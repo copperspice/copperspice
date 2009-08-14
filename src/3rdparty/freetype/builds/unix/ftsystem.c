@@ -238,7 +238,7 @@
       return FT_THROW( Invalid_Stream_Handle );
 
     /* open the file */
-    file = open( filepathname, O_RDONLY );
+    file = open( filepathname, O_RDONLY, 0);
     if ( file < 0 )
     {
       FT_ERROR(( "FT_Stream_Open:" ));
