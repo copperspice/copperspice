@@ -33,6 +33,15 @@
 
 #include "zconf.h"
 
+#include "qconfig.h"
+#if defined(QT_VISIBILITY_AVAILABLE)
+# undef ZEXTERN
+# define ZEXTERN __attribute__((visibility("default")))
+#elif defined(QT_MAKEDLL)
+# undef ZEXTERN
+# define ZEXTERN __declspec(dllexport)
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
