@@ -961,19 +961,7 @@ inline int qMacVersion()
 #endif
 
 // avoid "unused parameter" warnings
-#if defined(Q_CC_INTEL) && ! defined(Q_OS_WIN)
-template <typename T>
-inline void qUnused(T &x)
-{
-   (void)x;
-}
-
-#  define Q_UNUSED(x) qUnused(x);
-
-#else
 #  define Q_UNUSED(x) (void)x;
-
-#endif
 
 
 // Debugging and error handling
