@@ -106,6 +106,8 @@ Q_CORE_EXPORT uint qHash(const QStringRef &key, uint seed = 0);
 Q_CORE_EXPORT uint qHash(const QBitArray &key, uint seed = 0);
 Q_CORE_EXPORT uint qHash(const QLatin1String &key, uint seed = 0);
 
+Q_CORE_EXPORT uint qt_hash(const QString &key);
+
 template <class T> inline uint qHash(const T *key)
 {
    return qHash(reinterpret_cast<quintptr>(key));
