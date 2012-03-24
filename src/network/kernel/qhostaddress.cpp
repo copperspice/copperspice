@@ -1173,9 +1173,9 @@ QDebug operator<<(QDebug d, const QHostAddress &address)
    return d.space();
 }
 
-uint qHash(const QHostAddress &key)
+uint qHash(const QHostAddress &key, uint seed)
 {
-   return qHash(key.toString());
+   return qHash(key.toString(), seed);
 }
 
 #ifndef QT_NO_DATASTREAM

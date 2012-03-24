@@ -3153,9 +3153,9 @@ struct QRegExpPrivate {
 };
 
 #if !defined(QT_NO_REGEXP_OPTIM)
-uint qHash(const QRegExpEngineKey &key)
+uint qHash(const QRegExpEngineKey &key, uint seed)
 {
-   return qHash(key.pattern);
+   return qHash(key.pattern, seed);
 }
 
 typedef QCache<QRegExpEngineKey, QRegExpEngine> EngineCache;
