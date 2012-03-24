@@ -154,6 +154,7 @@ struct Q_CORE_EXPORT QHashData {
    static Node *previousNode(Node *node);
 
    static QHashData *sharedNull();
+   static uint hashSeed();
 };
 
 inline bool QHashData::willGrow()

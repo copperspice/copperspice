@@ -22,6 +22,13 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
+// for rand_s, _CRT_RAND_S must be #defined before #including stdlib.h.
+// put it at the beginning so some indirect inclusion doesn't break it
+#ifndef _CRT_RAND_S
+#define _CRT_RAND_S
+#endif
+#include <stdlib.h>
+
 
 #include <qhash.h>
 
@@ -31,11 +38,19 @@
 
 #include <qbitarray.h>
 #include <qstring.h>
-#include <stdlib.h>
+#include <qglobal.h>
+#include <qbytearray.h>
+#include <qdatetime.h>
 
-#ifdef QT_QHASH_DEBUG
-#include <qstring.h>
-#endif
+#include <qcoreapplication.h>
+
+#ifdef Q_OS_UNIX
+#include <stdio.h>
+#include "private/qcore_unix_p.h"
+#endif 
+
+#include <limits.h>
+
 
 QT_BEGIN_NAMESPACE
 
@@ -92,6 +107,76 @@ uint qHash(const QBitArray &bitArray)
    return result;
 }
 
+static uint qt_create_qhash_seed()
+{
+   uint seed = 0;
+	
+#if defined(Q_OS_UNIX)
+   int randomfd = qt_safe_open("/dev/urandom", O_RDONLY);
+   if (randomfd == -1) {
+       randomfd = qt_safe_open("/dev/random", O_RDONLY | O_NONBLOCK);
+   }
+   if (randomfd != -1) {
+       if (qt_safe_read(randomfd, reinterpret_cast<char *>(&seed), sizeof(seed)) == sizeof(seed)) {
+	   qt_safe_close(randomfd);
+	   return seed;
+       }
+       qt_safe_close(randomfd);
+   }
+#elif defined(Q_OS_WIN32)
+   errno_t err;
+   err = rand_s(&seed);
+   if (err == 0) {
+       return seed;
+   }
+#endif 
+   
+   // general fallback: initialize from the current timestamp, pid,
+   // and address of a stack-local variable
+   quint64 timestamp = QDateTime::currentMSecsSinceEpoch();
+   seed ^= timestamp;
+   seed ^= (timestamp >> 32);
+   
+   quint64 pid = QCoreApplication::applicationPid();
+   seed ^= pid;
+   seed ^= (pid >> 32);
+   
+   quintptr seedPtr = reinterpret_cast<quintptr>(&seed);
+   seed ^= seedPtr;
+   if(sizeof(int*) == 8) {
+       seed ^= (seedPtr >> 32);
+   }
+   
+   return seed;
+}
+
+
+std::atomic<uint> qt_qhash_seed{0};
+
+uint QHashData::hashSeed()
+{
+    uint value = qt_qhash_seed.load(std::memory_order_relaxed);
+    if (value != 0) {
+	// Already initialized
+	return value;
+    }
+
+    value = qt_create_qhash_seed();
+    if(value == 0) {
+	// Prevent 0 from ever being a valid seed value
+	value = 1;
+    }
+    
+    uint expectedValue = 0;
+    if(qt_qhash_seed.compare_exchange_strong(expectedValue, value, std::memory_order_relaxed)) {
+	// We succeeded, value is correct
+	return value;
+    } else {
+	// We failed, someone else has filled in the value
+	return expectedValue;
+    }
+}
+
 /*
     The prime_deltas array is a table of selected prime values, even
     though it doesn't look like one. The primes we are using are 1,
@@ -143,7 +228,7 @@ const int MinNumBits = 4;
 QHashData *QHashData::sharedNull()
 {
    static const QHashData shared_null = {
-      0, 0, Q_REFCOUNT_INITIALIZE_STATIC, 0, 0, MinNumBits, 0, 0, true, false, 0
+       0, 0, Q_REFCOUNT_INITIALIZE_STATIC, 0, 0, MinNumBits, 0, 0, true, false, 0
    };
 
    return const_cast<QHashData *>(&shared_null);
@@ -174,6 +259,7 @@ QHashData *QHashData::detach_helper(void (*node_duplicate)(Node *, void *),
       QHashData *d;
       Node *e;
    };
+
    d = new QHashData;
    d->fakeNext = 0;
    d->buckets = 0;
