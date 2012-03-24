@@ -54,9 +54,9 @@
 
 QT_BEGIN_NAMESPACE
 
-static uint hash(const uchar *p, int n)
+static uint hash(const uchar *p, int n, uint seed)
 {
-   uint h = 0;
+   uint h = seed;
 
    while (n--) {
       h = (h << 4) + *p++;
@@ -66,9 +66,9 @@ static uint hash(const uchar *p, int n)
    return h;
 }
 
-static uint hash(const QChar *p, int n)
+static uint hash(const QChar *p, int n, uint seed)
 {
-   uint h = 0;
+   uint h = seed;
 
    while (n--) {
       h = (h << 4) + (*p++).unicode();
@@ -78,25 +78,25 @@ static uint hash(const QChar *p, int n)
    return h;
 }
 
-uint qHash(const QByteArray &key)
+uint qHash(const QByteArray &key, uint seed)
 {
-   return hash(reinterpret_cast<const uchar *>(key.constData()), key.size());
+   return hash(reinterpret_cast<const uchar *>(key.constData()), key.size(), seed);
 }
 
-uint qHash(const QString &key)
+uint qHash(const QString &key, uint seed)
 {
-   return hash(key.unicode(), key.size());
+   return hash(key.unicode(), key.size(), seed);
 }
 
-uint qHash(const QStringRef &key)
+uint qHash(const QStringRef &key, uint seed)
 {
-   return hash(key.unicode(), key.size());
+   return hash(key.unicode(), key.size(), seed);
 }
 
-uint qHash(const QBitArray &bitArray)
+uint qHash(const QBitArray &bitArray, uint seed)
 {
    int m = bitArray.d.size() - 1;
-   uint result = hash(reinterpret_cast<const uchar *>(bitArray.d.constData()), qMax(0, m));
+   uint result = hash(reinterpret_cast<const uchar *>(bitArray.d.constData()), qMax(0, m), seed);
 
    // deal with the last 0 to 7 bits manually, because we can't trust that
    // the padding is initialized to 0 in bitArray.d

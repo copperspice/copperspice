@@ -100,10 +100,10 @@ inline uint qHash(QChar key)
    return qHash(key.unicode());
 }
 
-Q_CORE_EXPORT uint qHash(const QByteArray &key);
-Q_CORE_EXPORT uint qHash(const QString &key);
-Q_CORE_EXPORT uint qHash(const QStringRef &key);
-Q_CORE_EXPORT uint qHash(const QBitArray &key);
+Q_CORE_EXPORT uint qHash(const QByteArray &key, uint seed = 0);
+Q_CORE_EXPORT uint qHash(const QString &key, uint seed = 0);
+Q_CORE_EXPORT uint qHash(const QStringRef &key, uint seed = 0);
+Q_CORE_EXPORT uint qHash(const QBitArray &key, uint seed = 0);
 
 template <class T> inline uint qHash(const T *key)
 {
@@ -115,6 +115,11 @@ template <typename T1, typename T2> inline uint qHash(const QPair<T1, T2> &key)
    uint h1 = qHash(key.first);
    uint h2 = qHash(key.second);
    return ((h1 << 16) | (h1 >> 16)) ^ h2;
+}
+
+template<typename T> inline uint qHash(const T &t, uint) 
+{ 
+   return qHash(t); 
 }
 
 struct Q_CORE_EXPORT QHashData {
@@ -1022,7 +1027,7 @@ Q_OUTOFLINE_TEMPLATE typename QHash<Key, T>::Node **QHash<Key, T>::findNode(cons
    uint h;
 
    if (d->numBuckets || ahp) {
-      h = qHash(akey);
+      h = qHash(akey, 0);
       if (ahp) {
          *ahp = h;
       }
