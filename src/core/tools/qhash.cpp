@@ -107,6 +107,11 @@ uint qHash(const QBitArray &bitArray, uint seed)
    return result;
 }
 
+uint qHash(const QLatin1String &key, uint seed)
+{
+   return hash(reinterpret_cast<const uchar *>(key.data()), key.size(), seed);
+} 
+
 static uint qt_create_qhash_seed()
 {
    uint seed = 0;
