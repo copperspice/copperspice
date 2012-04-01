@@ -32,6 +32,8 @@
 #include <qmessagebox.h>
 #include <qapplication.h>
 
+#include <algorithm>
+
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
 #endif
@@ -999,17 +1001,36 @@ class QFileSystemModelSorter
             return QFileSystemModelPrivate::naturalCompare(l->fileName,
                    r->fileName, Qt::CaseInsensitive) < 0;
          }
-         case 1:
-            // Directories go first
-            if (l->isDir() && !r->isDir()) {
-               return true;
-            }
-            return l->size() < r->size();
+      case 1: {
+            // Directories go first	    
+	    bool left = l->isDir();
+	    bool right = r->isDir();
+	    if (left ^ right) {
+	       return left;
+	    }
+	    
+	    qint64 sizeDifference = l->size() - r->size();
+	    if (sizeDifference == 0) {
+	       return QFileSystemModelPrivate::naturalCompare(l->fileName, r->fileName, Qt::CaseInsensitive) < 0;
+	    }
+	    
+	    return sizeDifference < 0;
+      }
 
-         case 2:
-            return l->type() < r->type();
+         case 2: {
+	    int compare = QString::localeAwareCompare(l->type(), r->type());
+	    if (compare == 0) {
+	       return QFileSystemModelPrivate::naturalCompare(l->fileName, r->fileName, Qt::CaseInsensitive) < 0;
+	    }
+	    
+	    return compare < 0;
+         }
 
          case 3:
+	    if (l->lastModified() == r->lastModified()) {
+	       return QFileSystemModelPrivate::naturalCompare(l->fileName, r->fileName, Qt::CaseInsensitive) < 0;
+	    }
+
             return l->lastModified() < r->lastModified();
       }
 
@@ -1053,7 +1074,7 @@ void QFileSystemModelPrivate::sortChildren(int column, const QModelIndex &parent
    }
 
    QFileSystemModelSorter ms(column);
-   qStableSort(values.begin(), values.end(), ms);
+   std::sort(values.begin(), values.end(), ms);
 
    // update the new visible list
    indexNode->visibleChildren.clear();
