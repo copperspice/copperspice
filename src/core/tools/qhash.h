@@ -108,9 +108,9 @@ Q_CORE_EXPORT uint qHash(const QLatin1String &key, uint seed = 0);
 
 Q_CORE_EXPORT uint qt_hash(const QString &key);
 
-template <class T> inline uint qHash(const T *key)
+template <class T> inline uint qHash(const T *key, uint seed = 0)
 {
-   return qHash(reinterpret_cast<quintptr>(key));
+   return qHash(reinterpret_cast<quintptr>(key), seed);
 }
 
 template <typename T1, typename T2> inline uint qHash(const QPair<T1, T2> &key)
