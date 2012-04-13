@@ -39,65 +39,65 @@ class QByteArray;
 class QString;
 class QStringRef;
 
-inline uint qHash(char key)
+inline uint qHash(char key, uint seed = 0)
 {
-   return uint(key);
+   return uint(key) ^ seed;
 }
-inline uint qHash(uchar key)
+inline uint qHash(uchar key, uint seed = 0)
 {
-   return uint(key);
+   return uint(key) ^ seed;
 }
-inline uint qHash(signed char key)
+inline uint qHash(signed char key, uint seed = 0)
 {
-   return uint(key);
+   return uint(key) ^ seed;
 }
-inline uint qHash(ushort key)
+inline uint qHash(ushort key, uint seed = 0)
 {
-   return uint(key);
+   return uint(key) ^ seed;
 }
-inline uint qHash(short key)
+inline uint qHash(short key, uint seed = 0)
 {
-   return uint(key);
+   return uint(key) ^ seed;
 }
-inline uint qHash(uint key)
+inline uint qHash(uint key, uint seed = 0)
 {
-   return key;
+   return key ^ seed;
 }
-inline uint qHash(int key)
+inline uint qHash(int key, uint seed = 0)
 {
-   return uint(key);
+   return uint(key) ^ seed;
 }
 
-inline uint qHash(ulong key)
+inline uint qHash(ulong key, uint seed = 0)
 {
    if (sizeof(ulong) > sizeof(uint)) {
-      return uint(((key >> (8 * sizeof(uint) - 1)) ^ key) & (~0U));
+      return uint(((key >> (8 * sizeof(uint) - 1)) ^ key) & (~0U)) ^ seed;
    } else {
-      return uint(key & (~0U));
+      return uint(key & (~0U)) ^ seed;
    }
 }
 
-inline uint qHash(long key)
+inline uint qHash(long key, uint seed = 0)
 {
-   return qHash(ulong(key));
+   return qHash(ulong(key), seed);
 }
 
-inline uint qHash(quint64 key)
+inline uint qHash(quint64 key, uint seed = 0)
 {
    if (sizeof(quint64) > sizeof(uint)) {
-      return uint(((key >> (8 * sizeof(uint) - 1)) ^ key) & (~0U));
+      return uint(((key >> (8 * sizeof(uint) - 1)) ^ key) & (~0U)) ^ seed;
    } else {
-      return uint(key & (~0U));
+      return uint(key & (~0U)) ^ seed;
    }
 }
 
-inline uint qHash(qint64 key)
+inline uint qHash(qint64 key, uint seed = 0)
 {
-   return qHash(quint64(key));
+   return qHash(quint64(key), seed);
 }
-inline uint qHash(QChar key)
+inline uint qHash(QChar key, uint seed = 0)
 {
-   return qHash(key.unicode());
+   return qHash(key.unicode(), seed);
 }
 
 Q_CORE_EXPORT uint qHash(const QByteArray &key, uint seed = 0);
