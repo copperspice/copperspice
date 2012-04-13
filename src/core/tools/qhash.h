@@ -232,36 +232,6 @@ struct QHashNode {
    }
 };
 
-
-#define Q_HASH_DECLARE_INT_NODES(key_type) \
-    template <class T> \
-    struct QHashDummyNode<key_type, T> { \
-        QHashDummyNode *next; \
-        union { uint h; key_type key; }; \
-\
-        inline QHashDummyNode(key_type /* key0 */) {} \
-    }; \
-\
-    template <class T> \
-    struct QHashNode<key_type, T> { \
-        QHashNode *next; \
-        union { uint h; key_type key; }; \
-        T value; \
-\
-        inline QHashNode(key_type /* key0 */) {} \
-        inline QHashNode(key_type /* key0 */, const T &value0) : value(value0) {} \
-        inline bool same_key(uint h0, key_type) { return h0 == h; } \
-    }
-
-#if defined(Q_BYTE_ORDER) && Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-Q_HASH_DECLARE_INT_NODES(short);
-Q_HASH_DECLARE_INT_NODES(ushort);
-#endif
-
-Q_HASH_DECLARE_INT_NODES(int);
-Q_HASH_DECLARE_INT_NODES(uint);
-#undef Q_HASH_DECLARE_INT_NODES
-
 template <class Key, class T>
 class QHash
 {
