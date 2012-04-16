@@ -36,6 +36,15 @@
 #    undef PNG_USER_CHUNK_MALLOC_MAX
 #    define PNG_USER_CHUNK_MALLOC_MAX 4000000L
 #  endif
+/* For the memory copy APIs (i.e. the standard definitions of these),
+ * because this file defines png_memcpy and so on the base APIs must
+ * be defined here.
+ */
+#  if defined(BSD) && !defined(VXWORKS)
+#    include <strings.h>
+#  else
+#    include <string.h>
+#  endif
 #  ifdef PNG_USER_CHUNK_CACHE_MAX
 #    undef PNG_USER_CHUNK_CACHE_MAX
 #    define PNG_USER_CHUNK_CACHE_MAX 128
