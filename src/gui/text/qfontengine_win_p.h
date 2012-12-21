@@ -105,6 +105,7 @@ class QFontEngineWin : public QFontEngine
    uint        stockFont  : 1;
    uint        ttf        : 1;
    uint        hasOutline : 1;
+   uint        cffTable   : 1;
    TEXTMETRIC  tm;
    int         lw;
    const unsigned char *cmap;
