@@ -2274,10 +2274,12 @@ QPaintEngine *QX11PixmapData::paintEngine() const
       ::Pixmap hd_copy = XCreatePixmap(X11->display, RootWindow(X11->display, xinfo.screen()),
                                        w, h, d);
 #if !defined(QT_NO_XRENDER)
-      XRenderPictFormat *format = qt_renderformat_for_depth(xinfo, d);
-      ::Picture picture_copy = XRenderCreatePicture(X11->display, hd_copy, format, 0, 0);
-
       if (picture && d == 32) {
+         XRenderPictFormat *format = qt_renderformat_for_depth(xinfo, d);
+         ::Picture picture_copy = XRenderCreatePicture(X11->display,
+                                                       hd_copy, format,
+                                                       0, 0);
+
          XRenderComposite(X11->display, PictOpSrc, picture, 0, picture_copy,
                           0, 0, 0, 0, 0, 0, w, h);
          XRenderFreePicture(X11->display, picture);
