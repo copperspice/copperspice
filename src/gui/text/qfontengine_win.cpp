@@ -165,12 +165,19 @@ bool QFontEngineWin::hasCFFTable() const
    return GetFontData(hdc, MAKE_TAG('C', 'F', 'F', ' '), 0, 0, 0) != GDI_ERROR;
 }
 
+bool QFontEngineWin::hasCMapTable() const
+{
+    HDC hdc = shared_dc();
+    SelectObject(hdc, hfont);
+    return GetFontData(hdc, MAKE_TAG('c', 'm', 'a', 'p'), 0, 0, 0) != GDI_ERROR;
+}
+
 void QFontEngineWin::getCMap()
 {
-   ttf = (bool)(tm.tmPitchAndFamily & TMPF_TRUETYPE);
+   ttf = (bool)(tm.tmPitchAndFamily & TMPF_TRUETYPE) || hasCMapTable();
 
    // TMPF_TRUETYPE is not set for fonts with CFF tables
-   cffTable = !ttf && hasCFFTable();
+   cffTable = hasCFFTable();
 
    HDC hdc = shared_dc();
    SelectObject(hdc, hfont);
@@ -348,6 +355,7 @@ HGDIOBJ QFontEngineWin::selectDesignFont() const
 {
    LOGFONT f = logfont;
    f.lfHeight = unitsPerEm;
+   f.lfWidth = 0;
    HFONT designFont = CreateFontIndirect(&f);
    return SelectObject(shared_dc(), designFont);
 }
