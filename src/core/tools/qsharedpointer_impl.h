@@ -56,6 +56,9 @@ class QWeakPointer;
 template <class T>
 class QSharedPointer;
 
+template <class T>
+class QEnableSharedFromThis;
+
 template <class X, class T>
 QSharedPointer<X> qSharedPointerCast(const QSharedPointer<T> &ptr);
 
@@ -423,6 +426,14 @@ template <class T> class QSharedPointer
  private:
    explicit QSharedPointer(Qt::Initialization) {}
 
+   template <class X>
+   inline void enableSharedFromThis(const QEnableSharedFromThis<X> *ptr)
+   {
+       ptr->initializeFromSharedPointer(*this);
+   }  
+   
+   inline void enableSharedFromThis(...) {}
+
    inline void deref() {
       deref(d);
    }
@@ -457,6 +468,7 @@ template <class T> class QSharedPointer
       internalSafetyCheckAdd(d, ptr);
 #endif
       d->setQObjectShared(ptr, true);
+      enableSharedFromThis(ptr);
    }
 
    template <class X>
@@ -675,6 +687,36 @@ class QWeakPointer
 
    Data *d;
    T *value;
+};
+
+template <class T>
+class QEnableSharedFromThis
+{
+ protected:
+    QEnableSharedFromThis() = default;
+    QEnableSharedFromThis(const QEnableSharedFromThis &) { }
+    QEnableSharedFromThis &operator=(const QEnableSharedFromThis &) { 
+	return *this; 
+    }
+
+ public:
+    inline QSharedPointer<T> sharedFromThis() { 
+	return QSharedPointer<T>(weakPointer); 
+    }
+    
+    inline QSharedPointer<const T> sharedFromThis() const { 
+	return QSharedPointer<const T>(weakPointer); 
+    }
+    
+ private:
+    template <class X> friend class QSharedPointer;
+    
+    template <class X>
+    void initializeFromSharedPointer(const QSharedPointer<X> &ptr) const {
+	weakPointer = ptr;
+    }
+    
+    mutable QWeakPointer<T> weakPointer;
 };
 
 //
