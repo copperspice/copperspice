@@ -202,11 +202,11 @@ inline char QLocalePrivate::digitToCLocale(const QChar &in) const
       return in.toLatin1();
    }
 
-   if (in == plus()) {
+   if (in == plus() || in == QLatin1Char('+')) {
       return '+';
    }
 
-   if (in == minus()) {
+   if (in == minus() || in == QLatin1Char('-') || in == QChar(0x2212)) {
       return '-';
    }
 
