@@ -704,10 +704,8 @@ QStaticTextItem::~QStaticTextItem()
 
 void QStaticTextItem::setFontEngine(QFontEngine *fe)
 {
-   if (m_fontEngine != 0) {
-      if (!m_fontEngine->ref.deref()) {
-         delete m_fontEngine;
-      }
+   if (m_fontEngine != 0 && !m_fontEngine->ref.deref()) {
+      delete m_fontEngine;
    }
 
    m_fontEngine = fe;

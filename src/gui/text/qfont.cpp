@@ -275,8 +275,8 @@ QFontPrivate::QFontPrivate(const QFontPrivate &other)
 
 QFontPrivate::~QFontPrivate()
 {
-   if (engineData) {
-      engineData->ref.deref();
+   if (engineData && !engineData->ref.deref()) {
+      delete engineData;
    }
    engineData = 0;
    if (scFont && scFont != this) {
@@ -301,7 +301,9 @@ QFontEngine *QFontPrivate::engineForScript(int script) const
    }
    if (engineData && engineData->fontCache != QFontCache::instance()) {
       // throw out engineData that came from a different thread
-      engineData->ref.deref();
+      if (!engineData->ref.deref()) {
+	 delete engineData;
+      }
       engineData = 0;
    }
    if (!engineData || !QT_FONT_ENGINE_FROM_DATA(engineData, script)) {
@@ -442,14 +444,14 @@ QFontEngineData::~QFontEngineData()
 {
 #if !defined(Q_OS_MAC)
    for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
-      if (engines[i]) {
-         engines[i]->ref.deref();
+      if (engines[i] && !engines[i]->ref.deref()) {
+	 delete engines[i];
       }
       engines[i] = 0;
    }
 #else
-   if (engine) {
-      engine->ref.deref();
+   if (engine && !engine->ref.deref()) {
+      delete engine;
    }
    engine = 0;
 #endif
@@ -800,12 +802,12 @@ QFont::QFont(QFontPrivate *data)
 void QFont::detach()
 {
    if (d->ref.load() == 1) {
-      if (d->engineData) {
-         d->engineData->ref.deref();
+      if (d->engineData && !d->engineData->ref.deref()) {
+	 delete d->engineData;
       }
       d->engineData = 0;
       if (d->scFont && d->scFont != d.data()) {
-         d->scFont->ref.deref();
+	 d->scFont->ref.deref();
       }
       d->scFont = 0;
       return;
@@ -2839,31 +2841,14 @@ QFontCache::~QFontCache()
       EngineDataCache::ConstIterator it = engineDataCache.constBegin(),
                                      end = engineDataCache.constEnd();
       while (it != end) {
-         if (it.value()->ref.load() == 0) {
-            delete it.value();
-         } else
-            FC_DEBUG("QFontCache::~QFontCache: engineData %p still has refcount %d",
-                     it.value(), it.value()->ref.load());
-         ++it;
+	 if (it.value()->ref.deref() == 0) {
+	    delete it.value();
+	 } else {
+	    FC_DEBUG("QFontCache::~QFontCache: engineData %p still has refcount %d",
+		     it.value(), int(it.value()->ref));
+	 }
+	 ++it;
       }
-   }
-   EngineCache::ConstIterator it = engineCache.constBegin(),
-                              end = engineCache.constEnd();
-   while (it != end) {
-      if (--it.value().data->cache_count == 0) {
-         if (it.value().data->ref.load() == 0) {
-            FC_DEBUG("QFontCache::~QFontCache: deleting engine %p key=(%d / %g %g %d %d %d)",
-                     it.value().data, it.key().script, it.key().def.pointSize,
-                     it.key().def.pixelSize, it.key().def.weight, it.key().def.style,
-                     it.key().def.fixedPitch);
-
-            delete it.value().data;
-         } else {
-            FC_DEBUG("QFontCache::~QFontCache: engine = %p still has refcount %d",
-                     it.value().data, it.value().data->ref.load());
-         }
-      }
-      ++it;
    }
 }
 
@@ -2875,35 +2860,27 @@ void QFontCache::clear()
       while (it != end) {
          QFontEngineData *data = it.value();
 #if !defined(Q_OS_MAC)
-         for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
-            if (data->engines[i]) {
-               data->engines[i]->ref.deref();
-               data->engines[i] = 0;
-            }
-         }
+	 for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
+	    if (data->engines[i] && !data->engines[i]->ref.deref()) {
+	       delete data->engines[i];
+	    }
+	    data->engines[i] = 0;
+	 }
 #else
-         if (data->engine) {
-            data->engine->ref.deref();
-            data->engine = 0;
-         }
+	 if (data->engine && !data->engine->ref.deref()) {
+	    delete data->engine;
+	 }
+	 data->engine = 0;
 #endif
-         ++it;
+	 ++it;
       }
    }
 
    for (EngineCache::Iterator it = engineCache.begin(), end = engineCache.end();
-         it != end; ++it) {
-      if (it->data->ref.load() == 0) {
-         delete it->data;
-         it->data = 0;
-      }
-   }
-
-   for (EngineCache::Iterator it = engineCache.begin(), end = engineCache.end();
-         it != end; ++it) {
-      if (it->data && it->data->ref.load() == 0) {
-         delete it->data;
-         it->data = 0;
+	 it != end; ++it) {
+      if (it->data->ref.deref() == 0) {
+	 delete it->data;
+	 it->data = 0;
       }
    }
 
@@ -2938,6 +2915,8 @@ void QFontCache::insertEngineData(const Key &key, QFontEngineData *engineData)
 {
    FC_DEBUG("QFontCache: inserting new engine data %p", engineData);
 
+   Q_ASSERT(!engineDataCache.contains(key));
+   engineData->ref.ref(); // the cache has a reference
    engineDataCache.insert(key, engineData);
    increaseCost(sizeof(QFontEngineData));
 }
@@ -2969,6 +2948,12 @@ void QFontCache::insertEngine(const Key &key, QFontEngine *engine)
 
    Engine data(engine);
    data.timestamp = ++current_timestamp;
+
+   QFontEngine *oldEngine = engineCache.value(key).data;
+   engine->ref.ref(); // the cache has a reference
+   if (oldEngine && !oldEngine->ref.deref()) {
+      delete oldEngine;
+   }
 
    engineCache.insert(key, data);
 
@@ -3027,39 +3012,42 @@ void QFontCache::cleanupPrinterFonts()
       EngineDataCache::Iterator it = engineDataCache.begin(),
                                 end = engineDataCache.end();
       while (it != end) {
-         if (it.key().screen == 0) {
-            ++it;
-            continue;
-         }
+	 if (it.key().screen == 0) {
+	    ++it;
+	    continue;
+	 }
 
-         if (it.value()->ref.load() != 0) {
-            for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
-               if (it.value()->engines[i]) {
-                  it.value()->engines[i]->ref.deref();
-                  it.value()->engines[i] = 0;
-               }
-            }
-            ++it;
-         } else {
+	 if (it.value()->ref.load() > 1) {
+	    for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
+	       if (it.value()->engines[i] && !it.value()->engines[i]->ref.deref()) {
+		  delete it.value()->engines[i];
+	       }
+	       it.value()->engines[i] = 0;
+	    }
+	    ++it;
+	 } else {
 
-            EngineDataCache::Iterator rem = it++;
+	    EngineDataCache::Iterator rem = it++;
 
-            decreaseCost(sizeof(QFontEngineData));
+	    decreaseCost(sizeof(QFontEngineData));
 
-            FC_DEBUG("    %p", rem.value());
+	    FC_DEBUG("    %p", rem.value());
 
-            delete rem.value();
-            engineDataCache.erase(rem);
-         }
+	    if (!rem.value()->ref.deref()) {
+	       delete rem.value();
+	    }
+	    delete rem.value();
+	    engineDataCache.erase(rem);
+	 }
       }
    }
 
    EngineCache::Iterator it = engineCache.begin(),
                          end = engineCache.end();
    while (it != end) {
-      if (it.value().data->ref.load() != 0 || it.key().screen == 0) {
-         ++it;
-         continue;
+      if (it.value().data->ref.load() != 1 || it.key().screen == 0) {
+	 ++it;
+	 continue;
       }
 
       FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, type '%s'",
@@ -3070,8 +3058,10 @@ void QFontCache::cleanupPrinterFonts()
       if (--it.value().data->cache_count == 0) {
          FC_DEBUG("    DELETE: last occurrence in cache");
 
-         decreaseCost(it.value().data->cache_cost);
-         delete it.value().data;
+	 decreaseCost(it.value().data->cache_cost);
+	 if (!it.value().data->ref.deref()) {
+	    delete it.value().data;
+	 }
       }
 
       engineCache.erase(it++);
@@ -3122,10 +3112,9 @@ void QFontCache::timerEvent(QTimerEvent *)
 #  endif
 
 #endif
-
-         if (it.value()->ref.load() != 0) {
-            in_use_cost += engine_data_cost;
-         }
+	 if (it.value()->ref.load() > 1) {
+	    in_use_cost += engine_data_cost;
+	 }
       }
    }
 
@@ -3135,14 +3124,14 @@ void QFontCache::timerEvent(QTimerEvent *)
       EngineCache::ConstIterator it = engineCache.constBegin(),
                                  end = engineCache.constEnd();
       for (; it != end; ++it) {
-         FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, cost %u bytes",
-                  it.value().data, it.value().timestamp, it.value().hits,
-                  it.value().data->ref.load(), it.value().data->cache_count,
-                  it.value().data->cache_cost);
+	 FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, cost %u bytes",
+		  it.value().data, it.value().timestamp, it.value().hits,
+		  it.value().data->ref.load(), it.value().data->cache_count,
+		  it.value().data->cache_cost);
 
-         if (it.value().data->ref.load() != 0) {
-            in_use_cost += it.value().data->cache_cost / it.value().data->cache_count;
-         }
+	 if (it.value().data->ref.load() > 1) {
+	    in_use_cost += it.value().data->cache_cost / it.value().data->cache_count;
+	 }
       }
 
       // attempt to make up for rounding errors
@@ -3191,10 +3180,10 @@ void QFontCache::timerEvent(QTimerEvent *)
       EngineDataCache::Iterator it = engineDataCache.begin(),
                                 end = engineDataCache.end();
       while (it != end) {
-         if (it.value()->ref.load() != 0) {
-            ++it;
-            continue;
-         }
+	 if (it.value()->ref.load() > 1) {
+	    ++it;
+	    continue;
+	 }
 
          EngineDataCache::Iterator rem = it++;
 
@@ -3219,48 +3208,50 @@ void QFontCache::timerEvent(QTimerEvent *)
       uint least_popular = ~0u;
 
       for (; it != end; ++it) {
-         if (it.value().data->ref.load() != 0) {
-            continue;
-         }
+	 if (it.value().data->ref.load() > 1) {
+	    continue;
+	 }
 
-         if (it.value().timestamp < oldest &&
-               it.value().hits <= least_popular) {
-            oldest = it.value().timestamp;
-            least_popular = it.value().hits;
-         }
+	 if (it.value().timestamp < oldest &&
+	       it.value().hits <= least_popular) {
+	    oldest = it.value().timestamp;
+	    least_popular = it.value().hits;
+	 }
       }
 
       FC_DEBUG("    oldest %u least popular %u", oldest, least_popular);
 
       for (it = engineCache.begin(); it != end; ++it) {
-         if (it.value().data->ref.load() == 0 &&
-               it.value().timestamp == oldest &&
-               it.value().hits == least_popular) {
-            break;
-         }
+	 if (it.value().data->ref.load() == 0 &&
+	       it.value().timestamp == oldest &&
+	       it.value().hits == least_popular) {
+	    break;
+	 }
       }
 
       if (it != end) {
-         FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, type '%s'",
-                  it.value().data, it.value().timestamp, it.value().hits,
-                  it.value().data->ref.load(), it.value().data->cache_count,
-                  it.value().data->name());
+	 FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, type '%s'",
+		  it.value().data, it.value().timestamp, it.value().hits,
+		  it.value().data->ref.load(), it.value().data->cache_count,
+		  it.value().data->name());
 
-         if (--it.value().data->cache_count == 0) {
-            FC_DEBUG("    DELETE: last occurrence in cache");
+	 if (--it.value().data->cache_count == 0) {
+	    FC_DEBUG("    DELETE: last occurrence in cache");
 
-            decreaseCost(it.value().data->cache_cost);
-            delete it.value().data;
-         } else {
-            /*
-              this particular font engine is in the cache multiple
-              times...  set current_cost to zero, so that we can
-              keep looping to get rid of all occurrences
-            */
-            current_cost = 0;
-         }
+	    decreaseCost(it.value().data->cache_cost);
+	    if(!it.value().data->ref.deref()) {
+	       delete it.value().data;
+	    }
+	 } else {
+	    /*
+	      this particular font engine is in the cache multiple
+	      times...  set current_cost to zero, so that we can
+	      keep looping to get rid of all occurrences
+	    */
+	    current_cost = 0;
+	 }
 
-         engineCache.erase(it);
+	 engineCache.erase(it);
       }
    } while (current_cost != total_cost && total_cost > max_cost);
 }

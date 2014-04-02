@@ -574,28 +574,28 @@ void QRawFontPrivate::platformLoadFromData(const QByteArray &fontData,
       if (fontHandle == NULL) {
          qWarning("QRawFont::platformLoadFromData: AddFontMemResourceEx failed");
       } else {
-         QFontDef request;
-         request.family = uniqueFamilyName;
-         request.pixelSize = pixelSize;
-         request.styleStrategy = QFont::NoFontMerging | QFont::PreferMatch;
-         request.hintingPreference = hintingPreference;
+	 QFontDef request;
+	 request.family = uniqueFamilyName;
+	 request.pixelSize = pixelSize;
+	 request.styleStrategy = QFont::NoFontMerging | QFont::PreferMatch;
+	 request.hintingPreference = hintingPreference;
 
-         fontEngine = qt_load_font_engine_win(request);
-         if (request.family != fontEngine->fontDef.family) {
-            qWarning("QRawFont::platformLoadFromData: Failed to load font. "
-                     "Got fallback instead: %s", qPrintable(fontEngine->fontDef.family));
-            if (fontEngine->cache_count == 0 && fontEngine->ref.load() == 0) {
-               delete fontEngine;
-            }
-            fontEngine = 0;
-         } else {
-            Q_ASSERT(fontEngine->cache_count == 0 && fontEngine->ref.load() == 0);
+	 fontEngine = qt_load_font_engine_win(request);
+	 if (request.family != fontEngine->fontDef.family) {
+	    qWarning("QRawFont::platformLoadFromData: Failed to load font. "
+		     "Got fallback instead: %s", qPrintable(fontEngine->fontDef.family));
+	    if (fontEngine->ref.load() == 0) {
+	       delete fontEngine;
+	    }
+	    fontEngine = 0;
+	 } else {
+	    Q_ASSERT(fontEngine->cache_count == 0 && fontEngine->ref.load() == 0);
 
-            // Override the generated font name
-            static_cast<QFontEngineWin *>(fontEngine)->uniqueFamilyName = uniqueFamilyName;
-            fontEngine->fontDef.family = actualFontName;
-            fontEngine->ref.ref();
-         }
+	    // Override the generated font name
+	    static_cast<QFontEngineWin *>(fontEngine)->uniqueFamilyName = uniqueFamilyName;
+	    fontEngine->fontDef.family = actualFontName;
+	    fontEngine->ref.ref();
+	 }
       }
    }
 #if !defined(QT_NO_DIRECTWRITE)
