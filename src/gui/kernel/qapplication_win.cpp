@@ -523,6 +523,7 @@ static void qt_set_windows_color_resources()
       QPalette tiplabel(pal);
       tiplabel.setColor(QPalette::All, QPalette::Button, ttip);
       tiplabel.setColor(QPalette::All, QPalette::Window, ttip);
+      tiplabel.setColor(QPalette::All, QPalette::ToolTipBase, ttip);
       tiplabel.setColor(QPalette::All, QPalette::Text, ttipText);
       tiplabel.setColor(QPalette::All, QPalette::WindowText, ttipText);
       tiplabel.setColor(QPalette::All, QPalette::ButtonText, ttipText);
@@ -531,12 +532,15 @@ static void qt_set_windows_color_resources()
       tiplabel.setColor(QPalette::All, QPalette::Text, ttipText);
       tiplabel.setColor(QPalette::All, QPalette::WindowText, ttipText);
       tiplabel.setColor(QPalette::All, QPalette::ButtonText, ttipText);
+      tiplabel.setColor(QPalette::All, QPalette::ToolTipText, ttipText);
       const QColor fg = tiplabel.foreground().color(), btn = tiplabel.button().color();
-      QColor disabled((fg.red() + btn.red()) / 2, (fg.green() + btn.green()) / 2,
-                      (fg.blue() + btn.blue()) / 2);
+      QColor disabled((fg.red()+btn.red())/2,(fg.green()+btn.green())/2,
+                      (fg.blue()+btn.blue())/2);
       tiplabel.setColor(QPalette::Disabled, QPalette::WindowText, disabled);
+      tiplabel.setColor(QPalette::Disabled, QPalette::ToolTipText, disabled);
       tiplabel.setColor(QPalette::Disabled, QPalette::Text, disabled);
       tiplabel.setColor(QPalette::Disabled, QPalette::Base, Qt::white);
+      tiplabel.setColor(QPalette::Disabled, QPalette::ToolTipBase, Qt::white);
       tiplabel.setColor(QPalette::Disabled, QPalette::BrightText, Qt::white);
       QToolTip::setPalette(tiplabel);
 #endif //QT_NO_TOOLTIP
