@@ -1206,15 +1206,8 @@ void QTreeViewPrivate::adjustViewOptionsForIndex(QStyleOptionViewItemV4 *option,
    const int right = (spanning ? header->visualIndex(0) : header->count() - 1 );
    calcLogicalIndices(&logicalIndices, &viewItemPosList, left, right);
 
-   int columnIndex = 0;
-   for (int visualIndex = 0; visualIndex < current.column(); ++visualIndex) {
-      int logicalIndex = header->logicalIndex(visualIndex);
-      if (!header->isSectionHidden(logicalIndex)) {
-         ++columnIndex;
-      }
-   }
-
-   option->viewItemPosition = viewItemPosList.at(columnIndex);
+   const int visualIndex = logicalIndices.indexOf(current.column());
+   option->viewItemPosition = viewItemPosList.at(visualIndex);
 }
 
 void QTreeView::drawTree(QPainter *painter, const QRegion &region) const
