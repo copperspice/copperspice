@@ -238,10 +238,10 @@ void QWSTslibMouseHandlerPrivate::readMouseData()
          pressed = (sample.pressure > 0);
       }
 
-      // work around missing coordinates on mouse release in raw mode
-      if (!calibrated && !pressed && sample.x == 0 && sample.y == 0) {
-         sample.x = lastSample.x;
-         sample.y = lastSample.y;
+      // work around missing coordinates on mouse release
+      if (!pressed && sample.x == 0 && sample.y == 0) {
+	 sample.x = lastSample.x;
+	 sample.y = lastSample.y;
       }
 
       int dx = sample.x - lastSample.x;
