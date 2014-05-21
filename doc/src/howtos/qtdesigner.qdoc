@@ -1,0 +1,131 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page qtdesigner-components.html
+    \title Creating and Using Components for Qt Designer
+    \brief How to create and use custom widget plugins.
+    \ingroup best-practices
+
+    \tableofcontents
+
+    \section1 Creating Custom Widget Plugins
+
+    When implementing a custom widget plugin for \QD, you must
+    subclass QDesignerCustomWidgetInterface to expose your custom
+    widget to \QD. A single custom widget plugin is built as a
+    separate library. If you want to include several custom widget
+    plugins in the same library, you must in addition subclass
+    QDesignerCustomWidgetCollectionInterface.
+
+    To provide your custom widget plugin with the expected behavior
+    and functionality within \QD's workspace you can subclass the
+    associated extension classes:
+
+    The QDesignerContainerExtension class allows you to add pages to a
+    custom multi-page container. The QDesignerTaskMenuExtension class
+    allows you to add custom menu entries to \QD's task menu. The
+    QDesignerMemberSheetExtension class allows you to manipulate a
+    widget's member functions which is displayed when configuring
+    connections using \QD's mode for editing signals and slots. And
+    finally, the QDesignerPropertySheetExtension class allows you to
+    manipulate a widget's properties which is displayed in \QD's
+    property editor.
+
+    \image qtdesignerextensions.png
+
+    In \QD the extensions are not created until they are required. For
+    that reason, when implementing extensions, you must also subclass
+    QExtensionFactory, i.e create a class that is able to make
+    instances of your extensions. In addition, you must make \QD's
+    extension manager register your factory; the extension manager
+    controls the construction of extensions as they are required, and
+    you can access it through QDesignerFormEditorInterface and
+    QExtensionManager.
+
+    For a complete example creating a custom widget plugin with an
+    extension, see the \l {designer/taskmenuextension}{Task Menu
+    Extension} or \l {designer/containerextension}{Container
+    Extension} examples.
+
+    \section1 Retrieving Access to \QD Components
+
+    The purpose of the classes mentioned in this section is to provide
+    access to \QD's components, managers and workspace, and they are
+    not intended to be instantiated directly.
+
+    \QD is composed by several components. It has an action editor, a
+    property editor, widget box and object inspector which you can
+    view in its workspace.
+
+    \image qtdesignerscreenshot.png
+
+    \QD also has an object that works behind the scene; it contains
+    the logic that integrates all of \QD's components into a coherent
+    application. You can access this object, using the
+    QDesignerFormEditorInterface, to retrieve interfaces to \QD's
+    components:
+
+    \list
+    \o QDesignerActionEditorInterface
+    \o QDesignerObjectInspectorInterface
+    \o QDesignerPropertyEditorInterface
+    \o QDesignerWidgetBoxInterface
+    \endlist
+
+    In addition, you can use QDesignerFormEditorInterface to retrieve
+    interfaces to \QD's extension manager (QExtensionManager) and form
+    window manager (QDesignerFormWindowManagerInterface). The
+    extension manager controls the construction of extensions as they
+    are required, while the form window manager controls the form
+    windows appearing in \QD's workspace.
+
+    Once you have an interface to \QD's form window manager
+    (QDesignerFormWindowManagerInterface), you also have access to all
+    the form windows currently appearing in \QD's workspace: The
+    QDesignerFormWindowInterface class allows you to query and
+    manipulate the form windows, and it provides an interface to the
+    form windows' cursors. QDesignerFormWindowCursorInterface is a
+    convenience class allowing you to query and modify a given form
+    window's widget selection, and in addition modify the properties
+    of all the form's widgets.
+
+    \section1 Creating User Interfaces at Run-Time
+
+    The \c QtDesigner module contains the QFormBuilder class that
+    provides a mechanism for dynamically creating user interfaces at
+    run-time, based on UI files created with \QD. This class is
+    typically used by custom components and applications that embed
+    \QD. Standalone applications that need to dynamically generate
+    user interfaces at run-time use the QUiLoader class, found in
+    the QtUiTools module.
+
+    For a complete example using QUiLoader, see
+    the \l {designer/calculatorbuilder}{Calculator Builder example}.
+
+    \sa {Qt Designer Manual}, {QtUiTools Module}
+*/

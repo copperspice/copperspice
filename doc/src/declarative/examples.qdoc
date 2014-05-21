@@ -1,0 +1,243 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+  \page qdeclarativeexamples.html
+  \title QML Examples and Demos
+  \brief Building UIs with QML
+  \ingroup all-examples
+
+
+Qt includes a set of examples and demos that show how to use various aspects
+of QML. The examples are small demonstrations of particular QML components,
+while the demos contain more complete and functional applications.
+
+To run the examples and demos, open them in Qt Creator or use the included
+\l {QML Viewer} tool. The \l {QML Viewer} can be run from the command line:
+
+\code
+    qmlviewer $QTDIR/demos/declarative/samegame/samegame.qml
+\endcode
+
+On Mac OS X, you can run the included "QMLViewer" application from the
+Finder, or use the command line:
+
+\code
+    QMLViewer.app/Contents/MacOS/QMLViewer $QTDIR/demos/declarative/samegame/samegame.qml
+\endcode
+
+
+\section1 Demos
+
+The QML demos integrate a variety of features to demonstrate how QML
+can be used to produce sophisticated interfaces and applications:
+
+
+\table
+\row
+
+\o
+\l{demos/declarative/calculator}{Calculator}
+\image qml-calculator-example-small.png
+
+\o
+\l{demos/declarative/flickr}{Flickr Mobile}
+\image qml-flickr-demo-small.png
+
+\o
+\l{demos/declarative/minehunt}{Minehunt}
+\image qml-minehunt-demo-small.png
+
+\row
+
+\o
+\l{demos/declarative/photoviewer}{Photo Viewer}
+\image qml-photoviewer-demo-small.png
+
+\o
+\l{demos/declarative/rssnews}{RSS News Reader}
+\image qml-rssnews-demo-small.png
+
+\o
+\l{demos/declarative/samegame}{Same Game}
+\image qml-samegame-demo-small.png
+
+\row
+
+\o
+\l{demos/declarative/snake}{Snake}
+\image qml-snake-demo-small.png
+
+\o
+\l{demos/declarative/twitter}{Twitter}
+\image qml-twitter-demo-small.png
+
+\o
+\l{demos/declarative/webbrowser}{Web Browser}
+\image qml-webbrowser-demo-small.png
+
+\endtable
+
+The demos can be found in Qt's \c demos/declarative directory.
+
+
+\section1 Examples
+
+The QML examples are small, simple applications that show how to use a particular
+QML component or feature. If you are new
+to QML, you may also find the \l{QML Tutorial}{Hello World} and
+\l {QML Advanced Tutorial}{Same Game} tutorials useful.
+
+The examples can be found in Qt's \c examples/declarative directory.
+
+\section2 Animation
+\list
+\o \l{declarative/animation/basics/color-animation}{Color Animation}
+\o \l{declarative/animation/behaviors/behavior-example}{Behaviors}
+\o \l{declarative/animation/easing}{Easing}
+\o \l{declarative/animation/basics/property-animation}{Property Animation}
+\o \l{declarative/animation/states}{States}
+\o \l{declarative/animation/behaviors/wigglytext}{Wiggly Text}
+\endlist
+
+\section2 Image Elements
+\list
+\o \l{declarative/imageelements/borderimage}{BorderImage}
+\o \l{declarative/imageelements/image}{Image}
+\endlist
+
+\section2 Text
+\list
+\o \l{declarative/text/fonts}{Fonts}
+\o \l{declarative/text/textselection}{Text Selection}
+\endlist
+
+\section2 Positioners
+\list
+\o \l{declarative/positioners}{Example}
+\endlist
+
+\section2 Key Interaction
+\list
+\o \l{declarative/keyinteraction/focus}{Focus}
+\endlist
+
+\section2 Touch Interaction
+\list
+\o \l{declarative/touchinteraction/mousearea}{MouseArea}
+\endlist
+
+\section2 UI Components
+\list
+\o \l{declarative/ui-components/dialcontrol}{Dial control}
+\o \l{declarative/ui-components/flipable}{Flipable}
+\o \l{declarative/ui-components/progressbar}{Progress bar}
+\o \l{declarative/ui-components/scrollbar}{Scroll bar}
+\o \l{declarative/ui-components/searchbox}{Search box}
+\o \l{declarative/ui-components/slideswitch}{Slide switch}
+\o \l{declarative/ui-components/spinner}{Spinner}
+\o \l{declarative/ui-components/tabwidget}{Tab widget}
+\endlist
+
+\section2 Toys
+\list
+\o \l{declarative/toys/clocks}{Clocks}
+\o \l{declarative/toys/corkboards}{Corkboards}
+\o \l{declarative/toys/dynamicscene}{Dynamic Scene}
+\o \l{declarative/toys/tic-tac-toe}{Tic Tac Toe}
+\o \l{declarative/toys/tvtennis}{TV Tennis}
+\endlist
+
+\section2 Models and Views
+\list
+\o \l{declarative/modelviews/gridview}{GridView}
+\o \l{Models and Views: ListView Examples}{ListView}
+\o \l{declarative/modelviews/pathview}{PathView}
+\o \l{declarative/modelviews/package}{Package}
+\o \l{declarative/modelviews/parallax}{Parallax}
+\o \l{declarative/modelviews/visualitemmodel}{VisualItemModel}
+
+\o \l{declarative/modelviews/stringlistmodel}{String ListModel}
+\o \l{declarative/modelviews/objectlistmodel}{Object ListModel}
+\o \l{declarative/modelviews/abstractitemmodel}{AbstractItemModel}
+
+\o \l{Models and Views: WebView Examples}{WebView}
+\endlist
+
+\section2 XML
+\list
+\o \l{declarative/xml/xmlhttprequest}{XmlHttpRequest}
+\endlist
+
+\section2 Internationalization (i18n)
+\list
+\o \l{declarative/i18n}{Example}
+\endlist
+
+\section2 Right-to-left User Interfaces
+\list
+\o \l{declarative/righttoleft/layoutmirroring}{Layout mirroring}
+\o \l{declarative/righttoleft/layoutdirection}{Layout direction}
+\o \l{declarative/righttoleft/textalignment}{Text alignment}
+\endlist
+
+\section2 Threading
+\list
+\o \l{declarative/threading/threadedlistmodel}{Threaded ListModel}
+\o \l{declarative/threading/workerscript}{WorkerScript}
+\endlist
+
+\section2 Screen Orientation
+\list
+\o \l{declarative/screenorientation}{Example}
+\endlist
+
+\section2 SQL Local Storage
+\list
+\o \l{declarative/sqllocalstorage}{Example}
+\endlist
+
+\section2 C++ Extensions
+\list
+\o \l{declarative-cppextensions-reference.html}{Reference examples}
+\o \l{declarative/cppextensions/plugins}{Plugins}
+\o \l{declarative-cppextensions-qgraphicslayouts.html}{QGraphicsLayouts}
+\o \l{declarative/cppextensions/qwidgets}{QWidgets}
+\o \l{declarative/cppextensions/imageprovider}{Image provider}
+\o \l{declarative/cppextensions/networkaccessmanagerfactory}{Network access manager factory}
+\endlist
+
+
+\section1 Labs
+
+\list
+\o \l{src/imports/folderlistmodel}{Folder List Model} - a C++ model plugin
+\o \l{declarative/shadereffects}{Shader Effects}
+\endlist
+
+*/
+

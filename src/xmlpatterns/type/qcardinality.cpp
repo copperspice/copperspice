@@ -1,0 +1,86 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2014 Barbara Geller
+* Copyright (c) 2012-2014 Ansel Sermersheim
+* Copyright (c) 2012-2014 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software: you can redistribute it and/or 
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with CopperSpice.  If not, see 
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
+
+#include "qpatternistlocale_p.h"
+
+#include "qcardinality_p.h"
+
+QT_BEGIN_NAMESPACE
+
+using namespace QPatternist;
+
+QString Cardinality::displayName(const CustomizeDisplayName explain) const
+{
+    if(explain == IncludeExplanation)
+    {
+        if(isEmpty())
+            return QString(QtXmlPatterns::tr("empty") + QLatin1String("(\"empty-sequence()\")"));
+        else if(isZeroOrOne())
+            return QString(QtXmlPatterns::tr("zero or one") + QLatin1String("(\"?\")"));
+        else if(isExactlyOne())
+            return QString(QtXmlPatterns::tr("exactly one"));
+        else if(isOneOrMore())
+            return QString(QtXmlPatterns::tr("one or more") + QLatin1String("(\"+\")"));
+        else
+            return QString(QtXmlPatterns::tr("zero or more") + QLatin1String("(\"*\")"));
+    }
+    else
+    {
+        Q_ASSERT(explain == ExcludeExplanation);
+
+        if(isEmpty() || isZeroOrOne())
+            return QLatin1String("?");
+        else if(isExactlyOne())
+            return QString();
+        else if(isExact())
+        {
+            return QString(QLatin1Char('{'))    +
+                   QString::number(maximum())   +
+                   QLatin1Char('}');
+        }
+        else
+        {
+            if(m_max == -1)
+            {
+                if(isOneOrMore())
+                    return QChar::fromLatin1('+');
+                else
+                    return QChar::fromLatin1('*');
+            }
+            else
+            {
+                /* We have a range. We use a RegExp-like syntax. */
+                return QString(QLatin1Char('{'))    +
+                       QString::number(minimum())   +
+                       QLatin1String(", ")          +
+                       QString::number(maximum())   +
+                       QLatin1Char('}');
+
+            }
+        }
+    }
+}
+
+QT_END_NAMESPACE

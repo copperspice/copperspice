@@ -1,0 +1,324 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page propertybinding.html
+\ingroup qml-features
+\contentspage QML Features
+\previouspage {QML Basic Types}{Data Types}
+\nextpage {Using QML Positioner and Repeater Items}{Component Layouts}
+\title Property Binding
+
+\section1 Properties
+
+QML components have \e properties that can be read and modified by other objects.
+In QML, properties serve many purposes but their main function is to bind to
+values. Values may be a \l{QML Basic Types}{basic type}, or other QML elements.
+
+The syntax for properties is:
+
+\tt{[default] property <type> <name>[: defaultValue]}
+
+Elements already possess useful properties but, to create custom properties,
+precede the property name with the keyword \c property.
+
+\snippet doc/src/snippets/declarative/properties.qml parent begin
+\snippet doc/src/snippets/declarative/properties.qml inherited properties
+\snippet doc/src/snippets/declarative/properties.qml custom properties
+\snippet doc/src/snippets/declarative/properties.qml parent end
+
+QML property rules coincide with many of JavaScript's property rules, for example,
+property names must begin with a lowercase letter.
+\l {JavaScript Reserved Words}{JavaScript reserved words} are not valid property
+names.
+
+\section1 Property Binding
+
+Property binding is a declarative way of specifying the value of a property. Binding allows
+a property's value to be expressed as an JavaScript expression that defines the value relative
+to other property values or data accessible in the application. The property value is
+automatically kept up to date if the other properties or data values change.
+
+Property bindings are created in QML using the colon "\c {:}" before the value:
+\snippet doc/src/snippets/declarative/properties.qml property binding
+The property binding causes the width of the \c Rectangle to update whenever the
+\c {parent}'s width changes.
+
+QML extends a standards compliant JavaScript engine, so any valid JavaScript expression can be
+used as a property binding. Bindings can access object properties, make function calls and even
+use built-in JavaScript objects such as \c {Date} and \c {Math}.
+\snippet doc/src/snippets/declarative/properties.qml JavaScript sample
+
+While syntactically bindings can be of arbitrary complexity, if a binding starts to become
+overly complex - such as involving multiple lines, or imperative loops - it may be better
+to refactor the component entirely, or at least factor the binding out into a separate
+function.
+
+\keyword qml-javascript-assignment
+\section1 Property Assignment versus Property Binding
+
+When working with both QML and JavaScript, it is important to differentiate between
+QML property binding and JavaScript value assignment. In QML, a property
+binding is created using the colon "\c {:}".
+\snippet doc/src/snippets/declarative/properties.qml property binding
+The property binding causes the width of the \c Rectangle to update whenever the
+\c {parent}'s width changes.
+
+Assigning a property value (using the equals sign "\c {=}") does not create a
+property binding.
+\snippet doc/src/snippets/declarative/properties.qml property assignment
+
+Instead of creating a property binding, the assignment simply sets the \c Rectangle
+\c width value to a number when the \c Component.onCompleted code is invoked.
+
+Assigning a value to a property that is already bound will remove the previous binding.
+A property can only have one value at a time (a list of property is one value),
+and if any code explicitly re-sets this value, the property binding is removed.
+
+There is no way to create a property binding directly from imperative JavaScript code,
+although it is possible to use the \l {Using the Binding Element}{Binding} element.
+
+\section1 Types of Properties
+
+Properties may bind to different types, but they are are \e type-safe. That is,
+properties only allow you to assign a value that matches the property type. For
+example, if a property is a real, and if you try to assign a string to it you
+will get an error.
+
+\badcode
+property real volume: "four"  //generates an error
+\endcode
+
+Certain properties bind to more complex types such as other elements and objects.
+
+\keyword qml-basic-property-types
+\section2 Basic Property Types
+
+Basic types such as \l int, \l real, and other Qt structures may be bound to
+properties. For a list of types, visit the \l {QML Basic Types} document.
+
+\keyword qml-id-property
+\section2 The \c id Property
+
+Each QML object may be given a special unique property called an \c id.
+No other object within the same QML component (see \l{QML Documents}) can have
+the same \c id value. QML objects may then access an object using the \c id
+property.
+\snippet doc/src/snippets/declarative/properties.qml id property
+A component may readily access its parent's properties by using the \c parent
+property.
+
+Note that an \c id must begin with a lower-case letter or an underscore. The
+\c id cannot contain characters other than letters, numbers, underscores, and
+\l {JavaScript Reserved Words}{JavaScript reserved words}.
+
+\section2 Elements and Objects as Property Values
+
+Many properties bind to objects. For example, the \l Item element has a
+\c states property that can bind to \l State elements. This type of property
+binding allows elements to carry additional non-children elements. \c Item's
+\c transitions property behaves in a similar way; it can bind to \l Transition
+elements.
+
+Care must be taken when referring to the parent of an object property binding.
+Elements and components that are bound to properties are not necessarily set
+as children of the properties' component.
+
+\snippet doc/src/snippets/declarative/properties.qml object binding
+The code snippet has a \l Gradient element that attempts to print its parent's
+\c width value. However, the \c Gradient element is bound to the \c gradient
+property, not the \c children property of the \c Rectangle. As a result, the
+\c Gradient does not have the \c Rectangle as its parent. Printing the value
+of \c{parent.width} generates an error. Printing the \c Rectangle object's
+first child's \c name will print \c {childrectangle} because the second
+\c Rectangle is bound to the \c children property.
+
+For more information about the \c children property, please read the
+\l {Default Properties} section.
+
+\keyword attached-properties
+\section2 Attached Properties
+
+Certain objects provide additional properties by \e attaching properties to other
+objects. For example, the \l Keys element have properties that can \e attach to other QML
+objects to provide keyboard handling.
+
+\snippet doc/src/snippets/declarative/properties.qml list attached property
+The element \l ListView provides the delegate, \c listdelegate, the property
+\c isCurrentItem as an attached property. The \c ListView.isCurrentItem
+\e{attached property} provides highlight information to the delegate.
+Effectively, the \l ListView element attaches the \c ListView.isCurrentItem
+property to each delegate it creates.
+
+\keyword attached-signalhandlers
+\section2 Attached Signal Handlers
+
+\e {Attached signal handlers} are similar
+to \l{Attached Properties}{attached properties} in that they attach to objects
+to provide additional functionality to objects. Two prominent elements,
+\l Component and \l Keys element provide
+\l{QML Signal and Handler Event System}{signal handlers} as attached signal
+handlers.
+\snippet doc/src/snippets/declarative/properties.qml attached signal handler
+
+Read the \l{QML Signal and Handler Event System} and the \l{Keyboard Focus in QML}
+articles for more information.
+
+\section2 List properties
+
+Some properties may accept a binding to a list property, where more than one
+component can bind to the property. List properties allow multiple
+\l {State}{States}, \l {Gradient}{Gradients}, and other components to bind to a
+single property.
+\snippet doc/src/snippets/declarative/properties.qml list property
+The list is enclosed in square brackets, with a comma separating the
+list elements. In cases where you are only assigning a single item to a
+list, you may omit the square brackets.
+\snippet doc/src/snippets/declarative/properties.qml single property
+
+To access the list, use the \c index property.
+\snippet doc/src/snippets/declarative/properties.qml print list property
+The snippet code simply prints the name of the first state, \c FETCH.
+
+ See the \l{list}{list type} documentation
+for more details about list properties and their available operations.
+
+\keyword qml-grouped-properties
+\section2 Grouped Properties
+
+In some cases properties form a logical group and use either the \e dot notation
+or \e group notation.
+
+Grouped properties may be written both ways:
+\snippet doc/src/snippets/declarative/properties.qml grouped properties
+
+In the element documentation grouped properties are shown using the dot notation.
+
+\section2 Property Aliases
+
+Unlike a property definition, which allocates a new, unique storage space for
+the property, a property alias connects the newly declared property, called the
+\e{aliasing property} as a direct reference to an existing property, the
+\e{aliased property}. Read or write operations on the aliasing property results
+in a read or write operations on the aliased property, respectively.
+
+A property alias declaration is similar to an ordinary property definition:
+
+\tt{[default] property alias <name>: <alias reference>}
+
+As the aliasing property has the same type as the aliased property, an explicit
+type is omitted, and the special \c alias keyword is before the property name.
+Instead of a default value, a property alias has a compulsory alias reference.
+Accessing the aliasing property is similar to accessing a regular property. In
+addition, the optional \c default keyword indicates that the aliasing property
+is a \l{Default Properties}{default property}.
+
+\snippet doc/src/snippets/declarative/Button.qml property alias
+When importing the component as a \c Button, the \c buttonlabel is directly
+accessible through the \c label property.
+\snippet doc/src/snippets/declarative/properties.qml alias usage
+In addition, the \c id property may also be aliased and referred outside the
+component.
+\snippet doc/src/snippets/declarative/Button.qml parent begin
+\snippet doc/src/snippets/declarative/Button.qml id alias
+\snippet doc/src/snippets/declarative/Button.qml parent end
+The \c imagebutton component has the ability to modify the child \l Image object
+ and its properties.
+\snippet doc/src/snippets/declarative/properties.qml image alias
+
+Using aliases, properties may be exposed to the
+\l{qml-top-level-component}{top level component}. Exposing properties to the
+top-level component allows components to have interfaces similar to Qt widgets.
+
+\section3 Considerations for property aliases
+
+Aliases are only activated once the component
+\l{Component::onCompleted}{completes} its initialization. An error is generated
+when an uninitialized alias is referenced. Likewise, aliasing an aliasing
+property will also result in an error.
+
+\snippet doc/src/snippets/declarative/properties.qml alias complete
+
+When importing the component, however, aliasing properties appear as regular Qt
+properties and consequently can be used in alias references.
+
+It is possible for an aliasing property to have the same name as an existing
+property, effectively overwriting the existing property. For example,
+the following component has a \c color alias property, named the same as the built-in
+\l {Rectangle::color} property:
+
+\snippet doc/src/snippets/declarative/properties.qml alias overwrite
+
+Any object that use this component and refer to its \c color property will be
+referring to the alias rather than the ordinary \l {Rectangle::color} property.
+Internally, however, the \c coloredrectangle can correctly set its \c color
+property and refer to the actual defined property rather than the alias.
+
+The \l{declarative/ui-components/tabwidget}{TabWidget} example uses
+aliases to reassign children to the \l ListView, creating a tab effect.
+
+\keyword default-properties
+\section2 Default Properties
+
+When imported, QML components will bind declared children to their designated
+\e{default properties}. The optional \c default attribute specifies a property
+as the \e {default property}. For example, the State element's default property
+is its \l{State::changes}{changes} property. \l PropertyChanges elements
+may simply be placed as the \c{State}'s children and they will be bound to the
+\c changes property.
+\snippet doc/src/snippets/declarative/properties.qml state default
+
+Similarly, the \l Item element's default property is its
+\l{Item::data}{data} property. The \c data property manages Item's
+\c children and \c resources properties. This way, different data types may be
+placed as direct children of the \c Item.
+\snippet doc/src/snippets/declarative/properties.qml default property
+
+Reassigning a default property is useful when a component is reused. For
+example, the \l{declarative/ui-components/tabwidget}{TabWidget} example uses
+the \c default attribute to reassign children to the \l ListView, creating
+a tab effect.
+
+\section1 Using the Binding Element
+
+In some advanced cases, it may be necessary to create bindings explicitly with
+the\l Binding element.
+
+For example, to bind a property exposed from C++ (\c system.brightness) to a
+value written in QML (\c slider.value), you could use the \l Binding element as
+follows:
+\snippet doc/src/snippets/declarative/properties.qml binding element
+
+\section1 Changing Property Values in States
+
+The \l PropertyChanges element is for setting property bindings within a
+\l State element to set a property binding.
+
+\snippet doc/src/snippets/declarative/properties.qml PropertyChanges element
+The rectangle's \c color property will bind to the \c warning component's
+\c color property when its \c state is set to the \c WARNING state.
+*/

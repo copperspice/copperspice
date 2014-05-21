@@ -1,0 +1,977 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \group modules
+    \title All Modules
+    \startpage index.html Qt Reference Documentation
+    \nextpage QtCore
+
+    \ingroup classlists
+
+    \brief Qt 4 comprises several modules. Each module is a separate
+    library.
+
+    \table 80%
+    \header \o {2,1} \bold{Modules for general software development}
+    \row \o \l{QtCore} \o Core non-graphical classes used by other modules
+    \row \o \l{QtGui} \o Graphical user interface (GUI) components
+    \row \o \l{QtMultimedia Module}{QtMultimedia} \o Classes for low-level multimedia functionality
+    \row \o \l{QtNetwork} \o Classes for network programming
+    \row \o \l{QtOpenGL} \o OpenGL support classes
+    \row \o \l{QtOpenVG} \o OpenVG support classes
+    \row \o \l{QtScript} \o Classes for evaluating Qt Scripts
+    \row \o \l{QtScriptTools} \o Additional Qt Script components
+    \row \o \l{QtSql} \o Classes for database integration using SQL
+    \row \o \l{QtSvg} \o Classes for displaying the contents of SVG files
+    \row \o \l{QtWebKit} \o Classes for displaying and editing Web content
+    \row \o \l{QtXml} \o Classes for handling XML
+    \row \o \l{QtXmlPatterns} \o An XQuery & XPath engine for XML and custom data models
+    \row \o \l{QtDeclarative} \o An engine for declaratively building fluid user interfaces.
+    \row \o \l{Phonon Module}{Phonon} \o Multimedia framework classes
+    \row \o \l{Qt3Support} \o Qt 3 compatibility classes
+    \header \o {2,1} \bold{Modules for working with Qt's tools}
+    \row \o \l{QtDesigner} \o Classes for extending \QD
+    \row \o \l{QtUiTools} \o Classes for handling \QD forms in applications
+    \row \o \l{QtHelp} \o Classes for online help    
+    \row \o \l{QtTest} \o Tool classes for unit testing
+    \header \o {2,1} \bold{Modules for Windows developers}
+    \row \o \l{QAxContainer} \o Extension for accessing ActiveX controls
+    \row \o \l{QAxServer} \o Extension for writing ActiveX servers
+    \header \o {2,1} \bold{Modules for Unix developers}
+    \row \o \l{QtDBus} \o Classes for Inter-Process Communication using the D-Bus
+    \endtable
+
+    If you use \l qmake to build your projects, the QtCore and QtGui
+    modules are included by default. To link only against QtCore, add
+    the following line to your \c .pro file:
+
+    \snippet doc/src/snippets/code/doc_src_modules.pro 0
+
+    On Windows, if you do not use \l qmake
+    or other build tools such as CMake, you also need to link against
+    the \c qtmain library.
+
+    \sa {Class and Function Documentation}
+*/
+
+/*!
+    \module QtCore
+    \title QtCore Module
+    \ingroup modules
+
+    \keyword QtCore
+
+    \brief The QtCore module contains core non-GUI functionality.
+
+    All other Qt modules rely on this module. To include the
+    definitions of the module's classes, use the following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qtcore.cpp 0
+*/
+
+
+/*!
+    \module QtGui
+    \title QtGui Module
+    \ingroup modules
+
+    \brief The QtGui module extends QtCore with GUI functionality.
+
+    To include the definitions of both modules' classes, use the
+    following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qtgui.pro 0
+*/
+
+/*!
+    \module QtMultimedia
+    \title QtMultimedia Module
+    \ingroup modules
+
+    \brief The QtMultimedia module provides low-level multimedia functionality.
+
+    To include the definitions of the module's classes, use the
+    following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qtmultimedia.cpp 1
+
+    To link against the module, add this line to your \l qmake \c
+    .pro file:
+
+    \snippet doc/src/snippets/code/doc_src_qtmultimedia.pro 0
+
+    The functionality provided by the \l{Phonon Module} is on a higher level
+    and in many cases more suitable for application developers.
+*/
+
+/*!
+    \module QtNetwork
+    \title QtNetwork Module
+    \ingroup modules
+
+    \brief The QtNetwork module provides classes to make network programming
+    easier and portable.
+
+    To include the definitions of the module's classes, use the
+    following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qtnetwork.cpp 1
+
+    To link against the module, add this line to your \l qmake \c
+    .pro file:
+
+    \snippet doc/src/snippets/code/doc_src_qtnetwork.pro 0
+*/
+
+/*!
+    \module QtOpenGL
+    \title QtOpenGL Module
+    \ingroup modules
+	\ingroup technology-apis
+
+    \brief The QtOpenGL module offers classes that make it easy to
+    use OpenGL in Qt applications.
+
+    OpenGL is a standard API for rendering 3D graphics. OpenGL only
+    deals with 3D rendering and provides little or no support for GUI
+    programming issues. The user interface for an OpenGL application
+    must be created with another toolkit, such as Motif on the X
+    platform, Microsoft Foundation Classes (MFC) under Windows, or Qt
+    on both platforms.
+
+    \note OpenGL is a trademark of Silicon Graphics, Inc. in
+    the United States and other countries.
+
+    The Qt OpenGL module makes it easy to use OpenGL in Qt applications.
+    It provides an OpenGL widget class that can be used just like any
+    other Qt widget, except that it opens an OpenGL display buffer where
+    you can use the OpenGL API to render the contents.
+
+    To include the definitions of the module's classes, use the
+    following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qtopengl.cpp 0
+
+    To link against the module, add this line to your \l qmake \c
+    .pro file:
+
+    \snippet doc/src/snippets/code/doc_src_qtopengl.pro 1
+
+    The Qt OpenGL module is implemented as a platform-independent Qt/C++
+    wrapper around the platform-dependent GLX (version 1.3 or later),
+    WGL, or AGL C APIs. Although the basic functionality provided is very
+    similar to Mark Kilgard's GLUT library, applications using the Qt
+    OpenGL module can take advantage of the whole Qt API for
+    non-OpenGL-specific GUI functionality.
+
+    The QtOpenGL module is available on Windows, X11 and Mac OS X.
+    \l{Qt for Embedded Linux and OpenGL} supports OpenGL ES (OpenGL for
+    Embedded Systems).
+    \note To be able to use the OpenGL API in \l{Qt for Embedded Linux}, it must be
+    integrated with the Q Window System (QWS). See the
+    \l{Qt for Embedded Linux and OpenGL} documentation for details.
+
+*/
+
+/*!
+    \module QtOpenVG
+    \title QtOpenVG Module
+    \since 4.6
+    \ingroup modules
+	\ingroup technology-apis
+
+    \brief The QtOpenVG module is a plugin that provides support for
+    OpenVG painting.
+
+    OpenVG is a standard API from the
+    \l{http://www.khronos.org/openvg}{Khronos Group} for accelerated
+    2D vector graphics that is appearing in an increasing number of
+    embedded devices.
+
+    OpenVG support can be enabled by passing the \c{-openvg} option
+    to configure. It is assumed that the following qmake variables
+    are set to appropriate values in the qmake.conf file for your
+    platform:
+
+    \list
+    \o QMAKE_INCDIR_OPENVG
+    \o QMAKE_LIBDIR_OPENVG
+    \o QMAKE_LIBS_OPENVG
+    \endlist
+
+    Most OpenVG implementations are based on EGL, so the following
+    variables may also need to be set:
+
+    \list
+    \o QMAKE_INCDIR_EGL
+    \o QMAKE_LIBDIR_EGL
+    \o QMAKE_LIBS_EGL
+    \endlist
+
+    See \l{qmake Variable Reference} for more information on these variables.
+
+    Two kinds of OpenVG engines are currently supported: EGL based,
+    and engines built on top of OpenGL such as
+    \l{http://sourceforge.net/projects/shivavg}{ShivaVG}.
+    EGL based engines are preferred.
+
+    Once the graphics system plugin has been built and installed,
+    applications can be run as follows to use the plugin:
+
+    \code
+    app -graphicssystem OpenVG
+    \endcode
+
+    If ShivaVG is being used, then substitute \c ShivaVG instead of
+    \c OpenVG in the line above.
+*/
+
+/*!
+	\module QtScript
+	\title QtScript Module
+	\since 4.3
+	\ingroup modules
+
+	\brief The QtScript module provides classes for making Qt applications scriptable.
+
+	The QtScript module only provides core scripting facilities; the
+	QtScriptTools module provides additional Qt Script-related
+	components that application developers may find useful.
+
+	To include the definitions of the module's classes, use the
+	following directive:
+
+	\snippet doc/src/snippets/code/doc_src_qtscript.cpp 0
+
+	To link against the module, add this line to your \l qmake \c .pro file:
+
+	\snippet doc/src/snippets/code/doc_src_qtscript.pro 1
+
+        For detailed information on how to make your application
+        scriptable with QtScript, see \l{Making Applications
+        Scriptable}.
+
+        \section1 License Information
+
+        Qt Commercial Edition licensees that wish to distribute applications that
+        use the QtScript module need to be aware of their obligations under the
+        GNU Library General Public License (LGPL).
+
+        Developers using the Open Source Edition can choose to redistribute
+        the module under the appropriate version of the GNU LGPL.
+
+        \legalese
+        QtScript is licensed under the GNU Library General Public License.
+        Individual contributor names and copyright dates can be found
+        inline in the code.
+
+        This library is free software; you can redistribute it and/or
+        modify it under the terms of the GNU Library General Public
+        License as published by the Free Software Foundation; either
+        version 2 of the License, or (at your option) any later version.
+
+        This library is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+        Library General Public License for more details.
+
+        You should have received a copy of the GNU Library General Public License
+        along with this library; see the file COPYING.LIB.  If not, write to
+        the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+        Boston, MA 02110-1301, USA.
+        \endlegalese
+
+*/
+
+/*!
+  \module QtScriptTools
+  \title QtScriptTools Module
+  \since 4.5
+  \ingroup modules
+
+  \brief The QtScriptTools module provides additional components for applications that use Qt Script.
+
+  \section1 Configuring the Build Process
+
+  Applications that use the Qt Script Tools classes need to
+  be configured to be built against the QtScriptTools module.
+  To include the definitions of the module's classes, use the
+  following directive:
+
+  \snippet doc/src/snippets/code/doc_src_qtscripttools.cpp 0
+
+  To link against the module, add this line to your \l qmake \c .pro file:
+
+  \snippet doc/src/snippets/code/doc_src_qtscripttools.pro 1
+*/
+
+/*!
+    \module QtSql
+    \title QtSql Module
+    \ingroup modules
+
+    To include the definitions of the module's classes, use the
+    following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qtsql.cpp 0
+
+    To link against the module, add this line to your \l qmake \c
+    .pro file:
+
+    \snippet doc/src/snippets/code/doc_src_qtsql.pro 1
+
+    See the \l{SQL Programming} guide for information about using this
+    module in your applications.
+*/
+
+/*!
+        \module QtSvg
+        \title QtSvg Module
+        \since 4.1
+        \ingroup modules
+		\ingroup technology-apis
+		\ingroup best-practices
+
+        \brief The QtSvg module provides classes for displaying and creating SVG files.
+
+        To include the definitions of the module's classes, use the
+        following directive:
+
+        \snippet doc/src/snippets/code/doc_src_qtsvg.cpp 0
+
+        To link against the module, add this line to your \l qmake \c
+        .pro file:
+
+        \snippet doc/src/snippets/code/doc_src_qtsvg.pro 1
+
+        \section1 License Information
+
+        Some code for arc handling in this module is derived from code with
+        the following license:
+
+        \legalese
+        Copyright  2002 USC/Information Sciences Institute
+
+        Permission to use, copy, modify, distribute, and sell this software
+        and its documentation for any purpose is hereby granted without
+        fee, provided that the above copyright notice appear in all copies
+        and that both that copyright notice and this permission notice
+        appear in supporting documentation, and that the name of
+        Information Sciences Institute not be used in advertising or
+        publicity pertaining to distribution of the software without
+        specific, written prior permission.  Information Sciences Institute
+        makes no representations about the suitability of this software for
+        any purpose.  It is provided "as is" without express or implied
+        warranty.
+
+        INFORMATION SCIENCES INSTITUTE DISCLAIMS ALL WARRANTIES WITH REGARD
+        TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF
+        MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL INFORMATION SCIENCES
+        INSTITUTE BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL
+        DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA
+        OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+        TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+        PERFORMANCE OF THIS SOFTWARE.
+        \endlegalese
+*/
+
+/*!
+    \module QtXml
+    \title QtXml Module
+    \ingroup modules
+	\ingroup technology-apis
+
+    \brief The QtXml module provides a stream reader and writer for
+    XML documents, and C++ implementations of SAX and DOM.
+
+    To include the definitions of the module's classes, use the
+    following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qtxml.cpp 0
+
+    To link against the module, add this line to your \l qmake \c
+    .pro file:
+
+    \snippet doc/src/snippets/code/doc_src_qtxml.pro 1
+
+    Further XML support is provided by the \l{Qt Solutions} group who
+    provide, for example, classes that support SOAP and MML with the
+    Qt XML classes. 
+*/
+
+/*!
+    \module QtXmlPatterns
+    \title QtXmlPatterns Module
+    \since 4.4
+    \ingroup modules
+	\ingroup technology-apis
+
+    \brief The QtXmlPatterns module provides support for XPath,
+    XQuery, XSLT and XML Schema validation.
+
+    To include the definitions of the module's classes, use the
+    following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qtxmlpatterns.cpp 0
+
+    To link against the module, add this line to your \l qmake \c
+    .pro file:
+
+    \snippet doc/src/snippets/code/doc_src_qtxmlpatterns.pro 1
+
+    \section1 Further Reading
+
+    General overviews of XQuery and XSchema can be found in the
+    \l{XQuery} document.
+
+    An introduction to the XQuery language can be found in
+    \l{A Short Path to XQuery}.
+
+    \section1 License Information
+
+    The XML Schema implementation provided by this module contains the \c xml.xsd file
+    (located in \c{src/xmlpatterns/schema/schemas}) which is licensed under the terms
+    given below. This module is always built with XML Schema support enabled.
+
+    \legalese
+    W3C\copyright SOFTWARE NOTICE AND LICENSE
+
+    This license came from: http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
+
+    This work (and included software, documentation such as READMEs, or other
+    related items) is being provided by the copyright holders under the following
+    license. By obtaining, using and/or copying this work, you (the licensee)
+    agree that you have read, understood, and will comply with the following
+    terms and conditions.
+
+    Permission to copy, modify, and distribute this software and its
+    documentation, with or without modification, for any purpose and without
+    fee or royalty is hereby granted, provided that you include the following on
+    ALL copies of the software and documentation or portions thereof, including
+    modifications:
+
+      1. The full text of this NOTICE in a location viewable to users of the
+         redistributed or derivative work.\br
+      2. Any pre-existing intellectual property disclaimers, notices, or terms
+         and conditions. If none exist, the W3C Software Short Notice should be
+         included (hypertext is preferred, text is permitted)
+         within the body of any redistributed or derivative code.\br
+      3. Notice of any changes or modifications to the files, including the date
+         changes were made. (We recommend you provide URIs to the location from
+         which the code is derived.)
+
+    THIS SOFTWARE AND DOCUMENTATION IS PROVIDED "AS IS," AND COPYRIGHT HOLDERS
+    MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+    LIMITED TO, WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR
+    PURPOSE OR THAT THE USE OF THE SOFTWARE OR DOCUMENTATION WILL NOT INFRINGE
+    ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
+
+    COPYRIGHT HOLDERS WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL OR
+    CONSEQUENTIAL DAMAGES ARISING OUT OF ANY USE OF THE SOFTWARE OR
+    DOCUMENTATION.
+
+    The name and trademarks of copyright holders may NOT be used in
+    advertising or publicity pertaining to the software without specific, written
+    prior permission. Title to copyright in this software and any associated
+    documentation will at all times remain with copyright holders.
+    \endlegalese
+*/
+
+/*!
+    \page phonon-module.html
+    \module Phonon
+    \title Phonon Module
+    \ingroup modules
+
+    \brief The Phonon module contains namespaces and classes for multimedia functionality.
+
+    \generatelist{classesbymodule Phonon}
+
+    Phonon is a cross-platform multimedia framework that enables the use of
+    audio and video content in Qt applications. The \l{Phonon Overview}
+    document provides an introduction to the architecture and features included
+    in Phonon. The \l{Phonon} namespace contains a list of all classes, functions
+    and namespaces provided by the module.
+
+    Applications that use Phonon's classes need to
+    be configured to be built against the Phonon module.
+    The following declaration in a \c qmake project file ensures that
+    an application is compiled and linked appropriately:
+
+    \snippet doc/src/snippets/code/doc_src_phonon.pro 0
+
+    \section1 Qt Backends
+
+    Qt Backends are currently developed for Phonon version 4.1. The Phonon
+    project has moved on and introduced new features that the Qt Backends do not
+    implement. We have chosen not to document the part of Phonon that we do not
+    support. Any class or function not appearing in our documentation can be
+    considered unsupported.
+
+    \section1 License Information
+
+    Qt Commercial Edition licensees that wish to distribute applications that
+    use the Phonon module need to be aware of their obligations under the
+    GNU Lesser General Public License (LGPL).
+
+    Developers using the Open Source Edition can choose to redistribute
+    the module under the appropriate version of the GNU LGPL; version 2.1
+    for applications and libraries licensed under the GNU GPL version 2,
+    or version 3 for applications and libraries licensed under the GNU
+    GPL version 3.
+
+    \legalese
+    This file is part of the KDE project
+
+    Copyright (C) 2004-2009 Matthias Kretz <kretz@kde.org> \BR
+    Copyright (C) 2008 Ian Monroe <ian@monroe.nu> \BR
+    Copyright (C) 2007-2008 Trolltech ASA \BR
+    Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies). \BR
+    Contact: Nokia Corporation (qt-info@nokia.com)
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+    \endlegalese
+*/
+
+/*!
+    \module Qt3Support
+    \title Qt3Support Module
+    \ingroup modules
+
+    \keyword Qt3Support
+    \brief The Qt3Support module provides classes that ease porting
+    from Qt 3 to Qt 4.
+
+    \warning The classes in this module are intended to be used in
+    intermediate stages of a porting process and are not intended
+    to be used in production code.
+
+    To include the definitions of the module's classes, use the
+    following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qt3support.cpp 0
+
+    To link against the module, add this line to your \l qmake \c
+    .pro file:
+
+    \snippet doc/src/snippets/code/doc_src_qt3support.pro 1
+
+    \note Since this module provides compatibility classes for
+    diverse parts of the Qt 3 API, it has dependencies on the QtCore,
+    QtGui, QtNetwork, QtSql, and QtXml modules.
+
+    \sa {Porting to Qt 4}
+*/
+
+/*!
+    \module QtDesigner
+    \title QtDesigner Module
+    \ingroup modules
+
+    \brief The QtDesigner module provides classes that allow you to
+    create your own custom widget plugins for Qt Designer, and classes
+    that enable you to access Qt Designer's components.
+
+    In addition, the QFormBuilder class provides the possibility of
+    constructing user interfaces from UI files at run-time.
+
+    To include the definitions of the module's classes, use the
+    following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qtdesigner.cpp 0
+
+    To link against the module, add this line to your \c qmake .pro
+    file:
+
+    \snippet doc/src/snippets/code/doc_src_qtdesigner.pro 1
+*/
+
+/*!
+    \module QtUiTools
+    \title QtUiTools Module
+    \since 4.1
+    \ingroup modules
+
+    \brief The QtUiTools module provides classes to handle forms created 
+    with Qt Designer.
+
+    These forms are processed at run-time to produce dynamically-generated
+    user interfaces. In order to generate a form at run-time, a resource
+    file containing a UI file is needed. Applications that use the
+    form handling classes need to be configured to be built against the
+    QtUiTools module. This is done by including the following declaration
+    in a \c qmake project file to ensure that the application is compiled
+    and linked appropriately.
+
+    \snippet doc/src/snippets/code/doc_src_qtuiloader.pro 0
+
+    A form loader object, provided by the QUiLoader class, is used to
+    construct the user interface. This user interface can
+    be retrieved from any QIODevice; for example, a QFile object can be
+    used to obtain a form stored in a project's resources. The
+    QUiLoader::load() function takes the user interface description
+    contained in the file and constructs the form widget.
+
+    To include the definitions of the module's classes, use the following
+    directive:
+
+    \snippet doc/src/snippets/code/doc_src_qtuiloader.cpp 1
+
+    \sa{Calculator Builder Example}, {World Time Clock Builder Example}
+*/
+
+/*!
+    \module QtHelp
+    \title QtHelp Module
+    \ingroup modules
+
+    \brief The QtHelp module provides classes for integrating
+    online documentation in applications.
+
+    The classes and tools supplied with Qt to enable developers to include
+    online help and documentation in their applications are described in
+    more detail in \l{The Qt Help Framework} overview document.
+
+    To include the definitions of the module's classes, use the
+    following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.cpp 0
+
+    To link against the module, add this line to your \l qmake \c
+    .pro file:
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 1
+
+    \section1 License Information
+
+    The QtHelp module uses the CLucene indexing library to provide full-text
+    searching capabilities for Qt Assistant and applications that use the
+    features of QtHelp.
+
+    Qt Commercial Edition licensees that wish to distribute applications that
+    use these features of the QtHelp module need to be aware of their
+    obligations under the GNU Lesser General Public License (LGPL).
+
+    Developers using the Open Source Edition can choose to redistribute
+    the module under the appropriate version of the GNU LGPL; version 2.1
+    for applications and libraries licensed under the GNU GPL version 2,
+    or version 3 for applications and libraries licensed under the GNU
+    GPL version 3.
+
+    \legalese
+    Copyright (C) 2003-2006 Ben van Klinken and the CLucene Team \BR
+    Changes are Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+    \endlegalese
+
+    \sa {The Qt Help Framework}
+*/
+
+/*!
+    \module QtTest
+    \title QtTest Module
+    \ingroup modules
+
+    \keyword QtTest
+
+    \brief The QtTest module provides classes for unit testing Qt applications and libraries.
+
+    Applications that use Qt's unit testing classes need to
+    be configured to be built against the QtTest module.
+    To include the definitions of the module's classes, use the
+    following directive:
+
+    \snippet doc/src/snippets/code/doc_src_qttest.cpp 0
+
+    To link against the module, add this line to your \l qmake \c
+    .pro file:
+
+    \snippet doc/src/snippets/code/doc_src_qttest.pro 1
+
+    See the \l{QTestLib Manual} for a detailed introduction on how to use
+    Qt's unit testing features with your applications.
+
+    The QtTest module is part of all \l{Qt editions}.
+*/
+
+/*!
+    \module QAxContainer
+    \title QAxContainer Module
+    \ingroup modules
+
+    \brief The QAxContainer module is a Windows-only extension for
+    accessing ActiveX controls and COM objects.
+
+    QAxServer is part of the \l{ActiveQt Framework}.
+
+    \section1 License Information
+
+    The QAxContainer module is not covered by the \l{GNU General Public License (GPL)},
+    the \l{GNU Lesser General Public License (LGPL)}, or the
+    \l{Qt Commercial Edition}{Qt Commercial License}. Instead, it is distributed under
+    the following license.
+
+    \legalese
+    Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).\br
+    All rights reserved.
+
+    Contact:  Nokia Corporation (qt-info@nokia.com)\br
+
+    You may use this file under the terms of the BSD license as follows:\br
+
+    "Redistribution and use in source and binary forms, with or without modification,
+    are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this list
+    of conditions and the following disclaimer.\br
+    * Redistributions in binary form must reproduce the above copyright notice, this
+    list of conditions and the following disclaimer in the documentation and/or other
+    materials provided with the distribution.\br
+    * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of
+    its contributors may be used to endorse or promote products derived from this
+    software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+    OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+    SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+    TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+    BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+    ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+    \endlegalese
+*/
+
+/*!
+    \module QAxServer
+    \title QAxServer Module
+    \ingroup modules
+
+    \brief The QAxServer module is a Windows-only static library that
+    you can use to turn a standard Qt binary into a COM server. 
+
+    QAxServer is part of the \l{ActiveQt Framework}.
+
+    \section1 License Information
+
+    The QAxContainer module is not covered by the \l{GNU General Public License (GPL)},
+    the \l{GNU Lesser General Public License (LGPL)}, or the
+    \l{Qt Commercial Edition}{Qt Commercial License}. Instead, it is distributed under
+    the following license.
+
+    \legalese
+    Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).\br
+    All rights reserved.
+
+    Contact:  Nokia Corporation (qt-info@nokia.com)\br
+
+    You may use this file under the terms of the BSD license as follows:\br
+
+    "Redistribution and use in source and binary forms, with or without modification,
+    are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this list
+    of conditions and the following disclaimer.\br
+    * Redistributions in binary form must reproduce the above copyright notice, this
+    list of conditions and the following disclaimer in the documentation and/or other
+    materials provided with the distribution.\br
+    * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of
+    its contributors may be used to endorse or promote products derived from this
+    software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+    OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+    SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+    TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+    BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+    ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+    \endlegalese
+*/
+
+/*!
+    \module QtDBus
+    \title QtDBus module
+    \ingroup modules
+
+    \keyword QtDBus
+    \target The QDBus compiler
+
+    \brief The QtDBus module is a Unix-only library that you can use
+    to perform Inter-Process Communication using the \l{D-Bus} protocol.
+
+    Applications using the QtDBus module can provide services to
+    other, remote applications by exporting objects, as well as use
+    services exported by those applications by placing calls and
+    accessing properties.
+
+    The QtDBus module provides an interface that extends the Qt \l
+    {signalsandslots.html}{Signals and Slots} mechanism, allowing one
+    to connect to a signal emitted remotely as well as to connect a
+    local signal to remote slot.
+
+    To use this module, use the following code in your application:
+
+    \snippet doc/src/snippets/code/doc_src_qtdbus.cpp 0
+
+    If you're using qmake to build your application, you can add this
+    line to your .pro file to make it link against the QtDBus
+    libraries:
+
+    \snippet doc/src/snippets/code/doc_src_qtdbus.pro 1
+
+    \note The source code for this module is located in the \c{src/qdbus}
+    directory. When installing Qt from source, this module is built when Qt's
+    tools are built.
+
+    See the \l {D-Bus} page for detailed information on
+    how to use this module.
+
+    This module is part of all \l{Qt editions}.
+*/
+
+/*!
+    \page qtmain.html
+    \title The qtmain Library
+    \ingroup licensing
+    \ingroup platform-specific
+    \brief Describes the use and license of the qtmain helper library.
+
+    qtmain is a helper library that enables the developer to write a
+    cross-platform main() function on Windows and on the Symbian platform.
+    If you do not use \l qmake or other build tools such as CMake, then you
+    need to link against the \c qtmain library.
+
+    \section1 License Information
+
+    The QAxContainer module is not covered by the \l{GNU General Public License (GPL)},
+    the \l{GNU Lesser General Public License (LGPL)}, or the
+    \l{Qt Commercial Edition}{Qt Commercial License}. Instead, it is distributed under
+    the following license.
+    
+    \legalese
+    Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).\br
+    All rights reserved.
+
+    Contact:  Nokia Corporation (qt-info@nokia.com)
+
+    You may use this file under the terms of the BSD license as follows:
+
+    "Redistribution and use in source and binary forms, with or without modification,
+    are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this list
+    of conditions and the following disclaimer.\br
+    * Redistributions in binary form must reproduce the above copyright notice, this
+    list of conditions and the following disclaimer in the documentation and/or other
+    materials provided with the distribution.\br
+    * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of
+    its contributors may be used to endorse or promote products derived from this
+    software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+    OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+    SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+    TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+    BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+    ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+    \endlegalese
+
+    The contents of the \c{qts60main.cpp} and \c{qts60main_mcrt0.cpp} files,
+    located in the \c{src/s60main} directory are not covered by the
+    \l{GNU General Public License (GPL)}, the
+    \l{GNU Lesser General Public License (LGPL)}, or the
+    \l{Qt Commercial Edition}{Qt Commercial License}. Instead, they are
+    distributed under the following license.
+    
+    \legalese
+    Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).\br
+    All rights reserved.\br
+    Contact: Nokia Corporation (qt-info@nokia.com)
+
+    This file is part of the Symbian application wrapper of the Qt Toolkit.
+
+    You may use this file under the terms of the BSD license as follows:
+
+    "Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are
+    met:\br
+      * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.\br
+      * Redistributions in binary form must reproduce the above copyright
+        notice, this list of conditions and the following disclaimer in the
+        documentation and/or other materials provided with the distribution.\br
+      * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
+        the names of its contributors may be used to endorse or promote
+        products derived from this software without specific prior written
+        permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+    IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+    PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+    CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+    \endlegalese
+*/

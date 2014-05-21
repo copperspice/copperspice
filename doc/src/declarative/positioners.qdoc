@@ -1,0 +1,196 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qml-positioners.html
+\ingroup qml-features
+\previouspage Property Binding
+\nextpage Anchor-based Layout in QML
+\contentspage QML Features
+\title Using QML Positioner and Repeater Items
+
+
+Positioner items are container items that manage the positions and sizes of
+items in a declarative user interface. Positioners behave in a similar way to
+the \l{Widgets and Layouts}{layout managers} used with standard Qt widgets,
+except that they are also containers in their own right.
+
+Positioners and repeaters make it easier to work with many items when they need
+to be arranged in a regular layout.
+
+\section1 Positioners
+
+A set of standard positioners are provided in the basic set of Qt Quick
+graphical elements:
+
+\list
+\o \l{#Column}{Column} arranges its children in a column
+\o \l{#Row}{Row} arranges its children in a row
+\o \l{#Grid}{Grid} arranges its children in a grid
+\o \l{#Flow}{Flow} arranges its children like words on a page
+\endlist
+
+\section2 Column
+
+\div {class="float-right"}
+\inlineimage qml-column.png
+\enddiv
+
+\l Column items are used to vertically arrange items. The following example
+uses a Column item to arrange three \l Rectangle items in an area defined
+by an outer \l Item. The \l{Column::spacing}{spacing} property is set to
+include a small amount of space between the rectangles.
+
+\clearfloat
+\snippet doc/src/snippets/declarative/column/column.qml document
+
+Note that, since Column inherits directly from Item, any background color
+must be added to a parent Rectangle, if desired.
+
+\section2 Row
+
+\div {class="float-right"}
+\inlineimage qml-row.png
+\enddiv
+
+\l Row items are used to horizontally arrange items. The following example
+uses a Row item to arrange three rounded \l Rectangle items in an area defined
+by an outer colored Rectangle. The \l{Row::spacing}{spacing} property is set to
+include a small amount of space between the rectangles.
+
+We ensure that the parent Rectangle is large enough so that there is some space
+left around the edges of the horizontally centered Row item.
+
+\clearfloat
+\snippet doc/src/snippets/declarative/row.qml document
+
+\section2 Grid
+
+\div {class="float-right"}
+\inlineimage qml-grid-spacing.png
+\enddiv
+
+\l Grid items are used to place items in a grid or table arrangement.
+The following example uses a Grid item to place four \l Rectangle items
+in a 2-by-2 grid. As with the other positioners, the spacing between items
+can be specified using the \l{Grid::spacing}{spacing} property.
+
+\clearfloat
+\snippet doc/src/snippets/declarative/grid-spacing.qml document
+
+There is no difference between horizontal and vertical spacing inserted
+between items, so any additional space must be added within the items
+themselves.
+
+Any empty cells in the grid must be created by defining placeholder items
+at the appropriate places in the Grid definition.
+
+\section2 Flow
+
+\div {class="float-right"}
+\inlineimage qml-flow-text1.png
+\inlineimage qml-flow-text2.png
+\enddiv
+
+\l Flow items are used to place items like words on a page, with rows or
+columns of non-overlapping items.
+
+Flow items arrange items in a similar way to \l Grid items, with items
+arranged in lines along one axis (the minor axis), and lines of items
+placed next to each other along another axis (the major axis). The
+direction of flow, as well as the spacing between items, are controlled
+by the \l{Flow::}{flow} and \l{Flow::}{spacing} properties.
+
+The following example shows a Flow item containing a number of \l Text
+child items. These are arranged in a similar way to those shown in the
+screenshots.
+
+\clearfloat
+\snippet doc/src/snippets/declarative/flow.qml document
+
+The main differences between the Grid and Flow positioners are that items
+inside a Flow will wrap when they run out of space on the minor axis, and
+items on one line may not be aligned with items on another line if the
+items do not have uniform sizes. As with Grid items, there is no independent
+control of spacing between items and between lines of items.
+
+\section1 Repeaters
+
+\div {class="float-right"}
+\inlineimage qml-repeater-grid-index.png
+\enddiv
+
+Repeaters create items from a template for use with positioners, using data
+from a model. Combining repeaters and positioners is an easy way to lay out
+lots of items. A \l Repeater item is placed inside a positioner, and generates
+items that the enclosing positioner arranges.
+
+Each Repeater creates a number of items by combining each element of data
+from a model, specified using the \l{Repeater::model}{model} property, with
+the template item, defined as a child item within the Repeater.
+The total number of items is determined by the amount of data in the model.
+
+The following example shows a repeater used with a \l{#Grid}{Grid} item to
+arrange a set of Rectangle items. The Repeater item creates a series of 24
+rectangles for the Grid item to position in a 5 by 5 arrangement.
+
+\clearfloat
+\snippet doc/src/snippets/declarative/repeaters/repeater-grid-index.qml document
+
+The number of items created by a Repeater is held by its \l{Repeater::}{count}
+property. It is not possible to set this property to determine the number of
+items to be created. Instead, as in the above example, we use an integer as
+the model. This is explained in the \l{QML Data Models#An Integer}{QML Data Models}
+document.
+
+It is also possible to use a delegate as the template for the items created
+by a Repeater. This is specified using the \l{Repeater::}{delegate} property.
+
+\section1 Using Transitions
+
+Transitions can be used to animate items that are added to, moved within,
+or removed from a positioner.
+
+Transitions for adding items apply to items that are created as part of a
+positioner, as well as those that are reparented to become children of a
+positioner.
+Transitions for removing items apply to items within a positioner that are
+deleted, as well as those that are removed from a positioner and given new
+parents in a document.
+
+Additionally, changing the opacity of items to zero will cause them to
+disappear using the remove transition, and making the opacity non-zero will
+cause them to appear using the add transition.
+
+\section1 Other Ways to Position Items
+
+There are several other ways to position items in a user interface. In addition
+to the basic technique of specifying their coordinates directly, they can be
+positioned relative to other items with \l{anchor-layout}{anchors}, or used
+with \l{QML Data Models} such as
+\l{QML Data Models#VisualItemModel}{VisualItemModel}.
+*/

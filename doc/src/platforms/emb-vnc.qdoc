@@ -1,0 +1,127 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page qt-embedded-vnc.html
+    \brief A guide to using Qt for Embedded Linux applications as VNC servers
+    and clients.
+
+    \title The VNC Protocol and Qt for Embedded Linux
+    \ingroup qt-embedded-linux
+
+    VNC (Virtual Network Computing) software makes it possible to view
+    and interact with one computer (the "server") from any other
+    computer or mobile device (the "viewer") anywhere on a network.
+
+    \image qt-embedded-vnc-screen.png
+
+    VNC clients are available for a vast array of display systems, including
+    X11, Mac OS X and Windows.
+
+    \section1 Configuring Qt with VNC Capabilities
+
+    To run a \l{Qt for Embedded Linux} application using the VNC protocol, the
+    \l{Qt for Embedded Linux} library must be configured and compiled with the
+    \c -qt-gfx-vnc option:
+
+    \snippet doc/src/snippets/code/doc_src_emb-vnc.qdoc 0
+
+    \section1 Running a Server Application
+
+    Start a server application by specifying the \c -qws command
+    line option when running the application. (This can also be
+    specified in the application's source code.)
+    Use the \c -display command line option to specify the VNC server's
+    driver and the virtual screen to use. For example:
+
+    \snippet doc/src/snippets/code/doc_src_emb-vnc.qdoc 1
+
+    The application will act as a VNC server which can be accessed using
+    an ordinary VNC client, either on the development machine or from a
+    different machine on a network.
+
+    For example, using the X11 VNC client to view the application from the
+    same machine:
+
+    \snippet doc/src/snippets/code/doc_src_emb-vnc.qdoc 2
+
+    To interact with the application from another machine on the network,
+    run a VNC client pointing to the machine that is running the server
+    application.
+
+    \l{Qt for Embedded Linux} will create a 640 by 480 pixel display by
+    default. Alternatively, the \c QWS_SIZE environment variable can be
+    used to set another size; e.g., \c{QWS_SIZE=240x320}.
+
+    \section1 Running Client Applications
+
+    If you want to run more than one application on the same display, you
+    only need to start the first one as a server application, using the
+    \c -qws command line option to indicate that it will manage other
+    windows.
+
+    \snippet doc/src/snippets/code/doc_src_emb-vnc.qdoc Starting server
+
+    Subsequent client applications can be started \e without the \c -qws
+    option, but will each require the same \c -display option and argument
+    as those used for the server.
+
+    \snippet doc/src/snippets/code/doc_src_emb-vnc.qdoc Starting clients
+
+    However, for the clients, this option will not cause a new VNC server
+    to be started, but only indicates that their windows will appear on the
+    virtual screen managed by the server application.
+
+    \section1 Related Resources
+
+    It is not always necessary to specify the \c -qws command line option
+    when running a server application as long as the QApplication object
+    used by the application has been constructed with the
+    QApplication::GuiServer flag.
+
+    See the \l{Running Qt for Embedded Linux Applications}{running applications}
+    documentation for more details about server and client applications.
+
+    \table
+    \row
+    \o \bold {The Virtual Framebuffer}
+
+    The \l{The Virtual Framebuffer}{virtual framebuffer} is
+    an alternative technique recommended for development and debugging
+    purposes.
+
+    The virtual framebuffer emulates a framebuffer using a shared
+    memory region and the \c qvfb tool to display the framebuffer in a
+    window.
+
+    Its use of shared memory makes the virtual framebuffer much faster
+    and smoother than using the VNC protocol, but it does not operate
+    over a network.
+
+    \o \inlineimage qt-embedded-virtualframebuffer.png
+    \endtable
+*/

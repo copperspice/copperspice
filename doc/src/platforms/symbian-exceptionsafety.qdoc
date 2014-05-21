@@ -1,0 +1,227 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page symbianexceptionsafety.html
+    \title Exception Safety with Symbian
+    \ingroup qtsymbian
+    \brief A guide to integrating exception safety in Qt with Symbian.
+
+    The following sections describe how Qt code can interoperate with Symbian's
+    exception safety system.
+
+    \tableofcontents
+
+    \section1 What the problem is
+    
+    Qt and Symbian have different exception systems. Qt works with standard C++ 
+    exceptions, whereas Symbian has its TRAP/Leave/CleanupStack system. So, what would 
+    happen if you mix the two systems? It could go wrong in a number of ways.
+
+    Clean-up ordering would be different between the two. When Symbian code 
+    leaves, the clean-up stack is cleaned up before anything else happens. After 
+    that, the objects on the call stack would be cleaned up as with a normal 
+    exception. So if there are any dependencies between stack-based and  
+    objects owned by the clean-up stack, there could be problems due to this
+    ordering.
+
+    Symbian's \c XLeaveException, which is used when Symbian implements leaves as 
+    exceptions, is not derived from \c std::exception, so would not be caught in 
+    Qt catch statements designed to catch \c std::exception. 
+
+    Qt's and standard C++'s \c std::exception derived exceptions result in program 
+    termination if they fall back to a Symbian TRAP. 
+
+	These problems can be solved with barrier macros and helper functions that 
+	will translate between the two exception systems. Use them, in Qt code, 
+	whenever calling into or being called from Symbian code.
+
+    \section1 Qt calls to Symbian
+
+    When calling Symbian leaving functions from Qt code, we want to translate 
+    Symbian leaves to standard C++ exceptions. The following help is provided:
+
+    \list
+        \o \l qt_symbian_throwIfError() takes a Symbian
+        error code and throws an appropriate exception to represent it. 
+        This will do nothing if the error code is not in fact an error. The 
+        function is equivalent to Symbian's \c User::LeaveIfError.
+        \o \l q_check_ptr() takes a pointer and throws a std::bad_alloc
+        exception if it is 0, otherwise the pointer is returned. This can be
+        used to check the success of a non-throwing allocation, eg from
+        \c malloc(). The function is equivalent to Symbian's \c
+        User::LeaveIfNull.
+        \o \l QT_TRAP_THROWING() takes a Symbian leaving
+        code fragment f and runs it under a trap harness converting any resulting 
+        error into an exception.
+        \o \c TRAP and \c TRAPD from the Symbian libraries can be used to convert 
+        leaves to error codes. 
+    \endlist
+
+    \code
+    HBufC* buf=0;
+    // this will throw a std::bad_alloc because we've asked for too much memory
+    QT_TRAP_THROWING(buf = HBufC::NewL(100000000));
+
+    _LIT(KStr,"abc");
+    TInt pos = KStr().Locate('c');
+    // pos is a good value, >= 0, so no exception is thrown
+    qt_symbian_throwIfError(pos);
+    
+    pos = KStr().Locate('d');
+    // pos == KErrNotFound, so this throws an exception
+    qt_symbian_throwIfError(pos);
+    
+    // we are asking for a lot of memory, HBufC::New may return NULL, so check it
+    HBufC *buffer = q_check_ptr(HBufC::New(1000000));
+    \endcode
+    
+    \section2 Be careful with new and CBase
+    
+    When writing Qt code, \c new will normally throw a \c std::bad_alloc if the
+    allocation fails. However this may not happen if the object being created
+    has its own \c {operator new}. For example, CBase and derived classes have
+    their own \c {operator new} which returns 0 and the \c {new(ELeave)}
+    overload for a leaving \c {operator new}, neither of which does what we want.
+    When using 2-phase construction of CBase derived objects, use \c new and
+    \l q_check_ptr().
+    
+    \oldcode
+    CFbsBitmap* fbsBitmap = new(ELeave) CFbsBitmap;
+    \newcode
+    CFbsBitmap* fbsBitmap = q_check_ptr(new CFbsBitmap);
+    \endcode
+    
+    \section1 Qt called from Symbian
+
+    When Qt code is called from Symbian, we want to translate standard C++ 
+    exceptions to Symbian leaves or error codes. The following help is 
+    provided:
+
+    \list
+        \o \l qt_symbian_exception2Error() -
+        this takes a standard exception and gives an appropriate Symbian 
+        error code. If no mapping is known for the exception type, 
+        \c KErrGeneral is returned.
+        \o \l qt_symbian_exception2LeaveL() -
+        this takes a standard exception and generates an appropriate Symbian 
+        leave.
+        \o \l QT_TRYCATCH_ERROR() - this macro
+        takes the standard C++ code fragment \c f, catches any std::exceptions 
+        thrown from it, and sets err to the corresponding Symbian error code. 
+        err is set to \c KErrNone otherwise.
+        \o \l QT_TRYCATCH_LEAVING() - this macro takes the
+        standard C++ code fragment \c f, catches any std::exceptions thrown from 
+        it, and throws a corresponding Symbian leave. 
+    \endlist
+    
+    \code
+    TInt DoTickL() // called from an active object RunL, ie Symbian leaves expected
+        {
+        // without the translation to Symbian Leave, we get a USER:0 panic
+        QT_TRYCATCH_LEAVING({
+            int* x = new int[100000000];            // compiled as Qt code, will throw std::bad_alloc
+            delete [] x;
+        });
+        return 0;
+        }
+    \endcode
+
+    \section1 Common sense things
+
+    Try to minimise the interleaving of Symbian and Qt code, every switch 
+    requires a barrier. Grouping the code styles in different blocks will 
+    minimise the problems. For instance, examine the following code.
+
+    \code
+    1.    TRAPD(err, m_playUtility = CMdaAudioPlayerUtility::NewL(*this);
+    2.               QString filepath = QFileInfo( m_sound->fileName() ).absoluteFilePath();
+    3.               filepath = QDir::toNativeSeparators(filepath);
+    4.               m_playUtility->OpenFileL(qt_QString2TPtrC(filepath)));
+    \endcode
+
+    Line 1 starts a Symbian leave handling block, which is good because it 
+    also uses a Symbian leave generating function.
+
+    Line 2 creates a \l QString, uses \l QFileInfo and various member functions. 
+    These could all throw exceptions, which is not good inside a \c TRAP block.
+
+    Line 3 is unclear as to whether it might throw an exception, but since 
+    it's dealing with strings it probably does, again bad.
+
+    Line 4 is tricky, it calls a leaving function which is ok within a \c TRAP, 
+    but it also uses a helper function to convert string types. In this case
+    the helper function may cause an unwelcome exception.
+
+    We could rewrite this with nested exception translations, but it's much 
+    easier to refactor it. 
+
+    \code
+    QString filepath = QFileInfo( m_sound->fileName() ).absoluteFilePath();
+    filepath = QDir::toNativeSeparators(filepath);
+    TPtrC filepathPtr(qt_QString2TPtrC(filepath));
+    TRAPD(err, m_playUtility = CMdaAudioPlayerUtility::NewL(*this);
+               m_playUtility->OpenFileL(filepathPtr));
+    \endcode
+
+    Now the exception generating functions are separated from the leaving 
+    functions.
+
+    \section1 Advanced technique
+    When using Symbian APIs in Qt code, you may find that Symbian leaving 
+    code and Qt exception throwing code are just too mixed up to have
+    them interoperate through barriers. In some circumstances you can allow
+    code to both leave and throw exceptions. But you must be aware of the 
+    following issues:
+    
+    \list
+        \o Depending on whether a leave or exception is thrown, or a normal
+           exit happens, the cleanup order will vary. If the code leaves,
+           cleanup stack cleanup will happen first. On an exception however,
+           cleanup stack cleanup will happen last.
+        \o There must not be any destructor dependencies between different
+           code styles. That is, you must not have symbian objects using Qt
+           objects in their destructors, and vice versa. This is because the
+           cleanup order varies, and may result in objects being used after
+           they are deleted.
+        \o The cleanup stack must not refer to any stack based object. For 
+           instance, in Symbian you may use \c CleanupClosePushL() to push 
+           stack based R-classes onto the cleanup stack. However if the 
+           stack has unwound due to an exception before the cleanup stack 
+           cleanup happens, stack based objects will now be invalid.
+           Instead of using the cleanup stack, consider Symbian's new
+           \c LManagedHandle<> (or a custom cleanup object) to tie R-class 
+           cleanup to the stack.
+        \o Mixed throwing code must be called within both a TRAP and a 
+           try/catch harness. Standard exceptions must not propagate to
+           the TRAP and cleanup stack cleanup will only happen if a leave
+           is thrown, so the correct pattern is either \c {TRAPD(err, 
+           QT_TRYCATCH_LEAVING( f ));} or \c {QT_TRAP_THROWING(
+           QT_TRYCATCH_LEAVING( f ));}, depending if you want an error
+           code or exception as a result.
+    \endlist
+*/

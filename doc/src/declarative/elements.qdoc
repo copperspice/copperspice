@@ -1,0 +1,337 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+  \page qdeclarativeelements.html
+  \target elements
+  \title QML Elements
+  \brief A listing of standard QML elements.
+
+These are the functionally grouped lists of QML elements as part of
+\l{Qt Quick}.
+
+Elements are declared with the their name and two curly braces. Elements may
+be nested in elements, thereby creating a parent-child relationship between the
+two elements.
+
+To see the QML elements listed by functional area, see the
+\l{Groups Of Related QML Elements} page.
+
+\section1 Basic QML Elements
+\list
+\o \l {Item} - Basic item element inherited by QML elements
+\o \l {Component} - Encapsulates QML elements during importing
+\o \l {QML:QtObject} {QtObject} - Basic element containing only the \c {objectName} property
+\endlist
+
+\section1 Graphics
+\list
+\o \l {Rectangle} - A rectangle element
+\o \l {Image} - For incorporating bitmaps into a scene
+\o \l {BorderImage} - Allows the use of images as borders
+\o \l {AnimatedImage} - For playing animations stored in a series of frames
+\o \l {Gradient} - For defining a color gradient
+\o \l {GradientStop} - Used to define a color within a \l {Gradient}
+\o \l {SystemPalette} - Provides access to the Qt palettes
+\endlist
+
+\section1 Text Handling
+\list
+\o \l {Text} - For inserting formatted text into a scene
+\o \l {TextInput} - Captures user key input
+\o \l {TextEdit} - Displays multiple lines of editable formatted text
+\o \l {IntValidator} - Validates values as integers
+\o \l {DoubleValidator} - Validates real values
+\o \l {RegExpValidator} - Validator for string regular expressions
+\o \l {FontLoader} - Loads fonts by name or URL
+\endlist
+
+\section1 Mouse and Interaction Area
+\list
+\o \l {MouseArea} - Sets up an area for mouse interaction
+\o \l {Keys} - Provides components with attached properties to handle key input.
+\o \l {FocusScope} - Element that mediate keyboard focus changes
+\o \l {Flickable} - Provides a surface that can be "flicked"
+\o \l {Flipable} - Provides a surface that produces "flipping" effects
+\o \l {PinchArea} - Enables simple pinch gesture handling
+\endlist
+
+\section1 Positioners and Repeater
+\list
+\o \l {Column} - Arranges its children vertically
+\o \l {Row} - Arranges its children horizontally
+\o \l {Grid} - Positions its children in a grid
+\o \l {Flow} - Positions its children with wrapping support
+\o \l {Repeater} - Uses a model to create multiple components
+\endlist
+
+\section1 Transformations
+\list
+\o \l {Scale} - Assigns item scaling behaviors
+\o \l {Rotation} - Assigns item rotation behaviors
+\o \l {Translate} - Assigns item translation behaviors
+\endlist
+
+\section1 States
+\list
+\o \l {State} - Defines sets of configurations of objects and properties
+\o \l {PropertyChanges} - Describes property changes within a state
+\o \l {StateGroup} - Contains a set of states and state transitions
+\o \l {StateChangeScript} - Allows script binding in a state
+\o \l {ParentChange} - Re-parent an Item in a state change
+\o \l {AnchorChanges} - Change the anchors of an item in a state
+\endlist
+
+\section1 Animation and Transitions
+\list
+\o \l {Transition} - Animates transitions during state changes
+\o \l {SequentialAnimation} - Runs animations sequentially
+\o \l {ParallelAnimation} - Runs animations in parallel
+\o \l {Behavior} - Specifies a default animation for property changes
+\o \l {PropertyAction} - Sets immediate property changes during animation
+\o \l {PauseAnimation} - Introduces a pause in an animation
+\o \l {SmoothedAnimation} - Allows a property to smoothly track a value
+\o \l {SpringAnimation} - Allows a property to track a value in a spring-like motion
+\o \l {ScriptAction} - Runs scripts during an animation
+\endlist
+
+Elements that animate properties based on data types
+\list
+\o \l {PropertyAnimation} - Animates property changes
+\o \l {NumberAnimation} - Animates properties of type qreal
+\o \l {Vector3dAnimation} - Animates properties of type QVector3d
+\o \l {ColorAnimation} - Animates color changes
+\o \l {RotationAnimation} - Animates rotations
+\o \l {ParentAnimation} - Animates parent changes
+\o \l {AnchorAnimation} - Animates anchor changes
+\endlist
+
+\section1 Models and Data Handling
+\list
+\o \l {ListModel} - Defines a list of data
+\o \l {ListElement} - Defines a data item in a \l {ListModel}
+\o \l {VisualItemModel} - Contains items that already defines its own visual delegate
+\o \l {VisualDataModel} - Encapsulates a model and a delegate
+\o \l {XmlListModel} - Specifies a model using XPath expressions
+\o \l {XmlRole} - Specifies a role for an \l {XmlListModel}
+\o \l {Binding} - Binds any value to any property
+\o \l {Package} - Collection that enables sharing of items within different views
+\endlist
+
+\section1 Views
+\list
+\o \l {ListView} - Provides a list visualization of a model
+\o \l {GridView} - Provides a grid visualization of a model
+\o \l {PathView} - Visualizes a model's contents along a path. See \l {Path Definition}{Path Elements} for more information.
+\endlist
+
+\section1 Path Definition
+\list
+\o \l {Path} - Defines a path used by \l {PathView}
+\o \l {PathLine} - Defines a line in \l {Path}
+\o \l {PathQuad} - Defines a quadratic Bezier curve in a \l {Path}
+\o \l {PathCubic} - Defines a cubic Bezier curve in a \l {Path}
+\o \l {PathAttribute} - Allows the setting of attributes along a \l {Path}
+\o \l {PathPercent} - Modifies the item distribution along a \l {Path}
+\endlist
+
+\section1 Utility
+\list
+\o \l {Connections} - Explicitly connects signals and signal handlers
+\o \l {Timer} - Provides timed triggers
+\o \l {QML:Qt} {Qt} - The QML global Qt object provides useful enums and functions from Qt.
+\o \l {WorkerScript} - Enables the use of threads in QML
+\o \l {Loader} - Controls the loading of items or components
+\o \l {LayoutItem} - Allows declarative UI elements inside Qt's Graphics View layouts
+\endlist
+
+\section1 Graphical Effects
+\list
+\o \l {Particles} - Generates and animates particles
+\o \l {ParticleMotionLinear} - Adds linear motion behavior to \l {Particles}
+\o \l {ParticleMotionGravity} - Adds gravitational motion to \l {Particles}
+\o \l {ParticleMotionWander} - Adds varied motions to \l {Particles}
+\o \l {ShaderEffectItem} - Enables the use of OpenGL Shading Language together with QML
+\o \l {ShaderEffectSource} - Encapsulates QML item tree as a source item for \l {ShaderEffectItem}
+\endlist
+
+\section1 Add-On Elements
+These elements are not included in the \c{QtQuick 1.0} module. Their respective QML bindings
+should first be obtained and installed.
+\list
+\o \l{WebView}{QtWebKit QML Module - WebView Element} - For displaying Web contents
+\o \l{http://doc.qt.nokia.com/qtmobility-1.1.0/qml-plugins.html}{Mobility QML Plugins}
+\o \l {http://doc.qt.nokia.com/qt-components-symbian-1.1/index.html}{Qt Quick Components}
+\endlist
+
+*/
+
+
+/*!
+    \group qml-groups
+    \title Groups Of Related QML Elements
+
+    \brief If you know what kind of QML element you want (Basic Visual,
+    Interaction, Animation, etc), look here.
+
+    This is a list of functional groups of QML elements.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-basic-visual-elements
+    \title Basic QML Visual Elements
+    \ingroup qml-groups
+
+    \brief Elements for constructing basic visual items.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-basic-interaction-elements
+    \title Basic QML Interaction Elements
+    \ingroup qml-groups
+
+    \brief Elements for handling basic interactions.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-state-elements
+    \title QML State Elements
+    \ingroup qml-groups
+
+    \brief Elements for handling state changes.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-event-elements
+    \title QML Event Elements
+    \ingroup qml-groups
+
+    \brief Elements for handling events.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-animation-transition
+    \title QML Animation and Transition Elements
+    \ingroup qml-groups
+
+    \brief Elements for handling animations and transitions.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-working-with-data
+    \title Working With Data in QML
+    \ingroup qml-groups
+
+    \brief Elements for working with data.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-view-elements
+    \title QML View Elements
+    \ingroup qml-groups
+
+    \brief Elements for handling views.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-positioning-elements
+    \title QML Positioning Elements
+    \ingroup qml-groups
+
+    \brief Elements for positioning items.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-utility-elements
+    \title QML Utility Elements
+    \ingroup qml-groups
+
+    \brief Elements for handling misc operations.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-transform-elements
+    \title QML Transform Elements
+    \ingroup qml-groups
+
+    \brief Elements for handling transformations.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-particle-elements
+    \title QML Particle Elements
+    \ingroup qml-groups
+
+    \brief Elements for handling particle effects.
+
+    \generatelist{related}
+
+*/
+
+/*!
+    \group qml-shader-elements
+    \title QML Shader Elements
+    \ingroup qml-groups
+
+    \brief Elements for using OpenGL shading language code together with the QML code.
+
+    \generatelist{related}
+
+*/

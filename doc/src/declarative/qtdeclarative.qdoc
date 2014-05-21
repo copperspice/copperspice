@@ -1,0 +1,213 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+  \module QtDeclarative
+  \title Qt Declarative Module
+  \ingroup modules
+
+  \brief The Qt Declarative module provides a declarative framework
+  for building highly dynamic, custom user interfaces.
+
+  To include the definitions of the module's classes, use the
+  following directive:
+
+  \code
+  #include <QtDeclarative>
+  \endcode
+
+  To link against the module, add this line to your \l qmake \c
+  .pro file:
+
+  \code
+  QT += declarative
+  \endcode
+
+  For more information on the Qt Declarative module, see the
+  \l{Qt Quick} documentation.
+*/
+
+
+/*!
+  \macro QML_DECLARE_TYPE()
+  \relates QDeclarativeEngine
+
+  Equivalent to \c Q_DECLARE_METATYPE(TYPE *) and \c Q_DECLARE_METATYPE(QDeclarativeListProperty<TYPE>)
+
+  #include <QtDeclarative> to use this macro.
+*/
+
+/*!
+  \macro QML_DECLARE_TYPEINFO(Type,Flags)
+  \relates QDeclarativeEngine
+
+  Declares additional properties of the given \a Type as described by the
+  specified \a Flags.
+  
+  Current the only supported type info is \c QML_HAS_ATTACHED_PROPERTIES which
+  declares that the \a Type supports \l {Attached Properties}.
+
+  #include <QtDeclarative> to use this macro.
+*/
+
+
+/*!
+  \fn int qmlRegisterType(const char *uri, int versionMajor, int versionMinor, const char *qmlName)
+  \relates QDeclarativeEngine
+
+  This template function registers the C++ type in the QML system with
+  the name \a qmlName, in the library imported from \a uri having the
+  version number composed from \a versionMajor and \a versionMinor.
+
+  Returns the QML type id.
+
+  There are two forms of this template function:
+
+  \code
+  template<typename T>
+  int qmlRegisterType(const char *uri, int versionMajor, int versionMinor, const char *qmlName);
+
+  template<typename T, int metaObjectRevision>
+  int qmlRegisterType(const char *uri, int versionMajor, int versionMinor, const char *qmlName);
+  \endcode
+
+  The former is the standard form which registers the type \e T as a new type.
+  The latter allows a particular revision of a class to be registered in
+  a specified version (see \l {QML Type Versioning}).
+
+
+  For example, this registers a C++ class \c MySliderItem as a QML type
+  named \c Slider for version 1.0 of a \l{QML Modules}{module} called
+  "com.mycompany.qmlcomponents":
+
+  \code
+  #include <QtDeclarative>
+
+  ...
+
+  qmlRegisterType<MySliderItem>("com.mycompany.qmlcomponents", 1, 0, "Slider");
+  \endcode
+
+  Once this is registered, the type can be used in QML by importing the 
+  specified module name and version number:
+
+  \qml
+  import com.mycompany.qmlcomponents 1.0
+
+  Slider {
+      // ...
+  }
+  \endqml
+
+  Note that it's perfectly reasonable for a library to register types to older versions
+  than the actual version of the library. Indeed, it is normal for the new library to allow
+  QML written to previous versions to continue to work, even if more advanced versions of
+  some of its types are available.
+*/
+
+/*!
+  \fn int qmlRegisterUncreatableType(const char *uri, int versionMajor, int versionMinor, const char *qmlName, const QString& message)
+  \relates QDeclarativeEngine
+
+  This template function registers the C++ type in the QML system with
+  the name \a qmlName, in the library imported from \a uri having the
+  version number composed from \a versionMajor and \a versionMinor.
+
+  While the type has a name and a type, it cannot be created, and the
+  given error \a message will result if creation is attempted.
+
+  This is useful where the type is only intended for providing attached properties or enum values.
+
+  Returns the QML type id.
+
+  #include <QtDeclarative> to use this function.
+
+  \sa qmlRegisterTypeNotAvailable()
+*/
+
+/*!
+  \fn int qmlRegisterTypeNotAvailable(const char *uri, int versionMajor, int versionMinor, const char *qmlName, const QString& message)
+  \relates QDeclarativeEngine
+
+  This function registers a type in the QML system with the name \a qmlName, in the library imported from \a uri having the
+  version number composed from \a versionMajor and \a versionMinor, but any attempt to instantiate the type
+  will produce the given error \a message.
+
+  Normally, the types exported by a module should be fixed. However, if a C++ type is not available, you should
+  at least "reserve" the QML type name, and give the user of your module a meaningful error message.
+
+  Returns the QML type id.
+
+  Example:
+
+  \code
+  #ifdef NO_GAMES_ALLOWED
+  qmlRegisterTypeNotAvailable("MinehuntCore", 0, 1, "Game", "Get back to work, slacker!");
+  #else
+  qmlRegisterType<MinehuntGame>("MinehuntCore", 0, 1, "Game");
+  #endif
+  \endcode
+
+  This will cause any QML which uses this module and attempts to use the type to produce an error message:
+  \code
+  fun.qml: Get back to work, slacker!
+     Game {
+     ^
+  \endcode
+
+  Without this, a generic "Game is not a type" message would be given.
+
+  #include <QtDeclarative> to use this function.
+
+  \sa qmlRegisterUncreatableType()
+*/
+
+/*!
+  \fn int qmlRegisterType()
+  \relates QDeclarativeEngine
+  \overload
+
+  This template function registers the C++ type in the QML
+  system. Instances of this type cannot be created from the QML
+  system.
+
+  #include <QtDeclarative> to use this function.
+
+  Returns the QML type id.
+*/
+
+/*!
+  \fn int qmlRegisterInterface(const char *typeName)
+  \relates QDeclarativeEngine
+
+  This template function registers the C++ type in the QML system
+  under the name \a typeName.
+
+  #include <QtDeclarative> to use this function.
+
+  Returns the QML type id.
+*/

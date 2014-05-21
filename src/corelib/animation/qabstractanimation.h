@@ -1,0 +1,174 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2014 Barbara Geller
+* Copyright (c) 2012-2014 Ansel Sermersheim
+* Copyright (c) 2012-2014 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software: you can redistribute it and/or 
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with CopperSpice.  If not, see 
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
+
+#ifndef QABSTRACTANIMATION_H
+#define QABSTRACTANIMATION_H
+
+#include <QtCore/qobject.h>
+#include <QScopedPointer>
+
+QT_BEGIN_NAMESPACE
+
+#ifndef QT_NO_ANIMATION
+
+class QAnimationGroup;
+class QSequentialAnimationGroup;
+class QAnimationDriver;
+class QAbstractAnimationPrivate;
+class QAnimationDriverPrivate;
+
+class Q_CORE_EXPORT QAbstractAnimation : public QObject
+{
+    CS_OBJECT(QAbstractAnimation)
+
+    CORE_CS_ENUM(State)
+    CORE_CS_ENUM(Direction)
+
+    CORE_CS_PROPERTY_READ(state, state)
+    CORE_CS_PROPERTY_NOTIFY(state, stateChanged)
+
+    CORE_CS_PROPERTY_READ(loopCount, loopCount)
+    CORE_CS_PROPERTY_WRITE(loopCount, setLoopCount)
+
+    CORE_CS_PROPERTY_READ(currentTime, currentTime)
+    CORE_CS_PROPERTY_WRITE(currentTime, setCurrentTime)
+
+    CORE_CS_PROPERTY_READ(currentLoop, currentLoop)
+    CORE_CS_PROPERTY_NOTIFY(currentLoop, currentLoopChanged)
+
+    CORE_CS_PROPERTY_READ(direction, direction)
+    CORE_CS_PROPERTY_WRITE(direction, setDirection)
+    CORE_CS_PROPERTY_NOTIFY(direction, directionChanged)
+
+    CORE_CS_PROPERTY_READ(duration, duration)
+
+public:
+    enum Direction {
+        Forward,
+        Backward
+    };
+
+    enum State {
+        Stopped,
+        Paused,
+        Running
+    };
+
+    enum DeletionPolicy {
+        KeepWhenStopped = 0,
+        DeleteWhenStopped
+    };
+
+    QAbstractAnimation(QObject *parent = 0);
+    virtual ~QAbstractAnimation();
+
+    State state() const;
+
+    QAnimationGroup *group() const;
+
+    Direction direction() const;
+    void setDirection(Direction direction);
+
+    int currentTime() const;
+    int currentLoopTime() const;
+
+    int loopCount() const;
+    void setLoopCount(int loopCount);
+    int currentLoop() const;
+
+    virtual int duration() const = 0;
+    int totalDuration() const;
+
+    CORE_CS_SIGNAL_1(Public, void finished())
+    CORE_CS_SIGNAL_2(finished) 
+    CORE_CS_SIGNAL_1(Public, void stateChanged(QAbstractAnimation::State newState,QAbstractAnimation::State oldState))
+    CORE_CS_SIGNAL_2(stateChanged,newState,oldState) 
+    CORE_CS_SIGNAL_1(Public, void currentLoopChanged(int currentLoop))
+    CORE_CS_SIGNAL_2(currentLoopChanged,currentLoop) 
+    CORE_CS_SIGNAL_1(Public, void directionChanged(QAbstractAnimation::Direction un_named_arg1))
+    CORE_CS_SIGNAL_2(directionChanged,un_named_arg1) 
+
+    CORE_CS_SLOT_1(Public, void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped))
+    CORE_CS_SLOT_2(start) 
+    CORE_CS_SLOT_1(Public, void pause())
+    CORE_CS_SLOT_2(pause) 
+    CORE_CS_SLOT_1(Public, void resume())
+    CORE_CS_SLOT_2(resume) 
+    CORE_CS_SLOT_1(Public, void setPaused(bool un_named_arg1))
+    CORE_CS_SLOT_2(setPaused) 
+    CORE_CS_SLOT_1(Public, void stop())
+    CORE_CS_SLOT_2(stop) 
+    CORE_CS_SLOT_1(Public, void setCurrentTime(int msecs))
+    CORE_CS_SLOT_2(setCurrentTime) 
+
+protected:
+    QAbstractAnimation(QAbstractAnimationPrivate &dd, QObject *parent = 0);
+    bool event(QEvent *event);
+
+    virtual void updateCurrentTime(int currentTime) = 0;
+    virtual void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+    virtual void updateDirection(QAbstractAnimation::Direction direction);
+
+	 QScopedPointer<QAbstractAnimationPrivate> d_ptr;
+
+private:
+    Q_DISABLE_COPY(QAbstractAnimation)
+    Q_DECLARE_PRIVATE(QAbstractAnimation)
+};
+
+class Q_CORE_EXPORT QAnimationDriver : public QObject
+{
+    CS_OBJECT(QAnimationDriver)
+    Q_DECLARE_PRIVATE(QAnimationDriver)
+
+public:
+    QAnimationDriver(QObject *parent = 0);
+    ~QAnimationDriver();
+
+    void advance();
+    void install();
+
+    bool isRunning() const;
+
+protected:
+    virtual void started() {};
+    virtual void stopped() {};
+
+    QAnimationDriver(QAnimationDriverPrivate &dd, QObject *parent = 0);
+	 QScopedPointer<QAnimationDriverPrivate> d_ptr;
+
+private:
+    friend class QUnifiedTimer;
+
+    void start();
+    void stop();
+};
+
+
+#endif //QT_NO_ANIMATION
+
+QT_END_NAMESPACE
+
+#endif // QABSTRACTANIMATION_H

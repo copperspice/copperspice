@@ -1,0 +1,583 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page qdeclarativebasictypes.html
+    \ingroup qml-features
+    \contentspage QML Features
+    \previouspage {QML Basic Elements}
+    \nextpage Property Binding
+    \title QML Basic Types
+
+    QML has a set of primitive types, as listed below, that are used throughout
+    the \l {QML Elements}.
+
+    \annotatedlist qmlbasictypes
+
+    To create additional types, such as data types created in C++, read the
+    \l{Extending QML Functionalities using C++} article.
+*/
+
+/*!
+    \qmlbasictype int
+    \ingroup qmlbasictypes
+
+    \brief An integer is a whole number, e.g. 0, 10, or -20.
+
+    An integer is a whole number, e.g. 0, 10, or -20. The possible \c
+    int values range from around -2000000000 to around 2000000000,
+    although most elements will only accept a reduced range (which they
+    mention in their documentation).
+
+    Example:
+    \qml
+    Item { width: 100; height: 200 }
+    \endqml
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype bool
+    \ingroup qmlbasictypes
+
+    \brief A boolean is a binary true/false value.
+
+    A boolean is a binary true/false value.
+
+    Example:
+    \qml
+    Item { focus: true; clip: false }
+    \endqml
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype real
+    \ingroup qmlbasictypes
+
+    \brief A real number has a decimal point, e.g. 1.2 or -29.8.
+
+    A real number has a decimal point, e.g. 1.2 or -29.8.
+
+    Example:
+    \qml
+    Item { width: 100.45; height: 150.82 }
+    \endqml
+
+    \note In QML all reals are stored in single precision, \l
+    {http://en.wikipedia.org/wiki/IEEE_754} {IEEE floating point}
+    format.
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype double
+    \ingroup qmlbasictypes
+
+    \brief A double number has a decimal point and is stored in double precision.
+
+    A double number has a decimal point and is stored in double precision, \l
+    {http://en.wikipedia.org/wiki/IEEE_754} {IEEE floating point}
+    format.
+
+    Example:
+    \qml
+    Item {
+        property double number: 32155.2355
+    }
+    \endqml
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype string
+    \ingroup qmlbasictypes
+
+    \brief A string is a free form text in quotes, e.g. "Hello world!".
+
+    A string is a free form text in quotes, e.g. "Hello world!".
+
+    Example:
+    \qml
+    Text { text: "Hello world!" }
+    \endqml
+
+    Strings have a \c length attribute that holds the number of
+    characters in the string.
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype url
+    \ingroup qmlbasictypes
+
+    \brief A URL is a resource locator, like a file name.
+
+    A URL is a resource locator, like a file name. It can be either
+    absolute, e.g. "http://qt.nokia.com", or relative, e.g.
+    "pics/logo.png". A relative URL is resolved relative to the URL of
+    the component where the URL is converted from a JavaScript string
+    expression to a url property value.
+
+    Example:
+    \qml
+    Image { source: "pics/logo.png" }
+    \endqml
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype color
+    \ingroup qmlbasictypes
+
+    \brief A color is a standard color name in quotes.
+
+    A color is a standard color name in quotes. It is normally specified
+    as an \l {http://www.w3.org/TR/SVG/types.html#ColorKeywords} {SVG
+    color name}. These names include colors like "red", "green" and
+    "lightsteelblue".
+
+    If the color you want isn't part of this list, colors can also be
+    specified in hexidecimal triplets or quads that take the form \c
+    "#RRGGBB" and \c "#AARRGGBB" respectively. For example, the color
+    red corresponds to a triplet of \c "#FF0000" and a slightly
+    transparent blue to a quad of \c "#800000FF".
+
+    Example:
+    \div{float-right}
+    \inlineimage declarative-colors.png
+    \enddiv
+    \snippet doc/src/snippets/declarative/colors.qml colors
+
+    Or with the \l{QML:Qt::rgba()}{Qt.rgba()}, \l{QML:Qt::hsla()}{Qt.hsla()}, \l{QML:Qt::darker()}{Qt.darker()},
+    \l{QML:Qt::lighter()}{Qt.lighter()} or \l{QML:Qt::tint()}{Qt.tint()} functions:
+
+    \qml
+    Rectangle { color: Qt.rgba(0.5, 0.5, 0, 1) }
+    \endqml
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype point
+    \ingroup qmlbasictypes
+
+    \brief A point type has x and y attributes.
+
+    A \c point type has \c x and \c y attributes.
+
+    To create a \c point value, specify it as a "x,y" string:
+
+    \qml
+    CustomObject { myPointProperty: "0,20" }
+    \endqml
+
+    Or use the \l{QML:Qt::point()}{Qt.point()} function:
+
+    \qml
+    CustomObject { myPointProperty: Qt.point(0, 20) }
+    \endqml
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype size
+    \ingroup qmlbasictypes
+
+    \brief A size type has width and height attributes
+
+    A \c size type has \c width and \c height attributes.
+
+    For example, to read the \l {Image::sourceSize} \c size property:
+
+    \qml
+    Column {
+        Image { id: image; source: "logo.png" }
+        Text { text: image.sourceSize.width + "," + image.sourceSize.height }
+    }
+    \endqml
+
+    To create a \c size value, specify it as a "width x height" string:
+
+    \qml
+    LayoutItem { preferredSize: "150x50" }
+    \endqml
+
+    Or use the \l{QML:Qt::size()}{Qt.size()} function:
+
+    \qml
+    LayoutItem { preferredSize: Qt.size(150, 50) }
+    \endqml
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype rect
+    \ingroup qmlbasictypes
+
+    \brief A rect type has x, y, width and height attributes.
+
+    A \c rect type has \c x, \c y, \c width and \c height attributes.
+
+    For example, to read the \l {Item::childrenRect.x}{Item::childrenRect} \c rect property:
+    \qml
+    Rectangle {
+        width: childrenRect.width
+        height: childrenRect.height
+
+        Rectangle { width: 100; height: 100 }
+    }
+    \endqml
+
+    To create a \c rect value, specify it as a "x, y, width x height" string:
+
+    \qml
+    CustomObject { myRectProperty: "50,50,100x100" }
+    \endqml
+
+    Or use the \l{QML:Qt::rect()}{Qt.rect()} function:
+
+    \qml
+    CustomObject { myRectProperty: Qt.rect(50, 50, 100, 100) }
+    \endqml
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype date
+    \ingroup qmlbasictypes
+
+    \brief A date is specified as "YYYY-MM-DD".
+
+    To create a \c date value, specify it as a "YYYY-MM-DD" string:
+
+    Example:
+    \qml
+    MyDatePicker { minDate: "2000-01-01"; maxDate: "2020-12-31" }
+    \endqml
+
+    To read a date value returned from a C++ extension class, use
+    \l{QML:Qt::formatDate()}{Qt.formatDate()} and \l{QML:Qt::formatDateTime()}{Qt.formatDateTime()}.
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype time
+    \ingroup qmlbasictypes
+
+    \brief A time is specified as "hh:mm:ss".
+
+    A time is specified as "hh:mm:ss".
+
+    Example:
+    \qml
+    MyTimePicker { time: "14:22:15" }
+    \endqml
+
+    To read a time value returned from a C++ extension class, use
+    \l{QML:Qt::formatTime()}{Qt.formatTime()} and \l{QML:Qt::formatDateTime()}{Qt.formatDateTime()}.
+
+    \sa {QML Basic Types}
+ */
+
+/*!
+    \qmlbasictype font
+    \ingroup qmlbasictypes
+
+    \brief A font type has the properties of a QFont.
+
+    A font type has the properties of a QFont. The properties are:
+
+    \list
+    \o \c string font.family
+    \o \c bool font.bold
+    \o \c bool font.italic
+    \o \c bool font.underline
+    \o \c real font.pointSize
+    \o \c int font.pixelSize
+    \endlist
+
+    Example:
+    \qml
+    Text { font.family: "Helvetica"; font.pointSize: 13; font.bold: true }
+    \endqml
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype action
+    \ingroup qmlbasictypes
+
+    \brief The action type has all the properties of QAction.
+
+    The action type has all the properties of QAction. The properties
+    are:
+
+    \list
+    \o \c slot action.trigger - invoke the action
+    \o \c bool action.enabled - true if the action is enabled
+    \o \c string action.text - the text associated with the action
+    \endlist
+
+    Actions are used like this:
+
+    \qml
+    Item {
+        MouseArea { onClicked: myaction.trigger() }
+        State { name: "enabled"; when: myaction.enabled == true }
+        Text { text: someaction.text }
+    }
+    \endqml
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype list
+    \ingroup qmlbasictypes
+
+    \brief A list of objects.
+
+    A list type contains a list of objects. While not technically
+    a basic type, QML supports lists of object types. When used
+    from QML, the engine automatically appends each value to the list.
+    Items in the list can be accessed by index using the usual
+    \c listName[index] syntax.
+
+    For example, the \l Item class contains a list property named
+    children that can be used like this:
+
+    \qml
+    Item {
+        children: [
+            Item { id: child1 },
+            Rectangle { id: child2; width: 200 },
+            Text { id: child3 }
+        ]
+
+        Component.onCompleted: {
+            console.log("Width of child rectangle:", children[1].width)
+        }
+    }
+    \endqml
+    \c child1, \c child2 and \c child3 will be added to the children list
+    in the order in which they appear.
+
+    List \l {Property Binding}{properties} can be created as a
+    \c variant type, or as a \c list<Type> type, where \c Type is the
+    type of the object in the list:
+
+    \qml
+    Item {
+        property list<Rectangle> rects: [
+            Rectangle { width: 100; height: 100},
+            Rectangle { width: 200; height: 200}
+        ]
+    }
+    \endqml
+
+    A list property can only contain values that match (or are derived from) the
+    specified \c Type.
+
+    While the \c rects property can be reassigned to a different list value (including
+    an empty list), its individual values cannot be modified. See the \l variant type
+    documentation for details.
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype variant
+    \ingroup qmlbasictypes
+
+    \brief A variant type is a generic property type.
+
+    A variant is a generic property type. A variant type property can hold
+    any of the \l {QML Basic Types}{basic type} values:
+
+    \qml
+    Item {
+        property variant aNumber: 100
+        property variant aString: "Hello world!"
+        property variant aBool: false
+    }
+    \endqml
+
+    The \c variant type can also hold:
+
+    \list
+    \o An array of \l {QML Basic Types}{basic type} values
+    \o A map of key-value pairs with \l {QML Basic Types}{basic-type} values
+    \endlist
+
+    For example, below is an \c items array and an \c attributes map. Their
+    contents can be examined using JavaScript \c for loops. Individual array
+    values are accessible by index, and individual map values are accessible
+    by key:
+
+    \qml
+    Item {
+        property variant items: [1, 2, 3, "four", "five"]
+        property variant attributes: { 'color': 'red', 'width': 100 }
+
+        Component.onCompleted: {
+            for (var i=0; i<items.length; i++)
+                console.log(items[i])
+
+            for (var prop in attributes)
+                console.log(prop, "=", attributes[prop])
+        }
+    }
+    \endqml
+
+    While this is a convenient way to store array and map-type values, you
+    must be aware that the \c items and \c attributes properties above are \e not
+    QML objects (and certainly not JavaScript object either) and the key-value
+    pairs in \c attributes are \e not QML properties. Rather, the \c items
+    property holds an array of values, and \c attributes holds a set of key-value
+    pairs. Since they are stored as a set of values, instead of as an object,
+    their contents \e cannot be modified individually:
+
+    \qml
+    Item {
+        property variant items: [1, 2, 3, "four", "five"]
+        property variant attributes: { 'color': 'red', 'width': 100 }
+
+        Component.onCompleted: {
+            items[0] = 10
+            console.log(items[0])     // This will still be '1'!
+            attributes.color = 'blue'
+            console.log(attributes.color)     // This will still be 'red'!
+        }
+    }
+    \endqml
+
+    Additionally, since \c items and \c attributes are not QML objects, changing
+    their individual values do not trigger property change notifications. If
+    the above example had \c onNumberChanged or \c onAnimalChanged signal
+    handlers, they would not have been called.  If, however, the \c items or
+    \c attributes properties themselves were reassigned to different values, then
+    such handlers would be called.
+
+    One way to "update" the contents of an array or map is to copy the property
+    to a JavaScript object, modify the copy as desired, and then reassign the
+    property to the updated copy. Note, however, that this is not efficient.
+    In the example below, which reassigns the \c attributes property, the \e entire
+    set of key-value pairs must be serialized and deserialized every time it is
+    copied between a JavaScript object and a QML property:
+
+    \qml
+    Item {
+        property variant attributes: { 'color': 'red', 'width': 100 }
+
+        Component.onCompleted: {
+            // Change the value of attributes.color to 'blue':
+            var temp = attributes     // copy all values to 'temp'
+            temp.color = 'blue'
+            attributes = temp         // copy all values back to 'attributes'
+        }
+    }
+    \endqml
+
+    Since this operation is inefficient, if a list or map should be modifiable,
+    it is better to use alternative approaches. For example, you could implement
+    a custom C++ list element, or write to a JavaScript object defined from
+    within a JavaScript file.
+
+    JavaScript programmers should also note that when a JavaScript object is
+    copied to an array or map property, the \e contents of the object (that is,
+    its key-value properties) are copied, rather than the object itself. The
+    property does not hold a reference to the original JavaScript object, and
+    extra data such as the object's JavaScript prototype chain is also lost in
+    the process.
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype vector3d
+    \ingroup qmlbasictypes
+
+    \brief A vector3d type has x, y, and z attributes.
+
+    A \c vector3d type has \c x, \c y, and \c z attributes.
+
+    To create a \c vector3d value, specify it as a "x,y,z" string:
+
+    \qml
+    Rotation { angle: 60; axis: "0,1,0" }
+    \endqml
+
+    or with the \l{QML:Qt::vector3d()}{Qt.vector3d()} function:
+
+    \qml
+    Rotation { angle: 60; axis: Qt.vector3d(0, 1, 0) }
+    \endqml
+
+    or as separate \c x, \c y, and \c z components:
+
+    \qml
+    Rotation { angle: 60; axis.x: 0; axis.y: 1; axis.z: 0 }
+    \endqml
+
+    \sa {QML Basic Types}
+*/
+
+/*!
+    \qmlbasictype enumeration
+    \ingroup qmlbasictypes
+
+    \brief An enumeration type consists of a set of named values.
+
+    An enumeration type consists of a set of named values.
+
+    An enumeration value may be specified as either a string:
+    \qml
+    Text { horizontalAlignment: "AlignRight" }
+    \endqml
+
+    or as \c {<Element>.<value>}:
+    \qml
+    Text { horizontalAlignment: Text.AlignRight }
+    \endqml
+
+    The second form is preferred.
+
+    \sa {QML Basic Types}
+*/

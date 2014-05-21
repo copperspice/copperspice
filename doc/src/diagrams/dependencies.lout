@@ -1,0 +1,117 @@
+# This file is used to create x11_dependencies.sk, which is then converted to a PNG image.
+#
+# lout -EPS -o dependencies.eps dependencies.lout
+# pstoedit -f sk dependencies.eps x11_dependencies.sk
+# makeimage.py x11_dependencies.sk x11_dependencies.png 0.25 --anti-alias
+
+@SysInclude { picture }
+@SysInclude { tbl }
+@SysInclude { diag }
+
+macro @TTGreenColour { {cmyk 0.40 0.00 1.00 0.01} }
+macro @TTPurpleColour { {cmyk 0.39 0.39 0.00 0.00} }
+macro @DefaultColour { rgb { 0.961 0.961 0.863 } }
+macro @FreetypeColour { rgb { 0.902 0.902 0.980 } }
+macro @GLColour { rgb { 1.000 0.753 0.796 } }
+macro @PthreadColour { rgb { 0.741 0.718 0.420 } }
+macro @OptionalColour { rgb { 0.792 0.882 1.000 } }
+macro @SMColour { rgb { 0.761 0.980 0.980 } }
+macro @MiscColour { rgb { 0.941 0.973 1.000 } }
+macro @GlibColour { rgb { 0.7 0.7 0.7 } }
+@Illustration
+    @InitialFont { Helvetica Base 14p }
+{
+@Centre @Diag
+    outline { shadowbox }
+    shadow { 0.15f }
+    margin { 0.5f }
+    hsize { 5f }
+    paint { @MiscColour }
+    arrowwidth { 0.55f }
+    arrowlength { 0.55f }
+    pathwidth { medium }
+    zindent { 0.1f }
+    radius { 0.5f }
+    #
+    bmargin { 0.5f }
+    boutlinestyle { noline }
+    #
+    coutlinestyle { noline }
+    cmargin { 0.5f }
+{
+@Tbl
+#    rule { yes } rulecolour { red }
+    indent { ctr }
+    iv { ctr }
+    marginvertical { 1.25f }
+    div { top }
+#    fmarginbelow { 0c }
+
+    aformat { @Cell A | @Cell B | @StartHSpan @Cell marginbelow { 0c } font { +2p } C | @HSpan | @HSpan | @Cell F | @Cell G}
+    bformat { @Cell A | @Cell B | @Cell C | @Cell D | @Cell E | @Cell F | @Cell G }
+    cformat { @Cell A | @Cell B | @Cell C | @Cell D | @Cell E | @Cell marginleft { 1.5c } F | @Cell G }
+    dformat { @Cell A | @Cell B | @Cell C | @Cell D | @Cell E | @Cell F | @Cell G }
+    eformat { @Cell A | @Cell B | @Cell C | @Cell D | @Cell E | @Cell F | @Cell G }
+    fformat { @Cell A | @Cell B | @Cell C | @Cell D | @Cell E | @Cell F | @Cell G }
+    gformat { @Cell A | @Cell B | @Cell C | @Cell D | @Cell E | @StartHSpan @Cell F | @HSpan }
+{
+    @Rowa C { Qt"/"X11 library dependencies }
+    @Rowb D { QTGUI:: @Node paint { @TTGreenColour } QtGui }
+    @Rowc C { XCURSOR:: @Node paint { @OptionalColour } Xcursor }
+          D { XRANDR:: @Node paint { @OptionalColour } Xrandr }
+          E { XINERAMA:: @Node paint { @OptionalColour } Xinerama }
+          F { Xi:: @Node paint { @OptionalColour } Xi }
+    @Rowd A { FONTCONFIG:: @Node paint { @OptionalColour } Fontconfig }
+          D { XRENDER:: @Node paint { @OptionalColour } XRender }
+          G { Xt:: @Node paint { @DefaultColour } Xt* }
+    @Rowe A { FREETYPE:: @Node paint { @OptionalColour } FreeType }
+          B { QTCORE:: @Node paint { @TTPurpleColour } QtCore }
+          D { XFIXES:: @Node paint { @OptionalColour } Xfixes }
+	  E { XEXT:: @Node paint { @DefaultColour } Xext }
+          G { SM:: @Node paint { @SMColour } SM }
+    @Rowf B { PTHREAD:: @Node paint { @PthreadColour } pthread }
+          C { GLIB:: @Node paint { @GlibColour } Glib }
+          E { X:: @Node paint { @DefaultColour } X11 }
+          G { ICE:: @Node paint { @SMColour } ICE }
+    @Rowg F {
+	@Tbl
+	    font { -2p }
+	    margin { 0.15f }
+	    cmarginabove { 0c }
+	    iv { top }
+	    bformat { @Cell A | @Cell B | @Cell C }
+	    cformat { @Cell A | @Cell B | @Cell C }
+	    aformat { @StartHSpan @Cell A | @HSpan | @HSpan }
+	{
+	    @Rowb A { C:: @BNode {} } B { D:: @BNode {} }
+	          C { some configurations only }
+            @Rowb B { * } C { Xt intrinsics only }
+	}
+	} 
+}
+//
+@VHVCurveArrow from { QTGUI } to { XINERAMA } pathstyle { dotted }
+@VHVCurveArrow from { QTGUI } to { Xi } pathstyle { dotted }
+@HVCurveArrow from { QTGUI } to { QTCORE }
+@Arrow from { QTCORE } to { PTHREAD }
+@VHVCurveArrow from { QTCORE } to { GLIB } pathstyle { dotted }
+@HVCurveArrow from { QTGUI } to { Xt }
+@Arrow from { QTGUI } to { XRANDR } pathstyle { dotted }
+@VHVCurveArrow from { QTGUI } to { XCURSOR } pathstyle { dotted }
+@Arrow from { XRANDR } to { XRENDER }
+@Arrow from { XINERAMA } to { XEXT }
+@VHCurveArrow from { XCURSOR } to { XRENDER }
+@HVCurveArrow from { XRENDER } to { XEXT }
+@HVHCurveArrow from { Xi } to { XEXT }
+@Arrow from { Xt } to { SM }
+@HVHCurveArrow from { Xt } to { X }
+@Arrow from { SM } to { ICE }
+@Arrow from { XEXT } to { X }
+@VHCurveArrow from { XCURSOR } to { XFIXES }
+@VHVCurveArrow from { XFIXES } to { X }
+@HVCurveArrow from { QTGUI } to { FONTCONFIG } pathstyle { dotted }
+@Arrow from { FONTCONFIG } to { FREETYPE } pathstyle { dotted }
+@VHVCurveArrow from { FREETYPE } to { PTHREAD }
+@Link from { C@W } to { D@E } pathstyle { dotted }
+}
+}

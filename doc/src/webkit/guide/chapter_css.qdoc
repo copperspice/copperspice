@@ -1,0 +1,1519 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the Qt WebKit module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:BSD$
+** You may use this file under the terms of the BSD license as follows:
+**
+** "Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions are
+** met:
+**   * Redistributions of source code must retain the above copyright
+**     notice, this list of conditions and the following disclaimer.
+**   * Redistributions in binary form must reproduce the above copyright
+**     notice, this list of conditions and the following disclaimer in
+**     the documentation and/or other materials provided with the
+**     distribution.
+**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
+**     the names of its contributors may be used to endorse or promote
+**     products derived from this software without specific prior written
+**     permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+
+\page qtwebkit-guide-css.html
+
+\title QtWebKit Guide - Level 3 CSS
+
+\chapter Level 3 CSS
+This section of the \l{QtWebKit Guide} serves as an introduction to various
+Level 3 CSS features supported by QtWebKit:
+
+\list
+
+\o The \l{Media Queries} section discusses a simple client-based technique to
+present different interfaces and functionality from a single source of content
+to different classes of mobile device.
+
+\o The \l{Selectors} section concentrates on recently introduced syntax elements
+that make applying formatting and gathering DOM elements more flexible.
+
+\o The \l{Visual Effects} section surveys numerous formatting properties,
+including new color models and advanced WebKit effects.
+
+\o Finally, the \l{Dynamic CSS} section discusses 2D transforms, transitions,
+and keyframe animations.
+
+\endlist
+
+This section features links to numerous sample pages that demonstrate how
+various CSS3 features may be applied within a mobile interface. For best
+results, view these samples with a modern Webkit-based browser such as Apple
+Safari or Google Chrome. Resize the window in which the sample appears to
+roughly match the dimensions of a touch-screen mobile device.
+
+\section1 Media Queries
+
+CSS \e{media queries} extend \e{media types} with more detailed capabilities.
+Media queries offer a simple client-side mechanism to customize interfaces
+comprehensively via CSS.
+
+Media queries are especially useful when extending a body of content for
+presentation on mobile browsers. Prior to support for this feature, there were
+two basic approaches to provisioning mobile web content, both server-based:
+
+\list
+\o \e{Mobile-specific domains}. Content providers might provide a separate
+access points for default content at \c{www.website.com}, with mobile content
+available at \c{m.website.com} or \c{website.mobi}. There might also be an
+additional \c{touch.website.com} access point targeted for higher-end
+touch-screen browsers.
+
+\o \e{Dynamic Server-based Adaptation}. In this case, there is a single access
+point, but the server sends different content, typically depending on the
+\e{User-Agent} header included in all browsers' HTTP requests.
+This approach may leverage databases of device characteristics such as
+\l{WURFL} or \l{DeviceAtlas}.
+\endlist
+
+This section describes how to provision CSS entirely on the mobile
+client.
+
+    \section2 Media Types and Media Queries
+
+    If you only want to serve interfaces for desktop browsers and low-end mobile
+    browsers, specify external CSS files within your HTML's \c{head} region
+    using media types:
+
+    \code
+    <link media="screen" href="/path/to/desktop.css" type="text/css" rel="stylesheet"/>
+    <link media="handheld" href="/path/to/mobile.css" type="text/css" rel="stylesheet"/>
+    \endcode
+
+    The \c{media} attribute specifies different \e{types} of browser: \c{screen}
+    for large-screen desktop browsers, and \c{handheld} for mobile browsers.
+    Browsers identifying themselves as \c{handheld} are served the
+    \c{mobile.css} file, which should specify a dramatically simplified
+    mobile interface.
+
+    A problem arises, however, when the majority of higher-end touch browsers
+    identify themselves as the \c{screen} media type, to avoid being served
+    overly simplified content that is beneath their capabilities. The example
+    above serves a desktop-oriented design to later-generation mobile browsers.
+    To target a higher-end mobile design to these browsers, you need to specify
+    additional media \c{queries}:
+
+    \code
+    <link media="only screen and (min-device-width: 481px)" href="/path/to/desktop.css" type="text/css" rel="stylesheet"/>
+    <link media="only screen and (max-device-width: 480px)" href="/path/to/touch.css" type="text/css" rel="stylesheet"/>
+    <link media="handheld" href="/path/to/mobile.css" type="text/css" rel="stylesheet"/>
+    \endcode
+
+    The first two lines specify any \c{screen}-typed browser whose window
+    is wider or narrower than 480 pixels.
+
+    Regions of content that are inappropriate for presentation within
+    either the touch-based or lower-end mobile design can then be easily
+    removed within the corresponding CSS files:
+
+    \code
+    .widget, .nested_nav, .sidebar, .video_ad, .related_items {
+        display: none;
+    }
+    \endcode
+
+    The following example demonstrates a simple message identifying your class
+    of browser, which appears dynamically based on CSS that is linked using
+    media types and media query syntax:
+
+    \l{mob_mediaquery}{\inlineimage webkit-guide/scr_mob_mediaquery.png
+    }
+
+    \e{Click on the image to view the example live in a browser or click on the
+    following links to view the CSS files.}
+
+    \l{mq_desktop_css}{(Desktop CSS)}
+    \l{mq_touch_css}{(Touch-Screen CSS)}
+    \l{mq_mobile_css}{(Low-end Mobile CSS)}
+
+    The following example shows a skeletal interface that appears differently
+    based on the type of browser viewing it. The image below shows how it
+    appears when viewed on a touch-based browser, but a desktop browser renders
+    a more elaborate three-column layout:
+
+    \l{mob_layout}{\inlineimage webkit-guide/scr_mob_layout.png
+    }
+
+    \l{mqlayout_desktop_css}{(Desktop CSS)}
+    \l{mqlayout_touch_css}{(Touch-Screen CSS)}
+    \l{mqlayout_mobile_css}{(Low-end Mobile CSS)}
+
+    When viewed with a desktop browser,
+    the page displays a typical desktop-style layout:
+    a main content column surrounded by navigation and sidebar columns,
+    with banner headers and footers that straddle the top and bottom of
+    the screen.
+    When viewed with a touch-based browser,
+    the sidebar element does not appear.
+    The main content extends to the full width of the screen,
+    while header and navigation elements share the top of the screen.
+    When viewed with other mobile browsers,
+    even the top of the screen is simplified to replace header information
+    with a simple icon.
+
+    Note that you can also use media queries to customize interfaces for
+    tablet devices such as the Apple iPad:
+
+    \code
+    <link rel="stylesheet" media="all and (min-device-width: 481px)
+        and (max-device-width: 1024px)" href="/path/to/ipad.css"/>
+    \endcode
+
+    \section2 In-line Media Queries
+
+    While it's generally good practice to keep CSS for different designs within
+    separate files, you can also consolidate them. The following example
+    provides a default san-serif font styling for \c{h1} elements, then
+    different sets of style sheets for three browser categories:
+
+    \code
+    h1 { font-family : Arial, sans-serif }
+    @media screen {
+        h1 { color: #00008B; }
+    }
+    @media only screen and (max-device-width: 480px) {
+        h1 { color: #00008B; font-size: medium; }
+    }
+    @media handheld {
+        h1 { font-size: medium; font-weight: bold }
+    }
+    \endcode
+
+    Consolidating style sheets in this manner may reduce the number of separate
+    HTTP requests, help web designers to keep track of variations among designs,
+    and reduce style sheet properties defined redundantly in more than one file.
+
+    \section2 Media Queries via JavaScript
+
+    Browsers that support media queries also support APIs to test them from
+    within JavaScript. Browsers based on QtWebKit use the \c{matchMedia} API.
+    Some other browsers use a slightly different (and older) \c{styleMedia} API,
+    which itself used to be called the \c{media} API. Each can be called from
+    the \c{window} object. The following function accounts for all three cases:
+
+    \code
+    function matchesMediaQuery(query) {
+        if (!!window.matchMedia)
+            return window.matchMedia(query).matches;
+        if (!!window.styleMedia && !!window.styleMedia.matchMedium)
+            return window.styleMedia.matchMedium(query);
+        if (!!window.media && window.media.matchMedium)
+            return window.media.matchMedium(query);
+        return false;
+    }
+    \endcode
+
+    The \c{query} argument corresponds to the media query string used to
+    activate the CSS. For example, the following higher-level function tests
+    whether the browser matches design categories provided simple labels such as
+    \c{desktop}, \c{touch}, or \c{mobile}:
+
+    \code
+    function isDesign(str) {
+        var design;
+        if (matchesMediaQuery('only screen and (min-device-width: 481px)')) {
+            design = 'desktop';
+        }
+        else if (matchesMediaQuery('only screen and (max-device-width: 480px)')) {
+            design = 'touch';
+        }
+        else if (matchesMediaQuery('handheld')) {
+            design = 'mobile';
+        }
+        return str == design;
+    }
+    \endcode
+
+    You can then use the test whenever there is a need to assign functionality
+    for a specific design. The following gathers a series of images and assigns
+    different panel-viewing functions for \c{desktop} and \c{touch} designs,
+    with no functionality assigned to the lower-end \c{mobile} design:
+
+    \code
+    var imgs = document.querySelectorAll("img.panel");
+    for ( var i = 0, len = imgs.length ; i < len ; i++ ) {
+        el = imgs[i];
+        if ( isDesign("desktop") ) {
+            imgs[i].addEventListener("mouseover", showHoverPanel);
+            imgs[i].addEventListener("mouseout", hideHoverPanel);
+        }
+        else if ( isDesign("touch") ) {
+            imgs[i].addEventListener("click", showTouchPanel);
+        }
+    }
+    \endcode
+
+    The following example uses this technique to produce a simple message,
+    dynamically generated by JavaScript,
+    that corresponds to the message generated by CSS:
+
+    \l{mob_condjs}{\inlineimage webkit-guide/scr_mob_condjs.png
+    }
+
+    \l{mob_condjs_css}{(CSS)}
+    \l{mob_condjs_js}{(JavaScript)}
+
+\section1 Selectors
+
+Level 3 CSS provides many useful new \e{selectors} that make it easier to apply
+formatting to page elements. In addition, the \l{Selectors API} makes DOM
+elements accessible using the same CSS expressions you use to apply formatting
+to them. The following show alternate ways to access elements:
+
+\code
+var element = document.getElementById('map');
+var element = document.querySelector('#map');
+
+var elements = document.getElementByClassName('active');
+var elements = document.querySelectorAll('ul > li.active');
+\endcode
+
+This section provides examples of how different kinds of Level 3
+selectors might be applied when formatting mobile interfaces.
+
+    \section2 Attribute Matching
+
+    It is often useful to offer visual hints marking different kinds of link.
+    Users might want to know the difference between a link to a page on the same
+    website and one on an external site. Links to non-HTML file types might pose
+    special challenges to mobile users. Alternately, mobile users might get
+    special benefit from telephone links.
+
+    You can automate this by using the CSS attribute prefix and suffix matching
+    selectors. The following uses \c{^=} to mark external HTTP links, email,
+    SMS, and telephone links, by inserting an icon after the text of the link:
+
+    \code
+    a[href^="http://"]:after, a[href^="https://"]:after
+                             { content : url(icon/external.png); }
+    a[href^="mailto:"]:after { content : url(icon/email.png); }
+    a[href^="sms:"]:after    { content : url(icon/sms.png); }
+    a[href^="tel:"]:after    { content : url(icon/tel.gif); }
+    \endcode
+
+    The following uses \c{$=} to identify various file types by common suffixes:
+
+    \code
+    a[href$=".doc"]:after { content : url(icon/ms_word.gif) }
+    a[href$=".ppt"]:after { content : url(icon/powerpoint.gif) }
+    a[href$=".rss"]:after, a[href$=".xml"]:after
+                          { content : url(icon/feed.gif) }
+    a[href$=".pdf"]:after { content : url(icon/pdf.jpg) }
+    a[href$=".xls"]:after { content : url(icon/excel.jpg) }
+    \endcode
+
+    You can also use \c{*=} to freely match substrings within any attribute
+    value. The following might distinguish links to a site's blog area based on
+    how the URL is organized:
+
+    \code
+    a[href*="/blog/"]:after { content : url(icon/blog.jpg )}
+    \endcode
+
+    The following example demonstrates links identified by dynamically generated
+    icons:
+
+    \l{layout_link-fmt}{\inlineimage webkit-guide/scr_layout_link-fmt.png
+    }
+
+    \l{layout_link-fmt_css}{(CSS)}
+
+    \section2 Form Input State
+
+    The \c{:checked} dynamic class allows you to style radio and checkbox inputs
+    based on their selection state:
+
+    \code
+    input[type=radio],
+    input[type=checkbox]
+    { text-align : right }
+
+    input[type=radio]:checked,
+    input[type=checkbox]:checked
+    { text-align : left }
+    \endcode
+
+    This enables the following mobile-friendly interface, which converts small
+    radio and check boxes to much more accessible toggle buttons:
+
+    \l{form_toggler}{\inlineimage webkit-guide/scr_form_toggler.png
+    }
+
+    \l{form_toggler_css}{(CSS)}
+
+    Using the dynamic \c{:checked} CSS class, the \c{text-align} property
+    toggles from \c{left} to \c{right} depending on whether the \c{input} is
+    checked or not. Note that to display button text, dynamic classes can be
+    chained together to form complex expressions:
+    \c{input[type=radio]:checked:before}.
+
+    The example also relies on the \c{-webkit-appearance} property, which allows
+    you to override the default visual presentation of specialized interface
+    elements such as radio and checkbox inputs.
+
+    The following example provides alternate styling for radio and checkbox
+    inputs, presenting them as tappable buttons:
+
+    \l{form_tapper}{\inlineimage webkit-guide/scr_form_tapper.png
+    }
+
+    \l{form_tapper_css}{(CSS)}
+
+    Form elements may also be re-styled based on whether they are \c{:enabled}
+    or \c{:disabled}. In addition, the \c{:focus} dynamic class allows you to
+    style text form inputs or other editable content regions that users have
+    currently selected for editing.
+
+    \section2 Navigational Selectors
+
+    Elements within a page that are the target of navigation can receive
+    distinct styling using the \c{:target} dynamic class. The act of navigating
+    to an element can alter its appearance, or even determine if it is to appear
+    at all.
+
+    The following example relies on anchor navigation to display successive rows
+    of a table within a mobile interface:
+
+    \l{layout_tbl-keyhole}{\inlineimage webkit-guide/scr_layout_tbl-keyhole.png
+    }
+
+    \l{layout_tbl-keyhole_css}{(CSS)}
+
+    While the example relies on table-related tags, they are re-styled with
+    block formatting to confine each row of information within the screen. Each
+    row features links to other rows, triggering their display. Other links
+    navigate away from the table, which suppresses its display altogether. This
+    is the main CSS driving the interface:
+
+    \code
+    .mobile > tbody > tr        { display : none  }
+    .mobile > tbody > tr:target { display : block }
+    \endcode
+
+    The same technique may be used to display or dismiss optional interface
+    elements such as panels, simply by providing navigation links to them within
+    the page.
+
+    \section2 Indirect Sibling Selector
+
+    The Level 2 \c{+} selector allows you to style elements that immediately
+    follow other specified elements. For example, the following refers to a
+    paragraph that immediately follows a heading at the same level of markup:
+
+    \code
+    h1 + p { font-weight: bold }
+    \endcode
+
+    In contrast, the Level 3 \c{~} indirect sibling selector allows you to style
+    any subsequent element at the same level within the markup. The following
+    example styles any element that follows an \c{h2} that is classed
+    \c{pullquote}:
+
+    \code
+    h2 ~ .pullquote { font-size: 90% }
+    \endcode
+
+    \note Webkit-based browsers do not yet allow you to style
+    elements dynamically via indirect sibling selectors.
+
+    \section2 Positional Selectors
+
+    Various dynamic classes allow you to style elements depending on their
+    position with a series of elements: either elements of the same type, or
+    other child elements of the same parent. The following example aligns a
+    series of icons to a grid:
+
+    \l{css3_sel-nth}{\inlineimage webkit-guide/scr_css3_sel-nth.png
+    }
+
+    \l{css3_sel-nth_css}{(CSS)}
+
+    Columns are specified with the \c{:nth-of-type()} selector, which accepts
+    numeric expressions as arguments. The following selectors refer to every
+    fourth \c{img} element, but offset by a specified number:
+
+    \code
+    img            { position: absolute }
+    img:nth-of-type(4n-3)    { left: 2% }
+    img:nth-of-type(4n-2)    { left: 27% }
+    img:nth-of-type(4n-1)    { left: 52% }
+    img:nth-of-type(4n-0)    { left: 77% }
+    \endcode
+
+    Alternately, keywords \c{odd} and \c{even} correspond to \c{2n-1} and \c{2n}
+    expressions. These are useful, for example, when styling table rows with
+    alternating background colors.
+
+    Rows are represented as the number of the element within the series, plus a
+    fixed number. Each selector redefines the previous selector's upper range
+    of values:
+
+    \code
+    img:nth-of-type(n)    { top: 5% }
+    img:nth-of-type(n+5)    { top: 20% }
+    img:nth-of-type(n+9)    { top: 35% }
+    img:nth-of-type(n+13)    { top: 50% }
+    img:nth-of-type(n+17)    { top: 65% }
+    img:nth-of-type(n+21)    { top: 80% }
+    \endcode
+
+    Level 3 CSS defines the following positional selectors:
+
+    \list
+    \o \c{:first-child}, \c{:last-child}, and \c{:only-child} refer to the first
+    or last child element within a series, or when it is the only one.
+
+    \o \c{:first-of-type}, \c{:last-of-type}, and \c{:only-of-type} refer to the
+    first or last specified element within a series, or when it is the only one.
+
+    \o \c{:nth-first-child()} and \c{:nth-last-child()} refer to the specified
+    child element positioned from the start or end of the series.
+
+    \o \c{:nth-first-of-type()} and \c{:nth-last-of-type()} refer to the
+    specified element positioned from the start or end of the series.
+
+    \o \c{:nth-of-type()} refers to any series of specified elements.
+
+    \o \c{:nth-child()} refers to any series of child elements.
+
+    \endlist
+
+    \section2 Other Selectors
+
+    Level 3 CSS specifies several other potentially useful dynamic
+    classes that can be added to selectors:
+
+    \list
+
+    \o \c{:empty} refers to an element that contains no child elements,
+    including text nodes.
+
+    \o \c{:root} is a markup-independent way to refer to elements that are
+    postioned at the root of the document,
+    in most cases the \c{html} tag.
+
+    \o The \c{:not()} dynamic class allows you to narrow a range of
+    selectors.
+    This may be more useful when gathering elements via the Selectors API.
+    For example,
+    the following JavaScript gathers form inputs,
+    but not including submit buttons:
+
+    \code
+    var inputs = document.querySelectorAll("input:not([type=submit])");
+    \endcode
+
+    \endlist
+
+\section1 Visual Effects
+
+QtWebKit supports numerous Level 3 CSS visual features. This section briefly
+demonstrates how many of these recently available visual features may be used to
+refine mobile web designs.
+
+These more advanced CSS3 effects tend to be available only on the latest
+generation of mobile browsers. Still, it is safe to use them, even if the design
+degrades somewhat for devices that don't support them. When a browser
+encounters CSS properties or values it can't interpret, it simply ignores them.
+Designers can respond by providing fallback options to allow for \e{graceful
+degradation}. For example, the following CSS specifies a plain gray background
+in case the browser does not support gradients:
+
+\code
+background: #aaaaaa;
+background: -webkit-gradient(linear, center top, center bottom,
+        from(#777777), color-stop(50%,#dddddd), to(#777777) );
+\endcode
+
+Note that many of the CSS properties discussed in this section were implemented
+relatively recently, and vendors of browser rendering engines (such as WebKit)
+may still be in the process of testing and standardizing their behavior. These
+property names feature \e{vendor prefixes} such as \c{-webkit-} for WebKit,
+\c{-moz-} for Mozilla, and \c{-o-} for Opera.
+
+It may be possible to extend CSS properties to these various browsers by
+providing vendor-specific syntax. The following example shows how to extend the
+\c{border-image} property to the Opera browser or Mozilla-based Fennec or the
+Maemo Browser for Nokia N900. It also shows the property's final name following
+the process of standardization:
+
+\code
+-webkit-border-image     : url(img/border-frame.gif) 10 stretch stretch;
+-moz-border-image     : url(img/border-frame.gif) 10 stretch stretch;
+-o-border-image         : url(img/border-frame.gif) 10 stretch stretch;
+border-image         : url(img/border-frame.gif) 10 stretch stretch;
+\endcode
+
+In some cases, there are slight variations in the syntax each vendor expects as
+property values.
+
+    \section2 Specifying Color and Opacity
+
+    Prior to CSS3, there were three options when specifying color values: named
+    colors, hexadecimal color values, or RGB values. CSS3 provides additional
+    ways to specify colors:
+
+    \list
+    \o \e{HSL}. Colors defined with the HSL model specify the \e{hue} as a
+    radial or degree coordinate, then its \e{saturation} and \e{luminence}
+    as percentages. The following example specifies red and green values:
+
+    \code
+    background: hsl(0  , 100%, 60%);
+    background: hsl(128, 75% , 33%);
+    \endcode
+
+    \o \e{HSLA}.
+    Same as HSL,
+    but specifying an additional decimal \e{alpha} value that
+    corresponds to opacity.
+    The following specifies a fully opaque red,
+    followed by a partial transparency:
+
+    \code
+    background: hsla(0, 100%, 60%, 1.0);
+    background: hsla(0, 100%, 60%, 0.5);
+    \endcode
+
+    \o \e{RGBA}.
+    Same as RGB,
+    but specifying an additional decimal \e{alpha} value that
+    corresponds to opacity.
+    The following the same transition from opaque to transparent as shown
+    above:
+
+    \code
+    background: rgba(100%, 0%, 0%, 1.0);
+    background: rgba(100%, 0%, 0%, 0.5);
+    \endcode
+    \endlist
+
+    With the addition of opacity to color definitions, you can now also specify
+    \c{transparent} as a color name. Note that while RGBA and HSLA options are
+    now available, you can still use the familiar \c{opacity} property
+    independently of color definitions.
+
+    \section2 Rounded Corners
+
+    In addition to removing harsh edges, rounded corners often help distinguish
+    active items from static background elements. Rounded corners are
+    implemented using the \c{border-radius} property. The following rounds off
+    an edge to the same extent that interior elements are offset:
+
+    \code
+    .rounded {
+        border-radius    : 1em;
+        padding        : 1em;
+    }
+    \endcode
+
+    The following example demonstrates how rounded corners can enhance a mobile
+    design, by marking the start and end of large regions of content, such as a
+    list of links:
+
+    \l{layout_link-fmt}{\inlineimage webkit-guide/scr_layout_link-fmt.png
+    }
+
+    \l{layout_link-fmt_css}{(CSS)}
+
+    The greater the measurement applied to an element's \c{border-radius}, the
+    more dramatically rounded are its corners. For example, applying a
+    \c{border-radius} that is half an element's overall dimensions results in a
+    circle:
+
+    \code
+    .circle {
+        width              : 4em;
+        height             : 4em;
+        border-radius      : 2em;
+    }
+    \endcode
+
+    You can also set each corner individually, and specify a pair of values to
+    achieve oval-shaped borders:
+
+    \code
+    border-top-left-radius : 2em/1em;
+    \endcode
+
+    \section2 Border Images
+
+    Border images allow you to apply customized marquee effects, as in the
+    following example:
+
+    \l{css3_border-img}{\inlineimage webkit-guide/scr_css3_border-img.png
+    }
+
+    \l{css3_border-img_css}{(CSS)}
+
+    In this case, the image stretches to fit an element's dimensions:
+
+    \code
+    -webkit-border-image : url(img/border-frame.gif) 10 stretch stretch;
+    \endcode
+
+    As is true of the \c{border} property, a single numeric argument specifies
+    the width of the border as a whole, or up to four values to modify the width
+    of each side.
+
+    Any border image you specify substitutes some or all of an element's normal
+    border. The \c{border-image} and \c{border-corner-image} each collectively
+    represent four more specific properties.
+
+    For \c{border-image}, these properties are:
+
+    \list
+    \o \c{border-top-image}
+    \o \c{border-right-image}
+    \o \c{border-bottom-image}
+    \o \c{border-left-image}
+    \endlist
+
+    For \c{border-corner-image}, these properties are:
+    \list
+    \o \c{border-top-left-image}
+    \o \c{border-top-right-image}
+    \o \c{border-bottom-right-image}
+    \o \c{border-bottom-left-image}
+    \endlist
+
+    The \c{border-image} property specifies a single image for all four edge
+    borders. The \c{border-corner-image} property specifies an image for all
+    four corner borders. To specify images individually for any of the edge or
+    corner borders, use any of the eight individual properties.
+
+    When specifying any border edge or corner image values:
+
+    \list
+    \o A \c{stretch} value stretches one image to fill the element border area,
+    as shown in the example above.
+
+    \o A \c{repeat} value repeats one image until it fills the element border
+    area and clips any overflow, for example:
+
+    \code
+    -webkit-border-image : url(img/border-frame.gif) 10 repeat repeat;
+    \endcode
+
+    In this case the first \c{repeat} applies to top and bottom edge borders,
+    and the second applies to left and right edge borders.
+    \endlist
+
+    \section2 Backgrounds
+
+    CSS3 allows you to specify more than one background image at a time.
+    The following example shows an accordion-style tabbed interface:
+
+    \l{css3_backgrounds}{\inlineimage webkit-guide/scr_css3_backgrounds.png
+    }
+
+    \l{css3_backgrounds_css}{(CSS)}
+    \l{css3_backgrounds_js}{(JavaScript)}
+
+    By default, tabs display a single icon image, but when selected feature an
+    additional gradient background image. The following CSS shows how both icon
+    and background can receive their own series of specifications, affecting
+    their offset or whether each image repeats:
+
+    \code
+    background-image    : url(img/select.png)    , url(img/gradient.jpg);
+    background-repeat    : no-repeat        , repeat-x;
+    background-position    : 12px 12px        , 0 0;
+    \endcode
+
+    In addition, you may set the \c{background-size} property to \c{contain} to
+    scale images to the size of the containing element. (Level 2 CSS allowed
+    only specific measurements or percentages of the image's size.)
+
+    \section2 Text Shadow and Stroke
+
+    Shadows can be applied to text. As the following example shows, text shadows
+    may interfere with the legibility of text, and are seldom appropriate unless
+    they're used for large, sans-serif display headings:
+
+    \l{css3_text-shadow}{\inlineimage webkit-guide/scr_css3_text-shadow.png
+    }
+
+    \l{css3_text-shadow_css}{(CSS)}
+
+    In addition to the shadow's color, the property accepts two measurements to
+    represent its offset from the text, while the third specifies the extent to
+    which the shadow is blurred:
+
+    \code
+    h1,h2,h3,h4 { text-shadow : 0.25em 0.25em 0.25em #aaaaaa; }
+    \endcode
+
+    CSS3 also allows you to apply a different colored fill to characters,
+    suitable mainly for larger display type or subtle animations:
+
+    \l{css3_text-stroke}{\inlineimage webkit-guide/scr_css3_text-stroke.png
+    }
+
+    \l{css3_text-stroke_css}{(CSS)}
+
+    In the following CSS, \c{-webkit-text-fill-color} is synonymous with the
+    standard \c{color} property:
+
+    \code
+    -webkit-text-stroke-color    : #000000;
+    -webkit-text-stroke-width    : 1px;
+    -webkit-text-fill-color        : purple;
+    \endcode
+
+    \section2 Text Overflow
+
+    Web developers are familiar with the \c{overflow} property, which can be
+    used to hide content that exceeds an element's dimensions, or else to make
+    it accessible via scrolling. CSS3 specifies an additional \c{text-overflow}
+    property that allows you to add ellipses as a suffix to any text that
+    overflows the element, to indicate the presence of additional text.
+
+    The following example shows how the \c{text-overflow} property allows you to
+    present user-selectable links to expanded regions of text within a page:
+
+    \l{css3_text-overflow}{\inlineimage webkit-guide/scr_css3_text-overflow.png
+    }
+
+    \l{css3_text-overflow_css}{(CSS)}
+    \l{css3_text-overflow_js}{(JavaScript)}
+
+    Use the \c{text-overflow} property in conjunction with \c{overflow} and
+    \c{white-space}:
+
+    \code
+    text-overflow    : ellipsis;
+    overflow    : hidden;
+    white-space    : nowrap;
+    \endcode
+
+    For \c{text-overflow} to work, the element's \c{white-space} must be set to
+    \c{nowrap}, overriding the default \c{normal} value. This prevents words
+    from wrapping onto another line as is standard behavior outside the \c{pre}
+    tag, and forces text past the right edge of the element.
+
+    (The element's \c{text-overflow} may specify both \c{ellipsis} and
+    \c{ellipsis-word}, the latter of which is not as widely implemented.)
+
+    \section2 Custom Scrollbars
+
+    In general, scrollable elements should be avoided wherever possible within
+    mobile interfaces. Drag gestures already allow users to scroll windows
+    vertically, and narrow mobile screens are not suitable for overly wide
+    content.
+
+    In cases where content can only be viewed within a scrolling window,
+    scrollbars can be reformatted to make them more accessible to mobile users.
+    The following example presents a block of code within a touch-enabled mobile
+    interface:
+
+    \l{css3_scroll}{\inlineimage webkit-guide/scr_css3_scroll.png
+    }
+
+    \l{css3_scroll_css}{(CSS)}
+
+    This interface uses standard scrollbars, but their appearance is enhanced
+    using low-level \e{pseudo-element} CSS classes that refer to individual
+    components within the scrollbar.
+
+    Simply by invoking the following CSS selector, you disable scrollbars'
+    default appearance:
+
+    \code
+    pre::-webkit-scrollbar { height : 3em }
+    \endcode
+
+    In this case, the specified property increases the scrollbar's default
+    \c{height} to make it easier for mobile users to tap it with their fingers.
+
+    Each additional scrollbar component must then be explicitly defined,
+    otherwise it does not render. The following CSS provides custom styling for
+    the horizontal panning buttons:
+
+    \code
+    ::-webkit-scrollbar-button:increment {
+        background-image    : url(img/arrow_right.png);
+        background-size    : contain;
+        background-repeat    : no-repeat;
+        width        : 3em;
+        height        : 3em;
+    }
+    ::-webkit-scrollbar-button:decrement {
+        background-image    : url(img/arrow_left.png);
+        background-size    : contain;
+        background-repeat    : no-repeat;
+        width        : 3em;
+        height        : 3em;
+    }
+    \endcode
+
+    In this case, the scrollbar region between the two navigation icons is still
+    active, but not obviously so since its visual formatting has been
+    overridden. The simpler set of controls is far more suitable for a mobile
+    interface.
+
+    Webkit provides pseudo-elements for the following components:
+
+    \list
+    \o \c{scrollbar} refers to scrollbar as a whole. Additional dynamic classes
+    can be appended to specify \c{:vertical} and \c{:horizontal} scrollbars. The
+    \c{:corner-present} dynamic class activates when both scrollbars are
+    present.
+
+    \o \c{scrollbar-button} refers to incremental navigation buttons. Each
+    button can be styled separately with \c{:increment} and \c{:decrement}
+    dynamic classes.
+
+    \o \c{scrollbar-thumb} refers to the scrollbar's slider control.
+
+    \o \c{scrollbar-track} refers to the active navigation region between
+    buttons.
+
+    \o \c{scrollbar-track-piece} refers to each portion of the track on either
+    side of the thumb control. These can be styled separately using \c{:start}
+    and \c{:end} dynamic classes.
+
+    \o \c{scrollbar-corner} refers to the corner where scrollbar tracks meet.
+    The \c{resizer} pseudo-element also refers to this corner, but for resizable
+    elements such as \c{textarea}.
+
+    \o The \c{:double-button} and \c{:single-button} dynamic classes refer to
+    whether incrementor and decrementors are paired together redundantly at each
+    end of the track, while \c{:no-button} refers to whether they display at
+    all.
+    \endlist
+
+    \bold{See Also:}
+    \l{http://webkit.org/blog/363/styling-scrollbars/}{Surfin' Safari:
+    Styling Scrollbars}
+
+    \section2 Gradients
+
+    Gradients provide a graduated shading effect that can add subtle texture to
+    background elements, and can provide buttons a three-dimensional, beveled
+    appearance. Explicit support for gradients means there's no longer a need to
+    implement them as repeating background images.
+
+    Specify gradients using CSS properties such as the following:
+
+    \code
+    background: #aaaaaa;
+    background: -webkit-gradient(linear, center top, center bottom,
+                    from(#dddddd), to(#777777) );
+    \endcode
+
+    Note the pair of \c{background} statements. The first specifies a monochrome
+    fallback color for browsers that do not support gradients.
+
+    The function specifies a simple \c{linear} gradient from the top to the
+    bottom of the element, shifting from a light to a darker gray.
+
+    The following example shows how this gradient can be applied to a background
+    element:
+
+    \l{css3_gradientBack}{\inlineimage webkit-guide/scr_css3_gradientBack.png
+    }
+
+    \l{css3_gradientBack_css}{(CSS)}
+
+    Gradients cannot be applied to the \c{body} element. Instead, they are here
+    applied to an element that covers the background.
+
+    You can specify more than one gradient for the same element. The following
+    shifts from a dark to a light gray halfway down the element, then back to
+    dark:
+
+    \code
+    background: -webkit-gradient(linear, center top, center bottom,
+            from(#777777), color-stop(50%, #dddddd), to(#777777) );
+    \endcode
+
+    Here is how the additional \c{color-stop} appears when applied to the same
+    background element:
+
+    \l{css3_gradientBackStop}{\inlineimage webkit-guide/scr_css3_gradientBackStop.png
+    }
+
+    \l{css3_gradientBackStop_css}{(CSS)}
+
+    Gradients can also provide a textured, three-dimensional appearance for
+    buttons. In the following example, the gradient is inverted and darkened
+    when each button is pressed:
+
+    \l{css3_gradientButton}{\inlineimage webkit-guide/scr_css3_gradientButton.png
+    }
+
+    \l{css3_gradientButton_css}{(CSS)}
+
+    In addition to linear gradients, CSS3 also specifies \bold{radial} gradients
+    that emanate from a single point. The following example demonstrates a
+    colorful radial gradient used to mark where users touch the screen:
+
+    \l{css3_grad-radial}{\inlineimage webkit-guide/scr_css3_grad-radial.png
+    }
+
+    \l{css3_grad-radial_css}{(CSS)}
+    \l{css3_grad-radial_js}{(JavaScript)}
+
+    The syntax is slightly different than for linear gradients. The first two
+    comma-separated arguments after the \c{radial} statement specify the
+    coordinates of the inner circle, and its radius. The next two arguments
+    specify the coordinates and radius of the outer circle:
+
+    \code
+    background: -webkit-gradient(radial, 90 120, 5, 100 130, 48,
+            from(#777777), color-stop(50%, #dddddd), to(#777777) );
+    \endcode
+
+    The use of \c{from}, \c{to} values and \c{color-stop} in radial gradients
+    are the same as for linear gradients.
+
+    \section2 Reflections
+
+    Reflections offer a mirror-like effect which, in the following example, adds
+    a sense of weight to headings and images:
+
+    \l{css3_reflect}{\inlineimage webkit-guide/scr_css3_reflect.png
+    }
+
+    \l{css3_reflect_css}{(CSS)}
+
+    The property's syntax specifies the edge of the element at which to reflect,
+    the offset, and an overlay color. In this case, the color is a gradient,
+    which causes the reflection to gradually fade:
+
+    \code
+    -webkit-box-reflect : below -0.25em -webkit-gradient(linear, center
+                top, center bottom, from(transparent), color-stop(0.25,
+                transparent), to(black));
+    \endcode
+
+    \section2 Masks
+
+    Masks offer a way to modify an image by overlaying either another image, or
+    a gradient. The following example shows a series of thumbnail images that
+    appear faded at their bottom edge until selected:
+
+    \l{css3_mask-grad}{\inlineimage webkit-guide/scr_css3_mask-grad.png
+    }
+
+    \l{css3_mask-grad_css}{(CSS)}
+    \l{css3_mask-grad_js}{(JavaScript)}
+
+    The gradient's opacity shifts from \c 1 to \c 0, an effect that translates
+    to the image:
+
+    \code
+    -webkit-mask-box-image : -webkit-gradient(linear, left top, left
+       bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
+    \endcode
+
+    The following example demonstrates an image used as a mask to frame another
+    image:
+
+    \l{css3_mask-img}{\inlineimage webkit-guide/scr_css3_mask-img.png
+    }
+
+    \l{css3_mask-img_css}{(CSS)}
+
+    Separately, the component images look like these:
+
+    \inlineimage webkit-guide/mask0.png
+    \inlineimage webkit-guide/mask1.png
+
+
+    The syntax is the same for border images, and allows you to stretch one
+    image over the other:
+
+    \code
+    -webkit-mask-box-image : url(img/mask.png) 5% stretch;
+    \endcode
+
+\section1 Dynamic CSS
+
+Animations help enhance touch-based mobile interfaces in many ways. They help
+ease transitions from one display state to another that might otherwise appear
+jarring. They help provide a sense of navigational orientation. They also often
+simulate tactile feedback as users' touches result in a tangible visual effect.
+Overall, they add a sense of vibrancy that increases users' engagement with the
+content on display.
+
+Support by QtWebKit for HTML5 allows you to choose from among several flavors of
+web-based animation: Canvas, SVG, and Level 3 CSS. Web developers may also be
+familiar with lower-level JavaScript-based animation techniques, which form the
+basis of many popular JavaScript libraries such as jQuery and Prototype. This
+section focuses on CSS-based animations, since they are more appropriate to
+integrate throughout a web design, without the additional overhead JavaScript
+libraries require. Like Adobe Flash, SVG and Canvas offer more specialized,
+low-level graphics frameworks whose animation features are more appropriate for
+generating standalone effects.
+
+This section demonstrates animation techniques by offering a series of examples
+that apply to common mobile design tasks. While some of these tasks are
+addressed by existing JavaScript frameworks such as jQuery and Prototype, the
+examples provided here illustrate some CSS-only alternatives.
+
+    \section2 CSS Animation Concepts
+
+    Level 3 CSS introduces three distinct concepts that are relevant when
+    crafting dynamic effects, which are discussed in the following sections:
+
+    \list
+    \o \e{Transforms} offer a series of manipulations to screen elements. By
+    themselves, transforms present only static visual effects, but they become
+    especially useful as part of dynamic transitions and animations. Simple
+    transforms are two-dimensional, with three-dimensional transforms gaining
+    gradual support.
+
+    \o \e{Transitions} entail a graduated shift from one explicit display
+    state to another. Transitional shifts apply to any CSS property that
+    specifies numeric or color values.
+
+    \o \e{Animations} offer more complex sequences of transitions that can
+    specify many intermediate display states. Unlike simple transitions,
+    animations can also be initiated more freely.
+    \endlist
+
+    \section2 2D Transforms
+
+    Transforms allow you to freely displace box elements from where they would
+    ordinarily appear. Several transform functions are available, allowing you
+    to \e{scale}, \e{rotate}, \e{skew}, or \e{translate} (move) objects.
+
+    The \c{translate} function moves an element from its default location, and
+    accepts \c{x} and \c{y} measurements as arguments. The following moves an
+    element off the right edge of the screen:
+
+    \code
+    -webkit-transform: translate(120%, 0);
+    \endcode
+
+    Alternately, \c{translateX} and \c{translateY} functions allow you to
+    specify each axis independently. This moves the element off the top of the
+    screen:
+
+    \code
+    -webkit-transform: translateX(0.0) translateY(-120%);
+    \endcode
+
+    Scale transforms allow you enlarge or shrink an element, with the scale
+    expressed as a decimal. By itself, \c{scale} modifies height and width
+    proportionately, but the alternative \c{scaleX} and \c{scaleY} functions
+    allow you to constrain scaling to a single axis.
+
+    The following animation demonstrates a \c{translate} function, which moves
+    the element from off the screen, followed by series of \c{scale},
+    \c{scaleX}, and \c{scaleY} functions:
+
+    \l{anim_demo-scale}{\inlineimage webkit-guide/scr_anim_demo-scale.png
+    }
+
+    \l{anim_demo-scale_css}{(CSS)}
+
+    By default, transforms originate from the center of the element, but you can
+    specify any edge using the \c{-webkit-transform-origin} property. The
+    following reduces an element to 75% of its original size, while keeping it
+    at its original bottom edge:
+
+    \code
+    -webkit-transform        : scale(0.75);
+    -webkit-transform-origin    : bottom;
+    \endcode
+
+    The following example uses this scale transform to shrink icons that are
+    assigned to in-line links, with icons aligning to the text's baseline:
+
+    \l{layout_link-fmt}{\inlineimage webkit-guide/scr_layout_link-fmt.png
+    }
+
+    \l{layout_link-fmt_css}{(CSS)}
+
+    The \c{rotate} function accepts degree or radian arguments, with negative
+    arguments specifying counter-clockwise motion. The following animation
+    demonstrates two rotations: the first clockwise around the element's center
+    point, and the second counter-clockwise around the top left corner:
+
+    \l{anim_demo-rotate}{\inlineimage webkit-guide/scr_anim_demo-rotate.png
+    }
+
+    \l{anim_demo-rotate_css}{(CSS)}
+
+    The \c{skew} function also accepts positive or negative degree arguments,
+    specifying the extent to which to modify the bottom left corner's 90-degree
+    angle. The \c{skew} and \c{skewX} functions shift the element horizontally,
+    but the alternative \c{skewY} function shifts the element vertically. The
+    following animation demonstrates a \c{skewX} followed by a \c{skewY}:
+
+    \l{anim_demo-skew}{\inlineimage webkit-guide/scr_anim_demo-skew.png
+    }
+
+    \l{anim_demo-skew_css}{(CSS)}
+
+    In the following example, a variety of transforms make a set of three
+    navigational tab icons appear to be part of a cube:
+
+    \l{anim_tabbedSkew}{\inlineimage webkit-guide/scr_anim_tabbedSkew.png
+    }
+
+    \l{anim_tabbedSkew_css}{(CSS)}
+
+    The example also implements the tab icons as internal links that activate
+    display of content using the \c{:target} dynamic class. See the
+    \l{Navigational Selectors} section for more information.
+
+    Note that transforms can include any combination of the functions described
+    above:
+
+    \code
+    nav > a:nth-of-type(3) {
+        background-image    : url(img/S_google.jpg);
+        -webkit-transform    : rotate(-60deg) skew(-30deg) translate(1.7em, 0em);
+    }
+    \endcode
+
+    \section2 Transitions
+
+    Transitions allow you to gradually shift from one defined CSS state to
+    another. Any CSS property expressed as a numeric or color value (including a
+    color name or hex value) can be transitioned between two style sheets.
+    Properties such as \c{display} that have discrete sets of named values, such
+    as the \c{display} property's \c{block} or \c{none} values, cannot be
+    transitioned. In cases where named values translate internally to numeric
+    values, such as the \c{border-width} property's \c{thin} and \c{thick}
+    values, they can be transitioned.
+
+    The following example shows a series of transitions from a collapsed icon
+    state to an expanded panel:
+
+    \l{anim_panel}{\inlineimage webkit-guide/scr_anim_panel.png
+    }
+
+    \l{anim_panel_css}{(CSS)}
+    \l{anim_panel_js}{(JavaScript)}
+
+    Each style sheet specifies a different \c{max-width} value, and each
+    accompanying transition, defined separately for each state, allows the value
+    to shift over the course of half of a second:
+
+    \code
+    nav.expanded {
+        max-width        : 95%;
+        -webkit-transition    : max-width 0.5s ease-in-out;
+    }
+    nav.collapsed {
+        max-width        : 10%;
+        -webkit-transition    : max-width 0.5s ease-in-out;
+    }
+    \endcode
+
+    That shorthand syntax can be expanded to several different properties:
+
+    \code
+    nav.expanded {
+        max-width                : 95%;
+        -webkit-transition-property        : max-width;
+        -webkit-transition-duration        : 0.5s;
+        -webkit-transition-timing-function    : ease-in-out;
+    }
+    nav.collapsed {
+        max-width                : 10%;
+        -webkit-transition-property        : max-width;
+        -webkit-transition-duration        : 0.5s;
+        -webkit-transition-timing-function    : ease-in-out;
+    }
+    \endcode
+
+    Available transition functions include \c{linear}, \c{ease-in},
+    \c{ease-out}, \c{ease-in-out} and \c{cubic-bezier}.
+
+    Note that the \c{max-width} properties in both style sheets both use
+    percentages to specify measurements. Transitions may not work properly if
+    you shift from one unit to another.
+
+    The example above specifies an additional set of transitions affecting the
+    icons nested within the navigation panel:
+
+    \code
+    nav.expanded > .option {
+        opacity        : 1;
+        -webkit-transform    : scale(1.0);
+        -webkit-transition    : all 0.5s linear;
+    }
+    nav.collapsed > .option {
+        opacity        : 0;
+        -webkit-transform    : scale(0.0);
+        -webkit-transition    : all 0.5s linear;
+    }
+    \endcode
+
+    The shifting \c{scale} transform makes icons appear to zoom in to fill the
+    space, while \c{opacity} makes them fade in. Specifying \c{all} as the
+    transition property applies to any valid property that differs between the
+    two states.
+
+    These nested transitions execute at the same time as those assigned to the
+    parent \c{nav} element. The combined effect appears to be a single
+    transition.
+
+    \section2 Transitional Sequences
+
+    The prior example showed a single transition, but transitions can also be
+    run in sequence to form more complex animations. The following example
+    demonstrates an embedded navigation panel that, when pressed, expands
+    horizontally, then vertically to reveal numerous navigation options:
+
+    \l{anim_accord}{\inlineimage webkit-guide/scr_anim_accord.png
+    }
+
+    \l{anim_accord_css}{(CSS)}
+    \l{anim_accord_js}{(JavaScript)}
+
+    The style sheets specify separate, comma-separated transitions for \c{width}
+    and \c{height} properties:
+
+    \code
+    #accordion.expanded {
+        width: 80%;
+        height: 90%;
+        -webkit-transition:
+            width 0.5s ease-in-out 0.0s,
+            height 0.5s ease-in-out 0.5s
+        ;
+    }
+    #accordion.collapsed {
+        width: 10%;
+        height: 7%;
+        -webkit-transition:
+            height 0.5s ease-in-out 0.0s,
+            width 0.5s ease-in-out 0.5s
+        ;
+    }
+    \endcode
+
+    Each transition's additional time measurement specifies a delay. The
+    long-form syntax may make this clearer:
+
+    \code
+    #accordion.expanded {
+        width: 80%;
+        height: 90%;
+        -webkit-transition-property        : width        , height;
+        -webkit-transition-duration        : 0.5s        , 0.5s;
+        -webkit-transition-timing-function    : ease-in-out    , ease-in-out;
+        -webkit-transition-delay        : 0.0s        , 0.5s;
+    }
+    #accordion.collapsed {
+        width                : 10%;
+        height                : 7%;
+        -webkit-transition-property        : height    , width;
+        -webkit-transition-duration        : 0.5s        , 0.5s;
+        -webkit-transition-timing-function    : ease-in-out    , ease-in-out;
+        -webkit-transition-delay        : 0.0s        , 0.5s;
+    }
+    \endcode
+
+    The shift to the \c{expanded} state involves two transitions, each of which
+    lasts half a second and relies on the same \c{ease-in-out} function. The
+    first takes place immediately and affects the \c{width} property. The
+    second, affecting the \c{height} property, takes place after a delay that
+    matches the first transition's duration. The reverse transition is much the
+    same, only the \c{height} property transitions before the \c{width} to
+    reverse the effect.
+
+    In addition to the navigation element's sequence of transitions, nested
+    accordion-style animations activate when users expand top-level headings.
+    Subheadings are revealed using a \c{scaleY} transform, which makes them
+    appear as if they are flipping upwards.
+
+    The following example shows a photo gallery interface that uses the same
+    techniques. (Size the window to emulate a smaller mobile screen.)
+
+    \l{anim_gallery}{\inlineimage webkit-guide/scr_anim_gallery.png
+    }
+
+    \l{anim_gallery_css}{(CSS)}
+    \l{anim_gallery_js}{(JavaScript)}
+
+    The main interface uses simple transitions affecting \c{opacity}, along with
+    \c{scale} and \c{translate} transforms, which combined make queued images
+    appear dimmer, smaller, and horizontally offset from the main image.
+
+    A separate sequence of transitions activates when users tap selected images.
+    The first transition uses a \c{scaleX} transform to flip the image towards
+    the center. The second then flips out a panel featuring details on the
+    photo. When users navigate away to adjacent photos, the panel automatically
+    flips back to its original state as it is moved to the side.
+
+    Another example shows an interface featuring a simple list of items:
+
+    \l{anim_skew}{\inlineimage webkit-guide/scr_anim_skew.png
+    }
+
+    \l{anim_skew_css}{(CSS)}
+    \l{anim_skew_js}{(JavaScript)}
+
+    When dismissed, items are wiped off the screen using a \c{skew} transform
+    that provides the illusion of speed. Remaining items move upwards to fill
+    the space vacated by items that have been removed.
+
+    This example uses the same technique of sequential transitions. The first
+    transition applies to the combined \c{translate}/\c{skew} transform. The
+    second, delayed transition modifies the \c{top} property to align remaining
+    items to a grid.
+
+    Note that for items to reposition themselves in this example, a vertical
+    grid must be explicitly specified. You can only apply transitions between
+    properties you explicitly define and activate, not between values the
+    browser assigns internally to automatically position elements relative to
+    each other.
+
+    \section2 Keyframe Animations
+
+    The previous section showed how you can chain sequences of transitions to
+    produce complex effects. Animations also allow you to define many
+    intermediary interface states, but using a far simpler syntax, and not
+    assigned to transitions between CSS states.
+
+    The following example shows a simple animation of icons that pulse when
+    selected:
+
+    \l{anim_pulse}{\inlineimage webkit-guide/scr_anim_pulse.png
+    }
+
+    \l{anim_pulse_css}{(CSS)}
+
+    It uses the following CSS, shown here in both abbreviated and long form:
+
+    \code
+    nav > a:target { -webkit-animation : pulse 1s infinite; }
+
+    nav > a:target {
+        -webkit-animation-name        : pulse;
+        -webkit-animation-duration        : 1s;
+        -webkit-animation-iteration-count    : infinite;
+    }
+    \endcode
+
+    You supply a \c{name} for the animation that corresponds to a
+    \c{keyframes} rule defined separately within your CSS:
+
+    \code
+    @-webkit-keyframes pulse {
+        0% { opacity : 1.0 }
+        50% { opacity : 0.7 }
+    }
+    \endcode
+
+    Percentages mark new animation states within the course of the animation,
+    and behave much like CSS selectors. In this case, the animation shifts
+    between two separate states over the course of a second: opaque and slightly
+    dimmed. With its \c{iteration-count} set to \c{infinite} rather than a set
+    number, the animation only stops when the link is no longer selected.
+
+    The following example demonstrates a popular mobile design pattern
+    implemented with CSS. Navigation to nested subheads appears to wipe to the
+    right, while navigating upwards in the hierarchy appears to wipe to the
+    left:
+
+    \l{anim_slide1}{\inlineimage webkit-guide/scr_anim_slide1.png
+    }
+
+    \l{anim_slide_css}{(CSS)}
+
+    It relies on keyframes rules such as the following, which define a simple
+    start and end state:
+
+    \code
+    @-webkit-keyframes slide_in {
+      from {
+        left            : 80%;
+        right           : -80%;
+      }
+      to {
+        left            : 0em;
+        right           : 0em;
+      }
+    }
+    \endcode
+
+    Unlike a transition, the animation is triggered immediately when the page
+    loads, but only if the target of navigation is an anchor whose ID is
+    \c{in} or \c{out}. If you navigate to the page itself, no animation
+    occurs.
+
+    The following example uses a keyframe animation to scroll through banner
+    options at the top of the screen:
+
+    \l{css3_multicol}{\inlineimage webkit-guide/scr_css3_multicol.png
+    }
+
+    \l{css3_multicol_css}{(CSS)}
+
+    The animation defines a set of rapid shifts alternating with long static
+    phases. It modifies the left offset of an element that is five times the
+    width of the window.
+
+    \code
+    @-webkit-keyframes banner_scroll {
+        0% { left    : 0%; }
+        18% { left    : 0%; }
+        20% { left    : -100%; }
+        38% { left    : -100%; }
+        40% { left    : -200%; }
+        58% { left    : -200%; }
+        60% { left    : -300%; }
+        78% { left    : -300%; }
+        80% { left    : -400%; }
+        95% { left    : -400%; }
+        100% { left : 0%; }
+    }
+    \endcode
+
+    Finally, the demonstrations of \l{anim_demo-rotate}{rotate},
+    \l{anim_demo-scale}{scale}, and \l{anim_demo-skew}{skew} 2D transforms that
+    opened this section all rely on separate keyframe animations to slide in and
+    manipulate a series of panels. Separate \c{-webkit-animation-delay} settings
+    for each panel control the sequence of each presentation.
+
+
+\list
+\o \l{QtWebKit Guide} -back to the main page
+\endlist
+*/
+
+/*!
+\example webkit/webkit-guide
+\title QtWebKit Guide Files
+This is a listing of \l{QtWebKit Guide} code.
+\note The links to the HTML5 code is found within the guide.
+*/
+

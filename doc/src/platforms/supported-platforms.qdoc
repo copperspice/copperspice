@@ -1,0 +1,563 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page windows-support.html
+    \title Support for Windows
+    \brief Platform support for Windows.
+    \ingroup platform-specific
+    \ingroup platform-details
+
+    \section1 Qt on Windows
+
+    Qt is a comprehensive application and UI framework for developing Windows
+    applications that can also be deployed across many other desktop and
+    embedded operating systems without rewriting the source code. Use the
+    code from one single code-base and rebuild for all
+    \l{Supported Platforms}{supported Windows versions and other platforms}.
+
+    \section1 Getting Started on Windows
+
+    \list
+        \o \l{Supported Platforms}{Supported Windows platforms} - Qt
+        supports a wide range of Windows platforms.
+        \o \l{Qt for Windows Requirements}{Qt for Windows Requirements}
+        - Requirements for developing with Qt on Windows.
+        \o \l{Installing Qt for Windows}{Installing Qt for Windows}
+        - Build Qt for Windows development.
+        \o \l{Getting Started Guides}{Getting started} - Getting started developing for Windows
+    \endlist
+
+    \section1 Key Features for Windows Development
+
+    \section2 Rich Class Library
+
+    The Qt class library includes all the functionality needed to build
+    advanced GUI applications.
+
+    \list
+        \o Complete set of customizable  \l{UI Design with Qt}{UI
+        controls/widgets}
+        \o 3D graphics support with \l{QtOpenGL Module}{OpenGL}
+        or Direct3D
+        \o Powerful \l{Thread Support in Qt}{multi-threading} features
+        \o \l{Graphics View Framework}{2D graphics canvas} capable of
+        handling millions of items
+        \o Integrated \l{Phonon multimedia framework}{Phonon multimedia
+        framework}
+        \o \l{WebKit in Qt}{WebKit} integration
+        \o \l{Network programming with Qt}{Networking}, \l{QtXml Module}
+        {XML} and \l{SQL in Qt}{database} functionality
+        \o \l{ECMAScript Reference}{ECMA standard} scripting engine
+    \endlist
+
+    \section2 Integrated Development Tools
+
+    Qt includes a set of integrated development tools to speed
+    development on the Windows platform.
+
+    \list
+        \o \l{Qt Designer Manual}{Qt Designer} provides a drag and drop
+        visual GUI builder.
+        \o \l{Qt Linguist Manual}{Qt Linguist} provides internationalization
+        and translation features.
+        \o \l{Qt Assistant Manual}{Qt Assistant} is a customizable HTML help
+        file reader providing the complete Qt documentation offline.
+    \endlist
+
+    \section2 Cross-Platform Development using Qt Creator
+
+    \l{http://doc.qt.nokia.com/qtcreator-snapshot/index.html}{Qt Creator} is
+    a complete Cross-platform IDE included in the Qt SDK. The IDE allows
+    programmers to create, build, debug and run Qt applications accross all
+    supported platforms.
+
+    \section2 Visual Studio Add-in.
+
+    The Qt Visual Studio Add-in allows programmers to create, build, debug
+    and run Qt applications from within Microsoft Visual Studio 2005, 2008
+    and 2010. The add-in contains project wizards, Qt project import/export
+    support, integrated Qt resource manager and automated build setup for
+    the Qt Meta-Object Compiler, User Interface Compiler, and Resource
+    Compiler.
+
+    Additional \l{Cross-Platform and Platform-Specific Development}
+    information.
+*/
+
+/*!
+    \page linuxX11-support.html
+    \title Support for Linux/X11
+    \brief Platform support for Linux/X11.
+    \ingroup platform-specific
+    \ingroup platform-details
+
+    \section1 Qt on Linux/X11
+
+    Qt is a comprehensive application and UI framework for developing
+    Linux/X11 applications that can also be deployed across many other
+    desktop and embedded operating systems without rewriting the source code.
+    Use the code from one single code-base and rebuild for all
+    \l{Supported Platforms}{supported X11 versions and other platforms}.
+
+    \section1 Getting Started on Linux/X11
+
+    \list
+        \o \l{Supported Platforms}{Supported Linux/X11 platforms} - Qt
+        supports a wide range of Linux/X11 platforms.
+        \o \l{Qt for X11 Requirements}{Qt for X11 Requirements}
+        - Software required to run Qt on Linux/X11.
+        \o \l{Installing Qt for X11 Platforms}{Installing Qt for X11 Platforms}
+        - Build Qt for Linux/X11 development.
+        \o \l{Getting Started Guides}{Getting started}
+    \endlist
+
+    \section1 Key Features for Linux/X11 Development
+
+    \section2 Integrated Development Tools
+
+    Qt includes a set of integrated development tools to speed development
+    on X11 platforms.
+
+    \list
+        \o \l{Qt Designer Manual}{Qt Designer} provides a drag and drop
+        visual GUI builder.
+        \o \l{Qt Linguist Manual}{Qt Linguist} provides internationalization
+        and translation features.
+        \o \l{Qt Assistant Manual}{Qt Assistant} is a customizable HTML help
+        file reader providing the complete Qt documentation offline.
+        \o Integration with
+        \l{http://doc.qt.nokia.com/qt-eclipse-1.6/index.html}{Eclipse}
+        and KDevelop IDEs are also available.
+    \endlist
+
+    \section2 Cross-Platform Development using Qt Creator
+
+    \l{http://doc.qt.nokia.com/qtcreator-snapshot/index.html}{Qt Creator} is
+    a complete Cross-platform IDE included in the Qt SDK. The IDE allows
+    programmers to create, build, debug and run Qt applications accross all
+    supported platforms.
+
+    \section2 Rich Class Library
+
+    The Qt class library includes all the functionality needed to build
+    advanced GUI applications.
+
+    \list
+        \o Complete set of customizable \l{UI Design with Qt}{UI
+        controls/widgets}
+        \o 3D graphics support with \l{QtOpenGL Module}{OpenGL
+        integration}
+        \o Powerful \l{Thread Support in Qt}{multi-threading} features
+        \o \l{Graphics View Framework}{2D graphics canvas} capable of
+        handling millions of items
+        \o Integrated \l{Phonon multimedia framework}{Phonon multimedia
+        framework}
+        \o \l{WebKit in Qt}{WebKit} integration
+        \o \l{Network programming with Qt}{Networking}, \l{QtXml Module}
+        {XML} and \l{SQL in Qt}{database} functionality
+        \o \l{ECMAScript Reference}{ECMA standard} scripting engine
+    \endlist
+
+    \section2 Qt is the Foundation of KDE
+
+    Qt is best known in the Linux community as the basis for the KDE
+    desktop environment. Almost everything in KDE is based on Qt, and
+    Qt forms the foundation for thousands of open source KDE applications
+    developed by community members worldwide.
+
+    Additional \l{Cross-Platform and Platform-Specific Development}
+    information.
+
+*/
+
+/*!
+    \page mac-support.html
+    \title Support for Mac OS X
+    \brief Platform support for Mac OS X.
+    \ingroup platform-specific
+    \ingroup platform-details
+
+    \section1 Qt on Mac OS X
+
+    Qt is a comprehensive application and UI framework for developing Mac
+    applications that can also be deployed across many other desktop and
+    embedded operating systems without rewriting the source code. Use the
+    code from one single code-base and rebuild for all
+    \l{Supported Platforms}{supported Windows versions and other platforms}.
+
+     \section1 Getting Started on Mac
+
+    \list
+        \o \l{Supported Platforms}{Supported Mac OS X platforms} - Qt supports
+        a wide range of Mac platform variants.
+        \o \l{Qt for Mac OS X Requirements}{Qt for Mac OS X Requirements}
+        - Software required to run Qt on Mac OS X.
+        \o \l{Installing Qt for X11 Platforms}{Installing Qt for X11 Platforms}
+        - Build Qt for Mac OS X development.
+        \o \l{Getting Started Guides}{Getting started}
+    \endlist
+
+     \section1 Key Features for Mac OS X Development
+
+    \section2 Integrated Development Tools
+
+    Qt includes a set of integrated development tools to speed development
+    on the Mac platform.
+
+    \list
+        \o \l{Qt Designer Manual}{Qt Designer} provides a drag and drop
+        visual GUI builder.
+        \o \l{Qt Linguist Manual}{Qt Linguist} provides internationalization
+        and translation features.
+        \o \l{Qt Assistant Manual}{Qt Assistant} is a customizable HTML help
+        file reader providing the complete Qt documentation offline.
+    \endlist
+
+    \section2 Cross-Platform Development using Qt Creator
+
+    \l{http://doc.qt.nokia.com/qtcreator-snapshot/index.html}{Qt Creator} is
+    a complete Cross-platform IDE included in the Qt SDK. The IDE allows
+    programmers to create, build, debug and run Qt applications accross all
+    supported platforms.
+
+    \section2 Rich Class Library
+
+    The Qt class library includes all the functionality needed to build
+    advanced GUI applications.
+
+    \list
+        \o Complete set of customizable \l{UI Design with Qt}{UI
+        controls/widgets}
+        \o 3D graphics support with \l{QtOpenGL Module}{OpenGL
+        integration}
+        \o Powerful \l{Thread Support in Qt}{multi-threading} features
+        \o \l{Graphics View Framework}{2D graphics canvas} capable of
+        handling millions of items
+        \o Integrated \l{Phonon multimedia framework}{Phonon multimedia
+        framework}
+        \o \l{WebKit in Qt}{WebKit} integration
+        \o \l{Network programming with Qt}{Networking}, \l{QtXml Module}
+        {XML} and \l{SQL in Qt}{database} functionality
+        \o \l{ECMAScript Reference}{ECMA standard} scripting engine
+    \endlist
+
+    \section3 Supports Intel Hardware and Universal Binaries
+
+    Qt is written without making assumptions about the number representation,
+    endianness or architecture of the underlying processor. To support Intel
+    hardware on the Apple platforms, Qt customers simply need to recompile
+    their apps.
+
+    Additional \l{Cross-Platform and Platform-Specific Development}
+    information.
+
+    \note Qt also provides support for 64-bit applications on top of Cocoa APIs.
+*/
+/*!
+    \page embeddedLinux-support.html
+    \title Support for Embedded Linux
+    \brief Platform support for Embedded Linux.
+    \ingroup platform-specific
+    \ingroup platform-details
+
+    \section1 Qt on Embedded Linux
+
+    Qt is the leading application and UI framework for devices powered
+    by embedded Linux. You can use Qt to create highly memory efficient
+    devices and applications that have completely unique user experiences.
+
+    Qt runs anywhere Linux runs. Qt's intuitive API means fewer lines of
+    code and higher level functionality in less time. Use the code from
+    one single code-base and rebuild for all \l{Supported Platforms}
+    {supported platforms}.
+
+    \note Qt on Embedded Linux will not exist as a separate platform for Qt 5.0.
+
+    \section1 Getting Started on Embedded Linux
+
+    \list
+        \o \l{Supported Platforms}{Supported Linux platforms}
+        - Qt supports a wide range of Linux platform variants.
+        \o \l{Qt for Embedded Linux Requirements}{Qt for Embedded Linux
+        Requirements} - Software required to run Qt on Embedded Linux.
+        \o \l{Installing Qt for Embedded Linux}{Installing Qt for Embedded
+        Linux} - Build Qt for development on Embedded Linux.
+        \o \l{Getting Started Guides}{Getting started}
+    \endlist
+
+    \section1 Key Features for Embedded Linux Development
+
+    On top of all the tools and API and class libraries that Qt offers,
+    such as WebKit, Qt for Embedded Linux provides you with key components
+    for an optimized embedded development environment.
+
+    \section2 Compact and Efficient Windowing System \l{Qt for Embedded Linux Classes}{QWS}
+
+    Qt builds on the standard API for embedded Linux devices with its own
+    compact window system. Qt-based applications write directly to the
+    Linux framebuffer, eliminating the need for the X11 windowing system.
+
+    \section2 Virtual Frame Buffer (QVFb)
+
+    Qt for Embedded Linux provides a \l{The Virtual Framebuffer}{virtual
+    frame buffer} that will match the physical device display, pixel for
+    pixel. This gives the developer a realistic testing infrastructure
+    testing on the desktop where the frame buffer simulates the physical
+    device display's width, height and color depth.
+
+    \section2 Inter-Process Communication (IPC)
+
+    IPC allows for creation of rich multi-application user experiences.
+    Two main concepts define inter-process communication: channels and
+    messages.
+
+    \section2 Extended Font Format
+
+    Qt supports a wide range of font formats on embedded Linux including:
+    TrueType, Postscript Type1 and Qt pre-rendered fonts. Qt has
+    extended Unicode support including automatic data extraction at build
+    time and automatic update at runtime.
+
+    Plug-ins for custom font formats are also available allowing new font
+    engines to be easily added at runtime. Font sharing capabilities
+    between applications allow for increased memory efficiency.
+
+    Applications created with Qt for Embedded Linux can be ported to
+    Windows CE and any other OS that Qt supports.
+
+    Additional \l{Cross-Platform and Platform-Specific Development}
+    information.
+
+*/
+/*!
+    \page symbian-support.html
+    \title Support for Symbian
+    \brief Platform support for Symbian.
+    \ingroup platform-specific
+    \ingroup platform-details
+
+    \section1 Qt on Symbian
+
+    Qt provides support for the Symbian platform with integration
+    to the S60 framework. If you are developing apps for the Symbian,
+    Maemo or MeeGo platforms in most cases, you can use Qt under the
+    free LGPL licensing option. Qt is cross-platform, and that means
+    that you can use the code from one single code-base and rebuild
+    for all \l{Supported Platforms}{supported platforms}.
+
+     \section1 Getting Started on Symbian
+
+    \list
+        \o \l{Supported Platforms}{Supported platform}
+        - Details on the Qt support for Symbian.
+        \o \l{Qt for the Symbian platform Requirements}{Qt for the
+        Symbian platform Requirements} - Software required to run Qt
+        on Symbian.
+        \o \l{Installing Qt for the Symbian platform}{Installing Qt
+        for the Symbian platform} - Build Qt for Symbian development.
+        \o \l{Platform and Compiler Notes - Symbian}{Platform Notes - Symbian}
+        - Platform specific notes.
+        \o \l{Getting Started Guides}{Getting started}
+        \o \l{Qt Quick Components for Symbian 1.1}{Qt Quick Components for Symbian}
+        - provides a QML component set for the Symbian^3 platform
+    \endlist
+
+    \section1 Key Features for Symbian Development
+
+    On top of all the tools and the API and class libraries that Qt
+    offers, Qt provides you with added functionality for an optimized
+    Symbian development experience.
+
+    \section2 Native Look and Feel
+
+    Qt will detect which theme the phone is running and applies the
+    style at runtime to your Qt application. The look and feel of your
+    applications can also be easily customized in a fraction of the
+    time and lines of code required for traditional UI styling with
+    Qt Style Sheets.
+
+    The \l{Qt Quick Components for Symbian 1.1}{Qt Quick Components for Symbian 1.1}
+    provides a native QML component set.
+
+    \section2 Graphics Features
+
+    Qt for Symbian contains a powerful paint engine that provides
+    features such as anti, aliasing, gradients, curves and transparency.
+    It also has animation support with timelines and easing curves. It
+    is already targeting future device technology by supporting hardware
+    acceleration using OpenVG.
+
+    \section2 Device Configurations
+
+    Using Qt for Symbian all supported Symbian devices provides automatic
+    support for swiching between landscape and portrait mode, different
+    screen resolutions as well as touch screen and key pad input.
+
+    \section2 Cross-Platform Development using Qt Creator
+
+    \l{http://doc.qt.nokia.com/qtcreator-snapshot/index.html}{Qt Creator} is
+    a complete Cross-platform IDE included in the Qt SDK. The IDE allows
+    programmers to create, build, debug and run Qt applications accross all
+    supported platforms.
+
+    \section3 Licensing
+
+    Qt for Symbian is available under the Qt Commercial License, the LGPL
+    v. 2.1 "LGPL") and the GPL v. 3.0.  Symbian currently licenses their
+    software products under either the Symbian Foundation License or the
+    Eclipse Public License ("EPL"). While the LGPL and the EPL are not
+    compatible and may not be combined on a file-by-file basis, they may
+    be used in a common environment provided that the interaction between
+    Qt and Symbian is limited to:  dynamic linking, inter-process
+    communication and data exchange. Therefore, most Symbian developers
+    can use Qt for Symbian under the LGPL.
+
+    Additional \l{Cross-Platform and Platform-Specific Development}
+    information.
+
+*/
+/*!
+    \page supported-platforms.html
+    \title Supported Platforms
+    \brief The platforms supported by Nokia for Qt.
+    \ingroup platform-specific
+    \group platform-details
+
+    Qt is a cross-platform application and UI framework. Using Qt,
+    you can write GUI applications once and deploy them
+    across desktop, mobile and embedded operating systems without
+    rewriting the source code.
+
+    \section1 Qt is Available for the Following Platforms
+
+    \table
+    \header
+    \o {2,1} Qt Cross Platform Support
+    \header
+    \o {1,1} Desktop
+    \o {1,1} Embedded/Mobile
+    \row
+    \o \l{Support for Windows}{Windows}
+    \o \l{Support for Embedded Linux}{Embedded Linux}
+    \row
+    \o \l{Support for Linux/X11}{Linux/X11}
+    \o \l{Support for Symbian}{Symbian}
+    \row
+    \o \l{Support for Mac OS X}{Mac OS X}
+    \endtable
+
+    \section1 Supported Platform Details
+
+    The Qt team strives to provide support for the platforms most
+    frequently used by Qt users. We have designed our internal testing procedure to
+    divide platforms into three test categories (Tier 1 and Tier 2) in order
+    to prioritize internal testing and development resources so that the most
+    frequently used platforms are subjected to our most rigorous testing processes.
+
+    Qt is supported on a variety of 32-bit and 64-bit platforms, and can
+    usually be built on each platform with GCC, a vendor-supplied compiler, or
+    a third party compiler. Although Qt may be built on a range of platform-compiler
+    combinations, only a subset of these are actively supported by Nokia.
+
+    \tableofcontents
+
+    Information about the specific platforms Qt runs on, and the compilers used
+    on each platform, can be found on the \l{Platform and Compiler Notes} page.
+
+    \section1 Tier 1 Platforms
+
+    All Tier 1 platforms are subjected to our unit test suite and other internal
+    testing tools on a frequent basis (prior to new version releases, source tree
+    branching, and at other significant period points in the development process).
+    Errors or bugs discovered in these platforms are prioritized for correction
+    by the development team. Significant errors discovered in Tier 1 platforms can
+    impact release dates and Qt Development Frameworks strives to resolve all known
+    high priority errors in Tier 1 platforms prior to new version releases.
+
+    \table
+    \header \o Platform
+                                     \o Compilers
+    \row    \o Ubuntu Linux 10.04 (32-bit)
+                                     \o As provided by Ubuntu
+    \row    \o Ubuntu Linux 11.10 (64-bit)
+                                     \o As provided by Ubuntu
+    \row    \o Microsoft Windows XP SP3 (32-bit)
+                                     \o MSVC 2008
+    \row    \o Microsoft Windows 7 (32-bit)
+                                     \o MSVC 2008
+    \row    \o Microsoft Windows 7 (32-bit)
+                                     \o MSVC 2010 SP1
+    \row    \o Apple Mac OS X 10.6 "Snow Leopard" (64-bit)
+                                     \o As provided by Apple
+    \row    \o Apple Mac OS X 10.7 "Lion" (64-bit)
+                                     \o As provided by Apple
+    \endtable
+
+    \section1 Tier 2 Platforms
+
+    Tier 2 platforms are subject to ad hoc and internal testing. However, Qt users
+    should note that errors may be present in released product versions for Tier 2
+    platforms and, subject to resource availability, known errors in Tier 2 platforms
+    may or may not be corrected prior to new version releases.
+
+    \table
+    \header \o Platform
+                                     \o Compilers
+    \row    \o Ubuntu Linux 10.04 QWS (x86 32-bit)
+                                     \o As provided by Ubuntu
+    \row    \o Ubuntu Linux 10.04 (32-bit)
+                                     \o Intel Compiler [version 12]
+    \row    \o Ubuntu Linux 10.04 (64-bit)
+                                     \o As provided by Ubuntu
+    \row    \o Microsoft Windows XP SP3 (32-bit)
+                                     \o GCC 4.4 (MinGW)
+    \row    \o Microsoft Windows 7 (64-bit)
+                                     \o MSVC 2010 SP1
+    \row    \o Apple Mac OS X 10.6 "Snow Leopard" Cocoa (32-bit)
+                                     \o As provided by Apple
+    \endtable
+
+    \section1 Tier 3 Platforms (Not Supported by Nokia)
+
+    All platforms not specifically listed above are not supported by Nokia. Nokia does
+    not run its unit test suite or perform any other internal tests on platforms not
+    listed above.
+
+    Qt users should note, however, that there may be various open source
+    projects, community users and/or Qt partners who are able to provide assistance with
+    platforms not supported by Nokia.
+
+    \section1 General Legal Disclaimer
+
+    Please note that Qt is offered on an "as is" basis without warranty
+    of any kind and that our products are not error or bug free. To the maximum extent
+    permitted by applicable law, Nokia on behalf of itself and its suppliers, disclaims all
+    warranties and conditions, either express or implied, including, but not limited to,
+    implied warranties of merchantability, fitness for a particular purpose, title and
+    non-infringement with regard to the Licensed Software.
+*/

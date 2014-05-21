@@ -1,0 +1,207 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qdeclarativeglobalobject.html
+\title QML Global Object
+
+Contains all the properties of the JavaScript global object, plus:
+
+\tableofcontents
+
+\section1 Qt Object
+
+The \l{QmlGlobalQtObject}{Qt object} provides useful enums and functions from Qt, for use in all QML
+files. 
+
+\section1 XMLHttpRequest
+
+\target XMLHttpRequest
+
+QML script supports the XMLHttpRequest object, which can be used to asynchronously obtain 
+data from over a network.  
+
+The XMLHttpRequest API implements the same \l {http://www.w3.org/TR/XMLHttpRequest/}{W3C standard}
+as many popular web browsers with following exceptions:
+\list
+\i QML's XMLHttpRequest does not enforce the same origin policy.
+\i QML's XMLHttpRequest does not support \e synchronous requests.
+\endlist
+
+Additionally, the \c responseXML XML DOM tree currently supported by QML is a reduced subset
+of the \l {http://www.w3.org/TR/DOM-Level-3-Core/}{DOM Level 3 Core} API supported in a web
+browser.  The following objects and properties are supported by the QML implementation:
+
+\table
+\header
+\o \bold {Node}
+\o \bold {Document}
+\o \bold {Element}
+\o \bold {Attr}
+\o \bold {CharacterData}
+\o \bold {Text}
+
+\row
+\o 
+\list
+\o nodeName
+\o nodeValue
+\o nodeType
+\o parentNode
+\o childNodes
+\o firstChild
+\o lastChild
+\o previousSibling
+\o nextSibling
+\o attributes
+\endlist
+
+\o 
+\list
+\o xmlVersion
+\o xmlEncoding
+\o xmlStandalone
+\o documentElement
+\endlist
+
+\o
+\list 
+\o tagName
+\endlist
+
+\o
+\list
+\o name
+\o value
+\o ownerElement
+\endlist
+
+\o
+\list 
+\o data
+\o length
+\endlist
+
+\o
+\list
+\o isElementContentWhitespace
+\o wholeText
+\endlist
+
+\endtable
+
+The \l{declarative/xml/xmlhttprequest}{XMLHttpRequest example} demonstrates how to
+use the XMLHttpRequest object to make a request and read the response headers.
+
+\section1 Offline Storage API
+
+\section2 Database API
+
+The \c openDatabaseSync() and related functions
+provide the ability to access local offline storage in an SQL database.
+
+These databases are user-specific and QML-specific, but accessible to all QML applications.
+They are stored in the \c Databases subdirectory
+of QDeclarativeEngine::offlineStoragePath(), currently as SQLite databases.
+
+The API can be used from JavaScript functions in your QML:
+
+\snippet declarative/sqllocalstorage/hello.qml 0
+
+The API conforms to the Synchronous API of the HTML5 Web Database API,
+\link http://www.w3.org/TR/2009/WD-webdatabase-20091029/ W3C Working Draft 29 October 2009\endlink.
+
+The \l{declarative/sqllocalstorage}{SQL Local Storage example} demonstrates the basics of
+using the Offline Storage API.
+
+\section3 db = openDatabaseSync(identifier, version, description, estimated_size, callback(db))
+
+Returns the database identified by \e identifier. If the database does not already exist, it
+is created, and the function \e callback is called with the database as a parameter. \e description
+and \e estimated_size are written to the INI file (described below), but are otherwise currently
+unused.
+
+May throw exception with code property SQLException.DATABASE_ERR, or SQLException.VERSION_ERR.
+
+When a database is first created, an INI file is also created specifying its characteristics:
+
+\table
+\header \o \bold {Key} \o \bold {Value}
+\row \o Name \o The name of the database passed to \c openDatabase()
+\row \o Version \o The version of the database passed to \c openDatabase()
+\row \o Description \o The description of the database passed to \c openDatabase()
+\row \o EstimatedSize \o The estimated size (in bytes) of the database passed to \c openDatabase()
+\row \o Driver \o Currently "QSQLITE"
+\endtable
+
+This data can be used by application tools.
+
+\section3 db.changeVersion(from, to, callback(tx))
+
+This method allows you to perform a \e{Scheme Upgrade}.
+
+If the current version of \e db is not \e from, then an exception is thrown.
+
+Otherwise, a database transaction is created and passed to \e callback. In this function,
+you can call \e executeSql on \e tx to upgrade the database.
+
+May throw exception with code property SQLException.DATABASE_ERR or SQLException.UNKNOWN_ERR.
+
+\section3 db.transaction(callback(tx))
+
+This method creates a read/write transaction and passed to \e callback. In this function,
+you can call \e executeSql on \e tx to read and modify the database.
+
+If the callback throws exceptions, the transaction is rolled back.
+
+\section3 db.readTransaction(callback(tx))
+
+This method creates a read-only transaction and passed to \e callback. In this function,
+you can call \e executeSql on \e tx to read the database (with SELECT statements).
+
+\section3 results = tx.executeSql(statement, values)
+
+This method executes a SQL \e statement, binding the list of \e values to SQL positional parameters ("?").
+
+It returns a results object, with the following properties:
+
+\table
+\header \o \bold {Type} \o \bold {Property} \o \bold {Value} \o \bold {Applicability}
+\row \o int \o rows.length \o The number of rows in the result \o SELECT
+\row \o var \o rows.item(i) \o Function that returns row \e i of the result \o SELECT
+\row \o int \o rowsAffected \o The number of rows affected by a modification \o UPDATE, DELETE
+\row \o string \o insertId \o The id of the row inserted \o INSERT
+\endtable
+
+May throw exception with code property SQLException.DATABASE_ERR, SQLException.SYNTAX_ERR, or SQLException.UNKNOWN_ERR.
+
+\section1 Logging
+
+\c console.log() and \c console.debug() can be used to print information
+to the console. See \l{Debugging QML} for more information.
+
+*/

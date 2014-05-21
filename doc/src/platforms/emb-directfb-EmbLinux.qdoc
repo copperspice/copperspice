@@ -1,0 +1,333 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qt-embeddedLinux-directfb.html
+
+\title Qt for Embedded Linux and DirectFB
+
+\ingroup qt-embedded-linux
+
+\section1 Introduction
+
+DirectFB is an open source LGPL licensed project founded by Denis Oliver Kropp
+and generally chip vendors start out with the official version and
+implement their own plugins to optimize the operations their hardware
+supports.
+
+We recommend using Qt 4.6 or later with DirectFB. Support for DirectFB was
+introduced into Qt for Embedded Linux as a labs project for Qt 4.3 and folded
+into Qt as a screen driver for Qt 4.4, but not supported fully. In Qt 4.5,
+major changes were made to make it work with the optimized raster paint
+engine. These changes were further improved in Qt 4.6.
+
+\tableofcontents
+
+\section1 Using DirectFB with Qt
+DirectFB is centered around \l{DirectFB - IDirectFBSurface}{Surfaces}
+which is the equivalent of a QPaintDevice. In the Qt/DirectFB plugin,
+DirectFB maps onto either a QPixmap or a QWindowSurface which essentially
+means that drawing onto QPixmap or a QWidget can be accelerated and drawing
+onto any other paint device (e.g. QImage) cannot.
+
+\section2 Configure
+
+When configuring Qt there are two options, from which you can choose:
+
+\code
+    ./configure -plugin-gfx-directfb 
+    ./configure -qt-gfx-directfb 
+
+\endcode
+
+With either mode, Qt will try the following to look for the DirectFB
+includes/libs.
+
+\list
+    \o Use pkg-config
+    \o Use directfb-config
+    \o Check in your qmake.conf
+\endlist
+
+Often the values returned from pkg-config/directfb-config indicates the
+locations of the libs/headers on the target rootfs, rather than their
+location on your host. The safest option is usually to explicitly populate
+these variables in your qmake.conf like this:
+
+\code
+QT_CFLAGS_DIRECTFB =
+/opt/toolchain/gcc4.3_mipsel_linux/usr/include/directfb -D_REENTRANT
+QT_LIBS_DIRECTFB = -L/opt/toolchain/gcc4.3_mipsel_linux/usr/lib/-ldirect
+-ldirectfb -lfusion
+\endcode
+
+\note While DirectFB supports a multi-process setup through a
+kernel-extension called Fusion this setup is not well tested with Qt.
+
+\section2 Supported graphics operations
+
+IDirectFBSurface supports blitting, filling, drawing lines rects etc, but
+it does not support everything Qt allows you to do. E.g. painter paths,
+polygons, complex transformations, antialiasing, gradients. Some of these
+things are handled in newer versions of DirectFB and could be supported by
+Qt. They are seemingly optional at the driver level, so you need to have
+fall back code paths for older drivers and drivers on which this is not
+implemented.
+
+The QDirectFBPaintEngine is a subclass of the QRasterPaintEngine, thus
+essentially supporting everything QRasterPaintEngine supports. This means
+that it supports all graphical operations that Qt supports, but certain
+operations will have to fall back to software rendering and that should be
+avoided due to performance issues. Instead, these operations should be
+rendered into a QPixmap once, and then reuse the pixmap.
+
+Note: Fallbacks to software rendering should be avoided. If unsupported
+operations are used, the paint engine must fallback to the
+QRasterPaintEngine engine. A good debugging tip is to make Qt warn you when
+such fall backs occur, and to disable the fall back and only return.
+Debugging options are listed below.
+
+\section2 DirectFB driver
+DirectFB also provides an abstraction for keyboard and mouse drivers. This
+simplifies the process of getting the target hardware up and running. It
+also brings us to a feature fragmentation issue between different versions
+of DirectFB.
+
+The Qt DirectFB driver currently supports DirectFB versions >= 0.9. Still,
+there are large differences in what each actual implementation handles
+correctly. It is relatively common not to properly support
+\l{DirectFB - IDirectFBWindow}{DirectFB windows}, so Qt needs to handle
+this case with a different code path. In addition, certain drivers do not
+properly support DirectFB's cursor handling. This means Qt has to have a
+code path for rendering the cursor itself when this is the case.
+Some drivers do not let us create
+\l{DirectFB - DFBSurfaceDescription}{preallocated surfaces} which means we
+have to have a conditional code path for that case. 
+
+\section2 Optimize performance using define options
+
+Qt/DirectFB comes with a number of defines that can be either
+uncommented in directfb.pri or added to the QT_DEFINES_DIRECTFB variable in
+your qmake.conf.
+
+\note The defines have been moved from
+\e{src/plugins/gfxdrivers/directfb/directfb.pro} to
+\e{src/gui/embedded/directfb.pri}
+
+\code
+#DIRECTFB_DRAWINGOPERATIONS=DRAW_RECTS|DRAW_LINES|DRAW_IMAGE|DRAW_PIXMAP|
+    DRAW_TILED_PIXMAP|STROKE_PATH|DRAW_PATH|DRAW_POINTS|DRAW_ELLIPSE|DRAW_POLYGON|
+    DRAW_TEXT|FILL_PATH|FILL_RECT|DRAW_COLORSPANS|DRAW_ROUNDED_RECT
+
+ #DEFINES += \"QT_DIRECTFB_WARN_ON_RASTERFALLBACKS=$$DIRECTFB_DRAWINGOPERATIONS\"
+ #DEFINES += \"QT_DIRECTFB_DISABLE_RASTERFALLBACKS=$$DIRECTFB_DRAWINGOPERATIONS\"
+\endcode
+
+As demonstrated above, you need to tell Qt which drawing operations you want
+to warn/disable. Since there are varying implementations of DirectFB from
+manufacturer to manufacture, different operations will be optimized. This
+require you to define the operations you want to warn about or disable.
+These are listed above in the DIRECTFB_DRAWINGOPERATIONS variable.
+
+You can also customize this with environment variables.
+
+E.g. If you want to disable fallbacks for drawPixmap and fillRect and also get
+a warning printed on stderr when a fallback would have happened.
+
+\code
+$ export QT_DIRECTFB_WARN_ON_RASTERFALLBACKS="FILL_RECT|DRAW_PIXMAP"
+$ export QT_DIRECTFB_DISABLE_RASTERFALLBACKS="FILL_RECT|DRAW_PIXMAP"
+$ ./app -qws -display directfb
+\endcode
+
+Following is a table showing which options you have.
+
+\table
+    \header
+        \o Define option
+        \o Description
+    \row
+        \o QT_DIRECTFB_IMAGECACHE
+        \o Defining this means that Qt will cache an IDirectFBSurface per
+QImage you draw based on its \l{QImage::}{cacheKey()}.
+Use this define if your application draws many QImages that
+remain the same. Note that if you in this situation draw an image and then
+change it, by calling bits() or opening a QPainter on it, the cache will
+not benefit you. You can control the cache size with the imageCacheSize
+connect option.
+
+    \row
+        \o QT_NO_DIRECTFB_WM
+        \o If your DirectFB implementation does not support windows, you
+have to define this to make Qt work properly. You can test this by checking
+if the \l{DirectFB - df_window example}{df_window example} runs well.
+This means that all drawing operations onto a QWidget involves
+an extra blitting step since Qt essentially first has to draw into an
+off-screen buffer and then blit this buffer to the back buffer of the
+primary surface. Finally, Qt must flip the back buffer to the front buffer,
+which usually involves another blit. Still, blits are usually very fast
+with DirectFB.
+
+To work around this you can make your widget paint on screen, \l
+Qt::WA_PaintOnScreen but this comes with other limitations. This should be
+avoided if you want more than one full-screen window in your application.
+In addition, it will not work without proper DirectFB mouse support from the
+layer. Also, see QT_NO_DIRECTFB_LAYER for more.
+
+    \row
+        \o QT_NO_DIRECTFB_LAYER
+        \o If your DirectFB display layer cannot be used for e.g. drawing
+mouse cursor, creating windows you have to define this. Defining this also
+requires defining QT_NO_DIRECTFB_WM and involves making Qt render the
+cursor rather than letting DirectFB do it.
+
+    \row
+        \o QT_NO_DIRECTFB_PALETTE
+        \o Define this if your DirectFB driver does not support surfaces
+with \l{DirectFB - IDirectFBPalette}{color tables}.
+The effect of defining this is that Qt will have to convert
+images with \l QImage::Format_Indexed8 format to another format before
+rendering them.
+
+    \row
+        \o QT_NO_DIRECTFB_PREALLOCATED
+        \o Define this if your DirectFB driver does not support creating a
+surface with preallocated data. This will make a more frequent use of
+\l{C++ Reference - memcpy}{memcpy()}
+when drawing images. If you define this, you might want to consider
+defining QT_DIRECTFB_IMAGECACHE for better image rendering performance.
+
+    \row
+        \o QT_NO_DIRECTFB_MOUSE and QT_NO_DIRECTFB_KEYBOARD
+        \o Define this if your driver does not provide keyboard/mouse
+events through \l{DirectFB - CreateInputEventBuffer}{CreateInputEventBuffer}.
+This means that Qt cannot use DirectFB to receive keyboard/mouse events and
+if you want such events in your application, you will have to provide
+another driver. For more info see \l {Qt for Embedded Linux Pointer
+Handling}{Qt for Embedded Linux Pointer Handling} and \l{Qt for Embedded
+Linux Character Input}{Qt for Embedded Linux Character Input}
+
+    \row
+        \o QT_DIRECTFB_TIMING
+        \o Define this when debugging to get output on stderr about the
+frames per second.
+
+    \row
+        \o QT_NO_DIRECTFB_OPAQUE_DETECTION
+        \o When blitting a surface Qt has to decide whether to set the
+\l{DirectFB - DFBSurfaceBlittingFlags}{DSBLIT_BLEND_ALPHACHANNEL}
+flag. If you load an image from file or network data that has a format that
+includes an alpha channel, the image might still be completely opaque.
+Normally Qt runs through every pixel to check if there really is an alpha
+channel there. This involves some overhead but usually pays off in the end
+because blitting is cheaper than blending. If you define this Qt will
+assume that an image with a format that has alpha channel contains at least
+one pixel with an alpha value != 255.
+
+ \row
+    \o QT_DIRECTFB_SUBSURFACE
+    \o Defining this enables a mode that tries to minimize overhead from
+locking/unlocking surfaces. Note that this currently is experimental.
+
+ \row
+    \o QT_DIRECTFB_WINDOW_AS_CURSOR
+    \o Define this if your DirectFB implementation supports windows but
+can not render the cursor properly. This involves creating a small top level
+window and moving it around when the cursor moves. It does not always
+perform well.
+
+ \row
+    \o QT_NO_DIRECTFB_IMAGEPROVIDER
+    \o By default Qt will use DirectFB to load QPixmaps from disk/memory. If
+your DirectFB implementation does not support this it might make sense to
+define this. If you see strange rendering issues with pixmaps that have an
+alpha channel defining this could solve the problem.
+
+ \row
+    \o QT_DIRECTFB_IMAGEPROVIDER_KEEPALIVE
+    \o Define this to make sure Qt always keeps at least one
+\l{DirectFB - IDirectFBImageProvider}{IDirectFBImageProvider}
+object alive. This is to avoid considerable overhead when the first
+IDirectFBImageProvider is created, the last IDirectFBImageProvider is
+removed.
+
+\endtable
+
+\section2 Unsupported graphics operations
+
+There are a number of unsupported operations causing fallbacks. DirectFB
+does not support the following functions.
+
+
+
+\table
+ \header
+  \o Functions
+ \row
+  \o QPainter::strokePath(const QPainterPath & path, const QPen & pen)
+ \row
+  \o QPainter::drawPath(const QPainterPath & path)
+ \row
+  \o QPainter::fillPath(const QPainterPath & path, const QBrush & brush)
+ \row
+  \o QPainter::drawPoints(const QPointF * points, int pointCount)
+ \row
+  \o QPainter::drawEllipse(const QRectF & rectangle)
+ \row
+  \o QPainter::drawPolygon(const QPointF * points, int pointCount,
+ Qt::FillRule fillRule = Qt::OddEvenFill)
+ \row
+  \o QPainter::drawText(const QPointF & position, const QString & text)
+ \row
+  \o QGradient
+ \endtable
+
+\section2 Avoiding fallbacks
+To avoid fallbacks make sure that the following points are true:
+
+\list
+    \o QPen::isSolid() returns true and uses a color with a one pixel
+width. (QPen::width() returns 1.
+    \o QTransform::TransformationType() <= QTransform::TxScale are not
+supported.
+    \o Clipping must be a simple rectangle or a QRegion.
+\endlist
+
+\section2 When painting images
+\note You should use QPixmap instead of QImage. QImages are drawn by
+the QRasterPaintEngine. To get a warning for every fallback to the
+QRasterPaintEngine, use QT_DIRECTFB_WARN_ON_RASTERFALLBACKS. If
+QT_DIRECTFB_DISABLE_RASTERFALLBACKS is defined, DirectFB will only return
+instead of falling back to QRasterPaintEngine. Please note that these
+defines should only be used when optimizing the application. 
+
+\section2 Top level transparency
+\note DirectFB supports partially or fully transparent top level windows,
+either through QWidget::setWindowOpacity or through setting a non-opaque
+background brush. Note that for the latter it is not supported to change an
+opaque window to be transparent at runtime.
+*/

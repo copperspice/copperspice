@@ -1,0 +1,497 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qml-extending-tutorial-index.html
+\title Tutorial: Writing QML Extensions with C++
+
+The Qt Declarative module provides a set of APIs for extending QML through
+C++ extensions. You can write extensions to add your own QML types, extend existing
+Qt types, or call C/C++ functions that are not accessible from ordinary QML code.
+
+This tutorial shows how to write a QML extension using C++ that includes
+core QML features, including properties, signals and bindings. It also shows how
+extensions can be deployed through plugins.
+
+You can find the source code for this tutorial in \c Qt's
+examples/declarative/tutorials/extending directory.
+
+Tutorial chapters:
+
+\list 1
+\o \l{declarative/tutorials/extending/chapter1-basics}{Creating a New Type}
+\o \l{declarative/tutorials/extending/chapter2-methods}{Connecting to C++ Methods and Signals}
+\o \l{declarative/tutorials/extending/chapter3-bindings}{Property Binding}
+\o \l{declarative/tutorials/extending/chapter4-customPropertyTypes}{Using Custom Property Types}
+\o \l{declarative/tutorials/extending/chapter5-listproperties}{Using List Property Types}
+\o \l{declarative/tutorials/extending/chapter6-plugins}{Writing an Extension Plugin}
+\o \l{qml-extending-tutorial7.html}{In Summary}
+\endlist
+
+*/
+
+/*!
+\title Chapter 1: Creating a New Type
+
+\example declarative/tutorials/extending/chapter1-basics
+
+A common task when extending QML is to provide a new QML type that supports some
+ custom functionality beyond what is provided by the built-in \l {QML Elements}.
+For example, this could be done to implement particular data models, or provide
+elements with custom painting and drawing capabilities, or access system features
+like network programming that are not accessible through built-in QML features.
+
+In this tutorial, we will show how to use the C++ classes in the Qt Declarative
+module to extend QML. The end result will be a simple Pie Chart display implemented by
+several custom QML types connected together through QML features like bindings and
+signals, and made available to the QML runtime through a plugin.
+
+To begin with, let's create a new QML type called "PieChart" that has two properties: a name
+and a color.  We will make it available in a \l {Modules}{module} called "Charts", with
+a module version of 1.0.
+
+We want this \c PieChart type to be usable from QML like this:
+
+\code
+    import Charts 1.0
+
+    PieChart {
+        width: 100; height: 100
+        name: "A simple pie chart"
+        color: "red"
+    }
+\endcode
+
+To do this, we need a C++ class that encapsulates this \c PieChart type and its two
+properties. Since QML makes extensive use of Qt's \l{Meta-Object System}{meta object system},
+this new class must:
+
+\list
+\o Inherit from QObject
+\o Declare its properties using the Q_PROPERTY macro
+\endlist
+
+Here is our \c PieChart class, defined in \c piechart.h:
+
+\snippet declarative/tutorials/extending/chapter1-basics/piechart.h 0
+
+The class inherits from QDeclarativeItem because we want to override
+QDeclarativeItem::paint() in order to draw. If the class just represented some
+data type and was not an item that actually needed to be displayed, it could simply inherit
+from QObject. Or, if we want to extend the functionality of an existing QObject-based
+class, it could inherit from that class instead.
+
+The \c PieChart class defines the two properties, \c name and \c color, with the Q_PROPERTY macro,
+and overrides QDeclarativeItem::paint(). The class implementation in \c piechart.cpp
+simply sets and returns the \c m_name and \c m_color values as appropriate, and
+implements \c paint() to draw a simple pie chart. It also turns off the
+QGraphicsItem::ItemHasNoContents flag to enable painting:
+
+\snippet declarative/tutorials/extending/chapter1-basics/piechart.cpp 0
+\dots 0
+\snippet declarative/tutorials/extending/chapter1-basics/piechart.cpp 1
+
+Now that we have defined the \c PieChart type, we will use it from QML. The \c app.qml
+file creates a \c PieChart item and display the pie chart's details
+using a standard QML \l Text item:
+
+\snippet declarative/tutorials/extending/chapter1-basics/app.qml 0
+
+Notice that although the color is specified as a string in QML, it is automatically
+converted to a QColor object for the PieChart \c color property. Automatic conversions are
+provided for various other \l {QML Basic Types}{basic types}; for example, a string
+like "640x480" can be automatically converted to a QSize value.
+
+We'll also create a C++ application that uses a QDeclarativeView to run and
+display \c app.qml. The application must register the \c PieChart type
+using the qmlRegisterType() function, to allow it to be used from QML. If
+you don't register the type, \c app.qml won't be able to create a \c PieChart.
+
+Here is the application \c main.cpp:
+
+\snippet declarative/tutorials/extending/chapter1-basics/main.cpp 0
+
+This call to qmlRegisterType() registers the \c PieChart type as a type called "PieChart", in a module named "Charts",
+with a module version of 1.0.
+
+Lastly, we write a \c .pro project file that includes the files and the \c declarative library:
+
+\quotefile declarative/tutorials/extending/chapter1-basics/chapter1-basics.pro
+
+Now we can build and run the application:
+
+\image extending-tutorial-chapter1.png
+
+Try it yourself with the code in Qt's \c examples/tutorials/extending/chapter1-basics directory.
+
+At the moment, the \c app.qml is run from within a C++ application.
+This may seem odd if you're used to running QML files with the \l {QML Viewer}.
+Later on, we'll show how to create a plugin so that you can run \c app.qml using the
+\l {QML Viewer} instead.
+
+*/
+
+
+/*!
+\title Chapter 2: Connecting to C++ Methods and Signals
+
+\example declarative/tutorials/extending/chapter2-methods
+
+Suppose we want \c PieChart to have a "clearChart()" method that erases the
+chart and then emits a "chartCleared" signal. Our \c app.qml would be able
+to call \c clearChart() and receive \c chartCleared() signals like this:
+
+\snippet declarative/tutorials/extending/chapter2-methods/app.qml 0
+
+\image extending-tutorial-chapter2.png
+
+To do this, we add a \c clearChart() method and a \c chartCleared() signal
+to our C++ class:
+
+\snippet declarative/tutorials/extending/chapter2-methods/piechart.h 0
+\dots
+\snippet declarative/tutorials/extending/chapter2-methods/piechart.h 1
+\dots
+\snippet declarative/tutorials/extending/chapter2-methods/piechart.h 2
+\dots
+\snippet declarative/tutorials/extending/chapter2-methods/piechart.h 3
+
+The use of Q_INVOKABLE makes the \c clearChart() method available to the
+Qt Meta-Object system, and in turn, to QML. Note that it could have
+been declared as as a Qt slot instead of using Q_INVOKABLE, as
+slots are also callable from QML. Both of these approaches are valid.
+
+The \c clearChart() method simply changes the color to Qt::transparent,
+repaints the chart, then emits the \c chartCleared() signal:
+
+\snippet declarative/tutorials/extending/chapter2-methods/piechart.cpp 0
+
+Now when we run the application and click the window, the pie chart
+disappears, and the application outputs:
+
+\code
+    The chart has been cleared
+\endcode
+
+Try out the example yourself with the updated code in Qt's \c examples/tutorials/extending/chapter2-methods directory.
+
+*/
+
+/*!
+\title Chapter 3: Adding Property Bindings
+
+\example declarative/tutorials/extending/chapter3-bindings
+
+Property bindings is a powerful feature of QML that allows values of different
+elements to be synchronized automatically. It uses signals to notify and update
+other elements' values when property values are changed.
+
+Let's enable property bindings for the \c color property. That means
+if we have code like this:
+
+\snippet declarative/tutorials/extending/chapter3-bindings/app.qml 0
+
+\image extending-tutorial-chapter3.png
+
+The "color: chartA.color" statement binds the \c color value of
+\c chartB to the \c color of \c chartA.
+Whenever \c chartA's \c color value changes, \c chartB's \c color value
+updates to the same value. When the window is clicked, the \c onClicked
+handler in the MouseArea changes the color of \c chartA, thereby changing
+both charts to the color blue.
+
+It's easy to enable property binding for the \c color property.
+We add a \l{Qt's Property System}{NOTIFY} feature to its Q_PROPERTY() declaration to indicate that a "colorChanged" signal
+is emitted whenever the value changes.
+
+\snippet declarative/tutorials/extending/chapter3-bindings/piechart.h 0
+\dots
+\snippet declarative/tutorials/extending/chapter3-bindings/piechart.h 1
+\dots
+\snippet declarative/tutorials/extending/chapter3-bindings/piechart.h 2
+\dots
+\snippet declarative/tutorials/extending/chapter3-bindings/piechart.h 3
+
+Then, we emit this signal in \c setPieSlice():
+
+\snippet declarative/tutorials/extending/chapter3-bindings/piechart.cpp 0
+
+It's important for \c setColor() to check that the color value has actually changed
+before emitting \c colorChanged(). This ensures the signal is not emitted unnecessarily and
+also prevents loops when other elements respond to the value change.
+
+The use of bindings is essential to QML. You should always add NOTIFY
+signals for properties if they are able to be implemented, so that your
+properties can be used in bindings. Properties that cannot be bound cannot be
+automatically updated and cannot be used as flexibly in QML. Also, since
+bindings are invoked so often and relied upon in QML usage, users of your
+custom QML types may see unexpected behavior if bindings are not implemented.
+
+*/
+
+/*!
+\title Chapter 4: Using Custom Property Types
+
+\example declarative/tutorials/extending/chapter4-customPropertyTypes
+
+The \c PieChart type currently has a string-type property and a color-type property.
+It could have many other types of properties. For example, it could have an
+int-type property to store an identifier for each chart:
+
+\code
+    // C++
+    class PieChart : public QDeclarativeItem
+    {
+        Q_PROPERTY(int chartId READ chartId WRITE setChartId NOTIFY chartIdChanged)
+        ...
+
+    public:
+        void setChartId(int chartId);
+        int chartId() const;
+        ...
+
+    signals:
+        void chartIdChanged();
+    };
+
+    // QML
+    PieChart {
+        ...
+        chartId: 100
+    }
+\endcode
+
+We can also use various other property types. QML has built-in support for the types
+listed in the \l{QML Basic Types} documentation, which includes the following:
+
+\list
+\o bool, unsigned int, int, float, double, qreal
+\o QString, QUrl, QColor
+\o QDate, QTime, QDateTime
+\o QPoint, QPointF, QSize, QSizeF, QRect, QRectF
+\o QVariant
+\endlist
+
+If we want to create a property whose type is not supported by QML by default,
+we need to register the type with QML.
+
+For example, let's replace the use of the \c property with a type called
+"PieSlice" that has a \c color property. Instead of assigning a color,
+we assign an \c PieSlice value which itself contains a \c color:
+
+\snippet declarative/tutorials/extending/chapter4-customPropertyTypes/app.qml 0
+
+Like \c PieChart, this new \c PieSlice type inherits from QDeclarativeItem and declares
+its properties with Q_PROPERTY():
+
+\snippet declarative/tutorials/extending/chapter4-customPropertyTypes/pieslice.h 0
+
+To use it in \c PieChart, we modify the \c color property declaration
+and associated method signatures:
+
+\snippet declarative/tutorials/extending/chapter4-customPropertyTypes/piechart.h 0
+\dots
+\snippet declarative/tutorials/extending/chapter4-customPropertyTypes/piechart.h 1
+\dots
+\snippet declarative/tutorials/extending/chapter4-customPropertyTypes/piechart.h 2
+\dots
+\snippet declarative/tutorials/extending/chapter4-customPropertyTypes/piechart.h 3
+
+There is one thing to be aware of when implementing \c setPieSlice(). The \c PieSlice
+is a visual item, so it must be set as a child of the \c PieChart using
+QDeclarativeItem::setParentItem() so that the \c PieChart knows to paint this child
+item when its contents are drawn:
+
+\snippet declarative/tutorials/extending/chapter4-customPropertyTypes/piechart.cpp 0
+
+
+Like the \c PieChart type, the \c PieSlice type has to be registered
+using qmlRegisterType() to be used from QML. As with \c PieChart, we'll add the
+type to the "Charts" module, version 1.0:
+
+\snippet declarative/tutorials/extending/chapter4-customPropertyTypes/main.cpp 0
+\dots
+\snippet declarative/tutorials/extending/chapter4-customPropertyTypes/main.cpp 1
+\dots
+\snippet declarative/tutorials/extending/chapter4-customPropertyTypes/main.cpp 2
+
+Try it out with the code in Qt's \c examples/tutorials/extending/chapter4-customPropertyTypes directory.
+
+*/
+
+
+/*!
+\title Chapter 5: Using List Property Types
+
+\example declarative/tutorials/extending/chapter5-listproperties
+
+Right now, a \c PieChart can only have one \c PieSlice. Ideally a chart would
+have multiple slices, with different colors and sizes. To do this, we could
+have a \c slices property that accepts a list of \c PieSlice items:
+
+\snippet declarative/tutorials/extending/chapter5-listproperties/app.qml 0
+
+\image extending-tutorial-chapter5.png
+
+To do this, we replace the \c pieSlice property in \c PieChart with a \c slices property,
+declared as a QDeclarativeListProperty type. The QDeclarativeListProperty class enables the
+creation of list properties in QML extensions. We replace the \c pieSlice()
+function with a \c slices() function that returns a list of slices, and add
+an internal \c append_slice() function (discussed below). We also use a QList to
+store the internal list of slices as \c m_slices:
+
+\snippet declarative/tutorials/extending/chapter5-listproperties/piechart.h 0
+\dots
+\snippet declarative/tutorials/extending/chapter5-listproperties/piechart.h 1
+\dots
+\snippet declarative/tutorials/extending/chapter5-listproperties/piechart.h 2
+
+Although the \c slices property does not have an associated \c WRITE function,
+it is still modifiable because of the way QDeclarativeListProperty works.
+In the \c PieChart implementation, we implement \c PieChart::slices() to
+return a QDeclarativeListProperty value and indicate that the internal
+\c PieChart::append_slice() function is to be called whenever a request is made from QML
+to add items to the list:
+
+\snippet declarative/tutorials/extending/chapter5-listproperties/piechart.cpp 0
+
+The \c append_slice() function simply sets the parent item as before,
+and adds the new item to the \c m_slices list. As you can see, the append function for a
+QDeclarativeListProperty is called with two arguments: the list property, and
+the item that is to be appended.
+
+The \c PieSlice class has also been modified to include \c fromAngle and \c angleSpan
+properties and to draw the slice according to these values. This is a straightforward
+modification if you have read the previous pages in this tutorial, so the code is not shown here.
+
+The complete code can be seen in the updated \c examples/tutorials/extending/chapter5-listproperties directory.
+
+*/
+
+
+/*!
+\title Chapter 6: Writing an Extension Plugin
+
+\example declarative/tutorials/extending/chapter6-plugins
+
+Currently the \c PieChart and \c PieSlice types are used by \c app.qml,
+which is displayed using a QDeclarativeView in a C++ application. An alternative
+way to use our QML extension is to create a plugin library to make it available
+to the QML engine. This allows \c app.qml to be loaded with the \l {QML Viewer}
+(or some other QML \l{Qt Declarative UI Runtime}{runtime} application) instead of writing a \c main.cpp file and
+loading our own C++ application.
+
+To create a plugin library, we need:
+
+\list
+\o A plugin class that registers our QML types
+\o A project file that describes the plugin
+\o A \l{Writing a qmldir file}{qmldir} file that tells the QML engine to load the plugin
+\endlist
+
+First, we create a plugin class named \c ChartsPlugin. It subclasses QDeclarativeExtensionPlugin
+and registers our QML types in the inherited \l{QDeclarativeExtensionPlugin::}{registerTypes()} method. It also calls
+Q_EXPORT_PLUGIN2 for Qt's \l{How to Create Qt Plugins}{plugin system}.
+
+Here is the \c ChartsPlugin definition in \c chartsplugin.h:
+
+\snippet declarative/tutorials/extending/chapter6-plugins/chartsplugin.h 0
+
+And its implementation in \c chartsplugin.cpp:
+
+\snippet declarative/tutorials/extending/chapter6-plugins/chartsplugin.cpp 0
+
+Then, we write a \c .pro project file that defines the project as a plugin library
+and specifies with DESTDIR that library files should be built into a "lib" subdirectory:
+
+\quotefile declarative/tutorials/extending/chapter6-plugins/chapter6-plugins.pro
+
+Finally, we add a \l{Writing a qmldir file}{qmldir} file that is automatically parsed by the QML engine.
+In this file, we specify that a plugin named "chapter6-plugin" (the name
+of the example project) can be found in the "lib" subdirectory:
+
+\quotefile declarative/tutorials/extending/chapter6-plugins/qmldir
+
+Now we have a plugin, and instead of having a main.cpp and an executable, we can build
+the project and then load the QML file in the \l {QML Viewer}:
+
+\code
+    qmlviewer app.qml
+\endcode
+
+(On Mac OS X, you can launch the "QMLViewer" application instead.)
+
+Notice the "import Charts 1.0" statement has disappeared from \c app.qml. This is
+because the \c qmldir file is in the same directory as \c app.qml: this is equivalent to
+having PieChart.qml and PieSlice.qml files inside the project directory, which could both
+be used by \c app.qml without import statements.
+*/
+
+
+/*!
+\page qml-extending-tutorial7.html
+\title Chapter 7: In Summary
+
+In this tutorial, we've shown the basic steps for creating a QML extension:
+
+\list
+\o Define new QML types by subclassing QObject and registering them with qmlRegisterType()
+\o Add callable methods using Q_INVOKABLE or Qt slots, and connect to Qt signals with an \c onSignal syntax
+\o Add property bindings by defining \l{Qt's Property System}{NOTIFY} signals
+\o Define custom property types if the built-in types are not sufficient
+\o Define list property types using QDeclarativeListProperty
+\o Create a plugin library by defining a Qt plugin and writing a \c qmldir file
+\endlist
+
+
+The \l {Extending QML Functionalities using C++} reference documentation shows
+other useful features that can be added to QML extensions. For example, we
+could use \l{Default Property}{default properties} to allow
+slices to be added without using the \c slices property:
+
+\code
+    PieChart {
+        PieSlice { ... }
+        PieSlice { ... }
+        PieSlice { ... }
+    }
+\endcode
+
+Or randomly add and remove slices from time to time using \l{Property Value Sources}{property value sources}:
+
+\code
+    PieChart {
+        PieSliceRandomizer on slices {}
+    }
+\endcode
+
+
+See the \l{Extending QML Functionalities using C++} reference documentation
+for more information.
+
+*/
+

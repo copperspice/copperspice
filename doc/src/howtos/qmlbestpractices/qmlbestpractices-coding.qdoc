@@ -1,0 +1,97 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qml-best-practices-coding.html
+\ingroup qml-best-practices
+\contentspage QML Best Practices Guides
+\previouspage QML Best Practices Guides
+\startpage QML Best Practices Guides
+\title QML Best Practices: Coding Conventions
+
+\brief QML Coding Conventions and Importing Files
+
+There are many different ways to code using QML. These are a set of
+guidelines to help your code look better and consistent.
+
+\section1 Coding Conventions
+
+The official QML Coding Conventions may be found at
+\l {QML Coding Conventions}. This is the recommended convention that will be
+used throughout the QML documentation.
+
+In addition, Qt's official code style may be found at the \l {Qt Coding Style}.
+
+\section1 Importing Files into QML
+
+To import items such as directories, use the "import" keyword, similar to
+the way the \c {import QtQuick 1.0} statement is used.
+
+\snippet doc/src/snippets/declarative/imports/best-practices.qml imports
+
+To facilitate the import of QML components, it is best to begin the QML
+file with an uppercase character. This way, the user can simply declare the
+component using the file name as the component name. For example, if a QML
+component is in a file named \c Button.qml, then the user may import the
+component by declaring a \c {Button {}}. Note that this method only works if
+the QML files are in the same directory.
+
+It is also possible to import QML files which have file names that begin in
+lower case or files in a different directory by using a \c qmldir file.
+
+A \c qmldir file tells your QML application which QML components, plugins,
+or directories to import. The \c qmldir file must reside in an imported
+directory. By using the \c qmldir file, users may import any QML file and assign any
+valid QML component name to the component.
+
+For more information, read the section on
+\l{qml-loading-components}{Loading a Component}.
+
+\section1 Commenting Code
+
+Commenting code allows others to read the source code better. As well, comments
+allow the programmer to think about his or her code; a confusing comment may
+mean the code is confusing.
+
+Similar to JavaScript or C++, there are two ways of commenting QML code:
+\list
+\o Single line comments start with \c{//} and finish at the end of the line
+\o Multiline comments start with \c{/*} and finish with *\/
+\endlist
+
+\section1 Group Properties
+
+Many QML properties are \l{attached-properties}{attached} or
+\l {qml-grouped-properties}{group} properties. For convenience, you may treat
+them as another element when dealing with multiple properties belonging to the
+same group.
+
+\snippet doc/src/snippets/declarative/bestpractices/group.qml not grouped
+Treating groups of properties as a block can ease confusion and help relate the
+properties with other properties.
+\snippet doc/src/snippets/declarative/bestpractices/group.qml grouped
+*/

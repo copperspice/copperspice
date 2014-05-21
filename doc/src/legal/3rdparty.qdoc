@@ -1,0 +1,850 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page 3rdparty.html
+
+    \title Third-Party Licenses Used in Qt
+    \ingroup licensing
+    \brief License information for third-party libraries supplied with Qt.
+
+    Qt includes a number of third-party libraries that are used to provide
+    certain features. Unlike the code described in the
+    \l{Other Licenses Used in Qt}{code used in Qt} document, these
+    libraries are supplied alongside the Qt modules.
+
+    Third Party Software may impose additional restrictions and it is the
+    user's responsibility to ensure that they have met the licensing
+    requirements of the GPL, LGPL, or Qt Commercial license and the relevant
+    license of the Third Party Software they are using.
+
+    Run \c{configure -help} to see any options that may be available for
+    controlling the use of these libraries.
+
+    Modifications, if any, done to the third-party libraries can
+    normally be found by reviewing the change history of the
+    corresponding files in the public Qt repository.
+
+    \tableofcontents
+
+    \section1 DES (\c des.cpp)
+
+    \e{Implementation of DES encryption for NTLM\br
+    Copyright 1997-2005 Simon Tatham.\br
+    This software is released under the MIT license.}
+
+    See \c src/3rdparty/des/des.cpp for more information about the terms and
+    conditions under which the code is supplied.
+
+    \section1 FreeType 2 (\c freetype) version 2.3.6
+
+    \e{The FreeType project is a team of volunteers who develop free, portable
+    and high-quality software solutions for digital typography. We specifically
+    target embedded systems and focus on bringing small, efficient and
+    ubiquitous products.} -- quoted from \c 3rdparty/freetype/docs/freetype2.html.
+
+    See \c src/3rdparty/freetype/docs/FTL.txt and \c
+    src/3rdparty/freetype/docs/GPL.txt for license details.
+
+    See also the files in \c src/3rdparty/harfbuzz, which are used by
+    FreeType.
+
+    Parts of the FreeType projects have been modified and put into Qt
+    for use in the painting subsystem. These files are ftraster.h,
+    ftraster.c, ftgrays.h and ftgrays.c. The following modifications
+    has been made to these files:
+
+    \list
+    \i Renamed FT_ and ft_ symbols to QT_FT_ and qt_ft_ to avoid name
+    conflicts.
+    \i Removed parts of code not relevant when compiled with
+    _STANDALONE_ defined.
+    \i Changed behavior in ftraster.c to follow X polygon filling
+    rules.
+    \i Implemented support in ftraster.c for winding / odd even
+    polygon fill rules.
+    \i Replaced bitmap generation with span generation in ftraster.c
+    \i Renamed: ftraster.h to qblackraster_p.h
+    \i Renamed: ftraster.c to qblackraster.c
+    \i Renamed: ftgrays.h to qgrayraster_p.h
+    \i Renamed: ftgrays.c to qgrayraster.c
+    \endlist
+
+    \section1 HarfBuzz (\c harfbuzz)
+
+    \e{This is HarfBuzz, an OpenType Layout engine library.}
+    -- quoted from \c src/3rdparty/harfbuzz/README.
+
+    \hr
+
+    Copyright (C) 2004,2007 Red Hat, Inc.\br
+    Copyright (C) 1998-2004 David Turner and Werner Lemberg\br
+    Copyright (C) 2006 Behdad Esfahbod\br
+    Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies)
+
+    This is part of HarfBuzz, an OpenType Layout engine library.
+
+    Permission is hereby granted, without written agreement and without
+    license or royalty fees, to use, copy, modify, and distribute this
+    software and its documentation for any purpose, provided that the
+    above copyright notice and the following two paragraphs appear in
+    all copies of this software.
+
+    IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE TO ANY PARTY FOR
+    DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES
+    ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN
+    IF THE COPYRIGHT HOLDER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+    DAMAGE.
+
+    THE COPYRIGHT HOLDER SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING,
+    BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+    FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS
+    ON AN "AS IS" BASIS, AND THE COPYRIGHT HOLDER HAS NO OBLIGATION TO
+    PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+
+    \hr
+
+    See \c src/3rdparty/harfbuzz/COPYING for license details.
+
+    \section1 The Independent JPEG Group's JPEG Software (\c libjpeg) version 8c
+
+    \e{This package contains C software to implement JPEG image compression and
+    decompression.  JPEG (pronounced "jay-peg") is a standardized compression
+    method for full-color and gray-scale images.  JPEG is intended for compressing
+    "real-world" scenes; line drawings, cartoons and other non-realistic images
+    are not its strong suit.  JPEG is lossy, meaning that the output image is not
+    exactly identical to the input image.} -- quoted from \c
+    src/3rdparty/libjpeg/README.
+
+    \hr
+
+    This software is based in part on the work of the Independent JPEG Group.
+
+    \hr
+
+    The authors make NO WARRANTY or representation, either express or implied,
+    with respect to this software, its quality, accuracy, merchantability, or
+    fitness for a particular purpose.  This software is provided "AS IS", and you,
+    its user, assume the entire risk as to its quality and accuracy.
+    
+    This software is copyright (C) 1991-2010, Thomas G. Lane, Guido Vollbeding.
+    All Rights Reserved except as specified below.
+    
+    Permission is hereby granted to use, copy, modify, and distribute this
+    software (or portions thereof) for any purpose, without fee, subject to these
+    conditions:\br
+    (1) If any part of the source code for this software is distributed, then this
+    README file must be included, with this copyright and no-warranty notice
+    unaltered; and any additions, deletions, or changes to the original files
+    must be clearly indicated in accompanying documentation.\br
+    (2) If only executable code is distributed, then the accompanying
+    documentation must state that "this software is based in part on the work of
+    the Independent JPEG Group".\br
+    (3) Permission for use of this software is granted only if the user accepts
+    full responsibility for any undesirable consequences; the authors accept
+    NO LIABILITY for damages of any kind.
+    
+    These conditions apply to any software derived from or based on the IJG code,
+    not just to the unmodified library.  If you use our work, you ought to
+    acknowledge us.
+    
+    Permission is NOT granted for the use of any IJG author's name or company name
+    in advertising or publicity relating to this software or products derived from
+    it.  This software may be referred to only as "the Independent JPEG Group's
+    software".
+    
+    We specifically permit and encourage the use of this software as the basis of
+    commercial products, provided that all warranty or liability claims are
+    assumed by the product vendor.
+    
+    \hr
+
+    The Graphics Interchange Format(c) is the Copyright property of
+    CompuServe Incorporated.  GIF(sm) is a Service Mark property of
+    CompuServe Incorporated.
+
+    \hr
+
+    See \c src/3rdparty/libjpeg/README for license details.
+
+    \section1 MD4 (\c md4.cpp and \c md4.h)
+
+    \e{MD4 (RFC-1320) message digest.\br
+    Modified from MD5 code by Andrey Panin <pazke@donpac.ru>\br\br
+    Written by Solar Designer <solar@openwall.com> in 2001, and placed in\br
+    the public domain.  There's absolutely no warranty.}
+
+    See \c src/3rdparty/md4/md4.cpp and \c src/3rdparty/md4/md4.h for more
+    information about the terms and conditions under which the code is
+    supplied.
+
+    \section1 MD5 (\c md5.cpp and \c md5.h)
+
+    \e{This code implements the MD5 message-digest algorithm.
+    The algorithm is due to Ron Rivest.  This code was
+    written by Colin Plumb in 1993, no copyright is claimed.
+    This code is in the public domain; do with it what you wish.} -- quoted from
+    \c src/3rdparty/md5/md5.h
+
+    See \c src/3rdparty/md5/md5.cpp and \c src/3rdparty/md5/md5.h for more
+    information about the terms and conditions under which the code is
+    supplied.
+
+    \section1 MNG Library (\c libmng) version 1.0.10
+
+    \e{The libmng library supports decoding, displaying, encoding, and various
+    other manipulations of the Multiple-image Network Graphics (MNG) format
+    image files. It uses the zlib compression library, and optionally the
+    JPEG library by the Independant JPEG Group (IJG) and/or
+    lcms (little cms), a color-management library by Marti Maria Saguer.}
+    -- quoted from \c src/3rdparty/libmng/doc/libmng.txt
+
+    See \c src/3rdparty/libmng/LICENSE for license details.
+
+    \section1 PNG Reference Library (\c libpng) version 1.5.1
+
+    \e{Libpng was written as a companion to the PNG specification, as a way
+    of reducing the amount of time and effort it takes to support the PNG
+    file format in application programs.} -- quoted from \c
+    src/3rdparty/libpng/libpng-manual.txt.
+
+    \hr
+
+    libpng versions 1.2.6, August 15, 2004, through 1.5.10, March 29, 2012, are
+    Copyright (c) 2004, 2006-2011 Glenn Randers-Pehrson, and are
+    distributed according to the same disclaimer and license as libpng-1.2.5
+    with the following individual added to the list of Contributing Authors
+    
+       Cosmin Truta
+    
+    libpng versions 1.0.7, July 1, 2000, through 1.2.5 - October 3, 2002, are
+    Copyright (c) 2000-2002 Glenn Randers-Pehrson, and are
+    distributed according to the same disclaimer and license as libpng-1.0.6
+    with the following individuals added to the list of Contributing Authors
+    
+       Simon-Pierre Cadieux\br
+       Eric S. Raymond\br
+       Gilles Vollant
+    
+    and with the following additions to the disclaimer:
+    
+       There is no warranty against interference with your enjoyment of the
+       library or against infringement.  There is no warranty that our
+       efforts or the library will fulfill any of your particular purposes
+       or needs.  This library is provided with all faults, and the entire
+       risk of satisfactory quality, performance, accuracy, and effort is with
+       the user.
+    
+    libpng versions 0.97, January 1998, through 1.0.6, March 20, 2000, are
+    Copyright (c) 1998, 1999 Glenn Randers-Pehrson, and are
+    distributed according to the same disclaimer and license as libpng-0.96,
+    with the following individuals added to the list of Contributing Authors:
+    
+       Tom Lane\br
+       Glenn Randers-Pehrson\br
+       Willem van Schaik
+    
+    libpng versions 0.89, June 1996, through 0.96, May 1997, are
+    Copyright (c) 1996, 1997 Andreas Dilger
+    Distributed according to the same disclaimer and license as libpng-0.88,
+    with the following individuals added to the list of Contributing Authors:
+    
+       John Bowler\br
+       Kevin Bracey\br
+       Sam Bushell\br
+       Magnus Holmgren\br
+       Greg Roelofs\br
+       Tom Tanner
+    
+    libpng versions 0.5, May 1995, through 0.88, January 1996, are
+    Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.
+    
+    For the purposes of this copyright and license, "Contributing Authors"
+    is defined as the following set of individuals:
+    
+       Andreas Dilger\br
+       Dave Martindale\br
+       Guy Eric Schalnat\br
+       Paul Schmidt\br
+       Tim Wegner
+    
+    The PNG Reference Library is supplied "AS IS".  The Contributing Authors
+    and Group 42, Inc. disclaim all warranties, expressed or implied,
+    including, without limitation, the warranties of merchantability and of
+    fitness for any purpose.  The Contributing Authors and Group 42, Inc.
+    assume no liability for direct, indirect, incidental, special, exemplary,
+    or consequential damages, which may result from the use of the PNG
+    Reference Library, even if advised of the possibility of such damage.
+    
+    Permission is hereby granted to use, copy, modify, and distribute this
+    source code, or portions hereof, for any purpose, without fee, subject
+    to the following restrictions:
+    
+    1. The origin of this source code must not be misrepresented.
+    
+    2. Altered versions must be plainly marked as such and must not
+       be misrepresented as being the original source.
+    
+    3. This Copyright notice may not be removed or altered from any
+       source or altered source distribution.
+    
+    The Contributing Authors and Group 42, Inc. specifically permit, without
+    fee, and encourage the use of this source code as a component to
+    supporting the PNG file format in commercial products.  If you use this
+    source code in a product, acknowledgment is not required but would be
+    appreciated.
+    
+    \hr
+
+    See \c src/3rdparty/libpng/LICENSE for license details.
+
+    \section1 The ptmalloc memory allocator (\c ptmalloc3) version 1.8
+
+    \e ptmcalloc3 is a scalable concurrent memory allocator suitable
+    for use in multi-threaded programs.
+
+    \hr
+
+    Copyright (c) 2001-2006 Wolfram Gloger
+
+    Permission to use, copy, modify, distribute, and sell this software
+    and its documentation for any purpose is hereby granted without fee,
+    provided that (i) the above copyright notices and this permission
+    notice appear in all copies of the software and related documentation,
+    and (ii) the name of Wolfram Gloger may not be used in any advertising
+    or publicity relating to the software.
+
+    THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+    WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+
+    IN NO EVENT SHALL WOLFRAM GLOGER BE LIABLE FOR ANY SPECIAL,
+    INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY
+    DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+    WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY
+    OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+    PERFORMANCE OF THIS SOFTWARE.
+
+    \hr
+
+    See \c src/3rdparty/ptmalloc/COPYRIGHT for license details.
+
+    \section1 SHA-1 (\c sha1.cpp)
+
+    \e{Based on the public domain implementation of the SHA-1 algorithm\br
+    Copyright (C) Dominik Reichl <dominik.reichl@t-online.de>}
+
+    See \c src/3rdparty/sha1/sha1.cpp for more information about the terms and
+    conditions under which the code is supplied.
+
+    \section1 SQLite (\c sqlite) version 3.7.7.1
+
+    \e{SQLite is a small C library that implements a
+    self-contained, embeddable, zero-configuration SQL database engine.}
+    -- quoted from \l{http://www.sqlite.org/}{www.sqlite.org}.
+
+    According to the comments in the source files, the code is in the public
+    domain. See the
+    \l{http://www.sqlite.org/copyright.html}{SQLite Copyright} page on the
+    SQLite web site for further information.
+
+    \section1 TIFF Software Distribution (\c libtiff) version 3.9.2
+
+    \e {libtiff is a set of C functions (a library) that support the
+    manipulation of TIFF image files.} -- quoted from \c
+    src/libtiff/html/libtiff.html
+
+    \hr
+
+    Copyright (c) 1987, 1993, 1994\br
+    The Regents of the University of California.  All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:\br
+    1. Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.\br
+    2. Redistributions in binary form must reproduce the above copyright
+       notice, this list of conditions and the following disclaimer in the
+       documentation and/or other materials provided with the distribution.\br
+    3. Neither the name of the University nor the names of its contributors
+       may be used to endorse or promote products derived from this software
+       without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+    OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+    HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+    LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+    OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+    SUCH DAMAGE.
+
+    \hr
+
+    Copyright (C) 1988-1997 Sam Leffler\br
+    Copyright (C) 1991-1997 Silicon Graphics, Inc.\br
+    Copyright (c) Joris Van Damme <info@awaresystems.be>\br
+    Copyright (c) AWare Systems <http://www.awaresystems.be/>\br
+    Portions Copyright (C) 1985-1987, 1990 Regents of the University of California\br
+    Portions Copyright (C) 1990, 1991 Digital Equipment Corporation\br
+    Portions Copyright (C) 1990 Sun Microsystems, Inc.\br
+    Portions Copyright (C) 1990, 1995 Frank D. Cringle\br
+    Portions Copyright (C) 1996 BancTec AB\br
+    Portions Copyright (C) 1996 Mike Johnson\br
+    Portions Copyright (C) 1996 Pixar\br
+    Portions Copyright (C) 1997 Greg Ward Larson\br
+    Portions Copyright (C) 2000 Frank Warmerdam\br
+    Copyright (C) 2004, Andrey Kiselev <dron@ak4719.spb.edu>\br
+    Copyright (c( 1996 USAF Phillips Laboratory\br
+    Additions (c) Richard Nolde 2006-2009
+
+    Permission to use, copy, modify, distribute, and sell this software and 
+    its documentation for any purpose is hereby granted without fee, provided
+    that (i) the above copyright notices and this permission notice appear in
+    all copies of the software and related documentation, and (ii) the names of
+    Sam Leffler and Silicon Graphics may not be used in any advertising or
+    publicity relating to the software without the specific, prior written
+    permission of Sam Leffler and Silicon Graphics.
+
+    THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+    EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+    WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+
+    IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+    ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+    OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+    WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+    LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+    OF THIS SOFTWARE.
+
+    \hr
+
+    Copyright (c) 1985, 1986 The Regents of the University of California.\br
+    All rights reserved.
+
+    This code is derived from software contributed to Berkeley by
+    James A. Woods, derived from original work by Spencer Thomas
+    and Joseph Orost.
+
+    Redistribution and use in source and binary forms are permitted
+    provided that the above copyright notice and this paragraph are
+    duplicated in all such forms and that any documentation,
+    advertising materials, and other materials related to such
+    distribution and use acknowledge that the software was developed
+    by the University of California, Berkeley.  The name of the
+    University may not be used to endorse or promote products derived
+    from this software without specific prior written permission.
+    THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
+    IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+    WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+    \hr
+
+    Copyright (c) 1996-1997 Sam Leffler\br
+    Copyright (c) 1996 Pixar
+
+    Permission to use, copy, modify, distribute, and sell this software and 
+    its documentation for any purpose is hereby granted without fee, provided
+    that (i) the above copyright notices and this permission notice appear in
+    all copies of the software and related documentation, and (ii) the names of
+    Pixar, Sam Leffler and Silicon Graphics may not be used in any advertising or
+    publicity relating to the software without the specific, prior written
+    permission of Pixar, Sam Leffler and Silicon Graphics.
+
+    THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+    EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+    WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+
+    IN NO EVENT SHALL PIXAR, SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+    ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+    OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+    WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+    LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+    OF THIS SOFTWARE.
+
+    \hr
+
+    See \c src/3rdparty/libtiff/README for license details.
+
+    \section1 Wintab API (\c wintab)
+
+    Wintab is a de facto API for pointing devices on Windows. The
+    wintab code is from \l{http://www.pointing.com/WINTAB.HTM}.
+
+    See \c src/3rdparty/wintab/wintab.h for license details.
+
+    \section1 Data Compression Library (\c zlib) version 1.2.5
+
+    \e{zlib is a general purpose data compression library.  All the code
+    is thread safe.  The data format used by the zlib library is described
+    by RFCs (Request for Comments) 1950 to 1952} -- quoted from \c
+    src/3rdparty/zlib/README.
+
+    \hr
+    
+    Copyright (C) 1995-2010 Jean-loup Gailly and Mark Adler
+  
+    This software is provided 'as-is', without any express or implied
+    warranty.  In no event will the authors be held liable for any damages
+    arising from the use of this software.
+  
+    Permission is granted to anyone to use this software for any purpose,
+    including commercial applications, and to alter it and redistribute it
+    freely, subject to the following restrictions:
+  
+    1. The origin of this software must not be misrepresented; you must not
+       claim that you wrote the original software. If you use this software
+       in a product, an acknowledgment in the product documentation would be
+       appreciated but is not required.\br
+    2. Altered source versions must be plainly marked as such, and must not be
+       misrepresented as being the original software.\br
+    3. This notice may not be removed or altered from any source distribution.
+
+    \hr
+
+    See \c src/3rdparty/zlib/README for license details.
+
+    \section1 JavaScriptCore
+
+    Copyright (c) 1991, 2000, 2001 by Lucent Technologies.\br
+    Copyright (C) 2002, 2005, 2006, 2007, 2008 Apple Inc. All rights reserved.
+
+    Permission to use, copy, modify, and distribute this software for any
+    purpose without fee is hereby granted, provided that this entire notice
+    is included in all copies of any software which is or includes a copy
+    or modification of this software and in all copies of the supporting
+    documentation for such software.
+
+    THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+    WARRANTY. IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
+    REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+    OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+    See \c src/3rdparty/webkit/JavaScriptCore/wtf/dtoa.cpp for license details.
+
+    \hr
+
+    Copyright (C) 2009 Company 100, Inc. All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:\br
+    1. Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.\br
+    2. Redistributions in binary form must reproduce the above copyright
+       notice, this list of conditions and the following disclaimer in the
+       documentation and/or other materials provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY APPLE COMPUTER, INC. ``AS IS'' AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+    PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE COMPUTER, INC. OR
+    CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+    OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    \hr
+
+    Copyright (C) 2009 Apple Inc. All rights reserved.\br
+    Copyright (C) 2009 University of Szeged\br
+    All rights reserved.\br
+    Copyright (C) 2010 MIPS Technologies, Inc. All rights reserved.\br
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:\br
+    1. Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.\br
+    2. Redistributions in binary form must reproduce the above copyright
+       notice, this list of conditions and the following disclaimer in the
+       documentation and/or other materials provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY MIPS TECHNOLOGIES, INC. ``AS IS'' AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+    PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL MIPS TECHNOLOGIES, INC. OR
+    CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+    OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+    \section1 Pixman (\c pixman) version 0.17.11
+
+    \e{pixman is a library that provides low-level pixel manipulation
+    features such as image compositing and trapezoid rasterization.} -- quoted
+    from \c src/3rdparty/pixman/README
+
+    We are only using the pixman-arm-neon-asm.h and pixman-arm-neon-asm.S
+    source files which have the following copyright and license header:
+
+    \hr
+
+    Copyright © 2009 Nokia Corporation
+
+    Permission is hereby granted, free of charge, to any person obtaining a
+    copy of this software and associated documentation files (the "Software"),
+    to deal in the Software without restriction, including without limitation
+    the rights to use, copy, modify, merge, publish, distribute, sublicense,
+    and/or sell copies of the Software, and to permit persons to whom the
+    Software is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice (including the next
+    paragraph) shall be included in all copies or substantial portions of the
+    Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+    THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+    DEALINGS IN THE SOFTWARE.
+
+    Author:  Siarhei Siamashka (siarhei.siamashka@nokia.com)
+
+    \hr
+
+    See \c src/3rdparty/pixman/pixman-arm-neon-asm.h and
+    \c src/3rdparty/pixman/pixman-arm-neon-asm.S
+
+    \section1 WebCore (WebKit)
+
+    Copyright (C) 2009 Ericsson AB\br
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    1. Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.\br
+    2. Redistributions in binary form must reproduce the above copyright
+       notice, this list of conditions and the following disclaimer
+       in the documentation and/or other materials provided with the
+       distribution.\br
+    3. Neither the name of Ericsson nor the names of its contributors
+       may be used to endorse or promote products derived from this
+       software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+    A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+    OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    \hr
+
+    Copyright (C) 2004, Apple Computer, Inc. and The Mozilla Foundation.\br
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are
+    met:
+
+    1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.\br
+    2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.\br
+    3. Neither the names of Apple Computer, Inc. ("Apple") or The Mozilla
+    Foundation ("Mozilla") nor the names of their contributors may be used
+    to endorse or promote products derived from this software without
+    specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY APPLE, MOZILLA AND THEIR CONTRIBUTORS "AS
+    IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+    TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE, MOZILLA OR
+    THEIR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+    TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    \hr
+
+    Copyright (C) 2009 Igalia S.L.\br
+    Copyright (C) 2009 Antonio Gomes <tonikitoo@webkit.org>\br
+    Copyright (C) 2008 Christian Dywan <christian@imendio.com>\br
+    Copyright (C) 2007 Nicholas Shanks <contact@nickshanks.com>\br
+    Copyright (C) 2006 Charles Samuels <charles@kde.org>\br
+    Copyright (C) 2009 Dominik Röttsches <dominik.roettsches@access-company.com>\br
+    Copyright (C) 2009 Brent Fulgham\br
+    Copyright (C) 2009 Girish Ramakrishnan <girish@forwardbias.in>\br
+    Copyright (C) 2006 Alexander Kellett <lypanov@kde.org>\br
+    Copyright (C) 2009 Cameron McCormack <cam@mcc.id.au>\br
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:\br
+    1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.\br
+    2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY APPLE COMPUTER, INC. ``AS IS'' AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+    PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE COMPUTER, INC. OR
+    CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+    OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    \hr
+
+    Copyright (C) 2007, 2008 Apple Inc.  All rights reserved.\br
+    Copyright (C) IBM Corp. 2009  All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    1.  Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.\br
+    2.  Redistributions in binary form must reproduce the above copyright
+        notice, this list of conditions and the following disclaimer in the
+        documentation and/or other materials provided with the distribution.\br
+    3.  Neither the name of Apple Computer, Inc. ("Apple") nor the names of
+        its contributors may be used to endorse or promote products derived
+        from this software without specific prior written permission.\br
+
+    THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+    THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    \hr
+
+    Copyright (C) 2009 Alex Milowski (alex@milowski.com). All rights reserved.\br
+    Copyright (C) 2010 François Sausset (sausset@gmail.com). All rights reserved\br
+    Copyright (C) 2007 Marius Renn <damarvy@gmail.com> All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:\br
+    1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.\br
+    2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+    A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+    OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    \hr
+
+        jquery 1.4.2.js Copyright 2010 John Resig
+        This software is dual licensed under the MIT or GPL version 2 licenses.
+        Nokia has used the software herein under the MIT license.
+
+        jquery includes Sizzle.js Copyright 2010 The Dojo Foundaton and is
+        licensed under the MIT, BSD and GPL licenses.  Nokia has used this
+        software herein under the MIT license.
+
+        The MIT License
+
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+
+        The above copyright notice and this permission notice shall be included in
+        all copies or substantial portions of the Software.
+
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+        THE SOFTWARE.
+
+
+    \section1 The Public Suffix List
+
+    \e{The Public Suffix List is an initiative of the Mozilla Project, but is
+       maintained as a community resource. It is available for use in any
+       software, but was originally created to meet the needs of browser
+       manufacturers. It allows browsers to, for example:}
+    \list
+    \o \e{Avoid privacy-damaging "supercookies" being set for high-level
+          domain name suffixes}
+    \o \e{Highlight the most important part of a domain name in the user
+          interface}
+    \o \e{Accurately sort history entries by site}
+    \endlist
+    -- quoted from \l{publicsuffix.org}.
+
+    The public suffix list is used inside Qt to avoid such "supercookies"
+    mentioned above being set in the cookie jar supported by Qt (by the
+    QNetworkCookieJar class).
+
+    See \c src/network/access/qnetworkcookiejartlds_p.h.INFO for more
+    information about how the list is used.
+*/

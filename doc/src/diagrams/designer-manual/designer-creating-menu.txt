@@ -1,0 +1,49 @@
+# Cropping and fading the Qt Designer menu creation images.
+
+cropimage.py designer-creating-menu1.png designer-creating-menu1-crop.png bottom -100
+cropimage.py designer-creating-menu1-crop.png designer-creating-menu1-crop.png right -120
+fadeedges.py designer-creating-menu1-crop.png ../images/designer-creating-menu1.png right,bottom 16
+rm designer-creating-menu1-crop.png
+
+cropimage.py designer-creating-menu2.png designer-creating-menu2-crop.png bottom -100
+cropimage.py designer-creating-menu2-crop.png designer-creating-menu2-crop.png right -120
+fadeedges.py designer-creating-menu2-crop.png ../images/designer-creating-menu2.png right,bottom 16
+rm designer-creating-menu2-crop.png
+
+cropimage.py designer-creating-menu3.png designer-creating-menu3-crop.png bottom -100
+cropimage.py designer-creating-menu3-crop.png designer-creating-menu3-crop.png right -120
+fadeedges.py designer-creating-menu3-crop.png ../images/designer-creating-menu3.png right,bottom 16
+rm designer-creating-menu3-crop.png
+
+cropimage.py designer-creating-menu4.png designer-creating-menu4-crop.png bottom -100
+cropimage.py designer-creating-menu4-crop.png designer-creating-menu4-crop.png right -120
+fadeedges.py designer-creating-menu4-crop.png ../images/designer-creating-menu4.png right,bottom 16
+rm designer-creating-menu4-crop.png
+
+cropimage.py designer-creating-menu-entry1.png designer-creating-menu-entry1-crop.png left 54
+cropimage.py designer-creating-menu-entry1-crop.png designer-creating-menu-entry1-crop.png top 45
+cropimage.py designer-creating-menu-entry1-crop.png designer-creating-menu-entry1-crop.png right -160
+cropimage.py designer-creating-menu-entry1-crop.png designer-creating-menu-entry1-crop.png bottom -144
+fadeedges.py designer-creating-menu-entry1-crop.png ../images/designer-creating-menu-entry1.png right,bottom 16
+rm designer-creating-menu-entry1-crop.png
+
+cropimage.py designer-creating-menu-entry2.png designer-creating-menu-entry2-crop.png left 54
+cropimage.py designer-creating-menu-entry2-crop.png designer-creating-menu-entry2-crop.png top 45
+cropimage.py designer-creating-menu-entry2-crop.png designer-creating-menu-entry2-crop.png right -160
+cropimage.py designer-creating-menu-entry2-crop.png designer-creating-menu-entry2-crop.png bottom -144
+fadeedges.py designer-creating-menu-entry2-crop.png ../images/designer-creating-menu-entry2.png right,bottom 16
+rm designer-creating-menu-entry2-crop.png
+
+cropimage.py designer-creating-menu-entry3.png designer-creating-menu-entry3-crop.png left 54
+cropimage.py designer-creating-menu-entry3-crop.png designer-creating-menu-entry3-crop.png top 45
+cropimage.py designer-creating-menu-entry3-crop.png designer-creating-menu-entry3-crop.png right -160
+cropimage.py designer-creating-menu-entry3-crop.png designer-creating-menu-entry3-crop.png bottom -144
+fadeedges.py designer-creating-menu-entry3-crop.png ../images/designer-creating-menu-entry3.png right,bottom 16
+rm designer-creating-menu-entry3-crop.png
+
+cropimage.py designer-creating-menu-entry4.png designer-creating-menu-entry4-crop.png left 54
+cropimage.py designer-creating-menu-entry4-crop.png designer-creating-menu-entry4-crop.png top 45
+cropimage.py designer-creating-menu-entry4-crop.png designer-creating-menu-entry4-crop.png right -160
+cropimage.py designer-creating-menu-entry4-crop.png designer-creating-menu-entry4-crop.png bottom -144
+fadeedges.py designer-creating-menu-entry4-crop.png ../images/designer-creating-menu-entry4.png right,bottom 16
+rm designer-creating-menu-entry4-crop.png

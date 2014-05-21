@@ -1,0 +1,116 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>DateTimeWidgetsForm</class>
+ <widget class="QWidget" name="DateTimeWidgetsForm" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>328</width>
+    <height>105</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Date Time Widgets</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="label_3" >
+     <property name="font" >
+      <font>
+       <family>Bitstream Vera Sans</family>
+       <pointsize>9</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="text" >
+      <string>QDateTimeEdit</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label_5" >
+     <property name="font" >
+      <font>
+       <family>Bitstream Vera Sans</family>
+       <pointsize>9</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="text" >
+      <string>QDateEdit</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="label_4" >
+     <property name="font" >
+      <font>
+       <family>Bitstream Vera Sans</family>
+       <pointsize>9</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="text" >
+      <string>QTimeEdit</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QDateTimeEdit" name="dateTimeEdit" >
+     <property name="displayFormat" >
+      <string>MMM d, yyyy hh:mm:ss</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QTimeEdit" name="timeEdit" >
+     <property name="time" >
+      <time>
+       <hour>1</hour>
+       <minute>45</minute>
+       <second>2</second>
+      </time>
+     </property>
+     <property name="displayFormat" >
+      <string>hh:mm:ss</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QDateEdit" name="dateEdit" >
+     <property name="time" >
+      <time>
+       <hour>13</hour>
+       <minute>45</minute>
+       <second>2</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

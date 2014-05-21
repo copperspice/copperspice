@@ -1,0 +1,487 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qdeclarativemodules.html
+\title Modules
+\section1 QML Modules
+
+
+A module is a set of QML content files that can be imported as a unit into a QML
+application. Modules can be used to organize QML content into independent units,
+and they can use a versioning mechanism that allows for independent
+upgradability of the modules.
+
+While QML component files within the same directory are automatically accessible
+within the global namespace, components defined elsewhere must be imported
+explicitly using the \c import statement to import them as modules. For
+example, an \c import statement is required to use:
+
+\list
+\o A component defined in another QML file that is not in the same directory
+\o A component defined in a QML file located on a remote server
+\o A \l{QDeclarativeExtensionPlugin}{QML extension plugin} library (unless the plugin is installed in the same directory)
+\o A JavaScript file (note this must be imported using \l {#namespaces}{named imports})
+\endlist
+
+An \c import statement includes the module name, and possibly a version number.
+This can be seen in the snippet commonly found at the top of QML files:
+
+\snippet doc/src/snippets/declarative/imports/qtquick-1.0.qml import
+
+This imports version 1.0 of the "QtQuick" module into the global namespace. (The QML
+library itself must be imported to use any of the \l {QML Elements}, as they
+are not included in the global namespace by default.)
+
+The \c Qt module is an \e installed module; it is found in the
+\l{#import-path}{import path}. There are two types of QML modules:
+located modules (defined by a URL) and installed modules (defined by a URI).
+
+
+\section1 Located Modules
+
+Located modules can reside on the local filesystem or a network resource,
+and are referred to by a quoted location URL that specifies the filesystem
+or network URL. They allow any directory with QML content to be imported
+as a module, whether the directory is on the local filesystem or a remote
+server.
+
+For example, a QML project may have a separate directory for a set of
+custom UI components. These components can be accessed by importing the
+directory using a relative or absolute path, like this:
+
+\table
+\row
+\o Directory structure
+\o Contents of application.qml
+
+\row
+\o
+\code
+MyQMLProject
+    |- MyComponents
+        |- CheckBox.qml
+        |- Slider.qml
+        |- Window.qml
+    |- Main
+        |- application.qml
+\endcode
+
+\o
+\qml
+import "../MyComponents"
+
+Window {
+    Slider {
+        // ...
+    }
+    CheckBox {
+        // ...
+    }
+}
+\endqml
+
+\endtable
+
+Similarly, if the directory resided on a network source, it could
+be imported like this:
+
+\snippet doc/src/snippets/declarative/imports/network-imports.qml imports
+
+A located module can also be imported as a network resource if it has a
+\l{Writing a qmldir file}{qmldir file} in the directory that specifies the QML files
+to be made available by the module. For example, if the \c MyComponents directory
+contained a \c qmldir file defined like this:
+
+\code
+Slider 1.0 Slider.qml
+CheckBox 1.0 CheckBox.qml
+Window 1.0 Window.qml
+\endcode
+
+If the \c MyComponents directory was then hosted as a network resource, it could
+be imported as a module, like this:
+
+\qml
+import "http://the-server-name.com/MyQMLProject/MyComponents"
+
+Window {
+    Slider {
+        // ...
+    }
+    CheckBox {
+        // ...
+    }
+}
+\endqml
+
+with an optional "1.0" version specification. Notice the import would fail if
+a later version was used, as the \c qmldir file specifies that these elements
+are only available in the 1.0 version.
+
+Note that modules imported as a network resource allow only access to components
+defined in QML files; components defined by C++ \l{QDeclarativeExtensionPlugin}{QML extension plugins}
+are not available.
+
+
+\target import-path
+\section1 Installed Modules
+
+Installed modules are modules that are made available through the QML import path,
+as defined by QDeclarativeEngine::importPathList(), or modules defined within
+C++ application code. An installed module is referred to by a URI, which allows
+the module to be imported from QML code without specifying a complete filesystem
+path or network resource URL.
+
+When importing an installed module, an un-quoted URI is
+used, with a mandatory version number:
+
+\snippet doc/src/snippets/declarative/imports/installed-module.qml imports
+
+When a module is imported, the QML engine searches the QML import path for a matching
+module. The root directory of the module must contain a
+\l{Writing a qmldir file}{qmldir file} that defines the QML files
+and/or C++ QML extension plugins that are made available to the module.
+
+Modules that are installed into the import path translate the URI into
+directory names. For example, the qmldir file of the module \c com.nokia.qml.mymodule
+must be located in the subpath \c com/nokia/qml/mymodule/qmldir somewhere in the
+QML import path. In addition it is possible to store different versions of the
+module in subdirectories of its own. For example, a version 2.1 of the
+module could be located under \c com/nokia/qml/mymodule.2/qmldir or
+\c com/nokia/qml/mymodule.2.1/qmldir. The engine will automatically load
+the module which matches best.
+
+The import path, as returned by QDeclarativeEngine::importPathList(), defines the default
+locations to be searched by the QML engine for a matching module. By default, this list
+contains:
+
+\list
+\o The directory of the current file
+\o The location specified by QLibraryInfo::ImportsPath
+\o Paths specified by the \c QML_IMPORT_PATH environment variable
+\endlist
+
+Additional import paths can be added through QDeclarativeEngine::addImportPath() or the
+\c QML_IMPORT_PATH environment variable. When running the \l {QML Viewer}, you
+can also use the \c -I option to add an import path.
+
+
+\section2 Creating Installed Modules
+
+As an example, suppose the \c MyQMLProject directory in the \l{Located Modules}{previous example}
+was located on the local filesystem at \c C:\qml\projects\MyQMLProject. The \c MyComponents
+subdirectory could be made available as an installed module by adding a
+\l{Writing a qmldir file}{qmldir file} to the \c MyComponents directory that looked like this:
+
+\code
+Slider 1.0 Slider.qml
+CheckBox 1.0 CheckBox.qml
+Window 1.0 Window.qml
+\endcode
+
+Providing the path \c C:\qml is added to the QML import path using any of the methods listed previously,
+a QML file located anywhere on the local filesystem can then import the module as shown below,
+without referring to the module's absolute filesystem location:
+
+\qml
+import projects.MyQMLProject.MyComponents 1.0
+
+Window {
+    Slider {
+        // ...
+    }
+    CheckBox {
+        // ...
+    }
+}
+\endqml
+
+Installed modules are also accessible as a network resource. If the \c C:\qml directory was hosted
+as \c http://www.some-server.com/qml and this URL was added to the QML import path, the above
+QML code would work just the same.
+
+Note that modules imported as a network resource allow only access to components
+defined in QML files; components defined by C++ \l{QDeclarativeExtensionPlugin}{QML extension plugins}
+are not available.
+
+
+\section2 Creating Installed Modules in C++
+
+C++ applications can define installed modules directly within the application using qmlRegisterType().
+For example, the \l {Tutorial: Writing QML extensions with C++}{Writing QML extensions with C++ tutorial}
+defines a C++ class named \c PieChart and makes this type available to QML by calling qmlRegisterType():
+
+\code
+qmlRegisterType<PieChart>("Charts", 1, 0, "PieChart");
+\endcode
+
+This allows the application's QML files to use the \c PieChart type by importing the declared
+\c Charts module:
+
+\snippet doc/src/snippets/declarative/imports/chart.qml import
+
+For \l{QDeclarativeExtensionPlugin}{QML plugins}, the
+module URI is automatically passed to QDeclarativeExtensionPlugin::registerTypes(). This method
+can be reimplemented by the developer to register the necessary types for the module. Below is the
+\c registerTypes() implementation from the \l{declarative/cppextensions/plugins}{QML plugins}
+example:
+
+\snippet examples/declarative/cppextensions/plugins/plugin.cpp plugin
+
+Once the plugin is built and installed, and includes a \l{Writing a qmldir file}{qmldir file},
+the module can be imported from QML, like this:
+
+\snippet doc/src/snippets/declarative/imports/timeexample.qml import
+
+Unlike QML types defined by QML files, a QML type defined in a C++ extension plugin cannot be loaded by
+a module that is imported as a network resource.
+
+
+
+\target namespaces
+\section1 Namespaces: Using Named Imports
+
+By default, when a module is imported, its contents are imported into the global namespace. You may choose to import the module into another namespace, either to allow identically-named types to be referenced, or purely for readability.
+
+To import a module into a specific namespace, use the \e as keyword:
+
+\snippet doc/src/snippets/declarative/imports/named-imports.qml imports
+
+Types from these modules can then only be used when qualified by the namespace:
+
+\snippet doc/src/snippets/declarative/imports/named-imports.qml imported items
+
+Multiple modules can be imported into the same namespace in the same way that multiple modules can be imported into the global namespace:
+
+\snippet doc/src/snippets/declarative/imports/merged-named-imports.qml imports
+
+\section2 JavaScript Files
+
+JavaScript files must always be imported with a named import:
+
+\qml
+import "somescript.js" as MyScript
+
+Item {
+    //...
+    Component.onCompleted: MyScript.doSomething()
+}
+\endqml
+
+The qualifier ("MyScript" in the above example) must be unique within the QML document.
+Unlike ordinary modules, multiple scripts cannot be imported into the same namespace.
+
+
+\section1 Writing a qmldir File
+
+A \c qmldir file is a metadata file for a module that maps all type names in
+the module to versioned QML files. It is required for installed modules, and
+located modules that are loaded from a network source.
+
+It is defined by a plain text file named "qmldir" that contains one or more lines of the form:
+
+\code
+# <Comment>
+<TypeName> [<InitialVersion>] <File>
+internal <TypeName> <File>
+plugin <Name> [<Path>]
+typeinfo <File>
+\endcode
+
+\bold {# <Comment>} lines are used for comments. They are ignored by the QML engine.
+
+\bold {<TypeName> [<InitialVersion>] <File>} lines are used to add QML files as types.
+<TypeName> is the type being made available, the optional <InitialVersion> is a version
+number, and <File> is the (relative) file name of the QML file defining the type.
+
+Installed files do not need to import the module of which they are a part, as they can refer
+to the other QML files in the module as relative (local) files, but
+if the module is imported from a remote location, those files must nevertheless be listed in
+the \c qmldir file. Types which you do not wish to export to users of your module
+may be marked with the \c internal keyword: \bold {internal <TypeName> <File>}.
+
+The same type can be provided by different files in different versions, in which
+case later versions (e.g. 1.2) must precede earlier versions (e.g. 1.0),
+since the \e first name-version match is used and a request for a version of a type
+can be fulfilled by one defined in an earlier version of the module. If a user attempts
+to import a version earlier than the earliest provided or later than the latest provided,
+the import produces a runtime error, but if the user imports a version within the range of versions provided,
+even if no type is specific to that version, no error will occur.
+
+A single module, in all versions, may only be provided in a single directory (and a single \c qmldir file).
+If multiple are provided, only the first in the search path will be used (regardless of whether other versions
+are provided by directories later in the search path).
+
+The versioning system ensures that a given QML file will work regardless of the version
+of installed software, since a versioned import \e only imports types for that version,
+leaving other identifiers available, even if the actual installed version might otherwise
+provide those identifiers.
+
+\bold {plugin <Name> [<Path>]} lines are used to add \l{QDeclarativeExtensionPlugin}{QML C++ plugins} to the module. <Name> is the name of the library.  It is usually not the same as the file name
+of the plugin binary, which is platform dependent; e.g. the library \c MyAppTypes would produce
+\c libMyAppTypes.so on Linux and \c MyAppTypes.dll on Windows.
+
+<Path> is an optional argument specifying either an absolute path to the directory containing the
+plugin file, or a relative path from the directory containing the \c qmldir file to the directory
+containing the plugin file. By default the engine searches for the plugin library in the directory that contains the \c qmldir
+file. The plugin search path can be queried with QDeclarativeEngine::pluginPathList() and modified using QDeclarativeEngine::addPluginPath(). When running the \l {QML Viewer}, use the \c -P option to add paths to the plugin search path.
+
+\bold {typeinfo <File>} lines add \l{Writing a qmltypes file}{type description files} to
+the module that can be read by QML tools such as Qt Creator to get information about the
+types defined by the module's plugins. <File> is the (relative) file name of a .qmltypes
+file.
+
+Without such a file QML tools may be unable to offer features such as code completion
+for the types defined in your plugins.
+
+
+\section1 Debugging
+
+The \c QML_IMPORT_TRACE environment variable can be useful for debugging
+when there are problems with finding and loading modules. See
+\l{Debugging module imports} for more information.
+
+
+\section1 Writing a qmltypes file
+
+QML modules may refer to one or more type information files in their
+\l{Writing a qmldir file}{qmldir} file. These usually have the .qmltypes
+extension and are read by external tools to gain information about
+types defined in plugins.
+
+As such qmltypes files have no effect on the functionality of a QML module.
+Their only use is to allow tools such as Qt Creator to provide code completion,
+error checking and other functionality to users of your module.
+
+Any module that uses plugins should also ship a type description file.
+
+The best way to create a qmltypes file for your module is to generate it
+using the \c qmlplugindump tool that is provided with Qt.
+
+Example:
+If your module is in \c /tmp/imports/My/Module, you could run
+\code
+qmlplugindump My.Module 1.0 /tmp/imports > /tmp/imports/My/Module/mymodule.qmltypes
+\endcode
+to generate type information for your module. Afterwards, add the line
+\code
+typeinfo mymodule.qmltypes
+\endcode
+to \c /tmp/imports/My/Module/qmldir to register it.
+
+While the qmldump tool covers most cases, it does not work if:
+\list
+\o The plugin uses a \l{QDeclarativeCustomParser}. The component that uses
+   the custom parser will not get its members documented.
+\o The plugin can not be loaded. In particular if you cross-compiled
+   the plugin for a different architecture, qmldump will not be able to
+   load it.
+\endlist
+
+In case you have to create a qmltypes file manually or need to adjust
+an existing one, this is the file format:
+
+\qml
+import QtQuick.tooling 1.1
+
+// There always is a single Module object that contains all
+// Component objects.
+Module {
+    // A Component object directly corresponds to a type exported
+    // in a plugin with a call to qmlRegisterType.
+    Component {
+
+        // The name is a unique identifier used to refer to this type.
+        // It is recommended you simply use the C++ type name.
+        name: "QDeclarativeAbstractAnimation"
+
+        // The name of the prototype Component.
+        prototype: "QObject"
+
+        // The name of the default property.
+        defaultProperty: "animations"
+
+        // The name of the type containing attached properties
+        // and methods.
+        attachedType: "QDeclarativeAnimationAttached"
+
+        // The list of exports determines how a type can be imported.
+        // Each string has the format "URI/Name version" and matches the
+        // arguments to qmlRegisterType. Usually types are only exported
+        // once, if at all.
+        // If the "URI/" part of the string is missing that means the
+        // type should be put into the package defined by the URI the
+        // module was imported with.
+        // For example if this module was imported with 'import Foo 4.8'
+        // the Animation object would be found in the package Foo and
+        // QtQuick.
+        exports: [
+            "Animation 4.7",
+            "QtQuick/Animation 1.0"
+        ]
+
+        Property {
+            name: "animations";
+            type: "QDeclarativeAbstractAnimation"
+            // defaults to false, whether this property is read only
+            isReadonly: true
+            // defaults to false, whether the type of this property was a pointer in C++
+            isPointer: true
+            // defaults to false: whether the type actually is a QDeclarativeListProperty<type>
+            isList: true
+            // defaults to 0: the minor version that introduced this property
+            revision: 1
+        }
+        Property { name: "loops"; type: "int" }
+        Property { name: "name"; type: "string" }
+        Property { name: "loopsEnum"; type: "Loops" }
+
+        Enum {
+            name: "Loops"
+            values: {
+                "Infinite": -2,
+                "OnceOnly": 1
+            }
+        }
+
+        // Signal and Method work the same way. The inner Parameter
+        // declarations also support the isReadonly, isPointer and isList
+        // attributes which mean the same as for Property
+        Method { name: "restart" }
+        Signal { name: "started"; revision: 2 }
+        Signal {
+            name: "runningChanged"
+            Parameter { type: "bool" }
+            Parameter { name: "foo"; type: "bool" }
+        }
+    }
+}
+\endqml
+
+*/
+/

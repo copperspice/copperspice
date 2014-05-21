@@ -1,0 +1,87 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page qt4-threads.html
+    \title Thread Support in Qt 4
+
+    \contentspage {What's New in Qt 4}{Home}
+    \previouspage The Qt 4 Style API
+
+    Qt 4 makes it easier than ever to write multithreaded
+    applications. More classes have been made usable from non-GUI
+    threads, and the signals and slots mechanism can now be used to
+    communicate between threads.
+
+    \section1 General Overview
+
+    QThread now inherits QObject. It emits signals to indicate that
+    the thread started or finished executing, and provides a few
+    slots as well.
+
+    Each thread can now have its own event loop. The initial thread
+    starts its event loops using QCoreApplication::exec(); other
+    threads can start an event loop using QThread::exec(). Like
+    QCoreApplication, QThread also provides an
+    \l{QThread::exit()}{exit(int)} function and a
+    \l{QThread::quit()}{quit()} slot.
+
+    An event loop in a thread makes it possible for the thread to use
+    certain non-GUI Qt classes that require the presence of an event
+    loop (such as QTimer, QTcpSocket, and QProcess). It also makes it
+    possible to connect signals from any threads to slots of a
+    specific thread. When a signal is emitted, the slot isn't called
+    immediately; instead, it is invoked when control returns to the
+    event loop of the thread to which the object belongs. The slot is
+    executed in the thread where the receiver object lives. See
+    \l{signals-and-slots-across-threads} and QObject::connect() for details.
+
+    Qt 4 also introduces a new synchronization class: QReadWriteLock.
+    It is similar to QMutex, except that it distinguishes between
+    "read" and "write" access to shared data and allows multiple
+    readers to access the data simultaneously. Using QReadWriteLock
+    instead of QMutex when it is possible can make multithreaded
+    programs more concurrent.
+
+    Since Qt 4, \l{implicitly shared} classes can safely be copied
+    across threads, like any other value classes. They are fully
+    reentrant. This is implemented using atomic reference counting
+    operations, which are implemented in assembly language for the
+    different platforms supported by Qt. Atomic reference counting is
+    very fast, much faster than using a mutex.
+
+    See \l{Thread Support in Qt} for more information.
+
+    \section1 Comparison with Qt 3
+
+    Earlier versions of Qt offered an option to build the library
+    without thread support. In Qt 4, threads are always enabled.
+
+    Qt 3 had a class called \c QDeepCopy that you could use to take a
+    deep copy of an implicitly shared object. In Qt 4, the atomic
+    reference counting makes this class superfluous.
+*/

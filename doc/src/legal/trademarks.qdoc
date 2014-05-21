@@ -1,0 +1,61 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page trademarks.html
+
+    \title Trademarks
+    \ingroup licensing
+    \brief Information about trademarks owned by Nokia and other organisations.
+
+    Nokia, the Nokia logo, Qt, and the Qt logo are trademarks of Nokia
+    Corporation and/or its subsidiaries in Finland and other countries.
+
+    \list
+    \o Intel, Intel Inside (logos), MMX and Pentium are \reg trademarks of
+       Intel Corporation in the United States, other countries, or both.
+    \o Oracle and Java are registered trademarks of Oracle and/or its affiliates.
+       Other names may be trademarks of their respective owners.
+    \o Linux is a \reg trademark of Linus Torvalds in the United States, other
+       countries or both. 
+    \o Mac, Mac OS and Macintosh are \reg trademarks of Apple Computer, Inc.,
+       registered in the U.S. and other countries. 
+    \o Microsoft, Windows, Windows NT, XP, Windows Vista, Visual Studio and the
+       Windows logo are \reg trademarks of Microsoft Corporation in the United
+       States, other countries, or both.
+    \o Motif is a registered trademark of The Open Group in the United States,
+       other countries, or both. 
+    \o OpenGL is a \reg trademark of Silicon Graphics, Inc. in the United States
+       and other countries. 
+    \o UNIX is a registered trademark of The Open Group in the United States
+       and other countries. 
+    \o All other company, product, or service names may be trademarks or
+       service marks of others and are the property of their respective owners.
+       The use of the word partner does not imply a partnership relationship
+       between Nokia and any other company.
+    \endlist
+*/

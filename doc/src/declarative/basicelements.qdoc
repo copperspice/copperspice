@@ -1,0 +1,114 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qmlbasicelements.html
+\ingroup qml-features
+\contentspage QML Features
+\previouspage QML Features
+\nextpage {QML Basic Types}{Data Types}
+
+\title QML Basic Elements
+
+QML's basic elements allow the easy inclusion of objects into the
+scene.
+
+\section1 Basic Elements
+This is a list of some of the elements readily available for users.
+\list
+\o \l {Item}
+\o \l {Rectangle}
+\o \l {Image}
+\o \l {Text}
+\o \l {TextInput}
+\o \l {TextEdit}
+\o \l {FocusScope}
+\o \l {Component}
+\o \l {MouseArea}
+\endlist
+
+For a complete list of QML elements, please visit the \l {QML Elements} page.
+
+\section1 Properties and Qt Declarative Module
+
+When using QML elements, keep in mind that elements may possess properties that
+other elements also possess. This is because QML and its underlying engine is
+implemented in C++ using Qt. More importantly, the chain of property inheritance
+is directly due to QML's use of the \l {Qt Declarative Module} and Qt's
+\l {Meta-Object System}{meta-object} and \l {The Property System}{property} systems. For example, visual elements that have C++ implementation are sublcasses of
+\l {QDeclarativeItem}. As a result, elements such as \l {Rectangle} and
+\l {Text} elements inherit properties such as \c clip and \c smooth.
+
+\section1 Item Element
+
+Many QML elements inherit \l Item properties. \c Item possesses important properties
+such as \c focus, \c children, and dimension properties such as \c width and
+\c height. Although \c Item has physical properties, it is not a visual element.
+Using \c Item as the top-level QML element (as the screen) will not produce a
+visual result, use the \l {Rectangle} element instead. Use the \c Item to create
+opacity effects, such as when creating an invisible container to hold other
+components.
+
+\section1 Rectangle Element
+
+The \l Rectangle element is the basic visual element, for displaying different
+types of items onto the screen. The \c Rectangle is customizable and utilizes
+other elements such as \l Gradient and \l BorderImage for displaying advanced
+customized graphics.
+
+\section1 Image Element
+
+To insert an image into a QML scene, merely declare an \l Image element. The
+\c Image element can load images in formats supported by Qt.
+
+\section1 Text Elements
+
+The \l Text and \l TextEdit elements display formatted text onto the screen.
+\c TextEdit features multi-line editing while the \l TextInput element is for
+single line text input.
+
+\keyword qml-top-level-component
+\section1 Using Elements as the Top-Level Component
+
+For creating components (or displaying a simple scene), there are different
+elements that could be used as the top-level component. To display a simple scene,
+a \l Rectangle as the top-level component may suffice. \l Rectangle,
+\l FocusScope, \l Component, \l {QML:QtObject} {QtObject}, \l Item, are some of
+the commonly used elements as the top-level component.
+
+When importing components, the top-level component is important because the
+top-level component's properties are the only properties exposed to the parent.
+
+For example, a \c Button component may be implemented using different elements as
+its top-level component. When this component is loaded into another QML scene,
+the component will retain the top-level component's properties. If a non-visual
+component is the top-level component, the visual properties should be aliased to
+the top-level to display the component properly.
+
+For more information on how to build upon QML elements, see the
+\l{Importing Reusable Components} document.
+*/

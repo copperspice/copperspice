@@ -1,0 +1,124 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qml-intro.html
+\title Introduction to Qt Quick
+
+Qt Quick is a collection of technologies that are designed to help developers
+create the kind of intuitive, modern, and fluid user interfaces that are
+increasingly used on mobile phones, media players, set-top boxes, and other
+portable devices. Qt Quick consists of a rich set of user interface
+\l{QML Elements}{elements}, a \l{QML Syntax}{declarative} language for
+describing user interfaces, and a language \l{QtDeclarative Module}{runtime}. A
+collection of C++ APIs is used to integrate these high level features with
+classic Qt applications. Version 2.1 of the Qt Creator integrated development
+environment (IDE) introduces tools for developing Qt Quick applications.
+
+\image qml-clocks-example.png
+
+\section1 The QML Language
+
+QML is a high level, scripted language. Its commands, more correctly
+\e elements, leverage the power and efficiency of the Qt libraries to make easy
+to use commands that perform intuitive functions. Drawing a rectangle,
+displaying an image, and application events -- all are possible with declarative
+programming.
+
+The language also allows more flexibility of these commands by using
+\l{About JavaScript}{JavaScript} to implement the high level user interface
+logic.
+
+A QML element usually has various \e properties that help define the element.
+For example, if we created an element called Circle then the radius of the
+circle would be a property. Building user interfaces by importing these elements
+is one of the great feature of QML and Qt Quick.
+\image qml-texteditor5_newfile.png
+
+\section1 QtDeclarative Module
+
+To make Qt Quick possible, Qt introduces the \l {QtDeclarative} module. The
+module creates a JavaScript runtime that QML runs under with a Qt based backend.
+Because QtDeclarative and QML are built upon Qt, they inherit many of Qt's
+technology, namely the \l{Signals and Slots}{signals and slots} mechanism and
+the \l{The Meta-Object System}{meta-object} system. Data created using C++ are
+directly accessible from QML and QML objects are also accessible from C++ code.
+
+In conjunction with the QML language, the QtDeclarative module separates the
+interface logic in QML from the application logic in C++.
+
+\section1 Creator Tools
+
+Qt Creator is a complete integrated development environment (IDE) for creating
+applications with Qt Quick and the Qt application framework.
+
+\image qmldesigner-visual-editor.png
+
+The main goal for Qt Creator is meeting the development needs of Qt Quick
+developers who are looking for simplicity, usability, productivity,
+extendibility and openness, while aiming to lower the barrier of entry for
+newcomers to Qt Quick and Qt. The key features of Qt Creator allow UI designers
+and developers to accomplish the following tasks:
+\list
+\o Get started with Qt Quick application development quickly and easily with
+examples, tutorials, and project wizards.
+\o Design application user interface with the integrated editor, Qt Quick
+Designer, or use graphics software to design the user interface and use scripts
+to export the design to Qt Quick Designer.
+\o Develop applications with the advanced code editor that provides new powerful
+features for completing code snippets, refactoring code, and viewing the element
+hierarchy of QML files.
+\o Build and deploy Qt Quick applications that target multiple desktop and
+mobile platforms, such as Microsoft Windows, Mac OS X, Linux, Symbian, and
+Maemo.
+\o Debug JavaScript functions and execute JavaScript expressions in the current
+context, and inspect QML at runtime to explore the object structure, debug
+animations, and inspect colors.
+\o Deploy applications to mobile devices and create application installation
+packages for Symbian and Maemo devices that can be published in the Ovi Store
+and other channels.
+\o Easily access information with the integrated context-sensitive Qt Help
+system.
+\endlist
+
+\image qtcreator-target-selector.png
+
+\section1 Where to Go from Here
+
+The \l {Qt Quick} page has links to various Qt Quick topics such as QML
+features, addons, and tools.
+
+The \l {QML Examples and Demos} page has a gallery of QML applications.
+
+\section1 License Information
+\list
+\o \l{Qt Quick Licensing Information}
+\endlist
+*/
+
+
+

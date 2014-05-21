@@ -1,0 +1,63 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*! 
+    \page activeqt-testcon.html
+    \title testcon - An ActiveX Test Container (ActiveQt)
+
+    \ingroup activeqt-tools
+
+    \keyword testcon
+
+    This application implements a generic test container for ActiveX
+    controls. You can insert ActiveX controls installed on your
+    system, and execute methods and modify properties. The container
+    will log information about events and property changes as well
+    as debug output in the log window.
+
+    Parts of the code use internals of the Qt meta object and ActiveQt 
+    framework and are not recommended to be used in application code.
+
+    Use the application to view the slots, signals and porperties 
+    available through the QAxWidget class when instantiated with a 
+    certain ActiveX, and to test ActiveX controls you implement or
+    want to use in your Qt application.
+
+    The application can load and execute script files in JavaScript, 
+    VBScript, Perl and Python (if installed) to automate the controls 
+    loaded. Example script files using the QAxWidget2 class are available 
+    in the \c scripts subdirectory.
+
+    Note that the qmake project of this example includes a resource file
+    \c testcon.rc with a version resource. This is required by some
+    ActiveX controls (ie. Shockwave ActiveX Controls), which might crash
+    or misbehave otherwise if such version information is missing.
+
+    To build the tool you must first build the QAxContainer and the
+    QAxServer libraries. Then run your make  tool in \c tools/testcon
+    and run the resulting \c testcon.exe.
+*/

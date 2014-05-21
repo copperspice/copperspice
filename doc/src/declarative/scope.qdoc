@@ -1,0 +1,304 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+/*!
+\page qdeclarativescope.html
+\title QML Scope
+
+\tableofcontents
+
+QML property bindings, inline functions and imported JavaScript files all
+run in a JavaScript scope.  Scope controls which variables an expression can
+access, and which variable takes precedence when two or more names conflict.
+
+As JavaScript's built-in scope mechanism is very simple, QML enhances it to fit
+more naturally with the QML language extensions.
+
+\section1 JavaScript Scope
+
+QML's scope extensions do not interfere with JavaScript's natural scoping.
+JavaScript programmers can reuse their existing knowledge when programming
+functions, property bindings or imported JavaScript files in QML.
+
+In the following example, the \c {addConstant()} method will add 13 to the
+parameter passed just as the programmer would expect irrespective of the
+value of the QML object's \c a and \c b properties.
+
+\code
+QtObject {
+    property int a: 3
+    property int b: 9
+
+    function addConstant(b) {
+        var a = 13;
+        return b + a;
+    }
+}
+\endcode
+
+That QML respects JavaScript's normal scoping rules even applies in bindings.
+This totally evil, abomination of a binding will assign 12 to the QML object's
+\c a property.
+
+\code
+QtObject {
+    property int a
+
+    a: { var a = 12; a; }
+}
+\endcode
+
+Every JavaScript expression, function or file in QML has its own unique
+variable object.  Local variables declared in one will never conflict
+with local variables declared in another.
+
+\section1 Element Names and Imported JavaScript Files
+
+\l {QML Document}s include import statements that define the element names
+and JavaScript files visible to the document.  In addition to their use in the
+QML declaration itself, element names are used by JavaScript code when accessing
+\l {Attached Properties} and enumeration values.
+
+The effect of an import applies to every property binding, and JavaScript
+function in the QML document, even those in nested inline components.  The
+following example shows a simple QML file that accesses some enumeration
+values and calls an imported JavaScript function.
+
+\code
+import QtQuick 1.0
+import "code.js" as Code
+
+ListView {
+    snapMode: ListView.SnapToItem
+
+    delegate: Component {
+        Text {
+            elide: Text.ElideMiddle
+            text: "A really, really long string that will require eliding."
+            color: Code.defaultColor()
+        }
+    }
+}
+\endcode
+
+\section1 Binding Scope Object
+
+Property bindings are the most common use of JavaScript in QML.  Property
+bindings associate the result of a JavaScript expression with a property of an
+object.  The object to which the bound property belongs is known as the binding's
+scope object.  In this QML simple declaration the \l Item object is the
+binding's scope object.
+
+\code
+Item {
+    anchors.left: parent.left
+}
+\endcode
+
+Bindings have access to the scope object's properties without qualification.
+In the previous example, the binding accesses the \l Item's \c parent property
+directly, without needing any form of object prefix.  QML introduces a more
+structured, object-oriented approach to JavaScript, and consequently does not
+require the use of the JavaScript \c this property.
+
+Care must be used when accessing \l {Attached Properties} from bindings due
+to their interaction with the scope object.  Conceptually attached properties
+exist on \e all objects, even if they only have an effect on a subset of those.
+Consequently unqualified attached property reads will always resolve to an
+attached property on the scope object, which is not always what the programmer
+intended.
+
+For example, the \l PathView element attaches interpolated value properties to
+its delegates depending on their position in the path.  As PathView only
+meaningfully attaches these properties to the root element in the delegate, any
+sub-element that accesses them must explicitly qualify the root object, as shown
+below.
+
+\code
+PathView {
+    delegate: Component {
+        Rectangle {
+            id: root
+            Image {
+                scale: root.PathView.scale
+            }
+        }
+    }
+}
+\endcode
+
+If the \l Image element omitted the \c root prefix, it would inadvertently access
+the unset \c {PathView.scale} attached property on itself.
+
+\section1 Component Scope
+
+Each QML component in a QML document defines a logical scope.  Each document
+has at least one root component, but can also have other inline sub-components.
+The component scope is the union of the object ids within the component and the
+component's root element's properties.
+
+\code
+Item {
+    property string title
+
+    Text {
+        id: titleElement
+        text: "<b>" + title + "</b>"
+        font.pixelSize: 22
+        anchors.top: parent.top
+    }
+
+    Text {
+        text: titleElement.text
+        font.pixelSize: 18
+        anchors.bottom: parent.bottom
+    }
+}
+\endcode
+
+The example above shows a simple QML component that displays a rich text title
+string at the top, and a smaller copy of the same text at the bottom.  The first
+\c Text element directly accesses the component's \c title property when
+forming the text to display.  That the root element's properties are directly
+accessible makes it trivial to distribute data throughout the component.
+
+The second \c Text element uses an id to access the first's text directly.  IDs
+are specified explicitly by the QML programmer so they always take precedence
+over other property names (except for those in the \l {JavaScript Scope}).  For
+example, in the unlikely event that the binding's \l {Binding Scope Object}{scope
+object}  had a \c titleElement property in the previous example, the \c titleElement
+id would still take precedence.
+
+\section1 Component Instance Hierarchy
+
+In QML, component instances connect their component scopes together to form a
+scope hierarchy.  Component instances can directly access the component scopes of
+their ancestors.
+
+The easiest way to demonstrate this is with inline sub-components whose component
+scopes are implicitly scoped as children of the outer component.
+
+\code
+Item {
+    property color defaultColor: "blue"
+
+    ListView {
+        delegate: Component {
+            Rectangle {
+                color: defaultColor
+            }
+        }
+    }
+}
+\endcode
+
+The component instance hierarchy allows instances of the delegate component
+to access the \c defaultColor property of the \c Item element.  Of course,
+had the delegate component had a property called \c defaultColor that would
+have taken precedence.
+
+The component instance scope hierarchy extends to out-of-line components, too.
+In the following example, the \c TitlePage.qml component creates two
+\c TitleText instances.  Even though the \c TitleText element is in a separate
+file, it still has access to the \c title property when it is used from within
+the \c TitlePage.  QML is a dynamically scoped language - depending on where it
+is used, the \c title property may resolve differently.
+
+\code
+// TitlePage.qml
+import QtQuick 1.0
+Item {
+    property string title
+
+    TitleText {
+        size: 22
+        anchors.top: parent.top
+    }
+
+    TitleText {
+        size: 18
+        anchors.bottom: parent.bottom
+    }
+}
+
+// TitleText.qml
+import QtQuick 1.0
+Text {
+    property int size
+    text: "<b>" + title + "</b>"
+    font.pixelSize: size
+}
+\endcode
+
+Dynamic scoping is very powerful, but it must be used cautiously to prevent
+the behavior of QML code from becoming difficult to predict.  In general it
+should only be used in cases where the two components are already tightly
+coupled in another way.  When building reusable components, it is preferable
+to use property interfaces, like this:
+
+\code
+// TitlePage.qml
+import QtQuick 1.0
+Item {
+    id: root
+    property string title
+
+    TitleText {
+        title: root.title
+        size: 22
+        anchors.top: parent.top
+    }
+
+    TitleText {
+        title: root.title
+        size: 18
+        anchors.bottom: parent.bottom
+    }
+}
+
+// TitleText.qml
+import QtQuick 1.0
+Text {
+    property string title
+    property int size
+
+    text: "<b>" + title + "</b>"
+    font.pixelSize: size
+}
+\endcode
+
+\section1 JavaScript Global Object
+
+In addition to all the properties that a developer would normally expect on
+the JavaScript global object, QML adds some custom extensions to make UI or
+QML specific tasks a little easier.  These extensions are described in the
+\l {QML Global Object} documentation.
+
+QML disallows element, id and property names that conflict with the properties
+on the global object to prevent any confusion.  Programmers can be confident
+that \c Math.min(10, 9) will always work as expected!
+
+*/

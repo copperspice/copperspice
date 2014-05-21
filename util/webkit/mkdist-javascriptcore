@@ -1,0 +1,193 @@
+#!/bin/bash
+
+die() {
+    echo $*
+    exit 1
+}
+
+default_tag="javascriptcore-snapshot-02022010"
+
+if [ $# -eq 0 ]; then
+    tag="$default_tag"
+elif [ $# -eq 1 ]; then
+    tag=$1
+else
+    die "usage: $0 [commit (defaults to $default_tag)]"
+fi
+
+repository=`git config qtwebkit.url`
+if [ -z "$repository" ]; then
+    die "error: cannot locate webkit git repository. please run git config --global qtwebkit.url /path-or-url/to/webkit/repo"
+fi
+
+excluded_directories="$excluded_directories JavaScriptCore/Makefile"
+excluded_directories="$excluded_directories JavaScriptCore/GNUmakefile.am"
+excluded_directories="$excluded_directories JavaScriptCore/Configurations"
+excluded_directories="$excluded_directories JavaScriptCore/JavaScriptCore.exp"
+excluded_directories="$excluded_directories JavaScriptCore/JavaScriptCore.xcodeproj"
+excluded_directories="$excluded_directories JavaScriptCore/tests"
+excluded_directories="$excluded_directories JavaScriptCore/API/tests"
+excluded_directories="$excluded_directories JavaScriptCore/JavaScriptCore.vcproj"
+excluded_directories="$excluded_directories JavaScriptCore/wtf/wx"
+excluded_directories="$excluded_directories JavaScriptCore/wtf/gtk"
+excluded_directories="$excluded_directories JavaScriptCore/wtf/mac"
+excluded_directories="$excluded_directories JavaScriptCore/wtf/win"
+excluded_directories="$excluded_directories JavaScriptCore/wtf/chromium"
+excluded_directories="$excluded_directories JavaScriptCore/wtf/haiku"
+excluded_directories="$excluded_directories JavaScriptCore/icu"
+excluded_directories="$excluded_directories JavaScriptCore/qt"
+excluded_directories="$excluded_directories JavaScriptCore/JavaScriptCore.gyp"
+
+
+files_to_remove=""
+files_to_remove="$files_to_remove JavaScriptCore/AllInOneFile.cpp"
+files_to_remove="$files_to_remove JavaScriptCore/JavaScriptCoreSources.bkl"
+files_to_remove="$files_to_remove JavaScriptCore/jscore.bkl"
+files_to_remove="$files_to_remove JavaScriptCore/jsc.pro"
+files_to_remove="$files_to_remove JavaScriptCore/JavaScriptCore.pro"
+files_to_remove="$files_to_remove JavaScriptCore/DerivedSources.pro"
+files_to_remove="$files_to_remove JavaScriptCore/create_rvct_stubs"
+
+require_clean_work_tree() {
+    # test if working tree is dirty
+    git rev-parse --verify HEAD > /dev/null &&
+    git update-index --refresh &&
+    git diff-files --quiet &&
+    git diff-index --cached --quiet HEAD ||
+    die "Working tree is dirty"
+}
+
+which qmake >/dev/null 2>/dev/null
+if [ "$?" != 0 ]; then
+    die "abort: Could not locate qmake in your PATH"
+fi
+
+test -z "$(git rev-parse --show-cdup)" || {
+       exit=$?
+       echo >&2 "You need to run this command from the toplevel of the working tree."
+       exit $exit
+}
+
+echo "checking working tree"
+require_clean_work_tree
+
+revCount=`git ls-remote $repository | grep $tag | awk '{print $1}' | wc -l`
+if [ "$revCount" != 1 ]; then
+    die "Cannot parse $tag into a revision. It seems ambiguous".
+fi
+
+rev=`git ls-remote $repository | grep -E "^.+$tag$" | awk '{print $1}'`
+
+tarball=`mktemp /tmp/webkit-snapshot.tar.XXXXXX` || exit 1
+echo "creating $tarball"
+
+echo "archiving webkit from $repository $tag ( $rev )"
+
+git archive --remote=$repository $rev JavaScriptCore WebKit.pri > $tarball || exit 1
+
+echo "removing unwanted files and directories"
+for dir in $excluded_directories; do
+    echo "    removing $dir"
+    tar --delete --file=$tarball $dir
+done
+
+for item in $exclude_with_exceptions_list; do
+    dir=`echo $item | awk -F : '{print $1}'`
+    include=`echo $item | awk -F : '{print $2}'`
+    echo "    removing $dir except $include"
+    files=`tar --list --file=$tarball $dir | grep -v -E "^$dir\$" | grep -v $include`
+    tar --delete --file=$tarball $files
+done
+
+for file in $files_to_remove; do
+    echo "    removing $file"
+    tar --delete --file=$tarball $file
+done
+
+echo "done!"
+
+srcdir=src/3rdparty/javascriptcore
+absSrcDir=$PWD/$srcdir
+localDiff=
+lastImportRevison=
+
+echo "replacing $srcdir"
+if [  -d $srcdir ]; then
+    git ls-files $srcdir | xargs rm
+    git ls-files -z src/3rdparty/javascriptcore | git update-index --force-remove -z --stdin
+else
+    mkdir -p $srcdir
+fi
+
+(cd $srcdir && tar xf $tarball)
+git add $srcdir
+
+echo "generating extra sources"
+(
+  for proj in JavaScriptCore; do
+      cd $absSrcDir/$proj &&
+      rm -rf tmp &&
+      mkdir tmp &&
+      cd tmp &&
+      mkdir -p ../generated &&
+      qmake -o Makefile CONFIG-=QTDIR_build QT_CONFIG+=phonon GENERATED_SOURCES_DIR=`pwd`/../generated  OUTPUT_DIR=`pwd` ../$proj.pro &&
+      make generated_files &&
+      perl -pi -e "s,$absSrcDir/,,g" ../generated/*.cpp ../generated/*.h &&
+      git add ../generated &&
+      cd .. &&
+      rm -rf tmp &&
+      cd ..
+  done
+)
+rm -rf $srcdir/WebKitBuild
+
+cat >$srcdir/VERSION <<EOT
+This is a snapshot of JavaScriptCore from
+
+        git://gitorious.org/qtwebkit/qtwebkit.git
+
+The commit imported was from the
+
+        $tag branch/tag
+
+and has the sha1 checksum
+
+        $rev
+EOT
+git add $srcdir/VERSION
+
+git diff-files --name-only -z | git update-index --remove -z --stdin
+
+echo "removing $tarball"
+rm -f $tarball
+
+cat >commitlog.txt <<EOT
+Updated JavaScriptCore from $repository to $tag ( $rev )
+EOT
+
+if [ -d "$repository/.git" -a -n "$lastImportRevison" ]; then
+    echo >>commitlog.txt
+    echo "Changes in WebKit/qt since the last update:" >>commitlog.txt
+    echo >>commitlog.txt
+    git --git-dir=$repository/.git diff $lastImportRevison $rev -- WebKit/qt/ChangeLog | sed -n -e "s,^\+\(.*\),\1,p" >>commitlog.txt
+fi
+
+echo "Changes:"
+echo
+git --no-pager diff --name-status --cached $srcdir
+
+echo
+echo "Wrote commitlog.txt. Use with"
+echo
+echo "    git commit -e -F commitlog.txt"
+echo
+echo "to commit your changes"
+
+if [ -n "$localDiff" ]; then
+    echo
+    echo "The changes that were locally stored in Perforce are now stored as a git patch in $localDiff"
+    echo "You may want to appy them with"
+    echo
+    echo "    git am -3 $localDiff"
+    echo
+fi

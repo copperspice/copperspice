@@ -1,0 +1,10 @@
+[SkinFile]
+Up=S60-nHD-Touchscreen.png
+Down=S60-nHD-Touchscreen-down.png
+Screen=53 183 360 640
+Areas=3
+HasMouseHover=false
+
+"Call"	     0x01100004 76 874 171 899
+"Hangup"     0x01100005 300 876 393 899
+"Home"       0x1000010   174 878 298 899

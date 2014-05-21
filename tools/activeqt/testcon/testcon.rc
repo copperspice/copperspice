@@ -1,0 +1,35 @@
+#ifndef Q_CC_BOR
+#include <winver.h>
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+	FILEVERSION 1,0,0,1
+	PRODUCTVERSION 3, 2, 0, 0
+	FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+	FILEFLAGS VS_FF_DEBUG
+#else
+	FILEFLAGS 0x0L
+#endif
+	FILEOS VOS__WINDOWS32
+	FILETYPE VFT_DLL
+	FILESUBTYPE 0x0L
+	BEGIN
+		BLOCK "StringFileInfo"
+		BEGIN
+			BLOCK "040904B0"
+			BEGIN
+				VALUE "CompanyName", "Nokia Corporation and/or its subsidiary(-ies)\0"
+				VALUE "FileDescription", "ActiveQt Test Container\0"
+				VALUE "FileVersion", "1,0,0,1\0"
+				VALUE "InternalName", "testcon\0"
+				VALUE "LegalCopyright", "Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).0"
+				VALUE "LegalTrademarks", "\0"
+				VALUE "OriginalFilename", "testcon.exe\0"
+				VALUE "ProductName", "ActiveQt Test Container\0"
+				VALUE "ProductVersion", "3, 2, 0, 0\0"
+			END
+		END
+	END
+/* End of Version info */
+

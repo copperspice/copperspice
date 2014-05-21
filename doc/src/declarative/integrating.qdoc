@@ -1,0 +1,111 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qml-integration.html
+\ingroup qml-features
+\previouspage {Using QML Bindings in C++ Applications}
+\nextpage {Dynamic Object Management in QML}{Dynamic Object Management}
+\contentspage QML Features
+\title Integrating QML Code with Existing Qt UI Code
+
+There are a number of ways to integrate QML into QWidget-based UI applications,
+depending on the characteristics of your existing UI code.
+
+
+\section1 Integrating with a \l{QWidget}-based UI
+
+If you have an existing QWidget-based UI, QML widgets can be integrated into
+it using QDeclarativeView. QDeclarativeView is a subclass of QWidget so you
+can add it to your user interface like any other QWidget. Use
+QDeclarativeView::setSource() to load a QML file into the view, then add the
+view to your UI:
+
+\code
+QDeclarativeView *qmlView = new QDeclarativeView;
+qmlView->setSource(QUrl::fromLocalFile("myqml.qml"));
+
+QWidget *widget = myExistingWidget();
+QVBoxLayout *layout = new QVBoxLayout(widget);
+layout->addWidget(qmlView);
+\endcode
+
+The one drawback to this approach is that QDeclarativeView is slower to initialize
+and uses more memory than a QWidget, and creating large numbers of QDeclarativeView
+objects may lead to performance degradation. If this is the case, it may be
+better to rewrite your widgets in QML, and load the widgets from a main QML widget
+instead of using QDeclarativeView.
+
+Keep in mind that QWidgets were designed for a different type of user interface
+than QML, so it is not always a good idea to port a QWidget-based application to
+QML. QWidgets are a better choice if your UI is comprised of a small number of
+complex and static elements, and QML is a better choice if your UI is comprised of a large number
+of simple and dynamic elements.
+
+
+\section1 Integrating with a QGraphicsView-based UI
+
+\section2 Adding QML widgets to a QGraphicsScene
+
+If you have an existing UI based on the \l{Graphics View Framework},
+you can integrate QML widgets directly into your QGraphicsScene. Use
+QDeclarativeComponent to create a QGraphicsObject from a QML file, and
+place the graphics object into your scene using \l{QGraphicsScene::addItem()}, or
+reparent it to an item already in the \l{QGraphicsScene}.
+
+For example:
+
+\code
+QGraphicsScene* scene = myExistingGraphicsScene();
+QDeclarativeEngine *engine = new QDeclarativeEngine;
+QDeclarativeComponent component(engine, QUrl::fromLocalFile("myqml.qml"));
+QGraphicsObject *object =
+    qobject_cast<QGraphicsObject *>(component.create());
+scene->addItem(object);
+\endcode
+
+The following QGraphicsView options are recommended for optimal performance
+of QML UIs:
+
+\list
+\o QGraphicsView::setOptimizationFlags(QGraphicsView::DontSavePainterState)
+\o QGraphicsView::setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate)
+\o QGraphicsScene::setItemIndexMethod(QGraphicsScene::NoIndex)
+\endlist
+
+\section2 Loading QGraphicsWidget objects in QML
+
+An alternative approach is to expose your existing QGraphicsWidget objects to
+QML and construct your scene in QML instead. See the \l {declarative-cppextensions-qgraphicslayouts.html}{graphics layouts example}
+which shows how to expose Qt's graphics layout classes to QML in order
+to use QGraphicsWidget with classes like QGraphicsLinearLayout and QGraphicsGridLayout.
+
+To expose your existing QGraphicsWidget classes to QML, use \l {qmlRegisterType()}.
+See \l{Extending QML Functionalities using C++} for further information on
+how to use C++ types in QML.
+
+*/

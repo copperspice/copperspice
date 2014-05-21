@@ -1,0 +1,7 @@
+digraph {
+    size="5,4"
+    1 [label="  start state  ", shape=circle, style=filled, color=blue]
+    2 [label="start/end state", shape=doublecircle, style=filled, color=blue]
+    3 [label=" internal state", shape=circle, style=filled, color=red]
+    4 [label="  end state    ", shape=doublecircle, style=filled, color=green]
+}

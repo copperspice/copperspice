@@ -1,0 +1,66 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page bughowto.html
+    \title How to Report a Bug
+    \brief Information about ways to report bugs in Qt.
+
+    If you think you have found a bug in Qt, we would like to hear
+    about it so that we can fix it.
+
+    Before reporting a bug, please check the \l{FAQs}, \l{Platform
+    and Compiler Notes}, and the \l{Qt Bug Tracker} on the Qt website to see
+    if the issue is already known.
+
+    The first thing you should do is to sign up for an account for
+    the \l{Qt Bug Tracker}, if you do not already have one. Once you
+    have done that you can submit and track your bug reports and they
+    will be publicly available from the moment you submit them.
+
+    Always include the following information in your bug report:
+
+    \list 1
+    \o The name and version number of your compiler
+    \o The name and version number of your operating system
+    \o The version of Qt you are using, and what configure options it was
+       compiled with
+    \o Reliable and clear description on how to reproduce the problem
+    \endlist
+
+    If possible, please provide a test written using the QtTest module
+    as this will improve the procedure of reproducing your problem and
+    allow the developers to address the issue in a more efficient way.
+
+    Otherwise, if the problem you are reporting is only visible at run-time,
+    try to create a small test program that shows the problem when run.
+    Often, such a program can be created with some minor changes to one of
+    the many example programs in Qt's examples directory.
+
+    If you have implemented a bug fix and want to contribute your fix
+    directly, then you can do so through the \l{Public Qt Repository}.
+*/

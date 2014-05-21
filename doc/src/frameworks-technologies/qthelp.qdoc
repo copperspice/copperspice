@@ -1,0 +1,368 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \group helpsystem
+    \title Help System
+    \ingroup groups
+
+    \brief Classes used to provide online-help for applications.
+
+    \keyword help system
+
+    These classes provide for all forms of online-help in your application,
+    with three levels of detail:
+
+    \list 1
+        \o Tool Tips and Status Bar message - flyweight help, extremely brief,
+            entirely integrated in the user interface, requiring little
+            or no user interaction to invoke.
+        \o What's This? - lightweight, but can be
+            a three-paragraph explanation.
+        \o Online Help - can encompass any amount of information,
+            but is typically slower to call up, somewhat separated
+            from the user's work, and often users feel that using online
+            help is a digression from their real task.
+    \endlist
+
+*/
+
+/*!
+    \page qthelp-framework.html
+    \title The Qt Help Framework
+    \brief Integrating Documentation in Applications
+    \ingroup frameworks-technologies
+
+    \section1 Topics
+
+    \tableofcontents
+
+    \section1 Overview
+    The Qt help system includes tools for generating and viewing
+    Qt help files. In addition it provides classes for accessing
+    help contents programatically to be able to integrate online
+    help into Qt applications.
+
+    The actual help data, meaning the table of contents, index
+    keywords or html documents, is contained in Qt compressed help
+    files. So, one such a help file represents usually one manual
+    or documentation set. Since most products are more comprehensive
+    and consist of a number of tools, one manual is rarely enough.
+    Instead, more manuals which should be accessible at the same
+    time, exist. Ideally, it should also be possible to reference
+    certain points of interest of one manual to another.
+    Therefore, the Qt help system operates on help collection files
+    which include any number of compressed help files.
+
+    However, having collection files to merge many documentation
+    sets may lead to some problems. For example, one index keyword
+    may be defined in different documentations. So, when only seeing
+    it in the index and activating it, you cannot be sure that
+    the expected documentation will be shown. Therefore, the Qt
+    help system offers the possibiltiy to filter the help contents
+    after certain attributes. This requires however, that the
+    attributes have been assigned to the help contents before the
+    generation of the compressed help file.
+
+    As already mentioned, the Qt compressed help file contains all
+    data, so there is no need any longer to ship all single html
+    files. Instead, only the compressed help file and optionally the
+    collection file has to be distributed. The collection file is
+    optional since any existing collection file, e.g. from an older
+    release could be used.
+
+    So, in general, there are four files interacting with the help
+    system, two used for generating Qt help and two meant for
+    distribution:
+
+    \table
+        \header
+            \o Name
+            \o Extension
+            \o Brief Description
+        \row
+            \o \l {Qt Help Project}
+            \o .qhp
+            \o The input file for the help generator consisting of the table
+               of contents, indices and references to the actual documentation
+               files (*.html); it also defines a unique namespace for the
+               documentation.
+
+        \row
+            \o Qt Compressed Help
+            \o .qch
+            \o The output file of the help generator. This binary file contains
+               all information specified in the help project file along with all
+               compressed documentation files.
+
+        \row
+            \o \l {Qt Help Collection Project}
+            \o .qhcp
+            \o The input file for the help collection generator. It contains
+               references to compressed help files which should be included in
+               the collection; it also may contain other information for
+               customizing Qt Assistant.
+
+        \row
+            \o Qt Help Collection
+            \o .qhc
+            \o The output of the help collection generator. This is the file
+               QHelpEngine operates on. It contains references to any number of
+               compressed help files as well as additional information, such as
+               custom filters.
+    \endtable
+
+    \section1 Generating Qt Help
+
+    Building help files for the Qt help system assumes that the html
+    documentation files already exist, i.e. the Qt help system does
+    not offer the possibility to create html files like e.g. Doxygen.
+
+    Once the html documentents are in place, a \l {Qt Help Project} file
+    has to be created. After specifying all relevant information in
+    this file, it needs to be compiled by calling:
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 2
+
+    The file 'doc.qch' contains then all html files in compressed
+    form along with the table of contents and index keywords. To
+    test if the generated file is correct, open Qt Assistant and
+    install the file via the Settings|Documentation page.
+
+    \target Qt Help Collection Project
+    \section2 Creating a Qt Help Collection
+
+    The first step is to create a Qt Help Collection Project file.
+    Since a Qt help collection stores primarily references to
+    compressed help files, the project 'mycollection.qhcp' file
+    looks unsurprisingly simple:
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 3
+
+    For actually creating the collection file call:
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 4
+
+    Instead of running two tools, one for generating the compressed
+    help and one for generating the collection file, it is also
+    possible to just run the qcollectiongenerator tool with a
+    slightly modified project file instructing the generator to
+    create the compressed help first.
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 5
+
+    Of course, it is possible to specify more than one file in the
+    'generate' or 'register' section, so any number of compressed
+    help files can be generated and registered in one go.
+
+    \section1 Using Qt Help
+
+    Accessing the help contents can be done in two ways: Using Qt
+    Assistant as documentation browser or using the QHelpEngine
+    API for embedding the help contents directly in an application.
+
+    \section2 Using Qt Assistant
+
+    \QA operates on a collection file which can be specified
+    before start up. If no collection file is given, a default one
+    will be created and used. In either case, it is possible to
+    register any Qt compressed help file and access the help contents.
+
+    When using Assistant as the help browser for an application, it
+    would be desirable that it can be customized to fit better to the
+    application and doesn't look like an independent, standalone
+    help browser. To achieve this, several additional properties can
+    be set in an Qt help collection file, to change e.g. the title
+    or application icon of Qt Assistant. For more information on
+    this topic have a look at the \l{assistant-manual.html}
+    {Qt Assistant manual}.
+
+    \section2 Using QHelpEngine API
+
+    Instead of showing the help in an external application like the
+    Qt Assistant, it is also possible to embed the online help in
+    the application. The contents can then be retrieved via the
+    QHelpEngine class and can be displayed in nearly any form.
+    Showing it in a QTextBrowser is probably the most common way, but
+    embedding it in What's This help is also perfectly possible.
+
+    Retrieving help data from the file engine does not involve a
+    lot of code. The first step is to create an instance of the
+    help engine. Then we ask the engine for the links assigned to
+    the identifier, in this case "MyDialog::ChangeButton". If a link
+    was found, meaning at least one help document exists to this topic,
+    we get the actual help contents by calling fileData() and display
+    the document to the user.
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.cpp 6
+
+    For further information on how to use the API, have a look at
+    the QHelpEngine class reference.
+*/
+
+/*!
+    \page qthelpproject.html
+    \title Qt Help Project
+
+    A Qt help project collects all data necessary to generate a
+    compressed help file. Along with the actual help data, like
+    the table of contents, index keywords and help documents, it
+    contains some extra information like a namespace to identify
+    the help file. One help project stands for one documentation,
+    e.g. the Qt Assistant manual.
+
+    \section1 Qt Help Project File Format
+
+    The file format is XML-based. For a better understanding of
+    the format we'll discuss the following example:
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 7
+
+    \section2 Namespace
+
+    To enable the QHelpEngine to retrieve the proper documentation to
+    a given link, every documentation set has to have a unique
+    identifier. A unique identifier makes is also possible for the
+    help collection to keep track of a documentation set without relying
+    on its file name. The Qt help system uses a namespace as identifier
+    which is defined by the mandatory namespace tags. In the example
+    above, the namespace is "mycompany.com.myapplication.1.0".
+
+    \target Virtual Folders
+    \section2 Virtual Folders
+
+    Having a namespace for every documentation naturally means that
+    the documentation sets are quite separated. From the help engines
+    point of view this is beneficial, but from the documentors view
+    it is often desirable to cross reference certain topic from one
+    manual to another without having to specify absolute links. To
+    solve this problem, the help system introduced the concept of
+    virtual folders.
+
+    A virtual folder will become the root directory of all files
+    referenced in a compressed help file. When two documentations
+    share the same virtual folder, they can use relative paths when
+    defining hyperlinks pointing to the other documentation. If a
+    file is contained in both documentations or manuals, the one
+    from the current manual has precedence over the other.
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 8
+
+    The above example specifies 'doc' as virtual folder. If another
+    manual, e.g. for a small helper tool for 'My Application'
+    specifies the same folder, it is sufficient to write
+    'doc.html#section1' to reference the first section in the
+    'My Application' manual.
+
+    The virtual folder tag is mandatory and the folder must not
+    contain any '/'.
+
+    \target Custom Filters
+    \section2 Custom Filters
+
+    Next in the Qt help project file are the optional definitions of
+    custom filters. A custom filter contains a list of filter
+    attributes which will be used later to display only the documentation
+    which has all those attributes assigned to. So, when setting the
+    current filter in the QHelpEngine to "My Application 1.0" only
+    the documentation which has "myapp" and "1.0" set as filter
+    attributes will be shown.
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 9
+
+    It is possible to define any number of custom filters in a help
+    project file. Important to know is, that the filter attributes have
+    not to be specified in the same project file; they can be defined
+    in any other help file. The definition of a filter attributes
+    takes place by specifying them in a filter section.
+
+    \target Filter Section
+    \section2 Filter Section
+
+    A filter section contains the actual documentation. One Qt help project
+    file may contain more than one filter sections. Every filter section
+    consists of four parts, the filter attributes section, the table of
+    contents, the keywords and the files list. In theory all parts are
+    optional but not specifying anything there will result in an empty
+    documentation.
+
+    \section3 Filter Attributes
+
+    Every filter section should have filter attributes assigned to it, to
+    enable documentation filtering. If no filter attribute is defined, the
+    documentation will only be shown if no filtering occurs, meaning the
+    current custom filter in the QHelpEngine does not contain any filter
+    attributes.
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 10
+
+    In this case, the filter attributes 'myapp' and '1.0' are assigned
+    to the filter section, i.e. all contents specified in this section
+    will only be shown if the current custom filter has 'myapp' or '1.0'
+    or both as filter attributes.
+
+    \section3 Table of contents
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 11
+
+    One section tag represents one item in the table of contents. The
+    sections can be nested to any degree, but from a users perspective
+    it should not be more than four or five levels. A section is defined
+    by its title and reference. The reference, like all file references in a Qt
+    help project, are relative to the help project file itself.
+    \note The referenced files must be inside the same directory (or within a
+    subdirectory) as the help project file. An absolute file path is not supported
+    either.
+
+    \section3 Keywords
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 12
+
+    The keyword section lists all keywords of this filter section. A
+    keyword consists basically of a name and a file reference. If the
+    attribute 'name' is used then the keyword specified there will appear in
+    the visible index, i.e. it will be accessible through the QHelpIndexModel.
+    If 'id' is used, the keyword does not appear in the index and is
+    only accessible via the linksForIdentifier() function of the
+    QHelpEngineCore. 'name' and 'id' can be specified at the same time.
+
+    \section3 Files
+
+    \snippet doc/src/snippets/code/doc_src_qthelp.qdoc 13
+
+    Finally, the actual documentation files have to be listed. Make sure
+    that all files neccessary to display the help are mentioned, i.e.
+    stylesheets or similar files need to be there as well. The files, like all
+    file references in a Qt help project, are relative to the help project file
+    itself. As the example shows, files (but not directories) can also be 
+    specified as patterns using wildcards. All listed files will be compressed 
+    and written to the Qt compressed help file. So, in the end, one single Qt 
+    help file contains all documentation files along with the contents and 
+    indices. \note The referenced files must be inside the same directory 
+    (or within a subdirectory) as the help project file. An absolute file path 
+    is not supported either.
+*/

@@ -1,0 +1,218 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page how-to-learn-qt.html
+    \title How to Learn Qt
+    \brief Links to guides and resources for learning Qt.
+    \nextpage Tutorials
+
+    \section1 Required programming skills
+
+    Qt is an application development framework based on C++. Traditionally, C++ is the major programming language used to develop with Qt.
+
+    Since the introduction of Qt Quick (Qt UI Creation Kit) in the beginning of 2011, Qt has been supporting script-based declarative programming with QML. QML is very easy to understand for anybody who is familiar with JavaScript as well as for all other developers who are familiar the basics of object oriented programming and have worked with other scripting languages. Designers who are familiar with web development can start with QML and implement their ideas in executable code which can later be powered by more application logic developed by engineering teams.
+
+    A solid understanding of the basics of C++ is essential for those planning on using Qt for C++. You do not need to be a C++ expert to begin. Qt simplifies many aspects of C++ development, making it a lot of fun. The overall development effort is minimal since Qt API are easy to understand and application functionality can be implemented with a smaller a mount of code. C++ experts will find a lot of powerful APIs and tools in Qt which will make complicated things simple and new features easy to get done.
+
+    Various bindings have been developed by the Qt community for other programming languages. See the \l{Qt Language Bindings on Wiki}{this wiki page on Qt Developer Network} for more information about using other programming languages with Qt.
+
+    \section1 Tools to install
+
+    Qt provides a range of tools for all steps in application development for desktops and devices. Tools are integrated into packages that are easily installed on several platforms. You have following options:
+
+    \list
+    \o  \l{Qt SDK Product Page}{Qt SDK} - one package with all the tools you need for the creation of applications for Symbian and Maemo in addition to desktop platforms such as Microsoft Windows, Mac OS X, and Linux.
+    \o  \l{Qt Creator Product Page}{Qt Creator} - a cross-platform integrated development environment (IDE). Note, that the Qt Creator package does not contain the Qt framework itself. You can either configure it to use with a version of Qt already installed on your machine or download a new version of Qt separately.
+    \o  \l{Product Overview}{Qt} binary package - a ready-to-go installer for Mac, Linux and Windows containing a precompiled tool chain, libraries, include files, documentation, demos and examples.
+    \o  \l{Product Overview}{Qt} source code packages - Qt and Qt creator are available in source code as zip or tar archives as well as on the \l{Public Qt Repository}.
+    \endlist
+
+    All packages above are available for download on the \l{Downloads} page. We recommend starting with Qt SDK since it contains all you need in one package. Later on you can consider installing other packages separately. They can all coexist on your machine and be configured to work with each other.
+
+    \section1 Examples in action
+
+    One of the most popular ways of discovering new technologies is to walk through examples.
+
+    Qt provides a large selection of examples and demos which are available in source code (check \c demos and \c examples directories in your installation).The main difference between examples and demos is that examples are smaller and more focused on one functionality whereas demos are complete, more complex applications using many Qt features.
+
+    Most of the examples and demos are precompiled and integrated into the \l{Examples and Demos Launcher}.
+
+    \div {class="float-left"}
+    \inlineimage qtdemo-small.png
+    \enddiv
+
+    Run it and see Qt's features in action. You can also start all examples and demos from it as separate applications or browse to the source code. \l{Qt Creator Product Page}{Qt Creator} allows loading of examples as projects with a wizard on the "Welcome" page.
+
+    Additionally, \l{Qt Widget Gallery} provides overviews of selected Qt desktop widgets in each of the styles used on various supported platforms.
+    \clearfloat
+
+    If you are new to Qt, you should first take a look on the following examples:
+
+    \list
+    \o  \l{Calculator Example}
+    \o  \l{Application Example}
+    \o  \l{Image Viewer Example}
+    \o  \l{Basic Drawing Example}
+    \endlist
+
+    \section1 Qt technology guides
+
+    At some point you should take some time to walk through the Qt technology guides and overviews provided in Qt documentation. Qt is simple to use, but you should have a basic understanding of the key concepts behind Qt to reveal its full power. There is a large selection of documents that are sorted into the following sections:
+
+    \list
+    \o  \l{Programming with Qt} - about key components and technologies used in Qt development
+    \o  \l{Cross-platform and Platform-specific Development} and \l{Platform-Specific Documentation} - using Qt on different platforms
+    \o  \l{Qt Quick} - a home page of Qt Quick in Qt documentation
+    \o  \l{UI Design with Qt} - specifics of desktop UI development
+    \o  \l{Qt and Key Technologies} - how Qt addresses industry standards and also how they are used in Qt
+    \o  \l{Best Practice Guides} - a collection of various tips and hints
+    \endlist
+
+    The following guides are essential for those new to Qt:
+
+    \list
+    \o  \l{Object Model}
+    \o  \l{Object Trees & Ownership}
+    \o  \l{Signals & Slots}
+    \o  \l{The Event System}
+    \o  \l{Implicit Sharing}
+    \o  \l{Container Classes}
+    \o  \l{Internationalization with Qt}
+    \o  \l{Coordinate System}
+    \o  \l{Paint System}
+    \o  \l{Network Programming}
+    \o  \l{The Qt Resource System}
+    \endlist
+
+    The \l{Develop with Qt} guide provides a good overview of all topics in Qt development and includes links to the section mentioned above as well as many more advanced aspects.
+
+    \section1 Tutorials
+
+    Compared to examples, tutorials walk you through the development steps of an application and show how to use Qt to implement required functionality. Some Qt tutorials also explain specific details of selected Qt features.
+
+    The \l{Getting Started Programming with Qt} tutorial is a good start for all who are new to Qt. In this tutorial you will develop a simple text editor and go through the major steps of developing of a Qt application.
+
+    Desktop developers should then proceed to the \l{Widgets Tutorial} as well as the \l{Address Book Tutorial}.
+
+    Many Qt developers use Qt Designer to compose desktop UIs in a visual editor. Take a look the \l{Qt Designer manual} to learn more about this.
+
+    The \l{Tutorials} page contains a list of all tutorials provided in Qt documentation.
+
+    \section1 Getting most of Qt documentation
+
+    Qt comes with extensive documentation, with hypertext
+    cross-references throughout so you can easily click your way to
+    whatever interests you. The part of the documentation that you'll
+    probably use the most is the \link index.html API
+    Reference\endlink. Each link provides a different way of
+    navigating the API Reference. Try them all to see which work best
+    for you.
+
+    The \l{All Overviews and HOWTOs} page lists all Qt technology overviews and HOWTOs in one please. This includes the overviews mentioned above, but also lists several addtional references (e.g. starting pages of all Qt modules, most of which contain a short introduction to a given module).
+
+    You can find Qt documentation either directly integrated into Qt tools as well as \l{Qt Docs Web Start Page}{here}. The advantage of Qt documentation provided in tools is that it is stored on your machine and is available offline. The Qt documentation web site provides access to documentation from different Qt versions as well as the latest snapshot. Qt tools provide search functionality over the index of content as well as free text search. Advanced searches can also be conducted in Qt documentation through the use of search engines. Just limit the search to \c doc.qt.nokia.com and review help topics provided by the search engine you're using to know how to write more advanced search queries.
+
+    The most of the content in Qt documentation is in the documentation of Qt APIs. This includes a lot of code snippets showing how to implement a functionality with Qt APIs. A good example of this is the documentation on the \l{QString} class.
+
+    Make sure to take a look at the following reference documentation since they contain a lot of important details:
+    \list
+    \o  \l{Qt Namespace} - contains a log of frequently used static variables
+    \o  \l{Global Qt Declarations} - to get an overview of available standard types, macros, and static functions
+    \endlist
+
+    \section1 Get advice and support from the Qt Community
+
+    Qt has an active and helpful user community who communicate using
+    the various means:
+
+    \list
+    \o  \l{Qt Mailing Lists}{qt-interest} Mailing list
+    \o  \l{Qt Centre} Website
+    \o  \l{Forums on Qt Developer Network}
+    \o  \l{Wiki on Qt Developer Network} written by the Qt community and hosted on the Qt Developer Network
+    \o  The \c #qt and \c #qt-creator IRC channels on \c irc.freenode.org
+    \endlist
+
+    In addition, many Qt developers are active members of the \l{KDE}{KDE community}.
+
+    \section1 Books about Qt
+
+    There is a growing number of books about Qt programming. The Qt team maintains a list of books on the Qt Developer Network site. See \l{Books about Qt Programming} for a complete list of Qt books including translations to various languages.
+
+    \section1 Training
+
+    In many cases people prefer attending professional training courses to boost their learning progress. A training course has two unique benefits: Its scope can be adapted to your needs and you will get helped on the spot by Qt trainers who are also experienced Qt developers. \l{Qt Training Partners} offer a wide range of courses. Most courses are based on materials developed by the Qt team.
+
+    There are two types of courses: open enrollment and on-site. \l{Open Enrollment Qt Training Courses}{Open enrollment courses} are public courses open to anybody. They are a good choice for an individual developers or small groups. If you have a large Qt project, on-site training is a better choice and can be more cost efficient. You can request your own agenda for on-site training whereas open enrollment courses have a predefined agenda and scope valid for all attendees.
+
+    \section1 Listen to Qt experts on videos
+
+    A wide range of videos is available on the \l{Qt Video Portal} on the Qt Developer Network. Most of the videos are recordings of talks given by Qt experts at Qt Developer Days. You can use categories and tags to find videos which cover the scope of your needs.
+
+    Another part of the videos are recordings of training sessions recorded at Qt Developer Days:
+    \list
+    \o  Qt Essentials, by ICS: (part \l{Qt Essentials by ICS part 1}{1} and \l{Qt Essentials by ICS part 1}{2}) and KDAB: (part \l{Qt Essentials by KDAB part 1}{1} and \l{Qt Essentials by KDAB part 2}{2})
+    \o  \c QGraphicsView, \l{QGraphicsView by ICS}{session by ICS} and \l{QGraphicsView by ICS}{session by KDAB}
+    \o  Multithreading, \l{Multithreading by ICS}{session by ICS} and \l{Multithreading by KDAB}{session by KDAB}
+    \o  UI Development with Qt, \l{UI Development with Qt by ICS}{session by ICS} and \l{UI Development with Qt by KDAB}{session by KDAB}
+    \o  Embedded Development, \l{Embedded Development by basysKom}{session by basysKom} and \l{Embedded Development by ICS}{session by ICS}
+    \o  Model/View Programming, \l{ModelView Programming by basysKom}{session by basysKom} and \l{ModelView Programming by KDAB}{session by KDAB}
+    \o  \c QWebKit, \l{QWebKit by KDAB}{by KDAB}
+    \o  Qt Quick, by KDAB: part \l{Quick by KDAB part 1}{1}, \l{Quick by KDAB part 2}{2}, \l{Quick by KDAB part 3}{3}, \l{Quick by KDAB part 4}{4}
+    \o  Qt Mobile Development for Nokia Devices, by Digia: part \l{Qt Mobile Development for Nokia Devices by Digia part 1}{1}, \l{Qt Mobile Development for Nokia Devices by Digia part 2}{2}, \l{Qt Mobile Development for Nokia Devices by Digia part 3}{3}
+    \endlist
+
+    Additionally, there are recordings of the Qt Essentials training modules:
+    \list
+    \o  Fundamentals of Qt, part \l{Qt Essentials - Fundamentals of Qt part 1}{1} and \l{Qt Essentials - Fundamentals of Qt part 2}{2}
+    \o  Application Creation, part \l{Qt Essentials - Application Creation part 1}{1}, \l{Qt Essentials - Application Creation part 2}{2}, \l{Qt Essentials - Application Creation part 3}{3}
+    \o  Widgets, part \l{Qt Essentials - Widgets part 1}{1}, \l{Qt Essentials - Widgets part 2}{2}, \l{Qt Essentials - Widgets part 3}{3}
+    \o  Graphics View, part \l{Qt Essentials - Graphics View part 1}{1}, \l{Qt Essentials - Graphics View part 2}{2}, \l{Qt Essentials - Graphics View part 3}{3}
+    \o  Model/View I, part \l{Qt Essentials - Model/View I part 1}{1}, \l{Qt Essentials - Model/View I part 2}{2}, \l{Qt Essentials - Model/View I part 3}{3}, \l{Qt Essentials - Model/View I part 4}{4}
+    \o  Model/View II, , part \l{Qt Essentials - Model/View II part 1}{1}, \l{Qt Essentials - Model/View II part 2}{2}, \l{Qt Essentials - Model/View II part 3}{3}, \l{Qt Essentials - Model/View II part 4}{4}, \l{Qt Essentials - Model/View II part 5}{5}
+    \endlist
+
+    \section1 Prove your knowledge
+
+    \l{Qt Certification} publishes the scope of each exam in Qt Curriculum as "Qt Curriculum Blocks," which are available under \l{Qt Certification Exam Preparation and Prerequisites}{this link}. The Qt Essentials Curriculum Block describes the scope of knowledge which covers all of the fundamental concepts and basic features in Qt. Review this list to find out which areas of Qt you should become familiar with in order to reach a basic level of Qt expertise. If you also have at least 6 months of Qt development experience, consider taking the Qt Essentials exam and becoming a Nokia Certified Qt Developer.
+    \section1 Further Readings and Materials
+
+    A selection of training materials is available to download under \l{Download Qt training materials}{this link} which includes slides (PDF) and source code from the following three courses:
+    \list
+    \o  Qt Essentials - Widget Edition
+    \o  Qt Essentials - Qt Quick Edition
+    \o  Qt Quick for Designers
+    \endlist
+
+    \l{Qt in Education Course Material} is available to download as well. It is more tailored to the needs of educational institutions that use Qt for teaching purposes, but nonetheless provides helpful slides in various formats as well as labs and example code.
+
+    Another valuable source of example code and valuable information about Qt features is the archive of articles from \l{Qt Quarterly}, a quarterly newsletter for users of Qt.
+
+    Good luck and have fun!
+
+*/

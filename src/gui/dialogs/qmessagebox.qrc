@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/copperspice/qmessagebox">
+   <file>images/cslogo-64.png</file>
+</qresource>
+</RCC>

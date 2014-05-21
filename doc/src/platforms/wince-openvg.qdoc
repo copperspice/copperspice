@@ -1,0 +1,51 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page windowsce-openvg.html
+    \title Qt for Windows CE and OpenVG
+    \ingroup qtce
+    \brief Information about support for OpenVG with Qt for Windows CE.
+
+    \input platforms/emb-openvg.qdocinc
+
+\section1 Using OpenVG with Qt for Windows CE
+Qt for Windows CE uses EGL 1.1 to embed OpenVG windows within the Windows
+CE window manager.
+
+\note Make sure that your Windows CE SDK have a working EGL implementation.
+If not, OpenVG will not work.
+
+\note There is currently no support for Blitting and Alpha blending in Qt
+for Windows CE.
+
+\note To configure Qt for Windows Mobile 5.0 and OpenVG support you can run
+\c{configure} like this:
+
+    \snippet doc/src/snippets/code/doc_src_wince-opengl.qdoc 0
+
+*/

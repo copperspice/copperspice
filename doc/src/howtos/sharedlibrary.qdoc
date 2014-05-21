@@ -1,0 +1,162 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page sharedlibrary.html
+    \title Creating Shared Libraries
+    \brief How to create shared libraries.
+    \ingroup best-practices
+
+    The following sections list certain things that should be taken into
+    account when creating shared libraries.
+
+    \section1 Using Symbols from Shared Libraries
+
+    Symbols - functions, variables or classes - contained in shared libraries
+    intended to be used by \e{clients}, such as applications or other
+    libraries, must be marked in a special way. These symbols are called
+    \e{public symbols} that are \e{exported} or made publicly visible.
+
+    The remaining symbols should not be visible from the outside. On most
+    platforms, compilers will hide them by default. On some platforms, a
+    special compiler option is required to hide these symbols.
+
+    When compiling a shared library, it must be marked for \e{export}. To use
+    the shared library from a client, some platforms may require a special
+    \e{import} declaration as well.
+
+    Depending on your target platform, Qt provides special macros that contain
+    the necessary definitions:
+    \list
+        \o  \c{Q_DECL_EXPORT} must be added to the declarations of symbols used
+            when compiling a shared library.
+        \o  \c{Q_DECL_IMPORT} must be added to the declarations of symbols used
+            when compiling a client that uses the shared library.
+    \endlist
+
+    Now, we need to ensure that the right macro is invoked -- whether we
+    compile a shared library itself, or just the client using the shared
+    library.
+    Typically, this can be solved by adding a special header.
+
+    Let us assume we want to create a shared library called \e{mysharedlib}.
+    A special header for this library, \c{mysharedlib_global.h}, looks like
+    this:
+
+    \code
+        #include <QtCore/QtGlobal>
+
+        #if defined(MYSHAREDLIB_LIBRARY)
+        #  define MYSHAREDLIB_EXPORT Q_DECL_EXPORT
+        #else
+        #  define MYSHAREDLIB_EXPORT Q_DECL_IMPORT
+        #endif
+    \endcode
+
+    In the \c{.pro} file of the shared library, we add:
+
+    \code
+        DEFINES += MYSHAREDLIB_LIBRARY
+    \endcode
+
+    In each header of the library, we specify the following:
+
+    \code
+        #include "mysharedlib_global.h"
+
+        MYSHAREDLIB_EXPORT void foo();
+        class MYSHAREDLIB_EXPORT MyClass...
+    \endcode
+    This ensures that the right macro is seen by both library and clients. We
+    also use this technique in Qt's sources.
+
+
+    \section1 Header File Considerations
+
+    Typically, clients will include only the public header files of shared
+    libraries. These libraries might be installed in a different location, when
+    deployed. Therefore, it is important to exclude other internal header files
+    that were used when building the shared library.
+
+    For example, the library might provide a class that wraps a hardware device
+    and contains a handle to that device, provided by some 3rd-party library:
+
+    \code
+        #include <footronics/device.h>
+
+        class MyDevice {
+        private:
+	    FOOTRONICS_DEVICE_HANDLE handle;
+        };
+    \endcode  
+
+    A similar situation arises with forms created by Qt Designer when using
+    aggregation or multiple inheritance:
+
+    \code
+        #include "ui_widget.h"
+
+        class MyWidget : public QWidget {
+        private:
+	    Ui::MyWidget m_ui;
+        };
+    \endcode  
+
+    When deploying the library, there should be no dependency to the internal
+    headers \c{footronics/device.h} or \c{ui_widget.h}.
+
+    This can be avoided by making use of the \e{Pointer to implementation}
+    idiom described in various C++ programming books. For classes with
+    \e{value semantics}, consider using QSharedDataPointer.
+
+
+    \section1  Binary compatibility
+
+    For clients loading a shared library, to work correctly, the memory
+    layout of the classes being used must match exactly the memory layout of
+    the library version that was used to compile the client. In other words,
+    the library found by the client at runtime must be \e{binary compatible}
+    with the version used at compile time.
+
+    This is usually not a problem if the client is a self-contained software
+    package that ships all the libraries it needs.
+
+    However, if the client application relies on a shared library that belongs
+    to a different installation package or to the operating system, then we
+    need to think of a versioning scheme for shared libraries and decide at
+    which level \e{Binary compatibility} is to be maintained. For example, Qt
+    libraries of the same \e{major version number} are guaranteed to be binary
+    compatible.
+
+    Maintaining \e{Binary compatibility} places some restrictions on the changes
+    you can make to the classes. A good explanation can be found at
+    \l{http://techbase.kde.org/Policies/Binary_Compatibility_Issues_With_C++}
+    {KDE - Policies/Binary Compatibility Issues With C++}. These issues should
+    be considered right from the start of library design.
+    We recommend that the principle of \e{Information hiding} and the
+    \e{Pointer to implementation} technique be used wherever possible.
+*/

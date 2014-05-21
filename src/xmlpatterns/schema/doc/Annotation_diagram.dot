@@ -1,0 +1,9 @@
+digraph Annotation {
+  mindist = 2.0
+  1 -> 2 [label="appinfo"]
+  1 -> 2 [label="documentation"]
+  2 -> 2 [label="appinfo"]
+  2 -> 2 [label="documentation"]
+  1 [shape=doublecircle, style=filled, color=blue]
+  2 [shape=doublecircle, style=filled, color=green]
+}

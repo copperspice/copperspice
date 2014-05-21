@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="http://www.w3.org/XML/1998/namespace">schemas/xml.xsd</file>
+</qresource>
+</RCC>

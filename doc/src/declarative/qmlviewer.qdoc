@@ -1,0 +1,237 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+
+\page qmlviewer.html
+\title QML Viewer
+\ingroup qttools
+
+The Declarative UI package includes \QQV, a tool for loading QML documents that
+makes it easy to quickly develop and debug QML applications. It invokes the QML
+runtime to load QML documents and also includes additional features useful for
+the development of QML-based applications.
+
+The QML Viewer is a tool for testing and developing QML applications. It is
+\e not intended for use in a production environment and should not be used for the
+deployment of QML applications. In those cases, the QML runtime should be invoked
+from a Qt application instead; see \l {Qt Declarative UI Runtime} for more
+information.
+
+The viewer is located at \c QTDIR/bin/qmlviewer. To load a \c .qml file
+with the viewer, run the viewer and select the file to be opened, or provide the
+file path on the command line:
+
+\code
+    qmlviewer myqmlfile.qml
+\endcode
+
+On Mac OS X, the QML Viewer application is named "QMLViewer" instead. You
+can launch the viewer by opening the QMLViewer application from the Finder, or
+from the command line:
+
+\code
+    QMLViewer.app/Contents/MacOS/QMLViewer myqmlfile.qml
+\endcode
+
+The QML Viewer has a number of configuration options involving features such as
+fullscreen display, module import path configurations, video recording of QML
+animations, and OpenGL support.
+
+To see the configuration options, run \c qmlviewer with the \c -help argument.
+
+
+\section1 Adding module import paths
+
+Additional module import paths can be provided using the \c -I flag.
+For example, the \l{declarative/cppextensions/plugins}{QML plugins example} creates
+a C++ plugin identified as \c com.nokia.TimeExample. Since this has a namespaced
+identifier, the viewer has to be run with the \c -I flag from the example's
+base directory:
+
+\code
+qmlviewer -I . plugins.qml
+\endcode
+
+This adds the current directory to the import path so that the viewer will
+find the plugin in the \c com/nokia/TimeExample directory.
+
+Note by default, the current directory is included in the import search path,
+but namespaced modules like \c com.nokia.TimeExample are not found unless
+the path is explicitly added.
+
+
+\section1 Loading translation files
+
+When the QML Viewer loads a QML file, it installs a translation file from a
+"i18n" subdirectory relative to that initial file. This directory should contain
+translation files named "qml_<language>.qm", where <language> is a two-letter
+ISO 639 language, such as "qml_fr.qm", optionally followed by an underscore and
+an uppercase two-letter ISO 3166 country code, such as "qml_fr_FR.qm" or
+"qml_fr_CA.qm".
+
+Such files can be created using \l {Qt Linguist}.
+
+The actual translation file that is loaded depends on the system locale.
+Additionally, the viewer will load any translation files specified on the command
+line via the \c -translation option.
+
+See the \l{declarative/i18n}{QML i18n example} for an example. Also, the
+\l{scripting.html#internationalization}{Qt Internationalization} documentation
+shows how JavaScript code in QML files can be made to use translatable strings.
+
+
+\section1 Loading placeholder data with QML Viewer
+
+Often, QML applications are prototyped with fake data that is later replaced
+by real data sources from C++ plugins. QML Viewer assists in this aspect by
+loading fake data into the application context: it looks for a directory named
+"dummydata" in the same directory as the target QML file, and any \c .qml
+files in that directory are loaded as QML objects and bound to the root context
+as properties named after the files.
+
+For example, this QML document refers to a \c lottoNumbers property which does
+not actually exist within the document:
+
+\qml
+import QtQuick 1.0
+
+ListView {
+    width: 200; height: 300
+    model: lottoNumbers
+    delegate: Text { text: number }
+}
+\endqml
+
+If within the document's directory, there is a "dummydata" directory which
+contains a \c lottoNumbers.qml file like this:
+
+\qml
+import QtQuick 1.0
+
+ListModel {
+    ListElement { number: 23 }
+    ListElement { number: 44 }
+    ListElement { number: 78 }
+}
+\endqml
+
+Then this model would be automatically loaded into the ListView in the previous document.
+
+Child properties are included when loaded from dummy data. The following document
+refers to a \c clock.time property:
+
+\qml
+import QtQuick 1.0
+Text { text: clock.time }
+\endqml
+
+The text value could be filled by a \c dummydata/clock.qml file with a \c time
+property in the root context:
+
+\qml
+import QtQuick 1.0
+QtObject { property int time: 54321 }
+\endqml
+
+To replace this with real data, you can simply bind the real data object to
+the root context in C++ using QDeclarativeContext::setContextProperty(). This
+is detailed in \l {Using QML Bindings in C++ Applications}.
+
+\section1 Using the \c runtime object
+
+QML applications that are loaded with the QML Viewer have access to a special
+\c runtime property on the root context. This property provides additional
+information about the application's runtime environment through the following properties:
+
+\table
+\row
+
+\o \c runtime.isActiveWindow
+
+\o This property indicates whether the QML Viewer window is the current active
+window on the system. It is useful for "pausing" an application, particularly
+animations, when the QML Viewer loses focus or moves to the background.
+
+For example, the following animation is only played when the QML Viewer is
+the active window:
+
+\qml
+Rectangle {
+    width: 200; height: 200
+
+    ColorAnimation on color {
+        running: runtime.isActiveWindow
+        loops: Animation.Infinite
+        from: "green"; to: "blue"; duration: 2000
+    }
+}
+\endqml
+
+\note Since Qt Quick 1.1 this information is accessible outside of the QML Viewer,
+through the \c active property of the \l {QML:Qt::application}{Qt.application} object.
+
+\row
+
+\o \c runtime.orientation
+
+\o This property indicates the current orientation of the QML Viewer. On the
+N900 platform and most S60 5.0-based or newer Symbian devices, this property
+automatically updates to reflect the device's actual orientation; on other platforms,
+this indicates the orientation currently selected in the QML Viewer's
+\e {Settings -> Properties} menu. The \c orientation value can be one of the following:
+
+\list
+\o \c Orientation.Portrait
+\o \c Orientation.Landscape
+\o \c Orientation.PortraitInverted (Portrait orientation, upside-down)
+\o \c Orientation.LandscapeInverted (Landscape orientation, upside-down)
+\endlist
+
+When the viewer's orientation changes, the appearance of the loaded QML document
+does not change unless it has been set to respond to changes in
+\c runtime.orientation. For example, the following Rectangle changes its
+aspect ratio depending on the orientation of the QML Viewer:
+
+\qml
+Rectangle {
+    id: window
+    width: 640; height: 480
+
+    states: State {
+        name: "landscape"
+        PropertyChanges { target: window; width: 480; height: 640 }
+    }
+    state: (runtime.orientation == Orientation.Landscape
+            || runtime.orientation == Orientation.LandscapeInverted) ? 'landscape' : ''
+}
+\endqml
+
+\endtable
+
+*/
+

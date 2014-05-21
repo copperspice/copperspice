@@ -1,0 +1,148 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page qt4-accessibility.html
+    \title Cross-Platform Accessibility Support in Qt 4
+
+    \contentspage {What's New in Qt 4}{Home}
+    \previouspage The New Qt Designer
+    \nextpage The Qt 4 Database GUI Layer
+
+    Qt 4 allows developers to write cross-platform applications that
+    are usable by visually impaired users as well as by users with
+    other disabilities. Qt accessibility will make applications
+    accessible to more users and opens the governmental market, where
+    accessibility is often a requirement.
+
+    \section1 General Overview
+
+    The accessibility classes have been extended in
+    various ways since Qt 3. We added new functions and new enum
+    values, and revised the API to make it more consistent with the
+    rest of Qt. We also added two properties to QWidget,
+    \l{QWidget::accessibleName}{accessibleName} and
+    \l{QWidget::accessibleDescription}{accessibleDescription}, that
+    can be set in \e{Qt Designer} to provide basic help texts without
+    having to write any code.
+
+    Qt's accessibility architecture is as follows. Qt offers one
+    generic interface, QAccessibleInterface, that can be used to
+    wrap all widgets and objects (e.g., QPushButton). This single
+    interface provides all the metadata necessary for the assistive
+    technologies. Qt provides implementations of this interface for
+    its built-in widgets as plugins.
+
+    A more detailed overview of the accessibility support in Qt can
+    be found on the \l Accessibility page.
+
+    \section1 Enabling Accessibility Support
+
+    By default, Qt applications are run with accessibility support
+    enabled on Windows and Mac OS X. On Unix/X11 platforms, applications
+    must be launched in an environment with the \c QT_ACCESSIBILITY
+    variable set to 1. For example, this is set in the following way with
+    the bash shell:
+
+    \snippet doc/src/snippets/code/doc_src_qt4-accessibility.cpp environment
+
+    Accessibility features are built into Qt by default when the libraries
+    are configured and built.
+
+    \section1 Creating New Accessible Interfaces
+
+    When you develop custom widgets, you can create custom subclasses
+    of QAccessibleInterface and distribute them as plugins (using
+    QAccessiblePlugin) or compile them into the application.
+    Likewise, Qt's predefined accessibility support can be built as
+    plugin (the default) or directly into the Qt library. The main
+    advantage of using plugins is that the accessibility classes are
+    only loaded into memory if they are actually used; they don't
+    slow down the common case where no assistive technology is being
+    used.
+
+    In addition to QAccessibleInterface, Qt includes two convenience
+    classes, QAccessibleObject and QAccessibleWidget, that
+    provide the lowest common denominator of metadata (e.g., widget
+    geometry, window title, basic help text). You can use them as
+    base classes when wrapping your custom QObject or QWidget
+    subclasses.
+
+    Another new feature in Qt 4 is that Qt can now support other
+    backends in addition to the predefined ones. This is done by
+    subclassing QAccessibleBridge.
+
+    \omit
+    \section1 Software Layering
+
+        Qt Application
+            | links to
+        Qt Accessibility Module
+            | Plugin (in-process)
+        Qt ATK Bridge
+            | links to
+        ATK
+            | Plugin (in-process)
+        at-spi
+            | CORBA
+        assistive technologies
+
+    Windows:
+
+        Qt Application
+            | links to
+        Qt Accessibility Module
+            | COM (?)
+        MSAA
+            | ?
+        assistive technologies
+
+    Mac:
+
+        ?
+    \endomit
+
+    \section1 Example Code
+
+    The first example illustrates how to provide accessibility
+    information for a custom widget. We can use QAccessibleWidget as
+    a base class and reimplement various functions:
+
+    \snippet doc/src/snippets/code/doc_src_qt4-accessibility.cpp 0
+
+    Here's how we would implement the
+    \l{QAccessibleInterface::doAction()}{doAction()} function to call
+    a function named click() on the wrapped MyWidget object when the
+    user invokes the object's default action or "presses" it.
+
+    \snippet doc/src/snippets/code/doc_src_qt4-accessibility.cpp 1
+
+    To export the widget interface as a plugin, we must subclass
+    QAccessibleFactory:
+
+    \snippet doc/src/snippets/code/doc_src_qt4-accessibility.cpp 2
+*/

@@ -1,0 +1,86 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qdeclarativedebugging.html
+\title Debugging QML
+
+\section1 Logging
+
+\c console.log can be used to print debugging information to the console. For example:
+
+\qml
+Rectangle {
+    width: 200; height: 200
+    MouseArea {
+        anchors.fill: parent
+        onClicked: console.log("clicked")
+    }
+}
+\endqml
+
+\section1 Debugging Transitions
+
+When a transition doesn't look quite right, it can be helpful to view it in slow
+motion to see what is happening more clearly. This functionality is supported
+in the \l {QML Viewer} tool: to enable this,
+click on the "Debugging" menu, then "Slow Down Animations".
+
+
+\section1 Debugging module imports
+
+The \c QML_IMPORT_TRACE environment variable can be set to enable debug output
+from QML's import loading mechanisms. 
+
+For example, for a simple QML file like this:
+
+\qml
+import QtQuick 1.0
+
+Rectangle { width: 100; height: 100 }
+\endqml
+
+If you set \c {QML_IMPORT_TRACE=1} before running the \l {QML Viewer}
+(or your QML C++ application), you will see output similar to this:
+
+\code
+QDeclarativeImportDatabase::addImportPath "/qt-sdk/imports" 
+QDeclarativeImportDatabase::addImportPath "/qt-sdk/bin/QMLViewer.app/Contents/MacOS" 
+QDeclarativeImportDatabase::addToImport 0x106237370 "." -1.-1 File as ""
+QDeclarativeImportDatabase::addToImport 0x106237370 "Qt" 4.7 Library as ""
+QDeclarativeImportDatabase::resolveType "Rectangle" = "QDeclarativeRectangle"
+\endcode
+
+
+\section1 Debugging with Qt Creator
+
+\l{http://qt.nokia.com/products/developer-tools}{Qt Creator} provides built-in
+support for QML debugging. QML projects and standalone C++ applications that
+utilize QML can be debugged on desktops as well as on remote devices.
+For more information, see the Qt Creator Manual.
+
+*/

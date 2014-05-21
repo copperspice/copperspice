@@ -1,0 +1,70 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \group qttools
+    \title Qt's Tools
+
+    Qt is supplied with several command line and graphical tools to
+    ease and speed the development process. Each tool is listed here
+    with a link to its documentation.
+
+    \table
+    \header \o Tool \o Description
+    \row \o \l{Qt Designer Manual}{Qt Designer}
+         \o Create forms visually.
+    \row \o \l{Qt Assistant Manual}{Qt Assistant}
+         \o Quickly find the help you need.
+    \row \o \l{Qt Linguist Manual}{Qt Linguist, lupdate, lrelease, lconvert}
+         \o Translate applications to reach international markets.
+    \row \o \l{qmake Manual}{qmake}
+         \o Create makefiles from simple platform-independent project files (\c .pro files).
+    \row \o \l{The Virtual Framebuffer}{qvfb}
+         \o Run and test embedded applications on the desktop.
+    \row \o \l{makeqpf}
+         \o Create pre-rendered fonts for embedded devices.
+    \row \o \l{moc}{Meta-Object Compiler (moc)}
+         \o Generate meta-object information for QObject subclasses.
+    \row \o \l{User Interface Compiler (uic)}
+         \o Generate C++ code from user interface files.
+    \row \o \l{Resource Compiler (rcc)}
+         \o Embed resources into Qt applications during the build process.
+    \row \o \l{Configuring Qt}{Configuring Qt (qtconfig)}
+         \o X11-based Qt configuration tool with online help.
+    \row \o \l{Fine-Tuning Features in Qt}{Configuring Qt Embedded (qconfig)}
+         \o Qt Embedded (Linux and Windows CE) configuration tool.
+    \row \o \l{Examples and Demos Launcher}
+         \o A launcher for Qt's Examples and Demonstration programs.
+    \row \o \l{qt3to4 - The Qt 3 to 4 Porting Tool}
+         \o A tool to assist in porting applications from Qt 3 to Qt 4.
+    \row \o \l{QtDBus XML compiler (qdbusxml2cpp)}
+         \o A tool to convert D-Bus interface descriptions to C++ source code.
+    \row \o \l{D-Bus Viewer}
+         \o A tool to introspect D-Bus objects and messages.
+    \endtable
+
+*/

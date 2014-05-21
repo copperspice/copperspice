@@ -1,0 +1,10 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+
+<qresource prefix="/">
+    <file>main.qml</file>
+    <file>images/background.png</file>
+</qresource>
+
+</RCC>
+

@@ -1,0 +1,188 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\title What's New in Qt Quick
+\page qtquick-whatsnew.html
+
+\section1 Qt 4.7.4 includes QtQuick 1.1
+
+QtQuick 1.1 is a minor feature update.  \e {import QtQuick 1.1} to use the new
+features.
+
+\section2 PinchArea
+
+PinchArea provides support for the common two finger pinch gesture.
+
+\section2 LayoutMirroring attached property
+
+\l {LayoutMirroring}{Layout mirroring} is useful when you need to support both
+left-to-right and right-to-left layout versions of your application that target
+different language areas.
+
+\section2 Text
+
+Added the following properties:
+\list
+\o \l {Text::}{lineHeight}
+\o \l {Text::}{lineHeightMode}
+\o \l {Text::}{lineCount}
+\o \l {Text::}{maximumLineCount}
+\o \l {Text::}{truncated}
+\endlist
+
+horizontalAlignment now accepts Text.AlignJustify alignment mode.
+
+\section2 TextEdit
+
+Added the following properties, methods and signal handlers:
+\list
+\o \l {TextEdit::}{canPaste}
+\o \l {TextEdit::}{lineCount}
+\o \l {TextEdit::}{inputMethodComposing}
+\o \l {TextEdit::}{mouseSelectionMode}
+\o \l {TextEdit::}{deselect()}
+\o \l {TextEdit::}{isRightToLeft()}
+\o \l {TextEdit::}{moveCursorSelection()} to enable selection by word
+\o \l {TextEdit::}{onLinkActivated}
+\endlist
+
+\section2 TextInput
+
+Added the following properties and methods:
+\list
+\o \l {TextInput::}{canPaste}
+\o \l {TextInput::}{inputMethodComposing}
+\o \l {TextInput::}{mouseSelectionMode}
+\o \l {TextInput::}{deselect()}
+\o \l {TextInput::}{isRightToLeft()}
+\o \l {TextInput::}{moveCursorSelection()} to enable selection by word
+\endlist
+
+\section2 Image, BorderImage and AnimatedImage
+
+Added the following properties:
+\list
+\o \l{Image::}{cache}
+\o \l{Image::}{mirror}
+\endlist
+
+\section2 Item
+
+Added the following properties:
+\list
+\o \l{Item::}{implicitWidth} and \l{Item::}{implicitHeight}
+\endlist
+
+\section2 Flickable
+
+Added the following methods:
+\list
+\o \l{Flickable::}{resizeContent()}
+\o \l{Flickable::}{returnToBounds()}
+\endlist
+
+\section2 MouseArea
+
+Added the following property:
+\list
+\o \l{MouseArea::}{preventStealing}
+\endlist
+
+\section2 ListView and GridView
+
+Added the following properties and methods:
+\list
+\o \l{ListView::}{layoutDirection}
+\o \l{ListView::}{positionViewAtBeginning()}
+\o \l{ListView::}{positionViewAtEnd()}
+\endlist
+
+\section2 Flow, Grid and Row
+
+Added the following property:
+\list
+\o \l{Flow::}{layoutDirection}
+\endlist
+
+\section2 Repeater
+
+Added the following methods and signal handlers:
+\list
+\o \l{Repeater::}{onItemAdded}
+\o \l{Repeater::}{onItemRemoved}
+\o \l{Repeater::}{itemAt()}
+\endlist
+
+\section2 Component
+
+\list
+\o The \l{Component::}{createObject()} method now accepts a map of initial
+property values for the created object.
+\endlist
+
+\section2 Qt
+
+\list
+\o Added the \l {QML:Qt::application}{Qt.application} object to hold generic
+global application properties.
+\endlist
+
+\section2 Other changes
+
+\list
+\o Functions can be \l{Property Binding#Property Binding}{assigned to properties from JavaScript}
+to create property bindings.
+\o QtQuick now supports Right to Left layout in positioners, views, anchors and text elements.
+\endlist
+
+
+\section1 Qt 4.7.1
+
+\section2 QtQuick namespace
+
+In prior Qt releases, all the Qt Quick elements were available in the \e Qt
+namespace. Starting with Qt 4.7.1, the elements are also available in the
+\e QtQuick namespace, which improves naming consistency, and allows the
+development of Qt Quick to occur at a faster rate than Qt's usual minor release
+schedule.
+
+The change for developers is very simple - where you previously wrote
+\e {import Qt 4.7}, just replace it with \e {import QtQuick 1.0}, like this:
+
+\code
+import QtQuick 1.0 
+
+Text {
+    text: "Welcome to QtQuick 1.0!"
+}
+\endcode
+
+\e {import Qt 4.7} continues to work so existing applications won't break even
+if they aren't updated, but it is recommended that all import statements be
+modified to the new form.
+*/

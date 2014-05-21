@@ -1,0 +1,100 @@
+<!-- 
+ ! 
+ ! Some notes to the DTD:
+ !
+ ! The location element is set as optional since it was introduced first in Qt 4.2.
+ ! The userdata element is set as optional since it was introduced first in Qt 4.4.
+ !
+  -->
+<!-- 
+ ! Macro used in order to escape byte entities not allowed in an xml document
+ ! for instance, only #x9, #xA and #xD are allowed characters below #x20.
+ -->
+<!ENTITY % evilstring '(#PCDATA | byte)*' >
+<!ELEMENT byte EMPTY>
+<!-- value contains decimal (e.g. 1000) or hex (e.g. x3e8) unicode encoding of one char -->
+<!ATTLIST byte
+          value CDATA #REQUIRED>
+<!--
+ ! This element wildcard is no valid DTD. No better solution available.
+ ! extra elements may appear in TS and message elements. Each element may appear
+ ! only once within each scope. The contents are preserved verbatim; any
+ ! attributes are dropped. Currently recognized extra tags include:
+ !   extra-po-msgid_plural, extra-po-old_msgid_plural
+ !   extra-po-flags (comma-space separated list)
+ !   extra-loc-layout_id
+ !   extra-loc-feature
+ !   extra-loc-blank
+  -->
+<!ELEMENT extra-* %evilstring; >
+<!ELEMENT TS (defaultcodec?, extra-**, (context|message)+) > 
+<!ATTLIST TS
+          version CDATA #IMPLIED
+          sourcelanguage CDATA #IMPLIED
+          language CDATA #IMPLIED>
+<!-- The encoding to use in the QM file by default. Default is ISO-8859-1. -->
+<!ELEMENT defaultcodec (#PCDATA) >
+<!ELEMENT context (name, comment?, (context|message)+) >
+<!ATTLIST context
+          encoding CDATA #IMPLIED>
+<!ELEMENT name %evilstring; >
+<!-- This is "disambiguation" in the (new) API, or "msgctxt" in gettext speak -->
+<!ELEMENT comment %evilstring; >
+<!-- Previous content of comment (result of merge) -->
+<!ELEMENT oldcomment %evilstring; >
+<!-- The real comment (added by developer/designer) -->
+<!ELEMENT extracomment %evilstring; >
+<!-- Comment added by translator -->
+<!ELEMENT translatorcomment %evilstring; >
+<!ELEMENT message (location*, source?, oldsource?, comment?, oldcomment?, extracomment?, translatorcomment?, translation?, userdata?, extra-**) >
+<!--
+ ! If utf8 is "true", the defaultcodec is overridden and the message is encoded
+ ! in UTF-8 in the QM file. If it is "both", both source encodings are stored
+ ! in the QM file.
+  -->
+<!ATTLIST message
+          id CDATA #IMPLIED
+          utf8 (true|false|both) "false"
+          numerus (yes|no) "no">
+<!ELEMENT location EMPTY>
+<!--
+ ! If the line is omitted, the location specifies only a file.
+ !
+ ! location supports relative specifications as well. Line numbers are
+ ! relative (explicitly positive or negative) to the last reference to a
+ ! given filename; each file starts with current line 0. If the filename
+ ! is omitted, the "current" one is used. For the 1st location in a message,
+ ! "current" is the filename used for the 1st location of the previous message.
+ ! For subsequent locations, it is the filename used for the previous location.
+ ! A single TS file has either all absolute or all relative locations.
+  -->
+<!ATTLIST location 
+          filename CDATA #IMPLIED
+          line CDATA #IMPLIED>
+<!ELEMENT source %evilstring;>
+<!-- Previous content of source (result of merge) -->
+<!ELEMENT oldsource %evilstring;>
+<!--
+ ! The following should really say one evilstring macro or several
+ ! numerusform or lengthvariant elements, but the DTD can't express this.
+  -->
+<!ELEMENT translation (#PCDATA|byte|numerusform|lengthvariant)* >
+<!--
+ ! If no type is set, the message is "finished".
+ ! Length variants must be ordered by falling display length.
+ ! variants may not be yes if the message has numerus yes.
+  -->
+<!ATTLIST translation
+          type (unfinished|obsolete) #IMPLIED
+          variants (yes|no) "no">
+<!-- Deprecated. Use extra-* -->
+<!ELEMENT userdata (#PCDATA)* >
+<!--
+ ! The following should really say one evilstring macro or several
+ ! lengthvariant elements, but the DTD can't express this.
+ ! Length variants must be ordered by falling display length.
+  -->
+<!ELEMENT numerusform (#PCDATA|byte|lengthvariant)* >
+<!ATTLIST numerusform
+          variants (yes|no) "no">
+<!ELEMENT lengthvariant %evilstring; >

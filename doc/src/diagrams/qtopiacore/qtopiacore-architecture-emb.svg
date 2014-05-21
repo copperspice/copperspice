@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="285.482"
+   height="140.482"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.42"
+   sodipodi:docname="architecture-emb.svg"
+   sodipodi:docbase="/home/dboddie/dev/whitepapers/qtopia-core/diagrams">
+  <metadata
+     id="metadata88">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     inkscape:window-height="574"
+     inkscape:window-width="924"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     showgrid="true"
+     inkscape:grid-points="true"
+     inkscape:zoom="2.1612571"
+     inkscape:cx="142.74100"
+     inkscape:cy="70.240997"
+     inkscape:window-x="61"
+     inkscape:window-y="164"
+     inkscape:current-layer="svg2" />
+  <defs
+     id="defs4">
+    <marker
+       id="ArrowEnd"
+       viewBox="0 0 10 10"
+       refX="0"
+       refY="5"
+       markerUnits="strokeWidth"
+       markerWidth="4"
+       markerHeight="3"
+       orient="auto">
+      <path
+         d="M 0 0 L 10 5 L 0 10 z"
+         id="path7" />
+    </marker>
+    <marker
+       id="ArrowStart"
+       viewBox="0 0 10 10"
+       refX="10"
+       refY="5"
+       markerUnits="strokeWidth"
+       markerWidth="4"
+       markerHeight="3"
+       orient="auto">
+      <path
+         d="M 10 0 L 0 5 L 10 10 z"
+         id="path10" />
+    </marker>
+  </defs>
+  <g
+     id="g12">
+    <defs
+       id="defs14">
+      <linearGradient
+         id="1"
+         x1="142.741"
+         y1="140.482"
+         x2="142.741"
+         y2="100"
+         gradientUnits="userSpaceOnUse">
+        <stop
+           offset="0"
+           style="stop-color:#000000"
+           id="stop17" />
+        <stop
+           offset="1"
+           style="stop-color:#5c5c5c"
+           id="stop19" />
+      </linearGradient>
+    </defs>
+    <path
+       style="stroke:#000000; stroke-width:1; fill-rule:evenodd; fill:url(#1)"
+       d="M 5.24084 105.241L 280.241 105.241L 280.241 135.241L 5.24084 135.241L 5.24084 105.241z"
+       id="path21" />
+    <path
+       style="stroke:#000000; stroke-width:1; fill-rule:evenodd; fill:#ffffff"
+       d="M 5.24084 25.2408L 280.241 25.2408L 280.241 5.24084L 5.24084 5.24084L 5.24084 25.2408z"
+       id="path23" />
+    <path
+       style="stroke:none; fill-rule:evenodd; fill:#cccccc"
+       d="M 280.141 9.44084L 280.741 9.44084L 280.741 8.84085L 280.141 8.84085L 280.141 9.44084z"
+       id="path25" />
+    <path
+       style="stroke:none; fill-rule:evenodd; fill:#cccccc"
+       d="M 280.141 28.6408L 280.741 28.6408L 280.741 28.0408L 280.141 28.0408L 280.141 28.6408z"
+       id="path27" />
+    <path
+       style="stroke:#000000; stroke-width:1; fill-rule:evenodd; fill:#cccccc"
+       d="M 5.24084 45.2408L 280.241 45.2408L 280.241 25.2408L 5.24084 25.2408L 5.24084 45.2408z"
+       id="path29" />
+    <path
+       style="stroke:none; fill-rule:evenodd; fill:#cccccc"
+       d="M 280.141 47.8408L 280.741 47.8408L 280.741 47.2408L 280.141 47.2408L 280.141 47.8408z"
+       id="path31" />
+    <path
+       style="stroke:#000000; stroke-width:1; fill-rule:evenodd; fill:#a6ce39"
+       d="M 145.241 65.2408L 280.241 65.2408L 280.241 45.2408L 145.241 45.2408L 145.241 65.2408z"
+       id="path33" />
+    <path
+       style="stroke:none; fill-rule:evenodd; fill:#cccccc"
+       d="M 141.991 66.4407L 142.591 66.4407L 142.591 47.2408L 141.991 47.2408L 141.991 66.4407z"
+       id="path35" />
+    <path
+       style="stroke:#000000; stroke-width:1; fill-rule:evenodd; fill:#7f7f7f"
+       d="M 145.241 85.2408L 280.241 85.2408L 280.241 65.2408L 145.241 65.2408L 145.241 85.2408z"
+       id="path37" />
+    <path
+       style="stroke:none; fill-rule:evenodd; fill:#cccccc"
+       d="M 141.991 85.6406L 142.591 85.6406L 142.591 66.4407L 141.991 66.4407L 141.991 85.6406z"
+       id="path39" />
+    <path
+       style="stroke:#000000; stroke-width:1; fill-rule:evenodd; fill:#a6ce39"
+       d="M 5.24084 105.241L 145.241 105.241L 145.241 45.2408L 5.24084 45.2408L 5.24084 105.241z"
+       id="path41" />
+    <text
+       style="stroke:none; fill-rule:evenodd; fill:#ffffff; font-family:FreeSans; font-size:12.0"
+       transform="matrix(1 0 0 1 42.8948 78.8568)"
+       id="text43">
+Qtopia Core
+</text>
+    <path
+       style="stroke:#000000; stroke-width:1; fill-rule:evenodd; fill:#7f7f7f"
+       d="M 145.241 105.241L 280.241 105.241L 280.241 85.2408L 145.241 85.2408L 145.241 105.241z"
+       id="path45" />
+    <text
+       style="stroke:none; fill-rule:evenodd; fill:#000000; font-family:FreeSans; font-size:12.0"
+       transform="matrix(1 0 0 1 76.7108 18.8568)"
+       id="text47">
+Application Source Code
+</text>
+    <text
+       style="stroke:none; fill-rule:evenodd; fill:#000000; font-family:FreeSans; font-size:12.0"
+       transform="matrix(1 0 0 1 125.065 38.8568)"
+       id="text49">
+Qt API
+</text>
+    <text
+       style="stroke:none; fill-rule:evenodd; fill:#ffffff; font-family:FreeSans; font-size:12.0"
+       transform="matrix(1 0 0 1 194.063 60.2408)"
+       id="text51">
+Qt/X11
+</text>
+    <text
+       style="stroke:none; fill-rule:evenodd; fill:#ffffff; font-family:FreeSans; font-size:12.0"
+       transform="matrix(1 0 0 1 202.739 80.2408)"
+       id="text53">
+Xlib
+</text>
+    <text
+       style="stroke:none; fill-rule:evenodd; fill:#ffffff; font-family:FreeSans; font-size:12.0"
+       transform="matrix(1 0 0 1 166.397 98.8568)"
+       id="text55">
+X Window Server
+</text>
+    <defs
+       id="defs57">
+      <linearGradient
+         id="2"
+         x1="147.741"
+         y1="130.241"
+         x2="147.741"
+         y2="110.241"
+         gradientUnits="userSpaceOnUse">
+        <stop
+           offset="0"
+           style="stop-color:#3f3f3f"
+           id="stop60" />
+        <stop
+           offset="1"
+           style="stop-color:#5c5c5c"
+           id="stop62" />
+      </linearGradient>
+    </defs>
+    <path
+       style="stroke:none; fill-rule:evenodd; fill:url(#2)"
+       d="M 100.241 130.241L 110.241 110.241L 195.241 110.241L 185.241 130.241L 100.241 130.241z"
+       id="path64" />
+    <path
+       style="stroke:none; fill-rule:evenodd; fill:#c82121"
+       d="M 185.241 130.241L 195.241 110.241L 275.241 110.241L 275.241 130.241L 185.241 130.241z"
+       id="path66" />
+    <text
+       style="stroke:none; fill-rule:evenodd; fill:#ffffff; font-family:FreeSans; font-size:12.0"
+       transform="matrix(1 0 0 1 115.241 123.857)"
+       id="text68">
+Framebuffer
+</text>
+    <defs
+       id="defs70">
+      <linearGradient
+         id="3"
+         x1="57.7408"
+         y1="130.241"
+         x2="57.7408"
+         y2="110.241"
+         gradientUnits="userSpaceOnUse">
+        <stop
+           offset="0"
+           style="stop-color:#3f3f3f"
+           id="stop73" />
+        <stop
+           offset="1"
+           style="stop-color:#5c5c5c"
+           id="stop75" />
+      </linearGradient>
+    </defs>
+    <path
+       style="stroke:none; fill-rule:evenodd; fill:url(#3)"
+       d="M 10.2408 130.241L 10.2408 110.241L 105.241 110.241L 94.6852 130.241L 10.2408 130.241z"
+       id="path77" />
+    <text
+       style="stroke:none; fill-rule:evenodd; fill:#ffffff; font-family:FreeSans; font-size:12.0"
+       transform="matrix(1 0 0 1 20.2408 123.857)"
+       id="text79">
+Linux Kernel
+</text>
+    <g
+       id="g81">
+      <text
+         style="stroke:none; fill-rule:evenodd; fill:#ffffff; font-family:FreeSans; font-size:8"
+         transform="matrix(1 0 0 1 213.001 118.485)"
+         id="text83">
+Accelerated
+</text>
+      <text
+         style="stroke:none; fill-rule:evenodd; fill:#ffffff; font-family:FreeSans; font-size:8"
+         transform="matrix(1 0 0 1 218.117 127.641)"
+         id="text85">
+Graphics
+</text>
+    </g>
+  </g>
+</svg>

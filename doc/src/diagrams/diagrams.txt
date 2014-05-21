@@ -1,0 +1,16 @@
+Use makeimage.py (//depot/devtools/main/doctools/bin/makeimage.py) to generate
+images from these diagrams.
+
+Diagram                 Scale factor
+
+treemodel-structure.sk  0.28
+modelview-listmodel.sk  0.28
+modelview-models.sk     0.28
+modelview-overview.sk   0.28
+modelview-tablemodel.sk 0.28
+modelview-treemodel.sk  0.28
+plaintext-layout.png    0.8
+standard-views.sk       0.22
+boat.png                0.2
+car.png                 0.2
+house.png               0.2

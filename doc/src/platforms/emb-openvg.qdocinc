@@ -1,0 +1,313 @@
+\section1 Introduction
+
+\l {http://www.khronos.org/openvg}{OpenVG} is a standard API from the
+\l{http://www.khronos.org/openvg}{Khronos Group} for accelerated 2D vector
+graphics and raster graphics. It is a dedicated API for 2D graphics on
+mobile devices. It is therefore more likely to be a better alternative for
+2D acceleration than OpenGL/ES. 
+
+\tableofcontents
+
+\section1 Using OpenVG with Qt
+The QtOpenVG plugin provides support for OpenVG painting. OpenVG is
+optimized for 2D vector operations, and closely matches the functionality
+in QPainter. To translate QPainter operations into OpenVG calls, Qt uses a
+subclass of QPaintEngine. Unlike with OpenGL ES, OpenVG can be used for
+acceleration of regular widgets. It can therefore be an excellent substitute
+for the default raster-based QPaintEngine on hardware that supports the
+OpenVG API.
+
+\section2 Configure
+OpenVG support can be enabled by passing the \c{-openvg} option to
+configure.  It is assumed that the following qmake variables are set to
+appropriate values in the qmake.conf file for your platform:
+
+    \list
+    \o QMAKE_INCDIR_OPENVG
+    \o QMAKE_LIBDIR_OPENVG
+    \o QMAKE_LIBS_OPENVG
+    \endlist
+
+Most OpenVG implementations are based on EGL, so the following variables
+may also need to be set:
+
+    \list
+    \o QMAKE_INCDIR_EGL
+    \o QMAKE_LIBDIR_EGL
+    \o QMAKE_LIBS_EGL
+    \endlist
+
+See \l{qmake Variable Reference} for more information on these variables.
+
+\section2 Supported OpenVG Engines
+
+Two kinds of OpenVG engines are currently supported: EGL based, and engines
+built on top of OpenGL such as
+\l{http://sourceforge.net/projects/shivavg}{ShivaVG}. EGL based engines are
+preferred.
+
+It is assumed that the EGL implementation has some way to turn a
+QWidget::winId() into an EGL rendering surface with
+\c{eglCreateWindowSurface()}.  If this is not the case, then modifications
+may be needed to the code under \c{src/gui/egl} and
+\c{src/plugins/graphicssystems/openvg} to accomodate the EGL
+implementation.
+
+The ShivaVG graphics system under \c{src/plugins/graphicssystems/shivavg}
+is an example of how to integrate a non-EGL implementation of OpenVG into
+Qt. It is currently only supported with Qt/X11 and being an example only,
+the resulting screen output may not be as good as with other OpenVG
+engines.
+
+\section1 Using the OpenVG graphics system
+
+Once the graphics system plugin has been built and installed, applications
+can be run as follows to use the plugin:
+
+    \code
+    app -graphicssystem OpenVG
+    \endcode
+
+If ShivaVG is being used, then substitute \c ShivaVG instead of \c OpenVG
+in the line above.
+
+If the plugin fails to load, try setting the \c QT_DEBUG_PLUGINS
+environment variable to 1 and try again.  Usually the plugin cannot be
+loaded because Qt cannot locate it in the directory
+\c{plugins/graphicssystems} within the Qt installation, or the dynamic
+library path does not include the directory containing the system's \c
+libOpenVG.so library.
+
+\section2 Supported features
+
+\table
+    \header
+        \o Feature
+        \o Description
+
+    \row
+        \o Context modes
+        \o The default configuration is "single-context" mode, where a single
+EGLContext object is used for all drawing, regardless of the surface.
+Multiple EGLSurfaces are created, one for each window surface or pixmap.
+eglMakeCurrent() is called with the same EGLContext every time, but a
+different EGLSurface.
+
+Single-context mode is necessary for QPixmapData to be implemented in terms
+of a VGImage. If single-context mode is not enabled, then QPixmapData will
+use the fallback QRasterPixmapData implementation, which is less efficient
+performance-wise.
+
+Single-context mode can be disabled with the QVG_NO_SINGLE_CONTEXT
+define if the OpenVG engine does not support one context with multiple
+surfaces.
+
+    \row
+        \o Transformation matrices
+        \o All affine and projective transformation matrices are supported.
+
+QVGPaintEngine will use the engine to accelerate affine transformation
+matrices only. When a projective transformation matrix is used,
+QVGPaintEngine will transform the coordinates before passing them to the
+engine. This will probably incur a performance penalty.
+
+Pixmaps and images are always transformed by the engine, because OpenVG
+specifies that projective transformations must work for images.
+
+It is recommended that client applications should avoid using projective
+transformations for non-image elements in performance critical code.
+
+    \row
+        \o Composition modes
+        \o The following composition modes are supported:
+
+\list
+\o QPainter::CompositionMode_SourceOver
+\o QPainter::CompositionMode_DestinationOver
+\o QPainter::CompositionMode_Source
+\o QPainter::CompositionMode_SourceIn
+\o QPainter::CompositionMode_DestinationIn
+\o QPainter::CompositionMode_Plus
+\o QPainter::CompositionMode_Multiply
+\o QPainter::CompositionMode_Screen
+\o QPainter::CompositionMode_Darken
+\o QPainter::CompositionMode_Lighten
+\endlist
+
+The other members of QPainter::CompositionMode are not supported
+unless the \c{VG_KHR_advanced_blending} extension is present,
+in which case the following additional modes are supported:
+
+\list
+\o QPainter::CompositionMode_Overlay
+\o QPainter::CompositionMode_ColorDodge
+\o QPainter::CompositionMode_ColorBurn
+\o QPainter::CompositionMode_HardLight
+\o QPainter::CompositionMode_SoftLight
+\o QPainter::CompositionMode_Difference
+\o QPainter::CompositionMode_Exclusion
+\o QPainter::CompositionMode_SourceOut
+\o QPainter::CompositionMode_DestinationOut
+\o QPainter::CompositionMode_SourceAtop
+\o QPainter::CompositionMode_DestinationAtop
+\o QPainter::CompositionMode_Xor
+\endlist
+
+Any attempt to set an unsupported mode will result in
+the actual mode being set to QPainter::CompositionMode_SourceOver.
+Client applications should avoid using unsupported modes.
+
+    \row
+        \o Pens and brushes
+        \o All pen styles are supported, including cosmetic pens.
+
+All brush styles are supported except for conical gradients, which are not
+supported by OpenVG 1.1.  Conical gradients will be converted into a solid
+color brush corresponding to the first color in the gradient's color ramp.
+
+Affine matrices are supported for brush transforms, but not projective
+matrices.
+
+
+    \row
+        \o Rectangles, lines, and points
+        \o Rectangles, lines, and rounded rectangles use cached VGPath
+objects to try to accelerate drawing operations.  vgModifyPathCoords() is
+used to modify the co-ordinates in the cached VGPath object each time
+fillRect(), drawRects(), drawLines(), or drawRoundedRect() is called.
+
+If the engine does not implement vgModifyPathCoords() properly, then the
+QVG_NO_MODIFY_PATH define can be set to disable path caching.  This will
+incur a performance penalty.
+
+Points are implemented as lines from the point to itself.  The cached line
+drawing VGPath object is used when drawing points.
+
+    \row
+        \o Polygons and Ellipses
+        \o Polygon and ellipse drawing creates a new VGPath object every
+time drawPolygon() or drawEllipse() is called.  If the client application
+is making heavy use of these functions, the constant creation and
+destruction of VGPath objects could have an impact on performance.
+
+If a projective transformation is active, ellipses are converted into cubic
+curves prior to transformation, which may further impact performance.
+
+Client applications should avoid polygon and ellipse drawing in performance
+critical code if possible.
+
+    \row
+        \o Other Objects
+        \o Most other objects (arcs, pies, etc) use drawPath(), which takes
+a QPainterPath argument.  The default implementation in QPainterEngineEx
+converts the QPainterPath into a QVectorPath and then calls draw(), which
+in turn converts the QVectorPath into a VGPath for drawing.
+ 
+To reduce the overhead, we have overridden drawPath() in QVGPaintEngine to
+convert QPainterPath's directly into VGPath's.  This should help improve
+performance compared to the default implementation.
+
+Client applications should try to avoid these types of objects in
+performance critical code because of the QPainterPath to VGPath conversion
+cost.
+
+    \row
+        \o Clipping
+        \o Clipping with QRect, QRectF, and QRegion objects is supported on
+all OpenVG engines with vgMask() if the transformation matrix is the
+identity or a simple origin translation.
+ 
+Clipping with an arbitrary QPainterPath, or setting the clip region when
+the transformation matrix is simple, is supported only if the OpenVG engine
+has the vgRenderToMask() function (OpenVG 1.1 and higher).
+
+The QVG_NO_RENDER_TO_MASK define will disable the use of vgRenderToMask().
+
+The QVG_SCISSOR_CLIP define will disable clipping with vgMask() or
+vgRenderToMask() and instead use the scissor rectangle list to perform
+clipping.  Clipping with an arbitrary QPainterPath will need to convert
+the path into a series of rectangles.  If the number of rectangles
+exceeds VG_MAX_SCISSOR_RECTS, then the results will not be exact.
+ 
+The QVG_SCISSOR_CLIP define should only be used if the OpenVG engine does
+not support vgMask() or vgRenderToMask().
+
+    \row
+        \o Opacity
+        \o Opacity is supported for all drawing operations.  Solid color
+pens, solid color brushes, gradient brushes, and image drawing with
+drawPixmap() and drawImage() will probably have the best performance
+compared to other kinds of pens and brushes.
+
+    \row
+        \o Text Drawing
+        \o If OpenVG 1.1 is used, the paint engine will use VG fonts to
+cache glyphs while drawing.  If the engine does not support VG fonts
+correctly, QVG_NO_DRAW_GLYPHS can be defined to disable this mode.  Text
+drawing performance will suffer if VG fonts are not used.
+
+By default, image-based glyphs are used. If QVG_NO_IMAGE_GLYPHS is defined,
+then path-based glyphs will be used instead. QVG_NO_IMAGE_GLYPHS is ignored
+if QVG_NO_DRAW_GLYPHS is defined.
+
+If path-based glyphs are used, then the OpenVG engine will need to support
+hinting to render text with good results.  Image-based glyphs avoids the
+need for hinting and will usually give better results than path-based
+glyphs.
+
+    \row
+        \o Pixmaps
+        \o In single-context mode, pixmaps will be implemented using
+VGImage unless QVG_NO_PIXMAP_DATA is defined.
+
+QVGPixmapData will convert QImage's into VGImage's when the application
+calls drawPixmap(), and the pixmap will be kept in VGImage form for the
+lifetime of the QVGPixmapData object.  When the application tries to paint
+into a QPixmap with QPainter, the data will be converted back into a QImage
+and the raster paint engine will be used to render into the QImage.
+
+This arrangement optimizes for the case of drawing the same static pixmap
+over and over (e.g. for icons), but does not optimize the case of drawing
+into pixmaps.
+
+Bitmaps must use QRasterPixmapData.  They are not accelerated with VGImage
+at present.
+
+    \row
+        \o Pixmap filters
+        \o Convolution, colorize, drop shadow, and blur filters are
+accelerated using OpenVG operations.
+
+    \row
+        \o Scrolling
+        \o Accelerated scrolling is implemented but disabled by default
+unless QVG_BUFFER_SCROLLING is defined. This should only be enabled on
+OpenVG engines where vgCopyPixels() is known to be efficient.
+
+\endtable
+
+\section2 Known issues
+
+Performance of copying the contents of an OpenVG-rendered window to the
+screen needs platform-specific work in the QVGWindowSurface class.
+
+Clipping with arbitrary non-rectangular paths only works on engines that
+support vgRenderToMask(). Simple rectangular paths are supported on all
+engines that correctly implement vgMask().
+
+The paint engine is not yet thread-safe, so it is not recommended for use
+in threaded Qt applications that draw from multiple threads. Drawing should
+be limited to the main GUI thread.
+
+Performance of projective matrices for non-image drawing is not as good
+as for affine matrices.
+
+QPixmap's are implemented as VGImage objects so that they can be quickly
+rendered with drawPixmap().  Rendering into a QPixmap using QPainter will
+use the default Qt raster paint engine on a QImage copy of the QPixmap, and
+will not be accelerated.  This issue may be addressed in a future version
+of the engine.
+
+ShivaVG support is highly experimental and limited to Qt/X11. It is
+provided as an example of how to integrate a non-EGL engine.
+

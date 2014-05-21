@@ -1,0 +1,73 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2014 Barbara Geller
+* Copyright (c) 2012-2014 Ansel Sermersheim
+* Copyright (c) 2012-2014 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software: you can redistribute it and/or 
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with CopperSpice.  If not, see 
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
+
+#ifndef Patternist_RemovalIterator_P_H
+#define Patternist_RemovalIterator_P_H
+
+#include "qitem_p.h"
+
+QT_BEGIN_NAMESPACE
+
+namespace QPatternist
+{
+ 
+    class RemovalIterator : public Item::Iterator
+    {
+    public:
+
+        /**
+         * Creates an RemovalIterator.
+         *
+         * @param target the QAbstractXmlForwardIterator containing the sequence of items
+         * which the item at position @p position should be removed from.
+         * @param position the position of the item to remove. Must be
+         * 1 or larger.
+         */
+        RemovalIterator(const Item::Iterator::Ptr &target,
+                        const xsInteger position);
+
+        virtual Item next();
+        virtual Item current() const;
+        virtual xsInteger position() const;
+
+        /**
+         * The QAbstractXmlForwardIterator's count is computed by subtracting one from the source
+         * QAbstractXmlForwardIterator's count.
+         */
+        virtual xsInteger count();
+
+        virtual Item::Iterator::Ptr copy() const;
+
+    private:
+        const Item::Iterator::Ptr m_target;
+        const xsInteger m_removalPos;
+        Item m_current;
+        xsInteger m_position;
+    };
+}
+
+QT_END_NAMESPACE
+
+#endif

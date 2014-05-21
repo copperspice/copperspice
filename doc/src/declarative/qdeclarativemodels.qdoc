@@ -1,0 +1,505 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qdeclarativemodels.html
+\ingroup qml-features
+\contentspage QML Features
+\previouspage {QML Animation and Transitions}{Animation and Transitions}
+\nextpage {Presenting Data with Views}
+\target qmlmodels
+\title QML Data Models
+
+QML items such as ListView, GridView and \l Repeater require Data Models
+that provide the data to be displayed.
+These items typically require a \e delegate component that
+creates an instance for each item in the model.  Models may be static, or
+have items modified, inserted, removed or moved dynamically.
+
+Data is provided to the delegate via named data roles which the
+delegate may bind to. Here is a ListModel with two roles, \e type and \e age,
+and a ListView with a delegate that binds to these roles to display their
+values:
+
+\snippet doc/src/snippets/declarative/qml-data-models/listmodel-listview.qml document
+
+If there is a naming clash between the model's properties and the delegate's
+properties, the roles can be accessed with the qualified \e model name instead.
+For example, if a \l Text element had \e type or \e age properties, the text in the
+above example would display those property values instead of the \e type and \e age values
+from the model item. In this case, the properties could have been referenced as
+\c model.type and \c model.age instead to ensure the delegate displays the
+property values from the model item.
+
+A special \e index role containing the index of the item in the model
+is also available to the delegate.  Note this index is set to -1 if the item is removed from
+the model.  If you bind to the index role, be sure that the logic
+accounts for the possibility of index being -1, i.e. that the item
+is no longer valid. (Usually the item will shortly be destroyed, but
+it is possible to delay delegate destruction in some views via a \c delayRemove
+attached property.)
+
+Models that do not have named roles (such as the QStringList model shown below)
+will have the data provided via the \e modelData role.  The \e modelData role is also provided for
+models that have only one role.  In this case the \e modelData role
+contains the same data as the named role.
+
+QML provides several types of data models among the built-in set of
+QML elements. In addition, models can be created with C++ and then
+made available to QML components.
+
+The views used to access data models are described in the
+\l{Presenting Data with Views} overview.
+The use of positioner items to arrange items from a model is covered in
+\l{Using QML Positioner and Repeater Items}.
+
+
+\keyword qml-data-models
+\section1 QML Data Models
+
+\section2 ListModel
+
+ListModel is a simple hierarchy of elements specified in QML.  The
+available roles are specified by the \l ListElement properties.
+
+\snippet doc/src/snippets/declarative/qml-data-models/listelements.qml model
+
+The above model has two roles, \e name and \e cost.  These can be bound
+to by a ListView delegate, for example:
+
+\snippet doc/src/snippets/declarative/qml-data-models/listelements.qml view
+
+ListModel provides methods to manipulate the ListModel directly via JavaScript.
+In this case, the first item inserted determines the roles available
+to any views that are using the model. For example, if an empty ListModel is
+created and populated via JavaScript, the roles provided by the first
+insertion are the only roles that will be shown in the view:
+
+\snippet doc/src/snippets/declarative/qml-data-models/dynamic-listmodel.qml model
+\dots
+\snippet doc/src/snippets/declarative/qml-data-models/dynamic-listmodel.qml mouse area
+
+When the MouseArea is clicked, \c fruitModel will have two roles, \e cost and \e name.
+Even if subsequent roles are added, only the first two will be handled by views
+using the model. To reset the roles available in the model, call ListModel::clear().
+
+
+\section2 XmlListModel
+
+XmlListModel allows construction of a model from an XML data source. The roles
+are specified via the \l XmlRole element.
+
+The following model has three roles, \e title, \e link and \e description:
+\qml
+XmlListModel {
+     id: feedModel
+     source: "http://rss.news.yahoo.com/rss/oceania"
+     query: "/rss/channel/item"
+     XmlRole { name: "title"; query: "title/string()" }
+     XmlRole { name: "link"; query: "link/string()" }
+     XmlRole { name: "description"; query: "description/string()" }
+}
+\endqml
+
+The \l{demos/declarative/rssnews}{RSS News demo} shows how XmlListModel can
+be used to display an RSS feed.
+
+
+\section2 VisualItemModel
+
+VisualItemModel allows QML items to be provided as a model.
+
+This model contains both the data and delegate; the child items of a
+VisualItemModel provide the contents of the delegate. The model
+does not provide any roles.
+
+\snippet doc/src/snippets/declarative/models/visual-model-and-view.qml visual model and view
+
+Note that in the above example there is no delegate required.
+The items of the model itself provide the visual elements that
+will be positioned by the view.
+
+\keyword qml-c++-models
+\section1 C++ Data Models
+
+Models can be defined in C++ and then made available to QML. This is useful
+for exposing existing C++ data models or otherwise complex datasets to QML.
+
+A C++ model class can be defined as a QStringList, a QList<QObject*> or a
+QAbstractItemModel. The first two are useful for exposing simpler datasets,
+while QAbstractItemModel provides a more flexible solution for more complex
+models.
+
+
+\section2 QStringList-based model
+
+A model may be a simple QStringList, which provides the contents of the list via the \e modelData role.
+
+Here is a ListView with a delegate that references its model item's
+value using the \c modelData role:
+
+\snippet examples/declarative/modelviews/stringlistmodel/view.qml 0
+
+A Qt application can load this QML document and set the value of \c myModel
+to a QStringList:
+
+\snippet examples/declarative/modelviews/stringlistmodel/main.cpp 0
+
+The complete example is available in Qt's \l {declarative/modelviews/stringlistmodel}{examples/declarative/modelviews/stringlistmodel} directory.
+
+\note There is no way for the view to know that the contents of a QStringList
+have changed.  If the QStringList changes, it will be necessary to reset
+the model by calling QDeclarativeContext::setContextProperty() again.
+
+
+\section2 QObjectList-based model
+
+A list of QObject* values can also be used as a model. A QList<QObject*> provides
+the properties of the objects in the list as roles.
+
+The following application creates a \c DataObject class that with
+Q_PROPERTY values that will be accessible as named roles when a
+QList<DataObject*> is exposed to QML:
+
+\snippet examples/declarative/modelviews/objectlistmodel/dataobject.h 0
+\dots 4
+\snippet examples/declarative/modelviews/objectlistmodel/dataobject.h 1
+\codeline
+\snippet examples/declarative/modelviews/objectlistmodel/main.cpp 0
+\dots
+
+The QObject* is available as the \c modelData property.  As a convenience,
+the properties of the object are also made available directly in the
+delegate's context. Here, \c view.qml references the \c DataModel properties in
+the ListView delegate:
+
+\snippet examples/declarative/modelviews/objectlistmodel/view.qml 0
+
+Note the use of the fully qualified access to the \c color property.
+The properties of the object are not replicated in the \c model
+object, since they are easily available via the \c modelData
+object.
+
+The complete example is available in Qt's \l {declarative/modelviews/objectlistmodel}{examples/declarative/modelviews/objectlistmodel} directory.
+
+Note: There is no way for the view to know that the contents of a QList
+have changed.  If the QList changes, it will be necessary to reset
+the model by calling QDeclarativeContext::setContextProperty() again.
+
+
+\section2 QAbstractItemModel
+
+A model can be defined by subclassing QAbstractItemModel. This is the
+best approach if you have a more complex model that cannot be supported
+by the other approaches. A QAbstractItemModel can also automatically
+notify a QML view when the model data has changed.
+
+The roles of a QAbstractItemModel subclass can be exposed to QML by calling
+QAbstractItemModel::setRoleNames(). The default role names set by Qt are:
+
+\table
+\header
+\o Qt Role
+\o QML Role Name
+\row
+\o Qt::DisplayRole
+\o display
+\row
+\o Qt::DecorationRole
+\o decoration
+\endtable
+
+Here is an application with a QAbstractListModel subclass named \c AnimalModel
+that has \e type and \e size roles. It calls QAbstractItemModel::setRoleNames() to set the
+role names for accessing the properties via QML:
+
+\snippet examples/declarative/modelviews/abstractitemmodel/model.h 0
+\dots
+\snippet examples/declarative/modelviews/abstractitemmodel/model.h 1
+\dots
+\snippet examples/declarative/modelviews/abstractitemmodel/model.h 2
+\codeline
+\snippet examples/declarative/modelviews/abstractitemmodel/model.cpp 0
+\codeline
+\snippet examples/declarative/modelviews/abstractitemmodel/main.cpp 0
+\dots
+
+This model is displayed by a ListView delegate that accesses the \e type and \e size
+roles:
+
+\snippet examples/declarative/modelviews/abstractitemmodel/view.qml 0
+
+QML views are automatically updated when the model changes. Remember the model
+must follow the standard rules for model changes and notify the view when
+the model has changed by using QAbstractItemModel::dataChanged(),
+QAbstractItemModel::beginInsertRows(), etc. See the \l {Model subclassing reference} for
+more information.
+
+The complete example is available in Qt's \l {declarative/modelviews/abstractitemmodel}{examples/declarative/modelviews/abstractitemmodel} directory.
+
+QAbstractItemModel presents a hierarchy of tables, but the views currently provided by QML
+can only display list data.
+In order to display child lists of a hierarchical model
+the VisualDataModel element provides several properties and functions for use
+with models of type QAbstractItemModel:
+
+\list
+\o \e hasModelChildren role property to determine whether a node has child nodes.
+\o \l VisualDataModel::rootIndex allows the root node to be specifed
+\o \l VisualDataModel::modelIndex() returns a QModelIndex which can be assigned to VisualDataModel::rootIndex
+\o \l VisualDataModel::parentModelIndex() returns a QModelIndex which can be assigned to VisualDataModel::rootIndex
+\endlist
+
+
+\section2 Exposing C++ Data Models to QML
+
+The above examples use QDeclarativeContext::setContextProperty() to set
+model values directly in QML components. An alternative to this is to
+register the C++ model class as a QML type from a QML C++ plugin using
+QDeclarativeExtensionPlugin. This would allow the model classes to be
+created directly as elements within QML:
+
+\table
+\row
+
+\o
+\code
+class MyModelPlugin : public QDeclarativeExtensionPlugin
+{
+public:
+    void registerTypes(const char *uri)
+    {
+        qmlRegisterType<MyModel>(uri, 1, 0,
+                "MyModel");
+    }
+}
+
+Q_EXPORT_PLUGIN2(mymodelplugin, MyModelPlugin);
+\endcode
+
+\o
+\qml
+MyModel {
+    id: myModel
+    ListElement { someProperty: "some value" }
+}
+\endqml
+
+\qml
+ListView {
+    width: 200; height: 250
+    model: myModel
+    delegate: Text { text: someProperty }
+}
+\endqml
+
+\endtable
+
+See \l {Tutorial: Writing QML extensions with C++} for details on writing QML C++
+plugins.
+
+
+
+\section1 Other Data Models
+
+
+\section2 An Integer
+
+An integer can be used to specify a model that contains a certain number
+of elements. In this case, the model does not have any data roles.
+
+The following example creates a ListView with five elements:
+\qml
+Item {
+    width: 200; height: 250
+
+    Component {
+        id: itemDelegate
+        Text { text: "I am item number: " + index }
+    }
+
+    ListView {
+        anchors.fill: parent
+        model: 5
+        delegate: itemDelegate
+    }
+
+}
+\endqml
+
+
+\section2 An Object Instance
+
+An object instance can be used to specify a model with a single object element.  The
+properties of the object are provided as roles.
+
+The example below creates a list with one item, showing the color of the
+\e myText text.  Note the use of the fully qualified \e model.color property
+to avoid clashing with \e color property of the Text element in the delegate.
+
+\qml
+Rectangle {
+    width: 200; height: 250
+
+    Text {
+        id: myText
+        text: "Hello"
+        color: "#dd44ee"
+    }
+
+    Component {
+        id: myDelegate
+        Text { text: model.color }
+    }
+
+    ListView {
+        anchors.fill: parent
+        anchors.topMargin: 30
+        model: myText
+        delegate: myDelegate
+    }
+}
+\endqml
+
+\section1 Accessing Views and Models from Delegates
+
+You can access the view for which a delegate is used, and its
+properties, by using ListView.view in a delegate on a ListView, or
+GridView.view in a delegate on a GridView, etc. In particular, you can
+access the model and its properties by using ListView.view.model.
+
+This is useful when you want to use the same delegate for a number of
+views, for example, but you want decorations or other features to be
+different for each view, and you would like these different settings to
+be properties of each of the views. Similarly, it might be of interest
+to access or show some properties of the model.
+
+In the following example, the delegate shows the property \e{language}
+of the model, and the color of one of the fields depends on the
+property \e{fruit_color} of the view.
+
+\snippet doc/src/snippets/declarative/models/views-models-delegates.qml rectangle
+
+Another important case is when some action (e.g. mouse click) in the
+delegate should update data in the model. In this case you can define
+a function in the model, e.g.:
+
+\code
+        setData(int row, const QString & field_name, QVariant new_value),
+\endcode
+
+...and call it from the delegate using:
+
+\js
+        ListView.view.model.setData(index, field, value)
+\endjs
+
+...assuming that \e{field} holds the name of the field which should be
+updated, and that \e{value} holds the new value.
+
+*/
+
+/*!
+\page qml-presenting-data.html
+\title Presenting Data with QML
+
+\section1 Introduction
+
+Qt Quick contains a set of standard items that can be used to present data in a
+number of different ways. For simple user interfaces,
+\l{Using QML Positioner and Repeater Items#Repeaters}{Repeaters} can be used
+in combination with
+\l{Using QML Positioner and Repeater Items#Positioners}{Positioners}
+to obtain pieces of data and arrange them in a user interface. However, when
+large quantities of data are involved, it is often better to use models with
+the standard views since these contain many built-in display and navigation
+features.
+
+\section1 Views
+
+Views are scrolling containers for collections of items. They are feature-rich,
+supporting many of the use cases found in typical applications, and can be
+customized to meet requirements on style and behavior.
+
+A set of standard views are provided in the basic set of Qt Quick
+graphical elements:
+
+\list
+\o \l{#ListView}{ListView} arranges items in a horizontal or vertical list
+\o \l{#GridView}{GridView} arranges items in a grid within the available space
+\o \l{#PathView}{PathView} arranges items on a path
+\endlist
+
+Unlike these items, \l WebView is not a fully-featured view item, and needs
+to be combined with a \l Flickable item to create a view that performs like
+a Web browser.
+
+\section2 ListView
+
+\l ListView shows a classic list of items with horizontal or vertical placing
+of items.
+
+\beginfloatright
+\inlineimage qml-listview-snippet.png
+\endfloat
+
+The following example shows a minimal ListView displaying a sequence of
+numbers (using an \l{QML Data Models#An Integer}{integer as a model}).
+A simple delegate is used to define an items for each piece of data in the
+model.
+
+\clearfloat
+\snippet doc/src/snippets/declarative/listview/listview-snippet.qml document
+
+
+
+\section2 GridView
+
+\l GridView displays items in a grid like an file manager's icon view.
+
+\section2 PathView
+
+\l PathView displays items on a path, where the selection remains in
+the same place and the items move around it.
+
+\section1 Decorating Views
+
+\section2 Headers and Footers
+
+\section2 Sections
+
+\section2 Navigation
+
+In traditional user interfaces, views can be scrolled using standard
+controls, such as scroll bars and arrow buttons. In some situations, it
+is also possible to drag the view directly by pressing and holding a
+mouse button while moving the cursor. In touch-based user interfaces,
+this dragging action is often complemented with a flicking action, where
+scrolling continues after the user has stopped touching the view.
+
+\section1 Further Reading
+*/

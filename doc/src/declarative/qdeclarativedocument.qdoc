@@ -1,0 +1,143 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qdeclarativedocuments.html
+\title QML Documents
+\brief A description of QML documents and the kind of content they contain.
+
+A QML document is a block of QML source code.  QML documents generally correspond to files
+stored on a disk or at a location on a network, but they can also be constructed directly
+from text data.
+
+Here is a simple QML document:
+
+\snippet doc/src/snippets/declarative/qml-documents/non-trivial.qml document
+
+QML documents are always encoded in UTF-8 format.
+
+A QML document always begins with one or more import statements.  To prevent elements
+introduced in later versions from affecting existing QML programs, the element types
+available within a document are controlled by the imported QML \l {Modules}.  That is,
+QML is a \e versioned language.
+
+Syntactically a QML document is self contained; QML does \e not have a preprocessor that
+modifies the document prior to presentation to the QML runtime. \c import statements
+do not "include" code in the document, but instead instruct the QML runtime on how to
+resolve type references found in the document.  Any type reference present in a QML
+document - such as \c Rectangle and \c ListView - including those made within an
+\l {Inline JavaScript}{JavaScript block} or \l {Property Binding}s, are \e resolved based exclusively on the
+import statements.  QML does not import any modules by default, so at least one \c import
+statement must be present or no elements will be available!
+
+Each \c id value in a QML document must be unique within that document. They
+do not need to be unique across different documents as id values are
+resolved according to the document scope.
+
+
+\section1 Documents as Component Definitions
+
+A QML document defines a single, top-level \l {QDeclarativeComponent}{QML component}.  A QML component
+is a template that is interpreted by the QML runtime to create an object with some predefined
+behaviour.  As it is a template, a single QML component can be "run" multiple times to
+produce several objects, each of which are said to be \e instances of the component.
+
+Once created, instances are not dependent on the component that created them, so they can
+operate on independent data.  Here is an example of a simple "Button" component (defined
+in a \c Button.qml file) that is instantiated four times by \c application.qml.
+Each instance is created with a different value for its \c text property:
+
+\table
+\row
+\o Button.qml
+\o application.qml
+
+\row
+\o \snippet doc/src/snippets/declarative/qml-documents/qmldocuments.qml document
+\o
+\qml
+import QtQuick 1.0
+
+Column {
+    spacing: 10
+
+    Button { text: "Apple" }
+    Button { text: "Orange" }
+    Button { text: "Pear" }
+    Button { text: "Grape" }
+}
+\endqml
+
+\image anatomy-component.png
+
+\endtable
+
+Any snippet of QML code can become a component, just by placing it in the file "<Name>.qml"
+where <Name> is the new element name, and begins with an \bold uppercase letter.  Note that
+the case of all characters in the <Name> are significant on some filesystems, notably
+UNIX filesystems.  It is recommended that the case of the filename matches the case of
+the component name in QML exactly, regardless of the platform the QML will be deployed to.
+
+These QML component files automatically become available as new QML element types
+to other QML components and applications in the same directory.
+
+
+
+\section1 Inline Components
+
+In addition to the top-level component that all QML documents define, and any reusable
+components placed in separate files, documents may also
+include \e inline components.  Inline components are declared using the
+\l Component element, as can be seen in the first example above.  Inline components share
+all the characteristics of regular top-level components and use the same \c import list as their
+containing QML document.  Components are one of the most basic building blocks in QML, and are
+frequently used as "factories" by other elements.  For example, the \l ListView element uses the
+\c delegate component as the template for instantiating list items - each list item is just a
+new instance of the component with the item specific data set appropriately.
+
+Like other \l {QML Elements}, the \l Component element is an object and must be assigned to a
+property.   \l Component objects may also have an object id.  In the first example on this page,
+the inline component is added to the \l Rectangle's \c resources list, and then
+\l {Property Binding} is used to assign the \l Component to the \l ListView's \c delegate
+property.  While using property binding allows the \l Component object to be shared (for example,
+if the QML document contained multiple \l ListView's with the same delegate), in this case the
+\l Component could have been assigned directly to the \l ListView's \c delegate.  The QML
+language even contains a syntactic optimization when assigning directly to a component property
+for this case where it will automatically insert the \l Component tag.
+
+These final two examples are behaviorally identical to the original document.
+
+\table
+\row
+\o
+\snippet doc/src/snippets/declarative/qml-documents/inline-component.qml document
+\o
+\snippet doc/src/snippets/declarative/qml-documents/inline-text-component.qml document
+\endtable
+
+\sa QDeclarativeComponent
+*/

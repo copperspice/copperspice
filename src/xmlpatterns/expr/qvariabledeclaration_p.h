@@ -1,0 +1,147 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2014 Barbara Geller
+* Copyright (c) 2012-2014 Ansel Sermersheim
+* Copyright (c) 2012-2014 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software: you can redistribute it and/or 
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with CopperSpice.  If not, see 
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
+
+#ifndef Patternist_VariableDeclaration_P_H
+#define Patternist_VariableDeclaration_P_H
+
+#include <QSharedData>
+
+#include "qexpression_p.h"
+#include "qpatternistlocale_p.h"
+#include "qvariablereference_p.h"
+
+QT_BEGIN_NAMESPACE
+
+template<typename T> class QStack;
+
+namespace QPatternist
+{
+    class VariableDeclaration : public QSharedData
+    {
+    public:
+        typedef QExplicitlySharedDataPointer<VariableDeclaration> Ptr;
+        typedef QStack<VariableDeclaration::Ptr> Stack;
+        typedef QList<VariableDeclaration::Ptr> List;
+
+       
+        typedef QHash<QXmlName, VariableDeclaration::Ptr> Hash;
+
+        enum Type
+        {
+            RangeVariable,
+            ExpressionVariable,
+            FunctionArgument,
+            PositionalVariable,
+            TemplateParameter,    
+            GlobalVariable,
+            ExternalVariable
+        };
+
+
+        VariableDeclaration(const QXmlName n,
+                            const VariableSlotID varSlot,
+                            const Type t,
+                            const SequenceType::Ptr &seqType) : name(n)
+                                                              , slot(varSlot)
+                                                              , type(t)
+                                                              , sequenceType(seqType)
+                                                              , canSourceRewrite(true)
+        {
+            Q_ASSERT(!name.isNull());
+            Q_ASSERT(t == ExternalVariable || t == TemplateParameter || varSlot > -1);
+        }
+
+        inline bool isUsed() const
+        {
+            return !references.isEmpty();
+        }
+
+        inline const Expression::Ptr &expression() const
+        {
+            return m_expression;
+        }
+
+        inline void setExpression(const Expression::Ptr &expr)
+        {
+            m_expression = expr;
+        }
+
+        /**
+         * @short Returns how many times this variable is used.
+         */
+        inline bool usedByMany() const
+        {
+            return references.count() > 1;
+        }
+
+        /**
+         * @short Returns @c true if @p list contains @p lookup.
+         */
+        static bool contains(const VariableDeclaration::List &list,
+                             const QXmlName &lookup);
+
+        const QXmlName                  name;
+        const VariableSlotID            slot;
+        const Type                      type;
+
+        /**
+         * The declared type of the variable. What the value might be, depends
+         * on the context which VariableDeclaration is used in. Note that
+         * sequenceType is hence not in anyway obligated to the type of
+         * expression().
+         */
+        const SequenceType::Ptr         sequenceType;
+        VariableReference::List         references;
+
+        /**
+         * @short Whether a reference can rewrite itself to expression().
+         *
+         * The default value is @c true.
+         */
+        bool canSourceRewrite;
+
+    private:
+        Expression::Ptr                 m_expression;
+        Q_DISABLE_COPY(VariableDeclaration)
+    };
+
+    /**
+     * @short Formats @p var appropriately for display.
+     *
+     * @relates VariableDeclaration
+     */
+    static inline QString formatKeyword(const VariableDeclaration::Ptr &var,
+                                        const NamePool::Ptr &np)
+    {
+        Q_ASSERT(var);
+        Q_ASSERT(np);
+        return formatKeyword(np->displayName(var->name));
+    }
+
+}
+
+QT_END_NAMESPACE
+
+#endif

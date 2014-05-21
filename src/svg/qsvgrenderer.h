@@ -1,0 +1,126 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2014 Barbara Geller
+* Copyright (c) 2012-2014 Ansel Sermersheim
+* Copyright (c) 2012-2014 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software: you can redistribute it and/or 
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with CopperSpice.  If not, see 
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
+
+#ifndef QSVGRENDERER_H
+#define QSVGRENDERER_H
+
+#include <QtGui/qmatrix.h>
+
+#ifndef QT_NO_SVGRENDERER
+
+#include <QtCore/qobject.h>
+#include <QtCore/qsize.h>
+#include <QtCore/qrect.h>
+#include <QtCore/qxmlstream.h>
+#include <QScopedPointer>
+
+QT_BEGIN_NAMESPACE
+
+class QSvgRendererPrivate;
+class QPainter;
+class QByteArray;
+
+class Q_SVG_EXPORT QSvgRenderer : public QObject
+{
+    CS_OBJECT(QSvgRenderer)
+
+    SVG_CS_PROPERTY_READ(viewBox, viewBoxF)
+    SVG_CS_PROPERTY_WRITE(viewBox, cs_setViewBox)
+
+    SVG_CS_PROPERTY_READ(framesPerSecond, framesPerSecond)
+    SVG_CS_PROPERTY_WRITE(framesPerSecond, setFramesPerSecond)
+
+    SVG_CS_PROPERTY_READ(currentFrame, currentFrame)
+    SVG_CS_PROPERTY_WRITE(currentFrame, setCurrentFrame)
+
+public:
+    QSvgRenderer(QObject *parent=0);
+    QSvgRenderer(const QString &filename, QObject *parent=0);
+    QSvgRenderer(const QByteArray &contents, QObject *parent=0);
+    QSvgRenderer(QXmlStreamReader *contents, QObject *parent=0);
+    ~QSvgRenderer();
+
+    bool isValid() const;
+
+    QSize defaultSize() const;
+
+    QRect viewBox() const;
+    QRectF viewBoxF() const;
+    void setViewBox(const QRect &viewbox);
+    void setViewBox(const QRectF &viewbox);
+
+    // wrapper for overloaded method
+    inline void cs_setViewBox(const QRectF &viewbox);
+    
+    bool animated() const;
+    int framesPerSecond() const;
+    void setFramesPerSecond(int num);
+    int currentFrame() const;
+    void setCurrentFrame(int);
+    int animationDuration() const;   //in seconds
+
+    QRectF boundsOnElement(const QString &id) const;
+    bool elementExists(const QString &id) const;
+    QMatrix matrixForElement(const QString &id) const;
+
+    SVG_CS_SLOT_1(Public, bool load(const QString & filename))
+    SVG_CS_SLOT_OVERLOAD_BOOL(load,(const QString &))  
+
+    SVG_CS_SLOT_1(Public, bool load(const QByteArray & contents))
+    SVG_CS_SLOT_OVERLOAD_BOOL(load,(const QByteArray &))
+
+    SVG_CS_SLOT_1(Public, bool load(QXmlStreamReader * contents))
+    SVG_CS_SLOT_OVERLOAD_BOOL(load,(QXmlStreamReader *))
+
+    SVG_CS_SLOT_1(Public, void render(QPainter * p))
+    SVG_CS_SLOT_OVERLOAD(render,(QPainter *)) 
+
+    SVG_CS_SLOT_1(Public, void render(QPainter * p,const QRectF & bounds))
+    SVG_CS_SLOT_OVERLOAD(render,(QPainter *,const QRectF &)) 
+
+    SVG_CS_SLOT_1(Public, void render(QPainter * p,const QString & elementId,const QRectF & bounds = QRectF()))
+    SVG_CS_SLOT_OVERLOAD(render,(QPainter *,const QString &,const QRectF &))
+
+    SVG_CS_SIGNAL_1(Public, void repaintNeeded())
+    SVG_CS_SIGNAL_2(repaintNeeded) 
+
+protected:
+	 QScopedPointer<QSvgRendererPrivate> d_ptr;
+
+private:
+    Q_DECLARE_PRIVATE(QSvgRenderer)
+
+};
+
+void QSvgRenderer::cs_setViewBox(const QRectF &viewbox)
+{ 
+   setViewBox(viewbox);
+}
+
+QT_END_NAMESPACE
+
+
+#endif // QT_NO_SVGRENDERER
+#endif // QSVGRENDERER_H

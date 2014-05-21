@@ -1,0 +1,368 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \group platform-specific
+    \title Platform-Specific Documentation
+    \brief Documents describing platform-specific features of Qt.
+
+    These documents describe platform-specific features provided by Qt, and
+    discuss issues related to particular platforms and environments.
+
+    \generatelist{related}
+*/
+
+/*!
+    \page platform-notes.html
+    \ingroup platform-specific
+    \title Platform and Compiler Notes
+    \brief Information about the platforms on which Qt can be used.
+
+    This page contains information about the platforms Qt is currently known
+    to run on, with links to platform-specific notes, including any known bugs
+    or incompatibilities.
+
+    Information about the combinations of platforms and compilers
+    supported by Qt can be found on the \l{Supported Platforms} page.
+
+    \list
+    \o \l{Platform and Compiler Notes - Symbian}
+    \tableofcontents{1 Platform and Compiler Notes - Symbian}
+    \endlist
+
+*/
+
+/*!
+    \page platform-notes-symbian.html
+    \title Platform and Compiler Notes - Symbian
+    \contentspage Platform and Compiler Notes
+    \ingroup platform-specific
+    \brief Information about the state of support for the Symbian platform.
+
+    This page describes implementation details regarding the Qt for Symbian port. To get 
+    started with application development for Symbian devices, read  the \l 
+    {http://doc.qt.nokia.com/qtcreator/creator-developing-symbian.html} 
+    {Connecting Symbian Devices} document.
+
+    \section1 Source Compatibility
+
+    Qt for Symbian provides the same level of source compatibility guarantee as
+    given for other platforms. That is, a program which compiles against a given
+    version of Qt for Symbian will also compile against all future versions of the
+    same major release.
+
+    \section1 Binary Compatibility
+
+    As with every supported platform, Qt strives to maintain application 
+    behavior and binary compatibility throughout the lifetime of the Qt 4.x 
+    major version and on the \l {Supported Devices}{Symbian devices that support Qt}.
+    Symbian support in Qt SDK and Ovi Store were introduced with Qt 4.6. Each Qt 
+    release contains bug fixes that might change the API behavior and thereby 
+    affect application compatibility.
+
+    In addition, Symbian devices have different input methods, such as different 
+    keyboard styles or touch input, screen sizes, memory, and CPU and GPU 
+    capabilities. Therefore, you must test applications on specific target 
+    devices to ensure compatibility. In order to build applications that are 
+    supported also on earlier devices, select the target in Qt SDK carefully. 
+    Generally, an earlier target (such as S60 5th Edition) is supported on a 
+    larger number of devices than a later target (such as Symbian Belle).
+
+    \target Supported Devices
+    \section1 Supported Devices
+    
+    The \l {http://developer.qt.nokia.com/wiki/support_for_Symbian}{Support for Symbian} document
+    details the Qt support on different Symbian devices.
+
+    The \l {http://www.developer.nokia.com/Community/Wiki/Nokia_Smart_Installer_for_Symbian#Supported_Devices}
+    {Nokia Smart Installer for Symbian} document lists how Qt is supported on 
+    different Symbian devices through Smart Installer.
+
+    Qt versions are supported by Symbian devices as follows:
+    \list
+    \o Qt 4.6 is supported by S60 3rd Edition feature pack 1 and newer devices 
+    through \l {http://www.developer.nokia.com/Community/Wiki/Nokia_Smart_Installer_for_Symbian}{Smart Installer}.
+    \o Qt 4.7.3 is supported by S60 5th Edition and newer devices
+    through \l {http://www.developer.nokia.com/Community/Wiki/Nokia_Smart_Installer_for_Symbian}{Smart Installer}.
+    \endlist
+    
+    Symbian devices have a pre-installed Qt support as follows:
+    \list
+    \o Symbian Anna: Qt 4.7.3 in C: drive. Note that Qt 4.7.4 is supported in Symbian Anna
+    through \l {http://www.developer.nokia.com/Community/Wiki/Nokia_Smart_Installer_for_Symbian}{Smart Installer}.
+    \o Symbian Belle: Qt 4.7.4 in device firmware (ROM).
+    \endlist
+    
+
+    \section1 Functionality Support
+
+    The following technologies and classes are not supported:
+    \list
+    \o QtConcurrent
+    \o QtDBus
+    \o \l {http://doc.qt.nokia.com/4.8/printing.html}{Printing support}
+    \o Qt3Support
+    \endlist
+    
+    The following technologies have limited support:
+    
+
+    \table
+    \header \o Module
+            \o Note
+    \row    \o QtSql
+            \o The supported drivers are SQLite and QSYMSQL.
+    \row    \o QtMultimedia
+            \o For support details see \l {Multimedia Support} section.
+    \row    \o QtGui
+            \o QtGui's widgets are deprecated (i.e. they are available but not 
+            recommended to use) in the Symbian port. It is recommended to use \l
+            {http://doc.qt.nokia.com/qt-components-symbian-1.1/symbian-components-functional.html}
+            {Qt Quick Components for Symbian} instead, because they provide 
+            better look and feel on Symbian devices.
+
+            Moreover, the following classes of QtGui \bold {should not 
+            be used} in a Symbian application:
+            
+            \list
+            \o QFileDialog with the \c DontUseNativeDialog option
+            \o QColorDialog with the \c DontUseNativeDialog option
+            \o QFontDialog
+            \o QWizard
+            \o QCalendarWidget
+            \o QDateTimeEdit
+            \o QMdiArea
+            \o QDockWidget
+            \o QMdiSubWindow
+            \o QPrintPreviewWidget
+            \endlist
+            
+            QScrollArea: The scrolling and focus handling of QScrollArea's all 
+            scrollable widgets, for example QListView, differs from native Avkon 
+            list widgets' one. Native Avkon scrollable components support 
+            touch-gesture-based scrolling by dragging and flicking the UI 
+            component but this functionality is not implemented in Qt widgets. 
+            Scrolling by dragging and flicking works also in Qt Quick Components 
+            that implements the \l 
+            {http://www.developer.nokia.com/Resources/Library/Symbian_Design_Guidelines/}
+            {Symbian design guidelines}.
+
+    \endtable
+
+    \section1 Compiler Notes
+    
+    For the application development the necessary compiler toolchain is included in \l 
+    {http://qt.nokia.com/downloads}{Qt SDK}. For instructions compiling Qt 
+    itself see the \l
+    {http://doc.qt.nokia.com/stable/install-symbian.html}
+    {Installing Qt for the Symbian platform} document.
+
+    \section1 Known Issues
+
+    Known issues can be found by visiting the
+    \l{http://qt.gitorious.org/qt/pages/QtKnownIssues}{wiki page} with an
+    up-to-date list of known issues, and the list of bugs can be found by
+    \l{http://bugreports.qt-project.org/browse/QTBUG/component/19171}{browsing} the
+    S60 component in Qt's public task tracker, located at
+    \l{http://bugreports.qt-project.org/}{http://bugreports.qt-project.org/}.
+
+    For information about mixing exceptions with Symbian leaves, see
+    \l{Exception Safety with Symbian}.
+
+    \section1 Required Capabilities
+
+    The Qt libraries are typically signed with \c{All -TCB} capabilites but
+    that does not mean your Qt application needs to be signed with the same
+    capabilities to function properly. The capabilities your application needs
+    to function properly depends on which parts of Qt you use. 
+    In a Qt application Symbian capabilities are defined in the
+    \l {http://doc.qt.nokia.com/4.8/qmake-variable-reference.html#target-capability}
+    {TARGET.CAPABILITY} qmake variable in the project file.
+    Here is an overview for which capabilities may be needed when using different modules:
+
+    \table
+    \header \o Module
+            \o Required Symbian Capability
+    \row    \o QtCore
+            \o \c PowerMgmt if QProcess::kill(...) or QProcess::terminate(...) is called.
+    \row    \o QtCore
+            \o \c AllFiles when \l{http://wiki.forum.nokia.com/index.php/Capabilities_%28Symbian_Signed%29/AllFiles_Capability}{accessing specific areas.}
+    \row    \o QtDeclarative
+            \o \c NetworkServices is automatically added for this module if no capabilities are explicitly specified.
+    \row    \o QtNetwork
+            \o \c NetworkServices is automatically added for this module if no capabilities are explicitly specified.
+    \row    \o QtNetwork
+            \o \c ReadUserData is required to include all the phone's SSL certificates in the system's default CA certificate list
+                  (for example those added by the user or stored in the SIM card),
+                  without this capability only the CA certs built into the phone are used.
+    \row    \o QtMultimedia
+            \o \c UserEnvironment if QAudioInput is used.
+    \row    \o QtWebKit
+            \o \c NetworkServices is automatically added for this module if no capabilities are explicitly specified.
+    \endtable
+
+    \note Some modules rely on other modules. E.g. QtWebkit and QtDeclarative
+    depend on QtNetwork and therefore any application that
+    depends on these modules is also likely to need \c NetworkServices capability.
+
+    For more information see the documentation of the individual Qt classes. If
+    a class does not mention Symbian capabilities, it requires none.
+
+    \target Multimedia Support
+    \section1 Multimedia Support
+
+    Qt Mobility provides a high-level API for multimedia functionality with
+    \l{http://doc.qt.nokia.com/qtmobility/multimedia.html}{QtMultimediaKit}.
+    In addition, Qt provides the low-level \l {QtMultimedia}{QtMultimedia} 
+    module that is internally used by the QtMultimediaKit. For more information
+    on developing multimedia applications for Symbian devices, see
+    \l {http://www.developer.nokia.com/info/sw.nokia.com/id/4abf12e7-72d8-45ef-b1a2-46184abe18ba/Guide_for_Qt_Multimedia_Developers.html}
+    {Guide for Qt Multimedia Developers}.
+
+    Moreover, there is a third multimedia-related module called Phonon. Qt 
+    provides two backends for the Phonon module in Symbian: \i MMF and \i Helix. 
+
+    Note that Phonon is a legacy module and the QtMultimediaKit module is 
+    replacing Phonon in Qt 5. Although Phonon is supported in Symbian for 
+    backwards compatibility and there is no plan to remove Phonon from Symbian 
+    any new applications should use QtMultimediaKit in Symbian using Qt 4.7 
+    bundle. The QtMultimediaKit feature set is comparable to that in Phonon.        
+
+    The following applies to Phonon:
+    \list
+    \o MMF Phonon backend supports video and sound playback through Symbian's 
+    Multimedia Framework, MMF. Phonon's video playback may show artifacts when 
+    the video is moved or resized (for instance, during device orientation 
+    changes from portrait to landscape and vice versa). This problem is present 
+    on S60 5th Edition and earlier versions, as well as in Symbian Anna devices.
+    \o The audio and video formats that Phonon supports depends on what support
+    the platform provides for MMF. The emulator is known to have limited
+    codec support.
+    \o In addition, there exists a backend for the Helix framework. However, since
+    it is not shipped with Qt, its availability depends on the Symbian platform
+    in use. If the MFF plugin fails to load, the Helix plugin, if present on the
+    device, will be loaded instead.
+    \endlist
+
+    \section1 Hardware Accelerated Rendering
+
+    The default graphics system on Symbian Anna is OpenVG, which uses OpenVG
+    hardware to accelerate \l QPainter functions. There are a few exceptions,
+    where Qt will use software rendering fallback.
+
+    Devices like the N8 and C7 only have 32Mb of GPU memory and limited support
+    for EGL surface transparency. These devices can be identified by querying
+    the\c GL_RENDERER or \c VG_RENDERER string which evaluates to \c {VideoCore III}.
+    On these devices, Qt will use software rendering in cases listed below.
+
+        \list
+        \o Translucent windows
+        \o Dialogs
+        \o Popups
+        \endlist
+
+    \section1 OpenGL Support in Symbian
+
+     Qt 4.7 introduces the \l {QtOpenGL} module. QtOpenGL is
+     supported on devices which support OpenGL ES 2.0. Symbian platforms prior
+     to Symbian Anna (and Symbian^3) are not supported.
+
+    \l QGLWidget usage as a \l QGraphicsView viewport is not recommended on
+    Symbian. The OpenVG graphics system is not able to manage OpenGL graphics
+    resources. Also, a QGLWidget object is not able to release its GPU resources
+    when the application goes to the background. If OpenGL functionality is
+    needed, \l { http://doc.qt.nokia.com/4.7-snapshot/qapplication.html#setGraphicsSystem}
+    {OpenGL graphics system} usage is recommended. If an application
+    decides to use QGLWidget, then it is the application's responsibility to
+    destroy and release QGLWidget and related OpenGL resources when the
+    application goes to the background. Otherwise, the \l{Graphics Out Of Memory monitor}
+    may decide to kill the application as it consumes GPU resources while in the
+    background.
+
+    \note \l QGLBuffer, \l QGLFramebufferObject, \l QGLPixelBuffer, \l
+    QGLShader, and \l QGLShaderProgram are direct GPU resources and it is the
+    application's responsibility to manage them.
+
+    \section1 UI Performance in S60 3rd and 5th Edition Devices
+
+    Qt uses the QPainter class to perform low-level painting on widgets and
+    other paint devices. QPainter provides functions to draw complex shapes,
+    aligned text and pixmaps. It can also do vector path clipping, coordinate
+    transformations and Porter-Duff composition. If the underlying graphics
+    architecture does not support all of these operations then Qt uses the
+    raster graphics system for rendering.
+    
+    In Symbian Anna (and Symbian^3) Qt uses hardware accelerated graphics as explained above.
+    This is enabled by \l
+    {http://library.developer.nokia.com/index.jsp?topic=/GUID-E35887BB-7E58-438C-AA27-97B2CDE7E069/GUID-D93978BE-11A3-5CE3-B110-1DEAA5AD566C.html}
+    {ScreenPlay Graphics Architecture} in these devices.
+
+    Most of the Symbian S60 3rd and 5th Edition devices have a
+    graphics architecture that does not have native support for all functions
+    provided by QPainter. In these \l
+    {http://library.developer.nokia.com/index.jsp?topic=/GUID-E35887BB-7E58-438C-AA27-97B2CDE7E069/GUID-D93978BE-11A3-5CE3-B110-1DEAA5AD566C.html}
+    {non-ScreenPlay} devices Qt uses the raster
+    graphics system by default that has a performance penalty compared
+    to native Symbian rendering.
+
+    In order to be able to perform all functions provided by QPainter, the
+    raster graphics system needs to have pixel level framebuffer access. To
+    make this possible in non-ScreenPlay devices Qt has to create an
+    additional offscreen buffer that is the target for all Qt rendering
+    operations. Qt renders the widget tree to the offscreen buffer and the
+    offscreen buffer is blitted to the framebuffer via Symbian Window Server.
+
+    The following table shows the rendering stacks of native Symbian and Qt in
+    \l {http://library.developer.nokia.com/index.jsp?topic=/GUID-E35887BB-7E58-438C-AA27-97B2CDE7E069/GUID-D93978BE-11A3-5CE3-B110-1DEAA5AD566C.html}
+    {non-ScreenPlay devices}.
+
+    \table
+    \header \o Symbian
+            \o Qt
+    \row    \o \image symbian-rendering-stack-non-screenplay.png
+            \o \image symbian-qt-rendering-stack-non-screenplay.png
+    \endtable
+
+    The following diagrams show a simplified sequence of drawing a pixmap in
+    a non-ScreenPlay device.
+
+    \table
+    \header \o Symbian
+    \row    \o \image symbian-draw-pixmap-sequence.png
+    \endtable
+
+    \table
+    \header \o Qt
+    \row    \o \image symbian-qt-draw-pixmap-sequence.png
+    \endtable
+
+    When compared to a native Symbian application, Qt does an additional blit
+    to the offscreen buffer before drawing to the framebuffer. That is the
+    performance penalty which needs to be paid to get all functionality
+    provided by QPainter in non-ScreenPlay architecture.
+*/
+

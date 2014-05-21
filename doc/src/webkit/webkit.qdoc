@@ -1,0 +1,103 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the Qt WebKit module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:BSD$
+** You may use this file under the terms of the BSD license as follows:
+**
+** "Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions are
+** met:
+**   * Redistributions of source code must retain the above copyright
+**     notice, this list of conditions and the following disclaimer.
+**   * Redistributions in binary form must reproduce the above copyright
+**     notice, this list of conditions and the following disclaimer in
+**     the documentation and/or other materials provided with the
+**     distribution.
+**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
+**     the names of its contributors may be used to endorse or promote
+**     products derived from this software without specific prior written
+**     permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+/*!
+\page qtwebkit-guide.html
+
+\title QtWebKit Guide
+
+\section1 Introduction to QtWebKit
+
+Qt WebKit is a web content rendering engine based on the open source
+WebKit project, featuring broad support for standard web technologies.
+QtWebKit is developed as a part of the WebKit community,
+which enables every new release of Qt WebKit
+to include the latest developments from the WebKit project.
+
+Qt SDK 1.1 supports the following Qt WebKit releases:
+
+\list
+\o QtWebKit 2.1 for Symbian^3 when using Qt 4.7.
+\o QtWebKit 2.0, as a standard part of Qt 4.7,
+for all other platforms when using Qt 4.7.
+\o When using Qt 4.6,
+the QtWebKit version of Qt 4.6 is used on all platforms.
+\endlist
+
+\section1 QtWebKit 2.1 for Web Developers
+
+The highlights of the QtWebKit 2.1 release for web developers
+are listed below.
+Please note that HTML5 and CSS3 features are based on draft
+specifications that are subject to change.
+
+\list
+\o HTML5 progress and meter elements
+\o HTML5 canvas element
+\o Web SQL Database
+\o Web Storage
+\o CSS Animations
+\o CSS Transitions
+\o CSS 2D Transforms
+\o CSS Text
+\o CSS Masks
+\o CSS Scrollbar Styles
+\o Native JSON parser
+\endlist
+
+\section1 Qt WebKit Module
+
+Information regarding the classes and API introduced in the Qt WebKit module
+are found in the \l{WebKit in Qt} page.
+
+\section1 Mobile HTML5 Developer's Guide for QtWebKit (BETA)
+
+This is a beta release of a guide for mobile web development with
+QtWebKit 2.1. It discusses how to use several standard web
+technologies to create mobile applications with QtWebKit.
+
+Contents:
+\list
+\o \l{QtWebKit Guide - Level 3 CSS}{Level 3 CSS: media queries, selectors, visual
+effects, transforms, transitions, and animations}
+\o \l{Canvas Graphics}{HTML5 canvas element}
+\o \l{QtWebKit Guide - Client Storage}{Client Storage}
+\endlist
+*/
+

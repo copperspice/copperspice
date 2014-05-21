@@ -1,0 +1,143 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page exceptionsafety.html
+    \title Exception Safety
+    \ingroup best-practices
+    \brief A guide to exception safety in Qt.
+
+    \bold {Preliminary warning}: Exception safety is not feature complete!
+    Common cases should work, but classes might still leak or even crash.
+
+    Qt itself will not throw exceptions. Instead, error codes are used.
+    In addition, some classes have user visible error messages, for example
+    \l QIODevice::errorString() or \l QSqlQuery::lastError().
+    This has historical and practical reasons - turning on exceptions
+    can increase the library size by over 20%.
+
+    The following sections describe Qt's behavior if exception support is
+    enabled at compile time.
+
+    \tableofcontents
+
+    \section1 Exception safe modules
+
+    \section2 Containers
+    
+    Qt's \l{container classes} are generally exception neutral. They pass any
+    exception that happens within their contained type \c T to the user
+    while keeping their internal state valid.
+
+    Example:
+
+    \code
+    QList<QString> list;
+    ...
+    try {
+        list.append("hello");
+    } catch (...) {
+    }
+    // list is safe to use - the exception did not affect it.
+    \endcode
+
+    Exceptions to that rule are containers for types that can throw during assignment
+    or copy constructions. For those types, functions that modify the container as well as
+    returning a value, are unsafe to use:
+
+    \code
+    MyType s = list.takeAt(2);
+    \endcode
+
+    If an exception occurs during the assignment of \c s, the value at index 2 is already
+    removed from the container, but hasn't been assigned to \c s yet. It is lost
+    without chance of recovery.
+
+    The correct way to write it:
+
+    \code
+    MyType s = list.at(2);
+    list.removeAt(2);
+    \endcode
+
+    If the assignment throws, the container still contains the value, no data loss occured.
+
+    Note that implicitly shared Qt classes will not throw in their assignment
+    operators or copy constructors, so the limitation above does not apply.
+
+    \section1 Out of Memory Handling
+
+    Most desktop operating systems overcommit memory. This means that \c malloc()
+    or \c{operator new} return a valid pointer, even though there is not enough
+    memory available at allocation time. On such systems, no exception of type
+    \c std::bad_alloc is thrown.
+
+    On all other operating systems, Qt will throw an exception of type std::bad_alloc
+    if any allocation fails. Allocations can fail if the system runs out of memory or
+    doesn't have enough continuous memory to allocate the requested size.
+
+    Exceptions to that rule are documented. As an example, QImage constructors will
+    create a \l{QImage::isNull()}{null} image if not enough memory exists instead
+    of throwing an exception.
+
+    \section1 Recovering from exceptions
+
+    Currently, the only supported use case for recovering from exceptions thrown
+    within Qt (for example due to out of memory) is to exit the event loop and do 
+    some cleanup before exiting the application.
+
+    Typical use case:
+
+    \code
+    QApplication app(argc, argv);
+    ...
+    try {
+        app.exec();
+    } catch (const std::bad_alloc &) {
+        // clean up here, e.g. save the session
+        // and close all config files.
+
+        return 0; // exit the application
+    }
+    \endcode
+
+    After an exception is thrown, the connection to the windowing server
+    might already be closed. It is not safe to call a GUI related function
+    after catching an exception.
+
+    \section1 Platform-Specific Exception Handling
+
+    \section2 The Symbian platform
+
+    The Symbian platform implements its own exception system that differs from the standard
+    C++ mechanism. When using Qt for the Symbian platform, and especially when writing code to 
+    access Symbian functionality directly, it may be necessary to know about the underlying 
+    implementation and how it interacts with Qt.
+
+    The \l{Exception Safety with Symbian} document shows how to use the facilities provided
+    by Qt to use exceptions as safely as possible.
+*/

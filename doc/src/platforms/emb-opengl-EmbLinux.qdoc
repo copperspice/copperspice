@@ -1,0 +1,150 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qt-embeddedLinux-opengl.html
+
+\title Qt for Embedded Linux and OpenGL
+
+\ingroup qt-embedded-linux
+
+\input platforms/emb-opengl.qdocinc
+
+\section1 Using OpenGL with Qt for Embedded Linux
+Qt for Embedded Linux provides support for integrating OpenGL ES for
+drawing into a QGLWidget. The current implementation supports OpenGL and 2D
+painting within a QGLWidget. Using OpenGL to accelerate regular widgets and
+compositing top-level windows with OpenGL are not currently supported.
+
+\note OpenGL rendering only works with QGLWidget under QWS.  Regular
+widgets cannot currently support it.
+
+\section2 Configure
+
+It is recommended that Qt for Embedded Linux is configured with the
+\c{-DQT_QWS_CLIENTBLIT} and \c{-DQT_NO_QWS_CURSOR} options for optimum
+performance.  OpenGL is rendered direct to the screen and these options
+prevent Qt for Embedded Linux from trying to do its own non-OpenGL
+compositing on the QGLWidget contents.
+
+\section2 Using OpenGL to Implement Window Compositing and Effects
+
+Compositing effects can be simulated by adjusting the opacity and other
+parameters of the items within a QGraphicsView canvas on a QGLWidget
+viewport.
+
+While Qt for Embedded Linux does include a complete windowing system,
+using OpenGL to composite regular window surfaces can be quite difficult.
+Most of Qt for Embedded Linux assumes that the window surface is a plain
+raster memory buffer, with QGLWidget being the sole exception.
+The need to constantly re-upload the raster memory buffers into OpenGL
+textures for compositing can have a significant impact on performance,
+which is why we do not recommend implementing that form of compositing.
+We intend to address this problem in future versions of Qt.
+
+\section1 Integrating OpenGL/ES into Qt for Embedded Linux
+\section2 Reference Integration
+The reference integration for OpenGL into Qt for Embedded Linux is for the
+PowerVR chipset from \l{http://www.imgtec.com/}{Imagination Technologies}.
+It consists of two components: \c{pvreglscreen}, which provides the Qt for
+Embedded Linux screen driver, and \c{QWSWSEGL}, which implements a plug-in
+to the PowerVR EGL implementation to implement low-level OpenGL drawing
+surfaces.
+
+\section2 Integrating Other Chipsets
+In this section, we discuss the essential features of the reference
+integration that need to be provided for any other chipset integration.
+
+The QtOpenGL module assumes that a QGLWidget can be represented
+by an \c EGLNativeWindowType value in some underlying window system
+implementation, and that \c{eglSwapBuffers()} is sufficient to copy
+the contents of the native window to the screen when requested.
+
+However, many EGL implementations do not have a pre-existing window system.
+Usually only a single full-screen window is provided, and everything else
+must be simulated some other way.  This can be a problem because
+of QtOpenGL's assumptions.  We intend to address these assumptions in a
+future version of Qt, but for now, it is the responsibility of the integrator
+to provide a rudimentary window system within the EGL implementation.
+This is the purpose of \c{QWSWSEGL} in the reference integration.
+
+If it isn't possible for the EGL implementation to provide a rudimentary
+window system, then full-screen windows using QGLWidget can be supported,
+but very little else.
+
+The screen driver needs to inherit from QGLScreen and perform the
+following operations in its constructor:
+
+\snippet src/plugins/gfxdrivers/powervr/pvreglscreen/pvreglscreen.cpp 0
+
+The \c{setSurfaceFunctions()} call supplies an object that takes care
+of converting Qt paint devices such as widgets and pixmaps into
+\c EGLNativeWindowType and \c EGLNativePixmapType values.  Here we
+only support native windows.  Because OpenGL rendering is direct to
+the screen, we also indicate that client blit is supported.
+
+Next, we override the \c{createSurface()} functions in QGLScreen:
+
+\snippet src/plugins/gfxdrivers/powervr/pvreglscreen/pvreglscreen.cpp 1
+
+Even if Qt for Embedded Linux is used in single-process mode, it is
+necessary to create both client-side and server-side versions of the
+window surface.  In our case, the server-side is just a stub because
+the client side directly renders to the screen.
+
+Note that we only create a \c{PvrEglWindowSurface} if the widget is a
+QGLWidget.  All other widgets use the normal raster processing.
+It can be tempting to make \c{createSurface()} create an OpenGL
+window surface for other widget types as well.  This has not been
+extensively tested and we do not recommend its use at this time.
+
+The other main piece is the creation of the \c EGLNativeWindowType
+value for the widget.  This is done in the \c{createNativeWindow()}
+override:
+
+\snippet src/plugins/gfxdrivers/powervr/pvreglscreen/pvreglscreen.cpp 2
+
+The details of what needs to be placed in this function will vary
+from chipset to chipset.  The simplest is to return the native window
+handle corresponding to the "root" full-screen window:
+
+\code
+*native = rootWindowHandle;
+return true;
+\endcode
+
+The most common value for \c rootWindowHandle is zero, but this may
+not always be the case.  Consult the chipset documentation for the
+actual value to use.  The important thing is that whatever value is
+returned must be suitable for passing to the \c{eglCreateWindowSurface()}
+function of the chipset's EGL implementation.
+
+In the case of PowerVR, the rudimentary window system in \c{QWSWSEGL}
+provides a \c PvrQwsDrawable object to represent the \c EGLNativeWindowType
+value for the widget.
+
+*/

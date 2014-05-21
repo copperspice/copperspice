@@ -1,0 +1,138 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page porting4-dnd.html
+    \title Porting to Qt 4 - Drag and Drop
+    \contentspage {Porting Guides}{Contents}
+    \previouspage Porting to Qt 4 - Virtual Functions
+    \nextpage Porting UI Files to Qt 4
+    \ingroup porting
+    \brief An overview of the porting process for applications that use drag and drop.
+
+    Qt 4 introduces a new set of classes to handle drag and drop operations
+    that aim to be easier to use than their counterparts in Qt 3. As a result,
+    the way that drag and drop is performed is quite different to the way
+    developers of Qt 3 applications have come to expect. In this guide, we
+    show the differences between the old and new APIs and indicate where
+    applications need to be changed when they are ported to Qt 4.
+
+    \tableofcontents
+
+    \section1 Dragging
+
+    In Qt 3, drag operations are encapsulated by \c QDragObject (see Q3DragObject)
+    and its subclasses. These objects are typically constructed on the heap in
+    response to mouse click or mouse move events, and ownership of them is
+    transferred to Qt so that they can be deleted when the corresponding drag and
+    drop operations have been completed. The drag source has no control over how
+    the drag and drop operation is performed once the object's
+    \l{Q3DragObject::}{drag()} function is called, and it receives no information
+    about how the operation ended.
+
+    \snippet doc/src/snippets/code/doc_src_dnd.cpp 0
+
+    Similarly, in Qt 4, drag operations are also initiated when a QDrag object
+    is constructed and its \l{QDrag::}{exec()} function is called. In contrast,
+    these objects are typically constructed on the stack rather than the heap
+    since each drag and drop operation is performed synchronously as far as the
+    drag source is concerned. One key benefit of this is that the drag source
+    can receive information about how the operation ended from the value returned
+    by \l{QDrag::}{exec()}.
+
+    \snippet doc/src/snippets/porting4-dropevents/window.cpp 2
+    \snippet doc/src/snippets/porting4-dropevents/window.cpp 3
+    \dots 8
+    \snippet doc/src/snippets/porting4-dropevents/window.cpp 4
+    \snippet doc/src/snippets/porting4-dropevents/window.cpp 5
+
+    A key difference in the above code is the use of the QMimeData class to hold
+    information about the data that is transferred. Qt 3 relies on subclasses
+    of \c QDragObject to provide support for specific MIME types; in Qt 4, the
+    use of QMimeData as a generic container for data makes the relationship
+    between MIME type and data more tranparent. QMimeData is described in more
+    detail later in this document.
+
+    \section1 Dropping
+
+    In both Qt 3 and Qt 4, it is possible to prepare a custom widget to accept
+    dropped data by enabling the \l{QWidget::}{acceptDrops} property of a widget,
+    usually in the widget's constructor. As a result, the widget will receive
+    drag enter events that can be handled by its \l{QWidget::}{dragEnterEvent()}
+    function.
+    As in Qt 3, custom widgets in Qt 4 handle these events by determining
+    whether the data supplied by the drag and drop operation can be dropped onto
+    the widget. Since the classes used to encapsulate MIME data are different in
+    Qt 3 and Qt 4, the exact implementations differ.
+
+    In Qt 3, the drag enter event is handled by checking whether each of the
+    standard \c QDragObject subclasses can decode the data supplied, and
+    indicating success or failure of these checks via the event's
+    \l{QDragEnterEvent::}{accept()} function, as shown in this simple example:
+
+    \snippet doc/src/snippets/code/doc_src_dnd.cpp 1
+
+    In Qt 4, you can examine the MIME type describing the data to determine
+    whether the widget should accept the event or, for common data types, you
+    can use convenience functions:
+
+    \snippet doc/src/snippets/porting4-dropevents/window.cpp 0
+
+    The widget has some control over the type of drag and drop operation to be
+    performed. In the above code, the action proposed by the drag source is
+    accepted, but
+    \l{Drag and Drop#Overriding Proposed Actions}{this can be overridden} if
+    required.
+
+    In both Qt 3 and Qt 4, it is necessary to accept a given drag event in order
+    to receive the corresponding drop event. A custom widget in Qt 3 that can
+    accept dropped data in the form of text or images might provide an
+    implementation of \l{QWidget::}{dropEvent()} that looks like the following:
+
+    \snippet doc/src/snippets/code/doc_src_dnd.cpp 2
+
+    In Qt 4, the event is handled in a similar way:
+
+    \snippet doc/src/snippets/porting4-dropevents/window.cpp 1
+
+    It is also possible to extract data stored for a particular MIME type if it
+    was specified by the drag source.
+
+    \section1 MIME Types and Data
+
+    In Qt 3, data to be transferred in drag and drop operations is encapsulated
+    in instances of \c QDragObject and its subclasses, representing specific
+    data formats related to common MIME type and subtypes.
+
+    In Qt 4, only the QMimeData class is used to represent data, providing a
+    container for data stored in multiple formats, each associated with
+    a relevant MIME type. Since arbitrary MIME types can be specified, there is
+    no need for an extensive class hierarchy to represent different kinds of
+    information. Additionally, QMimeData it provides some convenience functions
+    to allow the most common data formats to be stored and retrieved with less
+    effort than for arbitrary MIME types.
+*/

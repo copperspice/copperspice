@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+<plist version="0.1">
+<dict>
+	<key>CFBundleIconFile</key>
+	<string>linguist.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.trolltech.Linguist</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+        <key>CFBundleGetInfoString</key>
+	<string>Created by Qt/QMake</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleExecutable</key>
+	<string>Linguist</string>
+
+        <key>CFBundleDocumentTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
+                <key>CFBundleTypeIconFile</key>
+                <string>linguist.icns</string>
+                <key>CFBundleTypeExtensions</key>
+                <array>
+                    <string>qph</string>
+                </array>
+                <key>CFBundleTypeName</key>
+                <string>Qt Linguist 'Phrase Book'</string>
+                <key>LSHandlerRank</key>
+                <string>Default</string>
+            </dict>
+            <dict>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
+                <key>CFBundleTypeIconFile</key>
+                <string>linguist.icns</string>
+                <key>CFBundleTypeExtensions</key>
+                <array>
+                    <string>ts</string>
+                </array>
+                <key>CFBundleTypeName</key>
+                <string>Qt Translation Source</string>
+                <key>LSHandlerRank</key>
+                <string>Default</string>
+            </dict>
+            <dict>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
+                <key>CFBundleTypeIconFile</key>
+                <string>linguist.icns</string>
+                <key>CFBundleTypeExtensions</key>
+                <array>
+                    <string>po</string>
+                </array>
+                <key>CFBundleTypeName</key>
+                <string>GNU Gettext Localization File</string>
+                <key>LSHandlerRank</key>
+                <string>Default</string>
+            </dict>
+            <dict>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
+                <key>CFBundleTypeIconFile</key>
+                <string>linguist.icns</string>
+                <key>CFBundleTypeExtensions</key>
+                <array>
+                    <string>xlf</string>
+                </array>
+                <key>CFBundleTypeName</key>
+                <string>XLIFF Localization File</string>
+                <key>LSHandlerRank</key>
+                <string>Default</string>
+            </dict>
+        </array>
+</dict>
+</plist>

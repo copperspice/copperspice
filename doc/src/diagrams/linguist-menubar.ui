@@ -1,0 +1,123 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>31</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" />
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File" >
+    <property name="title" >
+     <string>&amp;File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_Edit" >
+    <property name="title" >
+     <string>&amp;Edit</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_Translation" >
+    <property name="title" >
+     <string>&amp;Translation</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_Validation" >
+    <property name="title" >
+     <string>&amp;Validation</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_Phrases" >
+    <property name="title" >
+     <string>&amp;Phrases</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_View" >
+    <property name="title" >
+     <string>&amp;View</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_Help" >
+    <property name="title" >
+     <string>&amp;Help</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu" >
+    <property name="title" >
+     <string> </string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_2" >
+    <property name="title" >
+     <string>     </string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_3" >
+    <property name="title" >
+     <string>          </string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_4" >
+    <property name="title" >
+     <string>                                                </string>
+    </property>
+   </widget>
+   <addaction name="menu_File" />
+   <addaction name="menu_Edit" />
+   <addaction name="menu_Translation" />
+   <addaction name="menu_Validation" />
+   <addaction name="menu_Phrases" />
+   <addaction name="menu_View" />
+   <addaction name="menu_Help" />
+   <addaction name="menu" />
+   <addaction name="menu_2" />
+   <addaction name="menu_3" />
+   <addaction name="menu_4" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>9</y>
+     <width>800</width>
+     <height>0</height>
+    </rect>
+   </property>
+   <property name="sizePolicy" >
+    <sizepolicy>
+     <hsizetype>5</hsizetype>
+     <vsizetype>5</vsizetype>
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="autoFillBackground" >
+    <bool>false</bool>
+   </property>
+   <property name="sizeGripEnabled" >
+    <bool>false</bool>
+   </property>
+  </widget>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

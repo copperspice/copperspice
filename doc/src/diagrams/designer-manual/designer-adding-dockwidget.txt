@@ -1,0 +1,8 @@
+# Cropping and fading the Qt Designer dock widget images.
+
+cropimage.py designer-adding-dockwidget1.png designer-adding-dockwidget1-crop.png left 11
+cropimage.py designer-adding-dockwidget1-crop.png designer-adding-dockwidget1-crop.png top 6
+cropimage.py designer-adding-dockwidget1-crop.png designer-adding-dockwidget1-crop.png right -201
+cropimage.py designer-adding-dockwidget1-crop.png designer-adding-dockwidget1-crop.png bottom -236
+fadeedges.py designer-adding-dockwidget1-crop.png ../images/designer-adding-dockwidget.png right,bottom 16
+rm designer-adding-dockwidget1-crop.png

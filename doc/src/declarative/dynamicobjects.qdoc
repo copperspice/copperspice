@@ -1,0 +1,215 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qdeclarativedynamicobjects.html
+\ingroup qml-features
+\contentspage {QML Features}
+\previouspage {Integrating QML Code with Existing Qt UI Code}
+\nextpage {Network Transparency}{Loading Resources in QML}
+\title Dynamic Object Management in QML
+
+QML provides a number of ways to dynamically create and manage QML objects.
+The \l{Loader}, \l{Repeater}, \l{ListView}, \l{GridView} and \l{PathView} elements
+all support dynamic object management.  Objects can also be created and managed
+from C++, and this is the preferred method for hybrid QML/C++ applications
+(see \l{Using QML Bindings in C++ Applications}).
+
+QML also supports the dynamic creation of objects from within JavaScript
+code. This is useful if the existing QML elements do not fit the needs of your
+application, and there are no C++ components involved.
+
+See the \l {declarative/toys/dynamicscene}{Dynamic Scene example} for a demonstration
+of the concepts discussed on this page.
+
+
+\section1 Creating Objects Dynamically
+
+There are two ways to create objects dynamically from JavaScript. You can either call
+\l {QML:Qt::createComponent()}{Qt.createComponent()} to dynamically create
+a \l Component object, or use \l{QML:Qt::createQmlObject()}{Qt.createQmlObject()}
+to create an item from a string of QML.
+Creating a component is better if you have an existing component defined in a \c .qml
+file, and you want to dynamically create instances of that component. Otherwise,
+creating an item from a string of QML is useful when the item QML itself is generated
+at runtime.
+
+
+\section2 Creating a Component Dynamically
+
+To dynamically load a component defined in a QML file, call the
+\l {QML:Qt::createComponent()}{Qt.createComponent()} function on the \l{QML Global Object}.
+This function takes the URL of the QML file as its only argument and creates
+a \l Component object from this URL.
+
+Once you have a \l Component, you can call its \l {Component::createObject()}{createObject()} method to create an instance of
+the component. This function can take one or two arguments:
+\list
+\o The first is the parent for the new item. Since graphical items will not appear on the scene without a parent, it is 
+  recommended that you set the parent this way. However, if you wish to set the parent later you can safely pass \c null to 
+  this function. 
+\o The second is optional and is a map of property-value items that define initial any property values for the item.
+  Property values specified by this argument are applied to the object before its creation is finalized, avoiding
+  binding errors that may occur if particular properties must be initialized to enable other property bindings.
+  when certain properties have been bound to before they have been set by the code. Additionally, there are small
+  performance benefits when compared to defining property values and bindings after the object is created.
+\endlist
+
+Here is an example. First there is \c Sprite.qml, which defines a simple QML component:
+
+\snippet doc/src/snippets/declarative/Sprite.qml 0
+
+Our main application file, \c main.qml, imports a \c componentCreation.js JavaScript file
+that will create \c Sprite objects:
+
+\snippet doc/src/snippets/declarative/createComponent.qml 0
+
+Here is \c componentCreation.js. Notice it checks whether the component \l{Component::status}{status} is
+\c Component.Ready before calling \l {Component::createObject()}{createObject()}
+in case the QML file is loaded over a network and thus is not ready immediately.
+
+\snippet doc/src/snippets/declarative/componentCreation.js vars
+\codeline
+\snippet doc/src/snippets/declarative/componentCreation.js func
+\snippet doc/src/snippets/declarative/componentCreation.js remote
+\snippet doc/src/snippets/declarative/componentCreation.js func-end
+\codeline
+\snippet doc/src/snippets/declarative/componentCreation.js finishCreation
+
+If you are certain the QML file to be loaded is a local file, you could omit the \c finishCreation()
+function and call \l {Component::createObject()}{createObject()} immediately:
+
+\snippet doc/src/snippets/declarative/componentCreation.js func
+\snippet doc/src/snippets/declarative/componentCreation.js local
+\snippet doc/src/snippets/declarative/componentCreation.js func-end
+
+Notice in both instances, \l {Component::createObject()}{createObject()} is called with
+\c appWindow passed as an argument so that the created object will become a child of the
+\c appWindow item in \c main.qml. Otherwise, the new item will not appear in the scene.
+
+When using files with relative paths, the path should
+be relative to the file where \l {QML:Qt::createComponent()}{Qt.createComponent()} is executed.
+
+To connect signals to (or receive signals from) dynamically created objects,
+use the signal \c connect() method. See
+\l{QML Signal and Handler Event System#Connecting Signals to Methods and Signals}
+{Connecting Signals to Methods and Signals} for more information.
+
+
+\section2 Creating an Object from a String of QML
+
+If the QML is not defined until runtime, you can create a QML item from
+a string of QML using the \l{QML:Qt::createQmlObject()}{Qt.createQmlObject()} function, as in the following example:
+
+\snippet doc/src/snippets/declarative/createQmlObject.qml 0
+
+The first argument is the string of QML to create. Just like in a new file, you will need to
+import any types you wish to use. The second argument is the parent item for the new item;
+this should be an existing item in the scene. The third argument is the file path to associate
+with the new item; this is used for error reporting.
+
+If the string of QML imports files using relative paths, the path should be relative
+to the file in which the parent item (the second argument to the method) is defined.
+
+
+\section1 Maintaining Dynamically Created Objects
+
+When managing dynamically created items, you must ensure the creation context
+outlives the created item. Otherwise, if the creation context is destroyed first,
+the bindings in the dynamic item will no longer work.
+
+The actual creation context depends on how an item is created:
+
+\list
+\o If \l {QML:Qt::createComponent()}{Qt.createComponent()} is used, the creation context
+   is the QDeclarativeContext in which this method is called
+\o If \l{QML:Qt::createQmlObject()}{Qt.createQmlObject()}
+   if called, the creation context is the context of the parent item passed to this method
+\o If a \c {Component{}} item is defined and \l {Component::createObject()}{createObject()}
+   is called on that item, the creation context is the context in which the \c Component is defined
+\endlist
+
+Also, note that while dynamically created objects may be used the same as other objects, they
+do not have an id in QML.
+
+
+\section1 Deleting Objects Dynamically
+
+In many user interfaces, it is sufficient to set an item's opacity to 0 or
+to move the item off the screen instead of deleting the item. If you have
+lots of dynamically created items, however, you may receive a worthwhile
+performance benefit if unused items are deleted.
+
+Note that you should never manually delete items that were dynamically created
+by QML elements (such as \l Loader and \l Repeater). Also, you should avoid deleting
+items that you did not dynamically create yourself.
+
+Items can be deleted using the \c destroy() method. This method has an optional
+argument (which defaults to 0) that specifies the approximate delay in milliseconds
+before the object is to be destroyed.
+
+Here is an example. The \c application.qml creates five instances of the \c SelfDestroyingRect.qml
+component. Each instance runs a NumberAnimation, and when the animation has finished, calls
+\c destroy() on its root item to destroy itself:
+
+\table
+\row
+\o \c application.qml
+\o \c SelfDestroyingRect.qml
+
+\row
+\o \snippet doc/src/snippets/declarative/dynamicObjects-destroy.qml 0
+\o \snippet doc/src/snippets/declarative/SelfDestroyingRect.qml 0
+
+\endtable
+
+Alternatively, the \c application.qml could have destroyed the created object
+by calling \c object.destroy().
+
+Note that it is safe to call destroy() on an object within that object. Objects are not destroyed the
+instant destroy() is called, but are cleaned up sometime between the end of that script block and the next frame
+(unless you specified a non-zero delay).
+
+Note also that if a \c SelfDestroyingRect instance was created statically like this:
+
+\qml
+Item {
+    SelfDestroyingRect {
+        // ...
+    }
+}
+\endqml
+
+This would result in an error, since items can only be dynamically
+destroyed if they were dynamically created.
+
+Objects created with \l{QML:Qt::createQmlObject()}{Qt.createQmlObject()}
+can similarly be destroyed using \c destroy():
+
+\snippet doc/src/snippets/declarative/createQmlObject.qml 0
+\snippet doc/src/snippets/declarative/createQmlObject.qml destroy
+*/

@@ -1,0 +1,306 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:BSD$
+** You may use this file under the terms of the BSD license as follows:
+**
+** "Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions are
+** met:
+**   * Redistributions of source code must retain the above copyright
+**     notice, this list of conditions and the following disclaimer.
+**   * Redistributions in binary form must reproduce the above copyright
+**     notice, this list of conditions and the following disclaimer in
+**     the documentation and/or other materials provided with the
+**     distribution.
+**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
+**     the names of its contributors may be used to endorse or promote
+**     products derived from this software without specific prior written
+**     permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+
+void wrapInFunction()
+{
+
+//! [2]
+xmlpatterns myQuery.xq
+//! [2]
+
+//! [3]
+declare namespace c = "http://cookbook/namespace";
+doc('cookbook.xml')//c:recipe/c:title
+//! [3]
+
+//! [4]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')//recipe/title
+//! [4]
+
+//! [5]
+<title xmlns="http://cookbook/namespace">Quick and Easy Mushroom Soup</title>
+<title xmlns="http://cookbook/namespace">Cheese on Toast</title>
+<title xmlns="http://cookbook/namespace">Hard-Boiled Eggs</title>
+//! [5]
+
+//! [6]
+xmlpatterns file.xq
+//! [6]
+
+//! [7]
+doc('cookbook.xml')//@xml:*
+//! [7]
+
+//! [8]
+doc('cookbook.xml')//@*:name
+//! [8]
+
+//! [9]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')/cookbook/@*
+//! [9]
+
+//! [10]
+declare default element namespace "http://cookbook/namespace";
+doc("cookbook.xml")/cookbook/recipe[title = "Hard-Boiled Eggs"]
+//! [10]
+
+//! [11]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')//method[string-length(.) = 0]
+//! [11]
+
+//! [12]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')//method[string-length() = 0]
+//! [12]
+
+//! [13]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')/cookbook/recipe[2]
+//! [13]
+
+//! [14]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')/cookbook/recipe[position() = 2]
+//! [14]
+
+//! [15]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')/cookbook/recipe[position() > 1]
+//! [15]
+
+//! [16]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')/cookbook/recipe[last()]
+//! [16]
+
+//! [17]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')/cookbook/recipe[last() - 1]
+//! [17]
+
+//! [18]
+doc('cookbook.xml')//recipe
+//! [18]
+
+//! [19]
+doc('cookbook.xml')//recipe/title
+//! [19]
+
+//! [20]
+<recipe/>
+//! [20]
+
+//! [21]
+ <html xmlns="http://www.w3.org/1999/xhtml/"
+       xml:id="{doc("other.html")/html/@xml:id}"/>
+//! [21]
+
+//! [22]
+doc('cookbook.xml')/descendant-or-self::element(recipe)/child::element(title)
+//! [22]
+
+//! [23]
+<cookbook>
+//! [23]
+
+//! [24]
+<cookbook xmlns="http://cookbook/namespace">
+//! [24]
+
+//! [25]
+for $i in doc("cookbook.xml")//@xml:*
+return <p>{$i}</p>
+//! [25]
+
+//! [26]
+for $i in doc("cookbook.xml")//@*:name
+return <p>{$i}</p>
+//! [26]
+
+//! [27]
+declare default element namespace "http://cookbook/namespace";
+for $i in doc("cookbook.xml")/cookbook/@*
+return <p>{$i}</p>
+//! [27]
+
+//! [28]
+<p xml:id="MushroomSoup"/>
+<p xml:id="CheeseOnToast"/>
+<p xml:id="HardBoiledEggs"/>
+//! [28]
+
+//! [29]
+<p name="Fresh mushrooms"/>
+<p name="Garlic"/>
+<p name="Olive oil"/>
+<p name="Milk"/>
+<p name="Water"/>
+<p name="Cream"/>
+<p name="Vegetable soup cube"/>
+<p name="Ground black pepper"/>
+<p name="Dried parsley"/>
+<p name="Bread"/>
+<p name="Cheese"/>
+<p name="Eggs"/>
+//! [29]
+
+//! [30]
+<p xmlns="http://cookbook/namespace" count="3"/>
+//! [30]
+
+//! [31]
+<method xmlns="http://cookbook/namespace"/>
+//! [31]
+
+//! [32]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')//recipe[string-length(method) = 0]
+//! [32]
+
+//! [33]
+<recipe xmlns="http://cookbook/namespace" xml:id="HardBoiledEggs">
+    <title>Hard-Boiled Eggs</title>
+    <ingredient name="Eggs" quantity="3" unit="eggs"/>
+    <time quantity="3" unit="minutes"/>
+    <method/>
+</recipe>
+//! [33]
+
+//! [34]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')/cookbook/recipe[method[empty(step)]]
+//! [34]
+
+//! [35]
+declare default element namespace "http://cookbook/namespace";
+doc('cookbook.xml')/cookbook/recipe[not(normalize-space(method))]
+//! [35]
+
+//! [36]
+<e>{sum((1, 2, 3))}</e>
+//! [36]
+
+//! [37]
+<e>6</e>
+//! [37]
+
+//![38]
+declare variable $insertion := "example";
+<p class="important {$insertion} obsolete"/>
+//![38]
+
+//! [39]
+<p class="important example obsolete"/>
+//! [39]
+
+//! [40]
+declare default element namespace "http://cookbook/namespace";
+let $docURI := 'cookbook.xml'
+return if(doc-available($docURI))
+       then doc($docURI)//recipe/<oppskrift>{./node()}</oppskrift>
+       else <oppskrift>Failed to load {$docURI}</oppskrift>
+//! [40]
+
+//! [41]
+<span>1</span>
+<span>3</span>
+<span>5</span>
+<span>7</span>
+<span>9</span>
+<span>b</span>
+<span>d</span>
+<span>f</span>
+//! [41]
+
+//! [42]
+<span>1</span>
+//! [42]
+
+//! [43]
+let $doc := doc('doc.txt')
+return $doc/doc/p[1]/span[1]
+//! [43]
+
+//! [44]
+for $a in doc('doc.txt')/doc/p/span[1]
+return $a
+//! [44]
+
+//! [45]
+doc('doc.txt')/doc/p/span[1]
+//! [45]
+
+//! [46]
+doc('doc.txt')//p/<p>{span/node()}</p>
+//! [46]
+
+//! [47]
+<p>78</p>
+<p>9a</p>
+<p>12</p>
+<p>bc</p>
+<p>de</p>
+<p>34</p>
+<p>56</p>
+<p>f0</p>
+//! [47]
+
+//! [48]
+for $a in doc('doc.txt')//p
+ return <p>{$a/span/node()}</p>
+//! [48]
+
+//! [49]
+<p>12</p>
+<p>34</p>
+<p>56</p>
+<p>78</p>
+<p>9a</p>
+<p>bc</p>
+<p>de</p>
+<p>f0</p>
+//! [49]
+
+}
+

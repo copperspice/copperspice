@@ -1,0 +1,16 @@
+\row \o toBitmap ()         \o QVariant::value()
+\row \o toBrush ()          \o QVariant::value()
+\row \o toColorGroup ()     \o Use QVariant::value() with QPalette instead.
+\row \o toColor ()          \o QVariant::value()
+\row \o toCString ()        \o QVariant::toByteArray()
+\row \o toCursor ()         \o QVariant::value()
+\row \o toFont ()           \o QVariant::value()
+\row \o toIconSet ()        \o Use QVariant::value() with QIcon instead.
+\row \o toImage ()          \o QVariant::value()
+\row \o toKeySequence ()    \o QVariant::value()
+\row \o toPalette ()        \o QVariant::value()
+\row \o toPen ()            \o QVariant::value()
+\row \o toPixmap ()         \o QVariant::value()
+\row \o toPointArray ()     \o QVariant::value()
+\row \o toRegion ()         \o QVariant::value()
+\row \o toSizePolicy ()     \o QVariant::value()

@@ -1,0 +1,85 @@
+\section1 Introduction
+
+\l {http://www.opengl.org}{OpenGL} is an industry standard API for
+2D/3D graphics. It provides a powerful, low-level interface between
+software and acceleration hardware, and it is operating system and
+window system independent. \l {http://www.khronos.org/opengles}{OpenGL ES}
+is a subset of the \l {http://www.opengl.org}{OpenGL} standard. Because it
+is designed for use with embedded systems, it has a smaller, more
+constrained API.
+
+\l {http://www.khronos.org/opengles/1_X}{OpenGL ES version 1.x} is designed for
+fixed function hardware, while its successor \l
+{http://www.khronos.org/opengles/2_X}{OpenGL ES version 2.x} is designed for
+programmable hardware. It is worth noting that there is a significant
+difference between the two, and that they are not compatible with each
+other. OpenGL ES 1.x limits processing to a pre-defined set of fixed
+options for drawing and lighting objects. OpenGL 2.x has a significantly
+shorter graphics pipeline than 1.x. Instead of using function
+transformation and a fragment pipeline, 2.x uses the \l
+{http://www.khronos.org/registry/gles/specs/2.0/GLSL_ES_Specification_1.0.17.pdf}{OpenGL
+ES Shading Language (GLSL ES)}. Instead of using the pre-defined functions,
+the programmer writes small shader programs telling the hardware in detail
+how to render each object.
+
+The \l {QtOpenGL module} offers classes that make it easy to draw 3D
+graphics in GUI applications using OpenGL ES. Qt provides a plugin that
+integrates both OpenGL ES versions \l
+{http://www.khronos.org/opengles/1_X}{1.x} and \l
+{http://www.khronos.org/opengles/2_X}{2.x} with Qt for Embedded. However,
+Qt for Embedded can be adapted to a wide range of OpenGL versions.
+
+To translate QPainter operations into OpenGL ES calls (there are actually
+two subclasses, one for OpenGL/ES 1.1 and another for OpenGL/ES 2.0), Qt
+uses a subclass of QPaintEngine.  This specialized paint engine can be used
+to improve 2D rendering performance on appropriate hardware.  It can also
+overlay controls and decorations onto 3D scenes drawn using OpenGL. 
+
+\tableofcontents 
+
+\section1 Using OpenGL ES with Qt
+To use OpenGL-enabled widgets in a Qt for Embedded application, all that is
+required is to subclass QGLWidget and draw into instances of the subclass
+with standard OpenGL functions. The current implementation only
+supports OpenGL ES and 2D painting within a QGLWidget. Using OpenGL ES to
+accelerate regular widgets as well as compositing top-level windows with
+OpenGL ES are not currently supported. These issues will be addressed in
+future versions of Qt.
+
+\note The OpenGL paint engine is not currently supported in regular
+widgets. However, any application that uses QGraphicsView can set a
+QGLWidget as the viewport and obtain access to the OpenGL paint engine that
+way:
+
+\code
+    QGraphicsView view(&scene);
+    view.setViewport(new QGLWidget());
+    view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view.setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    view.setFrameStyle(0);
+    view.showFullScreen();
+\endcode
+
+It is recommended that the QGraphicsView::FullViewportUpdate flag
+be set because the default double-buffered behavior of QGLWidget
+does not support partial updates. It is also recommended that the
+window be shown full-screen because that usually has the best
+performance on current OpenGL ES implementations.
+
+Once a QGraphicsView has been initialized as above, regular widgets
+can be added to the canvas using QGraphicsProxyWidget if the
+application requires them.
+
+\note OpenGL ES 2.X does not support PBuffers, so QGLPixelBuffer will not
+work. In this case, QGLFramebufferObject should be used instead. However,
+OpenGL ES 1.X does not support Framebuffer objects, with the exception of
+some OpenGL ES 1.X extensions. In this case, please use QGLPixelBuffer. 
+
+\note On most embedded hardware, the OpenGL implementation is
+actually \l{http://www.khronos.org/opengles/1_X/}{OpenGL/ES 1.1} or
+\l{http://www.khronos.org/opengles/2_X/}{OpenGL/ES 2.0}.  When painting
+within a QGLWidget::paintGL() override, it is necessary to limit the
+application to only the features that are present in the OpenGL/ES
+implementation.
+

@@ -1,0 +1,240 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qdeclarativeanimation.html
+\ingroup qml-features
+\contentspage QML Features
+\previouspage {QML States}{States}
+\nextpage {QML Data Models}{Structuring Data with Models}
+\title QML Animation and Transitions
+
+\keyword qml-animation-elements
+\section1 Animation and Transitions Elements
+\list
+\o \l {Transition} - Animates transitions during state changes
+\o \l {SequentialAnimation} - Runs animations sequentially
+\o \l {ParallelAnimation} - Runs animations in parallel
+\o \l {Behavior} - Specifies a default animation for property changes
+\o \l {PropertyAction} - Sets immediate property changes during animation
+\o \l {PauseAnimation} - Introduces a pause in an animation
+\o \l {SmoothedAnimation} - Allows a property to smoothly track a value
+\o \l {SpringAnimation} - Allows a property to track a value in a spring-like motion
+\o \l {ScriptAction} - Runs scripts during an animation
+\endlist
+
+\keyword qml-property-animation-elements
+Elements that animate properties based on data types
+\list
+\o \l {PropertyAnimation} - Animates property changes
+\o \l {NumberAnimation} - Animates properties of type qreal
+\o \l {Vector3dAnimation} - Animates properties of type QVector3d
+\o \l {ColorAnimation} - Animates color changes
+\o \l {RotationAnimation} - Animates rotations
+\o \l {ParentAnimation} - Animates parent changes
+\o \l {AnchorAnimation} - Animates anchor changes
+\endlist
+
+In QML, animations are created by applying animation elements to property
+values. Animation elements will interpolate property values to create smooth
+transitions. As well, state transitions may assign animations to state changes.
+
+To create an animation, use an appropriate animation element for the type of
+the property that is to be animated, and apply the animation depending on the
+type of behavior that is required.
+
+\keyword qml-triggering-animations
+\section1 Triggering Animations
+
+There are several ways of setting animation to an object.
+
+\keyword qml-direct-animation
+\section2 Direct Property Animation
+
+To create an immediate movement or animated movement, set the property value
+directly. This may be done in signal handlers or attached properties.
+
+\snippet doc/src/snippets/declarative/animation.qml direct property change
+
+However, to create more control, \e {property animations} apply smooth movements
+by interpolating values between property value changes. Property animations
+provide timing controls and allows different interpolations through
+\l{qml-easing-animation}{easing curves}.
+
+\snippet doc/src/snippets/declarative/animation.qml property animation
+
+Specialized \l{qml-property-animation-elements}{property animation elements}
+have more efficient implementations than the \l{PropertyAnimation} element. They
+are for setting animations to different QML types such as \c int, \c color, and
+rotations. Similarly, the \l{ParentAnimation} can animate parent changes.
+
+See the \l {qml-controlling-animations}{Controlling Animations} section for more
+information about the different animation properties.
+
+\keyword qml-transition-animations
+\section2 Transitions during State Changes
+
+\l{QML States}{States} are property configurations where a property may have different values to reflect different states. State changes introduce
+abrupt property changes; animations smooth transitions to produce visually
+appealing state changes.
+
+The \l{Transition} element can contain
+\l{qml-animation-elements}{animation elements} to interpolate property changes
+caused by state changes. To assign the transition to an object, bind it to the
+\c transitions property.
+
+A button might have two states, the \c pressed state when the user clicks on the
+button and a \c released state when the user releases the button. We can assign
+different property configurations for each state. A transition would animate the
+change from the \c pressed state to the \c released state. Likewise, there would
+be an animation during the change from the \c released state to the \c pressed
+state.
+
+\snippet doc/src/snippets/declarative/animation.qml transition animation
+
+Binding the \c to and \c from properties to the state's name will assign that
+particular transition to the state change. For simple or symmetric transitions,
+setting the to \c to property to the wild card symbol, "\c{*}", denotes
+that the transition applies to any state change.
+
+\snippet doc/src/snippets/declarative/animation.qml wildcard animation
+
+\section2 Default Animation as Behaviors
+
+Default property animations are set using \e {behavior animations}. Animations
+declared in \l {Behavior} elements apply to the property and animates any
+property value changes. However, Behavior elements have an
+\c enabled property to purposely enable or disable the behavior animations.
+
+A ball component might have a behavior animation assigned to its \c x, \c y, and
+\c color properties. The behavior animation could be set up to simulate an
+elastic effect. In effect, this behavior animation would apply the elastic
+effect to the properties whenever the ball moves.
+
+\snippet doc/src/snippets/declarative/animation.qml behavior animation
+
+There are several methods of assigning behavior animations to properties. The
+\c{Behavior on <property>} declaration is a convenient way of assigning a
+behavior animation onto a property.
+
+See the \l {declarative/animation/behaviors/behavior-example}{Behaviors example} for a
+demonstration of behavioral animations.
+
+\section1 Playing Animations in Parallel or in Sequence
+
+Animations can run \e {in parallel} or \e {in sequence}. Parallel animations
+will play a group of animations at the same time while sequential animations
+play a group of animations in order: one after the other. Grouping animations in
+\l{SequentialAnimation} and \l{ParallelAnimation} will play the animations in
+sequence or in parallel.
+
+A banner component may have several icons or slogans to display, one after the
+other. The \c opacity property could transform to \c 1.0 denoting an opaque
+object. Using the \l{SequentialAnimation} element, the opacity animations will
+play after the preceding animation finishes. The \l{ParallelAnimation} element
+will play the animations at the same time.
+
+\snippet doc/src/snippets/declarative/animation.qml sequential animation
+
+Once individual animations are placed into a SequentialAnimation or
+ParallelAnimation, they can no longer be started and stopped independently. The
+sequential or parallel animation must be started and stopped as a group.
+
+The \l SequentialAnimation element is also useful for playing
+\l{qml-transition-animations}{transition animations} because animations are
+played in parallel inside transitions.
+
+See the \l {declarative/animation/basics}{Animation basics example} for a
+demonstration of creating and combining multiple animations in QML.
+
+\keyword qml-controlling-animations
+\section1 Controlling Animations
+
+There are different methods to control animations.
+
+\section2 Animation Playback
+All \l{qml-animation-elements}{animation elements} inherit from the \l Animation element. It is not
+possible to create \l Animation objects; instead, this element provides the
+essential properties and methods for animation elements. Animation elements have
+\c{start()}, \c{stop()}, \c{resume()}, \c{pause()}, \c {restart()}, and
+\c{complete()} -- all of these methods control the execution of animations.
+
+\keyword qml-easing-animation
+\section2 Easing
+
+Easing curves define how the animation will interpolate between the start value
+and the end value. Different easing curves might go beyond the defined range of
+interpolation. The easing curves simplify the creation of animation effects such
+as bounce effects, acceleration, deceleration, and cyclical animations.
+
+A QML object may have different easing curve for each property animation. There
+are also different parameters to control the curve, some of which are exclusive
+to a particular curve. For more information about the easing curves, visit the
+\l {PropertyAnimation::easing.type}{easing} documentation.
+
+The \l{declarative/animation/easing}{easing example} visually demonstrates each
+of the different easing types.
+
+\section2 Other Animation Elements
+
+In addition, QML provides several other elements useful for animation:
+
+\list
+\o PauseAnimation: enables pauses during animations
+\o ScriptAction: allows JavaScript to be executed during an animation, and can
+be used together with StateChangeScript to reused existing scripts
+\o PropertyAction: changes a property \e immediately during an animation,
+without animating the property change
+\endlist
+
+These are specialized animation elements that animate different property types
+\list
+\o SmoothedAnimation: a specialized NumberAnimation that provides smooth
+changes in animation when the target value changes
+\o SpringAnimation: provides a spring-like animation with specialized
+attributes such as \l {SpringAnimation::}{mass},
+\l{SpringAnimation::}{damping} and \l{SpringAnimation::}{epsilon}
+\o ParentAnimation: used for animating a parent change (see ParentChange)
+\o AnchorAnimation: used for animating an anchor change (see AnchorChanges)
+\endlist
+
+*/
+
+
+
+\snippet doc/src/snippets/declarative/animation-elements.qml color
+\snippet doc/src/snippets/declarative/animation-propertyvaluesource.qml 0
+\snippet doc/src/snippets/declarative/animation-signalhandler.qml 0
+\snippet doc/src/snippets/declarative/animation-standalone.qml 0
+
+\snippet doc/src/snippets/declarative/animation-transitions.qml 0
+\snippet doc/src/snippets/declarative/animation-groups.qml 0
+
+\snippet doc/src/snippets/declarative/animation-groups.qml 1
+\snippet doc/src/snippets/declarative/animation-groups.qml 0
+\image propanim.gif
+

@@ -1,0 +1,68 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page restoring-geometry.html
+    \title Restoring a Window's Geometry
+    \brief How to save &amp; restore window geometry.
+    \ingroup best-practices
+
+    This document describes how to save and restore a \l{Window
+    Geometry}{window's geometry} using the geometry properties. On
+    Windows, this is basically storing the result of
+    QWidget::geometry() and calling QWidget::setGeometry() in the next
+    session before calling \l{QWidget::show()}{show()}.
+
+    On X11, this might not work because an invisible window does not
+    have a frame yet. The window manager will decorate the window
+    later.  When this happens, the window shifts towards the
+    bottom/right corner of the screen depending on the size of the
+    decoration frame.  Although X provides a way to avoid this shift,
+    some window managers fail to implement this feature.
+
+    Since version 4.2, Qt provides functions that saves and restores a
+    window's geometry and state for you. QWidget::saveGeometry()
+    saves the window geometry and maximized/fullscreen state, while
+    QWidget::restoreGeometry() restores it. The restore function also
+    checks if the restored geometry is outside the available screen
+    geometry, and modifies it as appropriate if it is:
+
+    \snippet doc/src/snippets/code/src_gui_widgets_qmainwindow.cpp 0
+    \snippet doc/src/snippets/code/src_gui_widgets_qmainwindow.cpp 1
+
+    If those functions are not available or cannot be used, then a
+    workaround is to call \l{QWidget::setGeometry()}{setGeometry()}
+    after \l{QWidget::show()}{show()}. This has the two disadvantages
+    that the widget appears at a wrong place for a millisecond
+    (results in flashing) and that currently only every second window
+    manager gets it right. A safer solution is to store both
+    \l{QWidget::pos()}{pos()} and \l{QWidget::size()}{size()} and to
+    restore the geometry using \l{QWidget::resize()} and
+    \l{QWidget::move()}{move()} before calling
+    \l{QWidget::show()}{show()}, as demonstrated in the
+    \l{mainwindows/application}{Application} example.
+*/

@@ -1,0 +1,158 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qdeclarativenetwork.html
+\ingroup qml-features
+\previouspage {Dynamic Object Management in QML}{Dynamic Object Management}
+\nextpage {QML Internationalization}{Internationalization}
+\contentspage QML Features
+\title Network Transparency
+
+QML supports network transparency by using URLs (rather than file names) for all
+references from a QML document to other content:
+
+\qml
+Image {
+    source: "http://www.example.com/images/logo.png"
+}
+\endqml
+
+Since a \e relative URL is the same
+as a relative file, development of QML on regular file systems remains simple:
+
+\qml
+Image {
+    source: "images/logo.png"
+}
+\endqml
+
+Network transparency is supported throughout QML, for example:
+
+\list
+\o Fonts - the \c source property of FontLoader is a URL
+\o WebViews - the \c url property of WebView (obviously!)
+\endlist
+
+Even QML types themselves can be on the network - if the \l {QML Viewer} is used to load
+\tt http://example.com/mystuff/Hello.qml and that content refers to a type "World", the engine
+will load \tt http://example.com/mystuff/qmldir and resolve the type just as it would for a local file.
+For example if the qmldir file contains the line "World World.qml", it will load
+\tt http://example.com/mystuff/World.qml
+Any other resources that \tt Hello.qml referred to, usually by a relative URL, would
+similarly be loaded from the network.
+
+
+\section1 Relative vs. Absolute URLs
+
+Whenever an object has a property of type URL (QUrl), assigning a string to that
+property will actually assign an absolute URL - by resolving the string against
+the URL of the document where the string is used.
+
+For example, consider this content in \tt{http://example.com/mystuff/test.qml}:
+
+\qml
+Image {
+    source: "images/logo.png"
+}
+\endqml
+
+The \l Image source property will be assigned \tt{http://example.com/mystuff/images/logo.png},
+but while the QML is being developed, in say \tt C:\\User\\Fred\\Documents\\MyStuff\\test.qml, it will be assigned
+\tt C:\\User\\Fred\\Documents\\MyStuff\\images\\logo.png.
+
+If the string assigned to a URL is already an absolute URL, then "resolving" does
+not change it and the URL is assigned directly.
+
+
+\section1 Progressive Loading
+
+Because of the declarative nature of QML and the asynchronous nature of network resources,
+objects which reference network resource generally change state as the network resource loads.
+For example, an Image with a network source will initially have
+a \c width and \c height of 0, a \c status of \c Loading, and a \c progress of 0.0.
+While the content loads, the \c progress will increase until
+the content is fully loaded from the network,
+at which point the \c width and \c height become the content size, the \c status becomes \c Ready, and the \c progress reaches 1.0.
+Applications can bind to these changing states to provide visual progress indicators where appropriate, or simply
+bind to the \c width and \c height as if the content was a local file, adapting as those bound values change.
+
+Note that when objects reference local files they immediately have the \c Ready status, but applications wishing
+to remain network transparent should not rely on this. Future versions of QML may also use asynchronous local file I/O
+to improve performance.
+
+
+\section1 Accessing Network Services
+
+QML types such as XmlListModel, and JavaScript classes like XMLHttpRequest are intended
+entirely for accessing network services, which usually respond with references to
+content by URLs that can then be used directly in QML. For example, using these facilities
+to access an on-line photography service would provide the QML application with URLs to
+photographs, which can be directly set on an \l Image \c source property.
+
+See the \tt demos/declarative/flickr for a real demonstration of this.
+
+
+\section1 Configuring the Network Access Manager
+
+All network access from QML is managed by a QNetworkAccessManager set on the QDeclarativeEngine which executes the QML.
+By default, this is an unmodified Qt QNetworkAccessManager. You may set a different manager by
+providing a QDeclarativeNetworkAccessManagerFactory and setting it via
+QDeclarativeEngine::setNetworkAccessManagerFactory().
+For example, the \l {QML Viewer} sets a QDeclarativeNetworkAccessManagerFactory which
+creates QNetworkAccessManager that trusts HTTP Expiry headers to avoid network cache checks,
+allows HTTP Pipelining, adds a persistent HTTP CookieJar, a simple disk cache, and supports proxy settings.
+
+
+\section1 QRC Resources
+
+One of the URL schemes built into Qt is the "qrc" scheme. This allows content to be compiled into
+the executable using \l{The Qt Resource System}. Using this, an executable can reference QML content
+that is compiled into the executable:
+
+\quotefromfile snippets/declarative/qtbinding/resources/main.cpp
+\skipto view
+\printuntil setSource
+
+The content itself can then use relative URLs, and so be transparently unaware that the content is
+compiled into the executable.
+
+
+\section1 Limitations
+
+The \c import statement is only network transparent if it has an "as" clause.
+
+More specifically:
+\list
+\o \c{import "dir"} only works on local file systems
+\o \c{import libraryUri} only works on local file systems
+\o \c{import "dir" as D} works network transparently
+\o \c{import libraryUrl as U} works network transparently
+\endlist
+
+
+*/

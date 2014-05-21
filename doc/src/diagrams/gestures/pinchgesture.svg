@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="pinchgesture.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective2473"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3362"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3429"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3639"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="299.95763"
+     inkscape:cy="879.65793"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1184"
+     inkscape:window-height="668"
+     inkscape:window-x="223"
+     inkscape:window-y="324">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2383"
+       visible="true"
+       enabled="true"
+       units="pt"
+       spacingx="1pt"
+       spacingy="1pt" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3235"
+       width="275"
+       height="162.5"
+       x="137.5"
+       y="114.86218"
+       ry="25.253815"
+       rx="25.253815"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <rect
+       ry="0"
+       rx="0"
+       y="127.36218"
+       x="168.75"
+       height="81.25"
+       width="212.5"
+       id="rect3839"
+       style="opacity:1;fill:#4040a0;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       style="fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 168.75,158.61218 C 200,164.86218 243.75,164.86218 275,171.11218 C 293.75,164.86218 356.25,158.61218 381.25,158.61218 L 381.25,208.61218 L 256.25,208.61218 L 168.75,208.61218 L 168.75,158.61218 z"
+       id="path3845"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <rect
+       style="opacity:1;fill:#404060;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.93750000000000000;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3328"
+       width="75"
+       height="56.25"
+       x="237.5"
+       y="139.86218"
+       rx="0"
+       ry="0"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       style="fill:#2f4f2f;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 312.5,164.86218 C 306.25,158.61218 281.25,171.11218 262.5,164.86218 C 247.30507,158.35772 243.75,164.86218 237.5,171.11218 L 237.5,196.11218 L 312.5,196.11218 L 312.5,164.86218 z"
+       id="path3841"
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:#ffffff;fill-opacity:0.12437811;fill-rule:evenodd;stroke:#000000;stroke-width:2.50000000000000000;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:5, 5;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3167"
+       sodipodi:cx="137.5"
+       sodipodi:cy="164.86218"
+       sodipodi:rx="12.5"
+       sodipodi:ry="12.5"
+       d="M 150,164.86218 A 12.5,12.5 0 1 1 125,164.86218 A 12.5,12.5 0 1 1 150,164.86218 z"
+       transform="translate(118.75,0)"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:#ffffff;fill-opacity:0;fill-rule:evenodd;stroke:#c90000;stroke-width:2.50000000000000000;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3169"
+       sodipodi:cx="137.5"
+       sodipodi:cy="164.86218"
+       sodipodi:rx="12.5"
+       sodipodi:ry="12.5"
+       d="M 150,164.86218 A 12.5,12.5 0 1 1 125,164.86218 A 12.5,12.5 0 1 1 150,164.86218 z"
+       transform="translate(225.5176,19.302421)"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       inkscape:export-ydpi="72"
+       inkscape:export-xdpi="72"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       transform="translate(50,-6.25)"
+       d="M 150,164.86218 A 12.5,12.5 0 1 1 125,164.86218 A 12.5,12.5 0 1 1 150,164.86218 z"
+       sodipodi:ry="12.5"
+       sodipodi:rx="12.5"
+       sodipodi:cy="164.86218"
+       sodipodi:cx="137.5"
+       id="path3649"
+       style="opacity:1;fill:#ffffff;fill-opacity:0;fill-rule:evenodd;stroke:#c90000;stroke-width:2.50000000000000000;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       sodipodi:type="arc" />
+    <g
+       id="g3641"
+       inkscape:label="Layer 1"
+       transform="matrix(-0.75,0,0,0.75,585.42164,37.937193)"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72">
+      <g
+         id="g3643">
+        <path
+           sodipodi:nodetypes="ccccccccccccccccc"
+           id="path3645"
+           d="M 497.22886,219.23332 C 499.98338,212.79698 515.74295,224.65256 525,227.36218 L 525,164.86218 C 525,152.36218 537.5,152.36218 537.5,164.86218 L 537.5,208.61218 L 537.5,189.86218 C 537.5,183.61218 550,183.61218 550,189.86218 L 550,208.61218 L 550,196.11218 C 550,189.86218 562.5,189.86218 562.5,196.11218 L 562.5,214.86218 L 562.5,202.36218 C 562.5,196.11218 575,196.11218 575,202.36218 L 575,264.86218 C 562.5,271.11218 537.5,271.11218 525,264.86218 L 525,246.11218 C 517.00744,236.2443 493.75,227.36218 497.22886,219.23332 z"
+           style="fill:#e0e0e0;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        <path
+           sodipodi:nodetypes="cccc"
+           id="path3647"
+           d="M 535.83948,168.05221 C 535.83948,163.26959 535.83948,158.48698 531.25,158.48698 C 526.66052,158.48698 526.66052,163.26959 526.66052,168.05221 C 526.66052,172.83482 535.83948,172.83482 535.83948,168.05221 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      </g>
+    </g>
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:5.625, 5.625;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 187.5,158.61218 L 256.25,164.86218"
+       sodipodi:nodetypes="cc"
+       id="path12"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       inkscape:export-ydpi="72"
+       inkscape:export-xdpi="72"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       transform="translate(156.25,6.25)"
+       d="M 150,164.86218 A 12.5,12.5 0 1 1 125,164.86218 A 12.5,12.5 0 1 1 150,164.86218 z"
+       sodipodi:ry="12.5"
+       sodipodi:rx="12.5"
+       sodipodi:cy="164.86218"
+       sodipodi:cx="137.5"
+       id="path3659"
+       style="opacity:1;fill:#ffffff;fill-opacity:0.12437811;fill-rule:evenodd;stroke:#000000;stroke-width:2.50000000000000000;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:5, 5;stroke-dashoffset:0;stroke-opacity:1"
+       sodipodi:type="arc" />
+    <path
+       inkscape:export-ydpi="72"
+       inkscape:export-xdpi="72"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       id="path3661"
+       sodipodi:nodetypes="cc"
+       d="M 293.75,171.11218 L 362.5,183.61218"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:5.625, 5.625;stroke-dashoffset:0;stroke-opacity:1" />
+    <g
+       id="g3431"
+       inkscape:label="Layer 1"
+       transform="matrix(0.7386058,0.1302361,-0.1302361,0.7386058,-8.1572814,-2.6927947)"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72">
+      <g
+         id="g3210">
+        <path
+           sodipodi:nodetypes="ccccccccccccccccc"
+           id="path3191"
+           d="M 497.22886,219.23332 C 499.98338,212.79698 515.74295,224.65256 525,227.36218 L 525,164.86218 C 525,152.36218 537.5,152.36218 537.5,164.86218 L 537.5,208.61218 L 537.5,189.86218 C 537.5,183.61218 550,183.61218 550,189.86218 L 550,208.61218 L 550,196.11218 C 550,189.86218 562.5,189.86218 562.5,196.11218 L 562.5,214.86218 L 562.5,202.36218 C 562.5,196.11218 575,196.11218 575,202.36218 L 575,264.86218 C 562.5,271.11218 537.5,271.11218 525,264.86218 L 525,246.11218 C 517.00744,236.2443 493.75,227.36218 497.22886,219.23332 z"
+           style="fill:#e0e0e0;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        <path
+           sodipodi:nodetypes="cccc"
+           id="path3197"
+           d="M 535.83948,168.05221 C 535.83948,163.26959 535.83948,158.48698 531.25,158.48698 C 526.66052,158.48698 526.66052,163.26959 526.66052,168.05221 C 526.66052,172.83482 535.83948,172.83482 535.83948,168.05221 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      </g>
+    </g>
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 312.5,171.11218 L 356.25,171.11218"
+       id="path3847"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       style="fill:#c44060;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 362.5,171.11218 L 362.5,139.86218 L 312.5,139.86218 L 312.5,171.11218 L 362.5,171.11218 z"
+       id="path3849"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       style="fill:#e0e0e0;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 368.75,139.86218 L 356.25,127.36218 L 318.75,127.36218 L 306.25,139.86218 L 368.75,139.86218 z"
+       id="path3853"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       sodipodi:nodetypes="cccc"
+       id="path3855"
+       d="M 331.25,158.61218 L 331.25,146.11218 L 318.75,146.11218 L 318.75,158.61218 L 331.25,158.61218 z"
+       style="fill:#5b77ff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       style="fill:#c0cb54;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 356.25,171.11218 L 356.25,146.11218 L 343.75,146.11218 L 343.75,171.11218 L 356.25,171.11218 z"
+       id="path3857"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       id="path3868"
+       d="M 282.8125,167.98719 L 293.75,167.98719"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.25px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       sodipodi:nodetypes="cccc"
+       id="path3870"
+       d="M 295.3125,167.98719 L 295.3125,160.17469 L 282.8125,160.17469 L 282.8125,167.98719 L 295.3125,167.98719 z"
+       style="fill:#681e2f;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.25000000000000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       id="path3872"
+       d="M 296.875,160.17469 L 293.75,157.04969 L 284.375,157.04969 L 281.25,160.17469 L 296.875,160.17469 z"
+       style="fill:#6e6c6c;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.25000000000000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       style="fill:#2f3e85;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.31250000000000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 287.5,164.86219 L 287.5,161.73719 L 284.375,161.73719 L 284.375,164.86219 L 287.5,164.86219 z"
+       id="path3874"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       id="path3876"
+       d="M 293.75,167.98719 L 293.75,161.73719 L 290.625,161.73719 L 290.625,167.98719 L 293.75,167.98719 z"
+       style="fill:#65692a;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.31250000000000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/dboddie/git/qt/doc/src/images/pinchgesture.png"
+       inkscape:export-xdpi="72"
+       inkscape:export-ydpi="72" />
+  </g>
+</svg>

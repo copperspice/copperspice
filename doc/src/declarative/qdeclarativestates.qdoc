@@ -1,0 +1,158 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qdeclarativestates.html
+\ingroup qml-features
+\contentspage QML Features
+\previouspage {Importing Reusable Components}
+\nextpage {QML Animation and Transitions}{Animation and Transitions}
+\target qmlstates
+\title QML States
+
+\section1 States Elements
+\list
+\o \l State
+\o \l PropertyChanges
+\o \l StateGroup
+\o \l StateChangeScript
+\o \l ParentChange
+\o \l AnchorChanges
+\endlist
+
+Many user interface designs are \e state driven; interfaces have configurations
+that differ depending on the current state. For example, a traffic signal will
+configure its flags or lights depending on its state. While in the signal's
+\c stop state, a red light will turn on while the yellow and the green lights
+will turn off. In the \c caution state, the yellow light is on while the other
+lights are turned off.
+
+In QML, \e states are a set of property configurations defined in a \l State
+element. Different configurations could, for example:
+
+\list
+\o Show some UI elements and hide others
+\o Present different available actions to the user
+\o Start, stop, or pause animations
+\o Execute some script required in the new state
+\o Change a property value for a particular item
+\o Show a different view or screen
+\endlist
+
+All \l {Item}-based objects have a \c state property, and can specify additional
+states by adding new \c State objects to the item's \l {Item::}{states}
+property. Each state within a component has a unique \c name, an empty string
+being the default. To change the current state
+of an item, set the \l {Item::}{state} property to the name of the state.
+
+Non-Item objects may use states through the \l StateGroup element.
+
+\section1 Creating States
+
+To create a state, add a \l State object to the item's \l {Item::}{states} property,
+which holds a list of states for that item.
+
+A warning \c signal component may have two states, the \c NORMAL and the
+\c CRITICAL state. Suppose that in the \c NORMAL state, the \c color of the
+signal should be \c green and the warning \c flag is down. Meanwhile, in the
+\c CRITICAL state, the \c color should be \c red and the flag is \c up. We may
+model the states using the \c State element and the color and flag
+configurations with the \c PropertyChanges element.
+\snippet doc/src/snippets/declarative/states.qml signal states
+The \l PropertyChanges element will change the values of object properties.
+Objects are referenced through their \l {qml-id-property}{id}. Objects outside
+the component are also referenced using the \c id property, exemplified by the
+property change to the external \c flag object.
+
+Further, the state may change by assigning the \c state property with the
+appropriate signal state. A state switch could be in a \l MouseArea element,
+assigning a different state whenever the signal receives a mouse click.
+\snippet doc/src/snippets/declarative/states.qml switch states
+
+The State element is not limited to performing modifications on property values.
+It can also:
+\list
+\o Run some script using \l StateChangeScript
+\o Override an existing signal handler for an object using \l PropertyChanges
+\o Re-parent an \l Item using \l ParentChange
+\o Modify anchor values using \l AnchorChanges
+\endlist
+
+\section1 The Default State
+
+Every \l Item based component has a \c state property and a \e{default state}.
+The default state is the empty string (\c{""}) and contains all of an item's
+initial property values. The default state is useful for managing property
+values before state changes. Setting the \c state property to an empty string
+will load the default state.
+
+\section1 The \c when Property
+
+For convenience, the \l State element has a \c when property that can bind to
+expressions to change the state whenever the bound expression evaluates to
+\c true. The \c when property will revert the state back to the
+\l {The Default State}{default state} when the expression evaluates to false.
+
+\snippet doc/src/snippets/declarative/states.qml when property
+The \c bell component will change to the \c RINGING state whenever the
+\c signal.state is \c CRITICAL.
+
+\section1 Animating State Changes
+
+State changes induce abrupt value changes. The \l Transition element allow
+smoother changes during state changes. In transitions, animations and
+interpolation behaviors are definable. The
+\l {QML Animation and Transitions}{Animation and Transitions} article has more
+information about creating state animations.
+
+The \l {declarative/animation/states}{States and Transitions example}
+demonstrates how to declare a basic set of states and apply animated
+transitions between them.
+
+\l{Using QML Behaviors with States} explains a common problem when using Behaviors
+to animate state changes.
+
+\section1 State Fast Forwarding
+
+In order for Transition to correctly animate state changes, it is sometimes necessary
+for the engine to fast forward and rewind a state (that is, internally set and unset the state)
+before it is finally applied. The process is as follows:
+
+\list 1
+\o The state is fast forwarded to determine the complete set of end values.
+\o The state is rewound.
+\o The state is fully applied, with transitions.
+\endlist
+
+In some cases this may cause unintended behavior. For example, a state that changes
+a view's \i model or a Loader's \i sourceComponent will set these properties
+multiple times (to apply, rewind, and then reapply), which can be relatively expensive.
+
+State fast forwarding should be considered an implementation detail,
+and may change in later versions.
+
+*/

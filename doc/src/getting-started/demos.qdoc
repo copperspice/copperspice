@@ -1,0 +1,198 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page demos.html
+    \title Qt Demonstrations
+    \brief Information about the demonstration programs provided with Qt.
+
+    \previouspage Qt Examples
+    \contentspage How to Learn Qt
+    \nextpage What's New in Qt 4.7
+
+    This is the list of demonstrations in Qt's \c demos directory.
+    These are larger and more complicated programs than the
+    \l{Qt Examples} and are used to highlight certain features of
+    Qt.
+
+    \table
+    \header
+    \o {2,1} Getting an Overview
+    \row
+    \o \inlineimage qtdemo-small.png
+    \o If you run the \l{Examples and Demos Launcher}, you'll see many of Qt's
+    widgets in action.
+
+    The \l{Qt Widget Gallery} also provides overviews of selected Qt
+    widgets in each of the styles used on various supported platforms.
+    \endtable
+
+    If you are new to Qt, and want to start developing applications,
+    you should probably start by going through the \l{Tutorials}.
+
+    \keyword qt-mobile-demos
+    \section1 Mobile Applications
+    These are demonstrations of some of the capabilities of \l{Qt Quick} and
+    \l{external: Qt Mobility Manual}{Mobility} to create feature rich mobile
+    applications.
+    \list
+    \o \l{Guitar Tuner Example}{Guitar Tuner} - a guitar tuner made with a QML frontend and a Mobility based backend
+    \o \l{Quick Hit Demo}{Quick Hit} - a game that uses multimedia and Qt Quick
+    \o \l{Qt Bubble Level Example}{Qt Bubble Level} - a game that utilizes hardware sensors for effects
+    \o \l{QCamera Example}{QCamera} - a camera application that accesses mobile contacts and networking
+    \endlist
+    \section1 Painting
+
+    \list
+    \o \l{demos/composition}{Composition Modes} demonstrates the range of
+       composition modes available with Qt.
+    \o \l{demos/deform}{Vector Deformation} demonstrates effects that are made
+       possible with a vector-oriented paint engine.
+    \o \l{demos/gradients}{Gradients} shows the different types of gradients
+       that are available in Qt.
+    \o \l{demos/pathstroke}{Path Stroking} shows Qt's built-in dash patterns
+       and shows how custom patterns can be used to extend the range of
+       available patterns.
+    \o \l{demos/affine}{Affine Transformations} demonstrates the different
+       affine transformations that can be used to influence painting operations.
+    \o \l{demos/arthurplugin}{Arthur Plugin} shows the widgets from the
+       other painting demos packaged as a custom widget plugin for \QD.
+    \endlist
+
+    \section1 Item Views
+
+    \list
+    \o \l{demos/interview}{Interview} shows the same model and selection being
+       shared between three different views.
+    \o \l{demos/spreadsheet}{Spreadsheet} demonstrates the use of a table view
+       as a spreadsheet, using custom delegates to render each item according to
+       the type of data it contains.
+    \endlist
+
+    \section1 SQL
+
+    \list
+    \o \l{demos/books}{Books} shows how Qt's SQL support and model/view integration
+       enables the user to modify the contents of a database without requiring
+       knowledge of SQL.
+    \o \l{demos/sqlbrowser}{SQL Browser} demonstrates a console for executing SQL
+       statements on a live database and provides a data browser for interactively
+       visualizing the results.
+    \endlist
+
+    \section1 Rich Text
+
+    \list
+    \o \l{demos/textedit}{Text Edit} shows Qt's rich text editing features and provides
+       an environment for experimenting with them.
+    \endlist
+
+    \section1 Main Window
+
+    \list
+    \o \l{demos/mainwindow}{Main Window} shows Qt's extensive support for main window
+       features, such as tool bars, dock windows, and menus.
+    \o \l{demos/macmainwindow}{Mac Main Window} shows how to create main window applications that has
+      the same appearance as other Mac OS X applications.
+    \endlist
+
+    \section1 Graphics View
+
+    \list
+    \o \l{demos/chip}{40000 Chips} uses the \l{Graphics View Framework} to
+       efficiently display a large number of individual graphical items on
+       a scrolling canvas and highlighting features including rotation,
+       zooming, level of detail control, and item selection.
+    \o \l{demos/embeddeddialogs}{Embedded Dialogs} showcases Qt 4.4's
+       \e{Widgets on the Canvas} feature by embedding several
+       fully-functional dialogs in a scene.
+    \o \l{demos/boxes}{Boxes} showcases Qt's OpenGL support and the
+       integration with the \l{Graphics View Framework}.
+    \endlist
+
+    \section1 Tools
+
+    \list
+    \o \l{demos/undo}{Undo Framework} demonstrates how Qt's
+        \l{Overview of Qt's Undo Framework}{undo framework} is used to
+        provide advanced undo/redo functionality.
+    \endlist
+
+    \section1 QtWebKit
+
+    \list
+    \o \l{Web Browser} demonstrates how Qt's \l{QtWebKit} module can be used to
+       implement a small Web browser.
+    \endlist
+
+    \section1 Phonon
+
+    \list
+    \o \l{demos/qmediaplayer}{Media Player} demonstrates how the
+    \l{Phonon Module}{Phonon module} can be used to implement a basic media player
+    application.
+    \endlist
+
+    \note The Phonon demos are currently not available for the MinGW platform.
+
+    \section1 Multimedia
+
+    \list
+    \o \l{demos/spectrum}{Spectrum Analyzer} demonstrates how the \l{QtMultimedia Module}
+    can be used to capture and play back an audio stream, at the same time allowing the
+    application to access the raw audio data.  This application analyzes the audio stream
+    in order to display a frequency spectrum.
+    \endlist
+
+    \section1 Animation
+
+    \list
+    \o \l{demos/sub-attaq}{Sub-Attaq} demonstrates the features of the
+       \l{The Animation Framework}{animation framework} and
+       \l{The State Machine Framework}{state machine framework} in the production of
+       a simple game.
+    \endlist
+
+    \section1 Embedded Platforms
+
+    \list
+    \o \l{demos/embedded/anomaly}{Anomaly} is a small screen browser with kinetic scrolling.
+    \o \l{demos/embedded/desktopservices}{Embedded Desktop Services} shows how to open
+       documents using the applications associated with their file types.
+    \o \l{demos/embedded/digiflip}{Digiflip} is a digital watch with transition effects.
+    \o \l{demos/embedded/embeddedsvgviewer}{Embedded SVG Viewer} shows how to display SVG
+       drawings on embedded devices.
+    \o \l{demos/embedded/flickable}{Flickable List} shows how to display a list with kinetic scrolling.
+    \o \l{demos/embedded/flightinfo}{Flight Info} fetches information about aircraft flights from the Web.
+    \o \l{demos/embedded/fluidlauncher}{Fluid Launcher} demo application launcher for embedded screens
+    \o \l{demos/embedded/lightmaps}{Light Maps} demonstrates OpenStreetMap integration with WebKit.
+    \o \l{demos/embedded/raycasting}{Ray Casting} demonstrates the use of ray casting with the
+       \l{Graphics View Framework}.
+    \o \l{demos/embedded/styledemo}{Embedded Styles} demonstrates the use of styles.
+    \o \l{demos/embedded/weatherinfo}{Weather Info} fetches weather information from the Web.
+    \endlist
+*/

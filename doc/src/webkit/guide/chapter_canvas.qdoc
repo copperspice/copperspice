@@ -1,0 +1,1016 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the Qt WebKit module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:BSD$
+** You may use this file under the terms of the BSD license as follows:
+**
+** "Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions are
+** met:
+**   * Redistributions of source code must retain the above copyright
+**     notice, this list of conditions and the following disclaimer.
+**   * Redistributions in binary form must reproduce the above copyright
+**     notice, this list of conditions and the following disclaimer in
+**     the documentation and/or other materials provided with the
+**     distribution.
+**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
+**     the names of its contributors may be used to endorse or promote
+**     products derived from this software without specific prior written
+**     permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+/*!
+
+\page qtwebkit-guide-canvas.html
+\title QtWebKit Guide - Canvas Graphics
+
+\chapter Canvas Graphics
+This section of the \l{QtWebKit Guide} serves as an introduction to the
+\l{HTML5 Canvas API} features of QtWebKit.
+
+The \l{HTML5 Canvas API} enables you to draw within a Web page or Web App using
+JavaScript. After you define a rectangle that serves as your drawing canvas, you
+can draw straight and curved lines, simple and complex shapes, graphs, and
+referenced graphic images. You can add text, color, shadows, gradients, and
+patterns. The canvas API also enables you to save or export the canvas as a .png
+or .jpeg image file.
+
+To define the drawing area, set the \c{width} and \c{height} of a \c{<canvas>}
+element. For example, the following sets a drawing area with a height of 100
+pixels and width of 200 pixels:
+
+\code
+<canvas id="mycanvas" width="100" height="200"></canvas>
+\endcode
+
+By default, \c{canvas} elements are sized 150 pixels high and 300 pixels wide.
+You can also set the size of the canvas using CSS:
+
+\code
+canvas { height : 200px; width : 100px; }
+\endcode
+
+The \c{canvas} element is transparent and has no visible borders until you
+\l{Accessing the Rendering Context}{access the 2D rendering context}.
+
+Resetting the width or height of an existing canvas erases its contents and
+resets all the context properties of the canvas to their default values.
+
+\section1 Accessing the Rendering Context
+
+The rendering \bold{context} defines the methods and attributes needed to draw
+on the canvas. QtWebKit currently supports the two-dimensional rendering
+context. The following assigns the canvas rendering context to a \c{context}
+variable:
+
+\code
+var context = canvas.getContext("2d")
+\endcode
+
+The 2d context renders the canvas as a coordinate system whose origin (0,0) is
+at the top left corner, as shown in the figure below. Coordinates increase along
+the \c{x} axis from left to right and along the \c{y} axis from top to bottom of
+the canvas.
+
+\image webkit-guide/canvas_context.gif
+
+\section1 Drawing Shapes
+
+The 2D rendering context supports rectangles, lines, and arcs, which
+you can combine to build complex shapes and graphic images.
+
+    \section2 Drawing Rectangles
+
+    The rectangle is the only geometric shape that is built in to the
+    canvas API. You can draw an outline of a rectangle, a filled
+    rectangle, and a filled rectangle with clear parts. You do not have to
+    create a path to draw a rectangle.
+
+    To draw an outline of a rectangle, use the \c{strokeRect()} method.
+
+    To draw a filled rectangle, use the \c{fillRect()} method. The default
+    fill color is black.
+
+    To clear part of a filled rectangle, use the \c{clearRect()} method.
+
+    Each method accepts the following series of arguments:
+
+    \list
+    \o \c{x} is the position on the canvas to the right of the origin
+    (0,0) of the top left corner of the rectangle
+    \o \c{y} is the position on the canvas below the origin of the top
+    left corner of the rectangle
+    \o \c{width} is the width of the rectangle to be drawn
+    \o \c{height} is the height of the rectangle to be drawn
+    \endlist
+
+    For example, the following code draws concentric rectangles:
+
+    \code
+    var context = canvas.getContext("2d");
+    canvas.strokeRect(50,50,50,50);
+    canvas.fillRect(60,60,30,30);
+    canvas.clearRect(70,70,10,10);
+    \endcode
+
+    \image webkit-guide/canvas_rectangles.gif
+
+    \section2 Drawing Lines
+
+    To draw a line, you first have to \e{"put your pencil down"} on the canvas
+    by creating a path. The \c{context.beginPath()} method sets a new path
+    in the canvas. Each line that you draw is stored as a sub-path.
+    Sub-paths can be closed to form a shape, or they can be left open.
+    Each time you want to draw a new shape, you have to call the
+    \c{beginPath()} method to reset the current path.
+
+    After calling \c{beginPath()}, you set your starting position on the
+    canvas by calling the \c{context.moveTo(x,y)} method. The
+    \c{moveTo(x,y)} method creates a new subpath on the canvas that begins
+    at the Cartesian point \c{(x,y)}.
+
+    To draw a straight line, call the \c{context.lineTo(x,y)} method. This
+    adds the point (x,y) to the current subpath and connects it to the
+    previous subpath by a straight line. In other words, (x,y) are the
+    coordinates of the line's endpoint. For example:
+
+    \code
+    context.beginPath();
+    context.moveTo(10,10);
+    context.lineTo(30,30);
+    \endcode
+
+    To get the \e{pencil} to actually draw on the canvas, first use the
+    \c{strokeStyle} property to set the color to a value such as black
+    (\c{#000}):
+
+    \code
+    context.strokeStyle(#000);
+    \endcode
+
+    (The \c{strokeStyle} property can be a CSS color, a pattern, or a gradient.)
+    Then use the \c{context.stroke()} method to actually draw the line on the
+    canvas:
+
+    \code
+    context.stroke();
+    \endcode
+
+    This produces the image below. The numeric coordinates are added for clarity
+    but are not part of the image drawn by the code:
+
+    \image webkit-guide/canvas_lineStrokeTo.gif
+
+    To create a shape, call the \c{context.closePath()} method:
+
+    \code
+    context.closePath();
+    context.moveTo(10,10);        // starting point
+    context.lineTo(30,30);        // specify first line
+    context.moveTo(30,30);        // move to end of first line
+    context.lineTo(60,10);        // specify second line
+    context.moveTo(60,10);        // move to end of second line
+    context.lineTo(10,10);        // specify third line to close triangle
+    context.strokeStyle("#000");    // use black color for lines
+    context.stroke();        // draws the triangle lines on the canvas
+    \endcode
+
+    To fill the shape, use the \c{fillstyle} property and the \c{fill()}
+    method:
+
+    \code
+    context.fillStyle("#FF0000"); // use red color for fill
+    context.fill(); // fill the triangle
+    \endcode
+
+    The commands, if coded fully, would create the shape below:
+
+    \image webkit-guide/canvas_closepath.gif
+
+    \note It is not necessary to close the path when calling the \c{fill()}
+    method. Calling \c{fill()} closes the path and creates the completed shape.
+
+    You can draw lines of various widths, endcap types, and joining options by
+    configuring the following attributes:
+
+    \list
+    \o \c{lineWidth} sets the thickness of the current line. The value can be
+    any number greater than \c 0. For example, \c{context.lineWidth = 10} sets
+    the line thickness to \c 10 units. The default value is \c 1 unit, which is
+    not the same as \c 1 \e pixel. Instead, the line is centered on the current
+    path, with half its thickness on each side of the path.
+    \o \c{lineCap} sets the type of endpoint of the current line. The value can
+    be either \c{butt}, \c{square}, or \c{round}. (The default value is
+    \c{butt}.)
+    \list
+    \o \c{butt}- the ends of the line abutt the line guide.
+    \o \c{square} adds a box at both ends of the line.
+    \o \c{round} adds a semicircle at both ends of the line.
+    \endlist
+
+    \o \c{lineJoin} sets the style with which lines are joined. The value
+    can be either \c{bevel}, \c{round}, or \c{miter}. (The default value
+    is \c{miter}.)
+        \list
+        \o \c{bevel} flattens the corners at which the lines join
+        \o \c{round} rounds the corners at which the lines join
+        \o \c{miter}  joins the lines at a single point
+        \endlist
+    \o \c{miterLimit} sets the \e{miter limit ratio}. The value can be any
+    number greater than \c 0. The miter limit ratio determines how far the
+    connection point of the outside of the lines can be from the connection
+    point of the inside of the lines. (The default value is \c 10.)
+    \endlist
+
+    \image webkit-guide/canvas_linecap.png
+
+    \section2 Drawing Arcs
+
+    To draw an arc, you begin with the same steps your followed to create
+    a line:
+
+    \list 1
+    \o Call the \c{context.beginPath()} method to \e{"put your pencil down"} on
+    the canvas and set a new path.
+    \o Call the \c{context.moveTo(x,y)} method to set your starting position on
+    the canvas at the point (x,y).
+    \o To draw an arc or circle, call the \c{context.arcTo(x1,y1,x2,y2,radius)}
+    method. This adds an arc with starting point \c{(x1,y1)}, ending point
+    \c{(x2,y2)}, and radius \c{radius} to the current subpath and connects it to
+    the previous subpath by a straight line.
+
+    \image webkit-guide/canvas_arcTo.png
+
+    \o An alternative way to draw an arc or circle is to call the
+    \c{context.arc(x,y,radius,startAngle,endAngle,anticlockwise)} method. This
+    adds an arc to the current subpath that lies on the circumference of the
+    circle whose center is at the point (x,y) and whose radius is \c{radius}.
+
+    \image webkit-guide/canvas_arcTo2.png
+
+    Both \c{startAngle} and \c{endAngle} are measured from the x axis in units
+    of radians.
+
+    A complete circle is \c 360 degrees, or 2\pi radians. A semicircle is \c 180
+    degrees, or \pi radians. The number of radians is the number of degrees
+    multiplied by \pi/180, expressed in JavaScript as:
+
+    \code
+    var radians = (Math.PI/180)*degrees;
+    \endcode
+
+    \image webkit-guide/canvas_startAngle.png
+
+    \c{anticlockwise} has the value \c{TRUE} for each arc in the figure
+    above because they are all drawn in the counterclockwise direction.
+
+    \o To create a shape, call the \c{context.closePath()} method. This
+    marks the current subpath as closed and draws a straight line from the
+    current point to the first point in the path.
+
+    \o To draw only the outline of the shape, call the \c{context.stroke()}
+    method.
+
+    \o To fill in the shape, call the \c{context.fill()} method.
+
+    \o To set the color of the fill, set the \c{strokeStyle}. For example,
+    the code
+
+    \code
+    context.strokeStyle = "#FF0000";
+    \endcode
+
+    sets the fill color to red.
+
+    \endlist
+
+    \note It is not necessary to close the path if you are going to call
+    the \c{fill()} method. The fill closes the path and creates the completed
+    shape.
+
+    To create complex shapes, combine lines and arcs:
+
+    \list 1
+    \o Call the \c{context.beginPath()} method to \e{"put your pencil down"} on
+    the canvas and set a new path.
+    \o Call the \c{context.moveTo(x,y)} method to set your starting position on
+    the canvas at the point (x,y).
+    \o Draw any combination of lines and arcs by calling the \c{lineTo},
+    \c{arcTo}, \c{arc}, \c{moveTo}, \c{closePath}, \c{stroke}, and \c{fill}
+    methods and setting the line attributes and fill colors as described above.
+    \endlist
+
+    You can also create complex shapes by removing portions of the shapes you
+    draw. The \c{clip()} method creates a clipping path that defines the area
+    along which your "scissor" will cut. Any parts of the shape outside the
+    clipping path are not displayed. To create a complex shape using the
+    \c{clip()} method:
+
+    \list 1
+    \o Call the \c{context.beginPath()} method to set the clipping path.
+    \o Define the clipping path by calling any combination of the \c{lineTo},
+    \c{arcTo}, \c{arc}, \c{moveTo}, and \c{closePath} methods.
+    \o Call the \c{context.clip()} method.
+    \endlist
+
+    The new shape displays.  The following shows how a clipping path can
+    modify how an image displays:
+
+    \image webkit-guide/canvas_clip-complex.png
+
+\section1 Compositing
+
+You can build complex shapes by drawing shapes on top of each other. It is also
+possible to draw shapes behind existing shapes and to mask parts of shapes by
+using \e{compositing operations}. The \c{globalCompositeOperation} attribute
+sets the way shapes can be combined.
+
+The first shape drawn on the canvas to which additional shapes are added is
+called the \e{destination} shape. The shape drawn on the canvas afterwards to
+create the composite image is called the \e{source} shape. The value of the
+\c{globalCompositeOperation} attribute must be set to one of the following:
+
+\list
+\o \c{source-over} displays the source (newer) shape over the destination
+(older) shape unless the source shape is transparent. (This is the default
+value)
+
+\o \c{source-in} displays only the portion of the source shape that is opaque
+and overlaps the destination shape. Everything else is transparent.
+
+\o \c{source-out} displays only the portion of the source shape that does not
+overlap the destination shape.
+
+\o \c{source-atop} displays only the portion of the opaque source shape that
+overlaps the destination shape and the portion of the destination shape that is
+not covered by the opaque source shape.
+
+\o \c{destination-over} displays the destination shape over the source shape. In
+areas where both shapes are opaque and overlap, the older shape displays.
+
+\o \c{destination-in} displays only the portion of the destination shape that is
+opaque and overlaps the source shape. Everything else is transparent. The source
+(newer) shape is not visible.
+
+\o \c{destination-out} displays only the portion of the destination shape that
+does not overlap the source shape. The source shape is not visible.
+
+\o \c{destination-atop} displays only the portion of the opaque destination
+shape that overlaps the source shape and the portion of the source shape that is
+not covered by the opaque destination shape.
+
+\o \c{lighter} displays both the source and destination shapes. Where the shapes
+overlap, the their color values are added, producing a lighter color.
+
+\o \c{copy} displays only the source shape. The destination shape is ignored.
+
+\o \c{xor} displays both the source and the destination shapes except the areas
+of overlap, in which both shapes are completely transparent.
+\endlist
+
+The following figure shows the various compositing effects:
+\image webkit-guide/canvas_composite.png
+
+\section1 Saving and Exporting Canvas Drawings as Image Files
+
+You can save or export your canvas drawings as .png or .jpeg image files by
+calling the \c{toDataURL()} method:
+
+\code
+canvas.toDataURL([type, ...])
+\endcode
+where:
+\list
+\o \c{type} is the MIME type to which you want to save or export your canvas.
+Possible values are:
+    \list
+    \o \c{"image\png"} (Default value)
+    \o \c{"image\jpeg"}
+    \endlist
+\o\c{...} represents additional arguments that depend on the MIME type.
+    \list
+    \o If \c{type} is \c{png}, this argument is \c{" "}
+    \o If \c{type} is \c{jpeg}, this argument is the desired quality level of the
+    image. The value is a number in the range 0.0 to 1.0, inclusive.
+    \endlist
+\endlist
+
+\section1 Drawing Text
+
+You can draw text on your canvas by setting the following font attributes on the
+2d drawing context:
+
+\list
+\o \c{font} refers to any font, expressed the same way as in CSS properties.
+This attribute's value can include any font style, variant, weight, size,
+height, and family. For example:
+
+    \code
+    context.font = "12pt Arial";
+    \endcode
+
+    The default value is \c{10px sans-serif}.
+
+    If you set the \c{font} attribute to a
+    relative font size, the browser multiplies it by the computed font size of the
+    \c{<canvas>} element itself. For example:
+
+    \code
+    context.font = "200%";
+    \endcode
+
+\o \c{textAlign} specifies the alignment of the text. The values can be one of
+the following:
+    \list
+    \o \c{left} for left-aligned text
+    \o \c{right} for right-aligned text
+    \o \c{center} for text that is centered within each line
+    \o \c{start} (default) - the text is aligned at the beginning of the line. Text
+    is left- or right-justified based on locale-specific writing method: left when
+    text is left-to-right, right when text is right-to-left.
+    \o \c{end} - the text is aligned at the end of the line, either left or right
+    depending on locale-specific writing method.
+    \endlist
+
+\o \c{textBaseline} specifies the position at which text is drawn relative to a
+baseline. The figure below, from \l{HTML5 Canvas API}, illustrates the possible
+values for the \c{textBaseline} attribute:
+    \list
+    \o \c{top} is the top of the em square, which approximates the top of the glyphs
+    in a font
+    \o \c{hanging} specifies a hanging baseline, where the tops of some glyphs are
+    anchored.
+    \o \c{middle} is the mid-point of the em square
+    \o \c{alphabetic} (default) is the anchor point of many alphabetic characters
+    \o \c{ideographic} is the anchor point of many ideograms, such as the characters
+    used in the writing systems of many Asian languages
+    \o \c{bottom} is the bottom of the em square
+    \endlist
+\endlist
+
+\image webkit-guide/canvas_text.png
+
+To draw text on a canvas:
+\list 1
+\o Set the \c{font} attribute on the drawing context. For example:
+    \code
+    context.font = "bold 11px arial"
+    \endcode
+\o Measure the text that you want to draw by calling the \c{measureText} method:
+    \code
+    TextMetrics measureText("Text to draw");
+    \endcode
+where \c{TextMetrics} is the object returned. Its \c{width} attribute is the
+width, in pixels, that the \c{"Text to draw"} would be when drawn with the font
+specified by the \c{font} attribute.
+\o Call either of the following methods:
+    \list
+    \o \c{fillText} draws the text with the font style specified by the \c{font}
+    attribute, the alignment specified by the \c{textAlign} attribute, and the
+    baseline specified by the \c{textBaseline} attribute. For example:
+    \code
+    context.fillText("Text to draw",x,y,maximumWidth);
+    \endcode
+where \c{x} and \c{y} are the coordinates at which the drawing begins (the
+anchor point), and \c{maximumWidth} is the maximum width of the text string
+(optional). If the \c{width} returned in step 2 is larger than the
+\c{maximumWidth}, the font is scaled down until the width of the text string is
+less than the \c{maximumWidth} specified.
+
+If you don't specify the \c{font} attribute, the text inherits the font size and
+style of the \c{<canvas>} element itself.
+
+\o \c{strokeText} is the same as the \c{fillText} method, except that
+a stroke style is applied to the text instead of a fill style,
+creating outlines of glyphs. For example:
+
+\code
+context.fillText("Text to stroke",x,y,maximumWidth);
+\endcode
+
+\endlist
+
+\endlist
+
+\section1 Working with Images
+
+You can insert existing images onto your canvas, you can scale or crop
+them, and you can combine them to create composite images. You can
+also draw new images by creating an \c{Image()} object with JavaScript.
+
+To insert an existing image onto a canvas, call the \c{drawImage} method:
+
+\code
+context.drawImage(image, dx, dy, dw, dh)
+\endcode
+
+where:
+
+\list
+
+\o \c{image} is a reference to an HTML \c{<image>} or \c{<canvas>}
+element. The image must be fully loaded before you can draw it on the
+canvas. The reference cannot be a URL. Instead, it should be
+referenced using standard DOM methods such as \c{document.images()} or
+\c{document.getElementById()}.  For example:
+
+\code
+<canvas id="demo1" width="100" height="150"></canvas>
+
+var canvas = document.getElementById("demo1");
+var context = canvas.getContext("2d");
+\endcode
+
+
+\o \c{dx} is the x coordinate of the upper left corner of the image to be
+drawn on the canvas (the destination image)
+
+\o \c{dy} is the y coordinate of the upper left corner of the destination
+image
+
+\o \c{dw} is the width of the destination image (optional)
+
+\o \c{dh} is the height of the destination image (optional)
+
+\endlist
+
+If \c{dw} and \c{dh} are not specified, the image retains its source
+dimensions when drawn on the canvas. When \c{dw} and \c{dh} are
+specified, the image is scaled to width \c{dw} and height \c{dh} when
+drawn on the canvas.
+
+If you want to crop the source image, the \c{drawImage} method can be
+overloaded with the following arguments:
+
+\code
+context.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+\endcode
+
+where:
+\list
+\o \c{sx} is the x coordinate of the upper left corner of the cropped source
+image
+\o \c{sy} is the y coordinate of the upper left corner of the cropped source
+image
+\o \c{sw} is the width of the cropped source image
+\o \c{sh} is the height of the cropped source image
+\endlist
+
+Use this method if you want to crop the source image to the rectangle (sx, sy,
+sw, sh) before drawing it on the canvas. The destination image will have width
+\c dw, height \c dh, and upper left corner at coordinates \c{(dx,dy)} on the
+canvas.
+
+To create a new image using JavaScript, create an \c{Image} object and define
+its source. Use an \c{onload} event handler to ensure that the \c{drawImage}
+method is not called until the image has finished loading. For example:
+
+\code
+var graphic = new Image();
+graphic.src = "clipart/graphic.png";
+\endcode
+
+The image begins to load.
+
+\code
+graphic.onload = function(){
+    context.drawImage(graphic,x,y);
+};
+\endcode
+
+    \section2 Creating Patterns with Images
+
+    You can create patterns with an image by repeating it horizontally,
+    vertically, or both. The top left corner of the first image must be
+    anchored at the origin of the coordinate space. To repeat an image,
+    call the \c{createPattern} method:
+
+    \code
+    context.createPattern(image, repetition);
+    \endcode
+
+    where:
+
+    \list
+
+    \o \c{image} is a reference to an HTML \c{<image>} or \c{<canvas>}element
+    that is repeated to form a pattern. The image must
+    be fully loaded before you can draw it on the canvas. The reference
+    cannot be a URL. Instead, it should be referenced via standard DOM
+    methods such as
+        \list
+        \o \c{document.images} and
+        \o \c{document.getElementById}.  For example:
+
+        \code
+        <canvas id="demo1" width="100" height="150"></canvas>
+
+        var canvas = document.getElementById("demo1");
+        var context = canvas.getContext("2d");
+        \endcode
+        \endlist
+    \o \c{repetition} is the direction in which the image repeats to form the
+    pattern. Possible values are:
+        \list
+        \o \c{repeat} (default) the image repeats both horizontally and vertically
+        \o \c{repeat-x} the image repeats horizontally
+        \o \c{repeat-y} the image repeats vertically
+        \endlist
+    \endlist
+
+    The repeated images are the same size as the source image. The
+    \c{createPattern} method does not scale the images.
+
+    For example, to create a horizontal pattern of roses, create an
+    \c{Image} object to use as a pattern and define its source. Use an
+    \c{onload} event handler to ensure that the \c{createPattern} method
+    is not called until the image has finished loading. For example:
+
+    \code
+    var roses = new Image();
+    roses.src = "clipart/roses.jpg";
+    \endcode
+
+    The image begins to load.
+
+    \code
+    roses.onload = function(){
+        var pattern = context.createPattern(roses,repeat-x);
+    };
+    \endcode
+
+    \image webkit-guide/canvas_pattern.png
+
+\section1 Applying Colors
+
+To draw the outline of a shape in color, set the \c{strokeStyle} attribute to
+any valid \l{CSS Color Value}{CSS color value}. The color value can be in
+hexadecimal notation or in RGB/HSL notation, as described in \l{Specifying Color
+and Opacity}. For example, either of the following sets a shape's outline to
+red:
+
+\code
+context.strokeStyle = "#FF0000"
+context.strokeStyle = "rgb(255,0,0)"
+\endcode
+
+To fill a shape with color, set the \c{fillStyle} attribute to a l{CSS Color
+Value}{CSS color value}. The color value can be in hexadecimal notation or in
+RGB/HSL notation. For example, either of the following colors a shape's interior
+as blue:
+
+\code
+context.fillStyle = "#0000FF"
+context.fillStyle = "rgb(0,0,255)"
+\endcode
+
+The \l{CSS3 Color Module specification} extends both RGB and HSL color models to
+include a color's opacity, referred to as its \e{alpha}. These extended
+models are known as RGBA and HSLA. There are no hexadecimal notations for RGBA
+and HSLA values. The following specifies varying levels of opacity for a blue
+shape:
+
+\code
+context.fillStyle = rgba(0, 0, 255, 0)        // transparent
+context.fillStyle = rgba(0, 0, 255, 0.5)    // semi-transparent
+context.fillStyle = rgba(0, 0, 255, 1)        // opaque
+\endcode
+
+When you set the \c{context.strokeStyle} or \c{context.fillStyle} attributes,
+whatever value you set becomes the default value for all subsequently drawn
+shapes, until you set a new value.
+
+    \section2 Applying Gradients
+
+    A gradient is a smooth transition between colors. There are two types of
+    gradients: linear and radial.
+
+    A linear gradient transitions the color along a line between two points. To
+    create a linear gradient, call the \c{createLinearGradient} method:
+
+    \code
+    createLinearGradient(x0, y0, x1, y1)
+    \endcode
+
+    where \c{(x0, y0)} is the starting point and \c{(x1, y1)} is the ending
+    point for the linear gradient.
+
+    A radial gradient transitions the color along a cone between two circles. To
+    create a radial gradient, call the \c{createRadialGradient} method:
+
+    \code
+    createRadialGradient(x0, y0, r0, x1, y1, r1)
+    \endcode
+    where:
+    \list
+    \o \c{(x0, y0, r0)} represents the starting circle, whose origin is \c{(x0,
+    y0)} and whose radius is \c{r0}.
+    \o \c{(x1, y1, r1)} represents the ending circle, whose origin is \c{(x1, y1)}
+    and whose radius is \c{r1}.
+    \endlist
+
+    Gradients must have two or more \e{color stops}, representing color
+    shifts positioned from \c 0 to \c 1 between to the gradient's starting and
+    end points or circles:
+
+    \code
+    addColorStop(position,color)
+    \endcode
+
+    where:
+    \list
+    \o \c{position} specifies the position of the color within the already
+    defined starting and end points or circles, expressed as a number from \c 0
+    to \c 1.
+    \o \c{color} specifies the CSS color at that position.
+    \endlist
+
+    For example, to define a gradient that varies from red to blue horizontally
+    along a rectangular area:
+    \list 1
+    \o Create a gradient object:
+        \code
+        var redbluegradient = context.createLinearGradient(0,0,100,0);
+        \endcode
+    \o Define the color stops:
+        \code
+        redbluegradient.addColorStop(0, "rgb(255,0,0)"); // red at the left side of the rectangle
+        redbluegradient.addColorStop(1, "rgb(0,0,255)"); // blue at the right side of the rectangle
+        \endcode
+    \o Draw the shape and set a \c{fillStyle} or \c{strokeStyle}:
+        \code
+        context.fillStyle = redbluegradient;
+        context.fillRect(0,0,100,150);
+        \endcode
+    \endlist
+
+    To define a gradient that varies from red to blue vertically along a
+    rectangle:
+    \list 1
+    \o Create a gradient object:
+    \code
+    var redbluegradient = context.createLinearGradient(0,0,0,150);
+    \endcode
+    \o Define the color stops:
+    \code
+    redbluegradient.addColorStop(0, "rgb(255,0,0)"); // red at the top of the rectangle
+    redbluegradient.addColorStop(1, "rgb(0,0,255)"); // blue at the bottom of the rectangle
+    \endcode
+    \o Draw the shape and set a \c{fillStyle} or \c{strokeStyle}:
+    \code
+    context.fillStyle = redbluegradient;
+    context.fillRect(0,0,100,150);
+    \endcode
+    \endlist
+
+    \note A canvas gradient's color stops behave slightly differently than those
+    used within non-canvas \l{Gradients}{gradients}. Webkit gradients specify
+    mandatory \c{from} and \c{to} colors, with optional \c{color-stop} values
+    for additional color shifts within the overall range of the gradient. For
+    canvas gradients, even the initial and final colors are defined as color
+    stops.
+
+    \section2 Applying Shadows
+
+    To add a shadow effect to a drawing on a canvas, set the following
+    attributes:
+
+    \list
+    \o \c{shadowColor} sets the color of the shadow. The value can be any CSS
+    color value. The default value is transparent black (\c{"rgba(0,0,0,0)"}).
+
+    \o \c{shadowBlur} sets the amount of blur in the shadow, in pixels. The
+    value can be any positive number or 0. A value of 0 produces a sharp shadow
+    with no blur.
+
+    \o \c{shadowOffsetX} sets the number of pixels the shadow extends
+    horizontally from the object drawn. If this value is a positive number, the
+    shadow extends to the right of the object. If negative, the shadow extends
+    to the left of the object. The default value is 0 pixels.
+
+    \o \c{shadowOffsetY} sets the number of pixels the shadow extends vertically
+    from the object drawn. If this value is a positive number, the shadow
+    extends below the object. If negative, the shadow extends above the object.
+    The default value is 0 pixels.
+    \endlist
+
+    The following example code adds a semi-transparent black shadow to the
+    bottom right of a blue rectangle:
+
+    \code
+    var context        = canvas.getContext("2d");
+    context.shadowOffsetX    = 5;
+    context.shadowOffsetY    = 5;
+    context.shadowBlur    = 10;
+    context.shadowColor    = "rgba(0,0,0,0.5)";
+    context.fillStyle    = "#0000FF";
+    context.fillRect    = (0,0,100,50)
+    \endcode
+
+\section1 Transforming Graphics
+
+When drawing shapes and paths, you can translate the canvas's origin, rotate the
+canvas around the origin, scale the units in the canvas grid, and modify the
+transformation matrix directly.
+
+    \section2 Translating the Canvas Origin
+
+    Translating the origin enables you to draw patterns of different objects on
+    the canvas without having to measure the coordinates manually for each
+    shape. To translate the origin of the canvas, use the \c{translate} method:
+    \code
+    context.translate(x,y);
+    \endcode
+    where:
+    \list
+    \o \c{x} is the horizontal distance that the origin is translated, in
+    coordinate space units
+    \o \c{y} is the vertical distance that the origin is translated, in
+    coordinate space units
+    \endlist
+
+    \section2 Rotating the Canvas
+
+    To rotate the canvas around the current origin, call the \c{rotate()}
+    method:
+    \code
+    context.rotate(angle);
+    \endcode
+    where \c{angle} is the clockwise rotation angle in radians.
+    The number of radians is the number of degrees multiplied by \pi/180,
+    expressed in JavaScript as:
+    \code
+    var radians = (Math.PI/180)*degrees;
+    \endcode
+    \image webkit-guide/canvas_rotate.png
+
+    \section2 Scaling the Canvas Grid
+
+    To increase or decrease the size of each unit in the canvas grid, call the
+    \c{scale} method:
+
+    \code
+    context.scale(x,y);
+    \endcode
+
+    where:
+
+    \list
+
+    \o \c{x} is the scale factor in the horizontal direction
+
+    \o \c{y} is the scale factor in the vertical direction
+
+    \endlist
+
+    The scale factors are in multiples. For example, \c{scale(2.0, 0.5)} would
+    double the horizontal size of an object drawn on the canvas and half its
+    vertical size, as shown below:
+
+    \image webkit-guide/canvas_scale.png
+
+    \section2 Manipulating the Transformation Matrix
+
+    Modifying the transformation matrix directly enables you to perform scaling,
+    rotating, and translating transformations in a single step.
+
+    The transformation matrix is an \e{affine transformation} matrix from linear
+    algebra. Affine transformations preserve colinearity and relative distance
+    in the transformed coordinate space. This means that points in a line remain
+    in a line, parallel lines remain parallel, and the distance between lines
+    and objects maintains the same ratio, even if a scale factor is applied.
+    Repositioning by translation, rotation, or skewing is also possible.
+
+    Each point on the canvas is multiplied by the matrix before anything is
+    drawn. The \l{HTML5 Canvas API} defines the transformation matrix as:
+
+    \image webkit-guide/canvas_math.png
+    where:
+    \list
+    \o \c{a} is the scale factor in the horizontal (x) direction
+    \image webkit-guide/canvas_scalex.png
+    \o \c{c} is the skew factor in the x direction
+    \image webkit-guide/canvas_skewx.png
+    \o \c{e} is the translation in the x direction
+    \image webkit-guide/canvas_translate.png
+    \o \c{b} is the skew factor in the y (vertical) direction
+    \image webkit-guide/canvas_skewy.png
+    \o \c{d} is the scale factor in the y direction
+    \image webkit-guide/canvas_scaley.png
+    \o \c{f} is the translation in the y direction
+    \image webkit-guide/canvas_translatey.png
+    \o the last row remains constant
+    \endlist
+
+    The scale factors and skew factors are multiples; \c{e} and \c{f} are
+    coordinate space units, just like the units in the \c{translate(x,y)}
+    method.
+
+    The rotation transformation matrix is as follows:
+
+    \image webkit-guide/canvas_math_rotate.png
+
+    where the \c angle of rotation is in radians.
+
+    \bold{See Also:}
+    \l{http://www.senocular.com/flash/tutorials/transformmatrix/}{senocular.com}
+    for a good explanation of how transformation matrices are used
+    identically within Adobe Flash.
+
+\section1 Canvas Animations
+
+You can animate a canvas drawing by repeatedly redrawing the canvas for each
+frame and translating, rotating, skewing, and scaling the drawn objects.
+
+To draw each frame by employing the HTML5 canvas API, you should define the
+original canvas state and save it for future reference. The drawing context
+maintains a stack of drawing states. Each state consists of the current
+transformation matrix, current clipping region, and current values of the
+following attributes:
+\list
+\o\c{strokeStyle}
+\o\c{fillStyle}
+\o\c{globalAlpha}
+\o\c{lineWidth}
+\o\c{lineCap}
+\o\c{lineJoin}
+\o\c{miterLimit}
+\o\c{shadowOffsetX}
+\o\c{shadowOffsetY}
+\o\c{shadowBlur}
+\o\c{shadowColor}
+\o\c{globalCompositeOperation}
+\o\c{font}
+\o\c{textAlign}
+\o\c{textBaseline}
+\endlist
+The current path and the current bitmap are NOT part of the drawing state.
+The path can be reset only by invoking the \c{beginPath()} method. The current
+bitmap is a property of the canvas, not of the context.
+
+To save the original canvas state, call the \c{save()} method:
+\code
+context.save();
+\endcode
+
+Before drawing each new frame, you must clear the canvas:
+\code
+canvas.clearRect(x,y,width,height);
+\endcode
+where:
+\list
+\o \c{x} is the position of the top left corner of the canvas on the horizontal
+axis
+\o \c{y} is the position of the top left corner of the canvas on the vertical
+axis
+\o \c{width} is the width of the canvas
+\o \c{height} is the height of the canvas
+\endlist
+
+Draw the new frame using any of the methods provided by the canvas API. Then
+save it by calling the \c{save()} method.
+
+If you wish to return to the state of the original frame as the basis for each
+new frame that you draw, call the \c{context.restore()} method.
+
+To execute the drawing methods repeatedly, use the standard JavaScript-based
+animation technique, calling the \c{setInterval()} and \c{clearInterval()}
+methods. The following shows how to execute an animation function every \c 50
+milliseconds (corresponding to 20 times per second, a typical animation frame
+rate), then subsequently halt the animation:
+\code
+var id = setInterval(functionName, 50);
+clearInterval(id);
+\endcode
+
+\bold{See Also:}
+\list
+\o
+\l{http://www.canvasdemos.com/2009/10/09/html-5-canvas-animation/}{CanvasDemos.com: animated cartoon}, which discusses how to use Canvas as an animation framework.
+
+\o
+\l{http://blog.nihilogic.dk/2009/02/html5-canvas-cheat-sheet.html}{nihilogic.dk:
+HTML5 Canvas Cheat Sheet}
+
+\o \l{QtWebKit Guide} -back to the main page
+\endlist
+
+*/

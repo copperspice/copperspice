@@ -1,0 +1,69 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*! 
+    \page activeqt-dumpdoc.html
+    \title The dumpdoc Tool (ActiveQt)
+
+    \ingroup activeqt-tools
+
+    \keyword dumpdoc
+
+    The \c dumpdoc tool generates Qt-style documentation for any
+    COM object and writes it into the file specified.
+
+    Call \c dumpdoc with the following command line parameters:
+
+    \table
+    \header
+    \i Option
+    \i Result
+    \row
+    \i -o file
+    \i Writes output to \e file
+    \row
+    \i object
+    \i Generate documentation for \e object
+    \row
+    \i -v
+    \i Print version information
+    \row
+    \i -h
+    \i Print help
+    \endtable
+
+    \e object must be an object installed on the local machine (ie.
+    remote objects are not supported), and can include subobjects
+    accessible through properties, ie.
+    \c Outlook.Application/Session/CurrentUser
+
+    The generated file will be an HTML file using Qt documentation
+    style.
+
+    To build the tool you must first build the QAxContainer library.
+    Then run your make tool in \c tools/dumpdoc.
+*/

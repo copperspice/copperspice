@@ -1,0 +1,47 @@
+
+CORE_DIRS += src/corelib/xml
+
+
+CORE_PUBLIC_INCLUDES += \
+	QXmlStreamAttribute \
+	QXmlStreamAttributes \
+	QXmlStreamEntityDeclaration \
+	QXmlStreamEntityDeclarations \
+	QXmlStreamEntityResolver \
+	QXmlStreamNamespaceDeclaration \
+	QXmlStreamNamespaceDeclarations \
+	QXmlStreamNotationDeclaration \
+	QXmlStreamNotationDeclarations \
+	QXmlStreamReader \
+	QXmlStreamStringRef \
+	QXmlStreamWriter
+
+CORE_XML_INCLUDES = \
+	qxmlstreamattribute.h \
+	qxmlstreamattributes.h \
+	qxmlstreamentitydeclaration.h \
+	qxmlstreamentitydeclarations.h \
+	qxmlstreamentityresolver.h \
+	qxmlstreamnamespacedeclaration.h \
+	qxmlstreamnamespacedeclarations.h \
+	qxmlstreamnotationdeclaration.h \
+	qxmlstreamnotationdeclarations.h \
+	qxmlstreamreader.h \
+	qxmlstreamstringref.h \
+	qxmlstreamwriter.h \
+	qxmlstream.h
+
+CORE_XML_PRIVATE_INCLUDES = \
+	qxmlstream_p.h \
+	qxmlutils_p.h
+
+CORE_INCLUDES += $(CORE_XML_INCLUDES)
+CORE_PRIVATE_INCLUDES += $(CORE_XML_PRIVATE_INCLUDES)
+
+
+noinst_HEADERS+=$(patsubst %,src/corelib/xml/%,$(CORE_XML_INCLUDES)) \
+		$(patsubst %,src/corelib/xml/%,$(CORE_XML_PRIVATE_INCLUDES))
+
+lib_libCsCore1_la_SOURCES += \
+	src/corelib/xml/qxmlstream.cpp \
+	src/corelib/xml/qxmlutils.cpp

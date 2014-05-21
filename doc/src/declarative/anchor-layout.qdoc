@@ -1,0 +1,147 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qml-anchor-layout.html
+\target anchor-layout
+\contentspage QML Features
+\previouspage {Using QML Positioner and Repeater Items}{Component Layouts}
+\nextpage {QML Mouse Events}{Mouse Events}
+\title Anchor-based Layout in QML
+
+In addition to the more traditional \l Grid, \l Row, and \l Column,
+QML also provides a way to layout items using the concept of \e anchors.
+Each item can be thought of as having a set of 7 invisible "anchor lines":
+\l {Item::anchors.left}{left}, \l {Item::anchors.horizontalCenter}{horizontalCenter},
+\l {Item::anchors.right}{right}, \l {Item::anchors.top}{top},
+\l {Item::anchors.verticalCenter}{verticalCenter}, \l {Item::anchors.baseline}{baseline},
+and \l {Item::anchors.bottom}{bottom}.
+
+\image edges_qml.png
+
+The baseline (not pictured above) corresponds to the imaginary line on which
+text would sit. For items with no text it is the same as \e top.
+
+The QML anchoring system allows you to define relationships between the anchor lines of different items. For example, you can write:
+
+\code
+Rectangle { id: rect1; ... }
+Rectangle { id: rect2; anchors.left: rect1.right; ... }
+\endcode
+
+Each Item has two properties for each anchor line: one to bind from and one to bind to. The properties to bind
+from are contained in the \l{Item::}{anchors} attached property (seen as \c {anchors.left} above).
+The properties to bind to are normal properties (seen as \c {rect1.right} above).
+This way, each item can have several bindings to the same anchor line. Note that the properties to bind to are
+not visible in the documentation for Item.
+So in the example above, the left edge of \e rect2 is bound to the right edge of \e rect1, producing the following:
+
+\image edge1.png
+
+
+You can specify multiple anchors. For example:
+
+\code
+Rectangle { id: rect1; ... }
+Rectangle { id: rect2; anchors.left: rect1.right; anchors.top: rect1.bottom; ... }
+\endcode
+
+\image edge3.png
+
+By specifying multiple horizontal or vertical anchors you can control the size of an item. Below,
+\e rect2 is anchored to the right of \e rect1 and the left of \e rect3. If either of the blue
+rectangles are moved, \e rect2 will stretch and shrink as necessary:
+
+\code
+Rectangle { id: rect1; x: 0; ... }
+Rectangle { id: rect2; anchors.left: rect1.right; anchors.right: rect3.left; ... }
+Rectangle { id: rect3; x: 150; ... }
+\endcode
+
+\image edge4.png
+
+There are also some convenience anchors. anchors.fill is a convenience that is the same as setting the left,right,top and bottom anchors
+to the left,right,top and bottom of the target item. anchors.centerIn is another convenience anchor, and is the same as setting the verticalCenter
+and horizontalCenter anchors to the verticalCenter and horizontalCenter of the target item.
+
+\section1 Anchor Margins and Offsets
+
+The anchoring system also allows \e margins and \e offsets to be specified for an item's anchors.
+Margins specify the amount of empty space to leave to the outside of an item's anchor, while
+offsets allow positioning to be manipulated using the center anchor lines.  An item can
+specify its anchor margins individually through \l {Item::anchors.leftMargin}{leftMargin},
+\l {Item::anchors.rightMargin}{rightMargin}, \l {Item::anchors.topMargin}{topMargin} and
+\l {Item::anchors.bottomMargin}{bottomMargin}, or use \l {Item::}{anchors.margins} to
+specify the same margin value for all four edges. Anchor offsets are specified using
+\l {Item::anchors.horizontalCenterOffset}{horizontalCenterOffset},
+\l {Item::anchors.verticalCenterOffset}{verticalCenterOffset} and
+\l {Item::anchors.baselineOffset}{baselineOffset}.
+
+\image margins_qml.png
+
+The following example specifies a left margin:
+
+\code
+Rectangle { id: rect1; ... }
+Rectangle { id: rect2; anchors.left: rect1.right; anchors.leftMargin: 5; ... }
+\endcode
+
+In this case, a margin of 5 pixels is reserved to the left of \e rect2, producing the following:
+
+\image edge2.png
+
+\note Anchor margins only apply to anchors; they are \e not a generic means of applying margins to an \l Item.
+If an anchor margin is specified for an edge but the item is not anchored to any item on that
+edge, the margin is not applied.
+
+
+\section1 Restrictions
+
+For performance reasons, you can only anchor an item to its siblings and direct parent. For example,
+the following anchor is invalid and would produce a warning:
+
+\badcode
+Item {
+    id: group1
+    Rectangle { id: rect1; ... }
+}
+Item {
+    id: group2
+    Rectangle { id: rect2; anchors.left: rect1.right; ... }    // invalid anchor!
+}
+\endcode
+
+Also, anchor-based layouts cannot be mixed with absolute positioning. If an item specifies its
+\l {Item::}{x} position and also sets \l {Item::}{anchors.left},
+or anchors its left and right edges but additionally sets a \l {Item::}{width}, the
+result is undefined, as it would not be clear whether the item should use anchoring or absolute
+positioning. The same can be said for setting an item's \l {Item::}{y} and \l {Item::}{height}
+with \l {Item::}{anchors.top} and \l {Item::}{anchors.bottom}, or setting \l {Item::}{anchors.fill}
+as well as \l {Item::}{width} or \l {Item::}{height}. If you wish to change from using
+anchor-based to absolute positioning, you can clear an anchor value by setting it to \c undefined.
+
+*/

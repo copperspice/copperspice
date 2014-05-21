@@ -1,0 +1,141 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page tutorials.html
+    \title Tutorials
+
+    \contentspage How to Learn Qt
+    \nextpage Qt Examples
+
+    \brief Tutorials, guides and overviews to help you learn Qt.
+
+    \nextpage Qt Examples
+
+    A collection of tutorials and \e walkthrough guides are provided with Qt to
+    help new users get started with Qt development. These documents cover a
+    range of topics, from basic use of widgets to step-by-step tutorials that
+    show how an application is put together.
+
+    For demonstrations on how to use different Qt technologies, visit the
+    \l{Qt Examples} page.
+
+    \section1 Qt Creator Tutorial
+    Qt Creator is the development environment for Qt.
+    \list
+    \o \l{external: Qt Creator Manual}{Qt Creator Manual} - The manual contains
+    information on how to achieve development tasks
+    These are excerpts from the manual:
+        \list
+        \o \l{external: Creating Qt Projects in Creator}{Creating Qt Projects in Creator}
+        \o \l{external: Developing Qt Quick Applications with Creator}{Developing Qt Quick Applications with Creator}
+        \o \l{external: Building and Running Applications in Creator}{Building and Running Applications in Creator}
+        \o \l{external: Debugging Applications in Creator}{Debugging Applications in Creator}
+        \o \l{external: Publishing Applications to Ovi Store}{Publishing Applications to Ovi Store}
+        \endlist
+    \endlist
+
+    \section1 Qt Essentials
+    The basic concepts and technologies in Qt are introduced in these essential
+    tutorials.
+        \list
+        \o \l{Getting Started Programming with Qt}{Qt Text Editor} - A simple
+        tutorial detailing the creation of a basic Qt application
+        Introduces the use of slots and signals, file operations, and widgets.
+        \o \l{Address Book Tutorial}{Address Book} - A beginner's guide to
+        widgets, container classes, and layouts. This tutorial is also available
+        with
+        \l{Tutoriel "Carnet d'adresses"}{French version}.
+        \image addressbook-tutorial.png AddressBook
+        \o \l{modelview.html}{ModelView} - This tutorial gives an introduction to
+        ModelView programming using the Qt cross-platform framework
+        \o\l{thread-basics.html}{Threads} - A short tutorial about thread concepts
+        in general and basic Qt classes to handle threads
+        \endlist
+
+    \section1 Qt Quick Essentials
+    Qt Quick and QML features are covered in several tutorials, ranging from
+    easy introductions to advanced tutorials that mix QML with C++ and
+    JavaScript.
+        \list
+        \o \l{QML Tutorial}{Hello World} - A very simple QML example that
+        demonstrates the basic QML features
+        \o \l{Getting Started Programming with QML}{QML Text Editor} - An
+        intermediate QML tutorial that covers many QML features such as states,
+        plugins, and C++ development
+        \o \l{QML Advanced Tutorial}{SameGame} - A walkthrough of creating a
+        simple game using QML for the interface and JavaScript for the game
+        logic
+        \image qml-samegame-demo-small.png Samegame
+        \endlist
+
+    \section1 QtWebKit
+    \list
+    \o \l{QtWebKit Guide} - An introductory guide to the features of QtWebKit
+    and HTML5.
+        \list
+        \o \l{QtWebKit Guide - Level 3 CSS}{CSS Chapter} - Covers what is
+        possible with CSS3 and QtWebKit.
+        \o \l{Canvas Graphics}{HTML5 Canvas Chapter} - Covers the basics of
+        integrating the <canvas> element into web applications.
+        \o \l{QtWebKit Guide - Client Storage}{Client Storage Chapter} -
+        Describes the basics of storing information on the client side.
+        \endlist
+    \endlist
+
+    \section1 Qt Utilities
+    \list
+    \o \l{QTestLib Tutorial}{QTestLib} - This tutorial gives a short
+    introduction to how to use some of the features of Qt's unit-testing
+    framework, QTestLib. It is divided into four chapters.
+    \o \l{qmake Tutorial}{qmake} - This tutorial teaches you how to use \c
+    qmake. We recommend that you read the \l{qmake Manual}{qmake user guide}
+    after completing this tutorial.
+    \o \l{Qt Linguist Manual: Programmers#Tutorials}{Qt Linguist} - A guided
+    tour through the translations process, explaining the tools provided for
+    developers, translators and release managers.
+    \image linguist-examples.png QtLinguist
+    \endlist
+
+    \section1 Online Learning Materials
+    These online materials provide further tutorials and developer
+    presentations.
+
+    \note The videos presented in these sites are not supported by the
+    Qt Creator browser and must be viewed in a web browser.
+
+    \list
+    \o \l{Qt eLearning} - The Qt eLearning team provides training and Qt
+    certification. Many of their learning content are hosted online.
+        \list
+        \o \l{Qt eLearning Training Materials} - Additional training material
+        are available as videos, downloadable code, and PDF files.
+        \o \l{Qt Developer Days 2010} - The presentation slides and videos from
+        Qt Developer Days are available for viewing.
+        \endlist
+    \endlist
+*/

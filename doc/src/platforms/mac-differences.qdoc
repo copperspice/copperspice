@@ -1,0 +1,376 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page mac-differences.html
+    \title Qt for Mac OS X - Specific Issues
+    \brief A description of issues with Qt that are specific to Mac OS X.
+    \ingroup platform-specific
+
+    This file outlines known issues and possible workarounds when
+    using Qt for Mac OS X. Contact Qt's technical support team if you find
+    additional issues which are not covered here. (See also the
+    document \l{qtmac-as-native.html} {Qt is Mac OS X Native}.)
+
+    \tableofcontents
+
+    \section1 GUI Applications
+
+    Mac OS X handles most applications as "bundles". A bundle is a
+    directory structure that groups related files together (e.g.,
+    widgets.app/). GUI applications in particular must be run from a
+    bundle or by using the open(1), because Mac OS X needs the bundle
+    to dispatch events correctly, as well as for accessing the menu
+    bar.
+
+    If you are using older versions of GDB you must run with the full
+    path to the executable.  Later versions allow you to pass the
+    bundle name on the command line.
+
+    \section1 Painting
+
+    Mac OS X always double buffers the screen so the
+    Qt::WA_PaintOnScreen attribute has no effect. Also it is
+    impossible to paint outside of a paint event so
+    Qt::WA_PaintOutsidePaintEvent has no effect either.
+
+    \section1 Library Support
+
+    \section2 Qt libraries as frameworks
+
+    By default, Qt is built as a set of frameworks. Frameworks is the
+    Mac OS X "preferred" way of distributing libraries. There are
+    definite advantages to using them. See
+    \l{http://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/index.html}
+    {Apple's Framework Programming Guide} for more information.
+
+    In general, this shouldn't be an issue because qmake takes care of
+    the specifics for you. The
+    \l{http://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/index.html}
+    {Framework Programming Guide} discusses issues to keep in mind
+    when choosing frameworks over the more typical, dynamic libraries.
+    However, one point to remember is: \bold {Frameworks always link
+    with "release" versions of libraries}.
+
+    If you actually want to use a \e{debug} version of a Qt framework,
+    you must ensure that your application actually loads that debug
+    version. This is often done by using the DYLD_IMAGE_SUFFIX
+    environment variables, but that way often doesn't work so well.
+    Instead, you can temporarily swap your debug and release versions,
+    which is documented in
+    \l{http://developer.apple.com/technotes/tn2004/tn2124.html#SECJUSTONELIB}
+    {Apple's "Debugging Magic" technical note}.
+
+    If you don't want to use frameworks, simply configure Qt with
+    \c{-no-framework}.
+
+    \section2 Bundle-Based Libraries
+
+    If you want to use some dynamic libraries in your Mac OS X
+    application bundle (the application directory), create a
+    subdirectory named "Frameworks" in the application bundle
+    directory and place your dynamic libraries there. The application
+    will find a dynamic library if it has the install name
+    \e{@executable_path/../Frameworks/libname.dylib}.
+
+    If you use \c qmake and Makefiles, use the \c QMAKE_LFLAGS_SONAME setting:
+
+    \snippet doc/src/snippets/code/doc_src_mac-differences.pro 0
+
+    Alternatively, you can modify the install name using the
+    install_name_tool(1) on the command line. See its manpage for more
+    information.
+
+    Note that the \c DYLD_LIBRARY_PATH environment variable will
+    override these settings, and any other default paths, such as a
+    lookup of dynamic libraries inside \c /usr/lib and similar default
+    locations.
+
+    \section2 Combining Libraries
+
+    If you want to build a new dynamic library combining the Qt 4
+    dynamic libraries, you need to introduce the \c{ld -r} flag. Then
+    relocation information is stored in the output file, so that
+    this file could be the subject of another \c ld run. This is done
+    by setting the \c -r flag in the \c .pro file, and the \c LFLAGS
+    settings.
+
+    \section2 Initialization Order
+
+    dyld(1) calls global static initializers in the order they are
+    linked into your application. If a library links against Qt and
+    references globals in Qt (from global initializers in your own
+    library), be sure to link your application against Qt before
+    linking it against the library.  Otherwise the result will be
+    undefined because Qt's global initializers have not been called
+    yet.
+
+    \section1 Compile-Time Flags
+
+    The follewing flags are helpful when you want to define Mac OS X specific
+    code:
+
+    \list
+
+    \o Q_OS_DARWIN is defined when Qt detects you are on a
+    Darwin-based system (including the Open Source version)
+
+    \o Q_WS_MAC is defined when the Mac OS X GUI is present.
+
+    \o QT_MAC_USE_COCOA is defined when Qt is built to use the Cocoa framework.
+    If it is not present, then Qt is using Carbon.
+
+    \endlist
+
+    A additional flag, Q_OS_MAC, is defined as a convenience whenever
+    Q_OS_DARWIN is defined.
+
+    If you want to define code for specific versions of Mac OS X, use
+    the availability macros defined in /usr/include/AvailabilityMacros.h.
+
+    See QSysInfo for information on runtime version checking.
+
+    \section1 Mac OS X Native API Access
+
+    \section2 Accessing the Bundle Path
+
+    The Mac OS X application is actually a directory (ending with \c
+    .app).  This directory contains sub-directories and files. It may
+    be useful to place items (e.g. plugins, online-documentation,
+    etc.) inside this bundle. You might then want to find out where
+    the bundle resides on the disk. The following code returns the
+    path of the application bundle:
+
+    \snippet doc/src/snippets/code/doc_src_mac-differences.cpp 1
+
+    Note: When OS X is set to use Japanese, a bug causes this sequence
+    to fail and return an empty string. Therefore, always test the
+    returned string.
+
+    For more information about using the CFBundle API, see
+    \l{http://developer.apple.com/documentation/CoreFoundation/Reference/CFBundleRef/index.html}
+    {Apple's Developer Website}.
+
+    Note: QCoreApplication::applicationDirPath() can be used to determine
+    the path of the binary within the bundle.
+
+    \section2 Translating the Application Menu and Native Dialogs
+
+    The items in the Application Menu will be merged correctly for
+    your localized application, but they will not show up translated
+    until you 
+    \l{http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFBundles/Concepts/BundleAnatomy.html#//apple_ref/doc/uid/20001119-105003-BAJFDAAG}
+    {add a localized resource folder} to the application bundle.
+    The main thing you need to do is create a file called
+    locversion.plist.  Here is an example for Norwegian:
+
+    \snippet doc/src/snippets/code/doc_src_mac-differences.qdoc 2
+
+    Now when you run the application with your preferred language set
+    to Norwegian, you should see menu items like "Avslutt" instead of
+    "Quit".
+
+    \section1 User Interface
+
+    \section2 Right-Mouse Clicks
+
+    If you want to provide right-mouse click support for Mac OS X, use
+    the QContextMenuEvent class. This will map to a context menu
+    event, i.e., a menu that will display a pop-up selection. This is
+    the most common use of right-mouse clicks, and maps to a
+    control-click with the Mac OS X one-button mouse support.
+
+    \section2 Menu Bar
+
+    Qt will automatically detect your menu bars for you and turn
+    them into Mac native menu bars. Fitting this into your existing Qt
+    application will normally be automatic. However, if you have
+    special needs, the Qt implementation currently selects a menu
+    bar by starting at the active window
+    (i.e. QApplication::activeWindow()) and applying the following
+    tests:
+
+    \list 1
+
+    \i If the window has a QMenuBar, then it is used.
+
+    \i If the window is modal, then its menu bar is used. If no menu
+       bar is specified, then a default menu bar is used (as
+       documented below).
+
+    \i If the window has no parent, then the default menu bar is used
+       (as documented below).
+
+    \endlist
+
+    These tests are followed all the way up the parent window chain
+    until one of the above rules is satisifed. If all else fails, a
+    default menu bar will be created. Note the default menu bar on
+    Qt is an empty menu bar. However, you can create a different
+    default menu bar by creating a parentless QMenuBar. The first one
+    created will be designated the default menu bar and will be used
+    whenever a default menu bar is needed.
+
+    Note that using native menu bars introduces certain limitations on
+    Qt classes.  See the \l{#Limitations}{list of limitations} below
+    for more information about these.
+
+    \section2 Special Keys
+
+    To provide the expected behavior for Qt applications on Mac OS X,
+    the Qt::Meta, Qt::MetaModifier, and Qt::META enum values
+    correspond to the Control keys on the standard Macintosh keyboard,
+    and the Qt::Control, Qt::ControlModifier, and Qt::CTRL enum values
+    correspond to the Command keys.
+
+    \section1 Limitations
+
+    \section2 Menu Actions
+
+    \list
+
+    \o Actions in a QMenu with accelerators that have more than one
+       keystroke (QKeySequence) will not display correctly, when the
+       QMenu is translated into a Mac native menu bar. The first key
+       will be displayed. However, the shortcut will still be
+       activated as on all other platforms.
+
+    \o QMenu objects used in the native menu bar are not able to
+       handle Qt events via the normal event handlers.
+       For Carbon, you will have to install a Carbon event handler on
+       the menu bar in order to receive Carbon events that are similar
+       to \l{QMenu::}{showEvent()}, \l{QMenu::}{hideEvent()}, and
+       \l{QMenu::}{mouseMoveEvent()}. For Cocoa, you will have to
+       install a delegate on the menu itself to be notified of these
+       changes. Alternatively, consider using the QMenu::aboutToShow()
+       and QMenu::aboutToHide() signals to keep track of menu visibility;
+       these provide a solution that should work on all platforms
+       supported by Qt.
+
+    \endlist
+
+    \section2 Native Widgets
+
+    Qt has support for sheets and drawers, represented in the
+    window flags by Qt::Sheet and Qt::Drawer respectiviely. Brushed
+    metal windows can also be created by using the
+    Qt::WA_MacMetalStyle window attribute.
+
+    \section1 Preparing a Qt application for Mac App Store submission
+
+    \section2 Changing the location of global Qt settings
+
+    By default, global Qt settings are stored in the file com.trolltech.plist,
+    which does not conform with Mac App Store file system usage requirements.
+    Instructions for changing the location can be found in the
+    \l{QSettings#Changing the location of global Qt settings on Mac OS X}{QSettings documentation}.
+
+    \section2 Storage location paths
+
+    If you are using QDesktopServices::storageLocation() to find locations
+    for data or cache files, you should ensure that the application and
+    organization names used by Qt match the values in iTunes Connect. If
+    the values do not match, the paths that storageLocation() returns will
+    not conform with the Mac App Store file system usage requirements.
+    You can set the application and organization names that Qt uses by
+    calling QCoreApplication::setOrganizationName() and QCoreApplication::setApplicationName().
+
+    \section2 Info.plist and application icon
+
+    A custom Info.plist file instead of the qmake-generated one is needed,
+    since the Mac App Store requires some specific keys to be set that
+    are not present in the generated file. See \l{qmake Variable Reference#QMAKE_INFO_PLIST}{QMAKE_INFO_PLIST} for details.
+
+    Information about the required Info.plist contents can be found in
+    Apple's \l{Submitting to the Mac App Store} document.
+
+    You'll also need to provide an icon for your application, as
+    described in \l{Setting the Application Icon#Setting the Application Icon on Mac OS X}{Setting the Application Icon on Mac OS X}.
+
+    \section2 Debug symbols
+
+    To generate the debug symbol information needed for the Mac App Store
+    submission in a release build, add these settings to your .pro file:
+
+    \code
+    QMAKE_CFLAGS_RELEASE = $$QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO
+    QMAKE_CXXFLAGS_RELEASE = $$QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO
+    QMAKE_OBJECTIVE_CFLAGS_RELEASE = $$QMAKE_OBJECTIVE_CFLAGS_RELEASE_WITH_DEBUGINFO
+    QMAKE_LFLAGS_RELEASE = $$QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO
+    \endcode
+
+    The debug symbols can be extracted with the dsymutil command as follows:
+
+    \code
+    dsymutil MyApp.app/Contents/MacOS/MyApp -o MyApp.app.dSYM
+    \endcode
+*/
+
+/*!
+    \page qt-mac-cocoa-licensing.html
+
+    \title Contributions to the Following QtGui Files: qapplication_cocoa_p.h, qapplication_mac.mm, qdesktopwidget_mac.mm qeventdispatcher_mac.mm qeventdispatcher_mac_p.h qmacincludes_mac.h qt_cocoa_helpers.mm qt_cocoa_helpers_p.h qwidget_mac.mm qsystemtrayicon_mac.mm
+
+    \contentspage {Other Licenses Used in Qt}{Contents}
+
+    \ingroup licensing
+    \brief License information for contributions by Apple, Inc. to specific parts of the Qt for Mac OS X Cocoa port.
+
+    \legalese
+
+    Copyright (C) 2007-2008, Apple, Inc.
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+    \list
+    \o Redistributions of source code must retain the above copyright notice,
+       this list of conditions and the following disclaimer.
+    \o Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation
+       and/or other materials provided with the distribution.
+    \o Neither the name of Apple, Inc. nor the names of its contributors
+       may be used to endorse or promote products derived from this software
+       without specific prior written permission.
+    \endlist
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+    A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+    CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    \endlegalese
+*/

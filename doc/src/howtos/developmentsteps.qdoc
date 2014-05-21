@@ -1,0 +1,186 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+/*!
+\page qtdevelopment-steps.html
+\title Qt Development: The Steps from Challenge to Achievement
+
+\section1 The Challenge
+
+One day, your boss runs into your cubicle and exclaims to you, "The board blew
+millions on a new enterprise HelloWorld application. The new one does not work
+and we need a solution quickly before this disaster brings down the company! I'm
+putting you in charge of the whole project while I go on vacation -- see you in
+2 weeks."
+
+\section1 Brainstorming Ideas - It is time to play!
+
+Never one to shy away from a challenge (especially when your job might be on the
+line), you first set out try come up with an idea about what your options are.
+
+You ask around a bit and discover that the broken application was intended to
+replace one that has been living on a dusty mainframe for the past 25 years. The
+machine is nearing end of life and, rather than invest in replacement hardware
+to run a legacy HelloWorld program, the board decided to invest in new software
+that could be run on desktops, web, mobile devices and embedded into the
+company's main product line -- a pocket size device with a small LCD screen,
+which flashes the message "Hello World" every full moon.
+
+The vendor that was chosen to handle this task was a well known multinational
+company that specialized in enterprise CRM/ERP systems. The project missed
+several delivery deadlines over a 2 year period, and was 500% over budget. There
+was not going to be much margin for error trying to fix the problem, and there
+would likely be no budget either.
+
+You begin researching dozens of possible possible approaches to the problem. One
+of the biggest challenges is that there are very few options that will allow you
+to create native applications that use the same framework for targeting
+\l{qt-creator-configure-target}{multiple platforms}.
+
+Some years ago you had coded a small desktop application using the Qt framework,
+without realizing that it also can be used for targeting the web, mobile devices
+and embedded devices. Since that time, Qt has added a new feature called \l{Qt
+Quick}, which provides the ability to easily design applications with intuitive,
+modern-looking, fluid user interfaces.
+
+\section1 Creating an Objective
+
+You quickly realize that you might need two, three, or more interfaces for your
+application -- one for each of the target platforms you are aiming for.
+Thankfully Qt has options well suited for each of them.
+
+For your mobile application the choice seems obvious enough. The new Qt Quick
+technology looks very promising, but you do not know QML; the declarative
+language that helps define the interface in a Qt Quick program. You still want
+to give it a try, but worry that you might not have something complete before
+your boss returns from vacation in two weeks. You also wonder if Qt Quick is
+applicable to desktop and embedded targets -- and then of course there is the
+need for something targeting the web. You decide to give Qt Quick a try first
+and \l{QML Examples and Demos}{see where it takes you}.
+
+\section1 Developing Plans
+
+One thing you realize after reading up on \l{Qt Quick} is that things are very
+different from the desktop when designing an interface. Qt Quick doesn't contain
+ready made UI 'chrome'; the widgets and other design elements that define the
+application interface. A new technology, called Qt Quick Components, looks like
+a promising solution, but the components will only be available at a later date.
+For now you'll have to come up with something on your own -- but you are keen to
+give your design skills a work out, and learning to use Qt Quick seems to be a
+great way to do it.
+
+Not knowing a better place to start, you begin by taking a cue from web design
+and plan a wireframe, which helps
+\l{external: Developing Qt Quick Applications}{define the application layout},
+content and user interaction. You decide on breaking the field of the screen
+space into three roughly equal size parts. There will be one section across the
+top, which will span the width of the screen, and two sections in the lower
+have, which will be approximately as tall as the top section is wide (when in
+portrait mode).
+
+The top section will be a simple text representation of the phrase "Hello World"
+in English. In the lower left you would like to place some kind of audio
+playback feature that repeats back the phrase in the top section of the screen.
+Finally, in the lower right hand side of the screen will be four links to
+similar views for additional languages -- Mandarin Chinese, Brazilian
+Portuguese, Arabic, and Russian. When the user clicks one of the links the text
+at the top is then translated, and the playback corresponds to the appropriate
+language.
+
+While the wireframe is effective in dealing with one part of the design
+challenge, it does not cover visual aspects other than layout and content. This
+means that you still need to define colours, white space, and typography (among
+other things). This is where a style guide would come in handy, if your company
+already had one that is. In the absence of one you decide to again get some
+inspiration from the web, and you mimic some of the company's website design
+into your application -- a sans-serif font for white text on a blue field across
+the top, black text on white for the bottom two sections, and a small company
+logo to the left of the "Hello World" message.
+
+
+\section1 Execution: The Coding Begins!
+
+At long last you sit down to \l{qt-technologies}{implement} your plans and
+designs. The first few steps go according to plan, and creating the basic layout
+and text goes fairly smoothly -- but you run into a few challenges quite
+quickly:
+
+Devising a user friendly interface to audio playback is not as intuitive as you
+first thought. Since there exist a ready made component for
+\l{external: Mobility Multimedia}{multimedia},
+you remove the bottom left field and now have the screen split in two. You add
+textual links for each of the five target languages, and when the user clicks
+one of them the message text changes and the appropriate audio plays back. It is
+a small sacrifice to make for now, and you are sure there is a solution to be
+found once you have become more proficient with QML.
+
+The next challenge you run into is that \l{qt-deployment}{deploying} the
+application to a Symbian phone is not as clearly understood as you expected.
+Again you are sure there is something you are missing, but for the time being
+you manually copy the .sis file to the "Installs" directory on the phone
+(connected to the development machine by USB) and then install it through the
+Application Manager.
+
+When you finally manage to install the application on the device you notice
+something that looks rather peculiar, and something you had not thought of. When
+the phone is turned into landscape mode, your text remains at the same absolute
+coordinates as when it was in portrait mode. You had not realized you needed to
+anchor it in order to achieve the centering you wanted. There was an
+\l{qt-testing}{easy fix} for this, but you were glad you saw this earlier rather
+than later.
+
+
+\section1 Innovating
+
+After the ups and downs of learning to develop a basic application
+using Qt Quick, you start to see greater possibilities for using Qt technologies
+for your current and future projects:
+
+\list
+\o Extending HTML5 based applications that tie Javascript to a Qt C++ back end
+using \l{Qt WebKit}
+\o An \l{qt-rendering-painting-system}{OpenGL} based UI for embedded platforms
+\o \l{Gestures Programming}{Touch} screen support
+\o \l{external: Mobility Location}{Location} based applications
+\o \l{qt-technologies}{Much, much more}
+\endlist
+
+
+\section1 The Achievement
+
+After your boss returned from vacation you presented him with the finished Qt
+Quick application, demonstrating it on both a mobile device as well as desktop
+(it happened to work well on both with little modification). You also provided
+him a presentation that detailed your road map for taking things to the next
+level -- targeting other platforms, such as the web, as well as improving on the
+existing application you just completed.
+
+Even though the final product did not turn out the way you originally planned,
+your boss was still sufficiently impressed. Not only was the go ahead given for
+future projects, but ramping up a small team of developers and designers was
+also suggested to help support your efforts.
+
+*/

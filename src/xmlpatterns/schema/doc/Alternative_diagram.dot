@@ -1,0 +1,11 @@
+digraph Alternative {
+  mindist = 2.0
+  1 -> 3 [label="complexType"]
+  1 -> 2 [label="annotation"]
+  1 -> 3 [label="simpleType"]
+  2 -> 3 [label="complexType"]
+  2 -> 3 [label="simpleType"]
+  1 [shape=doublecircle, style=filled, color=blue]
+  2 [shape=doublecircle, style=filled, color=green]
+  3 [shape=doublecircle, style=filled, color=green]
+}

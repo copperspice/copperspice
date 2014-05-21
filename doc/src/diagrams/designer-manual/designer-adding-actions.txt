@@ -1,0 +1,15 @@
+# Cropping and fading the Qt Designer action images.
+
+cropimage.py designer-adding-menu-action1.png designer-adding-menu-action1-crop.png left 57
+cropimage.py designer-adding-menu-action1-crop.png designer-adding-menu-action1-crop.png top 41
+cropimage.py designer-adding-menu-action1-crop.png designer-adding-menu-action1-crop.png right -180
+cropimage.py designer-adding-menu-action1-crop.png designer-adding-menu-action1-crop.png bottom -124
+fadeedges.py designer-adding-menu-action1-crop.png ../images/designer-adding-menu-action.png right,bottom 16
+rm designer-adding-menu-action1-crop.png
+
+cropimage.py designer-adding-toolbar-action1.png designer-adding-toolbar-action1-crop.png left 57
+cropimage.py designer-adding-toolbar-action1-crop.png designer-adding-toolbar-action1-crop.png top 41
+cropimage.py designer-adding-toolbar-action1-crop.png designer-adding-toolbar-action1-crop.png right -144
+cropimage.py designer-adding-toolbar-action1-crop.png designer-adding-toolbar-action1-crop.png bottom -124
+fadeedges.py designer-adding-toolbar-action1-crop.png ../images/designer-adding-toolbar-action.png right,bottom 16
+rm designer-adding-toolbar-action1-crop.png

@@ -1,0 +1,29 @@
+bin_PROGRAMS += \
+	bin/lrelease
+
+noinst_HEADERS += \
+	src/tools/shared/translator.h \
+	src/tools/shared/translatormessage.h \
+	src/tools/shared/ioutils.h
+
+bin_lrelease_SOURCES = \
+	src/tools/shared/numerus.cpp \
+	src/tools/shared/translator.cpp \
+	src/tools/shared/translatormessage.cpp \
+	src/tools/shared/qm.cpp \
+	src/tools/shared/qph.cpp \
+	src/tools/shared/po.cpp \
+	src/tools/shared/ts.cpp \
+	src/tools/shared/xliff.cpp \
+	src/tools/shared/ioutils.cpp \
+	src/tools/lrelease/main.cpp
+
+bin_lrelease_CXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS) \
+   -Iinclude/QtCore \
+   -Iprivateinclude/QtCore/private  -I$(top_srcdir)/src/tools/shared
+
+bin_lrelease_LDADD = lib/libCsCore1.la lib/libCsXml1.la
+
+if OSTYPE_WIN
+   bin_lrelease_LDADD += -luuid
+endif

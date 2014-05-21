@@ -1,0 +1,267 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \group qtsymbian
+    \title Qt for the Symbian platform
+    \ingroup qt-embedded
+    \brief Documents related to Qt for the Symbian platform
+
+    Qt for Symbian is a C++ framework for GUI and application development
+    for embedded devices running Symbian. Qt for Symbian provides all
+    functionality required to develop rich end-user applications for devices
+    running S60 3.1 and later.
+
+    \table 100%
+    \header \o Getting Started \o Reference \o Development
+    \row
+    \o
+     \list
+        \o \l {Qt for the Symbian platform Requirements}
+        \o \l {Installing Qt for the Symbian platform}
+        \o \l {The Symbian platform - Introduction to Qt}{Introduction to using Qt}
+    \endlist
+    \o
+    \list
+        \o \l {Exception Safety with Symbian}
+        \o \l {Platform and Compiler Notes - Symbian} {Qt for the Symbian platform - state of support}
+        \o \l {qmake Platform Notes#Symbian platform} {Qt for Symbian extensions for qmake}
+	\o \l {Symbian Platform Security Requirements} {Symbian Platform Security Requirements}
+    \endlist
+    \o
+    \list
+        \o \l {Deploying an Application on the Symbian Platform}{Deploying Applications}
+    \endlist
+    \endtable
+*/
+
+/*!
+    \page symbian-platform-security-requirements.html
+
+    \title Symbian Platform Security Requirements
+    \ingroup qtsymbian
+
+    On Symbian, processes that access media via the network must
+    have the \c NetworkServices platform security capability. If the client
+    process lacks this capability, operations will result in errors.
+    This failure is indicated by a state() of Phonon::ErrorState.
+
+    Platform security capabilities are added via the
+    \l{qmake-variable-reference.html#target-capability}{TARGET.CAPABILITY}
+    qmake variable.
+
+    \sa {platform-notes-symbian.html#required-capabilities}{Required Capabilities}
+*/
+
+/*!
+    \page symbian-with-qt-introduction.html
+
+    \title The Symbian platform - Introduction to Qt
+    \brief An introduction to Qt for the Symbian platform developers.
+    \ingroup howto
+    \ingroup qtsymbian
+
+    \tableofcontents
+
+    \section1 Required Tools
+
+    See \l{Qt for the Symbian platform Requirements} to see what tools are
+    required to use Qt for the Symbian platform.
+
+    \section1 Installing Qt and Running Demos
+
+    Follow the instructions found in \l{Installing Qt for the Symbian platform} to learn how to install Qt using
+    using source package and how to build and run the Qt demos.
+
+    \section1 Building Your Own Applications
+
+    If you are new to Qt development, have a look at \l{How to Learn Qt}.
+    In general, the difference between developing a
+    Qt application on the Symbian platform compared to any of the other platforms supported
+    by Qt is not that big.
+
+    Once you have created a \c .pro file for your project, generate the
+    Symbian specific \c Bld.inf and \c .mmp files this way:
+
+    \snippet doc/src/snippets/code/doc_src_symbian-introduction.qdoc 0
+
+    For more information on how to use qmake have a look at the \l
+    {qmake Tutorial}. In particular, see the
+    \l{qmake Platform Notes#Symbian platform}{qmake Platform Notes} for
+    details of Symbian-specific build settings.
+
+    Now you can build the Qt for the Symbian platform application with
+    standard build tools.
+
+    \section2 Alternative Build Targets
+
+    By default, running \c make will produce binaries for the emulator.
+    However, the Symbian platform comes with several alternative
+    build targets that can be used to create binaries for target hardware
+    and deploy them on devices, as shown in the table below:
+
+    \table
+    \row \o \c debug-winscw  \o Build debug binaries for the emulator (default).
+                                It is currently not possible to build release
+                                binaries for the emulator.
+    \row \o \c debug-gcce    \o Build debug binaries for hardware using GCCE.
+    \row \o \c release-gcce  \o Build release binaries for hardware using GCCE.
+    \row \o \c debug-armv5   \o Build debug binaries for hardware using RVCT.
+    \row \o \c release-armv5 \o Build release binaries for hardware using RVCT.
+    \row \o \c run           \o Run the application on the emulator.
+    \row \o \c runonphone    \o Run the application on a device.
+    \row \o \c deploy        \o Deploys the project into a device.
+    \row \o \c sis           \o Create signed \c .sis file for project.
+    \row \o \c unsigned_sis  \o Create unsigned \c .sis file for project.
+    \row \o \c installer_sis \o Create signed \l{Smart Installer}{smart installer}
+                                \c .sis file for project.
+                                Smart installer will attempt to download
+                                missing dependencies in addition to
+                                just installing the application.
+                                Note: The application \c .sis contained in smart installer \c .sis
+                                will be recreated and signed with same certificates as
+                                smart installer \c .sis.
+    \row \o \c ok_installer_sis \o Otherwise similar to \c installer_sis target, except
+                                the application sis will not be recreated. This is useful
+                                when application \c .sis needs to be separately signed before
+                                including it into smart installer \c .sis.
+    \row \o \c unsigned_installer_sis \o Create unsigned \l{Smart Installer}{smart installer}
+                                      \c .sis file for project.
+                                      Note: The application \c .sis contained in smart installer
+                                      \c .sis will also be unsigned.
+    \row \o \c stub_sis      \o Create a stub sis to allow upgradability of projects
+                                that are deployed in ROM
+    \endtable
+
+    The following lines perform a debug build for the emulator
+    and deploy all the needed files:
+
+    \snippet doc/src/snippets/code/doc_src_symbian-introduction.qdoc 1
+
+    To work on your project in Carbide, simply import the \c .pro file
+    by right clicking on the project explorer and executing "Import...".
+
+    \section1 Running Applications from the Command Line
+
+    The application can be launched on the emulator using \c{make run} command.
+
+    The application can be launched on a device using \c{make runonphone} command.
+    When this command is invoked, a \c .sis file is first created as if \c{make sis}
+    command was invoked (see above for details).
+    \bold{Note:} Running the application on a device using this command requires
+    \c TRK application to be running on the device.
+
+    Additional environment variables that can be utilized with these commands are:
+    \table
+    \row \o \c QT_RUN_OPTIONS           \o Any command line parameters you wish to pass
+                                           to your application.
+    \row \o \c QT_RUN_ON_PHONE_OPTIONS  \o Options for runonphone application.
+                                           Execute \c runonphone from command line for
+                                           more information about available options.
+                                           \c{make runonphone} only.
+    \endtable
+
+    \section1 Installing Your Own Applications
+
+    To install your own applications on hardware, you need a signed \c .sis file.
+    (Refer to the \l{Symbian Platform Security} article for more informations about self-signing.)
+    The signed \c .sis file can be created with \c make \c sis target. \c sis target
+    is only supported for executables or projects with \c DEPLOYMENT statements.
+    By default the \c sis target will create signed \c .sis file for last build
+    target. For example, the following sequence will generate the needed makefiles,
+    build the project for \c debug-winscw and \c release-armv5, and create
+    self-signed \c .sis file for \c release-armv5 target:
+
+    \snippet doc/src/snippets/code/doc_src_symbian-introduction.qdoc 2
+
+    If you want to use different certificate information or override the default
+    target for \c .sis file creation you can use the environment variables as
+    shown in the table below:
+
+    \table
+    \row \o \c QT_SIS_OPTIONS      \o Options accepted by \c .sis creation. See
+                                   \l{Supported options for QT_SIS_OPTIONS}{Supported options}
+                                    below. By default no options are given.
+    \row \o \c QT_SIS_TARGET       \o Target for which \c .sis file is created.
+                                       Accepted values are build targets listed in
+                                       previous table. By default last build target.
+    \row \o \c QT_SIS_CERTIFICATE  \o The certificate file used for signing.
+                                       By default self-signed certificate.
+    \row \o \c QT_SIS_KEY          \o The certificate's private key file.
+                                       By default key is associated to self-signed certificate.
+    \row \o \c QT_SIS_PASSPHRASE   \o The certificate's private key file's passphrase.
+                                       By default empty.
+    \endtable
+
+    The supported options for \c QT_SIS_OPTIONS:
+
+    \target Supported options for QT_SIS_OPTIONS
+    \table
+    \row \o -i                  \o Install the package right away using PC suite.
+    \row \o -p                  \o Only preprocess the template \c .pkg file.
+    \row \o -c <file>           \o Read certificate information from a file.
+    \row \o -u                  \o Preserves unsigned package.
+    \row \o -o                  \o Creates only unsigned package.
+    \row \o -s                  \o Generates stub sis for ROM.
+    \row \o -n <name>           \o Specifies the final sis name.
+    \row \o -g                  \o Treat gcce platform as armv5.
+    \row \o -d                  \o Skip automatic patching of the package when default certificate is used.
+    \endtable
+
+    Execute the \c{createpackage.pl} script without any
+    parameters for detailed information about options. By default no options are given.
+
+    For example:
+
+    \snippet doc/src/snippets/code/doc_src_symbian-introduction.qdoc 4
+
+    The environment variables for \c make can also be given as parameters:
+
+    \snippet doc/src/snippets/code/doc_src_symbian-introduction.qdoc 3
+
+    If you want to install the program immediately after creating \c .sis file,
+    make sure that the device is connected to the computer in "PC Suite" mode,
+    and use \c deploy target instead of \c sis target:
+
+    \snippet doc/src/snippets/code/doc_src_symbian-introduction.qdoc 5
+
+    \section1 Deployment and the Smart Installer
+
+    Although some Symbian devices may already have a version of Qt installed
+    on them, there needs to be a way to ensure that an appropriate version
+    of Qt is available for your application to use. Rather than deploy the
+    required Qt libraries with your application, the preferred way to
+    package Qt applications for deployment is to download and use the Smart
+    Installer.
+
+    The Smart Installer makes sure that deployed applications have all the
+    Qt dependencies they need to run on a device, performing the necessary
+    updates when the user installs the application.
+
+    More information about deployment can be found in the
+    \l{Deploying an Application on the Symbian Platform} document.
+*/

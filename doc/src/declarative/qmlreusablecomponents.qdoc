@@ -1,0 +1,143 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qmlreusablecomponents.html
+\ingroup qml-features
+\previouspage {QML Signal and Handler Event System}{Signal and Handler Event System}
+\nextpage {QML States}{States}
+\contentspage QML Features
+
+\title Importing Reusable Components
+
+A \e component is an instantiable QML definition, typically contained in a
+\c .qml file. For instance, a Button \e component may be defined in
+\c Button.qml. The QML runtime may instantiate this Button component to create
+Button \e objects. Alternatively, a component may be defined inside a
+\l Component element.
+
+Moreover, the Button definition may also contain other components. A Button
+component could use a Text element for its label and other components to
+implement its functions. Compounding components to form new components
+(and effectively new interfaces) is the emphasis in QML.
+
+\keyword qml-define-components
+\section1 Defining New Components
+
+Any snippet of QML code may become a component, by placing the code in a QML
+file (extension is \c .qml). A complete Button component that responds to user
+input may be in a Button.qml file.
+\snippet doc/src/snippets/declarative/reusablecomponents/Button.qml document
+
+Alternatively, a \l Component element may encapsulate a QML object to form a
+component.
+\snippet doc/src/snippets/declarative/reusablecomponents/component.qml parent begin
+\snippet doc/src/snippets/declarative/reusablecomponents/component.qml define inline component
+\snippet doc/src/snippets/declarative/reusablecomponents/component.qml parent end
+
+\keyword qml-loading-components
+\section1 Loading a Component
+
+The initialization of inline components is different from loading a component
+from a \c .qml file.
+
+\section2 Importing a Component
+
+A component defined in a \c .qml file is directly usable by declaring the name
+of the component. For example, a button defined in \c Button.qml is created by
+declaring a \c Button. The button is defined in the
+\l {qml-define-components}{Defining New Components} section.
+\snippet doc/src/snippets/declarative/reusablecomponents/application.qml document
+
+Note that the component name, \c Button, matches the QML filename, \c Button.qml.
+Also, the first character is in upper case. Matching the names allow
+components in the same directory to be in the direct import path of the
+application.
+
+For flexibility, a \c qmldir file is for dictating which additional components,
+plugins, or directories should be imported. By using a \c qmldir file,
+component names do not need to match the filenames. The \c qmldir file should,
+however, be in an imported path.
+\snippet doc/src/snippets/declarative/reusablecomponents/qmldir document
+
+\section2 Loading an Inline Component
+
+A consequence of inline components is that initialization may be deferred or
+delayed. A component may be created during a MouseArea event or by using a
+\l Loader element. The component can create an object, which is addressable in a
+similar way as an \l {qml-id-property}{id property}. Thus, the created object may
+have its bindings set and read like a normal QML object.
+\snippet doc/src/snippets/declarative/reusablecomponents/component.qml define inline component
+\snippet doc/src/snippets/declarative/reusablecomponents/component.qml create inline component
+
+\keyword qml-component-properties
+\section1 Component Properties
+
+Initializing a component, either from a .qml file or initializing an inline
+component, have several properties to facilitate component execution.
+Specifically, there are \l{attached-properties}{attached properties} and
+\l{attached-signalhandlers}{attached signal handlers} for setting properties
+during the lifetime of a component.
+
+The \c{Component.onCompleted} attached signal handler is called when the
+component completes initialization. It is useful for executing any commands
+after component initialization. Similarly, the \c{Component.onDestruction}
+signal handler executes when the component finishes destruction.
+
+\keyword qml-top-level
+\section1 Top-Level Component
+
+Choosing the \e{top-level} or the \e{root} object of components is an important
+design aspect because the top-level object dictates which properties are
+accessible outside the component. Some elements are not visual elements and
+will not have visual properties exposed outside the component. Likewise, some
+elements add functionality that are not available to visual elements.
+
+Consider the Button component from the
+\l{qml-define-components}{Defining New Components} section; it's top-level
+object is a \l Rectangle. When imported, the Button component will possess the
+Rectangle's properties, methods, signals, and any custom properties.
+
+\snippet doc/src/snippets/declarative/reusablecomponents/Button.qml parent begin
+\snippet doc/src/snippets/declarative/reusablecomponents/Button.qml ellipses
+\snippet doc/src/snippets/declarative/reusablecomponents/Button.qml properties
+\snippet doc/src/snippets/declarative/reusablecomponents/Button.qml ellipses
+\snippet doc/src/snippets/declarative/reusablecomponents/Button.qml parent end
+
+The Button's \c text alias is accessible from outside the component as well as
+the Rectangle's visual properties and signals such as \c x, \c y, \c anchors,
+and \c states.
+
+Alternatively, we may choose a \l {Keyboard Focus in QML}{FocusScope} as our
+top-level object. The \l FocusScope element manage keyboard focus for its
+children which is beneficial for certain types of interfaces. However, since
+\c FocusScopes are not visual elements, the visual properties of its child need
+to be exposed.
+
+\snippet doc/src/snippets/declarative/reusablecomponents/focusbutton.qml document
+*/
+

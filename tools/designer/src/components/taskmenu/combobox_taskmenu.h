@@ -1,0 +1,77 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2013 Barbara Geller
+* Copyright (c) 2012-2013 Ansel Sermersheim
+* Copyright (c) 2011 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software: you can redistribute it and/or 
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with CopperSpice.  If not, see 
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
+
+#ifndef COMBOBOX_TASKMENU_H
+#define COMBOBOX_TASKMENU_H
+
+#include <QtGui/QComboBox>
+#include <QtCore/QPointer>
+
+#include <qdesigner_taskmenu_p.h>
+#include <extensionfactory_p.h>
+
+QT_BEGIN_NAMESPACE
+
+class QLineEdit;
+class QDesignerFormWindowInterface;
+
+namespace qdesigner_internal {
+
+class ComboBoxTaskMenu: public QDesignerTaskMenu
+{
+    Q_OBJECT
+public:
+    explicit ComboBoxTaskMenu(QComboBox *button,
+                              QObject *parent = 0);
+    virtual ~ComboBoxTaskMenu();
+
+    virtual QAction *preferredEditAction() const;
+    virtual QList<QAction*> taskActions() const;
+
+private slots:
+    void editItems();
+    void updateSelection();
+
+private:
+    QComboBox *m_comboBox;
+    QPointer<QDesignerFormWindowInterface> m_formWindow;
+    QPointer<QLineEdit> m_editor;
+    mutable QList<QAction*> m_taskActions;
+    QAction *m_editItemsAction;
+};
+
+class ComboBoxTaskMenuFactory : public ExtensionFactory<QDesignerTaskMenuExtension, QComboBox, ComboBoxTaskMenu>
+{
+public:
+    explicit ComboBoxTaskMenuFactory(const QString &iid, QExtensionManager *extensionManager);
+
+private:
+    virtual QComboBox *checkObject(QObject *qObject) const;
+};
+
+}  // namespace qdesigner_internal
+
+QT_END_NAMESPACE
+
+#endif // COMBOBOX_TASKMENU_H

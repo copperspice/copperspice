@@ -1,0 +1,682 @@
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+ <comment>*********************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the tools applications of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** GNU Lesser General Public License Usage
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+*********************************************************************</comment>
+  <exportmacro></exportmacro>
+  <class>MainWindow</class>
+  <widget class="QMainWindow" name="MainWindow" >
+    <property name="objectName" >
+      <string notr="true" >MainWindow</string>
+    </property>
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>929</width>
+        <height>620</height>
+      </rect>
+    </property>
+    <property name="windowTitle" >
+      <string>ActiveX Control Test Container</string>
+    </property>
+    <widget class="QWidget" name="centralWidget">
+    <layout class="QHBoxLayout" >
+      <property name="objectName" >
+        <string notr="true" >unnamed</string>
+      </property>
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <property name="spacing" >
+        <number>6</number>
+      </property>
+      <item>
+        <widget class="QFrame" name="Frame" >
+          <property name="objectName" >
+            <string notr="true" >Frame</string>
+          </property>
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>7</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="frameShape" >
+            <enum>StyledPanel</enum>
+          </property>
+          <property name="frameShadow" >
+            <enum>Sunken</enum>
+          </property>
+          <layout class="QVBoxLayout" >
+            <property name="objectName" >
+              <string notr="true" >unnamed</string>
+            </property>
+            <property name="margin" >
+              <number>0</number>
+            </property>
+            <property name="spacing" >
+              <number>0</number>
+            </property>
+            <item>
+              <widget class="QSplitter" name="Splitter2" >
+                <property name="objectName" >
+                  <string notr="true" >Splitter2</string>
+                </property>
+                <property name="orientation" >
+                  <enum>Qt::Vertical</enum>
+                </property>
+                <widget class="QFrame" name="Workbase" >
+                  <property name="objectName" >
+                    <string notr="true" >Workbase</string>
+                  </property>
+                  <property name="sizePolicy" >
+                    <sizepolicy>
+                      <hsizetype>5</hsizetype>
+                      <vsizetype>7</vsizetype>
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                    </sizepolicy>
+                  </property>
+                  <property name="frameShape" >
+                    <enum>NoFrame</enum>
+                  </property>
+                  <property name="frameShadow" >
+                    <enum>Raised</enum>
+                  </property>
+                </widget>
+                <widget class="QTabWidget" name="TabWidget2" >
+                  <property name="objectName" >
+                    <string notr="true" >TabWidget2</string>
+                  </property>
+                  <property name="sizePolicy" >
+                    <sizepolicy>
+                      <hsizetype>7</hsizetype>
+                      <vsizetype>4</vsizetype>
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                    </sizepolicy>
+                  </property>
+                  <widget class="QWidget" name="logSignalsTab" >
+                    <property name="objectName" >
+                      <string notr="true" >logSignalsTab</string>
+                    </property>
+                    <attribute name="title" >
+                      <string>Signal log</string>
+                    </attribute>
+                    <layout class="QHBoxLayout" >
+                      <property name="objectName" >
+                        <string notr="true" >unnamed</string>
+                      </property>
+                      <property name="margin" >
+                        <number>0</number>
+                      </property>
+                      <property name="spacing" >
+                        <number>6</number>
+                      </property>
+                      <item>
+                        <widget class="QTextEdit" name="logSignals" >
+                          <property name="objectName" >
+                            <string notr="true" >logSignals</string>
+                          </property>
+                          <property name="sizePolicy" >
+                            <sizepolicy>
+                              <hsizetype>7</hsizetype>
+                              <vsizetype>5</vsizetype>
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                            </sizepolicy>
+                          </property>
+                          <property name="readOnly" >
+                            <bool>true</bool>
+                          </property>
+                        </widget>
+                      </item>
+                    </layout>
+                  </widget>
+                  <widget class="QWidget" name="logPropertiesTab" >
+                    <property name="objectName" >
+                      <string notr="true" >logPropertiesTab</string>
+                    </property>
+                    <attribute name="title" >
+                      <string>Property log</string>
+                    </attribute>
+                    <layout class="QHBoxLayout" >
+                      <property name="objectName" >
+                        <string notr="true" >unnamed</string>
+                      </property>
+                      <property name="margin" >
+                        <number>0</number>
+                      </property>
+                      <property name="spacing" >
+                        <number>6</number>
+                      </property>
+                      <item>
+                        <widget class="QTextEdit" name="logProperties" >
+                          <property name="objectName" >
+                            <string notr="true" >logProperties</string>
+                          </property>
+                          <property name="sizePolicy" >
+                            <sizepolicy>
+                              <hsizetype>7</hsizetype>
+                              <vsizetype>5</vsizetype>
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                            </sizepolicy>
+                          </property>
+                          <property name="readOnly" >
+                            <bool>true</bool>
+                          </property>
+                        </widget>
+                      </item>
+                    </layout>
+                  </widget>
+                  <widget class="QWidget" name="TabPage" >
+                    <property name="objectName" >
+                      <string notr="true" >TabPage</string>
+                    </property>
+                    <attribute name="title" >
+                      <string>Macro Log</string>
+                    </attribute>
+                    <layout class="QHBoxLayout" >
+                      <property name="objectName" >
+                        <string notr="true" >unnamed</string>
+                      </property>
+                      <property name="margin" >
+                        <number>0</number>
+                      </property>
+                      <item>
+                        <widget class="QTextEdit" name="logMacros" >
+                          <property name="objectName" >
+                            <string notr="true" >logMacros</string>
+                          </property>
+                          <property name="sizePolicy" >
+                            <sizepolicy>
+                              <hsizetype>7</hsizetype>
+                              <vsizetype>5</vsizetype>
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                            </sizepolicy>
+                          </property>
+                          <property name="readOnly" >
+                            <bool>true</bool>
+                          </property>
+                        </widget>
+                      </item>
+                    </layout>
+                  </widget>
+                  <widget class="QWidget" name="logDebugTab" >
+                    <property name="objectName" >
+                      <string notr="true" >logDebugTab</string>
+                    </property>
+                    <attribute name="title" >
+                      <string>Debug log</string>
+                    </attribute>
+                    <layout class="QHBoxLayout" >
+                      <property name="objectName" >
+                        <string notr="true" >unnamed</string>
+                      </property>
+                      <property name="margin" >
+                        <number>0</number>
+                      </property>
+                      <property name="spacing" >
+                        <number>6</number>
+                      </property>
+                      <item>
+                        <widget class="QTextEdit" name="logDebug" >
+                          <property name="objectName" >
+                            <string notr="true" >logDebug</string>
+                          </property>
+                          <property name="sizePolicy" >
+                            <sizepolicy>
+                              <hsizetype>7</hsizetype>
+                              <vsizetype>5</vsizetype>
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                            </sizepolicy>
+                          </property>
+                          <property name="readOnly" >
+                            <bool>true</bool>
+                          </property>
+                        </widget>
+                      </item>
+                    </layout>
+                  </widget>
+                </widget>
+              </widget>
+            </item>
+          </layout>
+        </widget>
+      </item>
+    </layout>
+    </widget>
+    <widget class="QToolBar" name="Toolbar_2" >
+      <property name="objectName" >
+        <string notr="true" >Toolbar_2</string>
+      </property>
+      <property name="windowTitle" >
+        <string>Toolbar_2</string>
+      </property>
+      <addaction name="actionFileNew" />
+      <addaction name="actionControlMethods" />
+      <addaction name="actionControlProperties" />
+    </widget>
+    <widget class="QMenuBar" name="menubar" >
+      <property name="objectName" >
+        <string notr="true" >menubar</string>
+      </property>
+      <widget class="QMenu" name="FileMenu" >
+        <property name="objectName" >
+          <string notr="true" >FileMenu</string>
+        </property>
+        <property name="title" >
+          <string>&amp;File</string>
+        </property>
+        <addaction name="actionFileNew" />
+        <addaction name="actionFileLoad" />
+        <addaction name="actionFileSave" />
+        <addaction name="separator" />
+        <addaction name="actionFileExit" />
+      </widget>
+      <widget class="QMenu" name="ContainerMenu" >
+        <property name="objectName" >
+          <string notr="true" >ContainerMenu</string>
+        </property>
+        <property name="title" >
+          <string>Con&amp;tainer</string>
+        </property>
+        <addaction name="actionContainerSet" />
+        <addaction name="actionContainerClear" />
+        <addaction name="separator" />
+        <addaction name="actionContainerProperties" />
+      </widget>
+      <widget class="QMenu" name="ControlMenu" >
+        <property name="objectName" >
+          <string notr="true" >ControlMenu</string>
+        </property>
+        <property name="title" >
+          <string>&amp;Control</string>
+        </property>
+        <widget class="QMenu" name="VerbMenu" >
+          <property name="objectName" >
+            <string notr="true" >VerbMenu</string>
+          </property>
+          <property name="title" >
+            <string>&amp;Verbs...</string>
+          </property>
+          <property name="enabled" >
+            <bool>false</bool>
+          </property>
+        </widget>
+        <addaction name="actionControlMethods" />
+        <addaction name="actionControlProperties" />
+        <addaction name="VerbMenu" />
+        <addaction name="separator" />
+        <addaction name="actionControlInfo" />
+        <addaction name="actionControlDocumentation" />
+        <addaction name="actionControlPixmap" />
+      </widget>
+      <widget class="QMenu" name="ScriptMenu" >
+        <property name="objectName" >
+          <string notr="true" >ScriptMenu</string>
+        </property>
+        <property name="title" >
+          <string>&amp;Scripting</string>
+        </property>
+        <addaction name="actionScriptingLoad" />
+        <addaction name="actionScriptingRun" />
+      </widget>
+      <widget class="QMenu" name="OptionsMenu" >
+        <property name="objectName" >
+          <string notr="true" >OptionsMenu</string>
+        </property>
+        <property name="title" >
+          <string>&amp;Options</string>
+        </property>
+        <widget class="QMenu" name="LoggingMenu" >
+          <property name="objectName" >
+            <string notr="true" >LoggingMenu</string>
+          </property>
+          <property name="title" >
+            <string>Log...</string>
+          </property>
+          <addaction name="actionLogSignals" />
+          <addaction name="actionLogProperties" />
+        </widget>
+        <addaction name="actionFreezeEvents" />
+        <addaction name="actionGroupLogging" />
+        <addaction name="LoggingMenu" />
+      </widget>
+      <addaction name="FileMenu" />
+      <addaction name="ContainerMenu" />
+      <addaction name="ControlMenu" />
+      <addaction name="ScriptMenu" />
+      <addaction name="OptionsMenu" />
+    </widget>
+    <action name="actionFileExit" >
+      <property name="objectName" >
+        <string>actionFileExit</string>
+      </property>
+      <property name="iconText" >
+        <string>Exit</string>
+      </property>
+      <property name="text" >
+        <string>E&amp;xit</string>
+      </property>
+    </action>
+    <action name="actionContainerSet" >
+      <property name="objectName" >
+        <string>actionContainerSet</string>
+      </property>
+      <property name="enabled" >
+        <bool>false</bool>
+      </property>
+      <property name="iconText" >
+        <string>Set Control</string>
+      </property>
+      <property name="text" >
+        <string>&amp;Set Control</string>
+      </property>
+      <property name="shortcut" >
+        <string>Ctrl+S</string>
+      </property>
+    </action>
+    <action name="actionControlMethods" >
+      <property name="objectName" >
+        <string>actionControlMethods</string>
+      </property>
+      <property name="enabled" >
+        <bool>false</bool>
+      </property>
+      <property name="icon" >
+        <iconset>image0</iconset>
+      </property>
+      <property name="iconText" >
+        <string>Invoke Methods</string>
+      </property>
+      <property name="text" >
+        <string>Invoke &amp;Methods</string>
+      </property>
+      <property name="shortcut" >
+        <string>Ctrl+M</string>
+      </property>
+    </action>
+    <action name="actionControlProperties" >
+      <property name="objectName" >
+        <string>actionControlProperties</string>
+      </property>
+      <property name="enabled" >
+        <bool>false</bool>
+      </property>
+      <property name="icon" >
+        <iconset>image1</iconset>
+      </property>
+      <property name="iconText" >
+        <string>Change Properties</string>
+      </property>
+      <property name="text" >
+        <string>Change &amp;Properties</string>
+      </property>
+      <property name="shortcut" >
+        <string>Ctrl+P</string>
+      </property>
+    </action>
+    <action name="actionContainerClear" >
+      <property name="objectName" >
+        <string>actionContainerClear</string>
+      </property>
+      <property name="enabled" >
+        <bool>false</bool>
+      </property>
+      <property name="iconText" >
+        <string>Clear Control</string>
+      </property>
+      <property name="text" >
+        <string>C&amp;lear Control</string>
+      </property>
+      <property name="shortcut" >
+        <string/>
+      </property>
+    </action>
+    <action name="actionContainerProperties" >
+      <property name="objectName" >
+        <string>actionContainerProperties</string>
+      </property>
+      <property name="iconText" >
+        <string>Ambient Properties</string>
+      </property>
+      <property name="text" >
+        <string>Ambient &amp;Properties</string>
+      </property>
+      <property name="shortcut" >
+        <string>Ctrl+A</string>
+      </property>
+    </action>
+    <action name="actionControlInfo" >
+      <property name="objectName" >
+        <string>actionControlInfo</string>
+      </property>
+      <property name="enabled" >
+        <bool>false</bool>
+      </property>
+      <property name="iconText" >
+        <string>Details</string>
+      </property>
+      <property name="text" >
+        <string>&amp;Details</string>
+      </property>
+      <property name="shortcut" >
+        <string>Ctrl+I</string>
+      </property>
+    </action>
+    <action name="actionFileSave" >
+      <property name="objectName" >
+        <string>actionFileSave</string>
+      </property>
+      <property name="enabled" >
+        <bool>false</bool>
+      </property>
+      <property name="iconText" >
+        <string>Save Control</string>
+      </property>
+      <property name="text" >
+        <string>&amp;Save Control</string>
+      </property>
+    </action>
+    <action name="actionFileLoad" >
+      <property name="objectName" >
+        <string>actionFileLoad</string>
+      </property>
+      <property name="iconText" >
+        <string>Load Control</string>
+      </property>
+      <property name="text" >
+        <string>&amp;Load Control</string>
+      </property>
+    </action>
+    <action name="actionFreezeEvents" >
+      <property name="objectName" >
+        <string>actionFreezeEvents</string>
+      </property>
+      <property name="checkable" >
+        <bool>true</bool>
+      </property>
+      <property name="iconText" >
+        <string>Freeze Events</string>
+      </property>
+      <property name="text" >
+        <string>&amp;Freeze Events</string>
+      </property>
+    </action>
+    <action name="actionFileNew" >
+      <property name="objectName" >
+        <string>actionFileNew</string>
+      </property>
+      <property name="icon" >
+        <iconset>image2</iconset>
+      </property>
+      <property name="iconText" >
+        <string>Insert Control</string>
+      </property>
+      <property name="text" >
+        <string>&amp;Insert Control</string>
+      </property>
+      <property name="shortcut" >
+        <string>Ctrl+N</string>
+      </property>
+    </action>
+    <action name="actionControlDocumentation" >
+      <property name="objectName" >
+        <string>actionControlDocumentation</string>
+      </property>
+      <property name="enabled" >
+        <bool>false</bool>
+      </property>
+      <property name="iconText" >
+        <string>Show Documentation</string>
+      </property>
+      <property name="text" >
+        <string>Show D&amp;ocumentation</string>
+      </property>
+      <property name="shortcut" >
+        <string>Ctrl+D</string>
+      </property>
+    </action>
+    <action name="actionControlPixmap" >
+      <property name="objectName" >
+        <string>actionControlPixmap</string>
+      </property>
+      <property name="enabled" >
+        <bool>false</bool>
+      </property>
+      <property name="iconText" >
+        <string>Render to Pixmap</string>
+      </property>
+      <property name="text" >
+        <string>Render to Pi&amp;xmap</string>
+      </property>
+      <property name="shortcut" >
+        <string>Ctrl+X</string>
+      </property>
+    </action>
+    <action name="actionScriptingLoad" >
+      <property name="objectName" >
+        <string>actionScriptingLoad</string>
+      </property>
+      <property name="iconText" >
+        <string>Load Script</string>
+      </property>
+      <property name="text" >
+        <string>&amp;Load Script</string>
+      </property>
+    </action>
+    <action name="actionScriptingRun" >
+      <property name="objectName" >
+        <string>actionScriptingRun</string>
+      </property>
+      <property name="enabled" >
+        <bool>false</bool>
+      </property>
+      <property name="iconText" >
+        <string>Run Macro</string>
+      </property>
+      <property name="text" >
+        <string>&amp;Run Macro...</string>
+      </property>
+    </action>
+    <actiongroup name="actionGroupLogging" >
+      <action name="actionLogSignals" >
+        <property name="objectName" >
+          <string>actionLogSignals</string>
+        </property>
+        <property name="checkable" >
+          <bool>true</bool>
+        </property>
+        <property name="checked" >
+          <bool>true</bool>
+        </property>
+        <property name="iconText" >
+          <string>Signals</string>
+        </property>
+        <property name="text" >
+          <string>&amp;Signals</string>
+        </property>
+      </action>
+      <action name="actionLogProperties" >
+        <property name="objectName" >
+          <string>actionLogProperties</string>
+        </property>
+        <property name="checkable" >
+          <bool>true</bool>
+        </property>
+        <property name="checked" >
+          <bool>true</bool>
+        </property>
+        <property name="iconText" >
+          <string>Properties</string>
+        </property>
+        <property name="text" >
+          <string>&amp;Properties</string>
+        </property>
+      </action>
+      <property name="objectName" >
+        <string>actionGroupLogging</string>
+      </property>
+      <property name="exclusive" >
+        <bool>false</bool>
+      </property>
+    </actiongroup>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction></pixmapfunction>
+  <images>
+    <image name="image0" >
+      <data format="XPM.GZ" length="3502" >789cdd95c96e1c371086ef7a8a81eb6604e56e92bd21c84192175996648d6559b2831cd85cb4ef23d95290770fe72f36e3003ee41220485373f8543f975a587cf17c76b8bb3d7bfe62e56e6117276ee68eededecb9bfbfb878fcf5b75f7e5f79a6d42cfdd54d3553cf7e5a79365fccdc6ce7ea322cc19e26a0aa51aaeb964c31b3ee46d8a9b05b32b7994d27f3178523ecbb99bbbe87fdaef000be06b7ca0e067c9b791c5af04d6637c87e8f99fde0c11edc6935c2193e01f7dab91a1cc083314ef4c7e0b15141ece29f6b4c68c047998720fb7d01473d8e60b24bae2b1d1cf416faba36cacbfe1b99b597f5e04f6d4c081af335b86f5c80ff74091eda3a20beb40376ad8b381fbd0487ce44890f83a3a92cf6a3fd25abca682beb7d15ee42141ec0e90016fed366e6c6223ff498b91d2b30ceab5462d93f1416ff9accdd28e741bc9531e388fcd3c7c292fff7e0c67827febf05b74de5e47c3db84b2cfedf64ae9dc4df1496fc55e0bed15eceb75758ce578387a6f1a81fda288cfa639db9f5d89f55610b7d07b64defc51f3f71407c18f95163aa0fd9ff43662bf543a867e51b9ff3391696fa719943107f241ea189926f96fc84b68a92df3785113fdece5c47a9af77e09818fef2566615e5bea1de75ddb6c284fbaa753b487df03770d34ef532070f5d9bf90aecbb18253ec8bf317d88f08f719f4d3ba8cca83f330c5d147f5f67ee33239fc60e6366ec6fc6c10933fa87f1b6ca7c9fb98e12af0770b05a98d05f4cb42633eaade9c6364afe5e816d2a47e94fb86f9dafea0af1b617e05018fe76b1f0f9927b5df80c1c2a55213f16fd607085d14f6c5d18f7c7b6f5584b3da03e6d5718f567fb494f5bc2c5be061e26b6a847ebea3460477c6c2c8cfa18abb2de2ab8ae7d2df15907ab625f084f768bfa1c4d61d4ef38d4a196787e02db693e8bbef84f88d718ea584b7f417cdd5fe7c1fbe14a7c08f7d9a9e581c088af3385515fae298cfcbbb6d295f49327e1c9ce9fc1dd6467dc1fd7173dfab9f3aa5672dfd06f5c2c76f4575fa9f481b19eaf0be37df46a623e04ebc2e8b7de28ad64ff03705318f7c1b73a7d60c4d35b6514fa29a19ffa7162467ff7ae30f2e17d39afecef8b1dfdd7c7c2a8ff6074aba53f20fea1cc679bd954a2473f0d41754ade7ff497d8a85e49ffc47b145b6db5f403f817fb62477ca29dd623f49fe8d4a0a4dff4994725fde25a58a701463f8d5e375afadb7ae6c9be96396aa92fbcbf3198f4c1de656e8ccc9f67b606e7e5d5ccde483fb9126efa46ce7f29dc9a56d6bbc8dcb4b21eea2dc6f41ccbfb762edca6171b7c26dc990ef3e78b7f3efe2f7a26b6e9473cb24be43970e4a3328ef9e47b3d9ff2199ff3055ff2155ff34dfacf2ddff182eff901e32b7fe3c7499f567d4ada555ee3757ec9aff835bf493336f82d6ff23bde4a639b77f83def66bde5397fe03dfec8fb697ce2033ee4cf69c617aeb866958666c30db765fd8efbac9619437285e60bb2349223bfd453a038e9e9888e8b7a9f4ee894cee89c2ed28c4bbaa26bd67443b73fd6d3091fd01d2de89e1e92fe2b7d4b3e2cf58f3fd243fd44abb446eb49fd925ed16b7a431bf496368b7ee4757af737f5166d27f50ebda75d9ad307daa38fb43fe9e9131dd0217d4e3e7ea12aa96b5249adc950432d75d427f560d9d2942f6be9c98ed6d1c27a1b6c5ac71ed9e3149b3d7b92e2b249fb497dfa7d3dd8337b6e2fd2b8b45789aeed8dbdb5777661693952b3a0ff763dff6bfa3f7e5ef9138fb14e09</data>
+    </image>
+    <image name="image1" >
+      <data format="XPM.GZ" length="2493" >789ca59459531b391446dff9152ef4464dddb8dbbd566a1eb2af10c84a929a87de8c0dd86c76623235ff3dfa8eb0878c3309a9e850a64fe9d3b5a4967c6babb7bfbbdddbbab57131ab66e3a6d78caaf3de563b9f4c2e3ffef5e7df1b9b71dcf37f45de8b37ffd8d8dc9bf59adecec9b493d8dc8bebd3f0311e09fc151e0b7c07af05fe146f84dca9b88b1241ff17794cc347782ac89fc90791a07f8a27026ff042e043bc128c3fc51b417f8db7028ff14ee0bbc1b3a62af177f850e07bc1b3b60aeb3b90277d81bfc0a33caac37c3b9c86bfc67381b77821f00778990f9bd09fe0b5c01fe26d91b561bf2a79da17acf7088f044e7db693bc9be003c1f847c1cb7e17fad9ff341178a84f23ff12cf04fe18cfcbbc633f1dfb91760277f2ac2fc8e7782ce83fc60782fe90e70be83fc77dbbdaef27782ee83fc40b814f975e87fdb8c0ebacaec3f933bc13f878e94d582fe7271b0afc64e94da8cff9c9fdfb6dc2f9e1fbf381c039df795aa55d78df255e0abcc03b81bf97737cc378e65b1455d186f1295e099cfd28ea2a6d42bd7dbc15cc8ffb500e04fd039c463ff7b96c05fd91bc4a05fe1c2f57f7611baf57e7bf8fb702ff20e7ba87f7fb0c4f933809e7330b2ef0b7f850e097f22616cc8ffbc2750df35fe089c0efe079522661fdbc9fa62cea229c8f37782df0bbf2364eda24cc77125ce0fc3eb449e11bfe19678138e7b3ed047e4fdec5abfbc3ef5397e4691ed6c7fdeb0a817fc22b81df970fe3b44ccbf0637b737e276fce2aabadf14fad7536bc7a3ab0918dd7f376684776ec99d8d44e3ca776e69fce3d1736b3f9b7799ffe649f6de1b9f47cb13b76d7eed97dfff4c01eda237b1c4684bc3df1b5437a39e2a93db3e7b6edd9b117b66b7b9ef92affd2cf63710d8d187b5e79c6365fb2cabffe4f5e23deb09a7f797b2dff6e2d2ff6ed3dff3f58df7f46d7f2f177f3034b2cb5cc726c3d5f58e9cc3957b93a8c708d1f915c8dfe79fd856b9577ddffe44b3774076ee419933ef4335fb8237774d3fadfb09677c77ee6233771ad9b527f0427eb7977fa6bf5dd19f54757d55b774efd095c7c273ffbc5f9cffddb8e7e8cbb767e18f1537ef73ede28ffcfed8daf804d6c7a</data>
+    </image>
+    <image name="image2" >
+      <data format="XPM.GZ" length="1232" >789ccdd24b4fe2501c86f13d9fa2811d99a8ad9442cc2c44f082327169625c1c4e5b4f552e721398cc771f9f570907837bff0f8bfef226400287d5e0eeb617540f4bd399991536b0ce4c826a3a1f0c56f70fbfff96ca5114bcbf6a6110967f95ca07810dfe8c8619cfeefdb972a483e7306c107c84518de0293c360473312598c15a83602a1a8256b404fb30d64103eb09c10a4c9a047bb019119c8931c12e3475821dd88f094ec53ac1b5a8834bd1127c13738237d08604afc498e0b5a88313982604dba221f82a5a82633127b882594470211e137c116382976242f0496c121c8929c10b3127f80cf3238267624870282604e76293604bd4978603516f0d0b51a7ffd8dedb2c15d3b7699ae58feecb522936e7dcee62b6cb93db59fadbe5f9c5f98bdd0c03371c8d9db7a4dee770fb96e275329ded5f8af9e2eddb65f9a396cc5f566b6f392d8ad6fcf3ceda1d6f396f5d5c2e3e6ed5beea7a8b1b5fdf2c3f6edde9f6bce5c0ed9cff6b7fff3fd8b3fc3b29fd07f8c43cbd</data>
+    </image>
+  </images>
+</ui>

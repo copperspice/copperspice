@@ -1,0 +1,129 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qml-coding-conventions.html
+\title QML Coding Conventions
+
+This document contains the QML coding conventions that we follow in our documentation and examples and recommend that others follow.
+
+This page assumes that you are already familiar with the QML language.
+If you need an introduction to the language, please read \l {Introduction to the QML language}{the QML introduction} first.
+
+
+\section1 QML Objects
+
+Through our documentation and examples, QML objects are always structured in the following order:
+
+\list
+\o id
+\o property declarations
+\o signal declarations
+\o JavaScript functions
+\o object properties
+\o child objects
+\o states
+\o transitions
+\endlist
+
+For better readability, we separate these different parts with an empty line.
+
+
+For example, a hypothetical \e photo QML object would look like this:
+
+\snippet doc/src/snippets/declarative/codingconventions/photo.qml 0
+
+
+\section1 Grouped Properties
+
+If using multiple properties from a group of properties,
+we use the \e {group notation} rather than the \e {dot notation} to improve readability.
+
+For example, this:
+
+\snippet doc/src/snippets/declarative/codingconventions/dotproperties.qml 0
+
+can be written like this:
+
+\snippet doc/src/snippets/declarative/codingconventions/dotproperties.qml 1
+
+
+\section1 Private Properties
+
+QML and JavaScript do not enforce private properties like C++. There is a need
+to hide these private properties, for example, when the properties are part of
+the implementation. As a convention, private properties begin with two
+\e underscore characters. For example, \c __area, is a property that is
+accessible but is not meant for public use. Note that QML and JavaScript will
+grant the user access to these properties.
+
+\snippet doc/src/snippets/declarative/codingconventions/private.qml 0
+
+
+\section1 Lists
+
+If a list contains only one element, we generally omit the square brackets.
+
+For example, it is very common for a component to only have one state.
+
+In this case, instead of:
+
+\snippet doc/src/snippets/declarative/codingconventions/lists.qml 0
+
+we will write this:
+
+\snippet doc/src/snippets/declarative/codingconventions/lists.qml 1
+
+
+\section1 JavaScript Code
+
+If the script is a single expression, we recommend writing it inline:
+
+\snippet doc/src/snippets/declarative/codingconventions/javascript.qml 0
+
+If the script is only a couple of lines long, we generally use a block:
+
+\snippet doc/src/snippets/declarative/codingconventions/javascript.qml 1
+
+If the script is more than a couple of lines long or can be used by different objects, we recommend creating a function and calling it like this:
+
+\snippet doc/src/snippets/declarative/codingconventions/javascript.qml 2
+
+For long scripts, we will put the functions in their own JavaScript file and import it like this:
+
+\snippet doc/src/snippets/declarative/codingconventions/javascript-imports.qml 0
+
+*/
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,91 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+
+    \page qt-embeddedLinux-accel.html
+
+    \target Hardware Acceleration with Qt for Embedded Linux
+
+    \title Qt for Embedded Linux Hardware Accelerated Graphics
+    \ingroup qt-embedded-linux
+
+
+	\input platforms/emb-hardwareacceleration.qdocinc
+
+    \section1 Windowing on Embedded Linux with Hardware Accelerated Graphics
+
+    Qt for Embedded Linux includes its own windowing system, QWS. QWS was
+    designed in 1999, well before graphics acceleration was available for
+    embedded devices. It does a great job providing a lightweight window
+    manager including all the expected functionality such as arbitrary
+    windows that can be moved, resized, minimized, etc. Getting QWS to work
+    with GPUs is very challenging, particularly with OpenGL and OpenVG
+    because there is no standard way in Linux to share textures across
+    processes. Some silicon vendors provide private APIs to allow texture
+    sharing, others do not. These limitations are documented under the
+    sections describing each type of accelerated hardware APIs. The simplest
+    most generic support for accelerated graphics is a full screen single
+    process single window.
+
+    \section2 General options
+    \list
+        \o QWS, not accelerated, allows arbitrary windowing with multiple
+        processes drawing on the screen.
+        \o X11 with an accelerated X11 driver provided by the silicon
+        vendor. Like QWS, this allows arbitrary windows with multiple
+        processes drawing on the screen. Our experience is that there is
+        some overhead from X11 which will adversely affect framerates.
+        Additionally, our experience is that the drivers from silicon
+        vendors are still maturing.
+        \o Full screen single process single window. This will always work.
+        Some additional capabilities are available and are documented in
+        the acceleration specific API sections.
+    \endlist
+
+    \section1 Supported Hardware Accelerated Graphics APIs
+
+    This table shows which Hardware Accelerated Graphics APIs currently
+    supported by Qt.
+
+     \table 
+     \header
+        \o Supported APIs
+		\o API Version
+     \row
+        \o \l {Qt for Embedded Linux and OpenGL}{OpenGL ES}
+		\o 1.x and 2.x
+     \row
+        \o \l {Qt for Embedded Linux and OpenVG}{OpenVG } 
+		\o 1.1
+     \row
+        \o \l {Qt for Embedded Linux and DirectFB}{DirectFB}
+		\o 2.0
+     \endtable 
+
+
+*/

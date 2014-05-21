@@ -1,0 +1,324 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \title Scalability
+    \page scalability.html
+    \preliminary
+
+    \omit preliminary docs for next SDK release \endomit
+    \omit Somewhere I need to mention applications with more than
+          one page (top-level layouts). \endomit
+
+    A scalable application is an application that can run on more than
+    one form factor. In particular, it can cope with different screen
+    sizes, DPI, and aspect ratios. You need to consider scalability
+    when:
+
+    \list
+        \o your application will be deployed to more than one device
+           handset, or more than one device form factor.
+        \o your application will be deployed for a long period of time,
+           so that new device handsets might appear on the market after
+           your initial deployment.
+    \endlist
+
+    This document discusses how scalable applications can be created.
+
+    \section1 Developing Scalable UIs
+
+    This section shows the basics of how we advice scalable
+    applications to be implemented using QML. We recommend that you
+    follow these techniques:
+
+    \list
+        \o Create separate top-level layout
+           definitions for each form factor.
+        \o Keep the layouts small and let components
+           scale relative to their immediate parent.
+        \o Define device independent measurements, such as dp
+           (device independent pixels), and use
+           these to scale components and for layout measurement.
+        \o Define layouts in a
+           proportional way using the built-in layout features of QML.
+    \endlist
+
+    Using small top-level layouts makes your codebase smaller and
+    easier to maintain. Also, components that scales relative to their
+    parent are more reusable. The layouts should be children of the
+    application's root item. You can change between them by, for
+    instance, using the opacity property of Item; that is, if your
+    application has more tham one top-level layout. Such a top-level
+    layout is also often referred to as a page, i.e., a layout that
+    uses the entire screen. For instance, an organizer application
+    will typically have separate pages for showing the calender and
+    editing todo items.
+
+    You should define the measurements separate from the UI, for
+    instance by using a JavaScript object that you fill in with a
+    script on application start up.
+
+    QML provides several ways of laying out components, e.g, using
+    anchor based layout, the more classic Grid; Column; and Row
+    elements, and by setting the dimensions of Items directly. When
+    laying out components in scalable applications, you should
+    generally prefer using anchors and set width and height based on
+    parent size where possible. Layouts are not only relevant to
+    top-level layouts; components often contain child Items.
+
+    The following sections describe in more detail the different
+    aspects of scalability that should be considered in order to
+    achieve the desired level of flexibility within your application.
+
+    \section1 Implementing the Top-Level Layouts
+
+    As mentioned, each application should use separate top-level
+    layout QML definitions to support separate layout configurations /
+    form factors.
+
+    Consider an application that has to be deployed to at least two
+    devices, which both have very different screen sizes and DPI
+    values. The two form factors of the application will share many
+    common components and attributes, and will most likely connect to
+    the same data model.
+
+    Therefore, the top-level definitions should be quite
+    straightforward and short, with the majority of the functionality
+    refactored into contained Components. It is important to try to
+    avoid unnecessary duplication between these top-level definitions,
+    in order to improve maintainability.
+
+    There are some patterns that you might consider when designing
+    your top level layouts:
+
+    \list
+    \o In some cases, the contents of an entire page in a smaller
+     handset could form a component element of a layout in a
+     larger device. Therefore, consider making that a separate
+     component (i.e. defined in a separate QML file), and in the
+     smaller handset, the Page will simply contain an instance of
+     that component. On the larger device, there may be enough
+     space to show two separate items. For example, in an email
+     viewer, if the screen is large enough, it may be possible to
+     show the email list view, and the email reader view side by
+     side.
+    \o In some cases, the contents of a view might be quite similar
+     on all screen sizes, but with an expanded content area. In
+     this case, it may be possible to re-use the same layout
+     definition, if defined appropriately using anchors.
+    \endlist
+
+    The \l{Loader} component can be used to load separate QML files
+    based on some criteria, such as Device Profile (configuration of
+    screen pixel resolution and DPI density). In the case of form
+    factor, this information will not change during the application's
+    lifetime, therefore there is no issue with memory usage or
+    performance.
+
+    \section1 Defining Measurements
+
+    When you are defining the measurements within an application or
+    component layout, there are a number aspects to consider:
+
+    \list
+    \o The layout structure, the high-level relationship between
+     items. Which item is the parent? How are the items arranged
+     relatively on the screen? Are they in a grid or column?
+    \o The layout measurements. How big is an item, or a margin
+     inside the edge of an item, or an anchor between items?
+    \o The implicit size of contained items. Some child items will
+     require a certain amount of space, such as a button
+     containing a text. That may also depend on the current
+     platform and style. How do you ensure that you leave enough
+     space, and what happens if your children change size?
+    \endlist
+
+    These aspects combine together to resolve the final layout for a
+    given Device Profile. However, although there are dependencies
+    between them, it is important to manage and control the different
+    aspects separately.
+
+    It is strongly recommended that Layout measurements should be
+    stored in a separate place from the component layout structure
+    definition files. The reason for this is that layout structure,
+    for a given form factor, can be re-used for different Device
+    Profiles. However, measurements will almost always vary between
+    Device Profiles or Device Categories.
+
+    If the opposite approach (complete duplication of entire QML
+    files) was taken, then all of the layout states and structure
+    definitions would be duplicated between the copied QML files, and
+    only the measurement values would change.
+
+    The main benefit of using separate measurement definition files
+    are:
+
+    \list
+    \o To reduce the amount of duplication, and hence increase
+      maintainability.
+    \o It becomes much easier to change the layout structure,
+     perhaps due to subsequent specification changes. In that
+     case, the layout structure can be modified once, and many or
+     all of the layout measurements would remain unchanged.
+    \o It becomes much easier to add support for additional Device
+     Profiles, simply by adding another measurement definition
+     file.
+    \endlist
+
+    \section1 Using QML's Layout Features
+
+    For a given form factor, top-level Layouts structure definitions,
+    or component layout structure definitions, should in general be
+    defined in a proportional way using a combination of
+
+    \list
+    \o \l{Item::anchors.top}{anchors} within an Item
+    \o \l{Row} / \l{Column} / \l{Grid}
+    \o simple JavaScript expressions such as width: Math.round(parent.width / 3.0).
+    \endlist
+
+    These basic building blocks, along with the powerful evaluation
+    capabilities of JavaScript expressions within every QML binding,
+    are designed to allow the majority of the layout structure
+    definition to be defined in a Device Profile independent way.
+
+    There are some limitations of the basic grid type layouts. They
+    are designed to accommodate a number of Items, but use the current
+    sizes of those items. There is a similar issue with the basic
+    anchor type layout. In particular, it can be difficult to spread a
+    number of child items proportionately across an area of their
+    container.
+
+    By combining the features of the layout managers with simple
+    JavaScript expressions, a richer variety of designs can be
+    expressed, without having to resort to additional layout
+    measurement parameters or measurement values.
+
+    Here are some things not to do with layouts:
+
+    \list
+    \o Don't define complex JavaScript functions that are regularly
+     evaluated. This will cause poor performance, particularly
+     during animated transitions.
+    \o Don't define all of your layouts using x, y, width and
+     height. Reserve this for items that cannot easily be defined
+     using anchors (anchors are evaluated in a more efficient
+     way).
+    \o Don't make assumptions about the container size, or about
+     the size of child items. Try to make flexible layout
+     definitions that can absorb changes in the available space.
+    \endlist
+
+    \section1 Orientation Switches
+
+    Application top-level page definitions, and reusable component
+    definitions, should use one QML layout definition for the layout
+    structure. This single definition should include the layout design
+    for separate Device Orientations and Aspect Ratios. The reason for
+    this is that performance during an orientation switch is critical,
+    and it is therefore a good idea to ensure that all of the
+    components needed by both orientations are loaded when the
+    orientation changes.
+
+    On the contrary, you should perform thorough tests if you choose
+    to use a \l{Loader} to load additional QML that is needed in separate
+    orientations, as this will affect the performance of the
+    orientation change.
+
+    In order to enable layout animations between the orientations, the
+    anchor definitions must reside within the same containing
+    component. Therefore the structure of a page or a component
+    should consist of a common set of child components, a common set
+    of anchor definitions, and a collection of states (defined in a
+    StateGroup) representing the different aspect ratios supported by
+    the component. (However note that orientation change animations
+    are not possible on Symbian due to compatibility support for S60
+    applications).
+
+    If a component contained within a page needs to be
+    hosted in numerous different form factor definitions, then the
+    layout states of the view should depend on the aspect ratio of the
+    page (its immediate container). Similarly, different instances of
+    a component might be situated within numerous different containers
+    in a UI, and so its layout states should be determined by the
+    aspect ratio of its parent. The conclusion is that layout states
+    should always follow the aspect ratio of the direct container (not
+    the "orientation" of the current device screen).
+
+    Within each layout \l{State}, you should define the relationships
+    between items using native QML layout definitions. See below for
+    more information. During transitions between the states (triggered
+    by the top level orientation change), in the case of anchor
+    layouts, AnchorAnimation elements can be used to control the
+    transitions. In some cases, you can also use a NumberAnimation on
+    e.g. the width of an item. Remember to avoid complex JavaScript
+    calculations during each frame of animation. Using simple anchor
+    definitions and anchor animations can help with this in the
+    majority of cases.
+
+    There are a few additional cases to consider:
+
+    \list
+    \o What if you have a single page that looks completely
+     different between landscape and portrait, i.e. all of the
+     child items are different? For each page, have two child
+     components, with separate layout definitions, and make one
+     or other of the items have zero opacity in each state. You
+     can use a cross-fade animation by simply applying a
+     NumberAnimation transition to the opacity.
+    \o What if you have a single page that shares 30% or more of
+     the same layout contents between portrait and landscape? In
+     that case, consider having one component with landscape and
+     portrait states, and a collection of separate child items
+     whose opacity (or position) depends on the orientation
+     state. This will enable you to use layout animations for the
+     items that are shared between the orientations, whilst the
+     other items are either faded in/out, or animated on/off
+     screen.
+    \o What if you have two pages on a handheld device that need to
+     be on screen at the same time, for example on a larger form
+     factor device? In this case, notice that your view component
+     will no longer be occupying the full screen. Therefore it's
+     important to remember in all components (in particular, list
+     delegate items) should depend on the size of the containing
+     component width, not on the screen width. It may be
+     necessary to set the width in a Component.onCompleted()
+     handler in this case, to ensure that the list item delegate
+     has been constructed before the value is set.
+    \o What if the two orientations take up too much memory to have
+     them both in memory at once? Use a \l{Loader} if necessary, if
+     you cannot keep both versions of the view in memory at once,
+     but beware performance on the cross-fade animation during
+     layout switch. One solution could be to have two "splash
+     screen" items that are children of the Page, then you cross
+     fade between those during rotation. Then you can use a
+     \l{Loader} to load another child component that loads the actual
+     model data to another child Item, and cross-fade to that
+     when the \l{Loader} has completed.
+    \endlist
+   */
+

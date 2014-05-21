@@ -1,0 +1,422 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page qtscriptdebugger-manual.html
+    \title Qt Script Debugger Manual
+    \brief A manual describing how to use the Qt Script debugger.
+
+  The Qt Script debugger is a tool for debugging script execution in
+  Qt applications that use Qt Script. Application developers can embed
+  the debugger into their application through the
+  QScriptEngineDebugger class. This manual describes how to use the
+  debugger. We assume that the reader is somewhat familiar with
+  general debugging concepts and existing debugging tools.
+
+  We assume that the debugger has been integrated into the application
+  through the QScriptEngineDebugger::standardWindow()
+  function, which provides the standard debugger configuration.
+
+  \tableofcontents
+
+  \section1 Getting Started
+
+  The following image shows the debugger as created with
+  \l{QScriptEngineDebugger::}{standardWindow()}:
+
+  \image qtscript-debugger.png Running a script under the Qt Script debugger.
+
+  The debugger will start, i.e., take control over the script's
+  execution when any of these conditions are met:
+
+  \list
+    \o The \c{debugger} statement is encountered in the script.
+    \o Clicking the \gui Interrupt menu item from the \gui Debug
+        menu in the main window.
+    \o A breakpoint is reached.
+    \o An uncaught script exception is thrown.
+  \endlist
+
+  Once the debugger is started, the execution state can be inspected,
+  e.g., the value of variables can be queried and the current program
+  stack shown. New breakpoints can be set.
+
+  The debugger will resume, i.e., give the control back to the script
+  engine, when the user clicks \gui Continue menu item from the \gui
+  Debug menu. It will be invoked again if one of the conditions
+  described in the list above is met.
+
+  \section1 Overview of Debugger Components
+
+  The debugger's functionality is divided into a series of components,
+  each being a widget that can be shown in the main window of the
+  debugger. The following table describes each component and how they
+  relate to each other.
+
+  \table
+    \header
+      \o Component
+      \o Description
+  \row
+  \o Console Widget 
+  \o The console widget provides a command-line interface to the
+  debugger's functionality, and also serves as an interactive script
+  interpreter. The set of commands and their syntax is inspired by
+  GDB, the GNU Debugger. Commands and script variables are
+  auto-completed through the TAB key.
+
+  Any console command that causes a change in the debugger or debugger
+  target's state will immediately be reflected in the other debugger
+  components (e.g. breakpoints or local variables changed).
+
+  The console provides a simple and powerful way of manipulating the
+  script environment. For example, typing "x" and hitting enter will
+  evaluate "x" in the current stack frame and display the result.
+  Typing "x = 123" will assign the value 123 to the variable \c{x} in
+  the current scope (or create a global variable \c{x} if there isn't
+  one -- scripts evaluated through the console can have arbitrary side
+  effects, so be careful).
+
+  \row
+  \o Stack Widget
+  \o The stack widget shows a backtrace of the script execution state.
+  Each row represents one frame in the stack. A row contains the
+  frame index (0 being the inner-most frame), the name of the script function,
+  and the location (file name and line number). To select a particular
+  stack frame to inspect, click on its row.
+
+  \row
+  \o Locals Widget
+  \o The locals widget shows the variables that are local to the
+  currently selected stack frame; that is, the properties of the
+  objects in the scope chain and the \c{this}-object. Objects can be
+  expanded, so that their properties can be examined, recursively.
+  Properties whose value has changed are shown in bold font.
+
+  Properties that are not read-only can be edited. Double-click on the
+  value and type in the new value; the value can be an arbitrary
+  expression. The expression will be evaluated in the associated stack
+  frame. While typing, you can press the TAB key to get possible
+  completions for the expression.
+
+  \row
+  \o Code Widget
+  \o The code widget shows the code of the currently selected script.
+    The widget displays an arrow in the left margin, marking the
+    code line that is being executed.
+    Clicking in the margin of a line will cause a breakpoint to be
+    toggled at that line. A breakpoint has to be set on a line that
+    contains an actual statement in order to be useful.When an uncaught script exception occurs, the
+    offending line will be shown with a red background.
+
+    The code widget is read-only; it cannot currently be used to edit
+    and (re)evaluate scripts. This is however possible from the
+    command-line interface, see \l{Console Command Reference}.
+
+  \row
+  \o Scripts Widget
+
+  \o The scripts widget shows the scripts that are currently loaded in
+  the script engine. Clicking on a script will cause its code to be
+  shown in the code widget. When a script is no longer referenced by
+  the debugger target it is removed from the scripts widget. Code
+  evaluated through QScriptEngine::evaluate() without a name specified, will be
+  displayed in the widget as Anonymous.
+
+  \row
+    \o Breakpoints Widget
+
+  \o The breakpoints widget shows all the breakpoints that are set.  A
+  breakpoint can be disabled or enabled by clicking the checkbox next
+  to the breakpoint's ID (the ID is provided so that the breakpoint
+  can be manipulated through the console widget as well).
+
+  A condition can be associated with the breakpoint; the condition can
+  be an arbitrary expression that should evaluate to true or
+  false. The breakpoint will only be triggered when its location is
+  reached \bold{and} the condition evaluates to true.
+
+  Similarly, if the breakpoint's ignore-count is set to N, the
+  breakpoint will be ignored the next N times it is hit.
+
+  A new breakpoint can be set by clicking the New Breakpoint button
+  and typing in a location of the form <filename>\bold{:}<linenumber>.
+  The breakpoint location can refer to an already loaded script, or
+  one that has not been loaded yet.
+
+  \row
+  \o Debug Output Widget
+  \o The debug output widget shows messages generated by the print()
+  script function. Scripts can use the special variables \c{__FILE__}
+  and \c{__LINE__} to include the current location information in the
+  messages.
+
+  \row
+  \o Error Log Widget
+  \o The error log widget shows error messages that have been generated.
+     All uncaught exceptions that occur in the engine will appear here.
+
+  \endtable
+
+  \section2 Resuming Script Evaluation
+
+  Script evaluation can be resumed in one of the following ways:
+
+  \list
+  \o \bold{Continue}: Evaluation will resume normally.
+  \o \bold{Step Into}: Evaluation will resume until the next statement is reached.
+  \o \bold{Step Over}: Evaluation will resume until the next statement is reached;
+                but if the current statement is a function call, the debugger
+                will treat it as a single statement.
+  \o \bold{Step Out}: Evaluation will resume until the current function exits and
+               the next statement is reached.
+  \o \bold{Run to Cursor}: Run until the statement at the cursor is reached.
+  \o \bold{Run to New Script}: Run until the first statement of a new script is reached.
+  \endlist
+
+  In any case, script evaluation can also be stopped due to either of the
+  following reasons:
+
+  \list
+  \o A \c{debugger} statement is encountered.
+  \o A breakpoint is hit.
+  \o An uncaught script exception occurs.
+  \endlist
+
+  \section2 Resuming After an Uncaught Exception
+
+  When an uncaught script exception occurs, it is not possible to
+  continue evaluating the current function normally. However, you can
+  use the console command \bold{return} to catch the exception and
+  return a value to the calling function.
+
+  \section1 Console Command Reference
+
+  Note that you can also get help on the available commands by typing
+  ".help" in the console.
+
+  \section2 Breakpoint-related Commands
+
+  Break points is set
+
+  \section3 break <location>
+
+  Sets a breakpoint at a given code line.
+
+  \code
+  .break foo.qs:123
+  \endcode
+
+  This command sets a breakpoint at \c{foo.qs}, line 123.
+
+  \code
+  .break 123
+  \endcode
+
+  This command sets a breakpoint at line 123 in the current script; the current script
+  is the script associated with the current stack frame.
+
+  Each breakpoint has a unique identifier (an integer) associated with it.
+  This identifier is needed by other breakpoint-related commands.
+
+  \section3 clear <location>
+
+  \code
+  .clear foo.qs:123
+  \endcode
+
+  clears (deletes) the breakpoint at \c{foo.qs}, line 123.
+
+  \code
+  clear 123
+  \endcode
+
+  clears (deletes) the breakpoint at line 123 in the current script;
+  the current script is the script associated with the current stack
+  frame.
+
+  \section3 condition <breakpoint-id> <expression>
+
+  Sets a condition for a breakpoint.
+
+  \code
+  .condition 1 i > 42
+  \endcode
+
+  specifies that breakpoint 1 should only be triggered if the variable \c{i}
+  is greater than 42.
+
+  The expression can be an arbitrary one, i.e. it can have
+  side-effects. It can be any valid QScript conditional
+  expression.
+
+  \section3 delete <breakpoint-id>
+
+  Deletes a breakpoint, i.e., removes it from the current debugging
+  session.
+
+  \section3 disable <breakpoint-id>
+
+  Disables a breakpoint. The breakpoint will continue to exist, but
+  will not stop program execution.
+
+  \section3 enable <breakpoint-id>
+
+  Enables a breakpoint. Breakpoints are enabled by default, so you
+  only need to use this command if you have disabled to breakpoint
+  previously.
+
+  \section3 ignore <breakpoint-id> <count>
+  
+  Sets the ignore-count of a breakpoint, i.e., the breakpoint will not
+  stop the program execution unless it have been reached \c count
+  times. This can, for instance, be useful in loops to stop at a
+  specific iteration.
+
+  \code
+  .ignore 1 5
+  \endcode
+
+  Specifies that breakpoint 1 should be ignored the next 5 times it is
+  hit.
+
+  \section3 info breakpoints
+
+  Lists the breakpoints that are set.
+
+  \code
+    .info breakpoints
+  \endcode
+
+  \section3 tbreak <location>
+
+  Sets a temporary breakpoint. This command is identical to the
+  \c{break} command, only the breakpoint will be automatically deleted
+  the first time it is hit.
+
+  \section2 File-related Commands
+
+  \section3 list <location>
+
+  Lists the contents of a script around a given location, where the
+  location is given as a line number and, optionally, the name of the
+  file from which you will print. If only a line number is given, \c
+  {.list} will use the file of the current stack frame.
+
+  \code
+    .list foo.qs:125
+  \endcode
+
+  When no arguments are given, \c{list} will incrementally list
+  sections of the current script.
+
+  \section3 info scripts
+
+  Lists the scripts that are currently loaded.
+
+  \section2 Execution-related Commands
+
+  \section3 advance <location>
+
+  Advances execution to a given location. The syntax of the location
+  is the same as for setting breakpoints. For example:
+
+  \code
+    .advance foo.qs:125
+  \endcode
+
+  \section3 continue
+
+  Continues execution normally, i.e, gives the execution control over
+  the script back to the QScriptEngine.
+
+  \section3 eval <program>
+
+  Evaluates a program. 
+
+  \section3 finish
+
+  Continues execution until the current function exits and the next
+  statement is reached (i.e., the statement after the call to the
+  function).
+
+  \section3 interrupt
+
+  Requests that execution should be interrupted. Interruption will
+  occur as soon as a new script statement is reached.
+
+  \section3 next <count = 1>
+
+  Continues execution until a new statement is reached; but if the
+  current statement is a function call, the function call will be
+  treated as a single statement. This will be done \c count times
+  before execution is stopped; the default is one.
+
+  \section3 return <expression>
+
+  Makes the current frame return to its caller. If \c expression is
+  given, it will sent as the result of the function (i.e., replacing
+  the functions return value). \c expression can be any valid QScript
+  expression.
+
+  \section3 step <count = 1>
+
+  Continues execution until a new statement is reached. If the number
+  \c count is given as argument, this will be done \c count times
+  before execution is stopped. As opposed to \l{next <count = 1>},  \c
+  step will enter functions when encountering a function call
+  statement.
+
+  \section2 Stack-related Commands
+
+  \section3 backtrace
+
+  Shows a backtrace of the current execution. The trace will list the
+  function name and its position in the script for each stack frame.
+
+  \section3 down
+
+  Selects the previous (inner) stack frame. The execution will not
+  return to this frame, but you will get access to its local
+  variables. 
+
+  \section3 frame <index>
+
+  This command moves to the stack frame with the given \c index. The
+  index of the frame on the top of the stack is 0. Previous frames are
+  numbered from 1 and upwards (the bottom frame in the stack has the
+  largest index).
+
+  \section3 info locals
+
+  Lists the variables that are in the scope of the current frame.
+
+  \section3 up
+
+  Selects the next (outer) stack frame.
+
+*/

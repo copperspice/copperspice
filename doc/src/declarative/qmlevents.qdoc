@@ -1,0 +1,127 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qmlevents.html
+\ingroup qml-features
+\contentspage QML Features
+\previouspage {Keyboard Focus in QML}{Keyboard Focus}
+\nextpage Importing Reusable Components
+
+\title QML Signal and Handler Event System
+
+QML utilizes Qt's \l{The Meta-Object System}{meta-object} and
+\l{Signals & Slots}{signals} systems. Signals and slots created using Qt in C++
+are inheritely valid in QML.
+
+\keyword qml-signals-and-handlers
+\section1 Signals and Handlers
+
+Signals provide a way to notify other objects when an event has occurred. For
+example, the MouseArea \c clicked signal notifies other objects that the mouse
+has been clicked within the area.
+
+The syntax for defining a new signal is:
+
+\tt{signal <name>[([<type> <parameter name>[, ...]])]}
+
+Attempting to declare two signals or methods with the same name in the same type
+block generates an error.  However, a new signal may reuse the name of an existing signal on the type. (This should be done with caution, as the existing signal may be hidden and become inaccessible.)
+
+Here are various examples of signal declarations:
+\snippet doc/src/snippets/declarative/events.qml parent begin
+\snippet doc/src/snippets/declarative/events.qml signal declaration
+\snippet doc/src/snippets/declarative/events.qml parent end
+
+If the signal has no parameters, the "\c{()}" brackets are optional. If
+parameters are used, the parameter types must be declared, as for the \c string
+and \c variant arguments of the \c perform signal.
+
+Adding a signal to an item automatically adds a \e{signal handler} as well. The
+signal hander is named \c on<SignalName>, with the first letter of the signal in
+uppercase.  The previous signals have the following signal handlers:
+\snippet doc/src/snippets/declarative/events.qml signal handler declaration
+
+Further, each QML properties have a \c{<property_name>Changed} signal and its
+corresponding \c{on<property_name>Changed} signal handler. As a result, property
+changes may notify other components for any changes.
+\snippet doc/src/snippets/declarative/events.qml automatic signals
+
+To emit a signal, invoke it as a method. The signal handler binding is similar
+to a property binding and it is invoked when the signal is emitted. Use the
+defined argument names to access the respective arguments.
+\snippet doc/src/snippets/declarative/events.qml signal emit
+Note that the \c Component.onCompleted is an
+\l{attached-signalhandlers}{attached signal handler}; it is invoked when the
+\l Component initialization is complete.
+
+\keyword qml-connect-signals-to-method
+\section2 Connecting Signals to Methods and Signals
+
+Signal objects have a \c connect() method to a connect a signal either to a
+method or another signal. When a signal is connected to a method, the method is
+automatically invoked whenever the signal is emitted. (In Qt terminology, the
+method is a \e slot that is connected to the \e signal; all methods defined in
+QML are created as \l{Signals & Slots}{Qt slots}.) This enables a signal
+to be received by a method instead of a \l {Signal Handlers}{signal handler}.
+
+\snippet doc/src/snippets/declarative/events.qml connect method
+The \c {connect()} method is appropriate when connecting a JavaScript method to
+a signal.
+
+There is a corresponding \c disconnect() method for removing connected
+signals.
+
+\section3 Signal to Signal Connect
+
+By connecting signals to other signals, the \c connect() method can form different
+signal chains.
+\snippet doc/src/snippets/declarative/events.qml forward signal
+
+
+Whenever the \l MouseArea \c clicked signal is emitted, the \c send
+signal will automatically be emitted as well.
+
+\code
+output:
+    MouseArea clicked
+    Send clicked
+\endcode
+
+\section1 C++ Additions
+
+Because QML uses Qt, a signal defined in C++ also works as a QML signal. The
+signal may be emitted in QML code or called as a method. In addition, the QML
+runtime automatically creates signal handlers for the C++ signals. For more
+signal control, the \c connect() method and the \l Connections element may connect
+a C++ signal to another signal or method.
+
+For complete information on how to call C++ functions in QML, read the
+\l{Extending QML - Signal Support Example}.
+
+
+*/

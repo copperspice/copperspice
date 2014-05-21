@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="no"?>
+<svg width="10px" height="10px" viewBox="0 0 10px 10px"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink/"
+    baseProfile="tiny" version="1.2">
+  <title>Checker</title>
+  <desc>A checkerboard pattern to use as a background.</desc>
+  <g fill="#e0e0e0" stroke="none" >
+    <rect x="0" y="0" width="10px" height="10px" />
+  </g>
+  <g fill="#404040" stroke="none" >
+    <rect x="0" y="0" width="5px" height="5px" />
+  </g>
+  <g fill="#404040" stroke="none" >
+    <rect x="5px" y="5px" width="5px" height="5px" />
+  </g>
+</svg>

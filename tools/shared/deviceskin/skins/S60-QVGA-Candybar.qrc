@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/skins">
+    <file>S60-QVGA-Candybar.skin</file>
+</qresource>
+</RCC>

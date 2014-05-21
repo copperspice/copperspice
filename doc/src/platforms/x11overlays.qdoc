@@ -1,0 +1,85 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page x11overlays.html
+    \title How to Use X11 Overlays with Qt
+	\ingroup best-practices
+
+    X11 overlays are a powerful mechanism for drawing
+    annotations etc., on top of an image without destroying it, thus saving
+    a great deal of image rendering time. For more information, see the highly
+    recommended book \e{OpenGL Programming for the X Window System} (Mark
+    Kilgard, Addison Wesley Developers Press 1996).
+
+    \warning The Qt OpenGL Extension includes direct support for the
+    use of OpenGL overlays. For many uses of overlays, this makes the
+    technique described below redundant. The following is a discussion
+    on how to use non-QGL widgets in overlay planes.
+
+    In the typical case, X11 overlays can easily be used together with the
+    current version of Qt and the Qt OpenGL Extension. The following
+    requirements apply:
+
+    \list 1
+    \i Your X server and graphics card/hardware must support overlays.
+       For many X servers, overlay support can be turned on with
+       a configuration option; consult your X server installation
+       documentation.
+
+    \i Your X server must (be configured to) use an overlay visual as the
+       default visual. Most modern X servers do this, since this has the
+       added advantage that pop-up menus, overlapping windows etc., will
+       \e not affect underlying images in the main plane, thereby
+       avoiding expensive redraws.
+
+    \i The best (deepest) visual for OpenGL rendering is in the main
+       plane. This is the normal case. Typically, X servers that support
+       overlays provide a 24-bit \c TrueColor visual in the main plane,
+       and an 8-bit \c PseudoColor (default) visual in the overlay plane.
+    \endlist
+
+    Assuming that the requirements mentioned above are met, a
+    QGLWidget will default to using the main plane visual, while all
+    other widgets will use the overlay visual. Thus, we can place a
+    normal widget on top of the QGLWidget, and do drawing on it,
+    without affecting the image in the OpenGL window. In other words,
+    we can use all the drawing capabilities of QPainter to draw
+    annotations, rubberbands, etc. For the typical use of overlays,
+    this is much easier than using OpenGL for rendering annotations.
+
+    An overlay plane has a specific color called the transparent
+    color. Pixels drawn in this color will not be visible; instead
+    the underlying OpenGL image will show through.
+
+    To use this technique, you must not use the
+    QApplication::ManyColor or QApplication::TrueColor color
+    specification for QApplication, because this will force the
+    normal Qt widgets to use a \c TrueColor visual, which will
+    typically be in the main plane, not in the overlay plane as
+    desired.
+*/

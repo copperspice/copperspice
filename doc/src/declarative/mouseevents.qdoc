@@ -1,0 +1,120 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page mouseevents.html
+\title QML Mouse Events
+\ingroup QML Features
+\previouspage {Anchor-based Layout in QML}{Layouts using Anchors}
+\nextpage {QML Text Handling and Validators}{Text Handling and Validators}
+\contentspage QML Features
+
+\tableofcontents
+
+\section1 Mouse Elements
+
+\list
+\o \l{MouseArea} Element
+\o \l{MouseEvent} Object
+\endlist
+
+\section1 Mouse Event Handling
+
+QML uses \l{QML Signal and Handler Event System}{signals and handlers} to
+deliver mouse interactions. Specifically, the \l MouseArea and \l MouseEvent
+elements provide QML components with signal handlers to accept mouse events
+within a defined area.
+
+\section1 Defining a Mouse Area
+
+The \l MouseArea element receives events within a defined area. One quick way
+to define this area is to anchor the \c MouseArea to its parent's area using the
+\c anchors.fill property. If the parent is a \l Rectangle (or any \l Item
+component), then the MouseArea will fill the area defined by the parent's
+dimensions. Alternatively, an area smaller or larger than the parent is
+definable.
+\snippet doc/src/snippets/declarative/mousearea/mousearea-snippet.qml anchor fill
+
+\section1 Receiving Events
+
+The MouseArea element provides
+\l{QML Signal and Handler Event System}{signals and handlers} to detect different
+mouse events. The \l MouseArea element documentation describes these
+gestures in greater detail:
+
+\list
+\o canceled
+\o clicked
+\o doubleClicked
+\o entered
+\o exited
+\o positionChanged
+\o pressAndHold
+\o pressed
+\o released
+\endlist
+
+These signals have signal handlers that are invoked when the signals are emitted.
+\snippet doc/src/snippets/declarative/mousearea/mousearea-snippet.qml mouse handlers
+
+\section1 Enabling Gestures
+Some mouse gestures and button clicks need to be enabled before they send or
+receive events. Certain \l MouseArea and \l MouseEvent properties enable these
+gestures.
+
+To listen to (or explicitly ignore) a certain mouse button, set the appropriate
+mouse button to the \l {MouseArea::acceptedButtons}{acceptedButtons} property.
+
+Naturally, the mouse events, such as button presses and mouse positions, are
+sent during a mouse click. For example, the \c containsMouse property will only
+retrieve its correct value during a mouse press. The
+\l {MouseArea::hoverEnabled}{hoverEnabled} will enable mouse events and
+positioning even when there are no mouse button presses. Setting the
+\c hoverEnabled property to \c true, in turn will enable the \c entered,
+\c exited, and \c positionChanged signal and their respective signal handlers.
+
+\snippet doc/src/snippets/declarative/mousearea/mousearea-snippet.qml enable handlers
+Additionally, to disable the whole mouse area, set the \c MouseArea
+element's \c enabled property to \c false.
+
+\section1 MouseEvent Object
+
+Signals and their handlers receive a \l MouseEvent object as a parameter. The
+\c mouse object contain information about the mouse event. For example, the
+mouse button that started the event is queried through the
+\l {MouseEvent::button}{mouse.button} property.
+
+The \c MouseEvent object can also ignore a mouse event using its \c accepted
+property.
+
+\section2 Accepting Further Signals
+Many of the signals are sent multiple times to reflect various mouse events
+such as double clicking. To facilitate the classification of mouse clicks, the
+MouseEvent object has an \c accepted property to disable the event propagation.
+
+To learn more about QML's event system, please read the \l {QML Signal and Handler Event System} document.
+*/

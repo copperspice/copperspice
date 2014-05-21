@@ -1,0 +1,150 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qdeclarativeperformance.html
+\title QML Performance
+
+\section1 Opaque Items
+
+Items hidden behind an opaque item incur a cost.  If an item will be enitrely
+obscured by an opaque item, set its opacity to 0.  One common example of
+this is when a "details" page is shown over the main application view.
+
+\section1 Clipping
+
+\e clip is set to false by default.  Enable clipping only when necessary.
+
+\section1 Anchors vs. Binding
+
+It is more efficient to use anchors rather than bindings to position items
+relative to each other.  Consider this use of bindings to position rect2
+relative to rect1:
+
+\code
+Rectangle {
+    id: rect1
+    x: 20
+    width: 200; height: 200
+}
+Rectangle {
+    id: rect2
+    x: rect1.x
+    y: rect1.y + rect1.height
+    width: rect1.width - 20
+    height: 200
+}
+\endcode
+
+This is achieved more efficiently using anchors:
+
+\code
+Rectangle {
+    id: rect1
+    x: 20
+    width: 200; height: 200
+}
+Rectangle {
+    id: rect2
+    height: 200
+    anchors.left: rect1.left
+    anchors.top: rect1.bottom
+    anchors.right: rect1.right
+    anchors.rightMargin: 20
+}
+\endcode
+
+\section1 Images
+
+Images consume a great deal of memory and may also be costly to load.  In order
+to deal with large images efficiently it is recommended that the Image::sourceSize
+property be set to a size no greater than that necessary to render it.  Beware that
+changing the sourceSize will cause the image to be reloaded.
+
+Images on the local filesystem are usually loaded synchronously.  This is usually
+the desired behavior for user interface elements, however for large images that
+do not necessarily need to be visible immediately, set the Image::asynchronous
+property to true.  This will load the image in a low priority thread.
+
+\section1 View Delegates
+
+Delegates must be created quickly as the view is flicked.  There are two important
+aspects to maintaining a smooth view:
+
+\list
+\o Small delegates - keep the amount of QML to a minimum.  Have just enough
+QML in the delegate to display the necessary information.  Any additional functionality
+that is only needed when the delegate is clicked, for example, should be created by
+a Loader as needed.
+\o Fast data access - ensure the data model is as fast as possible.
+\endlist
+
+\section1 Image resources over composition
+
+If possible, provide a single image resource, rather than using composition
+of a number of elements.  For example, a frame with a shadow could be created using
+a Rectangle placed over an Image providing the shadow.  It is more efficient to
+provide an image that includes the frame and the shadow.
+
+\section1 Limit JavaScript
+
+Avoid running JavaScript during animation.  For example, running a complex
+JavaScript expression for each frame of an x property animation.
+
+\section1 Rendering
+
+Often using a different graphics system will give superior performance to the native
+graphics system (this is especially the case on X11). This can be configured using
+QApplication::setGraphicsSystem() or via the command line using the \c -graphicssystem
+switch.
+
+You can enable OpenGL acceleration using the \c opengl graphics system, or by setting a
+QGLWidget as the viewport of your QDeclarativeView.
+
+You may need to try various options to find what works the best for your application.
+For embedded X11-based devices one recommended combination is to use the raster graphics
+system with a QGLWidget for the viewport. While this doesn't guarantee the \bold fastest
+performance for all use-cases, it typically has \bold{consistently good} performance for
+all use-cases. In contrast, only using the raster paint engine may result in very good
+performance for parts of your application and very poor performance elsewhere.
+
+The QML Viewer uses the raster graphics system by default for X11 and OS X. It also
+includes a \c -opengl command line option which sets a QGLWidget as the viewport of the
+view. On OS X, a QGLWidget is always used.
+
+You can also prevent QDeclarativeView from painting its window background if
+you will provide the background of your application using QML, e.g.
+
+\code
+QDeclarativeView window;
+window.setAttribute(Qt::WA_OpaquePaintEvent);
+window.setAttribute(Qt::WA_NoSystemBackground);
+window.viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+window.viewport()->setAttribute(Qt::WA_NoSystemBackground);
+\endcode
+
+*/

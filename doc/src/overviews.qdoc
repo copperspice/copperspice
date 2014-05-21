@@ -1,0 +1,201 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page overviews.html
+
+    \title All Overviews and HOWTOs
+
+    \generatelist overviews
+*/
+
+/*!
+    \group qt-basic-concepts
+    \title Programming with Qt
+
+    \brief The basic architecture of the Qt cross-platform application and UI framework.
+
+    Qt is a cross-platform application and UI framework for writing
+    web-enabled applications for desktop, mobile, and embedded
+    operating systems. This page contains links to articles and overviews
+    explaining key components and techniques used in Qt development.
+
+    \generatelist {related}
+ */
+
+/*!
+    \group qt-gui-concepts
+    \title UI Design with Qt
+
+    \brief The Qt components for constructing native look and feel desktop UI's.
+
+    These pages are about Qt's traditional set of GUI components for
+    building both native look & feel and custom UI's for the desktop
+    environment. Use \l{Qt Quick} for building UI's for mobile devices.
+
+    \generatelist {related}
+ */
+
+/*!
+    \group qt-graphics
+    \ingroup qt-basic-concepts
+    \title Qt Graphics and Printing
+
+    \brief The Qt components for doing graphics.
+
+    \generatelist {related}
+ */
+
+/*!
+    \group qt-network
+	\ingroup qt-basic-concepts
+    \title Network programming with Qt
+
+    \brief The these pages are about Qt's support for network programming.
+
+    \generatelist {related}
+ */
+
+/*!
+    \group technology-apis
+    \title Qt and Key Technologies
+
+    These pages document Qt's API's for some widely-used standards and
+    technologies.
+
+    \generatelist{related}
+*/
+
+/*!
+  \group qt-activex
+  \title ActiveX in Qt
+  \ingroup qt-basic-concepts
+  \ingroup technology-apis
+  \ingroup platform-specific
+
+  \brief Qt API's for using ActiveX controls, servers, and COM.
+
+  These pages document Qt's API's for developing with ActiveX
+  controls, servers, and COM.
+
+  \generatelist{related}
+*/
+
+/*!
+  \group qt-sql
+  \title SQL in Qt
+  \brief Qt API's for using SQL.
+  \ingroup technology-apis
+  \ingroup best-practices
+  \ingroup qt-basic-concepts
+
+
+  These pages document Qt's API's for using SQL database systems
+  in Qt applications.
+
+  \generatelist{related}
+*/
+
+/*!
+    \group best-practices
+    \title Best Practice Guides
+
+    \brief How-To and Best Practice Guides
+
+    These documents provide guidelines and best practices for using Qt
+    to solve specific technical problems. They are listed
+    alphabetically by the first word in the title, so scan the entire
+    list to find what you want.
+
+    \generatelist{related}
+*/
+/*!
+
+	\group licensing
+	\title Qt Licenses and Credits
+
+	\brief About the licenses used for Qt, and some credits to our contributors.
+
+	This page contains information on the different licenses Qt is shipped with,
+	and credits to some of our many contributers.
+
+	\generatelist {related}
+
+*/
+
+/*!
+    \group qml-best-practices
+    \title QML Best Practices Guides
+
+    \brief QML Programming Best Practices Guides
+
+    These documents provide guidelines and best practices for using QML and Qt
+    to solve specific technical problems.
+
+    \generatelist {related}
+*/
+/*!
+    \group qml-features
+    \title QML Features
+
+    \brief Features of the QML Language
+
+These are overviews of the many features of the QML language and \l{Qt Quick}.
+
+\list
+\o \l{QML Basic Elements}{Basic Elements}
+\o \l{QML Basic Types}{Data Types}
+\o \l{Property Binding}
+\o \l{Using QML Positioner and Repeater Items}{Component Layouts}
+\o \l{Anchor-based Layout in QML}{Layouts using Anchors}
+\o \l{QML Mouse Events}{Mouse Events}
+\o \l{QML Text Handling and Validators}{Text Handling and Validators}
+\o \l{Keyboard Focus in QML}{Keyboard Focus}
+\o \l{QML Signal and Handler Event System}{Signal and Handler Event System}
+\o \l{Importing Reusable Components}
+\o \l{QML States}{States}
+\o \l{QML Animation and Transitions}{Animation and Transitions}
+\o \l{QML Data Models}{Structuring Data with Models}
+\o \l{Presenting Data with Views}
+\o \l{Extending QML Functionalities using C++}
+\o \l{Using QML Bindings in C++ Applications}
+\o \l{Integrating QML Code with Existing Qt UI Code}
+\o \l{Dynamic Object Management in QML}{Dynamic Object Management}
+\o \l{Network Transparency}{Loading Resources in QML}
+\o \l{QML Internationalization}{Internationalization}
+\endlist
+*/
+/*!
+    \group qml-architecture
+    \title QML Architecture
+
+    \brief QML Architecture
+
+    These are overviews of the architecture of QML and Qt Declarative Module.
+
+    \generatelist {related}
+*/

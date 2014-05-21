@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<catalogue>
+    <book type="Hardcover">
+        <title>C++ GUI Programming with Qt 4</title>
+        <year>2006</year>
+        <author>Jasmin Blanchette</author>
+        <author>Mark Summerfield</author>
+    </book>
+    <book type="Paperback">
+        <title>Programming with Qt</title>
+        <year>2002</year>
+        <author>Matthias Kalle Dalheimer</author>
+    </book>
+ </catalogue>

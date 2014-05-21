@@ -1,0 +1,76 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page texthandling.html
+\title QML Text Handling and Validators
+\ingroup QML Features
+\previouspage {QML Mouse Events}{Mouse Events}
+\nextpage {Keyboard Focus in QML}{Keyboard Focus}
+\contentspage QML Features
+
+\tableofcontents
+
+\section1 Text Elements
+
+\list
+\o \l{Text}
+\o \l{TextInput}
+\o \l{TextEdit}
+\endlist
+
+\section1 Validators
+\list
+\o \l{IntValidator}
+\o \l{DoubleValidator}
+\o \l{RegExpValidator}
+\endlist
+
+\section1 Displaying Text in QML
+QML provides several elements to display text onto the screen. The \l Text
+element will display formatted text onto the screen, the \l TextEdit element
+will place a multiline line edit onto the screen, and the \l TextInput will
+place a single editable line field onto the screen.
+
+To learn more about their specific features and properties, visit their
+respective element documentation.
+
+\section1 Validating Input Text
+The \l {Validators}{validator} elements enforce the type and format of
+\l TextInput objects.
+
+\snippet doc/src/snippets/declarative/texthandling.qml int validator
+The validator elements bind to \c {TextInput}'s \c validator property.
+
+\snippet doc/src/snippets/declarative/texthandling.qml regexp validator
+The regular expression in the snippet will only allow the inputted text to be
+\c {fruit basket}.
+
+Note that QML parses JavaScript regular expressions, while Qt's
+\l {QRegExp} class' regular expressions are based on Perl regular expressions.
+
+*/

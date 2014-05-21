@@ -1,0 +1,252 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>744</width>
+    <height>38</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" />
+  <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>16</y>
+     <width>744</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="sizeGripEnabled" >
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="toolBar" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionOpen" />
+   <addaction name="actionSave" />
+   <addaction name="actionPrint" />
+   <addaction name="separator" />
+   <addaction name="actionOpen_Phrase_Book" />
+  </widget>
+  <widget class="QToolBar" name="toolBar_2" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionUndo" />
+   <addaction name="actionRedo" />
+   <addaction name="separator" />
+   <addaction name="actionCut" />
+   <addaction name="actionCopy" />
+   <addaction name="actionPaste" />
+   <addaction name="separator" />
+   <addaction name="actionFind" />
+  </widget>
+  <widget class="QToolBar" name="toolBar_3" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionPrev" />
+   <addaction name="actionNext" />
+   <addaction name="actionPrev_Unfinished" />
+   <addaction name="actionNext_Unfinished" />
+   <addaction name="actionDone_and_Next" />
+  </widget>
+  <widget class="QToolBar" name="toolBar_4" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionAccelerators" />
+   <addaction name="actionEnding_Punctuation" />
+   <addaction name="actionPhrase_Matches" />
+  </widget>
+  <widget class="QToolBar" name="toolBar_5" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionWhat_s_This" />
+  </widget>
+  <action name="actionOpen" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/fileopen.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionSave" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/filesave.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionPrint" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/print.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Print</string>
+   </property>
+  </action>
+  <action name="actionOpen_Phrase_Book" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/book.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Open Phrase Book</string>
+   </property>
+  </action>
+  <action name="actionUndo" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/undo.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Undo</string>
+   </property>
+  </action>
+  <action name="actionRedo" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/redo.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Redo</string>
+   </property>
+  </action>
+  <action name="actionCut" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/editcut.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Cut</string>
+   </property>
+  </action>
+  <action name="actionCopy" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/editcopy.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Copy</string>
+   </property>
+  </action>
+  <action name="actionPaste" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/editpaste.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Paste</string>
+   </property>
+  </action>
+  <action name="actionFind" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/searchfind.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Find</string>
+   </property>
+  </action>
+  <action name="actionPrev" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/prev.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Prev</string>
+   </property>
+  </action>
+  <action name="actionNext" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/next.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Next</string>
+   </property>
+  </action>
+  <action name="actionPrev_Unfinished" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/prevunfinished.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Prev Unfinished</string>
+   </property>
+  </action>
+  <action name="actionNext_Unfinished" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/nextunfinished.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Next Unfinished</string>
+   </property>
+  </action>
+  <action name="actionDone_and_Next" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/doneandnext.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Done and Next</string>
+   </property>
+  </action>
+  <action name="actionAccelerators" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/accelerator.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Accelerators</string>
+   </property>
+  </action>
+  <action name="actionEnding_Punctuation" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/punctuation.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Ending Punctuation</string>
+   </property>
+  </action>
+  <action name="actionPhrase_Matches" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/phrase.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Phrase Matches</string>
+   </property>
+  </action>
+  <action name="actionWhat_s_This" >
+   <property name="icon" >
+    <iconset resource="../../../tools/linguist/linguist/linguist.qrc" >:/images/win/whatsthis.png</iconset>
+   </property>
+   <property name="text" >
+    <string>What's This?</string>
+   </property>
+  </action>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources>
+  <include location="../../../tools/linguist/linguist/linguist.qrc" />
+ </resources>
+ <connections/>
+</ui>

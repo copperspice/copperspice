@@ -1,0 +1,155 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qmlsyntax.html
+\title QML Syntax
+\ingroup QML Reference
+\contentspage QML Reference
+
+\tableofcontents
+
+QML is a declarative language designed to describe the user interface of a
+program: both what it looks like, and how it behaves. In QML, a user
+interface is specified as a tree of objects with properties.
+
+JavaScript is used as a scripting language in QML, so you may want
+to learn a bit more about it (\l{Javascript Guide}) before diving
+deeper into QML.
+
+\section1 Basic QML Syntax
+
+QML looks like this:
+
+\code
+import QtQuick 1.0
+
+Rectangle {
+    width: 200
+    height: 200
+    color: "blue"
+
+    Image {
+        source: "pics/logo.png"
+        anchors.centerIn: parent
+    }
+}
+\endcode
+
+Objects are specified by their type, followed by a pair of braces. Object
+types always begin with a capital letter. In the above example, there are
+two objects, a \l Rectangle, and an \l Image. Between the braces, we can specify
+information about the object, such as its properties.
+
+Properties are specified as \c {propertyname: value}. In the above example, we
+can see the Image has a property named \c source, which has been assigned the
+value \c "pics/logo.png". The property and its value are separated by a colon.
+
+Properties can be specified one-per-line:
+
+\code
+Rectangle {
+    width: 100
+    height: 100
+}
+\endcode
+
+or you can put multiple properties on a single line:
+
+\code
+Rectangle { width: 100; height: 100 }
+\endcode
+
+When multiple property/value pairs are specified on a single line, they
+must be separated by a semicolon.
+
+The \c import statement imports the \c Qt \l{QML Modules}{module}, which contains all of the
+standard \l {QML Elements}. Without this import statement, the \l Rectangle
+and \l Image elements would not be available.
+
+\section1 Expressions
+
+In addition to assigning values to properties, you can also assign
+expressions written in JavaScript.
+
+\code
+Rotation {
+    angle: 360 * 3
+}
+\endcode
+
+These expressions can include references to other objects and properties, in which case
+a \e binding is established: when the value of the expression changes, the property the
+expression has been assigned to is automatically updated to that value.
+
+\code
+Item {
+    Text {
+        id: text1
+        text: "Hello World"
+    }
+    Text {
+        id: text2
+        text: text1.text
+    }
+}
+\endcode
+
+In the example above, the \c text2 object will display the same text as \c text1. If \c text1 is changed,
+\c text2 is automatically changed to the same value.
+
+Note that to refer to other objects, we use their \e id values. (See below for more
+information on the \e id property.)
+
+\section1 QML Comments
+
+Commenting in QML is similar to JavaScript.
+\list
+\o Single line comments start with // and finish at the end of the line.
+\o Multiline comments start with /* and finish with *\/
+\endlist
+
+\snippet doc/src/snippets/declarative/comments.qml 0
+
+Comments are ignored by the engine. They are useful for explaining what you
+are doing; for referring back to at a later date, or for others reading
+your QML files.
+
+Comments can also be used to prevent the execution of code, which is
+sometimes useful for tracking down problems.
+
+\code
+Text {
+    text: "Hello world!"
+    //opacity: 0.5
+}
+\endcode
+
+In the above example, the Text object will have normal opacity, since the
+line opacity: 0.5 has been turned into a comment.
+
+*/

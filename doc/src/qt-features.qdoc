@@ -1,0 +1,204 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page qt-overview.html
+    \title Qt Features Overview
+
+    This document provides a summary of the most important features of Qt,
+    providing links to other pages in the documentation that cover these
+    features in more detail. It is not intended to be a comprehensive
+    guide to Qt's features.
+
+    \section1 Fundamental Technologies in Qt
+
+    Qt is built upon a set of core technologies, provided by the \l QtCore
+    and \l QtGui modules. These include the following:
+
+    \list
+    \o \l{The Tulip Container Classes}, a set of template container classes.
+    \o \l{The Arthur Paint System}, the Qt 4 painting framework.
+    \o \l{The Interview Framework}, a model/view architecture for item views
+       and the \l{QtSQL Module}, which also uses this architecture.
+    \o \l{The Scribe Classes}, a framework for creating text documents,
+        performing low-level text layout and writing OpenDocument files.
+    \o A collection of \l{Qt Widget Gallery}{common desktop widgets}, styled
+       to fit in on each supported platform.
+    \o \l{The Qt 4 Main Window Classes}, a main window, toolbar, menu, and
+       docking architecture.
+    \o The \l{Graphics View} framework provides a canvas for producing
+       interactive graphics.
+    \o The \l{QtNetwork Module} provides support for TCP, UDP and local
+       sockets that are integrated with Qt's event model, including support
+       for Secure Socket Layer (SSL) communications,
+       \l{QNetworkProxy}{network proxy} servers and
+       \l{Bearer Management}{network bearer management}.
+    \o Enhanced \l{qt4-threads.html}{thread support} allows
+    \l{Signals & Slots}{signal-slot} connections across threads and
+       per-thread event loops.
+       Additionally, \l{Thread Support in Qt}{a framework for concurrent programming}
+       using Qt paradigms makes common threading tasks easier.
+    \o A \l{resource system} for embedding images and other resource files
+       into executable files makes it easier to deploy applications.
+    \o A \l{QTestLib Manual}{unit testing framework} for Qt applications and
+       libraries.
+    \endlist
+
+    The mature classes provided by these technologies have been used to build
+    robust, cross-platform desktop applications. They are augmented by a number
+    of additional technologies and improvements that have appeared over the
+    lifetime of Qt 4.
+    
+    \section1 Graphical User Interfaces
+
+    \div{class="float-right"}
+    \inlineimage gtk-tabwidget.png
+    \enddiv
+    \div{class="float-right"}
+    \inlineimage gtk-progressbar.png
+    \br
+    \inlineimage gtk-checkbox.png
+    \br
+    \inlineimage plastique-combobox.png
+    \br
+    \inlineimage plastique-radiobutton.png
+    \enddiv
+
+    Alongside the support for traditional desktop user interfaces, Qt includes
+    support for declarative UI development with \l{Qt Quick}, a set of
+    technologies for creating fluid, dynamic user interfaces. A starting point
+    for exploring this approach can be found in the \l{Introduction to Qt Quick}
+    guide.
+
+    Qt provides a range of standard user interface elements, called widgets,
+    for each supported platform. Widgets can be used as containers for other
+    widgets, as windows, and as regular controls that the user interacts with.
+    Where the platform supports it, widgets can be made to appear partially
+    transparent, and may be styled with \l{Qt Style Sheets}.
+
+    Support for \l{QTouchEvent}{touch input} and \l{Gestures Programming}{gestures}
+    enable widgets to be used to create intuitive user interfaces for
+    touch-enabled devices.
+
+    User interfaces can also be created dynamically at run-time with the
+    features provided by the \l{QtUiTools} module.
+
+    A selection of available widgets are shown in the \l{Qt Widget Gallery}.
+    An introduction to the concepts behind widgets can be found in the
+    \l{Widgets Tutorial}.
+
+    \clearfloat
+    \section1 Painting, Printing and Rendering
+
+    \div{class="float-left"}
+    \inlineimage qpainter-affinetransformations.png
+    \enddiv
+    
+    Widgets are just one of many kinds of paint device that Qt can render onto.
+    This support for unified painting makes it possible for applications to use
+    the same painting code for different tasks, as well as allowing Qt to be
+    extended to support additional file formats.
+
+    Qt provides support for common bitmap image formats,
+    \l{QtSvg Module}{Scalable Vector Graphics} (SVG) drawings and animations,
+    Postscript and Portable Document Format (PDF) files. Postscript and PDF are
+    integrated with \l{Printing with Qt}{Qt's printing system}, which also
+    allows printed output to be previewed.
+
+    Interactive graphics can be created with the
+    \l{The Animation Framework}{animation framework}, allowing animations to be
+    used with both widgets and graphics items. Animations can be used with the
+    \l{The State Machine Framework}{state machine framework}, which provides a
+    way to express application logic and integrate it with the user interface.
+    Animations can be enhanced with a collection of
+    \l{QGraphicsEffect}{graphics effects} that operate on graphics items and
+    can be applied individually or combined to create more complex effects.
+
+    Qt supports integration with \l{QtOpenGL}{OpenGL} on a number of levels,
+    providing convenience functions for handling textures and colors, as well
+    as providing support for pixel and sample buffers. Future support for
+    higher level 3D integration is provided by Qt3D enablers which include
+    \l{QMatrix4x4}{matrix multiplication}, \l{QQuaternion}{quaternions}, and an
+    API for \l{QGLShader}{vertex and fragment shaders}.
+
+    Two APIs are provided for multimedia. The
+    \l{Phonon Overview}{Phonon Multimedia Framework} has traditionally been
+    used on desktop platforms. A set of
+    \l{QtMultimedia Module}{multimedia services} provides low-level access to
+    the system's audio system and is often used on mobile devices.
+
+    \clearfloat
+    \section1 Infrastructure
+
+    \div{class="float-right"}
+    \inlineimage qtscript-context2d.png
+    \enddiv
+
+    Facilities for Inter-Process Communication (IPC) and Remote Procedure
+    Calling (RPC) mechanisms are available on platforms that support the
+    \l{intro-to-dbus.html}{D-Bus} message bus system.
+
+    An \l{Undo Framework}{Undo framework} based on the
+    \l{Books about GUI Design#Design Patterns}{Command pattern} is designed to
+    enable a consistent approach to handling data in editing applications.
+
+    The \l{QtScript} and \l{QtScriptTools} modules provide support for
+    application scripting and debugging using the ECMAScript language.
+
+    The \l{QtHelp Module} provides the foundations of an interactive help
+    system that can be used in conjunction with Qt Creator or integrated into
+    applications directly.
+
+    XML handling is supported in a number of places in Qt. The \l QtCore module
+    provides classes for reading and writing XML streams. The \l QtXmlPatterns
+    module includes XQuery, XPath and XSLT support, providing facilities for
+    XML processing beyond that supported by the QtXml module, which contains
+    SAX and DOM parsers. XML schema validation in the QtXmlPatterns module
+    covers large parts of version 1.0 of the specification.
+
+    \clearfloat
+    \section1 Web Client Integration
+
+    Integration between \l{Webkit in Qt}{Qt and WebKit} makes it possible for
+    developers to use a fully-featured Web browser engine to display documents
+    and access online services. Developers can access the browser's environment
+    to create documents and run scripts within one or more browser widgets.
+
+    A \l{QWebElement}{DOM access API} for QtWebKit provides a cleaner and safer
+    way to access elements and structures of Web pages without the use of
+    JavaScript.
+
+    \section1 Further Reading
+
+    Many of the technologies mentioned here, as well as other, more specific
+    features, are listed in the \l{What's New in Qt 4} document. A complete
+    list of Qt's modules can be found on the \l{All Modules} page, which
+    also includes more domain-specific technologies.
+
+    The tools that are supplied with Qt are covered by the listing in the
+    \l{Qt's Tools} document.
+*/

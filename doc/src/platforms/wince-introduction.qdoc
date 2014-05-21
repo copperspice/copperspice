@@ -1,0 +1,131 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \group qtce
+    \title Qt for Windows CE
+    \ingroup qt-embedded
+    \brief Documents related to Qt for Windows CE
+
+    Qt for Windows CE is a C++ framework for GUI and application development
+    for embedded devices running Windows CE. It runs on a variety of processors,
+    including ARM, Intel x86, MIPS and SH-4.
+
+    \table 100%
+    \header \o Getting Started \o Reference \o Performance and Optimization
+    \row
+    \o
+     \list
+        \o \l {Qt for Windows CE Requirements}
+        \o \l {Installing Qt for Windows CE}
+        \o \l {Windows CE - Introduction to using Qt}{Introduction to using Qt}
+    \endlist
+    \o
+    \list
+        \o \l {Windows CE - Using shadow builds}{Using shadow builds}
+        \o \l {Windows CE - Working with Custom SDKs}{Working with Custom SDKs}
+    \endlist
+    \o
+    \list
+        \o \l {Qt for Windows CE Hardware Accelerated Graphics}{Hardware Accelerated Graphics}
+        \o \l {Qt Performance Tuning}
+        \o \l {Fine-Tuning Features in Qt}
+    \endlist
+    \endtable
+*/
+
+/*!
+    \page wince-with-qt-introduction.html
+
+    \title Windows CE - Introduction to using Qt
+    \brief An introduction to Qt for Windows CE developers.
+    \ingroup qtce
+
+    \tableofcontents
+
+    \section1 Required tools
+
+    In order to use Qt for Windows CE you need to have Visual Studio
+    2005 or 2008 and at least one of the supported Windows
+    CE/Mobile SDKs installed.
+    Note, that the Visual Studio 2008 Standard Edition doesn't come
+    with Windows CE support. You will need the Professional Edition,
+    if you're using Visual Studio 2008.
+
+    We recommend the \e{Windows Mobile 5.0 SDK for Pocket PC} SDK available
+    \l{http://www.microsoft.com/downloads/details.aspx?FamilyID=83a52af2-f524-4ec5-9155-717cbe5d25ed&amp;DisplayLang=en}{here}.
+
+    \section1 Installing Qt
+
+    Follow the instructions found in \l{Installing Qt for Windows CE}.
+
+    \section1 Building your own applications
+
+    If you are new to Qt development, have a look at \l{How to Learn Qt}
+    and \l{Tutorials}. In general there is little or no difference in
+    developing Qt applications for Windows CE compared to any of the
+    other platforms supported by Qt.
+
+    Once you have a \c .pro file, there are two ways of building your
+    application. You can either do it on the command line or inside of
+    Visual Studio. To do it on the command line, simply write:
+
+    \snippet doc/src/snippets/code/doc_src_wince-introduction.qdoc 0
+
+    To build the project inside of Visual Studio, on the command line write:
+
+    \snippet doc/src/snippets/code/doc_src_wince-introduction.qdoc 1
+
+    then start Visual Studio with the generated \c .vcproj or \c .sln file and
+    select \e{Build project}.
+
+    For more information on how to use qmake have a look at the \l
+    {qmake Tutorial}.
+
+    \section1 Running the application
+
+    In order to run the application, it needs to be deployed on the
+    Windows CE/Mobile device you want to test it for. This can either
+    be done manually or automated using Visual Studio.
+
+    To do it manually, simply copy the executable, the Qt \c{.dll}
+    files needed for the application to run, and the C-runtime library
+    into a folder on the device, and then click on the executable to
+    start the program. You can either use the \e Explorer found in
+    ActiveSync or the \e{Remote File Viewer} found in Visual Studio to do
+    this.
+
+    Visual Studio can do this step automatically for you as well. If you have
+    built the project inside Visual Studio, simply select \e Deploy and then
+    \e Debug to deploy and then run the application. You can change the
+    device type by changing the \e{Target Device} specified in the
+    Visual Studio toolbar.
+
+    Further information on deploying Qt applications for Windows can
+    be found in the \l{Deploying an Application on Windows}
+    {deployment document}.
+*/

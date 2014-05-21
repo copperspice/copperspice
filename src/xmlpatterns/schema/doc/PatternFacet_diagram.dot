@@ -1,0 +1,6 @@
+digraph PatternFacet {
+  mindist = 2.0
+  1 -> 2 [label="annotation"]
+  1 [shape=doublecircle, style=filled, color=blue]
+  2 [shape=doublecircle, style=filled, color=green]
+}

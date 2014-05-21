@@ -1,0 +1,155 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page qtprogrammers.html
+\target qtprogrammers
+\title QML for Qt Programmers
+
+While QML does not require Qt knowledge to use, if you \e are already familiar with Qt,
+much of your knowledge is directly relevant to learning and using QML. Of course,
+an application with a UI defined in QML also uses Qt for all the non-UI logic.
+
+\section1 Familiar Concepts
+
+QML provides direct access to the following concepts from Qt:
+
+\list
+ \o QAction - the \l {QML Basic Types}{action} type
+ \o QObject signals and slots - available as functions to call in JavaScript
+ \o QObject properties - available as variables in JavaScript
+ \o QWidget - QDeclarativeView is a QML-displaying widget
+ \o Qt models - used directly in data binding (QAbstractItemModel)
+\endlist
+
+Qt knowledge is \e required for \l {Extending QML Functionalities using C++},
+and also for \l{Integrating QML Code with existing Qt UI code}.
+
+\section1 QML Items compared with QWidgets
+
+QML Items are very similar to QWidgets: they define the look and feel of the user interface. (Note that while QWidgets
+haven't traditionally been used to define the look and feel of view delegates, QML Items can be used for this as well.)
+
+There are three structurally different types of QWidget:
+
+\list
+ \o Simple widgets that are not used as parents (QLabel, QCheckBox, QToolButton, etc.)
+ \o Parent widgets that are normally used as parents to other widgets (QGroupBox, QStackedWidget, QTabWidget, etc.)
+ \o Compound widgets that are internally composed of child widgets (QComboBox, QSpinBox, QFileDialog, QTabWidget, etc.)
+\endlist
+
+QML Items also serve these purposes. Each is considered separately below.
+
+\section2 Simple Widgets
+
+The most important rule to remember while implementing a new QDeclarativeItem in C++
+is that it should not contain any look and feel policies - leave that to the
+QML usage of the item.
+
+As an example, imagine you wanted a reusable Button item. If you therefore
+decided to write a QDeclarativeItem subclass to implement a button,
+just as QToolButton subclasses QWidget for this purpose, following the rule above, your
+\c QDeclarativeButton would not have any appearance - just the notions of enabled, triggering, etc.
+
+But there is already an object in Qt that does this: QAction.
+
+QAction is the UI-agnostic essence of QPushButton, QCheckBox, QMenu items, QToolButton,
+and other visual widgets that are commonly bound to a QAction.
+
+So, the job of implementing a checkbox abstraction for QML is already done - it's QAction.
+The look and feel of an action - the appearance of the button, the transition between states,
+and exactly how it respond to mouse, key, or touch input, should all be left for definition
+in QML.
+
+It is illustrative to note that QDeclarativeTextEdit is built upon QTextControl,
+QDeclarativeWebView is built upon QWebPage, and ListView uses QAbstractItemModel,
+just as QTextEdit, QWebView, and QListView are built upon
+those same UI-agnostic components.
+
+The encapsulation of the look and feel that QWidgets gives is important, and for this
+the QML concept of \l {qdeclarativedocuments.html}{components} serves the same purpose. If you are building a complete
+suite of applications which should have a consistent look and feel, you should build
+a set of reusable components with the look and feel you desire.
+
+So, to implement your reusable button, you would simply build a QML component.
+
+
+\section2 Parent Widgets
+
+Parent widgets each provide a generic way to interface to one or more arbitrary other widgets.
+A QTabWidget provides an interface to multiple "pages", one of which is visible at any time,
+and a mechanism for selecting among them (the QTabBar). A QScrollArea provides scrollbars around
+a widget that is otherwise too large to fit in available space.
+
+Nearly all such components can be created directly in QML. Only a few cases
+which require very particular event handling, such as Flickable, require C++ implementations.
+
+As an example, imagine you decided to make a generic tab widget item to be used
+through your application suite wherever information is in such quantity that it
+needs to be divided up into pages.
+
+A significant difference in the parenting concept with QML compare to QWidgets
+is that while child items are positioned relative to their parents,
+there is no requirement that they be wholly contained ("clipped") to
+the parent (although the clipped property of the child Item does allow
+this where it is needed).
+This difference has rather far-reaching consequences, for example:
+
+\list
+    \o A shadow or highlight around a widget could be a child of that widget.
+    \o Particle effects can flow outside the object where they originate.
+    \o Transitioning animations can "hide" items by visibly moving them beyond the screen bounds.
+\endlist
+
+
+\section2 Compound Widgets
+
+Some widgets provide functionality by composing other widgets as an "implementation detail",
+providing a higher level API to the composition. QSpinBox for example is a line edit and some
+buttons to increase/decrease the edited value. QFileDialog uses a whole host of widgets to
+give the user a way of finding and selecting a file name.
+
+When developing reusable QML Items, you may choose to do the same: build an item composed
+of other items you have already defined.
+
+The only caveat when doing this is to consider the possible animations and transitions that
+users of the compound item might wish to employ. For example, a spinbox might need to smoothly
+transition from an arbitrary Text item, or characters within a Text item, so your spinbox
+item would need to be sufficiently flexible to allow such animation.
+
+\section1 QML Items Compared With QGraphicsWidgets
+
+The main difference between QML items and QGraphicsWidgets is how they are intended to be used. The technical implementation details are much the same, but in practice they are different because QML items are made for declarative and compositional use, and QGraphicsWidgets are made for imperative and more integrated use. Both QML items and QGraphicsWidgets inherit from QGraphicsObject, and can co-exist. The differences are in the layouting system and the interfacing with other components. Note that, as QGraphicsWidgets tend more to be all-in-one packages, the equivalent of a QGraphicsWidget may be many QML items composed across several QML files, but it can still be loaded and used as a single QGraphicsObject from C++.
+
+QGraphicsWidgets are usually designed to be laid out with QGraphicsLayouts. QML does not use QGraphicsLayouts, as the Qt layouts do not mix well with animated and fluid UIs, so the geometry interface is one of the main differences. When writing QML elements, you allow the designers to place their bounding rectangle using absolute geometry, bindings or anchors (all setup for you when you inherit QDeclarativeItem) and you do not use layouts or size hints. If size hints are appropriate, then place them in the QML documentation so that the designers know how to use the item best, but still have complete control over the look and feel.
+
+The other main difference is that QGraphicsWidgets tend to follow the widget model, in that they are a self-contained bundle of UI and logic. In contrast, QML primitives are usually a single purpose item that does not fulfill a use case on its own, but is composed into the equivalent of the widget inside the QML file. So when writing QML Items, try to avoid doing UI logic or composing visual elements inside the items. Try instead to write more general purpose primitives, so that the look and feel (which involves the UI logic) can be written in QML.
+
+Both differences are caused by the different method of interaction. QGraphicsWidget is a QGraphicsObject subclass which makes fluid UI development from C++ easier, and QDeclarativeItem is a QGraphicsObject subclass which makes fluid UI development from QML easier. The difference therefore is primarily one of the interface exposed, and the design of the items that come with it (the Declarative primitives for QML and the nothing for QGraphicsWidget, because you need to write your own UI logic into the subclass).
+
+If you wish to use both QML and C++ to write the UI, for example to ease the transition period, it is recommended to use QDeclarativeItem subclasses (although you can use QGraphicsWidgets as well). To allow for easier use from C++ make the root item of each C++ component a LayoutItem, and load individual 'widgets' of QML (possibly comprised of multiple files, and containing a self-contained bundle of UI and logic) into your scene to replace individual QGraphicsWidgets one at a time.
+*/

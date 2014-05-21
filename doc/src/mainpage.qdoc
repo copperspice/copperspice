@@ -1,0 +1,234 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+\page gettingstarted-develop.html
+\title Develop with Qt
+\ingroup gettingstarted
+
+\div {class = "indexboxcont indexboxbar"}
+Developing a Qt application involves many different steps and stages. From
+configuring Creator to distributing binaries to different platforms, Qt provides
+many options along the way.
+\image quick_screens.png
+\enddiv
+
+\div {class = "indexboxcont indexboxbar normallist"}
+\keyword qt-creator-configure-target
+\section1 Configuring Qt and Creator Targets
+Qt and Creator are configurable to compile applications on many platform targets
+and multiple platforms.
+
+\section2 Configuring Creator for Qt Development:
+Creator is the integrated development environment for developing Qt applications.
+Creator encompasses every step of application development from interface design
+to application testing and deployment.
+\list
+\o \l{external: Creating Qt Projects in Creator}{Creating Qt Projects}
+\o \l{external: Building and Running Applications in Creator}{Building and Running Applications}
+    \list
+    \o \l{external: Set Compiler Targets in Creator}{Targets} - edit and set compiler targets
+    \o \l{external: Build Settings in Creator}{Build Settings} - edit and set build configurations
+    \o \l{external: Run Settings in Creator}{Run Settings} - edit and set application run settings
+    \endlist
+\o \l{external: Setting Up Development Environment for Symbian}{Setting Up Development Environment for Symbian}
+\o \l{external: Setting Up Development Environment for Maemo}{Setting Up Development Environment for Maemo}
+\endlist
+
+\keyword qt-platform-support
+\section2 Qt Platform Support
+Alternatively, Qt may be installed on its own without the Nokia Qt SDK.
+
+Information regarding Qt Support on Different Platforms:
+\list
+\o \l{Installing Qt for the Symbian platform}{Symbian and Mobile Development}
+\o \l{Support for Windows}{Microsoft Windows}
+\o \l{Support for Windows CE and Windows Mobile}{Microsoft Windows CE}
+\o \l{Support for Mac OS X}{Apple Mac OS X}
+\o \l{Support for Linux/X11}{Linux and X11 Platforms}
+\o \l{Support for Embedded Linux}{Qt for Embedded Linux}
+\endlist
+For more information about the platforms supported
+and their installation pages, view the \l {Supported Platforms} and the
+\l {Cross-Platform and Platform-Specific Development} pages.
+\enddiv
+
+\div {class = "indexboxcont indexboxbar normallist"}
+\keyword qt-technologies
+\section1 Qt Technologies
+
+Qt introduces an innovative alternative for inter-object communication, called
+"signals and slots", that replaces the old and unsafe callback technique used in
+many legacy frameworks. Qt also provides a conventional event model for handling
+mouse clicks, key presses, and other user input. Qt's cross-platform GUI
+applications can support all the user interface functionality required by modern
+applications, such as menus, context menus, drag and drop, and dockable
+toolbars. Desktop integration features provided by Qt can be used to extend
+applications into the surrounding desktop environment, taking advantage of some
+of the services provided on each platform.
+
+The \l{All Modules}{Qt Modules} page has a listing of the technology modules offered by Qt.
+
+\keyword qt-desktop-meta-object-system
+\section2 Qt's Meta-Object System
+Qt offers a unique event system based on meta-objects, signals and slots, and property systems.
+\list
+\o \l{The Meta-Object System}{Qt's Meta-Object System} - Qt's mechanism for signals and slots, inter-object communication, run-time type information, and dynamic property system
+\o \l{The Event System}{Event System} - event handling and delivery
+\o \l{The Property System}{Property System} - dynamic object properties
+\endlist
+
+\keyword qt-ui-creation
+\section2 UI Creation
+Qt offers several options with regards to user interface creation: widget based
+applications using layouts and Qt Quick interfaces with QML.
+\list
+\o \l{Qt Quick} - create UIs using QML
+    \list
+    \o \l{external: Developing Qt Quick Applications}{Creator's QML Design Mode} - design Qt Quick interfaces using Creator's design mode
+    \o \l{Qt Quick Components for Symbian 1.1}{Qt Quick Components for Symbian} - a native QML component set for the Symbian^3 platform
+    \endlist
+\o \l{Widgets and Layouts} - primary elements for C++ based interfaces
+    \list
+    \o \l{external: Designer in Creator}{Creator's Designer} - design interfaces using Qt Designer
+    \endlist
+\o \l{UI Design with Qt} - covers many Qt features for UI creation
+\endlist
+
+\section2 Inter-Process Communication, Threading, and Networking
+In addition to \l{qt-desktop-meta-object-system}{Qt's Meta-Object System}, Qt has several technologies
+that deal with inter-process communication.
+\list
+\o \l{Inter-Process Communication in Qt}{Inter-Process Communication} - various overviews of protocols implemented in Qt
+\o \l{Network programming with Qt}{Network Programming} - various overviews to network APIs
+\o \l{D-Bus} -  D-Bus implementation in Qt
+\o \l{Thread Support in Qt}{Thread Support} - overview of threading APIs and concurrent programming topics
+\endlist
+
+\keyword qt-rendering-painting-system
+\section2 Rendering and Paint System
+Qt has various support for different rendering and painting methods.
+\list
+\o \l{Coordinate System} - Information about the coordinate system used by the paint system
+\o \l{Graphics View Framework} - manages a large number of 2D items and visualizes the items
+\o \l{Paint System} - A system for painting on the screen or on print devices using the same API
+\o \l{QtSvg Module} - module for displaying and creating SVG files
+\o Rendering APIs:
+    \list
+    \o \l{QtOpenGL Module} - module for rendering with the OpenGL API
+    \o \l{OpenVG Rendering in Qt}{QtOpenVG Module} - provides support for OpenVG painting
+    \endlist
+\o \l{Printing with Qt} - A guide to producing printed output with Qt's paint system and widgets
+\endlist
+
+\keyword qt-webkit
+\section2 QtWebKit Module
+Web applications are increasing in importance and abundance and Qt has
+\l{WebKit Open Source Project}{WebKit} support.
+\list
+\o \l{WebKit in Qt} - WebKit Module
+\endlist
+
+\keyword qt-utilities
+\section2 Utilities
+Qt supports many utilities that work on multiple platforms.
+\list
+\o \l{Container Classes}{Containers} - Qt's implementation of various data structures such as linked lists and hash maps
+\o \l{Rich Text Processing} - for manipulating structured rich text documents
+\o \l{XML Processing} - high level manipulation of XML data using different interfaces
+\o \l{Making Applications Scriptable} - provides Qt applications with ECMAScript processor
+\o \l{Qt Linguist Manual}{Qt Linguist} - for translating applications into local languages
+\endlist
+For more information, visit the \l{Qt's Tools}{Qt Tools} page.
+\enddiv
+\div {class = "indexboxcont indexboxbar normallist"}
+\keyword qt-testing
+\section1 Testing Qt Applications
+Testing and debugging are part of the development process and Qt offers the
+developer multiple methods of testing their code.
+\list
+\o \l{external: Debugging Applications in Creator}{Debugging Applications in Creator} - various debugging options in Creator
+\o \l{Debugging Techniques} - essential techniques for debugging Qt code
+\o \l{external: Qt Simulator Manual}{Simulator} - testing mobile applications by simulating a mobile environment
+\o \l{QML Viewer} - an executable that is able to run QML files
+\o \l{QTestLib Manual}{QTestLib} - a unit testing framework built into Qt
+\endlist
+\enddiv
+
+\div {class = "indexboxcont indexboxbar normallist"}
+\keyword qt-deployment
+\section1 Deployment
+Symbian phones, Maemo devices, desktop environments, embedded Linux devices -- Qt applications are deployable to many environments.
+To deploy Qt applications onto multiple platforms, there are special
+considerations that each platform introduce.
+\list
+\o \l{Deploying Qt Applications}{Deploying Qt Libraries} - compares static versus shared libraries and deploying Qt libraries
+\o \l{Deploying Qt Applications#licensing}{Deploying Third Party Libraries} - deployment of libraries that are not under Qt's dual-license model.
+\o Platform-Specific Deployment:
+    \list
+    \o \l{Deploying an Application on X11 Platforms}{X11} - deploying Qt applications on X11 platforms
+    \o \l{Deploying an Application on Windows}{Windows} - deploying Qt applications on Windows operating systems
+    \o \l{Deploying an Application on Mac OS X}{Mac OS X} - deploying Qt applications on Mac OS X
+    \o \l{Deploying Qt for Embedded Linux Applications}{Embedded Linux} - deploying Qt applications on embedded Linux
+    \o \l{Deploying an Application on the Symbian Platform}{Symbian} - deploying Qt applications on the Symbian platform
+    \endlist
+\o \l{external: Symbian Deployment in Creator}{Symbian Deployment in Creator} - Symbian application deployment built into Creator
+\o \l{external: Maemo Deployment in Creator}{Deploying Qt Applications on Maemo Devices}
+\endlist
+
+\section1 Ovi Store Publishing
+Creator can publish applications to Ovi Store directly.
+\list
+\o \l{external: Publishing Applications to Ovi Store}{Publishing Qt Applications to Ovi Store}
+\endlist
+For additional information, visit the \l{Cross-Platform and Platform-Specific Development}
+and the \l {Supported Platforms} page.
+
+\enddiv
+\div {class = "indexboxcont indexboxbar normallist"}
+\section1 Where to Go from Here
+
+Qt Demos and Examples
+\list
+\o \l{Qt Demonstrations}{Application Gallery}
+\o \l{Tutorials}
+\o \l {Qt Examples}
+\o \l {QML Examples and Demos}
+\endlist
+
+Qt Information
+\list
+\o \l{Programming with Qt}
+\o \l{UI Design with Qt}
+\o \l{Cross-platform and Platform-specific Development}
+\o \l{Qt and Key Technologies}
+\o \l{Best Practice Guides}
+\o \l{Qt Licenses and Credits}{Licenses and Credits}
+\endlist
+\enddiv
+*/
+

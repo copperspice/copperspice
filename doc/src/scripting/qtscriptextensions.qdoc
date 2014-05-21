@@ -1,0 +1,101 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \page qtscriptextensions.html
+    \title Creating QtScript Extensions
+    \brief A guide to creating and using QtScript extensions.
+
+    QtScript extensions can make additional functionality available to scripts
+    evaluated by a QScriptEngine. Extensions are imported by calling
+    the QScriptEngine::importExtension() function.
+
+    There are three ways to create an extension:
+
+    \list
+    \o Subclass QScriptExtensionPlugin and implement the desired functionality.
+    \o Implement the functionality in a script file.
+    \o Use a hybrid approach, where part of the functionality is implemented in a
+       QScriptExtensionPlugin, and part is implemented in a script file.
+    \endlist
+
+    The (dot-qualified) extension name is used to determine the path (relative to
+    the application's plugin path) where QScriptEngine will look for the script
+    file that will initialize the extension; if a file called \c{__init__.js}
+    (usually located in \c{[application plugin path]/script/foo/}) is
+    found in the corresponding folder, its contents will be evaluated by the engine
+    when the extension is imported.
+    As an example, if the extension is called \c{"foo.bar.baz"}, the engine will look
+    for \c{__init__.js} in \c{foo/bar/baz}. Additionally, before importing
+    \c{"foo.bar.baz"}, the engine will ensure that the extensions \c{"foo"} and \c{"foo.bar"}
+    are imported, locating and evaluating the corresponding \c{__init__.js}
+    in the same manner (in folders \c{foo} and \c{foo/bar}, respectively).
+
+    The contents of \c{__init__.js} are evaluated in a new QScriptContext,
+    as if it were the body of a function. The engine's Global Object acts as
+    the \c{this} object. The following local variables are initially available
+    to the script:
+
+    \list
+    \o \bold{__extension__}: The name of the extension (e.g. \c{"foo.bar.baz"}).
+    \o \bold{__setupPackage__}: A convenience function for setting up a "namespace" in the script environment. A typical application is to call \c{__setupPackage__()} with \c{__extension__} as argument; e.g. \c{__setupPackage__("foo.bar.baz")} would ensure that the object chain represented by the expression \c{foo.bar.baz} exists in the script environment. (This function is semantically equivalent to QScriptExtensionPlugin::setupPackage().)
+    \o \bold{__postInit__}: By default, this variable is undefined. If you assign a function to it, that function will be called \bold{after} the C++ plugin's initialize() function has been called. You can use this to perform further initialization that depends on e.g. native functions that the C++ plugin registers.
+    \endlist
+
+    An example of a simple \c{__init__.js}:
+
+    \snippet doc/src/snippets/code/doc_src_qtscriptextensions.js 0
+
+    QScriptEngine will look for a QScriptExtensionPlugin that provides
+    the relevant extension by querying each plugin for its keys()
+    until a match is found. The plugin's initialize() function will be
+    called \bold{after} the relevant \c{__init__.js} (if any) has been
+    evaluated.
+
+    Continuining with the example of our imaginary extension \c{"foo.bar.baz"},
+    the following steps will be performed by QScriptEngine::importExtension():
+
+    \list
+    \o If it exists, \c{foo/__init__.js} is evaluated.
+    \o If a plugin with \c{"foo"} in its list of keys is found, its initialize() function is called with \c{"foo"} as key.
+    \o If it exists, \c{foo/bar/__init__.js} is evaluated.
+    \o If a plugin with \c{"foo.bar"} in its list of keys is found, its initialize() function is called with \c{"foo.bar"} as key.
+    \o If it exists, \c{foo/bar/baz/__init__.js} is evaluated.
+    \o If a plugin with "foo.bar.baz" in its list of keys is found, its initialize() function is called with \c{"foo.bar.baz"} as key.
+    \endlist
+
+    \section1 Static Extensions
+
+    When an extension is compiled and linked into your application as a
+    static plugin, Qt Script will look for the optional \c{__init__.js}
+    script in a resource, prefixed by \c{:/qtscriptextension}. For example,
+    if the extension key is "foo.bar", Qt Script will evaluate the contents
+    of the file \c{:/qtscriptextension/foo/bar/__init__.js}, if it
+    exists. Note that if the resource is built into the plugin, you may
+    need to use the Q_INIT_RESOURCE() macro to initialize the resource
+    before importing the extension.
+*/

@@ -1,0 +1,511 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the Qt WebKit module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:BSD$
+** You may use this file under the terms of the BSD license as follows:
+**
+** "Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions are
+** met:
+**   * Redistributions of source code must retain the above copyright
+**     notice, this list of conditions and the following disclaimer.
+**   * Redistributions in binary form must reproduce the above copyright
+**     notice, this list of conditions and the following disclaimer in
+**     the documentation and/or other materials provided with the
+**     distribution.
+**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
+**     the names of its contributors may be used to endorse or promote
+**     products derived from this software without specific prior written
+**     permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+
+\page qtwebkit-guide-cache.html
+\title QtWebKit Guide - Client Storage
+\chapter Client Storage
+
+This section of the \l{QtWebKit Guide} serves as an introduction to the
+\l{HTML5 Web Storage} features of QtWebKit.
+
+Traditional mobile web development centered around the limitations of client
+handsets, which had very little storage for applications. As handsets become
+more powerful, however, this assumption is no longer valid. HTML5's newly
+introduced \l{HTML5 Web Storage}{Web Storage} features expand application
+storage on the client.
+
+HTML 5 standardizes access to an application's local data via \c{LocalStorage}
+and \c{SessionStorage} APIs. These APIs boost the amount of client storage
+available to web applications. They also can effectively replace cookies as a
+means to maintain application state and track user preferences.
+
+Local storage persists indefinitely, while session storage lasts only for the
+duration of a window session. Local storage is available from any page or window
+from the same site, while session storage is local to each window. Both local
+and session storage rely on simple key/value pairs, with keys and values both
+stored as strings.
+
+Local and session storage are not the only client storage available. HTML 5
+WebSQL serves as a more full-featured, client-side database. WebSQL brings
+SQLite-based structured database functionality, typically deployed on servers,
+to client browser applications. WebSQL is appropriate for data-intensive
+applications requiring complex queries rather than simple key/value access.
+WebSQL database transaction calls help avoid interfaces from locking up,
+facilitate rollback and error handling, and protect against SQL injection.
+Database versioning allows you to manage schema changes incrementally.
+
+
+\section1 Simple Data Storage
+
+The \c{localStorage} and \c{sessionStorage} APIs offer applications up to 5MB of
+data storage. They both share the same simple key/value interface, but have
+different namespaces and also differ in the extent to which data is available.
+Local storage persists indefinitely, while session storage only lasts for the
+duration of a window session. Local storage is available from any page or window
+from the same site, while session storage is local to each window.
+
+The following examples demonstrate the API interface. While these use
+\c{localStorage} as an example, the same set of API calls work for
+\c{sessionStorage}, which is also available within the \c{window} object.
+
+The following performs an initial check for support of browser-based
+storage and assigns the database to a variable:
+
+\code
+if (window.localStorage) {
+    var db = window.localStorage;
+    // storage functionality here
+}
+else {
+    // store data remotely?
+}
+\endcode
+
+The \c{getItem()} method retrieves the value of a database field named
+\c{key}:
+
+\code
+var value = db.getItem("key");
+\endcode
+
+Note that both keys and values are represented as strings. If you specify any
+other type of data, it is converted silently to a string representation. (See
+\l{Storing Non-String Data} for ways around this limitation.) If \c{getItem()}
+returns \c{null} rather than a string value, it means the specified key does not
+exist.
+
+The \c{setItem()} method establishes a new value. When adding data, it is a good
+idea to check to make sure you haven't exceeded the allotted storage space:
+
+\code
+try {
+    db.setItem("key", "string");
+}
+catch(err) {
+    if (err.QUOTA_EXCEEDED_ERR) {
+        // storage space is exceeded
+    }
+}
+\endcode
+
+The \c{removeItem()} method deletes database fields:
+
+\code
+db.removeItem("key");
+\endcode
+
+The \c{clear()} method deletes all key/value pairs within the database, either
+for an entire site in the case of \c{localStorage}, or for an individual window
+session in the case of \c{sessionStorage}:
+
+\code
+db.clear();
+\endcode
+
+Databases can be accessed as arrays using index notation, useful in cases where
+you may not know all the field names. The \c{length} property returns the number
+of fields in the database, and the \c{key()} method returns the name of the key
+corresponding to a given index. The following reflects the contents of a
+database in a JavaScript object:
+
+\code
+var obj = {};
+for ( var i = 0, l = db.length ; i < l ; i++ ) {
+    obj[ db.key(i) ] = db.getItem( db.key(i) );
+}
+\endcode
+
+Since keys correspond to array indexes, you should not add or remove keys during
+any operation that iterates over the full set of key/value pairs. Newly
+introduced keys are introduced randomly into the array's sequence.
+
+The following displays simple storage functionality. The application prompts for
+a login and password if they are unavailable. This locally stored data is
+available the next time users open the browser. However, the contents of the
+credit card field is stored only for the duration of the browing session.
+
+\l{ex_storage}{\inlineimage webkit-guide/scr_storage.png
+}
+
+\l{storage_css}{(CSS)}
+\l{storage_js}{(JavaScript)}
+
+
+    \section2 Storing Non-String Data
+
+    Since local and session storage APIs only support string values, you need to
+    be careful not to allow errors that result from passive conversions from
+    other data types. The following sample shows how such an error might come
+    about:
+
+    \code
+    var db = window.localStorage;
+    var saveCardInfo;
+        // user expresses preference NOT to save credit card info:
+    saveCardInfo = false;
+        // BUG happens here...
+    db.setItem("save_card_info", saveCardInfo);
+        // variable is now a string, not a boolean:
+    saveCardInfo = db.getItem("save_card_info");
+        // both "true" and "false" strings evaluate as true...
+    if ( saveCardInfo ) {
+        // ...so this code always executes...
+    }
+    else {
+        // ...and this code never executes.
+    }
+    \endcode
+
+    The user's preference to retain credit card information is expressed within
+    the application as a \c{true} or \c{false} boolean value. When each value is
+    passed to storage, however, it is passively converted to a string. When
+    reassigned to a JavaScript variable, it no longer serves as a valid boolean
+    test. The application falsely assumes users want to save credit card
+    information, regardless of their expressed preference.
+
+    The following sample fixes the problem. Instead of using \c{true} and
+    \c{false} boolean values, it converts \c{1} and \c{0} strings to numbers:
+
+    \code
+    var db = window.localStorage;
+    var saveCardInfo = 0;
+    db.setItem("save_card_info", saveCardInfo);
+    // multiplying forces numeric output:
+    saveCardInfo = db.getItem("save_card_info") * 1;
+    \endcode
+
+    For a more reliable alternative, store values as JSON strings and rely on
+    automatic type conversion when subsequently parsing them. The following
+    sample shows how parsing JSON preserves both boolean and numeric data:
+
+    \code
+    var saveCardInfo = true;                    // boolean
+    var shipMethod = 2;                        // number
+    var db = window.localStorage;
+
+    db.setItem("save_card_info", JSON.stringify(saveCardInfo));
+    db.setItem("ship_method", JSON.stringify(shipMethod));
+
+    saveCardInfo = JSON.parse(db.getItem("save_card_info"));    // boolean
+    shipMethod = JSON.parse(db.getItem("ship_method"));        // number
+    \endcode
+
+    Note that this simple approach may cause problems of its own. For example,
+    perhaps the words \c{true} and \c{false} really should be represented
+    as strings. Encapsulating data within objects accounts for such variability:
+
+    \code
+    var db = window.localStorage;
+    var obj = {
+        bool    : true,
+        str        : "true",
+        num        : 1
+    };
+    db.setItem("appState", JSON.stringify(obj));    // to database...
+    // "appState" is "{'bool':true,'num':1,'str':'true'}"
+    obj = JSON.parse(db.getItem("appState"));    // ...and back
+    // obj is same as initially defined.
+    \endcode
+
+    The ability to save objects as JSON strings means that you can save an
+    application's state within a single database field. For example, you might
+    use the following approach to save the entire contents of a shopping cart in
+    a single field for later use:
+
+    \code
+    var db = window.localStorage;
+    var cart = { items: [] };
+
+    cart.message = "From your loving uncle";
+
+    cart.items.push({
+        description    : "Floor to Ceiling Shoe Rack",
+        id        : 203174676,
+        price    : 99.95,
+        quantity    : 1,
+        weight    : 20,
+    });
+
+    cart.items.push({
+        description    : "Automatic Laser Toy for Cats",
+        id        : 203345371,
+        price    : 19.95,
+        quantity    : 2,
+        weight    : 0.5,
+    });
+
+    // save all cumulative items:
+    db.setItem("cart", JSON.stringify(cart));
+
+    // extract items from storage:
+    cart = JSON.parse(db.getItem("cart"));
+    \endcode
+
+    JSON allows you to store data types, but functions are ignored. That makes
+    it more difficult to preserve objects representing fully functional
+    applications.
+
+    \section2 Storage Events
+
+    The \c{storage} event allows applications to respond indirectly to modified
+    data resulting from calls to \c{setItem()}, \c{removeItem()}, or
+    \c{clear()}. This may be useful in providing users with visual feedback
+    notifying them of data that is modified locally, perhaps rather than being
+    sent to a remote server:
+
+    \code
+    window.addEventListener("storage", function(event){
+        var icon = document.querySelector("#indicator");
+        if (event.storageArea.length) {
+            icon.className = "writing";
+        }
+        else {
+            icon.className = "empty";
+        }
+    }, false);
+    \endcode
+
+    The \c{storage} event's \c{storageArea} attribute returns the
+    \c{localStorage} or \c{sessionStorage} object being modified. The \c{key} is
+    the name of the field being modified, and \c{oldValue} and \c{newValue} are
+    its values before and after the event. The \c{url} is the page that called
+    the method triggering the change.
+
+
+\section1 WebSQL Databases
+
+While common local- or session-based databases are capable of storing complex
+data structures, QtWebKit-based browsers can also rely upon the WebSQL standard,
+which brings SQLite-based structured database functionality, typically deployed
+on servers, to client browser applications. Based on SQLite version 3.6.19,
+WebSQL is appropriate for data-intensive applications requring complex queries
+rather than simple key/value access.
+
+The following test confirms support for WebSQL:
+
+\code
+if (!!window.openDatabase) {
+    // supports WebSQL
+}
+\endcode
+
+Calls to databases made via the WebSQL API are made asynchronously via
+transactions to avoid the user interface from locking up, as database
+interaction may occur from several windows at a time.
+
+The three core API methods are:
+
+\list
+\o \c{openDatabase()}
+\o \c{transaction()}
+\o \c{executeSql()}
+\endlist
+
+    \section2 Creating and Opening a New Database
+
+    To create and open a database, use \c{openDatabase()}on the Window object,
+    for example:
+
+    \code
+    var db = openDatabase('mydb', '1.0', 'my first database', 2*1024*1024);
+    var db = openDatabase('notes', '', 'The Example Notes App!', 1048576);
+    \endcode
+
+    The four required arguments are the database name, version, display name,
+    and estimated size in bytes. You can supply a function as an optional fifth
+    argument to serve as a callback when a database is created. It may be used
+    to call the \c{changeversion()} method, in which case the callback is
+    invoked with an empty string for the database version.
+
+    The second example above specifies an empty string for the version. In this
+    case, the database opens no matter what the database version is. (An
+    \c{openDatabase()} call specifying the wrong version for an existing
+    database throws an \c{INVALID_STATE_ERR} exception.) You can then query the
+    version by examining the database object's version property, for example:
+
+    \code
+    var version = db.version;
+    \endcode
+
+    Note that you don't need to close a client-side Web SQL database when
+    you're done working with it.
+
+    \section2 Transaction Calls and ExecuteSQL Method
+
+    Performing database transactions is superior to running SQL statements
+    directly because transactions are not committed if they fail and you can
+    undo them if needed. Transactions also allow you to handle errors using a
+    callback. To implement a transaction, specify a callback function such as
+    the following:
+
+    \code
+    db.transaction(function (tx) {
+      // SQL details on the tx object go here
+    }
+    \endcode
+
+    The \c{transaction()} method takes one to three arguments:
+
+    \list
+    \o a required transaction callback, in which \c{executeSQL()} calls
+    belong
+    \o an optional transaction error object
+    \o an optional success callback.
+    \endlist
+
+    Use the \c{executeSQL()} method to specify SQL statements for read and write
+    operations. The method protects against SQL injection and provides a
+    callback method to process the results of any SQL queries you specify. The
+    \c{executeSQL()} method takes from one to four arguments:
+
+    \list
+    \o a required SQL statement
+    \o an optional object array of arguments
+    \o an optional SQL statement callback
+    \o an optional SQL statement error callback
+    \endlist
+
+    The example below creates the database if it doesn't exist, adds a
+    two-column table to the database, and adds a row of data to the table:
+
+    \code
+    var db = openDatabase('mydb', '1.0', 'my first database', 2 * 1024 * 1024);
+    db.transaction(function (tx) {
+        tx.executeSql('CREATE TABLE IF NOT EXISTS foo (id unique, text)');
+        tx.executeSql('INSERT INTO foo (id, text) VALUES (1, "synergies")');
+    });
+    \endcode
+
+    To capture data from the user or an external source, use \c{?} placeholders
+    to map that data into the SQL query. This ensures the data doesn't
+    compromise database security, for example from SQL injection:
+
+    \code
+    tx.executeSql('INSERT INTO foo (id, text) VALUES (?, ?)', [id, value]);
+    \endcode
+
+    \c{id} and \c{value} are external variables, and \c{executeSql} maps
+    the items in the array to the \c{?}s.
+
+    To select values from the table, use a callback to capture the results:
+
+    \code
+    tx.executeSql('SELECT * FROM foo', [], function(tx, results) {
+        for (var i = 0 , len = results.rows.length; i < len; i++) {
+            // do something with results.rows.item(i).text
+        }
+    });
+    \endcode
+
+    No fields are mapped in the above query, but to use the third argument you
+    need to pass in an empty array as the second argument.
+
+    The SQL statement callback for \c{executeSQL()} is called with the
+    \c{transaction} object and a SQL statement \c{result} object. The \c{result}
+    gives access to the ID of the last inserted row, the number of rows
+    affected, and an indexed list representing the rows returned, in the order
+    returned.
+
+    The \c{result} object contains an array-like \c{rows} object. It has a
+    length, but to access individual rows you need to use
+    \c{results.rows.item(i)}, where \c{i} is the index of the row. This returns
+    an object representation of each row. For example, if your database has a
+    \c{name} and an \c{age} field, the \c{row} contains a \c{name} and an
+    \c{age} property. The value of the \c{age} field can be accessed using
+    \c{results.rows.item(i).age}.
+
+    \section2 Changing Database Versions
+
+    Each database has one version at a time and multiple versions cannot exist
+    at one time. Versions allow you to manage schema changes incrementally.
+
+    You can change the version of a client-side Web SQL database using the
+    \c{changeversion()} method:
+
+    \code
+    if (db.version == "1.0") {
+        try {
+            // comment out for crash recovery.
+            db.changeVersion("1.0", "2.0", cv_1_0_2_0, oops_1_0_2_0, success_1_0_2_0);
+        } catch(e) {
+            alert('changeversion 1.0 -> 2.0 failed');
+            alert('DB Version: '+db.version);
+        }
+    }
+    \endcode
+
+    \c{changeversion()} takes the following arguments: required old and new
+    version numbers, optional SQL transaction callback, optional SQL transaction
+    error callback, and optional success callback.
+
+    \section2 Errors
+
+    Asynchronous API errors are reported using callbacks that have a
+    \c{SQLError} object as one of their arguments. \c{SQLError} contains a code
+    from the table below and a localized message string.
+
+    Error codes are:
+
+    \list
+    \o 0 \c{UNKNOWN_ERROR} Transaction failed for reasons unrelated to the DB
+    \o 1 \c{DATABASE_ERROR} Statement failed for DB reasons not covered by other
+    code
+    \o 2 \c{VERSION_ERROR} DB version doesn't match expected version
+    \o 3 \c{TOO_LARGE_ERROR} Data returned from DB was too large. Try the
+    \c{SQL LIMIT} modifier.
+    \o 4 \c{QUOTA_ERROR} Insufficient remaining storage
+    \o 5 \c{SYNTAX_ERROR} Syntax error, argument mismatch, or unallowed
+    statement
+    \o 6 \c{CONSTRAINT_ERROR} An \c{INSERT}, \c{UPDATE}, or \c{REPLACE}
+    statement failed due to a constraint error
+    \o 7 \c{TIMEOUT_ERROR} Timeout waiting for transaction lock
+    \endlist
+
+    \bold{See Also:}
+    \l{HTML5 Doctor: Introducing Web SQL Databases}
+
+\list
+\o \l{QtWebKit Guide} -back to the main page
+\endlist
+*/
+
+*/

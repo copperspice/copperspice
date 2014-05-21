@@ -1,0 +1,15 @@
+digraph Redefine {
+  mindist = 2.0
+  1 -> 2 [label="group"]
+  1 -> 2 [label="complexType"]
+  1 -> 2 [label="annotation"]
+  1 -> 2 [label="simpleType"]
+  1 -> 2 [label="attributeGroup"]
+  2 -> 2 [label="group"]
+  2 -> 2 [label="complexType"]
+  2 -> 2 [label="annotation"]
+  2 -> 2 [label="simpleType"]
+  2 -> 2 [label="attributeGroup"]
+  1 [shape=doublecircle, style=filled, color=blue]
+  2 [shape=doublecircle, style=filled, color=green]
+}

@@ -1,0 +1,61 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the documentation of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:FDL$
+** GNU Free Documentation License
+** Alternatively, this file may be used under the terms of the GNU Free
+** Documentation License version 1.3 as published by the Free Software
+** Foundation and appearing in the file included in the packaging of
+** this file.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms
+** and conditions contained in a signed written agreement between you
+** and Nokia.
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+    \group qt-embedded
+    \title Qt for Embedded Platforms
+    \brief Documents related to Qt for Embedded Platforms.
+    \ingroup platform-specific
+
+    Qt is available for embedded platforms and devices as well as for a number
+    of desktop platforms. The features provided for each platform depend on the
+    capabilities and architecture of the operating system.
+
+    \image qt-embedded-architecture.png
+
+    Currently, three embedded platforms are supported by Qt:
+
+    \table 90%
+    \header \o Embedded Linux \o Windows CE \o Symbian platform
+    \row
+    \o \l{Qt for Embedded Linux} is designed to be used on Linux devices
+    without X11 or existing graphical environments. This flavor of
+    Qt includes a framework for creating both applications and an
+    environment for them. As a result, it includes features for
+    window management, inter-process communication and facilities
+    for handling input and display devices.
+    \o \l{Qt for Windows CE} is used to create applications running in
+    existing Windows CE and Windows Mobile environments.
+    Applications use the appropriate style for the embedded
+    environment and use native features, such as menus, to conform
+    to the native style guidelines.
+    \o \l{Qt for the Symbian platform} is used to create applications running
+    in existing Symbian platform environments. Applications use the appropriate
+    style for the embedded environment and use native features, such as menus,
+    to conform to the native style guidelines.
+    \endtable
+*/

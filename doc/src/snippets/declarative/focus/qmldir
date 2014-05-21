@@ -1,0 +1,4 @@
+MyWidget 1.0 mywidget.qml
+MyFocusScopeWidget 1.0 myfocusscopewidget.qml
+MyClickableWidget 1.0 myclickablewidget.qml
+
