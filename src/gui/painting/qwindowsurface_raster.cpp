@@ -87,7 +87,7 @@ QRasterWindowSurface::QRasterWindowSurface(QWidget *window, bool setDefaultSurfa
    d_ptr->gc = XCreateGC(X11->display, window->handle(), 0, 0);
 #ifndef QT_NO_XRENDER
    d_ptr->translucentBackground = X11->use_xrender
-                                  && window->x11Info().depth() == 32;
+				  && window->x11Info().depth() == 32;
 #endif
 #ifndef QT_NO_MITSHM
    d_ptr->needsSync = false;
@@ -142,7 +142,7 @@ void QRasterWindowSurface::beginPaint(const QRegion &rgn)
 
 #if defined(Q_OS_WIN)
       if (d_ptr->image->image.format() != QImage::Format_ARGB32_Premultiplied) {
-         prepareBuffer(QImage::Format_ARGB32_Premultiplied, window());
+	 prepareBuffer(QImage::Format_ARGB32_Premultiplied, window());
       }
 #endif
 
@@ -151,7 +151,7 @@ void QRasterWindowSurface::beginPaint(const QRegion &rgn)
       const QVector<QRect> rects = rgn.rects();
       const QColor blank = Qt::transparent;
       for (QVector<QRect>::const_iterator it = rects.begin(); it != rects.end(); ++it) {
-         p.fillRect(*it, blank);
+	 p.fillRect(*it, blank);
       }
    }
 #else
@@ -173,8 +173,8 @@ void QRasterWindowSurface::flush(QWidget *widget, const QRegion &rgn, const QPoi
    QRect br = rgn.boundingRect();
 
    if (!qt_widget_private(window())->isOpaque
-         && window()->testAttribute(Qt::WA_TranslucentBackground)
-         && (qt_widget_private(window())->data.window_flags & Qt::FramelessWindowHint)) {
+	 && window()->testAttribute(Qt::WA_TranslucentBackground)
+	 && (qt_widget_private(window())->data.window_flags & Qt::FramelessWindowHint)) {
       QRect r = window()->frameGeometry();
       QPoint frameOffset = qt_widget_private(window())->frameStrut().topLeft();
       QRect dirtyRect = br.translated(offset + frameOffset);
@@ -184,8 +184,8 @@ void QRasterWindowSurface::flush(QWidget *widget, const QRegion &rgn, const QPoi
       POINT ptSrc = {0, 0};
       BLENDFUNCTION blend = {AC_SRC_OVER, 0, (BYTE)(255.0 * window()->windowOpacity()), Q_AC_SRC_ALPHA};
       RECT dirty = {dirtyRect.x(), dirtyRect.y(),
-                    dirtyRect.x() + dirtyRect.width(), dirtyRect.y() + dirtyRect.height()
-                   };
+		    dirtyRect.x() + dirtyRect.width(), dirtyRect.y() + dirtyRect.height()
+		   };
       Q_UPDATELAYEREDWINDOWINFO info = {sizeof(info), NULL, &ptDst, &size, d->image->hdc, &ptSrc, 0, &blend, Q_ULW_ALPHA, &dirty};
       ptrUpdateLayeredWindowIndirect(window()->internalWinId(), &info);
    } else
@@ -197,7 +197,7 @@ void QRasterWindowSurface::flush(QWidget *widget, const QRegion &rgn, const QPoi
 
       QRect wbr = br.translated(-wOffset);
       BitBlt(widget_dc, wbr.x(), wbr.y(), wbr.width(), wbr.height(),
-             d->image->hdc, br.x() + offset.x(), br.y() + offset.y(), SRCCOPY);
+	     d->image->hdc, br.x() + offset.x(), br.y() + offset.y(), SRCCOPY);
       widget->releaseDC(widget_dc);
    }
 
@@ -207,7 +207,7 @@ void QRasterWindowSurface::flush(QWidget *widget, const QRegion &rgn, const QPoi
       SelectObject(qt_win_display_dc(), GetStockObject(BLACK_BRUSH));
       Rectangle(qt_win_display_dc(), 0, 0, d->image->width() + 2, d->image->height() + 2);
       BitBlt(qt_win_display_dc(), 1, 1, d->image->width(), d->image->height(),
-             d->image->hdc, 0, 0, SRCCOPY);
+	     d->image->hdc, 0, 0, SRCCOPY);
    }
 #endif
 
@@ -243,31 +243,31 @@ void QRasterWindowSurface::flush(QWidget *widget, const QRegion &rgn, const QPoi
 #ifndef QT_NO_MITSHM
    if (d_ptr->image->xshmpm) {
       XCopyArea(X11->display, d_ptr->image->xshmpm, widget->handle(), d_ptr->gc,
-                br.x(), br.y(), br.width(), br.height(), wpos.x(), wpos.y());
+		br.x(), br.y(), br.width(), br.height(), wpos.x(), wpos.y());
       d_ptr->needsSync = true;
    } else if (d_ptr->image->xshmimg) {
       XShmPutImage(X11->display, widget->handle(), d_ptr->gc, d_ptr->image->xshmimg,
-                   br.x(), br.y(), wpos.x(), wpos.y(), br.width(), br.height(), False);
+		   br.x(), br.y(), wpos.x(), wpos.y(), br.width(), br.height(), False);
       d_ptr->needsSync = true;
    } else
 #endif
    {
       int depth = widget->x11Info().depth();
       const QImage &src = d->image->image;
-      if (src.format() != QImage::Format_RGB32 || depth < 24 || X11->bppForDepth.value(depth) != 32) {
-         Q_ASSERT(src.depth() >= 16);
-         const QImage sub_src(src.scanLine(br.y()) + br.x() * (uint(src.depth()) / 8),
-                              br.width(), br.height(), src.bytesPerLine(), src.format());
-         QX11PixmapData *data = new QX11PixmapData(QPixmapData::PixmapType);
-         data->xinfo = widget->x11Info();
-         data->fromImage(sub_src, Qt::NoOpaqueDetection);
-         QPixmap pm = QPixmap(data);
-         XCopyArea(X11->display, pm.handle(), widget->handle(), d_ptr->gc, 0 , 0 , br.width(), br.height(), wpos.x(), wpos.y());
+      if (src.format() != QImage::Format_RGB32 || (depth != 24 && depth != 32) || X11->bppForDepth.value(depth) != 32) {
+	 Q_ASSERT(src.depth() >= 16);
+	 const QImage sub_src(src.scanLine(br.y()) + br.x() * (uint(src.depth()) / 8),
+			      br.width(), br.height(), src.bytesPerLine(), src.format());
+	 QX11PixmapData *data = new QX11PixmapData(QPixmapData::PixmapType);
+	 data->xinfo = widget->x11Info();
+	 data->fromImage(sub_src, Qt::NoOpaqueDetection);
+	 QPixmap pm = QPixmap(data);
+	 XCopyArea(X11->display, pm.handle(), widget->handle(), d_ptr->gc, 0 , 0 , br.width(), br.height(), wpos.x(), wpos.y());
       } else {
-         // qpaintengine_x11.cpp
-         extern void qt_x11_drawImage(const QRect & rect, const QPoint & pos, const QImage & image, Drawable hd, GC gc,
-                                      Display * dpy, Visual * visual, int depth);
-         qt_x11_drawImage(br, wpos, src, widget->handle(), d_ptr->gc, X11->display, (Visual *)widget->x11Info().visual(), depth);
+	 // qpaintengine_x11.cpp
+	 extern void qt_x11_drawImage(const QRect & rect, const QPoint & pos, const QImage & image, Drawable hd, GC gc,
+				      Display * dpy, Visual * visual, int depth);
+	 qt_x11_drawImage(br, wpos, src, widget->handle(), d_ptr->gc, X11->display, (Visual *)widget->x11Info().visual(), depth);
       }
    }
 
@@ -307,10 +307,10 @@ void QRasterWindowSurface::setGeometry(const QRect &rect)
 #else
       if (!qt_widget_private(window())->isOpaque)
 #endif
-         prepareBuffer(QImage::Format_ARGB32_Premultiplied, window());
+	 prepareBuffer(QImage::Format_ARGB32_Premultiplied, window());
       else
 #endif
-         prepareBuffer(QNativeImage::systemFormat(), window());
+	 prepareBuffer(QNativeImage::systemFormat(), window());
    }
    d->inSetGeometry = false;
 
@@ -321,13 +321,13 @@ void QRasterWindowSurface::setGeometry(const QRect &rect)
       QList<QToolBar *> toolbarList = mLayout->qtoolbarsInUnifiedToolbarList;
 
       for (int i = 0; i < toolbarList.size(); ++i) {
-         QToolBar *toolbar = toolbarList.at(i);
-         if (mLayout->toolBarArea(toolbar) == Qt::TopToolBarArea) {
-            QWidget *tbWidget = (QWidget *) toolbar;
-            if (tbWidget->d_func()->unifiedSurface) {
-               tbWidget->d_func()->unifiedSurface->setGeometry(rect);
-            }
-         }
+	 QToolBar *toolbar = toolbarList.at(i);
+	 if (mLayout->toolBarArea(toolbar) == Qt::TopToolBarArea) {
+	    QWidget *tbWidget = (QWidget *) toolbar;
+	    if (tbWidget->d_func()->unifiedSurface) {
+	       tbWidget->d_func()->unifiedSurface->setGeometry(rect);
+	    }
+	 }
       }
    }
 #endif
@@ -348,7 +348,7 @@ bool QRasterWindowSurface::scroll(const QRegion &area, int dx, int dy)
 
    QRect rect = area.boundingRect();
    BitBlt(d->image->hdc, rect.x() + dx, rect.y() + dy, rect.width(), rect.height(),
-          d->image->hdc, rect.x(), rect.y(), SRCCOPY);
+	  d->image->hdc, rect.x(), rect.y(), SRCCOPY);
 
    return true;
 #else
@@ -415,22 +415,22 @@ void QRasterWindowSurface::prepareBuffer(QImage::Format format, QWidget *widget)
       // Copy the static content of the old image into the new one.
       int numRectsLeft = rects.size();
       do {
-         const int bytesOffset = srcRect->x() * bytesPerPixel;
-         const int dy = srcRect->y();
+	 const int bytesOffset = srcRect->x() * bytesPerPixel;
+	 const int dy = srcRect->y();
 
-         // Adjust src and dst to point to the right offset.
-         const uchar *s = src + dy * srcBytesPerLine + bytesOffset;
-         uchar *d = dst + dy * dstBytesPerLine + bytesOffset;
-         const int numBytes = srcRect->width() * bytesPerPixel;
+	 // Adjust src and dst to point to the right offset.
+	 const uchar *s = src + dy * srcBytesPerLine + bytesOffset;
+	 uchar *d = dst + dy * dstBytesPerLine + bytesOffset;
+	 const int numBytes = srcRect->width() * bytesPerPixel;
 
-         int numScanLinesLeft = srcRect->height();
-         do {
-            ::memcpy(d, s, numBytes);
-            d += dstBytesPerLine;
-            s += srcBytesPerLine;
-         } while (--numScanLinesLeft);
+	 int numScanLinesLeft = srcRect->height();
+	 do {
+	    ::memcpy(d, s, numBytes);
+	    d += dstBytesPerLine;
+	    s += srcBytesPerLine;
+	 } while (--numScanLinesLeft);
 
-         ++srcRect;
+	 ++srcRect;
       } while (--numRectsLeft);
    }
 
