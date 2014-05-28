@@ -88,10 +88,9 @@
 #include "qgesture.h"
 #include "qlibrary.h"
 #include "qdatetime.h"
-
 #include "qgesturemanager_p.h"
 
-#ifdef QT_MAC_USE_COCOA
+#ifdef Q_OS_MAC
 #include <qt_cocoa_helpers_mac_p.h>
 #endif
 
@@ -142,13 +141,13 @@ QApplicationPrivate::QApplicationPrivate(int &argc, char **argv, QApplication::T
     gestureWidget = 0;
 #endif // QT_NO_GESTURES
 
-#if defined(Q_WS_X11) || defined(Q_WS_WIN)
+#if defined(Q_WS_X11) || defined(Q_OS_WIN)
     move_cursor = 0;
     copy_cursor = 0;
     link_cursor = 0;
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     ignore_cursor = 0;
 #endif
 
@@ -745,13 +744,13 @@ QApplication::~QApplication()
     qt_clipboard = 0;
 #endif
 
-#if defined(Q_WS_X11) || defined(Q_WS_WIN)
+#if defined(Q_WS_X11) || defined(Q_OS_WIN)
     delete d->move_cursor; d->move_cursor = 0;
     delete d->copy_cursor; d->copy_cursor = 0;
     delete d->link_cursor; d->link_cursor = 0;
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     delete d->ignore_cursor; d->ignore_cursor = 0;
 #endif
 
@@ -1561,7 +1560,7 @@ QFont QApplication::font(const QWidget *widget)
 {
     FontHash *hash = app_fonts();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // short circuit for small and mini controls
     if (widget->testAttribute(Qt::WA_MacSmallSize)) {
         return hash->value("QSmallFont");
@@ -1716,7 +1715,7 @@ void QApplication::setWindowIcon(const QIcon &icon)
     *QApplicationPrivate::app_icon = icon;
 
     if (QApplicationPrivate::is_app_running && !QApplicationPrivate::is_app_closing) {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         void qt_mac_set_app_icon(const QPixmap &); //qapplication_mac.cpp
         QSize size = QApplicationPrivate::app_icon->actualSize(QSize(128, 128));
         qt_mac_set_app_icon(QApplicationPrivate::app_icon->pixmap(size));
@@ -1949,7 +1948,7 @@ void QApplication::closeAllWindows()
 
 void QApplication::aboutCs()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
    QMessageBox::aboutCs(0);
 #else
    QMessageBox::aboutCs(activeWindow());
@@ -1958,7 +1957,7 @@ void QApplication::aboutCs()
 
 void QApplication::aboutQt()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
    QMessageBox::aboutCs(0);
 #else
    QMessageBox::aboutCs(activeWindow());
@@ -1974,7 +1973,7 @@ static bool qt_detectRTLLanguage()
                          " languages or to 'RTL' in right-to-left languages (such as Hebrew"
                          " and Arabic) to get proper widget layout.") == QLatin1String("RTL"));
 }
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
 static const char *application_menu_strings[] = {
     QT_TRANSLATE_NOOP("MAC_APPLICATION_MENU","Services"),
     QT_TRANSLATE_NOOP("MAC_APPLICATION_MENU","Hide %1"),
@@ -2030,20 +2029,23 @@ bool QApplication::event(QEvent *e)
         setLayoutDirection(qt_detectRTLLanguage()?Qt::RightToLeft:Qt::LeftToRight);
 #endif
 
-#if defined(QT_MAC_USE_COCOA)
+#ifdef Q_OS_MAC
         qt_mac_post_retranslateAppMenu();
 #endif
+
         QWidgetList list = topLevelWidgets();
         for (int i = 0; i < list.size(); ++i) {
             QWidget *w = list.at(i);
             if (!(w->windowType() == Qt::Desktop))
                 postEvent(w, new QEvent(QEvent::LanguageChange));
         }
+
 #ifndef Q_OS_WIN
     } else if (e->type() == QEvent::LocaleChange) {
         // on Windows the event propagation is taken care by the
         // WM_SETTINGCHANGE event handler.
         QWidgetList list = topLevelWidgets();
+
         for (int i = 0; i < list.size(); ++i) {
             QWidget *w = list.at(i);
             if (!(w->windowType() == Qt::Desktop)) {
@@ -2083,7 +2085,6 @@ bool QApplication::event(QEvent *e)
 }
 
 #if !defined(Q_WS_X11)
-
 // The doc and X implementation of this function is in qapplication_x11.cpp
 
 void QApplication::syncX()
@@ -2092,30 +2093,7 @@ void QApplication::syncX()
 }
 #endif
 
-/*!
-    \fn Qt::WindowsVersion QApplication::winVersion()
 
-    Use \l QSysInfo::WindowsVersion instead.
-*/
-
-/*!
-    \fn void QApplication::setActiveWindow(QWidget* active)
-
-    Sets the active window to the \a active widget in response to a system
-    event. The function is called from the platform specific event handlers.
-
-    \warning This function does \e not set the keyboard focus to the active
-    widget. Call QWidget::activateWindow() instead.
-
-    It sets the activeWindow() and focusWidget() attributes and sends proper
-    \l{QEvent::WindowActivate}{WindowActivate}/\l{QEvent::WindowDeactivate}
-    {WindowDeactivate} and \l{QEvent::FocusIn}{FocusIn}/\l{QEvent::FocusOut}
-    {FocusOut} events to all appropriate widgets. The window will then be
-    painted in active state (e.g. cursors in line edits will blink), and it
-    will have tool tips enabled.
-
-    \sa activeWindow(), QWidget::activateWindow()
-*/
 void QApplication::setActiveWindow(QWidget* act)
 {
     QWidget* window = act?act->window():0;
@@ -2146,9 +2124,10 @@ void QApplication::setActiveWindow(QWidget* act)
         }
     }
 
-#if !defined(Q_WS_MAC)
+#if !defined(Q_OS_MAC)
     QWidget *previousActiveWindow =  QApplicationPrivate::active_window;
 #endif
+
     QApplicationPrivate::active_window = window;
 
     if (QApplicationPrivate::active_window) {
@@ -2170,7 +2149,7 @@ void QApplication::setActiveWindow(QWidget* act)
     QEvent windowActivate(QEvent::WindowActivate);
     QEvent windowDeactivate(QEvent::WindowDeactivate);
 
-#if !defined(Q_WS_MAC)
+#if ! defined(Q_OS_MAC)
     if (!previousActiveWindow) {
         QEvent appActivate(QEvent::ApplicationActivate);
         sendSpontaneousEvent(qApp, &appActivate);
@@ -2183,7 +2162,7 @@ void QApplication::setActiveWindow(QWidget* act)
         sendSpontaneousEvent(w, &activationChange);
     }
 
-#ifdef QT_MAC_USE_COCOA
+#ifdef Q_OS_MAC
     // In case the user clicked on a child window, we need to
     // reestablish the stacking order of the window so
     // it pops in front of other child windows in cocoa:
@@ -2196,7 +2175,7 @@ void QApplication::setActiveWindow(QWidget* act)
         sendSpontaneousEvent(w, &activationChange);
     }
 
-#if !defined(Q_WS_MAC)
+#if ! defined(Q_OS_MAC)
     if (!QApplicationPrivate::active_window) {
         QEvent appDeactivate(QEvent::ApplicationDeactivate);
         sendSpontaneousEvent(qApp, &appDeactivate);
@@ -2346,8 +2325,10 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget* enter, QWidget* leave) {
     QEvent leaveEvent(QEvent::Leave);
     for (int i = 0; i < leaveList.size(); ++i) {
         w = leaveList.at(i);
+
         if (!QApplication::activeModalWidget() || QApplicationPrivate::tryModalHelper(w, 0)) {
-#if defined(Q_WS_WIN) || defined(Q_WS_X11) || defined(Q_WS_MAC)
+
+#if defined(Q_OS_WIN) || defined(Q_WS_X11) || defined(Q_OS_MAC)
             if (leaveAfterRelease == w)
                 leaveAfterRelease = 0;
 #endif
@@ -2378,6 +2359,7 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget* enter, QWidget* leave) {
     // Update cursor for alien/graphics widgets.
 
     const bool enterOnAlien = (enter && (isAlien(enter) || enter->testAttribute(Qt::WA_DontShowOnScreen)));
+
 #if defined(Q_WS_X11) || defined(Q_WS_QPA)
     //Whenever we leave an alien widget on X11, we need to reset its nativeParentWidget()'s cursor.
     // This is not required on Windows as the cursor is reset on every single mouse move.
@@ -2428,13 +2410,15 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget* enter, QWidget* leave) {
         } else
 #endif
         {
-#if defined(Q_WS_WIN)
+
+#if defined(Q_OS_WIN)
             qt_win_set_cursor(cursorWidget, true);
 #elif defined(Q_WS_X11)
             qt_x11_enforce_cursor(cursorWidget, true);
 #elif defined(Q_WS_QPA)
             qt_qpa_set_cursor(cursorWidget, true);
 #endif
+
         }
     }
 #endif
@@ -2468,7 +2452,7 @@ bool QApplicationPrivate::isBlockedByModal(QWidget *widget)
                     return false;
                 w = w->parentWidget();
             }
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
             if ((widget->testAttribute(Qt::WA_WState_Created) || widget->data->winid)
                 && (modalWidget->testAttribute(Qt::WA_WState_Created) || modalWidget->data->winid)
                 && IsChild(modalWidget->data->winid, widget->data->winid))
@@ -2594,17 +2578,21 @@ void QApplicationPrivate::leaveModal(QWidget *widget)
 bool QApplicationPrivate::tryModalHelper(QWidget *widget, QWidget **rettop)
 {
     QWidget *top = QApplication::activeModalWidget();
-    if (rettop)
+    if (rettop)  {
         *rettop = top;
+    }  
 
     // the active popup widget always gets the input event
-    if (QApplication::activePopupWidget())
+    if (QApplication::activePopupWidget()) {
         return true;
+    }
 
-#if defined(Q_WS_MAC) && defined(QT_MAC_USE_COCOA)
+#if defined(Q_OS_MAC)
     top = QApplicationPrivate::tryModalHelper_sys(top);
-    if (rettop)
+
+    if (rettop) {
         *rettop = top;
+    }
 #endif
 
     return !isBlockedByModal(widget->window());
@@ -2637,6 +2625,7 @@ QWidget *QApplicationPrivate::pickMouseReceiver(QWidget *candidate, const QPoint
     if (mouseGrabber && mouseGrabber != candidate) {
         receiver = mouseGrabber;
         pos = receiver->mapFromGlobal(globalPos);
+
 #ifdef ALIEN_DEBUG
         qDebug() << "  ** receiver adjusted to:" << receiver << "pos:" << pos;
 #endif
@@ -2736,7 +2725,7 @@ bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event,
     return result;
 }
 
-#if defined(Q_WS_WIN) || defined(Q_WS_X11) || defined(Q_WS_QWS) || defined(Q_WS_MAC) || defined(Q_WS_QPA)
+#if defined(Q_OS_WIN) || defined(Q_WS_X11) || defined(Q_WS_QWS) || defined(Q_OS_MAC) || defined(Q_WS_QPA)
 /*
     This function should only be called when the widget changes visibility, i.e.
     when the \a widget is shown, hidden or deleted. This function does nothing
@@ -2796,7 +2785,7 @@ void QApplicationPrivate::sendSyntheticEnterLeave(QWidget *widget)
     sendMouseEvent(widgetUnderCursor, &e, widgetUnderCursor, tlw, &qt_button_down, qt_last_mouse_receiver);
 #endif // QT_NO_CURSOR
 }
-#endif // Q_WS_WIN || Q_WS_X11 || Q_WS_MAC
+#endif // Q_OS_WIN || Q_WS_X11 || Q_OS_MAC
 
 /*!
     Returns the desktop widget (also called the root window).
@@ -3257,8 +3246,9 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
     if (QApplicationPrivate::is_app_closing)
         return true;
 
-    if (receiver == 0) {                        // serious error
-        qWarning("QApplication::notify: Unexpected null receiver");
+    if (receiver == 0) {                
+        // serious error
+        qWarning("QApplication::notify() Unexpected null receiver");
         return true;
     }
 
@@ -3281,11 +3271,13 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                 else
                     QApplicationPrivate::mouse_buttons &= ~me->button();
             }
+
 #if !defined(QT_NO_WHEELEVENT) || !defined(QT_NO_TABLETEVENT)
             else if (false
 #  ifndef QT_NO_WHEELEVENT
                      || e->type() == QEvent::Wheel
 #  endif
+
 #  ifndef QT_NO_TABLETEVENT
                      || e->type() == QEvent::TabletMove
                      || e->type() == QEvent::TabletPress
@@ -3295,7 +3287,8 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
             QInputEvent *ie = static_cast<QInputEvent*>(e);
             QApplicationPrivate::modifier_buttons = ie->modifiers();
         }
-#endif // !QT_NO_WHEELEVENT || !QT_NO_TABLETEVENT
+#endif
+
     }
 
 #ifndef QT_NO_GESTURES
@@ -3357,8 +3350,10 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
     case QEvent::MouseButtonDblClick:
         d->toolTipFallAsleep.stop();
         // fall-through
+
     case QEvent::Leave:
         d->toolTipWakeUp.stop();
+
     default:
         break;
     }
@@ -3374,9 +3369,11 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
         {
             bool isWidget = receiver->isWidgetType();
             bool isGraphicsWidget = false;
+
 #ifndef QT_NO_GRAPHICSVIEW
             isGraphicsWidget = !isWidget && qobject_cast<QGraphicsWidget *>(receiver);
 #endif
+
             if (!isWidget && !isGraphicsWidget) {
                 res = d->notify_helper(receiver, e);
                 break;
@@ -3453,6 +3450,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
             QPoint relpos = mouse->pos();
 
             if (e->spontaneous()) {
+
 #ifndef QT_NO_IM
                 QInputContext *ic = w->inputContext();
                 if (ic
@@ -3463,8 +3461,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
 
                 if (e->type() == QEvent::MouseButtonPress) {
                     QApplicationPrivate::giveFocusAccordingToFocusPolicy(w,
-                                                                         Qt::ClickFocus,
-                                                                         Qt::MouseFocusReason);
+                              Qt::ClickFocus,Qt::MouseFocusReason);
                 }
 
                 // ### Qt 5 These dynamic tool tips should be an OPT-IN feature. Some platforms
@@ -3556,6 +3553,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
             d->hoverGlobalPos = mouse->globalPos();
         }
         break;
+
 #ifndef QT_NO_WHEELEVENT
     case QEvent::Wheel:
         {
@@ -3588,6 +3586,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
         }
         break;
 #endif
+
 #ifndef QT_NO_CONTEXTMENU
     case QEvent::ContextMenu:
         {
@@ -3613,6 +3612,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
         }
         break;
 #endif // QT_NO_CONTEXTMENU
+
 #ifndef QT_NO_TABLETEVENT
     case QEvent::TabletMove:
     case QEvent::TabletPress:
@@ -3692,7 +3692,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
             QWidget* w = static_cast<QWidget *>(receiver);
             QDragEnterEvent *dragEvent = static_cast<QDragEnterEvent *>(e);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
             // HIView has a slight difference in how it delivers events to children and parents
             // It will not give a leave to a child's parent when it enters a child.
             QWidget *currentTarget = QDragManager::self()->currentTarget();
@@ -3727,6 +3727,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
             }
         }
         break;
+
     case QEvent::DragMove:
     case QEvent::Drop:
     case QEvent::DragLeave: {
@@ -3741,7 +3742,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                 w = QDragManager::self()->currentTarget();
 
             if (!w) {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                 // HIView has a slight difference in how it delivers events to children and parents
                 // It will not give an enter to a child's parent when it leaves the child.
                 if (e->type() == QEvent::DragLeave)
@@ -3757,6 +3758,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
 #endif
                     break;
             }
+
             if (e->type() == QEvent::DragMove || e->type() == QEvent::Drop) {
                 QDropEvent *dragEvent = static_cast<QDropEvent *>(e);
                 QWidget *origReciver = static_cast<QWidget *>(receiver);
@@ -3767,6 +3769,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
             }
             res = d->notify_helper(w, e);
             if (e->type() != QEvent::DragMove
+
 #ifndef QT_NO_GRAPHICSVIEW
                 && !isProxyWidget
 #endif
@@ -3775,6 +3778,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
         }
         break;
 #endif
+
     case QEvent::TouchBegin:
     // Note: TouchUpdate and TouchEnd events are never propagated
     {
@@ -3829,6 +3833,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
         touchEvent->setAccepted(eventAccepted);
         break;
     }
+
     case QEvent::RequestSoftwareInputPanel:
     case QEvent::CloseSoftwareInputPanel:
 #ifndef QT_NO_IM
@@ -3925,7 +3930,8 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
         break;
     }
 #endif // QT_NO_GESTURES
-#ifdef QT_MAC_USE_COCOA
+
+#ifdef Q_OS_MAC
     case QEvent::Enter:
         if (receiver->isWidgetType()) {
             QWidget *w = static_cast<QWidget *>(receiver);
@@ -3934,6 +3940,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
         }
         res = d->notify_helper(receiver, e);
     break;
+
     case QEvent::Leave:
         if (receiver->isWidgetType()) {
             QWidget *w = static_cast<QWidget *>(receiver);
@@ -3943,6 +3950,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
         res = d->notify_helper(receiver, e);
     break;
 #endif
+
     default:
         res = d->notify_helper(receiver, e);
         break;
@@ -3984,303 +3992,11 @@ bool QApplicationPrivate::notify_helper(QObject *receiver, QEvent * e)
     return consumed;
 }
 
-
-/*!
-    \class QSessionManager
-    \brief The QSessionManager class provides access to the session manager.
-
-    A session manager in a desktop environment (in which Qt GUI applications
-    live) keeps track of a session, which is a group of running applications,
-    each of which has a particular state. The state of an application contains
-    (most notably) the documents the application has open and the position and
-    size of its windows.
-
-    The session manager is used to save the session, e.g., when the machine is
-    shut down, and to restore a session, e.g., when the machine is started up.
-    We recommend that you use QSettings to save an application's settings,
-    for example, window positions, recently used files, etc. When the
-    application is restarted by the session manager, you can restore the
-    settings.
-
-    QSessionManager provides an interface between the application and the
-    session manager so that the program can work well with the session manager.
-    In Qt, session management requests for action are handled by the two
-    virtual functions QApplication::commitData() and QApplication::saveState().
-    Both provide a reference to a session manager object as argument, to allow
-    the application to communicate with the session manager. The session
-    manager can only be accessed through these functions.
-
-    No user interaction is possible \e unless the application gets explicit
-    permission from the session manager. You ask for permission by calling
-    allowsInteraction() or, if it is really urgent, allowsErrorInteraction().
-    Qt does not enforce this, but the session manager may.
-
-    You can try to abort the shutdown process by calling cancel(). The default
-    commitData() function does this if some top-level window rejected its
-    closeEvent().
-
-    For sophisticated session managers provided on Unix/X11, QSessionManager
-    offers further possibilities to fine-tune an application's session
-    management behavior: setRestartCommand(), setDiscardCommand(),
-    setRestartHint(), setProperty(), requestPhase2(). See the respective
-    function descriptions for further details.
-
-    \sa QApplication, {Session Management}
-*/
-
-/*! \enum QSessionManager::RestartHint
-
-    This enum type defines the circumstances under which this application wants
-    to be restarted by the session manager. The current values are:
-
-    \value  RestartIfRunning    If the application is still running when the
-                                session is shut down, it wants to be restarted
-                                at the start of the next session.
-
-    \value  RestartAnyway       The application wants to be started at the
-                                start of the next session, no matter what.
-                                (This is useful for utilities that run just
-                                after startup and then quit.)
-
-    \value  RestartImmediately  The application wants to be started immediately
-                                whenever it is not running.
-
-    \value  RestartNever        The application does not want to be restarted
-                                automatically.
-
-    The default hint is \c RestartIfRunning.
-*/
-
-
-/*!
-    \fn QString QSessionManager::sessionId() const
-
-    Returns the identifier of the current session.
-
-    If the application has been restored from an earlier session, this
-    identifier is the same as it was in the earlier session.
-
-    \sa sessionKey(), QApplication::sessionId()
-*/
-
-/*!
-    \fn QString QSessionManager::sessionKey() const
-
-    Returns the session key in the current session.
-
-    If the application has been restored from an earlier session, this key is
-    the same as it was when the previous session ended.
-
-    The session key changes with every call of commitData() or saveState().
-
-    \sa sessionId(), QApplication::sessionKey()
-*/
-
-/*!
-    \fn void* QSessionManager::handle() const
-
-    \internal
-*/
-
-/*!
-    \fn bool QSessionManager::allowsInteraction()
-
-    Asks the session manager for permission to interact with the user. Returns
-    true if interaction is permitted; otherwise returns false.
-
-    The rationale behind this mechanism is to make it possible to synchronize
-    user interaction during a shutdown. Advanced session managers may ask all
-    applications simultaneously to commit their data, resulting in a much
-    faster shutdown.
-
-    When the interaction is completed we strongly recommend releasing the user
-    interaction semaphore with a call to release(). This way, other
-    applications may get the chance to interact with the user while your
-    application is still busy saving data. (The semaphore is implicitly
-    released when the application exits.)
-
-    If the user decides to cancel the shutdown process during the interaction
-    phase, you must tell the session manager that this has happened by calling
-    cancel().
-
-    Here's an example of how an application's QApplication::commitData() might
-    be implemented:
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication.cpp 8
-
-    If an error occurred within the application while saving its data, you may
-    want to try allowsErrorInteraction() instead.
-
-    \sa QApplication::commitData(), release(), cancel()
-*/
-
-
-/*!
-    \fn bool QSessionManager::allowsErrorInteraction()
-
-    Returns true if error interaction is permitted; otherwise returns false.
-
-    This is similar to allowsInteraction(), but also enables the application to
-    tell the user about any errors that occur. Session managers may give error
-    interaction requests higher priority, which means that it is more likely
-    that an error interaction is permitted. However, you are still not
-    guaranteed that the session manager will allow interaction.
-
-    \sa allowsInteraction(), release(), cancel()
-*/
-
-/*!
-    \fn void QSessionManager::release()
-
-    Releases the session manager's interaction semaphore after an interaction
-    phase.
-
-    \sa allowsInteraction(), allowsErrorInteraction()
-*/
-
-/*!
-    \fn void QSessionManager::cancel()
-
-    Tells the session manager to cancel the shutdown process.  Applications
-    should not call this function without asking the user first.
-
-    \sa allowsInteraction(), allowsErrorInteraction()
-*/
-
-/*!
-    \fn void QSessionManager::setRestartHint(RestartHint hint)
-
-    Sets the application's restart hint to \a hint. On application startup, the
-    hint is set to \c RestartIfRunning.
-
-    \note These flags are only hints, a session manager may or may not respect
-    them.
-
-    We recommend setting the restart hint in QApplication::saveState() because
-    most session managers perform a checkpoint shortly after an application's
-    startup.
-
-    \sa restartHint()
-*/
-
-/*!
-    \fn QSessionManager::RestartHint QSessionManager::restartHint() const
-
-    Returns the application's current restart hint. The default is
-    \c RestartIfRunning.
-
-    \sa setRestartHint()
-*/
-
-/*!
-    \fn void QSessionManager::setRestartCommand(const QStringList& command)
-
-    If the session manager is capable of restoring sessions it will execute
-    \a command in order to restore the application. The command defaults to
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication.cpp 9
-
-    The \c -session option is mandatory; otherwise QApplication cannot tell
-    whether it has been restored or what the current session identifier is.
-    See QApplication::isSessionRestored() and QApplication::sessionId() for
-    details.
-
-    If your application is very simple, it may be possible to store the entire
-    application state in additional command line options. This is usually a
-    very bad idea because command lines are often limited to a few hundred
-    bytes. Instead, use QSettings, temporary files, or a database for this
-    purpose. By marking the data with the unique sessionId(), you will be able
-    to restore the application in a future  session.
-
-    \sa restartCommand(), setDiscardCommand(), setRestartHint()
-*/
-
-/*!
-    \fn QStringList QSessionManager::restartCommand() const
-
-    Returns the currently set restart command.
-
-    To iterate over the list, you can use the \l foreach pseudo-keyword:
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication.cpp 10
-
-    \sa setRestartCommand(), restartHint()
-*/
-
-/*!
-    \fn void QSessionManager::setDiscardCommand(const QStringList& list)
-
-    Sets the discard command to the given \a list.
-
-    \sa discardCommand(), setRestartCommand()
-*/
-
-
-/*!
-    \fn QStringList QSessionManager::discardCommand() const
-
-    Returns the currently set discard command.
-
-    To iterate over the list, you can use the \l foreach pseudo-keyword:
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication.cpp 11
-
-    \sa setDiscardCommand(), restartCommand(), setRestartCommand()
-*/
-
-/*!
-    \fn void QSessionManager::setManagerProperty(const QString &name, const QString &value)
-    \overload
-
-    Low-level write access to the application's identification and state
-    records are kept in the session manager.
-
-    The property called \a name has its value set to the string \a value.
-*/
-
-/*!
-    \fn void QSessionManager::setManagerProperty(const QString& name,
-                                                 const QStringList& value)
-
-    Low-level write access to the application's identification and state record
-    are kept in the session manager.
-
-    The property called \a name has its value set to the string list \a value.
-*/
-
-/*!
-    \fn bool QSessionManager::isPhase2() const
-
-    Returns true if the session manager is currently performing a second
-    session management phase; otherwise returns false.
-
-    \sa requestPhase2()
-*/
-
-/*!
-    \fn void QSessionManager::requestPhase2()
-
-    Requests a second session management phase for the application. The
-    application may then return immediately from the QApplication::commitData()
-    or QApplication::saveState() function, and they will be called again once
-    most or all other applications have finished their session management.
-
-    The two phases are useful for applications such as the X11 window manager
-    that need to store information about another application's windows and
-    therefore have to wait until these applications have completed their
-    respective session management tasks.
-
-    \note If another application has requested a second phase it may get called
-    before, simultaneously with, or after your application's second phase.
-
-    \sa isPhase2()
-*/
-
 /*****************************************************************************
   Stubbed session management support
  *****************************************************************************/
 #ifndef QT_NO_SESSIONMANAGER
-#if defined(Q_WS_WIN) || defined(Q_WS_MAC) || defined(Q_WS_QWS)
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC) || defined(Q_WS_QWS)
 
 class QSessionManagerPrivate
 {
@@ -4304,7 +4020,7 @@ QSessionManager::QSessionManager(QApplication * app, QString &id, QString &key)
     setObjectName(QLatin1String("qt_sessionmanager"));
     qt_session_manager_self = this;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     wchar_t guidstr[40];
     GUID guid;
     CoCreateGuid(&guid);
@@ -4338,14 +4054,14 @@ QString QSessionManager::sessionKey() const
 }
 
 
-#if defined(Q_WS_X11) || defined(Q_WS_MAC)
+#if defined(Q_WS_X11) || defined(Q_OS_MAC)
 void* QSessionManager::handle() const
 {
     return 0;
 }
 #endif
 
-#if !defined(Q_WS_WIN)
+#if !defined(Q_OS_WIN)
 bool QSessionManager::allowsInteraction()
 {
     return true;
@@ -4797,7 +4513,7 @@ QInputContext *QApplication::inputContext() const
 //Returns the current platform used by keyBindings
 uint QApplicationPrivate::currentPlatform(){
     uint platform = KB_Win;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     platform = KB_Mac;
 #elif defined Q_WS_X11
     platform = KB_X11;
@@ -5237,7 +4953,7 @@ QGestureManager* QGestureManager::instance()
 static const char * const move_xpm[] = {
 "11 20 3 1",
 ".        c None",
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 "a        c #000000",
 "X        c #FFFFFF", // Windows cursor is traditionally white
 #else
@@ -5265,7 +4981,7 @@ static const char * const move_xpm[] = {
 ".......aXXa",
 "........aa."};
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 /* XPM */
 static const char * const ignore_xpm[] = {
 "24 30 3 1",
@@ -5310,7 +5026,7 @@ static const char * const copy_xpm[] = {
 ".        c None",
 "a        c #000000",
 "X        c #FFFFFF",
-#if defined(Q_WS_WIN) // Windows cursor is traditionally white
+#if defined(Q_OS_WIN) // Windows cursor is traditionally white
 "aa......................",
 "aXa.....................",
 "aXXa....................",
@@ -5370,7 +5086,7 @@ static const char * const link_xpm[] = {
 ".        c None",
 "a        c #000000",
 "X        c #FFFFFF",
-#if defined(Q_WS_WIN) // Windows cursor is traditionally white
+#if defined(Q_OS_WIN) // Windows cursor is traditionally white
 "aa......................",
 "aXa.....................",
 "aXXa....................",
@@ -5426,12 +5142,12 @@ static const char * const link_xpm[] = {
 
 QPixmap QApplicationPrivate::getPixmapCursor(Qt::CursorShape cshape)
 {
-#if defined(Q_WS_X11) || defined(Q_WS_WIN)
+#if defined(Q_WS_X11) || defined(Q_OS_WIN)
     if (!move_cursor) {
         move_cursor = new QPixmap((const char **)move_xpm);
         copy_cursor = new QPixmap((const char **)copy_xpm);
         link_cursor = new QPixmap((const char **)link_xpm);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         ignore_cursor = new QPixmap((const char **)ignore_xpm);
 #endif
     }
@@ -5443,7 +5159,7 @@ QPixmap QApplicationPrivate::getPixmapCursor(Qt::CursorShape cshape)
         return *copy_cursor;
     case Qt::DragLinkCursor:
         return *link_cursor;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     case Qt::ForbiddenCursor:
         return *ignore_cursor;
 #endif
@@ -5456,7 +5172,7 @@ QPixmap QApplicationPrivate::getPixmapCursor(Qt::CursorShape cshape)
     return QPixmap();
 }
 
-#if defined(Q_WS_MAC) || defined(Q_WS_X11)
+#if defined(Q_OS_MAC) || defined(Q_WS_X11)
    void QApplication::_q_alertTimeOut()
    {
    	Q_D(QApplication);

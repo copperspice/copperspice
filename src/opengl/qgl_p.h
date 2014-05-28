@@ -53,21 +53,18 @@ class QGLOverlayWidget;
 class QPixmap;
 class QPixmapFilter;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # ifdef qDebug
 #   define old_qDebug qDebug
 #   undef qDebug
 # endif
-QT_BEGIN_INCLUDE_NAMESPACE
-#ifndef QT_MAC_USE_COCOA
-# include <AGL/agl.h>
-#endif
-QT_END_INCLUDE_NAMESPACE
+
 # ifdef old_qDebug
 #   undef qDebug
 #   define qDebug QT_NO_QDEBUG_MACRO
 #   undef old_qDebug
 # endif
+
 class QMacWindowChangeEvent;
 #endif
 
@@ -173,7 +170,7 @@ public:
 
     bool disable_clear_on_painter_begin;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     void updateColormap();
     QGLContext *olcx;
 #elif defined(Q_WS_X11)
@@ -182,7 +179,7 @@ public:
     void recreateEglSurface();
     WId eglSurfaceWindowId;
 #endif
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     QGLContext *olcx;
     void updatePaintDevice();
 #elif defined(Q_WS_QWS)
@@ -320,11 +317,11 @@ public:
     void syncGlState(); // Makes sure the GL context's state is what we think it is
     void swapRegion(const QRegion &region);
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     void updateFormatVersion();
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     HGLRC rc;
     HDC dc;
     WId        win;
@@ -348,10 +345,10 @@ public:
     QPlatformGLContext *platformContext;
     void setupSharing();
 
-#elif defined(Q_WS_X11) || defined(Q_WS_MAC)
+#elif defined(Q_WS_X11) || defined(Q_OS_MAC)
     void* cx;
 #endif
-#if defined(Q_WS_X11) || defined(Q_WS_MAC)
+#if defined(Q_WS_X11) || defined(Q_OS_MAC)
     void* vi;
 #endif
 #if defined(Q_WS_X11)
@@ -364,7 +361,7 @@ public:
     static void destroyGlSurfaceForPixmap(QPixmapData*);
     static void unbindPixmapFromTexture(QPixmapData*);
 #endif
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     bool update;
     void *tryFormat(const QGLFormat &format);
     void clearDrawable();
@@ -417,11 +414,11 @@ public:
 
     static inline QGLContextGroup *contextGroup(const QGLContext *ctx) { return ctx->d_ptr->group; }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     static inline QGLExtensionFuncs& extensionFuncs(const QGLContext *ctx) { return ctx->d_ptr->group->extensionFuncs(); }
 #endif
 
-#if defined(Q_WS_X11) || defined(Q_WS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA) 
+#if defined(Q_WS_X11) || defined(Q_OS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA) 
     static Q_OPENGL_EXPORT QGLExtensionFuncs qt_extensionFuncs;
     static Q_OPENGL_EXPORT QGLExtensionFuncs& extensionFuncs(const QGLContext *);
 #endif

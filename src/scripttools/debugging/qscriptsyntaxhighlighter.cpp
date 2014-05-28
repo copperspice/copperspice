@@ -24,7 +24,7 @@
 ***********************************************************************/
 
 #include "qscriptsyntaxhighlighter_p.h"
-#include "private/qfunctions_p.h"
+#include "qfunctions_p.h"
 
 #ifndef QT_NO_SYNTAXHIGHLIGHTER
 

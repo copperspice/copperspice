@@ -62,9 +62,7 @@
 QT_BEGIN_NAMESPACE
 
 Q_GUI_EXPORT QImage qt_imageForBrush(int brushStyle, bool invert); //in qbrush.cpp
-#ifdef QT_MAC_USE_COCOA
 extern void *qt_current_nsopengl_context(); // qgl_mac.mm
-#endif
 
 #define QREAL_MAX 9e100
 #define QREAL_MIN -9e100
@@ -1779,7 +1777,7 @@ static void drawTrapezoid(const QGLTrapezoid &trap, const qreal offscreenHeight,
 
     glTexCoord4f(0.0f, 0.0f, 0.0f, 1.0f);
 }
-#endif // !Q_WS_QWS
+#endif
 
 class QOpenGLTrapezoidToArrayTessellator : public QOpenGLTessellator
 {
@@ -4495,17 +4493,19 @@ void QOpenGLPaintEngine::drawTextureRect(int tx_width, int tx_height, const QRec
     glDisableClientState(GL_VERTEX_ARRAY);
 
     glDisable(target);
+
 #ifndef QT_OPENGL_ES
     glPopAttrib();
 #endif
 }
 
-#ifdef Q_WS_WIN
-HDC
+#ifdef Q_OS_WIN
+   HDC QOpenGLPaintEngine::handle() const
+
 #else
-Qt::HANDLE
+   Qt::HANDLE QOpenGLPaintEngine::handle() const
+
 #endif
-QOpenGLPaintEngine::handle() const
 {
     return 0;
 }
@@ -4600,24 +4600,22 @@ void QGLGlyphCache::fontEngineDestroyed(QObject *o)
     quint64 font_key = (reinterpret_cast<quint64>(ctx) << 32) | reinterpret_cast<quint64>(fe);
     QGLFontTexture *tex = qt_font_textures.take(font_key);
     if (tex) {
-#ifdef Q_WS_MAC
-        if (
-#  ifndef QT_MAC_USE_COCOA
-            aglGetCurrentContext() != 0
-#  else
-            qt_current_nsopengl_context() != 0
-#  endif
-           )
+
+#ifdef Q_OS_MAC
+        if (qt_current_nsopengl_context() != 0) {
+          glDeleteTextures(1, &tex->texture);
+        }
+#else
+        glDeleteTextures(1, &tex->texture);           
 #endif
-            glDeleteTextures(1, &tex->texture);
+            
         delete tex;
     }
 }
 
 void QGLGlyphCache::widgetDestroyed(QObject *)
 {
-//     qDebug() << "widget destroyed";
-    cleanCache(); // ###
+    cleanCache();
 }
 
 void QGLGlyphCache::cleanupContext(const QGLContext *ctx)
@@ -4632,20 +4630,20 @@ void QGLGlyphCache::cleanupContext(const QGLContext *ctx)
             qt_delete_glyph_hash(font_cache->take(fe));
             quint64 font_key = (reinterpret_cast<quint64>(ctx) << 32) | reinterpret_cast<quint64>(fe);
             QGLFontTexture *font_tex = qt_font_textures.take(font_key);
+
             if (font_tex) {
-#ifdef Q_WS_MAC
-                if (
-#  ifndef QT_MAC_USE_COCOA
-            aglGetCurrentContext() == 0
-#  else
-            qt_current_nsopengl_context() != 0
-#  endif
-                   )
-#endif
-                    glDeleteTextures(1, &font_tex->texture);
+
+#ifdef Q_OS_MAC
+                if (qt_current_nsopengl_context() != 0)  {   
+                   glDeleteTextures(1, &font_tex->texture);
+                }           
+#else
+                glDeleteTextures(1, &font_tex->texture);
+#endif                    
                 delete font_tex;
             }
         }
+
         delete font_cache;
     }
 //    qDebug() << "<=== done cleaning, num tex:" << qt_font_textures.size() << "num ctx:" << qt_context_cache.size();
@@ -4656,7 +4654,8 @@ void QGLGlyphCache::cleanCache()
     QGLFontTexHash::const_iterator it = qt_font_textures.constBegin();
     if (QGLContext::currentContext()) {
         while (it != qt_font_textures.constEnd()) {
-#if defined(Q_WS_MAC) && defined(QT_MAC_USE_COCOA)
+
+#if defined(Q_OS_MAC)
             if (qt_current_nsopengl_context() == 0)
                 break;
 #endif
@@ -4847,7 +4846,8 @@ void QGLGlyphCache::cacheGlyphs(QGLContext *context, QFontEngine *fontEngine,
             qgl_glyph->height = qreal(glyph_height) / font_tex->height;
             qgl_glyph->log_width = qreal(glyph_width);
             qgl_glyph->log_height = qgl_glyph->height * font_tex->height;
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
             qgl_glyph->x_offset = -metrics.x + 1;
             qgl_glyph->y_offset = metrics.y - 2;
 #else

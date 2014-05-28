@@ -29,23 +29,18 @@
 #include <QtCore/qglobal.h>
 #include <QtCore/qobject.h>
 #include <QtCore/qshareddata.h>
-
 #include <QtDBus/qdbusmacros.h>
 #include <QtDBus/qdbusmessage.h>
 
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
-
-QT_MODULE(DBus)
 
 class QDBusConnection;
 class QDBusError;
 class QDBusPendingCallWatcher;
-
 class QDBusPendingCallPrivate;
+
 class Q_DBUS_EXPORT QDBusPendingCall
 {
 public:
@@ -97,8 +92,6 @@ private:
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif

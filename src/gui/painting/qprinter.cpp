@@ -37,15 +37,17 @@
 
 #ifndef QT_NO_PRINTER
 
-#if defined (Q_WS_WIN)
-#include <private/qprintengine_win_p.h>
-#elif defined (Q_WS_MAC)
-#include <private/qprintengine_mac_p.h>
+#if defined (Q_OS_WIN)
+#include <qprintengine_win_p.h>
+
+#elif defined (Q_OS_MAC)
+#include <qprintengine_mac_p.h>
+
 #endif
-#include <private/qprintengine_ps_p.h>
+#include <qprintengine_ps_p.h>
 
 #if defined(Q_WS_X11)
-#include <private/qt_x11_p.h>
+#include <qt_x11_p.h>
 #endif
 
 #ifndef QT_NO_PDF
@@ -53,7 +55,7 @@
 #endif
 
 #include <qpicture.h>
-#include <private/qpaintengine_preview_p.h>
+#include <qpaintengine_preview_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -140,7 +142,7 @@ void QPrinterPrivate::createDefaultEngines()
 {
     QPrinter::OutputFormat realOutputFormat = outputFormat;
 
-#if defined (Q_OS_UNIX) && ! defined (Q_WS_MAC)
+#if defined (Q_OS_UNIX) && ! defined (Q_OS_MAC)
     if(outputFormat == QPrinter::NativeFormat) {
         realOutputFormat = QPrinter::PostScriptFormat;
     }
@@ -148,11 +150,11 @@ void QPrinterPrivate::createDefaultEngines()
 
     switch (realOutputFormat) {
     case QPrinter::NativeFormat: {
-#if defined (Q_WS_WIN)
+#if defined (Q_OS_WIN)
         QWin32PrintEngine *winEngine = new QWin32PrintEngine(printerMode);
         paintEngine = winEngine;
         printEngine = winEngine;
-#elif defined (Q_WS_MAC)
+#elif defined (Q_OS_MAC)
         QMacPrintEngine *macEngine = new QMacPrintEngine(printerMode);
         paintEngine = macEngine;
         printEngine = macEngine;
@@ -1734,7 +1736,7 @@ QPrintEngine *QPrinter::printEngine() const
     return d->printEngine;
 }
 
-#if defined (Q_WS_WIN)
+#if defined (Q_OS_WIN)
 /*!
     Sets the page size to be used by the printer under Windows to \a
     pageSize.
@@ -1765,16 +1767,8 @@ int QPrinter::winPageSize() const
     Q_D(const QPrinter);
     return d->printEngine->property(QPrintEngine::PPK_WindowsPageSize).toInt();
 }
-#endif // Q_WS_WIN
+#endif
 
-/*!
-    Returns a list of the resolutions (a list of dots-per-inch
-    integers) that the printer says it supports.
-
-    For X11 where all printing is directly to postscript, this
-    function will always return a one item list containing only the
-    postscript resolution, i.e., 72 (72 dpi -- but see PrinterMode).
-*/
 QList<int> QPrinter::supportedResolutions() const
 {
     Q_D(const QPrinter);
@@ -1828,55 +1822,7 @@ QPrinter::PrinterState QPrinter::printerState() const
     return d->printEngine->printerState();
 }
 
-
-/*! \fn void QPrinter::margins(uint *top, uint *left, uint *bottom, uint *right) const
-
-    Sets *\a top, *\a left, *\a bottom, *\a right to be the top,
-    left, bottom, and right margins.
-
-    This function has been superseded by paperRect() and pageRect().
-    Use paperRect().top() - pageRect().top() for the top margin,
-    paperRect().left() - pageRect().left() for the left margin,
-    paperRect().bottom() - pageRect().bottom() for the bottom margin,
-    and papaerRect().right() - pageRect().right() for the right
-    margin.
-
-    \oldcode
-        uint rightMargin;
-        uint bottomMargin;
-        printer->margins(0, 0, &bottomMargin, &rightMargin);
-    \newcode
-        int rightMargin = printer->paperRect().right() - printer->pageRect().right();
-        int bottomMargin = printer->paperRect().bottom() - printer->pageRect().bottom();
-    \endcode
-*/
-
-/*! \fn QSize QPrinter::margins() const
-
-    \overload
-
-    Returns a QSize containing the left margin and the top margin.
-
-    This function has been superseded by paperRect() and pageRect().
-    Use paperRect().left() - pageRect().left() for the left margin,
-    and paperRect().top() - pageRect().top() for the top margin.
-
-    \oldcode
-        QSize margins = printer->margins();
-        int leftMargin = margins.width();
-        int topMargin = margins.height();
-    \newcode
-        int leftMargin = printer->paperRect().left() - printer->pageRect().left();
-        int topMargin = printer->paperRect().top() - printer->pageRect().top();
-    \endcode
-*/
-
-/*! \fn bool QPrinter::aborted()
-
-    Use printerState() == QPrinter::Aborted instead.
-*/
-
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 /*!
     \internal
 */
@@ -1953,7 +1899,7 @@ QList<QPrinter::PaperSource> QPrinter::supportedPaperSources() const
     \sa printerSelectionOption()
 */
 
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
 QString QPrinter::printerSelectionOption() const
 {
     Q_D(const QPrinter);

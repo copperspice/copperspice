@@ -110,7 +110,7 @@ public:
 
     void drawEllipse(const QRectF &rect);
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     HDC handle() const;
 #else
     Qt::HANDLE handle() const;

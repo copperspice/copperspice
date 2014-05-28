@@ -277,7 +277,7 @@ public:
     static bool isEffectEnabled(Qt::UIEffect);
     static void setEffectEnabled(Qt::UIEffect, bool enable = true);
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     virtual bool macEventFilter(EventHandlerCallRef, EventRef);
 #endif
 
@@ -303,7 +303,7 @@ public:
 #endif
 
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     void winFocus(QWidget *, bool);
     static void winMouseButtonUp();
 #endif
@@ -438,7 +438,7 @@ private:
     friend class QGestureManager;
 #endif
 
-#if defined(Q_WS_MAC) || defined(Q_WS_X11)
+#if defined(Q_OS_MAC) || defined(Q_WS_X11)
     GUI_CS_SLOT_1(Private, void _q_alertTimeOut())
     GUI_CS_SLOT_2(_q_alertTimeOut)
 #endif

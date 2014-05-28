@@ -516,7 +516,6 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
     return qcoreVariantHandler()->convert(d, t, result, ok);
 }
 
-#if !defined(QT_NO_DEBUG_STREAM)
 static void streamDebug(QDebug dbg, const QVariant &v)
 {
     switch(v.type()) {
@@ -524,22 +523,29 @@ static void streamDebug(QDebug dbg, const QVariant &v)
 #ifndef QT_NO_CURSOR
 //        dbg.nospace() << qvariant_cast<QCursor>(v); //FIXME
 #endif
+
         break;
+
     case QVariant::Bitmap:
 //        dbg.nospace() << qvariant_cast<QBitmap>(v); //FIXME
         break;
+
     case QVariant::Polygon:
         dbg.nospace() << qvariant_cast<QPolygon>(v);
         break;
+
     case QVariant::Region:
         dbg.nospace() << qvariant_cast<QRegion>(v);
         break;
+
     case QVariant::Font:
 //        dbg.nospace() << qvariant_cast<QFont>(v);  //FIXME
         break;
+
     case QVariant::Matrix:
         dbg.nospace() << qvariant_cast<QMatrix>(v);
         break;
+
     case QVariant::Transform:
         dbg.nospace() << qvariant_cast<QTransform>(v);
         break;
@@ -579,21 +585,25 @@ static void streamDebug(QDebug dbg, const QVariant &v)
         dbg.nospace() << qvariant_cast<QMatrix4x4>(v);
         break;
 #endif
+
 #ifndef QT_NO_VECTOR2D
     case QVariant::Vector2D:
         dbg.nospace() << qvariant_cast<QVector2D>(v);
         break;
 #endif
+
 #ifndef QT_NO_VECTOR3D
     case QVariant::Vector3D:
         dbg.nospace() << qvariant_cast<QVector3D>(v);
         break;
 #endif
+
 #ifndef QT_NO_VECTOR4D
     case QVariant::Vector4D:
         dbg.nospace() << qvariant_cast<QVector4D>(v);
         break;
 #endif
+
 #ifndef QT_NO_QUATERNION
     case QVariant::Quaternion:
         dbg.nospace() << qvariant_cast<QQuaternion>(v);
@@ -604,7 +614,7 @@ static void streamDebug(QDebug dbg, const QVariant &v)
         break;
     }
 }
-#endif
+
 
 const QVariant::Handler qt_gui_variant_handler = {
     construct,
@@ -617,14 +627,8 @@ const QVariant::Handler qt_gui_variant_handler = {
     compare,
     convert,
     0,
-#if !defined(QT_NO_DEBUG_STREAM)
     streamDebug
-#else
-    0
-#endif
 };
-
-
 
 
 

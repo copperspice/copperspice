@@ -26,8 +26,8 @@
 #include "qtabwidget.h"
 
 #ifndef QT_NO_TABWIDGET
-#include "private/qwidget_p.h"
-#include "private/qtabbar_p.h"
+#include "qwidget_p.h"
+#include "qtabbar_p.h"
 #include "qapplication.h"
 #include "qbitmap.h"
 #include "qdesktopwidget.h"
@@ -1045,7 +1045,7 @@ bool QTabWidget::event(QEvent *ev)
 void QTabWidget::changeEvent(QEvent *ev)
 {
     if (ev->type() == QEvent::StyleChange
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
             || ev->type() == QEvent::MacSizeChange
 #endif
             )

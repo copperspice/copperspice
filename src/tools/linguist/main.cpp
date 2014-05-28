@@ -38,14 +38,14 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QSplashScreen>
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 #include <QtCore/QUrl>
 #include <QtGui/QFileOpenEvent>
-#endif // Q_WS_MAC
+#endif 
 
 QT_USE_NAMESPACE
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 class ApplicationEventFilter : public QObject
 {
     Q_OBJECT
@@ -84,7 +84,7 @@ private:
     MainWindow *m_mainWindow;
     QStringList m_filesToOpen;
 };
-#endif // Q_WS_MAC
+#endif
 
 int main(int argc, char **argv)
 {
@@ -93,10 +93,10 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     ApplicationEventFilter eventFilter;
     app.installEventFilter(&eventFilter);
-#endif // Q_WS_MAC
+#endif
 
     QStringList files;
     QString resourceDir = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
@@ -118,6 +118,7 @@ int main(int argc, char **argv)
     QTranslator translator;
     QTranslator qtTranslator;
     QString sysLocale = QLocale::system().name();
+
     if (translator.load(QLatin1String("linguist_") + sysLocale, resourceDir)) {
         app.installTranslator(&translator);
         if (qtTranslator.load(QLatin1String("qt_") + sysLocale, resourceDir))
@@ -138,6 +139,7 @@ int main(int argc, char **argv)
     int screenId = QApplication::desktop()->screenNumber(tmp.geometry().center());
     splash = new QSplashScreen(QApplication::desktop()->screen(screenId),
         QPixmap(QLatin1String(":/images/splash.png")));
+
     if (QApplication::desktop()->isVirtualDesktop()) {
         QRect srect(0, 0, splash->width(), splash->height());
         splash->move(QApplication::desktop()->availableGeometry(screenId).center() - srect.center());
@@ -146,9 +148,11 @@ int main(int argc, char **argv)
     splash->show();
 
     MainWindow mw;
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
     eventFilter.setMainWindow(&mw);
-#endif // Q_WS_MAC
+#endif
+
     mw.show();
     splash->finish(&mw);
     QApplication::restoreOverrideCursor();
@@ -157,7 +161,3 @@ int main(int argc, char **argv)
 
     return app.exec();
 }
-
-#ifdef Q_WS_MAC
-#include "main.moc"
-#endif // Q_WS_MAC

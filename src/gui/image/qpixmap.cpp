@@ -49,7 +49,7 @@
 #include "qpaintengine.h"
 #include "qthread.h"
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # include "qt_mac_p.h"
 # include "qpixmap_mac_p.h"
 #endif
@@ -1064,82 +1064,7 @@ QPixmap QPixmap::grabWidget(QWidget * widget, const QRect &rect)
     return res;
 }
 
-/*!
-    \fn QPixmap QPixmap::grabWidget(QWidget *widget, int x, int y, int
-    width, int height)
-
-    \overload
-
-    Creates a pixmap and paints the given \a widget, restricted by
-    QRect(\a x, \a y, \a width, \a height), in it.
-
-    \warning Do not grab a widget from its QWidget::paintEvent().
-    However, it is safe to grab a widget from another widget's
-    \l {QWidget::}{paintEvent()}.
-*/
-
-
-/*!
-    \since 4.5
-
-    \enum QPixmap::ShareMode
-
-    This enum type defines the share modes that are available when
-    creating a QPixmap object from a raw X11 Pixmap handle.
-
-    \value ImplicitlyShared  This mode will cause the QPixmap object to
-    create a copy of the internal data before it is modified, thus
-    keeping the original X11 pixmap intact.
-
-    \value ExplicitlyShared  In this mode, the pixmap data will \e not be
-    copied before it is modified, which in effect will change the
-    original X11 pixmap.
-
-    \warning This enum is only used for X11 specific functions; using
-    it is non-portable.
-
-    \sa QPixmap::fromX11Pixmap()
-*/
-
-/*!
-    \since 4.5
-
-    \fn QPixmap QPixmap::fromX11Pixmap(Qt::HANDLE pixmap, QPixmap::ShareMode mode)
-
-    Creates a QPixmap from the native X11 Pixmap handle \a pixmap,
-    using \a mode as the share mode. The default share mode is
-    QPixmap::ImplicitlyShared, which means that a copy of the pixmap is
-    made if someone tries to modify it by e.g. drawing onto it.
-
-    QPixmap does \e not take ownership of the \a pixmap handle, and
-    have to be deleted by the user.
-
-    \warning This function is X11 specific; using it is non-portable.
-
-    \sa QPixmap::ShareMode
-*/
-
-
 #if defined(Q_WS_X11) || defined(Q_WS_QWS)
-
-/*!
-    Returns the pixmap's handle to the device context.
-
-    Note that, since QPixmap make use of \l {Implicit Data
-    Sharing}{implicit data sharing}, the detach() function must be
-    called explicitly to ensure that only \e this pixmap's data is
-    modified if the pixmap data is shared.
-
-    \warning This function is X11 specific; using it is non-portable.
-
-    \warning Since 4.8, pixmaps do not have an X11 handle unless
-    created with \l {QPixmap::}{fromX11Pixmap()}, or if the native
-    graphics system is explicitly enabled.
-
-    \sa detach()
-    \sa QApplication::setGraphicsSystem()
-*/
-
 Qt::HANDLE QPixmap::handle() const
 {
 #if defined(Q_WS_X11)
@@ -1406,225 +1331,17 @@ QPixmap QPixmap::transformed(const QMatrix &matrix, Qt::TransformationMode mode)
     return transformed(QTransform(matrix), mode);
 }
 
-
-
-
-
-
-
-
-/*!
-    \class QPixmap
-
-    \brief The QPixmap class is an off-screen image representation
-    that can be used as a paint device.
-
-    \ingroup painting
-    \ingroup shared
-
-
-    Qt provides four classes for handling image data: QImage, QPixmap,
-    QBitmap and QPicture. QImage is designed and optimized for I/O,
-    and for direct pixel access and manipulation, while QPixmap is
-    designed and optimized for showing images on screen. QBitmap is
-    only a convenience class that inherits QPixmap, ensuring a depth
-    of 1. The isQBitmap() function returns true if a QPixmap object is
-    really a bitmap, otherwise returns false. Finally, the QPicture class
-    is a paint device that records and replays QPainter commands.
-
-    A QPixmap can easily be displayed on the screen using QLabel or
-    one of QAbstractButton's subclasses (such as QPushButton and
-    QToolButton). QLabel has a pixmap property, whereas
-    QAbstractButton has an icon property.
-
-    In addition to the ordinary constructors, a QPixmap can be
-    constructed using the static grabWidget() and grabWindow()
-    functions which creates a QPixmap and paints the given widget, or
-    window, into it.
-
-    QPixmap objects can be passed around by value since the QPixmap
-    class uses implicit data sharing. For more information, see the \l
-    {Implicit Data Sharing} documentation. QPixmap objects can also be
-    streamed.
-
-    Note that the pixel data in a pixmap is internal and is managed by
-    the underlying window system. Because QPixmap is a QPaintDevice
-    subclass, QPainter can be used to draw directly onto pixmaps.
-    Pixels can only be accessed through QPainter functions or by
-    converting the QPixmap to a QImage. However, the fill() function
-    is available for initializing the entire pixmap with a given color.
-
-    There are functions to convert between QImage and
-    QPixmap. Typically, the QImage class is used to load an image
-    file, optionally manipulating the image data, before the QImage
-    object is converted into a QPixmap to be shown on
-    screen. Alternatively, if no manipulation is desired, the image
-    file can be loaded directly into a QPixmap. On Windows, the
-    QPixmap class also supports conversion between \c HBITMAP and
-    QPixmap. On Symbian, the QPixmap class also supports conversion
-    between CFbsBitmap and QPixmap.
-
-    QPixmap provides a collection of functions that can be used to
-    obtain a variety of information about the pixmap. In addition,
-    there are several functions that enables transformation of the
-    pixmap.
-
-    \tableofcontents
-
-    \section1 Reading and Writing Image Files
-
-    QPixmap provides several ways of reading an image file: The file
-    can be loaded when constructing the QPixmap object, or by using
-    the load() or loadFromData() functions later on. When loading an
-    image, the file name can either refer to an actual file on disk or
-    to one of the application's embedded resources. See \l{The Qt
-    Resource System} overview for details on how to embed images and
-    other resource files in the application's executable.
-
-    Simply call the save() function to save a QPixmap object.
-
-    The complete list of supported file formats are available through
-    the QImageReader::supportedImageFormats() and
-    QImageWriter::supportedImageFormats() functions. New file formats
-    can be added as plugins. By default, Qt supports the following
-    formats:
-
-    \table
-    \header \o Format \o Description                      \o Qt's support
-    \row    \o BMP    \o Windows Bitmap                   \o Read/write
-    \row    \o GIF    \o Graphic Interchange Format (optional) \o Read
-    \row    \o JPG    \o Joint Photographic Experts Group \o Read/write
-    \row    \o JPEG   \o Joint Photographic Experts Group \o Read/write
-    \row    \o PNG    \o Portable Network Graphics        \o Read/write
-    \row    \o PBM    \o Portable Bitmap                  \o Read
-    \row    \o PGM    \o Portable Graymap                 \o Read
-    \row    \o PPM    \o Portable Pixmap                  \o Read/write
-    \row    \o XBM    \o X11 Bitmap                       \o Read/write
-    \row    \o XPM    \o X11 Pixmap                       \o Read/write
-    \endtable
-
-    \section1 Pixmap Information
-
-    QPixmap provides a collection of functions that can be used to
-    obtain a variety of information about the pixmap:
-
-    \table
-    \header
-    \o \o Available Functions
-    \row
-    \o Geometry
-    \o
-    The size(), width() and height() functions provide information
-    about the pixmap's size. The rect() function returns the image's
-    enclosing rectangle.
-
-    \row
-    \o Alpha component
-    \o
-
-    The hasAlphaChannel() returns true if the pixmap has a format that
-    respects the alpha channel, otherwise returns false. The hasAlpha(),
-    setMask() and mask() functions are legacy and should not be used.
-    They are potentially very slow.
-
-    The createHeuristicMask() function creates and returns a 1-bpp
-    heuristic mask (i.e. a QBitmap) for this pixmap. It works by
-    selecting a color from one of the corners and then chipping away
-    pixels of that color, starting at all the edges. The
-    createMaskFromColor() function creates and returns a mask (i.e. a
-    QBitmap) for the pixmap based on a given color.
-
-    \row
-    \o Low-level information
-    \o
-
-    The depth() function returns the depth of the pixmap. The
-    defaultDepth() function returns the default depth, i.e. the depth
-    used by the application on the given screen.
-
-    The cacheKey() function returns a number that uniquely
-    identifies the contents of the QPixmap object.
-
-    The x11Info() function returns information about the configuration
-    of the X display used by the screen to which the pixmap currently
-    belongs. The x11PictureHandle() function returns the X11 Picture
-    handle of the pixmap for XRender support. Note that the two latter
-    functions are only available on x11.
-
-    \endtable
-
-    \section1 Pixmap Conversion
-
-    A QPixmap object can be converted into a QImage using the
-    toImage() function. Likewise, a QImage can be converted into a
-    QPixmap using the fromImage(). If this is too expensive an
-    operation, you can use QBitmap::fromImage() instead.
-
-    In addition, on Windows, the QPixmap class supports conversion to
-    and from HBITMAP: the toWinHBITMAP() function creates a HBITMAP
-    equivalent to the QPixmap, based on the given HBitmapFormat, and
-    returns the HBITMAP handle. The fromWinHBITMAP() function returns
-    a QPixmap that is equivalent to the given bitmap which has the
-    specified format. The QPixmap class also supports conversion to
-    and from HICON: the toWinHICON() function creates a HICON equivalent
-    to the QPixmap, and returns the HICON handle. The fromWinHICON()
-    function returns a QPixmap that is equivalent to the given icon.
-
-    In addition, on Symbian, the QPixmap class supports conversion to
-    and from CFbsBitmap: the toSymbianCFbsBitmap() function creates
-    CFbsBitmap equivalent to the QPixmap, based on given mode and returns
-    a CFbsBitmap object. The fromSymbianCFbsBitmap() function returns a
-    QPixmap that is equivalent to the given bitmap and given mode.
-
-    \section1 Pixmap Transformations
-
-    QPixmap supports a number of functions for creating a new pixmap
-    that is a transformed version of the original:
-
-    The scaled(), scaledToWidth() and scaledToHeight() functions
-    return scaled copies of the pixmap, while the copy() function
-    creates a QPixmap that is a plain copy of the original one.
-
-    The transformed() function returns a copy of the pixmap that is
-    transformed with the given transformation matrix and
-    transformation mode: Internally, the transformation matrix is
-    adjusted to compensate for unwanted translation,
-    i.e. transformed() returns the smallest pixmap containing all
-    transformed points of the original pixmap. The static trueMatrix()
-    function returns the actual matrix used for transforming the
-    pixmap.
-
-    \note When using the native X11 graphics system, the pixmap
-    becomes invalid when the QApplication instance is destroyed.
-
-    \sa QBitmap, QImage, QImageReader, QImageWriter
-*/
-
-
-/*!
-    \typedef QPixmap::DataPtr
-    \internal
-*/
-
-/*!
-    \fn DataPtr &QPixmap::data_ptr()
-    \internal
-*/
-
-/*!
-    Returns true if this pixmap has an alpha channel, \e or has a
-    mask, otherwise returns false.
-
-    \sa hasAlphaChannel(), mask()
-*/
 bool QPixmap::hasAlpha() const
 {
 #if defined(Q_WS_X11)
     if (data && data->hasAlphaChannel())
         return true;
+
     QPixmapData *pd = pixmapData();
+
     if (pd && pd->classId() == QPixmapData::X11Class) {
         QX11PixmapData *x11Data = static_cast<QX11PixmapData*>(pd);
+
 #ifndef QT_NO_XRENDER
         if (x11Data->picture && x11Data->d == 32)
             return true;
@@ -1633,17 +1350,13 @@ bool QPixmap::hasAlpha() const
             return true;
     }
     return false;
+
 #else
     return data && data->hasAlphaChannel();
+
 #endif
 }
 
-/*!
-    Returns true if the pixmap has a format that respects the alpha
-    channel, otherwise returns false.
-
-    \sa hasAlpha()
-*/
 bool QPixmap::hasAlphaChannel() const
 {
     return data && data->hasAlphaChannel();
@@ -1657,24 +1370,6 @@ int QPixmap::metric(PaintDeviceMetric metric) const
     return data ? data->metric(metric) : 0;
 }
 
-/*!
-    \fn void QPixmap::setAlphaChannel(const QPixmap &alphaChannel)
-    \obsolete
-
-    Sets the alpha channel of this pixmap to the given \a alphaChannel
-    by converting the \a alphaChannel into 32 bit and using the
-    intensity of the RGB pixel values.
-
-    The effect of this function is undefined when the pixmap is being
-    painted on.
-
-    \warning This is potentially an expensive operation. Most usecases
-    for this function are covered by QPainter and compositionModes
-    which will normally execute faster.
-
-    \sa alphaChannel(), {QPixmap#Pixmap Transformations}{Pixmap
-    Transformations}
- */
 void QPixmap::setAlphaChannel(const QPixmap &alphaChannel)
 {
     if (alphaChannel.isNull())
@@ -1737,43 +1432,28 @@ QPaintEngine *QPixmap::paintEngine() const
     return data ? data->paintEngine() : 0;
 }
 
-/*!
-    \fn QBitmap QPixmap::mask() const
-
-    Extracts a bitmap mask from the pixmap's alpha channel.
-
-    \warning This is potentially an expensive operation. The mask of
-    the pixmap is extracted dynamically from the pixeldata.
-
-    \sa setMask(), {QPixmap#Pixmap Information}{Pixmap Information}
-*/
 QBitmap QPixmap::mask() const
 {
     return data ? data->mask() : QBitmap();
 }
 
-/*!
-    Returns the default pixmap depth used by the application.
-
-    On Windows and Mac, the default depth is always 32. On X11 and
-    embedded, the depth of the screen will be returned by this
-    function.
-
-    \sa depth(), QColormap::depth(), {QPixmap#Pixmap Information}{Pixmap Information}
-
-*/
 int QPixmap::defaultDepth()
 {
 #if defined(Q_WS_QWS)
     return QScreen::instance()->depth();
+
 #elif defined(Q_WS_X11)
     return QX11Info::appDepth();
-#elif defined(Q_WS_WIN)
-    return 32; // XXX
-#elif defined(Q_WS_MAC)
+
+#elif defined(Q_OS_WIN)
     return 32;
+
+#elif defined(Q_OS_MAC)
+    return 32;
+
 #elif defined(Q_WS_QPA)
-    return 32; //LITE: use graphicssystem (we should do that in general)
+    return 32;       //LITE: use graphicssystem (we should do that in general)
+
 #endif
 }
 
@@ -1811,7 +1491,7 @@ void QPixmap::detach()
     if (data->is_cached && data->ref.load() == 1)
         QImagePixmapCleanupHooks::executePixmapDataModificationHooks(data.data());
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     QMacPixmapData *macData = id == QPixmapData::MacClass ? static_cast<QMacPixmapData*>(pd) : 0;
     if (macData) {
         if (macData->cg_mask) {
@@ -1837,7 +1517,7 @@ void QPixmap::detach()
             d->hd2 = 0;
         }
     }
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     if (macData) {
         macData->macReleaseCGImageRef();
         macData->uninit = false;

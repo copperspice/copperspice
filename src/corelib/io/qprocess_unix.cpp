@@ -88,13 +88,6 @@ QT_END_NAMESPACE
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef Q_OS_QNX
-#include "qvarlengtharray.h"
-
-#include <spawn.h>
-#include <sys/neutrino.h>
-#endif
-
 
 QT_BEGIN_NAMESPACE
 
@@ -825,108 +818,17 @@ bool QProcessPrivate::processStarted()
     return i <= 0;
 }
 
-#if defined(Q_OS_QNX)
-static pid_t doSpawn(int fd_count, int fd_map[], char **argv, char **envp,
-        const char *workingDir, bool spawn_detached)
-{
-    // A multi threaded QNX Process can't fork so we call spawn() instead.
-
-    struct inheritance inherit;
-    memset(&inherit, 0, sizeof(inherit));
-    inherit.flags |= SPAWN_SETSID;
-    inherit.flags |= SPAWN_CHECK_SCRIPT;
-    if (spawn_detached)
-        inherit.flags |= SPAWN_NOZOMBIE;
-    inherit.flags |= SPAWN_SETSIGDEF;
-    sigaddset(&inherit.sigdefault, SIGPIPE); // reset the signal that we ignored
-
-    // enter the working directory
-    const char *oldWorkingDir = 0;
-    char buff[PATH_MAX + 1];
-
-    if (workingDir) {
-        //we need to freeze everyone in order to avoid race conditions with //chdir().
-        if (ThreadCtl(_NTO_TCTL_THREADS_HOLD, 0) == -1)
-            qWarning("ThreadCtl(): cannot hold threads: %s", qPrintable(qt_error_string(errno)));
-
-        oldWorkingDir = QT_GETCWD(buff, PATH_MAX + 1);
-        QT_CHDIR(workingDir);
-    }
-
-    pid_t childPid;
-    EINTR_LOOP(childPid, ::spawn(argv[0], fd_count, fd_map, &inherit, argv, envp));
-    if (childPid == -1) {
-        inherit.flags |= SPAWN_SEARCH_PATH;
-        EINTR_LOOP(childPid, ::spawn(argv[0], fd_count, fd_map, &inherit, argv, envp));
-    }
-
-    if (oldWorkingDir) {
-        QT_CHDIR(oldWorkingDir);
-
-        if (ThreadCtl(_NTO_TCTL_THREADS_CONT, 0) == -1)
-            qFatal("ThreadCtl(): cannot resume threads: %s", qPrintable(qt_error_string(errno)));
-    }
-
-    return childPid;
-}
-
-pid_t QProcessPrivate::spawnChild(const char *workingDir, char **argv, char **envp)
-{
-    // we need to manually fill in fd_map
-    // to inherit the file descriptors from
-    // the parent
-    const int fd_count = sysconf(_SC_OPEN_MAX);
-    QVarLengthArray<int, 1024> fd_map(fd_count);
-
-    for (int i = 3; i < fd_count; ++i) {
-        // here we rely that fcntl returns -1 and
-        // sets errno to EBADF
-        const int flags = ::fcntl(i, F_GETFD);
-
-        fd_map[i] = ((flags >= 0) && !(flags & FD_CLOEXEC))
-                  ? i : SPAWN_FDCLOSED;
-    }
-
-    switch (processChannelMode) {
-    case QProcess::ForwardedChannels:
-        fd_map[0] = stdinChannel.pipe[0];
-        fd_map[1] = QT_FILENO(stdout);
-        fd_map[2] = QT_FILENO(stderr);
-        break;
-    case QProcess::MergedChannels:
-        fd_map[0] = stdinChannel.pipe[0];
-        fd_map[1] = stdoutChannel.pipe[1];
-        fd_map[2] = stdoutChannel.pipe[1];
-        break;
-    case QProcess::SeparateChannels:
-        fd_map[0] = stdinChannel.pipe[0];
-        fd_map[1] = stdoutChannel.pipe[1];
-        fd_map[2] = stderrChannel.pipe[1];
-        break;
-    }
-
-    pid_t childPid = doSpawn(fd_count, fd_map.data(), argv, envp, workingDir, false);
-
-    if (childPid == -1) {
-        QString error = qt_error_string(errno);
-        qt_safe_write(childStartedPipe[1], error.data(), error.length() * sizeof(QChar));
-        qt_safe_close(childStartedPipe[1]);
-        childStartedPipe[1] = -1;
-    }
-
-    return childPid;
-}
-#endif // Q_OS_QNX
-
 qint64 QProcessPrivate::bytesAvailableFromStdout() const
 {
     int nbytes = 0;
     qint64 available = 0;
     if (::ioctl(stdoutChannel.pipe[0], FIONREAD, (char *) &nbytes) >= 0)
         available = (qint64) nbytes;
+
 #if defined (QPROCESS_DEBUG)
     qDebug("QProcessPrivate::bytesAvailableFromStdout() == %lld", available);
 #endif
+
     return available;
 }
 
@@ -936,9 +838,11 @@ qint64 QProcessPrivate::bytesAvailableFromStderr() const
     qint64 available = 0;
     if (::ioctl(stderrChannel.pipe[0], FIONREAD, (char *) &nbytes) >= 0)
         available = (qint64) nbytes;
+
 #if defined (QPROCESS_DEBUG)
     qDebug("QProcessPrivate::bytesAvailableFromStderr() == %lld", available);
 #endif
+
     return available;
 }
 

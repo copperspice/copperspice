@@ -69,20 +69,16 @@ QT_END_NAMESPACE
 
 // Window system dependent definitions
 
-#if defined(Q_WS_MAC) && !defined(Q_WS_QWS)
+#if defined(Q_OS_MAC) && !defined(Q_WS_QWS)
 #include <QtGui/qmacdefines_mac.h>
-#ifdef Q_WS_MAC32
-typedef int WId;
-#else
+
 typedef long WId;
-#endif
+
 #endif
 
-
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 #include <QtGui/qwindowdefs_win.h>
 #endif
-
 
 #if defined(Q_WS_X11)
 typedef struct _XDisplay Display;
@@ -92,14 +88,12 @@ typedef struct _XRegion *Region;
 typedef unsigned long  WId;
 #endif
 
-
 #if defined(Q_WS_QWS)
 typedef unsigned long  WId;
 QT_BEGIN_NAMESPACE
 struct QWSEvent;
 QT_END_NAMESPACE
 #endif
-
 
 #if defined(Q_WS_QPA)
 typedef unsigned long  WId;

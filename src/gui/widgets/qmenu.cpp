@@ -62,7 +62,7 @@
 #   include <qt_x11_p.h>
 #endif
 
-#if defined(Q_WS_MAC) && !defined(QT_NO_EFFECTS)
+#if defined(Q_OS_MAC) && !defined(QT_NO_EFFECTS)
 #   include <qcore_mac_p.h>
 #   include <qt_cocoa_helpers_mac_p.h>
 #endif
@@ -187,7 +187,7 @@ int QMenuPrivate::scrollerHeight() const
 //Windows and KDE allows menus to cover the taskbar, while GNOME and Mac don't
 QRect QMenuPrivate::popupGeometry(const QWidget *widget) const
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     return QApplication::desktop()->screenGeometry(widget);
 #elif defined Q_WS_X11
     if (X11->desktopEnvironment == DE_KDE)
@@ -202,7 +202,7 @@ QRect QMenuPrivate::popupGeometry(const QWidget *widget) const
 //Windows and KDE allows menus to cover the taskbar, while GNOME and Mac don't
 QRect QMenuPrivate::popupGeometry(int screen) const
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     return QApplication::desktop()->screenGeometry(screen);
 #elif defined Q_WS_X11
     if (X11->desktopEnvironment == DE_KDE)
@@ -421,7 +421,7 @@ QRect QMenuPrivate::actionRect(QAction *act) const
     return actionRects.at(index);
 }
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
 static const qreal MenuFadeTimeInSec = 0.150;
 #endif
 
@@ -449,7 +449,7 @@ void QMenuPrivate::hideUpToMenuBar()
             } else {                caused = 0;
             }
         }
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
         if (fadeMenus) {
             QEventLoop eventLoop;
             QTimer::singleShot(int(MenuFadeTimeInSec * 1000), &eventLoop, SLOT(quit()));
@@ -465,6 +465,7 @@ void QMenuPrivate::hideMenu(QMenu *menu, bool justRegister)
 {
     if (!menu)
         return;
+
 #if !defined(QT_NO_EFFECTS)
     menu->blockSignals(true);
     aboutToHide = true;
@@ -485,25 +486,27 @@ void QMenuPrivate::hideMenu(QMenu *menu, bool justRegister)
         eventLoop.exec();
     }
 
-    // Fade out.
+    // Fade out
     if (menu->style()->styleHint(QStyle::SH_Menu_FadeOutOnHide)) {
-        // ### Qt 4.4:
+       
         // Should be something like: q->transitionWindow(Qt::FadeOutTransition, MenuFadeTimeInSec);
         // Hopefully we'll integrate qt/research/windowtransitions into main before 4.4.
-        // Talk to Richard, Trenton or Bjoern.
-#if defined(Q_WS_MAC)
+        
+#if defined(Q_OS_MAC)
         if (justRegister) {
             QMacWindowFader::currentFader()->setFadeDuration(MenuFadeTimeInSec);
             QMacWindowFader::currentFader()->registerWindowToFade(menu);
         } else {
             macWindowFade(qt_mac_window_for(menu), MenuFadeTimeInSec);
         }
+#endif
 
-#endif // Q_WS_MAC
     }
+
     aboutToHide = false;
     menu->blockSignals(false);
-#endif // QT_NO_EFFECTS
+
+#endif
     if (!justRegister)
         menu->close();
 }
@@ -2327,9 +2330,11 @@ void QMenu::mouseReleaseEvent(QMouseEvent *e)
     QAction *action = d->actionAt(e->pos());
 
     if (action && action == d->currentAction) {
+
         if (!action->menu()){
-#if defined(Q_WS_WIN)
-            //On Windows only context menus can be activated with the right button
+
+#if defined(Q_OS_WIN)
+            // On Windows only context menus can be activated with the right button
             if (e->button() == Qt::LeftButton || d->topCausedWidget() == 0)
 #endif
                 d->activateAction(action, QAction::Trigger);
@@ -2361,12 +2366,10 @@ void QMenu::changeEvent(QEvent *e)
     } else if (e->type() == QEvent::EnabledChange) {
         if (d->tornPopup) // torn-off menu
             d->tornPopup->setEnabled(isEnabled());
+
         d->menuAction->setEnabled(isEnabled());
-#if defined(Q_WS_MAC) && !defined(QT_MAC_USE_COCOA)
-        if (d->mac_menu)
-            d->setMacMenuEnabled(isEnabled());
-#endif
     }
+
     QWidget::changeEvent(e);
 }
 
@@ -2482,7 +2485,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
         else if (key == Qt::Key_Right)
             key = Qt::Key_Left;
     }
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     if (key == Qt::Key_Tab) //means down
         key = Qt::Key_Down;
     if (key == Qt::Key_Backtab) //means up
@@ -2938,7 +2941,7 @@ void QMenu::actionEvent(QActionEvent *e)
         d->widgetItems.remove(e->action());
     }
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (d->mac_menu) {
         if (e->type() == QEvent::ActionAdded)
             d->mac_menu->addAction(e->action(), d->mac_menu->findAction(e->before()), d);
@@ -3080,7 +3083,7 @@ void QMenu::internalDelayedPopup()
 */
 void QMenu::setNoReplayFor(QWidget *noReplayFor)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     d_func()->noReplayFor = noReplayFor;
 #else
     Q_UNUSED(noReplayFor);
@@ -3117,7 +3120,7 @@ void QMenu::setSeparatorsCollapsible(bool collapse)
         d->updateActionRects();
         update();
     }
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (d->mac_menu)
         d->syncSeparatorsCollapsible(collapse);
 #endif

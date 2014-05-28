@@ -32,9 +32,11 @@
 #include "qcursor.h"
 #include "qsizegrip.h"
 #include "qevent.h"
-#if defined(Q_WS_WIN)
+
+#if defined(Q_OS_WIN)
 #include "qt_windows.h"
 #endif
+
 #include "qdebug.h"
 #include "private/qlayoutengine_p.h"
 
@@ -105,6 +107,7 @@ bool QWidgetResizeHandler::eventFilter(QObject *o, QEvent *ee)
         if (!widget->rect().contains(widget->mapFromGlobal(e->globalPos())))
             return false;
         if (e->button() == Qt::LeftButton) {
+
 #if defined(Q_WS_X11)
             /*
                Implicit grabs do not stop the X server from changing
@@ -118,8 +121,8 @@ bool QWidgetResizeHandler::eventFilter(QObject *o, QEvent *ee)
                 widget->grabMouse(widget->cursor());
 #  else
                 widget->grabMouse();
-#  endif // QT_NO_CURSOR
-#endif // Q_WS_X11
+#  endif
+#endif
             buttonDown = false;
             emit activate();
             bool me = movingEnabled;

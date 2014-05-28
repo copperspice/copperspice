@@ -38,7 +38,8 @@
 #include <QtGui/qstyleoption.h>
 #include <QtGui/QStyleOptionTitleBar>
 #include <QtGui/QGraphicsSceneMouseEvent>
-#if defined(Q_WS_MAC) && !defined(QT_NO_STYLE_MAC)
+
+#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
 # include <QMacStyle>
 #endif
 
@@ -74,7 +75,7 @@ qreal QGraphicsWidgetPrivate::titleBarHeight(const QStyleOptionTitleBar &options
 {
     Q_Q(const QGraphicsWidget);
     int height = q->style()->pixelMetric(QStyle::PM_TitleBarHeight, &options);
-#if defined(Q_WS_MAC) && !defined(QT_NO_STYLE_MAC)
+#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
     if (qobject_cast<QMacStyle*>(q->style())) {
         height -=4;
     }
@@ -691,7 +692,7 @@ void QGraphicsWidgetPrivate::windowFrameHoverMoveEvent(QGraphicsSceneHoverEvent 
         case Qt::TitleBarArea:
             windowData->buttonRect = q->style()->subControlRect(
                 QStyle::CC_TitleBar, &bar, QStyle::SC_TitleBarCloseButton, 0);
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
             // On mac we should hover if we are in the 'area' of the buttons
             windowData->buttonRect |= q->style()->subControlRect(
                 QStyle::CC_TitleBar, &bar, QStyle::SC_TitleBarMinButton, 0);

@@ -37,34 +37,34 @@ class Q_GUI_EXPORT QSizeGrip : public QWidget
 {
     CS_OBJECT(QSizeGrip)
 
-public:
-    explicit QSizeGrip(QWidget *parent);
-    ~QSizeGrip();
-
-    QSize sizeHint() const;
-    void setVisible(bool);
-
-protected:
-    void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *mouseEvent);
-    void moveEvent(QMoveEvent *moveEvent);
-    void showEvent(QShowEvent *showEvent);
-    void hideEvent(QHideEvent *hideEvent);
-    bool eventFilter(QObject *, QEvent *);
-    bool event(QEvent *);
-
-#ifdef Q_WS_WIN
-    bool winEvent(MSG *m, long *result);
-#endif
-
-private:
-    Q_DECLARE_PRIVATE(QSizeGrip)
-    Q_DISABLE_COPY(QSizeGrip)
-
-    GUI_CS_SLOT_1(Private, void _q_showIfNotHidden())
-    GUI_CS_SLOT_2(_q_showIfNotHidden)
+   public:
+       explicit QSizeGrip(QWidget *parent);
+       ~QSizeGrip();
+   
+       QSize sizeHint() const;
+       void setVisible(bool);
+   
+   protected:
+       void paintEvent(QPaintEvent *);
+       void mousePressEvent(QMouseEvent *);
+       void mouseMoveEvent(QMouseEvent *);
+       void mouseReleaseEvent(QMouseEvent *mouseEvent);
+       void moveEvent(QMoveEvent *moveEvent);
+       void showEvent(QShowEvent *showEvent);
+       void hideEvent(QHideEvent *hideEvent);
+       bool eventFilter(QObject *, QEvent *);
+       bool event(QEvent *);
+   
+   #ifdef Q_OS_WIN
+       bool winEvent(MSG *m, long *result);
+   #endif
+   
+   private:
+       Q_DECLARE_PRIVATE(QSizeGrip)
+       Q_DISABLE_COPY(QSizeGrip)
+   
+       GUI_CS_SLOT_1(Private, void _q_showIfNotHidden())
+       GUI_CS_SLOT_2(_q_showIfNotHidden)
 };
 #endif // QT_NO_SIZEGRIP
 

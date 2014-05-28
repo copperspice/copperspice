@@ -1138,7 +1138,6 @@ QDataStream &operator>>(QDataStream &s, QMatrix &m)
 }
 #endif // QT_NO_DATASTREAM
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QMatrix &m)
 {
     dbg.nospace() << "QMatrix("
@@ -1151,31 +1150,6 @@ QDebug operator<<(QDebug dbg, const QMatrix &m)
                   << ')';
     return dbg.space();
 }
-#endif
 
-/*!
-    \fn QRect QMatrix::map(const QRect &rect) const
-    \compat
-
-    Creates and returns a QRect object that is a copy of the given
-    rectangle, mapped into the coordinate system defined by this
-    matrix.
-
-    Use the mapRect() function instead.
-*/
-
-
-/*!
-    \fn bool qFuzzyCompare(const QMatrix& m1, const QMatrix& m2)
-
-    \relates QMatrix
-    \since 4.6
-
-    \brief The qFuzzyCompare function is for comparing two matrices
-    using a fuzziness factor.
-    
-    Returns true if \a m1 and \a m2 are equal, allowing for a small
-    fuzziness factor for floating-point comparisons; false otherwise.
-*/
 
 QT_END_NAMESPACE

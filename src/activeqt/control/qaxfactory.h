@@ -50,11 +50,7 @@
 struct IUnknown;
 struct IDispatch;
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
-
-QT_MODULE(ActiveQt)
 
 #ifndef QT_NO_WIN_ACTIVEQT
 
@@ -306,6 +302,5 @@ Q_DECLARE_METATYPE(IDispatch*)
 
 #endif // QT_NO_WIN_ACTIVEQT
 
-QT_END_HEADER
 
 #endif // QAXFACTORY_H

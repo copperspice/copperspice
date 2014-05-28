@@ -115,7 +115,7 @@ public:
 
     void setNoReplayFor(QWidget *widget);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     OSMenuRef macMenu(OSMenuRef merge=0);
 #endif
 
@@ -183,7 +183,7 @@ private :
     friend class QAction;
     friend class QToolButtonPrivate;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     friend void qt_mac_trayicon_activate_action(QMenu *, QAction *action);
     friend bool qt_mac_watchingAboutToShow(QMenu *);
     friend OSStatus qt_mac_menu_event(EventHandlerCallRef, EventRef, void *);

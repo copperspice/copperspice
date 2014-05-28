@@ -83,9 +83,8 @@ private:
     QSqlRecordPrivate* d;
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_SQL_EXPORT QDebug operator<<(QDebug, const QSqlRecord &);
-#endif
+
 
 QT_END_NAMESPACE
 

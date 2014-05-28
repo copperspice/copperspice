@@ -46,7 +46,7 @@
 #include "qaccessible.h"
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 #include "qt_windows.h"
 #ifndef SPI_GETDROPSHADOW
 #define SPI_GETDROPSHADOW                   0x1024
@@ -215,7 +215,7 @@ QWhatsThat::QWhatsThat(const QString& txt, QWidget* parent, QWidget *showTextFor
                                         + Qt::TextWordWrap + Qt::TextExpandTabs,
                                         text);
     }
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     if ((QSysInfo::WindowsVersion >= QSysInfo::WV_XP
         && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)))
     {
@@ -293,7 +293,7 @@ void QWhatsThat::keyPressEvent(QKeyEvent*)
 void QWhatsThat::paintEvent(QPaintEvent*)
 {
     bool drawShadow = true;
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     if ((QSysInfo::WindowsVersion >= QSysInfo::WV_XP
         && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)))
     {
@@ -301,7 +301,7 @@ void QWhatsThat::paintEvent(QPaintEvent*)
         SystemParametersInfo(SPI_GETDROPSHADOW, 0, &shadow, 0);
         drawShadow = !shadow;
     }
-#elif defined(Q_WS_MAC) || defined(Q_WS_QWS)
+#elif defined(Q_OS_MAC) || defined(Q_WS_QWS)
     drawShadow = false; // never draw it on OS X or QWS, as we get it for free
 #endif
 
@@ -588,6 +588,7 @@ void QWhatsThisPrivate::say(QWidget * widget, const QString &text, int x, int y)
 {
     if (text.size() == 0)
         return;
+
     // make a fresh widget, and set it up
     QWhatsThat *whatsThat = new QWhatsThat(
         text,
@@ -599,7 +600,6 @@ void QWhatsThisPrivate::say(QWidget * widget, const QString &text, int x, int y)
         widget
        );
 
-
     // okay, now to find a suitable location
 
     int scr = (widget ?
@@ -608,7 +608,7 @@ void QWhatsThisPrivate::say(QWidget * widget, const QString &text, int x, int y)
                 QCursor::x11Screen()
 #else
                 QApplication::desktop()->screenNumber(QPoint(x,y))
-#endif // Q_WS_X11
+#endif
                );
     QRect screen = QApplication::desktop()->screenGeometry(scr);
 

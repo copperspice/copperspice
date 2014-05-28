@@ -326,7 +326,7 @@ QSize QToolButton::sizeHint() const
         QSize icon = opt.iconSize;
         w = icon.width();
         h = icon.height();
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         extern CGFloat qt_mac_get_scalefactor();
         w /= qt_mac_get_scalefactor();
         h /= qt_mac_get_scalefactor();
@@ -577,7 +577,7 @@ void QToolButton::changeEvent(QEvent *e)
         if (qobject_cast<QToolBar*>(parentWidget()))
             d->autoRaise = true;
     } else if (e->type() == QEvent::StyleChange
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                || e->type() == QEvent::MacSizeChange
 #endif
                ) {

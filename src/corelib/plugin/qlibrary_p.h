@@ -26,7 +26,7 @@
 #ifndef QLIBRARY_P_H
 #define QLIBRARY_P_H
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "QtCore/qt_windows.h"
 #endif
 
@@ -46,7 +46,7 @@ class QLibraryPrivate
 {
 public:
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     HINSTANCE
 #else
     void *

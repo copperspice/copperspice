@@ -136,12 +136,12 @@ QThreadPrivate::QThreadPrivate(QThreadData *d)
 {
 #if defined (Q_OS_UNIX)
     thread_id = 0;
-#elif defined (Q_WS_WIN)
+#elif defined (Q_OS_WIN)
     handle = 0;
     id = 0;
     waiters = 0;
 #endif
-#if defined (Q_WS_WIN)
+#if defined (Q_OS_WIN)
     terminationEnabled = true;
     terminatePending = false;
 #endif

@@ -32,34 +32,30 @@
 
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
-
-QT_MODULE(DBus)
 
 class QDBusMessage;
 class QDBusConnection;
-
 class QDBusVirtualObjectPrivate;
+
 class Q_DBUS_EXPORT QDBusVirtualObject : public QObject
 {
     Q_OBJECT
-public:
-    explicit QDBusVirtualObject(QObject *parent = 0);
-    virtual ~QDBusVirtualObject();
 
-    virtual QString introspect(const QString &path) const = 0;
-    virtual bool handleMessage(const QDBusMessage &message, const QDBusConnection &connection) = 0;
-
-private:
-    Q_DECLARE_PRIVATE(QDBusVirtualObject)
-    Q_DISABLE_COPY(QDBusVirtualObject)
+   public:
+       explicit QDBusVirtualObject(QObject *parent = 0);
+       virtual ~QDBusVirtualObject();
+   
+       virtual QString introspect(const QString &path) const = 0;
+       virtual bool handleMessage(const QDBusMessage &message, const QDBusConnection &connection) = 0;
+   
+   private:
+       Q_DECLARE_PRIVATE(QDBusVirtualObject)
+       Q_DISABLE_COPY(QDBusVirtualObject)
 };
 
 QT_END_NAMESPACE
 
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif

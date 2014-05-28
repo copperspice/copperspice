@@ -36,7 +36,7 @@
 #include <QtGui/qimage.h>
 
 #if !defined(QT_NO_EGL)
-#include <QtGui/private/qeglcontext_p.h>
+#include <qeglcontext_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE

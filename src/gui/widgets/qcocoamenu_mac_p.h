@@ -28,23 +28,10 @@
 
 #include "qmacdefines_mac.h"
 
-#ifdef QT_MAC_USE_COCOA
 #import <Cocoa/Cocoa.h>
 
 QT_FORWARD_DECLARE_CLASS(QMenu)
 QT_FORWARD_DECLARE_CLASS(QAction)
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_5
-
-@protocol NSMenuDelegate <NSObject>
-- (void)menu:(NSMenu*)menu willHighlightItem:(NSMenuItem*)item;
-- (void)menuWillOpen:(NSMenu*)menu;
-- (void)menuDidClose:(NSMenu*)menu;
-- (BOOL)hasShortcut:(NSMenu *)menu forKey:(NSString *)key forModifiers:(NSUInteger)modifier
-  whichItem:(NSMenuItem**)outItem;
-@end
-
-#endif
 
 @interface QT_MANGLE_NAMESPACE(QCocoaMenu) : NSMenu <NSMenuDelegate>
 {
@@ -55,6 +42,5 @@ QT_FORWARD_DECLARE_CLASS(QAction)
 - (BOOL)menuHasKeyEquivalent:(NSMenu *)menu forEvent:(NSEvent *)event target:(id *)target action:(SEL *)action;
 - (NSInteger)indexOfItemWithTarget:(id)anObject andAction:(SEL)actionSelector;
 @end
-#endif
 
 #endif

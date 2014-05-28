@@ -76,7 +76,7 @@ protected:
 
 private:
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     friend class QWidgetPrivate;
 #endif
 

@@ -33,7 +33,7 @@
 
 #include <qdebug.h>
 
-#if defined(Q_OS_UNIX) || defined(Q_WS_WIN)
+#if defined(Q_OS_UNIX) || defined(Q_OS_WIN)
 #include "qimage.h"
 #include "qbitmap.h"
 #include <stdlib.h>
@@ -423,7 +423,7 @@ QDataStream &operator>>(QDataStream &s, QRegion &r)
 }
 #endif //QT_NO_DATASTREAM
 
-#ifndef QT_NO_DEBUG_STREAM
+
 QDebug operator<<(QDebug s, const QRegion &r)
 {
     QVector<QRect> rects = r.rects();
@@ -433,62 +433,24 @@ QDebug operator<<(QDebug s, const QRegion &r)
         s << "- " << i << rects.at(i) << '\n';
     return s;
 }
-#endif
 
-
-// These are not inline - they can be implemented better on some platforms
-//  (eg. Windows at least provides 3-variable operations).  For now, simple.
-
-
-/*!
-    Applies the united() function to this region and \a r. \c r1|r2 is
-    equivalent to \c r1.united(r2).
-
-    \sa united(), operator+()
-*/
 const QRegion QRegion::operator|(const QRegion &r) const
     { return united(r); }
 
-/*!
-    Applies the united() function to this region and \a r. \c r1+r2 is
-    equivalent to \c r1.united(r2).
-
-    \sa united(), operator|()
-*/
 const QRegion QRegion::operator+(const QRegion &r) const
     { return united(r); }
 
-/*!
-   \overload
-   \since 4.4
- */
 const QRegion QRegion::operator+(const QRect &r) const
     { return united(r); }
 
-/*!
-    Applies the intersected() function to this region and \a r. \c r1&r2
-    is equivalent to \c r1.intersected(r2).
-
-    \sa intersected()
-*/
 const QRegion QRegion::operator&(const QRegion &r) const
     { return intersected(r); }
 
-/*!
-   \overload
-   \since 4.4
- */
 const QRegion QRegion::operator&(const QRect &r) const
 {
     return intersected(r);
 }
 
-/*!
-    Applies the subtracted() function to this region and \a r. \c r1-r2
-    is equivalent to \c r1.subtracted(r2).
-
-    \sa subtracted()
-*/
 const QRegion QRegion::operator-(const QRegion &r) const
     { return subtracted(r); }
 
@@ -527,7 +489,7 @@ QRegion& QRegion::operator|=(const QRegion &r)
 
     \sa intersected()
 */
-#if !defined (Q_OS_UNIX) && !defined (Q_WS_WIN)
+#if !defined (Q_OS_UNIX) && !defined (Q_OS_WIN)
 QRegion& QRegion::operator+=(const QRect &r)
 {
     return operator+=(QRegion(r));
@@ -550,7 +512,7 @@ QRegion& QRegion::operator&=(const QRegion &r)
    \overload
    \since 4.4
  */
-#if defined (Q_OS_UNIX) || defined (Q_WS_WIN)
+#if defined (Q_OS_UNIX) || defined (Q_OS_WIN)
 QRegion& QRegion::operator&=(const QRect &r)
 {
     return *this = *this & r;
@@ -694,7 +656,7 @@ bool QRegion::intersects(const QRegion &region) const
 */
 
 
-#if !defined (Q_OS_UNIX) && !defined (Q_WS_WIN)
+#if !defined (Q_OS_UNIX) && !defined (Q_OS_WIN)
 /*!
     \overload
     \since 4.4
@@ -1057,7 +1019,7 @@ QPainterPath qt_regionToPath(const QRegion &region)
     return result;
 }
 
-#if defined(Q_OS_UNIX) || defined(Q_WS_WIN)
+#if defined(Q_OS_UNIX) || defined(Q_OS_WIN)
 
 //#define QT_REGION_DEBUG
 /*
@@ -1588,23 +1550,27 @@ void QRegionPrivate::selfTest() const
         r = r2;
     }
 }
-#endif // QT_REGION_DEBUG
+#endif
 
 #if defined(Q_WS_X11)
 QT_BEGIN_INCLUDE_NAMESPACE
 # include "qregion_x11.cpp"
 QT_END_INCLUDE_NAMESPACE
-#elif defined(Q_WS_MAC)
+
+#elif defined(Q_OS_MAC)
 QT_BEGIN_INCLUDE_NAMESPACE
 # include "qregion_mac.cpp"
 QT_END_INCLUDE_NAMESPACE
-#elif defined(Q_WS_WIN)
+
+#elif defined(Q_OS_WIN)
 QT_BEGIN_INCLUDE_NAMESPACE
 # include "qregion_win.cpp"
 QT_END_INCLUDE_NAMESPACE
+
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
 static QRegionPrivate qrp;
 QRegion::QRegionData QRegion::shared_empty = {Q_BASIC_ATOMIC_INITIALIZER(1), &qrp};
+
 #endif
 
 typedef void (*OverlapFunc)(QRegionPrivate &dest, const QRect *r1, const QRect *r1End,
@@ -3817,7 +3783,7 @@ QRegion::QRegion(const QRect &r, RegionType t)
 #if defined(Q_WS_X11)
         d->rgn = 0;
         d->xrectangles = 0;
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
         d->rgn = 0;
 #endif
         if (t == Rectangle) {
@@ -3842,7 +3808,7 @@ QRegion::QRegion(const QPolygon &a, Qt::FillRule fillRule)
 #if defined(Q_WS_X11)
             d->rgn = 0;
             d->xrectangles = 0;
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
             d->rgn = 0;
 #endif
             d->qt_rgn = qt_rgn;
@@ -3874,7 +3840,7 @@ QRegion::QRegion(const QBitmap &bm)
 #if defined(Q_WS_X11)
         d->rgn = 0;
         d->xrectangles = 0;
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
         d->rgn = 0;
 #endif
         d->qt_rgn = qt_bitmapToRegion(bm);
@@ -3889,7 +3855,7 @@ void QRegion::cleanUp(QRegion::QRegionData *x)
         XDestroyRegion(x->rgn);
     if (x->xrectangles)
         free(x->xrectangles);
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
     if (x->rgn)
         qt_win_dispose_rgn(x->rgn);
 #endif
@@ -3924,7 +3890,7 @@ QRegion QRegion::copy() const
 #if defined(Q_WS_X11)
     x->rgn = 0;
     x->xrectangles = 0;
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
     x->rgn = 0;
 #endif
     if (d->qt_rgn)

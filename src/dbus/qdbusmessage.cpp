@@ -27,9 +27,7 @@
 
 #include <qdebug.h>
 #include <qstringlist.h>
-
 #include "qdbus_symbols_p.h"
-
 #include "qdbusargument_p.h"
 #include "qdbuserror.h"
 #include "qdbusmessage_p.h"
@@ -723,17 +721,7 @@ QDBusMessage::MessageType QDBusMessage::type() const
     return InvalidMessage;
 }
 
-/*!
-    Sends the message without waiting for a reply. This is suitable
-    for errors, signals, and return values as well as calls whose
-    return values are not necessary.
 
-    Returns true if the message was queued successfully;
-    otherwise returns false.
-
-    \sa QDBusConnection::send()
-*/
-#ifndef QT_NO_DEBUG_STREAM
 static QDebug operator<<(QDebug dbg, QDBusMessage::MessageType t)
 {
     switch (t)
@@ -782,7 +770,6 @@ QDebug operator<<(QDebug dbg, const QDBusMessage &msg)
     dbg.nospace() << ") )";
     return dbg.space();
 }
-#endif
 
 QT_END_NAMESPACE
 

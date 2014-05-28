@@ -37,14 +37,14 @@
 #include <qstylepainter.h>
 #include <qtoolbutton.h>
 #include <qdebug.h>
-
-#include <private/qwidgetresizehandler_p.h>
+#include <qwidgetresizehandler_p.h>
 
 #include "qdockwidget_p.h"
 #include "qmainwindowlayout_p.h"
-#ifdef Q_WS_MAC
-#include <private/qapplication_p.h>
-#include <private/qt_mac_p.h>
+
+#ifdef Q_OS_MAC
+#include <qapplication_p.h>
+#include <qt_mac_p.h>
 #include <qmacstyle_mac.h>
 #endif
 
@@ -432,7 +432,7 @@ int QDockWidgetLayout::titleHeight() const
                             perp(verticalTitleBar, floatSize));
 
     QFontMetrics titleFontMetrics = q->fontMetrics();
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (qobject_cast<QMacStyle *>(q->style())) {
         //### this breaks on proxy styles.  (But is this code still called?)
         QFont font = qt_app_fonts_hash()->value("QToolButton", q->font());
@@ -895,7 +895,7 @@ void QDockWidgetPrivate::nonClientAreaMouseEvent(QMouseEvent *event)
 
     QRect geo = q->geometry();
     QRect titleRect = q->frameGeometry();
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if ((features & QDockWidget::DockWidgetVerticalTitleBar)) {
         titleRect.setTop(geo.top());
         titleRect.setBottom(geo.bottom());
@@ -1036,12 +1036,6 @@ void QDockWidgetPrivate::setWindowState(bool floating, bool unplug, const QRect 
         flags |= Qt::X11BypassWindowManagerHint;
 
     q->setWindowFlags(flags);
-
-#if defined(Q_WS_MAC) && !defined(QT_MAC_USE_COCOA)
-    if (floating && nativeDeco && (q->features() & QDockWidget::DockWidgetVerticalTitleBar)) {
-        ChangeWindowAttributes(HIViewGetWindow(HIViewRef(q->winId())), kWindowSideTitlebarAttribute, 0);
-    }
-#endif
 
     if (!rect.isNull())
         q->setGeometry(rect);

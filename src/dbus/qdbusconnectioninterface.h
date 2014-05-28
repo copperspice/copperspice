@@ -27,17 +27,13 @@
 #define QDBUSBUS_H
 
 #include <QtCore/qstringlist.h>
-
 #include <QtDBus/qdbusabstractinterface.h>
 #include <QtDBus/qdbusreply.h>
 
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
-
-QT_MODULE(DBus)
 
 class QDBusConnection;
 class QString;
@@ -109,8 +105,6 @@ protected:
 QT_END_NAMESPACE
 
 Q_DECLARE_BUILTIN_METATYPE(QDBusConnectionInterface::RegisterServiceReply, UInt)
-
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif

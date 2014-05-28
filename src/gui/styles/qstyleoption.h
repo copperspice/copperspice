@@ -877,10 +877,8 @@ T qstyleoption_cast(QStyleHintReturn *hint)
     return 0;
 }
 
-#if !defined(QT_NO_DEBUG_STREAM)
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QStyleOption &option);
-#endif
 
 QT_END_NAMESPACE
 

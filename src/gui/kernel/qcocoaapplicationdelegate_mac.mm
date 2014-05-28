@@ -29,8 +29,6 @@
 
 #include "qmacdefines_mac.h"
 
-#ifdef QT_MAC_USE_COCOA
-
 #import <qcocoaapplicationdelegate_mac_p.h>
 #import <qcocoamenuloader_mac_p.h>
 #import <qcocoaapplication_mac_p.h>
@@ -330,4 +328,3 @@ QThreadData * internal_get_ThreadData(QObject *object)
 }
 
 @end
-#endif

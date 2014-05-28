@@ -31,13 +31,9 @@
 
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_HEADER
-
 struct DBusError;
 
 QT_BEGIN_NAMESPACE
-
-QT_MODULE(DBus)
 
 class QDBusMessage;
 
@@ -96,13 +92,9 @@ private:
     void *unused;
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_DBUS_EXPORT QDebug operator<<(QDebug, const QDBusError &);
-#endif
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif

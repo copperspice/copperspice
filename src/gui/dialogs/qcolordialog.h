@@ -117,7 +117,7 @@ private:
     GUI_CS_SLOT_1(Private, void _q_newStandard(int un_named_arg1,int un_named_arg2))
     GUI_CS_SLOT_2(_q_newStandard)
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     GUI_CS_SLOT_1(Private, void _q_macRunNativeAppModalPanel())
     GUI_CS_SLOT_2(_q_macRunNativeAppModalPanel)
 #endif

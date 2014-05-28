@@ -316,7 +316,7 @@ void QToolBarLayout::updateGeomArray() const
     rpick(o, that->hint) += handleExtent;
     that->hint += QSize(2*margin, 2*margin);
     that->dirty = false;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (QMainWindow *mw = qobject_cast<QMainWindow *>(parentWidget()->parentWidget())) {
         if (mw->unifiedTitleAndToolBarOnMac()
                 && mw->toolBarArea(static_cast<QToolBar *>(parentWidget())) == Qt::TopToolBarArea) {
@@ -384,16 +384,14 @@ void QToolBarLayout::setGeometry(const QRect &rect)
         if (!extension->isHidden())
             extension->hide();
     }
-#ifdef Q_WS_MAC
-    // Nothing to do for Carbon... probably   
-#  ifdef QT_MAC_USE_COCOA
+
+#ifdef Q_OS_MAC
     if (QMainWindow *win = qobject_cast<QMainWindow*>(tb->parentWidget())) {
         Qt::ToolBarArea area = win->toolBarArea(tb);
         if (win->unifiedTitleAndToolBarOnMac() && area == Qt::TopToolBarArea) {
             qt_mainwindow_layout(win)->fixSizeInUnifiedToolbar(tb);
         }
     }
-#  endif
 #endif
     
 }

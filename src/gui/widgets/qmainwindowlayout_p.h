@@ -49,18 +49,15 @@ Q_GUI_EXPORT void qt_dumpLayout(QTextStream &qout, QMainWindow *window);
 QT_END_NAMESPACE
 #endif 
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 struct OpaqueHIObjectRef;
 typedef struct OpaqueHIObjectRef*       HIObjectRef;
 typedef HIObjectRef                     HIToolbarItemRef;
 typedef const void * CFTypeRef;
 typedef const struct __CFString * CFStringRef;
 
-# ifdef QT_MAC_USE_COCOA
 #include <qunifiedtoolbarsurface_mac_p.h>
-# endif
-
-#endif // Q_WS_MAC
+#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -277,14 +274,7 @@ private :
     void updateTabBarShapes();
 #endif
 
-#ifdef Q_WS_MAC
-#  ifndef QT_MAC_USE_COCOA
-    static OSStatus qtmacToolbarDelegate(EventHandlerCallRef, EventRef , void *);
-    static OSStatus qtoolbarInHIToolbarHandler(EventHandlerCallRef inCallRef, EventRef event, void *data);
-    static void qtMacHIToolbarRegisterQToolBarInHIToolborItemClass();
-    static HIToolbarItemRef CreateToolbarItemForIdentifier(CFStringRef identifier, CFTypeRef data);
-    static HIToolbarItemRef createQToolBarInHIToolbarItem(QToolBar *toolbar, QMainWindowLayout *layout);
-#  endif
+#ifdef Q_OS_MAC
 
 public:
     struct ToolBarSaveState {
@@ -308,11 +298,12 @@ public:
     void syncUnifiedToolbarVisibility();
     bool blockVisiblityCheck;
 
-#ifdef QT_MAC_USE_COCOA
+
     QUnifiedToolbarSurface *unifiedSurface;
     void updateUnifiedToolbarOffset();
+
+
 #endif
-#endif // Q_WS_MAC
 
 };
 QT_END_NAMESPACE

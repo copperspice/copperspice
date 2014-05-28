@@ -558,8 +558,6 @@ QQuaternion::operator QVariant() const
     return QVariant(QVariant::Quaternion, this);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
-
 QDebug operator<<(QDebug dbg, const QQuaternion &q)
 {
     dbg.nospace() << "QQuaternion(scalar:" << q.scalar()
@@ -568,7 +566,6 @@ QDebug operator<<(QDebug dbg, const QQuaternion &q)
     return dbg.space();
 }
 
-#endif
 
 #ifndef QT_NO_DATASTREAM
 

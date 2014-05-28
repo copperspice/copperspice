@@ -26,14 +26,16 @@
 #include <qstyleoption.h>
 #include <qpainter.h>
 #include <qpixmapcache.h>
-#include <private/qmath_p.h>
-#include <private/qstyle_p.h>
+#include <qmath_p.h>
+#include <qstyle_p.h>
 #include <qmath.h>
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 #include "qt_windows.h"
-#elif defined(Q_WS_MAC)
-#include <private/qt_cocoa_helpers_mac_p.h>
+
+#elif defined(Q_OS_MAC)
+#include <qt_cocoa_helpers_mac_p.h>
+
 #endif
 
 #include "qstylehelper_p.h"
@@ -68,14 +70,14 @@ qreal dpiScaled(qreal value)
     static qreal scale = -1;
     if (scale < 0) {
         scale = 1.0;
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
         {
             HDC hdcScreen = GetDC(0);
             int dpi = GetDeviceCaps(hdcScreen, LOGPIXELSX);
             ReleaseDC(0, hdcScreen);
             scale = dpi/96.0;
         }
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     scale = qt_mac_get_scalefactor();
 #endif
     }

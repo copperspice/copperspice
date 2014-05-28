@@ -679,7 +679,7 @@ void QGraphicsWidget::initStyleOption(QStyleOption *option) const
         option->state |= QStyle::State_Window;
     /*
       ###
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     extern bool qt_mac_can_clickThrough(const QGraphicsWidget *w); //qwidget_mac.cpp
     if (!(option->state & QStyle::State_Active) && !qt_mac_can_clickThrough(widget))
         option->state &= ~QStyle::State_Enabled;
@@ -2251,7 +2251,7 @@ void QGraphicsWidget::paintWindowFrame(QPainter *painter, const QStyleOptionGrap
     const QPointF styleOrigin = this->windowFrameRect().topLeft();
     painter->translate(styleOrigin);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     const QSize pixmapSize = windowFrameRect.size();
     if (pixmapSize.width() <= 0 || pixmapSize.height() <= 0)
         return;
@@ -2320,7 +2320,7 @@ void QGraphicsWidget::paintWindowFrame(QPainter *painter, const QStyleOptionGrap
     frameOptions.midLineWidth = 1;
     style()->drawPrimitive(QStyle::PE_FrameWindow, &frameOptions, painter, widget);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     realPainter->drawPixmap(QPoint(), pm);
     delete painter;
 #endif

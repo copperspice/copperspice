@@ -101,9 +101,8 @@ public:
     qreal pts[8];
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug Q_GUI_EXPORT &operator<<(QDebug &, const QVectorPath &path);
-#endif
+
 
 class QPixmapFilter;
 

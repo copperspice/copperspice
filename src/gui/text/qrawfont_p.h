@@ -43,7 +43,7 @@ public:
         : fontEngine(0)
         , hintingPreference(QFont::PreferDefaultHinting)
         , thread(0)
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
         , fontHandle(NULL)
 #endif
     {}
@@ -52,7 +52,7 @@ public:
         : fontEngine(other.fontEngine)
         , hintingPreference(other.hintingPreference)
         , thread(other.thread)
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
         , fontHandle(NULL)
 #endif
     {
@@ -85,7 +85,7 @@ public:
     QThread *thread;
     QAtomicInt ref;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     HANDLE fontHandle;
 #endif
 };

@@ -426,7 +426,7 @@ QT_BEGIN_INCLUDE_NAMESPACE
 #include <QDebug>
 QT_END_INCLUDE_NAMESPACE
 
-#if !defined(QT_NO_DEBUG_STREAM)
+
 QDebug operator<<(QDebug debug, QStyle::State state)
 {
 #if !defined(QT_NO_DEBUG)
@@ -464,9 +464,9 @@ QDebug operator<<(QDebug debug, QStyle::State state)
 #else
     Q_UNUSED(state);
 #endif
+
     return debug;
 }
-#endif
 
 const QStyle * QStyle::proxy() const
 {

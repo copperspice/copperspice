@@ -24,27 +24,22 @@
 ***********************************************************************/
 
 #include "qcolordialog_p.h"
-#if !defined(QT_NO_COLORDIALOG) && defined(Q_WS_MAC)
+
+#if !defined(QT_NO_COLORDIALOG) && defined(Q_OS_MAC)
+
 #include <qapplication.h>
 #include <qtimer.h>
 #include <qdialogbuttonbox.h>
 #include <qabstracteventdispatcher.h>
-#include <private/qapplication_p.h>
-#include <private/qt_mac_p.h>
+#include <qapplication_p.h>
+#include <qt_mac_p.h>
 #include <qdebug.h>
+
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 
 #if !CGFLOAT_DEFINED
 typedef float CGFloat;  // Should only not be defined on 32-bit platforms
-#endif
-
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_5
-@protocol NSWindowDelegate <NSObject>
-- (void)windowDidResize:(NSNotification *)notification;
-- (BOOL)windowShouldClose:(id)window;
-@end
 #endif
 
 QT_USE_NAMESPACE
@@ -104,10 +99,10 @@ QT_USE_NAMESPACE
     mDialogIsExecuting = false;
     mResultSet = false;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+
     if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_7)
         [mColorPanel setRestorable:NO];
-#endif
+
 
     if (mHackedPanel) {
         [self relayout];

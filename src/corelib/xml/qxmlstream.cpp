@@ -25,10 +25,10 @@
 
 #include "QtCore/qxmlstream.h"
 
-#if defined(QT_BUILD_XML_LIB) && defined(Q_OS_MAC64)
-// No need to define this in the 64-bit Mac libraries.
-// Since Qt 4.4 and previous weren't supported in 64-bit, there are
-// no QXmlStream* symbols to keep compatibility with
+#if defined(QT_BUILD_XML_LIB) && defined(Q_OS_MAC)
+// No need to define this in the 64-bit Mac libraries Since Qt 4.4 and previous were not
+// supported in 64-bit, there are no QXmlStream* symbols to keep compatibility with
+
 # define QT_NO_XMLSTREAM
 #endif
 
@@ -48,104 +48,6 @@ QT_BEGIN_NAMESPACE
 #include "qxmlstream_p.h"
 
 /*!
-    \enum QXmlStreamReader::TokenType
-
-    This enum specifies the type of token the reader just read.
-
-    \value NoToken The reader has not yet read anything.
-
-    \value Invalid An error has occurred, reported in error() and
-    errorString().
-
-    \value StartDocument The reader reports the XML version number in
-    documentVersion(), and the encoding as specified in the XML
-    document in documentEncoding().  If the document is declared
-    standalone, isStandaloneDocument() returns true; otherwise it
-    returns false.
-
-    \value EndDocument The reader reports the end of the document.
-
-    \value StartElement The reader reports the start of an element
-    with namespaceUri() and name(). Empty elements are also reported
-    as StartElement, followed directly by EndElement. The convenience
-    function readElementText() can be called to concatenate all
-    content until the corresponding EndElement. Attributes are
-    reported in attributes(), namespace declarations in
-    namespaceDeclarations().
-
-    \value EndElement The reader reports the end of an element with
-    namespaceUri() and name().
-
-    \value Characters The reader reports characters in text(). If the
-    characters are all white-space, isWhitespace() returns true. If
-    the characters stem from a CDATA section, isCDATA() returns true.
-
-    \value Comment The reader reports a comment in text().
-
-    \value DTD The reader reports a DTD in text(), notation
-    declarations in notationDeclarations(), and entity declarations in
-    entityDeclarations(). Details of the DTD declaration are reported
-    in in dtdName(), dtdPublicId(), and dtdSystemId().
-
-    \value EntityReference The reader reports an entity reference that
-    could not be resolved.  The name of the reference is reported in
-    name(), the replacement text in text().
-
-    \value ProcessingInstruction The reader reports a processing
-    instruction in processingInstructionTarget() and
-    processingInstructionData().
-*/
-
-/*!
-    \enum QXmlStreamReader::ReadElementTextBehaviour
-
-    This enum specifies the different behaviours of readElementText().
-
-    \value ErrorOnUnexpectedElement Raise an UnexpectedElementError and return
-    what was read so far when a child element is encountered.
-
-    \value IncludeChildElements Recursively include the text from child elements.
-
-    \value SkipChildElements Skip child elements.
-
-    \since 4.6
-*/
-
-/*!
-    \enum QXmlStreamReader::Error
-
-    This enum specifies different error cases
-
-    \value NoError No error has occurred.
-
-    \value CustomError A custom error has been raised with
-    raiseError()
-
-    \value NotWellFormedError The parser internally raised an error
-    due to the read XML not being well-formed.
-
-    \value PrematureEndOfDocumentError The input stream ended before a
-    well-formed XML document was parsed. Recovery from this error is
-    possible if more XML arrives in the stream, either by calling
-    addData() or by waiting for it to arrive on the device().
-
-    \value UnexpectedElementError The parser encountered an element
-    that was different to those it expected.
-
-*/
-
-/*!
-  \class QXmlStreamEntityResolver
-  \reentrant
-  \since 4.4
-
-  \brief The QXmlStreamEntityResolver class provides an entity
-  resolver for a QXmlStreamReader.
-
-  \ingroup xml-tools
- */
-
-/*!
   Destroys the entity resolver.
  */
 QXmlStreamEntityResolver::~QXmlStreamEntityResolver()
@@ -162,14 +64,6 @@ QString QXmlStreamEntityResolver::resolveEntity(const QString& /*publicId*/, con
 }
 
 
-/*!
-  Resolves the undeclared entity \a name and returns its replacement
-  text. If the entity is also unknown to the entity resolver, it
-  returns an empty string.
-
-  The default implementation always returns an empty string.
-*/
-
 QString QXmlStreamEntityResolver::resolveUndeclaredEntity(const QString &/*name*/)
 {
     return QString();
@@ -184,166 +78,17 @@ QString QXmlStreamReaderPrivate::resolveUndeclaredEntity(const QString &name)
     return QString();
 }
 
-
-
-/*!
-   \since 4.4
-
-   Makes \a resolver the new entityResolver().
-
-   The stream reader does \e not take ownership of the resolver. It's
-   the callers responsibility to ensure that the resolver is valid
-   during the entire life-time of the stream reader object, or until
-   another resolver or 0 is set.
-
-   \sa entityResolver()
- */
 void QXmlStreamReader::setEntityResolver(QXmlStreamEntityResolver *resolver)
 {
     Q_D(QXmlStreamReader);
     d->entityResolver = resolver;
 }
 
-/*!
-  \since 4.4
-
-  Returns the entity resolver, or 0 if there is no entity resolver.
-
-  \sa setEntityResolver()
- */
 QXmlStreamEntityResolver *QXmlStreamReader::entityResolver() const
 {
     Q_D(const QXmlStreamReader);
     return d->entityResolver;
 }
-
-
-
-/*!
-  \class QXmlStreamReader
-  \reentrant
-  \since 4.3
-
-  \brief The QXmlStreamReader class provides a fast parser for reading
-  well-formed XML via a simple streaming API.
-
-
-  \ingroup xml-tools
-
-  QXmlStreamReader is a faster and more convenient replacement for
-  Qt's own SAX parser (see QXmlSimpleReader). In some cases it might
-  also be a faster and more convenient alternative for use in
-  applications that would otherwise use a DOM tree (see QDomDocument).
-  QXmlStreamReader reads data either from a QIODevice (see
-  setDevice()), or from a raw QByteArray (see addData()).
-
-  Qt provides QXmlStreamWriter for writing XML.
-
-  The basic concept of a stream reader is to report an XML document as
-  a stream of tokens, similar to SAX. The main difference between
-  QXmlStreamReader and SAX is \e how these XML tokens are reported.
-  With SAX, the application must provide handlers (callback functions)
-  that receive so-called XML \e events from the parser at the parser's
-  convenience.  With QXmlStreamReader, the application code itself
-  drives the loop and pulls \e tokens from the reader, one after
-  another, as it needs them. This is done by calling readNext(), where
-  the reader reads from the input stream until it completes the next
-  token, at which point it returns the tokenType(). A set of
-  convenient functions including isStartElement() and text() can then
-  be used to examine the token to obtain information about what has
-  been read. The big advantage of this \e pulling approach is the
-  possibility to build recursive descent parsers with it, meaning you
-  can split your XML parsing code easily into different methods or
-  classes. This makes it easy to keep track of the application's own
-  state when parsing XML.
-
-  A typical loop with QXmlStreamReader looks like this:
-
-  \snippet doc/src/snippets/code/src_corelib_xml_qxmlstream.cpp 0
-
-
-  QXmlStreamReader is a well-formed XML 1.0 parser that does \e not
-  include external parsed entities. As long as no error occurs, the
-  application code can thus be assured that the data provided by the
-  stream reader satisfies the W3C's criteria for well-formed XML. For
-  example, you can be certain that all tags are indeed nested and
-  closed properly, that references to internal entities have been
-  replaced with the correct replacement text, and that attributes have
-  been normalized or added according to the internal subset of the
-  DTD.
-
-  If an error occurs while parsing, atEnd() and hasError() return
-  true, and error() returns the error that occurred. The functions
-  errorString(), lineNumber(), columnNumber(), and characterOffset()
-  are for constructing an appropriate error or warning message. To
-  simplify application code, QXmlStreamReader contains a raiseError()
-  mechanism that lets you raise custom errors that trigger the same
-  error handling described.
-
-  The \l{QXmlStream Bookmarks Example} illustrates how to use the
-  recursive descent technique to read an XML bookmark file (XBEL) with
-  a stream reader.
-
-  \section1 Namespaces
-
-  QXmlStream understands and resolves XML namespaces. E.g. in case of
-  a StartElement, namespaceUri() returns the namespace the element is
-  in, and name() returns the element's \e local name. The combination
-  of namespaceUri and name uniquely identifies an element. If a
-  namespace prefix was not declared in the XML entities parsed by the
-  reader, the namespaceUri is empty.
-
-  If you parse XML data that does not utilize namespaces according to
-  the XML specification or doesn't use namespaces at all, you can use
-  the element's qualifiedName() instead. A qualified name is the
-  element's prefix() followed by colon followed by the element's local
-  name() - exactly like the element appears in the raw XML data. Since
-  the mapping namespaceUri to prefix is neither unique nor universal,
-  qualifiedName() should be avoided for namespace-compliant XML data.
-
-  In order to parse standalone documents that do use undeclared
-  namespace prefixes, you can turn off namespace processing completely
-  with the \l namespaceProcessing property.
-
-  \section1 Incremental parsing
-
-  QXmlStreamReader is an incremental parser. It can handle the case
-  where the document can't be parsed all at once because it arrives in
-  chunks (e.g. from multiple files, or over a network connection).
-  When the reader runs out of data before the complete document has
-  been parsed, it reports a PrematureEndOfDocumentError. When more
-  data arrives, either because of a call to addData() or because more
-  data is available through the network device(), the reader recovers
-  from the PrematureEndOfDocumentError error and continues parsing the
-  new data with the next call to readNext().
-
-  For example, if your application reads data from the network using a
-  \l{QNetworkAccessManager} {network access manager}, you would issue
-  a \l{QNetworkRequest} {network request} to the manager and receive a
-  \l{QNetworkReply} {network reply} in return. Since a QNetworkReply
-  is a QIODevice, you connect its \l{QNetworkReply::readyRead()}
-  {readyRead()} signal to a custom slot, e.g. \c{slotReadyRead()} in
-  the code snippet shown in the discussion for QNetworkAccessManager.
-  In this slot, you read all available data with
-  \l{QNetworkReply::readAll()} {readAll()} and pass it to the XML
-  stream reader using addData(). Then you call your custom parsing
-  function that reads the XML events from the reader.
-
-  \section1 Performance and memory consumption
-
-  QXmlStreamReader is memory-conservative by design, since it doesn't
-  store the entire XML document tree in memory, but only the current
-  token at the time it is reported. In addition, QXmlStreamReader
-  avoids the many small string allocations that it normally takes to
-  map an XML document to a convenient and Qt-ish API. It does this by
-  reporting all string data as QStringRef rather than real QString
-  objects. QStringRef is a thin wrapper around QString substrings that
-  provides a subset of the QString API without the memory allocation
-  and reference-counting overhead. Calling
-  \l{QStringRef::toString()}{toString()} on any of those objects
-  returns an equivalent real QString object.
-
-*/
 
 
 /*!
@@ -387,6 +132,7 @@ QXmlStreamReader::QXmlStreamReader(const QString &data)
     : d_ptr(new QXmlStreamReaderPrivate(this))
 {
     Q_D(QXmlStreamReader);
+
 #ifdef QT_NO_TEXTCODEC
     d->dataBuffer = data.toLatin1();
 #else

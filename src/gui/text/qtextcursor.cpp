@@ -405,7 +405,7 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
         break;
     }
     case QTextCursor::PreviousCharacter:
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         if (mode == QTextCursor::MoveAnchor && position != adjusted_anchor)
             newPosition = qMin(position, adjusted_anchor);
         else
@@ -413,7 +413,7 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
             newPosition = priv->previousCursorPosition(position, QTextLayout::SkipCharacters);
         break;
     case QTextCursor::Left:
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         if (mode == QTextCursor::MoveAnchor && position != adjusted_anchor)
             newPosition = visualMovement ? qMax(position, adjusted_anchor)
                                          : qMin(position, adjusted_anchor);
@@ -532,7 +532,7 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
         break;
     }
     case QTextCursor::NextCharacter:
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         if (mode == QTextCursor::MoveAnchor && position != adjusted_anchor)
             newPosition = qMax(position, adjusted_anchor);
         else
@@ -540,7 +540,7 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
             newPosition = priv->nextCursorPosition(position, QTextLayout::SkipCharacters);
         break;
     case QTextCursor::Right:
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         if (mode == QTextCursor::MoveAnchor && position != adjusted_anchor)
             newPosition = visualMovement ? qMin(position, adjusted_anchor)
                                          : qMax(position, adjusted_anchor);

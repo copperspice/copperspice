@@ -51,7 +51,7 @@ public:
         drawBase(true), scrollOffset(0), elideModeSetByUser(false), useScrollButtonsSetByUser(false), expanding(true), closeButtonOnTabs(false),
         selectionBehaviorOnRemove(QTabBar::SelectRightTab), paintWithOffsets(true), movable(false),
         dragInProgress(false), documentMode(false), movingTab(0)
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         , previousPressedIndex(-1)
 #endif
         {}
@@ -187,7 +187,7 @@ public:
 
     QWidget *movingTab;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     int previousPressedIndex;
 #endif
 

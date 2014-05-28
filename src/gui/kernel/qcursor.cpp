@@ -379,10 +379,12 @@ void QCursorData::initialize()
 {
     if (QCursorData::initialized)
         return;
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
     // DRSWAT - Not Needed Cocoa or Carbon
-	//InitCursor();
+	//  InitCursor();
 #endif
+
     for (int shape = 0; shape <= Qt::LastCursor; ++shape)
         qt_cursorTable[shape] = new QCursorData((Qt::CursorShape)shape);
     QCursorData::initialized = true;

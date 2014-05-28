@@ -26,8 +26,8 @@
 #ifndef QACTION_P_H
 #define QACTION_P_H
 
-#include "QtGui/qaction.h"
-#include "QtGui/qmenu.h"
+#include "qaction.h"
+#include "qmenu.h"
 #include "qgraphicswidget_p.h"
 
 QT_BEGIN_NAMESPACE

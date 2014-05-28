@@ -32,7 +32,7 @@
 #include "qline.h"
 #include "qdebug.h"
 #include <QtCore/qcoreapplication.h>
-#include "private/qhexstring_p.h"
+#include "qhexstring_p.h"
 #include <QtCore/qnumeric.h>
 
 QT_BEGIN_NAMESPACE
@@ -941,18 +941,7 @@ bool QBrush::operator==(const QBrush &b) const
     }
 }
 
-/*!
-    \fn QBrush::operator const QColor&() const
 
-    Returns the brush's color.
-
-    Use color() instead.
-*/
-
-#ifndef QT_NO_DEBUG_STREAM
-/*!
-  \internal
-*/
 QDebug operator<<(QDebug dbg, const QBrush &b)
 {
     static const char *BRUSH_STYLES[] = {
@@ -981,7 +970,7 @@ QDebug operator<<(QDebug dbg, const QBrush &b)
     dbg.nospace() << "QBrush(" << b.color() << ',' << BRUSH_STYLES[b.style()] << ')';
     return dbg.space();
 }
-#endif
+
 
 /*****************************************************************************
   QBrush stream functions

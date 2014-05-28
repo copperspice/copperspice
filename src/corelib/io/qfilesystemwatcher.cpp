@@ -38,16 +38,19 @@
 
 #if defined(Q_OS_WIN)
 #  include "qfilesystemwatcher_win_p.h"
+
 #elif defined(Q_OS_LINUX)
 #  include "qfilesystemwatcher_inotify_p.h"
 #  include "qfilesystemwatcher_dnotify_p.h"
-#elif defined(Q_OS_QNX) && !defined(QT_NO_INOTIFY)
-#  include "qfilesystemwatcher_inotify_p.h"
+
 #elif defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
+
 #  if (defined Q_OS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 #  include "qfilesystemwatcher_fsevents_p.h"
-#  endif //MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#  endif
+
 #  include "qfilesystemwatcher_kqueue_p.h"
+
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -234,9 +237,6 @@ QFileSystemWatcherEngine *QFileSystemWatcherPrivate::createNativeEngine()
 #if defined(Q_OS_WIN)
     return new QWindowsFileSystemWatcherEngine;
 
-#elif defined(Q_OS_QNX) && !defined(QT_NO_INOTIFY)
-    return QInotifyFileSystemWatcherEngine::create();
-
 #elif defined(Q_OS_LINUX)
     QFileSystemWatcherEngine *eng = QInotifyFileSystemWatcherEngine::create();
 
@@ -246,14 +246,11 @@ QFileSystemWatcherEngine *QFileSystemWatcherPrivate::createNativeEngine()
     return eng;
 
 #elif defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
-#  if 0 && defined(Q_OS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-    if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5)
-        return QFSEventsFileSystemWatcherEngine::create();
-    else
-#  endif
-        return QKqueueFileSystemWatcherEngine::create();
+    return QKqueueFileSystemWatcherEngine::create();
+
 #else
     return 0;
+
 #endif
 }
 

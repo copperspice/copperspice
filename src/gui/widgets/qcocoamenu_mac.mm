@@ -26,7 +26,6 @@
 #include "qmacdefines_mac.h"
 #include "qapplication.h"
 
-#ifdef QT_MAC_USE_COCOA
 #import <qcocoamenu_mac_p.h>
 #import <qcocoamenuloader_mac_p.h>
 #import <qcocoaapplication_mac_p.h>
@@ -227,4 +226,3 @@ void qt_mac_menu_emit_hovered(QMenu *menu, QAction *action)
 
 QT_END_NAMESPACE
 
-#endif

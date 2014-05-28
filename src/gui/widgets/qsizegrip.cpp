@@ -37,15 +37,18 @@
 #include <QDesktopWidget>
 
 #if defined(Q_WS_X11)
-#include <private/qt_x11_p.h>
-#elif defined (Q_WS_WIN)
+#include <qt_x11_p.h>
+
+#elif defined (Q_OS_WIN)
 #include "qt_windows.h"
 #endif
-#ifdef Q_WS_MAC
-#include <private/qt_mac_p.h>
+
+#ifdef Q_OS_MAC
+#include <qt_mac_p.h>
+
 #endif
 
-#include <private/qwidget_p.h>
+#include <qwidget_p.h>
 #include <QtGui/qabstractscrollarea.h>
 
 #define SZ_SIZEBOTTOMRIGHT  0xf008
@@ -75,7 +78,7 @@ public:
     Qt::Corner m_corner;
     bool gotMousePress;
     QWidget *tlw;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     void updateMacSizer(bool hide) const;
 #endif
     Qt::Corner corner() const;
@@ -113,7 +116,7 @@ public:
         updateTopLevelWidget();
         if (tlw && showSizeGrip) {
             Qt::WindowStates sizeGripNotVisibleState = Qt::WindowFullScreen;
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
             sizeGripNotVisibleState |= Qt::WindowMaximized;
 #endif
             // Don't show the size grip if the tlw is maximized or in full screen mode.
@@ -124,7 +127,7 @@ public:
     }
 };
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 void QSizeGripPrivate::updateMacSizer(bool hide) const
 {
     Q_Q(const QSizeGrip);
@@ -211,7 +214,7 @@ void QSizeGripPrivate::init()
     m_corner = q->isLeftToRight() ? Qt::BottomRightCorner : Qt::BottomLeftCorner;
     gotMousePress = false;
 
-#if !defined(QT_NO_CURSOR) && !defined(Q_WS_MAC)
+#if !defined(QT_NO_CURSOR) && !defined(Q_OS_MAC)
     q->setCursor(m_corner == Qt::TopLeftCorner || m_corner == Qt::BottomRightCorner
                  ? Qt::SizeFDiagCursor : Qt::SizeBDiagCursor);
 #endif
@@ -300,8 +303,9 @@ void QSizeGrip::mousePressEvent(QMouseEvent * e)
                    SubstructureRedirectMask | SubstructureNotifyMask, &xev);
         return;
     }
-#endif // Q_WS_X11
-#ifdef Q_WS_WIN
+#endif
+
+#ifdef Q_OS_WIN
     if (tlw->isWindow() && !tlw->testAttribute(Qt::WA_DontShowOnScreen) && !qt_widget_private(tlw)->hasHeightForWidth()) {
         uint orientation = 0;
         if (d->atBottom())
@@ -313,7 +317,7 @@ void QSizeGrip::mousePressEvent(QMouseEvent * e)
         PostMessage(tlw->winId(), WM_SYSCOMMAND, orientation, 0);
         return;
     }
-#endif // Q_WS_WIN
+#endif
 
     // Find available desktop/workspace geometry.
     QRect availableGeometry;
@@ -395,7 +399,8 @@ void QSizeGrip::mouseMoveEvent(QMouseEvent * e)
         && !tlw->testAttribute(Qt::WA_DontShowOnScreen) && !qt_widget_private(tlw)->hasHeightForWidth())
         return;
 #endif
-#ifdef Q_WS_WIN
+
+#ifdef Q_OS_WIN
     if (tlw->isWindow() && GetSystemMenu(tlw->winId(), FALSE) != 0 && internalWinId()
         && !tlw->testAttribute(Qt::WA_DontShowOnScreen) && !qt_widget_private(tlw)->hasHeightForWidth()) {
         MSG msg;
@@ -462,7 +467,8 @@ void QSizeGrip::moveEvent(QMoveEvent * /*moveEvent*/)
         return;
 
     d->m_corner = d->corner();
-#if !defined(QT_NO_CURSOR) && !defined(Q_WS_MAC)
+
+#if !defined(QT_NO_CURSOR) && !defined(Q_OS_MAC)
     setCursor(d->m_corner == Qt::TopLeftCorner || d->m_corner == Qt::BottomRightCorner
               ? Qt::SizeFDiagCursor : Qt::SizeBDiagCursor);
 #endif
@@ -473,7 +479,7 @@ void QSizeGrip::moveEvent(QMoveEvent * /*moveEvent*/)
 */
 void QSizeGrip::showEvent(QShowEvent *showEvent)
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     d_func()->updateMacSizer(false);
 #endif
     QWidget::showEvent(showEvent);
@@ -484,7 +490,7 @@ void QSizeGrip::showEvent(QShowEvent *showEvent)
 */
 void QSizeGrip::hideEvent(QHideEvent *hideEvent)
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     d_func()->updateMacSizer(true);
 #endif
     QWidget::hideEvent(hideEvent);
@@ -508,7 +514,7 @@ bool QSizeGrip::eventFilter(QObject *o, QEvent *e)
         return QWidget::eventFilter(o, e);
     }
     Qt::WindowStates sizeGripNotVisibleState = Qt::WindowFullScreen;
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     sizeGripNotVisibleState |= Qt::WindowMaximized;
 #endif
     // Don't show the size grip if the tlw is maximized or in full screen mode.
@@ -525,7 +531,7 @@ bool QSizeGrip::event(QEvent *event)
     return QWidget::event(event);
 }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 /*! \reimp */
 bool QSizeGrip::winEvent( MSG *m, long *result )
 {

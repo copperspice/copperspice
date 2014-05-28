@@ -48,7 +48,7 @@ private:
     QCursor();
 };
 
-#endif // QT_NO_CURSOR
+#endif
 
 
 
@@ -58,7 +58,7 @@ class QCursorData;
 class QBitmap;
 class QPixmap;
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
 void qt_mac_set_cursor(const QCursor *c);
 #endif
 
@@ -92,14 +92,14 @@ public:
     
 
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     HCURSOR handle() const;
     QCursor(HCURSOR cursor);
 #elif defined(Q_WS_X11)
     Qt::HANDLE handle() const;
     QCursor(Qt::HANDLE cursor);
     static int x11Screen();
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     Qt::HANDLE handle() const;
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
     int handle() const;
@@ -108,7 +108,7 @@ public:
 
 private:
     QCursorData *d;
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     friend void *qt_mac_nsCursorForQCursor(const QCursor &c);
     friend void qt_mac_set_cursor(const QCursor *c);
     friend void qt_mac_updateCursorWithWidgetUnderMouse(QWidget *widgetUnderMouse);

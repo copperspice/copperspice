@@ -384,10 +384,7 @@ protected:
     friend int qRegisterGuiVariant();
     friend int qUnregisterGuiVariant();
     friend inline bool operator==(const QVariant &, const QVariantComparisonHelper &);
-
-#ifndef QT_NO_DEBUG_STREAM
     friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
-#endif
 
     Private d;
 
@@ -519,14 +516,12 @@ inline QT_DEPRECATED bool qVariantCanConvert(const QVariant &variant)
 { return variant.template canConvert<T>(); }
 #endif
 
-
 Q_DECLARE_SHARED(QVariant)
 Q_DECLARE_TYPEINFO(QVariant, Q_MOVABLE_TYPE);
 
-#ifndef QT_NO_DEBUG_STREAM
-   Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
-   Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant::Type);
-#endif
+Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
+Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant::Type);
+
 
 QT_END_NAMESPACE
 

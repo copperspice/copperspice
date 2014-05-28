@@ -26,23 +26,24 @@
 #include "qinputcontextfactory.h"
 
 #ifndef QT_NO_IM
-
 #include "qcoreapplication.h"
 #include "qinputcontext.h"
 #include "qinputcontextplugin.h"
 
 #ifdef Q_WS_X11
-#include "private/qt_x11_p.h"
+#include "qt_x11_p.h"
 #include "qximinputcontext_p.h"
 #endif
-#ifdef Q_WS_WIN
+
+#ifdef Q_OS_WIN
 #include "qwininputcontext_p.h"
 #endif
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
 #include "qmacinputcontext_p.h"
 #endif
 
-#include "private/qfactoryloader_p.h"
+#include "qfactoryloader_p.h"
 #include "qmutex.h"
 
 QT_BEGIN_NAMESPACE
@@ -65,12 +66,12 @@ QInputContext *QInputContextFactory::create( const QString& key, QObject *parent
         result = new QXIMInputContext;
     }
 #endif
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     if (key == QLatin1String("win")) {
         result = new QWinInputContext;
     }
 #endif
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     if (key == QLatin1String("mac")) {
         result = new QMacInputContext;
     }
@@ -104,10 +105,10 @@ QStringList QInputContextFactory::keys()
 #if defined(Q_WS_X11) && !defined(QT_NO_XIM)
     result << QLatin1String("xim");
 #endif
-#if defined(Q_WS_WIN) && !defined(QT_NO_XIM)
+#if defined(Q_OS_WIN) && !defined(QT_NO_XIM)
     result << QLatin1String("win");
 #endif
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     result << QLatin1String("mac");
 #endif
 
@@ -137,11 +138,11 @@ QStringList QInputContextFactory::languages( const QString &key )
     if (key == QLatin1String("xim"))
         return QStringList(QString());
 #endif
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     if (key == QLatin1String("win"))
         return QStringList(QString());
 #endif
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     if (key == QLatin1String("mac"))
         return QStringList(QString());
 #endif
@@ -194,11 +195,11 @@ QString QInputContextFactory::description( const QString &key )
     if (key == QLatin1String("xim"))
         return QInputContext::tr( "XIM input method" );
 #endif
-#if defined(Q_WS_WIN) && !defined(QT_NO_XIM)
+#if defined(Q_OS_WIN) && !defined(QT_NO_XIM)
     if (key == QLatin1String("win"))
         return QInputContext::tr( "Windows input method" );
 #endif
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     if (key == QLatin1String("mac"))
         return QInputContext::tr( "Mac OS X input method" );
 #endif

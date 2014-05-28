@@ -30,11 +30,7 @@
 
 #ifdef __OBJC__
 #include <Cocoa/Cocoa.h>
-
-#ifdef QT_MAC_USE_COCOA
 #include <objc/runtime.h>
-#endif
-
 #endif
 
 #include <CoreServices/CoreServices.h>
@@ -45,7 +41,6 @@
 #include "QtCore/qpointer.h"
 #include "qcore_mac_p.h"
 #include "QtGui/qpainter.h"
-#include <Carbon/Carbon.h>
 
 QT_BEGIN_NAMESPACE
 class QWidget;

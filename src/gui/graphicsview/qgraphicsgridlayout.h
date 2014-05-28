@@ -31,7 +31,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if !defined(QT_NO_GRAPHICSVIEW) || (QT_EDITION & QT_MODULE_GRAPHICSVIEW) != QT_MODULE_GRAPHICSVIEW
+#if !defined(QT_NO_GRAPHICSVIEW)
 
 class QGraphicsGridLayoutPrivate;
 

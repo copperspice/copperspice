@@ -5713,7 +5713,7 @@ void QPlastiqueStyle::polish(QApplication *app)
 void QPlastiqueStyle::polish(QPalette &pal)
 {
     QWindowsStyle::polish(pal);
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     pal.setBrush(QPalette::Shadow, Qt::black);
 #endif
 }

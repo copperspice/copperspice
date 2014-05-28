@@ -56,8 +56,7 @@ public:
 
 private:
     QFileSystemEntry::NativePath nativePath;
-
-    // Platform-specific data
+    
 #if defined(Q_OS_WIN)
     QFileSystemEntry::NativePath dirPath;
     HANDLE findFileHandle;
@@ -68,15 +67,14 @@ private:
 #else
     QT_DIR *dir;
     QT_DIRENT *dirEntry;
+
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS)
     // for readdir_r
     QScopedPointer<QT_DIRENT, QScopedPointerPodDeleter> mt_file;
-#if defined(Q_OS_QNX) && defined(__EXT_QNX__READDIR_R)
-    // for _readdir_r
-    size_t direntSize;
-#endif
+
 #endif
     int lastError;
+
 #endif
 
     Q_DISABLE_COPY(QFileSystemIterator)

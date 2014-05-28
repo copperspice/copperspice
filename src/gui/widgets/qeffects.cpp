@@ -86,7 +86,7 @@ static QAlphaWidget* q_blend = 0;
 QAlphaWidget::QAlphaWidget(QWidget* w, Qt::WindowFlags f)
     : QWidget(QApplication::desktop()->screen(QApplication::desktop()->screenNumber(w)), f)
 {
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
     setEnabled(false);
 #endif
     setAttribute(Qt::WA_NoSystemBackground, true);
@@ -96,7 +96,7 @@ QAlphaWidget::QAlphaWidget(QWidget* w, Qt::WindowFlags f)
 
 QAlphaWidget::~QAlphaWidget()
 {
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     // Restore user-defined opacity value
     if (widget)
         widget->setWindowOpacity(1);
@@ -254,10 +254,10 @@ void QAlphaWidget::render()
 
         if (widget) {
             if (!showWidget) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
                 setEnabled(true);
                 setFocus();
-#endif // Q_WS_WIN
+#endif
                 widget->hide();
             } else {
                 //Since we are faking the visibility of the widget 
@@ -368,7 +368,7 @@ static QRollEffect* q_roll = 0;
 QRollEffect::QRollEffect(QWidget* w, Qt::WindowFlags f, DirFlags orient)
     : QWidget(0, f), orientation(orient)
 {
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
     setEnabled(false);
 #endif
 
@@ -523,7 +523,7 @@ void QRollEffect::scroll()
         qApp->removeEventFilter(this);
         if (widget) {
             if (!showWidget) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
                 setEnabled(true);
                 setFocus();
 #endif

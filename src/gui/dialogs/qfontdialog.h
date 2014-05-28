@@ -117,7 +117,7 @@ private:
     GUI_CS_SLOT_2(_q_updateSample)
 
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     GUI_CS_SLOT_1(Private, void _q_macRunNativeAppModalPanel())
     GUI_CS_SLOT_2(_q_macRunNativeAppModalPanel)
 #endif

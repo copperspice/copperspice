@@ -970,7 +970,6 @@ QDataStream &operator>>(QDataStream &s, QPen &p)
 }
 #endif //QT_NO_DATASTREAM
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QPen &p)
 {
     const char *PEN_STYLES[] = {
@@ -990,18 +989,6 @@ QDebug operator<<(QDebug dbg, const QPen &p)
                   << ',' << p.miterLimit() << ')';
     return dbg.space();
 }
-#endif
-
-/*!
-    \fn DataPtr &QPen::data_ptr()
-    \internal
-*/
-
-/*!
-    \typedef QPen::DataPtr
-
-    \internal
-*/
 
 QT_END_NAMESPACE
 

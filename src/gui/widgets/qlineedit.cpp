@@ -76,7 +76,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 extern void qt_mac_secure_keyboard(bool); //qapplication_mac.cpp
 #endif
 
@@ -481,7 +481,7 @@ void QLineEdit::setEchoMode(EchoMode mode)
     setInputMethodHints(imHints);
     d->control->setEchoMode(mode);
     update();
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (hasFocus())
         qt_mac_secure_keyboard(mode == Password || mode == NoEcho);
 #endif
@@ -1682,7 +1682,7 @@ void QLineEdit::focusInEvent(QFocusEvent *e)
              || style()->styleHint(QStyle::SH_BlinkCursorWhenTextSelected, &opt, this))
         d->setCursorVisible(true);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (d->control->echoMode() == Password || d->control->echoMode() == NoEcho)
         qt_mac_secure_keyboard(true);
 #endif
@@ -1732,7 +1732,7 @@ void QLineEdit::focusOutEvent(QFocusEvent *e)
                 emit editingFinished();
     }
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (d->control->echoMode() == Password || d->control->echoMode() == NoEcho)
         qt_mac_secure_keyboard(false);
 #endif
@@ -1970,7 +1970,7 @@ void QLineEdit::contextMenuEvent(QContextMenuEvent *event)
     }
 }
 
-#if defined(Q_WS_WIN) || defined(Q_WS_X11)
+#if defined(Q_OS_WIN) || defined(Q_WS_X11)
     extern bool qt_use_rtl_extensions;
 #endif
 
@@ -2042,7 +2042,7 @@ QMenu *QLineEdit::createStandardContextMenu()
     }
 #endif
 
-#if defined(Q_WS_WIN) || defined(Q_WS_X11)
+#if defined(Q_OS_WIN) || defined(Q_WS_X11)
     if (!d->control->isReadOnly() && qt_use_rtl_extensions) {
 #else
     if (!d->control->isReadOnly()) {

@@ -29,9 +29,8 @@
 #define QT_FT_BEGIN_HEADER
 #define QT_FT_END_HEADER
 
-#include <private/qrasterdefs_p.h>
-#include <private/qgrayraster_p.h>
-
+#include <qrasterdefs_p.h>
+#include <qgrayraster_p.h>
 #include <qpainterpath.h>
 #include <qdebug.h>
 #include <qhash.h>
@@ -39,52 +38,51 @@
 #include <qmath.h>
 
 #if defined (Q_WS_X11)
-#  include <private/qfontengine_ft_p.h>
+#  include <qfontengine_ft_p.h>
 #endif
 
-//   #include <private/qdatabuffer_p.h>
-//   #include <private/qpainter_p.h>
-#include <private/qmath_p.h>
-#include <private/qtextengine_p.h>
-#include <private/qfontengine_p.h>
-#include <private/qpixmap_raster_p.h>
-//   #include <private/qpolygonclipper_p.h>
-//   #include <private/qrasterizer_p.h>
-#include <private/qimage_p.h>
-#include <private/qstatictext_p.h>
-#include <private/qcosmeticstroker_p.h>
+#include <qmath_p.h>
+#include <qtextengine_p.h>
+#include <qfontengine_p.h>
+#include <qpixmap_raster_p.h>
+
+#include <qimage_p.h>
+#include <qstatictext_p.h>
+#include <qcosmeticstroker_p.h>
 #include "qmemrotate_p.h"
 
 #include "qpaintengine_raster_p.h"
-//   #include "qbezier_p.h"
 #include "qoutlinemapper_p.h"
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 #  include <qt_windows.h>
 #  include <qvarlengtharray.h>
 #  include <private/qfontengine_p.h>
 
-#elif defined(Q_WS_MAC)
-#  include <private/qt_mac_p.h>
-#  include <private/qpixmap_mac_p.h>
-#  include <private/qpaintengine_mac_p.h>
+#elif defined(Q_OS_MAC)
+#  include <qt_mac_p.h>
+#  include <qpixmap_mac_p.h>
+#  include <qpaintengine_mac_p.h>
 
 #elif defined(Q_WS_QWS)
 #  if !defined(QT_NO_FREETYPE)
-#    include <private/qfontengine_ft_p.h>
+#    include <qfontengine_ft_p.h>
 #  endif
+
 #  if !defined(QT_NO_QWS_QPF2)
-#    include <private/qfontengine_qpf_p.h>
+#    include <qfontengine_qpf_p.h>
 #  endif
-#  include <private/qabstractfontengine_p.h>
+
+#  include <qabstractfontengine_p.h>
 
 #elif defined(Q_WS_QPA)
-#  include <private/qfontengine_ft_p.h>
+#  include <qfontengine_ft_p.h>
 #endif
 
-#if defined(Q_WS_WIN64)
+#if defined(Q_OS_WIN64)
 #  include <malloc.h>
 #endif
+
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE
@@ -101,7 +99,6 @@ void dumpClip(int width, int height, const QClipData *clip);
 
 #define QT_FAST_SPANS
 
-
 // A little helper macro to get a better approximation of dimensions.
 // If we have a rect that starting at 0.5 of width 3.5 it should span
 // 4 pixels.
@@ -110,11 +107,11 @@ void dumpClip(int width, int height, const QClipData *clip);
 // use the same rounding as in qrasterizer.cpp (6 bit fixed point)
 static const qreal aliasedCoordinateDelta = 0.5 - 0.015625;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 extern bool qt_cleartype_enabled;
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 extern bool qt_applefontsmoothing_enabled;
 #endif
 
@@ -292,8 +289,7 @@ void QRasterPaintEngine::init()
 {
     Q_D(QRasterPaintEngine);
 
-
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     d->hdc = 0;
 #endif
 
@@ -336,14 +332,17 @@ void QRasterPaintEngine::init()
     case QInternal::Pixmap:
         qWarning("QRasterPaintEngine: unsupported for pixmaps...");
         break;
+
     case QInternal::Image:
         format = d->rasterBuffer->prepare(static_cast<QImage *>(d->device));
         break;
+
 #ifdef Q_WS_QWS
     case QInternal::CustomRaster:
         d->rasterBuffer->prepare(static_cast<QCustomRasterPaintDevice*>(d->device));
         break;
 #endif
+
     default:
         qWarning("QRasterPaintEngine: unsupported target device %d\n", d->device->devType());
         d->device = 0;
@@ -444,19 +443,22 @@ bool QRasterPaintEngine::begin(QPaintDevice *device)
     }
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     d->isPlain45DegreeRotation = true;
 #endif
 
     if (d->mono_surface)
         d->glyphCacheType = QFontEngineGlyphCache::Raster_Mono;
-#if defined(Q_WS_WIN)
+
+#if defined(Q_OS_WIN)
     else if (qt_cleartype_enabled)
-#elif defined (Q_WS_MAC)
+
+#elif defined (Q_OS_MAC)
     else if (qt_applefontsmoothing_enabled)
 #else
     else if (false)
 #endif
+
     {
         QImage::Format format = static_cast<QImage *>(d->device)->format();
         if (format == QImage::Format_ARGB32_Premultiplied || format == QImage::Format_RGB32)
@@ -470,14 +472,14 @@ bool QRasterPaintEngine::begin(QPaintDevice *device)
     return true;
 }
 
-/*!
-    \reimp
-*/
+
 bool QRasterPaintEngine::end()
 {
 #ifdef QT_DEBUG_DRAW
     Q_D(QRasterPaintEngine);
+
     qDebug() << "QRasterPaintEngine::end devRect:" << d->deviceRect;
+
     if (d->baseClip) {
         dumpClip(d->rasterBuffer->width(), d->rasterBuffer->height(), &*d->baseClip);
     }
@@ -486,18 +488,14 @@ bool QRasterPaintEngine::end()
     return true;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QRasterPaintEngine::releaseBuffer()
 {
     Q_D(QRasterPaintEngine);
     d->rasterBuffer.reset(new QRasterBuffer);
 }
 
-/*!
-    \internal
-*/
+// internal
 QSize QRasterPaintEngine::size() const
 {
     Q_D(const QRasterPaintEngine);
@@ -552,7 +550,7 @@ void QRasterPaintEngine::updateMatrix(const QTransform &matrix)
 
     ensureOutlineMapper();
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     Q_D(QRasterPaintEngine);
     d->isPlain45DegreeRotation = false;
     if (txop >= QTransform::TxRotate) {
@@ -1973,7 +1971,8 @@ void QRasterPaintEngine::drawPolygon(const QPoint *points, int pointCount, Polyg
     if (s->penData.blend) {
         int count = pointCount * 2;
         QVarLengthArray<qreal> fpoints(count);
-    #ifdef Q_WS_MAC
+
+    #ifdef Q_OS_MAC
         for (int i=0; i<count; i+=2) {
             fpoints[i] = ((int *) points)[i+1];
             fpoints[i+1] = ((int *) points)[i];
@@ -1982,6 +1981,7 @@ void QRasterPaintEngine::drawPolygon(const QPoint *points, int pointCount, Polyg
         for (int i=0; i<count; ++i)
             fpoints[i] = ((int *) points)[i];
     #endif
+
         QVectorPath vp((qreal *) fpoints.data(), pointCount, 0, QVectorPath::polygonFlags(mode));
 
         if (s->flags.fast_pen) {
@@ -3013,7 +3013,7 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
     ensurePen();
     ensureState();
 
-#if defined (Q_WS_WIN) || defined(Q_WS_MAC) || (defined(Q_OS_MAC) && defined(Q_WS_QPA))
+#if defined (Q_OS_WIN) || defined(Q_OS_MAC) || (defined(Q_OS_MAC) && defined(Q_WS_QPA))
 
     if (!supportsTransformations(ti.fontEngine)) {
         QVarLengthArray<QFixedPoint> positions;
@@ -3029,7 +3029,7 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
     }
 
 
-#else // Q_WS_WIN || Q_WS_MAC
+#else
 
     QFontEngine *fontEngine = ti.fontEngine;
 
@@ -3047,7 +3047,7 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
         fontEngine->draw(this, qFloor(p.x() + aliasedCoordinateDelta), qFloor(p.y() + aliasedCoordinateDelta), ti);
         return;
     }
-#endif // Q_WS_QWS
+#endif
 
 #ifdef Q_WS_QPA
     if (s->matrix.type() < QTransform::TxScale) {
@@ -3075,7 +3075,7 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
         }
         return;
     }
-#endif //Q_WS_QPA
+#endif
 
 #if (defined(Q_WS_X11) || defined(Q_WS_QWS)) && !defined(QT_NO_FREETYPE)
 
@@ -3286,16 +3286,14 @@ void QRasterPaintEngine::drawEllipse(const QRectF &rect)
 /*!
     \internal
 */
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 void QRasterPaintEngine::setCGContext(CGContextRef ctx)
 {
     Q_D(QRasterPaintEngine);
     d->cgContext = ctx;
 }
 
-/*!
-    \internal
-*/
+// internal
 CGContextRef QRasterPaintEngine::getCGContext() const
 {
     Q_D(const QRasterPaintEngine);
@@ -3303,27 +3301,21 @@ CGContextRef QRasterPaintEngine::getCGContext() const
 }
 #endif
 
-#ifdef Q_WS_WIN
-/*!
-    \internal
-*/
+#ifdef Q_OS_WIN
+// internal
 void QRasterPaintEngine::setDC(HDC hdc) {
     Q_D(QRasterPaintEngine);
     d->hdc = hdc;
 }
 
-/*!
-    \internal
-*/
+// internal
 HDC QRasterPaintEngine::getDC() const
 {
     Q_D(const QRasterPaintEngine);
     return d->hdc;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QRasterPaintEngine::releaseDC(HDC) const
 {
 }
@@ -3334,7 +3326,7 @@ bool QRasterPaintEngine::supportsTransformations(const QFontEngine *fontEngine) 
 {
     const QTransform &m = state()->matrix;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     QFontEngine::Type fontEngineType = fontEngine->type();
     if ((fontEngineType == QFontEngine::Win && !((QFontEngineWin *) fontEngine)->ttf && m.type() > QTransform::TxTranslate)
         || (m.type() <= QTransform::TxTranslate
@@ -3343,16 +3335,19 @@ bool QRasterPaintEngine::supportsTransformations(const QFontEngine *fontEngine) 
             return true;
     }
 #endif
+
     return supportsTransformations(fontEngine->fontDef.pixelSize, m);
 }
 
 bool QRasterPaintEngine::supportsTransformations(qreal pixelSize, const QTransform &m) const
 {
-#if defined(Q_WS_MAC) || (defined(Q_OS_MAC) && defined(Q_WS_QPA))
-    // Mac font engines don't support scaling and rotation
+#ifdef Q_OS_MAC     
+    // Mac font engines do not support scaling and rotation
     if (m.type() > QTransform::TxTranslate)
+
 #else
     if (m.type() >= QTransform::TxProject)
+
 #endif
         return true;
 
@@ -3362,53 +3357,22 @@ bool QRasterPaintEngine::supportsTransformations(qreal pixelSize, const QTransfo
     return false;
 }
 
-/*!
-    \internal
-*/
+// internal
 QPoint QRasterPaintEngine::coordinateOffset() const
 {
     return QPoint(0, 0);
 }
 
-/*!
-    Draws the given color \a spans with the specified \a color. The \a
-    count parameter specifies the number of spans.
-
-    The default implementation does nothing; reimplement this function
-    to draw the given color \a spans with the specified \a color. Note
-    that this function \e must be reimplemented if the framebuffer is
-    not memory-mapped.
-
-    \sa drawBufferSpan()
-*/
 #if defined(Q_WS_QWS) && !defined(QT_NO_RASTERCALLBACKS)
 void QRasterPaintEngine::drawColorSpans(const QSpan *spans, int count, uint color)
 {
     Q_UNUSED(spans);
     Q_UNUSED(count);
     Q_UNUSED(color);
-    qFatal("QRasterPaintEngine::drawColorSpans must be reimplemented on "
-           "a non memory-mapped device");
+
+    qFatal("QRasterPaintEngine::drawColorSpans() Must be reimplemented on a non memory-mapped device");
 }
 
-/*!
-    \fn void QRasterPaintEngine::drawBufferSpan(const uint *buffer, int size, int x, int y, int length, uint alpha)
-
-    Draws the given \a buffer.
-
-    The default implementation does nothing; reimplement this function
-    to draw a buffer that contains more than one color. Note that this
-    function \e must be reimplemented if the framebuffer is not
-    memory-mapped.
-
-    The \a size parameter specifies the total size of the given \a
-    buffer, while the \a length parameter specifies the number of
-    pixels to draw. The buffer's position is given by (\a x, \a
-    y). The provided \a alpha value is added to each pixel in the
-    buffer when drawing.
-
-    \sa drawColorSpans()
-*/
 void QRasterPaintEngine::drawBufferSpan(const uint *buffer, int bufsize,
                                         int x, int y, int length, uint const_alpha)
 {
@@ -3421,7 +3385,7 @@ void QRasterPaintEngine::drawBufferSpan(const uint *buffer, int bufsize,
     qFatal("QRasterPaintEngine::drawBufferSpan must be reimplemented on "
            "a non memory-mapped device");
 }
-#endif // Q_WS_QWS
+#endif
 
 void QRasterPaintEngine::drawBitmap(const QPointF &pos, const QImage &image, QSpanData *fg)
 {
@@ -3860,10 +3824,12 @@ void QRasterBuffer::prepare(QCustomRasterPaintDevice *device)
     bytes_per_pixel = device->depth() / 8;
     bytes_per_line = device->bytesPerLine();
     format = device->format();
+
 #ifndef QT_NO_RASTERCALLBACKS
     if (!m_buffer)
         drawHelper = qDrawHelperCallback + format;
     else
+
 #endif
         drawHelper = qDrawHelper + format;
 }
@@ -4824,6 +4790,7 @@ void QSpanData::adjustSpanMethods()
     case None:
         unclipped_blend = 0;
         break;
+
     case Solid:
         unclipped_blend = rasterBuffer->drawHelper->blendColor;
         bitmapBlit = rasterBuffer->drawHelper->bitmapBlit;
@@ -4831,11 +4798,13 @@ void QSpanData::adjustSpanMethods()
         alphaRGBBlit = rasterBuffer->drawHelper->alphaRGBBlit;
         fillRect = rasterBuffer->drawHelper->fillRect;
         break;
+
     case LinearGradient:
     case RadialGradient:
     case ConicalGradient:
         unclipped_blend = rasterBuffer->drawHelper->blendGradient;
         break;
+
     case Texture:
 #ifdef Q_WS_QWS
 #ifndef QT_NO_RASTERCALLBACKS

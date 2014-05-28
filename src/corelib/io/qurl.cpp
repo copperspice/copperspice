@@ -6366,22 +6366,14 @@ QDataStream &operator>>(QDataStream &in, QUrl &url)
     url = QUrl::fromEncoded(u);
     return in;
 }
-#endif // QT_NO_DATASTREAM
+#endif
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug d, const QUrl &url)
 {
     d.maybeSpace() << "QUrl(" << url.toString() << ')';
     return d.space();
 }
-#endif
 
-/*!
-    \since 4.2
-
-    Returns a text string that explains why an URL is invalid in the case being;
-    otherwise returns an empty string.
-*/
 QString QUrl::errorString() const
 {
     if (!d)

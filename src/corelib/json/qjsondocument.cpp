@@ -504,7 +504,6 @@ bool QJsonDocument::isNull() const
     return (d == 0);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QJsonDocument &o)
 {
     if (!o.d) {
@@ -521,6 +520,5 @@ QDebug operator<<(QDebug dbg, const QJsonDocument &o)
                   << ")";
     return dbg.space();
 }
-#endif
 
 QT_END_NAMESPACE

@@ -29,13 +29,13 @@
 #include <qglobal.h>
 #include "qwindowsurface_p.h"
 
-#ifdef QT_MAC_USE_COCOA
-# include <qt_cocoa_helpers_mac_p.h>
+#ifdef Q_OS_MAC
+#include <qt_cocoa_helpers_mac_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #define Q_WS_EX_LAYERED           0x00080000 // copied from WS_EX_LAYERED in winuser.h
 #define Q_LWA_ALPHA               0x00000002 // copied from LWA_ALPHA in winuser.h
 #define Q_ULW_ALPHA               0x00000002 // copied from ULW_ALPHA in winuser.h
@@ -85,12 +85,12 @@ public:
     bool scroll(const QRegion &area, int dx, int dy);
     WindowSurfaceFeatures features() const;
 
-#ifdef QT_MAC_USE_COCOA
+#ifdef Q_OS_MAC
     CGContextRef imageContext();
 
     bool needsFlush;
     QRegion regionToFlush;
-#endif // QT_MAC_USE_COCOA
+#endif
 
 private:
 #if defined(Q_WS_X11) && !defined(QT_NO_MITSHM)

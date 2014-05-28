@@ -23,107 +23,6 @@
 *
 ***********************************************************************/
 
-/*!
-    \class QCompleter
-    \brief The QCompleter class provides completions based on an item model.
-    \since 4.2
-
-    You can use QCompleter to provide auto completions in any Qt
-    widget, such as QLineEdit and QComboBox.
-    When the user starts typing a word, QCompleter suggests possible ways of
-    completing the word, based on a word list. The word list is
-    provided as a QAbstractItemModel. (For simple applications, where
-    the word list is static, you can pass a QStringList to
-    QCompleter's constructor.)
-
-    \tableofcontents
-
-    \section1 Basic Usage
-
-    A QCompleter is used typically with a QLineEdit or QComboBox.
-    For example, here's how to provide auto completions from a simple
-    word list in a QLineEdit:
-
-    \snippet doc/src/snippets/code/src_gui_util_qcompleter.cpp 0
-
-    A QFileSystemModel can be used to provide auto completion of file names.
-    For example:
-
-    \snippet doc/src/snippets/code/src_gui_util_qcompleter.cpp 1
-
-    To set the model on which QCompleter should operate, call
-    setModel(). By default, QCompleter will attempt to match the \l
-    {completionPrefix}{completion prefix} (i.e., the word that the
-    user has started typing) against the Qt::EditRole data stored in
-    column 0 in the  model case sensitively. This can be changed
-    using setCompletionRole(), setCompletionColumn(), and
-    setCaseSensitivity().
-
-    If the model is sorted on the column and role that are used for completion,
-    you can call setModelSorting() with either
-    QCompleter::CaseSensitivelySortedModel or
-    QCompleter::CaseInsensitivelySortedModel as the argument. On large models,
-    this can lead to significant performance improvements, because QCompleter
-    can then use binary search instead of linear search.
-
-    The model can be a \l{QAbstractListModel}{list model},
-    a \l{QAbstractTableModel}{table model}, or a
-    \l{QAbstractItemModel}{tree model}. Completion on tree models
-    is slightly more involved and is covered in the \l{Handling
-    Tree Models} section below.
-
-    The completionMode() determines the mode used to provide completions to
-    the user.
-
-    \section1 Iterating Through Completions
-
-    To retrieve a single candidate string, call setCompletionPrefix()
-    with the text that needs to be completed and call
-    currentCompletion(). You can iterate through the list of
-    completions as below:
-
-    \snippet doc/src/snippets/code/src_gui_util_qcompleter.cpp 2
-
-    completionCount() returns the total number of completions for the
-    current prefix. completionCount() should be avoided when possible,
-    since it requires a scan of the entire model.
-
-    \section1 The Completion Model
-
-    completionModel() return a list model that contains all possible
-    completions for the current completion prefix, in the order in which
-    they appear in the model. This model can be used to display the current
-    completions in a custom view. Calling setCompletionPrefix() automatically
-    refreshes the completion model.
-
-    \section1 Handling Tree Models
-
-    QCompleter can look for completions in tree models, assuming
-    that any item (or sub-item or sub-sub-item) can be unambiguously
-    represented as a string by specifying the path to the item. The
-    completion is then performed one level at a time.
-
-    Let's take the example of a user typing in a file system path.
-    The model is a (hierarchical) QFileSystemModel. The completion
-    occurs for every element in the path. For example, if the current
-    text is \c C:\Wind, QCompleter might suggest \c Windows to
-    complete the current path element. Similarly, if the current text
-    is \c C:\Windows\Sy, QCompleter might suggest \c System.
-
-    For this kind of completion to work, QCompleter needs to be able to
-    split the path into a list of strings that are matched at each level.
-    For \c C:\Windows\Sy, it needs to be split as "C:", "Windows" and "Sy".
-    The default implementation of splitPath(), splits the completionPrefix
-    using QDir::separator() if the model is a QFileSystemModel.
-
-    To provide completions, QCompleter needs to know the path from an index.
-    This is provided by pathFromIndex(). The default implementation of
-    pathFromIndex(), returns the data for the \l{Qt::EditRole}{edit role}
-    for list models and the absolute file path if the mode is a QFileSystemModel.
-
-    \sa QAbstractItemModel, QLineEdit, QComboBox, {Completer Example}
-*/
-
 #include "qcompleter_p.h"
 
 #ifndef QT_NO_COMPLETER
@@ -1141,11 +1040,8 @@ void QCompleter::setPopup(QAbstractItemView *popup)
         delete d->popup;
     if (popup->model() != d->proxy)
         popup->setModel(d->proxy);
-#if defined(Q_OS_MAC) && !defined(QT_MAC_USE_COCOA)
-     popup->show();
-#else
+
      popup->hide();
-#endif
 
     Qt::FocusPolicy origPolicy = Qt::NoFocus;
     if (d->widget)

@@ -27,7 +27,6 @@
 #define QT7_BACKENDINFO_H
 
 #include <phonon/mediasource.h>
-#include <Carbon/Carbon.h>
 #include <QtCore/QStringList>
 
 QT_BEGIN_NAMESPACE

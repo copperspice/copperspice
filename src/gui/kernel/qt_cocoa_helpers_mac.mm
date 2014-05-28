@@ -23,39 +23,9 @@
 *
 ***********************************************************************/
 
-/****************************************************************************
-**
-** Copyright (c) 2007-2008, Apple, Inc.
-**
-** All rights reserved.
-**
-** Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are met:
-**
-**   * Redistributions of source code must retain the above copyright notice,
-**     this list of conditions and the following disclaimer.
-**
-**   * Redistributions in binary form must reproduce the above copyright notice,
-**     this list of conditions and the following disclaimer in the documentation
-**     and/or other materials provided with the distribution.
-**
-**   * Neither the name of Apple, Inc. nor the names of its contributors
-**     may be used to endorse or promote products derived from this software
-**     without specific prior written permission.
-**
-** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-** CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-** EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-** PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-** PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-** LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-** NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**
-****************************************************************************/
+/**************************************************
+** Copyright (C) 2007-2008, Apple, Inc.
+**************************************************/
 
 #include <qcore_mac_p.h>
 #include <qaction.h>
@@ -77,11 +47,9 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifdef QT_MAC_USE_COCOA
 // Cmd + left mousebutton should produce a right button
 //  press (mainly for mac users with one-button mice):
 static bool qt_leftButtonIsRightButton = false;
-#endif
 
 Q_GLOBAL_STATIC(QMacWindowFader, macwindowFader);
 
@@ -104,27 +72,21 @@ void QMacWindowFader::performFade()
 {
     const QWidgetList myWidgetsToFade = m_windowsToFade;
     const int widgetCount = myWidgetsToFade.count();
-#ifdef QT_MAC_USE_COCOA
+
     QMacCocoaAutoReleasePool pool;
     [NSAnimationContext beginGrouping];
     [[NSAnimationContext currentContext] setDuration:NSTimeInterval(m_duration)];
-#endif
 
     for (int i = 0; i < widgetCount; ++i) {
         QWidget *widget = m_windowsToFade.at(i);
         OSWindowRef window = qt_mac_window_for(widget);
-#ifdef QT_MAC_USE_COCOA
+
         [[window animator] setAlphaValue:0.0];
         QTimer::singleShot(qRound(m_duration * 1000), widget, SLOT(hide()));
-#else
-        TransitionWindowOptions options = {0, m_duration, 0, 0};
-        TransitionWindowWithOptions(window, kWindowFadeTransitionEffect, kWindowHideTransitionAction,
-                                    0, 1, &options);
-#endif
+
     }
-#ifdef QT_MAC_USE_COCOA
+
     [NSAnimationContext endGrouping];
-#endif
     m_duration = 0.250;
     m_windowsToFade.clear();
 }
@@ -138,22 +100,14 @@ extern void qt_mac_updateCursorWithWidgetUnderMouse(QWidget *widgetUnderMouse); 
 
 void macWindowFade(void * /*OSWindowRef*/ window, float durationSeconds)
 {
-#ifdef QT_MAC_USE_COCOA
     QMacCocoaAutoReleasePool pool;
-#endif
+
     OSWindowRef wnd = static_cast<OSWindowRef>(window);
+
     if (wnd) {
         QWidget *widget;
-#ifdef QT_MAC_USE_COCOA
         widget = [wnd QT_MANGLE_NAMESPACE(qt_qwidget)];
-#else
-    const UInt32 kWidgetCreatorQt = kEventClassQt;
-    enum {
-        kWidgetPropertyQWidget = 'QWId' //QWidget *
-    };
-        if (GetWindowProperty(static_cast<WindowRef>(window), kWidgetCreatorQt, kWidgetPropertyQWidget, sizeof(widget), 0, &widget) != noErr)
-            widget = 0;
-#endif
+
         if (widget) {
             QMacWindowFader::currentFader()->setFadeDuration(durationSeconds);
             QMacWindowFader::currentFader()->registerWindowToFade(widget);
@@ -167,8 +121,6 @@ struct dndenum_mapper
     Qt::DropAction qt_code;
     bool Qt2Mac;
 };
-
-#if defined(QT_MAC_USE_COCOA) && defined(__OBJC__)
 
 static dndenum_mapper dnd_enums[] = {
     { NSDragOperationLink,  Qt::LinkAction, true },
@@ -224,24 +176,17 @@ DnDParams *macCurrentDnDParameters()
 {
     return currentDnDParameters();
 }
-#endif
 
 bool macWindowIsTextured( void * /*OSWindowRef*/ window )
 {
-    OSWindowRef wnd = static_cast<OSWindowRef>(window);
-#ifdef QT_MAC_USE_COCOA
+   OSWindowRef wnd = static_cast<OSWindowRef>(window);
 	return ( [wnd styleMask] & NSTexturedBackgroundWindowMask ) ? true : false;
-#else
-	WindowAttributes currentAttributes;
-	GetWindowAttributes(wnd, &currentAttributes);
-	return (currentAttributes & kWindowMetalAttribute) ? true : false;
-#endif
 }
 
 void macWindowToolbarShow(const QWidget *widget, bool show )
 {
     OSWindowRef wnd = qt_mac_window_for(widget);
-#ifdef QT_MAC_USE_COCOA
+
     if (NSToolbar *toolbar = [wnd toolbar]) {
         QMacCocoaAutoReleasePool pool;
         if (show != [toolbar isVisible]) {
@@ -251,56 +196,33 @@ void macWindowToolbarShow(const QWidget *widget, bool show )
             qt_widget_private(const_cast<QWidget *>(widget))->updateFrameStrut();
         }
     }
-#else
-    qt_widget_private(const_cast<QWidget *>(widget))->updateFrameStrut();
-    ShowHideWindowToolbar(wnd, show, false);
-#endif
 }
 
 
 void macWindowToolbarSet( void * /*OSWindowRef*/ window, void *toolbarRef  )
 {
     OSWindowRef wnd = static_cast<OSWindowRef>(window);
-#ifdef QT_MAC_USE_COCOA
     [wnd setToolbar:static_cast<NSToolbar *>(toolbarRef)];
-#else
-    SetWindowToolbar(wnd, static_cast<HIToolbarRef>(toolbarRef));
-#endif
 }
 
 bool macWindowToolbarIsVisible( void * /*OSWindowRef*/ window )
 {
     OSWindowRef wnd = static_cast<OSWindowRef>(window);
-#ifdef QT_MAC_USE_COCOA
     if (NSToolbar *toolbar = [wnd toolbar])
         return [toolbar isVisible];
     return false;
-#else
-    return IsWindowToolbarVisible(wnd);
-#endif
 }
 
 void macWindowSetHasShadow( void * /*OSWindowRef*/ window, bool hasShadow  )
 {
     OSWindowRef wnd = static_cast<OSWindowRef>(window);
-#ifdef QT_MAC_USE_COCOA
     [wnd setHasShadow:BOOL(hasShadow)];
-#else
-    if (hasShadow)
-        ChangeWindowAttributes(wnd, 0, kWindowNoShadowAttribute);
-    else
-        ChangeWindowAttributes(wnd, kWindowNoShadowAttribute, 0);
-#endif
 }
 
 void macWindowFlush(void * /*OSWindowRef*/ window)
 {
     OSWindowRef wnd = static_cast<OSWindowRef>(window);
-#ifdef QT_MAC_USE_COCOA
     [wnd flushWindowIfNeeded];
-#else
-    HIWindowFlush(wnd);
-#endif
 }
 
 void * /*NSImage */qt_mac_create_nsimage(const QPixmap &pm)
@@ -323,11 +245,7 @@ void * /*NSImage */qt_mac_create_nsimage(const QPixmap &pm)
 
 void qt_mac_update_mouseTracking(QWidget *widget)
 {
-#ifdef QT_MAC_USE_COCOA
     [qt_mac_nativeview_for(widget) updateTrackingAreas];
-#else
-    Q_UNUSED(widget);
-#endif
 }
 
 OSStatus qt_mac_drawCGImage(CGContextRef inContext, const CGRect *inBounds, CGImageRef inImage)
@@ -354,13 +272,7 @@ InvalidContext:
 
 bool qt_mac_checkForNativeSizeGrip(const QWidget *widget)
 {
-#ifndef QT_MAC_USE_COCOA
-    OSViewRef nativeSizeGrip = 0;
-    HIViewFindByID(HIViewGetRoot(HIViewGetWindow(HIViewRef(widget->winId()))), kHIViewWindowGrowBoxID, &nativeSizeGrip);
-    return (nativeSizeGrip != 0);
-#else
     return [[reinterpret_cast<NSView *>(widget->effectiveWinId()) window] showsResizeIndicator];
-#endif
 }
 struct qt_mac_enum_mapper
 {
@@ -428,8 +340,6 @@ QMacTabletHash *qt_mac_tablet_hash()
     return tablet_hash();
 }
 
-#ifdef QT_MAC_USE_COCOA
-
 // Clears the QWidget pointer that each QCocoaView holds.
 void qt_mac_clearCocoaViewQWidgetPointers(QWidget *widget)
 {
@@ -456,7 +366,6 @@ void qt_dispatchTabletProximityEvent(void * /*NSEvent * */ tabletEvent)
                                               static_cast<UInt8> ([proximityEvent isEnteringProximity]) };
     qt_dispatchTabletProximityEvent(carbonProximityRec);
 }
-#endif // QT_MAC_USE_COCOA
 
 void qt_dispatchTabletProximityEvent(const ::TabletProximityRec &proxRec)
 {
@@ -654,7 +563,6 @@ QChar qtKey2CocoaKey(Qt::Key key)
     return i->cocoaKey;
 }
 
-#ifdef QT_MAC_USE_COCOA
 static Qt::Key cocoaKey2QtKey(QChar keyCode)
 {
     const KeyPair *i = qBinaryFind(entries, end, keyCode);
@@ -776,7 +684,6 @@ bool qt_dispatchKeyEventWithCocoa(void * /*NSEvent * */ keyEvent, QWidget *widge
                    macScanCode, [event keyCode], [event modifierFlags]);
     return qt_sendSpontaneousEvent(widgetToGetEvent, &ke) && ke.isAccepted();
 }
-#endif
 
 Qt::MouseButton cocoaButton2QtButton(NSInteger buttonNum)
 {
@@ -795,11 +702,6 @@ Qt::MouseButton cocoaButton2QtButton(NSInteger buttonNum)
 
 bool qt_dispatchKeyEvent(void * /*NSEvent * */ keyEvent, QWidget *widgetToGetEvent)
 {
-#ifndef QT_MAC_USE_COCOA
-    Q_UNUSED(keyEvent);
-    Q_UNUSED(widgetToGetEvent);
-    return false;
-#else
     NSEvent *event = static_cast<NSEvent *>(keyEvent);
     EventRef key_event = static_cast<EventRef>(const_cast<void *>([event eventRef]));
     Q_ASSERT(key_event);
@@ -822,15 +724,11 @@ bool qt_dispatchKeyEvent(void * /*NSEvent * */ keyEvent, QWidget *widgetToGetEve
 
     bool consumed = qt_keymapper_private()->translateKeyEvent(widgetToGetEvent, 0, key_event, &info, true);
     return consumed && (info != 0);
-#endif
 }
 
 void qt_dispatchModifiersChanged(void * /*NSEvent * */flagsChangedEvent, QWidget *widgetToGetEvent)
 {
-#ifndef QT_MAC_USE_COCOA
-    Q_UNUSED(flagsChangedEvent);
-    Q_UNUSED(widgetToGetEvent);
-#else
+
     UInt32 modifiers = 0;
     // Sync modifiers with Qt
     NSEvent *event = static_cast<NSEvent *>(flagsChangedEvent);
@@ -840,7 +738,6 @@ void qt_dispatchModifiersChanged(void * /*NSEvent * */flagsChangedEvent, QWidget
                       sizeof(modifiers), 0, &modifiers);
     extern void qt_mac_send_modifiers_changed(quint32 modifiers, QObject *object);
     qt_mac_send_modifiers_changed(modifiers, widgetToGetEvent);
-#endif
 }
 
 QPointF flipPoint(const NSPoint &p)
@@ -857,8 +754,6 @@ NSPoint flipPoint(const QPointF &p)
 {
     return NSMakePoint(p.x(), flipYCoordinate(p.y()));
 }
-
-#if defined(QT_MAC_USE_COCOA) && defined(__OBJC__)
 
 void qt_mac_handleNonClientAreaMouseEvent(NSWindow *window, NSEvent *event)
 {
@@ -1271,15 +1166,9 @@ bool qt_mac_handleMouseEvent(NSEvent *event, QEvent::Type eventType, Qt::MouseBu
     previousButton = button;
     return true;
 }
-#endif
 
 bool qt_mac_handleTabletEvent(void * /*QCocoaView * */view, void * /*NSEvent * */tabletEvent)
 {
-#ifndef QT_MAC_USE_COCOA
-    Q_UNUSED(view);
-    Q_UNUSED(tabletEvent);
-    return false;
-#else
     QT_MANGLE_NAMESPACE(QCocoaView) *theView = static_cast<QT_MANGLE_NAMESPACE(QCocoaView) *>(view);
     NSView *theNSView = static_cast<NSView *>(view);
     NSEvent *theTabletEvent = static_cast<NSEvent *>(tabletEvent);
@@ -1368,29 +1257,18 @@ bool qt_mac_handleTabletEvent(void * /*QCocoaView * */view, void * /*NSEvent * *
 
     qt_sendSpontaneousEvent(widgetToGetMouse, &qtabletEvent);
     return qtabletEvent.isAccepted();
-#endif
 }
 
 void qt_mac_updateContentBorderMetricts(void * /*OSWindowRef */window, const ::HIContentBorderMetrics &metrics)
 {
     OSWindowRef theWindow = static_cast<OSWindowRef>(window);
-#if !defined(QT_MAC_USE_COCOA)
-#  if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-    if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
-        ::HIWindowSetContentBorderThickness(theWindow, &metrics);
-    }
-#  else
-    Q_UNUSED(window);
-    Q_UNUSED(metrics);
-#  endif
-#else
+
     if ([theWindow styleMask] & NSTexturedBackgroundWindowMask)
         [theWindow setContentBorderThickness:metrics.top forEdge:NSMaxYEdge];
+
     [theWindow setContentBorderThickness:metrics.bottom forEdge:NSMinYEdge];
-#endif
 }
 
-#ifdef QT_MAC_USE_COCOA
 void qt_mac_replaceDrawRect(void * /*OSWindowRef */window, QWidgetPrivate *widget)
 {
     QMacCocoaAutoReleasePool pool;
@@ -1453,19 +1331,6 @@ void qt_mac_replaceDrawRectOriginal(void * /*OSWindowRef */window, QWidgetPrivat
     widget->originalDrawMethod = true;
     [theWindow display];
 }
-#endif // QT_MAC_USE_COCOA
-
-#ifdef QT_MAC_USE_COCOA
-void qt_mac_showBaseLineSeparator(void * /*OSWindowRef */window, bool show)
-{
-    if(!window)
-        return;
-    QMacCocoaAutoReleasePool pool;
-    OSWindowRef theWindow = static_cast<OSWindowRef>(window);
-    NSToolbar *macToolbar = [theWindow toolbar];
-    [macToolbar setShowsBaselineSeparator:show];
-}
-#endif // QT_MAC_USE_COCOA
 
 QStringList qt_mac_NSArrayToQStringList(void *nsarray)
 {
@@ -1485,7 +1350,6 @@ void *qt_mac_QStringListToNSMutableArrayVoid(const QStringList &list)
     return result;
 }
 
-#ifdef QT_MAC_USE_COCOA
 void qt_syncCocoaTitleBarButtons(OSWindowRef window, QWidget *widgetForWindow)
 {
     if (!widgetForWindow)
@@ -1510,21 +1374,14 @@ void qt_syncCocoaTitleBarButtons(OSWindowRef window, QWidget *widgetForWindow)
 
     [window setShowsToolbarButton:uint(flags & Qt::MacWindowToolBarButtonHint) != 0];
 }
-#endif // QT_MAC_USE_COCOA
 
-// Carbon: Make sure you call QDEndContext on the context when done with it.
+
 CGContextRef qt_mac_graphicsContextFor(QWidget *widget)
 {
     if (!widget)
         return 0;
 
-#ifndef QT_MAC_USE_COCOA
-    CGContextRef context;
-    CGrafPtr port = GetWindowPort(qt_mac_window_for(widget));
-    QDBeginCGContext(port, &context);
-#else
     CGContextRef context = (CGContextRef)[[NSGraphicsContext graphicsContextWithWindow:qt_mac_window_for(widget)] graphicsPort];
-#endif
     return context;
 }
 
@@ -1532,24 +1389,16 @@ void qt_mac_dispatchPendingUpdateRequests(QWidget *widget)
 {
     if (!widget)
         return;
-#ifndef QT_MAC_USE_COCOA
-    HIViewRender(qt_mac_nativeview_for(widget));
-#else
+
     [qt_mac_nativeview_for(widget) displayIfNeeded];
-#endif
 }
 
 CGFloat qt_mac_get_scalefactor()
 {
-#ifndef QT_MAC_USE_COCOA
-    return HIGetScaleFactor();
-#endif
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
     NSScreen *mainScreen = [NSScreen mainScreen];
     if ([mainScreen respondsToSelector:@selector(backingScaleFactor)])
         return [mainScreen backingScaleFactor];
-#endif
+
     return 1.0;
 }
 
@@ -1617,7 +1466,6 @@ void qt_mac_constructQIconFromIconRef(const IconRef icon, const IconRef overlayI
     }
 }
 
-#ifdef QT_MAC_USE_COCOA
 void qt_mac_menu_collapseSeparators(void */*NSMenu **/ theMenu, bool collapse)
 {
     QMacCocoaAutoReleasePool pool;
@@ -1701,14 +1549,8 @@ QThreadData * internal_get_ThreadData(QObject *object)
    return threadData;
 }
 
-
-#endif
-
 QMacCocoaAutoReleasePool::QMacCocoaAutoReleasePool()
 {
-#ifndef QT_MAC_USE_COCOA
-    NSApplicationLoad();
-#endif
     pool = (void*)[[NSAutoreleasePool alloc] init];
 }
 
@@ -1719,10 +1561,8 @@ QMacCocoaAutoReleasePool::~QMacCocoaAutoReleasePool()
 
 void qt_mac_post_retranslateAppMenu()
 {
-#ifdef QT_MAC_USE_COCOA
     QMacCocoaAutoReleasePool pool;
     qt_cocoaPostMessage([NSApp QT_MANGLE_NAMESPACE(qt_qcocoamenuLoader)], @selector(qtTranslateApplicationMenu));
-#endif
 }
 
 QWidgetPrivate *QMacScrollOptimization::_target = 0;
@@ -1731,7 +1571,7 @@ int QMacScrollOptimization::_dx = 0;
 int QMacScrollOptimization::_dy = 0;
 QRect QMacScrollOptimization::_scrollRect = QRect(0, 0, -1, -1);
 
-#ifdef QT_MAC_USE_COCOA
+
 // This method implements the magic for the drawRectSpecial method.
 // We draw a line at the upper edge of the content view in order to
 // override the title baseline.
@@ -1821,7 +1661,5 @@ void qt_mac_setNeedsDisplayInRect(QWidget *widget, QRegion region)
     }
 
 }
-
-#endif // QT_MAC_USE_COCOA
 
 QT_END_NAMESPACE

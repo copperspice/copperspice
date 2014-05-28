@@ -24,8 +24,6 @@
 ***********************************************************************/
 
 #import <qcocoapanel_mac_p.h>
-
-#ifdef QT_MAC_USE_COCOA
 #import <qt_cocoa_helpers_mac_p.h>
 #import <qcocoawindow_mac_p.h>
 #import <qcocoawindowdelegate_mac_p.h>
@@ -52,4 +50,4 @@ QT_USE_NAMESPACE
 #include "qcocoasharedwindowmethods_mac_p.h"
 
 @end
-#endif
+

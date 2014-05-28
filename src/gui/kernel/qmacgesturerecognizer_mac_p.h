@@ -54,7 +54,6 @@ public:
     void reset(QGesture *gesture);
 };
 
-#if defined(QT_MAC_USE_COCOA)
 
 class QMacPanGestureRecognizer : public QObject, public QGestureRecognizer
 {
@@ -70,7 +69,6 @@ private:
     bool _panCanceled;
 };
 
-#endif
 
 QT_END_NAMESPACE
 

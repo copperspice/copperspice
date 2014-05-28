@@ -117,12 +117,8 @@ private:
     friend class QSplitterHandle;
 };
 
-
-#ifndef QT_NO_TEXTSTREAM
 Q_GUI_EXPORT QTextStream& operator<<(QTextStream&, const QSplitter&);
 Q_GUI_EXPORT QTextStream& operator>>(QTextStream&, QSplitter&);
-#endif
-
 
 class Q_GUI_EXPORT QSplitterHandle : public QWidget
 {

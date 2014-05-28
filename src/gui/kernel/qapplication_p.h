@@ -88,7 +88,7 @@ struct QWSServerCleaner { ~QWSServerCleaner(); };
 #ifndef QT_NO_TABLET
 struct QTabletDeviceData
 {
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     int minPressure;
     int maxPressure;
     int minTanPressure;
@@ -98,7 +98,7 @@ struct QTabletDeviceData
                               int outOriginY, int outExtentY) const;
 #endif
 
-#if defined(Q_WS_X11) || (defined(Q_WS_MAC) && !defined(QT_MAC_USE_COCOA))
+#if defined(Q_WS_X11)
     QPointer<QWidget> widgetToGetPress;
 #endif
 
@@ -118,16 +118,19 @@ struct QTabletDeviceData
     int xinput_button_release;
     int xinput_proximity_in;
     int xinput_proximity_out;
-#elif defined(Q_WS_WIN)
+
+#elif defined(Q_OS_WIN)
     qint64 llId;
     int currentDevice;
     int currentPointerType;
-#elif defined(Q_WS_MAC)
+
+#elif defined(Q_OS_MAC)
     quint64 tabletUniqueID;
     int tabletDeviceType;
     int tabletPointerType;
     int capabilityMask;
 #endif
+
 };
 
 static inline int sign(int x)
@@ -135,7 +138,7 @@ static inline int sign(int x)
     return x >= 0 ? 1 : -1;
 }
 
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
 inline QPointF QTabletDeviceData::scaleCoord(int coordX, int coordY,
                                             int outOriginX, int outExtentX,
                                             int outOriginY, int outExtentY) const
@@ -160,13 +163,13 @@ inline QPointF QTabletDeviceData::scaleCoord(int coordX, int coordY,
 
 typedef QList<QTabletDeviceData> QTabletDeviceDataList;
 QTabletDeviceDataList *qt_tablet_devices();
-# if defined(Q_WS_MAC)
+# if defined(Q_OS_MAC)
 typedef QHash<int, QTabletDeviceData> QMacTabletHash;
 QMacTabletHash *qt_mac_tablet_hash();
 # endif
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 typedef BOOL (WINAPI *PtrRegisterTouchWindow)(HWND, ULONG);
 typedef BOOL (WINAPI *PtrGetTouchInputInfo)(HANDLE, UINT, PVOID, int);
 typedef BOOL (WINAPI *PtrCloseTouchInputHandle)(HANDLE);
@@ -226,7 +229,7 @@ typedef struct tagGESTURECONFIG
 
 #endif // QT_NO_GESTURES
 
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
 typedef QHash<QByteArray, QFont> FontHash;
 FontHash *qt_app_fonts_hash();
@@ -241,15 +244,18 @@ public:
     QApplicationPrivate(int &argc, char **argv, QApplication::Type type, int flags);
     ~QApplicationPrivate();
 
-#if defined(Q_WS_X11)
+#if defined(Q_S_X11)
+
 #ifndef QT_NO_SETTINGS
     static bool x11_apply_settings();
 #endif
     static void reset_instance_pointer();
+
 #elif defined(Q_WS_QWS)
     static bool qws_apply_settings();
     static QWidget *findWidget(const QObjectList&, const QPoint &, bool rec);
 #endif
+
     static bool quitOnLastWindowClosed;
     static void emitLastWindowClosed();
     static bool autoSipEnabled;
@@ -283,9 +289,10 @@ public:
     static bool isBlockedByModal(QWidget *widget);
     static bool modalState();
     static bool tryModalHelper(QWidget *widget, QWidget **rettop = 0);
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
     static QWidget *tryModalHelper_sys(QWidget *top);
-	bool canQuit();
+    bool canQuit();
 #endif
 
     bool notify_helper(QObject *receiver, QEvent * e);
@@ -330,6 +337,7 @@ public:
 #ifndef QT_NO_CURSOR
     QList<QCursor> cursor_list;
 #endif
+
 #ifndef QT_NO_GRAPHICSVIEW
     // Maintain a list of all scenes to ensure font and palette propagation to
     // all scenes.
@@ -339,6 +347,7 @@ public:
     QBasicTimer toolTipWakeUp, toolTipFallAsleep;
     QPoint toolTipPos, toolTipGlobalPos, hoverGlobalPos;
     QPointer<QWidget> toolTipWidget;
+
 #ifndef QT_NO_SHORTCUT
     QShortcutMap shortcutMap;
 #endif
@@ -357,12 +366,14 @@ public:
     static QGraphicsSystem *graphics_system;
     static QString graphics_system_name;
     static bool runtime_graphics_system;
+
 #ifdef Q_WS_QPA
     static QPlatformIntegration *platform_integration;
 #endif
 
 private:
     static QFont *app_font; // private for a reason! Always use QApplication::font() instead!
+
 public:
     static QFont *sys_font;
     static QFont *set_font;
@@ -375,6 +386,7 @@ public:
     static int  cursor_flash_time;
     static int  mouse_double_click_time;
     static int  keyboard_input_time;
+
 #ifndef QT_NO_WHEELEVENT
     static int  wheel_scroll_lines;
 #endif
@@ -389,7 +401,7 @@ public:
     static bool widgetCount; // Coupled with -widgetcount switch
     static bool load_testability; // Coupled with -testability switch
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     static bool native_modal_dialog_active;
 #endif
 
@@ -400,18 +412,18 @@ public:
 
 #if defined(Q_WS_X11)
     static void applyX11SpecificCommandLineArguments(QWidget *main_widget);
+
 #elif defined(Q_WS_QWS)
     static void applyQWSSpecificCommandLineArguments(QWidget *main_widget);
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     static OSStatus globalEventProcessor(EventHandlerCallRef, EventRef, void *);
     static OSStatus globalAppleEventProcessor(const AppleEvent *, AppleEvent *, long);
     static OSStatus tabletProximityCallback(EventHandlerCallRef, EventRef, void *);
-#ifdef QT_MAC_USE_COCOA
     static void qt_initAfterNSAppStarted();
     static void setupAppleEvents();
-#endif
+
     static bool qt_mac_apply_settings();
 #endif
 
@@ -463,22 +475,25 @@ public:
     static Qt::NavigationMode navigationMode;
 #endif
 
-#if defined(Q_WS_MAC) || defined(Q_WS_X11)
+#if defined(Q_OS_MAC) || defined(Q_WS_X11)
     void _q_alertTimeOut();
     QHash<QWidget *, QTimer *> alertTimerHash;
 #endif
+
 #ifndef QT_NO_STYLE_STYLESHEET
     static QString styleSheet;
+
 #endif
     static QPointer<QWidget> leaveAfterRelease;
     static QWidget *pickMouseReceiver(QWidget *candidate, const QPoint &globalPos, QPoint &pos,
                                       QEvent::Type type, Qt::MouseButtons buttons,
                                       QWidget *buttonDown, QWidget *alienWidget);
+
     static bool sendMouseEvent(QWidget *receiver, QMouseEvent *event, QWidget *alienWidget,
                                QWidget *native, QWidget **buttonDown, QPointer<QWidget> &lastMouseReceiver,
                                bool spontaneous = true);
 
-#if defined(Q_WS_WIN) || defined(Q_WS_X11) || defined (Q_WS_QWS) || defined(Q_WS_MAC) || defined(Q_WS_QPA)
+#if defined(Q_OS_WIN) || defined(Q_WS_X11) || defined (Q_WS_QWS) || defined(Q_OS_MAC) || defined(Q_WS_QPA)
     void sendSyntheticEnterLeave(QWidget *widget);
 #endif
 
@@ -486,14 +501,17 @@ public:
     QGestureManager *gestureManager;
     QWidget *gestureWidget;
 #endif
-#if defined(Q_WS_X11) || defined(Q_WS_WIN)
+
+#if defined(Q_WS_X11) || defined(Q_OS_WIN)
     QPixmap *move_cursor;
     QPixmap *copy_cursor;
     QPixmap *link_cursor;
 #endif
-#if defined(Q_WS_WIN)
+
+#if defined(Q_OS_WIN)
     QPixmap *ignore_cursor;
 #endif
+
     QPixmap getPixmapCursor(Qt::CursorShape cshape);
 
     QMap<int, QWeakPointer<QWidget> > widgetForTouchPointId;
@@ -510,7 +528,7 @@ public:
                                        QTouchEvent::DeviceType deviceType,
                                        const QList<QTouchEvent::TouchPoint> &touchPoints);
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     static bool HasTouchSupport;
     static PtrRegisterTouchWindow RegisterTouchWindow;
     static PtrGetTouchInputInfo GetTouchInputInfo;
@@ -569,13 +587,16 @@ Q_GUI_EXPORT void qt_translateRawTouchEvent(QWidget *window,
                                             QTouchEvent::DeviceType deviceType,
                                             const QList<QTouchEvent::TouchPoint> &touchPoints);
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
   extern void qt_win_set_cursor(QWidget *, bool);
+
 #elif defined(Q_WS_X11)
   extern void qt_x11_enforce_cursor(QWidget *, bool);
   extern void qt_x11_enforce_cursor(QWidget *);
+
 #elif defined (Q_WS_QPA)
   extern void qt_qpa_set_cursor(QWidget *, bool);
+
 #endif
 
 QT_END_NAMESPACE

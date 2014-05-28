@@ -38,7 +38,7 @@
 #include "config.h"
 #include "GraphicsContext.h"
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #include <windows.h>
 #endif
 
@@ -882,7 +882,7 @@ void GraphicsContext::drawLineForText(const FloatPoint& origin, float width, boo
             endPoint.setY(endPoint.y() - 1);
         }
     }
-#endif // defined(Q_WS_X11)
+#endif
 
     // FIXME: Loss of precision here. Might consider rounding.
     drawLine(IntPoint(startPoint.x(), startPoint.y()), IntPoint(endPoint.x(), endPoint.y()));
@@ -1278,7 +1278,7 @@ void GraphicsContext::setPlatformShouldAntialias(bool enable)
     m_data->p()->setRenderHint(QPainter::Antialiasing, enable);
 }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 
 HDC GraphicsContext::getWindowsContext(const IntRect& dstRect, bool supportAlphaBlend, bool mayCreateBitmap)
 {

@@ -41,7 +41,7 @@ public:
 };
 
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 
 QT_BEGIN_INCLUDE_NAMESPACE
 
@@ -92,7 +92,7 @@ private:
 #endif
 
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
 
 /*
   Encapsulation of conversion between MIME and Mac flavor.
@@ -153,7 +153,7 @@ public:
 
 // ### Qt5/Add const QStringList& QMacPasteboardMime::supportedFlavours()
 Q_GUI_EXPORT void qRegisterDraggedTypes(const QStringList &types);
-#endif // Q_WS_MAC
+#endif
 
 QT_END_NAMESPACE
 

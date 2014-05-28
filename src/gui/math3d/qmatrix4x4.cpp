@@ -1817,8 +1817,6 @@ QMatrix4x4::operator QVariant() const
     return QVariant(QVariant::Matrix4x4, this);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
-
 QDebug operator<<(QDebug dbg, const QMatrix4x4 &m)
 {
     // Create a string that represents the matrix type.
@@ -1846,8 +1844,6 @@ QDebug operator<<(QDebug dbg, const QMatrix4x4 &m)
         << qSetFieldWidth(0) << ')';
     return dbg.space();
 }
-
-#endif
 
 #ifndef QT_NO_DATASTREAM
 

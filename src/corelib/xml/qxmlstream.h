@@ -36,37 +36,17 @@
 
 QT_BEGIN_NAMESPACE
 
-#if defined(Q_OS_MAC32)
-# if !defined QT_BUILD_XML_LIB
-#  define Q_XMLSTREAM_RENAME_SYMBOLS
-# endif
-#endif
-
 #if defined QT_BUILD_XML_LIB
 # define Q_XMLSTREAM_EXPORT     Q_XML_EXPORT
 #else
 # define Q_XMLSTREAM_EXPORT     Q_CORE_EXPORT
 #endif
 
-#if defined Q_XMLSTREAM_RENAME_SYMBOLS
-// don't worry, we'll undef and change to typedef at the bottom of the file
-# define QXmlStreamAttribute QCoreXmlStreamAttribute
-# define QXmlStreamAttributes QCoreXmlStreamAttributes
-# define QXmlStreamEntityDeclaration QCoreXmlStreamEntityDeclaration
-# define QXmlStreamEntityDeclarations QCoreXmlStreamEntityDeclarations
-# define QXmlStreamEntityResolver QCoreXmlStreamEntityResolver
-# define QXmlStreamNamespaceDeclaration QCoreXmlStreamNamespaceDeclaration
-# define QXmlStreamNamespaceDeclarations QCoreXmlStreamNamespaceDeclarations
-# define QXmlStreamNotationDeclaration QCoreXmlStreamNotationDeclaration
-# define QXmlStreamNotationDeclarations QCoreXmlStreamNotationDeclarations
-# define QXmlStreamReader QCoreXmlStreamReader
-# define QXmlStreamStringRef QCoreXmlStreamStringRef
-# define QXmlStreamWriter QCoreXmlStreamWriter
-#endif
 
 class Q_XMLSTREAM_EXPORT QXmlStreamStringRef {
     QString m_string;
     int m_position, m_size;
+
 public:
     inline QXmlStreamStringRef():m_position(0), m_size(0){}
     inline QXmlStreamStringRef(const QStringRef &aString)
@@ -83,12 +63,15 @@ public:
 
 class QXmlStreamReaderPrivate;
 class QXmlStreamAttributes;
-class Q_XMLSTREAM_EXPORT QXmlStreamAttribute {
+
+class Q_XMLSTREAM_EXPORT QXmlStreamAttribute
+{
     QXmlStreamStringRef m_name, m_namespaceUri, m_qualifiedName, m_value;
     void *reserved;
     uint m_isDefault : 1;
     friend class QXmlStreamReaderPrivate;
     friend class QXmlStreamAttributes;
+
 public:
     QXmlStreamAttribute();
     QXmlStreamAttribute(const QString &qualifiedName, const QString &value);

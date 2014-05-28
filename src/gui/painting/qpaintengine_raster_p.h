@@ -193,12 +193,12 @@ public:
     void saveBuffer(const QString &s) const;
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     void setCGContext(CGContextRef ref);
     CGContextRef getCGContext() const;
 #endif
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     void setDC(HDC hdc);
     HDC getDC() const;
     void releaseDC(HDC hdc) const;
@@ -311,9 +311,9 @@ public:
     QScopedPointer<QOutlineMapper> outlineMapper;
     QScopedPointer<QRasterBuffer>  rasterBuffer;
 
-#if defined (Q_WS_WIN)
+#if defined (Q_OS_WIN)
     HDC hdc;
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     CGContextRef cgContext;
 #endif
 
@@ -340,7 +340,7 @@ public:
     uint mono_surface : 1;
     uint outlinemapper_xform_dirty : 1;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     uint isPlain45DegreeRotation : 1;
 #endif
 
@@ -454,15 +454,17 @@ public:
 private:
     QWidget *widget;
 };
-#endif // Q_WS_QWS
+#endif
 
 /*******************************************************************************
  * QRasterBuffer
  */
 class
+
 #ifdef Q_WS_QWS
 Q_GUI_EXPORT
 #endif
+
 QRasterBuffer
 {
 public:

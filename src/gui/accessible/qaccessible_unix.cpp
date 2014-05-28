@@ -31,12 +31,11 @@
 #include "qcoreapplication.h"
 #include "qmutex.h"
 #include "qvector.h"
-#include "private/qfactoryloader_p.h"
+#include "qfactoryloader_p.h"
 
 #include <stdlib.h>
 
 QT_BEGIN_NAMESPACE
-
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
     (QAccessibleBridgeFactoryInterface_iid, QLatin1String("/accessiblebridge")))

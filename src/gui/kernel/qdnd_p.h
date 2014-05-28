@@ -34,11 +34,11 @@
 #include "QtGui/qcursor.h"
 #include "QtCore/qpoint.h"
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # include "qt_mac_p.h"
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 # include <qt_windows.h>
 # include <objidl.h>
 #endif
@@ -74,7 +74,7 @@ protected:
     virtual QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const = 0;
 };
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 class QOleDataObject : public IDataObject
 {
 public:
@@ -175,7 +175,7 @@ protected:
     QStringList formats_sys() const;
     QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 public:
     LPDATAOBJECT currentDataObject;
 #endif
@@ -191,7 +191,7 @@ class QDragManager: public QObject {
     friend class QDragMoveEvent;
     friend class QDropEvent;
     friend class QApplication;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     friend class QWidgetPrivate; //dnd is implemented here
 #endif
 
@@ -251,7 +251,7 @@ private:
 };
 
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 
 class QOleDropTarget : public IDropTarget
 {
@@ -286,7 +286,7 @@ private:
 
 #endif
 
-#if defined (Q_WS_MAC)
+#if defined (Q_OS_MAC)
 class QCocoaDropData : public QInternalMimeData
 {
     CS_OBJECT(QCocoaDropData)

@@ -25,15 +25,14 @@
 
 #include "qmacdefines_mac.h"
 
-#ifdef QT_MAC_USE_COCOA
 #include <qaction.h>
 #include <qcoreapplication.h>
-#include <private/qcocoamenuloader_mac_p.h>
-#include <private/qapplication_p.h>
-#include <private/qt_mac_p.h>
-#include <private/qmenubar_p.h>
+#include <qcocoamenuloader_mac_p.h>
+#include <qapplication_p.h>
+#include <qt_mac_p.h>
+#include <qmenubar_p.h>
 #include <qmenubar.h>
-#include <private/qt_cocoa_helpers_mac_p.h>
+#include <qt_cocoa_helpers_mac_p.h>
 
 QT_FORWARD_DECLARE_CLASS(QCFString)
 QT_FORWARD_DECLARE_CLASS(QString)
@@ -275,4 +274,4 @@ QThreadData * internal_get_ThreadData(QObject *object)
 }
 
 @end
-#endif // QT_MAC_USE_COCOA
+

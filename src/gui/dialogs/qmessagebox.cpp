@@ -205,7 +205,7 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
     label->setTextInteractionFlags(Qt::TextInteractionFlags(q->style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, 0, q)));
     label->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     label->setOpenExternalLinks(true);
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     label->setContentsMargins(16, 0, 0, 0);
 #elif !defined(Q_WS_QWS)
     label->setContentsMargins(2, 0, 0, 0);
@@ -224,7 +224,7 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
 
     QGridLayout *grid = new QGridLayout;
 
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     const int preferredIconColumn = 0;
     const int preferredTextColumn = 1;
 
@@ -254,7 +254,7 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
     }
     q->setModal(true);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     QFont f = q->font();
     f.setBold(true);
     label->setFont(f);
@@ -287,7 +287,7 @@ void QMessageBoxPrivate::updateSize()
         hardLimit = screenSize.width();
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     int softLimit = qMin(screenSize.width()/2, 420);
 #elif defined(Q_WS_QWS)
     int softLimit = qMin(hardLimit, 500);
@@ -788,7 +788,7 @@ void QMessageBox::changeEvent(QEvent *ev)
     }
     case QEvent::FontChange:
     case QEvent::ApplicationFontChange:
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     {
         QFont f = font();
         f.setBold(true);
@@ -808,12 +808,12 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
 {
     Q_D(QMessageBox);
     if (e->key() == Qt::Key_Escape
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         || (e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_Period)
 #endif
         ) {
             if (d->detectedEscapeButton) {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                 d->detectedEscapeButton->animateClick();
 #else
                 d->detectedEscapeButton->click();
@@ -932,7 +932,7 @@ void QMessageBox::showEvent(QShowEvent *e)
     QAccessible::updateAccessibility(this, 0, QAccessible::Alert);
 #endif
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     HMENU systemMenu = GetSystemMenu((HWND)winId(), FALSE);
     if (!d->detectedEscapeButton) {
         EnableMenuItem(systemMenu, SC_CLOSE, MF_BYCOMMAND|MF_GRAYED);
@@ -1116,7 +1116,7 @@ QMessageBox::StandardButton QMessageBox::critical(QWidget *parent, const QString
 
 void QMessageBox::about(QWidget *parent, const QString &title, const QString &text)
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     static QPointer<QMessageBox> oldMsgBox;
 
     if (oldMsgBox && oldMsgBox->text() == text) {
@@ -1128,7 +1128,7 @@ void QMessageBox::about(QWidget *parent, const QString &title, const QString &te
 #endif
 
     QMessageBox *msgBox = new QMessageBox(title, text, Information, 0, 0, 0, parent
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                                           , Qt::WindowTitleHint | Qt::WindowSystemMenuHint
 #endif
     );
@@ -1138,7 +1138,7 @@ void QMessageBox::about(QWidget *parent, const QString &title, const QString &te
     msgBox->setIconPixmap(icon.pixmap(size));
 
     // should perhaps be a style hint
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     oldMsgBox = msgBox;
 #if 0
     // ### does not work until close button is enabled in title bar
@@ -1798,7 +1798,7 @@ void QMessageBox::setInformativeText(const QString &text)
         layout()->removeWidget(d->informativeLabel);
         delete d->informativeLabel;
         d->informativeLabel = 0;
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
         d->label->setContentsMargins(2, 0, 0, 0);
 #endif
         d->updateSize();
@@ -1812,7 +1812,7 @@ void QMessageBox::setInformativeText(const QString &text)
         label->setAlignment(Qt::AlignTop | Qt::AlignLeft);
         label->setOpenExternalLinks(true);
         label->setWordWrap(true);
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
         d->label->setContentsMargins(2, 0, 0, 0);
         label->setContentsMargins(2, 0, 0, 6);
         label->setIndent(9);
@@ -1844,7 +1844,7 @@ void QMessageBox::setInformativeText(const QString &text)
 void QMessageBox::setWindowTitle(const QString &title)
 {
     // Message boxes on the mac do not have a title
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     QDialog::setWindowTitle(title);
 #else
     Q_UNUSED(title);

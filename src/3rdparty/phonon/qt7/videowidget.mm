@@ -28,9 +28,8 @@
 ********************************************************/
 
 #include <QtCore/qglobal.h>
-#ifdef QT_MAC_USE_COCOA
+
 #import <QTKit/QTMovieLayer.h>
-#endif
 
 #include "videowidget.h"
 #include "backendheader.h"
@@ -47,10 +46,7 @@
 #import <AppKit/NSImage.h>
 #import <QTKit/QTMovieView.h>
 
-/////////////////////////////////////////////////////////////////////////////////////////
-
-#ifdef QT_MAC_USE_COCOA // Rendering to a QTMovieView can only be done in Cocoa
-
+// Rendering to a QTMovieView can only be done in Cocoa
 #define VIDEO_TRANSPARENT(m) -(void)m:(NSEvent *)e{[[self superview] m:e];}
 
 @interface SharedQTMovieView : QTMovieView
@@ -72,8 +68,6 @@
 - (void) useOffscreenWindow:(bool)offscreen;
 - (void) applyDrawRectOnSelf;
 @end
-
-/////////////////////////////////////////////////////////////////////////////////////////
 
 @implementation SharedQTMovieView
 
@@ -233,9 +227,6 @@ VIDEO_TRANSPARENT(scrollWheel)
 
 @end
 
-#endif // QT_MAC_USE_COCOA
-
-/////////////////////////////////////////////////////////////////////////////////////////
 
 QT_BEGIN_NAMESPACE
 
@@ -254,16 +245,12 @@ public:
 	virtual void setMovieIsPaused(bool){}
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////
-
 QGLWidget *PhononSharedQGLWidget(){
 	static QGLWidget *glWidget = 0;
 	if (!glWidget)
 		glWidget = new QGLWidget();
 	return glWidget;
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////
 
 class RenderOpenGL : public QGLWidget, public IVideoRenderDrawWidget
 {
@@ -314,12 +301,10 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////
 
 class RenderQTMovieView : public QWidget, public IVideoRenderDrawWidget
 {
 public:
-#if defined(QT_MAC_USE_COCOA)
 	QRect m_drawRect;
 	VideoFrame m_videoFrame;
     SharedQTMovieView *m_currentView;
@@ -419,19 +404,11 @@ public:
             m_setDrawRectPending = true;
     }
 
-#else // QT_MAC_USE_COCOA == false
-	RenderQTMovieView(bool, QWidget *, const QSize& = QSize()){}
-	void setVideoFrame(VideoFrame &){}
-	void setDrawFrameRect(const QRect &){}
-#endif
 };
-
-/////////////////////////////////////////////////////////////////////////////////////////
 
 class RenderQTMovieLayer : public QWidget, public IVideoRenderDrawWidget
 {
 public:
-#ifdef QT_MAC_USE_COCOA
     QTMovieLayer *m_movieLayer;
 
     RenderQTMovieLayer(QWidget *parent, const QSize&) : QWidget(parent)
@@ -466,14 +443,7 @@ public:
         m_movieLayer.frame = frame;
     }
 
-#else // QT_MAC_USE_COCOA == false
-	RenderQTMovieLayer(QWidget *, const QSize&){}
-	void setVideoFrame(VideoFrame &){}
-	void setDrawFrameRect(const QRect &){}
-#endif
 };
-
-/////////////////////////////////////////////////////////////////////////////////////////
 
 class VideoRenderWidget : public QWidget
 {
@@ -523,11 +493,7 @@ public:
         else if (window() && window()->testAttribute(Qt::WA_DontShowOnScreen))
             return RS_QPainter;
         else {
-#ifdef QUICKTIME_C_API_AVAILABLE
-            return RS_QGLWidget;
-#else
             return RS_QTMovieView;
-#endif
         }
     }
 
@@ -559,17 +525,14 @@ public:
 			    m_renderDrawWidget = new RenderQTMovieLayer(this, size());
 				break;}
             case RS_QPainter:
+
 			case RS_CIImage:
 			case RS_CVTexture:
 			case RS_QImage:
-#ifndef QUICKTIME_C_API_AVAILABLE
-                // On cocoa-64, let QTMovieView produce
-                // video frames for us:
-				m_renderDrawWidget = new RenderQTMovieView(true, this);
-#endif
 				break;
-            case RS_NoRendering:
-                break;
+
+         case RS_NoRendering:
+            break;
         }
 
 		if (m_renderDrawWidget){
@@ -768,8 +731,6 @@ public:
         return QRect(0, 0, width, height);
     }
 };
-
-/////////////////////////////////////////////////////////////////////////////////////////
 
 VideoWidget::VideoWidget(QObject *parent) : MediaNode(VideoSink, parent)
 {

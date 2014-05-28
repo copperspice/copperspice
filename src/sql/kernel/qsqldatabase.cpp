@@ -1154,8 +1154,6 @@ QSql::NumericalPrecisionPolicy QSqlDatabase::numericalPrecisionPolicy() const
         return d->precisionPolicy;
 }
 
-
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QSqlDatabase &d)
 {
     if (!d.isValid()) {
@@ -1168,6 +1166,5 @@ QDebug operator<<(QDebug dbg, const QSqlDatabase &d)
                   << ", user=\"" << d.userName() << "\", open=" << d.isOpen() << ")";
     return dbg.space();
 }
-#endif
 
 QT_END_NAMESPACE

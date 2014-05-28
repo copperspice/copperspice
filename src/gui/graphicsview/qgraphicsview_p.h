@@ -28,7 +28,7 @@
 
 #include "qgraphicsview.h"
 
-#if !defined(QT_NO_GRAPHICSVIEW) || (QT_EDITION & QT_MODULE_GRAPHICSVIEW) != QT_MODULE_GRAPHICSVIEW
+#if !defined(QT_NO_GRAPHICSVIEW)
 
 #include <QtGui/qevent.h>
 #include <QtCore/qcoreapplication.h>
@@ -158,7 +158,7 @@ public:
     inline void dispatchPendingUpdateRequests()
     {
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         // QWidget::update() works slightly different on the Mac without the raster engine;
         // it's not part of our backing store so it needs special threatment.
         if (QApplicationPrivate::graphics_system_name != QLatin1String("raster")) {

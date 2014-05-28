@@ -818,7 +818,7 @@ QT_BEGIN_INCLUDE_NAMESPACE
 
 #if defined(Q_WS_X11) || defined (Q_WS_QWS)
 #   include "qfontengine_ft_p.h"
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
 # include "qtextengine_mac.cpp"
 #endif
 
@@ -871,7 +871,7 @@ void QTextEngine::shapeLine(const QScriptLine &line)
     }
 }
 
-#if !defined(QT_ENABLE_HARFBUZZ_FOR_MAC) && defined(Q_WS_MAC)
+#if !defined(QT_ENABLE_HARFBUZZ_FOR_MAC) && defined(Q_OS_MAC)
 static bool enableHarfBuzz()
 {
     static enum { Yes, No, Unknown } status = Unknown;
@@ -894,7 +894,7 @@ void QTextEngine::shapeText(int item) const
     if (si.num_glyphs)
         return;
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
 #if !defined(QT_ENABLE_HARFBUZZ_FOR_MAC)
     if (enableHarfBuzz()) {
 #endif
@@ -1310,13 +1310,8 @@ void QTextEngine::itemize() const
     int length = layoutData->string.length();
     if (!length)
         return;
-#if defined(Q_WS_MAC) && !defined(QT_MAC_USE_COCOA)
-    // ATSUI requires RTL flags to correctly identify the character stops.
-    bool ignore = false;
-#else
-    bool ignore = ignoreBidi;
-#endif
 
+    bool ignore = ignoreBidi;
     bool rtl = isRightToLeft();
 
     if (!ignore && !rtl) {

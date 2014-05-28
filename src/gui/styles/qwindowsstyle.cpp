@@ -28,14 +28,14 @@
 
 #if !defined(QT_NO_STYLE_WINDOWS) || defined(QT_PLUGIN)
 
-#include <private/qsystemlibrary_p.h>
+#include <qsystemlibrary_p.h>
 #include "qapplication.h"
 #include "qbitmap.h"
 #include "qdrawutil.h" // for now
 #include "qevent.h"
 #include "qmenu.h"
 #include "qmenubar.h"
-#include <private/qmenubar_p.h>
+#include <qmenubar_p.h>
 #include "qpaintengine.h"
 #include "qpainter.h"
 #include "qprogressbar.h"
@@ -50,20 +50,20 @@
 #include "qpixmapcache.h"
 #include "qwizard.h"
 #include "qlistview.h"
-#include <private/qmath_p.h>
+#include <qmath_p.h>
 #include <qmath.h>
 
 #ifdef Q_WS_X11
 #include "qfileinfo.h"
 #include "qdir.h"
-#include <private/qt_x11_p.h>
+#include <qt_x11_p.h>
 #endif
 
-#include <private/qstylehelper_p.h>
+#include <qstylehelper_p.h>
 
 QT_BEGIN_NAMESPACE
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 
 QT_BEGIN_INCLUDE_NAMESPACE
 #include "qt_windows.h"
@@ -93,7 +93,7 @@ typedef struct
 typedef HRESULT (WINAPI *PtrSHGetStockIconInfo)(int siid, int uFlags, QSHSTOCKICONINFO *psii);
 static PtrSHGetStockIconInfo pSHGetStockIconInfo = 0;
 
-#endif //Q_WS_WIN
+#endif
 
 QT_BEGIN_INCLUDE_NAMESPACE
 #include <limits.h>
@@ -107,7 +107,7 @@ enum QSliderDirection { SlUp, SlDown, SlLeft, SlRight };
 QWindowsStylePrivate::QWindowsStylePrivate()
     : alt_down(false), menuBarTimer(0), animationFps(10), animateTimer(0), animateStep(0)
 {
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     if ((QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA
         && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
         QSystemLibrary shellLib(QLatin1String("shell32"));
@@ -276,7 +276,7 @@ QWindowsStyle::~QWindowsStyle()
 {
 }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 static inline QRgb colorref2qrgb(COLORREF col)
 {
     return qRgb(GetRValue(col), GetGValue(col), GetBValue(col));
@@ -298,7 +298,7 @@ void QWindowsStyle::polish(QApplication *app)
     d->inactiveGradientCaptionColor = app->palette().dark().color();
     d->inactiveCaptionText = app->palette().background().color();
 
-#if defined(Q_WS_WIN) //fetch native title bar colors
+#if defined(Q_OS_WIN) //fetch native title bar colors
     if(app->desktopSettingsAware()){
         DWORD activeCaption = GetSysColor(COLOR_ACTIVECAPTION);
         DWORD gradientActiveCaption = GetSysColor(COLOR_GRADIENTACTIVECAPTION);
@@ -376,7 +376,7 @@ int QWindowsStyle::pixelMetric(PixelMetric pm, const QStyleOption *opt, const QW
         break;
 #endif
     case PM_MaximumDragDistance:
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
         {
             HDC hdcScreen = GetDC(0);
             int dpi = GetDeviceCaps(hdcScreen, LOGPIXELSX);
@@ -455,7 +455,7 @@ int QWindowsStyle::pixelMetric(PixelMetric pm, const QStyleOption *opt, const QW
     case PM_DockWidgetTitleBarButtonMargin:
         ret = int(QStyleHelper::dpiScaled(4.));
         break;
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     case PM_DockWidgetFrameWidth:
         ret = GetSystemMetrics(SM_CXFRAME);
         break;
@@ -463,14 +463,14 @@ int QWindowsStyle::pixelMetric(PixelMetric pm, const QStyleOption *opt, const QW
     case PM_DockWidgetFrameWidth:
         ret = 4;
         break;
-#endif // Q_WS_WIN
+#endif
 
     break;
 
 #endif // QT_NO_MENU
 
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     case PM_TitleBarHeight:
         if (widget && (widget->windowType() == Qt::Tool)) {
             // MS always use one less than they say
@@ -494,13 +494,13 @@ int QWindowsStyle::pixelMetric(PixelMetric pm, const QStyleOption *opt, const QW
                 ret = QCommonStyle::pixelMetric(pm, opt, widget);
         }
         break;
-#endif // Q_WS_WIN
+#endif
 
     case PM_SplitterWidth:
         ret = qMax(4, QApplication::globalStrut().width());
         break;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     case PM_MdiSubWindowFrameWidth:
         ret = GetSystemMetrics(SM_CYFRAME);
         break;
@@ -926,7 +926,7 @@ static QPixmap loadIconFromShell32( int resourceId, int size )
 QPixmap QWindowsStyle::standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt,
                                       const QWidget *widget) const
 {
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     QPixmap desktopIcon;
     switch(standardPixmap) {
     case SP_DriveCDIcon:
@@ -1128,7 +1128,7 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
         ret = 0;
         break;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     case SH_UnderlineShortcut:
     {
         ret = 1;
@@ -1178,7 +1178,7 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
 #endif // QT_NO_RUBBERBAND
     case SH_LineEdit_PasswordCharacter:
         {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
             if (widget && (QSysInfo::WindowsVersion >= QSysInfo::WV_XP && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
                 const QFontMetrics &fm = widget->fontMetrics();
                 if (fm.inFont(QChar(0x25CF)))

@@ -183,7 +183,7 @@ void QMenuBarPrivate::updateGeometries()
         }
     }
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if(q->isNativeMenuBar()) {//nothing to see here folks, move along..
         itemsDirty = false;
         return;
@@ -714,7 +714,7 @@ void QMenuBarPrivate::init()
     Q_Q(QMenuBar);
     q->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
     q->setAttribute(Qt::WA_CustomWhatsThis);
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     macCreateMenuBar(q->parentWidget());
     if(mac_menubar)
         q->hide();
@@ -780,7 +780,7 @@ QMenuBar::QMenuBar(QWidget *parent) : QWidget(*new QMenuBarPrivate, parent, 0)
 */
 QMenuBar::~QMenuBar()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     Q_D(QMenuBar);
     d->macDestroyMenuBar();
 #endif
@@ -1040,11 +1040,13 @@ void QMenuBar::paintEvent(QPaintEvent *e)
 */
 void QMenuBar::setVisible(bool visible)
 {
+
 #ifdef Q_WS_X11
     Q_D(QMenuBar);
     d->platformMenuBar->setVisible(visible);
 #else
-#if defined(Q_WS_MAC)
+
+#if defined(Q_OS_MAC)
     if (isNativeMenuBar()) {
 
         if (!visible)
@@ -1054,7 +1056,9 @@ void QMenuBar::setVisible(bool visible)
     }
 #endif
     QWidget::setVisible(visible);
-#endif // Q_WS_X11
+
+#endif
+
 }
 
 /*!
@@ -1083,7 +1087,7 @@ void QMenuBar::mousePressEvent(QMouseEvent *e)
             d->activeMenu = 0;
             menu->hide();
         }
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         if((d->closePopupMode = style()->styleHint(QStyle::SH_MenuBar_DismissOnSecondClick)))
             update(d->actionRect(action));
 #endif
@@ -1250,16 +1254,15 @@ void QMenuBar::actionEvent(QActionEvent *e)
 {
     Q_D(QMenuBar);
     d->itemsDirty = true;
+
 #ifdef Q_WS_X11
     d->platformMenuBar->actionEvent(e);
 #endif
-#if defined (Q_WS_MAC)
+
+#if defined (Q_OS_MAC)
     if (isNativeMenuBar()) {
-#ifdef Q_WS_MAC
         QMenuBarPrivate::QMacMenuBarPrivate *nativeMenuBar = d->mac_menubar;
-#else
-        QMenuBarPrivate::QWceMenuBarPrivate *nativeMenuBar = d->wce_menubar;
-#endif
+
         if (!nativeMenuBar)
             return;
         if(e->type() == QEvent::ActionAdded)
@@ -1352,7 +1355,7 @@ void QMenuBarPrivate::handleReparent()
     oldParent = newParent;
     oldWindow = newWindow;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (q->isNativeMenuBar() && !macWidgetHasNativeMenubar(newParent)) {
         // If the new parent got a native menubar from before, keep that
         // menubar rather than replace it with this one (because a parents
@@ -1547,7 +1550,7 @@ QRect QMenuBar::actionGeometry(QAction *act) const
 QSize QMenuBar::minimumSizeHint() const
 {
     Q_D(const QMenuBar);
-#if defined(Q_WS_MAC) || defined(Q_WS_X11)
+#if defined(Q_OS_MAC) || defined(Q_WS_X11)
     const bool as_gui_menubar = !isNativeMenuBar();
 #else
     const bool as_gui_menubar = true;
@@ -1609,7 +1612,7 @@ QSize QMenuBar::minimumSizeHint() const
 QSize QMenuBar::sizeHint() const
 {
     Q_D(const QMenuBar);
-#if defined(Q_WS_MAC) || defined(Q_WS_X11)
+#if defined(Q_OS_MAC) || defined(Q_WS_X11)
     const bool as_gui_menubar = !isNativeMenuBar();
 #else
     const bool as_gui_menubar = true;
@@ -1674,7 +1677,7 @@ QSize QMenuBar::sizeHint() const
 int QMenuBar::heightForWidth(int) const
 {
     Q_D(const QMenuBar);
-#if defined(Q_WS_MAC) || defined(Q_WS_X11)
+#if defined(Q_OS_MAC) || defined(Q_WS_X11)
     const bool as_gui_menubar = !isNativeMenuBar();
 #else
     const bool as_gui_menubar = true;
@@ -1885,7 +1888,7 @@ void QMenuBar::setNativeMenuBar(bool nativeMenuBar)
 #else
     if (d->nativeMenuBar == -1 || (nativeMenuBar != bool(d->nativeMenuBar))) {
         d->nativeMenuBar = nativeMenuBar;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         if (!d->nativeMenuBar) {
             extern void qt_mac_clear_menubar();
             qt_mac_clear_menubar();
@@ -1907,7 +1910,7 @@ void QMenuBar::setNativeMenuBar(bool nativeMenuBar)
 	    setVisible(true);
 #endif
     }
-#endif // Q_WS_X11
+#endif
 }
 
 bool QMenuBar::isNativeMenuBar() const

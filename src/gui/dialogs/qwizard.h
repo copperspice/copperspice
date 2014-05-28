@@ -186,7 +186,7 @@ protected:
     void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *event);
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     bool winEvent(MSG * message, long * result);
 #endif
     void done(int result);

@@ -180,12 +180,7 @@ namespace QT7
 	{
         if (!m_videoPlayer)
             return;
-#ifdef QUICKTIME_C_API_AVAILABLE
-        if (m_cachedQImage.isNull()){
-            m_videoPlayer->setColors(m_brightness, m_contrast, m_hue, m_saturation);
-            (const_cast<VideoFrame *>(this))->m_cachedQImage = m_videoPlayer->currentFrameAsQImage();
-        }
-#else
+
         // Since cocoa-64 doesn't give us OpenGL textures directly, the process of converting
         // CIImges into QImages takes time. We could still call m_videoPlayer->currentFrameAsQImage(),
         // but because of bitmap memory management issues, and the fact that we need to swap red and
@@ -212,7 +207,7 @@ namespace QT7
                 }
             }
         }
-#endif
+
         p->drawImage(rect, m_cachedQImage);
 	}
 

@@ -43,13 +43,13 @@
 #undef INT8
 
 #include "qx11info_x11.h"
-#elif defined(Q_WS_MAC)
+
+#elif defined(Q_OS_MAC)
 # include <qt_mac_p.h>
 #endif
 
 #include <qdatetime.h>
-
-#include <stdlib.h> // malloc
+#include <stdlib.h>
 
 #include "qpixmap.h"
 #include "qimage.h"
@@ -93,7 +93,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if defined(Q_WS_X11) || defined(Q_WS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA) 
+#if defined(Q_WS_X11) || defined(Q_OS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA) 
 QGLExtensionFuncs QGLContextPrivate::qt_extensionFuncs;
 #endif
 
@@ -152,7 +152,7 @@ public:
     }
 
     QPaintEngine::Type preferredPaintEngine() {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         // The ATI X1600 driver for Mac OS X does not support return
         // values from functions in GLSL. Since working around this in
         // the GL2 engine would require a big, ugly rewrite, we're
@@ -1543,7 +1543,6 @@ bool operator==(const QGLFormat& a, const QGLFormat& b)
         && a.d->profile == b.d->profile);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QGLFormat &f)
 {
     const QGLFormatPrivate * const d = f.d;
@@ -1567,8 +1566,6 @@ QDebug operator<<(QDebug dbg, const QGLFormat &f)
 
     return dbg.space();
 }
-#endif
-
 
 /*!
     Returns false if all the options of the two QGLFormat objects
@@ -1677,13 +1674,15 @@ void QGLContextPrivate::init(QPaintDevice *dev, const QGLFormat &format)
     glFormat = reqFormat = format;
     valid = false;
     q->setDevice(dev);
+
 #if defined(Q_WS_X11)
     pbuf = 0;
     gpm = 0;
     vi = 0;
     screen = QX11Info::appScreen();
 #endif
-#if defined(Q_WS_WIN)
+
+#if defined(Q_OS_WIN)
     dc = 0;
     win = 0;
     threadId = 0;
@@ -1692,15 +1691,15 @@ void QGLContextPrivate::init(QPaintDevice *dev, const QGLFormat &format)
     hbitmap = 0;
     hbitmap_hdc = 0;
 #endif
-#if defined(Q_WS_MAC)
-#  ifndef QT_MAC_USE_COCOA
-    update = false;
-#  endif
+
+#if defined(Q_OS_MAC)
     vi = 0;
 #endif
+
 #if defined(Q_WS_QPA)
     platformContext = 0;
 #endif
+
 #if !defined(QT_NO_EGL)
     ownsEglContext = false;
     eglContext = 0;
@@ -2288,7 +2287,7 @@ static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum textu
     }
 }
 
-#if defined(Q_WS_X11) || defined(Q_WS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA)
+#if defined(Q_WS_X11) || defined(Q_OS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA)
 QGLExtensionFuncs& QGLContextPrivate::extensionFuncs(const QGLContext *)
 {
     return qt_extensionFuncs;
@@ -3392,7 +3391,7 @@ const QGLContext* QGLContext::currentContext()
         return threadContext->context;
     }
     return 0;
-#endif //Q_WS_QPA
+#endif
 }
 
 void QGLContextPrivate::setCurrentContext(QGLContext *context)
@@ -3860,7 +3859,7 @@ QGLWidget::~QGLWidget()
 #endif
     delete d->glcx;
     d->glcx = 0;
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     delete d->olcx;
     d->olcx = 0;
 #endif
@@ -3870,7 +3869,7 @@ QGLWidget::~QGLWidget()
 #endif
     d->cleanupColormaps();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     QWidget *current = parentWidget();
     while (current) {
         qt_widget_private(current)->glWidgets.removeAll(QWidgetPrivate::GlWidgetInfo(this));
@@ -4270,7 +4269,8 @@ bool QGLWidget::event(QEvent *e)
         d->recreateEglSurface();
     }
 #endif
-#elif defined(Q_WS_WIN)
+
+#elif defined(Q_OS_WIN)
     if (e->type() == QEvent::ParentChange) {
         QGLContext *newContext = new QGLContext(d->glcx->requestedFormat(), this);
         setContext(newContext, d->glcx);
@@ -4291,7 +4291,7 @@ bool QGLWidget::event(QEvent *e)
         if (!format().rgba())
             d->updateColormap();
     }
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     if (e->type() == QEvent::MacGLWindowChange) {
         if (d->needWindowChange) {
             d->needWindowChange = false;
@@ -4300,10 +4300,9 @@ bool QGLWidget::event(QEvent *e)
         }
         return true;
 
-#  if defined(QT_MAC_USE_COCOA)
     } else if (e->type() == QEvent::MacGLClearDrawable) {
         d->glcx->d_ptr->clearDrawable();
-#  endif
+
     }
 
 #endif
@@ -4418,7 +4417,7 @@ QPixmap QGLWidget::renderPixmap(int w, int h, bool useContext)
     QGLFormat fmt = d->glcx->requestedFormat();
     fmt.setDirectRendering(false);                // Direct is unlikely to work
     fmt.setDoubleBuffer(false);                // We don't need dbl buf
-#ifdef Q_WS_MAC // crash prevention on the Mac - it's unlikely to work anyway
+#ifdef Q_OS_MAC // crash prevention on the Mac - it's unlikely to work anyway
     fmt.setSampleBuffers(false);
 #endif
 
@@ -4467,7 +4466,7 @@ QImage QGLWidget::grabFrameBuffer(bool withAlpha)
     if (format().rgba()) {
         res = qt_gl_read_framebuffer(QSize(w, h), format().alpha(), withAlpha);
     } else {
-#if defined (Q_WS_WIN) && !defined(QT_OPENGL_ES)
+#if defined (Q_OS_WIN) && !defined(QT_OPENGL_ES)
         res = QImage(w, h, QImage::Format_Indexed8);
         glReadPixels(0, 0, w, h, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, res.bits());
         const QVector<QColor> pal = QColormap::instance().colormap();
@@ -5452,7 +5451,7 @@ void QGLWidgetPrivate::initContext(QGLContext *context, const QGLWidget* shareWi
         glcx = new QGLContext(QGLFormat::defaultFormat(), q);
 }
 
-#if defined(Q_WS_X11) || defined(Q_WS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA)
+#if defined(Q_WS_X11) || defined(Q_OS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA)
 Q_GLOBAL_STATIC(QString, qt_gl_lib_name)
 
 Q_OPENGL_EXPORT void qt_set_gl_library_name(const QString& name)
@@ -5463,17 +5462,24 @@ Q_OPENGL_EXPORT void qt_set_gl_library_name(const QString& name)
 Q_OPENGL_EXPORT const QString qt_gl_library_name()
 {
     if (qt_gl_lib_name()->isNull()) {
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
+        // BROOM (can wait) consider changing the path
         return QLatin1String("/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib");
 #else
+
 # if defined(QT_OPENGL_ES_1)
         return QLatin1String("GLES_CM");
+
 # elif defined(QT_OPENGL_ES_2)
         return QLatin1String("GLESv2");
+
 # else
         return QLatin1String("GL");
 # endif
-#endif // defined Q_WS_MAC
+
+#endif
+
     }
     return *qt_gl_lib_name();
 }

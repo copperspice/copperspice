@@ -51,7 +51,7 @@ public:
 #endif
                          , doChildEffects(false)
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                          , mac_menubar(0)
 #endif
 
@@ -66,7 +66,7 @@ public:
             delete platformMenuBar;
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
             delete mac_menubar;
 #endif
         }
@@ -137,7 +137,7 @@ public:
     QAbstractPlatformMenuBar *platformMenuBar;
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     //mac menubar binding
     struct QMacMenuBarPrivate {
         QList<QMacMenuAction*> actionItems;

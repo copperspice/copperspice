@@ -79,9 +79,7 @@ public:
 
 inline QPolygon::QPolygon(int asize) : QVector<QPoint>(asize) {}
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPolygon &);
-#endif
 
 /*****************************************************************************
   QPolygon stream functions
@@ -143,9 +141,7 @@ public:
 
 inline QPolygonF::QPolygonF(int asize) : QVector<QPointF>(asize) {}
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPolygonF &);
-#endif
 
 #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPolygonF &array);

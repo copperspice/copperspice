@@ -43,7 +43,7 @@ class QFSFileEnginePrivate : public QAbstractFileEnginePrivate
 
 public:
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     static QString longFileName(const QString &path);
 #endif
 
@@ -88,7 +88,7 @@ public:
 
     FILE *fh;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     HANDLE fileHandle;
     HANDLE mapHandle;
     QHash<uchar *, DWORD /* offset % AllocationGranularity */> maps;

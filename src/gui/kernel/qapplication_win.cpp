@@ -384,7 +384,7 @@ static void     unregWinClasses();
 
 extern QCursor *qt_grab_cursor();
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 #define __export
 #endif
 
@@ -3340,8 +3340,9 @@ bool QETWidget::translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                             / qreal(currentTabletPointer.maxPressure
                                     - currentTabletPointer.minPressure);
             else
-#endif // QT_NO_TABLETEVENT
+#endif
                 prsNew = 0;
+
         } else if (button_pressed) {
             // One button press, should only give one button release
             t = QEvent::TabletRelease;
@@ -3352,7 +3353,7 @@ bool QETWidget::translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         // Get Mouse Position and compare to tablet info
         // Positions should be almost the same if we are in absolute
         //  mode. If they are not, use the mouse location.
-#ifndef Q_WS_WINCE
+
         POINT mouseLocationP;
         if (GetCursorPos(&mouseLocationP)) {
             const QPoint mouseLocation(mouseLocationP.x, mouseLocationP.y);
@@ -3361,7 +3362,6 @@ bool QETWidget::translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                 hiResTabletGlobalPosF = globalPos;
             }
         }
-#endif // !Q_WS_WINCE
 
         if (t == QEvent::TabletPress)
         {

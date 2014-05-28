@@ -27,7 +27,7 @@
 #define QGL_EXTENSIONS_P_H
 
 // extension prototypes
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
 # ifndef APIENTRYP
 #   ifdef APIENTRY
 #     define APIENTRYP APIENTRY *

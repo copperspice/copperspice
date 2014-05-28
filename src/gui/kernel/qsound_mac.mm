@@ -22,10 +22,11 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
+
 #include <qapplication.h>
 #include "qsound.h"
 #include "qsound_p.h"
-#include <private/qt_mac_p.h>
+#include <qt_mac_p.h>
 #include <qhash.h>
 #include <qdebug.h>
 #import <AppKit/AppKit.h>
@@ -67,12 +68,6 @@ protected:
 };
 
 QT_END_NAMESPACE
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_5
-@protocol NSSoundDelegate <NSObject>
--(void)sound:(NSSound *)sound didFinishPlaying:(BOOL)aBool;
-@end
-#endif
 
 QT_USE_NAMESPACE
 

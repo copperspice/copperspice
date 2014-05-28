@@ -132,7 +132,7 @@ public:
 
     bool convertFromImage(const QImage &img, Qt::ImageConversionFlags flags = Qt::AutoColor);
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     enum HBitmapFormat {
         NoAlpha,
         PremultipliedAlpha,
@@ -146,7 +146,7 @@ public:
     static QPixmap fromWinHICON(HICON hicon);
 #endif
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     CGImageRef toMacCGImageRef() const;
     static QPixmap fromMacCGImageRef(CGImageRef image);
 #endif
@@ -177,7 +177,7 @@ public:
 #endif
 
     int colorCount() const;
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     Qt::HANDLE macQDHandle() const;
     Qt::HANDLE macQDAlphaHandle() const;
     Qt::HANDLE macCGHandle() const;
@@ -221,13 +221,13 @@ private:
     void init(int, int, int);
     void deref();
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     void initAlphaPixmap(uchar *bytes, int length, struct tagBITMAPINFO *bmi);
 #endif
 
     Q_DUMMY_COMPARISON_OPERATOR(QPixmap)
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     friend CGContextRef qt_mac_cg_context(const QPaintDevice*);
     friend CGImageRef qt_mac_create_imagemask(const QPixmap&, const QRectF&);
     friend IconRef qt_mac_create_iconref(const QPixmap&);

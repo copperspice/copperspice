@@ -162,7 +162,7 @@ QPixmap QDragManager::dragCursor(Qt::DropAction action) const
         return QApplicationPrivate::instance()->getPixmapCursor(Qt::DragCopyCursor);
     else if (action == Qt::LinkAction)
         return QApplicationPrivate::instance()->getPixmapCursor(Qt::DragLinkCursor);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     else if (action == Qt::IgnoreAction)
         return QApplicationPrivate::instance()->getPixmapCursor(Qt::ForbiddenCursor);
 #endif
@@ -189,14 +189,14 @@ Qt::DropAction QDragManager::defaultAction(Qt::DropActions possibleActions,
     if (defaultAction == Qt::IgnoreAction) {
         //This means that the drag was initiated by QDrag::start and we need to
         //preserve the old behavior
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         defaultAction = Qt::MoveAction;
 #else
         defaultAction = Qt::CopyAction;
 #endif
     }
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (modifiers & Qt::ControlModifier && modifiers & Qt::AltModifier)
         defaultAction = Qt::LinkAction;
     else if (modifiers & Qt::AltModifier)

@@ -199,7 +199,6 @@ QT_END_NAMESPACE
     return [super frameViewClassForStyleMask:styleMask];
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
 - (void)touchesBeganWithEvent:(NSEvent *)event;
 {
     QPoint qlocal, qglobal;
@@ -247,7 +246,6 @@ QT_END_NAMESPACE
     bool all = widgetToGetTouch->testAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents);
     qt_translateRawTouchEvent(widgetToGetTouch, QTouchEvent::TouchPad, QCocoaTouch::getCurrentTouchPointList(event, all));
 }
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
 
 -(void)registerDragTypes
 {

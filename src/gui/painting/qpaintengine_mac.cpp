@@ -25,11 +25,11 @@
 
 #include <qbitmap.h>
 #include <qpaintdevice.h>
-#include <private/qpaintengine_mac_p.h>
+#include <qpaintengine_mac_p.h>
 #include <qpainterpath.h>
 #include <qpixmapcache.h>
-#include <private/qpaintengine_raster_p.h>
-#include <private/qprintengine_mac_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qprintengine_mac_p.h>
 #include <qprinter.h>
 #include <qstack.h>
 #include <qtextcodec.h>
@@ -39,18 +39,18 @@
 #include <qcoreapplication.h>
 #include <qmath.h>
 
-#include <private/qfont_p.h>
-#include <private/qfontengine_p.h>
-#include <private/qfontengine_coretext_p.h>
-#include <private/qfontengine_mac_p.h>
-#include <private/qnumeric_p.h>
-#include <private/qpainter_p.h>
-#include <private/qpainterpath_p.h>
-#include <private/qpixmap_mac_p.h>
-#include <private/qt_mac_p.h>
-#include <private/qtextengine_p.h>
-#include <private/qwidget_p.h>
-#include <private/qt_cocoa_helpers_mac_p.h>
+#include <qfont_p.h>
+#include <qfontengine_p.h>
+#include <qfontengine_coretext_p.h>
+#include <qfontengine_mac_p.h>
+#include <qnumeric_p.h>
+#include <qpainter_p.h>
+#include <qpainterpath_p.h>
+#include <qpixmap_mac_p.h>
+#include <qt_mac_p.h>
+#include <qtextengine_p.h>
+#include <qwidget_p.h>
+#include <qt_cocoa_helpers_mac_p.h>
 
 #include <string.h>
 
@@ -278,26 +278,8 @@ bool QCoreGraphicsPaintEngine::m_postRoutineRegistered = false;
 
 CGColorSpaceRef QCoreGraphicsPaintEngine::macGenericColorSpace()
 {
-#if 0
-    if (!m_genericColorSpace) {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-        if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_4) {
-            m_genericColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-        } else
-#endif
-        {
-            m_genericColorSpace = CGColorSpaceCreateDeviceRGB();
-        }
-        if (!m_postRoutineRegistered) {
-            m_postRoutineRegistered = true;
-            qAddPostRoutine(QCoreGraphicsPaintEngine::cleanUpMacColorSpaces);
-        }
-    }
-    return m_genericColorSpace;
-#else
     // Just return the main display colorspace for the moment.
     return macDisplayColorSpace();
-#endif
 }
 
 CGColorSpaceRef QCoreGraphicsPaintEngine::macDisplayColorSpace(const QWidget *widget)
@@ -376,13 +358,13 @@ void qt_mac_clip_cg(CGContextRef hd, const QRegion &rgn, CGAffineTransform *orig
     if(rgn.isEmpty()) {
         CGContextAddRect(hd, CGRectMake(0, 0, 0, 0));
     } else {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+
         if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
             QCFType<HIMutableShapeRef> shape = rgn.toHIMutableShape();
             Q_ASSERT(!HIShapeIsEmpty(shape));
             HIShapeReplacePathInCGContext(shape, hd);
         } else
-#endif
+
         {
             QVector<QRect> rects = rgn.rects();
             const int count = rects.size();
@@ -593,19 +575,16 @@ QCoreGraphicsPaintEngine::begin(QPaintDevice *pdev)
     return true;
 }
 
-bool
-QCoreGraphicsPaintEngine::end()
+bool QCoreGraphicsPaintEngine::end()
 {
     Q_D(QCoreGraphicsPaintEngine);
     setActive(false);
-    if(d->pdev->devType() == QInternal::Widget && static_cast<QWidget*>(d->pdev)->windowType() == Qt::Desktop) {
-#ifndef QT_MAC_USE_COCOA
-        HideWindow(qt_mac_window_for(static_cast<QWidget*>(d->pdev)));
-#else
-//        // ### need to do [qt_mac_window_for(static_cast<QWidget *>(d->pdev)) orderOut]; (need to rename)
-#endif
 
+    if(d->pdev->devType() == QInternal::Widget && static_cast<QWidget*>(d->pdev)->windowType() == Qt::Desktop) {
+
+//     // ### need to do [qt_mac_window_for(static_cast<QWidget *>(d->pdev)) orderOut]; (need to rename)
 	}
+
     if(d->shading) {
         CGShadingRelease(d->shading);
         d->shading = 0;
@@ -620,8 +599,7 @@ QCoreGraphicsPaintEngine::end()
     return true;
 }
 
-void
-QCoreGraphicsPaintEngine::updateState(const QPaintEngineState &state)
+void QCoreGraphicsPaintEngine::updateState(const QPaintEngineState &state)
 {
     Q_D(QCoreGraphicsPaintEngine);
     QPaintEngine::DirtyFlags flags = state.state();
@@ -1140,12 +1118,10 @@ void QCoreGraphicsPaintEngine::drawTextItem(const QPointF &pos, const QTextItem 
     if (ti.glyphs.numGlyphs) {
         switch (fe->type()) {
         case QFontEngine::Mac:
-#ifdef QT_MAC_USE_COCOA
+
             static_cast<QCoreTextFontEngine *>(fe)->draw(d->hd, pos.x(), pos.y(), ti, paintDevice()->height());
-#else
-            static_cast<QFontEngineMac *>(fe)->draw(d->hd, pos.x(), pos.y(), ti, paintDevice()->height());
-#endif
             break;
+
         case QFontEngine::Box:
             d->drawBoxTextItem(pos, ti);
             break;
@@ -1181,13 +1157,15 @@ enum CGCompositeMode {
         kCGCompositeModePlusDarker       = 11, // (max (0, (1-d) + (1-s)))
         kCGCompositeModePlusLighter      = 12, // (min (1, s + d))
     };
+
+// private function, but is in all versions of OS X
 extern "C" {
     extern void CGContextSetCompositeOperation(CGContextRef, int);
-} // private function, but is in all versions of OS X.
-void
-QCoreGraphicsPaintEngine::updateCompositionMode(QPainter::CompositionMode mode)
+} 
+
+void QCoreGraphicsPaintEngine::updateCompositionMode(QPainter::CompositionMode mode)
 {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+
     if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
         int cg_mode = kCGBlendModeNormal;
         switch(mode) {
@@ -1270,7 +1248,7 @@ QCoreGraphicsPaintEngine::updateCompositionMode(QPainter::CompositionMode mode)
             CGContextSetBlendMode(d_func()->hd, CGBlendMode(cg_mode));
         }
     } else
-#endif
+
     // The standard porter duff ops.
     if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_3
             && mode <= QPainter::CompositionMode_Xor) {
@@ -1319,7 +1297,7 @@ QCoreGraphicsPaintEngine::updateCompositionMode(QPainter::CompositionMode mode)
         if (cg_mode > -1)
             CGContextSetCompositeOperation(d_func()->hd, CGCompositeMode(cg_mode));
     } else {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4)
+
         bool needPrivateAPI = false;
         if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_4) {
             int cg_mode = kCGBlendModeNormal;
@@ -1369,7 +1347,6 @@ QCoreGraphicsPaintEngine::updateCompositionMode(QPainter::CompositionMode mode)
             else
                 CGContextSetCompositeOperation(d_func()->hd, CGCompositeMode(cg_mode));
         }
-#endif
     }
 }
 

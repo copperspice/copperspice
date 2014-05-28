@@ -506,8 +506,6 @@ QVector4D::operator QVariant() const
     return QVariant(QVariant::Vector4D, this);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
-
 QDebug operator<<(QDebug dbg, const QVector4D &vector)
 {
     dbg.nospace() << "QVector4D("
@@ -515,8 +513,6 @@ QDebug operator<<(QDebug dbg, const QVector4D &vector)
         << vector.z() << ", " << vector.w() << ')';
     return dbg.space();
 }
-
-#endif
 
 #ifndef QT_NO_DATASTREAM
 

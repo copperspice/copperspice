@@ -612,7 +612,7 @@ extern int qt_script_for_writing_system(QFontDatabase::WritingSystem writingSyst
 QRawFont QRawFont::fromFont(const QFont &font, QFontDatabase::WritingSystem writingSystem)
 {
     QRawFont rawFont;
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     QTextLayout layout(QFontDatabase::writingSystemSample(writingSystem), font);
     layout.beginLayout();
     QTextLine line = layout.createLine();

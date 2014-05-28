@@ -28,13 +28,7 @@
 
 #include "backendheader.h"
 #include <phonon/mediasource.h>
-#include <Carbon/Carbon.h>
 #include <QtCore/QString>
-
-#ifdef QUICKTIME_C_API_AVAILABLE
-    #include <QuickTime/QuickTime.h>
-    #undef check // avoid name clash;
-#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -57,15 +51,6 @@ namespace QT7
             bool m_movieChanged;
             QuickTimeVideoPlayer *m_videoPlayer;
             void readMetaData();
-
-#ifdef QUICKTIME_C_API_AVAILABLE
-            QString stripCopyRightSymbol(const QString &key);
-            QString convertQuickTimeKeyToUserKey(const QString &key);
-            OSStatus readMetaValue(QTMetaDataRef, QTMetaDataItem, QTPropertyClass, QTPropertyID, QTPropertyValuePtr *, ByteCount *);
-            UInt32 getMetaType(QTMetaDataRef metaDataRef, QTMetaDataItem item);
-            QString getMetaValue(QTMetaDataRef metaDataRef, QTMetaDataItem item, SInt32 id);
-            void readFormattedData(QTMetaDataRef metaDataRef, OSType format, QMultiMap<QString, QString> &result);
-#endif // QUICKTIME_C_API_AVAILABLE
     };
 
 }} // namespace Phonon::QT7

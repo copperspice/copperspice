@@ -84,7 +84,7 @@ public:
     bool isSymLink(bool ignoreNtfsSymLinks = false) const
     {
         if (ignoreNtfsSymLinks) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
             return !mFileInfo.suffix().compare(QLatin1String("lnk"), Qt::CaseInsensitive);
 #endif
         }

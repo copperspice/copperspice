@@ -28,43 +28,16 @@
 
 #include "qmacdefines_mac.h"
 
-#ifdef QT_MAC_USE_COCOA
 #import <Cocoa/Cocoa.h>
 
 QT_BEGIN_NAMESPACE
 template <class Key, class T> class QHash;
 QT_END_NAMESPACE
+
 using QT_PREPEND_NAMESPACE(QHash);
 QT_FORWARD_DECLARE_CLASS(QWidget)
 QT_FORWARD_DECLARE_CLASS(QSize)
 QT_FORWARD_DECLARE_CLASS(QWidgetData)
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_5
-@protocol NSWindowDelegate <NSObject>
-- (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize;
-- (void)windowDidMiniaturize:(NSNotification*)notification;
-- (void)windowDidResize:(NSNotification *)notification;
-- (NSRect)windowWillUseStandardFrame:(NSWindow *)window defaultFrame:(NSRect)defaultFrame;
-- (void)windowDidMove:(NSNotification *)notification;
-- (BOOL)windowShouldClose:(id)window;
-- (void)windowDidDeminiaturize:(NSNotification *)notification;
-- (void)windowDidBecomeMain:(NSNotification*)notification;
-- (void)windowDidResignMain:(NSNotification*)notification;
-- (void)windowDidBecomeKey:(NSNotification*)notification;
-- (void)windowDidResignKey:(NSNotification*)notification;
-- (void)windowDidChangeScreen:(NSNotification*)notification;
-- (BOOL)window:(NSWindow *)window shouldPopUpDocumentPathMenu:(NSMenu *)menu;
-- (BOOL)window:(NSWindow *)window shouldDragDocumentWithEvent:(NSEvent *)event from:(NSPoint)dragImageLocation withPasteboard:(NSPasteboard *)pasteboard;
-- (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame;
-@end
-
-@protocol NSDrawerDelegate <NSObject>
-- (NSSize)drawerWillResizeContents:(NSDrawer *)sender toSize:(NSSize)contentSize;
-@end
-
-#endif
-
-
 
 @interface QT_MANGLE_NAMESPACE(QCocoaWindowDelegate) : NSObject<NSWindowDelegate, NSDrawerDelegate> {
     QHash<NSWindow *, QWidget *> *m_windowHash;
@@ -84,6 +57,5 @@ QT_FORWARD_DECLARE_CLASS(QWidgetData)
 - (QWidget *)qt_qwidgetForWindow:(NSWindow *)window;
 - (void)syncContentViewFrame: (NSNotification *)notification;
 @end
-#endif
 
 #endif

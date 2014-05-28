@@ -203,12 +203,10 @@ Q_INLINE_TEMPLATE T *QBasicAtomicPointer<T>::fetchAndAddOrdered(qptrdiff valueTo
                  : "R0", "R1", "P0", "RETS", "memory");
     return ret;
 }
+#endif
 
-
-#endif // Q_OS_LINUX && Q_CC_GNU
 
 // Test and set for integers
-
 inline bool QBasicAtomicInt::testAndSetRelaxed(int expectedValue, int newValue)
 {
     return testAndSetOrdered(expectedValue, newValue);

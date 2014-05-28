@@ -326,8 +326,6 @@ typedef QGenericMatrix<3, 4, qreal> QMatrix3x4;
 typedef QGenericMatrix<4, 2, qreal> QMatrix4x2;
 typedef QGenericMatrix<4, 3, qreal> QMatrix4x3;
 
-#ifndef QT_NO_DEBUG_STREAM
-
 template <int N, int M, typename T>
 QDebug operator<<(QDebug dbg, const QGenericMatrix<N, M, T> &m)
 {
@@ -342,8 +340,6 @@ QDebug operator<<(QDebug dbg, const QGenericMatrix<N, M, T> &m)
     dbg << qSetFieldWidth(0) << ')';
     return dbg.space();
 }
-
-#endif
 
 #ifndef QT_NO_DATASTREAM
 

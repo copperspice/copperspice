@@ -27,7 +27,7 @@
 #define QCOCOAMENULOADER_MAC_P_H
 
 #include "qmacdefines_mac.h"
-#ifdef QT_MAC_USE_COCOA
+
 #import <Cocoa/Cocoa.h>
 
 @interface QT_MANGLE_NAMESPACE(QCocoaMenuLoader) : NSResponder
@@ -65,5 +65,4 @@
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem;
 @end
 
-#endif // QT_MAC_USE_COCOA
 #endif // QCOCOAMENULOADER_P_H

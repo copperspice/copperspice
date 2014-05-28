@@ -175,13 +175,6 @@ void QSourceLocation::setUri(const QUrl &newUri)
     m_uri = newUri;
 }
 
-/*!
-  \relates QSourceLocation
-  \since 4.4
-
-  Prints \a sourceLocation to the debug stream \a debug.
- */
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug debug, const QSourceLocation &sourceLocation)
 {
     debug << "QSourceLocation("
@@ -193,7 +186,6 @@ QDebug operator<<(QDebug debug, const QSourceLocation &sourceLocation)
           << ')';
     return debug;
 }
-#endif
 
 /*!
   Returns \c true if this QSourceLocation doesn't identify anything.

@@ -76,11 +76,11 @@ inline static bool isPowerOfTwo(uint x)
     return x && !(x & (x - 1));
 }
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 extern Q_GUI_EXPORT bool qt_cleartype_enabled;
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 extern bool qt_applefontsmoothing_enabled;
 #endif
 
@@ -1555,7 +1555,7 @@ namespace {
 
 }
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 static bool fontSmoothingApproximately(qreal target)
 {
     extern Q_GUI_EXPORT qreal qt_fontsmoothing_gamma; // qapplication_win.cpp
@@ -1731,9 +1731,10 @@ void QGL2PaintEngineExPrivate::drawCachedGlyphs(QFontEngineGlyphCache::Type glyp
     bool srgbFrameBufferEnabled = false;
     if (pensBrush.style() == Qt::SolidPattern &&
         (ctx->d_ptr->extension_flags & QGLExtensions::SRGBFrameBuffer)) {
-#if defined(Q_WS_MAC)
+
+#if defined(Q_OS_MAC)
         if (glyphType == QFontEngineGlyphCache::Raster_RGBMask)
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
         if (glyphType != QFontEngineGlyphCache::Raster_RGBMask || fontSmoothingApproximately(2.1))
 #else
         if (false)
@@ -2141,11 +2142,11 @@ bool QGL2PaintEngineEx::begin(QPaintDevice *pdev)
     d->glyphCacheType = QFontEngineGlyphCache::Raster_A8;
 
 #if !defined(QT_OPENGL_ES_2)
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     if (qt_cleartype_enabled
         && (fontSmoothingApproximately(1.0) || fontSmoothingApproximately(2.1)))
 #endif
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     if (qt_applefontsmoothing_enabled)
 #endif
         d->glyphCacheType = QFontEngineGlyphCache::Raster_RGBMask;

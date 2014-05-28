@@ -578,20 +578,16 @@ QByteArray fileIdWin8(HANDLE handle)
 //static
 QByteArray QFileSystemEngine::id(const QFileSystemEntry &entry)
 {
-#ifndef Q_OS_WINCE
     QByteArray result;
-    const HANDLE handle =
-        CreateFile((wchar_t*)entry.nativeFilePath().utf16(), GENERIC_READ,
+    const HANDLE handle = CreateFile((wchar_t*)entry.nativeFilePath().utf16(), GENERIC_READ,
                    FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
     if (handle) {
-        result = QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS8 ?
-                 fileIdWin8(handle) : fileId(handle);
+        result = QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS8 ? fileIdWin8(handle) : fileId(handle);
         CloseHandle(handle);
     }
     return result;
-#else // !Q_OS_WINCE
-    return entry.nativeFilePath().toLower().toLatin1();
-#endif
+
 }
 
 //static

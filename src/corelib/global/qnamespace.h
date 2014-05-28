@@ -1392,14 +1392,18 @@ class Q_CORE_EXPORT Qt {
     };
     using MatchFlags = QFlags<MatchFlag>;
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     typedef void * HANDLE;
-#elif defined(Q_WS_WIN)
+
+#elif defined(Q_OS_WIN)
     typedef void *HANDLE;
+
 #elif defined(Q_WS_X11)
     typedef unsigned long HANDLE;
+
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
     typedef void * HANDLE;
+
 #endif
     typedef WindowFlags WFlags;
 

@@ -154,10 +154,10 @@ inline bool operator<(int i, const QFixed &f) { return (i<<6) < f.value(); }
 inline bool operator>(const QFixed &f, int i) { return f.value() > (i<<6); }
 inline bool operator>(int i, const QFixed &f) { return (i<<6) > f.value(); }
 
-#ifndef QT_NO_DEBUG_STREAM
+
 inline QDebug &operator<<(QDebug &dbg, const QFixed &f)
-{ return dbg << f.toReal(); }
-#endif
+   { return dbg << f.toReal(); }
+
 
 struct QFixedPoint {
     QFixed x;
@@ -172,9 +172,10 @@ struct QFixedPoint {
 Q_DECLARE_TYPEINFO(QFixedPoint, Q_PRIMITIVE_TYPE);
 
 inline QFixedPoint operator-(const QFixedPoint &p1, const QFixedPoint &p2)
-{ return QFixedPoint(p1.x - p2.x, p1.y - p2.y); }
+   { return QFixedPoint(p1.x - p2.x, p1.y - p2.y); }
+
 inline QFixedPoint operator+(const QFixedPoint &p1, const QFixedPoint &p2)
-{ return QFixedPoint(p1.x + p2.x, p1.y + p2.y); }
+   { return QFixedPoint(p1.x + p2.x, p1.y + p2.y); }
 
 struct QFixedSize {
     QFixed width;

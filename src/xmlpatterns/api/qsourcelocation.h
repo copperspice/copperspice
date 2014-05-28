@@ -65,10 +65,7 @@ private:
 };
 
 Q_XMLPATTERNS_EXPORT uint qHash(const QSourceLocation &location);
-
-#ifndef QT_NO_DEBUG_STREAM
 Q_XMLPATTERNS_EXPORT QDebug operator<<(QDebug debug, const QSourceLocation &sourceLocation);
-#endif
 
 Q_DECLARE_TYPEINFO(QSourceLocation, Q_MOVABLE_TYPE);
 

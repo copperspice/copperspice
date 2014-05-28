@@ -39,8 +39,8 @@
 #include "qtextstream.h"
 #include "qvarlengtharray.h"
 #include "qvector.h"
-#include "private/qlayoutengine_p.h"
-#include "private/qsplitter_p.h"
+#include "qlayoutengine_p.h"
+#include "qsplitter_p.h"
 #include "qtimer.h"
 #include "qdebug.h"
 
@@ -50,54 +50,6 @@ QT_BEGIN_NAMESPACE
 
 //#define QSPLITTER_DEBUG
 
-/*!
-    \class QSplitterHandle
-    \brief The QSplitterHandle class provides handle functionality of the splitter.
-
-    \ingroup organizers
-
-    QSplitterHandle is typically what people think about when they think about
-    a splitter. It is the handle that is used to resize the widgets.
-
-    A typical developer using QSplitter will never have to worry about
-    QSplitterHandle. It is provided for developers who want splitter handles
-    that provide extra features, such as popup menus.
-
-    The typical way one would create splitter handles is to subclass QSplitter then
-    reimplement QSplitter::createHandle() to instantiate the custom splitter
-    handle. For example, a minimum QSplitter subclass might look like this:
-
-    \snippet doc/src/snippets/splitterhandle/splitter.h 0
-
-    The \l{QSplitter::}{createHandle()} implementation simply constructs a
-    custom splitter handle, called \c Splitter in this example:
-
-    \snippet doc/src/snippets/splitterhandle/splitter.cpp 1
-
-    Information about a given handle can be obtained using functions like
-    orientation() and opaqueResize(), and is retrieved from its parent splitter.
-    Details like these can be used to give custom handles different appearances
-    depending on the splitter's orientation.
-
-    The complexity of a custom handle subclass depends on the tasks that it
-    needs to perform. A simple subclass might only provide a paintEvent()
-    implementation:
-
-    \snippet doc/src/snippets/splitterhandle/splitter.cpp 0
-
-    In this example, a predefined gradient is set up differently depending on
-    the orientation of the handle. QSplitterHandle provides a reasonable
-    size hint for the handle, so the subclass does not need to provide a
-    reimplementation of sizeHint() unless the handle has special size
-    requirements.
-
-    \sa QSplitter
-*/
-
-/*!
-    Creates a QSplitter handle with the given \a orientation and
-    QSplitter \a parent.
-*/
 QSplitterHandle::QSplitterHandle(Qt::Orientation orientation, QSplitter *parent)
     : QWidget(*new QSplitterHandlePrivate, parent, 0)
 {
@@ -106,40 +58,24 @@ QSplitterHandle::QSplitterHandle(Qt::Orientation orientation, QSplitter *parent)
     setOrientation(orientation);
 }
 
-/*!
-    Sets the orientation of the splitter handle to \a orientation.
-    This is usually propagated from the QSplitter.
 
-    \sa QSplitter::setOrientation()
-*/
 void QSplitterHandle::setOrientation(Qt::Orientation orientation)
 {
     Q_D(QSplitterHandle);
     d->orient = orientation;
+
 #ifndef QT_NO_CURSOR
     setCursor(orientation == Qt::Horizontal ? Qt::SplitHCursor : Qt::SplitVCursor);
 #endif
+
 }
 
-/*!
-   Returns the handle's orientation. This is usually propagated from the QSplitter.
-
-   \sa QSplitter::orientation()
-*/
 Qt::Orientation QSplitterHandle::orientation() const
 {
     Q_D(const QSplitterHandle);
     return d->orient;
 }
 
-
-/*!
-    Returns true if widgets are resized dynamically (opaquely), otherwise
-    returns false. This value is controlled by the QSplitter.
-
-    \sa QSplitter::opaqueResize()
-
-*/
 bool QSplitterHandle::opaqueResize() const
 {
     Q_D(const QSplitterHandle);
@@ -147,26 +83,11 @@ bool QSplitterHandle::opaqueResize() const
 }
 
 
-/*!
-    Returns the splitter associated with this splitter handle.
-
-    \sa QSplitter::handle()
-*/
 QSplitter *QSplitterHandle::splitter() const
 {
     return d_func()->s;
 }
 
-/*!
-    Tells the splitter to move this handle to position \a pos, which is
-    the distance from the left or top edge of the widget.
-
-    Note that \a pos is also measured from the left (or top) for
-    right-to-left languages. This function will map \a pos to the
-    appropriate position before calling QSplitter::moveSplitter().
-
-    \sa QSplitter::moveSplitter() closestLegalPosition()
-*/
 void QSplitterHandle::moveSplitter(int pos)
 {
     Q_D(QSplitterHandle);
@@ -174,14 +95,6 @@ void QSplitterHandle::moveSplitter(int pos)
         pos = d->s->contentsRect().width() - pos;
     d->s->moveSplitter(pos, d->s->indexOf(this));
 }
-
-/*!
-   Returns the closest legal position to \a pos of the splitter
-   handle. The positions are measured from the left or top edge of
-   the splitter, even for right-to-left languages.
-
-   \sa QSplitter::closestLegalPosition(), moveSplitter()
-*/
 
 int QSplitterHandle::closestLegalPosition(int pos)
 {
@@ -1652,20 +1565,6 @@ bool QSplitter::restoreState(const QByteArray &state)
     return true;
 }
 
-/*!
-    Updates the size policy of the widget at position \a index to
-    have a stretch factor of \a stretch.
-
-    \a stretch is not the effective stretch factor; the effective
-    stretch factor is calculated by taking the initial size of the 
-    widget and multiplying it with \a stretch.
-
-    This function is provided for convenience. It is equivalent to
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qsplitter.cpp 0
-
-    \sa setSizes(), widget()
-*/
 void QSplitter::setStretchFactor(int index, int stretch)
 {
     Q_D(QSplitter);
@@ -1679,26 +1578,11 @@ void QSplitter::setStretchFactor(int index, int stretch)
     widget->setSizePolicy(sp);
 }
 
-#ifndef QT_NO_TEXTSTREAM
-/*!
-    \relates QSplitter
-    \obsolete
-
-    Use \a ts << \a{splitter}.saveState() instead.
-*/
-
-QTextStream& operator<<(QTextStream& ts, const QSplitter& splitter)
+QTextStream & operator<<(QTextStream& ts, const QSplitter& splitter)
 {
     ts << splitter.saveState() << endl;
     return ts;
 }
-
-/*!
-    \relates QSplitter
-    \obsolete
-
-    Use \a ts >> \a{splitter}.restoreState() instead.
-*/
 
 QTextStream& operator>>(QTextStream& ts, QSplitter& splitter)
 {
@@ -1710,7 +1594,6 @@ QTextStream& operator>>(QTextStream& ts, QSplitter& splitter)
     splitter.restoreState(line.toAscii());
     return ts;
 }
-#endif // QT_NO_TEXTSTREAM
 
 QT_END_NAMESPACE
 

@@ -1555,14 +1555,12 @@ void QItemSelectionModel::emitSelectionChanged(const QItemSelection &newSelectio
         emit selectionChanged(selected, deselected);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
+
 QDebug operator<<(QDebug dbg, const QItemSelectionRange &range)
 {
-    dbg.nospace() << "QItemSelectionRange(" << range.topLeft()
-                  << ',' << range.bottomRight() << ')';
+    dbg.nospace() << "QItemSelectionRange(" << range.topLeft() << ',' << range.bottomRight() << ')';
     return dbg.space();
 }
-#endif
 
 void QItemSelectionModel::_q_columnsAboutToBeRemoved(const QModelIndex & un_named_arg1,int un_named_arg2,int un_named_arg3)
 {

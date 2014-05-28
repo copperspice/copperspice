@@ -153,11 +153,12 @@ static bool qt_painter_thread_test(int devType, const char *what, bool extraCond
     case QInternal::Printer:
     case QInternal::Picture:
         // can be drawn onto these devices safely from any thread
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
         if (extraCondition)
 #endif
             break;
     default:
+
 #ifdef Q_WS_X11
         if (QApplication::testAttribute(Qt::AA_X11InitThreads))
             return true;

@@ -35,7 +35,7 @@
 #include <qevent.h>
 #include <qtextformat.h>
 #include <qheaderview.h>
-#include <private/qwidget_p.h>
+#include <qwidget_p.h>
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
@@ -44,7 +44,7 @@
 #include <qapplication.h>
 #include <qbasictimer.h>
 #include <qstylepainter.h>
-#include <private/qcalendartextnavigator_p.h>
+#include <qcalendartextnavigator_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -1539,7 +1539,7 @@ protected:
     {
         Q_UNUSED(e)
 
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
         QStyleOptionToolButton opt;
         initStyleOption(&opt);
 

@@ -3381,7 +3381,6 @@ void QPainterPath::computeControlPointRect() const
     d->controlBounds = QRectF(minx, miny, maxx - minx, maxy - miny);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug s, const QPainterPath &p)
 {
     s.nospace() << "QPainterPath: Element count=" << p.elementCount() << endl;
@@ -3392,6 +3391,5 @@ QDebug operator<<(QDebug s, const QPainterPath &p)
     }
     return s;
 }
-#endif
 
 QT_END_NAMESPACE

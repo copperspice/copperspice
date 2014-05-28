@@ -315,7 +315,7 @@ void QDialogPrivate::resetModalitySetByOpen()
         // open() changed the window modality and the user didn't touch it afterwards; restore it
         q->setWindowModality(Qt::WindowModality(resetModalityTo));
         q->setAttribute(Qt::WA_SetWindowModality, wasModalitySet);
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         Q_ASSERT(resetModalityTo != Qt::WindowModal);
         q->setParent(q->parentWidget(), Qt::Dialog);
 #endif
@@ -369,7 +369,7 @@ void QDialog::open()
         d->wasModalitySet = testAttribute(Qt::WA_SetWindowModality);
         setWindowModality(Qt::WindowModal);
         setAttribute(Qt::WA_SetWindowModality, false);
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         setParent(parentWidget(), Qt::Sheet);
 #endif
     }
@@ -417,7 +417,7 @@ int QDialog::exec()
     }
     show();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     d->mac_nativeDialogModalHelp();
 #endif
 
@@ -536,7 +536,7 @@ void QDialog::keyPressEvent(QKeyEvent *e)
     //   Calls reject() if Escape is pressed. Simulates a button
     //   click for the default button if Enter is pressed. Move focus
     //   for the arrow keys. Ignore the rest.
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if(e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_Period) {
         reject();
     } else
@@ -662,7 +662,7 @@ void QDialog::setVisible(bool visible)
         if (d->eventLoop)
             d->eventLoop->exit();
     }
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     if (d->mainDef && isActiveWindow()) {
         BOOL snapToDefault = false;
         if (SystemParametersInfo(SPI_GETSNAPTODEFBUTTON, 0, &snapToDefault, 0)) {

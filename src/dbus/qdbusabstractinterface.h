@@ -37,15 +37,10 @@
 
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
-
-QT_MODULE(DBus)
 
 class QDBusError;
 class QDBusPendingCall;
-
 class QDBusAbstractInterfacePrivate;
 
 class Q_DBUS_EXPORT QDBusAbstractInterfaceBase: public QObject
@@ -143,7 +138,6 @@ private:
 
 QT_END_NAMESPACE
 
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif

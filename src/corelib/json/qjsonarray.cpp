@@ -1072,7 +1072,6 @@ void QJsonArray::compact()
 }
 
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QJsonArray &a)
 {
     if (!a.a) {
@@ -1086,7 +1085,6 @@ QDebug operator<<(QDebug dbg, const QJsonArray &a)
                   << ")";
     return dbg.space();
 }
-#endif
 
 QT_END_NAMESPACE
 

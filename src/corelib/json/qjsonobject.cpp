@@ -1019,7 +1019,6 @@ void QJsonObject::setValueAt(int i, const QJsonValue &val)
     insert(e->key(), val);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QJsonObject &o)
 {
     if (!o.o) {
@@ -1033,6 +1032,5 @@ QDebug operator<<(QDebug dbg, const QJsonObject &o)
                   << ")";
     return dbg.space();
 }
-#endif
 
 QT_END_NAMESPACE

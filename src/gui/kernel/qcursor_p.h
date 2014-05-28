@@ -31,17 +31,17 @@
 #include "QtCore/qnamespace.h"
 #include "QtGui/qpixmap.h"
 
-# if defined (Q_WS_MAC)
+# if defined (Q_OS_MAC)
 #  include "qt_mac_p.h"
 # elif defined(Q_WS_X11)
 #  include "qt_x11_p.h"
-# elif defined(Q_WS_WIN)
+# elif defined(Q_OS_WIN)
 #  include "QtCore/qt_windows.h"
 #endif
 
 QT_BEGIN_NAMESPACE
 
-#if defined (Q_WS_MAC)
+#if defined (Q_OS_MAC)
 void *qt_mac_nsCursorForQCursor(const QCursor &c);
 class QMacAnimateCursor;
 #endif
@@ -61,18 +61,18 @@ public:
     QBitmap  *bm, *bmm;
     QPixmap pixmap;
     short     hx, hy;
-#if defined (Q_WS_MAC)
+#if defined (Q_OS_MAC)
     int mId;
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
     int id;
 #endif
-#if defined (Q_WS_WIN)
+#if defined (Q_OS_WIN)
     HCURSOR hcurs;
 #elif defined (Q_WS_X11)
     XColor fg, bg;
     Cursor hcurs;
     Pixmap pm, pmm;
-#elif defined (Q_WS_MAC)
+#elif defined (Q_OS_MAC)
     enum { TYPE_None, TYPE_ImageCursor, TYPE_ThemeCursor } type;
     union {
         struct {

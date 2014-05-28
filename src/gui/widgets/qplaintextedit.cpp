@@ -787,8 +787,10 @@ void QPlainTextEditPrivate::init(const QString &txt)
 #ifndef QT_NO_CURSOR
     viewport->setCursor(Qt::IBeamCursor);
 #endif
+
     originalOffsetY = 0;
-#ifdef Q_WS_WIN
+
+#ifdef Q_OS_WIN
     setSingleFingerPanEnabled(true);
 #endif
 }

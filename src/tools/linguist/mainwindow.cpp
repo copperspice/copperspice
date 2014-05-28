@@ -261,7 +261,7 @@ MainWindow::MainWindow()
     setUnifiedTitleAndToolBarOnMac(true);
     m_ui.setupUi(this);
 
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     setWindowIcon(QPixmap(QLatin1String(":/images/appicon.png") ));
 #endif
 
@@ -696,7 +696,7 @@ RecentFiles &MainWindow::recentFiles()
 
 const QString &MainWindow::resourcePrefix()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     static const QString prefix(QLatin1String(":/images/mac"));
 #else
     static const QString prefix(QLatin1String(":/images/win"));
@@ -1927,7 +1927,7 @@ void MainWindow::setupMenuBar()
     m_ui.menuViewViews->addAction(m_sourceAndFormDock->toggleViewAction());
     m_ui.menuViewViews->addAction(m_errorsDock->toggleViewAction());
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     // Window menu
     QMenu *windowMenu = new QMenu(tr("&Window"), this);
     menuBar()->insertMenu(m_ui.menuHelp->menuAction(), windowMenu);

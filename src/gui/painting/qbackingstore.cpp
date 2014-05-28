@@ -102,7 +102,7 @@ static inline void qt_flush(QWidget *widget, const QRegion &region, QWindowSurfa
 }
 
 #ifndef QT_NO_PAINT_DEBUG
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 static void showYellowThing_win(QWidget *widget, const QRegion &region, int msec)
 {
     HBRUSH brush;
@@ -157,7 +157,7 @@ void QWidgetBackingStore::showYellowThing(QWidget *widget, const QRegion &toBePa
         widget = nativeParent;
     }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     Q_UNUSED(unclipped);
     showYellowThing_win(widget, paintRegion, msec);
 #else
@@ -211,8 +211,9 @@ void QWidgetBackingStore::showYellowThing(QWidget *widget, const QRegion &toBePa
 #if defined(Q_OS_UNIX)
     ::usleep(1000 * msec);
 #endif
-#endif // Q_WS_WIN
-#endif // Q_WS_QWS
+#endif
+
+#endif
 }
 
 bool QWidgetBackingStore::flushPaint(QWidget *widget, const QRegion &rgn)
@@ -345,7 +346,7 @@ void QWidgetBackingStore::beginPaint(QRegion &toClean, QWidget *widget, QWindowS
         }
     }
 
-#endif // Q_WS_QWS
+#endif
 
     Q_UNUSED(widget);
     Q_UNUSED(toCleanIsInTopLevelCoordinates);
@@ -715,7 +716,7 @@ void QWidgetBackingStore::markDirtyOnScreen(const QRegion &region, QWidget *widg
     if (!widget || widget->d_func()->paintOnScreen() || region.isEmpty())
         return;
 
-#if defined(Q_WS_QWS) || defined(Q_WS_MAC)
+#if defined(Q_WS_QWS) || defined(Q_OS_MAC)
     if (!widget->testAttribute(Qt::WA_WState_InPaintEvent))
         dirtyOnScreen += region.translated(topLevelOffset);
     return;
@@ -1022,7 +1023,7 @@ void QWidgetPrivate::scrollRect(const QRect &rect, int dx, int dy)
             }
         }
     }
-#endif // Q_WS_QWS
+#endif
 
     if (!accelerateScroll) {
         if (overlapped) {
@@ -1034,12 +1035,14 @@ void QWidgetPrivate::scrollRect(const QRect &rect, int dx, int dy)
         }
     } else {
         const QPoint toplevelOffset = q->mapTo(tlw, QPoint());
+
 #ifdef Q_WS_QWS
         QWSWindowSurface *surface = static_cast<QWSWindowSurface*>(wbs->windowSurface);
         const QRegion clip = surface->clipRegion().translated(-toplevelOffset) & scrollRect;
         const QRect clipBoundingRect = clip.boundingRect();
         scrollRect &= clipBoundingRect;
 #endif
+
         const QRect destRect = scrollRect.translated(dx, dy) & scrollRect;
         const QRect sourceRect = destRect.translated(-dx, -dy);
 
@@ -1094,6 +1097,7 @@ static inline bool discardSyncRequest(QWidget *tlw, QTLWExtra *tlwExtra)
         return true;
 
     if (!tlw->isVisible()
+
 #ifndef Q_WS_X11
         // If we're minimized on X11, WA_Mapped will be false and we
         // will return in the case above. Some window managers on X11
@@ -1612,15 +1616,17 @@ void QWidgetPrivate::repaint_sys(const QRegion &rgn)
 #else
     QPaintEngine *engine = q->paintEngine();
 #endif
+
     // QGLWidget does not support partial updates if:
     // 1) The context is double buffered
     // 2) The context is single buffered and auto-fill background is enabled.
-    const bool noPartialUpdateSupport = (engine && (engine->type() == QPaintEngine::OpenGL
-                                                || engine->type() == QPaintEngine::OpenGL2))
-                                        && (usesDoubleBufferedGLContext || q->autoFillBackground());
+    const bool noPartialUpdateSupport = (engine && 
+               (engine->type() == QPaintEngine::OpenGL || engine->type() == QPaintEngine::OpenGL2)) &&
+               (usesDoubleBufferedGLContext || q->autoFillBackground());
+
     QRegion toBePainted(noPartialUpdateSupport ? q->rect() : rgn);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // No difference between update() and repaint() on the Mac.
     update_sys(toBePainted);
     return;

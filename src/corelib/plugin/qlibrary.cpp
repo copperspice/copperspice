@@ -575,21 +575,26 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
                      .arg(QLIBRARY_AS_DEBUG ? QLatin1String("debug") : QLatin1String("false"))
                      .arg(fileName);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // On Mac, add the application arch to the reg key in order to
     // cache plugin information separately for each arch. This prevents
     // Qt from wrongly caching plugin load failures when the archs don't match.
 
 #if defined(__x86_64__)
     regkey += QLatin1String("-x86_64");
+
 #elif defined(__i386__)
     regkey += QLatin1String("-i386");
+
 #elif defined(__ppc64__)
     regkey += QLatin1String("-ppc64");
+
 #elif defined(__ppc__)
     regkey += QLatin1String("-ppc");
+
 #endif
-#endif // Q_WS_MAC
+
+#endif
 
     QStringList reg;
 

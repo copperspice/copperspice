@@ -45,7 +45,7 @@ struct QFontDef
           styleStrategy(QFont::PreferDefault), styleHint(QFont::AnyStyle),
           weight(50), fixedPitch(false), style(QFont::StyleNormal), stretch(100),
           ignorePitch(true), hintingPreference(QFont::PreferDefaultHinting)
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
           ,fixedPitchComputed(false)
 #endif
     {
@@ -56,7 +56,7 @@ struct QFontDef
 
 #ifdef Q_WS_X11
     QString addStyle;
-#endif // Q_WS_X11
+#endif
 
     qreal pointSize;
     qreal pixelSize;
@@ -107,7 +107,7 @@ struct QFontDef
 
 #ifdef Q_WS_X11
         if (addStyle != other.addStyle) return addStyle < other.addStyle;
-#endif // Q_WS_X11
+#endif
 
         if (ignorePitch != other.ignorePitch) return ignorePitch < other.ignorePitch;
         if (fixedPitch != other.fixedPitch) return fixedPitch < other.fixedPitch;
@@ -124,7 +124,7 @@ public:
     QAtomicInt ref;
     QFontCache *fontCache;
 
-#if !defined(Q_WS_MAC)
+#if ! defined(Q_OS_MAC)
     QFontEngine *engines[QUnicodeTables::ScriptCount];
 #else
     QFontEngine *engine;
@@ -137,7 +137,7 @@ class Q_GUI_EXPORT QFontPrivate
 public:
 #ifdef Q_WS_X11
     static int defaultEncodingID;
-#endif // Q_WS_X11
+#endif
 
     QFontPrivate();
     QFontPrivate(const QFontPrivate &other);
@@ -152,7 +152,7 @@ public:
     int dpi;
     int screen;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     HDC hdc;
 #endif
 
@@ -241,7 +241,7 @@ public:
     QFontEngine *findEngine(const Key &key);
     void insertEngine(const Key &key, QFontEngine *engine);
 
-#if defined(Q_WS_WIN) || defined(Q_WS_QWS)
+#if defined(Q_OS_WIN) || defined(Q_WS_QWS)
     void cleanupPrinterFonts();
 #endif
 

@@ -27,14 +27,7 @@
 #define QT7_QUICKTIMEAUDIOPLAYER_H
 
 #include "backendheader.h"
-
-#ifdef QUICKTIME_C_API_AVAILABLE
-    #include <QuickTime/QuickTime.h>
-    #undef check // avoid name clash;
-#endif
-
 #include <phonon/mediasource.h>
-#include <Carbon/Carbon.h>
 #include <QtCore/QString>
 #include "audionode.h"
 
@@ -89,10 +82,6 @@ namespace QT7
 
             State m_state;
             QuickTimeVideoPlayer *m_videoPlayer;
-
-#ifdef QUICKTIME_C_API_AVAILABLE
-            MovieAudioExtractionRef m_audioExtractionRef;
-#endif
 
             ScheduledAudioSlice *m_sliceList;
             AudioChannelLayout *m_audioChannelLayout;

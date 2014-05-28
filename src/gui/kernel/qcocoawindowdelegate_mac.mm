@@ -25,7 +25,6 @@
 
 #import "qcocoawindowdelegate_mac_p.h"
 
-#ifdef QT_MAC_USE_COCOA
 #include <qwidget_p.h>
 #include <qapplication_p.h>
 #include <qt_cocoa_helpers_mac_p.h>
@@ -440,4 +439,4 @@ QThreadData * internal_get_ThreadData(QObject *object)
 }
 
 @end
-#endif// QT_MAC_USE_COCOA
+

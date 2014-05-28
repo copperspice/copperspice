@@ -47,7 +47,7 @@ QPixmapData *QGLGraphicsSystem::createPixmapData(QPixmapData::PixelType type) co
 
 QWindowSurface *QGLGraphicsSystem::createWindowSurface(QWidget *widget) const
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     // On Windows the QGLWindowSurface class can't handle
     // drop shadows and native effects, e.g. fading a menu in/out using
     // top level window opacity.

@@ -82,7 +82,7 @@ public:
     void setCornerWidget(QWidget *w, Qt::Corner corner = Qt::TopRightCorner);
     QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     OSMenuRef macMenu();
     static bool macUpdateMenuBar();
 #endif
@@ -135,7 +135,7 @@ private:
     friend class QMenuPrivate;
     friend class QWindowsStyle;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     friend class QApplicationPrivate;
     friend class QWidgetPrivate;
     friend bool qt_mac_activate_action(MenuRef, uint, QAction::ActionEvent, bool);

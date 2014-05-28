@@ -635,7 +635,7 @@ void QPdfEnginePrivate::drawTextItem(const QPointF &p, const QTextItemInt &ti)
 {
     if (ti.charFormat.isAnchor()) {
         qreal size = ti.fontEngine->fontDef.pixelSize;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         if (ti.fontEngine->type() == QFontEngine::Win) {
             QFontEngineWin *fe = static_cast<QFontEngineWin *>(ti.fontEngine);
             size = fe->tm.tmHeight;

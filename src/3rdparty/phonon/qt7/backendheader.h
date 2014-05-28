@@ -30,10 +30,6 @@
 #import <Foundation/NSAutoreleasePool.h>
 #include <CoreFoundation/CFBase.h>
 
-#ifndef Q_WS_MAC64
-#define QUICKTIME_C_API_AVAILABLE
-#endif
-
 QT_BEGIN_NAMESPACE
 
 namespace Phonon

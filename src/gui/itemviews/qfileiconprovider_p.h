@@ -43,11 +43,13 @@ public:
     QFileIconProviderPrivate();
     void setUseCustomDirectoryIcons(bool enable);
     QIcon getIcon(QStyle::StandardPixmap name) const;
-#ifdef Q_WS_WIN
+
+#ifdef Q_OS_WIN
     QIcon getWinIcon(const QFileInfo &fi) const;
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     QIcon getMacIcon(const QFileInfo &fi) const;
 #endif
+
     QFileIconProvider * q_ptr;
     const QString homePath;
 

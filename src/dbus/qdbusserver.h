@@ -31,11 +31,7 @@
 
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
-
-QT_MODULE(DBus)
 
 class QDBusConnectionPrivate;
 class QDBusError;
@@ -43,26 +39,25 @@ class QDBusConnection;
 
 class Q_DBUS_EXPORT QDBusServer: public QObject
 {
-    Q_OBJECT
-public:
-    QDBusServer(const QString &address = QLatin1String("unix:tmpdir=/tmp"), QObject *parent = 0);
-    virtual ~QDBusServer();
+   Q_OBJECT
 
-    bool isConnected() const;
-    QDBusError lastError() const;
-    QString address() const;
-
-Q_SIGNALS:
-    void newConnection(const QDBusConnection &connection);
-
-private:
-    Q_DISABLE_COPY(QDBusServer)
-    QDBusConnectionPrivate *d;
+   public:
+       QDBusServer(const QString &address = QLatin1String("unix:tmpdir=/tmp"), QObject *parent = 0);
+       virtual ~QDBusServer();
+   
+       bool isConnected() const;
+       QDBusError lastError() const;
+       QString address() const;
+   
+   Q_SIGNALS:
+       void newConnection(const QDBusConnection &connection);
+   
+   private:
+       Q_DISABLE_COPY(QDBusServer)
+       QDBusConnectionPrivate *d;
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif

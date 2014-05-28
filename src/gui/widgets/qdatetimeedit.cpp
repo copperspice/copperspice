@@ -969,7 +969,7 @@ QSize QDateTimeEdit::sizeHint() const
 
         QSize hint(w, h);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         if (d->calendarPopupEnabled()) {
             QStyleOptionComboBox opt;
             d->cachedSizeHint = style()->sizeFromContents(QStyle::CT_ComboBox, &opt, hint, this);
@@ -1019,7 +1019,8 @@ bool QDateTimeEdit::event(QEvent *event)
         d->updateEdit();
         break;
     case QEvent::StyleChange:
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
     case QEvent::MacSizeChange:
 #endif
         d->setLayoutItemMargins(QStyle::SE_DateTimeEditLayoutItem);
@@ -1120,7 +1121,7 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
                 select = false;
                 break;
             }
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
             else
 #ifdef QT_KEYPAD_NAVIGATION
                 if (!QApplication::keypadNavigationEnabled())

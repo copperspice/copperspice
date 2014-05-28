@@ -49,7 +49,6 @@
 
 #include <QScopedPointer>
 
-
 QT_BEGIN_NAMESPACE
 
 class QLayout;
@@ -753,12 +752,12 @@ public:
     Qt::HANDLE x11PictureHandle() const;
 #endif
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     Qt::HANDLE macQDHandle() const;
     Qt::HANDLE macCGHandle() const;
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     HDC getDC() const;
     void releaseDC(HDC) const;
 #else
@@ -850,11 +849,11 @@ protected:
     virtual void wheelEvent(QWheelEvent *);
 #endif
   
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     virtual bool macEvent(EventHandlerCallRef, EventRef);
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     virtual bool winEvent(MSG *message, long *result);
 #endif
 
@@ -929,7 +928,7 @@ private:
     friend class QWinNativePanGestureRecognizer;
 #endif
     
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     friend class QCoreGraphicsPaintEnginePrivate;
     friend QPoint qt_mac_posInWindow(const QWidget *w);
     friend OSWindowRef qt_mac_window_for(const QWidget *w);

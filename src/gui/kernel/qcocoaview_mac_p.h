@@ -27,7 +27,6 @@
 #define QCocoaView_MAC_P_H
 
 #include <qevent.h>
-#ifdef QT_MAC_USE_COCOA
 #import <Cocoa/Cocoa.h>
 
 @class QT_MANGLE_NAMESPACE(QCocoaView);
@@ -60,6 +59,4 @@ Q_GUI_EXPORT
 - (void) qt_clearQWidget;
 
 @end
-#endif
-
 #endif

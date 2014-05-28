@@ -28,13 +28,13 @@
 
 #include "qimage.h"
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #include "qt_windows.h"
 
 #elif defined(Q_WS_X11)
 #include <qt_x11_p.h>
 
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
 #include <qt_mac_p.h>
 
 #endif
@@ -56,7 +56,7 @@ public:
 
     static QImage::Format systemFormat();
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     HDC hdc;
     HBITMAP bitmap;
     HBITMAP null_bitmap;
@@ -66,7 +66,7 @@ public:
     Pixmap xshmpm;
     XShmSegmentInfo xshminfo;
 
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     CGContextRef cg;
 #endif
 

@@ -31,15 +31,11 @@
 
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
 
-QT_MODULE(DBus)
-
 class QDBusConnection;
-
 class QDBusServiceWatcherPrivate;
+
 class Q_DBUS_EXPORT QDBusServiceWatcher: public QObject
 {
     Q_OBJECT
@@ -83,8 +79,6 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDBusServiceWatcher::WatchMode)
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif // QDBUSSERVICEWATCHER_H

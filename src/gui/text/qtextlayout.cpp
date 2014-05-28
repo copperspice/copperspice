@@ -1250,10 +1250,12 @@ void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition
                               && (p->transform().type() > QTransform::TxTranslate);
     if (toggleAntialiasing)
         p->setRenderHint(QPainter::Antialiasing);
-#if defined(QT_MAC_USE_COCOA)
+
+#ifdef Q_OS_MAC
     // Always draw the cursor aligned to pixel boundary.
     x = qRound(x);
 #endif
+
     p->fillRect(QRectF(x, y, qreal(width), (base + descent + 1).toReal()), p->pen().brush());
     if (toggleAntialiasing)
         p->setRenderHint(QPainter::Antialiasing, false);
@@ -1875,7 +1877,8 @@ void QTextLine::layout_helper(int maxGlyphs)
             // expand the text beyond the edge.
             if (sb_or_ws|breakany) {
                 QFixed rightBearing = lbh.rightBearing; // store previous right bearing
-#if !defined(Q_WS_MAC)
+
+#if !defined(Q_OS_MAC)
                 if (lbh.calculateNewWidth(line) - lbh.minimumRightBearing > line.width)
 #endif
                     lbh.adjustRightBearing();
@@ -2196,12 +2199,12 @@ QList<QGlyphRun> QTextLine::glyphs(int from, int length) const
         fontD->fontEngine = fontEngine;
         fontD->fontEngine->ref.ref();
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
         if (fontEngine->supportsSubPixelPositions())
             fontD->hintingPreference = QFont::PreferVerticalHinting;
         else
             fontD->hintingPreference = QFont::PreferFullHinting;
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
         fontD->hintingPreference = QFont::PreferNoHinting;
 #elif !defined(QT_NO_FREETYPE)
         if (fontEngine->type() == QFontEngine::Freetype) {

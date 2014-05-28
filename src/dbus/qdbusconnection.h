@@ -31,11 +31,7 @@
 
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
-
-QT_MODULE(DBus)
 
 namespace QDBus
 {
@@ -55,8 +51,8 @@ class QDBusPendingCall;
 class QDBusConnectionInterface;
 class QDBusVirtualObject;
 class QObject;
-
 class QDBusConnectionPrivate;
+
 class Q_DBUS_EXPORT QDBusConnection
 {
     Q_GADGET
@@ -190,8 +186,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QDBusConnection::RegisterOptions)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDBusConnection::VirtualObjectRegisterOptions)
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif

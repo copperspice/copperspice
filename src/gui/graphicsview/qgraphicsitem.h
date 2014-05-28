@@ -38,7 +38,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if !defined(QT_NO_GRAPHICSVIEW) || (QT_EDITION & QT_MODULE_GRAPHICSVIEW) != QT_MODULE_GRAPHICSVIEW
+#if !defined(QT_NO_GRAPHICSVIEW)
 
 class QBrush;
 class QCursor;
@@ -1186,13 +1186,11 @@ template <class T> inline T qgraphicsitem_cast(const QGraphicsItem *item)
         || (item && int(static_cast<T>(0)->Type) == item->type()) ? static_cast<T>(item) : 0;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem *item);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsObject *item);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemChange change);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlag flag);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlags flags);
-#endif
 
 QT_END_NAMESPACE
 

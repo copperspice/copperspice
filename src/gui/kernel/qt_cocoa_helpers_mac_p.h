@@ -23,39 +23,9 @@
 *
 ***********************************************************************/
 
-/****************************************************************************
-**
-** Copyright (c) 2007-2008, Apple, Inc.
-**
-** All rights reserved.
-**
-** Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are met:
-**
-**   * Redistributions of source code must retain the above copyright notice,
-**     this list of conditions and the following disclaimer.
-**
-**   * Redistributions in binary form must reproduce the above copyright notice,
-**     this list of conditions and the following disclaimer in the documentation
-**     and/or other materials provided with the distribution.
-**
-**   * Neither the name of Apple, Inc. nor the names of its contributors
-**     may be used to endorse or promote products derived from this software
-**     without specific prior written permission.
-**
-** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-** CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-** EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-** PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-** PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-** LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-** NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**
-****************************************************************************/
+/**************************************************
+** Copyright (C) 2007-2008, Apple, Inc.
+**************************************************/
 
 #ifndef QT_COCOA_HELPERS_MAC_P_H
 #define QT_COCOA_HELPERS_MAC_P_H
@@ -81,12 +51,7 @@
 #include "qt_mac_p.h"
 
 struct HIContentBorderMetrics;
-
-#ifdef Q_WS_MAC32
-typedef struct _NSPoint NSPoint; // Just redefine here so I don't have to pull in all of Cocoa.
-#else
 typedef struct CGPoint NSPoint;
-#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -114,8 +79,6 @@ void qt_mac_update_mouseTracking(QWidget *widget);
 OSStatus qt_mac_drawCGImage(CGContextRef cg, const CGRect *inbounds, CGImageRef);
 bool qt_mac_checkForNativeSizeGrip(const QWidget *widget);
 void qt_dispatchTabletProximityEvent(void * /*NSEvent * */ tabletEvent);
-
-#ifdef QT_MAC_USE_COCOA
 bool qt_dispatchKeyEventWithCocoa(void * /*NSEvent * */ keyEvent, QWidget *widgetToGetEvent);
 
 // These methods exists only for supporting unified mode.
@@ -123,7 +86,7 @@ void macDrawRectOnTop(void * /*OSWindowRef */ window);
 void macSyncDrawingOnFirstInvocation(void * /*OSWindowRef */window);
 void qt_cocoaStackChildWindowOnTopOfOtherChildren(QWidget *widget);
 void qt_mac_menu_collapseSeparators(void * /*NSMenu */ menu, bool collapse);
-#endif
+
 
 bool qt_dispatchKeyEvent(void * /*NSEvent * */ keyEvent, QWidget *widgetToGetEvent);
 void qt_dispatchModifiersChanged(void * /*NSEvent * */flagsChangedEvent, QWidget *widgetToGetEvent);
@@ -137,8 +100,6 @@ Qt::KeyboardModifiers qt_cocoaDragOperation2QtModifiers(uint dragOperations);
 QPixmap qt_mac_convert_iconref(const IconRef icon, int width, int height);
 void qt_mac_constructQIconFromIconRef(const IconRef icon, const IconRef overlayIcon, QIcon *retIcon,
                                       QStyle::StandardPixmap standardIcon = QStyle::SP_CustomBase);
-
-#if defined(QT_MAC_USE_COCOA) && defined( __OBJC__)
 struct DnDParams
 {
     NSView *view;
@@ -158,7 +119,6 @@ QWidget *qt_mac_getTargetForMouseEvent(NSEvent *event, QEvent::Type eventType,
     QPoint &returnLocalPoint, QPoint &returnGlobalPoint, QWidget *nativeWidget, QWidget **returnWidgetUnderMouse);
 bool qt_mac_handleMouseEvent(NSEvent *event, QEvent::Type eventType, Qt::MouseButton button, QWidget *nativeWidget, bool fakeEvent = false);
 void qt_mac_handleNonClientAreaMouseEvent(NSWindow *window, NSEvent *event);
-#endif
 
 inline int flipYCoordinate(int y)
 {
@@ -182,7 +142,7 @@ void qt_syncCocoaTitleBarButtons(OSWindowRef window, QWidget *widgetForWindow);
 CGFloat qt_mac_get_scalefactor();
 QString qt_mac_get_pasteboardString(OSPasteboardRef paste);
 
-#ifdef __OBJC__
+
 inline NSMutableArray *qt_mac_QStringListToNSMutableArray(const QStringList &qstrlist)
 { return reinterpret_cast<NSMutableArray *>(qt_mac_QStringListToNSMutableArrayVoid(qstrlist)); }
 
@@ -192,7 +152,7 @@ inline QString qt_mac_NSStringToQString(const NSString *nsstr)
 inline NSString *qt_mac_QStringToNSString(const QString &qstr)
 { return [const_cast<NSString *>(reinterpret_cast<const NSString *>(QCFString::toCFStringRef(qstr))) autorelease]; }
 
-#ifdef QT_MAC_USE_COCOA
+
 class QCocoaPostMessageArgs {
 public:
     id target;
@@ -217,9 +177,7 @@ public:
 };
 void qt_cocoaPostMessage(id target, SEL selector, int argCount=0, id arg1=0, id arg2=0);
 void qt_cocoaPostMessageAfterEventLoopExit(id target, SEL selector, int argCount=0, id arg1=0, id arg2=0);
-#endif
 
-#endif
 
 class QMacScrollOptimization {
     // This class is made to optimize for the case when the user
@@ -276,11 +234,10 @@ public:
 
 void qt_mac_post_retranslateAppMenu();
 
-#ifdef QT_MAC_USE_COCOA
+
 void qt_mac_display(QWidget *widget);
 void qt_mac_setNeedsDisplay(QWidget *widget);
 void qt_mac_setNeedsDisplayInRect(QWidget *widget, QRegion region);
-#endif // QT_MAC_USE_COCOA
 
 
 // Utility functions to ease the use of Core Graphics contexts.

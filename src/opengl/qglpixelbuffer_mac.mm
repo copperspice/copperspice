@@ -26,10 +26,6 @@
 #include "qglpixelbuffer.h"
 #include "qglpixelbuffer_p.h"
 
-#ifndef QT_MAC_USE_COCOA
-#include <AGL/agl.h>
-#endif
-
 #include <qimage.h>
 #include <qgl_p.h>
 #include <qdebug.h>
@@ -56,8 +52,8 @@ static int nearest_gl_texture_size(int v)
 
 bool QGLPixelBufferPrivate::init(const QSize &size, const QGLFormat &f, QGLWidget *shareWidget)
 {
-#ifdef QT_MAC_USE_COCOA
     Q_Q(QGLPixelBuffer);
+
     // create a dummy context
     QGLContext context(f, q);
     context.create(shareWidget ? shareWidget->context() : 0);
@@ -98,160 +94,25 @@ bool QGLPixelBufferPrivate::init(const QSize &size, const QGLFormat &f, QGLWidge
                                             mipMapLevel:0
                                    currentVirtualScreen:0];
     return true;
-#else
-    GLint attribs[40], i=0;
-    attribs[i++] = AGL_RGBA;
-    attribs[i++] = AGL_BUFFER_SIZE;
-    attribs[i++] = 32;
-    attribs[i++] = AGL_LEVEL;
-    attribs[i++] = f.plane();
-    if (f.redBufferSize() != -1) {
-        attribs[i++] = AGL_RED_SIZE;
-        attribs[i++] = f.redBufferSize();
-    }
-    if (f.greenBufferSize() != -1) {
-        attribs[i++] = AGL_GREEN_SIZE;
-        attribs[i++] = f.greenBufferSize();
-    }
-    if (f.blueBufferSize() != -1) {
-        attribs[i++] = AGL_BLUE_SIZE;
-        attribs[i++] = f.blueBufferSize();
-    }
-    if (f.stereo())
-        attribs[i++] = AGL_STEREO;
-    if (f.alpha()) {
-        attribs[i++] = AGL_ALPHA_SIZE;
-        attribs[i++] = f.alphaBufferSize() == -1 ? 8 : f.alphaBufferSize();
-    }
-    if (f.stencil()) {
-        attribs[i++] = AGL_STENCIL_SIZE;
-        attribs[i++] = f.stencilBufferSize() == -1 ? 8 : f.stencilBufferSize();
-    }
-    if (f.depth()) {
-        attribs[i++] = AGL_DEPTH_SIZE;
-        attribs[i++] = f.depthBufferSize() == -1 ? 32 : f.depthBufferSize();
-    }
-    if (f.accum()) {
-        attribs[i++] = AGL_ACCUM_RED_SIZE;
-        attribs[i++] = f.accumBufferSize() == -1 ? 16 : f.accumBufferSize();
-        attribs[i++] = AGL_ACCUM_BLUE_SIZE;
-        attribs[i++] = f.accumBufferSize() == -1 ? 16 : f.accumBufferSize();
-        attribs[i++] = AGL_ACCUM_GREEN_SIZE;
-        attribs[i++] = f.accumBufferSize() == -1 ? 16 : f.accumBufferSize();
-        attribs[i++] = AGL_ACCUM_ALPHA_SIZE;
-        attribs[i++] = f.accumBufferSize() == -1 ? 16 : f.accumBufferSize();
-    }
-
-    if (f.sampleBuffers()) {
-        attribs[i++] = AGL_SAMPLE_BUFFERS_ARB;
-        attribs[i++] = 1;
-        attribs[i++] = AGL_SAMPLES_ARB;
-        attribs[i++] = f.samples() == -1 ? 4 : f.samples();
-    }
-    attribs[i] = AGL_NONE;
-
-    AGLPixelFormat format = aglChoosePixelFormat(0, 0, attribs);
-    if (!format) {
-	qWarning("QGLPixelBuffer: Unable to find a pixel format (AGL error %d).",
-		 (int) aglGetError());
-        return false;
-    }
-
-    GLint res;
-    aglDescribePixelFormat(format, AGL_LEVEL, &res);
-    this->format.setPlane(res);
-    aglDescribePixelFormat(format, AGL_DOUBLEBUFFER, &res);
-    this->format.setDoubleBuffer(res);
-    aglDescribePixelFormat(format, AGL_DEPTH_SIZE, &res);
-    this->format.setDepth(res);
-    if (this->format.depth())
-	this->format.setDepthBufferSize(res);
-    aglDescribePixelFormat(format, AGL_RGBA, &res);
-    this->format.setRgba(res);
-    aglDescribePixelFormat(format, AGL_RED_SIZE, &res);
-    this->format.setRedBufferSize(res);
-    aglDescribePixelFormat(format, AGL_GREEN_SIZE, &res);
-    this->format.setGreenBufferSize(res);
-    aglDescribePixelFormat(format, AGL_BLUE_SIZE, &res);
-    this->format.setBlueBufferSize(res);
-    aglDescribePixelFormat(format, AGL_ALPHA_SIZE, &res);
-    this->format.setAlpha(res);
-    if (this->format.alpha())
-	this->format.setAlphaBufferSize(res);
-    aglDescribePixelFormat(format, AGL_ACCUM_RED_SIZE, &res);
-    this->format.setAccum(res);
-    if (this->format.accum())
-	this->format.setAccumBufferSize(res);
-    aglDescribePixelFormat(format, AGL_STENCIL_SIZE, &res);
-    this->format.setStencil(res);
-    if (this->format.stencil())
-	this->format.setStencilBufferSize(res);
-    aglDescribePixelFormat(format, AGL_STEREO, &res);
-    this->format.setStereo(res);
-    aglDescribePixelFormat(format, AGL_SAMPLE_BUFFERS_ARB, &res);
-    this->format.setSampleBuffers(res);
-    if (this->format.sampleBuffers()) {
-        aglDescribePixelFormat(format, AGL_SAMPLES_ARB, &res);
-        this->format.setSamples(res);
-    }
-
-    AGLContext share = 0;
-    if (shareWidget)
-	share = share_ctx = static_cast<AGLContext>(shareWidget->d_func()->glcx->d_func()->cx);
-    ctx = aglCreateContext(format, share);
-    if (!ctx) {
-	qWarning("QGLPixelBuffer: Unable to create a context (AGL error %d).",
-		 (int) aglGetError());
-	return false;
-    }
-
-    GLenum target = GL_TEXTURE_2D;
-
-    if ((QGLExtensions::glExtensions() & QGLExtensions::TextureRectangle)
-        && (size.width() != nearest_gl_texture_size(size.width())
-            || size.height() != nearest_gl_texture_size(size.height())))
-    {
-        target = GL_TEXTURE_RECTANGLE_EXT;
-    }
-
-    if (!aglCreatePBuffer(size.width(), size.height(), target, GL_RGBA, 0, &pbuf)) {
-	qWarning("QGLPixelBuffer: Unable to create a pbuffer (AGL error %d).",
-		 (int) aglGetError());
-	return false;
-    }
-
-    if (!aglSetPBuffer(ctx, pbuf, 0, 0, 0)) {
-	qWarning("QGLPixelBuffer: Unable to set pbuffer (AGL error %d).",
-		 (int) aglGetError());
-	return false;
-    }
-
-    aglDestroyPixelFormat(format);
-    return true;
-
-#endif
 }
 
 bool QGLPixelBufferPrivate::cleanup()
 {
-#ifdef QT_MAC_USE_COCOA
     [static_cast<NSOpenGLPixelBuffer *>(pbuf) release];
     pbuf = 0;
     [static_cast<NSOpenGLContext *>(ctx) release];
     ctx = 0;
-#else
-    aglDestroyPBuffer(pbuf);
-#endif
+
     return true;
 }
 
 bool QGLPixelBuffer::bindToDynamicTexture(GLuint texture_id)
 {
     Q_D(QGLPixelBuffer);
+
     if (d->invalid || !d->share_ctx)
         return false;
 
-#ifdef QT_MAC_USE_COCOA
     NSOpenGLContext *oldContext = [NSOpenGLContext currentContext];
     if (d->share_ctx != oldContext)
         [static_cast<NSOpenGLContext *>(d->share_ctx) makeCurrentContext];
@@ -262,12 +123,7 @@ bool QGLPixelBuffer::bindToDynamicTexture(GLuint texture_id)
     if (oldContext && oldContext != d->share_ctx)
         [oldContext makeCurrentContext];
     return true;
-#else
-    aglSetCurrentContext(d->share_ctx);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    aglTexImagePBuffer(d->share_ctx, d->pbuf, GL_FRONT);
-    return true;
-#endif
+
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
@@ -283,8 +139,8 @@ void QGLPixelBuffer::releaseFromDynamicTexture()
 
 GLuint QGLPixelBuffer::generateDynamicTexture() const
 {
-#ifdef QT_MAC_USE_COCOA
     Q_D(const QGLPixelBuffer);
+
     NSOpenGLContext *oldContext = [NSOpenGLContext currentContext];
     if (d->share_ctx != oldContext)
         [static_cast<NSOpenGLContext *>(d->share_ctx) makeCurrentContext];
@@ -296,15 +152,8 @@ GLuint QGLPixelBuffer::generateDynamicTexture() const
 
     if (oldContext && oldContext != d->share_ctx)
         [oldContext makeCurrentContext];
+
     return texture;
-#else
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    return texture;
-#endif
 }
 
 bool QGLPixelBuffer::hasOpenGLPbuffers()

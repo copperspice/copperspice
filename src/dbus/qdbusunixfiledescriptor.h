@@ -33,11 +33,7 @@
 #ifndef QT_NO_DBUS
 # include <utility>
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
-
-QT_MODULE(DBus)
 
 class QDBusUnixFileDescriptorPrivate;
 template<> QExplicitlySharedDataPointer<QDBusUnixFileDescriptorPrivate>::~QExplicitlySharedDataPointer();
@@ -75,8 +71,6 @@ QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QDBusUnixFileDescriptor)
 Q_DECLARE_METATYPE(QList<QDBusUnixFileDescriptor>)
-
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif // QDBUSUNIXFILEDESCRIPTOR_H

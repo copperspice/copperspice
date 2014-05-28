@@ -33,20 +33,12 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-#ifdef QT_MAC_USE_COCOA
-
 QT_BEGIN_NAMESPACE
 
-//#define MAC_ACCESSIBILTY_DEVELOPER_MODE
-
-#ifndef QT_NO_DEBUG_STREAM
 #ifdef MAC_ACCESSIBILTY_DEVELOPER_MODE
 #define MAC_ACCESSIBILTY_DEBUG QT_PREPEND_NAMESPACE(qDebug)
 #else
 #define MAC_ACCESSIBILTY_DEBUG if (0) QT_PREPEND_NAMESPACE(qDebug)
-#endif
-#else
-#define MAC_ACCESSIBILTY_DEBUG if (0) QT_PREPEND_NAMESPACE(QNoDebug)
 #endif
 
 typedef QMap<QAccessible::Role, NSString *> QMacAccessibiltyRoleMap;
@@ -213,8 +205,6 @@ QT_END_NAMESPACE
 }
 
 @end
-
-#endif // QT_MAC_USE_COCOA
 
 #endif // QT_NO_ACCESSIBILITY
 

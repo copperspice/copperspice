@@ -26,7 +26,7 @@
 #ifndef QT_NO_ACCESSIBILITY
 
 #include "qapplication.h"
-#include <private/qsystemlibrary_p.h>
+#include <qsystemlibrary_p.h>
 #include "qmessagebox.h" // ### dependency
 #include "qt_windows.h"
 #include "qwidget.h"

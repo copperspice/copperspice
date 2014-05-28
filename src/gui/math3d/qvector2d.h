@@ -227,9 +227,7 @@ inline QPointF QVector2D::toPointF() const
     return QPointF(qreal(xp), qreal(yp));
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QVector2D &vector);
-#endif
 
 #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QVector2D &);

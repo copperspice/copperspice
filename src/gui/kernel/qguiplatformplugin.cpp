@@ -105,13 +105,15 @@ QGuiPlatformPlugin::~QGuiPlatformPlugin() {}
 QString QGuiPlatformPlugin::styleName()
 {
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     if ((QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA
         && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)))
         return QLatin1String("WindowsVista");
+
     else if ((QSysInfo::WindowsVersion >= QSysInfo::WV_XP
         && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)))
         return QLatin1String("WindowsXP");
+
     else
         return QLatin1String("Windows");                // default styles for Windows
 
@@ -121,7 +123,7 @@ QString QGuiPlatformPlugin::styleName()
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
     return QLatin1String("Plastique");                  // default style for X11 and small devices
 
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     return QLatin1String("Macintosh");                  // default style for all Mac's
 
 #elif defined(Q_WS_X11)
@@ -222,9 +224,9 @@ QStringList QGuiPlatformPlugin::iconThemeSearchPaths()
         paths.prepend(homeDir.path());
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     paths.append(qApp->applicationDirPath() + QLatin1String("/icons"));
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     paths.append(qApp->applicationDirPath() + QLatin1String("/../Resources/icons"));
 #endif
     return paths;

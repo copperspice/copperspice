@@ -83,18 +83,18 @@ typedef QUrl (*_qt_filedialog_save_file_url_hook)(QWidget * parent, const QStrin
 Q_GUI_EXPORT _qt_filedialog_save_file_url_hook qt_filedialog_save_file_url_hook = 0;
 
 
-#if defined(Q_WS_WIN) || defined(Q_WS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
 bool Q_GUI_EXPORT qt_use_native_dialogs = true; // for the benefit of testing tools, until we have a proper API
 #endif
 
 QT_BEGIN_INCLUDE_NAMESPACE
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #include <qwindowsstyle.h>
 #endif
 
 #include <qshortcut.h>
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 #include <qmacstyle_mac.h>
 #endif
 
@@ -298,13 +298,8 @@ QFileDialogPrivate::QFileDialogPrivate()
         defaultFileTypes(true),
         fileNameLabelExplicitlySat(false),
         nativeDialogInUse(false),
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         mDelegate(0),
-#ifndef QT_MAC_USE_COCOA
-        mDialog(0),
-        mDialogStarted(false),
-        mDialogClosed(true),
-#endif
 #endif
         qFileDialogUi(0)
 {
@@ -1167,7 +1162,7 @@ void QFileDialog::setAcceptMode(QFileDialog::AcceptMode mode)
         d->qFileDialogUi->lookInCombo->setEditable(false);
     }
     d->retranslateWindowTitle();
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     d->deleteNativeDialog_sys();
     setAttribute(Qt::WA_DontShowOnScreen, false);
 #endif
@@ -1463,7 +1458,7 @@ QString QFileDialog::labelText(DialogLabel label) const
     For the native file dialogs
 */
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 extern QString qt_win_get_open_file_name(const QFileDialogArgs &args,
                                          QString *initialDirectory,
                                          QString *selectedFilter);
@@ -1548,7 +1543,7 @@ QString QFileDialog::getOpenFileName(QWidget *parent,
     args.filter = filter;
     args.mode = ExistingFile;
     args.options = options;
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     if (qt_use_native_dialogs && !(args.options & DontUseNativeDialog)) {
         return qt_win_get_open_file_name(args, &(args.directory), selectedFilter);
     }
@@ -1680,7 +1675,7 @@ QStringList QFileDialog::getOpenFileNames(QWidget *parent,
     args.mode = ExistingFiles;
     args.options = options;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     if (qt_use_native_dialogs && !(args.options & DontUseNativeDialog)) {
         return qt_win_get_open_file_names(args, &(args.directory), selectedFilter);
     }
@@ -1820,7 +1815,7 @@ QString QFileDialog::getSaveFileName(QWidget *parent,
     args.mode = AnyFile;
     args.options = options;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     if (qt_use_native_dialogs && !(args.options & DontUseNativeDialog)) {
         return qt_win_get_save_file_name(args, &(args.directory), selectedFilter);
     }
@@ -1939,7 +1934,7 @@ QString QFileDialog::getExistingDirectory(QWidget *parent,
     args.mode = (options & ShowDirsOnly ? DirectoryOnly : Directory);
     args.options = options;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     if (qt_use_native_dialogs && !(args.options & DontUseNativeDialog) && (options & ShowDirsOnly)) {
         return qt_win_get_existing_directory(args);
     }    
@@ -2224,7 +2219,7 @@ void QFileDialogPrivate::createWidgets()
     model = new QFileSystemModel(q);
     model->setObjectName(QLatin1String("qt_filesystem_model"));
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     model->setNameFilterDisables(true);
 #else
     model->setNameFilterDisables(false);
@@ -3242,7 +3237,7 @@ void QFileDialog::_q_fileRenamed(const QString &path,const QString &oldName,cons
 	d->_q_fileRenamed(path,oldName,newName);
 }
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
    void QFileDialog::_q_macRunNativeAppModalPanel()
    {
    	Q_D(QFileDialog);

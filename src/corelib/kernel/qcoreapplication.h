@@ -33,7 +33,7 @@
 #include <QtCore/qeventloop.h>
 #include <QScopedPointer>
 
-#if defined(Q_WS_WIN) && !defined(tagMSG)
+#if defined(Q_OS_WIN) && !defined(tagMSG)
 typedef struct tagMSG MSG;
 #endif
 
@@ -153,7 +153,7 @@ public:
 
     static void flush();
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     virtual bool winEventFilter(MSG *message, long *result);
 #endif
 
@@ -311,7 +311,7 @@ Q_CORE_EXPORT void qAddPostRoutine(QtCleanUpFunction);
 Q_CORE_EXPORT void qRemovePostRoutine(QtCleanUpFunction);
 Q_CORE_EXPORT QString qAppName();                
 
-#if defined(Q_WS_WIN) && ! defined(QT_NO_DEBUG_STREAM)
+#if defined(Q_OS_WIN) 
 Q_CORE_EXPORT QString decodeMSG(const MSG &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const MSG &);
 #endif

@@ -47,7 +47,7 @@
 
 #ifndef QT_NO_TABBAR
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 #include <qt_mac_p.h>
 #include <qt_cocoa_helpers_mac_p.h>
 #endif
@@ -65,7 +65,7 @@ inline static bool verticalTabs(QTabBar::Shape shape)
 
 void QTabBarPrivate::updateMacBorderMetrics()
 {
-#if (defined Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#if (defined Q_OS_MAC) 
     if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
         Q_Q(QTabBar);
         ::HIContentBorderMetrics metrics;
@@ -81,7 +81,7 @@ void QTabBarPrivate::updateMacBorderMetrics()
         metrics.left = 0;
         metrics.right = 0;
         qt_mac_updateContentBorderMetricts(window, metrics);
-#ifdef QT_MAC_USE_COCOA
+
         // In Cocoa we need to keep track of the drawRect method.
         // If documentMode is enabled we need to change it, unless
         // a toolbar is present.
@@ -91,10 +91,11 @@ void QTabBarPrivate::updateMacBorderMetrics()
         QWidgetPrivate *privateWidget = qt_widget_private(q->window());
         if(privateWidget)
             privateWidget->changeMethods = documentMode;
+
         // Since in Cocoa there is no simple way to remove the baseline, so we just ask the
         // top level to do the magic for us.
         privateWidget->syncUnifiedMode();
-#endif // QT_MAC_USE_COCOA
+
     }
 #endif
 }
@@ -1713,7 +1714,7 @@ void QTabBar::mousePressEvent(QMouseEvent *event)
         d->moveTabFinished(d->pressedIndex);
 
     d->pressedIndex = d->indexAtPos(event->pos());
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     d->previousPressedIndex = d->pressedIndex;
 #endif
     if (d->validIndex(d->pressedIndex)) {
@@ -1796,7 +1797,7 @@ void QTabBar::mouseMoveEvent(QMouseEvent *event)
 
             update();
         }
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     } else if (!d->documentMode && event->buttons() == Qt::LeftButton && d->previousPressedIndex != -1) {
         int newPressedIndex = d->indexAtPos(event->pos());
         if (d->pressedIndex == -1 && d->previousPressedIndex == newPressedIndex) {
@@ -1863,13 +1864,15 @@ void QTabBarPrivate::moveTabFinished(int index)
     Q_Q(QTabBar);
     bool cleanup = (pressedIndex == index) || (pressedIndex == -1) || !validIndex(index);
     bool allAnimationsFinished = true;
+
 #ifndef QT_NO_ANIMATION
     for(int i = 0; allAnimationsFinished && i < tabList.count(); ++i) {
         const Tab &t = tabList.at(i);
         if (t.animation && t.animation->state() == QAbstractAnimation::Running)
             allAnimationsFinished = false;
     }
-#endif //QT_NO_ANIMATION
+#endif 
+
     if (allAnimationsFinished && cleanup) {
         if(movingTab)
             movingTab->setVisible(false); // We might not get a mouse release
@@ -1899,7 +1902,7 @@ void QTabBar::mouseReleaseEvent(QMouseEvent *event)
         event->ignore();
         return;
     }
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     d->previousPressedIndex = -1;
 #endif
     if (d->movable && d->dragInProgress && d->validIndex(d->pressedIndex)) {

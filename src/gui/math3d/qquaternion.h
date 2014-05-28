@@ -295,9 +295,7 @@ inline QVector4D QQuaternion::toVector4D() const
 
 #endif
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QQuaternion &q);
-#endif
 
 #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QQuaternion &);

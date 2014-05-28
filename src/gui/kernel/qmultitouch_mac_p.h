@@ -26,19 +26,13 @@
 #ifndef QMULTITOUCH_MAC_P_H
 #define QMULTITOUCH_MAC_P_H
 
-#ifdef QT_MAC_USE_COCOA
 #import <Cocoa/Cocoa.h>
-#endif
 
 #include <qevent.h>
 #include <qhash.h>
 #include <QtCore>
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-
 QT_BEGIN_NAMESPACE
-
-#ifdef QT_MAC_USE_COCOA
 
 class QCocoaTouch
 {
@@ -65,11 +59,8 @@ class QCocoaTouch
         static Qt::TouchPointState toTouchPointState(NSTouchPhase nsState);
 };
 
-#endif // QT_MAC_USE_COCOA
 
 QT_END_NAMESPACE
-
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
 
 #endif // QMULTITOUCH_MAC_P_H
 

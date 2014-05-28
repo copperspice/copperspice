@@ -27,10 +27,7 @@
 
 #include <QtCore/qendian.h>
 #include <QtCore/qsettings.h>
-
-#include <private/qimage_p.h>
-
-#if !defined(Q_WS_MAC) || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#include <qimage_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -160,7 +157,7 @@ bool QCoreTextFontEngineMulti::stringToCMap(const QChar *str, int len, QGlyphLay
     QCFType<CFAttributedStringRef> attributedString = CFAttributedStringCreate(0, cfstring, attributeDict);
     QCFType<CTTypesetterRef> typeSetter;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+
     if (flags & QTextEngine::RightToLeft) {
         const void *optionKeys[] = { kCTTypesetterOptionForcedEmbeddingLevel };
         const short rtlForcedEmbeddingLevelValue = 1;
@@ -169,9 +166,7 @@ bool QCoreTextFontEngineMulti::stringToCMap(const QChar *str, int len, QGlyphLay
                                                               &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
         typeSetter = CTTypesetterCreateWithAttributedStringAndOptions(attributedString, options);
     } else
-#else
-    Q_UNUSED(flags);
-#endif
+
         typeSetter = CTTypesetterCreateWithAttributedString(attributedString);
 
     CFRange range = {0, 0};
@@ -212,24 +207,7 @@ bool QCoreTextFontEngineMulti::stringToCMap(const QChar *str, int len, QGlyphLay
         CFRange stringRange = CTRunGetStringRange(run);
         CGAffineTransform textMatrix = CTRunGetTextMatrix(run);
         int prepend = 0;
-#if MAC_OS_X_VERSION_MAX_ALLOWED == MAC_OS_X_VERSION_10_5
-        UniChar beginGlyph = CFStringGetCharacterAtIndex(cfstring, stringRange.location);
-        QChar dir = QChar::direction(beginGlyph);
-        bool beginWithOverride = dir == QChar::DirLRO || dir == QChar::DirRLO || dir == QChar::DirLRE || dir == QChar::DirRLE;
-        if (beginWithOverride) {
-            logClusters[stringRange.location] = 0;
-            outGlyphs[0] = 0xFFFF;
-            outAdvances_x[0] = 0;
-            outAdvances_y[0] = 0;
-            outAttributes[0].clusterStart = true;
-            outAttributes[0].dontPrint = true;
-            outGlyphs++;
-            outAdvances_x++;
-            outAdvances_y++;
-            outAttributes++;
-            prepend = 1;
-        }
-#endif
+
         UniChar endGlyph = CFStringGetCharacterAtIndex(cfstring, stringRange.location + stringRange.length - 1);
         bool endWithPDF = QChar::direction(endGlyph) == QChar::DirPDF;
         if (endWithPDF)
@@ -457,11 +435,9 @@ void QCoreTextFontEngine::init()
     synthesisFlags = 0;
     CTFontSymbolicTraits traits = CTFontGetSymbolicTraits(ctfont);
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
     if (supportsColorGlyphs() && (traits & kCTFontColorGlyphsTrait))
         glyphFormat = QFontEngineGlyphCache::Raster_ARGB;
     else
-#endif
         glyphFormat = QFontEngineGlyphCache::Raster_RGBMask;
 
     if (traits & kCTFontItalicTrait)
@@ -722,21 +698,27 @@ QImage QCoreTextFontEngine::imageForGlyph(glyph_t glyph, QFixed subPixelPosition
     im.fill(0);
 
     CGColorSpaceRef colorspace =
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
             CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
 #else
             CGColorSpaceCreateDeviceRGB();
 #endif
+
     uint cgflags = kCGImageAlphaNoneSkipFirst;
+
 #ifdef kCGBitmapByteOrder32Host //only needed because CGImage.h added symbols in the minor version
     cgflags |= kCGBitmapByteOrder32Host;
 #endif
+
     CGContextRef ctx = CGBitmapContextCreate(im.bits(), im.width(), im.height(),
                                              8, im.bytesPerLine(), colorspace,
                                              cgflags);
+
     CGContextSetFontSize(ctx, fontDef.pixelSize);
     CGContextSetShouldAntialias(ctx, (aa || fontDef.pointSize > qt_antialiasing_threshold)
                                  && !(fontDef.styleStrategy & QFont::NoAntialias));
+
     CGContextSetShouldSmoothFonts(ctx, aa);
     CGAffineTransform oldTextMatrix = CGContextGetTextMatrix(ctx);
     CGAffineTransform cgMatrix = CGAffineTransformMake(1, 0, 0, 1, 0, 0);
@@ -869,6 +851,3 @@ QFontEngine *QCoreTextFontEngine::cloneWithSize(qreal pixelSize) const
 }
 
 QT_END_NAMESPACE
-
-#endif// !defined(Q_WS_MAC) || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-

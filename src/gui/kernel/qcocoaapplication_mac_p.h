@@ -34,7 +34,6 @@
 
 #include "qmacdefines_mac.h"
 
-#ifdef QT_MAC_USE_COCOA
 #import <AppKit/AppKit.h>
 
 QT_FORWARD_DECLARE_CLASS(QApplicationPrivate)
@@ -60,7 +59,5 @@ void qt_redirectNSApplicationSendEvent();
 void qt_resetNSApplicationSendEvent();
 
 QT_END_NAMESPACE
-
-#endif
 
 #endif

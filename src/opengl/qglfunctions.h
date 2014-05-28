@@ -39,7 +39,7 @@ QT_BEGIN_NAMESPACE
 typedef ptrdiff_t qgl_GLintptr;
 typedef ptrdiff_t qgl_GLsizeiptr;
 
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
 # ifndef QGLF_APIENTRYP
 #   ifdef QGLF_APIENTRY
 #     define QGLF_APIENTRYP QGLF_APIENTRY *

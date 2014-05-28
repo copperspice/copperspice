@@ -24,73 +24,21 @@
 
 /include/qt-acconfig.h.in
 
-callgrind.out.*
-pcviewer.cfg
-*~
 *.a
+*.dll
 *.la
-*.core
-*.moc
 *.o
 *.obj
-*.orig
-*.swp
-*.rej
+*.lo
 *.so
-*.pbxuser
-*.mode1
-*.mode1v3
-*_pch.h.cpp
-*_resource.rc
-.#*
-*.*#
-core
-tags
-.DS_Store
-*.debug
-Makefile*
-!Makefile.am
-*.prl
-*.app
-*.pro.user*
-*.qmlproject.user*
-*.gcov
-*.cs
 
-moc_*.cpp
+*.flc
+.*.swp
+.DS_Store
+
+Makefile.in
+Makefile
+
 qrc_*.cpp
 ui_*.h
-
 /bin/
-src/tools/uic/qclass_lib_map.h
-tools/qtestlib/chart/chart*
-tools/qtestlib/updater/updater*
-tools/activeqt/testcon/testcon.tlb
-translations/*.qm
-translations/*_untranslated.ts
-
-# Test generated files
-QObject.log
-tst_*
-!tst_*.*
-tst_*.log
-tst_*.debug
-tst_*~
-
-# xemacs temporary files
-*.flc
-
-# Vim temporary files
-.*.swp
-
-# MinGW generated files
-*.Debug
-*.Release
-
-qtc-debugging-helper
-qtc-qmldump
-qtc-qmldbg
-src/corelib/lib
-src/network/lib
-src/xml/lib/
-

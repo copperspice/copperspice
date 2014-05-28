@@ -223,11 +223,12 @@ void QCoreApplicationPrivate::removePostedTimerEvent(QObject *object, int timerI
     }
 }
 
-#if defined(Q_WS_WIN) && !defined(QT_NO_DEBUG_STREAM)
-/*****************************************************************************
-  Convenience functions for convert WM_* messages into human readable strings,
-  including a nifty QDebug operator<< for simpel QDebug() << msg output.
- *****************************************************************************/
+#if defined(Q_OS_WIN) 
+
+// Convenience functions for convert WM_* messages into human readable strings,
+// including a nifty QDebug operator<< for simpel QDebug() << msg output.
+ 
+
 QT_BEGIN_INCLUDE_NAMESPACE
 #include <windowsx.h>
 #include "qdebug.h"

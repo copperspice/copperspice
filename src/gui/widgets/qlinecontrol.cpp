@@ -1696,6 +1696,7 @@ void QLineControl::processKeyEvent(QKeyEvent* event)
         }
     }
 #endif //QT_NO_CLIPBOARD
+
     else if (event == QKeySequence::MoveToStartOfLine || event == QKeySequence::MoveToStartOfBlock) {
         home(0);
     }
@@ -1709,7 +1710,8 @@ void QLineControl::processKeyEvent(QKeyEvent* event)
         end(1);
     }
     else if (event == QKeySequence::MoveToNextChar) {
-#if !defined(Q_WS_WIN) || defined(QT_NO_COMPLETER)
+
+#if !defined(Q_OS_WIN) || defined(QT_NO_COMPLETER)
         if (hasSelectedText()) {
 #else
         if (hasSelectedText() && m_completer
@@ -1724,7 +1726,7 @@ void QLineControl::processKeyEvent(QKeyEvent* event)
         cursorForward(1, visual ? 1 : (layoutDirection() == Qt::LeftToRight ? 1 : -1));
     }
     else if (event == QKeySequence::MoveToPreviousChar) {
-#if !defined(Q_WS_WIN) || defined(QT_NO_COMPLETER)
+#if !defined(Q_OS_WIN) || defined(QT_NO_COMPLETER)
         if (hasSelectedText()) {
 #else
         if (hasSelectedText() && m_completer
@@ -1782,7 +1784,7 @@ void QLineControl::processKeyEvent(QKeyEvent* event)
 #endif // QT_NO_SHORTCUT
     else {
         bool handled = false;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Down) {
             Qt::KeyboardModifiers myModifiers = (event->modifiers() & ~Qt::KeypadModifier);
             if (myModifiers & Qt::ShiftModifier) {

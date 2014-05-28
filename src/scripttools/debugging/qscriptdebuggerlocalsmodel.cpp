@@ -34,8 +34,7 @@
 #include "qscriptdebuggerjobschedulerinterface_p.h"
 #include "qscriptdebuggerobjectsnapshotdelta_p.h"
 
-#include "private/qabstractitemmodel_p.h"
-
+#include "qabstractitemmodel_p.h"
 #include <QtCore/qdebug.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qpointer.h>

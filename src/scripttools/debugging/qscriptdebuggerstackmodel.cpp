@@ -24,9 +24,7 @@
 ***********************************************************************/
 
 #include "qscriptdebuggerstackmodel_p.h"
-
-#include "private/qabstractitemmodel_p.h"
-
+#include "qabstractitemmodel_p.h"
 #include <QtScript/qscriptcontextinfo.h>
 #include <QtCore/qfileinfo.h>
 #include <QtCore/qcoreapplication.h>

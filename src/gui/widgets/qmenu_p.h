@@ -41,30 +41,24 @@ QT_BEGIN_NAMESPACE
 class QTornOffMenu;
 class QEventLoop;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
+
 #  ifdef __OBJC__
 QT_END_NAMESPACE
 @class NSMenuItem;
 QT_BEGIN_NAMESPACE
 #  else
 typedef void NSMenuItem;
-#  endif //__OBJC__
+#  endif
+
 struct QMacMenuAction {
     QMacMenuAction()
-#ifndef QT_MAC_USE_COCOA
-       : command(0)
-#else
-       : menuItem(0)
-#endif
-         , ignore_accel(0), merged(0), menu(0)
+       : menuItem(0), ignore_accel(0), merged(0), menu(0)
     {
     }
     ~QMacMenuAction();
-#ifndef QT_MAC_USE_COCOA
-    uint command;
-#else
+
     NSMenuItem *menuItem;
-#endif
     uchar ignore_accel : 1;
     uchar merged : 1;
     QPointer<QAction> action;
@@ -73,13 +67,8 @@ struct QMacMenuAction {
 
 struct QMenuMergeItem
 {
-#ifndef QT_MAC_USE_COCOA
-    inline QMenuMergeItem(MenuCommand c, QMacMenuAction *a) : command(c), action(a) { }
-    MenuCommand command;
-#else
     inline QMenuMergeItem(NSMenuItem *c, QMacMenuAction *a) : menuItem(c), action(a) { }
     NSMenuItem *menuItem;
-#endif
     QMacMenuAction *action;
 };
 typedef QList<QMenuMergeItem> QMenuMergeList;
@@ -89,6 +78,7 @@ typedef QList<QMenuMergeItem> QMenuMergeList;
 class QMenuPrivate : public QWidgetPrivate
 {
     Q_DECLARE_PUBLIC(QMenu)
+
 public:
     QMenuPrivate() : itemsDirty(0), maxIconWidth(0), tabWidth(0), ncols(0),
                       collapsibleSeparators(true), toolTipsVisible(false),
@@ -100,7 +90,7 @@ public:
 #endif
                       scroll(0), eventLoop(0), tearoff(0), tornoff(0), tearoffHighlighted(0),
                       hasCheckableItems(0), sloppyDelayTimer(0), sloppyAction(0), doChildEffects(false)
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                       ,mac_menu(0)
 #endif
 
@@ -108,7 +98,7 @@ public:
     ~QMenuPrivate()
     {
         delete scroll;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         delete mac_menu;
 #endif
     }
@@ -143,15 +133,18 @@ public:
     uint aboutToHide : 1;
     int motions;
     QAction *currentAction;
+
 #ifdef QT_KEYPAD_NAVIGATION
     QAction *selectAction;
     QAction *cancelAction;
 #endif
+
     QBasicTimer menuDelayTimer;
     enum SelectionReason {
         SelectedFromKeyboard,
         SelectedFromElsewhere
     };
+
     QWidget *topCausedWidget() const;
     QAction *actionAt(QPoint p) const;
     void setFirstActionActive();
@@ -170,6 +163,7 @@ public:
         QMenuScroller() : scrollFlags(ScrollNone), scrollDirection(ScrollNone), scrollOffset(0) { }
         ~QMenuScroller() { }
     } *scroll;
+
     void scrollMenu(QMenuScroller::ScrollLocation location, bool active=false);
     void scrollMenu(QMenuScroller::ScrollDirection direction, bool page=false, bool active=false);
     void scrollMenu(QAction *action, QMenuScroller::ScrollLocation location, bool active=false);
@@ -191,6 +185,7 @@ public:
         QPointer<QWidget> widget;
         QPointer<QAction> action;
     };
+
     virtual QList<QPointer<QWidget> > calcCausedStack() const;
     QMenuCaused causedPopup;
     void hideUpToMenuBar();
@@ -234,7 +229,7 @@ public:
     //menu fading/scrolling effects
     bool doChildEffects;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     //mac menu binding
     struct QMacMenuPrivate {
         QList<QMacMenuAction*> actionItems;
@@ -258,10 +253,9 @@ public:
             return 0;
         }
     } *mac_menu;
+
     OSMenuRef macMenu(OSMenuRef merge);
-#ifndef QT_MAC_USE_COCOA
-    void setMacMenuEnabled(bool enable = true);
-#endif
+
     void syncSeparatorsCollapsible(bool collapsible);
     static QHash<OSMenuRef, OSMenuRef> mergeMenuHash;
     static QHash<OSMenuRef, QMenuMergeList*> mergeMenuItemsHash;

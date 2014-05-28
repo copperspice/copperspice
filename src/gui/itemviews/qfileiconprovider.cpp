@@ -31,21 +31,23 @@
 #include <qapplication.h>
 #include <qdir.h>
 #include <qpixmapcache.h>
-#if defined(Q_WS_WIN)
+
+#if defined(Q_OS_WIN)
 #  define _WIN32_IE 0x0500
 #  include <qt_windows.h>
 #  include <commctrl.h>
 #  include <objbase.h>
-#elif defined(Q_WS_MAC)
-#  include <private/qt_cocoa_helpers_mac_p.h>
+
+#elif defined(Q_OS_MAC)
+#  include </qt_cocoa_helpers_mac_p.h>
 #endif
 
-#include <private/qfunctions_p.h>
-#include <private/qguiplatformplugin_p.h>
+#include <qfunctions_p.h>
+#include <qguiplatformplugin_p.h>
 
-#if defined(Q_WS_X11) && !defined(QT_NO_STYLE_GTK)
-#  include <private/qgtkstyle_p.h>
-#  include <private/qt_x11_p.h>
+#if defined(Q_WS_X11) && ! defined(QT_NO_STYLE_GTK)
+#  include <qgtkstyle_p.h>
+#  include <qt_x11_p.h>
 #endif
 
 #ifndef SHGFI_ADDOVERLAYS
@@ -185,7 +187,7 @@ QIcon QFileIconProvider::icon(IconType type) const
     return QIcon();
 }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 
 static bool isCacheable(const QFileInfo &fi)
 {
@@ -310,7 +312,7 @@ QIcon QFileIconProviderPrivate::getWinIcon(const QFileInfo &fileInfo) const
     return retIcon;
 }
 
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
 QIcon QFileIconProviderPrivate::getMacIcon(const QFileInfo &fi) const
 {
     QIcon retIcon;
@@ -395,17 +397,17 @@ QIcon QFileIconProvider::icon(const QFileInfo &info) const
     }
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     QIcon retIcon = d->getMacIcon(info);
     if (!retIcon.isNull())
         return retIcon;
-#elif defined Q_WS_WIN
+#elif defined Q_OS_WIN
     QIcon icon = d->getWinIcon(info);
     if (!icon.isNull())
         return icon;
 #endif
     if (info.isRoot())
-#if defined (Q_WS_WIN)
+#if defined (Q_OS_WIN)
     {
         UINT type = GetDriveType((wchar_t *)info.absoluteFilePath().utf16());
 
@@ -463,7 +465,7 @@ QString QFileIconProvider::type(const QFileInfo &info) const
     }
 
     if (info.isDir())
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         return QApplication::translate("QFileDialog", "File Folder", "Match Windows Explorer");
 #else
         return QApplication::translate("QFileDialog", "Folder", "All other platforms");

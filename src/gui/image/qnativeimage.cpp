@@ -39,13 +39,13 @@
 #include <qwidget.h>
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 #include <private/qpaintengine_mac_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 typedef struct {
     BITMAPINFOHEADER bmiHeader;
     DWORD redMask;
@@ -214,7 +214,7 @@ QImage::Format QNativeImage::systemFormat()
     return QImage::Format_RGB32;
 }
 
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
 
 QNativeImage::QNativeImage(int width, int height, QImage::Format format, bool /* isTextBuffer */, QWidget *widget)
     : image(width, height, format)

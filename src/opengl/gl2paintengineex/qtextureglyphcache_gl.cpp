@@ -33,7 +33,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 extern Q_GUI_EXPORT bool qt_cleartype_enabled;
 #endif
 

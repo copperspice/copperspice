@@ -32,7 +32,6 @@
 
 #include "qdockwidget.h"
 #include "qtoolbar.h"
-
 #include <qapplication.h>
 #include <qmenubar.h>
 #include <qstatusbar.h>
@@ -40,14 +39,13 @@
 #include <qstyle.h>
 #include <qdebug.h>
 #include <qpainter.h>
-
-#include <private/qwidget_p.h>
+#include <qwidget_p.h>
 #include "qtoolbar_p.h"
 #include "qwidgetanimator_p.h"
 
-#ifdef Q_WS_MAC
-#include <private/qt_mac_p.h>
-#include <private/qt_cocoa_helpers_mac_p.h>
+#ifdef Q_OS_MAC
+#include <qt_mac_p.h>
+#include <qt_cocoa_helpers_mac_p.h>
 QT_BEGIN_NAMESPACE
 
 extern OSWindowRef qt_mac_window_for(const QWidget *); // qwidget_mac.cpp
@@ -63,7 +61,7 @@ class QMainWindowPrivate : public QWidgetPrivate
 public:
     inline QMainWindowPrivate()
         : layout(0), explicitIconSize(false), toolButtonStyle(Qt::ToolButtonIconOnly)
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
             , useHIToolBar(false)
 #endif
 #if !defined(QT_NO_DOCKWIDGET) && !defined(QT_NO_CURSOR)
@@ -76,7 +74,7 @@ public:
     bool explicitIconSize;
     Qt::ToolButtonStyle toolButtonStyle;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     bool useHIToolBar;
 #endif
 
@@ -808,7 +806,7 @@ void QMainWindow::addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget
     d_func()->layout->removeWidget(dockwidget); // in case it was already in here
     addDockWidget(area, dockwidget, orientation);
 
-#ifdef Q_WS_MAC     //drawer support
+#ifdef Q_OS_MAC     //drawer support
     QMacCocoaAutoReleasePool pool;
     extern bool qt_mac_is_macdrawer(const QWidget *); //qwidget_mac.cpp
     if (qt_mac_is_macdrawer(dockwidget)) {
@@ -1165,6 +1163,7 @@ bool QMainWindow::event(QEvent *event)
 
 #ifndef QT_NO_STATUSTIP
         case QEvent::StatusTip:
+
 #ifndef QT_NO_STATUSBAR
             if (QStatusBar *sb = d->layout->statusBar())
                 sb->showMessage(static_cast<QStatusTipEvent*>(event)->tip());
@@ -1172,16 +1171,18 @@ bool QMainWindow::event(QEvent *event)
 #endif
                 static_cast<QStatusTipEvent*>(event)->ignore();
             return true;
-#endif // QT_NO_STATUSTIP
+#endif
 
         case QEvent::StyleChange:
+
 #ifndef QT_NO_DOCKWIDGET
             d->layout->layoutState.dockAreaLayout.styleChangedEvent();
 #endif
             if (!d->explicitIconSize)
                 setIconSize(QSize());
             break;
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
         case QEvent::Show:
             d->layout->blockVisiblityCheck = false;
             if (unifiedTitleAndToolBarOnMac())
@@ -1193,16 +1194,16 @@ bool QMainWindow::event(QEvent *event)
                     // We are coming out of a minimize, leave things as is.
                     d->layout->blockVisiblityCheck = true;
                 }
-#  ifdef QT_MAC_USE_COCOA
+
                 // We need to update the HIToolbar status when we go out of or into fullscreen.
                 QWindowStateChangeEvent *wce = static_cast<QWindowStateChangeEvent *>(event);
                 if ((windowState() & Qt::WindowFullScreen) || (wce->oldState() & Qt::WindowFullScreen)) {
                     d->layout->updateHIToolBarStatus();
                 }
-#  endif // Cocoa
             }
+
             break;
-#endif // Q_WS_MAC
+#endif
 #if !defined(QT_NO_DOCKWIDGET) && !defined(QT_NO_CURSOR)
        case QEvent::CursorChange:
            if (d->cursorAdjusted) {
@@ -1220,36 +1221,9 @@ bool QMainWindow::event(QEvent *event)
 
 #ifndef QT_NO_TOOLBAR
 
-/*!
-    \property QMainWindow::unifiedTitleAndToolBarOnMac
-    \brief whether the window uses the unified title and toolbar look on Mac OS X
-    \since 4.3
-
-    This property is false by default and only has any effect on Mac OS X 10.4 or higher.
-
-    If set to true, then the top toolbar area is replaced with a Carbon HIToolbar
-    or a Cocoa NSToolbar (depending on whether Qt was built with Carbon or Cocoa).
-    All toolbars in the top toolbar area and any toolbars added afterwards are
-    moved to that. This means a couple of things.
-
-    \list
-    \i QToolBars in this toolbar area are not movable and you cannot drag other
-        toolbars to it
-    \i Toolbar breaks are not respected or preserved
-    \i Any custom widgets in the toolbar will not be shown if the toolbar
-        becomes too small (only actions will be shown)
-    \i Before Qt 4.5, if you called showFullScreen() on the main window, the QToolbar would
-        disappear since it is considered to be part of the title bar. Qt 4.5 and up will now work around this by pulling
-        the toolbars out and back into the regular toolbar and vice versa when you swap out.
-    \endlist
-
-    Setting this back to false will remove these restrictions.
-
-    The Qt::WA_MacBrushedMetal attribute takes precedence over this property.
-*/
 void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     Q_D(QMainWindow);
     if (!isWindow() || d->useHIToolBar == set || QSysInfo::MacintoshVersion < QSysInfo::MV_10_3)
         return;
@@ -1257,16 +1231,14 @@ void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
     d->useHIToolBar = set;
     createWinId(); // We need the hiview for down below.
 
-#ifdef QT_MAC_USE_COCOA
+
     // Activate the unified toolbar with the raster engine.
     if (windowSurface() && set) {
         d->layout->unifiedSurface = new QUnifiedToolbarSurface(this);
     }
-#endif // QT_MAC_USE_COCOA
 
     d->layout->updateHIToolBarStatus();
 
-#ifdef QT_MAC_USE_COCOA
     // Deactivate the unified toolbar with the raster engine.
     if (windowSurface() && !set) {
         if (d->layout->unifiedSurface) {
@@ -1274,24 +1246,24 @@ void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
             d->layout->unifiedSurface = 0;
         }
     }
-#endif // QT_MAC_USE_COCOA
 
     // Enabling the unified toolbar clears the opaque size grip setting, update it.
     d->macUpdateOpaqueSizeGrip();
 #else
     Q_UNUSED(set)
+
 #endif
 }
 
 bool QMainWindow::unifiedTitleAndToolBarOnMac() const
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     return d_func()->useHIToolBar && !testAttribute(Qt::WA_MacBrushedMetal) && !(windowFlags() & Qt::FramelessWindowHint);
 #endif
     return false;
 }
 
-#endif // QT_NO_TOOLBAR
+#endif
 
 /*!
     \internal

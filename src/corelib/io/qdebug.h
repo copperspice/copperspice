@@ -126,10 +126,8 @@ public:
     inline QNoDebug(const QDebug &){}
     inline ~QNoDebug(){}
 
-#if !defined( QT_NO_TEXTSTREAM )
     inline QNoDebug &operator<<(QTextStreamFunction) { return *this; }
     inline QNoDebug &operator<<(QTextStreamManipulator) { return *this; }
-#endif
 
     inline QNoDebug &space() { return *this; }
     inline QNoDebug &nospace() { return *this; }
@@ -273,22 +271,17 @@ inline QDebug operator<<(QDebug debug, const QFlags<T> &flags)
     return debug.space();
 }
 
-#if !defined(QT_NO_DEBUG_STREAM)
 inline QDebug qDebug() { return QDebug(QtDebugMsg); }
 
-#else 
-#undef qDebug
-inline QNoDebug qDebug() { return QNoDebug(); }
-#define qDebug QT_NO_QDEBUG_MACRO
-
-#endif
 
 #if !defined(QT_NO_WARNING_OUTPUT)
 inline QDebug qWarning() { return QDebug(QtWarningMsg); }
+
 #else
 #undef qWarning
 inline QNoDebug qWarning() { return QNoDebug(); }
 #define qWarning QT_NO_QWARNING_MACRO
+
 #endif
 
 QT_END_NAMESPACE

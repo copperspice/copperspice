@@ -1951,7 +1951,7 @@ QModelIndex QTreeView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
         return QModelIndex();
     }
     int vi = -1;
-#if defined(Q_WS_MAC) && !defined(QT_NO_STYLE_MAC)
+#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
     // Selection behavior is slightly different on the Mac.
     if (d->selectionMode == QAbstractItemView::ExtendedSelection
         && d->selectionModel

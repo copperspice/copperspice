@@ -201,9 +201,6 @@ public:
     QAction *printAction;
     QAction *pageSetupAction;
 
-#if defined(Q_WS_MAC) && !defined(QT_MAC_USE_COCOA)
-    QAction *closeAction;
-#endif
 
     QPointer<QObject> receiverToDisconnectOnClose;
     QByteArray memberToDisconnectOnClose;
@@ -272,7 +269,7 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     vboxLayout->setContentsMargins(0, 0, 0, 0);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // We query the widgets about their size and then we fix the size.
     // This should do the trick for the laying out part...
     QSize pageNumEditSize, pageNumLabelSize;
@@ -284,7 +281,7 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
 
     QFormLayout *formLayout = new QFormLayout;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // We have to change the growth policy in Mac.
     formLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
 #endif
@@ -305,10 +302,6 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
     toolbar->addSeparator();
     toolbar->addAction(pageSetupAction);
     toolbar->addAction(printAction);
-
-#if defined(Q_WS_MAC) && !defined(QT_MAC_USE_COCOA)
-    toolbar->addAction(closeAction);
-#endif
 
     // Cannot use the actions' triggered signal here, since it doesn't autorepeat
     QToolButton *zoomInButton = static_cast<QToolButton *>(toolbar->widgetForAction(zoomInAction));
@@ -341,7 +334,7 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
 
     if (! printer->isValid()  
 
-#if defined(Q_WS_WIN) || defined(Q_WS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
         || printer->outputFormat() != QPrinter::NativeFormat 
 #endif
         ) {
@@ -432,10 +425,6 @@ void QPrintPreviewDialogPrivate::setupActions()
     qt_setupActionIcon(pageSetupAction, QLatin1String("page-setup"));
     QObject::connect(printAction, SIGNAL(triggered(bool)), q, SLOT(_q_print()));
     QObject::connect(pageSetupAction, SIGNAL(triggered(bool)), q, SLOT(_q_pageSetup()));
-#if defined(Q_WS_MAC) && !defined(QT_MAC_USE_COCOA)
-    closeAction = printerGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Close"));
-    QObject::connect(closeAction, SIGNAL(triggered(bool)), q, SLOT(reject()));
-#endif
 
     // Initial state:
     fitPageAction->setChecked(true);
@@ -575,7 +564,7 @@ void QPrintPreviewDialogPrivate::_q_print()
 {
     Q_Q(QPrintPreviewDialog);
 
-#if defined(Q_WS_WIN) || defined(Q_WS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
     if (printer->outputFormat() != QPrinter::NativeFormat) {
         QString title;
         QString suffix;

@@ -605,7 +605,7 @@ private:
     void shapeText(int item) const;
     void shapeTextWithHarfbuzz(int item) const;
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     void shapeTextMac(int item) const;
 #endif
     void splitItem(int item, int pos) const;

@@ -476,9 +476,7 @@ inline const char * qobject_interface_iid()
    return 0;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
-   Q_CORE_EXPORT QDebug operator<<(QDebug, const QObject *);
-#endif
+Q_CORE_EXPORT QDebug operator<<(QDebug, const QObject *);
 
 
 // **

@@ -84,20 +84,12 @@
 #if defined(XP_MACOSX)
 #include <ApplicationServices/ApplicationServices.h>
 #include <OpenGL/OpenGL.h>
-#ifndef NP_NO_CARBON
-#include <Carbon/Carbon.h>
-#endif
 #endif
 
 #if defined(XP_UNIX)
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdio.h>
-#endif
-
-#if defined(XP_SYMBIAN)
-#include <QEvent>
-#include <QRegion>
 #endif
 
 /*----------------------------------------------------------------------*/

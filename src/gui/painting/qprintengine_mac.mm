@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include <private/qprintengine_mac_p.h>
+#include <qprintengine_mac_p.h>
 #include <qthread.h>
 #include <quuid.h>
 #include <QtCore/qcoreapplication.h>
@@ -73,13 +73,10 @@ bool QMacPrintEngine::begin(QPaintDevice *dev)
             return false;
         }
     }
+
     OSStatus status = noErr;
-#ifndef QT_MAC_USE_COCOA
-    status = d->shouldSuppressStatus() ? PMSessionBeginCGDocumentNoDialog(d->session, d->settings, d->format)
-                                       : PMSessionBeginCGDocument(d->session, d->settings, d->format);
-#else
     status = PMSessionBeginCGDocumentNoDialog(d->session, d->settings, d->format);
-#endif
+
 
     if (status != noErr) {
         d->state = QPrinter::Error;
@@ -123,9 +120,7 @@ Qt::HANDLE QMacPrintEngine::handle() const
 
 QMacPrintEnginePrivate::~QMacPrintEnginePrivate()
 {
-#ifdef QT_MAC_USE_COCOA
     [printInfo release];
-#endif
     delete paintEngine;
 }
 
@@ -210,21 +205,7 @@ QList<QVariant> QMacPrintEnginePrivate::supportedResolutions() const
         PMResolution res;
         OSStatus status = PMPrinterGetPrinterResolutionCount(printer, &resCount);
         if (status  == kPMNotImplemented) {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5)
-            // *Sigh* we have to use the non-indexed version.
-            if (PMPrinterGetPrinterResolution(printer, kPMMinSquareResolution, &res) == noErr)
-                resolutions.append(int(res.hRes));
-            if (PMPrinterGetPrinterResolution(printer, kPMMaxSquareResolution, &res) == noErr) {
-                QVariant var(int(res.hRes));
-                if (!resolutions.contains(var))
-                    resolutions.append(var);
-            }
-            if (PMPrinterGetPrinterResolution(printer, kPMDefaultResolution, &res) == noErr) {
-                QVariant var(int(res.hRes));
-                if (!resolutions.contains(var))
-                    resolutions.append(var);
-            }
-#endif
+
         } else if (status == noErr) {
             // According to the docs, index start at 1.
             for (UInt32 i = 1; i <= resCount; ++i) {
@@ -257,13 +238,9 @@ bool QMacPrintEngine::newPage()
 {
     Q_D(QMacPrintEngine);
     Q_ASSERT(d->state == QPrinter::Active);
-    OSStatus err =
-#ifndef QT_MAC_USE_COCOA
-    d->shouldSuppressStatus() ? PMSessionEndPageNoDialog(d->session)
-                              : PMSessionEndPage(d->session);
-#else
-    PMSessionEndPageNoDialog(d->session);
-#endif
+
+    OSStatus err =  PMSessionEndPageNoDialog(d->session);
+
     if (err != noErr)  {
         if (err == kPMCancel) {
             // User canceled, we need to abort!
@@ -365,18 +342,8 @@ int QMacPrintEngine::metric(QPaintDevice::PaintDeviceMetric m) const
         PMPrinter printer;
         if(PMSessionGetCurrentPrinter(d->session, &printer) == noErr) {
             PMResolution resolution;
-#ifndef QT_MAC_USE_COCOA
-#  if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-            if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
-                PMPrinterGetOutputResolution(printer, d->settings, &resolution);
-            } else
-#  endif
-            {
-                PMPrinterGetPrinterResolution(printer, kPMCurrentValue, &resolution);
-            }
-#else
+
             PMPrinterGetOutputResolution(printer, d->settings, &resolution);
-#endif
             val = (int)resolution.vRes;
             break;
         }
@@ -405,11 +372,7 @@ void QMacPrintEnginePrivate::initialize()
 {
     Q_Q(QMacPrintEngine);
 
-#ifndef QT_MAC_USE_COCOA
-    Q_ASSERT(!session);
-#else
     Q_ASSERT(!printInfo);
-#endif
 
     if (!paintEngine)
         paintEngine = new QCoreGraphicsPaintEngine();
@@ -418,14 +381,10 @@ void QMacPrintEnginePrivate::initialize()
 
     fullPage = false;
 
-#ifndef QT_MAC_USE_COCOA
-    if (PMCreateSession(&session) != 0)
-        session = 0;
-#else
+
     QMacCocoaAutoReleasePool pool;
     printInfo = [[NSPrintInfo alloc] initWithDictionary:[NSDictionary dictionary]];
     session = static_cast<PMPrintSession>([printInfo PMPrintSession]);
-#endif
 
     PMPrinter printer;
     if (session && PMSessionGetCurrentPrinter(session, &printer) == noErr) {
@@ -449,32 +408,9 @@ void QMacPrintEnginePrivate::initialize()
         }
     }
 
-#ifndef QT_MAC_USE_COCOA
-    bool settingsInitialized = (settings != 0);
-    bool settingsOK = !settingsInitialized ? PMCreatePrintSettings(&settings) == noErr : true;
-    if (settingsOK && !settingsInitialized)
-        settingsOK = PMSessionDefaultPrintSettings(session, settings) == noErr;
 
-
-    bool formatInitialized = (format != 0);
-    bool formatOK = !formatInitialized ? PMCreatePageFormat(&format) == noErr : true;
-    if (formatOK) {
-        if (!formatInitialized) {
-            formatOK = PMSessionDefaultPageFormat(session, format) == noErr;
-        }
-        formatOK = PMSessionValidatePageFormat(session, format, kPMDontWantBoolean) == noErr;
-    }
-#else
     settings = static_cast<PMPrintSettings>([printInfo PMPrintSettings]);
     format = static_cast<PMPageFormat>([printInfo PMPageFormat]);
-#endif
-
-#ifndef QT_MAC_USE_COCOA
-    if (!settingsOK || !formatOK) {
-        qWarning("QMacPrintEngine::initialize: Unable to initialize QPainter");
-        state = QPrinter::Error;
-    }
-#endif
 
     QHash<QMacPrintEngine::PrintEnginePropertyKey, QVariant>::const_iterator propC;
     for (propC = valueCache.constBegin(); propC != valueCache.constEnd(); propC++) {
@@ -484,20 +420,10 @@ void QMacPrintEnginePrivate::initialize()
 
 void QMacPrintEnginePrivate::releaseSession()
 {
-#ifndef QT_MAC_USE_COCOA
-    if (shouldSuppressStatus()) {
-	PMSessionEndPageNoDialog(session);
-	PMSessionEndDocumentNoDialog(session);
-    } else {
-	PMSessionEndPage(session);
-	PMSessionEndDocument(session);
-    }
-    PMRelease(session);
-#else
     PMSessionEndPageNoDialog(session);
     PMSessionEndDocumentNoDialog(session);
     [printInfo release];
-#endif
+
     if (hasCustomPaperSize)
         PMRelease(customPaper);
     printInfo = 0;
@@ -521,13 +447,8 @@ bool QMacPrintEnginePrivate::newPage_helper()
     while (cgEngine->d_func()->stackCount > 0)
         cgEngine->d_func()->restoreGraphicsState();
 
-    OSStatus status =
-#ifndef QT_MAC_USE_COCOA
-        shouldSuppressStatus() ? PMSessionBeginPageNoDialog(session, format, 0)
-                               : PMSessionBeginPage(session, format, 0);
-#else
-        PMSessionBeginPageNoDialog(session, format, 0);
-#endif
+    OSStatus status = PMSessionBeginPageNoDialog(session, format, 0);
+
     if(status != noErr) {
         state = QPrinter::Error;
         return false;

@@ -22,21 +22,21 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include <qconfig.h>
-#import <private/qcocoaview_mac_p.h>
-#ifdef QT_MAC_USE_COCOA
 
-#include <private/qwidget_p.h>
-#include <private/qt_mac_p.h>
-#include <private/qapplication_p.h>
-#include <private/qabstractscrollarea_p.h>
-#include <private/qt_cocoa_helpers_mac_p.h>
-#include <private/qdnd_p.h>
-#include <private/qmacinputcontext_p.h>
-#include <private/qevent_p.h>
-#include <private/qbackingstore_p.h>
-#include <private/qwindowsurface_raster_p.h>
-#include <private/qunifiedtoolbarsurface_mac_p.h>
+#include <qconfig.h>
+#import <qcocoaview_mac_p.h>
+
+#include <qwidget_p.h>
+#include <qt_mac_p.h>
+#include <qapplication_p.h>
+#include <qabstractscrollarea_p.h>
+#include <qt_cocoa_helpers_mac_p.h>
+#include <qdnd_p.h>
+#include <qmacinputcontext_p.h>
+#include <qevent_p.h>
+#include <qbackingstore_p.h>
+#include <qwindowsurface_raster_p.h>
+#include <qunifiedtoolbarsurface_mac_p.h>
 
 #include <qscrollarea.h>
 #include <qhash.h>
@@ -1389,5 +1389,3 @@ Qt::DropAction QDragManager::drag(QDrag *o)
 }
 
 QT_END_NAMESPACE
-
-#endif // QT_MAC_USE_COCOA

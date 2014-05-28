@@ -501,7 +501,7 @@ void QSqlRecord::detach()
     qAtomicDetach(d);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
+
 QDebug operator<<(QDebug dbg, const QSqlRecord &r)
 {
     dbg << "QSqlRecord(" << r.count() << ')';
@@ -509,12 +509,6 @@ QDebug operator<<(QDebug dbg, const QSqlRecord &r)
         dbg << '\n' << QString::fromLatin1("%1:").arg(i, 2) << r.field(i) << r.value(i).toString();
     return dbg;
 }
-#endif
 
-/*!
-    \fn int QSqlRecord::position(const QString& name) const
-
-    Use indexOf() instead.
-*/
 
 QT_END_NAMESPACE

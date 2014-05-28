@@ -81,55 +81,49 @@ private:
 };
 Q_DECLARE_TYPEINFO(QModelIndex, Q_MOVABLE_TYPE);
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QModelIndex &);
-#endif
 
 class QPersistentModelIndexData;
 
 class Q_CORE_EXPORT QPersistentModelIndex
 {
-public:
-    QPersistentModelIndex();
-    QPersistentModelIndex(const QModelIndex &index);
-    QPersistentModelIndex(const QPersistentModelIndex &other);
-    ~QPersistentModelIndex();
-    bool operator<(const QPersistentModelIndex &other) const;
-    bool operator==(const QPersistentModelIndex &other) const;
-    inline bool operator!=(const QPersistentModelIndex &other) const
-    { return !operator==(other); }
-    QPersistentModelIndex &operator=(const QPersistentModelIndex &other);
-    bool operator==(const QModelIndex &other) const;
-    bool operator!=(const QModelIndex &other) const;
-    QPersistentModelIndex &operator=(const QModelIndex &other);
-    operator const QModelIndex&() const;
-    int row() const;
-    int column() const;
-    void *internalPointer() const;
-    qint64 internalId() const;
-    QModelIndex parent() const;
-    QModelIndex sibling(int row, int column) const;
-    QModelIndex child(int row, int column) const;
-    QVariant data(int role = Qt::DisplayRole) const;
-    Qt::ItemFlags flags() const;
-    const QAbstractItemModel *model() const;
-    bool isValid() const;
-private:
-    QPersistentModelIndexData *d;
-    friend uint qHash(const QPersistentModelIndex &);
-#ifndef QT_NO_DEBUG_STREAM
-    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QPersistentModelIndex &);
-#endif
+   public:
+       QPersistentModelIndex();
+       QPersistentModelIndex(const QModelIndex &index);
+       QPersistentModelIndex(const QPersistentModelIndex &other);
+       ~QPersistentModelIndex();
+       bool operator<(const QPersistentModelIndex &other) const;
+       bool operator==(const QPersistentModelIndex &other) const;
+       inline bool operator!=(const QPersistentModelIndex &other) const
+       { return !operator==(other); }
+       QPersistentModelIndex &operator=(const QPersistentModelIndex &other);
+       bool operator==(const QModelIndex &other) const;
+       bool operator!=(const QModelIndex &other) const;
+       QPersistentModelIndex &operator=(const QModelIndex &other);
+       operator const QModelIndex&() const;
+       int row() const;
+       int column() const;
+       void *internalPointer() const;
+       qint64 internalId() const;
+       QModelIndex parent() const;
+       QModelIndex sibling(int row, int column) const;
+       QModelIndex child(int row, int column) const;
+       QVariant data(int role = Qt::DisplayRole) const;
+       Qt::ItemFlags flags() const;
+       const QAbstractItemModel *model() const;
+       bool isValid() const;
+   private:
+       QPersistentModelIndexData *d;
+   
+       friend uint qHash(const QPersistentModelIndex &);
+       friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QPersistentModelIndex &);
 };
 Q_DECLARE_TYPEINFO(QPersistentModelIndex, Q_MOVABLE_TYPE);
 
 inline uint qHash(const QPersistentModelIndex &index)
-{ return qHash(index.d); }
+   { return qHash(index.d); }
 
-
-#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QPersistentModelIndex &);
-#endif
 
 template<typename T> class QList;
 typedef QList<QModelIndex> QModelIndexList;

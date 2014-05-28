@@ -22,6 +22,7 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
+
 #ifndef QKEYMAPPER_P_H
 #define QKEYMAPPER_P_H
 
@@ -33,8 +34,8 @@
 #include <qhash.h>
 #include <QScopedPointer>
 
-#if defined (Q_WS_MAC64)
-# include <qt_mac_p.h>
+#ifdef Q_OS_MAC
+#include <qt_mac_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -92,13 +93,17 @@ enum WindowsNativeModifiers {
     MetaAny              = 0x00000088,
     LockAny              = 0x00000700
 };
-# if !defined(tagMSG)
-    typedef struct tagMSG MSG;
-# endif
-#elif defined(Q_WS_MAC)
+
+#if ! defined(tagMSG)
+   typedef struct tagMSG MSG;
+#endif
+
+#elif defined(Q_OS_MAC)
+
 QT_BEGIN_INCLUDE_NAMESPACE
 # include <qt_mac_p.h>
 QT_END_INCLUDE_NAMESPACE
+
 #elif defined(Q_WS_X11)
 
 QT_BEGIN_INCLUDE_NAMESPACE
@@ -167,7 +172,7 @@ public:
     int xkb_currentGroup;
     QXCoreDesc coreDesc;
 
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     bool updateKeyboard();
     void updateKeyMap(EventHandlerCallRef, EventRef, void *);
     bool translateKeyEvent(QWidget *, EventHandlerCallRef, EventRef, void *, bool);
@@ -178,11 +183,9 @@ public:
         const UCKeyboardLayout *unicode;
         void *other;
     } keyboard_layout_format;
-#ifdef Q_WS_MAC64
+
     QCFType<TISInputSourceRef> currentInputSource;
-#else
-    KeyboardLayoutRef currentKeyboardLayout;
-#endif
+
     KeyboardLayoutKind keyboard_kind;
     UInt32 keyboard_dead;
     KeyboardLayoutItem *keyLayout[256];

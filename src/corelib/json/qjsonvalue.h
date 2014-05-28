@@ -167,9 +167,7 @@ private:
     uint index : 31;
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QJsonValue &);
-#endif
 
 QT_END_NAMESPACE
 

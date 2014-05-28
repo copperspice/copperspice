@@ -43,7 +43,7 @@
 #include "qlayoutitem.h"
 #include "qdialogbuttonbox.h"
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 #include "qmacstyle_mac.h"
 #include "qmacstyle_mac_p.h"
 #endif
@@ -656,10 +656,13 @@ bool QPushButton::event(QEvent *e)
             if (d->defaultButton)
                 dialog->d_func()->setMainDefault(this);
         }
+
     } else if (e->type() == QEvent::StyleChange
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
                || e->type() == QEvent::MacSizeChange
 #endif
+
                ) {
 		d->resetLayoutItemMargins();
 		updateGeometry();
@@ -669,8 +672,8 @@ bool QPushButton::event(QEvent *e)
     return QAbstractButton::event(e);
 }
 
-#ifdef Q_WS_MAC
-/*! \reimp */
+#ifdef Q_OS_MAC
+
 bool QPushButton::hitButton(const QPoint &pos) const
 {
     QStyleOptionButton opt;
@@ -678,8 +681,9 @@ bool QPushButton::hitButton(const QPoint &pos) const
     if (qt_mac_buttonIsRenderedFlat(this, &opt))
         return QAbstractButton::hitButton(pos);
 
-    // Now that we know we are using the native style, let's proceed.
+    // we know we are using the native style, proceed
     Q_D(const QPushButton);
+
     QPushButtonPrivate *nonConst = const_cast<QPushButtonPrivate *>(d);
     // In OSX buttons are round, which causes the hit method to be special.
     // We cannot simply relay on detecting if something is inside the rect or not,
@@ -698,36 +702,12 @@ bool QPushButtonPrivate::hitButton(const QPoint &pos)
                       q->rect().height() - QMacStylePrivate::PushButtonBottomOffset);
     return roundedRect.contains(pos);
 }
-#endif // Q_WS_MAC
+#endif
 
 void QPushButton::_q_popupPressed()
 {
 	Q_D(QPushButton);
 	d->_q_popupPressed();
 }
-
-/*!
-    \fn void QPushButton::openPopup()
-
-    Use showMenu() instead.
-*/
-
-/*!
-    \fn bool QPushButton::isMenuButton() const
-
-    Use menu() != 0 instead.
-*/
-
-/*!
-    \fn void QPushButton::setPopup(QMenu* popup)
-
-    Use setMenu() instead.
-*/
-
-/*!
-    \fn QMenu* QPushButton::popup() const
-
-    Use menu() instead.
-*/
 
 QT_END_NAMESPACE

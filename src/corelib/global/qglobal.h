@@ -28,7 +28,7 @@
 
 #include <stddef.h>
 
-// CopperSpice Versoin
+// CopperSpice Version
 #define CS_VERSION_STR  "1.0.0"
 
 // CopperSpice - Version  (major << 16) + (minor << 8) + patch
@@ -99,20 +99,19 @@ namespace QT_NAMESPACE {}
 #endif
 
 
-/*
-   Detect the target architecture
-*/
+//  Detect the target architecture
 #if defined(__x86_64__)
 #define QT_ARCH_X86_64
+
 #elif defined(__i386__)
 #define QT_ARCH_I386
+
 #else
 #error Unable to detect architecture, please update above list
+
 #endif
 
-/*
-  Detect the target endianness
-*/
+//  Detect the target endianness
 #if defined (__BYTE_ORDER__) && \
          (__BYTE_ORDER__ - 0 == __ORDER_BIG_ENDIAN__ - 0 || __BYTE_ORDER__ - 0 == __ORDER_LITTLE_ENDIAN__ - 0)
 
@@ -131,26 +130,24 @@ namespace QT_NAMESPACE {}
 #define Q_BYTE_ORDER Q_BIG_ENDIAN
 
 #else
-#error Unable to detect target endianness			
+#error Unable to detect target endianness		
+	
 #endif
 
 
 #if defined(Q_OS_MAC) && !defined(Q_CC_INTEL)
 #define QT_BEGIN_INCLUDE_HEADER }
 #define QT_END_INCLUDE_HEADER extern "C++" {
+
 #else
 #define QT_BEGIN_INCLUDE_HEADER
 #define QT_END_INCLUDE_HEADER extern "C++"
+
 #endif
 
 #if defined(__APPLE__) && (defined(__GNUC__) || defined(__xlC__) || defined(__xlc__))
 #  define Q_OS_DARWIN
 #  define Q_OS_BSD4
-#  ifdef __LP64__
-#    define Q_OS_DARWIN64
-#  else
-#    define Q_OS_DARWIN32
-#  endif
 
 #elif !defined(SAG_COM) && (defined(WIN64) || defined(_WIN64) || defined(__WIN64__))
 #  define Q_OS_WIN32
@@ -186,7 +183,7 @@ namespace QT_NAMESPACE {}
 #  define Q_OS_OPENBSD
 #  define Q_OS_BSD4
 
-#elif defined(__USLC__)                      /* all SCO platforms + UDK or OUDK */
+#elif defined(__USLC__)                     /* all SCO platforms + UDK or OUDK */
 #  define Q_OS_UNIXWARE
 
 #elif defined(__svr4__) && defined(i386)    /* Open UNIX 8 + GCC */
@@ -196,6 +193,7 @@ namespace QT_NAMESPACE {}
 
 #else
 #  error "CopperSpice has not been ported to this OS"
+
 #endif
 
 #if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
@@ -203,21 +201,18 @@ namespace QT_NAMESPACE {}
 #endif
 
 #if defined(Q_OS_DARWIN)
-#  define Q_OS_MAC                           /* Q_OS_MAC is more clear */
-#  if defined(Q_OS_DARWIN64)
-#     define Q_OS_MAC64
-#  elif defined(Q_OS_DARWIN32)
-#     define Q_OS_MAC32
-#  endif
+#  define Q_OS_MAC
 #endif
 
 #if defined(Q_OS_WIN)
 #  undef Q_OS_UNIX
+
 #elif ! defined(Q_OS_UNIX)
 #  define Q_OS_UNIX
+
 #endif
 
-#if defined(Q_OS_DARWIN) && !defined(QT_LARGEFILE_SUPPORT)
+#if defined(Q_OS_DARWIN) && ! defined(QT_LARGEFILE_SUPPORT)
 #  define QT_LARGEFILE_SUPPORT 64
 #endif
 
@@ -262,9 +257,11 @@ namespace QT_NAMESPACE {}
 #  if __LSB_VERSION__ < 40
 #    error "This version of the Linux Standard Base is unsupported"
 #  endif
+
 #ifndef QT_LINUXBASE
 #  define QT_LINUXBASE
 #endif
+
 #endif
 
 #if defined(__ghs)
@@ -327,7 +324,6 @@ namespace QT_NAMESPACE {}
 #  define Q_COMPILER_LAMBDA
 #  define Q_COMPILER_UNICODE_STRINGS
 #  define Q_COMPILER_CONSTEXPR
-
 
 #  else
 #    error CopperSpice requires Clang 3.2 or greater
@@ -422,15 +418,20 @@ namespace QT_NAMESPACE {}
 #  if !defined(_BOOL) && !defined(__BOOL_DEFINED)
 #    define Q_NO_BOOL_TYPE
 #  endif
+
 #  if defined(__COMO__)
 #    define Q_CC_COMEAU
 #    define Q_C_CALLBACKS
+
 #  elif defined(__KCC)
 #    define Q_CC_KAI
+
 #  elif defined(__INTEL_COMPILER)
 #    define Q_CC_INTEL
+
 #  elif defined(__ghs)
 #    define Q_CC_GHS
+
 #  elif defined(__USLC__) && defined(__SCO_VERSION__)
 #    define Q_CC_USLC
 #    if !defined(__SCO_VERSION__) || (__SCO_VERSION__ < 302200010)
@@ -480,6 +481,7 @@ namespace QT_NAMESPACE {}
 #elif defined(sinix)
 #  define Q_CC_EDG
 #  define Q_CC_CDS
+
 #  if !defined(_BOOL)
 #    define Q_NO_BOOL_TYPE
 #  endif
@@ -489,18 +491,22 @@ namespace QT_NAMESPACE {}
 #  if defined(__HP_aCC) || __cplusplus >= 199707L
 #    define Q_NO_TEMPLATE_FRIENDS
 #    define Q_CC_HPACC
+
 #    if __HP_aCC-0 < 060000
 #      define Q_DECL_EXPORT     __declspec(dllexport)
 #      define Q_DECL_IMPORT     __declspec(dllimport)
 #    endif
+
 #    if __HP_aCC-0 >= 061200
 #      define Q_DECL_ALIGN(n)   __attribute__((aligned(n)))
 #    endif
+
 #    if __HP_aCC-0 >= 062000
 #      define Q_DECL_EXPORT     __attribute__((visibility("default")))
 #      define Q_DECL_HIDDEN     __attribute__((visibility("hidden")))
 #      define Q_DECL_IMPORT     Q_DECL_EXPORT
 #    endif
+
 #  else
 #    define Q_CC_HP
 #    define Q_NO_BOOL_TYPE
@@ -519,10 +525,12 @@ namespace QT_NAMESPACE {}
 #  if __INTEL_COMPILER < 1200
 #    define Q_NO_TEMPLATE_FRIENDS
 #  endif
+
 #  if defined(__GXX_EXPERIMENTAL_CXX0X__) || defined(__GXX_EXPERIMENTAL_CPP0X__)
 #    if __INTEL_COMPILER >= 1100
 #      define Q_COMPILER_EXTERN_TEMPLATES
 #      define Q_COMPILER_DECLTYPE
+
 #    elif __INTEL_COMPILER >= 1200
 #      define Q_COMPILER_VARIADIC_TEMPLATES
 #      define Q_COMPILER_AUTO_TYPE
@@ -570,37 +578,18 @@ namespace QT_NAMESPACE {}
 #endif
 
 
-
 #if defined(_WIN32_X11_)
 #  define Q_WS_X11
 
-#elif defined(Q_OS_WIN32)
-#  define Q_WS_WIN32
-#  if defined(Q_OS_WIN64)
-#    define Q_WS_WIN64
-#  endif
-
 #elif defined(Q_OS_UNIX)
-#  if defined(Q_OS_MAC) && !defined(__USE_WS_X11__) && !defined(Q_WS_QWS) && !defined(Q_WS_QPA)
-#    define Q_WS_MAC
+#  if defined(Q_OS_MAC) && ! defined(__USE_WS_X11__) && ! defined(Q_WS_QWS) && ! defined(Q_WS_QPA)
+#    define Q_OS_MAC            // BROOM - verify this one
 
-//   Always use cocoa
-#    define QT_MAC_USE_COCOA
-#    if defined(Q_OS_MAC64)
-#      define Q_WS_MAC64
-#    elif defined(Q_OS_MAC32)
-#      define Q_WS_MAC32
-#    endif
 #  elif !defined(Q_WS_QWS) && !defined(Q_WS_QPA)
 #    define Q_WS_X11
 #  endif
+
 #endif
-
-
-#if defined(Q_WS_WIN32)
-#  define Q_WS_WIN
-#endif
-
 
 QT_BEGIN_NAMESPACE
 
@@ -732,16 +721,19 @@ QT_END_INCLUDE_NAMESPACE
 
 #if defined(__i386__) || defined(_WIN32)
 #  if defined(Q_CC_GNU)
+
 #    if !defined(Q_CC_INTEL) && ((100*(__GNUC__ - 0) + 10*(__GNUC_MINOR__ - 0) + __GNUC_PATCHLEVEL__) >= 332)
-#     define QT_FASTCALL __attribute__((regparm(3)))
+#       define QT_FASTCALL __attribute__((regparm(3)))
 #    else
-#     define QT_FASTCALL
+#       define QT_FASTCALL
 #    endif
 #  else
 #     define QT_FASTCALL
 #  endif
+
 #else
 #  define QT_FASTCALL
+
 #endif
 
 #ifdef Q_COMPILER_DEFAULT_DELETE_MEMBERS
@@ -756,14 +748,16 @@ QT_END_INCLUDE_NAMESPACE
 # define Q_DECL_CONSTEXPR
 #endif
 
-//defines the type for the WNDPROC on windows
-//the alignment needs to be forced for sse2 to not crash with mingw
-#if defined(Q_WS_WIN)
+// defines the type for the WNDPROC on windows
+// alignment needs to be forced for sse2 to not crash with mingw
+
+#if defined(Q_OS_WIN)
 #  if defined(Q_CC_MINGW)
 #    define QT_ENSURE_STACK_ALIGNED_FOR_SSE __attribute__ ((force_align_arg_pointer))
 #  else
 #    define QT_ENSURE_STACK_ALIGNED_FOR_SSE
 #  endif
+
 #  define QT_WIN_CALLBACK CALLBACK QT_ENSURE_STACK_ALIGNED_FOR_SSE
 #endif
 
@@ -779,8 +773,10 @@ typedef int QNoImplicitBoolCast;
 // must match both files:  qmetatype.h & qglobal.h
 #if defined(QT_COORD_TYPE)
 typedef QT_COORD_TYPE qreal;
+
 #elif defined(QT_NO_FPU) || defined(QT_ARCH_ARM)
 typedef float qreal;
+
 #else
 typedef double qreal;
 #endif
@@ -818,7 +814,7 @@ class QDataStream;
 #define QT_BUILD_KEY "(copperspice)"
 #endif
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
 #  ifndef QMAC_QMENUBAR_NO_EVENT
 #    define QMAC_QMENUBAR_NO_EVENT
 #  endif
@@ -831,13 +827,16 @@ class QDataStream;
 #ifndef Q_DECL_EXPORT
 #  if defined(Q_OS_WIN)
 #    define Q_DECL_EXPORT __declspec(dllexport)
+
 #  elif defined(QT_VISIBILITY_AVAILABLE)
 #    define Q_DECL_EXPORT __attribute__((visibility("default")))
 #    define Q_DECL_HIDDEN __attribute__((visibility("hidden")))
 #  endif
+
 #  ifndef Q_DECL_EXPORT
 #    define Q_DECL_EXPORT
 #  endif
+
 #endif
 
 #ifndef Q_DECL_IMPORT
@@ -858,81 +857,98 @@ class QDataStream;
 #  if defined(QT_NODLL)
 #    undef QT_MAKEDLL
 #    undef QT_DLL
+
 #  elif defined(QT_MAKEDLL)        /* create a DLL library */
 #    if defined(QT_DLL)
 #      undef QT_DLL
 #    endif
+
 #    if defined(QT_BUILD_CORE_LIB)
 #      define Q_CORE_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_CORE_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_GUI_LIB)
 #      define Q_GUI_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_GUI_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_SQL_LIB)
 #      define Q_SQL_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_SQL_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_NETWORK_LIB)
 #      define Q_NETWORK_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_NETWORK_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_SVG_LIB)
 #      define Q_SVG_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_SVG_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_DECLARATIVE_LIB)
 #      define Q_DECLARATIVE_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_DECLARATIVE_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_OPENGL_LIB)
 #      define Q_OPENGL_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_OPENGL_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_MULTIMEDIA_LIB)
 #      define Q_MULTIMEDIA_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_MULTIMEDIA_EXPORT Q_DECL_IMPORT
-#    endif  
+#    endif 
+ 
 #    if defined(QT_BUILD_XML_LIB)
 #      define Q_XML_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_XML_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_XMLPATTERNS_LIB)
 #      define Q_XMLPATTERNS_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_XMLPATTERNS_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_SCRIPT_LIB)
 #      define Q_SCRIPT_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_SCRIPT_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_SCRIPTTOOLS_LIB)
 #      define Q_SCRIPTTOOLS_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_SCRIPTTOOLS_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_CANVAS_LIB)
 #      define Q_CANVAS_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_CANVAS_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    if defined(QT_BUILD_DBUS_LIB)
 #      define Q_DBUS_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_DBUS_EXPORT Q_DECL_IMPORT
 #    endif
+
 #    define Q_TEMPLATEDLL
+
 #  elif defined(QT_DLL) /* use a DLL library */
 #    define Q_CORE_EXPORT Q_DECL_IMPORT
 #    define Q_GUI_EXPORT Q_DECL_IMPORT
@@ -950,6 +966,7 @@ class QDataStream;
 #    define Q_DBUS_EXPORT Q_DECL_IMPORT
 #    define Q_TEMPLATEDLL
 #  endif
+
 #  define Q_NO_DECLARED_NOT_DEFINED
 #else
 #  undef QT_MAKEDLL /* ignore these for other platforms */
@@ -1017,7 +1034,7 @@ public:
     };
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     enum WinVersion {
         WV_32s      = 0x0001,
         WV_95       = 0x0002,
@@ -1097,10 +1114,8 @@ inline int qMacVersion() { return QSysInfo::MacintoshVersion; }
 #  define Q_TYPENAME typename
 #endif
 
-/*
-   Avoid "unused parameter" warnings
-*/
 
+// Avoid "unused parameter" warnings
 #if defined(Q_CC_INTEL) && !defined(Q_OS_WIN)
 template <typename T>
 inline void qUnused(T &x) { (void)x; }
@@ -1132,12 +1147,15 @@ Q_CORE_EXPORT void qWarning(const char *, ...) /* print warning message */
 ;
 
 class QString;
+
 Q_CORE_EXPORT QString qt_error_string(int errorCode = -1);
+
 Q_CORE_EXPORT void qCritical(const char *, ...) /* print critical message */
 #if defined(Q_CC_GNU) && !defined(__INSURE__)
     __attribute__ ((format (printf, 1, 2)))
 #endif
 ;
+
 Q_CORE_EXPORT void qFatal(const char *, ...) /* print fatal message and exit */
 #if defined(Q_CC_GNU) && !defined(__INSURE__)
     __attribute__ ((format (printf, 1, 2)))
@@ -1147,21 +1165,13 @@ Q_CORE_EXPORT void qFatal(const char *, ...) /* print fatal message and exit */
 Q_CORE_EXPORT void qErrnoWarning(int code, const char *msg, ...);
 Q_CORE_EXPORT void qErrnoWarning(const char *msg, ...);
 
-#if (defined(QT_NO_DEBUG_OUTPUT) || defined(QT_NO_TEXTSTREAM)) && !defined(QT_NO_DEBUG_STREAM)
-#define QT_NO_DEBUG_STREAM
-#endif
-
 //
 class QDebug;
 class QNoDebug;
 
-#ifndef QT_NO_DEBUG_STREAM
 inline QDebug qDebug();
 inline QDebug qWarning();
 inline QDebug qCritical();
-#else
-inline QNoDebug qDebug();
-#endif
 
 #ifdef QT_NO_WARNING_OUTPUT
 inline QNoDebug qWarning();
@@ -1368,11 +1378,9 @@ static inline bool qIsNull(double d)
     return val.u == quint64(0);
 }
 
-/*
-   This function tests a float for a null value. It doesn't
-   check whether the actual value is 0 or close to 0, but whether
-   it is binary 0.
-*/
+
+// tests a float for a null value, it does not check whether
+// the actual value is 0 or close to 0, but whether it is binary 0.
 static inline bool qIsNull(float f)
 {
     union U {
@@ -1601,12 +1609,15 @@ public:
     inline bool testFlag(Enum f) const { return (i & f) == f && (f != 0 || i == int(f) ); }
 };
 
-#define Q_DECLARE_FLAGS(Flags, Enum)\
+
+#define Q_DECLARE_FLAGS(Flags, Enum) \
 typedef QFlags<Enum> Flags;
+
 
 #define Q_DECLARE_INCOMPATIBLE_FLAGS(Flags) \
 inline QIncompatibleFlag operator|(Flags::enum_type f1, int f2) \
    { return QIncompatibleFlag(int(f1) | f2); }
+
 
 #define Q_DECLARE_OPERATORS_FOR_FLAGS(Flags) \
 Q_DECL_CONSTEXPR inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, Flags::enum_type f2) \
@@ -1614,13 +1625,14 @@ Q_DECL_CONSTEXPR inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, 
 Q_DECL_CONSTEXPR inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, QFlags<Flags::enum_type> f2) \
    { return f2 | f1; } Q_DECLARE_INCOMPATIBLE_FLAGS(Flags)
 
-#else /* Q_NO_TYPESAFE_FLAGS */
+#else
+   // Q_NO_TYPESAFE_FLAGS
 
-#define Q_DECLARE_FLAGS(Flags, Enum)\
+#define Q_DECLARE_FLAGS(Flags, Enum) \
 typedef uint Flags;
 #define Q_DECLARE_OPERATORS_FOR_FLAGS(Flags)
 
-#endif /* Q_NO_TYPESAFE_FLAGS */
+#endif
 
 
 #if defined(Q_CC_GNU) && ! defined(Q_CC_INTEL)
@@ -1685,7 +1697,7 @@ inline const QForeachContainer<T> *qForeachContainer(const QForeachContainerBase
         for (variable = *qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i; \
              qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk;           \
              --qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk)
-#endif //  MIPSpro
+#endif 
 
 #endif
 
@@ -1744,7 +1756,7 @@ typename Wrapper::pointer qGetPtrHelper(const Wrapper &p)
 
 // Defined in qcoreapplication.cpp
 // The better name qTrId() is reserved for an upcoming function which would
-// return a much more powerful QStringFormatter instead of a QString.
+// return a much more powerful QStringFormatter instead of a QString
 Q_CORE_EXPORT QString qtTrId(const char *id, int n = -1);
 
 #define QT_TRID_NOOP(id) id
@@ -1777,10 +1789,7 @@ Q_CORE_EXPORT int qrand();
 #  endif
 #endif
 
-#if ! defined(Q_WS_WIN) \
-    && !(defined(Q_WS_MAC) && defined(QT_MAC_USE_COCOA)) \
-    && !(defined(Q_WS_X11) && !defined(QT_NO_FREETYPE))  \
-    && !(defined(Q_WS_QPA))
+#if ! defined(Q_OS_WIN) && ! defined(Q_OS_MAC) && ! (defined(Q_WS_X11) && !defined(QT_NO_FREETYPE)) && !(defined(Q_WS_QPA))
 #  define QT_NO_RAWFONT
 #endif
 

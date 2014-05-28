@@ -1275,7 +1275,6 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
    return true;
 }
 
-#if ! defined(QT_NO_DEBUG_STREAM)
 static void streamDebug(QDebug dbg, const QVariant &v)
 {
     switch (v.userType()) {
@@ -1391,7 +1390,6 @@ static void streamDebug(QDebug dbg, const QVariant &v)
         break;
     }
 }
-#endif
 
 const QVariant::Handler qt_kernel_variant_handler = {
     construct,
@@ -1404,11 +1402,7 @@ const QVariant::Handler qt_kernel_variant_handler = {
     compare,
     convert,
     0,
-#if !defined(QT_NO_DEBUG_STREAM)
     streamDebug
-#else
-    0
-#endif
 
 };
 
@@ -2220,7 +2214,6 @@ bool QVariant::isNull() const
     return handler->isNull(&d);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QVariant &v)
 {
     dbg.nospace() << "QVariant(" << v.typeName() << ", ";
@@ -2234,6 +2227,5 @@ QDebug operator<<(QDebug dbg, const QVariant::Type p)
     dbg.nospace() << "QVariant::" << QVariant::typeToName(p);
     return dbg.space();
 }
-#endif
 
 QT_END_NAMESPACE

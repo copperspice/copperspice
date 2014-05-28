@@ -959,7 +959,6 @@ bool operator!=(const QPlatformWindowFormat& a, const QPlatformWindowFormat& b)
     return !(a == b);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QPlatformWindowFormat &f)
 {
     const QPlatformWindowFormatPrivate * const d = f.d;
@@ -979,4 +978,3 @@ QDebug operator<<(QDebug dbg, const QPlatformWindowFormat &f)
 
     return dbg.space();
 }
-#endif

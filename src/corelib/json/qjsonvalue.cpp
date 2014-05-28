@@ -683,7 +683,6 @@ QJsonValue QJsonValueRef::toValue() const
     return o->valueAt(index);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QJsonValue &o)
 {
     switch (o.t) {
@@ -715,6 +714,5 @@ QDebug operator<<(QDebug dbg, const QJsonValue &o)
     }
     return dbg.space();
 }
-#endif
 
 QT_END_NAMESPACE

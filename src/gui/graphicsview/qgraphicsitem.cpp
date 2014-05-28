@@ -10539,7 +10539,6 @@ QPixmap QGraphicsItemEffectSourcePrivate::pixmap(Qt::CoordinateSystem system, QP
 }
 #endif //QT_NO_GRAPHICSEFFECT
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug debug, QGraphicsItem *item)
 {
     if (!item) {
@@ -10769,7 +10768,6 @@ QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlags flags)
     return debug;
 }
 
-#endif
 
 /*!
     \internal

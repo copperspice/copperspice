@@ -397,7 +397,6 @@ inline void QPainterPath::setElementPositionAt(int i, qreal x, qreal y)
     e.y = y;
 }
 
-
 inline void QPainterPath::detach()
 {
     if (d_ptr->ref.load() != 1)
@@ -405,9 +404,7 @@ inline void QPainterPath::detach()
     setDirty(true);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPainterPath &);
-#endif
 
 QT_END_NAMESPACE
 

@@ -25,16 +25,17 @@
 
 #include "qmacstyle_mac.h"
 
-#if defined(Q_WS_MAC) && !defined(QT_NO_STYLE_MAC)
+#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
+
 #define QMAC_QAQUASTYLE_SIZE_CONSTRAIN
 //#define DEBUG_SIZE_CONSTRAINT
 
-#include <private/qapplication_p.h>
-#include <private/qcombobox_p.h>
-#include <private/qmacstylepixmaps_mac_p.h>
-#include <private/qpaintengine_mac_p.h>
-#include <private/qpainter_p.h>
-#include <private/qprintengine_mac_p.h>
+#include <qapplication_p.h>
+#include <qcombobox_p.h>
+#include <qmacstylepixmaps_mac_p.h>
+#include <qpaintengine_mac_p.h>
+#include <qpainter_p.h>
+#include <qprintengine_mac_p.h>
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qcheckbox.h>
@@ -78,9 +79,9 @@
 #include <qmath.h>
 #include <QtGui/qgraphicsproxywidget.h>
 #include <QtGui/qgraphicsview.h>
-#include <private/qt_cocoa_helpers_mac_p.h>
+#include <qt_cocoa_helpers_mac_p.h>
 #include "qmacstyle_mac_p.h"
-#include <private/qstylehelper_p.h>
+#include <qstylehelper_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -737,11 +738,7 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
         break;
     case QStyle::CT_MenuBar:
         if (sz == QAquaSizeLarge) {
-#ifndef QT_MAC_USE_COCOA
-            SInt16 size;
-            if (!GetThemeMenuBarHeight(&size))
-                ret = QSize(-1, size);
-#else
+
             ret = QSize(-1, [[NSApp mainMenu] menuBarHeight]);
             // In the qt_mac_set_native_menubar(false) case,
             // we come it here with a zero-height main menu,
@@ -749,7 +746,7 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
             // Use 22 pixels for the height, by observation.
             if (ret.height() <= 0)
                 ret.setHeight(22);
-#endif
+
         }
         break;
     default:
@@ -4681,10 +4678,10 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
             } else {
                 if (!(slider->subControls & SC_SliderHandle))
                     tdi.attributes &= ~kThemeTrackShowThumb;
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+
                 if (!(slider->subControls & SC_SliderGroove))
                     tdi.attributes |= kThemeTrackHideTrack;
-#endif
+
             }
 
             HIThemeDrawTrack(&tdi, tracking ? 0 : &macRect, cg,

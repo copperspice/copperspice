@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "private/qdeclarativepainteditem_p.h"
-#include "private/qdeclarativepainteditem_p_p.h"
+#include "qdeclarativepainteditem_p.h"
+#include "qdeclarativepainteditem_p_p.h"
 
 #include <QDebug>
 #include <QPen>
@@ -272,12 +272,12 @@ void QDeclarativePaintedItem::paint(QPainter *p, const QStyleOptionGraphicsItem 
             QRectF target(area.x(), area.y(), area.width(), area.height());
             if (!d->cachefrozen) {
                 if (!d->imagecache[i]->dirty.isNull() && topaint.contains(d->imagecache[i]->dirty)) {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                     bool oldSmooth = qt_applefontsmoothing_enabled;
                     qt_applefontsmoothing_enabled = false;
 #endif
                     QPainter qp(&d->imagecache[i]->image);
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                     qt_applefontsmoothing_enabled = oldSmooth;
 #endif
                     qp.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, d->smoothCache);
@@ -341,12 +341,12 @@ void QDeclarativePaintedItem::paint(QPainter *p, const QStyleOptionGraphicsItem 
                 if (d->fillColor.isValid())
                     img.fill(d->fillColor);
                 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                     bool oldSmooth = qt_applefontsmoothing_enabled;
                     qt_applefontsmoothing_enabled = false;
 #endif
                     QPainter qp(&img);
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                     qt_applefontsmoothing_enabled = oldSmooth;
 #endif
                     qp.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, d->smoothCache);

@@ -449,7 +449,6 @@ QRect QPolygon::boundingRect() const
     return QRect(QPoint(minx,miny), QPoint(maxx,maxy));
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QPolygon &a)
 {
     dbg.nospace() << "QPolygon(";
@@ -458,84 +457,6 @@ QDebug operator<<(QDebug dbg, const QPolygon &a)
     dbg.nospace() << ')';
     return dbg.space();
 }
-#endif
-
-
-/*!
-    \class QPolygonF
-    \brief The QPolygonF class provides a vector of points using
-    floating point precision.
-
-    \reentrant
-    \ingroup painting
-    \ingroup shared
-
-    A QPolygonF is a QVector<QPointF>. The easiest way to add points
-    to a QPolygonF is to use its streaming operator, as illustrated
-    below:
-
-    \snippet doc/src/snippets/polygon/polygon.cpp 1
-
-    In addition to the functions provided by QVector, QPolygonF
-    provides the boundingRect() and translate() functions for geometry
-    operations. Use the QMatrix::map() function for more general
-    transformations of QPolygonFs.
-
-    QPolygonF also provides the isClosed() function to determine
-    whether a polygon's start and end points are the same, and the
-    toPolygon() function returning an integer precision copy of this
-    polygon.
-
-    The QPolygonF class is \l {Implicit Data Sharing}{implicitly
-    shared}.
-
-    \sa QVector, QPolygon, QLineF
-*/
-
-
-/*****************************************************************************
-  QPolygonF member functions
- *****************************************************************************/
-
-/*!
-    \fn QPolygonF::QPolygonF()
-
-    Constructs a polygon with no points.
-
-    \sa QVector::isEmpty()
-*/
-
-/*!
-    \fn QPolygonF::QPolygonF(int size)
-
-    Constructs a polygon of the given \a size. Creates an empty
-    polygon if \a size == 0.
-
-    \sa QVector::isEmpty()
-*/
-
-/*!
-    \fn QPolygonF::QPolygonF(const QPolygonF &polygon)
-
-    Constructs a copy of the given \a polygon.
-*/
-
-/*!
-    \fn QPolygonF::QPolygonF(const QVector<QPointF> &points)
-
-    Constructs a polygon containing the specified \a points.
-*/
-
-/*!
-    \fn QPolygonF::QPolygonF(const QRectF &rectangle)
-
-    Constructs a closed polygon from the specified \a rectangle.
-
-    The polygon contains the four vertices of the rectangle in
-    clockwise order starting and ending with the top-left vertex.
-
-    \sa isClosed()
-*/
 
 QPolygonF::QPolygonF(const QRectF &r)
 {
@@ -547,14 +468,6 @@ QPolygonF::QPolygonF(const QRectF &r)
     append(QPointF(r.x(), r.y()));
 }
 
-/*!
-    \fn QPolygonF::QPolygonF(const QPolygon &polygon)
-
-    Constructs a float based polygon from the specified integer based
-    \a polygon.
-
-    \sa toPolygon()
-*/
 
 QPolygonF::QPolygonF(const QPolygon &a)
 {
@@ -563,18 +476,6 @@ QPolygonF::QPolygonF(const QPolygon &a)
         append(a.at(i));
 }
 
-/*!
-    \fn QPolygonF::~QPolygonF()
-
-    Destroys the polygon.
-*/
-
-
-/*!
-    Translate all points in the polygon by the given \a offset.
-
-    \sa translated()
-*/
 
 void QPolygonF::translate(const QPointF &offset)
 {
@@ -789,7 +690,6 @@ QDataStream &operator>>(QDataStream &s, QPolygonF &a)
 }
 #endif //QT_NO_DATASTREAM
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QPolygonF &a)
 {
     dbg.nospace() << "QPolygonF(";
@@ -798,17 +698,7 @@ QDebug operator<<(QDebug dbg, const QPolygonF &a)
     dbg.nospace() << ')';
     return dbg.space();
 }
-#endif
 
-
-/*!
-    \since 4.3
-
-    \fn bool QPolygonF::containsPoint(const QPointF &point, Qt::FillRule fillRule) const
-
-    Returns true if the given \a point is inside the polygon according to
-    the specified \a fillRule; otherwise returns false.
-*/
 bool QPolygonF::containsPoint(const QPointF &pt, Qt::FillRule fillRule) const
 {
     if (isEmpty())

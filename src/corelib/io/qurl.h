@@ -207,6 +207,7 @@ public:
 private:
     void detach(QMutexLocker &locker);
     QUrlPrivate *d;
+
 public:
     typedef QUrlPrivate * DataPtr;
     inline DataPtr &data_ptr() { return d; }
@@ -226,9 +227,7 @@ Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QUrl &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QUrl &);
 #endif
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QUrl &);
-#endif
 
 QT_END_NAMESPACE
 

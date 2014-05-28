@@ -140,10 +140,12 @@ public:
 
     QPoint map(const QPoint& point) const;
     QPointF map(const QPointF& point) const;
+
 #ifndef QT_NO_VECTOR3D
     QVector3D map(const QVector3D& point) const;
     QVector3D mapVector(const QVector3D& vector) const;
 #endif
+
 #ifndef QT_NO_VECTOR4D
     QVector4D map(const QVector4D& point) const;
 #endif
@@ -161,9 +163,7 @@ public:
 
     operator QVariant() const;
 
-#ifndef QT_NO_DEBUG_STREAM
     friend Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QMatrix4x4 &m);
-#endif
 
 private:
     qreal m[4][4];          // Column-major order to match OpenGL.
@@ -958,9 +958,7 @@ inline qreal *QMatrix4x4::data()
     return *m;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QMatrix4x4 &m);
-#endif
 
 #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QMatrix4x4 &);

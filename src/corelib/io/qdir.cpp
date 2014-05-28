@@ -28,10 +28,7 @@
 #include "qdir_p.h"
 #include "qabstractfileengine.h"
 
-#ifndef QT_NO_DEBUG_STREAM
 #include "qdebug.h"
-#endif
-
 #include "qdiriterator.h"
 #include "qfsfileengine.h"
 #include "qdatetime.h"
@@ -2200,8 +2197,6 @@ QStringList QDir::nameFiltersFromString(const QString &nameFilter)
     \sa Q_INIT_RESOURCE(), {The Qt Resource System}
 */
 
-
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug debug, QDir::Filters filters)
 {
     QStringList flags;
@@ -2265,6 +2260,5 @@ QDebug operator<<(QDebug debug, const QDir &dir)
                        << ')';
     return debug.space();
 }
-#endif // QT_NO_DEBUG_STREAM
 
 QT_END_NAMESPACE

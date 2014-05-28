@@ -59,15 +59,15 @@
 
 #define QT_MAC_SYSTEMTRAY_USE_GROWL
 
-#include <private/qt_cocoa_helpers_mac_p.h>
-#include <private/qsystemtrayicon_p.h>
+#include <qt_cocoa_helpers_mac_p.h>
+#include <qsystemtrayicon_p.h>
 #include <qtemporaryfile.h>
 #include <qimagewriter.h>
 #include <qapplication.h>
 #include <qdebug.h>
 #include <qstyle.h>
 
-#include <private/qt_mac_p.h>
+#include <qt_mac_p.h>
 #import <AppKit/AppKit.h>
 
 QT_BEGIN_NAMESPACE
@@ -107,14 +107,6 @@ QT_USE_NAMESPACE
 -(void)menuTrackingDone:(NSNotification*)notification;
 -(void)mousePressed:(NSEvent *)mouseEvent button:(Qt::MouseButton)mouseButton;
 @end
-
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_5
-
-@protocol NSMenuDelegate <NSObject>
--(void)menuNeedsUpdate:(NSMenu*)menu;
-@end
-#endif
 
 
 @interface QT_MANGLE_NAMESPACE(QNSMenu) : NSMenu <NSMenuDelegate> {
@@ -172,12 +164,10 @@ void QSystemTrayIconPrivate::updateIcon_sys()
 {
     if(sys && !icon.isNull()) {
         QMacCocoaAutoReleasePool pool;
-#ifndef QT_MAC_USE_COCOA
-        const short scale = GetMBarHeight()-4;
-#else
+
         CGFloat hgt = [[[NSApplication sharedApplication] mainMenu] menuBarHeight];
         const short scale = hgt - 4;
-#endif
+
         NSImage *nsimage = static_cast<NSImage *>(qt_mac_create_nsimage(icon.pixmap(QSize(scale, scale))));
         [(NSImageView*)[[sys->item item] view] setImage: nsimage];
         [nsimage release];
@@ -309,12 +299,10 @@ QT_END_NAMESPACE
     down = NO;
 
     if( ![self icon]->icon().isNull() ) {
-#ifndef QT_MAC_USE_COCOA
-        const short scale = GetMBarHeight()-4;
-#else
+
         CGFloat hgt = [[[NSApplication sharedApplication] mainMenu] menuBarHeight];
         const short scale = hgt - 4;
-#endif
+
         NSImage *nsimage = static_cast<NSImage *>(qt_mac_create_nsimage([self icon]->icon().pixmap(QSize(scale, scale))));
         [self setImage: nsimage];
         [nsimage release];
@@ -332,12 +320,8 @@ QT_END_NAMESPACE
     int clickCount = [mouseEvent clickCount];  
     [self setNeedsDisplay:YES];
 
-#ifndef QT_MAC_USE_COCOA
-    const short scale = GetMBarHeight()-4;
-#else
     CGFloat hgt = [[[NSApplication sharedApplication] mainMenu] menuBarHeight];
     const short scale = hgt - 4;
-#endif
 
     if (![self icon]->icon().isNull() ) {
         NSImage *nsaltimage = static_cast<NSImage *>(qt_mac_create_nsimage([self icon]->icon().pixmap(QSize(scale, scale), QIcon::Selected)));
@@ -441,10 +425,7 @@ QT_END_NAMESPACE
         qtsystray_sendActivated(icon, QSystemTrayIcon::Trigger);
 
     if (icon->contextMenu()) {
-#ifndef QT_MAC_USE_COCOA
-        [[[self item] view] removeAllToolTips];
-        iconPrivate->updateToolTip_sys();
-#endif
+
         NSMenu *m = [[QT_MANGLE_NAMESPACE(QNSMenu) alloc] initWithQMenu:icon->contextMenu()];
         [m setAutoenablesItems: NO];
         [[NSNotificationCenter defaultCenter] addObserver:imageCell
@@ -521,11 +502,9 @@ private:
             [item setToolTip:(NSString*)QCFString::toCFStringRef(action->toolTip())];
             const QIcon icon = action->icon();
             if(!icon.isNull()) {
-#ifndef QT_MAC_USE_COCOA
-                const short scale = GetMBarHeight();
-#else
+
                 const short scale = [[NSApp mainMenu] menuBarHeight];
-#endif
+
                 NSImage *nsimage = static_cast<NSImage *>(qt_mac_create_nsimage(icon.pixmap(QSize(scale, scale))));
                 [item setImage: nsimage];
                 [nsimage release];

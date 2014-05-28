@@ -25,9 +25,7 @@
 
 #include "qscriptdebuggerscriptsmodel_p.h"
 #include "qscriptscriptdata_p.h"
-
-#include "private/qabstractitemmodel_p.h"
-
+#include "qabstractitemmodel_p.h"
 #include <QtCore/qfileinfo.h>
 #include <QtCore/qpair.h>
 #include <QtCore/qdebug.h>
@@ -38,6 +36,7 @@ class QScriptDebuggerScriptsModelPrivate
     : public QAbstractItemModelPrivate
 {
     Q_DECLARE_PUBLIC(QScriptDebuggerScriptsModel)
+
 public:
     struct Node {
         Node(qint64 sid, const QScriptScriptData &dt)

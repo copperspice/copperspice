@@ -1,7 +1,6 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2014 Barbara Geller
-* Copyright (c) 2012-2014 Ansel Sermersheim
+* Copyright (c) 2012-2014 Barbara Geller* Copyright (c) 2012-2014 Ansel Sermersheim
 * Copyright (c) 2012-2014 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
@@ -32,9 +31,9 @@
 #include "qfontmetrics.h"
 #include "qpaintdevice.h"
 #include "qstring.h"
-#include <private/qt_mac_p.h>
-#include <private/qtextengine_p.h>
-#include <private/qunicodetables_p.h>
+#include <qt_mac_p.h>
+#include <qtextengine_p.h>
+#include <qunicodetables_p.h>
 #include <qapplication.h>
 #include "qfontdatabase.h"
 #include <qpainter.h>
@@ -82,33 +81,19 @@ void QFont::cleanup()
 /*!
   Returns an ATSUFontID
 */
-quint32 QFont::macFontID() const  // ### need 64-bit version
+quint32 QFont::macFontID() const  
 {
-#ifdef QT_MAC_USE_COCOA
-    return 0;
-#elif 1
-    QFontEngine *fe = d->engineForScript(QUnicodeTables::Common);
-    if (fe && fe->type() == QFontEngine::Multi)
-        return static_cast<QFontEngineMacMulti*>(fe)->macFontID();
-#else
-    Str255 name;
-    if(FMGetFontFamilyName((FMFontFamily)((UInt32)handle()), name) == noErr) {
-        short fnum;
-        GetFNum(name, &fnum);
-        return fnum;
-    }
-#endif
     return 0;
 }
 
 // Returns an ATSUFonFamilyRef
 Qt::HANDLE QFont::handle() const
 {
-#ifdef QT_MAC_USE_COCOA
+
     QFontEngine *fe = d->engineForScript(QUnicodeTables::Common);
     if (fe && fe->type() == QFontEngine::Multi)
         return (Qt::HANDLE)static_cast<QCoreTextFontEngineMulti*>(fe)->macFontID();
-#endif
+
     return 0;
 }
 

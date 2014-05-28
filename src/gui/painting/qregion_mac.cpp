@@ -31,25 +31,6 @@ QT_BEGIN_NAMESPACE
 
 QRegion::QRegionData QRegion::shared_empty = { Q_BASIC_ATOMIC_INITIALIZER(1), 0 };
 
-#if defined(Q_WS_MAC32) && !defined(QT_MAC_USE_COCOA)
-#define RGN_CACHE_SIZE 200
-#ifdef RGN_CACHE_SIZE
-static bool rgncache_init = false;
-static int rgncache_used;
-static RgnHandle rgncache[RGN_CACHE_SIZE];
-static void qt_mac_cleanup_rgncache()
-{
-    rgncache_init = false;
-    for(int i = 0; i < RGN_CACHE_SIZE; ++i) {
-        if(rgncache[i]) {
-            --rgncache_used;
-            DisposeRgn(rgncache[i]);
-            rgncache[i] = 0;
-        }
-    }
-}
-#endif
-
 Q_GUI_EXPORT RgnHandle qt_mac_get_rgn()
 {
 #ifdef RGN_CACHE_SIZE
@@ -178,9 +159,7 @@ RgnHandle QRegion::toQDRgnForUpdate_sys() const
 
 #endif
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-OSStatus QRegion::shape2QRegionHelper(int inMessage, HIShapeRef,
-                                      const CGRect *inRect, void *inRefcon)
+OSStatus QRegion::shape2QRegionHelper(int inMessage, HIShapeRef, const CGRect *inRect, void *inRefcon)
 {
     QRegion *region = static_cast<QRegion *>(inRefcon);
     if (!region)
@@ -199,7 +178,7 @@ OSStatus QRegion::shape2QRegionHelper(int inMessage, HIShapeRef,
     }
     return noErr;
 }
-#endif
+
 
 /*!
     \internal
@@ -209,7 +188,7 @@ OSStatus QRegion::shape2QRegionHelper(int inMessage, HIShapeRef,
 HIMutableShapeRef QRegion::toHIMutableShape() const
 {
     HIMutableShapeRef shape = HIShapeCreateMutable();
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+
     if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
         if (d->qt_rgn && d->qt_rgn->numRects) {
             int n = d->qt_rgn->numRects;
@@ -220,50 +199,19 @@ HIMutableShapeRef QRegion::toHIMutableShape() const
                 ++qt_r;
             }
         }
-    } else
-#endif
-    {
-#ifndef QT_MAC_USE_COCOA
-        QCFType<HIShapeRef> qdShape = HIShapeCreateWithQDRgn(QMacSmartQuickDrawRegion(toQDRgn()));
-        HIShapeUnion(qdShape, shape, shape);
-#endif
-    }
+
+    } 
+
     return shape;
 }
-
-#if !defined(Q_WS_MAC64) && !defined(QT_MAC_USE_COCOA)
-typedef OSStatus (*PtrHIShapeGetAsQDRgn)(HIShapeRef, RgnHandle);
-static PtrHIShapeGetAsQDRgn ptrHIShapeGetAsQDRgn = 0;
-#endif
-
 
 QRegion QRegion::fromHIShapeRef(HIShapeRef shape)
 {
     QRegion returnRegion;
     returnRegion.detach();
-    // Begin gratuitous #if-defery
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-# ifndef Q_WS_MAC64
-    if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
-# endif
-        HIShapeEnumerate(shape, kHIShapeParseFromTopLeft, shape2QRegionHelper, &returnRegion);
-# ifndef Q_WS_MAC64
-    } else
-# endif
-#endif
-    {
-#if !defined(Q_WS_MAC64) && !defined(QT_MAC_USE_COCOA)
-        if (ptrHIShapeGetAsQDRgn == 0) {
-            QLibrary library(QLatin1String("/System/Library/Frameworks/Carbon.framework/Carbon"));
-            library.setLoadHints(QLibrary::ExportExternalSymbolsHint);
-                    ptrHIShapeGetAsQDRgn = reinterpret_cast<PtrHIShapeGetAsQDRgn>(library.resolve("HIShapeGetAsQDRgn"));
-        }
-        RgnHandle rgn = qt_mac_get_rgn();
-        ptrHIShapeGetAsQDRgn(shape, rgn);
-        returnRegion = QRegion::fromQDRgn(rgn);
-        qt_mac_dispose_rgn(rgn);
-#endif
-    }
+    
+    HIShapeEnumerate(shape, kHIShapeParseFromTopLeft, shape2QRegionHelper, &returnRegion);
+
     return returnRegion;
 }
 

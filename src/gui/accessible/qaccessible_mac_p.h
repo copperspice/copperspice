@@ -353,21 +353,14 @@ public:
 
     inline HIObjectRef object() const
     {
-#ifndef Q_WS_MAC64
-        return AXUIElementGetHIObject(elementRef);
-#else
         return 0;
-#endif
     }
 
     inline int id() const
     {
         UInt64 theId;
-#ifndef QT_MAC_USE_COCOA
-        AXUIElementGetIdentifier(elementRef, &theId);
-#else
         theId = 0;
-#endif
+
         return theId;
     }
 
@@ -383,6 +376,7 @@ public:
 
     void operator=(const QAElement &other);
     bool operator==(const QAElement &other) const;
+
 private:
     AXUIElementRef elementRef;
 };

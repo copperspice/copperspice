@@ -47,8 +47,8 @@
 #include <qtoolbar.h>
 #include <qtoolbutton.h>
 #include <qrubberband.h>
-#include <private/qcommonstylepixmaps_p.h>
-#include <private/qmath_p.h>
+#include <qcommonstylepixmaps_p.h>
+#include <qmath_p.h>
 #include <qdebug.h>
 #include <qtextformat.h>
 #include <qwizard.h>
@@ -57,7 +57,7 @@
 #include <qdir.h>
 #include <qsettings.h>
 #include <qpixmapcache.h>
-#include <private/qguiplatformplugin_p.h>
+#include <qguiplatformplugin_p.h>
 
 #include <limits.h>
 
@@ -66,12 +66,13 @@
 #endif
 
 #ifdef Q_WS_X11
-#   include <private/qt_x11_p.h>
-#elif defined(Q_WS_MAC)
-#   include <private/qt_cocoa_helpers_mac_p.h>
+#   include <qt_x11_p.h>
+
+#elif defined(Q_OS_MAC)
+#   include <qt_cocoa_helpers_mac_p.h>
 #endif
 
-#include <private/qstylehelper_p.h>
+#include <qstylehelper_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -4537,7 +4538,7 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
         ret = int(QStyleHelper::dpiScaled(13.));
         break;
     case PM_MessageBoxIconSize:
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         if (QApplication::desktopSettingsAware()) {
             ret = 64; // No DPI scaling, it's handled elsewhere.
         } else
@@ -5512,7 +5513,7 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
     } // if (QApplication::desktopSettingsAware() && !QIcon::themeName().isEmpty())
         if (!icon.isNull())
             return icon;
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     if (QApplication::desktopSettingsAware()) {
         OSType iconType = 0;
         switch (standardIcon) {
@@ -5610,10 +5611,11 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
                 ReleaseIconRef(overlayIcon);
             return retIcon;
         }
-    } // if (QApplication::desktopSettingsAware())
-#endif // Q_WS_MAC
+    } 
+#endif
 
     switch (standardIcon) {
+
 #ifndef QT_NO_IMAGEFORMAT_PNG
      case SP_FileDialogNewFolder:
         icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/newdirectory-16.png"), QSize(16, 16));

@@ -76,7 +76,7 @@ QT_END_NAMESPACE
 #include <qsocketnotifier.h>
 #include <qtimer.h>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #include <qwineventnotifier_p.h>
 #endif
 
@@ -770,10 +770,10 @@ QProcessPrivate::QProcessPrivate()
     emittedReadyRead = false;
     emittedBytesWritten = false;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     pipeWriter = 0;
     processFinishedNotifier = 0;
-#endif // Q_WS_WIN
+#endif
 
 #ifdef Q_OS_UNIX
     serial = 0;

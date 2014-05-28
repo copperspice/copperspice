@@ -44,17 +44,12 @@
 #include <ActiveQt/qaxbase.h>
 #include <QtGui/qwidget.h>
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
-
-QT_MODULE(ActiveQt)
 
 #ifndef QT_NO_WIN_ACTIVEQT
 
 class QAxHostWindow;
 class QAxAggregated;
-
 class QAxClientSite;
 
 class QAxWidget : public QWidget, public QAxBase
@@ -115,6 +110,5 @@ template <> inline QAxWidget *qobject_cast<QAxWidget*>(QObject *o)
 QT_END_NAMESPACE
 #endif // QT_NO_WIN_ACTIVEQT
 
-QT_END_HEADER
 
 #endif // QAXWIDGET_H

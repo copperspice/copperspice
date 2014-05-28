@@ -37,7 +37,6 @@
 #include <qt_windows.h>
 #include <wininet.h>
 #include <qsystemlibrary_p.h>
-#include "qnetworkfunctions_wince.h"
 
 /*
  * Information on the WinHTTP DLL:
@@ -48,9 +47,8 @@
  *  http://msdn.microsoft.com/en-us/library/aa384095(VS.85).aspx WinHttpGetDefaultProxyConfiguration
  */
 
-// We don't want to include winhttp.h because that's not
-// present in some Windows SDKs (I don't know why)
-// So, instead, copy the definitions here
+// We do not want to include winhttp.h because it is not present in some Windows SDKs (I don't know why)
+// Instead, copy the definitions here
 
 typedef struct {
   DWORD dwFlags;

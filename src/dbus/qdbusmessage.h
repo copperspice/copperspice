@@ -37,11 +37,7 @@
 #  undef interface
 #endif
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
-
-QT_MODULE(DBus)
 
 class QDBusMessagePrivate;
 class Q_DBUS_EXPORT QDBusMessage
@@ -107,13 +103,10 @@ private:
     QDBusMessagePrivate *d_ptr;
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_DBUS_EXPORT QDebug operator<<(QDebug, const QDBusMessage &);
-#endif
+
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif

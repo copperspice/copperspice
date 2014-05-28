@@ -25,28 +25,30 @@
 
 #include "qkeysequence.h"
 #include "qkeysequence_p.h"
-#include "private/qapplication_p.h"
+#include "qapplication_p.h"
 
 #ifndef QT_NO_SHORTCUT
 
 #include "qshortcut.h"
 #include "qdebug.h"
+
 #ifndef QT_NO_REGEXP
 # include "qregexp.h"
 #endif
+
 #ifndef QT_NO_DATASTREAM
 # include "qdatastream.h"
 #endif
+
 #include "qvariant.h"
 
-#ifdef Q_WS_MAC
-# include <private/qt_mac_p.h>
-
+#ifdef Q_OS_MAC
+# include <qt_mac_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 static bool qt_sequence_no_mnemonics = true;
 struct MacSpecialKey {
     int key;
@@ -960,7 +962,7 @@ QKeySequence::QKeySequence(const QKeySequence& keysequence)
     d->ref.ref();
 }
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 static inline int maybeSwapShortcut(int shortcut)
 {
     if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)) {
@@ -992,7 +994,7 @@ QList<QKeySequence> QKeySequence::keyBindings(StandardKey key)
         QKeyBinding keyBinding = QKeySequencePrivate::keyBindings[i];
         if (keyBinding.standardKey == key && (keyBinding.platform & platform)) {
             uint shortcut =
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                     maybeSwapShortcut(QKeySequencePrivate::keyBindings[i].shortcut);
 #else
                     QKeySequencePrivate::keyBindings[i].shortcut;
@@ -1194,7 +1196,7 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
     if (nativeText) {
         gmodifs = globalModifs();
         if (gmodifs->isEmpty()) {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
             const bool dontSwap = qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta);
             if (dontSwap)
                 *gmodifs << QModifKeyName(Qt::META, QChar(kCommandUnicode));
@@ -1237,7 +1239,7 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
     modifs += *gmodifs; // Test non-translated ones last
 
     QString sl = accel;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     for (int i = 0; i < modifs.size(); ++i) {
         const QModifKeyName &mkf = modifs.at(i);
         if (sl.contains(mkf.name)) {
@@ -1289,7 +1291,7 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
 
     int fnum = 0;
     if (accel.length() == 1) {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         int qtKey = qtkeyForMacSymbol(accel[0]);
         if (qtKey != -1) {
             ret |= qtKey;
@@ -1347,7 +1349,7 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
 {
     bool nativeText = (format == QKeySequence::NativeText);
     QString s;
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     if (nativeText) {
         // On Mac OS X the order (by default) is Meta, Alt, Shift, Control.
         // If the AA_MacDontSwapCtrlAndMeta is enabled, then the order
@@ -1405,7 +1407,7 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
                            : QString::fromLatin1("F%1").arg(key - Qt::Key_F1 + 1);
     } else if (key) {
         int i=0;
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
         if (nativeText) {
             QChar ch = qt_macSymbolForQtKey(key);
             if (!ch.isNull())
@@ -1415,7 +1417,7 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
         } else
 #endif
         {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 NonSymbol:
 #endif
             while (keyname[i].name) {
@@ -1441,7 +1443,7 @@ NonSymbol:
         }
     }
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (nativeText)
         s += p;
     else
@@ -1750,13 +1752,12 @@ QDataStream &operator>>(QDataStream &s, QKeySequence &keysequence)
 
 #endif //QT_NO_DATASTREAM
 
-#ifndef QT_NO_DEBUG_STREAM
+
 QDebug operator<<(QDebug dbg, const QKeySequence &p)
 {
     dbg.nospace() << "QKeySequence(" << p.toString() << ')';
     return dbg.space();
 }
-#endif
 
 #endif // QT_NO_SHORTCUT
 

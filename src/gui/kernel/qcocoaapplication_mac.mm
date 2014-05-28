@@ -58,11 +58,11 @@
 ****************************************************************************/
 
 #include <qglobal.h>
-#ifdef QT_MAC_USE_COCOA
-#include <private/qcocoaapplication_mac_p.h>
-#include <private/qcocoaapplicationdelegate_mac_p.h>
-#include <private/qt_cocoa_helpers_mac_p.h>
-#include <private/qcocoaintrospection_p.h>
+
+#include <qcocoaapplication_mac_p.h>
+#include <qcocoaapplicationdelegate_mac_p.h>
+#include <qt_cocoa_helpers_mac_p.h>
+#include <qcocoaintrospection_p.h>
 
 QT_USE_NAMESPACE
 
@@ -213,4 +213,4 @@ void qt_resetNSApplicationSendEvent()
 }
 
 QT_END_NAMESPACE
-#endif
+

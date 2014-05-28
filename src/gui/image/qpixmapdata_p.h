@@ -130,7 +130,7 @@ private:
 
 #  define QT_XFORM_TYPE_MSBFIRST 0
 #  define QT_XFORM_TYPE_LSBFIRST 1
-#  if defined(Q_WS_WIN)
+#  if defined(Q_OS_WIN)
 #    define QT_XFORM_TYPE_WINDOWSPIXMAP 2
 #  endif
 extern bool qt_xForm_helper(const QTransform&, int, int, int, uchar*, int, int, int, const uchar*, int, int, int);

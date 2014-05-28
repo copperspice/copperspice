@@ -27,9 +27,9 @@
 
 #include <qt_windows.h>
 #include <qdebug.h>
-#include <private/qevent_p.h>
-#include <private/qlocale_p.h>
-#include <private/qapplication_p.h>
+#include <qevent_p.h>
+#include <qlocale_p.h>
+#include <qapplication_p.h>
 #include <qwidget.h>
 #include <qapplication.h>
 #include <ctype.h>
@@ -46,18 +46,23 @@ extern Q_CORE_EXPORT QLocale qt_localeFromLCID(LCID id);
 #ifndef LANG_PASHTO
 #define LANG_PASHTO 0x63
 #endif
+
 #ifndef LANG_SYRIAC
 #define LANG_SYRIAC 0x5a
 #endif
+
 #ifndef LANG_DIVEHI
 #define LANG_DIVEHI 0x65
 #endif
+
 #ifndef VK_OEM_PLUS
 #define VK_OEM_PLUS 0xBB
 #endif
+
 #ifndef VK_OEM_3
 #define VK_OEM_3 0xC0
 #endif
+
 #ifndef MAPVK_VK_TO_CHAR
 #define MAPVK_VK_TO_CHAR (2)
 #endif
@@ -66,7 +71,7 @@ extern Q_CORE_EXPORT QLocale qt_localeFromLCID(LCID id);
 // the additional bit when masking the scancode.
 enum { scancodeBitmask = 0x1ff };
 
-// Key recorder ------------------------------------------------------------------------[ start ] --
+// Key recorder 
 struct KeyRecord {
     KeyRecord(int c, int a, int s, const QString &t) : code(c), ascii(a), state(s), text(t) {}
     KeyRecord() {}
@@ -416,14 +421,6 @@ static const Qt::KeyboardModifiers ModsTbl[] = {
     Qt::NoModifier,                                             // Fall-back to raw Key_*
 };
 
-/**
-  Remap return or action key to select key for windows mobile.
-*/
-inline int winceKeyBend(int keyCode)
-{
-   return KeyTbl[keyCode];
-}
-
 // Translate a VK into a Qt key code, or unicode character
 static inline int toKeyOrUnicode(int vk, int scancode, unsigned char *kbdBuffer, bool *isDeadkey = 0)
 {
@@ -431,6 +428,7 @@ static inline int toKeyOrUnicode(int vk, int scancode, unsigned char *kbdBuffer,
     int code = 0;
     QChar unicodeBuffer[5];
     int res = ToUnicode(vk, scancode, kbdBuffer, reinterpret_cast<LPWSTR>(unicodeBuffer), 5, 0);
+
     // When Ctrl modifier is used ToUnicode does not return correct values. In order to assign the
     // right key the control modifier is removed for just that function if the previous call failed.
     if (res == 0 && kbdBuffer[VK_CONTROL]) {
@@ -439,13 +437,15 @@ static inline int toKeyOrUnicode(int vk, int scancode, unsigned char *kbdBuffer,
         res = ToUnicode(vk, scancode, kbdBuffer, reinterpret_cast<LPWSTR>(unicodeBuffer), 5, 0);
         kbdBuffer[VK_CONTROL] = controlState;
     }
+
     if (res)
         code = unicodeBuffer[0].toUpper().unicode();
 
     // Qt::Key_*'s are not encoded below 0x20, so try again, and DEL keys (0x7f) is encoded with a
     // proper Qt::Key_ code
-    if (code < 0x20 || code == 0x7f) // Handles res==0 too
-        code = winceKeyBend(vk);
+
+    if (code < 0x20 || code == 0x7f) // Handles res == 0 too
+        code = KeyTbl[vk];
 
     if (isDeadkey)
         *isDeadkey = (res == -1);
@@ -455,8 +455,21 @@ static inline int toKeyOrUnicode(int vk, int scancode, unsigned char *kbdBuffer,
 
 Q_GUI_EXPORT int qt_translateKeyCode(int vk)
 {
-    int code = winceKeyBend((vk < 0 || vk > 255) ? 0 : vk);
-    return code == Qt::Key_unknown ? 0 : code;
+   int code;
+
+   if (vk < 0 || vk > 255) {
+      code = KeyTbl[0];
+
+   } else {
+      code = KeyTbl[vk];
+   
+   }
+
+   if (code == Qt::Key_unknown) {
+      return 0;
+   }
+
+   return code;
 }
 
 static inline int asciiToKeycode(char a, int state)
@@ -628,6 +641,7 @@ void QKeyMapperPrivate::updatePossibleKeyCodes(unsigned char *kbdBuffer, quint32
     buffer[VK_CAPITAL ] = 0;
     buffer[VK_NUMLOCK ] = 0;
     buffer[VK_SCROLL  ] = 0;
+
     // Always 0, since we'll only change the other versions
     buffer[VK_RSHIFT  ] = 0;
     buffer[VK_RCONTROL] = 0;
@@ -636,37 +650,49 @@ void QKeyMapperPrivate::updatePossibleKeyCodes(unsigned char *kbdBuffer, quint32
     bool isDeadKey = false;
     keyLayout[vk_key]->deadkeys = 0;
     keyLayout[vk_key]->dirty = false;
+
     setKbdState(buffer, false, false, false);
     keyLayout[vk_key]->qtKey[0] = toKeyOrUnicode(vk_key, scancode, buffer, &isDeadKey);
     keyLayout[vk_key]->deadkeys |= isDeadKey ? 0x01 : 0;
+
     setKbdState(buffer, true, false, false);
     keyLayout[vk_key]->qtKey[1] = toKeyOrUnicode(vk_key, scancode, buffer, &isDeadKey);
     keyLayout[vk_key]->deadkeys |= isDeadKey ? 0x02 : 0;
+
     setKbdState(buffer, false, true, false);
     keyLayout[vk_key]->qtKey[2] = toKeyOrUnicode(vk_key, scancode, buffer, &isDeadKey);
     keyLayout[vk_key]->deadkeys |= isDeadKey ? 0x04 : 0;
+
     setKbdState(buffer, true, true, false);
     keyLayout[vk_key]->qtKey[3] = toKeyOrUnicode(vk_key, scancode, buffer, &isDeadKey);
     keyLayout[vk_key]->deadkeys |= isDeadKey ? 0x08 : 0;
+
     setKbdState(buffer, false, false, true);
     keyLayout[vk_key]->qtKey[4] = toKeyOrUnicode(vk_key, scancode, buffer, &isDeadKey);
     keyLayout[vk_key]->deadkeys |= isDeadKey ? 0x10 : 0;
+
     setKbdState(buffer, true, false, true);
     keyLayout[vk_key]->qtKey[5] = toKeyOrUnicode(vk_key, scancode, buffer, &isDeadKey);
     keyLayout[vk_key]->deadkeys |= isDeadKey ? 0x20 : 0;
+
     setKbdState(buffer, false, true, true);
     keyLayout[vk_key]->qtKey[6] = toKeyOrUnicode(vk_key, scancode, buffer, &isDeadKey);
     keyLayout[vk_key]->deadkeys |= isDeadKey ? 0x40 : 0;
+
     setKbdState(buffer, true, true, true);
     keyLayout[vk_key]->qtKey[7] = toKeyOrUnicode(vk_key, scancode, buffer, &isDeadKey);
     keyLayout[vk_key]->deadkeys |= isDeadKey ? 0x80 : 0;
+
     // Add a fall back key for layouts which don't do composition and show non-latin1 characters
-    int fallbackKey = winceKeyBend(vk_key);
+    int fallbackKey = KeyTbl[vk_key];
+
     if (!fallbackKey || fallbackKey == Qt::Key_unknown) {
         fallbackKey = 0;
+
         if (vk_key != keyLayout[vk_key]->qtKey[0] && vk_key < 0x5B && vk_key > 0x2F)
             fallbackKey = vk_key;
     }
+
     keyLayout[vk_key]->qtKey[8] = fallbackKey;
 
     // If this vk_key makes a dead key with any combination of modifiers
@@ -685,6 +711,7 @@ void QKeyMapperPrivate::updatePossibleKeyCodes(unsigned char *kbdBuffer, quint32
 
 #ifdef DEBUG_KEYMAPPER
     qDebug("updatePossibleKeyCodes for virtual key = 0x%02x!", vk_key);
+
     for (int i = 0; i < 9; ++i) {
         qDebug("    [%d] (%d,0x%02x,'%c')  %s", i,
                keyLayout[vk_key]->qtKey[i],
@@ -692,7 +719,7 @@ void QKeyMapperPrivate::updatePossibleKeyCodes(unsigned char *kbdBuffer, quint32
                keyLayout[vk_key]->qtKey[i] ? keyLayout[vk_key]->qtKey[i] : 0x03,
                keyLayout[vk_key]->deadkeys & (1<<i) ? "deadkey" : "");
     }
-#endif // DEBUG_KEYMAPPER
+#endif
 }
 
 bool QKeyMapperPrivate::isADeadKey(unsigned int vk_key, unsigned int modifiers)
@@ -740,10 +767,12 @@ QList<int> QKeyMapperPrivate::possibleKeys(QKeyEvent *e)
 bool QKeyMapperPrivate::translateKeyEvent(QWidget *widget, const MSG &msg, bool grab)
 {
     Q_Q(QKeyMapper);
-    Q_UNUSED(q); // Strange, but the compiler complains on q not being referenced, even if it is..
+    Q_UNUSED(q); // Strange, but the compiler complains on q not being referenced, even if it is
+
     bool k0 = false;
     bool k1 = false;
     int  msgType = msg.message;
+
     // WM_(IME_)CHAR messages already contain the character in question so there is
     // no need to fiddle with our key map. In any other case add this key to the
     // keymap if it is not present yet.
@@ -755,20 +784,20 @@ bool QKeyMapperPrivate::translateKeyEvent(QWidget *widget, const MSG &msg, bool 
 
     quint32 nModifiers = 0;
 
-     // Map native modifiers to some bit representation
-     nModifiers |= (GetKeyState(VK_LSHIFT  ) & 0x80 ? ShiftLeft : 0);
-     nModifiers |= (GetKeyState(VK_RSHIFT  ) & 0x80 ? ShiftRight : 0);
-     nModifiers |= (GetKeyState(VK_LCONTROL) & 0x80 ? ControlLeft : 0);
-     nModifiers |= (GetKeyState(VK_RCONTROL) & 0x80 ? ControlRight : 0);
-     nModifiers |= (GetKeyState(VK_LMENU   ) & 0x80 ? AltLeft : 0);
-     nModifiers |= (GetKeyState(VK_RMENU   ) & 0x80 ? AltRight : 0);
-     nModifiers |= (GetKeyState(VK_LWIN    ) & 0x80 ? MetaLeft : 0);
-     nModifiers |= (GetKeyState(VK_RWIN    ) & 0x80 ? MetaRight : 0);
+    // Map native modifiers to some bit representation
+    nModifiers |= (GetKeyState(VK_LSHIFT  ) & 0x80 ? ShiftLeft : 0);
+    nModifiers |= (GetKeyState(VK_RSHIFT  ) & 0x80 ? ShiftRight : 0);
+    nModifiers |= (GetKeyState(VK_LCONTROL) & 0x80 ? ControlLeft : 0);
+    nModifiers |= (GetKeyState(VK_RCONTROL) & 0x80 ? ControlRight : 0);
+    nModifiers |= (GetKeyState(VK_LMENU   ) & 0x80 ? AltLeft : 0);
+    nModifiers |= (GetKeyState(VK_RMENU   ) & 0x80 ? AltRight : 0);
+    nModifiers |= (GetKeyState(VK_LWIN    ) & 0x80 ? MetaLeft : 0);
+    nModifiers |= (GetKeyState(VK_RWIN    ) & 0x80 ? MetaRight : 0);
 
-     // Add Lock keys to the same bits
-     nModifiers |= (GetKeyState(VK_CAPITAL ) & 0x01 ? CapsLock : 0);
-     nModifiers |= (GetKeyState(VK_NUMLOCK ) & 0x01 ? NumLock : 0);
-     nModifiers |= (GetKeyState(VK_SCROLL  ) & 0x01 ? ScrollLock : 0);
+    // Add Lock keys to the same bits
+    nModifiers |= (GetKeyState(VK_CAPITAL ) & 0x01 ? CapsLock : 0);
+    nModifiers |= (GetKeyState(VK_NUMLOCK ) & 0x01 ? NumLock : 0);
+    nModifiers |= (GetKeyState(VK_SCROLL  ) & 0x01 ? ScrollLock : 0);
 
 
     if (msg.lParam & ExtendedKey)
@@ -1108,8 +1137,7 @@ bool QKeyMapperPrivate::translateKeyEvent(QWidget *widget, const MSG &msg, bool 
 }
 
 
-// QKeyMapper (Windows) implementation -------------------------------------------------[ start ]---
-
+// QKeyMapper (Windows) implementation 
 bool QKeyMapper::sendKeyEvent(QWidget *widget, bool grab,
                               QEvent::Type type, int code, Qt::KeyboardModifiers modifiers,
                               const QString &text, bool autorepeat, int count,
@@ -1125,6 +1153,7 @@ bool QKeyMapper::sendKeyEvent(QWidget *widget, bool grab,
     QKeyEventEx e(type, code, modifiers,
                   text, autorepeat, qMax(1, int(text.length())),
                   nativeScanCode, nativeVirtualKey, nativeModifiers);
+
     QETWidget::sendSpontaneousEvent(widget, &e);
 
     if (!isModifierKey(code)

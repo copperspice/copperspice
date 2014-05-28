@@ -40,7 +40,7 @@
 #include "qlibraryinfo.h"
 #include "qfile.h"
 #include "qdebug.h"
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
+#include <qcore_unix_p.h> // overrides QT_OPEN
 
 #include <syslog.h>
 #include <unistd.h>
@@ -477,27 +477,29 @@ bool QTransportAuth::authorizeRequest( QTransportAuth::Data &d, const QString &r
         emit policyCheck( d, request );
         isAuthorized = (( d.status & QTransportAuth::StatusMask ) == QTransportAuth::Allow );
     }
+
 #if defined(SXE_DISCOVERY)
     if (isDiscoveryMode()) {
-#ifndef QT_NO_TEXTSTREAM
-        if (!logFilePath().isEmpty()) {
+
+        if (! logFilePath().isEmpty()) {
             QFile log( logFilePath() );
+
             if (!log.open(QIODevice::WriteOnly | QIODevice::Append)) {
-                qWarning("Could not write to log in discovery mode: %s",
-                         qPrintable(logFilePath()));
+                qWarning("Could not write to log in discovery mode: %s", qPrintable(logFilePath()));
+
             } else {
                 QTextStream ts( &log );
                 ts << d.progId << '\t' << ( isAuthorized ? "Allow" : "Deny" ) << '\t' << request << endl;
             }
         }
-#endif
+
         isAuthorized = true;
     }
 #endif
+
     if ( !isAuthorized )
     {
-        qWarning( "%s - denied: for Program Id %u [PID %d]"
-                , qPrintable(request), d.progId, d.processId );
+        qWarning( "%s - denied: for Program Id %u [PID %d]", qPrintable(request), d.progId, d.processId );
 
         char linkTarget[BUF_SIZE]="";
         char exeLink[BUF_SIZE]="";
@@ -1459,11 +1461,13 @@ void FAREnforcer::logAuthAttempt( QDateTime time )
     authAttempts.append( time );
     if ( dt.secsTo( authAttempts.last() ) <= minute )
     {
+
 #if defined(SXE_DISCOVERY)
         if ( QTransportAuth::getInstance()->isDiscoveryMode() ) {
             static QBasicAtomicInt reported = Q_BASIC_ATOMIC_INITIALIZER(0);
             if ( reported.testAndSetRelaxed(0,1) ) {
-#ifndef QT_NO_TEXTSTREAM
+
+
                 QString logFilePath = QTransportAuth::getInstance()->logFilePath();
                 if ( !logFilePath.isEmpty() ) {
                       QFile log( logFilePath );
@@ -1478,7 +1482,7 @@ void FAREnforcer::logAuthAttempt( QDateTime time )
                     }
                 }
             }
-#endif
+
             reset();
             return;
         }

@@ -31,8 +31,7 @@
 #include "qstyle.h"
 #include "qstyleoption.h"
 #include "qevent.h"
-
-#include "private/qabstractbutton_p.h"
+#include "qabstractbutton_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -370,8 +369,9 @@ void QCheckBox::nextCheckState()
 bool QCheckBox::event(QEvent *e)
 {
     Q_D(QCheckBox);
+
     if (e->type() == QEvent::StyleChange
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
             || e->type() == QEvent::MacSizeChange
 #endif
             )

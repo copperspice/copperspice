@@ -142,10 +142,8 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QIODevice::OpenMode)
 
-#if !defined(QT_NO_DEBUG_STREAM)
 class QDebug;
 Q_CORE_EXPORT QDebug operator<<(QDebug debug, QIODevice::OpenMode modes);
-#endif
 
 QT_END_NAMESPACE
 

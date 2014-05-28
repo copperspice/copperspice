@@ -26,19 +26,22 @@
 #include "qgraphicssystem_p.h"
 
 #ifdef Q_WS_X11
-# include <private/qpixmap_x11_p.h>
-#endif
-#if defined(Q_WS_WIN)
-# include <private/qpixmap_raster_p.h>
-#endif
-#ifdef Q_WS_MAC
-# include <private/qpixmap_mac_p.h>
-#endif
-#ifdef Q_WS_QPA
-# include <QtGui/private/qapplication_p.h>
+# include <qpixmap_x11_p.h>
 #endif
 
-# include <private/qgraphicssystemex_p.h>
+#if defined(Q_OS_WIN)
+# include <qpixmap_raster_p.h>
+#endif
+
+#ifdef Q_OS_MAC
+# include <qpixmap_mac_p.h>
+#endif
+
+#ifdef Q_WS_QPA
+# include <qapplication_p.h>
+#endif
+
+# include <qgraphicssystemex_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -51,16 +54,22 @@ QPixmapData *QGraphicsSystem::createDefaultPixmapData(QPixmapData::PixelType typ
 #ifdef Q_WS_QWS
     Q_UNUSED(type);
 #endif
+
 #if defined(Q_WS_X11)
     return new QX11PixmapData(type);
-#elif defined(Q_WS_WIN)
+
+#elif defined(Q_OS_WIN)
     return new QRasterPixmapData(type);
-#elif defined(Q_WS_MAC)
+
+#elif defined(Q_OS_MAC)
     return new QMacPixmapData(type);
+
 #elif defined(Q_WS_QPA)
     return QApplicationPrivate::platformIntegration()->createPixmapData(type);
+
 #elif !defined(Q_WS_QWS)
 #error QGraphicsSystem::createDefaultPixmapData() not implemented
+
 #endif
     return 0;
 }

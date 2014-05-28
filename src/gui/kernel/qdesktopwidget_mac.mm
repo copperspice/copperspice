@@ -61,10 +61,10 @@
 
 #include "qapplication.h"
 #include "qdesktopwidget.h"
-#include <private/qt_mac_p.h>
+#include <qt_mac_p.h>
 #include "qwidget_p.h"
-#include <private/qt_cocoa_helpers_mac_p.h>
-#include <private/qdesktopwidget_mac_p.h>
+#include <qt_cocoa_helpers_mac_p.h>
+#include <qdesktopwidget_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 

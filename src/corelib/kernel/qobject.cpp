@@ -1082,7 +1082,7 @@ void QObject::moveToThread(QThread *targetThread)
       qWarning("QObject::moveToThread() Current thread (%p) is not the current object's thread (%p).\n"
                "Can not move to target thread (%p)\n", currentData->thread, threadData->thread, targetData->thread);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 
       qWarning("Multiple libraries might be loaded in the same process. Verify all plugins are "
                "linked with the correct binaries. Export DYLD_PRINT_LIBRARIES=1 and verify only one set of "
@@ -1118,8 +1118,6 @@ void QObject::moveToThread_helper()
    }
 }
 
-#ifndef QT_NO_DEBUG_STREAM
-
 QDebug operator<<(QDebug debug, const QObject *object)
 {
    QByteArray msg;
@@ -1145,7 +1143,6 @@ QDebug operator<<(QDebug debug, const QObject *object)
    return debug << msg;
 }
 
-#endif
 
 QObject * QObject::parent() const
 {

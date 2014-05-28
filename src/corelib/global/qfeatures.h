@@ -267,9 +267,6 @@
 // HtmlParser
 //#define QT_NO_TEXTHTMLPARSER
 
-// QTextStream
-//#define QT_NO_TEXTSTREAM
-
 // QToolTip
 //#define QT_NO_TOOLTIP
 
@@ -294,10 +291,6 @@
 // 
 //#define QT_NO_XMLSTREAM
 
-// Animation
-#if !defined(QT_NO_ANIMATION) && (defined(QT_NO_PROPERTIES))
-#define QT_NO_ANIMATION
-#endif
 
 // QButtonGroup
 #if !defined(QT_NO_BUTTONGROUP) && (defined(QT_NO_GROUPBOX))
@@ -329,15 +322,6 @@
 #define QT_NO_FILESYSTEMMODEL
 #endif
 
-// QHostInfo
-#if !defined(QT_NO_HOSTINFO) && (defined(QT_NO_TEXTSTREAM))
-#define QT_NO_HOSTINFO
-#endif
-
-// XPM Image Format
-#if !defined(QT_NO_IMAGEFORMAT_XPM) && (defined(QT_NO_TEXTSTREAM))
-#define QT_NO_IMAGEFORMAT_XPM
-#endif
 
 // QMenu
 #if !defined(QT_NO_MENU) && (defined(QT_NO_ACTION))
@@ -429,11 +413,6 @@
 #define QT_NO_SPLITTER
 #endif
 
-// State machine
-#if !defined(QT_NO_STATEMACHINE) && (defined(QT_NO_PROPERTIES))
-#define QT_NO_STATEMACHINE
-#endif
-
 // QCDEStyle
 #if !defined(QT_NO_STYLE_CDE) && (defined(QT_NO_STYLE_MOTIF))
 #define QT_NO_STYLE_CDE
@@ -459,16 +438,6 @@
 #define QT_NO_UNDOSTACK
 #endif
 
-// ActiveQt
-#if !defined(QT_NO_WIN_ACTIVEQT) && (defined(QT_NO_PROPERTIES))
-#define QT_NO_WIN_ACTIVEQT
-#endif
-
-// QWizard
-#if !defined(QT_NO_WIZARD) && (defined(QT_NO_PROPERTIES))
-#define QT_NO_WIZARD
-#endif
-
 // QXmlStreamReader
 #if !defined(QT_NO_XMLSTREAMREADER) && (defined(QT_NO_XMLSTREAM))
 #define QT_NO_XMLSTREAMREADER
@@ -485,7 +454,7 @@
 #endif
 
 // QtDBus module
-#if !defined(QT_NO_DBUS) && (defined(QT_NO_PROPERTIES) || defined(QT_NO_DOM))
+#if !defined(QT_NO_DBUS) && defined(QT_NO_DOM)
 #define QT_NO_DBUS
 #endif
 
@@ -555,7 +524,7 @@
 #endif
 
 // QPrinter
-#if !defined(QT_NO_PRINTER) && (defined(QT_NO_TEXTSTREAM) || defined(QT_NO_PICTURE) || defined(QT_NO_TEMPORARYFILE))
+#if !defined(QT_NO_PRINTER) && (defined(QT_NO_PICTURE) || defined(QT_NO_TEMPORARYFILE))
 #define QT_NO_PRINTER
 #endif
 
@@ -580,7 +549,7 @@
 #endif
 
 // QStyleSheetStyle
-#if !defined(QT_NO_STYLE_STYLESHEET) && (defined(QT_NO_STYLE_WINDOWS) || defined(QT_NO_PROPERTIES) || defined(QT_NO_CSSPARSER))
+#if !defined(QT_NO_STYLE_STYLESHEET) && (defined(QT_NO_STYLE_WINDOWS) || defined(QT_NO_CSSPARSER))
 #define QT_NO_STYLE_STYLESHEET
 #endif
 
@@ -635,7 +604,7 @@
 #endif
 
 // QTextEdit
-#if !defined(QT_NO_TEXTEDIT) && (defined(QT_NO_SCROLLAREA) || defined(QT_NO_PROPERTIES))
+#if !defined(QT_NO_TEXTEDIT) && (defined(QT_NO_SCROLLAREA))
 #define QT_NO_TEXTEDIT
 #endif
 
@@ -700,7 +669,7 @@
 #endif
 
 // Accessibility
-#if !defined(QT_NO_ACCESSIBILITY) && (defined(QT_NO_PROPERTIES) || defined(QT_NO_MENUBAR))
+#if !defined(QT_NO_ACCESSIBILITY) && defined(QT_NO_MENUBAR)
 #define QT_NO_ACCESSIBILITY
 #endif
 
@@ -720,12 +689,12 @@
 #endif
 
 // QDataWidgetMapper
-#if !defined(QT_NO_DATAWIDGETMAPPER) && (defined(QT_NO_ITEMVIEWS) || defined(QT_NO_PROPERTIES))
+#if !defined(QT_NO_DATAWIDGETMAPPER) && defined(QT_NO_ITEMVIEWS)
 #define QT_NO_DATAWIDGETMAPPER
 #endif
 
 // QListWidget
-#if !defined(QT_NO_LISTWIDGET) && (defined(QT_NO_LISTVIEW))
+#if ! defined(QT_NO_LISTWIDGET) && defined(QT_NO_LISTVIEW)
 #define QT_NO_LISTWIDGET
 #endif
 

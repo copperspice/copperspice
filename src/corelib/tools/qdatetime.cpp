@@ -32,18 +32,17 @@
 #include "qregexp.h"
 #include "qdebug.h"
 
-#if defined(Q_OS_WIN32)
+#ifdef Q_OS_WIN32
 #include <qt_windows.h>
 #endif
 
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
 #include <locale.h>
 #endif
 
 #include <time.h>
 
-//#define QDATETIMEPARSER_DEBUG
-#if defined (QDATETIMEPARSER_DEBUG) && !defined(QT_NO_DEBUG_STREAM)
+#ifdef QDATETIMEPARSER_DEBUG
 #  define QDTPDEBUG qDebug() << QString("%1:%2").arg(__FILE__).arg(__LINE__)
 #  define QDTPDEBUGN qDebug
 #else
@@ -51,7 +50,7 @@
 #  define QDTPDEBUGN if (false) qDebug
 #endif
 
-#if defined(Q_WS_MAC)
+#ifdef Q_OS_MAC
 #include <qcore_mac_p.h>
 #endif
 
@@ -2653,9 +2652,11 @@ QString QDateTime::toString(Qt::DateFormat f) const
             break;
         }
     }
+
 #ifndef QT_NO_TEXTDATE
     else if (f == Qt::TextDate) {
-#ifndef Q_WS_WIN
+
+#ifndef Q_OS_WIN
         buf = d->date.shortDayName(d->date.dayOfWeek());
         buf += QLatin1Char(' ');
         buf += d->date.shortMonthName(d->date.month());
@@ -4283,7 +4284,7 @@ void QDateTimePrivate::getUTC(QDate &outDate, QTime &outTime) const
         localToUtc(outDate, outTime, (int)spec);
 }
 
-#if !defined(QT_NO_DEBUG_STREAM) && !defined(QT_NO_DATESTRING)
+#if ! defined(QT_NO_DATESTRING)
 QDebug operator<<(QDebug dbg, const QDate &date)
 {
     dbg.nospace() << "QDate(" << date.toString() << ')';

@@ -24,13 +24,11 @@
 ***********************************************************************/
 
 #include "qunifiedtoolbarsurface_mac_p.h"
-#include <private/qt_cocoa_helpers_mac_p.h>
-#include <private/qbackingstore_p.h>
-#include <private/qmainwindowlayout_p.h>
+#include <qt_cocoa_helpers_mac_p.h>
+#include <qbackingstore_p.h>
+#include <qmainwindowlayout_p.h>
 
 #include <QDebug>
-
-#ifdef QT_MAC_USE_COCOA
 
 QT_BEGIN_NAMESPACE
 
@@ -243,5 +241,3 @@ void QUnifiedToolbarSurface::renderToolbar(QWidget *widget, bool forceFlush)
 }
 
 QT_END_NAMESPACE
-
-#endif // QT_MAC_USE_COCOA

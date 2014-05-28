@@ -110,7 +110,7 @@ public:
     QPointer<QObject> receiverToDisconnectOnClose;
     QByteArray memberToDisconnectOnClose;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     static void setFont(void *delegate, const QFont &font);
 
     inline void done(int result) { q_func()->done(result); }

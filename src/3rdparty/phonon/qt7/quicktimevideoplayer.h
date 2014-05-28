@@ -30,8 +30,8 @@
 
 #import <QTKit/QTDataReference.h>
 #import <QTKit/QTMovie.h>
+
 #include <phonon/mediasource.h>
-#include <Carbon/Carbon.h>
 #include <QtCore/QString>
 #include <QtOpenGL/QGLPixelBuffer>
 #include "videoframe.h"
@@ -45,7 +45,7 @@ namespace Phonon
 namespace QT7
 {
     class QuickTimeStreamReader;
-	class VideoRenderWidgetQTMovieView;
+   class VideoRenderWidgetQTMovieView;
 
     class QuickTimeVideoPlayer : QObject
     {
@@ -71,7 +71,7 @@ namespace QT7
             bool videoFrameChanged();
             CVOpenGLTextureRef currentFrameAsCVTexture();
             GLuint currentFrameAsGLTexture();
-			void *currentFrameAsCIImage();
+         void *currentFrameAsCIImage();
             QImage currentFrameAsQImage();
             QRect videoRect() const;
 
@@ -111,12 +111,12 @@ namespace QT7
 
             static QString timeToString(quint64 ms);
 
-			// Help functions when drawing to more that one widget in cocoa 64:
-			void *m_primaryRenderingTarget;
+         // Help functions when drawing to more that one widget in cocoa 64:
+         void *m_primaryRenderingTarget;
             void setPrimaryRenderingTarget(NSObject *target);
 
-			void *primaryRenderingCIImage();
-			void setPrimaryRenderingCIImage(void *ciImage);
+         void *primaryRenderingCIImage();
+         void setPrimaryRenderingCIImage(void *ciImage);
 
         private:
             QTMovie *m_QTMovie;
@@ -134,15 +134,12 @@ namespace QT7
             float m_playbackRate;
             quint64 m_currentTime;
             MediaSource m_mediaSource;
-			void *m_primaryRenderingCIImage;
-			qreal m_brightness;
-			qreal m_contrast;
-			qreal m_hue;
-			qreal m_saturation;
+            void *m_primaryRenderingCIImage;
+            qreal m_brightness;
+            qreal m_contrast;
+            qreal m_hue;
+            qreal m_saturation;
 
-#ifdef QUICKTIME_C_API_AVAILABLE
-            QTVisualContextRef m_visualContext;
-#endif
             VideoFrame m_currentFrame;
             QuickTimeStreamReader *m_streamReader;
 
@@ -154,8 +151,8 @@ namespace QT7
             void openMovieFromStream();
             void openMovieFromData(QByteArray *data, const char *fileType);
             void openMovieFromDataGuessType(QByteArray *data);
-			QString mediaSourcePath();
-			bool codecExistsAccordingToSuffix(const QString &fileName);
+         QString mediaSourcePath();
+         bool codecExistsAccordingToSuffix(const QString &fileName);
 
             void setError(NSError *error);
             bool errorOccured();

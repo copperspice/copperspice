@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 #include <QtCore/qvariantanimation.h>
-#include <private/qvariantanimation_p.h>
+#include <qvariantanimation_p.h>
 
 #ifndef QT_NO_ANIMATION
 

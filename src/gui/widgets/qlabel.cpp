@@ -962,7 +962,7 @@ bool QLabel::event(QEvent *e)
         if (d->control)
             d->textLayoutDirty = true;
     } else if (e->type() == QEvent::StyleChange
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
                || e->type() == QEvent::MacSizeChange
 #endif
                ) {

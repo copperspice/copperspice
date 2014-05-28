@@ -428,7 +428,7 @@ void QProgressDialog::setValue(int progress)
             }
         }
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         QApplication::flush();
 #endif
 

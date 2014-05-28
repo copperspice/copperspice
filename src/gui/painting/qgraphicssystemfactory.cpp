@@ -55,7 +55,7 @@ QGraphicsSystem *QGraphicsSystemFactory::create(const QString& key)
     if (system.isEmpty()) {
         system = QLatin1String("runtime");
     }
-#elif defined (QT_GRAPHICSSYSTEM_RASTER) && !defined(Q_WS_WIN) || defined(Q_WS_X11)
+#elif defined (QT_GRAPHICSSYSTEM_RASTER) && !defined(Q_OS_WIN) || defined(Q_WS_X11)
     if (system.isEmpty()) {
         system = QLatin1String("raster");
     }

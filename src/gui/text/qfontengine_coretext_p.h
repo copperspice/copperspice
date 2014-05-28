@@ -34,12 +34,11 @@
 #include <qcore_mac_p.h>
 #endif
 
-#if !defined(Q_WS_MAC) || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-
 QT_BEGIN_NAMESPACE
 
 class QRawFontPrivate;
 class QCoreTextFontEngineMulti;
+
 class QCoreTextFontEngine : public QFontEngine
 {
 public:
@@ -88,17 +87,18 @@ public:
 
     static bool supportsColorGlyphs()
     {
+
 #if defined(Q_OS_IOS)
         return true;
-#elif MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
-  #if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
-        return &CTFontDrawGlyphs;
-  #else
-        return true;
-  #endif
+
+#elif defined(Q_OS_MAC)
+        return true;  
+
 #else
         return false;
+
 #endif
+
     }
 
     static int antialiasingThreshold;
@@ -118,41 +118,39 @@ private:
 
 class QCoreTextFontEngineMulti : public QFontEngineMulti
 {
-public:
-    QCoreTextFontEngineMulti(const QCFString &name, const QFontDef &fontDef, bool kerning);
-    QCoreTextFontEngineMulti(CTFontRef ctFontRef, const QFontDef &fontDef, bool kerning);
-    ~QCoreTextFontEngineMulti();
-
-    virtual bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                              QTextEngine::ShaperFlags flags) const;
-    bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                      QTextEngine::ShaperFlags flags,
-                      unsigned short *logClusters, const HB_CharAttributes *charAttributes,
-                      QScriptItem *si) const;
-
-    virtual const char *name() const { return "CoreText"; }
-    inline CTFontRef macFontID() const { return ctfont; }
-
-protected:
-    virtual void loadEngine(int at);
-
-private:
-    void init(bool kerning);
-    inline const QCoreTextFontEngine *engineAt(int i) const
-    { return static_cast<const QCoreTextFontEngine *>(engines.at(i)); }
-
-    uint fontIndexForFont(CTFontRef font) const;
-    CTFontRef ctfont;
-    mutable QCFType<CFMutableDictionaryRef> attributeDict;
-    CGAffineTransform transform;
-    friend class QFontDialogPrivate;
-    bool transformAdvances;
+   public:
+       QCoreTextFontEngineMulti(const QCFString &name, const QFontDef &fontDef, bool kerning);
+       QCoreTextFontEngineMulti(CTFontRef ctFontRef, const QFontDef &fontDef, bool kerning);
+       ~QCoreTextFontEngineMulti();
+   
+       virtual bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
+                                 QTextEngine::ShaperFlags flags) const;
+       bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
+                         QTextEngine::ShaperFlags flags,
+                         unsigned short *logClusters, const HB_CharAttributes *charAttributes,
+                         QScriptItem *si) const;
+   
+       virtual const char *name() const { return "CoreText"; }
+       inline CTFontRef macFontID() const { return ctfont; }
+   
+   protected:
+       virtual void loadEngine(int at);
+   
+   private:
+       void init(bool kerning);
+       inline const QCoreTextFontEngine *engineAt(int i) const
+       { return static_cast<const QCoreTextFontEngine *>(engines.at(i)); }
+   
+       uint fontIndexForFont(CTFontRef font) const;
+       CTFontRef ctfont;
+       mutable QCFType<CFMutableDictionaryRef> attributeDict;
+       CGAffineTransform transform;
+       friend class QFontDialogPrivate;
+       bool transformAdvances;
 };
 
 CGAffineTransform qt_transform_from_fontdef(const QFontDef &fontDef);
 
 QT_END_NAMESPACE
-
-#endif// !defined(Q_WS_MAC) || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 
 #endif // QFONTENGINE_CORETEXT_P_H

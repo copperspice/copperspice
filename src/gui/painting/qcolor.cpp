@@ -2450,7 +2450,6 @@ void QColor::invalidate()
   QColor stream functions
  *****************************************************************************/
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QColor &c)
 {
     if (!c.isValid())
@@ -2467,7 +2466,6 @@ QDebug operator<<(QDebug dbg, const QColor &c)
 
     return dbg.space();
 }
-#endif
 
 #ifndef QT_NO_DATASTREAM
 /*!

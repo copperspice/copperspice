@@ -573,8 +573,6 @@ void QVideoSurfaceFormat::setProperty(const char *name, const QVariant &value)
     }
 }
 
-
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QVideoSurfaceFormat &f)
 {
     QString typeName;
@@ -683,6 +681,5 @@ QDebug operator<<(QDebug dbg, const QVideoSurfaceFormat &f)
 
     return dbg.space();
 }
-#endif
 
 QT_END_NAMESPACE

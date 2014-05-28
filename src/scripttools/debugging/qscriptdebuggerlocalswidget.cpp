@@ -305,7 +305,7 @@ void QScriptDebuggerLocalsItemDelegate::paint(QPainter *painter, const QStyleOpt
         QStyleOptionButton buttonOption;
 
         buttonOption.state = option.state;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         buttonOption.state |= QStyle::State_Raised;
 #endif
         buttonOption.state &= ~QStyle::State_HasFocus;

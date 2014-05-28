@@ -28,9 +28,11 @@
 #include "qevent.h"
 #include "qabstractslider_p.h"
 #include "qdebug.h"
+
 #ifndef QT_NO_ACCESSIBILITY
 #include "qaccessible.h"
 #endif
+
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE
@@ -710,7 +712,7 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
             offset_accumulated = 0;
 
         offset_accumulated += stepsToScrollF;
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
         // Don't scroll more than one page in any case:
         stepsToScroll = qBound(-pageStep, clampScrollStep(offset_accumulated), pageStep);
 #else

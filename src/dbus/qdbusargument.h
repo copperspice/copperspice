@@ -39,17 +39,13 @@
 
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
 
-QT_MODULE(DBus)
-
 class QDBusUnixFileDescriptor;
-
 class QDBusArgumentPrivate;
 class QDBusDemarshaller;
 class QDBusMarshaller;
+
 class Q_DBUS_EXPORT QDBusArgument
 {
 public:
@@ -374,8 +370,6 @@ inline QDBusArgument &operator<<(QDBusArgument &arg, const QVariantHash &map)
 QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QDBusArgument)
-
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif

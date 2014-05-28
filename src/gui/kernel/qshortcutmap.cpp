@@ -637,7 +637,7 @@ bool QShortcutMap::correctContext(const QShortcutEntry &item) const {
 bool QShortcutMap::correctWidgetContext(Qt::ShortcutContext context, QWidget *w, QWidget *active_window) const
 {
     bool visible = w->isVisible();    
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (!qApp->testAttribute(Qt::AA_DontUseNativeMenuBar) && qobject_cast<QMenuBar *>(w))
         visible = true;
 #endif
@@ -700,7 +700,7 @@ bool QShortcutMap::correctWidgetContext(Qt::ShortcutContext context, QWidget *w,
 bool QShortcutMap::correctGraphicsWidgetContext(Qt::ShortcutContext context, QGraphicsWidget *w, QWidget *active_window) const
 {
     bool visible = w->isVisible();
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (!qApp->testAttribute(Qt::AA_DontUseNativeMenuBar) && qobject_cast<QMenuBar *>(w))
         visible = true;
 #endif

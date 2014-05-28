@@ -73,7 +73,7 @@ public:
 protected:
     bool event(QEvent *e);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     bool hitButton(const QPoint &pos) const;
 #endif
 

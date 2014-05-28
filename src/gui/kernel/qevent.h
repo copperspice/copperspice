@@ -615,14 +615,12 @@ private:
     Qt::WindowStates ostate;
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QEvent *);
-#endif
 
 #ifndef QT_NO_SHORTCUT
 inline bool operator==(QKeyEvent *e, QKeySequence::StandardKey key){return (e ? e->matches(key) : false);}
 inline bool operator==(QKeySequence::StandardKey key, QKeyEvent *e){return (e ? e->matches(key) : false);}
-#endif // QT_NO_SHORTCUT
+#endif
 
 class QTouchEventTouchPointPrivate;
 class Q_GUI_EXPORT QTouchEvent : public QInputEvent

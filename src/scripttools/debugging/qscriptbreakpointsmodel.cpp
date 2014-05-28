@@ -28,8 +28,7 @@
 #include "qscriptdebuggercommandschedulerjob_p.h"
 #include "qscriptdebuggercommandschedulerfrontend_p.h"
 
-#include "private/qabstractitemmodel_p.h"
-
+#include "qabstractitemmodel_p.h"
 #include <QtCore/qpair.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtGui/qicon.h>

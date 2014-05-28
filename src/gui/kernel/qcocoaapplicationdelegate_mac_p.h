@@ -31,25 +31,12 @@
 #define QCocoaApplicationDelegate_MAC_P_H
 
 #include "qmacdefines_mac.h"
-#ifdef QT_MAC_USE_COCOA
+
 #import <Cocoa/Cocoa.h>
 
 QT_FORWARD_DECLARE_CLASS(QApplicationPrivate);
 
 @class QT_MANGLE_NAMESPACE(QCocoaMenuLoader);
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_5
-
-@protocol NSApplicationDelegate <NSObject>
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification;
-- (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames;
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender;
-- (void)applicationDidBecomeActive:(NSNotification *)notification;
-- (void)applicationDidResignActive:(NSNotification *)notification;
-@end
-
-#endif
 
 @interface QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) : NSObject <NSApplicationDelegate> {
     bool startedQuit;
@@ -68,6 +55,5 @@ QT_FORWARD_DECLARE_CLASS(QApplicationPrivate);
 - (void)setReflectionDelegate:(NSObject <NSApplicationDelegate> *)oldDelegate;
 - (void)getUrl:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
 @end
-#endif
 
 #endif

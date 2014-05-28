@@ -404,27 +404,13 @@ QVector2D::operator QVariant() const
     return QVariant(QVariant::Vector2D, this);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
-
 QDebug operator<<(QDebug dbg, const QVector2D &vector)
 {
     dbg.nospace() << "QVector2D(" << vector.x() << ", " << vector.y() << ')';
     return dbg.space();
 }
 
-#endif
-
 #ifndef QT_NO_DATASTREAM
-
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QVector2D &vector)
-    \relates QVector2D
-
-    Writes the given \a vector to the given \a stream and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator<<(QDataStream &stream, const QVector2D &vector)
 {

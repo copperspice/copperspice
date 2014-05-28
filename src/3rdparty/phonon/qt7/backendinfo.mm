@@ -25,18 +25,12 @@
 
 #import <QTKit/QTMovie.h>
 
-#ifdef QUICKTIME_C_API_AVAILABLE
-    #include <QuickTime/QuickTime.h>
-    #undef check // avoid name clash;
-#endif
-
 #include "backendinfo.h"
 #include "backendheader.h"
 
 #include <AudioToolbox/AudioToolbox.h>
 #include <AudioUnit/AudioUnit.h>
 #include <CoreServices/CoreServices.h>
-
 
 QT_BEGIN_NAMESPACE
 
@@ -47,7 +41,7 @@ namespace QT7
 
 QString BackendInfo::quickTimeVersionString()
 {
-	SInt32 version;
+	 SInt32 version;
     OSStatus err = Gestalt(gestaltQuickTimeVersion, &version);
     if (err != noErr)
         return QString("00.0.0.0000");
@@ -66,59 +60,10 @@ QString BackendInfo::quickTimeVersionString()
 bool BackendInfo::isQuickTimeVersionAvailable(int minHexVersion)
 {
     // minHexVersion == 0x0741 means version 7.4.1
-	SInt32 qtHexVersion;
+	 SInt32 qtHexVersion;
     OSStatus err = Gestalt(gestaltQuickTimeVersion, &qtHexVersion);
     return (err == noErr) ? ((qtHexVersion >> 16) >= minHexVersion) : 0;
 }
-
-#ifdef QUICKTIME_C_API_AVAILABLE
-static QString getMimeTypeTag(QTAtomContainer mimeList, int index, OSType type)
-{
-    QTAtom mimeAtom = QTFindChildByIndex(mimeList, kParentAtomIsContainer, type, index, 0);
-    char mimeCharArray[256];
-    long length;
-    OSStatus err = QTCopyAtomDataToPtr(mimeList, mimeAtom, true, sizeof(mimeCharArray)-1, mimeCharArray, &length);
-    if (err == noErr)
-        return QString::fromAscii(mimeCharArray, length);
-    return QString();
-}
-#endif // QUICKTIME_C_API_AVAILABLE
-
-#ifdef QUICKTIME_C_API_AVAILABLE
-QStringList BackendInfo::quickTimeMimeTypes(Scope scope)
-{
-    QStringList mimeTypes;
-    ARGUMENT_UNSUPPORTED(scope, Out, NORMAL_ERROR, mimeTypes)
-
-    ComponentDescription description;
-    description.componentType = MovieImportType;
-    description.componentSubType = 0;
-    description.componentManufacturer = 0;
-    description.componentFlags = hasMovieImportMIMEList | canMovieImportFiles;
-    description.componentFlagsMask = canMovieImportFiles | movieImportSubTypeIsFileExtension | hasMovieImportMIMEList;
-    Component component = FindNextComponent(0, &description);
-
-    while (component) {
-        QTAtomContainer mimeList = 0;
-        OSStatus err = MovieImportGetMIMETypeList((MovieImportComponent)component, &mimeList);
-        if (err == noErr){
-            int count = QTCountChildrenOfType(mimeList, kParentAtomIsContainer, 0);
-            for (int i=1; i<=count; ++i){
-                QString mimeType = getMimeTypeTag(mimeList, i, kMimeInfoMimeTypeTag);
-                if (mimeType.startsWith(QLatin1String("audio")) || mimeType.startsWith(QLatin1String("video"))){
-                    if (err == noErr && !mimeType.isEmpty())
-                        mimeTypes << mimeType;
-                }
-            }
-         }
-         QTDisposeAtomContainer(mimeList);
-         component = FindNextComponent(component, &description);
-    }
-	mimeTypes.sort();
-    return mimeTypes;
-}
-
-#else // QUICKTIME_C_API_AVAILABLE == false
 
 QString mimeForExtensionAudio(const QString &ext)
 {
@@ -217,36 +162,12 @@ QStringList BackendInfo::quickTimeMimeTypes(Scope scope)
 	fileExtensions.sort();
     return mimeTypes + fileExtensions;
 }
-#endif // QUICKTIME_C_API_AVAILABLE
 
 QStringList BackendInfo::quickTimeCompressionFormats()
 {
     QStringList result;
-
-#ifdef QUICKTIME_C_API_AVAILABLE
-
-    ComponentInstance component = 0;
-    OSStatus err = OpenADefaultComponent(StandardCompressionType, StandardCompressionSubTypeAudio, &component);
-    BACKEND_ASSERT3(err == noErr, "Could not open component for retrieving awailable compression formats", NORMAL_ERROR, result)
-
-    UInt32 size;
-    err = QTGetComponentPropertyInfo(component, kQTPropertyClass_SCAudio, kQTSCAudioPropertyID_AvailableCompressionFormatNamesList, 0, &size,0);
-    BACKEND_ASSERT3(err == noErr, "Could not get awailable compression formats", NORMAL_ERROR, result)
-
-    CFArrayRef formats[size];
-    err = QTGetComponentProperty(component, kQTPropertyClass_SCAudio, kQTSCAudioPropertyID_AvailableCompressionFormatNamesList, size, &formats, &size);
-    BACKEND_ASSERT3(err == noErr, "Could not get awailable compression formats", NORMAL_ERROR, result)
-
-    CFIndex count = CFArrayGetCount(*formats);
-    for (CFIndex i=0; i<count; ++i){
-        const CFStringRef name = (const struct __CFString *) CFArrayGetValueAtIndex(*formats, i);
-        result << PhononCFString::toQString(name);
-    }
-    
-#endif // QUICKTIME_C_API_AVAILABLE
     return result;
 }
-
 
 QStringList BackendInfo::coreAudioCodecs(Scope scope)
 {

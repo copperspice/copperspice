@@ -24,87 +24,12 @@
 ***********************************************************************/
 
 #include "qlocale_p.h"
-
 #include "qstringbuilder.h"
 #include "qdatetime.h"
 #include "qstringlist.h"
 #include "qvariant.h"
 
-#if defined(Q_OS_QNX)
-#include <qcore_unix_p.h>
-#include <QCoreApplication>
-
-#include <unistd.h>
-#include <errno.h>
-#include <sys/pps.h>
-#endif
-
 QT_BEGIN_NAMESPACE
-
-#if defined(Q_OS_QNX)
-static const char ppsServicePath[] = "/pps/services/locale/uom";
-static const size_t ppsBufferSize = 256;
-
-QBBLocaleData::QBBLocaleData()
-    :ppsNotifier(0)
-    ,ppsFd(-1)
-{
-    readPPSLocale();
-}
-
-QBBLocaleData::~QBBLocaleData()
-{
-    if (ppsFd != -1)
-        qt_safe_close(ppsFd);
-}
-
-void QBBLocaleData::updateMesurementSystem()
-{
-    char buffer[ppsBufferSize];
-
-    errno = 0;
-    int bytes = qt_safe_read(ppsFd, buffer, ppsBufferSize - 1);
-    if (bytes == -1) {
-        qWarning("Failed to read Locale pps, errno=%d", errno);
-        return;
-    }
-    // ensure data is null terminated
-    buffer[bytes] = '\0';
-
-    pps_decoder_t ppsDecoder;
-    pps_decoder_initialize(&ppsDecoder, 0);
-    if (pps_decoder_parse_pps_str(&ppsDecoder, buffer) == PPS_DECODER_OK) {
-        pps_decoder_push(&ppsDecoder, 0);
-        const char *measurementBuff;
-        if (pps_decoder_get_string(&ppsDecoder, "uom", &measurementBuff) == PPS_DECODER_OK) {
-            if (qstrcmp(measurementBuff, "imperial") == 0) {
-                pps_decoder_cleanup(&ppsDecoder);
-                ppsMeasurement = QLocale::ImperialSystem;
-                return;
-            }
-        }
-    }
-
-    pps_decoder_cleanup(&ppsDecoder);
-    ppsMeasurement = QLocale::MetricSystem;
-}
-
-void QBBLocaleData::readPPSLocale()
-{
-    errno = 0;
-    ppsFd = qt_safe_open(ppsServicePath, O_RDONLY);
-    if (ppsFd == -1) {
-        qWarning("Failed to open Locale pps, errno=%d", errno);
-        return;
-    }
-
-    updateMesurementSystem();
-    if (QCoreApplication::instance()) {
-        ppsNotifier = new QSocketNotifier(ppsFd, QSocketNotifier::Read, this);
-        QObject::connect(ppsNotifier, SIGNAL(activated(int)), this, SLOT(updateMesurementSystem()));
-    }
-}
-#endif
 
 static QByteArray getSystemLocale()
 {

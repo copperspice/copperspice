@@ -29,7 +29,6 @@
 
 #include "qfontdialog.h"
 #include "qfontdialog_p.h"
-
 #include <qapplication.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -46,8 +45,8 @@
 #include <qlistview.h>
 #include <qstringlistmodel.h>
 #include <qvalidator.h>
-#include <private/qdialog_p.h>
-#include <private/qfont_p.h>
+#include <qdialog_p.h>
+#include <qfont_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -155,7 +154,7 @@ void QFontDialogPrivate::init()
 {
     Q_Q(QFontDialog);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     nativeDialogInUse = false;
     delegate = 0;
 #endif
@@ -316,7 +315,7 @@ void QFontDialogPrivate::init()
 
 QFontDialog::~QFontDialog()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     Q_D(QFontDialog);
     if (d->delegate) {
         d->closeCocoaFontPanel();
@@ -788,7 +787,7 @@ void QFontDialog::setCurrentFont(const QFont &font)
     d->underline->setChecked(font.underline());
     d->updateFamilies();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (d->delegate)
         QFontDialogPrivate::setFont(d->delegate, font);
 #endif
@@ -892,7 +891,7 @@ QFontDialog::FontDialogOptions QFontDialog::options() const
     return d->opts;
 }
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 // can only have one Cocoa font panel active
 bool QFontDialogPrivate::sharedFontPanelAvailable = true;
 #endif
@@ -952,7 +951,7 @@ void QFontDialog::setVisible(bool visible)
 {
     if (testAttribute(Qt::WA_WState_ExplicitShowHide) && testAttribute(Qt::WA_WState_Hidden) != visible)
         return;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     Q_D(QFontDialog);
     if (d->canBeNativeDialog()){
         if (d->setVisible_sys(visible)){
@@ -965,7 +964,7 @@ void QFontDialog::setVisible(bool visible)
             setAttribute(Qt::WA_DontShowOnScreen, false);
         }
     }
-#endif // Q_WS_MAC
+#endif 
     QDialog::setVisible(visible);
 }
 
@@ -1004,7 +1003,7 @@ void QFontDialog::done(int result)
     d->memberToDisconnectOnClose.clear();
 }
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 bool QFontDialogPrivate::canBeNativeDialog()
 {
     Q_Q(QFontDialog);
@@ -1019,7 +1018,7 @@ bool QFontDialogPrivate::canBeNativeDialog()
     QLatin1String dynamicName(q->metaObject()->className());
     return (staticName == dynamicName);
 }
-#endif // Q_WS_MAC
+#endif
 
 void QFontDialog::_q_sizeChanged(const QString & un_named_arg1)
 {
@@ -1057,7 +1056,7 @@ void QFontDialog::_q_updateSample()
 	d->_q_updateSample();
 }
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
 void QFontDialog::_q_macRunNativeAppModalPanel()
    {
    	Q_D(QFontDialog);

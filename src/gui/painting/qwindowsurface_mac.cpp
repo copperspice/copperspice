@@ -57,15 +57,10 @@ void QMacWindowSurface::flush(QWidget *widget, const QRegion &rgn, const QPoint 
 {
     Q_UNUSED(offset);
 
-    // Get a context for the widget.
-#ifndef QT_MAC_USE_COCOA
-    CGContextRef context;
-    CGrafPtr port = GetWindowPort(qt_mac_window_for(widget));
-    QDBeginCGContext(port, &context);
-#else
+    // Get a context for the widget
     extern CGContextRef qt_mac_graphicsContextFor(QWidget *);
     CGContextRef context = qt_mac_graphicsContextFor(widget);
-#endif
+
     CGContextRetain(context);
     CGContextSaveGState(context);
 
@@ -89,11 +84,7 @@ void QMacWindowSurface::flush(QWidget *widget, const QRegion &rgn, const QPoint 
 
     // Restore context.
     CGContextRestoreGState(context);
-#ifndef QT_MAC_USE_COCOA
-    QDEndCGContext(port, &context);
-#else
     CGContextFlush(context);
-#endif
     CGContextRelease(context);
 }
 

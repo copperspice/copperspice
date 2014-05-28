@@ -54,12 +54,15 @@ extern uint qGlobalPostedEventsCount();
 #endif
 
 #ifndef QT_NO_GESTURES
+
 #ifndef WM_GESTURE
 #  define WM_GESTURE 0x0119
 #endif
+
 #ifndef WM_GESTURENOTIFY
 #  define WM_GESTURENOTIFY 0x011A
 #endif
+
 #endif // QT_NO_GESTURES
 
 enum {
@@ -96,7 +99,7 @@ public:
 typedef QList<WinTimerInfo*>  WinTimerVec;      // vector of TimerInfo structs
 typedef QHash<int, WinTimerInfo*> WinTimerDict; // fast dict of timers
 
-#if !defined(DWORD_PTR) && !defined(Q_WS_WIN64)
+#if !defined(DWORD_PTR) && !defined(Q_OS_WIN64)
 #define DWORD_PTR DWORD
 #endif
 

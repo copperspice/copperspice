@@ -554,8 +554,6 @@ qreal QVector3D::lengthSquared() const
     return xp * xp + yp * yp + zp * zp;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
-
 QDebug operator<<(QDebug dbg, const QVector3D &vector)
 {
     dbg.nospace() << "QVector3D("
@@ -563,19 +561,9 @@ QDebug operator<<(QDebug dbg, const QVector3D &vector)
     return dbg.space();
 }
 
-#endif
 
 #ifndef QT_NO_DATASTREAM
 
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QVector3D &vector)
-    \relates QVector3D
-
-    Writes the given \a vector to the given \a stream and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator<<(QDataStream &stream, const QVector3D &vector)
 {

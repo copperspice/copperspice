@@ -391,7 +391,7 @@ QWorkspaceTitleBar::~QWorkspaceTitleBar()
 }
 
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 static inline QRgb colorref2qrgb(COLORREF col)
 {
     return qRgb(GetRValue(col),GetGValue(col),GetBValue(col));
@@ -405,7 +405,7 @@ void QWorkspaceTitleBarPrivate::readColors()
 
     bool colorsInitialized = false;
 
-#ifdef Q_WS_WIN // ask system properties on windows
+#ifdef Q_OS_WIN // ask system properties on windows
 #ifndef SPI_GETGRADIENTCAPTIONS
 #define SPI_GETGRADIENTCAPTIONS 0x1008
 #endif
@@ -433,7 +433,8 @@ void QWorkspaceTitleBarPrivate::readColors()
             pal.setColor(QPalette::Inactive, QPalette::Base, pal.color(QPalette::Inactive, QPalette::Highlight));
         }
     }
-#endif // Q_WS_WIN
+#endif
+
     if (!colorsInitialized) {
         pal.setColor(QPalette::Active, QPalette::Highlight,
                       pal.color(QPalette::Active, QPalette::Highlight));

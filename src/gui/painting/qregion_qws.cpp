@@ -337,13 +337,16 @@ bool QRegionPrivate::canPrepend(const QRegionPrivate *r) const
 QT_BEGIN_INCLUDE_NAMESPACE
 # include "qregion_x11.cpp"
 QT_END_INCLUDE_NAMESPACE
-#elif defined(Q_WS_MAC)
+
+#elif defined(Q_OS_MAC)
 QT_BEGIN_INCLUDE_NAMESPACE
 # include "qregion_mac.cpp"
 QT_END_INCLUDE_NAMESPACE
+
 #elif defined(Q_WS_QWS)
 static QRegionPrivate qrp;
 QRegion::QRegionData QRegion::shared_empty = {Q_BASIC_ATOMIC_INITIALIZER(1), &qrp};
+
 #endif
 
 typedef void (*OverlapFunc)(QRegionPrivate &dest, const QRect *r1, const QRect *r1End,
@@ -2495,7 +2498,7 @@ QRegion::QRegion(const QRect &r, RegionType t)
 #if defined(Q_WS_X11)
         d->rgn = 0;
         d->xrectangles = 0;
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
         d->rgn = 0;
 #endif
         d->qt_rgn = rp;
@@ -2527,7 +2530,7 @@ QRegion::QRegion(const QPolygon &a, Qt::FillRule fillRule)
 #if defined(Q_WS_X11)
         d->rgn = 0;
         d->xrectangles = 0;
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
         d->rgn = 0;
 #endif
         d->qt_rgn = rp;
@@ -2575,7 +2578,7 @@ QRegion::QRegion(const QBitmap &bm)
 #if defined(Q_WS_X11)
         d->rgn = 0;
         d->xrectangles = 0;
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
         d->rgn = 0;
 #endif
         d->qt_rgn = rp;
@@ -2590,7 +2593,7 @@ void QRegion::cleanUp(QRegion::QRegionData *x)
         XDestroyRegion(x->rgn);
     if (x->xrectangles)
         free(x->xrectangles);
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     if (x->rgn)
         qt_mac_dispose_rgn(x->rgn);
 #endif
@@ -2647,7 +2650,7 @@ QRegion QRegion::copy() const
 #if defined(Q_WS_X11)
     x->rgn = 0;
     x->xrectangles = 0;
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     x->rgn = 0;
 #endif
 
@@ -2717,7 +2720,7 @@ void QRegion::translate(int dx, int dy)
         free(d->xrectangles);
         d->xrectangles = 0;
     }
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     if(d->rgn) {
         qt_mac_dispose_rgn(d->rgn);
         d->rgn = 0;

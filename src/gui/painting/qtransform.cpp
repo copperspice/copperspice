@@ -1061,7 +1061,6 @@ QDataStream & operator>>(QDataStream &s, QTransform &t)
 
 #endif // QT_NO_DATASTREAM
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QTransform &m)
 {
     static const char *typeStr[] =
@@ -1091,7 +1090,7 @@ QDebug operator<<(QDebug dbg, const QTransform &m)
 
     return dbg.space();
 }
-#endif
+
 
 /*!
     \fn QPoint operator*(const QPoint &point, const QTransform &matrix)

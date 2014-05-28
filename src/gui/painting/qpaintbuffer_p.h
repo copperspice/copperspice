@@ -55,9 +55,8 @@ public:
     int frameStartIndex(int frame) const;
     int frameEndIndex(int frame) const;
     int processCommands(QPainter *painter, int begin, int end) const;
-#ifndef QT_NO_DEBUG_STREAM
+
     QString commandDescription(int command) const;
-#endif
 
     void setBoundingRect(const QRectF &rect);
     QRectF boundingRect() const;

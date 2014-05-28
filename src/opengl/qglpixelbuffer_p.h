@@ -97,9 +97,9 @@ struct GLXFBConfig {
     GLdouble minAlpha, maxAlpha;
 };
 
-#endif // Q_OS_HPUX
+#endif
 
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
 DECLARE_HANDLE(HPBUFFERARB);
 #elif !defined(QT_NO_EGL)
 #include <qegl_p.h>
@@ -126,9 +126,9 @@ class QGLPixelBufferPrivate {
 public:
     QGLPixelBufferPrivate(QGLPixelBuffer *q) : q_ptr(q), invalid(true), qctx(0), pbuf(0), ctx(0)
     {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         dc = 0;
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
         share_ctx = 0;
 #endif
     }
@@ -149,28 +149,27 @@ public:
 #if defined(Q_WS_X11) && defined(QT_NO_EGL)
     GLXPbuffer pbuf;
     GLXContext ctx;
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
     HDC dc;
     bool has_render_texture :1;
+
 #if !defined(QT_OPENGL_ES)
     HPBUFFERARB pbuf;
     HGLRC ctx;
 #endif
-#elif defined(Q_WS_MAC)
-#  ifdef QT_MAC_USE_COCOA
+
+#elif defined(Q_OS_MAC)
     void *pbuf;
     void *ctx;
     void *share_ctx;
-#  else
-    AGLPbuffer pbuf;
-    AGLContext ctx;
-    AGLContext share_ctx;
-#  endif
+
 #endif
+
 #ifndef QT_NO_EGL
     EGLSurface pbuf;
     QEglContext *ctx;
     int textureFormat;
+
 #elif defined(Q_WS_QPA)
     //stubs
     void *pbuf;

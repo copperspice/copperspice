@@ -103,11 +103,8 @@ static inline WindowRef nativeWindowFor(PlatformWidget widget)
 {
 #if PLATFORM(QT)
     if (widget)
-#ifdef QT_MAC_USE_COCOA
         return static_cast<WindowRef>([qt_mac_window_for(widget) windowRef]);
-#else
-        return static_cast<WindowRef>(qt_mac_window_for(widget));
-#endif
+
 #elif PLATFORM(WX)
     if (widget)
         return (WindowRef)widget->MacGetTopLevelWindowRef();

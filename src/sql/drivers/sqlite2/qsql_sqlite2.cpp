@@ -37,7 +37,7 @@
 #include <qstringlist.h>
 #include <qvector.h>
 
-#if !defined Q_WS_WIN32
+#if !defined Q_OS_WIN32
 # include <unistd.h>
 #endif
 #include <sqlite.h>
@@ -186,14 +186,16 @@ bool QSQLite2ResultPrivate::fetchNext(QSqlCachedResult::ValueCache &values, int 
     if (!currentMachine)
         return false;
 
-    // keep trying while busy, wish I could implement this better.
+    // keep trying while busy, wish I could implement this better
     while ((res = sqlite_step(currentMachine, &colNum, &fvals, &cnames)) == SQLITE_BUSY) {
-        // sleep instead requesting result again immidiately.
-#if defined Q_WS_WIN32
+
+        // sleep instead requesting result again immidiately
+#if defined Q_OS_WIN32
         Sleep(1000);
 #else
         sleep(1);
 #endif
+
     }
 
     if(initialFetch) {

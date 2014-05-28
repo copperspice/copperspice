@@ -30,7 +30,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if defined(Q_WS_MAC) && !defined(QT_NO_STYLE_MAC)
+#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
 
 class QPalette;
 
@@ -114,7 +114,7 @@ private:
     friend bool qt_mac_buttonIsRenderedFlat(const QPushButton *pushButton, const QStyleOptionButton *option);
 };
 
-#endif // Q_WS_MAC
+#endif
 
 QT_END_NAMESPACE
 

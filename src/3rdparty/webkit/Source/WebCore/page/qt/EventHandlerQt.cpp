@@ -56,7 +56,7 @@ QT_END_NAMESPACE
 
 namespace WebCore {
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
 const double EventHandler::TextDragDelay = 0.15;
 #else
 const double EventHandler::TextDragDelay = 0.0;

@@ -50,7 +50,7 @@ public:
     QString sessionId() const;
     QString sessionKey() const;
 
-#if defined(Q_WS_X11) || defined(Q_WS_MAC)
+#if defined(Q_WS_X11) || defined(Q_OS_MAC)
     void *handle() const;
 #endif
 

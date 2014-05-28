@@ -1626,7 +1626,7 @@ void QColorDialogPrivate::init(const QColor &initial)
 
     retranslateStrings();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     delegate = 0;
 #endif
 
@@ -1729,7 +1729,7 @@ void QColorDialog::setCurrentColor(const QColor &color)
     d->selectColor(color);
     d->setCurrentAlpha(color.alpha());
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     d->setCurrentQColor(color);
     d->setCocoaPanelColor(color);
 #endif
@@ -1816,49 +1816,11 @@ QColorDialog::ColorDialogOptions QColorDialog::options() const
     return d->opts;
 }
 
-/*!
-    \enum QColorDialog::ColorDialogOption
-
-    \since 4.5
-
-    This enum specifies various options that affect the look and feel
-    of a color dialog.
-
-    \value ShowAlphaChannel Allow the user to select the alpha component of a color.
-    \value NoButtons Don't display \gui{OK} and \gui{Cancel} buttons. (Useful for "live dialogs".)
-    \value DontUseNativeDialog Use Qt's standard color dialog on the Mac instead of Apple's
-                               native color panel.
-
-    \sa options, setOption(), testOption(), windowModality()
-*/
-
-/*!
-    \fn void QColorDialog::currentColorChanged(const QColor &color)
-
-    This signal is emitted whenever the current color changes in the dialog.
-    The current color is specified by \a color.
-
-    \sa color, colorSelected()
-*/
-
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 // can only have one Cocoa color panel active
 bool QColorDialogPrivate::sharedColorPanelAvailable = true;
 #endif
 
-/*!
-    \fn void QColorDialog::colorSelected(const QColor &color);
-
-    This signal is emitted just after the user has clicked \gui{OK} to
-    select a color to use. The chosen color is specified by \a color.
-
-    \sa color, currentColorChanged()
-*/
-
-/*!
-    Changes the visibility of the dialog. If \a visible is true, the dialog
-    is shown; otherwise, it is hidden.
-*/
 void QColorDialog::setVisible(bool visible)
 {
     Q_D(QColorDialog);
@@ -1872,7 +1834,7 @@ void QColorDialog::setVisible(bool visible)
     if (visible)
         d->selectedQColor = QColor();
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     if (visible) {
         if (d->delegate || (QColorDialogPrivate::sharedColorPanelAvailable &&
                 !(testAttribute(Qt::WA_DontShowOnScreen) || (d->opts & DontUseNativeDialog)))){
@@ -2009,7 +1971,7 @@ QColorDialog::~QColorDialog()
 {
     Q_D(QColorDialog);
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     if (d->delegate) {
         d->releaseCocoaColorPanelDelegate();
         QColorDialogPrivate::sharedColorPanelAvailable = true;
@@ -2101,7 +2063,7 @@ void QColorDialog::_q_newStandard(int un_named_arg1,int un_named_arg2)
 	d->_q_newStandard(un_named_arg1, un_named_arg2);
 }
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
 void QColorDialog::_q_macRunNativeAppModalPanel()
    {
    	Q_D(QColorDialog);

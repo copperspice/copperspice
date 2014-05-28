@@ -144,18 +144,13 @@ private:
 
     friend Q_GUI_EXPORT bool operator==(const QPlatformWindowFormat&, const QPlatformWindowFormat&);
     friend Q_GUI_EXPORT bool operator!=(const QPlatformWindowFormat&, const QPlatformWindowFormat&);
-
-#ifndef QT_NO_DEBUG_STREAM
     friend Q_GUI_EXPORT QDebug operator<<(QDebug, const QPlatformWindowFormat &);
-#endif
 };
 
 Q_GUI_EXPORT bool operator==(const QPlatformWindowFormat&, const QPlatformWindowFormat&);
 Q_GUI_EXPORT bool operator!=(const QPlatformWindowFormat&, const QPlatformWindowFormat&);
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_OPENGL_EXPORT QDebug operator<<(QDebug, const QPlatformWindowFormat &);
-#endif
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPlatformWindowFormat::FormatOptions)
 

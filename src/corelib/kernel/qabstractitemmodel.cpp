@@ -412,7 +412,6 @@ bool QPersistentModelIndex::isValid() const
     return d && d->index.isValid();
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QModelIndex &idx)
 {
     dbg.nospace() << "QModelIndex(" << idx.row() << ',' << idx.column()
@@ -428,7 +427,6 @@ QDebug operator<<(QDebug dbg, const QPersistentModelIndex &idx)
         dbg << QModelIndex();
     return dbg;
 }
-#endif
 
 class QEmptyItemModel : public QAbstractItemModel
 {

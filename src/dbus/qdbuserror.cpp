@@ -27,7 +27,6 @@
 
 #include <qdebug.h>
 #include <qvarlengtharray.h>
-
 #include "qdbus_symbols_p.h"
 #include "qdbusmessage.h"
 #include "qdbusmessage_p.h"
@@ -284,13 +283,11 @@ QString QDBusError::errorString(ErrorType error)
     return QLatin1String(::get(error));
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QDBusError &msg)
 {
     dbg.nospace() << "QDBusError(" << msg.name() << ", " << msg.message() << ')';
     return dbg.space();
 }
-#endif
 
 QT_END_NAMESPACE
 

@@ -1762,7 +1762,7 @@ void QAbstractItemView::keyPressEvent(QKeyEvent *event)
         }
 #endif
         break;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     case Qt::Key_Enter:
     case Qt::Key_Return:
         // Propagate the enter if you couldn't edit the item and there are no
@@ -1793,7 +1793,7 @@ void QAbstractItemView::keyPressEvent(QKeyEvent *event)
             break;
         }
     default: {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         if (event->key() == Qt::Key_O && event->modifiers() & Qt::ControlModifier && currentIndex().isValid()) {
             emit activated(currentIndex());
             break;
@@ -2991,7 +2991,7 @@ QStyleOptionViewItem QAbstractItemView::viewOptions() const
     option.state &= ~QStyle::State_MouseOver;
     option.font = font();
 
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     // On mac the focus appearance follows window activation
     // not widget activation
     if (!hasFocus())

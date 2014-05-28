@@ -65,7 +65,7 @@
 #  define FM_DEBUG if (false) qDebug
 #endif
 
-#if defined(Q_WS_WIN) && !defined(QT_NO_DIRECTWRITE)
+#if defined(Q_OS_WIN) && !defined(QT_NO_DIRECTWRITE)
 #  include <dwrite.h>
 #endif
 
@@ -197,7 +197,7 @@ QtFontEncoding *QtFontSize::encodingID(int id, uint xpoint, uint xres,
     encodings[count].pitch = '*';
     return encodings + count++;
 }
-#endif // Q_WS_X11
+#endif
 
 struct QtFontStyle
 {
@@ -230,7 +230,7 @@ struct QtFontStyle
     {
 #if defined(Q_WS_X11)
         weightName = setwidthName = 0;
-#endif // Q_WS_X11
+#endif
     }
 
     ~QtFontStyle() {
@@ -243,12 +243,15 @@ struct QtFontStyle
         while (count) {
             // bitfield count-- in while condition does not work correctly in mwccsym2
             count--;
+
 #ifdef Q_WS_X11
             free(pixelSizes[count].encodings);
 #endif
+
 #if defined(Q_WS_QWS)
             pixelSizes[count].fileName.~QByteArray();
 #endif
+
 #if defined (Q_WS_QPA)
             QPlatformIntegration *integration = QApplicationPrivate::platformIntegration();
             if (integration) { //on shut down there will be some that we don't release.
@@ -270,7 +273,8 @@ struct QtFontStyle
 #ifdef Q_WS_X11
     const char *weightName;
     const char *setwidthName;
-#endif // Q_WS_X11
+#endif
+
 #if defined(Q_WS_QWS) || defined(Q_WS_QPA)
     bool antialiased;
 #endif
@@ -396,7 +400,7 @@ struct  QtFontFamily
 #else
         fixedPitch(false),
 #endif
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         writingSystemCheck(false),
         loaded(false),
 #endif
@@ -426,7 +430,7 @@ struct  QtFontFamily
     bool xlfdLoaded : 1;
     bool synthetic : 1;
 #endif
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     bool writingSystemCheck : 1;
     bool loaded : 1;
 #endif
@@ -442,7 +446,7 @@ struct  QtFontFamily
     QByteArray fontFilename;
     int fontFileIndex;
 #endif
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     QString english_name;
 #endif
     int count;
@@ -633,7 +637,7 @@ public:
           , stream(0)
 #endif
 
-#if defined(Q_WS_WIN) && !defined(QT_NO_DIRECTWRITE)
+#if defined(Q_OS_WIN) && !defined(QT_NO_DIRECTWRITE)
           , directWriteFactory(0)
           , directWriteGdiInterop(0)
 #endif
@@ -642,7 +646,7 @@ public:
     ~QFontDatabasePrivate() {
         free();
 
-#if defined(Q_WS_WIN) && !defined(QT_NO_DIRECTWRITE)
+#if defined(Q_OS_WIN) && !defined(QT_NO_DIRECTWRITE)
     if (directWriteGdiInterop)
         directWriteGdiInterop->Release();
     if (directWriteFactory != 0)
@@ -666,11 +670,10 @@ public:
 #endif
     QtFontFamily **families;
 
-#if defined(Q_WS_WIN) && !defined(QT_NO_DIRECTWRITE)
+#if defined(Q_OS_WIN) && !defined(QT_NO_DIRECTWRITE)
     IDWriteFactory *directWriteFactory;
     IDWriteGdiInterop *directWriteGdiInterop;
 #endif
-
 
     struct ApplicationFont {
         QString fileName;
@@ -679,7 +682,7 @@ public:
         HANDLE handle;
         bool memoryFont;
         QVector<FONTSIGNATURE> signatures;
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
         ATSFontContainerRef handle;
 #endif
         QStringList families;
@@ -704,7 +707,7 @@ public:
 
 #ifndef QT_NO_FREETYPE
     QStringList addTTFile(const QByteArray &file, const QByteArray &fontData = QByteArray());
-#endif // QT_NO_FREETYPE
+#endif
 
 #endif
 
@@ -913,7 +916,7 @@ int qt_script_for_writing_system(QFontDatabase::WritingSystem writingSystem)
 }
 
 
-#if defined Q_WS_QWS || (defined(Q_WS_X11) && !defined(QT_NO_FONTCONFIG)) || defined(Q_WS_WIN)
+#if defined Q_WS_QWS || (defined(Q_WS_X11) && !defined(QT_NO_FONTCONFIG)) || defined(Q_OS_WIN)
 static inline bool requiresOpenType(int writingSystem)
 {
     return ((writingSystem >= QFontDatabase::Syriac && writingSystem <= QFontDatabase::Sinhala)
@@ -982,7 +985,7 @@ struct QtFontDesc
     int familyIndex;
 };
 
-#if !defined(Q_WS_MAC)
+#if !defined(Q_OS_MAC)
 static void match(int script, const QFontDef &request,
                   const QString &family_name, const QString &foundry_name, int force_encoding_id,
                   QtFontDesc *desc, const QList<int> &blacklistedFamilies = QList<int>(), bool forceXLFD=false);
@@ -1016,7 +1019,7 @@ static void initFontDef(const QtFontDesc &desc, const QFontDef &request, QFontDe
 #endif
 #endif
 
-#if defined(Q_WS_X11) || defined(Q_WS_WIN) || defined(Q_WS_QPA)
+#if defined(Q_WS_X11) || defined(Q_OS_WIN) || defined(Q_WS_QPA)
 static void getEngineData(const QFontPrivate *d, const QFontCache::Key &key)
 {
     // look for the requested font in the engine data cache
@@ -1071,18 +1074,23 @@ QMutex *qt_fontdatabase_mutex()
 QT_BEGIN_INCLUDE_NAMESPACE
 #if defined(Q_WS_X11)
 #  include "qfontdatabase_x11.cpp"
-#elif defined(Q_WS_MAC)
+
+#elif defined(Q_OS_MAC)
 #  include "qfontdatabase_mac.cpp"
-#elif defined(Q_WS_WIN)
+
+#elif defined(Q_OS_WIN)
 #  include "qfontdatabase_win.cpp"
+
 #elif defined(Q_WS_QWS)
 #  include "qfontdatabase_qws.cpp"
+
 #elif defined(Q_WS_QPA)
 #  include "qfontdatabase_qpa.cpp"
+
 #endif
 QT_END_INCLUDE_NAMESPACE
 
-#if !defined(Q_WS_X11) && !defined(Q_WS_MAC)
+#if !defined(Q_WS_X11) && !defined(Q_OS_MAC)
 QString QFontDatabase::resolveFontFamilyAlias(const QString &family)
 {
     return family;
@@ -1175,9 +1183,9 @@ static QtFontEncoding *findEncoding(int script, int styleStrategy,
 
     return encoding;
 }
-#endif // Q_WS_X11
+#endif
 
-#if !defined(Q_WS_MAC)
+#if !defined(Q_OS_MAC)
 static
 unsigned int bestFoundry(int script, unsigned int score, int styleStrategy,
                          const QtFontFamily *family, const QString &foundry_name,
@@ -1301,7 +1309,7 @@ unsigned int bestFoundry(int script, unsigned int score, int styleStrategy,
             FM_DEBUG("          foundry doesn't support the script we want");
             continue;
         }
-#endif // Q_WS_X11
+#endif
 
         unsigned int this_score = 0x0000;
         enum {
@@ -1311,6 +1319,7 @@ unsigned int bestFoundry(int script, unsigned int score, int styleStrategy,
             EncodingMismatch    = 0x0002,
             XLFDPenalty         = 0x0001
         };
+
 #ifdef Q_WS_X11
         if (encoding->encoding != -1) {
             this_score += XLFDPenalty;
@@ -1348,7 +1357,7 @@ unsigned int bestFoundry(int script, unsigned int score, int styleStrategy,
             desc->size = size;
 #ifdef Q_WS_X11
             desc->encoding = encoding;
-#endif // Q_WS_X11
+#endif
         } else {
             FM_DEBUG("          score %x no better than best %x", this_score, score);
         }
@@ -1358,7 +1367,7 @@ unsigned int bestFoundry(int script, unsigned int score, int styleStrategy,
 }
 #endif
 
-#if !defined(Q_WS_MAC)
+#if !defined(Q_OS_MAC)
 /*!
     \internal
 
@@ -1419,7 +1428,7 @@ static void match(int script, const QFontDef &request,
 
         if (!family_name.isEmpty()
             && test.family->name.compare(family_name, Qt::CaseInsensitive) != 0
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
             && test.family->english_name.compare(family_name, Qt::CaseInsensitive) != 0
 #endif
             )
@@ -1902,7 +1911,7 @@ bool  QFontDatabase::isScalable(const QString &family,
 QList<int> QFontDatabase::pointSizes(const QString &family,
                                            const QString &styleName)
 {
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     // windows and macosx are always smoothly scalable
     Q_UNUSED(family);
     Q_UNUSED(styleName);
@@ -2014,7 +2023,7 @@ QFont QFontDatabase::font(const QString &family, const QString &style,
 QList<int> QFontDatabase::smoothSizes(const QString &family,
                                             const QString &styleName)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     Q_UNUSED(family);
     Q_UNUSED(styleName);
     return QFontDatabase::standardSizes();

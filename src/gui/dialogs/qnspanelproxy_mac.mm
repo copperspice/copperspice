@@ -24,9 +24,11 @@
 ***********************************************************************/
 
 #include <qdialogbuttonbox.h>
-#if defined(Q_WS_MAC)
-#include <private/qt_mac_p.h>
-#include <private/qcocoaintrospection_p.h>
+
+#if defined(Q_OS_MAC)
+#include <qt_mac_p.h>
+#include <qcocoaintrospection_p.h>
+
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 #import <objc/objc-class.h>

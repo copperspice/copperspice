@@ -25,7 +25,6 @@
 
 #import <qcocoatoolbardelegate_mac_p.h>
 
-#ifdef QT_MAC_USE_COCOA
 #include <qmainwindowlayout_p.h>
 #include <qt_mac_p.h>
 #include <qt_cocoa_helpers_mac_p.h>
@@ -135,4 +134,3 @@ QT_FORWARD_DECLARE_CLASS(QCFString);
 }
 
 @end
-#endif // QT_MAC_USE_COCOA

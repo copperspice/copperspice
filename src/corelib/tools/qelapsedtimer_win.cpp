@@ -45,8 +45,7 @@ static void resolveLibs()
     QSystemLibrary kernel32(QLatin1String("kernel32"));
     if (!kernel32.load())
         return;
-
-    // does this function exist on WinCE, or will ever exist?
+    
     ptrGetTickCount64 = (PtrGetTickCount64)kernel32.resolve("GetTickCount64");
 
     // Retrieve the number of high-resolution performance counter ticks per second

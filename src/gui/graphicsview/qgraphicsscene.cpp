@@ -4023,13 +4023,14 @@ void QGraphicsScene::wheelEvent(QGraphicsSceneWheelEvent *wheelEvent)
                                                                 wheelEvent->scenePos(),
                                                                 wheelEvent->widget());
 
-#ifdef Q_WS_MAC
-    // On Mac, ignore the event if the first item under the mouse is not the last opened
-    // popup (or one of its descendant)
-    if (!d->popupWidgets.isEmpty() && !wheelCandidates.isEmpty() && wheelCandidates.first() != d->popupWidgets.back() && !d->popupWidgets.back()->isAncestorOf(wheelCandidates.first())) {
+#ifdef Q_OS_MAC
+    // ignore the event if the first item under the mouse is not the last opened popup (or one of its descendant)
+    if (! d->popupWidgets.isEmpty() && !wheelCandidates.isEmpty() 
+            && wheelCandidates.first() != d->popupWidgets.back() && !d->popupWidgets.back()->isAncestorOf(wheelCandidates.first())) {
         wheelEvent->accept();
         return;
     }
+
 #else
     // Find the first popup under the mouse (including the popup's descendants) starting from the last.
     // Remove all popups after the one found, or all or them if no popup is under the mouse.

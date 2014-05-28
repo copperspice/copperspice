@@ -44,7 +44,7 @@
 #include <GL/glx.h>
 #include <X11/Xlib.h>
 #endif
-#endif //Q_WS_X11
+#endif
 
 #include <qglextensions_p.h>
 #include <qwindowsurface_gl_p.h>
@@ -72,7 +72,7 @@ QT_BEGIN_NAMESPACE
 //
 // QGLGraphicsSystem
 //
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 extern Q_GUI_EXPORT bool qt_win_owndc_required;
 #endif
 QGLGraphicsSystem::QGLGraphicsSystem(bool useX11GL)
@@ -152,7 +152,7 @@ QGLGraphicsSystem::QGLGraphicsSystem(bool useX11GL)
             printf("using visual class %x, id %x\n", X11->visual_class, X11->visual_id);
         }
     }
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
     QGLWindowSurface::surfaceFormat.setDoubleBuffer(true);
 
     qt_win_owndc_required = true;
@@ -821,7 +821,7 @@ void QGLWindowSurface::updateGeometry() {
 
     QGLContext *ctx = reinterpret_cast<QGLContext *>(wd->extraData()->glContext);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     ctx->updatePaintDevice();
 #endif
 

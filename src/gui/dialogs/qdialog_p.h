@@ -66,7 +66,7 @@ public:
     void hideDefault();
     void resetModalitySetByOpen();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     virtual void mac_nativeDialogModalHelp() {}
 #endif
 

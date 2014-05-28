@@ -36,75 +36,59 @@
 #include <QtGui/QPlatformWindowFormat>
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 # include <QtCore/qt_windows.h>
 #endif
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
 # include <OpenGL/gl.h>
+
 #elif defined(QT_OPENGL_ES_1)
 # if defined(Q_OS_MAC)
 #  include <OpenGLES/ES1/gl.h>
 # else
 #  include <GLES/gl.h>
 # endif
+
 # ifndef GL_DOUBLE
 #  define GL_DOUBLE GL_FLOAT
 # endif
+
 # ifndef GLdouble
 typedef GLfloat GLdouble;
 # endif
+
 #elif defined(QT_OPENGL_ES_2)
 # if defined(Q_OS_MAC)
 #  include <OpenGLES/ES2/gl.h>
 # else
 #  include <GLES2/gl2.h>
 # endif
+
 # ifndef GL_DOUBLE
 #  define GL_DOUBLE GL_FLOAT
 # endif
+
 # ifndef GLdouble
 typedef GLfloat GLdouble;
 # endif
+
 #else
 # include <GL/gl.h>
 #endif
 
 QT_BEGIN_NAMESPACE
 
-#if defined(Q_WS_MAC) && defined (QT_BUILD_OPENGL_LIB) && !defined(QT_MAC_USE_COCOA) 
-#define Q_MAC_COMPAT_GL_FUNCTIONS
-
-template <typename T>
-struct QMacGLCompatTypes
-{
-    typedef long CompatGLint;
-    typedef unsigned long CompatGLuint;
-    typedef unsigned long CompatGLenum;
-};
-
-template <>
-struct QMacGLCompatTypes<long>
-{
-    typedef int CompatGLint;
-    typedef unsigned int CompatGLuint;
-    typedef unsigned int CompatGLenum;
-};
-
-typedef QMacGLCompatTypes<GLint>::CompatGLint QMacCompatGLint;
-typedef QMacGLCompatTypes<GLint>::CompatGLuint QMacCompatGLuint;
-typedef QMacGLCompatTypes<GLint>::CompatGLenum QMacCompatGLenum;
-
-#endif
-
-#if defined(Q_WS_WIN) || defined(Q_WS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
 class QGLCmap;
 #endif
 
 class QPixmap;
+
 #if defined(Q_WS_X11) && !defined(QT_OPENGL_ES)
 class QGLOverlayWidget;
 #endif
+
 class QGLWidgetPrivate;
 class QGLContextPrivate;
 
@@ -258,6 +242,7 @@ public:
     static QGLFormat fromPlatformWindowFormat(const QPlatformWindowFormat &format);
     static QPlatformWindowFormat toPlatformWindowFormat(const QGLFormat &format);
 #endif
+
 private:
     QGLFormatPrivate *d;
 
@@ -265,23 +250,20 @@ private:
 
     friend Q_OPENGL_EXPORT bool operator==(const QGLFormat&, const QGLFormat&);
     friend Q_OPENGL_EXPORT bool operator!=(const QGLFormat&, const QGLFormat&);
-#ifndef QT_NO_DEBUG_STREAM
     friend Q_OPENGL_EXPORT QDebug operator<<(QDebug, const QGLFormat &);
-#endif
+
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGLFormat::OpenGLVersionFlags)
 
 Q_OPENGL_EXPORT bool operator==(const QGLFormat&, const QGLFormat&);
 Q_OPENGL_EXPORT bool operator!=(const QGLFormat&, const QGLFormat&);
-
-#ifndef QT_NO_DEBUG_STREAM
 Q_OPENGL_EXPORT QDebug operator<<(QDebug, const QGLFormat &);
-#endif
 
 class Q_OPENGL_EXPORT QGLContext
 {
     Q_DECLARE_PRIVATE(QGLContext)
+
 public:
     QGLContext(const QGLFormat& format, QPaintDevice* device);
     QGLContext(const QGLFormat& format);
@@ -341,12 +323,12 @@ public:
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
     GLuint bindTexture(const QImage &image, QMacCompatGLenum = GL_TEXTURE_2D,
                        QMacCompatGLint format = GL_RGBA);
+
     GLuint bindTexture(const QPixmap &pixmap, QMacCompatGLenum = GL_TEXTURE_2D,
                        QMacCompatGLint format = GL_RGBA);
-    GLuint bindTexture(const QImage &image, QMacCompatGLenum, QMacCompatGLint format,
-                       BindOptions);
-    GLuint bindTexture(const QPixmap &pixmap, QMacCompatGLenum, QMacCompatGLint format,
-                       BindOptions);
+
+    GLuint bindTexture(const QImage &image, QMacCompatGLenum, QMacCompatGLint format,BindOptions);
+    GLuint bindTexture(const QPixmap &pixmap, QMacCompatGLenum, QMacCompatGLint format,BindOptions);
 
     void deleteTexture(QMacCompatGLuint tx_id);
 
@@ -366,17 +348,20 @@ public:
 #ifdef Q_WS_QPA
     static QGLContext *fromPlatformGLContext(QPlatformGLContext *platformContext);
 #endif
+
 protected:
     virtual bool chooseContext(const QGLContext* shareContext = 0);
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     virtual int choosePixelFormat(void* pfd, HDC pdc);
 #endif
+
 #if defined(Q_WS_X11)
     virtual void* tryVisual(const QGLFormat& f, int bufDepth = 1);
     virtual void* chooseVisual();
 #endif
-#if defined(Q_WS_MAC)
+
+#if defined(Q_OS_MAC)
     virtual void* chooseMacVisual(GDHandle);
 #endif
 
@@ -395,6 +380,7 @@ protected:
     static QGLContext* currentCtx;
 
 private:
+
 #ifdef Q_WS_QPA
     QGLContext(QPlatformGLContext *platformContext);
 #endif
@@ -422,13 +408,16 @@ private:
     friend class QGLExtensions;
     friend class QGLTexture;
     friend QGLFormat::OpenGLVersionFlags QGLFormat::openGLVersionFlags();
-#ifdef Q_WS_MAC
-public:
-    void updatePaintDevice();
-private:
-    friend class QMacGLWindowChangeEvent;
-    friend QGLContextPrivate *qt_phonon_get_dptr(const QGLContext *);
+
+#ifdef Q_OS_MAC
+   public:
+       void updatePaintDevice();
+   
+   private:
+       friend class QMacGLWindowChangeEvent;
+       friend QGLContextPrivate *qt_phonon_get_dptr(const QGLContext *);
 #endif
+
     friend class QGLFramebufferObject;
     friend class QGLFramebufferObjectPrivate;
     friend class QGLFBOGLPaintDevice;
@@ -437,6 +426,7 @@ private:
     friend class QX11GLPixmapData;
     friend class QX11GLSharedContexts;
     friend class QGLContextResourceBase;
+
 private:
     Q_DISABLE_COPY(QGLContext)
 };
@@ -447,11 +437,14 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
 {
     CS_OBJECT(QGLWidget)
     Q_DECLARE_PRIVATE(QGLWidget)
+
 public:
     explicit QGLWidget(QWidget* parent=0,
                        const QGLWidget* shareWidget = 0, Qt::WindowFlags f=0);
+
     explicit QGLWidget(QGLContext *context, QWidget* parent=0,
                        const QGLWidget* shareWidget = 0, Qt::WindowFlags f=0);
+
     explicit QGLWidget(const QGLFormat& format, QWidget* parent=0,
                        const QGLWidget* shareWidget = 0, Qt::WindowFlags f=0);
 
@@ -558,9 +551,10 @@ protected:
 private:
     Q_DISABLE_COPY(QGLWidget)
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     friend class QMacGLWindowChangeEvent;
 #endif
+
     friend class QGLDrawable;
     friend class QGLPixelBuffer;
     friend class QGLPixelBufferPrivate;

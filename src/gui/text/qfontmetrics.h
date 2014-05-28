@@ -101,7 +101,7 @@ public:
 
 private:
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     friend class QFontPrivate;
 #endif
 

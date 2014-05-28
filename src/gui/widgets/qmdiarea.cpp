@@ -146,9 +146,11 @@
 
 #include <QApplication>
 #include <QStyle>
-#if defined(Q_WS_MAC) && !defined(QT_NO_STYLE_MAC)
+
+#if defined(Q_OS_MAC) && ! defined(QT_NO_STYLE_MAC)
 #include <QMacStyle>
 #endif
+
 #include <QChildEvent>
 #include <QResizeEvent>
 #include <QScrollBar>
@@ -336,11 +338,13 @@ void SimpleCascader::rearrange(QList<QWidget *> &widgets, const QRect &domain) c
     QStyleOptionTitleBar options;
     options.initFrom(widgets.at(0));
     int titleBarHeight = widgets.at(0)->style()->pixelMetric(QStyle::PM_TitleBarHeight, &options, widgets.at(0));
-#if defined(Q_WS_MAC) && !defined(QT_NO_STYLE_MAC)
+
+#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
     // ### Remove this after the mac style has been fixed
     if (qobject_cast<QMacStyle *>(widgets.at(0)->style()))
         titleBarHeight -= 4;
 #endif
+
     const QFontMetrics fontMetrics = QFontMetrics(QApplication::font("QWorkspaceTitleBar"));
     const int dy = qMax(titleBarHeight - (titleBarHeight - fontMetrics.height()) / 2, 1);
 
@@ -2462,14 +2466,17 @@ void QMdiArea::cascadeSubWindows()
 bool QMdiArea::event(QEvent *event)
 {
     Q_D(QMdiArea);
+
     switch (event->type()) {
-#ifdef Q_WS_WIN
+
+#ifdef Q_OS_WIN
     // QWidgetPrivate::hide_helper activates another sub-window when closing a
     // modal dialog on Windows (see activateWindow() inside the the ifdef).
     case QEvent::WindowUnblocked:
         d->activateCurrentWindow();
         break;
 #endif
+
     case QEvent::WindowActivate: {
         d->isActivated = true;
         if (d->childWindows.isEmpty())
@@ -2527,7 +2534,7 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
 
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         // Ingore key events without a Ctrl modifier (except for press/release on the modifier itself).
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         if (!(keyEvent->modifiers() & Qt::MetaModifier) && keyEvent->key() != Qt::Key_Meta)
 #else
         if (!(keyEvent->modifiers() & Qt::ControlModifier) && keyEvent->key() != Qt::Key_Control)
@@ -2546,7 +2553,7 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
         // 3) Ctrl-Shift-Tab (Tab, Tab, ...) -> iterate through all windows in the opposite
         //    direction (activatePreviousSubWindow())
         switch (keyEvent->key()) {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         case Qt::Key_Meta:
 #else
         case Qt::Key_Control:

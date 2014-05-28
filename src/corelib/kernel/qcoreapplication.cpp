@@ -87,7 +87,7 @@ private:
     QMutex *mtx;
 };
 
-#if defined(Q_WS_WIN) || defined(Q_WS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
 extern QString qAppFileName();
 #endif
 
@@ -1095,7 +1095,7 @@ bool QCoreApplication::compressEvent(QEvent *event, QObject *receiver, QPostEven
 {
 	 int peCount = CSInternalEvents::get_m_PostedEvents(receiver);
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     Q_ASSERT(event);
     Q_ASSERT(receiver);
     Q_ASSERT(postedEvents);
@@ -1754,10 +1754,11 @@ QString QCoreApplication::applicationFilePath()
     if (!d->cachedApplicationFilePath.isNull())
         return d->cachedApplicationFilePath;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     d->cachedApplicationFilePath = QFileInfo(qAppFileName()).filePath();
     return d->cachedApplicationFilePath;
-#elif defined(Q_WS_MAC)
+
+#elif defined(Q_OS_MAC)
     QString qAppFileName_str = qAppFileName();
     if(!qAppFileName_str.isEmpty()) {
         QFileInfo fi(qAppFileName_str);

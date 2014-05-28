@@ -228,13 +228,13 @@ public:
     { qSwap(d, other.d); qSwap(resolve_mask, other.resolve_mask);  return *this; }
 
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     HFONT handle() const;
 #else
     Qt::HANDLE handle() const;
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     quint32 macFontID() const;
 #endif
 
@@ -277,8 +277,9 @@ private:
 
     void detach();
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     void macSetFont(QPaintDevice *);
+
 #elif defined(Q_WS_X11)
     void x11SetScreen(int screen = -1);
     int x11Screen() const;
@@ -341,9 +342,7 @@ Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QFont &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QFont &);
 #endif
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QFont &);
-#endif
 
 QT_END_NAMESPACE
 

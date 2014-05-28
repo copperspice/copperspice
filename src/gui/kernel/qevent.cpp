@@ -840,7 +840,7 @@ bool QKeyEvent::matches(QKeySequence::StandardKey matchKey) const
     uint searchkey = (modifiers() | key()) & ~(Qt::KeypadModifier | Qt::GroupSwitchModifier);
     uint platform = QApplicationPrivate::currentPlatform();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)) {
         uint oldSearchKey = searchkey;
         searchkey &= ~(Qt::ControlModifier | Qt::MetaModifier);
@@ -2913,7 +2913,6 @@ QShortcutEvent::~QShortcutEvent()
 
 #endif // QT_NO_SHORTCUT
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QEvent *e) {
     // More useful event output could be added here
     if (!e)
@@ -3197,7 +3196,7 @@ QDebug operator<<(QDebug dbg, const QEvent *e) {
     dbg.nospace() << 'Q' << n << "Event(" << (const void *)e << ')';
     return dbg.space();
 }
-#endif
+
 
 #ifndef QT_NO_CLIPBOARD
 /*!

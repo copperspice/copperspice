@@ -239,7 +239,7 @@ HICON QPixmap::toWinHICON() const
     return hIcon;
 }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 
 static QImage qt_fromWinHBITMAP(HDC hdc, HBITMAP bitmap, int w, int h)
 {
@@ -344,6 +344,6 @@ QPixmap QPixmap::fromWinHICON(HICON icon)
     return QPixmap::fromImage(image);
 }
 
-#endif //ifdef Q_WS_WIN
+#endif
 
 QT_END_NAMESPACE

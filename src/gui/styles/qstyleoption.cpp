@@ -26,8 +26,8 @@
 #include "qstyleoption.h"
 #include "qapplication.h"
 
-#ifdef Q_WS_MAC
-# include "private/qt_mac_p.h"
+#ifdef Q_OS_MAC
+# include "qt_mac_p.h"
 # include "qmacstyle_mac.h"
 #endif
 
@@ -131,7 +131,8 @@ void QStyleOption::init(const QWidget *widget)
         state |= QStyle::State_Active;
     if (widget->isWindow())
         state |= QStyle::State_Window;
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
     extern bool qt_mac_can_clickThrough(const QWidget *w); //qwidget_mac.cpp
     if (!(state & QStyle::State_Active) && !qt_mac_can_clickThrough(widget))
         state &= ~QStyle::State_Enabled;
@@ -4887,7 +4888,6 @@ QStyleHintReturnVariant::QStyleHintReturnVariant() : QStyleHintReturn(Version, T
     Returns a T or 0 depending on the type of \a hint.
 */
 
-#if !defined(QT_NO_DEBUG_STREAM)
 QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType)
 {
 #if !defined(QT_NO_DEBUG)
@@ -4948,9 +4948,7 @@ QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType)
     case QStyleOption::SO_GraphicsItem:
         debug << "SO_GraphicsItem"; break;
     }
-#else
-    Q_UNUSED(optionType);
-#endif
+
     return debug;
 }
 

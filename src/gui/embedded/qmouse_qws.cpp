@@ -377,15 +377,6 @@ void QWSCalibratedMouseHandler::clearCalibration()
 }
 
 
-/*!
-    Saves the current calibration parameters in \c /etc/pointercal
-    (separated by whitespace and in alphabetical order).
-
-    You can override the default \c /etc/pointercal by specifying
-    another file using the POINTERCAL_FILE environment variable.
-
-    \sa readCalibration()
-*/
 void QWSCalibratedMouseHandler::writeCalibration()
 {
     QString calFile;
@@ -393,38 +384,26 @@ void QWSCalibratedMouseHandler::writeCalibration()
     if (calFile.isEmpty())
         calFile = QLatin1String("/etc/pointercal");
 
-#ifndef QT_NO_TEXTSTREAM
+
     QFile file(calFile);
     if (file.open(QIODevice::WriteOnly)) {
         QTextStream t(&file);
         t << a << ' ' << b << ' ' << c << ' ';
         t << d << ' ' << e << ' ' << f << ' ' << s << endl;
     } else
-#endif
+
     {
         qCritical("QWSCalibratedMouseHandler::writeCalibration: "
                   "Could not save calibration into %s", qPrintable(calFile));
     }
 }
 
-/*!
-    Reads previously written calibration parameters which are stored
-    in \c /etc/pointercal (separated by whitespace and in alphabetical
-    order).
-
-    You can override the default \c /etc/pointercal by specifying
-    another file using the POINTERCAL_FILE environment variable.
-
-
-    \sa writeCalibration()
-*/
 void QWSCalibratedMouseHandler::readCalibration()
 {
     QString calFile = QString::fromLocal8Bit(qgetenv("POINTERCAL_FILE"));
     if (calFile.isEmpty())
         calFile = QLatin1String("/etc/pointercal");
 
-#ifndef QT_NO_TEXTSTREAM
     QFile file(calFile);
     if (file.open(QIODevice::ReadOnly)) {
         QTextStream t(&file);
@@ -434,7 +413,7 @@ void QWSCalibratedMouseHandler::readCalibration()
             clearCalibration();
         }
     } else
-#endif
+
     {
         qDebug() << "Could not read calibration:" <<calFile;
     }

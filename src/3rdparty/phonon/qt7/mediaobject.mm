@@ -153,29 +153,29 @@ void MediaObject::setupAudioSystem()
 {
     // Select which audio system to use:
     AudioSystem newAudioSystem = AS_Unset;
+
     if (!m_audioOutputCount || !m_videoPlayer->canPlayMedia()){
         newAudioSystem = AS_Silent;
+
     } else if (m_audioEffectCount == 0){
         newAudioSystem = AS_Video;
+
     } else if (QSysInfo::MacintoshVersion < QSysInfo::MV_10_4){
         newAudioSystem = AS_Video;
         SET_ERROR("Audio effects are not supported for Mac OS 10.3 and below", NORMAL_ERROR);
+
     } else if (m_videoPlayer->isDrmProtected()){
         newAudioSystem = AS_Video;
         SET_ERROR("Audio effects are not supported for DRM protected media", NORMAL_ERROR);
+
     } else if (m_audioGraph->graphCannotPlay()){
         newAudioSystem = AS_Video;
         SET_ERROR("Audio effects are not supported for the current codec", NORMAL_ERROR);
-#ifdef QUICKTIME_C_API_AVAILABLE
-    } else {
-        newAudioSystem = AS_Graph;
-    }
-#else
+
     } else {
         newAudioSystem = AS_Video;
         SET_ERROR("Audio effects are not supported for the 64-bit version of the Phonon QT7 backend", NORMAL_ERROR);
     }
-#endif
 
     if (newAudioSystem == m_audioSystem)
         return;

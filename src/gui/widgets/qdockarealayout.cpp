@@ -35,7 +35,7 @@
 #include "qwidgetanimator_p.h"
 #include "qmainwindowlayout_p.h"
 #include "qdockwidget_p.h"
-#include <private/qlayoutengine_p.h>
+#include <qlayoutengine_p.h>
 
 #include <qpainter.h>
 #include <qstyleoption.h>
@@ -1928,7 +1928,7 @@ bool QDockAreaLayoutInfo::restoreState(QDataStream &stream, QList<QDockWidget*> 
                 QDockAreaLayoutItem item(new QDockWidgetItem(widget));
                 if (flags & StateFlagFloating) {
                	    bool drawer = false;
-#ifdef Q_WS_MAC // drawer support
+#ifdef Q_OS_MAC // drawer support
                	    extern bool qt_mac_is_macdrawer(const QWidget *); //qwidget_mac.cpp
                     extern bool qt_mac_set_drawer_preferred_edge(QWidget *, Qt::DockWidgetArea); //qwidget_mac.cpp
                     drawer = qt_mac_is_macdrawer(widget);
@@ -1943,7 +1943,7 @@ bool QDockAreaLayoutInfo::restoreState(QDataStream &stream, QList<QDockWidget*> 
                     int x, y, w, h;
                     stream >> x >> y >> w >> h;
 
-#ifdef Q_WS_MAC // drawer support
+#ifdef Q_OS_MAC // drawer support
                     if (drawer) {
                         mainWindow->window()->createWinId();
                         widget->window()->createWinId();
@@ -2051,7 +2051,7 @@ void QDockAreaLayoutInfo::updateSeparatorWidgets() const
         }
         j++;
 
-#ifndef QT_MAC_USE_COCOA
+#ifndef Q_OS_MAC
         sepWidget->raise();
 #endif
         QRect sepRect = separatorRect(i).adjusted(-2, -2, 2, 2);
@@ -3165,7 +3165,7 @@ void QDockAreaLayout::updateSeparatorWidgets() const
         }
         j++;
 
-#ifndef QT_MAC_USE_COCOA
+#ifndef Q_OS_MAC
         sepWidget->raise();
 #endif
         QRect sepRect = separatorRect(i).adjusted(-2, -2, 2, 2);

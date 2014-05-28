@@ -29,7 +29,7 @@
 #include <qpixmapdata_p.h>
 #include <qpixmapdatafactory_p.h>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "qt_windows.h"
 #endif
 

@@ -28,15 +28,19 @@
 #ifdef Q_WS_QWS
 # include <QtGui/qscreen_qws.h>
 #endif
+
 #ifdef Q_WS_X11
 # include <qpixmap_x11_p.h>
 #endif
-#if defined(Q_WS_WIN)
+
+#if defined(Q_OS_WIN)
 # include <qpixmap_raster_p.h>
 #endif
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
 # include <qpixmap_mac_p.h>
 #endif
+
 #ifdef Q_WS_QPA
 # include <qpixmap_raster_p.h>
 #endif
@@ -62,19 +66,22 @@ QPixmapData* QSimplePixmapDataFactory::create(QPixmapData::PixelType type)
 
 #if defined(Q_WS_X11)
     return new QX11PixmapData(type);
-#elif defined(Q_WS_WIN)
+
+#elif defined(Q_OS_WIN)
     return new QRasterPixmapData(type);
-#elif defined(Q_WS_MAC)
+
+#elif defined(Q_OS_MAC)
     return new QMacPixmapData(type);
+
 #elif defined(Q_WS_QPA)
     return new QRasterPixmapData(type);
+
 #error QSimplePixmapDataFactory::create() not implemented
 #endif
 }
 
 Q_GLOBAL_STATIC(QSimplePixmapDataFactory, factory)
-
-#endif // !defined(Q_WS_QWS)
+#endif
 
 QPixmapDataFactory::~QPixmapDataFactory()
 {

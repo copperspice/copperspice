@@ -116,7 +116,7 @@ const QVectorPath &qtVectorPathForPath(const QPainterPath &path)
     return path.d_func()->vectorPath();
 }
 
-#ifndef QT_NO_DEBUG_STREAM
+
 QDebug Q_GUI_EXPORT &operator<<(QDebug &s, const QVectorPath &path)
 {
     QRectF rf = path.controlPointRect();
@@ -125,14 +125,6 @@ QDebug Q_GUI_EXPORT &operator<<(QDebug &s, const QVectorPath &path)
       << rf << ')';
     return s;
 }
-#endif
-
-/*******************************************************************************
- *
- * class QPaintEngineExPrivate:
- *
- */
-
 
 struct StrokeHandler {
     StrokeHandler(int reserve) : pts(reserve), types(reserve) {}
@@ -764,7 +756,6 @@ void QPaintEngineEx::drawRoundedRect(const QRectF &rect, qreal xRadius, qreal yR
 }
 
 
-
 void QPaintEngineEx::drawLines(const QLine *lines, int lineCount)
 {
     int elementCount = lineCount << 1;
@@ -773,7 +764,7 @@ void QPaintEngineEx::drawLines(const QLine *lines, int lineCount)
 
         qreal pts[64];
         int count2 = count<<1;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         for (int i=0; i<count2; i+=2) {
             pts[i] = ((int *) lines)[i+1];
             pts[i+1] = ((int *) lines)[i];
@@ -912,7 +903,7 @@ void QPaintEngineEx::drawPolygon(const QPoint *points, int pointCount, PolygonDr
     int count = pointCount<<1;
     QVarLengthArray<qreal> pts(count);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     for (int i=0; i<count; i+=2) {
         pts[i] = ((int *) points)[i+1];
         pts[i+1] = ((int *) points)[i];
@@ -1062,7 +1053,7 @@ Q_GUI_EXPORT QPainterPath qt_painterPathFromVectorPath(const QVectorPath &path)
 void QPaintEngineEx::drawStaticTextItem(QStaticTextItem *staticTextItem)
 {
     QPainterPath path;
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     path.setFillRule(Qt::WindingFill);
 #endif
 
