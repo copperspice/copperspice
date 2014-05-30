@@ -36,7 +36,7 @@
 
 // useage:  #if (CS_VERSION >= CS_VERSION_CHECK(1, 0, 0))
 #define CS_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
- 
+
 #define QT_PACKAGEDATE_STR "YYYY-MM-DD"
 #define QT_PACKAGE_TAG ""
 
@@ -84,7 +84,7 @@ class QString;
 # define QT_MANGLE_NAMESPACE1(a, b)  a##_##b
 # define QT_MANGLE_NAMESPACE2(a, b)  QT_MANGLE_NAMESPACE1(a,b)
 # define QT_MANGLE_NAMESPACE(name)   QT_MANGLE_NAMESPACE2( \
-         QT_MANGLE_NAMESPACE0(name), QT_MANGLE_NAMESPACE0(QT_NAMESPACE))
+	 QT_MANGLE_NAMESPACE0(name), QT_MANGLE_NAMESPACE0(QT_NAMESPACE))
 
 namespace QT_NAMESPACE {}
 
@@ -119,7 +119,7 @@ QT_USE_NAMESPACE
 
 //  Detect the target endianness
 #if defined (__BYTE_ORDER__) && \
-         (__BYTE_ORDER__ - 0 == __ORDER_BIG_ENDIAN__ - 0 || __BYTE_ORDER__ - 0 == __ORDER_LITTLE_ENDIAN__ - 0)
+	 (__BYTE_ORDER__ - 0 == __ORDER_BIG_ENDIAN__ - 0 || __BYTE_ORDER__ - 0 == __ORDER_LITTLE_ENDIAN__ - 0)
 
 #define Q_BYTE_ORDER    __BYTE_ORDER__
 #define Q_BIG_ENDIAN    __ORDER_BIG_ENDIAN__
@@ -259,7 +259,7 @@ QT_USE_NAMESPACE
 #  endif
 
 #  if !defined(MAC_OS_X_VERSION_10_10)
-#       define MAC_OS_X_VERSION_10_10 MAC_OS_X_VERSION_10_9 + 1
+#       define MAC_OS_X_VERSION_10_10 101000
 #  endif
 
 #endif
@@ -634,11 +634,11 @@ typedef quint64    qulonglong;
 
 #define Q_INIT_RESOURCE(name) \
     do { extern int QT_MANGLE_NAMESPACE(qInitResources_ ## name) ();       \
-        QT_MANGLE_NAMESPACE(qInitResources_ ## name) (); } while (0)
+	QT_MANGLE_NAMESPACE(qInitResources_ ## name) (); } while (0)
 
 #define Q_CLEANUP_RESOURCE(name) \
     do { extern int QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) ();    \
-        QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) (); } while (0)
+	QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) (); } while (0)
 
 #if defined(__cplusplus)
 
@@ -789,8 +789,8 @@ QT_END_INCLUDE_NAMESPACE
 typedef int QNoImplicitBoolCast;
 
 #if defined(QT_ARCH_ARM) || defined(QT_ARCH_ARMV6) || defined(QT_ARCH_AVR32) ||     \
-            (defined(QT_ARCH_MIPS) && (defined(Q_WS_QWS) || defined(Q_WS_QPA))) ||  \
-             defined(QT_ARCH_SH) || defined(QT_ARCH_SH4A)
+	    (defined(QT_ARCH_MIPS) && (defined(Q_WS_QWS) || defined(Q_WS_QPA))) ||  \
+	     defined(QT_ARCH_SH) || defined(QT_ARCH_SH4A)
 
 #define QT_NO_FPU
 #endif
@@ -1309,49 +1309,49 @@ class QGlobalStaticDeleter
 };
 
 #define Q_GLOBAL_STATIC_INIT(TYPE, NAME)   \
-        static QGlobalStatic<TYPE> this_ ## NAME = { QBasicAtomicPointer<TYPE>(0), false }
+	static QGlobalStatic<TYPE> this_ ## NAME = { QBasicAtomicPointer<TYPE>(0), false }
 
 #define Q_GLOBAL_STATIC(TYPE, NAME)                                           \
     static TYPE *NAME()                                                       \
     {                                                                         \
-        Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                              \
-        if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) {\
-            TYPE *x = new TYPE;                                               \
-            if (!this__StaticVar_.pointer.testAndSetOrdered(0, x))            \
-                delete x;                                                     \
-            else                                                              \
-                static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_); \
-        }                                                                     \
-        return this__StaticVar_.pointer.load();                               \
+	Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                              \
+	if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) {\
+	    TYPE *x = new TYPE;                                               \
+	    if (!this__StaticVar_.pointer.testAndSetOrdered(0, x))            \
+		delete x;                                                     \
+	    else                                                              \
+		static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_); \
+	}                                                                     \
+	return this__StaticVar_.pointer.load();                               \
     }
 
 #define Q_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                           \
     static TYPE *NAME()                                                       \
     {                                                                         \
-        Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                              \
-        if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) {\
-            TYPE *x = new TYPE ARGS;                                          \
-            if (!this__StaticVar_.pointer.testAndSetOrdered(0, x))            \
-                delete x;                                                     \
-            else                                                              \
-                static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_); \
-        }                                                                     \
-        return this__StaticVar_.pointer.load();                               \
+	Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                              \
+	if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) {\
+	    TYPE *x = new TYPE ARGS;                                          \
+	    if (!this__StaticVar_.pointer.testAndSetOrdered(0, x))            \
+		delete x;                                                     \
+	    else                                                              \
+		static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_); \
+	}                                                                     \
+	return this__StaticVar_.pointer.load();                               \
     }
 
 #define Q_GLOBAL_STATIC_WITH_INITIALIZER(TYPE, NAME, INITIALIZER)             \
     static TYPE *NAME()                                                       \
     {                                                                         \
-        Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                              \
-        if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) {\
-            QScopedPointer<TYPE > x(new TYPE);                                \
-            INITIALIZER;                                                      \
-            if (this__StaticVar_.pointer.testAndSetOrdered(0, x.data())) {    \
-                static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_); \
-                x.take();                                                     \
-            }                                                                 \
-        }                                                                     \
-        return this__StaticVar_.pointer.load();                               \
+	Q_GLOBAL_STATIC_INIT(TYPE, _StaticVar_);                              \
+	if (!this__StaticVar_.pointer.load() && !this__StaticVar_.destroyed) {\
+	    QScopedPointer<TYPE > x(new TYPE);                                \
+	    INITIALIZER;                                                      \
+	    if (this__StaticVar_.pointer.testAndSetOrdered(0, x.data())) {    \
+		static QGlobalStaticDeleter<TYPE > cleanup(this__StaticVar_); \
+		x.take();                                                     \
+	    }                                                                 \
+	}                                                                     \
+	return this__StaticVar_.pointer.load();                               \
     }
 
 
@@ -1455,8 +1455,8 @@ static inline bool qIsNull(float f)
 #ifdef Q_FULL_TEMPLATE_INSTANTIATION
 #  define Q_DUMMY_COMPARISON_OPERATOR(C) \
     bool operator==(const C&) const { \
-        qWarning(#C"::operator==(const "#C"&) was called"); \
-        return false; \
+	qWarning(#C"::operator==(const "#C"&) was called"); \
+	return false; \
     }
 #else
 #  define Q_DUMMY_COMPARISON_OPERATOR(C)
@@ -1521,11 +1521,11 @@ class QTypeInfo<TYPE > \
 { \
 public: \
     enum { \
-        isComplex = (((FLAGS) & Q_PRIMITIVE_TYPE) == 0), \
-        isStatic = (((FLAGS) & (Q_MOVABLE_TYPE | Q_PRIMITIVE_TYPE)) == 0), \
-        isLarge = (sizeof(TYPE)>sizeof(void*)), \
-        isPointer = false, \
-        isDummy = (((FLAGS) & Q_DUMMY_TYPE) != 0) \
+	isComplex = (((FLAGS) & Q_PRIMITIVE_TYPE) == 0), \
+	isStatic = (((FLAGS) & (Q_MOVABLE_TYPE | Q_PRIMITIVE_TYPE)) == 0), \
+	isLarge = (sizeof(TYPE)>sizeof(void*)), \
+	isPointer = false, \
+	isDummy = (((FLAGS) & Q_DUMMY_TYPE) != 0) \
     }; \
     static inline const char *name() { return #TYPE; } \
 }
@@ -1794,20 +1794,20 @@ inline const QForeachContainer<T> *qForeachContainer(const QForeachContainerBase
 #  define Q_FOREACH(variable,container)                                                             \
     if(0){}else                                                                                     \
     for (const QForeachContainerBase &_container_ = qForeachContainerNew(container);                \
-         qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->condition();       \
-         ++qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i)               \
-        for (variable = *qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i; \
-             qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk;           \
-             --qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk)
+	 qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->condition();       \
+	 ++qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i)               \
+	for (variable = *qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i; \
+	     qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk;           \
+	     --qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk)
 
 #else
 #  define Q_FOREACH(variable, container) \
     for (const QForeachContainerBase &_container_ = qForeachContainerNew(container); \
-         qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->condition();       \
-         ++qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i)               \
-        for (variable = *qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i; \
-             qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk;           \
-             --qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk)
+	 qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->condition();       \
+	 ++qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i)               \
+	for (variable = *qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i; \
+	     qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk;           \
+	     --qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk)
 #endif
 
 #endif
