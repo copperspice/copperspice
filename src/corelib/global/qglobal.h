@@ -231,31 +231,31 @@ QT_USE_NAMESPACE
 #  include <AvailabilityMacros.h>
 
 #  if !defined(MAC_OS_X_VERSION_10_3)
-#     define MAC_OS_X_VERSION_10_3 MAC_OS_X_VERSION_10_2 + 1
+#       define MAC_OS_X_VERSION_10_3 MAC_OS_X_VERSION_10_2 + 10
 #  endif
 
 #  if !defined(MAC_OS_X_VERSION_10_4)
-#       define MAC_OS_X_VERSION_10_4 MAC_OS_X_VERSION_10_3 + 1
+#       define MAC_OS_X_VERSION_10_4 MAC_OS_X_VERSION_10_3 + 10
 #  endif
 
 #  if !defined(MAC_OS_X_VERSION_10_5)
-#       define MAC_OS_X_VERSION_10_5 MAC_OS_X_VERSION_10_4 + 1
+#       define MAC_OS_X_VERSION_10_5 MAC_OS_X_VERSION_10_4 + 10
 #  endif
 
 #  if !defined(MAC_OS_X_VERSION_10_6)
-#       define MAC_OS_X_VERSION_10_6 MAC_OS_X_VERSION_10_5 + 1
+#       define MAC_OS_X_VERSION_10_6 MAC_OS_X_VERSION_10_5 + 10
 #  endif
 
 #  if !defined(MAC_OS_X_VERSION_10_7)
-#       define MAC_OS_X_VERSION_10_7 MAC_OS_X_VERSION_10_6 + 1
+#       define MAC_OS_X_VERSION_10_7 MAC_OS_X_VERSION_10_6 + 10
 #  endif
 
 #  if !defined(MAC_OS_X_VERSION_10_8)
-#       define MAC_OS_X_VERSION_10_8 MAC_OS_X_VERSION_10_7 + 1
+#       define MAC_OS_X_VERSION_10_8 MAC_OS_X_VERSION_10_7 + 10
 #  endif
 
 #  if !defined(MAC_OS_X_VERSION_10_9)
-#       define MAC_OS_X_VERSION_10_9 MAC_OS_X_VERSION_10_8 + 1
+#       define MAC_OS_X_VERSION_10_9 MAC_OS_X_VERSION_10_8 + 10
 #  endif
 
 #  if !defined(MAC_OS_X_VERSION_10_10)
