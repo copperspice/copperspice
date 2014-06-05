@@ -963,6 +963,7 @@ bool QKeyMapperPrivate::translateKeyEvent(QWidget *widget, const MSG &msg, bool 
             case Qt::Key_Plus:
             case Qt::Key_Minus:
             case Qt::Key_Period:
+            case Qt::Key_Comma:
             case Qt::Key_0:
             case Qt::Key_1:
             case Qt::Key_2:
