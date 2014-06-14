@@ -28,7 +28,7 @@ ______lib_libCsWebKit1_la_SOURCES =
 ______lib_libCsWebKit1_la_CXXFLAGS := $(AM_CXXFLAGS) -Iinclude  -DBUILD_DATE=\"`date +%Y-%m-%d`\"  -DBUILDING_WEBKIT -O2
 ______lib_libCsWebKit1_la_CFLAGS = $(______lib_libCsWebKit1_la_CXXFLAGS) -Iinclude/QtCore
 ______lib_libCsWebKit1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
-______lib_libCsWebKit1_la_LIBADD = ../../lib/libCsCore1.la ../../lib/libCsGui1.la ../../lib/libCsNetwork1.la ../../lib/libCsScript1.la
+______lib_libCsWebKit1_la_LIBADD = ../../lib/libCsCore1.la ../../lib/libCsGui1.la ../../lib/libCsNetwork1.la
 
 
 # BROOM (enable OpenSSL)

@@ -195,7 +195,7 @@ lib/libCsWebKit1.la: webkit-headers
 clean-local: clean-cs
 
 clean-cs:
-	rm -rf include privateinclude .*.mk	
+	rm -rf include/Qt* include/phonon privateinclude .*.mk	
 	find . -name 'qrc_*.cpp' -exec rm -f \{\} \;
 	find . -name 'ui_*.h' -exec rm -f \{\} \;	
 
