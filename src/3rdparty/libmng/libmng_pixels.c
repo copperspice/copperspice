@@ -14667,7 +14667,7 @@ mng_retcode mng_promote_g8_g16 (mng_datap pData)
     iW = ((mng_bitdepth_16)pData->fPromBitdepth) (*pSrcline);
 
     *pDstline     = (mng_uint8)(iW >> 8);
-    *(pDstline+1) = (mng_uint8)(iW && 0xFF);
+    *(pDstline+1) = (mng_uint8)(iW & 0xFF);
 
     pSrcline++;
     pDstline += 2;
@@ -14785,7 +14785,7 @@ mng_retcode mng_promote_g8_ga16 (mng_datap pData)
     iW = ((mng_bitdepth_16)pData->fPromBitdepth) (iB);
 
     *pDstline     = (mng_uint8)(iW >> 8);
-    *(pDstline+1) = (mng_uint8)(iW && 0xFF);
+    *(pDstline+1) = (mng_uint8)(iW & 0xFF);
 
     pSrcline++;
     pDstline += 4;
@@ -14906,7 +14906,7 @@ mng_retcode mng_promote_g8_rgb16 (mng_datap pData)
     *pDstline     = iB;
     *(pDstline+2) = iB;
     *(pDstline+4) = iB;
-    iB            = (mng_uint8)(iW && 0xFF);
+    iB            = (mng_uint8)(iW & 0xFF);
     *(pDstline+1) = iB;
     *(pDstline+3) = iB;
     *(pDstline+5) = iB;
@@ -15040,7 +15040,7 @@ mng_retcode mng_promote_g8_rgba16 (mng_datap pData)
     *pDstline     = iB;
     *(pDstline+2) = iB;
     *(pDstline+4) = iB;
-    iB            = (mng_uint8)(iW && 0xFF);
+    iB            = (mng_uint8)(iW & 0xFF);
     *(pDstline+1) = iB;
     *(pDstline+3) = iB;
     *(pDstline+5) = iB;;
@@ -15124,9 +15124,9 @@ mng_retcode mng_promote_ga8_ga16 (mng_datap pData)
     iA = ((mng_bitdepth_16)pData->fPromBitdepth) (*(pSrcline+1));
 
     *pDstline     = (mng_uint8)(iW >> 8);
-    *(pDstline+1) = (mng_uint8)(iW && 0xFF);
+    *(pDstline+1) = (mng_uint8)(iW & 0xFF);
     *(pDstline+2) = (mng_uint8)(iA >> 8);
-    *(pDstline+3) = (mng_uint8)(iA && 0xFF);
+    *(pDstline+3) = (mng_uint8)(iA & 0xFF);
 
     pSrcline += 2;
     pDstline += 4;
@@ -15208,12 +15208,12 @@ mng_retcode mng_promote_ga8_rgba16 (mng_datap pData)
     *pDstline     = iB;
     *(pDstline+2) = iB;
     *(pDstline+4) = iB;
-    iB            = (mng_uint8)(iW && 0xFF);
+    iB            = (mng_uint8)(iW & 0xFF);
     *(pDstline+1) = iB;
     *(pDstline+3) = iB;
     *(pDstline+5) = iB;
     *(pDstline+6) = (mng_uint8)(iA >> 8);
-    *(pDstline+7) = (mng_uint8)(iA && 0xFF);
+    *(pDstline+7) = (mng_uint8)(iA & 0xFF);
 
     pSrcline += 2;
     pDstline += 8;
@@ -15295,11 +15295,11 @@ mng_retcode mng_promote_rgb8_rgb16 (mng_datap pData)
     iB            = ((mng_bitdepth_16)pData->fPromBitdepth) (*(pSrcline+2));
 
     *pDstline     = (mng_uint8)(iR >> 8);
-    *(pDstline+1) = (mng_uint8)(iR && 0xFF);
+    *(pDstline+1) = (mng_uint8)(iR & 0xFF);
     *(pDstline+2) = (mng_uint8)(iG >> 8);
-    *(pDstline+3) = (mng_uint8)(iG && 0xFF);
+    *(pDstline+3) = (mng_uint8)(iG & 0xFF);
     *(pDstline+4) = (mng_uint8)(iB >> 8);
-    *(pDstline+5) = (mng_uint8)(iB && 0xFF);
+    *(pDstline+5) = (mng_uint8)(iB & 0xFF);
 
     pSrcline += 3;
     pDstline += 6;
@@ -15400,11 +15400,11 @@ mng_retcode mng_promote_rgb8_rgba16 (mng_datap pData)
     iBw           = ((mng_bitdepth_16)pData->fPromBitdepth) (iB);
 
     *pDstline     = (mng_uint8)(iRw >> 8);
-    *(pDstline+1) = (mng_uint8)(iRw && 0xFF);
+    *(pDstline+1) = (mng_uint8)(iRw & 0xFF);
     *(pDstline+2) = (mng_uint8)(iGw >> 8);
-    *(pDstline+3) = (mng_uint8)(iGw && 0xFF);
+    *(pDstline+3) = (mng_uint8)(iGw & 0xFF);
     *(pDstline+4) = (mng_uint8)(iBw >> 8);
-    *(pDstline+5) = (mng_uint8)(iBw && 0xFF);
+    *(pDstline+5) = (mng_uint8)(iBw & 0xFF);
 
     pSrcline += 3;
     pDstline += 8;
@@ -15537,11 +15537,11 @@ mng_retcode mng_promote_idx8_rgb16 (mng_datap pData)
       iG              = ((mng_bitdepth_16)pData->fPromBitdepth) (pBuf->aPLTEentries [iN].iGreen);
       iB              = ((mng_bitdepth_16)pData->fPromBitdepth) (pBuf->aPLTEentries [iN].iBlue);
       *pDstline       = (mng_uint8)(iR >> 8);
-      *(pDstline+1)   = (mng_uint8)(iR && 0xFF);
+      *(pDstline+1)   = (mng_uint8)(iR & 0xFF);
       *(pDstline+2)   = (mng_uint8)(iG >> 8);
-      *(pDstline+3)   = (mng_uint8)(iG && 0xFF);
+      *(pDstline+3)   = (mng_uint8)(iG & 0xFF);
       *(pDstline+4)   = (mng_uint8)(iB >> 8);
-      *(pDstline+5)   = (mng_uint8)(iB && 0xFF);
+      *(pDstline+5)   = (mng_uint8)(iB & 0xFF);
     }
 
     pSrcline++;
@@ -15640,13 +15640,13 @@ mng_retcode mng_promote_idx8_rgba16 (mng_datap pData)
         iA          = 0xFFFF;
 
       *pDstline     = (mng_uint8)(iR >> 8);
-      *(pDstline+1) = (mng_uint8)(iR && 0xFF);
+      *(pDstline+1) = (mng_uint8)(iR & 0xFF);
       *(pDstline+2) = (mng_uint8)(iG >> 8);
-      *(pDstline+3) = (mng_uint8)(iG && 0xFF);
+      *(pDstline+3) = (mng_uint8)(iG & 0xFF);
       *(pDstline+4) = (mng_uint8)(iB >> 8);
-      *(pDstline+5) = (mng_uint8)(iB && 0xFF);
+      *(pDstline+5) = (mng_uint8)(iB & 0xFF);
       *(pDstline+6) = (mng_uint8)(iA >> 8);
-      *(pDstline+7) = (mng_uint8)(iA && 0xFF);
+      *(pDstline+7) = (mng_uint8)(iA & 0xFF);
     }
 
     pSrcline++;
@@ -15688,13 +15688,13 @@ mng_retcode mng_promote_rgba8_rgba16 (mng_datap pData)
     iA            = ((mng_bitdepth_16)pData->fPromBitdepth) (*(pSrcline+3));
 
     *pDstline     = (mng_uint8)(iR >> 8);
-    *(pDstline+1) = (mng_uint8)(iR && 0xFF);
+    *(pDstline+1) = (mng_uint8)(iR & 0xFF);
     *(pDstline+2) = (mng_uint8)(iG >> 8);
-    *(pDstline+3) = (mng_uint8)(iG && 0xFF);
+    *(pDstline+3) = (mng_uint8)(iG & 0xFF);
     *(pDstline+4) = (mng_uint8)(iB >> 8);
-    *(pDstline+5) = (mng_uint8)(iB && 0xFF);
+    *(pDstline+5) = (mng_uint8)(iB & 0xFF);
     *(pDstline+6) = (mng_uint8)(iA >> 8);
-    *(pDstline+7) = (mng_uint8)(iA && 0xFF);
+    *(pDstline+7) = (mng_uint8)(iA & 0xFF);
 
     pSrcline += 4;
     pDstline += 8;
