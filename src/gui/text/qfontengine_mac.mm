@@ -41,6 +41,7 @@
 #include <qmath.h>
 #include <qimage_p.h>
 
+// OS X framework 
 #include <ApplicationServices/ApplicationServices.h>
 #include <AppKit/AppKit.h>
 

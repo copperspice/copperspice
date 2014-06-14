@@ -966,29 +966,15 @@ QRect QItemDelegate::rect(const QStyleOptionViewItem &option,
     return QRect();
 }
 
-/*!
-  \internal
-
-  Note that on Mac, if /usr/include/AssertMacros.h is included prior
-  to QItemDelegate, and the application is building in debug mode, the
-  check(assertion) will conflict with QItemDelegate::check.
-
-  To avoid this problem, add
-
-  #ifdef check
-	#undef check
-  #endif
-
-  after including AssertMacros.h
-*/
-QRect QItemDelegate::check(const QStyleOptionViewItem &option,
-                           const QRect &bounding, const QVariant &value) const
+QRect QItemDelegate::check(const QStyleOptionViewItem &option, const QRect &bounding, const QVariant &value) const
 {
     if (value.isValid()) {
         Q_D(const QItemDelegate);
+
         QStyleOptionButton opt;
         opt.QStyleOption::operator=(option);
         opt.rect = bounding;
+
         const QWidget *widget = d->widget(option); // cast
         QStyle *style = widget ? widget->style() : QApplication::style();
         return style->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt, widget);

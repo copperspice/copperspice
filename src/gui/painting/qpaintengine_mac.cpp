@@ -456,8 +456,10 @@ static void qt_mac_draw_pattern(void *info, CGContextRef c)
                 }
             }
             pat->image = qt_mac_create_imagemask(pm, pm.rect());
+
             CGImageRelease(swatch);
             CGContextRelease(pm_ctx);
+
             w *= QMACPATTERN_MASK_MULTIPLIER;
             h *= QMACPATTERN_MASK_MULTIPLIER;
 #endif
@@ -480,8 +482,10 @@ static void qt_mac_draw_pattern(void *info, CGContextRef c)
         CGContextSaveGState(c);
         CGContextSetFillColorWithColor(c, cgColorForQColor(pat->foreground, pat->pdev));
     }
+
     CGRect rect = CGRectMake(0, 0, w, h);
     qt_mac_drawCGImage(c, &rect, pat->image);
+
     if(needRestore)
         CGContextRestoreGState(c);
 }
@@ -589,6 +593,7 @@ bool QCoreGraphicsPaintEngine::end()
         CGShadingRelease(d->shading);
         d->shading = 0;
     }
+
     d->pdev = 0;
     if(d->hd) {
         d->restoreGraphicsState();

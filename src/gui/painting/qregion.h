@@ -34,6 +34,10 @@
 #include <QtCore/qdatastream.h>
 #endif
 
+#if defined(Q_OS_MAC)
+#include <cs_carbon_wrapper.h>
+#endif
+
 QT_BEGIN_NAMESPACE
 
 template <class T> class QVector;
@@ -132,13 +136,14 @@ public:
 #elif defined(Q_OS_MAC)
 
     inline HIMutableShapeRef handle(bool unused = false) const
-    { Q_UNUSED(unused); return toHIMutableShape(); }
+       { Q_UNUSED(unused); return toHIMutableShape(); }
 
     HIMutableShapeRef toHIMutableShape() const;
     static QRegion fromHIShapeRef(HIShapeRef shape);
 
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
     inline void *handle() const { return d->qt_rgn; }
+
 #endif
 
 friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QRegion &);

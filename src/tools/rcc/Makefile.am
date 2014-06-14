@@ -10,7 +10,7 @@ bin_rcc_SOURCES = \
 
 bin_rcc_LDFLAGS= -lpthread
 
-$(patsubst %,$(top_srcdir)/%,bin_rcc_SOURCES) : $(CORE_HEADERS_INSTALLED)
+$(bin_rcc_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED) 
 
 bin_rcc_CXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS)  -I$(top_srcdir)/src/tools/rcc  \
     -Iincludes/QtCore -Iincludes/QtXml \

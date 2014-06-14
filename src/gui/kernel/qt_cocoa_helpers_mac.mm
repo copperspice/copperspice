@@ -23,10 +23,12 @@
 *
 ***********************************************************************/
 
-/**************************************************
+/***********************************************************************
 ** Copyright (C) 2007-2008, Apple, Inc.
-**************************************************/
+***********************************************************************/
 
+#include <cs_carbon_wrapper_p.h>
+#include <qt_mac_p.h>
 #include <qcore_mac_p.h>
 #include <qaction.h>
 #include <qwidget.h>
@@ -36,7 +38,6 @@
 #include <qvarlengtharray.h>
 #include <qevent_p.h>
 #include <qt_cocoa_helpers_mac_p.h>
-#include <qt_mac_p.h>
 #include <qapplication_p.h>
 #include <qcocoaapplication_mac_p.h>
 #include <qcocoawindow_mac_p.h>
@@ -123,12 +124,12 @@ struct dndenum_mapper
 };
 
 static dndenum_mapper dnd_enums[] = {
-    { NSDragOperationLink,  Qt::LinkAction, true },
-    { NSDragOperationMove,  Qt::MoveAction, true },
-    { NSDragOperationCopy,  Qt::CopyAction, true },
+    { NSDragOperationLink,     Qt::LinkAction, true },
+    { NSDragOperationMove,     Qt::MoveAction, true },
+    { NSDragOperationCopy,     Qt::CopyAction, true },
     { NSDragOperationGeneric,  Qt::CopyAction, false },
-    { NSDragOperationEvery, Qt::ActionMask, false },
-    { NSDragOperationNone, Qt::IgnoreAction, false }
+    { NSDragOperationEvery,    Qt::ActionMask, false },
+    { NSDragOperationNone,     Qt::IgnoreAction, false }
 };
 
 NSDragOperation qt_mac_mapDropAction(Qt::DropAction action)
@@ -180,7 +181,7 @@ DnDParams *macCurrentDnDParameters()
 bool macWindowIsTextured( void * /*OSWindowRef*/ window )
 {
    OSWindowRef wnd = static_cast<OSWindowRef>(window);
-	return ( [wnd styleMask] & NSTexturedBackgroundWindowMask ) ? true : false;
+   return ( [wnd styleMask] & NSTexturedBackgroundWindowMask ) ? true : false;
 }
 
 void macWindowToolbarShow(const QWidget *widget, bool show )
@@ -264,10 +265,12 @@ OSStatus qt_mac_drawCGImage(CGContextRef inContext, const CGRect *inBounds, CGIm
     CGContextDrawImage(inContext, *inBounds, inImage);
 
     CGContextRestoreGState(inContext);
-InvalidImage:
-InvalidBounds:
-InvalidContext:
-	return err;
+
+    InvalidImage:
+    InvalidBounds:
+    InvalidContext:
+
+    return err;
 }
 
 bool qt_mac_checkForNativeSizeGrip(const QWidget *widget)
@@ -295,11 +298,13 @@ static qt_mac_enum_mapper qt_mac_mouse_symbols[] = {
 { 5, QT_MAC_MAP_ENUM(Qt::XButton2) },
 { 0, QT_MAC_MAP_ENUM(0) }
 };
+
 Qt::MouseButtons qt_mac_get_buttons(int buttons)
 {
 #ifdef DEBUG_MOUSE_MAPS
     qDebug("Qt: internal: **Mapping buttons: %d (0x%04x)", buttons, buttons);
 #endif
+
     Qt::MouseButtons ret = Qt::NoButton;
     for(int i = 0; qt_mac_mouse_symbols[i].qt_code; i++) {
         if (buttons & (0x01<<(qt_mac_mouse_symbols[i].mac_code-1))) {
@@ -311,26 +316,10 @@ Qt::MouseButtons qt_mac_get_buttons(int buttons)
     }
     return ret;
 }
-Qt::MouseButton qt_mac_get_button(EventMouseButton button)
-{
-#ifdef DEBUG_MOUSE_MAPS
-    qDebug("Qt: internal: **Mapping button: %d (0x%04x)", button, button);
-#endif
-    Qt::MouseButtons ret = 0;
-    for(int i = 0; qt_mac_mouse_symbols[i].qt_code; i++) {
-        if (button == qt_mac_mouse_symbols[i].mac_code) {
-#ifdef DEBUG_MOUSE_MAPS
-            qDebug("Qt: internal: got button: %s", qt_mac_mouse_symbols[i].desc);
-#endif
-            return Qt::MouseButton(qt_mac_mouse_symbols[i].qt_code);
-        }
-    }
-    return Qt::NoButton;
-}
 
 void macSendToolbarChangeEvent(QWidget *widget)
 {
-    QToolBarChangeEvent ev(!(GetCurrentKeyModifiers() & cmdKey));
+    QToolBarChangeEvent ev(!(CS_GetCurrentKeyModifiers() & cmdKey));
     qt_sendSpontaneousEvent(widget, &ev);
 }
 
@@ -352,7 +341,8 @@ void qt_mac_clearCocoaViewQWidgetPointers(QWidget *widget)
 void qt_dispatchTabletProximityEvent(void * /*NSEvent * */ tabletEvent)
 {
     NSEvent *proximityEvent = static_cast<NSEvent *>(tabletEvent);
-    // simply construct a Carbon proximity record and handle it all in one spot.
+
+    // simply construct a Carbon proximity record and handle it all in one spot
     TabletProximityRec carbonProximityRec = { static_cast<UInt16>([proximityEvent vendorID]),
                                               static_cast<UInt16>([proximityEvent tabletID]),
                                               static_cast<UInt16>([proximityEvent pointingDeviceID]),
@@ -364,6 +354,7 @@ void qt_dispatchTabletProximityEvent(void * /*NSEvent * */ tabletEvent)
                                               static_cast<UInt32>([proximityEvent capabilityMask]),
                                               static_cast<UInt8> ([proximityEvent pointingDeviceType]),
                                               static_cast<UInt8> ([proximityEvent isEnteringProximity]) };
+
     qt_dispatchTabletProximityEvent(carbonProximityRec);
 }
 
@@ -649,8 +640,8 @@ static inline QEvent::Type cocoaEvent2QtEvent(NSUInteger eventType)
 
 static bool mustUseCocoaKeyEvent()
 {
-    QCFType<TISInputSourceRef> source = TISCopyCurrentKeyboardInputSource();
-    return TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData) == 0;
+    QCFType<TISInputSourceRef> source = CS_TISCopyCurrentKeyboardInputSource();
+    return CS_TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData) == 0;
 }
 
 bool qt_dispatchKeyEventWithCocoa(void * /*NSEvent * */ keyEvent, QWidget *widgetToGetEvent)
@@ -658,10 +649,14 @@ bool qt_dispatchKeyEventWithCocoa(void * /*NSEvent * */ keyEvent, QWidget *widge
     NSEvent *event = static_cast<NSEvent *>(keyEvent);
     NSString *keyChars = [event charactersIgnoringModifiers];
     int keyLength = [keyChars length];
+
     if (keyLength == 0)
         return false; // Dead Key, nothing to do!
+
     bool ignoreText = false;
+
     Qt::Key qtKey = Qt::Key_unknown;
+
     if (keyLength == 1) {
         QChar ch([keyChars characterAtIndex:0]);
         if (ch.isLower())
@@ -670,6 +665,7 @@ bool qt_dispatchKeyEventWithCocoa(void * /*NSEvent * */ keyEvent, QWidget *widge
         // Do not set the text for Function-Key Unicodes characters (0xF700–0xF8FF).
         ignoreText = (ch.unicode() >= 0xF700 && ch.unicode() <= 0xF8FF);
     }
+
     Qt::KeyboardModifiers keyMods = qt_cocoaModifiers2QtModifiers([event modifierFlags]);
     QString text;
 
@@ -682,6 +678,7 @@ bool qt_dispatchKeyEventWithCocoa(void * /*NSEvent * */ keyEvent, QWidget *widge
     UInt32 macScanCode = 1;
     QKeyEventEx ke(cocoaEvent2QtEvent([event type]), qtKey, keyMods, text, [event isARepeat], qMax(1, keyLength),
                    macScanCode, [event keyCode], [event modifierFlags]);
+
     return qt_sendSpontaneousEvent(widgetToGetEvent, &ke) && ke.isAccepted();
 }
 
@@ -702,8 +699,9 @@ Qt::MouseButton cocoaButton2QtButton(NSInteger buttonNum)
 
 bool qt_dispatchKeyEvent(void * /*NSEvent * */ keyEvent, QWidget *widgetToGetEvent)
 {
-    NSEvent *event = static_cast<NSEvent *>(keyEvent);
+    NSEvent *event     = static_cast<NSEvent *>(keyEvent);
     EventRef key_event = static_cast<EventRef>(const_cast<void *>([event eventRef]));
+
     Q_ASSERT(key_event);
     unsigned int info = 0;
 
@@ -734,8 +732,9 @@ void qt_dispatchModifiersChanged(void * /*NSEvent * */flagsChangedEvent, QWidget
     NSEvent *event = static_cast<NSEvent *>(flagsChangedEvent);
     EventRef key_event = static_cast<EventRef>(const_cast<void *>([event eventRef]));
     Q_ASSERT(key_event);
-    GetEventParameter(key_event, kEventParamKeyModifiers, typeUInt32, 0,
-                      sizeof(modifiers), 0, &modifiers);
+
+    CS_GetEventParameter(key_event, kEventParamKeyModifiers, typeUInt32, 0,sizeof(modifiers), 0, &modifiers);
+
     extern void qt_mac_send_modifiers_changed(quint32 modifiers, QObject *object);
     qt_mac_send_modifiers_changed(modifiers, widgetToGetEvent);
 }
@@ -891,8 +890,7 @@ void qt_mac_handleNonClientAreaMouseEvent(NSWindow *window, NSEvent *event)
     Qt::MouseButtons buttons = 0;
     {
         UInt32 mac_buttons;
-        if (GetEventParameter((EventRef)[event eventRef], kEventParamMouseChord, typeUInt32, 0,
-                              sizeof(mac_buttons), 0, &mac_buttons) == noErr)
+        if (CS_GetEventParameter((EventRef)[event eventRef], kEventParamMouseChord, typeUInt32, 0, sizeof(mac_buttons), 0, &mac_buttons) == noErr)
             buttons = qt_mac_get_buttons(mac_buttons);
     }
 
@@ -1100,9 +1098,9 @@ bool qt_mac_handleMouseEvent(NSEvent *event, QEvent::Type eventType, Qt::MouseBu
     Qt::MouseButtons buttons = 0;
     {
         UInt32 mac_buttons;
-        if (GetEventParameter(carbonEvent, kEventParamMouseChord, typeUInt32, 0,
-                              sizeof(mac_buttons), 0, &mac_buttons) == noErr)
+        if (CS_GetEventParameter(carbonEvent, kEventParamMouseChord, typeUInt32, 0,sizeof(mac_buttons), 0, &mac_buttons) == noErr)
             buttons = qt_mac_get_buttons(mac_buttons);
+
         if (fakeEvent && buttons == 0)
             buttons = qt_mac_get_buttons(QApplication::mouseButtons());
     }
@@ -1259,23 +1257,16 @@ bool qt_mac_handleTabletEvent(void * /*QCocoaView * */view, void * /*NSEvent * *
     return qtabletEvent.isAccepted();
 }
 
-void qt_mac_updateContentBorderMetricts(void * /*OSWindowRef */window, const ::HIContentBorderMetrics &metrics)
-{
-    OSWindowRef theWindow = static_cast<OSWindowRef>(window);
-
-    if ([theWindow styleMask] & NSTexturedBackgroundWindowMask)
-        [theWindow setContentBorderThickness:metrics.top forEdge:NSMaxYEdge];
-
-    [theWindow setContentBorderThickness:metrics.bottom forEdge:NSMinYEdge];
-}
-
 void qt_mac_replaceDrawRect(void * /*OSWindowRef */window, QWidgetPrivate *widget)
 {
     QMacCocoaAutoReleasePool pool;
     OSWindowRef theWindow = static_cast<OSWindowRef>(window);
+
     if(!theWindow)
         return;
+
     id theClass = [[[theWindow contentView] superview] class];
+
     // What we do here is basically to add a new selector to NSThemeFrame called
     // "drawRectOriginal:" which will contain the original implementation of
     // "drawRect:". After that we get the new implementation from QCocoaWindow

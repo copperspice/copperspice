@@ -26,6 +26,8 @@
 #ifndef QMACSTYLE_MAC_P_H
 #define QMACSTYLE_MAC_P_H
 
+#include <cs_carbon_wrapper_p.h>
+
 #include <qmacstyle_mac.h>
 #include <qapplication_p.h>
 #include <qcombobox_p.h>
@@ -137,22 +139,23 @@ public:
     void stopAnimate(Animates, QWidget *);
     void startAnimate(Animates, QWidget *);
     static ThemeDrawState getDrawState(QStyle::State flags);
+
     QAquaWidgetSize aquaSizeConstrain(const QStyleOption *option, const QWidget *widg,
                              QStyle::ContentsType ct = QStyle::CT_CustomBase,
                              QSize szHint=QSize(-1, -1), QSize *insz = 0) const;
+
     void getSliderInfo(QStyle::ComplexControl cc, const QStyleOptionSlider *slider,
                           HIThemeTrackDrawInfo *tdi, const QWidget *needToRemoveMe);
+
     bool doAnimate(Animates);
     inline int animateSpeed(Animates) const { return 33; }
 
     // Utility functions
-    void drawColorlessButton(const HIRect &macRect, HIThemeButtonDrawInfo *bdi,
-                             QPainter *p, const QStyleOption *opt) const;
+    void drawColorlessButton(const HIRect &macRect, HIThemeButtonDrawInfo *bdi, QPainter *p, const QStyleOption *opt) const;
 
     QSize pushButtonSizeFromContents(const QStyleOptionButton *btn) const;
 
-    HIRect pushButtonContentBounds(const QStyleOptionButton *btn,
-                                   const HIThemeButtonDrawInfo *bdi) const;
+    HIRect pushButtonContentBounds(const QStyleOptionButton *btn, const HIThemeButtonDrawInfo *bdi) const;
 
     void initComboboxBdi(const QStyleOptionComboBox *combo, HIThemeButtonDrawInfo *bdi,
                         const QWidget *widget, const ThemeDrawState &tds);

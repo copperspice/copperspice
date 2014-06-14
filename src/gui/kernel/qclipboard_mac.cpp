@@ -189,7 +189,7 @@ QMacPasteboard::~QMacPasteboard()
     for (int i = 0; i < promises.count(); ++i) {
         const Promise &promise = promises.at(i);
         QCFString flavor = QCFString(promise.convertor->flavorFor(promise.mime));
-        promiseKeeper(paste, (PasteboardItemID)promise.itemId, flavor, this);
+        promiseKeeper(paste, (void *)promise.itemId, flavor, this);
     }
 
     if(paste)
@@ -202,7 +202,7 @@ QMacPasteboard::pasteBoard() const
     return paste;
 }
 
-OSStatus QMacPasteboard::promiseKeeper(PasteboardRef paste, PasteboardItemID id, CFStringRef flavor, void *_qpaste)
+OSStatus QMacPasteboard::promiseKeeper(PasteboardRef paste, void *id, CFStringRef flavor, void *_qpaste)
 {
     QMacPasteboard *qpaste = (QMacPasteboard*)_qpaste;
     const long promise_id = (long)id;
@@ -266,7 +266,7 @@ QMacPasteboard::hasOSType(int c_flavor) const
 #endif
     for(uint index = 1; index <= cnt; ++index) {
 
-        PasteboardItemID id;
+        void * id;
         if(PasteboardGetItemIdentifier(paste, index, &id) != noErr)
             return false;
 
@@ -309,7 +309,7 @@ QMacPasteboard::hasFlavor(QString c_flavor) const
 #endif
     for(uint index = 1; index <= cnt; ++index) {
 
-        PasteboardItemID id;
+        void * id;
         if(PasteboardGetItemIdentifier(paste, index, &id) != noErr)
             return false;
 
@@ -398,7 +398,7 @@ QMacPasteboard::setMimeData(QMimeData *mime_src)
                     for(int item = 0; item < numItems; ++item) {
                         const int itemID = item+1; //id starts at 1
                         promises.append(QMacPasteboard::Promise(itemID, c, mimeType, mimeData, item));
-                        PasteboardPutItemFlavor(paste, (PasteboardItemID)itemID, QCFString(flavor), 0, kPasteboardFlavorNoFlags);
+                        PasteboardPutItemFlavor(paste, (void *)itemID, QCFString(flavor), 0, kPasteboardFlavorNoFlags);
 #ifdef DEBUG_PASTEBOARD
                         qDebug(" -  adding %d %s [%s] <%s> [%d]",
                                itemID, qPrintable(mimeType), qPrintable(flavor), qPrintable(c->convertorName()), item);
@@ -428,7 +428,7 @@ QMacPasteboard::formats() const
 #endif
     for(uint index = 1; index <= cnt; ++index) {
 
-        PasteboardItemID id;
+        void * id;
         if(PasteboardGetItemIdentifier(paste, index, &id) != noErr)
             continue;
 
@@ -471,7 +471,7 @@ QMacPasteboard::hasFormat(const QString &format) const
 #endif
     for(uint index = 1; index <= cnt; ++index) {
 
-        PasteboardItemID id;
+        void * id;
         if(PasteboardGetItemIdentifier(paste, index, &id) != noErr)
             continue;
 
@@ -534,7 +534,7 @@ QMacPasteboard::retrieveData(const QString &format, QVariant::Type) const
             QVariant ret;
             QList<QByteArray> retList;
             for(uint index = 1; index <= cnt; ++index) {
-                PasteboardItemID id;
+                void * id;
                 if(PasteboardGetItemIdentifier(paste, index, &id) != noErr)
                     continue;
 

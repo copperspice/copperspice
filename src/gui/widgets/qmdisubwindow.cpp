@@ -50,15 +50,15 @@ using namespace QMdi;
 
 static const QStyle::SubControl SubControls[] =
 {
-    QStyle::SC_TitleBarLabel, // 1
-    QStyle::SC_TitleBarSysMenu, // 2
-    QStyle::SC_TitleBarMinButton, // 3
-    QStyle::SC_TitleBarMaxButton, // 4
-    QStyle::SC_TitleBarShadeButton, // 5
-    QStyle::SC_TitleBarCloseButton, // 6
-    QStyle::SC_TitleBarNormalButton, // 7
-    QStyle::SC_TitleBarUnshadeButton, // 8
-    QStyle::SC_TitleBarContextHelpButton // 9
+    QStyle::SC_TitleBarLabel,             // 1
+    QStyle::SC_TitleBarSysMenu,           // 2
+    QStyle::SC_TitleBarMinButton,         // 3
+    QStyle::SC_TitleBarMaxButton,         // 4
+    QStyle::SC_TitleBarShadeButton,       // 5
+    QStyle::SC_TitleBarCloseButton,       // 6
+    QStyle::SC_TitleBarNormalButton,      // 7
+    QStyle::SC_TitleBarUnshadeButton,     // 8
+    QStyle::SC_TitleBarContextHelpButton  // 9
 };
 static const int NumSubControls = sizeof(SubControls) / sizeof(SubControls[0]);
 
@@ -93,8 +93,7 @@ static inline int getMoveDeltaComponent(uint cflags, uint moveFlag, uint resizeF
     return 0;
 }
 
-static inline int getResizeDeltaComponent(uint cflags, uint resizeFlag,
-                                          uint resizeReverseFlag, int delta)
+static inline int getResizeDeltaComponent(uint cflags, uint resizeFlag, uint resizeReverseFlag, int delta)
 {
     if (cflags & resizeFlag) {
         if (cflags & resizeReverseFlag)
@@ -186,7 +185,7 @@ static void showToolTip(QHelpEvent *helpEvent, QWidget *widget, const QStyleOpti
     Q_ASSERT(widget);
 
 #if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
-    // Native Mac windows don't show tool tip.
+    // Native Mac windows do not show tool tip
     if (qobject_cast<QMacStyle *>(widget->style()))
         return;
 #endif
@@ -973,7 +972,8 @@ void QMdiSubWindowPrivate::updateCursor()
 {
 #ifndef QT_NO_CURSOR
     Q_Q(QMdiSubWindow);
-#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
+
+#if defined(Q_OS_MAC) && ! defined(QT_NO_STYLE_MAC)
     if (qobject_cast<QMacStyle *>(q->style()))
         return;
 #endif
@@ -1404,13 +1404,15 @@ void QMdiSubWindowPrivate::processClickedSubControl()
         q->showShaded();
         hoveredSubControl = QStyle::SC_TitleBarUnshadeButton;
         break;
+
     case QStyle::SC_TitleBarUnshadeButton:
         if (q->isShaded())
             hoveredSubControl = QStyle::SC_TitleBarShadeButton;
         q->showNormal();
         break;
+
     case QStyle::SC_TitleBarMinButton:
-#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
+#if defined(Q_OS_MAC) && ! defined(QT_NO_STYLE_MAC)
         if (qobject_cast<QMacStyle *>(q->style())) {
             if (q->isMinimized())
                 q->showNormal();
@@ -1426,6 +1428,7 @@ void QMdiSubWindowPrivate::processClickedSubControl()
             hoveredSubControl = QStyle::SC_TitleBarMinButton;
         q->showNormal();
         break;
+
     case QStyle::SC_TitleBarMaxButton:
 #if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
         if (qobject_cast<QMacStyle *>(q->style())) {
@@ -1474,7 +1477,8 @@ QRegion QMdiSubWindowPrivate::getRegion(Operation operation) const
     }
 
     QRegion region;
-#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
+
+#if defined(Q_OS_MAC) && ! defined(QT_NO_STYLE_MAC)
     if (qobject_cast<QMacStyle *>(q->style()))
         return region;
 #endif
@@ -1535,17 +1539,20 @@ extern QString qt_setWindowTitle_helperHelper(const QString&, const QWidget*);
 QStyleOptionTitleBar QMdiSubWindowPrivate::titleBarOptions() const
 {
     Q_Q(const QMdiSubWindow);
+
     QStyleOptionTitleBar titleBarOptions;
     titleBarOptions.initFrom(q);
+
     if (activeSubControl != QStyle::SC_None) {
         if (hoveredSubControl == activeSubControl) {
             titleBarOptions.state |= QStyle::State_Sunken;
             titleBarOptions.activeSubControls = activeSubControl;
         }
-    } else if (autoRaise() && hoveredSubControl != QStyle::SC_None
-               && hoveredSubControl != QStyle::SC_TitleBarLabel) {
+
+    } else if (autoRaise() && hoveredSubControl != QStyle::SC_None && hoveredSubControl != QStyle::SC_TitleBarLabel) {
         titleBarOptions.state |= QStyle::State_MouseOver;
         titleBarOptions.activeSubControls = hoveredSubControl;
+
     } else {
         titleBarOptions.state &= ~QStyle::State_MouseOver;
         titleBarOptions.activeSubControls = QStyle::SC_None;
@@ -1561,6 +1568,7 @@ QStyleOptionTitleBar QMdiSubWindowPrivate::titleBarOptions() const
         titleBarOptions.state |= QStyle::State_Active;
         titleBarOptions.titleBarState |= QStyle::State_Active;
         titleBarOptions.palette.setCurrentColorGroup(QPalette::Active);
+
     } else {
         titleBarOptions.state &= ~QStyle::State_Active;
         titleBarOptions.palette.setCurrentColorGroup(QPalette::Inactive);
@@ -1568,19 +1576,21 @@ QStyleOptionTitleBar QMdiSubWindowPrivate::titleBarOptions() const
 
     int border = hasBorder(titleBarOptions) ? 4 : 0;
     int paintHeight = titleBarHeight(titleBarOptions);
-    paintHeight -= q->isMinimized() ? 2 * border : border;
-    titleBarOptions.rect = QRect(border, border, q->width() - 2 * border, paintHeight);
 
-    if (!windowTitle.isEmpty()) {
+    paintHeight -= q->isMinimized() ? 2 * border : border;
+    titleBarOptions.rect = QRect(border, border, q->width() - 2 * border, paintHeight);   
+
+    if (! windowTitle.isEmpty()) {
         // Set the text here before asking for the width of the title bar label
         // in case people uses the actual text to calculate the width.
         titleBarOptions.text = windowTitle;
         titleBarOptions.fontMetrics = QFontMetrics(font);
-        int width = q->style()->subControlRect(QStyle::CC_TitleBar, &titleBarOptions,
-                                               QStyle::SC_TitleBarLabel, q).width();
-        // Set elided text if we don't have enough space for the entire title.
+        int width = q->style()->subControlRect(QStyle::CC_TitleBar, &titleBarOptions, QStyle::SC_TitleBarLabel, q).width();
+
+        // Set elided text if we don't have enough space for the entire title
         titleBarOptions.text = titleBarOptions.fontMetrics.elidedText(windowTitle, Qt::ElideRight, width);
     }
+
     return titleBarOptions;
 }
 
@@ -1629,13 +1639,16 @@ int QMdiSubWindowPrivate::titleBarHeight(const QStyleOptionTitleBar &options) co
     }
 
     int height = q->style()->pixelMetric(QStyle::PM_TitleBarHeight, &options, q);
-#if defined(Q_OS_MAC) && !defined(QT_NO_STYLE_MAC)
+
+#if defined(Q_OS_MAC) && ! defined(QT_NO_STYLE_MAC)
     // ### Fix mac style, the +4 pixels hack is not necessary anymore
     if (qobject_cast<QMacStyle *>(q->style()))
         height -= 4;
 #endif
+
     if (hasBorder(options))
-        height += q->isMinimized() ? 8 : 4;
+        height += q->isMinimized() ? 8 : 4;    
+
     return height;
 }
 
@@ -2806,6 +2819,7 @@ bool QMdiSubWindow::event(QEvent *event)
             d->updateWindowTitle(false);
         d->updateInternalWindowTitle();
         break;
+
     case QEvent::ModifiedChange:
         if (!windowTitle().contains(QLatin1String("[*]")))
             break;
@@ -2814,15 +2828,18 @@ bool QMdiSubWindow::event(QEvent *event)
                 ->cornerWidget(Qt::TopRightCorner) == maximizedButtonsWidget()) {
             window()->setWindowModified(isWindowModified());
         }
-#endif // QT_NO_MENUBAR
+#endif
         d->updateInternalWindowTitle();
         break;
+
     case QEvent::LayoutDirectionChange:
         d->updateDirtyRegions();
         break;
+
     case QEvent::LayoutRequest:
         d->updateGeometryConstraints();
         break;
+
     case QEvent::WindowIconChange:
         d->menuIcon = windowIcon();
         if (d->menuIcon.isNull())
@@ -2832,6 +2849,7 @@ bool QMdiSubWindow::event(QEvent *event)
         if (!maximizedSystemMenuIconWidget())
             update(0, 0, width(), d->titleBarHeight());
         break;
+
     case QEvent::PaletteChange:
         d->titleBarPalette = d->desktopPalette();
         break;
@@ -3058,35 +3076,42 @@ void QMdiSubWindow::moveEvent(QMoveEvent *moveEvent)
 */
 void QMdiSubWindow::paintEvent(QPaintEvent *paintEvent)
 {
-    if (!parent() || (windowFlags() & Qt::FramelessWindowHint)) {
+    if (! parent() || (windowFlags() & Qt::FramelessWindowHint)) {
         QWidget::paintEvent(paintEvent);
         return;
     }
 
     Q_D(QMdiSubWindow);
-    if (isMaximized() && !d->drawTitleBarWhenMaximized())
+
+    if (isMaximized() && ! d->drawTitleBarWhenMaximized()) {
         return;
+    }
 
     if (d->resizeTimerId != -1) {
-        // Only update the style option rect and the window title.
+        // Only update the style option rect and the window title
         int border = d->hasBorder(d->cachedStyleOptions) ? 4 : 0;
         int titleBarHeight = d->titleBarHeight(d->cachedStyleOptions);
         titleBarHeight -= isMinimized() ? 2 * border : border;
+
         d->cachedStyleOptions.rect = QRect(border, border, width() - 2 * border, titleBarHeight);
+
         if (!d->windowTitle.isEmpty()) {
             int width = style()->subControlRect(QStyle::CC_TitleBar, &d->cachedStyleOptions,
                                                 QStyle::SC_TitleBarLabel, this).width();
+
             d->cachedStyleOptions.text = d->cachedStyleOptions.fontMetrics
                                          .elidedText(d->windowTitle, Qt::ElideRight, width);
         }
     } else {
-        // Force full update.
+        // Force full update
         d->cachedStyleOptions = d->titleBarOptions();
+       
     }
 
     QStylePainter painter(this);
     if (!d->windowTitle.isEmpty())
         painter.setFont(d->font);
+
     painter.drawComplexControl(QStyle::CC_TitleBar, d->cachedStyleOptions);
 
     if (isMinimized() && !d->hasBorder(d->cachedStyleOptions))

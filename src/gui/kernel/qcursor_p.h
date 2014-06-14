@@ -33,22 +33,25 @@
 
 # if defined (Q_OS_MAC)
 #  include "qt_mac_p.h"
+
 # elif defined(Q_WS_X11)
 #  include "qt_x11_p.h"
+
 # elif defined(Q_OS_WIN)
 #  include "QtCore/qt_windows.h"
+
 #endif
 
 QT_BEGIN_NAMESPACE
 
 #if defined (Q_OS_MAC)
 void *qt_mac_nsCursorForQCursor(const QCursor &c);
-class QMacAnimateCursor;
 #endif
 
 class QBitmap;
 
-class QCursorData {
+class QCursorData
+{
 public:
     QCursorData(Qt::CursorShape s = Qt::ArrowCursor);
     ~QCursorData();
@@ -58,35 +61,41 @@ public:
 
     QAtomicInt ref;
     Qt::CursorShape cshape;
-    QBitmap  *bm, *bmm;
+    QBitmap *bm, *bmm;
     QPixmap pixmap;
-    short     hx, hy;
+    short hx, hy;
+
 #if defined (Q_OS_MAC)
     int mId;
+
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
     int id;
+
 #endif
+
 #if defined (Q_OS_WIN)
     HCURSOR hcurs;
+
 #elif defined (Q_WS_X11)
     XColor fg, bg;
     Cursor hcurs;
     Pixmap pm, pmm;
+
 #elif defined (Q_OS_MAC)
     enum { TYPE_None, TYPE_ImageCursor, TYPE_ThemeCursor } type;
+
     union {
         struct {
             uint my_cursor:1;
             void *nscursor;
-        } cp;
-        struct {
-            QMacAnimateCursor *anim;
-            ThemeCursor curs;
-        } tc;
+        } cp;       
+
     } curs;
+
     void initCursorFromBitmap();
     void initCursorFromPixmap();
 #endif
+
     static bool initialized;
     void update();
     static QCursorData *setBitmap(const QBitmap &bitmap, const QBitmap &mask, int hotX, int hotY);

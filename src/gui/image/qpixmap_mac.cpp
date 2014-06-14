@@ -505,7 +505,7 @@ QMacPixmapData::~QMacPixmapData()
         cg_mask = 0;
     }
 
-    delete pengine;  // Make sure we aren't drawing on the context anymore.
+    delete pengine;  // Make sure we are not drawing on the context anymore.
     if (cg_data) {
         CGImageRelease(cg_data);
     }
@@ -908,15 +908,6 @@ Qt::HANDLE QPixmap::macQDAlphaHandle() const
     return 0;
 }
 
-/*! \internal
-
-    Returns the CoreGraphics CGContextRef of the pixmap. 0 is returned if
-    it can't be obtained. It is the caller's responsiblity to
-    CGContextRelease the context when finished using it.
-
-    \warning This function is only available on Mac OS X.
-*/
-
 Qt::HANDLE QPixmap::macCGHandle() const
 {
     if (isNull())
@@ -1050,14 +1041,16 @@ CGImageRef QPixmap::toMacCGImageRef() const
 */
 QPixmap QPixmap::fromMacCGImageRef(CGImageRef image)
 {
-    const size_t w = CGImageGetWidth(image),
-                 h = CGImageGetHeight(image);
+    const size_t w = CGImageGetWidth(image);
+    const size_t h = CGImageGetHeight(image);
+
     QPixmap ret(w, h);
     ret.fill(Qt::transparent);
     CGRect rect = CGRectMake(0, 0, w, h);
     CGContextRef ctx = qt_mac_cg_context(&ret);
     qt_mac_drawCGImage(ctx, &rect, image);
     CGContextRelease(ctx);
+
     return ret;
 }
 

@@ -50,10 +50,10 @@
 
 QT_BEGIN_NAMESPACE
 
-extern QStringList qt_make_filter_list(const QString &filter); // qfiledialog.cpp
-extern QStringList qt_clean_filter_list(const QString &filter); // qfiledialog.cpp
-extern const char *qt_file_dialog_filter_reg_exp; // qfiledialog.cpp
-extern bool qt_mac_is_macsheet(const QWidget *w); // qwidget_mac.mm
+extern QStringList qt_make_filter_list(const QString &filter);   // qfiledialog.cpp
+extern QStringList qt_clean_filter_list(const QString &filter);  // qfiledialog.cpp
+extern const char *qt_file_dialog_filter_reg_exp;                // qfiledialog.cpp
+extern bool qt_mac_is_macsheet(const QWidget *w);                // qwidget_mac.mm
 
 QT_END_NAMESPACE
 

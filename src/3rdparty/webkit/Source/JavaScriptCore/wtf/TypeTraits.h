@@ -176,42 +176,60 @@ namespace WTF {
         typedef T Type;
     };
 
-#ifdef WTF_COMPILER_GCC
 
-#if __GNUC__ == 4 && __GNUC_MINOR__ == 7
-#define USE_NONSTANDARD_TYPE_TRAITS_7
+} // namespace WTF
 
-#elif __GNUC__ == 4 && __GNUC_MINOR__ == 8
-#define USE_NONSTANDARD_TYPE_TRAITS_8
-#endif
 
-#endif
+// copperspice solution for type traits (used in javascript and webkit)
+class cs_alternate{};
 
-#ifdef USE_NONSTANDARD_TYPE_TRAITS_7
+class cs_preferred : public cs_alternate{};
 
-    template<typename T> 
-    struct HasTrivialConstructor : public std::has_trivial_default_constructor<T> { };
+namespace std{
+   template<class> struct is_trivially_constructible;
+   template<class> struct has_trivial_default_constructor;
 
-    template<typename T>
-    struct HasTrivialDestructor : public std::has_trivial_destructor<T> { };
+   template<class> struct is_trivially_destructible;
+   template<class> struct has_trivial_destructor;
+}
 
-#elif defined(USE_NONSTANDARD_TYPE_TRAITS_8)
+namespace WTF {
 
-    template<typename T> 
-    struct HasTrivialConstructor : public std::has_trivial_default_constructor<T> { };
+// constructor
+template<typename T>
+decltype(std::is_trivially_constructible<T>::value, std::is_trivially_constructible<T>{})
+   cs_check_constructor(const cs_preferred &)
+{
+}
 
-    template<typename T>
-    struct HasTrivialDestructor : public std::is_trivially_destructible<T> { };
+template<typename T>
+decltype(std::has_trivial_default_constructor<T>::value, std::has_trivial_default_constructor<T>{})
+   cs_check_constructor(const cs_alternate &)
+{
+}
 
-#else
+template<typename T>
+struct HasTrivialConstructor : public decltype(cs_check_constructor<T>(cs_preferred{}))
+{
+};
 
-    template<typename T> 
-    struct HasTrivialConstructor : public std::is_trivially_constructible<T> { };
+// destructor
+template<typename T>
+decltype(std::is_trivially_destructible<T>::value, std::is_trivially_destructible<T>{})
+   cs_check_destructor(const cs_preferred &)
+{
+}
 
-    template<typename T>
-    struct HasTrivialDestructor : public std::is_trivially_destructible<T> { };
+template<typename T>
+decltype(std::has_trivial_destructor<T>::value, std::has_trivial_destructor<T>{})
+   cs_check_destructor(const cs_alternate &)
+{
+}
 
-#endif
+template<typename T>
+struct HasTrivialDestructor : public decltype(cs_check_destructor<T>(cs_preferred{}))
+{
+};
 
 } // namespace WTF
 

@@ -44,8 +44,8 @@
 #include "qvarlengtharray.h"
 
 #if defined(Q_OS_MAC)
-#include "qt_mac_p.h"
-#include "qlibrary.h"
+#include <qt_mac_p.h>
+#include <qlibrary.h>
 
 #elif ! defined(QT_NO_STYLE_WINDOWSVISTA)
 #include "qwizard_win_p.h"
@@ -53,7 +53,7 @@
 
 #endif
 
-#include "qdialog_p.h"
+#include <qdialog_p.h>
 #include <qdebug.h>
 #include <string.h>     
 
@@ -1752,17 +1752,23 @@ QPixmap QWizardPrivate::findDefaultBackgroundPixmap()
     QCFType<CFURLRef> url;
     const int ExpectedImageWidth = 242;
     const int ExpectedImageHeight = 414;
-    if (LSFindApplicationForInfo(kLSUnknownCreator, CFSTR("com.apple.KeyboardSetupAssistant"),
-                                 0, 0, &url) == noErr) {
+
+    if (LSFindApplicationForInfo(kLSUnknownCreator, 
+               CFSTR("com.apple.KeyboardSetupAssistant"), 0, 0, &url) == noErr) {
+
         QCFType<CFBundleRef> bundle = CFBundleCreate(kCFAllocatorDefault, url);
+
         if (bundle) {
             url = CFBundleCopyResourceURL(bundle, CFSTR("Background"), CFSTR("tif"), 0);
+
             if (url) {
                 QCFType<CGImageSourceRef> imageSource = CGImageSourceCreateWithURL(url, 0);
                 QCFType<CGImageRef> image = CGImageSourceCreateImageAtIndex(imageSource, 0, 0);
+
                 if (image) {
-                    int width = CGImageGetWidth(image);
+                    int width  = CGImageGetWidth(image);
                     int height = CGImageGetHeight(image);
+
                     if (width == ExpectedImageWidth && height == ExpectedImageHeight)
                         return QPixmap::fromMacCGImageRef(image);
                 }

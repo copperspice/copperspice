@@ -23,6 +23,8 @@
 *
 ***********************************************************************/
 
+#include <cs_carbon_wrapper_p.h>
+
 #include "qmenu.h"
 #include "qhash.h"
 #include <qdebug.h>
@@ -60,20 +62,15 @@ static struct {
 } qt_mac_current_menubar = { 0, false };
 
 
-/*****************************************************************************
-  Externals
- *****************************************************************************/
-extern OSViewRef qt_mac_hiview_for(const QWidget *w); //qwidget_mac.cpp
-extern HIViewRef qt_mac_hiview_for(OSWindowRef w); //qwidget_mac.cpp
-extern IconRef qt_mac_create_iconref(const QPixmap &px); //qpixmap_mac.cpp
-extern QWidget * mac_keyboard_grabber; //qwidget_mac.cpp
-extern bool qt_sendSpontaneousEvent(QObject*, QEvent*); //qapplication_xxx.cpp
-RgnHandle qt_mac_get_rgn(); //qregion_mac.cpp
-void qt_mac_dispose_rgn(RgnHandle r); //qregion_mac.cpp
+extern OSViewRef qt_mac_hiview_for(const QWidget *w); 
+extern HIViewRef qt_mac_hiview_for(OSWindowRef w); 
+extern IconRef qt_mac_create_iconref(const QPixmap &px); 
+extern QWidget * mac_keyboard_grabber; 
+extern bool qt_sendSpontaneousEvent(QObject*, QEvent*); 
 
-/*****************************************************************************
-  QMenu utility functions
- *****************************************************************************/
+RgnHandle qt_mac_get_rgn(); 
+void qt_mac_dispose_rgn(RgnHandle r); 
+
 bool qt_mac_watchingAboutToShow(QMenu *menu)
 {
     return menu && menu->receivers("aboutToShow()");
@@ -249,7 +246,7 @@ static NSMenuItem *qt_mac_menu_merge_action(OSMenuRef merge, QMacMenuAction *act
         t.remove(st, t.length()-st);
 
     t.replace(QRegExp(QString::fromLatin1("\\.*$")), QLatin1String("")); //no ellipses
-W
+
     NSMenuItem *ret = 0;
     QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *loader = getMenuLoader();
 
@@ -1078,14 +1075,14 @@ bool QMenuBarPrivate::macUpdateMenuBarImmediatly()
         // This case means we are creating a menubar, check if full screen
         if(w->isFullScreen()) {
             // Ok, switch to showing the menubar when hovering over it.
-            SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
+            CS_SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
             qt_mac_app_fullscreen = true;
         }
     } else if(w) {
         // Removing a menubar
         if(w->isFullScreen()) {
             // Ok, switch to not showing the menubar when hovering on it
-            SetSystemUIMode(kUIModeAllHidden, 0);
+            CS_SetSystemUIMode(kUIModeAllHidden, 0);
             qt_mac_app_fullscreen = true;
         }
     }

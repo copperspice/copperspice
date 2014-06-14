@@ -47,11 +47,9 @@
 
 QT_BEGIN_NAMESPACE
 
-/*
-    Set up platform defines. There is a one-to-one correspondence between the
-    Carbon and Cocoa roles and attributes, but the prefix and type changes.
-*/
+// Set up platform defines 
 typedef NSString * const QAXRoleType;
+
 #define QAXApplicationRole NSAccessibilityApplicationRole
 #define QAXButtonRole NSAccessibilityButtonRole
 #define QAXCancelAction NSAccessibilityCancelAction
@@ -143,16 +141,13 @@ typedef NSString * const QAXRoleType;
 #define QAXWindowRole NSAccessibilityWindowRole
 #define QAXZoomButtonAttribute NSAccessibilityZoomButtonAttribute
 
-/*****************************************************************************
-  Externals
- *****************************************************************************/
-extern bool qt_mac_is_macsheet(const QWidget *w); //qwidget_mac.cpp
-extern bool qt_mac_is_macdrawer(const QWidget *w); //qwidget_mac.cpp
 
-/*****************************************************************************
-  QAccessible Bindings
- *****************************************************************************/
-//hardcoded bindings between control info and (known) QWidgets
+//  externals
+extern bool qt_mac_is_macsheet(const QWidget *w);    // qwidget_mac.cpp
+extern bool qt_mac_is_macdrawer(const QWidget *w);   // qwidget_mac.cpp
+
+
+// QAccessible Bindings - hardcoded bindings between control info and (known) QWidgets
 struct QAccessibleTextBinding {
     int qt;
     QAXRoleType mac;
@@ -611,6 +606,9 @@ struct QAccessibleTextBinding {
     }
 };
 
+// The root of the Qt accessible hiearchy
+static QObject *rootObject = 0;
+
 class QAInterface;
 static CFStringRef macRole(const QAInterface &interface);
 
@@ -623,17 +621,13 @@ QDebug operator<<(QDebug debug, const QAInterface &interface)
     return debug;
 }
 
-// The root of the Qt accessible hiearchy.
-static QObject *rootObject = 0;
-
-
+// ***
 bool QAInterface::operator==(const QAInterface &other) const
 {
     if (isValid() == false || other.isValid() == false)
         return (isValid() && other.isValid());
     
-    // walk up the parent chain, comparing child indexes, until we reach
-    // an interface that has a QObject.
+    // walk up the parent chain, comparing child indexes, until we reach an interface with a QObject
     QAInterface currentThis = *this;
     QAInterface currentOther = other;
     
@@ -668,7 +662,7 @@ uint qHash(const QAInterface &item)
 
 QAInterface QAInterface::navigate(RelationFlag relation, int entry) const
 {
-        if (!checkValid())
+    if (!checkValid())
             return QAInterface();
 
     // On a QAccessibleInterface that handles its own children we can short-circut
@@ -692,109 +686,13 @@ QAInterface QAInterface::navigate(RelationFlag relation, int entry) const
     if (status == -1)
         return QAInterface(); // not found;
 
-    // Check if target is a child of this interface.
-    if (!child_iface) {
+    // Check if target is a child of this interface
+    if (! child_iface) {
         return QAInterface(*this, status);
     } else {
         // Target is child_iface or a child of that (status decides).
         return QAInterface(child_iface, status);
     }
-}
-
-QAElement::QAElement()
-:elementRef(0)
-{}
-
-QAElement::QAElement(AXUIElementRef elementRef)
-:elementRef(elementRef)
-{
-    if (elementRef != 0) {
-        CFRetain(elementRef);
-        CFRetain(object());
-    }
-}
-
-QAElement::QAElement(const QAElement &element)
-:elementRef(element.elementRef)
-{
-    if (elementRef != 0) {
-        CFRetain(elementRef);
-        CFRetain(object());
-    }
-}
-
-QAElement::QAElement(HIObjectRef object, int child)
-{
-    Q_UNUSED(object);
-    Q_UNUSED(child);
-}
-
-QAElement::~QAElement()
-{
-    if (elementRef != 0) {
-        CFRelease(object());
-        CFRelease(elementRef);
-    }
-}
-
-void QAElement::operator=(const QAElement &other)
-{
-    if (*this == other)
-        return;
-
-    if (elementRef != 0) {
-        CFRelease(object());
-        CFRelease(elementRef);
-    }
-
-    elementRef = other.elementRef;
-
-    if (elementRef != 0) {
-        CFRetain(elementRef);
-        CFRetain(object());
-    }
-}
-
-bool QAElement::operator==(const QAElement &other) const
-{
-    if (elementRef == 0 || other.elementRef == 0)
-        return (elementRef == other.elementRef);
-
-    return CFEqual(elementRef, other.elementRef);
-}
-
-uint qHash(QAElement element)
-{
-    return qHash(element.object()) + qHash(element.id());
-}
-
-Q_GLOBAL_STATIC(QAccessibleHierarchyManager, accessibleHierarchyManager);
-
-/*
-    Reomves all accessibility info accosiated with the sender object.
-*/
-void QAccessibleHierarchyManager::objectDestroyed(QObject *object)
-{
-    HIObjectRef hiObject = qobjectHiobjectHash.value(object);
-    delete qobjectElementHash.value(object);
-    qobjectElementHash.remove(object);
-    hiobjectInterfaceHash.remove(hiObject);
-}
-
-/*
-    Removes all stored items.
-*/
-void QAccessibleHierarchyManager::reset()
-{
-    qDeleteAll(qobjectElementHash);
-    qobjectElementHash.clear();
-    hiobjectInterfaceHash.clear();
-    qobjectHiobjectHash.clear();
-}
-
-QAccessibleHierarchyManager *QAccessibleHierarchyManager::instance()
-{
-    return accessibleHierarchyManager();
 }
 
 static bool isTabWidget(const QAInterface &interface)
@@ -807,6 +705,7 @@ static bool isTabWidget(const QAInterface &interface)
 static bool isStandaloneTabBar(const QAInterface &interface)
 {
     QObject *object = interface.object();
+
     if (interface.role() == QAccessible::PageTabList && object)
         return (qobject_cast<QTabWidget *>(object->parent()) == 0);
 
@@ -822,13 +721,12 @@ static bool isEmbeddedTabBar(const QAInterface &interface)
     return false;
 }
 
-/*
-    Decides if a QAInterface is interesting from an accessibility users point of view.
-*/
+// Decides if a QAInterface is interesting from an accessibility users point of view
 bool isItInteresting(const QAInterface &interface)
 {
     // Mac accessibility does not have an attribute that corresponds to the Invisible/Offscreen
-    // state, so we disable the interface here.
+    // state, so we disable the interface here
+
     const QAccessible::State state = interface.state();
     if (state & QAccessible::Invisible ||
         state & QAccessible::Offscreen )
@@ -839,13 +737,12 @@ bool isItInteresting(const QAInterface &interface)
     if (QObject * const object = interface.object()) {
         const QString className = QLatin1String(object->metaObject()->className());
 
-        // VoiceOver focusing on tool tips can be confusing. The contents of the
-        // tool tip is avalible through the description attribute anyway, so
-        // we disable accessibility for tool tips.
+        // VoiceOver focusing on tool tips can be confusing. The contents of the tool tip is avalible
+        // through the description attribute anyway, so we disable accessibility for tool tips.
         if (className == QLatin1String("QTipLabel"))
             return false;
 
-        // Hide TabBars that has a QTabWidget parent (the tab widget handles the accessibility)
+        // Hide TabBars has a QTabWidget parent (the tab widget handles the accessibility)
         if (isEmbeddedTabBar(interface))
             return false;
 
@@ -855,50 +752,106 @@ bool isItInteresting(const QAInterface &interface)
                 return false;        
          }
     */
+
     }
 
-    // Client is a generic role returned by plain QWidgets or other
-    // widgets that does not have separate QAccessible interface, such
-    // as the TabWidget. Return false unless macRole gives the interface
-    // a special role.
+    // Client is a generic role returned by plain QWidgets or other widgets which does not have separate
+    //  QAccessible interface, such as the TabWidget. Return false unless macRole gives the interface a special role.
     if (role == QAccessible::Client && macRole(interface) == CFStringRef(QAXUnknownRole))
         return false;
 
-    // Some roles are not interesting:
-    if (role == QAccessible::Border ||    // QFrame
-        role == QAccessible::Application || // We use the system-provided application element.
-        role == QAccessible::MenuItem)      // The system also provides the menu items.
+    // Some roles are not interesting
+
+    if (role == QAccessible::Border ||       // QFrame
+        role == QAccessible::Application ||  // We use the system-provided application element.
+        role == QAccessible::MenuItem)       // The system also provides the menu items.
         return false;
 
-    // It is probably better to access the toolbar buttons directly than having
-    // to navigate through the toolbar.
+    // It is probably better to access the toolbar buttons directly than having to navigate through the toolbar
     if (role == QAccessible::ToolBar)
         return false;
 
     return true;
 }
 
-QAElement QAccessibleHierarchyManager::registerInterface(QObject *object, int child)
+// ***
+QAElement::QAElement()
+   : elementRef(0)
 {
-    Q_UNUSED(object);
-    Q_UNUSED(child);
-    return QAElement();
 }
 
-/*
-    Creates a QAXUIelement that corresponds to the given QAInterface.
-*/
-QAElement QAccessibleHierarchyManager::registerInterface(const QAInterface &interface)
+QAElement::QAElement(AXUIElementRef elementRef)
+   : elementRef(elementRef)
 {
-    Q_UNUSED(interface);
-    return QAElement();
+    if (elementRef != 0) {
+        CFRetain(elementRef);        
+    }
 }
 
-void QAccessibleHierarchyManager::registerInterface(QObject * qobject, HIObjectRef hiobject, QInterfaceFactory *interfaceFactory)
+QAElement::QAElement(const QAElement &element)
+   : elementRef(element.elementRef)
 {
-    Q_UNUSED(qobject);
-    Q_UNUSED(hiobject);
-    Q_UNUSED(interfaceFactory);
+    if (elementRef != 0) {
+        CFRetain(elementRef);        
+    }
+}
+
+QAElement::~QAElement()
+{
+    if (elementRef != 0) {       
+        CFRelease(elementRef);
+    }
+}
+
+void QAElement::operator=(const QAElement &other)
+{
+    if (*this == other)
+        return;
+
+    if (elementRef != 0) {        
+        CFRelease(elementRef);
+    }
+
+    elementRef = other.elementRef;
+
+    if (elementRef != 0) {
+        CFRetain(elementRef);        
+    }
+}
+
+bool QAElement::operator==(const QAElement &other) const
+{
+    if (elementRef == 0 || other.elementRef == 0)
+        return (elementRef == other.elementRef);
+
+    return CFEqual(elementRef, other.elementRef);
+}
+
+uint qHash(QAElement element)
+{
+    return qHash(element.id());
+}
+
+// ***
+Q_GLOBAL_STATIC(QAccessibleHierarchyManager, accessibleHierarchyManager);
+
+// removes all accessibility info associated with the sender object
+void QAccessibleHierarchyManager::objectDestroyed(QObject *object)
+{
+    delete qobjectElementHash.value(object);
+    qobjectElementHash.remove(object);    
+}
+
+// Removes all stored items
+void QAccessibleHierarchyManager::reset()
+{
+    qDeleteAll(qobjectElementHash);
+    qobjectElementHash.clear();
+}
+
+QAccessibleHierarchyManager *QAccessibleHierarchyManager::instance()
+{
+    return accessibleHierarchyManager();
 }
 
 void QAccessibleHierarchyManager::registerChildren(const QAInterface &interface)
@@ -913,19 +866,6 @@ void QAccessibleHierarchyManager::registerChildren(const QAInterface &interface)
         return;
 
     interfaceFactory->registerChildren();
-}
-
-QAInterface QAccessibleHierarchyManager::lookup(const AXUIElementRef &element)
-{
-     if (element == 0)
-        return QAInterface();
-
-    return QAInterface();
-}
-
-QAInterface QAccessibleHierarchyManager::lookup(const QAElement &element)
-{
-    return lookup(element.element());
 }
 
 QAElement QAccessibleHierarchyManager::lookup(const QAInterface &interface)
@@ -949,209 +889,10 @@ QAElement QAccessibleHierarchyManager::lookup(QObject * const object, int id)
     return factory->element(id);
 }
 
-/*
-    Standard interface mapping, return the stored interface
-    or HIObjectRef, and there is an one-to-one mapping between
-    the identifier and child.
-*/
-class QStandardInterfaceFactory : public QInterfaceFactory
-{
-public:
-    QStandardInterfaceFactory(const QAInterface &interface)
-    : m_interface(interface), object(interface.hiObject())
-    {
-        CFRetain(object);
-    }
-    
-    ~QStandardInterfaceFactory()
-    {
-         CFRelease(object);
-    }
-
-    
-    QAInterface interface(UInt64 identifier)
-    {
-        const int child = identifier;
-        return QAInterface(m_interface, child);
-    }
-
-    QAElement element(int id)
-    {
-        return QAElement(object, id);
-    }
-
-    QAElement element(const QAInterface &interface)
-    {
-        if (interface.object() == 0)
-            return QAElement();
-        return QAElement(object, interface.id());
-    }
-
-    void registerChildren()
-    {
-        const int childCount = m_interface.childCount();
-        for (int i = 1; i <= childCount; ++i) {
-            accessibleHierarchyManager()->registerInterface(m_interface.navigate(QAccessible::Child, i));
-        }
-    }
-
-private:
-    QAInterface m_interface;
-    HIObjectRef object;
-};
-
-/*
-    Interface mapping where that creates one HIObject for each interface child.
-*/
-class QMultipleHIObjectFactory : public QInterfaceFactory
-{
-public:
-    QMultipleHIObjectFactory(const QAInterface &interface)
-    : m_interface(interface)
-    {  }
-    
-    ~QMultipleHIObjectFactory()
-    {
-        foreach (HIObjectRef object, objects) {
-            CFRelease(object);
-        }
-    }
-
-    QAInterface interface(UInt64 identifier)
-    {
-        const int child = identifier;
-        return QAInterface(m_interface, child);
-    }
-
-    QAElement element(int child)
-    {
-        if (child == 0)
-            return QAElement(m_interface.hiObject(), 0);
-        
-        if (child > objects.count())
-            return QAElement();
-
-        return QAElement(objects.at(child - 1), child);
-    }
-
-    void registerChildren()
-    {
-    }
-
-private:
-    QAInterface m_interface;
-    QList<HIObjectRef> objects;
-};
-
-class QItemViewInterfaceFactory : public QInterfaceFactory
-{
-public:
-    QItemViewInterfaceFactory(const QAInterface &interface)
-    : m_interface(interface), object(interface.hiObject())
-    {
-        CFRetain(object);
-        columnCount = 0;
-        if (QTableView * tableView = qobject_cast<QTableView *>(interface.parent().object())) {
-            if (tableView->model())
-                columnCount = tableView->model()->columnCount();
-            if (tableView->verticalHeader())
-                ++columnCount;
-        }
-    }
-    
-    ~QItemViewInterfaceFactory()
-    {
-        CFRelease(object);
-    }
-
-    QAInterface interface(UInt64 identifier)
-    {
-        if (identifier == 0)
-            return m_interface;
-
-        if (m_interface.role() == QAccessible::List)
-            return m_interface.childAt(identifier);
-        
-        if (m_interface.role() == QAccessible::Table) {
-            const int index = identifier;
-            if (index == 0)
-                return m_interface; // return the item view interface.
-           
-            const int rowIndex = (index - 1) / (columnCount + 1);
-            const int cellIndex = (index - 1)  % (columnCount + 1);
-/*
-            qDebug() << "index" << index;
-            qDebug() << "rowIndex" << rowIndex;
-            qDebug() << "cellIndex" << cellIndex;
-*/
-            const QAInterface rowInterface = m_interface.childAt(rowIndex + 1);
-
-            if ((cellIndex) == 0) // Is it a row?
-                return rowInterface;
-            else {
-                return rowInterface.childAt(cellIndex);
-            }
-        }
-
-        return QAInterface();
-    }
-
-    QAElement element(int id)
-    {
-        if (id != 0) {
-            return QAElement();
-        }
-        return QAElement(object, 0);
-    }
-
-    QAElement element(const QAInterface &interface)
-    {
-        if (interface.object() && interface.object() == m_interface.object()) {
-            return QAElement(object, 0);
-        } else if (m_interface.role() == QAccessible::List) {
-            if (interface.parent().object() && interface.parent().object() == m_interface.object())
-                return QAElement(object, m_interface.indexOfChild(interface));
-        } else if (m_interface.role() == QAccessible::Table) {
-            QAInterface currentInterface = interface;
-            int index = 0;
-
-            while (currentInterface.isValid() && currentInterface.object() == 0) {
-                const QAInterface parentInterface = currentInterface.parent();
-/*
-                qDebug() << "current index" << index;
-                qDebug() << "current interface" << interface;
-
-                qDebug() << "parent interface" << parentInterface;
-                qDebug() << "grandparent interface" << parentInterface.parent();
-                qDebug() << "childCount" << interface.childCount();
-                qDebug() << "index of child" << parentInterface.indexOfChild(currentInterface);
-*/
-                index += ((parentInterface.indexOfChild(currentInterface) - 1) * (currentInterface.childCount() + 1)) + 1;
-                currentInterface = parentInterface;
-//                qDebug() << "new current interface" << currentInterface;
-            }
-            if (currentInterface.object() == m_interface.object())
-                return QAElement(object, index);
-
-
-        }
-        return QAElement();
-    }
-
-    void registerChildren()
-    {
-        // Item view child interfraces don't have their own qobjects, so there is nothing to register here.
-    }
-
-private:
-    QAInterface m_interface;
-    HIObjectRef object;
-    int columnCount; // for table views;
-};
-
 QList<QAElement> lookup(const QList<QAInterface> &interfaces)
 {
     QList<QAElement> elements;
+
     foreach (const QAInterface &interface, interfaces)
         if (interface.isValid()) {
             const QAElement element = accessibleHierarchyManager()->lookup(interface);
@@ -1161,10 +902,10 @@ QList<QAElement> lookup(const QList<QAInterface> &interfaces)
     return elements;
 }
 
-// Debug output helpers:
 /*
 static QString nameForEventKind(UInt32 kind)
 {
+   // debug output helpers
     switch(kind) {
         case kEventAccessibleGetChildAtPoint:       return QString("GetChildAtPoint");      break;
         case kEventAccessibleGetAllAttributeNames:  return QString("GetAllAttributeNames"); break;
@@ -1179,19 +920,7 @@ static QString nameForEventKind(UInt32 kind)
 }
 */
 
-
-//  Gets the AccessibleObject parameter from an event.
-static inline AXUIElementRef getAccessibleObjectParameter(EventRef event)
-{
-    AXUIElementRef element;
-    GetEventParameter(event, kEventParamAccessibleObject, typeCFTypeRef, 0,
-                        sizeof(element), 0, &element);
-    return element;
-}
-
-/*
-    Translates a QAccessible::Role into a mac accessibility role.
-*/
+//  Translates a QAccessible::Role into a mac accessibility role.
 static CFStringRef macRole(const QAInterface &interface)
 {
     const QAccessible::Role qtRole = interface.role();
@@ -1230,7 +959,7 @@ static CFStringRef macRole(const QAInterface &interface)
         testRole = text_bindings[i][0].qt;
     }
 
-//    qDebug() << "got unknown role!" << interface << interface.parent();
+    //    qDebug() << "got unknown role!" << interface << interface.parent();
 
     return CFStringRef(QAXUnknownRole);
 }
@@ -1255,59 +984,8 @@ struct IsWindowAndNotDrawerOrSheetTest
     }
 };
 
-/*
-    Navigates up the iterfaces ancestor hierachy until a QAccessibleInterface that
-    passes the Test is found. If we reach a interface that is a HIView we stop the
-    search and call AXUIElementCopyAttributeValue.
-*/
-template <typename TestType>
-OSStatus navigateAncestors(EventHandlerCallRef next_ref, EventRef event, const QAInterface &interface, CFStringRef attribute)
-{
-    if (interface.isHIView())
-        return CallNextEventHandler(next_ref, event);
 
-    QAInterface current = interface;
-    QAElement element;
-    while (current.isValid()) {
-        if (TestType::test(interface)) {
-            element = accessibleHierarchyManager()->lookup(current);
-            break;
-        }
-
-        // If we reach an InterfaceItem that is a HiView we can hand of the search to
-        // the system event handler. This is the common case.
-        if (current.isHIView()) {
-            CFTypeRef value = 0;
-            const QAElement currentElement = accessibleHierarchyManager()->lookup(current);
-            AXError err = AXUIElementCopyAttributeValue(currentElement.element(), attribute, &value);
-            AXUIElementRef newElement = (AXUIElementRef)value;
-
-            if (err == noErr)
-                element = QAElement(newElement);
-
-            if (newElement != 0)
-                CFRelease(newElement);
-            break;
-        }
-
-        QAInterface next = current.parent();
-        if (next.isValid() == false)
-            break;
-        if (next == current)
-            break;
-        current = next;
-    }
-
-    if (element.isValid() == false)
-        return eventNotHandledErr;
-
-
-    AXUIElementRef elementRef = element.element();
-    SetEventParameter(event, kEventParamAccessibleAttributeValue, typeCFTypeRef,
-                                      sizeof(elementRef), &elementRef);
-    return noErr;
-}
-
+// ***
 void QAccessible::initialize()
 {
 }

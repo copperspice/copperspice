@@ -39,7 +39,7 @@
 #  include <objbase.h>
 
 #elif defined(Q_OS_MAC)
-#  include </qt_cocoa_helpers_mac_p.h>
+#  include <qt_cocoa_helpers_mac_p.h>
 #endif
 
 #include <qfunctions_p.h>

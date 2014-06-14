@@ -23,11 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qwindowsurface_mac_p.h"
-
-#include <private/qt_mac_p.h>
-#include <private/qt_cocoa_helpers_mac_p.h>
-#include <QtGui/qwidget.h>
+#include <qwindowsurface_mac_p.h>
+#include <qt_mac_p.h>
+#include <qt_cocoa_helpers_mac_p.h>
+#include <qwidget.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -82,7 +81,7 @@ void QMacWindowSurface::flush(QWidget *widget, const QRegion &rgn, const QPoint 
     qt_mac_drawCGImage(context, &dest, image);
     CFRelease(image);
 
-    // Restore context.
+    // Restore context
     CGContextRestoreGState(context);
     CGContextFlush(context);
     CGContextRelease(context);

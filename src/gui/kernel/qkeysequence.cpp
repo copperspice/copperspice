@@ -55,28 +55,35 @@ struct MacSpecialKey {
     ushort macSymbol;
 };
 
+enum {
+   kShiftUnicode   = 0x21E7,    
+   kCommandUnicode = 0x2318, 
+   kControlUnicode = 0x2303,
+   kOptionUnicode  = 0x2325, 
+};
+
 static const int NumEntries = 21;
 static const MacSpecialKey entries[NumEntries] = {
-    { Qt::Key_Escape, 0x238B },
-    { Qt::Key_Tab, 0x21E5 },
-    { Qt::Key_Backtab, 0x21E4 },
+    { Qt::Key_Escape,    0x238B },
+    { Qt::Key_Tab,       0x21E5 },
+    { Qt::Key_Backtab,   0x21E4 },
     { Qt::Key_Backspace, 0x232B },
-    { Qt::Key_Return, 0x21B5 },
-    { Qt::Key_Enter, 0x2324 },
-    { Qt::Key_Delete, 0x2326 },
-    { Qt::Key_Home, 0x2196 },
-    { Qt::Key_End, 0x2198 },
-    { Qt::Key_Left, 0x2190 },
-    { Qt::Key_Up, 0x2191 },
-    { Qt::Key_Right, 0x2192 },
-    { Qt::Key_Down, 0x2193 },
-    { Qt::Key_PageUp, 0x21DE },
-    { Qt::Key_PageDown, 0x21DF },
-    { Qt::Key_Shift, kShiftUnicode },
-    { Qt::Key_Control, kCommandUnicode },
-    { Qt::Key_Meta, kControlUnicode },
-    { Qt::Key_Alt, kOptionUnicode },
-    { Qt::Key_CapsLock, 0x21EA },
+    { Qt::Key_Return,    0x21B5 },
+    { Qt::Key_Enter,     0x2324 },
+    { Qt::Key_Delete,    0x2326 },
+    { Qt::Key_Home,      0x2196 },
+    { Qt::Key_End,       0x2198 },
+    { Qt::Key_Left,      0x2190 },
+    { Qt::Key_Up,        0x2191 },
+    { Qt::Key_Right,     0x2192 },
+    { Qt::Key_Down,      0x2193 },
+    { Qt::Key_PageUp,    0x21DE },
+    { Qt::Key_PageDown,  0x21DF },
+    { Qt::Key_Shift,     kShiftUnicode   },
+    { Qt::Key_Control,   kCommandUnicode }, 
+    { Qt::Key_Meta,      kControlUnicode },
+    { Qt::Key_Alt,       kOptionUnicode  },
+    { Qt::Key_CapsLock,  0x21EA },
 };
 
 static bool operator<(const MacSpecialKey &entry, int key)
@@ -96,7 +103,9 @@ QChar qt_macSymbolForQtKey(int key)
     const MacSpecialKey *i = qBinaryFind(entries, MacSpecialKeyEntriesEnd, key);
     if (i == MacSpecialKeyEntriesEnd)
         return QChar();
+
     ushort macSymbol = i->macSymbol;
+
     if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)
             && (macSymbol == kControlUnicode || macSymbol == kCommandUnicode)) {
         if (macSymbol == kControlUnicode)

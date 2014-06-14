@@ -91,23 +91,28 @@ QT_USE_NAMESPACE
         UInt32 frompage, topage;
         PMGetFirstPage(d->ep->settings, &frompage);
         PMGetLastPage(d->ep->settings, &topage);
+
         topage = qMin(UInt32(INT_MAX), topage);
         dialog->setFromTo(frompage, topage);
 
-        // OK, I need to map these values back let's see
-        // If from is 1 and to is INT_MAX, then print it all
-        // (Apologies to the folks with more than INT_MAX pages)
+        
         if (dialog->fromPage() == 1 && dialog->toPage() == INT_MAX) {
+            // print all       
+
             dialog->setPrintRange(QPrintDialog::AllPages);
             dialog->setFromTo(0, 0);
+
         } else {
-            dialog->setPrintRange(QPrintDialog::PageRange); // In a way a lie, but it shouldn't hurt.
-            // Carbon hands us back a very large number here even for ALL, set it to max
-            // in that case to follow the behavior of the other print dialogs.
+            dialog->setPrintRange(QPrintDialog::PageRange); 
+            
+            // Carbon hands us back a very large number, set 'toPage' to max
+            // to follow the behavior of the other print dialogs
+
             if (dialog->maxPage() < dialog->toPage())
                 dialog->setFromTo(dialog->fromPage(), dialog->maxPage());
         }
-        // Keep us in sync with file output
+
+        // keep in sync with file output
         PMDestinationType dest;
 
         // If the user selected print to file, the session has been
@@ -119,12 +124,15 @@ QT_USE_NAMESPACE
         if (dest == kPMDestinationFile) {
             QCFType<CFURLRef> file;
             PMSessionCopyDestinationLocation(d->ep->session, d->ep->settings, &file);
-            UInt8 localFile[2048];  // Assuming there's a POSIX file system here.
+
+            // assume POSIX file system here
+            UInt8 localFile[2048]; 
+
             CFURLGetFileSystemRepresentation(file, true, localFile, sizeof(localFile));
-            d->ep->outputFilename
-                = QString::fromUtf8(reinterpret_cast<const char *>(localFile));
+            d->ep->outputFilename = QString::fromUtf8(reinterpret_cast<const char *>(localFile));
+
         } else {
-            // Keep output format.
+            // Keep output format
             QPrinter::OutputFormat format;
             format = d->printer->outputFormat();
             d->printer->setOutputFileName(QString());

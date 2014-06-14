@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-/**************************************************
+/***********************************************************************
 ** Copyright (C) 2007-2008, Apple, Inc.
-**************************************************/
+***********************************************************************/
 
 #include <qt_mac_p.h>
 #include <qeventdispatcher_mac_p.h>
@@ -178,9 +178,12 @@ static void qt_mac_destructDrawer(NSDrawer *drawer)
 bool qt_mac_can_clickThrough(const QWidget *w)
 {
     static int qt_mac_carbon_clickthrough = -1;
+
     if (qt_mac_carbon_clickthrough < 0)
         qt_mac_carbon_clickthrough = !qgetenv("QT_MAC_NO_COCOA_CLICKTHROUGH").isEmpty();
+
     bool ret = !qt_mac_carbon_clickthrough;
+
     for ( ; w; w = w->parentWidget()) {
         if (w->testAttribute(Qt::WA_MacNoClickThrough)) {
             ret = false;
@@ -270,9 +273,9 @@ inline static void qt_mac_set_fullscreen_mode(bool b)
         return;
     qt_mac_app_fullscreen = b;
     if (b) {
-        SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
+        CS_SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
     } else {
-        SetSystemUIMode(kUIModeNormal, 0);
+        CS_SetSystemUIMode(kUIModeNormal, 0);
     }
 }
 
@@ -360,6 +363,7 @@ inline static bool updateRedirectedToGraphicsProxyWidget(QWidget *widget, const 
 #ifndef QT_NO_GRAPHICSVIEW
     QWidget *tlw = widget->window();
     QWExtra *extra = qt_widget_private(tlw)->extra;
+
     if (extra && extra->proxyWidget) {
         extra->proxyWidget->update(rect.translated(widget->mapTo(tlw, QPoint())));
         return true;
@@ -377,9 +381,11 @@ inline static bool updateRedirectedToGraphicsProxyWidget(QWidget *widget, const 
 #ifndef QT_NO_GRAPHICSVIEW
     QWidget *tlw = widget->window();
     QWExtra *extra = qt_widget_private(tlw)->extra;
+
     if (extra && extra->proxyWidget) {
         const QPoint offset(widget->mapTo(tlw, QPoint()));
         const QVector<QRect> rects = rgn.rects();
+
         for (int i = 0; i < rects.size(); ++i)
             extra->proxyWidget->update(rects.at(i).translated(offset));
         return true;
@@ -645,24 +651,30 @@ void QWidgetPrivate::determineWindowClass()
     }
 #endif
 
-
     const Qt::WindowType type = q->windowType();
     Qt::WindowFlags &flags = data.window_flags;
     const bool popup = (type == Qt::Popup);
+
     if (type == Qt::ToolTip || type == Qt::SplashScreen || popup)
         flags |= Qt::FramelessWindowHint;
 
     WindowClass wclass = kSheetWindowClass;
+
     if(qt_mac_is_macdrawer(q))
         wclass = kDrawerWindowClass;
+
     else if (q->testAttribute(Qt::WA_ShowModal) && flags & Qt::CustomizeWindowHint)
         wclass = kDocumentWindowClass;
+
     else if(popup || (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5 && type == Qt::SplashScreen))
         wclass = kModalWindowClass;
+
     else if(type == Qt::Dialog)
         wclass = kMovableModalWindowClass;
+
     else if(type == Qt::ToolTip)
         wclass = kHelpWindowClass;
+
     else if(type == Qt::Tool || (QSysInfo::MacintoshVersion < QSysInfo::MV_10_5
                                  && type == Qt::SplashScreen))
         wclass = kFloatingWindowClass;
@@ -853,9 +865,9 @@ void QWidgetPrivate::finishCreateWindow_sys_Cocoa(void * /*NSWindow * */ voidWin
     [nsview setHidden:NO];
     transferChildren();
 
-    // Tell Cocoa explicit that we wan't the view to receive key events
-    // (regardless of focus policy) because this is how it works on other
-    // platforms (and in the carbon port):
+    // indicate to Cocoa the view wants to receive key events (regardless of focus policy) 
+    // because this is how it works on other platforms
+
     [windowRef makeFirstResponder:nsview];
 
     if (topExtra->posFromMove) {
@@ -863,19 +875,22 @@ void QWidgetPrivate::finishCreateWindow_sys_Cocoa(void * /*NSWindow * */ voidWin
 
         const QRect &fStrut = frameStrut();
         const QRect &crect = data.crect;
-        const QRect frameRect(QPoint(crect.left(), crect.top()),
-                              QSize(fStrut.left() + fStrut.right() + crect.width(),
+        const QRect frameRect(QPoint(crect.left(), crect.top()), QSize(fStrut.left() + fStrut.right() + crect.width(),
                                     fStrut.top() + fStrut.bottom() + crect.height()));
+
         NSRect cocoaFrameRect = NSMakeRect(frameRect.x(), flipYCoordinate(frameRect.bottom() + 1),
-                                           frameRect.width(), frameRect.height());
+                                    frameRect.width(), frameRect.height());
+
         [windowRef setFrame:cocoaFrameRect display:NO];
         topExtra->posFromMove = false;
     }
 
     if (q->testAttribute(Qt::WA_WState_WindowOpacitySet)){
         q->setWindowOpacity(topExtra->opacity / 255.0f);
+
     } else if (qt_mac_is_macsheet(q)){
         CGFloat alpha = [qt_mac_window_for(q) alphaValue];
+
         if (alpha >= 1.0) {
             q->setWindowOpacity(0.95f);
             q->setAttribute(Qt::WA_WState_WindowOpacitySet, false);
@@ -1447,7 +1462,7 @@ void QWidgetPrivate::setParent_sys(QWidget *parent, Qt::WindowFlags f)
         createWinId();
         if (q->isWindow()) {
 
-            // Simply transfer our toolbar over. Everything should stay put, unlike in Carbon.
+            // transfer our toolbar
             if (oldToolbar && !(f & Qt::FramelessWindowHint)) {
                 OSWindowRef newWindow = qt_mac_window_for(q);
                 [newWindow setToolbar:oldToolbar];
@@ -2911,10 +2926,8 @@ void QWidgetPrivate::createSysExtra()
 
 void QWidgetPrivate::deleteSysExtra()
 {
-
     if (extra->imageMask)
         CFRelease(extra->imageMask);
-
 }
 
 void QWidgetPrivate::createTLSysExtra()
@@ -2924,7 +2937,6 @@ void QWidgetPrivate::createTLSysExtra()
     extra->topextra->isMove = 0;
     extra->topextra->wattr = 0;
     extra->topextra->wclass = 0;
-    extra->topextra->group = 0;
     extra->topextra->windowIcon = 0;
     extra->topextra->savedWindowAttributesFromMaximized = 0;
 }

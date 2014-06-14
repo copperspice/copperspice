@@ -32,205 +32,29 @@
 #include <qimage.h>
 #include <qdatastream.h>
 #include <qvariant.h>
-#include <private/qcursor_p.h>
+#include <qcursor_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QCursor
-
-    \brief The QCursor class provides a mouse cursor with an arbitrary
-    shape.
-
-    \ingroup appearance
-    \ingroup shared
-
-
-    This class is mainly used to create mouse cursors that are
-    associated with particular widgets and to get and set the position
-    of the mouse cursor.
-
-    Qt has a number of standard cursor shapes, but you can also make
-    custom cursor shapes based on a QBitmap, a mask and a hotspot.
-
-    To associate a cursor with a widget, use QWidget::setCursor(). To
-    associate a cursor with all widgets (normally for a short period
-    of time), use QApplication::setOverrideCursor().
-
-    To set a cursor shape use QCursor::setShape() or use the QCursor
-    constructor which takes the shape as argument, or you can use one
-    of the predefined cursors defined in the \l Qt::CursorShape enum.
-
-    If you want to create a cursor with your own bitmap, either use
-    the QCursor constructor which takes a bitmap and a mask or the
-    constructor which takes a pixmap as arguments.
-
-    To set or get the position of the mouse cursor use the static
-    methods QCursor::pos() and QCursor::setPos().
-
-    \bold{Note:} It is possible to create a QCursor before
-    QApplication, but it is not useful except as a place-holder for a
-    real QCursor created after QApplication. Attempting to use a
-    QCursor that was created before QApplication will result in a
-    crash.
-
-    \section1 A Note for X11 Users
-
-    On X11, Qt supports the \link
-    http://www.xfree86.org/4.3.0/Xcursor.3.html Xcursor\endlink
-    library, which allows for full color icon themes. The table below
-    shows the cursor name used for each Qt::CursorShape value. If a
-    cursor cannot be found using the name shown below, a standard X11
-    cursor will be used instead. Note: X11 does not provide
-    appropriate cursors for all possible Qt::CursorShape values. It
-    is possible that some cursors will be taken from the Xcursor
-    theme, while others will use an internal bitmap cursor.
-
-    \table
-    \header \o Shape \o Qt::CursorShape Value \o Cursor Name
-            \o Shape \o Qt::CursorShape Value \o Cursor Name
-    \row \o \inlineimage cursor-arrow.png
-         \o Qt::ArrowCursor   \o \c left_ptr
-         \o \inlineimage      cursor-sizev.png
-         \o Qt::SizeVerCursor \o \c size_ver
-    \row \o \inlineimage      cursor-uparrow.png
-         \o Qt::UpArrowCursor \o \c up_arrow
-         \o \inlineimage      cursor-sizeh.png
-         \o Qt::SizeHorCursor \o \c size_hor
-    \row \o \inlineimage      cursor-cross.png
-         \o Qt::CrossCursor   \o \c cross
-         \o \inlineimage      cursor-sizeb.png
-         \o Qt::SizeBDiagCursor \o \c size_bdiag
-    \row \o \inlineimage      cursor-ibeam.png
-         \o Qt::IBeamCursor   \o \c ibeam
-         \o \inlineimage      cursor-sizef.png
-         \o Qt::SizeFDiagCursor \o \c size_fdiag
-    \row \o \inlineimage      cursor-wait.png
-         \o Qt::WaitCursor    \o \c wait
-         \o \inlineimage      cursor-sizeall.png
-         \o Qt::SizeAllCursor \o \c size_all
-    \row \o \inlineimage      cursor-busy.png
-         \o Qt::BusyCursor    \o \c left_ptr_watch
-         \o \inlineimage      cursor-vsplit.png
-         \o Qt::SplitVCursor  \o \c split_v
-    \row \o \inlineimage      cursor-forbidden.png
-         \o Qt::ForbiddenCursor \o \c forbidden
-         \o \inlineimage      cursor-hsplit.png
-         \o Qt::SplitHCursor  \o \c split_h
-    \row \o \inlineimage      cursor-hand.png
-         \o Qt::PointingHandCursor \o \c pointing_hand
-         \o \inlineimage      cursor-openhand.png
-         \o Qt::OpenHandCursor  \o \c openhand
-    \row \o \inlineimage      cursor-whatsthis.png
-         \o Qt::WhatsThisCursor \o \c whats_this
-         \o \inlineimage      cursor-closedhand.png
-         \o Qt::ClosedHandCursor \o \c closedhand
-    \row \o
-         \o Qt::DragMoveCursor      \o \c dnd-move or \c move
-         \o
-         \o Qt::DragCopyCursor      \o \c dnd-copy or \c copy
-    \row \o
-         \o Qt::DragLinkCursor      \o \c dnd-link or \c link
-    \endtable
-
-    \sa QWidget, {fowler}{GUI Design Handbook: Cursors}
-*/
-
-/*!
-    \fn HCURSOR_or_HANDLE QCursor::handle() const
-
-    Returns a platform-specific cursor handle. The \c
-    HCURSOR_or_HANDLE type is \c HCURSOR on Windows and Qt::HANDLE on X11
-    and Mac OS X. On \l{Qt for Embedded Linux} it is an integer.
-
-    \warning Using the value returned by this function is not
-    portable.
-*/
-
-/*!
-    \fn QCursor::QCursor(HCURSOR cursor)
-
-    Constructs a Qt cursor from the given Windows \a cursor.
-
-    \warning This function is only available on Windows.
-
-    \sa handle()
-*/
-
-/*!
-    \fn QCursor::QCursor(Qt::HANDLE handle)
-
-    Constructs a Qt cursor from the given \a handle.
-
-    \warning This function is only available on X11.
-
-    \sa handle()
-*/
-
-/*!
-    \fn QPoint QCursor::pos()
-
-    Returns the position of the cursor (hot spot) in global screen
-    coordinates.
-
-    You can call QWidget::mapFromGlobal() to translate it to widget
-    coordinates.
-
-    \sa setPos(), QWidget::mapFromGlobal(), QWidget::mapToGlobal()
-*/
-
-/*!
-    \fn void QCursor::setPos(int x, int y)
-
-    Moves the cursor (hot spot) to the global screen position (\a x,
-    \a y).
-
-    You can call QWidget::mapToGlobal() to translate widget
-    coordinates to global screen coordinates.
-
-    \sa pos(), QWidget::mapFromGlobal(), QWidget::mapToGlobal()
-*/
-
-/*!
-    \fn void QCursor::setPos (const QPoint &p)
-
-    \overload
-
-    Moves the cursor (hot spot) to the global screen position at point
-    \a p.
-*/
-
-/*****************************************************************************
-  QCursor stream functions
- *****************************************************************************/
-
 #ifndef QT_NO_DATASTREAM
-
-
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QCursor &cursor)
-    \relates QCursor
-
-    Writes the \a cursor to the \a stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator<<(QDataStream &s, const QCursor &c)
 {
     s << (qint16)c.shape();                        // write shape id to stream
-    if (c.shape() == Qt::BitmapCursor) {                // bitmap cursor
+    if (c.shape() == Qt::BitmapCursor) {           // bitmap cursor
         bool isPixmap = false;
         if (s.version() >= 7) {
             isPixmap = !c.pixmap().isNull();
             s << isPixmap;
         }
+
         if (isPixmap)
             s << c.pixmap();
         else
             s << *c.bitmap() << *c.mask();
         s << c.hotSpot();
     }
+
     return s;
 }
 
@@ -380,13 +204,9 @@ void QCursorData::initialize()
     if (QCursorData::initialized)
         return;
 
-#ifdef Q_OS_MAC
-    // DRSWAT - Not Needed Cocoa or Carbon
-	//  InitCursor();
-#endif
-
     for (int shape = 0; shape <= Qt::LastCursor; ++shape)
         qt_cursorTable[shape] = new QCursorData((Qt::CursorShape)shape);
+
     QCursorData::initialized = true;
 }
 

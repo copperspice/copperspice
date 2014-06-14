@@ -50,11 +50,9 @@ QT_END_NAMESPACE
 #endif 
 
 #ifdef Q_OS_MAC
-struct OpaqueHIObjectRef;
-typedef struct OpaqueHIObjectRef*       HIObjectRef;
-typedef HIObjectRef                     HIToolbarItemRef;
-typedef const void * CFTypeRef;
-typedef const struct __CFString * CFStringRef;
+
+using CFTypeRef    = const void *;
+using CFStringRef  = const struct __CFString *;
 
 #include <qunifiedtoolbarsurface_mac_p.h>
 #endif
@@ -66,8 +64,7 @@ class QRubberBand;
 
 /* This data structure represents the state of all the tool-bars and dock-widgets. It's value based
    so it can be easilly copied into a temporary variable. All operations are performed without moving
-   any widgets. Only when we are sure we have the desired state, we call apply(), which moves the
-   widgets.
+   any widgets. Only when we are sure we have the desired state, we call apply(), which moves the widgets.
 */
 
 class QMainWindowLayoutState

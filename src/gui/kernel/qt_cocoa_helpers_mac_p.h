@@ -31,6 +31,12 @@
 #define QT_COCOA_HELPERS_MAC_P_H
 
 #include <qt_mac_p.h>
+
+#ifdef __OBJC__
+   // OS X framework
+   #include <AppKit/AppKit.h>
+#endif
+
 #include <qapplication.h>
 #include <qdesktopwidget.h>
 #include <qwidget.h>
@@ -48,9 +54,7 @@
 #include <qtextdocument.h>
 #include <qdebug.h>
 #include <qpoint.h>
-#include "qt_mac_p.h"
 
-struct HIContentBorderMetrics;
 typedef struct CGPoint NSPoint;
 
 QT_BEGIN_NAMESPACE
@@ -61,7 +65,7 @@ enum {
 };
 
 Qt::MouseButtons qt_mac_get_buttons(int buttons);
-Qt::MouseButton qt_mac_get_button(EventMouseButton button);
+
 void macWindowFade(void * /*OSWindowRef*/ window, float durationSeconds = 0.15);
 bool macWindowIsTextured(void * /*OSWindowRef*/ window);
 void macWindowToolbarShow(const QWidget *widget, bool show );
@@ -70,36 +74,38 @@ bool macWindowToolbarIsVisible( void * /*OSWindowRef*/ window );
 void macWindowSetHasShadow( void * /*OSWindowRef*/ window, bool hasShadow );
 void macWindowFlush(void * /*OSWindowRef*/ window);
 void macSendToolbarChangeEvent(QWidget *widget);
-void qt_mac_updateContentBorderMetricts(void * /*OSWindowRef */window, const ::HIContentBorderMetrics &metrics);
+void qt_mac_updateContentBorderMetrics(void * /*OSWindowRef */window, const ::HIContentBorderMetrics &metrics);
 void qt_mac_replaceDrawRect(void * /*OSWindowRef */window, QWidgetPrivate *widget);
 void qt_mac_replaceDrawRectOriginal(void * /*OSWindowRef */window, QWidgetPrivate *widget);
 void qt_mac_showBaseLineSeparator(void * /*OSWindowRef */window, bool show);
 void * /*NSImage */qt_mac_create_nsimage(const QPixmap &pm);
 void qt_mac_update_mouseTracking(QWidget *widget);
+
 OSStatus qt_mac_drawCGImage(CGContextRef cg, const CGRect *inbounds, CGImageRef);
 bool qt_mac_checkForNativeSizeGrip(const QWidget *widget);
 void qt_dispatchTabletProximityEvent(void * /*NSEvent * */ tabletEvent);
 bool qt_dispatchKeyEventWithCocoa(void * /*NSEvent * */ keyEvent, QWidget *widgetToGetEvent);
 
-// These methods exists only for supporting unified mode.
+// These methods exists only for supporting unified mode
 void macDrawRectOnTop(void * /*OSWindowRef */ window);
 void macSyncDrawingOnFirstInvocation(void * /*OSWindowRef */window);
 void qt_cocoaStackChildWindowOnTopOfOtherChildren(QWidget *widget);
 void qt_mac_menu_collapseSeparators(void * /*NSMenu */ menu, bool collapse);
-
 
 bool qt_dispatchKeyEvent(void * /*NSEvent * */ keyEvent, QWidget *widgetToGetEvent);
 void qt_dispatchModifiersChanged(void * /*NSEvent * */flagsChangedEvent, QWidget *widgetToGetEvent);
 bool qt_mac_handleTabletEvent(void * /*QCocoaView * */view, void * /*NSEvent * */event);
 inline QApplication *qAppInstance() { return static_cast<QApplication *>(QCoreApplication::instance()); }
 
-struct TabletProximityRec;
 void qt_dispatchTabletProximityEvent(const ::TabletProximityRec &proxRec);
 Qt::KeyboardModifiers qt_cocoaModifiers2QtModifiers(ulong modifierFlags);
 Qt::KeyboardModifiers qt_cocoaDragOperation2QtModifiers(uint dragOperations);
 QPixmap qt_mac_convert_iconref(const IconRef icon, int width, int height);
 void qt_mac_constructQIconFromIconRef(const IconRef icon, const IconRef overlayIcon, QIcon *retIcon,
                                       QStyle::StandardPixmap standardIcon = QStyle::SP_CustomBase);
+
+#ifdef __OBJC__
+
 struct DnDParams
 {
     NSView *view;
@@ -117,8 +123,12 @@ Qt::DropActions qt_mac_mapNSDragOperations(NSDragOperation nsActions);
 QWidget *qt_mac_getTargetForKeyEvent(QWidget *widgetThatReceivedEvent);
 QWidget *qt_mac_getTargetForMouseEvent(NSEvent *event, QEvent::Type eventType,
     QPoint &returnLocalPoint, QPoint &returnGlobalPoint, QWidget *nativeWidget, QWidget **returnWidgetUnderMouse);
+
 bool qt_mac_handleMouseEvent(NSEvent *event, QEvent::Type eventType, Qt::MouseButton button, QWidget *nativeWidget, bool fakeEvent = false);
 void qt_mac_handleNonClientAreaMouseEvent(NSWindow *window, NSEvent *event);
+
+#endif
+
 
 inline int flipYCoordinate(int y)
 {
@@ -142,42 +152,50 @@ void qt_syncCocoaTitleBarButtons(OSWindowRef window, QWidget *widgetForWindow);
 CGFloat qt_mac_get_scalefactor();
 QString qt_mac_get_pasteboardString(OSPasteboardRef paste);
 
+#ifdef __OBJC__
 
 inline NSMutableArray *qt_mac_QStringListToNSMutableArray(const QStringList &qstrlist)
-{ return reinterpret_cast<NSMutableArray *>(qt_mac_QStringListToNSMutableArrayVoid(qstrlist)); }
+{ 
+   return reinterpret_cast<NSMutableArray *>(qt_mac_QStringListToNSMutableArrayVoid(qstrlist)); 
+}
 
 inline QString qt_mac_NSStringToQString(const NSString *nsstr)
-{ return QCFString::toQString(reinterpret_cast<const CFStringRef>(nsstr)); }
+{ 
+   return QCFString::toQString(reinterpret_cast<const CFStringRef>(nsstr)); 
+}
 
 inline NSString *qt_mac_QStringToNSString(const QString &qstr)
-{ return [const_cast<NSString *>(reinterpret_cast<const NSString *>(QCFString::toCFStringRef(qstr))) autorelease]; }
+{ 
+   return [const_cast<NSString *>(reinterpret_cast<const NSString *>(QCFString::toCFStringRef(qstr))) autorelease]; 
+}
 
-
-class QCocoaPostMessageArgs {
-public:
-    id target;
-    SEL selector;
-    int argCount;
-    id arg1;
-    id arg2;
-    QCocoaPostMessageArgs(id target, SEL selector, int argCount=0, id arg1=0, id arg2=0)
-        : target(target), selector(selector), argCount(argCount), arg1(arg1), arg2(arg2)
-    {
-        [target retain];
-        [arg1 retain];
-        [arg2 retain];
-    }
-
-    ~QCocoaPostMessageArgs()
-    {
-        [arg2 release];
-        [arg1 release];
-        [target release];
-    }
+class QCocoaPostMessageArgs
+{
+   public:
+       id target;
+       SEL selector;
+       int argCount;
+       id arg1;
+       id arg2;
+   
+       QCocoaPostMessageArgs(id target, SEL selector, int argCount=0, id arg1=0, id arg2=0)
+           : target(target), selector(selector), argCount(argCount), arg1(arg1), arg2(arg2)
+       {
+           [target retain];
+           [arg1 retain];
+           [arg2 retain];
+       }
+   
+       ~QCocoaPostMessageArgs()
+       {
+           [arg2 release];
+           [arg1 release];
+           [target release];
+       }
 };
 void qt_cocoaPostMessage(id target, SEL selector, int argCount=0, id arg1=0, id arg2=0);
 void qt_cocoaPostMessageAfterEventLoopExit(id target, SEL selector, int argCount=0, id arg1=0, id arg2=0);
-
+#endif
 
 class QMacScrollOptimization {
     // This class is made to optimize for the case when the user

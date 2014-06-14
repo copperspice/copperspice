@@ -49,9 +49,7 @@ static QAInterface interfaceForView(QT_MANGLE_NAMESPACE(QCocoaView) *view)
     return QAInterface(QAccessible::queryAccessibleInterface([view qt_qwidget]));
 }
 
-/*
-    Set up mappings from Qt accessibilty roles to Mac accessibilty roles.
-*/
+// set up mappings from Qt accessibilty roles to Mac accessibilty roles
 static void populateRoleMap()
 {
     QMacAccessibiltyRoleMap &roleMap = *qMacAccessibiltyRoleMap();
@@ -97,10 +95,8 @@ static void populateRoleMap()
     roleMap[QAccessible::Cell] = NSAccessibilityStaticTextRole;
 }
 
-/*
-    Returns a Mac accessibility role for the given interface, or
-    NSAccessibilityUnknownRole if no role mapping is found.
-*/
+
+//  returns a Mac accessibility role for the given interface, or NSAccessibilityUnknownRole if no role mapping is found
 static NSString *macRoleForInterface(QAInterface interface)
 {
     const QAccessible::Role qtRole = interface.role();
@@ -159,11 +155,13 @@ static bool isInterfaceIgnored(QAInterface interface)
 
     // Hide interfaces with an unknown role. When developing it's often useful to disable
     // this check to see all interfaces in the hierarchy.
+
 #ifndef MAC_ACCESSIBILTY_DEVELOPER_MODE
     return [macRoleForInterface(interface) isEqualToString: NSAccessibilityUnknownRole];
 #else
     return NO;
 #endif
+
 }
 
 QT_END_NAMESPACE

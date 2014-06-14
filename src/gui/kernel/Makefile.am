@@ -225,7 +225,9 @@ GUI_KERNEL_INCLUDES = \
 	qx11embedcontainer.h \
 	qx11embedwidget.h \
 	qx11info.h \
-	qx11info_x11.h
+	qx11info_x11.h \
+	cs_carbon_wrapper.h
+
 
 GUI_KERNEL_PRIVATE_INCLUDES = \
 	qaction_p.h \
@@ -274,7 +276,8 @@ GUI_KERNEL_PRIVATE_INCLUDES = \
 	qtgui.h \
 	qwidget_p.h \
 	qwidgetaction_p.h \
-	qwinnativepangesturerecognizer_win_p.h
+	qwinnativepangesturerecognizer_win_p.h \
+	cs_carbon_wrapper_p.h
 
 
 GUI_INCLUDES += $(GUI_KERNEL_INCLUDES)
@@ -384,7 +387,8 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/kernel/qcocoawindowcustomthemeframe_mac.mm \
 	src/gui/kernel/qmacgesturerecognizer_mac.mm \
 	src/gui/kernel/qmultitouch_mac.mm \
-	src/gui/kernel/qcocoaintrospection_mac.mm
+	src/gui/kernel/qcocoaintrospection_mac.mm \
+	src/gui/kernel/cs_carbon_wrapper.mm
 
 lib_libCsGui1_la_LDFLAGS += -framework AppKit
 endif

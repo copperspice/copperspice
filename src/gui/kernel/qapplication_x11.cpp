@@ -733,6 +733,7 @@ static int qt_x_errhandler(Display *dpy, XErrorEvent *err)
             extensionName = "Uknown extension";
             qsnprintf(minor_str, 256, "Unknown request");
         }
+
         qWarning( "X Error: %s %d\n"
                   "  Extension:    %d (%s)\n"
                   "  Minor opcode: %d (%s)\n"
@@ -751,12 +752,12 @@ static int qt_x_errhandler(Display *dpy, XErrorEvent *err)
     return 0;
 }
 
-
 static int qt_xio_errhandler(Display *)
 {
     qWarning("%s: Fatal IO error: client killed", appName);
     QApplicationPrivate::reset_instance_pointer();
     exit(1);
+
     //### give the application a chance for a proper shutdown instead,
     //### exit(1) doesn't help.
     return 0;

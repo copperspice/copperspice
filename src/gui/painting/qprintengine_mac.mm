@@ -26,7 +26,7 @@
 #include <qprintengine_mac_p.h>
 #include <qthread.h>
 #include <quuid.h>
-#include <QtCore/qcoreapplication.h>
+#include <qcoreapplication.h>
 
 #ifndef QT_NO_PRINTER
 

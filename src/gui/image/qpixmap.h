@@ -26,10 +26,14 @@
 #ifndef QPIXMAP_H
 #define QPIXMAP_H
 
+#if defined(Q_OS_MAC)
+#include <cs_carbon_wrapper.h>
+#endif
+
 #include <QtGui/qpaintdevice.h>
 #include <QtGui/qcolor.h>
 #include <QtCore/qnamespace.h>
-#include <QtCore/qstring.h> // char*->QString conversion
+#include <QtCore/qstring.h> 
 #include <QtCore/qsharedpointer.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qtransform.h>
@@ -177,10 +181,12 @@ public:
 #endif
 
     int colorCount() const;
+
 #elif defined(Q_OS_MAC)
     Qt::HANDLE macQDHandle() const;
     Qt::HANDLE macQDAlphaHandle() const;
     Qt::HANDLE macCGHandle() const;
+
 #elif defined(Q_WS_X11)
     enum ShareMode { ImplicitlyShared, ExplicitlyShared };
 
@@ -234,6 +240,7 @@ private:
     friend quint32 *qt_mac_pixmap_get_base(const QPixmap*);
     friend int qt_mac_pixmap_get_bytes_per_line(const QPixmap*);
 #endif
+
     friend class QPixmapData;
     friend class QX11PixmapData;
     friend class QMacPixmapData;

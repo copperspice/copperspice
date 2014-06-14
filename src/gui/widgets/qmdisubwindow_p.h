@@ -271,7 +271,7 @@ public:
         Q_Q(const QMdiSubWindow);
 
         if (! q->parent() || q->windowFlags() & Qt::FramelessWindowHint
-            || (q->isMaximized() && !drawTitleBarWhenMaximized())) {
+            || (q->isMaximized() && ! drawTitleBarWhenMaximized())) {        
             return 0;
         }
 

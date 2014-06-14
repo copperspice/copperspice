@@ -27,12 +27,12 @@
 #ifndef QT_NO_STYLE_WINDOWSVISTA
 
 #include "qwizard_win_p.h"
-#include <private/qsystemlibrary_p.h>
+#include <qsystemlibrary_p.h>
 #include "qwizard.h"
 #include "qpaintengine.h"
 #include "qapplication.h"
-#include <QtGui/QMouseEvent>
-#include <QtGui/QDesktopWidget>
+#include <QMouseEvent>
+#include <QDesktopWidget>
 
 // Note, these tests are duplicates in qwindowsxpstyle_p.h.
 #ifdef Q_CC_GNU

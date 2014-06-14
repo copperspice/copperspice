@@ -24,8 +24,10 @@
 ***********************************************************************/
 
 #include <qconfig.h>
+
 #import <qcocoaview_mac_p.h>
 
+#include <cs_carbon_wrapper_p.h>
 #include <qwidget_p.h>
 #include <qt_mac_p.h>
 #include <qapplication_p.h>
@@ -605,7 +607,7 @@ static int qCocoaViewCount = 0;
     int deltaY = 0;
 
     const EventRef carbonEvent = (EventRef)[theEvent eventRef];
-    const UInt32 carbonEventKind = carbonEvent ? ::GetEventKind(carbonEvent) : 0;
+    const UInt32 carbonEventKind = carbonEvent ? :: CS_GetEventKind(carbonEvent) : 0;
     const bool scrollEvent = carbonEventKind == kEventMouseScroll;
 
     if (scrollEvent) {
@@ -1266,9 +1268,11 @@ Qt::DropAction QDragManager::drag(QDrag *o)
     }
     if(object == o)
         return Qt::IgnoreAction;
+
     /* At the moment it seems clear that Mac OS X does not want to drag with a non-left button
      so we just bail early to prevent it */
-    if (!(GetCurrentEventButtonState() & kEventMouseButtonPrimary)) {
+
+    if (! (CS_GetCurrentEventButtonState() & kEventMouseButtonPrimary)) {
         o->setMimeData(0);
         o->deleteLater();
         return Qt::IgnoreAction;

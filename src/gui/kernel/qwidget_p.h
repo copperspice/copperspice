@@ -183,15 +183,15 @@ struct QTLWExtra {
     uint isSetGeometry : 1;
     uint isMove : 1;
     quint32 wattr;
-    quint32 wclass;
-    WindowGroupRef group;
-    IconRef windowIcon; // the current window icon, if set with setWindowIcon_sys.
-    quint32 savedWindowAttributesFromMaximized; // Saved attributes from when the calling updateMaximizeButton_sys()
+    quint32 wclass;   
 
-    // This value is just to make sure we maximize and restore to the right location, yet we allow apps to be maximized and
-    // manually resized.
-    // The name is misleading, since this is set when maximizing the window. It is a hint to saveGeometry(..) to record the
-    // starting position as 0,0 instead of the normal starting position.
+    IconRef windowIcon;                            // the current window icon, if set with setWindowIcon_sys.
+    quint32 savedWindowAttributesFromMaximized;    // Saved attributes from when the calling updateMaximizeButton_sys()
+
+    // This value is just to make sure we maximize and restore to the right location, 
+    // yet we allow apps to be maximized and manually resized.
+    // The name is misleading, since this is set when maximizing the window. It is a hint to saveGeometry(..) to record
+    // the starting position as 0,0 instead of the normal starting position.
     bool wasMaximized;
 
 #elif defined(Q_WS_QWS) 
@@ -211,8 +211,8 @@ struct QWExtra {
     // *************************** Cross-platform variables *****************************
 
     // Regular pointers (keep them together to avoid gaps on 64 bits architectures).
-    void *glContext; // if the widget is hijacked by QGLWindowSurface
-    QTLWExtra *topextra; // only useful for TLWs
+    void *glContext;       // if the widget is hijacked by QGLWindowSurface
+    QTLWExtra *topextra;   // only useful for TLWs
 
 #ifndef QT_NO_GRAPHICSVIEW
     QGraphicsProxyWidget *proxyWidget; // if the widget is embedded
@@ -769,7 +769,7 @@ public:
     // dirtyWidget_sys and cleared in the paint event. In scroll_sys we then use
     // this information repaint invalid areas when widgets are scrolled.
     QRegion dirtyOnWidget;
-    EventHandlerRef window_event;
+   
     QList<GlWidgetInfo> glWidgets;
 
     //these are here just for code compat (HIViews)
@@ -801,10 +801,13 @@ public:
     void syncCocoaMask();
     void finishCocoaMaskSetup();
     void syncUnifiedMode();
+
     // Did we add the drawRectOriginal method?
     bool drawRectOriginalAdded;
+
     // Is the original drawRect method available?
     bool originalDrawMethod;
+
     // Do we need to change the methods?
     bool changeMethods;
 
@@ -815,16 +818,16 @@ public:
     QWidget *toolbar_ancestor;
     bool flushRequested;
     bool touchEventsEnabled;
+
     void determineWindowClass();
-    void transferChildren();
+    void transferChildren();   
     bool qt_mac_dnd_event(uint, DragRef);
     void toggleDrawers(bool);
+
     //mac event functions
     static bool qt_create_root_win();
     static void qt_clean_root_win();
-    static bool qt_mac_update_sizer(QWidget *, int up = 0);
-    static OSStatus qt_window_event(EventHandlerCallRef er, EventRef event, void *);
-    static OSStatus qt_widget_event(EventHandlerCallRef er, EventRef event, void *);
+    static bool qt_mac_update_sizer(QWidget *, int up = 0);        
     static bool qt_widget_rgn(QWidget *, short, RgnHandle, bool);
     void registerTouchWindow(bool enable = true);
 

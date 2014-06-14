@@ -50,7 +50,7 @@
 # include "qt_windows.h"
 #endif
 
-#ifdef Q_OS_MAC
+#if defined(Q_OS_MAC)
 # include "qt_mac_p.h"
 # include "qt_cocoa_helpers_mac_p.h"
 # include "qmainwindow.h"
@@ -249,17 +249,20 @@ QWidgetPrivate::QWidgetPrivate()
 #ifndef QT_NO_IM
       , inheritsInputMethodHints(0)
 #endif
+
       , inSetParent(0)
+
 #if defined(Q_WS_X11)
       , picture(0)
+
 #elif defined(Q_OS_WIN)
       , noPaintOnScreen(0)
   #ifndef QT_NO_GESTURES
       , nativeGesturePanEnabled(0)
   #endif
+
 #elif defined(Q_OS_MAC)
-      , needWindowChange(0)
-      , window_event(0)
+      , needWindowChange(0)     
       , qd_hd(0)
 #endif
 

@@ -24,20 +24,16 @@
 ***********************************************************************/
 
 #include "qfontengine_coretext_p.h"
-
-#include <QtCore/qendian.h>
-#include <QtCore/qsettings.h>
+#include <qendian.h>
+#include <qsettings.h>
 #include <qimage_p.h>
 
 QT_BEGIN_NAMESPACE
 
 static float SYNTHETIC_ITALIC_SKEW = tanf(14 * acosf(0) / 90);
 
-static void loadAdvancesForGlyphs(CTFontRef ctfont,
-                                  QVarLengthArray<CGGlyph> &cgGlyphs,
-                                  QGlyphLayout *glyphs, int len,
-                                  QTextEngine::ShaperFlags flags,
-                                  const QFontDef &fontDef)
+static void loadAdvancesForGlyphs(CTFontRef ctfont, QVarLengthArray<CGGlyph> &cgGlyphs, QGlyphLayout *glyphs, int len,
+                                  QTextEngine::ShaperFlags flags, const QFontDef &fontDef)
 {
     Q_UNUSED(flags);
     QVarLengthArray<CGSize> advances(len);

@@ -30,7 +30,7 @@
 #include <qvarlengtharray.h>
 #include <qwidget.h>
 #include <qmacinputcontext_p.h>
-#include "qtextformat.h"
+#include <qtextformat.h>
 #include <qdebug.h>
 #include <qapplication_p.h>
 #include <qkeymapper_p.h>
@@ -39,20 +39,16 @@ QT_BEGIN_NAMESPACE
 
 extern bool qt_sendSpontaneousEvent(QObject*, QEvent*);
 
-
 QMacInputContext::QMacInputContext(QObject *parent)
-    : QInputContext(parent), composing(false), recursionGuard(false), textDocument(0),
-      keydownEvent(0), lastFocusWid(0)
-{
-   //  createTextDocument();
+    : QInputContext(parent), composing(false), recursionGuard(false), keydownEvent(0), lastFocusWid(0)
+{   
 }
 
 QMacInputContext::~QMacInputContext()
 {
 }
 
-void
-QMacInputContext::createTextDocument()
+void QMacInputContext::createTextDocument()
 {
 }
 
@@ -60,7 +56,6 @@ QString QMacInputContext::language()
 {
     return QString();
 }
-
 
 void QMacInputContext::mouseHandler(int pos, QMouseEvent *e)
 {
@@ -70,10 +65,10 @@ void QMacInputContext::mouseHandler(int pos, QMouseEvent *e)
 
 void QMacInputContext::setFocusWidget(QWidget *w)
 {
-    if (!w)
+    if (! w) {
         lastFocusWid = focusWidget();
-
-    createTextDocument();
+    }
+    
     QInputContext::setFocusWidget(w);
 }
 
@@ -81,7 +76,7 @@ void QMacInputContext::initialize()
 {
 }
 
-void MacInputContext::cleanup()
+void QMacInputContext::cleanup()
 {
 }
 
@@ -91,16 +86,10 @@ void QMacInputContext::setLastKeydownEvent(EventRef event)
     keydownEvent = event;
 
     if (keydownEvent)
-        RetainEvent(keydownEvent);
+        CS_RetainEvent(keydownEvent);
 
     if (tmpEvent)
-        ReleaseEvent(tmpEvent);
-}
-
-OSStatus QMacInputContext::globalEventProcessor(EventHandlerCallRef, EventRef event, void *)
-{
-    Q_UNUSED(event);
-    return noErr;
+        CS_ReleaseEvent(tmpEvent);
 }
 
 QT_END_NAMESPACE

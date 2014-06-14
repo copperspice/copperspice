@@ -52,28 +52,15 @@ QT_USE_NAMESPACE
 
 QMacDndAnswerRecord qt_mac_dnd_answer_rec; 
 
-/*****************************************************************************
-  QDnD debug facilities
- *****************************************************************************/
 //#define DEBUG_DRAG_EVENTS
 //#define DEBUG_DRAG_PROMISES
 
-/*****************************************************************************
-  QDnD globals
- *****************************************************************************/
 bool qt_mac_in_drag = false;
 
-
-/*****************************************************************************
-  Externals
- *****************************************************************************/
-extern void qt_mac_send_modifiers_changed(quint32, QObject *); //qapplication_mac.cpp
-extern uint qGlobalPostedEventsCount(); //qapplication.cpp
-extern RgnHandle qt_mac_get_rgn(); // qregion_mac.cpp
-extern void qt_mac_dispose_rgn(RgnHandle); // qregion_mac.cpp
-/*****************************************************************************
-  QDnD utility functions
- *****************************************************************************/
+extern void qt_mac_send_modifiers_changed(quint32, QObject *); 
+extern uint qGlobalPostedEventsCount(); 
+extern RgnHandle qt_mac_get_rgn(); 
+extern void qt_mac_dispose_rgn(RgnHandle); 
 
 //default pixmap
 static const int default_pm_hotx = -2;
@@ -97,10 +84,6 @@ struct mac_enum_mapper
 
 };
 
-
-/*****************************************************************************
-  DnD functions
- *****************************************************************************/
 bool QDropData::hasFormat_sys(const QString &mime) const
 {
     Q_UNUSED(mime);
@@ -138,6 +121,7 @@ void QDragManager::cancel(bool)
         beingCancelled = true;
         object = 0;
     }
+
 #ifndef QT_NO_ACCESSIBILITY
     QAccessible::updateAccessibility(this, 0, QAccessible::DragDropEnd);
 #endif
@@ -160,6 +144,7 @@ static inline bool qt_mac_set_existing_drop_action(const DragRef &dragRef, QDrop
 {
     Q_UNUSED(dragRef);
     Q_UNUSED(event);
+    return false;  
 }
 
 /**
@@ -189,7 +174,8 @@ bool qt_mac_mouse_inside_answer_rect(QPoint mouse)
 }
 
 bool QWidgetPrivate::qt_mac_dnd_event(uint kind, DragRef dragRef)
-{
+{  
+   return false;
 }
 
 void QDragManager::updatePixmap()
@@ -214,10 +200,12 @@ QStringList QCocoaDropData::formats_sys() const
 {
     QStringList formats; 
     OSPasteboardRef board;
+
     if (PasteboardCreate(dropPasteboard, &board) != noErr) {
         qDebug("DnD: Cannot get PasteBoard!");
         return formats;
     }
+
     formats = QMacPasteboard(board, QMacPasteboardMime::MIME_DND).formats();
     return formats;
 }

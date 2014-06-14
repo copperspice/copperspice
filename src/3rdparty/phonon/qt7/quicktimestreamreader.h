@@ -29,7 +29,6 @@
 #include <phonon/mediasource.h>
 #include <phonon/streaminterface.h>
 #include <QtCore/QReadWriteLock>
-#include <QuickTime/Movies.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -58,7 +57,7 @@ namespace QT7
         void setCurrentPos(qint64 pos);
         qint64 currentPos() const;
         int currentBufferSize() const;
-        Movie movieRef();
+        
 
         QByteArray m_buffer;
         mutable QReadWriteLock m_lock;

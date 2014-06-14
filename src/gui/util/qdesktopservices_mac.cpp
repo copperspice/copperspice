@@ -30,9 +30,10 @@
 #include <qdir.h>
 #include <qurl.h>
 #include <qstringlist.h>
-#include <private/qcore_mac_p.h>
+#include <qcore_mac_p.h>
 #include <qcoreapplication.h>
 
+// OS X framework 
 #include <ApplicationServices/ApplicationServices.h>
 
 QT_BEGIN_NAMESPACE

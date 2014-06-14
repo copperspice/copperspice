@@ -52,7 +52,6 @@ public:
     QAbstractAnimation *currentAnimation() const;
     int duration() const;
 
-public:
     CORE_CS_SIGNAL_1(Public, void currentAnimationChanged(QAbstractAnimation * current))
     CORE_CS_SIGNAL_2(currentAnimationChanged,current) 
 

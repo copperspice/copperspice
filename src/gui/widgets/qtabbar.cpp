@@ -48,12 +48,12 @@
 #ifndef QT_NO_TABBAR
 
 #ifdef Q_OS_MAC
+#include <cs_carbon_wrapper_p.h>
 #include <qt_mac_p.h>
 #include <qt_cocoa_helpers_mac_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE
-
 
 inline static bool verticalTabs(QTabBar::Shape shape)
 {
@@ -65,50 +65,30 @@ inline static bool verticalTabs(QTabBar::Shape shape)
 
 void QTabBarPrivate::updateMacBorderMetrics()
 {
-#if (defined Q_OS_MAC) 
-    if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
-        Q_Q(QTabBar);
-        ::HIContentBorderMetrics metrics;
+#if (defined Q_OS_MAC)     
+ 
+   Q_Q(QTabBar);
 
-        // TODO: get metrics to preserve the bottom value
-        // TODO: test tab bar position
+   // wrapper for carbon
+   cs_updateMacBorderMetrics(q);
+   
+   // In Cocoa we need to keep track of the drawRect method. 
+   // If documentMode is enabled we need to change it, unless a toolbar is present.
+   
+   // All the information is kept in the window, which is why we retrieve the private widget
+   // for it instead of the private widget for this widget.
+   
+   QWidgetPrivate *privateWidget = qt_widget_private(q->window());
+   
+   if(privateWidget)
+      privateWidget->changeMethods = documentMode;
+   
+   // in Cocoa there is no simple way to remove the baseline, ask the top level to do the magic
+   privateWidget->syncUnifiedMode();
 
-        OSWindowRef window = qt_mac_window_for(q);
-
-        // push base line separator down to the client are so we can paint over it (Carbon)
-        metrics.top = (documentMode && q->isVisible()) ? 1 : 0;
-        metrics.bottom = 0;
-        metrics.left = 0;
-        metrics.right = 0;
-        qt_mac_updateContentBorderMetricts(window, metrics);
-
-        // In Cocoa we need to keep track of the drawRect method.
-        // If documentMode is enabled we need to change it, unless
-        // a toolbar is present.
-        // Notice that all the information is kept in the window,
-        // that's why we get the private widget for it instead of
-        // the private widget for this widget.
-        QWidgetPrivate *privateWidget = qt_widget_private(q->window());
-        if(privateWidget)
-            privateWidget->changeMethods = documentMode;
-
-        // Since in Cocoa there is no simple way to remove the baseline, so we just ask the
-        // top level to do the magic for us.
-        privateWidget->syncUnifiedMode();
-
-    }
 #endif
 }
 
-/*!
-    Initialize \a option with the values from the tab at \a tabIndex. This method
-    is useful for subclasses when they need a QStyleOptionTab, QStyleOptionTabV2,
-    or QStyleOptionTabV3 but don't want to fill in all the information themselves.
-    This function will check the version of the QStyleOptionTab and fill in the
-    additional values for a QStyleOptionTabV2 and QStyleOptionTabV3.
-
-    \sa QStyleOption::initFrom() QTabWidget::initStyleOption()
-*/
 void QTabBar::initStyleOption(QStyleOptionTab *option, int tabIndex) const
 {
     Q_D(const QTabBar);
@@ -123,6 +103,7 @@ void QTabBar::initStyleOption(QStyleOptionTab *option, int tabIndex) const
     option->rect = tabRect(tabIndex);
     bool isCurrent = tabIndex == d->currentIndex;
     option->row = 0;
+
     if (tabIndex == d->pressedIndex)
         option->state |= QStyle::State_Sunken;
     if (isCurrent)

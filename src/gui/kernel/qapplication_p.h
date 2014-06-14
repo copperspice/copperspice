@@ -244,11 +244,12 @@ public:
     QApplicationPrivate(int &argc, char **argv, QApplication::Type type, int flags);
     ~QApplicationPrivate();
 
-#if defined(Q_S_X11)
+#if defined(Q_WS_X11)
 
 #ifndef QT_NO_SETTINGS
     static bool x11_apply_settings();
 #endif
+
     static void reset_instance_pointer();
 
 #elif defined(Q_WS_QWS)
@@ -417,8 +418,7 @@ public:
     static void applyQWSSpecificCommandLineArguments(QWidget *main_widget);
 #endif
 
-#ifdef Q_OS_MAC
-    static OSStatus globalEventProcessor(EventHandlerCallRef, EventRef, void *);
+#ifdef Q_OS_MAC   
     static OSStatus globalAppleEventProcessor(const AppleEvent *, AppleEvent *, long);
     static OSStatus tabletProximityCallback(EventHandlerCallRef, EventRef, void *);
     static void qt_initAfterNSAppStarted();

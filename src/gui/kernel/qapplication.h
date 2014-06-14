@@ -26,6 +26,10 @@
 #ifndef QAPPLICATION_H
 #define QAPPLICATION_H
 
+#if defined(Q_OS_MAC)
+#include <cs_carbon_wrapper.h>
+#endif
+
 #include <QtCore/qcoreapplication.h>
 #include <QtGui/qwindowdefs.h>
 #include <QtCore/qpoint.h>

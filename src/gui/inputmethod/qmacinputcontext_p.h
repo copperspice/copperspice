@@ -29,7 +29,7 @@
 
 #ifndef QT_NO_IM
 
-#include "QtGui/qinputcontext.h"
+#include "qinputcontext.h"
 #include "qt_mac_p.h"
 
 QT_BEGIN_NAMESPACE
@@ -37,8 +37,9 @@ QT_BEGIN_NAMESPACE
 class Q_GUI_EXPORT QMacInputContext : public QInputContext
 {
     CS_OBJECT(QMacInputContext)
-    //Q_DECLARE_PRIVATE(QMacInputContext)
+    
     void createTextDocument();
+
 public:
     explicit QMacInputContext(QObject* parent = 0);
     virtual ~QMacInputContext();
@@ -48,22 +49,22 @@ public:
     virtual QString language();
 
     virtual void reset();
-
     virtual bool isComposing() const;
-
-    static OSStatus globalEventProcessor(EventHandlerCallRef, EventRef, void *);
+    
     static void initialize();
     static void cleanup();
 
     EventRef lastKeydownEvent() { return keydownEvent; }
     void setLastKeydownEvent(EventRef);
     QWidget *lastFocusWidget() const { return lastFocusWid; }
+
 protected:
     void mouseHandler(int pos, QMouseEvent *);
+
 private:
     bool composing;
     bool recursionGuard;
-    TSMDocumentID textDocument;
+   
     QString currentText;
     EventRef keydownEvent;
     QWidget *lastFocusWid;

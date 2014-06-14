@@ -54,6 +54,9 @@
 
 QT_BEGIN_NAMESPACE
 
+
+// #define DEBUG_MIME_MAPS
+
 extern CGImageRef qt_mac_createCGImageFromQImage(const QImage &img, const QImage **imagePtr = 0); // qpaintengine_mac.cpp
 
 typedef QList<QMacPasteboardMime*> MimeList;
@@ -78,16 +81,6 @@ const QStringList& qEnabledDraggedTypes()
     return (*globalDraggedTypesList());
 }
 
-
-/*****************************************************************************
-  QDnD debug facilities
- *****************************************************************************/
-//#define DEBUG_MIME_MAPS
-
-ScrapFlavorType qt_mac_mime_type = 'CUTE';
-CFStringRef qt_mac_mime_typeUTI = CFSTR("com.pasteboard.copperspice.marker");
-
-
 /*!
   Constructs a new conversion object of type \a t, adding it to the
   globally accessed list of available convertors.
@@ -107,14 +100,14 @@ QMacPasteboardMime::~QMacPasteboardMime()
         globalMimeList()->removeAll(this);
 }
 
-class QMacPasteboardMimeAny : public QMacPasteboardMime {
-private:
+class QMacPasteboardMimeAny : public QMacPasteboardMime
+{
 
 public:
-    QMacPasteboardMimeAny() : QMacPasteboardMime(MIME_QT_CONVERTOR|MIME_ALL) {
-    }
-    ~QMacPasteboardMimeAny() {
-    }
+    QMacPasteboardMimeAny() : QMacPasteboardMime(MIME_QT_CONVERTOR|MIME_ALL) { }
+
+    ~QMacPasteboardMimeAny() { }
+
     QString convertorName();
 
     QString flavorFor(const QString &mime);
@@ -134,6 +127,7 @@ QString QMacPasteboardMimeAny::flavorFor(const QString &mime)
     // do not handle the mime type name in the drag pasteboard
     if(mime == QLatin1String("application/x-qt-mime-type-name"))
         return QString();
+
     QString ret = QLatin1String("com.copperspice.anymime.") + mime;
     return ret.replace(QLatin1Char('/'), QLatin1String("--"));
 }
@@ -141,8 +135,10 @@ QString QMacPasteboardMimeAny::flavorFor(const QString &mime)
 QString QMacPasteboardMimeAny::mimeFor(QString flav)
 {
     const QString any_prefix = QLatin1String("com.copperspice.anymime.");
+
     if(flav.size() > any_prefix.length() && flav.startsWith(any_prefix))
         return flav.mid(any_prefix.length()).replace(QLatin1String("--"), QLatin1String("/"));
+
     return QString();
 }
 
@@ -154,7 +150,8 @@ bool QMacPasteboardMimeAny::canConvert(const QString &mime, QString flav)
 QVariant QMacPasteboardMimeAny::convertToMime(const QString &mime, QList<QByteArray> data, QString)
 {
     if(data.count() > 1)
-        qWarning("QMacPasteboardMimeAny: Cannot handle multiple member data");
+        qWarning("QMacPasteboardMimeAny() Can not handle multiple member data");
+
     QVariant ret;
     if (mime == QLatin1String("text/plain"))
         ret = QString::fromUtf8(data.first());
@@ -177,10 +174,9 @@ class QMacPasteboardMimeTypeName : public QMacPasteboardMime {
 private:
 
 public:
-    QMacPasteboardMimeTypeName() : QMacPasteboardMime(MIME_QT_CONVERTOR|MIME_ALL) {
-    }
-    ~QMacPasteboardMimeTypeName() {
-    }
+    QMacPasteboardMimeTypeName() : QMacPasteboardMime(MIME_QT_CONVERTOR|MIME_ALL) {}
+    ~QMacPasteboardMimeTypeName() { }
+
     QString convertorName();
 
     QString flavorFor(const QString &mime);
@@ -199,6 +195,7 @@ QString QMacPasteboardMimeTypeName::flavorFor(const QString &mime)
 {
     if(mime == QLatin1String("application/x-qt-mime-type-name"))
         return QLatin1String("com.copperspice.MimeTypeName");
+
     return QString();
 }
 
@@ -722,8 +719,6 @@ QList<QByteArray> QMacPasteboardMimeVCard::convertFromMime(const QString &mime, 
 
 /*!
   \internal
-
-  This is an internal function.
 */
 void QMacPasteboardMime::initialize()
 {

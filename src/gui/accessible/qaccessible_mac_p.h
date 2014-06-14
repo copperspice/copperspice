@@ -32,14 +32,12 @@
 #include <qwidget.h>
 #include <qdebug.h>
 
-//#define Q_ACCESSIBLE_MAC_DEBUG
+// #define Q_ACCESSIBLE_MAC_DEBUG
 
 QT_BEGIN_NAMESPACE
 
-/*
-    QAccessibleInterfaceWrapper wraps QAccessibleInterface and adds
-    a ref count. QAccessibleInterfaceWrapper is a "by-value" class.
-*/
+//  QAccessibleInterfaceWrapper wraps QAccessibleInterface and adds a ref count. 
+//  QAccessibleInterfaceWrapper is a "by-value" class.
 class QAccessibleInterfaceWrapper
 {
 public:
@@ -83,6 +81,7 @@ public:
 
     QAccessibleInterface *interface;
     bool *childrenIsRegistered;
+
 private:
     int *refCount;
 };
@@ -206,7 +205,7 @@ public:
 
     inline QObject * object() const
     {
-        if (!checkValid())
+        if (! checkValid())
             return 0;
 
         return base.interface->object();
@@ -224,27 +223,18 @@ public:
             QAInterface parent = current.parent();
             if (parent.isValid() == false)
                 break;
+
             obj = parent.object();
             current = parent;
         }
         return current;
     }
 
-    inline HIObjectRef hiObject() const
-    {
-        if (!checkValid())
-            return 0;
-        QWidget * const widget = qobject_cast<QWidget * const>(object());
-        if (widget)
-            return (HIObjectRef)widget->winId();
-        else
-            return 0;
-    }
-
     inline QObject * cachedObject() const
     {
         if (!checkValid())
             return 0;
+
         return m_cachedObject;
     }
 
@@ -252,6 +242,7 @@ public:
     {
         if (!checkValid())
             return QRect();
+
         return base.interface->rect(child);
     }
 
@@ -259,6 +250,7 @@ public:
     {
         if (!checkValid())
             return QAccessible::NoRole;
+
         return base.interface->role(child);
     }
 
@@ -266,6 +258,7 @@ public:
     {
         if (!checkValid())
             return;
+
         base.interface->setText(t, child, text);
     }
 
@@ -273,6 +266,7 @@ public:
     {
         if (!checkValid())
             return 0;
+
         return base.interface->state(child);
     }
 
@@ -280,19 +274,21 @@ public:
     {
         if (!checkValid())
             return QString();
+
         return base.interface->text(text, child);
     }
 
     inline QString value() const
-    { return text(QAccessible::Value); }
+       { return text(QAccessible::Value); }
 
     inline QString name() const
-    { return text(QAccessible::Name); }
+       { return text(QAccessible::Name); }
 
     inline int userActionCount() const
     {
         if (!checkValid())
             return 0;
+
         return base.interface->userActionCount(child);
     }
 
@@ -300,14 +296,12 @@ public:
     {
         if (!checkValid())
             return QString();
-        return QLatin1String(base.interface->object()->metaObject()->className());
-    }
 
-    inline bool isHIView() const
-    { return (child == 0 && object() != 0); }
+        return QLatin1String(base.interface->object()->metaObject()->className());
+    }   
 
     inline int id() const
-    { return child; }
+       { return child; }
 
     inline bool isValid() const
     {
@@ -315,18 +309,19 @@ public:
     }
 
     QAInterface parent() const
-    { return navigate(QAccessible::Ancestor, 1); }
+       { return navigate(QAccessible::Ancestor, 1); }
 
     QAccessibleInterfaceWrapper interfaceWrapper() const
-    { return base; }
+       { return base; }
 
 protected:
     bool checkValid() const
     {
         const bool valid = isValid();
+
 #ifdef Q_ACCESSIBLE_MAC_DEBUG
-        if (!valid)
-            qFatal("QAccessible_mac: tried to use invalid interface.");
+        if (! valid)
+            qFatal("QAInterface::checkValid() Attempted to use an invalid interface.");
 #endif
         return valid;
     }
@@ -336,63 +331,54 @@ protected:
     int child;
 };
 
-QDebug operator<<(QDebug debug, const QAInterface &interface);
-
-/*
-    QAElement is a thin wrapper around an AXUIElementRef that automates
-    the ref-counting.
-*/
+// QAElement is a thin wrapper around an AXUIElementRef that automates the ref-counting
 class QAElement
 {
-public:
-    QAElement();
-    explicit QAElement(AXUIElementRef elementRef);
-    QAElement(const QAElement &element);
-    QAElement(HIObjectRef, int child);
-    ~QAElement();
-
-    inline HIObjectRef object() const
-    {
-        return 0;
-    }
-
-    inline int id() const
-    {
-        UInt64 theId;
-        theId = 0;
-
-        return theId;
-    }
-
-    inline AXUIElementRef element() const
-    {
-        return elementRef;
-    }
-
-    inline bool isValid() const
-    {
-        return (elementRef != 0);
-    }
-
-    void operator=(const QAElement &other);
-    bool operator==(const QAElement &other) const;
-
-private:
-    AXUIElementRef elementRef;
+   public:
+       QAElement();   
+       explicit QAElement(AXUIElementRef elementRef);
+       QAElement(const QAElement &element);
+         
+       ~QAElement();
+        
+       inline int id() const
+       {
+           UInt64 theId;
+           theId = 0;
+   
+           return theId;
+       }
+   
+       inline AXUIElementRef element() const
+       {
+           return elementRef;
+       }
+   
+       inline bool isValid() const
+       {
+           return (elementRef != 0);
+       }
+   
+       void operator=(const QAElement &other);
+       bool operator==(const QAElement &other) const;
+   
+   private:
+       AXUIElementRef elementRef;
 };
-
 
 class QInterfaceFactory
 {
-public:
-    virtual QAInterface interface(UInt64 identifier) = 0;
-    virtual QAElement element(int id) = 0;
-    virtual QAElement element(const QAInterface &interface)
-    {
-        return element(interface.id());
-    }
-    virtual void registerChildren() = 0;
-    virtual ~QInterfaceFactory() {}
+   public:
+       virtual QAInterface interface(UInt64 identifier) = 0;
+       virtual QAElement element(int id) = 0;
+   
+       virtual QAElement element(const QAInterface &interface)
+       {
+           return element(interface.id());
+       }
+   
+       virtual void registerChildren() = 0;
+       virtual ~QInterfaceFactory() {}
 };
 
 /*
@@ -402,8 +388,7 @@ public:
     that translates between these to items.
 
     The identity of a QAInterface is determined by its QAccessibleInterface and
-    child identifier, and the identity of a QAElement is determined by its
-    HIObjectRef and identifier.
+    child identifier, and the identity of a QAElement is determined by its identifier.
 
     QAccessibleHierarchyManager receives QObject::destroyed() signals and deletes
     the accessibility objects for destroyed objects.
@@ -412,35 +397,26 @@ class QAccessibleHierarchyManager : public QObject
 {
    CS_OBJECT(QAccessibleHierarchyManager)
 
-public:
-    ~QAccessibleHierarchyManager() { reset(); }
-    static QAccessibleHierarchyManager *instance();
-    void reset();
+   public:
+       ~QAccessibleHierarchyManager() { reset(); }
 
-    QAElement registerInterface(QObject *object, int child);
-    QAElement registerInterface(const QAInterface &interface);
-    void registerInterface(QObject *object, HIObjectRef hiobject, QInterfaceFactory *interfaceFactory);
+       static QAccessibleHierarchyManager *instance();
+       void reset();   
+    
+       void registerChildren(const QAInterface &interface);
+          
+       QAElement lookup(const QAInterface &interface);
+       QAElement lookup(QObject * const object, int id);
 
-    void registerChildren(const QAInterface &interface);
-
-    QAInterface lookup(const AXUIElementRef &element);
-    QAInterface lookup(const QAElement &element);
-    QAElement lookup(const QAInterface &interface);
-    QAElement lookup(QObject * const object, int id);
-
-private :
-    GUI_CS_SLOT_1(Private, void objectDestroyed(QObject * un_named_arg1))
-    GUI_CS_SLOT_2(objectDestroyed) 
-
-    typedef QHash<QObject *, QInterfaceFactory *> QObjectElementHash;
-    typedef QHash<HIObjectRef, QInterfaceFactory *> HIObjectInterfaceHash;
-    typedef QHash<QObject *, HIObjectRef> QObjectHIObjectHash;
-
-    QObjectElementHash qobjectElementHash;
-    HIObjectInterfaceHash hiobjectInterfaceHash;
-    QObjectHIObjectHash qobjectHiobjectHash;
+   private :
+       GUI_CS_SLOT_1(Private, void objectDestroyed(QObject * un_named_arg1))
+       GUI_CS_SLOT_2(objectDestroyed) 
+   
+       typedef QHash<QObject *, QInterfaceFactory *> QObjectElementHash; 
+       QObjectElementHash qobjectElementHash;     
 };
 
+QDebug operator<<(QDebug debug, const QAInterface &interface);
 bool isItInteresting(const QAInterface &interface);
 
 QT_END_NAMESPACE

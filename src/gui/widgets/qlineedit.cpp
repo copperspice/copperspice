@@ -77,7 +77,7 @@
 QT_BEGIN_NAMESPACE
 
 #ifdef Q_OS_MAC
-extern void qt_mac_secure_keyboard(bool); //qapplication_mac.cpp
+extern void qt_mac_secure_keyboard(bool);
 #endif
 
 /*!
@@ -481,6 +481,7 @@ void QLineEdit::setEchoMode(EchoMode mode)
     setInputMethodHints(imHints);
     d->control->setEchoMode(mode);
     update();
+
 #ifdef Q_OS_MAC
     if (hasFocus())
         qt_mac_secure_keyboard(mode == Password || mode == NoEcho);

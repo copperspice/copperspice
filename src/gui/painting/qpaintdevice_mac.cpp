@@ -30,10 +30,10 @@
 #include "qapplication.h"
 #include "qprinter.h"
 #include <qdebug.h>
-#include <private/qt_mac_p.h>
-#include <private/qprintengine_mac_p.h>
-#include <private/qpixmap_mac_p.h>
-#include <private/qpixmap_raster_p.h>
+#include <qt_mac_p.h>
+#include <qprintengine_mac_p.h>
+#include <qpixmap_mac_p.h>
+#include <qpixmap_raster_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -84,14 +84,6 @@ Q_GUI_EXPORT GrafPtr qt_mac_qd_context(const QPaintDevice *device)
 
 extern CGColorSpaceRef qt_mac_colorSpaceForDeviceType(const QPaintDevice *pdev);
 
-/*! \internal
-
-    Returns the CoreGraphics CGContextRef of the paint device. 0 is
-    returned if it can't be obtained. It is the caller's responsiblity to
-    CGContextRelease the context when finished using it.
-
-    \warning This function is only available on Mac OS X.
-*/
 
 Q_GUI_EXPORT CGContextRef qt_mac_cg_context(const QPaintDevice *pdev)
 {
@@ -124,10 +116,12 @@ Q_GUI_EXPORT CGContextRef qt_mac_cg_context(const QPaintDevice *pdev)
         CGContextTranslateCTM(ret, 0, pm->height());
         CGContextScaleCTM(ret, 1, -1);
         return ret;
+
     } else if (pdev->devType() == QInternal::Widget) {
         CGContextRef ret = static_cast<CGContextRef>(static_cast<const QWidget *>(pdev)->macCGHandle());
         CGContextRetain(ret);
         return ret;
+
     } else if (pdev->devType() == QInternal::MacQuartz) {
         return static_cast<const QMacQuartzPaintDevice *>(pdev)->cgContext();
     }

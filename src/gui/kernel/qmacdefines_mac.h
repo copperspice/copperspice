@@ -27,25 +27,14 @@
 ** Copyright (c) 2007-2008, Apple, Inc.
 **************************************************/
 
-/*
- *  qmacdefines_mac_p.h
- *  All the defines you'll ever need for Qt/Mac :-)
- */
-
 #ifndef QMacDefines_MAC_H
 #define QMacDefines_MAC_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifdef qDebug
 #  define old_qDebug qDebug
 #  undef qDebug
-#endif
-
-#ifdef __LP64__
-typedef signed int OSStatus;
-#else
-typedef signed long OSStatus;
 #endif
 
 #ifdef __OBJC__
@@ -53,7 +42,9 @@ typedef signed long OSStatus;
 #      define old_slots slots
 #      undef slots
 #    endif
+
 #include <Cocoa/Cocoa.h>
+
 #    ifdef old_slots
 #      undef slots
 #      define slots
@@ -61,37 +52,14 @@ typedef signed long OSStatus;
 #    endif
 #endif
 
+/*
+  Mac Note: if /usr/include/AssertMacros.h is included prior to QItemDelegate, and the application
+  is building in debug mode, the  check(assertion) will conflict with QItemDelegate::check
 
-typedef struct OpaqueEventHandlerCallRef * EventHandlerCallRef;
-typedef struct OpaqueEventRef * EventRef;
-typedef struct OpaqueMenuRef * MenuRef;
-typedef struct OpaquePasteboardRef* PasteboardRef;
-typedef struct OpaqueRgnHandle * RgnHandle;
-typedef const struct __HIShape *HIShapeRef;
-typedef struct __HIShape *HIMutableShapeRef;
-typedef struct CGRect CGRect;
-typedef struct CGImage *CGImageRef;
-typedef struct CGContext *CGContextRef;
-typedef struct GDevice * GDPtr;
-typedef GDPtr * GDHandle;
-typedef struct OpaqueIconRef * IconRef;
-
-#ifdef __OBJC__
-   typedef NSWindow* OSWindowRef;
-   typedef NSView *OSViewRef;
-   typedef NSMenu *OSMenuRef;
-   typedef NSEvent *OSEventRef;
-#else
-   typedef void *OSWindowRef;
-   typedef void *OSViewRef;
-   typedef void *OSMenuRef;
-   typedef void *OSEventRef;
-#endif
-
-typedef PasteboardRef OSPasteboardRef;
-typedef struct AEDesc AEDescList;
-typedef AEDescList AERecord;
-typedef AERecord AppleEvent;
+  To avoid this problem, add the folling #undef check
+ 
+  after including AssertMacros.h ( mabye Cocoa.h also )
+*/
 
 #ifdef check
 #undef check
@@ -101,6 +69,18 @@ typedef AERecord AppleEvent;
 #  undef qDebug
 #  define qDebug QT_NO_QDEBUG_MACRO
 #  undef old_qDebug
+#endif
+
+#ifdef __OBJC__
+   typedef NSWindow *OSWindowRef;
+   typedef NSView   *OSViewRef;
+   typedef NSMenu   *OSMenuRef;
+   typedef NSEvent  *OSEventRef;
+#else
+   typedef void *OSWindowRef;
+   typedef void *OSViewRef;
+   typedef void *OSMenuRef;
+   typedef void *OSEventRef;
 #endif
 
 #endif

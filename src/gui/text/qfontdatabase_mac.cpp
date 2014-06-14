@@ -310,25 +310,15 @@ static void registerFont(QFontDatabasePrivate::ApplicationFont *fnt)
     ATSFontContainerRef handle;
     OSStatus e  = noErr;
 
-    if(fnt->data.isEmpty()) {
+    if (fnt->data.isEmpty()) {
 
-        if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
-           FSRef ref;
-           if (qt_mac_create_fsref(fnt->fileName, &ref) != noErr)
-              return;
-
-           ATSFontActivateFromFileReference(&ref, kATSFontContextLocal, kATSFontFormatUnspecified, 0, kATSOptionFlagsDefault, &handle);
-
-        } else  {
-
-           FSSpec spec;
-           if (qt_mac_create_fsspec(fnt->fileName, &spec) != noErr)
-              return;
-
-           e = ATSFontActivateFromFileSpecification(&spec, kATSFontContextLocal, kATSFontFormatUnspecified,
-                                           0, kATSOptionFlagsDefault, &handle);
-
-        }
+        
+        FSRef ref;
+        if (qt_mac_create_fsref(fnt->fileName, &ref) != noErr)
+           return;
+   
+        ATSFontActivateFromFileReference(&ref, kATSFontContextLocal, kATSFontFormatUnspecified, 0, kATSOptionFlagsDefault, &handle);
+         
 
     } else {
         e = ATSFontActivateFromMemory((void *)fnt->data.constData(), fnt->data.size(), kATSFontContextLocal,

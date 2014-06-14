@@ -181,13 +181,13 @@ QT_USE_NAMESPACE
 
     NSRect rect = [[mStolenContentView superview] frame];
 
-    // should a priori be kept in sync with qfontdialog_mac.mm
-    const CGFloat ButtonMinWidth = 78.0; // 84.0 for Carbon
-    const CGFloat ButtonMinHeight = 32.0;
-    const CGFloat ButtonSpacing = 0.0;
-    const CGFloat ButtonTopMargin = 0.0;
+    // should a prior be kept in sync with qfontdialog_mac.mm
+    const CGFloat ButtonMinWidth     = 78.0;
+    const CGFloat ButtonMinHeight    = 32.0;
+    const CGFloat ButtonSpacing      = 0.0;
+    const CGFloat ButtonTopMargin    = 0.0;
     const CGFloat ButtonBottomMargin = 7.0;
-    const CGFloat ButtonSideMargin = 9.0;
+    const CGFloat ButtonSideMargin   = 9.0;
 
     [mOkButton sizeToFit];
     NSSize okSizeHint = [mOkButton frame].size;

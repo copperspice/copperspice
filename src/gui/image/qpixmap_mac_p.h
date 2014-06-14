@@ -50,15 +50,13 @@ public:
     QBitmap mask() const;
     void setMask(const QBitmap &mask);
     bool hasAlphaChannel() const;
-//     QPixmap transformed(const QTransform &matrix,
-//                         Qt::TransformationMode mode) const;
+//     QPixmap transformed(const QTransform &matrix,Qt::TransformationMode mode) const;
     void setAlphaChannel(const QPixmap &alphaChannel);
     QPixmap alphaChannel() const;
     QImage toImage() const;
     QPaintEngine* paintEngine() const;
 
 private:
-
     uint has_alpha : 1, has_mask : 1, uninit : 1;
 
     void macSetHasAlpha(bool b);
@@ -93,13 +91,15 @@ private:
     friend class QRasterBuffer;
     friend class QRasterPaintEngine;
     friend class QCoreGraphicsPaintEngine;
+
     friend CGImageRef qt_mac_create_imagemask(const QPixmap&, const QRectF&);
     friend quint32 *qt_mac_pixmap_get_base(const QPixmap*);
     friend int qt_mac_pixmap_get_bytes_per_line(const QPixmap*);
     friend void qt_mac_cgimage_data_free(void *, const void*, size_t);
     friend IconRef qt_mac_create_iconref(const QPixmap&);
     friend CGContextRef qt_mac_cg_context(const QPaintDevice*);
-    friend QColor qcolorForThemeTextColor(ThemeTextColor themeColor);
+
+    friend QColor qt_mac_colorForThemeTextColor(ThemeTextColor themeColor);
 };
 
 QT_END_NAMESPACE
