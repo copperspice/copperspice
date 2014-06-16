@@ -195,27 +195,27 @@ QT_USE_NAMESPACE
 
 - (void)terminate: (id)sender
 {
-   [NSApp terminate: sender];
+   [[NSApplication sharedApplication] terminate: sender];
 }
 
 - (void)orderFrontStandardAboutPanel: (id)sender
 {
-   [NSApp orderFrontStandardAboutPanel: sender];
+   [[NSApplication sharedApplication] orderFrontStandardAboutPanel: sender];
 }
 
 - (void)hideOtherApplications: (id)sender
 {
-   [NSApp hideOtherApplications: sender];
+   [[NSApplication sharedApplication] hideOtherApplications: sender];
 }
 
 - (void)unhideAllApplications: (id)sender
 {
-   [NSApp unhideAllApplications: sender];
+   [[NSApplication sharedApplication] unhideAllApplications: sender];
 }
 
 - (void)hide: (id)sender
 {
-   [NSApp hide: sender];
+   [[NSApplication sharedApplication] hide: sender];
 }
 
 - (void)qtUpdateMenubar
@@ -263,7 +263,7 @@ QThreadData *internal_get_ThreadData(QObject *object)
 
 - (void)orderFrontCharacterPalette: (id)sender
 {
-   [NSApp orderFrontCharacterPalette: sender];
+   [[NSApplication sharedApplication] orderFrontCharacterPalette: sender];
 }
 
 - (BOOL)validateMenuItem: (NSMenuItem *)menuItem
@@ -271,7 +271,7 @@ QThreadData *internal_get_ThreadData(QObject *object)
    if ([menuItem action] == @selector(hide:)
          || [menuItem action] == @selector(hideOtherApplications:)
          || [menuItem action] == @selector(unhideAllApplications:)) {
-      return [NSApp validateMenuItem: menuItem];
+      return [[NSApplication sharedApplication] validateMenuItem: menuItem];
    } else {
       return [menuItem isEnabled];
    }

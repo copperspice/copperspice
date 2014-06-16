@@ -808,7 +808,7 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
       case QStyle::CT_MenuBar:
          if (sz == QAquaSizeLarge) {
 
-            ret = QSize(-1, [[NSApp mainMenu] menuBarHeight]);
+            ret = QSize(-1, [[[NSApplication sharedApplication] mainMenu] menuBarHeight]);
             // In the qt_mac_set_native_menubar(false) case,
             // we come it here with a zero-height main menu,
             // preventing the in-window menu from displaying.

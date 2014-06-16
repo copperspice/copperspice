@@ -211,7 +211,7 @@ QT_USE_NAMESPACE
       [mSavePanel close];
    }
    if ([mSavePanel isSheet]) {
-      [NSApp endSheet: mSavePanel];
+      [[NSApplication sharedApplication] endSheet: mSavePanel];
    }
 }
 
@@ -783,10 +783,10 @@ void QFileDialogPrivate::mac_nativeDialogModalHelp()
    // Do a queued meta-call to open the native modal dialog so it opens after the new
    // event loop has started to execute (in QDialog::exec). Using a timer rather than
    // a queued meta call is intentional to ensure that the call is only delivered when
-   // [NSApp run] runs (timers are handeled special in cocoa). If NSApp is not
+   // [[NSApplication sharedApplication] run] runs (timers are handeled special in cocoa). If NSApp is not
    // running (which is the case if e.g a top-most QEventLoop has been
    // interrupted, and the second-most event loop has not yet been reactivated (regardless
-   // if [NSApp run] is still on the stack)), showing a native modal dialog will fail.
+   // if [[NSApplication sharedApplication] run] is still on the stack)), showing a native modal dialog will fail.
    if (nativeDialogInUse) {
       Q_Q(QFileDialog);
       QTimer::singleShot(1, q, SLOT(_q_macRunNativeAppModalPanel()));

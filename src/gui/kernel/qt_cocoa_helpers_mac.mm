@@ -1592,7 +1592,7 @@ void qt_cocoaPostMessage(id target, SEL selector, int argCount, id arg1, id arg2
    NSEvent *e = [NSEvent otherEventWithType: NSApplicationDefined
                  location: NSZeroPoint modifierFlags: 0 timestamp: 0 windowNumber: 0
                  context: nil subtype: QtCocoaEventSubTypePostMessage data1: lower data2: upper];
-   [NSApp postEvent: e atStart: NO];
+   [[NSApplication sharedApplication] postEvent: e atStart: NO];
 }
 
 void qt_cocoaPostMessageAfterEventLoopExit(id target, SEL selector, int argCount, id arg1, id arg2)
@@ -1626,7 +1626,7 @@ QMacCocoaAutoReleasePool::~QMacCocoaAutoReleasePool()
 void qt_mac_post_retranslateAppMenu()
 {
    QMacCocoaAutoReleasePool pool;
-   qt_cocoaPostMessage([NSApp QT_MANGLE_NAMESPACE(qt_qcocoamenuLoader)], @selector(qtTranslateApplicationMenu));
+   qt_cocoaPostMessage([[NSApplication sharedApplication] QT_MANGLE_NAMESPACE(qt_qcocoamenuLoader)], @selector(qtTranslateApplicationMenu));
 }
 
 QWidgetPrivate *QMacScrollOptimization::_target = 0;

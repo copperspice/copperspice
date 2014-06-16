@@ -378,7 +378,7 @@ void qt_mac_set_app_icon(const QPixmap &pixmap)
       image = static_cast<NSImage *>(qt_mac_create_nsimage(pixmap));
    }
 
-   [NSApp setApplicationIconImage: image];
+   [[NSApplication sharedApplication] setApplicationIconImage: image];
    [image release];
 }
 
@@ -657,7 +657,7 @@ void qt_event_request_showsheet(QWidget *w)
    Q_ASSERT(qt_mac_is_macsheet(w));
 
    w->repaint();
-   [NSApp beginSheet: qt_mac_window_for(w) modalForWindow: qt_mac_window_for(w->parentWidget())
+   [[NSApplication sharedApplication] beginSheet: qt_mac_window_for(w) modalForWindow: qt_mac_window_for(w->parentWidget())
     modalDelegate: nil didEndSelector: nil contextInfo: 0];
 
 }
@@ -834,7 +834,7 @@ static QMenu *qt_mac_dock_menu = 0;
 Q_GUI_EXPORT void qt_mac_set_dock_menu(QMenu *menu)
 {
    qt_mac_dock_menu = menu;
-   [NSApp setDockMenu: menu->macMenu()];
+   [[NSApplication sharedApplication] setDockMenu: menu->macMenu()];
 
 }
 
@@ -845,7 +845,7 @@ void qt_mac_event_release(QWidget *w)
 
       if (w == qt_mac_dock_menu) {
          qt_mac_dock_menu = 0;
-         [NSApp setDockMenu: 0];
+         [[NSApplication sharedApplication] setDockMenu: 0];
       }
    }
 }
@@ -1204,7 +1204,7 @@ QWidget *QApplication::topLevelAt(const QPoint &p)
    NSWindowList(windowCount, windowList.data());
    int firstQtWindowFound = -1;
    for (int i = 0; i < windowCount; ++i) {
-      NSWindow *window = [NSApp windowWithWindowNumber: windowList[i]];
+      NSWindow *window = [[NSApplication sharedApplication] windowWithWindowNumber: windowList[i]];
       if (window) {
          QWidget *candidateWindow = [window QT_MANGLE_NAMESPACE(qt_qwidget)];
          if (candidateWindow && firstQtWindowFound == -1) {
@@ -1881,7 +1881,7 @@ bool QApplicationPrivate::canQuit()
 {
    Q_Q(QApplication);
 
-   [[NSApp mainMenu] cancelTracking];
+   [[[NSApplication sharedApplication] mainMenu] cancelTracking];
 
    bool handle_quit = true;
    if (QApplicationPrivate::modalState() && [[[[QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) sharedDelegate]
@@ -1951,7 +1951,7 @@ void onApplicationChangedActivation( bool activated )
       }
 
       if (!app->activeWindow()) {
-         OSWindowRef wp = [NSApp keyWindow];
+         OSWindowRef wp = [[NSApplication sharedApplication] keyWindow];
          if (QWidget *tmp_w = qt_mac_find_window(wp)) {
             app->setActiveWindow(tmp_w);
          }

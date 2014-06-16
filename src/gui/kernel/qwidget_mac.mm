@@ -131,7 +131,7 @@ static QSize qt_mac_desktopSize()
 static NSDrawer *qt_mac_drawer_for(const QWidget *widget)
 {
    NSView *widgetView = reinterpret_cast<NSView *>(widget->window()->effectiveWinId());
-   NSArray *windows = [NSApp windows];
+   NSArray *windows = [[NSApplication sharedApplication] windows];
    for (NSWindow * window in windows) {
       NSArray *drawers = [window drawers];
       for (NSDrawer * drawer in drawers) {
@@ -162,7 +162,7 @@ static void qt_mac_destructWindow(OSWindowRef window)
 {
 
    if ([window isVisible] && [window isSheet]) {
-      [NSApp endSheet: window];
+      [[NSApplication sharedApplication] endSheet: window];
       [window orderOut: window];
    }
 
@@ -992,7 +992,7 @@ void QWidgetPrivate::recreateMacWindow()
    }
    if ([oldWindow isVisible]) {
       if ([oldWindow isSheet]) {
-         [NSApp endSheet: oldWindow];
+         [[NSApplication sharedApplication] endSheet: oldWindow];
       }
       [oldWindow orderOut: oldWindow];
       show_sys();
@@ -1998,7 +1998,7 @@ void QWidgetPrivate::show_sys()
    }
 
 
-   if ([NSApp isActive] && !qt_button_down && !QWidget::mouseGrabber()) {
+   if ([[NSApplication sharedApplication] isActive] && !qt_button_down && !QWidget::mouseGrabber()) {
       // Update enter/leave immidiatly, don't wait for a move event. But only
       // if no grab exists (even if the grab points to this widget, it seems, ref X11)
       QPoint qlocal, qglobal;
@@ -2041,7 +2041,7 @@ void QWidgetPrivate::hide_sys()
       OSWindowRef window = qt_mac_window_for(q);
       if (qt_mac_is_macsheet(q)) {
 
-         [NSApp endSheet: window];
+         [[NSApplication sharedApplication] endSheet: window];
          [window orderOut: window];
 
       } else if (qt_mac_is_macdrawer(q)) {
@@ -2109,7 +2109,7 @@ void QWidgetPrivate::hide_sys()
    }
 
 
-   if ([NSApp isActive] && !qt_button_down && !QWidget::mouseGrabber()) {
+   if ([[NSApplication sharedApplication] isActive] && !qt_button_down && !QWidget::mouseGrabber()) {
       // Update enter/leave immidiatly, don't wait for a move event. But only
       // if no grab exists (even if the grab points to this widget, it seems, ref X11)
       QPoint qlocal, qglobal;

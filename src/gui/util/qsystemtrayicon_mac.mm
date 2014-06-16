@@ -549,7 +549,7 @@ class QSystemTrayIconQMenu : public QMenu
          const QIcon icon = action->icon();
          if (!icon.isNull() && action->isIconVisibleInMenu()) {
 
-            const short scale = [[NSApp mainMenu] menuBarHeight];
+            const short scale = [[[NSApplication sharedApplication] mainMenu] menuBarHeight];
 
             NSImage *nsimage = static_cast<NSImage *>(qt_mac_create_nsimage(icon.pixmap(QSize(scale, scale))));
             [item setImage: nsimage];

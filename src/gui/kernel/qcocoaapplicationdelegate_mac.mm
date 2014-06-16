@@ -77,7 +77,7 @@ static void cleanupCocoaApplicationDelegate()
    [dockMenu release];
    [qtMenuLoader release];
    if (reflectionDelegate) {
-      [NSApp setDelegate: reflectionDelegate];
+      [[NSApplication sharedApplication] setDelegate: reflectionDelegate];
       [reflectionDelegate release];
    }
    [super dealloc];
@@ -330,12 +330,12 @@ QThreadData *internal_get_ThreadData(QObject *object)
 {
    Q_UNUSED(event);
    Q_UNUSED(replyEvent);
-   [NSApp terminate: self];
+   [[NSApplication sharedApplication] terminate: self];
 }
 
 - (void)qtDispatcherToQAction: (id)sender
 {
-   [[NSApp QT_MANGLE_NAMESPACE(qt_qcocoamenuLoader)] qtDispatcherToQAction: sender];
+   [[[NSApplication sharedApplication] QT_MANGLE_NAMESPACE(qt_qcocoamenuLoader)] qtDispatcherToQAction: sender];
 }
 
 @end
