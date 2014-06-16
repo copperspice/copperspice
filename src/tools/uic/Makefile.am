@@ -40,7 +40,7 @@ bin_uic_SOURCES = \
 
 bin_uic_LDFLAGS= -lpthread
 
-$(patsubst %,$(top_srcdir)/%,bin_uic_SOURCES) : $(CORE_HEADERS_INSTALLED)
+$(bin_uic_SOURCES) : $(CORE_HEADERS_INSTALLED)
 
 bin_uic_CXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS) -I$(top_srcdir)/src/tools/uic/cpp -I$(top_srcdir)/src/tools/uic \
             -I$(top_srcdir)/src/corelib/global \
