@@ -97,6 +97,9 @@ class QNetworkReplyImpl: public QNetworkReply
    NET_CS_SLOT_1(Private, void _q_cacheDestroyed())
    NET_CS_SLOT_2(_q_cacheDestroyed)
 
+   NET_CS_SLOT_1(Private, void _q_cacheSaveDeviceAboutToClose())
+   NET_CS_SLOT_2(_q_cacheSaveDeviceAboutToClose)
+
 };
 
 class QNetworkReplyImplPrivate: public QNetworkReplyPrivate
@@ -136,6 +139,7 @@ class QNetworkReplyImplPrivate: public QNetworkReplyPrivate
 #endif
 
    void _q_cacheDestroyed();
+   void _q_cacheSaveDeviceAboutToClose();
 
    void setup(QNetworkAccessManager::Operation op, const QNetworkRequest &request, QIODevice *outgoingData);
 
