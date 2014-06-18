@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,13 +35,14 @@ QT_BEGIN_NAMESPACE
 namespace QtPrivate {
 
 template<class T>
-class HasResultType {
-    typedef char Yes;
-    typedef void *No;
-    template<typename U> static Yes test(int, const typename U::result_type * = 0);
-    template<typename U> static No test(double);
-public:
-    enum { Value = (sizeof(test<T>(0)) == sizeof(Yes)) };
+class HasResultType
+{
+   typedef char Yes;
+   typedef void *No;
+   template<typename U> static Yes test(int, const typename U::result_type * = 0);
+   template<typename U> static No test(double);
+ public:
+   enum { Value = (sizeof(test<T>(0)) == sizeof(Yes)) };
 };
 
 }

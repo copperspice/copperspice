@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -74,7 +74,7 @@ QT_BEGIN_NAMESPACE
     The default is to create a Null value.
  */
 QJsonValue::QJsonValue(Type type)
-    : ui(0), d(0), t(type)
+   : ui(0), d(0), t(type)
 {
 }
 
@@ -82,57 +82,58 @@ QJsonValue::QJsonValue(Type type)
     \internal
  */
 QJsonValue::QJsonValue(QJsonPrivate::Data *data, QJsonPrivate::Base *base, const QJsonPrivate::Value &v)
-    : d(0)
+   : d(0)
 {
-    t = (Type)(uint)v.type;
-    switch (t) {
-    case Undefined:
-    case Null:
-        dbl = 0;
-        break;
-    case Bool:
-        b = v.toBoolean();
-        break;
-    case Double:
-        dbl = v.toDouble(base);
-        break;
-    case String: {
-	/* Qt 5 Beta 1
-        QString s = v.toString(base);
-        stringData = s.data_ptr();
-        stringData->ref.ref();
-	*/
-	// Temporary for QStringData
-        QString* s = new QString(v.toString(base));
-        stringData = s;
-        break;
-    }
-    case Array:
-    case Object:
-        d = data;
-        this->base = v.base(base);
-        break;
-    }
-    if (d)
-        d->ref.ref();
+   t = (Type)(uint)v.type;
+   switch (t) {
+      case Undefined:
+      case Null:
+         dbl = 0;
+         break;
+      case Bool:
+         b = v.toBoolean();
+         break;
+      case Double:
+         dbl = v.toDouble(base);
+         break;
+      case String: {
+         /* Qt 5 Beta 1
+              QString s = v.toString(base);
+              stringData = s.data_ptr();
+              stringData->ref.ref();
+         */
+         // Temporary for QStringData
+         QString *s = new QString(v.toString(base));
+         stringData = s;
+         break;
+      }
+      case Array:
+      case Object:
+         d = data;
+         this->base = v.base(base);
+         break;
+   }
+   if (d) {
+      d->ref.ref();
+   }
 }
 
 /*!
     Creates a value of type Bool, with value \a b.
  */
 QJsonValue::QJsonValue(bool b)
-    : d(0), t(Bool)
+   : d(0), t(Bool)
 {
-    this->b = b;
+   this->b = b;
 }
 
 /*!
     Creates a value of type Double, with value \a n.
  */
 QJsonValue::QJsonValue(double n)
-    : d(0), t(Double)
+   : d(0), t(Double)
 {
-    this->dbl = n;
+   this->dbl = n;
 }
 
 /*!
@@ -140,9 +141,9 @@ QJsonValue::QJsonValue(double n)
     Creates a value of type Double, with value \a n.
  */
 QJsonValue::QJsonValue(int n)
-    : d(0), t(Double)
+   : d(0), t(Double)
 {
-    this->dbl = n;
+   this->dbl = n;
 }
 
 /*!
@@ -152,61 +153,63 @@ QJsonValue::QJsonValue(int n)
     If you pass in values outside this range expect a loss of precision to occur.
  */
 QJsonValue::QJsonValue(qint64 n)
-    : d(0), t(Double)
+   : d(0), t(Double)
 {
-    this->dbl = n;
+   this->dbl = n;
 }
 
 /*!
     Creates a value of type String, with value \a s.
  */
 QJsonValue::QJsonValue(const QString &s)
-    : d(0), t(String)
+   : d(0), t(String)
 {
-    /* Qt 5 Beta 1
-    stringData = *(QStringData **)(&s);
-    stringData->ref.ref();
-    */
-    // Temporary for QStringData
-    stringData = new QString(s);
+   /* Qt 5 Beta 1
+   stringData = *(QStringData **)(&s);
+   stringData->ref.ref();
+   */
+   // Temporary for QStringData
+   stringData = new QString(s);
 }
 
 /*!
     Creates a value of type String, with value \a s.
  */
 QJsonValue::QJsonValue(QLatin1String s)
-    : d(0), t(String)
+   : d(0), t(String)
 {
-    // ### FIXME: Avoid creating the temp QString below
-    /* Qt 5 Beta 1
-    QString str(s);
-    stringData = *(QStringData **)(&str);
-    stringData->ref.ref();
-    */
-    // Temporary for QStringData
-    stringData = new QString(s);
+   // ### FIXME: Avoid creating the temp QString below
+   /* Qt 5 Beta 1
+   QString str(s);
+   stringData = *(QStringData **)(&str);
+   stringData->ref.ref();
+   */
+   // Temporary for QStringData
+   stringData = new QString(s);
 }
 
 /*!
     Creates a value of type Array, with value \a a.
  */
 QJsonValue::QJsonValue(const QJsonArray &a)
-    : d(a.d), t(Array)
+   : d(a.d), t(Array)
 {
-    base = a.a;
-    if (d)
-        d->ref.ref();
+   base = a.a;
+   if (d) {
+      d->ref.ref();
+   }
 }
 
 /*!
     Creates a value of type Object, with value \a o.
  */
 QJsonValue::QJsonValue(const QJsonObject &o)
-    : d(o.d), t(Object)
+   : d(o.d), t(Object)
 {
-    base = o.o;
-    if (d)
-        d->ref.ref();
+   base = o.o;
+   if (d) {
+      d->ref.ref();
+   }
 }
 
 
@@ -215,16 +218,18 @@ QJsonValue::QJsonValue(const QJsonObject &o)
  */
 QJsonValue::~QJsonValue()
 {
-    /* Qt 5 Beta 1
-    if (t == String && stringData && !stringData->ref.deref())
-        free(stringData);
-    */
-    // Temporary for QStringData
-    if (t == String)
-        delete stringData;
+   /* Qt 5 Beta 1
+   if (t == String && stringData && !stringData->ref.deref())
+       free(stringData);
+   */
+   // Temporary for QStringData
+   if (t == String) {
+      delete stringData;
+   }
 
-    if (d && !d->ref.deref())
-        delete d;
+   if (d && !d->ref.deref()) {
+      delete d;
+   }
 }
 
 /*!
@@ -232,20 +237,21 @@ QJsonValue::~QJsonValue()
  */
 QJsonValue::QJsonValue(const QJsonValue &other)
 {
-    t = other.t;
-    d = other.d;
-    ui = other.ui;
-    if (d)
-        d->ref.ref();
+   t = other.t;
+   d = other.d;
+   ui = other.ui;
+   if (d) {
+      d->ref.ref();
+   }
 
-    if (t == String && stringData) {
-        /* Qt 5 Beta 1
-        stringData->ref.ref();
-        */
-        // Temporary for QStringData
-	QString* tmp = new QString(*stringData);
-        stringData = tmp;
-    }
+   if (t == String && stringData) {
+      /* Qt 5 Beta 1
+      stringData->ref.ref();
+      */
+      // Temporary for QStringData
+      QString *tmp = new QString(*stringData);
+      stringData = tmp;
+   }
 }
 
 /*!
@@ -253,37 +259,40 @@ QJsonValue::QJsonValue(const QJsonValue &other)
  */
 QJsonValue &QJsonValue::operator =(const QJsonValue &other)
 {
-    /* Qt 5 Beta 1
-    if (t == String && stringData && !stringData->ref.deref())
-        free(stringData);
-    */
-    // Temporary for QStringData
-    if (t == String)
-        delete stringData;
+   /* Qt 5 Beta 1
+   if (t == String && stringData && !stringData->ref.deref())
+       free(stringData);
+   */
+   // Temporary for QStringData
+   if (t == String) {
+      delete stringData;
+   }
 
-    t = other.t;
-    dbl = other.dbl;
+   t = other.t;
+   dbl = other.dbl;
 
-    if (d != other.d) {
+   if (d != other.d) {
 
-        if (d && !d->ref.deref())
-            delete d;
-        d = other.d;
-        if (d)
-            d->ref.ref();
+      if (d && !d->ref.deref()) {
+         delete d;
+      }
+      d = other.d;
+      if (d) {
+         d->ref.ref();
+      }
 
-    }
+   }
 
-    if (t == String && stringData) {
-        /* Qt 5 Beta 1
-        stringData->ref.ref();
-        */
-        // Temporary for QStringData
-	QString* tmp = new QString(*stringData);
-        stringData = tmp;
-    }
+   if (t == String && stringData) {
+      /* Qt 5 Beta 1
+      stringData->ref.ref();
+      */
+      // Temporary for QStringData
+      QString *tmp = new QString(*stringData);
+      stringData = tmp;
+   }
 
-    return *this;
+   return *this;
 }
 
 /*!
@@ -365,30 +374,31 @@ QJsonValue &QJsonValue::operator =(const QJsonValue &other)
  */
 QJsonValue QJsonValue::fromVariant(const QVariant &variant)
 {
-    switch (variant.type()) {
-    case QVariant::Bool:
-        return QJsonValue(variant.toBool());
-    case QVariant::Int:
-    case QVariant::Double:
-    case QVariant::LongLong:
-    case QVariant::ULongLong:
-    case QVariant::UInt:
-        return QJsonValue(variant.toDouble());
-    case QVariant::String:
-        return QJsonValue(variant.toString());
-    case QVariant::StringList:
-        return QJsonValue(QJsonArray::fromStringList(variant.toStringList()));
-    case QVariant::List:
-        return QJsonValue(QJsonArray::fromVariantList(variant.toList()));
-    case QVariant::Map:
-        return QJsonValue(QJsonObject::fromVariantMap(variant.toMap()));
-    default:
-        break;
-    }
-    QString string = variant.toString();
-    if (string.isEmpty())
-        return QJsonValue();
-    return QJsonValue(string);
+   switch (variant.type()) {
+      case QVariant::Bool:
+         return QJsonValue(variant.toBool());
+      case QVariant::Int:
+      case QVariant::Double:
+      case QVariant::LongLong:
+      case QVariant::ULongLong:
+      case QVariant::UInt:
+         return QJsonValue(variant.toDouble());
+      case QVariant::String:
+         return QJsonValue(variant.toString());
+      case QVariant::StringList:
+         return QJsonValue(QJsonArray::fromStringList(variant.toStringList()));
+      case QVariant::List:
+         return QJsonValue(QJsonArray::fromVariantList(variant.toList()));
+      case QVariant::Map:
+         return QJsonValue(QJsonObject::fromVariantMap(variant.toMap()));
+      default:
+         break;
+   }
+   QString string = variant.toString();
+   if (string.isEmpty()) {
+      return QJsonValue();
+   }
+   return QJsonValue(string);
 }
 
 /*!
@@ -408,26 +418,26 @@ QJsonValue QJsonValue::fromVariant(const QVariant &variant)
  */
 QVariant QJsonValue::toVariant() const
 {
-    switch (t) {
-    case Bool:
-        return b;
-    case Double:
-        return dbl;
-    case String:
-        return toString();
-    case Array:
-        return d ?
-               QJsonArray(d, static_cast<QJsonPrivate::Array *>(base)).toVariantList() :
-               QVariantList();
-    case Object:
-        return d ?
-               QJsonObject(d, static_cast<QJsonPrivate::Object *>(base)).toVariantMap() :
-               QVariantMap();
-    case Null:
-    case Undefined:
-        break;
-    }
-    return QVariant();
+   switch (t) {
+      case Bool:
+         return b;
+      case Double:
+         return dbl;
+      case String:
+         return toString();
+      case Array:
+         return d ?
+                QJsonArray(d, static_cast<QJsonPrivate::Array *>(base)).toVariantList() :
+                QVariantList();
+      case Object:
+         return d ?
+                QJsonObject(d, static_cast<QJsonPrivate::Object *>(base)).toVariantMap() :
+                QVariantMap();
+      case Null:
+      case Undefined:
+         break;
+   }
+   return QVariant();
 }
 
 /*!
@@ -453,7 +463,7 @@ QVariant QJsonValue::toVariant() const
  */
 QJsonValue::Type QJsonValue::type() const
 {
-    return t;
+   return t;
 }
 
 /*!
@@ -463,9 +473,10 @@ QJsonValue::Type QJsonValue::type() const
  */
 bool QJsonValue::toBool(bool defaultValue) const
 {
-    if (t != Bool)
-        return defaultValue;
-    return b;
+   if (t != Bool) {
+      return defaultValue;
+   }
+   return b;
 }
 
 /*!
@@ -476,9 +487,10 @@ bool QJsonValue::toBool(bool defaultValue) const
  */
 int QJsonValue::toInt(int defaultValue) const
 {
-    if (t == Double && int(dbl) == dbl)
-        return dbl;
-    return defaultValue;
+   if (t == Double && int(dbl) == dbl) {
+      return dbl;
+   }
+   return defaultValue;
 }
 
 /*!
@@ -488,9 +500,10 @@ int QJsonValue::toInt(int defaultValue) const
  */
 double QJsonValue::toDouble(double defaultValue) const
 {
-    if (t != Double)
-        return defaultValue;
-    return dbl;
+   if (t != Double) {
+      return defaultValue;
+   }
+   return dbl;
 }
 
 /*!
@@ -500,15 +513,16 @@ double QJsonValue::toDouble(double defaultValue) const
  */
 QString QJsonValue::toString(const QString &defaultValue) const
 {
-    if (t != String)
-        return defaultValue;
-    /* Qt 5 Beta 1
-    stringData->ref.ref(); // the constructor below doesn't add a ref.
-    QStringDataPtr holder = { stringData };
-    return QString(holder);
-    */
-    // Temporary for QStringData
-    return *stringData;
+   if (t != String) {
+      return defaultValue;
+   }
+   /* Qt 5 Beta 1
+   stringData->ref.ref(); // the constructor below doesn't add a ref.
+   QStringDataPtr holder = { stringData };
+   return QString(holder);
+   */
+   // Temporary for QStringData
+   return *stringData;
 }
 
 /*!
@@ -518,10 +532,11 @@ QString QJsonValue::toString(const QString &defaultValue) const
  */
 QJsonArray QJsonValue::toArray(const QJsonArray &defaultValue) const
 {
-    if (!d || t != Array)
-        return defaultValue;
+   if (!d || t != Array) {
+      return defaultValue;
+   }
 
-    return QJsonArray(d, static_cast<QJsonPrivate::Array *>(base));
+   return QJsonArray(d, static_cast<QJsonPrivate::Array *>(base));
 }
 
 /*!
@@ -533,7 +548,7 @@ QJsonArray QJsonValue::toArray(const QJsonArray &defaultValue) const
  */
 QJsonArray QJsonValue::toArray() const
 {
-    return toArray(QJsonArray());
+   return toArray(QJsonArray());
 }
 
 /*!
@@ -543,10 +558,11 @@ QJsonArray QJsonValue::toArray() const
  */
 QJsonObject QJsonValue::toObject(const QJsonObject &defaultValue) const
 {
-    if (!d || t != Object)
-        return defaultValue;
+   if (!d || t != Object) {
+      return defaultValue;
+   }
 
-    return QJsonObject(d, static_cast<QJsonPrivate::Object *>(base));
+   return QJsonObject(d, static_cast<QJsonPrivate::Object *>(base));
 }
 
 /*!
@@ -558,7 +574,7 @@ QJsonObject QJsonValue::toObject(const QJsonObject &defaultValue) const
  */
 QJsonObject QJsonValue::toObject() const
 {
-    return toObject(QJsonObject());
+   return toObject(QJsonObject());
 }
 
 /*!
@@ -566,35 +582,40 @@ QJsonObject QJsonValue::toObject() const
  */
 bool QJsonValue::operator==(const QJsonValue &other) const
 {
-    if (t != other.t)
-        return false;
+   if (t != other.t) {
+      return false;
+   }
 
-    switch (t) {
-    case Undefined:
-    case Null:
-        break;
-    case Bool:
-        return b == other.b;
-    case Double:
-        return dbl == other.dbl;
-    case String:
-        return toString() == other.toString();
-    case Array:
-        if (base == other.base)
+   switch (t) {
+      case Undefined:
+      case Null:
+         break;
+      case Bool:
+         return b == other.b;
+      case Double:
+         return dbl == other.dbl;
+      case String:
+         return toString() == other.toString();
+      case Array:
+         if (base == other.base) {
             return true;
-        if (!base || !other.base)
+         }
+         if (!base || !other.base) {
             return false;
-        return QJsonArray(d, static_cast<QJsonPrivate::Array *>(base))
+         }
+         return QJsonArray(d, static_cast<QJsonPrivate::Array *>(base))
                 == QJsonArray(other.d, static_cast<QJsonPrivate::Array *>(other.base));
-    case Object:
-        if (base == other.base)
+      case Object:
+         if (base == other.base) {
             return true;
-        if (!base || !other.base)
+         }
+         if (!base || !other.base) {
             return false;
-        return QJsonObject(d, static_cast<QJsonPrivate::Object *>(base))
+         }
+         return QJsonObject(d, static_cast<QJsonPrivate::Object *>(base))
                 == QJsonObject(other.d, static_cast<QJsonPrivate::Object *>(other.base));
-    }
-    return true;
+   }
+   return true;
 }
 
 /*!
@@ -602,7 +623,7 @@ bool QJsonValue::operator==(const QJsonValue &other) const
  */
 bool QJsonValue::operator!=(const QJsonValue &other) const
 {
-    return !(*this == other);
+   return !(*this == other);
 }
 
 /*!
@@ -610,15 +631,17 @@ bool QJsonValue::operator!=(const QJsonValue &other) const
  */
 void QJsonValue::detach()
 {
-    if (!d)
-        return;
+   if (!d) {
+      return;
+   }
 
-    QJsonPrivate::Data *x = d->clone(base);
-    x->ref.ref();
-    if (!d->ref.deref())
-        delete d;
-    d = x;
-    base = static_cast<QJsonPrivate::Object *>(d->header->root());
+   QJsonPrivate::Data *x = d->clone(base);
+   x->ref.ref();
+   if (!d->ref.deref()) {
+      delete d;
+   }
+   d = x;
+   base = static_cast<QJsonPrivate::Object *>(d->header->root());
 }
 
 
@@ -648,71 +671,74 @@ void QJsonValue::detach()
 
 QJsonValueRef &QJsonValueRef::operator =(const QJsonValue &val)
 {
-    if (is_object)
-        o->setValueAt(index, val);
-    else
-        a->replace(index, val);
+   if (is_object) {
+      o->setValueAt(index, val);
+   } else {
+      a->replace(index, val);
+   }
 
-    return *this;
+   return *this;
 }
 
 QJsonValueRef &QJsonValueRef::operator =(const QJsonValueRef &ref)
 {
-    if (is_object)
-        o->setValueAt(index, ref);
-    else
-        a->replace(index, ref);
+   if (is_object) {
+      o->setValueAt(index, ref);
+   } else {
+      a->replace(index, ref);
+   }
 
-    return *this;
+   return *this;
 }
 
 QJsonArray QJsonValueRef::toArray() const
 {
-    return toValue().toArray();
+   return toValue().toArray();
 }
 
 QJsonObject QJsonValueRef::toObject() const
 {
-    return toValue().toObject();
+   return toValue().toObject();
 }
 
 QJsonValue QJsonValueRef::toValue() const
 {
-    if (!is_object)
-        return a->at(index);
-    return o->valueAt(index);
+   if (!is_object) {
+      return a->at(index);
+   }
+   return o->valueAt(index);
 }
 
 QDebug operator<<(QDebug dbg, const QJsonValue &o)
 {
-    switch (o.t) {
-    case QJsonValue::Undefined:
-        dbg.nospace() << "QJsonValue(undefined)";
-        break;
-    case QJsonValue::Null:
-        dbg.nospace() << "QJsonValue(null)";
-        break;
-    case QJsonValue::Bool:
-        dbg.nospace() << "QJsonValue(bool, " << o.toBool() << ")";
-        break;
-    case QJsonValue::Double:
-        dbg.nospace() << "QJsonValue(double, " << o.toDouble() << ")";
-        break;
-    case QJsonValue::String:
-        dbg.nospace() << "QJsonValue(string, " << o.toString() << ")";
-        break;
-    case QJsonValue::Array:
-        dbg.nospace() << "QJsonValue(array, ";
-        dbg.nospace() << o.toArray();
-        dbg.nospace() << ")";
-        break;
-    case QJsonValue::Object:
-        dbg.nospace() << "QJsonValue(object, ";
-        dbg.nospace() << o.toObject();
-        dbg.nospace() << ")";
-        break;
-    }
-    return dbg.space();
+   switch (o.t) {
+      case QJsonValue::Undefined:
+         dbg.nospace() << "QJsonValue(undefined)";
+         break;
+      case QJsonValue::Null:
+         dbg.nospace() << "QJsonValue(null)";
+         break;
+      case QJsonValue::Bool:
+         dbg.nospace() << "QJsonValue(bool, " << o.toBool() << ")";
+         break;
+      case QJsonValue::Double:
+         dbg.nospace() << "QJsonValue(double, " << o.toDouble() << ")";
+         break;
+      case QJsonValue::String:
+         dbg.nospace() << "QJsonValue(string, " << o.toString() << ")";
+         break;
+      case QJsonValue::Array:
+         dbg.nospace() << "QJsonValue(array, ";
+         dbg.nospace() << o.toArray();
+         dbg.nospace() << ")";
+         break;
+      case QJsonValue::Object:
+         dbg.nospace() << "QJsonValue(object, ";
+         dbg.nospace() << o.toObject();
+         dbg.nospace() << ")";
+         break;
+   }
+   return dbg.space();
 }
 
 QT_END_NAMESPACE

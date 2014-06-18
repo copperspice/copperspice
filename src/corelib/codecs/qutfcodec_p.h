@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,108 +31,125 @@
 
 QT_BEGIN_NAMESPACE
 
-enum DataEndianness
-{
-    DetectEndianness,
-    BigEndianness,
-    LittleEndianness
+enum DataEndianness {
+   DetectEndianness,
+   BigEndianness,
+   LittleEndianness
 };
 
-struct QUtf8
-{
-    static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *);
-    static QByteArray convertFromUnicode(const QChar *, int, QTextCodec::ConverterState *);
+struct QUtf8 {
+   static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *);
+   static QByteArray convertFromUnicode(const QChar *, int, QTextCodec::ConverterState *);
 };
 
-struct QUtf16
-{
-    static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
-    static QByteArray convertFromUnicode(const QChar *, int, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
+struct QUtf16 {
+   static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
+   static QByteArray convertFromUnicode(const QChar *, int, QTextCodec::ConverterState *,
+                                        DataEndianness = DetectEndianness);
 };
 
-struct QUtf32
-{
-    static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
-    static QByteArray convertFromUnicode(const QChar *, int, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
+struct QUtf32 {
+   static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
+   static QByteArray convertFromUnicode(const QChar *, int, QTextCodec::ConverterState *,
+                                        DataEndianness = DetectEndianness);
 };
 
 #ifndef QT_NO_TEXTCODEC
 
-class QUtf8Codec : public QTextCodec {
-public:
-    ~QUtf8Codec();
+class QUtf8Codec : public QTextCodec
+{
+ public:
+   ~QUtf8Codec();
 
-    QByteArray name() const;
-    int mibEnum() const;
+   QByteArray name() const;
+   int mibEnum() const;
 
-    QString convertToUnicode(const char *, int, ConverterState *) const;
-    QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
-    void convertToUnicode(QString *target, const char *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   void convertToUnicode(QString *target, const char *, int, ConverterState *) const;
 };
 
-class QUtf16Codec : public QTextCodec {
-protected:
-public:
-    QUtf16Codec() { e = DetectEndianness; }
-    ~QUtf16Codec();
+class QUtf16Codec : public QTextCodec
+{
+ protected:
+ public:
+   QUtf16Codec() {
+      e = DetectEndianness;
+   }
+   ~QUtf16Codec();
 
-    QByteArray name() const;
-    QList<QByteArray> aliases() const;
-    int mibEnum() const;
+   QByteArray name() const;
+   QList<QByteArray> aliases() const;
+   int mibEnum() const;
 
-    QString convertToUnicode(const char *, int, ConverterState *) const;
-    QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
 
-protected:
-    DataEndianness e;
+ protected:
+   DataEndianness e;
 };
 
-class QUtf16BECodec : public QUtf16Codec {
-public:
-    QUtf16BECodec() : QUtf16Codec() { e = BigEndianness; }
-    QByteArray name() const;
-    QList<QByteArray> aliases() const;
-    int mibEnum() const;
+class QUtf16BECodec : public QUtf16Codec
+{
+ public:
+   QUtf16BECodec() : QUtf16Codec() {
+      e = BigEndianness;
+   }
+   QByteArray name() const;
+   QList<QByteArray> aliases() const;
+   int mibEnum() const;
 };
 
-class QUtf16LECodec : public QUtf16Codec {
-public:
-    QUtf16LECodec() : QUtf16Codec() { e = LittleEndianness; }
-    QByteArray name() const;
-    QList<QByteArray> aliases() const;
-    int mibEnum() const;
+class QUtf16LECodec : public QUtf16Codec
+{
+ public:
+   QUtf16LECodec() : QUtf16Codec() {
+      e = LittleEndianness;
+   }
+   QByteArray name() const;
+   QList<QByteArray> aliases() const;
+   int mibEnum() const;
 };
 
-class QUtf32Codec : public QTextCodec {
-public:
-    QUtf32Codec() { e = DetectEndianness; }
-    ~QUtf32Codec();
+class QUtf32Codec : public QTextCodec
+{
+ public:
+   QUtf32Codec() {
+      e = DetectEndianness;
+   }
+   ~QUtf32Codec();
 
-    QByteArray name() const;
-    QList<QByteArray> aliases() const;
-    int mibEnum() const;
+   QByteArray name() const;
+   QList<QByteArray> aliases() const;
+   int mibEnum() const;
 
-    QString convertToUnicode(const char *, int, ConverterState *) const;
-    QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
 
-protected:
-    DataEndianness e;
+ protected:
+   DataEndianness e;
 };
 
-class QUtf32BECodec : public QUtf32Codec {
-public:
-    QUtf32BECodec() : QUtf32Codec() { e = BigEndianness; }
-    QByteArray name() const;
-    QList<QByteArray> aliases() const;
-    int mibEnum() const;
+class QUtf32BECodec : public QUtf32Codec
+{
+ public:
+   QUtf32BECodec() : QUtf32Codec() {
+      e = BigEndianness;
+   }
+   QByteArray name() const;
+   QList<QByteArray> aliases() const;
+   int mibEnum() const;
 };
 
-class QUtf32LECodec : public QUtf32Codec {
-public:
-    QUtf32LECodec() : QUtf32Codec() { e = LittleEndianness; }
-    QByteArray name() const;
-    QList<QByteArray> aliases() const;
-    int mibEnum() const;
+class QUtf32LECodec : public QUtf32Codec
+{
+ public:
+   QUtf32LECodec() : QUtf32Codec() {
+      e = LittleEndianness;
+   }
+   QByteArray name() const;
+   QList<QByteArray> aliases() const;
+   int mibEnum() const;
 };
 
 

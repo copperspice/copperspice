@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -47,202 +47,203 @@ class QProcessEnvironmentPrivate;
 
 class Q_CORE_EXPORT QProcessEnvironment
 {
-public:
-    QProcessEnvironment();
-    QProcessEnvironment(const QProcessEnvironment &other);
-    ~QProcessEnvironment();
-    QProcessEnvironment &operator=(const QProcessEnvironment &other);
+ public:
+   QProcessEnvironment();
+   QProcessEnvironment(const QProcessEnvironment &other);
+   ~QProcessEnvironment();
+   QProcessEnvironment &operator=(const QProcessEnvironment &other);
 
-    bool operator==(const QProcessEnvironment &other) const;
-    inline bool operator!=(const QProcessEnvironment &other) const
-    { return !(*this == other); }
+   bool operator==(const QProcessEnvironment &other) const;
+   inline bool operator!=(const QProcessEnvironment &other) const {
+      return !(*this == other);
+   }
 
-    bool isEmpty() const;
-    void clear();
+   bool isEmpty() const;
+   void clear();
 
-    bool contains(const QString &name) const;
-    void insert(const QString &name, const QString &value);
-    void remove(const QString &name);
-    QString value(const QString &name, const QString &defaultValue = QString()) const;
+   bool contains(const QString &name) const;
+   void insert(const QString &name, const QString &value);
+   void remove(const QString &name);
+   QString value(const QString &name, const QString &defaultValue = QString()) const;
 
-    QStringList toStringList() const;
+   QStringList toStringList() const;
 
-    QStringList keys() const;
+   QStringList keys() const;
 
-    void insert(const QProcessEnvironment &e);
+   void insert(const QProcessEnvironment &e);
 
-    static QProcessEnvironment systemEnvironment();
+   static QProcessEnvironment systemEnvironment();
 
-private:
-    friend class QProcessPrivate;
-    friend class QProcessEnvironmentPrivate;
-    QSharedDataPointer<QProcessEnvironmentPrivate> d;
+ private:
+   friend class QProcessPrivate;
+   friend class QProcessEnvironmentPrivate;
+   QSharedDataPointer<QProcessEnvironmentPrivate> d;
 };
 
 class Q_CORE_EXPORT QProcess : public QIODevice
 {
-    CS_OBJECT(QProcess)
+   CS_OBJECT(QProcess)
 
-public:
-    enum ProcessError {
-        FailedToStart, //### file not found, resource error
-        Crashed,
-        Timedout,
-        ReadError,
-        WriteError,
-        UnknownError
-    };
-    enum ProcessState {
-        NotRunning,
-        Starting,
-        Running
-    };
-    enum ProcessChannel {
-        StandardOutput,
-        StandardError
-    };
-    enum ProcessChannelMode {
-        SeparateChannels,
-        MergedChannels,
-        ForwardedChannels
-    };
-    enum ExitStatus {
-        NormalExit,
-        CrashExit
-    };
+ public:
+   enum ProcessError {
+      FailedToStart, //### file not found, resource error
+      Crashed,
+      Timedout,
+      ReadError,
+      WriteError,
+      UnknownError
+   };
+   enum ProcessState {
+      NotRunning,
+      Starting,
+      Running
+   };
+   enum ProcessChannel {
+      StandardOutput,
+      StandardError
+   };
+   enum ProcessChannelMode {
+      SeparateChannels,
+      MergedChannels,
+      ForwardedChannels
+   };
+   enum ExitStatus {
+      NormalExit,
+      CrashExit
+   };
 
-    explicit QProcess(QObject *parent = 0);
-    virtual ~QProcess();
+   explicit QProcess(QObject *parent = 0);
+   virtual ~QProcess();
 
-    void start(const QString &program, const QStringList &arguments, OpenMode mode = ReadWrite);
-    void start(const QString &program, OpenMode mode = ReadWrite);
+   void start(const QString &program, const QStringList &arguments, OpenMode mode = ReadWrite);
+   void start(const QString &program, OpenMode mode = ReadWrite);
 
-    ProcessChannelMode readChannelMode() const;
-    void setReadChannelMode(ProcessChannelMode mode);
-    ProcessChannelMode processChannelMode() const;
-    void setProcessChannelMode(ProcessChannelMode mode);
+   ProcessChannelMode readChannelMode() const;
+   void setReadChannelMode(ProcessChannelMode mode);
+   ProcessChannelMode processChannelMode() const;
+   void setProcessChannelMode(ProcessChannelMode mode);
 
-    ProcessChannel readChannel() const;
-    void setReadChannel(ProcessChannel channel);
+   ProcessChannel readChannel() const;
+   void setReadChannel(ProcessChannel channel);
 
-    void closeReadChannel(ProcessChannel channel);
-    void closeWriteChannel();
+   void closeReadChannel(ProcessChannel channel);
+   void closeWriteChannel();
 
-    void setStandardInputFile(const QString &fileName);
-    void setStandardOutputFile(const QString &fileName, OpenMode mode = Truncate);
-    void setStandardErrorFile(const QString &fileName, OpenMode mode = Truncate);
-    void setStandardOutputProcess(QProcess *destination);
+   void setStandardInputFile(const QString &fileName);
+   void setStandardOutputFile(const QString &fileName, OpenMode mode = Truncate);
+   void setStandardErrorFile(const QString &fileName, OpenMode mode = Truncate);
+   void setStandardOutputProcess(QProcess *destination);
 
 #if defined(Q_OS_WIN)
-    QString nativeArguments() const;
-    void setNativeArguments(const QString &arguments);
+   QString nativeArguments() const;
+   void setNativeArguments(const QString &arguments);
 #endif
 
-    QString workingDirectory() const;
-    void setWorkingDirectory(const QString &dir);
+   QString workingDirectory() const;
+   void setWorkingDirectory(const QString &dir);
 
-    void setEnvironment(const QStringList &environment);
-    QStringList environment() const;
-    void setProcessEnvironment(const QProcessEnvironment &environment);
-    QProcessEnvironment processEnvironment() const;
+   void setEnvironment(const QStringList &environment);
+   QStringList environment() const;
+   void setProcessEnvironment(const QProcessEnvironment &environment);
+   QProcessEnvironment processEnvironment() const;
 
-	 // CopperSpice - method was called error()
-    QProcess::ProcessError errorCode() const;		
+   // CopperSpice - method was called error()
+   QProcess::ProcessError errorCode() const;
 
-    QProcess::ProcessState state() const;
+   QProcess::ProcessState state() const;
 
-    // #### Qt5/Q_PID is a pointer on Windows and a value on Unix
-    Q_PID pid() const;
+   // #### Qt5/Q_PID is a pointer on Windows and a value on Unix
+   Q_PID pid() const;
 
-    bool waitForStarted(int msecs = 30000);
-    bool waitForReadyRead(int msecs = 30000);
-    bool waitForBytesWritten(int msecs = 30000);
-    bool waitForFinished(int msecs = 30000);
+   bool waitForStarted(int msecs = 30000);
+   bool waitForReadyRead(int msecs = 30000);
+   bool waitForBytesWritten(int msecs = 30000);
+   bool waitForFinished(int msecs = 30000);
 
-    QByteArray readAllStandardOutput();
-    QByteArray readAllStandardError();
+   QByteArray readAllStandardOutput();
+   QByteArray readAllStandardError();
 
-    int exitCode() const;
-    QProcess::ExitStatus exitStatus() const;
+   int exitCode() const;
+   QProcess::ExitStatus exitStatus() const;
 
-    // QIODevice
-    qint64 bytesAvailable() const;
-    qint64 bytesToWrite() const;
-    bool isSequential() const;
-    bool canReadLine() const;
-    void close();
-    bool atEnd() const;
+   // QIODevice
+   qint64 bytesAvailable() const;
+   qint64 bytesToWrite() const;
+   bool isSequential() const;
+   bool canReadLine() const;
+   void close();
+   bool atEnd() const;
 
-    static int execute(const QString &program, const QStringList &arguments);
-    static int execute(const QString &program);
+   static int execute(const QString &program, const QStringList &arguments);
+   static int execute(const QString &program);
 
-    static bool startDetached(const QString &program, const QStringList &arguments, const QString &workingDirectory,
-                              qint64 *pid = 0);
-    static bool startDetached(const QString &program, const QStringList &arguments);
-    static bool startDetached(const QString &program);
+   static bool startDetached(const QString &program, const QStringList &arguments, const QString &workingDirectory,
+                             qint64 *pid = 0);
+   static bool startDetached(const QString &program, const QStringList &arguments);
+   static bool startDetached(const QString &program);
 
-    static QStringList systemEnvironment();
+   static QStringList systemEnvironment();
 
-public :
-    CORE_CS_SLOT_1(Public, void terminate())
-    CORE_CS_SLOT_2(terminate) 
+ public :
+   CORE_CS_SLOT_1(Public, void terminate())
+   CORE_CS_SLOT_2(terminate)
 
-    CORE_CS_SLOT_1(Public, void kill())
-    CORE_CS_SLOT_2(kill) 
+   CORE_CS_SLOT_1(Public, void kill())
+   CORE_CS_SLOT_2(kill)
 
-    CORE_CS_SIGNAL_1(Public, void started())
-    CORE_CS_SIGNAL_2(started) 
+   CORE_CS_SIGNAL_1(Public, void started())
+   CORE_CS_SIGNAL_2(started)
 
-    CORE_CS_SIGNAL_1(Public, void finished(int exitCode))
-    CORE_CS_SIGNAL_OVERLOAD(finished,(int),exitCode)
- 
-    CORE_CS_SIGNAL_1(Public, void finished(int exitCode,QProcess::ExitStatus exitStatus))
-    CORE_CS_SIGNAL_OVERLOAD(finished,(int,QProcess::ExitStatus),exitCode,exitStatus) 
+   CORE_CS_SIGNAL_1(Public, void finished(int exitCode))
+   CORE_CS_SIGNAL_OVERLOAD(finished, (int), exitCode)
 
-    CORE_CS_SIGNAL_1(Public, void error(QProcess::ProcessError error))
-    CORE_CS_SIGNAL_2(error,error) 
+   CORE_CS_SIGNAL_1(Public, void finished(int exitCode, QProcess::ExitStatus exitStatus))
+   CORE_CS_SIGNAL_OVERLOAD(finished, (int, QProcess::ExitStatus), exitCode, exitStatus)
 
-    CORE_CS_SIGNAL_1(Public, void stateChanged(QProcess::ProcessState state))
-    CORE_CS_SIGNAL_2(stateChanged,state) 
+   CORE_CS_SIGNAL_1(Public, void error(QProcess::ProcessError error))
+   CORE_CS_SIGNAL_2(error, error)
 
-    CORE_CS_SIGNAL_1(Public, void readyReadStandardOutput())
-    CORE_CS_SIGNAL_2(readyReadStandardOutput) 
+   CORE_CS_SIGNAL_1(Public, void stateChanged(QProcess::ProcessState state))
+   CORE_CS_SIGNAL_2(stateChanged, state)
 
-    CORE_CS_SIGNAL_1(Public, void readyReadStandardError())
-    CORE_CS_SIGNAL_2(readyReadStandardError) 
+   CORE_CS_SIGNAL_1(Public, void readyReadStandardOutput())
+   CORE_CS_SIGNAL_2(readyReadStandardOutput)
 
-protected:
-    void setProcessState(ProcessState state);
+   CORE_CS_SIGNAL_1(Public, void readyReadStandardError())
+   CORE_CS_SIGNAL_2(readyReadStandardError)
 
-    virtual void setupChildProcess();
+ protected:
+   void setProcessState(ProcessState state);
 
-    // QIODevice
-    qint64 readData(char *data, qint64 maxlen);
-    qint64 writeData(const char *data, qint64 len);
+   virtual void setupChildProcess();
 
-private:
-    Q_DECLARE_PRIVATE(QProcess)
-    Q_DISABLE_COPY(QProcess)
+   // QIODevice
+   qint64 readData(char *data, qint64 maxlen);
+   qint64 writeData(const char *data, qint64 len);
 
-	 CORE_CS_SLOT_1(Private, bool _q_canReadStandardOutput())
-    CORE_CS_SLOT_2(_q_canReadStandardOutput)
+ private:
+   Q_DECLARE_PRIVATE(QProcess)
+   Q_DISABLE_COPY(QProcess)
 
-	 CORE_CS_SLOT_1(Private, bool _q_canReadStandardError())
-    CORE_CS_SLOT_2(_q_canReadStandardError)
+   CORE_CS_SLOT_1(Private, bool _q_canReadStandardOutput())
+   CORE_CS_SLOT_2(_q_canReadStandardOutput)
 
-	 CORE_CS_SLOT_1(Private, bool _q_canWrite())
-    CORE_CS_SLOT_2(_q_canWrite)
+   CORE_CS_SLOT_1(Private, bool _q_canReadStandardError())
+   CORE_CS_SLOT_2(_q_canReadStandardError)
 
-	 CORE_CS_SLOT_1(Private, bool _q_startupNotification())
-    CORE_CS_SLOT_2(_q_startupNotification)
+   CORE_CS_SLOT_1(Private, bool _q_canWrite())
+   CORE_CS_SLOT_2(_q_canWrite)
 
-	 CORE_CS_SLOT_1(Private, bool _q_processDied())
-    CORE_CS_SLOT_2(_q_processDied)
+   CORE_CS_SLOT_1(Private, bool _q_startupNotification())
+   CORE_CS_SLOT_2(_q_startupNotification)
 
-	 CORE_CS_SLOT_1(Private, void _q_notified())
-    CORE_CS_SLOT_2(_q_notified)
- 
-    friend class QProcessManager;
+   CORE_CS_SLOT_1(Private, bool _q_processDied())
+   CORE_CS_SLOT_2(_q_processDied)
+
+   CORE_CS_SLOT_1(Private, void _q_notified())
+   CORE_CS_SLOT_2(_q_notified)
+
+   friend class QProcessManager;
 };
 
 #endif // QT_NO_PROCESS

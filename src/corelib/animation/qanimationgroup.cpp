@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -81,7 +81,7 @@ QT_BEGIN_NAMESPACE
     \a parent is passed to QObject's constructor.
 */
 QAnimationGroup::QAnimationGroup(QObject *parent)
-    : QAbstractAnimation(*new QAnimationGroupPrivate, parent)
+   : QAbstractAnimation(*new QAnimationGroupPrivate, parent)
 {
 }
 
@@ -89,7 +89,7 @@ QAnimationGroup::QAnimationGroup(QObject *parent)
     \internal
 */
 QAnimationGroup::QAnimationGroup(QAnimationGroupPrivate &dd, QObject *parent)
-    : QAbstractAnimation(dd, parent)
+   : QAbstractAnimation(dd, parent)
 {
 }
 
@@ -109,14 +109,14 @@ QAnimationGroup::~QAnimationGroup()
 */
 QAbstractAnimation *QAnimationGroup::animationAt(int index) const
 {
-    Q_D(const QAnimationGroup);
+   Q_D(const QAnimationGroup);
 
-    if (index < 0 || index >= d->animations.size()) {
-        qWarning("QAnimationGroup::animationAt: index is out of bounds");
-        return 0;
-    }
+   if (index < 0 || index >= d->animations.size()) {
+      qWarning("QAnimationGroup::animationAt: index is out of bounds");
+      return 0;
+   }
 
-    return d->animations.at(index);
+   return d->animations.at(index);
 }
 
 
@@ -127,8 +127,8 @@ QAbstractAnimation *QAnimationGroup::animationAt(int index) const
 */
 int QAnimationGroup::animationCount() const
 {
-    Q_D(const QAnimationGroup);
-    return d->animations.size();
+   Q_D(const QAnimationGroup);
+   return d->animations.size();
 }
 
 /*!
@@ -139,8 +139,8 @@ int QAnimationGroup::animationCount() const
 */
 int QAnimationGroup::indexOfAnimation(QAbstractAnimation *animation) const
 {
-    Q_D(const QAnimationGroup);
-    return d->animations.indexOf(animation);
+   Q_D(const QAnimationGroup);
+   return d->animations.indexOf(animation);
 }
 
 /*!
@@ -153,8 +153,8 @@ int QAnimationGroup::indexOfAnimation(QAbstractAnimation *animation) const
 */
 void QAnimationGroup::addAnimation(QAbstractAnimation *animation)
 {
-    Q_D(QAnimationGroup);
-    insertAnimation(d->animations.count(), animation);
+   Q_D(QAnimationGroup);
+   insertAnimation(d->animations.count(), animation);
 }
 
 /*!
@@ -168,21 +168,22 @@ void QAnimationGroup::addAnimation(QAbstractAnimation *animation)
 */
 void QAnimationGroup::insertAnimation(int index, QAbstractAnimation *animation)
 {
-    Q_D(QAnimationGroup);
+   Q_D(QAnimationGroup);
 
-    if (index < 0 || index > d->animations.size()) {
-        qWarning("QAnimationGroup::insertAnimation: index is out of bounds");
-        return;
-    }
+   if (index < 0 || index > d->animations.size()) {
+      qWarning("QAnimationGroup::insertAnimation: index is out of bounds");
+      return;
+   }
 
-    if (QAnimationGroup *oldGroup = animation->group())
-        oldGroup->removeAnimation(animation);
+   if (QAnimationGroup *oldGroup = animation->group()) {
+      oldGroup->removeAnimation(animation);
+   }
 
-    d->animations.insert(index, animation);
-    QAbstractAnimationPrivate::get(animation)->group = this;
-    // this will make sure that ChildAdded event is sent to 'this'
-    animation->setParent(this);
-    d->animationInsertedAt(index);
+   d->animations.insert(index, animation);
+   QAbstractAnimationPrivate::get(animation)->group = this;
+   // this will make sure that ChildAdded event is sent to 'this'
+   animation->setParent(this);
+   d->animationInsertedAt(index);
 }
 
 /*!
@@ -193,19 +194,19 @@ void QAnimationGroup::insertAnimation(int index, QAbstractAnimation *animation)
 */
 void QAnimationGroup::removeAnimation(QAbstractAnimation *animation)
 {
-    Q_D(QAnimationGroup);
+   Q_D(QAnimationGroup);
 
-    if (!animation) {
-        qWarning("QAnimationGroup::remove: cannot remove null animation");
-        return;
-    }
-    int index = d->animations.indexOf(animation);
-    if (index == -1) {
-        qWarning("QAnimationGroup::remove: animation is not part of this group");
-        return;
-    }
+   if (!animation) {
+      qWarning("QAnimationGroup::remove: cannot remove null animation");
+      return;
+   }
+   int index = d->animations.indexOf(animation);
+   if (index == -1) {
+      qWarning("QAnimationGroup::remove: animation is not part of this group");
+      return;
+   }
 
-    takeAnimation(index);
+   takeAnimation(index);
 }
 
 /*!
@@ -217,19 +218,19 @@ void QAnimationGroup::removeAnimation(QAbstractAnimation *animation)
 */
 QAbstractAnimation *QAnimationGroup::takeAnimation(int index)
 {
-    Q_D(QAnimationGroup);
-    if (index < 0 || index >= d->animations.size()) {
-        qWarning("QAnimationGroup::takeAnimation: no animation at index %d", index);
-        return 0;
-    }
-    QAbstractAnimation *animation = d->animations.at(index);
-    QAbstractAnimationPrivate::get(animation)->group = 0;
-    // ### removing from list before doing setParent to avoid inifinite recursion
-    // in ChildRemoved event
-    d->animations.removeAt(index);
-    animation->setParent(0);
-    d->animationRemoved(index, animation);
-    return animation;
+   Q_D(QAnimationGroup);
+   if (index < 0 || index >= d->animations.size()) {
+      qWarning("QAnimationGroup::takeAnimation: no animation at index %d", index);
+      return 0;
+   }
+   QAbstractAnimation *animation = d->animations.at(index);
+   QAbstractAnimationPrivate::get(animation)->group = 0;
+   // ### removing from list before doing setParent to avoid inifinite recursion
+   // in ChildRemoved event
+   d->animations.removeAt(index);
+   animation->setParent(0);
+   d->animationRemoved(index, animation);
+   return animation;
 }
 
 /*!
@@ -240,8 +241,8 @@ QAbstractAnimation *QAnimationGroup::takeAnimation(int index)
 */
 void QAnimationGroup::clear()
 {
-    Q_D(QAnimationGroup);
-    qDeleteAll(d->animations);
+   Q_D(QAnimationGroup);
+   qDeleteAll(d->animations);
 }
 
 /*!
@@ -249,34 +250,36 @@ void QAnimationGroup::clear()
 */
 bool QAnimationGroup::event(QEvent *event)
 {
-    Q_D(QAnimationGroup);
-    if (event->type() == QEvent::ChildAdded) {
-        QChildEvent *childEvent = static_cast<QChildEvent *>(event);
-        if (QAbstractAnimation *a = qobject_cast<QAbstractAnimation *>(childEvent->child())) {
-            if (a->group() != this)
-                addAnimation(a);
-        }
-    } else if (event->type() == QEvent::ChildRemoved) {
-        QChildEvent *childEvent = static_cast<QChildEvent *>(event);
-        QAbstractAnimation *a = static_cast<QAbstractAnimation *>(childEvent->child());
-        // You can only rely on the child being a QObject because in the QEvent::ChildRemoved
-        // case it might be called from the destructor.
-        int index = d->animations.indexOf(a);
-        if (index != -1)
-            takeAnimation(index);
-    }
-    return QAbstractAnimation::event(event);
+   Q_D(QAnimationGroup);
+   if (event->type() == QEvent::ChildAdded) {
+      QChildEvent *childEvent = static_cast<QChildEvent *>(event);
+      if (QAbstractAnimation *a = qobject_cast<QAbstractAnimation *>(childEvent->child())) {
+         if (a->group() != this) {
+            addAnimation(a);
+         }
+      }
+   } else if (event->type() == QEvent::ChildRemoved) {
+      QChildEvent *childEvent = static_cast<QChildEvent *>(event);
+      QAbstractAnimation *a = static_cast<QAbstractAnimation *>(childEvent->child());
+      // You can only rely on the child being a QObject because in the QEvent::ChildRemoved
+      // case it might be called from the destructor.
+      int index = d->animations.indexOf(a);
+      if (index != -1) {
+         takeAnimation(index);
+      }
+   }
+   return QAbstractAnimation::event(event);
 }
 
 
 void QAnimationGroupPrivate::animationRemoved(int index, QAbstractAnimation *)
 {
-    Q_Q(QAnimationGroup);
-    Q_UNUSED(index);
-    if (animations.isEmpty()) {
-        currentTime = 0;
-        q->stop();
-    }
+   Q_Q(QAnimationGroup);
+   Q_UNUSED(index);
+   if (animations.isEmpty()) {
+      currentTime = 0;
+      q->stop();
+   }
 }
 
 QT_END_NAMESPACE

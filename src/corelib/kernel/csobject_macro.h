@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -160,7 +160,7 @@
          return false;  \
       }  \
    private:  \
-
+ 
 
 // ** classInfo
 #define CS_CLASSINFO(name, data) \
@@ -792,7 +792,7 @@
 
 #else
 #define GUI_CS_SLOT_1(access, ...)                                __VA_ARGS__;
-#define GUI_CS_SLOT_2(slotName)   
+#define GUI_CS_SLOT_2(slotName)
 #define GUI_CS_SLOT_OVERLOAD(slotName, argTypes)
 
 #define GUI_CS_SIGNAL_1(access, ...)                              Q_DECL_IMPORT __VA_ARGS__;
@@ -1177,7 +1177,7 @@
 #define WEB_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
 
 #define WEB_CS_INVOKABLE_METHOD_1(access, ...)                    __VA_ARGS__;
-#define WEB_CS_INVOKABLE_METHOD_2(methodName)                     
+#define WEB_CS_INVOKABLE_METHOD_2(methodName)
 
 #define WEB_CS_ENUM(name)
 #define WEB_CS_REGISTER_ENUM(...)                                 __VA_ARGS__          // do not add ;
@@ -1247,8 +1247,8 @@
 
 #define DECL_CS_INVOKABLE_METHOD_1(access, ...)                   __VA_ARGS__;
 #define DECL_CS_INVOKABLE_METHOD_2(methodName)
-#define DECL_CS_REVISION(methodName,revision)                      
-#define DECL_CS_REVISION_OVERLOAD(methodName, revision, argTypes) 
+#define DECL_CS_REVISION(methodName,revision)
+#define DECL_CS_REVISION_OVERLOAD(methodName, revision, argTypes)
 
 #define DECL_CS_ENUM(name)
 #define DECL_CS_REGISTER_ENUM(...)                                __VA_ARGS__          // do not add ;

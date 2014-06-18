@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,47 +30,47 @@
 
 extern "C" {
 
-int q_atomic_trylock_int(volatile int *addr);
-int q_atomic_trylock_ptr(volatile void *addr);
+   int q_atomic_trylock_int(volatile int *addr);
+   int q_atomic_trylock_ptr(volatile void *addr);
 
-Q_CORE_EXPORT int q_atomic_lock_int(volatile int *addr)
-{
-    int returnValue = q_atomic_trylock_int(addr);
+   Q_CORE_EXPORT int q_atomic_lock_int(volatile int *addr)
+   {
+      int returnValue = q_atomic_trylock_int(addr);
 
-    if (returnValue == INT_MIN) {
-        do {
+      if (returnValue == INT_MIN) {
+         do {
             // spin until we think we can succeed
             do {
-                sched_yield();
-                returnValue = *addr;
+               sched_yield();
+               returnValue = *addr;
             } while (returnValue == INT_MIN);
-            
+
             // try again
             returnValue = q_atomic_trylock_int(addr);
-        } while (returnValue == INT_MIN);
-    }
+         } while (returnValue == INT_MIN);
+      }
 
-    return returnValue;
-}
+      return returnValue;
+   }
 
-Q_CORE_EXPORT int q_atomic_lock_ptr(volatile void *addr)
-{
-    int returnValue = q_atomic_trylock_ptr(addr);
+   Q_CORE_EXPORT int q_atomic_lock_ptr(volatile void *addr)
+   {
+      int returnValue = q_atomic_trylock_ptr(addr);
 
-    if (returnValue == -1) {
-        do {
+      if (returnValue == -1) {
+         do {
             // spin until we think we can succeed
             do {
-                sched_yield();
-                returnValue = *reinterpret_cast<volatile int *>(addr);
+               sched_yield();
+               returnValue = *reinterpret_cast<volatile int *>(addr);
             } while (returnValue == -1);
 
             // try again
             returnValue = q_atomic_trylock_ptr(addr);
-        } while (returnValue == -1);
-    }
+         } while (returnValue == -1);
+      }
 
-    return returnValue;
-}
+      return returnValue;
+   }
 
 } // extern "C"

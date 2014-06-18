@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,38 +46,38 @@ QT_BEGIN_NAMESPACE
 
 class QFileSystemIterator
 {
-public:
-    QFileSystemIterator(const QFileSystemEntry &entry, QDir::Filters filters,
-            const QStringList &nameFilters, QDirIterator::IteratorFlags flags
-                = QDirIterator::FollowSymlinks | QDirIterator::Subdirectories);
-    ~QFileSystemIterator();
+ public:
+   QFileSystemIterator(const QFileSystemEntry &entry, QDir::Filters filters,
+                       const QStringList &nameFilters, QDirIterator::IteratorFlags flags
+                       = QDirIterator::FollowSymlinks | QDirIterator::Subdirectories);
+   ~QFileSystemIterator();
 
-    bool advance(QFileSystemEntry &fileEntry, QFileSystemMetaData &metaData);
+   bool advance(QFileSystemEntry &fileEntry, QFileSystemMetaData &metaData);
 
-private:
-    QFileSystemEntry::NativePath nativePath;
-    
+ private:
+   QFileSystemEntry::NativePath nativePath;
+
 #if defined(Q_OS_WIN)
-    QFileSystemEntry::NativePath dirPath;
-    HANDLE findFileHandle;
-    QStringList uncShares;
-    bool uncFallback;
-    int uncShareIndex;
-    bool onlyDirs;
+   QFileSystemEntry::NativePath dirPath;
+   HANDLE findFileHandle;
+   QStringList uncShares;
+   bool uncFallback;
+   int uncShareIndex;
+   bool onlyDirs;
 #else
-    QT_DIR *dir;
-    QT_DIRENT *dirEntry;
+   QT_DIR *dir;
+   QT_DIRENT *dirEntry;
 
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS)
-    // for readdir_r
-    QScopedPointer<QT_DIRENT, QScopedPointerPodDeleter> mt_file;
+   // for readdir_r
+   QScopedPointer<QT_DIRENT, QScopedPointerPodDeleter> mt_file;
 
 #endif
-    int lastError;
+   int lastError;
 
 #endif
 
-    Q_DISABLE_COPY(QFileSystemIterator)
+   Q_DISABLE_COPY(QFileSystemIterator)
 };
 
 QT_END_NAMESPACE

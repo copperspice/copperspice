@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,38 +34,38 @@ class QLibraryPrivate;
 
 class Q_CORE_EXPORT QPluginLoader : public QObject
 {
-    CS_OBJECT(QPluginLoader)
+   CS_OBJECT(QPluginLoader)
 
-    CORE_CS_PROPERTY_READ(fileName, fileName)
-    CORE_CS_PROPERTY_WRITE(fileName, setFileName)
-    CORE_CS_PROPERTY_READ(loadHints, loadHints)
-    CORE_CS_PROPERTY_WRITE(loadHints, setLoadHints)
+   CORE_CS_PROPERTY_READ(fileName, fileName)
+   CORE_CS_PROPERTY_WRITE(fileName, setFileName)
+   CORE_CS_PROPERTY_READ(loadHints, loadHints)
+   CORE_CS_PROPERTY_WRITE(loadHints, setLoadHints)
 
-public:
-    explicit QPluginLoader(QObject *parent = 0);
-    explicit QPluginLoader(const QString &fileName, QObject *parent = 0);
-    ~QPluginLoader();
+ public:
+   explicit QPluginLoader(QObject *parent = 0);
+   explicit QPluginLoader(const QString &fileName, QObject *parent = 0);
+   ~QPluginLoader();
 
-    QObject *instance();
+   QObject *instance();
 
-    static QObjectList staticInstances();
+   static QObjectList staticInstances();
 
-    bool load();
-    bool unload();
-    bool isLoaded() const;
+   bool load();
+   bool unload();
+   bool isLoaded() const;
 
-    void setFileName(const QString &fileName);
-    QString fileName() const;
+   void setFileName(const QString &fileName);
+   QString fileName() const;
 
-    QString errorString() const;
+   QString errorString() const;
 
-    void setLoadHints(QLibrary::LoadHints loadHints);
-    QLibrary::LoadHints loadHints() const;
+   void setLoadHints(QLibrary::LoadHints loadHints);
+   QLibrary::LoadHints loadHints() const;
 
-private:
-    QLibraryPrivate *d;
-    bool did_load;
-    Q_DISABLE_COPY(QPluginLoader)
+ private:
+   QLibraryPrivate *d;
+   bool did_load;
+   Q_DISABLE_COPY(QPluginLoader)
 };
 
 QT_END_NAMESPACE

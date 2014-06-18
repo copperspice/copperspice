@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,50 +34,50 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
 {
-    CS_OBJECT(QSignalTransition)
+   CS_OBJECT(QSignalTransition)
 
-    CORE_CS_PROPERTY_READ(senderObject, senderObject)
-    CORE_CS_PROPERTY_WRITE(senderObject, setSenderObject)
+   CORE_CS_PROPERTY_READ(senderObject, senderObject)
+   CORE_CS_PROPERTY_WRITE(senderObject, setSenderObject)
 
-public:
-    QSignalTransition(QState *sourceState = 0);
+ public:
+   QSignalTransition(QState *sourceState = 0);
 
-    template<class SignalClass, class ...SignalArgs>
-    QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState = 0);
+   template<class SignalClass, class ...SignalArgs>
+   QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState = 0);
 
-    ~QSignalTransition();
+   ~QSignalTransition();
 
-    QObject *senderObject() const;
-    void setSenderObject(QObject *sender);
+   QObject *senderObject() const;
+   void setSenderObject(QObject *sender);
 
-    BentoAbstract *get_signalBento() const;
-    
-    void unregister();
-    void maybeRegister();
+   BentoAbstract *get_signalBento() const;
 
-    virtual void callOnTransition(QEvent *e);
-  
-protected:
-    bool eventTest(QEvent *event);
-    void onTransition(QEvent *event);
-    bool event(QEvent *e);
+   void unregister();
+   void maybeRegister();
 
-private:
-    Q_DISABLE_COPY(QSignalTransition)
-   
-    QObject *m_sender;
-    QScopedPointer<BentoAbstract> m_signalBento;
+   virtual void callOnTransition(QEvent *e);
+
+ protected:
+   bool eventTest(QEvent *event);
+   void onTransition(QEvent *event);
+   bool event(QEvent *e);
+
+ private:
+   Q_DISABLE_COPY(QSignalTransition)
+
+   QObject *m_sender;
+   QScopedPointer<BentoAbstract> m_signalBento;
 };
 
 
 template<class SignalClass, class ...SignalArgs>
 QSignalTransition::QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState)
-    : QAbstractTransition(sourceState)
+   : QAbstractTransition(sourceState)
 {
-    m_sender = sender;
+   m_sender = sender;
 
-    // store the signal method pointer in a CS Bento object 
-    m_signalBento.reset(new Bento<void (SignalClass::*)(SignalArgs...)> {signal});
+   // store the signal method pointer in a CS Bento object
+   m_signalBento.reset(new Bento<void (SignalClass::*)(SignalArgs...)> {signal});
 }
 
 #endif //QT_NO_STATEMACHINE

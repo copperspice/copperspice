@@ -9,7 +9,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -19,7 +19,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -28,20 +28,20 @@
 
 // default sizes and offsets (no need to define these when customizing)
 enum {
-    Offset0 = 0x00000000,
-    Offset1 = 0x00008000,
-    Offset2 = 0x00080000,
-    Offset3 = 0x00800000,
+   Offset0 = 0x00000000,
+   Offset1 = 0x00008000,
+   Offset2 = 0x00080000,
+   Offset3 = 0x00800000,
 
-    Size0 = Offset1  - Offset0,
-    Size1 = Offset2  - Offset1,
-    Size2 = Offset3  - Offset2,
-    Size3 = QFreeListDefaultConstants::MaxIndex - Offset3
+   Size0 = Offset1  - Offset0,
+   Size1 = Offset2  - Offset1,
+   Size2 = Offset3  - Offset2,
+   Size3 = QFreeListDefaultConstants::MaxIndex - Offset3
 };
 
 const int QFreeListDefaultConstants::Sizes[QFreeListDefaultConstants::BlockCount] = {
-    Size0,
-    Size1,
-    Size2,
-    Size3
+   Size0,
+   Size1,
+   Size2,
+   Size3
 };

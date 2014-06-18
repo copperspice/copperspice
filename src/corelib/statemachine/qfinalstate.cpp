@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,14 +33,14 @@ QT_BEGIN_NAMESPACE
 
 class QFinalStatePrivate : public QAbstractStatePrivate
 {
-    Q_DECLARE_PUBLIC(QFinalState)
+   Q_DECLARE_PUBLIC(QFinalState)
 
-public:
-    QFinalStatePrivate();
+ public:
+   QFinalStatePrivate();
 };
 
 QFinalStatePrivate::QFinalStatePrivate()
-    : QAbstractStatePrivate(FinalState)
+   : QAbstractStatePrivate(FinalState)
 {
 }
 
@@ -48,7 +48,7 @@ QFinalStatePrivate::QFinalStatePrivate()
   Constructs a new QFinalState object with the given \a parent state.
 */
 QFinalState::QFinalState(QState *parent)
-    : QAbstractState(*new QFinalStatePrivate, parent)
+   : QAbstractState(*new QFinalStatePrivate, parent)
 {
 }
 
@@ -64,7 +64,7 @@ QFinalState::~QFinalState()
 */
 void QFinalState::onEntry(QEvent *event)
 {
-    Q_UNUSED(event);
+   Q_UNUSED(event);
 }
 
 /*!
@@ -72,7 +72,7 @@ void QFinalState::onEntry(QEvent *event)
 */
 void QFinalState::onExit(QEvent *event)
 {
-    Q_UNUSED(event);
+   Q_UNUSED(event);
 }
 
 /*!
@@ -80,7 +80,7 @@ void QFinalState::onExit(QEvent *event)
 */
 bool QFinalState::event(QEvent *e)
 {
-    return QAbstractState::event(e);
+   return QAbstractState::event(e);
 }
 
 QT_END_NAMESPACE

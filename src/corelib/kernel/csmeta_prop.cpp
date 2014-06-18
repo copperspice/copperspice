@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -27,7 +27,7 @@
 #include "csmeta.h"
 #include "qmetaobject.h"
 
-QMetaProperty::QMetaProperty(const char *name, QMetaObject *obj)   
+QMetaProperty::QMetaProperty(const char *name, QMetaObject *obj)
 {
    m_name         = name;
    m_metaObject   = obj;
@@ -78,7 +78,7 @@ bool QMetaProperty::isConstant() const
 }
 
 bool QMetaProperty::isDesignable(const QObject *object) const
-{  
+{
    bool retval;
 
    if (! m_designJar) {
@@ -91,7 +91,7 @@ bool QMetaProperty::isDesignable(const QObject *object) const
 }
 
 bool QMetaProperty::isEnumType() const
-{  
+{
    bool retval = false;
    QMetaEnum enumObj = this->enumerator();
 
@@ -108,7 +108,7 @@ bool QMetaProperty::isFinal() const
 }
 
 bool QMetaProperty::isFlagType() const
-{   
+{
    bool retval = false;
    QMetaEnum enumObj = this->enumerator();
 
@@ -120,7 +120,7 @@ bool QMetaProperty::isFlagType() const
 }
 
 bool QMetaProperty::isReadable() const
-{   
+{
    return m_read_able;
 }
 
@@ -143,7 +143,7 @@ bool QMetaProperty::isScriptable(const QObject *object) const
 }
 
 bool QMetaProperty::isStored(const QObject *object) const
-{  
+{
    bool retval = m_storedJar;
 
    if (! m_storedJar) {
@@ -156,14 +156,14 @@ bool QMetaProperty::isStored(const QObject *object) const
 }
 
 bool QMetaProperty::isUser(const QObject *object) const
-{  
+{
    bool retval = false;
-   
+
    if (! m_userJar) {
-      return false; 
+      return false;
    }
 
-   retval = m_userJar->run<bool>(object);  
+   retval = m_userJar->run<bool>(object);
 
    return retval;
 }
@@ -188,17 +188,17 @@ QMetaMethod QMetaProperty::notifySignal() const
    int id = notifySignalIndex();
 
    if (id == -1) {
-      return QMetaMethod("","", QList<QByteArray>(), QMetaMethod::Private,QMetaMethod::Slot,
-                          QMetaMethod::Attributes(), m_metaObject);
+      return QMetaMethod("", "", QList<QByteArray>(), QMetaMethod::Private, QMetaMethod::Slot,
+                         QMetaMethod::Attributes(), m_metaObject);
 
-   } else  {    
+   } else  {
       return m_metaObject->method(id);
 
-   }   
+   }
 }
 
 int QMetaProperty::notifySignalIndex() const
-{  
+{
    int retval = -1;
 
    if (m_notify_able) {
@@ -230,7 +230,7 @@ int QMetaProperty::propertyIndex() const
 }
 
 QVariant QMetaProperty::read(const QObject *object) const
-{   
+{
    if (! object || ! m_readJar) {
       return QVariant();
    }
@@ -241,7 +241,7 @@ QVariant QMetaProperty::read(const QObject *object) const
 }
 
 bool QMetaProperty::reset(QObject *object) const
-{    
+{
    if (! object || ! m_reset_able) {
       return false;
    }
@@ -331,7 +331,7 @@ int QMetaProperty::userType() const
 }
 
 bool QMetaProperty::write(QObject *object, const QVariant &value) const
-{   
+{
    if (! object || ! m_write_able || ! m_writeJar) {
       return false;
    }
@@ -339,7 +339,7 @@ bool QMetaProperty::write(QObject *object, const QVariant &value) const
    return  m_writeJar->runV(object, value);
 }
 
-// ** internal 
+// ** internal
 void QMetaProperty::setReadMethod(const char *typeName, JarReadAbstract *jarRead)
 {
    if (! jarRead) {

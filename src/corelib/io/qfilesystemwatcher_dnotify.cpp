@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -66,350 +66,368 @@ static void (*qfswd_old_sigio_handler)(int) = 0;
 static void (*qfswd_old_sigio_action)(int, siginfo_t *, void *) = 0;
 static void qfswd_sigio_monitor(int signum, siginfo_t *i, void *v)
 {
-    qt_safe_write(qfswd_fileChanged_pipe[1], reinterpret_cast<char*>(&i->si_fd), sizeof(int));
+   qt_safe_write(qfswd_fileChanged_pipe[1], reinterpret_cast<char *>(&i->si_fd), sizeof(int));
 
-    if (qfswd_old_sigio_handler && qfswd_old_sigio_handler != SIG_IGN)
-        qfswd_old_sigio_handler(signum);
-    if (qfswd_old_sigio_action)
-        qfswd_old_sigio_action(signum, i, v);
+   if (qfswd_old_sigio_handler && qfswd_old_sigio_handler != SIG_IGN) {
+      qfswd_old_sigio_handler(signum);
+   }
+   if (qfswd_old_sigio_action) {
+      qfswd_old_sigio_action(signum, i, v);
+   }
 }
 
 class QDnotifySignalThread : public QThread
 {
-	CS_OBJECT(QDnotifySignalThread)
+   CS_OBJECT(QDnotifySignalThread)
 
-public:
-    QDnotifySignalThread();
-    virtual ~QDnotifySignalThread();
+ public:
+   QDnotifySignalThread();
+   virtual ~QDnotifySignalThread();
 
-    void startNotify();
+   void startNotify();
 
-    virtual void run();
+   virtual void run();
 
-    CORE_CS_SIGNAL_1(Public,void fdChanged(int data))
-    CORE_CS_SIGNAL_2(fdChanged,data)
-	 
-private:
-    QMutex mutex;
-    QWaitCondition wait;
-    bool isExecing;    
+   CORE_CS_SIGNAL_1(Public, void fdChanged(int data))
+   CORE_CS_SIGNAL_2(fdChanged, data)
 
-	 CORE_CS_SLOT_1(Private,void readFromDnotify())
-    CORE_CS_SLOT_2(readFromDnotify)
+ private:
+   QMutex mutex;
+   QWaitCondition wait;
+   bool isExecing;
 
-protected:
-    virtual bool event(QEvent *);
+   CORE_CS_SLOT_1(Private, void readFromDnotify())
+   CORE_CS_SLOT_2(readFromDnotify)
+
+ protected:
+   virtual bool event(QEvent *);
 
 };
 
 Q_GLOBAL_STATIC(QDnotifySignalThread, dnotifySignal)
 
 QDnotifySignalThread::QDnotifySignalThread()
-: isExecing(false)
+   : isExecing(false)
 {
-    moveToThread(this);
+   moveToThread(this);
 
-    qt_safe_pipe(qfswd_fileChanged_pipe, O_NONBLOCK);
+   qt_safe_pipe(qfswd_fileChanged_pipe, O_NONBLOCK);
 
-    struct sigaction oldAction;
-    struct sigaction action;
-    memset(&action, 0, sizeof(action));
-    action.sa_sigaction = qfswd_sigio_monitor;
-    action.sa_flags = SA_SIGINFO;
-    ::sigaction(SIGIO, &action, &oldAction);
-    if (!(oldAction.sa_flags & SA_SIGINFO))
-        qfswd_old_sigio_handler = oldAction.sa_handler;
-    else
-        qfswd_old_sigio_action = oldAction.sa_sigaction;
+   struct sigaction oldAction;
+   struct sigaction action;
+   memset(&action, 0, sizeof(action));
+   action.sa_sigaction = qfswd_sigio_monitor;
+   action.sa_flags = SA_SIGINFO;
+   ::sigaction(SIGIO, &action, &oldAction);
+   if (!(oldAction.sa_flags & SA_SIGINFO)) {
+      qfswd_old_sigio_handler = oldAction.sa_handler;
+   } else {
+      qfswd_old_sigio_action = oldAction.sa_sigaction;
+   }
 }
 
 QDnotifySignalThread::~QDnotifySignalThread()
 {
-    if(isRunning()) {
-        quit();
-        QThread::wait();
-    }
+   if (isRunning()) {
+      quit();
+      QThread::wait();
+   }
 }
 
 bool QDnotifySignalThread::event(QEvent *e)
 {
-    if(e->type() == QEvent::User) {
-        QMutexLocker locker(&mutex);
-        isExecing = true;
-        wait.wakeAll();
-        return true;
-    } else {
-        return QThread::event(e);
-    }
+   if (e->type() == QEvent::User) {
+      QMutexLocker locker(&mutex);
+      isExecing = true;
+      wait.wakeAll();
+      return true;
+   } else {
+      return QThread::event(e);
+   }
 }
 
 void QDnotifySignalThread::startNotify()
 {
-    // Note: All this fancy waiting for the thread to enter its event
-    // loop is to avoid nasty messages at app shutdown when the
-    // QDnotifySignalThread singleton is deleted
-    start();
-    mutex.lock();
-    while(!isExecing)
-        wait.wait(&mutex);
-    mutex.unlock();
+   // Note: All this fancy waiting for the thread to enter its event
+   // loop is to avoid nasty messages at app shutdown when the
+   // QDnotifySignalThread singleton is deleted
+   start();
+   mutex.lock();
+   while (!isExecing) {
+      wait.wait(&mutex);
+   }
+   mutex.unlock();
 }
 
 void QDnotifySignalThread::run()
 {
-    QSocketNotifier sn(qfswd_fileChanged_pipe[0], QSocketNotifier::Read, this);
-    connect(&sn, SIGNAL(activated(int)), this, SLOT(readFromDnotify()));
+   QSocketNotifier sn(qfswd_fileChanged_pipe[0], QSocketNotifier::Read, this);
+   connect(&sn, SIGNAL(activated(int)), this, SLOT(readFromDnotify()));
 
-    QCoreApplication::instance()->postEvent(this, new QEvent(QEvent::User));
-    (void) exec();
+   QCoreApplication::instance()->postEvent(this, new QEvent(QEvent::User));
+   (void) exec();
 }
 
 void QDnotifySignalThread::readFromDnotify()
 {
-    int fd;
-    int readrv = qt_safe_read(qfswd_fileChanged_pipe[0], reinterpret_cast<char*>(&fd), sizeof(int));
-    // Only expect EAGAIN or EINTR.  Other errors are assumed to be impossible.
-    if(readrv != -1) {
-        Q_ASSERT(readrv == sizeof(int));
-        Q_UNUSED(readrv);
+   int fd;
+   int readrv = qt_safe_read(qfswd_fileChanged_pipe[0], reinterpret_cast<char *>(&fd), sizeof(int));
+   // Only expect EAGAIN or EINTR.  Other errors are assumed to be impossible.
+   if (readrv != -1) {
+      Q_ASSERT(readrv == sizeof(int));
+      Q_UNUSED(readrv);
 
-        if(0 == fd)
-            quit();
-        else
-            emit fdChanged(fd);
-    }
+      if (0 == fd) {
+         quit();
+      } else {
+         emit fdChanged(fd);
+      }
+   }
 }
 
 QDnotifyFileSystemWatcherEngine::QDnotifyFileSystemWatcherEngine()
 {
-    QObject::connect(dnotifySignal(), SIGNAL(fdChanged(int)), this, SLOT(refresh(int)), Qt::DirectConnection);
+   QObject::connect(dnotifySignal(), SIGNAL(fdChanged(int)), this, SLOT(refresh(int)), Qt::DirectConnection);
 }
 
 QDnotifyFileSystemWatcherEngine::~QDnotifyFileSystemWatcherEngine()
 {
-    QMutexLocker locker(&mutex);
+   QMutexLocker locker(&mutex);
 
-    for(QHash<int, Directory>::ConstIterator iter = fdToDirectory.constBegin();
-            iter != fdToDirectory.constEnd();
-            ++iter) {
-        qt_safe_close(iter->fd);
-        if(iter->parentFd)
-            qt_safe_close(iter->parentFd);
-    }
+   for (QHash<int, Directory>::ConstIterator iter = fdToDirectory.constBegin();
+         iter != fdToDirectory.constEnd();
+         ++iter) {
+      qt_safe_close(iter->fd);
+      if (iter->parentFd) {
+         qt_safe_close(iter->parentFd);
+      }
+   }
 }
 
 QDnotifyFileSystemWatcherEngine *QDnotifyFileSystemWatcherEngine::create()
 {
-    return new QDnotifyFileSystemWatcherEngine();
+   return new QDnotifyFileSystemWatcherEngine();
 }
 
 void QDnotifyFileSystemWatcherEngine::run()
 {
-    qFatal("QDnotifyFileSystemWatcherEngine thread should not be run");
+   qFatal("QDnotifyFileSystemWatcherEngine thread should not be run");
 }
 
-QStringList QDnotifyFileSystemWatcherEngine::addPaths(const QStringList &paths, QStringList *files, QStringList *directories)
+QStringList QDnotifyFileSystemWatcherEngine::addPaths(const QStringList &paths, QStringList *files,
+      QStringList *directories)
 {
-    QMutexLocker locker(&mutex);
+   QMutexLocker locker(&mutex);
 
-    QStringList p = paths;
-    QMutableListIterator<QString> it(p);
+   QStringList p = paths;
+   QMutableListIterator<QString> it(p);
 
-    while (it.hasNext()) {
-        QString path = it.next();
+   while (it.hasNext()) {
+      QString path = it.next();
 
-        QFileInfo fi(path);
+      QFileInfo fi(path);
 
-        if(!fi.exists()) {
-            continue;
-        }
+      if (!fi.exists()) {
+         continue;
+      }
 
-        bool isDir = fi.isDir();
+      bool isDir = fi.isDir();
 
-        if (isDir && directories->contains(path)) {
-            continue; // Skip monitored directories
-        } else if(!isDir && files->contains(path)) {
-            continue; // Skip monitored files
-        }
+      if (isDir && directories->contains(path)) {
+         continue; // Skip monitored directories
+      } else if (!isDir && files->contains(path)) {
+         continue; // Skip monitored files
+      }
 
-        if(!isDir)
-            path = fi.canonicalPath();
+      if (!isDir) {
+         path = fi.canonicalPath();
+      }
 
-        // Locate the directory entry (creating if needed)
-        int fd = pathToFD[path];
+      // Locate the directory entry (creating if needed)
+      int fd = pathToFD[path];
 
-        if(fd == 0) {
+      if (fd == 0) {
 
-            QT_DIR *d = QT_OPENDIR(path.toUtf8().constData());
-            if(!d) continue; // Could not open directory
-            QT_DIR *parent = 0;
+         QT_DIR *d = QT_OPENDIR(path.toUtf8().constData());
+         if (!d) {
+            continue;   // Could not open directory
+         }
+         QT_DIR *parent = 0;
 
-            QDir parentDir(path);
-            if(!parentDir.isRoot()) {
-                parentDir.cdUp();
-                parent = QT_OPENDIR(parentDir.path().toUtf8().constData());
-                if(!parent) {
-                    QT_CLOSEDIR(d);
-                    continue;
-                }
+         QDir parentDir(path);
+         if (!parentDir.isRoot()) {
+            parentDir.cdUp();
+            parent = QT_OPENDIR(parentDir.path().toUtf8().constData());
+            if (!parent) {
+               QT_CLOSEDIR(d);
+               continue;
             }
+         }
 
-            fd = qt_safe_dup(::dirfd(d));
-            int parentFd = parent ? qt_safe_dup(::dirfd(parent)) : 0;
+         fd = qt_safe_dup(::dirfd(d));
+         int parentFd = parent ? qt_safe_dup(::dirfd(parent)) : 0;
 
-            QT_CLOSEDIR(d);
-            if(parent) QT_CLOSEDIR(parent);
+         QT_CLOSEDIR(d);
+         if (parent) {
+            QT_CLOSEDIR(parent);
+         }
 
-            Q_ASSERT(fd);
-            if(::fcntl(fd, F_SETSIG, SIGIO) ||
+         Q_ASSERT(fd);
+         if (::fcntl(fd, F_SETSIG, SIGIO) ||
                ::fcntl(fd, F_NOTIFY, DN_MODIFY | DN_CREATE | DN_DELETE |
-                                     DN_RENAME | DN_ATTRIB | DN_MULTISHOT) ||
+                       DN_RENAME | DN_ATTRIB | DN_MULTISHOT) ||
                (parent && ::fcntl(parentFd, F_SETSIG, SIGIO)) ||
                (parent && ::fcntl(parentFd, F_NOTIFY, DN_DELETE | DN_RENAME |
-                                            DN_MULTISHOT))) {
-                continue; // Could not set appropriate flags
-            }
+                                  DN_MULTISHOT))) {
+            continue; // Could not set appropriate flags
+         }
 
-            Directory dir;
-            dir.path = path;
-            dir.fd = fd;
-            dir.parentFd = parentFd;
+         Directory dir;
+         dir.path = path;
+         dir.fd = fd;
+         dir.parentFd = parentFd;
 
-            fdToDirectory.insert(fd, dir);
-            pathToFD.insert(path, fd);
-            if(parentFd)
-                parentToFD.insert(parentFd, fd);
-        }
+         fdToDirectory.insert(fd, dir);
+         pathToFD.insert(path, fd);
+         if (parentFd) {
+            parentToFD.insert(parentFd, fd);
+         }
+      }
 
-        Directory &directory = fdToDirectory[fd];
+      Directory &directory = fdToDirectory[fd];
 
-        if(isDir) {
-            directory.isMonitored = true;
-        } else {
-            Directory::File file;
-            file.path = fi.filePath();
-            file.lastWrite = fi.lastModified();
-            directory.files.append(file);
-            pathToFD.insert(fi.filePath(), fd);
-        }
+      if (isDir) {
+         directory.isMonitored = true;
+      } else {
+         Directory::File file;
+         file.path = fi.filePath();
+         file.lastWrite = fi.lastModified();
+         directory.files.append(file);
+         pathToFD.insert(fi.filePath(), fd);
+      }
 
-        it.remove();
+      it.remove();
 
-        if(isDir) {
-            directories->append(path);
-        } else {
-            files->append(fi.filePath());
-        }
-    }
+      if (isDir) {
+         directories->append(path);
+      } else {
+         files->append(fi.filePath());
+      }
+   }
 
-    dnotifySignal()->startNotify();
+   dnotifySignal()->startNotify();
 
-    return p;
+   return p;
 }
 
-QStringList QDnotifyFileSystemWatcherEngine::removePaths(const QStringList &paths, QStringList *files, QStringList *directories)
+QStringList QDnotifyFileSystemWatcherEngine::removePaths(const QStringList &paths, QStringList *files,
+      QStringList *directories)
 {
-    QMutexLocker locker(&mutex);
+   QMutexLocker locker(&mutex);
 
-    QStringList p = paths;
-    QMutableListIterator<QString> it(p);
-    while (it.hasNext()) {
+   QStringList p = paths;
+   QMutableListIterator<QString> it(p);
+   while (it.hasNext()) {
 
-        QString path = it.next();
-        int fd = pathToFD.take(path);
+      QString path = it.next();
+      int fd = pathToFD.take(path);
 
-        if(!fd)
-            continue;
+      if (!fd) {
+         continue;
+      }
 
-        Directory &directory = fdToDirectory[fd];
-        bool isDir = false;
-        if(directory.path == path) {
-            isDir = true;
-            directory.isMonitored = false;
-        } else {
-            for(int ii = 0; ii < directory.files.count(); ++ii) {
-                if(directory.files.at(ii).path == path) {
-                    directory.files.removeAt(ii);
-                    break;
-                }
+      Directory &directory = fdToDirectory[fd];
+      bool isDir = false;
+      if (directory.path == path) {
+         isDir = true;
+         directory.isMonitored = false;
+      } else {
+         for (int ii = 0; ii < directory.files.count(); ++ii) {
+            if (directory.files.at(ii).path == path) {
+               directory.files.removeAt(ii);
+               break;
             }
-        }
+         }
+      }
 
-        if(!directory.isMonitored && directory.files.isEmpty()) {
-            // No longer needed
-            qt_safe_close(directory.fd);
-            pathToFD.remove(directory.path);
-            fdToDirectory.remove(fd);
-        }
+      if (!directory.isMonitored && directory.files.isEmpty()) {
+         // No longer needed
+         qt_safe_close(directory.fd);
+         pathToFD.remove(directory.path);
+         fdToDirectory.remove(fd);
+      }
 
-        if(isDir) {
-            directories->removeAll(path);
-        } else {
-            files->removeAll(path);
-        }
+      if (isDir) {
+         directories->removeAll(path);
+      } else {
+         files->removeAll(path);
+      }
 
-        it.remove();
-    }
+      it.remove();
+   }
 
-    return p;
+   return p;
 }
 
 void QDnotifyFileSystemWatcherEngine::refresh(int fd)
 {
-    QMutexLocker locker(&mutex);
+   QMutexLocker locker(&mutex);
 
-    bool wasParent = false;
-    QHash<int, Directory>::Iterator iter = fdToDirectory.find(fd);
-    if(iter == fdToDirectory.end()) {
-        QHash<int, int>::Iterator pIter = parentToFD.find(fd);
-        if(pIter == parentToFD.end())
-            return;
+   bool wasParent = false;
+   QHash<int, Directory>::Iterator iter = fdToDirectory.find(fd);
+   if (iter == fdToDirectory.end()) {
+      QHash<int, int>::Iterator pIter = parentToFD.find(fd);
+      if (pIter == parentToFD.end()) {
+         return;
+      }
 
-        iter = fdToDirectory.find(*pIter);
-        if (iter == fdToDirectory.end())
-            return;
-        wasParent = true;
-    }
+      iter = fdToDirectory.find(*pIter);
+      if (iter == fdToDirectory.end()) {
+         return;
+      }
+      wasParent = true;
+   }
 
-    Directory &directory = *iter;
+   Directory &directory = *iter;
 
-    if(!wasParent) {
-        for(int ii = 0; ii < directory.files.count(); ++ii) {
-            Directory::File &file = directory.files[ii];
-            if(file.updateInfo()) {
-                // Emit signal
-                QString filePath = file.path;
-                bool removed = !QFileInfo(filePath).exists();
+   if (!wasParent) {
+      for (int ii = 0; ii < directory.files.count(); ++ii) {
+         Directory::File &file = directory.files[ii];
+         if (file.updateInfo()) {
+            // Emit signal
+            QString filePath = file.path;
+            bool removed = !QFileInfo(filePath).exists();
 
-                if(removed) {
-                    directory.files.removeAt(ii);
-                    --ii;
-                }
-
-                emit fileChanged(filePath, removed);
+            if (removed) {
+               directory.files.removeAt(ii);
+               --ii;
             }
-        }
-    }
 
-    if(directory.isMonitored) {
-        // Emit signal
-        bool removed = !QFileInfo(directory.path).exists();
-        QString path = directory.path;
+            emit fileChanged(filePath, removed);
+         }
+      }
+   }
 
-        if(removed)
-            directory.isMonitored = false;
+   if (directory.isMonitored) {
+      // Emit signal
+      bool removed = !QFileInfo(directory.path).exists();
+      QString path = directory.path;
 
-        emit directoryChanged(path, removed);
-    }
+      if (removed) {
+         directory.isMonitored = false;
+      }
 
-    if(!directory.isMonitored && directory.files.isEmpty()) {
-        qt_safe_close(directory.fd);
-        if(directory.parentFd) {
-            qt_safe_close(directory.parentFd);
-            parentToFD.remove(directory.parentFd);
-        }
-        fdToDirectory.erase(iter);
-    }
+      emit directoryChanged(path, removed);
+   }
+
+   if (!directory.isMonitored && directory.files.isEmpty()) {
+      qt_safe_close(directory.fd);
+      if (directory.parentFd) {
+         qt_safe_close(directory.parentFd);
+         parentToFD.remove(directory.parentFd);
+      }
+      fdToDirectory.erase(iter);
+   }
 }
 
 void QDnotifyFileSystemWatcherEngine::stop()
@@ -418,24 +436,24 @@ void QDnotifyFileSystemWatcherEngine::stop()
 
 bool QDnotifyFileSystemWatcherEngine::Directory::File::updateInfo()
 {
-    QFileInfo fi(path);
-    QDateTime nLastWrite = fi.lastModified();
-    uint nOwnerId = fi.ownerId();
-    uint nGroupId = fi.groupId();
-    QFile::Permissions nPermissions = fi.permissions();
+   QFileInfo fi(path);
+   QDateTime nLastWrite = fi.lastModified();
+   uint nOwnerId = fi.ownerId();
+   uint nGroupId = fi.groupId();
+   QFile::Permissions nPermissions = fi.permissions();
 
-    if(nLastWrite != lastWrite ||
-       nOwnerId != ownerId ||
-       nGroupId != groupId ||
-       nPermissions != permissions) {
-        ownerId = nOwnerId;
-        groupId = nGroupId;
-        permissions = nPermissions;
-        lastWrite = nLastWrite;
-        return true;
-    } else {
-        return false;
-    }
+   if (nLastWrite != lastWrite ||
+         nOwnerId != ownerId ||
+         nGroupId != groupId ||
+         nPermissions != permissions) {
+      ownerId = nOwnerId;
+      groupId = nGroupId;
+      permissions = nPermissions;
+      lastWrite = nLastWrite;
+      return true;
+   } else {
+      return false;
+   }
 }
 
 QT_END_NAMESPACE

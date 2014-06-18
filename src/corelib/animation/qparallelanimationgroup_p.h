@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,28 +36,27 @@ QT_BEGIN_NAMESPACE
 
 class QParallelAnimationGroupPrivate : public QAnimationGroupPrivate
 {
-    Q_DECLARE_PUBLIC(QParallelAnimationGroup)
+   Q_DECLARE_PUBLIC(QParallelAnimationGroup)
 
-public:
-    QParallelAnimationGroupPrivate()
-        : lastLoop(0), lastCurrentTime(0)
-    {
-    }
+ public:
+   QParallelAnimationGroupPrivate()
+      : lastLoop(0), lastCurrentTime(0) {
+   }
 
-    QHash<QAbstractAnimation*, int> uncontrolledFinishTime;
-    int lastLoop;
-    int lastCurrentTime;
+   QHash<QAbstractAnimation *, int> uncontrolledFinishTime;
+   int lastLoop;
+   int lastCurrentTime;
 
-    bool shouldAnimationStart(QAbstractAnimation *animation, bool startIfAtEnd) const;
-    void applyGroupState(QAbstractAnimation *animation);
-    bool isUncontrolledAnimationFinished(QAbstractAnimation *anim) const;
-    void connectUncontrolledAnimations();
-    void disconnectUncontrolledAnimations();
+   bool shouldAnimationStart(QAbstractAnimation *animation, bool startIfAtEnd) const;
+   void applyGroupState(QAbstractAnimation *animation);
+   bool isUncontrolledAnimationFinished(QAbstractAnimation *anim) const;
+   void connectUncontrolledAnimations();
+   void disconnectUncontrolledAnimations();
 
-    void animationRemoved(int index, QAbstractAnimation *);
+   void animationRemoved(int index, QAbstractAnimation *);
 
-    // private slot
-    void _q_uncontrolledAnimationFinished();
+   // private slot
+   void _q_uncontrolledAnimationFinished();
 };
 
 QT_END_NAMESPACE

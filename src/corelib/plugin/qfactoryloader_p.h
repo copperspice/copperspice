@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,24 +40,24 @@ class Q_CORE_EXPORT QFactoryLoader : public QObject
    CS_OBJECT(QFactoryLoader)
    Q_DECLARE_PRIVATE(QFactoryLoader)
 
-   public:
-       QFactoryLoader(const char *iid,const QString &suffix = QString(),Qt::CaseSensitivity = Qt::CaseSensitive);
-       ~QFactoryLoader();
-   
-       QStringList keys() const;
-       QObject *instance(const QString &key) const;
-   
-   #ifdef Q_WS_X11
-       QLibraryPrivate *library(const QString &key) const;
-   #endif
-   
-       void update();
-       void updateDir(const QString &pluginDir, QSettings& settings);
-   
-       static void refreshAll();
-   
-   protected:
-   	 QScopedPointer<QFactoryLoaderPrivate> d_ptr;
+ public:
+   QFactoryLoader(const char *iid, const QString &suffix = QString(), Qt::CaseSensitivity = Qt::CaseSensitive);
+   ~QFactoryLoader();
+
+   QStringList keys() const;
+   QObject *instance(const QString &key) const;
+
+#ifdef Q_WS_X11
+   QLibraryPrivate *library(const QString &key) const;
+#endif
+
+   void update();
+   void updateDir(const QString &pluginDir, QSettings &settings);
+
+   static void refreshAll();
+
+ protected:
+   QScopedPointer<QFactoryLoaderPrivate> d_ptr;
 };
 
 QT_END_NAMESPACE

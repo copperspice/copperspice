@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -50,40 +50,41 @@ void QtSharedPointer::ExternalRefCountData::setQObjectShared(const QObject *, bo
 */
 void QtSharedPointer::ExternalRefCountData::checkQObjectShared(const QObject *)
 {
-    if (strongref.load() < 0)
-        qWarning("QSharedPointer: cannot create a QSharedPointer from a QObject-tracking QWeakPointer");
+   if (strongref.load() < 0) {
+      qWarning("QSharedPointer: cannot create a QSharedPointer from a QObject-tracking QWeakPointer");
+   }
 }
 
 QtSharedPointer::ExternalRefCountData *QtSharedPointer::ExternalRefCountData::getAndRef(const QObject *obj)
-{	
-    Q_ASSERT(obj);
+{
+   Q_ASSERT(obj);
 
-	 bool wasDeleted = CSInternalRefCount::get_m_wasDeleted(obj);
-	 std::atomic<QtSharedPointer::ExternalRefCountData *> &sharedRefcount = CSInternalRefCount::get_m_SharedRefCount(obj);
+   bool wasDeleted = CSInternalRefCount::get_m_wasDeleted(obj);
+   std::atomic<QtSharedPointer::ExternalRefCountData *> &sharedRefcount = CSInternalRefCount::get_m_SharedRefCount(obj);
 
-    Q_ASSERT_X(! wasDeleted, "QWeakPointer", "Detected QWeakPointer creation in a QObject being deleted");
+   Q_ASSERT_X(! wasDeleted, "QWeakPointer", "Detected QWeakPointer creation in a QObject being deleted");
 
-    ExternalRefCountData *that = sharedRefcount.load();
-    if (that) {
-        that->weakref.ref();
-        return that;
-    }
+   ExternalRefCountData *that = sharedRefcount.load();
+   if (that) {
+      that->weakref.ref();
+      return that;
+   }
 
-    // we can create the refcount data because it does not exist
-    ExternalRefCountData *x = new ExternalRefCountData(Qt::Uninitialized);
-    x->strongref.store(-1);
-    x->weakref.store(2);  		// the QWeakPointer that called us plus the QObject itself
+   // we can create the refcount data because it does not exist
+   ExternalRefCountData *x = new ExternalRefCountData(Qt::Uninitialized);
+   x->strongref.store(-1);
+   x->weakref.store(2);  		// the QWeakPointer that called us plus the QObject itself
 
-	 ExternalRefCountData *newPtr = 0;
+   ExternalRefCountData *newPtr = 0;
 
-    if (! sharedRefcount.compare_exchange_strong(newPtr, x, std::memory_order_release, std::memory_order_acquire)) {
-        delete x;       
+   if (! sharedRefcount.compare_exchange_strong(newPtr, x, std::memory_order_release, std::memory_order_acquire)) {
+      delete x;
 
-        newPtr->weakref.ref();
-		  x = newPtr; 
-    }
+      newPtr->weakref.ref();
+      x = newPtr;
+   }
 
-    return x;
+   return x;
 }
 
 /**
@@ -93,7 +94,7 @@ QtSharedPointer::ExternalRefCountData *QtSharedPointer::ExternalRefCountData::ge
 */
 QSharedPointer<QObject> QtSharedPointer::sharedPointerFromVariant_internal(const QVariant &variant)
 {
-    return *reinterpret_cast<const QSharedPointer<QObject>*>(variant.constData());
+   return *reinterpret_cast<const QSharedPointer<QObject>*>(variant.constData());
 }
 
 /**
@@ -103,7 +104,7 @@ QSharedPointer<QObject> QtSharedPointer::sharedPointerFromVariant_internal(const
 */
 QWeakPointer<QObject> QtSharedPointer::weakPointerFromVariant_internal(const QVariant &variant)
 {
-    return *reinterpret_cast<const QWeakPointer<QObject>*>(variant.constData());
+   return *reinterpret_cast<const QWeakPointer<QObject>*>(variant.constData());
 }
 
 QT_END_NAMESPACE
@@ -131,62 +132,64 @@ QT_BEGIN_NAMESPACE
 static inline QByteArray saveBacktrace() __attribute__((always_inline));
 static inline QByteArray saveBacktrace()
 {
-    static const int maxFrames = 32;
+   static const int maxFrames = 32;
 
-    QByteArray stacktrace;
-    stacktrace.resize(sizeof(void*) * maxFrames);
-    int stack_size = backtrace((void**)stacktrace.data(), maxFrames);
-    stacktrace.resize(sizeof(void*) * stack_size);
+   QByteArray stacktrace;
+   stacktrace.resize(sizeof(void *) * maxFrames);
+   int stack_size = backtrace((void **)stacktrace.data(), maxFrames);
+   stacktrace.resize(sizeof(void *) * stack_size);
 
-    return stacktrace;
+   return stacktrace;
 }
 
 static void printBacktrace(QByteArray stacktrace)
 {
-    void *const *stack = (void *const *)stacktrace.constData();
-    int stack_size = stacktrace.size() / sizeof(void*);
-    char **stack_symbols = backtrace_symbols(stack, stack_size);
+   void *const *stack = (void *const *)stacktrace.constData();
+   int stack_size = stacktrace.size() / sizeof(void *);
+   char **stack_symbols = backtrace_symbols(stack, stack_size);
 
-    int filter[2];
-    pid_t child = -1;
-    if (pipe(filter) != -1)
-        child = fork();
-    if (child == 0) {
-        // child process
-        dup2(fileno(stderr), fileno(stdout));
-        dup2(filter[0], fileno(stdin));
-        close(filter[0]);
-        close(filter[1]);
-        execlp("c++filt", "c++filt", "-n", NULL);
+   int filter[2];
+   pid_t child = -1;
+   if (pipe(filter) != -1) {
+      child = fork();
+   }
+   if (child == 0) {
+      // child process
+      dup2(fileno(stderr), fileno(stdout));
+      dup2(filter[0], fileno(stdin));
+      close(filter[0]);
+      close(filter[1]);
+      execlp("c++filt", "c++filt", "-n", NULL);
 
-        // execlp failed
-        execl("/bin/cat", "/bin/cat", NULL);
-        _exit(127);
-    }
+      // execlp failed
+      execl("/bin/cat", "/bin/cat", NULL);
+      _exit(127);
+   }
 
-    // parent process
-    close(filter[0]);
-    FILE *output;
-    if (child == -1) {
-        // failed forking
-        close(filter[1]);
-        output = stderr;
-    } else {
-        output = fdopen(filter[1], "w");
-    }
+   // parent process
+   close(filter[0]);
+   FILE *output;
+   if (child == -1) {
+      // failed forking
+      close(filter[1]);
+      output = stderr;
+   } else {
+      output = fdopen(filter[1], "w");
+   }
 
-    fprintf(stderr, "Backtrace of the first creation (most recent frame first):\n");
-    for (int i = 0; i < stack_size; ++i) {
-        if (strlen(stack_symbols[i]))
-            fprintf(output, "#%-2d %s\n", i, stack_symbols[i]);
-        else
-            fprintf(output, "#%-2d %p\n", i, stack[i]);
-    }
+   fprintf(stderr, "Backtrace of the first creation (most recent frame first):\n");
+   for (int i = 0; i < stack_size; ++i) {
+      if (strlen(stack_symbols[i])) {
+         fprintf(output, "#%-2d %s\n", i, stack_symbols[i]);
+      } else {
+         fprintf(output, "#%-2d %p\n", i, stack[i]);
+      }
+   }
 
-    if (child != -1) {
-        fclose(output);
-        waitpid(child, 0, 0);
-    }
+   if (child != -1) {
+      fclose(output);
+      waitpid(child, 0, 0);
+   }
 }
 
 QT_END_NAMESPACE
@@ -194,21 +197,21 @@ QT_END_NAMESPACE
 #  endif  // BACKTRACE_SUPPORTED
 
 namespace {
-    QT_USE_NAMESPACE
-    struct Data {
-        const volatile void *pointer;
+QT_USE_NAMESPACE
+struct Data {
+   const volatile void *pointer;
 #  ifdef BACKTRACE_SUPPORTED
-        QByteArray backtrace;
+   QByteArray backtrace;
 #  endif
-    };
+};
 
-    class KnownPointers
-    {
-    public:
-        QMutex mutex;
-        QHash<const void *, Data> dPointers;
-        QHash<const volatile void *, const void *> dataPointers;
-    };
+class KnownPointers
+{
+ public:
+   QMutex mutex;
+   QHash<const void *, Data> dPointers;
+   QHash<const volatile void *, const void *> dataPointers;
+};
 }
 
 Q_GLOBAL_STATIC(KnownPointers, knownPointers)
@@ -216,7 +219,7 @@ Q_GLOBAL_STATIC(KnownPointers, knownPointers)
 QT_BEGIN_NAMESPACE
 
 namespace QtSharedPointer {
- void internalSafetyCheckCleanCheck();
+void internalSafetyCheckCleanCheck();
 }
 
 /*!
@@ -224,33 +227,34 @@ namespace QtSharedPointer {
 */
 void QtSharedPointer::internalSafetyCheckAdd(const void *d_ptr, const volatile void *ptr)
 {
-    KnownPointers *const kp = knownPointers();
-    if (!kp)
-        return;                 // end-game: the application is being destroyed already
+   KnownPointers *const kp = knownPointers();
+   if (!kp) {
+      return;   // end-game: the application is being destroyed already
+   }
 
-    QMutexLocker lock(&kp->mutex);
-    Q_ASSERT(!kp->dPointers.contains(d_ptr));
+   QMutexLocker lock(&kp->mutex);
+   Q_ASSERT(!kp->dPointers.contains(d_ptr));
 
-    //qDebug("Adding d=%p value=%p", d_ptr, ptr);
+   //qDebug("Adding d=%p value=%p", d_ptr, ptr);
 
-    const void *other_d_ptr = kp->dataPointers.value(ptr, 0);
-    if (other_d_ptr) {
+   const void *other_d_ptr = kp->dataPointers.value(ptr, 0);
+   if (other_d_ptr) {
 #  ifdef BACKTRACE_SUPPORTED
-        printBacktrace(knownPointers()->dPointers.value(other_d_ptr).backtrace);
+      printBacktrace(knownPointers()->dPointers.value(other_d_ptr).backtrace);
 #  endif
-        qFatal("QSharedPointer: internal self-check failed: pointer %p was already tracked "
-               "by another QSharedPointer object %p", ptr, other_d_ptr);
-    }
+      qFatal("QSharedPointer: internal self-check failed: pointer %p was already tracked "
+             "by another QSharedPointer object %p", ptr, other_d_ptr);
+   }
 
-    Data data;
-    data.pointer = ptr;
+   Data data;
+   data.pointer = ptr;
 #  ifdef BACKTRACE_SUPPORTED
-    data.backtrace = saveBacktrace();
+   data.backtrace = saveBacktrace();
 #  endif
 
-    kp->dPointers.insert(d_ptr, data);
-    kp->dataPointers.insert(ptr, d_ptr);
-    Q_ASSERT(kp->dPointers.size() == kp->dataPointers.size());
+   kp->dPointers.insert(d_ptr, data);
+   kp->dataPointers.insert(ptr, d_ptr);
+   Q_ASSERT(kp->dPointers.size() == kp->dataPointers.size());
 }
 
 /*!
@@ -258,28 +262,29 @@ void QtSharedPointer::internalSafetyCheckAdd(const void *d_ptr, const volatile v
 */
 void QtSharedPointer::internalSafetyCheckRemove(const void *d_ptr)
 {
-    KnownPointers *const kp = knownPointers();
-    if (!kp)
-        return;                 // end-game: the application is being destroyed already
+   KnownPointers *const kp = knownPointers();
+   if (!kp) {
+      return;   // end-game: the application is being destroyed already
+   }
 
-    QMutexLocker lock(&kp->mutex);
+   QMutexLocker lock(&kp->mutex);
 
-    QHash<const void *, Data>::iterator it = kp->dPointers.find(d_ptr);
-    if (it == kp->dPointers.end()) {
-        qFatal("QSharedPointer: internal self-check inconsistency: pointer %p was not tracked. "
-               "To use QT_SHAREDPOINTER_TRACK_POINTERS, you have to enable it throughout "
-               "in your code.", d_ptr);
-    }
+   QHash<const void *, Data>::iterator it = kp->dPointers.find(d_ptr);
+   if (it == kp->dPointers.end()) {
+      qFatal("QSharedPointer: internal self-check inconsistency: pointer %p was not tracked. "
+             "To use QT_SHAREDPOINTER_TRACK_POINTERS, you have to enable it throughout "
+             "in your code.", d_ptr);
+   }
 
-    QHash<const volatile void *, const void *>::iterator it2 = kp->dataPointers.find(it->pointer);
-    Q_ASSERT(it2 != kp->dataPointers.end());
+   QHash<const volatile void *, const void *>::iterator it2 = kp->dataPointers.find(it->pointer);
+   Q_ASSERT(it2 != kp->dataPointers.end());
 
-    //qDebug("Removing d=%p value=%p", d_ptr, it->pointer);
+   //qDebug("Removing d=%p value=%p", d_ptr, it->pointer);
 
-    // remove entries
-    kp->dataPointers.erase(it2);
-    kp->dPointers.erase(it);
-    Q_ASSERT(kp->dPointers.size() == kp->dataPointers.size());
+   // remove entries
+   kp->dataPointers.erase(it2);
+   kp->dPointers.erase(it);
+   Q_ASSERT(kp->dPointers.size() == kp->dataPointers.size());
 }
 
 /*!
@@ -289,14 +294,16 @@ void QtSharedPointer::internalSafetyCheckRemove(const void *d_ptr)
 void QtSharedPointer::internalSafetyCheckCleanCheck()
 {
 #  ifdef QT_BUILD_INTERNAL
-    KnownPointers *const kp = knownPointers();
-    Q_ASSERT_X(kp, "internalSafetyCheckSelfCheck()", "Called after global statics deletion!");
+   KnownPointers *const kp = knownPointers();
+   Q_ASSERT_X(kp, "internalSafetyCheckSelfCheck()", "Called after global statics deletion!");
 
-    if (kp->dPointers.size() != kp->dataPointers.size())
-        qFatal("Internal consistency error: the number of pointers is not equal!");
+   if (kp->dPointers.size() != kp->dataPointers.size()) {
+      qFatal("Internal consistency error: the number of pointers is not equal!");
+   }
 
-    if (!kp->dPointers.isEmpty())
-        qFatal("Pointer cleaning failed: %d entries remaining", kp->dPointers.size());
+   if (!kp->dPointers.isEmpty()) {
+      qFatal("Pointer cleaning failed: %d entries remaining", kp->dPointers.size());
+   }
 #  endif
 }
 

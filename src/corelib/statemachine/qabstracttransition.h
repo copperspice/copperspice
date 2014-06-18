@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,50 +46,50 @@ class QAbstractAnimation;
 
 class Q_CORE_EXPORT QAbstractTransition : public QObject
 {
-    CS_OBJECT(QAbstractTransition)
+   CS_OBJECT(QAbstractTransition)
 
-    CORE_CS_PROPERTY_READ(sourceState, sourceState)
-    CORE_CS_PROPERTY_READ(targetState, targetState)
-    CORE_CS_PROPERTY_WRITE(targetState, setTargetState)
-    CORE_CS_PROPERTY_READ(targetStates, targetStates)
-    CORE_CS_PROPERTY_WRITE(targetStates, setTargetStates)
+   CORE_CS_PROPERTY_READ(sourceState, sourceState)
+   CORE_CS_PROPERTY_READ(targetState, targetState)
+   CORE_CS_PROPERTY_WRITE(targetState, setTargetState)
+   CORE_CS_PROPERTY_READ(targetStates, targetStates)
+   CORE_CS_PROPERTY_WRITE(targetStates, setTargetStates)
 
-public:
-    QAbstractTransition(QState *sourceState = 0);
-    virtual ~QAbstractTransition();
+ public:
+   QAbstractTransition(QState *sourceState = 0);
+   virtual ~QAbstractTransition();
 
-    QState *sourceState() const;
-    QAbstractState *targetState() const;
-    void setTargetState(QAbstractState* target);
-    QList<QAbstractState*> targetStates() const;
-    void setTargetStates(const QList<QAbstractState*> &targets);
+   QState *sourceState() const;
+   QAbstractState *targetState() const;
+   void setTargetState(QAbstractState *target);
+   QList<QAbstractState *> targetStates() const;
+   void setTargetStates(const QList<QAbstractState *> &targets);
 
-    QStateMachine *machine() const;
+   QStateMachine *machine() const;
 
 #ifndef QT_NO_ANIMATION
-    void addAnimation(QAbstractAnimation *animation);
-    void removeAnimation(QAbstractAnimation *animation);
-    QList<QAbstractAnimation*> animations() const;
+   void addAnimation(QAbstractAnimation *animation);
+   void removeAnimation(QAbstractAnimation *animation);
+   QList<QAbstractAnimation *> animations() const;
 #endif
 
-    CORE_CS_SIGNAL_1(Public, void triggered())
-    CORE_CS_SIGNAL_2(triggered) 
+   CORE_CS_SIGNAL_1(Public, void triggered())
+   CORE_CS_SIGNAL_2(triggered)
 
-protected:
-    virtual bool eventTest(QEvent *event) = 0;
+ protected:
+   virtual bool eventTest(QEvent *event) = 0;
 
-    virtual void onTransition(QEvent *event) = 0;
+   virtual void onTransition(QEvent *event) = 0;
 
-    bool event(QEvent *e);
+   bool event(QEvent *e);
 
-    QAbstractTransition(QAbstractTransitionPrivate &dd, QState *parent);
+   QAbstractTransition(QAbstractTransitionPrivate &dd, QState *parent);
 
-    QScopedPointer<QAbstractTransitionPrivate> d_ptr;
+   QScopedPointer<QAbstractTransitionPrivate> d_ptr;
 
-private:
-    Q_DISABLE_COPY(QAbstractTransition)
-    Q_DECLARE_PRIVATE(QAbstractTransition)
- 
+ private:
+   Q_DISABLE_COPY(QAbstractTransition)
+   Q_DECLARE_PRIVATE(QAbstractTransition)
+
 };
 
 #endif //QT_NO_STATEMACHINE

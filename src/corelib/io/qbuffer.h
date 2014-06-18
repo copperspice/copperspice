@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,49 +36,51 @@ class QBufferPrivate;
 
 class Q_CORE_EXPORT QBuffer : public QIODevice
 {
-    CS_OBJECT(QBuffer)
+   CS_OBJECT(QBuffer)
 
-public:
-     explicit QBuffer(QObject *parent = 0);
-     QBuffer(QByteArray *buf, QObject *parent = 0);
+ public:
+   explicit QBuffer(QObject *parent = 0);
+   QBuffer(QByteArray *buf, QObject *parent = 0);
 
-    ~QBuffer();
+   ~QBuffer();
 
-    QByteArray &buffer();
-    const QByteArray &buffer() const;
-    void setBuffer(QByteArray *a);
+   QByteArray &buffer();
+   const QByteArray &buffer() const;
+   void setBuffer(QByteArray *a);
 
-    void setData(const QByteArray &data);
-    inline void setData(const char *data, int len);
-    const QByteArray &data() const;
+   void setData(const QByteArray &data);
+   inline void setData(const char *data, int len);
+   const QByteArray &data() const;
 
-    bool open(OpenMode openMode);
+   bool open(OpenMode openMode);
 
-    void close();
-    qint64 size() const;
-    qint64 pos() const;
-    bool seek(qint64 off);
-    bool atEnd() const;
-    bool canReadLine() const;
+   void close();
+   qint64 size() const;
+   qint64 pos() const;
+   bool seek(qint64 off);
+   bool atEnd() const;
+   bool canReadLine() const;
 
-protected:
+ protected:
 
-    void connectNotify(const char*);
-    void disconnectNotify(const char*);
+   void connectNotify(const char *);
+   void disconnectNotify(const char *);
 
-    qint64 readData(char *data, qint64 maxlen);
-    qint64 writeData(const char *data, qint64 len);
+   qint64 readData(char *data, qint64 maxlen);
+   qint64 writeData(const char *data, qint64 len);
 
-private:
-    Q_DECLARE_PRIVATE(QBuffer)
-    Q_DISABLE_COPY(QBuffer)
+ private:
+   Q_DECLARE_PRIVATE(QBuffer)
+   Q_DISABLE_COPY(QBuffer)
 
-    CORE_CS_SLOT_1(Private, void _q_emitSignals())
-    CORE_CS_SLOT_2(_q_emitSignals)
+   CORE_CS_SLOT_1(Private, void _q_emitSignals())
+   CORE_CS_SLOT_2(_q_emitSignals)
 };
 
 inline void QBuffer::setData(const char *adata, int alen)
-{ setData(QByteArray(adata, alen)); }
+{
+   setData(QByteArray(adata, alen));
+}
 
 QT_END_NAMESPACE
 

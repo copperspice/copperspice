@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,161 +30,168 @@
 
 QT_BEGIN_NAMESPACE
 
-struct QMimeDataStruct
-{
-    QString format;
-    QVariant data;
+struct QMimeDataStruct {
+   QString format;
+   QVariant data;
 };
 
 class QMimeDataPrivate
 {
-    Q_DECLARE_PUBLIC(QMimeData)
+   Q_DECLARE_PUBLIC(QMimeData)
 
-public:
-    virtual ~QMimeDataPrivate() {}
+ public:
+   virtual ~QMimeDataPrivate() {}
 
-    void removeData(const QString &format);
-    void setData(const QString &format, const QVariant &data);
-    QVariant getData(const QString &format) const;
+   void removeData(const QString &format);
+   void setData(const QString &format, const QVariant &data);
+   QVariant getData(const QString &format) const;
 
-    QVariant retrieveTypedData(const QString &format, QVariant::Type type) const;
+   QVariant retrieveTypedData(const QString &format, QVariant::Type type) const;
 
-    QList<QMimeDataStruct> dataList;
+   QList<QMimeDataStruct> dataList;
 
-protected:
-	 QMimeData *q_ptr;
+ protected:
+   QMimeData *q_ptr;
 
 };
 
 void QMimeDataPrivate::removeData(const QString &format)
 {
-    for (int i=0; i<dataList.size(); i++) {
-        if (dataList.at(i).format == format) {
-            dataList.removeAt(i);
-            return;
-        }
-    }
+   for (int i = 0; i < dataList.size(); i++) {
+      if (dataList.at(i).format == format) {
+         dataList.removeAt(i);
+         return;
+      }
+   }
 }
 
 void QMimeDataPrivate::setData(const QString &format, const QVariant &data)
 {
-    // remove it first if the format is already here.
-    removeData(format);
-    QMimeDataStruct mimeData;
-    mimeData.format = format;
-    mimeData.data = data;
-    dataList += mimeData;
+   // remove it first if the format is already here.
+   removeData(format);
+   QMimeDataStruct mimeData;
+   mimeData.format = format;
+   mimeData.data = data;
+   dataList += mimeData;
 }
 
 
 QVariant QMimeDataPrivate::getData(const QString &format) const
 {
-    QVariant data;
-    for (int i=0; i<dataList.size(); i++) {
-        if (dataList.at(i).format == format) {
-            data = dataList.at(i).data;
-            break;
-        }
-    }
-    return data;
+   QVariant data;
+   for (int i = 0; i < dataList.size(); i++) {
+      if (dataList.at(i).format == format) {
+         data = dataList.at(i).data;
+         break;
+      }
+   }
+   return data;
 }
 
 QVariant QMimeDataPrivate::retrieveTypedData(const QString &format, QVariant::Type type) const
 {
-    Q_Q(const QMimeData);
+   Q_Q(const QMimeData);
 
-    QVariant data = q->retrieveData(format, type);
-    if (data.type() == type || !data.isValid())
-        return data;
+   QVariant data = q->retrieveData(format, type);
+   if (data.type() == type || !data.isValid()) {
+      return data;
+   }
 
-    // provide more conversion possiblities than just what QVariant provides
+   // provide more conversion possiblities than just what QVariant provides
 
-    // URLs can be lists as well...
-    if ((type == QVariant::Url && data.type() == QVariant::List)
-        || (type == QVariant::List && data.type() == QVariant::Url))
-        return data;
+   // URLs can be lists as well...
+   if ((type == QVariant::Url && data.type() == QVariant::List)
+         || (type == QVariant::List && data.type() == QVariant::Url)) {
+      return data;
+   }
 
-    // images and pixmaps are interchangeable
-    if ((type == QVariant::Pixmap && data.type() == QVariant::Image)
-        || (type == QVariant::Image && data.type() == QVariant::Pixmap))
-        return data;
+   // images and pixmaps are interchangeable
+   if ((type == QVariant::Pixmap && data.type() == QVariant::Image)
+         || (type == QVariant::Image && data.type() == QVariant::Pixmap)) {
+      return data;
+   }
 
-    if (data.type() == QVariant::ByteArray) {
-        // see if we can convert to the requested type
-        switch(type) {
+   if (data.type() == QVariant::ByteArray) {
+      // see if we can convert to the requested type
+      switch (type) {
 #ifndef QT_NO_TEXTCODEC
-        case QVariant::String: {
+         case QVariant::String: {
             const QByteArray ba = data.toByteArray();
             QTextCodec *codec = QTextCodec::codecForName("utf-8");
-            if (format == QLatin1String("text/html"))
-                codec = QTextCodec::codecForHtml(ba, codec);
+            if (format == QLatin1String("text/html")) {
+               codec = QTextCodec::codecForHtml(ba, codec);
+            }
             return codec->toUnicode(ba);
-        }
+         }
 #endif // QT_NO_TEXTCODEC
-        case QVariant::Color: {
+         case QVariant::Color: {
             QVariant newData = data;
             newData.convert(QVariant::Color);
             return newData;
-        }
-        case QVariant::List: {
-            if (format != QLatin1String("text/uri-list"))
-                break;
+         }
+         case QVariant::List: {
+            if (format != QLatin1String("text/uri-list")) {
+               break;
+            }
             // fall through
-        }
-        case QVariant::Url: {
+         }
+         case QVariant::Url: {
             QByteArray ba = data.toByteArray();
             // Qt 3.x will send text/uri-list with a trailing
             // null-terminator (that is *not* sent for any other
             // text/* mime-type), so chop it off
-            if (ba.endsWith('\0'))
-                ba.chop(1);
+            if (ba.endsWith('\0')) {
+               ba.chop(1);
+            }
 
             QList<QByteArray> urls = ba.split('\n');
             QList<QVariant> list;
             for (int i = 0; i < urls.size(); ++i) {
-                QByteArray ba = urls.at(i).trimmed();
-                if (!ba.isEmpty())
-                    list.append(QUrl::fromEncoded(ba));
+               QByteArray ba = urls.at(i).trimmed();
+               if (!ba.isEmpty()) {
+                  list.append(QUrl::fromEncoded(ba));
+               }
             }
             return list;
-        }
-        default:
+         }
+         default:
             break;
-        }
+      }
 
-    } else if (type == QVariant::ByteArray) {
+   } else if (type == QVariant::ByteArray) {
 
-        // try to convert to bytearray
-        switch(data.type()) {
-        case QVariant::ByteArray:
-        case QVariant::Color:
+      // try to convert to bytearray
+      switch (data.type()) {
+         case QVariant::ByteArray:
+         case QVariant::Color:
             return data.toByteArray();
             break;
-        case QVariant::String:
+         case QVariant::String:
             return data.toString().toUtf8();
             break;
-        case QVariant::Url:
+         case QVariant::Url:
             return data.toUrl().toEncoded();
             break;
-        case QVariant::List: {
+         case QVariant::List: {
             // has to be list of URLs
             QByteArray result;
             QList<QVariant> list = data.toList();
             for (int i = 0; i < list.size(); ++i) {
-                if (list.at(i).type() == QVariant::Url) {
-                    result += list.at(i).toUrl().toEncoded();
-                    result += "\r\n";
-                }
+               if (list.at(i).type() == QVariant::Url) {
+                  result += list.at(i).toUrl().toEncoded();
+                  result += "\r\n";
+               }
             }
-            if (!result.isEmpty())
-                return result;
+            if (!result.isEmpty()) {
+               return result;
+            }
             break;
-        }
-        default:
+         }
+         default:
             break;
-        }
-    }
-    return data;
+      }
+   }
+   return data;
 }
 
 /*!
@@ -275,9 +282,9 @@ QVariant QMimeDataPrivate::retrieveTypedData(const QString &format, QVariant::Ty
     Constructs a new MIME data object with no data in it.
 */
 QMimeData::QMimeData()
-	: QObject(0), d_ptr(new QMimeDataPrivate)
+   : QObject(0), d_ptr(new QMimeDataPrivate)
 {
-	d_ptr->q_ptr = this;
+   d_ptr->q_ptr = this;
 }
 
 /*!
@@ -296,19 +303,20 @@ QMimeData::~QMimeData()
 */
 QList<QUrl> QMimeData::urls() const
 {
-    Q_D(const QMimeData);
-    QVariant data = d->retrieveTypedData(QLatin1String("text/uri-list"), QVariant::List);
-    QList<QUrl> urls;
-    if (data.type() == QVariant::Url)
-        urls.append(data.toUrl());
-    else if (data.type() == QVariant::List) {
-        QList<QVariant> list = data.toList();
-        for (int i = 0; i < list.size(); ++i) {
-            if (list.at(i).type() == QVariant::Url)
-                urls.append(list.at(i).toUrl());
-        }
-    }
-    return urls;
+   Q_D(const QMimeData);
+   QVariant data = d->retrieveTypedData(QLatin1String("text/uri-list"), QVariant::List);
+   QList<QUrl> urls;
+   if (data.type() == QVariant::Url) {
+      urls.append(data.toUrl());
+   } else if (data.type() == QVariant::List) {
+      QList<QVariant> list = data.toList();
+      for (int i = 0; i < list.size(); ++i) {
+         if (list.at(i).type() == QVariant::Url) {
+            urls.append(list.at(i).toUrl());
+         }
+      }
+   }
+   return urls;
 }
 
 /*!
@@ -320,12 +328,13 @@ QList<QUrl> QMimeData::urls() const
 */
 void QMimeData::setUrls(const QList<QUrl> &urls)
 {
-    Q_D(QMimeData);
-    QList<QVariant> list;
-    for (int i = 0; i < urls.size(); ++i)
-        list.append(urls.at(i));
+   Q_D(QMimeData);
+   QList<QVariant> list;
+   for (int i = 0; i < urls.size(); ++i) {
+      list.append(urls.at(i));
+   }
 
-    d->setData(QLatin1String("text/uri-list"), list);
+   d->setData(QLatin1String("text/uri-list"), list);
 }
 
 /*!
@@ -338,7 +347,7 @@ void QMimeData::setUrls(const QList<QUrl> &urls)
 */
 bool QMimeData::hasUrls() const
 {
-    return hasFormat(QLatin1String("text/uri-list"));
+   return hasFormat(QLatin1String("text/uri-list"));
 }
 
 
@@ -350,9 +359,9 @@ bool QMimeData::hasUrls() const
 */
 QString QMimeData::text() const
 {
-    Q_D(const QMimeData);
-    QVariant data = d->retrieveTypedData(QLatin1String("text/plain"), QVariant::String);
-    return data.toString();
+   Q_D(const QMimeData);
+   QVariant data = d->retrieveTypedData(QLatin1String("text/plain"), QVariant::String);
+   return data.toString();
 }
 
 /*!
@@ -363,8 +372,8 @@ QString QMimeData::text() const
 */
 void QMimeData::setText(const QString &text)
 {
-    Q_D(QMimeData);
-    d->setData(QLatin1String("text/plain"), text);
+   Q_D(QMimeData);
+   d->setData(QLatin1String("text/plain"), text);
 }
 
 /*!
@@ -375,7 +384,7 @@ void QMimeData::setText(const QString &text)
 */
 bool QMimeData::hasText() const
 {
-    return hasFormat(QLatin1String("text/plain"));
+   return hasFormat(QLatin1String("text/plain"));
 }
 
 /*!
@@ -386,9 +395,9 @@ bool QMimeData::hasText() const
 */
 QString QMimeData::html() const
 {
-    Q_D(const QMimeData);
-    QVariant data = d->retrieveTypedData(QLatin1String("text/html"), QVariant::String);
-    return data.toString();
+   Q_D(const QMimeData);
+   QVariant data = d->retrieveTypedData(QLatin1String("text/html"), QVariant::String);
+   return data.toString();
 }
 
 /*!
@@ -399,8 +408,8 @@ QString QMimeData::html() const
 */
 void QMimeData::setHtml(const QString &html)
 {
-    Q_D(QMimeData);
-    d->setData(QLatin1String("text/html"), html);
+   Q_D(QMimeData);
+   d->setData(QLatin1String("text/html"), html);
 }
 
 /*!
@@ -411,7 +420,7 @@ void QMimeData::setHtml(const QString &html)
 */
 bool QMimeData::hasHtml() const
 {
-    return hasFormat(QLatin1String("text/html"));
+   return hasFormat(QLatin1String("text/html"));
 }
 
 /*!
@@ -428,8 +437,8 @@ bool QMimeData::hasHtml() const
 */
 QVariant QMimeData::imageData() const
 {
-    Q_D(const QMimeData);
-    return d->retrieveTypedData(QLatin1String("application/x-qt-image"), QVariant::Image);
+   Q_D(const QMimeData);
+   return d->retrieveTypedData(QLatin1String("application/x-qt-image"), QVariant::Image);
 }
 
 /*!
@@ -445,8 +454,8 @@ QVariant QMimeData::imageData() const
 */
 void QMimeData::setImageData(const QVariant &image)
 {
-    Q_D(QMimeData);
-    d->setData(QLatin1String("application/x-qt-image"), image);
+   Q_D(QMimeData);
+   d->setData(QLatin1String("application/x-qt-image"), image);
 }
 
 /*!
@@ -457,7 +466,7 @@ void QMimeData::setImageData(const QVariant &image)
 */
 bool QMimeData::hasImage() const
 {
-    return hasFormat(QLatin1String("application/x-qt-image"));
+   return hasFormat(QLatin1String("application/x-qt-image"));
 }
 
 /*!
@@ -475,8 +484,8 @@ bool QMimeData::hasImage() const
 */
 QVariant QMimeData::colorData() const
 {
-    Q_D(const QMimeData);
-    return d->retrieveTypedData(QLatin1String("application/x-color"), QVariant::Color);
+   Q_D(const QMimeData);
+   return d->retrieveTypedData(QLatin1String("application/x-color"), QVariant::Color);
 }
 
 /*!
@@ -488,8 +497,8 @@ QVariant QMimeData::colorData() const
 */
 void QMimeData::setColorData(const QVariant &color)
 {
-    Q_D(QMimeData);
-    d->setData(QLatin1String("application/x-color"), color);
+   Q_D(QMimeData);
+   d->setData(QLatin1String("application/x-color"), color);
 }
 
 
@@ -501,7 +510,7 @@ void QMimeData::setColorData(const QVariant &color)
 */
 bool QMimeData::hasColor() const
 {
-    return hasFormat(QLatin1String("application/x-color"));
+   return hasFormat(QLatin1String("application/x-color"));
 }
 
 /*!
@@ -510,9 +519,9 @@ bool QMimeData::hasColor() const
 */
 QByteArray QMimeData::data(const QString &mimeType) const
 {
-    Q_D(const QMimeData);
-    QVariant data = d->retrieveTypedData(mimeType, QVariant::ByteArray);
-    return data.toByteArray();
+   Q_D(const QMimeData);
+   QVariant data = d->retrieveTypedData(mimeType, QVariant::ByteArray);
+   return data.toByteArray();
 }
 
 /*!
@@ -533,8 +542,8 @@ QByteArray QMimeData::data(const QString &mimeType) const
 */
 void QMimeData::setData(const QString &mimeType, const QByteArray &data)
 {
-    Q_D(QMimeData);
-    d->setData(mimeType, QVariant(data));
+   Q_D(QMimeData);
+   d->setData(mimeType, QVariant(data));
 }
 
 /*!
@@ -549,7 +558,7 @@ void QMimeData::setData(const QString &mimeType, const QByteArray &data)
 */
 bool QMimeData::hasFormat(const QString &mimeType) const
 {
-    return formats().contains(mimeType);
+   return formats().contains(mimeType);
 }
 
 /*!
@@ -565,11 +574,12 @@ bool QMimeData::hasFormat(const QString &mimeType) const
 */
 QStringList QMimeData::formats() const
 {
-    Q_D(const QMimeData);
-    QStringList list;
-    for (int i=0; i<d->dataList.size(); i++)
-        list += d->dataList.at(i).format;
-    return list;
+   Q_D(const QMimeData);
+   QStringList list;
+   for (int i = 0; i < d->dataList.size(); i++) {
+      list += d->dataList.at(i).format;
+   }
+   return list;
 }
 
 /*!
@@ -589,9 +599,9 @@ QStringList QMimeData::formats() const
 */
 QVariant QMimeData::retrieveData(const QString &mimeType, QVariant::Type type) const
 {
-    Q_UNUSED(type);
-    Q_D(const QMimeData);
-    return d->getData(mimeType);
+   Q_UNUSED(type);
+   Q_D(const QMimeData);
+   return d->getData(mimeType);
 }
 
 /*!
@@ -599,8 +609,8 @@ QVariant QMimeData::retrieveData(const QString &mimeType, QVariant::Type type) c
 */
 void QMimeData::clear()
 {
-    Q_D(QMimeData);
-    d->dataList.clear();
+   Q_D(QMimeData);
+   d->dataList.clear();
 }
 
 /*!
@@ -610,8 +620,8 @@ void QMimeData::clear()
 */
 void QMimeData::removeFormat(const QString &mimeType)
 {
-    Q_D(QMimeData);
-    d->removeData(mimeType);
+   Q_D(QMimeData);
+   d->removeData(mimeType);
 }
 
 QT_END_NAMESPACE

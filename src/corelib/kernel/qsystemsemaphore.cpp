@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -158,9 +158,9 @@ QT_BEGIN_NAMESPACE
   \sa acquire(), key()
  */
 QSystemSemaphore::QSystemSemaphore(const QString &key, int initialValue, AccessMode mode)
-    : d(new QSystemSemaphorePrivate)
+   : d(new QSystemSemaphorePrivate)
 {
-    setKey(key, initialValue, mode);
+   setKey(key, initialValue, mode);
 }
 
 /*!
@@ -180,7 +180,7 @@ QSystemSemaphore::QSystemSemaphore(const QString &key, int initialValue, AccessM
 */
 QSystemSemaphore::~QSystemSemaphore()
 {
-    d->cleanHandle();
+   d->cleanHandle();
 }
 
 /*!
@@ -219,25 +219,26 @@ QSystemSemaphore::~QSystemSemaphore()
  */
 void QSystemSemaphore::setKey(const QString &key, int initialValue, AccessMode mode)
 {
-    if (key == d->key && mode == Open)
-        return;
-    d->error = NoError;
-    d->errorString = QString();
+   if (key == d->key && mode == Open) {
+      return;
+   }
+   d->error = NoError;
+   d->errorString = QString();
 #if !defined(Q_OS_WIN) && !defined(QT_POSIX_IPC)
-    // optimization to not destroy/create the file & semaphore
-    if (key == d->key && mode == Create && d->createdSemaphore && d->createdFile) {
-        d->initialValue = initialValue;
-        d->unix_key = -1;
-        d->handle(mode);
-        return;
-    }
+   // optimization to not destroy/create the file & semaphore
+   if (key == d->key && mode == Create && d->createdSemaphore && d->createdFile) {
+      d->initialValue = initialValue;
+      d->unix_key = -1;
+      d->handle(mode);
+      return;
+   }
 #endif
-    d->cleanHandle();
-    d->key = key;
-    d->initialValue = initialValue;
-    // cache the file name so it doesn't have to be generated all the time.
-    d->fileName = d->makeKeyFileName();
-    d->handle(mode);
+   d->cleanHandle();
+   d->key = key;
+   d->initialValue = initialValue;
+   // cache the file name so it doesn't have to be generated all the time.
+   d->fileName = d->makeKeyFileName();
+   d->handle(mode);
 }
 
 /*!
@@ -248,7 +249,7 @@ void QSystemSemaphore::setKey(const QString &key, int initialValue, AccessMode m
  */
 QString QSystemSemaphore::key() const
 {
-    return d->key;
+   return d->key;
 }
 
 /*!
@@ -266,7 +267,7 @@ QString QSystemSemaphore::key() const
  */
 bool QSystemSemaphore::acquire()
 {
-    return d->modifySemaphore(-1);
+   return d->modifySemaphore(-1);
 }
 
 /*!
@@ -292,13 +293,14 @@ bool QSystemSemaphore::acquire()
  */
 bool QSystemSemaphore::release(int n)
 {
-    if (n == 0)
-        return true;
-    if (n < 0) {
-        qWarning("QSystemSemaphore::release: n is negative.");
-        return false;
-    }
-    return d->modifySemaphore(n);
+   if (n == 0) {
+      return true;
+   }
+   if (n < 0) {
+      qWarning("QSystemSemaphore::release: n is negative.");
+      return false;
+   }
+   return d->modifySemaphore(n);
 }
 
 /*!
@@ -309,7 +311,7 @@ bool QSystemSemaphore::release(int n)
  */
 QSystemSemaphore::SystemSemaphoreError QSystemSemaphore::error() const
 {
-    return d->error;
+   return d->error;
 }
 
 /*!
@@ -344,7 +346,7 @@ QSystemSemaphore::SystemSemaphoreError QSystemSemaphore::error() const
  */
 QString QSystemSemaphore::errorString() const
 {
-    return d->errorString;
+   return d->errorString;
 }
 
 #endif // QT_NO_SYSTEMSEMAPHORE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,7 +32,7 @@
 
     For atomic operations on pointers, see the QAtomicPointer class.
 
-    An \e atomic operation is a complex operation that completes without interruption. 
+    An \e atomic operation is a complex operation that completes without interruption.
     The QAtomicInt class provides atomic reference counting, test-and-set, fetch-and-store,
     and fetch-and-add for integers.
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,20 +37,20 @@ class QReadWriteLock;
 
 class Q_CORE_EXPORT QWaitCondition
 {
-public:
-    QWaitCondition();
-    ~QWaitCondition();
+ public:
+   QWaitCondition();
+   ~QWaitCondition();
 
-    bool wait(QMutex *mutex, unsigned long time = ULONG_MAX);
-    bool wait(QReadWriteLock *readWriteLock, unsigned long time = ULONG_MAX);
+   bool wait(QMutex *mutex, unsigned long time = ULONG_MAX);
+   bool wait(QReadWriteLock *readWriteLock, unsigned long time = ULONG_MAX);
 
-    void wakeOne();
-    void wakeAll();
+   void wakeOne();
+   void wakeAll();
 
-private:
-    Q_DISABLE_COPY(QWaitCondition)
+ private:
+   Q_DISABLE_COPY(QWaitCondition)
 
-    QWaitConditionPrivate * d;
+   QWaitConditionPrivate *d;
 };
 
 QT_END_NAMESPACE

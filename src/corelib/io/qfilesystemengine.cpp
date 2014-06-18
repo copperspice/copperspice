@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,130 +43,138 @@ QT_BEGIN_NAMESPACE
 */
 QString QFileSystemEngine::slowCanonicalized(const QString &path)
 {
-    if (path.isEmpty())
-        return path;
+   if (path.isEmpty()) {
+      return path;
+   }
 
-    QFileInfo fi;
-    const QChar slash(QLatin1Char('/'));
-    QString tmpPath = path;
-    int separatorPos = 0;
-    QSet<QString> nonSymlinks;
-    QSet<QString> known;
+   QFileInfo fi;
+   const QChar slash(QLatin1Char('/'));
+   QString tmpPath = path;
+   int separatorPos = 0;
+   QSet<QString> nonSymlinks;
+   QSet<QString> known;
 
-    known.insert(path);
-    do {
+   known.insert(path);
+   do {
 #ifdef Q_OS_WIN
-        if (separatorPos == 0) {
-            if (tmpPath.size() >= 2 && tmpPath.at(0) == slash && tmpPath.at(1) == slash) {
-                // UNC, skip past the first two elements
-                separatorPos = tmpPath.indexOf(slash, 2);
-            } else if (tmpPath.size() >= 3 && tmpPath.at(1) == QLatin1Char(':') && tmpPath.at(2) == slash) {
-                // volume root, skip since it can not be a symlink
-                separatorPos = 2;
-            }
-        }
-        if (separatorPos != -1)
+      if (separatorPos == 0) {
+         if (tmpPath.size() >= 2 && tmpPath.at(0) == slash && tmpPath.at(1) == slash) {
+            // UNC, skip past the first two elements
+            separatorPos = tmpPath.indexOf(slash, 2);
+         } else if (tmpPath.size() >= 3 && tmpPath.at(1) == QLatin1Char(':') && tmpPath.at(2) == slash) {
+            // volume root, skip since it can not be a symlink
+            separatorPos = 2;
+         }
+      }
+      if (separatorPos != -1)
 #endif
-        separatorPos = tmpPath.indexOf(slash, separatorPos + 1);
-        QString prefix = separatorPos == -1 ? tmpPath : tmpPath.left(separatorPos);
+         separatorPos = tmpPath.indexOf(slash, separatorPos + 1);
+      QString prefix = separatorPos == -1 ? tmpPath : tmpPath.left(separatorPos);
 
-        if (
-            !nonSymlinks.contains(prefix)) {
-            fi.setFile(prefix);
-            if (fi.isSymLink()) {
-                QString target = fi.symLinkTarget();
-                if(QFileInfo(target).isRelative())
-                    target = fi.absolutePath() + slash + target;
-                if (separatorPos != -1) {
-                    if (fi.isDir() && !target.endsWith(slash))
-                        target.append(slash);
-                    target.append(tmpPath.mid(separatorPos));
-                }
-                tmpPath = QDir::cleanPath(target);
-                separatorPos = 0;
-
-                if (known.contains(tmpPath))
-                    return QString();
-                known.insert(tmpPath);
-            } else {
-                nonSymlinks.insert(prefix);
+      if (
+         !nonSymlinks.contains(prefix)) {
+         fi.setFile(prefix);
+         if (fi.isSymLink()) {
+            QString target = fi.symLinkTarget();
+            if (QFileInfo(target).isRelative()) {
+               target = fi.absolutePath() + slash + target;
             }
-        }
-    } while (separatorPos != -1);
+            if (separatorPos != -1) {
+               if (fi.isDir() && !target.endsWith(slash)) {
+                  target.append(slash);
+               }
+               target.append(tmpPath.mid(separatorPos));
+            }
+            tmpPath = QDir::cleanPath(target);
+            separatorPos = 0;
 
-    return QDir::cleanPath(tmpPath);
+            if (known.contains(tmpPath)) {
+               return QString();
+            }
+            known.insert(tmpPath);
+         } else {
+            nonSymlinks.insert(prefix);
+         }
+      }
+   } while (separatorPos != -1);
+
+   return QDir::cleanPath(tmpPath);
 }
 
 static inline bool _q_checkEntry(QFileSystemEntry &entry, QFileSystemMetaData &data, bool resolvingEntry)
 {
-    if (resolvingEntry) {
-        if (!QFileSystemEngine::fillMetaData(entry, data, QFileSystemMetaData::ExistsAttribute)
-                || !data.exists()) {
-            data.clear();
-            return false;
-        }
-    }
+   if (resolvingEntry) {
+      if (!QFileSystemEngine::fillMetaData(entry, data, QFileSystemMetaData::ExistsAttribute)
+            || !data.exists()) {
+         data.clear();
+         return false;
+      }
+   }
 
-    return true;
+   return true;
 }
 
 static inline bool _q_checkEntry(QAbstractFileEngine *&engine, bool resolvingEntry)
 {
-    if (resolvingEntry) {
-        if (!(engine->fileFlags(QAbstractFileEngine::FlagsMask) & QAbstractFileEngine::ExistsFlag)) {
-            delete engine;
-            engine = 0;
-            return false;
-        }
-    }
+   if (resolvingEntry) {
+      if (!(engine->fileFlags(QAbstractFileEngine::FlagsMask) & QAbstractFileEngine::ExistsFlag)) {
+         delete engine;
+         engine = 0;
+         return false;
+      }
+   }
 
-    return true;
+   return true;
 }
 
 static bool _q_resolveEntryAndCreateLegacyEngine_recursive(QFileSystemEntry &entry, QFileSystemMetaData &data,
-        QAbstractFileEngine *&engine, bool resolvingEntry = false)
+      QAbstractFileEngine *&engine, bool resolvingEntry = false)
 {
-    QString const &filePath = entry.filePath();
-    if ((engine = qt_custom_file_engine_handler_create(filePath)))
-        return _q_checkEntry(engine, resolvingEntry);
+   QString const &filePath = entry.filePath();
+   if ((engine = qt_custom_file_engine_handler_create(filePath))) {
+      return _q_checkEntry(engine, resolvingEntry);
+   }
 
 #if defined(QT_BUILD_CORE_LIB)
-    for (int prefixSeparator = 0; prefixSeparator < filePath.size(); ++prefixSeparator) {
-        QChar const ch = filePath[prefixSeparator];
-        if (ch == QLatin1Char('/'))
+   for (int prefixSeparator = 0; prefixSeparator < filePath.size(); ++prefixSeparator) {
+      QChar const ch = filePath[prefixSeparator];
+      if (ch == QLatin1Char('/')) {
+         break;
+      }
+
+      if (ch == QLatin1Char(':')) {
+         if (prefixSeparator == 0) {
+            engine = new QResourceFileEngine(filePath);
+            return _q_checkEntry(engine, resolvingEntry);
+         }
+
+         if (prefixSeparator == 1) {
             break;
+         }
 
-        if (ch == QLatin1Char(':')) {
-            if (prefixSeparator == 0) {
-                engine = new QResourceFileEngine(filePath);
-                return _q_checkEntry(engine, resolvingEntry);
+         const QStringList &paths = QDir::searchPaths(filePath.left(prefixSeparator));
+         for (int i = 0; i < paths.count(); i++) {
+            entry = QFileSystemEntry(QDir::cleanPath(paths.at(i) % QLatin1Char('/') % filePath.mid(prefixSeparator + 1)));
+            // Recurse!
+            if (_q_resolveEntryAndCreateLegacyEngine_recursive(entry, data, engine, true)) {
+               return true;
             }
+         }
 
-            if (prefixSeparator == 1)
-                break;
+         // entry may have been clobbered at this point.
+         return false;
+      }
 
-            const QStringList &paths = QDir::searchPaths(filePath.left(prefixSeparator));
-            for (int i = 0; i < paths.count(); i++) {
-                entry = QFileSystemEntry(QDir::cleanPath(paths.at(i) % QLatin1Char('/') % filePath.mid(prefixSeparator + 1)));
-                // Recurse!
-                if (_q_resolveEntryAndCreateLegacyEngine_recursive(entry, data, engine, true))
-                    return true;
-            }
-
-            // entry may have been clobbered at this point.
-            return false;
-        }
-
-        //  There's no need to fully validate the prefix here. Consulting the
-        //  unicode tables could be expensive and validation is already
-        //  performed in QDir::setSearchPaths.
-        //
-        //  if (!ch.isLetterOrNumber())
-        //      break;
-    }
+      //  There's no need to fully validate the prefix here. Consulting the
+      //  unicode tables could be expensive and validation is already
+      //  performed in QDir::setSearchPaths.
+      //
+      //  if (!ch.isLetterOrNumber())
+      //      break;
+   }
 #endif // defined(QT_BUILD_CORE_LIB)
 
-    return _q_checkEntry(entry, data, resolvingEntry);
+   return _q_checkEntry(entry, data, resolvingEntry);
 }
 
 /*!
@@ -180,17 +188,20 @@ static bool _q_resolveEntryAndCreateLegacyEngine_recursive(QFileSystemEntry &ent
     system object.
 */
 QAbstractFileEngine *QFileSystemEngine::resolveEntryAndCreateLegacyEngine(
-        QFileSystemEntry &entry, QFileSystemMetaData &data) {
-    QFileSystemEntry copy = entry;
-    QAbstractFileEngine *engine = 0;
+   QFileSystemEntry &entry, QFileSystemMetaData &data)
+{
+   QFileSystemEntry copy = entry;
+   QAbstractFileEngine *engine = 0;
 
-    if (_q_resolveEntryAndCreateLegacyEngine_recursive(copy, data, engine))
-        // Reset entry to resolved copy.
-        entry = copy;
-    else
-        data.clear();
+   if (_q_resolveEntryAndCreateLegacyEngine_recursive(copy, data, engine))
+      // Reset entry to resolved copy.
+   {
+      entry = copy;
+   } else {
+      data.clear();
+   }
 
-    return engine;
+   return engine;
 }
 
 //these unix functions are in this file, because they are shared by symbian port
@@ -199,132 +210,141 @@ QAbstractFileEngine *QFileSystemEngine::resolveEntryAndCreateLegacyEngine(
 //static
 bool QFileSystemEngine::fillMetaData(int fd, QFileSystemMetaData &data)
 {
-    data.entryFlags &= ~QFileSystemMetaData::PosixStatFlags;
-    data.knownFlagsMask |= QFileSystemMetaData::PosixStatFlags;
+   data.entryFlags &= ~QFileSystemMetaData::PosixStatFlags;
+   data.knownFlagsMask |= QFileSystemMetaData::PosixStatFlags;
 
-    QT_STATBUF statBuffer;
-    if (QT_FSTAT(fd, &statBuffer) == 0) {
-        data.fillFromStatBuf(statBuffer);
-        return true;
-    }
+   QT_STATBUF statBuffer;
+   if (QT_FSTAT(fd, &statBuffer) == 0) {
+      data.fillFromStatBuf(statBuffer);
+      return true;
+   }
 
-    return false;
+   return false;
 }
 
 void QFileSystemMetaData::fillFromStatBuf(const QT_STATBUF &statBuffer)
 {
-    // Permissions
-    if (statBuffer.st_mode & S_IRUSR)
-        entryFlags |= QFileSystemMetaData::OwnerReadPermission;
-    if (statBuffer.st_mode & S_IWUSR)
-        entryFlags |= QFileSystemMetaData::OwnerWritePermission;
-    if (statBuffer.st_mode & S_IXUSR)
-        entryFlags |= QFileSystemMetaData::OwnerExecutePermission;
+   // Permissions
+   if (statBuffer.st_mode & S_IRUSR) {
+      entryFlags |= QFileSystemMetaData::OwnerReadPermission;
+   }
+   if (statBuffer.st_mode & S_IWUSR) {
+      entryFlags |= QFileSystemMetaData::OwnerWritePermission;
+   }
+   if (statBuffer.st_mode & S_IXUSR) {
+      entryFlags |= QFileSystemMetaData::OwnerExecutePermission;
+   }
 
-    if (statBuffer.st_mode & S_IRGRP)
-        entryFlags |= QFileSystemMetaData::GroupReadPermission;
-    if (statBuffer.st_mode & S_IWGRP)
-        entryFlags |= QFileSystemMetaData::GroupWritePermission;
-    if (statBuffer.st_mode & S_IXGRP)
-        entryFlags |= QFileSystemMetaData::GroupExecutePermission;
+   if (statBuffer.st_mode & S_IRGRP) {
+      entryFlags |= QFileSystemMetaData::GroupReadPermission;
+   }
+   if (statBuffer.st_mode & S_IWGRP) {
+      entryFlags |= QFileSystemMetaData::GroupWritePermission;
+   }
+   if (statBuffer.st_mode & S_IXGRP) {
+      entryFlags |= QFileSystemMetaData::GroupExecutePermission;
+   }
 
-    if (statBuffer.st_mode & S_IROTH)
-        entryFlags |= QFileSystemMetaData::OtherReadPermission;
-    if (statBuffer.st_mode & S_IWOTH)
-        entryFlags |= QFileSystemMetaData::OtherWritePermission;
-    if (statBuffer.st_mode & S_IXOTH)
-        entryFlags |= QFileSystemMetaData::OtherExecutePermission;
+   if (statBuffer.st_mode & S_IROTH) {
+      entryFlags |= QFileSystemMetaData::OtherReadPermission;
+   }
+   if (statBuffer.st_mode & S_IWOTH) {
+      entryFlags |= QFileSystemMetaData::OtherWritePermission;
+   }
+   if (statBuffer.st_mode & S_IXOTH) {
+      entryFlags |= QFileSystemMetaData::OtherExecutePermission;
+   }
 
-    // Type
-    if ((statBuffer.st_mode & S_IFMT) == S_IFREG)
-        entryFlags |= QFileSystemMetaData::FileType;
-    else if ((statBuffer.st_mode & S_IFMT) == S_IFDIR)
-        entryFlags |= QFileSystemMetaData::DirectoryType;
-    else
-        entryFlags |= QFileSystemMetaData::SequentialType;
+   // Type
+   if ((statBuffer.st_mode & S_IFMT) == S_IFREG) {
+      entryFlags |= QFileSystemMetaData::FileType;
+   } else if ((statBuffer.st_mode & S_IFMT) == S_IFDIR) {
+      entryFlags |= QFileSystemMetaData::DirectoryType;
+   } else {
+      entryFlags |= QFileSystemMetaData::SequentialType;
+   }
 
-    // Attributes
-    entryFlags |= QFileSystemMetaData::ExistsAttribute;
-    size_ = statBuffer.st_size;
+   // Attributes
+   entryFlags |= QFileSystemMetaData::ExistsAttribute;
+   size_ = statBuffer.st_size;
 #if !defined(QWS) && !defined(Q_WS_QPA) && defined(Q_OS_MAC) \
         && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-    if (statBuffer.st_flags & UF_HIDDEN) {
-        entryFlags |= QFileSystemMetaData::HiddenAttribute;
-        knownFlagsMask |= QFileSystemMetaData::HiddenAttribute;
-    }
+   if (statBuffer.st_flags & UF_HIDDEN) {
+      entryFlags |= QFileSystemMetaData::HiddenAttribute;
+      knownFlagsMask |= QFileSystemMetaData::HiddenAttribute;
+   }
 #endif
 
-    // Times
-    creationTime_ = statBuffer.st_ctime ? statBuffer.st_ctime : statBuffer.st_mtime;
-    modificationTime_ = statBuffer.st_mtime;
-    accessTime_ = statBuffer.st_atime;
-    userId_ = statBuffer.st_uid;
-    groupId_ = statBuffer.st_gid;
+   // Times
+   creationTime_ = statBuffer.st_ctime ? statBuffer.st_ctime : statBuffer.st_mtime;
+   modificationTime_ = statBuffer.st_mtime;
+   accessTime_ = statBuffer.st_atime;
+   userId_ = statBuffer.st_uid;
+   groupId_ = statBuffer.st_gid;
 }
 
 void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
 {
 
 #if defined(_DIRENT_HAVE_D_TYPE) || defined(Q_OS_BSD4)
-    // BSD4 includes Mac OS X
+   // BSD4 includes Mac OS X
 
-    // ### This will clear all entry flags and knownFlagsMask
-    switch (entry.d_type)
-    {
-    case DT_DIR:
-        knownFlagsMask = QFileSystemMetaData::LinkType
-            | QFileSystemMetaData::FileType
-            | QFileSystemMetaData::DirectoryType
-            | QFileSystemMetaData::SequentialType
-            | QFileSystemMetaData::ExistsAttribute;
+   // ### This will clear all entry flags and knownFlagsMask
+   switch (entry.d_type) {
+      case DT_DIR:
+         knownFlagsMask = QFileSystemMetaData::LinkType
+                          | QFileSystemMetaData::FileType
+                          | QFileSystemMetaData::DirectoryType
+                          | QFileSystemMetaData::SequentialType
+                          | QFileSystemMetaData::ExistsAttribute;
 
-        entryFlags = QFileSystemMetaData::DirectoryType
-            | QFileSystemMetaData::ExistsAttribute;
+         entryFlags = QFileSystemMetaData::DirectoryType
+                      | QFileSystemMetaData::ExistsAttribute;
 
-        break;
+         break;
 
-    case DT_BLK:
-    case DT_CHR:
-    case DT_FIFO:
-    case DT_SOCK:
-        // ### System attribute
-        knownFlagsMask = QFileSystemMetaData::LinkType
-            | QFileSystemMetaData::FileType
-            | QFileSystemMetaData::DirectoryType
-            | QFileSystemMetaData::BundleType
-            | QFileSystemMetaData::AliasType
-            | QFileSystemMetaData::SequentialType
-            | QFileSystemMetaData::ExistsAttribute;
+      case DT_BLK:
+      case DT_CHR:
+      case DT_FIFO:
+      case DT_SOCK:
+         // ### System attribute
+         knownFlagsMask = QFileSystemMetaData::LinkType
+                          | QFileSystemMetaData::FileType
+                          | QFileSystemMetaData::DirectoryType
+                          | QFileSystemMetaData::BundleType
+                          | QFileSystemMetaData::AliasType
+                          | QFileSystemMetaData::SequentialType
+                          | QFileSystemMetaData::ExistsAttribute;
 
-        entryFlags = QFileSystemMetaData::SequentialType
-            | QFileSystemMetaData::ExistsAttribute;
+         entryFlags = QFileSystemMetaData::SequentialType
+                      | QFileSystemMetaData::ExistsAttribute;
 
-        break;
+         break;
 
-    case DT_LNK:
-        knownFlagsMask = QFileSystemMetaData::LinkType;
-        entryFlags = QFileSystemMetaData::LinkType;
-        break;
+      case DT_LNK:
+         knownFlagsMask = QFileSystemMetaData::LinkType;
+         entryFlags = QFileSystemMetaData::LinkType;
+         break;
 
-    case DT_REG:
-        knownFlagsMask = QFileSystemMetaData::LinkType
-            | QFileSystemMetaData::FileType
-            | QFileSystemMetaData::DirectoryType
-            | QFileSystemMetaData::BundleType
-            | QFileSystemMetaData::SequentialType
-            | QFileSystemMetaData::ExistsAttribute;
+      case DT_REG:
+         knownFlagsMask = QFileSystemMetaData::LinkType
+                          | QFileSystemMetaData::FileType
+                          | QFileSystemMetaData::DirectoryType
+                          | QFileSystemMetaData::BundleType
+                          | QFileSystemMetaData::SequentialType
+                          | QFileSystemMetaData::ExistsAttribute;
 
-        entryFlags = QFileSystemMetaData::FileType
-            | QFileSystemMetaData::ExistsAttribute;
+         entryFlags = QFileSystemMetaData::FileType
+                      | QFileSystemMetaData::ExistsAttribute;
 
-        break;
+         break;
 
-    case DT_UNKNOWN:
-    default:
-        clear();
-    }
+      case DT_UNKNOWN:
+      default:
+         clear();
+   }
 #else
-    Q_UNUSED(entry)
+   Q_UNUSED(entry)
 
 #endif
 
@@ -337,13 +357,14 @@ QString QFileSystemEngine::resolveUserName(const QFileSystemEntry &entry, QFileS
 {
 
 #if defined(Q_OS_WIN)
-    Q_UNUSED(metaData);
-    return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerUser);
+   Q_UNUSED(metaData);
+   return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerUser);
 
 #else
-    if (!metaData.hasFlags(QFileSystemMetaData::UserId))
-        QFileSystemEngine::fillMetaData(entry, metaData, QFileSystemMetaData::UserId);
-    return resolveUserName(metaData.userId());
+   if (!metaData.hasFlags(QFileSystemMetaData::UserId)) {
+      QFileSystemEngine::fillMetaData(entry, metaData, QFileSystemMetaData::UserId);
+   }
+   return resolveUserName(metaData.userId());
 #endif
 }
 
@@ -352,12 +373,13 @@ QString QFileSystemEngine::resolveGroupName(const QFileSystemEntry &entry, QFile
 {
 
 #if defined(Q_OS_WIN)
-    Q_UNUSED(metaData);
-    return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerGroup);
+   Q_UNUSED(metaData);
+   return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerGroup);
 #else //(Q_OS_UNIX)
-    if (!metaData.hasFlags(QFileSystemMetaData::GroupId))
-        QFileSystemEngine::fillMetaData(entry, metaData, QFileSystemMetaData::GroupId);
-    return resolveGroupName(metaData.groupId());
+   if (!metaData.hasFlags(QFileSystemMetaData::GroupId)) {
+      QFileSystemEngine::fillMetaData(entry, metaData, QFileSystemMetaData::GroupId);
+   }
+   return resolveGroupName(metaData.groupId());
 #endif
 }
 

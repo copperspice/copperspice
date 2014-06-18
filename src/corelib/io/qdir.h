@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,158 +40,174 @@ class QDirPrivate;
 
 class Q_CORE_EXPORT QDir
 {
-protected:
-    QSharedDataPointer<QDirPrivate> d_ptr;
+ protected:
+   QSharedDataPointer<QDirPrivate> d_ptr;
 
-public:
-    enum Filter { Dirs        = 0x001,
-                  Files       = 0x002,
-                  Drives      = 0x004,
-                  NoSymLinks  = 0x008,
-                  AllEntries  = Dirs | Files | Drives,
-                  TypeMask    = 0x00f,
-                  Readable    = 0x010,
-                  Writable    = 0x020,
-                  Executable  = 0x040,
-                  PermissionMask    = 0x070,
-                  Modified    = 0x080,
-                  Hidden      = 0x100,
-                  System      = 0x200,
+ public:
+   enum Filter { Dirs        = 0x001,
+                 Files       = 0x002,
+                 Drives      = 0x004,
+                 NoSymLinks  = 0x008,
+                 AllEntries  = Dirs | Files | Drives,
+                 TypeMask    = 0x00f,
+                 Readable    = 0x010,
+                 Writable    = 0x020,
+                 Executable  = 0x040,
+                 PermissionMask    = 0x070,
+                 Modified    = 0x080,
+                 Hidden      = 0x100,
+                 System      = 0x200,
 
-                  AccessMask  = 0x3F0,
+                 AccessMask  = 0x3F0,
 
-                  AllDirs       = 0x400,
-                  CaseSensitive = 0x800,
-                  NoDotAndDotDot = 0x1000, // ### Qt5/NoDotAndDotDot = NoDot|NoDotDot
-                  NoDot         = 0x2000,
-                  NoDotDot      = 0x4000,
+                 AllDirs       = 0x400,
+                 CaseSensitive = 0x800,
+                 NoDotAndDotDot = 0x1000, // ### Qt5/NoDotAndDotDot = NoDot|NoDotDot
+                 NoDot         = 0x2000,
+                 NoDotDot      = 0x4000,
 
-                  NoFilter = -1
-    };
-
-
-    using Filters = QFlags<Filter>;
-
-    enum SortFlag { Name        = 0x00,
-                    Time        = 0x01,
-                    Size        = 0x02,
-                    Unsorted    = 0x03,
-                    SortByMask  = 0x03,
-
-                    DirsFirst   = 0x04,
-                    Reversed    = 0x08,
-                    IgnoreCase  = 0x10,
-                    DirsLast    = 0x20,
-                    LocaleAware = 0x40, 
-                    Type        = 0x80,
-                    NoSort = -1
-    };
+                 NoFilter = -1
+               };
 
 
-    using SortFlags = QFlags<SortFlag>;
+   using Filters = QFlags<Filter>;
 
-    QDir(const QDir &);
-    QDir(const QString &path = QString());
-    QDir(const QString &path, const QString &nameFilter,
-         SortFlags sort = SortFlags(Name | IgnoreCase), Filters filter = AllEntries);
-    ~QDir();
+   enum SortFlag { Name        = 0x00,
+                   Time        = 0x01,
+                   Size        = 0x02,
+                   Unsorted    = 0x03,
+                   SortByMask  = 0x03,
 
-    QDir &operator=(const QDir &);
-    QDir &operator=(const QString &path);
+                   DirsFirst   = 0x04,
+                   Reversed    = 0x08,
+                   IgnoreCase  = 0x10,
+                   DirsLast    = 0x20,
+                   LocaleAware = 0x40,
+                   Type        = 0x80,
+                   NoSort = -1
+                 };
 
-    inline QDir &operator=(QDir &&other)
-    { qSwap(d_ptr, other.d_ptr); return *this; }
 
-    void setPath(const QString &path);
-    QString path() const;
-    QString absolutePath() const;
-    QString canonicalPath() const;
+   using SortFlags = QFlags<SortFlag>;
 
-    static void addResourceSearchPath(const QString &path);
+   QDir(const QDir &);
+   QDir(const QString &path = QString());
+   QDir(const QString &path, const QString &nameFilter,
+        SortFlags sort = SortFlags(Name | IgnoreCase), Filters filter = AllEntries);
+   ~QDir();
 
-    static void setSearchPaths(const QString &prefix, const QStringList &searchPaths);
-    static void addSearchPath(const QString &prefix, const QString &path);
-    static QStringList searchPaths(const QString &prefix);
+   QDir &operator=(const QDir &);
+   QDir &operator=(const QString &path);
 
-    QString dirName() const;
-    QString filePath(const QString &fileName) const;
-    QString absoluteFilePath(const QString &fileName) const;
-    QString relativeFilePath(const QString &fileName) const;
+   inline QDir &operator=(QDir && other) {
+      qSwap(d_ptr, other.d_ptr);
+      return *this;
+   }
 
-    static QString toNativeSeparators(const QString &pathName);
-    static QString fromNativeSeparators(const QString &pathName);
+   void setPath(const QString &path);
+   QString path() const;
+   QString absolutePath() const;
+   QString canonicalPath() const;
 
-    bool cd(const QString &dirName);
-    bool cdUp();
+   static void addResourceSearchPath(const QString &path);
 
-    QStringList nameFilters() const;
-    void setNameFilters(const QStringList &nameFilters);
+   static void setSearchPaths(const QString &prefix, const QStringList &searchPaths);
+   static void addSearchPath(const QString &prefix, const QString &path);
+   static QStringList searchPaths(const QString &prefix);
 
-    Filters filter() const;
-    void setFilter(Filters filter);
-    SortFlags sorting() const;
-    void setSorting(SortFlags sort);
+   QString dirName() const;
+   QString filePath(const QString &fileName) const;
+   QString absoluteFilePath(const QString &fileName) const;
+   QString relativeFilePath(const QString &fileName) const;
 
-    uint count() const;
-    QString operator[](int) const;
+   static QString toNativeSeparators(const QString &pathName);
+   static QString fromNativeSeparators(const QString &pathName);
 
-    static QStringList nameFiltersFromString(const QString &nameFilter);
+   bool cd(const QString &dirName);
+   bool cdUp();
 
-    QStringList entryList(Filters filters = NoFilter, SortFlags sort = NoSort) const;
-    QStringList entryList(const QStringList &nameFilters, Filters filters = NoFilter,
-                          SortFlags sort = NoSort) const;
+   QStringList nameFilters() const;
+   void setNameFilters(const QStringList &nameFilters);
 
-    QFileInfoList entryInfoList(Filters filters = NoFilter, SortFlags sort = NoSort) const;
-    QFileInfoList entryInfoList(const QStringList &nameFilters, Filters filters = NoFilter,
-                                SortFlags sort = NoSort) const;
+   Filters filter() const;
+   void setFilter(Filters filter);
+   SortFlags sorting() const;
+   void setSorting(SortFlags sort);
 
-    bool mkdir(const QString &dirName) const;
-    bool rmdir(const QString &dirName) const;
-    bool mkpath(const QString &dirPath) const;
-    bool rmpath(const QString &dirPath) const;
+   uint count() const;
+   QString operator[](int) const;
 
-    bool removeRecursively();
+   static QStringList nameFiltersFromString(const QString &nameFilter);
 
-    bool isReadable() const;
-    bool exists() const;
-    bool isRoot() const;
+   QStringList entryList(Filters filters = NoFilter, SortFlags sort = NoSort) const;
+   QStringList entryList(const QStringList &nameFilters, Filters filters = NoFilter,
+                         SortFlags sort = NoSort) const;
 
-    static bool isRelativePath(const QString &path);
-    inline static bool isAbsolutePath(const QString &path) { return !isRelativePath(path); }
-    bool isRelative() const;
-    inline bool isAbsolute() const { return !isRelative(); }
-    bool makeAbsolute();
+   QFileInfoList entryInfoList(Filters filters = NoFilter, SortFlags sort = NoSort) const;
+   QFileInfoList entryInfoList(const QStringList &nameFilters, Filters filters = NoFilter,
+                               SortFlags sort = NoSort) const;
 
-    bool operator==(const QDir &dir) const;
-    inline bool operator!=(const QDir &dir) const {  return !operator==(dir); }
+   bool mkdir(const QString &dirName) const;
+   bool rmdir(const QString &dirName) const;
+   bool mkpath(const QString &dirPath) const;
+   bool rmpath(const QString &dirPath) const;
 
-    bool remove(const QString &fileName);
-    bool rename(const QString &oldName, const QString &newName);
-    bool exists(const QString &name) const;
+   bool removeRecursively();
 
-    static QFileInfoList drives();
+   bool isReadable() const;
+   bool exists() const;
+   bool isRoot() const;
 
-    static QChar separator();
+   static bool isRelativePath(const QString &path);
+   inline static bool isAbsolutePath(const QString &path) {
+      return !isRelativePath(path);
+   }
+   bool isRelative() const;
+   inline bool isAbsolute() const {
+      return !isRelative();
+   }
+   bool makeAbsolute();
 
-    static bool setCurrent(const QString &path);
-    static inline QDir current() { return QDir(currentPath()); }
-    static QString currentPath();
+   bool operator==(const QDir &dir) const;
+   inline bool operator!=(const QDir &dir) const {
+      return !operator==(dir);
+   }
 
-    static inline QDir home() { return QDir(homePath()); }
-    static QString homePath();
-    static QString homeDirPath();
-    static inline QDir root() { return QDir(rootPath()); }
-    static QString rootPath();
-    static inline QDir temp() { return QDir(tempPath()); }
-    static QString tempPath();
+   bool remove(const QString &fileName);
+   bool rename(const QString &oldName, const QString &newName);
+   bool exists(const QString &name) const;
+
+   static QFileInfoList drives();
+
+   static QChar separator();
+
+   static bool setCurrent(const QString &path);
+   static inline QDir current() {
+      return QDir(currentPath());
+   }
+   static QString currentPath();
+
+   static inline QDir home() {
+      return QDir(homePath());
+   }
+   static QString homePath();
+   static QString homeDirPath();
+   static inline QDir root() {
+      return QDir(rootPath());
+   }
+   static QString rootPath();
+   static inline QDir temp() {
+      return QDir(tempPath());
+   }
+   static QString tempPath();
 
 #ifndef QT_NO_REGEXP
-    static bool match(const QStringList &filters, const QString &fileName);
-    static bool match(const QString &filter, const QString &fileName);
+   static bool match(const QStringList &filters, const QString &fileName);
+   static bool match(const QString &filter, const QString &fileName);
 #endif
 
-    static QString cleanPath(const QString &path);
-    void refresh() const;
+   static QString cleanPath(const QString &path);
+   void refresh() const;
 
 };
 

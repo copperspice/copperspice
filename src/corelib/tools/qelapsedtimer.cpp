@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -216,7 +216,7 @@ static const qint64 invalidData = Q_INT64_C(0x8000000000000000);
 */
 void QElapsedTimer::invalidate()
 {
-     t1 = t2 = invalidData;
+   t1 = t2 = invalidData;
 }
 
 /*!
@@ -227,7 +227,7 @@ void QElapsedTimer::invalidate()
 */
 bool QElapsedTimer::isValid() const
 {
-    return t1 != invalidData && t2 != invalidData;
+   return t1 != invalidData && t2 != invalidData;
 }
 
 /*!
@@ -240,9 +240,9 @@ bool QElapsedTimer::isValid() const
 */
 bool QElapsedTimer::hasExpired(qint64 timeout) const
 {
-    // if timeout is -1, quint64(timeout) is LLINT_MAX, so this will be
-    // considered as never expired
-    return quint64(elapsed()) > quint64(timeout);
+   // if timeout is -1, quint64(timeout) is LLINT_MAX, so this will be
+   // considered as never expired
+   return quint64(elapsed()) > quint64(timeout);
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,110 +36,110 @@ class QTimeLinePrivate;
 
 class Q_CORE_EXPORT QTimeLine : public QObject
 {
-    CS_OBJECT(QTimeLine)
+   CS_OBJECT(QTimeLine)
 
-    CORE_CS_PROPERTY_READ(duration, duration)
-    CORE_CS_PROPERTY_WRITE(duration, setDuration)
-    CORE_CS_PROPERTY_READ(updateInterval, updateInterval)
-    CORE_CS_PROPERTY_WRITE(updateInterval, setUpdateInterval)
-    CORE_CS_PROPERTY_READ(currentTime, currentTime)
-    CORE_CS_PROPERTY_WRITE(currentTime, setCurrentTime)
-    CORE_CS_PROPERTY_READ(direction, direction)
-    CORE_CS_PROPERTY_WRITE(direction, setDirection)
-    CORE_CS_PROPERTY_READ(loopCount, loopCount)
-    CORE_CS_PROPERTY_WRITE(loopCount, setLoopCount)
-    CORE_CS_PROPERTY_READ(curveShape, curveShape)
-    CORE_CS_PROPERTY_WRITE(curveShape, setCurveShape)
-    CORE_CS_PROPERTY_READ(easingCurve, easingCurve)
-    CORE_CS_PROPERTY_WRITE(easingCurve, setEasingCurve)
+   CORE_CS_PROPERTY_READ(duration, duration)
+   CORE_CS_PROPERTY_WRITE(duration, setDuration)
+   CORE_CS_PROPERTY_READ(updateInterval, updateInterval)
+   CORE_CS_PROPERTY_WRITE(updateInterval, setUpdateInterval)
+   CORE_CS_PROPERTY_READ(currentTime, currentTime)
+   CORE_CS_PROPERTY_WRITE(currentTime, setCurrentTime)
+   CORE_CS_PROPERTY_READ(direction, direction)
+   CORE_CS_PROPERTY_WRITE(direction, setDirection)
+   CORE_CS_PROPERTY_READ(loopCount, loopCount)
+   CORE_CS_PROPERTY_WRITE(loopCount, setLoopCount)
+   CORE_CS_PROPERTY_READ(curveShape, curveShape)
+   CORE_CS_PROPERTY_WRITE(curveShape, setCurveShape)
+   CORE_CS_PROPERTY_READ(easingCurve, easingCurve)
+   CORE_CS_PROPERTY_WRITE(easingCurve, setEasingCurve)
 
-public:
-    enum State {
-        NotRunning,
-        Paused,
-        Running
-    };
-    enum Direction {
-        Forward,
-        Backward
-    };
-    enum CurveShape {
-        EaseInCurve,
-        EaseOutCurve,
-        EaseInOutCurve,
-        LinearCurve,
-        SineCurve,
-        CosineCurve
-    };
+ public:
+   enum State {
+      NotRunning,
+      Paused,
+      Running
+   };
+   enum Direction {
+      Forward,
+      Backward
+   };
+   enum CurveShape {
+      EaseInCurve,
+      EaseOutCurve,
+      EaseInOutCurve,
+      LinearCurve,
+      SineCurve,
+      CosineCurve
+   };
 
-    explicit QTimeLine(int duration = 1000, QObject *parent = 0);
-    virtual ~QTimeLine();
+   explicit QTimeLine(int duration = 1000, QObject *parent = 0);
+   virtual ~QTimeLine();
 
-    State state() const;
+   State state() const;
 
-    int loopCount() const;
-    void setLoopCount(int count);
+   int loopCount() const;
+   void setLoopCount(int count);
 
-    Direction direction() const;
-    void setDirection(Direction direction);
+   Direction direction() const;
+   void setDirection(Direction direction);
 
-    int duration() const;
-    void setDuration(int duration);
+   int duration() const;
+   void setDuration(int duration);
 
-    int startFrame() const;
-    void setStartFrame(int frame);
-    int endFrame() const;
-    void setEndFrame(int frame);
-    void setFrameRange(int startFrame, int endFrame);
+   int startFrame() const;
+   void setStartFrame(int frame);
+   int endFrame() const;
+   void setEndFrame(int frame);
+   void setFrameRange(int startFrame, int endFrame);
 
-    int updateInterval() const;
-    void setUpdateInterval(int interval);
+   int updateInterval() const;
+   void setUpdateInterval(int interval);
 
-    CurveShape curveShape() const;
-    void setCurveShape(CurveShape shape);
+   CurveShape curveShape() const;
+   void setCurveShape(CurveShape shape);
 
-    QEasingCurve easingCurve() const;
-    void setEasingCurve(const QEasingCurve &curve);
+   QEasingCurve easingCurve() const;
+   void setEasingCurve(const QEasingCurve &curve);
 
-    int currentTime() const;
-    int currentFrame() const;
-    qreal currentValue() const;
+   int currentTime() const;
+   int currentFrame() const;
+   qreal currentValue() const;
 
-    int frameForTime(int msec) const;
-    virtual qreal valueForTime(int msec) const;
+   int frameForTime(int msec) const;
+   virtual qreal valueForTime(int msec) const;
 
-public :
-    CORE_CS_SLOT_1(Public, void start())
-    CORE_CS_SLOT_2(start) 
-    CORE_CS_SLOT_1(Public, void resume())
-    CORE_CS_SLOT_2(resume) 
-    CORE_CS_SLOT_1(Public, void stop())
-    CORE_CS_SLOT_2(stop) 
-    CORE_CS_SLOT_1(Public, void setPaused(bool paused))
-    CORE_CS_SLOT_2(setPaused) 
-    CORE_CS_SLOT_1(Public, void setCurrentTime(int msec))
-    CORE_CS_SLOT_2(setCurrentTime) 
-    CORE_CS_SLOT_1(Public, void toggleDirection())
-    CORE_CS_SLOT_2(toggleDirection) 
+ public :
+   CORE_CS_SLOT_1(Public, void start())
+   CORE_CS_SLOT_2(start)
+   CORE_CS_SLOT_1(Public, void resume())
+   CORE_CS_SLOT_2(resume)
+   CORE_CS_SLOT_1(Public, void stop())
+   CORE_CS_SLOT_2(stop)
+   CORE_CS_SLOT_1(Public, void setPaused(bool paused))
+   CORE_CS_SLOT_2(setPaused)
+   CORE_CS_SLOT_1(Public, void setCurrentTime(int msec))
+   CORE_CS_SLOT_2(setCurrentTime)
+   CORE_CS_SLOT_1(Public, void toggleDirection())
+   CORE_CS_SLOT_2(toggleDirection)
 
-    CORE_CS_SIGNAL_1(Public, void valueChanged(qreal x))
-    CORE_CS_SIGNAL_2(valueChanged,x) 
-    CORE_CS_SIGNAL_1(Public, void frameChanged(int un_named_arg1))
-    CORE_CS_SIGNAL_2(frameChanged,un_named_arg1) 
-    CORE_CS_SIGNAL_1(Public, void stateChanged(QTimeLine::State newState))
-    CORE_CS_SIGNAL_2(stateChanged,newState) 
-    CORE_CS_SIGNAL_1(Public, void finished())
-    CORE_CS_SIGNAL_2(finished) 
+   CORE_CS_SIGNAL_1(Public, void valueChanged(qreal x))
+   CORE_CS_SIGNAL_2(valueChanged, x)
+   CORE_CS_SIGNAL_1(Public, void frameChanged(int un_named_arg1))
+   CORE_CS_SIGNAL_2(frameChanged, un_named_arg1)
+   CORE_CS_SIGNAL_1(Public, void stateChanged(QTimeLine::State newState))
+   CORE_CS_SIGNAL_2(stateChanged, newState)
+   CORE_CS_SIGNAL_1(Public, void finished())
+   CORE_CS_SIGNAL_2(finished)
 
-protected:
-    void timerEvent(QTimerEvent *event);
+ protected:
+   void timerEvent(QTimerEvent *event);
 
-private:
-    Q_DISABLE_COPY(QTimeLine)
-    Q_DECLARE_PRIVATE(QTimeLine)
+ private:
+   Q_DISABLE_COPY(QTimeLine)
+   Q_DECLARE_PRIVATE(QTimeLine)
 
-protected:
-	 QScopedPointer<QTimeLinePrivate> d_ptr;
+ protected:
+   QScopedPointer<QTimeLinePrivate> d_ptr;
 };
 
 QT_END_NAMESPACE

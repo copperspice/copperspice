@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,51 +44,51 @@ class QSettings;
 
 class QLibraryPrivate
 {
-public:
+ public:
 
 #ifdef Q_OS_WIN
-    HINSTANCE
+   HINSTANCE
 #else
-    void *
+   void *
 #endif
 
-    pHnd;
+   pHnd;
 
-    QString fileName, qualifiedFileName;
-    QString fullVersion;
+   QString fileName, qualifiedFileName;
+   QString fullVersion;
 
-    bool load();
-    bool loadPlugin(); // loads and resolves instance
-    bool unload();
-    void release();
-    void *resolve(const char *);
+   bool load();
+   bool loadPlugin(); // loads and resolves instance
+   bool unload();
+   void release();
+   void *resolve(const char *);
 
-    static QLibraryPrivate *findOrCreate(const QString &fileName, const QString &version = QString());
+   static QLibraryPrivate *findOrCreate(const QString &fileName, const QString &version = QString());
 
-    QWeakPointer<QObject> inst;
-    QtPluginInstanceFunction instance;
-    uint cs_version;
-    QString lastModified;
+   QWeakPointer<QObject> inst;
+   QtPluginInstanceFunction instance;
+   uint cs_version;
+   QString lastModified;
 
-    QString errorString;
-    QLibrary::LoadHints loadHints;
+   QString errorString;
+   QLibrary::LoadHints loadHints;
 
-    bool isPlugin(QSettings *settings = 0);
+   bool isPlugin(QSettings *settings = 0);
 
 
-private:
-    explicit QLibraryPrivate(const QString &canonicalFileName, const QString &version);
-    ~QLibraryPrivate();
+ private:
+   explicit QLibraryPrivate(const QString &canonicalFileName, const QString &version);
+   ~QLibraryPrivate();
 
-    bool load_sys();
-    bool unload_sys();
-    void *resolve_sys(const char *);
+   bool load_sys();
+   bool unload_sys();
+   void *resolve_sys(const char *);
 
-    QAtomicInt libraryRefCount;
-    QAtomicInt libraryUnloadCount;
+   QAtomicInt libraryRefCount;
+   QAtomicInt libraryUnloadCount;
 
-    enum {IsAPlugin, IsNotAPlugin, MightBeAPlugin } pluginState;
-    friend class QLibraryPrivateHasFriends;
+   enum {IsAPlugin, IsNotAPlugin, MightBeAPlugin } pluginState;
+   friend class QLibraryPrivateHasFriends;
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,7 +40,7 @@
     change the auto-deletion flag.
 
     QThreadPool supports executing the same QRunnable more than once
-    by calling QThreadPool::tryStart(this) from within the run() function. 
+    by calling QThreadPool::tryStart(this) from within the run() function.
     If autoDelete is enabled the QRunnable will be deleted when
     the last thread exits the run function. Calling QThreadPool::start()
     multiple times with the same QRunnable when autoDelete is enabled

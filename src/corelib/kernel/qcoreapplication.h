@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,212 +49,226 @@ class QStringList;
 
 class Q_CORE_EXPORT QCoreApplication : public QObject
 {
-    CS_OBJECT(QCoreApplication)
+   CS_OBJECT(QCoreApplication)
 
-    CORE_CS_PROPERTY_READ(applicationName, cs_applicationName)
-    CORE_CS_PROPERTY_WRITE(applicationName, cs_setApplicationName)
+   CORE_CS_PROPERTY_READ(applicationName, cs_applicationName)
+   CORE_CS_PROPERTY_WRITE(applicationName, cs_setApplicationName)
 
-    CORE_CS_PROPERTY_READ(applicationVersion, cs_applicationVersion)
-    CORE_CS_PROPERTY_WRITE(applicationVersion, cs_setApplicationVersion)
+   CORE_CS_PROPERTY_READ(applicationVersion, cs_applicationVersion)
+   CORE_CS_PROPERTY_WRITE(applicationVersion, cs_setApplicationVersion)
 
-    CORE_CS_PROPERTY_READ(organizationName, cs_organizationName)
-    CORE_CS_PROPERTY_WRITE(organizationName, cs_setOrganizationName)
+   CORE_CS_PROPERTY_READ(organizationName, cs_organizationName)
+   CORE_CS_PROPERTY_WRITE(organizationName, cs_setOrganizationName)
 
-    CORE_CS_PROPERTY_READ(organizationDomain, cs_organizationDomain)
-    CORE_CS_PROPERTY_WRITE(organizationDomain, cs_setOrganizationDomain)
+   CORE_CS_PROPERTY_READ(organizationDomain, cs_organizationDomain)
+   CORE_CS_PROPERTY_WRITE(organizationDomain, cs_setOrganizationDomain)
 
-    Q_DECLARE_PRIVATE(QCoreApplication)
+   Q_DECLARE_PRIVATE(QCoreApplication)
 
-public:
-    enum { ApplicationFlags = CS_VERSION | 0x01000000 };
+ public:
+   enum { ApplicationFlags = CS_VERSION | 0x01000000 };
 
-    QCoreApplication(int &argc, char **argv, int = ApplicationFlags );
-    ~QCoreApplication();
+   QCoreApplication(int &argc, char **argv, int = ApplicationFlags );
+   ~QCoreApplication();
 
 #ifdef QT_DEPRECATED
-    QT_DEPRECATED static int argc();
-    QT_DEPRECATED static char **argv();
+   QT_DEPRECATED static int argc();
+   QT_DEPRECATED static char **argv();
 #endif
 
-    static QStringList arguments();
+   static QStringList arguments();
 
-    static void setAttribute(Qt::ApplicationAttribute attribute, bool on = true);
-    static bool testAttribute(Qt::ApplicationAttribute attribute);
+   static void setAttribute(Qt::ApplicationAttribute attribute, bool on = true);
+   static bool testAttribute(Qt::ApplicationAttribute attribute);
 
-    static void setOrganizationDomain(const QString &orgDomain);
-    static QString organizationDomain();
+   static void setOrganizationDomain(const QString &orgDomain);
+   static QString organizationDomain();
 
-    // wrapper for static method  
-    inline void cs_setOrganizationDomain(const QString &orgDomain);           
-	 inline QString cs_organizationDomain() const;
-      
-    static void setOrganizationName(const QString &orgName);    
-    static QString organizationName();
-    inline void cs_setOrganizationName(const QString &orgName);    
-	 inline QString cs_organizationName() const;
+   // wrapper for static method
+   inline void cs_setOrganizationDomain(const QString &orgDomain);
+   inline QString cs_organizationDomain() const;
 
-    static void setApplicationName(const QString &application);    
-	 static QString applicationName();
-    inline void cs_setApplicationName(const QString &application);    
-	 inline QString cs_applicationName() const;
+   static void setOrganizationName(const QString &orgName);
+   static QString organizationName();
+   inline void cs_setOrganizationName(const QString &orgName);
+   inline QString cs_organizationName() const;
 
-    static void setApplicationVersion(const QString &version);
-    static QString applicationVersion();
-    inline void cs_setApplicationVersion(const QString &version);    
-	 inline QString cs_applicationVersion() const;
+   static void setApplicationName(const QString &application);
+   static QString applicationName();
+   inline void cs_setApplicationName(const QString &application);
+   inline QString cs_applicationName() const;
 
-    static QCoreApplication *instance() { return self; }
+   static void setApplicationVersion(const QString &version);
+   static QString applicationVersion();
+   inline void cs_setApplicationVersion(const QString &version);
+   inline QString cs_applicationVersion() const;
 
-    static int exec();
-    static void processEvents(QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents);
-    static void processEvents(QEventLoop::ProcessEventsFlags flags, int maxtime);
-    static void exit(int retcode=0);
+   static QCoreApplication *instance() {
+      return self;
+   }
 
-    static bool sendEvent(QObject *receiver, QEvent *event);
-    static void postEvent(QObject *receiver, QEvent *event);
-    static void postEvent(QObject *receiver, QEvent *event, int priority);
-    static void sendPostedEvents(QObject *receiver, int event_type);
-    static void sendPostedEvents();
-    static void removePostedEvents(QObject *receiver);
-    static void removePostedEvents(QObject *receiver, int eventType);
-    static bool hasPendingEvents();
+   static int exec();
+   static void processEvents(QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents);
+   static void processEvents(QEventLoop::ProcessEventsFlags flags, int maxtime);
+   static void exit(int retcode = 0);
 
-    virtual bool notify(QObject *, QEvent *);
+   static bool sendEvent(QObject *receiver, QEvent *event);
+   static void postEvent(QObject *receiver, QEvent *event);
+   static void postEvent(QObject *receiver, QEvent *event, int priority);
+   static void sendPostedEvents(QObject *receiver, int event_type);
+   static void sendPostedEvents();
+   static void removePostedEvents(QObject *receiver);
+   static void removePostedEvents(QObject *receiver, int eventType);
+   static bool hasPendingEvents();
 
-    static bool startingUp();
-    static bool closingDown();
+   virtual bool notify(QObject *, QEvent *);
 
-    static QString applicationDirPath();
-    static QString applicationFilePath();
-    static qint64 applicationPid();
+   static bool startingUp();
+   static bool closingDown();
 
-    static void setLibraryPaths(const QStringList &);
-    static QStringList libraryPaths();
-    static void addLibraryPath(const QString &);
-    static void removeLibraryPath(const QString &);
+   static QString applicationDirPath();
+   static QString applicationFilePath();
+   static qint64 applicationPid();
+
+   static void setLibraryPaths(const QStringList &);
+   static QStringList libraryPaths();
+   static void addLibraryPath(const QString &);
+   static void removeLibraryPath(const QString &);
 
 #ifndef QT_NO_TRANSLATION
-    static void installTranslator(QTranslator * messageFile);
-    static void removeTranslator(QTranslator * messageFile);
+   static void installTranslator(QTranslator *messageFile);
+   static void removeTranslator(QTranslator *messageFile);
 #endif
 
-    enum Encoding { CodecForTr, UnicodeUTF8, DefaultCodec = CodecForTr };
+   enum Encoding { CodecForTr, UnicodeUTF8, DefaultCodec = CodecForTr };
 
-    // ### Qt5/merge
-    static QString translate(const char * context,
-                             const char * key,
-                             const char * disambiguation = 0,
-                             Encoding encoding = CodecForTr);
+   // ### Qt5/merge
+   static QString translate(const char *context,
+                            const char *key,
+                            const char *disambiguation = 0,
+                            Encoding encoding = CodecForTr);
 
-    static QString translate(const char * context,
-                             const char * key,
-                             const char * disambiguation,
-                             Encoding encoding, int n);
+   static QString translate(const char *context,
+                            const char *key,
+                            const char *disambiguation,
+                            Encoding encoding, int n);
 
-    static void flush();
+   static void flush();
 
 #if defined(Q_OS_WIN)
-    virtual bool winEventFilter(MSG *message, long *result);
+   virtual bool winEventFilter(MSG *message, long *result);
 #endif
 
 #if defined(Q_OS_UNIX)
-    static void watchUnixSignal(int signal, bool watch);
+   static void watchUnixSignal(int signal, bool watch);
 #endif
 
-    typedef bool (*EventFilter)(void *message, long *result);
-    EventFilter setEventFilter(EventFilter filter);
-    bool filterEvent(void *message, long *result);
+   typedef bool (*EventFilter)(void *message, long *result);
+   EventFilter setEventFilter(EventFilter filter);
+   bool filterEvent(void *message, long *result);
 
-    CORE_CS_SLOT_1(Public, static void quit())
-    CORE_CS_SLOT_2(quit) 
+   CORE_CS_SLOT_1(Public, static void quit())
+   CORE_CS_SLOT_2(quit)
 
-    CORE_CS_SIGNAL_1(Public, void aboutToQuit())
-    CORE_CS_SIGNAL_2(aboutToQuit) 
+   CORE_CS_SIGNAL_1(Public, void aboutToQuit())
+   CORE_CS_SIGNAL_2(aboutToQuit)
 
-    CORE_CS_SIGNAL_1(Public, void unixSignal(int un_named_arg1))
-    CORE_CS_SIGNAL_2(unixSignal,un_named_arg1) 
+   CORE_CS_SIGNAL_1(Public, void unixSignal(int un_named_arg1))
+   CORE_CS_SIGNAL_2(unixSignal, un_named_arg1)
 
-protected:
-    bool event(QEvent *);
+ protected:
+   bool event(QEvent *);
 
-    virtual bool compressEvent(QEvent *, QObject *receiver, QPostEventList *);
+   virtual bool compressEvent(QEvent *, QObject *receiver, QPostEventList *);
 
-    QCoreApplication(QCoreApplicationPrivate &p);
+   QCoreApplication(QCoreApplicationPrivate &p);
 
-	 QScopedPointer<QCoreApplicationPrivate> d_ptr;
+   QScopedPointer<QCoreApplicationPrivate> d_ptr;
 
-private:
-    static bool sendSpontaneousEvent(QObject *receiver, QEvent *event);
-    bool notifyInternal(QObject *receiver, QEvent *event);
+ private:
+   static bool sendSpontaneousEvent(QObject *receiver, QEvent *event);
+   bool notifyInternal(QObject *receiver, QEvent *event);
 
-    void init();
+   void init();
 
-    static QCoreApplication *self;
-    
-    Q_DISABLE_COPY(QCoreApplication)
+   static QCoreApplication *self;
 
-    friend class QEventDispatcherUNIXPrivate;
-    friend class QApplication;
-    friend class QApplicationPrivate;
-    friend class QETWidget;    
-    friend class QShortcutMap;
-    friend class QWidget;
-    friend class QWidgetPrivate;
-    friend bool qt_sendSpontaneousEvent(QObject*, QEvent*);
-    friend Q_CORE_EXPORT QString qAppName();
-    friend class QClassFactory;
+   Q_DISABLE_COPY(QCoreApplication)
+
+   friend class QEventDispatcherUNIXPrivate;
+   friend class QApplication;
+   friend class QApplicationPrivate;
+   friend class QETWidget;
+   friend class QShortcutMap;
+   friend class QWidget;
+   friend class QWidgetPrivate;
+   friend bool qt_sendSpontaneousEvent(QObject *, QEvent *);
+   friend Q_CORE_EXPORT QString qAppName();
+   friend class QClassFactory;
 };
 
 
 void QCoreApplication::cs_setApplicationName(const QString &application)
 {
-   QCoreApplication::setApplicationName(application); 
-};   
+   QCoreApplication::setApplicationName(application);
+};
 
 QString QCoreApplication::cs_applicationName() const
-{ 
+{
    return QCoreApplication::applicationName();
 };
 
 void QCoreApplication::cs_setOrganizationName(const QString &orgName)
 {
    QCoreApplication::setOrganizationName(orgName);
-};    
+};
 
 QString QCoreApplication::cs_organizationName() const
-{ 
-   return QCoreApplication::organizationName(); 
+{
+   return QCoreApplication::organizationName();
 };
 
 void QCoreApplication::cs_setApplicationVersion(const QString &version)
 {
    QCoreApplication::setApplicationVersion(version);
-};    
-
-QString QCoreApplication::cs_applicationVersion() const
-{ 
-   return QCoreApplication::applicationVersion(); 
 };
 
-void QCoreApplication::cs_setOrganizationDomain(const QString &orgDomain) 
-{ 
-   QCoreApplication::setOrganizationDomain(orgDomain); 
-};   
+QString QCoreApplication::cs_applicationVersion() const
+{
+   return QCoreApplication::applicationVersion();
+};
+
+void QCoreApplication::cs_setOrganizationDomain(const QString &orgDomain)
+{
+   QCoreApplication::setOrganizationDomain(orgDomain);
+};
 
 QString QCoreApplication::cs_organizationDomain() const
-{ 
-   return QCoreApplication::organizationDomain(); 
+{
+   return QCoreApplication::organizationDomain();
 };
 
 
 inline bool QCoreApplication::sendEvent(QObject *receiver, QEvent *event)
-   {  if (event) event->spont = false; return self ? self->notifyInternal(receiver, event) : false; }
+{
+   if (event) {
+      event->spont = false;
+   }
+   return self ? self->notifyInternal(receiver, event) : false;
+}
 
 inline bool QCoreApplication::sendSpontaneousEvent(QObject *receiver, QEvent *event)
-   { if (event) event->spont = true; return self ? self->notifyInternal(receiver, event) : false; }
+{
+   if (event) {
+      event->spont = true;
+   }
+   return self ? self->notifyInternal(receiver, event) : false;
+}
 
 inline void QCoreApplication::sendPostedEvents()
-   { sendPostedEvents(0, 0); }
+{
+   sendPostedEvents(0, 0);
+}
 
 
 // * *
@@ -264,25 +278,27 @@ inline void QCoreApplication::sendPostedEvents()
 inline QString QCoreApplication::translate(const char *, const char *sourceText, const char *, Encoding encoding)
 {
 #ifndef QT_NO_TEXTCODEC
-    if (encoding == UnicodeUTF8)
-        return QString::fromUtf8(sourceText);
+   if (encoding == UnicodeUTF8) {
+      return QString::fromUtf8(sourceText);
+   }
 #else
-    Q_UNUSED(encoding)
+   Q_UNUSED(encoding)
 
 #endif
-    return QString::fromLatin1(sourceText);
+   return QString::fromLatin1(sourceText);
 }
 
 // 2
 inline QString QCoreApplication::translate(const char *, const char *sourceText, const char *, Encoding encoding, int)
 {
 #ifndef QT_NO_TEXTCODEC
-    if (encoding == UnicodeUTF8)
-        return QString::fromUtf8(sourceText);
+   if (encoding == UnicodeUTF8) {
+      return QString::fromUtf8(sourceText);
+   }
 #else
-    Q_UNUSED(encoding)
+   Q_UNUSED(encoding)
 #endif
-    return QString::fromLatin1(sourceText);
+   return QString::fromLatin1(sourceText);
 }
 #endif
 
@@ -309,9 +325,9 @@ using QtCleanUpFunction = void (*)();
 
 Q_CORE_EXPORT void qAddPostRoutine(QtCleanUpFunction);
 Q_CORE_EXPORT void qRemovePostRoutine(QtCleanUpFunction);
-Q_CORE_EXPORT QString qAppName();                
+Q_CORE_EXPORT QString qAppName();
 
-#if defined(Q_OS_WIN) 
+#if defined(Q_OS_WIN)
 Q_CORE_EXPORT QString decodeMSG(const MSG &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const MSG &);
 #endif

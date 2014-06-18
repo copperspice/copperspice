@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,88 +39,88 @@ QT_BEGIN_NAMESPACE
 class QDataStream;
 struct QMetaTypeGuiHelper;
 
-class Q_CORE_EXPORT QMetaType {
+class Q_CORE_EXPORT QMetaType
+{
 
-   public:
-      enum Type {
+ public:
+   enum Type {
 
-         UnknownType = 0,
+      UnknownType = 0,
 
-         Bool = 1, Int = 2, UInt = 3, LongLong = 4, ULongLong = 5,
-         Double = 6, QChar = 7, QVariantMap = 8, QVariantList = 9,
-         QString = 10, QStringList = 11, QByteArray = 12,
-         QBitArray = 13, QDate = 14, QTime = 15, QDateTime = 16, QUrl = 17,
-         QLocale = 18, QRect = 19, QRectF = 20, QSize = 21, QSizeF = 22,
-         QLine = 23, QLineF = 24, QPoint = 25, QPointF = 26, QRegExp = 27,
-         QVariantHash = 28, QEasingCurve = 29,
-        
-         Void = 30, SChar = 31, QUuid = 32, QModelIndex = 33,
-         QJsonValue = 45, QJsonObject = 46, QJsonArray = 47, QJsonDocument = 48,              
+      Bool = 1, Int = 2, UInt = 3, LongLong = 4, ULongLong = 5,
+      Double = 6, QChar = 7, QVariantMap = 8, QVariantList = 9,
+      QString = 10, QStringList = 11, QByteArray = 12,
+      QBitArray = 13, QDate = 14, QTime = 15, QDateTime = 16, QUrl = 17,
+      QLocale = 18, QRect = 19, QRectF = 20, QSize = 21, QSizeF = 22,
+      QLine = 23, QLineF = 24, QPoint = 25, QPointF = 26, QRegExp = 27,
+      QVariantHash = 28, QEasingCurve = 29,
 
-         // **         
-         QFont = 64, QPixmap = 65, QBrush = 66, QColor = 67, QPalette = 68,
-         QIcon = 69, QImage = 70, QPolygon = 71, QRegion = 72, QBitmap = 73,
-         QCursor = 74, QSizePolicy = 75, QKeySequence = 76, QPen = 77,
-         QTextLength = 78, QTextFormat = 79, QMatrix = 80, QTransform = 81,
-         QMatrix4x4 = 82, QVector2D = 83, QVector3D = 84, QVector4D = 85, 
-         QQuaternion = 86, QPolygonF = 87, 
+      Void = 30, SChar = 31, QUuid = 32, QModelIndex = 33,
+      QJsonValue = 45, QJsonObject = 46, QJsonArray = 47, QJsonDocument = 48,
 
-         // **         
-         VoidStar = 128, Long = 129, Short = 130, Char = 131, ULong = 132,
-         UShort = 133, UChar = 134, Float = 135, QObjectStar = 136, 
-         QWidgetStar = 137, QVariant = 138, 
+      // **
+      QFont = 64, QPixmap = 65, QBrush = 66, QColor = 67, QPalette = 68,
+      QIcon = 69, QImage = 70, QPolygon = 71, QRegion = 72, QBitmap = 73,
+      QCursor = 74, QSizePolicy = 75, QKeySequence = 76, QPen = 77,
+      QTextLength = 78, QTextFormat = 79, QMatrix = 80, QTransform = 81,
+      QMatrix4x4 = 82, QVector2D = 83, QVector3D = 84, QVector4D = 85,
+      QQuaternion = 86, QPolygonF = 87,
 
-         // must match both files:  qmetatype.h & qglobal.h
+      // **
+      VoidStar = 128, Long = 129, Short = 130, Char = 131, ULong = 132,
+      UShort = 133, UChar = 134, Float = 135, QObjectStar = 136,
+      QWidgetStar = 137, QVariant = 138,
+
+      // must match both files:  qmetatype.h & qglobal.h
 #if defined(QT_COORD_TYPE)
-         QReal = 0,         
+      QReal = 0,
 #elif defined(QT_NO_FPU) || defined(QT_ARCH_ARM)
-         QReal = Float,         
+      QReal = Float,
 #else
-         QReal = Double,         
+      QReal = Double,
 #endif
 
-         User = 256
-      };
+      User = 256
+   };
 
-      typedef void (*Destructor)(void *);
-      typedef void *(*Constructor)(const void *);
+   typedef void (*Destructor)(void *);
+   typedef void *(*Constructor)(const void *);
 
 #ifndef QT_NO_DATASTREAM
-      typedef void (*SaveOperator)(QDataStream &, const void *);
-      typedef void (*LoadOperator)(QDataStream &, void *);
-      static void registerStreamOperators(const char *typeName, SaveOperator saveOp, LoadOperator loadOp);
-      static void registerStreamOperators(int type, SaveOperator saveOp, LoadOperator loadOp);
+   typedef void (*SaveOperator)(QDataStream &, const void *);
+   typedef void (*LoadOperator)(QDataStream &, void *);
+   static void registerStreamOperators(const char *typeName, SaveOperator saveOp, LoadOperator loadOp);
+   static void registerStreamOperators(int type, SaveOperator saveOp, LoadOperator loadOp);
 #endif
 
-      static int registerType(const char *typeName, Destructor destructor, Constructor constructor);
-      static int registerTypedef(const char *typeName, int aliasId);
-      static int type(const char *typeName);
-      static const char *typeName(int type);
-      static bool isRegistered(int type);
-      static void *construct(int type, const void *copy = 0);
-      static void destroy(int type, void *data);
-      static void unregisterType(const char *typeName);
+   static int registerType(const char *typeName, Destructor destructor, Constructor constructor);
+   static int registerTypedef(const char *typeName, int aliasId);
+   static int type(const char *typeName);
+   static const char *typeName(int type);
+   static bool isRegistered(int type);
+   static void *construct(int type, const void *copy = 0);
+   static void destroy(int type, void *data);
+   static void unregisterType(const char *typeName);
 
 #ifndef QT_NO_DATASTREAM
-      static bool save(QDataStream &stream, int type, const void *data);
-      static bool load(QDataStream &stream, int type, void *data);
+   static bool save(QDataStream &stream, int type, const void *data);
+   static bool load(QDataStream &stream, int type, void *data);
 #endif
 
-   private:
-      // global array containing the Gui data types
-      static const QMap<Type, const QMetaTypeGuiHelper *> &dataTypes_Gui();
+ private:
+   // global array containing the Gui data types
+   static const QMap<Type, const QMetaTypeGuiHelper *> &dataTypes_Gui();
 
 };
 
-struct QMetaTypeGuiHelper
-{
-    QMetaType::Type typeId;    
-    QMetaType::Constructor constr;
-    QMetaType::Destructor destr;
-    
+struct QMetaTypeGuiHelper {
+   QMetaType::Type typeId;
+   QMetaType::Constructor constr;
+   QMetaType::Destructor destr;
+
 #ifndef QT_NO_DATASTREAM
-    QMetaType::SaveOperator saveOp;
-    QMetaType::LoadOperator loadOp;
+   QMetaType::SaveOperator saveOp;
+   QMetaType::LoadOperator loadOp;
 #endif
 
 };
@@ -138,7 +138,7 @@ void *qMetaTypeConstructHelper(const T *v)
       return new T();
    }
 
-   return new T(*static_cast<const T*>(v));
+   return new T(*static_cast<const T *>(v));
 }
 
 
@@ -157,14 +157,12 @@ void qMetaTypeLoadHelper(QDataStream &stream, T *v)
 #endif
 
 template <typename T>
-struct QMetaTypeId
-{
+struct QMetaTypeId {
    enum { Defined = 0 };
 };
 
 template <typename T>
-struct QMetaTypeId2
-{
+struct QMetaTypeId2 {
    enum { Defined = QMetaTypeId<T>::Defined };
    static inline int qt_metatype_id() {
       return QMetaTypeId<T>::qt_metatype_id();
@@ -173,38 +171,34 @@ struct QMetaTypeId2
 
 namespace QtPrivate {
 
-   template <typename T, bool Defined = QMetaTypeId2<T>::Defined>
-   struct QMetaTypeIdHelper
-   {
-      static inline int qt_metatype_id() 
-      {
-         return QMetaTypeId2<T>::qt_metatype_id();
-      }
-   };
+template <typename T, bool Defined = QMetaTypeId2<T>::Defined>
+struct QMetaTypeIdHelper {
+   static inline int qt_metatype_id() {
+      return QMetaTypeId2<T>::qt_metatype_id();
+   }
+};
 
-   template <typename T> 
-   struct QMetaTypeIdHelper<T, false>
-   {
-      static inline int qt_metatype_id() 
-      {
-         return -1;
-      }
-   };
+template <typename T>
+struct QMetaTypeIdHelper<T, false> {
+   static inline int qt_metatype_id() {
+      return -1;
+   }
+};
 
 }
 
 template <typename T>
 int qRegisterMetaType(const char *typeName, T *dummy = nullptr)
-{   
+{
    if (! dummy) {
       int typedefOf = QtPrivate::QMetaTypeIdHelper<T>::qt_metatype_id();
       return QMetaType::registerTypedef(typeName, typedefOf);
    }
 
-   typedef void*(*ConstructPtr)(const T*);
+   typedef void *(*ConstructPtr)(const T *);
    ConstructPtr cptr = qMetaTypeConstructHelper<T>;
 
-   typedef void(*DeletePtr)(T*);
+   typedef void(*DeletePtr)(T *);
    DeletePtr dptr = qMetaTypeDeleteHelper<T>;
 
    return QMetaType::registerType(typeName, reinterpret_cast<QMetaType::Destructor>(dptr),
@@ -224,17 +218,14 @@ inline int qRegisterMetaType(T *v = 0)
 }
 
 template <typename T, bool = QMetaTypeId2<T>::Defined>
-struct csTypeQuery
-{
-   static int query()
-   {
+struct csTypeQuery {
+   static int query() {
       return 0;
    }
 };
 
 template <typename T>
-struct csTypeQuery<T, true>
-{
+struct csTypeQuery<T, true> {
    static int query() {
       return QMetaTypeId2<T>::qt_metatype_id();
    }
@@ -258,7 +249,7 @@ void qRegisterMetaTypeStreamOperators(const char *typeName, T * = 0 )
 
    qRegisterMetaType<T>(typeName);
    QMetaType::registerStreamOperators(typeName, reinterpret_cast<QMetaType::SaveOperator>(sptr),
-                                         reinterpret_cast<QMetaType::LoadOperator>(lptr));
+                                      reinterpret_cast<QMetaType::LoadOperator>(lptr));
 }
 
 template <typename T>
@@ -271,7 +262,7 @@ inline int qRegisterMetaTypeStreamOperators()
 
    register int id = qMetaTypeId<T>();
    QMetaType::registerStreamOperators(id, reinterpret_cast<QMetaType::SaveOperator>(sptr),
-            reinterpret_cast<QMetaType::LoadOperator>(lptr));
+                                      reinterpret_cast<QMetaType::LoadOperator>(lptr));
 
    return id;
 }

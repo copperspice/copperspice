@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -50,7 +50,7 @@ template<class T, class unused_1, class unused_2, class unused_3>
 std::pair<T, bool> convertFromQVariant(QVariant data)
 {
    // T is not an enum, flag, or built in data type
-   return std::make_pair(T{}, false);
+   return std::make_pair(T {}, false);
 }
 
 // template<class T, class=void, class=typename std::enable_if< (! is_enum_or_flag<T>::value) && QMetaTypeId2<T>::Defined>::type>
@@ -74,7 +74,7 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
    QVariant::Type dataType = data.type();
 
    if (dataType == QVariant::Int  || dataType == QVariant::LongLong ||
-       dataType == QVariant::UInt || dataType == QVariant::ULongLong) {
+         dataType == QVariant::UInt || dataType == QVariant::ULongLong) {
 
       // supported integer types
       temp = data.value<intType>();
@@ -105,7 +105,7 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
          // unable to convert, type mismatch
          retval = false;
 
-      } else  {         
+      } else  {
          temp = *reinterpret_cast<const intType *>(data.constData()) ;
 
       }
@@ -116,7 +116,7 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
 
 // classes for these 2 methods, located in csmeta.h around line 330
 template<class E>
-inline const char * cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type  >::typeName()
+inline const char *cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type  >::typeName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<E>();
 
@@ -131,7 +131,7 @@ inline const char * cs_typeName_internal<E, typename std::enable_if<std::is_enum
 }
 
 template<class E>
-inline const char * cs_typeName_internal< QFlags<E> >::typeName()
+inline const char *cs_typeName_internal< QFlags<E> >::typeName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<QFlags<E>>();
 

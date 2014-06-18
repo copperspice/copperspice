@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,47 +31,74 @@ QT_BEGIN_NAMESPACE
 /*!
     Returns true if the double \a {d} is equivalent to infinity.
 */
-Q_CORE_EXPORT bool qIsInf(double d) { return qt_is_inf(d); }
+Q_CORE_EXPORT bool qIsInf(double d)
+{
+   return qt_is_inf(d);
+}
 
 /*!
     Returns true if the double \a {d} is not a number (NaN).
 */
-Q_CORE_EXPORT bool qIsNaN(double d) { return qt_is_nan(d); }
+Q_CORE_EXPORT bool qIsNaN(double d)
+{
+   return qt_is_nan(d);
+}
 
 /*!
     Returns true if the double \a {d} is a finite number.
 */
-Q_CORE_EXPORT bool qIsFinite(double d) { return qt_is_finite(d); }
+Q_CORE_EXPORT bool qIsFinite(double d)
+{
+   return qt_is_finite(d);
+}
 
 /*!
     Returns true if the float \a {f} is equivalent to infinity.
 */
-Q_CORE_EXPORT bool qIsInf(float f) { return qt_is_inf(f); }
+Q_CORE_EXPORT bool qIsInf(float f)
+{
+   return qt_is_inf(f);
+}
 
 /*!
     Returns true if the float \a {f} is not a number (NaN).
 */
-Q_CORE_EXPORT bool qIsNaN(float f) { return qt_is_nan(f); }
+Q_CORE_EXPORT bool qIsNaN(float f)
+{
+   return qt_is_nan(f);
+}
 
 /*!
     Returns true if the float \a {f} is a finite number.
 */
-Q_CORE_EXPORT bool qIsFinite(float f) { return qt_is_finite(f); }
+Q_CORE_EXPORT bool qIsFinite(float f)
+{
+   return qt_is_finite(f);
+}
 
 /*!
     Returns the bit pattern of a signalling NaN as a double.
 */
-Q_CORE_EXPORT double qSNaN() { return qt_snan(); }
+Q_CORE_EXPORT double qSNaN()
+{
+   return qt_snan();
+}
 
 /*!
     Returns the bit pattern of a quiet NaN as a double.
 */
-Q_CORE_EXPORT double qQNaN() { return qt_qnan(); }
+Q_CORE_EXPORT double qQNaN()
+{
+   return qt_qnan();
+}
 
 /*!
     Returns the bit pattern for an infinite number as a double.
 */
-Q_CORE_EXPORT double qInf() { return qt_inf(); }
+Q_CORE_EXPORT double qInf()
+{
+   return qt_inf();
+}
 
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,30 +34,30 @@ QT_BEGIN_NAMESPACE
 
 class QLatin1Codec : public QTextCodec
 {
-public:
-    ~QLatin1Codec();
+ public:
+   ~QLatin1Codec();
 
-    QString convertToUnicode(const char *, int, ConverterState *) const;
-    QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
 
-    QByteArray name() const;
-    QList<QByteArray> aliases() const;
-    int mibEnum() const;
+   QByteArray name() const;
+   QList<QByteArray> aliases() const;
+   int mibEnum() const;
 };
 
 
 
 class QLatin15Codec: public QTextCodec
 {
-public:
-    ~QLatin15Codec();
+ public:
+   ~QLatin15Codec();
 
-    QString convertToUnicode(const char *, int, ConverterState *) const;
-    QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
 
-    QByteArray name() const;
-    QList<QByteArray> aliases() const;
-    int mibEnum() const;
+   QByteArray name() const;
+   QList<QByteArray> aliases() const;
+   int mibEnum() const;
 };
 
 #endif // QT_NO_TEXTCODEC

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,29 +37,29 @@ QT_BEGIN_NAMESPACE
 
 class QInotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
-    CS_OBJECT(QInotifyFileSystemWatcherEngine)
+   CS_OBJECT(QInotifyFileSystemWatcherEngine)
 
-public:
-    ~QInotifyFileSystemWatcherEngine();
+ public:
+   ~QInotifyFileSystemWatcherEngine();
 
-    static QInotifyFileSystemWatcherEngine *create();
+   static QInotifyFileSystemWatcherEngine *create();
 
-    void run();
+   void run();
 
-    QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
-    QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
 
-    void stop();
+   void stop();
 
-private :
-    CORE_CS_SLOT_1(Private, void readFromInotify())
-    CORE_CS_SLOT_2(readFromInotify) 
+ private :
+   CORE_CS_SLOT_1(Private, void readFromInotify())
+   CORE_CS_SLOT_2(readFromInotify)
 
-    QInotifyFileSystemWatcherEngine(int fd);
-    int inotifyFd;
-    QMutex mutex;
-    QHash<QString, int> pathToID;
-    QHash<int, QString> idToPath;
+   QInotifyFileSystemWatcherEngine(int fd);
+   int inotifyFd;
+   QMutex mutex;
+   QHash<QString, int> pathToID;
+   QHash<int, QString> idToPath;
 };
 
 

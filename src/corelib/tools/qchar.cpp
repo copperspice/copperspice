@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -502,9 +502,9 @@ QT_BEGIN_NAMESPACE
 */
 bool QChar::isPrint() const
 {
-    const int test = FLAG(Other_Control) |
-                     FLAG(Other_NotAssigned);
-    return !(FLAG(qGetProp(ucs)->category) & test);
+   const int test = FLAG(Other_Control) |
+                    FLAG(Other_NotAssigned);
+   return !(FLAG(qGetProp(ucs)->category) & test);
 }
 
 /*!
@@ -513,12 +513,13 @@ bool QChar::isPrint() const
 */
 bool QChar::isSpace() const
 {
-    if(ucs >= 9 && ucs <=13)
-        return true;
-    const int test = FLAG(Separator_Space) |
-                     FLAG(Separator_Line) |
-                     FLAG(Separator_Paragraph);
-    return FLAG(qGetProp(ucs)->category) & test;
+   if (ucs >= 9 && ucs <= 13) {
+      return true;
+   }
+   const int test = FLAG(Separator_Space) |
+                    FLAG(Separator_Line) |
+                    FLAG(Separator_Paragraph);
+   return FLAG(qGetProp(ucs)->category) & test;
 }
 
 /*!
@@ -529,10 +530,10 @@ bool QChar::isSpace() const
 */
 bool QChar::isMark() const
 {
-    const int test = FLAG(Mark_NonSpacing) |
-                     FLAG(Mark_SpacingCombining) |
-                     FLAG(Mark_Enclosing);
-    return FLAG(qGetProp(ucs)->category) & test;
+   const int test = FLAG(Mark_NonSpacing) |
+                    FLAG(Mark_SpacingCombining) |
+                    FLAG(Mark_Enclosing);
+   return FLAG(qGetProp(ucs)->category) & test;
 }
 
 /*!
@@ -541,14 +542,14 @@ bool QChar::isMark() const
 */
 bool QChar::isPunct() const
 {
-    const int test = FLAG(Punctuation_Connector) |
-                     FLAG(Punctuation_Dash) |
-                     FLAG(Punctuation_Open) |
-                     FLAG(Punctuation_Close) |
-                     FLAG(Punctuation_InitialQuote) |
-                     FLAG(Punctuation_FinalQuote) |
-                     FLAG(Punctuation_Other);
-    return FLAG(qGetProp(ucs)->category) & test;
+   const int test = FLAG(Punctuation_Connector) |
+                    FLAG(Punctuation_Dash) |
+                    FLAG(Punctuation_Open) |
+                    FLAG(Punctuation_Close) |
+                    FLAG(Punctuation_InitialQuote) |
+                    FLAG(Punctuation_FinalQuote) |
+                    FLAG(Punctuation_Other);
+   return FLAG(qGetProp(ucs)->category) & test;
 }
 
 /*!
@@ -557,12 +558,12 @@ bool QChar::isPunct() const
 */
 bool QChar::isLetter() const
 {
-    const int test = FLAG(Letter_Uppercase) |
-                     FLAG(Letter_Lowercase) |
-                     FLAG(Letter_Titlecase) |
-                     FLAG(Letter_Modifier) |
-                     FLAG(Letter_Other);
-    return FLAG(qGetProp(ucs)->category) & test;
+   const int test = FLAG(Letter_Uppercase) |
+                    FLAG(Letter_Lowercase) |
+                    FLAG(Letter_Titlecase) |
+                    FLAG(Letter_Modifier) |
+                    FLAG(Letter_Other);
+   return FLAG(qGetProp(ucs)->category) & test;
 }
 
 /*!
@@ -573,10 +574,10 @@ bool QChar::isLetter() const
 */
 bool QChar::isNumber() const
 {
-    const int test = FLAG(Number_DecimalDigit) |
-                     FLAG(Number_Letter) |
-                     FLAG(Number_Other);
-    return FLAG(qGetProp(ucs)->category) & test;
+   const int test = FLAG(Number_DecimalDigit) |
+                    FLAG(Number_Letter) |
+                    FLAG(Number_Other);
+   return FLAG(qGetProp(ucs)->category) & test;
 }
 
 /*!
@@ -585,15 +586,15 @@ bool QChar::isNumber() const
 */
 bool QChar::isLetterOrNumber() const
 {
-    const int test = FLAG(Letter_Uppercase) |
-                     FLAG(Letter_Lowercase) |
-                     FLAG(Letter_Titlecase) |
-                     FLAG(Letter_Modifier) |
-                     FLAG(Letter_Other) |
-                     FLAG(Number_DecimalDigit) |
-                     FLAG(Number_Letter) |
-                     FLAG(Number_Other);
-    return FLAG(qGetProp(ucs)->category) & test;
+   const int test = FLAG(Letter_Uppercase) |
+                    FLAG(Letter_Lowercase) |
+                    FLAG(Letter_Titlecase) |
+                    FLAG(Letter_Modifier) |
+                    FLAG(Letter_Other) |
+                    FLAG(Number_DecimalDigit) |
+                    FLAG(Number_Letter) |
+                    FLAG(Number_Other);
+   return FLAG(qGetProp(ucs)->category) & test;
 }
 
 
@@ -603,7 +604,7 @@ bool QChar::isLetterOrNumber() const
 */
 bool QChar::isDigit() const
 {
-    return (qGetProp(ucs)->category == Number_DecimalDigit);
+   return (qGetProp(ucs)->category == Number_DecimalDigit);
 }
 
 
@@ -613,11 +614,11 @@ bool QChar::isDigit() const
 */
 bool QChar::isSymbol() const
 {
-    const int test = FLAG(Symbol_Math) |
-                     FLAG(Symbol_Currency) |
-                     FLAG(Symbol_Modifier) |
-                     FLAG(Symbol_Other);
-    return FLAG(qGetProp(ucs)->category) & test;
+   const int test = FLAG(Symbol_Math) |
+                    FLAG(Symbol_Currency) |
+                    FLAG(Symbol_Modifier) |
+                    FLAG(Symbol_Other);
+   return FLAG(qGetProp(ucs)->category) & test;
 }
 
 /*!
@@ -694,7 +695,7 @@ bool QChar::isSymbol() const
 */
 int QChar::digitValue() const
 {
-    return qGetProp(ucs)->digitValue;
+   return qGetProp(ucs)->digitValue;
 }
 
 /*!
@@ -704,7 +705,7 @@ int QChar::digitValue() const
 */
 int QChar::digitValue(ushort ucs2)
 {
-    return qGetProp(ucs2)->digitValue;
+   return qGetProp(ucs2)->digitValue;
 }
 
 /*!
@@ -714,9 +715,10 @@ int QChar::digitValue(ushort ucs2)
 */
 int QChar::digitValue(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return 0;
-    return qGetProp(ucs4)->digitValue;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return 0;
+   }
+   return qGetProp(ucs4)->digitValue;
 }
 
 /*!
@@ -724,7 +726,7 @@ int QChar::digitValue(uint ucs4)
 */
 QChar::Category QChar::category() const
 {
-    return (QChar::Category) qGetProp(ucs)->category;
+   return (QChar::Category) qGetProp(ucs)->category;
 }
 
 /*!
@@ -734,9 +736,10 @@ QChar::Category QChar::category() const
 */
 QChar::Category QChar::category(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return QChar::NoCategory;
-    return (QChar::Category) qGetProp(ucs4)->category;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return QChar::NoCategory;
+   }
+   return (QChar::Category) qGetProp(ucs4)->category;
 }
 
 /*!
@@ -745,7 +748,7 @@ QChar::Category QChar::category(uint ucs4)
 */
 QChar::Category QChar::category(ushort ucs2)
 {
-    return (QChar::Category) qGetProp(ucs2)->category;
+   return (QChar::Category) qGetProp(ucs2)->category;
 }
 
 
@@ -754,7 +757,7 @@ QChar::Category QChar::category(ushort ucs2)
 */
 QChar::Direction QChar::direction() const
 {
-    return (QChar::Direction) qGetProp(ucs)->direction;
+   return (QChar::Direction) qGetProp(ucs)->direction;
 }
 
 /*!
@@ -763,9 +766,10 @@ QChar::Direction QChar::direction() const
 */
 QChar::Direction QChar::direction(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return QChar::DirL;
-    return (QChar::Direction) qGetProp(ucs4)->direction;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return QChar::DirL;
+   }
+   return (QChar::Direction) qGetProp(ucs4)->direction;
 }
 
 /*!
@@ -774,7 +778,7 @@ QChar::Direction QChar::direction(uint ucs4)
 */
 QChar::Direction QChar::direction(ushort ucs2)
 {
-    return (QChar::Direction) qGetProp(ucs2)->direction;
+   return (QChar::Direction) qGetProp(ucs2)->direction;
 }
 
 /*!
@@ -783,7 +787,7 @@ QChar::Direction QChar::direction(ushort ucs2)
 */
 QChar::Joining QChar::joining() const
 {
-    return (QChar::Joining) qGetProp(ucs)->joining;
+   return (QChar::Joining) qGetProp(ucs)->joining;
 }
 
 /*!
@@ -794,9 +798,10 @@ QChar::Joining QChar::joining() const
 */
 QChar::Joining QChar::joining(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return QChar::OtherJoining;
-    return (QChar::Joining) qGetProp(ucs4)->joining;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return QChar::OtherJoining;
+   }
+   return (QChar::Joining) qGetProp(ucs4)->joining;
 }
 
 /*!
@@ -807,7 +812,7 @@ QChar::Joining QChar::joining(uint ucs4)
 */
 QChar::Joining QChar::joining(ushort ucs2)
 {
-    return (QChar::Joining) qGetProp(ucs2)->joining;
+   return (QChar::Joining) qGetProp(ucs2)->joining;
 }
 
 
@@ -821,7 +826,7 @@ QChar::Joining QChar::joining(ushort ucs2)
 */
 bool QChar::hasMirrored() const
 {
-    return qGetProp(ucs)->mirrorDiff != 0;
+   return qGetProp(ucs)->mirrorDiff != 0;
 }
 
 /*!
@@ -860,7 +865,7 @@ bool QChar::hasMirrored() const
 */
 QChar QChar::mirroredChar() const
 {
-    return ucs + qGetProp(ucs)->mirrorDiff;
+   return ucs + qGetProp(ucs)->mirrorDiff;
 }
 
 /*!
@@ -872,9 +877,10 @@ QChar QChar::mirroredChar() const
 */
 uint QChar::mirroredChar(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return ucs4;
-    return ucs4 + qGetProp(ucs4)->mirrorDiff;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return ucs4;
+   }
+   return ucs4 + qGetProp(ucs4)->mirrorDiff;
 }
 
 /*!
@@ -886,46 +892,48 @@ uint QChar::mirroredChar(uint ucs4)
 */
 ushort QChar::mirroredChar(ushort ucs2)
 {
-    return ucs2 + qGetProp(ucs2)->mirrorDiff;
+   return ucs2 + qGetProp(ucs2)->mirrorDiff;
 }
 
 
 enum {
-    Hangul_SBase = 0xac00,
-    Hangul_LBase = 0x1100,
-    Hangul_VBase = 0x1161,
-    Hangul_TBase = 0x11a7,
-    Hangul_SCount = 11172,
-    Hangul_LCount = 19,
-    Hangul_VCount = 21,
-    Hangul_TCount = 28,
-    Hangul_NCount = 21*28
+   Hangul_SBase = 0xac00,
+   Hangul_LBase = 0x1100,
+   Hangul_VBase = 0x1161,
+   Hangul_TBase = 0x11a7,
+   Hangul_SCount = 11172,
+   Hangul_LCount = 19,
+   Hangul_VCount = 21,
+   Hangul_TCount = 28,
+   Hangul_NCount = 21 * 28
 };
 
 // buffer has to have a length of 3. It's needed for Hangul decomposition
-static const unsigned short * QT_FASTCALL decompositionHelper
-    (uint ucs4, int *length, int *tag, unsigned short *buffer)
+static const unsigned short *QT_FASTCALL decompositionHelper
+(uint ucs4, int *length, int *tag, unsigned short *buffer)
 {
-    *length = 0;
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return 0;
-    if (ucs4 >= Hangul_SBase && ucs4 < Hangul_SBase + Hangul_SCount) {
-        int SIndex = ucs4 - Hangul_SBase;
-        buffer[0] = Hangul_LBase + SIndex / Hangul_NCount; // L
-        buffer[1] = Hangul_VBase + (SIndex % Hangul_NCount) / Hangul_TCount; // V
-        buffer[2] = Hangul_TBase + SIndex % Hangul_TCount; // T
-        *length = buffer[2] == Hangul_TBase ? 2 : 3;
-        *tag = QChar::Canonical;
-        return buffer;
-    }
+   *length = 0;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return 0;
+   }
+   if (ucs4 >= Hangul_SBase && ucs4 < Hangul_SBase + Hangul_SCount) {
+      int SIndex = ucs4 - Hangul_SBase;
+      buffer[0] = Hangul_LBase + SIndex / Hangul_NCount; // L
+      buffer[1] = Hangul_VBase + (SIndex % Hangul_NCount) / Hangul_TCount; // V
+      buffer[2] = Hangul_TBase + SIndex % Hangul_TCount; // T
+      *length = buffer[2] == Hangul_TBase ? 2 : 3;
+      *tag = QChar::Canonical;
+      return buffer;
+   }
 
-    const unsigned short index = GET_DECOMPOSITION_INDEX(ucs4);
-    if (index == 0xffff)
-        return 0;
-    const unsigned short *decomposition = uc_decomposition_map+index;
-    *tag = (*decomposition) & 0xff;
-    *length = (*decomposition) >> 8;
-    return decomposition+1;
+   const unsigned short index = GET_DECOMPOSITION_INDEX(ucs4);
+   if (index == 0xffff) {
+      return 0;
+   }
+   const unsigned short *decomposition = uc_decomposition_map + index;
+   *tag = (*decomposition) & 0xff;
+   *length = (*decomposition) >> 8;
+   return decomposition + 1;
 }
 
 /*!
@@ -934,7 +942,7 @@ static const unsigned short * QT_FASTCALL decompositionHelper
 */
 QString QChar::decomposition() const
 {
-    return decomposition(ucs);
+   return decomposition(ucs);
 }
 
 /*!
@@ -944,11 +952,11 @@ QString QChar::decomposition() const
 */
 QString QChar::decomposition(uint ucs4)
 {
-    unsigned short buffer[3];
-    int length;
-    int tag;
-    const unsigned short *d = decompositionHelper(ucs4, &length, &tag, buffer);
-    return QString::fromUtf16(d, length);
+   unsigned short buffer[3];
+   int length;
+   int tag;
+   const unsigned short *d = decompositionHelper(ucs4, &length, &tag, buffer);
+   return QString::fromUtf16(d, length);
 }
 
 /*!
@@ -957,7 +965,7 @@ QString QChar::decomposition(uint ucs4)
 */
 QChar::Decomposition QChar::decompositionTag() const
 {
-    return decompositionTag(ucs);
+   return decompositionTag(ucs);
 }
 
 /*!
@@ -967,12 +975,14 @@ QChar::Decomposition QChar::decompositionTag() const
 */
 QChar::Decomposition QChar::decompositionTag(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return QChar::NoDecomposition;
-    const unsigned short index = GET_DECOMPOSITION_INDEX(ucs4);
-    if (index == 0xffff)
-        return QChar::NoDecomposition;
-    return (QChar::Decomposition)(uc_decomposition_map[index] & 0xff);
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return QChar::NoDecomposition;
+   }
+   const unsigned short index = GET_DECOMPOSITION_INDEX(ucs4);
+   if (index == 0xffff) {
+      return QChar::NoDecomposition;
+   }
+   return (QChar::Decomposition)(uc_decomposition_map[index] & 0xff);
 }
 
 /*!
@@ -985,7 +995,7 @@ QChar::Decomposition QChar::decompositionTag(uint ucs4)
 */
 unsigned char QChar::combiningClass() const
 {
-    return (unsigned char) qGetProp(ucs)->combiningClass;
+   return (unsigned char) qGetProp(ucs)->combiningClass;
 }
 
 /*!
@@ -995,9 +1005,10 @@ unsigned char QChar::combiningClass() const
 */
 unsigned char QChar::combiningClass(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return 0;
-    return (unsigned char) qGetProp(ucs4)->combiningClass;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return 0;
+   }
+   return (unsigned char) qGetProp(ucs4)->combiningClass;
 }
 
 /*!
@@ -1007,7 +1018,7 @@ unsigned char QChar::combiningClass(uint ucs4)
 */
 unsigned char QChar::combiningClass(ushort ucs2)
 {
-    return (unsigned char) qGetProp(ucs2)->combiningClass;
+   return (unsigned char) qGetProp(ucs2)->combiningClass;
 }
 
 /*!
@@ -1015,7 +1026,7 @@ unsigned char QChar::combiningClass(ushort ucs2)
 */
 QChar::UnicodeVersion QChar::unicodeVersion() const
 {
-    return (QChar::UnicodeVersion) qGetProp(ucs)->unicodeVersion;
+   return (QChar::UnicodeVersion) qGetProp(ucs)->unicodeVersion;
 }
 
 /*!
@@ -1025,9 +1036,10 @@ QChar::UnicodeVersion QChar::unicodeVersion() const
 */
 QChar::UnicodeVersion QChar::unicodeVersion(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return QChar::Unicode_Unassigned;
-    return (QChar::UnicodeVersion) qGetProp(ucs4)->unicodeVersion;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return QChar::Unicode_Unassigned;
+   }
+   return (QChar::UnicodeVersion) qGetProp(ucs4)->unicodeVersion;
 }
 
 /*!
@@ -1037,7 +1049,7 @@ QChar::UnicodeVersion QChar::unicodeVersion(uint ucs4)
 */
 QChar::UnicodeVersion QChar::unicodeVersion(ushort ucs2)
 {
-    return (QChar::UnicodeVersion) qGetProp(ucs2)->unicodeVersion;
+   return (QChar::UnicodeVersion) qGetProp(ucs2)->unicodeVersion;
 }
 
 /*!
@@ -1047,7 +1059,7 @@ QChar::UnicodeVersion QChar::unicodeVersion(ushort ucs2)
 */
 QChar::UnicodeVersion QChar::currentUnicodeVersion()
 {
-    return UNICODE_DATA_VERSION;
+   return UNICODE_DATA_VERSION;
 }
 
 /*!
@@ -1056,10 +1068,11 @@ QChar::UnicodeVersion QChar::currentUnicodeVersion()
 */
 QChar QChar::toLower() const
 {
-    const QUnicodeTables::Properties *p = qGetProp(ucs);
-    if (!p->lowerCaseSpecial)
-        return ucs + p->lowerCaseDiff;
-    return ucs;
+   const QUnicodeTables::Properties *p = qGetProp(ucs);
+   if (!p->lowerCaseSpecial) {
+      return ucs + p->lowerCaseDiff;
+   }
+   return ucs;
 }
 
 /*!
@@ -1070,12 +1083,14 @@ QChar QChar::toLower() const
 */
 uint QChar::toLower(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return ucs4;
-    const QUnicodeTables::Properties *p = qGetProp(ucs4);
-    if (!p->lowerCaseSpecial)
-        return ucs4 + p->lowerCaseDiff;
-    return ucs4;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return ucs4;
+   }
+   const QUnicodeTables::Properties *p = qGetProp(ucs4);
+   if (!p->lowerCaseSpecial) {
+      return ucs4 + p->lowerCaseDiff;
+   }
+   return ucs4;
 }
 
 /*!
@@ -1086,10 +1101,11 @@ uint QChar::toLower(uint ucs4)
 */
 ushort QChar::toLower(ushort ucs2)
 {
-    const QUnicodeTables::Properties *p = qGetProp(ucs2);
-    if (!p->lowerCaseSpecial)
-        return ucs2 + p->lowerCaseDiff;
-    return ucs2;
+   const QUnicodeTables::Properties *p = qGetProp(ucs2);
+   if (!p->lowerCaseSpecial) {
+      return ucs2 + p->lowerCaseDiff;
+   }
+   return ucs2;
 }
 
 /*!
@@ -1098,10 +1114,11 @@ ushort QChar::toLower(ushort ucs2)
 */
 QChar QChar::toUpper() const
 {
-    const QUnicodeTables::Properties *p = qGetProp(ucs);
-    if (!p->upperCaseSpecial)
-        return ucs + p->upperCaseDiff;
-    return ucs;
+   const QUnicodeTables::Properties *p = qGetProp(ucs);
+   if (!p->upperCaseSpecial) {
+      return ucs + p->upperCaseDiff;
+   }
+   return ucs;
 }
 
 /*!
@@ -1112,12 +1129,14 @@ QChar QChar::toUpper() const
 */
 uint QChar::toUpper(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return ucs4;
-    const QUnicodeTables::Properties *p = qGetProp(ucs4);
-    if (!p->upperCaseSpecial)
-        return ucs4 + p->upperCaseDiff;
-    return ucs4;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return ucs4;
+   }
+   const QUnicodeTables::Properties *p = qGetProp(ucs4);
+   if (!p->upperCaseSpecial) {
+      return ucs4 + p->upperCaseDiff;
+   }
+   return ucs4;
 }
 
 /*!
@@ -1128,10 +1147,11 @@ uint QChar::toUpper(uint ucs4)
 */
 ushort QChar::toUpper(ushort ucs2)
 {
-    const QUnicodeTables::Properties *p = qGetProp(ucs2);
-    if (!p->upperCaseSpecial)
-        return ucs2 + p->upperCaseDiff;
-    return ucs2;
+   const QUnicodeTables::Properties *p = qGetProp(ucs2);
+   if (!p->upperCaseSpecial) {
+      return ucs2 + p->upperCaseDiff;
+   }
+   return ucs2;
 }
 
 /*!
@@ -1140,10 +1160,11 @@ ushort QChar::toUpper(ushort ucs2)
 */
 QChar QChar::toTitleCase() const
 {
-    const QUnicodeTables::Properties *p = qGetProp(ucs);
-    if (!p->titleCaseSpecial)
-        return ucs + p->titleCaseDiff;
-    return ucs;
+   const QUnicodeTables::Properties *p = qGetProp(ucs);
+   if (!p->titleCaseSpecial) {
+      return ucs + p->titleCaseDiff;
+   }
+   return ucs;
 }
 
 /*!
@@ -1154,12 +1175,14 @@ QChar QChar::toTitleCase() const
 */
 uint QChar::toTitleCase(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return ucs4;
-    const QUnicodeTables::Properties *p = qGetProp(ucs4);
-    if (!p->titleCaseSpecial)
-        return ucs4 + p->titleCaseDiff;
-    return ucs4;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return ucs4;
+   }
+   const QUnicodeTables::Properties *p = qGetProp(ucs4);
+   if (!p->titleCaseSpecial) {
+      return ucs4 + p->titleCaseDiff;
+   }
+   return ucs4;
 }
 
 /*!
@@ -1170,33 +1193,36 @@ uint QChar::toTitleCase(uint ucs4)
 */
 ushort QChar::toTitleCase(ushort ucs2)
 {
-    const QUnicodeTables::Properties *p = qGetProp(ucs2);
-    if (!p->titleCaseSpecial)
-        return ucs2 + p->titleCaseDiff;
-    return ucs2;
+   const QUnicodeTables::Properties *p = qGetProp(ucs2);
+   if (!p->titleCaseSpecial) {
+      return ucs2 + p->titleCaseDiff;
+   }
+   return ucs2;
 }
 
 
 static inline uint foldCase(const ushort *ch, const ushort *start)
 {
-    uint c = *ch;
-    if (QChar(c).isLowSurrogate() && ch > start && QChar(*(ch - 1)).isHighSurrogate())
-        c = QChar::surrogateToUcs4(*(ch - 1), c);
-    return *ch + qGetProp(c)->caseFoldDiff;
+   uint c = *ch;
+   if (QChar(c).isLowSurrogate() && ch > start && QChar(*(ch - 1)).isHighSurrogate()) {
+      c = QChar::surrogateToUcs4(*(ch - 1), c);
+   }
+   return *ch + qGetProp(c)->caseFoldDiff;
 }
 
 static inline uint foldCase(uint ch, uint &last)
 {
-    uint c = ch;
-    if (QChar(c).isLowSurrogate() && QChar(last).isHighSurrogate())
-        c = QChar::surrogateToUcs4(last, c);
-    last = ch;
-    return ch + qGetProp(c)->caseFoldDiff;
+   uint c = ch;
+   if (QChar(c).isLowSurrogate() && QChar(last).isHighSurrogate()) {
+      c = QChar::surrogateToUcs4(last, c);
+   }
+   last = ch;
+   return ch + qGetProp(c)->caseFoldDiff;
 }
 
 static inline ushort foldCase(ushort ch)
 {
-    return ch + qGetProp(ch)->caseFoldDiff;
+   return ch + qGetProp(ch)->caseFoldDiff;
 }
 
 /*!
@@ -1205,7 +1231,7 @@ static inline ushort foldCase(ushort ch)
 */
 QChar QChar::toCaseFolded() const
 {
-    return ucs + qGetProp(ucs)->caseFoldDiff;
+   return ucs + qGetProp(ucs)->caseFoldDiff;
 }
 
 /*!
@@ -1215,9 +1241,10 @@ QChar QChar::toCaseFolded() const
 */
 uint QChar::toCaseFolded(uint ucs4)
 {
-    if (ucs4 > UNICODE_LAST_CODEPOINT)
-        return ucs4;
-    return ucs4 + qGetProp(ucs4)->caseFoldDiff;
+   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+      return ucs4;
+   }
+   return ucs4 + qGetProp(ucs4)->caseFoldDiff;
 }
 
 /*!
@@ -1227,7 +1254,7 @@ uint QChar::toCaseFolded(uint ucs4)
 */
 ushort QChar::toCaseFolded(ushort ucs2)
 {
-    return ucs2 + qGetProp(ucs2)->caseFoldDiff;
+   return ucs2 + qGetProp(ucs2)->caseFoldDiff;
 }
 
 
@@ -1289,8 +1316,8 @@ ushort QChar::toCaseFolded(ushort ucs2)
 */
 QDataStream &operator<<(QDataStream &out, QChar chr)
 {
-    out << quint16(chr.unicode());
-    return out;
+   out << quint16(chr.unicode());
+   return out;
 }
 
 /*!
@@ -1302,10 +1329,10 @@ QDataStream &operator<<(QDataStream &out, QChar chr)
 */
 QDataStream &operator>>(QDataStream &in, QChar &chr)
 {
-    quint16 u;
-    in >> u;
-    chr.unicode() = ushort(u);
-    return in;
+   quint16 u;
+   in >> u;
+   chr.unicode() = ushort(u);
+   return in;
 }
 #endif // QT_NO_DATASTREAM
 
@@ -1409,197 +1436,215 @@ QDataStream &operator>>(QDataStream &in, QChar &chr)
 
 static void decomposeHelper(QString *str, bool canonical, QChar::UnicodeVersion version, int from)
 {
-    unsigned short buffer[3];
+   unsigned short buffer[3];
 
-    QString &s = *str;
+   QString &s = *str;
 
-    const unsigned short *utf16 = reinterpret_cast<unsigned short *>(s.data());
-    const unsigned short *uc = utf16 + s.length();
-    while (uc != utf16 + from) {
-        uint ucs4 = *(--uc);
-        if (QChar(ucs4).isLowSurrogate() && uc != utf16) {
-            ushort high = *(uc - 1);
-            if (QChar(high).isHighSurrogate()) {
-                --uc;
-                ucs4 = QChar::surrogateToUcs4(high, ucs4);
-            }
-        }
-        QChar::UnicodeVersion v = QChar::unicodeVersion(ucs4);
-        if (v == QChar::Unicode_Unassigned || v > version)
-            continue;
-        int length;
-        int tag;
-        const unsigned short *d = decompositionHelper(ucs4, &length, &tag, buffer);
-        if (!d || (canonical && tag != QChar::Canonical))
-            continue;
+   const unsigned short *utf16 = reinterpret_cast<unsigned short *>(s.data());
+   const unsigned short *uc = utf16 + s.length();
+   while (uc != utf16 + from) {
+      uint ucs4 = *(--uc);
+      if (QChar(ucs4).isLowSurrogate() && uc != utf16) {
+         ushort high = *(uc - 1);
+         if (QChar(high).isHighSurrogate()) {
+            --uc;
+            ucs4 = QChar::surrogateToUcs4(high, ucs4);
+         }
+      }
+      QChar::UnicodeVersion v = QChar::unicodeVersion(ucs4);
+      if (v == QChar::Unicode_Unassigned || v > version) {
+         continue;
+      }
+      int length;
+      int tag;
+      const unsigned short *d = decompositionHelper(ucs4, &length, &tag, buffer);
+      if (!d || (canonical && tag != QChar::Canonical)) {
+         continue;
+      }
 
-        int pos = uc - utf16;
-        s.replace(pos, QChar::requiresSurrogates(ucs4) ? 2 : 1, reinterpret_cast<const QChar *>(d), length);
-        // since the insert invalidates the pointers and we do decomposition recursive
-        utf16 = reinterpret_cast<unsigned short *>(s.data());
-        uc = utf16 + pos + length;
-    }
+      int pos = uc - utf16;
+      s.replace(pos, QChar::requiresSurrogates(ucs4) ? 2 : 1, reinterpret_cast<const QChar *>(d), length);
+      // since the insert invalidates the pointers and we do decomposition recursive
+      utf16 = reinterpret_cast<unsigned short *>(s.data());
+      uc = utf16 + pos + length;
+   }
 }
 
 
 struct UCS2Pair {
-    ushort u1;
-    ushort u2;
+   ushort u1;
+   ushort u2;
 };
 
 inline bool operator<(ushort u1, const UCS2Pair &ligature)
-{ return u1 < ligature.u1; }
+{
+   return u1 < ligature.u1;
+}
 inline bool operator<(const UCS2Pair &ligature, ushort u1)
-{ return ligature.u1 < u1; }
+{
+   return ligature.u1 < u1;
+}
 
 static ushort ligatureHelper(ushort u1, ushort u2)
 {
-    // hangul L-V pair
-    int LIndex = u1 - Hangul_LBase;
-    if (0 <= LIndex && LIndex < Hangul_LCount) {
-        int VIndex = u2 - Hangul_VBase;
-        if (0 <= VIndex && VIndex < Hangul_VCount)
-            return Hangul_SBase + (LIndex * Hangul_VCount + VIndex) * Hangul_TCount;
-    }
+   // hangul L-V pair
+   int LIndex = u1 - Hangul_LBase;
+   if (0 <= LIndex && LIndex < Hangul_LCount) {
+      int VIndex = u2 - Hangul_VBase;
+      if (0 <= VIndex && VIndex < Hangul_VCount) {
+         return Hangul_SBase + (LIndex * Hangul_VCount + VIndex) * Hangul_TCount;
+      }
+   }
 
-    // hangul LV-T pair
-    int SIndex = u1 - Hangul_SBase;
-    if (0 <= SIndex && SIndex < Hangul_SCount && (SIndex % Hangul_TCount) == 0) {
-        int TIndex = u2 - Hangul_TBase;
-        if (0 <= TIndex && TIndex <= Hangul_TCount)
-            return u1 + TIndex;
-    }
+   // hangul LV-T pair
+   int SIndex = u1 - Hangul_SBase;
+   if (0 <= SIndex && SIndex < Hangul_SCount && (SIndex % Hangul_TCount) == 0) {
+      int TIndex = u2 - Hangul_TBase;
+      if (0 <= TIndex && TIndex <= Hangul_TCount) {
+         return u1 + TIndex;
+      }
+   }
 
-    const unsigned short index = GET_LIGATURE_INDEX(u2);
-    if (index == 0xffff)
-        return 0;
-    const unsigned short *ligatures = uc_ligature_map+index;
-    ushort length = *ligatures++;
-    {
-        const UCS2Pair *data = reinterpret_cast<const UCS2Pair *>(ligatures);
-        const UCS2Pair *r = qBinaryFind(data, data + length, u1);
-        if (r != data + length)
-            return r->u2;
-    }
+   const unsigned short index = GET_LIGATURE_INDEX(u2);
+   if (index == 0xffff) {
+      return 0;
+   }
+   const unsigned short *ligatures = uc_ligature_map + index;
+   ushort length = *ligatures++;
+   {
+      const UCS2Pair *data = reinterpret_cast<const UCS2Pair *>(ligatures);
+      const UCS2Pair *r = qBinaryFind(data, data + length, u1);
+      if (r != data + length) {
+         return r->u2;
+      }
+   }
 
-    return 0;
+   return 0;
 }
 
 static void composeHelper(QString *str, QChar::UnicodeVersion version, int from)
 {
-    QString &s = *str;
+   QString &s = *str;
 
-    if (from < 0 || s.length() - from < 2)
-        return;
+   if (from < 0 || s.length() - from < 2) {
+      return;
+   }
 
-    // the loop can partly ignore high Unicode as all ligatures are in the BMP
-    int starter = -2; // to prevent starter == pos - 1
-    int lastCombining = 255; // to prevent combining > lastCombining
-    int pos = from;
-    while (pos < s.length()) {
-        uint uc = s.at(pos).unicode();
-        if (QChar(uc).isHighSurrogate() && pos < s.length()-1) {
-            ushort low = s.at(pos+1).unicode();
-            if (QChar(low).isLowSurrogate()) {
-                uc = QChar::surrogateToUcs4(uc, low);
-                ++pos;
-            }
-        }
-        const QUnicodeTables::Properties *p = qGetProp(uc);
-        if (p->unicodeVersion == QChar::Unicode_Unassigned || p->unicodeVersion > version) {
-            starter = -1; // to prevent starter == pos - 1
-            lastCombining = 255; // to prevent combining > lastCombining
+   // the loop can partly ignore high Unicode as all ligatures are in the BMP
+   int starter = -2; // to prevent starter == pos - 1
+   int lastCombining = 255; // to prevent combining > lastCombining
+   int pos = from;
+   while (pos < s.length()) {
+      uint uc = s.at(pos).unicode();
+      if (QChar(uc).isHighSurrogate() && pos < s.length() - 1) {
+         ushort low = s.at(pos + 1).unicode();
+         if (QChar(low).isLowSurrogate()) {
+            uc = QChar::surrogateToUcs4(uc, low);
             ++pos;
+         }
+      }
+      const QUnicodeTables::Properties *p = qGetProp(uc);
+      if (p->unicodeVersion == QChar::Unicode_Unassigned || p->unicodeVersion > version) {
+         starter = -1; // to prevent starter == pos - 1
+         lastCombining = 255; // to prevent combining > lastCombining
+         ++pos;
+         continue;
+      }
+      int combining = p->combiningClass;
+      if ((starter == pos - 1 || combining > lastCombining) && starter >= from) {
+         // allowed to form ligature with S
+         QChar ligature = ligatureHelper(s.at(starter).unicode(), uc);
+         if (ligature.unicode()) {
+            s[starter] = ligature;
+            s.remove(pos, 1);
             continue;
-        }
-        int combining = p->combiningClass;
-        if ((starter == pos - 1 || combining > lastCombining) && starter >= from) {
-            // allowed to form ligature with S
-            QChar ligature = ligatureHelper(s.at(starter).unicode(), uc);
-            if (ligature.unicode()) {
-                s[starter] = ligature;
-                s.remove(pos, 1);
-                continue;
-            }
-        }
-        if (!combining)
-            starter = pos;
-        lastCombining = combining;
-        ++pos;
-    }
+         }
+      }
+      if (!combining) {
+         starter = pos;
+      }
+      lastCombining = combining;
+      ++pos;
+   }
 }
 
 
 static void canonicalOrderHelper(QString *str, QChar::UnicodeVersion version, int from)
 {
-    QString &s = *str;
-    const int l = s.length()-1;
-    int pos = from;
-    while (pos < l) {
-        int p2 = pos+1;
-        uint u1 = s.at(pos).unicode();
-        if (QChar(u1).isHighSurrogate()) {
-            ushort low = s.at(p2).unicode();
-            if (QChar(low).isLowSurrogate()) {
-                u1 = QChar::surrogateToUcs4(u1, low);
-                if (p2 >= l)
-                    break;
-                ++p2;
+   QString &s = *str;
+   const int l = s.length() - 1;
+   int pos = from;
+   while (pos < l) {
+      int p2 = pos + 1;
+      uint u1 = s.at(pos).unicode();
+      if (QChar(u1).isHighSurrogate()) {
+         ushort low = s.at(p2).unicode();
+         if (QChar(low).isLowSurrogate()) {
+            u1 = QChar::surrogateToUcs4(u1, low);
+            if (p2 >= l) {
+               break;
             }
-        }
-        uint u2 = s.at(p2).unicode();
-        if (QChar(u2).isHighSurrogate() && p2 < l) {
-            ushort low = s.at(p2+1).unicode();
-            if (QChar(low).isLowSurrogate()) {
-                u2 = QChar::surrogateToUcs4(u2, low);
-                ++p2;
-            }
-        }
+            ++p2;
+         }
+      }
+      uint u2 = s.at(p2).unicode();
+      if (QChar(u2).isHighSurrogate() && p2 < l) {
+         ushort low = s.at(p2 + 1).unicode();
+         if (QChar(low).isLowSurrogate()) {
+            u2 = QChar::surrogateToUcs4(u2, low);
+            ++p2;
+         }
+      }
 
-        ushort c2 = 0;
-        {
-            const QUnicodeTables::Properties *p = qGetProp(u2);
-            if (p->unicodeVersion != QChar::Unicode_Unassigned && p->unicodeVersion <= version)
-                c2 = p->combiningClass;
-        }
-        if (c2 == 0) {
-            pos = p2+1;
-            continue;
-        }
+      ushort c2 = 0;
+      {
+         const QUnicodeTables::Properties *p = qGetProp(u2);
+         if (p->unicodeVersion != QChar::Unicode_Unassigned && p->unicodeVersion <= version) {
+            c2 = p->combiningClass;
+         }
+      }
+      if (c2 == 0) {
+         pos = p2 + 1;
+         continue;
+      }
 
-        ushort c1 = 0;
-        {
-            const QUnicodeTables::Properties *p = qGetProp(u1);
-            if (p->unicodeVersion != QChar::Unicode_Unassigned && p->unicodeVersion <= version)
-                c1 = p->combiningClass;
-        }
+      ushort c1 = 0;
+      {
+         const QUnicodeTables::Properties *p = qGetProp(u1);
+         if (p->unicodeVersion != QChar::Unicode_Unassigned && p->unicodeVersion <= version) {
+            c1 = p->combiningClass;
+         }
+      }
 
-        if (c1 > c2) {
-            QChar *uc = s.data();
-            int p = pos;
-            // exchange characters
-            if (!QChar::requiresSurrogates(u2)) {
-                uc[p++] = u2;
-            } else {
-                uc[p++] = QChar::highSurrogate(u2);
-                uc[p++] = QChar::lowSurrogate(u2);
-            }
-            if (!QChar::requiresSurrogates(u1)) {
-                uc[p++] = u1;
-            } else {
-                uc[p++] = QChar::highSurrogate(u1);
-                uc[p++] = QChar::lowSurrogate(u1);
-            }
-            if (pos > 0)
-                --pos;
-            if (pos > 0 && s.at(pos).isLowSurrogate())
-                --pos;
-        } else {
+      if (c1 > c2) {
+         QChar *uc = s.data();
+         int p = pos;
+         // exchange characters
+         if (!QChar::requiresSurrogates(u2)) {
+            uc[p++] = u2;
+         } else {
+            uc[p++] = QChar::highSurrogate(u2);
+            uc[p++] = QChar::lowSurrogate(u2);
+         }
+         if (!QChar::requiresSurrogates(u1)) {
+            uc[p++] = u1;
+         } else {
+            uc[p++] = QChar::highSurrogate(u1);
+            uc[p++] = QChar::lowSurrogate(u1);
+         }
+         if (pos > 0) {
+            --pos;
+         }
+         if (pos > 0 && s.at(pos).isLowSurrogate()) {
+            --pos;
+         }
+      } else {
+         ++pos;
+         if (QChar::requiresSurrogates(u1)) {
             ++pos;
-            if (QChar::requiresSurrogates(u1))
-                ++pos;
-        }
-    }
+         }
+      }
+   }
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,63 +33,59 @@ QT_BEGIN_NAMESPACE
 template <typename T>
 class QFutureSynchronizer
 {
-    Q_DISABLE_COPY(QFutureSynchronizer)
+   Q_DISABLE_COPY(QFutureSynchronizer)
 
-public:
-    QFutureSynchronizer() : m_cancelOnWait(false) { }
-    explicit QFutureSynchronizer(const QFuture<T> &future)
-        : m_cancelOnWait(false)
-    { addFuture(future); }
-    ~QFutureSynchronizer()  { waitForFinished(); }
+ public:
+   QFutureSynchronizer() : m_cancelOnWait(false) { }
+   explicit QFutureSynchronizer(const QFuture<T> &future)
+      : m_cancelOnWait(false) {
+      addFuture(future);
+   }
+   ~QFutureSynchronizer()  {
+      waitForFinished();
+   }
 
-    void setFuture(const QFuture<T> &future)
-    {
-        waitForFinished();
-        m_futures.clear();
-        addFuture(future);
-    }
+   void setFuture(const QFuture<T> &future) {
+      waitForFinished();
+      m_futures.clear();
+      addFuture(future);
+   }
 
-    void addFuture(const QFuture<T> &future)
-    {
-        m_futures.append(future);
-    }
+   void addFuture(const QFuture<T> &future) {
+      m_futures.append(future);
+   }
 
-    void waitForFinished()
-    {
-        if (m_cancelOnWait) {
-            for (int i = 0; i < m_futures.count(); ++i) {
-                 m_futures[i].cancel();
-            }
-        }
-        
-        for (int i = 0; i < m_futures.count(); ++i) {
-             m_futures[i].waitForFinished();
+   void waitForFinished() {
+      if (m_cancelOnWait) {
+         for (int i = 0; i < m_futures.count(); ++i) {
+            m_futures[i].cancel();
          }
-    }
+      }
 
-    void clearFutures()
-    {
-        m_futures.clear();
-    }
+      for (int i = 0; i < m_futures.count(); ++i) {
+         m_futures[i].waitForFinished();
+      }
+   }
 
-    QList<QFuture<T> > futures() const
-    {
-        return m_futures;
-    }
+   void clearFutures() {
+      m_futures.clear();
+   }
 
-    void setCancelOnWait(bool enabled)
-    {
-        m_cancelOnWait = enabled;
-    }
+   QList<QFuture<T> > futures() const {
+      return m_futures;
+   }
 
-    bool cancelOnWait() const
-    {
-        return m_cancelOnWait;
-    }
+   void setCancelOnWait(bool enabled) {
+      m_cancelOnWait = enabled;
+   }
 
-protected:
-    QList<QFuture<T> > m_futures;
-    bool m_cancelOnWait;
+   bool cancelOnWait() const {
+      return m_cancelOnWait;
+   }
+
+ protected:
+   QList<QFuture<T> > m_futures;
+   bool m_cancelOnWait;
 };
 
 QT_END_NAMESPACE

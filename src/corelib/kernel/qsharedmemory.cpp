@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,25 +45,26 @@ QT_BEGIN_NAMESPACE
   */
 QString
 QSharedMemoryPrivate::makePlatformSafeKey(const QString &key,
-					  const QString &prefix)
+      const QString &prefix)
 {
-    if (key.isEmpty())
-        return QString();
+   if (key.isEmpty()) {
+      return QString();
+   }
 
-    QString result = prefix;
+   QString result = prefix;
 
-    QString part1 = key;
-    part1.replace(QRegExp(QLatin1String("[^A-Za-z]")), QString());
-    result.append(part1);
+   QString part1 = key;
+   part1.replace(QRegExp(QLatin1String("[^A-Za-z]")), QString());
+   result.append(part1);
 
-    QByteArray hex = QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Sha1).toHex();
-    result.append(QLatin1String(hex));
+   QByteArray hex = QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Sha1).toHex();
+   result.append(QLatin1String(hex));
 #ifdef Q_OS_WIN
-    return result;
+   return result;
 #elif defined(QT_POSIX_IPC)
-    return QLatin1Char('/') + result;
+   return QLatin1Char('/') + result;
 #else
-    return QDir::tempPath() + QLatin1Char('/') + result;
+   return QDir::tempPath() + QLatin1Char('/') + result;
 #endif
 }
 #endif // QT_NO_SHAREDMEMORY && QT_NO_SHAREDMEMORY
@@ -146,9 +147,9 @@ QSharedMemoryPrivate::makePlatformSafeKey(const QString &key,
   \sa setKey()
  */
 QSharedMemory::QSharedMemory(QObject *parent)
-	: QObject(parent), d_ptr(new QSharedMemoryPrivate)
+   : QObject(parent), d_ptr(new QSharedMemoryPrivate)
 {
-	d_ptr->q_ptr = this;	
+   d_ptr->q_ptr = this;
 }
 
 /*!
@@ -161,7 +162,7 @@ QSharedMemory::QSharedMemory(QObject *parent)
 QSharedMemory::QSharedMemory(const QString &key, QObject *parent)
    : QObject(parent), d_ptr(new QSharedMemoryPrivate)
 {
-	d_ptr->q_ptr = this;	
+   d_ptr->q_ptr = this;
    setKey(key);
 }
 
@@ -176,7 +177,7 @@ QSharedMemory::QSharedMemory(const QString &key, QObject *parent)
  */
 QSharedMemory::~QSharedMemory()
 {
-    setKey(QString());
+   setKey(QString());
 }
 
 /*!
@@ -195,15 +196,17 @@ QSharedMemory::~QSharedMemory()
 */
 void QSharedMemory::setKey(const QString &key)
 {
-    Q_D(QSharedMemory);
-    if (key == d->key && d->makePlatformSafeKey(key) == d->nativeKey)
-        return;
+   Q_D(QSharedMemory);
+   if (key == d->key && d->makePlatformSafeKey(key) == d->nativeKey) {
+      return;
+   }
 
-    if (isAttached())
-        detach();
-    d->cleanHandle();
-    d->key = key;
-    d->nativeKey = d->makePlatformSafeKey(key);
+   if (isAttached()) {
+      detach();
+   }
+   d->cleanHandle();
+   d->key = key;
+   d->nativeKey = d->makePlatformSafeKey(key);
 }
 
 /*!
@@ -227,54 +230,56 @@ void QSharedMemory::setKey(const QString &key)
 */
 void QSharedMemory::setNativeKey(const QString &key)
 {
-    Q_D(QSharedMemory);
-    if (key == d->nativeKey && d->key.isNull())
-        return;
+   Q_D(QSharedMemory);
+   if (key == d->nativeKey && d->key.isNull()) {
+      return;
+   }
 
-    if (isAttached())
-        detach();
-    d->cleanHandle();
-    d->key.clear();
-    d->nativeKey = key;
+   if (isAttached()) {
+      detach();
+   }
+   d->cleanHandle();
+   d->key.clear();
+   d->nativeKey = key;
 }
 
 bool QSharedMemoryPrivate::initKey()
 {
-    cleanHandle();
+   cleanHandle();
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
-    systemSemaphore.setKey(QString(), 1);
-    systemSemaphore.setKey(key, 1);
-    if (systemSemaphore.error() != QSystemSemaphore::NoError) {
-        QString function = QLatin1String("QSharedMemoryPrivate::initKey");
-        errorString = QSharedMemory::tr("%1: unable to set key on lock").arg(function);
-        switch(systemSemaphore.error()) {
-        case QSystemSemaphore::PermissionDenied:
+   systemSemaphore.setKey(QString(), 1);
+   systemSemaphore.setKey(key, 1);
+   if (systemSemaphore.error() != QSystemSemaphore::NoError) {
+      QString function = QLatin1String("QSharedMemoryPrivate::initKey");
+      errorString = QSharedMemory::tr("%1: unable to set key on lock").arg(function);
+      switch (systemSemaphore.error()) {
+         case QSystemSemaphore::PermissionDenied:
             error = QSharedMemory::PermissionDenied;
             break;
-        case QSystemSemaphore::KeyError:
+         case QSystemSemaphore::KeyError:
             error = QSharedMemory::KeyError;
             break;
-        case QSystemSemaphore::AlreadyExists:
+         case QSystemSemaphore::AlreadyExists:
             error = QSharedMemory::AlreadyExists;
             break;
-        case QSystemSemaphore::NotFound:
+         case QSystemSemaphore::NotFound:
             error = QSharedMemory::NotFound;
             break;
-        case QSystemSemaphore::OutOfResources:
+         case QSystemSemaphore::OutOfResources:
             error = QSharedMemory::OutOfResources;
             break;
-        case QSystemSemaphore::UnknownError:
-        default:
+         case QSystemSemaphore::UnknownError:
+         default:
             error = QSharedMemory::UnknownError;
             break;
-        }
-        return false;
-    }
+      }
+      return false;
+   }
 #endif
-    errorString.clear();
-    error = QSharedMemory::NoError;
-    return true;
+   errorString.clear();
+   error = QSharedMemory::NoError;
+   return true;
 }
 
 /*!
@@ -290,8 +295,8 @@ bool QSharedMemoryPrivate::initKey()
  */
 QString QSharedMemory::key() const
 {
-    Q_D(const QSharedMemory);
-    return d->key;
+   Q_D(const QSharedMemory);
+   return d->key;
 }
 
 /*!
@@ -308,8 +313,8 @@ QString QSharedMemory::key() const
 */
 QString QSharedMemory::nativeKey() const
 {
-    Q_D(const QSharedMemory);
-    return d->nativeKey;
+   Q_D(const QSharedMemory);
+   return d->nativeKey;
 }
 
 /*!
@@ -324,33 +329,36 @@ QString QSharedMemory::nativeKey() const
  */
 bool QSharedMemory::create(int size, AccessMode mode)
 {
-    Q_D(QSharedMemory);
+   Q_D(QSharedMemory);
 
-    if (!d->initKey())
-        return false;
+   if (!d->initKey()) {
+      return false;
+   }
 
-    if (size <= 0) {
-        d->error = QSharedMemory::InvalidSize;
-        d->errorString = QSharedMemory::tr("%1: create size is less then 0").arg(QLatin1String("QSharedMemory::create"));
-        return false;
-    }
+   if (size <= 0) {
+      d->error = QSharedMemory::InvalidSize;
+      d->errorString = QSharedMemory::tr("%1: create size is less then 0").arg(QLatin1String("QSharedMemory::create"));
+      return false;
+   }
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
 #ifndef Q_OS_WIN
-    // Take ownership and force set initialValue because the semaphore
-    // might have already existed from a previous crash.
-    d->systemSemaphore.setKey(d->key, 1, QSystemSemaphore::Create);
+   // Take ownership and force set initialValue because the semaphore
+   // might have already existed from a previous crash.
+   d->systemSemaphore.setKey(d->key, 1, QSystemSemaphore::Create);
 #endif
 
-    QSharedMemoryLocker lock(this);
-    if (!d->key.isNull() && !d->tryLocker(&lock, QLatin1String("QSharedMemory::create")))
-        return false;
+   QSharedMemoryLocker lock(this);
+   if (!d->key.isNull() && !d->tryLocker(&lock, QLatin1String("QSharedMemory::create"))) {
+      return false;
+   }
 #endif
 
-    if (!d->create(size))
-        return false;
+   if (!d->create(size)) {
+      return false;
+   }
 
-    return d->attach(mode);
+   return d->attach(mode);
 }
 
 /*!
@@ -361,8 +369,8 @@ bool QSharedMemory::create(int size, AccessMode mode)
  */
 int QSharedMemory::size() const
 {
-    Q_D(const QSharedMemory);
-    return d->size;
+   Q_D(const QSharedMemory);
+   return d->size;
 }
 
 /*!
@@ -391,20 +399,23 @@ int QSharedMemory::size() const
  */
 bool QSharedMemory::attach(AccessMode mode)
 {
-    Q_D(QSharedMemory);
+   Q_D(QSharedMemory);
 
-    if (isAttached() || !d->initKey())
-        return false;
+   if (isAttached() || !d->initKey()) {
+      return false;
+   }
 #ifndef QT_NO_SYSTEMSEMAPHORE
-    QSharedMemoryLocker lock(this);
-    if (!d->key.isNull() && !d->tryLocker(&lock, QLatin1String("QSharedMemory::attach")))
-        return false;
+   QSharedMemoryLocker lock(this);
+   if (!d->key.isNull() && !d->tryLocker(&lock, QLatin1String("QSharedMemory::attach"))) {
+      return false;
+   }
 #endif
 
-    if (isAttached() || !d->handle())
-        return false;
+   if (isAttached() || !d->handle()) {
+      return false;
+   }
 
-    return d->attach(mode);
+   return d->attach(mode);
 }
 
 /*!
@@ -415,8 +426,8 @@ bool QSharedMemory::attach(AccessMode mode)
  */
 bool QSharedMemory::isAttached() const
 {
-    Q_D(const QSharedMemory);
-    return (0 != d->memory);
+   Q_D(const QSharedMemory);
+   return (0 != d->memory);
 }
 
 /*!
@@ -431,17 +442,19 @@ bool QSharedMemory::isAttached() const
  */
 bool QSharedMemory::detach()
 {
-    Q_D(QSharedMemory);
-    if (!isAttached())
-        return false;
+   Q_D(QSharedMemory);
+   if (!isAttached()) {
+      return false;
+   }
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
-    QSharedMemoryLocker lock(this);
-    if (!d->key.isNull() && !d->tryLocker(&lock, QLatin1String("QSharedMemory::detach")))
-        return false;
+   QSharedMemoryLocker lock(this);
+   if (!d->key.isNull() && !d->tryLocker(&lock, QLatin1String("QSharedMemory::detach"))) {
+      return false;
+   }
 #endif
 
-    return d->detach();
+   return d->detach();
 }
 
 /*!
@@ -455,8 +468,8 @@ bool QSharedMemory::detach()
  */
 void *QSharedMemory::data()
 {
-    Q_D(QSharedMemory);
-    return d->memory;
+   Q_D(QSharedMemory);
+   return d->memory;
 }
 
 /*!
@@ -468,10 +481,10 @@ void *QSharedMemory::data()
 
   \sa attach() create()
  */
-const void* QSharedMemory::constData() const
+const void *QSharedMemory::constData() const
 {
-    Q_D(const QSharedMemory);
-    return d->memory;
+   Q_D(const QSharedMemory);
+   return d->memory;
 }
 
 /*!
@@ -479,8 +492,8 @@ const void* QSharedMemory::constData() const
  */
 const void *QSharedMemory::data() const
 {
-    Q_D(const QSharedMemory);
-    return d->memory;
+   Q_D(const QSharedMemory);
+   return d->memory;
 }
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
@@ -497,19 +510,19 @@ const void *QSharedMemory::data() const
  */
 bool QSharedMemory::lock()
 {
-    Q_D(QSharedMemory);
-    if (d->lockedByMe) {
-        qWarning("QSharedMemory::lock: already locked");
-        return true;
-    }
-    if (d->systemSemaphore.acquire()) {
-        d->lockedByMe = true;
-        return true;
-    }
-    QString function = QLatin1String("QSharedMemory::lock");
-    d->errorString = QSharedMemory::tr("%1: unable to lock").arg(function);
-    d->error = QSharedMemory::LockError;
-    return false;
+   Q_D(QSharedMemory);
+   if (d->lockedByMe) {
+      qWarning("QSharedMemory::lock: already locked");
+      return true;
+   }
+   if (d->systemSemaphore.acquire()) {
+      d->lockedByMe = true;
+      return true;
+   }
+   QString function = QLatin1String("QSharedMemory::lock");
+   d->errorString = QSharedMemory::tr("%1: unable to lock").arg(function);
+   d->error = QSharedMemory::LockError;
+   return false;
 }
 
 /*!
@@ -522,16 +535,18 @@ bool QSharedMemory::lock()
  */
 bool QSharedMemory::unlock()
 {
-    Q_D(QSharedMemory);
-    if (!d->lockedByMe)
-        return false;
-    d->lockedByMe = false;
-    if (d->systemSemaphore.release())
-        return true;
-    QString function = QLatin1String("QSharedMemory::unlock");
-    d->errorString = QSharedMemory::tr("%1: unable to unlock").arg(function);
-    d->error = QSharedMemory::LockError;
-    return false;
+   Q_D(QSharedMemory);
+   if (!d->lockedByMe) {
+      return false;
+   }
+   d->lockedByMe = false;
+   if (d->systemSemaphore.release()) {
+      return true;
+   }
+   QString function = QLatin1String("QSharedMemory::unlock");
+   d->errorString = QSharedMemory::tr("%1: unable to unlock").arg(function);
+   d->error = QSharedMemory::LockError;
+   return false;
 }
 #endif // QT_NO_SYSTEMSEMAPHORE
 
@@ -572,8 +587,8 @@ bool QSharedMemory::unlock()
  */
 QSharedMemory::SharedMemoryError QSharedMemory::error() const
 {
-    Q_D(const QSharedMemory);
-    return d->error;
+   Q_D(const QSharedMemory);
+   return d->error;
 }
 
 /*!
@@ -586,8 +601,8 @@ QSharedMemory::SharedMemoryError QSharedMemory::error() const
  */
 QString QSharedMemory::errorString() const
 {
-    Q_D(const QSharedMemory);
-    return d->errorString;
+   Q_D(const QSharedMemory);
+   return d->errorString;
 }
 
 #endif // QT_NO_SHAREDMEMORY

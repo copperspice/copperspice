@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,39 +36,40 @@ class QFSFileEngine;
 
 class QFileDevicePrivate : public QIODevicePrivate
 {
-    Q_DECLARE_PUBLIC(QFileDevice)protected:
-    QFileDevicePrivate();
-    ~QFileDevicePrivate();
+ Q_DECLARE_PUBLIC(QFileDevice)protected:
+   QFileDevicePrivate();
+   ~QFileDevicePrivate();
 
-    virtual QAbstractFileEngine *engine() const;
+   virtual QAbstractFileEngine *engine() const;
 
-    QFileDevice::FileHandleFlags handleFlags;
+   QFileDevice::FileHandleFlags handleFlags;
 
-    mutable QAbstractFileEngine *fileEngine;
-    bool lastWasWrite;
-    QRingBuffer writeBuffer;
-    inline bool ensureFlushed() const;
+   mutable QAbstractFileEngine *fileEngine;
+   bool lastWasWrite;
+   QRingBuffer writeBuffer;
+   inline bool ensureFlushed() const;
 
-    bool putCharHelper(char c);
+   bool putCharHelper(char c);
 
-    QFileDevice::FileError error;
-    void setError(QFileDevice::FileError err);
-    void setError(QFileDevice::FileError err, const QString &errorString);
-    void setError(QFileDevice::FileError err, int errNum);
+   QFileDevice::FileError error;
+   void setError(QFileDevice::FileError err);
+   void setError(QFileDevice::FileError err, const QString &errorString);
+   void setError(QFileDevice::FileError err, int errNum);
 
-    mutable qint64 cachedSize;
+   mutable qint64 cachedSize;
 };
 
 inline bool QFileDevicePrivate::ensureFlushed() const
 {
-    // This function ensures that the write buffer has been flushed (const
-    // because certain const functions need to call it.
-    if (lastWasWrite) {
-        const_cast<QFileDevicePrivate *>(this)->lastWasWrite = false;
-        if (!const_cast<QFileDevice *>(q_func())->flush())
-            return false;
-    }
-    return true;
+   // This function ensures that the write buffer has been flushed (const
+   // because certain const functions need to call it.
+   if (lastWasWrite) {
+      const_cast<QFileDevicePrivate *>(this)->lastWasWrite = false;
+      if (!const_cast<QFileDevice *>(q_func())->flush()) {
+         return false;
+      }
+   }
+   return true;
 }
 
 QT_END_NAMESPACE

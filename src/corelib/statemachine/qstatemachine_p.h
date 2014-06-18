@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -59,165 +59,165 @@ class QAbstractAnimation;
 
 class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
 {
-    Q_DECLARE_PUBLIC(QStateMachine)
+   Q_DECLARE_PUBLIC(QStateMachine)
 
-public:
-    enum State {
-        NotRunning,
-        Starting,
-        Running
-    };
-    enum EventProcessingMode {
-        DirectProcessing,
-        QueuedProcessing
-    };
-    enum StopProcessingReason {
-        EventQueueEmpty,
-        Finished,
-        Stopped
-    };
+ public:
+   enum State {
+      NotRunning,
+      Starting,
+      Running
+   };
+   enum EventProcessingMode {
+      DirectProcessing,
+      QueuedProcessing
+   };
+   enum StopProcessingReason {
+      EventQueueEmpty,
+      Finished,
+      Stopped
+   };
 
-    QStateMachinePrivate();
-    ~QStateMachinePrivate();
+   QStateMachinePrivate();
+   ~QStateMachinePrivate();
 
-    static QStateMachinePrivate *get(QStateMachine *q);
+   static QStateMachinePrivate *get(QStateMachine *q);
 
-    QState *findLCA(const QList<QAbstractState*> &states) const;
+   QState *findLCA(const QList<QAbstractState *> &states) const;
 
-    static bool stateEntryLessThan(QAbstractState *s1, QAbstractState *s2);
-    static bool stateExitLessThan(QAbstractState *s1, QAbstractState *s2);
+   static bool stateEntryLessThan(QAbstractState *s1, QAbstractState *s2);
+   static bool stateExitLessThan(QAbstractState *s1, QAbstractState *s2);
 
-    QAbstractState *findErrorState(QAbstractState *context);
-    void setError(QStateMachine::Error error, QAbstractState *currentContext);
+   QAbstractState *findErrorState(QAbstractState *context);
+   void setError(QStateMachine::Error error, QAbstractState *currentContext);
 
-    // private slots
-    void _q_start();
-    void _q_process();
+   // private slots
+   void _q_start();
+   void _q_process();
 
 #ifndef QT_NO_ANIMATION
-    void _q_animationFinished();
+   void _q_animationFinished();
 #endif
 
-    QState *rootState() const;
+   QState *rootState() const;
 
-    QState *startState();
-    void removeStartState();
+   QState *startState();
+   void removeStartState();
 
-    void clearHistory();
+   void clearHistory();
 
-    void microstep(QEvent *event, const QList<QAbstractTransition*> &transitionList);
-    bool isPreempted(const QAbstractState *s, const QSet<QAbstractTransition*> &transitions) const;
-    QSet<QAbstractTransition*> selectTransitions(QEvent *event) const;
-    QList<QAbstractState*> exitStates(QEvent *event, const QList<QAbstractTransition*> &transitionList);
-    void executeTransitionContent(QEvent *event, const QList<QAbstractTransition*> &transitionList);
-    QList<QAbstractState*> enterStates(QEvent *event, const QList<QAbstractTransition*> &enabledTransitions);
-    void addStatesToEnter(QAbstractState *s, QState *root,
-                          QSet<QAbstractState*> &statesToEnter,
-                          QSet<QAbstractState*> &statesForDefaultEntry);
+   void microstep(QEvent *event, const QList<QAbstractTransition *> &transitionList);
+   bool isPreempted(const QAbstractState *s, const QSet<QAbstractTransition *> &transitions) const;
+   QSet<QAbstractTransition *> selectTransitions(QEvent *event) const;
+   QList<QAbstractState *> exitStates(QEvent *event, const QList<QAbstractTransition *> &transitionList);
+   void executeTransitionContent(QEvent *event, const QList<QAbstractTransition *> &transitionList);
+   QList<QAbstractState *> enterStates(QEvent *event, const QList<QAbstractTransition *> &enabledTransitions);
+   void addStatesToEnter(QAbstractState *s, QState *root,
+                         QSet<QAbstractState *> &statesToEnter,
+                         QSet<QAbstractState *> &statesForDefaultEntry);
 
-    void applyProperties(const QList<QAbstractTransition*> &transitionList,
-                         const QList<QAbstractState*> &exitedStates,
-                         const QList<QAbstractState*> &enteredStates);
+   void applyProperties(const QList<QAbstractTransition *> &transitionList,
+                        const QList<QAbstractState *> &exitedStates,
+                        const QList<QAbstractState *> &enteredStates);
 
-    static QState *toStandardState(QAbstractState *state);
-    static const QState *toStandardState(const QAbstractState *state);
-    static QFinalState *toFinalState(QAbstractState *state);
-    static QHistoryState *toHistoryState(QAbstractState *state);
+   static QState *toStandardState(QAbstractState *state);
+   static const QState *toStandardState(const QAbstractState *state);
+   static QFinalState *toFinalState(QAbstractState *state);
+   static QHistoryState *toHistoryState(QAbstractState *state);
 
-    bool isInFinalState(QAbstractState *s) const;
-    static bool isFinal(const QAbstractState *s);
-    static bool isParallel(const QAbstractState *s);
-    bool isCompound(const QAbstractState *s) const;
-    bool isAtomic(const QAbstractState *s) const;
-    static bool isDescendantOf(const QAbstractState *s, const QAbstractState *other);
-    static QList<QState*> properAncestors(const QAbstractState *s, const QState *upperBound);
+   bool isInFinalState(QAbstractState *s) const;
+   static bool isFinal(const QAbstractState *s);
+   static bool isParallel(const QAbstractState *s);
+   bool isCompound(const QAbstractState *s) const;
+   bool isAtomic(const QAbstractState *s) const;
+   static bool isDescendantOf(const QAbstractState *s, const QAbstractState *other);
+   static QList<QState *> properAncestors(const QAbstractState *s, const QState *upperBound);
 
-    void goToState(QAbstractState *targetState);
+   void goToState(QAbstractState *targetState);
 
-    void registerTransitions(QAbstractState *state);
-    void registerSignalTransition(QSignalTransition *transition);
-    void unregisterSignalTransition(QSignalTransition *transition);
+   void registerTransitions(QAbstractState *state);
+   void registerSignalTransition(QSignalTransition *transition);
+   void unregisterSignalTransition(QSignalTransition *transition);
 
 #ifndef QT_NO_STATEMACHINE_EVENTFILTER
-    void registerEventTransition(QEventTransition *transition);
-    void unregisterEventTransition(QEventTransition *transition);
-    void handleFilteredEvent(QObject *watched, QEvent *event);
+   void registerEventTransition(QEventTransition *transition);
+   void unregisterEventTransition(QEventTransition *transition);
+   void handleFilteredEvent(QObject *watched, QEvent *event);
 #endif
 
-    void unregisterTransition(QAbstractTransition *transition);
-    void unregisterAllTransitions();
-    void handleTransitionSignal(QObject *sender, int sender_signalIndex);      // , const TeaCupAbstract &data);    
+   void unregisterTransition(QAbstractTransition *transition);
+   void unregisterAllTransitions();
+   void handleTransitionSignal(QObject *sender, int sender_signalIndex);      // , const TeaCupAbstract &data);
 
-    void postInternalEvent(QEvent *e);
-    void postExternalEvent(QEvent *e);
-    QEvent *dequeueInternalEvent();
-    QEvent *dequeueExternalEvent();
-    bool isInternalEventQueueEmpty();
-    bool isExternalEventQueueEmpty();
-    void processEvents(EventProcessingMode processingMode);
-    void cancelAllDelayedEvents();
-    
+   void postInternalEvent(QEvent *e);
+   void postExternalEvent(QEvent *e);
+   QEvent *dequeueInternalEvent();
+   QEvent *dequeueExternalEvent();
+   bool isInternalEventQueueEmpty();
+   bool isExternalEventQueueEmpty();
+   void processEvents(EventProcessingMode processingMode);
+   void cancelAllDelayedEvents();
+
 #ifndef QT_NO_PROPERTIES
-    typedef QPair<QObject *, QByteArray> RestorableId;
-    QHash<RestorableId, QVariant> registeredRestorables;
-    void registerRestorable(QObject *object, const QByteArray &propertyName);
-    void unregisterRestorable(QObject *object, const QByteArray &propertyName);
-    bool hasRestorable(QObject *object, const QByteArray &propertyName) const;
-    QVariant restorableValue(QObject *object, const QByteArray &propertyName) const;
-    QList<QPropertyAssignment> restorablesToPropertyList(const QHash<RestorableId, QVariant> &restorables) const;
+   typedef QPair<QObject *, QByteArray> RestorableId;
+   QHash<RestorableId, QVariant> registeredRestorables;
+   void registerRestorable(QObject *object, const QByteArray &propertyName);
+   void unregisterRestorable(QObject *object, const QByteArray &propertyName);
+   bool hasRestorable(QObject *object, const QByteArray &propertyName) const;
+   QVariant restorableValue(QObject *object, const QByteArray &propertyName) const;
+   QList<QPropertyAssignment> restorablesToPropertyList(const QHash<RestorableId, QVariant> &restorables) const;
 #endif
 
-    State state;
-    QState *_startState;
-    bool processing;
-    bool processingScheduled;
-    bool stop;
-    StopProcessingReason stopProcessingReason;
-    QSet<QAbstractState*> configuration;
-    QList<QEvent*> internalEventQueue;
-    QList<QEvent*> externalEventQueue;
-    QMutex internalEventMutex;
-    QMutex externalEventMutex;
+   State state;
+   QState *_startState;
+   bool processing;
+   bool processingScheduled;
+   bool stop;
+   StopProcessingReason stopProcessingReason;
+   QSet<QAbstractState *> configuration;
+   QList<QEvent *> internalEventQueue;
+   QList<QEvent *> externalEventQueue;
+   QMutex internalEventMutex;
+   QMutex externalEventMutex;
 
-    QStateMachine::Error error;
-    QStateMachine::RestorePolicy globalRestorePolicy;
+   QStateMachine::Error error;
+   QStateMachine::RestorePolicy globalRestorePolicy;
 
-    QString errorString;
-    QSet<QAbstractState *> pendingErrorStates;
-    QSet<QAbstractState *> pendingErrorStatesForDefaultEntry;
+   QString errorString;
+   QSet<QAbstractState *> pendingErrorStates;
+   QSet<QAbstractState *> pendingErrorStatesForDefaultEntry;
 
 #ifndef QT_NO_ANIMATION
-    bool animated;
+   bool animated;
 
-    QPair<QList<QAbstractAnimation*>, QList<QAbstractAnimation*> >
-        initializeAnimation(QAbstractAnimation *abstractAnimation, const QPropertyAssignment &prop);
+   QPair<QList<QAbstractAnimation *>, QList<QAbstractAnimation *> >
+   initializeAnimation(QAbstractAnimation *abstractAnimation, const QPropertyAssignment &prop);
 
-    QHash<QAbstractState*, QList<QAbstractAnimation*> > animationsForState;
-    QHash<QAbstractAnimation*, QPropertyAssignment> propertyForAnimation;
-    QHash<QAbstractAnimation*, QAbstractState*> stateForAnimation;
-    QSet<QAbstractAnimation*> resetAnimationEndValues;
+   QHash<QAbstractState *, QList<QAbstractAnimation *> > animationsForState;
+   QHash<QAbstractAnimation *, QPropertyAssignment> propertyForAnimation;
+   QHash<QAbstractAnimation *, QAbstractState *> stateForAnimation;
+   QSet<QAbstractAnimation *> resetAnimationEndValues;
 
-    QList<QAbstractAnimation *> defaultAnimations;
-    QMultiHash<QAbstractState *, QAbstractAnimation *> defaultAnimationsForSource;
-    QMultiHash<QAbstractState *, QAbstractAnimation *> defaultAnimationsForTarget;
+   QList<QAbstractAnimation *> defaultAnimations;
+   QMultiHash<QAbstractState *, QAbstractAnimation *> defaultAnimationsForSource;
+   QMultiHash<QAbstractState *, QAbstractAnimation *> defaultAnimationsForTarget;
 
 #endif
 
-    QSignalEventGenerator *m_signalEventGenerator;
-   
+   QSignalEventGenerator *m_signalEventGenerator;
+
 #ifndef QT_NO_STATEMACHINE_EVENTFILTER
-    QHash<QObject*, QHash<QEvent::Type, int> > qobjectEvents;
+   QHash<QObject *, QHash<QEvent::Type, int> > qobjectEvents;
 #endif
 
-    QHash<int, QEvent*> delayedEvents;
-    QMutex delayedEventsMutex;
-  
-    typedef QEvent* (*f_cloneEvent)(QEvent*);
-    struct Handler {
-        f_cloneEvent cloneEvent;
-    };
+   QHash<int, QEvent *> delayedEvents;
+   QMutex delayedEventsMutex;
 
-    static const Handler *handler;
+   typedef QEvent *(*f_cloneEvent)(QEvent *);
+   struct Handler {
+      f_cloneEvent cloneEvent;
+   };
+
+   static const Handler *handler;
 };
 
 Q_CORE_EXPORT const QStateMachinePrivate::Handler *qcoreStateMachineHandler();

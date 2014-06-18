@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,22 +33,22 @@ class QSemaphore;
 
 class Q_CORE_EXPORT CSMetaCallEvent : public QEvent
 {
-   public:
-      CSMetaCallEvent(const BentoAbstract *bento,const TeaCupAbstract *dataPack,
-                      const QObject *sender, int signal_index, QSemaphore *semaphore = 0);
+ public:
+   CSMetaCallEvent(const BentoAbstract *bento, const TeaCupAbstract *dataPack,
+                   const QObject *sender, int signal_index, QSemaphore *semaphore = 0);
 
-      ~CSMetaCallEvent();
+   ~CSMetaCallEvent();
 
-      void placeMetaCall(QObject *object);
-      const QObject *sender() const;
-      int signal_index() const;
+   void placeMetaCall(QObject *object);
+   const QObject *sender() const;
+   int signal_index() const;
 
-   private:
-       const BentoAbstract *m_bento;
-       const TeaCupAbstract *m_dataPack;
-       const QObject *m_sender;
-       QSemaphore *m_semaphore;
-       int m_signal_index;
+ private:
+   const BentoAbstract *m_bento;
+   const TeaCupAbstract *m_dataPack;
+   const QObject *m_sender;
+   QSemaphore *m_semaphore;
+   int m_signal_index;
 };
 
 #endif

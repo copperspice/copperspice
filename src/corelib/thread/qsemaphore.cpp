@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -80,14 +80,15 @@ QT_BEGIN_NAMESPACE
     \sa QMutex, QWaitCondition, QThread, {Semaphores Example}
 */
 
-class QSemaphorePrivate {
-public:
-    inline QSemaphorePrivate(int n) : avail(n) { }
+class QSemaphorePrivate
+{
+ public:
+   inline QSemaphorePrivate(int n) : avail(n) { }
 
-    QMutex mutex;
-    QWaitCondition cond;
+   QMutex mutex;
+   QWaitCondition cond;
 
-    int avail;
+   int avail;
 };
 
 /*!
@@ -98,8 +99,8 @@ public:
 */
 QSemaphore::QSemaphore(int n)
 {
-    Q_ASSERT_X(n >= 0, "QSemaphore", "parameter 'n' must be non-negative");
-    d = new QSemaphorePrivate(n);
+   Q_ASSERT_X(n >= 0, "QSemaphore", "parameter 'n' must be non-negative");
+   d = new QSemaphorePrivate(n);
 }
 
 /*!
@@ -109,7 +110,9 @@ QSemaphore::QSemaphore(int n)
     undefined behavior.
 */
 QSemaphore::~QSemaphore()
-{ delete d; }
+{
+   delete d;
+}
 
 /*!
     Tries to acquire \c n resources guarded by the semaphore. If \a n
@@ -120,11 +123,12 @@ QSemaphore::~QSemaphore()
 */
 void QSemaphore::acquire(int n)
 {
-    Q_ASSERT_X(n >= 0, "QSemaphore::acquire", "parameter 'n' must be non-negative");
-    QMutexLocker locker(&d->mutex);
-    while (n > d->avail)
-        d->cond.wait(locker.mutex());
-    d->avail -= n;
+   Q_ASSERT_X(n >= 0, "QSemaphore::acquire", "parameter 'n' must be non-negative");
+   QMutexLocker locker(&d->mutex);
+   while (n > d->avail) {
+      d->cond.wait(locker.mutex());
+   }
+   d->avail -= n;
 }
 
 /*!
@@ -139,10 +143,10 @@ void QSemaphore::acquire(int n)
 */
 void QSemaphore::release(int n)
 {
-    Q_ASSERT_X(n >= 0, "QSemaphore::release", "parameter 'n' must be non-negative");
-    QMutexLocker locker(&d->mutex);
-    d->avail += n;
-    d->cond.wakeAll();
+   Q_ASSERT_X(n >= 0, "QSemaphore::release", "parameter 'n' must be non-negative");
+   QMutexLocker locker(&d->mutex);
+   d->avail += n;
+   d->cond.wakeAll();
 }
 
 /*!
@@ -153,8 +157,8 @@ void QSemaphore::release(int n)
 */
 int QSemaphore::available() const
 {
-    QMutexLocker locker(&d->mutex);
-    return d->avail;
+   QMutexLocker locker(&d->mutex);
+   return d->avail;
 }
 
 /*!
@@ -170,12 +174,13 @@ int QSemaphore::available() const
 */
 bool QSemaphore::tryAcquire(int n)
 {
-    Q_ASSERT_X(n >= 0, "QSemaphore::tryAcquire", "parameter 'n' must be non-negative");
-    QMutexLocker locker(&d->mutex);
-    if (n > d->avail)
-        return false;
-    d->avail -= n;
-    return true;
+   Q_ASSERT_X(n >= 0, "QSemaphore::tryAcquire", "parameter 'n' must be non-negative");
+   QMutexLocker locker(&d->mutex);
+   if (n > d->avail) {
+      return false;
+   }
+   d->avail -= n;
+   return true;
 }
 
 /*!
@@ -196,23 +201,25 @@ bool QSemaphore::tryAcquire(int n)
 */
 bool QSemaphore::tryAcquire(int n, int timeout)
 {
-    Q_ASSERT_X(n >= 0, "QSemaphore::tryAcquire", "parameter 'n' must be non-negative");
-    QMutexLocker locker(&d->mutex);
-    if (timeout < 0) {
-        while (n > d->avail)
-            d->cond.wait(locker.mutex());
-    } else {
-        QElapsedTimer timer;
-        timer.start();
-        while (n > d->avail) {
-            const qint64 elapsed = timer.elapsed();
-            if (timeout - elapsed <= 0
-                || !d->cond.wait(locker.mutex(), timeout - elapsed))
-                return false;
-        }
-    }
-    d->avail -= n;
-    return true;
+   Q_ASSERT_X(n >= 0, "QSemaphore::tryAcquire", "parameter 'n' must be non-negative");
+   QMutexLocker locker(&d->mutex);
+   if (timeout < 0) {
+      while (n > d->avail) {
+         d->cond.wait(locker.mutex());
+      }
+   } else {
+      QElapsedTimer timer;
+      timer.start();
+      while (n > d->avail) {
+         const qint64 elapsed = timer.elapsed();
+         if (timeout - elapsed <= 0
+               || !d->cond.wait(locker.mutex(), timeout - elapsed)) {
+            return false;
+         }
+      }
+   }
+   d->avail -= n;
+   return true;
 
 
 }

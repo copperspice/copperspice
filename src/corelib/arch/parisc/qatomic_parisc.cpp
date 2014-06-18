@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,28 +44,32 @@ QT_USE_NAMESPACE
 static int locks[256][4] = { UNLOCKED256 };
 
 int *getLock(volatile void *addr)
-{ return locks[qHash(const_cast<void *>(addr)) % 256]; }
+{
+   return locks[qHash(const_cast<void *>(addr)) % 256];
+}
 
 static int *align16(int *lock)
 {
-    ulong off = (((ulong) lock) % 16);
-    return off ? (int *)(ulong(lock) + 16 - off) : lock;
+   ulong off = (((ulong) lock) % 16);
+   return off ? (int *)(ulong(lock) + 16 - off) : lock;
 }
 
 extern "C" {
 
-    int q_ldcw(volatile int *addr);
+   int q_ldcw(volatile int *addr);
 
-    void q_atomic_lock(int *lock)
-    {
-        // ldcw requires a 16-byte aligned address
-        volatile int *x = align16(lock);
-        while (q_ldcw(x) == 0)
-	    ;
-    }
+   void q_atomic_lock(int *lock)
+   {
+      // ldcw requires a 16-byte aligned address
+      volatile int *x = align16(lock);
+      while (q_ldcw(x) == 0)
+         ;
+   }
 
-    void q_atomic_unlock(int *lock)
-    { lock[0] = lock[1] = lock[2] = lock[3] = -1; }
+   void q_atomic_unlock(int *lock)
+   {
+      lock[0] = lock[1] = lock[2] = lock[3] = -1;
+   }
 }
 
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,50 +37,50 @@ class QMimeDataPrivate;
 
 class Q_CORE_EXPORT QMimeData : public QObject
 {
-    CS_OBJECT(QMimeData)
+   CS_OBJECT(QMimeData)
 
-public:
-    QMimeData();
-    ~QMimeData();
+ public:
+   QMimeData();
+   ~QMimeData();
 
-    QList<QUrl> urls() const;
-    void setUrls(const QList<QUrl> &urls);
-    bool hasUrls() const;
+   QList<QUrl> urls() const;
+   void setUrls(const QList<QUrl> &urls);
+   bool hasUrls() const;
 
-    QString text() const;
-    void setText(const QString &text);
-    bool hasText() const;
+   QString text() const;
+   void setText(const QString &text);
+   bool hasText() const;
 
-    QString html() const;
-    void setHtml(const QString &html);
-    bool hasHtml() const;
+   QString html() const;
+   void setHtml(const QString &html);
+   bool hasHtml() const;
 
-    QVariant imageData() const;
-    void setImageData(const QVariant &image);
-    bool hasImage() const;
+   QVariant imageData() const;
+   void setImageData(const QVariant &image);
+   bool hasImage() const;
 
-    QVariant colorData() const;
-    void setColorData(const QVariant &color);
-    bool hasColor() const;
+   QVariant colorData() const;
+   void setColorData(const QVariant &color);
+   bool hasColor() const;
 
-    QByteArray data(const QString &mimetype) const;
-    void setData(const QString &mimetype, const QByteArray &data);
-    void removeFormat(const QString &mimetype);
+   QByteArray data(const QString &mimetype) const;
+   void setData(const QString &mimetype, const QByteArray &data);
+   void removeFormat(const QString &mimetype);
 
-    virtual bool hasFormat(const QString &mimetype) const;
-    virtual QStringList formats() const;
+   virtual bool hasFormat(const QString &mimetype) const;
+   virtual QStringList formats() const;
 
-    void clear();
+   void clear();
 
-protected:
-    virtual QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const;
+ protected:
+   virtual QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const;
 
-private:
-    Q_DISABLE_COPY(QMimeData)
-    Q_DECLARE_PRIVATE(QMimeData)
+ private:
+   Q_DISABLE_COPY(QMimeData)
+   Q_DECLARE_PRIVATE(QMimeData)
 
-protected:
-	 QScopedPointer<QMimeDataPrivate> d_ptr;
+ protected:
+   QScopedPointer<QMimeDataPrivate> d_ptr;
 
 };
 

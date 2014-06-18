@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,11 +30,10 @@
 
 #ifdef QT_NO_SHAREDMEMORY
 # ifndef QT_NO_SYSTEMSEMAPHORE
-namespace QSharedMemoryPrivate
-{
-    int createUnixKeyFile(const QString &fileName);
-    QString makePlatformSafeKey(const QString &key,
-            const QString &prefix = QLatin1String("qipc_sharedmemory_"));
+namespace QSharedMemoryPrivate {
+int createUnixKeyFile(const QString &fileName);
+QString makePlatformSafeKey(const QString &key,
+                            const QString &prefix = QLatin1String("qipc_sharedmemory_"));
 }
 #endif
 #else
@@ -56,93 +55,92 @@ QT_BEGIN_NAMESPACE
 class QSharedMemoryLocker
 {
 
-public:
-    inline QSharedMemoryLocker(QSharedMemory *sharedMemory) : q_sm(sharedMemory)
-    {
-        Q_ASSERT(q_sm);
-    }
+ public:
+   inline QSharedMemoryLocker(QSharedMemory *sharedMemory) : q_sm(sharedMemory) {
+      Q_ASSERT(q_sm);
+   }
 
-    inline ~QSharedMemoryLocker()
-    {
-        if (q_sm)
-            q_sm->unlock();
-    }
+   inline ~QSharedMemoryLocker() {
+      if (q_sm) {
+         q_sm->unlock();
+      }
+   }
 
-    inline bool lock()
-    {
-        if (q_sm && q_sm->lock())
-            return true;
-        q_sm = 0;
-        return false;
-    }
+   inline bool lock() {
+      if (q_sm && q_sm->lock()) {
+         return true;
+      }
+      q_sm = 0;
+      return false;
+   }
 
-private:
-    QSharedMemory *q_sm;
+ private:
+   QSharedMemory *q_sm;
 };
 #endif // QT_NO_SYSTEMSEMAPHORE
 
 class QSharedMemoryPrivate
 {
-    Q_DECLARE_PUBLIC(QSharedMemory)
+   Q_DECLARE_PUBLIC(QSharedMemory)
 
-public:
-    QSharedMemoryPrivate();
-    virtual ~QSharedMemoryPrivate() {}
+ public:
+   QSharedMemoryPrivate();
+   virtual ~QSharedMemoryPrivate() {}
 
-    void *memory;
-    int size;
-    QString key;
-    QString nativeKey;
-    QSharedMemory::SharedMemoryError error;
-    QString errorString;
+   void *memory;
+   int size;
+   QString key;
+   QString nativeKey;
+   QSharedMemory::SharedMemoryError error;
+   QString errorString;
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
-    QSystemSemaphore systemSemaphore;
-    bool lockedByMe;
+   QSystemSemaphore systemSemaphore;
+   bool lockedByMe;
 #endif
 
-    static int createUnixKeyFile(const QString &fileName);
-    static QString makePlatformSafeKey(const QString &key,
-            const QString &prefix = QLatin1String("qipc_sharedmemory_"));
+   static int createUnixKeyFile(const QString &fileName);
+   static QString makePlatformSafeKey(const QString &key,
+                                      const QString &prefix = QLatin1String("qipc_sharedmemory_"));
 
 #ifdef Q_OS_WIN
-    HANDLE handle();
+   HANDLE handle();
 #elif defined(QT_POSIX_IPC)
-    int handle();
+   int handle();
 #else
-    key_t handle();
+   key_t handle();
 #endif
 
-    bool initKey();
-    void cleanHandle();
-    bool create(int size);
-    bool attach(QSharedMemory::AccessMode mode);
-    bool detach();
+   bool initKey();
+   void cleanHandle();
+   bool create(int size);
+   bool attach(QSharedMemory::AccessMode mode);
+   bool detach();
 
-    void setErrorString(const QString &function);
+   void setErrorString(const QString &function);
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
-    inline bool tryLocker(QSharedMemoryLocker *locker, const QString &function) {
-        if (!locker->lock()) {
-            errorString = QSharedMemory::tr("%1: unable to lock").arg(function);
-            error = QSharedMemory::LockError;
-            return false;
-        }
-        return true;
-    }
+   inline bool tryLocker(QSharedMemoryLocker *locker, const QString &function) {
+      if (!locker->lock()) {
+         errorString = QSharedMemory::tr("%1: unable to lock").arg(function);
+         error = QSharedMemory::LockError;
+         return false;
+      }
+      return true;
+   }
 #endif // QT_NO_SYSTEMSEMAPHORE
 
-private:
+ private:
 #ifdef Q_OS_WIN
-    HANDLE hand;
+   HANDLE hand;
 #elif defined(QT_POSIX_IPC)
-    int hand;
+   int hand;
 #else
-    key_t unix_key;
+   key_t unix_key;
 #endif
 
-protected:
-	 QSharedMemory *q_ptr;
+ protected:
+   QSharedMemory *q_ptr;
 
 };
 

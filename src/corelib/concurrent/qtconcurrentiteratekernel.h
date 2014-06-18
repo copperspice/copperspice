@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,7 +35,7 @@
 QT_BEGIN_NAMESPACE
 
 namespace QtConcurrent {
-    using std::advance;
+using std::advance;
 
 /*
     The BlockSizeManager class manages how many iterations a thread should
@@ -47,234 +47,249 @@ namespace QtConcurrent {
 */
 class Q_CORE_EXPORT BlockSizeManager
 {
-public:
-    BlockSizeManager(int iterationCount);
-    void timeBeforeUser();
-    void timeAfterUser();
-    int blockSize();
-private:
-    inline bool blockSizeMaxed()
-    {
-        return (m_blockSize >= maxBlockSize);
-    }
+ public:
+   BlockSizeManager(int iterationCount);
+   void timeBeforeUser();
+   void timeAfterUser();
+   int blockSize();
+ private:
+   inline bool blockSizeMaxed() {
+      return (m_blockSize >= maxBlockSize);
+   }
 
-    const int maxBlockSize;
-    qint64 beforeUser;
-    qint64 afterUser;
-    Median<double> controlPartElapsed;
-    Median<double> userPartElapsed;
-    int m_blockSize;
+   const int maxBlockSize;
+   qint64 beforeUser;
+   qint64 afterUser;
+   Median<double> controlPartElapsed;
+   Median<double> userPartElapsed;
+   int m_blockSize;
 };
 
 template <typename T>
 class ResultReporter
 {
-public:
-    ResultReporter(ThreadEngine<T> *_threadEngine)
-    :threadEngine(_threadEngine)
-    {
+ public:
+   ResultReporter(ThreadEngine<T> *_threadEngine)
+      : threadEngine(_threadEngine) {
 
-    }
+   }
 
-    void reserveSpace(int resultCount)
-    {
-        currentResultCount = resultCount;
-        vector.resize(qMax(resultCount, vector.count()));
-    }
+   void reserveSpace(int resultCount) {
+      currentResultCount = resultCount;
+      vector.resize(qMax(resultCount, vector.count()));
+   }
 
-    void reportResults(int begin)
-    {
-        const int useVectorThreshold = 4; // Tunable parameter.
-        if (currentResultCount > useVectorThreshold) {
-            vector.resize(currentResultCount);
-            threadEngine->reportResults(vector, begin);
-        } else {
-            for (int i = 0; i < currentResultCount; ++i)
-                threadEngine->reportResult(&vector.at(i), begin + i);
-        }
-    }
+   void reportResults(int begin) {
+      const int useVectorThreshold = 4; // Tunable parameter.
+      if (currentResultCount > useVectorThreshold) {
+         vector.resize(currentResultCount);
+         threadEngine->reportResults(vector, begin);
+      } else {
+         for (int i = 0; i < currentResultCount; ++i) {
+            threadEngine->reportResult(&vector.at(i), begin + i);
+         }
+      }
+   }
 
-    inline T * getPointer()
-    {
-        return vector.data();
-    }
+   inline T *getPointer() {
+      return vector.data();
+   }
 
-    int currentResultCount;
-    ThreadEngine<T> *threadEngine;
-    QVector<T> vector;
+   int currentResultCount;
+   ThreadEngine<T> *threadEngine;
+   QVector<T> vector;
 };
 
 template <>
 class ResultReporter<void>
 {
-public:
-    inline ResultReporter(ThreadEngine<void> *) { }
-    inline void reserveSpace(int) { };
-    inline void reportResults(int) { };
-    inline void * getPointer() { return 0; }
+ public:
+   inline ResultReporter(ThreadEngine<void> *) { }
+   inline void reserveSpace(int) { };
+   inline void reportResults(int) { };
+   inline void *getPointer() {
+      return 0;
+   }
 };
 
 inline bool selectIteration(std::bidirectional_iterator_tag)
 {
-    return false; // while
+   return false; // while
 }
 
 inline bool selectIteration(std::forward_iterator_tag)
 {
-    return false; // while
+   return false; // while
 }
 
 inline bool selectIteration(std::random_access_iterator_tag)
 {
-    return true; // for
+   return true; // for
 }
 
 
 template <typename Iterator, typename T>
 class IterateKernel : public ThreadEngine<T>
 {
-public:
-    typedef T ResultType;
+ public:
+   typedef T ResultType;
 
-    IterateKernel(Iterator _begin, Iterator _end)
-        : begin(_begin), end(_end), current(_begin), currentIndex(0),
-           forIteration(selectIteration(typename std::iterator_traits<Iterator>::iterator_category())),
-           progressReportingEnabled(true)
+   IterateKernel(Iterator _begin, Iterator _end)
+      : begin(_begin), end(_end), current(_begin), currentIndex(0),
+        forIteration(selectIteration(typename std::iterator_traits<Iterator>::iterator_category())),
+        progressReportingEnabled(true)
 
-    {
-        iterationCount =  forIteration ? std::distance(_begin, _end) : 0;
+   {
+      iterationCount =  forIteration ? std::distance(_begin, _end) : 0;
 
-    }
+   }
 
-    virtual ~IterateKernel() { }
+   virtual ~IterateKernel() { }
 
-    virtual bool runIteration(Iterator it, int index , T *result)
-        { Q_UNUSED(it); Q_UNUSED(index); Q_UNUSED(result); return false; }
-    virtual bool runIterations(Iterator _begin, int beginIndex, int endIndex, T *results)
-        { Q_UNUSED(_begin); Q_UNUSED(beginIndex); Q_UNUSED(endIndex); Q_UNUSED(results); return false; }
+   virtual bool runIteration(Iterator it, int index , T *result) {
+      Q_UNUSED(it);
+      Q_UNUSED(index);
+      Q_UNUSED(result);
+      return false;
+   }
+   virtual bool runIterations(Iterator _begin, int beginIndex, int endIndex, T *results) {
+      Q_UNUSED(_begin);
+      Q_UNUSED(beginIndex);
+      Q_UNUSED(endIndex);
+      Q_UNUSED(results);
+      return false;
+   }
 
-    void start()
-    {
-        progressReportingEnabled = this->isProgressReportingEnabled();
-        if (progressReportingEnabled && iterationCount > 0)
-            this->setProgressRange(0, iterationCount);
-    }
+   void start() {
+      progressReportingEnabled = this->isProgressReportingEnabled();
+      if (progressReportingEnabled && iterationCount > 0) {
+         this->setProgressRange(0, iterationCount);
+      }
+   }
 
-    bool shouldStartThread()
-    {
-        if (forIteration)
-            return (currentIndex.load() < iterationCount) && !this->shouldThrottleThread();
-        else // whileIteration
-            return (iteratorThreads.load() == 0);
-    }
+   bool shouldStartThread() {
+      if (forIteration) {
+         return (currentIndex.load() < iterationCount) && !this->shouldThrottleThread();
+      } else { // whileIteration
+         return (iteratorThreads.load() == 0);
+      }
+   }
 
-    ThreadFunctionResult threadFunction()
-    {
-        if (forIteration)
-            return this->forThreadFunction();
-        else // whileIteration
-            return this->whileThreadFunction();
-    }
+   ThreadFunctionResult threadFunction() {
+      if (forIteration) {
+         return this->forThreadFunction();
+      } else { // whileIteration
+         return this->whileThreadFunction();
+      }
+   }
 
-    ThreadFunctionResult forThreadFunction()
-    {
-        BlockSizeManager blockSizeManager(iterationCount);
-        ResultReporter<T> resultReporter(this);
+   ThreadFunctionResult forThreadFunction() {
+      BlockSizeManager blockSizeManager(iterationCount);
+      ResultReporter<T> resultReporter(this);
 
-        for(;;) {
-            if (this->isCanceled())
-                break;
+      for (;;) {
+         if (this->isCanceled()) {
+            break;
+         }
 
-            const int currentBlockSize = blockSizeManager.blockSize();
+         const int currentBlockSize = blockSizeManager.blockSize();
 
-            if (currentIndex.load() >= iterationCount)
-                break;
+         if (currentIndex.load() >= iterationCount) {
+            break;
+         }
 
-            // Atomically reserve a block of iterationCount for this thread.
-            const int beginIndex = currentIndex.fetchAndAddRelease(currentBlockSize);
-            const int endIndex = qMin(beginIndex + currentBlockSize, iterationCount);
+         // Atomically reserve a block of iterationCount for this thread.
+         const int beginIndex = currentIndex.fetchAndAddRelease(currentBlockSize);
+         const int endIndex = qMin(beginIndex + currentBlockSize, iterationCount);
 
-            if (beginIndex >= endIndex) {
-                // No more work
-                break;
-            }
+         if (beginIndex >= endIndex) {
+            // No more work
+            break;
+         }
 
-            this->waitForResume(); // (only waits if the qfuture is paused.)
+         this->waitForResume(); // (only waits if the qfuture is paused.)
 
-            if (shouldStartThread())
-                this->startThread();
+         if (shouldStartThread()) {
+            this->startThread();
+         }
 
-            const int finalBlockSize = endIndex - beginIndex; // block size adjusted for possible end-of-range
-            resultReporter.reserveSpace(finalBlockSize);
+         const int finalBlockSize = endIndex - beginIndex; // block size adjusted for possible end-of-range
+         resultReporter.reserveSpace(finalBlockSize);
 
-            // Call user code with the current iteration range.
-            blockSizeManager.timeBeforeUser();
-            const bool resultsAvailable = this->runIterations(begin, beginIndex, endIndex, resultReporter.getPointer());
-            blockSizeManager.timeAfterUser();
+         // Call user code with the current iteration range.
+         blockSizeManager.timeBeforeUser();
+         const bool resultsAvailable = this->runIterations(begin, beginIndex, endIndex, resultReporter.getPointer());
+         blockSizeManager.timeAfterUser();
 
-            if (resultsAvailable)
-                resultReporter.reportResults(beginIndex);
+         if (resultsAvailable) {
+            resultReporter.reportResults(beginIndex);
+         }
 
-            // Report progress if progress reporting enabled.
-            if (progressReportingEnabled) {
-                completed.fetchAndAddAcquire(finalBlockSize);
-                this->setProgressValue(this->completed.load());
-            }
+         // Report progress if progress reporting enabled.
+         if (progressReportingEnabled) {
+            completed.fetchAndAddAcquire(finalBlockSize);
+            this->setProgressValue(this->completed.load());
+         }
 
-            if (this->shouldThrottleThread())
-                return ThrottleThread;
-        }
-        return ThreadFinished;
-    }
+         if (this->shouldThrottleThread()) {
+            return ThrottleThread;
+         }
+      }
+      return ThreadFinished;
+   }
 
-    ThreadFunctionResult whileThreadFunction()
-    {
-        if (iteratorThreads.testAndSetAcquire(0, 1) == false)
+   ThreadFunctionResult whileThreadFunction() {
+      if (iteratorThreads.testAndSetAcquire(0, 1) == false) {
+         return ThreadFinished;
+      }
+
+      ResultReporter<T> resultReporter(this);
+      resultReporter.reserveSpace(1);
+
+      while (current != end) {
+         // The following two lines breaks support for input iterators according to
+         // the sgi docs: dereferencing prev after calling ++current is not allowed
+         // on input iterators. (prev is dereferenced inside user.runIteration())
+         Iterator prev = current;
+         ++current;
+         int index = currentIndex.fetchAndAddRelaxed(1);
+         iteratorThreads.testAndSetRelease(1, 0);
+
+         this->waitForResume(); // (only waits if the qfuture is paused.)
+
+         if (shouldStartThread()) {
+            this->startThread();
+         }
+
+         const bool resultAavailable = this->runIteration(prev, index, resultReporter.getPointer());
+         if (resultAavailable) {
+            resultReporter.reportResults(index);
+         }
+
+         if (this->shouldThrottleThread()) {
+            return ThrottleThread;
+         }
+
+         if (iteratorThreads.testAndSetAcquire(0, 1) == false) {
             return ThreadFinished;
+         }
+      }
 
-        ResultReporter<T> resultReporter(this);
-        resultReporter.reserveSpace(1);
-
-        while (current != end) {
-            // The following two lines breaks support for input iterators according to
-            // the sgi docs: dereferencing prev after calling ++current is not allowed
-            // on input iterators. (prev is dereferenced inside user.runIteration())
-            Iterator prev = current;
-            ++current;
-            int index = currentIndex.fetchAndAddRelaxed(1);
-            iteratorThreads.testAndSetRelease(1, 0);
-
-            this->waitForResume(); // (only waits if the qfuture is paused.)
-
-            if (shouldStartThread())
-                this->startThread();
-
-            const bool resultAavailable = this->runIteration(prev, index, resultReporter.getPointer());
-            if (resultAavailable)
-                resultReporter.reportResults(index);
-
-            if (this->shouldThrottleThread())
-                return ThrottleThread;
-
-            if (iteratorThreads.testAndSetAcquire(0, 1) == false)
-                return ThreadFinished;
-        }
-
-        return ThreadFinished;
-    }
+      return ThreadFinished;
+   }
 
 
-public:
-    const Iterator begin;
-    const Iterator end;
-    Iterator current;
-    QAtomicInt currentIndex;
-    bool forIteration;
-    QAtomicInt iteratorThreads;
-    int iterationCount;
+ public:
+   const Iterator begin;
+   const Iterator end;
+   Iterator current;
+   QAtomicInt currentIndex;
+   bool forIteration;
+   QAtomicInt iteratorThreads;
+   int iterationCount;
 
-    bool progressReportingEnabled;
-    QAtomicInt completed;
+   bool progressReportingEnabled;
+   QAtomicInt completed;
 };
 
 } // namespace QtConcurrent

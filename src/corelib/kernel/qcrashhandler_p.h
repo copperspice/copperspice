@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,15 +36,19 @@ typedef void (*QtCrashHandler)();
 
 class Q_CORE_EXPORT QSegfaultHandler
 {
-    friend void qt_signal_handler(int);
-    static QtCrashHandler callback;
-public:
-    static void initialize(char **, int);
+   friend void qt_signal_handler(int);
+   static QtCrashHandler callback;
+ public:
+   static void initialize(char **, int);
 
-    inline static void installCrashHandler(QtCrashHandler h) { callback = h; }
-    inline static QtCrashHandler crashHandler() { return callback; }
+   inline static void installCrashHandler(QtCrashHandler h) {
+      callback = h;
+   }
+   inline static QtCrashHandler crashHandler() {
+      return callback;
+   }
 
-private:
+ private:
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,69 +41,74 @@ class QFilePrivate;
 
 class Q_CORE_EXPORT QFile : public QFileDevice
 {
-    CS_OBJECT(QFile)
-    Q_DECLARE_PRIVATE(QFile)
+   CS_OBJECT(QFile)
+   Q_DECLARE_PRIVATE(QFile)
 
-public:
-    QFile();
-    QFile(const QString &name);
+ public:
+   QFile();
+   QFile(const QString &name);
 
-    explicit QFile(QObject *parent);
-    QFile(const QString &name, QObject *parent);
-    ~QFile();
+   explicit QFile(QObject *parent);
+   QFile(const QString &name, QObject *parent);
+   ~QFile();
 
-    QString fileName() const;
-    void setFileName(const QString &name);
+   QString fileName() const;
+   void setFileName(const QString &name);
 
-    typedef QByteArray (*EncoderFn)(const QString &fileName);
-    typedef QString (*DecoderFn)(const QByteArray &localfileName);
-    static QByteArray encodeName(const QString &fileName);
-    static QString decodeName(const QByteArray &localFileName);
-    inline static QString decodeName(const char *localFileName)
-        { return decodeName(QByteArray(localFileName)); }
-    static void setEncodingFunction(EncoderFn);
-    static void setDecodingFunction(DecoderFn);
+   typedef QByteArray (*EncoderFn)(const QString &fileName);
+   typedef QString (*DecoderFn)(const QByteArray &localfileName);
+   static QByteArray encodeName(const QString &fileName);
+   static QString decodeName(const QByteArray &localFileName);
+   inline static QString decodeName(const char *localFileName) {
+      return decodeName(QByteArray(localFileName));
+   }
+   static void setEncodingFunction(EncoderFn);
+   static void setDecodingFunction(DecoderFn);
 
-    bool exists() const;
-    static bool exists(const QString &fileName);
+   bool exists() const;
+   static bool exists(const QString &fileName);
 
-    QString readLink() const;
-    static QString readLink(const QString &fileName);
-    inline QString symLinkTarget() const { return readLink(); }
-    inline static QString symLinkTarget(const QString &fileName) { return readLink(fileName); }
+   QString readLink() const;
+   static QString readLink(const QString &fileName);
+   inline QString symLinkTarget() const {
+      return readLink();
+   }
+   inline static QString symLinkTarget(const QString &fileName) {
+      return readLink(fileName);
+   }
 
-    bool remove();
-    static bool remove(const QString &fileName);
+   bool remove();
+   static bool remove(const QString &fileName);
 
-    bool rename(const QString &newName);
-    static bool rename(const QString &oldName, const QString &newName);
+   bool rename(const QString &newName);
+   static bool rename(const QString &oldName, const QString &newName);
 
-    bool link(const QString &newName);
-    static bool link(const QString &oldname, const QString &newName);
+   bool link(const QString &newName);
+   static bool link(const QString &oldname, const QString &newName);
 
-    bool copy(const QString &newName);
-    static bool copy(const QString &fileName, const QString &newName);
+   bool copy(const QString &newName);
+   static bool copy(const QString &fileName, const QString &newName);
 
-    bool open(OpenMode flags);
-    bool open(FILE *f, OpenMode ioFlags, FileHandleFlags handleFlags=DontCloseHandle);
-    bool open(int fd, OpenMode ioFlags, FileHandleFlags handleFlags=DontCloseHandle);
+   bool open(OpenMode flags);
+   bool open(FILE *f, OpenMode ioFlags, FileHandleFlags handleFlags = DontCloseHandle);
+   bool open(int fd, OpenMode ioFlags, FileHandleFlags handleFlags = DontCloseHandle);
 
-    qint64 size() const;
+   qint64 size() const;
 
-    bool resize(qint64 sz);
-    static bool resize(const QString &filename, qint64 sz);
+   bool resize(qint64 sz);
+   static bool resize(const QString &filename, qint64 sz);
 
-    Permissions permissions() const;
-    static Permissions permissions(const QString &filename);
-    bool setPermissions(Permissions permissionSpec);
-    static bool setPermissions(const QString &filename, Permissions permissionSpec);
+   Permissions permissions() const;
+   static Permissions permissions(const QString &filename);
+   bool setPermissions(Permissions permissionSpec);
+   static bool setPermissions(const QString &filename, Permissions permissionSpec);
 
-protected:
-    QFile(QFilePrivate &dd, QObject *parent = 0);
+ protected:
+   QFile(QFilePrivate &dd, QObject *parent = 0);
 
-private:
-    friend class QTemporaryFile;
-    Q_DISABLE_COPY(QFile)
+ private:
+   friend class QTemporaryFile;
+   Q_DISABLE_COPY(QFile)
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,36 +37,36 @@ class QEventTransitionPrivate;
 
 class Q_CORE_EXPORT QEventTransition : public QAbstractTransition
 {
-    CS_OBJECT(QEventTransition)
+   CS_OBJECT(QEventTransition)
 
-    CORE_CS_PROPERTY_READ(eventSource, eventSource)
-    CORE_CS_PROPERTY_WRITE(eventSource, setEventSource)
-    CORE_CS_PROPERTY_READ(eventType, eventType)
-    CORE_CS_PROPERTY_WRITE(eventType, setEventType)
+   CORE_CS_PROPERTY_READ(eventSource, eventSource)
+   CORE_CS_PROPERTY_WRITE(eventSource, setEventSource)
+   CORE_CS_PROPERTY_READ(eventType, eventType)
+   CORE_CS_PROPERTY_WRITE(eventType, setEventType)
 
-public:
-    QEventTransition(QState *sourceState = 0);
-    QEventTransition(QObject *object, QEvent::Type type, QState *sourceState = 0);
-    ~QEventTransition();
+ public:
+   QEventTransition(QState *sourceState = 0);
+   QEventTransition(QObject *object, QEvent::Type type, QState *sourceState = 0);
+   ~QEventTransition();
 
-    QObject *eventSource() const;
-    void setEventSource(QObject *object);
+   QObject *eventSource() const;
+   void setEventSource(QObject *object);
 
-    QEvent::Type eventType() const;
-    void setEventType(QEvent::Type type);
+   QEvent::Type eventType() const;
+   void setEventType(QEvent::Type type);
 
-protected:
-    bool eventTest(QEvent *event);
-    void onTransition(QEvent *event);
+ protected:
+   bool eventTest(QEvent *event);
+   void onTransition(QEvent *event);
 
-    bool event(QEvent *e);
+   bool event(QEvent *e);
 
-    QEventTransition(QEventTransitionPrivate &dd, QState *parent);
-    QEventTransition(QEventTransitionPrivate &dd, QObject *object, QEvent::Type type, QState *parent);
+   QEventTransition(QEventTransitionPrivate &dd, QState *parent);
+   QEventTransition(QEventTransitionPrivate &dd, QObject *object, QEvent::Type type, QState *parent);
 
-private:
-    Q_DISABLE_COPY(QEventTransition)
-    Q_DECLARE_PRIVATE(QEventTransition)
+ private:
+   Q_DISABLE_COPY(QEventTransition)
+   Q_DECLARE_PRIVATE(QEventTransition)
 };
 
 #endif //QT_NO_STATEMACHINE

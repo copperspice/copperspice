@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,14 +34,14 @@
 QT_BEGIN_NAMESPACE
 
 QPluginLoader::QPluginLoader(QObject *parent)
-    : QObject(parent), d(0), did_load(false)
+   : QObject(parent), d(0), did_load(false)
 {
 }
 
 QPluginLoader::QPluginLoader(const QString &fileName, QObject *parent)
-    : QObject(parent), d(0), did_load(false)
+   : QObject(parent), d(0), did_load(false)
 {
-    setFileName(fileName);
+   setFileName(fileName);
 }
 
 /*!
@@ -54,8 +54,9 @@ QPluginLoader::QPluginLoader(const QString &fileName, QObject *parent)
 */
 QPluginLoader::~QPluginLoader()
 {
-    if (d)
-        d->release();
+   if (d) {
+      d->release();
+   }
 }
 
 /*!
@@ -80,11 +81,13 @@ QPluginLoader::~QPluginLoader()
 */
 QObject *QPluginLoader::instance()
 {
-    if (!load())
-        return 0;
-    if (!d->inst && d->instance)
-        d->inst = d->instance();
-    return d->inst.data();
+   if (!load()) {
+      return 0;
+   }
+   if (!d->inst && d->instance) {
+      d->inst = d->instance();
+   }
+   return d->inst.data();
 }
 
 /*!
@@ -99,77 +102,80 @@ QObject *QPluginLoader::instance()
 */
 bool QPluginLoader::load()
 {
-    if (! d || d->fileName.isEmpty()) {
-        return false;
-    }
+   if (! d || d->fileName.isEmpty()) {
+      return false;
+   }
 
-    if (did_load) {
-        return d->pHnd && d->instance;
-    }
+   if (did_load) {
+      return d->pHnd && d->instance;
+   }
 
-    if (! d->isPlugin()) {
-        return false;
-    }
+   if (! d->isPlugin()) {
+      return false;
+   }
 
-    bool retval = d->loadPlugin();
-    did_load = true;
+   bool retval = d->loadPlugin();
+   did_load = true;
 
-    return retval;
+   return retval;
 }
 
 bool QPluginLoader::unload()
 {
-    if (did_load) {
-        did_load = false;
-        return d->unload();
-    }
-    if (d)  // Ouch
-        d->errorString = tr("The plugin was not loaded.");
-    return false;
+   if (did_load) {
+      did_load = false;
+      return d->unload();
+   }
+   if (d) { // Ouch
+      d->errorString = tr("The plugin was not loaded.");
+   }
+   return false;
 }
 
 bool QPluginLoader::isLoaded() const
 {
-    return d && d->pHnd && d->instance;
+   return d && d->pHnd && d->instance;
 }
 
 void QPluginLoader::setFileName(const QString &fileName)
 {
 #if defined(QT_SHARED)
-    QLibrary::LoadHints lh;
+   QLibrary::LoadHints lh;
 
-    if (d) {
-        lh = d->loadHints;
-        d->release();
-        d = 0;
-        did_load = false;
-    }
+   if (d) {
+      lh = d->loadHints;
+      d->release();
+      d = 0;
+      did_load = false;
+   }
 
-    QString fn = QFileInfo(fileName).canonicalFilePath();
-    d = QLibraryPrivate::findOrCreate(fn);
-    d->loadHints = lh;
+   QString fn = QFileInfo(fileName).canonicalFilePath();
+   d = QLibraryPrivate::findOrCreate(fn);
+   d->loadHints = lh;
 
-    if (fn.isEmpty())
-        d->errorString = QLibrary::tr("The shared library was not found.");
+   if (fn.isEmpty()) {
+      d->errorString = QLibrary::tr("The shared library was not found.");
+   }
 #else
-    if (qt_debug_component()) {
-        qWarning("Can not load %s into a statically linked CopperSpice library.",
-            (const char*)QFile::encodeName(fileName));
-    }
-    Q_UNUSED(fileName);
+   if (qt_debug_component()) {
+      qWarning("Can not load %s into a statically linked CopperSpice library.",
+               (const char *)QFile::encodeName(fileName));
+   }
+   Q_UNUSED(fileName);
 #endif
 }
 
 QString QPluginLoader::fileName() const
 {
-    if (d)
-        return d->fileName;
-    return QString();
+   if (d) {
+      return d->fileName;
+   }
+   return QString();
 }
 
 QString QPluginLoader::errorString() const
 {
-    return (!d || d->errorString.isEmpty()) ? tr("Unknown error") : d->errorString;
+   return (!d || d->errorString.isEmpty()) ? tr("Unknown error") : d->errorString;
 }
 
 typedef QList<QtPluginInstanceFunction> StaticInstanceFunctionList;
@@ -177,41 +183,41 @@ Q_GLOBAL_STATIC(StaticInstanceFunctionList, staticInstanceFunctionList)
 
 void QPluginLoader::setLoadHints(QLibrary::LoadHints loadHints)
 {
-    if (!d) {
-        d = QLibraryPrivate::findOrCreate(QString());   // ugly, but we need a d-ptr
-        d->errorString.clear();
-    }
+   if (!d) {
+      d = QLibraryPrivate::findOrCreate(QString());   // ugly, but we need a d-ptr
+      d->errorString.clear();
+   }
 
-    d->loadHints = loadHints;
+   d->loadHints = loadHints;
 }
 
 QLibrary::LoadHints QPluginLoader::loadHints() const
 {
-    if (!d) {
-        QPluginLoader *that = const_cast<QPluginLoader *>(this);
-        that->d = QLibraryPrivate::findOrCreate(QString());   // ugly, but we need a d-ptr
-        that->d->errorString.clear();
-    }
-    return d->loadHints;
+   if (!d) {
+      QPluginLoader *that = const_cast<QPluginLoader *>(this);
+      that->d = QLibraryPrivate::findOrCreate(QString());   // ugly, but we need a d-ptr
+      that->d->errorString.clear();
+   }
+   return d->loadHints;
 }
 
 void Q_CORE_EXPORT qRegisterStaticPluginInstanceFunction(QtPluginInstanceFunction function)
 {
-    staticInstanceFunctionList()->append(function);
+   staticInstanceFunctionList()->append(function);
 }
 
 QObjectList QPluginLoader::staticInstances()
 {
-    QObjectList instances;
-    StaticInstanceFunctionList *functions = staticInstanceFunctionList();
+   QObjectList instances;
+   StaticInstanceFunctionList *functions = staticInstanceFunctionList();
 
-    if (functions) {
-        for (int i = 0; i < functions->count(); ++i) {
-            instances.append((*functions)[i]());
-        } 
-    }
+   if (functions) {
+      for (int i = 0; i < functions->count(); ++i) {
+         instances.append((*functions)[i]());
+      }
+   }
 
-    return instances;
+   return instances;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,110 +39,116 @@ static const int TimerSerialCounter = TimerIdMask + 1;
 static const int MaxTimerId = TimerIdMask;
 
 static int FirstBucket[] = {
-     1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
-    17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+   1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
+   17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 };
 
 enum {
-    FirstBucketOffset  = 0,
-    SecondBucketOffset = sizeof(FirstBucket) / sizeof(FirstBucket[0]),
-    ThirdBucketOffset  = 0x100,
-    FourthBucketOffset = 0x1000,
-    FifthBucketOffset  = 0x10000,
-    SixthBucketOffset  = 0x100000
+   FirstBucketOffset  = 0,
+   SecondBucketOffset = sizeof(FirstBucket) / sizeof(FirstBucket[0]),
+   ThirdBucketOffset  = 0x100,
+   FourthBucketOffset = 0x1000,
+   FifthBucketOffset  = 0x10000,
+   SixthBucketOffset  = 0x100000
 };
 
 enum {
-    FirstBucketSize  = SecondBucketOffset,
-    SecondBucketSize = ThirdBucketOffset - SecondBucketOffset,
-    ThirdBucketSize  = FourthBucketOffset - ThirdBucketOffset,
-    FourthBucketSize = FifthBucketOffset - FourthBucketOffset,
-    FifthBucketSize  = SixthBucketOffset - FifthBucketOffset,
-    SixthBucketSize  = MaxTimerId - SixthBucketOffset
+   FirstBucketSize  = SecondBucketOffset,
+   SecondBucketSize = ThirdBucketOffset - SecondBucketOffset,
+   ThirdBucketSize  = FourthBucketOffset - ThirdBucketOffset,
+   FourthBucketSize = FifthBucketOffset - FourthBucketOffset,
+   FifthBucketSize  = SixthBucketOffset - FifthBucketOffset,
+   SixthBucketSize  = MaxTimerId - SixthBucketOffset
 };
 
 static const int BucketSize[] = {
-    FirstBucketSize, SecondBucketSize, ThirdBucketSize,
-    FourthBucketSize, FifthBucketSize, SixthBucketSize
+   FirstBucketSize, SecondBucketSize, ThirdBucketSize,
+   FourthBucketSize, FifthBucketSize, SixthBucketSize
 };
 enum { NumberOfBuckets = sizeof(BucketSize) / sizeof(BucketSize[0]) };
 
 static const int BucketOffset[] = {
-    FirstBucketOffset, SecondBucketOffset, ThirdBucketOffset,
-    FourthBucketOffset, FifthBucketOffset, SixthBucketOffset
+   FirstBucketOffset, SecondBucketOffset, ThirdBucketOffset,
+   FourthBucketOffset, FifthBucketOffset, SixthBucketOffset
 };
 
-static QBasicAtomicPointer<int> timerIds[] =
-    { QBasicAtomicPointer<int>(FirstBucket),
-      QBasicAtomicPointer<int>(0),
-      QBasicAtomicPointer<int>(0),
-      QBasicAtomicPointer<int>(0),
-      QBasicAtomicPointer<int>(0),
-      QBasicAtomicPointer<int>(0) };
+static QBasicAtomicPointer<int> timerIds[] = {
+   QBasicAtomicPointer<int>(FirstBucket),
+   QBasicAtomicPointer<int>(0),
+   QBasicAtomicPointer<int>(0),
+   QBasicAtomicPointer<int>(0),
+   QBasicAtomicPointer<int>(0),
+   QBasicAtomicPointer<int>(0)
+};
 
 static void timerIdsDestructorFunction()
 {
-    // start at one, the first bucket is pre-allocated
-    for (int i = 1; i < NumberOfBuckets; ++i)
-        delete [] static_cast<int *>(timerIds[i].load());
+   // start at one, the first bucket is pre-allocated
+   for (int i = 1; i < NumberOfBuckets; ++i) {
+      delete [] static_cast<int *>(timerIds[i].load());
+   }
 }
 Q_DESTRUCTOR_FUNCTION(timerIdsDestructorFunction)
 
-static QBasicAtomicInt nextFreeTimerId = QBasicAtomicInt{Q_BASIC_ATOMIC_INITIALIZER(1)};
+static QBasicAtomicInt nextFreeTimerId = QBasicAtomicInt {Q_BASIC_ATOMIC_INITIALIZER(1)};
 
 // avoid the ABA-problem by using 7 of the top 8 bits of the timerId as a serial number
 static inline int prepareNewValueWithSerialNumber(int oldId, int newId)
 {
-    return (newId & TimerIdMask) | ((oldId + TimerSerialCounter) & TimerSerialMask);
+   return (newId & TimerIdMask) | ((oldId + TimerSerialCounter) & TimerSerialMask);
 }
 
 namespace {
-    template<bool> struct QStaticAssertType;
-    template<> struct QStaticAssertType<true> { enum { Value = 1 }; };
+template<bool> struct QStaticAssertType;
+template<> struct QStaticAssertType<true> {
+   enum { Value = 1 };
+};
 }
 #define q_static_assert(expr)     (void)QStaticAssertType<expr>::Value
 
 static inline int bucketOffset(int timerId)
 {
-    q_static_assert(sizeof BucketSize == sizeof BucketOffset);
-    q_static_assert(sizeof(timerIds) / sizeof(timerIds[0]) == NumberOfBuckets);
+   q_static_assert(sizeof BucketSize == sizeof BucketOffset);
+   q_static_assert(sizeof(timerIds) / sizeof(timerIds[0]) == NumberOfBuckets);
 
-    for (int i = 0; i < NumberOfBuckets; ++i) {
-        if (timerId < BucketSize[i])
-            return i;
-        timerId -= BucketSize[i];
-    }
-    qFatal("QAbstractEventDispatcher: INTERNAL ERROR, timer ID %d is too large", timerId);
-    return -1;
+   for (int i = 0; i < NumberOfBuckets; ++i) {
+      if (timerId < BucketSize[i]) {
+         return i;
+      }
+      timerId -= BucketSize[i];
+   }
+   qFatal("QAbstractEventDispatcher: INTERNAL ERROR, timer ID %d is too large", timerId);
+   return -1;
 }
 
 static inline int bucketIndex(int bucket, int timerId)
 {
-    return timerId - BucketOffset[bucket];
+   return timerId - BucketOffset[bucket];
 }
 
 static inline int *allocateBucket(int bucket)
 {
-    // allocate a new bucket
-    const int size = BucketSize[bucket];
-    const int offset = BucketOffset[bucket];
-    int *b = new int[size];
-    for (int i = 0; i != size; ++i)
-        b[i] = offset + i + 1;
-    return b;
+   // allocate a new bucket
+   const int size = BucketSize[bucket];
+   const int offset = BucketOffset[bucket];
+   int *b = new int[size];
+   for (int i = 0; i != size; ++i) {
+      b[i] = offset + i + 1;
+   }
+   return b;
 }
 
 void QAbstractEventDispatcherPrivate::init()
 {
-    Q_Q(QAbstractEventDispatcher);
+   Q_Q(QAbstractEventDispatcher);
 
-	 QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(q);
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(q);
 
-    if (threadData->eventDispatcher != 0) {
-        qWarning("QAbstractEventDispatcher: An event dispatcher has already been created for this thread");
-    } else {
-        threadData->eventDispatcher = q;
-    }
+   if (threadData->eventDispatcher != 0) {
+      qWarning("QAbstractEventDispatcher: An event dispatcher has already been created for this thread");
+   } else {
+      threadData->eventDispatcher = q;
+   }
 }
 
 // Timer IDs are implemented using a free-list;
@@ -161,33 +167,33 @@ void QAbstractEventDispatcherPrivate::init()
 // (continues below).
 int QAbstractEventDispatcherPrivate::allocateTimerId()
 {
-    int timerId, newTimerId;
-    int at, *b;
-    do {
-        timerId = nextFreeTimerId.loadAcquire(); 
+   int timerId, newTimerId;
+   int at, *b;
+   do {
+      timerId = nextFreeTimerId.loadAcquire();
 
-        // which bucket are we looking in?
-        int which = timerId & TimerIdMask;
-        int bucket = bucketOffset(which);
-        at = bucketIndex(bucket, which);
-        b = timerIds[bucket].load();
+      // which bucket are we looking in?
+      int which = timerId & TimerIdMask;
+      int bucket = bucketOffset(which);
+      at = bucketIndex(bucket, which);
+      b = timerIds[bucket].load();
 
-        if (!b) {
-            // allocate a new bucket
-            b = allocateBucket(bucket);
-            if (!timerIds[bucket].testAndSetRelease(0, b)) {
-                // another thread won the race to allocate the bucket
-                delete [] b;
-                b = timerIds[bucket].load();
-            }
-        }
+      if (!b) {
+         // allocate a new bucket
+         b = allocateBucket(bucket);
+         if (!timerIds[bucket].testAndSetRelease(0, b)) {
+            // another thread won the race to allocate the bucket
+            delete [] b;
+            b = timerIds[bucket].load();
+         }
+      }
 
-        newTimerId = prepareNewValueWithSerialNumber(timerId, b[at]);
-    } while (!nextFreeTimerId.testAndSetRelaxed(timerId, newTimerId));
+      newTimerId = prepareNewValueWithSerialNumber(timerId, b[at]);
+   } while (!nextFreeTimerId.testAndSetRelaxed(timerId, newTimerId));
 
-    b[at] = -timerId;
+   b[at] = -timerId;
 
-    return timerId;
+   return timerId;
 }
 
 // Releasing a timer ID requires putting the current ID back in the vector;
@@ -203,21 +209,21 @@ int QAbstractEventDispatcherPrivate::allocateTimerId()
 // nextFreeTimerId.
 void QAbstractEventDispatcherPrivate::releaseTimerId(int timerId)
 {
-    int which = timerId & TimerIdMask;
-    int bucket = bucketOffset(which);
-    int at = bucketIndex(bucket, which);
-    int *b = timerIds[bucket].load();
+   int which = timerId & TimerIdMask;
+   int bucket = bucketOffset(which);
+   int at = bucketIndex(bucket, which);
+   int *b = timerIds[bucket].load();
 
-    Q_ASSERT_X(timerId == -b[at], "QAbstractEventDispatcher::releaseTimerId",
-               "Internal error: timer ID not found");
+   Q_ASSERT_X(timerId == -b[at], "QAbstractEventDispatcher::releaseTimerId",
+              "Internal error: timer ID not found");
 
-    int freeId, newTimerId;
-    do {
-        freeId = nextFreeTimerId.loadAcquire(); // ### FIXME Proper memory ordering semantics
-        b[at] = freeId & TimerIdMask;
+   int freeId, newTimerId;
+   do {
+      freeId = nextFreeTimerId.loadAcquire(); // ### FIXME Proper memory ordering semantics
+      b[at] = freeId & TimerIdMask;
 
-        newTimerId = prepareNewValueWithSerialNumber(freeId, timerId);
-    } while (!nextFreeTimerId.testAndSetRelease(freeId, newTimerId));
+      newTimerId = prepareNewValueWithSerialNumber(freeId, timerId);
+   } while (!nextFreeTimerId.testAndSetRelease(freeId, newTimerId));
 }
 
 /*!
@@ -262,25 +268,25 @@ void QAbstractEventDispatcherPrivate::releaseTimerId(int timerId)
 /*!
     Constructs a new event dispatcher with the given \a parent.
 */
-QAbstractEventDispatcher::QAbstractEventDispatcher(QObject *parent)   
-	: QObject(parent), d_ptr(new QAbstractEventDispatcherPrivate)
+QAbstractEventDispatcher::QAbstractEventDispatcher(QObject *parent)
+   : QObject(parent), d_ptr(new QAbstractEventDispatcherPrivate)
 {
-	 d_ptr->q_ptr = this;	
-    Q_D(QAbstractEventDispatcher);
+   d_ptr->q_ptr = this;
+   Q_D(QAbstractEventDispatcher);
 
-    d->init();
+   d->init();
 }
 
 /*!
     \internal
 */
-QAbstractEventDispatcher::QAbstractEventDispatcher(QAbstractEventDispatcherPrivate &dd,QObject *parent)   
-	: QObject(parent), d_ptr(&dd)
+QAbstractEventDispatcher::QAbstractEventDispatcher(QAbstractEventDispatcherPrivate &dd, QObject *parent)
+   : QObject(parent), d_ptr(&dd)
 {
-	 d_ptr->q_ptr = this;	
-    Q_D(QAbstractEventDispatcher);
+   d_ptr->q_ptr = this;
+   Q_D(QAbstractEventDispatcher);
 
-    d->init();
+   d->init();
 }
 
 /*!
@@ -300,8 +306,8 @@ QAbstractEventDispatcher::~QAbstractEventDispatcher()
  */
 QAbstractEventDispatcher *QAbstractEventDispatcher::instance(QThread *thread)
 {
-    QThreadData *data = thread ? QThreadData::get2(thread) : QThreadData::current();
-    return data->eventDispatcher;
+   QThreadData *data = thread ? QThreadData::get2(thread) : QThreadData::current();
+   return data->eventDispatcher;
 }
 
 /*!
@@ -367,9 +373,9 @@ QAbstractEventDispatcher *QAbstractEventDispatcher::instance(QThread *thread)
 */
 int QAbstractEventDispatcher::registerTimer(int interval, QObject *object)
 {
-    int id = QAbstractEventDispatcherPrivate::allocateTimerId();
-    registerTimer(id, interval, object);
-    return id;
+   int id = QAbstractEventDispatcherPrivate::allocateTimerId();
+   registerTimer(id, interval, object);
+   return id;
 }
 
 /*!
@@ -471,7 +477,7 @@ void QAbstractEventDispatcher::closingDown()
             \o NSEvent
     \endtable
 
-    
+
 
     \sa setEventFilter(), filterEvent()
 */
@@ -497,10 +503,10 @@ void QAbstractEventDispatcher::closingDown()
 */
 QAbstractEventDispatcher::EventFilter QAbstractEventDispatcher::setEventFilter(EventFilter filter)
 {
-    Q_D(QAbstractEventDispatcher);
-    EventFilter oldFilter = d->event_filter;
-    d->event_filter = filter;
-    return oldFilter;
+   Q_D(QAbstractEventDispatcher);
+   EventFilter oldFilter = d->event_filter;
+   d->event_filter = filter;
+   return oldFilter;
 }
 
 /*!
@@ -514,24 +520,24 @@ QAbstractEventDispatcher::EventFilter QAbstractEventDispatcher::setEventFilter(E
     compatibility with any extensions that may be used in the
     application.
 
-    Note that the type of \a message is platform dependent. See 
+    Note that the type of \a message is platform dependent. See
     QAbstractEventDispatcher::EventFilter for details.
 
     \sa setEventFilter()
 */
 bool QAbstractEventDispatcher::filterEvent(void *message)
 {
-    Q_D(QAbstractEventDispatcher);
+   Q_D(QAbstractEventDispatcher);
 
-    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-    if (d->event_filter) {
-        // Raise the loopLevel so that deleteLater() calls in or triggered
-        // by event_filter() will be processed from the main event loop.
-        QScopedLoopLevelCounter loopLevelCounter(threadData);
-        return d->event_filter(message);
-    }
-    return false;
+   if (d->event_filter) {
+      // Raise the loopLevel so that deleteLater() calls in or triggered
+      // by event_filter() will be processed from the main event loop.
+      QScopedLoopLevelCounter loopLevelCounter(threadData);
+      return d->event_filter(message);
+   }
+   return false;
 }
 
 /*! \fn void QAbstractEventDispatcher::awake()

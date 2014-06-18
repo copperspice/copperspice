@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -100,8 +100,9 @@ QT_BEGIN_NAMESPACE
 void QBasicTimer::start(int msec, QObject *obj)
 {
    stop();
-   if (obj)
-       id = obj->startTimer(msec);
+   if (obj) {
+      id = obj->startTimer(msec);
+   }
 }
 
 /*!
@@ -111,12 +112,13 @@ void QBasicTimer::start(int msec, QObject *obj)
 */
 void QBasicTimer::stop()
 {
-    if (id) {
-        QAbstractEventDispatcher *eventDispatcher = QAbstractEventDispatcher::instance();
-        if (eventDispatcher)
-            eventDispatcher->unregisterTimer(id);
-    }
-    id = 0;
+   if (id) {
+      QAbstractEventDispatcher *eventDispatcher = QAbstractEventDispatcher::instance();
+      if (eventDispatcher) {
+         eventDispatcher->unregisterTimer(id);
+      }
+   }
+   id = 0;
 }
 
 QT_END_NAMESPACE

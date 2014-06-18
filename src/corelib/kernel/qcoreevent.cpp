@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -91,7 +91,7 @@ QT_BEGIN_NAMESPACE
     \value ApplicationLayoutDirectionChange The default application layout direction has changed.
     \value ApplicationPaletteChange         The default application palette has changed.
     \value ApplicationWindowIconChange      The application's icon has changed.
-    \value ChildAdded                       An object gets a child (QChildEvent).  
+    \value ChildAdded                       An object gets a child (QChildEvent).
     \value ChildPolished                    A widget child gets polished (QChildEvent).
     \value ChildRemoved                     An object loses a child (QChildEvent).
     \value Clipboard                        The clipboard contents have changed (QClipboardEvent).
@@ -263,7 +263,7 @@ QT_BEGIN_NAMESPACE
     Contructs an event object of type \a type.
 */
 QEvent::QEvent(Type type)
-    : d(0), t(type), posted(false), spont(false), m_accept(true)
+   : d(0), t(type), posted(false), spont(false), m_accept(true)
 {}
 
 /*!
@@ -274,8 +274,9 @@ QEvent::QEvent(Type type)
 
 QEvent::~QEvent()
 {
-    if (posted && QCoreApplication::instance())
-        QCoreApplicationPrivate::removePostedEvent(this);
+   if (posted && QCoreApplication::instance()) {
+      QCoreApplicationPrivate::removePostedEvent(this);
+   }
 }
 
 
@@ -337,9 +338,9 @@ QEvent::~QEvent()
 
 class QEventUserEventRegistration
 {
-public:
-    QMutex mutex;
-    QSet<int> set;
+ public:
+   QMutex mutex;
+   QSet<int> set;
 };
 Q_GLOBAL_STATIC(QEventUserEventRegistration, userEventRegistrationHelper)
 
@@ -355,28 +356,30 @@ Q_GLOBAL_STATIC(QEventUserEventRegistration, userEventRegistrationHelper)
 */
 int QEvent::registerEventType(int hint)
 {
-    QEventUserEventRegistration *userEventRegistration
-        = userEventRegistrationHelper();
-    if (!userEventRegistration)
-        return -1;
+   QEventUserEventRegistration *userEventRegistration
+      = userEventRegistrationHelper();
+   if (!userEventRegistration) {
+      return -1;
+   }
 
-    QMutexLocker locker(&userEventRegistration->mutex);
+   QMutexLocker locker(&userEventRegistration->mutex);
 
-    // if the type hint hasn't been registered yet, take it
-    if (hint >= QEvent::User && hint <= QEvent::MaxUser && !userEventRegistration->set.contains(hint)) {
-        userEventRegistration->set.insert(hint);
-        return hint;
-    }
+   // if the type hint hasn't been registered yet, take it
+   if (hint >= QEvent::User && hint <= QEvent::MaxUser && !userEventRegistration->set.contains(hint)) {
+      userEventRegistration->set.insert(hint);
+      return hint;
+   }
 
-    // find a free event type, starting at MaxUser and decreasing
-    int id = QEvent::MaxUser;
-    while (userEventRegistration->set.contains(id) && id >= QEvent::User)
-        --id;
-    if (id >= QEvent::User) {
-        userEventRegistration->set.insert(id);
-        return id;
-    }
-    return -1;
+   // find a free event type, starting at MaxUser and decreasing
+   int id = QEvent::MaxUser;
+   while (userEventRegistration->set.contains(id) && id >= QEvent::User) {
+      --id;
+   }
+   if (id >= QEvent::User) {
+      userEventRegistration->set.insert(id);
+      return id;
+   }
+   return -1;
 }
 
 /*!
@@ -404,7 +407,7 @@ int QEvent::registerEventType(int hint)
     \a timerId.
 */
 QTimerEvent::QTimerEvent(int timerId)
-    : QEvent(Timer), id(timerId)
+   : QEvent(Timer), id(timerId)
 {}
 
 /*! \internal
@@ -414,7 +417,7 @@ QTimerEvent::~QTimerEvent()
 }
 
 QChildEvent::QChildEvent(Type type, QObject *child)
-    : QEvent(type), c(child)
+   : QEvent(type), c(child)
 {}
 
 /*! \internal
@@ -424,7 +427,7 @@ QChildEvent::~QChildEvent()
 }
 
 QDynamicPropertyChangeEvent::QDynamicPropertyChangeEvent(const QByteArray &name)
-    : QEvent(QEvent::DynamicPropertyChange), n(name)
+   : QEvent(QEvent::DynamicPropertyChange), n(name)
 {
 }
 

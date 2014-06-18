@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,40 +32,42 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QElapsedTimer
 {
-public:
-    enum ClockType {
-        SystemTime,
-        MonotonicClock,
-        TickCounter,
-        MachAbsoluteTime,
-        PerformanceCounter
-    };
-    static ClockType clockType();
-    static bool isMonotonic();
+ public:
+   enum ClockType {
+      SystemTime,
+      MonotonicClock,
+      TickCounter,
+      MachAbsoluteTime,
+      PerformanceCounter
+   };
+   static ClockType clockType();
+   static bool isMonotonic();
 
-    void start();
-    qint64 restart();
-    void invalidate();
-    bool isValid() const;
+   void start();
+   qint64 restart();
+   void invalidate();
+   bool isValid() const;
 
-    qint64 nsecsElapsed() const;
-    qint64 elapsed() const;
-    bool hasExpired(qint64 timeout) const;
+   qint64 nsecsElapsed() const;
+   qint64 elapsed() const;
+   bool hasExpired(qint64 timeout) const;
 
-    qint64 msecsSinceReference() const;
-    qint64 msecsTo(const QElapsedTimer &other) const;
-    qint64 secsTo(const QElapsedTimer &other) const;
+   qint64 msecsSinceReference() const;
+   qint64 msecsTo(const QElapsedTimer &other) const;
+   qint64 secsTo(const QElapsedTimer &other) const;
 
-    bool operator==(const QElapsedTimer &other) const
-    { return t1 == other.t1 && t2 == other.t2; }
-    bool operator!=(const QElapsedTimer &other) const
-    { return !(*this == other); }
+   bool operator==(const QElapsedTimer &other) const {
+      return t1 == other.t1 && t2 == other.t2;
+   }
+   bool operator!=(const QElapsedTimer &other) const {
+      return !(*this == other);
+   }
 
-    friend bool Q_CORE_EXPORT operator<(const QElapsedTimer &v1, const QElapsedTimer &v2);
+   friend bool Q_CORE_EXPORT operator<(const QElapsedTimer &v1, const QElapsedTimer &v2);
 
-private:
-    qint64 t1;
-    qint64 t2;
+ private:
+   qint64 t1;
+   qint64 t2;
 };
 
 QT_END_NAMESPACE

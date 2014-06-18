@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qscriptdeclarativeclass_p.h"
-#include "qscriptdeclarativeobject_p.h"
-#include "qscriptobject_p.h"
-#include "qscriptstaticscopeobject_p.h"
+#include <qscriptdeclarativeclass_p.h>
+#include <qscriptdeclarativeobject_p.h>
+#include <qscriptobject_p.h>
+#include <qscriptstaticscopeobject_p.h>
 #include <QtScript/qscriptstring.h>
 #include <QtScript/qscriptengine.h>
 #include <QtScript/qscriptengineagent.h>
-#include <private/qscriptengine_p.h>
-#include <private/qscriptvalue_p.h>
-#include <private/qscriptqobject_p.h>
-#include <private/qscriptactivationobject_p.h>
+#include <qscriptengine_p.h>
+#include <qscriptvalue_p.h>
+#include <qscriptqobject_p.h>
+#include <qscriptactivationobject_p.h>
 #include <QtCore/qstringlist.h>
 
 QT_BEGIN_NAMESPACE

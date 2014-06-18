@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -27,7 +27,7 @@
 
 QT_BEGIN_NAMESPACE
 
-/*! 
+/*!
     \class QtConcurrent::Exception
     \brief The Exception class provides a base class for exceptions that can transferred across threads.
     \since 4.4
@@ -57,20 +57,20 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn QtConcurrent::Exception::raise() const 
+    \fn QtConcurrent::Exception::raise() const
     In your QtConcurrent::Exception subclass, reimplement raise() like this:
-    
+
     \snippet doc/src/snippets/code/src_corelib_concurrent_qtconcurrentexception.cpp 2
 */
 
 /*!
     \fn QtConcurrent::Exception::clone() const
     In your QtConcurrent::Exception subclass, reimplement clone() like this:
-    
+
     \snippet doc/src/snippets/code/src_corelib_concurrent_qtconcurrentexception.cpp 3
 */
 
-/*! 
+/*!
     \class QtConcurrent::UnhandledException
 
     \brief The UnhandledException class represents an unhandled exception in a worker thread.
@@ -93,29 +93,28 @@ QT_BEGIN_NAMESPACE
     \internal
 */
 
-namespace QtConcurrent
-{
+namespace QtConcurrent {
 
 void Exception::raise() const
 {
-    Exception e = *this;
-    throw e;
+   Exception e = *this;
+   throw e;
 }
 
 Exception *Exception::clone() const
 {
-    return new Exception(*this);
+   return new Exception(*this);
 }
 
 void UnhandledException::raise() const
 {
-    UnhandledException e = *this;
-    throw e;
+   UnhandledException e = *this;
+   throw e;
 }
 
 Exception *UnhandledException::clone() const
 {
-    return new UnhandledException(*this);
+   return new UnhandledException(*this);
 }
 
 
@@ -123,73 +122,82 @@ namespace internal {
 
 class Base
 {
-public:
-    Base(Exception *exception)
-    : exception(exception), refCount(1), hasThrown(false) { }
-    ~Base() { delete exception; }
+ public:
+   Base(Exception *exception)
+      : exception(exception), refCount(1), hasThrown(false) { }
+   ~Base() {
+      delete exception;
+   }
 
-    Exception *exception;
-    QAtomicInt refCount;
-    bool hasThrown;
+   Exception *exception;
+   QAtomicInt refCount;
+   bool hasThrown;
 };
 
 ExceptionHolder::ExceptionHolder(Exception *exception)
-: base(new Base(exception)) {}
+   : base(new Base(exception)) {}
 
 ExceptionHolder::ExceptionHolder(const ExceptionHolder &other)
-: base(other.base)
+   : base(other.base)
 {
-    base->refCount.ref();
+   base->refCount.ref();
 }
 
 void ExceptionHolder::operator=(const ExceptionHolder &other)
 {
-    if (base == other.base)
-        return;
+   if (base == other.base) {
+      return;
+   }
 
-    if (base->refCount.deref() == false)
-        delete base;
+   if (base->refCount.deref() == false) {
+      delete base;
+   }
 
-    base = other.base;
-    base->refCount.ref();
+   base = other.base;
+   base->refCount.ref();
 }
 
 ExceptionHolder::~ExceptionHolder()
 {
-    if (base->refCount.deref() == 0)
-        delete base;
+   if (base->refCount.deref() == 0) {
+      delete base;
+   }
 }
 
 Exception *ExceptionHolder::exception() const
 {
-    return base->exception;
+   return base->exception;
 }
 
 void ExceptionStore::setException(const Exception &e)
 {
-    if (hasException() == false)
-        exceptionHolder = ExceptionHolder(e.clone());
+   if (hasException() == false) {
+      exceptionHolder = ExceptionHolder(e.clone());
+   }
 }
 
 bool ExceptionStore::hasException() const
 {
-    return (exceptionHolder.exception() != 0);
+   return (exceptionHolder.exception() != 0);
 }
 
 ExceptionHolder ExceptionStore::exception()
 {
-    return exceptionHolder;
+   return exceptionHolder;
 }
 
 void ExceptionStore::throwPossibleException()
 {
-    if (hasException() ) {
-        exceptionHolder.base->hasThrown = true;
-        exceptionHolder.exception()->raise();
-    }
+   if (hasException() ) {
+      exceptionHolder.base->hasThrown = true;
+      exceptionHolder.exception()->raise();
+   }
 }
 
-bool ExceptionStore::hasThrown() const { return exceptionHolder.base->hasThrown; }
+bool ExceptionStore::hasThrown() const
+{
+   return exceptionHolder.base->hasThrown;
+}
 
 } // namespace internal
 

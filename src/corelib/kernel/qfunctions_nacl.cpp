@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -48,93 +48,93 @@
 
 extern "C" {
 
-void pthread_cleanup_push(void (*)(void *), void *)
-{
+   void pthread_cleanup_push(void (*)(void *), void *)
+   {
 
-}
+   }
 
-void pthread_cleanup_pop(int)
-{
+   void pthread_cleanup_pop(int)
+   {
 
-}
+   }
 
-int pthread_setcancelstate(int, int *)
-{
-    return 0;
-}
+   int pthread_setcancelstate(int, int *)
+   {
+      return 0;
+   }
 
-int pthread_setcanceltype(int, int *)
-{
-    return 0;
-}
+   int pthread_setcanceltype(int, int *)
+   {
+      return 0;
+   }
 
-void pthread_testcancel(void)
-{
+   void pthread_testcancel(void)
+   {
 
-}
-
-
-int pthread_cancel(pthread_t)
-{
-    return 0;
-}
-
-int pthread_attr_setinheritsched(pthread_attr_t *,int)
-{
-    return 0;
-}
+   }
 
 
-int pthread_attr_getinheritsched(const pthread_attr_t *, int *)
-{
-    return 0;
-}
+   int pthread_cancel(pthread_t)
+   {
+      return 0;
+   }
 
-// event dispatcher, select
-//struct fd_set;
-//struct timeval;
+   int pthread_attr_setinheritsched(pthread_attr_t *, int)
+   {
+      return 0;
+   }
 
-int fcntl(int, int, ...)
-{
-    return 0;
-}
 
-int sigaction(int, const struct sigaction *, struct sigaction *)
-{
-    return 0;
-}
+   int pthread_attr_getinheritsched(const pthread_attr_t *, int *)
+   {
+      return 0;
+   }
 
-int open(const char *, int, ...)
-{
-    return 0;
-}
+   // event dispatcher, select
+   //struct fd_set;
+   //struct timeval;
 
-int open64(const char *, int, ...)
-{
-    return 0;
-}
+   int fcntl(int, int, ...)
+   {
+      return 0;
+   }
 
-int access(const char *, int)
-{
-    return 0;
-}
+   int sigaction(int, const struct sigaction *, struct sigaction *)
+   {
+      return 0;
+   }
 
-typedef long off64_t;
-off64_t ftello64(void *)
-{
-    qFatal("ftello64 called");
-    return 0;
-}
+   int open(const char *, int, ...)
+   {
+      return 0;
+   }
 
-off64_t lseek64(int, off_t, int)
-{
-    qFatal("lseek64 called");
-    return 0;
-}
+   int open64(const char *, int, ...)
+   {
+      return 0;
+   }
+
+   int access(const char *, int)
+   {
+      return 0;
+   }
+
+   typedef long off64_t;
+   off64_t ftello64(void *)
+   {
+      qFatal("ftello64 called");
+      return 0;
+   }
+
+   off64_t lseek64(int, off_t, int)
+   {
+      qFatal("lseek64 called");
+      return 0;
+   }
 
 } // Extern C
 
 int select(int, fd_set *, fd_set *, fd_set *, struct timeval *)
 {
-    return 0;
+   return 0;
 }

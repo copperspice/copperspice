@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,38 +37,38 @@ class QSequentialAnimationGroupPrivate;
 
 class Q_CORE_EXPORT QSequentialAnimationGroup : public QAnimationGroup
 {
-    CS_OBJECT(QSequentialAnimationGroup)
-		
-    CORE_CS_PROPERTY_READ(currentAnimation, currentAnimation)
-    CORE_CS_PROPERTY_NOTIFY(currentAnimation, currentAnimationChanged)
+   CS_OBJECT(QSequentialAnimationGroup)
 
-public:
-    QSequentialAnimationGroup(QObject *parent = 0);
-    ~QSequentialAnimationGroup();
+   CORE_CS_PROPERTY_READ(currentAnimation, currentAnimation)
+   CORE_CS_PROPERTY_NOTIFY(currentAnimation, currentAnimationChanged)
 
-    QPauseAnimation *addPause(int msecs);
-    QPauseAnimation *insertPause(int index, int msecs);
+ public:
+   QSequentialAnimationGroup(QObject *parent = 0);
+   ~QSequentialAnimationGroup();
 
-    QAbstractAnimation *currentAnimation() const;
-    int duration() const;
+   QPauseAnimation *addPause(int msecs);
+   QPauseAnimation *insertPause(int index, int msecs);
 
-    CORE_CS_SIGNAL_1(Public, void currentAnimationChanged(QAbstractAnimation * current))
-    CORE_CS_SIGNAL_2(currentAnimationChanged,current) 
+   QAbstractAnimation *currentAnimation() const;
+   int duration() const;
 
-protected:
-    QSequentialAnimationGroup(QSequentialAnimationGroupPrivate &dd, QObject *parent);
-    bool event(QEvent *event);
+   CORE_CS_SIGNAL_1(Public, void currentAnimationChanged(QAbstractAnimation *current))
+   CORE_CS_SIGNAL_2(currentAnimationChanged, current)
 
-    void updateCurrentTime(int);
-    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-    void updateDirection(QAbstractAnimation::Direction direction);
+ protected:
+   QSequentialAnimationGroup(QSequentialAnimationGroupPrivate &dd, QObject *parent);
+   bool event(QEvent *event);
 
-private:
-    Q_DISABLE_COPY(QSequentialAnimationGroup)
-    Q_DECLARE_PRIVATE(QSequentialAnimationGroup)
+   void updateCurrentTime(int);
+   void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+   void updateDirection(QAbstractAnimation::Direction direction);
 
-    CORE_CS_SLOT_1(Private, void _q_uncontrolledAnimationFinished())
-	 CORE_CS_SLOT_2(_q_uncontrolledAnimationFinished)
+ private:
+   Q_DISABLE_COPY(QSequentialAnimationGroup)
+   Q_DECLARE_PRIVATE(QSequentialAnimationGroup)
+
+   CORE_CS_SLOT_1(Private, void _q_uncontrolledAnimationFinished())
+   CORE_CS_SLOT_2(_q_uncontrolledAnimationFinished)
 };
 
 #endif //QT_NO_ANIMATION

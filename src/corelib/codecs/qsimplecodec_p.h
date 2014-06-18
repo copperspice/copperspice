@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,22 +36,22 @@ template <typename T> class QAtomicPointer;
 
 class QSimpleTextCodec: public QTextCodec
 {
-public:
-    enum { numSimpleCodecs = 30 };
+ public:
+   enum { numSimpleCodecs = 30 };
 
-    explicit QSimpleTextCodec(int);
-    ~QSimpleTextCodec();
+   explicit QSimpleTextCodec(int);
+   ~QSimpleTextCodec();
 
-    QString convertToUnicode(const char *, int, ConverterState *) const;
-    QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
 
-    QByteArray name() const;
-    QList<QByteArray> aliases() const;
-    int mibEnum() const;
+   QByteArray name() const;
+   QList<QByteArray> aliases() const;
+   int mibEnum() const;
 
-private:
-    int forwardIndex;
-    mutable QAtomicPointer<QByteArray> reverseMap;
+ private:
+   int forwardIndex;
+   mutable QAtomicPointer<QByteArray> reverseMap;
 };
 
 #endif // QT_NO_TEXTCODEC

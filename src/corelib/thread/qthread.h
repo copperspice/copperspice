@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,81 +40,81 @@ class QThreadPrivate;
 
 class Q_CORE_EXPORT QThread : public QObject
 {
-  CS_OBJECT(QThread)
+   CS_OBJECT(QThread)
 
-  public:
-    static Qt::HANDLE currentThreadId();
-    static QThread *currentThread();
-    static int idealThreadCount();
-    static void yieldCurrentThread();
+ public:
+   static Qt::HANDLE currentThreadId();
+   static QThread *currentThread();
+   static int idealThreadCount();
+   static void yieldCurrentThread();
 
-    explicit QThread(QObject *parent = 0);
-    ~QThread();
+   explicit QThread(QObject *parent = 0);
+   ~QThread();
 
-    enum Priority {
-        IdlePriority,
+   enum Priority {
+      IdlePriority,
 
-        LowestPriority,
-        LowPriority,
-        NormalPriority,
-        HighPriority,
-        HighestPriority,
+      LowestPriority,
+      LowPriority,
+      NormalPriority,
+      HighPriority,
+      HighestPriority,
 
-        TimeCriticalPriority,
+      TimeCriticalPriority,
 
-        InheritPriority
-    };
+      InheritPriority
+   };
 
-    void setPriority(Priority priority);
-    Priority priority() const;
+   void setPriority(Priority priority);
+   Priority priority() const;
 
-    bool isFinished() const;
-    bool isRunning() const;
+   bool isFinished() const;
+   bool isRunning() const;
 
-    void setStackSize(uint stackSize);
-    uint stackSize() const;
+   void setStackSize(uint stackSize);
+   uint stackSize() const;
 
-    void exit(int retcode = 0);
+   void exit(int retcode = 0);
 
-public :
-    CORE_CS_SLOT_1(Public, void start(Priority un_named_arg1 = InheritPriority))
-    CORE_CS_SLOT_2(start) 
-    CORE_CS_SLOT_1(Public, void terminate())
-    CORE_CS_SLOT_2(terminate) 
-    CORE_CS_SLOT_1(Public, void quit())
-    CORE_CS_SLOT_2(quit) 
+ public :
+   CORE_CS_SLOT_1(Public, void start(Priority un_named_arg1 = InheritPriority))
+   CORE_CS_SLOT_2(start)
+   CORE_CS_SLOT_1(Public, void terminate())
+   CORE_CS_SLOT_2(terminate)
+   CORE_CS_SLOT_1(Public, void quit())
+   CORE_CS_SLOT_2(quit)
 
-    // default argument causes thread to block indefinately
-    bool wait(unsigned long time = ULONG_MAX);
+   // default argument causes thread to block indefinately
+   bool wait(unsigned long time = ULONG_MAX);
 
-    static void sleep(unsigned long);
-    static void msleep(unsigned long);
-    static void usleep(unsigned long);
+   static void sleep(unsigned long);
+   static void msleep(unsigned long);
+   static void usleep(unsigned long);
 
-    CORE_CS_SIGNAL_1(Public, void started())
-    CORE_CS_SIGNAL_2(started) 
-    CORE_CS_SIGNAL_1(Public, void finished())
-    CORE_CS_SIGNAL_2(finished) 
-    CORE_CS_SIGNAL_1(Public, void terminated())
-    CORE_CS_SIGNAL_2(terminated) 
+   CORE_CS_SIGNAL_1(Public, void started())
+   CORE_CS_SIGNAL_2(started)
+   CORE_CS_SIGNAL_1(Public, void finished())
+   CORE_CS_SIGNAL_2(finished)
+   CORE_CS_SIGNAL_1(Public, void terminated())
+   CORE_CS_SIGNAL_2(terminated)
 
-protected:
-    virtual void run();
-    int exec();
+ protected:
+   virtual void run();
+   int exec();
 
-    static void setTerminationEnabled(bool enabled = true);
+   static void setTerminationEnabled(bool enabled = true);
 
-    QThread(QThreadPrivate &dd, QObject *parent = 0);
-	 QScopedPointer<QThreadPrivate> d_ptr;
+   QThread(QThreadPrivate &dd, QObject *parent = 0);
+   QScopedPointer<QThreadPrivate> d_ptr;
 
-private:    
-    Q_DECLARE_PRIVATE(QThread)
+ private:
+   Q_DECLARE_PRIVATE(QThread)
 
-    static void initialize();
-    static void cleanup();
+   static void initialize();
+   static void cleanup();
 
-    friend class QCoreApplication;
-    friend class QThreadData;
+   friend class QCoreApplication;
+   friend class QThreadData;
 };
 
 QT_END_NAMESPACE

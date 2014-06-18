@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -59,174 +59,177 @@ enum { PollingInterval = 1000 };
 
 class QPollingFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
-    CS_OBJECT(QPollingFileSystemWatcherEngine)
+   CS_OBJECT(QPollingFileSystemWatcherEngine)
 
-    class FileInfo
-    {
-        uint ownerId;
-        uint groupId;
-        QFile::Permissions permissions;
-        QDateTime lastModified;
-        QStringList entries;
+   class FileInfo
+   {
+      uint ownerId;
+      uint groupId;
+      QFile::Permissions permissions;
+      QDateTime lastModified;
+      QStringList entries;
 
     public:
-        FileInfo(const QFileInfo &fileInfo)
-            : ownerId(fileInfo.ownerId()),
-              groupId(fileInfo.groupId()),
-              permissions(fileInfo.permissions()),
-              lastModified(fileInfo.lastModified())
-        { 
-            if (fileInfo.isDir()) {
-                entries = fileInfo.absoluteDir().entryList(QDir::AllEntries);
-            }
-        }
-        FileInfo &operator=(const QFileInfo &fileInfo)
-        {
-            *this = FileInfo(fileInfo);
-            return *this;
-        }
+      FileInfo(const QFileInfo &fileInfo)
+         : ownerId(fileInfo.ownerId()),
+           groupId(fileInfo.groupId()),
+           permissions(fileInfo.permissions()),
+           lastModified(fileInfo.lastModified()) {
+         if (fileInfo.isDir()) {
+            entries = fileInfo.absoluteDir().entryList(QDir::AllEntries);
+         }
+      }
+      FileInfo &operator=(const QFileInfo &fileInfo) {
+         *this = FileInfo(fileInfo);
+         return *this;
+      }
 
-        bool operator!=(const QFileInfo &fileInfo) const
-        {
-            if (fileInfo.isDir() && entries != fileInfo.absoluteDir().entryList(QDir::AllEntries))
-                return true;
-            return (ownerId != fileInfo.ownerId()
-                    || groupId != fileInfo.groupId()
-                    || permissions != fileInfo.permissions()
-                    || lastModified != fileInfo.lastModified());
-        }
-    };
+      bool operator!=(const QFileInfo &fileInfo) const {
+         if (fileInfo.isDir() && entries != fileInfo.absoluteDir().entryList(QDir::AllEntries)) {
+            return true;
+         }
+         return (ownerId != fileInfo.ownerId()
+                 || groupId != fileInfo.groupId()
+                 || permissions != fileInfo.permissions()
+                 || lastModified != fileInfo.lastModified());
+      }
+   };
 
-    mutable QMutex mutex;
-    QHash<QString, FileInfo> files, directories;
+   mutable QMutex mutex;
+   QHash<QString, FileInfo> files, directories;
 
-public:
-    QPollingFileSystemWatcherEngine();
+ public:
+   QPollingFileSystemWatcherEngine();
 
-    void run();
+   void run();
 
-    QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
-    QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
 
-    void stop();
+   void stop();
 
-private:
-    	
-	 CORE_CS_SLOT_1(Private,void timeout())
-    CORE_CS_SLOT_2(timeout)
+ private:
+
+   CORE_CS_SLOT_1(Private, void timeout())
+   CORE_CS_SLOT_2(timeout)
 
 };
 
 QPollingFileSystemWatcherEngine::QPollingFileSystemWatcherEngine()
 {
-    moveToThread(this);
+   moveToThread(this);
 }
 
 void QPollingFileSystemWatcherEngine::run()
 {
-    QTimer timer;
-    connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
-    timer.start(PollingInterval);
-    (void) exec();
+   QTimer timer;
+   connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
+   timer.start(PollingInterval);
+   (void) exec();
 }
 
 QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
-                     QStringList *files, QStringList *directories)
+      QStringList *files, QStringList *directories)
 {
-    QMutexLocker locker(&mutex);
-    QStringList p = paths;
-    QMutableListIterator<QString> it(p);
+   QMutexLocker locker(&mutex);
+   QStringList p = paths;
+   QMutableListIterator<QString> it(p);
 
-    while (it.hasNext()) {
-        QString path = it.next();
-        QFileInfo fi(path);
-        if (!fi.exists())
-            continue;
-        if (fi.isDir()) {
-            if (!directories->contains(path))
-                directories->append(path);
-            if (!path.endsWith(QLatin1Char('/')))
-                fi = QFileInfo(path + QLatin1Char('/'));
-            this->directories.insert(path, fi);
-        } else {
-            if (!files->contains(path))
-                files->append(path);
-            this->files.insert(path, fi);
-        }
-        it.remove();
-    }
-    start();
-    return p;
+   while (it.hasNext()) {
+      QString path = it.next();
+      QFileInfo fi(path);
+      if (!fi.exists()) {
+         continue;
+      }
+      if (fi.isDir()) {
+         if (!directories->contains(path)) {
+            directories->append(path);
+         }
+         if (!path.endsWith(QLatin1Char('/'))) {
+            fi = QFileInfo(path + QLatin1Char('/'));
+         }
+         this->directories.insert(path, fi);
+      } else {
+         if (!files->contains(path)) {
+            files->append(path);
+         }
+         this->files.insert(path, fi);
+      }
+      it.remove();
+   }
+   start();
+   return p;
 }
 
 QStringList QPollingFileSystemWatcherEngine::removePaths(const QStringList &paths,
-                                                         QStringList *files,
-                                                         QStringList *directories)
+      QStringList *files,
+      QStringList *directories)
 {
-    QMutexLocker locker(&mutex);
-    QStringList p = paths;
-    QMutableListIterator<QString> it(p);
-    while (it.hasNext()) {
-        QString path = it.next();
-        if (this->directories.remove(path)) {
-            directories->removeAll(path);
-            it.remove();
-        } else if (this->files.remove(path)) {
-            files->removeAll(path);
-            it.remove();
-        }
-    }
-    if (this->files.isEmpty() && this->directories.isEmpty()) {
-        locker.unlock();
-        stop();
-        wait();
-    }
-    return p;
+   QMutexLocker locker(&mutex);
+   QStringList p = paths;
+   QMutableListIterator<QString> it(p);
+   while (it.hasNext()) {
+      QString path = it.next();
+      if (this->directories.remove(path)) {
+         directories->removeAll(path);
+         it.remove();
+      } else if (this->files.remove(path)) {
+         files->removeAll(path);
+         it.remove();
+      }
+   }
+   if (this->files.isEmpty() && this->directories.isEmpty()) {
+      locker.unlock();
+      stop();
+      wait();
+   }
+   return p;
 }
 
 void QPollingFileSystemWatcherEngine::stop()
 {
-    quit();
+   quit();
 }
 
 void QPollingFileSystemWatcherEngine::timeout()
 {
-    QMutexLocker locker(&mutex);
-    QMutableHashIterator<QString, FileInfo> fit(files);
-    while (fit.hasNext()) {
-        QHash<QString, FileInfo>::iterator x = fit.next();
-        QString path = x.key();
-        QFileInfo fi(path);
-        if (!fi.exists()) {
-            fit.remove();
-            emit fileChanged(path, true);
-        } else if (x.value() != fi) {
-            x.value() = fi;
-            emit fileChanged(path, false);
-        }
-    }
-    QMutableHashIterator<QString, FileInfo> dit(directories);
-    while (dit.hasNext()) {
-        QHash<QString, FileInfo>::iterator x = dit.next();
-        QString path = x.key();
-        QFileInfo fi(path);
-        if (!path.endsWith(QLatin1Char('/')))
-            fi = QFileInfo(path + QLatin1Char('/'));
-        if (!fi.exists()) {
+   QMutexLocker locker(&mutex);
+   QMutableHashIterator<QString, FileInfo> fit(files);
+   while (fit.hasNext()) {
+      QHash<QString, FileInfo>::iterator x = fit.next();
+      QString path = x.key();
+      QFileInfo fi(path);
+      if (!fi.exists()) {
+         fit.remove();
+         emit fileChanged(path, true);
+      } else if (x.value() != fi) {
+         x.value() = fi;
+         emit fileChanged(path, false);
+      }
+   }
+   QMutableHashIterator<QString, FileInfo> dit(directories);
+   while (dit.hasNext()) {
+      QHash<QString, FileInfo>::iterator x = dit.next();
+      QString path = x.key();
+      QFileInfo fi(path);
+      if (!path.endsWith(QLatin1Char('/'))) {
+         fi = QFileInfo(path + QLatin1Char('/'));
+      }
+      if (!fi.exists()) {
+         dit.remove();
+         emit directoryChanged(path, true);
+      } else if (x.value() != fi) {
+         fi.refresh();
+         if (!fi.exists()) {
             dit.remove();
             emit directoryChanged(path, true);
-        } else if (x.value() != fi) {
-            fi.refresh();
-            if (!fi.exists()) {
-                dit.remove();
-                emit directoryChanged(path, true);
-            } else {
-                x.value() = fi;
-                emit directoryChanged(path, false);
-            }
-        }
-        
-    }
+         } else {
+            x.value() = fi;
+            emit directoryChanged(path, false);
+         }
+      }
+
+   }
 }
 
 
@@ -235,115 +238,121 @@ void QPollingFileSystemWatcherEngine::timeout()
 QFileSystemWatcherEngine *QFileSystemWatcherPrivate::createNativeEngine()
 {
 #if defined(Q_OS_WIN)
-    return new QWindowsFileSystemWatcherEngine;
+   return new QWindowsFileSystemWatcherEngine;
 
 #elif defined(Q_OS_LINUX)
-    QFileSystemWatcherEngine *eng = QInotifyFileSystemWatcherEngine::create();
+   QFileSystemWatcherEngine *eng = QInotifyFileSystemWatcherEngine::create();
 
-    if (! eng) {
-        eng = QDnotifyFileSystemWatcherEngine::create();
-    }
-    return eng;
+   if (! eng) {
+      eng = QDnotifyFileSystemWatcherEngine::create();
+   }
+   return eng;
 
 #elif defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
-    return QKqueueFileSystemWatcherEngine::create();
+   return QKqueueFileSystemWatcherEngine::create();
 
 #else
-    return 0;
+   return 0;
 
 #endif
 }
 
 QFileSystemWatcherPrivate::QFileSystemWatcherPrivate()
-    : native(0), poller(0), forced(0)
+   : native(0), poller(0), forced(0)
 {
 }
 
 void QFileSystemWatcherPrivate::init()
 {
-    Q_Q(QFileSystemWatcher);
-    native = createNativeEngine();
+   Q_Q(QFileSystemWatcher);
+   native = createNativeEngine();
 
-    if (native) {
-        QObject::connect(native, SIGNAL(fileChanged(const QString &,bool)), q, SLOT(_q_fileChanged(const QString &,bool)));
-        QObject::connect(native, SIGNAL(directoryChanged(const QString &,bool)), q, SLOT(_q_directoryChanged(const QString &,bool)));
-    }
+   if (native) {
+      QObject::connect(native, SIGNAL(fileChanged(const QString &, bool)), q, SLOT(_q_fileChanged(const QString &, bool)));
+      QObject::connect(native, SIGNAL(directoryChanged(const QString &, bool)), q, SLOT(_q_directoryChanged(const QString &,
+                       bool)));
+   }
 }
 
 void QFileSystemWatcherPrivate::initForcedEngine(const QString &forceName)
 {
-    if (forced) {
-        return;
-    }
+   if (forced) {
+      return;
+   }
 
-    Q_Q(QFileSystemWatcher);
+   Q_Q(QFileSystemWatcher);
 
 #if defined(Q_OS_LINUX)
-    if(forceName == QLatin1String("inotify")) {
-        forced = QInotifyFileSystemWatcherEngine::create();
+   if (forceName == QLatin1String("inotify")) {
+      forced = QInotifyFileSystemWatcherEngine::create();
 
-    } else if(forceName == QLatin1String("dnotify")) {
-        forced = QDnotifyFileSystemWatcherEngine::create();
-    }
+   } else if (forceName == QLatin1String("dnotify")) {
+      forced = QDnotifyFileSystemWatcherEngine::create();
+   }
 
 #else
-    Q_UNUSED(forceName);
+   Q_UNUSED(forceName);
 
 #endif
 
-    if (forced) {
-        QObject::connect(forced, SIGNAL(fileChanged(const QString &,bool)), q, SLOT(_q_fileChanged(const QString &,bool)));
-        QObject::connect(forced, SIGNAL(directoryChanged(const QString &,bool)), q, SLOT(_q_directoryChanged(const QString &,bool)));
-    }
+   if (forced) {
+      QObject::connect(forced, SIGNAL(fileChanged(const QString &, bool)), q, SLOT(_q_fileChanged(const QString &, bool)));
+      QObject::connect(forced, SIGNAL(directoryChanged(const QString &, bool)), q, SLOT(_q_directoryChanged(const QString &,
+                       bool)));
+   }
 }
 
 void QFileSystemWatcherPrivate::initPollerEngine()
 {
-    if (poller)
-        return;
+   if (poller) {
+      return;
+   }
 
-    Q_Q(QFileSystemWatcher);
-    poller = new QPollingFileSystemWatcherEngine; // that was a mouthful
-    QObject::connect(poller, SIGNAL(fileChanged(const QString &,bool)), q, SLOT(_q_fileChanged(const QString &,bool)));
-    QObject::connect(poller, SIGNAL(directoryChanged(const QString &,bool)), q, SLOT(_q_directoryChanged(const QString &,bool)));
+   Q_Q(QFileSystemWatcher);
+   poller = new QPollingFileSystemWatcherEngine; // that was a mouthful
+   QObject::connect(poller, SIGNAL(fileChanged(const QString &, bool)), q, SLOT(_q_fileChanged(const QString &, bool)));
+   QObject::connect(poller, SIGNAL(directoryChanged(const QString &, bool)), q, SLOT(_q_directoryChanged(const QString &,
+                    bool)));
 }
 
 void QFileSystemWatcherPrivate::_q_fileChanged(const QString &path, bool removed)
 {
-    Q_Q(QFileSystemWatcher);
+   Q_Q(QFileSystemWatcher);
 
-    if (!files.contains(path)) {
-        // the path was removed after a change was detected, but before we delivered the signal
-        return;
-    }
+   if (!files.contains(path)) {
+      // the path was removed after a change was detected, but before we delivered the signal
+      return;
+   }
 
-    if (removed)
-        files.removeAll(path);
-    emit q->fileChanged(path);
+   if (removed) {
+      files.removeAll(path);
+   }
+   emit q->fileChanged(path);
 }
 
 void QFileSystemWatcherPrivate::_q_directoryChanged(const QString &path, bool removed)
 {
-    Q_Q(QFileSystemWatcher);
-    if (!directories.contains(path)) {
-        // perhaps the path was removed after a change was detected, but before we delivered the signal
-        return;
-    }
-    if (removed)
-        directories.removeAll(path);
-    emit q->directoryChanged(path);
+   Q_Q(QFileSystemWatcher);
+   if (!directories.contains(path)) {
+      // perhaps the path was removed after a change was detected, but before we delivered the signal
+      return;
+   }
+   if (removed) {
+      directories.removeAll(path);
+   }
+   emit q->directoryChanged(path);
 }
 
 void QFileSystemWatcher::_q_fileChanged(const QString &path, bool removed)
 {
-	Q_D(QFileSystemWatcher);
-	d->_q_fileChanged(path, removed);
+   Q_D(QFileSystemWatcher);
+   d->_q_fileChanged(path, removed);
 }
 
 void QFileSystemWatcher::_q_directoryChanged(const QString &path, bool removed)
 {
-	Q_D(QFileSystemWatcher);
-	d->_q_directoryChanged(path, removed);
+   Q_D(QFileSystemWatcher);
+   d->_q_directoryChanged(path, removed);
 }
 
 
@@ -401,10 +410,10 @@ void QFileSystemWatcher::_q_directoryChanged(const QString &path, bool removed)
     Constructs a new file system watcher object with the given \a parent.
 */
 QFileSystemWatcher::QFileSystemWatcher(QObject *parent)
-	: QObject(parent), d_ptr(new QFileSystemWatcherPrivate)   
+   : QObject(parent), d_ptr(new QFileSystemWatcherPrivate)
 {
    d_ptr->q_ptr = this;
-	d_func()->init();
+   d_func()->init();
 }
 
 /*!
@@ -412,12 +421,12 @@ QFileSystemWatcher::QFileSystemWatcher(QObject *parent)
     which monitors the specified \a paths list.
 */
 QFileSystemWatcher::QFileSystemWatcher(const QStringList &paths, QObject *parent)
-	: QObject(parent), d_ptr(new QFileSystemWatcherPrivate)       
+   : QObject(parent), d_ptr(new QFileSystemWatcherPrivate)
 {
-	 d_ptr->q_ptr = this;
-    d_func()->init();
+   d_ptr->q_ptr = this;
+   d_func()->init();
 
-    addPaths(paths);
+   addPaths(paths);
 }
 
 /*!
@@ -425,25 +434,25 @@ QFileSystemWatcher::QFileSystemWatcher(const QStringList &paths, QObject *parent
 */
 QFileSystemWatcher::~QFileSystemWatcher()
 {
-    Q_D(QFileSystemWatcher);
-    if (d->native) {
-        d->native->stop();
-        d->native->wait();
-        delete d->native;
-        d->native = 0;
-    }
-    if (d->poller) {
-        d->poller->stop();
-        d->poller->wait();
-        delete d->poller;
-        d->poller = 0;
-    }
-    if (d->forced) {
-        d->forced->stop();
-        d->forced->wait();
-        delete d->forced;
-        d->forced = 0;
-    }
+   Q_D(QFileSystemWatcher);
+   if (d->native) {
+      d->native->stop();
+      d->native->wait();
+      delete d->native;
+      d->native = 0;
+   }
+   if (d->poller) {
+      d->poller->stop();
+      d->poller->wait();
+      delete d->poller;
+      d->poller = 0;
+   }
+   if (d->forced) {
+      d->forced->stop();
+      d->forced->wait();
+      delete d->forced;
+      d->forced = 0;
+   }
 }
 
 /*!
@@ -465,11 +474,11 @@ QFileSystemWatcher::~QFileSystemWatcher()
 */
 void QFileSystemWatcher::addPath(const QString &path)
 {
-    if (path.isEmpty()) {
-        qWarning("QFileSystemWatcher::addPath: path is empty");
-        return;
-    }
-    addPaths(QStringList(path));
+   if (path.isEmpty()) {
+      qWarning("QFileSystemWatcher::addPath: path is empty");
+      return;
+   }
+   addPaths(QStringList(path));
 }
 
 /*!
@@ -492,47 +501,48 @@ void QFileSystemWatcher::addPath(const QString &path)
 */
 void QFileSystemWatcher::addPaths(const QStringList &paths)
 {
-    Q_D(QFileSystemWatcher);
-    if (paths.isEmpty()) {
-        qWarning("QFileSystemWatcher::addPaths: list is empty");
-        return;
-    }
+   Q_D(QFileSystemWatcher);
+   if (paths.isEmpty()) {
+      qWarning("QFileSystemWatcher::addPaths: list is empty");
+      return;
+   }
 
-    QStringList p = paths;
-    QFileSystemWatcherEngine *engine = 0;
+   QStringList p = paths;
+   QFileSystemWatcherEngine *engine = 0;
 
-    if(!objectName().startsWith(QLatin1String("_qt_autotest_force_engine_"))) {
-        // Normal runtime case - search intelligently for best engine
-        if(d->native) {
-            engine = d->native;
-        } else {
-            d_func()->initPollerEngine();
-            engine = d->poller;
-        }
+   if (!objectName().startsWith(QLatin1String("_qt_autotest_force_engine_"))) {
+      // Normal runtime case - search intelligently for best engine
+      if (d->native) {
+         engine = d->native;
+      } else {
+         d_func()->initPollerEngine();
+         engine = d->poller;
+      }
 
-    } else {
-        // Autotest override case - use the explicitly selected engine only
-        QString forceName = objectName().mid(26);
-        if(forceName == QLatin1String("poller")) {
-            qDebug() << "QFileSystemWatcher: skipping native engine, using only polling engine";
-            d_func()->initPollerEngine();
-            engine = d->poller;
-        } else if(forceName == QLatin1String("native")) {
-            qDebug() << "QFileSystemWatcher: skipping polling engine, using only native engine";
-            engine = d->native;
-        } else {
-            qDebug() << "QFileSystemWatcher: skipping polling and native engine, using only explicit" << forceName << "engine";
-            d_func()->initForcedEngine(forceName);
-            engine = d->forced;
-        }
-    }
+   } else {
+      // Autotest override case - use the explicitly selected engine only
+      QString forceName = objectName().mid(26);
+      if (forceName == QLatin1String("poller")) {
+         qDebug() << "QFileSystemWatcher: skipping native engine, using only polling engine";
+         d_func()->initPollerEngine();
+         engine = d->poller;
+      } else if (forceName == QLatin1String("native")) {
+         qDebug() << "QFileSystemWatcher: skipping polling engine, using only native engine";
+         engine = d->native;
+      } else {
+         qDebug() << "QFileSystemWatcher: skipping polling and native engine, using only explicit" << forceName << "engine";
+         d_func()->initForcedEngine(forceName);
+         engine = d->forced;
+      }
+   }
 
-    if(engine)
-        p = engine->addPaths(p, &d->files, &d->directories);
+   if (engine) {
+      p = engine->addPaths(p, &d->files, &d->directories);
+   }
 
-    if (!p.isEmpty())
-        qWarning("QFileSystemWatcher: failed to add paths: %s",
-                 qPrintable(p.join(QLatin1String(", "))));
+   if (!p.isEmpty())
+      qWarning("QFileSystemWatcher: failed to add paths: %s",
+               qPrintable(p.join(QLatin1String(", "))));
 }
 
 /*!
@@ -542,11 +552,11 @@ void QFileSystemWatcher::addPaths(const QStringList &paths)
 */
 void QFileSystemWatcher::removePath(const QString &path)
 {
-    if (path.isEmpty()) {
-        qWarning("QFileSystemWatcher::removePath: path is empty");
-        return;
-    }
-    removePaths(QStringList(path));
+   if (path.isEmpty()) {
+      qWarning("QFileSystemWatcher::removePath: path is empty");
+      return;
+   }
+   removePaths(QStringList(path));
 }
 
 /*!
@@ -556,18 +566,21 @@ void QFileSystemWatcher::removePath(const QString &path)
 */
 void QFileSystemWatcher::removePaths(const QStringList &paths)
 {
-    if (paths.isEmpty()) {
-        qWarning("QFileSystemWatcher::removePaths: list is empty");
-        return;
-    }
-    Q_D(QFileSystemWatcher);
-    QStringList p = paths;
-    if (d->native)
-        p = d->native->removePaths(p, &d->files, &d->directories);
-    if (d->poller)
-        p = d->poller->removePaths(p, &d->files, &d->directories);
-    if (d->forced)
-        p = d->forced->removePaths(p, &d->files, &d->directories);
+   if (paths.isEmpty()) {
+      qWarning("QFileSystemWatcher::removePaths: list is empty");
+      return;
+   }
+   Q_D(QFileSystemWatcher);
+   QStringList p = paths;
+   if (d->native) {
+      p = d->native->removePaths(p, &d->files, &d->directories);
+   }
+   if (d->poller) {
+      p = d->poller->removePaths(p, &d->files, &d->directories);
+   }
+   if (d->forced) {
+      p = d->forced->removePaths(p, &d->files, &d->directories);
+   }
 }
 
 /*!
@@ -610,14 +623,14 @@ void QFileSystemWatcher::removePaths(const QStringList &paths)
 
 QStringList QFileSystemWatcher::directories() const
 {
-    Q_D(const QFileSystemWatcher);
-    return d->directories;
+   Q_D(const QFileSystemWatcher);
+   return d->directories;
 }
 
 QStringList QFileSystemWatcher::files() const
 {
-    Q_D(const QFileSystemWatcher);
-    return d->files;
+   Q_D(const QFileSystemWatcher);
+   return d->files;
 }
 
 QT_END_NAMESPACE

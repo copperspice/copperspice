@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,24 +31,23 @@
 
 QT_BEGIN_NAMESPACE
 
-struct QReadWriteLockPrivate
-{
-    QReadWriteLockPrivate(QReadWriteLock::RecursionMode recursionMode)
-        : accessCount(0), waitingReaders(0), waitingWriters(0),
-          recursive(recursionMode == QReadWriteLock::Recursive), currentWriter(0)
-    { }
+struct QReadWriteLockPrivate {
+   QReadWriteLockPrivate(QReadWriteLock::RecursionMode recursionMode)
+      : accessCount(0), waitingReaders(0), waitingWriters(0),
+        recursive(recursionMode == QReadWriteLock::Recursive), currentWriter(0) {
+   }
 
-    QMutex mutex;
-    QWaitCondition readerWait;
-    QWaitCondition writerWait;
+   QMutex mutex;
+   QWaitCondition readerWait;
+   QWaitCondition writerWait;
 
-    int accessCount;
-    int waitingReaders;
-    int waitingWriters;
+   int accessCount;
+   int waitingReaders;
+   int waitingWriters;
 
-    bool recursive;
-    Qt::HANDLE currentWriter;
-    QHash<Qt::HANDLE, int> currentReaders;
+   bool recursive;
+   Qt::HANDLE currentWriter;
+   QHash<Qt::HANDLE, int> currentReaders;
 };
 
 QT_END_NAMESPACE

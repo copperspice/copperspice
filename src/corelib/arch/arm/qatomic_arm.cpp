@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,17 +40,17 @@ Q_CORE_EXPORT char q_atomic_lock = 0;
 Q_CORE_EXPORT void qt_atomic_yield(int *count)
 {
 #ifdef _POSIX_PRIORITY_SCHEDULING
-    if((*count)++ < 50) {
-        sched_yield();
-    } else
+   if ((*count)++ < 50) {
+      sched_yield();
+   } else
 #endif
-    {
-        struct timespec tm;
-        tm.tv_sec = 0;
-        tm.tv_nsec = 2000001;
-        nanosleep(&tm, NULL);
-        *count = 0;
-    }
+   {
+      struct timespec tm;
+      tm.tv_sec = 0;
+      tm.tv_nsec = 2000001;
+      nanosleep(&tm, NULL);
+      *count = 0;
+   }
 }
 
 QT_END_NAMESPACE

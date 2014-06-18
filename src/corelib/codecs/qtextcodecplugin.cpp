@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -106,7 +106,7 @@ QT_BEGIN_NAMESPACE
     invoked automatically by the Q_EXPORT_PLUGIN2() macro.
 */
 QTextCodecPlugin::QTextCodecPlugin(QObject *parent)
-    : QObject(parent)
+   : QObject(parent)
 {
 }
 
@@ -122,22 +122,25 @@ QTextCodecPlugin::~QTextCodecPlugin()
 
 QStringList QTextCodecPlugin::keys() const
 {
-    QStringList keys;
-    QList<QByteArray> list = names();
-    list += aliases();
-    for (int i = 0; i < list.size(); ++i)
-        keys += QString::fromLatin1(list.at(i));
-    QList<int> mibs = mibEnums();
-    for (int i = 0; i < mibs.count(); ++i)
-        keys += QLatin1String("MIB: ") + QString::number(mibs.at(i));
-    return keys;
+   QStringList keys;
+   QList<QByteArray> list = names();
+   list += aliases();
+   for (int i = 0; i < list.size(); ++i) {
+      keys += QString::fromLatin1(list.at(i));
+   }
+   QList<int> mibs = mibEnums();
+   for (int i = 0; i < mibs.count(); ++i) {
+      keys += QLatin1String("MIB: ") + QString::number(mibs.at(i));
+   }
+   return keys;
 }
 
 QTextCodec *QTextCodecPlugin::create(const QString &name)
 {
-    if (name.startsWith(QLatin1String("MIB: ")))
-        return createForMib(name.mid(4).toInt());
-    return createForName(name.toLatin1());
+   if (name.startsWith(QLatin1String("MIB: "))) {
+      return createForMib(name.mid(4).toInt());
+   }
+   return createForName(name.toLatin1());
 }
 
 QT_END_NAMESPACE

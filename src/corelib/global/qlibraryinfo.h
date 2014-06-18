@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,34 +35,33 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QLibraryInfo
 {
-public:
-    static QString licensee();
-    static QString licensedProducts();
-    static QString buildKey();
+ public:
+   static QString licensee();
+   static QString licensedProducts();
+   static QString buildKey();
 
 #ifndef QT_NO_DATESTRING
-    static QDate buildDate();
+   static QDate buildDate();
 #endif //QT_NO_DATESTRING
 
-    enum LibraryLocation
-    {
-        PrefixPath,
-        DocumentationPath,
-        HeadersPath,
-        LibrariesPath,
-        BinariesPath,
-        PluginsPath,
-        DataPath,
-        TranslationsPath,
-        SettingsPath,
-        DemosPath,
-        ExamplesPath,
-        ImportsPath
-    };
-    static QString location(LibraryLocation); // ### Qt5/consider renaming it to path()
+   enum LibraryLocation {
+      PrefixPath,
+      DocumentationPath,
+      HeadersPath,
+      LibrariesPath,
+      BinariesPath,
+      PluginsPath,
+      DataPath,
+      TranslationsPath,
+      SettingsPath,
+      DemosPath,
+      ExamplesPath,
+      ImportsPath
+   };
+   static QString location(LibraryLocation); // ### Qt5/consider renaming it to path()
 
-private:
-    QLibraryInfo();
+ private:
+   QLibraryInfo();
 };
 
 #endif /* QT_NO_SETTINGS */

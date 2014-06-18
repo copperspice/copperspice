@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,14 +41,14 @@ static void dumpRecursive(int level, QObject *object)
       QString name   = object->objectName();
       QString flags  = QLatin1String("");
 
-      qDebug("%s%s::%s %s", (const char*)buffer, object->metaObject()->className(),
-                        name.toLocal8Bit().data(), flags.toLatin1().data());
+      qDebug("%s%s::%s %s", (const char *)buffer, object->metaObject()->className(),
+             name.toLocal8Bit().data(), flags.toLatin1().data());
 
       QList<QObject *> children = object->children();
 
       if (! children.isEmpty()) {
          for (int i = 0; i < children.size(); ++i) {
-            dumpRecursive(level+1, children.at(i));
+            dumpRecursive(level + 1, children.at(i));
          }
       }
    }
@@ -74,13 +74,13 @@ void QObject::dumpObjectInfo()
    qDebug("  OBJECT %s::%s", this->metaObject()->className(),
           objectName().isEmpty() ? "unnamed" : objectName().toLocal8Bit().data());
 
-   std::unique_lock<std::mutex> senderLock{this->m_mutex_ToReceiver};
-   std::unique_lock<std::mutex> receiverLock{this->m_mutex_FromSender};
+   std::unique_lock<std::mutex> senderLock {this->m_mutex_ToReceiver};
+   std::unique_lock<std::mutex> receiverLock {this->m_mutex_FromSender};
 
    // look for connections where this object is the sender
    qDebug("  SIGNALS OUT");
 
-   for(auto k = this->m_connectList_ToReceiver.begin(); k != this->m_connectList_ToReceiver.end(); ++k) {
+   for (auto k = this->m_connectList_ToReceiver.begin(); k != this->m_connectList_ToReceiver.end(); ++k) {
       const ConnectStruct &temp = *k;
 
       if (temp.sender == 0) {
@@ -101,15 +101,15 @@ void QObject::dumpObjectInfo()
       const QMetaMethod method = receiverMetaObject->method(*temp.slotMethod);
 
       qDebug("          --> %s::%s %s",
-               receiverMetaObject->className(),
-               temp.receiver->objectName().isEmpty() ? "unnamed" : qPrintable(temp.receiver->objectName()),
-               method.signature());
+             receiverMetaObject->className(),
+             temp.receiver->objectName().isEmpty() ? "unnamed" : qPrintable(temp.receiver->objectName()),
+             method.signature());
    }
 
    // look for connections where this object is the receiver
    qDebug("\n  SIGNALS IN");
 
-   for(auto k = this->m_connectList_FromSender.begin(); k != this->m_connectList_FromSender.end(); ++k) {
+   for (auto k = this->m_connectList_FromSender.begin(); k != this->m_connectList_FromSender.end(); ++k) {
       const ConnectStruct &temp = *k;
 
       const QMetaMethod slot = metaObject()->method(*temp.slotMethod);

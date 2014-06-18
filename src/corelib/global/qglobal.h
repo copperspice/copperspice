@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -83,7 +83,7 @@
 namespace QT_NAMESPACE {}
 
 # ifndef QT_NO_USING_NAMESPACE
-   QT_USE_NAMESPACE
+QT_USE_NAMESPACE
 # endif
 
 #endif      // QT_NAMESPACE
@@ -130,8 +130,8 @@ namespace QT_NAMESPACE {}
 #define Q_BYTE_ORDER Q_BIG_ENDIAN
 
 #else
-#error Unable to detect target endianness		
-	
+#error Unable to detect target endianness
+
 #endif
 
 
@@ -636,13 +636,25 @@ quintptr and qptrdiff are guaranteed to be the same size as a pointer
 */
 
 template <int> struct QIntegerForSize;
-template <>    struct QIntegerForSize<1> { typedef quint8  Unsigned; typedef qint8  Signed; };
-template <>    struct QIntegerForSize<2> { typedef quint16 Unsigned; typedef qint16 Signed; };
-template <>    struct QIntegerForSize<4> { typedef quint32 Unsigned; typedef qint32 Signed; };
-template <>    struct QIntegerForSize<8> { typedef quint64 Unsigned; typedef qint64 Signed; };
+template <>    struct QIntegerForSize<1> {
+   typedef quint8  Unsigned;
+   typedef qint8  Signed;
+};
+template <>    struct QIntegerForSize<2> {
+   typedef quint16 Unsigned;
+   typedef qint16 Signed;
+};
+template <>    struct QIntegerForSize<4> {
+   typedef quint32 Unsigned;
+   typedef qint32 Signed;
+};
+template <>    struct QIntegerForSize<8> {
+   typedef quint64 Unsigned;
+   typedef qint64 Signed;
+};
 template <class T> struct QIntegerForSizeof: QIntegerForSize<sizeof(T)> { };
-typedef QIntegerForSizeof<void*>::Unsigned quintptr;
-typedef QIntegerForSizeof<void*>::Signed qptrdiff;
+typedef QIntegerForSizeof<void *>::Unsigned quintptr;
+typedef QIntegerForSizeof<void *>::Signed qptrdiff;
 
 
 QT_BEGIN_INCLUDE_NAMESPACE
@@ -709,7 +721,7 @@ QT_END_INCLUDE_NAMESPACE
 #ifdef QT_ASCII_CAST_WARNINGS
 #  define QT_ASCII_CAST_WARN Q_DECL_DEPRECATED
 #  if defined(Q_CC_GNU) && __GNUC__ < 4
-     /* gcc < 4 doesn't like Q_DECL_DEPRECATED in front of constructors */
+/* gcc < 4 doesn't like Q_DECL_DEPRECATED in front of constructors */
 #    define QT_ASCII_CAST_WARN_CONSTRUCTOR
 #  else
 #    define QT_ASCII_CAST_WARN_CONSTRUCTOR Q_DECL_CONSTRUCTOR_DEPRECATED
@@ -784,26 +796,43 @@ typedef double qreal;
 
 //   Utility macros and inline functions
 template <typename T>
-Q_DECL_CONSTEXPR inline T qAbs(const T &t) { return t >= 0 ? t : -t; }
+Q_DECL_CONSTEXPR inline T qAbs(const T &t)
+{
+   return t >= 0 ? t : -t;
+}
 
 Q_DECL_CONSTEXPR inline int qRound(qreal d)
-{ return d >= qreal(0.0) ? int(d + qreal(0.5)) : int(d - int(d-1) + qreal(0.5)) + int(d-1); }
+{
+   return d >= qreal(0.0) ? int(d + qreal(0.5)) : int(d - int(d - 1) + qreal(0.5)) + int(d - 1);
+}
 
 #if defined(QT_NO_FPU) || defined(QT_ARCH_ARM)
-   Q_DECL_CONSTEXPR inline qint64 qRound64(double d)
-   { return d >= 0.0 ? qint64(d + 0.5) : qint64(d - qreal(qint64(d-1)) + 0.5) + qint64(d-1); }
+Q_DECL_CONSTEXPR inline qint64 qRound64(double d)
+{
+   return d >= 0.0 ? qint64(d + 0.5) : qint64(d - qreal(qint64(d - 1)) + 0.5) + qint64(d - 1);
+}
 #else
-   Q_DECL_CONSTEXPR inline qint64 qRound64(qreal d)
-   { return d >= qreal(0.0) ? qint64(d + qreal(0.5)) : qint64(d - qreal(qint64(d-1)) + qreal(0.5)) + qint64(d-1); }
+Q_DECL_CONSTEXPR inline qint64 qRound64(qreal d)
+{
+   return d >= qreal(0.0) ? qint64(d + qreal(0.5)) : qint64(d - qreal(qint64(d - 1)) + qreal(0.5)) + qint64(d - 1);
+}
 #endif
 
 template <typename T>
-Q_DECL_CONSTEXPR inline const T &qMin(const T &a, const T &b) { return (a < b) ? a : b; }
+Q_DECL_CONSTEXPR inline const T &qMin(const T &a, const T &b)
+{
+   return (a < b) ? a : b;
+}
 template <typename T>
-Q_DECL_CONSTEXPR inline const T &qMax(const T &a, const T &b) { return (a < b) ? b : a; }
+Q_DECL_CONSTEXPR inline const T &qMax(const T &a, const T &b)
+{
+   return (a < b) ? b : a;
+}
 template <typename T>
 Q_DECL_CONSTEXPR inline const T &qBound(const T &min, const T &val, const T &max)
-{ return qMax(min, qMin(max, val)); }
+{
+   return qMax(min, qMin(max, val));
+}
 
 
 
@@ -909,8 +938,8 @@ class QDataStream;
 #      define Q_MULTIMEDIA_EXPORT Q_DECL_EXPORT
 #    else
 #      define Q_MULTIMEDIA_EXPORT Q_DECL_IMPORT
-#    endif 
- 
+#    endif
+
 #    if defined(QT_BUILD_XML_LIB)
 #      define Q_XML_EXPORT Q_DECL_EXPORT
 #    else
@@ -1015,84 +1044,85 @@ inline void qt_noop(void) {}
 // System information
 class QString;
 
-class Q_CORE_EXPORT QSysInfo {
-public:
-    enum Sizes {
-        WordSize = (sizeof(void *)<<3)
-    };
+class Q_CORE_EXPORT QSysInfo
+{
+ public:
+   enum Sizes {
+      WordSize = (sizeof(void *) << 3)
+   };
 
 #if defined(Q_BYTE_ORDER)
-    enum Endian {
-        BigEndian,
-        LittleEndian
+   enum Endian {
+      BigEndian,
+      LittleEndian
 
 #  if Q_BYTE_ORDER == Q_BIG_ENDIAN
-        , ByteOrder = BigEndian
+      , ByteOrder = BigEndian
 #  elif Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-        , ByteOrder = LittleEndian
+      , ByteOrder = LittleEndian
 #  endif
-    };
+   };
 #endif
 
 #if defined(Q_OS_WIN)
-    enum WinVersion {
-        WV_32s      = 0x0001,
-        WV_95       = 0x0002,
-        WV_98       = 0x0003,
-        WV_Me       = 0x0004,
-        WV_DOS_based= 0x000f,
+   enum WinVersion {
+      WV_32s      = 0x0001,
+      WV_95       = 0x0002,
+      WV_98       = 0x0003,
+      WV_Me       = 0x0004,
+      WV_DOS_based = 0x000f,
 
-        WV_NT       = 0x0010,
-        WV_2000     = 0x0020,
-        WV_XP       = 0x0030,
-        WV_2003     = 0x0040,
-        WV_VISTA    = 0x0080,
-        WV_WINDOWS7 = 0x0090,
-        WV_WINDOWS8 = 0x00a0,
-        WV_WINDOWS8_1 = 0x00b0,
-        WV_NT_based = 0x00f0,
+      WV_NT       = 0x0010,
+      WV_2000     = 0x0020,
+      WV_XP       = 0x0030,
+      WV_2003     = 0x0040,
+      WV_VISTA    = 0x0080,
+      WV_WINDOWS7 = 0x0090,
+      WV_WINDOWS8 = 0x00a0,
+      WV_WINDOWS8_1 = 0x00b0,
+      WV_NT_based = 0x00f0,
 
-        WV_4_0      = WV_NT,
-        WV_5_0      = WV_2000,
-        WV_5_1      = WV_XP,
-        WV_5_2      = WV_2003,
-        WV_6_0      = WV_VISTA,
-        WV_6_1      = WV_WINDOWS7,
-        WV_6_2      = WV_WINDOWS8,
-        WV_6_3      = WV_WINDOWS8_1
-    };
-    static const WinVersion WindowsVersion;
-    static WinVersion windowsVersion();
+      WV_4_0      = WV_NT,
+      WV_5_0      = WV_2000,
+      WV_5_1      = WV_XP,
+      WV_5_2      = WV_2003,
+      WV_6_0      = WV_VISTA,
+      WV_6_1      = WV_WINDOWS7,
+      WV_6_2      = WV_WINDOWS8,
+      WV_6_3      = WV_WINDOWS8_1
+   };
+   static const WinVersion WindowsVersion;
+   static WinVersion windowsVersion();
 
 #endif
 #ifdef Q_OS_MAC
-    enum MacVersion {
-        MV_Unknown = 0x0000,
- 
-        MV_9 = 0x0001,
-        MV_10_0 = 0x0002,
-        MV_10_1 = 0x0003,
-        MV_10_2 = 0x0004,
-        MV_10_3 = 0x0005,
-        MV_10_4 = 0x0006,
-        MV_10_5 = 0x0007,
-        MV_10_6 = 0x0008,
-        MV_10_7 = 0x0009,
-        MV_10_8 = 0x000A,
-        MV_10_9 = 0x000B,
-      
-        MV_CHEETAH = MV_10_0,
-        MV_PUMA = MV_10_1,
-        MV_JAGUAR = MV_10_2,
-        MV_PANTHER = MV_10_3,
-        MV_TIGER = MV_10_4,
-        MV_LEOPARD = MV_10_5,
-        MV_SNOWLEOPARD = MV_10_6,
-        MV_LION = MV_10_7,
-        MV_MOUNTAINLION = MV_10_8,
-        MV_MAVERICKS = MV_10_9
-    };
-    static const MacVersion MacintoshVersion;
+   enum MacVersion {
+      MV_Unknown = 0x0000,
+
+      MV_9 = 0x0001,
+      MV_10_0 = 0x0002,
+      MV_10_1 = 0x0003,
+      MV_10_2 = 0x0004,
+      MV_10_3 = 0x0005,
+      MV_10_4 = 0x0006,
+      MV_10_5 = 0x0007,
+      MV_10_6 = 0x0008,
+      MV_10_7 = 0x0009,
+      MV_10_8 = 0x000A,
+      MV_10_9 = 0x000B,
+
+      MV_CHEETAH = MV_10_0,
+      MV_PUMA = MV_10_1,
+      MV_JAGUAR = MV_10_2,
+      MV_PANTHER = MV_10_3,
+      MV_TIGER = MV_10_4,
+      MV_LEOPARD = MV_10_5,
+      MV_SNOWLEOPARD = MV_10_6,
+      MV_LION = MV_10_7,
+      MV_MOUNTAINLION = MV_10_8,
+      MV_MAVERICKS = MV_10_9
+   };
+   static const MacVersion MacintoshVersion;
 #endif
 };
 
@@ -1100,7 +1130,10 @@ Q_CORE_EXPORT const char *qVersion();
 Q_CORE_EXPORT bool qSharedBuild();
 
 #if defined(Q_OS_MAC)
-inline int qMacVersion() { return QSysInfo::MacintoshVersion; }
+inline int qMacVersion()
+{
+   return QSysInfo::MacintoshVersion;
+}
 #endif
 
 #ifndef Q_OUTOFLINE_TEMPLATE
@@ -1118,7 +1151,10 @@ inline int qMacVersion() { return QSysInfo::MacintoshVersion; }
 // Avoid "unused parameter" warnings
 #if defined(Q_CC_INTEL) && !defined(Q_OS_WIN)
 template <typename T>
-inline void qUnused(T &x) { (void)x; }
+inline void qUnused(T &x)
+{
+   (void)x;
+}
 #  define Q_UNUSED(x) qUnused(x);
 #else
 #  define Q_UNUSED(x) (void)x;
@@ -1136,13 +1172,13 @@ inline void qUnused(T &x) { (void)x; }
 
 Q_CORE_EXPORT void qDebug(const char *, ...) /* print debug message */
 #if defined(Q_CC_GNU) && !defined(__INSURE__)
-    __attribute__ ((format (printf, 1, 2)))
+__attribute__ ((format (printf, 1, 2)))
 #endif
 ;
 
 Q_CORE_EXPORT void qWarning(const char *, ...) /* print warning message */
 #if defined(Q_CC_GNU) && !defined(__INSURE__)
-    __attribute__ ((format (printf, 1, 2)))
+__attribute__ ((format (printf, 1, 2)))
 #endif
 ;
 
@@ -1152,13 +1188,13 @@ Q_CORE_EXPORT QString qt_error_string(int errorCode = -1);
 
 Q_CORE_EXPORT void qCritical(const char *, ...) /* print critical message */
 #if defined(Q_CC_GNU) && !defined(__INSURE__)
-    __attribute__ ((format (printf, 1, 2)))
+__attribute__ ((format (printf, 1, 2)))
 #endif
 ;
 
 Q_CORE_EXPORT void qFatal(const char *, ...) /* print fatal message and exit */
 #if defined(Q_CC_GNU) && !defined(__INSURE__)
-    __attribute__ ((format (printf, 1, 2)))
+__attribute__ ((format (printf, 1, 2)))
 #endif
 ;
 
@@ -1219,7 +1255,11 @@ Q_CORE_EXPORT void qBadAlloc();
 
 
 template <typename T>
-inline T *q_check_ptr(T *p) { Q_CHECK_PTR(p); return p; }
+inline T *q_check_ptr(T *p)
+{
+   Q_CHECK_PTR(p);
+   return p;
+}
 
 #if (defined(Q_CC_GNU) && !defined(Q_OS_SOLARIS)) || defined(Q_CC_HPACC)
 #  define Q_FUNC_INFO __PRETTY_FUNCTION__
@@ -1227,11 +1267,11 @@ inline T *q_check_ptr(T *p) { Q_CHECK_PTR(p); return p; }
 #else
 #   if defined(Q_OS_SOLARIS) || defined(Q_CC_XLC)
 #      define Q_FUNC_INFO __FILE__ "(line number unavailable)"
-#   else       
+#   else
 #       define QT_STRINGIFY2(x) #x
 #       define QT_STRINGIFY(x) QT_STRINGIFY2(x)
 #       define Q_FUNC_INFO __FILE__ ":" QT_STRINGIFY(__LINE__)
-#   endif    
+#   endif
 #   if !defined(Q_CC_MIPS)
 #       undef QT_STRINGIFY2
 #       undef QT_STRINGIFY
@@ -1253,27 +1293,26 @@ template <typename T> class QBasicAtomicPointer;
 template <typename T>
 class QGlobalStatic
 {
-public:
-    QBasicAtomicPointer<T> pointer;
-    bool destroyed;
+ public:
+   QBasicAtomicPointer<T> pointer;
+   bool destroyed;
 };
 
 // Created as a function-local static to delete a QGlobalStatic<T>
 template <typename T>
 class QGlobalStaticDeleter
 {
-public:
-    QGlobalStatic<T> &globalStatic;
-    QGlobalStaticDeleter(QGlobalStatic<T> &_globalStatic)
-        : globalStatic(_globalStatic)
-    { }
+ public:
+   QGlobalStatic<T> &globalStatic;
+   QGlobalStaticDeleter(QGlobalStatic<T> &_globalStatic)
+      : globalStatic(_globalStatic) {
+   }
 
-    inline ~QGlobalStaticDeleter()
-    {
-        delete globalStatic.pointer.load();
-        globalStatic.pointer.store(0);
-        globalStatic.destroyed = true;
-    }
+   inline ~QGlobalStaticDeleter() {
+      delete globalStatic.pointer.load();
+      globalStatic.pointer.store(0);
+      globalStatic.destroyed = true;
+   }
 };
 
 #define Q_GLOBAL_STATIC_INIT(TYPE, NAME)   \
@@ -1325,41 +1364,60 @@ public:
 
 class QBool
 {
-    bool b;
+   bool b;
 
-public:
-    inline explicit QBool(bool B) : b(B) {}
-    inline operator const void *() const
-    { return b ? static_cast<const void *>(this) : static_cast<const void *>(0); }
+ public:
+   inline explicit QBool(bool B) : b(B) {}
+   inline operator const void *() const {
+      return b ? static_cast<const void *>(this) : static_cast<const void *>(0);
+   }
 };
 
-inline bool operator==(QBool b1, bool b2)  { return !b1 == !b2; }
-inline bool operator==(bool b1, QBool b2)  { return !b1 == !b2; }
-inline bool operator==(QBool b1, QBool b2) { return !b1 == !b2; }
-inline bool operator!=(QBool b1, bool b2)  { return !b1 != !b2; }
-inline bool operator!=(bool b1, QBool b2)  { return !b1 != !b2; }
-inline bool operator!=(QBool b1, QBool b2) { return !b1 != !b2; }
+inline bool operator==(QBool b1, bool b2)
+{
+   return !b1 == !b2;
+}
+inline bool operator==(bool b1, QBool b2)
+{
+   return !b1 == !b2;
+}
+inline bool operator==(QBool b1, QBool b2)
+{
+   return !b1 == !b2;
+}
+inline bool operator!=(QBool b1, bool b2)
+{
+   return !b1 != !b2;
+}
+inline bool operator!=(bool b1, QBool b2)
+{
+   return !b1 != !b2;
+}
+inline bool operator!=(QBool b1, QBool b2)
+{
+   return !b1 != !b2;
+}
 
 Q_DECL_CONSTEXPR static inline bool qFuzzyCompare(double p1, double p2)
 {
-    return (qAbs(p1 - p2) <= 0.000000000001 * qMin(qAbs(p1), qAbs(p2)));
+   return (qAbs(p1 - p2) <= 0.000000000001 * qMin(qAbs(p1), qAbs(p2)));
 }
 
 Q_DECL_CONSTEXPR static inline bool qFuzzyCompare(float p1, float p2)
 {
-    return (qAbs(p1 - p2) <= 0.00001f * qMin(qAbs(p1), qAbs(p2)));
+   return (qAbs(p1 - p2) <= 0.00001f * qMin(qAbs(p1), qAbs(p2)));
 }
 
 // internal
 Q_DECL_CONSTEXPR static inline bool qFuzzyIsNull(double d)
 {
-    return qAbs(d) <= 0.000000000001;
+   return qAbs(d) <= 0.000000000001;
 }
 
 // internal
 Q_DECL_CONSTEXPR static inline bool qFuzzyIsNull(float f)
 {
-    return qAbs(f) <= 0.00001f;
+   return qAbs(f) <= 0.00001f;
 }
 
 /*
@@ -1369,13 +1427,13 @@ Q_DECL_CONSTEXPR static inline bool qFuzzyIsNull(float f)
 */
 static inline bool qIsNull(double d)
 {
-    union U {
-        double d;
-        quint64 u;
-    };
-    U val;
-    val.d = d;
-    return val.u == quint64(0);
+   union U {
+      double d;
+      quint64 u;
+   };
+   U val;
+   val.d = d;
+   return val.u == quint64(0);
 }
 
 
@@ -1383,13 +1441,13 @@ static inline bool qIsNull(double d)
 // the actual value is 0 or close to 0, but whether it is binary 0.
 static inline bool qIsNull(float f)
 {
-    union U {
-        float f;
-        quint32 u;
-    };
-    U val;
-    val.f = f;
-    return val.u == 0u;
+   union U {
+      float f;
+      quint32 u;
+   };
+   U val;
+   val.f = f;
+   return val.u == 0u;
 }
 
 /*
@@ -1418,32 +1476,35 @@ static inline bool qIsNull(float f)
 */
 
 //
-template <typename T> inline bool qIsDetached(T &) { return true; }
+template <typename T> inline bool qIsDetached(T &)
+{
+   return true;
+}
 
 template <typename T>
 class QTypeInfo
 {
-public:
-    enum {
-        isPointer = false,
-        isComplex = true,
-        isStatic  = true,
-        isLarge   = (sizeof(T)>sizeof(void*)),
-        isDummy   = false
-    };
+ public:
+   enum {
+      isPointer = false,
+      isComplex = true,
+      isStatic  = true,
+      isLarge   = (sizeof(T) > sizeof(void *)),
+      isDummy   = false
+   };
 };
 
 template <typename T>
-class QTypeInfo<T*>
+class QTypeInfo<T *>
 {
-public:
-    enum {
-        isPointer = true,
-        isComplex = false,
-        isStatic = false,
-        isLarge = false,
-        isDummy = false
-    };
+ public:
+   enum {
+      isPointer = true,
+      isComplex = false,
+      isStatic = false,
+      isLarge = false,
+      isDummy = false
+   };
 };
 
 /*
@@ -1455,11 +1516,11 @@ public:
    logically-OR'ed combination of the flags below.
 */
 enum { /* TYPEINFO flags */
-    Q_COMPLEX_TYPE = 0,
-    Q_PRIMITIVE_TYPE = 0x1,
-    Q_STATIC_TYPE = 0,
-    Q_MOVABLE_TYPE = 0x2,
-    Q_DUMMY_TYPE = 0x4
+   Q_COMPLEX_TYPE = 0,
+   Q_PRIMITIVE_TYPE = 0x1,
+   Q_STATIC_TYPE = 0,
+   Q_MOVABLE_TYPE = 0x2,
+   Q_DUMMY_TYPE = 0x4
 };
 
 #define Q_DECLARE_TYPEINFO_BODY(TYPE, FLAGS) \
@@ -1484,8 +1545,8 @@ Q_DECLARE_TYPEINFO_BODY(TYPE, FLAGS)
 template <typename T>
 inline void qSwap(T &value1, T &value2)
 {
-    using std::swap;
-    swap(value1, value2);
+   using std::swap;
+   swap(value1, value2);
 }
 
 /*
@@ -1523,12 +1584,12 @@ Q_DECLARE_TYPEINFO(short,   Q_PRIMITIVE_TYPE);
 Q_DECLARE_TYPEINFO(ushort,  Q_PRIMITIVE_TYPE);
 Q_DECLARE_TYPEINFO(int,     Q_PRIMITIVE_TYPE);
 Q_DECLARE_TYPEINFO(uint,    Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(long,    Q_PRIMITIVE_TYPE); 
-Q_DECLARE_TYPEINFO(ulong,   Q_PRIMITIVE_TYPE); 
+Q_DECLARE_TYPEINFO(long,    Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(ulong,   Q_PRIMITIVE_TYPE);
 Q_DECLARE_TYPEINFO(float,   Q_PRIMITIVE_TYPE);
 Q_DECLARE_TYPEINFO(double,  Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(qint64,  Q_PRIMITIVE_TYPE); 
-Q_DECLARE_TYPEINFO(quint64, Q_PRIMITIVE_TYPE);   
+Q_DECLARE_TYPEINFO(qint64,  Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(quint64, Q_PRIMITIVE_TYPE);
 
 #ifndef Q_OS_DARWIN
 Q_DECLARE_TYPEINFO(long double, Q_PRIMITIVE_TYPE);
@@ -1549,22 +1610,26 @@ Q_CORE_EXPORT void qFreeAligned(void *ptr);
 
 class Q_CORE_EXPORT QFlag
 {
-    int i;
+   int i;
 
-public:
-    inline QFlag(int i);
-    inline operator int() const { return i; }
+ public:
+   inline QFlag(int i);
+   inline operator int() const {
+      return i;
+   }
 };
 
 inline QFlag::QFlag(int ai) : i(ai) {}
 
 class Q_CORE_EXPORT QIncompatibleFlag
 {
-    int i;
+   int i;
 
-public:
-    inline explicit QIncompatibleFlag(int i);
-    inline operator int() const { return i; }
+ public:
+   inline explicit QIncompatibleFlag(int i);
+   inline operator int() const {
+      return i;
+   }
 };
 
 inline QIncompatibleFlag::QIncompatibleFlag(int ai) : i(ai) {}
@@ -1575,38 +1640,81 @@ inline QIncompatibleFlag::QIncompatibleFlag(int ai) : i(ai) {}
 template<typename Enum>
 class QFlags
 {
-    typedef void **Zero;
-    int i;
+   typedef void **Zero;
+   int i;
 
-public:
-    typedef Enum enum_type;
-    Q_DECL_CONSTEXPR inline QFlags(const QFlags &f) : i(f.i) {}
-    Q_DECL_CONSTEXPR inline QFlags(Enum f) : i(f) {}
-    Q_DECL_CONSTEXPR inline QFlags(Zero = 0) : i(0) {}
-    inline QFlags(QFlag f) : i(f) {}
+ public:
+   typedef Enum enum_type;
+   Q_DECL_CONSTEXPR inline QFlags(const QFlags &f) : i(f.i) {}
+   Q_DECL_CONSTEXPR inline QFlags(Enum f) : i(f) {}
+   Q_DECL_CONSTEXPR inline QFlags(Zero = 0) : i(0) {}
+   inline QFlags(QFlag f) : i(f) {}
 
-    inline QFlags &operator=(const QFlags &f) { i = f.i; return *this; }
-    inline QFlags &operator&=(int mask)  { i &= mask; return *this; }
-    inline QFlags &operator&=(uint mask) { i &= mask; return *this; }
-    inline QFlags &operator|=(QFlags f)  { i |= f.i; return *this; }
-    inline QFlags &operator|=(Enum f)    { i |= f; return *this; }
-    inline QFlags &operator^=(QFlags f)  { i ^= f.i; return *this; }
-    inline QFlags &operator^=(Enum f)    { i ^= f; return *this; }
+   inline QFlags &operator=(const QFlags &f) {
+      i = f.i;
+      return *this;
+   }
+   inline QFlags &operator&=(int mask)  {
+      i &= mask;
+      return *this;
+   }
+   inline QFlags &operator&=(uint mask) {
+      i &= mask;
+      return *this;
+   }
+   inline QFlags &operator|=(QFlags f)  {
+      i |= f.i;
+      return *this;
+   }
+   inline QFlags &operator|=(Enum f)    {
+      i |= f;
+      return *this;
+   }
+   inline QFlags &operator^=(QFlags f)  {
+      i ^= f.i;
+      return *this;
+   }
+   inline QFlags &operator^=(Enum f)    {
+      i ^= f;
+      return *this;
+   }
 
-    Q_DECL_CONSTEXPR  inline operator int() const { return i; }
+   Q_DECL_CONSTEXPR  inline operator int() const {
+      return i;
+   }
 
-    Q_DECL_CONSTEXPR inline QFlags operator|(QFlags f) const { return QFlags(Enum(i | f.i)); }
-    Q_DECL_CONSTEXPR inline QFlags operator|(Enum f) const { return QFlags(Enum(i | f)); }
-    Q_DECL_CONSTEXPR inline QFlags operator^(QFlags f) const { return QFlags(Enum(i ^ f.i)); }
-    Q_DECL_CONSTEXPR inline QFlags operator^(Enum f) const { return QFlags(Enum(i ^ f)); }
-    Q_DECL_CONSTEXPR inline QFlags operator&(int mask) const { return QFlags(Enum(i & mask)); }
-    Q_DECL_CONSTEXPR inline QFlags operator&(uint mask) const { return QFlags(Enum(i & mask)); }
-    Q_DECL_CONSTEXPR inline QFlags operator&(Enum f) const { return QFlags(Enum(i & f)); }
-    Q_DECL_CONSTEXPR inline QFlags operator~() const { return QFlags(Enum(~i)); }
+   Q_DECL_CONSTEXPR inline QFlags operator|(QFlags f) const {
+      return QFlags(Enum(i | f.i));
+   }
+   Q_DECL_CONSTEXPR inline QFlags operator|(Enum f) const {
+      return QFlags(Enum(i | f));
+   }
+   Q_DECL_CONSTEXPR inline QFlags operator^(QFlags f) const {
+      return QFlags(Enum(i ^ f.i));
+   }
+   Q_DECL_CONSTEXPR inline QFlags operator^(Enum f) const {
+      return QFlags(Enum(i ^ f));
+   }
+   Q_DECL_CONSTEXPR inline QFlags operator&(int mask) const {
+      return QFlags(Enum(i & mask));
+   }
+   Q_DECL_CONSTEXPR inline QFlags operator&(uint mask) const {
+      return QFlags(Enum(i & mask));
+   }
+   Q_DECL_CONSTEXPR inline QFlags operator&(Enum f) const {
+      return QFlags(Enum(i & f));
+   }
+   Q_DECL_CONSTEXPR inline QFlags operator~() const {
+      return QFlags(Enum(~i));
+   }
 
-    Q_DECL_CONSTEXPR inline bool operator!() const { return !i; }
+   Q_DECL_CONSTEXPR inline bool operator!() const {
+      return !i;
+   }
 
-    inline bool testFlag(Enum f) const { return (i & f) == f && (f != 0 || i == int(f) ); }
+   inline bool testFlag(Enum f) const {
+      return (i & f) == f && (f != 0 || i == int(f) );
+   }
 };
 
 
@@ -1626,7 +1734,7 @@ Q_DECL_CONSTEXPR inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, 
    { return f2 | f1; } Q_DECLARE_INCOMPATIBLE_FLAGS(Flags)
 
 #else
-   // Q_NO_TYPESAFE_FLAGS
+// Q_NO_TYPESAFE_FLAGS
 
 #define Q_DECLARE_FLAGS(Flags, Enum) \
 typedef uint Flags;
@@ -1637,12 +1745,13 @@ typedef uint Flags;
 
 #if defined(Q_CC_GNU) && ! defined(Q_CC_INTEL)
 template <typename T>
-class QForeachContainer {
-public:
-    inline QForeachContainer(const T& t) : c(t), brk(0), i(c.begin()), e(c.end()) { }
-    const T c;
-    int brk;
-    typename T::const_iterator i, e;
+class QForeachContainer
+{
+ public:
+   inline QForeachContainer(const T &t) : c(t), brk(0), i(c.begin()), e(c.end()) { }
+   const T c;
+   int brk;
+   typename T::const_iterator i, e;
 };
 
 #define Q_FOREACH(variable, container)                                \
@@ -1656,26 +1765,35 @@ for (QForeachContainer<__typeof__(container)> _container_(container); \
 struct QForeachContainerBase {};
 
 template <typename T>
-class QForeachContainer : public QForeachContainerBase {
-public:
-    inline QForeachContainer(const T& t): c(t), brk(0), i(c.begin()), e(c.end()){};
-    const T c;
-    mutable int brk;
-    mutable typename T::const_iterator i, e;
-    inline bool condition() const { return (!brk++ && i != e); }
+class QForeachContainer : public QForeachContainerBase
+{
+ public:
+   inline QForeachContainer(const T &t): c(t), brk(0), i(c.begin()), e(c.end()) {};
+   const T c;
+   mutable int brk;
+   mutable typename T::const_iterator i, e;
+   inline bool condition() const {
+      return (!brk++ && i != e);
+   }
 };
 
-template <typename T> 
+template <typename T>
 inline T *qForeachPointer(const T &)
-   { return 0; }
+{
+   return 0;
+}
 
-template <typename T> 
-inline QForeachContainer<T> qForeachContainerNew(const T& t)
-   { return QForeachContainer<T>(t); }
+template <typename T>
+inline QForeachContainer<T> qForeachContainerNew(const T &t)
+{
+   return QForeachContainer<T>(t);
+}
 
 template <typename T>
 inline const QForeachContainer<T> *qForeachContainer(const QForeachContainerBase *base, const T *)
-   { return static_cast<const QForeachContainer<T> *>(base); }
+{
+   return static_cast<const QForeachContainer<T> *>(base);
+}
 
 
 #if defined(Q_CC_MIPS)
@@ -1697,7 +1815,7 @@ inline const QForeachContainer<T> *qForeachContainer(const QForeachContainerBase
         for (variable = *qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i; \
              qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk;           \
              --qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk)
-#endif 
+#endif
 
 #endif
 
@@ -1716,14 +1834,14 @@ inline const QForeachContainer<T> *qForeachContainer(const QForeachContainerBase
 template <typename T>
 T *qGetPtrHelper(T *ptr)
 {
-	return ptr;
+   return ptr;
 }
 
 // smart pointer
 template <typename Wrapper>
 typename Wrapper::pointer qGetPtrHelper(const Wrapper &p)
 {
-	return p.data();
+   return p.data();
 }
 
 #define Q_DECLARE_PRIVATE(Class) \
@@ -1752,7 +1870,7 @@ typename Wrapper::pointer qGetPtrHelper(const Wrapper &p)
 #define QT_TRANSLATE_NOOP3(scope, x, comment) {x, comment}
 #define QT_TRANSLATE_NOOP3_UTF8(scope, x, comment) {x, comment}
 
-#ifndef QT_NO_TRANSLATION 
+#ifndef QT_NO_TRANSLATION
 
 // Defined in qcoreapplication.cpp
 // The better name qTrId() is reserved for an upcoming function which would
@@ -1774,10 +1892,16 @@ Q_CORE_EXPORT QString qtTrId(const char *id, int n = -1);
 
 class QByteArray;
 Q_CORE_EXPORT QByteArray qgetenv(const char *varName);
-Q_CORE_EXPORT bool qputenv(const char *varName, const QByteArray& value);
+Q_CORE_EXPORT bool qputenv(const char *varName, const QByteArray &value);
 
-inline int qIntCast(double f) { return int(f); }
-inline int qIntCast(float f) { return int(f); }
+inline int qIntCast(double f)
+{
+   return int(f);
+}
+inline int qIntCast(float f)
+{
+   return int(f);
+}
 
 Q_CORE_EXPORT void qsrand(uint seed);
 Q_CORE_EXPORT int qrand();
@@ -1796,7 +1920,9 @@ Q_CORE_EXPORT int qrand();
 namespace QtPrivate {
 //like std::enable_if
 template <bool B, typename T = void> struct QEnableIf;
-template <typename T> struct QEnableIf<true, T> { typedef T Type; };
+template <typename T> struct QEnableIf<true, T> {
+   typedef T Type;
+};
 }
 
 QT_END_NAMESPACE

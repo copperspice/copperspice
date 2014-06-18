@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -62,19 +62,21 @@ QT_END_INCLUDE_NAMESPACE
 
 static void print_backtrace(FILE *outb)
 {
-    void *stack[128];
-    int stack_size = backtrace(stack, sizeof(stack) / sizeof(void *));
-    char **stack_symbols = backtrace_symbols(stack, stack_size);
-    fprintf(outb, "Stack [%d]:\n", stack_size);
-    if(FILE *cppfilt = popen("c++filt", "rw")) {
-        dup2(fileno(outb), fileno(cppfilt));
-        for(int i = stack_size-1; i>=0; --i)
-            fwrite(stack_symbols[i], 1, strlen(stack_symbols[i]), cppfilt);
-        pclose(cppfilt);
-    } else {
-        for(int i = stack_size-1; i>=0; --i)
-            fprintf(outb, "#%d  %p [%s]\n", i, stack[i], stack_symbols[i]);
-    }
+   void *stack[128];
+   int stack_size = backtrace(stack, sizeof(stack) / sizeof(void *));
+   char **stack_symbols = backtrace_symbols(stack, stack_size);
+   fprintf(outb, "Stack [%d]:\n", stack_size);
+   if (FILE *cppfilt = popen("c++filt", "rw")) {
+      dup2(fileno(outb), fileno(cppfilt));
+      for (int i = stack_size - 1; i >= 0; --i) {
+         fwrite(stack_symbols[i], 1, strlen(stack_symbols[i]), cppfilt);
+      }
+      pclose(cppfilt);
+   } else {
+      for (int i = stack_size - 1; i >= 0; --i) {
+         fprintf(outb, "#%d  %p [%s]\n", i, stack[i], stack_symbols[i]);
+      }
+   }
 }
 static void init_backtrace(char **, int)
 {
@@ -96,106 +98,112 @@ static char *globalProgName = NULL;
 static bool backtrace_command(FILE *outb, const char *format, ...)
 {
 
-    bool ret = false;
-    char buffer[50];
+   bool ret = false;
+   char buffer[50];
 
-    /*
-     * Please note that vsnprintf() is not ASync safe (ie. cannot safely
-     * be used from a signal handler.) If this proves to be a problem
-     * then the cmd string can be built by more basic functions such as
-     * strcpy, strcat, and a home-made integer-to-ascii function.
-     */
-    va_list args;
-    char cmd[512];
-    va_start(args, format);
-    qvsnprintf(cmd, 512, format, args);
-    va_end(args);
+   /*
+    * Please note that vsnprintf() is not ASync safe (ie. cannot safely
+    * be used from a signal handler.) If this proves to be a problem
+    * then the cmd string can be built by more basic functions such as
+    * strcpy, strcat, and a home-made integer-to-ascii function.
+    */
+   va_list args;
+   char cmd[512];
+   va_start(args, format);
+   qvsnprintf(cmd, 512, format, args);
+   va_end(args);
 
-    char *foo = cmd;
+   char *foo = cmd;
 
-    if(FILE *inb = popen(foo, "r")) {
-        while(!feof(inb)) {
-            int len = fread(buffer, 1, sizeof(buffer), inb);
-            if(!len)
-                break;
-            if(!ret) {
-                fwrite("Output from ", 1, strlen("Output from "), outb);
-                strtok(cmd, " ");
-                fwrite(cmd, 1, strlen(cmd), outb);
-                fwrite("\n", 1, 1, outb);
-                ret = true;
-            }
-            fwrite(buffer, 1, len, outb);
-        }
-        fclose(inb);
-    }
-    return ret;
+   if (FILE *inb = popen(foo, "r")) {
+      while (!feof(inb)) {
+         int len = fread(buffer, 1, sizeof(buffer), inb);
+         if (!len) {
+            break;
+         }
+         if (!ret) {
+            fwrite("Output from ", 1, strlen("Output from "), outb);
+            strtok(cmd, " ");
+            fwrite(cmd, 1, strlen(cmd), outb);
+            fwrite("\n", 1, 1, outb);
+            ret = true;
+         }
+         fwrite(buffer, 1, len, outb);
+      }
+      fclose(inb);
+   }
+   return ret;
 }
 
 static void init_backtrace(char **argv, int argc)
 {
-    if(argc >= 1)
-        globalProgName = argv[0];
+   if (argc >= 1) {
+      globalProgName = argv[0];
+   }
 }
 
 static void print_backtrace(FILE *outb)
 {
-    /*
-     * In general dbx seems to do a better job than gdb.
-     *
-     * Different dbx implementations require different flags/commands.
-     */
+   /*
+    * In general dbx seems to do a better job than gdb.
+    *
+    * Different dbx implementations require different flags/commands.
+    */
 
 #if defined(Q_OS_FREEBSD)
-    /*
-     * FreeBSD insists on sending a SIGSTOP to the process we
-     * attach to, so we let the debugger send a SIGCONT to that
-     * process after we have detached.
-     */
-    if(backtrace_command(outb, "gdb -q %s %d 2>/dev/null <<EOF\n"
+   /*
+    * FreeBSD insists on sending a SIGSTOP to the process we
+    * attach to, so we let the debugger send a SIGCONT to that
+    * process after we have detached.
+    */
+   if (backtrace_command(outb, "gdb -q %s %d 2>/dev/null <<EOF\n"
                          "set prompt\n"
                          "where\n"
                          "detach\n"
                          "shell kill -CONT %d\n"
                          "quit\n"
                          "EOF\n",
-                         globalProgName, (int)getpid(), (int)getpid()))
-        return;
+                         globalProgName, (int)getpid(), (int)getpid())) {
+      return;
+   }
 #elif defined(Q_OS_HPUX)
-    /*
-     * HP decided to call their debugger xdb.
-     *
-     * This does not seem to work properly yet. The debugger says
-     * "Note: Stack traces may not be possible until you are
-     *  stopped in user code." on HP-UX 09.01
-     *
-     * -L = line-oriented interface.
-     * "T [depth]" gives a stacktrace with local variables.
-     * The final "y" is confirmation to the quit command.
-     */
-    if(backtrace_command(outb, "xdb -P %d -L %s 2>&1 <<EOF\n"
+   /*
+    * HP decided to call their debugger xdb.
+    *
+    * This does not seem to work properly yet. The debugger says
+    * "Note: Stack traces may not be possible until you are
+    *  stopped in user code." on HP-UX 09.01
+    *
+    * -L = line-oriented interface.
+    * "T [depth]" gives a stacktrace with local variables.
+    * The final "y" is confirmation to the quit command.
+    */
+   if (backtrace_command(outb, "xdb -P %d -L %s 2>&1 <<EOF\n"
                          "T 50\n"
                          "q\ny\n"
                          "EOF\n",
-                         (int)getpid(), globalProgName))
-        return;
-    if(backtrace_command(outb, "gdb -q %s %d 2>/dev/null <<EOF\n"
+                         (int)getpid(), globalProgName)) {
+      return;
+   }
+   if (backtrace_command(outb, "gdb -q %s %d 2>/dev/null <<EOF\n"
                          "set prompt\n"
                          "where\n"
                          "detach\n"
                          "quit\n"
                          "EOF\n",
-                         globalProgName, (int)getpid()))
-        return;
+                         globalProgName, (int)getpid())) {
+      return;
+   }
 
 #elif defined(Q_OS_SOLARIS)
-    if(backtrace_command(outb, "dbx %s %d 2>/dev/null <<EOF\n"
+   if (backtrace_command(outb, "dbx %s %d 2>/dev/null <<EOF\n"
                          "where\n"
                          "detach\n"
                          "EOF\n",
-                         globalProgName, (int)getpid()))
-        return;
-    if(backtrace_command(outb, "gdb -q %s %d 2>/dev/null <<EOF\n"
+                         globalProgName, (int)getpid())) {
+      return;
+   }
+   if (backtrace_command(outb, "gdb -q %s %d 2>/dev/null <<EOF\n"
                          "set prompt\n"
                          "where\n"
                          "echo ---\\n\n"
@@ -210,48 +218,53 @@ static void print_backtrace(FILE *outb)
                          "detach\n"
                          "quit\n"
                          "EOF\n",
-                         globalProgName, (int)getpid()))
-        return;
-    if(backtrace_command(outb, "/usr/proc/bin/pstack %d",
-                         (int)getpid()))
-        return;
-    /*
-     * Other Unices (AIX, HPUX, SCO) also have adb, but
-     * they seem unable to attach to a running process.)
-     */
-    if(backtrace_command(outb, "adb %s 2>&1 <<EOF\n"
+                         globalProgName, (int)getpid())) {
+      return;
+   }
+   if (backtrace_command(outb, "/usr/proc/bin/pstack %d",
+                         (int)getpid())) {
+      return;
+   }
+   /*
+    * Other Unices (AIX, HPUX, SCO) also have adb, but
+    * they seem unable to attach to a running process.)
+    */
+   if (backtrace_command(outb, "adb %s 2>&1 <<EOF\n"
                          "0t%d:A\n" /* Attach to pid */
                          "\\$c\n"   /* print stacktrace */
                          ":R\n"     /* Detach */
                          "\\$q\n"   /* Quit */
                          "EOF\n",
-                         globalProgName, (int)getpid()))
-        return;
+                         globalProgName, (int)getpid())) {
+      return;
+   }
 
 #else /* All other platforms */
-    /*
-     * TODO: SCO/UnixWare 7 must be something like (not tested)
-     *  debug -i c <pid> <<EOF\nstack -f 4\nquit\nEOF\n
-     */
+   /*
+    * TODO: SCO/UnixWare 7 must be something like (not tested)
+    *  debug -i c <pid> <<EOF\nstack -f 4\nquit\nEOF\n
+    */
 # if !defined(__GNUC__)
-    if(backtrace_command(outb, "dbx %s %d 2>/dev/null <<EOF\n"
+   if (backtrace_command(outb, "dbx %s %d 2>/dev/null <<EOF\n"
                          "where\n"
                          "detach\n"
                          "EOF\n",
-                         globalProgName, (int)getpid()))
-        return;
+                         globalProgName, (int)getpid())) {
+      return;
+   }
 # endif
-    if(backtrace_command(outb, "gdb -q %s %d 2>/dev/null <<EOF\n"
+   if (backtrace_command(outb, "gdb -q %s %d 2>/dev/null <<EOF\n"
                          "set prompt\n"
                          "where\n"
                          "detach\n"
                          "quit\n"
                          "EOF\n",
-                         globalProgName, (int)getpid()))
-        return;
+                         globalProgName, (int)getpid())) {
+      return;
+   }
 #endif
-    const char debug_err[] = "No debugger found\n";
-    fwrite(debug_err, strlen(debug_err), 1, outb);
+   const char debug_err[] = "No debugger found\n";
+   fwrite(debug_err, strlen(debug_err), 1, outb);
 }
 /* end of copied code */
 #endif
@@ -259,38 +272,39 @@ static void print_backtrace(FILE *outb)
 
 void qt_signal_handler(int sig)
 {
-    signal(sig, SIG_DFL);
-    if(QSegfaultHandler::callback) {
-        (*QSegfaultHandler::callback)();
-        _exit(1);
-    }
-    FILE *outb = stderr;
-    if(char *crash_loc = ::getenv("QT_CRASH_OUTPUT")) {
-        if(FILE *new_outb = fopen(crash_loc, "w")) {
-            fprintf(stderr, "Crash (backtrace written to %s)!!!\n", crash_loc);
-            outb = new_outb;
-        }
-    } else {
-        fprintf(outb, "Crash!!!\n");
-    }
-    print_backtrace(outb);
-    if(outb != stderr)
-        fclose(outb);
-    _exit(1);
+   signal(sig, SIG_DFL);
+   if (QSegfaultHandler::callback) {
+      (*QSegfaultHandler::callback)();
+      _exit(1);
+   }
+   FILE *outb = stderr;
+   if (char *crash_loc = ::getenv("QT_CRASH_OUTPUT")) {
+      if (FILE *new_outb = fopen(crash_loc, "w")) {
+         fprintf(stderr, "Crash (backtrace written to %s)!!!\n", crash_loc);
+         outb = new_outb;
+      }
+   } else {
+      fprintf(outb, "Crash!!!\n");
+   }
+   print_backtrace(outb);
+   if (outb != stderr) {
+      fclose(outb);
+   }
+   _exit(1);
 }
 
 
 void
 QSegfaultHandler::initialize(char **argv, int argc)
 {
-    init_backtrace(argv, argc);
+   init_backtrace(argv, argc);
 
-    struct sigaction SignalAction;
-    SignalAction.sa_flags = 0;
-    SignalAction.sa_handler = qt_signal_handler;
-    sigemptyset(&SignalAction.sa_mask);
-    sigaction(SIGSEGV, &SignalAction, NULL);
-    sigaction(SIGBUS, &SignalAction, NULL);
+   struct sigaction SignalAction;
+   SignalAction.sa_flags = 0;
+   SignalAction.sa_handler = qt_signal_handler;
+   sigemptyset(&SignalAction.sa_mask);
+   sigaction(SIGSEGV, &SignalAction, NULL);
+   sigaction(SIGBUS, &SignalAction, NULL);
 }
 
 QT_END_NAMESPACE

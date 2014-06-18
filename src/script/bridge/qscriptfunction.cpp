@@ -26,10 +26,10 @@
 #include "config.h"
 #include "qscriptfunction_p.h"
 
-#include "private/qscriptengine_p.h"
+#include "qscriptengine_p.h"
 #include "qscriptcontext.h"
-#include "private/qscriptcontext_p.h"
-#include "private/qscriptvalue_p.h"
+#include "qscriptcontext_p.h"
+#include "qscriptvalue_p.h"
 #include "qscriptactivationobject_p.h"
 #include "qscriptobject_p.h"
 

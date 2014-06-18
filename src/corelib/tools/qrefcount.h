@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,69 +30,75 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QtPrivate
-{
+namespace QtPrivate {
 
 class RefCount
 {
-public:
-    inline bool ref() {
-        int count = atomic.load();
-        if (count == 0) // !isSharable
-            return false;
-        if (count != -1) // !isStatic
-            atomic.ref();
-        return true;
-    }
+ public:
+   inline bool ref() {
+      int count = atomic.load();
+      if (count == 0) { // !isSharable
+         return false;
+      }
+      if (count != -1) { // !isStatic
+         atomic.ref();
+      }
+      return true;
+   }
 
-    inline bool deref() {
-        int count = atomic.load();
-        if (count == 0) // !isSharable
-            return false;
-        if (count == -1) // isStatic
-            return true;
-        return atomic.deref();
-    }
+   inline bool deref() {
+      int count = atomic.load();
+      if (count == 0) { // !isSharable
+         return false;
+      }
+      if (count == -1) { // isStatic
+         return true;
+      }
+      return atomic.deref();
+   }
 
-    bool setSharable(bool sharable)
-    {
-        Q_ASSERT(!isShared());
-        if (sharable)
-            return atomic.testAndSetRelaxed(0, 1);
-        else
-            return atomic.testAndSetRelaxed(1, 0);
-    }
+   bool setSharable(bool sharable) {
+      Q_ASSERT(!isShared());
+      if (sharable) {
+         return atomic.testAndSetRelaxed(0, 1);
+      } else {
+         return atomic.testAndSetRelaxed(1, 0);
+      }
+   }
 
-    bool isStatic() const
-    {
-        // Persistent object, never deleted
-        return atomic.load() == -1;
-    }
+   bool isStatic() const {
+      // Persistent object, never deleted
+      return atomic.load() == -1;
+   }
 
-    bool isSharable() const
-    {
-        // Sharable === Shared ownership.
-        return atomic.load() != 0;
-    }
+   bool isSharable() const {
+      // Sharable === Shared ownership.
+      return atomic.load() != 0;
+   }
 
-    bool isShared() const
-    {
-        int count = atomic.load();
-        return (count != 1) && (count != 0);
-    }
+   bool isShared() const {
+      int count = atomic.load();
+      return (count != 1) && (count != 0);
+   }
 
-    inline bool operator==(int value) const
-    { return atomic.load() == value; }
-    inline bool operator!=(int value) const
-    { return atomic.load() != value; }
-    inline bool operator!() const
-    { return !atomic.load(); }
-    inline operator int() const
-    { return atomic.load(); }
+   inline bool operator==(int value) const {
+      return atomic.load() == value;
+   }
+   inline bool operator!=(int value) const {
+      return atomic.load() != value;
+   }
+   inline bool operator!() const {
+      return !atomic.load();
+   }
+   inline operator int() const {
+      return atomic.load();
+   }
 
-    void initializeOwned() { atomic.store(1); }
+   void initializeOwned() {
+      atomic.store(1);
+   }
 
-    QBasicAtomicInt atomic;
+   QBasicAtomicInt atomic;
 };
 
 }

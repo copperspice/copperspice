@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,23 +34,23 @@ class QTemporaryFile;
 
 class QFilePrivate : public QFileDevicePrivate
 {
-    Q_DECLARE_PUBLIC(QFile)
-    friend class QTemporaryFile;
+   Q_DECLARE_PUBLIC(QFile)
+   friend class QTemporaryFile;
 
-protected:
-    QFilePrivate();
-    ~QFilePrivate();
+ protected:
+   QFilePrivate();
+   ~QFilePrivate();
 
-    bool openExternalFile(int flags, int fd, QFile::FileHandleFlags handleFlags);
-    bool openExternalFile(int flags, FILE *fh, QFile::FileHandleFlags handleFlags);
+   bool openExternalFile(int flags, int fd, QFile::FileHandleFlags handleFlags);
+   bool openExternalFile(int flags, FILE *fh, QFile::FileHandleFlags handleFlags);
 
-    virtual QAbstractFileEngine *engine() const;
+   virtual QAbstractFileEngine *engine() const;
 
-    QString fileName;
+   QString fileName;
 
-private:
-    static QFile::EncoderFn encoder;
-    static QFile::DecoderFn decoder;
+ private:
+   static QFile::EncoderFn encoder;
+   static QFile::DecoderFn decoder;
 };
 
 QT_END_NAMESPACE

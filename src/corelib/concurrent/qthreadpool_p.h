@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,41 +37,41 @@ class QThreadPoolThread;
 
 class QThreadPoolPrivate
 {
-    Q_DECLARE_PUBLIC(QThreadPool)
-    friend class QThreadPoolThread;
+   Q_DECLARE_PUBLIC(QThreadPool)
+   friend class QThreadPoolThread;
 
-   public:
-       QThreadPoolPrivate();
-       virtual ~QThreadPoolPrivate() {}
-   
-       bool tryStart(QRunnable *task);
-       void enqueueTask(QRunnable *task, int priority = 0);
-       int activeThreadCount() const;
-   
-       void tryToStartMoreThreads();
-       bool tooManyThreadsActive() const;
-   
-       void startThread(QRunnable *runnable = 0);
-       void reset();
-       bool waitForDone(int msecs = -1);
-       bool startFrontRunnable();
-       void stealRunnable(QRunnable *);
-   
-       mutable QMutex mutex;
-       QSet<QThreadPoolThread *> allThreads;
-       QQueue<QThreadPoolThread *> waitingThreads;
-       QQueue<QThreadPoolThread *> expiredThreads;
-       QList<QPair<QRunnable *, int> > queue;
-       QWaitCondition noActiveThreads;
-   
-       bool isExiting;
-       int expiryTimeout;
-       int maxThreadCount;
-       int reservedThreads;
-       int activeThreads;
-   
-   protected:
-   	 QThreadPool *q_ptr;
+ public:
+   QThreadPoolPrivate();
+   virtual ~QThreadPoolPrivate() {}
+
+   bool tryStart(QRunnable *task);
+   void enqueueTask(QRunnable *task, int priority = 0);
+   int activeThreadCount() const;
+
+   void tryToStartMoreThreads();
+   bool tooManyThreadsActive() const;
+
+   void startThread(QRunnable *runnable = 0);
+   void reset();
+   bool waitForDone(int msecs = -1);
+   bool startFrontRunnable();
+   void stealRunnable(QRunnable *);
+
+   mutable QMutex mutex;
+   QSet<QThreadPoolThread *> allThreads;
+   QQueue<QThreadPoolThread *> waitingThreads;
+   QQueue<QThreadPoolThread *> expiredThreads;
+   QList<QPair<QRunnable *, int> > queue;
+   QWaitCondition noActiveThreads;
+
+   bool isExiting;
+   int expiryTimeout;
+   int maxThreadCount;
+   int reservedThreads;
+   int activeThreads;
+
+ protected:
+   QThreadPool *q_ptr;
 
 };
 

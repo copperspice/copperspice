@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,49 +37,52 @@ QT_BEGIN_NAMESPACE
 */
 Q_CORE_EXPORT QPair<QString, QByteArray> qDecodeDataUrl(const QUrl &uri)
 {
-    QString mimeType;
-    QByteArray payload;
+   QString mimeType;
+   QByteArray payload;
 
-    if (uri.scheme() == QLatin1String("data") && uri.host().isEmpty()) {
-        mimeType = QLatin1String("text/plain;charset=US-ASCII");
+   if (uri.scheme() == QLatin1String("data") && uri.host().isEmpty()) {
+      mimeType = QLatin1String("text/plain;charset=US-ASCII");
 
-        // the following would have been the correct thing, but
-        // reality often differs from the specification. People have
-        // data: URIs with ? and #
-        //QByteArray data = QByteArray::fromPercentEncoding(uri.encodedPath());
-        QByteArray data = QByteArray::fromPercentEncoding(uri.toEncoded());
+      // the following would have been the correct thing, but
+      // reality often differs from the specification. People have
+      // data: URIs with ? and #
+      //QByteArray data = QByteArray::fromPercentEncoding(uri.encodedPath());
+      QByteArray data = QByteArray::fromPercentEncoding(uri.toEncoded());
 
-        // remove the data: scheme
-        data.remove(0, 5);
+      // remove the data: scheme
+      data.remove(0, 5);
 
-        // parse it:
-        int pos = data.indexOf(',');
-        if (pos != -1) {
-            payload = data.mid(pos + 1);
-            data.truncate(pos);
-            data = data.trimmed();
+      // parse it:
+      int pos = data.indexOf(',');
+      if (pos != -1) {
+         payload = data.mid(pos + 1);
+         data.truncate(pos);
+         data = data.trimmed();
 
-            // find out if the payload is encoded in Base64
-            if (data.endsWith(";base64")) {
-                payload = QByteArray::fromBase64(payload);
-                data.chop(7);
+         // find out if the payload is encoded in Base64
+         if (data.endsWith(";base64")) {
+            payload = QByteArray::fromBase64(payload);
+            data.chop(7);
+         }
+
+         if (data.toLower().startsWith("charset")) {
+            int i = 7;      // strlen("charset")
+            while (data.at(i) == ' ') {
+               ++i;
             }
-
-            if (data.toLower().startsWith("charset")) {
-                int i = 7;      // strlen("charset")
-                while (data.at(i) == ' ')
-                    ++i;
-                if (data.at(i) == '=')
-                    data.prepend("text/plain;");
+            if (data.at(i) == '=') {
+               data.prepend("text/plain;");
             }
+         }
 
-            if (!data.isEmpty())
-                mimeType = QLatin1String(data.trimmed());
+         if (!data.isEmpty()) {
+            mimeType = QLatin1String(data.trimmed());
+         }
 
-        }
-    }
+      }
+   }
 
-    return QPair<QString,QByteArray>(mimeType,payload);
+   return QPair<QString, QByteArray>(mimeType, payload);
 }
 
 QT_END_NAMESPACE

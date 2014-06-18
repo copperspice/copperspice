@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -178,21 +178,21 @@
 QT_BEGIN_NAMESPACE
 
 enum CPUFeatures {
-    None        = 0,
-    MMX         = 0x1,
-    MMXEXT      = 0x2,
-    MMX3DNOW    = 0x4,
-    MMX3DNOWEXT = 0x8,
-    SSE         = 0x10,
-    SSE2        = 0x20,
-    CMOV        = 0x40,
-    IWMMXT      = 0x80,
-    NEON        = 0x100,
-    SSE3        = 0x200,
-    SSSE3       = 0x400,
-    SSE4_1      = 0x800,
-    SSE4_2      = 0x1000,
-    AVX         = 0x2000
+   None        = 0,
+   MMX         = 0x1,
+   MMXEXT      = 0x2,
+   MMX3DNOW    = 0x4,
+   MMX3DNOWEXT = 0x8,
+   SSE         = 0x10,
+   SSE2        = 0x20,
+   CMOV        = 0x40,
+   IWMMXT      = 0x80,
+   NEON        = 0x100,
+   SSE3        = 0x200,
+   SSSE3       = 0x400,
+   SSE4_1      = 0x800,
+   SSE4_2      = 0x1000,
+   AVX         = 0x2000
 };
 
 Q_CORE_EXPORT uint qDetectCPUFeatures();

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,22 +34,22 @@ class QSemaphorePrivate;
 
 class Q_CORE_EXPORT QSemaphore
 {
-public:
-    explicit QSemaphore(int n = 0);
-    ~QSemaphore();
+ public:
+   explicit QSemaphore(int n = 0);
+   ~QSemaphore();
 
-    void acquire(int n = 1);
-    bool tryAcquire(int n = 1);
-    bool tryAcquire(int n, int timeout);
+   void acquire(int n = 1);
+   bool tryAcquire(int n = 1);
+   bool tryAcquire(int n, int timeout);
 
-    void release(int n = 1);
+   void release(int n = 1);
 
-    int available() const;
+   int available() const;
 
-private:
-    Q_DISABLE_COPY(QSemaphore)
+ private:
+   Q_DISABLE_COPY(QSemaphore)
 
-    QSemaphorePrivate *d;
+   QSemaphorePrivate *d;
 };
 
 QT_END_NAMESPACE

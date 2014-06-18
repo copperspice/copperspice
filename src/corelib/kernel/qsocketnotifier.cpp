@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -149,22 +149,25 @@ QT_BEGIN_NAMESPACE
 */
 
 QSocketNotifier::QSocketNotifier(int socket, Type type, QObject *parent)
-    : QObject(parent)
+   : QObject(parent)
 {
-    sockfd = socket;
-    sntype = type;
-    snenabled = true;
+   sockfd = socket;
+   sntype = type;
+   snenabled = true;
 
-	 QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
-   
-    if (socket < 0)
-        qWarning("QSocketNotifier: Invalid socket specified");
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-    else if (! threadData->eventDispatcher)
-        qWarning("QSocketNotifier: Can only be used with threads started with QThread");
+   if (socket < 0) {
+      qWarning("QSocketNotifier: Invalid socket specified");
+   }
 
-    else
-        threadData->eventDispatcher->registerSocketNotifier(this);
+   else if (! threadData->eventDispatcher) {
+      qWarning("QSocketNotifier: Can only be used with threads started with QThread");
+   }
+
+   else {
+      threadData->eventDispatcher->registerSocketNotifier(this);
+   }
 }
 
 
@@ -174,7 +177,7 @@ QSocketNotifier::QSocketNotifier(int socket, Type type, QObject *parent)
 
 QSocketNotifier::~QSocketNotifier()
 {
-    setEnabled(false);
+   setEnabled(false);
 }
 
 
@@ -232,24 +235,28 @@ QSocketNotifier::~QSocketNotifier()
 
 void QSocketNotifier::setEnabled(bool enable)
 {
-    if (sockfd < 0)
-        return;
+   if (sockfd < 0) {
+      return;
+   }
 
-    if (snenabled == enable)                        // no change
-        return;
+   if (snenabled == enable) {                      // no change
+      return;
+   }
 
-    snenabled = enable;
-    
-	 //
-	 QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
+   snenabled = enable;
 
-    if (! threadData->eventDispatcher) // perhaps application/thread is shutting down
-        return;
+   //
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-    if (snenabled)
-        threadData->eventDispatcher->registerSocketNotifier(this);
-    else
-        threadData->eventDispatcher->unregisterSocketNotifier(this);
+   if (! threadData->eventDispatcher) { // perhaps application/thread is shutting down
+      return;
+   }
+
+   if (snenabled) {
+      threadData->eventDispatcher->registerSocketNotifier(this);
+   } else {
+      threadData->eventDispatcher->unregisterSocketNotifier(this);
+   }
 }
 
 
@@ -257,22 +264,22 @@ void QSocketNotifier::setEnabled(bool enable)
 */
 bool QSocketNotifier::event(QEvent *e)
 {
-    // Emits the activated() signal when a QEvent::SockAct is
-    // received.
+   // Emits the activated() signal when a QEvent::SockAct is
+   // received.
 
-    if (e->type() == QEvent::ThreadChange) {
-        if (snenabled) {
-            QMetaObject::invokeMethod(this, "setEnabled", Qt::QueuedConnection,Q_ARG(bool, snenabled));
-            setEnabled(false);
-        }
-    }
+   if (e->type() == QEvent::ThreadChange) {
+      if (snenabled) {
+         QMetaObject::invokeMethod(this, "setEnabled", Qt::QueuedConnection, Q_ARG(bool, snenabled));
+         setEnabled(false);
+      }
+   }
 
-    QObject::event(e);                        // will activate filters
-    if (e->type() == QEvent::SockAct) {
-        emit activated(sockfd);
-        return true;
-    }
-    return false;
+   QObject::event(e);                        // will activate filters
+   if (e->type() == QEvent::SockAct) {
+      emit activated(sockfd);
+      return true;
+   }
+   return false;
 }
 
 QT_END_NAMESPACE

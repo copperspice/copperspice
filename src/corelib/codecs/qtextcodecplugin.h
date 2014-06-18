@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,9 +37,8 @@ QT_BEGIN_NAMESPACE
 
 class QTextCodec;
 
-struct Q_CORE_EXPORT QTextCodecFactoryInterface : public QFactoryInterface
-{
-    virtual QTextCodec *create(const QString &key) = 0;
+struct Q_CORE_EXPORT QTextCodecFactoryInterface : public QFactoryInterface {
+   virtual QTextCodec *create(const QString &key) = 0;
 };
 
 #define QTextCodecFactoryInterface_iid "com.copperspice.Qt.QTextCodecFactoryInterface"
@@ -49,23 +48,23 @@ CS_DECLARE_INTERFACE(QTextCodecFactoryInterface, QTextCodecFactoryInterface_iid)
 
 class Q_CORE_EXPORT QTextCodecPlugin : public QObject, public QTextCodecFactoryInterface
 {
-    CS_OBJECT(QTextCodecPlugin)
-    CS_INTERFACES(QTextCodecFactoryInterface, QFactoryInterface)
-	 
-public:
-    explicit QTextCodecPlugin(QObject *parent = 0);
-    ~QTextCodecPlugin();
+   CS_OBJECT(QTextCodecPlugin)
+   CS_INTERFACES(QTextCodecFactoryInterface, QFactoryInterface)
 
-    virtual QList<QByteArray> names() const = 0;
-    virtual QList<QByteArray> aliases() const = 0;
-    virtual QTextCodec *createForName(const QByteArray &name) = 0;
+ public:
+   explicit QTextCodecPlugin(QObject *parent = 0);
+   ~QTextCodecPlugin();
 
-    virtual QList<int> mibEnums() const = 0;
-    virtual QTextCodec *createForMib(int mib) = 0;
+   virtual QList<QByteArray> names() const = 0;
+   virtual QList<QByteArray> aliases() const = 0;
+   virtual QTextCodec *createForName(const QByteArray &name) = 0;
 
-private:
-    QStringList keys() const;
-    QTextCodec *create(const QString &name);
+   virtual QList<int> mibEnums() const = 0;
+   virtual QTextCodec *createForMib(int mib) = 0;
+
+ private:
+   QStringList keys() const;
+   QTextCodec *create(const QString &name);
 };
 
 #endif // QT_NO_TEXTCODECPLUGIN

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,8 +33,8 @@
 QT_BEGIN_NAMESPACE
 
 QFSFileEngineIterator::QFSFileEngineIterator(QDir::Filters filters, const QStringList &filterNames)
-    : QAbstractFileEngineIterator(filters, filterNames)
-    , done(false)
+   : QAbstractFileEngineIterator(filters, filterNames)
+   , done(false)
 {
 }
 
@@ -44,46 +44,47 @@ QFSFileEngineIterator::~QFSFileEngineIterator()
 
 bool QFSFileEngineIterator::hasNext() const
 {
-    if (!done && !nativeIterator) {
-        nativeIterator.reset(new QFileSystemIterator(QFileSystemEntry(path()),
-                    filters(), nameFilters()));
-        advance();
-    }
+   if (!done && !nativeIterator) {
+      nativeIterator.reset(new QFileSystemIterator(QFileSystemEntry(path()),
+                           filters(), nameFilters()));
+      advance();
+   }
 
-    return !done;
+   return !done;
 }
 
 QString QFSFileEngineIterator::next()
 {
-    if (!hasNext())
-        return QString();
+   if (!hasNext()) {
+      return QString();
+   }
 
-    advance();
-    return currentFilePath();
+   advance();
+   return currentFilePath();
 }
 
 void QFSFileEngineIterator::advance() const
 {
-    currentInfo = nextInfo;
+   currentInfo = nextInfo;
 
-    QFileSystemEntry entry;
-    QFileSystemMetaData data;
-    if (nativeIterator->advance(entry, data)) {
-        nextInfo = QFileInfo(new QFileInfoPrivate(entry, data));
-    } else {
-        done = true;
-        nativeIterator.reset();
-    }
+   QFileSystemEntry entry;
+   QFileSystemMetaData data;
+   if (nativeIterator->advance(entry, data)) {
+      nextInfo = QFileInfo(new QFileInfoPrivate(entry, data));
+   } else {
+      done = true;
+      nativeIterator.reset();
+   }
 }
 
 QString QFSFileEngineIterator::currentFileName() const
 {
-    return currentInfo.fileName();
+   return currentInfo.fileName();
 }
 
 QFileInfo QFSFileEngineIterator::currentFileInfo() const
 {
-    return currentInfo;
+   return currentInfo;
 }
 
 QT_END_NAMESPACE

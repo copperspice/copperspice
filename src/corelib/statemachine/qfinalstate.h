@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,21 +36,21 @@ class QFinalStatePrivate;
 
 class Q_CORE_EXPORT QFinalState : public QAbstractState
 {
-    CS_OBJECT(QFinalState)
+   CS_OBJECT(QFinalState)
 
-public:
-    QFinalState(QState *parent = 0);
-    ~QFinalState();
+ public:
+   QFinalState(QState *parent = 0);
+   ~QFinalState();
 
-protected:
-    void onEntry(QEvent *event);
-    void onExit(QEvent *event);
+ protected:
+   void onEntry(QEvent *event);
+   void onExit(QEvent *event);
 
-    bool event(QEvent *e);
+   bool event(QEvent *e);
 
-private:
-    Q_DISABLE_COPY(QFinalState)
-    Q_DECLARE_PRIVATE(QFinalState)
+ private:
+   Q_DISABLE_COPY(QFinalState)
+   Q_DECLARE_PRIVATE(QFinalState)
 };
 
 #endif //QT_NO_STATEMACHINE

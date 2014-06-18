@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,44 +41,43 @@ QT_BEGIN_NAMESPACE
 
 class QSystemSemaphorePrivate
 {
-public:
-    QSystemSemaphorePrivate();
+ public:
+   QSystemSemaphorePrivate();
 
-    inline QString makeKeyFileName() const
-    {
-        return QSharedMemoryPrivate::makePlatformSafeKey(key, QLatin1String("qipc_systemsem_"));
-    }
+   inline QString makeKeyFileName() const {
+      return QSharedMemoryPrivate::makePlatformSafeKey(key, QLatin1String("qipc_systemsem_"));
+   }
 
 #ifdef Q_OS_WIN
-    HANDLE handle(QSystemSemaphore::AccessMode mode = QSystemSemaphore::Open);
-    void setErrorString(const QString &function);
+   HANDLE handle(QSystemSemaphore::AccessMode mode = QSystemSemaphore::Open);
+   void setErrorString(const QString &function);
 #elif defined(QT_POSIX_IPC)
-    bool handle(QSystemSemaphore::AccessMode mode = QSystemSemaphore::Open);
-    void setErrorString(const QString &function);
+   bool handle(QSystemSemaphore::AccessMode mode = QSystemSemaphore::Open);
+   void setErrorString(const QString &function);
 #else
-    key_t handle(QSystemSemaphore::AccessMode mode = QSystemSemaphore::Open);
-    void setErrorString(const QString &function);
+   key_t handle(QSystemSemaphore::AccessMode mode = QSystemSemaphore::Open);
+   void setErrorString(const QString &function);
 #endif
-    void cleanHandle();
-    bool modifySemaphore(int count);
+   void cleanHandle();
+   bool modifySemaphore(int count);
 
-    QString key;
-    QString fileName;
-    int initialValue;
+   QString key;
+   QString fileName;
+   int initialValue;
 #ifdef Q_OS_WIN
-    HANDLE semaphore;
-    HANDLE semaphoreLock;
+   HANDLE semaphore;
+   HANDLE semaphoreLock;
 #elif defined(QT_POSIX_IPC)
-    sem_t *semaphore;
-    bool createdSemaphore;
+   sem_t *semaphore;
+   bool createdSemaphore;
 #else
-    key_t unix_key;
-    int semaphore;
-    bool createdFile;
-    bool createdSemaphore;
+   key_t unix_key;
+   int semaphore;
+   bool createdFile;
+   bool createdSemaphore;
 #endif
-    QString errorString;
-    QSystemSemaphore::SystemSemaphoreError error;
+   QString errorString;
+   QSystemSemaphore::SystemSemaphoreError error;
 };
 
 QT_END_NAMESPACE

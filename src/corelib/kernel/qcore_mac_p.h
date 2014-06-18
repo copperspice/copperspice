@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -79,44 +79,58 @@ QT_BEGIN_NAMESPACE
 template <typename T>
 class Q_CORE_EXPORT QCFType
 {
-public:
-    inline QCFType(const T &t = 0) : type(t) {}
-    inline QCFType(const QCFType &helper) : type(helper.type) { if (type) CFRetain(type); }
-    inline ~QCFType() { if (type) CFRelease(type); }
-    inline operator T() { return type; }
-    inline QCFType operator =(const QCFType &helper)
-    {
-	if (helper.type)
-	    CFRetain(helper.type);
-	CFTypeRef type2 = type;
-	type = helper.type;
-	if (type2)
-	    CFRelease(type2);
-	return *this;
-    }
-    inline T *operator&() { return &type; }
-    template <typename X> X as() const { return reinterpret_cast<X>(type); }
-    static QCFType constructFromGet(const T &t)
-    {
-        CFRetain(t);
-        return QCFType<T>(t);
-    }
-protected:
-    T type;
+ public:
+   inline QCFType(const T &t = 0) : type(t) {}
+   inline QCFType(const QCFType &helper) : type(helper.type) {
+      if (type) {
+         CFRetain(type);
+      }
+   }
+   inline ~QCFType() {
+      if (type) {
+         CFRelease(type);
+      }
+   }
+   inline operator T() {
+      return type;
+   }
+   inline QCFType operator =(const QCFType &helper) {
+      if (helper.type) {
+         CFRetain(helper.type);
+      }
+      CFTypeRef type2 = type;
+      type = helper.type;
+      if (type2) {
+         CFRelease(type2);
+      }
+      return *this;
+   }
+   inline T *operator&() {
+      return &type;
+   }
+   template <typename X> X as() const {
+      return reinterpret_cast<X>(type);
+   }
+   static QCFType constructFromGet(const T &t) {
+      CFRetain(t);
+      return QCFType<T>(t);
+   }
+ protected:
+   T type;
 };
 
 class Q_CORE_EXPORT QCFString : public QCFType<CFStringRef>
 {
-public:
-    inline QCFString(const QString &str) : QCFType<CFStringRef>(0), string(str) {}
-    inline QCFString(const CFStringRef cfstr = 0) : QCFType<CFStringRef>(cfstr) {}
-    inline QCFString(const QCFType<CFStringRef> &other) : QCFType<CFStringRef>(other) {}
-    operator QString() const;
-    operator CFStringRef() const;
-    static QString toQString(CFStringRef cfstr);
-    static CFStringRef toCFStringRef(const QString &str);
-private:
-    QString string;
+ public:
+   inline QCFString(const QString &str) : QCFType<CFStringRef>(0), string(str) {}
+   inline QCFString(const CFStringRef cfstr = 0) : QCFType<CFStringRef>(cfstr) {}
+   inline QCFString(const QCFType<CFStringRef> &other) : QCFType<CFStringRef>(other) {}
+   operator QString() const;
+   operator CFStringRef() const;
+   static QString toQString(CFStringRef cfstr);
+   static CFStringRef toCFStringRef(const QString &str);
+ private:
+   QString string;
 };
 
 
@@ -133,11 +147,11 @@ QT_END_NAMESPACE
 
 #if (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5)
 #ifndef __LP64__
-	typedef float CGFloat;
-        typedef int NSInteger;
-        typedef unsigned int NSUInteger;
-	#define SRefCon SInt32
-	#define URefCon UInt32
+typedef float CGFloat;
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#define SRefCon SInt32
+#define URefCon UInt32
 #endif
 #endif
 

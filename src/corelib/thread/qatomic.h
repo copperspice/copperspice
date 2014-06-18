@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,56 +40,50 @@ QT_BEGIN_NAMESPACE
 // High-level atomic integer operations
 class Q_CORE_EXPORT QAtomicInt : public QBasicAtomicInt
 {
-public:
-    // Non-atomic API
-    inline QAtomicInt(int value = 0)
-    {
+ public:
+   // Non-atomic API
+   inline QAtomicInt(int value = 0) {
 #ifdef QT_ARCH_PARISC
-        this->_q_lock[0] = this->_q_lock[1] = this->_q_lock[2] = this->_q_lock[3] = -1;
+      this->_q_lock[0] = this->_q_lock[1] = this->_q_lock[2] = this->_q_lock[3] = -1;
 #endif
-        _q_value = value;
-    }
+      _q_value = value;
+   }
 
-    inline QAtomicInt(const QAtomicInt &other)
-    {
+   inline QAtomicInt(const QAtomicInt &other) {
 #ifdef QT_ARCH_PARISC
-        this->_q_lock[0] = this->_q_lock[1] = this->_q_lock[2] = this->_q_lock[3] = -1;
+      this->_q_lock[0] = this->_q_lock[1] = this->_q_lock[2] = this->_q_lock[3] = -1;
 #endif
-        this->store(other.load());
-    }
+      this->store(other.load());
+   }
 
-    inline QAtomicInt &operator=(const QAtomicInt &other)
-    {
-        this->store(other.load());
-        return *this;
-    }
+   inline QAtomicInt &operator=(const QAtomicInt &other) {
+      this->store(other.load());
+      return *this;
+   }
 };
 
 // High-level atomic pointer operations
 template <typename T>
 class QAtomicPointer : public QBasicAtomicPointer<T>
 {
-public:
-    inline QAtomicPointer(T *value = 0)
-    {
+ public:
+   inline QAtomicPointer(T *value = 0) {
 #ifdef QT_ARCH_PARISC
-        this->_q_lock[0] = this->_q_lock[1] = this->_q_lock[2] = this->_q_lock[3] = -1;
+      this->_q_lock[0] = this->_q_lock[1] = this->_q_lock[2] = this->_q_lock[3] = -1;
 #endif
-        this->store(value);
-    }
-    inline QAtomicPointer(const QAtomicPointer<T> &other)
-    {
+      this->store(value);
+   }
+   inline QAtomicPointer(const QAtomicPointer<T> &other) {
 #ifdef QT_ARCH_PARISC
-        this->_q_lock[0] = this->_q_lock[1] = this->_q_lock[2] = this->_q_lock[3] = -1;
+      this->_q_lock[0] = this->_q_lock[1] = this->_q_lock[2] = this->_q_lock[3] = -1;
 #endif
-        this->store(other.load());
-    }
+      this->store(other.load());
+   }
 
-    inline QAtomicPointer<T> &operator=(const QAtomicPointer<T> &other)
-    {
-        this->store(other.load());
-        return *this;
-    }
+   inline QAtomicPointer<T> &operator=(const QAtomicPointer<T> &other) {
+      this->store(other.load());
+      return *this;
+   }
 };
 
 #if defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ >= 406)
@@ -105,12 +99,14 @@ public:
 template <typename T>
 inline void qAtomicAssign(T *&d, T *x)
 {
-    if (d == x)
-        return;
-    x->ref.ref();
-    if (!d->ref.deref())
-        delete d;
-    d = x;
+   if (d == x) {
+      return;
+   }
+   x->ref.ref();
+   if (!d->ref.deref()) {
+      delete d;
+   }
+   d = x;
 }
 
 /*!
@@ -124,12 +120,14 @@ inline void qAtomicAssign(T *&d, T *x)
 template <typename T>
 inline void qAtomicDetach(T *&d)
 {
-    if (d->ref.load() == 1)
-        return;
-    T *x = d;
-    d = new T(*d);
-    if (!x->ref.deref())
-        delete x;
+   if (d->ref.load() == 1) {
+      return;
+   }
+   T *x = d;
+   d = new T(*d);
+   if (!x->ref.deref()) {
+      delete x;
+   }
 }
 
 QT_END_NAMESPACE

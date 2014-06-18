@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,37 +33,37 @@ class QAbstractState;
 
 class QAbstractStatePrivate
 {
-    Q_DECLARE_PUBLIC(QAbstractState)
+   Q_DECLARE_PUBLIC(QAbstractState)
 
-public:
-    virtual ~QAbstractStatePrivate() {}
+ public:
+   virtual ~QAbstractStatePrivate() {}
 
-    enum StateType {
-        AbstractState,
-        StandardState,
-        FinalState,
-        HistoryState
-    };
+   enum StateType {
+      AbstractState,
+      StandardState,
+      FinalState,
+      HistoryState
+   };
 
-    QAbstractStatePrivate(StateType type);
+   QAbstractStatePrivate(StateType type);
 
-    static QAbstractStatePrivate *get(QAbstractState *q);
-    static const QAbstractStatePrivate *get(const QAbstractState *q);
+   static QAbstractStatePrivate *get(QAbstractState *q);
+   static const QAbstractStatePrivate *get(const QAbstractState *q);
 
-    QStateMachine *machine() const;
+   QStateMachine *machine() const;
 
-    void callOnEntry(QEvent *e);
-    void callOnExit(QEvent *e);
+   void callOnEntry(QEvent *e);
+   void callOnExit(QEvent *e);
 
-    void emitEntered();
-    void emitExited();
+   void emitEntered();
+   void emitExited();
 
-    uint stateType:31;
-    uint isMachine:1;
-    mutable QState *parentState;
+   uint stateType: 31;
+   uint isMachine: 1;
+   mutable QState *parentState;
 
-protected:
-	 QAbstractState *q_ptr;
+ protected:
+   QAbstractState *q_ptr;
 
 };
 

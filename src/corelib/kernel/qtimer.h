@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,61 +33,78 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QTimer : public QObject
 {
-    CS_OBJECT(QTimer)
+   CS_OBJECT(QTimer)
 
-    CORE_CS_PROPERTY_READ(singleShot, isSingleShot)
-    CORE_CS_PROPERTY_WRITE(singleShot, setSingleShot)
-    CORE_CS_PROPERTY_READ(interval, interval)
-    CORE_CS_PROPERTY_WRITE(interval, setInterval)
-    CORE_CS_PROPERTY_READ(active, isActive)
+   CORE_CS_PROPERTY_READ(singleShot, isSingleShot)
+   CORE_CS_PROPERTY_WRITE(singleShot, setSingleShot)
+   CORE_CS_PROPERTY_READ(interval, interval)
+   CORE_CS_PROPERTY_WRITE(interval, setInterval)
+   CORE_CS_PROPERTY_READ(active, isActive)
 
-public:
-    explicit QTimer(QObject *parent = 0);
-    ~QTimer();
+ public:
+   explicit QTimer(QObject *parent = 0);
+   ~QTimer();
 
-    inline bool isActive() const;
-    inline int timerId() const;
+   inline bool isActive() const;
+   inline int timerId() const;
 
-    void setInterval(int msec);
-    inline int interval() const;
+   void setInterval(int msec);
+   inline int interval() const;
 
-    inline void setSingleShot(bool singleShot);
-    static void singleShot(int msec, QObject *receiver, const char *member);
-    inline bool isSingleShot() const;
- 
-    CORE_CS_SLOT_1(Public, void start(int msec))
-    CORE_CS_SLOT_OVERLOAD(start,(int)) 
+   inline void setSingleShot(bool singleShot);
+   static void singleShot(int msec, QObject *receiver, const char *member);
+   inline bool isSingleShot() const;
 
-    CORE_CS_SLOT_1(Public, void start())
-    CORE_CS_SLOT_OVERLOAD(start,()) 
+   CORE_CS_SLOT_1(Public, void start(int msec))
+   CORE_CS_SLOT_OVERLOAD(start, (int))
 
-    CORE_CS_SLOT_1(Public, void stop())
-    CORE_CS_SLOT_2(stop) 
+   CORE_CS_SLOT_1(Public, void start())
+   CORE_CS_SLOT_OVERLOAD(start, ())
 
-    CORE_CS_SIGNAL_1(Public, void timeout())
-    CORE_CS_SIGNAL_2(timeout) 
+   CORE_CS_SLOT_1(Public, void stop())
+   CORE_CS_SLOT_2(stop)
 
-protected:
-    void timerEvent(QTimerEvent *);
+   CORE_CS_SIGNAL_1(Public, void timeout())
+   CORE_CS_SIGNAL_2(timeout)
 
-private:
-    Q_DISABLE_COPY(QTimer)
+ protected:
+   void timerEvent(QTimerEvent *);
 
-    inline int startTimer(int){ return -1;}
-    inline void killTimer(int){}
+ private:
+   Q_DISABLE_COPY(QTimer)
 
-    int id, inter, del;
-    uint single : 1;
-    uint nulltimer : 1;
+   inline int startTimer(int) {
+      return -1;
+   }
+   inline void killTimer(int) {}
+
+   int id, inter, del;
+   uint single : 1;
+   uint nulltimer : 1;
 };
 
-bool QTimer::isActive() const { return id >= 0; }
-int  QTimer::timerId() const { return id; }
+bool QTimer::isActive() const
+{
+   return id >= 0;
+}
+int  QTimer::timerId() const
+{
+   return id;
+}
 
-int  QTimer::interval() const { return inter; }
+int  QTimer::interval() const
+{
+   return inter;
+}
 
-void QTimer::setSingleShot(bool singleShot) { single = singleShot; }
-bool QTimer::isSingleShot() const { return single; }
+void QTimer::setSingleShot(bool singleShot)
+{
+   single = singleShot;
+}
+bool QTimer::isSingleShot() const
+{
+   return single;
+}
 
 QT_END_NAMESPACE
 

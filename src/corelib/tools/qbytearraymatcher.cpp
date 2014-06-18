@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,46 +31,52 @@ QT_BEGIN_NAMESPACE
 
 static inline void bm_init_skiptable(const uchar *cc, int len, uchar *skiptable)
 {
-    int l = qMin(len, 255);
-    memset(skiptable, l, 256*sizeof(uchar));
-    cc += len - l;
-    while (l--)
-        skiptable[*cc++] = l;
+   int l = qMin(len, 255);
+   memset(skiptable, l, 256 * sizeof(uchar));
+   cc += len - l;
+   while (l--) {
+      skiptable[*cc++] = l;
+   }
 }
 
 static inline int bm_find(const uchar *cc, int l, int index, const uchar *puc, uint pl,
                           const uchar *skiptable)
 {
-    if (pl == 0)
-        return index > l ? -1 : index;
-    const uint pl_minus_one = pl - 1;
+   if (pl == 0) {
+      return index > l ? -1 : index;
+   }
+   const uint pl_minus_one = pl - 1;
 
-    const uchar *current = cc + index + pl_minus_one;
-    const uchar *end = cc + l;
-    while (current < end) {
-        uint skip = skiptable[*current];
-        if (!skip) {
-            // possible match
-            while (skip < pl) {
-                if (*(current - skip) != puc[pl_minus_one - skip])
-                    break;
-                skip++;
+   const uchar *current = cc + index + pl_minus_one;
+   const uchar *end = cc + l;
+   while (current < end) {
+      uint skip = skiptable[*current];
+      if (!skip) {
+         // possible match
+         while (skip < pl) {
+            if (*(current - skip) != puc[pl_minus_one - skip]) {
+               break;
             }
-            if (skip > pl_minus_one) // we have a match
-                return (current - cc) - skip + 1;
+            skip++;
+         }
+         if (skip > pl_minus_one) { // we have a match
+            return (current - cc) - skip + 1;
+         }
 
-            // in case we don't have a match we are a bit inefficient as we only skip by one
-            // when we have the non matching char in the string.
-            if (skiptable[*(current - skip)] == pl)
-                skip = pl - skip;
-            else
-                skip = 1;
-        }
-        if (current > end - skip)
-            break;
-        current += skip;
-    }
-    return -1; // not found
+         // in case we don't have a match we are a bit inefficient as we only skip by one
+         // when we have the non matching char in the string.
+         if (skiptable[*(current - skip)] == pl) {
+            skip = pl - skip;
+         } else {
+            skip = 1;
+         }
+      }
+      if (current > end - skip) {
+         break;
+      }
+      current += skip;
+   }
+   return -1; // not found
 }
 
 /*! \class QByteArrayMatcher
@@ -101,11 +107,11 @@ static inline int bm_find(const uchar *cc, int l, int index, const uchar *puc, u
     Call setPattern() to give it a pattern to match.
 */
 QByteArrayMatcher::QByteArrayMatcher()
-    : d(0)
+   : d(0)
 {
-    p.p = 0;
-    p.l = 0;
-    memset(p.q_skiptable, 0, sizeof(p.q_skiptable));
+   p.p = 0;
+   p.l = 0;
+   memset(p.q_skiptable, 0, sizeof(p.q_skiptable));
 }
 
 /*!
@@ -114,11 +120,11 @@ QByteArrayMatcher::QByteArrayMatcher()
   the destructor does not delete \a pattern.
  */
 QByteArrayMatcher::QByteArrayMatcher(const char *pattern, int length)
-    : d(0)
+   : d(0)
 {
-    p.p = reinterpret_cast<const uchar *>(pattern);
-    p.l = length;
-    bm_init_skiptable(p.p, p.l, p.q_skiptable);
+   p.p = reinterpret_cast<const uchar *>(pattern);
+   p.l = length;
+   bm_init_skiptable(p.p, p.l, p.q_skiptable);
 }
 
 /*!
@@ -126,20 +132,20 @@ QByteArrayMatcher::QByteArrayMatcher(const char *pattern, int length)
     Call indexIn() to perform a search.
 */
 QByteArrayMatcher::QByteArrayMatcher(const QByteArray &pattern)
-    : d(0), q_pattern(pattern)
+   : d(0), q_pattern(pattern)
 {
-    p.p = reinterpret_cast<const uchar *>(pattern.constData());
-    p.l = pattern.size();
-    bm_init_skiptable(p.p, p.l, p.q_skiptable);
+   p.p = reinterpret_cast<const uchar *>(pattern.constData());
+   p.l = pattern.size();
+   bm_init_skiptable(p.p, p.l, p.q_skiptable);
 }
 
 /*!
     Copies the \a other byte array matcher to this byte array matcher.
 */
 QByteArrayMatcher::QByteArrayMatcher(const QByteArrayMatcher &other)
-    : d(0)
+   : d(0)
 {
-    operator=(other);
+   operator=(other);
 }
 
 /*!
@@ -154,9 +160,9 @@ QByteArrayMatcher::~QByteArrayMatcher()
 */
 QByteArrayMatcher &QByteArrayMatcher::operator=(const QByteArrayMatcher &other)
 {
-    q_pattern = other.q_pattern;
-    memcpy(&p, &other.p, sizeof(p));
-    return *this;
+   q_pattern = other.q_pattern;
+   memcpy(&p, &other.p, sizeof(p));
+   return *this;
 }
 
 /*!
@@ -167,10 +173,10 @@ QByteArrayMatcher &QByteArrayMatcher::operator=(const QByteArrayMatcher &other)
 */
 void QByteArrayMatcher::setPattern(const QByteArray &pattern)
 {
-    q_pattern = pattern;
-    p.p = reinterpret_cast<const uchar *>(pattern.constData());
-    p.l = pattern.size();
-    bm_init_skiptable(p.p, p.l, p.q_skiptable);
+   q_pattern = pattern;
+   p.p = reinterpret_cast<const uchar *>(pattern.constData());
+   p.l = pattern.size();
+   bm_init_skiptable(p.p, p.l, p.q_skiptable);
 }
 
 /*!
@@ -182,10 +188,11 @@ void QByteArrayMatcher::setPattern(const QByteArray &pattern)
 */
 int QByteArrayMatcher::indexIn(const QByteArray &ba, int from) const
 {
-    if (from < 0)
-        from = 0;
-    return bm_find(reinterpret_cast<const uchar *>(ba.constData()), ba.size(), from,
-                   p.p, p.l, p.q_skiptable);
+   if (from < 0) {
+      from = 0;
+   }
+   return bm_find(reinterpret_cast<const uchar *>(ba.constData()), ba.size(), from,
+                  p.p, p.l, p.q_skiptable);
 }
 
 /*!
@@ -197,10 +204,11 @@ int QByteArrayMatcher::indexIn(const QByteArray &ba, int from) const
 */
 int QByteArrayMatcher::indexIn(const char *str, int len, int from) const
 {
-    if (from < 0)
-        from = 0;
-    return bm_find(reinterpret_cast<const uchar *>(str), len, from,
-                   p.p, p.l, p.q_skiptable);
+   if (from < 0) {
+      from = 0;
+   }
+   return bm_find(reinterpret_cast<const uchar *>(str), len, from,
+                  p.p, p.l, p.q_skiptable);
 }
 
 /*!
@@ -215,32 +223,35 @@ int QByteArrayMatcher::indexIn(const char *str, int len, int from) const
 
 static int findChar(const char *str, int len, char ch, int from)
 {
-    const uchar *s = (const uchar *)str;
-    uchar c = (uchar)ch;
-    if (from < 0)
-        from = qMax(from + len, 0);
-    if (from < len) {
-        const uchar *n = s + from - 1;
-        const uchar *e = s + len;
-        while (++n != e)
-            if (*n == c)
-                return  n - s;
-    }
-    return -1;
+   const uchar *s = (const uchar *)str;
+   uchar c = (uchar)ch;
+   if (from < 0) {
+      from = qMax(from + len, 0);
+   }
+   if (from < len) {
+      const uchar *n = s + from - 1;
+      const uchar *e = s + len;
+      while (++n != e)
+         if (*n == c) {
+            return  n - s;
+         }
+   }
+   return -1;
 }
 
 /*! \internal
  */
 static int qFindByteArrayBoyerMoore(
-    const char *haystack, int haystackLen, int haystackOffset,
-    const char *needle, int needleLen)
+   const char *haystack, int haystackLen, int haystackOffset,
+   const char *needle, int needleLen)
 {
-    uchar skiptable[256];
-    bm_init_skiptable((const uchar *)needle, needleLen, skiptable);
-    if (haystackOffset < 0)
-        haystackOffset = 0;
-    return bm_find((const uchar *)haystack, haystackLen, haystackOffset,
-                   (const uchar *)needle, needleLen, skiptable);
+   uchar skiptable[256];
+   bm_init_skiptable((const uchar *)needle, needleLen, skiptable);
+   if (haystackOffset < 0) {
+      haystackOffset = 0;
+   }
+   return bm_find((const uchar *)haystack, haystackLen, haystackOffset,
+                  (const uchar *)needle, needleLen, skiptable);
 }
 
 #define REHASH(a) \
@@ -251,58 +262,64 @@ static int qFindByteArrayBoyerMoore(
 /*! \internal
  */
 int qFindByteArray(
-    const char *haystack0, int haystackLen, int from,
-    const char *needle, int needleLen)
+   const char *haystack0, int haystackLen, int from,
+   const char *needle, int needleLen)
 {
-    const int l = haystackLen;
-    const int sl = needleLen;
-    if (from < 0)
-        from += l;
-    if (uint(sl + from) > (uint)l)
-        return -1;
-    if (!sl)
-        return from;
-    if (!l)
-        return -1;
+   const int l = haystackLen;
+   const int sl = needleLen;
+   if (from < 0) {
+      from += l;
+   }
+   if (uint(sl + from) > (uint)l) {
+      return -1;
+   }
+   if (!sl) {
+      return from;
+   }
+   if (!l) {
+      return -1;
+   }
 
-    if (sl == 1)
-        return findChar(haystack0, haystackLen, needle[0], from);
+   if (sl == 1) {
+      return findChar(haystack0, haystackLen, needle[0], from);
+   }
 
-    /*
-      We use the Boyer-Moore algorithm in cases where the overhead
-      for the skip table should pay off, otherwise we use a simple
-      hash function.
-    */
-    if (l > 500 && sl > 5)
-        return qFindByteArrayBoyerMoore(haystack0, haystackLen, from,
-                                        needle, needleLen);
+   /*
+     We use the Boyer-Moore algorithm in cases where the overhead
+     for the skip table should pay off, otherwise we use a simple
+     hash function.
+   */
+   if (l > 500 && sl > 5)
+      return qFindByteArrayBoyerMoore(haystack0, haystackLen, from,
+                                      needle, needleLen);
 
-    /*
-      We use some hashing for efficiency's sake. Instead of
-      comparing strings, we compare the hash value of str with that
-      of a part of this QString. Only if that matches, we call memcmp().
-    */
-    const char *haystack = haystack0 + from;
-    const char *end = haystack0 + (l - sl);
-    const uint sl_minus_1 = sl - 1;
-    uint hashNeedle = 0, hashHaystack = 0;
-    int idx;
-    for (idx = 0; idx < sl; ++idx) {
-        hashNeedle = ((hashNeedle<<1) + needle[idx]);
-        hashHaystack = ((hashHaystack<<1) + haystack[idx]);
-    }
-    hashHaystack -= *(haystack + sl_minus_1);
+   /*
+     We use some hashing for efficiency's sake. Instead of
+     comparing strings, we compare the hash value of str with that
+     of a part of this QString. Only if that matches, we call memcmp().
+   */
+   const char *haystack = haystack0 + from;
+   const char *end = haystack0 + (l - sl);
+   const uint sl_minus_1 = sl - 1;
+   uint hashNeedle = 0, hashHaystack = 0;
+   int idx;
+   for (idx = 0; idx < sl; ++idx) {
+      hashNeedle = ((hashNeedle << 1) + needle[idx]);
+      hashHaystack = ((hashHaystack << 1) + haystack[idx]);
+   }
+   hashHaystack -= *(haystack + sl_minus_1);
 
-    while (haystack <= end) {
-        hashHaystack += *(haystack + sl_minus_1);
-        if (hashHaystack == hashNeedle && *needle == *haystack
-             && memcmp(needle, haystack, sl) == 0)
-            return haystack - haystack0;
+   while (haystack <= end) {
+      hashHaystack += *(haystack + sl_minus_1);
+      if (hashHaystack == hashNeedle && *needle == *haystack
+            && memcmp(needle, haystack, sl) == 0) {
+         return haystack - haystack0;
+      }
 
-        REHASH(*haystack);
-        ++haystack;
-    }
-    return -1;
+      REHASH(*haystack);
+      ++haystack;
+   }
+   return -1;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,142 +42,152 @@ class QAbstractAnimation;
 
 class Q_CORE_EXPORT QStateMachine : public QState
 {
-    CS_OBJECT(QStateMachine)
-	 
-	 CORE_CS_ENUM(RestorePolicy)	
+   CS_OBJECT(QStateMachine)
 
-    CORE_CS_PROPERTY_READ(errorString, errorString)	 
-	 CORE_CS_PROPERTY_READ(globalRestorePolicy, globalRestorePolicy)
-    CORE_CS_PROPERTY_WRITE(globalRestorePolicy, setGlobalRestorePolicy)
-   
+   CORE_CS_ENUM(RestorePolicy)
+
+   CORE_CS_PROPERTY_READ(errorString, errorString)
+   CORE_CS_PROPERTY_READ(globalRestorePolicy, globalRestorePolicy)
+   CORE_CS_PROPERTY_WRITE(globalRestorePolicy, setGlobalRestorePolicy)
+
 #ifndef QT_NO_ANIMATION
-    CORE_CS_PROPERTY_READ(animated, isAnimated)
-    CORE_CS_PROPERTY_WRITE(animated, setAnimated)
+   CORE_CS_PROPERTY_READ(animated, isAnimated)
+   CORE_CS_PROPERTY_WRITE(animated, setAnimated)
 #endif
 
-public:
-    class Q_CORE_EXPORT SignalEvent : public QEvent
-    {
+ public:
+   class Q_CORE_EXPORT SignalEvent : public QEvent
+   {
     public:
-        SignalEvent(QObject *sender, int signalIndex, const QList<QVariant> &arguments);
-        ~SignalEvent();
+      SignalEvent(QObject *sender, int signalIndex, const QList<QVariant> &arguments);
+      ~SignalEvent();
 
-        inline QObject *sender() const { return m_sender; }
-        inline int signalIndex() const { return m_signalIndex; }
-        inline QList<QVariant> arguments() const { return m_arguments; }
+      inline QObject *sender() const {
+         return m_sender;
+      }
+      inline int signalIndex() const {
+         return m_signalIndex;
+      }
+      inline QList<QVariant> arguments() const {
+         return m_arguments;
+      }
 
     private:
-        QObject *m_sender;
-        int m_signalIndex;
-        QList<QVariant> m_arguments;
+      QObject *m_sender;
+      int m_signalIndex;
+      QList<QVariant> m_arguments;
 
-        friend class QSignalTransition;
-    };
+      friend class QSignalTransition;
+   };
 
-    class Q_CORE_EXPORT WrappedEvent : public QEvent
-    {
+   class Q_CORE_EXPORT WrappedEvent : public QEvent
+   {
     public:
-        WrappedEvent(QObject *object, QEvent *event);
-        ~WrappedEvent();
+      WrappedEvent(QObject *object, QEvent *event);
+      ~WrappedEvent();
 
-        inline QObject *object() const { return m_object; }
-        inline QEvent *event() const { return m_event; }
+      inline QObject *object() const {
+         return m_object;
+      }
+      inline QEvent *event() const {
+         return m_event;
+      }
 
     private:
-        QObject *m_object;
-        QEvent *m_event;
-    };
+      QObject *m_object;
+      QEvent *m_event;
+   };
 
-    enum EventPriority {
-        NormalPriority,
-        HighPriority
-    };
+   enum EventPriority {
+      NormalPriority,
+      HighPriority
+   };
 
-    enum RestorePolicy {
-        DontRestoreProperties,
-        RestoreProperties
-    };
+   enum RestorePolicy {
+      DontRestoreProperties,
+      RestoreProperties
+   };
 
-    enum Error {
-        NoError, 
-        NoInitialStateError,
-        NoDefaultStateInHistoryStateError,
-        NoCommonAncestorForTransitionError
-    };
+   enum Error {
+      NoError,
+      NoInitialStateError,
+      NoDefaultStateInHistoryStateError,
+      NoCommonAncestorForTransitionError
+   };
 
-    QStateMachine(QObject *parent = 0);
-    ~QStateMachine();
+   QStateMachine(QObject *parent = 0);
+   ~QStateMachine();
 
-    void addState(QAbstractState *state);
-    void removeState(QAbstractState *state);
+   void addState(QAbstractState *state);
+   void removeState(QAbstractState *state);
 
-    Error error() const;
-    QString errorString() const;
-    void clearError();
+   Error error() const;
+   QString errorString() const;
+   void clearError();
 
-    bool isRunning() const;
+   bool isRunning() const;
 
 #ifndef QT_NO_ANIMATION
-    bool isAnimated() const;
-    void setAnimated(bool enabled);
+   bool isAnimated() const;
+   void setAnimated(bool enabled);
 
-    void addDefaultAnimation(QAbstractAnimation *animation);
-    QList<QAbstractAnimation *> defaultAnimations() const;
-    void removeDefaultAnimation(QAbstractAnimation *animation);
-#endif 
+   void addDefaultAnimation(QAbstractAnimation *animation);
+   QList<QAbstractAnimation *> defaultAnimations() const;
+   void removeDefaultAnimation(QAbstractAnimation *animation);
+#endif
 
-    QStateMachine::RestorePolicy globalRestorePolicy() const;
-    void setGlobalRestorePolicy(QStateMachine::RestorePolicy restorePolicy);
+   QStateMachine::RestorePolicy globalRestorePolicy() const;
+   void setGlobalRestorePolicy(QStateMachine::RestorePolicy restorePolicy);
 
-    void postEvent(QEvent *event, EventPriority priority = NormalPriority);
-    int postDelayedEvent(QEvent *event, int delay);
-    bool cancelDelayedEvent(int id);
+   void postEvent(QEvent *event, EventPriority priority = NormalPriority);
+   int postDelayedEvent(QEvent *event, int delay);
+   bool cancelDelayedEvent(int id);
 
-    QSet<QAbstractState*> configuration() const;
+   QSet<QAbstractState *> configuration() const;
 
 #ifndef QT_NO_STATEMACHINE_EVENTFILTER
-    bool eventFilter(QObject *watched, QEvent *event);
+   bool eventFilter(QObject *watched, QEvent *event);
 #endif
 
-    CORE_CS_SLOT_1(Public, void start())
-    CORE_CS_SLOT_2(start)
- 
-    CORE_CS_SLOT_1(Public, void stop())
-    CORE_CS_SLOT_2(stop) 
+   CORE_CS_SLOT_1(Public, void start())
+   CORE_CS_SLOT_2(start)
 
-    CORE_CS_SIGNAL_1(Public, void started())
-    CORE_CS_SIGNAL_2(started) 
+   CORE_CS_SLOT_1(Public, void stop())
+   CORE_CS_SLOT_2(stop)
 
-    CORE_CS_SIGNAL_1(Public, void stopped())
-    CORE_CS_SIGNAL_2(stopped) 
+   CORE_CS_SIGNAL_1(Public, void started())
+   CORE_CS_SIGNAL_2(started)
 
-protected:
-    void onEntry(QEvent *event);
-    void onExit(QEvent *event);
+   CORE_CS_SIGNAL_1(Public, void stopped())
+   CORE_CS_SIGNAL_2(stopped)
 
-    virtual void beginSelectTransitions(QEvent *event);
-    virtual void endSelectTransitions(QEvent *event);
+ protected:
+   void onEntry(QEvent *event);
+   void onExit(QEvent *event);
 
-    virtual void beginMicrostep(QEvent *event);
-    virtual void endMicrostep(QEvent *event);
+   virtual void beginSelectTransitions(QEvent *event);
+   virtual void endSelectTransitions(QEvent *event);
 
-    bool event(QEvent *e);
+   virtual void beginMicrostep(QEvent *event);
+   virtual void endMicrostep(QEvent *event);
 
-    QStateMachine(QStateMachinePrivate &dd, QObject *parent);
+   bool event(QEvent *e);
 
-private:
-    Q_DISABLE_COPY(QStateMachine)
-    Q_DECLARE_PRIVATE(QStateMachine)
+   QStateMachine(QStateMachinePrivate &dd, QObject *parent);
 
-    CORE_CS_SLOT_1(Private, void _q_start())
-    CORE_CS_SLOT_2(_q_start)
+ private:
+   Q_DISABLE_COPY(QStateMachine)
+   Q_DECLARE_PRIVATE(QStateMachine)
 
-    CORE_CS_SLOT_1(Private, void _q_process())
-    CORE_CS_SLOT_2(_q_process)
+   CORE_CS_SLOT_1(Private, void _q_start())
+   CORE_CS_SLOT_2(_q_start)
+
+   CORE_CS_SLOT_1(Private, void _q_process())
+   CORE_CS_SLOT_2(_q_process)
 
 #ifndef QT_NO_ANIMATION
-	 CORE_CS_SLOT_1(Private, void _q_animationFinished())
-    CORE_CS_SLOT_2(_q_animationFinished)
+   CORE_CS_SLOT_1(Private, void _q_animationFinished())
+   CORE_CS_SLOT_2(_q_animationFinished)
 #endif
 
 };

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,37 +39,37 @@ class QTranslatorPrivate;
 
 class Q_CORE_EXPORT QTranslator : public QObject
 {
-    CS_OBJECT(QTranslator)
+   CS_OBJECT(QTranslator)
 
-public:
-    explicit QTranslator(QObject *parent = 0);
-    ~QTranslator();
+ public:
+   explicit QTranslator(QObject *parent = 0);
+   ~QTranslator();
 
-    // ### Qt5/Merge (with "int n = -1")
-    virtual QString translate(const char *context, const char *sourceText,
-                              const char *disambiguation = 0) const;
-    QString translate(const char *context, const char *sourceText, const char *disambiguation,
-                      int n) const;
+   // ### Qt5/Merge (with "int n = -1")
+   virtual QString translate(const char *context, const char *sourceText,
+                             const char *disambiguation = 0) const;
+   QString translate(const char *context, const char *sourceText, const char *disambiguation,
+                     int n) const;
 
-    virtual bool isEmpty() const;
+   virtual bool isEmpty() const;
 
-    bool load(const QString & filename,
-              const QString & directory = QString(),
-              const QString & search_delimiters = QString(),
-              const QString & suffix = QString());
-    bool load(const QLocale & locale,
-              const QString & filename,
-              const QString & prefix = QString(),
-              const QString & directory = QString(),
-              const QString & suffix = QString());
-    bool load(const uchar *data, int len);
+   bool load(const QString &filename,
+             const QString &directory = QString(),
+             const QString &search_delimiters = QString(),
+             const QString &suffix = QString());
+   bool load(const QLocale &locale,
+             const QString &filename,
+             const QString &prefix = QString(),
+             const QString &directory = QString(),
+             const QString &suffix = QString());
+   bool load(const uchar *data, int len);
 
-private:
-    Q_DISABLE_COPY(QTranslator)
-    Q_DECLARE_PRIVATE(QTranslator)
+ private:
+   Q_DISABLE_COPY(QTranslator)
+   Q_DECLARE_PRIVATE(QTranslator)
 
-protected:
-	 QScopedPointer<QTranslatorPrivate> d_ptr;
+ protected:
+   QScopedPointer<QTranslatorPrivate> d_ptr;
 
 };
 

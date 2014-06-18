@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,16 +30,16 @@
 template<class T, class E, class name, class scope>
 class cs_record_enum
 {
-   public:
-      static const int placeholder;
+ public:
+   static const int placeholder;
 };
 
 // ** flags
 template<class T, class F, class enumName, class scope, class flagName>
 class cs_record_flag
 {
-   public:
-      static const int placeholder;
+ public:
+   static const int placeholder;
 };
 
 #endif

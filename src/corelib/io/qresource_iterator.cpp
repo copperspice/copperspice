@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,8 +31,8 @@
 QT_BEGIN_NAMESPACE
 
 QResourceFileEngineIterator::QResourceFileEngineIterator(QDir::Filters filters,
-                                                         const QStringList &filterNames)
-    : QAbstractFileEngineIterator(filters, filterNames), index(-1)
+      const QStringList &filterNames)
+   : QAbstractFileEngineIterator(filters, filterNames), index(-1)
 {
 }
 
@@ -42,33 +42,36 @@ QResourceFileEngineIterator::~QResourceFileEngineIterator()
 
 QString QResourceFileEngineIterator::next()
 {
-    if (!hasNext())
-        return QString();
-    ++index;
-    return currentFilePath();
+   if (!hasNext()) {
+      return QString();
+   }
+   ++index;
+   return currentFilePath();
 }
 
 bool QResourceFileEngineIterator::hasNext() const
 {
-    if (index == -1) {
-        // Lazy initialization of the iterator
-        QResource resource(path());
-        if (!resource.isValid())
-            return false;
+   if (index == -1) {
+      // Lazy initialization of the iterator
+      QResource resource(path());
+      if (!resource.isValid()) {
+         return false;
+      }
 
-        // Initialize and move to the next entry.
-        entries = resource.children();
-        index = 0;
-    }
+      // Initialize and move to the next entry.
+      entries = resource.children();
+      index = 0;
+   }
 
-    return index < entries.size();
+   return index < entries.size();
 }
 
 QString QResourceFileEngineIterator::currentFileName() const
 {
-    if (index <= 0 || index > entries.size())
-        return QString();
-    return entries.at(index - 1);
+   if (index <= 0 || index > entries.size()) {
+      return QString();
+   }
+   return entries.at(index - 1);
 }
 
 QT_END_NAMESPACE

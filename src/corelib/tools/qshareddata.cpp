@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -27,7 +27,7 @@
 
 QT_BEGIN_NAMESPACE
 
-/*! 
+/*!
     \class QSharedData
     \brief The QSharedData class is a base class for shared data objects.
     \reentrant
@@ -49,7 +49,7 @@ QT_BEGIN_NAMESPACE
     \a other is ignored.
 */
 
-/*! 
+/*!
     \class QSharedDataPointer
     \brief The QSharedDataPointer class represents a pointer to an implicitly shared object.
     \since 4.0
@@ -369,7 +369,7 @@ QT_BEGIN_NAMESPACE
     return the proper polymorphic type.
 */
 
-/*! 
+/*!
     \class QExplicitlySharedDataPointer
     \brief The QExplicitlySharedDataPointer class represents a pointer to an explicitly shared object.
     \since 4.4

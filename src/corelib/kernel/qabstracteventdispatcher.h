@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,51 +40,51 @@ class QPair;
 
 class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
 {
-    CS_OBJECT(QAbstractEventDispatcher)
-    Q_DECLARE_PRIVATE(QAbstractEventDispatcher)
+   CS_OBJECT(QAbstractEventDispatcher)
+   Q_DECLARE_PRIVATE(QAbstractEventDispatcher)
 
-public:
-    typedef std::pair<int, int> TimerInfo;
+ public:
+   typedef std::pair<int, int> TimerInfo;
 
-    explicit QAbstractEventDispatcher(QObject *parent = 0);
-    ~QAbstractEventDispatcher();
+   explicit QAbstractEventDispatcher(QObject *parent = 0);
+   ~QAbstractEventDispatcher();
 
-    static QAbstractEventDispatcher *instance(QThread *thread = 0);
+   static QAbstractEventDispatcher *instance(QThread *thread = 0);
 
-    virtual bool processEvents(QEventLoop::ProcessEventsFlags flags) = 0;
-    virtual bool hasPendingEvents() = 0;
+   virtual bool processEvents(QEventLoop::ProcessEventsFlags flags) = 0;
+   virtual bool hasPendingEvents() = 0;
 
-    virtual void registerSocketNotifier(QSocketNotifier *notifier) = 0;
-    virtual void unregisterSocketNotifier(QSocketNotifier *notifier) = 0;
+   virtual void registerSocketNotifier(QSocketNotifier *notifier) = 0;
+   virtual void unregisterSocketNotifier(QSocketNotifier *notifier) = 0;
 
-    int registerTimer(int interval, QObject *object);
-    virtual void registerTimer(int timerId, int interval, QObject *object) = 0;
-    virtual bool unregisterTimer(int timerId) = 0;
-    virtual bool unregisterTimers(QObject *object) = 0;
-    virtual QList<TimerInfo> registeredTimers(QObject *object) const = 0;
+   int registerTimer(int interval, QObject *object);
+   virtual void registerTimer(int timerId, int interval, QObject *object) = 0;
+   virtual bool unregisterTimer(int timerId) = 0;
+   virtual bool unregisterTimers(QObject *object) = 0;
+   virtual QList<TimerInfo> registeredTimers(QObject *object) const = 0;
 
-    virtual void wakeUp() = 0;
-    virtual void interrupt() = 0;
-    virtual void flush() = 0;
+   virtual void wakeUp() = 0;
+   virtual void interrupt() = 0;
+   virtual void flush() = 0;
 
-    virtual void startingUp();
-    virtual void closingDown();
+   virtual void startingUp();
+   virtual void closingDown();
 
-    typedef bool(*EventFilter)(void *message);
-    EventFilter setEventFilter(EventFilter filter);
-    bool filterEvent(void *message);
+   typedef bool(*EventFilter)(void *message);
+   EventFilter setEventFilter(EventFilter filter);
+   bool filterEvent(void *message);
 
-public:
-    CORE_CS_SIGNAL_1(Public, void aboutToBlock())
-    CORE_CS_SIGNAL_2(aboutToBlock) 
-    CORE_CS_SIGNAL_1(Public, void awake())
-    CORE_CS_SIGNAL_2(awake) 
+ public:
+   CORE_CS_SIGNAL_1(Public, void aboutToBlock())
+   CORE_CS_SIGNAL_2(aboutToBlock)
+   CORE_CS_SIGNAL_1(Public, void awake())
+   CORE_CS_SIGNAL_2(awake)
 
-protected:
-    QAbstractEventDispatcher(QAbstractEventDispatcherPrivate &,QObject *parent);
+ protected:
+   QAbstractEventDispatcher(QAbstractEventDispatcherPrivate &, QObject *parent);
 
-protected:
-	 QScopedPointer<QAbstractEventDispatcherPrivate> d_ptr;
+ protected:
+   QScopedPointer<QAbstractEventDispatcherPrivate> d_ptr;
 
 };
 

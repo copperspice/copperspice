@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,26 +37,28 @@ class QXmlCharRange;
 
 //  internal
 //  This class contains helper functions related to XML, for validating character classes,
-//  productions in the XML specification 
+//  productions in the XML specification
 class Q_CORE_EXPORT QXmlUtils
 {
-   public:
-       static bool isEncName(const QString &encName);
-       static bool isChar(const QChar c);
-       static bool isNameChar(const QChar c);
-       static bool isLetter(const QChar c);
-       static bool isNCName(const QStringRef &ncName);
-       static inline bool isNCName(const QString &ncName) { return isNCName(&ncName); }
-       static bool isPublicID(const QString &candidate);
-   
-   private:
-       typedef const QXmlCharRange *RangeIter;
-       static bool rangeContains(RangeIter begin, RangeIter end, const QChar c);
-       static bool isBaseChar(const QChar c);
-       static bool isDigit(const QChar c);
-       static bool isExtender(const QChar c);
-       static bool isIdeographic(const QChar c);
-       static bool isCombiningChar(const QChar c);
+ public:
+   static bool isEncName(const QString &encName);
+   static bool isChar(const QChar c);
+   static bool isNameChar(const QChar c);
+   static bool isLetter(const QChar c);
+   static bool isNCName(const QStringRef &ncName);
+   static inline bool isNCName(const QString &ncName) {
+      return isNCName(&ncName);
+   }
+   static bool isPublicID(const QString &candidate);
+
+ private:
+   typedef const QXmlCharRange *RangeIter;
+   static bool rangeContains(RangeIter begin, RangeIter end, const QChar c);
+   static bool isBaseChar(const QChar c);
+   static bool isDigit(const QChar c);
+   static bool isExtender(const QChar c);
+   static bool isIdeographic(const QChar c);
+   static bool isCombiningChar(const QChar c);
 };
 
 QT_END_NAMESPACE

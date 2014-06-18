@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,92 +34,120 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QDate
 {
-public:
-    enum MonthNameType {
-        DateFormat = 0,
-        StandaloneFormat
-    };
-public:
-    QDate() { jd = 0; }
-    QDate(int y, int m, int d);
+ public:
+   enum MonthNameType {
+      DateFormat = 0,
+      StandaloneFormat
+   };
+ public:
+   QDate() {
+      jd = 0;
+   }
+   QDate(int y, int m, int d);
 
-    bool isNull() const { return jd == 0; }
-    bool isValid() const;
+   bool isNull() const {
+      return jd == 0;
+   }
+   bool isValid() const;
 
-    int year() const;
-    int month() const;
-    int day() const;
-    int dayOfWeek() const;
-    int dayOfYear() const;
-    int daysInMonth() const;
-    int daysInYear() const;
-    int weekNumber(int *yearNum = 0) const;
+   int year() const;
+   int month() const;
+   int day() const;
+   int dayOfWeek() const;
+   int dayOfYear() const;
+   int daysInMonth() const;
+   int daysInYear() const;
+   int weekNumber(int *yearNum = 0) const;
 
 #ifndef QT_NO_TEXTDATE
 
-    // ### Qt5/merge these functions.
-    static QString shortMonthName(int month);
-    static QString shortMonthName(int month, MonthNameType type);
-    static QString shortDayName(int weekday);
-    static QString shortDayName(int weekday, MonthNameType type);
-    static QString longMonthName(int month);
-    static QString longMonthName(int month, MonthNameType type);
-    static QString longDayName(int weekday);
-    static QString longDayName(int weekday, MonthNameType type);
+   // ### Qt5/merge these functions.
+   static QString shortMonthName(int month);
+   static QString shortMonthName(int month, MonthNameType type);
+   static QString shortDayName(int weekday);
+   static QString shortDayName(int weekday, MonthNameType type);
+   static QString longMonthName(int month);
+   static QString longMonthName(int month, MonthNameType type);
+   static QString longDayName(int weekday);
+   static QString longDayName(int weekday, MonthNameType type);
 #endif
 
 #ifndef QT_NO_DATESTRING
-    QString toString(Qt::DateFormat f = Qt::TextDate) const;
-    QString toString(const QString &format) const;
+   QString toString(Qt::DateFormat f = Qt::TextDate) const;
+   QString toString(const QString &format) const;
 #endif
 
-    bool setYMD(int y, int m, int d);
-    bool setDate(int year, int month, int day);
+   bool setYMD(int y, int m, int d);
+   bool setDate(int year, int month, int day);
 
-    void getDate(int *year, int *month, int *day);
+   void getDate(int *year, int *month, int *day);
 
-    QDate addDays(int days) const;
-    QDate addMonths(int months) const;
-    QDate addYears(int years) const;
-    int daysTo(const QDate &) const;
+   QDate addDays(int days) const;
+   QDate addMonths(int months) const;
+   QDate addYears(int years) const;
+   int daysTo(const QDate &) const;
 
-    bool operator==(const QDate &other) const { return jd == other.jd; }
-    bool operator!=(const QDate &other) const { return jd != other.jd; }
-    bool operator<(const QDate &other) const { return jd < other.jd; }
-    bool operator<=(const QDate &other) const { return jd <= other.jd; }
-    bool operator>(const QDate &other) const { return jd > other.jd; }
-    bool operator>=(const QDate &other) const { return jd >= other.jd; }
+   bool operator==(const QDate &other) const {
+      return jd == other.jd;
+   }
+   bool operator!=(const QDate &other) const {
+      return jd != other.jd;
+   }
+   bool operator<(const QDate &other) const {
+      return jd < other.jd;
+   }
+   bool operator<=(const QDate &other) const {
+      return jd <= other.jd;
+   }
+   bool operator>(const QDate &other) const {
+      return jd > other.jd;
+   }
+   bool operator>=(const QDate &other) const {
+      return jd >= other.jd;
+   }
 
-    static QDate currentDate();
+   static QDate currentDate();
 
 #ifndef QT_NO_DATESTRING
-    static QDate fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
-    static QDate fromString(const QString &s, const QString &format);
+   static QDate fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
+   static QDate fromString(const QString &s, const QString &format);
 #endif
 
-    static bool isValid(int y, int m, int d);
-    static bool isLeapYear(int year);
+   static bool isValid(int y, int m, int d);
+   static bool isLeapYear(int year);
 
-    // ### Qt5/remove these two functions
-    static uint gregorianToJulian(int y, int m, int d);
-    static void julianToGregorian(uint jd, int &y, int &m, int &d);
+   // ### Qt5/remove these two functions
+   static uint gregorianToJulian(int y, int m, int d);
+   static void julianToGregorian(uint jd, int &y, int &m, int &d);
 
-    static inline QDate fromJulianDay(int jd) { QDate d; d.jd = jd; return d; }
-    inline int toJulianDay() const { return jd; }
+   static inline QDate fromJulianDay(int jd) {
+      QDate d;
+      d.jd = jd;
+      return d;
+   }
+   inline int toJulianDay() const {
+      return jd;
+   }
 
-private:
-    static inline qint64 nullJd() { return std::numeric_limits<qint64>::lowest(); }
-    static inline qint64 minJd() { return Q_INT64_C(-784350574879); }
-    static inline qint64 maxJd() { return Q_INT64_C( 784354017364); }
+ private:
+   static inline qint64 nullJd() {
+      return std::numeric_limits<qint64>::lowest();
+   }
+   static inline qint64 minJd() {
+      return Q_INT64_C(-784350574879);
+   }
+   static inline qint64 maxJd() {
+      return Q_INT64_C( 784354017364);
+   }
 
-    qint64 jd;
+   qint64 jd;
 
-    friend class QDateTime;
-    friend class QDateTimePrivate;
+   friend class QDateTime;
+   friend class QDateTimePrivate;
 
 #ifndef QT_NO_DATASTREAM
-    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDate &);
-    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDate &);
+   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDate &);
+   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDate &);
 #endif
 
 };
@@ -127,58 +155,74 @@ Q_DECLARE_TYPEINFO(QDate, Q_MOVABLE_TYPE);
 
 class Q_CORE_EXPORT QTime
 {
-public:
-    QTime()
-       : mds(NullTime)
-    {}
+ public:
+   QTime()
+      : mds(NullTime) {
+   }
 
-    QTime(int h, int m, int s = 0, int ms = 0);
+   QTime(int h, int m, int s = 0, int ms = 0);
 
-    bool isNull() const { return mds == NullTime; }
-    bool isValid() const;
+   bool isNull() const {
+      return mds == NullTime;
+   }
+   bool isValid() const;
 
-    int hour() const;
-    int minute() const;
-    int second() const;
-    int msec() const;
+   int hour() const;
+   int minute() const;
+   int second() const;
+   int msec() const;
 #ifndef QT_NO_DATESTRING
-    QString toString(Qt::DateFormat f = Qt::TextDate) const;
-    QString toString(const QString &format) const;
+   QString toString(Qt::DateFormat f = Qt::TextDate) const;
+   QString toString(const QString &format) const;
 #endif
-    bool setHMS(int h, int m, int s, int ms = 0);
+   bool setHMS(int h, int m, int s, int ms = 0);
 
-    QTime addSecs(int secs) const;
-    int secsTo(const QTime &) const;
-    QTime addMSecs(int ms) const;
-    int msecsTo(const QTime &) const;
+   QTime addSecs(int secs) const;
+   int secsTo(const QTime &) const;
+   QTime addMSecs(int ms) const;
+   int msecsTo(const QTime &) const;
 
-    bool operator==(const QTime &other) const { return mds == other.mds; }
-    bool operator!=(const QTime &other) const { return mds != other.mds; }
-    bool operator<(const QTime &other) const { return mds < other.mds; }
-    bool operator<=(const QTime &other) const { return mds <= other.mds; }
-    bool operator>(const QTime &other) const { return mds > other.mds; }
-    bool operator>=(const QTime &other) const { return mds >= other.mds; }
+   bool operator==(const QTime &other) const {
+      return mds == other.mds;
+   }
+   bool operator!=(const QTime &other) const {
+      return mds != other.mds;
+   }
+   bool operator<(const QTime &other) const {
+      return mds < other.mds;
+   }
+   bool operator<=(const QTime &other) const {
+      return mds <= other.mds;
+   }
+   bool operator>(const QTime &other) const {
+      return mds > other.mds;
+   }
+   bool operator>=(const QTime &other) const {
+      return mds >= other.mds;
+   }
 
-    static QTime currentTime();
+   static QTime currentTime();
 #ifndef QT_NO_DATESTRING
-    static QTime fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
-    static QTime fromString(const QString &s, const QString &format);
+   static QTime fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
+   static QTime fromString(const QString &s, const QString &format);
 #endif
-    static bool isValid(int h, int m, int s, int ms = 0);
+   static bool isValid(int h, int m, int s, int ms = 0);
 
-    void start();
-    int restart();
-    int elapsed() const;
-private:
-    enum TimeFlag { NullTime = -1 };
-    inline int ds() const { return mds == -1 ? 0 : mds; }
-    int mds;
+   void start();
+   int restart();
+   int elapsed() const;
+ private:
+   enum TimeFlag { NullTime = -1 };
+   inline int ds() const {
+      return mds == -1 ? 0 : mds;
+   }
+   int mds;
 
-    friend class QDateTime;
-    friend class QDateTimePrivate;
+   friend class QDateTime;
+   friend class QDateTimePrivate;
 #ifndef QT_NO_DATASTREAM
-    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QTime &);
-    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &);
+   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QTime &);
+   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &);
 #endif
 
 };
@@ -188,89 +232,101 @@ class QDateTimePrivate;
 
 class Q_CORE_EXPORT QDateTime
 {
-public:
-    QDateTime();
-    explicit QDateTime(const QDate &);
-    QDateTime(const QDate &, const QTime &, Qt::TimeSpec spec = Qt::LocalTime);
-    // ### Qt 6: Merge with above with default offsetSeconds = 0
-    QDateTime(const QDate &date, const QTime &time, Qt::TimeSpec spec, int offsetSeconds);
-    QDateTime(const QDateTime &other);
-    ~QDateTime();
+ public:
+   QDateTime();
+   explicit QDateTime(const QDate &);
+   QDateTime(const QDate &, const QTime &, Qt::TimeSpec spec = Qt::LocalTime);
+   // ### Qt 6: Merge with above with default offsetSeconds = 0
+   QDateTime(const QDate &date, const QTime &time, Qt::TimeSpec spec, int offsetSeconds);
+   QDateTime(const QDateTime &other);
+   ~QDateTime();
 
-    QDateTime &operator=(const QDateTime &other);
+   QDateTime &operator=(const QDateTime &other);
 
-    bool isNull() const;
-    bool isValid() const;
+   bool isNull() const;
+   bool isValid() const;
 
-    QDate date() const;
-    QTime time() const;
-    Qt::TimeSpec timeSpec() const;
-    int offsetFromUtc() const;
+   QDate date() const;
+   QTime time() const;
+   Qt::TimeSpec timeSpec() const;
+   int offsetFromUtc() const;
 
-    qint64 toMSecsSinceEpoch() const;
-    uint toTime_t() const;
+   qint64 toMSecsSinceEpoch() const;
+   uint toTime_t() const;
 
-    void setDate(const QDate &date);
-    void setTime(const QTime &time);
-    void setTimeSpec(Qt::TimeSpec spec);
-    void setOffsetFromUtc(int offsetSeconds);
-    void setMSecsSinceEpoch(qint64 msecs);
-    void setTime_t(uint secsSince1Jan1970UTC);
-
-#ifndef QT_NO_DATESTRING
-    QString toString(Qt::DateFormat f = Qt::TextDate) const;
-    QString toString(const QString &format) const;
-#endif
-    QDateTime addDays(int days) const;
-    QDateTime addMonths(int months) const;
-    QDateTime addYears(int years) const;
-    QDateTime addSecs(int secs) const;
-    QDateTime addMSecs(qint64 msecs) const;
-
-    QDateTime toTimeSpec(Qt::TimeSpec spec) const;
-    inline QDateTime toLocalTime() const { return toTimeSpec(Qt::LocalTime); }
-    inline QDateTime toUTC() const { return toTimeSpec(Qt::UTC); }
-    QDateTime toOffsetFromUtc(int offsetSeconds) const;
-
-    qint64 daysTo(const QDateTime &) const;
-    qint64 secsTo(const QDateTime &) const;
-    qint64 msecsTo(const QDateTime &) const;
-
-    bool operator==(const QDateTime &other) const;
-    inline bool operator!=(const QDateTime &other) const { return !(*this == other); }
-    bool operator<(const QDateTime &other) const;
-    inline bool operator<=(const QDateTime &other) const { return !(other < *this); }
-    inline bool operator>(const QDateTime &other) const { return other < *this; }
-    inline bool operator>=(const QDateTime &other) const { return !(*this < other); }
-
-    void setUtcOffset(int seconds);
-    int utcOffset() const;
-
-    static QDateTime currentDateTime();
-    static QDateTime currentDateTimeUtc();
+   void setDate(const QDate &date);
+   void setTime(const QTime &time);
+   void setTimeSpec(Qt::TimeSpec spec);
+   void setOffsetFromUtc(int offsetSeconds);
+   void setMSecsSinceEpoch(qint64 msecs);
+   void setTime_t(uint secsSince1Jan1970UTC);
 
 #ifndef QT_NO_DATESTRING
-    static QDateTime fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
-    static QDateTime fromString(const QString &s, const QString &format);
+   QString toString(Qt::DateFormat f = Qt::TextDate) const;
+   QString toString(const QString &format) const;
 #endif
-    static QDateTime fromTime_t(uint secsSince1Jan1970UTC);
+   QDateTime addDays(int days) const;
+   QDateTime addMonths(int months) const;
+   QDateTime addYears(int years) const;
+   QDateTime addSecs(int secs) const;
+   QDateTime addMSecs(qint64 msecs) const;
 
-    // ### Qt 6: Merge with above with default spec = Qt::LocalTime
-    static QDateTime fromTime_t(uint secsSince1Jan1970UTC, Qt::TimeSpec spec,int offsetFromUtc = 0);
-    static QDateTime fromMSecsSinceEpoch(qint64 msecs);
+   QDateTime toTimeSpec(Qt::TimeSpec spec) const;
+   inline QDateTime toLocalTime() const {
+      return toTimeSpec(Qt::LocalTime);
+   }
+   inline QDateTime toUTC() const {
+      return toTimeSpec(Qt::UTC);
+   }
+   QDateTime toOffsetFromUtc(int offsetSeconds) const;
 
-    // ### Qt 6: Merge with above with default spec = Qt::LocalTime
-    static QDateTime fromMSecsSinceEpoch(qint64 msecs, Qt::TimeSpec spec, int offsetFromUtc = 0);
-    static qint64 currentMSecsSinceEpoch();
+   qint64 daysTo(const QDateTime &) const;
+   qint64 secsTo(const QDateTime &) const;
+   qint64 msecsTo(const QDateTime &) const;
 
-private:
-    friend class QDateTimePrivate;
-    void detach();
-    QExplicitlySharedDataPointer<QDateTimePrivate> d;
+   bool operator==(const QDateTime &other) const;
+   inline bool operator!=(const QDateTime &other) const {
+      return !(*this == other);
+   }
+   bool operator<(const QDateTime &other) const;
+   inline bool operator<=(const QDateTime &other) const {
+      return !(other < *this);
+   }
+   inline bool operator>(const QDateTime &other) const {
+      return other < *this;
+   }
+   inline bool operator>=(const QDateTime &other) const {
+      return !(*this < other);
+   }
+
+   void setUtcOffset(int seconds);
+   int utcOffset() const;
+
+   static QDateTime currentDateTime();
+   static QDateTime currentDateTimeUtc();
+
+#ifndef QT_NO_DATESTRING
+   static QDateTime fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
+   static QDateTime fromString(const QString &s, const QString &format);
+#endif
+   static QDateTime fromTime_t(uint secsSince1Jan1970UTC);
+
+   // ### Qt 6: Merge with above with default spec = Qt::LocalTime
+   static QDateTime fromTime_t(uint secsSince1Jan1970UTC, Qt::TimeSpec spec, int offsetFromUtc = 0);
+   static QDateTime fromMSecsSinceEpoch(qint64 msecs);
+
+   // ### Qt 6: Merge with above with default spec = Qt::LocalTime
+   static QDateTime fromMSecsSinceEpoch(qint64 msecs, Qt::TimeSpec spec, int offsetFromUtc = 0);
+   static qint64 currentMSecsSinceEpoch();
+
+ private:
+   friend class QDateTimePrivate;
+   void detach();
+   QExplicitlySharedDataPointer<QDateTimePrivate> d;
 
 #ifndef QT_NO_DATASTREAM
-    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &);
-    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
+   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &);
+   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
 #endif
 };
 Q_DECLARE_TYPEINFO(QDateTime, Q_MOVABLE_TYPE);

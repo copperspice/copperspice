@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,33 +39,33 @@ class QEventDispatcherGlibPrivate;
 
 class Q_CORE_EXPORT QEventDispatcherGlib : public QAbstractEventDispatcher
 {
-    CS_OBJECT(QEventDispatcherGlib)
-    Q_DECLARE_PRIVATE(QEventDispatcherGlib)
+   CS_OBJECT(QEventDispatcherGlib)
+   Q_DECLARE_PRIVATE(QEventDispatcherGlib)
 
-public:
-    explicit QEventDispatcherGlib(QObject *parent = 0);
-    explicit QEventDispatcherGlib(GMainContext *context, QObject *parent = 0);
-    ~QEventDispatcherGlib();
+ public:
+   explicit QEventDispatcherGlib(QObject *parent = 0);
+   explicit QEventDispatcherGlib(GMainContext *context, QObject *parent = 0);
+   ~QEventDispatcherGlib();
 
-    bool processEvents(QEventLoop::ProcessEventsFlags flags);
-    bool hasPendingEvents();
+   bool processEvents(QEventLoop::ProcessEventsFlags flags);
+   bool hasPendingEvents();
 
-    void registerSocketNotifier(QSocketNotifier *socketNotifier);
-    void unregisterSocketNotifier(QSocketNotifier *socketNotifier);
+   void registerSocketNotifier(QSocketNotifier *socketNotifier);
+   void unregisterSocketNotifier(QSocketNotifier *socketNotifier);
 
-    void registerTimer(int timerId, int interval, QObject *object);
-    bool unregisterTimer(int timerId);
-    bool unregisterTimers(QObject *object);
-    QList<TimerInfo> registeredTimers(QObject *object) const;
+   void registerTimer(int timerId, int interval, QObject *object);
+   bool unregisterTimer(int timerId);
+   bool unregisterTimers(QObject *object);
+   QList<TimerInfo> registeredTimers(QObject *object) const;
 
-    void wakeUp();
-    void interrupt();
-    void flush();
+   void wakeUp();
+   void interrupt();
+   void flush();
 
-    static bool versionSupported();
+   static bool versionSupported();
 
-protected:
-    QEventDispatcherGlib(QEventDispatcherGlibPrivate &dd, QObject *parent);
+ protected:
+   QEventDispatcherGlib(QEventDispatcherGlibPrivate &dd, QObject *parent);
 };
 
 struct GPostEventSource;
@@ -76,15 +76,15 @@ struct GIdleTimerSource;
 class Q_CORE_EXPORT QEventDispatcherGlibPrivate : public QAbstractEventDispatcherPrivate
 {
 
-public:
-    QEventDispatcherGlibPrivate(GMainContext *context = 0);
-    GMainContext *mainContext;
-    GPostEventSource *postEventSource;
-    GSocketNotifierSource *socketNotifierSource;
-    GTimerSource *timerSource;
-    GIdleTimerSource *idleTimerSource;
+ public:
+   QEventDispatcherGlibPrivate(GMainContext *context = 0);
+   GMainContext *mainContext;
+   GPostEventSource *postEventSource;
+   GSocketNotifierSource *socketNotifierSource;
+   GTimerSource *timerSource;
+   GIdleTimerSource *idleTimerSource;
 
-    void runTimersOnceWithNormalPriority();
+   void runTimersOnceWithNormalPriority();
 };
 
 QT_END_NAMESPACE

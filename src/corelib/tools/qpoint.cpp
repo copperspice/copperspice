@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -361,11 +361,12 @@ QT_BEGIN_NAMESPACE
 
 QDataStream &operator<<(QDataStream &s, const QPoint &p)
 {
-    if (s.version() == 1)
-        s << (qint16)p.x() << (qint16)p.y();
-    else
-        s << (qint32)p.x() << (qint32)p.y();
-    return s;
+   if (s.version() == 1) {
+      s << (qint16)p.x() << (qint16)p.y();
+   } else {
+      s << (qint32)p.x() << (qint32)p.y();
+   }
+   return s;
 }
 
 /*!
@@ -380,17 +381,20 @@ QDataStream &operator<<(QDataStream &s, const QPoint &p)
 
 QDataStream &operator>>(QDataStream &s, QPoint &p)
 {
-    if (s.version() == 1) {
-        qint16 x, y;
-        s >> x;  p.rx() = x;
-        s >> y;  p.ry() = y;
-    }
-    else {
-        qint32 x, y;
-        s >> x;  p.rx() = x;
-        s >> y;  p.ry() = y;
-    }
-    return s;
+   if (s.version() == 1) {
+      qint16 x, y;
+      s >> x;
+      p.rx() = x;
+      s >> y;
+      p.ry() = y;
+   } else {
+      qint32 x, y;
+      s >> x;
+      p.rx() = x;
+      s >> y;
+      p.ry() = y;
+   }
+   return s;
 }
 
 #endif // QT_NO_DATASTREAM
@@ -412,19 +416,20 @@ QDataStream &operator>>(QDataStream &s, QPoint &p)
 */
 int QPoint::manhattanLength() const
 {
-    return qAbs(x())+qAbs(y());
+   return qAbs(x()) + qAbs(y());
 }
 
 #ifndef QT_NO_DEBUG_STREAM
-QDebug operator<<(QDebug dbg, const QPoint &p) {
-    dbg.nospace() << "QPoint(" << p.x() << ',' << p.y() << ')';
-    return dbg.space();
+QDebug operator<<(QDebug dbg, const QPoint &p)
+{
+   dbg.nospace() << "QPoint(" << p.x() << ',' << p.y() << ')';
+   return dbg.space();
 }
 
 QDebug operator<<(QDebug d, const QPointF &p)
 {
-    d.nospace() << "QPointF(" << p.x() << ", " << p.y() << ')';
-    return d.space();
+   d.nospace() << "QPointF(" << p.x() << ", " << p.y() << ')';
+   return d.space();
 }
 #endif
 
@@ -508,7 +513,7 @@ QDebug operator<<(QDebug d, const QPointF &p)
 */
 qreal QPointF::manhattanLength() const
 {
-    return qAbs(x())+qAbs(y());
+   return qAbs(x()) + qAbs(y());
 }
 
 /*!
@@ -706,8 +711,8 @@ qreal QPointF::manhattanLength() const
 
 QDataStream &operator<<(QDataStream &s, const QPointF &p)
 {
-    s << double(p.x()) << double(p.y());
-    return s;
+   s << double(p.x()) << double(p.y());
+   return s;
 }
 
 /*!
@@ -722,12 +727,12 @@ QDataStream &operator<<(QDataStream &s, const QPointF &p)
 
 QDataStream &operator>>(QDataStream &s, QPointF &p)
 {
-    double x, y;
-    s >> x;
-    s >> y;
-    p.setX(qreal(x));
-    p.setY(qreal(y));
-    return s;
+   double x, y;
+   s >> x;
+   s >> y;
+   p.setX(qreal(x));
+   p.setY(qreal(y));
+   return s;
 }
 #endif // QT_NO_DATASTREAM
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,146 +37,164 @@ class QFutureWatcherBasePrivate;
 
 class Q_CORE_EXPORT QFutureWatcherBase : public QObject
 {
-    CS_OBJECT(QFutureWatcherBase)
-    Q_DECLARE_PRIVATE(QFutureWatcherBase)
+   CS_OBJECT(QFutureWatcherBase)
+   Q_DECLARE_PRIVATE(QFutureWatcherBase)
 
-public:
-    QFutureWatcherBase(QObject *parent = 0);
-    ~QFutureWatcherBase();
+ public:
+   QFutureWatcherBase(QObject *parent = 0);
+   ~QFutureWatcherBase();
 
-    int progressValue() const;
-    int progressMinimum() const;
-    int progressMaximum() const;
-    QString progressText() const;
+   int progressValue() const;
+   int progressMinimum() const;
+   int progressMaximum() const;
+   QString progressText() const;
 
-    bool isStarted() const;
-    bool isFinished() const;
-    bool isRunning() const;
-    bool isCanceled() const;
-    bool isPaused() const;
+   bool isStarted() const;
+   bool isFinished() const;
+   bool isRunning() const;
+   bool isCanceled() const;
+   bool isPaused() const;
 
-    void waitForFinished();
+   void waitForFinished();
 
-    void setPendingResultsLimit(int limit);
+   void setPendingResultsLimit(int limit);
 
-    bool event(QEvent *event);
+   bool event(QEvent *event);
 
-public:
-    CORE_CS_SIGNAL_1(Public, void started())
-    CORE_CS_SIGNAL_2(started) 
-    CORE_CS_SIGNAL_1(Public, void finished())
-    CORE_CS_SIGNAL_2(finished) 
-    CORE_CS_SIGNAL_1(Public, void canceled())
-    CORE_CS_SIGNAL_2(canceled) 
-    CORE_CS_SIGNAL_1(Public, void paused())
-    CORE_CS_SIGNAL_2(paused) 
-    CORE_CS_SIGNAL_1(Public, void resumed())
-    CORE_CS_SIGNAL_2(resumed) 
-    CORE_CS_SIGNAL_1(Public, void resultReadyAt(int resultIndex))
-    CORE_CS_SIGNAL_2(resultReadyAt,resultIndex) 
-    CORE_CS_SIGNAL_1(Public, void resultsReadyAt(int beginIndex,int endIndex))
-    CORE_CS_SIGNAL_2(resultsReadyAt,beginIndex,endIndex) 
-    CORE_CS_SIGNAL_1(Public, void progressRangeChanged(int minimum,int maximum))
-    CORE_CS_SIGNAL_2(progressRangeChanged,minimum,maximum) 
-    CORE_CS_SIGNAL_1(Public, void progressValueChanged(int progressValue))
-    CORE_CS_SIGNAL_2(progressValueChanged,progressValue) 
-    CORE_CS_SIGNAL_1(Public, void progressTextChanged(const QString & progressText))
-    CORE_CS_SIGNAL_2(progressTextChanged,progressText) 
+ public:
+   CORE_CS_SIGNAL_1(Public, void started())
+   CORE_CS_SIGNAL_2(started)
+   CORE_CS_SIGNAL_1(Public, void finished())
+   CORE_CS_SIGNAL_2(finished)
+   CORE_CS_SIGNAL_1(Public, void canceled())
+   CORE_CS_SIGNAL_2(canceled)
+   CORE_CS_SIGNAL_1(Public, void paused())
+   CORE_CS_SIGNAL_2(paused)
+   CORE_CS_SIGNAL_1(Public, void resumed())
+   CORE_CS_SIGNAL_2(resumed)
+   CORE_CS_SIGNAL_1(Public, void resultReadyAt(int resultIndex))
+   CORE_CS_SIGNAL_2(resultReadyAt, resultIndex)
+   CORE_CS_SIGNAL_1(Public, void resultsReadyAt(int beginIndex, int endIndex))
+   CORE_CS_SIGNAL_2(resultsReadyAt, beginIndex, endIndex)
+   CORE_CS_SIGNAL_1(Public, void progressRangeChanged(int minimum, int maximum))
+   CORE_CS_SIGNAL_2(progressRangeChanged, minimum, maximum)
+   CORE_CS_SIGNAL_1(Public, void progressValueChanged(int progressValue))
+   CORE_CS_SIGNAL_2(progressValueChanged, progressValue)
+   CORE_CS_SIGNAL_1(Public, void progressTextChanged(const QString &progressText))
+   CORE_CS_SIGNAL_2(progressTextChanged, progressText)
 
-public :
-    CORE_CS_SLOT_1(Public, void cancel())
-    CORE_CS_SLOT_2(cancel) 
-    CORE_CS_SLOT_1(Public, void setPaused(bool paused))
-    CORE_CS_SLOT_2(setPaused) 
-    CORE_CS_SLOT_1(Public, void pause())
-    CORE_CS_SLOT_2(pause) 
-    CORE_CS_SLOT_1(Public, void resume())
-    CORE_CS_SLOT_2(resume) 
-    CORE_CS_SLOT_1(Public, void togglePaused())
-    CORE_CS_SLOT_2(togglePaused) 
+ public :
+   CORE_CS_SLOT_1(Public, void cancel())
+   CORE_CS_SLOT_2(cancel)
+   CORE_CS_SLOT_1(Public, void setPaused(bool paused))
+   CORE_CS_SLOT_2(setPaused)
+   CORE_CS_SLOT_1(Public, void pause())
+   CORE_CS_SLOT_2(pause)
+   CORE_CS_SLOT_1(Public, void resume())
+   CORE_CS_SLOT_2(resume)
+   CORE_CS_SLOT_1(Public, void togglePaused())
+   CORE_CS_SLOT_2(togglePaused)
 
-protected:
-    void connectNotify (const char * signal);
-    void disconnectNotify (const char * signal);
+ protected:
+   void connectNotify (const char *signal);
+   void disconnectNotify (const char *signal);
 
-    // called from setFuture() implemented in template sub-classes
-    void connectOutputInterface();
-    void disconnectOutputInterface(bool pendingAssignment = false);
+   // called from setFuture() implemented in template sub-classes
+   void connectOutputInterface();
+   void disconnectOutputInterface(bool pendingAssignment = false);
 
-private:
-    // implemented in the template sub-classes
-    virtual const QFutureInterfaceBase &futureInterface() const = 0;
-    virtual QFutureInterfaceBase &futureInterface() = 0;
+ private:
+   // implemented in the template sub-classes
+   virtual const QFutureInterfaceBase &futureInterface() const = 0;
+   virtual QFutureInterfaceBase &futureInterface() = 0;
 
-protected:
-	 QScopedPointer<QFutureWatcherBasePrivate> d_ptr;
+ protected:
+   QScopedPointer<QFutureWatcherBasePrivate> d_ptr;
 
 };
 
 template <typename T>
 class QFutureWatcher : public QFutureWatcherBase
 {
-public:
-    QFutureWatcher(QObject *_parent = 0)
-        : QFutureWatcherBase(_parent)
-    { }
+ public:
+   QFutureWatcher(QObject *_parent = 0)
+      : QFutureWatcherBase(_parent) {
+   }
 
-    ~QFutureWatcher()
-       { disconnectOutputInterface(); }
+   ~QFutureWatcher() {
+      disconnectOutputInterface();
+   }
 
-    void setFuture(const QFuture<T> &future);
-    QFuture<T> future() const
-    { return m_future; }
+   void setFuture(const QFuture<T> &future);
+   QFuture<T> future() const {
+      return m_future;
+   }
 
-    T result() const { return m_future.result(); }
-    T resultAt(int index) const { return m_future.resultAt(index); }
+   T result() const {
+      return m_future.result();
+   }
+   T resultAt(int index) const {
+      return m_future.resultAt(index);
+   }
 
-private:
-    QFuture<T> m_future;
-    const QFutureInterfaceBase &futureInterface() const { return m_future.d; }
-    QFutureInterfaceBase &futureInterface() { return m_future.d; }
+ private:
+   QFuture<T> m_future;
+   const QFutureInterfaceBase &futureInterface() const {
+      return m_future.d;
+   }
+   QFutureInterfaceBase &futureInterface() {
+      return m_future.d;
+   }
 };
 
 template <typename T>
 Q_INLINE_TEMPLATE void QFutureWatcher<T>::setFuture(const QFuture<T> &_future)
 {
-    if (_future == m_future)
-        return;
+   if (_future == m_future) {
+      return;
+   }
 
-    disconnectOutputInterface(true);
-    m_future = _future;
-    connectOutputInterface();
+   disconnectOutputInterface(true);
+   m_future = _future;
+   connectOutputInterface();
 }
 
 template <>
 class QFutureWatcher<void> : public QFutureWatcherBase
 {
-public:
-    QFutureWatcher(QObject *_parent = 0)
-        : QFutureWatcherBase(_parent)
-    { }
+ public:
+   QFutureWatcher(QObject *_parent = 0)
+      : QFutureWatcherBase(_parent) {
+   }
 
-    ~QFutureWatcher()
-    { disconnectOutputInterface(); }
+   ~QFutureWatcher() {
+      disconnectOutputInterface();
+   }
 
-    void setFuture(const QFuture<void> &future);
-    QFuture<void> future() const
-    { return m_future; }
+   void setFuture(const QFuture<void> &future);
+   QFuture<void> future() const {
+      return m_future;
+   }
 
-private:
-    QFuture<void> m_future;
-    const QFutureInterfaceBase &futureInterface() const { return m_future.d; }
-    QFutureInterfaceBase &futureInterface() { return m_future.d; }
+ private:
+   QFuture<void> m_future;
+   const QFutureInterfaceBase &futureInterface() const {
+      return m_future.d;
+   }
+   QFutureInterfaceBase &futureInterface() {
+      return m_future.d;
+   }
 };
 
 Q_INLINE_TEMPLATE void QFutureWatcher<void>::setFuture(const QFuture<void> &_future)
 {
-    if (_future == m_future)
-        return;
+   if (_future == m_future) {
+      return;
+   }
 
-    disconnectOutputInterface(true);
-    m_future = _future;
-    connectOutputInterface();
+   disconnectOutputInterface(true);
+   m_future = _future;
+   connectOutputInterface();
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -50,27 +50,36 @@ QT_BEGIN_NAMESPACE
 // characters in \a data.
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 {
-    if (!data) return "(null)";
-    QByteArray out;
-    for (int i = 0; i < len; ++i) {
-        char c = data[i];
-        if (isprint(int(uchar(c)))) {
-            out += c;
-        } else switch (c) {
-        case '\n': out += "\\n"; break;
-        case '\r': out += "\\r"; break;
-        case '\t': out += "\\t"; break;
-        default:
-            QString tmp;
-            tmp.sprintf("\\x%x", (unsigned int)(unsigned char)c);
-            out += tmp.toLatin1();
-        }
-    }
+   if (!data) {
+      return "(null)";
+   }
+   QByteArray out;
+   for (int i = 0; i < len; ++i) {
+      char c = data[i];
+      if (isprint(int(uchar(c)))) {
+         out += c;
+      } else switch (c) {
+            case '\n':
+               out += "\\n";
+               break;
+            case '\r':
+               out += "\\r";
+               break;
+            case '\t':
+               out += "\\t";
+               break;
+            default:
+               QString tmp;
+               tmp.sprintf("\\x%x", (unsigned int)(unsigned char)c);
+               out += tmp.toLatin1();
+         }
+   }
 
-    if (len < maxSize)
-        out += "...";
+   if (len < maxSize) {
+      out += "...";
+   }
 
-    return out;
+   return out;
 }
 QT_END_NAMESPACE
 
@@ -118,168 +127,168 @@ QT_BEGIN_NAMESPACE
 
 class QDeviceClosedNotifier : public QObject
 {
-    CS_OBJECT(QDeviceClosedNotifier)
+   CS_OBJECT(QDeviceClosedNotifier)
 
-public:
-    inline QDeviceClosedNotifier()
-    { }
+ public:
+   inline QDeviceClosedNotifier() {
+   }
 
-    inline void setupDevice(QTextStream *stream, QIODevice *device)
-    {
-        disconnect();
-        if (device)
-            connect(device, SIGNAL(aboutToClose()), this, SLOT(flushStream()));
-        this->stream = stream;
-    }
+   inline void setupDevice(QTextStream *stream, QIODevice *device) {
+      disconnect();
+      if (device) {
+         connect(device, SIGNAL(aboutToClose()), this, SLOT(flushStream()));
+      }
+      this->stream = stream;
+   }
 
-	CORE_CS_SLOT_1(Public,void flushStream())
+   CORE_CS_SLOT_1(Public, void flushStream())
    CORE_CS_SLOT_2(flushStream)
-    
-private:
-    QTextStream *stream;
+
+ private:
+   QTextStream *stream;
 };
 
 void  QDeviceClosedNotifier::flushStream()
-{ 
-	stream->flush();
+{
+   stream->flush();
 }
 
 
 //-------------------------------------------------------------------
 class QTextStreamPrivate
 {
-    Q_DECLARE_PUBLIC(QTextStream)
-public:
-    QTextStreamPrivate(QTextStream *q_ptr);
-    ~QTextStreamPrivate();
-    void reset();
+   Q_DECLARE_PUBLIC(QTextStream)
+ public:
+   QTextStreamPrivate(QTextStream *q_ptr);
+   ~QTextStreamPrivate();
+   void reset();
 
-    // device
-    QIODevice *device;
+   // device
+   QIODevice *device;
 
-    QDeviceClosedNotifier deviceClosedNotifier;
-    bool deleteDevice;
+   QDeviceClosedNotifier deviceClosedNotifier;
+   bool deleteDevice;
 
-    // string
-    QString *string;
-    int stringOffset;
-    QIODevice::OpenMode stringOpenMode;
+   // string
+   QString *string;
+   int stringOffset;
+   QIODevice::OpenMode stringOpenMode;
 
 #ifndef QT_NO_TEXTCODEC
-    // codec
-    QTextCodec *codec;
-    QTextCodec::ConverterState readConverterState;
-    QTextCodec::ConverterState writeConverterState;
-    QTextCodec::ConverterState *readConverterSavedState;
-    bool autoDetectUnicode;
+   // codec
+   QTextCodec *codec;
+   QTextCodec::ConverterState readConverterState;
+   QTextCodec::ConverterState writeConverterState;
+   QTextCodec::ConverterState *readConverterSavedState;
+   bool autoDetectUnicode;
 #endif
 
-    // i/o
-    enum TokenDelimiter {
-        Space,
-        NotSpace,
-        EndOfLine
-    };
+   // i/o
+   enum TokenDelimiter {
+      Space,
+      NotSpace,
+      EndOfLine
+   };
 
-    QString read(int maxlen);
-    bool scan(const QChar **ptr, int *tokenLength,
-              int maxlen, TokenDelimiter delimiter);
-    inline const QChar *readPtr() const;
-    inline void consumeLastToken();
-    inline void consume(int nchars);
-    void saveConverterState(qint64 newPos);
-    void restoreToSavedConverterState();
-    int lastTokenSize;
+   QString read(int maxlen);
+   bool scan(const QChar **ptr, int *tokenLength,
+             int maxlen, TokenDelimiter delimiter);
+   inline const QChar *readPtr() const;
+   inline void consumeLastToken();
+   inline void consume(int nchars);
+   void saveConverterState(qint64 newPos);
+   void restoreToSavedConverterState();
+   int lastTokenSize;
 
-    // Return value type for getNumber()
-    enum NumberParsingStatus {
-        npsOk,
-        npsMissingDigit,
-        npsInvalidPrefix
-    };
+   // Return value type for getNumber()
+   enum NumberParsingStatus {
+      npsOk,
+      npsMissingDigit,
+      npsInvalidPrefix
+   };
 
-    inline bool getChar(QChar *ch);
-    inline void ungetChar(const QChar &ch);
-    NumberParsingStatus getNumber(qulonglong *l);
-    bool getReal(double *f);
+   inline bool getChar(QChar *ch);
+   inline void ungetChar(const QChar &ch);
+   NumberParsingStatus getNumber(qulonglong *l);
+   bool getReal(double *f);
 
-    inline void write(const QString &data);
-    inline void putString(const QString &ch, bool number = false);
-    void putNumber(qulonglong number, bool negative);
+   inline void write(const QString &data);
+   inline void putString(const QString &ch, bool number = false);
+   void putNumber(qulonglong number, bool negative);
 
-    // buffers
-    bool fillReadBuffer(qint64 maxBytes = -1);
-    void resetReadBuffer();
-    void flushWriteBuffer();
-    QString writeBuffer;
-    QString readBuffer;
-    int readBufferOffset;
-    int readConverterSavedStateOffset; //the offset between readBufferStartDevicePos and that start of the buffer
-    qint64 readBufferStartDevicePos;
+   // buffers
+   bool fillReadBuffer(qint64 maxBytes = -1);
+   void resetReadBuffer();
+   void flushWriteBuffer();
+   QString writeBuffer;
+   QString readBuffer;
+   int readBufferOffset;
+   int readConverterSavedStateOffset; //the offset between readBufferStartDevicePos and that start of the buffer
+   qint64 readBufferStartDevicePos;
 
-    // streaming parameters
-    int realNumberPrecision;
-    int integerBase;
-    int fieldWidth;
-    QChar padChar;
-    QTextStream::FieldAlignment fieldAlignment;
-    QTextStream::RealNumberNotation realNumberNotation;
-    QTextStream::NumberFlags numberFlags;
+   // streaming parameters
+   int realNumberPrecision;
+   int integerBase;
+   int fieldWidth;
+   QChar padChar;
+   QTextStream::FieldAlignment fieldAlignment;
+   QTextStream::RealNumberNotation realNumberNotation;
+   QTextStream::NumberFlags numberFlags;
 
-    // status
-    QTextStream::Status status;
+   // status
+   QTextStream::Status status;
 
-    QLocale locale;
+   QLocale locale;
 
-    QTextStream *q_ptr;
+   QTextStream *q_ptr;
 };
 
 /*! \internal
 */
 QTextStreamPrivate::QTextStreamPrivate(QTextStream *q_ptr)
-    :
+   :
 #ifndef QT_NO_TEXTCODEC
-    readConverterSavedState(0),
+   readConverterSavedState(0),
 #endif
-    readConverterSavedStateOffset(0),
-    locale(QLocale::c())
+   readConverterSavedStateOffset(0),
+   locale(QLocale::c())
 {
-    this->q_ptr = q_ptr;
-    reset();
+   this->q_ptr = q_ptr;
+   reset();
 }
 
 /*! \internal
 */
 QTextStreamPrivate::~QTextStreamPrivate()
 {
-    if (deleteDevice) {
+   if (deleteDevice) {
 
-        device->blockSignals(true);
-        delete device;
-    }
+      device->blockSignals(true);
+      delete device;
+   }
 #ifndef QT_NO_TEXTCODEC
-    delete readConverterSavedState;
+   delete readConverterSavedState;
 #endif
 }
 
 #ifndef QT_NO_TEXTCODEC
 static void resetCodecConverterStateHelper(QTextCodec::ConverterState *state)
 {
-    state->~ConverterState();
-    new (state) QTextCodec::ConverterState;
+   state->~ConverterState();
+   new (state) QTextCodec::ConverterState;
 }
 
 static void copyConverterStateHelper(QTextCodec::ConverterState *dest,
-    const QTextCodec::ConverterState *src)
+                                     const QTextCodec::ConverterState *src)
 {
-    // ### QTextCodec::ConverterState's copy constructors and assignments are
-    // private. This function copies the structure manually.
-    Q_ASSERT(!src->d);
-    dest->flags = src->flags;
-    dest->invalidChars = src->invalidChars;
-    dest->state_data[0] = src->state_data[0];
-    dest->state_data[1] = src->state_data[1];
-    dest->state_data[2] = src->state_data[2];
+   // ### QTextCodec::ConverterState's copy constructors and assignments are
+   // private. This function copies the structure manually.
+   Q_ASSERT(!src->d);
+   dest->flags = src->flags;
+   dest->invalidChars = src->invalidChars;
+   dest->state_data[0] = src->state_data[0];
+   dest->state_data[1] = src->state_data[1];
+   dest->state_data[2] = src->state_data[2];
 }
 #endif
 
@@ -287,32 +296,32 @@ static void copyConverterStateHelper(QTextCodec::ConverterState *dest,
 */
 void QTextStreamPrivate::reset()
 {
-    realNumberPrecision = 6;
-    integerBase = 0;
-    fieldWidth = 0;
-    padChar = QLatin1Char(' ');
-    fieldAlignment = QTextStream::AlignRight;
-    realNumberNotation = QTextStream::SmartNotation;
-    numberFlags = 0;
+   realNumberPrecision = 6;
+   integerBase = 0;
+   fieldWidth = 0;
+   padChar = QLatin1Char(' ');
+   fieldAlignment = QTextStream::AlignRight;
+   realNumberNotation = QTextStream::SmartNotation;
+   numberFlags = 0;
 
-    device = 0;
-    deleteDevice = false;
-    string = 0;
-    stringOffset = 0;
-    stringOpenMode = QIODevice::NotOpen;
+   device = 0;
+   deleteDevice = false;
+   string = 0;
+   stringOffset = 0;
+   stringOpenMode = QIODevice::NotOpen;
 
-    readBufferOffset = 0;
-    readBufferStartDevicePos = 0;
-    lastTokenSize = 0;
+   readBufferOffset = 0;
+   readBufferStartDevicePos = 0;
+   lastTokenSize = 0;
 
 #ifndef QT_NO_TEXTCODEC
-    codec = QTextCodec::codecForLocale();
-    resetCodecConverterStateHelper(&readConverterState);
-    resetCodecConverterStateHelper(&writeConverterState);
-    delete readConverterSavedState;
-    readConverterSavedState = 0;
-    writeConverterState.flags |= QTextCodec::IgnoreHeader;
-    autoDetectUnicode = true;
+   codec = QTextCodec::codecForLocale();
+   resetCodecConverterStateHelper(&readConverterState);
+   resetCodecConverterStateHelper(&writeConverterState);
+   delete readConverterSavedState;
+   readConverterSavedState = 0;
+   writeConverterState.flags |= QTextCodec::IgnoreHeader;
+   autoDetectUnicode = true;
 #endif
 }
 
@@ -320,213 +329,226 @@ void QTextStreamPrivate::reset()
 */
 bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
 {
-    // no buffer next to the QString itself; this function should only
-    // be called internally, for devices.
-    Q_ASSERT(!string);
-    Q_ASSERT(device);
+   // no buffer next to the QString itself; this function should only
+   // be called internally, for devices.
+   Q_ASSERT(!string);
+   Q_ASSERT(device);
 
-    // handle text translation and bypass the Text flag in the device.
-    bool textModeEnabled = device->isTextModeEnabled();
-    if (textModeEnabled)
-        device->setTextModeEnabled(false);
+   // handle text translation and bypass the Text flag in the device.
+   bool textModeEnabled = device->isTextModeEnabled();
+   if (textModeEnabled) {
+      device->setTextModeEnabled(false);
+   }
 
-    // read raw data into a temporary buffer
-    char buf[QTEXTSTREAM_BUFFERSIZE];
-    qint64 bytesRead = 0;
+   // read raw data into a temporary buffer
+   char buf[QTEXTSTREAM_BUFFERSIZE];
+   qint64 bytesRead = 0;
 
 #if defined(Q_OS_WIN)
-    // On Windows, there is no non-blocking stdin - so we fall back to reading
-    // lines instead. If there is no QOBJECT, we read lines for all sequential
-    // devices; otherwise, we read lines only for stdin.
-    QFile *file = 0;
-    Q_UNUSED(file);
+   // On Windows, there is no non-blocking stdin - so we fall back to reading
+   // lines instead. If there is no QOBJECT, we read lines for all sequential
+   // devices; otherwise, we read lines only for stdin.
+   QFile *file = 0;
+   Q_UNUSED(file);
 
-    if (device->isSequential() && (file = qobject_cast<QFile *>(device)) && file->handle() == 0 ) {
-        if (maxBytes != -1)
-            bytesRead = device->readLine(buf, qMin<qint64>(sizeof(buf), maxBytes));
-        else
-            bytesRead = device->readLine(buf, sizeof(buf));
-    } else
+   if (device->isSequential() && (file = qobject_cast<QFile *>(device)) && file->handle() == 0 ) {
+      if (maxBytes != -1) {
+         bytesRead = device->readLine(buf, qMin<qint64>(sizeof(buf), maxBytes));
+      } else {
+         bytesRead = device->readLine(buf, sizeof(buf));
+      }
+   } else
 #endif
-    {
-        if (maxBytes != -1)
-            bytesRead = device->read(buf, qMin<qint64>(sizeof(buf), maxBytes));
-        else
-            bytesRead = device->read(buf, sizeof(buf));
-    }
+   {
+      if (maxBytes != -1) {
+         bytesRead = device->read(buf, qMin<qint64>(sizeof(buf), maxBytes));
+      } else {
+         bytesRead = device->read(buf, sizeof(buf));
+      }
+   }
 
 #ifndef QT_NO_TEXTCODEC
-    // codec auto detection, explicitly defaults to locale encoding if the
-    // codec has been set to 0.
-    if (!codec || autoDetectUnicode) {
-        autoDetectUnicode = false;
+   // codec auto detection, explicitly defaults to locale encoding if the
+   // codec has been set to 0.
+   if (!codec || autoDetectUnicode) {
+      autoDetectUnicode = false;
 
-        codec = QTextCodec::codecForUtfText(QByteArray::fromRawData(buf, bytesRead), codec);
-        if (!codec) {
-            codec = QTextCodec::codecForLocale();
-            writeConverterState.flags |= QTextCodec::IgnoreHeader;
-        }
-    }
+      codec = QTextCodec::codecForUtfText(QByteArray::fromRawData(buf, bytesRead), codec);
+      if (!codec) {
+         codec = QTextCodec::codecForLocale();
+         writeConverterState.flags |= QTextCodec::IgnoreHeader;
+      }
+   }
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStreamPrivate::fillReadBuffer(), using %s codec",
-           codec->name().constData());
+   qDebug("QTextStreamPrivate::fillReadBuffer(), using %s codec",
+          codec->name().constData());
 #endif
 #endif
 
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStreamPrivate::fillReadBuffer(), device->read(\"%s\", %d) == %d",
-           qt_prettyDebug(buf, qMin(32,int(bytesRead)) , int(bytesRead)).constData(), sizeof(buf), int(bytesRead));
+   qDebug("QTextStreamPrivate::fillReadBuffer(), device->read(\"%s\", %d) == %d",
+          qt_prettyDebug(buf, qMin(32, int(bytesRead)) , int(bytesRead)).constData(), sizeof(buf), int(bytesRead));
 #endif
 
-    if (bytesRead <= 0)
-        return false;
+   if (bytesRead <= 0) {
+      return false;
+   }
 
-    int oldReadBufferSize = readBuffer.size();
+   int oldReadBufferSize = readBuffer.size();
 #ifndef QT_NO_TEXTCODEC
-    // convert to unicode
-    readBuffer += codec->toUnicode(buf, bytesRead, &readConverterState);
+   // convert to unicode
+   readBuffer += codec->toUnicode(buf, bytesRead, &readConverterState);
 #else
-    readBuffer += QString::fromLatin1(QByteArray(buf, bytesRead).constData());
+   readBuffer += QString::fromLatin1(QByteArray(buf, bytesRead).constData());
 #endif
 
-    // reset the Text flag.
-    if (textModeEnabled)
-        device->setTextModeEnabled(true);
+   // reset the Text flag.
+   if (textModeEnabled) {
+      device->setTextModeEnabled(true);
+   }
 
-    // remove all '\r\n' in the string.
-    if (readBuffer.size() > oldReadBufferSize && textModeEnabled) {
-        QChar CR = QLatin1Char('\r');
-        QChar *writePtr = readBuffer.data() + oldReadBufferSize;
-        QChar *readPtr = readBuffer.data() + oldReadBufferSize;
-        QChar *endPtr = readBuffer.data() + readBuffer.size();
+   // remove all '\r\n' in the string.
+   if (readBuffer.size() > oldReadBufferSize && textModeEnabled) {
+      QChar CR = QLatin1Char('\r');
+      QChar *writePtr = readBuffer.data() + oldReadBufferSize;
+      QChar *readPtr = readBuffer.data() + oldReadBufferSize;
+      QChar *endPtr = readBuffer.data() + readBuffer.size();
 
-        int n = oldReadBufferSize;
-        if (readPtr < endPtr) {
-            // Cut-off to avoid unnecessary self-copying.
-            while (*readPtr++ != CR) {
-                ++n;
-                if (++writePtr == endPtr)
-                    break;
-            }
-        }
-        while (readPtr < endPtr) {
-            QChar ch = *readPtr++;
-            if (ch != CR) {
-                *writePtr++ = ch;
-            } else {
-                if (n < readBufferOffset)
-                    --readBufferOffset;
-                --bytesRead;
-            }
+      int n = oldReadBufferSize;
+      if (readPtr < endPtr) {
+         // Cut-off to avoid unnecessary self-copying.
+         while (*readPtr++ != CR) {
             ++n;
-        }
-        readBuffer.resize(writePtr - readBuffer.data());
-    }
+            if (++writePtr == endPtr) {
+               break;
+            }
+         }
+      }
+      while (readPtr < endPtr) {
+         QChar ch = *readPtr++;
+         if (ch != CR) {
+            *writePtr++ = ch;
+         } else {
+            if (n < readBufferOffset) {
+               --readBufferOffset;
+            }
+            --bytesRead;
+         }
+         ++n;
+      }
+      readBuffer.resize(writePtr - readBuffer.data());
+   }
 
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStreamPrivate::fillReadBuffer() read %d bytes from device. readBuffer = [%s]", int(bytesRead),
-           qt_prettyDebug(readBuffer.toLatin1(), readBuffer.size(), readBuffer.size()).data());
+   qDebug("QTextStreamPrivate::fillReadBuffer() read %d bytes from device. readBuffer = [%s]", int(bytesRead),
+          qt_prettyDebug(readBuffer.toLatin1(), readBuffer.size(), readBuffer.size()).data());
 #endif
-    return true;
+   return true;
 }
 
 /*! \internal
 */
 void QTextStreamPrivate::resetReadBuffer()
 {
-    readBuffer.clear();
-    readBufferOffset = 0;
-    readBufferStartDevicePos = (device ? device->pos() : 0);
+   readBuffer.clear();
+   readBufferOffset = 0;
+   readBufferStartDevicePos = (device ? device->pos() : 0);
 }
 
 /*! \internal
 */
 void QTextStreamPrivate::flushWriteBuffer()
 {
-    // no buffer next to the QString itself; this function should only
-    // be called internally, for devices.
-    if (string || !device)
-        return;
+   // no buffer next to the QString itself; this function should only
+   // be called internally, for devices.
+   if (string || !device) {
+      return;
+   }
 
-    // Stream went bye-bye already. Appending further data may succeed again,
-    // but would create a corrupted stream anyway.
-    if (status != QTextStream::Ok)
-        return;
+   // Stream went bye-bye already. Appending further data may succeed again,
+   // but would create a corrupted stream anyway.
+   if (status != QTextStream::Ok) {
+      return;
+   }
 
-    if (writeBuffer.isEmpty())
-        return;
+   if (writeBuffer.isEmpty()) {
+      return;
+   }
 
 #if defined (Q_OS_WIN)
-    // handle text translation and bypass the Text flag in the device.
-    bool textModeEnabled = device->isTextModeEnabled();
-    if (textModeEnabled) {
-        device->setTextModeEnabled(false);
-        writeBuffer.replace(QLatin1Char('\n'), QLatin1String("\r\n"));
-    }
+   // handle text translation and bypass the Text flag in the device.
+   bool textModeEnabled = device->isTextModeEnabled();
+   if (textModeEnabled) {
+      device->setTextModeEnabled(false);
+      writeBuffer.replace(QLatin1Char('\n'), QLatin1String("\r\n"));
+   }
 #endif
 
 #ifndef QT_NO_TEXTCODEC
-    if (!codec)
-        codec = QTextCodec::codecForLocale();
+   if (!codec) {
+      codec = QTextCodec::codecForLocale();
+   }
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStreamPrivate::flushWriteBuffer(), using %s codec (%s generating BOM)",
-           codec->name().constData(), writeConverterState.flags & QTextCodec::IgnoreHeader ? "not" : "");
+   qDebug("QTextStreamPrivate::flushWriteBuffer(), using %s codec (%s generating BOM)",
+          codec->name().constData(), writeConverterState.flags & QTextCodec::IgnoreHeader ? "not" : "");
 #endif
 
-    // convert from unicode to raw data
-    QByteArray data = codec->fromUnicode(writeBuffer.data(), writeBuffer.size(), &writeConverterState);
+   // convert from unicode to raw data
+   QByteArray data = codec->fromUnicode(writeBuffer.data(), writeBuffer.size(), &writeConverterState);
 #else
-    QByteArray data = writeBuffer.toLocal8Bit();
+   QByteArray data = writeBuffer.toLocal8Bit();
 #endif
-    writeBuffer.clear();
+   writeBuffer.clear();
 
-    // write raw data to the device
-    qint64 bytesWritten = device->write(data);
+   // write raw data to the device
+   qint64 bytesWritten = device->write(data);
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStreamPrivate::flushWriteBuffer(), device->write(\"%s\") == %d",
-           qt_prettyDebug(data.constData(), qMin(data.size(),32), data.size()).constData(), int(bytesWritten));
+   qDebug("QTextStreamPrivate::flushWriteBuffer(), device->write(\"%s\") == %d",
+          qt_prettyDebug(data.constData(), qMin(data.size(), 32), data.size()).constData(), int(bytesWritten));
 #endif
-    if (bytesWritten <= 0) {
-        status = QTextStream::WriteFailed;
-        return;
-    }
+   if (bytesWritten <= 0) {
+      status = QTextStream::WriteFailed;
+      return;
+   }
 
 #if defined (Q_OS_WIN)
-    // replace the text flag
-    if (textModeEnabled)
-        device->setTextModeEnabled(true);
+   // replace the text flag
+   if (textModeEnabled) {
+      device->setTextModeEnabled(true);
+   }
 #endif
 
-    // flush the file
+   // flush the file
 
-    QFileDevice *file = qobject_cast<QFileDevice *>(device);
-    bool flushed = !file || file->flush();
+   QFileDevice *file = qobject_cast<QFileDevice *>(device);
+   bool flushed = !file || file->flush();
 
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStreamPrivate::flushWriteBuffer() wrote %d bytes",
-           int(bytesWritten));
+   qDebug("QTextStreamPrivate::flushWriteBuffer() wrote %d bytes",
+          int(bytesWritten));
 #endif
-    if (!flushed || bytesWritten != qint64(data.size()))
-        status = QTextStream::WriteFailed;
+   if (!flushed || bytesWritten != qint64(data.size())) {
+      status = QTextStream::WriteFailed;
+   }
 }
 
 QString QTextStreamPrivate::read(int maxlen)
 {
-    QString ret;
-    if (string) {
-        lastTokenSize = qMin(maxlen, string->size() - stringOffset);
-        ret = string->mid(stringOffset, lastTokenSize);
-    } else {
-        while (readBuffer.size() - readBufferOffset < maxlen && fillReadBuffer()) ;
-        lastTokenSize = qMin(maxlen, readBuffer.size() - readBufferOffset);
-        ret = readBuffer.mid(readBufferOffset, lastTokenSize);
-    }
-    consumeLastToken();
+   QString ret;
+   if (string) {
+      lastTokenSize = qMin(maxlen, string->size() - stringOffset);
+      ret = string->mid(stringOffset, lastTokenSize);
+   } else {
+      while (readBuffer.size() - readBufferOffset < maxlen && fillReadBuffer()) ;
+      lastTokenSize = qMin(maxlen, readBuffer.size() - readBufferOffset);
+      ret = readBuffer.mid(readBufferOffset, lastTokenSize);
+   }
+   consumeLastToken();
 
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStreamPrivate::read() maxlen = %d, token length = %d", maxlen, ret.length());
+   qDebug("QTextStreamPrivate::read() maxlen = %d, token length = %d", maxlen, ret.length());
 #endif
-    return ret;
+   return ret;
 }
 
 /*! \internal
@@ -537,116 +559,121 @@ QString QTextStreamPrivate::read(int maxlen)
 */
 bool QTextStreamPrivate::scan(const QChar **ptr, int *length, int maxlen, TokenDelimiter delimiter)
 {
-    int totalSize = 0;
-    int delimSize = 0;
-    bool consumeDelimiter = false;
-    bool foundToken = false;
-    int startOffset = device ? readBufferOffset : stringOffset;
-    QChar lastChar;
+   int totalSize = 0;
+   int delimSize = 0;
+   bool consumeDelimiter = false;
+   bool foundToken = false;
+   int startOffset = device ? readBufferOffset : stringOffset;
+   QChar lastChar;
 
-    bool canStillReadFromDevice = true;
-    do {
-        int endOffset;
-        const QChar *chPtr;
-        if (device) {
-            chPtr = readBuffer.constData();
-            endOffset = readBuffer.size();
-        } else {
-            chPtr = string->constData();
-            endOffset = string->size();
-        }
-        chPtr += startOffset;
+   bool canStillReadFromDevice = true;
+   do {
+      int endOffset;
+      const QChar *chPtr;
+      if (device) {
+         chPtr = readBuffer.constData();
+         endOffset = readBuffer.size();
+      } else {
+         chPtr = string->constData();
+         endOffset = string->size();
+      }
+      chPtr += startOffset;
 
-        for (; !foundToken && startOffset < endOffset && (!maxlen || totalSize < maxlen); ++startOffset) {
-            const QChar ch = *chPtr++;
-            ++totalSize;
+      for (; !foundToken && startOffset < endOffset && (!maxlen || totalSize < maxlen); ++startOffset) {
+         const QChar ch = *chPtr++;
+         ++totalSize;
 
-            switch (delimiter) {
+         switch (delimiter) {
             case Space:
-                if (ch.isSpace()) {
-                    foundToken = true;
-                    delimSize = 1;
-                }
-                break;
+               if (ch.isSpace()) {
+                  foundToken = true;
+                  delimSize = 1;
+               }
+               break;
             case NotSpace:
-                if (!ch.isSpace()) {
-                    foundToken = true;
-                    delimSize = 1;
-                }
-                break;
+               if (!ch.isSpace()) {
+                  foundToken = true;
+                  delimSize = 1;
+               }
+               break;
             case EndOfLine:
-                if (ch == QLatin1Char('\n')) {
-                    foundToken = true;
-                    delimSize = (lastChar == QLatin1Char('\r')) ? 2 : 1;
-                    consumeDelimiter = true;
-                }
-                lastChar = ch;
-                break;
-            }
-        }
-    } while (!foundToken
-             && (!maxlen || totalSize < maxlen)
-             && (device && (canStillReadFromDevice = fillReadBuffer())));
+               if (ch == QLatin1Char('\n')) {
+                  foundToken = true;
+                  delimSize = (lastChar == QLatin1Char('\r')) ? 2 : 1;
+                  consumeDelimiter = true;
+               }
+               lastChar = ch;
+               break;
+         }
+      }
+   } while (!foundToken
+            && (!maxlen || totalSize < maxlen)
+            && (device && (canStillReadFromDevice = fillReadBuffer())));
 
-    // if the token was not found, but we reached the end of input,
-    // then we accept what we got. if we are not at the end of input,
-    // we return false.
-    if (!foundToken && (!maxlen || totalSize < maxlen)
-        && (totalSize == 0
-            || (string && stringOffset + totalSize < string->size())
-            || (device && !device->atEnd() && canStillReadFromDevice))) {
+   // if the token was not found, but we reached the end of input,
+   // then we accept what we got. if we are not at the end of input,
+   // we return false.
+   if (!foundToken && (!maxlen || totalSize < maxlen)
+         && (totalSize == 0
+             || (string && stringOffset + totalSize < string->size())
+             || (device && !device->atEnd() && canStillReadFromDevice))) {
 #if defined (QTEXTSTREAM_DEBUG)
-        qDebug("QTextStreamPrivate::scan() did not find the token.");
+      qDebug("QTextStreamPrivate::scan() did not find the token.");
 #endif
-        return false;
-    }
+      return false;
+   }
 
-    // if we find a '\r' at the end of the data when reading lines,
-    // don't make it part of the line.
-    if (delimiter == EndOfLine && totalSize > 0 && !foundToken) {
-        if (((string && stringOffset + totalSize == string->size()) || (device && device->atEnd()))
+   // if we find a '\r' at the end of the data when reading lines,
+   // don't make it part of the line.
+   if (delimiter == EndOfLine && totalSize > 0 && !foundToken) {
+      if (((string && stringOffset + totalSize == string->size()) || (device && device->atEnd()))
             && lastChar == QLatin1Char('\r')) {
-            consumeDelimiter = true;
-            ++delimSize;
-        }
-    }
+         consumeDelimiter = true;
+         ++delimSize;
+      }
+   }
 
-    // set the read offset and length of the token
-    if (length)
-        *length = totalSize - delimSize;
-    if (ptr)
-        *ptr = readPtr();
+   // set the read offset and length of the token
+   if (length) {
+      *length = totalSize - delimSize;
+   }
+   if (ptr) {
+      *ptr = readPtr();
+   }
 
-    // update last token size. the callee will call consumeLastToken() when
-    // done.
-    lastTokenSize = totalSize;
-    if (!consumeDelimiter)
-        lastTokenSize -= delimSize;
+   // update last token size. the callee will call consumeLastToken() when
+   // done.
+   lastTokenSize = totalSize;
+   if (!consumeDelimiter) {
+      lastTokenSize -= delimSize;
+   }
 
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStreamPrivate::scan(%p, %p, %d, %x) token length = %d, delimiter = %d",
-           ptr, length, maxlen, (int)delimiter, totalSize - delimSize, delimSize);
+   qDebug("QTextStreamPrivate::scan(%p, %p, %d, %x) token length = %d, delimiter = %d",
+          ptr, length, maxlen, (int)delimiter, totalSize - delimSize, delimSize);
 #endif
-    return true;
+   return true;
 }
 
 /*! \internal
 */
 inline const QChar *QTextStreamPrivate::readPtr() const
 {
-    Q_ASSERT(readBufferOffset <= readBuffer.size());
-    if (string)
-        return string->constData() + stringOffset;
-    return readBuffer.constData() + readBufferOffset;
+   Q_ASSERT(readBufferOffset <= readBuffer.size());
+   if (string) {
+      return string->constData() + stringOffset;
+   }
+   return readBuffer.constData() + readBufferOffset;
 }
 
 /*! \internal
 */
 inline void QTextStreamPrivate::consumeLastToken()
 {
-    if (lastTokenSize)
-        consume(lastTokenSize);
-    lastTokenSize = 0;
+   if (lastTokenSize) {
+      consume(lastTokenSize);
+   }
+   lastTokenSize = 0;
 }
 
 /*! \internal
@@ -654,24 +681,25 @@ inline void QTextStreamPrivate::consumeLastToken()
 inline void QTextStreamPrivate::consume(int size)
 {
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStreamPrivate::consume(%d)", size);
+   qDebug("QTextStreamPrivate::consume(%d)", size);
 #endif
-    if (string) {
-        stringOffset += size;
-        if (stringOffset > string->size())
-            stringOffset = string->size();
-    } else {
-        readBufferOffset += size;
-        if (readBufferOffset >= readBuffer.size()) {
-            readBufferOffset = 0;
-            readBuffer.clear();
-            saveConverterState(device->pos());
-        } else if (readBufferOffset > QTEXTSTREAM_BUFFERSIZE) {
-            readBuffer = readBuffer.remove(0,readBufferOffset);
-            readConverterSavedStateOffset += readBufferOffset;
-            readBufferOffset = 0;
-        }
-    }
+   if (string) {
+      stringOffset += size;
+      if (stringOffset > string->size()) {
+         stringOffset = string->size();
+      }
+   } else {
+      readBufferOffset += size;
+      if (readBufferOffset >= readBuffer.size()) {
+         readBufferOffset = 0;
+         readBuffer.clear();
+         saveConverterState(device->pos());
+      } else if (readBufferOffset > QTEXTSTREAM_BUFFERSIZE) {
+         readBuffer = readBuffer.remove(0, readBufferOffset);
+         readConverterSavedStateOffset += readBufferOffset;
+         readBufferOffset = 0;
+      }
+   }
 }
 
 /*! \internal
@@ -679,19 +707,20 @@ inline void QTextStreamPrivate::consume(int size)
 inline void QTextStreamPrivate::saveConverterState(qint64 newPos)
 {
 #ifndef QT_NO_TEXTCODEC
-    if (readConverterState.d) {
-        // converter cannot be copied, so don't save anything
-        // don't update readBufferStartDevicePos either
-        return;
-    }
+   if (readConverterState.d) {
+      // converter cannot be copied, so don't save anything
+      // don't update readBufferStartDevicePos either
+      return;
+   }
 
-    if (!readConverterSavedState)
-        readConverterSavedState = new QTextCodec::ConverterState;
-    copyConverterStateHelper(readConverterSavedState, &readConverterState);
+   if (!readConverterSavedState) {
+      readConverterSavedState = new QTextCodec::ConverterState;
+   }
+   copyConverterStateHelper(readConverterSavedState, &readConverterState);
 #endif
 
-    readBufferStartDevicePos = newPos;
-    readConverterSavedStateOffset = 0;
+   readBufferStartDevicePos = newPos;
+   readConverterSavedStateOffset = 0;
 }
 
 /*! \internal
@@ -699,15 +728,15 @@ inline void QTextStreamPrivate::saveConverterState(qint64 newPos)
 inline void QTextStreamPrivate::restoreToSavedConverterState()
 {
 #ifndef QT_NO_TEXTCODEC
-    if (readConverterSavedState) {
-        // we have a saved state
-        // that means the converter can be copied
-        copyConverterStateHelper(&readConverterState, readConverterSavedState);
-    } else {
-        // the only state we could save was the initial
-        // so reset to that
-        resetCodecConverterStateHelper(&readConverterState);
-    }
+   if (readConverterSavedState) {
+      // we have a saved state
+      // that means the converter can be copied
+      copyConverterStateHelper(&readConverterState, readConverterSavedState);
+   } else {
+      // the only state we could save was the initial
+      // so reset to that
+      resetCodecConverterStateHelper(&readConverterState);
+   }
 #endif
 }
 
@@ -715,89 +744,93 @@ inline void QTextStreamPrivate::restoreToSavedConverterState()
 */
 inline void QTextStreamPrivate::write(const QString &data)
 {
-    if (string) {
-        // ### What about seek()??
-        string->append(data);
-    } else {
-        writeBuffer += data;
-        if (writeBuffer.size() > QTEXTSTREAM_BUFFERSIZE)
-            flushWriteBuffer();
-    }
+   if (string) {
+      // ### What about seek()??
+      string->append(data);
+   } else {
+      writeBuffer += data;
+      if (writeBuffer.size() > QTEXTSTREAM_BUFFERSIZE) {
+         flushWriteBuffer();
+      }
+   }
 }
 
 /*! \internal
 */
 inline bool QTextStreamPrivate::getChar(QChar *ch)
 {
-    if ((string && stringOffset == string->size())
-        || (device && readBuffer.isEmpty() && !fillReadBuffer())) {
-        if (ch)
-            *ch = 0;
-        return false;
-    }
-    if (ch)
-        *ch = *readPtr();
-    consume(1);
-    return true;
+   if ((string && stringOffset == string->size())
+         || (device && readBuffer.isEmpty() && !fillReadBuffer())) {
+      if (ch) {
+         *ch = 0;
+      }
+      return false;
+   }
+   if (ch) {
+      *ch = *readPtr();
+   }
+   consume(1);
+   return true;
 }
 
 /*! \internal
 */
 inline void QTextStreamPrivate::ungetChar(const QChar &ch)
 {
-    if (string) {
-        if (stringOffset == 0)
-            string->prepend(ch);
-        else
-            (*string)[--stringOffset] = ch;
-        return;
-    }
+   if (string) {
+      if (stringOffset == 0) {
+         string->prepend(ch);
+      } else {
+         (*string)[--stringOffset] = ch;
+      }
+      return;
+   }
 
-    if (readBufferOffset == 0) {
-        readBuffer.prepend(ch);
-        return;
-    }
+   if (readBufferOffset == 0) {
+      readBuffer.prepend(ch);
+      return;
+   }
 
-    readBuffer[--readBufferOffset] = ch;
+   readBuffer[--readBufferOffset] = ch;
 }
 
 /*! \internal
 */
 inline void QTextStreamPrivate::putString(const QString &s, bool number)
 {
-    QString tmp = s;
+   QString tmp = s;
 
-    // handle padding
-    int padSize = fieldWidth - s.size();
-    if (padSize > 0) {
-        QString pad(padSize, padChar);
-        if (fieldAlignment == QTextStream::AlignLeft) {
-            tmp.append(QString(padSize, padChar));
-        } else if (fieldAlignment == QTextStream::AlignRight
-                   || fieldAlignment == QTextStream::AlignAccountingStyle) {
-            tmp.prepend(QString(padSize, padChar));
-            if (fieldAlignment == QTextStream::AlignAccountingStyle && number) {
-                const QChar sign = s.size() > 0 ? s.at(0) : QChar();
-                if (sign == locale.negativeSign() || sign == locale.positiveSign()) {
-                    QChar *data = tmp.data();
-                    data[padSize] = tmp.at(0);
-                    data[0] = sign;
-                }
-           }
-        } else if (fieldAlignment == QTextStream::AlignCenter) {
-            tmp.prepend(QString(padSize/2, padChar));
-            tmp.append(QString(padSize - padSize/2, padChar));
-        }
-    }
+   // handle padding
+   int padSize = fieldWidth - s.size();
+   if (padSize > 0) {
+      QString pad(padSize, padChar);
+      if (fieldAlignment == QTextStream::AlignLeft) {
+         tmp.append(QString(padSize, padChar));
+      } else if (fieldAlignment == QTextStream::AlignRight
+                 || fieldAlignment == QTextStream::AlignAccountingStyle) {
+         tmp.prepend(QString(padSize, padChar));
+         if (fieldAlignment == QTextStream::AlignAccountingStyle && number) {
+            const QChar sign = s.size() > 0 ? s.at(0) : QChar();
+            if (sign == locale.negativeSign() || sign == locale.positiveSign()) {
+               QChar *data = tmp.data();
+               data[padSize] = tmp.at(0);
+               data[0] = sign;
+            }
+         }
+      } else if (fieldAlignment == QTextStream::AlignCenter) {
+         tmp.prepend(QString(padSize / 2, padChar));
+         tmp.append(QString(padSize - padSize / 2, padChar));
+      }
+   }
 
 #if defined (QTEXTSTREAM_DEBUG)
-    QByteArray a = s.toUtf8();
-    QByteArray b = tmp.toUtf8();
-    qDebug("QTextStreamPrivate::putString(\"%s\") calls write(\"%s\")",
-           qt_prettyDebug(a.constData(), a.size(), qMax(16, a.size())).constData(),
-           qt_prettyDebug(b.constData(), b.size(), qMax(16, b.size())).constData());
+   QByteArray a = s.toUtf8();
+   QByteArray b = tmp.toUtf8();
+   qDebug("QTextStreamPrivate::putString(\"%s\") calls write(\"%s\")",
+          qt_prettyDebug(a.constData(), a.size(), qMax(16, a.size())).constData(),
+          qt_prettyDebug(b.constData(), b.size(), qMax(16, b.size())).constData());
 #endif
-    write(tmp);
+   write(tmp);
 }
 
 /*!
@@ -807,30 +840,30 @@ inline void QTextStreamPrivate::putString(const QString &s, bool number)
     \sa setDevice(), setString()
 */
 QTextStream::QTextStream()
-    : d_ptr(new QTextStreamPrivate(this))
+   : d_ptr(new QTextStreamPrivate(this))
 {
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStream::QTextStream()");
+   qDebug("QTextStream::QTextStream()");
 #endif
-    Q_D(QTextStream);
-    d->status = Ok;
+   Q_D(QTextStream);
+   d->status = Ok;
 }
 
 /*!
     Constructs a QTextStream that operates on \a device.
 */
 QTextStream::QTextStream(QIODevice *device)
-    : d_ptr(new QTextStreamPrivate(this))
+   : d_ptr(new QTextStreamPrivate(this))
 {
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStream::QTextStream(QIODevice *device == *%p)",
-           device);
+   qDebug("QTextStream::QTextStream(QIODevice *device == *%p)",
+          device);
 #endif
-    Q_D(QTextStream);
-    d->device = device;
+   Q_D(QTextStream);
+   d->device = device;
 
-    d->deviceClosedNotifier.setupDevice(this, d->device);
-    d->status = Ok;
+   d->deviceClosedNotifier.setupDevice(this, d->device);
+   d->status = Ok;
 }
 
 /*!
@@ -838,16 +871,16 @@ QTextStream::QTextStream(QIODevice *device)
     openMode to define the open mode.
 */
 QTextStream::QTextStream(QString *string, QIODevice::OpenMode openMode)
-    : d_ptr(new QTextStreamPrivate(this))
+   : d_ptr(new QTextStreamPrivate(this))
 {
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStream::QTextStream(QString *string == *%p, openMode = %d)",
-           string, int(openMode));
+   qDebug("QTextStream::QTextStream(QString *string == *%p, openMode = %d)",
+          string, int(openMode));
 #endif
-    Q_D(QTextStream);
-    d->string = string;
-    d->stringOpenMode = openMode;
-    d->status = Ok;
+   Q_D(QTextStream);
+   d->string = string;
+   d->stringOpenMode = openMode;
+   d->status = Ok;
 }
 
 /*!
@@ -856,18 +889,18 @@ QTextStream::QTextStream(QString *string, QIODevice::OpenMode openMode)
     by a QBuffer.
 */
 QTextStream::QTextStream(QByteArray *array, QIODevice::OpenMode openMode)
-    : d_ptr(new QTextStreamPrivate(this))
+   : d_ptr(new QTextStreamPrivate(this))
 {
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStream::QTextStream(QByteArray *array == *%p, openMode = %d)",
-           array, int(openMode));
+   qDebug("QTextStream::QTextStream(QByteArray *array == *%p, openMode = %d)",
+          array, int(openMode));
 #endif
-    Q_D(QTextStream);
-    d->device = new QBuffer(array);
-    d->device->open(openMode);
-    d->deleteDevice = true;
-    d->deviceClosedNotifier.setupDevice(this, d->device);
-    d->status = Ok;
+   Q_D(QTextStream);
+   d->device = new QBuffer(array);
+   d->device->open(openMode);
+   d->deleteDevice = true;
+   d->deviceClosedNotifier.setupDevice(this, d->device);
+   d->status = Ok;
 }
 
 /*!
@@ -881,21 +914,21 @@ QTextStream::QTextStream(QByteArray *array, QIODevice::OpenMode openMode)
     \snippet doc/src/snippets/code/src_corelib_io_qtextstream.cpp 3
 */
 QTextStream::QTextStream(const QByteArray &array, QIODevice::OpenMode openMode)
-    : d_ptr(new QTextStreamPrivate(this))
+   : d_ptr(new QTextStreamPrivate(this))
 {
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStream::QTextStream(const QByteArray &array == *(%p), openMode = %d)",
-           &array, int(openMode));
+   qDebug("QTextStream::QTextStream(const QByteArray &array == *(%p), openMode = %d)",
+          &array, int(openMode));
 #endif
-    QBuffer *buffer = new QBuffer;
-    buffer->setData(array);
-    buffer->open(openMode);
+   QBuffer *buffer = new QBuffer;
+   buffer->setData(array);
+   buffer->open(openMode);
 
-    Q_D(QTextStream);
-    d->device = buffer;
-    d->deleteDevice = true;
-    d->deviceClosedNotifier.setupDevice(this, d->device);
-    d->status = Ok;
+   Q_D(QTextStream);
+   d->device = buffer;
+   d->deleteDevice = true;
+   d->deviceClosedNotifier.setupDevice(this, d->device);
+   d->status = Ok;
 }
 
 /*!
@@ -910,21 +943,21 @@ QTextStream::QTextStream(const QByteArray &array, QIODevice::OpenMode openMode)
 */
 
 QTextStream::QTextStream(FILE *fileHandle, QIODevice::OpenMode openMode)
-    : d_ptr(new QTextStreamPrivate(this))
+   : d_ptr(new QTextStreamPrivate(this))
 {
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStream::QTextStream(FILE *fileHandle = %p, openMode = %d)",
-           fileHandle, int(openMode));
+   qDebug("QTextStream::QTextStream(FILE *fileHandle = %p, openMode = %d)",
+          fileHandle, int(openMode));
 #endif
-    QFile *file = new QFile;
-    file->open(fileHandle, openMode);
+   QFile *file = new QFile;
+   file->open(fileHandle, openMode);
 
-    Q_D(QTextStream);
-    d->device = file;
-    d->deleteDevice = true;
-    d->deviceClosedNotifier.setupDevice(this, d->device);
+   Q_D(QTextStream);
+   d->device = file;
+   d->deleteDevice = true;
+   d->deviceClosedNotifier.setupDevice(this, d->device);
 
-    d->status = Ok;
+   d->status = Ok;
 }
 
 /*!
@@ -935,12 +968,13 @@ QTextStream::QTextStream(FILE *fileHandle, QIODevice::OpenMode openMode)
 */
 QTextStream::~QTextStream()
 {
-    Q_D(QTextStream);
+   Q_D(QTextStream);
 #if defined (QTEXTSTREAM_DEBUG)
-    qDebug("QTextStream::~QTextStream()");
+   qDebug("QTextStream::~QTextStream()");
 #endif
-    if (!d->writeBuffer.isEmpty())
-        d->flushWriteBuffer();
+   if (!d->writeBuffer.isEmpty()) {
+      d->flushWriteBuffer();
+   }
 }
 
 /*!
@@ -950,15 +984,15 @@ QTextStream::~QTextStream()
 */
 void QTextStream::reset()
 {
-    Q_D(QTextStream);
+   Q_D(QTextStream);
 
-    d->realNumberPrecision = 6;
-    d->integerBase = 0;
-    d->fieldWidth = 0;
-    d->padChar = QLatin1Char(' ');
-    d->fieldAlignment = QTextStream::AlignRight;
-    d->realNumberNotation = QTextStream::SmartNotation;
-    d->numberFlags = 0;
+   d->realNumberPrecision = 6;
+   d->integerBase = 0;
+   d->fieldWidth = 0;
+   d->padChar = QLatin1Char(' ');
+   d->fieldAlignment = QTextStream::AlignRight;
+   d->realNumberNotation = QTextStream::SmartNotation;
+   d->numberFlags = 0;
 }
 
 /*!
@@ -968,8 +1002,8 @@ void QTextStream::reset()
 */
 void QTextStream::flush()
 {
-    Q_D(QTextStream);
-    d->flushWriteBuffer();
+   Q_D(QTextStream);
+   d->flushWriteBuffer();
 }
 
 /*!
@@ -978,33 +1012,34 @@ void QTextStream::flush()
 */
 bool QTextStream::seek(qint64 pos)
 {
-    Q_D(QTextStream);
-    d->lastTokenSize = 0;
+   Q_D(QTextStream);
+   d->lastTokenSize = 0;
 
-    if (d->device) {
-        // Empty the write buffer
-        d->flushWriteBuffer();
-        if (!d->device->seek(pos))
-            return false;
-        d->resetReadBuffer();
+   if (d->device) {
+      // Empty the write buffer
+      d->flushWriteBuffer();
+      if (!d->device->seek(pos)) {
+         return false;
+      }
+      d->resetReadBuffer();
 
 #ifndef QT_NO_TEXTCODEC
-        // Reset the codec converter states.
-        resetCodecConverterStateHelper(&d->readConverterState);
-        resetCodecConverterStateHelper(&d->writeConverterState);
-        delete d->readConverterSavedState;
-        d->readConverterSavedState = 0;
-        d->writeConverterState.flags |= QTextCodec::IgnoreHeader;
+      // Reset the codec converter states.
+      resetCodecConverterStateHelper(&d->readConverterState);
+      resetCodecConverterStateHelper(&d->writeConverterState);
+      delete d->readConverterSavedState;
+      d->readConverterSavedState = 0;
+      d->writeConverterState.flags |= QTextCodec::IgnoreHeader;
 #endif
-        return true;
-    }
+      return true;
+   }
 
-    // string
-    if (d->string && pos <= d->string->size()) {
-        d->stringOffset = int(pos);
-        return true;
-    }
-    return false;
+   // string
+   if (d->string && pos <= d->string->size()) {
+      d->stringOffset = int(pos);
+      return true;
+   }
+   return false;
 }
 
 /*!
@@ -1023,47 +1058,53 @@ bool QTextStream::seek(qint64 pos)
 */
 qint64 QTextStream::pos() const
 {
-    Q_D(const QTextStream);
-    if (d->device) {
-        // Cutoff
-        if (d->readBuffer.isEmpty())
-            return d->device->pos();
-        if (d->device->isSequential())
-            return 0;
+   Q_D(const QTextStream);
+   if (d->device) {
+      // Cutoff
+      if (d->readBuffer.isEmpty()) {
+         return d->device->pos();
+      }
+      if (d->device->isSequential()) {
+         return 0;
+      }
 
-        // Seek the device
-        if (!d->device->seek(d->readBufferStartDevicePos))
-            return qint64(-1);
+      // Seek the device
+      if (!d->device->seek(d->readBufferStartDevicePos)) {
+         return qint64(-1);
+      }
 
-        // Reset the read buffer
-        QTextStreamPrivate *thatd = const_cast<QTextStreamPrivate *>(d);
-        thatd->readBuffer.clear();
+      // Reset the read buffer
+      QTextStreamPrivate *thatd = const_cast<QTextStreamPrivate *>(d);
+      thatd->readBuffer.clear();
 
 #ifndef QT_NO_TEXTCODEC
-        thatd->restoreToSavedConverterState();
-        if (d->readBufferStartDevicePos == 0)
-            thatd->autoDetectUnicode = true;
+      thatd->restoreToSavedConverterState();
+      if (d->readBufferStartDevicePos == 0) {
+         thatd->autoDetectUnicode = true;
+      }
 #endif
 
-        // Rewind the device to get to the current position Ensure that
-        // readBufferOffset is unaffected by fillReadBuffer()
-        int oldReadBufferOffset = d->readBufferOffset + d->readConverterSavedStateOffset;
-        while (d->readBuffer.size() < oldReadBufferOffset) {
-            if (!thatd->fillReadBuffer(1))
-                return qint64(-1);
-        }
-        thatd->readBufferOffset = oldReadBufferOffset;
-        thatd->readConverterSavedStateOffset = 0;
+      // Rewind the device to get to the current position Ensure that
+      // readBufferOffset is unaffected by fillReadBuffer()
+      int oldReadBufferOffset = d->readBufferOffset + d->readConverterSavedStateOffset;
+      while (d->readBuffer.size() < oldReadBufferOffset) {
+         if (!thatd->fillReadBuffer(1)) {
+            return qint64(-1);
+         }
+      }
+      thatd->readBufferOffset = oldReadBufferOffset;
+      thatd->readConverterSavedStateOffset = 0;
 
-        // Return the device position.
-        return d->device->pos();
-    }
+      // Return the device position.
+      return d->device->pos();
+   }
 
-    if (d->string)
-        return d->stringOffset;
+   if (d->string) {
+      return d->stringOffset;
+   }
 
-    qWarning("QTextStream::pos: no device");
-    return qint64(-1);
+   qWarning("QTextStream::pos: no device");
+   return qint64(-1);
 }
 
 /*!
@@ -1079,10 +1120,10 @@ qint64 QTextStream::pos() const
 */
 void QTextStream::skipWhiteSpace()
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(Q_VOID);
-    d->scan(0, 0, 0, QTextStreamPrivate::NotSpace);
-    d->consumeLastToken();
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(Q_VOID);
+   d->scan(0, 0, 0, QTextStreamPrivate::NotSpace);
+   d->consumeLastToken();
 }
 
 /*!
@@ -1097,20 +1138,20 @@ void QTextStream::skipWhiteSpace()
 */
 void QTextStream::setDevice(QIODevice *device)
 {
-    Q_D(QTextStream);
-    flush();
-    if (d->deleteDevice) {
+   Q_D(QTextStream);
+   flush();
+   if (d->deleteDevice) {
 
-        d->deviceClosedNotifier.disconnect();
-        delete d->device;
-        d->deleteDevice = false;
-    }
+      d->deviceClosedNotifier.disconnect();
+      delete d->device;
+      d->deleteDevice = false;
+   }
 
-    d->reset();
-    d->status = Ok;
-    d->device = device;
-    d->resetReadBuffer();
-    d->deviceClosedNotifier.setupDevice(this, d->device);
+   d->reset();
+   d->status = Ok;
+   d->device = device;
+   d->resetReadBuffer();
+   d->deviceClosedNotifier.setupDevice(this, d->device);
 
 }
 
@@ -1122,8 +1163,8 @@ void QTextStream::setDevice(QIODevice *device)
 */
 QIODevice *QTextStream::device() const
 {
-    Q_D(const QTextStream);
-    return d->device;
+   Q_D(const QTextStream);
+   return d->device;
 }
 
 /*!
@@ -1135,20 +1176,20 @@ QIODevice *QTextStream::device() const
 */
 void QTextStream::setString(QString *string, QIODevice::OpenMode openMode)
 {
-    Q_D(QTextStream);
-    flush();
-    if (d->deleteDevice) {
+   Q_D(QTextStream);
+   flush();
+   if (d->deleteDevice) {
 
-        d->deviceClosedNotifier.disconnect();
-        d->device->blockSignals(true);
-        delete d->device;
-        d->deleteDevice = false;
-    }
+      d->deviceClosedNotifier.disconnect();
+      d->device->blockSignals(true);
+      delete d->device;
+      d->deleteDevice = false;
+   }
 
-    d->reset();
-    d->status = Ok;
-    d->string = string;
-    d->stringOpenMode = openMode;
+   d->reset();
+   d->status = Ok;
+   d->string = string;
+   d->stringOpenMode = openMode;
 }
 
 /*!
@@ -1159,8 +1200,8 @@ void QTextStream::setString(QString *string, QIODevice::OpenMode openMode)
 */
 QString *QTextStream::string() const
 {
-    Q_D(const QTextStream);
-    return d->string;
+   Q_D(const QTextStream);
+   return d->string;
 }
 
 /*!
@@ -1173,8 +1214,8 @@ QString *QTextStream::string() const
 */
 void QTextStream::setFieldAlignment(FieldAlignment mode)
 {
-    Q_D(QTextStream);
-    d->fieldAlignment = mode;
+   Q_D(QTextStream);
+   d->fieldAlignment = mode;
 }
 
 /*!
@@ -1184,8 +1225,8 @@ void QTextStream::setFieldAlignment(FieldAlignment mode)
 */
 QTextStream::FieldAlignment QTextStream::fieldAlignment() const
 {
-    Q_D(const QTextStream);
-    return d->fieldAlignment;
+   Q_D(const QTextStream);
+   return d->fieldAlignment;
 }
 
 /*!
@@ -1205,8 +1246,8 @@ QTextStream::FieldAlignment QTextStream::fieldAlignment() const
 */
 void QTextStream::setPadChar(QChar ch)
 {
-    Q_D(QTextStream);
-    d->padChar = ch;
+   Q_D(QTextStream);
+   d->padChar = ch;
 }
 
 /*!
@@ -1216,8 +1257,8 @@ void QTextStream::setPadChar(QChar ch)
 */
 QChar QTextStream::padChar() const
 {
-    Q_D(const QTextStream);
-    return d->padChar;
+   Q_D(const QTextStream);
+   return d->padChar;
 }
 
 /*!
@@ -1234,8 +1275,8 @@ QChar QTextStream::padChar() const
 */
 void QTextStream::setFieldWidth(int width)
 {
-    Q_D(QTextStream);
-    d->fieldWidth = width;
+   Q_D(QTextStream);
+   d->fieldWidth = width;
 }
 
 /*!
@@ -1245,8 +1286,8 @@ void QTextStream::setFieldWidth(int width)
 */
 int QTextStream::fieldWidth() const
 {
-    Q_D(const QTextStream);
-    return d->fieldWidth;
+   Q_D(const QTextStream);
+   return d->fieldWidth;
 }
 
 /*!
@@ -1259,8 +1300,8 @@ int QTextStream::fieldWidth() const
 */
 void QTextStream::setNumberFlags(NumberFlags flags)
 {
-    Q_D(QTextStream);
-    d->numberFlags = flags;
+   Q_D(QTextStream);
+   d->numberFlags = flags;
 }
 
 /*!
@@ -1270,8 +1311,8 @@ void QTextStream::setNumberFlags(NumberFlags flags)
 */
 QTextStream::NumberFlags QTextStream::numberFlags() const
 {
-    Q_D(const QTextStream);
-    return d->numberFlags;
+   Q_D(const QTextStream);
+   return d->numberFlags;
 }
 
 /*!
@@ -1286,8 +1327,8 @@ QTextStream::NumberFlags QTextStream::numberFlags() const
 */
 void QTextStream::setIntegerBase(int base)
 {
-    Q_D(QTextStream);
-    d->integerBase = base;
+   Q_D(QTextStream);
+   d->integerBase = base;
 }
 
 /*!
@@ -1298,8 +1339,8 @@ void QTextStream::setIntegerBase(int base)
 */
 int QTextStream::integerBase() const
 {
-    Q_D(const QTextStream);
-    return d->integerBase;
+   Q_D(const QTextStream);
+   return d->integerBase;
 }
 
 /*!
@@ -1312,8 +1353,8 @@ int QTextStream::integerBase() const
 */
 void QTextStream::setRealNumberNotation(RealNumberNotation notation)
 {
-    Q_D(QTextStream);
-    d->realNumberNotation = notation;
+   Q_D(QTextStream);
+   d->realNumberNotation = notation;
 }
 
 /*!
@@ -1323,8 +1364,8 @@ void QTextStream::setRealNumberNotation(RealNumberNotation notation)
 */
 QTextStream::RealNumberNotation QTextStream::realNumberNotation() const
 {
-    Q_D(const QTextStream);
-    return d->realNumberNotation;
+   Q_D(const QTextStream);
+   return d->realNumberNotation;
 }
 
 /*!
@@ -1338,13 +1379,13 @@ QTextStream::RealNumberNotation QTextStream::realNumberNotation() const
 */
 void QTextStream::setRealNumberPrecision(int precision)
 {
-    Q_D(QTextStream);
-    if (precision < 0) {
-        qWarning("QTextStream::setRealNumberPrecision: Invalid precision (%d)", precision);
-        d->realNumberPrecision = 6;
-        return;
-    }
-    d->realNumberPrecision = precision;
+   Q_D(QTextStream);
+   if (precision < 0) {
+      qWarning("QTextStream::setRealNumberPrecision: Invalid precision (%d)", precision);
+      d->realNumberPrecision = 6;
+      return;
+   }
+   d->realNumberPrecision = precision;
 }
 
 /*!
@@ -1355,8 +1396,8 @@ void QTextStream::setRealNumberPrecision(int precision)
 */
 int QTextStream::realNumberPrecision() const
 {
-    Q_D(const QTextStream);
-    return d->realNumberPrecision;
+   Q_D(const QTextStream);
+   return d->realNumberPrecision;
 }
 
 /*!
@@ -1367,8 +1408,8 @@ int QTextStream::realNumberPrecision() const
 
 QTextStream::Status QTextStream::status() const
 {
-    Q_D(const QTextStream);
-    return d->status;
+   Q_D(const QTextStream);
+   return d->status;
 }
 
 /*!
@@ -1380,8 +1421,8 @@ QTextStream::Status QTextStream::status() const
 */
 void QTextStream::resetStatus()
 {
-    Q_D(QTextStream);
-    d->status = Ok;
+   Q_D(QTextStream);
+   d->status = Ok;
 }
 
 /*!
@@ -1396,9 +1437,10 @@ void QTextStream::resetStatus()
 */
 void QTextStream::setStatus(Status status)
 {
-    Q_D(QTextStream);
-    if (d->status == Ok)
-        d->status = status;
+   Q_D(QTextStream);
+   if (d->status == Ok) {
+      d->status = status;
+   }
 }
 
 /*!
@@ -1409,12 +1451,13 @@ void QTextStream::setStatus(Status status)
 */
 bool QTextStream::atEnd() const
 {
-    Q_D(const QTextStream);
-    CHECK_VALID_STREAM(true);
+   Q_D(const QTextStream);
+   CHECK_VALID_STREAM(true);
 
-    if (d->string)
-        return d->string->size() == d->stringOffset;
-    return d->readBuffer.isEmpty() && d->device->atEnd();
+   if (d->string) {
+      return d->string->size() == d->stringOffset;
+   }
+   return d->readBuffer.isEmpty() && d->device->atEnd();
 }
 
 /*!
@@ -1429,10 +1472,10 @@ bool QTextStream::atEnd() const
 */
 QString QTextStream::readAll()
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(QString());
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(QString());
 
-    return d->read(INT_MAX);
+   return d->read(INT_MAX);
 }
 
 /*!
@@ -1455,17 +1498,18 @@ QString QTextStream::readAll()
 */
 QString QTextStream::readLine(qint64 maxlen)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(QString());
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(QString());
 
-    const QChar *readPtr;
-    int length;
-    if (!d->scan(&readPtr, &length, int(maxlen), QTextStreamPrivate::EndOfLine))
-        return QString();
+   const QChar *readPtr;
+   int length;
+   if (!d->scan(&readPtr, &length, int(maxlen), QTextStreamPrivate::EndOfLine)) {
+      return QString();
+   }
 
-    QString tmp = QString(readPtr, length);
-    d->consumeLastToken();
-    return tmp;
+   QString tmp = QString(readPtr, length);
+   d->consumeLastToken();
+   return tmp;
 }
 
 /*!
@@ -1478,188 +1522,199 @@ QString QTextStream::readLine(qint64 maxlen)
 */
 QString QTextStream::read(qint64 maxlen)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(QString());
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(QString());
 
-    if (maxlen <= 0)
-        return QString::fromLatin1("");     // empty, not null
+   if (maxlen <= 0) {
+      return QString::fromLatin1("");   // empty, not null
+   }
 
-    return d->read(int(maxlen));
+   return d->read(int(maxlen));
 }
 
 /*! \internal
 */
 QTextStreamPrivate::NumberParsingStatus QTextStreamPrivate::getNumber(qulonglong *ret)
 {
-    scan(0, 0, 0, NotSpace);
-    consumeLastToken();
+   scan(0, 0, 0, NotSpace);
+   consumeLastToken();
 
-    // detect int encoding
-    int base = integerBase;
-    if (base == 0) {
-        QChar ch;
-        if (!getChar(&ch))
-            return npsInvalidPrefix;
-        if (ch == QLatin1Char('0')) {
-            QChar ch2;
-            if (!getChar(&ch2)) {
-                // Result is the number 0
-                *ret = 0;
-                return npsOk;
-            }
-            ch2 = ch2.toLower();
+   // detect int encoding
+   int base = integerBase;
+   if (base == 0) {
+      QChar ch;
+      if (!getChar(&ch)) {
+         return npsInvalidPrefix;
+      }
+      if (ch == QLatin1Char('0')) {
+         QChar ch2;
+         if (!getChar(&ch2)) {
+            // Result is the number 0
+            *ret = 0;
+            return npsOk;
+         }
+         ch2 = ch2.toLower();
 
-            if (ch2 == QLatin1Char('x')) {
-                base = 16;
-            } else if (ch2 == QLatin1Char('b')) {
-                base = 2;
-            } else if (ch2.isDigit() && ch2.digitValue() >= 0 && ch2.digitValue() <= 7) {
-                base = 8;
-            } else {
-                base = 10;
-            }
-            ungetChar(ch2);
-        } else if (ch == locale.negativeSign() || ch == locale.positiveSign() || ch.isDigit()) {
+         if (ch2 == QLatin1Char('x')) {
+            base = 16;
+         } else if (ch2 == QLatin1Char('b')) {
+            base = 2;
+         } else if (ch2.isDigit() && ch2.digitValue() >= 0 && ch2.digitValue() <= 7) {
+            base = 8;
+         } else {
             base = 10;
-        } else {
-            ungetChar(ch);
-            return npsInvalidPrefix;
-        }
-        ungetChar(ch);
-        // State of the stream is now the same as on entry
-        // (cursor is at prefix),
-        // and local variable 'base' has been set appropriately.
-    }
+         }
+         ungetChar(ch2);
+      } else if (ch == locale.negativeSign() || ch == locale.positiveSign() || ch.isDigit()) {
+         base = 10;
+      } else {
+         ungetChar(ch);
+         return npsInvalidPrefix;
+      }
+      ungetChar(ch);
+      // State of the stream is now the same as on entry
+      // (cursor is at prefix),
+      // and local variable 'base' has been set appropriately.
+   }
 
-    qulonglong val=0;
-    switch (base) {
-    case 2: {
-        QChar pf1, pf2, dig;
-        // Parse prefix '0b'
-        if (!getChar(&pf1) || pf1 != QLatin1Char('0'))
+   qulonglong val = 0;
+   switch (base) {
+      case 2: {
+         QChar pf1, pf2, dig;
+         // Parse prefix '0b'
+         if (!getChar(&pf1) || pf1 != QLatin1Char('0')) {
             return npsInvalidPrefix;
-        if (!getChar(&pf2) || pf2.toLower() != QLatin1Char('b'))
+         }
+         if (!getChar(&pf2) || pf2.toLower() != QLatin1Char('b')) {
             return npsInvalidPrefix;
-        // Parse digits
-        int ndigits = 0;
-        while (getChar(&dig)) {
+         }
+         // Parse digits
+         int ndigits = 0;
+         while (getChar(&dig)) {
             int n = dig.toLower().unicode();
             if (n == '0' || n == '1') {
-                val <<= 1;
-                val += n - '0';
+               val <<= 1;
+               val += n - '0';
             } else {
-                ungetChar(dig);
-                break;
+               ungetChar(dig);
+               break;
             }
             ndigits++;
-        }
-        if (ndigits == 0) {
+         }
+         if (ndigits == 0) {
             // Unwind the prefix and abort
             ungetChar(pf2);
             ungetChar(pf1);
             return npsMissingDigit;
-        }
-        break;
-    }
-    case 8: {
-        QChar pf, dig;
-        // Parse prefix '0'
-        if (!getChar(&pf) || pf != QLatin1Char('0'))
+         }
+         break;
+      }
+      case 8: {
+         QChar pf, dig;
+         // Parse prefix '0'
+         if (!getChar(&pf) || pf != QLatin1Char('0')) {
             return npsInvalidPrefix;
-        // Parse digits
-        int ndigits = 0;
-        while (getChar(&dig)) {
+         }
+         // Parse digits
+         int ndigits = 0;
+         while (getChar(&dig)) {
             int n = dig.toLower().unicode();
             if (n >= '0' && n <= '7') {
-                val *= 8;
-                val += n - '0';
+               val *= 8;
+               val += n - '0';
             } else {
-                ungetChar(dig);
-                break;
+               ungetChar(dig);
+               break;
             }
             ndigits++;
-        }
-        if (ndigits == 0) {
+         }
+         if (ndigits == 0) {
             // Unwind the prefix and abort
             ungetChar(pf);
             return npsMissingDigit;
-        }
-        break;
-    }
-    case 10: {
-        // Parse sign (or first digit)
-        QChar sign;
-        int ndigits = 0;
-        if (!getChar(&sign))
+         }
+         break;
+      }
+      case 10: {
+         // Parse sign (or first digit)
+         QChar sign;
+         int ndigits = 0;
+         if (!getChar(&sign)) {
             return npsMissingDigit;
-        if (sign != locale.negativeSign() && sign != locale.positiveSign()) {
+         }
+         if (sign != locale.negativeSign() && sign != locale.positiveSign()) {
             if (!sign.isDigit()) {
-                ungetChar(sign);
-                return npsMissingDigit;
+               ungetChar(sign);
+               return npsMissingDigit;
             }
             val += sign.digitValue();
             ndigits++;
-        }
-        // Parse digits
-        QChar ch;
-        while (getChar(&ch)) {
+         }
+         // Parse digits
+         QChar ch;
+         while (getChar(&ch)) {
             if (ch.isDigit()) {
-                val *= 10;
-                val += ch.digitValue();
+               val *= 10;
+               val += ch.digitValue();
             } else if (locale != QLocale::c() && ch == locale.groupSeparator()) {
-                continue;
+               continue;
             } else {
-                ungetChar(ch);
-                break;
+               ungetChar(ch);
+               break;
             }
             ndigits++;
-        }
-        if (ndigits == 0)
+         }
+         if (ndigits == 0) {
             return npsMissingDigit;
-        if (sign == locale.negativeSign()) {
+         }
+         if (sign == locale.negativeSign()) {
             qlonglong ival = qlonglong(val);
-            if (ival > 0)
-                ival = -ival;
+            if (ival > 0) {
+               ival = -ival;
+            }
             val = qulonglong(ival);
-        }
-        break;
-    }
-    case 16: {
-        QChar pf1, pf2, dig;
-        // Parse prefix ' 0x'
-        if (!getChar(&pf1) || pf1 != QLatin1Char('0'))
+         }
+         break;
+      }
+      case 16: {
+         QChar pf1, pf2, dig;
+         // Parse prefix ' 0x'
+         if (!getChar(&pf1) || pf1 != QLatin1Char('0')) {
             return npsInvalidPrefix;
-        if (!getChar(&pf2) || pf2.toLower() != QLatin1Char('x'))
+         }
+         if (!getChar(&pf2) || pf2.toLower() != QLatin1Char('x')) {
             return npsInvalidPrefix;
-        // Parse digits
-        int ndigits = 0;
-        while (getChar(&dig)) {
+         }
+         // Parse digits
+         int ndigits = 0;
+         while (getChar(&dig)) {
             int n = dig.toLower().unicode();
             if (n >= '0' && n <= '9') {
-                val <<= 4;
-                val += n - '0';
+               val <<= 4;
+               val += n - '0';
             } else if (n >= 'a' && n <= 'f') {
-                val <<= 4;
-                val += 10 + (n - 'a');
+               val <<= 4;
+               val += 10 + (n - 'a');
             } else {
-                ungetChar(dig);
-                break;
+               ungetChar(dig);
+               break;
             }
             ndigits++;
-        }
-        if (ndigits == 0) {
+         }
+         if (ndigits == 0) {
             return npsMissingDigit;
-        }
-        break;
-    }
-    default:
-        // Unsupported integerBase
-        return npsInvalidPrefix;
-    }
+         }
+         break;
+      }
+      default:
+         // Unsupported integerBase
+         return npsInvalidPrefix;
+   }
 
-    if (ret)
-        *ret = val;
-    return npsOk;
+   if (ret) {
+      *ret = val;
+   }
+   return npsOk;
 }
 
 /*! \internal
@@ -1667,146 +1722,162 @@ QTextStreamPrivate::NumberParsingStatus QTextStreamPrivate::getNumber(qulonglong
 */
 bool QTextStreamPrivate::getReal(double *f)
 {
-    // We use a table-driven FSM to parse floating point numbers
-    // strtod() cannot be used directly since we may be reading from a
-    // QIODevice.
-    enum ParserState {
-        Init = 0,
-        Sign = 1,
-        Mantissa = 2,
-        Dot = 3,
-        Abscissa = 4,
-        ExpMark = 5,
-        ExpSign = 6,
-        Exponent = 7,
-        Nan1 = 8,
-        Nan2 = 9,
-        Inf1 = 10,
-        Inf2 = 11,
-        NanInf = 12,
-        Done = 13
-    };
-    enum InputToken {
-        None = 0,
-        InputSign = 1,
-        InputDigit = 2,
-        InputDot = 3,
-        InputExp = 4,
-        InputI = 5,
-        InputN = 6,
-        InputF = 7,
-        InputA = 8,
-        InputT = 9
-    };
+   // We use a table-driven FSM to parse floating point numbers
+   // strtod() cannot be used directly since we may be reading from a
+   // QIODevice.
+   enum ParserState {
+      Init = 0,
+      Sign = 1,
+      Mantissa = 2,
+      Dot = 3,
+      Abscissa = 4,
+      ExpMark = 5,
+      ExpSign = 6,
+      Exponent = 7,
+      Nan1 = 8,
+      Nan2 = 9,
+      Inf1 = 10,
+      Inf2 = 11,
+      NanInf = 12,
+      Done = 13
+   };
+   enum InputToken {
+      None = 0,
+      InputSign = 1,
+      InputDigit = 2,
+      InputDot = 3,
+      InputExp = 4,
+      InputI = 5,
+      InputN = 6,
+      InputF = 7,
+      InputA = 8,
+      InputT = 9
+   };
 
-    static const uchar table[13][10] = {
-        // None InputSign InputDigit InputDot InputExp InputI    InputN    InputF    InputA    InputT
-        { 0,    Sign,     Mantissa,  Dot,     0,       Inf1,     Nan1,     0,        0,        0      }, // 0  Init
-        { 0,    0,        Mantissa,  Dot,     0,       Inf1,     Nan1,     0,        0,        0      }, // 1  Sign
-        { Done, Done,     Mantissa,  Dot,     ExpMark, 0,        0,        0,        0,        0      }, // 2  Mantissa
-        { 0,    0,        Abscissa,  0,       0,       0,        0,        0,        0,        0      }, // 3  Dot
-        { Done, Done,     Abscissa,  Done,    ExpMark, 0,        0,        0,        0,        0      }, // 4  Abscissa
-        { 0,    ExpSign,  Exponent,  0,       0,       0,        0,        0,        0,        0      }, // 5  ExpMark
-        { 0,    0,        Exponent,  0,       0,       0,        0,        0,        0,        0      }, // 6  ExpSign
-        { Done, Done,     Exponent,  Done,    Done,    0,        0,        0,        0,        0      }, // 7  Exponent
-        { 0,    0,        0,         0,       0,       0,        0,        0,        Nan2,     0      }, // 8  Nan1
-        { 0,    0,        0,         0,       0,       0,        NanInf,   0,        0,        0      }, // 9  Nan2
-        { 0,    0,        0,         0,       0,       0,        Inf2,     0,        0,        0      }, // 10 Inf1
-        { 0,    0,        0,         0,       0,       0,        0,        NanInf,   0,        0      }, // 11 Inf2
-        { Done, 0,        0,         0,       0,       0,        0,        0,        0,        0      }, // 11 NanInf
-    };
+   static const uchar table[13][10] = {
+      // None InputSign InputDigit InputDot InputExp InputI    InputN    InputF    InputA    InputT
+      { 0,    Sign,     Mantissa,  Dot,     0,       Inf1,     Nan1,     0,        0,        0      }, // 0  Init
+      { 0,    0,        Mantissa,  Dot,     0,       Inf1,     Nan1,     0,        0,        0      }, // 1  Sign
+      { Done, Done,     Mantissa,  Dot,     ExpMark, 0,        0,        0,        0,        0      }, // 2  Mantissa
+      { 0,    0,        Abscissa,  0,       0,       0,        0,        0,        0,        0      }, // 3  Dot
+      { Done, Done,     Abscissa,  Done,    ExpMark, 0,        0,        0,        0,        0      }, // 4  Abscissa
+      { 0,    ExpSign,  Exponent,  0,       0,       0,        0,        0,        0,        0      }, // 5  ExpMark
+      { 0,    0,        Exponent,  0,       0,       0,        0,        0,        0,        0      }, // 6  ExpSign
+      { Done, Done,     Exponent,  Done,    Done,    0,        0,        0,        0,        0      }, // 7  Exponent
+      { 0,    0,        0,         0,       0,       0,        0,        0,        Nan2,     0      }, // 8  Nan1
+      { 0,    0,        0,         0,       0,       0,        NanInf,   0,        0,        0      }, // 9  Nan2
+      { 0,    0,        0,         0,       0,       0,        Inf2,     0,        0,        0      }, // 10 Inf1
+      { 0,    0,        0,         0,       0,       0,        0,        NanInf,   0,        0      }, // 11 Inf2
+      { Done, 0,        0,         0,       0,       0,        0,        0,        0,        0      }, // 11 NanInf
+   };
 
-    ParserState state = Init;
-    InputToken input = None;
+   ParserState state = Init;
+   InputToken input = None;
 
-    scan(0, 0, 0, NotSpace);
-    consumeLastToken();
+   scan(0, 0, 0, NotSpace);
+   consumeLastToken();
 
-    const int BufferSize = 128;
-    char buf[BufferSize];
-    int i = 0;
+   const int BufferSize = 128;
+   char buf[BufferSize];
+   int i = 0;
 
-    QChar c;
-    while (getChar(&c)) {
-        switch (c.unicode()) {
-        case '0': case '1': case '2': case '3': case '4':
-        case '5': case '6': case '7': case '8': case '9':
+   QChar c;
+   while (getChar(&c)) {
+      switch (c.unicode()) {
+         case '0':
+         case '1':
+         case '2':
+         case '3':
+         case '4':
+         case '5':
+         case '6':
+         case '7':
+         case '8':
+         case '9':
             input = InputDigit;
             break;
-        case 'i': case 'I':
+         case 'i':
+         case 'I':
             input = InputI;
             break;
-        case 'n': case 'N':
+         case 'n':
+         case 'N':
             input = InputN;
             break;
-        case 'f': case 'F':
+         case 'f':
+         case 'F':
             input = InputF;
             break;
-        case 'a': case 'A':
+         case 'a':
+         case 'A':
             input = InputA;
             break;
-        case 't': case 'T':
+         case 't':
+         case 'T':
             input = InputT;
             break;
-        default: {
+         default: {
             QChar lc = c.toLower();
-            if (lc == locale.decimalPoint().toLower())
-                input = InputDot;
-            else if (lc == locale.exponential().toLower())
-                input = InputExp;
-            else if (lc == locale.negativeSign().toLower()
-                     || lc == locale.positiveSign().toLower())
-                input = InputSign;
-            else if (locale != QLocale::c() // backward-compatibility
-                     && lc == locale.groupSeparator().toLower())
-                input = InputDigit; // well, it isn't a digit, but no one cares.
-            else
-                input = None;
-        }
-            break;
-        }
-
-        state = ParserState(table[state][input]);
-
-        if  (state == Init || state == Done || i > (BufferSize - 5)) {
-            ungetChar(c);
-            if (i > (BufferSize - 5)) { // ignore rest of digits
-                while (getChar(&c)) {
-                    if (!c.isDigit()) {
-                        ungetChar(c);
-                        break;
-                    }
-                }
+            if (lc == locale.decimalPoint().toLower()) {
+               input = InputDot;
+            } else if (lc == locale.exponential().toLower()) {
+               input = InputExp;
+            } else if (lc == locale.negativeSign().toLower()
+                       || lc == locale.positiveSign().toLower()) {
+               input = InputSign;
+            } else if (locale != QLocale::c() // backward-compatibility
+                       && lc == locale.groupSeparator().toLower()) {
+               input = InputDigit;   // well, it isn't a digit, but no one cares.
+            } else {
+               input = None;
             }
-            break;
-        }
+         }
+         break;
+      }
 
-        buf[i++] = c.toLatin1();
-    }
+      state = ParserState(table[state][input]);
 
-    if (i == 0)
-        return false;
-    if (!f)
-        return true;
-    buf[i] = '\0';
+      if  (state == Init || state == Done || i > (BufferSize - 5)) {
+         ungetChar(c);
+         if (i > (BufferSize - 5)) { // ignore rest of digits
+            while (getChar(&c)) {
+               if (!c.isDigit()) {
+                  ungetChar(c);
+                  break;
+               }
+            }
+         }
+         break;
+      }
 
-    // backward-compatibility. Old implementation supported +nan/-nan
-    // for some reason. QLocale only checks for lower-case
-    // nan/+inf/-inf, so here we also check for uppercase and mixed
-    // case versions.
-    if (!qstricmp(buf, "nan") || !qstricmp(buf, "+nan") || !qstricmp(buf, "-nan")) {
-        *f = qSNaN();
-        return true;
-    } else if (!qstricmp(buf, "+inf") || !qstricmp(buf, "inf")) {
-        *f = qInf();
-        return true;
-    } else if (!qstricmp(buf, "-inf")) {
-        *f = -qInf();
-        return true;
-    }
-    bool ok;
-    *f = locale.toDouble(QString::fromLatin1(buf), &ok);
-    return ok;
+      buf[i++] = c.toLatin1();
+   }
+
+   if (i == 0) {
+      return false;
+   }
+   if (!f) {
+      return true;
+   }
+   buf[i] = '\0';
+
+   // backward-compatibility. Old implementation supported +nan/-nan
+   // for some reason. QLocale only checks for lower-case
+   // nan/+inf/-inf, so here we also check for uppercase and mixed
+   // case versions.
+   if (!qstricmp(buf, "nan") || !qstricmp(buf, "+nan") || !qstricmp(buf, "-nan")) {
+      *f = qSNaN();
+      return true;
+   } else if (!qstricmp(buf, "+inf") || !qstricmp(buf, "inf")) {
+      *f = qInf();
+      return true;
+   } else if (!qstricmp(buf, "-inf")) {
+      *f = -qInf();
+      return true;
+   }
+   bool ok;
+   *f = locale.toDouble(QString::fromLatin1(buf), &ok);
+   return ok;
 }
 
 /*!
@@ -1821,12 +1892,13 @@ bool QTextStreamPrivate::getReal(double *f)
 
 QTextStream &QTextStream::operator>>(QChar &c)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->scan(0, 0, 0, QTextStreamPrivate::NotSpace);
-    if (!d->getChar(&c))
-        setStatus(ReadPastEnd);
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->scan(0, 0, 0, QTextStreamPrivate::NotSpace);
+   if (!d->getChar(&c)) {
+      setStatus(ReadPastEnd);
+   }
+   return *this;
 }
 
 /*!
@@ -1840,10 +1912,10 @@ QTextStream &QTextStream::operator>>(QChar &c)
 */
 QTextStream &QTextStream::operator>>(char &c)
 {
-    QChar ch;
-    *this >> ch;
-    c = ch.toLatin1();
-    return *this;
+   QChar ch;
+   *this >> ch;
+   c = ch.toLatin1();
+   return *this;
 }
 
 /*!
@@ -1872,7 +1944,7 @@ QTextStream &QTextStream::operator>>(char &c)
 */
 QTextStream &QTextStream::operator>>(signed short &i)
 {
-    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(signed short);
+   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(signed short);
 }
 
 /*!
@@ -1882,7 +1954,7 @@ QTextStream &QTextStream::operator>>(signed short &i)
 */
 QTextStream &QTextStream::operator>>(unsigned short &i)
 {
-    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(unsigned short);
+   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(unsigned short);
 }
 
 /*!
@@ -1892,7 +1964,7 @@ QTextStream &QTextStream::operator>>(unsigned short &i)
 */
 QTextStream &QTextStream::operator>>(signed int &i)
 {
-    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(signed int);
+   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(signed int);
 }
 
 /*!
@@ -1902,7 +1974,7 @@ QTextStream &QTextStream::operator>>(signed int &i)
 */
 QTextStream &QTextStream::operator>>(unsigned int &i)
 {
-    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(unsigned int);
+   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(unsigned int);
 }
 
 /*!
@@ -1912,7 +1984,7 @@ QTextStream &QTextStream::operator>>(unsigned int &i)
 */
 QTextStream &QTextStream::operator>>(signed long &i)
 {
-    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(signed long);
+   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(signed long);
 }
 
 /*!
@@ -1922,7 +1994,7 @@ QTextStream &QTextStream::operator>>(signed long &i)
 */
 QTextStream &QTextStream::operator>>(unsigned long &i)
 {
-    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(unsigned long);
+   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(unsigned long);
 }
 
 /*!
@@ -1932,7 +2004,7 @@ QTextStream &QTextStream::operator>>(unsigned long &i)
 */
 QTextStream &QTextStream::operator>>(qlonglong &i)
 {
-    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(qlonglong);
+   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(qlonglong);
 }
 
 /*!
@@ -1942,7 +2014,7 @@ QTextStream &QTextStream::operator>>(qlonglong &i)
 */
 QTextStream &QTextStream::operator>>(qulonglong &i)
 {
-    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(qulonglong);
+   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(qulonglong);
 }
 
 /*!
@@ -1958,7 +2030,7 @@ QTextStream &QTextStream::operator>>(qulonglong &i)
 */
 QTextStream &QTextStream::operator>>(float &f)
 {
-    IMPLEMENT_STREAM_RIGHT_REAL_OPERATOR(float);
+   IMPLEMENT_STREAM_RIGHT_REAL_OPERATOR(float);
 }
 
 /*!
@@ -1968,7 +2040,7 @@ QTextStream &QTextStream::operator>>(float &f)
 */
 QTextStream &QTextStream::operator>>(double &f)
 {
-    IMPLEMENT_STREAM_RIGHT_REAL_OPERATOR(double);
+   IMPLEMENT_STREAM_RIGHT_REAL_OPERATOR(double);
 }
 
 /*!
@@ -1980,23 +2052,23 @@ QTextStream &QTextStream::operator>>(double &f)
 */
 QTextStream &QTextStream::operator>>(QString &str)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
 
-    str.clear();
-    d->scan(0, 0, 0, QTextStreamPrivate::NotSpace);
-    d->consumeLastToken();
+   str.clear();
+   d->scan(0, 0, 0, QTextStreamPrivate::NotSpace);
+   d->consumeLastToken();
 
-    const QChar *ptr;
-    int length;
-    if (!d->scan(&ptr, &length, 0, QTextStreamPrivate::Space)) {
-        setStatus(ReadPastEnd);
-        return *this;
-    }
+   const QChar *ptr;
+   int length;
+   if (!d->scan(&ptr, &length, 0, QTextStreamPrivate::Space)) {
+      setStatus(ReadPastEnd);
+      return *this;
+   }
 
-    str = QString(ptr, length);
-    d->consumeLastToken();
-    return *this;
+   str = QString(ptr, length);
+   d->consumeLastToken();
+   return *this;
 }
 
 /*!
@@ -2008,25 +2080,26 @@ QTextStream &QTextStream::operator>>(QString &str)
 */
 QTextStream &QTextStream::operator>>(QByteArray &array)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
 
-    array.clear();
-    d->scan(0, 0, 0, QTextStreamPrivate::NotSpace);
-    d->consumeLastToken();
+   array.clear();
+   d->scan(0, 0, 0, QTextStreamPrivate::NotSpace);
+   d->consumeLastToken();
 
-    const QChar *ptr;
-    int length;
-    if (!d->scan(&ptr, &length, 0, QTextStreamPrivate::Space)) {
-        setStatus(ReadPastEnd);
-        return *this;
-    }
+   const QChar *ptr;
+   int length;
+   if (!d->scan(&ptr, &length, 0, QTextStreamPrivate::Space)) {
+      setStatus(ReadPastEnd);
+      return *this;
+   }
 
-    for (int i = 0; i < length; ++i)
-        array += ptr[i].toLatin1();
+   for (int i = 0; i < length; ++i) {
+      array += ptr[i].toLatin1();
+   }
 
-    d->consumeLastToken();
-    return *this;
+   d->consumeLastToken();
+   return *this;
 }
 
 /*!
@@ -2044,69 +2117,75 @@ QTextStream &QTextStream::operator>>(QByteArray &array)
 */
 QTextStream &QTextStream::operator>>(char *c)
 {
-    Q_D(QTextStream);
-    *c = 0;
-    CHECK_VALID_STREAM(*this);
-    d->scan(0, 0, 0, QTextStreamPrivate::NotSpace);
-    d->consumeLastToken();
+   Q_D(QTextStream);
+   *c = 0;
+   CHECK_VALID_STREAM(*this);
+   d->scan(0, 0, 0, QTextStreamPrivate::NotSpace);
+   d->consumeLastToken();
 
-    const QChar *ptr;
-    int length;
-    if (!d->scan(&ptr, &length, 0, QTextStreamPrivate::Space)) {
-        setStatus(ReadPastEnd);
-        return *this;
-    }
+   const QChar *ptr;
+   int length;
+   if (!d->scan(&ptr, &length, 0, QTextStreamPrivate::Space)) {
+      setStatus(ReadPastEnd);
+      return *this;
+   }
 
-    for (int i = 0; i < length; ++i)
-        *c++ = ptr[i].toLatin1();
-    *c = '\0';
-    d->consumeLastToken();
-    return *this;
+   for (int i = 0; i < length; ++i) {
+      *c++ = ptr[i].toLatin1();
+   }
+   *c = '\0';
+   d->consumeLastToken();
+   return *this;
 }
 
 /*! \internal
  */
 void QTextStreamPrivate::putNumber(qulonglong number, bool negative)
 {
-    QString result;
+   QString result;
 
-    unsigned flags = 0;
-    if (numberFlags & QTextStream::ShowBase)
-        flags |= QLocalePrivate::ShowBase;
-    if (numberFlags & QTextStream::ForceSign)
-        flags |= QLocalePrivate::AlwaysShowSign;
-    if (numberFlags & QTextStream::UppercaseBase)
-        flags |= QLocalePrivate::UppercaseBase;
-    if (numberFlags & QTextStream::UppercaseDigits)
-        flags |= QLocalePrivate::CapitalEorX;
+   unsigned flags = 0;
+   if (numberFlags & QTextStream::ShowBase) {
+      flags |= QLocalePrivate::ShowBase;
+   }
+   if (numberFlags & QTextStream::ForceSign) {
+      flags |= QLocalePrivate::AlwaysShowSign;
+   }
+   if (numberFlags & QTextStream::UppercaseBase) {
+      flags |= QLocalePrivate::UppercaseBase;
+   }
+   if (numberFlags & QTextStream::UppercaseDigits) {
+      flags |= QLocalePrivate::CapitalEorX;
+   }
 
-    // add thousands group separators. For backward compatibility we
-    // don't add a group separator for C locale.
-    if (locale != QLocale::c())
-        flags |= QLocalePrivate::ThousandsGroup;
+   // add thousands group separators. For backward compatibility we
+   // don't add a group separator for C locale.
+   if (locale != QLocale::c()) {
+      flags |= QLocalePrivate::ThousandsGroup;
+   }
 
-    const QLocalePrivate *dd = locale.d();
-    int base = integerBase ? integerBase : 10;
-    if (negative && base == 10) {
-        result = dd->longLongToString(-static_cast<qlonglong>(number), -1,
-                                      base, -1, flags);
-    } else if (negative) {
-        // Workaround for backward compatibility for writing negative
-        // numbers in octal and hex:
-        // QTextStream(result) << showbase << hex << -1 << oct << -1
-        // should output: -0x1 -0b1
-        result = dd->unsLongLongToString(number, -1, base, -1, flags);
-        result.prepend(locale.negativeSign());
-    } else {
-        result = dd->unsLongLongToString(number, -1, base, -1, flags);
-        // workaround for backward compatibility - in octal form with
-        // ShowBase flag set zero should be written as '00'
-        if (number == 0 && base == 8 && numberFlags & QTextStream::ShowBase
+   const QLocalePrivate *dd = locale.d();
+   int base = integerBase ? integerBase : 10;
+   if (negative && base == 10) {
+      result = dd->longLongToString(-static_cast<qlonglong>(number), -1,
+                                    base, -1, flags);
+   } else if (negative) {
+      // Workaround for backward compatibility for writing negative
+      // numbers in octal and hex:
+      // QTextStream(result) << showbase << hex << -1 << oct << -1
+      // should output: -0x1 -0b1
+      result = dd->unsLongLongToString(number, -1, base, -1, flags);
+      result.prepend(locale.negativeSign());
+   } else {
+      result = dd->unsLongLongToString(number, -1, base, -1, flags);
+      // workaround for backward compatibility - in octal form with
+      // ShowBase flag set zero should be written as '00'
+      if (number == 0 && base == 8 && numberFlags & QTextStream::ShowBase
             && result == QLatin1String("0")) {
-            result.prepend(QLatin1Char('0'));
-        }
-    }
-    putString(result, true);
+         result.prepend(QLatin1Char('0'));
+      }
+   }
+   putString(result, true);
 }
 
 /*!
@@ -2115,7 +2194,7 @@ void QTextStreamPrivate::putNumber(qulonglong number, bool negative)
 */
 QTextStream &QTextStream::operator<<(QBool b)
 {
-    return *this << bool(b);
+   return *this << bool(b);
 }
 
 /*!
@@ -2126,10 +2205,10 @@ QTextStream &QTextStream::operator<<(QBool b)
 */
 QTextStream &QTextStream::operator<<(QChar c)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putString(QString(c));
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putString(QString(c));
+   return *this;
 }
 
 /*!
@@ -2139,10 +2218,10 @@ QTextStream &QTextStream::operator<<(QChar c)
 */
 QTextStream &QTextStream::operator<<(char c)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putString(QString(QChar::fromAscii(c)));
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putString(QString(QChar::fromAscii(c)));
+   return *this;
 }
 
 /*!
@@ -2155,10 +2234,10 @@ QTextStream &QTextStream::operator<<(char c)
 */
 QTextStream &QTextStream::operator<<(signed short i)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putNumber((qulonglong)qAbs(qlonglong(i)), i < 0);
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putNumber((qulonglong)qAbs(qlonglong(i)), i < 0);
+   return *this;
 }
 
 /*!
@@ -2168,10 +2247,10 @@ QTextStream &QTextStream::operator<<(signed short i)
 */
 QTextStream &QTextStream::operator<<(unsigned short i)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putNumber((qulonglong)i, false);
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putNumber((qulonglong)i, false);
+   return *this;
 }
 
 /*!
@@ -2181,10 +2260,10 @@ QTextStream &QTextStream::operator<<(unsigned short i)
 */
 QTextStream &QTextStream::operator<<(signed int i)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putNumber((qulonglong)qAbs(qlonglong(i)), i < 0);
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putNumber((qulonglong)qAbs(qlonglong(i)), i < 0);
+   return *this;
 }
 
 /*!
@@ -2194,10 +2273,10 @@ QTextStream &QTextStream::operator<<(signed int i)
 */
 QTextStream &QTextStream::operator<<(unsigned int i)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putNumber((qulonglong)i, false);
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putNumber((qulonglong)i, false);
+   return *this;
 }
 
 /*!
@@ -2207,10 +2286,10 @@ QTextStream &QTextStream::operator<<(unsigned int i)
 */
 QTextStream &QTextStream::operator<<(signed long i)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putNumber((qulonglong)qAbs(qlonglong(i)), i < 0);
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putNumber((qulonglong)qAbs(qlonglong(i)), i < 0);
+   return *this;
 }
 
 /*!
@@ -2220,10 +2299,10 @@ QTextStream &QTextStream::operator<<(signed long i)
 */
 QTextStream &QTextStream::operator<<(unsigned long i)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putNumber((qulonglong)i, false);
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putNumber((qulonglong)i, false);
+   return *this;
 }
 
 /*!
@@ -2233,10 +2312,10 @@ QTextStream &QTextStream::operator<<(unsigned long i)
 */
 QTextStream &QTextStream::operator<<(qlonglong i)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putNumber((qulonglong)qAbs(i), i < 0);
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putNumber((qulonglong)qAbs(i), i < 0);
+   return *this;
 }
 
 /*!
@@ -2246,10 +2325,10 @@ QTextStream &QTextStream::operator<<(qlonglong i)
 */
 QTextStream &QTextStream::operator<<(qulonglong i)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putNumber(i, false);
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putNumber(i, false);
+   return *this;
 }
 
 /*!
@@ -2265,7 +2344,7 @@ QTextStream &QTextStream::operator<<(qulonglong i)
 */
 QTextStream &QTextStream::operator<<(float f)
 {
-    return *this << double(f);
+   return *this << double(f);
 }
 
 /*!
@@ -2275,38 +2354,43 @@ QTextStream &QTextStream::operator<<(float f)
 */
 QTextStream &QTextStream::operator<<(double f)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
 
-    QLocalePrivate::DoubleForm form = QLocalePrivate::DFDecimal;
-    switch (realNumberNotation()) {
-    case FixedNotation:
-        form = QLocalePrivate::DFDecimal;
-        break;
-    case ScientificNotation:
-        form = QLocalePrivate::DFExponent;
-        break;
-    case SmartNotation:
-        form = QLocalePrivate::DFSignificantDigits;
-        break;
-    }
+   QLocalePrivate::DoubleForm form = QLocalePrivate::DFDecimal;
+   switch (realNumberNotation()) {
+      case FixedNotation:
+         form = QLocalePrivate::DFDecimal;
+         break;
+      case ScientificNotation:
+         form = QLocalePrivate::DFExponent;
+         break;
+      case SmartNotation:
+         form = QLocalePrivate::DFSignificantDigits;
+         break;
+   }
 
-    uint flags = 0;
-    if (numberFlags() & ShowBase)
-        flags |= QLocalePrivate::ShowBase;
-    if (numberFlags() & ForceSign)
-        flags |= QLocalePrivate::AlwaysShowSign;
-    if (numberFlags() & UppercaseBase)
-        flags |= QLocalePrivate::UppercaseBase;
-    if (numberFlags() & UppercaseDigits)
-        flags |= QLocalePrivate::CapitalEorX;
-    if (numberFlags() & ForcePoint)
-        flags |= QLocalePrivate::Alternate;
+   uint flags = 0;
+   if (numberFlags() & ShowBase) {
+      flags |= QLocalePrivate::ShowBase;
+   }
+   if (numberFlags() & ForceSign) {
+      flags |= QLocalePrivate::AlwaysShowSign;
+   }
+   if (numberFlags() & UppercaseBase) {
+      flags |= QLocalePrivate::UppercaseBase;
+   }
+   if (numberFlags() & UppercaseDigits) {
+      flags |= QLocalePrivate::CapitalEorX;
+   }
+   if (numberFlags() & ForcePoint) {
+      flags |= QLocalePrivate::Alternate;
+   }
 
-    const QLocalePrivate *dd = d->locale.d();
-    QString num = dd->doubleToString(f, d->realNumberPrecision, form, -1, flags);
-    d->putString(num, true);
-    return *this;
+   const QLocalePrivate *dd = d->locale.d();
+   QString num = dd->doubleToString(f, d->realNumberPrecision, form, -1, flags);
+   d->putString(num, true);
+   return *this;
 }
 
 /*!
@@ -2319,10 +2403,10 @@ QTextStream &QTextStream::operator<<(double f)
 */
 QTextStream &QTextStream::operator<<(const QString &string)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putString(string);
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putString(string);
+   return *this;
 }
 
 /*!
@@ -2333,10 +2417,10 @@ QTextStream &QTextStream::operator<<(const QString &string)
 */
 QTextStream &QTextStream::operator<<(const QByteArray &array)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putString(QString::fromAscii(array.constData(), array.length()));
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putString(QString::fromAscii(array.constData(), array.length()));
+   return *this;
 }
 
 /*!
@@ -2354,10 +2438,10 @@ QTextStream &QTextStream::operator<<(const QByteArray &array)
 */
 QTextStream &QTextStream::operator<<(const char *string)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    d->putString(QLatin1String(string));
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   d->putString(QLatin1String(string));
+   return *this;
 }
 
 /*!
@@ -2368,16 +2452,16 @@ QTextStream &QTextStream::operator<<(const char *string)
 
 QTextStream &QTextStream::operator<<(const void *ptr)
 {
-    Q_D(QTextStream);
-    CHECK_VALID_STREAM(*this);
-    int oldBase = d->integerBase;
-    NumberFlags oldFlags = d->numberFlags;
-    d->integerBase = 16;
-    d->numberFlags |= ShowBase;
-    d->putNumber(reinterpret_cast<quintptr>(ptr), false);
-    d->integerBase = oldBase;
-    d->numberFlags = oldFlags;
-    return *this;
+   Q_D(QTextStream);
+   CHECK_VALID_STREAM(*this);
+   int oldBase = d->integerBase;
+   NumberFlags oldFlags = d->numberFlags;
+   d->integerBase = 16;
+   d->numberFlags |= ShowBase;
+   d->putNumber(reinterpret_cast<quintptr>(ptr), false);
+   d->integerBase = oldBase;
+   d->numberFlags = oldFlags;
+   return *this;
 }
 
 /*!
@@ -2390,8 +2474,8 @@ QTextStream &QTextStream::operator<<(const void *ptr)
 */
 QTextStream &bin(QTextStream &stream)
 {
-    stream.setIntegerBase(2);
-    return stream;
+   stream.setIntegerBase(2);
+   return stream;
 }
 
 /*!
@@ -2404,8 +2488,8 @@ QTextStream &bin(QTextStream &stream)
 */
 QTextStream &oct(QTextStream &stream)
 {
-    stream.setIntegerBase(8);
-    return stream;
+   stream.setIntegerBase(8);
+   return stream;
 }
 
 /*!
@@ -2418,8 +2502,8 @@ QTextStream &oct(QTextStream &stream)
 */
 QTextStream &dec(QTextStream &stream)
 {
-    stream.setIntegerBase(10);
-    return stream;
+   stream.setIntegerBase(10);
+   return stream;
 }
 
 /*!
@@ -2433,8 +2517,8 @@ QTextStream &dec(QTextStream &stream)
 */
 QTextStream &hex(QTextStream &stream)
 {
-    stream.setIntegerBase(16);
-    return stream;
+   stream.setIntegerBase(16);
+   return stream;
 }
 
 /*!
@@ -2447,8 +2531,8 @@ QTextStream &hex(QTextStream &stream)
 */
 QTextStream &showbase(QTextStream &stream)
 {
-    stream.setNumberFlags(stream.numberFlags() | QTextStream::ShowBase);
-    return stream;
+   stream.setNumberFlags(stream.numberFlags() | QTextStream::ShowBase);
+   return stream;
 }
 
 /*!
@@ -2461,8 +2545,8 @@ QTextStream &showbase(QTextStream &stream)
 */
 QTextStream &forcesign(QTextStream &stream)
 {
-    stream.setNumberFlags(stream.numberFlags() | QTextStream::ForceSign);
-    return stream;
+   stream.setNumberFlags(stream.numberFlags() | QTextStream::ForceSign);
+   return stream;
 }
 
 /*!
@@ -2475,8 +2559,8 @@ QTextStream &forcesign(QTextStream &stream)
 */
 QTextStream &forcepoint(QTextStream &stream)
 {
-    stream.setNumberFlags(stream.numberFlags() | QTextStream::ForcePoint);
-    return stream;
+   stream.setNumberFlags(stream.numberFlags() | QTextStream::ForcePoint);
+   return stream;
 }
 
 /*!
@@ -2489,8 +2573,8 @@ QTextStream &forcepoint(QTextStream &stream)
 */
 QTextStream &noshowbase(QTextStream &stream)
 {
-    stream.setNumberFlags(stream.numberFlags() &= ~QTextStream::ShowBase);
-    return stream;
+   stream.setNumberFlags(stream.numberFlags() &= ~QTextStream::ShowBase);
+   return stream;
 }
 
 /*!
@@ -2503,8 +2587,8 @@ QTextStream &noshowbase(QTextStream &stream)
 */
 QTextStream &noforcesign(QTextStream &stream)
 {
-    stream.setNumberFlags(stream.numberFlags() &= ~QTextStream::ForceSign);
-    return stream;
+   stream.setNumberFlags(stream.numberFlags() &= ~QTextStream::ForceSign);
+   return stream;
 }
 
 /*!
@@ -2517,8 +2601,8 @@ QTextStream &noforcesign(QTextStream &stream)
 */
 QTextStream &noforcepoint(QTextStream &stream)
 {
-    stream.setNumberFlags(stream.numberFlags() &= ~QTextStream::ForcePoint);
-    return stream;
+   stream.setNumberFlags(stream.numberFlags() &= ~QTextStream::ForcePoint);
+   return stream;
 }
 
 /*!
@@ -2531,8 +2615,8 @@ QTextStream &noforcepoint(QTextStream &stream)
 */
 QTextStream &uppercasebase(QTextStream &stream)
 {
-    stream.setNumberFlags(stream.numberFlags() | QTextStream::UppercaseBase);
-    return stream;
+   stream.setNumberFlags(stream.numberFlags() | QTextStream::UppercaseBase);
+   return stream;
 }
 
 /*!
@@ -2545,8 +2629,8 @@ QTextStream &uppercasebase(QTextStream &stream)
 */
 QTextStream &uppercasedigits(QTextStream &stream)
 {
-    stream.setNumberFlags(stream.numberFlags() | QTextStream::UppercaseDigits);
-    return stream;
+   stream.setNumberFlags(stream.numberFlags() | QTextStream::UppercaseDigits);
+   return stream;
 }
 
 /*!
@@ -2559,8 +2643,8 @@ QTextStream &uppercasedigits(QTextStream &stream)
 */
 QTextStream &lowercasebase(QTextStream &stream)
 {
-    stream.setNumberFlags(stream.numberFlags() & ~QTextStream::UppercaseBase);
-    return stream;
+   stream.setNumberFlags(stream.numberFlags() & ~QTextStream::UppercaseBase);
+   return stream;
 }
 
 /*!
@@ -2573,8 +2657,8 @@ QTextStream &lowercasebase(QTextStream &stream)
 */
 QTextStream &lowercasedigits(QTextStream &stream)
 {
-    stream.setNumberFlags(stream.numberFlags() & ~QTextStream::UppercaseDigits);
-    return stream;
+   stream.setNumberFlags(stream.numberFlags() & ~QTextStream::UppercaseDigits);
+   return stream;
 }
 
 /*!
@@ -2587,8 +2671,8 @@ QTextStream &lowercasedigits(QTextStream &stream)
 */
 QTextStream &fixed(QTextStream &stream)
 {
-    stream.setRealNumberNotation(QTextStream::FixedNotation);
-    return stream;
+   stream.setRealNumberNotation(QTextStream::FixedNotation);
+   return stream;
 }
 
 /*!
@@ -2601,8 +2685,8 @@ QTextStream &fixed(QTextStream &stream)
 */
 QTextStream &scientific(QTextStream &stream)
 {
-    stream.setRealNumberNotation(QTextStream::ScientificNotation);
-    return stream;
+   stream.setRealNumberNotation(QTextStream::ScientificNotation);
+   return stream;
 }
 
 /*!
@@ -2615,8 +2699,8 @@ QTextStream &scientific(QTextStream &stream)
 */
 QTextStream &left(QTextStream &stream)
 {
-    stream.setFieldAlignment(QTextStream::AlignLeft);
-    return stream;
+   stream.setFieldAlignment(QTextStream::AlignLeft);
+   return stream;
 }
 
 /*!
@@ -2629,8 +2713,8 @@ QTextStream &left(QTextStream &stream)
 */
 QTextStream &right(QTextStream &stream)
 {
-    stream.setFieldAlignment(QTextStream::AlignRight);
-    return stream;
+   stream.setFieldAlignment(QTextStream::AlignRight);
+   return stream;
 }
 
 /*!
@@ -2643,8 +2727,8 @@ QTextStream &right(QTextStream &stream)
 */
 QTextStream &center(QTextStream &stream)
 {
-    stream.setFieldAlignment(QTextStream::AlignCenter);
-    return stream;
+   stream.setFieldAlignment(QTextStream::AlignCenter);
+   return stream;
 }
 
 /*!
@@ -2663,7 +2747,7 @@ QTextStream &center(QTextStream &stream)
 */
 QTextStream &endl(QTextStream &stream)
 {
-    return stream << QLatin1Char('\n') << flush;
+   return stream << QLatin1Char('\n') << flush;
 }
 
 /*!
@@ -2675,8 +2759,8 @@ QTextStream &endl(QTextStream &stream)
 */
 QTextStream &flush(QTextStream &stream)
 {
-    stream.flush();
-    return stream;
+   stream.flush();
+   return stream;
 }
 
 /*!
@@ -2688,8 +2772,8 @@ QTextStream &flush(QTextStream &stream)
 */
 QTextStream &reset(QTextStream &stream)
 {
-    stream.reset();
-    return stream;
+   stream.reset();
+   return stream;
 }
 
 /*!
@@ -2701,8 +2785,8 @@ QTextStream &reset(QTextStream &stream)
 */
 QTextStream &ws(QTextStream &stream)
 {
-    stream.skipWhiteSpace();
-    return stream;
+   stream.skipWhiteSpace();
+   return stream;
 }
 
 /*!
@@ -2737,8 +2821,8 @@ QTextStream &ws(QTextStream &stream)
 */
 QTextStream &bom(QTextStream &stream)
 {
-    stream.setGenerateByteOrderMark(true);
-    return stream;
+   stream.setGenerateByteOrderMark(true);
+   return stream;
 }
 
 /*!
@@ -2758,16 +2842,17 @@ QTextStream &bom(QTextStream &stream)
 */
 void QTextStream::setCodec(QTextCodec *codec)
 {
-    Q_D(QTextStream);
-    qint64 seekPos = -1;
-    if (!d->readBuffer.isEmpty()) {
-        if (!d->device->isSequential()) {
-            seekPos = pos();
-        }
-    }
-    d->codec = codec;
-    if (seekPos >=0 && !d->readBuffer.isEmpty())
-        seek(seekPos);
+   Q_D(QTextStream);
+   qint64 seekPos = -1;
+   if (!d->readBuffer.isEmpty()) {
+      if (!d->device->isSequential()) {
+         seekPos = pos();
+      }
+   }
+   d->codec = codec;
+   if (seekPos >= 0 && !d->readBuffer.isEmpty()) {
+      seek(seekPos);
+   }
 }
 
 /*!
@@ -2784,9 +2869,10 @@ void QTextStream::setCodec(QTextCodec *codec)
 */
 void QTextStream::setCodec(const char *codecName)
 {
-    QTextCodec *codec = QTextCodec::codecForName(codecName);
-    if (codec)
-        setCodec(codec);
+   QTextCodec *codec = QTextCodec::codecForName(codecName);
+   if (codec) {
+      setCodec(codec);
+   }
 }
 
 /*!
@@ -2796,8 +2882,8 @@ void QTextStream::setCodec(const char *codecName)
 */
 QTextCodec *QTextStream::codec() const
 {
-    Q_D(const QTextStream);
-    return d->codec;
+   Q_D(const QTextStream);
+   return d->codec;
 }
 
 /*!
@@ -2813,8 +2899,8 @@ QTextCodec *QTextStream::codec() const
 */
 void QTextStream::setAutoDetectUnicode(bool enabled)
 {
-    Q_D(QTextStream);
-    d->autoDetectUnicode = enabled;
+   Q_D(QTextStream);
+   d->autoDetectUnicode = enabled;
 }
 
 /*!
@@ -2825,8 +2911,8 @@ void QTextStream::setAutoDetectUnicode(bool enabled)
 */
 bool QTextStream::autoDetectUnicode() const
 {
-    Q_D(const QTextStream);
-    return d->autoDetectUnicode;
+   Q_D(const QTextStream);
+   return d->autoDetectUnicode;
 }
 
 /*!
@@ -2839,13 +2925,14 @@ bool QTextStream::autoDetectUnicode() const
 */
 void QTextStream::setGenerateByteOrderMark(bool generate)
 {
-    Q_D(QTextStream);
-    if (d->writeBuffer.isEmpty()) {
-        if (generate)
-            d->writeConverterState.flags &= ~QTextCodec::IgnoreHeader;
-        else
-            d->writeConverterState.flags |= QTextCodec::IgnoreHeader;
-    }
+   Q_D(QTextStream);
+   if (d->writeBuffer.isEmpty()) {
+      if (generate) {
+         d->writeConverterState.flags &= ~QTextCodec::IgnoreHeader;
+      } else {
+         d->writeConverterState.flags |= QTextCodec::IgnoreHeader;
+      }
+   }
 }
 
 /*!
@@ -2857,8 +2944,8 @@ void QTextStream::setGenerateByteOrderMark(bool generate)
 */
 bool QTextStream::generateByteOrderMark() const
 {
-    Q_D(const QTextStream);
-    return (d->writeConverterState.flags & QTextCodec::IgnoreHeader) == 0;
+   Q_D(const QTextStream);
+   return (d->writeConverterState.flags & QTextCodec::IgnoreHeader) == 0;
 }
 
 #endif
@@ -2876,8 +2963,8 @@ bool QTextStream::generateByteOrderMark() const
 */
 void QTextStream::setLocale(const QLocale &locale)
 {
-    Q_D(QTextStream);
-    d->locale = locale;
+   Q_D(QTextStream);
+   d->locale = locale;
 }
 
 /*!
@@ -2889,8 +2976,8 @@ void QTextStream::setLocale(const QLocale &locale)
 */
 QLocale QTextStream::locale() const
 {
-    Q_D(const QTextStream);
-    return d->locale;
+   Q_D(const QTextStream);
+   return d->locale;
 }
 
 

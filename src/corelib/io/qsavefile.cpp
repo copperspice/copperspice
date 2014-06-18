@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,9 +44,9 @@
 QT_BEGIN_NAMESPACE
 
 QSaveFilePrivate::QSaveFilePrivate()
-    : writeError(QFileDevice::NoError),
-      useTemporaryFile(true),
-      directWriteFallback(false)
+   : writeError(QFileDevice::NoError),
+     useTemporaryFile(true),
+     directWriteFallback(false)
 {
 }
 
@@ -96,27 +96,27 @@ QSaveFilePrivate::~QSaveFilePrivate()
     Constructs a new file object with the given \a parent.
 */
 QSaveFile::QSaveFile(QObject *parent)
-    : QFileDevice(*new QSaveFilePrivate, parent)
+   : QFileDevice(*new QSaveFilePrivate, parent)
 {
 }
 /*!
     Constructs a new file object to represent the file with the given \a name.
 */
 QSaveFile::QSaveFile(const QString &name)
-    : QFileDevice(*new QSaveFilePrivate, 0)
+   : QFileDevice(*new QSaveFilePrivate, 0)
 {
-    Q_D(QSaveFile);
-    d->fileName = name;
+   Q_D(QSaveFile);
+   d->fileName = name;
 }
 /*!
     Constructs a new file object with the given \a parent to represent the
     file with the specified \a name.
 */
 QSaveFile::QSaveFile(const QString &name, QObject *parent)
-    : QFileDevice(*new QSaveFilePrivate, parent)
+   : QFileDevice(*new QSaveFilePrivate, parent)
 {
-    Q_D(QSaveFile);
-    d->fileName = name;
+   Q_D(QSaveFile);
+   d->fileName = name;
 }
 
 /*!
@@ -124,13 +124,13 @@ QSaveFile::QSaveFile(const QString &name, QObject *parent)
 */
 QSaveFile::~QSaveFile()
 {
-    Q_D(QSaveFile);
-    QFileDevice::close();
-    if (d->fileEngine) {
-        d->fileEngine->remove();
-        delete d->fileEngine;
-        d->fileEngine = 0;
-    }
+   Q_D(QSaveFile);
+   QFileDevice::close();
+   if (d->fileEngine) {
+      d->fileEngine->remove();
+      delete d->fileEngine;
+      d->fileEngine = 0;
+   }
 }
 
 /*!
@@ -141,7 +141,7 @@ QSaveFile::~QSaveFile()
 */
 QString QSaveFile::fileName() const
 {
-    return d_func()->fileName;
+   return d_func()->fileName;
 }
 
 /*!
@@ -152,7 +152,7 @@ QString QSaveFile::fileName() const
 */
 void QSaveFile::setFileName(const QString &name)
 {
-    d_func()->fileName = name;
+   d_func()->fileName = name;
 }
 
 /*!
@@ -168,58 +168,60 @@ void QSaveFile::setFileName(const QString &name)
 */
 bool QSaveFile::open(OpenMode mode)
 {
-    Q_D(QSaveFile);
-    if (isOpen()) {
-        qWarning("QSaveFile::open: File (%s) already open", qPrintable(fileName()));
-        return false;
-    }
-    unsetError();
-    if ((mode & (ReadOnly | WriteOnly)) == 0) {
-        qWarning("QSaveFile::open: Open mode not specified");
-        return false;
-    }
-    // In the future we could implement ReadWrite by copying from the existing file to the temp file...
-    if ((mode & ReadOnly) || (mode & Append)) {
-        qWarning("QSaveFile::open: Unsupported open mode 0x%x", int(mode));
-        return false;
-    }
+   Q_D(QSaveFile);
+   if (isOpen()) {
+      qWarning("QSaveFile::open: File (%s) already open", qPrintable(fileName()));
+      return false;
+   }
+   unsetError();
+   if ((mode & (ReadOnly | WriteOnly)) == 0) {
+      qWarning("QSaveFile::open: Open mode not specified");
+      return false;
+   }
+   // In the future we could implement ReadWrite by copying from the existing file to the temp file...
+   if ((mode & ReadOnly) || (mode & Append)) {
+      qWarning("QSaveFile::open: Unsupported open mode 0x%x", int(mode));
+      return false;
+   }
 
-    // check if existing file is writable
-    QFileInfo existingFile(d->fileName);
-    if (existingFile.exists() && !existingFile.isWritable()) {
-        d->setError(QFileDevice::WriteError, QSaveFile::tr("Existing file %1 is not writable").arg(d->fileName));
-        d->writeError = QFileDevice::WriteError;
-        return false;
-    }
-    d->fileEngine = new QTemporaryFileEngine(d->fileName);
-    // Same as in QFile: QIODevice provides the buffering, so there's no need to request it from the file engine.
-    if (!d->fileEngine->open(mode | QIODevice::Unbuffered)) {
-        QFileDevice::FileError err = d->fileEngine->error();
+   // check if existing file is writable
+   QFileInfo existingFile(d->fileName);
+   if (existingFile.exists() && !existingFile.isWritable()) {
+      d->setError(QFileDevice::WriteError, QSaveFile::tr("Existing file %1 is not writable").arg(d->fileName));
+      d->writeError = QFileDevice::WriteError;
+      return false;
+   }
+   d->fileEngine = new QTemporaryFileEngine(d->fileName);
+   // Same as in QFile: QIODevice provides the buffering, so there's no need to request it from the file engine.
+   if (!d->fileEngine->open(mode | QIODevice::Unbuffered)) {
+      QFileDevice::FileError err = d->fileEngine->error();
 #ifdef Q_OS_UNIX
-        if (d->directWriteFallback && err == QFileDevice::OpenError && errno == EACCES) {
-            delete d->fileEngine;
-            d->fileEngine = QAbstractFileEngine::create(d->fileName);
-            if (d->fileEngine->open(mode | QIODevice::Unbuffered)) {
-                d->useTemporaryFile = false;
-                QFileDevice::open(mode);
-                return true;
-            }
-            err = d->fileEngine->error();
-        }
+      if (d->directWriteFallback && err == QFileDevice::OpenError && errno == EACCES) {
+         delete d->fileEngine;
+         d->fileEngine = QAbstractFileEngine::create(d->fileName);
+         if (d->fileEngine->open(mode | QIODevice::Unbuffered)) {
+            d->useTemporaryFile = false;
+            QFileDevice::open(mode);
+            return true;
+         }
+         err = d->fileEngine->error();
+      }
 #endif
-        if (err == QFileDevice::UnspecifiedError)
-            err = QFileDevice::OpenError;
-        d->setError(err, d->fileEngine->errorString());
-        delete d->fileEngine;
-        d->fileEngine = 0;
-        return false;
-    }
+      if (err == QFileDevice::UnspecifiedError) {
+         err = QFileDevice::OpenError;
+      }
+      d->setError(err, d->fileEngine->errorString());
+      delete d->fileEngine;
+      d->fileEngine = 0;
+      return false;
+   }
 
-    d->useTemporaryFile = true;
-    QFileDevice::open(mode);
-    if (existingFile.exists())
-        setPermissions(existingFile.permissions());
-    return true;
+   d->useTemporaryFile = true;
+   QFileDevice::open(mode);
+   if (existingFile.exists()) {
+      setPermissions(existingFile.permissions());
+   }
+   return true;
 }
 
 /*!
@@ -230,7 +232,7 @@ bool QSaveFile::open(OpenMode mode)
 */
 void QSaveFile::close()
 {
-    qFatal("QSaveFile::close called");
+   qFatal("QSaveFile::close called");
 }
 
 /*!
@@ -247,41 +249,42 @@ void QSaveFile::close()
 */
 bool QSaveFile::commit()
 {
-    Q_D(QSaveFile);
-    if (!d->fileEngine)
-        return false;
+   Q_D(QSaveFile);
+   if (!d->fileEngine) {
+      return false;
+   }
 
-    if (!isOpen()) {
-        qWarning("QSaveFile::commit: File (%s) is not open", qPrintable(fileName()));
-        return false;
-    }
-    QFileDevice::close(); // calls flush()
+   if (!isOpen()) {
+      qWarning("QSaveFile::commit: File (%s) is not open", qPrintable(fileName()));
+      return false;
+   }
+   QFileDevice::close(); // calls flush()
 
-    // Sync to disk if possible. Ignore errors (e.g. not supported).
-    d->fileEngine->syncToDisk();
+   // Sync to disk if possible. Ignore errors (e.g. not supported).
+   d->fileEngine->syncToDisk();
 
-    if (d->useTemporaryFile) {
-        if (d->writeError != QFileDevice::NoError) {
-            d->fileEngine->remove();
-            d->writeError = QFileDevice::NoError;
-            delete d->fileEngine;
-            d->fileEngine = 0;
-            return false;
-        }
-        // atomically replace old file with new file
-        // Can't use QFile::rename for that, must use the file engine directly
-        Q_ASSERT(d->fileEngine);
-        if (!d->fileEngine->renameOverwrite(d->fileName)) {
-            d->setError(d->fileEngine->error(), d->fileEngine->errorString());
-            d->fileEngine->remove();
-            delete d->fileEngine;
-            d->fileEngine = 0;
-            return false;
-        }
-    }
-    delete d->fileEngine;
-    d->fileEngine = 0;
-    return true;
+   if (d->useTemporaryFile) {
+      if (d->writeError != QFileDevice::NoError) {
+         d->fileEngine->remove();
+         d->writeError = QFileDevice::NoError;
+         delete d->fileEngine;
+         d->fileEngine = 0;
+         return false;
+      }
+      // atomically replace old file with new file
+      // Can't use QFile::rename for that, must use the file engine directly
+      Q_ASSERT(d->fileEngine);
+      if (!d->fileEngine->renameOverwrite(d->fileName)) {
+         d->setError(d->fileEngine->error(), d->fileEngine->errorString());
+         d->fileEngine->remove();
+         delete d->fileEngine;
+         d->fileEngine = 0;
+         return false;
+      }
+   }
+   delete d->fileEngine;
+   d->fileEngine = 0;
+   return true;
 }
 
 /*!
@@ -304,11 +307,12 @@ bool QSaveFile::commit()
 */
 void QSaveFile::cancelWriting()
 {
-    Q_D(QSaveFile);
-    if (!isOpen())
-        return;
-    d->setError(QFileDevice::WriteError, QSaveFile::tr("Writing canceled by application"));
-    d->writeError = QFileDevice::WriteError;
+   Q_D(QSaveFile);
+   if (!isOpen()) {
+      return;
+   }
+   d->setError(QFileDevice::WriteError, QSaveFile::tr("Writing canceled by application"));
+   d->writeError = QFileDevice::WriteError;
 }
 
 /*!
@@ -316,15 +320,17 @@ void QSaveFile::cancelWriting()
 */
 qint64 QSaveFile::writeData(const char *data, qint64 len)
 {
-    Q_D(QSaveFile);
-    if (d->writeError != QFileDevice::NoError)
-        return -1;
+   Q_D(QSaveFile);
+   if (d->writeError != QFileDevice::NoError) {
+      return -1;
+   }
 
-    const qint64 ret = QFileDevice::writeData(data, len);
+   const qint64 ret = QFileDevice::writeData(data, len);
 
-    if (d->error != QFileDevice::NoError)
-        d->writeError = d->error;
-    return ret;
+   if (d->error != QFileDevice::NoError) {
+      d->writeError = d->error;
+   }
+   return ret;
 }
 
 /*!
@@ -353,8 +359,8 @@ qint64 QSaveFile::writeData(const char *data, qint64 len)
 */
 void QSaveFile::setDirectWriteFallback(bool enabled)
 {
-    Q_D(QSaveFile);
-    d->directWriteFallback = enabled;
+   Q_D(QSaveFile);
+   d->directWriteFallback = enabled;
 }
 
 /*!
@@ -365,8 +371,8 @@ void QSaveFile::setDirectWriteFallback(bool enabled)
 */
 bool QSaveFile::directWriteFallback() const
 {
-    Q_D(const QSaveFile);
-    return d->directWriteFallback;
+   Q_D(const QSaveFile);
+   return d->directWriteFallback;
 }
 
 QT_END_NAMESPACE

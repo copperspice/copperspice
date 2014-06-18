@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,23 +37,23 @@ class QTemporaryDirPrivate;
 
 class Q_CORE_EXPORT QTemporaryDir
 {
-public:
-    QTemporaryDir();
-    explicit QTemporaryDir(const QString &templateName);
-    ~QTemporaryDir();
+ public:
+   QTemporaryDir();
+   explicit QTemporaryDir(const QString &templateName);
+   ~QTemporaryDir();
 
-    bool isValid() const;
+   bool isValid() const;
 
-    bool autoRemove() const;
-    void setAutoRemove(bool b);
-    bool remove();
+   bool autoRemove() const;
+   void setAutoRemove(bool b);
+   bool remove();
 
-    QString path() const;
+   QString path() const;
 
-private:
-    QScopedPointer<QTemporaryDirPrivate> d_ptr;
+ private:
+   QScopedPointer<QTemporaryDirPrivate> d_ptr;
 
-    Q_DISABLE_COPY(QTemporaryDir)
+   Q_DISABLE_COPY(QTemporaryDir)
 };
 
 #endif // QT_NO_TEMPORARYFILE

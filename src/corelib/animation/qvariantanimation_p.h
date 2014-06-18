@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,55 +38,53 @@ QT_BEGIN_NAMESPACE
 
 class QVariantAnimationPrivate : public QAbstractAnimationPrivate
 {
-    Q_DECLARE_PUBLIC(QVariantAnimation)
+   Q_DECLARE_PUBLIC(QVariantAnimation)
 
-public:
+ public:
 
-    QVariantAnimationPrivate();
+   QVariantAnimationPrivate();
 
-    static QVariantAnimationPrivate *get(QVariantAnimation *q)
-    {
-        return q->d_func();
-    }
+   static QVariantAnimationPrivate *get(QVariantAnimation *q) {
+      return q->d_func();
+   }
 
-    void setDefaultStartEndValue(const QVariant &value);
+   void setDefaultStartEndValue(const QVariant &value);
 
 
-    QVariant currentValue;
-    QVariant defaultStartEndValue;
+   QVariant currentValue;
+   QVariant defaultStartEndValue;
 
-    //this is used to keep track of the KeyValue interval in which we currently are
-    struct
-    {
-        QVariantAnimation::KeyValue start, end;
-    } currentInterval;
+   //this is used to keep track of the KeyValue interval in which we currently are
+   struct {
+      QVariantAnimation::KeyValue start, end;
+   } currentInterval;
 
-    QEasingCurve easing;
-    int duration;
-    QVariantAnimation::KeyValues keyValues;
-    QVariantAnimation::Interpolator interpolator;
+   QEasingCurve easing;
+   int duration;
+   QVariantAnimation::KeyValues keyValues;
+   QVariantAnimation::Interpolator interpolator;
 
-    void setCurrentValueForProgress(const qreal progress);
-    void recalculateCurrentInterval(bool force=false);
-    void setValueAt(qreal, const QVariant &);
-    QVariant valueAt(qreal step) const;
-    void convertValues(int t);
+   void setCurrentValueForProgress(const qreal progress);
+   void recalculateCurrentInterval(bool force = false);
+   void setValueAt(qreal, const QVariant &);
+   QVariant valueAt(qreal step) const;
+   void convertValues(int t);
 
-    void updateInterpolator();
+   void updateInterpolator();
 
-    //XXX this is needed by dui
-    static Q_CORE_EXPORT QVariantAnimation::Interpolator getInterpolator(int interpolationType);
+   //XXX this is needed by dui
+   static Q_CORE_EXPORT QVariantAnimation::Interpolator getInterpolator(int interpolationType);
 };
 
 //this should make the interpolation faster
 template<typename T> inline T _q_interpolate(const T &f, const T &t, qreal progress)
 {
-    return T(f + (t - f) * progress);
+   return T(f + (t - f) * progress);
 }
 
 template<typename T > inline QVariant _q_interpolateVariant(const T &from, const T &to, qreal progress)
 {
-    return _q_interpolate(from, to, progress);
+   return _q_interpolate(from, to, progress);
 }
 
 QT_END_NAMESPACE

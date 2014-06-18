@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,29 +36,26 @@ QT_BEGIN_NAMESPACE
 
 class QAnimationGroupPrivate : public QAbstractAnimationPrivate
 {
-    Q_DECLARE_PUBLIC(QAnimationGroup)
+   Q_DECLARE_PUBLIC(QAnimationGroup)
 
-public:
-    QAnimationGroupPrivate()
-    {
-        isGroup = true;
-    }
+ public:
+   QAnimationGroupPrivate() {
+      isGroup = true;
+   }
 
-    virtual void animationInsertedAt(int) { }
-    virtual void animationRemoved(int, QAbstractAnimation *);
+   virtual void animationInsertedAt(int) { }
+   virtual void animationRemoved(int, QAbstractAnimation *);
 
-    void disconnectUncontrolledAnimation(QAbstractAnimation *anim)
-    {
-        //0 for the signal here because we might be called from the animation destructor
-        QObject::disconnect(anim, 0, q_func(), SLOT(_q_uncontrolledAnimationFinished()));
-    }
+   void disconnectUncontrolledAnimation(QAbstractAnimation *anim) {
+      //0 for the signal here because we might be called from the animation destructor
+      QObject::disconnect(anim, 0, q_func(), SLOT(_q_uncontrolledAnimationFinished()));
+   }
 
-    void connectUncontrolledAnimation(QAbstractAnimation *anim)
-    {
-        QObject::connect(anim, SIGNAL(finished()), q_func(), SLOT(_q_uncontrolledAnimationFinished()));
-    }
+   void connectUncontrolledAnimation(QAbstractAnimation *anim) {
+      QObject::connect(anim, SIGNAL(finished()), q_func(), SLOT(_q_uncontrolledAnimationFinished()));
+   }
 
-    QList<QAbstractAnimation *> animations;
+   QList<QAbstractAnimation *> animations;
 };
 
 QT_END_NAMESPACE

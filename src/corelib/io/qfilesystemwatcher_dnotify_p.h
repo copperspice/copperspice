@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,62 +40,62 @@ QT_BEGIN_NAMESPACE
 
 class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
-    CS_OBJECT(QDnotifyFileSystemWatcherEngine)
+   CS_OBJECT(QDnotifyFileSystemWatcherEngine)
 
-public:
-    virtual ~QDnotifyFileSystemWatcherEngine();
+ public:
+   virtual ~QDnotifyFileSystemWatcherEngine();
 
-    static QDnotifyFileSystemWatcherEngine *create();
+   static QDnotifyFileSystemWatcherEngine *create();
 
-    void run();
+   void run();
 
-    QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
-    QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
 
-    void stop();
+   void stop();
 
-private :
-    CORE_CS_SLOT_1(Private, void refresh(int un_named_arg1))
-    CORE_CS_SLOT_2(refresh) 
+ private :
+   CORE_CS_SLOT_1(Private, void refresh(int un_named_arg1))
+   CORE_CS_SLOT_2(refresh)
 
-    struct Directory {
-        Directory() : fd(0), parentFd(0), isMonitored(false) {}
-        Directory(const Directory &o) : path(o.path),
-                                        fd(o.fd),
-                                        parentFd(o.parentFd),
-                                        isMonitored(o.isMonitored),
-                                        files(o.files) {}
-        QString path;
-        int fd;
-        int parentFd;
-        bool isMonitored;
+   struct Directory {
+      Directory() : fd(0), parentFd(0), isMonitored(false) {}
+      Directory(const Directory &o) : path(o.path),
+         fd(o.fd),
+         parentFd(o.parentFd),
+         isMonitored(o.isMonitored),
+         files(o.files) {}
+      QString path;
+      int fd;
+      int parentFd;
+      bool isMonitored;
 
-        struct File {
-            File() : ownerId(0u), groupId(0u), permissions(0u) { }
-            File(const File &o) : path(o.path),
-                                  ownerId(o.ownerId),
-                                  groupId(o.groupId),
-                                  permissions(o.permissions),
-                                  lastWrite(o.lastWrite) {}
-            QString path;
+      struct File {
+         File() : ownerId(0u), groupId(0u), permissions(0u) { }
+         File(const File &o) : path(o.path),
+            ownerId(o.ownerId),
+            groupId(o.groupId),
+            permissions(o.permissions),
+            lastWrite(o.lastWrite) {}
+         QString path;
 
-            bool updateInfo();
+         bool updateInfo();
 
-            uint ownerId;
-            uint groupId;
-            QFile::Permissions permissions;
-            QDateTime lastWrite;
-        };
+         uint ownerId;
+         uint groupId;
+         QFile::Permissions permissions;
+         QDateTime lastWrite;
+      };
 
-        QList<File> files;
-    };
+      QList<File> files;
+   };
 
-    QDnotifyFileSystemWatcherEngine();
+   QDnotifyFileSystemWatcherEngine();
 
-    QMutex mutex;
-    QHash<QString, int> pathToFD;
-    QHash<int, Directory> fdToDirectory;
-    QHash<int, int> parentToFD;
+   QMutex mutex;
+   QHash<QString, int> pathToFD;
+   QHash<int, Directory> fdToDirectory;
+   QHash<int, int> parentToFD;
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,28 +36,28 @@ class QParallelAnimationGroupPrivate;
 
 class Q_CORE_EXPORT QParallelAnimationGroup : public QAnimationGroup
 {
-    CS_OBJECT(QParallelAnimationGroup)
+   CS_OBJECT(QParallelAnimationGroup)
 
-public:
-    QParallelAnimationGroup(QObject *parent = 0);
-    ~QParallelAnimationGroup();
+ public:
+   QParallelAnimationGroup(QObject *parent = 0);
+   ~QParallelAnimationGroup();
 
-    int duration() const;
+   int duration() const;
 
-protected:
-    QParallelAnimationGroup(QParallelAnimationGroupPrivate &dd, QObject *parent);
-    bool event(QEvent *event);
+ protected:
+   QParallelAnimationGroup(QParallelAnimationGroupPrivate &dd, QObject *parent);
+   bool event(QEvent *event);
 
-    void updateCurrentTime(int currentTime);
-    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-    void updateDirection(QAbstractAnimation::Direction direction);
+   void updateCurrentTime(int currentTime);
+   void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+   void updateDirection(QAbstractAnimation::Direction direction);
 
-private:
-    Q_DISABLE_COPY(QParallelAnimationGroup)
-    Q_DECLARE_PRIVATE(QParallelAnimationGroup)
+ private:
+   Q_DISABLE_COPY(QParallelAnimationGroup)
+   Q_DECLARE_PRIVATE(QParallelAnimationGroup)
 
-    CORE_CS_SLOT_1(Private, void _q_uncontrolledAnimationFinished())
-	 CORE_CS_SLOT_2(_q_uncontrolledAnimationFinished)
+   CORE_CS_SLOT_1(Private, void _q_uncontrolledAnimationFinished())
+   CORE_CS_SLOT_2(_q_uncontrolledAnimationFinished)
 };
 
 #endif //QT_NO_ANIMATION

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,50 +36,50 @@ class QSignalMapperPrivate;
 
 class Q_CORE_EXPORT QSignalMapper : public QObject
 {
-    CS_OBJECT(QSignalMapper)
-    Q_DECLARE_PRIVATE(QSignalMapper)
+   CS_OBJECT(QSignalMapper)
+   Q_DECLARE_PRIVATE(QSignalMapper)
 
-public:
-    explicit QSignalMapper(QObject *parent = 0);
-    ~QSignalMapper();
+ public:
+   explicit QSignalMapper(QObject *parent = 0);
+   ~QSignalMapper();
 
-    void setMapping(QObject *sender, int id);
-    void setMapping(QObject *sender, const QString &text);
-    void setMapping(QObject *sender, QWidget *widget);
-    void setMapping(QObject *sender, QObject *object);
-    void removeMappings(QObject *sender);
+   void setMapping(QObject *sender, int id);
+   void setMapping(QObject *sender, const QString &text);
+   void setMapping(QObject *sender, QWidget *widget);
+   void setMapping(QObject *sender, QObject *object);
+   void removeMappings(QObject *sender);
 
-    QObject *mapping(int id) const;
-    QObject *mapping(const QString &text) const;
-    QObject *mapping(QWidget *widget) const;
-    QObject *mapping(QObject *object) const;
+   QObject *mapping(int id) const;
+   QObject *mapping(const QString &text) const;
+   QObject *mapping(QWidget *widget) const;
+   QObject *mapping(QObject *object) const;
 
-    CORE_CS_SIGNAL_1(Public, void mapped(int un_named_arg1))
-    CORE_CS_SIGNAL_OVERLOAD(mapped,(int),un_named_arg1) 
+   CORE_CS_SIGNAL_1(Public, void mapped(int un_named_arg1))
+   CORE_CS_SIGNAL_OVERLOAD(mapped, (int), un_named_arg1)
 
-    CORE_CS_SIGNAL_1(Public, void mapped(const QString & un_named_arg1))
-    CORE_CS_SIGNAL_OVERLOAD(mapped,(const QString &),un_named_arg1) 
+   CORE_CS_SIGNAL_1(Public, void mapped(const QString &un_named_arg1))
+   CORE_CS_SIGNAL_OVERLOAD(mapped, (const QString &), un_named_arg1)
 
-    CORE_CS_SIGNAL_1(Public, void mapped(QWidget * un_named_arg1))
-    CORE_CS_SIGNAL_OVERLOAD(mapped,(QWidget *),un_named_arg1) 
+   CORE_CS_SIGNAL_1(Public, void mapped(QWidget *un_named_arg1))
+   CORE_CS_SIGNAL_OVERLOAD(mapped, (QWidget *), un_named_arg1)
 
-    CORE_CS_SIGNAL_1(Public, void mapped(QObject * un_named_arg1))
-    CORE_CS_SIGNAL_OVERLOAD(mapped,(QObject *),un_named_arg1) 
+   CORE_CS_SIGNAL_1(Public, void mapped(QObject *un_named_arg1))
+   CORE_CS_SIGNAL_OVERLOAD(mapped, (QObject *), un_named_arg1)
 
-    CORE_CS_SLOT_1(Public, void map())
-    CORE_CS_SLOT_OVERLOAD(map,()) 
+   CORE_CS_SLOT_1(Public, void map())
+   CORE_CS_SLOT_OVERLOAD(map, ())
 
-    CORE_CS_SLOT_1(Public, void map(QObject * sender))
-    CORE_CS_SLOT_OVERLOAD(map,(QObject *)) 
+   CORE_CS_SLOT_1(Public, void map(QObject *sender))
+   CORE_CS_SLOT_OVERLOAD(map, (QObject *))
 
-private:
-    Q_DISABLE_COPY(QSignalMapper)
+ private:
+   Q_DISABLE_COPY(QSignalMapper)
 
-    CORE_CS_SLOT_1(Private, void _q_senderDestroyed())
-    CORE_CS_SLOT_2(_q_senderDestroyed) 
+   CORE_CS_SLOT_1(Private, void _q_senderDestroyed())
+   CORE_CS_SLOT_2(_q_senderDestroyed)
 
-protected:
-	 QScopedPointer<QSignalMapperPrivate> d_ptr;
+ protected:
+   QScopedPointer<QSignalMapperPrivate> d_ptr;
 };
 
 #endif // QT_NO_SIGNALMAPPER

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -98,57 +98,58 @@ QAbstractTransitionPrivate::QAbstractTransitionPrivate()
 
 QAbstractTransitionPrivate *QAbstractTransitionPrivate::get(QAbstractTransition *q)
 {
-    return q->d_func();
+   return q->d_func();
 }
 
 QStateMachine *QAbstractTransitionPrivate::machine() const
 {
-    QState *source = sourceState();
-    if (!source)
-        return 0;
-    return source->machine();
+   QState *source = sourceState();
+   if (!source) {
+      return 0;
+   }
+   return source->machine();
 }
 
 bool QAbstractTransitionPrivate::callEventTest(QEvent *e)
 {
-    Q_Q(QAbstractTransition);
-    return q->eventTest(e);
+   Q_Q(QAbstractTransition);
+   return q->eventTest(e);
 }
 
 void QAbstractTransitionPrivate::callOnTransition(QEvent *e)
 {
-    Q_Q(QAbstractTransition);
-    q->onTransition(e);
+   Q_Q(QAbstractTransition);
+   q->onTransition(e);
 }
 
 QState *QAbstractTransitionPrivate::sourceState() const
 {
-	 Q_Q(const QAbstractTransition);
-    return qobject_cast<QState*>(q->parent());
+   Q_Q(const QAbstractTransition);
+   return qobject_cast<QState *>(q->parent());
 }
 
 void QAbstractTransitionPrivate::emitTriggered()
 {
-    Q_Q(QAbstractTransition);
-    emit q->triggered();
+   Q_Q(QAbstractTransition);
+   emit q->triggered();
 }
 
 /*!
   Constructs a new QAbstractTransition object with the given \a sourceState.
 */
 QAbstractTransition::QAbstractTransition(QState *sourceState)
-	: QObject(sourceState), d_ptr(new QAbstractTransitionPrivate)
+   : QObject(sourceState), d_ptr(new QAbstractTransitionPrivate)
 {
-	d_ptr->q_ptr = this;
+   d_ptr->q_ptr = this;
 }
 
 /*!
   \internal
 */
-QAbstractTransition::QAbstractTransition(QAbstractTransitionPrivate &dd, QState *parent)    
-	: QObject(parent), d_ptr(&dd)
+QAbstractTransition::QAbstractTransition(QAbstractTransitionPrivate &dd, QState *parent)
+   : QObject(parent), d_ptr(&dd)
 {
-	d_ptr->q_ptr = this;
+   d_ptr->q_ptr = this;
 }
 
 /*!
@@ -164,8 +165,8 @@ QAbstractTransition::~QAbstractTransition()
 */
 QState *QAbstractTransition::sourceState() const
 {
-    Q_D(const QAbstractTransition);
-    return d->sourceState();
+   Q_D(const QAbstractTransition);
+   return d->sourceState();
 }
 
 /*!
@@ -174,58 +175,62 @@ QState *QAbstractTransition::sourceState() const
 */
 QAbstractState *QAbstractTransition::targetState() const
 {
-    Q_D(const QAbstractTransition);
-    if (d->targetStates.isEmpty())
-        return 0;
-    return d->targetStates.first().data();
+   Q_D(const QAbstractTransition);
+   if (d->targetStates.isEmpty()) {
+      return 0;
+   }
+   return d->targetStates.first().data();
 }
 
 /*!
   Sets the \a target state of this transition.
 */
-void QAbstractTransition::setTargetState(QAbstractState* target)
+void QAbstractTransition::setTargetState(QAbstractState *target)
 {
-    Q_D(QAbstractTransition);
-    if (!target)
-        d->targetStates.clear();
-    else
-        setTargetStates(QList<QAbstractState*>() << target);
+   Q_D(QAbstractTransition);
+   if (!target) {
+      d->targetStates.clear();
+   } else {
+      setTargetStates(QList<QAbstractState *>() << target);
+   }
 }
 
 /*!
   Returns the target states of this transition, or an empty list if this
   transition has no target states.
 */
-QList<QAbstractState*> QAbstractTransition::targetStates() const
+QList<QAbstractState *> QAbstractTransition::targetStates() const
 {
-    Q_D(const QAbstractTransition);
-    QList<QAbstractState*> result;
-    for (int i = 0; i < d->targetStates.size(); ++i) {
-        QAbstractState *target = d->targetStates.at(i).data();
-        if (target)
-            result.append(target);
-    }
-    return result;
+   Q_D(const QAbstractTransition);
+   QList<QAbstractState *> result;
+   for (int i = 0; i < d->targetStates.size(); ++i) {
+      QAbstractState *target = d->targetStates.at(i).data();
+      if (target) {
+         result.append(target);
+      }
+   }
+   return result;
 }
 
 /*!
   Sets the target states of this transition to be the given \a targets.
 */
-void QAbstractTransition::setTargetStates(const QList<QAbstractState*> &targets)
+void QAbstractTransition::setTargetStates(const QList<QAbstractState *> &targets)
 {
-    Q_D(QAbstractTransition);
+   Q_D(QAbstractTransition);
 
-    for (int i = 0; i < targets.size(); ++i) {
-        QAbstractState *target = targets.at(i);
-        if (!target) {
-            qWarning("QAbstractTransition::setTargetStates: target state(s) cannot be null");
-            return;
-        }
-    }
+   for (int i = 0; i < targets.size(); ++i) {
+      QAbstractState *target = targets.at(i);
+      if (!target) {
+         qWarning("QAbstractTransition::setTargetStates: target state(s) cannot be null");
+         return;
+      }
+   }
 
-    d->targetStates.clear();
-    for (int i = 0; i < targets.size(); ++i)
-        d->targetStates.append(targets.at(i));
+   d->targetStates.clear();
+   for (int i = 0; i < targets.size(); ++i) {
+      d->targetStates.append(targets.at(i));
+   }
 }
 
 /*!
@@ -234,8 +239,8 @@ void QAbstractTransition::setTargetStates(const QList<QAbstractState*> &targets)
 */
 QStateMachine *QAbstractTransition::machine() const
 {
-    Q_D(const QAbstractTransition);
-    return d->machine();
+   Q_D(const QAbstractTransition);
+   return d->machine();
 }
 
 #ifndef QT_NO_ANIMATION
@@ -248,12 +253,12 @@ QStateMachine *QAbstractTransition::machine() const
 */
 void QAbstractTransition::addAnimation(QAbstractAnimation *animation)
 {
-    Q_D(QAbstractTransition);
-    if (!animation) {
-        qWarning("QAbstractTransition::addAnimation: cannot add null animation");
-        return;
-    }
-    d->animations.append(animation);
+   Q_D(QAbstractTransition);
+   if (!animation) {
+      qWarning("QAbstractTransition::addAnimation: cannot add null animation");
+      return;
+   }
+   d->animations.append(animation);
 }
 
 /*!
@@ -263,12 +268,12 @@ void QAbstractTransition::addAnimation(QAbstractAnimation *animation)
 */
 void QAbstractTransition::removeAnimation(QAbstractAnimation *animation)
 {
-    Q_D(QAbstractTransition);
-    if (!animation) {
-        qWarning("QAbstractTransition::removeAnimation: cannot remove null animation");
-        return;
-    }
-    d->animations.removeOne(animation);
+   Q_D(QAbstractTransition);
+   if (!animation) {
+      qWarning("QAbstractTransition::removeAnimation: cannot remove null animation");
+      return;
+   }
+   d->animations.removeOne(animation);
 }
 
 /*!
@@ -277,10 +282,10 @@ void QAbstractTransition::removeAnimation(QAbstractAnimation *animation)
 
   \sa addAnimation()
 */
-QList<QAbstractAnimation*> QAbstractTransition::animations() const
+QList<QAbstractAnimation *> QAbstractTransition::animations() const
 {
-    Q_D(const QAbstractTransition);
-    return d->animations;
+   Q_D(const QAbstractTransition);
+   return d->animations;
 }
 
 #endif
@@ -313,7 +318,7 @@ QList<QAbstractAnimation*> QAbstractTransition::animations() const
 */
 bool QAbstractTransition::event(QEvent *e)
 {
-    return QObject::event(e);
+   return QObject::event(e);
 }
 
 QT_END_NAMESPACE

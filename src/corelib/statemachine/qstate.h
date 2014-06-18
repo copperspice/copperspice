@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,93 +39,94 @@ class QStatePrivate;
 
 class Q_CORE_EXPORT QState : public QAbstractState
 {
-    CS_OBJECT(QState)
+   CS_OBJECT(QState)
 
-    CORE_CS_PROPERTY_READ(initialState, initialState)
-    CORE_CS_PROPERTY_WRITE(initialState, setInitialState)
+   CORE_CS_PROPERTY_READ(initialState, initialState)
+   CORE_CS_PROPERTY_WRITE(initialState, setInitialState)
 
-    CORE_CS_PROPERTY_READ(errorState, errorState)
-    CORE_CS_PROPERTY_WRITE(errorState, setErrorState)
+   CORE_CS_PROPERTY_READ(errorState, errorState)
+   CORE_CS_PROPERTY_WRITE(errorState, setErrorState)
 
-    CORE_CS_PROPERTY_READ(childMode, childMode)
-    CORE_CS_PROPERTY_WRITE(childMode, setChildMode)
+   CORE_CS_PROPERTY_READ(childMode, childMode)
+   CORE_CS_PROPERTY_WRITE(childMode, setChildMode)
 
-    CORE_CS_ENUM(ChildMode)
+   CORE_CS_ENUM(ChildMode)
 
-public:
-    enum ChildMode {
-        ExclusiveStates,
-        ParallelStates
-    };
+ public:
+   enum ChildMode {
+      ExclusiveStates,
+      ParallelStates
+   };
 
-    QState(QState *parent = 0);
-    QState(ChildMode childMode, QState *parent = 0);
-    ~QState();
-  
-    void addTransition(QAbstractTransition *transition);
+   QState(QState *parent = 0);
+   QState(ChildMode childMode, QState *parent = 0);
+   ~QState();
 
-    // CopperSpice - second parameter changed from a string to a method pointer
-    template<class SignalClass, class ...SignalArgs>
-    QSignalTransition *addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QAbstractState *target);
+   void addTransition(QAbstractTransition *transition);
 
-    QAbstractTransition *addTransition(QAbstractState *target);
-    void removeTransition(QAbstractTransition *transition);
-    QList<QAbstractTransition*> transitions() const;
+   // CopperSpice - second parameter changed from a string to a method pointer
+   template<class SignalClass, class ...SignalArgs>
+   QSignalTransition *addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QAbstractState *target);
 
-    QAbstractState *initialState() const;
-    void setInitialState(QAbstractState *state);
+   QAbstractTransition *addTransition(QAbstractState *target);
+   void removeTransition(QAbstractTransition *transition);
+   QList<QAbstractTransition *> transitions() const;
 
-    ChildMode childMode() const;
-    void setChildMode(ChildMode mode);
+   QAbstractState *initialState() const;
+   void setInitialState(QAbstractState *state);
 
-    QAbstractState *errorState() const;
-    void setErrorState(QAbstractState *state);
+   ChildMode childMode() const;
+   void setChildMode(ChildMode mode);
+
+   QAbstractState *errorState() const;
+   void setErrorState(QAbstractState *state);
 
 #ifndef QT_NO_PROPERTIES
-    void assignProperty(QObject *object, const char *name,const QVariant &value);
+   void assignProperty(QObject *object, const char *name, const QVariant &value);
 #endif
 
-public:
-    CORE_CS_SIGNAL_1(Public, void finished())
-    CORE_CS_SIGNAL_2(finished) 
+ public:
+   CORE_CS_SIGNAL_1(Public, void finished())
+   CORE_CS_SIGNAL_2(finished)
 
-    CORE_CS_SIGNAL_1(Public, void propertiesAssigned())
-    CORE_CS_SIGNAL_2(propertiesAssigned) 
+   CORE_CS_SIGNAL_1(Public, void propertiesAssigned())
+   CORE_CS_SIGNAL_2(propertiesAssigned)
 
-protected:
-    void onEntry(QEvent *event);
-    void onExit(QEvent *event);
+ protected:
+   void onEntry(QEvent *event);
+   void onExit(QEvent *event);
 
-    bool event(QEvent *e);
+   bool event(QEvent *e);
 
-    QState(QStatePrivate &dd, QState *parent);
+   QState(QStatePrivate &dd, QState *parent);
 
-private:
-    Q_DISABLE_COPY(QState)
-    Q_DECLARE_PRIVATE(QState)
+ private:
+   Q_DISABLE_COPY(QState)
+   Q_DECLARE_PRIVATE(QState)
 };
 
 template<class SignalClass, class ...SignalArgs>
-QSignalTransition *QState::addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QAbstractState *target)
+QSignalTransition *QState::addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...),
+      QAbstractState *target)
 {
-    if (! sender) {
-        qWarning("QState::addTransition: No sender specified");
-        return 0;
-    }
-    if (! signal) {
-        qWarning("QState::addTransition: No signal specified");
-        return 0;
-    }
-    if (! target) {
-        qWarning("QState::addTransition: No target specified");
-        return 0;
-    }   
+   if (! sender) {
+      qWarning("QState::addTransition: No sender specified");
+      return 0;
+   }
+   if (! signal) {
+      qWarning("QState::addTransition: No signal specified");
+      return 0;
+   }
+   if (! target) {
+      qWarning("QState::addTransition: No target specified");
+      return 0;
+   }
 
-    QSignalTransition *trans = new QSignalTransition(sender, signal);
-    trans->setTargetState(target);
-    addTransition(trans);
+   QSignalTransition *trans = new QSignalTransition(sender, signal);
+   trans->setTargetState(target);
+   addTransition(trans);
 
-    return trans;	 
+   return trans;
 }
 
 #endif //QT_NO_STATEMACHINE

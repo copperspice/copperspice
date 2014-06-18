@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,104 +44,107 @@ extern QString qt_error_string(int code);
 
 bool QLibraryPrivate::load_sys()
 {
-    // avoid 'Bad Image' message box
-    UINT oldmode = SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
+   // avoid 'Bad Image' message box
+   UINT oldmode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
-    // make the following attempts at locating the library:
-    //
-    // Windows
-    // if (loadHints & QLibrary::ImprovedSearchHeuristics)
-    //   if (absolute)
-    //     fileName
-    //     fileName + ".dll"
-    //   else
-    //     fileName + ".dll"
-    //     fileName
-    // else
-    //   fileName
-    //   fileName + ".dll"
-    //
-    // NB If it's a plugin we do not ever try the ".dll" extension
+   // make the following attempts at locating the library:
+   //
+   // Windows
+   // if (loadHints & QLibrary::ImprovedSearchHeuristics)
+   //   if (absolute)
+   //     fileName
+   //     fileName + ".dll"
+   //   else
+   //     fileName + ".dll"
+   //     fileName
+   // else
+   //   fileName
+   //   fileName + ".dll"
+   //
+   // NB If it's a plugin we do not ever try the ".dll" extension
 
-    QStringList attempts;
-    QFileSystemEntry fsEntry(fileName);
+   QStringList attempts;
+   QFileSystemEntry fsEntry(fileName);
 
-    if (loadHints & QLibrary::ImprovedSearchHeuristics) {
-        if (pluginState != IsAPlugin)
-            attempts.append(fileName + QLatin1String(".dll"));
+   if (loadHints & QLibrary::ImprovedSearchHeuristics) {
+      if (pluginState != IsAPlugin) {
+         attempts.append(fileName + QLatin1String(".dll"));
+      }
 
-        // If the fileName is an absolute path we try that first, otherwise we
-        // use the system-specific suffix first
-        if (fsEntry.isAbsolute()) {
-            attempts.prepend(fileName);
-        } else {
-            attempts.append(fileName);
-        }
+      // If the fileName is an absolute path we try that first, otherwise we
+      // use the system-specific suffix first
+      if (fsEntry.isAbsolute()) {
+         attempts.prepend(fileName);
+      } else {
+         attempts.append(fileName);
+      }
 
-    } else {
-        attempts.append(fileName);
+   } else {
+      attempts.append(fileName);
 
-        if (pluginState != IsAPlugin) {
-            attempts.append(fileName + QLatin1String(".dll"));
-        }
-    }
+      if (pluginState != IsAPlugin) {
+         attempts.append(fileName + QLatin1String(".dll"));
+      }
+   }
 
-    Q_FOREACH (const QString &attempt, attempts) {
-        pHnd = LoadLibrary((wchar_t*)QDir::toNativeSeparators(attempt).utf16());
+   Q_FOREACH (const QString & attempt, attempts) {
+      pHnd = LoadLibrary((wchar_t *)QDir::toNativeSeparators(attempt).utf16());
 
-        // If we have a handle or the last error is something other than "unable
-        // to find the module", then bail out
-        if (pHnd || ::GetLastError() != ERROR_MOD_NOT_FOUND)
-            break;
-    }
+      // If we have a handle or the last error is something other than "unable
+      // to find the module", then bail out
+      if (pHnd || ::GetLastError() != ERROR_MOD_NOT_FOUND) {
+         break;
+      }
+   }
 
-    SetErrorMode(oldmode);
-    if (! pHnd) {
-        errorString = QLibrary::tr("Can not load library %1: %2").arg(fileName).arg(qt_error_string());
+   SetErrorMode(oldmode);
+   if (! pHnd) {
+      errorString = QLibrary::tr("Can not load library %1: %2").arg(fileName).arg(qt_error_string());
 
-    } else {
-        // Query the actual name of the library that was loaded
-        errorString.clear();
+   } else {
+      // Query the actual name of the library that was loaded
+      errorString.clear();
 
-        wchar_t buffer[MAX_PATH];
-        ::GetModuleFileName(pHnd, buffer, MAX_PATH);
+      wchar_t buffer[MAX_PATH];
+      ::GetModuleFileName(pHnd, buffer, MAX_PATH);
 
-        QString moduleFileName = QString::fromWCharArray(buffer);
-        moduleFileName.remove(0, 1 + moduleFileName.lastIndexOf(QLatin1Char('\\')));
-        const QDir dir(fsEntry.path());
+      QString moduleFileName = QString::fromWCharArray(buffer);
+      moduleFileName.remove(0, 1 + moduleFileName.lastIndexOf(QLatin1Char('\\')));
+      const QDir dir(fsEntry.path());
 
-        if (dir.path() == QLatin1String("."))
-            qualifiedFileName = moduleFileName;
-        else
-            qualifiedFileName = dir.filePath(moduleFileName);
-    }
+      if (dir.path() == QLatin1String(".")) {
+         qualifiedFileName = moduleFileName;
+      } else {
+         qualifiedFileName = dir.filePath(moduleFileName);
+      }
+   }
 
-    return (pHnd != 0);
+   return (pHnd != 0);
 }
 
 bool QLibraryPrivate::unload_sys()
 {
-    if (!FreeLibrary(pHnd)) {
-        errorString = QLibrary::tr("Can not unload library %1: %2").arg(fileName).arg(qt_error_string());
-        return false;
-    }
+   if (!FreeLibrary(pHnd)) {
+      errorString = QLibrary::tr("Can not unload library %1: %2").arg(fileName).arg(qt_error_string());
+      return false;
+   }
 
-    errorString.clear();
-    return true;
+   errorString.clear();
+   return true;
 }
 
-void* QLibraryPrivate::resolve_sys(const char* symbol)
+void *QLibraryPrivate::resolve_sys(const char *symbol)
 {
-    void* address = (void*)GetProcAddress(pHnd, symbol);
+   void *address = (void *)GetProcAddress(pHnd, symbol);
 
-    if (! address) {
-        errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").arg(
-            QString::fromAscii(symbol)).arg(fileName).arg(qt_error_string());
+   if (! address) {
+      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").arg(
+                       QString::fromAscii(symbol)).arg(fileName).arg(qt_error_string());
 
-    } else {
-        errorString.clear();
-    }
+   } else {
+      errorString.clear();
+   }
 
-    return address;
+   return address;
 }
 QT_END_NAMESPACE

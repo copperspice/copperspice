@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,40 +36,40 @@ class QHistoryStatePrivate;
 
 class Q_CORE_EXPORT QHistoryState : public QAbstractState
 {
-    CS_OBJECT(QHistoryState)
+   CS_OBJECT(QHistoryState)
 
-    CORE_CS_PROPERTY_READ(defaultState, defaultState)
-    CORE_CS_PROPERTY_WRITE(defaultState, setDefaultState)
-    CORE_CS_PROPERTY_READ(historyType, historyType)
-    CORE_CS_PROPERTY_WRITE(historyType, setHistoryType)
+   CORE_CS_PROPERTY_READ(defaultState, defaultState)
+   CORE_CS_PROPERTY_WRITE(defaultState, setDefaultState)
+   CORE_CS_PROPERTY_READ(historyType, historyType)
+   CORE_CS_PROPERTY_WRITE(historyType, setHistoryType)
 
-    CORE_CS_ENUM(HistoryType)
+   CORE_CS_ENUM(HistoryType)
 
-public:
-    enum HistoryType {
-        ShallowHistory,
-        DeepHistory
-    };
+ public:
+   enum HistoryType {
+      ShallowHistory,
+      DeepHistory
+   };
 
-    QHistoryState(QState *parent = 0);
-    QHistoryState(HistoryType type, QState *parent = 0);
-    ~QHistoryState();
+   QHistoryState(QState *parent = 0);
+   QHistoryState(HistoryType type, QState *parent = 0);
+   ~QHistoryState();
 
-    QAbstractState *defaultState() const;
-    void setDefaultState(QAbstractState *state);
+   QAbstractState *defaultState() const;
+   void setDefaultState(QAbstractState *state);
 
-    HistoryType historyType() const;
-    void setHistoryType(HistoryType type);
+   HistoryType historyType() const;
+   void setHistoryType(HistoryType type);
 
-protected:
-    void onEntry(QEvent *event);
-    void onExit(QEvent *event);
+ protected:
+   void onEntry(QEvent *event);
+   void onExit(QEvent *event);
 
-    bool event(QEvent *e);
+   bool event(QEvent *e);
 
-private:
-    Q_DISABLE_COPY(QHistoryState)
-    Q_DECLARE_PRIVATE(QHistoryState)
+ private:
+   Q_DISABLE_COPY(QHistoryState)
+   Q_DECLARE_PRIVATE(QHistoryState)
 };
 
 #endif //QT_NO_STATEMACHINE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,33 +40,33 @@ QT_BEGIN_NAMESPACE
 
 extern "C" {
 
-void pthread_cleanup_push(void (*handler)(void *), void *arg);
-void pthread_cleanup_pop(int execute);
+   void pthread_cleanup_push(void (*handler)(void *), void *arg);
+   void pthread_cleanup_pop(int execute);
 
-int pthread_setcancelstate(int state, int *oldstate);
-int pthread_setcanceltype(int type, int *oldtype);
-void pthread_testcancel(void);
-int pthread_cancel(pthread_t thread);
+   int pthread_setcancelstate(int state, int *oldstate);
+   int pthread_setcanceltype(int type, int *oldtype);
+   void pthread_testcancel(void);
+   int pthread_cancel(pthread_t thread);
 
-int pthread_attr_setinheritsched(pthread_attr_t *attr,
-    int inheritsched);
-int pthread_attr_getinheritsched(const pthread_attr_t *attr, 
-    int *inheritsched);
+   int pthread_attr_setinheritsched(pthread_attr_t *attr,
+                                    int inheritsched);
+   int pthread_attr_getinheritsched(const pthread_attr_t *attr,
+                                    int *inheritsched);
 
-// event dispatcher, select
-//struct fd_set;
-//struct timeval;
-int fcntl(int fildes, int cmd, ...);
-int sigaction(int sig, const struct sigaction * act, struct sigaction * oact);
+   // event dispatcher, select
+   //struct fd_set;
+   //struct timeval;
+   int fcntl(int fildes, int cmd, ...);
+   int sigaction(int sig, const struct sigaction *act, struct sigaction *oact);
 
-typedef long off64_t;
-off64_t ftello64(void *stream);
-off64_t lseek64(int fildes, off_t offset, int whence);
-int open64(const char *path, int oflag, ...);
+   typedef long off64_t;
+   off64_t ftello64(void *stream);
+   off64_t lseek64(int fildes, off_t offset, int whence);
+   int open64(const char *path, int oflag, ...);
 
 }
 
-int select(int nfds, fd_set * readfds, fd_set * writefds, fd_set * errorfds, struct timeval * timeout);
+int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct timeval *timeout);
 
 QT_END_NAMESPACE
 

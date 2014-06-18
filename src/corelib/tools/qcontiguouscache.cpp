@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,21 +33,21 @@ QT_BEGIN_NAMESPACE
 #ifdef QT_QCONTIGUOUSCACHE_DEBUG
 void QContiguousCacheData::dump() const
 {
-    qDebug() << "capacity:" << alloc;
-    qDebug() << "count:" << count;
-    qDebug() << "start:" << start;
-    qDebug() << "offset:" << offset;
+   qDebug() << "capacity:" << alloc;
+   qDebug() << "count:" << count;
+   qDebug() << "start:" << start;
+   qDebug() << "offset:" << offset;
 }
 #endif
 
 QContiguousCacheData *QContiguousCacheData::allocate(int size, int alignment)
 {
-    return static_cast<QContiguousCacheData *>(qMallocAligned(size, alignment));
+   return static_cast<QContiguousCacheData *>(qMallocAligned(size, alignment));
 }
 
 void QContiguousCacheData::free(QContiguousCacheData *data)
 {
-    qFreeAligned(data);
+   qFreeAligned(data);
 }
 
 /*! \class QContiguousCache
@@ -296,8 +296,8 @@ MyRecord record(int row) const
 
     In most cases it is better to use either at() or insert().
 
-    \note This non-const overload of operator[] requires QContiguousCache 
-    to make a deep copy. Use at() for read-only access to a non-const 
+    \note This non-const overload of operator[] requires QContiguousCache
+    to make a deep copy. Use at() for read-only access to a non-const
     QContiguousCache.
 
     \sa insert(), at()

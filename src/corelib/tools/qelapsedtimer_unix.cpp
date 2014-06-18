@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -57,137 +57,140 @@ static int monotonicClockAvailable = false;
 static void unixCheckClockType()
 {
 #if (_POSIX_MONOTONIC_CLOCK-0 == 0)
-    if (is_likely(load_acquire(monotonicClockChecked)))
-        return;
+   if (is_likely(load_acquire(monotonicClockChecked))) {
+      return;
+   }
 
 # if defined(_SC_MONOTONIC_CLOCK)
-    // detect if the system support monotonic timers
-    long x = sysconf(_SC_MONOTONIC_CLOCK);
-    store_release(monotonicClockAvailable, x >= 200112L);
+   // detect if the system support monotonic timers
+   long x = sysconf(_SC_MONOTONIC_CLOCK);
+   store_release(monotonicClockAvailable, x >= 200112L);
 # endif
 
-    store_release(monotonicClockChecked, true);
+   store_release(monotonicClockChecked, true);
 #endif
 }
 
 static inline qint64 fractionAdjustment()
 {
-    // disabled, but otherwise indicates bad usage of QElapsedTimer
-    //Q_ASSERT(monotonicClockChecked);
+   // disabled, but otherwise indicates bad usage of QElapsedTimer
+   //Q_ASSERT(monotonicClockChecked);
 
-    if (monotonicClockAvailable) {
-        // the monotonic timer is measured in nanoseconds
-        // 1 ms = 1000000 ns
-        return 1000*1000ull;
-    } else {
-        // gettimeofday is measured in microseconds
-        // 1 ms = 1000 us
-        return 1000;
-    }
+   if (monotonicClockAvailable) {
+      // the monotonic timer is measured in nanoseconds
+      // 1 ms = 1000000 ns
+      return 1000 * 1000ull;
+   } else {
+      // gettimeofday is measured in microseconds
+      // 1 ms = 1000 us
+      return 1000;
+   }
 }
 
 bool QElapsedTimer::isMonotonic()
 {
-    unixCheckClockType();
-    return monotonicClockAvailable;
+   unixCheckClockType();
+   return monotonicClockAvailable;
 }
 
 QElapsedTimer::ClockType QElapsedTimer::clockType()
 {
-    unixCheckClockType();
-    return monotonicClockAvailable ? MonotonicClock : SystemTime;
+   unixCheckClockType();
+   return monotonicClockAvailable ? MonotonicClock : SystemTime;
 }
 
 static inline void do_gettime(qint64 *sec, qint64 *frac)
 {
 #if (_POSIX_MONOTONIC_CLOCK-0 >= 0)
-    unixCheckClockType();
-    if (is_likely(monotonicClockAvailable)) {
-        timespec ts;
-        clock_gettime(CLOCK_MONOTONIC, &ts);
-        *sec = ts.tv_sec;
-        *frac = ts.tv_nsec;
-        return;
-    }
+   unixCheckClockType();
+   if (is_likely(monotonicClockAvailable)) {
+      timespec ts;
+      clock_gettime(CLOCK_MONOTONIC, &ts);
+      *sec = ts.tv_sec;
+      *frac = ts.tv_nsec;
+      return;
+   }
 #endif
-    // use gettimeofday
-    struct timeval tv;
-    ::gettimeofday(&tv, 0);
-    *sec = tv.tv_sec;
-    *frac = tv.tv_usec;
+   // use gettimeofday
+   struct timeval tv;
+   ::gettimeofday(&tv, 0);
+   *sec = tv.tv_sec;
+   *frac = tv.tv_usec;
 }
 
 // used in qcore_unix.cpp and qeventdispatcher_unix.cpp
 timeval qt_gettime()
 {
-    qint64 sec, frac;
-    do_gettime(&sec, &frac);
+   qint64 sec, frac;
+   do_gettime(&sec, &frac);
 
-    timeval tv;
-    tv.tv_sec = sec;
-    tv.tv_usec = frac;
-    if (monotonicClockAvailable)
-        tv.tv_usec /= 1000;
+   timeval tv;
+   tv.tv_sec = sec;
+   tv.tv_usec = frac;
+   if (monotonicClockAvailable) {
+      tv.tv_usec /= 1000;
+   }
 
-    return tv;
+   return tv;
 }
 
 static qint64 elapsedAndRestart(qint64 sec, qint64 frac,
                                 qint64 *nowsec, qint64 *nowfrac)
 {
-    do_gettime(nowsec, nowfrac);
-    sec = *nowsec - sec;
-    frac = *nowfrac - frac;
-    return sec * Q_INT64_C(1000) + frac / fractionAdjustment();
+   do_gettime(nowsec, nowfrac);
+   sec = *nowsec - sec;
+   frac = *nowfrac - frac;
+   return sec * Q_INT64_C(1000) + frac / fractionAdjustment();
 }
 
 void QElapsedTimer::start()
 {
-    do_gettime(&t1, &t2);
+   do_gettime(&t1, &t2);
 }
 
 qint64 QElapsedTimer::restart()
 {
-    return elapsedAndRestart(t1, t2, &t1, &t2);
+   return elapsedAndRestart(t1, t2, &t1, &t2);
 }
 
 qint64 QElapsedTimer::nsecsElapsed() const
 {
-    qint64 sec, frac;
-    do_gettime(&sec, &frac);
-    sec = sec - t1;
-    frac = frac - t2;
-    if (!monotonicClockAvailable)
-        frac *= 1000;
-    return sec * Q_INT64_C(1000000000) + frac;
+   qint64 sec, frac;
+   do_gettime(&sec, &frac);
+   sec = sec - t1;
+   frac = frac - t2;
+   if (!monotonicClockAvailable) {
+      frac *= 1000;
+   }
+   return sec * Q_INT64_C(1000000000) + frac;
 }
 
 qint64 QElapsedTimer::elapsed() const
 {
-    qint64 sec, frac;
-    return elapsedAndRestart(t1, t2, &sec, &frac);
+   qint64 sec, frac;
+   return elapsedAndRestart(t1, t2, &sec, &frac);
 }
 
 qint64 QElapsedTimer::msecsSinceReference() const
 {
-    return t1 * Q_INT64_C(1000) + t2 / fractionAdjustment();
+   return t1 * Q_INT64_C(1000) + t2 / fractionAdjustment();
 }
 
 qint64 QElapsedTimer::msecsTo(const QElapsedTimer &other) const
 {
-    qint64 secs = other.t1 - t1;
-    qint64 fraction = other.t2 - t2;
-    return secs * Q_INT64_C(1000) + fraction / fractionAdjustment();
+   qint64 secs = other.t1 - t1;
+   qint64 fraction = other.t2 - t2;
+   return secs * Q_INT64_C(1000) + fraction / fractionAdjustment();
 }
 
 qint64 QElapsedTimer::secsTo(const QElapsedTimer &other) const
 {
-    return other.t1 - t1;
+   return other.t1 - t1;
 }
 
 bool operator<(const QElapsedTimer &v1, const QElapsedTimer &v2)
 {
-    return v1.t1 < v2.t1 || (v1.t1 == v2.t1 && v1.t2 < v2.t2);
+   return v1.t1 < v2.t1 || (v1.t1 == v2.t1 && v1.t2 < v2.t2);
 }
 
 QT_END_NAMESPACE

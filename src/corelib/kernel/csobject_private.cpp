@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -29,9 +29,9 @@
 
 void CSInternalChildren::deleteChildren(QObject *object)
 {
-	if (! object) {
-	   return;
-	}
+   if (! object) {
+      return;
+   }
 
    object->deleteChildren();
 }
@@ -39,8 +39,8 @@ void CSInternalChildren::deleteChildren(QObject *object)
 void CSInternalChildren::moveChildren(QObject *object, int from, int to)
 {
    if (! object) {
-	   return;
-	}
+      return;
+   }
 
    object->m_children.move(from, to);
 }
@@ -48,8 +48,8 @@ void CSInternalChildren::moveChildren(QObject *object, int from, int to)
 void CSInternalChildren::removeOne(QObject *object, QObject *value)
 {
    if (! object) {
-	   return;
-	}
+      return;
+   }
 
    object->m_children.removeOne(value);
 }
@@ -57,8 +57,8 @@ void CSInternalChildren::removeOne(QObject *object, QObject *value)
 void CSInternalChildren::set_mParent(QObject *object, QObject *value)
 {
    if (! object) {
-	   return;
-	}
+      return;
+   }
 
    // hard setting this member!
    object->m_parent = value;
@@ -66,11 +66,11 @@ void CSInternalChildren::set_mParent(QObject *object, QObject *value)
 
 // **
 
-CSAbstractDeclarativeData * CSInternalDeclarativeData::get_m_declarativeData(const QObject *object)
+CSAbstractDeclarativeData *CSInternalDeclarativeData::get_m_declarativeData(const QObject *object)
 {
    if (! object) {
-		return 0;
-	}
+      return 0;
+   }
 
    return object->m_declarativeData;
 }
@@ -78,10 +78,10 @@ CSAbstractDeclarativeData * CSInternalDeclarativeData::get_m_declarativeData(con
 void CSInternalDeclarativeData::set_m_declarativeData(QObject *object, CSAbstractDeclarativeData *value)
 {
    if (! object) {
-		return;
-	}
+      return;
+   }
 
-  object->m_declarativeData = value;
+   object->m_declarativeData = value;
 }
 
 
@@ -90,8 +90,8 @@ void CSInternalDeclarativeData::set_m_declarativeData(QObject *object, CSAbstrac
 bool CSInternalEvents::get_m_sendChildEvents(const QObject *object)
 {
    if (! object) {
-		return 0;
-	}
+      return 0;
+   }
 
    return object->m_sendChildEvents;
 }
@@ -99,46 +99,46 @@ bool CSInternalEvents::get_m_sendChildEvents(const QObject *object)
 bool CSInternalEvents::get_m_receiveChildEvents(const QObject *object)
 {
    if (! object) {
-		return 0;
-	}
+      return 0;
+   }
 
    return object->m_receiveChildEvents;
 }
 
 int CSInternalEvents::get_m_PostedEvents(const QObject *object)
 {
-	if (! object) {
-		return 0;
-	}
+   if (! object) {
+      return 0;
+   }
 
-	return object->m_postedEvents;
+   return object->m_postedEvents;
 }
 
-QList<QPointer<QObject> > & CSInternalEvents::get_m_EventFilters(QObject *object)
+QList<QPointer<QObject> > &CSInternalEvents::get_m_EventFilters(QObject *object)
 {
-	if (! object) {
-		static QList<QPointer<QObject> > emptyList;
-		return emptyList;
-	}
+   if (! object) {
+      static QList<QPointer<QObject> > emptyList;
+      return emptyList;
+   }
 
-	return object->m_eventFilters;
+   return object->m_eventFilters;
 }
 
-std::atomic<bool> & CSInternalEvents::get_m_inThreadChangeEvent(QObject *object)
+std::atomic<bool> &CSInternalEvents::get_m_inThreadChangeEvent(QObject *object)
 {
-	if (! object) {
-		static std::atomic<bool> emptyAtomic;
-		return emptyAtomic;
-	}
+   if (! object) {
+      static std::atomic<bool> emptyAtomic;
+      return emptyAtomic;
+   }
 
-	return object->m_inThreadChangeEvent;
+   return object->m_inThreadChangeEvent;
 }
 
 void CSInternalEvents::set_m_sendChildEvents(QObject *object, bool data)
 {
    if (! object) {
-		return;
-	}
+      return;
+   }
 
    object->m_sendChildEvents = data;
 }
@@ -146,8 +146,8 @@ void CSInternalEvents::set_m_sendChildEvents(QObject *object, bool data)
 void CSInternalEvents::set_m_receiveChildEvents(QObject *object, bool data)
 {
    if (! object) {
-		return;
-	}
+      return;
+   }
 
    object->m_receiveChildEvents = data;
 }
@@ -156,49 +156,49 @@ void CSInternalEvents::set_m_receiveChildEvents(QObject *object, bool data)
 // **
 bool CSInternalRefCount::get_m_wasDeleted(const QObject *object)
 {
-	if (! object) {
-		return false;
-	}
+   if (! object) {
+      return false;
+   }
 
-	return object->m_wasDeleted;
+   return object->m_wasDeleted;
 }
 
 void CSInternalRefCount::set_m_wasDeleted(QObject *object, bool data)
 {
-	if (! object) {
-		return;
-	}
+   if (! object) {
+      return;
+   }
 
-	object->m_wasDeleted = data;
+   object->m_wasDeleted = data;
 }
 
-std::atomic<QtSharedPointer::ExternalRefCountData *> & CSInternalRefCount::get_m_SharedRefCount(const QObject *object)
+std::atomic<QtSharedPointer::ExternalRefCountData *> &CSInternalRefCount::get_m_SharedRefCount(const QObject *object)
 {
-	if (! object) {
-		static std::atomic<QtSharedPointer::ExternalRefCountData *> emptyAtomic;
-		return emptyAtomic;
-	}
+   if (! object) {
+      static std::atomic<QtSharedPointer::ExternalRefCountData *> emptyAtomic;
+      return emptyAtomic;
+   }
 
-	return object->m_sharedRefCount;
+   return object->m_sharedRefCount;
 }
 
 
 // **
-bool CSInternalSender::isSender(const QObject *object, const QObject *receiver, const char *signal)  
+bool CSInternalSender::isSender(const QObject *object, const QObject *receiver, const char *signal)
 {
    if (! object) {
-		return false;
-	}
+      return false;
+   }
 
-   return object->isSender(receiver,signal);
+   return object->isSender(receiver, signal);
 }
 
 
 QList<QObject *> CSInternalSender::receiverList(const QObject *object, const char *signal)
 {
    if (! object) {
-		return QList<QObject *>{};
-	}
+      return QList<QObject *> {};
+   }
 
    return object->receiverList(signal);
 }
@@ -206,57 +206,57 @@ QList<QObject *> CSInternalSender::receiverList(const QObject *object, const cha
 QList<QObject *> CSInternalSender::senderList(const QObject *object)
 {
    if (! object) {
-		return QList<QObject *>{};
-	}
+      return QList<QObject *> {};
+   }
 
    return object->senderList();
 }
 
 
 // **
-QThreadData * CSInternalThreadData::get_m_ThreadData(const QObject *object)
-{ 
-	if (! object) {
-		return nullptr;
-	}
+QThreadData *CSInternalThreadData::get_m_ThreadData(const QObject *object)
+{
+   if (! object) {
+      return nullptr;
+   }
 
-	// returns a pointer to the threadData
-	return object->m_threadData.load();
+   // returns a pointer to the threadData
+   return object->m_threadData.load();
 }
 
-std::atomic<QThreadData *> & CSInternalThreadData::get_AtomicThreadData(QObject *object)
+std::atomic<QThreadData *> &CSInternalThreadData::get_AtomicThreadData(QObject *object)
 {
-	if (! object) {
-		static std::atomic<QThreadData *> emptyAtomic;
-		return emptyAtomic;
-	}
+   if (! object) {
+      static std::atomic<QThreadData *> emptyAtomic;
+      return emptyAtomic;
+   }
 
-	// returns a reference to the atomic var whichs contains a pointer to the thread data
-	return object->m_threadData;
+   // returns a reference to the atomic var whichs contains a pointer to the thread data
+   return object->m_threadData;
 }
 
 void CSInternalEvents::incr_PostedEvents(QObject *object)
 {
-	if (! object) {
-		return;
-	}
+   if (! object) {
+      return;
+   }
 
-	++(object->m_postedEvents);
+   ++(object->m_postedEvents);
 }
 
 void CSInternalEvents::decr_PostedEvents(QObject *object)
 {
-	if (! object) {
-		return;
-	}
+   if (! object) {
+      return;
+   }
 
-	--(object->m_postedEvents);
+   --(object->m_postedEvents);
 }
 
 
 // **
 bool QObject::internal_disconnect(const QObject *sender, const BentoAbstract *signalBento,
-                                   const QObject *receiver, const BentoAbstract *slotBento)
+                                  const QObject *receiver, const BentoAbstract *slotBento)
 {
    bool retval = false;
    bool isDone = false;
@@ -265,16 +265,16 @@ bool QObject::internal_disconnect(const QObject *sender, const BentoAbstract *si
       return false;
    }
 
-   std::unique_lock<std::mutex> senderLock{sender->m_mutex_ToReceiver};
+   std::unique_lock<std::mutex> senderLock {sender->m_mutex_ToReceiver};
    std::unique_lock<std::mutex> receiverLock;
 
-   if (receiver) {     
-      receiverLock = std::unique_lock<std::mutex>{receiver->m_mutex_FromSender};
+   if (receiver) {
+      receiverLock = std::unique_lock<std::mutex> {receiver->m_mutex_FromSender};
    }
 
    bool isMatch;
 
-   for(int k = 0; k < sender->m_connectList_ToReceiver.count(); ++k) {
+   for (int k = 0; k < sender->m_connectList_ToReceiver.count(); ++k) {
       ConnectStruct &temp = sender->m_connectList_ToReceiver[k];
 
       if (temp.sender == 0) {
@@ -295,7 +295,8 @@ bool QObject::internal_disconnect(const QObject *sender, const BentoAbstract *si
             if (signalBento == 0 && (slotBento == 0 || *slotBento == *temp.slotMethod)) {
                isMatch = true;
 
-            } else if (signalBento != 0 && *signalBento == *temp.signalMethod && (slotBento == 0 || *slotBento == *temp.slotMethod)) {
+            } else if (signalBento != 0 && *signalBento == *temp.signalMethod && (slotBento == 0 ||
+                       *slotBento == *temp.slotMethod)) {
                isMatch = true;
 
             }
@@ -311,20 +312,20 @@ bool QObject::internal_disconnect(const QObject *sender, const BentoAbstract *si
 
       if (isMatch)  {
          // delete connection in Receiver
-         retval = true;         
+         retval = true;
 
          if (! receiver)  {
             // no receiver was locked, lock temp.receiver now
-            receiverLock = std::unique_lock<std::mutex>{temp.receiver->m_mutex_FromSender};
+            receiverLock = std::unique_lock<std::mutex> {temp.receiver->m_mutex_FromSender};
          }
 
          for (int x = 0; x < temp.receiver->m_connectList_FromSender.count(); ++x)  {
             const ConnectStruct &listR = temp.receiver->m_connectList_FromSender[x];
 
             if (temp.sender == listR.sender && *temp.signalMethod == *listR.signalMethod &&
-                      *temp.slotMethod == *listR.slotMethod) {
+                  *temp.slotMethod == *listR.slotMethod) {
 
-               temp.receiver->m_connectList_FromSender.removeAt(x);               
+               temp.receiver->m_connectList_FromSender.removeAt(x);
 
                // yes, this is required
                x = x - 1;

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,30 +36,30 @@ class QState;
 class QStateMachine;
 class QAbstractTransition;
 
-class Q_CORE_EXPORT QAbstractTransitionPrivate    
+class Q_CORE_EXPORT QAbstractTransitionPrivate
 {
-    Q_DECLARE_PUBLIC(QAbstractTransition)
+   Q_DECLARE_PUBLIC(QAbstractTransition)
 
-public:
-    QAbstractTransitionPrivate();
-    virtual ~QAbstractTransitionPrivate() {}
+ public:
+   QAbstractTransitionPrivate();
+   virtual ~QAbstractTransitionPrivate() {}
 
-    static QAbstractTransitionPrivate *get(QAbstractTransition *q);
+   static QAbstractTransitionPrivate *get(QAbstractTransition *q);
 
-    bool callEventTest(QEvent *e);
-    virtual void callOnTransition(QEvent *e);
-    QState *sourceState() const;
-    QStateMachine *machine() const;
-    void emitTriggered();
+   bool callEventTest(QEvent *e);
+   virtual void callOnTransition(QEvent *e);
+   QState *sourceState() const;
+   QStateMachine *machine() const;
+   void emitTriggered();
 
-    QList<QWeakPointer<QAbstractState> > targetStates;
+   QList<QWeakPointer<QAbstractState> > targetStates;
 
 #ifndef QT_NO_ANIMATION
-    QList<QAbstractAnimation*> animations;
+   QList<QAbstractAnimation *> animations;
 #endif
 
-protected:
-	 QAbstractTransition *q_ptr;
+ protected:
+   QAbstractTransition *q_ptr;
 };
 
 QT_END_NAMESPACE

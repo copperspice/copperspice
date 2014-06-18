@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,34 +32,40 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QSocketNotifier : public QObject
 {
-    CS_OBJECT(QSocketNotifier)   
+   CS_OBJECT(QSocketNotifier)
 
-public:
-    enum Type { Read, Write, Exception };
+ public:
+   enum Type { Read, Write, Exception };
 
-    QSocketNotifier(int socket, Type, QObject *parent = 0);
-    ~QSocketNotifier();
+   QSocketNotifier(int socket, Type, QObject *parent = 0);
+   ~QSocketNotifier();
 
-    inline int socket() const { return sockfd; }
-    inline Type type() const { return sntype; }
+   inline int socket() const {
+      return sockfd;
+   }
+   inline Type type() const {
+      return sntype;
+   }
 
-    inline bool isEnabled() const { return snenabled; }
+   inline bool isEnabled() const {
+      return snenabled;
+   }
 
-    CORE_CS_SLOT_1(Public, void setEnabled(bool un_named_arg1))
-    CORE_CS_SLOT_2(setEnabled) 
+   CORE_CS_SLOT_1(Public, void setEnabled(bool un_named_arg1))
+   CORE_CS_SLOT_2(setEnabled)
 
-    CORE_CS_SIGNAL_1(Public, void activated(int socket))
-    CORE_CS_SIGNAL_2(activated,socket) 
+   CORE_CS_SIGNAL_1(Public, void activated(int socket))
+   CORE_CS_SIGNAL_2(activated, socket)
 
-protected:
-    bool event(QEvent *);
+ protected:
+   bool event(QEvent *);
 
-private:
-    Q_DISABLE_COPY(QSocketNotifier)
+ private:
+   Q_DISABLE_COPY(QSocketNotifier)
 
-    int sockfd;
-    Type sntype;
-    bool snenabled;
+   int sockfd;
+   Type sntype;
+   bool snenabled;
 };
 
 QT_END_NAMESPACE

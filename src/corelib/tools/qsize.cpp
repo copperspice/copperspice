@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -149,9 +149,9 @@ QT_BEGIN_NAMESPACE
 
 void QSize::transpose()
 {
-    int tmp = wd;
-    wd = ht;
-    ht = tmp;
+   int tmp = wd;
+   wd = ht;
+   ht = tmp;
 }
 
 /*!
@@ -183,27 +183,27 @@ void QSize::transpose()
 */
 void QSize::scale(const QSize &s, Qt::AspectRatioMode mode)
 {
-    if (mode == Qt::IgnoreAspectRatio || wd == 0 || ht == 0) {
-        wd = s.wd;
-        ht = s.ht;
-    } else {
-        bool useHeight;
-        qint64 rw = qint64(s.ht) * qint64(wd) / qint64(ht);
+   if (mode == Qt::IgnoreAspectRatio || wd == 0 || ht == 0) {
+      wd = s.wd;
+      ht = s.ht;
+   } else {
+      bool useHeight;
+      qint64 rw = qint64(s.ht) * qint64(wd) / qint64(ht);
 
-        if (mode == Qt::KeepAspectRatio) {
-            useHeight = (rw <= s.wd);
-        } else { // mode == Qt::KeepAspectRatioByExpanding
-            useHeight = (rw >= s.wd);
-        }
+      if (mode == Qt::KeepAspectRatio) {
+         useHeight = (rw <= s.wd);
+      } else { // mode == Qt::KeepAspectRatioByExpanding
+         useHeight = (rw >= s.wd);
+      }
 
-        if (useHeight) {
-            wd = rw;
-            ht = s.ht;
-        } else {
-            ht = qint32(qint64(s.wd) * qint64(ht) / qint64(wd));
-            wd = s.wd;
-        }
-    }
+      if (useHeight) {
+         wd = rw;
+         ht = s.ht;
+      } else {
+         ht = qint32(qint64(s.wd) * qint64(ht) / qint64(wd));
+         wd = s.wd;
+      }
+   }
 }
 
 /*!
@@ -369,11 +369,12 @@ void QSize::scale(const QSize &s, Qt::AspectRatioMode mode)
 
 QDataStream &operator<<(QDataStream &s, const QSize &sz)
 {
-    if (s.version() == 1)
-        s << (qint16)sz.width() << (qint16)sz.height();
-    else
-        s << (qint32)sz.width() << (qint32)sz.height();
-    return s;
+   if (s.version() == 1) {
+      s << (qint16)sz.width() << (qint16)sz.height();
+   } else {
+      s << (qint32)sz.width() << (qint32)sz.height();
+   }
+   return s;
 }
 
 /*!
@@ -388,24 +389,28 @@ QDataStream &operator<<(QDataStream &s, const QSize &sz)
 
 QDataStream &operator>>(QDataStream &s, QSize &sz)
 {
-    if (s.version() == 1) {
-        qint16 w, h;
-        s >> w;  sz.rwidth() = w;
-        s >> h;  sz.rheight() = h;
-    }
-    else {
-        qint32 w, h;
-        s >> w;  sz.rwidth() = w;
-        s >> h;  sz.rheight() = h;
-    }
-    return s;
+   if (s.version() == 1) {
+      qint16 w, h;
+      s >> w;
+      sz.rwidth() = w;
+      s >> h;
+      sz.rheight() = h;
+   } else {
+      qint32 w, h;
+      s >> w;
+      sz.rwidth() = w;
+      s >> h;
+      sz.rheight() = h;
+   }
+   return s;
 }
 #endif // QT_NO_DATASTREAM
 
 #ifndef QT_NO_DEBUG_STREAM
-QDebug operator<<(QDebug dbg, const QSize &s) {
-    dbg.nospace() << "QSize(" << s.width() << ", " << s.height() << ')';
-    return dbg.space();
+QDebug operator<<(QDebug dbg, const QSize &s)
+{
+   dbg.nospace() << "QSize(" << s.width() << ", " << s.height() << ')';
+   return dbg.space();
 }
 #endif
 
@@ -555,9 +560,9 @@ QDebug operator<<(QDebug dbg, const QSize &s) {
 
 void QSizeF::transpose()
 {
-    qreal tmp = wd;
-    wd = ht;
-    ht = tmp;
+   qreal tmp = wd;
+   wd = ht;
+   ht = tmp;
 }
 
 /*!
@@ -589,27 +594,27 @@ void QSizeF::transpose()
 */
 void QSizeF::scale(const QSizeF &s, Qt::AspectRatioMode mode)
 {
-    if (mode == Qt::IgnoreAspectRatio || qIsNull(wd) || qIsNull(ht)) {
-        wd = s.wd;
-        ht = s.ht;
-    } else {
-        bool useHeight;
-        qreal rw = s.ht * wd / ht;
+   if (mode == Qt::IgnoreAspectRatio || qIsNull(wd) || qIsNull(ht)) {
+      wd = s.wd;
+      ht = s.ht;
+   } else {
+      bool useHeight;
+      qreal rw = s.ht * wd / ht;
 
-        if (mode == Qt::KeepAspectRatio) {
-            useHeight = (rw <= s.wd);
-        } else { // mode == Qt::KeepAspectRatioByExpanding
-            useHeight = (rw >= s.wd);
-        }
+      if (mode == Qt::KeepAspectRatio) {
+         useHeight = (rw <= s.wd);
+      } else { // mode == Qt::KeepAspectRatioByExpanding
+         useHeight = (rw >= s.wd);
+      }
 
-        if (useHeight) {
-            wd = rw;
-            ht = s.ht;
-        } else {
-            ht = s.wd * ht / wd;
-            wd = s.wd;
-        }
-    }
+      if (useHeight) {
+         wd = rw;
+         ht = s.ht;
+      } else {
+         ht = s.wd * ht / wd;
+         wd = s.wd;
+      }
+   }
 }
 
 /*!
@@ -777,8 +782,8 @@ void QSizeF::scale(const QSizeF &s, Qt::AspectRatioMode mode)
 
 QDataStream &operator<<(QDataStream &s, const QSizeF &sz)
 {
-    s << double(sz.width()) << double(sz.height());
-    return s;
+   s << double(sz.width()) << double(sz.height());
+   return s;
 }
 
 /*!
@@ -793,19 +798,20 @@ QDataStream &operator<<(QDataStream &s, const QSizeF &sz)
 
 QDataStream &operator>>(QDataStream &s, QSizeF &sz)
 {
-    double w, h;
-    s >> w;
-    s >> h;
-    sz.setWidth(qreal(w));
-    sz.setHeight(qreal(h));
-    return s;
+   double w, h;
+   s >> w;
+   s >> h;
+   sz.setWidth(qreal(w));
+   sz.setHeight(qreal(h));
+   return s;
 }
 #endif // QT_NO_DATASTREAM
 
 #ifndef QT_NO_DEBUG_STREAM
-QDebug operator<<(QDebug dbg, const QSizeF &s) {
-    dbg.nospace() << "QSizeF(" << s.width() << ", " << s.height() << ')';
-    return dbg.space();
+QDebug operator<<(QDebug dbg, const QSizeF &s)
+{
+   dbg.nospace() << "QSizeF(" << s.width() << ", " << s.height() << ')';
+   return dbg.space();
 }
 #endif
 

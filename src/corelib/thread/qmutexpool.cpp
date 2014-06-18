@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -78,11 +78,11 @@ Q_GLOBAL_STATIC_WITH_ARGS(QMutexPool, globalMutexPool, (QMutex::Recursive))
     QMutexPool is destructed.
 */
 QMutexPool::QMutexPool(QMutex::RecursionMode recursionMode, int size)
-    : mutexes(size), recursionMode(recursionMode)
+   : mutexes(size), recursionMode(recursionMode)
 {
-    for (int index = 0; index < mutexes.count(); ++index) {
-        mutexes[index].store(0);
-    }
+   for (int index = 0; index < mutexes.count(); ++index) {
+      mutexes[index].store(0);
+   }
 }
 
 /*!
@@ -91,8 +91,9 @@ QMutexPool::QMutexPool(QMutex::RecursionMode recursionMode, int size)
 */
 QMutexPool::~QMutexPool()
 {
-    for (int index = 0; index < mutexes.count(); ++index)
-        delete mutexes[index].load();
+   for (int index = 0; index < mutexes.count(); ++index) {
+      delete mutexes[index].load();
+   }
 }
 
 /*!
@@ -100,7 +101,7 @@ QMutexPool::~QMutexPool()
 */
 QMutexPool *QMutexPool::instance()
 {
-    return globalMutexPool();
+   return globalMutexPool();
 }
 
 /*!
@@ -114,11 +115,12 @@ QMutexPool *QMutexPool::instance()
  */
 QMutex *QMutexPool::createMutex(int index)
 {
-    // mutex not created, create one
-    QMutex *newMutex = new QMutex(recursionMode);
-    if (!mutexes[index].testAndSetRelease(0, newMutex))
-        delete newMutex;
-    return mutexes[index].load();
+   // mutex not created, create one
+   QMutex *newMutex = new QMutex(recursionMode);
+   if (!mutexes[index].testAndSetRelease(0, newMutex)) {
+      delete newMutex;
+   }
+   return mutexes[index].load();
 }
 
 /*!
@@ -126,10 +128,11 @@ QMutex *QMutexPool::createMutex(int index)
 */
 QMutex *QMutexPool::globalInstanceGet(const void *address)
 {
-    QMutexPool * const globalInstance = globalMutexPool();
-    if (globalInstance == 0)
-        return 0;
-    return globalInstance->get(address);
+   QMutexPool *const globalInstance = globalMutexPool();
+   if (globalInstance == 0) {
+      return 0;
+   }
+   return globalInstance->get(address);
 }
 
 QT_END_NAMESPACE

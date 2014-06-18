@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,28 +39,28 @@ QT_BEGIN_NAMESPACE
 
 class QKqueueFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
-    CS_OBJECT(QKqueueFileSystemWatcherEngine)
-public:
-    ~QKqueueFileSystemWatcherEngine();
+   CS_OBJECT(QKqueueFileSystemWatcherEngine)
+ public:
+   ~QKqueueFileSystemWatcherEngine();
 
-    static QKqueueFileSystemWatcherEngine *create();
+   static QKqueueFileSystemWatcherEngine *create();
 
-    QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
-    QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
 
-    void stop();
+   void stop();
 
-private:
-    QKqueueFileSystemWatcherEngine(int kqfd);
+ private:
+   QKqueueFileSystemWatcherEngine(int kqfd);
 
-    void run();
+   void run();
 
-    int kqfd;
-    int kqpipe[2];
+   int kqfd;
+   int kqpipe[2];
 
-    QMutex mutex;
-    QHash<QString, int> pathToID;
-    QHash<int, QString> idToPath;
+   QMutex mutex;
+   QHash<QString, int> pathToID;
+   QHash<int, QString> idToPath;
 };
 
 QT_END_NAMESPACE

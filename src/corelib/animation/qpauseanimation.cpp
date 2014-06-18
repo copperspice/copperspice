@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -56,13 +56,12 @@ QT_BEGIN_NAMESPACE
 
 class QPauseAnimationPrivate : public QAbstractAnimationPrivate
 {
-public:
-    QPauseAnimationPrivate() : QAbstractAnimationPrivate(), duration(250)
-    {
-        isPause = true;
-    }
+ public:
+   QPauseAnimationPrivate() : QAbstractAnimationPrivate(), duration(250) {
+      isPause = true;
+   }
 
-    int duration;
+   int duration;
 };
 
 /*!
@@ -83,7 +82,7 @@ QPauseAnimation::QPauseAnimation(QObject *parent) : QAbstractAnimation(*new QPau
 
 QPauseAnimation::QPauseAnimation(int msecs, QObject *parent) : QAbstractAnimation(*new QPauseAnimationPrivate, parent)
 {
-    setDuration(msecs);
+   setDuration(msecs);
 }
 
 /*!
@@ -102,18 +101,18 @@ QPauseAnimation::~QPauseAnimation()
 */
 int QPauseAnimation::duration() const
 {
-    Q_D(const QPauseAnimation);
-    return d->duration;
+   Q_D(const QPauseAnimation);
+   return d->duration;
 }
 
 void QPauseAnimation::setDuration(int msecs)
 {
-    if (msecs < 0) {
-        qWarning("QPauseAnimation::setDuration: cannot set a negative duration");
-        return;
-    }
-    Q_D(QPauseAnimation);
-    d->duration = msecs;
+   if (msecs < 0) {
+      qWarning("QPauseAnimation::setDuration: cannot set a negative duration");
+      return;
+   }
+   Q_D(QPauseAnimation);
+   d->duration = msecs;
 }
 
 /*!
@@ -121,7 +120,7 @@ void QPauseAnimation::setDuration(int msecs)
  */
 bool QPauseAnimation::event(QEvent *e)
 {
-    return QAbstractAnimation::event(e);
+   return QAbstractAnimation::event(e);
 }
 
 /*!

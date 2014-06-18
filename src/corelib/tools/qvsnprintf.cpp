@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -58,21 +58,22 @@ QT_BEGIN_NAMESPACE
 
 int qvsnprintf(char *str, size_t n, const char *fmt, va_list ap)
 {
-    if (!str || !fmt)
-        return -1;
+   if (!str || !fmt) {
+      return -1;
+   }
 
-    QString buf;
-    buf.vsprintf(fmt, ap);
+   QString buf;
+   buf.vsprintf(fmt, ap);
 
-    QByteArray ba = buf.toLocal8Bit();
+   QByteArray ba = buf.toLocal8Bit();
 
-    if (n > 0) {
-        size_t blen = qMin(size_t(ba.length()), size_t(n - 1));
-        memcpy(str, ba.constData(), blen);
-        str[blen] = '\0'; // make sure str is always 0 terminated
-    }
+   if (n > 0) {
+      size_t blen = qMin(size_t(ba.length()), size_t(n - 1));
+      memcpy(str, ba.constData(), blen);
+      str[blen] = '\0'; // make sure str is always 0 terminated
+   }
 
-    return ba.length();
+   return ba.length();
 }
 
 #else
@@ -83,7 +84,7 @@ QT_END_INCLUDE_NAMESPACE
 
 int qvsnprintf(char *str, size_t n, const char *fmt, va_list ap)
 {
-    return QT_VSNPRINTF(str, n, fmt, ap);
+   return QT_VSNPRINTF(str, n, fmt, ap);
 }
 
 #endif
@@ -105,13 +106,13 @@ int qvsnprintf(char *str, size_t n, const char *fmt, va_list ap)
 
 int qsnprintf(char *str, size_t n, const char *fmt, ...)
 {
-    va_list ap;
-    va_start(ap, fmt);
+   va_list ap;
+   va_start(ap, fmt);
 
-    int ret = qvsnprintf(str, n, fmt, ap);
-    va_end(ap);
+   int ret = qvsnprintf(str, n, fmt, ap);
+   va_end(ap);
 
-    return ret;
+   return ret;
 }
 
 QT_END_NAMESPACE

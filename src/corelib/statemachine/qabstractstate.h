@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,35 +39,35 @@ class QAbstractStatePrivate;
 
 class Q_CORE_EXPORT QAbstractState : public QObject
 {
-    CS_OBJECT(QAbstractState)
+   CS_OBJECT(QAbstractState)
 
-public:
-    ~QAbstractState();
+ public:
+   ~QAbstractState();
 
-    QState *parentState() const;
-    QStateMachine *machine() const;
+   QState *parentState() const;
+   QStateMachine *machine() const;
 
-    CORE_CS_SIGNAL_1(Public, void entered())
-    CORE_CS_SIGNAL_2(entered) 
+   CORE_CS_SIGNAL_1(Public, void entered())
+   CORE_CS_SIGNAL_2(entered)
 
-    CORE_CS_SIGNAL_1(Public, void exited())
-    CORE_CS_SIGNAL_2(exited) 
+   CORE_CS_SIGNAL_1(Public, void exited())
+   CORE_CS_SIGNAL_2(exited)
 
-protected:
-    QAbstractState(QState *parent = 0);
+ protected:
+   QAbstractState(QState *parent = 0);
 
-    virtual void onEntry(QEvent *event) = 0;
-    virtual void onExit(QEvent *event) = 0;
+   virtual void onEntry(QEvent *event) = 0;
+   virtual void onExit(QEvent *event) = 0;
 
-    bool event(QEvent *e);
-    QAbstractState(QAbstractStatePrivate &dd, QState *parent);
+   bool event(QEvent *e);
+   QAbstractState(QAbstractStatePrivate &dd, QState *parent);
 
-private:
-    Q_DISABLE_COPY(QAbstractState)
-    Q_DECLARE_PRIVATE(QAbstractState)
+ private:
+   Q_DISABLE_COPY(QAbstractState)
+   Q_DECLARE_PRIVATE(QAbstractState)
 
-protected:
-	 QScopedPointer<QAbstractStatePrivate> d_ptr;
+ protected:
+   QScopedPointer<QAbstractStatePrivate> d_ptr;
 };
 
 #endif //QT_NO_STATEMACHINE

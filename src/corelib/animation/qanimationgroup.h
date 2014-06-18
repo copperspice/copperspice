@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,28 +36,28 @@ class QAnimationGroupPrivate;
 
 class Q_CORE_EXPORT QAnimationGroup : public QAbstractAnimation
 {
-    CS_OBJECT(QAnimationGroup)
+   CS_OBJECT(QAnimationGroup)
 
-public:
-    QAnimationGroup(QObject *parent = 0);
-    ~QAnimationGroup();
+ public:
+   QAnimationGroup(QObject *parent = 0);
+   ~QAnimationGroup();
 
-    QAbstractAnimation *animationAt(int index) const;
-    int animationCount() const;
-    int indexOfAnimation(QAbstractAnimation *animation) const;
-    void addAnimation(QAbstractAnimation *animation);
-    void insertAnimation(int index, QAbstractAnimation *animation);
-    void removeAnimation(QAbstractAnimation *animation);
-    QAbstractAnimation *takeAnimation(int index);
-    void clear();
+   QAbstractAnimation *animationAt(int index) const;
+   int animationCount() const;
+   int indexOfAnimation(QAbstractAnimation *animation) const;
+   void addAnimation(QAbstractAnimation *animation);
+   void insertAnimation(int index, QAbstractAnimation *animation);
+   void removeAnimation(QAbstractAnimation *animation);
+   QAbstractAnimation *takeAnimation(int index);
+   void clear();
 
-protected:
-    QAnimationGroup(QAnimationGroupPrivate &dd, QObject *parent);
-    bool event(QEvent *event);
+ protected:
+   QAnimationGroup(QAnimationGroupPrivate &dd, QObject *parent);
+   bool event(QEvent *event);
 
-private:
-    Q_DISABLE_COPY(QAnimationGroup)
-    Q_DECLARE_PRIVATE(QAnimationGroup)
+ private:
+   Q_DISABLE_COPY(QAnimationGroup)
+   Q_DECLARE_PRIVATE(QAnimationGroup)
 };
 
 #endif //QT_NO_ANIMATION

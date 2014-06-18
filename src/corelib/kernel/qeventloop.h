@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,42 +37,42 @@ class QEventLoopPrivate;
 
 class Q_CORE_EXPORT QEventLoop : public QObject
 {
-    CS_OBJECT(QEventLoop)
-    Q_DECLARE_PRIVATE(QEventLoop)
+   CS_OBJECT(QEventLoop)
+   Q_DECLARE_PRIVATE(QEventLoop)
 
-public:
-    explicit QEventLoop(QObject *parent = 0);
-    ~QEventLoop();
+ public:
+   explicit QEventLoop(QObject *parent = 0);
+   ~QEventLoop();
 
-    enum ProcessEventsFlag {
-        AllEvents = 0x00,
-        ExcludeUserInputEvents = 0x01,
-        ExcludeSocketNotifiers = 0x02,
-        WaitForMoreEvents = 0x04,
-		  X11ExcludeTimers = 0x08,
+   enum ProcessEventsFlag {
+      AllEvents = 0x00,
+      ExcludeUserInputEvents = 0x01,
+      ExcludeSocketNotifiers = 0x02,
+      WaitForMoreEvents = 0x04,
+      X11ExcludeTimers = 0x08,
 
 #ifdef QT_DEPRECATED
-   DeferredDeletion = 0x10,
+      DeferredDeletion = 0x10,
 #endif
-        EventLoopExec = 0x20,
-        DialogExec = 0x40
-    };
-    using ProcessEventsFlags = QFlags<ProcessEventsFlag>;
+      EventLoopExec = 0x20,
+      DialogExec = 0x40
+   };
+   using ProcessEventsFlags = QFlags<ProcessEventsFlag>;
 
-    bool processEvents(ProcessEventsFlags flags = AllEvents);
-    void processEvents(ProcessEventsFlags flags, int maximumTime);
+   bool processEvents(ProcessEventsFlags flags = AllEvents);
+   void processEvents(ProcessEventsFlags flags, int maximumTime);
 
-    int exec(ProcessEventsFlags flags = AllEvents);
-    void exit(int returnCode = 0);
-    bool isRunning() const;
+   int exec(ProcessEventsFlags flags = AllEvents);
+   void exit(int returnCode = 0);
+   bool isRunning() const;
 
-    void wakeUp();
+   void wakeUp();
 
-    CORE_CS_SLOT_1(Public, void quit())
-    CORE_CS_SLOT_2(quit) 
+   CORE_CS_SLOT_1(Public, void quit())
+   CORE_CS_SLOT_2(quit)
 
-protected:
-	 QScopedPointer<QEventLoopPrivate> d_ptr;
+ protected:
+   QScopedPointer<QEventLoopPrivate> d_ptr;
 
 };
 

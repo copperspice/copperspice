@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,7 +35,7 @@ QT_BEGIN_NAMESPACE
 */
 QElapsedTimer::ClockType QElapsedTimer::clockType()
 {
-    return SystemTime;
+   return SystemTime;
 }
 
 /*!
@@ -47,7 +47,7 @@ QElapsedTimer::ClockType QElapsedTimer::clockType()
 */
 bool QElapsedTimer::isMonotonic()
 {
-    return false;
+   return false;
 }
 
 /*!
@@ -62,7 +62,7 @@ bool QElapsedTimer::isMonotonic()
 */
 void QElapsedTimer::start()
 {
-    restart();
+   restart();
 }
 
 /*!
@@ -81,10 +81,10 @@ void QElapsedTimer::start()
 */
 qint64 QElapsedTimer::restart()
 {
-    qint64 old = t1;
-    t1 = QDateTime::currentMSecsSinceEpoch();
-    t2 = 0;
-    return t1 - old;
+   qint64 old = t1;
+   t1 = QDateTime::currentMSecsSinceEpoch();
+   t2 = 0;
+   return t1 - old;
 }
 
 /*! \since 4.8
@@ -100,7 +100,7 @@ qint64 QElapsedTimer::restart()
 */
 qint64 QElapsedTimer::nsecsElapsed() const
 {
-    return elapsed() * 1000000;
+   return elapsed() * 1000000;
 }
 
 /*!
@@ -112,7 +112,7 @@ qint64 QElapsedTimer::nsecsElapsed() const
 */
 qint64 QElapsedTimer::elapsed() const
 {
-    return QDateTime::currentMSecsSinceEpoch() - t1;
+   return QDateTime::currentMSecsSinceEpoch() - t1;
 }
 
 /*!
@@ -128,7 +128,7 @@ qint64 QElapsedTimer::elapsed() const
 */
 qint64 QElapsedTimer::msecsSinceReference() const
 {
-    return t1;
+   return t1;
 }
 
 /*!
@@ -143,8 +143,8 @@ qint64 QElapsedTimer::msecsSinceReference() const
 */
 qint64 QElapsedTimer::msecsTo(const QElapsedTimer &other) const
 {
-    qint64 diff = other.t1 - t1;
-    return diff;
+   qint64 diff = other.t1 - t1;
+   return diff;
 }
 
 /*!
@@ -158,7 +158,7 @@ qint64 QElapsedTimer::msecsTo(const QElapsedTimer &other) const
 */
 qint64 QElapsedTimer::secsTo(const QElapsedTimer &other) const
 {
-    return msecsTo(other) / 1000;
+   return msecsTo(other) / 1000;
 }
 
 /*!
@@ -172,7 +172,7 @@ qint64 QElapsedTimer::secsTo(const QElapsedTimer &other) const
 */
 bool operator<(const QElapsedTimer &v1, const QElapsedTimer &v2)
 {
-    return v1.t1 < v2.t1;
+   return v1.t1 < v2.t1;
 }
 
 QT_END_NAMESPACE

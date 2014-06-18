@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,21 +32,21 @@
 QT_BEGIN_NAMESPACE
 
 QHistoryStatePrivate::QHistoryStatePrivate()
-    : QAbstractStatePrivate(HistoryState),
-      defaultState(0), historyType(QHistoryState::ShallowHistory)
+   : QAbstractStatePrivate(HistoryState),
+     defaultState(0), historyType(QHistoryState::ShallowHistory)
 {
 }
 
 QHistoryStatePrivate *QHistoryStatePrivate::get(QHistoryState *q)
 {
-    return q->d_func();
+   return q->d_func();
 }
 
 /*!
   Constructs a new shallow history state with the given \a parent state.
 */
 QHistoryState::QHistoryState(QState *parent)
-    : QAbstractState(*new QHistoryStatePrivate, parent)
+   : QAbstractState(*new QHistoryStatePrivate, parent)
 {
 }
 /*!
@@ -54,10 +54,10 @@ QHistoryState::QHistoryState(QState *parent)
   parent state.
 */
 QHistoryState::QHistoryState(HistoryType type, QState *parent)
-    : QAbstractState(*new QHistoryStatePrivate, parent)
+   : QAbstractState(*new QHistoryStatePrivate, parent)
 {
-    Q_D(QHistoryState);
-    d->historyType = type;
+   Q_D(QHistoryState);
+   d->historyType = type;
 }
 
 /*!
@@ -73,8 +73,8 @@ QHistoryState::~QHistoryState()
 */
 QAbstractState *QHistoryState::defaultState() const
 {
-    Q_D(const QHistoryState);
-    return d->defaultState;
+   Q_D(const QHistoryState);
+   return d->defaultState;
 }
 
 /*!
@@ -86,13 +86,13 @@ QAbstractState *QHistoryState::defaultState() const
 */
 void QHistoryState::setDefaultState(QAbstractState *state)
 {
-    Q_D(QHistoryState);
-    if (state && state->parentState() != parentState()) {
-        qWarning("QHistoryState::setDefaultState: state %p does not belong "
-                 "to this history state's group (%p)", state, parentState());
-        return;
-    }
-    d->defaultState = state;
+   Q_D(QHistoryState);
+   if (state && state->parentState() != parentState()) {
+      qWarning("QHistoryState::setDefaultState: state %p does not belong "
+               "to this history state's group (%p)", state, parentState());
+      return;
+   }
+   d->defaultState = state;
 }
 
 /*!
@@ -100,8 +100,8 @@ void QHistoryState::setDefaultState(QAbstractState *state)
 */
 QHistoryState::HistoryType QHistoryState::historyType() const
 {
-    Q_D(const QHistoryState);
-    return d->historyType;
+   Q_D(const QHistoryState);
+   return d->historyType;
 }
 
 /*!
@@ -109,8 +109,8 @@ QHistoryState::HistoryType QHistoryState::historyType() const
 */
 void QHistoryState::setHistoryType(HistoryType type)
 {
-    Q_D(QHistoryState);
-    d->historyType = type;
+   Q_D(QHistoryState);
+   d->historyType = type;
 }
 
 /*!
@@ -118,7 +118,7 @@ void QHistoryState::setHistoryType(HistoryType type)
 */
 void QHistoryState::onEntry(QEvent *event)
 {
-    Q_UNUSED(event);
+   Q_UNUSED(event);
 }
 
 /*!
@@ -126,7 +126,7 @@ void QHistoryState::onEntry(QEvent *event)
 */
 void QHistoryState::onExit(QEvent *event)
 {
-    Q_UNUSED(event);
+   Q_UNUSED(event);
 }
 
 /*!
@@ -134,7 +134,7 @@ void QHistoryState::onExit(QEvent *event)
 */
 bool QHistoryState::event(QEvent *e)
 {
-    return QAbstractState::event(e);
+   return QAbstractState::event(e);
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,61 +37,62 @@
 QT_BEGIN_NAMESPACE
 
 QThreadData::QThreadData(int initialRefCount)
-    : _ref(initialRefCount), thread(0), threadId(0),
-      quitNow(false), loopLevel(0), eventDispatcher(0), canWait(true), isAdopted(false)
+   : _ref(initialRefCount), thread(0), threadId(0),
+     quitNow(false), loopLevel(0), eventDispatcher(0), canWait(true), isAdopted(false)
 {
-    // fprintf(stderr, "QThreadData %p created\n", this);
+   // fprintf(stderr, "QThreadData %p created\n", this);
 }
 
 QThreadData::~QThreadData()
 {
-    Q_ASSERT(_ref.load() == 0);
+   Q_ASSERT(_ref.load() == 0);
 
-    // In the odd case that Qt is running on a secondary thread, the main
-    // thread instance will have been dereffed asunder because of the deref in
-    // QThreadData::current() and the deref in the pthread_destroy. To avoid
-    // crashing during QCoreApplicationData's global static cleanup we need to
-    // safeguard the main thread here.. This fix is a bit crude, but it solves
-    // the problem...
-    if (this->thread == QCoreApplicationPrivate::theMainThread) {
-       QCoreApplicationPrivate::theMainThread = 0;
-       QThreadData::clearCurrentThreadData();
-    }
+   // In the odd case that Qt is running on a secondary thread, the main
+   // thread instance will have been dereffed asunder because of the deref in
+   // QThreadData::current() and the deref in the pthread_destroy. To avoid
+   // crashing during QCoreApplicationData's global static cleanup we need to
+   // safeguard the main thread here.. This fix is a bit crude, but it solves
+   // the problem...
+   if (this->thread == QCoreApplicationPrivate::theMainThread) {
+      QCoreApplicationPrivate::theMainThread = 0;
+      QThreadData::clearCurrentThreadData();
+   }
 
-    QThread *t = thread;
-    thread = 0;
-    delete t;
+   QThread *t = thread;
+   thread = 0;
+   delete t;
 
-    for (int i = 0; i < postEventList.size(); ++i) {
-        const QPostEvent &pe = postEventList.at(i);
+   for (int i = 0; i < postEventList.size(); ++i) {
+      const QPostEvent &pe = postEventList.at(i);
 
-        if (pe.event) {
+      if (pe.event) {
 
-				CSInternalEvents::decr_PostedEvents(pe.receiver);
-            pe.event->posted = false;
+         CSInternalEvents::decr_PostedEvents(pe.receiver);
+         pe.event->posted = false;
 
-            delete pe.event;
-        }
-    }
+         delete pe.event;
+      }
+   }
 
-    // fprintf(stderr, "QThreadData %p destroyed\n", this);
+   // fprintf(stderr, "QThreadData %p destroyed\n", this);
 }
 
 void QThreadData::ref()
 {
-    (void) _ref.ref();
-    Q_ASSERT(_ref.load() != 0);
+   (void) _ref.ref();
+   Q_ASSERT(_ref.load() != 0);
 }
 
 void QThreadData::deref()
 {
-    if (!_ref.deref())
-        delete this;
+   if (!_ref.deref()) {
+      delete this;
+   }
 }
 
-QThreadPrivate * QThreadData::get_QThreadPrivate() const
+QThreadPrivate *QThreadData::get_QThreadPrivate() const
 {
-	return this->thread->d_func();	
+   return this->thread->d_func();
 }
 
 
@@ -100,28 +101,28 @@ QThreadPrivate * QThreadData::get_QThreadPrivate() const
 */
 
 QAdoptedThread::QAdoptedThread(QThreadData *data)
-    : QThread(*new QThreadPrivate(data))
+   : QThread(*new QThreadPrivate(data))
 {
-    // thread should be running and not finished for the lifetime
-    // of the application (even if QCoreApplication goes away)
+   // thread should be running and not finished for the lifetime
+   // of the application (even if QCoreApplication goes away)
 
-    d_func()->running = true;
-    d_func()->finished = false;
+   d_func()->running = true;
+   d_func()->finished = false;
 
-    init();
+   init();
 
-    // fprintf(stderr, "new QAdoptedThread = %p\n", this);
+   // fprintf(stderr, "new QAdoptedThread = %p\n", this);
 }
 
 QAdoptedThread::~QAdoptedThread()
 {
-    // fprintf(stderr, "~QAdoptedThread = %p\n", this);
+   // fprintf(stderr, "~QAdoptedThread = %p\n", this);
 }
 
 void QAdoptedThread::run()
 {
-    // this function should never be called
-    qFatal("QAdoptedThread::run(): Internal error, this implementation should never be called.");
+   // this function should never be called
+   qFatal("QAdoptedThread::run(): Internal error, this implementation should never be called.");
 }
 
 
@@ -130,29 +131,30 @@ void QAdoptedThread::run()
 */
 
 QThreadPrivate::QThreadPrivate(QThreadData *d)
-    : running(false), finished(false), terminated(false),
-      isInFinish(false), exited(false), returnCode(-1),
-      stackSize(0), priority(QThread::InheritPriority), data(d)
+   : running(false), finished(false), terminated(false),
+     isInFinish(false), exited(false), returnCode(-1),
+     stackSize(0), priority(QThread::InheritPriority), data(d)
 {
 #if defined (Q_OS_UNIX)
-    thread_id = 0;
+   thread_id = 0;
 #elif defined (Q_OS_WIN)
-    handle = 0;
-    id = 0;
-    waiters = 0;
+   handle = 0;
+   id = 0;
+   waiters = 0;
 #endif
 #if defined (Q_OS_WIN)
-    terminationEnabled = true;
-    terminatePending = false;
+   terminationEnabled = true;
+   terminatePending = false;
 #endif
 
-    if (!data)
-        data = new QThreadData;
+   if (!data) {
+      data = new QThreadData;
+   }
 }
 
 QThreadPrivate::~QThreadPrivate()
 {
-    data->deref();
+   data->deref();
 }
 
 /*!
@@ -352,9 +354,9 @@ QThreadPrivate::~QThreadPrivate()
 */
 QThread *QThread::currentThread()
 {
-    QThreadData *data = QThreadData::current();
-    Q_ASSERT(data != 0);
-    return data->thread;
+   QThreadData *data = QThreadData::current();
+   Q_ASSERT(data != 0);
+   return data->thread;
 }
 
 /*!
@@ -364,28 +366,28 @@ QThread *QThread::currentThread()
 
     \sa start()
 */
-QThread::QThread(QObject *parent)   
-	: QObject(parent), d_ptr(new QThreadPrivate)
+QThread::QThread(QObject *parent)
+   : QObject(parent), d_ptr(new QThreadPrivate)
 {
-	 d_ptr->q_ptr = this;	
+   d_ptr->q_ptr = this;
 
-    Q_D(QThread);
+   Q_D(QThread);
 
-    // fprintf(stderr, "QThreadData %p created for thread %p\n", d->data, this);
-    d->data->thread = this;
+   // fprintf(stderr, "QThreadData %p created for thread %p\n", d->data, this);
+   d->data->thread = this;
 }
 
 /*! \internal
  */
 QThread::QThread(QThreadPrivate &dd, QObject *parent)
-	: QObject(parent), d_ptr(&dd)
+   : QObject(parent), d_ptr(&dd)
 {
-	 d_ptr->q_ptr = this;
+   d_ptr->q_ptr = this;
 
-    Q_D(QThread);
+   Q_D(QThread);
 
-    // fprintf(stderr, "QThreadData %p taken from private data for thread %p\n", d->data, this);
-    d->data->thread = this;
+   // fprintf(stderr, "QThreadData %p taken from private data for thread %p\n", d->data, this);
+   d->data->thread = this;
 }
 
 /*!
@@ -399,19 +401,20 @@ QThread::QThread(QThreadPrivate &dd, QObject *parent)
 */
 QThread::~QThread()
 {
-    Q_D(QThread);
-    {
-        QMutexLocker locker(&d->mutex);
-        if (d->isInFinish) {
-            locker.unlock();
-            wait();
-            locker.relock();
-        }
-        if (d->running && !d->finished && !d->data->isAdopted)
-            qWarning("QThread: Destroyed while thread is still running");
+   Q_D(QThread);
+   {
+      QMutexLocker locker(&d->mutex);
+      if (d->isInFinish) {
+         locker.unlock();
+         wait();
+         locker.relock();
+      }
+      if (d->running && !d->finished && !d->data->isAdopted) {
+         qWarning("QThread: Destroyed while thread is still running");
+      }
 
-        d->data->thread = 0;
-    }
+      d->data->thread = 0;
+   }
 }
 
 /*!
@@ -421,9 +424,9 @@ QThread::~QThread()
 */
 bool QThread::isFinished() const
 {
-    Q_D(const QThread);
-    QMutexLocker locker(&d->mutex);
-    return d->finished || d->isInFinish;
+   Q_D(const QThread);
+   QMutexLocker locker(&d->mutex);
+   return d->finished || d->isInFinish;
 }
 
 /*!
@@ -433,10 +436,10 @@ bool QThread::isFinished() const
 */
 bool QThread::isRunning() const
 {
-    Q_D(const QThread);
-    QMutexLocker locker(&d->mutex);
+   Q_D(const QThread);
+   QMutexLocker locker(&d->mutex);
 
-    return d->running && !d->isInFinish;
+   return d->running && !d->isInFinish;
 }
 
 /*!
@@ -453,11 +456,11 @@ bool QThread::isRunning() const
 */
 void QThread::setStackSize(uint stackSize)
 {
-    Q_D(QThread);
-    QMutexLocker locker(&d->mutex);
-    Q_ASSERT_X(!d->running, "QThread::setStackSize",
-               "cannot change stack size while the thread is running");
-    d->stackSize = stackSize;
+   Q_D(QThread);
+   QMutexLocker locker(&d->mutex);
+   Q_ASSERT_X(!d->running, "QThread::setStackSize",
+              "cannot change stack size while the thread is running");
+   d->stackSize = stackSize;
 }
 
 /*!
@@ -468,9 +471,9 @@ void QThread::setStackSize(uint stackSize)
 */
 uint QThread::stackSize() const
 {
-    Q_D(const QThread);
-    QMutexLocker locker(&d->mutex);
-    return d->stackSize;
+   Q_D(const QThread);
+   QMutexLocker locker(&d->mutex);
+   return d->stackSize;
 }
 
 /*!
@@ -484,22 +487,22 @@ uint QThread::stackSize() const
 */
 int QThread::exec()
 {
-    Q_D(QThread);
-    QMutexLocker locker(&d->mutex);
-    d->data->quitNow = false;
-    if (d->exited) {
-        d->exited = false;
-        return d->returnCode;
-    }
-    locker.unlock();
+   Q_D(QThread);
+   QMutexLocker locker(&d->mutex);
+   d->data->quitNow = false;
+   if (d->exited) {
+      d->exited = false;
+      return d->returnCode;
+   }
+   locker.unlock();
 
-    QEventLoop eventLoop;
-    int returnCode = eventLoop.exec();
+   QEventLoop eventLoop;
+   int returnCode = eventLoop.exec();
 
-    locker.relock();
-    d->exited = false;
-    d->returnCode = -1;
-    return returnCode;
+   locker.relock();
+   d->exited = false;
+   d->returnCode = -1;
+   return returnCode;
 }
 
 /*!
@@ -514,9 +517,9 @@ int QThread::exec()
 
     Note that unlike the C library function of the same name, this
     function \e does return to the caller -- it is event processing
-    that stops. 
-    
-    No QEventLoops will be started anymore in this thread  until 
+    that stops.
+
+    No QEventLoops will be started anymore in this thread  until
     QThread::exec() has been called again. If the eventloop in QThread::exec()
     is not running then the next call to QThread::exec() will also return
     immediately.
@@ -525,15 +528,15 @@ int QThread::exec()
 */
 void QThread::exit(int returnCode)
 {
-    Q_D(QThread);
-    QMutexLocker locker(&d->mutex);
-    d->exited = true;
-    d->returnCode = returnCode;
-    d->data->quitNow = true;
-    for (int i = 0; i < d->data->eventLoops.size(); ++i) {
-        QEventLoop *eventLoop = d->data->eventLoops.at(i);
-        eventLoop->exit(returnCode);
-    }
+   Q_D(QThread);
+   QMutexLocker locker(&d->mutex);
+   d->exited = true;
+   d->returnCode = returnCode;
+   d->data->quitNow = true;
+   for (int i = 0; i < d->data->eventLoops.size(); ++i) {
+      QEventLoop *eventLoop = d->data->eventLoops.at(i);
+      eventLoop->exit(returnCode);
+   }
 }
 
 /*!
@@ -546,7 +549,9 @@ void QThread::exit(int returnCode)
     \sa exit() QEventLoop
 */
 void QThread::quit()
-{ exit(); }
+{
+   exit();
+}
 
 /*!
     The starting point for the thread. After calling start(), the
@@ -561,7 +566,7 @@ void QThread::quit()
 */
 void QThread::run()
 {
-    (void) exec();
+   (void) exec();
 }
 
 /*! \internal
@@ -573,12 +578,13 @@ void qt_create_tls();
 
 void QThread::initialize()
 {
-    if (qt_global_mutexpool)
-        return;
-    qt_global_mutexpool = QMutexPool::instance();
+   if (qt_global_mutexpool) {
+      return;
+   }
+   qt_global_mutexpool = QMutexPool::instance();
 
 #if defined (Q_OS_WIN)
-    qt_create_tls();
+   qt_create_tls();
 #endif
 }
 
@@ -588,7 +594,7 @@ void QThread::initialize()
 */
 void QThread::cleanup()
 {
-    qt_global_mutexpool = 0;
+   qt_global_mutexpool = 0;
 }
 
 /*!
@@ -633,14 +639,14 @@ void QThread::cleanup()
 */
 QThread::Priority QThread::priority() const
 {
-    Q_D(const QThread);
-    QMutexLocker locker(&d->mutex);
+   Q_D(const QThread);
+   QMutexLocker locker(&d->mutex);
 
-    // mask off the high bits that are used for flags
-    return Priority(d->priority & 0xffff);
+   // mask off the high bits that are used for flags
+   return Priority(d->priority & 0xffff);
 }
 
-QThreadPrivate * QThreadPrivate::cs_getPrivate(QThread *object)
+QThreadPrivate *QThreadPrivate::cs_getPrivate(QThread *object)
 {
    return object->d_ptr.data();
 }

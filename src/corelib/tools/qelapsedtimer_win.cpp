@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,129 +37,134 @@ static quint64 counterFrequency = 0;
 
 static void resolveLibs()
 {
-    static volatile bool done = false;
-    if (done)
-        return;
+   static volatile bool done = false;
+   if (done) {
+      return;
+   }
 
-    // try to get GetTickCount64 from the system
-    QSystemLibrary kernel32(QLatin1String("kernel32"));
-    if (!kernel32.load())
-        return;
-    
-    ptrGetTickCount64 = (PtrGetTickCount64)kernel32.resolve("GetTickCount64");
+   // try to get GetTickCount64 from the system
+   QSystemLibrary kernel32(QLatin1String("kernel32"));
+   if (!kernel32.load()) {
+      return;
+   }
 
-    // Retrieve the number of high-resolution performance counter ticks per second
-    LARGE_INTEGER frequency;
-    if (!QueryPerformanceFrequency(&frequency)) {
-        counterFrequency = 0;
-    } else {
-        counterFrequency = frequency.QuadPart;
-    }
+   ptrGetTickCount64 = (PtrGetTickCount64)kernel32.resolve("GetTickCount64");
 
-    done = true;
+   // Retrieve the number of high-resolution performance counter ticks per second
+   LARGE_INTEGER frequency;
+   if (!QueryPerformanceFrequency(&frequency)) {
+      counterFrequency = 0;
+   } else {
+      counterFrequency = frequency.QuadPart;
+   }
+
+   done = true;
 }
 
 static inline qint64 ticksToNanoseconds(qint64 ticks)
 {
-    if (counterFrequency > 0) {
-        // QueryPerformanceCounter uses an arbitrary frequency
-        qint64 seconds = ticks / counterFrequency;
-        qint64 nanoSeconds = (ticks - seconds * counterFrequency) * 1000000000 / counterFrequency;
-        return seconds * 1000000000 + nanoSeconds;
-    } else {
-        // GetTickCount(64) return milliseconds
-        return ticks * 1000000;
-    }
+   if (counterFrequency > 0) {
+      // QueryPerformanceCounter uses an arbitrary frequency
+      qint64 seconds = ticks / counterFrequency;
+      qint64 nanoSeconds = (ticks - seconds * counterFrequency) * 1000000000 / counterFrequency;
+      return seconds * 1000000000 + nanoSeconds;
+   } else {
+      // GetTickCount(64) return milliseconds
+      return ticks * 1000000;
+   }
 }
 
 static quint64 getTickCount()
 {
-    resolveLibs();
+   resolveLibs();
 
-    // This avoids a division by zero and disables the high performance counter if it's not available
-    if (counterFrequency > 0) {
-        LARGE_INTEGER counter;
+   // This avoids a division by zero and disables the high performance counter if it's not available
+   if (counterFrequency > 0) {
+      LARGE_INTEGER counter;
 
-        if (QueryPerformanceCounter(&counter)) {
-            return counter.QuadPart;
-        } else {
-            qWarning("QueryPerformanceCounter failed, although QueryPerformanceFrequency succeeded.");
-            return 0;
-        }
-    }
+      if (QueryPerformanceCounter(&counter)) {
+         return counter.QuadPart;
+      } else {
+         qWarning("QueryPerformanceCounter failed, although QueryPerformanceFrequency succeeded.");
+         return 0;
+      }
+   }
 
-    if (ptrGetTickCount64)
-        return ptrGetTickCount64();
+   if (ptrGetTickCount64) {
+      return ptrGetTickCount64();
+   }
 
-    static quint32 highdword = 0;
-    static quint32 lastval = 0;
-    quint32 val = GetTickCount();
-    if (val < lastval)
-        ++highdword;
-    lastval = val;
-    return val | (quint64(highdword) << 32);
+   static quint32 highdword = 0;
+   static quint32 lastval = 0;
+   quint32 val = GetTickCount();
+   if (val < lastval) {
+      ++highdword;
+   }
+   lastval = val;
+   return val | (quint64(highdword) << 32);
 }
 
 QElapsedTimer::ClockType QElapsedTimer::clockType()
 {
-    resolveLibs();
+   resolveLibs();
 
-    if (counterFrequency > 0)
-        return PerformanceCounter;
-    else
-        return TickCounter;
+   if (counterFrequency > 0) {
+      return PerformanceCounter;
+   } else {
+      return TickCounter;
+   }
 }
 
 bool QElapsedTimer::isMonotonic()
 {
-    return true;
+   return true;
 }
 
 void QElapsedTimer::start()
 {
-    t1 = getTickCount();
-    t2 = 0;
+   t1 = getTickCount();
+   t2 = 0;
 }
 
 qint64 QElapsedTimer::restart()
 {
-    qint64 oldt1 = t1;
-    t1 = getTickCount();
-    t2 = 0;
-    return ticksToNanoseconds(t1 - oldt1) / 1000000;
+   qint64 oldt1 = t1;
+   t1 = getTickCount();
+   t2 = 0;
+   return ticksToNanoseconds(t1 - oldt1) / 1000000;
 }
 
 qint64 QElapsedTimer::nsecsElapsed() const
 {
-    qint64 elapsed = getTickCount() - t1;
-    return ticksToNanoseconds(elapsed);
+   qint64 elapsed = getTickCount() - t1;
+   return ticksToNanoseconds(elapsed);
 }
 
 qint64 QElapsedTimer::elapsed() const
 {
-    qint64 elapsed = getTickCount() - t1;
-    return ticksToNanoseconds(elapsed) / 1000000;
+   qint64 elapsed = getTickCount() - t1;
+   return ticksToNanoseconds(elapsed) / 1000000;
 }
 
 qint64 QElapsedTimer::msecsSinceReference() const
 {
-    return ticksToNanoseconds(t1) / 1000000;
+   return ticksToNanoseconds(t1) / 1000000;
 }
 
 qint64 QElapsedTimer::msecsTo(const QElapsedTimer &other) const
 {
-    qint64 difference = other.t1 - t1;
-    return ticksToNanoseconds(difference) / 1000000;
+   qint64 difference = other.t1 - t1;
+   return ticksToNanoseconds(difference) / 1000000;
 }
 
 qint64 QElapsedTimer::secsTo(const QElapsedTimer &other) const
 {
-    return msecsTo(other) / 1000;
+   return msecsTo(other) / 1000;
 }
 
 bool operator<(const QElapsedTimer &v1, const QElapsedTimer &v2)
 {
-    return (v1.t1 - v2.t1) < 0;
+   return (v1.t1 - v2.t1) < 0;
 }
 
 QT_END_NAMESPACE

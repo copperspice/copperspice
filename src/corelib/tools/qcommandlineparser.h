@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,51 +46,51 @@ class QCoreApplication;
 
 class Q_CORE_EXPORT QCommandLineParser
 {
-    Q_DECLARE_TR_FUNCTIONS(QCommandLineParser)
-public:
-    QCommandLineParser();
-    ~QCommandLineParser();
+   Q_DECLARE_TR_FUNCTIONS(QCommandLineParser)
+ public:
+   QCommandLineParser();
+   ~QCommandLineParser();
 
-    enum SingleDashWordOptionMode {
-        ParseAsCompactedShortOptions,
-        ParseAsLongOptions
-    };
-    void setSingleDashWordOptionMode(SingleDashWordOptionMode parsingMode);
+   enum SingleDashWordOptionMode {
+      ParseAsCompactedShortOptions,
+      ParseAsLongOptions
+   };
+   void setSingleDashWordOptionMode(SingleDashWordOptionMode parsingMode);
 
-    bool addOption(const QCommandLineOption &commandLineOption);
+   bool addOption(const QCommandLineOption &commandLineOption);
 
-    QCommandLineOption addVersionOption();
-    QCommandLineOption addHelpOption();
-    void setApplicationDescription(const QString &description);
-    QString applicationDescription() const;
-    void addPositionalArgument(const QString &name, const QString &description, const QString &syntax = QString());
-    void clearPositionalArguments();
+   QCommandLineOption addVersionOption();
+   QCommandLineOption addHelpOption();
+   void setApplicationDescription(const QString &description);
+   QString applicationDescription() const;
+   void addPositionalArgument(const QString &name, const QString &description, const QString &syntax = QString());
+   void clearPositionalArguments();
 
-    void process(const QStringList &arguments);
-    void process(const QCoreApplication &app);
+   void process(const QStringList &arguments);
+   void process(const QCoreApplication &app);
 
-    bool parse(const QStringList &arguments);
-    QString errorText() const;
+   bool parse(const QStringList &arguments);
+   QString errorText() const;
 
-    bool isSet(const QString &name) const;
-    QString value(const QString &name) const;
-    QStringList values(const QString &name) const;
+   bool isSet(const QString &name) const;
+   QString value(const QString &name) const;
+   QStringList values(const QString &name) const;
 
-    bool isSet(const QCommandLineOption &option) const;
-    QString value(const QCommandLineOption &option) const;
-    QStringList values(const QCommandLineOption &option) const;
+   bool isSet(const QCommandLineOption &option) const;
+   QString value(const QCommandLineOption &option) const;
+   QStringList values(const QCommandLineOption &option) const;
 
-    QStringList positionalArguments() const;
-    QStringList optionNames() const;
-    QStringList unknownOptionNames() const;
+   QStringList positionalArguments() const;
+   QStringList optionNames() const;
+   QStringList unknownOptionNames() const;
 
-    void showHelp(int exitCode = 0);
-    QString helpText() const;
+   void showHelp(int exitCode = 0);
+   QString helpText() const;
 
-private:
-    Q_DISABLE_COPY(QCommandLineParser)
+ private:
+   Q_DISABLE_COPY(QCommandLineParser)
 
-    QCommandLineParserPrivate * const d;
+   QCommandLineParserPrivate *const d;
 };
 
 QT_END_NAMESPACE

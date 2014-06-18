@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,7 +42,7 @@
 QT_BEGIN_NAMESPACE
 
 int qFindString(const QChar *haystack, int haystackLen, int from,
-    const QChar *needle, int needleLen, Qt::CaseSensitivity cs);
+                const QChar *needle, int needleLen, Qt::CaseSensitivity cs);
 
 // error strings for the regexp parser
 #define RXERR_OK         QT_TRANSLATE_NOOP("QRegExp", "no error occurred")
@@ -279,7 +279,7 @@ int qFindString(const QChar *haystack, int haystackLen, int from,
     Square brackets mean match any character contained in the square
     brackets. The character set abbreviations described above can
     appear in a character set in square brackets. Except for the
-    character set abbreviations and the following two exceptions, 
+    character set abbreviations and the following two exceptions,
     characters do not have special meanings in square brackets.
 
     \table
@@ -684,7 +684,7 @@ const int EOS = -1;
 
 static bool isWord(QChar ch)
 {
-    return ch.isLetterOrNumber() || ch.isMark() || ch == QLatin1Char('_');
+   return ch.isLetterOrNumber() || ch.isMark() || ch == QLatin1Char('_');
 }
 
 /*
@@ -693,39 +693,40 @@ static bool isWord(QChar ch)
 */
 static void mergeInto(QVector<int> *a, const QVector<int> &b)
 {
-    int asize = a->size();
-    int bsize = b.size();
-    if (asize == 0) {
-        *a = b;
+   int asize = a->size();
+   int bsize = b.size();
+   if (asize == 0) {
+      *a = b;
 #ifndef QT_NO_REGEXP_OPTIM
-    } else if (bsize == 1 && a->at(asize - 1) < b.at(0)) {
-        a->resize(asize + 1);
-        (*a)[asize] = b.at(0);
+   } else if (bsize == 1 && a->at(asize - 1) < b.at(0)) {
+      a->resize(asize + 1);
+      (*a)[asize] = b.at(0);
 #endif
-    } else if (bsize >= 1) {
-        int csize = asize + bsize;
-        QVector<int> c(csize);
-        int i = 0, j = 0, k = 0;
-        while (i < asize) {
-            if (j < bsize) {
-                if (a->at(i) == b.at(j)) {
-                    ++i;
-                    --csize;
-                } else if (a->at(i) < b.at(j)) {
-                    c[k++] = a->at(i++);
-                } else {
-                    c[k++] = b.at(j++);
-                }
+   } else if (bsize >= 1) {
+      int csize = asize + bsize;
+      QVector<int> c(csize);
+      int i = 0, j = 0, k = 0;
+      while (i < asize) {
+         if (j < bsize) {
+            if (a->at(i) == b.at(j)) {
+               ++i;
+               --csize;
+            } else if (a->at(i) < b.at(j)) {
+               c[k++] = a->at(i++);
             } else {
-                memcpy(c.data() + k, a->constData() + i, (asize - i) * sizeof(int));
-                break;
+               c[k++] = b.at(j++);
             }
-        }
-        c.resize(csize);
-        if (j < bsize)
-            memcpy(c.data() + k, b.constData() + j, (bsize - j) * sizeof(int));
-        *a = c;
-    }
+         } else {
+            memcpy(c.data() + k, a->constData() + i, (asize - i) * sizeof(int));
+            break;
+         }
+      }
+      c.resize(csize);
+      if (j < bsize) {
+         memcpy(c.data() + k, b.constData() + j, (bsize - j) * sizeof(int));
+      }
+      *a = c;
+   }
 }
 
 #ifndef QT_NO_REGEXP_WILDCARD
@@ -738,136 +739,138 @@ static void mergeInto(QVector<int> *a, const QVector<int> &b)
 */
 static QString wc2rx(const QString &wc_str, const bool enableEscaping)
 {
-    const int wclen = wc_str.length();
-    QString rx;
-    int i = 0;
-    bool isEscaping = false; // the previous character is '\'
-    const QChar *wc = wc_str.unicode();
+   const int wclen = wc_str.length();
+   QString rx;
+   int i = 0;
+   bool isEscaping = false; // the previous character is '\'
+   const QChar *wc = wc_str.unicode();
 
-    while (i < wclen) {
-        const QChar c = wc[i++];
-        switch (c.unicode()) {
-        case '\\':
+   while (i < wclen) {
+      const QChar c = wc[i++];
+      switch (c.unicode()) {
+         case '\\':
             if (enableEscaping) {
-                if (isEscaping) {
-                    rx += QLatin1String("\\\\");
-                } // we insert the \\ later if necessary
-                if (i == wclen) { // the end
-                    rx += QLatin1String("\\\\");
-                }
+               if (isEscaping) {
+                  rx += QLatin1String("\\\\");
+               } // we insert the \\ later if necessary
+               if (i == wclen) { // the end
+                  rx += QLatin1String("\\\\");
+               }
             } else {
-                rx += QLatin1String("\\\\");
+               rx += QLatin1String("\\\\");
             }
             isEscaping = true;
             break;
-        case '*':
+         case '*':
             if (isEscaping) {
-                rx += QLatin1String("\\*");
-                isEscaping = false;
+               rx += QLatin1String("\\*");
+               isEscaping = false;
             } else {
-                rx += QLatin1String(".*");
+               rx += QLatin1String(".*");
             }
             break;
-        case '?':
+         case '?':
             if (isEscaping) {
-                rx += QLatin1String("\\?");
-                isEscaping = false;
+               rx += QLatin1String("\\?");
+               isEscaping = false;
             } else {
-                rx += QLatin1Char('.');
+               rx += QLatin1Char('.');
             }
 
             break;
-        case '$':
-        case '(':
-        case ')':
-        case '+':
-        case '.':
-        case '^':
-        case '{':
-        case '|':
-        case '}':
+         case '$':
+         case '(':
+         case ')':
+         case '+':
+         case '.':
+         case '^':
+         case '{':
+         case '|':
+         case '}':
             if (isEscaping) {
-                isEscaping = false;
-                rx += QLatin1String("\\\\");
+               isEscaping = false;
+               rx += QLatin1String("\\\\");
             }
             rx += QLatin1Char('\\');
             rx += c;
             break;
          case '[':
             if (isEscaping) {
-                isEscaping = false;
-                rx += QLatin1String("\\[");
+               isEscaping = false;
+               rx += QLatin1String("\\[");
             } else {
-                rx += c;
-                if (wc[i] == QLatin1Char('^'))
-                    rx += wc[i++];
-                if (i < wclen) {
-                    if (rx[i] == QLatin1Char(']'))
-                        rx += wc[i++];
-                    while (i < wclen && wc[i] != QLatin1Char(']')) {
-                        if (wc[i] == QLatin1Char('\\'))
-                            rx += QLatin1Char('\\');
-                        rx += wc[i++];
-                    }
-                }
+               rx += c;
+               if (wc[i] == QLatin1Char('^')) {
+                  rx += wc[i++];
+               }
+               if (i < wclen) {
+                  if (rx[i] == QLatin1Char(']')) {
+                     rx += wc[i++];
+                  }
+                  while (i < wclen && wc[i] != QLatin1Char(']')) {
+                     if (wc[i] == QLatin1Char('\\')) {
+                        rx += QLatin1Char('\\');
+                     }
+                     rx += wc[i++];
+                  }
+               }
             }
-             break;
+            break;
 
-        case ']':
-            if(isEscaping){
-                isEscaping = false;
-                rx += QLatin1String("\\");
+         case ']':
+            if (isEscaping) {
+               isEscaping = false;
+               rx += QLatin1String("\\");
             }
             rx += c;
             break;
 
-        default:
-            if(isEscaping){
-                isEscaping = false;
-                rx += QLatin1String("\\\\");
+         default:
+            if (isEscaping) {
+               isEscaping = false;
+               rx += QLatin1String("\\\\");
             }
             rx += c;
-        }
-    }
-    return rx;
+      }
+   }
+   return rx;
 }
 #endif
 
 static int caretIndex(int offset, QRegExp::CaretMode caretMode)
 {
-    if (caretMode == QRegExp::CaretAtZero) {
-        return 0;
-    } else if (caretMode == QRegExp::CaretAtOffset) {
-        return offset;
-    } else { // QRegExp::CaretWontMatch
-        return -1;
-    }
+   if (caretMode == QRegExp::CaretAtZero) {
+      return 0;
+   } else if (caretMode == QRegExp::CaretAtOffset) {
+      return offset;
+   } else { // QRegExp::CaretWontMatch
+      return -1;
+   }
 }
 
 /*
     The QRegExpEngineKey struct uniquely identifies an engine.
 */
-struct QRegExpEngineKey
-{
-    QString pattern;
-    QRegExp::PatternSyntax patternSyntax;
-    Qt::CaseSensitivity cs;
+struct QRegExpEngineKey {
+   QString pattern;
+   QRegExp::PatternSyntax patternSyntax;
+   Qt::CaseSensitivity cs;
 
-    inline QRegExpEngineKey(const QString &pattern, QRegExp::PatternSyntax patternSyntax,
-                            Qt::CaseSensitivity cs)
-        : pattern(pattern), patternSyntax(patternSyntax), cs(cs) {}
+   inline QRegExpEngineKey(const QString &pattern, QRegExp::PatternSyntax patternSyntax,
+                           Qt::CaseSensitivity cs)
+      : pattern(pattern), patternSyntax(patternSyntax), cs(cs) {}
 
-    inline void clear() {
-        pattern.clear();
-        patternSyntax = QRegExp::RegExp;
-        cs = Qt::CaseSensitive;
-    }
+   inline void clear() {
+      pattern.clear();
+      patternSyntax = QRegExp::RegExp;
+      cs = Qt::CaseSensitive;
+   }
 };
 
 Q_STATIC_GLOBAL_OPERATOR bool operator==(const QRegExpEngineKey &key1, const QRegExpEngineKey &key2)
 {
-    return key1.pattern == key2.pattern && key1.patternSyntax == key2.patternSyntax
-           && key1.cs == key2.cs;
+   return key1.pattern == key2.pattern && key1.patternSyntax == key2.patternSyntax
+          && key1.cs == key2.cs;
 }
 
 class QRegExpEngine;
@@ -877,46 +880,51 @@ class QRegExpEngine;
 /*
   This is the engine state during matching.
 */
-struct QRegExpMatchState
-{
-    const QChar *in; // a pointer to the input string data
-    int pos; // the current position in the string
-    int caretPos;
-    int len; // the length of the input string
-    bool minimal; // minimal matching?
-    int *bigArray; // big array holding the data for the next pointers
-    int *inNextStack; // is state is nextStack?
-    int *curStack; // stack of current states
-    int *nextStack; // stack of next states
-    int *curCapBegin; // start of current states' captures
-    int *nextCapBegin; // start of next states' captures
-    int *curCapEnd; // end of current states' captures
-    int *nextCapEnd; // end of next states' captures
-    int *tempCapBegin; // start of temporary captures
-    int *tempCapEnd; // end of temporary captures
-    int *capBegin; // start of captures for a next state
-    int *capEnd; // end of captures for a next state
-    int *slideTab; // bump-along slide table for bad-character heuristic
-    int *captured; // what match() returned last
-    int slideTabSize; // size of slide table
-    int capturedSize;
+struct QRegExpMatchState {
+   const QChar *in; // a pointer to the input string data
+   int pos; // the current position in the string
+   int caretPos;
+   int len; // the length of the input string
+   bool minimal; // minimal matching?
+   int *bigArray; // big array holding the data for the next pointers
+   int *inNextStack; // is state is nextStack?
+   int *curStack; // stack of current states
+   int *nextStack; // stack of next states
+   int *curCapBegin; // start of current states' captures
+   int *nextCapBegin; // start of next states' captures
+   int *curCapEnd; // end of current states' captures
+   int *nextCapEnd; // end of next states' captures
+   int *tempCapBegin; // start of temporary captures
+   int *tempCapEnd; // end of temporary captures
+   int *capBegin; // start of captures for a next state
+   int *capEnd; // end of captures for a next state
+   int *slideTab; // bump-along slide table for bad-character heuristic
+   int *captured; // what match() returned last
+   int slideTabSize; // size of slide table
+   int capturedSize;
 #ifndef QT_NO_REGEXP_BACKREF
-    QList<QVector<int> > sleeping; // list of back-reference sleepers
+   QList<QVector<int> > sleeping; // list of back-reference sleepers
 #endif
-    int matchLen; // length of match
-    int oneTestMatchedLen; // length of partial match
+   int matchLen; // length of match
+   int oneTestMatchedLen; // length of partial match
 
-    const QRegExpEngine *eng;
+   const QRegExpEngine *eng;
 
-    inline QRegExpMatchState() : bigArray(0), captured(0) {}
-    inline ~QRegExpMatchState() { free(bigArray); }
+   inline QRegExpMatchState() : bigArray(0), captured(0) {}
+   inline ~QRegExpMatchState() {
+      free(bigArray);
+   }
 
-    void drain() { free(bigArray); bigArray = 0; captured = 0; } // to save memory
-    void prepareForMatch(QRegExpEngine *eng);
-    void match(const QChar *str, int len, int pos, bool minimal,
-        bool oneTest, int caretIndex);
-    bool matchHere();
-    bool testAnchor(int i, int a, const int *capBegin);
+   void drain() {
+      free(bigArray);   // to save memory
+      bigArray = 0;
+      captured = 0;
+   }
+   void prepareForMatch(QRegExpEngine *eng);
+   void match(const QChar *str, int len, int pos, bool minimal,
+              bool oneTest, int caretIndex);
+   bool matchHere();
+   bool testAnchor(int i, int a, const int *capBegin);
 };
 
 /*
@@ -925,23 +933,22 @@ struct QRegExpMatchState
   the transitions, something possible for an automaton
   constructed from a regular expression.
 */
-struct QRegExpAutomatonState
-{
+struct QRegExpAutomatonState {
 #ifndef QT_NO_REGEXP_CAPTURE
-    int atom; // which atom does this state belong to?
+   int atom; // which atom does this state belong to?
 #endif
-    int match; // what does it match? (see CharClassBit and BackRefBit)
-    QVector<int> outs; // out-transitions
-    QMap<int, int> reenter; // atoms reentered when transiting out
-    QMap<int, int> anchors; // anchors met when transiting out
+   int match; // what does it match? (see CharClassBit and BackRefBit)
+   QVector<int> outs; // out-transitions
+   QMap<int, int> reenter; // atoms reentered when transiting out
+   QMap<int, int> anchors; // anchors met when transiting out
 
-    inline QRegExpAutomatonState() { }
+   inline QRegExpAutomatonState() { }
 #ifndef QT_NO_REGEXP_CAPTURE
-    inline QRegExpAutomatonState(int a, int m)
-        : atom(a), match(m) { }
+   inline QRegExpAutomatonState(int a, int m)
+      : atom(a), match(m) { }
 #else
-    inline QRegExpAutomatonState(int m)
-        : match(m) { }
+   inline QRegExpAutomatonState(int m)
+      : match(m) { }
 #endif
 };
 
@@ -951,10 +958,9 @@ Q_DECLARE_TYPEINFO(QRegExpAutomatonState, Q_MOVABLE_TYPE);
   The struct QRegExpCharClassRange represents a range of characters (e.g.,
   [0-9] denotes range 48 to 57).
 */
-struct QRegExpCharClassRange
-{
-    ushort from; // 48
-    ushort len; // 10
+struct QRegExpCharClassRange {
+   ushort from; // 48
+   ushort len; // 10
 };
 
 Q_DECLARE_TYPEINFO(QRegExpCharClassRange, Q_PRIMITIVE_TYPE);
@@ -964,12 +970,11 @@ Q_DECLARE_TYPEINFO(QRegExpCharClassRange, Q_PRIMITIVE_TYPE);
   The struct QRegExpAtom represents one node in the hierarchy of regular
   expression atoms.
 */
-struct QRegExpAtom
-{
-    enum { NoCapture = -1, OfficialCapture = -2, UnofficialCapture = -3 };
+struct QRegExpAtom {
+   enum { NoCapture = -1, OfficialCapture = -2, UnofficialCapture = -3 };
 
-    int parent; // index of parent in array of atoms
-    int capture; // index of capture, from 1 to ncap - 1
+   int parent; // index of parent in array of atoms
+   int capture; // index of capture, from 1 to ncap - 1
 };
 
 Q_DECLARE_TYPEINFO(QRegExpAtom, Q_PRIMITIVE_TYPE);
@@ -982,10 +987,9 @@ struct QRegExpLookahead;
   The struct QRegExpAnchorAlternation represents a pair of anchors with
   OR semantics.
 */
-struct QRegExpAnchorAlternation
-{
-    int a; // this anchor...
-    int b; // ...or this one
+struct QRegExpAnchorAlternation {
+   int a; // this anchor...
+   int b; // ...or this one
 };
 
 Q_DECLARE_TYPEINFO(QRegExpAnchorAlternation, Q_PRIMITIVE_TYPE);
@@ -999,46 +1003,57 @@ Q_DECLARE_TYPEINFO(QRegExpAnchorAlternation, Q_PRIMITIVE_TYPE);
 */
 class QRegExpCharClass
 {
-public:
-    QRegExpCharClass();
-    inline QRegExpCharClass(const QRegExpCharClass &cc) { operator=(cc); }
+ public:
+   QRegExpCharClass();
+   inline QRegExpCharClass(const QRegExpCharClass &cc) {
+      operator=(cc);
+   }
 
-    QRegExpCharClass &operator=(const QRegExpCharClass &cc);
+   QRegExpCharClass &operator=(const QRegExpCharClass &cc);
 
-    void clear();
-    bool negative() const { return n; }
-    void setNegative(bool negative);
-    void addCategories(int cats);
-    void addRange(ushort from, ushort to);
-    void addSingleton(ushort ch) { addRange(ch, ch); }
+   void clear();
+   bool negative() const {
+      return n;
+   }
+   void setNegative(bool negative);
+   void addCategories(int cats);
+   void addRange(ushort from, ushort to);
+   void addSingleton(ushort ch) {
+      addRange(ch, ch);
+   }
 
-    bool in(QChar ch) const;
+   bool in(QChar ch) const;
 #ifndef QT_NO_REGEXP_OPTIM
-    const QVector<int> &firstOccurrence() const { return occ1; }
+   const QVector<int> &firstOccurrence() const {
+      return occ1;
+   }
 #endif
 
 #if defined(QT_DEBUG)
-    void dump() const;
+   void dump() const;
 #endif
 
-private:
-    int c; // character classes
-    QVector<QRegExpCharClassRange> r; // character ranges
-    bool n; // negative?
+ private:
+   int c; // character classes
+   QVector<QRegExpCharClassRange> r; // character ranges
+   bool n; // negative?
 #ifndef QT_NO_REGEXP_OPTIM
-    QVector<int> occ1; // first-occurrence array
+   QVector<int> occ1; // first-occurrence array
 #endif
 };
 #else
-struct QRegExpCharClass
-{
-    int dummy;
+struct QRegExpCharClass {
+   int dummy;
 
 #ifndef QT_NO_REGEXP_OPTIM
-    QRegExpCharClass() { occ1.fill(0, NumBadChars); }
+   QRegExpCharClass() {
+      occ1.fill(0, NumBadChars);
+   }
 
-    const QVector<int> &firstOccurrence() const { return occ1; }
-    QVector<int> occ1;
+   const QVector<int> &firstOccurrence() const {
+      return occ1;
+   }
+   QVector<int> occ1;
 #endif
 };
 #endif
@@ -1051,230 +1066,248 @@ Q_DECLARE_TYPEINFO(QRegExpCharClass, Q_MOVABLE_TYPE);
 */
 class QRegExpEngine
 {
-public:
-    QRegExpEngine(Qt::CaseSensitivity cs, bool greedyQuantifiers)
-        : cs(cs), greedyQuantifiers(greedyQuantifiers) { setup(); }
+ public:
+   QRegExpEngine(Qt::CaseSensitivity cs, bool greedyQuantifiers)
+      : cs(cs), greedyQuantifiers(greedyQuantifiers) {
+      setup();
+   }
 
-    QRegExpEngine(const QRegExpEngineKey &key);
-    ~QRegExpEngine();
+   QRegExpEngine(const QRegExpEngineKey &key);
+   ~QRegExpEngine();
 
-    bool isValid() const { return valid; }
-    const QString &errorString() const { return yyError; }
-    int captureCount() const { return officialncap; }
+   bool isValid() const {
+      return valid;
+   }
+   const QString &errorString() const {
+      return yyError;
+   }
+   int captureCount() const {
+      return officialncap;
+   }
 
-    int createState(QChar ch);
-    int createState(const QRegExpCharClass &cc);
+   int createState(QChar ch);
+   int createState(const QRegExpCharClass &cc);
 #ifndef QT_NO_REGEXP_BACKREF
-    int createState(int bref);
+   int createState(int bref);
 #endif
 
-    void addCatTransitions(const QVector<int> &from, const QVector<int> &to);
+   void addCatTransitions(const QVector<int> &from, const QVector<int> &to);
 #ifndef QT_NO_REGEXP_CAPTURE
-    void addPlusTransitions(const QVector<int> &from, const QVector<int> &to, int atom);
+   void addPlusTransitions(const QVector<int> &from, const QVector<int> &to, int atom);
 #endif
 
 #ifndef QT_NO_REGEXP_ANCHOR_ALT
-    int anchorAlternation(int a, int b);
-    int anchorConcatenation(int a, int b);
+   int anchorAlternation(int a, int b);
+   int anchorConcatenation(int a, int b);
 #else
-    int anchorAlternation(int a, int b) { return a & b; }
-    int anchorConcatenation(int a, int b) { return a | b; }
+   int anchorAlternation(int a, int b) {
+      return a & b;
+   }
+   int anchorConcatenation(int a, int b) {
+      return a | b;
+   }
 #endif
-    void addAnchors(int from, int to, int a);
+   void addAnchors(int from, int to, int a);
 
 #ifndef QT_NO_REGEXP_OPTIM
-    void heuristicallyChooseHeuristic();
+   void heuristicallyChooseHeuristic();
 #endif
 
 #if defined(QT_DEBUG)
-    void dump() const;
+   void dump() const;
 #endif
 
-    QAtomicInt ref;
+   QAtomicInt ref;
 
-private:
-    enum { CharClassBit = 0x10000, BackRefBit = 0x20000 };
-    enum { InitialState = 0, FinalState = 1 };
+ private:
+   enum { CharClassBit = 0x10000, BackRefBit = 0x20000 };
+   enum { InitialState = 0, FinalState = 1 };
 
-    void setup();
-    int setupState(int match);
+   void setup();
+   int setupState(int match);
 
-    /*
-      Let's hope that 13 lookaheads and 14 back-references are
-      enough.
-     */
-    enum { MaxLookaheads = 13, MaxBackRefs = 14 };
-    enum { Anchor_Dollar = 0x00000001, Anchor_Caret = 0x00000002, Anchor_Word = 0x00000004,
-           Anchor_NonWord = 0x00000008, Anchor_FirstLookahead = 0x00000010,
-           Anchor_BackRef1Empty = Anchor_FirstLookahead << MaxLookaheads,
-           Anchor_BackRef0Empty = Anchor_BackRef1Empty >> 1,
-           Anchor_Alternation = unsigned(Anchor_BackRef1Empty) << MaxBackRefs,
-
-           Anchor_LookaheadMask = (Anchor_FirstLookahead - 1) ^
-                   ((Anchor_FirstLookahead << MaxLookaheads) - 1) };
-#ifndef QT_NO_REGEXP_CAPTURE
-    int startAtom(bool officialCapture);
-    void finishAtom(int atom, bool needCapture);
-#endif
-
-#ifndef QT_NO_REGEXP_LOOKAHEAD
-    int addLookahead(QRegExpEngine *eng, bool negative);
-#endif
-
-#ifndef QT_NO_REGEXP_OPTIM
-    bool goodStringMatch(QRegExpMatchState &matchState) const;
-    bool badCharMatch(QRegExpMatchState &matchState) const;
-#else
-    bool bruteMatch(QRegExpMatchState &matchState) const;
-#endif
-
-    QVector<QRegExpAutomatonState> s; // array of states
-#ifndef QT_NO_REGEXP_CAPTURE
-    QVector<QRegExpAtom> f; // atom hierarchy
-    int nf; // number of atoms
-    int cf; // current atom
-    QVector<int> captureForOfficialCapture;
-#endif
-    int officialncap; // number of captures, seen from the outside
-    int ncap; // number of captures, seen from the inside
-#ifndef QT_NO_REGEXP_CCLASS
-    QVector<QRegExpCharClass> cl; // array of character classes
-#endif
-#ifndef QT_NO_REGEXP_LOOKAHEAD
-    QVector<QRegExpLookahead *> ahead; // array of lookaheads
-#endif
-#ifndef QT_NO_REGEXP_ANCHOR_ALT
-    QVector<QRegExpAnchorAlternation> aa; // array of (a, b) pairs of anchors
-#endif
-#ifndef QT_NO_REGEXP_OPTIM
-    bool caretAnchored; // does the regexp start with ^?
-    bool trivial; // is the good-string all that needs to match?
-#endif
-    bool valid; // is the regular expression valid?
-    Qt::CaseSensitivity cs; // case sensitive?
-    bool greedyQuantifiers; // RegExp2?
-    bool xmlSchemaExtensions;
-#ifndef QT_NO_REGEXP_BACKREF
-    int nbrefs; // number of back-references
-#endif
-
-#ifndef QT_NO_REGEXP_OPTIM
-    bool useGoodStringHeuristic; // use goodStringMatch? otherwise badCharMatch
-
-    int goodEarlyStart; // the index where goodStr can first occur in a match
-    int goodLateStart; // the index where goodStr can last occur in a match
-    QString goodStr; // the string that any match has to contain
-
-    int minl; // the minimum length of a match
-    QVector<int> occ1; // first-occurrence array
-#endif
-
-    /*
-      The class Box is an abstraction for a regular expression
-      fragment. It can also be seen as one node in the syntax tree of
-      a regular expression with synthetized attributes.
-
-      Its interface is ugly for performance reasons.
+   /*
+     Let's hope that 13 lookaheads and 14 back-references are
+     enough.
     */
-    class Box
-    {
-    public:
-        Box(QRegExpEngine *engine);
-        Box(const Box &b) { operator=(b); }
+   enum { MaxLookaheads = 13, MaxBackRefs = 14 };
+   enum { Anchor_Dollar = 0x00000001, Anchor_Caret = 0x00000002, Anchor_Word = 0x00000004,
+          Anchor_NonWord = 0x00000008, Anchor_FirstLookahead = 0x00000010,
+          Anchor_BackRef1Empty = Anchor_FirstLookahead << MaxLookaheads,
+          Anchor_BackRef0Empty = Anchor_BackRef1Empty >> 1,
+          Anchor_Alternation = unsigned(Anchor_BackRef1Empty) << MaxBackRefs,
 
-        Box &operator=(const Box &b);
-
-        void clear() { operator=(Box(eng)); }
-        void set(QChar ch);
-        void set(const QRegExpCharClass &cc);
-#ifndef QT_NO_REGEXP_BACKREF
-        void set(int bref);
+          Anchor_LookaheadMask = (Anchor_FirstLookahead - 1) ^
+                                 ((Anchor_FirstLookahead << MaxLookaheads) - 1)
+        };
+#ifndef QT_NO_REGEXP_CAPTURE
+   int startAtom(bool officialCapture);
+   void finishAtom(int atom, bool needCapture);
 #endif
 
-        void cat(const Box &b);
-        void orx(const Box &b);
-        void plus(int atom);
-        void opt();
-        void catAnchor(int a);
+#ifndef QT_NO_REGEXP_LOOKAHEAD
+   int addLookahead(QRegExpEngine *eng, bool negative);
+#endif
+
 #ifndef QT_NO_REGEXP_OPTIM
-        void setupHeuristics();
+   bool goodStringMatch(QRegExpMatchState &matchState) const;
+   bool badCharMatch(QRegExpMatchState &matchState) const;
+#else
+   bool bruteMatch(QRegExpMatchState &matchState) const;
+#endif
+
+   QVector<QRegExpAutomatonState> s; // array of states
+#ifndef QT_NO_REGEXP_CAPTURE
+   QVector<QRegExpAtom> f; // atom hierarchy
+   int nf; // number of atoms
+   int cf; // current atom
+   QVector<int> captureForOfficialCapture;
+#endif
+   int officialncap; // number of captures, seen from the outside
+   int ncap; // number of captures, seen from the inside
+#ifndef QT_NO_REGEXP_CCLASS
+   QVector<QRegExpCharClass> cl; // array of character classes
+#endif
+#ifndef QT_NO_REGEXP_LOOKAHEAD
+   QVector<QRegExpLookahead *> ahead; // array of lookaheads
+#endif
+#ifndef QT_NO_REGEXP_ANCHOR_ALT
+   QVector<QRegExpAnchorAlternation> aa; // array of (a, b) pairs of anchors
+#endif
+#ifndef QT_NO_REGEXP_OPTIM
+   bool caretAnchored; // does the regexp start with ^?
+   bool trivial; // is the good-string all that needs to match?
+#endif
+   bool valid; // is the regular expression valid?
+   Qt::CaseSensitivity cs; // case sensitive?
+   bool greedyQuantifiers; // RegExp2?
+   bool xmlSchemaExtensions;
+#ifndef QT_NO_REGEXP_BACKREF
+   int nbrefs; // number of back-references
+#endif
+
+#ifndef QT_NO_REGEXP_OPTIM
+   bool useGoodStringHeuristic; // use goodStringMatch? otherwise badCharMatch
+
+   int goodEarlyStart; // the index where goodStr can first occur in a match
+   int goodLateStart; // the index where goodStr can last occur in a match
+   QString goodStr; // the string that any match has to contain
+
+   int minl; // the minimum length of a match
+   QVector<int> occ1; // first-occurrence array
+#endif
+
+   /*
+     The class Box is an abstraction for a regular expression
+     fragment. It can also be seen as one node in the syntax tree of
+     a regular expression with synthetized attributes.
+
+     Its interface is ugly for performance reasons.
+   */
+   class Box
+   {
+    public:
+      Box(QRegExpEngine *engine);
+      Box(const Box &b) {
+         operator=(b);
+      }
+
+      Box &operator=(const Box &b);
+
+      void clear() {
+         operator=(Box(eng));
+      }
+      void set(QChar ch);
+      void set(const QRegExpCharClass &cc);
+#ifndef QT_NO_REGEXP_BACKREF
+      void set(int bref);
+#endif
+
+      void cat(const Box &b);
+      void orx(const Box &b);
+      void plus(int atom);
+      void opt();
+      void catAnchor(int a);
+#ifndef QT_NO_REGEXP_OPTIM
+      void setupHeuristics();
 #endif
 
 #if defined(QT_DEBUG)
-        void dump() const;
+      void dump() const;
 #endif
 
     private:
-        void addAnchorsToEngine(const Box &to) const;
+      void addAnchorsToEngine(const Box &to) const;
 
-        QRegExpEngine *eng; // the automaton under construction
-        QVector<int> ls; // the left states (firstpos)
-        QVector<int> rs; // the right states (lastpos)
-        QMap<int, int> lanchors; // the left anchors
-        QMap<int, int> ranchors; // the right anchors
-        int skipanchors; // the anchors to match if the box is skipped
+      QRegExpEngine *eng; // the automaton under construction
+      QVector<int> ls; // the left states (firstpos)
+      QVector<int> rs; // the right states (lastpos)
+      QMap<int, int> lanchors; // the left anchors
+      QMap<int, int> ranchors; // the right anchors
+      int skipanchors; // the anchors to match if the box is skipped
 
 #ifndef QT_NO_REGEXP_OPTIM
-        int earlyStart; // the index where str can first occur
-        int lateStart; // the index where str can last occur
-        QString str; // a string that has to occur in any match
-        QString leftStr; // a string occurring at the left of this box
-        QString rightStr; // a string occurring at the right of this box
-        int maxl; // the maximum length of this box (possibly InftyLen)
+      int earlyStart; // the index where str can first occur
+      int lateStart; // the index where str can last occur
+      QString str; // a string that has to occur in any match
+      QString leftStr; // a string occurring at the left of this box
+      QString rightStr; // a string occurring at the right of this box
+      int maxl; // the maximum length of this box (possibly InftyLen)
 #endif
 
-        int minl; // the minimum length of this box
+      int minl; // the minimum length of this box
 #ifndef QT_NO_REGEXP_OPTIM
-        QVector<int> occ1; // first-occurrence array
+      QVector<int> occ1; // first-occurrence array
 #endif
-    };
+   };
 
-    friend class Box;
+   friend class Box;
 
-    void setupCategoriesRangeMap();
+   void setupCategoriesRangeMap();
 
-    /*
-      This is the lexical analyzer for regular expressions.
-    */
-    enum { Tok_Eos, Tok_Dollar, Tok_LeftParen, Tok_MagicLeftParen, Tok_PosLookahead,
-           Tok_NegLookahead, Tok_RightParen, Tok_CharClass, Tok_Caret, Tok_Quantifier, Tok_Bar,
-           Tok_Word, Tok_NonWord, Tok_Char = 0x10000, Tok_BackRef = 0x20000 };
-    int getChar();
-    int getEscape();
+   /*
+     This is the lexical analyzer for regular expressions.
+   */
+   enum { Tok_Eos, Tok_Dollar, Tok_LeftParen, Tok_MagicLeftParen, Tok_PosLookahead,
+          Tok_NegLookahead, Tok_RightParen, Tok_CharClass, Tok_Caret, Tok_Quantifier, Tok_Bar,
+          Tok_Word, Tok_NonWord, Tok_Char = 0x10000, Tok_BackRef = 0x20000
+        };
+   int getChar();
+   int getEscape();
 #ifndef QT_NO_REGEXP_INTERVAL
-    int getRep(int def);
+   int getRep(int def);
 #endif
 #ifndef QT_NO_REGEXP_LOOKAHEAD
-    void skipChars(int n);
+   void skipChars(int n);
 #endif
-    void error(const char *msg);
-    void startTokenizer(const QChar *rx, int len);
-    int getToken();
+   void error(const char *msg);
+   void startTokenizer(const QChar *rx, int len);
+   int getToken();
 
-    const QChar *yyIn; // a pointer to the input regular expression pattern
-    int yyPos0; // the position of yyTok in the input pattern
-    int yyPos; // the position of the next character to read
-    int yyLen; // the length of yyIn
-    int yyCh; // the last character read
-    QScopedPointer<QRegExpCharClass> yyCharClass; // attribute for Tok_CharClass tokens
-    int yyMinRep; // attribute for Tok_Quantifier
-    int yyMaxRep; // ditto
-    QString yyError; // syntax error or overflow during parsing?
+   const QChar *yyIn; // a pointer to the input regular expression pattern
+   int yyPos0; // the position of yyTok in the input pattern
+   int yyPos; // the position of the next character to read
+   int yyLen; // the length of yyIn
+   int yyCh; // the last character read
+   QScopedPointer<QRegExpCharClass> yyCharClass; // attribute for Tok_CharClass tokens
+   int yyMinRep; // attribute for Tok_Quantifier
+   int yyMaxRep; // ditto
+   QString yyError; // syntax error or overflow during parsing?
 
-    /*
-      This is the syntactic analyzer for regular expressions.
-    */
-    int parse(const QChar *rx, int len);
-    void parseAtom(Box *box);
-    void parseFactor(Box *box);
-    void parseTerm(Box *box);
-    void parseExpression(Box *box);
+   /*
+     This is the syntactic analyzer for regular expressions.
+   */
+   int parse(const QChar *rx, int len);
+   void parseAtom(Box *box);
+   void parseFactor(Box *box);
+   void parseTerm(Box *box);
+   void parseExpression(Box *box);
 
-    int yyTok; // the last token read
-    bool yyMayCapture; // set this to false to disable capturing
-    QHash<QByteArray, QPair<int, int> > categoriesRangeMap; // fast lookup hash for xml schema extensions
+   int yyTok; // the last token read
+   bool yyMayCapture; // set this to false to disable capturing
+   QHash<QByteArray, QPair<int, int> > categoriesRangeMap; // fast lookup hash for xml schema extensions
 
-    friend struct QRegExpMatchState;
+   friend struct QRegExpMatchState;
 };
 
 #ifndef QT_NO_REGEXP_LOOKAHEAD
@@ -1282,14 +1315,15 @@ private:
   The struct QRegExpLookahead represents a lookahead a la Perl (e.g.,
   (?=foo) and (?!bar)).
 */
-struct QRegExpLookahead
-{
-    QRegExpEngine *eng; // NFA representing the embedded regular expression
-    bool neg; // negative lookahead?
+struct QRegExpLookahead {
+   QRegExpEngine *eng; // NFA representing the embedded regular expression
+   bool neg; // negative lookahead?
 
-    inline QRegExpLookahead(QRegExpEngine *eng0, bool neg0)
-        : eng(eng0), neg(neg0) { }
-    inline ~QRegExpLookahead() { delete eng; }
+   inline QRegExpLookahead(QRegExpEngine *eng0, bool neg0)
+      : eng(eng0), neg(neg0) { }
+   inline ~QRegExpLookahead() {
+      delete eng;
+   }
 };
 #endif
 
@@ -1300,89 +1334,90 @@ struct QRegExpLookahead
  */
 Q_CORE_EXPORT QString qt_regexp_toCanonical(const QString &pattern, QRegExp::PatternSyntax patternSyntax)
 {
-    switch (patternSyntax) {
+   switch (patternSyntax) {
 #ifndef QT_NO_REGEXP_WILDCARD
-    case QRegExp::Wildcard:
-        return wc2rx(pattern, false);
-        break;
-    case QRegExp::WildcardUnix:
-        return wc2rx(pattern, true);
-        break;
+      case QRegExp::Wildcard:
+         return wc2rx(pattern, false);
+         break;
+      case QRegExp::WildcardUnix:
+         return wc2rx(pattern, true);
+         break;
 #endif
-    case QRegExp::FixedString:
-        return QRegExp::escape(pattern);
-        break;
-    case QRegExp::W3CXmlSchema11:
-    default:
-        return pattern;
-    }
+      case QRegExp::FixedString:
+         return QRegExp::escape(pattern);
+         break;
+      case QRegExp::W3CXmlSchema11:
+      default:
+         return pattern;
+   }
 }
 
 QRegExpEngine::QRegExpEngine(const QRegExpEngineKey &key)
-    : cs(key.cs), greedyQuantifiers(key.patternSyntax == QRegExp::RegExp2),
-      xmlSchemaExtensions(key.patternSyntax == QRegExp::W3CXmlSchema11)
+   : cs(key.cs), greedyQuantifiers(key.patternSyntax == QRegExp::RegExp2),
+     xmlSchemaExtensions(key.patternSyntax == QRegExp::W3CXmlSchema11)
 {
-    setup();
+   setup();
 
-    QString rx = qt_regexp_toCanonical(key.pattern, key.patternSyntax);
+   QString rx = qt_regexp_toCanonical(key.pattern, key.patternSyntax);
 
-    valid = (parse(rx.unicode(), rx.length()) == rx.length());
-    if (!valid) {
+   valid = (parse(rx.unicode(), rx.length()) == rx.length());
+   if (!valid) {
 #ifndef QT_NO_REGEXP_OPTIM
-        trivial = false;
+      trivial = false;
 #endif
-        error(RXERR_LEFTDELIM);
-    }
+      error(RXERR_LEFTDELIM);
+   }
 }
 
 QRegExpEngine::~QRegExpEngine()
 {
 #ifndef QT_NO_REGEXP_LOOKAHEAD
-    qDeleteAll(ahead);
+   qDeleteAll(ahead);
 #endif
 }
 
 void QRegExpMatchState::prepareForMatch(QRegExpEngine *eng)
 {
-    /*
-      We use one QVector<int> for all the big data used a lot in
-      matchHere() and friends.
-    */
-    int ns = eng->s.size(); // number of states
-    int ncap = eng->ncap;
+   /*
+     We use one QVector<int> for all the big data used a lot in
+     matchHere() and friends.
+   */
+   int ns = eng->s.size(); // number of states
+   int ncap = eng->ncap;
 #ifndef QT_NO_REGEXP_OPTIM
-    int newSlideTabSize = qMax(eng->minl + 1, 16);
+   int newSlideTabSize = qMax(eng->minl + 1, 16);
 #else
-    int newSlideTabSize = 0;
+   int newSlideTabSize = 0;
 #endif
-    int numCaptures = eng->captureCount();
-    int newCapturedSize = 2 + 2 * numCaptures;
-    bigArray = q_check_ptr((int *)realloc(bigArray, ((3 + 4 * ncap) * ns + 4 * ncap + newSlideTabSize + newCapturedSize)*sizeof(int)));
+   int numCaptures = eng->captureCount();
+   int newCapturedSize = 2 + 2 * numCaptures;
+   bigArray = q_check_ptr((int *)realloc(bigArray,
+                                         ((3 + 4 * ncap) * ns + 4 * ncap + newSlideTabSize + newCapturedSize) * sizeof(int)));
 
-    // set all internal variables only _after_ bigArray is realloc'ed
-    // to prevent a broken regexp in oom case
+   // set all internal variables only _after_ bigArray is realloc'ed
+   // to prevent a broken regexp in oom case
 
-    slideTabSize = newSlideTabSize;
-    capturedSize = newCapturedSize;
-    inNextStack = bigArray;
-    memset(inNextStack, -1, ns * sizeof(int));
-    curStack = inNextStack + ns;
-    nextStack = inNextStack + 2 * ns;
+   slideTabSize = newSlideTabSize;
+   capturedSize = newCapturedSize;
+   inNextStack = bigArray;
+   memset(inNextStack, -1, ns * sizeof(int));
+   curStack = inNextStack + ns;
+   nextStack = inNextStack + 2 * ns;
 
-    curCapBegin = inNextStack + 3 * ns;
-    nextCapBegin = curCapBegin + ncap * ns;
-    curCapEnd = curCapBegin + 2 * ncap * ns;
-    nextCapEnd = curCapBegin + 3 * ncap * ns;
+   curCapBegin = inNextStack + 3 * ns;
+   nextCapBegin = curCapBegin + ncap * ns;
+   curCapEnd = curCapBegin + 2 * ncap * ns;
+   nextCapEnd = curCapBegin + 3 * ncap * ns;
 
-    tempCapBegin = curCapBegin + 4 * ncap * ns;
-    tempCapEnd = tempCapBegin + ncap;
-    capBegin = tempCapBegin + 2 * ncap;
-    capEnd = tempCapBegin + 3 * ncap;
+   tempCapBegin = curCapBegin + 4 * ncap * ns;
+   tempCapEnd = tempCapBegin + ncap;
+   capBegin = tempCapBegin + 2 * ncap;
+   capEnd = tempCapBegin + 3 * ncap;
 
-    slideTab = tempCapBegin + 4 * ncap;
-    captured = slideTab + slideTabSize;
-    memset(captured, -1, capturedSize*sizeof(int));
-    this->eng = eng;
+   slideTab = tempCapBegin + 4 * ncap;
+   captured = slideTab + slideTabSize;
+   memset(captured, -1, capturedSize * sizeof(int));
+   this->eng = eng;
 }
 
 /*
@@ -1390,73 +1425,74 @@ void QRegExpMatchState::prepareForMatch(QRegExpEngine *eng)
   for captured text. If there is no match, all pairs are (-1, -1).
 */
 void QRegExpMatchState::match(const QChar *str0, int len0, int pos0,
-    bool minimal0, bool oneTest, int caretIndex)
+                              bool minimal0, bool oneTest, int caretIndex)
 {
-    bool matched = false;
-    QChar char_null;
+   bool matched = false;
+   QChar char_null;
 
 #ifndef QT_NO_REGEXP_OPTIM
-    if (eng->trivial && !oneTest) {
-        pos = qFindString(str0, len0, pos0, eng->goodStr.unicode(), eng->goodStr.length(), eng->cs);
-        matchLen = eng->goodStr.length();
-        matched = (pos != -1);
-    } else
+   if (eng->trivial && !oneTest) {
+      pos = qFindString(str0, len0, pos0, eng->goodStr.unicode(), eng->goodStr.length(), eng->cs);
+      matchLen = eng->goodStr.length();
+      matched = (pos != -1);
+   } else
 #endif
-    {
-        in = str0;
-        if (in == 0)
-            in = &char_null;
-        pos = pos0;
-        caretPos = caretIndex;
-        len = len0;
-        minimal = minimal0;
-        matchLen = 0;
-        oneTestMatchedLen = 0;
+   {
+      in = str0;
+      if (in == 0) {
+         in = &char_null;
+      }
+      pos = pos0;
+      caretPos = caretIndex;
+      len = len0;
+      minimal = minimal0;
+      matchLen = 0;
+      oneTestMatchedLen = 0;
 
-        if (eng->valid && pos >= 0 && pos <= len) {
+      if (eng->valid && pos >= 0 && pos <= len) {
 #ifndef QT_NO_REGEXP_OPTIM
-            if (oneTest) {
-                matched = matchHere();
-            } else {
-                if (pos <= len - eng->minl) {
-                    if (eng->caretAnchored) {
-                        matched = matchHere();
-                    } else if (eng->useGoodStringHeuristic) {
-                        matched = eng->goodStringMatch(*this);
-                    } else {
-                        matched = eng->badCharMatch(*this);
-                    }
-                }
+         if (oneTest) {
+            matched = matchHere();
+         } else {
+            if (pos <= len - eng->minl) {
+               if (eng->caretAnchored) {
+                  matched = matchHere();
+               } else if (eng->useGoodStringHeuristic) {
+                  matched = eng->goodStringMatch(*this);
+               } else {
+                  matched = eng->badCharMatch(*this);
+               }
             }
+         }
 #else
-            matched = oneTest ? matchHere() : eng->bruteMatch(*this);
+         matched = oneTest ? matchHere() : eng->bruteMatch(*this);
 #endif
-        }
-    }
+      }
+   }
 
-    if (matched) {
-        int *c = captured;
-        *c++ = pos;
-        *c++ = matchLen;
+   if (matched) {
+      int *c = captured;
+      *c++ = pos;
+      *c++ = matchLen;
 
-        int numCaptures = (capturedSize - 2) >> 1;
+      int numCaptures = (capturedSize - 2) >> 1;
 #ifndef QT_NO_REGEXP_CAPTURE
-        for (int i = 0; i < numCaptures; ++i) {
-            int j = eng->captureForOfficialCapture.at(i);
-            if (capBegin[j] != EmptyCapture) {
-                int len = capEnd[j] - capBegin[j];
-                *c++ = (len > 0) ? pos + capBegin[j] : 0;
-                *c++ = len;
-            } else {
-                *c++ = -1;
-                *c++ = -1;
-            }
-        }
+      for (int i = 0; i < numCaptures; ++i) {
+         int j = eng->captureForOfficialCapture.at(i);
+         if (capBegin[j] != EmptyCapture) {
+            int len = capEnd[j] - capBegin[j];
+            *c++ = (len > 0) ? pos + capBegin[j] : 0;
+            *c++ = len;
+         } else {
+            *c++ = -1;
+            *c++ = -1;
+         }
+      }
 #endif
-    } else {
-        // we rely on 2's complement here
-        memset(captured, -1, capturedSize * sizeof(int));
-    }
+   } else {
+      // we rely on 2's complement here
+      memset(captured, -1, capturedSize * sizeof(int));
+   }
 }
 
 /*
@@ -1466,32 +1502,32 @@ void QRegExpMatchState::match(const QChar *str0, int len0, int pos0,
 
 int QRegExpEngine::createState(QChar ch)
 {
-    return setupState(ch.unicode());
+   return setupState(ch.unicode());
 }
 
 int QRegExpEngine::createState(const QRegExpCharClass &cc)
 {
 #ifndef QT_NO_REGEXP_CCLASS
-    int n = cl.size();
-    cl += QRegExpCharClass(cc);
-    return setupState(CharClassBit | n);
+   int n = cl.size();
+   cl += QRegExpCharClass(cc);
+   return setupState(CharClassBit | n);
 #else
-    Q_UNUSED(cc);
-    return setupState(CharClassBit);
+   Q_UNUSED(cc);
+   return setupState(CharClassBit);
 #endif
 }
 
 #ifndef QT_NO_REGEXP_BACKREF
 int QRegExpEngine::createState(int bref)
 {
-    if (bref > nbrefs) {
-        nbrefs = bref;
-        if (nbrefs > MaxBackRefs) {
-            error(RXERR_LIMIT);
-            return 0;
-        }
-    }
-    return setupState(BackRefBit | bref);
+   if (bref > nbrefs) {
+      nbrefs = bref;
+      if (nbrefs > MaxBackRefs) {
+         error(RXERR_LIMIT);
+         return 0;
+      }
+   }
+   return setupState(BackRefBit | bref);
 }
 #endif
 
@@ -1505,26 +1541,28 @@ int QRegExpEngine::createState(int bref)
 
 void QRegExpEngine::addCatTransitions(const QVector<int> &from, const QVector<int> &to)
 {
-    for (int i = 0; i < from.size(); i++)
-        mergeInto(&s[from.at(i)].outs, to);
+   for (int i = 0; i < from.size(); i++) {
+      mergeInto(&s[from.at(i)].outs, to);
+   }
 }
 
 #ifndef QT_NO_REGEXP_CAPTURE
 void QRegExpEngine::addPlusTransitions(const QVector<int> &from, const QVector<int> &to, int atom)
 {
-    for (int i = 0; i < from.size(); i++) {
-        QRegExpAutomatonState &st = s[from.at(i)];
-        const QVector<int> oldOuts = st.outs;
-        mergeInto(&st.outs, to);
-        if (f.at(atom).capture != QRegExpAtom::NoCapture) {
-            for (int j = 0; j < to.size(); j++) {
-                // ### st.reenter.contains(to.at(j)) check looks suspicious
-                if (!st.reenter.contains(to.at(j)) &&
-                     qBinaryFind(oldOuts.constBegin(), oldOuts.constEnd(), to.at(j)) == oldOuts.end())
-                    st.reenter.insert(to.at(j), atom);
+   for (int i = 0; i < from.size(); i++) {
+      QRegExpAutomatonState &st = s[from.at(i)];
+      const QVector<int> oldOuts = st.outs;
+      mergeInto(&st.outs, to);
+      if (f.at(atom).capture != QRegExpAtom::NoCapture) {
+         for (int j = 0; j < to.size(); j++) {
+            // ### st.reenter.contains(to.at(j)) check looks suspicious
+            if (!st.reenter.contains(to.at(j)) &&
+                  qBinaryFind(oldOuts.constBegin(), oldOuts.constEnd(), to.at(j)) == oldOuts.end()) {
+               st.reenter.insert(to.at(j), atom);
             }
-        }
-    }
+         }
+      }
+   }
 }
 #endif
 
@@ -1534,18 +1572,20 @@ void QRegExpEngine::addPlusTransitions(const QVector<int> &from, const QVector<i
 */
 int QRegExpEngine::anchorAlternation(int a, int b)
 {
-    if (((a & b) == a || (a & b) == b) && ((a | b) & Anchor_Alternation) == 0)
-        return a & b;
+   if (((a & b) == a || (a & b) == b) && ((a | b) & Anchor_Alternation) == 0) {
+      return a & b;
+   }
 
-    int n = aa.size();
+   int n = aa.size();
 #ifndef QT_NO_REGEXP_OPTIM
-    if (n > 0 && aa.at(n - 1).a == a && aa.at(n - 1).b == b)
-        return Anchor_Alternation | (n - 1);
+   if (n > 0 && aa.at(n - 1).a == a && aa.at(n - 1).b == b) {
+      return Anchor_Alternation | (n - 1);
+   }
 #endif
 
-    QRegExpAnchorAlternation element = {a, b};
-    aa.append(element);
-    return Anchor_Alternation | n;
+   QRegExpAnchorAlternation element = {a, b};
+   aa.append(element);
+   return Anchor_Alternation | n;
 }
 
 /*
@@ -1553,14 +1593,16 @@ int QRegExpEngine::anchorAlternation(int a, int b)
 */
 int QRegExpEngine::anchorConcatenation(int a, int b)
 {
-    if (((a | b) & Anchor_Alternation) == 0)
-        return a | b;
-    if ((b & Anchor_Alternation) != 0)
-        qSwap(a, b);
+   if (((a | b) & Anchor_Alternation) == 0) {
+      return a | b;
+   }
+   if ((b & Anchor_Alternation) != 0) {
+      qSwap(a, b);
+   }
 
-    int aprime = anchorConcatenation(aa.at(a ^ Anchor_Alternation).a, b);
-    int bprime = anchorConcatenation(aa.at(a ^ Anchor_Alternation).b, b);
-    return anchorAlternation(aprime, bprime);
+   int aprime = anchorConcatenation(aa.at(a ^ Anchor_Alternation).a, b);
+   int bprime = anchorConcatenation(aa.at(a ^ Anchor_Alternation).b, b);
+   return anchorAlternation(aprime, bprime);
 }
 #endif
 
@@ -1570,10 +1612,11 @@ int QRegExpEngine::anchorConcatenation(int a, int b)
 */
 void QRegExpEngine::addAnchors(int from, int to, int a)
 {
-    QRegExpAutomatonState &st = s[from];
-    if (st.anchors.contains(to))
-        a = anchorAlternation(st.anchors.value(to), a);
-    st.anchors.insert(to, a);
+   QRegExpAutomatonState &st = s[from];
+   if (st.anchors.contains(to)) {
+      a = anchorAlternation(st.anchors.value(to), a);
+   }
+   st.anchors.insert(to, a);
 }
 
 #ifndef QT_NO_REGEXP_OPTIM
@@ -1593,127 +1636,132 @@ void QRegExpEngine::addAnchors(int from, int to, int a)
 */
 void QRegExpEngine::heuristicallyChooseHeuristic()
 {
-    if (minl == 0) {
-        useGoodStringHeuristic = false;
-    } else if (trivial) {
-        useGoodStringHeuristic = true;
-    } else {
-        /*
-          Magic formula: The good string has to constitute a good
-          proportion of the minimum-length string, and appear at a
-          more-or-less known index.
-        */
-        int goodStringScore = (64 * goodStr.length() / minl) -
-                              (goodLateStart - goodEarlyStart);
-        /*
-          Less magic formula: We pick some characters at random, and
-          check whether they are good or bad.
-        */
-        int badCharScore = 0;
-        int step = qMax(1, NumBadChars / 32);
-        for (int i = 1; i < NumBadChars; i += step) {
-            if (occ1.at(i) == NoOccurrence)
-                badCharScore += minl;
-            else
-                badCharScore += occ1.at(i);
-        }
-        badCharScore /= minl;
-        useGoodStringHeuristic = (goodStringScore > badCharScore);
-    }
+   if (minl == 0) {
+      useGoodStringHeuristic = false;
+   } else if (trivial) {
+      useGoodStringHeuristic = true;
+   } else {
+      /*
+        Magic formula: The good string has to constitute a good
+        proportion of the minimum-length string, and appear at a
+        more-or-less known index.
+      */
+      int goodStringScore = (64 * goodStr.length() / minl) -
+                            (goodLateStart - goodEarlyStart);
+      /*
+        Less magic formula: We pick some characters at random, and
+        check whether they are good or bad.
+      */
+      int badCharScore = 0;
+      int step = qMax(1, NumBadChars / 32);
+      for (int i = 1; i < NumBadChars; i += step) {
+         if (occ1.at(i) == NoOccurrence) {
+            badCharScore += minl;
+         } else {
+            badCharScore += occ1.at(i);
+         }
+      }
+      badCharScore /= minl;
+      useGoodStringHeuristic = (goodStringScore > badCharScore);
+   }
 }
 #endif
 
 #if defined(QT_DEBUG)
 void QRegExpEngine::dump() const
 {
-    int i, j;
-    qDebug("Case %ssensitive engine", cs ? "" : "in");
-    qDebug("  States");
-    for (i = 0; i < s.size(); i++) {
-        qDebug("  %d%s", i, i == InitialState ? " (initial)" : i == FinalState ? " (final)" : "");
+   int i, j;
+   qDebug("Case %ssensitive engine", cs ? "" : "in");
+   qDebug("  States");
+   for (i = 0; i < s.size(); i++) {
+      qDebug("  %d%s", i, i == InitialState ? " (initial)" : i == FinalState ? " (final)" : "");
 #ifndef QT_NO_REGEXP_CAPTURE
-        if (nf > 0)
-            qDebug("    in atom %d", s[i].atom);
+      if (nf > 0) {
+         qDebug("    in atom %d", s[i].atom);
+      }
 #endif
-        int m = s[i].match;
-        if ((m & CharClassBit) != 0) {
-            qDebug("    match character class %d", m ^ CharClassBit);
+      int m = s[i].match;
+      if ((m & CharClassBit) != 0) {
+         qDebug("    match character class %d", m ^ CharClassBit);
 #ifndef QT_NO_REGEXP_CCLASS
-            cl[m ^ CharClassBit].dump();
+         cl[m ^ CharClassBit].dump();
 #else
-            qDebug("    negative character class");
+         qDebug("    negative character class");
 #endif
-        } else if ((m & BackRefBit) != 0) {
-            qDebug("    match back-reference %d", m ^ BackRefBit);
-        } else if (m >= 0x20 && m <= 0x7e) {
-            qDebug("    match 0x%.4x (%c)", m, m);
-        } else {
-            qDebug("    match 0x%.4x", m);
-        }
-        for (j = 0; j < s[i].outs.size(); j++) {
-            int next = s[i].outs[j];
-            qDebug("    -> %d", next);
-            if (s[i].reenter.contains(next))
-                qDebug("       [reenter %d]", s[i].reenter[next]);
-            if (s[i].anchors.value(next) != 0)
-                qDebug("       [anchors 0x%.8x]", s[i].anchors[next]);
-        }
-    }
+      } else if ((m & BackRefBit) != 0) {
+         qDebug("    match back-reference %d", m ^ BackRefBit);
+      } else if (m >= 0x20 && m <= 0x7e) {
+         qDebug("    match 0x%.4x (%c)", m, m);
+      } else {
+         qDebug("    match 0x%.4x", m);
+      }
+      for (j = 0; j < s[i].outs.size(); j++) {
+         int next = s[i].outs[j];
+         qDebug("    -> %d", next);
+         if (s[i].reenter.contains(next)) {
+            qDebug("       [reenter %d]", s[i].reenter[next]);
+         }
+         if (s[i].anchors.value(next) != 0) {
+            qDebug("       [anchors 0x%.8x]", s[i].anchors[next]);
+         }
+      }
+   }
 #ifndef QT_NO_REGEXP_CAPTURE
-    if (nf > 0) {
-        qDebug("  Atom    Parent  Capture");
-        for (i = 0; i < nf; i++) {
-            if (f[i].capture == QRegExpAtom::NoCapture) {
-                qDebug("  %6d  %6d     nil", i, f[i].parent);
-            } else {
-                int cap = f[i].capture;
-                bool official = captureForOfficialCapture.contains(cap);
-                qDebug("  %6d  %6d  %6d  %s", i, f[i].parent, f[i].capture,
-                       official ? "official" : "");
-            }
-        }
-    }
+   if (nf > 0) {
+      qDebug("  Atom    Parent  Capture");
+      for (i = 0; i < nf; i++) {
+         if (f[i].capture == QRegExpAtom::NoCapture) {
+            qDebug("  %6d  %6d     nil", i, f[i].parent);
+         } else {
+            int cap = f[i].capture;
+            bool official = captureForOfficialCapture.contains(cap);
+            qDebug("  %6d  %6d  %6d  %s", i, f[i].parent, f[i].capture,
+                   official ? "official" : "");
+         }
+      }
+   }
 #endif
 #ifndef QT_NO_REGEXP_ANCHOR_ALT
-    for (i = 0; i < aa.size(); i++)
-        qDebug("  Anchor alternation 0x%.8x: 0x%.8x 0x%.9x", i, aa[i].a, aa[i].b);
+   for (i = 0; i < aa.size(); i++) {
+      qDebug("  Anchor alternation 0x%.8x: 0x%.8x 0x%.9x", i, aa[i].a, aa[i].b);
+   }
 #endif
 }
 #endif
 
 void QRegExpEngine::setup()
 {
-    ref.store(1);
+   ref.store(1);
 #ifndef QT_NO_REGEXP_CAPTURE
-    f.resize(32);
-    nf = 0;
-    cf = -1;
+   f.resize(32);
+   nf = 0;
+   cf = -1;
 #endif
-    officialncap = 0;
-    ncap = 0;
+   officialncap = 0;
+   ncap = 0;
 #ifndef QT_NO_REGEXP_OPTIM
-    caretAnchored = true;
-    trivial = true;
+   caretAnchored = true;
+   trivial = true;
 #endif
-    valid = false;
+   valid = false;
 #ifndef QT_NO_REGEXP_BACKREF
-    nbrefs = 0;
+   nbrefs = 0;
 #endif
 #ifndef QT_NO_REGEXP_OPTIM
-    useGoodStringHeuristic = true;
-    minl = 0;
-    occ1.fill(0, NumBadChars);
+   useGoodStringHeuristic = true;
+   minl = 0;
+   occ1.fill(0, NumBadChars);
 #endif
 }
 
 int QRegExpEngine::setupState(int match)
 {
 #ifndef QT_NO_REGEXP_CAPTURE
-    s += QRegExpAutomatonState(cf, match);
+   s += QRegExpAutomatonState(cf, match);
 #else
-    s += QRegExpAutomatonState(match);
+   s += QRegExpAutomatonState(match);
 #endif
-    return s.size() - 1;
+   return s.size() - 1;
 }
 
 #ifndef QT_NO_REGEXP_CAPTURE
@@ -1724,19 +1772,21 @@ int QRegExpEngine::setupState(int match)
 */
 int QRegExpEngine::startAtom(bool officialCapture)
 {
-    if ((nf & (nf + 1)) == 0 && nf + 1 >= f.size())
-        f.resize((nf + 1) << 1);
-    f[nf].parent = cf;
-    cf = nf++;
-    f[cf].capture = officialCapture ? QRegExpAtom::OfficialCapture : QRegExpAtom::NoCapture;
-    return cf;
+   if ((nf & (nf + 1)) == 0 && nf + 1 >= f.size()) {
+      f.resize((nf + 1) << 1);
+   }
+   f[nf].parent = cf;
+   cf = nf++;
+   f[cf].capture = officialCapture ? QRegExpAtom::OfficialCapture : QRegExpAtom::NoCapture;
+   return cf;
 }
 
 void QRegExpEngine::finishAtom(int atom, bool needCapture)
 {
-    if (greedyQuantifiers && needCapture && f[atom].capture == QRegExpAtom::NoCapture)
-        f[atom].capture = QRegExpAtom::UnofficialCapture;
-    cf = f.at(atom).parent;
+   if (greedyQuantifiers && needCapture && f[atom].capture == QRegExpAtom::NoCapture) {
+      f[atom].capture = QRegExpAtom::UnofficialCapture;
+   }
+   cf = f.at(atom).parent;
 }
 #endif
 
@@ -1746,13 +1796,13 @@ void QRegExpEngine::finishAtom(int atom, bool needCapture)
 */
 int QRegExpEngine::addLookahead(QRegExpEngine *eng, bool negative)
 {
-    int n = ahead.size();
-    if (n == MaxLookaheads) {
-        error(RXERR_LIMIT);
-        return 0;
-    }
-    ahead += new QRegExpLookahead(eng, negative);
-    return Anchor_FirstLookahead << n;
+   int n = ahead.size();
+   if (n == MaxLookaheads) {
+      error(RXERR_LIMIT);
+      return 0;
+   }
+   ahead += new QRegExpLookahead(eng, negative);
+   return Anchor_FirstLookahead << n;
 }
 #endif
 
@@ -1763,15 +1813,17 @@ int QRegExpEngine::addLookahead(QRegExpEngine *eng, bool negative)
 static bool isBetterCapture(int ncap, const int *begin1, const int *end1, const int *begin2,
                             const int *end2)
 {
-    for (int i = 0; i < ncap; i++) {
-        int delta = begin2[i] - begin1[i]; // it has to start early...
-        if (delta == 0)
-            delta = end1[i] - end2[i]; // ...and end late
+   for (int i = 0; i < ncap; i++) {
+      int delta = begin2[i] - begin1[i]; // it has to start early...
+      if (delta == 0) {
+         delta = end1[i] - end2[i];   // ...and end late
+      }
 
-        if (delta != 0)
-            return delta > 0;
-    }
-    return false;
+      if (delta != 0) {
+         return delta > 0;
+      }
+   }
+   return false;
 }
 #endif
 
@@ -1781,63 +1833,71 @@ static bool isBetterCapture(int ncap, const int *begin1, const int *end1, const 
 */
 bool QRegExpMatchState::testAnchor(int i, int a, const int *capBegin)
 {
-    int j;
+   int j;
 
 #ifndef QT_NO_REGEXP_ANCHOR_ALT
-    if ((a & QRegExpEngine::Anchor_Alternation) != 0)
-        return testAnchor(i, eng->aa.at(a ^ QRegExpEngine::Anchor_Alternation).a, capBegin)
-               || testAnchor(i, eng->aa.at(a ^ QRegExpEngine::Anchor_Alternation).b, capBegin);
+   if ((a & QRegExpEngine::Anchor_Alternation) != 0)
+      return testAnchor(i, eng->aa.at(a ^ QRegExpEngine::Anchor_Alternation).a, capBegin)
+             || testAnchor(i, eng->aa.at(a ^ QRegExpEngine::Anchor_Alternation).b, capBegin);
 #endif
 
-    if ((a & QRegExpEngine::Anchor_Caret) != 0) {
-        if (pos + i != caretPos)
-            return false;
-    }
-    if ((a & QRegExpEngine::Anchor_Dollar) != 0) {
-        if (pos + i != len)
-            return false;
-    }
+   if ((a & QRegExpEngine::Anchor_Caret) != 0) {
+      if (pos + i != caretPos) {
+         return false;
+      }
+   }
+   if ((a & QRegExpEngine::Anchor_Dollar) != 0) {
+      if (pos + i != len) {
+         return false;
+      }
+   }
 #ifndef QT_NO_REGEXP_ESCAPE
-    if ((a & (QRegExpEngine::Anchor_Word | QRegExpEngine::Anchor_NonWord)) != 0) {
-        bool before = false;
-        bool after = false;
-        if (pos + i != 0)
-            before = isWord(in[pos + i - 1]);
-        if (pos + i != len)
-            after = isWord(in[pos + i]);
-        if ((a & QRegExpEngine::Anchor_Word) != 0 && (before == after))
-            return false;
-        if ((a & QRegExpEngine::Anchor_NonWord) != 0 && (before != after))
-            return false;
-    }
+   if ((a & (QRegExpEngine::Anchor_Word | QRegExpEngine::Anchor_NonWord)) != 0) {
+      bool before = false;
+      bool after = false;
+      if (pos + i != 0) {
+         before = isWord(in[pos + i - 1]);
+      }
+      if (pos + i != len) {
+         after = isWord(in[pos + i]);
+      }
+      if ((a & QRegExpEngine::Anchor_Word) != 0 && (before == after)) {
+         return false;
+      }
+      if ((a & QRegExpEngine::Anchor_NonWord) != 0 && (before != after)) {
+         return false;
+      }
+   }
 #endif
 #ifndef QT_NO_REGEXP_LOOKAHEAD
-    if ((a & QRegExpEngine::Anchor_LookaheadMask) != 0) {
-        const QVector<QRegExpLookahead *> &ahead = eng->ahead;
-        for (j = 0; j < ahead.size(); j++) {
-            if ((a & (QRegExpEngine::Anchor_FirstLookahead << j)) != 0) {
-                QRegExpMatchState matchState;
-                matchState.prepareForMatch(ahead[j]->eng);
-                matchState.match(in + pos + i, len - pos - i, 0,
-                    true, true, caretPos - pos - i);
-                if ((matchState.captured[0] == 0) == ahead[j]->neg)
-                    return false;
+   if ((a & QRegExpEngine::Anchor_LookaheadMask) != 0) {
+      const QVector<QRegExpLookahead *> &ahead = eng->ahead;
+      for (j = 0; j < ahead.size(); j++) {
+         if ((a & (QRegExpEngine::Anchor_FirstLookahead << j)) != 0) {
+            QRegExpMatchState matchState;
+            matchState.prepareForMatch(ahead[j]->eng);
+            matchState.match(in + pos + i, len - pos - i, 0,
+                             true, true, caretPos - pos - i);
+            if ((matchState.captured[0] == 0) == ahead[j]->neg) {
+               return false;
             }
-        }
-    }
+         }
+      }
+   }
 #endif
 #ifndef QT_NO_REGEXP_CAPTURE
 #ifndef QT_NO_REGEXP_BACKREF
-    for (j = 0; j < eng->nbrefs; j++) {
-        if ((a & (QRegExpEngine::Anchor_BackRef1Empty << j)) != 0) {
-            int i = eng->captureForOfficialCapture.at(j);
-            if (capBegin[i] != EmptyCapture)
-                return false;
-        }
-    }
+   for (j = 0; j < eng->nbrefs; j++) {
+      if ((a & (QRegExpEngine::Anchor_BackRef1Empty << j)) != 0) {
+         int i = eng->captureForOfficialCapture.at(j);
+         if (capBegin[i] != EmptyCapture) {
+            return false;
+         }
+      }
+   }
 #endif
 #endif
-    return true;
+   return true;
 }
 
 #ifndef QT_NO_REGEXP_OPTIM
@@ -1849,97 +1909,109 @@ bool QRegExpMatchState::testAnchor(int i, int a, const int *capBegin)
 
 bool QRegExpEngine::goodStringMatch(QRegExpMatchState &matchState) const
 {
-    int k = matchState.pos + goodEarlyStart;
-    QStringMatcher matcher(goodStr.unicode(), goodStr.length(), cs);
-    while ((k = matcher.indexIn(matchState.in, matchState.len, k)) != -1) {
-        int from = k - goodLateStart;
-        int to = k - goodEarlyStart;
-        if (from > matchState.pos)
-            matchState.pos = from;
+   int k = matchState.pos + goodEarlyStart;
+   QStringMatcher matcher(goodStr.unicode(), goodStr.length(), cs);
+   while ((k = matcher.indexIn(matchState.in, matchState.len, k)) != -1) {
+      int from = k - goodLateStart;
+      int to = k - goodEarlyStart;
+      if (from > matchState.pos) {
+         matchState.pos = from;
+      }
 
-        while (matchState.pos <= to) {
-            if (matchState.matchHere())
-                return true;
-            ++matchState.pos;
-        }
-        ++k;
-    }
-    return false;
+      while (matchState.pos <= to) {
+         if (matchState.matchHere()) {
+            return true;
+         }
+         ++matchState.pos;
+      }
+      ++k;
+   }
+   return false;
 }
 
 bool QRegExpEngine::badCharMatch(QRegExpMatchState &matchState) const
 {
-    int slideHead = 0;
-    int slideNext = 0;
-    int i;
-    int lastPos = matchState.len - minl;
-    memset(matchState.slideTab, 0, matchState.slideTabSize * sizeof(int));
+   int slideHead = 0;
+   int slideNext = 0;
+   int i;
+   int lastPos = matchState.len - minl;
+   memset(matchState.slideTab, 0, matchState.slideTabSize * sizeof(int));
 
-    /*
-      Set up the slide table, used for the bad-character heuristic,
-      using the table of first occurrence of each character.
-    */
-    for (i = 0; i < minl; i++) {
-        int sk = occ1[BadChar(matchState.in[matchState.pos + i])];
-        if (sk == NoOccurrence)
+   /*
+     Set up the slide table, used for the bad-character heuristic,
+     using the table of first occurrence of each character.
+   */
+   for (i = 0; i < minl; i++) {
+      int sk = occ1[BadChar(matchState.in[matchState.pos + i])];
+      if (sk == NoOccurrence) {
+         sk = i + 1;
+      }
+      if (sk > 0) {
+         int k = i + 1 - sk;
+         if (k < 0) {
             sk = i + 1;
-        if (sk > 0) {
-            int k = i + 1 - sk;
-            if (k < 0) {
-                sk = i + 1;
-                k = 0;
-            }
-            if (sk > matchState.slideTab[k])
-                matchState.slideTab[k] = sk;
-        }
-    }
+            k = 0;
+         }
+         if (sk > matchState.slideTab[k]) {
+            matchState.slideTab[k] = sk;
+         }
+      }
+   }
 
-    if (matchState.pos > lastPos)
-        return false;
+   if (matchState.pos > lastPos) {
+      return false;
+   }
 
-    for (;;) {
-        if (++slideNext >= matchState.slideTabSize)
-            slideNext = 0;
-        if (matchState.slideTab[slideHead] > 0) {
-            if (matchState.slideTab[slideHead] - 1 > matchState.slideTab[slideNext])
-                matchState.slideTab[slideNext] = matchState.slideTab[slideHead] - 1;
-            matchState.slideTab[slideHead] = 0;
-        } else {
-            if (matchState.matchHere())
-                return true;
-        }
+   for (;;) {
+      if (++slideNext >= matchState.slideTabSize) {
+         slideNext = 0;
+      }
+      if (matchState.slideTab[slideHead] > 0) {
+         if (matchState.slideTab[slideHead] - 1 > matchState.slideTab[slideNext]) {
+            matchState.slideTab[slideNext] = matchState.slideTab[slideHead] - 1;
+         }
+         matchState.slideTab[slideHead] = 0;
+      } else {
+         if (matchState.matchHere()) {
+            return true;
+         }
+      }
 
-        if (matchState.pos == lastPos)
-            break;
+      if (matchState.pos == lastPos) {
+         break;
+      }
 
-        /*
-          Update the slide table. This code has much in common with
-          the initialization code.
-        */
-        int sk = occ1[BadChar(matchState.in[matchState.pos + minl])];
-        if (sk == NoOccurrence) {
-            matchState.slideTab[slideNext] = minl;
-        } else if (sk > 0) {
-            int k = slideNext + minl - sk;
-            if (k >= matchState.slideTabSize)
-                k -= matchState.slideTabSize;
-            if (sk > matchState.slideTab[k])
-                matchState.slideTab[k] = sk;
-        }
-        slideHead = slideNext;
-        ++matchState.pos;
-    }
-    return false;
+      /*
+        Update the slide table. This code has much in common with
+        the initialization code.
+      */
+      int sk = occ1[BadChar(matchState.in[matchState.pos + minl])];
+      if (sk == NoOccurrence) {
+         matchState.slideTab[slideNext] = minl;
+      } else if (sk > 0) {
+         int k = slideNext + minl - sk;
+         if (k >= matchState.slideTabSize) {
+            k -= matchState.slideTabSize;
+         }
+         if (sk > matchState.slideTab[k]) {
+            matchState.slideTab[k] = sk;
+         }
+      }
+      slideHead = slideNext;
+      ++matchState.pos;
+   }
+   return false;
 }
 #else
 bool QRegExpEngine::bruteMatch(QRegExpMatchState &matchState) const
 {
-    while (matchState.pos <= matchState.len) {
-        if (matchState.matchHere())
-            return true;
-        ++matchState.pos;
-    }
-    return false;
+   while (matchState.pos <= matchState.len) {
+      if (matchState.matchHere()) {
+         return true;
+      }
+      ++matchState.pos;
+   }
+   return false;
 }
 #endif
 
@@ -1948,740 +2020,770 @@ bool QRegExpEngine::bruteMatch(QRegExpMatchState &matchState) const
 */
 bool QRegExpMatchState::matchHere()
 {
-    int ncur = 1, nnext = 0;
-    int i = 0, j, k, m;
-    bool stop = false;
+   int ncur = 1, nnext = 0;
+   int i = 0, j, k, m;
+   bool stop = false;
 
-    matchLen = -1;
-    oneTestMatchedLen = -1;
-    curStack[0] = QRegExpEngine::InitialState;
+   matchLen = -1;
+   oneTestMatchedLen = -1;
+   curStack[0] = QRegExpEngine::InitialState;
 
-    int ncap = eng->ncap;
+   int ncap = eng->ncap;
 #ifndef QT_NO_REGEXP_CAPTURE
-    if (ncap > 0) {
-        for (j = 0; j < ncap; j++) {
-            curCapBegin[j] = EmptyCapture;
-            curCapEnd[j] = EmptyCapture;
-        }
-    }
+   if (ncap > 0) {
+      for (j = 0; j < ncap; j++) {
+         curCapBegin[j] = EmptyCapture;
+         curCapEnd[j] = EmptyCapture;
+      }
+   }
 #endif
 
 #ifndef QT_NO_REGEXP_BACKREF
-    while ((ncur > 0 || !sleeping.isEmpty()) && i <= len - pos && !stop)
+   while ((ncur > 0 || !sleeping.isEmpty()) && i <= len - pos && !stop)
 #else
-    while (ncur > 0 && i <= len - pos && !stop)
+   while (ncur > 0 && i <= len - pos && !stop)
 #endif
-    {
-        int ch = (i < len - pos) ? in[pos + i].unicode() : 0;
-        for (j = 0; j < ncur; j++) {
-            int cur = curStack[j];
-            const QRegExpAutomatonState &scur = eng->s.at(cur);
-            const QVector<int> &outs = scur.outs;
-            for (k = 0; k < outs.size(); k++) {
-                int next = outs.at(k);
-                const QRegExpAutomatonState &snext = eng->s.at(next);
-                bool inside = true;
+   {
+      int ch = (i < len - pos) ? in[pos + i].unicode() : 0;
+      for (j = 0; j < ncur; j++) {
+         int cur = curStack[j];
+         const QRegExpAutomatonState &scur = eng->s.at(cur);
+         const QVector<int> &outs = scur.outs;
+         for (k = 0; k < outs.size(); k++) {
+            int next = outs.at(k);
+            const QRegExpAutomatonState &snext = eng->s.at(next);
+            bool inside = true;
 #if !defined(QT_NO_REGEXP_BACKREF) && !defined(QT_NO_REGEXP_CAPTURE)
-                int needSomeSleep = 0;
+            int needSomeSleep = 0;
 #endif
 
-                /*
-                  First, check if the anchors are anchored properly.
-                */
-                int a = scur.anchors.value(next);
-                if (a != 0 && !testAnchor(i, a, curCapBegin + j * ncap))
-                    inside = false;
+            /*
+              First, check if the anchors are anchored properly.
+            */
+            int a = scur.anchors.value(next);
+            if (a != 0 && !testAnchor(i, a, curCapBegin + j * ncap)) {
+               inside = false;
+            }
 
-                /*
-                  If indeed they are, check if the input character is
-                  correct for this transition.
-                */
-                if (inside) {
-                    m = snext.match;
-                    if ((m & (QRegExpEngine::CharClassBit | QRegExpEngine::BackRefBit)) == 0) {
-                        if (eng->cs)
-                            inside = (m == ch);
-                        else
-                            inside = (QChar(m).toLower() == QChar(ch).toLower());
-                    } else if (next == QRegExpEngine::FinalState) {
-                        matchLen = i;
-                        stop = minimal;
-                        inside = true;
-                    } else if ((m & QRegExpEngine::CharClassBit) != 0) {
+            /*
+              If indeed they are, check if the input character is
+              correct for this transition.
+            */
+            if (inside) {
+               m = snext.match;
+               if ((m & (QRegExpEngine::CharClassBit | QRegExpEngine::BackRefBit)) == 0) {
+                  if (eng->cs) {
+                     inside = (m == ch);
+                  } else {
+                     inside = (QChar(m).toLower() == QChar(ch).toLower());
+                  }
+               } else if (next == QRegExpEngine::FinalState) {
+                  matchLen = i;
+                  stop = minimal;
+                  inside = true;
+               } else if ((m & QRegExpEngine::CharClassBit) != 0) {
 #ifndef QT_NO_REGEXP_CCLASS
-                        const QRegExpCharClass &cc = eng->cl.at(m ^ QRegExpEngine::CharClassBit);
-                        if (eng->cs)
-                            inside = cc.in(ch);
-                        else if (cc.negative())
-                            inside = cc.in(QChar(ch).toLower()) &&
-                                     cc.in(QChar(ch).toUpper());
-                        else
-                            inside = cc.in(QChar(ch).toLower()) ||
-                                     cc.in(QChar(ch).toUpper());
+                  const QRegExpCharClass &cc = eng->cl.at(m ^ QRegExpEngine::CharClassBit);
+                  if (eng->cs) {
+                     inside = cc.in(ch);
+                  } else if (cc.negative())
+                     inside = cc.in(QChar(ch).toLower()) &&
+                              cc.in(QChar(ch).toUpper());
+                  else
+                     inside = cc.in(QChar(ch).toLower()) ||
+                              cc.in(QChar(ch).toUpper());
 #endif
 #if !defined(QT_NO_REGEXP_BACKREF) && !defined(QT_NO_REGEXP_CAPTURE)
-                    } else { /* ((m & QRegExpEngine::BackRefBit) != 0) */
-                        int bref = m ^ QRegExpEngine::BackRefBit;
-                        int ell = j * ncap + eng->captureForOfficialCapture.at(bref - 1);
+               } else { /* ((m & QRegExpEngine::BackRefBit) != 0) */
+                  int bref = m ^ QRegExpEngine::BackRefBit;
+                  int ell = j * ncap + eng->captureForOfficialCapture.at(bref - 1);
 
-                        inside = bref <= ncap && curCapBegin[ell] != EmptyCapture;
-                        if (inside) {
-                            if (eng->cs)
-                                inside = (in[pos + curCapBegin[ell]] == QChar(ch));
-                            else
-                                inside = (in[pos + curCapBegin[ell]].toLower()
-                                       == QChar(ch).toLower());
-                        }
+                  inside = bref <= ncap && curCapBegin[ell] != EmptyCapture;
+                  if (inside) {
+                     if (eng->cs) {
+                        inside = (in[pos + curCapBegin[ell]] == QChar(ch));
+                     } else
+                        inside = (in[pos + curCapBegin[ell]].toLower()
+                                  == QChar(ch).toLower());
+                  }
 
-                        if (inside) {
-                            int delta;
-                            if (curCapEnd[ell] == EmptyCapture)
-                                delta = i - curCapBegin[ell];
-                            else
-                                delta = curCapEnd[ell] - curCapBegin[ell];
+                  if (inside) {
+                     int delta;
+                     if (curCapEnd[ell] == EmptyCapture) {
+                        delta = i - curCapBegin[ell];
+                     } else {
+                        delta = curCapEnd[ell] - curCapBegin[ell];
+                     }
 
-                            inside = (delta <= len - (pos + i));
-                            if (inside && delta > 1) {
-                                int n = 1;
-                                if (eng->cs) {
-                                    while (n < delta) {
-                                        if (in[pos + curCapBegin[ell] + n]
-                                            != in[pos + i + n])
-                                            break;
-                                        ++n;
-                                    }
-                                } else {
-                                    while (n < delta) {
-                                        QChar a = in[pos + curCapBegin[ell] + n];
-                                        QChar b = in[pos + i + n];
-                                        if (a.toLower() != b.toLower())
-                                            break;
-                                        ++n;
-                                    }
-                                }
-                                inside = (n == delta);
-                                if (inside)
-                                    needSomeSleep = delta - 1;
-                            }
-                        }
-#endif
-                    }
-                }
-
-                /*
-                  We must now update our data structures.
-                */
-                if (inside) {
-#ifndef QT_NO_REGEXP_CAPTURE
-                    int *capBegin, *capEnd;
-#endif
-                    /*
-                      If the next state was not encountered yet, all
-                      is fine.
-                    */
-                    if ((m = inNextStack[next]) == -1) {
-                        m = nnext++;
-                        nextStack[m] = next;
-                        inNextStack[next] = m;
-#ifndef QT_NO_REGEXP_CAPTURE
-                        capBegin = nextCapBegin + m * ncap;
-                        capEnd = nextCapEnd + m * ncap;
-
-                    /*
-                      Otherwise, we'll first maintain captures in
-                      temporary arrays, and decide at the end whether
-                      it's best to keep the previous capture zones or
-                      the new ones.
-                    */
-                    } else {
-                        capBegin = tempCapBegin;
-                        capEnd = tempCapEnd;
-#endif
-                    }
-
-#ifndef QT_NO_REGEXP_CAPTURE
-                    /*
-                      Updating the capture zones is much of a task.
-                    */
-                    if (ncap > 0) {
-                        memcpy(capBegin, curCapBegin + j * ncap, ncap * sizeof(int));
-                        memcpy(capEnd, curCapEnd + j * ncap, ncap * sizeof(int));
-                        int c = scur.atom, n = snext.atom;
-                        int p = -1, q = -1;
-                        int cap;
-
-                        /*
-                          Lemma 1. For any x in the range [0..nf), we
-                          have f[x].parent < x.
-
-                          Proof. By looking at startAtom(), it is
-                          clear that cf < nf holds all the time, and
-                          thus that f[nf].parent < nf.
-                        */
-
-                        /*
-                          If we are reentering an atom, we empty all
-                          capture zones inside it.
-                        */
-                        if ((q = scur.reenter.value(next)) != 0) {
-                            QBitArray b(eng->nf, false);
-                            b.setBit(q, true);
-                            for (int ell = q + 1; ell < eng->nf; ell++) {
-                                if (b.testBit(eng->f.at(ell).parent)) {
-                                    b.setBit(ell, true);
-                                    cap = eng->f.at(ell).capture;
-                                    if (cap >= 0) {
-                                        capBegin[cap] = EmptyCapture;
-                                        capEnd[cap] = EmptyCapture;
-                                    }
-                                }
-                            }
-                            p = eng->f.at(q).parent;
-
-                        /*
-                          Otherwise, close the capture zones we are
-                          leaving. We are leaving f[c].capture,
-                          f[f[c].parent].capture,
-                          f[f[f[c].parent].parent].capture, ...,
-                          until f[x].capture, with x such that
-                          f[x].parent is the youngest common ancestor
-                          for c and n.
-
-                          We go up along c's and n's ancestry until
-                          we find x.
-                        */
+                     inside = (delta <= len - (pos + i));
+                     if (inside && delta > 1) {
+                        int n = 1;
+                        if (eng->cs) {
+                           while (n < delta) {
+                              if (in[pos + curCapBegin[ell] + n]
+                                    != in[pos + i + n]) {
+                                 break;
+                              }
+                              ++n;
+                           }
                         } else {
-                            p = c;
-                            q = n;
-                            while (p != q) {
-                                if (p > q) {
-                                    cap = eng->f.at(p).capture;
-                                    if (cap >= 0) {
-                                        if (capBegin[cap] == i) {
-                                            capBegin[cap] = EmptyCapture;
-                                            capEnd[cap] = EmptyCapture;
-                                        } else {
-                                            capEnd[cap] = i;
-                                        }
-                                    }
-                                    p = eng->f.at(p).parent;
-                                } else {
-                                    q = eng->f.at(q).parent;
-                                }
-                            }
+                           while (n < delta) {
+                              QChar a = in[pos + curCapBegin[ell] + n];
+                              QChar b = in[pos + i + n];
+                              if (a.toLower() != b.toLower()) {
+                                 break;
+                              }
+                              ++n;
+                           }
                         }
-
-                        /*
-                          In any case, we now open the capture zones
-                          we are entering. We work upwards from n
-                          until we reach p (the parent of the atom we
-                          reenter or the youngest common ancestor).
-                        */
-                        while (n > p) {
-                            cap = eng->f.at(n).capture;
-                            if (cap >= 0) {
-                                capBegin[cap] = i;
-                                capEnd[cap] = EmptyCapture;
-                            }
-                            n = eng->f.at(n).parent;
+                        inside = (n == delta);
+                        if (inside) {
+                           needSomeSleep = delta - 1;
                         }
-                        /*
-                          If the next state was already in
-                          nextStack, we must choose carefully which
-                          capture zones we want to keep.
-                        */
-                        if (capBegin == tempCapBegin &&
-                                isBetterCapture(ncap, capBegin, capEnd, nextCapBegin + m * ncap,
-                                                nextCapEnd + m * ncap)) {
-                            memcpy(nextCapBegin + m * ncap, capBegin, ncap * sizeof(int));
-                            memcpy(nextCapEnd + m * ncap, capEnd, ncap * sizeof(int));
-                        }
-                    }
-#ifndef QT_NO_REGEXP_BACKREF
-                    /*
-                      We are done with updating the capture zones.
-                      It's now time to put the next state to sleep,
-                      if it needs to, and to remove it from
-                      nextStack.
-                    */
-                    if (needSomeSleep > 0) {
-                        QVector<int> zzZ(2 + 2 * ncap);
-                        zzZ[0] = i + needSomeSleep;
-                        zzZ[1] = next;
-                        if (ncap > 0) {
-                            memcpy(zzZ.data() + 2, capBegin, ncap * sizeof(int));
-                            memcpy(zzZ.data() + 2 + ncap, capEnd, ncap * sizeof(int));
-                        }
-                        inNextStack[nextStack[--nnext]] = -1;
-                        sleeping.append(zzZ);
-                    }
+                     }
+                  }
 #endif
-#endif
-                }
+               }
             }
-        }
+
+            /*
+              We must now update our data structures.
+            */
+            if (inside) {
 #ifndef QT_NO_REGEXP_CAPTURE
-        /*
-          If we reached the final state, hurray! Copy the captured
-          zone.
-        */
-        if (ncap > 0 && (m = inNextStack[QRegExpEngine::FinalState]) != -1) {
-            memcpy(capBegin, nextCapBegin + m * ncap, ncap * sizeof(int));
-            memcpy(capEnd, nextCapEnd + m * ncap, ncap * sizeof(int));
-        }
+               int *capBegin, *capEnd;
+#endif
+               /*
+                 If the next state was not encountered yet, all
+                 is fine.
+               */
+               if ((m = inNextStack[next]) == -1) {
+                  m = nnext++;
+                  nextStack[m] = next;
+                  inNextStack[next] = m;
+#ifndef QT_NO_REGEXP_CAPTURE
+                  capBegin = nextCapBegin + m * ncap;
+                  capEnd = nextCapEnd + m * ncap;
+
+                  /*
+                    Otherwise, we'll first maintain captures in
+                    temporary arrays, and decide at the end whether
+                    it's best to keep the previous capture zones or
+                    the new ones.
+                  */
+               } else {
+                  capBegin = tempCapBegin;
+                  capEnd = tempCapEnd;
+#endif
+               }
+
+#ifndef QT_NO_REGEXP_CAPTURE
+               /*
+                 Updating the capture zones is much of a task.
+               */
+               if (ncap > 0) {
+                  memcpy(capBegin, curCapBegin + j * ncap, ncap * sizeof(int));
+                  memcpy(capEnd, curCapEnd + j * ncap, ncap * sizeof(int));
+                  int c = scur.atom, n = snext.atom;
+                  int p = -1, q = -1;
+                  int cap;
+
+                  /*
+                    Lemma 1. For any x in the range [0..nf), we
+                    have f[x].parent < x.
+
+                    Proof. By looking at startAtom(), it is
+                    clear that cf < nf holds all the time, and
+                    thus that f[nf].parent < nf.
+                  */
+
+                  /*
+                    If we are reentering an atom, we empty all
+                    capture zones inside it.
+                  */
+                  if ((q = scur.reenter.value(next)) != 0) {
+                     QBitArray b(eng->nf, false);
+                     b.setBit(q, true);
+                     for (int ell = q + 1; ell < eng->nf; ell++) {
+                        if (b.testBit(eng->f.at(ell).parent)) {
+                           b.setBit(ell, true);
+                           cap = eng->f.at(ell).capture;
+                           if (cap >= 0) {
+                              capBegin[cap] = EmptyCapture;
+                              capEnd[cap] = EmptyCapture;
+                           }
+                        }
+                     }
+                     p = eng->f.at(q).parent;
+
+                     /*
+                       Otherwise, close the capture zones we are
+                       leaving. We are leaving f[c].capture,
+                       f[f[c].parent].capture,
+                       f[f[f[c].parent].parent].capture, ...,
+                       until f[x].capture, with x such that
+                       f[x].parent is the youngest common ancestor
+                       for c and n.
+
+                       We go up along c's and n's ancestry until
+                       we find x.
+                     */
+                  } else {
+                     p = c;
+                     q = n;
+                     while (p != q) {
+                        if (p > q) {
+                           cap = eng->f.at(p).capture;
+                           if (cap >= 0) {
+                              if (capBegin[cap] == i) {
+                                 capBegin[cap] = EmptyCapture;
+                                 capEnd[cap] = EmptyCapture;
+                              } else {
+                                 capEnd[cap] = i;
+                              }
+                           }
+                           p = eng->f.at(p).parent;
+                        } else {
+                           q = eng->f.at(q).parent;
+                        }
+                     }
+                  }
+
+                  /*
+                    In any case, we now open the capture zones
+                    we are entering. We work upwards from n
+                    until we reach p (the parent of the atom we
+                    reenter or the youngest common ancestor).
+                  */
+                  while (n > p) {
+                     cap = eng->f.at(n).capture;
+                     if (cap >= 0) {
+                        capBegin[cap] = i;
+                        capEnd[cap] = EmptyCapture;
+                     }
+                     n = eng->f.at(n).parent;
+                  }
+                  /*
+                    If the next state was already in
+                    nextStack, we must choose carefully which
+                    capture zones we want to keep.
+                  */
+                  if (capBegin == tempCapBegin &&
+                        isBetterCapture(ncap, capBegin, capEnd, nextCapBegin + m * ncap,
+                                        nextCapEnd + m * ncap)) {
+                     memcpy(nextCapBegin + m * ncap, capBegin, ncap * sizeof(int));
+                     memcpy(nextCapEnd + m * ncap, capEnd, ncap * sizeof(int));
+                  }
+               }
 #ifndef QT_NO_REGEXP_BACKREF
-        /*
-          It's time to wake up the sleepers.
-        */
-        j = 0;
-        while (j < sleeping.count()) {
-            if (sleeping.at(j)[0] == i) {
-                const QVector<int> &zzZ = sleeping.at(j);
-                int next = zzZ[1];
-                const int *capBegin = zzZ.data() + 2;
-                const int *capEnd = zzZ.data() + 2 + ncap;
-                bool copyOver = true;
+               /*
+                 We are done with updating the capture zones.
+                 It's now time to put the next state to sleep,
+                 if it needs to, and to remove it from
+                 nextStack.
+               */
+               if (needSomeSleep > 0) {
+                  QVector<int> zzZ(2 + 2 * ncap);
+                  zzZ[0] = i + needSomeSleep;
+                  zzZ[1] = next;
+                  if (ncap > 0) {
+                     memcpy(zzZ.data() + 2, capBegin, ncap * sizeof(int));
+                     memcpy(zzZ.data() + 2 + ncap, capEnd, ncap * sizeof(int));
+                  }
+                  inNextStack[nextStack[--nnext]] = -1;
+                  sleeping.append(zzZ);
+               }
+#endif
+#endif
+            }
+         }
+      }
+#ifndef QT_NO_REGEXP_CAPTURE
+      /*
+        If we reached the final state, hurray! Copy the captured
+        zone.
+      */
+      if (ncap > 0 && (m = inNextStack[QRegExpEngine::FinalState]) != -1) {
+         memcpy(capBegin, nextCapBegin + m * ncap, ncap * sizeof(int));
+         memcpy(capEnd, nextCapEnd + m * ncap, ncap * sizeof(int));
+      }
+#ifndef QT_NO_REGEXP_BACKREF
+      /*
+        It's time to wake up the sleepers.
+      */
+      j = 0;
+      while (j < sleeping.count()) {
+         if (sleeping.at(j)[0] == i) {
+            const QVector<int> &zzZ = sleeping.at(j);
+            int next = zzZ[1];
+            const int *capBegin = zzZ.data() + 2;
+            const int *capEnd = zzZ.data() + 2 + ncap;
+            bool copyOver = true;
 
-                if ((m = inNextStack[next]) == -1) {
-                    m = nnext++;
-                    nextStack[m] = next;
-                    inNextStack[next] = m;
-                } else {
-                    copyOver = isBetterCapture(ncap, nextCapBegin + m * ncap, nextCapEnd + m * ncap,
-                                               capBegin, capEnd);
-                }
-                if (copyOver) {
-                    memcpy(nextCapBegin + m * ncap, capBegin, ncap * sizeof(int));
-                    memcpy(nextCapEnd + m * ncap, capEnd, ncap * sizeof(int));
-                }
-
-                sleeping.removeAt(j);
+            if ((m = inNextStack[next]) == -1) {
+               m = nnext++;
+               nextStack[m] = next;
+               inNextStack[next] = m;
             } else {
-                ++j;
+               copyOver = isBetterCapture(ncap, nextCapBegin + m * ncap, nextCapEnd + m * ncap,
+                                          capBegin, capEnd);
             }
-        }
-#endif
-#endif
-        for (j = 0; j < nnext; j++)
-            inNextStack[nextStack[j]] = -1;
+            if (copyOver) {
+               memcpy(nextCapBegin + m * ncap, capBegin, ncap * sizeof(int));
+               memcpy(nextCapEnd + m * ncap, capEnd, ncap * sizeof(int));
+            }
 
-        // avoid needless iteration that confuses oneTestMatchedLen
-        if (nnext == 1 && nextStack[0] == QRegExpEngine::FinalState
+            sleeping.removeAt(j);
+         } else {
+            ++j;
+         }
+      }
+#endif
+#endif
+      for (j = 0; j < nnext; j++) {
+         inNextStack[nextStack[j]] = -1;
+      }
+
+      // avoid needless iteration that confuses oneTestMatchedLen
+      if (nnext == 1 && nextStack[0] == QRegExpEngine::FinalState
 #ifndef QT_NO_REGEXP_BACKREF
-             && sleeping.isEmpty()
+            && sleeping.isEmpty()
 #endif
-           )
-            stop = true;
+         ) {
+         stop = true;
+      }
 
-        qSwap(curStack, nextStack);
+      qSwap(curStack, nextStack);
 #ifndef QT_NO_REGEXP_CAPTURE
-        qSwap(curCapBegin, nextCapBegin);
-        qSwap(curCapEnd, nextCapEnd);
+      qSwap(curCapBegin, nextCapBegin);
+      qSwap(curCapEnd, nextCapEnd);
 #endif
-        ncur = nnext;
-        nnext = 0;
-        ++i;
-    }
+      ncur = nnext;
+      nnext = 0;
+      ++i;
+   }
 
 #ifndef QT_NO_REGEXP_BACKREF
-    /*
-      If minimal matching is enabled, we might have some sleepers
-      left.
-    */
-    if (!sleeping.isEmpty())
-        sleeping.clear();
+   /*
+     If minimal matching is enabled, we might have some sleepers
+     left.
+   */
+   if (!sleeping.isEmpty()) {
+      sleeping.clear();
+   }
 #endif
 
-    oneTestMatchedLen = i - 1;
-    return (matchLen >= 0);
+   oneTestMatchedLen = i - 1;
+   return (matchLen >= 0);
 }
 
 #ifndef QT_NO_REGEXP_CCLASS
 
 QRegExpCharClass::QRegExpCharClass()
-    : c(0), n(false)
+   : c(0), n(false)
 {
 #ifndef QT_NO_REGEXP_OPTIM
-    occ1.fill(NoOccurrence, NumBadChars);
+   occ1.fill(NoOccurrence, NumBadChars);
 #endif
 }
 
 QRegExpCharClass &QRegExpCharClass::operator=(const QRegExpCharClass &cc)
 {
-    c = cc.c;
-    r = cc.r;
-    n = cc.n;
+   c = cc.c;
+   r = cc.r;
+   n = cc.n;
 #ifndef QT_NO_REGEXP_OPTIM
-    occ1 = cc.occ1;
+   occ1 = cc.occ1;
 #endif
-    return *this;
+   return *this;
 }
 
 void QRegExpCharClass::clear()
 {
-    c = 0;
-    r.resize(0);
-    n = false;
+   c = 0;
+   r.resize(0);
+   n = false;
 }
 
 void QRegExpCharClass::setNegative(bool negative)
 {
-    n = negative;
+   n = negative;
 #ifndef QT_NO_REGEXP_OPTIM
-    occ1.fill(0, NumBadChars);
+   occ1.fill(0, NumBadChars);
 #endif
 }
 
 void QRegExpCharClass::addCategories(int cats)
 {
-    c |= cats;
+   c |= cats;
 #ifndef QT_NO_REGEXP_OPTIM
-    occ1.fill(0, NumBadChars);
+   occ1.fill(0, NumBadChars);
 #endif
 }
 
 void QRegExpCharClass::addRange(ushort from, ushort to)
 {
-    if (from > to)
-        qSwap(from, to);
-    int m = r.size();
-    r.resize(m + 1);
-    r[m].from = from;
-    r[m].len = to - from + 1;
+   if (from > to) {
+      qSwap(from, to);
+   }
+   int m = r.size();
+   r.resize(m + 1);
+   r[m].from = from;
+   r[m].len = to - from + 1;
 
 #ifndef QT_NO_REGEXP_OPTIM
-    int i;
+   int i;
 
-    if (to - from < NumBadChars) {
-        if (from % NumBadChars <= to % NumBadChars) {
-            for (i = from % NumBadChars; i <= to % NumBadChars; i++)
-                occ1[i] = 0;
-        } else {
-            for (i = 0; i <= to % NumBadChars; i++)
-                occ1[i] = 0;
-            for (i = from % NumBadChars; i < NumBadChars; i++)
-                occ1[i] = 0;
-        }
-    } else {
-        occ1.fill(0, NumBadChars);
-    }
+   if (to - from < NumBadChars) {
+      if (from % NumBadChars <= to % NumBadChars) {
+         for (i = from % NumBadChars; i <= to % NumBadChars; i++) {
+            occ1[i] = 0;
+         }
+      } else {
+         for (i = 0; i <= to % NumBadChars; i++) {
+            occ1[i] = 0;
+         }
+         for (i = from % NumBadChars; i < NumBadChars; i++) {
+            occ1[i] = 0;
+         }
+      }
+   } else {
+      occ1.fill(0, NumBadChars);
+   }
 #endif
 }
 
 bool QRegExpCharClass::in(QChar ch) const
 {
 #ifndef QT_NO_REGEXP_OPTIM
-    if (occ1.at(BadChar(ch)) == NoOccurrence)
-        return n;
+   if (occ1.at(BadChar(ch)) == NoOccurrence) {
+      return n;
+   }
 #endif
 
-    if (c != 0 && (c & (1 << (int)ch.category())) != 0)
-        return !n;
+   if (c != 0 && (c & (1 << (int)ch.category())) != 0) {
+      return !n;
+   }
 
-    const int uc = ch.unicode();
-    int size = r.size();
+   const int uc = ch.unicode();
+   int size = r.size();
 
-    for (int i = 0; i < size; ++i) {
-        const QRegExpCharClassRange &range = r.at(i);
-        if (uint(uc - range.from) < uint(r.at(i).len))
-            return !n;
-    }
-    return n;
+   for (int i = 0; i < size; ++i) {
+      const QRegExpCharClassRange &range = r.at(i);
+      if (uint(uc - range.from) < uint(r.at(i).len)) {
+         return !n;
+      }
+   }
+   return n;
 }
 
 #if defined(QT_DEBUG)
 void QRegExpCharClass::dump() const
 {
-    int i;
-    qDebug("    %stive character class", n ? "nega" : "posi");
+   int i;
+   qDebug("    %stive character class", n ? "nega" : "posi");
 #ifndef QT_NO_REGEXP_CCLASS
-    if (c != 0)
-        qDebug("      categories 0x%.8x", c);
+   if (c != 0) {
+      qDebug("      categories 0x%.8x", c);
+   }
 #endif
-    for (i = 0; i < r.size(); i++)
-        qDebug("      0x%.4x through 0x%.4x", r[i].from, r[i].from + r[i].len - 1);
+   for (i = 0; i < r.size(); i++) {
+      qDebug("      0x%.4x through 0x%.4x", r[i].from, r[i].from + r[i].len - 1);
+   }
 }
 #endif
 #endif
 
 QRegExpEngine::Box::Box(QRegExpEngine *engine)
-    : eng(engine), skipanchors(0)
+   : eng(engine), skipanchors(0)
 #ifndef QT_NO_REGEXP_OPTIM
-      , earlyStart(0), lateStart(0), maxl(0)
+   , earlyStart(0), lateStart(0), maxl(0)
 #endif
 {
 #ifndef QT_NO_REGEXP_OPTIM
-    occ1.fill(NoOccurrence, NumBadChars);
+   occ1.fill(NoOccurrence, NumBadChars);
 #endif
-    minl = 0;
+   minl = 0;
 }
 
 QRegExpEngine::Box &QRegExpEngine::Box::operator=(const Box &b)
 {
-    eng = b.eng;
-    ls = b.ls;
-    rs = b.rs;
-    lanchors = b.lanchors;
-    ranchors = b.ranchors;
-    skipanchors = b.skipanchors;
+   eng = b.eng;
+   ls = b.ls;
+   rs = b.rs;
+   lanchors = b.lanchors;
+   ranchors = b.ranchors;
+   skipanchors = b.skipanchors;
 #ifndef QT_NO_REGEXP_OPTIM
-    earlyStart = b.earlyStart;
-    lateStart = b.lateStart;
-    str = b.str;
-    leftStr = b.leftStr;
-    rightStr = b.rightStr;
-    maxl = b.maxl;
-    occ1 = b.occ1;
+   earlyStart = b.earlyStart;
+   lateStart = b.lateStart;
+   str = b.str;
+   leftStr = b.leftStr;
+   rightStr = b.rightStr;
+   maxl = b.maxl;
+   occ1 = b.occ1;
 #endif
-    minl = b.minl;
-    return *this;
+   minl = b.minl;
+   return *this;
 }
 
 void QRegExpEngine::Box::set(QChar ch)
 {
-    ls.resize(1);
-    ls[0] = eng->createState(ch);
-    rs = ls;
+   ls.resize(1);
+   ls[0] = eng->createState(ch);
+   rs = ls;
 #ifndef QT_NO_REGEXP_OPTIM
-    str = ch;
-    leftStr = ch;
-    rightStr = ch;
-    maxl = 1;
-    occ1[BadChar(ch)] = 0;
+   str = ch;
+   leftStr = ch;
+   rightStr = ch;
+   maxl = 1;
+   occ1[BadChar(ch)] = 0;
 #endif
-    minl = 1;
+   minl = 1;
 }
 
 void QRegExpEngine::Box::set(const QRegExpCharClass &cc)
 {
-    ls.resize(1);
-    ls[0] = eng->createState(cc);
-    rs = ls;
+   ls.resize(1);
+   ls[0] = eng->createState(cc);
+   rs = ls;
 #ifndef QT_NO_REGEXP_OPTIM
-    maxl = 1;
-    occ1 = cc.firstOccurrence();
+   maxl = 1;
+   occ1 = cc.firstOccurrence();
 #endif
-    minl = 1;
+   minl = 1;
 }
 
 #ifndef QT_NO_REGEXP_BACKREF
 void QRegExpEngine::Box::set(int bref)
 {
-    ls.resize(1);
-    ls[0] = eng->createState(bref);
-    rs = ls;
-    if (bref >= 1 && bref <= MaxBackRefs)
-        skipanchors = Anchor_BackRef0Empty << bref;
+   ls.resize(1);
+   ls[0] = eng->createState(bref);
+   rs = ls;
+   if (bref >= 1 && bref <= MaxBackRefs) {
+      skipanchors = Anchor_BackRef0Empty << bref;
+   }
 #ifndef QT_NO_REGEXP_OPTIM
-    maxl = InftyLen;
+   maxl = InftyLen;
 #endif
-    minl = 0;
+   minl = 0;
 }
 #endif
 
 void QRegExpEngine::Box::cat(const Box &b)
 {
-    eng->addCatTransitions(rs, b.ls);
-    addAnchorsToEngine(b);
-    if (minl == 0) {
-        lanchors.unite(b.lanchors);
-        if (skipanchors != 0) {
-            for (int i = 0; i < b.ls.size(); i++) {
-                int a = eng->anchorConcatenation(lanchors.value(b.ls.at(i), 0), skipanchors);
-                lanchors.insert(b.ls.at(i), a);
-            }
-        }
-        mergeInto(&ls, b.ls);
-    }
-    if (b.minl == 0) {
-        ranchors.unite(b.ranchors);
-        if (b.skipanchors != 0) {
-            for (int i = 0; i < rs.size(); i++) {
-                int a = eng->anchorConcatenation(ranchors.value(rs.at(i), 0), b.skipanchors);
-                ranchors.insert(rs.at(i), a);
-            }
-        }
-        mergeInto(&rs, b.rs);
-    } else {
-        ranchors = b.ranchors;
-        rs = b.rs;
-    }
+   eng->addCatTransitions(rs, b.ls);
+   addAnchorsToEngine(b);
+   if (minl == 0) {
+      lanchors.unite(b.lanchors);
+      if (skipanchors != 0) {
+         for (int i = 0; i < b.ls.size(); i++) {
+            int a = eng->anchorConcatenation(lanchors.value(b.ls.at(i), 0), skipanchors);
+            lanchors.insert(b.ls.at(i), a);
+         }
+      }
+      mergeInto(&ls, b.ls);
+   }
+   if (b.minl == 0) {
+      ranchors.unite(b.ranchors);
+      if (b.skipanchors != 0) {
+         for (int i = 0; i < rs.size(); i++) {
+            int a = eng->anchorConcatenation(ranchors.value(rs.at(i), 0), b.skipanchors);
+            ranchors.insert(rs.at(i), a);
+         }
+      }
+      mergeInto(&rs, b.rs);
+   } else {
+      ranchors = b.ranchors;
+      rs = b.rs;
+   }
 
 #ifndef QT_NO_REGEXP_OPTIM
-    if (maxl != InftyLen) {
-        if (rightStr.length() + b.leftStr.length() >
-             qMax(str.length(), b.str.length())) {
-            earlyStart = minl - rightStr.length();
-            lateStart = maxl - rightStr.length();
-            str = rightStr + b.leftStr;
-        } else if (b.str.length() > str.length()) {
-            earlyStart = minl + b.earlyStart;
-            lateStart = maxl + b.lateStart;
-            str = b.str;
-        }
-    }
+   if (maxl != InftyLen) {
+      if (rightStr.length() + b.leftStr.length() >
+            qMax(str.length(), b.str.length())) {
+         earlyStart = minl - rightStr.length();
+         lateStart = maxl - rightStr.length();
+         str = rightStr + b.leftStr;
+      } else if (b.str.length() > str.length()) {
+         earlyStart = minl + b.earlyStart;
+         lateStart = maxl + b.lateStart;
+         str = b.str;
+      }
+   }
 
-    if (leftStr.length() == maxl)
-        leftStr += b.leftStr;
+   if (leftStr.length() == maxl) {
+      leftStr += b.leftStr;
+   }
 
-    if (b.rightStr.length() == b.maxl) {
-        rightStr += b.rightStr;
-    } else {
-        rightStr = b.rightStr;
-    }
+   if (b.rightStr.length() == b.maxl) {
+      rightStr += b.rightStr;
+   } else {
+      rightStr = b.rightStr;
+   }
 
-    if (maxl == InftyLen || b.maxl == InftyLen) {
-        maxl = InftyLen;
-    } else {
-        maxl += b.maxl;
-    }
+   if (maxl == InftyLen || b.maxl == InftyLen) {
+      maxl = InftyLen;
+   } else {
+      maxl += b.maxl;
+   }
 
-    for (int i = 0; i < NumBadChars; i++) {
-        if (b.occ1.at(i) != NoOccurrence && minl + b.occ1.at(i) < occ1.at(i))
-            occ1[i] = minl + b.occ1.at(i);
-    }
+   for (int i = 0; i < NumBadChars; i++) {
+      if (b.occ1.at(i) != NoOccurrence && minl + b.occ1.at(i) < occ1.at(i)) {
+         occ1[i] = minl + b.occ1.at(i);
+      }
+   }
 #endif
 
-    minl += b.minl;
-    if (minl == 0)
-        skipanchors = eng->anchorConcatenation(skipanchors, b.skipanchors);
-    else
-        skipanchors = 0;
+   minl += b.minl;
+   if (minl == 0) {
+      skipanchors = eng->anchorConcatenation(skipanchors, b.skipanchors);
+   } else {
+      skipanchors = 0;
+   }
 }
 
 void QRegExpEngine::Box::orx(const Box &b)
 {
-    mergeInto(&ls, b.ls);
-    lanchors.unite(b.lanchors);
-    mergeInto(&rs, b.rs);
-    ranchors.unite(b.ranchors);
+   mergeInto(&ls, b.ls);
+   lanchors.unite(b.lanchors);
+   mergeInto(&rs, b.rs);
+   ranchors.unite(b.ranchors);
 
-    if (b.minl == 0) {
-        if (minl == 0)
-            skipanchors = eng->anchorAlternation(skipanchors, b.skipanchors);
-        else
-            skipanchors = b.skipanchors;
-    }
+   if (b.minl == 0) {
+      if (minl == 0) {
+         skipanchors = eng->anchorAlternation(skipanchors, b.skipanchors);
+      } else {
+         skipanchors = b.skipanchors;
+      }
+   }
 
 #ifndef QT_NO_REGEXP_OPTIM
-    for (int i = 0; i < NumBadChars; i++) {
-        if (occ1.at(i) > b.occ1.at(i))
-            occ1[i] = b.occ1.at(i);
-    }
-    earlyStart = 0;
-    lateStart = 0;
-    str = QString();
-    leftStr = QString();
-    rightStr = QString();
-    if (b.maxl > maxl)
-        maxl = b.maxl;
+   for (int i = 0; i < NumBadChars; i++) {
+      if (occ1.at(i) > b.occ1.at(i)) {
+         occ1[i] = b.occ1.at(i);
+      }
+   }
+   earlyStart = 0;
+   lateStart = 0;
+   str = QString();
+   leftStr = QString();
+   rightStr = QString();
+   if (b.maxl > maxl) {
+      maxl = b.maxl;
+   }
 #endif
-    if (b.minl < minl)
-        minl = b.minl;
+   if (b.minl < minl) {
+      minl = b.minl;
+   }
 }
 
 void QRegExpEngine::Box::plus(int atom)
 {
 #ifndef QT_NO_REGEXP_CAPTURE
-    eng->addPlusTransitions(rs, ls, atom);
+   eng->addPlusTransitions(rs, ls, atom);
 #else
-    Q_UNUSED(atom);
-    eng->addCatTransitions(rs, ls);
+   Q_UNUSED(atom);
+   eng->addCatTransitions(rs, ls);
 #endif
-    addAnchorsToEngine(*this);
+   addAnchorsToEngine(*this);
 #ifndef QT_NO_REGEXP_OPTIM
-    maxl = InftyLen;
+   maxl = InftyLen;
 #endif
 }
 
 void QRegExpEngine::Box::opt()
 {
 #ifndef QT_NO_REGEXP_OPTIM
-    earlyStart = 0;
-    lateStart = 0;
-    str = QString();
-    leftStr = QString();
-    rightStr = QString();
+   earlyStart = 0;
+   lateStart = 0;
+   str = QString();
+   leftStr = QString();
+   rightStr = QString();
 #endif
-    skipanchors = 0;
-    minl = 0;
+   skipanchors = 0;
+   minl = 0;
 }
 
 void QRegExpEngine::Box::catAnchor(int a)
 {
-    if (a != 0) {
-        for (int i = 0; i < rs.size(); i++) {
-            a = eng->anchorConcatenation(ranchors.value(rs.at(i), 0), a);
-            ranchors.insert(rs.at(i), a);
-        }
-        if (minl == 0)
-            skipanchors = eng->anchorConcatenation(skipanchors, a);
-    }
+   if (a != 0) {
+      for (int i = 0; i < rs.size(); i++) {
+         a = eng->anchorConcatenation(ranchors.value(rs.at(i), 0), a);
+         ranchors.insert(rs.at(i), a);
+      }
+      if (minl == 0) {
+         skipanchors = eng->anchorConcatenation(skipanchors, a);
+      }
+   }
 }
 
 #ifndef QT_NO_REGEXP_OPTIM
 void QRegExpEngine::Box::setupHeuristics()
 {
-    eng->goodEarlyStart = earlyStart;
-    eng->goodLateStart = lateStart;
-    eng->goodStr = eng->cs ? str : str.toLower();
+   eng->goodEarlyStart = earlyStart;
+   eng->goodLateStart = lateStart;
+   eng->goodStr = eng->cs ? str : str.toLower();
 
-    eng->minl = minl;
-    if (eng->cs) {
-        /*
-          A regular expression such as 112|1 has occ1['2'] = 2 and minl =
-          1 at this point. An entry of occ1 has to be at most minl or
-          infinity for the rest of the algorithm to go well.
+   eng->minl = minl;
+   if (eng->cs) {
+      /*
+        A regular expression such as 112|1 has occ1['2'] = 2 and minl =
+        1 at this point. An entry of occ1 has to be at most minl or
+        infinity for the rest of the algorithm to go well.
 
-          We waited until here before normalizing these cases (instead of
-          doing it in Box::orx()) because sometimes things improve by
-          themselves. Consider for example (112|1)34.
-        */
-        for (int i = 0; i < NumBadChars; i++) {
-            if (occ1.at(i) != NoOccurrence && occ1.at(i) >= minl)
-                occ1[i] = minl;
-        }
-        eng->occ1 = occ1;
-    } else {
-        eng->occ1.fill(0, NumBadChars);
-    }
+        We waited until here before normalizing these cases (instead of
+        doing it in Box::orx()) because sometimes things improve by
+        themselves. Consider for example (112|1)34.
+      */
+      for (int i = 0; i < NumBadChars; i++) {
+         if (occ1.at(i) != NoOccurrence && occ1.at(i) >= minl) {
+            occ1[i] = minl;
+         }
+      }
+      eng->occ1 = occ1;
+   } else {
+      eng->occ1.fill(0, NumBadChars);
+   }
 
-    eng->heuristicallyChooseHeuristic();
+   eng->heuristicallyChooseHeuristic();
 }
 #endif
 
 #if defined(QT_DEBUG)
 void QRegExpEngine::Box::dump() const
 {
-    int i;
-    qDebug("Box of at least %d character%s", minl, minl == 1 ? "" : "s");
-    qDebug("  Left states:");
-    for (i = 0; i < ls.size(); i++) {
-        if (lanchors.value(ls[i], 0) == 0)
-            qDebug("    %d", ls[i]);
-        else
-            qDebug("    %d [anchors 0x%.8x]", ls[i], lanchors[ls[i]]);
-    }
-    qDebug("  Right states:");
-    for (i = 0; i < rs.size(); i++) {
-        if (ranchors.value(rs[i], 0) == 0)
-            qDebug("    %d", rs[i]);
-        else
-            qDebug("    %d [anchors 0x%.8x]", rs[i], ranchors[rs[i]]);
-    }
-    qDebug("  Skip anchors: 0x%.8x", skipanchors);
+   int i;
+   qDebug("Box of at least %d character%s", minl, minl == 1 ? "" : "s");
+   qDebug("  Left states:");
+   for (i = 0; i < ls.size(); i++) {
+      if (lanchors.value(ls[i], 0) == 0) {
+         qDebug("    %d", ls[i]);
+      } else {
+         qDebug("    %d [anchors 0x%.8x]", ls[i], lanchors[ls[i]]);
+      }
+   }
+   qDebug("  Right states:");
+   for (i = 0; i < rs.size(); i++) {
+      if (ranchors.value(rs[i], 0) == 0) {
+         qDebug("    %d", rs[i]);
+      } else {
+         qDebug("    %d [anchors 0x%.8x]", rs[i], ranchors[rs[i]]);
+      }
+   }
+   qDebug("  Skip anchors: 0x%.8x", skipanchors);
 }
 #endif
 
 void QRegExpEngine::Box::addAnchorsToEngine(const Box &to) const
 {
-    for (int i = 0; i < to.ls.size(); i++) {
-        for (int j = 0; j < rs.size(); j++) {
-            int a = eng->anchorConcatenation(ranchors.value(rs.at(j), 0),
-                                             to.lanchors.value(to.ls.at(i), 0));
-            eng->addAnchors(rs[j], to.ls[i], a);
-        }
-    }
+   for (int i = 0; i < to.ls.size(); i++) {
+      for (int j = 0; j < rs.size(); j++) {
+         int a = eng->anchorConcatenation(ranchors.value(rs.at(j), 0),
+                                          to.lanchors.value(to.ls.at(i), 0));
+         eng->addAnchors(rs[j], to.ls[i], a);
+      }
+   }
 }
 
 void QRegExpEngine::setupCategoriesRangeMap()
@@ -2832,103 +2934,106 @@ void QRegExpEngine::setupCategoriesRangeMap()
 
 int QRegExpEngine::getChar()
 {
-    return (yyPos == yyLen) ? EOS : yyIn[yyPos++].unicode();
+   return (yyPos == yyLen) ? EOS : yyIn[yyPos++].unicode();
 }
 
 int QRegExpEngine::getEscape()
 {
 #ifndef QT_NO_REGEXP_ESCAPE
-    const char tab[] = "afnrtv"; // no b, as \b means word boundary
-    const char backTab[] = "\a\f\n\r\t\v";
-    ushort low;
-    int i;
+   const char tab[] = "afnrtv"; // no b, as \b means word boundary
+   const char backTab[] = "\a\f\n\r\t\v";
+   ushort low;
+   int i;
 #endif
-    ushort val;
-    int prevCh = yyCh;
+   ushort val;
+   int prevCh = yyCh;
 
-    if (prevCh == EOS) {
-        error(RXERR_END);
-        return Tok_Char | '\\';
-    }
-    yyCh = getChar();
+   if (prevCh == EOS) {
+      error(RXERR_END);
+      return Tok_Char | '\\';
+   }
+   yyCh = getChar();
 #ifndef QT_NO_REGEXP_ESCAPE
-    if ((prevCh & ~0xff) == 0) {
-        const char *p = strchr(tab, prevCh);
-        if (p != 0)
-            return Tok_Char | backTab[p - tab];
-    }
+   if ((prevCh & ~0xff) == 0) {
+      const char *p = strchr(tab, prevCh);
+      if (p != 0) {
+         return Tok_Char | backTab[p - tab];
+      }
+   }
 #endif
 
-    switch (prevCh) {
+   switch (prevCh) {
 #ifndef QT_NO_REGEXP_ESCAPE
-    case '0':
-        val = 0;
-        for (i = 0; i < 3; i++) {
-            if (yyCh >= '0' && yyCh <= '7')
-                val = (val << 3) | (yyCh - '0');
-            else
-                break;
+      case '0':
+         val = 0;
+         for (i = 0; i < 3; i++) {
+            if (yyCh >= '0' && yyCh <= '7') {
+               val = (val << 3) | (yyCh - '0');
+            } else {
+               break;
+            }
             yyCh = getChar();
-        }
-        if ((val & ~0377) != 0)
+         }
+         if ((val & ~0377) != 0) {
             error(RXERR_OCTAL);
-        return Tok_Char | val;
+         }
+         return Tok_Char | val;
 #endif
 #ifndef QT_NO_REGEXP_ESCAPE
-    case 'B':
-        return Tok_NonWord;
+      case 'B':
+         return Tok_NonWord;
 #endif
 #ifndef QT_NO_REGEXP_CCLASS
-    case 'D':
-        // see QChar::isDigit()
-        yyCharClass->addCategories(0x7fffffef);
-        return Tok_CharClass;
-    case 'S':
-        // see QChar::isSpace()
-        yyCharClass->addCategories(0x7ffff87f);
-        yyCharClass->addRange(0x0000, 0x0008);
-        yyCharClass->addRange(0x000e, 0x001f);
-        yyCharClass->addRange(0x007f, 0x009f);
-        return Tok_CharClass;
-    case 'W':
-        // see QChar::isLetterOrNumber() and QChar::isMark()
-        yyCharClass->addCategories(0x7fe07f81);
-        yyCharClass->addRange(0x203f, 0x2040);
-        yyCharClass->addSingleton(0x2040);
-        yyCharClass->addSingleton(0x2054);
-        yyCharClass->addSingleton(0x30fb);
-        yyCharClass->addRange(0xfe33, 0xfe34);
-        yyCharClass->addRange(0xfe4d, 0xfe4f);
-        yyCharClass->addSingleton(0xff3f);
-        yyCharClass->addSingleton(0xff65);
-        return Tok_CharClass;
+      case 'D':
+         // see QChar::isDigit()
+         yyCharClass->addCategories(0x7fffffef);
+         return Tok_CharClass;
+      case 'S':
+         // see QChar::isSpace()
+         yyCharClass->addCategories(0x7ffff87f);
+         yyCharClass->addRange(0x0000, 0x0008);
+         yyCharClass->addRange(0x000e, 0x001f);
+         yyCharClass->addRange(0x007f, 0x009f);
+         return Tok_CharClass;
+      case 'W':
+         // see QChar::isLetterOrNumber() and QChar::isMark()
+         yyCharClass->addCategories(0x7fe07f81);
+         yyCharClass->addRange(0x203f, 0x2040);
+         yyCharClass->addSingleton(0x2040);
+         yyCharClass->addSingleton(0x2054);
+         yyCharClass->addSingleton(0x30fb);
+         yyCharClass->addRange(0xfe33, 0xfe34);
+         yyCharClass->addRange(0xfe4d, 0xfe4f);
+         yyCharClass->addSingleton(0xff3f);
+         yyCharClass->addSingleton(0xff65);
+         return Tok_CharClass;
 #endif
 #ifndef QT_NO_REGEXP_ESCAPE
-    case 'b':
-        return Tok_Word;
+      case 'b':
+         return Tok_Word;
 #endif
 #ifndef QT_NO_REGEXP_CCLASS
-    case 'd':
-        // see QChar::isDigit()
-        yyCharClass->addCategories(0x00000010);
-        return Tok_CharClass;
-    case 's':
-        // see QChar::isSpace()
-        yyCharClass->addCategories(0x00000380);
-        yyCharClass->addRange(0x0009, 0x000d);
-        return Tok_CharClass;
-    case 'w':
-        // see QChar::isLetterOrNumber() and QChar::isMark()
-        yyCharClass->addCategories(0x000f807e);
-        yyCharClass->addSingleton(0x005f); // '_'
-        return Tok_CharClass;
-    case 'I':
-        if (xmlSchemaExtensions) {
+      case 'd':
+         // see QChar::isDigit()
+         yyCharClass->addCategories(0x00000010);
+         return Tok_CharClass;
+      case 's':
+         // see QChar::isSpace()
+         yyCharClass->addCategories(0x00000380);
+         yyCharClass->addRange(0x0009, 0x000d);
+         return Tok_CharClass;
+      case 'w':
+         // see QChar::isLetterOrNumber() and QChar::isMark()
+         yyCharClass->addCategories(0x000f807e);
+         yyCharClass->addSingleton(0x005f); // '_'
+         return Tok_CharClass;
+      case 'I':
+         if (xmlSchemaExtensions) {
             yyCharClass->setNegative(!yyCharClass->negative());
             // fall through
-        }
-    case 'i':
-        if (xmlSchemaExtensions) {
+         }
+      case 'i':
+         if (xmlSchemaExtensions) {
             yyCharClass->addCategories(0x000f807e);
             yyCharClass->addSingleton(0x003a); // ':'
             yyCharClass->addSingleton(0x005f); // '_'
@@ -2946,15 +3051,15 @@ int QRegExpEngine::getEscape()
             yyCharClass->addRange(0xf900, 0xfdcf);
             yyCharClass->addRange(0xfdf0, 0xfffd);
             yyCharClass->addRange((ushort)0x10000, (ushort)0xeffff);
-        }
-        return Tok_CharClass;
-    case 'C':
-        if (xmlSchemaExtensions) {
+         }
+         return Tok_CharClass;
+      case 'C':
+         if (xmlSchemaExtensions) {
             yyCharClass->setNegative(!yyCharClass->negative());
             // fall through
-        }
-    case 'c':
-        if (xmlSchemaExtensions) {
+         }
+      case 'c':
+         if (xmlSchemaExtensions) {
             yyCharClass->addCategories(0x000f807e);
             yyCharClass->addSingleton(0x002d); // '-'
             yyCharClass->addSingleton(0x002e); // '.'
@@ -2978,547 +3083,560 @@ int QRegExpEngine::getEscape()
             yyCharClass->addRange((ushort)0x10000, (ushort)0xeffff);
             yyCharClass->addRange(0x0300, 0x036f);
             yyCharClass->addRange(0x203f, 0x2040);
-        }
-        return Tok_CharClass;
-    case 'P':
-        if (xmlSchemaExtensions) {
+         }
+         return Tok_CharClass;
+      case 'P':
+         if (xmlSchemaExtensions) {
             yyCharClass->setNegative(!yyCharClass->negative());
             // fall through
-        }
-    case 'p':
-        if (xmlSchemaExtensions) {
+         }
+      case 'p':
+         if (xmlSchemaExtensions) {
             if (yyCh != '{') {
-                error(RXERR_CHARCLASS);
-                return Tok_CharClass;
+               error(RXERR_CHARCLASS);
+               return Tok_CharClass;
             }
 
             QByteArray category;
             yyCh = getChar();
             while (yyCh != '}') {
-                if (yyCh == EOS) {
-                    error(RXERR_END);
-                    return Tok_CharClass;
-                }
-                category.append(yyCh);
-                yyCh = getChar();
+               if (yyCh == EOS) {
+                  error(RXERR_END);
+                  return Tok_CharClass;
+               }
+               category.append(yyCh);
+               yyCh = getChar();
             }
             yyCh = getChar(); // skip closing '}'
 
             if (category == "M") {
-                yyCharClass->addCategories(0x0000000e);
+               yyCharClass->addCategories(0x0000000e);
             } else if (category == "Mn") {
-                yyCharClass->addCategories(0x00000002);
+               yyCharClass->addCategories(0x00000002);
             } else if (category == "Mc") {
-                yyCharClass->addCategories(0x00000004);
+               yyCharClass->addCategories(0x00000004);
             } else if (category == "Me") {
-                yyCharClass->addCategories(0x00000008);
+               yyCharClass->addCategories(0x00000008);
             } else if (category == "N") {
-                yyCharClass->addCategories(0x00000070);
+               yyCharClass->addCategories(0x00000070);
             } else if (category == "Nd") {
-                yyCharClass->addCategories(0x00000010);
+               yyCharClass->addCategories(0x00000010);
             } else if (category == "Nl") {
-                yyCharClass->addCategories(0x00000020);
+               yyCharClass->addCategories(0x00000020);
             } else if (category == "No") {
-                yyCharClass->addCategories(0x00000040);
+               yyCharClass->addCategories(0x00000040);
             } else if (category == "Z") {
-                yyCharClass->addCategories(0x00000380);
+               yyCharClass->addCategories(0x00000380);
             } else if (category == "Zs") {
-                yyCharClass->addCategories(0x00000080);
+               yyCharClass->addCategories(0x00000080);
             } else if (category == "Zl") {
-                yyCharClass->addCategories(0x00000100);
+               yyCharClass->addCategories(0x00000100);
             } else if (category == "Zp") {
-                yyCharClass->addCategories(0x00000200);
+               yyCharClass->addCategories(0x00000200);
             } else if (category == "C") {
-                yyCharClass->addCategories(0x00006c00);
+               yyCharClass->addCategories(0x00006c00);
             } else if (category == "Cc") {
-                yyCharClass->addCategories(0x00000400);
+               yyCharClass->addCategories(0x00000400);
             } else if (category == "Cf") {
-                yyCharClass->addCategories(0x00000800);
+               yyCharClass->addCategories(0x00000800);
             } else if (category == "Cs") {
-                yyCharClass->addCategories(0x00001000);
+               yyCharClass->addCategories(0x00001000);
             } else if (category == "Co") {
-                yyCharClass->addCategories(0x00002000);
+               yyCharClass->addCategories(0x00002000);
             } else if (category == "Cn") {
-                yyCharClass->addCategories(0x00004000);
+               yyCharClass->addCategories(0x00004000);
             } else if (category == "L") {
-                yyCharClass->addCategories(0x000f8000);
+               yyCharClass->addCategories(0x000f8000);
             } else if (category == "Lu") {
-                yyCharClass->addCategories(0x00008000);
+               yyCharClass->addCategories(0x00008000);
             } else if (category == "Ll") {
-                yyCharClass->addCategories(0x00010000);
+               yyCharClass->addCategories(0x00010000);
             } else if (category == "Lt") {
-                yyCharClass->addCategories(0x00020000);
+               yyCharClass->addCategories(0x00020000);
             } else if (category == "Lm") {
-                yyCharClass->addCategories(0x00040000);
+               yyCharClass->addCategories(0x00040000);
             } else if (category == "Lo") {
-                yyCharClass->addCategories(0x00080000);
+               yyCharClass->addCategories(0x00080000);
             } else if (category == "P") {
-                yyCharClass->addCategories(0x4f580780);
+               yyCharClass->addCategories(0x4f580780);
             } else if (category == "Pc") {
-                yyCharClass->addCategories(0x00100000);
+               yyCharClass->addCategories(0x00100000);
             } else if (category == "Pd") {
-                yyCharClass->addCategories(0x00200000);
+               yyCharClass->addCategories(0x00200000);
             } else if (category == "Ps") {
-                yyCharClass->addCategories(0x00400000);
+               yyCharClass->addCategories(0x00400000);
             } else if (category == "Pe") {
-                yyCharClass->addCategories(0x00800000);
+               yyCharClass->addCategories(0x00800000);
             } else if (category == "Pi") {
-                yyCharClass->addCategories(0x01000000);
+               yyCharClass->addCategories(0x01000000);
             } else if (category == "Pf") {
-                yyCharClass->addCategories(0x02000000);
+               yyCharClass->addCategories(0x02000000);
             } else if (category == "Po") {
-                yyCharClass->addCategories(0x04000000);
+               yyCharClass->addCategories(0x04000000);
             } else if (category == "S") {
-                yyCharClass->addCategories(0x78000000);
+               yyCharClass->addCategories(0x78000000);
             } else if (category == "Sm") {
-                yyCharClass->addCategories(0x08000000);
+               yyCharClass->addCategories(0x08000000);
             } else if (category == "Sc") {
-                yyCharClass->addCategories(0x10000000);
+               yyCharClass->addCategories(0x10000000);
             } else if (category == "Sk") {
-                yyCharClass->addCategories(0x20000000);
+               yyCharClass->addCategories(0x20000000);
             } else if (category == "So") {
-                yyCharClass->addCategories(0x40000000);
+               yyCharClass->addCategories(0x40000000);
             } else if (category.startsWith("Is")) {
-                if (categoriesRangeMap.isEmpty())
-                    setupCategoriesRangeMap();
+               if (categoriesRangeMap.isEmpty()) {
+                  setupCategoriesRangeMap();
+               }
 
-                if (categoriesRangeMap.contains(category)) {
-                    const QPair<int, int> range = categoriesRangeMap.value(category);
-                    yyCharClass->addRange(range.first, range.second);
-                } else {
-                    error(RXERR_CATEGORY);
-                }
+               if (categoriesRangeMap.contains(category)) {
+                  const QPair<int, int> range = categoriesRangeMap.value(category);
+                  yyCharClass->addRange(range.first, range.second);
+               } else {
+                  error(RXERR_CATEGORY);
+               }
             } else {
-                error(RXERR_CATEGORY);
+               error(RXERR_CATEGORY);
             }
-        }
-        return Tok_CharClass;
+         }
+         return Tok_CharClass;
 #endif
 #ifndef QT_NO_REGEXP_ESCAPE
-    case 'x':
-        val = 0;
-        for (i = 0; i < 4; i++) {
+      case 'x':
+         val = 0;
+         for (i = 0; i < 4; i++) {
             low = QChar(yyCh).toLower().unicode();
-            if (low >= '0' && low <= '9')
-                val = (val << 4) | (low - '0');
-            else if (low >= 'a' && low <= 'f')
-                val = (val << 4) | (low - 'a' + 10);
-            else
-                break;
+            if (low >= '0' && low <= '9') {
+               val = (val << 4) | (low - '0');
+            } else if (low >= 'a' && low <= 'f') {
+               val = (val << 4) | (low - 'a' + 10);
+            } else {
+               break;
+            }
             yyCh = getChar();
-        }
-        return Tok_Char | val;
+         }
+         return Tok_Char | val;
 #endif
-    default:
-        if (prevCh >= '1' && prevCh <= '9') {
+      default:
+         if (prevCh >= '1' && prevCh <= '9') {
 #ifndef QT_NO_REGEXP_BACKREF
             val = prevCh - '0';
             while (yyCh >= '0' && yyCh <= '9') {
-                val = (val * 10) + (yyCh - '0');
-                yyCh = getChar();
+               val = (val * 10) + (yyCh - '0');
+               yyCh = getChar();
             }
             return Tok_BackRef | val;
 #else
             error(RXERR_DISABLED);
 #endif
-        }
-        return Tok_Char | prevCh;
-    }
+         }
+         return Tok_Char | prevCh;
+   }
 }
 
 #ifndef QT_NO_REGEXP_INTERVAL
 int QRegExpEngine::getRep(int def)
 {
-    if (yyCh >= '0' && yyCh <= '9') {
-        int rep = 0;
-        do {
-            rep = 10 * rep + yyCh - '0';
-            if (rep >= InftyRep) {
-                error(RXERR_REPETITION);
-                rep = def;
-            }
-            yyCh = getChar();
-        } while (yyCh >= '0' && yyCh <= '9');
-        return rep;
-    } else {
-        return def;
-    }
+   if (yyCh >= '0' && yyCh <= '9') {
+      int rep = 0;
+      do {
+         rep = 10 * rep + yyCh - '0';
+         if (rep >= InftyRep) {
+            error(RXERR_REPETITION);
+            rep = def;
+         }
+         yyCh = getChar();
+      } while (yyCh >= '0' && yyCh <= '9');
+      return rep;
+   } else {
+      return def;
+   }
 }
 #endif
 
 #ifndef QT_NO_REGEXP_LOOKAHEAD
 void QRegExpEngine::skipChars(int n)
 {
-    if (n > 0) {
-        yyPos += n - 1;
-        yyCh = getChar();
-    }
+   if (n > 0) {
+      yyPos += n - 1;
+      yyCh = getChar();
+   }
 }
 #endif
 
 void QRegExpEngine::error(const char *msg)
 {
-    if (yyError.isEmpty())
-        yyError = QLatin1String(msg);
+   if (yyError.isEmpty()) {
+      yyError = QLatin1String(msg);
+   }
 }
 
 void QRegExpEngine::startTokenizer(const QChar *rx, int len)
 {
-    yyIn = rx;
-    yyPos0 = 0;
-    yyPos = 0;
-    yyLen = len;
-    yyCh = getChar();
-    yyCharClass.reset(new QRegExpCharClass);
-    yyMinRep = 0;
-    yyMaxRep = 0;
-    yyError = QString();
+   yyIn = rx;
+   yyPos0 = 0;
+   yyPos = 0;
+   yyLen = len;
+   yyCh = getChar();
+   yyCharClass.reset(new QRegExpCharClass);
+   yyMinRep = 0;
+   yyMaxRep = 0;
+   yyError = QString();
 }
 
 int QRegExpEngine::getToken()
 {
 #ifndef QT_NO_REGEXP_CCLASS
-    ushort pendingCh = 0;
-    bool charPending;
-    bool rangePending;
-    int tok;
+   ushort pendingCh = 0;
+   bool charPending;
+   bool rangePending;
+   int tok;
 #endif
-    int prevCh = yyCh;
+   int prevCh = yyCh;
 
-    yyPos0 = yyPos - 1;
+   yyPos0 = yyPos - 1;
 #ifndef QT_NO_REGEXP_CCLASS
-    yyCharClass->clear();
+   yyCharClass->clear();
 #endif
-    yyMinRep = 0;
-    yyMaxRep = 0;
-    yyCh = getChar();
+   yyMinRep = 0;
+   yyMaxRep = 0;
+   yyCh = getChar();
 
-    switch (prevCh) {
-    case EOS:
-        yyPos0 = yyPos;
-        return Tok_Eos;
-    case '$':
-        return Tok_Dollar;
-    case '(':
-        if (yyCh == '?') {
+   switch (prevCh) {
+      case EOS:
+         yyPos0 = yyPos;
+         return Tok_Eos;
+      case '$':
+         return Tok_Dollar;
+      case '(':
+         if (yyCh == '?') {
             prevCh = getChar();
             yyCh = getChar();
             switch (prevCh) {
 #ifndef QT_NO_REGEXP_LOOKAHEAD
-            case '!':
-                return Tok_NegLookahead;
-            case '=':
-                return Tok_PosLookahead;
+               case '!':
+                  return Tok_NegLookahead;
+               case '=':
+                  return Tok_PosLookahead;
 #endif
-            case ':':
-                return Tok_MagicLeftParen;
-            case '<':
-                error(RXERR_LOOKBEHIND);
-                return Tok_MagicLeftParen;
-            default:
-                error(RXERR_LOOKAHEAD);
-                return Tok_MagicLeftParen;
+               case ':':
+                  return Tok_MagicLeftParen;
+               case '<':
+                  error(RXERR_LOOKBEHIND);
+                  return Tok_MagicLeftParen;
+               default:
+                  error(RXERR_LOOKAHEAD);
+                  return Tok_MagicLeftParen;
             }
-        } else {
+         } else {
             return Tok_LeftParen;
-        }
-    case ')':
-        return Tok_RightParen;
-    case '*':
-        yyMinRep = 0;
-        yyMaxRep = InftyRep;
-        return Tok_Quantifier;
-    case '+':
-        yyMinRep = 1;
-        yyMaxRep = InftyRep;
-        return Tok_Quantifier;
-    case '.':
+         }
+      case ')':
+         return Tok_RightParen;
+      case '*':
+         yyMinRep = 0;
+         yyMaxRep = InftyRep;
+         return Tok_Quantifier;
+      case '+':
+         yyMinRep = 1;
+         yyMaxRep = InftyRep;
+         return Tok_Quantifier;
+      case '.':
 #ifndef QT_NO_REGEXP_CCLASS
-        yyCharClass->setNegative(true);
+         yyCharClass->setNegative(true);
 #endif
-        return Tok_CharClass;
-    case '?':
-        yyMinRep = 0;
-        yyMaxRep = 1;
-        return Tok_Quantifier;
-    case '[':
+         return Tok_CharClass;
+      case '?':
+         yyMinRep = 0;
+         yyMaxRep = 1;
+         return Tok_Quantifier;
+      case '[':
 #ifndef QT_NO_REGEXP_CCLASS
-        if (yyCh == '^') {
+         if (yyCh == '^') {
             yyCharClass->setNegative(true);
             yyCh = getChar();
-        }
-        charPending = false;
-        rangePending = false;
-        do {
+         }
+         charPending = false;
+         rangePending = false;
+         do {
             if (yyCh == '-' && charPending && !rangePending) {
-                rangePending = true;
-                yyCh = getChar();
+               rangePending = true;
+               yyCh = getChar();
             } else {
-                if (charPending && !rangePending) {
-                    yyCharClass->addSingleton(pendingCh);
-                    charPending = false;
-                }
-                if (yyCh == '\\') {
-                    yyCh = getChar();
-                    tok = getEscape();
-                    if (tok == Tok_Word)
-                        tok = '\b';
-                } else {
-                    tok = Tok_Char | yyCh;
-                    yyCh = getChar();
-                }
-                if (tok == Tok_CharClass) {
-                    if (rangePending) {
-                        yyCharClass->addSingleton('-');
-                        yyCharClass->addSingleton(pendingCh);
-                        charPending = false;
-                        rangePending = false;
-                    }
-                } else if ((tok & Tok_Char) != 0) {
-                    if (rangePending) {
-                        yyCharClass->addRange(pendingCh, tok ^ Tok_Char);
-                        charPending = false;
-                        rangePending = false;
-                    } else {
-                        pendingCh = tok ^ Tok_Char;
-                        charPending = true;
-                    }
-                } else {
-                    error(RXERR_CHARCLASS);
-                }
+               if (charPending && !rangePending) {
+                  yyCharClass->addSingleton(pendingCh);
+                  charPending = false;
+               }
+               if (yyCh == '\\') {
+                  yyCh = getChar();
+                  tok = getEscape();
+                  if (tok == Tok_Word) {
+                     tok = '\b';
+                  }
+               } else {
+                  tok = Tok_Char | yyCh;
+                  yyCh = getChar();
+               }
+               if (tok == Tok_CharClass) {
+                  if (rangePending) {
+                     yyCharClass->addSingleton('-');
+                     yyCharClass->addSingleton(pendingCh);
+                     charPending = false;
+                     rangePending = false;
+                  }
+               } else if ((tok & Tok_Char) != 0) {
+                  if (rangePending) {
+                     yyCharClass->addRange(pendingCh, tok ^ Tok_Char);
+                     charPending = false;
+                     rangePending = false;
+                  } else {
+                     pendingCh = tok ^ Tok_Char;
+                     charPending = true;
+                  }
+               } else {
+                  error(RXERR_CHARCLASS);
+               }
             }
-        }  while (yyCh != ']' && yyCh != EOS);
-        if (rangePending)
+         }  while (yyCh != ']' && yyCh != EOS);
+         if (rangePending) {
             yyCharClass->addSingleton('-');
-        if (charPending)
+         }
+         if (charPending) {
             yyCharClass->addSingleton(pendingCh);
-        if (yyCh == EOS)
+         }
+         if (yyCh == EOS) {
             error(RXERR_END);
-        else
+         } else {
             yyCh = getChar();
-        return Tok_CharClass;
+         }
+         return Tok_CharClass;
 #else
-        error(RXERR_END);
-        return Tok_Char | '[';
+         error(RXERR_END);
+         return Tok_Char | '[';
 #endif
-    case '\\':
-        return getEscape();
-    case ']':
-        error(RXERR_LEFTDELIM);
-        return Tok_Char | ']';
-    case '^':
-        return Tok_Caret;
-    case '{':
+      case '\\':
+         return getEscape();
+      case ']':
+         error(RXERR_LEFTDELIM);
+         return Tok_Char | ']';
+      case '^':
+         return Tok_Caret;
+      case '{':
 #ifndef QT_NO_REGEXP_INTERVAL
-        yyMinRep = getRep(0);
-        yyMaxRep = yyMinRep;
-        if (yyCh == ',') {
+         yyMinRep = getRep(0);
+         yyMaxRep = yyMinRep;
+         if (yyCh == ',') {
             yyCh = getChar();
             yyMaxRep = getRep(InftyRep);
-        }
-        if (yyMaxRep < yyMinRep)
+         }
+         if (yyMaxRep < yyMinRep) {
             error(RXERR_INTERVAL);
-        if (yyCh != '}')
+         }
+         if (yyCh != '}') {
             error(RXERR_REPETITION);
-        yyCh = getChar();
-        return Tok_Quantifier;
+         }
+         yyCh = getChar();
+         return Tok_Quantifier;
 #else
-        error(RXERR_DISABLED);
-        return Tok_Char | '{';
+         error(RXERR_DISABLED);
+         return Tok_Char | '{';
 #endif
-    case '|':
-        return Tok_Bar;
-    case '}':
-        error(RXERR_LEFTDELIM);
-        return Tok_Char | '}';
-    default:
-        return Tok_Char | prevCh;
-    }
+      case '|':
+         return Tok_Bar;
+      case '}':
+         error(RXERR_LEFTDELIM);
+         return Tok_Char | '}';
+      default:
+         return Tok_Char | prevCh;
+   }
 }
 
 int QRegExpEngine::parse(const QChar *pattern, int len)
 {
-    valid = true;
-    startTokenizer(pattern, len);
-    yyTok = getToken();
+   valid = true;
+   startTokenizer(pattern, len);
+   yyTok = getToken();
 #ifndef QT_NO_REGEXP_CAPTURE
-    yyMayCapture = true;
+   yyMayCapture = true;
 #else
-    yyMayCapture = false;
+   yyMayCapture = false;
 #endif
 
 #ifndef QT_NO_REGEXP_CAPTURE
-    int atom = startAtom(false);
+   int atom = startAtom(false);
 #endif
-    QRegExpCharClass anything;
-    Box box(this); // create InitialState
-    box.set(anything);
-    Box rightBox(this); // create FinalState
-    rightBox.set(anything);
+   QRegExpCharClass anything;
+   Box box(this); // create InitialState
+   box.set(anything);
+   Box rightBox(this); // create FinalState
+   rightBox.set(anything);
 
-    Box middleBox(this);
-    parseExpression(&middleBox);
+   Box middleBox(this);
+   parseExpression(&middleBox);
 #ifndef QT_NO_REGEXP_CAPTURE
-    finishAtom(atom, false);
+   finishAtom(atom, false);
 #endif
 #ifndef QT_NO_REGEXP_OPTIM
-    middleBox.setupHeuristics();
+   middleBox.setupHeuristics();
 #endif
-    box.cat(middleBox);
-    box.cat(rightBox);
-    yyCharClass.reset(0);
+   box.cat(middleBox);
+   box.cat(rightBox);
+   yyCharClass.reset(0);
 
 #ifndef QT_NO_REGEXP_CAPTURE
-    for (int i = 0; i < nf; ++i) {
-        switch (f[i].capture) {
-        case QRegExpAtom::NoCapture:
+   for (int i = 0; i < nf; ++i) {
+      switch (f[i].capture) {
+         case QRegExpAtom::NoCapture:
             break;
-        case QRegExpAtom::OfficialCapture:
+         case QRegExpAtom::OfficialCapture:
             f[i].capture = ncap;
             captureForOfficialCapture.append(ncap);
             ++ncap;
             ++officialncap;
             break;
-        case QRegExpAtom::UnofficialCapture:
+         case QRegExpAtom::UnofficialCapture:
             f[i].capture = greedyQuantifiers ? ncap++ : QRegExpAtom::NoCapture;
-        }
-    }
+      }
+   }
 
 #ifndef QT_NO_REGEXP_BACKREF
 #ifndef QT_NO_REGEXP_OPTIM
-    if (officialncap == 0 && nbrefs == 0) {
-        ncap = nf = 0;
-        f.clear();
-    }
+   if (officialncap == 0 && nbrefs == 0) {
+      ncap = nf = 0;
+      f.clear();
+   }
 #endif
-    // handle the case where there's a \5 with no corresponding capture
-    // (captureForOfficialCapture.size() != officialncap)
-    for (int i = 0; i < nbrefs - officialncap; ++i) {
-        captureForOfficialCapture.append(ncap);
-        ++ncap;
-    }
+   // handle the case where there's a \5 with no corresponding capture
+   // (captureForOfficialCapture.size() != officialncap)
+   for (int i = 0; i < nbrefs - officialncap; ++i) {
+      captureForOfficialCapture.append(ncap);
+      ++ncap;
+   }
 #endif
 #endif
 
-    if (!yyError.isEmpty())
-        return -1;
+   if (!yyError.isEmpty()) {
+      return -1;
+   }
 
 #ifndef QT_NO_REGEXP_OPTIM
-    const QRegExpAutomatonState &sinit = s.at(InitialState);
-    caretAnchored = !sinit.anchors.isEmpty();
-    if (caretAnchored) {
-        const QMap<int, int> &anchors = sinit.anchors;
-        QMap<int, int>::const_iterator a;
-        for (a = anchors.constBegin(); a != anchors.constEnd(); ++a) {
-            if (
+   const QRegExpAutomatonState &sinit = s.at(InitialState);
+   caretAnchored = !sinit.anchors.isEmpty();
+   if (caretAnchored) {
+      const QMap<int, int> &anchors = sinit.anchors;
+      QMap<int, int>::const_iterator a;
+      for (a = anchors.constBegin(); a != anchors.constEnd(); ++a) {
+         if (
 #ifndef QT_NO_REGEXP_ANCHOR_ALT
-                (*a & Anchor_Alternation) != 0 ||
+            (*a & Anchor_Alternation) != 0 ||
 #endif
-                (*a & Anchor_Caret) == 0)
-            {
-                caretAnchored = false;
-                break;
-            }
-        }
-    }
+            (*a & Anchor_Caret) == 0) {
+            caretAnchored = false;
+            break;
+         }
+      }
+   }
 #endif
 
-    // cleanup anchors
-    int numStates = s.count();
-    for (int i = 0; i < numStates; ++i) {
-        QRegExpAutomatonState &state = s[i];
-        if (!state.anchors.isEmpty()) {
-            QMap<int, int>::iterator a = state.anchors.begin();
-            while (a != state.anchors.end()) {
-                if (a.value() == 0)
-                    a = state.anchors.erase(a);
-                else
-                    ++a;
+   // cleanup anchors
+   int numStates = s.count();
+   for (int i = 0; i < numStates; ++i) {
+      QRegExpAutomatonState &state = s[i];
+      if (!state.anchors.isEmpty()) {
+         QMap<int, int>::iterator a = state.anchors.begin();
+         while (a != state.anchors.end()) {
+            if (a.value() == 0) {
+               a = state.anchors.erase(a);
+            } else {
+               ++a;
             }
-        }
-    }
+         }
+      }
+   }
 
-    return yyPos0;
+   return yyPos0;
 }
 
 void QRegExpEngine::parseAtom(Box *box)
 {
 #ifndef QT_NO_REGEXP_LOOKAHEAD
-    QRegExpEngine *eng = 0;
-    bool neg;
-    int len;
+   QRegExpEngine *eng = 0;
+   bool neg;
+   int len;
 #endif
 
-    if ((yyTok & Tok_Char) != 0) {
-        box->set(QChar(yyTok ^ Tok_Char));
-    } else {
+   if ((yyTok & Tok_Char) != 0) {
+      box->set(QChar(yyTok ^ Tok_Char));
+   } else {
 #ifndef QT_NO_REGEXP_OPTIM
-        trivial = false;
+      trivial = false;
 #endif
-        switch (yyTok) {
-        case Tok_Dollar:
+      switch (yyTok) {
+         case Tok_Dollar:
             box->catAnchor(Anchor_Dollar);
             break;
-        case Tok_Caret:
+         case Tok_Caret:
             box->catAnchor(Anchor_Caret);
             break;
 #ifndef QT_NO_REGEXP_LOOKAHEAD
-        case Tok_PosLookahead:
-        case Tok_NegLookahead:
+         case Tok_PosLookahead:
+         case Tok_NegLookahead:
             neg = (yyTok == Tok_NegLookahead);
             eng = new QRegExpEngine(cs, greedyQuantifiers);
             len = eng->parse(yyIn + yyPos - 1, yyLen - yyPos + 1);
-            if (len >= 0)
-                skipChars(len);
-            else
-                error(RXERR_LOOKAHEAD);
+            if (len >= 0) {
+               skipChars(len);
+            } else {
+               error(RXERR_LOOKAHEAD);
+            }
             box->catAnchor(addLookahead(eng, neg));
             yyTok = getToken();
-            if (yyTok != Tok_RightParen)
-                error(RXERR_LOOKAHEAD);
+            if (yyTok != Tok_RightParen) {
+               error(RXERR_LOOKAHEAD);
+            }
             break;
 #endif
 #ifndef QT_NO_REGEXP_ESCAPE
-        case Tok_Word:
+         case Tok_Word:
             box->catAnchor(Anchor_Word);
             break;
-        case Tok_NonWord:
+         case Tok_NonWord:
             box->catAnchor(Anchor_NonWord);
             break;
 #endif
-        case Tok_LeftParen:
-        case Tok_MagicLeftParen:
+         case Tok_LeftParen:
+         case Tok_MagicLeftParen:
             yyTok = getToken();
             parseExpression(box);
-            if (yyTok != Tok_RightParen)
-                error(RXERR_END);
+            if (yyTok != Tok_RightParen) {
+               error(RXERR_END);
+            }
             break;
-        case Tok_CharClass:
+         case Tok_CharClass:
             box->set(*yyCharClass);
             break;
-        case Tok_Quantifier:
+         case Tok_Quantifier:
             error(RXERR_REPETITION);
             break;
-        default:
+         default:
 #ifndef QT_NO_REGEXP_BACKREF
-            if ((yyTok & Tok_BackRef) != 0)
-                box->set(yyTok ^ Tok_BackRef);
-            else
+            if ((yyTok & Tok_BackRef) != 0) {
+               box->set(yyTok ^ Tok_BackRef);
+            } else
 #endif
-                error(RXERR_DISABLED);
-        }
-    }
-    yyTok = getToken();
+               error(RXERR_DISABLED);
+      }
+   }
+   yyTok = getToken();
 }
 
 void QRegExpEngine::parseFactor(Box *box)
 {
 #ifndef QT_NO_REGEXP_CAPTURE
-    int outerAtom = greedyQuantifiers ? startAtom(false) : -1;
-    int innerAtom = startAtom(yyMayCapture && yyTok == Tok_LeftParen);
-    bool magicLeftParen = (yyTok == Tok_MagicLeftParen);
+   int outerAtom = greedyQuantifiers ? startAtom(false) : -1;
+   int innerAtom = startAtom(yyMayCapture && yyTok == Tok_LeftParen);
+   bool magicLeftParen = (yyTok == Tok_MagicLeftParen);
 #else
-    const int innerAtom = -1;
+   const int innerAtom = -1;
 #endif
 
 #ifndef QT_NO_REGEXP_INTERVAL
@@ -3526,101 +3644,105 @@ void QRegExpEngine::parseFactor(Box *box)
         yyIn = in, yyPos0 = pos0, yyPos = pos, yyLen = len, yyCh = ch, \
         *yyCharClass = charClass, yyMinRep = 0, yyMaxRep = 0, yyTok = tok
 
-    const QChar *in = yyIn;
-    int pos0 = yyPos0;
-    int pos = yyPos;
-    int len = yyLen;
-    int ch = yyCh;
-    QRegExpCharClass charClass;
-    if (yyTok == Tok_CharClass)
-        charClass = *yyCharClass;
-    int tok = yyTok;
-    bool mayCapture = yyMayCapture;
+   const QChar *in = yyIn;
+   int pos0 = yyPos0;
+   int pos = yyPos;
+   int len = yyLen;
+   int ch = yyCh;
+   QRegExpCharClass charClass;
+   if (yyTok == Tok_CharClass) {
+      charClass = *yyCharClass;
+   }
+   int tok = yyTok;
+   bool mayCapture = yyMayCapture;
 #endif
 
-    parseAtom(box);
+   parseAtom(box);
 #ifndef QT_NO_REGEXP_CAPTURE
-    finishAtom(innerAtom, magicLeftParen);
+   finishAtom(innerAtom, magicLeftParen);
 #endif
 
-    bool hasQuantifier = (yyTok == Tok_Quantifier);
-    if (hasQuantifier) {
+   bool hasQuantifier = (yyTok == Tok_Quantifier);
+   if (hasQuantifier) {
 #ifndef QT_NO_REGEXP_OPTIM
-        trivial = false;
+      trivial = false;
 #endif
-        if (yyMaxRep == InftyRep) {
-            box->plus(innerAtom);
+      if (yyMaxRep == InftyRep) {
+         box->plus(innerAtom);
 #ifndef QT_NO_REGEXP_INTERVAL
-        } else if (yyMaxRep == 0) {
-            box->clear();
+      } else if (yyMaxRep == 0) {
+         box->clear();
 #endif
-        }
-        if (yyMinRep == 0)
-            box->opt();
+      }
+      if (yyMinRep == 0) {
+         box->opt();
+      }
 
 #ifndef QT_NO_REGEXP_INTERVAL
-        yyMayCapture = false;
-        int alpha = (yyMinRep == 0) ? 0 : yyMinRep - 1;
-        int beta = (yyMaxRep == InftyRep) ? 0 : yyMaxRep - (alpha + 1);
+      yyMayCapture = false;
+      int alpha = (yyMinRep == 0) ? 0 : yyMinRep - 1;
+      int beta = (yyMaxRep == InftyRep) ? 0 : yyMaxRep - (alpha + 1);
 
-        Box rightBox(this);
-        int i;
+      Box rightBox(this);
+      int i;
 
-        for (i = 0; i < beta; i++) {
-            YYREDO();
-            Box leftBox(this);
-            parseAtom(&leftBox);
-            leftBox.cat(rightBox);
-            leftBox.opt();
-            rightBox = leftBox;
-        }
-        for (i = 0; i < alpha; i++) {
-            YYREDO();
-            Box leftBox(this);
-            parseAtom(&leftBox);
-            leftBox.cat(rightBox);
-            rightBox = leftBox;
-        }
-        rightBox.cat(*box);
-        *box = rightBox;
+      for (i = 0; i < beta; i++) {
+         YYREDO();
+         Box leftBox(this);
+         parseAtom(&leftBox);
+         leftBox.cat(rightBox);
+         leftBox.opt();
+         rightBox = leftBox;
+      }
+      for (i = 0; i < alpha; i++) {
+         YYREDO();
+         Box leftBox(this);
+         parseAtom(&leftBox);
+         leftBox.cat(rightBox);
+         rightBox = leftBox;
+      }
+      rightBox.cat(*box);
+      *box = rightBox;
 #endif
-        yyTok = getToken();
+      yyTok = getToken();
 #ifndef QT_NO_REGEXP_INTERVAL
-        yyMayCapture = mayCapture;
+      yyMayCapture = mayCapture;
 #endif
-    }
+   }
 #undef YYREDO
 #ifndef QT_NO_REGEXP_CAPTURE
-    if (greedyQuantifiers)
-        finishAtom(outerAtom, hasQuantifier);
+   if (greedyQuantifiers) {
+      finishAtom(outerAtom, hasQuantifier);
+   }
 #endif
 }
 
 void QRegExpEngine::parseTerm(Box *box)
 {
 #ifndef QT_NO_REGEXP_OPTIM
-    if (yyTok != Tok_Eos && yyTok != Tok_RightParen && yyTok != Tok_Bar)
-        parseFactor(box);
+   if (yyTok != Tok_Eos && yyTok != Tok_RightParen && yyTok != Tok_Bar) {
+      parseFactor(box);
+   }
 #endif
-    while (yyTok != Tok_Eos && yyTok != Tok_RightParen && yyTok != Tok_Bar) {
-        Box rightBox(this);
-        parseFactor(&rightBox);
-        box->cat(rightBox);
-    }
+   while (yyTok != Tok_Eos && yyTok != Tok_RightParen && yyTok != Tok_Bar) {
+      Box rightBox(this);
+      parseFactor(&rightBox);
+      box->cat(rightBox);
+   }
 }
 
 void QRegExpEngine::parseExpression(Box *box)
 {
-    parseTerm(box);
-    while (yyTok == Tok_Bar) {
+   parseTerm(box);
+   while (yyTok == Tok_Bar) {
 #ifndef QT_NO_REGEXP_OPTIM
-        trivial = false;
+      trivial = false;
 #endif
-        Box rightBox(this);
-        yyTok = getToken();
-        parseTerm(&rightBox);
-        box->orx(rightBox);
-    }
+      Box rightBox(this);
+      yyTok = getToken();
+      parseTerm(&rightBox);
+      box->orx(rightBox);
+   }
 }
 
 /*
@@ -3629,27 +3751,26 @@ void QRegExpEngine::parseExpression(Box *box)
   QRegExp objects to use the same QRegExpEngine object with different
   QRegExpPrivate objects.
 */
-struct QRegExpPrivate
-{
-    QRegExpEngine *eng;
-    QRegExpEngineKey engineKey;
-    bool minimal;
+struct QRegExpPrivate {
+   QRegExpEngine *eng;
+   QRegExpEngineKey engineKey;
+   bool minimal;
 #ifndef QT_NO_REGEXP_CAPTURE
-    QString t; // last string passed to QRegExp::indexIn() or lastIndexIn()
-    QStringList capturedCache; // what QRegExp::capturedTexts() returned last
+   QString t; // last string passed to QRegExp::indexIn() or lastIndexIn()
+   QStringList capturedCache; // what QRegExp::capturedTexts() returned last
 #endif
-    QRegExpMatchState matchState;
+   QRegExpMatchState matchState;
 
-    inline QRegExpPrivate()
-        : eng(0), engineKey(QString(), QRegExp::RegExp, Qt::CaseSensitive), minimal(false) { }
-    inline QRegExpPrivate(const QRegExpEngineKey &key)
-        : eng(0), engineKey(key), minimal(false) {}
+   inline QRegExpPrivate()
+      : eng(0), engineKey(QString(), QRegExp::RegExp, Qt::CaseSensitive), minimal(false) { }
+   inline QRegExpPrivate(const QRegExpEngineKey &key)
+      : eng(0), engineKey(key), minimal(false) {}
 };
 
 #if !defined(QT_NO_REGEXP_OPTIM)
 uint qHash(const QRegExpEngineKey &key)
 {
-    return qHash(key.pattern);
+   return qHash(key.pattern);
 }
 
 typedef QCache<QRegExpEngineKey, QRegExpEngine> EngineCache;
@@ -3659,71 +3780,75 @@ Q_GLOBAL_STATIC(QMutex, mutex)
 
 static void derefEngine(QRegExpEngine *eng, const QRegExpEngineKey &key)
 {
-    if (!eng->ref.deref()) {
+   if (!eng->ref.deref()) {
 #if !defined(QT_NO_REGEXP_OPTIM)
-        if (globalEngineCache()) {
-            QMutexLocker locker(mutex());
-            QT_TRY {
-                globalEngineCache()->insert(key, eng, 4 + key.pattern.length() / 4);
-            } QT_CATCH(const std::bad_alloc &) {
-                // in case of an exception (e.g. oom), just delete the engine
-                delete eng;
-            }
-        } else {
+      if (globalEngineCache()) {
+         QMutexLocker locker(mutex());
+         QT_TRY {
+            globalEngineCache()->insert(key, eng, 4 + key.pattern.length() / 4);
+         } QT_CATCH(const std::bad_alloc &) {
+            // in case of an exception (e.g. oom), just delete the engine
             delete eng;
-        }
+         }
+      } else {
+         delete eng;
+      }
 #else
-        Q_UNUSED(key);
-        delete eng;
+      Q_UNUSED(key);
+      delete eng;
 #endif
-    }
+   }
 }
 
 static void prepareEngine_helper(QRegExpPrivate *priv)
 {
-    bool initMatchState = !priv->eng;
+   bool initMatchState = !priv->eng;
 #if !defined(QT_NO_REGEXP_OPTIM)
-    if (!priv->eng && globalEngineCache()) {
-        QMutexLocker locker(mutex());
-        priv->eng = globalEngineCache()->take(priv->engineKey);
-        if (priv->eng != 0)
-            priv->eng->ref.ref();
-    }
+   if (!priv->eng && globalEngineCache()) {
+      QMutexLocker locker(mutex());
+      priv->eng = globalEngineCache()->take(priv->engineKey);
+      if (priv->eng != 0) {
+         priv->eng->ref.ref();
+      }
+   }
 #endif // QT_NO_REGEXP_OPTIM
 
-    if (!priv->eng)
-        priv->eng = new QRegExpEngine(priv->engineKey);
+   if (!priv->eng) {
+      priv->eng = new QRegExpEngine(priv->engineKey);
+   }
 
-    if (initMatchState)
-        priv->matchState.prepareForMatch(priv->eng);
+   if (initMatchState) {
+      priv->matchState.prepareForMatch(priv->eng);
+   }
 }
 
 inline static void prepareEngine(QRegExpPrivate *priv)
 {
-    if (priv->eng)
-        return;
-    prepareEngine_helper(priv);
+   if (priv->eng) {
+      return;
+   }
+   prepareEngine_helper(priv);
 }
 
 static void prepareEngineForMatch(QRegExpPrivate *priv, const QString &str)
 {
-    prepareEngine(priv);
-    priv->matchState.prepareForMatch(priv->eng);
+   prepareEngine(priv);
+   priv->matchState.prepareForMatch(priv->eng);
 #ifndef QT_NO_REGEXP_CAPTURE
-    priv->t = str;
-    priv->capturedCache.clear();
+   priv->t = str;
+   priv->capturedCache.clear();
 #else
-    Q_UNUSED(str);
+   Q_UNUSED(str);
 #endif
 }
 
 static void invalidateEngine(QRegExpPrivate *priv)
 {
-    if (priv->eng != 0) {
-        derefEngine(priv->eng, priv->engineKey);
-        priv->eng = 0;
-        priv->matchState.drain();
-    }
+   if (priv->eng != 0) {
+      derefEngine(priv->eng, priv->engineKey);
+      priv->eng = 0;
+      priv->matchState.drain();
+   }
 }
 
 /*!
@@ -3778,8 +3903,8 @@ static void invalidateEngine(QRegExpPrivate *priv)
 */
 QRegExp::QRegExp()
 {
-    priv = new QRegExpPrivate;
-    prepareEngine(priv);
+   priv = new QRegExpPrivate;
+   prepareEngine(priv);
 }
 
 /*!
@@ -3794,8 +3919,8 @@ QRegExp::QRegExp()
 */
 QRegExp::QRegExp(const QString &pattern, Qt::CaseSensitivity cs, PatternSyntax syntax)
 {
-    priv = new QRegExpPrivate(QRegExpEngineKey(pattern, syntax, cs));
-    prepareEngine(priv);
+   priv = new QRegExpPrivate(QRegExpEngineKey(pattern, syntax, cs));
+   prepareEngine(priv);
 }
 
 /*!
@@ -3805,8 +3930,8 @@ QRegExp::QRegExp(const QString &pattern, Qt::CaseSensitivity cs, PatternSyntax s
 */
 QRegExp::QRegExp(const QRegExp &rx)
 {
-    priv = new QRegExpPrivate;
-    operator=(rx);
+   priv = new QRegExpPrivate;
+   operator=(rx);
 }
 
 /*!
@@ -3814,8 +3939,8 @@ QRegExp::QRegExp(const QRegExp &rx)
 */
 QRegExp::~QRegExp()
 {
-    invalidateEngine(priv);
-    delete priv;
+   invalidateEngine(priv);
+   delete priv;
 }
 
 /*!
@@ -3825,22 +3950,24 @@ QRegExp::~QRegExp()
 */
 QRegExp &QRegExp::operator=(const QRegExp &rx)
 {
-    prepareEngine(rx.priv); // to allow sharing
-    QRegExpEngine *otherEng = rx.priv->eng;
-    if (otherEng)
-        otherEng->ref.ref();
-    invalidateEngine(priv);
-    priv->eng = otherEng;
-    priv->engineKey = rx.priv->engineKey;
-    priv->minimal = rx.priv->minimal;
+   prepareEngine(rx.priv); // to allow sharing
+   QRegExpEngine *otherEng = rx.priv->eng;
+   if (otherEng) {
+      otherEng->ref.ref();
+   }
+   invalidateEngine(priv);
+   priv->eng = otherEng;
+   priv->engineKey = rx.priv->engineKey;
+   priv->minimal = rx.priv->minimal;
 #ifndef QT_NO_REGEXP_CAPTURE
-    priv->t = rx.priv->t;
-    priv->capturedCache = rx.priv->capturedCache;
+   priv->t = rx.priv->t;
+   priv->capturedCache = rx.priv->capturedCache;
 #endif
-    if (priv->eng)
-        priv->matchState.prepareForMatch(priv->eng);
-    priv->matchState.captured = rx.priv->matchState.captured;
-    return *this;
+   if (priv->eng) {
+      priv->matchState.prepareForMatch(priv->eng);
+   }
+   priv->matchState.captured = rx.priv->matchState.captured;
+   return *this;
 }
 
 /*!
@@ -3861,7 +3988,7 @@ QRegExp &QRegExp::operator=(const QRegExp &rx)
 */
 bool QRegExp::operator==(const QRegExp &rx) const
 {
-    return priv->engineKey == rx.priv->engineKey && priv->minimal == rx.priv->minimal;
+   return priv->engineKey == rx.priv->engineKey && priv->minimal == rx.priv->minimal;
 }
 
 /*!
@@ -3890,7 +4017,7 @@ bool QRegExp::operator==(const QRegExp &rx) const
 
 bool QRegExp::isEmpty() const
 {
-    return priv->engineKey.pattern.isEmpty();
+   return priv->engineKey.pattern.isEmpty();
 }
 
 /*!
@@ -3908,12 +4035,12 @@ bool QRegExp::isEmpty() const
 */
 bool QRegExp::isValid() const
 {
-    if (priv->engineKey.pattern.isEmpty()) {
-        return true;
-    } else {
-        prepareEngine(priv);
-        return priv->eng->isValid();
-    }
+   if (priv->engineKey.pattern.isEmpty()) {
+      return true;
+   } else {
+      prepareEngine(priv);
+      return priv->eng->isValid();
+   }
 }
 
 /*!
@@ -3925,7 +4052,7 @@ bool QRegExp::isValid() const
 */
 QString QRegExp::pattern() const
 {
-    return priv->engineKey.pattern;
+   return priv->engineKey.pattern;
 }
 
 /*!
@@ -3936,10 +4063,10 @@ QString QRegExp::pattern() const
 */
 void QRegExp::setPattern(const QString &pattern)
 {
-    if (priv->engineKey.pattern != pattern) {
-        invalidateEngine(priv);
-        priv->engineKey.pattern = pattern;
-    }
+   if (priv->engineKey.pattern != pattern) {
+      invalidateEngine(priv);
+      priv->engineKey.pattern = pattern;
+   }
 }
 
 /*!
@@ -3950,7 +4077,7 @@ void QRegExp::setPattern(const QString &pattern)
 */
 Qt::CaseSensitivity QRegExp::caseSensitivity() const
 {
-    return priv->engineKey.cs;
+   return priv->engineKey.cs;
 }
 
 /*!
@@ -3963,10 +4090,10 @@ Qt::CaseSensitivity QRegExp::caseSensitivity() const
 */
 void QRegExp::setCaseSensitivity(Qt::CaseSensitivity cs)
 {
-    if ((bool)cs != (bool)priv->engineKey.cs) {
-        invalidateEngine(priv);
-        priv->engineKey.cs = cs;
-    }
+   if ((bool)cs != (bool)priv->engineKey.cs) {
+      invalidateEngine(priv);
+      priv->engineKey.cs = cs;
+   }
 }
 
 /*!
@@ -3977,7 +4104,7 @@ void QRegExp::setCaseSensitivity(Qt::CaseSensitivity cs)
 */
 QRegExp::PatternSyntax QRegExp::patternSyntax() const
 {
-    return priv->engineKey.patternSyntax;
+   return priv->engineKey.patternSyntax;
 }
 
 /*!
@@ -3997,10 +4124,10 @@ QRegExp::PatternSyntax QRegExp::patternSyntax() const
 */
 void QRegExp::setPatternSyntax(PatternSyntax syntax)
 {
-    if (syntax != priv->engineKey.patternSyntax) {
-        invalidateEngine(priv);
-        priv->engineKey.patternSyntax = syntax;
-    }
+   if (syntax != priv->engineKey.patternSyntax) {
+      invalidateEngine(priv);
+      priv->engineKey.patternSyntax = syntax;
+   }
 }
 
 /*!
@@ -4011,7 +4138,7 @@ void QRegExp::setPatternSyntax(PatternSyntax syntax)
 */
 bool QRegExp::isMinimal() const
 {
-    return priv->minimal;
+   return priv->minimal;
 }
 
 /*!
@@ -4033,7 +4160,7 @@ bool QRegExp::isMinimal() const
 */
 void QRegExp::setMinimal(bool minimal)
 {
-    priv->minimal = minimal;
+   priv->minimal = minimal;
 }
 
 // ### Qt 5: make non-const
@@ -4059,15 +4186,15 @@ void QRegExp::setMinimal(bool minimal)
 */
 bool QRegExp::exactMatch(const QString &str) const
 {
-    prepareEngineForMatch(priv, str);
-    priv->matchState.match(str.unicode(), str.length(), 0, priv->minimal, true, 0);
-    if (priv->matchState.captured[1] == str.length()) {
-        return true;
-    } else {
-        priv->matchState.captured[0] = 0;
-        priv->matchState.captured[1] = priv->matchState.oneTestMatchedLen;
-        return false;
-    }
+   prepareEngineForMatch(priv, str);
+   priv->matchState.match(str.unicode(), str.length(), 0, priv->minimal, true, 0);
+   if (priv->matchState.captured[1] == str.length()) {
+      return true;
+   } else {
+      priv->matchState.captured[0] = 0;
+      priv->matchState.captured[1] = priv->matchState.oneTestMatchedLen;
+      return false;
+   }
 }
 
 // ### Qt 5: make non-const
@@ -4101,12 +4228,13 @@ bool QRegExp::exactMatch(const QString &str) const
 
 int QRegExp::indexIn(const QString &str, int offset, CaretMode caretMode) const
 {
-    prepareEngineForMatch(priv, str);
-    if (offset < 0)
-        offset += str.length();
-    priv->matchState.match(str.unicode(), str.length(), offset,
-        priv->minimal, false, caretIndex(offset, caretMode));
-    return priv->matchState.captured[0];
+   prepareEngineForMatch(priv, str);
+   if (offset < 0) {
+      offset += str.length();
+   }
+   priv->matchState.match(str.unicode(), str.length(), offset,
+                          priv->minimal, false, caretIndex(offset, caretMode));
+   return priv->matchState.captured[0];
 }
 
 // ### Qt 5: make non-const
@@ -4132,22 +4260,24 @@ int QRegExp::indexIn(const QString &str, int offset, CaretMode caretMode) const
 
 int QRegExp::lastIndexIn(const QString &str, int offset, CaretMode caretMode) const
 {
-    prepareEngineForMatch(priv, str);
-    if (offset < 0)
-        offset += str.length();
-    if (offset < 0 || offset > str.length()) {
-        memset(priv->matchState.captured, -1, priv->matchState.capturedSize*sizeof(int));
-        return -1;
-    }
+   prepareEngineForMatch(priv, str);
+   if (offset < 0) {
+      offset += str.length();
+   }
+   if (offset < 0 || offset > str.length()) {
+      memset(priv->matchState.captured, -1, priv->matchState.capturedSize * sizeof(int));
+      return -1;
+   }
 
-    while (offset >= 0) {
-        priv->matchState.match(str.unicode(), str.length(), offset,
-            priv->minimal, true, caretIndex(offset, caretMode));
-        if (priv->matchState.captured[0] == offset)
-            return offset;
-        --offset;
-    }
-    return -1;
+   while (offset >= 0) {
+      priv->matchState.match(str.unicode(), str.length(), offset,
+                             priv->minimal, true, caretIndex(offset, caretMode));
+      if (priv->matchState.captured[0] == offset) {
+         return offset;
+      }
+      --offset;
+   }
+   return -1;
 }
 
 /*!
@@ -4158,7 +4288,7 @@ int QRegExp::lastIndexIn(const QString &str, int offset, CaretMode caretMode) co
 */
 int QRegExp::matchedLength() const
 {
-    return priv->matchState.captured[1];
+   return priv->matchState.captured[1];
 }
 
 #ifndef QT_NO_REGEXP_CAPTURE
@@ -4172,7 +4302,7 @@ int QRegExp::matchedLength() const
  */
 int QRegExp::numCaptures() const
 {
-    return captureCount();
+   return captureCount();
 }
 #endif
 
@@ -4182,8 +4312,8 @@ int QRegExp::numCaptures() const
  */
 int QRegExp::captureCount() const
 {
-    prepareEngine(priv);
-    return priv->eng->captureCount();
+   prepareEngine(priv);
+   return priv->eng->captureCount();
 }
 
 /*!
@@ -4226,22 +4356,23 @@ int QRegExp::captureCount() const
 */
 QStringList QRegExp::capturedTexts() const
 {
-    if (priv->capturedCache.isEmpty()) {
-        prepareEngine(priv);
-        const int *captured = priv->matchState.captured;
-        int n = priv->matchState.capturedSize;
+   if (priv->capturedCache.isEmpty()) {
+      prepareEngine(priv);
+      const int *captured = priv->matchState.captured;
+      int n = priv->matchState.capturedSize;
 
-        for (int i = 0; i < n; i += 2) {
-            QString m;
-            if (captured[i + 1] == 0)
-                m = QLatin1String(""); // ### Qt 5: don't distinguish between null and empty
-            else if (captured[i] >= 0)
-                m = priv->t.mid(captured[i], captured[i + 1]);
-            priv->capturedCache.append(m);
-        }
-        priv->t.clear();
-    }
-    return priv->capturedCache;
+      for (int i = 0; i < n; i += 2) {
+         QString m;
+         if (captured[i + 1] == 0) {
+            m = QLatin1String("");   // ### Qt 5: don't distinguish between null and empty
+         } else if (captured[i] >= 0) {
+            m = priv->t.mid(captured[i], captured[i + 1]);
+         }
+         priv->capturedCache.append(m);
+      }
+      priv->t.clear();
+   }
+   return priv->capturedCache;
 }
 
 /*!
@@ -4249,7 +4380,7 @@ QStringList QRegExp::capturedTexts() const
 */
 QStringList QRegExp::capturedTexts()
 {
-    return const_cast<const QRegExp *>(this)->capturedTexts();
+   return const_cast<const QRegExp *>(this)->capturedTexts();
 }
 
 /*!
@@ -4269,7 +4400,7 @@ QStringList QRegExp::capturedTexts()
 */
 QString QRegExp::cap(int nth) const
 {
-    return capturedTexts().value(nth);
+   return capturedTexts().value(nth);
 }
 
 /*!
@@ -4277,7 +4408,7 @@ QString QRegExp::cap(int nth) const
 */
 QString QRegExp::cap(int nth)
 {
-    return const_cast<const QRegExp *>(this)->cap(nth);
+   return const_cast<const QRegExp *>(this)->cap(nth);
 }
 
 /*!
@@ -4296,10 +4427,11 @@ QString QRegExp::cap(int nth)
 */
 int QRegExp::pos(int nth) const
 {
-    if (nth < 0 || nth >= priv->matchState.capturedSize / 2)
-        return -1;
-    else
-        return priv->matchState.captured[2 * nth];
+   if (nth < 0 || nth >= priv->matchState.capturedSize / 2) {
+      return -1;
+   } else {
+      return priv->matchState.captured[2 * nth];
+   }
 }
 
 /*!
@@ -4307,7 +4439,7 @@ int QRegExp::pos(int nth) const
 */
 int QRegExp::pos(int nth)
 {
-    return const_cast<const QRegExp *>(this)->pos(nth);
+   return const_cast<const QRegExp *>(this)->pos(nth);
 }
 
 /*!
@@ -4318,11 +4450,11 @@ int QRegExp::pos(int nth)
 */
 QString QRegExp::errorString() const
 {
-    if (isValid()) {
-        return QString::fromLatin1(RXERR_OK);
-    } else {
-        return priv->eng->errorString();
-    }
+   if (isValid()) {
+      return QString::fromLatin1(RXERR_OK);
+   } else {
+      return priv->eng->errorString();
+   }
 }
 
 /*!
@@ -4330,7 +4462,7 @@ QString QRegExp::errorString() const
 */
 QString QRegExp::errorString()
 {
-    return const_cast<const QRegExp *>(this)->errorString();
+   return const_cast<const QRegExp *>(this)->errorString();
 }
 #endif
 
@@ -4351,31 +4483,31 @@ QString QRegExp::errorString()
 */
 QString QRegExp::escape(const QString &str)
 {
-    QString quoted;
-    const int count = str.count();
-    quoted.reserve(count * 2);
-    const QLatin1Char backslash('\\');
-    for (int i = 0; i < count; i++) {
-        switch (str.at(i).toLatin1()) {
-        case '$':
-        case '(':
-        case ')':
-        case '*':
-        case '+':
-        case '.':
-        case '?':
-        case '[':
-        case '\\':
-        case ']':
-        case '^':
-        case '{':
-        case '|':
-        case '}':
+   QString quoted;
+   const int count = str.count();
+   quoted.reserve(count * 2);
+   const QLatin1Char backslash('\\');
+   for (int i = 0; i < count; i++) {
+      switch (str.at(i).toLatin1()) {
+         case '$':
+         case '(':
+         case ')':
+         case '*':
+         case '+':
+         case '.':
+         case '?':
+         case '[':
+         case '\\':
+         case ']':
+         case '^':
+         case '{':
+         case '|':
+         case '}':
             quoted.append(backslash);
-        }
-        quoted.append(str.at(i));
-    }
-    return quoted;
+      }
+      quoted.append(str.at(i));
+   }
+   return quoted;
 }
 
 /*!
@@ -4456,9 +4588,9 @@ QString QRegExp::escape(const QString &str)
 */
 QDataStream &operator<<(QDataStream &out, const QRegExp &regExp)
 {
-    return out << regExp.pattern() << (quint8)regExp.caseSensitivity()
-               << (quint8)regExp.patternSyntax()
-               << (quint8)!!regExp.isMinimal();
+   return out << regExp.pattern() << (quint8)regExp.caseSensitivity()
+          << (quint8)regExp.patternSyntax()
+          << (quint8)!!regExp.isMinimal();
 }
 
 /*!
@@ -4470,19 +4602,19 @@ QDataStream &operator<<(QDataStream &out, const QRegExp &regExp)
 */
 QDataStream &operator>>(QDataStream &in, QRegExp &regExp)
 {
-    QString pattern;
-    quint8 cs;
-    quint8 patternSyntax;
-    quint8 isMinimal;
+   QString pattern;
+   quint8 cs;
+   quint8 patternSyntax;
+   quint8 isMinimal;
 
-    in >> pattern >> cs >> patternSyntax >> isMinimal;
+   in >> pattern >> cs >> patternSyntax >> isMinimal;
 
-    QRegExp newRegExp(pattern, Qt::CaseSensitivity(cs),
-                      QRegExp::PatternSyntax(patternSyntax));
+   QRegExp newRegExp(pattern, Qt::CaseSensitivity(cs),
+                     QRegExp::PatternSyntax(patternSyntax));
 
-    newRegExp.setMinimal(isMinimal);
-    regExp = newRegExp;
-    return in;
+   newRegExp.setMinimal(isMinimal);
+   regExp = newRegExp;
+   return in;
 }
 #endif // QT_NO_DATASTREAM
 

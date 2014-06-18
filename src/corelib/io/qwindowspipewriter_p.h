@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,85 +40,81 @@ QT_BEGIN_NAMESPACE
 class QIncrementalSleepTimer
 {
 
-public:
-    QIncrementalSleepTimer(int msecs)
-        : totalTimeOut(msecs)
-        , nextSleep(qMin(SLEEPMIN, totalTimeOut))
-    {
-        if (totalTimeOut == -1)
-            nextSleep = SLEEPMIN;
-        timer.start();
-    }
+ public:
+   QIncrementalSleepTimer(int msecs)
+      : totalTimeOut(msecs)
+      , nextSleep(qMin(SLEEPMIN, totalTimeOut)) {
+      if (totalTimeOut == -1) {
+         nextSleep = SLEEPMIN;
+      }
+      timer.start();
+   }
 
-    int nextSleepTime()
-    {
-        int tmp = nextSleep;
-        nextSleep = qMin(nextSleep * 2, qMin(SLEEPMAX, timeLeft()));
-        return tmp;
-    }
+   int nextSleepTime() {
+      int tmp = nextSleep;
+      nextSleep = qMin(nextSleep * 2, qMin(SLEEPMAX, timeLeft()));
+      return tmp;
+   }
 
-    int timeLeft() const
-    {
-        if (totalTimeOut == -1)
-            return SLEEPMAX;
-        return qMax(totalTimeOut - timer.elapsed(), 0);
-    }
+   int timeLeft() const {
+      if (totalTimeOut == -1) {
+         return SLEEPMAX;
+      }
+      return qMax(totalTimeOut - timer.elapsed(), 0);
+   }
 
-    bool hasTimedOut() const
-    {
-        if (totalTimeOut == -1)
-            return false;
-        return timer.elapsed() >= totalTimeOut;
-    }
+   bool hasTimedOut() const {
+      if (totalTimeOut == -1) {
+         return false;
+      }
+      return timer.elapsed() >= totalTimeOut;
+   }
 
-    void resetIncrements()
-    {
-        nextSleep = qMin(SLEEPMIN, timeLeft());
-    }
+   void resetIncrements() {
+      nextSleep = qMin(SLEEPMIN, timeLeft());
+   }
 
-private:
-    QTime timer;
-    int totalTimeOut;
-    int nextSleep;
+ private:
+   QTime timer;
+   int totalTimeOut;
+   int nextSleep;
 };
 
 class Q_CORE_EXPORT QWindowsPipeWriter : public QThread
 {
-    CS_OBJECT(QWindowsPipeWriter)
+   CS_OBJECT(QWindowsPipeWriter)
 
-public:
-    CORE_CS_SIGNAL_1(Public, void canWrite())
-    CORE_CS_SIGNAL_2(canWrite) 
-    CORE_CS_SIGNAL_1(Public, void bytesWritten(qint64 bytes))
-    CORE_CS_SIGNAL_2(bytesWritten,bytes) 
+ public:
+   CORE_CS_SIGNAL_1(Public, void canWrite())
+   CORE_CS_SIGNAL_2(canWrite)
+   CORE_CS_SIGNAL_1(Public, void bytesWritten(qint64 bytes))
+   CORE_CS_SIGNAL_2(bytesWritten, bytes)
 
-    QWindowsPipeWriter(HANDLE writePipe, QObject * parent = 0);
-    ~QWindowsPipeWriter();
+   QWindowsPipeWriter(HANDLE writePipe, QObject *parent = 0);
+   ~QWindowsPipeWriter();
 
-    bool waitForWrite(int msecs);
-    qint64 write(const char *data, qint64 maxlen);
+   bool waitForWrite(int msecs);
+   qint64 write(const char *data, qint64 maxlen);
 
-    qint64 bytesToWrite() const
-    {
-        QMutexLocker locker(&lock);
-        return data.size();
-    }
+   qint64 bytesToWrite() const {
+      QMutexLocker locker(&lock);
+      return data.size();
+   }
 
-    bool hadWritten() const
-    {
-        return hasWritten;
-    }
+   bool hadWritten() const {
+      return hasWritten;
+   }
 
-protected:
+ protected:
    void run();
 
-private:
-    QByteArray data;
-    QWaitCondition waitCondition;
-    mutable QMutex lock;
-    HANDLE writePipe;
-    volatile bool quitNow;
-    bool hasWritten;
+ private:
+   QByteArray data;
+   QWaitCondition waitCondition;
+   mutable QMutex lock;
+   HANDLE writePipe;
+   volatile bool quitNow;
+   bool hasWritten;
 };
 
 QT_END_NAMESPACE

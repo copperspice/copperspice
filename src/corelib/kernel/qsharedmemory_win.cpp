@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,135 +35,138 @@
 QT_BEGIN_NAMESPACE
 
 QSharedMemoryPrivate::QSharedMemoryPrivate()
-    : memory(0), size(0), error(QSharedMemory::NoError),
+   : memory(0), size(0), error(QSharedMemory::NoError),
 #ifndef QT_NO_SYSTEMSEMAPHORE
-      systemSemaphore(QString()), lockedByMe(false),
+     systemSemaphore(QString()), lockedByMe(false),
 #endif
-      hand(0)
+     hand(0)
 {
 }
 
 void QSharedMemoryPrivate::setErrorString(const QString &function)
 {
-    DWORD windowsError = GetLastError();
-    if (windowsError == 0)
-        return;
+   DWORD windowsError = GetLastError();
+   if (windowsError == 0) {
+      return;
+   }
 
-    switch (windowsError) {
-    case ERROR_ALREADY_EXISTS:
-        error = QSharedMemory::AlreadyExists;
-        errorString = QSharedMemory::tr("%1: already exists").arg(function);
-    break;
-    case ERROR_FILE_NOT_FOUND:
-        error = QSharedMemory::NotFound;
-        errorString = QSharedMemory::tr("%1: doesn't exist").arg(function);
-        break;
-    case ERROR_COMMITMENT_LIMIT:
-        error = QSharedMemory::InvalidSize;
-        errorString = QSharedMemory::tr("%1: invalid size").arg(function);
-        break;
-    case ERROR_NO_SYSTEM_RESOURCES:
-    case ERROR_NOT_ENOUGH_MEMORY:
-        error = QSharedMemory::OutOfResources;
-        errorString = QSharedMemory::tr("%1: out of resources").arg(function);
-        break;
-    case ERROR_ACCESS_DENIED:
-        error = QSharedMemory::PermissionDenied;
-        errorString = QSharedMemory::tr("%1: permission denied").arg(function);
-        break;
-    default:
-        errorString = QSharedMemory::tr("%1: unknown error %2").arg(function).arg(windowsError);
-        error = QSharedMemory::UnknownError;
+   switch (windowsError) {
+      case ERROR_ALREADY_EXISTS:
+         error = QSharedMemory::AlreadyExists;
+         errorString = QSharedMemory::tr("%1: already exists").arg(function);
+         break;
+      case ERROR_FILE_NOT_FOUND:
+         error = QSharedMemory::NotFound;
+         errorString = QSharedMemory::tr("%1: doesn't exist").arg(function);
+         break;
+      case ERROR_COMMITMENT_LIMIT:
+         error = QSharedMemory::InvalidSize;
+         errorString = QSharedMemory::tr("%1: invalid size").arg(function);
+         break;
+      case ERROR_NO_SYSTEM_RESOURCES:
+      case ERROR_NOT_ENOUGH_MEMORY:
+         error = QSharedMemory::OutOfResources;
+         errorString = QSharedMemory::tr("%1: out of resources").arg(function);
+         break;
+      case ERROR_ACCESS_DENIED:
+         error = QSharedMemory::PermissionDenied;
+         errorString = QSharedMemory::tr("%1: permission denied").arg(function);
+         break;
+      default:
+         errorString = QSharedMemory::tr("%1: unknown error %2").arg(function).arg(windowsError);
+         error = QSharedMemory::UnknownError;
 #ifdef QSHAREDMEMORY_DEBUG
-        qDebug() << errorString << "key" << key;
+         qDebug() << errorString << "key" << key;
 #endif
-        break;
-    }
+         break;
+   }
 }
 
 HANDLE QSharedMemoryPrivate::handle()
 {
-    if (!hand) {
-        // don't allow making handles on empty keys
-        if (nativeKey.isEmpty()) {
-            error = QSharedMemory::KeyError;
-            errorString = QSharedMemory::tr("%1: key is empty").arg(QLatin1String("QSharedMemory::handle"));
-            return 0;
-        }
+   if (!hand) {
+      // don't allow making handles on empty keys
+      if (nativeKey.isEmpty()) {
+         error = QSharedMemory::KeyError;
+         errorString = QSharedMemory::tr("%1: key is empty").arg(QLatin1String("QSharedMemory::handle"));
+         return 0;
+      }
 
-        // This works for opening a mapping too, but always opens it with read/write access in
-        // attach as it seems.
-        hand = CreateFileMapping(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, 0, (wchar_t*)nativeKey.utf16());
+      // This works for opening a mapping too, but always opens it with read/write access in
+      // attach as it seems.
+      hand = CreateFileMapping(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, 0, (wchar_t *)nativeKey.utf16());
 
-        if (!hand)
-            setErrorString(QLatin1String("QSharedMemory::handle"));
-    }
+      if (!hand) {
+         setErrorString(QLatin1String("QSharedMemory::handle"));
+      }
+   }
 
-    return hand;
+   return hand;
 }
 
 void QSharedMemoryPrivate::cleanHandle()
 {
-    if (hand != 0 && !CloseHandle(hand))
-        setErrorString(QLatin1String("QSharedMemory::cleanHandle"));
-    hand = 0;
+   if (hand != 0 && !CloseHandle(hand)) {
+      setErrorString(QLatin1String("QSharedMemory::cleanHandle"));
+   }
+   hand = 0;
 }
 
 bool QSharedMemoryPrivate::create(int size)
 {
-    if (nativeKey.isEmpty()) {
-        error = QSharedMemory::KeyError;
-        errorString = QSharedMemory::tr("%1: key is empty").arg(QLatin1String("QSharedMemory::create"));
-        return false;
-    }
+   if (nativeKey.isEmpty()) {
+      error = QSharedMemory::KeyError;
+      errorString = QSharedMemory::tr("%1: key is empty").arg(QLatin1String("QSharedMemory::create"));
+      return false;
+   }
 
-    // Create the file mapping.
-    hand = CreateFileMapping(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, size, (wchar_t*)nativeKey.utf16());
-    setErrorString(QLatin1String("QSharedMemory::create"));
+   // Create the file mapping.
+   hand = CreateFileMapping(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, size, (wchar_t *)nativeKey.utf16());
+   setErrorString(QLatin1String("QSharedMemory::create"));
 
-    // hand is valid when it already exists unlike unix so explicitly check
-    return !(error == QSharedMemory::AlreadyExists || !hand);
+   // hand is valid when it already exists unlike unix so explicitly check
+   return !(error == QSharedMemory::AlreadyExists || !hand);
 }
 
 bool QSharedMemoryPrivate::attach(QSharedMemory::AccessMode mode)
 {
-    // Grab a pointer to the memory block
-    int permissions = (mode == QSharedMemory::ReadOnly ? FILE_MAP_READ : FILE_MAP_ALL_ACCESS);
-    memory = (void *)MapViewOfFile(handle(), permissions, 0, 0, 0);
-    if (0 == memory) {
-        setErrorString(QLatin1String("QSharedMemory::attach"));
-        cleanHandle();
-        return false;
-    }
+   // Grab a pointer to the memory block
+   int permissions = (mode == QSharedMemory::ReadOnly ? FILE_MAP_READ : FILE_MAP_ALL_ACCESS);
+   memory = (void *)MapViewOfFile(handle(), permissions, 0, 0, 0);
+   if (0 == memory) {
+      setErrorString(QLatin1String("QSharedMemory::attach"));
+      cleanHandle();
+      return false;
+   }
 
-    // Grab the size of the memory we have been given (a multiple of 4K on windows)
-    MEMORY_BASIC_INFORMATION info;
-    if (!VirtualQuery(memory, &info, sizeof(info))) {
-        // Windows doesn't set an error code on this one,
-        // it should only be a kernel memory error.
-        error = QSharedMemory::UnknownError;
-        errorString = QSharedMemory::tr("%1: size query failed").arg(QLatin1String("QSharedMemory::attach"));
-        return false;
-    }
-    size = info.RegionSize;
+   // Grab the size of the memory we have been given (a multiple of 4K on windows)
+   MEMORY_BASIC_INFORMATION info;
+   if (!VirtualQuery(memory, &info, sizeof(info))) {
+      // Windows doesn't set an error code on this one,
+      // it should only be a kernel memory error.
+      error = QSharedMemory::UnknownError;
+      errorString = QSharedMemory::tr("%1: size query failed").arg(QLatin1String("QSharedMemory::attach"));
+      return false;
+   }
+   size = info.RegionSize;
 
-    return true;
+   return true;
 }
 
 bool QSharedMemoryPrivate::detach()
 {
-    // umap memory
-    if (!UnmapViewOfFile(memory)) {
-        setErrorString(QLatin1String("QSharedMemory::detach"));
-        return false;
-    }
-    memory = 0;
-    size = 0;
+   // umap memory
+   if (!UnmapViewOfFile(memory)) {
+      setErrorString(QLatin1String("QSharedMemory::detach"));
+      return false;
+   }
+   memory = 0;
+   size = 0;
 
-    // close handle
-    cleanHandle();
+   // close handle
+   cleanHandle();
 
-    return true;
+   return true;
 }
 
 QT_END_NAMESPACE

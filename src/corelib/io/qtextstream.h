@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,136 +46,136 @@ class QTextDecoder;
 class QTextStreamPrivate;
 class Q_CORE_EXPORT QTextStream                                // text stream class
 {
-    Q_DECLARE_PRIVATE(QTextStream)
+   Q_DECLARE_PRIVATE(QTextStream)
 
-public:
-    enum RealNumberNotation {
-        SmartNotation,
-        FixedNotation,
-        ScientificNotation
-    };
-    enum FieldAlignment {
-        AlignLeft,
-        AlignRight,
-        AlignCenter,
-        AlignAccountingStyle
-    };
-    enum Status {
-        Ok,
-        ReadPastEnd,
-        ReadCorruptData,
-        WriteFailed
-    };
-    enum NumberFlag {
-        ShowBase = 0x1,
-        ForcePoint = 0x2,
-        ForceSign = 0x4,
-        UppercaseBase = 0x8,
-        UppercaseDigits = 0x10
-    };
-    using NumberFlags = QFlags<NumberFlag>;
+ public:
+   enum RealNumberNotation {
+      SmartNotation,
+      FixedNotation,
+      ScientificNotation
+   };
+   enum FieldAlignment {
+      AlignLeft,
+      AlignRight,
+      AlignCenter,
+      AlignAccountingStyle
+   };
+   enum Status {
+      Ok,
+      ReadPastEnd,
+      ReadCorruptData,
+      WriteFailed
+   };
+   enum NumberFlag {
+      ShowBase = 0x1,
+      ForcePoint = 0x2,
+      ForceSign = 0x4,
+      UppercaseBase = 0x8,
+      UppercaseDigits = 0x10
+   };
+   using NumberFlags = QFlags<NumberFlag>;
 
-    QTextStream();
-    explicit QTextStream(QIODevice *device);
-    explicit QTextStream(FILE *fileHandle, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
-    explicit QTextStream(QString *string, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
-    explicit QTextStream(QByteArray *array, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
-    explicit QTextStream(const QByteArray &array, QIODevice::OpenMode openMode = QIODevice::ReadOnly);
-    virtual ~QTextStream();
+   QTextStream();
+   explicit QTextStream(QIODevice *device);
+   explicit QTextStream(FILE *fileHandle, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
+   explicit QTextStream(QString *string, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
+   explicit QTextStream(QByteArray *array, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
+   explicit QTextStream(const QByteArray &array, QIODevice::OpenMode openMode = QIODevice::ReadOnly);
+   virtual ~QTextStream();
 
 #ifndef QT_NO_TEXTCODEC
-    void setCodec(QTextCodec *codec);
-    void setCodec(const char *codecName);
-    QTextCodec *codec() const;
-    void setAutoDetectUnicode(bool enabled);
-    bool autoDetectUnicode() const;
-    void setGenerateByteOrderMark(bool generate);
-    bool generateByteOrderMark() const;
+   void setCodec(QTextCodec *codec);
+   void setCodec(const char *codecName);
+   QTextCodec *codec() const;
+   void setAutoDetectUnicode(bool enabled);
+   bool autoDetectUnicode() const;
+   void setGenerateByteOrderMark(bool generate);
+   bool generateByteOrderMark() const;
 #endif
 
-    void setLocale(const QLocale &locale);
-    QLocale locale() const;
+   void setLocale(const QLocale &locale);
+   QLocale locale() const;
 
-    void setDevice(QIODevice *device);
-    QIODevice *device() const;
+   void setDevice(QIODevice *device);
+   QIODevice *device() const;
 
-    void setString(QString *string, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
-    QString *string() const;
+   void setString(QString *string, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
+   QString *string() const;
 
-    Status status() const;
-    void setStatus(Status status);
-    void resetStatus();
+   Status status() const;
+   void setStatus(Status status);
+   void resetStatus();
 
-    bool atEnd() const;
-    void reset();
-    void flush();
-    bool seek(qint64 pos);
-    qint64 pos() const;
+   bool atEnd() const;
+   void reset();
+   void flush();
+   bool seek(qint64 pos);
+   qint64 pos() const;
 
-    void skipWhiteSpace();
+   void skipWhiteSpace();
 
-    QString readLine(qint64 maxlen = 0);
-    QString readAll();
-    QString read(qint64 maxlen);
+   QString readLine(qint64 maxlen = 0);
+   QString readAll();
+   QString read(qint64 maxlen);
 
-    void setFieldAlignment(FieldAlignment alignment);
-    FieldAlignment fieldAlignment() const;
+   void setFieldAlignment(FieldAlignment alignment);
+   FieldAlignment fieldAlignment() const;
 
-    void setPadChar(QChar ch);
-    QChar padChar() const;
+   void setPadChar(QChar ch);
+   QChar padChar() const;
 
-    void setFieldWidth(int width);
-    int fieldWidth() const;
+   void setFieldWidth(int width);
+   int fieldWidth() const;
 
-    void setNumberFlags(NumberFlags flags);
-    NumberFlags numberFlags() const;
+   void setNumberFlags(NumberFlags flags);
+   NumberFlags numberFlags() const;
 
-    void setIntegerBase(int base);
-    int integerBase() const;
+   void setIntegerBase(int base);
+   int integerBase() const;
 
-    void setRealNumberNotation(RealNumberNotation notation);
-    RealNumberNotation realNumberNotation() const;
+   void setRealNumberNotation(RealNumberNotation notation);
+   RealNumberNotation realNumberNotation() const;
 
-    void setRealNumberPrecision(int precision);
-    int realNumberPrecision() const;
+   void setRealNumberPrecision(int precision);
+   int realNumberPrecision() const;
 
-    QTextStream &operator>>(QChar &ch);
-    QTextStream &operator>>(char &ch);
-    QTextStream &operator>>(signed short &i);
-    QTextStream &operator>>(unsigned short &i);
-    QTextStream &operator>>(signed int &i);
-    QTextStream &operator>>(unsigned int &i);
-    QTextStream &operator>>(signed long &i);
-    QTextStream &operator>>(unsigned long &i);
-    QTextStream &operator>>(qlonglong &i);
-    QTextStream &operator>>(qulonglong &i);
-    QTextStream &operator>>(float &f);
-    QTextStream &operator>>(double &f);
-    QTextStream &operator>>(QString &s);
-    QTextStream &operator>>(QByteArray &array);
-    QTextStream &operator>>(char *c);
+   QTextStream &operator>>(QChar &ch);
+   QTextStream &operator>>(char &ch);
+   QTextStream &operator>>(signed short &i);
+   QTextStream &operator>>(unsigned short &i);
+   QTextStream &operator>>(signed int &i);
+   QTextStream &operator>>(unsigned int &i);
+   QTextStream &operator>>(signed long &i);
+   QTextStream &operator>>(unsigned long &i);
+   QTextStream &operator>>(qlonglong &i);
+   QTextStream &operator>>(qulonglong &i);
+   QTextStream &operator>>(float &f);
+   QTextStream &operator>>(double &f);
+   QTextStream &operator>>(QString &s);
+   QTextStream &operator>>(QByteArray &array);
+   QTextStream &operator>>(char *c);
 
-    QTextStream &operator<<(QBool b);
-    QTextStream &operator<<(QChar ch);
-    QTextStream &operator<<(char ch);
-    QTextStream &operator<<(signed short i);
-    QTextStream &operator<<(unsigned short i);
-    QTextStream &operator<<(signed int i);
-    QTextStream &operator<<(unsigned int i);
-    QTextStream &operator<<(signed long i);
-    QTextStream &operator<<(unsigned long i);
-    QTextStream &operator<<(qlonglong i);
-    QTextStream &operator<<(qulonglong i);
-    QTextStream &operator<<(float f);
-    QTextStream &operator<<(double f);
-    QTextStream &operator<<(const QString &s);
-    QTextStream &operator<<(const QByteArray &array);
-    QTextStream &operator<<(const char *c);
-    QTextStream &operator<<(const void *ptr);
+   QTextStream &operator<<(QBool b);
+   QTextStream &operator<<(QChar ch);
+   QTextStream &operator<<(char ch);
+   QTextStream &operator<<(signed short i);
+   QTextStream &operator<<(unsigned short i);
+   QTextStream &operator<<(signed int i);
+   QTextStream &operator<<(unsigned int i);
+   QTextStream &operator<<(signed long i);
+   QTextStream &operator<<(unsigned long i);
+   QTextStream &operator<<(qlonglong i);
+   QTextStream &operator<<(qulonglong i);
+   QTextStream &operator<<(float f);
+   QTextStream &operator<<(double f);
+   QTextStream &operator<<(const QString &s);
+   QTextStream &operator<<(const QByteArray &array);
+   QTextStream &operator<<(const char *c);
+   QTextStream &operator<<(const void *ptr);
 
-private:
-    Q_DISABLE_COPY(QTextStream)
-    QScopedPointer<QTextStreamPrivate> d_ptr;
+ private:
+   Q_DISABLE_COPY(QTextStream)
+   QScopedPointer<QTextStreamPrivate> d_ptr;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTextStream::NumberFlags)
@@ -184,32 +184,54 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextStream::NumberFlags)
   QTextStream manipulators
  *****************************************************************************/
 
-typedef QTextStream & (*QTextStreamFunction)(QTextStream &);// manipulator function
+typedef QTextStream &(*QTextStreamFunction)(QTextStream &); // manipulator function
 typedef void (QTextStream::*QTSMFI)(int); // manipulator w/int argument
 typedef void (QTextStream::*QTSMFC)(QChar); // manipulator w/QChar argument
 
 class Q_CORE_EXPORT QTextStreamManipulator
 {
-public:
-    QTextStreamManipulator(QTSMFI m, int a) { mf = m; mc = 0; arg = a; }
-    QTextStreamManipulator(QTSMFC m, QChar c) { mf = 0; mc = m; ch = c; arg = -1; }
-    void exec(QTextStream &s) { if (mf) { (s.*mf)(arg); } else { (s.*mc)(ch); } }
+ public:
+   QTextStreamManipulator(QTSMFI m, int a) {
+      mf = m;
+      mc = 0;
+      arg = a;
+   }
+   QTextStreamManipulator(QTSMFC m, QChar c) {
+      mf = 0;
+      mc = m;
+      ch = c;
+      arg = -1;
+   }
+   void exec(QTextStream &s) {
+      if (mf) {
+         (s.*mf)(arg);
+      } else {
+         (s.*mc)(ch);
+      }
+   }
 
-private:
-    QTSMFI mf;                                        // QTextStream member function
-    QTSMFC mc;                                        // QTextStream member function
-    int arg;                                          // member function argument
-    QChar ch;
+ private:
+   QTSMFI mf;                                        // QTextStream member function
+   QTSMFC mc;                                        // QTextStream member function
+   int arg;                                          // member function argument
+   QChar ch;
 };
 
 inline QTextStream &operator>>(QTextStream &s, QTextStreamFunction f)
-{ return (*f)(s); }
+{
+   return (*f)(s);
+}
 
 inline QTextStream &operator<<(QTextStream &s, QTextStreamFunction f)
-{ return (*f)(s); }
+{
+   return (*f)(s);
+}
 
 inline QTextStream &operator<<(QTextStream &s, QTextStreamManipulator m)
-{ m.exec(s); return s; }
+{
+   m.exec(s);
+   return s;
+}
 
 Q_CORE_EXPORT QTextStream &bin(QTextStream &s);
 Q_CORE_EXPORT QTextStream &oct(QTextStream &s);
@@ -245,20 +267,20 @@ Q_CORE_EXPORT QTextStream &ws(QTextStream &s);
 
 inline QTextStreamManipulator qSetFieldWidth(int width)
 {
-    QTSMFI func = &QTextStream::setFieldWidth;
-    return QTextStreamManipulator(func,width);
+   QTSMFI func = &QTextStream::setFieldWidth;
+   return QTextStreamManipulator(func, width);
 }
 
 inline QTextStreamManipulator qSetPadChar(QChar ch)
 {
-    QTSMFC func = &QTextStream::setPadChar;
-    return QTextStreamManipulator(func, ch);
+   QTSMFC func = &QTextStream::setPadChar;
+   return QTextStreamManipulator(func, ch);
 }
 
 inline QTextStreamManipulator qSetRealNumberPrecision(int precision)
 {
-    QTSMFI func = &QTextStream::setRealNumberPrecision;
-    return QTextStreamManipulator(func, precision);
+   QTSMFI func = &QTextStream::setRealNumberPrecision;
+   return QTextStreamManipulator(func, precision);
 }
 
 QT_END_NAMESPACE

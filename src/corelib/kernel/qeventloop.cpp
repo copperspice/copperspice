@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,17 +33,17 @@ QT_BEGIN_NAMESPACE
 
 class QEventLoopPrivate
 {
-    Q_DECLARE_PUBLIC(QEventLoop)
+   Q_DECLARE_PUBLIC(QEventLoop)
 
-public:
-    inline QEventLoopPrivate() : exit(true), inExec(false), returnCode(-1)   {  }
-    virtual ~QEventLoopPrivate() {}
+ public:
+   inline QEventLoopPrivate() : exit(true), inExec(false), returnCode(-1)   {  }
+   virtual ~QEventLoopPrivate() {}
 
-    bool exit, inExec;
-    int returnCode;
+   bool exit, inExec;
+   int returnCode;
 
-protected:
-	 QEventLoop *q_ptr;
+ protected:
+   QEventLoop *q_ptr;
 
 };
 
@@ -51,17 +51,17 @@ protected:
     Constructs an event loop object with the given \a parent.
 */
 QEventLoop::QEventLoop(QObject *parent)
-    : QObject(parent), d_ptr(new QEventLoopPrivate)
-{   
-	 d_ptr->q_ptr = this;
-	 QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
+   : QObject(parent), d_ptr(new QEventLoopPrivate)
+{
+   d_ptr->q_ptr = this;
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-    if (!QCoreApplication::instance()) {
-        qWarning("QEventLoop: Can not be used without QApplication");
+   if (!QCoreApplication::instance()) {
+      qWarning("QEventLoop: Can not be used without QApplication");
 
-    } else if (! threadData->eventDispatcher) {
-        QThreadPrivate::createEventDispatcher(threadData);
-    }
+   } else if (! threadData->eventDispatcher) {
+      QThreadPrivate::createEventDispatcher(threadData);
+   }
 }
 
 /*!
@@ -72,16 +72,18 @@ QEventLoop::~QEventLoop()
 
 bool QEventLoop::processEvents(ProcessEventsFlags flags)
 {
-    Q_D(QEventLoop);
-	 QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
+   Q_D(QEventLoop);
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-    if (! threadData->eventDispatcher)
-        return false;
+   if (! threadData->eventDispatcher) {
+      return false;
+   }
 
-    if (flags & DeferredDeletion)
-        QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+   if (flags & DeferredDeletion) {
+      QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+   }
 
-    return threadData->eventDispatcher->processEvents(flags);
+   return threadData->eventDispatcher->processEvents(flags);
 }
 
 /*!
@@ -109,61 +111,64 @@ bool QEventLoop::processEvents(ProcessEventsFlags flags)
 */
 int QEventLoop::exec(ProcessEventsFlags flags)
 {
-    Q_D(QEventLoop);
-	 QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
+   Q_D(QEventLoop);
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-    //we need to protect from race condition with QThread::exit
-    QMutexLocker locker(&threadData->get_QThreadPrivate()->mutex);
+   //we need to protect from race condition with QThread::exit
+   QMutexLocker locker(&threadData->get_QThreadPrivate()->mutex);
 
-    if (threadData->quitNow)
-        return -1;
+   if (threadData->quitNow) {
+      return -1;
+   }
 
-    if (d->inExec) {
-        qWarning("QEventLoop::exec: instance %p has already called exec()", this);
-        return -1;
-    }
-    d->inExec = true;
-    d->exit = false;
+   if (d->inExec) {
+      qWarning("QEventLoop::exec: instance %p has already called exec()", this);
+      return -1;
+   }
+   d->inExec = true;
+   d->exit = false;
 
-    ++threadData->loopLevel;
-    threadData->eventLoops.push(this);
-    locker.unlock();
+   ++threadData->loopLevel;
+   threadData->eventLoops.push(this);
+   locker.unlock();
 
-    // remove posted quit events when entering a new event loop
-    QCoreApplication *app = QCoreApplication::instance();
-    if (app && app->thread() == thread())
-        QCoreApplication::removePostedEvents(app, QEvent::Quit);
+   // remove posted quit events when entering a new event loop
+   QCoreApplication *app = QCoreApplication::instance();
+   if (app && app->thread() == thread()) {
+      QCoreApplication::removePostedEvents(app, QEvent::Quit);
+   }
 
-    try {
-        while (!d->exit)
-            processEvents(flags | WaitForMoreEvents | EventLoopExec);
+   try {
+      while (!d->exit) {
+         processEvents(flags | WaitForMoreEvents | EventLoopExec);
+      }
 
-    } catch (...) {
-        qWarning("CopperSpice has caught an exception thrown from an event handler.\n"                 
-                 "Reimplement QApplication::notify() and catch all exceptions.\n");
+   } catch (...) {
+      qWarning("CopperSpice has caught an exception thrown from an event handler.\n"
+               "Reimplement QApplication::notify() and catch all exceptions.\n");
 
-        // copied from below
-        locker.relock();
+      // copied from below
+      locker.relock();
 
-        QEventLoop *eventLoop = threadData->eventLoops.pop();
-        Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
-        Q_UNUSED(eventLoop); // --release warning
-        d->inExec = false;
-        --threadData->loopLevel;
+      QEventLoop *eventLoop = threadData->eventLoops.pop();
+      Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
+      Q_UNUSED(eventLoop); // --release warning
+      d->inExec = false;
+      --threadData->loopLevel;
 
-        throw;
-    }
+      throw;
+   }
 
-    // copied above
-    locker.relock();
+   // copied above
+   locker.relock();
 
-    QEventLoop *eventLoop = threadData->eventLoops.pop();
-    Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
-    Q_UNUSED(eventLoop); // --release warning
-    d->inExec = false;
-    --threadData->loopLevel;
+   QEventLoop *eventLoop = threadData->eventLoops.pop();
+   Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
+   Q_UNUSED(eventLoop); // --release warning
+   d->inExec = false;
+   --threadData->loopLevel;
 
-    return d->returnCode;
+   return d->returnCode;
 }
 
 /*!
@@ -184,24 +189,28 @@ int QEventLoop::exec(ProcessEventsFlags flags)
 */
 void QEventLoop::processEvents(ProcessEventsFlags flags, int maxTime)
 {
-    Q_D(QEventLoop);
-    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
+   Q_D(QEventLoop);
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-    if (! threadData->eventDispatcher)
-        return;
+   if (! threadData->eventDispatcher) {
+      return;
+   }
 
-    QElapsedTimer start;
-    start.start();
+   QElapsedTimer start;
+   start.start();
 
-    if (flags & DeferredDeletion)
-        QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+   if (flags & DeferredDeletion) {
+      QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+   }
 
-    while (processEvents(flags & ~WaitForMoreEvents)) {
-        if (start.elapsed() > maxTime)
-            break;
-        if (flags & DeferredDeletion)
-            QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
-    }
+   while (processEvents(flags & ~WaitForMoreEvents)) {
+      if (start.elapsed() > maxTime) {
+         break;
+      }
+      if (flags & DeferredDeletion) {
+         QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+      }
+   }
 }
 
 /*!
@@ -221,15 +230,16 @@ void QEventLoop::processEvents(ProcessEventsFlags flags, int maxTime)
 */
 void QEventLoop::exit(int returnCode)
 {
-    Q_D(QEventLoop);
-    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
+   Q_D(QEventLoop);
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-    if (! threadData->eventDispatcher)
-        return;
+   if (! threadData->eventDispatcher) {
+      return;
+   }
 
-    d->returnCode = returnCode;
-    d->exit = true;
-    threadData->eventDispatcher->interrupt();
+   d->returnCode = returnCode;
+   d->exit = true;
+   threadData->eventDispatcher->interrupt();
 }
 
 /*!
@@ -241,8 +251,8 @@ void QEventLoop::exit(int returnCode)
  */
 bool QEventLoop::isRunning() const
 {
-    Q_D(const QEventLoop);
-    return !d->exit;
+   Q_D(const QEventLoop);
+   return !d->exit;
 }
 
 /*!
@@ -252,13 +262,14 @@ bool QEventLoop::isRunning() const
 */
 void QEventLoop::wakeUp()
 {
-    Q_D(QEventLoop);
-	 QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
+   Q_D(QEventLoop);
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-    if (! threadData->eventDispatcher)
-        return;
+   if (! threadData->eventDispatcher) {
+      return;
+   }
 
-    threadData->eventDispatcher->wakeUp();
+   threadData->eventDispatcher->wakeUp();
 }
 
 /*!
@@ -269,6 +280,8 @@ void QEventLoop::wakeUp()
     \sa QCoreApplication::quit(), exit()
 */
 void QEventLoop::quit()
-{ exit(0); }
+{
+   exit(0);
+}
 
 QT_END_NAMESPACE

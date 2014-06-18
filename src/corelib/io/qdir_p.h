@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,43 +33,43 @@ QT_BEGIN_NAMESPACE
 
 class QDirPrivate : public QSharedData
 {
-public:
-    QDirPrivate(const QString &path, const QStringList &nameFilters_ = QStringList(),
-            QDir::SortFlags sort_ = QDir::SortFlags(QDir::Name | QDir::IgnoreCase),
-            QDir::Filters filters_ = QDir::AllEntries);
+ public:
+   QDirPrivate(const QString &path, const QStringList &nameFilters_ = QStringList(),
+               QDir::SortFlags sort_ = QDir::SortFlags(QDir::Name | QDir::IgnoreCase),
+               QDir::Filters filters_ = QDir::AllEntries);
 
-    QDirPrivate(const QDirPrivate &copy);
+   QDirPrivate(const QDirPrivate &copy);
 
-    bool exists() const;
+   bool exists() const;
 
-    void initFileEngine();
-    void initFileLists(const QDir &dir) const;
+   void initFileEngine();
+   void initFileLists(const QDir &dir) const;
 
-    static void sortFileList(QDir::SortFlags, QFileInfoList &, QStringList *, QFileInfoList *);
+   static void sortFileList(QDir::SortFlags, QFileInfoList &, QStringList *, QFileInfoList *);
 
-    static inline QChar getFilterSepChar(const QString &nameFilter);
+   static inline QChar getFilterSepChar(const QString &nameFilter);
 
-    static inline QStringList splitFilters(const QString &nameFilter, QChar sep = 0);
+   static inline QStringList splitFilters(const QString &nameFilter, QChar sep = 0);
 
-    void setPath(const QString &path);
+   void setPath(const QString &path);
 
-    void clearFileLists();
+   void clearFileLists();
 
-    void resolveAbsoluteEntry() const;
+   void resolveAbsoluteEntry() const;
 
-    QStringList nameFilters;
-    QDir::SortFlags sort;
-    QDir::Filters filters;
+   QStringList nameFilters;
+   QDir::SortFlags sort;
+   QDir::Filters filters;
 
-    QScopedPointer<QAbstractFileEngine> fileEngine;
+   QScopedPointer<QAbstractFileEngine> fileEngine;
 
-    mutable bool fileListsInitialized;
-    mutable QStringList files;
-    mutable QFileInfoList fileInfos;
+   mutable bool fileListsInitialized;
+   mutable QStringList files;
+   mutable QFileInfoList fileInfos;
 
-    QFileSystemEntry dirEntry;
-    mutable QFileSystemEntry absoluteDirEntry;
-    mutable QFileSystemMetaData metaData;
+   QFileSystemEntry dirEntry;
+   mutable QFileSystemEntry absoluteDirEntry;
+   mutable QFileSystemMetaData metaData;
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -51,9 +51,9 @@ QString qulltoa(qulonglong l, int base, const QChar _zero);
 QString qlltoa(qlonglong l, int base, const QChar zero);
 
 enum PrecisionMode {
-    PMDecimalDigits =             0x01,
-    PMSignificantDigits =   0x02,
-    PMChopTrailingZeros =   0x03
+   PMDecimalDigits =             0x01,
+   PMSignificantDigits =   0x02,
+   PMChopTrailingZeros =   0x03
 };
 
 QString &decimalForm(QChar zero, QChar decimal, QChar group,
@@ -69,15 +69,15 @@ QString &exponentForm(QChar zero, QChar decimal, QChar exponential,
 
 inline bool isZero(double d)
 {
-    uchar *ch = (uchar *)&d;
+   uchar *ch = (uchar *)&d;
 #ifdef QT_ARMFPA
-        return !(ch[3] & 0x7F || ch[2] || ch[1] || ch[0] || ch[7] || ch[6] || ch[5] || ch[4]);
+   return !(ch[3] & 0x7F || ch[2] || ch[1] || ch[0] || ch[7] || ch[6] || ch[5] || ch[4]);
 #else
-    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-        return !(ch[0] & 0x7F || ch[1] || ch[2] || ch[3] || ch[4] || ch[5] || ch[6] || ch[7]);
-    } else {
-        return !(ch[7] & 0x7F || ch[6] || ch[5] || ch[4] || ch[3] || ch[2] || ch[1] || ch[0]);
-    }
+   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+      return !(ch[0] & 0x7F || ch[1] || ch[2] || ch[3] || ch[4] || ch[5] || ch[6] || ch[7]);
+   } else {
+      return !(ch[7] & 0x7F || ch[6] || ch[5] || ch[4] || ch[3] || ch[2] || ch[1] || ch[0]);
+   }
 #endif
 }
 

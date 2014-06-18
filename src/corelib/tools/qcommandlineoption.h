@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,40 +42,43 @@ class QCommandLineOptionPrivate;
 
 class Q_CORE_EXPORT QCommandLineOption
 {
-public:
-    explicit QCommandLineOption(const QString &name, const QString &description = QString(),
-                                const QString &valueName = QString(),
-                                const QString &defaultValue = QString());
-    explicit QCommandLineOption(const QStringList &names, const QString &description = QString(),
-                                const QString &valueName = QString(),
-                                const QString &defaultValue = QString());
-    QCommandLineOption(const QCommandLineOption &other);
+ public:
+   explicit QCommandLineOption(const QString &name, const QString &description = QString(),
+                               const QString &valueName = QString(),
+                               const QString &defaultValue = QString());
+   explicit QCommandLineOption(const QStringList &names, const QString &description = QString(),
+                               const QString &valueName = QString(),
+                               const QString &defaultValue = QString());
+   QCommandLineOption(const QCommandLineOption &other);
 
-    ~QCommandLineOption();
+   ~QCommandLineOption();
 
-    QCommandLineOption &operator=(const QCommandLineOption &other);
+   QCommandLineOption &operator=(const QCommandLineOption &other);
 #ifdef Q_COMPILER_RVALUE_REFS
-    inline QCommandLineOption &operator=(QCommandLineOption &&other)
-    { qSwap(d, other.d); return *this; }
+   inline QCommandLineOption &operator=(QCommandLineOption && other) {
+      qSwap(d, other.d);
+      return *this;
+   }
 #endif
 
-    inline void swap(QCommandLineOption &other)
-    { qSwap(d, other.d); }
+   inline void swap(QCommandLineOption &other) {
+      qSwap(d, other.d);
+   }
 
-    QStringList names() const;
+   QStringList names() const;
 
-    void setValueName(const QString &name);
-    QString valueName() const;
+   void setValueName(const QString &name);
+   QString valueName() const;
 
-    void setDescription(const QString &description);
-    QString description() const;
+   void setDescription(const QString &description);
+   QString description() const;
 
-    void setDefaultValue(const QString &defaultValue);
-    void setDefaultValues(const QStringList &defaultValues);
-    QStringList defaultValues() const;
+   void setDefaultValue(const QString &defaultValue);
+   void setDefaultValues(const QStringList &defaultValues);
+   QStringList defaultValues() const;
 
-private:
-    QSharedDataPointer<QCommandLineOptionPrivate> d;
+ private:
+   QSharedDataPointer<QCommandLineOptionPrivate> d;
 };
 
 QT_END_NAMESPACE

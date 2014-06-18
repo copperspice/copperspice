@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,39 +38,37 @@ class QSystemSemaphorePrivate;
 class Q_CORE_EXPORT QSystemSemaphore
 {
 
-public:
-    enum AccessMode
-    {
-        Open,
-        Create
-    };
+ public:
+   enum AccessMode {
+      Open,
+      Create
+   };
 
-    enum SystemSemaphoreError
-    {
-        NoError,
-        PermissionDenied,
-        KeyError,
-        AlreadyExists,
-        NotFound,
-        OutOfResources,
-        UnknownError
-    };
+   enum SystemSemaphoreError {
+      NoError,
+      PermissionDenied,
+      KeyError,
+      AlreadyExists,
+      NotFound,
+      OutOfResources,
+      UnknownError
+   };
 
-    QSystemSemaphore(const QString &key, int initialValue = 0, AccessMode mode = Open);
-    ~QSystemSemaphore();
+   QSystemSemaphore(const QString &key, int initialValue = 0, AccessMode mode = Open);
+   ~QSystemSemaphore();
 
-    void setKey(const QString &key, int initialValue = 0, AccessMode mode = Open);
-    QString key() const;
+   void setKey(const QString &key, int initialValue = 0, AccessMode mode = Open);
+   QString key() const;
 
-    bool acquire();
-    bool release(int n = 1);
+   bool acquire();
+   bool release(int n = 1);
 
-    SystemSemaphoreError error() const;
-    QString errorString() const;
+   SystemSemaphoreError error() const;
+   QString errorString() const;
 
-private:
-    Q_DISABLE_COPY(QSystemSemaphore)
-    QScopedPointer<QSystemSemaphorePrivate> d;
+ private:
+   Q_DISABLE_COPY(QSystemSemaphore)
+   QScopedPointer<QSystemSemaphorePrivate> d;
 };
 
 #endif // QT_NO_SYSTEMSEMAPHORE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,38 +39,40 @@ QT_BEGIN_NAMESPACE
 
 QMutexPrivate::QMutexPrivate()
 {
-    kern_return_t r = semaphore_create(mach_task_self(), &mach_semaphore, SYNC_POLICY_FIFO, 0);
-    if (r != KERN_SUCCESS)
-        qWarning("QMutex: failed to create semaphore, error %d", r);
+   kern_return_t r = semaphore_create(mach_task_self(), &mach_semaphore, SYNC_POLICY_FIFO, 0);
+   if (r != KERN_SUCCESS) {
+      qWarning("QMutex: failed to create semaphore, error %d", r);
+   }
 }
 
 QMutexPrivate::~QMutexPrivate()
 {
-    kern_return_t r = semaphore_destroy(mach_task_self(), mach_semaphore);
-    if (r != KERN_SUCCESS)
-        qWarning("QMutex: failed to destroy semaphore, error %d", r);
+   kern_return_t r = semaphore_destroy(mach_task_self(), mach_semaphore);
+   if (r != KERN_SUCCESS) {
+      qWarning("QMutex: failed to destroy semaphore, error %d", r);
+   }
 }
 
 bool QMutexPrivate::wait(int timeout)
 {
-    kern_return_t r;
-    if (timeout < 0) {
-        do {
-            r = semaphore_wait(mach_semaphore);
-        } while (r == KERN_ABORTED);
-        Q_ASSERT(r == KERN_SUCCESS);
-    } else {
-        mach_timespec_t ts;
-        ts.tv_nsec = ((timeout % 1000) * 1000) * 1000;
-        ts.tv_sec = (timeout / 1000);
-        r = semaphore_timedwait(mach_semaphore, ts);
-    }
-    return (r == KERN_SUCCESS);
+   kern_return_t r;
+   if (timeout < 0) {
+      do {
+         r = semaphore_wait(mach_semaphore);
+      } while (r == KERN_ABORTED);
+      Q_ASSERT(r == KERN_SUCCESS);
+   } else {
+      mach_timespec_t ts;
+      ts.tv_nsec = ((timeout % 1000) * 1000) * 1000;
+      ts.tv_sec = (timeout / 1000);
+      r = semaphore_timedwait(mach_semaphore, ts);
+   }
+   return (r == KERN_SUCCESS);
 }
 
 void QMutexPrivate::wakeUp()
 {
-    semaphore_signal(mach_semaphore);
+   semaphore_signal(mach_semaphore);
 }
 
 

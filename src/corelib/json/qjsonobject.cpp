@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -93,7 +93,7 @@ QT_BEGIN_NAMESPACE
     \sa isEmpty()
  */
 QJsonObject::QJsonObject()
-    : d(0), o(0)
+   : d(0), o(0)
 {
 }
 
@@ -101,11 +101,11 @@ QJsonObject::QJsonObject()
     \internal
  */
 QJsonObject::QJsonObject(QJsonPrivate::Data *data, QJsonPrivate::Object *object)
-    : d(data), o(object)
+   : d(data), o(object)
 {
-    Q_ASSERT(d);
-    Q_ASSERT(o);
-    d->ref.ref();
+   Q_ASSERT(d);
+   Q_ASSERT(o);
+   d->ref.ref();
 }
 
 
@@ -114,8 +114,9 @@ QJsonObject::QJsonObject(QJsonPrivate::Data *data, QJsonPrivate::Object *object)
  */
 QJsonObject::~QJsonObject()
 {
-    if (d && !d->ref.deref())
-        delete d;
+   if (d && !d->ref.deref()) {
+      delete d;
+   }
 }
 
 /*!
@@ -126,10 +127,11 @@ QJsonObject::~QJsonObject()
  */
 QJsonObject::QJsonObject(const QJsonObject &other)
 {
-    d = other.d;
-    o = other.o;
-    if (d)
-        d->ref.ref();
+   d = other.d;
+   o = other.o;
+   if (d) {
+      d->ref.ref();
+   }
 }
 
 /*!
@@ -137,16 +139,18 @@ QJsonObject::QJsonObject(const QJsonObject &other)
  */
 QJsonObject &QJsonObject::operator =(const QJsonObject &other)
 {
-    if (d != other.d) {
-        if (d && !d->ref.deref())
-            delete d;
-        d = other.d;
-        if (d)
-            d->ref.ref();
-    }
-    o = other.o;
+   if (d != other.d) {
+      if (d && !d->ref.deref()) {
+         delete d;
+      }
+      d = other.d;
+      if (d) {
+         d->ref.ref();
+      }
+   }
+   o = other.o;
 
-    return *this;
+   return *this;
 }
 
 /*!
@@ -159,12 +163,13 @@ QJsonObject &QJsonObject::operator =(const QJsonObject &other)
  */
 QJsonObject QJsonObject::fromVariantMap(const QVariantMap &map)
 {
-    // ### this is implemented the trivial way, not the most efficient way
+   // ### this is implemented the trivial way, not the most efficient way
 
-    QJsonObject object;
-    for (QVariantMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
-        object.insert(it.key(), QJsonValue::fromVariant(it.value()));
-    return object;
+   QJsonObject object;
+   for (QVariantMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it) {
+      object.insert(it.key(), QJsonValue::fromVariant(it.value()));
+   }
+   return object;
 }
 
 /*!
@@ -174,14 +179,14 @@ QJsonObject QJsonObject::fromVariantMap(const QVariantMap &map)
  */
 QVariantMap QJsonObject::toVariantMap() const
 {
-    QVariantMap map;
-    if (o) {
-        for (uint i = 0; i < o->length; ++i) {
-            QJsonPrivate::Entry *e = o->entryAt(i);
-            map.insert(e->key(), QJsonValue(d, o, e->value).toVariant());
-        }
-    }
-    return map;
+   QVariantMap map;
+   if (o) {
+      for (uint i = 0; i < o->length; ++i) {
+         QJsonPrivate::Entry *e = o->entryAt(i);
+         map.insert(e->key(), QJsonValue(d, o, e->value).toVariant());
+      }
+   }
+   return map;
 }
 
 /*!
@@ -189,17 +194,18 @@ QVariantMap QJsonObject::toVariantMap() const
  */
 QStringList QJsonObject::keys() const
 {
-    if (!d)
-        return QStringList();
+   if (!d) {
+      return QStringList();
+   }
 
-    QStringList keys;
+   QStringList keys;
 
-    for (uint i = 0; i < o->length; ++i) {
-        QJsonPrivate::Entry *e = o->entryAt(i);
-        keys.append(e->key());
-    }
+   for (uint i = 0; i < o->length; ++i) {
+      QJsonPrivate::Entry *e = o->entryAt(i);
+      keys.append(e->key());
+   }
 
-    return keys;
+   return keys;
 }
 
 /*!
@@ -207,10 +213,11 @@ QStringList QJsonObject::keys() const
  */
 int QJsonObject::size() const
 {
-    if (!d)
-        return 0;
+   if (!d) {
+      return 0;
+   }
 
-    return o->length;
+   return o->length;
 }
 
 /*!
@@ -220,10 +227,11 @@ int QJsonObject::size() const
  */
 bool QJsonObject::isEmpty() const
 {
-    if (!d)
-        return true;
+   if (!d) {
+      return true;
+   }
 
-    return !o->length;
+   return !o->length;
 }
 
 /*!
@@ -235,14 +243,16 @@ bool QJsonObject::isEmpty() const
  */
 QJsonValue QJsonObject::value(const QString &key) const
 {
-    if (!d)
-        return QJsonValue();
+   if (!d) {
+      return QJsonValue();
+   }
 
-    bool keyExists;
-    int i = o->indexOf(key, &keyExists);
-    if (!keyExists)
-        return QJsonValue(QJsonValue::Undefined);
-    return QJsonValue(d, o, o->entryAt(i)->value);
+   bool keyExists;
+   int i = o->indexOf(key, &keyExists);
+   if (!keyExists) {
+      return QJsonValue(QJsonValue::Undefined);
+   }
+   return QJsonValue(d, o, o->entryAt(i)->value);
 }
 
 /*!
@@ -256,7 +266,7 @@ QJsonValue QJsonObject::value(const QString &key) const
  */
 QJsonValue QJsonObject::operator [](const QString &key) const
 {
-    return value(key);
+   return value(key);
 }
 
 /*!
@@ -272,14 +282,14 @@ QJsonValue QJsonObject::operator [](const QString &key) const
  */
 QJsonValueRef QJsonObject::operator [](const QString &key)
 {
-    // ### somewhat inefficient, as we lookup the key twice if it doesn't yet exist
-    bool keyExists = false;
-    int index = o ? o->indexOf(key, &keyExists) : -1;
-    if (!keyExists) {
-        iterator i = insert(key, QJsonValue());
-        index = i.i;
-    }
-    return QJsonValueRef(this, index);
+   // ### somewhat inefficient, as we lookup the key twice if it doesn't yet exist
+   bool keyExists = false;
+   int index = o ? o->indexOf(key, &keyExists) : -1;
+   if (!keyExists) {
+      iterator i = insert(key, QJsonValue());
+      index = i.i;
+   }
+   return QJsonValueRef(this, index);
 }
 
 /*!
@@ -297,46 +307,51 @@ QJsonValueRef QJsonObject::operator [](const QString &key)
  */
 QJsonObject::iterator QJsonObject::insert(const QString &key, const QJsonValue &value)
 {
-    if (value.t == QJsonValue::Undefined) {
-        remove(key);
-        return end();
-    }
-    QJsonValue val = value;
+   if (value.t == QJsonValue::Undefined) {
+      remove(key);
+      return end();
+   }
+   QJsonValue val = value;
 
-    bool latinOrIntValue;
-    int valueSize = QJsonPrivate::Value::requiredStorage(val, &latinOrIntValue);
+   bool latinOrIntValue;
+   int valueSize = QJsonPrivate::Value::requiredStorage(val, &latinOrIntValue);
 
-    bool latinKey = QJsonPrivate::useCompressed(key);
-    int valueOffset = sizeof(QJsonPrivate::Entry) + QJsonPrivate::qStringSize(key, latinKey);
-    int requiredSize = valueOffset + valueSize;
+   bool latinKey = QJsonPrivate::useCompressed(key);
+   int valueOffset = sizeof(QJsonPrivate::Entry) + QJsonPrivate::qStringSize(key, latinKey);
+   int requiredSize = valueOffset + valueSize;
 
-    detach(requiredSize + sizeof(QJsonPrivate::offset)); // offset for the new index entry
+   detach(requiredSize + sizeof(QJsonPrivate::offset)); // offset for the new index entry
 
-    if (!o->length)
-        o->tableOffset = sizeof(QJsonPrivate::Object);
+   if (!o->length) {
+      o->tableOffset = sizeof(QJsonPrivate::Object);
+   }
 
-    bool keyExists = false;
-    int pos = o->indexOf(key, &keyExists);
-    if (keyExists)
-        ++d->compactionCounter;
+   bool keyExists = false;
+   int pos = o->indexOf(key, &keyExists);
+   if (keyExists) {
+      ++d->compactionCounter;
+   }
 
-    uint off = o->reserveSpace(requiredSize, pos, 1, keyExists);
-    if (!off)
-        return end();
+   uint off = o->reserveSpace(requiredSize, pos, 1, keyExists);
+   if (!off) {
+      return end();
+   }
 
-    QJsonPrivate::Entry *e = o->entryAt(pos);
-    e->value.type = val.t;
-    e->value.latinKey = latinKey;
-    e->value.latinOrIntValue = latinOrIntValue;
-    e->value.value = QJsonPrivate::Value::valueToStore(val, (char *)e - (char *)o + valueOffset);
-    QJsonPrivate::copyString((char *)(e + 1), key, latinKey);
-    if (valueSize)
-        QJsonPrivate::Value::copyData(val, (char *)e + valueOffset, latinOrIntValue);
+   QJsonPrivate::Entry *e = o->entryAt(pos);
+   e->value.type = val.t;
+   e->value.latinKey = latinKey;
+   e->value.latinOrIntValue = latinOrIntValue;
+   e->value.value = QJsonPrivate::Value::valueToStore(val, (char *)e - (char *)o + valueOffset);
+   QJsonPrivate::copyString((char *)(e + 1), key, latinKey);
+   if (valueSize) {
+      QJsonPrivate::Value::copyData(val, (char *)e + valueOffset, latinOrIntValue);
+   }
 
-    if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(o->length) / 2u)
-        compact();
+   if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(o->length) / 2u) {
+      compact();
+   }
 
-    return iterator(this, pos);
+   return iterator(this, pos);
 }
 
 /*!
@@ -346,19 +361,22 @@ QJsonObject::iterator QJsonObject::insert(const QString &key, const QJsonValue &
  */
 void QJsonObject::remove(const QString &key)
 {
-    if (!d)
-        return;
+   if (!d) {
+      return;
+   }
 
-    bool keyExists;
-    int index = o->indexOf(key, &keyExists);
-    if (!keyExists)
-        return;
+   bool keyExists;
+   int index = o->indexOf(key, &keyExists);
+   if (!keyExists) {
+      return;
+   }
 
-    detach();
-    o->removeItems(index, 1);
-    ++d->compactionCounter;
-    if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(o->length) / 2u)
-        compact();
+   detach();
+   o->removeItems(index, 1);
+   ++d->compactionCounter;
+   if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(o->length) / 2u) {
+      compact();
+   }
 }
 
 /*!
@@ -372,22 +390,25 @@ void QJsonObject::remove(const QString &key)
  */
 QJsonValue QJsonObject::take(const QString &key)
 {
-    if (!o)
-        return QJsonValue(QJsonValue::Undefined);
+   if (!o) {
+      return QJsonValue(QJsonValue::Undefined);
+   }
 
-    bool keyExists;
-    int index = o->indexOf(key, &keyExists);
-    if (!keyExists)
-        return QJsonValue(QJsonValue::Undefined);
+   bool keyExists;
+   int index = o->indexOf(key, &keyExists);
+   if (!keyExists) {
+      return QJsonValue(QJsonValue::Undefined);
+   }
 
-    QJsonValue v(d, o, o->entryAt(index)->value);
-    detach();
-    o->removeItems(index, 1);
-    ++d->compactionCounter;
-    if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(o->length) / 2u)
-        compact();
+   QJsonValue v(d, o, o->entryAt(index)->value);
+   detach();
+   o->removeItems(index, 1);
+   ++d->compactionCounter;
+   if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(o->length) / 2u) {
+      compact();
+   }
 
-    return v;
+   return v;
 }
 
 /*!
@@ -397,12 +418,13 @@ QJsonValue QJsonObject::take(const QString &key)
  */
 bool QJsonObject::contains(const QString &key) const
 {
-    if (!o)
-        return false;
+   if (!o) {
+      return false;
+   }
 
-    bool keyExists;
-    o->indexOf(key, &keyExists);
-    return keyExists;
+   bool keyExists;
+   o->indexOf(key, &keyExists);
+   return keyExists;
 }
 
 /*!
@@ -410,24 +432,29 @@ bool QJsonObject::contains(const QString &key) const
  */
 bool QJsonObject::operator==(const QJsonObject &other) const
 {
-    if (o == other.o)
-        return true;
+   if (o == other.o) {
+      return true;
+   }
 
-    if (!o)
-        return !other.o->length;
-    if (!other.o)
-        return !o->length;
-    if (o->length != other.o->length)
-        return false;
+   if (!o) {
+      return !other.o->length;
+   }
+   if (!other.o) {
+      return !o->length;
+   }
+   if (o->length != other.o->length) {
+      return false;
+   }
 
-    for (uint i = 0; i < o->length; ++i) {
-        QJsonPrivate::Entry *e = o->entryAt(i);
-        QJsonValue v(d, o, e->value);
-        if (other.value(e->key()) != v)
-            return false;
-    }
+   for (uint i = 0; i < o->length; ++i) {
+      QJsonPrivate::Entry *e = o->entryAt(i);
+      QJsonValue v(d, o, e->value);
+      if (other.value(e->key()) != v) {
+         return false;
+      }
+   }
 
-    return true;
+   return true;
 }
 
 /*!
@@ -435,7 +462,7 @@ bool QJsonObject::operator==(const QJsonObject &other) const
  */
 bool QJsonObject::operator!=(const QJsonObject &other) const
 {
-    return !(*this == other);
+   return !(*this == other);
 }
 
 /*!
@@ -447,20 +474,22 @@ bool QJsonObject::operator!=(const QJsonObject &other) const
  */
 QJsonObject::iterator QJsonObject::erase(QJsonObject::iterator it)
 {
-    Q_ASSERT(d && d->ref.load() == 1);
+   Q_ASSERT(d && d->ref.load() == 1);
 
-    if (it.o != this || it.i < 0 || it.i >= (int)o->length)
-        return iterator(this, o->length);
+   if (it.o != this || it.i < 0 || it.i >= (int)o->length) {
+      return iterator(this, o->length);
+   }
 
-    int index = it.i;
+   int index = it.i;
 
-    o->removeItems(index, 1);
-    ++d->compactionCounter;
-    if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(o->length) / 2u)
-        compact();
+   o->removeItems(index, 1);
+   ++d->compactionCounter;
+   if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(o->length) / 2u) {
+      compact();
+   }
 
-    // iterator hasn't changed
-    return it;
+   // iterator hasn't changed
+   return it;
 }
 
 /*!
@@ -472,12 +501,13 @@ QJsonObject::iterator QJsonObject::erase(QJsonObject::iterator it)
  */
 QJsonObject::iterator QJsonObject::find(const QString &key)
 {
-    bool keyExists = false;
-    int index = o ? o->indexOf(key, &keyExists) : 0;
-    if (!keyExists)
-        return end();
-    detach();
-    return iterator(this, index);
+   bool keyExists = false;
+   int index = o ? o->indexOf(key, &keyExists) : 0;
+   if (!keyExists) {
+      return end();
+   }
+   detach();
+   return iterator(this, index);
 }
 
 /*! \fn QJsonObject::const_iterator QJsonObject::find(const QString &key) const
@@ -494,11 +524,12 @@ QJsonObject::iterator QJsonObject::find(const QString &key)
  */
 QJsonObject::const_iterator QJsonObject::constFind(const QString &key) const
 {
-    bool keyExists = false;
-    int index = o ? o->indexOf(key, &keyExists) : 0;
-    if (!keyExists)
-        return end();
-    return const_iterator(this, index);
+   bool keyExists = false;
+   int index = o ? o->indexOf(key, &keyExists) : 0;
+   if (!keyExists) {
+      return end();
+   }
+   return const_iterator(this, index);
 }
 
 /*! \fn int QJsonObject::count() const
@@ -955,21 +986,23 @@ QJsonObject::const_iterator QJsonObject::constFind(const QString &key) const
  */
 void QJsonObject::detach(uint reserve)
 {
-    if (!d) {
-        d = new QJsonPrivate::Data(reserve, QJsonValue::Object);
-        o = static_cast<QJsonPrivate::Object *>(d->header->root());
-        d->ref.ref();
-        return;
-    }
-    if (reserve == 0 && d->ref.load() == 1)
-        return;
+   if (!d) {
+      d = new QJsonPrivate::Data(reserve, QJsonValue::Object);
+      o = static_cast<QJsonPrivate::Object *>(d->header->root());
+      d->ref.ref();
+      return;
+   }
+   if (reserve == 0 && d->ref.load() == 1) {
+      return;
+   }
 
-    QJsonPrivate::Data *x = d->clone(o, reserve);
-    x->ref.ref();
-    if (!d->ref.deref())
-        delete d;
-    d = x;
-    o = static_cast<QJsonPrivate::Object *>(d->header->root());
+   QJsonPrivate::Data *x = d->clone(o, reserve);
+   x->ref.ref();
+   if (!d->ref.deref()) {
+      delete d;
+   }
+   d = x;
+   o = static_cast<QJsonPrivate::Object *>(d->header->root());
 }
 
 /*!
@@ -977,12 +1010,13 @@ void QJsonObject::detach(uint reserve)
  */
 void QJsonObject::compact()
 {
-    if (!d || !d->compactionCounter)
-        return;
+   if (!d || !d->compactionCounter) {
+      return;
+   }
 
-    detach();
-    d->compact();
-    o = static_cast<QJsonPrivate::Object *>(d->header->root());
+   detach();
+   d->compact();
+   o = static_cast<QJsonPrivate::Object *>(d->header->root());
 }
 
 /*!
@@ -990,10 +1024,10 @@ void QJsonObject::compact()
  */
 QString QJsonObject::keyAt(int i) const
 {
-    Q_ASSERT(o && i >= 0 && i < (int)o->length);
+   Q_ASSERT(o && i >= 0 && i < (int)o->length);
 
-    QJsonPrivate::Entry *e = o->entryAt(i);
-    return e->key();
+   QJsonPrivate::Entry *e = o->entryAt(i);
+   return e->key();
 }
 
 /*!
@@ -1001,11 +1035,12 @@ QString QJsonObject::keyAt(int i) const
  */
 QJsonValue QJsonObject::valueAt(int i) const
 {
-    if (!o || i < 0 || i >= (int)o->length)
-        return QJsonValue(QJsonValue::Undefined);
+   if (!o || i < 0 || i >= (int)o->length) {
+      return QJsonValue(QJsonValue::Undefined);
+   }
 
-    QJsonPrivate::Entry *e = o->entryAt(i);
-    return QJsonValue(d, o, e->value);
+   QJsonPrivate::Entry *e = o->entryAt(i);
+   return QJsonValue(d, o, e->value);
 }
 
 /*!
@@ -1013,24 +1048,24 @@ QJsonValue QJsonObject::valueAt(int i) const
  */
 void QJsonObject::setValueAt(int i, const QJsonValue &val)
 {
-    Q_ASSERT(o && i >= 0 && i < (int)o->length);
+   Q_ASSERT(o && i >= 0 && i < (int)o->length);
 
-    QJsonPrivate::Entry *e = o->entryAt(i);
-    insert(e->key(), val);
+   QJsonPrivate::Entry *e = o->entryAt(i);
+   insert(e->key(), val);
 }
 
 QDebug operator<<(QDebug dbg, const QJsonObject &o)
 {
-    if (!o.o) {
-        dbg << "QJsonObject()";
-        return dbg;
-    }
-    QByteArray json;
-    QJsonPrivate::Writer::objectToJson(o.o, json, 0, true);
-    dbg.nospace() << "QJsonObject("
-                  << json.constData() // print as utf-8 string without extra quotation marks
-                  << ")";
-    return dbg.space();
+   if (!o.o) {
+      dbg << "QJsonObject()";
+      return dbg;
+   }
+   QByteArray json;
+   QJsonPrivate::Writer::objectToJson(o.o, json, 0, true);
+   dbg.nospace() << "QJsonObject("
+                 << json.constData() // print as utf-8 string without extra quotation marks
+                 << ")";
+   return dbg.space();
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,7 +33,7 @@
 QMetaEnum::QMetaEnum(const char *name, const char *scope, bool isFlag)
 {
    m_name  = name;
-   m_scope = scope;  
+   m_scope = scope;
    m_flag  = isFlag;
 }
 
@@ -54,7 +54,7 @@ bool QMetaEnum::isValid() const
 }
 
 const char *QMetaEnum::key(int index) const
-{    
+{
    if (index < 0 || index >= m_data.size() ) {
       return 0;
    }
@@ -75,7 +75,7 @@ int QMetaEnum::keyCount() const
 
 int QMetaEnum::keyToValue(const char *key) const
 {
-    if (! key) {
+   if (! key) {
       return -1;
    }
 
@@ -94,7 +94,7 @@ int QMetaEnum::keyToValue(const char *key) const
 }
 
 int QMetaEnum::keysToValue(const char *keys) const
-{  
+{
    int value = 0;
 
    QByteArray temp = keys;
@@ -120,7 +120,7 @@ void QMetaEnum::setData(QMap<QByteArray, int> valueMap)
 }
 
 const char *QMetaEnum::scope() const
-{   
+{
    return m_scope;
 }
 
@@ -137,7 +137,7 @@ int QMetaEnum::value(int index) const
 }
 
 const char *QMetaEnum::valueToKey(int value) const
-{   
+{
    const char *retval = 0;
 
    for (auto elem = m_data.begin(); elem != m_data.end(); ++elem) {
@@ -152,12 +152,12 @@ const char *QMetaEnum::valueToKey(int value) const
 }
 
 QByteArray QMetaEnum::valueToKeys(int value) const
-{   
+{
    QByteArray keys = "";
 
    for (auto elem = m_data.begin(); elem != m_data.end(); ++elem) {
 
-      if (elem.value() & value) {         
+      if (elem.value() & value) {
 
          if (keys.isEmpty()) {
             keys = elem.key();

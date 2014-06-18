@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,39 +34,39 @@ class QByteArrayMatcherPrivate;
 
 class Q_CORE_EXPORT QByteArrayMatcher
 {
-public:
-    QByteArrayMatcher();
-    explicit QByteArrayMatcher(const QByteArray &pattern);
-    explicit QByteArrayMatcher(const char *pattern, int length);
-    QByteArrayMatcher(const QByteArrayMatcher &other);
-    ~QByteArrayMatcher();
+ public:
+   QByteArrayMatcher();
+   explicit QByteArrayMatcher(const QByteArray &pattern);
+   explicit QByteArrayMatcher(const char *pattern, int length);
+   QByteArrayMatcher(const QByteArrayMatcher &other);
+   ~QByteArrayMatcher();
 
-    QByteArrayMatcher &operator=(const QByteArrayMatcher &other);
+   QByteArrayMatcher &operator=(const QByteArrayMatcher &other);
 
-    void setPattern(const QByteArray &pattern);
+   void setPattern(const QByteArray &pattern);
 
-    int indexIn(const QByteArray &ba, int from = 0) const;
-    int indexIn(const char *str, int len, int from = 0) const;
-    inline QByteArray pattern() const
-    {
-        if (q_pattern.isNull())
-            return QByteArray(reinterpret_cast<const char*>(p.p), p.l);
-        return q_pattern;
-    }
+   int indexIn(const QByteArray &ba, int from = 0) const;
+   int indexIn(const char *str, int len, int from = 0) const;
+   inline QByteArray pattern() const {
+      if (q_pattern.isNull()) {
+         return QByteArray(reinterpret_cast<const char *>(p.p), p.l);
+      }
+      return q_pattern;
+   }
 
-private:
-    QByteArrayMatcherPrivate *d;
-    QByteArray q_pattern;
+ private:
+   QByteArrayMatcherPrivate *d;
+   QByteArray q_pattern;
 
-    struct Data {
-        uchar q_skiptable[256];
-        const uchar *p;
-        int l;
-    };
-    union {
-        uint dummy[256];
-        Data p;
-    };
+   struct Data {
+      uchar q_skiptable[256];
+      const uchar *p;
+      int l;
+   };
+   union {
+      uint dummy[256];
+      Data p;
+   };
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -85,19 +85,19 @@ QT_BEGIN_NAMESPACE
 
     Constructs a new QFutureWatcher with the given \a parent.
 */
-QFutureWatcherBase::QFutureWatcherBase(QObject *parent)  
-	: QObject(parent), d_ptr(new QFutureWatcherBasePrivate)
+QFutureWatcherBase::QFutureWatcherBase(QObject *parent)
+   : QObject(parent), d_ptr(new QFutureWatcherBasePrivate)
 {
-	d_ptr->q_ptr = this;
+   d_ptr->q_ptr = this;
 }
 
 QFutureWatcherBase::~QFutureWatcherBase()
-{ 
+{
 }
 
 void QFutureWatcherBase::cancel()
 {
-    futureInterface().cancel();
+   futureInterface().cancel();
 }
 
 /*! \fn void QFutureWatcher::setPaused(bool paused)
@@ -119,7 +119,7 @@ void QFutureWatcherBase::cancel()
 */
 void QFutureWatcherBase::setPaused(bool paused)
 {
-    futureInterface().setPaused(paused);
+   futureInterface().setPaused(paused);
 }
 
 /*! \fn void QFutureWatcher::pause()
@@ -131,7 +131,7 @@ void QFutureWatcherBase::setPaused(bool paused)
 */
 void QFutureWatcherBase::pause()
 {
-    futureInterface().setPaused(true);
+   futureInterface().setPaused(true);
 }
 
 /*! \fn void QFutureWatcher::resume()
@@ -143,7 +143,7 @@ void QFutureWatcherBase::pause()
 */
 void QFutureWatcherBase::resume()
 {
-    futureInterface().setPaused(false);
+   futureInterface().setPaused(false);
 }
 
 /*! \fn void QFutureWatcher::togglePaused()
@@ -157,7 +157,7 @@ void QFutureWatcherBase::resume()
 */
 void QFutureWatcherBase::togglePaused()
 {
-    futureInterface().togglePaused();
+   futureInterface().togglePaused();
 }
 
 /*! \fn int QFutureWatcher::progressValue() const
@@ -169,7 +169,7 @@ void QFutureWatcherBase::togglePaused()
 */
 int QFutureWatcherBase::progressValue() const
 {
-    return futureInterface().progressValue();
+   return futureInterface().progressValue();
 }
 
 /*! \fn int QFutureWatcher::progressMinimum() const
@@ -180,7 +180,7 @@ int QFutureWatcherBase::progressValue() const
 */
 int QFutureWatcherBase::progressMinimum() const
 {
-    return futureInterface().progressMinimum();
+   return futureInterface().progressMinimum();
 }
 
 /*! \fn int QFutureWatcher::progressMaximum() const
@@ -191,7 +191,7 @@ int QFutureWatcherBase::progressMinimum() const
 */
 int QFutureWatcherBase::progressMaximum() const
 {
-    return futureInterface().progressMaximum();
+   return futureInterface().progressMaximum();
 }
 
 /*! \fn QString QFutureWatcher::progressText() const
@@ -204,7 +204,7 @@ int QFutureWatcherBase::progressMaximum() const
 */
 QString QFutureWatcherBase::progressText() const
 {
-    return futureInterface().progressText();
+   return futureInterface().progressText();
 }
 
 /*! \fn bool QFutureWatcher::isStarted() const
@@ -214,7 +214,7 @@ QString QFutureWatcherBase::progressText() const
 */
 bool QFutureWatcherBase::isStarted() const
 {
-    return futureInterface().queryState(QFutureInterfaceBase::Started);
+   return futureInterface().queryState(QFutureInterfaceBase::Started);
 }
 
 /*! \fn bool QFutureWatcher::isFinished() const
@@ -224,8 +224,8 @@ bool QFutureWatcherBase::isStarted() const
 */
 bool QFutureWatcherBase::isFinished() const
 {
-    Q_D(const QFutureWatcherBase);
-    return d->finished;
+   Q_D(const QFutureWatcherBase);
+   return d->finished;
 }
 
 /*! \fn bool QFutureWatcher::isRunning() const
@@ -235,7 +235,7 @@ bool QFutureWatcherBase::isFinished() const
 */
 bool QFutureWatcherBase::isRunning() const
 {
-    return futureInterface().queryState(QFutureInterfaceBase::Running);
+   return futureInterface().queryState(QFutureInterfaceBase::Running);
 }
 
 /*! \fn bool QFutureWatcher::isCanceled() const
@@ -248,7 +248,7 @@ bool QFutureWatcherBase::isRunning() const
 */
 bool QFutureWatcherBase::isCanceled() const
 {
-    return futureInterface().queryState(QFutureInterfaceBase::Canceled);
+   return futureInterface().queryState(QFutureInterfaceBase::Canceled);
 }
 
 /*! \fn bool QFutureWatcher::isPaused() const
@@ -263,7 +263,7 @@ bool QFutureWatcherBase::isCanceled() const
 */
 bool QFutureWatcherBase::isPaused() const
 {
-    return futureInterface().queryState(QFutureInterfaceBase::Paused);
+   return futureInterface().queryState(QFutureInterfaceBase::Paused);
 }
 
 /*! \fn void QFutureWatcher::waitForFinished()
@@ -273,7 +273,7 @@ bool QFutureWatcherBase::isPaused() const
 */
 void QFutureWatcherBase::waitForFinished()
 {
-    futureInterface().waitForFinished();
+   futureInterface().waitForFinished();
 }
 
 /*! \fn void QFutureWatcher::setPendingResultsLimit(int limit)
@@ -287,79 +287,82 @@ void QFutureWatcherBase::waitForFinished()
 
 bool QFutureWatcherBase::event(QEvent *event)
 {
-    Q_D(QFutureWatcherBase);
-    if (event->type() == QEvent::FutureCallOut) {
-        QFutureCallOutEvent *callOutEvent = static_cast<QFutureCallOutEvent *>(event);
+   Q_D(QFutureWatcherBase);
+   if (event->type() == QEvent::FutureCallOut) {
+      QFutureCallOutEvent *callOutEvent = static_cast<QFutureCallOutEvent *>(event);
 
-        if (futureInterface().isPaused()) {
-            d->pendingCallOutEvents.append(callOutEvent->clone());
-            return true;
-        }
+      if (futureInterface().isPaused()) {
+         d->pendingCallOutEvents.append(callOutEvent->clone());
+         return true;
+      }
 
-        if (callOutEvent->callOutType == QFutureCallOutEvent::Resumed
+      if (callOutEvent->callOutType == QFutureCallOutEvent::Resumed
             && !d->pendingCallOutEvents.isEmpty()) {
-            // send the resume
-            d->sendCallOutEvent(callOutEvent);
+         // send the resume
+         d->sendCallOutEvent(callOutEvent);
 
-            // next send all pending call outs
-            for (int i = 0; i < d->pendingCallOutEvents.count(); ++i)
-                d->sendCallOutEvent(d->pendingCallOutEvents.at(i));
-            qDeleteAll(d->pendingCallOutEvents);
-            d->pendingCallOutEvents.clear();
-        } else {
-            d->sendCallOutEvent(callOutEvent);
-        }
-        return true;
-    }
-    return QObject::event(event);
+         // next send all pending call outs
+         for (int i = 0; i < d->pendingCallOutEvents.count(); ++i) {
+            d->sendCallOutEvent(d->pendingCallOutEvents.at(i));
+         }
+         qDeleteAll(d->pendingCallOutEvents);
+         d->pendingCallOutEvents.clear();
+      } else {
+         d->sendCallOutEvent(callOutEvent);
+      }
+      return true;
+   }
+   return QObject::event(event);
 }
 
 void QFutureWatcherBase::setPendingResultsLimit(int limit)
 {
-    Q_D(QFutureWatcherBase);
-    d->maximumPendingResultsReady = limit;
+   Q_D(QFutureWatcherBase);
+   d->maximumPendingResultsReady = limit;
 }
 
-void QFutureWatcherBase::connectNotify(const char * signal)
+void QFutureWatcherBase::connectNotify(const char *signal)
 {
-    Q_D(QFutureWatcherBase);
+   Q_D(QFutureWatcherBase);
 
-	 const char *resultSignal = "resultReadyAt(int)";
+   const char *resultSignal = "resultReadyAt(int)";
 
-    if (qstrcmp(signal, resultSignal) == 0)
-        d->resultAtConnected.ref();
+   if (qstrcmp(signal, resultSignal) == 0) {
+      d->resultAtConnected.ref();
+   }
 
 #ifndef QT_NO_DEBUG
-	 const char *finishedSignal = "finished()";
+   const char *finishedSignal = "finished()";
 
-    if (qstrcmp(signal, finishedSignal) == 0) {
-        if (futureInterface().isRunning()) {
-            //connections should be established before calling stFuture to avoid race.
-            // (The future could finish before the connection is made.)
-            qWarning("QFutureWatcher::connect: connecting after calling setFuture() is likely to produce race");
-        }
-    }
+   if (qstrcmp(signal, finishedSignal) == 0) {
+      if (futureInterface().isRunning()) {
+         //connections should be established before calling stFuture to avoid race.
+         // (The future could finish before the connection is made.)
+         qWarning("QFutureWatcher::connect: connecting after calling setFuture() is likely to produce race");
+      }
+   }
 
 #endif
 
 }
 
-void QFutureWatcherBase::disconnectNotify(const char * signal)
+void QFutureWatcherBase::disconnectNotify(const char *signal)
 {
-    Q_D(QFutureWatcherBase);
+   Q_D(QFutureWatcherBase);
 
-	 const char *resultSignal = "resultReadyAt(int)";
+   const char *resultSignal = "resultReadyAt(int)";
 
-    if (qstrcmp(signal, resultSignal) == 0)
-        d->resultAtConnected.deref();
+   if (qstrcmp(signal, resultSignal) == 0) {
+      d->resultAtConnected.deref();
+   }
 }
 
 /*!
     \internal
 */
 QFutureWatcherBasePrivate::QFutureWatcherBasePrivate()
-    : maximumPendingResultsReady(QThread::idealThreadCount() * 2),
-      resultAtConnected(0)
+   : maximumPendingResultsReady(QThread::idealThreadCount() * 2),
+     resultAtConnected(0)
 { }
 
 /*!
@@ -367,7 +370,7 @@ QFutureWatcherBasePrivate::QFutureWatcherBasePrivate()
 */
 void QFutureWatcherBase::connectOutputInterface()
 {
-    futureInterface().d->connectOutputInterface(d_func());
+   futureInterface().d->connectOutputInterface(d_func());
 }
 
 /*!
@@ -375,92 +378,103 @@ void QFutureWatcherBase::connectOutputInterface()
 */
 void QFutureWatcherBase::disconnectOutputInterface(bool pendingAssignment)
 {
-    if (pendingAssignment) {
-        Q_D(QFutureWatcherBase);
-        d->pendingResultsReady = 0;
-        qDeleteAll(d->pendingCallOutEvents);
-        d->pendingCallOutEvents.clear();
-        d->finished = false;
-    }
+   if (pendingAssignment) {
+      Q_D(QFutureWatcherBase);
+      d->pendingResultsReady = 0;
+      qDeleteAll(d->pendingCallOutEvents);
+      d->pendingCallOutEvents.clear();
+      d->finished = false;
+   }
 
-    futureInterface().d->disconnectOutputInterface(d_func());
+   futureInterface().d->disconnectOutputInterface(d_func());
 }
 
 void QFutureWatcherBasePrivate::postCallOutEvent(const QFutureCallOutEvent &callOutEvent)
 {
-    Q_Q(QFutureWatcherBase);
+   Q_Q(QFutureWatcherBase);
 
-    if (callOutEvent.callOutType == QFutureCallOutEvent::ResultsReady) {
-        if (pendingResultsReady.fetchAndAddRelaxed(1) >= maximumPendingResultsReady)
-            q->futureInterface().d->internal_setThrottled(true);
-    }
+   if (callOutEvent.callOutType == QFutureCallOutEvent::ResultsReady) {
+      if (pendingResultsReady.fetchAndAddRelaxed(1) >= maximumPendingResultsReady) {
+         q->futureInterface().d->internal_setThrottled(true);
+      }
+   }
 
-    QCoreApplication::postEvent(q, callOutEvent.clone());
+   QCoreApplication::postEvent(q, callOutEvent.clone());
 }
 
 void QFutureWatcherBasePrivate::callOutInterfaceDisconnected()
 {
-    QCoreApplication::removePostedEvents(q_func(), QEvent::FutureCallOut);
+   QCoreApplication::removePostedEvents(q_func(), QEvent::FutureCallOut);
 }
 
 void QFutureWatcherBasePrivate::sendCallOutEvent(QFutureCallOutEvent *event)
 {
-    Q_Q(QFutureWatcherBase);
+   Q_Q(QFutureWatcherBase);
 
-    switch (event->callOutType) {
-        case QFutureCallOutEvent::Started:
-            emit q->started();
-        break;
-        case QFutureCallOutEvent::Finished:
-            finished = true;
-            emit q->finished();
-        break;
-        case QFutureCallOutEvent::Canceled:
-            pendingResultsReady = 0;
-            emit q->canceled();
-        break;
-        case QFutureCallOutEvent::Paused:
-            if (q->futureInterface().isCanceled())
-                break;
-            emit q->paused();
-        break;
-        case QFutureCallOutEvent::Resumed:
-            if (q->futureInterface().isCanceled())
-                break;
-            emit q->resumed();
-        break;
-        case QFutureCallOutEvent::ResultsReady: {
-            if (q->futureInterface().isCanceled())
-                break;
+   switch (event->callOutType) {
+      case QFutureCallOutEvent::Started:
+         emit q->started();
+         break;
+      case QFutureCallOutEvent::Finished:
+         finished = true;
+         emit q->finished();
+         break;
+      case QFutureCallOutEvent::Canceled:
+         pendingResultsReady = 0;
+         emit q->canceled();
+         break;
+      case QFutureCallOutEvent::Paused:
+         if (q->futureInterface().isCanceled()) {
+            break;
+         }
+         emit q->paused();
+         break;
+      case QFutureCallOutEvent::Resumed:
+         if (q->futureInterface().isCanceled()) {
+            break;
+         }
+         emit q->resumed();
+         break;
+      case QFutureCallOutEvent::ResultsReady: {
+         if (q->futureInterface().isCanceled()) {
+            break;
+         }
 
-            if (pendingResultsReady.fetchAndAddRelaxed(-1) <= maximumPendingResultsReady)
-                q->futureInterface().setThrottled(false);
+         if (pendingResultsReady.fetchAndAddRelaxed(-1) <= maximumPendingResultsReady) {
+            q->futureInterface().setThrottled(false);
+         }
 
-            const int beginIndex = event->index1;
-            const int endIndex = event->index2;
+         const int beginIndex = event->index1;
+         const int endIndex = event->index2;
 
-            emit q->resultsReadyAt(beginIndex, endIndex);
+         emit q->resultsReadyAt(beginIndex, endIndex);
 
-            if (resultAtConnected.load() <= 0)
-                break;
+         if (resultAtConnected.load() <= 0) {
+            break;
+         }
 
-            for (int i = beginIndex; i < endIndex; ++i)
-                emit q->resultReadyAt(i);
+         for (int i = beginIndex; i < endIndex; ++i) {
+            emit q->resultReadyAt(i);
+         }
 
-        } break;
-        case QFutureCallOutEvent::Progress:
-            if (q->futureInterface().isCanceled())
-                break;
+      }
+      break;
+      case QFutureCallOutEvent::Progress:
+         if (q->futureInterface().isCanceled()) {
+            break;
+         }
 
-            emit q->progressValueChanged(event->index1);
-            if (!event->text.isNull()) // ###
-                q->progressTextChanged(event->text);
-        break;
-        case QFutureCallOutEvent::ProgressRange:
-            emit q->progressRangeChanged(event->index1, event->index2);
-        break;
-        default: break;
-    }
+         emit q->progressValueChanged(event->index1);
+         if (!event->text.isNull()) { // ###
+            q->progressTextChanged(event->text);
+         }
+         break;
+      case QFutureCallOutEvent::ProgressRange:
+         emit q->progressRangeChanged(event->index1, event->index2);
+         break;
+      default:
+         break;
+   }
 }
 
 

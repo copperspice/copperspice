@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,46 +33,46 @@ QT_BEGIN_NAMESPACE
 
 class QTimeLinePrivate
 {
-    Q_DECLARE_PUBLIC(QTimeLine)
+   Q_DECLARE_PUBLIC(QTimeLine)
 
-public:
-    inline QTimeLinePrivate()
-        : startTime(0), duration(1000), startFrame(0), endFrame(0),
-          updateInterval(1000 / 25),
-          totalLoopCount(1), currentLoopCount(0), currentTime(0), timerId(0),
-          direction(QTimeLine::Forward), easingCurve(QEasingCurve::InOutSine),
-          state(QTimeLine::NotRunning)
-    { }
+ public:
+   inline QTimeLinePrivate()
+      : startTime(0), duration(1000), startFrame(0), endFrame(0),
+        updateInterval(1000 / 25),
+        totalLoopCount(1), currentLoopCount(0), currentTime(0), timerId(0),
+        direction(QTimeLine::Forward), easingCurve(QEasingCurve::InOutSine),
+        state(QTimeLine::NotRunning) {
+   }
 
-    virtual ~QTimeLinePrivate() {}
+   virtual ~QTimeLinePrivate() {}
 
-    int startTime;
-    int duration;
-    int startFrame;
-    int endFrame;
-    int updateInterval;
-    int totalLoopCount;
-    int currentLoopCount;
+   int startTime;
+   int duration;
+   int startFrame;
+   int endFrame;
+   int updateInterval;
+   int totalLoopCount;
+   int currentLoopCount;
 
-    int currentTime;
-    int timerId;
-    QElapsedTimer timer;
+   int currentTime;
+   int timerId;
+   QElapsedTimer timer;
 
-    QTimeLine::Direction direction;
-    QEasingCurve easingCurve;
-    QTimeLine::State state;
+   QTimeLine::Direction direction;
+   QEasingCurve easingCurve;
+   QTimeLine::State state;
 
-    inline void setState(QTimeLine::State newState)
-    {
-        Q_Q(QTimeLine);
-        if (newState != state)
-            emit q->stateChanged(state = newState);
-    }
+   inline void setState(QTimeLine::State newState) {
+      Q_Q(QTimeLine);
+      if (newState != state) {
+         emit q->stateChanged(state = newState);
+      }
+   }
 
-    void setCurrentTime(int msecs);
+   void setCurrentTime(int msecs);
 
-protected:
-	 QTimeLine *q_ptr;
+ protected:
+   QTimeLine *q_ptr;
 
 };
 
@@ -81,75 +81,81 @@ protected:
 */
 void QTimeLinePrivate::setCurrentTime(int msecs)
 {
-    Q_Q(QTimeLine);
+   Q_Q(QTimeLine);
 
-    qreal lastValue = q->currentValue();
-    int lastFrame = q->currentFrame();
+   qreal lastValue = q->currentValue();
+   int lastFrame = q->currentFrame();
 
-    // Determine if we are looping.
-    int elapsed = (direction == QTimeLine::Backward) ? (-msecs +  duration) : msecs;
-    int loopCount = elapsed / duration;
+   // Determine if we are looping.
+   int elapsed = (direction == QTimeLine::Backward) ? (-msecs +  duration) : msecs;
+   int loopCount = elapsed / duration;
 
-    bool looping = (loopCount != currentLoopCount);
+   bool looping = (loopCount != currentLoopCount);
 #ifdef QTIMELINE_DEBUG
-    qDebug() << "QTimeLinePrivate::setCurrentTime:" << msecs << duration << "with loopCount" << loopCount
-             << "currentLoopCount" << currentLoopCount
-             << "looping" << looping;
+   qDebug() << "QTimeLinePrivate::setCurrentTime:" << msecs << duration << "with loopCount" << loopCount
+            << "currentLoopCount" << currentLoopCount
+            << "looping" << looping;
 #endif
-    if (looping)
-        currentLoopCount = loopCount;
+   if (looping) {
+      currentLoopCount = loopCount;
+   }
 
-    // Normalize msecs to be between 0 and duration, inclusive.
-    currentTime = elapsed % duration;
-    if (direction == QTimeLine::Backward)
-        currentTime = duration - currentTime;
+   // Normalize msecs to be between 0 and duration, inclusive.
+   currentTime = elapsed % duration;
+   if (direction == QTimeLine::Backward) {
+      currentTime = duration - currentTime;
+   }
 
-    // Check if we have reached the end of loopcount.
-    bool finished = false;
-    if (totalLoopCount && currentLoopCount >= totalLoopCount) {
-        finished = true;
-        currentTime = (direction == QTimeLine::Backward) ? 0 : duration;
-        currentLoopCount = totalLoopCount - 1;
-    }
+   // Check if we have reached the end of loopcount.
+   bool finished = false;
+   if (totalLoopCount && currentLoopCount >= totalLoopCount) {
+      finished = true;
+      currentTime = (direction == QTimeLine::Backward) ? 0 : duration;
+      currentLoopCount = totalLoopCount - 1;
+   }
 
-    int currentFrame = q->frameForTime(currentTime);
+   int currentFrame = q->frameForTime(currentTime);
 #ifdef QTIMELINE_DEBUG
-    qDebug() << "QTimeLinePrivate::setCurrentTime: frameForTime" << currentTime << currentFrame;
+   qDebug() << "QTimeLinePrivate::setCurrentTime: frameForTime" << currentTime << currentFrame;
 #endif
-    if (!qFuzzyCompare(lastValue, q->currentValue()))
-        emit q->valueChanged(q->currentValue());
-    if (lastFrame != currentFrame) {
-        const int transitionframe = (direction == QTimeLine::Forward ? endFrame : startFrame);
-        if (looping && !finished && transitionframe != currentFrame) {
+   if (!qFuzzyCompare(lastValue, q->currentValue())) {
+      emit q->valueChanged(q->currentValue());
+   }
+   if (lastFrame != currentFrame) {
+      const int transitionframe = (direction == QTimeLine::Forward ? endFrame : startFrame);
+      if (looping && !finished && transitionframe != currentFrame) {
 #ifdef QTIMELINE_DEBUG
-            qDebug() << "QTimeLinePrivate::setCurrentTime: transitionframe";
+         qDebug() << "QTimeLinePrivate::setCurrentTime: transitionframe";
 #endif
-            emit q->frameChanged(transitionframe);
-        }
+         emit q->frameChanged(transitionframe);
+      }
 #ifdef QTIMELINE_DEBUG
-        else {
-            QByteArray reason;
-            if (!looping)
-                reason += " not looping";
-            if (finished) {
-                if (!reason.isEmpty())
-                    reason += " and";
-                reason += " finished";
+      else {
+         QByteArray reason;
+         if (!looping) {
+            reason += " not looping";
+         }
+         if (finished) {
+            if (!reason.isEmpty()) {
+               reason += " and";
             }
-            if (transitionframe == currentFrame) {
-                if (!reason.isEmpty())
-                    reason += " and";
-                reason += " transitionframe is equal to currentFrame: " + QByteArray::number(currentFrame);
+            reason += " finished";
+         }
+         if (transitionframe == currentFrame) {
+            if (!reason.isEmpty()) {
+               reason += " and";
             }
-            qDebug("QTimeLinePrivate::setCurrentTime: not transitionframe because %s",  reason.constData());
-        }
+            reason += " transitionframe is equal to currentFrame: " + QByteArray::number(currentFrame);
+         }
+         qDebug("QTimeLinePrivate::setCurrentTime: not transitionframe because %s",  reason.constData());
+      }
 #endif
-        emit q->frameChanged(currentFrame);
-    }
-    if (finished && state == QTimeLine::Running) {
-        q->stop();
-        emit q->finished();
-    }
+      emit q->frameChanged(currentFrame);
+   }
+   if (finished && state == QTimeLine::Running) {
+      q->stop();
+      emit q->finished();
+   }
 }
 
 /*!
@@ -303,9 +309,9 @@ void QTimeLinePrivate::setCurrentTime(int msecs)
  */
 
 QTimeLine::QTimeLine(int duration, QObject *parent)
-	: QObject(parent), d_ptr(new QTimeLinePrivate)  
+   : QObject(parent), d_ptr(new QTimeLinePrivate)
 {
-	d_ptr->q_ptr = this;
+   d_ptr->q_ptr = this;
    setDuration(duration);
 }
 
@@ -314,10 +320,11 @@ QTimeLine::QTimeLine(int duration, QObject *parent)
  */
 QTimeLine::~QTimeLine()
 {
-    Q_D(QTimeLine);
+   Q_D(QTimeLine);
 
-    if (d->state == Running)
-        stop();
+   if (d->state == Running) {
+      stop();
+   }
 }
 
 /*!
@@ -327,8 +334,8 @@ QTimeLine::~QTimeLine()
 */
 QTimeLine::State QTimeLine::state() const
 {
-    Q_D(const QTimeLine);
-    return d->state;
+   Q_D(const QTimeLine);
+   return d->state;
 }
 
 /*!
@@ -341,13 +348,13 @@ QTimeLine::State QTimeLine::state() const
 */
 int QTimeLine::loopCount() const
 {
-    Q_D(const QTimeLine);
-    return d->totalLoopCount;
+   Q_D(const QTimeLine);
+   return d->totalLoopCount;
 }
 void QTimeLine::setLoopCount(int count)
 {
-    Q_D(QTimeLine);
-    d->totalLoopCount = count;
+   Q_D(QTimeLine);
+   d->totalLoopCount = count;
 }
 
 /*!
@@ -363,15 +370,15 @@ void QTimeLine::setLoopCount(int count)
 */
 QTimeLine::Direction QTimeLine::direction() const
 {
-    Q_D(const QTimeLine);
-    return d->direction;
+   Q_D(const QTimeLine);
+   return d->direction;
 }
 void QTimeLine::setDirection(Direction direction)
 {
-    Q_D(QTimeLine);
-    d->direction = direction;
-    d->startTime = d->currentTime;
-    d->timer.start();
+   Q_D(QTimeLine);
+   d->direction = direction;
+   d->startTime = d->currentTime;
+   d->timer.start();
 }
 
 /*!
@@ -388,17 +395,17 @@ void QTimeLine::setDirection(Direction direction)
 */
 int QTimeLine::duration() const
 {
-    Q_D(const QTimeLine);
-    return d->duration;
+   Q_D(const QTimeLine);
+   return d->duration;
 }
 void QTimeLine::setDuration(int duration)
 {
-    Q_D(QTimeLine);
-    if (duration <= 0) {
-        qWarning("QTimeLine::setDuration: cannot set duration <= 0");
-        return;
-    }
-    d->duration = duration;
+   Q_D(QTimeLine);
+   if (duration <= 0) {
+      qWarning("QTimeLine::setDuration: cannot set duration <= 0");
+      return;
+   }
+   d->duration = duration;
 }
 
 /*!
@@ -409,8 +416,8 @@ void QTimeLine::setDuration(int duration)
 */
 int QTimeLine::startFrame() const
 {
-    Q_D(const QTimeLine);
-    return d->startFrame;
+   Q_D(const QTimeLine);
+   return d->startFrame;
 }
 
 /*!
@@ -421,8 +428,8 @@ int QTimeLine::startFrame() const
 */
 void QTimeLine::setStartFrame(int frame)
 {
-    Q_D(QTimeLine);
-    d->startFrame = frame;
+   Q_D(QTimeLine);
+   d->startFrame = frame;
 }
 
 /*!
@@ -433,8 +440,8 @@ void QTimeLine::setStartFrame(int frame)
 */
 int QTimeLine::endFrame() const
 {
-    Q_D(const QTimeLine);
-    return d->endFrame;
+   Q_D(const QTimeLine);
+   return d->endFrame;
 }
 
 /*!
@@ -445,8 +452,8 @@ int QTimeLine::endFrame() const
 */
 void QTimeLine::setEndFrame(int frame)
 {
-    Q_D(QTimeLine);
-    d->endFrame = frame;
+   Q_D(QTimeLine);
+   d->endFrame = frame;
 }
 
 /*!
@@ -462,9 +469,9 @@ void QTimeLine::setEndFrame(int frame)
 */
 void QTimeLine::setFrameRange(int startFrame, int endFrame)
 {
-    Q_D(QTimeLine);
-    d->startFrame = startFrame;
-    d->endFrame = endFrame;
+   Q_D(QTimeLine);
+   d->startFrame = startFrame;
+   d->endFrame = endFrame;
 }
 
 /*!
@@ -480,13 +487,13 @@ void QTimeLine::setFrameRange(int startFrame, int endFrame)
 */
 int QTimeLine::updateInterval() const
 {
-    Q_D(const QTimeLine);
-    return d->updateInterval;
+   Q_D(const QTimeLine);
+   return d->updateInterval;
 }
 void QTimeLine::setUpdateInterval(int interval)
 {
-    Q_D(QTimeLine);
-    d->updateInterval = interval;
+   Q_D(QTimeLine);
+   d->updateInterval = interval;
 }
 
 /*!
@@ -504,48 +511,48 @@ void QTimeLine::setUpdateInterval(int interval)
 */
 QTimeLine::CurveShape QTimeLine::curveShape() const
 {
-    Q_D(const QTimeLine);
-    switch (d->easingCurve.type()) {
-    default:
-    case QEasingCurve::InOutSine:
-        return EaseInOutCurve;
-    case QEasingCurve::InCurve:
-        return EaseInCurve;
-    case QEasingCurve::OutCurve:
-        return EaseOutCurve;
-    case QEasingCurve::Linear:
-        return LinearCurve;
-    case QEasingCurve::SineCurve:
-        return SineCurve;
-    case QEasingCurve::CosineCurve:
-        return CosineCurve;
-    }
-    return EaseInOutCurve;
+   Q_D(const QTimeLine);
+   switch (d->easingCurve.type()) {
+      default:
+      case QEasingCurve::InOutSine:
+         return EaseInOutCurve;
+      case QEasingCurve::InCurve:
+         return EaseInCurve;
+      case QEasingCurve::OutCurve:
+         return EaseOutCurve;
+      case QEasingCurve::Linear:
+         return LinearCurve;
+      case QEasingCurve::SineCurve:
+         return SineCurve;
+      case QEasingCurve::CosineCurve:
+         return CosineCurve;
+   }
+   return EaseInOutCurve;
 }
 
 void QTimeLine::setCurveShape(CurveShape shape)
 {
-    switch (shape) {
-    default:
-    case EaseInOutCurve:
-        setEasingCurve(QEasingCurve(QEasingCurve::InOutSine));
-        break;
-    case EaseInCurve:
-        setEasingCurve(QEasingCurve(QEasingCurve::InCurve));
-        break;
-    case EaseOutCurve:
-        setEasingCurve(QEasingCurve(QEasingCurve::OutCurve));
-        break;
-    case LinearCurve:
-        setEasingCurve(QEasingCurve(QEasingCurve::Linear));
-        break;
-    case SineCurve:
-        setEasingCurve(QEasingCurve(QEasingCurve::SineCurve));
-        break;
-    case CosineCurve:
-        setEasingCurve(QEasingCurve(QEasingCurve::CosineCurve));
-        break;
-    }
+   switch (shape) {
+      default:
+      case EaseInOutCurve:
+         setEasingCurve(QEasingCurve(QEasingCurve::InOutSine));
+         break;
+      case EaseInCurve:
+         setEasingCurve(QEasingCurve(QEasingCurve::InCurve));
+         break;
+      case EaseOutCurve:
+         setEasingCurve(QEasingCurve(QEasingCurve::OutCurve));
+         break;
+      case LinearCurve:
+         setEasingCurve(QEasingCurve(QEasingCurve::Linear));
+         break;
+      case SineCurve:
+         setEasingCurve(QEasingCurve(QEasingCurve::SineCurve));
+         break;
+      case CosineCurve:
+         setEasingCurve(QEasingCurve(QEasingCurve::CosineCurve));
+         break;
+   }
 }
 
 /*!
@@ -561,14 +568,14 @@ void QTimeLine::setCurveShape(CurveShape shape)
 
 QEasingCurve QTimeLine::easingCurve() const
 {
-    Q_D(const QTimeLine);
-    return d->easingCurve;
+   Q_D(const QTimeLine);
+   return d->easingCurve;
 }
 
-void QTimeLine::setEasingCurve(const QEasingCurve& curve)
+void QTimeLine::setEasingCurve(const QEasingCurve &curve)
 {
-    Q_D(QTimeLine);
-    d->easingCurve = curve;
+   Q_D(QTimeLine);
+   d->easingCurve = curve;
 }
 
 /*!
@@ -584,16 +591,16 @@ void QTimeLine::setEasingCurve(const QEasingCurve& curve)
 */
 int QTimeLine::currentTime() const
 {
-    Q_D(const QTimeLine);
-    return d->currentTime;
+   Q_D(const QTimeLine);
+   return d->currentTime;
 }
 void QTimeLine::setCurrentTime(int msec)
 {
-    Q_D(QTimeLine);
-    d->startTime = 0;
-    d->currentLoopCount = 0;
-    d->timer.restart();
-    d->setCurrentTime(msec);
+   Q_D(QTimeLine);
+   d->startTime = 0;
+   d->currentLoopCount = 0;
+   d->timer.restart();
+   d->setCurrentTime(msec);
 }
 
 /*!
@@ -603,8 +610,8 @@ void QTimeLine::setCurrentTime(int msec)
 */
 int QTimeLine::currentFrame() const
 {
-    Q_D(const QTimeLine);
-    return frameForTime(d->currentTime);
+   Q_D(const QTimeLine);
+   return frameForTime(d->currentTime);
 }
 
 /*!
@@ -614,8 +621,8 @@ int QTimeLine::currentFrame() const
 */
 qreal QTimeLine::currentValue() const
 {
-    Q_D(const QTimeLine);
-    return valueForTime(d->currentTime);
+   Q_D(const QTimeLine);
+   return valueForTime(d->currentTime);
 }
 
 /*!
@@ -627,10 +634,11 @@ qreal QTimeLine::currentValue() const
 */
 int QTimeLine::frameForTime(int msec) const
 {
-    Q_D(const QTimeLine);
-    if (d->direction == Forward)
-        return d->startFrame + int((d->endFrame - d->startFrame) * valueForTime(msec));
-    return d->startFrame + qCeil((d->endFrame - d->startFrame) * valueForTime(msec));
+   Q_D(const QTimeLine);
+   if (d->direction == Forward) {
+      return d->startFrame + int((d->endFrame - d->startFrame) * valueForTime(msec));
+   }
+   return d->startFrame + qCeil((d->endFrame - d->startFrame) * valueForTime(msec));
 }
 
 /*!
@@ -645,11 +653,11 @@ int QTimeLine::frameForTime(int msec) const
 */
 qreal QTimeLine::valueForTime(int msec) const
 {
-    Q_D(const QTimeLine);
-    msec = qMin(qMax(msec, 0), d->duration);
+   Q_D(const QTimeLine);
+   msec = qMin(qMax(msec, 0), d->duration);
 
-    qreal value = msec / qreal(d->duration);
-    return d->easingCurve.valueForProgress(value);
+   qreal value = msec / qreal(d->duration);
+   return d->easingCurve.valueForProgress(value);
 }
 
 /*!
@@ -667,20 +675,21 @@ qreal QTimeLine::valueForTime(int msec) const
 */
 void QTimeLine::start()
 {
-    Q_D(QTimeLine);
-    if (d->timerId) {
-        qWarning("QTimeLine::start: already running");
-        return;
-    }
-    int curTime = 0;
-    if (d->direction == Backward)
-        curTime = d->duration;
-    d->timerId = startTimer(d->updateInterval);
-    d->startTime = curTime;
-    d->currentLoopCount = 0;
-    d->timer.start();
-    d->setState(Running);
-    d->setCurrentTime(curTime);
+   Q_D(QTimeLine);
+   if (d->timerId) {
+      qWarning("QTimeLine::start: already running");
+      return;
+   }
+   int curTime = 0;
+   if (d->direction == Backward) {
+      curTime = d->duration;
+   }
+   d->timerId = startTimer(d->updateInterval);
+   d->startTime = curTime;
+   d->currentLoopCount = 0;
+   d->timer.start();
+   d->setState(Running);
+   d->setCurrentTime(curTime);
 }
 
 /*!
@@ -695,15 +704,15 @@ void QTimeLine::start()
 */
 void QTimeLine::resume()
 {
-    Q_D(QTimeLine);
-    if (d->timerId) {
-        qWarning("QTimeLine::resume: already running");
-        return;
-    }
-    d->timerId = startTimer(d->updateInterval);
-    d->startTime = d->currentTime;
-    d->timer.start();
-    d->setState(Running);
+   Q_D(QTimeLine);
+   if (d->timerId) {
+      qWarning("QTimeLine::resume: already running");
+      return;
+   }
+   d->timerId = startTimer(d->updateInterval);
+   d->startTime = d->currentTime;
+   d->timer.start();
+   d->setState(Running);
 }
 
 /*!
@@ -713,11 +722,12 @@ void QTimeLine::resume()
 */
 void QTimeLine::stop()
 {
-    Q_D(QTimeLine);
-    if (d->timerId)
-        killTimer(d->timerId);
-    d->setState(NotRunning);
-    d->timerId = 0;
+   Q_D(QTimeLine);
+   if (d->timerId) {
+      killTimer(d->timerId);
+   }
+   d->setState(NotRunning);
+   d->timerId = 0;
 }
 
 /*!
@@ -730,23 +740,23 @@ void QTimeLine::stop()
 */
 void QTimeLine::setPaused(bool paused)
 {
-    Q_D(QTimeLine);
-    if (d->state == NotRunning) {
-        qWarning("QTimeLine::setPaused: Not running");
-        return;
-    }
-    if (paused && d->state != Paused) {
-        d->startTime = d->currentTime;
-        killTimer(d->timerId);
-        d->timerId = 0;
-        d->setState(Paused);
-    } else if (!paused && d->state == Paused) {
-        // Same as resume()
-        d->timerId = startTimer(d->updateInterval);
-        d->startTime = d->currentTime;
-        d->timer.start();
-        d->setState(Running);
-    }
+   Q_D(QTimeLine);
+   if (d->state == NotRunning) {
+      qWarning("QTimeLine::setPaused: Not running");
+      return;
+   }
+   if (paused && d->state != Paused) {
+      d->startTime = d->currentTime;
+      killTimer(d->timerId);
+      d->timerId = 0;
+      d->setState(Paused);
+   } else if (!paused && d->state == Paused) {
+      // Same as resume()
+      d->timerId = startTimer(d->updateInterval);
+      d->startTime = d->currentTime;
+      d->timer.start();
+      d->setState(Running);
+   }
 }
 
 /*!
@@ -757,8 +767,8 @@ void QTimeLine::setPaused(bool paused)
 */
 void QTimeLine::toggleDirection()
 {
-    Q_D(QTimeLine);
-    setDirection(d->direction == Forward ? Backward : Forward);
+   Q_D(QTimeLine);
+   setDirection(d->direction == Forward ? Backward : Forward);
 }
 
 /*!
@@ -766,18 +776,18 @@ void QTimeLine::toggleDirection()
 */
 void QTimeLine::timerEvent(QTimerEvent *event)
 {
-    Q_D(QTimeLine);
-    if (event->timerId() != d->timerId) {
-        event->ignore();
-        return;
-    }
-    event->accept();
+   Q_D(QTimeLine);
+   if (event->timerId() != d->timerId) {
+      event->ignore();
+      return;
+   }
+   event->accept();
 
-    if (d->direction == Forward) {
-        d->setCurrentTime(d->startTime + d->timer.elapsed());
-    } else {
-        d->setCurrentTime(d->startTime - d->timer.elapsed());
-    }
+   if (d->direction == Forward) {
+      d->setCurrentTime(d->startTime + d->timer.elapsed());
+   } else {
+      d->setCurrentTime(d->startTime - d->timer.elapsed());
+   }
 }
 
 QT_END_NAMESPACE

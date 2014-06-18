@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,19 +32,20 @@ QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_CODECS
 
-class QIsciiCodec : public QTextCodec {
-public:
-    explicit QIsciiCodec(int i) : idx(i) {}
-    ~QIsciiCodec();
+class QIsciiCodec : public QTextCodec
+{
+ public:
+   explicit QIsciiCodec(int i) : idx(i) {}
+   ~QIsciiCodec();
 
-    QByteArray name() const;
-    int mibEnum() const;
+   QByteArray name() const;
+   int mibEnum() const;
 
-    QString convertToUnicode(const char *, int, ConverterState *) const;
-    QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
 
-private:
-    int idx;
+ private:
+   int idx;
 };
 
 #endif // QT_NO_CODECS

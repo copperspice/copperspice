@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,28 +39,37 @@ QT_BEGIN_NAMESPACE
 */
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 {
-    if (!data) return "(null)";
-    QByteArray out;
-    for (int i = 0; i < len && i < maxSize; ++i) {
-        char c = data[i];
-        if (isprint(c)) {
-            out += c;
-        } else switch (c) {
-        case '\n': out += "\\n"; break;
-        case '\r': out += "\\r"; break;
-        case '\t': out += "\\t"; break;
-        default:
-            char buf[5];
-            qsnprintf(buf, sizeof(buf), "\\%3o", c);
-            buf[4] = '\0';
-            out += QByteArray(buf);
-        }
-    }
+   if (!data) {
+      return "(null)";
+   }
+   QByteArray out;
+   for (int i = 0; i < len && i < maxSize; ++i) {
+      char c = data[i];
+      if (isprint(c)) {
+         out += c;
+      } else switch (c) {
+            case '\n':
+               out += "\\n";
+               break;
+            case '\r':
+               out += "\\r";
+               break;
+            case '\t':
+               out += "\\t";
+               break;
+            default:
+               char buf[5];
+               qsnprintf(buf, sizeof(buf), "\\%3o", c);
+               buf[4] = '\0';
+               out += QByteArray(buf);
+         }
+   }
 
-    if (len < maxSize)
-        out += "...";
+   if (len < maxSize) {
+      out += "...";
+   }
 
-    return out;
+   return out;
 }
 
 QT_END_NAMESPACE
@@ -125,62 +134,66 @@ QT_BEGIN_NAMESPACE
 
 QStringList QProcessEnvironmentPrivate::toList() const
 {
-    QStringList result;
-    result.reserve(hash.size());
-    Hash::ConstIterator it = hash.constBegin(),
+   QStringList result;
+   result.reserve(hash.size());
+   Hash::ConstIterator it = hash.constBegin(),
                        end = hash.constEnd();
-    for ( ; it != end; ++it) {
-        QString data = nameToString(it.key());
-        QString value = valueToString(it.value());
-        data.reserve(data.length() + value.length() + 1);
-        data.append(QLatin1Char('='));
-        data.append(value);
-        result << data;
-    }
-    return result;
+   for ( ; it != end; ++it) {
+      QString data = nameToString(it.key());
+      QString value = valueToString(it.value());
+      data.reserve(data.length() + value.length() + 1);
+      data.append(QLatin1Char('='));
+      data.append(value);
+      result << data;
+   }
+   return result;
 }
 
 QProcessEnvironment QProcessEnvironmentPrivate::fromList(const QStringList &list)
 {
-    QProcessEnvironment env;
-    QStringList::ConstIterator it = list.constBegin(),
+   QProcessEnvironment env;
+   QStringList::ConstIterator it = list.constBegin(),
                               end = list.constEnd();
-    for ( ; it != end; ++it) {
-        int pos = it->indexOf(QLatin1Char('='));
-        if (pos < 1)
-            continue;
+   for ( ; it != end; ++it) {
+      int pos = it->indexOf(QLatin1Char('='));
+      if (pos < 1) {
+         continue;
+      }
 
-        QString value = it->mid(pos + 1);
-        QString name = *it;
-        name.truncate(pos);
-        env.insert(name, value);
-    }
-    return env;
+      QString value = it->mid(pos + 1);
+      QString name = *it;
+      name.truncate(pos);
+      env.insert(name, value);
+   }
+   return env;
 }
 
 QStringList QProcessEnvironmentPrivate::keys() const
 {
-    QStringList result;
-    result.reserve(hash.size());
-    Hash::ConstIterator it = hash.constBegin(),
+   QStringList result;
+   result.reserve(hash.size());
+   Hash::ConstIterator it = hash.constBegin(),
                        end = hash.constEnd();
-    for ( ; it != end; ++it)
-        result << nameToString(it.key());
-    return result;
+   for ( ; it != end; ++it) {
+      result << nameToString(it.key());
+   }
+   return result;
 }
 
 void QProcessEnvironmentPrivate::insert(const QProcessEnvironmentPrivate &other)
 {
-    Hash::ConstIterator it = other.hash.constBegin(),
+   Hash::ConstIterator it = other.hash.constBegin(),
                        end = other.hash.constEnd();
-    for ( ; it != end; ++it)
-        hash.insert(it.key(), it.value());
+   for ( ; it != end; ++it) {
+      hash.insert(it.key(), it.value());
+   }
 
 #ifdef Q_OS_UNIX
-    QHash<QString, Key>::ConstIterator nit = other.nameMap.constBegin(),
+   QHash<QString, Key>::ConstIterator nit = other.nameMap.constBegin(),
                                       nend = other.nameMap.constEnd();
-    for ( ; nit != nend; ++nit)
-        nameMap.insert(nit.key(), nit.value());
+   for ( ; nit != nend; ++nit) {
+      nameMap.insert(nit.key(), nit.value());
+   }
 #endif
 }
 
@@ -190,7 +203,7 @@ void QProcessEnvironmentPrivate::insert(const QProcessEnvironmentPrivate &other)
     environment variables to be removed.
 */
 QProcessEnvironment::QProcessEnvironment()
-    : d(0)
+   : d(0)
 {
 }
 
@@ -205,7 +218,7 @@ QProcessEnvironment::~QProcessEnvironment()
     Creates a QProcessEnvironment object that is a copy of \a other.
 */
 QProcessEnvironment::QProcessEnvironment(const QProcessEnvironment &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -215,8 +228,8 @@ QProcessEnvironment::QProcessEnvironment(const QProcessEnvironment &other)
 */
 QProcessEnvironment &QProcessEnvironment::operator=(const QProcessEnvironment &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -238,13 +251,14 @@ QProcessEnvironment &QProcessEnvironment::operator=(const QProcessEnvironment &o
 */
 bool QProcessEnvironment::operator==(const QProcessEnvironment &other) const
 {
-    if (d == other.d)
-        return true;
-    if (d && other.d) {
-        QProcessEnvironmentPrivate::OrderedMutexLocker locker(d, other.d);
-        return d->hash == other.d->hash;
-    }
-    return false;
+   if (d == other.d) {
+      return true;
+   }
+   if (d && other.d) {
+      QProcessEnvironmentPrivate::OrderedMutexLocker locker(d, other.d);
+      return d->hash == other.d->hash;
+   }
+   return false;
 }
 
 /*!
@@ -255,8 +269,8 @@ bool QProcessEnvironment::operator==(const QProcessEnvironment &other) const
 */
 bool QProcessEnvironment::isEmpty() const
 {
-    // Needs no locking, as no hash nodes are accessed
-    return d ? d->hash.isEmpty() : true;
+   // Needs no locking, as no hash nodes are accessed
+   return d ? d->hash.isEmpty() : true;
 }
 
 /*!
@@ -267,10 +281,11 @@ bool QProcessEnvironment::isEmpty() const
 */
 void QProcessEnvironment::clear()
 {
-    if (d)
-        d->hash.clear();
-    // Unix: Don't clear d->nameMap, as the environment is likely to be
-    // re-populated with the same keys again.
+   if (d) {
+      d->hash.clear();
+   }
+   // Unix: Don't clear d->nameMap, as the environment is likely to be
+   // re-populated with the same keys again.
 }
 
 /*!
@@ -285,10 +300,11 @@ void QProcessEnvironment::clear()
 */
 bool QProcessEnvironment::contains(const QString &name) const
 {
-    if (!d)
-        return false;
-    QProcessEnvironmentPrivate::MutexLocker locker(d);
-    return d->hash.contains(d->prepareName(name));
+   if (!d) {
+      return false;
+   }
+   QProcessEnvironmentPrivate::MutexLocker locker(d);
+   return d->hash.contains(d->prepareName(name));
 }
 
 /*!
@@ -309,9 +325,9 @@ bool QProcessEnvironment::contains(const QString &name) const
 */
 void QProcessEnvironment::insert(const QString &name, const QString &value)
 {
-    // our re-impl of detach() detaches from null
-    d.detach(); // detach before prepareName()
-    d->hash.insert(d->prepareName(name), d->prepareValue(value));
+   // our re-impl of detach() detaches from null
+   d.detach(); // detach before prepareName()
+   d->hash.insert(d->prepareName(name), d->prepareValue(value));
 }
 
 /*!
@@ -327,10 +343,10 @@ void QProcessEnvironment::insert(const QString &name, const QString &value)
 */
 void QProcessEnvironment::remove(const QString &name)
 {
-    if (d) {
-        d.detach(); // detach before prepareName()
-        d->hash.remove(d->prepareName(name));
-    }
+   if (d) {
+      d.detach(); // detach before prepareName()
+      d->hash.remove(d->prepareName(name));
+   }
 }
 
 /*!
@@ -346,15 +362,17 @@ void QProcessEnvironment::remove(const QString &name)
 */
 QString QProcessEnvironment::value(const QString &name, const QString &defaultValue) const
 {
-    if (!d)
-        return defaultValue;
+   if (!d) {
+      return defaultValue;
+   }
 
-    QProcessEnvironmentPrivate::MutexLocker locker(d);
-    QProcessEnvironmentPrivate::Hash::ConstIterator it = d->hash.constFind(d->prepareName(name));
-    if (it == d->hash.constEnd())
-        return defaultValue;
+   QProcessEnvironmentPrivate::MutexLocker locker(d);
+   QProcessEnvironmentPrivate::Hash::ConstIterator it = d->hash.constFind(d->prepareName(name));
+   if (it == d->hash.constEnd()) {
+      return defaultValue;
+   }
 
-    return d->valueToString(it.value());
+   return d->valueToString(it.value());
 }
 
 /*!
@@ -372,10 +390,11 @@ QString QProcessEnvironment::value(const QString &name, const QString &defaultVa
 */
 QStringList QProcessEnvironment::toStringList() const
 {
-    if (!d)
-        return QStringList();
-    QProcessEnvironmentPrivate::MutexLocker locker(d);
-    return d->toList();
+   if (!d) {
+      return QStringList();
+   }
+   QProcessEnvironmentPrivate::MutexLocker locker(d);
+   return d->toList();
 }
 
 /*!
@@ -386,10 +405,11 @@ QStringList QProcessEnvironment::toStringList() const
 */
 QStringList QProcessEnvironment::keys() const
 {
-    if (!d)
-        return QStringList();
-    QProcessEnvironmentPrivate::MutexLocker locker(d);
-    return d->keys();
+   if (!d) {
+      return QStringList();
+   }
+   QProcessEnvironmentPrivate::MutexLocker locker(d);
+   return d->keys();
 }
 
 /*!
@@ -401,32 +421,33 @@ QStringList QProcessEnvironment::keys() const
 */
 void QProcessEnvironment::insert(const QProcessEnvironment &e)
 {
-    if (!e.d)
-        return;
+   if (!e.d) {
+      return;
+   }
 
-    // our re-impl of detach() detaches from null
-    QProcessEnvironmentPrivate::MutexLocker locker(e.d);
-    d->insert(*e.d);
+   // our re-impl of detach() detaches from null
+   QProcessEnvironmentPrivate::MutexLocker locker(e.d);
+   d->insert(*e.d);
 }
 
 void QProcessPrivate::Channel::clear()
 {
-    switch (type) {
-    case PipeSource:
-        Q_ASSERT(process);
-        process->stdinChannel.type = Normal;
-        process->stdinChannel.process = 0;
-        break;
-    case PipeSink:
-        Q_ASSERT(process);
-        process->stdoutChannel.type = Normal;
-        process->stdoutChannel.process = 0;
-        break;
-    }
+   switch (type) {
+      case PipeSource:
+         Q_ASSERT(process);
+         process->stdinChannel.type = Normal;
+         process->stdinChannel.process = 0;
+         break;
+      case PipeSink:
+         Q_ASSERT(process);
+         process->stdoutChannel.type = Normal;
+         process->stdoutChannel.process = 0;
+         break;
+   }
 
-    type = Normal;
-    file.clear();
-    process = 0;
+   type = Normal;
+   file.clear();
+   process = 0;
 }
 
 /*! \fn bool QProcessPrivate::startDetached(const QString &program, const QStringList &arguments, const QString &workingDirectory, qint64 *pid)
@@ -748,35 +769,35 @@ void QProcessPrivate::Channel::clear()
 */
 QProcessPrivate::QProcessPrivate()
 {
-    processChannel = QProcess::StandardOutput;
-    processChannelMode = QProcess::SeparateChannels;
-    processError = QProcess::UnknownError;
-    processState = QProcess::NotRunning;
-    pid = 0;
-    sequenceNumber = 0;
-    exitCode = 0;
-    exitStatus = QProcess::NormalExit;
-    startupSocketNotifier = 0;
-    deathNotifier = 0;
-    notifier = 0;
-    pipeWriter = 0;
-    childStartedPipe[0] = INVALID_Q_PIPE;
-    childStartedPipe[1] = INVALID_Q_PIPE;
-    deathPipe[0] = INVALID_Q_PIPE;
-    deathPipe[1] = INVALID_Q_PIPE;
-    exitCode = 0;
-    crashed = false;
-    dying = false;
-    emittedReadyRead = false;
-    emittedBytesWritten = false;
+   processChannel = QProcess::StandardOutput;
+   processChannelMode = QProcess::SeparateChannels;
+   processError = QProcess::UnknownError;
+   processState = QProcess::NotRunning;
+   pid = 0;
+   sequenceNumber = 0;
+   exitCode = 0;
+   exitStatus = QProcess::NormalExit;
+   startupSocketNotifier = 0;
+   deathNotifier = 0;
+   notifier = 0;
+   pipeWriter = 0;
+   childStartedPipe[0] = INVALID_Q_PIPE;
+   childStartedPipe[1] = INVALID_Q_PIPE;
+   deathPipe[0] = INVALID_Q_PIPE;
+   deathPipe[1] = INVALID_Q_PIPE;
+   exitCode = 0;
+   crashed = false;
+   dying = false;
+   emittedReadyRead = false;
+   emittedBytesWritten = false;
 
 #ifdef Q_OS_WIN
-    pipeWriter = 0;
-    processFinishedNotifier = 0;
+   pipeWriter = 0;
+   processFinishedNotifier = 0;
 #endif
 
 #ifdef Q_OS_UNIX
-    serial = 0;
+   serial = 0;
 #endif
 
 }
@@ -785,84 +806,86 @@ QProcessPrivate::QProcessPrivate()
 */
 QProcessPrivate::~QProcessPrivate()
 {
-    if (stdinChannel.process)
-        stdinChannel.process->stdoutChannel.clear();
-    if (stdoutChannel.process)
-        stdoutChannel.process->stdinChannel.clear();
+   if (stdinChannel.process) {
+      stdinChannel.process->stdoutChannel.clear();
+   }
+   if (stdoutChannel.process) {
+      stdoutChannel.process->stdinChannel.clear();
+   }
 }
 
 /*! \internal
 */
 void QProcessPrivate::cleanup()
 {
-    q_func()->setProcessState(QProcess::NotRunning);
+   q_func()->setProcessState(QProcess::NotRunning);
 #ifdef Q_OS_WIN
-    if (pid) {
-        CloseHandle(pid->hThread);
-        CloseHandle(pid->hProcess);
-        delete pid;
-        pid = 0;
-    }
-    if (processFinishedNotifier) {
-        processFinishedNotifier->setEnabled(false);
+   if (pid) {
+      CloseHandle(pid->hThread);
+      CloseHandle(pid->hProcess);
+      delete pid;
+      pid = 0;
+   }
+   if (processFinishedNotifier) {
+      processFinishedNotifier->setEnabled(false);
 
-		  delete processFinishedNotifier;       
-        processFinishedNotifier = 0;
-    }
+      delete processFinishedNotifier;
+      processFinishedNotifier = 0;
+   }
 
 #endif
-    pid = 0;
-    sequenceNumber = 0;
-    dying = false;
+   pid = 0;
+   sequenceNumber = 0;
+   dying = false;
 
-    if (stdoutChannel.notifier) {
-        stdoutChannel.notifier->setEnabled(false);
+   if (stdoutChannel.notifier) {
+      stdoutChannel.notifier->setEnabled(false);
 
-        delete  stdoutChannel.notifier;
-        stdoutChannel.notifier = 0;
-    }
+      delete  stdoutChannel.notifier;
+      stdoutChannel.notifier = 0;
+   }
 
-    if (stderrChannel.notifier) {
-        stderrChannel.notifier->setEnabled(false);
+   if (stderrChannel.notifier) {
+      stderrChannel.notifier->setEnabled(false);
 
-        delete stderrChannel.notifier;
-        stderrChannel.notifier = 0;
-    }
+      delete stderrChannel.notifier;
+      stderrChannel.notifier = 0;
+   }
 
-    if (stdinChannel.notifier) {
-        stdinChannel.notifier->setEnabled(false);
+   if (stdinChannel.notifier) {
+      stdinChannel.notifier->setEnabled(false);
 
-        delete stdinChannel.notifier;
-        stdinChannel.notifier = 0;
-    }
+      delete stdinChannel.notifier;
+      stdinChannel.notifier = 0;
+   }
 
-    if (startupSocketNotifier) {
-        startupSocketNotifier->setEnabled(false);
+   if (startupSocketNotifier) {
+      startupSocketNotifier->setEnabled(false);
 
-        delete startupSocketNotifier;
-        startupSocketNotifier = 0;
-    }
+      delete startupSocketNotifier;
+      startupSocketNotifier = 0;
+   }
 
-    if (deathNotifier) {
-        deathNotifier->setEnabled(false);
+   if (deathNotifier) {
+      deathNotifier->setEnabled(false);
 
-        delete deathNotifier;
-        deathNotifier = 0;
-    }
+      delete deathNotifier;
+      deathNotifier = 0;
+   }
 
-    if (notifier) {
-        delete notifier;
-        notifier = 0;
-    }
+   if (notifier) {
+      delete notifier;
+      notifier = 0;
+   }
 
-    destroyPipe(stdoutChannel.pipe);
-    destroyPipe(stderrChannel.pipe);
-    destroyPipe(stdinChannel.pipe);
-    destroyPipe(childStartedPipe);
-    destroyPipe(deathPipe);
+   destroyPipe(stdoutChannel.pipe);
+   destroyPipe(stderrChannel.pipe);
+   destroyPipe(stdinChannel.pipe);
+   destroyPipe(childStartedPipe);
+   destroyPipe(deathPipe);
 
 #ifdef Q_OS_UNIX
-    serial = 0;
+   serial = 0;
 #endif
 
 }
@@ -871,277 +894,288 @@ void QProcessPrivate::cleanup()
 */
 bool QProcessPrivate::_q_canReadStandardOutput()
 {
-    Q_Q(QProcess);
-    qint64 available = bytesAvailableFromStdout();
-    if (available == 0) {
-        if (stdoutChannel.notifier)
-            stdoutChannel.notifier->setEnabled(false);
-        destroyPipe(stdoutChannel.pipe);
+   Q_Q(QProcess);
+   qint64 available = bytesAvailableFromStdout();
+   if (available == 0) {
+      if (stdoutChannel.notifier) {
+         stdoutChannel.notifier->setEnabled(false);
+      }
+      destroyPipe(stdoutChannel.pipe);
 #if defined QPROCESS_DEBUG
-        qDebug("QProcessPrivate::canReadStandardOutput(), 0 bytes available");
+      qDebug("QProcessPrivate::canReadStandardOutput(), 0 bytes available");
 #endif
-        return false;
-    }
+      return false;
+   }
 
-    char *ptr = outputReadBuffer.reserve(available);
-    qint64 readBytes = readFromStdout(ptr, available);
-    if (readBytes == -1) {
-        processError = QProcess::ReadError;
-        q->setErrorString(QProcess::tr("Error reading from process"));
-        emit q->error(processError);
+   char *ptr = outputReadBuffer.reserve(available);
+   qint64 readBytes = readFromStdout(ptr, available);
+   if (readBytes == -1) {
+      processError = QProcess::ReadError;
+      q->setErrorString(QProcess::tr("Error reading from process"));
+      emit q->error(processError);
 #if defined QPROCESS_DEBUG
-        qDebug("QProcessPrivate::canReadStandardOutput(), failed to read from the process");
+      qDebug("QProcessPrivate::canReadStandardOutput(), failed to read from the process");
 #endif
-        return false;
-    }
+      return false;
+   }
 #if defined QPROCESS_DEBUG
-    qDebug("QProcessPrivate::canReadStandardOutput(), read %d bytes from the process' output",
-            int(readBytes));
+   qDebug("QProcessPrivate::canReadStandardOutput(), read %d bytes from the process' output",
+          int(readBytes));
 #endif
 
-    if (stdoutChannel.closed) {
-        outputReadBuffer.chop(readBytes);
-        return false;
-    }
+   if (stdoutChannel.closed) {
+      outputReadBuffer.chop(readBytes);
+      return false;
+   }
 
-    outputReadBuffer.chop(available - readBytes);
+   outputReadBuffer.chop(available - readBytes);
 
-    bool didRead = false;
-    if (readBytes == 0) {
-        if (stdoutChannel.notifier)
-            stdoutChannel.notifier->setEnabled(false);
-    } else if (processChannel == QProcess::StandardOutput) {
-        didRead = true;
-        if (!emittedReadyRead) {
-            emittedReadyRead = true;
-            emit q->readyRead();
-            emittedReadyRead = false;
-        }
-    }
-    emit q->readyReadStandardOutput();
-    return didRead;
+   bool didRead = false;
+   if (readBytes == 0) {
+      if (stdoutChannel.notifier) {
+         stdoutChannel.notifier->setEnabled(false);
+      }
+   } else if (processChannel == QProcess::StandardOutput) {
+      didRead = true;
+      if (!emittedReadyRead) {
+         emittedReadyRead = true;
+         emit q->readyRead();
+         emittedReadyRead = false;
+      }
+   }
+   emit q->readyReadStandardOutput();
+   return didRead;
 }
 
 /*! \internal
 */
 bool QProcessPrivate::_q_canReadStandardError()
 {
-    Q_Q(QProcess);
-    qint64 available = bytesAvailableFromStderr();
-    if (available == 0) {
-        if (stderrChannel.notifier)
-            stderrChannel.notifier->setEnabled(false);
-        destroyPipe(stderrChannel.pipe);
-        return false;
-    }
+   Q_Q(QProcess);
+   qint64 available = bytesAvailableFromStderr();
+   if (available == 0) {
+      if (stderrChannel.notifier) {
+         stderrChannel.notifier->setEnabled(false);
+      }
+      destroyPipe(stderrChannel.pipe);
+      return false;
+   }
 
-    char *ptr = errorReadBuffer.reserve(available);
-    qint64 readBytes = readFromStderr(ptr, available);
-    if (readBytes == -1) {
-        processError = QProcess::ReadError;
-        q->setErrorString(QProcess::tr("Error reading from process"));
-        emit q->error(processError);
-        return false;
-    }
-    if (stderrChannel.closed) {
-        errorReadBuffer.chop(readBytes);
-        return false;
-    }
+   char *ptr = errorReadBuffer.reserve(available);
+   qint64 readBytes = readFromStderr(ptr, available);
+   if (readBytes == -1) {
+      processError = QProcess::ReadError;
+      q->setErrorString(QProcess::tr("Error reading from process"));
+      emit q->error(processError);
+      return false;
+   }
+   if (stderrChannel.closed) {
+      errorReadBuffer.chop(readBytes);
+      return false;
+   }
 
-    errorReadBuffer.chop(available - readBytes);
+   errorReadBuffer.chop(available - readBytes);
 
-    bool didRead = false;
-    if (readBytes == 0) {
-        if (stderrChannel.notifier)
-            stderrChannel.notifier->setEnabled(false);
-    } else if (processChannel == QProcess::StandardError) {
-        didRead = true;
-        if (!emittedReadyRead) {
-            emittedReadyRead = true;
-            emit q->readyRead();
-            emittedReadyRead = false;
-        }
-    }
-    emit q->readyReadStandardError();
-    return didRead;
+   bool didRead = false;
+   if (readBytes == 0) {
+      if (stderrChannel.notifier) {
+         stderrChannel.notifier->setEnabled(false);
+      }
+   } else if (processChannel == QProcess::StandardError) {
+      didRead = true;
+      if (!emittedReadyRead) {
+         emittedReadyRead = true;
+         emit q->readyRead();
+         emittedReadyRead = false;
+      }
+   }
+   emit q->readyReadStandardError();
+   return didRead;
 }
 
 /*! \internal
 */
 bool QProcessPrivate::_q_canWrite()
 {
-    Q_Q(QProcess);
-    if (stdinChannel.notifier)
-        stdinChannel.notifier->setEnabled(false);
+   Q_Q(QProcess);
+   if (stdinChannel.notifier) {
+      stdinChannel.notifier->setEnabled(false);
+   }
 
-    if (writeBuffer.isEmpty()) {
+   if (writeBuffer.isEmpty()) {
 #if defined QPROCESS_DEBUG
-        qDebug("QProcessPrivate::canWrite(), not writing anything (empty write buffer).");
+      qDebug("QProcessPrivate::canWrite(), not writing anything (empty write buffer).");
 #endif
-        return false;
-    }
+      return false;
+   }
 
-    qint64 written = writeToStdin(writeBuffer.readPointer(),
-                                      writeBuffer.nextDataBlockSize());
-    if (written < 0) {
-        destroyPipe(stdinChannel.pipe);
-        processError = QProcess::WriteError;
-        q->setErrorString(QProcess::tr("Error writing to process"));
-        emit q->error(processError);
-        return false;
-    }
+   qint64 written = writeToStdin(writeBuffer.readPointer(),
+                                 writeBuffer.nextDataBlockSize());
+   if (written < 0) {
+      destroyPipe(stdinChannel.pipe);
+      processError = QProcess::WriteError;
+      q->setErrorString(QProcess::tr("Error writing to process"));
+      emit q->error(processError);
+      return false;
+   }
 
 #if defined QPROCESS_DEBUG
-    qDebug("QProcessPrivate::canWrite(), wrote %d bytes to the process input", int(written));
+   qDebug("QProcessPrivate::canWrite(), wrote %d bytes to the process input", int(written));
 #endif
 
-    if (written != 0) {
-        writeBuffer.free(written);
-        if (!emittedBytesWritten) {
-            emittedBytesWritten = true;
-            emit q->bytesWritten(written);
-            emittedBytesWritten = false;
-        }
-    }
-    if (stdinChannel.notifier && !writeBuffer.isEmpty())
-        stdinChannel.notifier->setEnabled(true);
-    if (writeBuffer.isEmpty() && stdinChannel.closed)
-        closeWriteChannel();
-    return true;
+   if (written != 0) {
+      writeBuffer.free(written);
+      if (!emittedBytesWritten) {
+         emittedBytesWritten = true;
+         emit q->bytesWritten(written);
+         emittedBytesWritten = false;
+      }
+   }
+   if (stdinChannel.notifier && !writeBuffer.isEmpty()) {
+      stdinChannel.notifier->setEnabled(true);
+   }
+   if (writeBuffer.isEmpty() && stdinChannel.closed) {
+      closeWriteChannel();
+   }
+   return true;
 }
 
 /*! \internal
 */
 bool QProcessPrivate::_q_processDied()
 {
-    Q_Q(QProcess);
+   Q_Q(QProcess);
 #if defined QPROCESS_DEBUG
-    qDebug("QProcessPrivate::_q_processDied()");
+   qDebug("QProcessPrivate::_q_processDied()");
 #endif
 #ifdef Q_OS_UNIX
-    if (!waitForDeadChild())
-        return false;
+   if (!waitForDeadChild()) {
+      return false;
+   }
 #endif
 #ifdef Q_OS_WIN
-    if (processFinishedNotifier)
-        processFinishedNotifier->setEnabled(false);
+   if (processFinishedNotifier) {
+      processFinishedNotifier->setEnabled(false);
+   }
 #endif
 
-    // the process may have died before it got a chance to report that it was
-    // either running or stopped, so we will call _q_startupNotification() and
-    // give it a chance to emit started() or error(FailedToStart).
-    if (processState == QProcess::Starting) {
-        if (!_q_startupNotification())
-            return true;
-    }
+   // the process may have died before it got a chance to report that it was
+   // either running or stopped, so we will call _q_startupNotification() and
+   // give it a chance to emit started() or error(FailedToStart).
+   if (processState == QProcess::Starting) {
+      if (!_q_startupNotification()) {
+         return true;
+      }
+   }
 
-    if (dying) {
-        // at this point we know the process is dead. prevent
-        // reentering this slot recursively by calling waitForFinished()
-        // or opening a dialog inside slots connected to the readyRead
-        // signals emitted below.
-        return true;
-    }
-    dying = true;
+   if (dying) {
+      // at this point we know the process is dead. prevent
+      // reentering this slot recursively by calling waitForFinished()
+      // or opening a dialog inside slots connected to the readyRead
+      // signals emitted below.
+      return true;
+   }
+   dying = true;
 
-    // in case there is data in the pipe line and this slot by chance
-    // got called before the read notifications, call these two slots
-    // so the data is made available before the process dies.
-    _q_canReadStandardOutput();
-    _q_canReadStandardError();
+   // in case there is data in the pipe line and this slot by chance
+   // got called before the read notifications, call these two slots
+   // so the data is made available before the process dies.
+   _q_canReadStandardOutput();
+   _q_canReadStandardError();
 
-    findExitCode();
+   findExitCode();
 
-    if (crashed) {
-        exitStatus = QProcess::CrashExit;
-        processError = QProcess::Crashed;
-        q->setErrorString(QProcess::tr("Process crashed"));
-        emit q->error(processError);
-    }
+   if (crashed) {
+      exitStatus = QProcess::CrashExit;
+      processError = QProcess::Crashed;
+      q->setErrorString(QProcess::tr("Process crashed"));
+      emit q->error(processError);
+   }
 
-    bool wasRunning = (processState == QProcess::Running);
+   bool wasRunning = (processState == QProcess::Running);
 
-    cleanup();
+   cleanup();
 
-    if (wasRunning) {
-        // we received EOF now:
-        emit q->readChannelFinished();
-        // in the future:
-        //emit q->standardOutputClosed();
-        //emit q->standardErrorClosed();
+   if (wasRunning) {
+      // we received EOF now:
+      emit q->readChannelFinished();
+      // in the future:
+      //emit q->standardOutputClosed();
+      //emit q->standardErrorClosed();
 
-        emit q->finished(exitCode);
-        emit q->finished(exitCode, exitStatus);
-    }
+      emit q->finished(exitCode);
+      emit q->finished(exitCode, exitStatus);
+   }
 #if defined QPROCESS_DEBUG
-    qDebug("QProcessPrivate::_q_processDied() process is dead");
+   qDebug("QProcessPrivate::_q_processDied() process is dead");
 #endif
-    return true;
+   return true;
 }
 
 /*! \internal
 */
 bool QProcessPrivate::_q_startupNotification()
 {
-    Q_Q(QProcess);
+   Q_Q(QProcess);
 #if defined QPROCESS_DEBUG
-    qDebug("QProcessPrivate::startupNotification()");
+   qDebug("QProcessPrivate::startupNotification()");
 #endif
 
-    if (startupSocketNotifier)
-        startupSocketNotifier->setEnabled(false);
-    if (processStarted()) {
-        q->setProcessState(QProcess::Running);
-        emit q->started();
-        return true;
-    }
+   if (startupSocketNotifier) {
+      startupSocketNotifier->setEnabled(false);
+   }
+   if (processStarted()) {
+      q->setProcessState(QProcess::Running);
+      emit q->started();
+      return true;
+   }
 
-    q->setProcessState(QProcess::NotRunning);
-    processError = QProcess::FailedToStart;
-    emit q->error(processError);
+   q->setProcessState(QProcess::NotRunning);
+   processError = QProcess::FailedToStart;
+   emit q->error(processError);
 #ifdef Q_OS_UNIX
-    // make sure the process manager removes this entry
-    waitForDeadChild();
-    findExitCode();
+   // make sure the process manager removes this entry
+   waitForDeadChild();
+   findExitCode();
 #endif
-    cleanup();
-    return false;
+   cleanup();
+   return false;
 }
 
 bool QProcess::_q_canReadStandardOutput()
 {
-	Q_D(QProcess);
-	return d->_q_canReadStandardOutput();
+   Q_D(QProcess);
+   return d->_q_canReadStandardOutput();
 }
 
 bool QProcess::_q_canReadStandardError()
 {
-	Q_D(QProcess);
-	return d->_q_canReadStandardError();
+   Q_D(QProcess);
+   return d->_q_canReadStandardError();
 }
 
 bool QProcess::_q_canWrite()
 {
-	Q_D(QProcess);
-	return d->_q_canWrite();
+   Q_D(QProcess);
+   return d->_q_canWrite();
 }
 
 bool QProcess::_q_startupNotification()
 {
-	Q_D(QProcess);
-	return d->_q_startupNotification();
+   Q_D(QProcess);
+   return d->_q_startupNotification();
 }
 
 bool QProcess::_q_processDied()
 {
-	Q_D(QProcess);
-	return d->_q_processDied();
+   Q_D(QProcess);
+   return d->_q_processDied();
 }
 
 void QProcess::_q_notified()
 {
-	Q_D(QProcess);
-	d->_q_notified();
+   Q_D(QProcess);
+   d->_q_notified();
 }
 
 
@@ -1151,34 +1185,34 @@ void QProcessPrivate::closeWriteChannel()
 {
 
 #if defined QPROCESS_DEBUG
-    qDebug("QProcessPrivate::closeWriteChannel()");
+   qDebug("QProcessPrivate::closeWriteChannel()");
 #endif
 
-    if (stdinChannel.notifier) {     
-        stdinChannel.notifier->setEnabled(false);
+   if (stdinChannel.notifier) {
+      stdinChannel.notifier->setEnabled(false);
 
-        if (stdinChannel.notifier) {
-            delete stdinChannel.notifier;
-            stdinChannel.notifier = 0;
-        }
-    }
+      if (stdinChannel.notifier) {
+         delete stdinChannel.notifier;
+         stdinChannel.notifier = 0;
+      }
+   }
 
 #ifdef Q_OS_WIN
-    // ### Find a better fix, feeding the process little by little instead.
-    flushPipeWriter();
+   // ### Find a better fix, feeding the process little by little instead.
+   flushPipeWriter();
 #endif
 
-    destroyPipe(stdinChannel.pipe);
+   destroyPipe(stdinChannel.pipe);
 }
 
 /*!
     Constructs a QProcess object with the given \a parent.
 */
 QProcess::QProcess(QObject *parent)
-    : QIODevice(*new QProcessPrivate, parent)
+   : QIODevice(*new QProcessPrivate, parent)
 {
 #if defined QPROCESS_DEBUG
-    qDebug("QProcess::QProcess(%p)", parent);
+   qDebug("QProcess::QProcess(%p)", parent);
 #endif
 }
 
@@ -1190,17 +1224,17 @@ QProcess::QProcess(QObject *parent)
 */
 QProcess::~QProcess()
 {
-    Q_D(QProcess);
-    if (d->processState != NotRunning) {
-        qWarning("QProcess: Destroyed while process is still running.");
-        kill();
-        waitForFinished();
-    }
+   Q_D(QProcess);
+   if (d->processState != NotRunning) {
+      qWarning("QProcess: Destroyed while process is still running.");
+      kill();
+      waitForFinished();
+   }
 #ifdef Q_OS_UNIX
-    // make sure the process manager removes this entry
-    d->findExitCode();
+   // make sure the process manager removes this entry
+   d->findExitCode();
 #endif
-    d->cleanup();
+   d->cleanup();
 }
 
 /*!
@@ -1212,7 +1246,7 @@ QProcess::~QProcess()
 */
 QProcess::ProcessChannelMode QProcess::readChannelMode() const
 {
-    return processChannelMode();
+   return processChannelMode();
 }
 
 /*!
@@ -1224,7 +1258,7 @@ QProcess::ProcessChannelMode QProcess::readChannelMode() const
 */
 void QProcess::setReadChannelMode(ProcessChannelMode mode)
 {
-    setProcessChannelMode(mode);
+   setProcessChannelMode(mode);
 }
 
 /*!
@@ -1237,8 +1271,8 @@ void QProcess::setReadChannelMode(ProcessChannelMode mode)
 */
 QProcess::ProcessChannelMode QProcess::processChannelMode() const
 {
-    Q_D(const QProcess);
-    return d->processChannelMode;
+   Q_D(const QProcess);
+   return d->processChannelMode;
 }
 
 /*!
@@ -1254,8 +1288,8 @@ QProcess::ProcessChannelMode QProcess::processChannelMode() const
 */
 void QProcess::setProcessChannelMode(ProcessChannelMode mode)
 {
-    Q_D(QProcess);
-    d->processChannelMode = mode;
+   Q_D(QProcess);
+   d->processChannelMode = mode;
 }
 
 /*!
@@ -1265,8 +1299,8 @@ void QProcess::setProcessChannelMode(ProcessChannelMode mode)
 */
 QProcess::ProcessChannel QProcess::readChannel() const
 {
-    Q_D(const QProcess);
-    return d->processChannel;
+   Q_D(const QProcess);
+   return d->processChannel;
 }
 
 /*!
@@ -1279,18 +1313,20 @@ QProcess::ProcessChannel QProcess::readChannel() const
 */
 void QProcess::setReadChannel(ProcessChannel channel)
 {
-    Q_D(QProcess);
-    if (d->processChannel != channel) {
-        QByteArray buf = d->buffer.readAll();
-        if (d->processChannel == QProcess::StandardOutput) {
-            for (int i = buf.size() - 1; i >= 0; --i)
-                d->outputReadBuffer.ungetChar(buf.at(i));
-        } else {
-            for (int i = buf.size() - 1; i >= 0; --i)
-                d->errorReadBuffer.ungetChar(buf.at(i));
-        }
-    }
-    d->processChannel = channel;
+   Q_D(QProcess);
+   if (d->processChannel != channel) {
+      QByteArray buf = d->buffer.readAll();
+      if (d->processChannel == QProcess::StandardOutput) {
+         for (int i = buf.size() - 1; i >= 0; --i) {
+            d->outputReadBuffer.ungetChar(buf.at(i));
+         }
+      } else {
+         for (int i = buf.size() - 1; i >= 0; --i) {
+            d->errorReadBuffer.ungetChar(buf.at(i));
+         }
+      }
+   }
+   d->processChannel = channel;
 }
 
 /*!
@@ -1305,12 +1341,13 @@ void QProcess::setReadChannel(ProcessChannel channel)
 */
 void QProcess::closeReadChannel(ProcessChannel channel)
 {
-    Q_D(QProcess);
+   Q_D(QProcess);
 
-    if (channel == StandardOutput)
-        d->stdoutChannel.closed = true;
-    else
-        d->stderrChannel.closed = true;
+   if (channel == StandardOutput) {
+      d->stdoutChannel.closed = true;
+   } else {
+      d->stderrChannel.closed = true;
+   }
 }
 
 /*!
@@ -1333,10 +1370,11 @@ void QProcess::closeReadChannel(ProcessChannel channel)
 */
 void QProcess::closeWriteChannel()
 {
-    Q_D(QProcess);
-    d->stdinChannel.closed = true; // closing
-    if (d->writeBuffer.isEmpty())
-        d->closeWriteChannel();
+   Q_D(QProcess);
+   d->stdinChannel.closed = true; // closing
+   if (d->writeBuffer.isEmpty()) {
+      d->closeWriteChannel();
+   }
 }
 
 /*!
@@ -1358,8 +1396,8 @@ void QProcess::closeWriteChannel()
 */
 void QProcess::setStandardInputFile(const QString &fileName)
 {
-    Q_D(QProcess);
-    d->stdinChannel = fileName;
+   Q_D(QProcess);
+   d->stdinChannel = fileName;
 }
 
 /*!
@@ -1386,11 +1424,11 @@ void QProcess::setStandardInputFile(const QString &fileName)
 */
 void QProcess::setStandardOutputFile(const QString &fileName, OpenMode mode)
 {
-    Q_ASSERT(mode == Append || mode == Truncate);
-    Q_D(QProcess);
+   Q_ASSERT(mode == Append || mode == Truncate);
+   Q_D(QProcess);
 
-    d->stdoutChannel = fileName;
-    d->stdoutChannel.append = mode == Append;
+   d->stdoutChannel = fileName;
+   d->stdoutChannel.append = mode == Append;
 }
 
 /*!
@@ -1413,11 +1451,11 @@ void QProcess::setStandardOutputFile(const QString &fileName, OpenMode mode)
 */
 void QProcess::setStandardErrorFile(const QString &fileName, OpenMode mode)
 {
-    Q_ASSERT(mode == Append || mode == Truncate);
-    Q_D(QProcess);
+   Q_ASSERT(mode == Append || mode == Truncate);
+   Q_D(QProcess);
 
-    d->stderrChannel = fileName;
-    d->stderrChannel.append = mode == Append;
+   d->stderrChannel = fileName;
+   d->stderrChannel.append = mode == Append;
 }
 
 /*!
@@ -1434,10 +1472,10 @@ void QProcess::setStandardErrorFile(const QString &fileName, OpenMode mode)
 */
 void QProcess::setStandardOutputProcess(QProcess *destination)
 {
-    QProcessPrivate *dfrom = d_func();
-    QProcessPrivate *dto = destination->d_func();
-    dfrom->stdoutChannel.pipeTo(dto);
-    dto->stdinChannel.pipeFrom(dfrom);
+   QProcessPrivate *dfrom = d_func();
+   QProcessPrivate *dto = destination->d_func();
+   dfrom->stdoutChannel.pipeTo(dto);
+   dto->stdinChannel.pipeFrom(dfrom);
 }
 
 #if defined(Q_OS_WIN)
@@ -1454,8 +1492,8 @@ void QProcess::setStandardOutputProcess(QProcess *destination)
 */
 QString QProcess::nativeArguments() const
 {
-    Q_D(const QProcess);
-    return d->nativeArguments;
+   Q_D(const QProcess);
+   return d->nativeArguments;
 }
 
 /*!
@@ -1478,8 +1516,8 @@ QString QProcess::nativeArguments() const
 */
 void QProcess::setNativeArguments(const QString &arguments)
 {
-    Q_D(QProcess);
-    d->nativeArguments = arguments;
+   Q_D(QProcess);
+   d->nativeArguments = arguments;
 }
 
 #endif
@@ -1495,8 +1533,8 @@ void QProcess::setNativeArguments(const QString &arguments)
 */
 QString QProcess::workingDirectory() const
 {
-    Q_D(const QProcess);
-    return d->workingDirectory;
+   Q_D(const QProcess);
+   return d->workingDirectory;
 }
 
 /*!
@@ -1515,8 +1553,8 @@ QString QProcess::workingDirectory() const
 */
 void QProcess::setWorkingDirectory(const QString &dir)
 {
-    Q_D(QProcess);
-    d->workingDirectory = dir;
+   Q_D(QProcess);
+   d->workingDirectory = dir;
 }
 
 /*!
@@ -1525,8 +1563,8 @@ void QProcess::setWorkingDirectory(const QString &dir)
 */
 Q_PID QProcess::pid() const
 {
-    Q_D(const QProcess);
-    return d->pid;
+   Q_D(const QProcess);
+   return d->pid;
 }
 
 /*! \reimp
@@ -1537,11 +1575,11 @@ Q_PID QProcess::pid() const
 */
 bool QProcess::canReadLine() const
 {
-    Q_D(const QProcess);
-    const QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
-                                    ? &d->errorReadBuffer
-                                    : &d->outputReadBuffer;
-    return readBuffer->canReadLine() || QIODevice::canReadLine();
+   Q_D(const QProcess);
+   const QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
+                                   ? &d->errorReadBuffer
+                                   : &d->outputReadBuffer;
+   return readBuffer->canReadLine() || QIODevice::canReadLine();
 }
 
 /*!
@@ -1551,12 +1589,12 @@ bool QProcess::canReadLine() const
 */
 void QProcess::close()
 {
-    emit aboutToClose();
-    while (waitForBytesWritten(-1))
-        ;
-    kill();
-    waitForFinished(-1);
-    QIODevice::close();
+   emit aboutToClose();
+   while (waitForBytesWritten(-1))
+      ;
+   kill();
+   waitForFinished(-1);
+   QIODevice::close();
 }
 
 /*! \reimp
@@ -1566,45 +1604,45 @@ void QProcess::close()
 */
 bool QProcess::atEnd() const
 {
-    Q_D(const QProcess);
-    const QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
-                                    ? &d->errorReadBuffer
-                                    : &d->outputReadBuffer;
-    return QIODevice::atEnd() && (!isOpen() || readBuffer->isEmpty());
+   Q_D(const QProcess);
+   const QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
+                                   ? &d->errorReadBuffer
+                                   : &d->outputReadBuffer;
+   return QIODevice::atEnd() && (!isOpen() || readBuffer->isEmpty());
 }
 
 /*! \reimp
 */
 bool QProcess::isSequential() const
 {
-    return true;
+   return true;
 }
 
 /*! \reimp
 */
 qint64 QProcess::bytesAvailable() const
 {
-    Q_D(const QProcess);
-    const QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
-                                    ? &d->errorReadBuffer
-                                    : &d->outputReadBuffer;
+   Q_D(const QProcess);
+   const QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
+                                   ? &d->errorReadBuffer
+                                   : &d->outputReadBuffer;
 #if defined QPROCESS_DEBUG
-    qDebug("QProcess::bytesAvailable() == %i (%s)", readBuffer->size(),
-           (d->processChannel == QProcess::StandardError) ? "stderr" : "stdout");
+   qDebug("QProcess::bytesAvailable() == %i (%s)", readBuffer->size(),
+          (d->processChannel == QProcess::StandardError) ? "stderr" : "stdout");
 #endif
-    return readBuffer->size() + QIODevice::bytesAvailable();
+   return readBuffer->size() + QIODevice::bytesAvailable();
 }
 
 /*! \reimp
 */
 qint64 QProcess::bytesToWrite() const
 {
-    Q_D(const QProcess);
-    qint64 size = d->writeBuffer.size();
+   Q_D(const QProcess);
+   qint64 size = d->writeBuffer.size();
 #ifdef Q_OS_WIN
-    size += d->pipeWriterBytesToWrite();
+   size += d->pipeWriterBytesToWrite();
 #endif
-    return size;
+   return size;
 }
 
 /*!
@@ -1614,8 +1652,8 @@ qint64 QProcess::bytesToWrite() const
 */
 QProcess::ProcessError QProcess::errorCode() const
 {
-    Q_D(const QProcess);
-    return d->processError;
+   Q_D(const QProcess);
+   return d->processError;
 }
 
 /*!
@@ -1625,8 +1663,8 @@ QProcess::ProcessError QProcess::errorCode() const
 */
 QProcess::ProcessState QProcess::state() const
 {
-    Q_D(const QProcess);
-    return d->processState;
+   Q_D(const QProcess);
+   return d->processState;
 }
 
 /*!
@@ -1646,7 +1684,7 @@ QProcess::ProcessState QProcess::state() const
 */
 void QProcess::setEnvironment(const QStringList &environment)
 {
-    setProcessEnvironment(QProcessEnvironmentPrivate::fromList(environment));
+   setProcessEnvironment(QProcessEnvironmentPrivate::fromList(environment));
 }
 
 /*!
@@ -1663,8 +1701,8 @@ void QProcess::setEnvironment(const QStringList &environment)
 */
 QStringList QProcess::environment() const
 {
-    Q_D(const QProcess);
-    return d->environment.toStringList();
+   Q_D(const QProcess);
+   return d->environment.toStringList();
 }
 
 /*!
@@ -1683,8 +1721,8 @@ QStringList QProcess::environment() const
 */
 void QProcess::setProcessEnvironment(const QProcessEnvironment &environment)
 {
-    Q_D(QProcess);
-    d->environment = environment;
+   Q_D(QProcess);
+   d->environment = environment;
 }
 
 /*!
@@ -1701,8 +1739,8 @@ void QProcess::setProcessEnvironment(const QProcessEnvironment &environment)
 */
 QProcessEnvironment QProcess::processEnvironment() const
 {
-    Q_D(const QProcess);
-    return d->environment;
+   Q_D(const QProcess);
+   return d->environment;
 }
 
 /*!
@@ -1726,46 +1764,53 @@ QProcessEnvironment QProcess::processEnvironment() const
 */
 bool QProcess::waitForStarted(int msecs)
 {
-    Q_D(QProcess);
-    if (d->processState == QProcess::Starting)
-        return d->waitForStarted(msecs);
+   Q_D(QProcess);
+   if (d->processState == QProcess::Starting) {
+      return d->waitForStarted(msecs);
+   }
 
-    return d->processState == QProcess::Running;
+   return d->processState == QProcess::Running;
 }
 
 /*! \reimp
 */
 bool QProcess::waitForReadyRead(int msecs)
 {
-    Q_D(QProcess);
+   Q_D(QProcess);
 
-    if (d->processState == QProcess::NotRunning)
-        return false;
-    if (d->processChannel == QProcess::StandardOutput && d->stdoutChannel.closed)
-        return false;
-    if (d->processChannel == QProcess::StandardError && d->stderrChannel.closed)
-        return false;
-    return d->waitForReadyRead(msecs);
+   if (d->processState == QProcess::NotRunning) {
+      return false;
+   }
+   if (d->processChannel == QProcess::StandardOutput && d->stdoutChannel.closed) {
+      return false;
+   }
+   if (d->processChannel == QProcess::StandardError && d->stderrChannel.closed) {
+      return false;
+   }
+   return d->waitForReadyRead(msecs);
 }
 
 /*! \reimp
 */
 bool QProcess::waitForBytesWritten(int msecs)
 {
-    Q_D(QProcess);
-    if (d->processState == QProcess::NotRunning)
-        return false;
-    if (d->processState == QProcess::Starting) {
-        QElapsedTimer stopWatch;
-        stopWatch.start();
-        bool started = waitForStarted(msecs);
-        if (!started)
-            return false;
-        if (msecs != -1)
-            msecs -= stopWatch.elapsed();
-    }
+   Q_D(QProcess);
+   if (d->processState == QProcess::NotRunning) {
+      return false;
+   }
+   if (d->processState == QProcess::Starting) {
+      QElapsedTimer stopWatch;
+      stopWatch.start();
+      bool started = waitForStarted(msecs);
+      if (!started) {
+         return false;
+      }
+      if (msecs != -1) {
+         msecs -= stopWatch.elapsed();
+      }
+   }
 
-    return d->waitForBytesWritten(msecs);
+   return d->waitForBytesWritten(msecs);
 }
 
 /*!
@@ -1789,20 +1834,23 @@ bool QProcess::waitForBytesWritten(int msecs)
 */
 bool QProcess::waitForFinished(int msecs)
 {
-    Q_D(QProcess);
-    if (d->processState == QProcess::NotRunning)
-        return false;
-    if (d->processState == QProcess::Starting) {
-        QElapsedTimer stopWatch;
-        stopWatch.start();
-        bool started = waitForStarted(msecs);
-        if (!started)
-            return false;
-        if (msecs != -1)
-            msecs -= stopWatch.elapsed();
-    }
+   Q_D(QProcess);
+   if (d->processState == QProcess::NotRunning) {
+      return false;
+   }
+   if (d->processState == QProcess::Starting) {
+      QElapsedTimer stopWatch;
+      stopWatch.start();
+      bool started = waitForStarted(msecs);
+      if (!started) {
+         return false;
+      }
+      if (msecs != -1) {
+         msecs -= stopWatch.elapsed();
+      }
+   }
 
-    return d->waitForFinished(msecs);
+   return d->waitForFinished(msecs);
 }
 
 /*!
@@ -1812,11 +1860,12 @@ bool QProcess::waitForFinished(int msecs)
 */
 void QProcess::setProcessState(ProcessState state)
 {
-    Q_D(QProcess);
-    if (d->processState == state)
-        return;
-    d->processState = state;
-    emit stateChanged(state);
+   Q_D(QProcess);
+   if (d->processState == state) {
+      return;
+   }
+   d->processState = state;
+   emit stateChanged(state);
 }
 
 /*!
@@ -1843,82 +1892,85 @@ void QProcess::setupChildProcess()
 */
 qint64 QProcess::readData(char *data, qint64 maxlen)
 {
-    Q_D(QProcess);
-    QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
-                              ? &d->errorReadBuffer
-                              : &d->outputReadBuffer;
+   Q_D(QProcess);
+   QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
+                             ? &d->errorReadBuffer
+                             : &d->outputReadBuffer;
 
-    if (maxlen == 1 && !readBuffer->isEmpty()) {
-        int c = readBuffer->getChar();
-        if (c == -1) {
+   if (maxlen == 1 && !readBuffer->isEmpty()) {
+      int c = readBuffer->getChar();
+      if (c == -1) {
 #if defined QPROCESS_DEBUG
-            qDebug("QProcess::readData(%p \"%s\", %d) == -1",
-                   data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
+         qDebug("QProcess::readData(%p \"%s\", %d) == -1",
+                data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
 #endif
-            return -1;
-        }
-        *data = (char) c;
+         return -1;
+      }
+      *data = (char) c;
 #if defined QPROCESS_DEBUG
-        qDebug("QProcess::readData(%p \"%s\", %d) == 1",
-               data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
+      qDebug("QProcess::readData(%p \"%s\", %d) == 1",
+             data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
 #endif
-        return 1;
-    }
+      return 1;
+   }
 
-    qint64 bytesToRead = qint64(qMin(readBuffer->size(), (int)maxlen));
-    qint64 readSoFar = 0;
-    while (readSoFar < bytesToRead) {
-        const char *ptr = readBuffer->readPointer();
-        int bytesToReadFromThisBlock = qMin<qint64>(bytesToRead - readSoFar,
-                                            readBuffer->nextDataBlockSize());
-        memcpy(data + readSoFar, ptr, bytesToReadFromThisBlock);
-        readSoFar += bytesToReadFromThisBlock;
-        readBuffer->free(bytesToReadFromThisBlock);
-    }
+   qint64 bytesToRead = qint64(qMin(readBuffer->size(), (int)maxlen));
+   qint64 readSoFar = 0;
+   while (readSoFar < bytesToRead) {
+      const char *ptr = readBuffer->readPointer();
+      int bytesToReadFromThisBlock = qMin<qint64>(bytesToRead - readSoFar,
+                                     readBuffer->nextDataBlockSize());
+      memcpy(data + readSoFar, ptr, bytesToReadFromThisBlock);
+      readSoFar += bytesToReadFromThisBlock;
+      readBuffer->free(bytesToReadFromThisBlock);
+   }
 
 #if defined QPROCESS_DEBUG
-    qDebug("QProcess::readData(%p \"%s\", %lld) == %lld",
-           data, qt_prettyDebug(data, readSoFar, 16).constData(), maxlen, readSoFar);
+   qDebug("QProcess::readData(%p \"%s\", %lld) == %lld",
+          data, qt_prettyDebug(data, readSoFar, 16).constData(), maxlen, readSoFar);
 #endif
-    if (!readSoFar && d->processState == QProcess::NotRunning)
-        return -1;              // EOF
-    return readSoFar;
+   if (!readSoFar && d->processState == QProcess::NotRunning) {
+      return -1;   // EOF
+   }
+   return readSoFar;
 }
 
 /*! \reimp
 */
 qint64 QProcess::writeData(const char *data, qint64 len)
 {
-    Q_D(QProcess);
+   Q_D(QProcess);
 
-    if (d->stdinChannel.closed) {
+   if (d->stdinChannel.closed) {
 #if defined QPROCESS_DEBUG
-    qDebug("QProcess::writeData(%p \"%s\", %lld) == 0 (write channel closing)",
-           data, qt_prettyDebug(data, len, 16).constData(), len);
+      qDebug("QProcess::writeData(%p \"%s\", %lld) == 0 (write channel closing)",
+             data, qt_prettyDebug(data, len, 16).constData(), len);
 #endif
-        return 0;
-    }
+      return 0;
+   }
 
-    if (len == 1) {
-        d->writeBuffer.putChar(*data);
-        if (d->stdinChannel.notifier)
-            d->stdinChannel.notifier->setEnabled(true);
+   if (len == 1) {
+      d->writeBuffer.putChar(*data);
+      if (d->stdinChannel.notifier) {
+         d->stdinChannel.notifier->setEnabled(true);
+      }
 #if defined QPROCESS_DEBUG
-    qDebug("QProcess::writeData(%p \"%s\", %lld) == 1 (written to buffer)",
-           data, qt_prettyDebug(data, len, 16).constData(), len);
+      qDebug("QProcess::writeData(%p \"%s\", %lld) == 1 (written to buffer)",
+             data, qt_prettyDebug(data, len, 16).constData(), len);
 #endif
-        return 1;
-    }
+      return 1;
+   }
 
-    char *dest = d->writeBuffer.reserve(len);
-    memcpy(dest, data, len);
-    if (d->stdinChannel.notifier)
-        d->stdinChannel.notifier->setEnabled(true);
+   char *dest = d->writeBuffer.reserve(len);
+   memcpy(dest, data, len);
+   if (d->stdinChannel.notifier) {
+      d->stdinChannel.notifier->setEnabled(true);
+   }
 #if defined QPROCESS_DEBUG
-    qDebug("QProcess::writeData(%p \"%s\", %lld) == %lld (written to buffer)",
-           data, qt_prettyDebug(data, len, 16).constData(), len, len);
+   qDebug("QProcess::writeData(%p \"%s\", %lld) == %lld (written to buffer)",
+          data, qt_prettyDebug(data, len, 16).constData(), len, len);
 #endif
-    return len;
+   return len;
 }
 
 /*!
@@ -1930,11 +1982,11 @@ qint64 QProcess::writeData(const char *data, qint64 len)
 */
 QByteArray QProcess::readAllStandardOutput()
 {
-    ProcessChannel tmp = readChannel();
-    setReadChannel(StandardOutput);
-    QByteArray data = readAll();
-    setReadChannel(tmp);
-    return data;
+   ProcessChannel tmp = readChannel();
+   setReadChannel(StandardOutput);
+   QByteArray data = readAll();
+   setReadChannel(tmp);
+   return data;
 }
 
 /*!
@@ -1946,11 +1998,11 @@ QByteArray QProcess::readAllStandardOutput()
 */
 QByteArray QProcess::readAllStandardError()
 {
-    ProcessChannel tmp = readChannel();
-    setReadChannel(StandardError);
-    QByteArray data = readAll();
-    setReadChannel(tmp);
-    return data;
+   ProcessChannel tmp = readChannel();
+   setReadChannel(StandardError);
+   QByteArray data = readAll();
+   setReadChannel(tmp);
+   return data;
 }
 
 /*!
@@ -1977,82 +2029,87 @@ QByteArray QProcess::readAllStandardError()
 */
 void QProcess::start(const QString &program, const QStringList &arguments, OpenMode mode)
 {
-    Q_D(QProcess);
-    if (d->processState != NotRunning) {
-        qWarning("QProcess::start: Process is already running");
-        return;
-    }
+   Q_D(QProcess);
+   if (d->processState != NotRunning) {
+      qWarning("QProcess::start: Process is already running");
+      return;
+   }
 
 #if defined QPROCESS_DEBUG
-    qDebug() << "QProcess::start(" << program << ',' << arguments << ',' << mode << ')';
+   qDebug() << "QProcess::start(" << program << ',' << arguments << ',' << mode << ')';
 #endif
 
-    d->outputReadBuffer.clear();
-    d->errorReadBuffer.clear();
+   d->outputReadBuffer.clear();
+   d->errorReadBuffer.clear();
 
-    if (d->stdinChannel.type != QProcessPrivate::Channel::Normal)
-        mode &= ~WriteOnly;     // not open for writing
-    if (d->stdoutChannel.type != QProcessPrivate::Channel::Normal &&
-        (d->stderrChannel.type != QProcessPrivate::Channel::Normal ||
-         d->processChannelMode == MergedChannels))
-        mode &= ~ReadOnly;      // not open for reading
-    if (mode == 0)
-        mode = Unbuffered;
-    QIODevice::open(mode);
+   if (d->stdinChannel.type != QProcessPrivate::Channel::Normal) {
+      mode &= ~WriteOnly;   // not open for writing
+   }
+   if (d->stdoutChannel.type != QProcessPrivate::Channel::Normal &&
+         (d->stderrChannel.type != QProcessPrivate::Channel::Normal ||
+          d->processChannelMode == MergedChannels)) {
+      mode &= ~ReadOnly;   // not open for reading
+   }
+   if (mode == 0) {
+      mode = Unbuffered;
+   }
+   QIODevice::open(mode);
 
-    d->stdinChannel.closed = false;
-    d->stdoutChannel.closed = false;
-    d->stderrChannel.closed = false;
+   d->stdinChannel.closed = false;
+   d->stdoutChannel.closed = false;
+   d->stderrChannel.closed = false;
 
-    d->program = program;
-    d->arguments = arguments;
+   d->program = program;
+   d->arguments = arguments;
 
-    d->exitCode = 0;
-    d->exitStatus = NormalExit;
-    d->processError = QProcess::UnknownError;
-    d->errorString.clear();
-    d->startProcess();
+   d->exitCode = 0;
+   d->exitStatus = NormalExit;
+   d->processError = QProcess::UnknownError;
+   d->errorString.clear();
+   d->startProcess();
 }
 
 
 static QStringList parseCombinedArgString(const QString &program)
 {
-    QStringList args;
-    QString tmp;
-    int quoteCount = 0;
-    bool inQuote = false;
+   QStringList args;
+   QString tmp;
+   int quoteCount = 0;
+   bool inQuote = false;
 
-    // handle quoting. tokens can be surrounded by double quotes
-    // "hello world". three consecutive double quotes represent
-    // the quote character itself.
-    for (int i = 0; i < program.size(); ++i) {
-        if (program.at(i) == QLatin1Char('"')) {
-            ++quoteCount;
-            if (quoteCount == 3) {
-                // third consecutive quote
-                quoteCount = 0;
-                tmp += program.at(i);
-            }
-            continue;
-        }
-        if (quoteCount) {
-            if (quoteCount == 1)
-                inQuote = !inQuote;
+   // handle quoting. tokens can be surrounded by double quotes
+   // "hello world". three consecutive double quotes represent
+   // the quote character itself.
+   for (int i = 0; i < program.size(); ++i) {
+      if (program.at(i) == QLatin1Char('"')) {
+         ++quoteCount;
+         if (quoteCount == 3) {
+            // third consecutive quote
             quoteCount = 0;
-        }
-        if (!inQuote && program.at(i).isSpace()) {
-            if (!tmp.isEmpty()) {
-                args += tmp;
-                tmp.clear();
-            }
-        } else {
             tmp += program.at(i);
-        }
-    }
-    if (!tmp.isEmpty())
-        args += tmp;
+         }
+         continue;
+      }
+      if (quoteCount) {
+         if (quoteCount == 1) {
+            inQuote = !inQuote;
+         }
+         quoteCount = 0;
+      }
+      if (!inQuote && program.at(i).isSpace()) {
+         if (!tmp.isEmpty()) {
+            args += tmp;
+            tmp.clear();
+         }
+      } else {
+         tmp += program.at(i);
+      }
+   }
+   if (!tmp.isEmpty()) {
+      args += tmp;
+   }
 
-    return args;
+   return args;
 }
 
 /*!
@@ -2084,19 +2141,19 @@ static QStringList parseCombinedArgString(const QString &program)
 */
 void QProcess::start(const QString &program, OpenMode mode)
 {
-    QStringList args = parseCombinedArgString(program);
-    if (args.isEmpty()) {
-        Q_D(QProcess);
-        d->processError = QProcess::FailedToStart;
-        setErrorString(tr("No program defined"));
-        emit error(d->processError);
-        return;
-    }
+   QStringList args = parseCombinedArgString(program);
+   if (args.isEmpty()) {
+      Q_D(QProcess);
+      d->processError = QProcess::FailedToStart;
+      setErrorString(tr("No program defined"));
+      emit error(d->processError);
+      return;
+   }
 
-    QString prog = args.first();
-    args.removeFirst();
+   QString prog = args.first();
+   args.removeFirst();
 
-    start(prog, args, mode);
+   start(prog, args, mode);
 }
 
 /*!
@@ -2124,8 +2181,8 @@ void QProcess::start(const QString &program, OpenMode mode)
 */
 void QProcess::terminate()
 {
-    Q_D(QProcess);
-    d->terminateProcess();
+   Q_D(QProcess);
+   d->terminateProcess();
 }
 
 /*!
@@ -2145,8 +2202,8 @@ void QProcess::terminate()
 */
 void QProcess::kill()
 {
-    Q_D(QProcess);
-    d->killProcess();
+   Q_D(QProcess);
+   d->killProcess();
 }
 
 /*!
@@ -2154,8 +2211,8 @@ void QProcess::kill()
 */
 int QProcess::exitCode() const
 {
-    Q_D(const QProcess);
-    return d->exitCode;
+   Q_D(const QProcess);
+   return d->exitCode;
 }
 
 /*!
@@ -2169,8 +2226,8 @@ int QProcess::exitCode() const
 */
 QProcess::ExitStatus QProcess::exitStatus() const
 {
-    Q_D(const QProcess);
-    return d->exitStatus;
+   Q_D(const QProcess);
+   return d->exitStatus;
 }
 
 /*!
@@ -2190,12 +2247,13 @@ QProcess::ExitStatus QProcess::exitStatus() const
 */
 int QProcess::execute(const QString &program, const QStringList &arguments)
 {
-    QProcess process;
-    process.setReadChannelMode(ForwardedChannels);
-    process.start(program, arguments);
-    if (!process.waitForFinished(-1))
-        return -2;
-    return process.exitStatus() == QProcess::NormalExit ? process.exitCode() : -1;
+   QProcess process;
+   process.setReadChannelMode(ForwardedChannels);
+   process.start(program, arguments);
+   if (!process.waitForFinished(-1)) {
+      return -2;
+   }
+   return process.exitStatus() == QProcess::NormalExit ? process.exitCode() : -1;
 }
 
 /*!
@@ -2207,12 +2265,13 @@ int QProcess::execute(const QString &program, const QStringList &arguments)
 */
 int QProcess::execute(const QString &program)
 {
-    QProcess process;
-    process.setReadChannelMode(ForwardedChannels);
-    process.start(program);
-    if (!process.waitForFinished(-1))
-        return -2;
-    return process.exitStatus() == QProcess::NormalExit ? process.exitCode() : -1;
+   QProcess process;
+   process.setReadChannelMode(ForwardedChannels);
+   process.start(program);
+   if (!process.waitForFinished(-1)) {
+      return -2;
+   }
+   return process.exitStatus() == QProcess::NormalExit ? process.exitCode() : -1;
 }
 
 /*!
@@ -2239,14 +2298,14 @@ int QProcess::execute(const QString &program)
     identifier of the started process.
 */
 bool QProcess::startDetached(const QString &program,
-			     const QStringList &arguments,
-			     const QString &workingDirectory,
+                             const QStringList &arguments,
+                             const QString &workingDirectory,
                              qint64 *pid)
 {
-    return QProcessPrivate::startDetached(program,
-					  arguments,
-					  workingDirectory,
-					  pid);
+   return QProcessPrivate::startDetached(program,
+                                         arguments,
+                                         workingDirectory,
+                                         pid);
 }
 
 /*!
@@ -2265,9 +2324,9 @@ bool QProcess::startDetached(const QString &program,
     The started process will run as a regular standalone process.
 */
 bool QProcess::startDetached(const QString &program,
-			     const QStringList &arguments)
+                             const QStringList &arguments)
 {
-    return QProcessPrivate::startDetached(program, arguments);
+   return QProcessPrivate::startDetached(program, arguments);
 }
 
 /*!
@@ -2282,14 +2341,15 @@ bool QProcess::startDetached(const QString &program,
 */
 bool QProcess::startDetached(const QString &program)
 {
-    QStringList args = parseCombinedArgString(program);
-    if (args.isEmpty())
-        return false;
+   QStringList args = parseCombinedArgString(program);
+   if (args.isEmpty()) {
+      return false;
+   }
 
-    QString prog = args.first();
-    args.removeFirst();
+   QString prog = args.first();
+   args.removeFirst();
 
-    return QProcessPrivate::startDetached(prog, args);
+   return QProcessPrivate::startDetached(prog, args);
 }
 
 QT_BEGIN_INCLUDE_NAMESPACE
@@ -2297,10 +2357,10 @@ QT_BEGIN_INCLUDE_NAMESPACE
 # include <crt_externs.h>
 # define environ (*_NSGetEnviron())
 #elif defined(Q_OS_MAC) && defined(Q_OS_IOS)
-  static char *qt_empty_environ[] = { 0 };
+static char *qt_empty_environ[] = { 0 };
 #define environ qt_empty_environ
 #elif !defined(Q_OS_WIN)
-  extern char **environ;
+extern char **environ;
 #endif
 QT_END_INCLUDE_NAMESPACE
 
@@ -2325,12 +2385,13 @@ QT_END_INCLUDE_NAMESPACE
 */
 QStringList QProcess::systemEnvironment()
 {
-    QStringList tmp;
-    char *entry = 0;
-    int count = 0;
-    while ((entry = environ[count++]))
-        tmp << QString::fromLocal8Bit(entry);
-    return tmp;
+   QStringList tmp;
+   char *entry = 0;
+   int count = 0;
+   while ((entry = environ[count++])) {
+      tmp << QString::fromLocal8Bit(entry);
+   }
+   return tmp;
 }
 
 /*!

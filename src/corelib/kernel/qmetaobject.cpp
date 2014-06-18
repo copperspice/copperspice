@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -62,7 +62,7 @@ bool QMetaObject::checkConnectArgs(const char *signal, const char *method)
    while (*s2++ != '(') {
    }
 
-   if (*s2 == ')' || qstrcmp(s1,s2) == 0)   {
+   if (*s2 == ')' || qstrcmp(s1, s2) == 0)   {
       // method has no args or exact match
       retval = true;
 
@@ -70,7 +70,7 @@ bool QMetaObject::checkConnectArgs(const char *signal, const char *method)
       int s1len = qstrlen(s1);
       int s2len = qstrlen(s2);
 
-      if (s2len < s1len && strncmp(s1,s2,s2len-1)== 0 && s1[s2len-1]== ',') {
+      if (s2len < s1len && strncmp(s1, s2, s2len - 1) == 0 && s1[s2len - 1] == ',') {
          // method has less args
          retval = true;
       }
@@ -91,7 +91,7 @@ bool QMetaObject::checkConnectArgs(const QMetaMethod &signal, const QMetaMethod 
 
    } else {
 
-      for(int index = 0; index != typesSlot.count(); ++index)   {
+      for (int index = 0; index != typesSlot.count(); ++index)   {
 
          if (typesSignal.at(index) != typesSlot.at(index)) {
             // unable to test if typeDefs are used
@@ -112,7 +112,7 @@ bool QMetaObject::compareThreads(Qt::HANDLE currentThreadId, QObject *receiver)
 void QMetaObject::connectSlotsByName(QObject *receiver)
 {
    if (! receiver)  {
-       return;
+      return;
    }
 
    const QMetaObject *metaObj = receiver->metaObject();
@@ -131,7 +131,7 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
       bool isConnected = false;
 
       // walk element list
-      for(int j = 0; j < list.count(); ++j) {
+      for (int j = 0; j < list.count(); ++j) {
 
          const QObject *element = list.at(j);
 
@@ -139,7 +139,7 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
          QByteArray objName = element->objectName().toAscii();
          int len = objName.length();
 
-         if (! len || qstrncmp(slotName+3, objName.data(), len) || slotName[len+3] != '_') {
+         if (! len || qstrncmp(slotName + 3, objName.data(), len) || slotName[len + 3] != '_') {
             continue;
          }
 
@@ -179,7 +179,7 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
          // found a slot, skip all clones (defaults)
          int slotCount = metaObj->methodCount();
 
-         while (slotIndex < slotCount-1)  {
+         while (slotIndex < slotCount - 1)  {
 
             if ( ! (metaObj->method(slotIndex + 1).attributes() & QMetaMethod::Cloned) ) {
                break;
@@ -231,7 +231,7 @@ int QMetaObject::indexOfConstructor(const char *constructor) const
    // adjust spacing in the passed method name
    QByteArray tValue = constructor;
    tValue.remove(char(32));
-  
+
    for (int index = 0; index < this->constructorCount(); ++index) {
       QMetaMethod testMethod = this->constructor(index);
 
@@ -248,7 +248,7 @@ int QMetaObject::indexOfConstructor(const char *constructor) const
 }
 
 int QMetaObject::indexOfEnumerator(const char *name) const
-{   
+{
    int retval = -1;
 
    for (int index = 0; index < this->enumeratorCount(); ++index) {
@@ -302,7 +302,7 @@ int QMetaObject::indexOfMethod(const BentoAbstract &temp) const
 }
 
 int QMetaObject::indexOfProperty(const char *name) const
-{    
+{
    int retval = -1;
 
    for (int x = 0; x < this->propertyCount(); ++x) {
@@ -329,9 +329,9 @@ int QMetaObject::indexOfSignal(const char *signal) const
       QMetaMethod testMethod = this->method(index);
 
       // NOTE: will match a method with the same or less arguments than signal  02/27/2014
-     
-      if (qstrncmp(testMethod.signature(), tValue.constData(), tValue.length()-1) == 0)  {
-        
+
+      if (qstrncmp(testMethod.signature(), tValue.constData(), tValue.length() - 1) == 0)  {
+
          if (testMethod.methodType() == QMetaMethod::Signal) {
             retval = index;
             break;
@@ -366,10 +366,10 @@ int QMetaObject::indexOfSlot(const char *slot) const
 }
 
 // internal method wrapping the global enum map
-QMap<std::type_index, std::pair<QMetaObject *, QString> > &QMetaObject::m_enumsAll() 
+QMap<std::type_index, std::pair<QMetaObject *, QString> > &QMetaObject::m_enumsAll()
 {
-   static QMap<std::type_index, std::pair<QMetaObject *, QString> > enums_All;      
-	return enums_All;
+   static QMap<std::type_index, std::pair<QMetaObject *, QString> > enums_All;
+   return enums_All;
 }
 
 QMetaMethod QMetaObject::method(const BentoAbstract &temp) const
@@ -420,7 +420,7 @@ QByteArray QMetaObject::normalizedSignature(const char *method)
    QByteArray fullMethod = QByteArray("void ") + method;
 
    std::tie(signatures, typeReturn, paramNames) = getSignatures(fullMethod.constData());
-   result = signatures[signatures.size()-1];
+   result = signatures[signatures.size() - 1];
 
    return result;
 }
@@ -451,7 +451,7 @@ int QMetaObject::propertyOffset() const
 }
 
 QString QMetaObject::tr(const char *text, const char *notes, int n) const
-{   
+{
    const char *context = className();
    return QCoreApplication::translate(context, text, notes, QCoreApplication::CodecForTr, n);
 }
@@ -469,12 +469,12 @@ QMetaProperty QMetaObject::userProperty() const
    const int lastIndex = this->propertyCount() - 1;
 
    for (int index = lastIndex; index >= 0; --index) {
-       const QMetaProperty prop = property(index);
+      const QMetaProperty prop = property(index);
 
-       if (prop.isUser()) {
+      if (prop.isUser()) {
          retval = prop;
          break;
-       }
+      }
    }
 
    return retval;
@@ -484,613 +484,613 @@ QMetaProperty QMetaObject::userProperty() const
 
 std::tuple<std::vector<const char *>, const char *, QList<QByteArray> > QMetaObject::getSignatures(const char *fullName)
 {
-   try { 
+   try {
 
-   std::vector<const char *> sigList;
-   const char *returnType;
-   QList<QByteArray> paramNames;
+      std::vector<const char *> sigList;
+      const char *returnType;
+      QList<QByteArray> paramNames;
 
-   //
-   const char *temp = fullName;
-   QStringList tokens;
-   QString item;
+      //
+      const char *temp = fullName;
+      QStringList tokens;
+      QString item;
 
-   // part 1, decipher tokens from fullName
-   while (*temp) {
-      char letter = *temp;
+      // part 1, decipher tokens from fullName
+      while (*temp) {
+         char letter = *temp;
 
-      if (isspace(letter)) {
+         if (isspace(letter)) {
 
-         // store the token
-         if (! item.isEmpty()) {          
-        
-            tokens.append(item);
-            item.clear();         
-         }
+            // store the token
+            if (! item.isEmpty()) {
 
-      } else if (letter == '*' || letter == '&' || letter == '=' || letter == ',' ||
-                 letter == '[' || letter == ']' ||
-                 letter == '(' || letter == ')' ||
-                 letter == '{' || letter == '}' ||
-                 letter == '<' || letter == '>'  )   {
+               tokens.append(item);
+               item.clear();
+            }
 
-         // store the token
-         if (! item.isEmpty()) {
-            tokens.append(item);       
-            item.clear();
-         }
+         } else if (letter == '*' || letter == '&' || letter == '=' || letter == ',' ||
+                    letter == '[' || letter == ']' ||
+                    letter == '(' || letter == ')' ||
+                    letter == '{' || letter == '}' ||
+                    letter == '<' || letter == '>'  )   {
 
-         tokens.append( QString(letter) );
-                
-      } else {
-         // tack letter onto the current item
-         item += letter;
-      }
+            // store the token
+            if (! item.isEmpty()) {
+               tokens.append(item);
+               item.clear();
+            }
 
-      ++temp;
-   }
-
-   if (! item.isEmpty()) {
-      tokens.append(item);
-   }
-
-   // part 2, parse return type from tokens
-   int index = 0;
-   QString typeReturn;
-
-   QString word;  
-   QString nextWord;
-
-   bool isStar = false;
-
-   int angleLevel   = 0;
-   int bracketLevel = 0;
-   int parenLevel   = 0;
-   
-   while (true)  {
-      word = tokens[index];   
-
-      // A
-      if (word == "<") {
-         ++angleLevel;
-
-      } else if (word == ">")  {
-         --angleLevel;
-
-      } else if (word == "[")  {
-         ++bracketLevel;
-
-      } else if (word == "]")  {
-         --bracketLevel;
-
-      } else if (word == "(")  {
-         ++parenLevel;
-
-      } else if (word == ")")  {
-         --parenLevel;
-
-      }
-
-
-      // B
-      if (word == "const")  {
-         nextWord = tokens[index+1];
-
-         if (isStar && nextWord != "*") {
-            typeReturn += word;
-            ++index;
-            break;
-         }
-
-      } else if (word == "enum")  {
-         // discard
-   
-         ++index;
-         continue;
-
-      } else if (word == "inline")  {
-         // discard
-   
-         ++index;
-         continue;
-
-      } else if (word == "static")  {
-         // discard
-         
-         ++index;
-         continue;
-
-      } else if (word == "virtual")  {
-         // discard
-         
-         ++index;
-         continue;
-
-      } else if (word == "volatile")  {
-         // nothing for now
-
-         typeReturn = typeReturn + word + " ";
-         ++index;
-         continue;
-
-      } else if (word == "*") {
-         isStar   = true;
-         nextWord = tokens[index+1];
-
-         if (nextWord == "*" || nextWord == "const") {
-            // do nothing
+            tokens.append( QString(letter) );
 
          } else {
-            typeReturn += word;
-            ++index;
-            break;
+            // tack letter onto the current item
+            item += letter;
          }
 
-      } else if (angleLevel != 0 && word == ">")   {
-         typeReturn += word;
-         ++index;
-         continue;
+         ++temp;
+      }
 
-      } else if (angleLevel != 0 && word == "<")   {
-         typeReturn += word;
-         ++index;
-         continue;
+      if (! item.isEmpty()) {
+         tokens.append(item);
+      }
 
-      } else if (bracketLevel != 0 && word == "]") {
-         typeReturn += word;
-         ++index;
-         continue;
+      // part 2, parse return type from tokens
+      int index = 0;
+      QString typeReturn;
 
-      } else if (bracketLevel != 0 && word == "[") {
-         typeReturn += word;
-         ++index;
-         continue;
+      QString word;
+      QString nextWord;
 
-      } else if (parenLevel != 0 && word == ",") {
-         isStar = false;
+      bool isStar = false;
 
-         typeReturn += word;
-         ++index;
-         continue;
+      int angleLevel   = 0;
+      int bracketLevel = 0;
+      int parenLevel   = 0;
 
-      } else if (parenLevel != 0 && word == ")") {
-         isStar = false;
+      while (true)  {
+         word = tokens[index];
 
-         typeReturn += word;
-         ++index;
-         continue;
+         // A
+         if (word == "<") {
+            ++angleLevel;
 
-      } else if (parenLevel != 0 && word == "(") {
-         typeReturn += word;
-         ++index;
-         continue;
+         } else if (word == ">")  {
+            --angleLevel;
 
-      } else {
-         nextWord = tokens[index+1];
+         } else if (word == "[")  {
+            ++bracketLevel;
 
-         if (nextWord == "*" || nextWord == "&" || nextWord == "<" || nextWord == "[" || nextWord == "(") {
+         } else if (word == "]")  {
+            --bracketLevel;
+
+         } else if (word == "(")  {
+            ++parenLevel;
+
+         } else if (word == ")")  {
+            --parenLevel;
+
+         }
+
+
+         // B
+         if (word == "const")  {
+            nextWord = tokens[index + 1];
+
+            if (isStar && nextWord != "*") {
+               typeReturn += word;
+               ++index;
+               break;
+            }
+
+         } else if (word == "enum")  {
+            // discard
+
+            ++index;
+            continue;
+
+         } else if (word == "inline")  {
+            // discard
+
+            ++index;
+            continue;
+
+         } else if (word == "static")  {
+            // discard
+
+            ++index;
+            continue;
+
+         } else if (word == "virtual")  {
+            // discard
+
+            ++index;
+            continue;
+
+         } else if (word == "volatile")  {
+            // nothing for now
+
+            typeReturn = typeReturn + word + " ";
+            ++index;
+            continue;
+
+         } else if (word == "*") {
+            isStar   = true;
+            nextWord = tokens[index + 1];
+
+            if (nextWord == "*" || nextWord == "const") {
+               // do nothing
+
+            } else {
+               typeReturn += word;
+               ++index;
+               break;
+            }
+
+         } else if (angleLevel != 0 && word == ">")   {
             typeReturn += word;
             ++index;
             continue;
 
-         }  else {
+         } else if (angleLevel != 0 && word == "<")   {
             typeReturn += word;
             ++index;
+            continue;
 
-            if (angleLevel == 0 && bracketLevel == 0 && parenLevel == 0) {
-               break;
+         } else if (bracketLevel != 0 && word == "]") {
+            typeReturn += word;
+            ++index;
+            continue;
 
-            } else {
+         } else if (bracketLevel != 0 && word == "[") {
+            typeReturn += word;
+            ++index;
+            continue;
+
+         } else if (parenLevel != 0 && word == ",") {
+            isStar = false;
+
+            typeReturn += word;
+            ++index;
+            continue;
+
+         } else if (parenLevel != 0 && word == ")") {
+            isStar = false;
+
+            typeReturn += word;
+            ++index;
+            continue;
+
+         } else if (parenLevel != 0 && word == "(") {
+            typeReturn += word;
+            ++index;
+            continue;
+
+         } else {
+            nextWord = tokens[index + 1];
+
+            if (nextWord == "*" || nextWord == "&" || nextWord == "<" || nextWord == "[" || nextWord == "(") {
+               typeReturn += word;
+               ++index;
                continue;
 
-            }
-         }
-      }
+            }  else {
+               typeReturn += word;
+               ++index;
 
-      typeReturn = typeReturn + word + " ";
-      ++index;
-   }
-
-   // convert return type to "char *" data type
-   returnType = strdup(csPrintable(typeReturn));
-
-   // part 3 parse method name
-   QString signature = tokens[index++];
-  
-   // part 4, parse signature from tokens
-   QString typeArg;
-
-   bool found_funcPtrVar;
-   bool isDefaultArg;     
-
-   // parse open paren
-   QString leftParn = tokens[index++];  
-
-   if (leftParn != "(")   {   
-      qWarning("QMetaObject:getSignature() Unable to parse signature: %s",fullName);     
-   }
- 
-   signature += leftParn;
-   
-   bool break_loop  = false;
-   bool all_done    = false;   
-   bool bigArg      = false;
-   bool bigArg_test = true;
-   
-   for (int k = index; k < tokens.size(); ++k) {
-      word = tokens[k];
-
-      if (word == ")")  {
-         signature += word;
-         break;
-
-      } else {         
-         found_funcPtrVar = false;
-         
-         bigArg        = false;
-         bigArg_test   = true;
-
-         isDefaultArg  = false;
-         isStar        = false;
-         typeArg       = "";
-
-         angleLevel    = 0;
-         bracketLevel  = 0;
-         parenLevel    = 0;                
-
-         while (true)  {
-            word = tokens[k];
-                             
-            // A
-            if (word == "<") {
-               ++angleLevel;
-
-            } else if (word == ">")  {
-               --angleLevel;
-
-            } else if (word == "[")  {
-               ++bracketLevel;
-
-            } else if (word == "]")  {
-               --bracketLevel;
-
-            } else if (word == "(")  {
-               ++parenLevel;
-
-            } else if (word == ")")  {
-               --parenLevel;
-
-            }
-
-            // B
-            int tokenMax = tokens.size() - 1;  
-
-            if (word == "const")  {
-
-               if (k < tokenMax)  {
-                  nextWord = tokens[k+1];
+               if (angleLevel == 0 && bracketLevel == 0 && parenLevel == 0) {
+                  break;
 
                } else {
-                  // all done
-                  break_loop = true;
-                  break ;
+                  continue;
+
+               }
+            }
+         }
+
+         typeReturn = typeReturn + word + " ";
+         ++index;
+      }
+
+      // convert return type to "char *" data type
+      returnType = strdup(csPrintable(typeReturn));
+
+      // part 3 parse method name
+      QString signature = tokens[index++];
+
+      // part 4, parse signature from tokens
+      QString typeArg;
+
+      bool found_funcPtrVar;
+      bool isDefaultArg;
+
+      // parse open paren
+      QString leftParn = tokens[index++];
+
+      if (leftParn != "(")   {
+         qWarning("QMetaObject:getSignature() Unable to parse signature: %s", fullName);
+      }
+
+      signature += leftParn;
+
+      bool break_loop  = false;
+      bool all_done    = false;
+      bool bigArg      = false;
+      bool bigArg_test = true;
+
+      for (int k = index; k < tokens.size(); ++k) {
+         word = tokens[k];
+
+         if (word == ")")  {
+            signature += word;
+            break;
+
+         } else {
+            found_funcPtrVar = false;
+
+            bigArg        = false;
+            bigArg_test   = true;
+
+            isDefaultArg  = false;
+            isStar        = false;
+            typeArg       = "";
+
+            angleLevel    = 0;
+            bracketLevel  = 0;
+            parenLevel    = 0;
+
+            while (true)  {
+               word = tokens[k];
+
+               // A
+               if (word == "<") {
+                  ++angleLevel;
+
+               } else if (word == ">")  {
+                  --angleLevel;
+
+               } else if (word == "[")  {
+                  ++bracketLevel;
+
+               } else if (word == "]")  {
+                  --bracketLevel;
+
+               } else if (word == "(")  {
+                  ++parenLevel;
+
+               } else if (word == ")")  {
+                  --parenLevel;
+
                }
 
-               if (isStar && nextWord != "*") {
-                  typeArg += word;
-                  ++k;
-                  break;
-               }
+               // B
+               int tokenMax = tokens.size() - 1;
 
-            } else if (word == "enum")  {
-               // discard
-               ++k;
-               continue;
+               if (word == "const")  {
 
-            } else if (word == "restrict")  {
-               // discard
-               ++k;
-               continue;
+                  if (k < tokenMax)  {
+                     nextWord = tokens[k + 1];
 
-            } else if (word == "volatile")  {
-               // keep
-
-               typeArg = typeArg + word + " ";
-               ++k;
-               continue;
-
-            } else if (bigArg_test && (word == "signed" || word == "unsigned" || word == "short" || word == "long"))  { 
-
-               bool firstLoop = true;               
-               int index = k+1;
-
-#ifdef CS_Debug               
-               qDebug("Debug (bigArg):  Passed full name %s",    fullName );
-#endif
-
-               while (k < tokenMax)  {
-                  bool found = false;
-
-                  nextWord = tokens[index];
-                   
-                  if ((word == "long") && (nextWord == "double" || nextWord == "int" || nextWord == "long")) {
-                     found = true;                                       
-
-                  } else if ((word == "short") && (nextWord == "int")) {
-                     found = true;   
-                  
-                  } else if (nextWord == "char" || nextWord == "int" || nextWord == "long" || nextWord == "short") {
-                     // signed & unsigned 
-                     found = true;
-
+                  } else {
+                     // all done
+                     break_loop = true;
+                     break ;
                   }
 
-                  //
-                  if (found) { 
-  
-                     if (firstLoop) {
-                        typeArg += word;
-                        ++k; 
-   
-                        firstLoop   = false;
-                        bigArg      = true;                      
+                  if (isStar && nextWord != "*") {
+                     typeArg += word;
+                     ++k;
+                     break;
+                  }
+
+               } else if (word == "enum")  {
+                  // discard
+                  ++k;
+                  continue;
+
+               } else if (word == "restrict")  {
+                  // discard
+                  ++k;
+                  continue;
+
+               } else if (word == "volatile")  {
+                  // keep
+
+                  typeArg = typeArg + word + " ";
+                  ++k;
+                  continue;
+
+               } else if (bigArg_test && (word == "signed" || word == "unsigned" || word == "short" || word == "long"))  {
+
+                  bool firstLoop = true;
+                  int index = k + 1;
 
 #ifdef CS_Debug
-                        qDebug("Debug (bigArg):  Inside 'first loop'  %s", csPrintable(typeArg));
+                  qDebug("Debug (bigArg):  Passed full name %s",    fullName );
 #endif
 
+                  while (k < tokenMax)  {
+                     bool found = false;
+
+                     nextWord = tokens[index];
+
+                     if ((word == "long") && (nextWord == "double" || nextWord == "int" || nextWord == "long")) {
+                        found = true;
+
+                     } else if ((word == "short") && (nextWord == "int")) {
+                        found = true;
+
+                     } else if (nextWord == "char" || nextWord == "int" || nextWord == "long" || nextWord == "short") {
+                        // signed & unsigned
+                        found = true;
+
                      }
-   
-                     typeArg += " " + nextWord;
-                     ++k; 
 
-                     // used for nextWord                                 
-                     index = k;    
-                                   
-                  }  else {
-                     // all done
+                     //
+                     if (found) {
 
-                     if (firstLoop) {
-                        // standard, no doubled type name                                           
-                     
-                        bigArg_test = false;                                         
+                        if (firstLoop) {
+                           typeArg += word;
+                           ++k;
+
+                           firstLoop   = false;
+                           bigArg      = true;
+
+#ifdef CS_Debug
+                           qDebug("Debug (bigArg):  Inside 'first loop'  %s", csPrintable(typeArg));
+#endif
+
+                        }
+
+                        typeArg += " " + nextWord;
+                        ++k;
+
+                        // used for nextWord
+                        index = k;
+
+                     }  else {
+                        // all done
+
+                        if (firstLoop) {
+                           // standard, no doubled type name
+
+                           bigArg_test = false;
+                           break;
+                        }
+
                         break;
                      }
 
-                     break;
                   }
-   
-               }                 
 
-               if (bigArg) {     
-                  typeArg += " ";                  
-               }
+                  if (bigArg) {
+                     typeArg += " ";
+                  }
 
-               continue;             
-             
-            } else if (word == "*") {
-               isStar = true;
-
-               if (k < tokenMax)  {
-                  nextWord = tokens[k+1];            
-               }
-             
-               //
-               if (nextWord == "*" || nextWord == "const") {
-                  typeArg += word;
-                  ++k;
                   continue;
 
-               }  else if (parenLevel != 0 && nextWord == ")")  {
-                  // function pointer with no variable name
-                  typeArg += word;
-                  ++k;
-                  continue;
+               } else if (word == "*") {
+                  isStar = true;
 
-               }  else if (parenLevel != 0 && ! found_funcPtrVar)  {
-                  // function pointer, save the var name, then keep going
-                  found_funcPtrVar = true;
-                  paramNames.append(nextWord.toLatin1());
+                  if (k < tokenMax)  {
+                     nextWord = tokens[k + 1];
+                  }
 
-                  typeArg += word;
-                  k += 2;
-                  continue;
-
-               } else  {
-                  typeArg += word;
-                  ++k;
-
-                  if (parenLevel == 0) {
-                     break;
-                  } else {
+                  //
+                  if (nextWord == "*" || nextWord == "const") {
+                     typeArg += word;
+                     ++k;
                      continue;
+
+                  }  else if (parenLevel != 0 && nextWord == ")")  {
+                     // function pointer with no variable name
+                     typeArg += word;
+                     ++k;
+                     continue;
+
+                  }  else if (parenLevel != 0 && ! found_funcPtrVar)  {
+                     // function pointer, save the var name, then keep going
+                     found_funcPtrVar = true;
+                     paramNames.append(nextWord.toLatin1());
+
+                     typeArg += word;
+                     k += 2;
+                     continue;
+
+                  } else  {
+                     typeArg += word;
+                     ++k;
+
+                     if (parenLevel == 0) {
+                        break;
+                     } else {
+                        continue;
+                     }
+
                   }
 
-               }
+               } else if (angleLevel != 0 && word == ">")   {
+                  typeArg += word;
+                  ++k;
+                  continue;
 
-            } else if (angleLevel != 0 && word == ">")   {
-               typeArg += word;
-               ++k;
-               continue;
+               } else if (angleLevel != 0 && word == "<")   {
+                  typeArg += word;
+                  ++k;
+                  continue;
 
-            } else if (angleLevel != 0 && word == "<")   {
-               typeArg += word;
-               ++k;
-               continue;
+               } else if (bracketLevel != 0 && word == "]") {
+                  typeArg += word;
+                  ++k;
+                  continue;
 
-            } else if (bracketLevel != 0 && word == "]") {
-               typeArg += word;
-               ++k;
-               continue;
+               } else if (bracketLevel != 0 && word == "[") {
+                  typeArg += word;
+                  ++k;
+                  continue;
 
-            } else if (bracketLevel != 0 && word == "[") {
-               typeArg += word;
-               ++k;
-               continue;
+               } else if (parenLevel != 0 && word == ",") {
+                  isStar = false;
 
-            } else if (parenLevel != 0 && word == ",") {
-               isStar = false;
+                  typeArg += word;
+                  ++k;
+                  continue;
 
-               typeArg += word;
-               ++k;
-               continue;
+               } else if (parenLevel != 0 && word == ")") {
+                  isStar = false;
 
-            } else if (parenLevel != 0 && word == ")") {
-               isStar = false;
+                  typeArg += word;
+                  ++k;
+                  continue;
 
-               typeArg += word;
-               ++k;
-               continue;
+               } else if (parenLevel != 0 && word == "(") {
+                  typeArg += word;
+                  ++k;
+                  continue;
 
-            } else if (parenLevel != 0 && word == "(") {
-               typeArg += word;
-               ++k;
-               continue;
+               } else {
+                  nextWord = tokens[k + 1];
 
-            } else {
-               nextWord = tokens[k+1];
-
-               if (bigArg)  {
-                  // we are on a comma, var name, right paren, star, ampersand
+                  if (bigArg)  {
+                     // we are on a comma, var name, right paren, star, ampersand
 
 #ifdef CS_Debug
-                  // parse the following:   &  *  (  )                                    
-                  qDebug("Debug (bigArg):  Args:     %s", csPrintable(typeArg) );
-                  qDebug("Debug (bigArg):  NextWord  %s", csPrintable(nextWord) );
+                     // parse the following:   &  *  (  )
+                     qDebug("Debug (bigArg):  Args:     %s", csPrintable(typeArg) );
+                     qDebug("Debug (bigArg):  NextWord  %s", csPrintable(nextWord) );
 #endif
 
-                  break;   
-               
-               } else if (nextWord == "*" || nextWord == "&" || nextWord == "<" || nextWord == "[" || nextWord == "(") {
-                  typeArg += word;
-                  ++k;
-                  continue;
-
-               }  else {
-                  typeArg += word;
-                  ++k;
-
-                  if (angleLevel == 0 && bracketLevel == 0 && parenLevel == 0) {
                      break;
 
-                  } else {
+                  } else if (nextWord == "*" || nextWord == "&" || nextWord == "<" || nextWord == "[" || nextWord == "(") {
+                     typeArg += word;
+                     ++k;
                      continue;
 
+                  }  else {
+                     typeArg += word;
+                     ++k;
+
+                     if (angleLevel == 0 && bracketLevel == 0 && parenLevel == 0) {
+                        break;
+
+                     } else {
+                        continue;
+
+                     }
                   }
                }
+
+               typeArg = typeArg + word + " ";
+               ++k;
             }
 
-            typeArg = typeArg + word + " ";
-            ++k;
-         }
-
-         if (break_loop)  {
-            break;
-         }
+            if (break_loop)  {
+               break;
+            }
 
 
-         // C save var name
-         word = tokens[k];
-
-
-         // D
-         if (found_funcPtrVar) {
-            // fall thru
-
-         } else if (word == "=" || word == ")" || word == ",")  {
-            // default name
-            paramNames.append("un_named_arg");
-
-         } else {           
-            // token is a variable
-            paramNames.append(word.toLatin1());
-            ++k;
-         }
-
-         // E next token could be equal, close paren, comma, left square bracket(array)
-         int parenLevel_2 = 0;
-
-         while (true) {
+            // C save var name
             word = tokens[k];
 
-            if (word == "=") {
-               isDefaultArg = true;
 
-            } else if (word == "(" && isDefaultArg)  {
-               ++parenLevel_2;
+            // D
+            if (found_funcPtrVar) {
+               // fall thru
 
-            } else if (word == ")")  {
+            } else if (word == "=" || word == ")" || word == ",")  {
+               // default name
+               paramNames.append("un_named_arg");
 
-               if (isDefaultArg) {
+            } else {
+               // token is a variable
+               paramNames.append(word.toLatin1());
+               ++k;
+            }
 
+            // E next token could be equal, close paren, comma, left square bracket(array)
+            int parenLevel_2 = 0;
+
+            while (true) {
+               word = tokens[k];
+
+               if (word == "=") {
+                  isDefaultArg = true;
+
+               } else if (word == "(" && isDefaultArg)  {
+                  ++parenLevel_2;
+
+               } else if (word == ")")  {
+
+                  if (isDefaultArg) {
+
+                     if (parenLevel_2 <= 0) {
+                        break;
+                     }
+
+                     --parenLevel_2;
+
+                  } else {
+                     all_done = true;
+                     break;
+
+                  }
+
+               } else if (word == ",")  {
                   if (parenLevel_2 <= 0) {
                      break;
                   }
 
-                  --parenLevel_2;
-
-               } else {                  
-                  all_done = true;
-                  break;
+               } else if (! isDefaultArg) {
+                  // add to signature
+                  typeArg += word;
 
                }
 
-            } else if (word == ",")  {
-               if (parenLevel_2 <= 0) {
-                  break;
+               ++k;
+            }
+
+            if (isDefaultArg)  {
+               // add overloaded signature to the vector
+
+               QString temp = signature;
+
+               if (temp.endsWith(",")) {
+                  temp.chop(1);
                }
 
-            } else if (! isDefaultArg) {
-               // add to signature
-               typeArg += word;
+               const char *sig = strdup(csPrintable(temp + ")"));
+               sigList.push_back(sig);
 
             }
 
-            ++k;
-         } 
-
-         if (isDefaultArg)  {
-            // add overloaded signature to the vector
-         
-            QString temp = signature;
-
-            if (temp.endsWith(",")) {    
-               temp.chop(1); 
-            }
-               
-            const char *sig = strdup(csPrintable(temp + ")"));
-            sigList.push_back(sig);  
-                                 
+            signature += typeArg;
          }
 
-         signature += typeArg;
+         signature += tokens[k];
+
+         if (all_done) {
+            break;
+         }
       }
 
-      signature += tokens[k];
+      // convert tempSig to appropriate data type
+      const char *sig = strdup(csPrintable(signature));
 
-      if (all_done) {
-         break;
-      }
-   }
-
-   // convert tempSig to appropriate data type
-   const char *sig = strdup(csPrintable(signature));
-
-   // add sig to the vector
-   sigList.push_back(sig);
+      // add sig to the vector
+      sigList.push_back(sig);
 
 
 #ifdef CS_Debug
-   const char *space = "                      ";                                             
-   qDebug("QObject:getSignature()  Passed name: %s\n %s Signature: %s \n", fullName, space, csPrintable(signature));
+      const char *space = "                      ";
+      qDebug("QObject:getSignature()  Passed name: %s\n %s Signature: %s \n", fullName, space, csPrintable(signature));
 #endif
 
-   return std::make_tuple(sigList, returnType, paramNames);
+      return std::make_tuple(sigList, returnType, paramNames);
 
    }  catch (std::exception &e) {
       // rethrow
       std::string msg = "QObject::getSignature() Exception when processing " + std::string(fullName);
-      std::throw_with_nested(std::logic_error(msg));     
+      std::throw_with_nested(std::logic_error(msg));
 
    }
 }
@@ -1184,13 +1184,13 @@ QByteArray QMetaObject::getType(const char *fullName)
       // B
       if (word == "const")  {
 
-         if (index+1 >= tokens.size()) {
+         if (index + 1 >= tokens.size()) {
             typeReturn += word;
             ++index;
             break;
          }
 
-         nextWord = tokens[index+1];
+         nextWord = tokens[index + 1];
 
          if (isStar && nextWord != "*") {
             typeReturn += word;
@@ -1208,14 +1208,14 @@ QByteArray QMetaObject::getType(const char *fullName)
       } else if (word == "*") {
          isStar = true;
 
-         if (index+1 >= tokens.size()) {
+         if (index + 1 >= tokens.size()) {
             typeReturn += word;
             ++index;
             break;
          }
-       
-         nextWord = tokens[index+1];
-         
+
+         nextWord = tokens[index + 1];
+
          if (nextWord == "*" || nextWord == "const") {
             // do nothing
 
@@ -1265,11 +1265,11 @@ QByteArray QMetaObject::getType(const char *fullName)
          continue;
 
       } else {
-         if (index+1 >= tokens.size()) {
+         if (index + 1 >= tokens.size()) {
             nextWord = "";
 
          } else {
-            nextWord = tokens[index+1];
+            nextWord = tokens[index + 1];
 
          }
 
@@ -1330,7 +1330,7 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QByteArray, int> valueMap
          }
 
          //
-         if (letter == '<' && *(temp+1) == '<' )  {
+         if (letter == '<' && *(temp + 1) == '<' )  {
             // store the token "<<"
             tokens.append("<<");
             ++temp;
@@ -1398,12 +1398,12 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QByteArray, int> valueMap
          // single quote
 
          int len = word.size();
-         QString temp = word.mid(1,len-2);
+         QString temp = word.mid(1, len - 2);
 
          if (temp.left(2) == "\\u")  {
 
             temp = temp.mid(2);
-            int t_value = temp.toInt(&ok,16);
+            int t_value = temp.toInt(&ok, 16);
 
             if (ok) {
                valueStack.append(t_value);
@@ -1414,7 +1414,7 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QByteArray, int> valueMap
          } else if (temp.left(2) == "\\0") {
 
             temp = temp.mid(2);
-            int t_value = temp.toInt(&ok,0);
+            int t_value = temp.toInt(&ok, 0);
 
             if (ok) {
                valueStack.append(t_value);
@@ -1433,7 +1433,7 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QByteArray, int> valueMap
 
          int pos = word.indexOf("::");
          QString className = word.mid(0, pos);
-         QString enumKey   = word.mid(pos+2);
+         QString enumKey   = word.mid(pos + 2);
 
          for (auto index = m_enumsAll().begin(); index != m_enumsAll().end(); ++index  )  {
 
@@ -1505,7 +1505,7 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QByteArray, int> valueMap
 
       } else if (word  == "~")  {
          if (valueStack.size() < 1) {
-           throw std::logic_error("Unable to parse enum data, check enum macros");
+            throw std::logic_error("Unable to parse enum data, check enum macros");
          }
 
          int right = valueStack.takeLast();
@@ -1541,7 +1541,7 @@ QMetaClassInfo QMetaObject_X::classInfo(int index) const
 
    if (index >= count) {
       // index is out of bounds, look in parent class
-      return superClass()->classInfo(index-count);
+      return superClass()->classInfo(index - count);
 
    }  else {
       auto elem = m_classInfo.end();
@@ -1564,7 +1564,7 @@ int QMetaObject_X::classInfoCount() const
 }
 
 QMetaMethod QMetaObject_X::constructor(int index) const
-{  
+{
    const int count = m_constructor.size();
 
    if (index >= count) {
@@ -1578,11 +1578,11 @@ QMetaMethod QMetaObject_X::constructor(int index) const
       return elem.value();
    }
 
-   return QMetaMethod{};
+   return QMetaMethod {};
 }
 
 int QMetaObject_X::constructorCount() const
-{   
+{
    // number of constructors in this class
    int count = m_constructor.size();
 
@@ -1595,7 +1595,7 @@ QMetaEnum QMetaObject_X::enumerator(int index) const
 
    if (index >= count) {
       // index is out of bounds, look in parent class
-      return superClass()->enumerator(index-count);
+      return superClass()->enumerator(index - count);
 
    }  else {
       auto elem = m_enums.end();
@@ -1623,7 +1623,7 @@ QMetaMethod QMetaObject_X::method(int index) const
 
    if (index >= count) {
       // index is out of bounds, look in parent class
-      return superClass()->method(index-count);
+      return superClass()->method(index - count);
 
    }  else {
       auto elem = m_methods.end();
@@ -1635,7 +1635,7 @@ QMetaMethod QMetaObject_X::method(int index) const
 }
 
 int QMetaObject_X::methodCount() const
-{   
+{
    // includes signals, slots, and methods declared with CS_INVOKABLE
    int count = m_methods.size();
 
@@ -1652,7 +1652,7 @@ QMetaProperty QMetaObject_X::property(int index) const
 
    if (index >= count) {
       // index is out of bounds, look in parent class
-      return superClass()->property(index-count);
+      return superClass()->property(index - count);
 
    }  else {
       auto elem = m_properties.end();
@@ -1699,7 +1699,7 @@ int QMetaObject_X::register_flag(const char *enumName, const char *scope, const 
    m_flag.insertMulti(enumName, flagName);
 
    QMetaEnum data(flagName, scope, true);
-   m_enums.insert(flagName, data);   
+   m_enums.insert(flagName, data);
 
    // used in findEnum()
    m_enumsAll().insert(id, std::make_pair(this, flagName) );
@@ -1757,7 +1757,7 @@ void QMetaObject_X::register_enum_data(const char *args, const char *scope)
       char letter = *temp;
 
       if ((isspace(letter) || letter == '{')) {
-        // move on
+         // move on
 
       } else if (letter == '}' || letter == ',') {
 
@@ -1766,7 +1766,7 @@ void QMetaObject_X::register_enum_data(const char *args, const char *scope)
          if (index > 0)  {
             // convert enum value
 
-            QString t_word = word.mid(index+1);
+            QString t_word = word.mid(index + 1);
 
             bool ok;
             int t_value = t_word.toInt(&ok, 0);
@@ -1775,7 +1775,7 @@ void QMetaObject_X::register_enum_data(const char *args, const char *scope)
                // value is an int
                value = t_value;
 
-            } else  {               
+            } else  {
                value = this->enum_calculate(t_word, valueMap);
 
             }
@@ -1787,7 +1787,7 @@ void QMetaObject_X::register_enum_data(const char *args, const char *scope)
          valueMap.insert(key, value);
          value++;
 
-         if (letter == '}') {            
+         if (letter == '}') {
             break;
          }
 
@@ -1817,7 +1817,7 @@ void QMetaObject_X::register_enum_data(const char *args, const char *scope)
          tempName.append(iter_flag.value());
          ++iter_flag;
       }
-   }   
+   }
 
    // save enum data in QMap
    for (int i = 0; i < tempName.size(); ++i) {
@@ -1856,39 +1856,39 @@ void QMetaObject_X::register_method(const char *name, QMetaMethod::Access access
    QList<QByteArray> tempNames = paramNames;
 
 
-   for( int k = 0; k < size; ++k )  {
+   for ( int k = 0; k < size; ++k )  {
 
       if (size > 1) {
          // adjust the number of parameter names
-         int howMany = paramNames.size() - ((size -1) - k);
+         int howMany = paramNames.size() - ((size - 1) - k);
          tempNames   = paramNames.mid(0, howMany);
 
          attr = QMetaMethod::Cloned;
 
-         if (k == size -1) {
+         if (k == size - 1) {
             attr = QMetaMethod::Attributes();
          }
       }
 
       // remove spacing from the key
-		QString tokenKey = signatures[k];
-      tokenKey.remove(QChar(32)); 
+      QString tokenKey = signatures[k];
+      tokenKey.remove(QChar(32));
 
       // adjust spacing in the value
-		QString tokenValue = signatures[k];
+      QString tokenValue = signatures[k];
       tokenValue.remove(QChar(32));
 
       const char *tokenData = strdup(csPrintable(tokenValue));
-      
+
       // save the key/value into the master map
       QMetaMethod data(typeReturn, tokenData, tempNames, access, kind, attr, this);
-	
+
       if (kind == QMetaMethod::Constructor) {
          m_constructor.insert(tokenKey, data);
       } else  {
          m_methods.insert(tokenKey, data);
       }
-   } 
+   }
 }
 
 void QMetaObject_X::register_tag(const char *name, const char *method)
@@ -1926,7 +1926,7 @@ int QMetaObject_X::register_property_read(const char *name, const char *dataType
    if ( item == m_properties.end() )  {
       // entry not found in QMap, construct new obj then insert
 
-      data = QMetaProperty{name, this};
+      data = QMetaProperty {name, this};
       m_properties.insert(name, data);
 
    } else {
@@ -1956,7 +1956,7 @@ int QMetaObject_X::register_property_write(const char *name, JarWriteAbstract *m
    if ( item == m_properties.end() )  {
       // entry not found in QMap, construct new obj then insert
 
-      data = QMetaProperty{name, this};
+      data = QMetaProperty {name, this};
       m_properties.insert(name, data);
 
    } else {
@@ -1970,7 +1970,7 @@ int QMetaObject_X::register_property_write(const char *name, JarWriteAbstract *m
 
    // update QMetaProperty
    m_properties.insert(name, data);
-   
+
    return 0;
 }
 
@@ -1986,14 +1986,14 @@ int QMetaObject_X::register_property_bool(const char *name, JarReadAbstract *met
    if ( item == m_properties.end() )  {
       // entry not found in QMap, construct new obj then insert
 
-      data = QMetaProperty{name, this};
+      data = QMetaProperty {name, this};
       m_properties.insert(name, data);
 
    } else {
       // retrieve existing obj
       data = item.value();
 
-   }  
+   }
 
    if (kind == QMetaProperty::DESIGNABLE) {
       data.setDesignable(method);
@@ -2011,7 +2011,7 @@ int QMetaObject_X::register_property_bool(const char *name, JarReadAbstract *met
 
    // update QMetaProperty
    m_properties.insert(name, data);
-   
+
    return 0;
 }
 
@@ -2027,7 +2027,7 @@ void QMetaObject_X::register_property_int(const char *name, int value, QMetaProp
    if ( item == m_properties.end() )  {
       // entry not found in QMap, construct new obj then insert
 
-      data = QMetaProperty{name, this};
+      data = QMetaProperty {name, this};
       m_properties.insert(name, data);
 
    } else {
@@ -2041,10 +2041,12 @@ void QMetaObject_X::register_property_int(const char *name, int value, QMetaProp
       // int value
       data.setRevision(value);
 
-   } if (kind == QMetaProperty::CONSTANT) {
+   }
+   if (kind == QMetaProperty::CONSTANT) {
       data.setConstant();
 
-   } if (kind == QMetaProperty::FINAL) {
+   }
+   if (kind == QMetaProperty::FINAL) {
       data.setFinal();
 
    }

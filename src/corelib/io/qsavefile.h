@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -47,33 +47,33 @@ class QSaveFilePrivate;
 
 class Q_CORE_EXPORT QSaveFile : public QFileDevice
 {
-    CS_OBJECT(QSaveFile)
-    Q_DECLARE_PRIVATE(QSaveFile)
+   CS_OBJECT(QSaveFile)
+   Q_DECLARE_PRIVATE(QSaveFile)
 
-public:
+ public:
 
-    explicit QSaveFile(const QString &name);
-    explicit QSaveFile(QObject *parent = 0);
-    explicit QSaveFile(const QString &name, QObject *parent);
-    ~QSaveFile();
+   explicit QSaveFile(const QString &name);
+   explicit QSaveFile(QObject *parent = 0);
+   explicit QSaveFile(const QString &name, QObject *parent);
+   ~QSaveFile();
 
-    QString fileName() const;
-    void setFileName(const QString &name);
+   QString fileName() const;
+   void setFileName(const QString &name);
 
-    bool open(OpenMode flags);
-    bool commit();
+   bool open(OpenMode flags);
+   bool commit();
 
-    void cancelWriting();
+   void cancelWriting();
 
-    void setDirectWriteFallback(bool enabled);
-    bool directWriteFallback() const;
+   void setDirectWriteFallback(bool enabled);
+   bool directWriteFallback() const;
 
-protected:
-    qint64 writeData(const char *data, qint64 len);
+ protected:
+   qint64 writeData(const char *data, qint64 len);
 
-private:
-    void close();
-    Q_DISABLE_COPY(QSaveFile)
+ private:
+   void close();
+   Q_DISABLE_COPY(QSaveFile)
 };
 
 QT_END_NAMESPACE

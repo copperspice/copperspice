@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -214,7 +214,7 @@ QT_BEGIN_NAMESPACE
 */
 void QtPrivate::QStringList_sort(QStringList *that)
 {
-    qSort(*that);
+   qSort(*that);
 }
 
 /*!
@@ -237,14 +237,15 @@ void QtPrivate::QStringList_sort(QStringList *that)
     \sa contains()
 */
 QStringList QtPrivate::QStringList_filter(const QStringList *that, const QString &str,
-                                          Qt::CaseSensitivity cs)
+      Qt::CaseSensitivity cs)
 {
-    QStringMatcher matcher(str, cs);
-    QStringList res;
-    for (int i = 0; i < that->size(); ++i)
-        if (matcher.indexIn(that->at(i)) != -1)
-            res << that->at(i);
-    return res;
+   QStringMatcher matcher(str, cs);
+   QStringList res;
+   for (int i = 0; i < that->size(); ++i)
+      if (matcher.indexIn(that->at(i)) != -1) {
+         res << that->at(i);
+      }
+   return res;
 }
 
 
@@ -260,12 +261,13 @@ QStringList QtPrivate::QStringList_filter(const QStringList *that, const QString
 QBool QtPrivate::QStringList_contains(const QStringList *that, const QString &str,
                                       Qt::CaseSensitivity cs)
 {
-    for (int i = 0; i < that->size(); ++i) {
-        const QString & string = that->at(i);
-        if (string.length() == str.length() && str.compare(string, cs) == 0)
-            return QBool(true);
-    }
-    return QBool(false);
+   for (int i = 0; i < that->size(); ++i) {
+      const QString &string = that->at(i);
+      if (string.length() == str.length() && str.compare(string, cs) == 0) {
+         return QBool(true);
+      }
+   }
+   return QBool(false);
 }
 
 #ifndef QT_NO_REGEXP
@@ -279,11 +281,12 @@ QBool QtPrivate::QStringList_contains(const QStringList *that, const QString &st
 */
 QStringList QtPrivate::QStringList_filter(const QStringList *that, const QRegExp &rx)
 {
-    QStringList res;
-    for (int i = 0; i < that->size(); ++i)
-        if (that->at(i).contains(rx))
-            res << that->at(i);
-    return res;
+   QStringList res;
+   for (int i = 0; i < that->size(); ++i)
+      if (that->at(i).contains(rx)) {
+         res << that->at(i);
+      }
+   return res;
 }
 #endif
 
@@ -303,10 +306,11 @@ QStringList QtPrivate::QStringList_filter(const QStringList *that, const QRegExp
     \sa QString::replace()
 */
 void QtPrivate::QStringList_replaceInStrings(QStringList *that, const QString &before,
-                                             const QString &after, Qt::CaseSensitivity cs)
+      const QString &after, Qt::CaseSensitivity cs)
 {
-    for (int i = 0; i < that->size(); ++i)
-        (*that)[i].replace(before, after, cs);
+   for (int i = 0; i < that->size(); ++i) {
+      (*that)[i].replace(before, after, cs);
+   }
 }
 
 
@@ -335,8 +339,9 @@ void QtPrivate::QStringList_replaceInStrings(QStringList *that, const QString &b
 */
 void QtPrivate::QStringList_replaceInStrings(QStringList *that, const QRegExp &rx, const QString &after)
 {
-    for (int i = 0; i < that->size(); ++i)
-        (*that)[i].replace(rx, after);
+   for (int i = 0; i < that->size(); ++i) {
+      (*that)[i].replace(rx, after);
+   }
 }
 #endif
 
@@ -351,25 +356,29 @@ void QtPrivate::QStringList_replaceInStrings(QStringList *that, const QRegExp &r
 */
 QString QtPrivate::QStringList_join(const QStringList *that, const QString &sep)
 {
-    int totalLength = 0;
-    const int size = that->size();
+   int totalLength = 0;
+   const int size = that->size();
 
-    for (int i = 0; i < size; ++i)
-        totalLength += that->at(i).size();
+   for (int i = 0; i < size; ++i) {
+      totalLength += that->at(i).size();
+   }
 
-    if(size > 0)
-        totalLength += sep.size() * (size - 1);
+   if (size > 0) {
+      totalLength += sep.size() * (size - 1);
+   }
 
-    QString res;
-    if (totalLength == 0)
-	return res;
-    res.reserve(totalLength);
-    for (int i = 0; i < that->size(); ++i) {
-        if (i)
-            res += sep;
-        res += that->at(i);
-    }
-    return res;
+   QString res;
+   if (totalLength == 0) {
+      return res;
+   }
+   res.reserve(totalLength);
+   for (int i = 0; i < that->size(); ++i) {
+      if (i) {
+         res += sep;
+      }
+      res += that->at(i);
+   }
+   return res;
 }
 
 /*!
@@ -472,26 +481,30 @@ QString QtPrivate::QStringList_join(const QStringList *that, const QString &sep)
 #ifndef QT_NO_REGEXP
 static int indexOfMutating(const QStringList *that, QRegExp &rx, int from)
 {
-    if (from < 0)
-        from = qMax(from + that->size(), 0);
-    for (int i = from; i < that->size(); ++i) {
-        if (rx.exactMatch(that->at(i)))
-            return i;
-    }
-    return -1;
+   if (from < 0) {
+      from = qMax(from + that->size(), 0);
+   }
+   for (int i = from; i < that->size(); ++i) {
+      if (rx.exactMatch(that->at(i))) {
+         return i;
+      }
+   }
+   return -1;
 }
 
 static int lastIndexOfMutating(const QStringList *that, QRegExp &rx, int from)
 {
-    if (from < 0)
-        from += that->size();
-    else if (from >= that->size())
-        from = that->size() - 1;
-    for (int i = from; i >= 0; --i) {
-        if (rx.exactMatch(that->at(i)))
-            return i;
-        }
-    return -1;
+   if (from < 0) {
+      from += that->size();
+   } else if (from >= that->size()) {
+      from = that->size() - 1;
+   }
+   for (int i = from; i >= 0; --i) {
+      if (rx.exactMatch(that->at(i))) {
+         return i;
+      }
+   }
+   return -1;
 }
 
 /*!
@@ -507,8 +520,8 @@ static int lastIndexOfMutating(const QStringList *that, QRegExp &rx, int from)
 */
 int QtPrivate::QStringList_indexOf(const QStringList *that, const QRegExp &rx, int from)
 {
-    QRegExp rx2(rx);
-    return indexOfMutating(that, rx2, from);
+   QRegExp rx2(rx);
+   return indexOfMutating(that, rx2, from);
 }
 
 /*!
@@ -529,7 +542,7 @@ int QtPrivate::QStringList_indexOf(const QStringList *that, const QRegExp &rx, i
 */
 int QtPrivate::QStringList_indexOf(const QStringList *that, QRegExp &rx, int from)
 {
-    return indexOfMutating(that, rx, from);
+   return indexOfMutating(that, rx, from);
 }
 
 /*!
@@ -546,8 +559,8 @@ int QtPrivate::QStringList_indexOf(const QStringList *that, QRegExp &rx, int fro
 */
 int QtPrivate::QStringList_lastIndexOf(const QStringList *that, const QRegExp &rx, int from)
 {
-    QRegExp rx2(rx);
-    return lastIndexOfMutating(that, rx2, from);
+   QRegExp rx2(rx);
+   return lastIndexOfMutating(that, rx2, from);
 }
 
 /*!
@@ -569,7 +582,7 @@ int QtPrivate::QStringList_lastIndexOf(const QStringList *that, const QRegExp &r
 */
 int QtPrivate::QStringList_lastIndexOf(const QStringList *that, QRegExp &rx, int from)
 {
-    return lastIndexOfMutating(that, rx, from);
+   return lastIndexOfMutating(that, rx, from);
 }
 #endif
 
@@ -609,22 +622,25 @@ int QtPrivate::QStringList_lastIndexOf(const QStringList *that, QRegExp &rx, int
 */
 int QtPrivate::QStringList_removeDuplicates(QStringList *that)
 {
-    int n = that->size();
-    int j = 0;
-    QSet<QString> seen;
-    seen.reserve(n);
-    for (int i = 0; i < n; ++i) {
-        const QString &s = that->at(i);
-        if (seen.contains(s))
-            continue;
-        seen.insert(s);
-        if (j != i)
-            (*that)[j] = s;
-        ++j;
-    }
-    if (n != j)
-        that->erase(that->begin() + j, that->end());
-    return n - j;
+   int n = that->size();
+   int j = 0;
+   QSet<QString> seen;
+   seen.reserve(n);
+   for (int i = 0; i < n; ++i) {
+      const QString &s = that->at(i);
+      if (seen.contains(s)) {
+         continue;
+      }
+      seen.insert(s);
+      if (j != i) {
+         (*that)[j] = s;
+      }
+      ++j;
+   }
+   if (n != j) {
+      that->erase(that->begin() + j, that->end());
+   }
+   return n - j;
 }
 
 /*! \fn QStringList::QStringList(std::initializer_list<QString> args)

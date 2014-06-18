@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,23 +32,23 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QObjectCleanupHandler : public QObject
 {
-    CS_OBJECT(QObjectCleanupHandler)
+   CS_OBJECT(QObjectCleanupHandler)
 
-public:
-    QObjectCleanupHandler();
-    ~QObjectCleanupHandler();
+ public:
+   QObjectCleanupHandler();
+   ~QObjectCleanupHandler();
 
-    QObject* add(QObject* object);
-    void remove(QObject *object);
-    bool isEmpty() const;
-    void clear();
+   QObject *add(QObject *object);
+   void remove(QObject *object);
+   bool isEmpty() const;
+   void clear();
 
-    // ### move into d pointer
-    QObjectList cleanupObjects;
+   // ### move into d pointer
+   QObjectList cleanupObjects;
 
-private :
-    CORE_CS_SLOT_1(Private, void objectDestroyed(QObject * un_named_arg1))
-    CORE_CS_SLOT_2(objectDestroyed) 
+ private :
+   CORE_CS_SLOT_1(Private, void objectDestroyed(QObject *un_named_arg1))
+   CORE_CS_SLOT_2(objectDestroyed)
 };
 
 QT_END_NAMESPACE

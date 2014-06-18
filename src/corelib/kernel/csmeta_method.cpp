@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -28,24 +28,24 @@
 #include "qmetaobject.h"
 
 QMetaMethod::QMetaMethod(const char *typeName,
-                           const char *signature,
-                           QList<QByteArray> paramNames,
-                           QMetaMethod::Access access,
-                           QMetaMethod::MethodType methodType,
-                           QMetaMethod::Attributes attributes,
-                           QMetaObject *obj)
+                         const char *signature,
+                         QList<QByteArray> paramNames,
+                         QMetaMethod::Access access,
+                         QMetaMethod::MethodType methodType,
+                         QMetaMethod::Attributes attributes,
+                         QMetaObject *obj)
 {
    m_typeName   = typeName;
-   m_signature  = signature;  
+   m_signature  = signature;
    m_paramNames = paramNames;
    m_access     = access;
    m_methodType = methodType;
    m_attributes = attributes;
-   m_metaObject = obj;      
-  
+   m_metaObject = obj;
+
    m_bento     = nullptr;
    m_tag       = "";
-   m_revision  = 0;  
+   m_revision  = 0;
 }
 
 QMetaMethod::QMetaMethod()
@@ -195,7 +195,7 @@ void QMetaMethod::setBentoBox(const BentoAbstract *method)
    m_bento = method;
 }
 
-const char * QMetaMethod::signature() const
+const char *QMetaMethod::signature() const
 {
    return m_signature;
 }
@@ -210,12 +210,12 @@ void QMetaMethod::setTag(const char *data)
    m_tag = data;
 }
 
-const char * QMetaMethod::tag() const
+const char *QMetaMethod::tag() const
 {
    return m_tag;
 }
 
-const char * QMetaMethod::typeName() const
+const char *QMetaMethod::typeName() const
 {
    return m_typeName;
 }

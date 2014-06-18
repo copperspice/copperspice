@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,25 +35,26 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QMutexPool
 {
-public:
-    explicit QMutexPool(QMutex::RecursionMode recursionMode = QMutex::NonRecursive, int size = 131);
-    ~QMutexPool();
+ public:
+   explicit QMutexPool(QMutex::RecursionMode recursionMode = QMutex::NonRecursive, int size = 131);
+   ~QMutexPool();
 
-    inline QMutex *get(const void *address) {
-        int index = uint(quintptr(address)) % mutexes.count();
-        QMutex *m = mutexes[index].load();
-        if (m)
-            return m;
-        else
-            return createMutex(index);
-    }
-    static QMutexPool *instance();
-    static QMutex *globalInstanceGet(const void *address);
+   inline QMutex *get(const void *address) {
+      int index = uint(quintptr(address)) % mutexes.count();
+      QMutex *m = mutexes[index].load();
+      if (m) {
+         return m;
+      } else {
+         return createMutex(index);
+      }
+   }
+   static QMutexPool *instance();
+   static QMutex *globalInstanceGet(const void *address);
 
-private:
-    QMutex *createMutex(int index);
-    QVarLengthArray<QAtomicPointer<QMutex>, 131> mutexes;
-    QMutex::RecursionMode recursionMode;
+ private:
+   QMutex *createMutex(int index);
+   QVarLengthArray<QAtomicPointer<QMutex>, 131> mutexes;
+   QMutex::RecursionMode recursionMode;
 };
 
 extern Q_CORE_EXPORT QMutexPool *qt_global_mutexpool;

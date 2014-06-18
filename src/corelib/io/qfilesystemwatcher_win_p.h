@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,89 +49,88 @@ class QWindowsFileSystemWatcherEngineThread;
 // to do the actually watching.
 class QWindowsFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
-    CS_OBJECT(QWindowsFileSystemWatcherEngine)
+   CS_OBJECT(QWindowsFileSystemWatcherEngine)
 
-public:
-    QWindowsFileSystemWatcherEngine();
-    ~QWindowsFileSystemWatcherEngine();
+ public:
+   QWindowsFileSystemWatcherEngine();
+   ~QWindowsFileSystemWatcherEngine();
 
-    QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
-    QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
 
-    void stop();
+   void stop();
 
 
-    class Handle
-    {
+   class Handle
+   {
     public:
-        HANDLE handle;
-        uint flags;
+      HANDLE handle;
+      uint flags;
 
-        Handle()
-                : handle(INVALID_HANDLE_VALUE), flags(0u)
-        { }
-        Handle(const Handle &other)
-                : handle(other.handle), flags(other.flags)
-        { }
-    };
+      Handle()
+         : handle(INVALID_HANDLE_VALUE), flags(0u) {
+      }
+      Handle(const Handle &other)
+         : handle(other.handle), flags(other.flags) {
+      }
+   };
 
-    class PathInfo {
+   class PathInfo
+   {
     public:
-        QString absolutePath;
-        QString path;
-        bool isDir;
+      QString absolutePath;
+      QString path;
+      bool isDir;
 
-        // fileinfo bits
-        uint ownerId;
-        uint groupId;
-        QFile::Permissions permissions;
-        QDateTime lastModified;
+      // fileinfo bits
+      uint ownerId;
+      uint groupId;
+      QFile::Permissions permissions;
+      QDateTime lastModified;
 
-        PathInfo &operator=(const QFileInfo &fileInfo)
-                           {
-            ownerId = fileInfo.ownerId();
-            groupId = fileInfo.groupId();
-            permissions = fileInfo.permissions();
-            lastModified = fileInfo.lastModified();
-            return *this;
-        }
+      PathInfo &operator=(const QFileInfo &fileInfo) {
+         ownerId = fileInfo.ownerId();
+         groupId = fileInfo.groupId();
+         permissions = fileInfo.permissions();
+         lastModified = fileInfo.lastModified();
+         return *this;
+      }
 
-        bool operator!=(const QFileInfo &fileInfo) const
-        {
-            return (ownerId != fileInfo.ownerId()
-                    || groupId != fileInfo.groupId()
-                    || permissions != fileInfo.permissions()
-                    || lastModified != fileInfo.lastModified());
-        }
-    };
-private:
-    QList<QWindowsFileSystemWatcherEngineThread *> threads;
+      bool operator!=(const QFileInfo &fileInfo) const {
+         return (ownerId != fileInfo.ownerId()
+                 || groupId != fileInfo.groupId()
+                 || permissions != fileInfo.permissions()
+                 || lastModified != fileInfo.lastModified());
+      }
+   };
+ private:
+   QList<QWindowsFileSystemWatcherEngineThread *> threads;
 
 };
 
 class QWindowsFileSystemWatcherEngineThread : public QThread
 {
-    CS_OBJECT(QWindowsFileSystemWatcherEngineThread)
+   CS_OBJECT(QWindowsFileSystemWatcherEngineThread)
 
-public:
-    QWindowsFileSystemWatcherEngineThread();
-    ~QWindowsFileSystemWatcherEngineThread();
-    void run();
-    void stop();
-    void wakeup();
+ public:
+   QWindowsFileSystemWatcherEngineThread();
+   ~QWindowsFileSystemWatcherEngineThread();
+   void run();
+   void stop();
+   void wakeup();
 
-    QMutex mutex;
-    QVector<HANDLE> handles;
-    int msg;
+   QMutex mutex;
+   QVector<HANDLE> handles;
+   int msg;
 
-    QHash<QString, QWindowsFileSystemWatcherEngine::Handle> handleForDir;
+   QHash<QString, QWindowsFileSystemWatcherEngine::Handle> handleForDir;
 
-    QHash<HANDLE, QHash<QString, QWindowsFileSystemWatcherEngine::PathInfo> > pathInfoForHandle;
+   QHash<HANDLE, QHash<QString, QWindowsFileSystemWatcherEngine::PathInfo> > pathInfoForHandle;
 
-    CORE_CS_SIGNAL_1(Public, void fileChanged(const QString & path,bool removed))
-    CORE_CS_SIGNAL_2(fileChanged,path,removed) 
-    CORE_CS_SIGNAL_1(Public, void directoryChanged(const QString & path,bool removed))
-    CORE_CS_SIGNAL_2(directoryChanged,path,removed) 
+   CORE_CS_SIGNAL_1(Public, void fileChanged(const QString &path, bool removed))
+   CORE_CS_SIGNAL_2(fileChanged, path, removed)
+   CORE_CS_SIGNAL_1(Public, void directoryChanged(const QString &path, bool removed))
+   CORE_CS_SIGNAL_2(directoryChanged, path, removed)
 };
 
 #endif // QT_NO_FILESYSTEMWATCHER

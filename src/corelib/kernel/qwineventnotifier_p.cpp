@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,77 +44,80 @@ QT_BEGIN_NAMESPACE
 
 
 QWinEventNotifier::QWinEventNotifier(QObject *parent)
-  : QObject(parent), handleToEvent(0), enabled(false)
+   : QObject(parent), handleToEvent(0), enabled(false)
 {}
 
 QWinEventNotifier::QWinEventNotifier(HANDLE hEvent, QObject *parent)
-	: QObject(parent), handleToEvent(hEvent), enabled(false)
+   : QObject(parent), handleToEvent(hEvent), enabled(false)
 {
-    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-    QEventDispatcherWin32 *eventDispatcher = qobject_cast<QEventDispatcherWin32 *>(threadData->eventDispatcher);
+   QEventDispatcherWin32 *eventDispatcher = qobject_cast<QEventDispatcherWin32 *>(threadData->eventDispatcher);
 
-    Q_ASSERT_X(eventDispatcher, "QWinEventNotifier::QWinEventNotifier()",
-               "Cannot create a win event notifier without a QEventDispatcherWin32");
+   Q_ASSERT_X(eventDispatcher, "QWinEventNotifier::QWinEventNotifier()",
+              "Cannot create a win event notifier without a QEventDispatcherWin32");
 
-    eventDispatcher->registerEventNotifier(this);
-    enabled = true;
+   eventDispatcher->registerEventNotifier(this);
+   enabled = true;
 }
 
 QWinEventNotifier::~QWinEventNotifier()
 {
-    setEnabled(false);
+   setEnabled(false);
 }
 
 void QWinEventNotifier::setHandle(HANDLE hEvent)
 {
-    setEnabled(false);
-    handleToEvent = hEvent;
+   setEnabled(false);
+   handleToEvent = hEvent;
 }
 
 HANDLE  QWinEventNotifier::handle() const
 {
-    return handleToEvent;
+   return handleToEvent;
 }
 
 bool QWinEventNotifier::isEnabled() const
 {
-    return enabled;
+   return enabled;
 }
 
 void QWinEventNotifier::setEnabled(bool enable)
 {
-    if (enabled == enable)                        // no change
-        return;
-    enabled = enable;
+   if (enabled == enable) {                      // no change
+      return;
+   }
+   enabled = enable;
 
-	 QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);    
-    QEventDispatcherWin32 *eventDispatcher = qobject_cast<QEventDispatcherWin32 *>(threadData->eventDispatcher);
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
+   QEventDispatcherWin32 *eventDispatcher = qobject_cast<QEventDispatcherWin32 *>(threadData->eventDispatcher);
 
-    if (!eventDispatcher) // perhaps application is shutting down
-        return;
+   if (!eventDispatcher) { // perhaps application is shutting down
+      return;
+   }
 
-    if (enabled)
-        eventDispatcher->registerEventNotifier(this);
-    else
-        eventDispatcher->unregisterEventNotifier(this);
+   if (enabled) {
+      eventDispatcher->registerEventNotifier(this);
+   } else {
+      eventDispatcher->unregisterEventNotifier(this);
+   }
 }
 
-bool QWinEventNotifier::event(QEvent * e)
+bool QWinEventNotifier::event(QEvent *e)
 {
-    if (e->type() == QEvent::ThreadChange) {
-        if (enabled) {
-            QMetaObject::invokeMethod(this, "setEnabled", Qt::QueuedConnection,
-                                      Q_ARG(bool, enabled));
-            setEnabled(false);
-        }
-    }
-    QObject::event(e);                        // will activate filters
-    if (e->type() == QEvent::WinEventAct) {
-        emit activated(handleToEvent);
-        return true;
-    }
-    return false;
+   if (e->type() == QEvent::ThreadChange) {
+      if (enabled) {
+         QMetaObject::invokeMethod(this, "setEnabled", Qt::QueuedConnection,
+                                   Q_ARG(bool, enabled));
+         setEnabled(false);
+      }
+   }
+   QObject::event(e);                        // will activate filters
+   if (e->type() == QEvent::WinEventAct) {
+      emit activated(handleToEvent);
+      return true;
+   }
+   return false;
 }
 
 QT_END_NAMESPACE

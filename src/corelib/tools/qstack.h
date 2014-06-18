@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,28 +33,43 @@ QT_BEGIN_NAMESPACE
 template<class T>
 class QStack : public QVector<T>
 {
-public:
-    inline QStack() {}
-    inline ~QStack() {}
-    inline void swap(QStack<T> &other) { QVector<T>::swap(other); } // prevent QVector<->QStack swaps
-    inline void push(const T &t) { QVector<T>::append(t); }
-    T pop();
-    T &top();
-    const T &top() const;
+ public:
+   inline QStack() {}
+   inline ~QStack() {}
+   inline void swap(QStack<T> &other) {
+      QVector<T>::swap(other);   // prevent QVector<->QStack swaps
+   }
+   inline void push(const T &t) {
+      QVector<T>::append(t);
+   }
+   T pop();
+   T &top();
+   const T &top() const;
 };
 
 template<class T>
 inline T QStack<T>::pop()
-{ Q_ASSERT(!this->isEmpty()); T t = this->data()[this->size() -1];
-  this->resize(this->size()-1); return t; }
+{
+   Q_ASSERT(!this->isEmpty());
+   T t = this->data()[this->size() - 1];
+   this->resize(this->size() - 1);
+   return t;
+}
 
 template<class T>
 inline T &QStack<T>::top()
-{ Q_ASSERT(!this->isEmpty()); this->detach(); return this->data()[this->size()-1]; }
+{
+   Q_ASSERT(!this->isEmpty());
+   this->detach();
+   return this->data()[this->size() - 1];
+}
 
 template<class T>
 inline const T &QStack<T>::top() const
-{ Q_ASSERT(!this->isEmpty()); return this->data()[this->size()-1]; }
+{
+   Q_ASSERT(!this->isEmpty());
+   return this->data()[this->size() - 1];
+}
 
 QT_END_NAMESPACE
 

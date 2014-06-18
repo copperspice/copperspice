@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -116,7 +116,7 @@ QT_BEGIN_NAMESPACE
     Creates an empty array.
  */
 QJsonArray::QJsonArray()
-    : d(0), a(0)
+   : d(0), a(0)
 {
 }
 
@@ -124,11 +124,11 @@ QJsonArray::QJsonArray()
     \internal
  */
 QJsonArray::QJsonArray(QJsonPrivate::Data *data, QJsonPrivate::Array *array)
-    : d(data), a(array)
+   : d(data), a(array)
 {
-    Q_ASSERT(data);
-    Q_ASSERT(array);
-    d->ref.ref();
+   Q_ASSERT(data);
+   Q_ASSERT(array);
+   d->ref.ref();
 }
 
 /*!
@@ -136,8 +136,9 @@ QJsonArray::QJsonArray(QJsonPrivate::Data *data, QJsonPrivate::Array *array)
  */
 QJsonArray::~QJsonArray()
 {
-    if (d && !d->ref.deref())
-        delete d;
+   if (d && !d->ref.deref()) {
+      delete d;
+   }
 }
 
 /*!
@@ -148,10 +149,11 @@ QJsonArray::~QJsonArray()
  */
 QJsonArray::QJsonArray(const QJsonArray &other)
 {
-    d = other.d;
-    a = other.a;
-    if (d)
-        d->ref.ref();
+   d = other.d;
+   a = other.a;
+   if (d) {
+      d->ref.ref();
+   }
 }
 
 /*!
@@ -159,16 +161,18 @@ QJsonArray::QJsonArray(const QJsonArray &other)
  */
 QJsonArray &QJsonArray::operator =(const QJsonArray &other)
 {
-    if (d != other.d) {
-        if (d && !d->ref.deref())
-            delete d;
-        d = other.d;
-        if (d)
-            d->ref.ref();
-    }
-    a = other.a;
+   if (d != other.d) {
+      if (d && !d->ref.deref()) {
+         delete d;
+      }
+      d = other.d;
+      if (d) {
+         d->ref.ref();
+      }
+   }
+   a = other.a;
 
-    return *this;
+   return *this;
 }
 
 /*!
@@ -180,10 +184,11 @@ QJsonArray &QJsonArray::operator =(const QJsonArray &other)
  */
 QJsonArray QJsonArray::fromStringList(const QStringList &list)
 {
-    QJsonArray array;
-    for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
-        array.append(QJsonValue(*it));
-    return array;
+   QJsonArray array;
+   for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it) {
+      array.append(QJsonValue(*it));
+   }
+   return array;
 }
 
 /*!
@@ -195,10 +200,11 @@ QJsonArray QJsonArray::fromStringList(const QStringList &list)
  */
 QJsonArray QJsonArray::fromVariantList(const QVariantList &list)
 {
-    QJsonArray array;
-    for (QVariantList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
-        array.append(QJsonValue::fromVariant(*it));
-    return array;
+   QJsonArray array;
+   for (QVariantList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it) {
+      array.append(QJsonValue::fromVariant(*it));
+   }
+   return array;
 }
 
 /*!
@@ -208,13 +214,14 @@ QJsonArray QJsonArray::fromVariantList(const QVariantList &list)
  */
 QVariantList QJsonArray::toVariantList() const
 {
-    QVariantList list;
+   QVariantList list;
 
-    if (a) {
-        for (int i = 0; i < (int)a->length; ++i)
-            list.append(QJsonValue(d, a, a->at(i)).toVariant());
-    }
-    return list;
+   if (a) {
+      for (int i = 0; i < (int)a->length; ++i) {
+         list.append(QJsonValue(d, a, a->at(i)).toVariant());
+      }
+   }
+   return list;
 }
 
 
@@ -223,10 +230,11 @@ QVariantList QJsonArray::toVariantList() const
  */
 int QJsonArray::size() const
 {
-    if (!d)
-        return 0;
+   if (!d) {
+      return 0;
+   }
 
-    return (int)a->length;
+   return (int)a->length;
 }
 
 /*!
@@ -244,10 +252,11 @@ int QJsonArray::size() const
  */
 bool QJsonArray::isEmpty() const
 {
-    if (!d)
-        return true;
+   if (!d) {
+      return true;
+   }
 
-    return !a->length;
+   return !a->length;
 }
 
 /*!
@@ -258,10 +267,11 @@ bool QJsonArray::isEmpty() const
  */
 QJsonValue QJsonArray::at(int i) const
 {
-    if (!a || i < 0 || i >= (int)a->length)
-        return QJsonValue(QJsonValue::Undefined);
+   if (!a || i < 0 || i >= (int)a->length) {
+      return QJsonValue(QJsonValue::Undefined);
+   }
 
-    return QJsonValue(d, a, a->at(i));
+   return QJsonValue(d, a, a->at(i));
 }
 
 /*!
@@ -273,7 +283,7 @@ QJsonValue QJsonArray::at(int i) const
  */
 QJsonValue QJsonArray::first() const
 {
-    return at(0);
+   return at(0);
 }
 
 /*!
@@ -285,7 +295,7 @@ QJsonValue QJsonArray::first() const
  */
 QJsonValue QJsonArray::last() const
 {
-    return at(a ? (a->length - 1) : 0);
+   return at(a ? (a->length - 1) : 0);
 }
 
 /*!
@@ -297,7 +307,7 @@ QJsonValue QJsonArray::last() const
  */
 void QJsonArray::prepend(const QJsonValue &value)
 {
-    insert(0, value);
+   insert(0, value);
 }
 
 /*!
@@ -307,7 +317,7 @@ void QJsonArray::prepend(const QJsonValue &value)
  */
 void QJsonArray::append(const QJsonValue &value)
 {
-    insert(a ? (int)a->length : 0, value);
+   insert(a ? (int)a->length : 0, value);
 }
 
 /*!
@@ -318,14 +328,16 @@ void QJsonArray::append(const QJsonValue &value)
  */
 void QJsonArray::removeAt(int i)
 {
-    if (!a || i < 0 || i >= (int)a->length)
-        return;
+   if (!a || i < 0 || i >= (int)a->length) {
+      return;
+   }
 
-    detach();
-    a->removeItems(i, 1);
-    ++d->compactionCounter;
-    if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(a->length) / 2u)
-        compact();
+   detach();
+   a->removeItems(i, 1);
+   ++d->compactionCounter;
+   if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(a->length) / 2u) {
+      compact();
+   }
 }
 
 /*! \fn void QJsonArray::removeFirst()
@@ -358,12 +370,13 @@ void QJsonArray::removeAt(int i)
  */
 QJsonValue QJsonArray::takeAt(int i)
 {
-    if (!a || i < 0 || i >= (int)a->length)
-        return QJsonValue(QJsonValue::Undefined);
+   if (!a || i < 0 || i >= (int)a->length) {
+      return QJsonValue(QJsonValue::Undefined);
+   }
 
-    QJsonValue v(d, a, a->at(i));
-    removeAt(i); // detaches
-    return v;
+   QJsonValue v(d, a, a->at(i));
+   removeAt(i); // detaches
+   return v;
 }
 
 /*!
@@ -375,28 +388,31 @@ QJsonValue QJsonArray::takeAt(int i)
  */
 void QJsonArray::insert(int i, const QJsonValue &value)
 {
-    Q_ASSERT (i >= 0 && i <= (a ? (int)a->length : 0));
-    QJsonValue val = value;
+   Q_ASSERT (i >= 0 && i <= (a ? (int)a->length : 0));
+   QJsonValue val = value;
 
-    bool compressed;
-    int valueSize = QJsonPrivate::Value::requiredStorage(val, &compressed);
+   bool compressed;
+   int valueSize = QJsonPrivate::Value::requiredStorage(val, &compressed);
 
-    detach(valueSize + sizeof(QJsonPrivate::Value));
+   detach(valueSize + sizeof(QJsonPrivate::Value));
 
-    if (!a->length)
-        a->tableOffset = sizeof(QJsonPrivate::Array);
+   if (!a->length) {
+      a->tableOffset = sizeof(QJsonPrivate::Array);
+   }
 
-    int valueOffset = a->reserveSpace(valueSize, i, 1, false);
-    if (!valueOffset)
-        return;
+   int valueOffset = a->reserveSpace(valueSize, i, 1, false);
+   if (!valueOffset) {
+      return;
+   }
 
-    QJsonPrivate::Value &v = (*a)[i];
-    v.type = (val.t == QJsonValue::Undefined ? QJsonValue::Null : val.t);
-    v.latinOrIntValue = compressed;
-    v.latinKey = false;
-    v.value = QJsonPrivate::Value::valueToStore(val, valueOffset);
-    if (valueSize)
-        QJsonPrivate::Value::copyData(val, (char *)a + valueOffset, compressed);
+   QJsonPrivate::Value &v = (*a)[i];
+   v.type = (val.t == QJsonValue::Undefined ? QJsonValue::Null : val.t);
+   v.latinOrIntValue = compressed;
+   v.latinKey = false;
+   v.value = QJsonPrivate::Value::valueToStore(val, valueOffset);
+   if (valueSize) {
+      QJsonPrivate::Value::copyData(val, (char *)a + valueOffset, compressed);
+   }
 }
 
 /*!
@@ -425,32 +441,36 @@ void QJsonArray::insert(int i, const QJsonValue &value)
  */
 void QJsonArray::replace(int i, const QJsonValue &value)
 {
-    Q_ASSERT (a && i >= 0 && i < (int)(a->length));
-    QJsonValue val = value;
+   Q_ASSERT (a && i >= 0 && i < (int)(a->length));
+   QJsonValue val = value;
 
-    bool compressed;
-    int valueSize = QJsonPrivate::Value::requiredStorage(val, &compressed);
+   bool compressed;
+   int valueSize = QJsonPrivate::Value::requiredStorage(val, &compressed);
 
-    detach(valueSize);
+   detach(valueSize);
 
-    if (!a->length)
-        a->tableOffset = sizeof(QJsonPrivate::Array);
+   if (!a->length) {
+      a->tableOffset = sizeof(QJsonPrivate::Array);
+   }
 
-    int valueOffset = a->reserveSpace(valueSize, i, 1, true);
-    if (!valueOffset)
-        return;
+   int valueOffset = a->reserveSpace(valueSize, i, 1, true);
+   if (!valueOffset) {
+      return;
+   }
 
-    QJsonPrivate::Value &v = (*a)[i];
-    v.type = (val.t == QJsonValue::Undefined ? QJsonValue::Null : val.t);
-    v.latinOrIntValue = compressed;
-    v.latinKey = false;
-    v.value = QJsonPrivate::Value::valueToStore(val, valueOffset);
-    if (valueSize)
-        QJsonPrivate::Value::copyData(val, (char *)a + valueOffset, compressed);
+   QJsonPrivate::Value &v = (*a)[i];
+   v.type = (val.t == QJsonValue::Undefined ? QJsonValue::Null : val.t);
+   v.latinOrIntValue = compressed;
+   v.latinKey = false;
+   v.value = QJsonPrivate::Value::valueToStore(val, valueOffset);
+   if (valueSize) {
+      QJsonPrivate::Value::copyData(val, (char *)a + valueOffset, compressed);
+   }
 
-    ++d->compactionCounter;
-    if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(a->length) / 2u)
-        compact();
+   ++d->compactionCounter;
+   if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(a->length) / 2u) {
+      compact();
+   }
 }
 
 /*!
@@ -460,11 +480,12 @@ void QJsonArray::replace(int i, const QJsonValue &value)
  */
 bool QJsonArray::contains(const QJsonValue &value) const
 {
-    for (int i = 0; i < size(); i++) {
-        if (at(i) == value)
-            return true;
-    }
-    return false;
+   for (int i = 0; i < size(); i++) {
+      if (at(i) == value) {
+         return true;
+      }
+   }
+   return false;
 }
 
 /*!
@@ -482,8 +503,8 @@ bool QJsonArray::contains(const QJsonValue &value) const
  */
 QJsonValueRef QJsonArray::operator [](int i)
 {
-    Q_ASSERT(a && i >= 0 && i < (int)a->length);
-    return QJsonValueRef(this, i);
+   Q_ASSERT(a && i >= 0 && i < (int)a->length);
+   return QJsonValueRef(this, i);
 }
 
 /*!
@@ -493,7 +514,7 @@ QJsonValueRef QJsonArray::operator [](int i)
  */
 QJsonValue QJsonArray::operator[](int i) const
 {
-    return at(i);
+   return at(i);
 }
 
 /*!
@@ -501,21 +522,26 @@ QJsonValue QJsonArray::operator[](int i) const
  */
 bool QJsonArray::operator==(const QJsonArray &other) const
 {
-    if (a == other.a)
-        return true;
+   if (a == other.a) {
+      return true;
+   }
 
-    if (!a)
-        return !other.a->length;
-    if (!other.a)
-        return !a->length;
-    if (a->length != other.a->length)
-        return false;
+   if (!a) {
+      return !other.a->length;
+   }
+   if (!other.a) {
+      return !a->length;
+   }
+   if (a->length != other.a->length) {
+      return false;
+   }
 
-    for (int i = 0; i < (int)a->length; ++i) {
-        if (QJsonValue(d, a, a->at(i)) != QJsonValue(other.d, other.a, other.a->at(i)))
-            return false;
-    }
-    return true;
+   for (int i = 0; i < (int)a->length; ++i) {
+      if (QJsonValue(d, a, a->at(i)) != QJsonValue(other.d, other.a, other.a->at(i))) {
+         return false;
+      }
+   }
+   return true;
 }
 
 /*!
@@ -523,7 +549,7 @@ bool QJsonArray::operator==(const QJsonArray &other) const
  */
 bool QJsonArray::operator!=(const QJsonArray &other) const
 {
-    return !(*this == other);
+   return !(*this == other);
 }
 
 /*! \fn QJsonArray::iterator QJsonArray::begin()
@@ -1041,21 +1067,23 @@ bool QJsonArray::operator!=(const QJsonArray &other) const
  */
 void QJsonArray::detach(uint reserve)
 {
-    if (!d) {
-        d = new QJsonPrivate::Data(reserve, QJsonValue::Array);
-        a = static_cast<QJsonPrivate::Array *>(d->header->root());
-        d->ref.ref();
-        return;
-    }
-    if (reserve == 0 && d->ref.load() == 1)
-        return;
+   if (!d) {
+      d = new QJsonPrivate::Data(reserve, QJsonValue::Array);
+      a = static_cast<QJsonPrivate::Array *>(d->header->root());
+      d->ref.ref();
+      return;
+   }
+   if (reserve == 0 && d->ref.load() == 1) {
+      return;
+   }
 
-    QJsonPrivate::Data *x = d->clone(a, reserve);
-    x->ref.ref();
-    if (!d->ref.deref())
-        delete d;
-    d = x;
-    a = static_cast<QJsonPrivate::Array *>(d->header->root());
+   QJsonPrivate::Data *x = d->clone(a, reserve);
+   x->ref.ref();
+   if (!d->ref.deref()) {
+      delete d;
+   }
+   d = x;
+   a = static_cast<QJsonPrivate::Array *>(d->header->root());
 }
 
 /*!
@@ -1063,27 +1091,28 @@ void QJsonArray::detach(uint reserve)
  */
 void QJsonArray::compact()
 {
-    if (!d || !d->compactionCounter)
-        return;
+   if (!d || !d->compactionCounter) {
+      return;
+   }
 
-    detach();
-    d->compact();
-    a = static_cast<QJsonPrivate::Array *>(d->header->root());
+   detach();
+   d->compact();
+   a = static_cast<QJsonPrivate::Array *>(d->header->root());
 }
 
 
 QDebug operator<<(QDebug dbg, const QJsonArray &a)
 {
-    if (!a.a) {
-        dbg << "QJsonArray()";
-        return dbg;
-    }
-    QByteArray json;
-    QJsonPrivate::Writer::arrayToJson(a.a, json, 0, true);
-    dbg.nospace() << "QJsonArray("
-                  << json.constData() // print as utf-8 string without extra quotation marks
-                  << ")";
-    return dbg.space();
+   if (!a.a) {
+      dbg << "QJsonArray()";
+      return dbg;
+   }
+   QByteArray json;
+   QJsonPrivate::Writer::arrayToJson(a.a, json, 0, true);
+   dbg.nospace() << "QJsonArray("
+                 << json.constData() // print as utf-8 string without extra quotation marks
+                 << ")";
+   return dbg.space();
 }
 
 QT_END_NAMESPACE

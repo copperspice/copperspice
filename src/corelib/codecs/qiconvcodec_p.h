@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,7 +31,7 @@
 #if defined(Q_OS_UNIX) && !defined(QT_NO_ICONV)
 
 #ifdef Q_OS_MAC
-typedef void * iconv_t;
+typedef void *iconv_t;
 #else
 #include <iconv.h>
 #endif
@@ -40,35 +40,35 @@ QT_BEGIN_NAMESPACE
 
 class QIconvCodec: public QTextCodec
 {
-private:
-    mutable QTextCodec *utf16Codec;
+ private:
+   mutable QTextCodec *utf16Codec;
 
-public:
-    QIconvCodec();
-    ~QIconvCodec();
+ public:
+   QIconvCodec();
+   ~QIconvCodec();
 
-    QString convertToUnicode(const char *, int, ConverterState *) const;
-    QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
 
-    QByteArray name() const;
-    int mibEnum() const;
+   QByteArray name() const;
+   int mibEnum() const;
 
-    static iconv_t createIconv_t(const char *to, const char *from);
+   static iconv_t createIconv_t(const char *to, const char *from);
 
-    class IconvState
-    {
+   class IconvState
+   {
     public:
-        IconvState(iconv_t x);
-        ~IconvState();
-        ConverterState internalState;
-        char *buffer;
-        int bufferLen;
-        iconv_t cd;
+      IconvState(iconv_t x);
+      ~IconvState();
+      ConverterState internalState;
+      char *buffer;
+      int bufferLen;
+      iconv_t cd;
 
-        char array[8];
+      char array[8];
 
-        void saveChars(const char *c, int count);
-    };
+      void saveChars(const char *c, int count);
+   };
 };
 
 QT_END_NAMESPACE

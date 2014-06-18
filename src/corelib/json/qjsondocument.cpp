@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -66,7 +66,7 @@ QT_BEGIN_NAMESPACE
  * Constructs an empty and invalid document.
  */
 QJsonDocument::QJsonDocument()
-    : d(0)
+   : d(0)
 {
 }
 
@@ -74,28 +74,28 @@ QJsonDocument::QJsonDocument()
  * Creates a QJsonDocument from \a object.
  */
 QJsonDocument::QJsonDocument(const QJsonObject &object)
-    : d(0)
+   : d(0)
 {
-    setObject(object);
+   setObject(object);
 }
 
 /*!
  * Constructs a QJsonDocument from \a array.
  */
 QJsonDocument::QJsonDocument(const QJsonArray &array)
-    : d(0)
+   : d(0)
 {
-    setArray(array);
+   setArray(array);
 }
 
 /*!
     \internal
  */
 QJsonDocument::QJsonDocument(QJsonPrivate::Data *data)
-    : d(data)
+   : d(data)
 {
-    Q_ASSERT(d);
-    d->ref.ref();
+   Q_ASSERT(d);
+   d->ref.ref();
 }
 
 /*!
@@ -105,8 +105,9 @@ QJsonDocument::QJsonDocument(QJsonPrivate::Data *data)
  */
 QJsonDocument::~QJsonDocument()
 {
-    if (d && !d->ref.deref())
-        delete d;
+   if (d && !d->ref.deref()) {
+      delete d;
+   }
 }
 
 /*!
@@ -114,9 +115,10 @@ QJsonDocument::~QJsonDocument()
  */
 QJsonDocument::QJsonDocument(const QJsonDocument &other)
 {
-    d = other.d;
-    if (d)
-        d->ref.ref();
+   d = other.d;
+   if (d) {
+      d->ref.ref();
+   }
 }
 
 /*!
@@ -125,15 +127,17 @@ QJsonDocument::QJsonDocument(const QJsonDocument &other)
  */
 QJsonDocument &QJsonDocument::operator =(const QJsonDocument &other)
 {
-    if (d != other.d) {
-        if (d && !d->ref.deref())
-            delete d;
-        d = other.d;
-        if (d)
-            d->ref.ref();
-    }
+   if (d != other.d) {
+      if (d && !d->ref.deref()) {
+         delete d;
+      }
+      d = other.d;
+      if (d) {
+         d->ref.ref();
+      }
+   }
 
-    return *this;
+   return *this;
 }
 
 /*! \enum QJsonDocument::DataValidation
@@ -166,20 +170,20 @@ QJsonDocument &QJsonDocument::operator =(const QJsonDocument &other)
  */
 QJsonDocument QJsonDocument::fromRawData(const char *data, int size, DataValidation validation)
 {
-    if (quintptr(data) & 3) {
-        qWarning() <<"QJsonDocument::fromRawData: data has to have 4 byte alignment";
-        return QJsonDocument();
-    }
+   if (quintptr(data) & 3) {
+      qWarning() << "QJsonDocument::fromRawData: data has to have 4 byte alignment";
+      return QJsonDocument();
+   }
 
-    QJsonPrivate::Data *d = new QJsonPrivate::Data((char *)data, size);
-    d->ownsData = false;
+   QJsonPrivate::Data *d = new QJsonPrivate::Data((char *)data, size);
+   d->ownsData = false;
 
-    if (validation != BypassValidation && !d->valid()) {
-        delete d;
-        return QJsonDocument();
-    }
+   if (validation != BypassValidation && !d->valid()) {
+      delete d;
+      return QJsonDocument();
+   }
 
-    return QJsonDocument(d);
+   return QJsonDocument(d);
 }
 
 /*!
@@ -191,12 +195,12 @@ QJsonDocument QJsonDocument::fromRawData(const char *data, int size, DataValidat
  */
 const char *QJsonDocument::rawData(int *size) const
 {
-    if (!d) {
-        *size = 0;
-        return 0;
-    }
-    *size = d->alloc;
-    return d->rawData;
+   if (!d) {
+      *size = 0;
+      return 0;
+   }
+   *size = d->alloc;
+   return d->rawData;
 }
 
 /*!
@@ -210,33 +214,36 @@ const char *QJsonDocument::rawData(int *size) const
  */
 QJsonDocument QJsonDocument::fromBinaryData(const QByteArray &data, DataValidation validation)
 {
-    if (data.size() < (int)(sizeof(QJsonPrivate::Header) + sizeof(QJsonPrivate::Base)))
-        return QJsonDocument();
+   if (data.size() < (int)(sizeof(QJsonPrivate::Header) + sizeof(QJsonPrivate::Base))) {
+      return QJsonDocument();
+   }
 
-    QJsonPrivate::Header h;
-    memcpy(&h, data.constData(), sizeof(QJsonPrivate::Header));
-    QJsonPrivate::Base root;
-    memcpy(&root, data.constData() + sizeof(QJsonPrivate::Header), sizeof(QJsonPrivate::Base));
+   QJsonPrivate::Header h;
+   memcpy(&h, data.constData(), sizeof(QJsonPrivate::Header));
+   QJsonPrivate::Base root;
+   memcpy(&root, data.constData() + sizeof(QJsonPrivate::Header), sizeof(QJsonPrivate::Base));
 
-    // do basic checks here, so we don't try to allocate more memory than we can.
-    if (h.tag != QJsonDocument::BinaryFormatTag || h.version != 1u ||
-        sizeof(QJsonPrivate::Header) + root.size > (uint)data.size())
-        return QJsonDocument();
+   // do basic checks here, so we don't try to allocate more memory than we can.
+   if (h.tag != QJsonDocument::BinaryFormatTag || h.version != 1u ||
+         sizeof(QJsonPrivate::Header) + root.size > (uint)data.size()) {
+      return QJsonDocument();
+   }
 
-    const uint size = sizeof(QJsonPrivate::Header) + root.size;
-    char *raw = (char *)malloc(size);
-    if (!raw)
-        return QJsonDocument();
+   const uint size = sizeof(QJsonPrivate::Header) + root.size;
+   char *raw = (char *)malloc(size);
+   if (!raw) {
+      return QJsonDocument();
+   }
 
-    memcpy(raw, data.constData(), size);
-    QJsonPrivate::Data *d = new QJsonPrivate::Data(raw, size);
+   memcpy(raw, data.constData(), size);
+   QJsonPrivate::Data *d = new QJsonPrivate::Data(raw, size);
 
-    if (validation != BypassValidation && !d->valid()) {
-        delete d;
-        return QJsonDocument();
-    }
+   if (validation != BypassValidation && !d->valid()) {
+      delete d;
+      return QJsonDocument();
+   }
 
-    return QJsonDocument(d);
+   return QJsonDocument(d);
 }
 
 /*!
@@ -250,15 +257,15 @@ QJsonDocument QJsonDocument::fromBinaryData(const QByteArray &data, DataValidati
  */
 QJsonDocument QJsonDocument::fromVariant(const QVariant &variant)
 {
-    QJsonDocument doc;
-    if (variant.type() == QVariant::Map) {
-        doc.setObject(QJsonObject::fromVariantMap(variant.toMap()));
-    } else if (variant.type() == QVariant::List) {
-        doc.setArray(QJsonArray::fromVariantList(variant.toList()));
-    } else if (variant.type() == QVariant::StringList) {
-        doc.setArray(QJsonArray::fromStringList(variant.toStringList()));
-    }
-    return doc;
+   QJsonDocument doc;
+   if (variant.type() == QVariant::Map) {
+      doc.setObject(QJsonObject::fromVariantMap(variant.toMap()));
+   } else if (variant.type() == QVariant::List) {
+      doc.setArray(QJsonArray::fromVariantList(variant.toList()));
+   } else if (variant.type() == QVariant::StringList) {
+      doc.setArray(QJsonArray::fromStringList(variant.toStringList()));
+   }
+   return doc;
 }
 
 /*!
@@ -271,28 +278,33 @@ QJsonDocument QJsonDocument::fromVariant(const QVariant &variant)
  */
 QVariant QJsonDocument::toVariant() const
 {
-    if (!d)
-        return QVariant();
+   if (!d) {
+      return QVariant();
+   }
 
-    if (d->header->root()->isArray())
-        return QJsonArray(d, static_cast<QJsonPrivate::Array *>(d->header->root())).toVariantList();
-    else
-        return QJsonObject(d, static_cast<QJsonPrivate::Object *>(d->header->root())).toVariantMap();
+   if (d->header->root()->isArray()) {
+      return QJsonArray(d, static_cast<QJsonPrivate::Array *>(d->header->root())).toVariantList();
+   } else {
+      return QJsonObject(d, static_cast<QJsonPrivate::Object *>(d->header->root())).toVariantMap();
+   }
 }
 
 QByteArray QJsonDocument::toJson(JsonFormat format) const
 {
-    if (!d)
-        return QByteArray();
+   if (!d) {
+      return QByteArray();
+   }
 
-    QByteArray json;
+   QByteArray json;
 
-    if (d->header->root()->isArray())
-        QJsonPrivate::Writer::arrayToJson(static_cast<QJsonPrivate::Array *>(d->header->root()), json, 0, (format == Compact));
-    else
-        QJsonPrivate::Writer::objectToJson(static_cast<QJsonPrivate::Object *>(d->header->root()), json, 0, (format == Compact));
+   if (d->header->root()->isArray()) {
+      QJsonPrivate::Writer::arrayToJson(static_cast<QJsonPrivate::Array *>(d->header->root()), json, 0, (format == Compact));
+   } else {
+      QJsonPrivate::Writer::objectToJson(static_cast<QJsonPrivate::Object *>(d->header->root()), json, 0,
+                                         (format == Compact));
+   }
 
-    return json;
+   return json;
 }
 
 /*!
@@ -309,8 +321,8 @@ QByteArray QJsonDocument::toJson(JsonFormat format) const
  */
 QJsonDocument QJsonDocument::fromJson(const QByteArray &json, QJsonParseError *error)
 {
-    QJsonPrivate::Parser parser(json.constData(), json.length());
-    return parser.parse(error);
+   QJsonPrivate::Parser parser(json.constData(), json.length());
+   return parser.parse(error);
 }
 
 /*!
@@ -318,10 +330,11 @@ QJsonDocument QJsonDocument::fromJson(const QByteArray &json, QJsonParseError *e
  */
 bool QJsonDocument::isEmpty() const
 {
-    if (!d)
-        return true;
+   if (!d) {
+      return true;
+   }
 
-    return false;
+   return false;
 }
 
 /*!
@@ -338,10 +351,11 @@ bool QJsonDocument::isEmpty() const
  */
 QByteArray QJsonDocument::toBinaryData() const
 {
-    if (!d || !d->rawData)
-        return QByteArray();
+   if (!d || !d->rawData) {
+      return QByteArray();
+   }
 
-    return QByteArray(d->rawData, d->header->root()->size + sizeof(QJsonPrivate::Header));
+   return QByteArray(d->rawData, d->header->root()->size + sizeof(QJsonPrivate::Header));
 }
 
 /*!
@@ -351,11 +365,12 @@ QByteArray QJsonDocument::toBinaryData() const
  */
 bool QJsonDocument::isArray() const
 {
-    if (!d)
-        return false;
+   if (!d) {
+      return false;
+   }
 
-    QJsonPrivate::Header *h = (QJsonPrivate::Header *)d->rawData;
-    return h->root()->isArray();
+   QJsonPrivate::Header *h = (QJsonPrivate::Header *)d->rawData;
+   return h->root()->isArray();
 }
 
 /*!
@@ -365,11 +380,12 @@ bool QJsonDocument::isArray() const
  */
 bool QJsonDocument::isObject() const
 {
-    if (!d)
-        return false;
+   if (!d) {
+      return false;
+   }
 
-    QJsonPrivate::Header *h = (QJsonPrivate::Header *)d->rawData;
-    return h->root()->isObject();
+   QJsonPrivate::Header *h = (QJsonPrivate::Header *)d->rawData;
+   return h->root()->isObject();
 }
 
 /*!
@@ -382,12 +398,13 @@ bool QJsonDocument::isObject() const
  */
 QJsonObject QJsonDocument::object() const
 {
-    if (d) {
-        QJsonPrivate::Base *b = d->header->root();
-        if (b->isObject())
-            return QJsonObject(d, static_cast<QJsonPrivate::Object *>(b));
-    }
-    return QJsonObject();
+   if (d) {
+      QJsonPrivate::Base *b = d->header->root();
+      if (b->isObject()) {
+         return QJsonObject(d, static_cast<QJsonPrivate::Object *>(b));
+      }
+   }
+   return QJsonObject();
 }
 
 /*!
@@ -400,12 +417,13 @@ QJsonObject QJsonDocument::object() const
  */
 QJsonArray QJsonDocument::array() const
 {
-    if (d) {
-        QJsonPrivate::Base *b = d->header->root();
-        if (b->isArray())
-            return QJsonArray(d, static_cast<QJsonPrivate::Array *>(b));
-    }
-    return QJsonArray();
+   if (d) {
+      QJsonPrivate::Base *b = d->header->root();
+      if (b->isArray()) {
+         return QJsonArray(d, static_cast<QJsonPrivate::Array *>(b));
+      }
+   }
+   return QJsonArray();
 }
 
 /*!
@@ -415,24 +433,26 @@ QJsonArray QJsonDocument::array() const
  */
 void QJsonDocument::setObject(const QJsonObject &object)
 {
-    if (d && !d->ref.deref())
-        delete d;
+   if (d && !d->ref.deref()) {
+      delete d;
+   }
 
-    d = object.d;
+   d = object.d;
 
-    if (!d) {
-        d = new QJsonPrivate::Data(0, QJsonValue::Object);
-    } else if (d->compactionCounter || object.o != d->header->root()) {
-        QJsonObject o(object);
-        if (d->compactionCounter)
-            o.compact();
-        else
-            o.detach();
-        d = o.d;
-        d->ref.ref();
-        return;
-    }
-    d->ref.ref();
+   if (!d) {
+      d = new QJsonPrivate::Data(0, QJsonValue::Object);
+   } else if (d->compactionCounter || object.o != d->header->root()) {
+      QJsonObject o(object);
+      if (d->compactionCounter) {
+         o.compact();
+      } else {
+         o.detach();
+      }
+      d = o.d;
+      d->ref.ref();
+      return;
+   }
+   d->ref.ref();
 }
 
 /*!
@@ -442,24 +462,26 @@ void QJsonDocument::setObject(const QJsonObject &object)
  */
 void QJsonDocument::setArray(const QJsonArray &array)
 {
-    if (d && !d->ref.deref())
-        delete d;
+   if (d && !d->ref.deref()) {
+      delete d;
+   }
 
-    d = array.d;
+   d = array.d;
 
-    if (!d) {
-        d = new QJsonPrivate::Data(0, QJsonValue::Array);
-    } else if (d->compactionCounter || array.a != d->header->root()) {
-        QJsonArray a(array);
-        if (d->compactionCounter)
-            a.compact();
-        else
-            a.detach();
-        d = a.d;
-        d->ref.ref();
-        return;
-    }
-    d->ref.ref();
+   if (!d) {
+      d = new QJsonPrivate::Data(0, QJsonValue::Array);
+   } else if (d->compactionCounter || array.a != d->header->root()) {
+      QJsonArray a(array);
+      if (d->compactionCounter) {
+         a.compact();
+      } else {
+         a.detach();
+      }
+      d = a.d;
+      d->ref.ref();
+      return;
+   }
+   d->ref.ref();
 }
 
 /*!
@@ -467,21 +489,24 @@ void QJsonDocument::setArray(const QJsonArray &array)
  */
 bool QJsonDocument::operator==(const QJsonDocument &other) const
 {
-    if (d == other.d)
-        return true;
+   if (d == other.d) {
+      return true;
+   }
 
-    if (!d || !other.d)
-        return false;
+   if (!d || !other.d) {
+      return false;
+   }
 
-    if (d->header->root()->isArray() != other.d->header->root()->isArray())
-        return false;
+   if (d->header->root()->isArray() != other.d->header->root()->isArray()) {
+      return false;
+   }
 
-    if (d->header->root()->isObject())
-        return QJsonObject(d, static_cast<QJsonPrivate::Object *>(d->header->root()))
-                == QJsonObject(other.d, static_cast<QJsonPrivate::Object *>(other.d->header->root()));
-    else
-        return QJsonArray(d, static_cast<QJsonPrivate::Array *>(d->header->root()))
-                == QJsonArray(other.d, static_cast<QJsonPrivate::Array *>(other.d->header->root()));
+   if (d->header->root()->isObject())
+      return QJsonObject(d, static_cast<QJsonPrivate::Object *>(d->header->root()))
+             == QJsonObject(other.d, static_cast<QJsonPrivate::Object *>(other.d->header->root()));
+   else
+      return QJsonArray(d, static_cast<QJsonPrivate::Array *>(d->header->root()))
+             == QJsonArray(other.d, static_cast<QJsonPrivate::Array *>(other.d->header->root()));
 }
 
 /*!
@@ -501,24 +526,25 @@ bool QJsonDocument::operator==(const QJsonDocument &other) const
  */
 bool QJsonDocument::isNull() const
 {
-    return (d == 0);
+   return (d == 0);
 }
 
 QDebug operator<<(QDebug dbg, const QJsonDocument &o)
 {
-    if (!o.d) {
-        dbg << "QJsonDocument()";
-        return dbg;
-    }
-    QByteArray json;
-    if (o.d->header->root()->isArray())
-        QJsonPrivate::Writer::arrayToJson(static_cast<QJsonPrivate::Array *>(o.d->header->root()), json, 0, true);
-    else
-        QJsonPrivate::Writer::objectToJson(static_cast<QJsonPrivate::Object *>(o.d->header->root()), json, 0, true);
-    dbg.nospace() << "QJsonDocument("
-                  << json.constData() // print as utf-8 string without extra quotation marks
-                  << ")";
-    return dbg.space();
+   if (!o.d) {
+      dbg << "QJsonDocument()";
+      return dbg;
+   }
+   QByteArray json;
+   if (o.d->header->root()->isArray()) {
+      QJsonPrivate::Writer::arrayToJson(static_cast<QJsonPrivate::Array *>(o.d->header->root()), json, 0, true);
+   } else {
+      QJsonPrivate::Writer::objectToJson(static_cast<QJsonPrivate::Object *>(o.d->header->root()), json, 0, true);
+   }
+   dbg.nospace() << "QJsonDocument("
+                 << json.constData() // print as utf-8 string without extra quotation marks
+                 << ")";
+   return dbg.space();
 }
 
 QT_END_NAMESPACE

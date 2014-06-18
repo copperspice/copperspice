@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -141,42 +141,42 @@ QT_BEGIN_NAMESPACE
 
 static bool animationValueLessThan(const QVariantAnimation::KeyValue &p1, const QVariantAnimation::KeyValue &p2)
 {
-    return p1.first < p2.first;
+   return p1.first < p2.first;
 }
 
 static QVariant defaultInterpolator(const void *, const void *, qreal)
 {
-    return QVariant();
+   return QVariant();
 }
 
 template<> Q_INLINE_TEMPLATE QRect _q_interpolate(const QRect &f, const QRect &t, qreal progress)
 {
-    QRect ret;
-    ret.setCoords(_q_interpolate(f.left(), t.left(), progress),
-                  _q_interpolate(f.top(), t.top(), progress),
-                  _q_interpolate(f.right(), t.right(), progress),
-                  _q_interpolate(f.bottom(), t.bottom(), progress));
-    return ret;
+   QRect ret;
+   ret.setCoords(_q_interpolate(f.left(), t.left(), progress),
+                 _q_interpolate(f.top(), t.top(), progress),
+                 _q_interpolate(f.right(), t.right(), progress),
+                 _q_interpolate(f.bottom(), t.bottom(), progress));
+   return ret;
 }
 
 template<> Q_INLINE_TEMPLATE QRectF _q_interpolate(const QRectF &f, const QRectF &t, qreal progress)
 {
-    qreal x1, y1, w1, h1;
-    f.getRect(&x1, &y1, &w1, &h1);
-    qreal x2, y2, w2, h2;
-    t.getRect(&x2, &y2, &w2, &h2);
-    return QRectF(_q_interpolate(x1, x2, progress), _q_interpolate(y1, y2, progress),
-                  _q_interpolate(w1, w2, progress), _q_interpolate(h1, h2, progress));
+   qreal x1, y1, w1, h1;
+   f.getRect(&x1, &y1, &w1, &h1);
+   qreal x2, y2, w2, h2;
+   t.getRect(&x2, &y2, &w2, &h2);
+   return QRectF(_q_interpolate(x1, x2, progress), _q_interpolate(y1, y2, progress),
+                 _q_interpolate(w1, w2, progress), _q_interpolate(h1, h2, progress));
 }
 
 template<> Q_INLINE_TEMPLATE QLine _q_interpolate(const QLine &f, const QLine &t, qreal progress)
 {
-    return QLine( _q_interpolate(f.p1(), t.p1(), progress), _q_interpolate(f.p2(), t.p2(), progress));
+   return QLine( _q_interpolate(f.p1(), t.p1(), progress), _q_interpolate(f.p2(), t.p2(), progress));
 }
 
 template<> Q_INLINE_TEMPLATE QLineF _q_interpolate(const QLineF &f, const QLineF &t, qreal progress)
 {
-    return QLineF( _q_interpolate(f.p1(), t.p1(), progress), _q_interpolate(f.p2(), t.p2(), progress));
+   return QLineF( _q_interpolate(f.p1(), t.p1(), progress), _q_interpolate(f.p2(), t.p2(), progress));
 }
 
 QVariantAnimationPrivate::QVariantAnimationPrivate() : duration(250), interpolator(&defaultInterpolator)
@@ -184,30 +184,32 @@ QVariantAnimationPrivate::QVariantAnimationPrivate() : duration(250), interpolat
 
 void QVariantAnimationPrivate::convertValues(int t)
 {
-    //this ensures that all the keyValues are of type t
-    for (int i = 0; i < keyValues.count(); ++i) {
-        QVariantAnimation::KeyValue &pair = keyValues[i];
-        pair.second.convert(static_cast<QVariant::Type>(t));
-    }
-    //we also need update to the current interval if needed
-    currentInterval.start.second.convert(static_cast<QVariant::Type>(t));
-    currentInterval.end.second.convert(static_cast<QVariant::Type>(t));
+   //this ensures that all the keyValues are of type t
+   for (int i = 0; i < keyValues.count(); ++i) {
+      QVariantAnimation::KeyValue &pair = keyValues[i];
+      pair.second.convert(static_cast<QVariant::Type>(t));
+   }
+   //we also need update to the current interval if needed
+   currentInterval.start.second.convert(static_cast<QVariant::Type>(t));
+   currentInterval.end.second.convert(static_cast<QVariant::Type>(t));
 
-    //... and the interpolator
-    updateInterpolator();
+   //... and the interpolator
+   updateInterpolator();
 }
 
 void QVariantAnimationPrivate::updateInterpolator()
 {
-    int type = currentInterval.start.second.userType();
-    if (type == currentInterval.end.second.userType())
-        interpolator = getInterpolator(type);
-    else
-        interpolator = 0;
-    
-    //we make sure that the interpolator is always set to something
-    if (!interpolator)
-        interpolator = &defaultInterpolator;
+   int type = currentInterval.start.second.userType();
+   if (type == currentInterval.end.second.userType()) {
+      interpolator = getInterpolator(type);
+   } else {
+      interpolator = 0;
+   }
+
+   //we make sure that the interpolator is always set to something
+   if (!interpolator) {
+      interpolator = &defaultInterpolator;
+   }
 }
 
 /*!
@@ -218,103 +220,107 @@ void QVariantAnimationPrivate::updateInterpolator()
 */
 void QVariantAnimationPrivate::recalculateCurrentInterval(bool force/*=false*/)
 {
-    // can't interpolate if we don't have at least 2 values
-    if ((keyValues.count() + (defaultStartEndValue.isValid() ? 1 : 0)) < 2)
-        return;
+   // can't interpolate if we don't have at least 2 values
+   if ((keyValues.count() + (defaultStartEndValue.isValid() ? 1 : 0)) < 2) {
+      return;
+   }
 
-    const qreal endProgress = (direction == QAbstractAnimation::Forward) ? qreal(1) : qreal(0);
-    const qreal progress = easing.valueForProgress(((duration == 0) ? endProgress : qreal(currentTime) / qreal(duration)));
+   const qreal endProgress = (direction == QAbstractAnimation::Forward) ? qreal(1) : qreal(0);
+   const qreal progress = easing.valueForProgress(((duration == 0) ? endProgress : qreal(currentTime) / qreal(duration)));
 
-    //0 and 1 are still the boundaries
-    if (force || (currentInterval.start.first > 0 && progress < currentInterval.start.first)
-        || (currentInterval.end.first < 1 && progress > currentInterval.end.first)) {
-        //let's update currentInterval
-        QVariantAnimation::KeyValues::const_iterator it = qLowerBound(keyValues.constBegin(),
-                                                                      keyValues.constEnd(),
-                                                                      qMakePair(progress, QVariant()),
-                                                                      animationValueLessThan);
-        if (it == keyValues.constBegin()) {
-            //the item pointed to by it is the start element in the range    
-            if (it->first == 0 && keyValues.count() > 1) {
-                currentInterval.start = *it;
-                currentInterval.end = *(it+1);
-            } else {
-                currentInterval.start = qMakePair(qreal(0), defaultStartEndValue);
-                currentInterval.end = *it;
-            }
-        } else if (it == keyValues.constEnd()) {
-            --it; //position the iterator on the last item
-            if (it->first == 1 && keyValues.count() > 1) {
-                //we have an end value (item with progress = 1)
-                currentInterval.start = *(it-1);
-                currentInterval.end = *it;
-            } else {
-                //we use the default end value here
-                currentInterval.start = *it;
-                currentInterval.end = qMakePair(qreal(1), defaultStartEndValue);
-            }
-        } else {
-            currentInterval.start = *(it-1);
+   //0 and 1 are still the boundaries
+   if (force || (currentInterval.start.first > 0 && progress < currentInterval.start.first)
+         || (currentInterval.end.first < 1 && progress > currentInterval.end.first)) {
+      //let's update currentInterval
+      QVariantAnimation::KeyValues::const_iterator it = qLowerBound(keyValues.constBegin(),
+            keyValues.constEnd(),
+            qMakePair(progress, QVariant()),
+            animationValueLessThan);
+      if (it == keyValues.constBegin()) {
+         //the item pointed to by it is the start element in the range
+         if (it->first == 0 && keyValues.count() > 1) {
+            currentInterval.start = *it;
+            currentInterval.end = *(it + 1);
+         } else {
+            currentInterval.start = qMakePair(qreal(0), defaultStartEndValue);
             currentInterval.end = *it;
-        }
+         }
+      } else if (it == keyValues.constEnd()) {
+         --it; //position the iterator on the last item
+         if (it->first == 1 && keyValues.count() > 1) {
+            //we have an end value (item with progress = 1)
+            currentInterval.start = *(it - 1);
+            currentInterval.end = *it;
+         } else {
+            //we use the default end value here
+            currentInterval.start = *it;
+            currentInterval.end = qMakePair(qreal(1), defaultStartEndValue);
+         }
+      } else {
+         currentInterval.start = *(it - 1);
+         currentInterval.end = *it;
+      }
 
-        // update all the values of the currentInterval
-        updateInterpolator();
-    }
-    setCurrentValueForProgress(progress);
+      // update all the values of the currentInterval
+      updateInterpolator();
+   }
+   setCurrentValueForProgress(progress);
 }
 
 void QVariantAnimationPrivate::setCurrentValueForProgress(const qreal progress)
 {
-    Q_Q(QVariantAnimation);
+   Q_Q(QVariantAnimation);
 
-    const qreal startProgress = currentInterval.start.first;
-    const qreal endProgress = currentInterval.end.first;
-    const qreal localProgress = (progress - startProgress) / (endProgress - startProgress);
+   const qreal startProgress = currentInterval.start.first;
+   const qreal endProgress = currentInterval.end.first;
+   const qreal localProgress = (progress - startProgress) / (endProgress - startProgress);
 
-    QVariant ret = q->interpolated(currentInterval.start.second, currentInterval.end.second, localProgress);
-    qSwap(currentValue, ret);
-    q->updateCurrentValue(currentValue);
-	 
-	 emit q->valueChanged(currentValue);
+   QVariant ret = q->interpolated(currentInterval.start.second, currentInterval.end.second, localProgress);
+   qSwap(currentValue, ret);
+   q->updateCurrentValue(currentValue);
+
+   emit q->valueChanged(currentValue);
 }
 
 QVariant QVariantAnimationPrivate::valueAt(qreal step) const
 {
-    QVariantAnimation::KeyValues::const_iterator result =
-        qBinaryFind(keyValues.begin(), keyValues.end(), qMakePair(step, QVariant()), animationValueLessThan);
-    if (result != keyValues.constEnd())
-        return result->second;
+   QVariantAnimation::KeyValues::const_iterator result =
+      qBinaryFind(keyValues.begin(), keyValues.end(), qMakePair(step, QVariant()), animationValueLessThan);
+   if (result != keyValues.constEnd()) {
+      return result->second;
+   }
 
-    return QVariant();
+   return QVariant();
 }
 
 void QVariantAnimationPrivate::setValueAt(qreal step, const QVariant &value)
 {
-    if (step < qreal(0.0) || step > qreal(1.0)) {
-        qWarning("QVariantAnimation::setValueAt: invalid step = %f", step);
-        return;
-    }
+   if (step < qreal(0.0) || step > qreal(1.0)) {
+      qWarning("QVariantAnimation::setValueAt: invalid step = %f", step);
+      return;
+   }
 
-    QVariantAnimation::KeyValue pair(step, value);
+   QVariantAnimation::KeyValue pair(step, value);
 
-    QVariantAnimation::KeyValues::iterator result = qLowerBound(keyValues.begin(), keyValues.end(), pair, animationValueLessThan);
-    if (result == keyValues.end() || result->first != step) {
-        keyValues.insert(result, pair);
-    } else {
-        if (value.isValid())
-            result->second = value; // replaces the previous value
-        else
-            keyValues.erase(result); // removes the previous value
-    }
+   QVariantAnimation::KeyValues::iterator result = qLowerBound(keyValues.begin(), keyValues.end(), pair,
+         animationValueLessThan);
+   if (result == keyValues.end() || result->first != step) {
+      keyValues.insert(result, pair);
+   } else {
+      if (value.isValid()) {
+         result->second = value;   // replaces the previous value
+      } else {
+         keyValues.erase(result);   // removes the previous value
+      }
+   }
 
-    recalculateCurrentInterval(/*force=*/true);
+   recalculateCurrentInterval(/*force=*/true);
 }
 
 void QVariantAnimationPrivate::setDefaultStartEndValue(const QVariant &value)
 {
-    defaultStartEndValue = value;
-    recalculateCurrentInterval(/*force=*/true);
+   defaultStartEndValue = value;
+   recalculateCurrentInterval(/*force=*/true);
 }
 
 /*!
@@ -363,15 +369,15 @@ QVariantAnimation::~QVariantAnimation()
 */
 QEasingCurve QVariantAnimation::easingCurve() const
 {
-    Q_D(const QVariantAnimation);
-    return d->easing;
+   Q_D(const QVariantAnimation);
+   return d->easing;
 }
 
 void QVariantAnimation::setEasingCurve(const QEasingCurve &easing)
 {
-    Q_D(QVariantAnimation);
-    d->easing = easing;
-    d->recalculateCurrentInterval();
+   Q_D(QVariantAnimation);
+   d->easing = easing;
+   d->recalculateCurrentInterval();
 }
 
 typedef QVector<QVariantAnimation::Interpolator> QInterpolatorVector;
@@ -406,68 +412,71 @@ Q_GLOBAL_STATIC(QInterpolatorVector, registeredInterpolators)
  */
 void QVariantAnimation::registerInterpolator(QVariantAnimation::Interpolator func, int interpolationType)
 {
-    // will override any existing interpolators
-    QInterpolatorVector *interpolators = registeredInterpolators();
-    // When built on solaris with GCC, the destructors can be called
-    // in such an order that we get here with interpolators == NULL,
-    // to continue causes the app to crash on exit with a SEGV
-    if (interpolators) {
+   // will override any existing interpolators
+   QInterpolatorVector *interpolators = registeredInterpolators();
+   // When built on solaris with GCC, the destructors can be called
+   // in such an order that we get here with interpolators == NULL,
+   // to continue causes the app to crash on exit with a SEGV
+   if (interpolators) {
 
-        QMutexLocker locker(QMutexPool::globalInstanceGet(interpolators));
+      QMutexLocker locker(QMutexPool::globalInstanceGet(interpolators));
 
-        if (int(interpolationType) >= interpolators->count())
-            interpolators->resize(int(interpolationType) + 1);
-        interpolators->replace(interpolationType, func);
-    }
+      if (int(interpolationType) >= interpolators->count()) {
+         interpolators->resize(int(interpolationType) + 1);
+      }
+      interpolators->replace(interpolationType, func);
+   }
 }
 
 
-template<typename T> static inline QVariantAnimation::Interpolator castToInterpolator(QVariant (*func)(const T &from, const T &to, qreal progress))
+template<typename T> static inline QVariantAnimation::Interpolator castToInterpolator(QVariant (*func)(const T &from,
+      const T &to, qreal progress))
 {
-     return reinterpret_cast<QVariantAnimation::Interpolator>(func);
+   return reinterpret_cast<QVariantAnimation::Interpolator>(func);
 }
 
 QVariantAnimation::Interpolator QVariantAnimationPrivate::getInterpolator(int interpolationType)
 {
-    QInterpolatorVector *interpolators = registeredInterpolators();
+   QInterpolatorVector *interpolators = registeredInterpolators();
 
-    QMutexLocker locker(QMutexPool::globalInstanceGet(interpolators));
+   QMutexLocker locker(QMutexPool::globalInstanceGet(interpolators));
 
-    QVariantAnimation::Interpolator ret = 0;
-    if (interpolationType < interpolators->count()) {
-        ret = interpolators->at(interpolationType);
-        if (ret) return ret;
-    }
+   QVariantAnimation::Interpolator ret = 0;
+   if (interpolationType < interpolators->count()) {
+      ret = interpolators->at(interpolationType);
+      if (ret) {
+         return ret;
+      }
+   }
 
-    switch(interpolationType)
-    {
-    case QMetaType::Int:
-        return castToInterpolator(_q_interpolateVariant<int>);
-    case QMetaType::UInt:
-        return castToInterpolator(_q_interpolateVariant<uint>);
-    case QMetaType::Double:
-        return castToInterpolator(_q_interpolateVariant<double>);
-    case QMetaType::Float:
-        return castToInterpolator(_q_interpolateVariant<float>);
-    case QMetaType::QLine:
-        return castToInterpolator(_q_interpolateVariant<QLine>);
-    case QMetaType::QLineF:
-        return castToInterpolator(_q_interpolateVariant<QLineF>);
-    case QMetaType::QPoint:
-        return castToInterpolator(_q_interpolateVariant<QPoint>);
-    case QMetaType::QPointF:
-        return castToInterpolator(_q_interpolateVariant<QPointF>);
-    case QMetaType::QSize:
-        return castToInterpolator(_q_interpolateVariant<QSize>);
-    case QMetaType::QSizeF:
-        return castToInterpolator(_q_interpolateVariant<QSizeF>);
-    case QMetaType::QRect:
-        return castToInterpolator(_q_interpolateVariant<QRect>);
-    case QMetaType::QRectF:
-        return castToInterpolator(_q_interpolateVariant<QRectF>);
-    default:
-        return 0; //this type is not handled
-    }
+   switch (interpolationType) {
+      case QMetaType::Int:
+         return castToInterpolator(_q_interpolateVariant<int>);
+      case QMetaType::UInt:
+         return castToInterpolator(_q_interpolateVariant<uint>);
+      case QMetaType::Double:
+         return castToInterpolator(_q_interpolateVariant<double>);
+      case QMetaType::Float:
+         return castToInterpolator(_q_interpolateVariant<float>);
+      case QMetaType::QLine:
+         return castToInterpolator(_q_interpolateVariant<QLine>);
+      case QMetaType::QLineF:
+         return castToInterpolator(_q_interpolateVariant<QLineF>);
+      case QMetaType::QPoint:
+         return castToInterpolator(_q_interpolateVariant<QPoint>);
+      case QMetaType::QPointF:
+         return castToInterpolator(_q_interpolateVariant<QPointF>);
+      case QMetaType::QSize:
+         return castToInterpolator(_q_interpolateVariant<QSize>);
+      case QMetaType::QSizeF:
+         return castToInterpolator(_q_interpolateVariant<QSizeF>);
+      case QMetaType::QRect:
+         return castToInterpolator(_q_interpolateVariant<QRect>);
+      case QMetaType::QRectF:
+         return castToInterpolator(_q_interpolateVariant<QRectF>);
+      default:
+         return 0; //this type is not handled
+   }
 }
 
 /*!
@@ -481,21 +490,22 @@ QVariantAnimation::Interpolator QVariantAnimationPrivate::getInterpolator(int in
  */
 int QVariantAnimation::duration() const
 {
-    Q_D(const QVariantAnimation);
-    return d->duration;
+   Q_D(const QVariantAnimation);
+   return d->duration;
 }
 
 void QVariantAnimation::setDuration(int msecs)
 {
-    Q_D(QVariantAnimation);
-    if (msecs < 0) {
-        qWarning("QVariantAnimation::setDuration: cannot set a negative duration");
-        return;
-    }
-    if (d->duration == msecs)
-        return;
-    d->duration = msecs;
-    d->recalculateCurrentInterval();
+   Q_D(QVariantAnimation);
+   if (msecs < 0) {
+      qWarning("QVariantAnimation::setDuration: cannot set a negative duration");
+      return;
+   }
+   if (d->duration == msecs) {
+      return;
+   }
+   d->duration = msecs;
+   d->recalculateCurrentInterval();
 }
 
 /*!
@@ -511,12 +521,12 @@ void QVariantAnimation::setDuration(int msecs)
 */
 QVariant QVariantAnimation::startValue() const
 {
-    return keyValueAt(0);
+   return keyValueAt(0);
 }
 
 void QVariantAnimation::setStartValue(const QVariant &value)
 {
-    setKeyValueAt(0, value);
+   setKeyValueAt(0, value);
 }
 
 /*!
@@ -529,12 +539,12 @@ void QVariantAnimation::setStartValue(const QVariant &value)
  */
 QVariant QVariantAnimation::endValue() const
 {
-    return keyValueAt(1);
+   return keyValueAt(1);
 }
 
 void QVariantAnimation::setEndValue(const QVariant &value)
 {
-    setKeyValueAt(1, value);
+   setKeyValueAt(1, value);
 }
 
 
@@ -547,7 +557,7 @@ void QVariantAnimation::setEndValue(const QVariant &value)
 */
 QVariant QVariantAnimation::keyValueAt(qreal step) const
 {
-    return d_func()->valueAt(step);
+   return d_func()->valueAt(step);
 }
 
 /*!
@@ -569,7 +579,7 @@ QVariant QVariantAnimation::keyValueAt(qreal step) const
 */
 void QVariantAnimation::setKeyValueAt(qreal step, const QVariant &value)
 {
-    d_func()->setValueAt(step, value);
+   d_func()->setValueAt(step, value);
 }
 
 /*!
@@ -579,7 +589,7 @@ void QVariantAnimation::setKeyValueAt(qreal step, const QVariant &value)
 */
 QVariantAnimation::KeyValues QVariantAnimation::keyValues() const
 {
-    return d_func()->keyValues;
+   return d_func()->keyValues;
 }
 
 /*!
@@ -590,10 +600,10 @@ QVariantAnimation::KeyValues QVariantAnimation::keyValues() const
 */
 void QVariantAnimation::setKeyValues(const KeyValues &keyValues)
 {
-    Q_D(QVariantAnimation);
-    d->keyValues = keyValues;
-    qSort(d->keyValues.begin(), d->keyValues.end(), animationValueLessThan);
-    d->recalculateCurrentInterval(/*force=*/true);
+   Q_D(QVariantAnimation);
+   d->keyValues = keyValues;
+   qSort(d->keyValues.begin(), d->keyValues.end(), animationValueLessThan);
+   d->recalculateCurrentInterval(/*force=*/true);
 }
 
 /*!
@@ -616,10 +626,11 @@ void QVariantAnimation::setKeyValues(const KeyValues &keyValues)
 */
 QVariant QVariantAnimation::currentValue() const
 {
-    Q_D(const QVariantAnimation);
-    if (!d->currentValue.isValid())
-        const_cast<QVariantAnimationPrivate*>(d)->recalculateCurrentInterval();
-    return d->currentValue;
+   Q_D(const QVariantAnimation);
+   if (!d->currentValue.isValid()) {
+      const_cast<QVariantAnimationPrivate *>(d)->recalculateCurrentInterval();
+   }
+   return d->currentValue;
 }
 
 /*!
@@ -627,7 +638,7 @@ QVariant QVariantAnimation::currentValue() const
  */
 bool QVariantAnimation::event(QEvent *event)
 {
-    return QAbstractAnimation::event(event);
+   return QAbstractAnimation::event(event);
 }
 
 /*!
@@ -636,8 +647,8 @@ bool QVariantAnimation::event(QEvent *event)
 void QVariantAnimation::updateState(QAbstractAnimation::State newState,
                                     QAbstractAnimation::State oldState)
 {
-    Q_UNUSED(oldState);
-    Q_UNUSED(newState);
+   Q_UNUSED(oldState);
+   Q_UNUSED(newState);
 }
 
 /*!
@@ -662,7 +673,7 @@ void QVariantAnimation::updateState(QAbstractAnimation::State newState,
  */
 QVariant QVariantAnimation::interpolated(const QVariant &from, const QVariant &to, qreal progress) const
 {
-    return d_func()->interpolator(from.constData(), to.constData(), progress);
+   return d_func()->interpolator(from.constData(), to.constData(), progress);
 }
 
 /*!
@@ -670,7 +681,7 @@ QVariant QVariantAnimation::interpolated(const QVariant &from, const QVariant &t
  */
 void QVariantAnimation::updateCurrentTime(int)
 {
-    d_func()->recalculateCurrentInterval();
+   d_func()->recalculateCurrentInterval();
 }
 
 QT_END_NAMESPACE

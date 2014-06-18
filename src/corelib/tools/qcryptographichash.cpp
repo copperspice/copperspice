@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,14 +38,14 @@ QT_BEGIN_NAMESPACE
 
 class QCryptographicHashPrivate
 {
-public:
-    QCryptographicHash::Algorithm method;
-    union {
-        MD5Context md5Context;
-        md4_context md4Context;
-        Sha1State sha1Context;
-    };
-    QByteArray result;
+ public:
+   QCryptographicHash::Algorithm method;
+   union {
+      MD5Context md5Context;
+      md4_context md4Context;
+      Sha1State sha1Context;
+   };
+   QByteArray result;
 };
 
 /*!
@@ -75,10 +75,10 @@ public:
   Constructs an object that can be used to create a cryptographic hash from data using \a method.
 */
 QCryptographicHash::QCryptographicHash(Algorithm method)
-    : d(new QCryptographicHashPrivate)
+   : d(new QCryptographicHashPrivate)
 {
-    d->method = method;
-    reset();
+   d->method = method;
+   reset();
 }
 
 /*!
@@ -86,7 +86,7 @@ QCryptographicHash::QCryptographicHash(Algorithm method)
 */
 QCryptographicHash::~QCryptographicHash()
 {
-    delete d;
+   delete d;
 }
 
 /*!
@@ -94,18 +94,18 @@ QCryptographicHash::~QCryptographicHash()
 */
 void QCryptographicHash::reset()
 {
-    switch (d->method) {
-    case Md4:
-        md4_init(&d->md4Context);
-        break;
-    case Md5:
-        MD5Init(&d->md5Context);
-        break;
-    case Sha1:
-        sha1InitState(&d->sha1Context);
-        break;
-    }
-    d->result.clear();
+   switch (d->method) {
+      case Md4:
+         md4_init(&d->md4Context);
+         break;
+      case Md5:
+         MD5Init(&d->md5Context);
+         break;
+      case Sha1:
+         sha1InitState(&d->sha1Context);
+         break;
+   }
+   d->result.clear();
 }
 
 /*!
@@ -114,18 +114,18 @@ void QCryptographicHash::reset()
 */
 void QCryptographicHash::addData(const char *data, int length)
 {
-    switch (d->method) {
-    case Md4:
-        md4_update(&d->md4Context, (const unsigned char *)data, length);
-        break;
-    case Md5:
-        MD5Update(&d->md5Context, (const unsigned char *)data, length);
-        break;
-    case Sha1:
-        sha1Update(&d->sha1Context, (const unsigned char *)data, length);
-        break;
-    }    
-    d->result.clear();
+   switch (d->method) {
+      case Md4:
+         md4_update(&d->md4Context, (const unsigned char *)data, length);
+         break;
+      case Md5:
+         MD5Update(&d->md5Context, (const unsigned char *)data, length);
+         break;
+      case Sha1:
+         sha1Update(&d->sha1Context, (const unsigned char *)data, length);
+         break;
+   }
+   d->result.clear();
 }
 
 /*!
@@ -133,28 +133,31 @@ void QCryptographicHash::addData(const char *data, int length)
 */
 void QCryptographicHash::addData(const QByteArray &data)
 {
-    addData(data.constData(), data.length());
+   addData(data.constData(), data.length());
 }
 
 /*!
   Reads the data from the open QIODevice \a device until it ends
   and hashes it. Returns true if reading was successful.
  */
-bool QCryptographicHash::addData(QIODevice* device)
+bool QCryptographicHash::addData(QIODevice *device)
 {
-    if (!device->isReadable())
-        return false;
+   if (!device->isReadable()) {
+      return false;
+   }
 
-    if (!device->isOpen())
-        return false;
+   if (!device->isOpen()) {
+      return false;
+   }
 
-    char buffer[1024];
-    int length;
+   char buffer[1024];
+   int length;
 
-    while ((length = device->read(buffer,sizeof(buffer))) > 0)
-        addData(buffer,length);
+   while ((length = device->read(buffer, sizeof(buffer))) > 0) {
+      addData(buffer, length);
+   }
 
-    return device->atEnd();
+   return device->atEnd();
 }
 
 
@@ -165,30 +168,31 @@ bool QCryptographicHash::addData(QIODevice* device)
 */
 QByteArray QCryptographicHash::result() const
 {
-    if (!d->result.isEmpty()) 
-        return d->result;
+   if (!d->result.isEmpty()) {
+      return d->result;
+   }
 
-    switch (d->method) {
-    case Md4: {
-        md4_context copy = d->md4Context;
-        d->result.resize(MD4_RESULTLEN);
-        md4_final(&copy, (unsigned char *)d->result.data());
-        break;
-    }
-    case Md5: {
-        MD5Context copy = d->md5Context;
-        d->result.resize(16);
-        MD5Final(&copy, (unsigned char *)d->result.data());
-        break;
-    }
-    case Sha1: {
-        Sha1State copy = d->sha1Context;
-        d->result.resize(20);
-        sha1FinalizeState(&copy);
-        sha1ToHash(&copy, (unsigned char *)d->result.data());
-    }
-    }
-    return d->result;
+   switch (d->method) {
+      case Md4: {
+         md4_context copy = d->md4Context;
+         d->result.resize(MD4_RESULTLEN);
+         md4_final(&copy, (unsigned char *)d->result.data());
+         break;
+      }
+      case Md5: {
+         MD5Context copy = d->md5Context;
+         d->result.resize(16);
+         MD5Final(&copy, (unsigned char *)d->result.data());
+         break;
+      }
+      case Sha1: {
+         Sha1State copy = d->sha1Context;
+         d->result.resize(20);
+         sha1FinalizeState(&copy);
+         sha1ToHash(&copy, (unsigned char *)d->result.data());
+      }
+   }
+   return d->result;
 }
 
 /*!
@@ -196,9 +200,9 @@ QByteArray QCryptographicHash::result() const
 */
 QByteArray QCryptographicHash::hash(const QByteArray &data, Algorithm method)
 {
-    QCryptographicHash hash(method);
-    hash.addData(data);
-    return hash.result();
+   QCryptographicHash hash(method);
+   hash.addData(data);
+   return hash.result();
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,23 +37,22 @@ class QPropertyAnimationPrivate : public QVariantAnimationPrivate
 {
    Q_DECLARE_PUBLIC(QPropertyAnimation)
 
-public:
-    QPropertyAnimationPrivate()
-        : targetValue(0), propertyType(0), propertyIndex(-1)
-    {
-    }
+ public:
+   QPropertyAnimationPrivate()
+      : targetValue(0), propertyType(0), propertyIndex(-1) {
+   }
 
-    QWeakPointer<QObject> target;
-    //we use targetValue to be able to unregister the target from the global hash
-    QObject *targetValue;
+   QWeakPointer<QObject> target;
+   //we use targetValue to be able to unregister the target from the global hash
+   QObject *targetValue;
 
-    //for the QProperty
-    int propertyType;
-    int propertyIndex;
+   //for the QProperty
+   int propertyType;
+   int propertyIndex;
 
-    QByteArray propertyName;
-    void updateProperty(const QVariant &);
-    void updateMetaProperty();
+   QByteArray propertyName;
+   void updateProperty(const QVariant &);
+   void updateMetaProperty();
 };
 
 QT_END_NAMESPACE

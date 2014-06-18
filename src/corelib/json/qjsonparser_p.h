@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,57 +35,57 @@ namespace QJsonPrivate {
 
 class Parser
 {
-public:
-    Parser(const char *json, int length);
+ public:
+   Parser(const char *json, int length);
 
-    QJsonDocument parse(QJsonParseError *error);
+   QJsonDocument parse(QJsonParseError *error);
 
-    class ParsedObject
-    {
+   class ParsedObject
+   {
     public:
-        ParsedObject(Parser *p, int pos) : parser(p), objectPosition(pos) {}
-        void insert(uint offset);
+      ParsedObject(Parser *p, int pos) : parser(p), objectPosition(pos) {}
+      void insert(uint offset);
 
-        Parser *parser;
-        int objectPosition;
-        QVarLengthArray<uint, 64> offsets;
+      Parser *parser;
+      int objectPosition;
+      QVarLengthArray<uint, 64> offsets;
 
-        inline QJsonPrivate::Entry *entryAt(int i) const {
-            return reinterpret_cast<QJsonPrivate::Entry *>(parser->data + objectPosition + offsets[i]);
-        }
-    };
+      inline QJsonPrivate::Entry *entryAt(int i) const {
+         return reinterpret_cast<QJsonPrivate::Entry *>(parser->data + objectPosition + offsets[i]);
+      }
+   };
 
 
-private:
-    inline void eatBOM();
-    inline bool eatSpace();
-    inline char nextToken();
+ private:
+   inline void eatBOM();
+   inline bool eatSpace();
+   inline char nextToken();
 
-    bool parseObject();
-    bool parseArray();
-    bool parseMember(int baseOffset);
-    bool parseString(bool *latin1);
-    bool parseValue(QJsonPrivate::Value *val, int baseOffset);
-    bool parseNumber(QJsonPrivate::Value *val, int baseOffset);
-    const char *head;
-    const char *json;
-    const char *end;
+   bool parseObject();
+   bool parseArray();
+   bool parseMember(int baseOffset);
+   bool parseString(bool *latin1);
+   bool parseValue(QJsonPrivate::Value *val, int baseOffset);
+   bool parseNumber(QJsonPrivate::Value *val, int baseOffset);
+   const char *head;
+   const char *json;
+   const char *end;
 
-    char *data;
-    int dataLength;
-    int current;
-    int nestingLevel;
-    QJsonParseError::ParseError lastError;
+   char *data;
+   int dataLength;
+   int current;
+   int nestingLevel;
+   QJsonParseError::ParseError lastError;
 
-    inline int reserveSpace(int space) {
-        if (current + space >= dataLength) {
-            dataLength = 2*dataLength + space;
-            data = (char *)realloc(data, dataLength);
-        }
-        int pos = current;
-        current += space;
-        return pos;
-    }
+   inline int reserveSpace(int space) {
+      if (current + space >= dataLength) {
+         dataLength = 2 * dataLength + space;
+         data = (char *)realloc(data, dataLength);
+      }
+      int pos = current;
+      current += space;
+      return pos;
+   }
 };
 
 }

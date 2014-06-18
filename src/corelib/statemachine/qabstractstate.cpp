@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,73 +36,74 @@
 QT_BEGIN_NAMESPACE
 
 QAbstractStatePrivate::QAbstractStatePrivate(StateType type)
-    : stateType(type), isMachine(false), parentState(0)
+   : stateType(type), isMachine(false), parentState(0)
 {
 }
 
 QAbstractStatePrivate *QAbstractStatePrivate::get(QAbstractState *q)
 {
-    return q->d_func();
+   return q->d_func();
 }
 
 const QAbstractStatePrivate *QAbstractStatePrivate::get(const QAbstractState *q)
 {
-    return q->d_func();
+   return q->d_func();
 }
 
 QStateMachine *QAbstractStatePrivate::machine() const
 {
-	 Q_Q(const QAbstractState);
-    QObject *par = q->parent();
+   Q_Q(const QAbstractState);
+   QObject *par = q->parent();
 
-    while (par != 0) {
-        if (QStateMachine *mach = qobject_cast<QStateMachine*>(par))
-            return mach;
-        par = par->parent();
-    }
-    return 0;
+   while (par != 0) {
+      if (QStateMachine *mach = qobject_cast<QStateMachine *>(par)) {
+         return mach;
+      }
+      par = par->parent();
+   }
+   return 0;
 }
 
 void QAbstractStatePrivate::callOnEntry(QEvent *e)
 {
-    Q_Q(QAbstractState);
-    q->onEntry(e);
+   Q_Q(QAbstractState);
+   q->onEntry(e);
 }
 
 void QAbstractStatePrivate::callOnExit(QEvent *e)
 {
-    Q_Q(QAbstractState);
-    q->onExit(e);
+   Q_Q(QAbstractState);
+   q->onExit(e);
 }
 
 void QAbstractStatePrivate::emitEntered()
 {
-    Q_Q(QAbstractState);
-    emit q->entered();
+   Q_Q(QAbstractState);
+   emit q->entered();
 }
 
 void QAbstractStatePrivate::emitExited()
 {
-    Q_Q(QAbstractState);
-    emit q->exited();
+   Q_Q(QAbstractState);
+   emit q->exited();
 }
 
 /*!
   Constructs a new state with the given \a parent state.
 */
 QAbstractState::QAbstractState(QState *parent)
-	: QObject(parent), d_ptr(new QAbstractStatePrivate(QAbstractStatePrivate::AbstractState))
+   : QObject(parent), d_ptr(new QAbstractStatePrivate(QAbstractStatePrivate::AbstractState))
 {
-	d_ptr->q_ptr = this;
+   d_ptr->q_ptr = this;
 }
 
 /*!
   \internal
 */
 QAbstractState::QAbstractState(QAbstractStatePrivate &dd, QState *parent)
-	: QObject(parent), d_ptr(&dd)
+   : QObject(parent), d_ptr(&dd)
 {
-	d_ptr->q_ptr = this;
+   d_ptr->q_ptr = this;
 }
 
 /*!
@@ -117,10 +118,11 @@ QAbstractState::~QAbstractState()
 */
 QState *QAbstractState::parentState() const
 {
-    Q_D(const QAbstractState);
-    if (d->parentState != parent())
-        d->parentState = qobject_cast<QState*>(parent());
-    return d->parentState;
+   Q_D(const QAbstractState);
+   if (d->parentState != parent()) {
+      d->parentState = qobject_cast<QState *>(parent());
+   }
+   return d->parentState;
 }
 
 /*!
@@ -129,8 +131,8 @@ QState *QAbstractState::parentState() const
 */
 QStateMachine *QAbstractState::machine() const
 {
-    Q_D(const QAbstractState);
-    return d->machine();
+   Q_D(const QAbstractState);
+   return d->machine();
 }
 
 /*!
@@ -168,7 +170,7 @@ QStateMachine *QAbstractState::machine() const
 */
 bool QAbstractState::event(QEvent *e)
 {
-    return QObject::event(e);
+   return QObject::event(e);
 }
 
 QT_END_NAMESPACE

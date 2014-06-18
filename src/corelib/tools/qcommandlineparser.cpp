@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,77 +42,76 @@ typedef QHash<QString, int> NameHash_t;
 
 class QCommandLineParserPrivate
 {
-public:
-    inline QCommandLineParserPrivate()
-        : singleDashWordOptionMode(QCommandLineParser::ParseAsCompactedShortOptions),
-          builtinVersionOption(false),
-          builtinHelpOption(false),
-          needsParsing(true)
-    { }
+ public:
+   inline QCommandLineParserPrivate()
+      : singleDashWordOptionMode(QCommandLineParser::ParseAsCompactedShortOptions),
+        builtinVersionOption(false),
+        builtinHelpOption(false),
+        needsParsing(true) {
+   }
 
-    bool parse(const QStringList &args);
-    void checkParsed(const char *method);
-    QStringList aliases(const QString &name) const;
-    QString helpText() const;
-    bool registerFoundOption(const QString &optionName);
-    bool parseOptionValue(const QString &optionName, const QString &argument,
-                          QStringList::const_iterator *argumentIterator,
-                          QStringList::const_iterator argsEnd);
+   bool parse(const QStringList &args);
+   void checkParsed(const char *method);
+   QStringList aliases(const QString &name) const;
+   QString helpText() const;
+   bool registerFoundOption(const QString &optionName);
+   bool parseOptionValue(const QString &optionName, const QString &argument,
+                         QStringList::const_iterator *argumentIterator,
+                         QStringList::const_iterator argsEnd);
 
-    //! Error text set when parse() returns false
-    QString errorText;
+   //! Error text set when parse() returns false
+   QString errorText;
 
-    //! The command line options used for parsing
-    QList<QCommandLineOption> commandLineOptionList;
+   //! The command line options used for parsing
+   QList<QCommandLineOption> commandLineOptionList;
 
-    //! Hash mapping option names to their offsets in commandLineOptionList and optionArgumentList.
-    NameHash_t nameHash;
+   //! Hash mapping option names to their offsets in commandLineOptionList and optionArgumentList.
+   NameHash_t nameHash;
 
-    //! Option values found (only for options with a value)
-    QHash<int, QStringList> optionValuesHash;
+   //! Option values found (only for options with a value)
+   QHash<int, QStringList> optionValuesHash;
 
-    //! Names of options found on the command line.
-    QStringList optionNames;
+   //! Names of options found on the command line.
+   QStringList optionNames;
 
-    //! Arguments which did not belong to any option.
-    QStringList positionalArgumentList;
+   //! Arguments which did not belong to any option.
+   QStringList positionalArgumentList;
 
-    //! Names of options which were unknown.
-    QStringList unknownOptionNames;
+   //! Names of options which were unknown.
+   QStringList unknownOptionNames;
 
-    //! Application description
-    QString description;
+   //! Application description
+   QString description;
 
-    //! Documentation for positional arguments
-    struct PositionalArgumentDefinition
-    {
-        QString name;
-        QString description;
-        QString syntax;
-    };
-    QVector<PositionalArgumentDefinition> positionalArgumentDefinitions;
+   //! Documentation for positional arguments
+   struct PositionalArgumentDefinition {
+      QString name;
+      QString description;
+      QString syntax;
+   };
+   QVector<PositionalArgumentDefinition> positionalArgumentDefinitions;
 
-    //! The parsing mode for "-abc"
-    QCommandLineParser::SingleDashWordOptionMode singleDashWordOptionMode;
+   //! The parsing mode for "-abc"
+   QCommandLineParser::SingleDashWordOptionMode singleDashWordOptionMode;
 
-    //! Whether addVersionOption was called
-    bool builtinVersionOption;
+   //! Whether addVersionOption was called
+   bool builtinVersionOption;
 
-    //! Whether addHelpOption was called
-    bool builtinHelpOption;
+   //! Whether addHelpOption was called
+   bool builtinHelpOption;
 
-    //! True if parse() needs to be called
-    bool needsParsing;
+   //! True if parse() needs to be called
+   bool needsParsing;
 };
 
 QStringList QCommandLineParserPrivate::aliases(const QString &optionName) const
 {
-    const NameHash_t::const_iterator it = nameHash.find(optionName);
-    if (it == nameHash.end()) {
-        qWarning("QCommandLineParser: option not defined: \"%s\"", qPrintable(optionName));
-        return QStringList();
-    }
-    return commandLineOptionList.at(*it).names();
+   const NameHash_t::const_iterator it = nameHash.find(optionName);
+   if (it == nameHash.end()) {
+      qWarning("QCommandLineParser: option not defined: \"%s\"", qPrintable(optionName));
+      return QStringList();
+   }
+   return commandLineOptionList.at(*it).names();
 }
 
 /*!
@@ -182,7 +181,7 @@ QStringList QCommandLineParserPrivate::aliases(const QString &optionName) const
     Constructs a command line parser object.
 */
 QCommandLineParser::QCommandLineParser()
-    : d(new QCommandLineParserPrivate)
+   : d(new QCommandLineParserPrivate)
 {
 }
 
@@ -191,7 +190,7 @@ QCommandLineParser::QCommandLineParser()
 */
 QCommandLineParser::~QCommandLineParser()
 {
-    delete d;
+   delete d;
 }
 
 /*!
@@ -222,9 +221,10 @@ QCommandLineParser::~QCommandLineParser()
     Sets the parsing mode to \a singleDashWordOptionMode.
     This must be called before process() or parse().
 */
-void QCommandLineParser::setSingleDashWordOptionMode(QCommandLineParser::SingleDashWordOptionMode singleDashWordOptionMode)
+void QCommandLineParser::setSingleDashWordOptionMode(QCommandLineParser::SingleDashWordOptionMode
+      singleDashWordOptionMode)
 {
-    d->singleDashWordOptionMode = singleDashWordOptionMode;
+   d->singleDashWordOptionMode = singleDashWordOptionMode;
 }
 
 /*!
@@ -237,24 +237,25 @@ void QCommandLineParser::setSingleDashWordOptionMode(QCommandLineParser::SingleD
  */
 bool QCommandLineParser::addOption(const QCommandLineOption &option)
 {
-    QStringList optionNames = option.names();
+   QStringList optionNames = option.names();
 
-    if (!optionNames.isEmpty()) {
-        foreach (const QString &name, optionNames) {
-            if (d->nameHash.contains(name))
-                return false;
-        }
+   if (!optionNames.isEmpty()) {
+      foreach (const QString & name, optionNames) {
+         if (d->nameHash.contains(name)) {
+            return false;
+         }
+      }
 
-        d->commandLineOptionList.append(option);
+      d->commandLineOptionList.append(option);
 
-        const int offset = d->commandLineOptionList.size() - 1;
-        foreach (const QString &name, optionNames)
-            d->nameHash.insert(name, offset);
+      const int offset = d->commandLineOptionList.size() - 1;
+      foreach (const QString & name, optionNames)
+      d->nameHash.insert(name, offset);
 
-        return true;
-    }
+      return true;
+   }
 
-    return false;
+   return false;
 }
 
 /*!
@@ -268,10 +269,10 @@ bool QCommandLineParser::addOption(const QCommandLineOption &option)
 */
 QCommandLineOption QCommandLineParser::addVersionOption()
 {
-    d->builtinVersionOption = true;
-    QCommandLineOption opt(QStringList() << QString("v") << QString("version"), tr("Displays version information."));
-    addOption(opt);
-    return opt;
+   d->builtinVersionOption = true;
+   QCommandLineOption opt(QStringList() << QString("v") << QString("version"), tr("Displays version information."));
+   addOption(opt);
+   return opt;
 }
 
 /*!
@@ -291,15 +292,15 @@ QCommandLineOption QCommandLineParser::addVersionOption()
 */
 QCommandLineOption QCommandLineParser::addHelpOption()
 {
-    d->builtinHelpOption = true;
-    QCommandLineOption opt(QStringList()
+   d->builtinHelpOption = true;
+   QCommandLineOption opt(QStringList()
 #ifdef Q_OS_WIN
-                << QString("?")
+                          << QString("?")
 #endif
-                << QString("h")
-                << QString("help"), tr("Displays this help."));
-    addOption(opt);
-    return opt;
+                          << QString("h")
+                          << QString("help"), tr("Displays this help."));
+   addOption(opt);
+   return opt;
 }
 
 /*!
@@ -309,7 +310,7 @@ QCommandLineOption QCommandLineParser::addHelpOption()
 */
 void QCommandLineParser::setApplicationDescription(const QString &description)
 {
-    d->description = description;
+   d->description = description;
 }
 
 /*!
@@ -318,7 +319,7 @@ void QCommandLineParser::setApplicationDescription(const QString &description)
 */
 QString QCommandLineParser::applicationDescription() const
 {
-    return d->description;
+   return d->description;
 }
 
 /*!
@@ -335,11 +336,11 @@ QString QCommandLineParser::applicationDescription() const
 */
 void QCommandLineParser::addPositionalArgument(const QString &name, const QString &description, const QString &syntax)
 {
-    QCommandLineParserPrivate::PositionalArgumentDefinition arg;
-    arg.name = name;
-    arg.description = description;
-    arg.syntax = syntax.isEmpty() ? name : syntax;
-    d->positionalArgumentDefinitions.append(arg);
+   QCommandLineParserPrivate::PositionalArgumentDefinition arg;
+   arg.name = name;
+   arg.description = description;
+   arg.syntax = syntax.isEmpty() ? name : syntax;
+   d->positionalArgumentDefinitions.append(arg);
 }
 
 /*!
@@ -355,7 +356,7 @@ void QCommandLineParser::addPositionalArgument(const QString &name, const QStrin
 */
 void QCommandLineParser::clearPositionalArguments()
 {
-    d->positionalArgumentDefinitions.clear();
+   d->positionalArgumentDefinitions.clear();
 }
 
 /*!
@@ -379,7 +380,7 @@ void QCommandLineParser::clearPositionalArguments()
 */
 bool QCommandLineParser::parse(const QStringList &arguments)
 {
-    return d->parse(arguments);
+   return d->parse(arguments);
 }
 
 /*!
@@ -388,13 +389,16 @@ bool QCommandLineParser::parse(const QStringList &arguments)
 */
 QString QCommandLineParser::errorText() const
 {
-    if (!d->errorText.isEmpty())
-        return d->errorText;
-    if (d->unknownOptionNames.count() == 1)
-        return tr("Unknown option '%1'.").arg(d->unknownOptionNames.first());
-    if (d->unknownOptionNames.count() > 1)
-        return tr("Unknown options: %1.").arg(d->unknownOptionNames.join(QString(", ")));
-    return QString();
+   if (!d->errorText.isEmpty()) {
+      return d->errorText;
+   }
+   if (d->unknownOptionNames.count() == 1) {
+      return tr("Unknown option '%1'.").arg(d->unknownOptionNames.first());
+   }
+   if (d->unknownOptionNames.count() > 1) {
+      return tr("Unknown options: %1.").arg(d->unknownOptionNames.join(QString(", ")));
+   }
+   return QString();
 }
 
 /*!
@@ -409,18 +413,19 @@ QString QCommandLineParser::errorText() const
  */
 void QCommandLineParser::process(const QStringList &arguments)
 {
-    if (!d->parse(arguments)) {
-        fprintf(stderr, "%s\n", qPrintable(errorText()));
-        ::exit(EXIT_FAILURE);
-    }
+   if (!d->parse(arguments)) {
+      fprintf(stderr, "%s\n", qPrintable(errorText()));
+      ::exit(EXIT_FAILURE);
+   }
 
-    if (d->builtinVersionOption && isSet(QString("version"))) {
-        printf("%s %s\n", qPrintable(QCoreApplication::applicationName()), qPrintable(QCoreApplication::applicationVersion()));
-        ::exit(EXIT_SUCCESS);
-    }
+   if (d->builtinVersionOption && isSet(QString("version"))) {
+      printf("%s %s\n", qPrintable(QCoreApplication::applicationName()), qPrintable(QCoreApplication::applicationVersion()));
+      ::exit(EXIT_SUCCESS);
+   }
 
-    if (d->builtinHelpOption && isSet(QString("help")))
-        showHelp(EXIT_SUCCESS);
+   if (d->builtinHelpOption && isSet(QString("help"))) {
+      showHelp(EXIT_SUCCESS);
+   }
 }
 
 /*!
@@ -430,15 +435,16 @@ void QCommandLineParser::process(const QStringList &arguments)
  */
 void QCommandLineParser::process(const QCoreApplication &app)
 {
-    // QCoreApplication::arguments() is static, but the app instance must exist so we require it as parameter
-    Q_UNUSED(app);
-    process(QCoreApplication::arguments());
+   // QCoreApplication::arguments() is static, but the app instance must exist so we require it as parameter
+   Q_UNUSED(app);
+   process(QCoreApplication::arguments());
 }
 
 void QCommandLineParserPrivate::checkParsed(const char *method)
 {
-    if (needsParsing)
-        qWarning("QCommandLineParser: call process() or parse() before %s", method);
+   if (needsParsing) {
+      qWarning("QCommandLineParser: call process() or parse() before %s", method);
+   }
 }
 
 /*!
@@ -448,13 +454,13 @@ void QCommandLineParserPrivate::checkParsed(const char *method)
  */
 bool QCommandLineParserPrivate::registerFoundOption(const QString &optionName)
 {
-    if (nameHash.contains(optionName)) {
-        optionNames.append(optionName);
-        return true;
-    } else {
-        unknownOptionNames.append(optionName);
-        return false;
-    }
+   if (nameHash.contains(optionName)) {
+      optionNames.append(optionName);
+      return true;
+   } else {
+      unknownOptionNames.append(optionName);
+      return false;
+   }
 }
 
 /*!
@@ -470,33 +476,33 @@ bool QCommandLineParserPrivate::registerFoundOption(const QString &optionName)
     Returns true on success.
  */
 bool QCommandLineParserPrivate::parseOptionValue(const QString &optionName, const QString &argument,
-                                                 QStringList::const_iterator *argumentIterator, QStringList::const_iterator argsEnd)
+      QStringList::const_iterator *argumentIterator, QStringList::const_iterator argsEnd)
 {
-    const QLatin1Char assignChar('=');
-    const NameHash_t::const_iterator nameHashIt = nameHash.constFind(optionName);
-    if (nameHashIt != nameHash.constEnd()) {
-        const int assignPos = argument.indexOf(assignChar);
-        const NameHash_t::mapped_type optionOffset = *nameHashIt;
-        const bool withValue = !commandLineOptionList.at(optionOffset).valueName().isEmpty();
-        if (withValue) {
-            if (assignPos == -1) {
-                ++(*argumentIterator);
-                if (*argumentIterator == argsEnd) {
-                    errorText = QCommandLineParser::tr("Missing value after '%1'.").arg(argument);
-                    return false;
-                }
-                optionValuesHash[optionOffset].append(*(*argumentIterator));
-            } else {
-                optionValuesHash[optionOffset].append(argument.mid(assignPos + 1));
+   const QLatin1Char assignChar('=');
+   const NameHash_t::const_iterator nameHashIt = nameHash.constFind(optionName);
+   if (nameHashIt != nameHash.constEnd()) {
+      const int assignPos = argument.indexOf(assignChar);
+      const NameHash_t::mapped_type optionOffset = *nameHashIt;
+      const bool withValue = !commandLineOptionList.at(optionOffset).valueName().isEmpty();
+      if (withValue) {
+         if (assignPos == -1) {
+            ++(*argumentIterator);
+            if (*argumentIterator == argsEnd) {
+               errorText = QCommandLineParser::tr("Missing value after '%1'.").arg(argument);
+               return false;
             }
-        } else {
-            if (assignPos != -1) {
-                errorText = QCommandLineParser::tr("Unexpected value after '%1'.").arg(argument.left(assignPos));
-                return false;
-            }
-        }
-    }
-    return true;
+            optionValuesHash[optionOffset].append(*(*argumentIterator));
+         } else {
+            optionValuesHash[optionOffset].append(argument.mid(assignPos + 1));
+         }
+      } else {
+         if (assignPos != -1) {
+            errorText = QCommandLineParser::tr("Unexpected value after '%1'.").arg(argument.left(assignPos));
+            return false;
+         }
+      }
+   }
+   return true;
 }
 
 /*!
@@ -516,100 +522,104 @@ bool QCommandLineParserPrivate::parseOptionValue(const QString &optionName, cons
  */
 bool QCommandLineParserPrivate::parse(const QStringList &args)
 {
-    needsParsing = false;
-    bool error = false;
+   needsParsing = false;
+   bool error = false;
 
-    const QString     doubleDashString(QString("--"));
-    const QLatin1Char dashChar('-');
-    const QLatin1Char assignChar('=');
+   const QString     doubleDashString(QString("--"));
+   const QLatin1Char dashChar('-');
+   const QLatin1Char assignChar('=');
 
-    bool doubleDashFound = false;
-    errorText.clear();
-    positionalArgumentList.clear();
-    optionNames.clear();
-    unknownOptionNames.clear();
-    optionValuesHash.clear();
+   bool doubleDashFound = false;
+   errorText.clear();
+   positionalArgumentList.clear();
+   optionNames.clear();
+   unknownOptionNames.clear();
+   optionValuesHash.clear();
 
-    if (args.isEmpty()) {
-        qWarning("QCommandLineParser: argument list cannot be empty, it should contain at least the executable name");
-        return false;
-    }
+   if (args.isEmpty()) {
+      qWarning("QCommandLineParser: argument list cannot be empty, it should contain at least the executable name");
+      return false;
+   }
 
-    QStringList::const_iterator argumentIterator = args.begin();
-    ++argumentIterator; // skip executable name
+   QStringList::const_iterator argumentIterator = args.begin();
+   ++argumentIterator; // skip executable name
 
-    for (; argumentIterator != args.end() ; ++argumentIterator) {
-        QString argument = *argumentIterator;
+   for (; argumentIterator != args.end() ; ++argumentIterator) {
+      QString argument = *argumentIterator;
 
-        if (doubleDashFound) {
-            positionalArgumentList.append(argument);
-        } else if (argument.startsWith(doubleDashString)) {
-            if (argument.length() > 2) {
-                QString optionName = argument.mid(2).section(assignChar, 0, 0);
-                if (registerFoundOption(optionName)) {
-                    if (!parseOptionValue(optionName, argument, &argumentIterator, args.end()))
-                        error = true;
-                } else {
-                    error = true;
-                }
+      if (doubleDashFound) {
+         positionalArgumentList.append(argument);
+      } else if (argument.startsWith(doubleDashString)) {
+         if (argument.length() > 2) {
+            QString optionName = argument.mid(2).section(assignChar, 0, 0);
+            if (registerFoundOption(optionName)) {
+               if (!parseOptionValue(optionName, argument, &argumentIterator, args.end())) {
+                  error = true;
+               }
             } else {
-                doubleDashFound = true;
+               error = true;
             }
-        } else if (argument.startsWith(dashChar)) {
-            if (argument.size() == 1) { // single dash ("stdin")
-                positionalArgumentList.append(argument);
-                continue;
-            }
-            switch (singleDashWordOptionMode) {
-            case QCommandLineParser::ParseAsCompactedShortOptions:
-            {
-                QString optionName;
-                bool valueFound = false;
-                for (int pos = 1 ; pos < argument.size(); ++pos) {
-                    optionName = argument.mid(pos, 1);
-                    if (!registerFoundOption(optionName)) {
-                        error = true;
-                    } else {
-                        const NameHash_t::const_iterator nameHashIt = nameHash.constFind(optionName);
-                        Q_ASSERT(nameHashIt != nameHash.constEnd()); // checked by registerFoundOption
-                        const NameHash_t::mapped_type optionOffset = *nameHashIt;
-                        const bool withValue = !commandLineOptionList.at(optionOffset).valueName().isEmpty();
-                        if (withValue) {
-                            if (pos + 1 < argument.size()) {
-                                if (argument.at(pos + 1) == assignChar)
-                                    ++pos;
-                                optionValuesHash[optionOffset].append(argument.mid(pos + 1));
-                                valueFound = true;
-                            }
-                            break;
-                        }
-                        if (pos + 1 < argument.size() && argument.at(pos + 1) == assignChar)
-                            break;
-                    }
-                }
-                if (!valueFound && !parseOptionValue(optionName, argument, &argumentIterator, args.end()))
-                    error = true;
-                break;
-            }
-            case QCommandLineParser::ParseAsLongOptions:
-            {
-                const QString optionName = argument.mid(1).section(assignChar, 0, 0);
-                if (registerFoundOption(optionName)) {
-                    if (!parseOptionValue(optionName, argument, &argumentIterator, args.end()))
-                        error = true;
-                } else {
-                    error = true;
-                }
-                break;
-            }
-            }
-        } else {
+         } else {
+            doubleDashFound = true;
+         }
+      } else if (argument.startsWith(dashChar)) {
+         if (argument.size() == 1) { // single dash ("stdin")
             positionalArgumentList.append(argument);
-        }
-        if (argumentIterator == args.end())
-            break;
-    }
-    return !error;
+            continue;
+         }
+         switch (singleDashWordOptionMode) {
+            case QCommandLineParser::ParseAsCompactedShortOptions: {
+               QString optionName;
+               bool valueFound = false;
+               for (int pos = 1 ; pos < argument.size(); ++pos) {
+                  optionName = argument.mid(pos, 1);
+                  if (!registerFoundOption(optionName)) {
+                     error = true;
+                  } else {
+                     const NameHash_t::const_iterator nameHashIt = nameHash.constFind(optionName);
+                     Q_ASSERT(nameHashIt != nameHash.constEnd()); // checked by registerFoundOption
+                     const NameHash_t::mapped_type optionOffset = *nameHashIt;
+                     const bool withValue = !commandLineOptionList.at(optionOffset).valueName().isEmpty();
+                     if (withValue) {
+                        if (pos + 1 < argument.size()) {
+                           if (argument.at(pos + 1) == assignChar) {
+                              ++pos;
+                           }
+                           optionValuesHash[optionOffset].append(argument.mid(pos + 1));
+                           valueFound = true;
+                        }
+                        break;
+                     }
+                     if (pos + 1 < argument.size() && argument.at(pos + 1) == assignChar) {
+                        break;
+                     }
+                  }
+               }
+               if (!valueFound && !parseOptionValue(optionName, argument, &argumentIterator, args.end())) {
+                  error = true;
+               }
+               break;
+            }
+            case QCommandLineParser::ParseAsLongOptions: {
+               const QString optionName = argument.mid(1).section(assignChar, 0, 0);
+               if (registerFoundOption(optionName)) {
+                  if (!parseOptionValue(optionName, argument, &argumentIterator, args.end())) {
+                     error = true;
+                  }
+               } else {
+                  error = true;
+               }
+               break;
+            }
+         }
+      } else {
+         positionalArgumentList.append(argument);
+      }
+      if (argumentIterator == args.end()) {
+         break;
+      }
+   }
+   return !error;
 }
 
 /*!
@@ -630,15 +640,17 @@ bool QCommandLineParserPrivate::parse(const QStringList &args)
 
 bool QCommandLineParser::isSet(const QString &name) const
 {
-    d->checkParsed("isSet");
-    if (d->optionNames.contains(name))
-        return true;
-    const QStringList aliases = d->aliases(name);
-    foreach (const QString &optionName, d->optionNames) {
-        if (aliases.contains(optionName))
-            return true;
-    }
-    return false;
+   d->checkParsed("isSet");
+   if (d->optionNames.contains(name)) {
+      return true;
+   }
+   const QStringList aliases = d->aliases(name);
+   foreach (const QString & optionName, d->optionNames) {
+      if (aliases.contains(optionName)) {
+         return true;
+      }
+   }
+   return false;
 }
 
 /*!
@@ -661,13 +673,14 @@ bool QCommandLineParser::isSet(const QString &name) const
 
 QString QCommandLineParser::value(const QString &optionName) const
 {
-    d->checkParsed("value");
-    const QStringList valueList = values(optionName);
+   d->checkParsed("value");
+   const QStringList valueList = values(optionName);
 
-    if (!valueList.isEmpty())
-        return valueList.last();
+   if (!valueList.isEmpty()) {
+      return valueList.last();
+   }
 
-    return QString();
+   return QString();
 }
 
 /*!
@@ -690,18 +703,19 @@ QString QCommandLineParser::value(const QString &optionName) const
 
 QStringList QCommandLineParser::values(const QString &optionName) const
 {
-    d->checkParsed("values");
-    const NameHash_t::const_iterator it = d->nameHash.find(optionName);
-    if (it != d->nameHash.end()) {
-        const int optionOffset = *it;
-        QStringList values = d->optionValuesHash.value(optionOffset);
-        if (values.isEmpty())
-            values = d->commandLineOptionList.at(optionOffset).defaultValues();
-        return values;
-    }
+   d->checkParsed("values");
+   const NameHash_t::const_iterator it = d->nameHash.find(optionName);
+   if (it != d->nameHash.end()) {
+      const int optionOffset = *it;
+      QStringList values = d->optionValuesHash.value(optionOffset);
+      if (values.isEmpty()) {
+         values = d->commandLineOptionList.at(optionOffset).defaultValues();
+      }
+      return values;
+   }
 
-    qWarning("QCommandLineParser: option not defined: \"%s\"", qPrintable(optionName));
-    return QStringList();
+   qWarning("QCommandLineParser: option not defined: \"%s\"", qPrintable(optionName));
+   return QStringList();
 }
 
 /*!
@@ -710,7 +724,7 @@ QStringList QCommandLineParser::values(const QString &optionName) const
 */
 bool QCommandLineParser::isSet(const QCommandLineOption &option) const
 {
-    return isSet(option.names().first());
+   return isSet(option.names().first());
 }
 
 /*!
@@ -720,7 +734,7 @@ bool QCommandLineParser::isSet(const QCommandLineOption &option) const
 */
 QString QCommandLineParser::value(const QCommandLineOption &option) const
 {
-    return value(option.names().first());
+   return value(option.names().first());
 }
 
 /*!
@@ -730,7 +744,7 @@ QString QCommandLineParser::value(const QCommandLineOption &option) const
 */
 QStringList QCommandLineParser::values(const QCommandLineOption &option) const
 {
-    return values(option.names().first());
+   return values(option.names().first());
 }
 
 /*!
@@ -742,8 +756,8 @@ QStringList QCommandLineParser::values(const QCommandLineOption &option) const
 
 QStringList QCommandLineParser::positionalArguments() const
 {
-    d->checkParsed("positionalArguments");
-    return d->positionalArgumentList;
+   d->checkParsed("positionalArguments");
+   return d->positionalArgumentList;
 }
 
 /*!
@@ -764,8 +778,8 @@ QStringList QCommandLineParser::positionalArguments() const
 
 QStringList QCommandLineParser::optionNames() const
 {
-    d->checkParsed("optionNames");
-    return d->optionNames;
+   d->checkParsed("optionNames");
+   return d->optionNames;
 }
 
 /*!
@@ -784,8 +798,8 @@ QStringList QCommandLineParser::optionNames() const
 
 QStringList QCommandLineParser::unknownOptionNames() const
 {
-    d->checkParsed("unknownOptionNames");
-    return d->unknownOptionNames;
+   d->checkParsed("unknownOptionNames");
+   return d->unknownOptionNames;
 }
 
 /*!
@@ -801,8 +815,8 @@ QStringList QCommandLineParser::unknownOptionNames() const
 */
 void QCommandLineParser::showHelp(int exitCode)
 {
-    fprintf(stdout, "%s", qPrintable(d->helpText()));
-    ::exit(exitCode);
+   fprintf(stdout, "%s", qPrintable(d->helpText()));
+   ::exit(exitCode);
 }
 
 /*!
@@ -812,110 +826,118 @@ void QCommandLineParser::showHelp(int exitCode)
 */
 QString QCommandLineParser::helpText() const
 {
-    return d->helpText();
+   return d->helpText();
 }
 
 static QString wrapText(const QString &names, int longestOptionNameString, const QString &description)
 {
-    const QLatin1Char nl('\n');
-    QString text = QString("  ") + names.leftJustified(longestOptionNameString) + QLatin1Char(' ');
-    const int indent = text.length();
-    int lineStart = 0;
-    int lastBreakable = -1;
-    const int max = 79 - indent;
-    int x = 0;
-    const int len = description.length();
+   const QLatin1Char nl('\n');
+   QString text = QString("  ") + names.leftJustified(longestOptionNameString) + QLatin1Char(' ');
+   const int indent = text.length();
+   int lineStart = 0;
+   int lastBreakable = -1;
+   const int max = 79 - indent;
+   int x = 0;
+   const int len = description.length();
 
-    for (int i = 0; i < len; ++i) {
-        ++x;
-        const QChar c = description.at(i);
-        if (c.isSpace())
-            lastBreakable = i;
+   for (int i = 0; i < len; ++i) {
+      ++x;
+      const QChar c = description.at(i);
+      if (c.isSpace()) {
+         lastBreakable = i;
+      }
 
-        int breakAt = -1;
-        int nextLineStart = -1;
-        if (x > max && lastBreakable != -1) {
-            // time to break and we know where
-            breakAt = lastBreakable;
-            nextLineStart = lastBreakable + 1;
-        } else if ((x > max - 1 && lastBreakable == -1) || i == len - 1) {
-            // time to break but found nowhere [-> break here], or end of last line
-            breakAt = i + 1;
-            nextLineStart = breakAt;
-        } else if (c == nl) {
-            // forced break
-            breakAt = i;
-            nextLineStart = i + 1;
-        }
+      int breakAt = -1;
+      int nextLineStart = -1;
+      if (x > max && lastBreakable != -1) {
+         // time to break and we know where
+         breakAt = lastBreakable;
+         nextLineStart = lastBreakable + 1;
+      } else if ((x > max - 1 && lastBreakable == -1) || i == len - 1) {
+         // time to break but found nowhere [-> break here], or end of last line
+         breakAt = i + 1;
+         nextLineStart = breakAt;
+      } else if (c == nl) {
+         // forced break
+         breakAt = i;
+         nextLineStart = i + 1;
+      }
 
-        if (breakAt != -1) {
-            const int numChars = breakAt - lineStart;
-            //qDebug() << "breakAt=" << description.at(breakAt) << "breakAtSpace=" << breakAtSpace << lineStart << "to" << breakAt << description.mid(lineStart, numChars);
-            if (lineStart > 0)
-                text += QString(indent, QLatin1Char(' '));
-            text += description.mid(lineStart, numChars) + nl;
-            x = 0;
-            lastBreakable = -1;
-            lineStart = nextLineStart;
-            if (lineStart < len && description.at(lineStart).isSpace())
-                ++lineStart; // don't start a line with a space
-            i = lineStart;
-        }
-    }
+      if (breakAt != -1) {
+         const int numChars = breakAt - lineStart;
+         //qDebug() << "breakAt=" << description.at(breakAt) << "breakAtSpace=" << breakAtSpace << lineStart << "to" << breakAt << description.mid(lineStart, numChars);
+         if (lineStart > 0) {
+            text += QString(indent, QLatin1Char(' '));
+         }
+         text += description.mid(lineStart, numChars) + nl;
+         x = 0;
+         lastBreakable = -1;
+         lineStart = nextLineStart;
+         if (lineStart < len && description.at(lineStart).isSpace()) {
+            ++lineStart;   // don't start a line with a space
+         }
+         i = lineStart;
+      }
+   }
 
-    return text;
+   return text;
 }
 
 QString QCommandLineParserPrivate::helpText() const
 {
-    const QLatin1Char nl('\n');
-    QString text;
-    const QString exeName = QCoreApplication::instance()->arguments().first();
-    QString usage = exeName;
-    if (!commandLineOptionList.isEmpty()) {
-        usage += QLatin1Char(' ');
-        usage += QCommandLineParser::tr("[options]");
-    }
-    foreach (const PositionalArgumentDefinition &arg, positionalArgumentDefinitions) {
-        usage += QLatin1Char(' ');
-        usage += arg.syntax;
-    }
-    text += QCommandLineParser::tr("Usage: %1").arg(usage) + nl;
-    if (!description.isEmpty())
-       text += description + nl;
-    text += nl;
-    if (!commandLineOptionList.isEmpty())
-        text += QCommandLineParser::tr("Options:") + nl;
-    QStringList optionNameList;
-    int longestOptionNameString = 0;
-    foreach (const QCommandLineOption &option, commandLineOptionList) {
-        QStringList optionNames;
-        foreach (const QString &optionName, option.names()) {
-            if (optionName.length() == 1)
-                optionNames.append(QLatin1Char('-') + optionName);
-            else
-                optionNames.append(QString("--") + optionName);
-        }
-        QString optionNamesString = optionNames.join(QString(", "));
-        if (!option.valueName().isEmpty())
-            optionNamesString += QString(" <") + option.valueName() + QLatin1Char('>');
-        optionNameList.append(optionNamesString);
-        longestOptionNameString = qMax(longestOptionNameString, optionNamesString.length());
-    }
-    ++longestOptionNameString;
-    for (int i = 0; i < commandLineOptionList.count(); ++i) {
-        const QCommandLineOption &option = commandLineOptionList.at(i);
-        text += wrapText(optionNameList.at(i), longestOptionNameString, option.description());
-    }
-    if (!positionalArgumentDefinitions.isEmpty()) {
-        if (!commandLineOptionList.isEmpty())
-            text += nl;
-        text += QCommandLineParser::tr("Arguments:") + nl;
-        foreach (const PositionalArgumentDefinition &arg, positionalArgumentDefinitions) {
-            text += wrapText(arg.name, longestOptionNameString, arg.description);
-        }
-    }
-    return text;
+   const QLatin1Char nl('\n');
+   QString text;
+   const QString exeName = QCoreApplication::instance()->arguments().first();
+   QString usage = exeName;
+   if (!commandLineOptionList.isEmpty()) {
+      usage += QLatin1Char(' ');
+      usage += QCommandLineParser::tr("[options]");
+   }
+   foreach (const PositionalArgumentDefinition & arg, positionalArgumentDefinitions) {
+      usage += QLatin1Char(' ');
+      usage += arg.syntax;
+   }
+   text += QCommandLineParser::tr("Usage: %1").arg(usage) + nl;
+   if (!description.isEmpty()) {
+      text += description + nl;
+   }
+   text += nl;
+   if (!commandLineOptionList.isEmpty()) {
+      text += QCommandLineParser::tr("Options:") + nl;
+   }
+   QStringList optionNameList;
+   int longestOptionNameString = 0;
+   foreach (const QCommandLineOption & option, commandLineOptionList) {
+      QStringList optionNames;
+      foreach (const QString & optionName, option.names()) {
+         if (optionName.length() == 1) {
+            optionNames.append(QLatin1Char('-') + optionName);
+         } else {
+            optionNames.append(QString("--") + optionName);
+         }
+      }
+      QString optionNamesString = optionNames.join(QString(", "));
+      if (!option.valueName().isEmpty()) {
+         optionNamesString += QString(" <") + option.valueName() + QLatin1Char('>');
+      }
+      optionNameList.append(optionNamesString);
+      longestOptionNameString = qMax(longestOptionNameString, optionNamesString.length());
+   }
+   ++longestOptionNameString;
+   for (int i = 0; i < commandLineOptionList.count(); ++i) {
+      const QCommandLineOption &option = commandLineOptionList.at(i);
+      text += wrapText(optionNameList.at(i), longestOptionNameString, option.description());
+   }
+   if (!positionalArgumentDefinitions.isEmpty()) {
+      if (!commandLineOptionList.isEmpty()) {
+         text += nl;
+      }
+      text += QCommandLineParser::tr("Arguments:") + nl;
+      foreach (const PositionalArgumentDefinition & arg, positionalArgumentDefinitions) {
+         text += wrapText(arg.name, longestOptionNameString, arg.description);
+      }
+   }
+   return text;
 }
 
 QT_END_NAMESPACE
