@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,31 +36,30 @@ QT_BEGIN_NAMESPACE
 class QNetworkCacheMetaDataPrivate : public QSharedData
 {
 
-public:
-    QNetworkCacheMetaDataPrivate()
-        : QSharedData()
-        , saveToDisk(true)
-    {}
+ public:
+   QNetworkCacheMetaDataPrivate()
+      : QSharedData()
+      , saveToDisk(true) {
+   }
 
-    bool operator==(const QNetworkCacheMetaDataPrivate &other) const
-    {
-        return
-            url == other.url
-            && lastModified == other.lastModified
-            && expirationDate == other.expirationDate
-            && headers == other.headers
-            && saveToDisk == other.saveToDisk;
-    }
+   bool operator==(const QNetworkCacheMetaDataPrivate &other) const {
+      return
+         url == other.url
+         && lastModified == other.lastModified
+         && expirationDate == other.expirationDate
+         && headers == other.headers
+         && saveToDisk == other.saveToDisk;
+   }
 
-    QUrl url;
-    QDateTime lastModified;
-    QDateTime expirationDate;
-    QNetworkCacheMetaData::RawHeaderList headers;
-    QNetworkCacheMetaData::AttributesMap attributes;
-    bool saveToDisk;
+   QUrl url;
+   QDateTime lastModified;
+   QDateTime expirationDate;
+   QNetworkCacheMetaData::RawHeaderList headers;
+   QNetworkCacheMetaData::AttributesMap attributes;
+   bool saveToDisk;
 
-    static void save(QDataStream &out, const QNetworkCacheMetaData &metaData);
-    static void load(QDataStream &in, QNetworkCacheMetaData &metaData);
+   static void save(QDataStream &out, const QNetworkCacheMetaData &metaData);
+   static void load(QDataStream &in, QNetworkCacheMetaData &metaData);
 };
 Q_GLOBAL_STATIC(QNetworkCacheMetaDataPrivate, metadata_shared_invalid)
 
@@ -102,7 +101,7 @@ Q_GLOBAL_STATIC(QNetworkCacheMetaDataPrivate, metadata_shared_invalid)
     \sa isValid()
  */
 QNetworkCacheMetaData::QNetworkCacheMetaData()
-    : d(new QNetworkCacheMetaDataPrivate)
+   : d(new QNetworkCacheMetaDataPrivate)
 {
 }
 
@@ -111,14 +110,14 @@ QNetworkCacheMetaData::QNetworkCacheMetaData()
  */
 QNetworkCacheMetaData::~QNetworkCacheMetaData()
 {
-    // QSharedDataPointer takes care of freeing d
+   // QSharedDataPointer takes care of freeing d
 }
 
 /*!
     Constructs a copy of the \a other QNetworkCacheMetaData.
  */
 QNetworkCacheMetaData::QNetworkCacheMetaData(const QNetworkCacheMetaData &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -127,8 +126,8 @@ QNetworkCacheMetaData::QNetworkCacheMetaData(const QNetworkCacheMetaData &other)
  */
 QNetworkCacheMetaData &QNetworkCacheMetaData::operator=(const QNetworkCacheMetaData &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -138,11 +137,13 @@ QNetworkCacheMetaData &QNetworkCacheMetaData::operator=(const QNetworkCacheMetaD
  */
 bool QNetworkCacheMetaData::operator==(const QNetworkCacheMetaData &other) const
 {
-    if (d == other.d)
-        return true;
-    if (d && other.d)
-        return *d == *other.d;
-    return false;
+   if (d == other.d) {
+      return true;
+   }
+   if (d && other.d) {
+      return *d == *other.d;
+   }
+   return false;
 }
 
 /*!
@@ -158,7 +159,7 @@ bool QNetworkCacheMetaData::operator==(const QNetworkCacheMetaData &other) const
  */
 bool QNetworkCacheMetaData::isValid() const
 {
-    return !(*d == *metadata_shared_invalid());
+   return !(*d == *metadata_shared_invalid());
 }
 
 /*!
@@ -175,7 +176,7 @@ bool QNetworkCacheMetaData::isValid() const
  */
 bool QNetworkCacheMetaData::saveToDisk() const
 {
-    return d->saveToDisk;
+   return d->saveToDisk;
 }
 
 /*!
@@ -186,7 +187,7 @@ bool QNetworkCacheMetaData::saveToDisk() const
  */
 void QNetworkCacheMetaData::setSaveToDisk(bool allow)
 {
-    d->saveToDisk = allow;
+   d->saveToDisk = allow;
 }
 
 /*!
@@ -196,7 +197,7 @@ void QNetworkCacheMetaData::setSaveToDisk(bool allow)
  */
 QUrl QNetworkCacheMetaData::url() const
 {
-    return d->url;
+   return d->url;
 }
 
 /*!
@@ -208,9 +209,9 @@ QUrl QNetworkCacheMetaData::url() const
  */
 void QNetworkCacheMetaData::setUrl(const QUrl &url)
 {
-    d->url = url;
-    d->url.setPassword(QString());
-    d->url.setFragment(QString());
+   d->url = url;
+   d->url.setPassword(QString());
+   d->url.setFragment(QString());
 }
 
 /*!
@@ -221,7 +222,7 @@ void QNetworkCacheMetaData::setUrl(const QUrl &url)
  */
 QNetworkCacheMetaData::RawHeaderList QNetworkCacheMetaData::rawHeaders() const
 {
-    return d->headers;
+   return d->headers;
 }
 
 /*!
@@ -231,7 +232,7 @@ QNetworkCacheMetaData::RawHeaderList QNetworkCacheMetaData::rawHeaders() const
  */
 void QNetworkCacheMetaData::setRawHeaders(const RawHeaderList &list)
 {
-    d->headers = list;
+   d->headers = list;
 }
 
 /*!
@@ -239,7 +240,7 @@ void QNetworkCacheMetaData::setRawHeaders(const RawHeaderList &list)
  */
 QDateTime QNetworkCacheMetaData::lastModified() const
 {
-    return d->lastModified;
+   return d->lastModified;
 }
 
 /*!
@@ -247,7 +248,7 @@ QDateTime QNetworkCacheMetaData::lastModified() const
  */
 void QNetworkCacheMetaData::setLastModified(const QDateTime &dateTime)
 {
-    d->lastModified = dateTime;
+   d->lastModified = dateTime;
 }
 
 /*!
@@ -255,7 +256,7 @@ void QNetworkCacheMetaData::setLastModified(const QDateTime &dateTime)
  */
 QDateTime QNetworkCacheMetaData::expirationDate() const
 {
-    return d->expirationDate;
+   return d->expirationDate;
 }
 
 /*!
@@ -263,7 +264,7 @@ QDateTime QNetworkCacheMetaData::expirationDate() const
  */
 void QNetworkCacheMetaData::setExpirationDate(const QDateTime &dateTime)
 {
-    d->expirationDate = dateTime;
+   d->expirationDate = dateTime;
 }
 
 /*!
@@ -275,7 +276,7 @@ void QNetworkCacheMetaData::setExpirationDate(const QDateTime &dateTime)
 */
 QNetworkCacheMetaData::AttributesMap QNetworkCacheMetaData::attributes() const
 {
-    return d->attributes;
+   return d->attributes;
 }
 
 /*!
@@ -287,7 +288,7 @@ QNetworkCacheMetaData::AttributesMap QNetworkCacheMetaData::attributes() const
 */
 void QNetworkCacheMetaData::setAttributes(const AttributesMap &attributes)
 {
-    d->attributes = attributes;
+   d->attributes = attributes;
 }
 
 /*!
@@ -300,32 +301,32 @@ void QNetworkCacheMetaData::setAttributes(const AttributesMap &attributes)
 */
 QDataStream &operator<<(QDataStream &out, const QNetworkCacheMetaData &metaData)
 {
-    QNetworkCacheMetaDataPrivate::save(out, metaData);
-    return out;
+   QNetworkCacheMetaDataPrivate::save(out, metaData);
+   return out;
 }
 
 static inline QDataStream &operator<<(QDataStream &out, const QNetworkCacheMetaData::AttributesMap &hash)
 {
-    out << quint32(hash.size());
-    QNetworkCacheMetaData::AttributesMap::ConstIterator it = hash.end();
-    QNetworkCacheMetaData::AttributesMap::ConstIterator begin = hash.begin();
-    while (it != begin) {
-        --it;
-        out << int(it.key()) << it.value();
-    }
-    return out;
+   out << quint32(hash.size());
+   QNetworkCacheMetaData::AttributesMap::ConstIterator it = hash.end();
+   QNetworkCacheMetaData::AttributesMap::ConstIterator begin = hash.begin();
+   while (it != begin) {
+      --it;
+      out << int(it.key()) << it.value();
+   }
+   return out;
 }
 
 void QNetworkCacheMetaDataPrivate::save(QDataStream &out, const QNetworkCacheMetaData &metaData)
 {
-    // note: if you change the contents of the meta data here
-    // remember to bump the cache version in qnetworkdiskcache.cpp CurrentCacheVersion
-    out << metaData.url();
-    out << metaData.expirationDate();
-    out << metaData.lastModified();
-    out << metaData.saveToDisk();
-    out << metaData.attributes();
-    out << metaData.rawHeaders();
+   // note: if you change the contents of the meta data here
+   // remember to bump the cache version in qnetworkdiskcache.cpp CurrentCacheVersion
+   out << metaData.url();
+   out << metaData.expirationDate();
+   out << metaData.lastModified();
+   out << metaData.saveToDisk();
+   out << metaData.attributes();
+   out << metaData.rawHeaders();
 }
 
 /*!
@@ -338,45 +339,48 @@ void QNetworkCacheMetaDataPrivate::save(QDataStream &out, const QNetworkCacheMet
 */
 QDataStream &operator>>(QDataStream &in, QNetworkCacheMetaData &metaData)
 {
-    QNetworkCacheMetaDataPrivate::load(in, metaData);
-    return in;
+   QNetworkCacheMetaDataPrivate::load(in, metaData);
+   return in;
 }
 
 static inline QDataStream &operator>>(QDataStream &in, QNetworkCacheMetaData::AttributesMap &hash)
 {
-    hash.clear();
-    QDataStream::Status oldStatus = in.status();
-    in.resetStatus();
-    hash.clear();
+   hash.clear();
+   QDataStream::Status oldStatus = in.status();
+   in.resetStatus();
+   hash.clear();
 
-    quint32 n;
-    in >> n;
+   quint32 n;
+   in >> n;
 
-    for (quint32 i = 0; i < n; ++i) {
-        if (in.status() != QDataStream::Ok)
-            break;
+   for (quint32 i = 0; i < n; ++i) {
+      if (in.status() != QDataStream::Ok) {
+         break;
+      }
 
-        int k;
-        QVariant t;
-        in >> k >> t;
-        hash.insertMulti(QNetworkRequest::Attribute(k), t);
-    }
+      int k;
+      QVariant t;
+      in >> k >> t;
+      hash.insertMulti(QNetworkRequest::Attribute(k), t);
+   }
 
-    if (in.status() != QDataStream::Ok)
-        hash.clear();
-    if (oldStatus != QDataStream::Ok)
-        in.setStatus(oldStatus);
-    return in;
+   if (in.status() != QDataStream::Ok) {
+      hash.clear();
+   }
+   if (oldStatus != QDataStream::Ok) {
+      in.setStatus(oldStatus);
+   }
+   return in;
 }
 
 void QNetworkCacheMetaDataPrivate::load(QDataStream &in, QNetworkCacheMetaData &metaData)
 {
-    in >> metaData.d->url;
-    in >> metaData.d->expirationDate;
-    in >> metaData.d->lastModified;
-    in >> metaData.d->saveToDisk;
-    in >> metaData.d->attributes;
-    in >> metaData.d->headers;
+   in >> metaData.d->url;
+   in >> metaData.d->expirationDate;
+   in >> metaData.d->lastModified;
+   in >> metaData.d->saveToDisk;
+   in >> metaData.d->attributes;
+   in >> metaData.d->headers;
 }
 
 /*!
@@ -399,7 +403,7 @@ void QNetworkCacheMetaDataPrivate::load(QDataStream &in, QNetworkCacheMetaData &
 QAbstractNetworkCache::QAbstractNetworkCache(QObject *parent)
    : QObject(parent), d_ptr(new QAbstractNetworkCachePrivate)
 {
-   d_ptr->q_ptr = this;	
+   d_ptr->q_ptr = this;
 }
 
 /*!

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -47,46 +47,46 @@ class QObject;
 
 class QShortcutMap
 {
-    Q_DECLARE_PRIVATE(QShortcutMap)
-public:
-    QShortcutMap();
-    ~QShortcutMap();
+   Q_DECLARE_PRIVATE(QShortcutMap)
+ public:
+   QShortcutMap();
+   ~QShortcutMap();
 
-    int addShortcut(QObject *owner, const QKeySequence &key, Qt::ShortcutContext context);
-    int removeShortcut(int id, QObject *owner, const QKeySequence &key = QKeySequence());
-    int setShortcutEnabled(bool enable, int id, QObject *owner, const QKeySequence &key = QKeySequence());
-    int setShortcutAutoRepeat(bool on, int id, QObject *owner, const QKeySequence &key = QKeySequence());
+   int addShortcut(QObject *owner, const QKeySequence &key, Qt::ShortcutContext context);
+   int removeShortcut(int id, QObject *owner, const QKeySequence &key = QKeySequence());
+   int setShortcutEnabled(bool enable, int id, QObject *owner, const QKeySequence &key = QKeySequence());
+   int setShortcutAutoRepeat(bool on, int id, QObject *owner, const QKeySequence &key = QKeySequence());
 
-    void resetState();
-    QKeySequence::SequenceMatch nextState(QKeyEvent *e);
-    QKeySequence::SequenceMatch state();
-    void dispatchEvent(QKeyEvent *e);
-    bool tryShortcutEvent(QObject *o, QKeyEvent *e);
+   void resetState();
+   QKeySequence::SequenceMatch nextState(QKeyEvent *e);
+   QKeySequence::SequenceMatch state();
+   void dispatchEvent(QKeyEvent *e);
+   bool tryShortcutEvent(QObject *o, QKeyEvent *e);
 
 #ifdef Dump_QShortcutMap
-    void dumpMap() const;
+   void dumpMap() const;
 #endif
 
-    bool hasShortcutForKeySequence(const QKeySequence &seq) const;
+   bool hasShortcutForKeySequence(const QKeySequence &seq) const;
 
 
-private:
-    bool correctWidgetContext(Qt::ShortcutContext context, QWidget *w, QWidget *active_window) const;
+ private:
+   bool correctWidgetContext(Qt::ShortcutContext context, QWidget *w, QWidget *active_window) const;
 #ifndef QT_NO_GRAPHICSVIEW
-    bool correctGraphicsWidgetContext(Qt::ShortcutContext context, QGraphicsWidget *w, QWidget *active_window) const;
+   bool correctGraphicsWidgetContext(Qt::ShortcutContext context, QGraphicsWidget *w, QWidget *active_window) const;
 #endif
 #ifndef QT_NO_ACTION
-    bool correctContext(Qt::ShortcutContext context,QAction *a, QWidget *active_window) const;
+   bool correctContext(Qt::ShortcutContext context, QAction *a, QWidget *active_window) const;
 #endif
-    QScopedPointer<QShortcutMapPrivate> d_ptr;
+   QScopedPointer<QShortcutMapPrivate> d_ptr;
 
-    QKeySequence::SequenceMatch find(QKeyEvent *e);
-    QKeySequence::SequenceMatch matches(const QKeySequence &seq1, const QKeySequence &seq2) const;
-    QVector<const QShortcutEntry *> matches() const;
-    void createNewSequences(QKeyEvent *e, QVector<QKeySequence> &ksl);
-    void clearSequence(QVector<QKeySequence> &ksl);
-    bool correctContext(const QShortcutEntry &item) const;
-    int translateModifiers(Qt::KeyboardModifiers modifiers);
+   QKeySequence::SequenceMatch find(QKeyEvent *e);
+   QKeySequence::SequenceMatch matches(const QKeySequence &seq1, const QKeySequence &seq2) const;
+   QVector<const QShortcutEntry *> matches() const;
+   void createNewSequences(QKeyEvent *e, QVector<QKeySequence> &ksl);
+   void clearSequence(QVector<QKeySequence> &ksl);
+   bool correctContext(const QShortcutEntry &item) const;
+   int translateModifiers(Qt::KeyboardModifiers modifiers);
 };
 
 #endif // QT_NO_SHORTCUT

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,86 +37,86 @@ QT_BEGIN_NAMESPACE
 
 class QWSDisplay::Data
 {
-public:
-    Data(QObject* parent, bool singleProcess = false);
-    ~Data();
+ public:
+   Data(QObject *parent, bool singleProcess = false);
+   ~Data();
 
-    void flush();
+   void flush();
 
-    bool queueNotEmpty();
-    QWSEvent *dequeue();
-    QWSEvent *peek();
+   bool queueNotEmpty();
+   QWSEvent *dequeue();
+   QWSEvent *peek();
 
-    bool directServerConnection();
-    void fillQueue();
+   bool directServerConnection();
+   void fillQueue();
 #ifndef QT_NO_QWS_MULTIPROCESS
-    void connectToPipe();
-    void waitForConnection();
-    void waitForPropertyReply();
-    void waitForRegionAck(int winId);
-    void waitForRegionEvents(int winId, bool ungrabDisplay);
-    bool hasPendingRegionEvents() const;
+   void connectToPipe();
+   void waitForConnection();
+   void waitForPropertyReply();
+   void waitForRegionAck(int winId);
+   void waitForRegionEvents(int winId, bool ungrabDisplay);
+   bool hasPendingRegionEvents() const;
 #endif
-    void waitForCreation();
+   void waitForCreation();
 #ifndef QT_NO_COP
-    void waitForQCopResponse();
+   void waitForQCopResponse();
 #endif
-    void init();
-    void reinit( const QString& newAppName );
-    void create(int n = 1);
+   void init();
+   void reinit( const QString &newAppName );
+   void create(int n = 1);
 
-    void flushCommands();
-    void sendCommand(QWSCommand & cmd);
-    void sendSynchronousCommand(QWSCommand & cmd);
+   void flushCommands();
+   void sendCommand(QWSCommand &cmd);
+   void sendSynchronousCommand(QWSCommand &cmd);
 
-    QWSEvent *readMore();
+   QWSEvent *readMore();
 
-    int takeId();
+   int takeId();
 
-    void setMouseFilter(void (*filter)(QWSMouseEvent*));
+   void setMouseFilter(void (*filter)(QWSMouseEvent *));
 
-    //####public data members
+   //####public data members
 
-//    QWSRegionManager *rgnMan;
-    uchar *sharedRam;
+   //    QWSRegionManager *rgnMan;
+   uchar *sharedRam;
 #ifndef QT_NO_QWS_MULTIPROCESS
-    QWSSharedMemory shm;
+   QWSSharedMemory shm;
 #endif
-    int sharedRamSize;
+   int sharedRamSize;
 
 #ifndef QT_NO_QWS_MULTIPROCESS
-    static QWSLock *clientLock;
+   static QWSLock *clientLock;
 
-    static bool lockClient(QWSLock::LockType, int timeout = -1);
-    static void unlockClient(QWSLock::LockType);
-    static bool waitClient(QWSLock::LockType, int timeout = -1);
-    static QWSLock* getClientLock();
+   static bool lockClient(QWSLock::LockType, int timeout = -1);
+   static void unlockClient(QWSLock::LockType);
+   static bool waitClient(QWSLock::LockType, int timeout = -1);
+   static QWSLock *getClientLock();
 #endif // QT_NO_QWS_MULTIPROCESS
 
-private:
+ private:
 #ifndef QT_NO_QWS_MULTIPROCESS
-    QWSSocket *csocket;
+   QWSSocket *csocket;
 #endif
-    QList<QWSEvent*> queue;
+   QList<QWSEvent *> queue;
 
-    QWSConnectedEvent* connected_event;
-    QWSMouseEvent* mouse_event;
-    int region_events_count;
-    int mouse_state;
-    int mouse_winid;
-    QPoint region_offset;
-    int region_offset_window;
+   QWSConnectedEvent *connected_event;
+   QWSMouseEvent *mouse_event;
+   int region_events_count;
+   int mouse_state;
+   int mouse_winid;
+   QPoint region_offset;
+   int region_offset_window;
 #ifndef QT_NO_COP
-    QWSQCopMessageEvent *qcop_response;
+   QWSQCopMessageEvent *qcop_response;
 #endif
-    QWSEvent* current_event;
-    QList<int> unused_identifiers;
+   QWSEvent *current_event;
+   QList<int> unused_identifiers;
 #ifdef QAPPLICATION_EXTRA_DEBUG
-    int mouse_event_count;
+   int mouse_event_count;
 #endif
-    void (*mouseFilter)(QWSMouseEvent *);
+   void (*mouseFilter)(QWSMouseEvent *);
 
-    enum { VariableEvent=-1 };
+   enum { VariableEvent = -1 };
 
 };
 

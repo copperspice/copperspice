@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,58 +35,61 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace { class CustomFontFileLoader; }
+namespace {
+class CustomFontFileLoader;
+}
 class QRawFontPrivate
 {
-public:
-    QRawFontPrivate()
-        : fontEngine(0)
-        , hintingPreference(QFont::PreferDefaultHinting)
-        , thread(0)
+ public:
+   QRawFontPrivate()
+      : fontEngine(0)
+      , hintingPreference(QFont::PreferDefaultHinting)
+      , thread(0)
 #if defined(Q_OS_WIN)
-        , fontHandle(NULL)
+      , fontHandle(NULL)
 #endif
-    {}
+   {}
 
-    QRawFontPrivate(const QRawFontPrivate &other)
-        : fontEngine(other.fontEngine)
-        , hintingPreference(other.hintingPreference)
-        , thread(other.thread)
+   QRawFontPrivate(const QRawFontPrivate &other)
+      : fontEngine(other.fontEngine)
+      , hintingPreference(other.hintingPreference)
+      , thread(other.thread)
 #if defined(Q_OS_WIN)
-        , fontHandle(NULL)
+      , fontHandle(NULL)
 #endif
-    {
-        if (fontEngine != 0)
-            fontEngine->ref.ref();
-    }
+   {
+      if (fontEngine != 0) {
+         fontEngine->ref.ref();
+      }
+   }
 
-    ~QRawFontPrivate()
-    {
-        Q_ASSERT(ref.load() == 0);
-        cleanUp();
-    }
+   ~QRawFontPrivate() {
+      Q_ASSERT(ref.load() == 0);
+      cleanUp();
+   }
 
-    inline bool isValid() const
-    {
-        Q_ASSERT(thread == 0 || thread == QThread::currentThread());
-        return fontEngine != 0;
-    }
+   inline bool isValid() const {
+      Q_ASSERT(thread == 0 || thread == QThread::currentThread());
+      return fontEngine != 0;
+   }
 
-    void cleanUp();
-    void platformCleanUp();
-    void platformLoadFromData(const QByteArray &fontData,
-                              qreal pixelSize,
-                              QFont::HintingPreference hintingPreference);
+   void cleanUp();
+   void platformCleanUp();
+   void platformLoadFromData(const QByteArray &fontData,
+                             qreal pixelSize,
+                             QFont::HintingPreference hintingPreference);
 
-    static QRawFontPrivate *get(const QRawFont &font) { return font.d.data(); }
+   static QRawFontPrivate *get(const QRawFont &font) {
+      return font.d.data();
+   }
 
-    QFontEngine *fontEngine;
-    QFont::HintingPreference hintingPreference;
-    QThread *thread;
-    QAtomicInt ref;
+   QFontEngine *fontEngine;
+   QFont::HintingPreference hintingPreference;
+   QThread *thread;
+   QAtomicInt ref;
 
 #if defined(Q_OS_WIN)
-    HANDLE fontHandle;
+   HANDLE fontHandle;
 #endif
 };
 

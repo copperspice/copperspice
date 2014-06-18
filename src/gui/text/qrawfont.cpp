@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -110,7 +110,7 @@ QT_BEGIN_NAMESPACE
    Constructs an invalid QRawFont.
 */
 QRawFont::QRawFont()
-    : d(new QRawFontPrivate)
+   : d(new QRawFontPrivate)
 {
 }
 
@@ -124,9 +124,9 @@ QRawFont::QRawFont()
 QRawFont::QRawFont(const QString &fileName,
                    qreal pixelSize,
                    QFont::HintingPreference hintingPreference)
-    : d(new QRawFontPrivate)
+   : d(new QRawFontPrivate)
 {
-    loadFromFile(fileName, pixelSize, hintingPreference);
+   loadFromFile(fileName, pixelSize, hintingPreference);
 }
 
 /*!
@@ -139,9 +139,9 @@ QRawFont::QRawFont(const QString &fileName,
 QRawFont::QRawFont(const QByteArray &fontData,
                    qreal pixelSize,
                    QFont::HintingPreference hintingPreference)
-    : d(new QRawFontPrivate)
+   : d(new QRawFontPrivate)
 {
-    loadFromData(fontData, pixelSize, hintingPreference);
+   loadFromData(fontData, pixelSize, hintingPreference);
 }
 
 /*!
@@ -149,7 +149,7 @@ QRawFont::QRawFont(const QByteArray &fontData,
 */
 QRawFont::QRawFont(const QRawFont &other)
 {
-    d = other.d;
+   d = other.d;
 }
 
 /*!
@@ -164,8 +164,8 @@ QRawFont::~QRawFont()
 */
 QRawFont &QRawFont::operator=(const QRawFont &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -173,7 +173,7 @@ QRawFont &QRawFont::operator=(const QRawFont &other)
 */
 bool QRawFont::isValid() const
 {
-    return d->isValid();
+   return d->isValid();
 }
 
 /*!
@@ -189,9 +189,10 @@ void QRawFont::loadFromFile(const QString &fileName,
                             qreal pixelSize,
                             QFont::HintingPreference hintingPreference)
 {
-    QFile file(fileName);
-    if (file.open(QIODevice::ReadOnly))
-        loadFromData(file.readAll(), pixelSize, hintingPreference);
+   QFile file(fileName);
+   if (file.open(QIODevice::ReadOnly)) {
+      loadFromData(file.readAll(), pixelSize, hintingPreference);
+   }
 }
 
 /*!
@@ -207,11 +208,11 @@ void QRawFont::loadFromData(const QByteArray &fontData,
                             qreal pixelSize,
                             QFont::HintingPreference hintingPreference)
 {
-    d.detach();
-    d->cleanUp();
-    d->hintingPreference = hintingPreference;
-    d->thread = QThread::currentThread();
-    d->platformLoadFromData(fontData, pixelSize, hintingPreference);
+   d.detach();
+   d->cleanUp();
+   d->hintingPreference = hintingPreference;
+   d->thread = QThread::currentThread();
+   d->platformLoadFromData(fontData, pixelSize, hintingPreference);
 }
 
 /*!
@@ -230,13 +231,15 @@ void QRawFont::loadFromData(const QByteArray &fontData,
 QImage QRawFont::alphaMapForGlyph(quint32 glyphIndex, AntialiasingType antialiasingType,
                                   const QTransform &transform) const
 {
-    if (!d->isValid())
-        return QImage();
+   if (!d->isValid()) {
+      return QImage();
+   }
 
-    if (antialiasingType == SubPixelAntialiasing)
-        return d->fontEngine->alphaRGBMapForGlyph(glyphIndex, QFixed(), 0, transform);
+   if (antialiasingType == SubPixelAntialiasing) {
+      return d->fontEngine->alphaRGBMapForGlyph(glyphIndex, QFixed(), 0, transform);
+   }
 
-    return d->fontEngine->alphaMapForGlyph(glyphIndex, QFixed(), transform);
+   return d->fontEngine->alphaMapForGlyph(glyphIndex, QFixed(), transform);
 }
 
 /*!
@@ -249,13 +252,14 @@ QImage QRawFont::alphaMapForGlyph(quint32 glyphIndex, AntialiasingType antialias
 */
 QPainterPath QRawFont::pathForGlyph(quint32 glyphIndex) const
 {
-    if (!d->isValid())
-        return QPainterPath();
+   if (!d->isValid()) {
+      return QPainterPath();
+   }
 
-    QFixedPoint position;
-    QPainterPath path;
-    d->fontEngine->addGlyphsToPath(&glyphIndex, &position, 1, &path, 0);
-    return path;
+   QFixedPoint position;
+   QPainterPath path;
+   d->fontEngine->addGlyphsToPath(&glyphIndex, &position, 1, &path, 0);
+   return path;
 }
 
 /*!
@@ -263,7 +267,7 @@ QPainterPath QRawFont::pathForGlyph(quint32 glyphIndex) const
 */
 bool QRawFont::operator==(const QRawFont &other) const
 {
-    return d->fontEngine == other.d->fontEngine;
+   return d->fontEngine == other.d->fontEngine;
 }
 
 /*!
@@ -279,7 +283,7 @@ bool QRawFont::operator==(const QRawFont &other) const
 */
 qreal QRawFont::ascent() const
 {
-    return d->isValid() ? d->fontEngine->ascent().toReal() : 0.0;
+   return d->isValid() ? d->fontEngine->ascent().toReal() : 0.0;
 }
 
 /*!
@@ -289,7 +293,7 @@ qreal QRawFont::ascent() const
 */
 qreal QRawFont::descent() const
 {
-    return d->isValid() ? d->fontEngine->descent().toReal() : 0.0;
+   return d->isValid() ? d->fontEngine->descent().toReal() : 0.0;
 }
 
 /*!
@@ -299,7 +303,7 @@ qreal QRawFont::descent() const
 */
 qreal QRawFont::xHeight() const
 {
-    return d->isValid() ? d->fontEngine->xHeight().toReal() : 0.0;
+   return d->isValid() ? d->fontEngine->xHeight().toReal() : 0.0;
 }
 
 /*!
@@ -309,7 +313,7 @@ qreal QRawFont::xHeight() const
 */
 qreal QRawFont::leading() const
 {
-    return d->isValid() ? d->fontEngine->leading().toReal() : 0.0;
+   return d->isValid() ? d->fontEngine->leading().toReal() : 0.0;
 }
 
 /*!
@@ -319,7 +323,7 @@ qreal QRawFont::leading() const
 */
 qreal QRawFont::averageCharWidth() const
 {
-    return d->isValid() ? d->fontEngine->averageCharWidth().toReal() : 0.0;
+   return d->isValid() ? d->fontEngine->averageCharWidth().toReal() : 0.0;
 }
 
 /*!
@@ -329,7 +333,7 @@ qreal QRawFont::averageCharWidth() const
 */
 qreal QRawFont::maxCharWidth() const
 {
-    return d->isValid() ? d->fontEngine->maxCharWidth() : 0.0;
+   return d->isValid() ? d->fontEngine->maxCharWidth() : 0.0;
 }
 
 /*!
@@ -341,7 +345,7 @@ qreal QRawFont::maxCharWidth() const
 */
 qreal QRawFont::pixelSize() const
 {
-    return d->isValid() ? d->fontEngine->fontDef.pixelSize : 0.0;
+   return d->isValid() ? d->fontEngine->fontDef.pixelSize : 0.0;
 }
 
 /*!
@@ -354,7 +358,7 @@ qreal QRawFont::pixelSize() const
 */
 qreal QRawFont::unitsPerEm() const
 {
-    return d->isValid() ? d->fontEngine->emSquareSize().toReal() : 0.0;
+   return d->isValid() ? d->fontEngine->emSquareSize().toReal() : 0.0;
 }
 
 /*!
@@ -362,7 +366,7 @@ qreal QRawFont::unitsPerEm() const
 */
 QString QRawFont::familyName() const
 {
-    return d->isValid() ? d->fontEngine->fontDef.family : QString();
+   return d->isValid() ? d->fontEngine->fontDef.family : QString();
 }
 
 /*!
@@ -372,7 +376,7 @@ QString QRawFont::familyName() const
 */
 QString QRawFont::styleName() const
 {
-    return d->isValid() ? d->fontEngine->fontDef.styleName : QString();
+   return d->isValid() ? d->fontEngine->fontDef.styleName : QString();
 }
 
 /*!
@@ -382,7 +386,7 @@ QString QRawFont::styleName() const
 */
 QFont::Style QRawFont::style() const
 {
-    return d->isValid() ? QFont::Style(d->fontEngine->fontDef.style) : QFont::StyleNormal;
+   return d->isValid() ? QFont::Style(d->fontEngine->fontDef.style) : QFont::StyleNormal;
 }
 
 /*!
@@ -392,7 +396,7 @@ QFont::Style QRawFont::style() const
 */
 int QRawFont::weight() const
 {
-    return d->isValid() ? int(d->fontEngine->fontDef.weight) : -1;
+   return d->isValid() ? int(d->fontEngine->fontDef.weight) : -1;
 }
 
 /*!
@@ -410,24 +414,26 @@ int QRawFont::weight() const
 */
 QVector<quint32> QRawFont::glyphIndexesForString(const QString &text) const
 {
-    if (!d->isValid())
-        return QVector<quint32>();
+   if (!d->isValid()) {
+      return QVector<quint32>();
+   }
 
-    int nglyphs = text.size();
-    QVarLengthGlyphLayoutArray glyphs(nglyphs);
-    if (!glyphIndexesForChars(text.data(), text.size(), glyphs.glyphs, &nglyphs)) {
-        glyphs.resize(nglyphs);
-        if (!glyphIndexesForChars(text.data(), text.size(), glyphs.glyphs, &nglyphs)) {
-            Q_ASSERT_X(false, Q_FUNC_INFO, "stringToCMap shouldn't fail twice");
-            return QVector<quint32>();
-        }
-    }
+   int nglyphs = text.size();
+   QVarLengthGlyphLayoutArray glyphs(nglyphs);
+   if (!glyphIndexesForChars(text.data(), text.size(), glyphs.glyphs, &nglyphs)) {
+      glyphs.resize(nglyphs);
+      if (!glyphIndexesForChars(text.data(), text.size(), glyphs.glyphs, &nglyphs)) {
+         Q_ASSERT_X(false, Q_FUNC_INFO, "stringToCMap shouldn't fail twice");
+         return QVector<quint32>();
+      }
+   }
 
-    QVector<quint32> glyphIndexes;
-    for (int i=0; i<nglyphs; ++i)
-        glyphIndexes.append(glyphs.glyphs[i]);
+   QVector<quint32> glyphIndexes;
+   for (int i = 0; i < nglyphs; ++i) {
+      glyphIndexes.append(glyphs.glyphs[i]);
+   }
 
-    return glyphIndexes;
+   return glyphIndexes;
 }
 
 /*!
@@ -443,12 +449,13 @@ QVector<quint32> QRawFont::glyphIndexesForString(const QString &text) const
 */
 bool QRawFont::glyphIndexesForChars(const QChar *chars, int numChars, quint32 *glyphIndexes, int *numGlyphs) const
 {
-    if (!d->isValid())
-        return false;
+   if (!d->isValid()) {
+      return false;
+   }
 
-    QGlyphLayout glyphs;
-    glyphs.glyphs = glyphIndexes;
-    return d->fontEngine->stringToCMap(chars, numChars, &glyphs, numGlyphs, QTextEngine::GlyphIndicesOnly);
+   QGlyphLayout glyphs;
+   glyphs.glyphs = glyphIndexes;
+   return d->fontEngine->stringToCMap(chars, numChars, &glyphs, numGlyphs, QTextEngine::GlyphIndicesOnly);
 }
 
 /*!
@@ -460,20 +467,22 @@ bool QRawFont::glyphIndexesForChars(const QChar *chars, int numChars, quint32 *g
 */
 QVector<QPointF> QRawFont::advancesForGlyphIndexes(const QVector<quint32> &glyphIndexes) const
 {
-    if (!d->isValid())
-        return QVector<QPointF>();
+   if (!d->isValid()) {
+      return QVector<QPointF>();
+   }
 
-    int numGlyphs = glyphIndexes.size();
-    QVarLengthGlyphLayoutArray glyphs(numGlyphs);
-    memcpy(glyphs.glyphs, glyphIndexes.data(), numGlyphs * sizeof(quint32));
+   int numGlyphs = glyphIndexes.size();
+   QVarLengthGlyphLayoutArray glyphs(numGlyphs);
+   memcpy(glyphs.glyphs, glyphIndexes.data(), numGlyphs * sizeof(quint32));
 
-    d->fontEngine->recalcAdvances(&glyphs, 0);
+   d->fontEngine->recalcAdvances(&glyphs, 0);
 
-    QVector<QPointF> advances;
-    for (int i=0; i<numGlyphs; ++i)
-        advances.append(QPointF(glyphs.advances_x[i].toReal(), glyphs.advances_y[i].toReal()));
+   QVector<QPointF> advances;
+   for (int i = 0; i < numGlyphs; ++i) {
+      advances.append(QPointF(glyphs.advances_x[i].toReal(), glyphs.advances_y[i].toReal()));
+   }
 
-    return advances;
+   return advances;
 }
 
 /*!
@@ -487,23 +496,25 @@ QVector<QPointF> QRawFont::advancesForGlyphIndexes(const QVector<quint32> &glyph
 */
 bool QRawFont::advancesForGlyphIndexes(const quint32 *glyphIndexes, QPointF *advances, int numGlyphs) const
 {
-    if (!d->isValid())
-        return false;
+   if (!d->isValid()) {
+      return false;
+   }
 
-    QGlyphLayout glyphs;
-    glyphs.glyphs = const_cast<HB_Glyph *>(glyphIndexes);
-    glyphs.numGlyphs = numGlyphs;
-    QVarLengthArray<QFixed> advances_x(numGlyphs);
-    QVarLengthArray<QFixed> advances_y(numGlyphs);
-    glyphs.advances_x = advances_x.data();
-    glyphs.advances_y = advances_y.data();
+   QGlyphLayout glyphs;
+   glyphs.glyphs = const_cast<HB_Glyph *>(glyphIndexes);
+   glyphs.numGlyphs = numGlyphs;
+   QVarLengthArray<QFixed> advances_x(numGlyphs);
+   QVarLengthArray<QFixed> advances_y(numGlyphs);
+   glyphs.advances_x = advances_x.data();
+   glyphs.advances_y = advances_y.data();
 
-    d->fontEngine->recalcAdvances(&glyphs, 0);
+   d->fontEngine->recalcAdvances(&glyphs, 0);
 
-    for (int i=0; i<numGlyphs; ++i)
-        advances[i] = QPointF(glyphs.advances_x[i].toReal(), glyphs.advances_y[i].toReal());
+   for (int i = 0; i < numGlyphs; ++i) {
+      advances[i] = QPointF(glyphs.advances_x[i].toReal(), glyphs.advances_y[i].toReal());
+   }
 
-    return true;
+   return true;
 }
 
 /*!
@@ -513,7 +524,7 @@ bool QRawFont::advancesForGlyphIndexes(const quint32 *glyphIndexes, QPointF *adv
 */
 QFont::HintingPreference QRawFont::hintingPreference() const
 {
-    return d->isValid() ? d->hintingPreference : QFont::PreferDefaultHinting;
+   return d->isValid() ? d->hintingPreference : QFont::PreferDefaultHinting;
 }
 
 /*!
@@ -524,15 +535,17 @@ QFont::HintingPreference QRawFont::hintingPreference() const
 */
 QByteArray QRawFont::fontTable(const char *tagName) const
 {
-    if (!d->isValid())
-        return QByteArray();
+   if (!d->isValid()) {
+      return QByteArray();
+   }
 
-    const quint32 *tagId = reinterpret_cast<const quint32 *>(tagName);
-    return d->fontEngine->getSfntTable(qToBigEndian(*tagId));
+   const quint32 *tagId = reinterpret_cast<const quint32 *>(tagName);
+   return d->fontEngine->getSfntTable(qToBigEndian(*tagId));
 }
 
 // From qfontdatabase.cpp
-extern QList<QFontDatabase::WritingSystem> qt_determine_writing_systems_from_truetype_bits(quint32 unicodeRange[4], quint32 codePageRange[2]);
+extern QList<QFontDatabase::WritingSystem> qt_determine_writing_systems_from_truetype_bits(quint32 unicodeRange[4],
+      quint32 codePageRange[2]);
 
 /*!
    Returns a list of writing systems supported by the font according to designer supplied
@@ -547,27 +560,28 @@ extern QList<QFontDatabase::WritingSystem> qt_determine_writing_systems_from_tru
 */
 QList<QFontDatabase::WritingSystem> QRawFont::supportedWritingSystems() const
 {
-    if (d->isValid()) {
-        QByteArray os2Table = fontTable("OS/2");
-        if (os2Table.size() > 86) {
-            char *data = os2Table.data();
-            quint32 *bigEndianUnicodeRanges = reinterpret_cast<quint32 *>(data + 42);
-            quint32 *bigEndianCodepageRanges = reinterpret_cast<quint32 *>(data + 78);
+   if (d->isValid()) {
+      QByteArray os2Table = fontTable("OS/2");
+      if (os2Table.size() > 86) {
+         char *data = os2Table.data();
+         quint32 *bigEndianUnicodeRanges = reinterpret_cast<quint32 *>(data + 42);
+         quint32 *bigEndianCodepageRanges = reinterpret_cast<quint32 *>(data + 78);
 
-            quint32 unicodeRanges[4];
-            quint32 codepageRanges[2];
+         quint32 unicodeRanges[4];
+         quint32 codepageRanges[2];
 
-            for (int i=0; i<4; ++i) {
-                if (i < 2)
-                    codepageRanges[i] = qFromBigEndian(bigEndianCodepageRanges[i]);
-                unicodeRanges[i] = qFromBigEndian(bigEndianUnicodeRanges[i]);
+         for (int i = 0; i < 4; ++i) {
+            if (i < 2) {
+               codepageRanges[i] = qFromBigEndian(bigEndianCodepageRanges[i]);
             }
+            unicodeRanges[i] = qFromBigEndian(bigEndianUnicodeRanges[i]);
+         }
 
-            return qt_determine_writing_systems_from_truetype_bits(unicodeRanges, codepageRanges);
-        }
-    }
+         return qt_determine_writing_systems_from_truetype_bits(unicodeRanges, codepageRanges);
+      }
+   }
 
-    return QList<QFontDatabase::WritingSystem>();
+   return QList<QFontDatabase::WritingSystem>();
 }
 
 /*!
@@ -577,7 +591,7 @@ QList<QFontDatabase::WritingSystem> QRawFont::supportedWritingSystems() const
 */
 bool QRawFont::supportsCharacter(QChar character) const
 {
-    return d->isValid() && d->fontEngine->canRender(&character, 1);
+   return d->isValid() && d->fontEngine->canRender(&character, 1);
 }
 
 /*!
@@ -588,18 +602,18 @@ bool QRawFont::supportsCharacter(QChar character) const
 */
 bool QRawFont::supportsCharacter(quint32 ucs4) const
 {
-    QChar str[2];
-    int len;
-    if (!QChar::requiresSurrogates(ucs4)) {
-        str[0] = QChar(ucs4);
-        len = 1;
-    } else {
-        str[0] = QChar(QChar::highSurrogate(ucs4));
-        str[1] = QChar(QChar::lowSurrogate(ucs4));
-        len = 2;
-    }
+   QChar str[2];
+   int len;
+   if (!QChar::requiresSurrogates(ucs4)) {
+      str[0] = QChar(ucs4);
+      len = 1;
+   } else {
+      str[0] = QChar(QChar::highSurrogate(ucs4));
+      str[1] = QChar(QChar::lowSurrogate(ucs4));
+      len = 2;
+   }
 
-    return d->isValid() && d->fontEngine->canRender(str, len);
+   return d->isValid() && d->fontEngine->canRender(str, len);
 }
 
 // qfontdatabase.cpp
@@ -611,44 +625,45 @@ extern int qt_script_for_writing_system(QFontDatabase::WritingSystem writingSyst
 */
 QRawFont QRawFont::fromFont(const QFont &font, QFontDatabase::WritingSystem writingSystem)
 {
-    QRawFont rawFont;
+   QRawFont rawFont;
 #if defined(Q_OS_MAC)
-    QTextLayout layout(QFontDatabase::writingSystemSample(writingSystem), font);
-    layout.beginLayout();
-    QTextLine line = layout.createLine();
-    layout.endLayout();
-    QList<QGlyphRun> list = layout.glyphRuns();
-    if (list.size()) {
-        // Pick the one matches the family name we originally requested,
-        // if none of them match, just pick the first one
-        for (int i = 0; i < list.size(); i++) {
-            rawFont = list.at(i).rawFont();
-            if (rawFont.familyName() == font.family())
-                return rawFont;
-        }
-        return list.at(0).rawFont();
-    }
+   QTextLayout layout(QFontDatabase::writingSystemSample(writingSystem), font);
+   layout.beginLayout();
+   QTextLine line = layout.createLine();
+   layout.endLayout();
+   QList<QGlyphRun> list = layout.glyphRuns();
+   if (list.size()) {
+      // Pick the one matches the family name we originally requested,
+      // if none of them match, just pick the first one
+      for (int i = 0; i < list.size(); i++) {
+         rawFont = list.at(i).rawFont();
+         if (rawFont.familyName() == font.family()) {
+            return rawFont;
+         }
+      }
+      return list.at(0).rawFont();
+   }
 #else
-    QFontPrivate *font_d = QFontPrivate::get(font);
-    int script = qt_script_for_writing_system(writingSystem);
-    QFontEngine *fe = font_d->engineForScript(script);
+   QFontPrivate *font_d = QFontPrivate::get(font);
+   int script = qt_script_for_writing_system(writingSystem);
+   QFontEngine *fe = font_d->engineForScript(script);
 
-    if (fe != 0 && fe->type() == QFontEngine::Multi) {
-        QFontEngineMulti *multiEngine = static_cast<QFontEngineMulti *>(fe);
-        fe = multiEngine->engine(0);
-        if (fe == 0) {
-            multiEngine->loadEngine(0);
-            fe = multiEngine->engine(0);
-        }
-    }
+   if (fe != 0 && fe->type() == QFontEngine::Multi) {
+      QFontEngineMulti *multiEngine = static_cast<QFontEngineMulti *>(fe);
+      fe = multiEngine->engine(0);
+      if (fe == 0) {
+         multiEngine->loadEngine(0);
+         fe = multiEngine->engine(0);
+      }
+   }
 
-    if (fe != 0) {
-        rawFont.d.data()->fontEngine = fe;
-        rawFont.d.data()->fontEngine->ref.ref();
-        rawFont.d.data()->hintingPreference = font.hintingPreference();
-    }
+   if (fe != 0) {
+      rawFont.d.data()->fontEngine = fe;
+      rawFont.d.data()->fontEngine->ref.ref();
+      rawFont.d.data()->hintingPreference = font.hintingPreference();
+   }
 #endif
-    return rawFont;
+   return rawFont;
 }
 
 /*!
@@ -656,19 +671,22 @@ QRawFont QRawFont::fromFont(const QFont &font, QFontDatabase::WritingSystem writ
 */
 void QRawFont::setPixelSize(qreal pixelSize)
 {
-    if (d->fontEngine == 0)
-        return;
+   if (d->fontEngine == 0) {
+      return;
+   }
 
-    d.detach();
-    QFontEngine *oldFontEngine = d->fontEngine;
+   d.detach();
+   QFontEngine *oldFontEngine = d->fontEngine;
 
-    d->fontEngine = d->fontEngine->cloneWithSize(pixelSize);
-    if (d->fontEngine != 0)
-        d->fontEngine->ref.ref();
+   d->fontEngine = d->fontEngine->cloneWithSize(pixelSize);
+   if (d->fontEngine != 0) {
+      d->fontEngine->ref.ref();
+   }
 
-    oldFontEngine->ref.deref();
-    if (oldFontEngine->cache_count == 0 && oldFontEngine->ref.load() == 0)
-        delete oldFontEngine;
+   oldFontEngine->ref.deref();
+   if (oldFontEngine->cache_count == 0 && oldFontEngine->ref.load() == 0) {
+      delete oldFontEngine;
+   }
 }
 
 /*!
@@ -676,14 +694,15 @@ void QRawFont::setPixelSize(qreal pixelSize)
 */
 void QRawFontPrivate::cleanUp()
 {
-    platformCleanUp();
-    if (fontEngine != 0) {
-        fontEngine->ref.deref();
-        if (fontEngine->cache_count == 0 && fontEngine->ref.load() == 0)
-            delete fontEngine;
-        fontEngine = 0;
-    }
-    hintingPreference = QFont::PreferDefaultHinting;
+   platformCleanUp();
+   if (fontEngine != 0) {
+      fontEngine->ref.deref();
+      if (fontEngine->cache_count == 0 && fontEngine->ref.load() == 0) {
+         delete fontEngine;
+      }
+      fontEngine = 0;
+   }
+   hintingPreference = QFont::PreferDefaultHinting;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,7 +37,7 @@ QT_BEGIN_NAMESPACE
 //detects the deletion of the source model
 void QAbstractProxyModelPrivate::_q_sourceModelDestroyed()
 {
-    model = QAbstractItemModelPrivate::staticEmptyModel();
+   model = QAbstractItemModelPrivate::staticEmptyModel();
 }
 
 /*!
@@ -45,9 +45,9 @@ void QAbstractProxyModelPrivate::_q_sourceModelDestroyed()
 */
 
 QAbstractProxyModel::QAbstractProxyModel(QObject *parent)
-    :QAbstractItemModel(*new QAbstractProxyModelPrivate, parent)
+   : QAbstractItemModel(*new QAbstractProxyModelPrivate, parent)
 {
-    setSourceModel(QAbstractItemModelPrivate::staticEmptyModel());
+   setSourceModel(QAbstractItemModelPrivate::staticEmptyModel());
 }
 
 /*!
@@ -55,9 +55,9 @@ QAbstractProxyModel::QAbstractProxyModel(QObject *parent)
 */
 
 QAbstractProxyModel::QAbstractProxyModel(QAbstractProxyModelPrivate &dd, QObject *parent)
-    : QAbstractItemModel(dd, parent)
+   : QAbstractItemModel(dd, parent)
 {
-    setSourceModel(QAbstractItemModelPrivate::staticEmptyModel());
+   setSourceModel(QAbstractItemModelPrivate::staticEmptyModel());
 }
 
 /*!
@@ -73,17 +73,18 @@ QAbstractProxyModel::~QAbstractProxyModel()
 */
 void QAbstractProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
 {
-    Q_D(QAbstractProxyModel);
-    if (d->model)
-        disconnect(d->model, SIGNAL(destroyed()), this, SLOT(_q_sourceModelDestroyed()));
+   Q_D(QAbstractProxyModel);
+   if (d->model) {
+      disconnect(d->model, SIGNAL(destroyed()), this, SLOT(_q_sourceModelDestroyed()));
+   }
 
-    if (sourceModel) {
-        d->model = sourceModel;
-        connect(d->model, SIGNAL(destroyed()), this, SLOT(_q_sourceModelDestroyed()));
-    } else {
-        d->model = QAbstractItemModelPrivate::staticEmptyModel();
-    }
-    d->roleNames = d->model->roleNames();
+   if (sourceModel) {
+      d->model = sourceModel;
+      connect(d->model, SIGNAL(destroyed()), this, SLOT(_q_sourceModelDestroyed()));
+   } else {
+      d->model = QAbstractItemModelPrivate::staticEmptyModel();
+   }
+   d->roleNames = d->model->roleNames();
 }
 
 /*!
@@ -91,10 +92,11 @@ void QAbstractProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
 */
 QAbstractItemModel *QAbstractProxyModel::sourceModel() const
 {
-    Q_D(const QAbstractProxyModel);
-    if (d->model == QAbstractItemModelPrivate::staticEmptyModel())
-        return 0;
-    return d->model;
+   Q_D(const QAbstractProxyModel);
+   if (d->model == QAbstractItemModelPrivate::staticEmptyModel()) {
+      return 0;
+   }
+   return d->model;
 }
 
 /*!
@@ -102,8 +104,8 @@ QAbstractItemModel *QAbstractProxyModel::sourceModel() const
  */
 bool QAbstractProxyModel::submit()
 {
-    Q_D(QAbstractProxyModel);
-    return d->model->submit();
+   Q_D(QAbstractProxyModel);
+   return d->model->submit();
 }
 
 /*!
@@ -111,8 +113,8 @@ bool QAbstractProxyModel::submit()
  */
 void QAbstractProxyModel::revert()
 {
-    Q_D(QAbstractProxyModel);
-    d->model->revert();
+   Q_D(QAbstractProxyModel);
+   d->model->revert();
 }
 
 
@@ -141,15 +143,16 @@ void QAbstractProxyModel::revert()
  */
 QItemSelection QAbstractProxyModel::mapSelectionToSource(const QItemSelection &proxySelection) const
 {
-    QModelIndexList proxyIndexes = proxySelection.indexes();
-    QItemSelection sourceSelection;
-    for (int i = 0; i < proxyIndexes.size(); ++i) {
-        const QModelIndex proxyIdx = mapToSource(proxyIndexes.at(i));
-        if (!proxyIdx.isValid())
-            continue;
-        sourceSelection << QItemSelectionRange(proxyIdx);
-    }
-    return sourceSelection;
+   QModelIndexList proxyIndexes = proxySelection.indexes();
+   QItemSelection sourceSelection;
+   for (int i = 0; i < proxyIndexes.size(); ++i) {
+      const QModelIndex proxyIdx = mapToSource(proxyIndexes.at(i));
+      if (!proxyIdx.isValid()) {
+         continue;
+      }
+      sourceSelection << QItemSelectionRange(proxyIdx);
+   }
+   return sourceSelection;
 }
 
 /*!
@@ -159,15 +162,16 @@ QItemSelection QAbstractProxyModel::mapSelectionToSource(const QItemSelection &p
 */
 QItemSelection QAbstractProxyModel::mapSelectionFromSource(const QItemSelection &sourceSelection) const
 {
-    QModelIndexList sourceIndexes = sourceSelection.indexes();
-    QItemSelection proxySelection;
-    for (int i = 0; i < sourceIndexes.size(); ++i) {
-        const QModelIndex srcIdx = mapFromSource(sourceIndexes.at(i));
-        if (!srcIdx.isValid())
-            continue;
-        proxySelection << QItemSelectionRange(srcIdx);
-    }
-    return proxySelection;
+   QModelIndexList sourceIndexes = sourceSelection.indexes();
+   QItemSelection proxySelection;
+   for (int i = 0; i < sourceIndexes.size(); ++i) {
+      const QModelIndex srcIdx = mapFromSource(sourceIndexes.at(i));
+      if (!srcIdx.isValid()) {
+         continue;
+      }
+      proxySelection << QItemSelectionRange(srcIdx);
+   }
+   return proxySelection;
 }
 
 /*!
@@ -175,8 +179,8 @@ QItemSelection QAbstractProxyModel::mapSelectionFromSource(const QItemSelection 
  */
 QVariant QAbstractProxyModel::data(const QModelIndex &proxyIndex, int role) const
 {
-    Q_D(const QAbstractProxyModel);
-    return d->model->data(mapToSource(proxyIndex), role);
+   Q_D(const QAbstractProxyModel);
+   return d->model->data(mapToSource(proxyIndex), role);
 }
 
 /*!
@@ -184,16 +188,16 @@ QVariant QAbstractProxyModel::data(const QModelIndex &proxyIndex, int role) cons
  */
 QVariant QAbstractProxyModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    Q_D(const QAbstractProxyModel);
-    int sourceSection;
-    if (orientation == Qt::Horizontal) {
-        const QModelIndex proxyIndex = index(0, section);
-        sourceSection = mapToSource(proxyIndex).column();
-    } else {
-        const QModelIndex proxyIndex = index(section, 0);
-        sourceSection = mapToSource(proxyIndex).row();
-    }
-    return d->model->headerData(sourceSection, orientation, role);
+   Q_D(const QAbstractProxyModel);
+   int sourceSection;
+   if (orientation == Qt::Horizontal) {
+      const QModelIndex proxyIndex = index(0, section);
+      sourceSection = mapToSource(proxyIndex).column();
+   } else {
+      const QModelIndex proxyIndex = index(section, 0);
+      sourceSection = mapToSource(proxyIndex).row();
+   }
+   return d->model->headerData(sourceSection, orientation, role);
 }
 
 /*!
@@ -201,7 +205,7 @@ QVariant QAbstractProxyModel::headerData(int section, Qt::Orientation orientatio
  */
 QMap<int, QVariant> QAbstractProxyModel::itemData(const QModelIndex &proxyIndex) const
 {
-    return QAbstractItemModel::itemData(proxyIndex);
+   return QAbstractItemModel::itemData(proxyIndex);
 }
 
 /*!
@@ -209,8 +213,8 @@ QMap<int, QVariant> QAbstractProxyModel::itemData(const QModelIndex &proxyIndex)
  */
 Qt::ItemFlags QAbstractProxyModel::flags(const QModelIndex &index) const
 {
-    Q_D(const QAbstractProxyModel);
-    return d->model->flags(mapToSource(index));
+   Q_D(const QAbstractProxyModel);
+   return d->model->flags(mapToSource(index));
 }
 
 /*!
@@ -218,16 +222,16 @@ Qt::ItemFlags QAbstractProxyModel::flags(const QModelIndex &index) const
  */
 bool QAbstractProxyModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    Q_D(QAbstractProxyModel);
-    return d->model->setData(mapToSource(index), value, role);
+   Q_D(QAbstractProxyModel);
+   return d->model->setData(mapToSource(index), value, role);
 }
 
 /*!
     \reimp
  */
-bool QAbstractProxyModel::setItemData(const QModelIndex &index, const QMap< int, QVariant >& roles)
+bool QAbstractProxyModel::setItemData(const QModelIndex &index, const QMap< int, QVariant > &roles)
 {
-    return QAbstractItemModel::setItemData(index, roles);
+   return QAbstractItemModel::setItemData(index, roles);
 }
 
 /*!
@@ -235,16 +239,16 @@ bool QAbstractProxyModel::setItemData(const QModelIndex &index, const QMap< int,
  */
 bool QAbstractProxyModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
-    Q_D(QAbstractProxyModel);
-    int sourceSection;
-    if (orientation == Qt::Horizontal) {
-        const QModelIndex proxyIndex = index(0, section);
-        sourceSection = mapToSource(proxyIndex).column();
-    } else {
-        const QModelIndex proxyIndex = index(section, 0);
-        sourceSection = mapToSource(proxyIndex).row();
-    }
-    return d->model->setHeaderData(sourceSection, orientation, value, role);
+   Q_D(QAbstractProxyModel);
+   int sourceSection;
+   if (orientation == Qt::Horizontal) {
+      const QModelIndex proxyIndex = index(0, section);
+      sourceSection = mapToSource(proxyIndex).column();
+   } else {
+      const QModelIndex proxyIndex = index(section, 0);
+      sourceSection = mapToSource(proxyIndex).row();
+   }
+   return d->model->setHeaderData(sourceSection, orientation, value, role);
 }
 
 /*!
@@ -253,8 +257,8 @@ bool QAbstractProxyModel::setHeaderData(int section, Qt::Orientation orientation
  */
 QModelIndex QAbstractProxyModel::buddy(const QModelIndex &index) const
 {
-    Q_D(const QAbstractProxyModel);
-    return mapFromSource(d->model->buddy(mapToSource(index)));
+   Q_D(const QAbstractProxyModel);
+   return mapFromSource(d->model->buddy(mapToSource(index)));
 }
 
 /*!
@@ -263,8 +267,8 @@ QModelIndex QAbstractProxyModel::buddy(const QModelIndex &index) const
  */
 bool QAbstractProxyModel::canFetchMore(const QModelIndex &parent) const
 {
-    Q_D(const QAbstractProxyModel);
-    return d->model->canFetchMore(mapToSource(parent));
+   Q_D(const QAbstractProxyModel);
+   return d->model->canFetchMore(mapToSource(parent));
 }
 
 /*!
@@ -273,8 +277,8 @@ bool QAbstractProxyModel::canFetchMore(const QModelIndex &parent) const
  */
 void QAbstractProxyModel::fetchMore(const QModelIndex &parent)
 {
-    Q_D(QAbstractProxyModel);
-    d->model->fetchMore(mapToSource(parent));
+   Q_D(QAbstractProxyModel);
+   d->model->fetchMore(mapToSource(parent));
 }
 
 /*!
@@ -283,8 +287,8 @@ void QAbstractProxyModel::fetchMore(const QModelIndex &parent)
  */
 void QAbstractProxyModel::sort(int column, Qt::SortOrder order)
 {
-    Q_D(QAbstractProxyModel);
-    d->model->sort(column, order);
+   Q_D(QAbstractProxyModel);
+   d->model->sort(column, order);
 }
 
 /*!
@@ -293,8 +297,8 @@ void QAbstractProxyModel::sort(int column, Qt::SortOrder order)
  */
 QSize QAbstractProxyModel::span(const QModelIndex &index) const
 {
-    Q_D(const QAbstractProxyModel);
-    return d->model->span(mapToSource(index));
+   Q_D(const QAbstractProxyModel);
+   return d->model->span(mapToSource(index));
 }
 
 /*!
@@ -303,21 +307,21 @@ QSize QAbstractProxyModel::span(const QModelIndex &index) const
  */
 bool QAbstractProxyModel::hasChildren(const QModelIndex &parent) const
 {
-    Q_D(const QAbstractProxyModel);
-    return d->model->hasChildren(mapToSource(parent));
+   Q_D(const QAbstractProxyModel);
+   return d->model->hasChildren(mapToSource(parent));
 }
 
 /*!
     \reimp
     \since 4.8
  */
-QMimeData* QAbstractProxyModel::mimeData(const QModelIndexList &indexes) const
+QMimeData *QAbstractProxyModel::mimeData(const QModelIndexList &indexes) const
 {
-    Q_D(const QAbstractProxyModel);
-    QModelIndexList list;
-    foreach(const QModelIndex &index, indexes)
-        list << mapToSource(index);
-    return d->model->mimeData(list);
+   Q_D(const QAbstractProxyModel);
+   QModelIndexList list;
+   foreach(const QModelIndex & index, indexes)
+   list << mapToSource(index);
+   return d->model->mimeData(list);
 }
 
 /*!
@@ -326,8 +330,8 @@ QMimeData* QAbstractProxyModel::mimeData(const QModelIndexList &indexes) const
  */
 QStringList QAbstractProxyModel::mimeTypes() const
 {
-    Q_D(const QAbstractProxyModel);
-    return d->model->mimeTypes();
+   Q_D(const QAbstractProxyModel);
+   return d->model->mimeTypes();
 }
 
 /*!
@@ -336,14 +340,14 @@ QStringList QAbstractProxyModel::mimeTypes() const
  */
 Qt::DropActions QAbstractProxyModel::supportedDropActions() const
 {
-    Q_D(const QAbstractProxyModel);
-    return d->model->supportedDropActions();
+   Q_D(const QAbstractProxyModel);
+   return d->model->supportedDropActions();
 }
 
 void QAbstractProxyModel::_q_sourceModelDestroyed()
 {
-	Q_D(QAbstractProxyModel);
-	d->_q_sourceModelDestroyed();
+   Q_D(QAbstractProxyModel);
+   d->_q_sourceModelDestroyed();
 }
 
 

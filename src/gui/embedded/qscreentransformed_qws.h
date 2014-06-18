@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,42 +37,44 @@ class QTransformedScreenPrivate;
 class QTransformedScreen : public QProxyScreen
 {
 
-public:
-    explicit QTransformedScreen(int display_id);
-    ~QTransformedScreen();
+ public:
+   explicit QTransformedScreen(int display_id);
+   ~QTransformedScreen();
 
-    enum Transformation { None, Rot90, Rot180, Rot270 };
+   enum Transformation { None, Rot90, Rot180, Rot270 };
 
-    void setTransformation(Transformation t);
-    Transformation transformation() const;
-    int transformOrientation() const;
+   void setTransformation(Transformation t);
+   Transformation transformation() const;
+   int transformOrientation() const;
 
-    QSize mapToDevice(const QSize &s) const;
-    QSize mapFromDevice(const QSize &s) const;
+   QSize mapToDevice(const QSize &s) const;
+   QSize mapFromDevice(const QSize &s) const;
 
-    QPoint mapToDevice(const QPoint &, const QSize &) const;
-    QPoint mapFromDevice(const QPoint &, const QSize &) const;
+   QPoint mapToDevice(const QPoint &, const QSize &) const;
+   QPoint mapFromDevice(const QPoint &, const QSize &) const;
 
-    QRect mapToDevice(const QRect &, const QSize &) const;
-    QRect mapFromDevice(const QRect &, const QSize &) const;
+   QRect mapToDevice(const QRect &, const QSize &) const;
+   QRect mapFromDevice(const QRect &, const QSize &) const;
 
-    QRegion mapToDevice(const QRegion &, const QSize &) const;
-    QRegion mapFromDevice(const QRegion &, const QSize &) const;
+   QRegion mapToDevice(const QRegion &, const QSize &) const;
+   QRegion mapFromDevice(const QRegion &, const QSize &) const;
 
-    bool connect(const QString &displaySpec);
+   bool connect(const QString &displaySpec);
 
-    bool isTransformed() const { return transformation() != None; }
+   bool isTransformed() const {
+      return transformation() != None;
+   }
 
-    void exposeRegion(QRegion region, int changing);
-    void blit(const QImage &img, const QPoint &topLeft, const QRegion &region);
-    void solidFill(const QColor &color, const QRegion &region);
-    void setDirty(const QRect&);
+   void exposeRegion(QRegion region, int changing);
+   void blit(const QImage &img, const QPoint &topLeft, const QRegion &region);
+   void solidFill(const QColor &color, const QRegion &region);
+   void setDirty(const QRect &);
 
-    QRegion region() const;
+   QRegion region() const;
 
-private:
-    friend class QTransformedScreenPrivate;
-    QTransformedScreenPrivate *d_ptr;
+ private:
+   friend class QTransformedScreenPrivate;
+   QTransformedScreenPrivate *d_ptr;
 };
 
 #endif // QT_NO_QWS_TRANSFORMED

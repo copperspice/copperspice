@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -27,11 +27,11 @@
 #define QGrayRaster_P_H
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 #include <qrasterdefs_p.h>
- 
+
 #ifndef QT_FT_EXPORT_VAR
 #define QT_FT_EXPORT_VAR( x )  extern  x
 #endif
@@ -42,7 +42,7 @@
 QT_FT_EXPORT_VAR( const QT_FT_Raster_Funcs )  qt_ft_grays_raster;
 
 #ifdef __cplusplus
-  }
+}
 #endif
 
 #endif

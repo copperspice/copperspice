@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -29,27 +29,27 @@
 QT_BEGIN_NAMESPACE
 
 // Hidden private fields for additional extension data.
-struct QGLFunctionsPrivateEx : public QGLFunctionsPrivate
-{
-    QGLFunctionsPrivateEx(const QGLContext *context = 0)
-        : QGLFunctionsPrivate(context), m_features(-1) {}
+struct QGLFunctionsPrivateEx : public QGLFunctionsPrivate {
+   QGLFunctionsPrivateEx(const QGLContext *context = 0)
+      : QGLFunctionsPrivate(context), m_features(-1) {}
 
-    int m_features;
+   int m_features;
 };
 
 Q_GLOBAL_STATIC(QGLContextGroupResource<QGLFunctionsPrivateEx>, qt_gl_functions_resource)
 
 static QGLFunctionsPrivateEx *qt_gl_functions(const QGLContext *context = 0)
 {
-    if (!context)
-        context = QGLContext::currentContext();
+   if (!context) {
+      context = QGLContext::currentContext();
+   }
 
-    Q_ASSERT(context);
+   Q_ASSERT(context);
 
-    QGLFunctionsPrivateEx *funcs = reinterpret_cast<QGLFunctionsPrivateEx *>
-            (qt_gl_functions_resource()->value(context));
+   QGLFunctionsPrivateEx *funcs = reinterpret_cast<QGLFunctionsPrivateEx *>
+                                  (qt_gl_functions_resource()->value(context));
 
-    return funcs;
+   return funcs;
 }
 
 /*!
@@ -60,7 +60,7 @@ static QGLFunctionsPrivateEx *qt_gl_functions(const QGLContext *context = 0)
     \sa initializeGLFunctions()
 */
 QGLFunctions::QGLFunctions()
-    : d_ptr(0)
+   : d_ptr(0)
 {
 }
 
@@ -75,7 +75,7 @@ QGLFunctions::QGLFunctions()
     \sa initializeGLFunctions()
 */
 QGLFunctions::QGLFunctions(const QGLContext *context)
-    : d_ptr(qt_gl_functions(context))
+   : d_ptr(qt_gl_functions(context))
 {
 }
 
@@ -88,92 +88,112 @@ QGLFunctions::QGLFunctions(const QGLContext *context)
 static int qt_gl_resolve_features()
 {
 #if defined(QT_OPENGL_ES_2)
-    int features = QGLFunctions::Multitexture |
-                   QGLFunctions::Shaders |
-                   QGLFunctions::Buffers |
-                   QGLFunctions::Framebuffers |
-                   QGLFunctions::BlendColor |
-                   QGLFunctions::BlendEquation |
-                   QGLFunctions::BlendEquationSeparate |
-                   QGLFunctions::BlendFuncSeparate |
-                   QGLFunctions::BlendSubtract |
-                   QGLFunctions::CompressedTextures |
-                   QGLFunctions::Multisample |
-                   QGLFunctions::StencilSeparate;
-    QGLExtensionMatcher extensions;
-    if (extensions.match("GL_OES_texture_npot"))
-        features |= QGLFunctions::NPOTTextures;
-    if (extensions.match("GL_IMG_texture_npot"))
-        features |= QGLFunctions::NPOTTextures;
-    return features;
+   int features = QGLFunctions::Multitexture |
+                  QGLFunctions::Shaders |
+                  QGLFunctions::Buffers |
+                  QGLFunctions::Framebuffers |
+                  QGLFunctions::BlendColor |
+                  QGLFunctions::BlendEquation |
+                  QGLFunctions::BlendEquationSeparate |
+                  QGLFunctions::BlendFuncSeparate |
+                  QGLFunctions::BlendSubtract |
+                  QGLFunctions::CompressedTextures |
+                  QGLFunctions::Multisample |
+                  QGLFunctions::StencilSeparate;
+   QGLExtensionMatcher extensions;
+   if (extensions.match("GL_OES_texture_npot")) {
+      features |= QGLFunctions::NPOTTextures;
+   }
+   if (extensions.match("GL_IMG_texture_npot")) {
+      features |= QGLFunctions::NPOTTextures;
+   }
+   return features;
 #elif defined(QT_OPENGL_ES)
-    int features = QGLFunctions::Multitexture |
-                   QGLFunctions::Buffers |
-                   QGLFunctions::CompressedTextures |
-                   QGLFunctions::Multisample;
-    QGLExtensionMatcher extensions;
-    if (extensions.match("GL_OES_framebuffer_object"))
-        features |= QGLFunctions::Framebuffers;
-    if (extensions.match("GL_OES_blend_equation_separate"))
-        features |= QGLFunctions::BlendEquationSeparate;
-    if (extensions.match("GL_OES_blend_func_separate"))
-        features |= QGLFunctions::BlendFuncSeparate;
-    if (extensions.match("GL_OES_blend_subtract"))
-        features |= QGLFunctions::BlendSubtract;
-    if (extensions.match("GL_OES_texture_npot"))
-        features |= QGLFunctions::NPOTTextures;
-    if (extensions.match("GL_IMG_texture_npot"))
-        features |= QGLFunctions::NPOTTextures;
-    return features;
+   int features = QGLFunctions::Multitexture |
+                  QGLFunctions::Buffers |
+                  QGLFunctions::CompressedTextures |
+                  QGLFunctions::Multisample;
+   QGLExtensionMatcher extensions;
+   if (extensions.match("GL_OES_framebuffer_object")) {
+      features |= QGLFunctions::Framebuffers;
+   }
+   if (extensions.match("GL_OES_blend_equation_separate")) {
+      features |= QGLFunctions::BlendEquationSeparate;
+   }
+   if (extensions.match("GL_OES_blend_func_separate")) {
+      features |= QGLFunctions::BlendFuncSeparate;
+   }
+   if (extensions.match("GL_OES_blend_subtract")) {
+      features |= QGLFunctions::BlendSubtract;
+   }
+   if (extensions.match("GL_OES_texture_npot")) {
+      features |= QGLFunctions::NPOTTextures;
+   }
+   if (extensions.match("GL_IMG_texture_npot")) {
+      features |= QGLFunctions::NPOTTextures;
+   }
+   return features;
 #else
-    int features = 0;
-    QGLFormat::OpenGLVersionFlags versions = QGLFormat::openGLVersionFlags();
-    QGLExtensionMatcher extensions;
+   int features = 0;
+   QGLFormat::OpenGLVersionFlags versions = QGLFormat::openGLVersionFlags();
+   QGLExtensionMatcher extensions;
 
-    // Recognize features by extension name.
-    if (extensions.match("GL_ARB_multitexture"))
-        features |= QGLFunctions::Multitexture;
-    if (extensions.match("GL_ARB_shader_objects"))
-        features |= QGLFunctions::Shaders;
-    if (extensions.match("GL_EXT_framebuffer_object") ||
-            extensions.match("GL_ARB_framebuffer_object"))
-        features |= QGLFunctions::Framebuffers;
-    if (extensions.match("GL_EXT_blend_color"))
-        features |= QGLFunctions::BlendColor;
-    if (extensions.match("GL_EXT_blend_equation_separate"))
-        features |= QGLFunctions::BlendEquationSeparate;
-    if (extensions.match("GL_EXT_blend_func_separate"))
-        features |= QGLFunctions::BlendFuncSeparate;
-    if (extensions.match("GL_EXT_blend_subtract"))
-        features |= QGLFunctions::BlendSubtract;
-    if (extensions.match("GL_ARB_texture_compression"))
-        features |= QGLFunctions::CompressedTextures;
-    if (extensions.match("GL_ARB_multisample"))
-        features |= QGLFunctions::Multisample;
-    if (extensions.match("GL_ARB_texture_non_power_of_two"))
-        features |= QGLFunctions::NPOTTextures;
+   // Recognize features by extension name.
+   if (extensions.match("GL_ARB_multitexture")) {
+      features |= QGLFunctions::Multitexture;
+   }
+   if (extensions.match("GL_ARB_shader_objects")) {
+      features |= QGLFunctions::Shaders;
+   }
+   if (extensions.match("GL_EXT_framebuffer_object") ||
+         extensions.match("GL_ARB_framebuffer_object")) {
+      features |= QGLFunctions::Framebuffers;
+   }
+   if (extensions.match("GL_EXT_blend_color")) {
+      features |= QGLFunctions::BlendColor;
+   }
+   if (extensions.match("GL_EXT_blend_equation_separate")) {
+      features |= QGLFunctions::BlendEquationSeparate;
+   }
+   if (extensions.match("GL_EXT_blend_func_separate")) {
+      features |= QGLFunctions::BlendFuncSeparate;
+   }
+   if (extensions.match("GL_EXT_blend_subtract")) {
+      features |= QGLFunctions::BlendSubtract;
+   }
+   if (extensions.match("GL_ARB_texture_compression")) {
+      features |= QGLFunctions::CompressedTextures;
+   }
+   if (extensions.match("GL_ARB_multisample")) {
+      features |= QGLFunctions::Multisample;
+   }
+   if (extensions.match("GL_ARB_texture_non_power_of_two")) {
+      features |= QGLFunctions::NPOTTextures;
+   }
 
-    // Recognize features by minimum OpenGL version.
-    if (versions & QGLFormat::OpenGL_Version_1_2) {
-        features |= QGLFunctions::BlendColor |
-                    QGLFunctions::BlendEquation;
-    }
-    if (versions & QGLFormat::OpenGL_Version_1_3) {
-        features |= QGLFunctions::Multitexture |
-                    QGLFunctions::CompressedTextures |
-                    QGLFunctions::Multisample;
-    }
-    if (versions & QGLFormat::OpenGL_Version_1_4)
-        features |= QGLFunctions::BlendFuncSeparate;
-    if (versions & QGLFormat::OpenGL_Version_1_5)
-        features |= QGLFunctions::Buffers;
-    if (versions & QGLFormat::OpenGL_Version_2_0) {
-        features |= QGLFunctions::Shaders |
-                    QGLFunctions::StencilSeparate |
-                    QGLFunctions::BlendEquationSeparate |
-                    QGLFunctions::NPOTTextures;
-    }
-    return features;
+   // Recognize features by minimum OpenGL version.
+   if (versions & QGLFormat::OpenGL_Version_1_2) {
+      features |= QGLFunctions::BlendColor |
+                  QGLFunctions::BlendEquation;
+   }
+   if (versions & QGLFormat::OpenGL_Version_1_3) {
+      features |= QGLFunctions::Multitexture |
+                  QGLFunctions::CompressedTextures |
+                  QGLFunctions::Multisample;
+   }
+   if (versions & QGLFormat::OpenGL_Version_1_4) {
+      features |= QGLFunctions::BlendFuncSeparate;
+   }
+   if (versions & QGLFormat::OpenGL_Version_1_5) {
+      features |= QGLFunctions::Buffers;
+   }
+   if (versions & QGLFormat::OpenGL_Version_2_0) {
+      features |= QGLFunctions::Shaders |
+                  QGLFunctions::StencilSeparate |
+                  QGLFunctions::BlendEquationSeparate |
+                  QGLFunctions::NPOTTextures;
+   }
+   return features;
 #endif
 }
 
@@ -188,12 +208,14 @@ static int qt_gl_resolve_features()
 */
 QGLFunctions::OpenGLFeatures QGLFunctions::openGLFeatures() const
 {
-    QGLFunctionsPrivateEx *d = static_cast<QGLFunctionsPrivateEx *>(d_ptr);
-    if (!d)
-        return 0;
-    if (d->m_features == -1)
-        d->m_features = qt_gl_resolve_features();
-    return QGLFunctions::OpenGLFeatures(d->m_features);
+   QGLFunctionsPrivateEx *d = static_cast<QGLFunctionsPrivateEx *>(d_ptr);
+   if (!d) {
+      return 0;
+   }
+   if (d->m_features == -1) {
+      d->m_features = qt_gl_resolve_features();
+   }
+   return QGLFunctions::OpenGLFeatures(d->m_features);
 }
 
 /*!
@@ -207,12 +229,14 @@ QGLFunctions::OpenGLFeatures QGLFunctions::openGLFeatures() const
 */
 bool QGLFunctions::hasOpenGLFeature(QGLFunctions::OpenGLFeature feature) const
 {
-    QGLFunctionsPrivateEx *d = static_cast<QGLFunctionsPrivateEx *>(d_ptr);
-    if (!d)
-        return false;
-    if (d->m_features == -1)
-        d->m_features = qt_gl_resolve_features();
-    return (d->m_features & int(feature)) != 0;
+   QGLFunctionsPrivateEx *d = static_cast<QGLFunctionsPrivateEx *>(d_ptr);
+   if (!d) {
+      return false;
+   }
+   if (d->m_features == -1) {
+      d->m_features = qt_gl_resolve_features();
+   }
+   return (d->m_features & int(feature)) != 0;
 }
 
 /*!
@@ -226,7 +250,7 @@ bool QGLFunctions::hasOpenGLFeature(QGLFunctions::OpenGLFeature feature) const
 */
 void QGLFunctions::initializeGLFunctions(const QGLContext *context)
 {
-    d_ptr = qt_gl_functions(context);
+   d_ptr = qt_gl_functions(context);
 }
 
 /*!
@@ -1234,1439 +1258,1514 @@ void QGLFunctions::initializeGLFunctions(const QGLContext *context)
 
 static void qglfResolveActiveTexture(GLenum texture)
 {
-    typedef void (QGLF_APIENTRYP type_glActiveTexture)(GLenum texture);
+   typedef void (QGLF_APIENTRYP type_glActiveTexture)(GLenum texture);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->activeTexture = (type_glActiveTexture)
-        context->getProcAddress(QLatin1String("glActiveTexture"));
-    if (!funcs->activeTexture) {
-        funcs->activeTexture = (type_glActiveTexture)
-            context->getProcAddress(QLatin1String("glActiveTextureARB"));
-    }
+   funcs->activeTexture = (type_glActiveTexture)
+                          context->getProcAddress(QLatin1String("glActiveTexture"));
+   if (!funcs->activeTexture) {
+      funcs->activeTexture = (type_glActiveTexture)
+                             context->getProcAddress(QLatin1String("glActiveTextureARB"));
+   }
 
-    if (funcs->activeTexture)
-        funcs->activeTexture(texture);
-    else
-        funcs->activeTexture = qglfResolveActiveTexture;
+   if (funcs->activeTexture) {
+      funcs->activeTexture(texture);
+   } else {
+      funcs->activeTexture = qglfResolveActiveTexture;
+   }
 }
 
 static void qglfResolveAttachShader(GLuint program, GLuint shader)
 {
-    typedef void (QGLF_APIENTRYP type_glAttachShader)(GLuint program, GLuint shader);
+   typedef void (QGLF_APIENTRYP type_glAttachShader)(GLuint program, GLuint shader);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->attachShader = (type_glAttachShader)
-        context->getProcAddress(QLatin1String("glAttachShader"));
-    if (!funcs->attachShader) {
-        funcs->attachShader = (type_glAttachShader)
-            context->getProcAddress(QLatin1String("glAttachObjectARB"));
-    }
+   funcs->attachShader = (type_glAttachShader)
+                         context->getProcAddress(QLatin1String("glAttachShader"));
+   if (!funcs->attachShader) {
+      funcs->attachShader = (type_glAttachShader)
+                            context->getProcAddress(QLatin1String("glAttachObjectARB"));
+   }
 
-    if (funcs->attachShader)
-        funcs->attachShader(program, shader);
-    else
-        funcs->attachShader = qglfResolveAttachShader;
+   if (funcs->attachShader) {
+      funcs->attachShader(program, shader);
+   } else {
+      funcs->attachShader = qglfResolveAttachShader;
+   }
 }
 
-static void qglfResolveBindAttribLocation(GLuint program, GLuint index, const char* name)
+static void qglfResolveBindAttribLocation(GLuint program, GLuint index, const char *name)
 {
-    typedef void (QGLF_APIENTRYP type_glBindAttribLocation)(GLuint program, GLuint index, const char* name);
+   typedef void (QGLF_APIENTRYP type_glBindAttribLocation)(GLuint program, GLuint index, const char *name);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->bindAttribLocation = (type_glBindAttribLocation)
-        context->getProcAddress(QLatin1String("glBindAttribLocation"));
-    if (!funcs->bindAttribLocation) {
-        funcs->bindAttribLocation = (type_glBindAttribLocation)
-            context->getProcAddress(QLatin1String("glBindAttribLocationARB"));
-    }
+   funcs->bindAttribLocation = (type_glBindAttribLocation)
+                               context->getProcAddress(QLatin1String("glBindAttribLocation"));
+   if (!funcs->bindAttribLocation) {
+      funcs->bindAttribLocation = (type_glBindAttribLocation)
+                                  context->getProcAddress(QLatin1String("glBindAttribLocationARB"));
+   }
 
-    if (funcs->bindAttribLocation)
-        funcs->bindAttribLocation(program, index, name);
-    else
-        funcs->bindAttribLocation = qglfResolveBindAttribLocation;
+   if (funcs->bindAttribLocation) {
+      funcs->bindAttribLocation(program, index, name);
+   } else {
+      funcs->bindAttribLocation = qglfResolveBindAttribLocation;
+   }
 }
 
 static void qglfResolveBindBuffer(GLenum target, GLuint buffer)
 {
-    typedef void (QGLF_APIENTRYP type_glBindBuffer)(GLenum target, GLuint buffer);
+   typedef void (QGLF_APIENTRYP type_glBindBuffer)(GLenum target, GLuint buffer);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->bindBuffer = (type_glBindBuffer)
-        context->getProcAddress(QLatin1String("glBindBuffer"));
+   funcs->bindBuffer = (type_glBindBuffer)
+                       context->getProcAddress(QLatin1String("glBindBuffer"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->bindBuffer) {
-        funcs->bindBuffer = (type_glBindBuffer)
-            context->getProcAddress(QLatin1String("glBindBufferOES"));
-    }
+   if (!funcs->bindBuffer) {
+      funcs->bindBuffer = (type_glBindBuffer)
+                          context->getProcAddress(QLatin1String("glBindBufferOES"));
+   }
 #endif
-    if (!funcs->bindBuffer) {
-        funcs->bindBuffer = (type_glBindBuffer)
-            context->getProcAddress(QLatin1String("glBindBufferEXT"));
-    }
-    if (!funcs->bindBuffer) {
-        funcs->bindBuffer = (type_glBindBuffer)
-            context->getProcAddress(QLatin1String("glBindBufferARB"));
-    }
+   if (!funcs->bindBuffer) {
+      funcs->bindBuffer = (type_glBindBuffer)
+                          context->getProcAddress(QLatin1String("glBindBufferEXT"));
+   }
+   if (!funcs->bindBuffer) {
+      funcs->bindBuffer = (type_glBindBuffer)
+                          context->getProcAddress(QLatin1String("glBindBufferARB"));
+   }
 
-    if (funcs->bindBuffer)
-        funcs->bindBuffer(target, buffer);
-    else
-        funcs->bindBuffer = qglfResolveBindBuffer;
+   if (funcs->bindBuffer) {
+      funcs->bindBuffer(target, buffer);
+   } else {
+      funcs->bindBuffer = qglfResolveBindBuffer;
+   }
 }
 
 static void qglfResolveBindFramebuffer(GLenum target, GLuint framebuffer)
 {
-    typedef void (QGLF_APIENTRYP type_glBindFramebuffer)(GLenum target, GLuint framebuffer);
+   typedef void (QGLF_APIENTRYP type_glBindFramebuffer)(GLenum target, GLuint framebuffer);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->bindFramebuffer = (type_glBindFramebuffer)
-        context->getProcAddress(QLatin1String("glBindFramebuffer"));
+   funcs->bindFramebuffer = (type_glBindFramebuffer)
+                            context->getProcAddress(QLatin1String("glBindFramebuffer"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->bindFramebuffer) {
-        funcs->bindFramebuffer = (type_glBindFramebuffer)
-            context->getProcAddress(QLatin1String("glBindFramebufferOES"));
-    }
+   if (!funcs->bindFramebuffer) {
+      funcs->bindFramebuffer = (type_glBindFramebuffer)
+                               context->getProcAddress(QLatin1String("glBindFramebufferOES"));
+   }
 #endif
-    if (!funcs->bindFramebuffer) {
-        funcs->bindFramebuffer = (type_glBindFramebuffer)
-            context->getProcAddress(QLatin1String("glBindFramebufferEXT"));
-    }
-    if (!funcs->bindFramebuffer) {
-        funcs->bindFramebuffer = (type_glBindFramebuffer)
-            context->getProcAddress(QLatin1String("glBindFramebufferARB"));
-    }
+   if (!funcs->bindFramebuffer) {
+      funcs->bindFramebuffer = (type_glBindFramebuffer)
+                               context->getProcAddress(QLatin1String("glBindFramebufferEXT"));
+   }
+   if (!funcs->bindFramebuffer) {
+      funcs->bindFramebuffer = (type_glBindFramebuffer)
+                               context->getProcAddress(QLatin1String("glBindFramebufferARB"));
+   }
 
-    if (funcs->bindFramebuffer)
-        funcs->bindFramebuffer(target, framebuffer);
-    else
-        funcs->bindFramebuffer = qglfResolveBindFramebuffer;
+   if (funcs->bindFramebuffer) {
+      funcs->bindFramebuffer(target, framebuffer);
+   } else {
+      funcs->bindFramebuffer = qglfResolveBindFramebuffer;
+   }
 }
 
 static void qglfResolveBindRenderbuffer(GLenum target, GLuint renderbuffer)
 {
-    typedef void (QGLF_APIENTRYP type_glBindRenderbuffer)(GLenum target, GLuint renderbuffer);
+   typedef void (QGLF_APIENTRYP type_glBindRenderbuffer)(GLenum target, GLuint renderbuffer);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->bindRenderbuffer = (type_glBindRenderbuffer)
-        context->getProcAddress(QLatin1String("glBindRenderbuffer"));
+   funcs->bindRenderbuffer = (type_glBindRenderbuffer)
+                             context->getProcAddress(QLatin1String("glBindRenderbuffer"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->bindRenderbuffer) {
-        funcs->bindRenderbuffer = (type_glBindRenderbuffer)
-            context->getProcAddress(QLatin1String("glBindRenderbufferOES"));
-    }
+   if (!funcs->bindRenderbuffer) {
+      funcs->bindRenderbuffer = (type_glBindRenderbuffer)
+                                context->getProcAddress(QLatin1String("glBindRenderbufferOES"));
+   }
 #endif
-    if (!funcs->bindRenderbuffer) {
-        funcs->bindRenderbuffer = (type_glBindRenderbuffer)
-            context->getProcAddress(QLatin1String("glBindRenderbufferEXT"));
-    }
-    if (!funcs->bindRenderbuffer) {
-        funcs->bindRenderbuffer = (type_glBindRenderbuffer)
-            context->getProcAddress(QLatin1String("glBindRenderbufferARB"));
-    }
+   if (!funcs->bindRenderbuffer) {
+      funcs->bindRenderbuffer = (type_glBindRenderbuffer)
+                                context->getProcAddress(QLatin1String("glBindRenderbufferEXT"));
+   }
+   if (!funcs->bindRenderbuffer) {
+      funcs->bindRenderbuffer = (type_glBindRenderbuffer)
+                                context->getProcAddress(QLatin1String("glBindRenderbufferARB"));
+   }
 
-    if (funcs->bindRenderbuffer)
-        funcs->bindRenderbuffer(target, renderbuffer);
-    else
-        funcs->bindRenderbuffer = qglfResolveBindRenderbuffer;
+   if (funcs->bindRenderbuffer) {
+      funcs->bindRenderbuffer(target, renderbuffer);
+   } else {
+      funcs->bindRenderbuffer = qglfResolveBindRenderbuffer;
+   }
 }
 
 static void qglfResolveBlendColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)
 {
-    typedef void (QGLF_APIENTRYP type_glBlendColor)(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
+   typedef void (QGLF_APIENTRYP type_glBlendColor)(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->blendColor = (type_glBlendColor)
-        context->getProcAddress(QLatin1String("glBlendColor"));
+   funcs->blendColor = (type_glBlendColor)
+                       context->getProcAddress(QLatin1String("glBlendColor"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->blendColor) {
-        funcs->blendColor = (type_glBlendColor)
-            context->getProcAddress(QLatin1String("glBlendColorOES"));
-    }
+   if (!funcs->blendColor) {
+      funcs->blendColor = (type_glBlendColor)
+                          context->getProcAddress(QLatin1String("glBlendColorOES"));
+   }
 #endif
-    if (!funcs->blendColor) {
-        funcs->blendColor = (type_glBlendColor)
-            context->getProcAddress(QLatin1String("glBlendColorEXT"));
-    }
-    if (!funcs->blendColor) {
-        funcs->blendColor = (type_glBlendColor)
-            context->getProcAddress(QLatin1String("glBlendColorARB"));
-    }
+   if (!funcs->blendColor) {
+      funcs->blendColor = (type_glBlendColor)
+                          context->getProcAddress(QLatin1String("glBlendColorEXT"));
+   }
+   if (!funcs->blendColor) {
+      funcs->blendColor = (type_glBlendColor)
+                          context->getProcAddress(QLatin1String("glBlendColorARB"));
+   }
 
-    if (funcs->blendColor)
-        funcs->blendColor(red, green, blue, alpha);
-    else
-        funcs->blendColor = qglfResolveBlendColor;
+   if (funcs->blendColor) {
+      funcs->blendColor(red, green, blue, alpha);
+   } else {
+      funcs->blendColor = qglfResolveBlendColor;
+   }
 }
 
 static void qglfResolveBlendEquation(GLenum mode)
 {
-    typedef void (QGLF_APIENTRYP type_glBlendEquation)(GLenum mode);
+   typedef void (QGLF_APIENTRYP type_glBlendEquation)(GLenum mode);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->blendEquation = (type_glBlendEquation)
-        context->getProcAddress(QLatin1String("glBlendEquation"));
+   funcs->blendEquation = (type_glBlendEquation)
+                          context->getProcAddress(QLatin1String("glBlendEquation"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->blendEquation) {
-        funcs->blendEquation = (type_glBlendEquation)
-            context->getProcAddress(QLatin1String("glBlendEquationOES"));
-    }
+   if (!funcs->blendEquation) {
+      funcs->blendEquation = (type_glBlendEquation)
+                             context->getProcAddress(QLatin1String("glBlendEquationOES"));
+   }
 #endif
-    if (!funcs->blendEquation) {
-        funcs->blendEquation = (type_glBlendEquation)
-            context->getProcAddress(QLatin1String("glBlendEquationEXT"));
-    }
-    if (!funcs->blendEquation) {
-        funcs->blendEquation = (type_glBlendEquation)
-            context->getProcAddress(QLatin1String("glBlendEquationARB"));
-    }
+   if (!funcs->blendEquation) {
+      funcs->blendEquation = (type_glBlendEquation)
+                             context->getProcAddress(QLatin1String("glBlendEquationEXT"));
+   }
+   if (!funcs->blendEquation) {
+      funcs->blendEquation = (type_glBlendEquation)
+                             context->getProcAddress(QLatin1String("glBlendEquationARB"));
+   }
 
-    if (funcs->blendEquation)
-        funcs->blendEquation(mode);
-    else
-        funcs->blendEquation = qglfResolveBlendEquation;
+   if (funcs->blendEquation) {
+      funcs->blendEquation(mode);
+   } else {
+      funcs->blendEquation = qglfResolveBlendEquation;
+   }
 }
 
 static void qglfResolveBlendEquationSeparate(GLenum modeRGB, GLenum modeAlpha)
 {
-    typedef void (QGLF_APIENTRYP type_glBlendEquationSeparate)(GLenum modeRGB, GLenum modeAlpha);
+   typedef void (QGLF_APIENTRYP type_glBlendEquationSeparate)(GLenum modeRGB, GLenum modeAlpha);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->blendEquationSeparate = (type_glBlendEquationSeparate)
-        context->getProcAddress(QLatin1String("glBlendEquationSeparate"));
+   funcs->blendEquationSeparate = (type_glBlendEquationSeparate)
+                                  context->getProcAddress(QLatin1String("glBlendEquationSeparate"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->blendEquationSeparate) {
-        funcs->blendEquationSeparate = (type_glBlendEquationSeparate)
-            context->getProcAddress(QLatin1String("glBlendEquationSeparateOES"));
-    }
+   if (!funcs->blendEquationSeparate) {
+      funcs->blendEquationSeparate = (type_glBlendEquationSeparate)
+                                     context->getProcAddress(QLatin1String("glBlendEquationSeparateOES"));
+   }
 #endif
-    if (!funcs->blendEquationSeparate) {
-        funcs->blendEquationSeparate = (type_glBlendEquationSeparate)
-            context->getProcAddress(QLatin1String("glBlendEquationSeparateEXT"));
-    }
-    if (!funcs->blendEquationSeparate) {
-        funcs->blendEquationSeparate = (type_glBlendEquationSeparate)
-            context->getProcAddress(QLatin1String("glBlendEquationSeparateARB"));
-    }
+   if (!funcs->blendEquationSeparate) {
+      funcs->blendEquationSeparate = (type_glBlendEquationSeparate)
+                                     context->getProcAddress(QLatin1String("glBlendEquationSeparateEXT"));
+   }
+   if (!funcs->blendEquationSeparate) {
+      funcs->blendEquationSeparate = (type_glBlendEquationSeparate)
+                                     context->getProcAddress(QLatin1String("glBlendEquationSeparateARB"));
+   }
 
-    if (funcs->blendEquationSeparate)
-        funcs->blendEquationSeparate(modeRGB, modeAlpha);
-    else
-        funcs->blendEquationSeparate = qglfResolveBlendEquationSeparate;
+   if (funcs->blendEquationSeparate) {
+      funcs->blendEquationSeparate(modeRGB, modeAlpha);
+   } else {
+      funcs->blendEquationSeparate = qglfResolveBlendEquationSeparate;
+   }
 }
 
 static void qglfResolveBlendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha)
 {
-    typedef void (QGLF_APIENTRYP type_glBlendFuncSeparate)(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha);
+   typedef void (QGLF_APIENTRYP type_glBlendFuncSeparate)(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->blendFuncSeparate = (type_glBlendFuncSeparate)
-        context->getProcAddress(QLatin1String("glBlendFuncSeparate"));
+   funcs->blendFuncSeparate = (type_glBlendFuncSeparate)
+                              context->getProcAddress(QLatin1String("glBlendFuncSeparate"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->blendFuncSeparate) {
-        funcs->blendFuncSeparate = (type_glBlendFuncSeparate)
-            context->getProcAddress(QLatin1String("glBlendFuncSeparateOES"));
-    }
+   if (!funcs->blendFuncSeparate) {
+      funcs->blendFuncSeparate = (type_glBlendFuncSeparate)
+                                 context->getProcAddress(QLatin1String("glBlendFuncSeparateOES"));
+   }
 #endif
-    if (!funcs->blendFuncSeparate) {
-        funcs->blendFuncSeparate = (type_glBlendFuncSeparate)
-            context->getProcAddress(QLatin1String("glBlendFuncSeparateEXT"));
-    }
-    if (!funcs->blendFuncSeparate) {
-        funcs->blendFuncSeparate = (type_glBlendFuncSeparate)
-            context->getProcAddress(QLatin1String("glBlendFuncSeparateARB"));
-    }
+   if (!funcs->blendFuncSeparate) {
+      funcs->blendFuncSeparate = (type_glBlendFuncSeparate)
+                                 context->getProcAddress(QLatin1String("glBlendFuncSeparateEXT"));
+   }
+   if (!funcs->blendFuncSeparate) {
+      funcs->blendFuncSeparate = (type_glBlendFuncSeparate)
+                                 context->getProcAddress(QLatin1String("glBlendFuncSeparateARB"));
+   }
 
-    if (funcs->blendFuncSeparate)
-        funcs->blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
-    else
-        funcs->blendFuncSeparate = qglfResolveBlendFuncSeparate;
+   if (funcs->blendFuncSeparate) {
+      funcs->blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
+   } else {
+      funcs->blendFuncSeparate = qglfResolveBlendFuncSeparate;
+   }
 }
 
-static void qglfResolveBufferData(GLenum target, qgl_GLsizeiptr size, const void* data, GLenum usage)
+static void qglfResolveBufferData(GLenum target, qgl_GLsizeiptr size, const void *data, GLenum usage)
 {
-    typedef void (QGLF_APIENTRYP type_glBufferData)(GLenum target, qgl_GLsizeiptr size, const void* data, GLenum usage);
+   typedef void (QGLF_APIENTRYP type_glBufferData)(GLenum target, qgl_GLsizeiptr size, const void *data, GLenum usage);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->bufferData = (type_glBufferData)
-        context->getProcAddress(QLatin1String("glBufferData"));
+   funcs->bufferData = (type_glBufferData)
+                       context->getProcAddress(QLatin1String("glBufferData"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->bufferData) {
-        funcs->bufferData = (type_glBufferData)
-            context->getProcAddress(QLatin1String("glBufferDataOES"));
-    }
+   if (!funcs->bufferData) {
+      funcs->bufferData = (type_glBufferData)
+                          context->getProcAddress(QLatin1String("glBufferDataOES"));
+   }
 #endif
-    if (!funcs->bufferData) {
-        funcs->bufferData = (type_glBufferData)
-            context->getProcAddress(QLatin1String("glBufferDataEXT"));
-    }
-    if (!funcs->bufferData) {
-        funcs->bufferData = (type_glBufferData)
-            context->getProcAddress(QLatin1String("glBufferDataARB"));
-    }
+   if (!funcs->bufferData) {
+      funcs->bufferData = (type_glBufferData)
+                          context->getProcAddress(QLatin1String("glBufferDataEXT"));
+   }
+   if (!funcs->bufferData) {
+      funcs->bufferData = (type_glBufferData)
+                          context->getProcAddress(QLatin1String("glBufferDataARB"));
+   }
 
-    if (funcs->bufferData)
-        funcs->bufferData(target, size, data, usage);
-    else
-        funcs->bufferData = qglfResolveBufferData;
+   if (funcs->bufferData) {
+      funcs->bufferData(target, size, data, usage);
+   } else {
+      funcs->bufferData = qglfResolveBufferData;
+   }
 }
 
-static void qglfResolveBufferSubData(GLenum target, qgl_GLintptr offset, qgl_GLsizeiptr size, const void* data)
+static void qglfResolveBufferSubData(GLenum target, qgl_GLintptr offset, qgl_GLsizeiptr size, const void *data)
 {
-    typedef void (QGLF_APIENTRYP type_glBufferSubData)(GLenum target, qgl_GLintptr offset, qgl_GLsizeiptr size, const void* data);
+   typedef void (QGLF_APIENTRYP type_glBufferSubData)(GLenum target, qgl_GLintptr offset, qgl_GLsizeiptr size,
+         const void *data);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->bufferSubData = (type_glBufferSubData)
-        context->getProcAddress(QLatin1String("glBufferSubData"));
+   funcs->bufferSubData = (type_glBufferSubData)
+                          context->getProcAddress(QLatin1String("glBufferSubData"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->bufferSubData) {
-        funcs->bufferSubData = (type_glBufferSubData)
-            context->getProcAddress(QLatin1String("glBufferSubDataOES"));
-    }
+   if (!funcs->bufferSubData) {
+      funcs->bufferSubData = (type_glBufferSubData)
+                             context->getProcAddress(QLatin1String("glBufferSubDataOES"));
+   }
 #endif
-    if (!funcs->bufferSubData) {
-        funcs->bufferSubData = (type_glBufferSubData)
-            context->getProcAddress(QLatin1String("glBufferSubDataEXT"));
-    }
-    if (!funcs->bufferSubData) {
-        funcs->bufferSubData = (type_glBufferSubData)
-            context->getProcAddress(QLatin1String("glBufferSubDataARB"));
-    }
+   if (!funcs->bufferSubData) {
+      funcs->bufferSubData = (type_glBufferSubData)
+                             context->getProcAddress(QLatin1String("glBufferSubDataEXT"));
+   }
+   if (!funcs->bufferSubData) {
+      funcs->bufferSubData = (type_glBufferSubData)
+                             context->getProcAddress(QLatin1String("glBufferSubDataARB"));
+   }
 
-    if (funcs->bufferSubData)
-        funcs->bufferSubData(target, offset, size, data);
-    else
-        funcs->bufferSubData = qglfResolveBufferSubData;
+   if (funcs->bufferSubData) {
+      funcs->bufferSubData(target, offset, size, data);
+   } else {
+      funcs->bufferSubData = qglfResolveBufferSubData;
+   }
 }
 
 static GLenum qglfResolveCheckFramebufferStatus(GLenum target)
 {
-    typedef GLenum (QGLF_APIENTRYP type_glCheckFramebufferStatus)(GLenum target);
+   typedef GLenum (QGLF_APIENTRYP type_glCheckFramebufferStatus)(GLenum target);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->checkFramebufferStatus = (type_glCheckFramebufferStatus)
-        context->getProcAddress(QLatin1String("glCheckFramebufferStatus"));
+   funcs->checkFramebufferStatus = (type_glCheckFramebufferStatus)
+                                   context->getProcAddress(QLatin1String("glCheckFramebufferStatus"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->checkFramebufferStatus) {
-        funcs->checkFramebufferStatus = (type_glCheckFramebufferStatus)
-            context->getProcAddress(QLatin1String("glCheckFramebufferStatusOES"));
-    }
+   if (!funcs->checkFramebufferStatus) {
+      funcs->checkFramebufferStatus = (type_glCheckFramebufferStatus)
+                                      context->getProcAddress(QLatin1String("glCheckFramebufferStatusOES"));
+   }
 #endif
-    if (!funcs->checkFramebufferStatus) {
-        funcs->checkFramebufferStatus = (type_glCheckFramebufferStatus)
-            context->getProcAddress(QLatin1String("glCheckFramebufferStatusEXT"));
-    }
-    if (!funcs->checkFramebufferStatus) {
-        funcs->checkFramebufferStatus = (type_glCheckFramebufferStatus)
-            context->getProcAddress(QLatin1String("glCheckFramebufferStatusARB"));
-    }
+   if (!funcs->checkFramebufferStatus) {
+      funcs->checkFramebufferStatus = (type_glCheckFramebufferStatus)
+                                      context->getProcAddress(QLatin1String("glCheckFramebufferStatusEXT"));
+   }
+   if (!funcs->checkFramebufferStatus) {
+      funcs->checkFramebufferStatus = (type_glCheckFramebufferStatus)
+                                      context->getProcAddress(QLatin1String("glCheckFramebufferStatusARB"));
+   }
 
-    if (funcs->checkFramebufferStatus)
-        return funcs->checkFramebufferStatus(target);
-    funcs->checkFramebufferStatus = qglfResolveCheckFramebufferStatus;
-    return GLenum(0);
+   if (funcs->checkFramebufferStatus) {
+      return funcs->checkFramebufferStatus(target);
+   }
+   funcs->checkFramebufferStatus = qglfResolveCheckFramebufferStatus;
+   return GLenum(0);
 }
 
 static void qglfResolveCompileShader(GLuint shader)
 {
-    typedef void (QGLF_APIENTRYP type_glCompileShader)(GLuint shader);
+   typedef void (QGLF_APIENTRYP type_glCompileShader)(GLuint shader);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->compileShader = (type_glCompileShader)
-        context->getProcAddress(QLatin1String("glCompileShader"));
-    if (!funcs->compileShader) {
-        funcs->compileShader = (type_glCompileShader)
-            context->getProcAddress(QLatin1String("glCompileShader"));
-    }
+   funcs->compileShader = (type_glCompileShader)
+                          context->getProcAddress(QLatin1String("glCompileShader"));
+   if (!funcs->compileShader) {
+      funcs->compileShader = (type_glCompileShader)
+                             context->getProcAddress(QLatin1String("glCompileShader"));
+   }
 
-    if (funcs->compileShader)
-        funcs->compileShader(shader);
-    else
-        funcs->compileShader = qglfResolveCompileShader;
+   if (funcs->compileShader) {
+      funcs->compileShader(shader);
+   } else {
+      funcs->compileShader = qglfResolveCompileShader;
+   }
 }
 
-static void qglfResolveCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void* data)
+static void qglfResolveCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width,
+      GLsizei height, GLint border, GLsizei imageSize, const void *data)
 {
-    typedef void (QGLF_APIENTRYP type_glCompressedTexImage2D)(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void* data);
+   typedef void (QGLF_APIENTRYP type_glCompressedTexImage2D)(GLenum target, GLint level, GLenum internalformat,
+         GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void *data);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->compressedTexImage2D = (type_glCompressedTexImage2D)
-        context->getProcAddress(QLatin1String("glCompressedTexImage2D"));
+   funcs->compressedTexImage2D = (type_glCompressedTexImage2D)
+                                 context->getProcAddress(QLatin1String("glCompressedTexImage2D"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->compressedTexImage2D) {
-        funcs->compressedTexImage2D = (type_glCompressedTexImage2D)
-            context->getProcAddress(QLatin1String("glCompressedTexImage2DOES"));
-    }
+   if (!funcs->compressedTexImage2D) {
+      funcs->compressedTexImage2D = (type_glCompressedTexImage2D)
+                                    context->getProcAddress(QLatin1String("glCompressedTexImage2DOES"));
+   }
 #endif
-    if (!funcs->compressedTexImage2D) {
-        funcs->compressedTexImage2D = (type_glCompressedTexImage2D)
-            context->getProcAddress(QLatin1String("glCompressedTexImage2DEXT"));
-    }
-    if (!funcs->compressedTexImage2D) {
-        funcs->compressedTexImage2D = (type_glCompressedTexImage2D)
-            context->getProcAddress(QLatin1String("glCompressedTexImage2DARB"));
-    }
+   if (!funcs->compressedTexImage2D) {
+      funcs->compressedTexImage2D = (type_glCompressedTexImage2D)
+                                    context->getProcAddress(QLatin1String("glCompressedTexImage2DEXT"));
+   }
+   if (!funcs->compressedTexImage2D) {
+      funcs->compressedTexImage2D = (type_glCompressedTexImage2D)
+                                    context->getProcAddress(QLatin1String("glCompressedTexImage2DARB"));
+   }
 
-    if (funcs->compressedTexImage2D)
-        funcs->compressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
-    else
-        funcs->compressedTexImage2D = qglfResolveCompressedTexImage2D;
+   if (funcs->compressedTexImage2D) {
+      funcs->compressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
+   } else {
+      funcs->compressedTexImage2D = qglfResolveCompressedTexImage2D;
+   }
 }
 
-static void qglfResolveCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void* data)
+static void qglfResolveCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width,
+      GLsizei height, GLenum format, GLsizei imageSize, const void *data)
 {
-    typedef void (QGLF_APIENTRYP type_glCompressedTexSubImage2D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void* data);
+   typedef void (QGLF_APIENTRYP type_glCompressedTexSubImage2D)(GLenum target, GLint level, GLint xoffset, GLint yoffset,
+         GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void *data);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->compressedTexSubImage2D = (type_glCompressedTexSubImage2D)
-        context->getProcAddress(QLatin1String("glCompressedTexSubImage2D"));
+   funcs->compressedTexSubImage2D = (type_glCompressedTexSubImage2D)
+                                    context->getProcAddress(QLatin1String("glCompressedTexSubImage2D"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->compressedTexSubImage2D) {
-        funcs->compressedTexSubImage2D = (type_glCompressedTexSubImage2D)
-            context->getProcAddress(QLatin1String("glCompressedTexSubImage2DOES"));
-    }
+   if (!funcs->compressedTexSubImage2D) {
+      funcs->compressedTexSubImage2D = (type_glCompressedTexSubImage2D)
+                                       context->getProcAddress(QLatin1String("glCompressedTexSubImage2DOES"));
+   }
 #endif
-    if (!funcs->compressedTexSubImage2D) {
-        funcs->compressedTexSubImage2D = (type_glCompressedTexSubImage2D)
-            context->getProcAddress(QLatin1String("glCompressedTexSubImage2DEXT"));
-    }
-    if (!funcs->compressedTexSubImage2D) {
-        funcs->compressedTexSubImage2D = (type_glCompressedTexSubImage2D)
-            context->getProcAddress(QLatin1String("glCompressedTexSubImage2DARB"));
-    }
+   if (!funcs->compressedTexSubImage2D) {
+      funcs->compressedTexSubImage2D = (type_glCompressedTexSubImage2D)
+                                       context->getProcAddress(QLatin1String("glCompressedTexSubImage2DEXT"));
+   }
+   if (!funcs->compressedTexSubImage2D) {
+      funcs->compressedTexSubImage2D = (type_glCompressedTexSubImage2D)
+                                       context->getProcAddress(QLatin1String("glCompressedTexSubImage2DARB"));
+   }
 
-    if (funcs->compressedTexSubImage2D)
-        funcs->compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data);
-    else
-        funcs->compressedTexSubImage2D = qglfResolveCompressedTexSubImage2D;
+   if (funcs->compressedTexSubImage2D) {
+      funcs->compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data);
+   } else {
+      funcs->compressedTexSubImage2D = qglfResolveCompressedTexSubImage2D;
+   }
 }
 
 static GLuint qglfResolveCreateProgram()
 {
-    typedef GLuint (QGLF_APIENTRYP type_glCreateProgram)();
+   typedef GLuint (QGLF_APIENTRYP type_glCreateProgram)();
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->createProgram = (type_glCreateProgram)
-        context->getProcAddress(QLatin1String("glCreateProgram"));
-    if (!funcs->createProgram) {
-        funcs->createProgram = (type_glCreateProgram)
-            context->getProcAddress(QLatin1String("glCreateProgramObjectARB"));
-    }
+   funcs->createProgram = (type_glCreateProgram)
+                          context->getProcAddress(QLatin1String("glCreateProgram"));
+   if (!funcs->createProgram) {
+      funcs->createProgram = (type_glCreateProgram)
+                             context->getProcAddress(QLatin1String("glCreateProgramObjectARB"));
+   }
 
-    if (funcs->createProgram)
-        return funcs->createProgram();
-    funcs->createProgram = qglfResolveCreateProgram;
-    return GLuint(0);
+   if (funcs->createProgram) {
+      return funcs->createProgram();
+   }
+   funcs->createProgram = qglfResolveCreateProgram;
+   return GLuint(0);
 }
 
 static GLuint qglfResolveCreateShader(GLenum type)
 {
-    typedef GLuint (QGLF_APIENTRYP type_glCreateShader)(GLenum type);
+   typedef GLuint (QGLF_APIENTRYP type_glCreateShader)(GLenum type);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->createShader = (type_glCreateShader)
-        context->getProcAddress(QLatin1String("glCreateShader"));
-    if (!funcs->createShader) {
-        funcs->createShader = (type_glCreateShader)
-            context->getProcAddress(QLatin1String("glCreateShaderObjectARB"));
-    }
+   funcs->createShader = (type_glCreateShader)
+                         context->getProcAddress(QLatin1String("glCreateShader"));
+   if (!funcs->createShader) {
+      funcs->createShader = (type_glCreateShader)
+                            context->getProcAddress(QLatin1String("glCreateShaderObjectARB"));
+   }
 
-    if (funcs->createShader)
-        return funcs->createShader(type);
-    funcs->createShader = qglfResolveCreateShader;
-    return GLuint(0);
+   if (funcs->createShader) {
+      return funcs->createShader(type);
+   }
+   funcs->createShader = qglfResolveCreateShader;
+   return GLuint(0);
 }
 
-static void qglfResolveDeleteBuffers(GLsizei n, const GLuint* buffers)
+static void qglfResolveDeleteBuffers(GLsizei n, const GLuint *buffers)
 {
-    typedef void (QGLF_APIENTRYP type_glDeleteBuffers)(GLsizei n, const GLuint* buffers);
+   typedef void (QGLF_APIENTRYP type_glDeleteBuffers)(GLsizei n, const GLuint * buffers);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->deleteBuffers = (type_glDeleteBuffers)
-        context->getProcAddress(QLatin1String("glDeleteBuffers"));
+   funcs->deleteBuffers = (type_glDeleteBuffers)
+                          context->getProcAddress(QLatin1String("glDeleteBuffers"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->deleteBuffers) {
-        funcs->deleteBuffers = (type_glDeleteBuffers)
-            context->getProcAddress(QLatin1String("glDeleteBuffersOES"));
-    }
+   if (!funcs->deleteBuffers) {
+      funcs->deleteBuffers = (type_glDeleteBuffers)
+                             context->getProcAddress(QLatin1String("glDeleteBuffersOES"));
+   }
 #endif
-    if (!funcs->deleteBuffers) {
-        funcs->deleteBuffers = (type_glDeleteBuffers)
-            context->getProcAddress(QLatin1String("glDeleteBuffersEXT"));
-    }
-    if (!funcs->deleteBuffers) {
-        funcs->deleteBuffers = (type_glDeleteBuffers)
-            context->getProcAddress(QLatin1String("glDeleteBuffersARB"));
-    }
+   if (!funcs->deleteBuffers) {
+      funcs->deleteBuffers = (type_glDeleteBuffers)
+                             context->getProcAddress(QLatin1String("glDeleteBuffersEXT"));
+   }
+   if (!funcs->deleteBuffers) {
+      funcs->deleteBuffers = (type_glDeleteBuffers)
+                             context->getProcAddress(QLatin1String("glDeleteBuffersARB"));
+   }
 
-    if (funcs->deleteBuffers)
-        funcs->deleteBuffers(n, buffers);
-    else
-        funcs->deleteBuffers = qglfResolveDeleteBuffers;
+   if (funcs->deleteBuffers) {
+      funcs->deleteBuffers(n, buffers);
+   } else {
+      funcs->deleteBuffers = qglfResolveDeleteBuffers;
+   }
 }
 
-static void qglfResolveDeleteFramebuffers(GLsizei n, const GLuint* framebuffers)
+static void qglfResolveDeleteFramebuffers(GLsizei n, const GLuint *framebuffers)
 {
-    typedef void (QGLF_APIENTRYP type_glDeleteFramebuffers)(GLsizei n, const GLuint* framebuffers);
+   typedef void (QGLF_APIENTRYP type_glDeleteFramebuffers)(GLsizei n, const GLuint * framebuffers);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->deleteFramebuffers = (type_glDeleteFramebuffers)
-        context->getProcAddress(QLatin1String("glDeleteFramebuffers"));
+   funcs->deleteFramebuffers = (type_glDeleteFramebuffers)
+                               context->getProcAddress(QLatin1String("glDeleteFramebuffers"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->deleteFramebuffers) {
-        funcs->deleteFramebuffers = (type_glDeleteFramebuffers)
-            context->getProcAddress(QLatin1String("glDeleteFramebuffersOES"));
-    }
+   if (!funcs->deleteFramebuffers) {
+      funcs->deleteFramebuffers = (type_glDeleteFramebuffers)
+                                  context->getProcAddress(QLatin1String("glDeleteFramebuffersOES"));
+   }
 #endif
-    if (!funcs->deleteFramebuffers) {
-        funcs->deleteFramebuffers = (type_glDeleteFramebuffers)
-            context->getProcAddress(QLatin1String("glDeleteFramebuffersEXT"));
-    }
-    if (!funcs->deleteFramebuffers) {
-        funcs->deleteFramebuffers = (type_glDeleteFramebuffers)
-            context->getProcAddress(QLatin1String("glDeleteFramebuffersARB"));
-    }
+   if (!funcs->deleteFramebuffers) {
+      funcs->deleteFramebuffers = (type_glDeleteFramebuffers)
+                                  context->getProcAddress(QLatin1String("glDeleteFramebuffersEXT"));
+   }
+   if (!funcs->deleteFramebuffers) {
+      funcs->deleteFramebuffers = (type_glDeleteFramebuffers)
+                                  context->getProcAddress(QLatin1String("glDeleteFramebuffersARB"));
+   }
 
-    if (funcs->deleteFramebuffers)
-        funcs->deleteFramebuffers(n, framebuffers);
-    else
-        funcs->deleteFramebuffers = qglfResolveDeleteFramebuffers;
+   if (funcs->deleteFramebuffers) {
+      funcs->deleteFramebuffers(n, framebuffers);
+   } else {
+      funcs->deleteFramebuffers = qglfResolveDeleteFramebuffers;
+   }
 }
 
 static void qglfResolveDeleteProgram(GLuint program)
 {
-    typedef void (QGLF_APIENTRYP type_glDeleteProgram)(GLuint program);
+   typedef void (QGLF_APIENTRYP type_glDeleteProgram)(GLuint program);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->deleteProgram = (type_glDeleteProgram)
-        context->getProcAddress(QLatin1String("glDeleteProgram"));
-    if (!funcs->deleteProgram) {
-        funcs->deleteProgram = (type_glDeleteProgram)
-            context->getProcAddress(QLatin1String("glDeleteObjectARB"));
-    }
+   funcs->deleteProgram = (type_glDeleteProgram)
+                          context->getProcAddress(QLatin1String("glDeleteProgram"));
+   if (!funcs->deleteProgram) {
+      funcs->deleteProgram = (type_glDeleteProgram)
+                             context->getProcAddress(QLatin1String("glDeleteObjectARB"));
+   }
 
-    if (funcs->deleteProgram)
-        funcs->deleteProgram(program);
-    else
-        funcs->deleteProgram = qglfResolveDeleteProgram;
+   if (funcs->deleteProgram) {
+      funcs->deleteProgram(program);
+   } else {
+      funcs->deleteProgram = qglfResolveDeleteProgram;
+   }
 }
 
-static void qglfResolveDeleteRenderbuffers(GLsizei n, const GLuint* renderbuffers)
+static void qglfResolveDeleteRenderbuffers(GLsizei n, const GLuint *renderbuffers)
 {
-    typedef void (QGLF_APIENTRYP type_glDeleteRenderbuffers)(GLsizei n, const GLuint* renderbuffers);
+   typedef void (QGLF_APIENTRYP type_glDeleteRenderbuffers)(GLsizei n, const GLuint * renderbuffers);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->deleteRenderbuffers = (type_glDeleteRenderbuffers)
-        context->getProcAddress(QLatin1String("glDeleteRenderbuffers"));
+   funcs->deleteRenderbuffers = (type_glDeleteRenderbuffers)
+                                context->getProcAddress(QLatin1String("glDeleteRenderbuffers"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->deleteRenderbuffers) {
-        funcs->deleteRenderbuffers = (type_glDeleteRenderbuffers)
-            context->getProcAddress(QLatin1String("glDeleteRenderbuffersOES"));
-    }
+   if (!funcs->deleteRenderbuffers) {
+      funcs->deleteRenderbuffers = (type_glDeleteRenderbuffers)
+                                   context->getProcAddress(QLatin1String("glDeleteRenderbuffersOES"));
+   }
 #endif
-    if (!funcs->deleteRenderbuffers) {
-        funcs->deleteRenderbuffers = (type_glDeleteRenderbuffers)
-            context->getProcAddress(QLatin1String("glDeleteRenderbuffersEXT"));
-    }
-    if (!funcs->deleteRenderbuffers) {
-        funcs->deleteRenderbuffers = (type_glDeleteRenderbuffers)
-            context->getProcAddress(QLatin1String("glDeleteRenderbuffersARB"));
-    }
+   if (!funcs->deleteRenderbuffers) {
+      funcs->deleteRenderbuffers = (type_glDeleteRenderbuffers)
+                                   context->getProcAddress(QLatin1String("glDeleteRenderbuffersEXT"));
+   }
+   if (!funcs->deleteRenderbuffers) {
+      funcs->deleteRenderbuffers = (type_glDeleteRenderbuffers)
+                                   context->getProcAddress(QLatin1String("glDeleteRenderbuffersARB"));
+   }
 
-    if (funcs->deleteRenderbuffers)
-        funcs->deleteRenderbuffers(n, renderbuffers);
-    else
-        funcs->deleteRenderbuffers = qglfResolveDeleteRenderbuffers;
+   if (funcs->deleteRenderbuffers) {
+      funcs->deleteRenderbuffers(n, renderbuffers);
+   } else {
+      funcs->deleteRenderbuffers = qglfResolveDeleteRenderbuffers;
+   }
 }
 
 static void qglfResolveDeleteShader(GLuint shader)
 {
-    typedef void (QGLF_APIENTRYP type_glDeleteShader)(GLuint shader);
+   typedef void (QGLF_APIENTRYP type_glDeleteShader)(GLuint shader);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->deleteShader = (type_glDeleteShader)
-        context->getProcAddress(QLatin1String("glDeleteShader"));
-    if (!funcs->deleteShader) {
-        funcs->deleteShader = (type_glDeleteShader)
-            context->getProcAddress(QLatin1String("glDeleteObjectARB"));
-    }
+   funcs->deleteShader = (type_glDeleteShader)
+                         context->getProcAddress(QLatin1String("glDeleteShader"));
+   if (!funcs->deleteShader) {
+      funcs->deleteShader = (type_glDeleteShader)
+                            context->getProcAddress(QLatin1String("glDeleteObjectARB"));
+   }
 
-    if (funcs->deleteShader)
-        funcs->deleteShader(shader);
-    else
-        funcs->deleteShader = qglfResolveDeleteShader;
+   if (funcs->deleteShader) {
+      funcs->deleteShader(shader);
+   } else {
+      funcs->deleteShader = qglfResolveDeleteShader;
+   }
 }
 
 static void qglfResolveDetachShader(GLuint program, GLuint shader)
 {
-    typedef void (QGLF_APIENTRYP type_glDetachShader)(GLuint program, GLuint shader);
+   typedef void (QGLF_APIENTRYP type_glDetachShader)(GLuint program, GLuint shader);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->detachShader = (type_glDetachShader)
-        context->getProcAddress(QLatin1String("glDetachShader"));
-    if (!funcs->detachShader) {
-        funcs->detachShader = (type_glDetachShader)
-            context->getProcAddress(QLatin1String("glDetachObjectARB"));
-    }
+   funcs->detachShader = (type_glDetachShader)
+                         context->getProcAddress(QLatin1String("glDetachShader"));
+   if (!funcs->detachShader) {
+      funcs->detachShader = (type_glDetachShader)
+                            context->getProcAddress(QLatin1String("glDetachObjectARB"));
+   }
 
-    if (funcs->detachShader)
-        funcs->detachShader(program, shader);
-    else
-        funcs->detachShader = qglfResolveDetachShader;
+   if (funcs->detachShader) {
+      funcs->detachShader(program, shader);
+   } else {
+      funcs->detachShader = qglfResolveDetachShader;
+   }
 }
 
 static void qglfResolveDisableVertexAttribArray(GLuint index)
 {
-    typedef void (QGLF_APIENTRYP type_glDisableVertexAttribArray)(GLuint index);
+   typedef void (QGLF_APIENTRYP type_glDisableVertexAttribArray)(GLuint index);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->disableVertexAttribArray = (type_glDisableVertexAttribArray)
-        context->getProcAddress(QLatin1String("glDisableVertexAttribArray"));
-    if (!funcs->disableVertexAttribArray) {
-        funcs->disableVertexAttribArray = (type_glDisableVertexAttribArray)
-            context->getProcAddress(QLatin1String("glDisableVertexAttribArrayARB"));
-    }
+   funcs->disableVertexAttribArray = (type_glDisableVertexAttribArray)
+                                     context->getProcAddress(QLatin1String("glDisableVertexAttribArray"));
+   if (!funcs->disableVertexAttribArray) {
+      funcs->disableVertexAttribArray = (type_glDisableVertexAttribArray)
+                                        context->getProcAddress(QLatin1String("glDisableVertexAttribArrayARB"));
+   }
 
-    if (funcs->disableVertexAttribArray)
-        funcs->disableVertexAttribArray(index);
-    else
-        funcs->disableVertexAttribArray = qglfResolveDisableVertexAttribArray;
+   if (funcs->disableVertexAttribArray) {
+      funcs->disableVertexAttribArray(index);
+   } else {
+      funcs->disableVertexAttribArray = qglfResolveDisableVertexAttribArray;
+   }
 }
 
 static void qglfResolveEnableVertexAttribArray(GLuint index)
 {
-    typedef void (QGLF_APIENTRYP type_glEnableVertexAttribArray)(GLuint index);
+   typedef void (QGLF_APIENTRYP type_glEnableVertexAttribArray)(GLuint index);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->enableVertexAttribArray = (type_glEnableVertexAttribArray)
-        context->getProcAddress(QLatin1String("glEnableVertexAttribArray"));
-    if (!funcs->enableVertexAttribArray) {
-        funcs->enableVertexAttribArray = (type_glEnableVertexAttribArray)
-            context->getProcAddress(QLatin1String("glEnableVertexAttribArrayARB"));
-    }
+   funcs->enableVertexAttribArray = (type_glEnableVertexAttribArray)
+                                    context->getProcAddress(QLatin1String("glEnableVertexAttribArray"));
+   if (!funcs->enableVertexAttribArray) {
+      funcs->enableVertexAttribArray = (type_glEnableVertexAttribArray)
+                                       context->getProcAddress(QLatin1String("glEnableVertexAttribArrayARB"));
+   }
 
-    if (funcs->enableVertexAttribArray)
-        funcs->enableVertexAttribArray(index);
-    else
-        funcs->enableVertexAttribArray = qglfResolveEnableVertexAttribArray;
+   if (funcs->enableVertexAttribArray) {
+      funcs->enableVertexAttribArray(index);
+   } else {
+      funcs->enableVertexAttribArray = qglfResolveEnableVertexAttribArray;
+   }
 }
 
-static void qglfResolveFramebufferRenderbuffer(GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer)
+static void qglfResolveFramebufferRenderbuffer(GLenum target, GLenum attachment, GLenum renderbuffertarget,
+      GLuint renderbuffer)
 {
-    typedef void (QGLF_APIENTRYP type_glFramebufferRenderbuffer)(GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer);
+   typedef void (QGLF_APIENTRYP type_glFramebufferRenderbuffer)(GLenum target, GLenum attachment,
+         GLenum renderbuffertarget, GLuint renderbuffer);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->framebufferRenderbuffer = (type_glFramebufferRenderbuffer)
-        context->getProcAddress(QLatin1String("glFramebufferRenderbuffer"));
+   funcs->framebufferRenderbuffer = (type_glFramebufferRenderbuffer)
+                                    context->getProcAddress(QLatin1String("glFramebufferRenderbuffer"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->framebufferRenderbuffer) {
-        funcs->framebufferRenderbuffer = (type_glFramebufferRenderbuffer)
-            context->getProcAddress(QLatin1String("glFramebufferRenderbufferOES"));
-    }
+   if (!funcs->framebufferRenderbuffer) {
+      funcs->framebufferRenderbuffer = (type_glFramebufferRenderbuffer)
+                                       context->getProcAddress(QLatin1String("glFramebufferRenderbufferOES"));
+   }
 #endif
-    if (!funcs->framebufferRenderbuffer) {
-        funcs->framebufferRenderbuffer = (type_glFramebufferRenderbuffer)
-            context->getProcAddress(QLatin1String("glFramebufferRenderbufferEXT"));
-    }
-    if (!funcs->framebufferRenderbuffer) {
-        funcs->framebufferRenderbuffer = (type_glFramebufferRenderbuffer)
-            context->getProcAddress(QLatin1String("glFramebufferRenderbufferARB"));
-    }
+   if (!funcs->framebufferRenderbuffer) {
+      funcs->framebufferRenderbuffer = (type_glFramebufferRenderbuffer)
+                                       context->getProcAddress(QLatin1String("glFramebufferRenderbufferEXT"));
+   }
+   if (!funcs->framebufferRenderbuffer) {
+      funcs->framebufferRenderbuffer = (type_glFramebufferRenderbuffer)
+                                       context->getProcAddress(QLatin1String("glFramebufferRenderbufferARB"));
+   }
 
-    if (funcs->framebufferRenderbuffer)
-        funcs->framebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
-    else
-        funcs->framebufferRenderbuffer = qglfResolveFramebufferRenderbuffer;
+   if (funcs->framebufferRenderbuffer) {
+      funcs->framebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
+   } else {
+      funcs->framebufferRenderbuffer = qglfResolveFramebufferRenderbuffer;
+   }
 }
 
-static void qglfResolveFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
+static void qglfResolveFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture,
+      GLint level)
 {
-    typedef void (QGLF_APIENTRYP type_glFramebufferTexture2D)(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level);
+   typedef void (QGLF_APIENTRYP type_glFramebufferTexture2D)(GLenum target, GLenum attachment, GLenum textarget,
+         GLuint texture, GLint level);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->framebufferTexture2D = (type_glFramebufferTexture2D)
-        context->getProcAddress(QLatin1String("glFramebufferTexture2D"));
+   funcs->framebufferTexture2D = (type_glFramebufferTexture2D)
+                                 context->getProcAddress(QLatin1String("glFramebufferTexture2D"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->framebufferTexture2D) {
-        funcs->framebufferTexture2D = (type_glFramebufferTexture2D)
-            context->getProcAddress(QLatin1String("glFramebufferTexture2DOES"));
-    }
+   if (!funcs->framebufferTexture2D) {
+      funcs->framebufferTexture2D = (type_glFramebufferTexture2D)
+                                    context->getProcAddress(QLatin1String("glFramebufferTexture2DOES"));
+   }
 #endif
-    if (!funcs->framebufferTexture2D) {
-        funcs->framebufferTexture2D = (type_glFramebufferTexture2D)
-            context->getProcAddress(QLatin1String("glFramebufferTexture2DEXT"));
-    }
-    if (!funcs->framebufferTexture2D) {
-        funcs->framebufferTexture2D = (type_glFramebufferTexture2D)
-            context->getProcAddress(QLatin1String("glFramebufferTexture2DARB"));
-    }
+   if (!funcs->framebufferTexture2D) {
+      funcs->framebufferTexture2D = (type_glFramebufferTexture2D)
+                                    context->getProcAddress(QLatin1String("glFramebufferTexture2DEXT"));
+   }
+   if (!funcs->framebufferTexture2D) {
+      funcs->framebufferTexture2D = (type_glFramebufferTexture2D)
+                                    context->getProcAddress(QLatin1String("glFramebufferTexture2DARB"));
+   }
 
-    if (funcs->framebufferTexture2D)
-        funcs->framebufferTexture2D(target, attachment, textarget, texture, level);
-    else
-        funcs->framebufferTexture2D = qglfResolveFramebufferTexture2D;
+   if (funcs->framebufferTexture2D) {
+      funcs->framebufferTexture2D(target, attachment, textarget, texture, level);
+   } else {
+      funcs->framebufferTexture2D = qglfResolveFramebufferTexture2D;
+   }
 }
 
-static void qglfResolveGenBuffers(GLsizei n, GLuint* buffers)
+static void qglfResolveGenBuffers(GLsizei n, GLuint *buffers)
 {
-    typedef void (QGLF_APIENTRYP type_glGenBuffers)(GLsizei n, GLuint* buffers);
+   typedef void (QGLF_APIENTRYP type_glGenBuffers)(GLsizei n, GLuint * buffers);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->genBuffers = (type_glGenBuffers)
-        context->getProcAddress(QLatin1String("glGenBuffers"));
+   funcs->genBuffers = (type_glGenBuffers)
+                       context->getProcAddress(QLatin1String("glGenBuffers"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->genBuffers) {
-        funcs->genBuffers = (type_glGenBuffers)
-            context->getProcAddress(QLatin1String("glGenBuffersOES"));
-    }
+   if (!funcs->genBuffers) {
+      funcs->genBuffers = (type_glGenBuffers)
+                          context->getProcAddress(QLatin1String("glGenBuffersOES"));
+   }
 #endif
-    if (!funcs->genBuffers) {
-        funcs->genBuffers = (type_glGenBuffers)
-            context->getProcAddress(QLatin1String("glGenBuffersEXT"));
-    }
-    if (!funcs->genBuffers) {
-        funcs->genBuffers = (type_glGenBuffers)
-            context->getProcAddress(QLatin1String("glGenBuffersARB"));
-    }
+   if (!funcs->genBuffers) {
+      funcs->genBuffers = (type_glGenBuffers)
+                          context->getProcAddress(QLatin1String("glGenBuffersEXT"));
+   }
+   if (!funcs->genBuffers) {
+      funcs->genBuffers = (type_glGenBuffers)
+                          context->getProcAddress(QLatin1String("glGenBuffersARB"));
+   }
 
-    if (funcs->genBuffers)
-        funcs->genBuffers(n, buffers);
-    else
-        funcs->genBuffers = qglfResolveGenBuffers;
+   if (funcs->genBuffers) {
+      funcs->genBuffers(n, buffers);
+   } else {
+      funcs->genBuffers = qglfResolveGenBuffers;
+   }
 }
 
 static void qglfResolveGenerateMipmap(GLenum target)
 {
-    typedef void (QGLF_APIENTRYP type_glGenerateMipmap)(GLenum target);
+   typedef void (QGLF_APIENTRYP type_glGenerateMipmap)(GLenum target);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->generateMipmap = (type_glGenerateMipmap)
-        context->getProcAddress(QLatin1String("glGenerateMipmap"));
+   funcs->generateMipmap = (type_glGenerateMipmap)
+                           context->getProcAddress(QLatin1String("glGenerateMipmap"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->generateMipmap) {
-        funcs->generateMipmap = (type_glGenerateMipmap)
-            context->getProcAddress(QLatin1String("glGenerateMipmapOES"));
-    }
+   if (!funcs->generateMipmap) {
+      funcs->generateMipmap = (type_glGenerateMipmap)
+                              context->getProcAddress(QLatin1String("glGenerateMipmapOES"));
+   }
 #endif
-    if (!funcs->generateMipmap) {
-        funcs->generateMipmap = (type_glGenerateMipmap)
-            context->getProcAddress(QLatin1String("glGenerateMipmapEXT"));
-    }
-    if (!funcs->generateMipmap) {
-        funcs->generateMipmap = (type_glGenerateMipmap)
-            context->getProcAddress(QLatin1String("glGenerateMipmapARB"));
-    }
+   if (!funcs->generateMipmap) {
+      funcs->generateMipmap = (type_glGenerateMipmap)
+                              context->getProcAddress(QLatin1String("glGenerateMipmapEXT"));
+   }
+   if (!funcs->generateMipmap) {
+      funcs->generateMipmap = (type_glGenerateMipmap)
+                              context->getProcAddress(QLatin1String("glGenerateMipmapARB"));
+   }
 
-    if (funcs->generateMipmap)
-        funcs->generateMipmap(target);
-    else
-        funcs->generateMipmap = qglfResolveGenerateMipmap;
+   if (funcs->generateMipmap) {
+      funcs->generateMipmap(target);
+   } else {
+      funcs->generateMipmap = qglfResolveGenerateMipmap;
+   }
 }
 
-static void qglfResolveGenFramebuffers(GLsizei n, GLuint* framebuffers)
+static void qglfResolveGenFramebuffers(GLsizei n, GLuint *framebuffers)
 {
-    typedef void (QGLF_APIENTRYP type_glGenFramebuffers)(GLsizei n, GLuint* framebuffers);
+   typedef void (QGLF_APIENTRYP type_glGenFramebuffers)(GLsizei n, GLuint * framebuffers);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->genFramebuffers = (type_glGenFramebuffers)
-        context->getProcAddress(QLatin1String("glGenFramebuffers"));
+   funcs->genFramebuffers = (type_glGenFramebuffers)
+                            context->getProcAddress(QLatin1String("glGenFramebuffers"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->genFramebuffers) {
-        funcs->genFramebuffers = (type_glGenFramebuffers)
-            context->getProcAddress(QLatin1String("glGenFramebuffersOES"));
-    }
+   if (!funcs->genFramebuffers) {
+      funcs->genFramebuffers = (type_glGenFramebuffers)
+                               context->getProcAddress(QLatin1String("glGenFramebuffersOES"));
+   }
 #endif
-    if (!funcs->genFramebuffers) {
-        funcs->genFramebuffers = (type_glGenFramebuffers)
-            context->getProcAddress(QLatin1String("glGenFramebuffersEXT"));
-    }
-    if (!funcs->genFramebuffers) {
-        funcs->genFramebuffers = (type_glGenFramebuffers)
-            context->getProcAddress(QLatin1String("glGenFramebuffersARB"));
-    }
+   if (!funcs->genFramebuffers) {
+      funcs->genFramebuffers = (type_glGenFramebuffers)
+                               context->getProcAddress(QLatin1String("glGenFramebuffersEXT"));
+   }
+   if (!funcs->genFramebuffers) {
+      funcs->genFramebuffers = (type_glGenFramebuffers)
+                               context->getProcAddress(QLatin1String("glGenFramebuffersARB"));
+   }
 
-    if (funcs->genFramebuffers)
-        funcs->genFramebuffers(n, framebuffers);
-    else
-        funcs->genFramebuffers = qglfResolveGenFramebuffers;
+   if (funcs->genFramebuffers) {
+      funcs->genFramebuffers(n, framebuffers);
+   } else {
+      funcs->genFramebuffers = qglfResolveGenFramebuffers;
+   }
 }
 
-static void qglfResolveGenRenderbuffers(GLsizei n, GLuint* renderbuffers)
+static void qglfResolveGenRenderbuffers(GLsizei n, GLuint *renderbuffers)
 {
-    typedef void (QGLF_APIENTRYP type_glGenRenderbuffers)(GLsizei n, GLuint* renderbuffers);
+   typedef void (QGLF_APIENTRYP type_glGenRenderbuffers)(GLsizei n, GLuint * renderbuffers);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->genRenderbuffers = (type_glGenRenderbuffers)
-        context->getProcAddress(QLatin1String("glGenRenderbuffers"));
+   funcs->genRenderbuffers = (type_glGenRenderbuffers)
+                             context->getProcAddress(QLatin1String("glGenRenderbuffers"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->genRenderbuffers) {
-        funcs->genRenderbuffers = (type_glGenRenderbuffers)
-            context->getProcAddress(QLatin1String("glGenRenderbuffersOES"));
-    }
+   if (!funcs->genRenderbuffers) {
+      funcs->genRenderbuffers = (type_glGenRenderbuffers)
+                                context->getProcAddress(QLatin1String("glGenRenderbuffersOES"));
+   }
 #endif
-    if (!funcs->genRenderbuffers) {
-        funcs->genRenderbuffers = (type_glGenRenderbuffers)
-            context->getProcAddress(QLatin1String("glGenRenderbuffersEXT"));
-    }
-    if (!funcs->genRenderbuffers) {
-        funcs->genRenderbuffers = (type_glGenRenderbuffers)
-            context->getProcAddress(QLatin1String("glGenRenderbuffersARB"));
-    }
+   if (!funcs->genRenderbuffers) {
+      funcs->genRenderbuffers = (type_glGenRenderbuffers)
+                                context->getProcAddress(QLatin1String("glGenRenderbuffersEXT"));
+   }
+   if (!funcs->genRenderbuffers) {
+      funcs->genRenderbuffers = (type_glGenRenderbuffers)
+                                context->getProcAddress(QLatin1String("glGenRenderbuffersARB"));
+   }
 
-    if (funcs->genRenderbuffers)
-        funcs->genRenderbuffers(n, renderbuffers);
-    else
-        funcs->genRenderbuffers = qglfResolveGenRenderbuffers;
+   if (funcs->genRenderbuffers) {
+      funcs->genRenderbuffers(n, renderbuffers);
+   } else {
+      funcs->genRenderbuffers = qglfResolveGenRenderbuffers;
+   }
 }
 
-static void qglfResolveGetActiveAttrib(GLuint program, GLuint index, GLsizei bufsize, GLsizei* length, GLint* size, GLenum* type, char* name)
+static void qglfResolveGetActiveAttrib(GLuint program, GLuint index, GLsizei bufsize, GLsizei *length, GLint *size,
+                                       GLenum *type, char *name)
 {
-    typedef void (QGLF_APIENTRYP type_glGetActiveAttrib)(GLuint program, GLuint index, GLsizei bufsize, GLsizei* length, GLint* size, GLenum* type, char* name);
+   typedef void (QGLF_APIENTRYP type_glGetActiveAttrib)(GLuint program, GLuint index, GLsizei bufsize, GLsizei * length,
+         GLint * size, GLenum * type, char *name);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getActiveAttrib = (type_glGetActiveAttrib)
-        context->getProcAddress(QLatin1String("glGetActiveAttrib"));
-    if (!funcs->getActiveAttrib) {
-        funcs->getActiveAttrib = (type_glGetActiveAttrib)
-            context->getProcAddress(QLatin1String("glGetActiveAttribARB"));
-    }
+   funcs->getActiveAttrib = (type_glGetActiveAttrib)
+                            context->getProcAddress(QLatin1String("glGetActiveAttrib"));
+   if (!funcs->getActiveAttrib) {
+      funcs->getActiveAttrib = (type_glGetActiveAttrib)
+                               context->getProcAddress(QLatin1String("glGetActiveAttribARB"));
+   }
 
-    if (funcs->getActiveAttrib)
-        funcs->getActiveAttrib(program, index, bufsize, length, size, type, name);
-    else
-        funcs->getActiveAttrib = qglfResolveGetActiveAttrib;
+   if (funcs->getActiveAttrib) {
+      funcs->getActiveAttrib(program, index, bufsize, length, size, type, name);
+   } else {
+      funcs->getActiveAttrib = qglfResolveGetActiveAttrib;
+   }
 }
 
-static void qglfResolveGetActiveUniform(GLuint program, GLuint index, GLsizei bufsize, GLsizei* length, GLint* size, GLenum* type, char* name)
+static void qglfResolveGetActiveUniform(GLuint program, GLuint index, GLsizei bufsize, GLsizei *length, GLint *size,
+                                        GLenum *type, char *name)
 {
-    typedef void (QGLF_APIENTRYP type_glGetActiveUniform)(GLuint program, GLuint index, GLsizei bufsize, GLsizei* length, GLint* size, GLenum* type, char* name);
+   typedef void (QGLF_APIENTRYP type_glGetActiveUniform)(GLuint program, GLuint index, GLsizei bufsize, GLsizei * length,
+         GLint * size, GLenum * type, char *name);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getActiveUniform = (type_glGetActiveUniform)
-        context->getProcAddress(QLatin1String("glGetActiveUniform"));
-    if (!funcs->getActiveUniform) {
-        funcs->getActiveUniform = (type_glGetActiveUniform)
-            context->getProcAddress(QLatin1String("glGetActiveUniformARB"));
-    }
+   funcs->getActiveUniform = (type_glGetActiveUniform)
+                             context->getProcAddress(QLatin1String("glGetActiveUniform"));
+   if (!funcs->getActiveUniform) {
+      funcs->getActiveUniform = (type_glGetActiveUniform)
+                                context->getProcAddress(QLatin1String("glGetActiveUniformARB"));
+   }
 
-    if (funcs->getActiveUniform)
-        funcs->getActiveUniform(program, index, bufsize, length, size, type, name);
-    else
-        funcs->getActiveUniform = qglfResolveGetActiveUniform;
+   if (funcs->getActiveUniform) {
+      funcs->getActiveUniform(program, index, bufsize, length, size, type, name);
+   } else {
+      funcs->getActiveUniform = qglfResolveGetActiveUniform;
+   }
 }
 
-static void qglfResolveGetAttachedShaders(GLuint program, GLsizei maxcount, GLsizei* count, GLuint* shaders)
+static void qglfResolveGetAttachedShaders(GLuint program, GLsizei maxcount, GLsizei *count, GLuint *shaders)
 {
-    typedef void (QGLF_APIENTRYP type_glGetAttachedShaders)(GLuint program, GLsizei maxcount, GLsizei* count, GLuint* shaders);
+   typedef void (QGLF_APIENTRYP type_glGetAttachedShaders)(GLuint program, GLsizei maxcount, GLsizei * count,
+         GLuint * shaders);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getAttachedShaders = (type_glGetAttachedShaders)
-        context->getProcAddress(QLatin1String("glGetAttachedShaders"));
-    if (!funcs->getAttachedShaders) {
-        funcs->getAttachedShaders = (type_glGetAttachedShaders)
-            context->getProcAddress(QLatin1String("glGetAttachedObjectsARB"));
-    }
+   funcs->getAttachedShaders = (type_glGetAttachedShaders)
+                               context->getProcAddress(QLatin1String("glGetAttachedShaders"));
+   if (!funcs->getAttachedShaders) {
+      funcs->getAttachedShaders = (type_glGetAttachedShaders)
+                                  context->getProcAddress(QLatin1String("glGetAttachedObjectsARB"));
+   }
 
-    if (funcs->getAttachedShaders)
-        funcs->getAttachedShaders(program, maxcount, count, shaders);
-    else
-        funcs->getAttachedShaders = qglfResolveGetAttachedShaders;
+   if (funcs->getAttachedShaders) {
+      funcs->getAttachedShaders(program, maxcount, count, shaders);
+   } else {
+      funcs->getAttachedShaders = qglfResolveGetAttachedShaders;
+   }
 }
 
-static int qglfResolveGetAttribLocation(GLuint program, const char* name)
+static int qglfResolveGetAttribLocation(GLuint program, const char *name)
 {
-    typedef int (QGLF_APIENTRYP type_glGetAttribLocation)(GLuint program, const char* name);
+   typedef int (QGLF_APIENTRYP type_glGetAttribLocation)(GLuint program, const char *name);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getAttribLocation = (type_glGetAttribLocation)
-        context->getProcAddress(QLatin1String("glGetAttribLocation"));
-    if (!funcs->getAttribLocation) {
-        funcs->getAttribLocation = (type_glGetAttribLocation)
-            context->getProcAddress(QLatin1String("glGetAttribLocationARB"));
-    }
+   funcs->getAttribLocation = (type_glGetAttribLocation)
+                              context->getProcAddress(QLatin1String("glGetAttribLocation"));
+   if (!funcs->getAttribLocation) {
+      funcs->getAttribLocation = (type_glGetAttribLocation)
+                                 context->getProcAddress(QLatin1String("glGetAttribLocationARB"));
+   }
 
-    if (funcs->getAttribLocation)
-        return funcs->getAttribLocation(program, name);
-    funcs->getAttribLocation = qglfResolveGetAttribLocation;
-    return int(0);
+   if (funcs->getAttribLocation) {
+      return funcs->getAttribLocation(program, name);
+   }
+   funcs->getAttribLocation = qglfResolveGetAttribLocation;
+   return int(0);
 }
 
-static void qglfResolveGetBufferParameteriv(GLenum target, GLenum pname, GLint* params)
+static void qglfResolveGetBufferParameteriv(GLenum target, GLenum pname, GLint *params)
 {
-    typedef void (QGLF_APIENTRYP type_glGetBufferParameteriv)(GLenum target, GLenum pname, GLint* params);
+   typedef void (QGLF_APIENTRYP type_glGetBufferParameteriv)(GLenum target, GLenum pname, GLint * params);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getBufferParameteriv = (type_glGetBufferParameteriv)
-        context->getProcAddress(QLatin1String("glGetBufferParameteriv"));
+   funcs->getBufferParameteriv = (type_glGetBufferParameteriv)
+                                 context->getProcAddress(QLatin1String("glGetBufferParameteriv"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->getBufferParameteriv) {
-        funcs->getBufferParameteriv = (type_glGetBufferParameteriv)
-            context->getProcAddress(QLatin1String("glGetBufferParameterivOES"));
-    }
+   if (!funcs->getBufferParameteriv) {
+      funcs->getBufferParameteriv = (type_glGetBufferParameteriv)
+                                    context->getProcAddress(QLatin1String("glGetBufferParameterivOES"));
+   }
 #endif
-    if (!funcs->getBufferParameteriv) {
-        funcs->getBufferParameteriv = (type_glGetBufferParameteriv)
-            context->getProcAddress(QLatin1String("glGetBufferParameterivEXT"));
-    }
-    if (!funcs->getBufferParameteriv) {
-        funcs->getBufferParameteriv = (type_glGetBufferParameteriv)
-            context->getProcAddress(QLatin1String("glGetBufferParameterivARB"));
-    }
+   if (!funcs->getBufferParameteriv) {
+      funcs->getBufferParameteriv = (type_glGetBufferParameteriv)
+                                    context->getProcAddress(QLatin1String("glGetBufferParameterivEXT"));
+   }
+   if (!funcs->getBufferParameteriv) {
+      funcs->getBufferParameteriv = (type_glGetBufferParameteriv)
+                                    context->getProcAddress(QLatin1String("glGetBufferParameterivARB"));
+   }
 
-    if (funcs->getBufferParameteriv)
-        funcs->getBufferParameteriv(target, pname, params);
-    else
-        funcs->getBufferParameteriv = qglfResolveGetBufferParameteriv;
+   if (funcs->getBufferParameteriv) {
+      funcs->getBufferParameteriv(target, pname, params);
+   } else {
+      funcs->getBufferParameteriv = qglfResolveGetBufferParameteriv;
+   }
 }
 
-static void qglfResolveGetFramebufferAttachmentParameteriv(GLenum target, GLenum attachment, GLenum pname, GLint* params)
+static void qglfResolveGetFramebufferAttachmentParameteriv(GLenum target, GLenum attachment, GLenum pname,
+      GLint *params)
 {
-    typedef void (QGLF_APIENTRYP type_glGetFramebufferAttachmentParameteriv)(GLenum target, GLenum attachment, GLenum pname, GLint* params);
+   typedef void (QGLF_APIENTRYP type_glGetFramebufferAttachmentParameteriv)(GLenum target, GLenum attachment, GLenum pname,
+         GLint * params);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getFramebufferAttachmentParameteriv = (type_glGetFramebufferAttachmentParameteriv)
-        context->getProcAddress(QLatin1String("glGetFramebufferAttachmentParameteriv"));
+   funcs->getFramebufferAttachmentParameteriv = (type_glGetFramebufferAttachmentParameteriv)
+         context->getProcAddress(QLatin1String("glGetFramebufferAttachmentParameteriv"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->getFramebufferAttachmentParameteriv) {
-        funcs->getFramebufferAttachmentParameteriv = (type_glGetFramebufferAttachmentParameteriv)
+   if (!funcs->getFramebufferAttachmentParameteriv) {
+      funcs->getFramebufferAttachmentParameteriv = (type_glGetFramebufferAttachmentParameteriv)
             context->getProcAddress(QLatin1String("glGetFramebufferAttachmentParameterivOES"));
-    }
+   }
 #endif
-    if (!funcs->getFramebufferAttachmentParameteriv) {
-        funcs->getFramebufferAttachmentParameteriv = (type_glGetFramebufferAttachmentParameteriv)
+   if (!funcs->getFramebufferAttachmentParameteriv) {
+      funcs->getFramebufferAttachmentParameteriv = (type_glGetFramebufferAttachmentParameteriv)
             context->getProcAddress(QLatin1String("glGetFramebufferAttachmentParameterivEXT"));
-    }
-    if (!funcs->getFramebufferAttachmentParameteriv) {
-        funcs->getFramebufferAttachmentParameteriv = (type_glGetFramebufferAttachmentParameteriv)
+   }
+   if (!funcs->getFramebufferAttachmentParameteriv) {
+      funcs->getFramebufferAttachmentParameteriv = (type_glGetFramebufferAttachmentParameteriv)
             context->getProcAddress(QLatin1String("glGetFramebufferAttachmentParameterivARB"));
-    }
+   }
 
-    if (funcs->getFramebufferAttachmentParameteriv)
-        funcs->getFramebufferAttachmentParameteriv(target, attachment, pname, params);
-    else
-        funcs->getFramebufferAttachmentParameteriv = qglfResolveGetFramebufferAttachmentParameteriv;
+   if (funcs->getFramebufferAttachmentParameteriv) {
+      funcs->getFramebufferAttachmentParameteriv(target, attachment, pname, params);
+   } else {
+      funcs->getFramebufferAttachmentParameteriv = qglfResolveGetFramebufferAttachmentParameteriv;
+   }
 }
 
-static void qglfResolveGetProgramiv(GLuint program, GLenum pname, GLint* params)
+static void qglfResolveGetProgramiv(GLuint program, GLenum pname, GLint *params)
 {
-    typedef void (QGLF_APIENTRYP type_glGetProgramiv)(GLuint program, GLenum pname, GLint* params);
+   typedef void (QGLF_APIENTRYP type_glGetProgramiv)(GLuint program, GLenum pname, GLint * params);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getProgramiv = (type_glGetProgramiv)
-        context->getProcAddress(QLatin1String("glGetProgramiv"));
-    if (!funcs->getProgramiv) {
-        funcs->getProgramiv = (type_glGetProgramiv)
-            context->getProcAddress(QLatin1String("glGetObjectParameterivARB"));
-    }
+   funcs->getProgramiv = (type_glGetProgramiv)
+                         context->getProcAddress(QLatin1String("glGetProgramiv"));
+   if (!funcs->getProgramiv) {
+      funcs->getProgramiv = (type_glGetProgramiv)
+                            context->getProcAddress(QLatin1String("glGetObjectParameterivARB"));
+   }
 
-    if (funcs->getProgramiv)
-        funcs->getProgramiv(program, pname, params);
-    else
-        funcs->getProgramiv = qglfResolveGetProgramiv;
+   if (funcs->getProgramiv) {
+      funcs->getProgramiv(program, pname, params);
+   } else {
+      funcs->getProgramiv = qglfResolveGetProgramiv;
+   }
 }
 
-static void qglfResolveGetProgramInfoLog(GLuint program, GLsizei bufsize, GLsizei* length, char* infolog)
+static void qglfResolveGetProgramInfoLog(GLuint program, GLsizei bufsize, GLsizei *length, char *infolog)
 {
-    typedef void (QGLF_APIENTRYP type_glGetProgramInfoLog)(GLuint program, GLsizei bufsize, GLsizei* length, char* infolog);
+   typedef void (QGLF_APIENTRYP type_glGetProgramInfoLog)(GLuint program, GLsizei bufsize, GLsizei * length,
+         char *infolog);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getProgramInfoLog = (type_glGetProgramInfoLog)
-        context->getProcAddress(QLatin1String("glGetProgramInfoLog"));
-    if (!funcs->getProgramInfoLog) {
-        funcs->getProgramInfoLog = (type_glGetProgramInfoLog)
-            context->getProcAddress(QLatin1String("glGetInfoLogARB"));
-    }
+   funcs->getProgramInfoLog = (type_glGetProgramInfoLog)
+                              context->getProcAddress(QLatin1String("glGetProgramInfoLog"));
+   if (!funcs->getProgramInfoLog) {
+      funcs->getProgramInfoLog = (type_glGetProgramInfoLog)
+                                 context->getProcAddress(QLatin1String("glGetInfoLogARB"));
+   }
 
-    if (funcs->getProgramInfoLog)
-        funcs->getProgramInfoLog(program, bufsize, length, infolog);
-    else
-        funcs->getProgramInfoLog = qglfResolveGetProgramInfoLog;
+   if (funcs->getProgramInfoLog) {
+      funcs->getProgramInfoLog(program, bufsize, length, infolog);
+   } else {
+      funcs->getProgramInfoLog = qglfResolveGetProgramInfoLog;
+   }
 }
 
-static void qglfResolveGetRenderbufferParameteriv(GLenum target, GLenum pname, GLint* params)
+static void qglfResolveGetRenderbufferParameteriv(GLenum target, GLenum pname, GLint *params)
 {
-    typedef void (QGLF_APIENTRYP type_glGetRenderbufferParameteriv)(GLenum target, GLenum pname, GLint* params);
+   typedef void (QGLF_APIENTRYP type_glGetRenderbufferParameteriv)(GLenum target, GLenum pname, GLint * params);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getRenderbufferParameteriv = (type_glGetRenderbufferParameteriv)
-        context->getProcAddress(QLatin1String("glGetRenderbufferParameteriv"));
+   funcs->getRenderbufferParameteriv = (type_glGetRenderbufferParameteriv)
+                                       context->getProcAddress(QLatin1String("glGetRenderbufferParameteriv"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->getRenderbufferParameteriv) {
-        funcs->getRenderbufferParameteriv = (type_glGetRenderbufferParameteriv)
-            context->getProcAddress(QLatin1String("glGetRenderbufferParameterivOES"));
-    }
+   if (!funcs->getRenderbufferParameteriv) {
+      funcs->getRenderbufferParameteriv = (type_glGetRenderbufferParameteriv)
+                                          context->getProcAddress(QLatin1String("glGetRenderbufferParameterivOES"));
+   }
 #endif
-    if (!funcs->getRenderbufferParameteriv) {
-        funcs->getRenderbufferParameteriv = (type_glGetRenderbufferParameteriv)
-            context->getProcAddress(QLatin1String("glGetRenderbufferParameterivEXT"));
-    }
-    if (!funcs->getRenderbufferParameteriv) {
-        funcs->getRenderbufferParameteriv = (type_glGetRenderbufferParameteriv)
-            context->getProcAddress(QLatin1String("glGetRenderbufferParameterivARB"));
-    }
+   if (!funcs->getRenderbufferParameteriv) {
+      funcs->getRenderbufferParameteriv = (type_glGetRenderbufferParameteriv)
+                                          context->getProcAddress(QLatin1String("glGetRenderbufferParameterivEXT"));
+   }
+   if (!funcs->getRenderbufferParameteriv) {
+      funcs->getRenderbufferParameteriv = (type_glGetRenderbufferParameteriv)
+                                          context->getProcAddress(QLatin1String("glGetRenderbufferParameterivARB"));
+   }
 
-    if (funcs->getRenderbufferParameteriv)
-        funcs->getRenderbufferParameteriv(target, pname, params);
-    else
-        funcs->getRenderbufferParameteriv = qglfResolveGetRenderbufferParameteriv;
+   if (funcs->getRenderbufferParameteriv) {
+      funcs->getRenderbufferParameteriv(target, pname, params);
+   } else {
+      funcs->getRenderbufferParameteriv = qglfResolveGetRenderbufferParameteriv;
+   }
 }
 
-static void qglfResolveGetShaderiv(GLuint shader, GLenum pname, GLint* params)
+static void qglfResolveGetShaderiv(GLuint shader, GLenum pname, GLint *params)
 {
-    typedef void (QGLF_APIENTRYP type_glGetShaderiv)(GLuint shader, GLenum pname, GLint* params);
+   typedef void (QGLF_APIENTRYP type_glGetShaderiv)(GLuint shader, GLenum pname, GLint * params);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getShaderiv = (type_glGetShaderiv)
-        context->getProcAddress(QLatin1String("glGetShaderiv"));
-    if (!funcs->getShaderiv) {
-        funcs->getShaderiv = (type_glGetShaderiv)
-            context->getProcAddress(QLatin1String("glGetObjectParameterivARB"));
-    }
+   funcs->getShaderiv = (type_glGetShaderiv)
+                        context->getProcAddress(QLatin1String("glGetShaderiv"));
+   if (!funcs->getShaderiv) {
+      funcs->getShaderiv = (type_glGetShaderiv)
+                           context->getProcAddress(QLatin1String("glGetObjectParameterivARB"));
+   }
 
-    if (funcs->getShaderiv)
-        funcs->getShaderiv(shader, pname, params);
-    else
-        funcs->getShaderiv = qglfResolveGetShaderiv;
+   if (funcs->getShaderiv) {
+      funcs->getShaderiv(shader, pname, params);
+   } else {
+      funcs->getShaderiv = qglfResolveGetShaderiv;
+   }
 }
 
-static void qglfResolveGetShaderInfoLog(GLuint shader, GLsizei bufsize, GLsizei* length, char* infolog)
+static void qglfResolveGetShaderInfoLog(GLuint shader, GLsizei bufsize, GLsizei *length, char *infolog)
 {
-    typedef void (QGLF_APIENTRYP type_glGetShaderInfoLog)(GLuint shader, GLsizei bufsize, GLsizei* length, char* infolog);
+   typedef void (QGLF_APIENTRYP type_glGetShaderInfoLog)(GLuint shader, GLsizei bufsize, GLsizei * length, char *infolog);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getShaderInfoLog = (type_glGetShaderInfoLog)
-        context->getProcAddress(QLatin1String("glGetShaderInfoLog"));
-    if (!funcs->getShaderInfoLog) {
-        funcs->getShaderInfoLog = (type_glGetShaderInfoLog)
-            context->getProcAddress(QLatin1String("glGetInfoLogARB"));
-    }
+   funcs->getShaderInfoLog = (type_glGetShaderInfoLog)
+                             context->getProcAddress(QLatin1String("glGetShaderInfoLog"));
+   if (!funcs->getShaderInfoLog) {
+      funcs->getShaderInfoLog = (type_glGetShaderInfoLog)
+                                context->getProcAddress(QLatin1String("glGetInfoLogARB"));
+   }
 
-    if (funcs->getShaderInfoLog)
-        funcs->getShaderInfoLog(shader, bufsize, length, infolog);
-    else
-        funcs->getShaderInfoLog = qglfResolveGetShaderInfoLog;
+   if (funcs->getShaderInfoLog) {
+      funcs->getShaderInfoLog(shader, bufsize, length, infolog);
+   } else {
+      funcs->getShaderInfoLog = qglfResolveGetShaderInfoLog;
+   }
 }
 
-static void qglfSpecialGetShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype, GLint* range, GLint* precision)
+static void qglfSpecialGetShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype, GLint *range, GLint *precision)
 {
-    Q_UNUSED(shadertype);
-    Q_UNUSED(precisiontype);
-    range[0] = range[1] = precision[0] = 0;
+   Q_UNUSED(shadertype);
+   Q_UNUSED(precisiontype);
+   range[0] = range[1] = precision[0] = 0;
 }
 
-static void qglfResolveGetShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype, GLint* range, GLint* precision)
+static void qglfResolveGetShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype, GLint *range, GLint *precision)
 {
-    typedef void (QGLF_APIENTRYP type_glGetShaderPrecisionFormat)(GLenum shadertype, GLenum precisiontype, GLint* range, GLint* precision);
+   typedef void (QGLF_APIENTRYP type_glGetShaderPrecisionFormat)(GLenum shadertype, GLenum precisiontype, GLint * range,
+         GLint * precision);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getShaderPrecisionFormat = (type_glGetShaderPrecisionFormat)
-        context->getProcAddress(QLatin1String("glGetShaderPrecisionFormat"));
+   funcs->getShaderPrecisionFormat = (type_glGetShaderPrecisionFormat)
+                                     context->getProcAddress(QLatin1String("glGetShaderPrecisionFormat"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->getShaderPrecisionFormat) {
-        funcs->getShaderPrecisionFormat = (type_glGetShaderPrecisionFormat)
-            context->getProcAddress(QLatin1String("glGetShaderPrecisionFormatOES"));
-    }
+   if (!funcs->getShaderPrecisionFormat) {
+      funcs->getShaderPrecisionFormat = (type_glGetShaderPrecisionFormat)
+                                        context->getProcAddress(QLatin1String("glGetShaderPrecisionFormatOES"));
+   }
 #endif
-    if (!funcs->getShaderPrecisionFormat) {
-        funcs->getShaderPrecisionFormat = (type_glGetShaderPrecisionFormat)
-            context->getProcAddress(QLatin1String("glGetShaderPrecisionFormatEXT"));
-    }
-    if (!funcs->getShaderPrecisionFormat) {
-        funcs->getShaderPrecisionFormat = (type_glGetShaderPrecisionFormat)
-            context->getProcAddress(QLatin1String("glGetShaderPrecisionFormatARB"));
-    }
+   if (!funcs->getShaderPrecisionFormat) {
+      funcs->getShaderPrecisionFormat = (type_glGetShaderPrecisionFormat)
+                                        context->getProcAddress(QLatin1String("glGetShaderPrecisionFormatEXT"));
+   }
+   if (!funcs->getShaderPrecisionFormat) {
+      funcs->getShaderPrecisionFormat = (type_glGetShaderPrecisionFormat)
+                                        context->getProcAddress(QLatin1String("glGetShaderPrecisionFormatARB"));
+   }
 
-    if (!funcs->getShaderPrecisionFormat)
-        funcs->getShaderPrecisionFormat = qglfSpecialGetShaderPrecisionFormat;
+   if (!funcs->getShaderPrecisionFormat) {
+      funcs->getShaderPrecisionFormat = qglfSpecialGetShaderPrecisionFormat;
+   }
 
-    funcs->getShaderPrecisionFormat(shadertype, precisiontype, range, precision);
+   funcs->getShaderPrecisionFormat(shadertype, precisiontype, range, precision);
 }
 
-static void qglfResolveGetShaderSource(GLuint shader, GLsizei bufsize, GLsizei* length, char* source)
+static void qglfResolveGetShaderSource(GLuint shader, GLsizei bufsize, GLsizei *length, char *source)
 {
-    typedef void (QGLF_APIENTRYP type_glGetShaderSource)(GLuint shader, GLsizei bufsize, GLsizei* length, char* source);
+   typedef void (QGLF_APIENTRYP type_glGetShaderSource)(GLuint shader, GLsizei bufsize, GLsizei * length, char *source);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getShaderSource = (type_glGetShaderSource)
-        context->getProcAddress(QLatin1String("glGetShaderSource"));
-    if (!funcs->getShaderSource) {
-        funcs->getShaderSource = (type_glGetShaderSource)
-            context->getProcAddress(QLatin1String("glGetShaderSourceARB"));
-    }
+   funcs->getShaderSource = (type_glGetShaderSource)
+                            context->getProcAddress(QLatin1String("glGetShaderSource"));
+   if (!funcs->getShaderSource) {
+      funcs->getShaderSource = (type_glGetShaderSource)
+                               context->getProcAddress(QLatin1String("glGetShaderSourceARB"));
+   }
 
-    if (funcs->getShaderSource)
-        funcs->getShaderSource(shader, bufsize, length, source);
-    else
-        funcs->getShaderSource = qglfResolveGetShaderSource;
+   if (funcs->getShaderSource) {
+      funcs->getShaderSource(shader, bufsize, length, source);
+   } else {
+      funcs->getShaderSource = qglfResolveGetShaderSource;
+   }
 }
 
-static void qglfResolveGetUniformfv(GLuint program, GLint location, GLfloat* params)
+static void qglfResolveGetUniformfv(GLuint program, GLint location, GLfloat *params)
 {
-    typedef void (QGLF_APIENTRYP type_glGetUniformfv)(GLuint program, GLint location, GLfloat* params);
+   typedef void (QGLF_APIENTRYP type_glGetUniformfv)(GLuint program, GLint location, GLfloat * params);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getUniformfv = (type_glGetUniformfv)
-        context->getProcAddress(QLatin1String("glGetUniformfv"));
-    if (!funcs->getUniformfv) {
-        funcs->getUniformfv = (type_glGetUniformfv)
-            context->getProcAddress(QLatin1String("glGetUniformfvARB"));
-    }
+   funcs->getUniformfv = (type_glGetUniformfv)
+                         context->getProcAddress(QLatin1String("glGetUniformfv"));
+   if (!funcs->getUniformfv) {
+      funcs->getUniformfv = (type_glGetUniformfv)
+                            context->getProcAddress(QLatin1String("glGetUniformfvARB"));
+   }
 
-    if (funcs->getUniformfv)
-        funcs->getUniformfv(program, location, params);
-    else
-        funcs->getUniformfv = qglfResolveGetUniformfv;
+   if (funcs->getUniformfv) {
+      funcs->getUniformfv(program, location, params);
+   } else {
+      funcs->getUniformfv = qglfResolveGetUniformfv;
+   }
 }
 
-static void qglfResolveGetUniformiv(GLuint program, GLint location, GLint* params)
+static void qglfResolveGetUniformiv(GLuint program, GLint location, GLint *params)
 {
-    typedef void (QGLF_APIENTRYP type_glGetUniformiv)(GLuint program, GLint location, GLint* params);
+   typedef void (QGLF_APIENTRYP type_glGetUniformiv)(GLuint program, GLint location, GLint * params);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getUniformiv = (type_glGetUniformiv)
-        context->getProcAddress(QLatin1String("glGetUniformiv"));
-    if (!funcs->getUniformiv) {
-        funcs->getUniformiv = (type_glGetUniformiv)
-            context->getProcAddress(QLatin1String("glGetUniformivARB"));
-    }
+   funcs->getUniformiv = (type_glGetUniformiv)
+                         context->getProcAddress(QLatin1String("glGetUniformiv"));
+   if (!funcs->getUniformiv) {
+      funcs->getUniformiv = (type_glGetUniformiv)
+                            context->getProcAddress(QLatin1String("glGetUniformivARB"));
+   }
 
-    if (funcs->getUniformiv)
-        funcs->getUniformiv(program, location, params);
-    else
-        funcs->getUniformiv = qglfResolveGetUniformiv;
+   if (funcs->getUniformiv) {
+      funcs->getUniformiv(program, location, params);
+   } else {
+      funcs->getUniformiv = qglfResolveGetUniformiv;
+   }
 }
 
-static int qglfResolveGetUniformLocation(GLuint program, const char* name)
+static int qglfResolveGetUniformLocation(GLuint program, const char *name)
 {
-    typedef int (QGLF_APIENTRYP type_glGetUniformLocation)(GLuint program, const char* name);
+   typedef int (QGLF_APIENTRYP type_glGetUniformLocation)(GLuint program, const char *name);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getUniformLocation = (type_glGetUniformLocation)
-        context->getProcAddress(QLatin1String("glGetUniformLocation"));
-    if (!funcs->getUniformLocation) {
-        funcs->getUniformLocation = (type_glGetUniformLocation)
-            context->getProcAddress(QLatin1String("glGetUniformLocationARB"));
-    }
+   funcs->getUniformLocation = (type_glGetUniformLocation)
+                               context->getProcAddress(QLatin1String("glGetUniformLocation"));
+   if (!funcs->getUniformLocation) {
+      funcs->getUniformLocation = (type_glGetUniformLocation)
+                                  context->getProcAddress(QLatin1String("glGetUniformLocationARB"));
+   }
 
-    if (funcs->getUniformLocation)
-        return funcs->getUniformLocation(program, name);
-    funcs->getUniformLocation = qglfResolveGetUniformLocation;
-    return int(0);
+   if (funcs->getUniformLocation) {
+      return funcs->getUniformLocation(program, name);
+   }
+   funcs->getUniformLocation = qglfResolveGetUniformLocation;
+   return int(0);
 }
 
-static void qglfResolveGetVertexAttribfv(GLuint index, GLenum pname, GLfloat* params)
+static void qglfResolveGetVertexAttribfv(GLuint index, GLenum pname, GLfloat *params)
 {
-    typedef void (QGLF_APIENTRYP type_glGetVertexAttribfv)(GLuint index, GLenum pname, GLfloat* params);
+   typedef void (QGLF_APIENTRYP type_glGetVertexAttribfv)(GLuint index, GLenum pname, GLfloat * params);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getVertexAttribfv = (type_glGetVertexAttribfv)
-        context->getProcAddress(QLatin1String("glGetVertexAttribfv"));
-    if (!funcs->getVertexAttribfv) {
-        funcs->getVertexAttribfv = (type_glGetVertexAttribfv)
-            context->getProcAddress(QLatin1String("glGetVertexAttribfvARB"));
-    }
+   funcs->getVertexAttribfv = (type_glGetVertexAttribfv)
+                              context->getProcAddress(QLatin1String("glGetVertexAttribfv"));
+   if (!funcs->getVertexAttribfv) {
+      funcs->getVertexAttribfv = (type_glGetVertexAttribfv)
+                                 context->getProcAddress(QLatin1String("glGetVertexAttribfvARB"));
+   }
 
-    if (funcs->getVertexAttribfv)
-        funcs->getVertexAttribfv(index, pname, params);
-    else
-        funcs->getVertexAttribfv = qglfResolveGetVertexAttribfv;
+   if (funcs->getVertexAttribfv) {
+      funcs->getVertexAttribfv(index, pname, params);
+   } else {
+      funcs->getVertexAttribfv = qglfResolveGetVertexAttribfv;
+   }
 }
 
-static void qglfResolveGetVertexAttribiv(GLuint index, GLenum pname, GLint* params)
+static void qglfResolveGetVertexAttribiv(GLuint index, GLenum pname, GLint *params)
 {
-    typedef void (QGLF_APIENTRYP type_glGetVertexAttribiv)(GLuint index, GLenum pname, GLint* params);
+   typedef void (QGLF_APIENTRYP type_glGetVertexAttribiv)(GLuint index, GLenum pname, GLint * params);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getVertexAttribiv = (type_glGetVertexAttribiv)
-        context->getProcAddress(QLatin1String("glGetVertexAttribiv"));
-    if (!funcs->getVertexAttribiv) {
-        funcs->getVertexAttribiv = (type_glGetVertexAttribiv)
-            context->getProcAddress(QLatin1String("glGetVertexAttribivARB"));
-    }
+   funcs->getVertexAttribiv = (type_glGetVertexAttribiv)
+                              context->getProcAddress(QLatin1String("glGetVertexAttribiv"));
+   if (!funcs->getVertexAttribiv) {
+      funcs->getVertexAttribiv = (type_glGetVertexAttribiv)
+                                 context->getProcAddress(QLatin1String("glGetVertexAttribivARB"));
+   }
 
-    if (funcs->getVertexAttribiv)
-        funcs->getVertexAttribiv(index, pname, params);
-    else
-        funcs->getVertexAttribiv = qglfResolveGetVertexAttribiv;
+   if (funcs->getVertexAttribiv) {
+      funcs->getVertexAttribiv(index, pname, params);
+   } else {
+      funcs->getVertexAttribiv = qglfResolveGetVertexAttribiv;
+   }
 }
 
-static void qglfResolveGetVertexAttribPointerv(GLuint index, GLenum pname, void** pointer)
+static void qglfResolveGetVertexAttribPointerv(GLuint index, GLenum pname, void **pointer)
 {
-    typedef void (QGLF_APIENTRYP type_glGetVertexAttribPointerv)(GLuint index, GLenum pname, void** pointer);
+   typedef void (QGLF_APIENTRYP type_glGetVertexAttribPointerv)(GLuint index, GLenum pname, void **pointer);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->getVertexAttribPointerv = (type_glGetVertexAttribPointerv)
-        context->getProcAddress(QLatin1String("glGetVertexAttribPointerv"));
-    if (!funcs->getVertexAttribPointerv) {
-        funcs->getVertexAttribPointerv = (type_glGetVertexAttribPointerv)
-            context->getProcAddress(QLatin1String("glGetVertexAttribPointervARB"));
-    }
+   funcs->getVertexAttribPointerv = (type_glGetVertexAttribPointerv)
+                                    context->getProcAddress(QLatin1String("glGetVertexAttribPointerv"));
+   if (!funcs->getVertexAttribPointerv) {
+      funcs->getVertexAttribPointerv = (type_glGetVertexAttribPointerv)
+                                       context->getProcAddress(QLatin1String("glGetVertexAttribPointervARB"));
+   }
 
-    if (funcs->getVertexAttribPointerv)
-        funcs->getVertexAttribPointerv(index, pname, pointer);
-    else
-        funcs->getVertexAttribPointerv = qglfResolveGetVertexAttribPointerv;
+   if (funcs->getVertexAttribPointerv) {
+      funcs->getVertexAttribPointerv(index, pname, pointer);
+   } else {
+      funcs->getVertexAttribPointerv = qglfResolveGetVertexAttribPointerv;
+   }
 }
 
 static GLboolean qglfResolveIsBuffer(GLuint buffer)
 {
-    typedef GLboolean (QGLF_APIENTRYP type_glIsBuffer)(GLuint buffer);
+   typedef GLboolean (QGLF_APIENTRYP type_glIsBuffer)(GLuint buffer);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->isBuffer = (type_glIsBuffer)
-        context->getProcAddress(QLatin1String("glIsBuffer"));
+   funcs->isBuffer = (type_glIsBuffer)
+                     context->getProcAddress(QLatin1String("glIsBuffer"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->isBuffer) {
-        funcs->isBuffer = (type_glIsBuffer)
-            context->getProcAddress(QLatin1String("glIsBufferOES"));
-    }
+   if (!funcs->isBuffer) {
+      funcs->isBuffer = (type_glIsBuffer)
+                        context->getProcAddress(QLatin1String("glIsBufferOES"));
+   }
 #endif
-    if (!funcs->isBuffer) {
-        funcs->isBuffer = (type_glIsBuffer)
-            context->getProcAddress(QLatin1String("glIsBufferEXT"));
-    }
-    if (!funcs->isBuffer) {
-        funcs->isBuffer = (type_glIsBuffer)
-            context->getProcAddress(QLatin1String("glIsBufferARB"));
-    }
+   if (!funcs->isBuffer) {
+      funcs->isBuffer = (type_glIsBuffer)
+                        context->getProcAddress(QLatin1String("glIsBufferEXT"));
+   }
+   if (!funcs->isBuffer) {
+      funcs->isBuffer = (type_glIsBuffer)
+                        context->getProcAddress(QLatin1String("glIsBufferARB"));
+   }
 
-    if (funcs->isBuffer)
-        return funcs->isBuffer(buffer);
-    funcs->isBuffer = qglfResolveIsBuffer;
-    return GLboolean(0);
+   if (funcs->isBuffer) {
+      return funcs->isBuffer(buffer);
+   }
+   funcs->isBuffer = qglfResolveIsBuffer;
+   return GLboolean(0);
 }
 
 static GLboolean qglfResolveIsFramebuffer(GLuint framebuffer)
 {
-    typedef GLboolean (QGLF_APIENTRYP type_glIsFramebuffer)(GLuint framebuffer);
+   typedef GLboolean (QGLF_APIENTRYP type_glIsFramebuffer)(GLuint framebuffer);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->isFramebuffer = (type_glIsFramebuffer)
-        context->getProcAddress(QLatin1String("glIsFramebuffer"));
+   funcs->isFramebuffer = (type_glIsFramebuffer)
+                          context->getProcAddress(QLatin1String("glIsFramebuffer"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->isFramebuffer) {
-        funcs->isFramebuffer = (type_glIsFramebuffer)
-            context->getProcAddress(QLatin1String("glIsFramebufferOES"));
-    }
+   if (!funcs->isFramebuffer) {
+      funcs->isFramebuffer = (type_glIsFramebuffer)
+                             context->getProcAddress(QLatin1String("glIsFramebufferOES"));
+   }
 #endif
-    if (!funcs->isFramebuffer) {
-        funcs->isFramebuffer = (type_glIsFramebuffer)
-            context->getProcAddress(QLatin1String("glIsFramebufferEXT"));
-    }
-    if (!funcs->isFramebuffer) {
-        funcs->isFramebuffer = (type_glIsFramebuffer)
-            context->getProcAddress(QLatin1String("glIsFramebufferARB"));
-    }
+   if (!funcs->isFramebuffer) {
+      funcs->isFramebuffer = (type_glIsFramebuffer)
+                             context->getProcAddress(QLatin1String("glIsFramebufferEXT"));
+   }
+   if (!funcs->isFramebuffer) {
+      funcs->isFramebuffer = (type_glIsFramebuffer)
+                             context->getProcAddress(QLatin1String("glIsFramebufferARB"));
+   }
 
-    if (funcs->isFramebuffer)
-        return funcs->isFramebuffer(framebuffer);
-    funcs->isFramebuffer = qglfResolveIsFramebuffer;
-    return GLboolean(0);
+   if (funcs->isFramebuffer) {
+      return funcs->isFramebuffer(framebuffer);
+   }
+   funcs->isFramebuffer = qglfResolveIsFramebuffer;
+   return GLboolean(0);
 }
 
 static GLboolean qglfSpecialIsProgram(GLuint program)
 {
-    return program != 0;
+   return program != 0;
 }
 
 static GLboolean qglfResolveIsProgram(GLuint program)
 {
-    typedef GLboolean (QGLF_APIENTRYP type_glIsProgram)(GLuint program);
+   typedef GLboolean (QGLF_APIENTRYP type_glIsProgram)(GLuint program);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->isProgram = (type_glIsProgram)
-        context->getProcAddress(QLatin1String("glIsProgram"));
-    if (!funcs->isProgram) {
-        funcs->isProgram = (type_glIsProgram)
-            context->getProcAddress(QLatin1String("glIsProgramARB"));
-    }
+   funcs->isProgram = (type_glIsProgram)
+                      context->getProcAddress(QLatin1String("glIsProgram"));
+   if (!funcs->isProgram) {
+      funcs->isProgram = (type_glIsProgram)
+                         context->getProcAddress(QLatin1String("glIsProgramARB"));
+   }
 
-    if (!funcs->isProgram)
-        funcs->isProgram = qglfSpecialIsProgram;
+   if (!funcs->isProgram) {
+      funcs->isProgram = qglfSpecialIsProgram;
+   }
 
-    return funcs->isProgram(program);
+   return funcs->isProgram(program);
 }
 
 static GLboolean qglfResolveIsRenderbuffer(GLuint renderbuffer)
 {
-    typedef GLboolean (QGLF_APIENTRYP type_glIsRenderbuffer)(GLuint renderbuffer);
+   typedef GLboolean (QGLF_APIENTRYP type_glIsRenderbuffer)(GLuint renderbuffer);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->isRenderbuffer = (type_glIsRenderbuffer)
-        context->getProcAddress(QLatin1String("glIsRenderbuffer"));
+   funcs->isRenderbuffer = (type_glIsRenderbuffer)
+                           context->getProcAddress(QLatin1String("glIsRenderbuffer"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->isRenderbuffer) {
-        funcs->isRenderbuffer = (type_glIsRenderbuffer)
-            context->getProcAddress(QLatin1String("glIsRenderbufferOES"));
-    }
+   if (!funcs->isRenderbuffer) {
+      funcs->isRenderbuffer = (type_glIsRenderbuffer)
+                              context->getProcAddress(QLatin1String("glIsRenderbufferOES"));
+   }
 #endif
-    if (!funcs->isRenderbuffer) {
-        funcs->isRenderbuffer = (type_glIsRenderbuffer)
-            context->getProcAddress(QLatin1String("glIsRenderbufferEXT"));
-    }
-    if (!funcs->isRenderbuffer) {
-        funcs->isRenderbuffer = (type_glIsRenderbuffer)
-            context->getProcAddress(QLatin1String("glIsRenderbufferARB"));
-    }
+   if (!funcs->isRenderbuffer) {
+      funcs->isRenderbuffer = (type_glIsRenderbuffer)
+                              context->getProcAddress(QLatin1String("glIsRenderbufferEXT"));
+   }
+   if (!funcs->isRenderbuffer) {
+      funcs->isRenderbuffer = (type_glIsRenderbuffer)
+                              context->getProcAddress(QLatin1String("glIsRenderbufferARB"));
+   }
 
-    if (funcs->isRenderbuffer)
-        return funcs->isRenderbuffer(renderbuffer);
-    funcs->isRenderbuffer = qglfResolveIsRenderbuffer;
-    return GLboolean(0);
+   if (funcs->isRenderbuffer) {
+      return funcs->isRenderbuffer(renderbuffer);
+   }
+   funcs->isRenderbuffer = qglfResolveIsRenderbuffer;
+   return GLboolean(0);
 }
 
 static GLboolean qglfSpecialIsShader(GLuint shader)
 {
-    return shader != 0;
+   return shader != 0;
 }
 
 static GLboolean qglfResolveIsShader(GLuint shader)
 {
-    typedef GLboolean (QGLF_APIENTRYP type_glIsShader)(GLuint shader);
+   typedef GLboolean (QGLF_APIENTRYP type_glIsShader)(GLuint shader);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->isShader = (type_glIsShader)
-        context->getProcAddress(QLatin1String("glIsShader"));
-    if (!funcs->isShader) {
-        funcs->isShader = (type_glIsShader)
-            context->getProcAddress(QLatin1String("glIsShaderARB"));
-    }
+   funcs->isShader = (type_glIsShader)
+                     context->getProcAddress(QLatin1String("glIsShader"));
+   if (!funcs->isShader) {
+      funcs->isShader = (type_glIsShader)
+                        context->getProcAddress(QLatin1String("glIsShaderARB"));
+   }
 
-    if (!funcs->isShader)
-        funcs->isShader = qglfSpecialIsShader;
+   if (!funcs->isShader) {
+      funcs->isShader = qglfSpecialIsShader;
+   }
 
-    return funcs->isShader(shader);
+   return funcs->isShader(shader);
 }
 
 static void qglfResolveLinkProgram(GLuint program)
 {
-    typedef void (QGLF_APIENTRYP type_glLinkProgram)(GLuint program);
+   typedef void (QGLF_APIENTRYP type_glLinkProgram)(GLuint program);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->linkProgram = (type_glLinkProgram)
-        context->getProcAddress(QLatin1String("glLinkProgram"));
-    if (!funcs->linkProgram) {
-        funcs->linkProgram = (type_glLinkProgram)
-            context->getProcAddress(QLatin1String("glLinkProgramARB"));
-    }
+   funcs->linkProgram = (type_glLinkProgram)
+                        context->getProcAddress(QLatin1String("glLinkProgram"));
+   if (!funcs->linkProgram) {
+      funcs->linkProgram = (type_glLinkProgram)
+                           context->getProcAddress(QLatin1String("glLinkProgramARB"));
+   }
 
-    if (funcs->linkProgram)
-        funcs->linkProgram(program);
-    else
-        funcs->linkProgram = qglfResolveLinkProgram;
+   if (funcs->linkProgram) {
+      funcs->linkProgram(program);
+   } else {
+      funcs->linkProgram = qglfResolveLinkProgram;
+   }
 }
 
 static void qglfSpecialReleaseShaderCompiler()
@@ -2675,812 +2774,859 @@ static void qglfSpecialReleaseShaderCompiler()
 
 static void qglfResolveReleaseShaderCompiler()
 {
-    typedef void (QGLF_APIENTRYP type_glReleaseShaderCompiler)();
+   typedef void (QGLF_APIENTRYP type_glReleaseShaderCompiler)();
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->releaseShaderCompiler = (type_glReleaseShaderCompiler)
-        context->getProcAddress(QLatin1String("glReleaseShaderCompiler"));
-    if (!funcs->releaseShaderCompiler) {
-        funcs->releaseShaderCompiler = (type_glReleaseShaderCompiler)
-            context->getProcAddress(QLatin1String("glReleaseShaderCompilerARB"));
-    }
+   funcs->releaseShaderCompiler = (type_glReleaseShaderCompiler)
+                                  context->getProcAddress(QLatin1String("glReleaseShaderCompiler"));
+   if (!funcs->releaseShaderCompiler) {
+      funcs->releaseShaderCompiler = (type_glReleaseShaderCompiler)
+                                     context->getProcAddress(QLatin1String("glReleaseShaderCompilerARB"));
+   }
 
-    if (!funcs->releaseShaderCompiler)
-        funcs->releaseShaderCompiler = qglfSpecialReleaseShaderCompiler;
+   if (!funcs->releaseShaderCompiler) {
+      funcs->releaseShaderCompiler = qglfSpecialReleaseShaderCompiler;
+   }
 
-    funcs->releaseShaderCompiler();
+   funcs->releaseShaderCompiler();
 }
 
 static void qglfResolveRenderbufferStorage(GLenum target, GLenum internalformat, GLsizei width, GLsizei height)
 {
-    typedef void (QGLF_APIENTRYP type_glRenderbufferStorage)(GLenum target, GLenum internalformat, GLsizei width, GLsizei height);
+   typedef void (QGLF_APIENTRYP type_glRenderbufferStorage)(GLenum target, GLenum internalformat, GLsizei width,
+         GLsizei height);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->renderbufferStorage = (type_glRenderbufferStorage)
-        context->getProcAddress(QLatin1String("glRenderbufferStorage"));
+   funcs->renderbufferStorage = (type_glRenderbufferStorage)
+                                context->getProcAddress(QLatin1String("glRenderbufferStorage"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->renderbufferStorage) {
-        funcs->renderbufferStorage = (type_glRenderbufferStorage)
-            context->getProcAddress(QLatin1String("glRenderbufferStorageOES"));
-    }
+   if (!funcs->renderbufferStorage) {
+      funcs->renderbufferStorage = (type_glRenderbufferStorage)
+                                   context->getProcAddress(QLatin1String("glRenderbufferStorageOES"));
+   }
 #endif
-    if (!funcs->renderbufferStorage) {
-        funcs->renderbufferStorage = (type_glRenderbufferStorage)
-            context->getProcAddress(QLatin1String("glRenderbufferStorageEXT"));
-    }
-    if (!funcs->renderbufferStorage) {
-        funcs->renderbufferStorage = (type_glRenderbufferStorage)
-            context->getProcAddress(QLatin1String("glRenderbufferStorageARB"));
-    }
+   if (!funcs->renderbufferStorage) {
+      funcs->renderbufferStorage = (type_glRenderbufferStorage)
+                                   context->getProcAddress(QLatin1String("glRenderbufferStorageEXT"));
+   }
+   if (!funcs->renderbufferStorage) {
+      funcs->renderbufferStorage = (type_glRenderbufferStorage)
+                                   context->getProcAddress(QLatin1String("glRenderbufferStorageARB"));
+   }
 
-    if (funcs->renderbufferStorage)
-        funcs->renderbufferStorage(target, internalformat, width, height);
-    else
-        funcs->renderbufferStorage = qglfResolveRenderbufferStorage;
+   if (funcs->renderbufferStorage) {
+      funcs->renderbufferStorage(target, internalformat, width, height);
+   } else {
+      funcs->renderbufferStorage = qglfResolveRenderbufferStorage;
+   }
 }
 
 static void qglfResolveSampleCoverage(GLclampf value, GLboolean invert)
 {
-    typedef void (QGLF_APIENTRYP type_glSampleCoverage)(GLclampf value, GLboolean invert);
+   typedef void (QGLF_APIENTRYP type_glSampleCoverage)(GLclampf value, GLboolean invert);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->sampleCoverage = (type_glSampleCoverage)
-        context->getProcAddress(QLatin1String("glSampleCoverage"));
+   funcs->sampleCoverage = (type_glSampleCoverage)
+                           context->getProcAddress(QLatin1String("glSampleCoverage"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->sampleCoverage) {
-        funcs->sampleCoverage = (type_glSampleCoverage)
-            context->getProcAddress(QLatin1String("glSampleCoverageOES"));
-    }
+   if (!funcs->sampleCoverage) {
+      funcs->sampleCoverage = (type_glSampleCoverage)
+                              context->getProcAddress(QLatin1String("glSampleCoverageOES"));
+   }
 #endif
-    if (!funcs->sampleCoverage) {
-        funcs->sampleCoverage = (type_glSampleCoverage)
-            context->getProcAddress(QLatin1String("glSampleCoverageEXT"));
-    }
-    if (!funcs->sampleCoverage) {
-        funcs->sampleCoverage = (type_glSampleCoverage)
-            context->getProcAddress(QLatin1String("glSampleCoverageARB"));
-    }
+   if (!funcs->sampleCoverage) {
+      funcs->sampleCoverage = (type_glSampleCoverage)
+                              context->getProcAddress(QLatin1String("glSampleCoverageEXT"));
+   }
+   if (!funcs->sampleCoverage) {
+      funcs->sampleCoverage = (type_glSampleCoverage)
+                              context->getProcAddress(QLatin1String("glSampleCoverageARB"));
+   }
 
-    if (funcs->sampleCoverage)
-        funcs->sampleCoverage(value, invert);
-    else
-        funcs->sampleCoverage = qglfResolveSampleCoverage;
+   if (funcs->sampleCoverage) {
+      funcs->sampleCoverage(value, invert);
+   } else {
+      funcs->sampleCoverage = qglfResolveSampleCoverage;
+   }
 }
 
-static void qglfResolveShaderBinary(GLint n, const GLuint* shaders, GLenum binaryformat, const void* binary, GLint length)
+static void qglfResolveShaderBinary(GLint n, const GLuint *shaders, GLenum binaryformat, const void *binary,
+                                    GLint length)
 {
-    typedef void (QGLF_APIENTRYP type_glShaderBinary)(GLint n, const GLuint* shaders, GLenum binaryformat, const void* binary, GLint length);
+   typedef void (QGLF_APIENTRYP type_glShaderBinary)(GLint n, const GLuint * shaders, GLenum binaryformat,
+         const void *binary, GLint length);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->shaderBinary = (type_glShaderBinary)
-        context->getProcAddress(QLatin1String("glShaderBinary"));
-    if (!funcs->shaderBinary) {
-        funcs->shaderBinary = (type_glShaderBinary)
-            context->getProcAddress(QLatin1String("glShaderBinaryARB"));
-    }
+   funcs->shaderBinary = (type_glShaderBinary)
+                         context->getProcAddress(QLatin1String("glShaderBinary"));
+   if (!funcs->shaderBinary) {
+      funcs->shaderBinary = (type_glShaderBinary)
+                            context->getProcAddress(QLatin1String("glShaderBinaryARB"));
+   }
 
-    if (funcs->shaderBinary)
-        funcs->shaderBinary(n, shaders, binaryformat, binary, length);
-    else
-        funcs->shaderBinary = qglfResolveShaderBinary;
+   if (funcs->shaderBinary) {
+      funcs->shaderBinary(n, shaders, binaryformat, binary, length);
+   } else {
+      funcs->shaderBinary = qglfResolveShaderBinary;
+   }
 }
 
-static void qglfResolveShaderSource(GLuint shader, GLsizei count, const char** string, const GLint* length)
+static void qglfResolveShaderSource(GLuint shader, GLsizei count, const char **string, const GLint *length)
 {
-    typedef void (QGLF_APIENTRYP type_glShaderSource)(GLuint shader, GLsizei count, const char** string, const GLint* length);
+   typedef void (QGLF_APIENTRYP type_glShaderSource)(GLuint shader, GLsizei count, const char **string,
+         const GLint * length);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->shaderSource = (type_glShaderSource)
-        context->getProcAddress(QLatin1String("glShaderSource"));
-    if (!funcs->shaderSource) {
-        funcs->shaderSource = (type_glShaderSource)
-            context->getProcAddress(QLatin1String("glShaderSourceARB"));
-    }
+   funcs->shaderSource = (type_glShaderSource)
+                         context->getProcAddress(QLatin1String("glShaderSource"));
+   if (!funcs->shaderSource) {
+      funcs->shaderSource = (type_glShaderSource)
+                            context->getProcAddress(QLatin1String("glShaderSourceARB"));
+   }
 
-    if (funcs->shaderSource)
-        funcs->shaderSource(shader, count, string, length);
-    else
-        funcs->shaderSource = qglfResolveShaderSource;
+   if (funcs->shaderSource) {
+      funcs->shaderSource(shader, count, string, length);
+   } else {
+      funcs->shaderSource = qglfResolveShaderSource;
+   }
 }
 
 static void qglfResolveStencilFuncSeparate(GLenum face, GLenum func, GLint ref, GLuint mask)
 {
-    typedef void (QGLF_APIENTRYP type_glStencilFuncSeparate)(GLenum face, GLenum func, GLint ref, GLuint mask);
+   typedef void (QGLF_APIENTRYP type_glStencilFuncSeparate)(GLenum face, GLenum func, GLint ref, GLuint mask);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->stencilFuncSeparate = (type_glStencilFuncSeparate)
-        context->getProcAddress(QLatin1String("glStencilFuncSeparate"));
+   funcs->stencilFuncSeparate = (type_glStencilFuncSeparate)
+                                context->getProcAddress(QLatin1String("glStencilFuncSeparate"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->stencilFuncSeparate) {
-        funcs->stencilFuncSeparate = (type_glStencilFuncSeparate)
-            context->getProcAddress(QLatin1String("glStencilFuncSeparateOES"));
-    }
+   if (!funcs->stencilFuncSeparate) {
+      funcs->stencilFuncSeparate = (type_glStencilFuncSeparate)
+                                   context->getProcAddress(QLatin1String("glStencilFuncSeparateOES"));
+   }
 #endif
-    if (!funcs->stencilFuncSeparate) {
-        funcs->stencilFuncSeparate = (type_glStencilFuncSeparate)
-            context->getProcAddress(QLatin1String("glStencilFuncSeparateEXT"));
-    }
-    if (!funcs->stencilFuncSeparate) {
-        funcs->stencilFuncSeparate = (type_glStencilFuncSeparate)
-            context->getProcAddress(QLatin1String("glStencilFuncSeparateARB"));
-    }
+   if (!funcs->stencilFuncSeparate) {
+      funcs->stencilFuncSeparate = (type_glStencilFuncSeparate)
+                                   context->getProcAddress(QLatin1String("glStencilFuncSeparateEXT"));
+   }
+   if (!funcs->stencilFuncSeparate) {
+      funcs->stencilFuncSeparate = (type_glStencilFuncSeparate)
+                                   context->getProcAddress(QLatin1String("glStencilFuncSeparateARB"));
+   }
 
-    if (funcs->stencilFuncSeparate)
-        funcs->stencilFuncSeparate(face, func, ref, mask);
-    else
-        funcs->stencilFuncSeparate = qglfResolveStencilFuncSeparate;
+   if (funcs->stencilFuncSeparate) {
+      funcs->stencilFuncSeparate(face, func, ref, mask);
+   } else {
+      funcs->stencilFuncSeparate = qglfResolveStencilFuncSeparate;
+   }
 }
 
 static void qglfResolveStencilMaskSeparate(GLenum face, GLuint mask)
 {
-    typedef void (QGLF_APIENTRYP type_glStencilMaskSeparate)(GLenum face, GLuint mask);
+   typedef void (QGLF_APIENTRYP type_glStencilMaskSeparate)(GLenum face, GLuint mask);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->stencilMaskSeparate = (type_glStencilMaskSeparate)
-        context->getProcAddress(QLatin1String("glStencilMaskSeparate"));
+   funcs->stencilMaskSeparate = (type_glStencilMaskSeparate)
+                                context->getProcAddress(QLatin1String("glStencilMaskSeparate"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->stencilMaskSeparate) {
-        funcs->stencilMaskSeparate = (type_glStencilMaskSeparate)
-            context->getProcAddress(QLatin1String("glStencilMaskSeparateOES"));
-    }
+   if (!funcs->stencilMaskSeparate) {
+      funcs->stencilMaskSeparate = (type_glStencilMaskSeparate)
+                                   context->getProcAddress(QLatin1String("glStencilMaskSeparateOES"));
+   }
 #endif
-    if (!funcs->stencilMaskSeparate) {
-        funcs->stencilMaskSeparate = (type_glStencilMaskSeparate)
-            context->getProcAddress(QLatin1String("glStencilMaskSeparateEXT"));
-    }
-    if (!funcs->stencilMaskSeparate) {
-        funcs->stencilMaskSeparate = (type_glStencilMaskSeparate)
-            context->getProcAddress(QLatin1String("glStencilMaskSeparateARB"));
-    }
+   if (!funcs->stencilMaskSeparate) {
+      funcs->stencilMaskSeparate = (type_glStencilMaskSeparate)
+                                   context->getProcAddress(QLatin1String("glStencilMaskSeparateEXT"));
+   }
+   if (!funcs->stencilMaskSeparate) {
+      funcs->stencilMaskSeparate = (type_glStencilMaskSeparate)
+                                   context->getProcAddress(QLatin1String("glStencilMaskSeparateARB"));
+   }
 
-    if (funcs->stencilMaskSeparate)
-        funcs->stencilMaskSeparate(face, mask);
-    else
-        funcs->stencilMaskSeparate = qglfResolveStencilMaskSeparate;
+   if (funcs->stencilMaskSeparate) {
+      funcs->stencilMaskSeparate(face, mask);
+   } else {
+      funcs->stencilMaskSeparate = qglfResolveStencilMaskSeparate;
+   }
 }
 
 static void qglfResolveStencilOpSeparate(GLenum face, GLenum fail, GLenum zfail, GLenum zpass)
 {
-    typedef void (QGLF_APIENTRYP type_glStencilOpSeparate)(GLenum face, GLenum fail, GLenum zfail, GLenum zpass);
+   typedef void (QGLF_APIENTRYP type_glStencilOpSeparate)(GLenum face, GLenum fail, GLenum zfail, GLenum zpass);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->stencilOpSeparate = (type_glStencilOpSeparate)
-        context->getProcAddress(QLatin1String("glStencilOpSeparate"));
+   funcs->stencilOpSeparate = (type_glStencilOpSeparate)
+                              context->getProcAddress(QLatin1String("glStencilOpSeparate"));
 #ifdef QT_OPENGL_ES
-    if (!funcs->stencilOpSeparate) {
-        funcs->stencilOpSeparate = (type_glStencilOpSeparate)
-            context->getProcAddress(QLatin1String("glStencilOpSeparateOES"));
-    }
+   if (!funcs->stencilOpSeparate) {
+      funcs->stencilOpSeparate = (type_glStencilOpSeparate)
+                                 context->getProcAddress(QLatin1String("glStencilOpSeparateOES"));
+   }
 #endif
-    if (!funcs->stencilOpSeparate) {
-        funcs->stencilOpSeparate = (type_glStencilOpSeparate)
-            context->getProcAddress(QLatin1String("glStencilOpSeparateEXT"));
-    }
-    if (!funcs->stencilOpSeparate) {
-        funcs->stencilOpSeparate = (type_glStencilOpSeparate)
-            context->getProcAddress(QLatin1String("glStencilOpSeparateARB"));
-    }
+   if (!funcs->stencilOpSeparate) {
+      funcs->stencilOpSeparate = (type_glStencilOpSeparate)
+                                 context->getProcAddress(QLatin1String("glStencilOpSeparateEXT"));
+   }
+   if (!funcs->stencilOpSeparate) {
+      funcs->stencilOpSeparate = (type_glStencilOpSeparate)
+                                 context->getProcAddress(QLatin1String("glStencilOpSeparateARB"));
+   }
 
-    if (funcs->stencilOpSeparate)
-        funcs->stencilOpSeparate(face, fail, zfail, zpass);
-    else
-        funcs->stencilOpSeparate = qglfResolveStencilOpSeparate;
+   if (funcs->stencilOpSeparate) {
+      funcs->stencilOpSeparate(face, fail, zfail, zpass);
+   } else {
+      funcs->stencilOpSeparate = qglfResolveStencilOpSeparate;
+   }
 }
 
 static void qglfResolveUniform1f(GLint location, GLfloat x)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform1f)(GLint location, GLfloat x);
+   typedef void (QGLF_APIENTRYP type_glUniform1f)(GLint location, GLfloat x);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform1f = (type_glUniform1f)
-        context->getProcAddress(QLatin1String("glUniform1f"));
-    if (!funcs->uniform1f) {
-        funcs->uniform1f = (type_glUniform1f)
-            context->getProcAddress(QLatin1String("glUniform1fARB"));
-    }
+   funcs->uniform1f = (type_glUniform1f)
+                      context->getProcAddress(QLatin1String("glUniform1f"));
+   if (!funcs->uniform1f) {
+      funcs->uniform1f = (type_glUniform1f)
+                         context->getProcAddress(QLatin1String("glUniform1fARB"));
+   }
 
-    if (funcs->uniform1f)
-        funcs->uniform1f(location, x);
-    else
-        funcs->uniform1f = qglfResolveUniform1f;
+   if (funcs->uniform1f) {
+      funcs->uniform1f(location, x);
+   } else {
+      funcs->uniform1f = qglfResolveUniform1f;
+   }
 }
 
-static void qglfResolveUniform1fv(GLint location, GLsizei count, const GLfloat* v)
+static void qglfResolveUniform1fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform1fv)(GLint location, GLsizei count, const GLfloat* v);
+   typedef void (QGLF_APIENTRYP type_glUniform1fv)(GLint location, GLsizei count, const GLfloat * v);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform1fv = (type_glUniform1fv)
-        context->getProcAddress(QLatin1String("glUniform1fv"));
-    if (!funcs->uniform1fv) {
-        funcs->uniform1fv = (type_glUniform1fv)
-            context->getProcAddress(QLatin1String("glUniform1fvARB"));
-    }
+   funcs->uniform1fv = (type_glUniform1fv)
+                       context->getProcAddress(QLatin1String("glUniform1fv"));
+   if (!funcs->uniform1fv) {
+      funcs->uniform1fv = (type_glUniform1fv)
+                          context->getProcAddress(QLatin1String("glUniform1fvARB"));
+   }
 
-    if (funcs->uniform1fv)
-        funcs->uniform1fv(location, count, v);
-    else
-        funcs->uniform1fv = qglfResolveUniform1fv;
+   if (funcs->uniform1fv) {
+      funcs->uniform1fv(location, count, v);
+   } else {
+      funcs->uniform1fv = qglfResolveUniform1fv;
+   }
 }
 
 static void qglfResolveUniform1i(GLint location, GLint x)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform1i)(GLint location, GLint x);
+   typedef void (QGLF_APIENTRYP type_glUniform1i)(GLint location, GLint x);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform1i = (type_glUniform1i)
-        context->getProcAddress(QLatin1String("glUniform1i"));
-    if (!funcs->uniform1i) {
-        funcs->uniform1i = (type_glUniform1i)
-            context->getProcAddress(QLatin1String("glUniform1iARB"));
-    }
+   funcs->uniform1i = (type_glUniform1i)
+                      context->getProcAddress(QLatin1String("glUniform1i"));
+   if (!funcs->uniform1i) {
+      funcs->uniform1i = (type_glUniform1i)
+                         context->getProcAddress(QLatin1String("glUniform1iARB"));
+   }
 
-    if (funcs->uniform1i)
-        funcs->uniform1i(location, x);
-    else
-        funcs->uniform1i = qglfResolveUniform1i;
+   if (funcs->uniform1i) {
+      funcs->uniform1i(location, x);
+   } else {
+      funcs->uniform1i = qglfResolveUniform1i;
+   }
 }
 
-static void qglfResolveUniform1iv(GLint location, GLsizei count, const GLint* v)
+static void qglfResolveUniform1iv(GLint location, GLsizei count, const GLint *v)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform1iv)(GLint location, GLsizei count, const GLint* v);
+   typedef void (QGLF_APIENTRYP type_glUniform1iv)(GLint location, GLsizei count, const GLint * v);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform1iv = (type_glUniform1iv)
-        context->getProcAddress(QLatin1String("glUniform1iv"));
-    if (!funcs->uniform1iv) {
-        funcs->uniform1iv = (type_glUniform1iv)
-            context->getProcAddress(QLatin1String("glUniform1ivARB"));
-    }
+   funcs->uniform1iv = (type_glUniform1iv)
+                       context->getProcAddress(QLatin1String("glUniform1iv"));
+   if (!funcs->uniform1iv) {
+      funcs->uniform1iv = (type_glUniform1iv)
+                          context->getProcAddress(QLatin1String("glUniform1ivARB"));
+   }
 
-    if (funcs->uniform1iv)
-        funcs->uniform1iv(location, count, v);
-    else
-        funcs->uniform1iv = qglfResolveUniform1iv;
+   if (funcs->uniform1iv) {
+      funcs->uniform1iv(location, count, v);
+   } else {
+      funcs->uniform1iv = qglfResolveUniform1iv;
+   }
 }
 
 static void qglfResolveUniform2f(GLint location, GLfloat x, GLfloat y)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform2f)(GLint location, GLfloat x, GLfloat y);
+   typedef void (QGLF_APIENTRYP type_glUniform2f)(GLint location, GLfloat x, GLfloat y);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform2f = (type_glUniform2f)
-        context->getProcAddress(QLatin1String("glUniform2f"));
-    if (!funcs->uniform2f) {
-        funcs->uniform2f = (type_glUniform2f)
-            context->getProcAddress(QLatin1String("glUniform2fARB"));
-    }
+   funcs->uniform2f = (type_glUniform2f)
+                      context->getProcAddress(QLatin1String("glUniform2f"));
+   if (!funcs->uniform2f) {
+      funcs->uniform2f = (type_glUniform2f)
+                         context->getProcAddress(QLatin1String("glUniform2fARB"));
+   }
 
-    if (funcs->uniform2f)
-        funcs->uniform2f(location, x, y);
-    else
-        funcs->uniform2f = qglfResolveUniform2f;
+   if (funcs->uniform2f) {
+      funcs->uniform2f(location, x, y);
+   } else {
+      funcs->uniform2f = qglfResolveUniform2f;
+   }
 }
 
-static void qglfResolveUniform2fv(GLint location, GLsizei count, const GLfloat* v)
+static void qglfResolveUniform2fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform2fv)(GLint location, GLsizei count, const GLfloat* v);
+   typedef void (QGLF_APIENTRYP type_glUniform2fv)(GLint location, GLsizei count, const GLfloat * v);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform2fv = (type_glUniform2fv)
-        context->getProcAddress(QLatin1String("glUniform2fv"));
-    if (!funcs->uniform2fv) {
-        funcs->uniform2fv = (type_glUniform2fv)
-            context->getProcAddress(QLatin1String("glUniform2fvARB"));
-    }
+   funcs->uniform2fv = (type_glUniform2fv)
+                       context->getProcAddress(QLatin1String("glUniform2fv"));
+   if (!funcs->uniform2fv) {
+      funcs->uniform2fv = (type_glUniform2fv)
+                          context->getProcAddress(QLatin1String("glUniform2fvARB"));
+   }
 
-    if (funcs->uniform2fv)
-        funcs->uniform2fv(location, count, v);
-    else
-        funcs->uniform2fv = qglfResolveUniform2fv;
+   if (funcs->uniform2fv) {
+      funcs->uniform2fv(location, count, v);
+   } else {
+      funcs->uniform2fv = qglfResolveUniform2fv;
+   }
 }
 
 static void qglfResolveUniform2i(GLint location, GLint x, GLint y)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform2i)(GLint location, GLint x, GLint y);
+   typedef void (QGLF_APIENTRYP type_glUniform2i)(GLint location, GLint x, GLint y);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform2i = (type_glUniform2i)
-        context->getProcAddress(QLatin1String("glUniform2i"));
-    if (!funcs->uniform2i) {
-        funcs->uniform2i = (type_glUniform2i)
-            context->getProcAddress(QLatin1String("glUniform2iARB"));
-    }
+   funcs->uniform2i = (type_glUniform2i)
+                      context->getProcAddress(QLatin1String("glUniform2i"));
+   if (!funcs->uniform2i) {
+      funcs->uniform2i = (type_glUniform2i)
+                         context->getProcAddress(QLatin1String("glUniform2iARB"));
+   }
 
-    if (funcs->uniform2i)
-        funcs->uniform2i(location, x, y);
-    else
-        funcs->uniform2i = qglfResolveUniform2i;
+   if (funcs->uniform2i) {
+      funcs->uniform2i(location, x, y);
+   } else {
+      funcs->uniform2i = qglfResolveUniform2i;
+   }
 }
 
-static void qglfResolveUniform2iv(GLint location, GLsizei count, const GLint* v)
+static void qglfResolveUniform2iv(GLint location, GLsizei count, const GLint *v)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform2iv)(GLint location, GLsizei count, const GLint* v);
+   typedef void (QGLF_APIENTRYP type_glUniform2iv)(GLint location, GLsizei count, const GLint * v);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform2iv = (type_glUniform2iv)
-        context->getProcAddress(QLatin1String("glUniform2iv"));
-    if (!funcs->uniform2iv) {
-        funcs->uniform2iv = (type_glUniform2iv)
-            context->getProcAddress(QLatin1String("glUniform2ivARB"));
-    }
+   funcs->uniform2iv = (type_glUniform2iv)
+                       context->getProcAddress(QLatin1String("glUniform2iv"));
+   if (!funcs->uniform2iv) {
+      funcs->uniform2iv = (type_glUniform2iv)
+                          context->getProcAddress(QLatin1String("glUniform2ivARB"));
+   }
 
-    if (funcs->uniform2iv)
-        funcs->uniform2iv(location, count, v);
-    else
-        funcs->uniform2iv = qglfResolveUniform2iv;
+   if (funcs->uniform2iv) {
+      funcs->uniform2iv(location, count, v);
+   } else {
+      funcs->uniform2iv = qglfResolveUniform2iv;
+   }
 }
 
 static void qglfResolveUniform3f(GLint location, GLfloat x, GLfloat y, GLfloat z)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform3f)(GLint location, GLfloat x, GLfloat y, GLfloat z);
+   typedef void (QGLF_APIENTRYP type_glUniform3f)(GLint location, GLfloat x, GLfloat y, GLfloat z);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform3f = (type_glUniform3f)
-        context->getProcAddress(QLatin1String("glUniform3f"));
-    if (!funcs->uniform3f) {
-        funcs->uniform3f = (type_glUniform3f)
-            context->getProcAddress(QLatin1String("glUniform3fARB"));
-    }
+   funcs->uniform3f = (type_glUniform3f)
+                      context->getProcAddress(QLatin1String("glUniform3f"));
+   if (!funcs->uniform3f) {
+      funcs->uniform3f = (type_glUniform3f)
+                         context->getProcAddress(QLatin1String("glUniform3fARB"));
+   }
 
-    if (funcs->uniform3f)
-        funcs->uniform3f(location, x, y, z);
-    else
-        funcs->uniform3f = qglfResolveUniform3f;
+   if (funcs->uniform3f) {
+      funcs->uniform3f(location, x, y, z);
+   } else {
+      funcs->uniform3f = qglfResolveUniform3f;
+   }
 }
 
-static void qglfResolveUniform3fv(GLint location, GLsizei count, const GLfloat* v)
+static void qglfResolveUniform3fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform3fv)(GLint location, GLsizei count, const GLfloat* v);
+   typedef void (QGLF_APIENTRYP type_glUniform3fv)(GLint location, GLsizei count, const GLfloat * v);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform3fv = (type_glUniform3fv)
-        context->getProcAddress(QLatin1String("glUniform3fv"));
-    if (!funcs->uniform3fv) {
-        funcs->uniform3fv = (type_glUniform3fv)
-            context->getProcAddress(QLatin1String("glUniform3fvARB"));
-    }
+   funcs->uniform3fv = (type_glUniform3fv)
+                       context->getProcAddress(QLatin1String("glUniform3fv"));
+   if (!funcs->uniform3fv) {
+      funcs->uniform3fv = (type_glUniform3fv)
+                          context->getProcAddress(QLatin1String("glUniform3fvARB"));
+   }
 
-    if (funcs->uniform3fv)
-        funcs->uniform3fv(location, count, v);
-    else
-        funcs->uniform3fv = qglfResolveUniform3fv;
+   if (funcs->uniform3fv) {
+      funcs->uniform3fv(location, count, v);
+   } else {
+      funcs->uniform3fv = qglfResolveUniform3fv;
+   }
 }
 
 static void qglfResolveUniform3i(GLint location, GLint x, GLint y, GLint z)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform3i)(GLint location, GLint x, GLint y, GLint z);
+   typedef void (QGLF_APIENTRYP type_glUniform3i)(GLint location, GLint x, GLint y, GLint z);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform3i = (type_glUniform3i)
-        context->getProcAddress(QLatin1String("glUniform3i"));
-    if (!funcs->uniform3i) {
-        funcs->uniform3i = (type_glUniform3i)
-            context->getProcAddress(QLatin1String("glUniform3iARB"));
-    }
+   funcs->uniform3i = (type_glUniform3i)
+                      context->getProcAddress(QLatin1String("glUniform3i"));
+   if (!funcs->uniform3i) {
+      funcs->uniform3i = (type_glUniform3i)
+                         context->getProcAddress(QLatin1String("glUniform3iARB"));
+   }
 
-    if (funcs->uniform3i)
-        funcs->uniform3i(location, x, y, z);
-    else
-        funcs->uniform3i = qglfResolveUniform3i;
+   if (funcs->uniform3i) {
+      funcs->uniform3i(location, x, y, z);
+   } else {
+      funcs->uniform3i = qglfResolveUniform3i;
+   }
 }
 
-static void qglfResolveUniform3iv(GLint location, GLsizei count, const GLint* v)
+static void qglfResolveUniform3iv(GLint location, GLsizei count, const GLint *v)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform3iv)(GLint location, GLsizei count, const GLint* v);
+   typedef void (QGLF_APIENTRYP type_glUniform3iv)(GLint location, GLsizei count, const GLint * v);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform3iv = (type_glUniform3iv)
-        context->getProcAddress(QLatin1String("glUniform3iv"));
-    if (!funcs->uniform3iv) {
-        funcs->uniform3iv = (type_glUniform3iv)
-            context->getProcAddress(QLatin1String("glUniform3ivARB"));
-    }
+   funcs->uniform3iv = (type_glUniform3iv)
+                       context->getProcAddress(QLatin1String("glUniform3iv"));
+   if (!funcs->uniform3iv) {
+      funcs->uniform3iv = (type_glUniform3iv)
+                          context->getProcAddress(QLatin1String("glUniform3ivARB"));
+   }
 
-    if (funcs->uniform3iv)
-        funcs->uniform3iv(location, count, v);
-    else
-        funcs->uniform3iv = qglfResolveUniform3iv;
+   if (funcs->uniform3iv) {
+      funcs->uniform3iv(location, count, v);
+   } else {
+      funcs->uniform3iv = qglfResolveUniform3iv;
+   }
 }
 
 static void qglfResolveUniform4f(GLint location, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform4f)(GLint location, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+   typedef void (QGLF_APIENTRYP type_glUniform4f)(GLint location, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform4f = (type_glUniform4f)
-        context->getProcAddress(QLatin1String("glUniform4f"));
-    if (!funcs->uniform4f) {
-        funcs->uniform4f = (type_glUniform4f)
-            context->getProcAddress(QLatin1String("glUniform4fARB"));
-    }
+   funcs->uniform4f = (type_glUniform4f)
+                      context->getProcAddress(QLatin1String("glUniform4f"));
+   if (!funcs->uniform4f) {
+      funcs->uniform4f = (type_glUniform4f)
+                         context->getProcAddress(QLatin1String("glUniform4fARB"));
+   }
 
-    if (funcs->uniform4f)
-        funcs->uniform4f(location, x, y, z, w);
-    else
-        funcs->uniform4f = qglfResolveUniform4f;
+   if (funcs->uniform4f) {
+      funcs->uniform4f(location, x, y, z, w);
+   } else {
+      funcs->uniform4f = qglfResolveUniform4f;
+   }
 }
 
-static void qglfResolveUniform4fv(GLint location, GLsizei count, const GLfloat* v)
+static void qglfResolveUniform4fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform4fv)(GLint location, GLsizei count, const GLfloat* v);
+   typedef void (QGLF_APIENTRYP type_glUniform4fv)(GLint location, GLsizei count, const GLfloat * v);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform4fv = (type_glUniform4fv)
-        context->getProcAddress(QLatin1String("glUniform4fv"));
-    if (!funcs->uniform4fv) {
-        funcs->uniform4fv = (type_glUniform4fv)
-            context->getProcAddress(QLatin1String("glUniform4fvARB"));
-    }
+   funcs->uniform4fv = (type_glUniform4fv)
+                       context->getProcAddress(QLatin1String("glUniform4fv"));
+   if (!funcs->uniform4fv) {
+      funcs->uniform4fv = (type_glUniform4fv)
+                          context->getProcAddress(QLatin1String("glUniform4fvARB"));
+   }
 
-    if (funcs->uniform4fv)
-        funcs->uniform4fv(location, count, v);
-    else
-        funcs->uniform4fv = qglfResolveUniform4fv;
+   if (funcs->uniform4fv) {
+      funcs->uniform4fv(location, count, v);
+   } else {
+      funcs->uniform4fv = qglfResolveUniform4fv;
+   }
 }
 
 static void qglfResolveUniform4i(GLint location, GLint x, GLint y, GLint z, GLint w)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform4i)(GLint location, GLint x, GLint y, GLint z, GLint w);
+   typedef void (QGLF_APIENTRYP type_glUniform4i)(GLint location, GLint x, GLint y, GLint z, GLint w);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform4i = (type_glUniform4i)
-        context->getProcAddress(QLatin1String("glUniform4i"));
-    if (!funcs->uniform4i) {
-        funcs->uniform4i = (type_glUniform4i)
-            context->getProcAddress(QLatin1String("glUniform4iARB"));
-    }
+   funcs->uniform4i = (type_glUniform4i)
+                      context->getProcAddress(QLatin1String("glUniform4i"));
+   if (!funcs->uniform4i) {
+      funcs->uniform4i = (type_glUniform4i)
+                         context->getProcAddress(QLatin1String("glUniform4iARB"));
+   }
 
-    if (funcs->uniform4i)
-        funcs->uniform4i(location, x, y, z, w);
-    else
-        funcs->uniform4i = qglfResolveUniform4i;
+   if (funcs->uniform4i) {
+      funcs->uniform4i(location, x, y, z, w);
+   } else {
+      funcs->uniform4i = qglfResolveUniform4i;
+   }
 }
 
-static void qglfResolveUniform4iv(GLint location, GLsizei count, const GLint* v)
+static void qglfResolveUniform4iv(GLint location, GLsizei count, const GLint *v)
 {
-    typedef void (QGLF_APIENTRYP type_glUniform4iv)(GLint location, GLsizei count, const GLint* v);
+   typedef void (QGLF_APIENTRYP type_glUniform4iv)(GLint location, GLsizei count, const GLint * v);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniform4iv = (type_glUniform4iv)
-        context->getProcAddress(QLatin1String("glUniform4iv"));
-    if (!funcs->uniform4iv) {
-        funcs->uniform4iv = (type_glUniform4iv)
-            context->getProcAddress(QLatin1String("glUniform4ivARB"));
-    }
+   funcs->uniform4iv = (type_glUniform4iv)
+                       context->getProcAddress(QLatin1String("glUniform4iv"));
+   if (!funcs->uniform4iv) {
+      funcs->uniform4iv = (type_glUniform4iv)
+                          context->getProcAddress(QLatin1String("glUniform4ivARB"));
+   }
 
-    if (funcs->uniform4iv)
-        funcs->uniform4iv(location, count, v);
-    else
-        funcs->uniform4iv = qglfResolveUniform4iv;
+   if (funcs->uniform4iv) {
+      funcs->uniform4iv(location, count, v);
+   } else {
+      funcs->uniform4iv = qglfResolveUniform4iv;
+   }
 }
 
-static void qglfResolveUniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value)
+static void qglfResolveUniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    typedef void (QGLF_APIENTRYP type_glUniformMatrix2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value);
+   typedef void (QGLF_APIENTRYP type_glUniformMatrix2fv)(GLint location, GLsizei count, GLboolean transpose,
+         const GLfloat * value);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniformMatrix2fv = (type_glUniformMatrix2fv)
-        context->getProcAddress(QLatin1String("glUniformMatrix2fv"));
-    if (!funcs->uniformMatrix2fv) {
-        funcs->uniformMatrix2fv = (type_glUniformMatrix2fv)
-            context->getProcAddress(QLatin1String("glUniformMatrix2fvARB"));
-    }
+   funcs->uniformMatrix2fv = (type_glUniformMatrix2fv)
+                             context->getProcAddress(QLatin1String("glUniformMatrix2fv"));
+   if (!funcs->uniformMatrix2fv) {
+      funcs->uniformMatrix2fv = (type_glUniformMatrix2fv)
+                                context->getProcAddress(QLatin1String("glUniformMatrix2fvARB"));
+   }
 
-    if (funcs->uniformMatrix2fv)
-        funcs->uniformMatrix2fv(location, count, transpose, value);
-    else
-        funcs->uniformMatrix2fv = qglfResolveUniformMatrix2fv;
+   if (funcs->uniformMatrix2fv) {
+      funcs->uniformMatrix2fv(location, count, transpose, value);
+   } else {
+      funcs->uniformMatrix2fv = qglfResolveUniformMatrix2fv;
+   }
 }
 
-static void qglfResolveUniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value)
+static void qglfResolveUniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    typedef void (QGLF_APIENTRYP type_glUniformMatrix3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value);
+   typedef void (QGLF_APIENTRYP type_glUniformMatrix3fv)(GLint location, GLsizei count, GLboolean transpose,
+         const GLfloat * value);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniformMatrix3fv = (type_glUniformMatrix3fv)
-        context->getProcAddress(QLatin1String("glUniformMatrix3fv"));
-    if (!funcs->uniformMatrix3fv) {
-        funcs->uniformMatrix3fv = (type_glUniformMatrix3fv)
-            context->getProcAddress(QLatin1String("glUniformMatrix3fvARB"));
-    }
+   funcs->uniformMatrix3fv = (type_glUniformMatrix3fv)
+                             context->getProcAddress(QLatin1String("glUniformMatrix3fv"));
+   if (!funcs->uniformMatrix3fv) {
+      funcs->uniformMatrix3fv = (type_glUniformMatrix3fv)
+                                context->getProcAddress(QLatin1String("glUniformMatrix3fvARB"));
+   }
 
-    if (funcs->uniformMatrix3fv)
-        funcs->uniformMatrix3fv(location, count, transpose, value);
-    else
-        funcs->uniformMatrix3fv = qglfResolveUniformMatrix3fv;
+   if (funcs->uniformMatrix3fv) {
+      funcs->uniformMatrix3fv(location, count, transpose, value);
+   } else {
+      funcs->uniformMatrix3fv = qglfResolveUniformMatrix3fv;
+   }
 }
 
-static void qglfResolveUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value)
+static void qglfResolveUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
-    typedef void (QGLF_APIENTRYP type_glUniformMatrix4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value);
+   typedef void (QGLF_APIENTRYP type_glUniformMatrix4fv)(GLint location, GLsizei count, GLboolean transpose,
+         const GLfloat * value);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->uniformMatrix4fv = (type_glUniformMatrix4fv)
-        context->getProcAddress(QLatin1String("glUniformMatrix4fv"));
-    if (!funcs->uniformMatrix4fv) {
-        funcs->uniformMatrix4fv = (type_glUniformMatrix4fv)
-            context->getProcAddress(QLatin1String("glUniformMatrix4fvARB"));
-    }
+   funcs->uniformMatrix4fv = (type_glUniformMatrix4fv)
+                             context->getProcAddress(QLatin1String("glUniformMatrix4fv"));
+   if (!funcs->uniformMatrix4fv) {
+      funcs->uniformMatrix4fv = (type_glUniformMatrix4fv)
+                                context->getProcAddress(QLatin1String("glUniformMatrix4fvARB"));
+   }
 
-    if (funcs->uniformMatrix4fv)
-        funcs->uniformMatrix4fv(location, count, transpose, value);
-    else
-        funcs->uniformMatrix4fv = qglfResolveUniformMatrix4fv;
+   if (funcs->uniformMatrix4fv) {
+      funcs->uniformMatrix4fv(location, count, transpose, value);
+   } else {
+      funcs->uniformMatrix4fv = qglfResolveUniformMatrix4fv;
+   }
 }
 
 static void qglfResolveUseProgram(GLuint program)
 {
-    typedef void (QGLF_APIENTRYP type_glUseProgram)(GLuint program);
+   typedef void (QGLF_APIENTRYP type_glUseProgram)(GLuint program);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->useProgram = (type_glUseProgram)
-        context->getProcAddress(QLatin1String("glUseProgram"));
-    if (!funcs->useProgram) {
-        funcs->useProgram = (type_glUseProgram)
-            context->getProcAddress(QLatin1String("glUseProgramObjectARB"));
-    }
+   funcs->useProgram = (type_glUseProgram)
+                       context->getProcAddress(QLatin1String("glUseProgram"));
+   if (!funcs->useProgram) {
+      funcs->useProgram = (type_glUseProgram)
+                          context->getProcAddress(QLatin1String("glUseProgramObjectARB"));
+   }
 
-    if (funcs->useProgram)
-        funcs->useProgram(program);
-    else
-        funcs->useProgram = qglfResolveUseProgram;
+   if (funcs->useProgram) {
+      funcs->useProgram(program);
+   } else {
+      funcs->useProgram = qglfResolveUseProgram;
+   }
 }
 
 static void qglfResolveValidateProgram(GLuint program)
 {
-    typedef void (QGLF_APIENTRYP type_glValidateProgram)(GLuint program);
+   typedef void (QGLF_APIENTRYP type_glValidateProgram)(GLuint program);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->validateProgram = (type_glValidateProgram)
-        context->getProcAddress(QLatin1String("glValidateProgram"));
-    if (!funcs->validateProgram) {
-        funcs->validateProgram = (type_glValidateProgram)
-            context->getProcAddress(QLatin1String("glValidateProgramARB"));
-    }
+   funcs->validateProgram = (type_glValidateProgram)
+                            context->getProcAddress(QLatin1String("glValidateProgram"));
+   if (!funcs->validateProgram) {
+      funcs->validateProgram = (type_glValidateProgram)
+                               context->getProcAddress(QLatin1String("glValidateProgramARB"));
+   }
 
-    if (funcs->validateProgram)
-        funcs->validateProgram(program);
-    else
-        funcs->validateProgram = qglfResolveValidateProgram;
+   if (funcs->validateProgram) {
+      funcs->validateProgram(program);
+   } else {
+      funcs->validateProgram = qglfResolveValidateProgram;
+   }
 }
 
 static void qglfResolveVertexAttrib1f(GLuint indx, GLfloat x)
 {
-    typedef void (QGLF_APIENTRYP type_glVertexAttrib1f)(GLuint indx, GLfloat x);
+   typedef void (QGLF_APIENTRYP type_glVertexAttrib1f)(GLuint indx, GLfloat x);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->vertexAttrib1f = (type_glVertexAttrib1f)
-        context->getProcAddress(QLatin1String("glVertexAttrib1f"));
-    if (!funcs->vertexAttrib1f) {
-        funcs->vertexAttrib1f = (type_glVertexAttrib1f)
-            context->getProcAddress(QLatin1String("glVertexAttrib1fARB"));
-    }
+   funcs->vertexAttrib1f = (type_glVertexAttrib1f)
+                           context->getProcAddress(QLatin1String("glVertexAttrib1f"));
+   if (!funcs->vertexAttrib1f) {
+      funcs->vertexAttrib1f = (type_glVertexAttrib1f)
+                              context->getProcAddress(QLatin1String("glVertexAttrib1fARB"));
+   }
 
-    if (funcs->vertexAttrib1f)
-        funcs->vertexAttrib1f(indx, x);
-    else
-        funcs->vertexAttrib1f = qglfResolveVertexAttrib1f;
+   if (funcs->vertexAttrib1f) {
+      funcs->vertexAttrib1f(indx, x);
+   } else {
+      funcs->vertexAttrib1f = qglfResolveVertexAttrib1f;
+   }
 }
 
-static void qglfResolveVertexAttrib1fv(GLuint indx, const GLfloat* values)
+static void qglfResolveVertexAttrib1fv(GLuint indx, const GLfloat *values)
 {
-    typedef void (QGLF_APIENTRYP type_glVertexAttrib1fv)(GLuint indx, const GLfloat* values);
+   typedef void (QGLF_APIENTRYP type_glVertexAttrib1fv)(GLuint indx, const GLfloat * values);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->vertexAttrib1fv = (type_glVertexAttrib1fv)
-        context->getProcAddress(QLatin1String("glVertexAttrib1fv"));
-    if (!funcs->vertexAttrib1fv) {
-        funcs->vertexAttrib1fv = (type_glVertexAttrib1fv)
-            context->getProcAddress(QLatin1String("glVertexAttrib1fvARB"));
-    }
+   funcs->vertexAttrib1fv = (type_glVertexAttrib1fv)
+                            context->getProcAddress(QLatin1String("glVertexAttrib1fv"));
+   if (!funcs->vertexAttrib1fv) {
+      funcs->vertexAttrib1fv = (type_glVertexAttrib1fv)
+                               context->getProcAddress(QLatin1String("glVertexAttrib1fvARB"));
+   }
 
-    if (funcs->vertexAttrib1fv)
-        funcs->vertexAttrib1fv(indx, values);
-    else
-        funcs->vertexAttrib1fv = qglfResolveVertexAttrib1fv;
+   if (funcs->vertexAttrib1fv) {
+      funcs->vertexAttrib1fv(indx, values);
+   } else {
+      funcs->vertexAttrib1fv = qglfResolveVertexAttrib1fv;
+   }
 }
 
 static void qglfResolveVertexAttrib2f(GLuint indx, GLfloat x, GLfloat y)
 {
-    typedef void (QGLF_APIENTRYP type_glVertexAttrib2f)(GLuint indx, GLfloat x, GLfloat y);
+   typedef void (QGLF_APIENTRYP type_glVertexAttrib2f)(GLuint indx, GLfloat x, GLfloat y);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->vertexAttrib2f = (type_glVertexAttrib2f)
-        context->getProcAddress(QLatin1String("glVertexAttrib2f"));
-    if (!funcs->vertexAttrib2f) {
-        funcs->vertexAttrib2f = (type_glVertexAttrib2f)
-            context->getProcAddress(QLatin1String("glVertexAttrib2fARB"));
-    }
+   funcs->vertexAttrib2f = (type_glVertexAttrib2f)
+                           context->getProcAddress(QLatin1String("glVertexAttrib2f"));
+   if (!funcs->vertexAttrib2f) {
+      funcs->vertexAttrib2f = (type_glVertexAttrib2f)
+                              context->getProcAddress(QLatin1String("glVertexAttrib2fARB"));
+   }
 
-    if (funcs->vertexAttrib2f)
-        funcs->vertexAttrib2f(indx, x, y);
-    else
-        funcs->vertexAttrib2f = qglfResolveVertexAttrib2f;
+   if (funcs->vertexAttrib2f) {
+      funcs->vertexAttrib2f(indx, x, y);
+   } else {
+      funcs->vertexAttrib2f = qglfResolveVertexAttrib2f;
+   }
 }
 
-static void qglfResolveVertexAttrib2fv(GLuint indx, const GLfloat* values)
+static void qglfResolveVertexAttrib2fv(GLuint indx, const GLfloat *values)
 {
-    typedef void (QGLF_APIENTRYP type_glVertexAttrib2fv)(GLuint indx, const GLfloat* values);
+   typedef void (QGLF_APIENTRYP type_glVertexAttrib2fv)(GLuint indx, const GLfloat * values);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->vertexAttrib2fv = (type_glVertexAttrib2fv)
-        context->getProcAddress(QLatin1String("glVertexAttrib2fv"));
-    if (!funcs->vertexAttrib2fv) {
-        funcs->vertexAttrib2fv = (type_glVertexAttrib2fv)
-            context->getProcAddress(QLatin1String("glVertexAttrib2fvARB"));
-    }
+   funcs->vertexAttrib2fv = (type_glVertexAttrib2fv)
+                            context->getProcAddress(QLatin1String("glVertexAttrib2fv"));
+   if (!funcs->vertexAttrib2fv) {
+      funcs->vertexAttrib2fv = (type_glVertexAttrib2fv)
+                               context->getProcAddress(QLatin1String("glVertexAttrib2fvARB"));
+   }
 
-    if (funcs->vertexAttrib2fv)
-        funcs->vertexAttrib2fv(indx, values);
-    else
-        funcs->vertexAttrib2fv = qglfResolveVertexAttrib2fv;
+   if (funcs->vertexAttrib2fv) {
+      funcs->vertexAttrib2fv(indx, values);
+   } else {
+      funcs->vertexAttrib2fv = qglfResolveVertexAttrib2fv;
+   }
 }
 
 static void qglfResolveVertexAttrib3f(GLuint indx, GLfloat x, GLfloat y, GLfloat z)
 {
-    typedef void (QGLF_APIENTRYP type_glVertexAttrib3f)(GLuint indx, GLfloat x, GLfloat y, GLfloat z);
+   typedef void (QGLF_APIENTRYP type_glVertexAttrib3f)(GLuint indx, GLfloat x, GLfloat y, GLfloat z);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->vertexAttrib3f = (type_glVertexAttrib3f)
-        context->getProcAddress(QLatin1String("glVertexAttrib3f"));
-    if (!funcs->vertexAttrib3f) {
-        funcs->vertexAttrib3f = (type_glVertexAttrib3f)
-            context->getProcAddress(QLatin1String("glVertexAttrib3fARB"));
-    }
+   funcs->vertexAttrib3f = (type_glVertexAttrib3f)
+                           context->getProcAddress(QLatin1String("glVertexAttrib3f"));
+   if (!funcs->vertexAttrib3f) {
+      funcs->vertexAttrib3f = (type_glVertexAttrib3f)
+                              context->getProcAddress(QLatin1String("glVertexAttrib3fARB"));
+   }
 
-    if (funcs->vertexAttrib3f)
-        funcs->vertexAttrib3f(indx, x, y, z);
-    else
-        funcs->vertexAttrib3f = qglfResolveVertexAttrib3f;
+   if (funcs->vertexAttrib3f) {
+      funcs->vertexAttrib3f(indx, x, y, z);
+   } else {
+      funcs->vertexAttrib3f = qglfResolveVertexAttrib3f;
+   }
 }
 
-static void qglfResolveVertexAttrib3fv(GLuint indx, const GLfloat* values)
+static void qglfResolveVertexAttrib3fv(GLuint indx, const GLfloat *values)
 {
-    typedef void (QGLF_APIENTRYP type_glVertexAttrib3fv)(GLuint indx, const GLfloat* values);
+   typedef void (QGLF_APIENTRYP type_glVertexAttrib3fv)(GLuint indx, const GLfloat * values);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->vertexAttrib3fv = (type_glVertexAttrib3fv)
-        context->getProcAddress(QLatin1String("glVertexAttrib3fv"));
-    if (!funcs->vertexAttrib3fv) {
-        funcs->vertexAttrib3fv = (type_glVertexAttrib3fv)
-            context->getProcAddress(QLatin1String("glVertexAttrib3fvARB"));
-    }
+   funcs->vertexAttrib3fv = (type_glVertexAttrib3fv)
+                            context->getProcAddress(QLatin1String("glVertexAttrib3fv"));
+   if (!funcs->vertexAttrib3fv) {
+      funcs->vertexAttrib3fv = (type_glVertexAttrib3fv)
+                               context->getProcAddress(QLatin1String("glVertexAttrib3fvARB"));
+   }
 
-    if (funcs->vertexAttrib3fv)
-        funcs->vertexAttrib3fv(indx, values);
-    else
-        funcs->vertexAttrib3fv = qglfResolveVertexAttrib3fv;
+   if (funcs->vertexAttrib3fv) {
+      funcs->vertexAttrib3fv(indx, values);
+   } else {
+      funcs->vertexAttrib3fv = qglfResolveVertexAttrib3fv;
+   }
 }
 
 static void qglfResolveVertexAttrib4f(GLuint indx, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
-    typedef void (QGLF_APIENTRYP type_glVertexAttrib4f)(GLuint indx, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+   typedef void (QGLF_APIENTRYP type_glVertexAttrib4f)(GLuint indx, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->vertexAttrib4f = (type_glVertexAttrib4f)
-        context->getProcAddress(QLatin1String("glVertexAttrib4f"));
-    if (!funcs->vertexAttrib4f) {
-        funcs->vertexAttrib4f = (type_glVertexAttrib4f)
-            context->getProcAddress(QLatin1String("glVertexAttrib4fARB"));
-    }
+   funcs->vertexAttrib4f = (type_glVertexAttrib4f)
+                           context->getProcAddress(QLatin1String("glVertexAttrib4f"));
+   if (!funcs->vertexAttrib4f) {
+      funcs->vertexAttrib4f = (type_glVertexAttrib4f)
+                              context->getProcAddress(QLatin1String("glVertexAttrib4fARB"));
+   }
 
-    if (funcs->vertexAttrib4f)
-        funcs->vertexAttrib4f(indx, x, y, z, w);
-    else
-        funcs->vertexAttrib4f = qglfResolveVertexAttrib4f;
+   if (funcs->vertexAttrib4f) {
+      funcs->vertexAttrib4f(indx, x, y, z, w);
+   } else {
+      funcs->vertexAttrib4f = qglfResolveVertexAttrib4f;
+   }
 }
 
-static void qglfResolveVertexAttrib4fv(GLuint indx, const GLfloat* values)
+static void qglfResolveVertexAttrib4fv(GLuint indx, const GLfloat *values)
 {
-    typedef void (QGLF_APIENTRYP type_glVertexAttrib4fv)(GLuint indx, const GLfloat* values);
+   typedef void (QGLF_APIENTRYP type_glVertexAttrib4fv)(GLuint indx, const GLfloat * values);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->vertexAttrib4fv = (type_glVertexAttrib4fv)
-        context->getProcAddress(QLatin1String("glVertexAttrib4fv"));
-    if (!funcs->vertexAttrib4fv) {
-        funcs->vertexAttrib4fv = (type_glVertexAttrib4fv)
-            context->getProcAddress(QLatin1String("glVertexAttrib4fvARB"));
-    }
+   funcs->vertexAttrib4fv = (type_glVertexAttrib4fv)
+                            context->getProcAddress(QLatin1String("glVertexAttrib4fv"));
+   if (!funcs->vertexAttrib4fv) {
+      funcs->vertexAttrib4fv = (type_glVertexAttrib4fv)
+                               context->getProcAddress(QLatin1String("glVertexAttrib4fvARB"));
+   }
 
-    if (funcs->vertexAttrib4fv)
-        funcs->vertexAttrib4fv(indx, values);
-    else
-        funcs->vertexAttrib4fv = qglfResolveVertexAttrib4fv;
+   if (funcs->vertexAttrib4fv) {
+      funcs->vertexAttrib4fv(indx, values);
+   } else {
+      funcs->vertexAttrib4fv = qglfResolveVertexAttrib4fv;
+   }
 }
 
-static void qglfResolveVertexAttribPointer(GLuint indx, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void* ptr)
+static void qglfResolveVertexAttribPointer(GLuint indx, GLint size, GLenum type, GLboolean normalized, GLsizei stride,
+      const void *ptr)
 {
-    typedef void (QGLF_APIENTRYP type_glVertexAttribPointer)(GLuint indx, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void* ptr);
+   typedef void (QGLF_APIENTRYP type_glVertexAttribPointer)(GLuint indx, GLint size, GLenum type, GLboolean normalized,
+         GLsizei stride, const void *ptr);
 
-    const QGLContext *context = QGLContext::currentContext();
-    QGLFunctionsPrivate *funcs = qt_gl_functions(context);
+   const QGLContext *context = QGLContext::currentContext();
+   QGLFunctionsPrivate *funcs = qt_gl_functions(context);
 
-    funcs->vertexAttribPointer = (type_glVertexAttribPointer)
-        context->getProcAddress(QLatin1String("glVertexAttribPointer"));
-    if (!funcs->vertexAttribPointer) {
-        funcs->vertexAttribPointer = (type_glVertexAttribPointer)
-            context->getProcAddress(QLatin1String("glVertexAttribPointerARB"));
-    }
+   funcs->vertexAttribPointer = (type_glVertexAttribPointer)
+                                context->getProcAddress(QLatin1String("glVertexAttribPointer"));
+   if (!funcs->vertexAttribPointer) {
+      funcs->vertexAttribPointer = (type_glVertexAttribPointer)
+                                   context->getProcAddress(QLatin1String("glVertexAttribPointerARB"));
+   }
 
-    if (funcs->vertexAttribPointer)
-        funcs->vertexAttribPointer(indx, size, type, normalized, stride, ptr);
-    else
-        funcs->vertexAttribPointer = qglfResolveVertexAttribPointer;
+   if (funcs->vertexAttribPointer) {
+      funcs->vertexAttribPointer(indx, size, type, normalized, stride, ptr);
+   } else {
+      funcs->vertexAttribPointer = qglfResolveVertexAttribPointer;
+   }
 }
 
 #endif // !QT_OPENGL_ES_2
@@ -3488,101 +3634,101 @@ static void qglfResolveVertexAttribPointer(GLuint indx, GLint size, GLenum type,
 QGLFunctionsPrivate::QGLFunctionsPrivate(const QGLContext *)
 {
 #ifndef QT_OPENGL_ES_2
-    activeTexture = qglfResolveActiveTexture;
-    attachShader = qglfResolveAttachShader;
-    bindAttribLocation = qglfResolveBindAttribLocation;
-    bindBuffer = qglfResolveBindBuffer;
-    bindFramebuffer = qglfResolveBindFramebuffer;
-    bindRenderbuffer = qglfResolveBindRenderbuffer;
-    blendColor = qglfResolveBlendColor;
-    blendEquation = qglfResolveBlendEquation;
-    blendEquationSeparate = qglfResolveBlendEquationSeparate;
-    blendFuncSeparate = qglfResolveBlendFuncSeparate;
-    bufferData = qglfResolveBufferData;
-    bufferSubData = qglfResolveBufferSubData;
-    checkFramebufferStatus = qglfResolveCheckFramebufferStatus;
-    compileShader = qglfResolveCompileShader;
-    compressedTexImage2D = qglfResolveCompressedTexImage2D;
-    compressedTexSubImage2D = qglfResolveCompressedTexSubImage2D;
-    createProgram = qglfResolveCreateProgram;
-    createShader = qglfResolveCreateShader;
-    deleteBuffers = qglfResolveDeleteBuffers;
-    deleteFramebuffers = qglfResolveDeleteFramebuffers;
-    deleteProgram = qglfResolveDeleteProgram;
-    deleteRenderbuffers = qglfResolveDeleteRenderbuffers;
-    deleteShader = qglfResolveDeleteShader;
-    detachShader = qglfResolveDetachShader;
-    disableVertexAttribArray = qglfResolveDisableVertexAttribArray;
-    enableVertexAttribArray = qglfResolveEnableVertexAttribArray;
-    framebufferRenderbuffer = qglfResolveFramebufferRenderbuffer;
-    framebufferTexture2D = qglfResolveFramebufferTexture2D;
-    genBuffers = qglfResolveGenBuffers;
-    generateMipmap = qglfResolveGenerateMipmap;
-    genFramebuffers = qglfResolveGenFramebuffers;
-    genRenderbuffers = qglfResolveGenRenderbuffers;
-    getActiveAttrib = qglfResolveGetActiveAttrib;
-    getActiveUniform = qglfResolveGetActiveUniform;
-    getAttachedShaders = qglfResolveGetAttachedShaders;
-    getAttribLocation = qglfResolveGetAttribLocation;
-    getBufferParameteriv = qglfResolveGetBufferParameteriv;
-    getFramebufferAttachmentParameteriv = qglfResolveGetFramebufferAttachmentParameteriv;
-    getProgramiv = qglfResolveGetProgramiv;
-    getProgramInfoLog = qglfResolveGetProgramInfoLog;
-    getRenderbufferParameteriv = qglfResolveGetRenderbufferParameteriv;
-    getShaderiv = qglfResolveGetShaderiv;
-    getShaderInfoLog = qglfResolveGetShaderInfoLog;
-    getShaderPrecisionFormat = qglfResolveGetShaderPrecisionFormat;
-    getShaderSource = qglfResolveGetShaderSource;
-    getUniformfv = qglfResolveGetUniformfv;
-    getUniformiv = qglfResolveGetUniformiv;
-    getUniformLocation = qglfResolveGetUniformLocation;
-    getVertexAttribfv = qglfResolveGetVertexAttribfv;
-    getVertexAttribiv = qglfResolveGetVertexAttribiv;
-    getVertexAttribPointerv = qglfResolveGetVertexAttribPointerv;
-    isBuffer = qglfResolveIsBuffer;
-    isFramebuffer = qglfResolveIsFramebuffer;
-    isProgram = qglfResolveIsProgram;
-    isRenderbuffer = qglfResolveIsRenderbuffer;
-    isShader = qglfResolveIsShader;
-    linkProgram = qglfResolveLinkProgram;
-    releaseShaderCompiler = qglfResolveReleaseShaderCompiler;
-    renderbufferStorage = qglfResolveRenderbufferStorage;
-    sampleCoverage = qglfResolveSampleCoverage;
-    shaderBinary = qglfResolveShaderBinary;
-    shaderSource = qglfResolveShaderSource;
-    stencilFuncSeparate = qglfResolveStencilFuncSeparate;
-    stencilMaskSeparate = qglfResolveStencilMaskSeparate;
-    stencilOpSeparate = qglfResolveStencilOpSeparate;
-    uniform1f = qglfResolveUniform1f;
-    uniform1fv = qglfResolveUniform1fv;
-    uniform1i = qglfResolveUniform1i;
-    uniform1iv = qglfResolveUniform1iv;
-    uniform2f = qglfResolveUniform2f;
-    uniform2fv = qglfResolveUniform2fv;
-    uniform2i = qglfResolveUniform2i;
-    uniform2iv = qglfResolveUniform2iv;
-    uniform3f = qglfResolveUniform3f;
-    uniform3fv = qglfResolveUniform3fv;
-    uniform3i = qglfResolveUniform3i;
-    uniform3iv = qglfResolveUniform3iv;
-    uniform4f = qglfResolveUniform4f;
-    uniform4fv = qglfResolveUniform4fv;
-    uniform4i = qglfResolveUniform4i;
-    uniform4iv = qglfResolveUniform4iv;
-    uniformMatrix2fv = qglfResolveUniformMatrix2fv;
-    uniformMatrix3fv = qglfResolveUniformMatrix3fv;
-    uniformMatrix4fv = qglfResolveUniformMatrix4fv;
-    useProgram = qglfResolveUseProgram;
-    validateProgram = qglfResolveValidateProgram;
-    vertexAttrib1f = qglfResolveVertexAttrib1f;
-    vertexAttrib1fv = qglfResolveVertexAttrib1fv;
-    vertexAttrib2f = qglfResolveVertexAttrib2f;
-    vertexAttrib2fv = qglfResolveVertexAttrib2fv;
-    vertexAttrib3f = qglfResolveVertexAttrib3f;
-    vertexAttrib3fv = qglfResolveVertexAttrib3fv;
-    vertexAttrib4f = qglfResolveVertexAttrib4f;
-    vertexAttrib4fv = qglfResolveVertexAttrib4fv;
-    vertexAttribPointer = qglfResolveVertexAttribPointer;
+   activeTexture = qglfResolveActiveTexture;
+   attachShader = qglfResolveAttachShader;
+   bindAttribLocation = qglfResolveBindAttribLocation;
+   bindBuffer = qglfResolveBindBuffer;
+   bindFramebuffer = qglfResolveBindFramebuffer;
+   bindRenderbuffer = qglfResolveBindRenderbuffer;
+   blendColor = qglfResolveBlendColor;
+   blendEquation = qglfResolveBlendEquation;
+   blendEquationSeparate = qglfResolveBlendEquationSeparate;
+   blendFuncSeparate = qglfResolveBlendFuncSeparate;
+   bufferData = qglfResolveBufferData;
+   bufferSubData = qglfResolveBufferSubData;
+   checkFramebufferStatus = qglfResolveCheckFramebufferStatus;
+   compileShader = qglfResolveCompileShader;
+   compressedTexImage2D = qglfResolveCompressedTexImage2D;
+   compressedTexSubImage2D = qglfResolveCompressedTexSubImage2D;
+   createProgram = qglfResolveCreateProgram;
+   createShader = qglfResolveCreateShader;
+   deleteBuffers = qglfResolveDeleteBuffers;
+   deleteFramebuffers = qglfResolveDeleteFramebuffers;
+   deleteProgram = qglfResolveDeleteProgram;
+   deleteRenderbuffers = qglfResolveDeleteRenderbuffers;
+   deleteShader = qglfResolveDeleteShader;
+   detachShader = qglfResolveDetachShader;
+   disableVertexAttribArray = qglfResolveDisableVertexAttribArray;
+   enableVertexAttribArray = qglfResolveEnableVertexAttribArray;
+   framebufferRenderbuffer = qglfResolveFramebufferRenderbuffer;
+   framebufferTexture2D = qglfResolveFramebufferTexture2D;
+   genBuffers = qglfResolveGenBuffers;
+   generateMipmap = qglfResolveGenerateMipmap;
+   genFramebuffers = qglfResolveGenFramebuffers;
+   genRenderbuffers = qglfResolveGenRenderbuffers;
+   getActiveAttrib = qglfResolveGetActiveAttrib;
+   getActiveUniform = qglfResolveGetActiveUniform;
+   getAttachedShaders = qglfResolveGetAttachedShaders;
+   getAttribLocation = qglfResolveGetAttribLocation;
+   getBufferParameteriv = qglfResolveGetBufferParameteriv;
+   getFramebufferAttachmentParameteriv = qglfResolveGetFramebufferAttachmentParameteriv;
+   getProgramiv = qglfResolveGetProgramiv;
+   getProgramInfoLog = qglfResolveGetProgramInfoLog;
+   getRenderbufferParameteriv = qglfResolveGetRenderbufferParameteriv;
+   getShaderiv = qglfResolveGetShaderiv;
+   getShaderInfoLog = qglfResolveGetShaderInfoLog;
+   getShaderPrecisionFormat = qglfResolveGetShaderPrecisionFormat;
+   getShaderSource = qglfResolveGetShaderSource;
+   getUniformfv = qglfResolveGetUniformfv;
+   getUniformiv = qglfResolveGetUniformiv;
+   getUniformLocation = qglfResolveGetUniformLocation;
+   getVertexAttribfv = qglfResolveGetVertexAttribfv;
+   getVertexAttribiv = qglfResolveGetVertexAttribiv;
+   getVertexAttribPointerv = qglfResolveGetVertexAttribPointerv;
+   isBuffer = qglfResolveIsBuffer;
+   isFramebuffer = qglfResolveIsFramebuffer;
+   isProgram = qglfResolveIsProgram;
+   isRenderbuffer = qglfResolveIsRenderbuffer;
+   isShader = qglfResolveIsShader;
+   linkProgram = qglfResolveLinkProgram;
+   releaseShaderCompiler = qglfResolveReleaseShaderCompiler;
+   renderbufferStorage = qglfResolveRenderbufferStorage;
+   sampleCoverage = qglfResolveSampleCoverage;
+   shaderBinary = qglfResolveShaderBinary;
+   shaderSource = qglfResolveShaderSource;
+   stencilFuncSeparate = qglfResolveStencilFuncSeparate;
+   stencilMaskSeparate = qglfResolveStencilMaskSeparate;
+   stencilOpSeparate = qglfResolveStencilOpSeparate;
+   uniform1f = qglfResolveUniform1f;
+   uniform1fv = qglfResolveUniform1fv;
+   uniform1i = qglfResolveUniform1i;
+   uniform1iv = qglfResolveUniform1iv;
+   uniform2f = qglfResolveUniform2f;
+   uniform2fv = qglfResolveUniform2fv;
+   uniform2i = qglfResolveUniform2i;
+   uniform2iv = qglfResolveUniform2iv;
+   uniform3f = qglfResolveUniform3f;
+   uniform3fv = qglfResolveUniform3fv;
+   uniform3i = qglfResolveUniform3i;
+   uniform3iv = qglfResolveUniform3iv;
+   uniform4f = qglfResolveUniform4f;
+   uniform4fv = qglfResolveUniform4fv;
+   uniform4i = qglfResolveUniform4i;
+   uniform4iv = qglfResolveUniform4iv;
+   uniformMatrix2fv = qglfResolveUniformMatrix2fv;
+   uniformMatrix3fv = qglfResolveUniformMatrix3fv;
+   uniformMatrix4fv = qglfResolveUniformMatrix4fv;
+   useProgram = qglfResolveUseProgram;
+   validateProgram = qglfResolveValidateProgram;
+   vertexAttrib1f = qglfResolveVertexAttrib1f;
+   vertexAttrib1fv = qglfResolveVertexAttrib1fv;
+   vertexAttrib2f = qglfResolveVertexAttrib2f;
+   vertexAttrib2fv = qglfResolveVertexAttrib2fv;
+   vertexAttrib3f = qglfResolveVertexAttrib3f;
+   vertexAttrib3fv = qglfResolveVertexAttrib3fv;
+   vertexAttrib4f = qglfResolveVertexAttrib4f;
+   vertexAttrib4fv = qglfResolveVertexAttrib4fv;
+   vertexAttribPointer = qglfResolveVertexAttribPointer;
 #endif // !QT_OPENGL_ES_2
 }
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,37 +36,42 @@ class QTextCursor;
 
 class Q_GUI_EXPORT QTextList : public QTextBlockGroup
 {
-    CS_OBJECT(QTextList)
+   CS_OBJECT(QTextList)
 
-public:
-    explicit QTextList(QTextDocument *doc);
-    ~QTextList();
+ public:
+   explicit QTextList(QTextDocument *doc);
+   ~QTextList();
 
-    int count() const;
+   int count() const;
 
-    inline bool isEmpty() const
-    { return count() == 0; }
+   inline bool isEmpty() const {
+      return count() == 0;
+   }
 
-    QTextBlock item(int i) const;
+   QTextBlock item(int i) const;
 
-    int itemNumber(const QTextBlock &) const;
-    QString itemText(const QTextBlock &) const;
+   int itemNumber(const QTextBlock &) const;
+   QString itemText(const QTextBlock &) const;
 
-    void removeItem(int i);
-    void remove(const QTextBlock &);
+   void removeItem(int i);
+   void remove(const QTextBlock &);
 
-    void add(const QTextBlock &block);
+   void add(const QTextBlock &block);
 
-    inline void setFormat(const QTextListFormat &format);
-    QTextListFormat format() const { return QTextObject::format().toListFormat(); }
+   inline void setFormat(const QTextListFormat &format);
+   QTextListFormat format() const {
+      return QTextObject::format().toListFormat();
+   }
 
-private:
-    Q_DISABLE_COPY(QTextList)
-    Q_DECLARE_PRIVATE(QTextList)
+ private:
+   Q_DISABLE_COPY(QTextList)
+   Q_DECLARE_PRIVATE(QTextList)
 };
 
 inline void QTextList::setFormat(const QTextListFormat &aformat)
-{ QTextObject::setFormat(aformat); }
+{
+   QTextObject::setFormat(aformat);
+}
 
 QT_END_NAMESPACE
 

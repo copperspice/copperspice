@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,12 +37,12 @@ QT_BEGIN_NAMESPACE
 
 class QRadioButtonPrivate : public QAbstractButtonPrivate
 {
-    Q_DECLARE_PUBLIC(QRadioButton)
+   Q_DECLARE_PUBLIC(QRadioButton)
 
-public:
-    QRadioButtonPrivate() : QAbstractButtonPrivate(QSizePolicy::RadioButton), hovering(true) {}
-    void init();
-    uint hovering : 1;
+ public:
+   QRadioButtonPrivate() : QAbstractButtonPrivate(QSizePolicy::RadioButton), hovering(true) {}
+   void init();
+   uint hovering : 1;
 };
 
 /*
@@ -50,12 +50,12 @@ public:
 */
 void QRadioButtonPrivate::init()
 {
-    Q_Q(QRadioButton);
-    q->setCheckable(true);
-    q->setAutoExclusive(true);
-    q->setMouseTracking(true);
-    q->setForegroundRole(QPalette::WindowText);
-    setLayoutItemMargins(QStyle::SE_RadioButtonLayoutItem);
+   Q_Q(QRadioButton);
+   q->setCheckable(true);
+   q->setAutoExclusive(true);
+   q->setMouseTracking(true);
+   q->setForegroundRole(QPalette::WindowText);
+   setLayoutItemMargins(QStyle::SE_RadioButtonLayoutItem);
 }
 
 /*!
@@ -120,10 +120,10 @@ void QRadioButtonPrivate::init()
 */
 
 QRadioButton::QRadioButton(QWidget *parent)
-    : QAbstractButton(*new QRadioButtonPrivate, parent)
+   : QAbstractButton(*new QRadioButtonPrivate, parent)
 {
-    Q_D(QRadioButton);
-    d->init();
+   Q_D(QRadioButton);
+   d->init();
 }
 
 /*!
@@ -133,11 +133,11 @@ QRadioButton::QRadioButton(QWidget *parent)
 */
 
 QRadioButton::QRadioButton(const QString &text, QWidget *parent)
-    : QAbstractButton(*new QRadioButtonPrivate, parent)
+   : QAbstractButton(*new QRadioButtonPrivate, parent)
 {
-    Q_D(QRadioButton);
-    d->init();
-    setText(text);
+   Q_D(QRadioButton);
+   d->init();
+   setText(text);
 }
 
 /*!
@@ -149,22 +149,25 @@ QRadioButton::QRadioButton(const QString &text, QWidget *parent)
 */
 void QRadioButton::initStyleOption(QStyleOptionButton *option) const
 {
-    if (!option)
-        return;
-    Q_D(const QRadioButton);
-    option->initFrom(this);
-    option->text = d->text;
-    option->icon = d->icon;
-    option->iconSize = iconSize();
-    if (d->down)
-        option->state |= QStyle::State_Sunken;
-    option->state |= (d->checked) ? QStyle::State_On : QStyle::State_Off;
-    if (testAttribute(Qt::WA_Hover) && underMouse()) {
-        if (d->hovering)
-            option->state |= QStyle::State_MouseOver;
-        else
-            option->state &= ~QStyle::State_MouseOver;
-    }
+   if (!option) {
+      return;
+   }
+   Q_D(const QRadioButton);
+   option->initFrom(this);
+   option->text = d->text;
+   option->icon = d->icon;
+   option->iconSize = iconSize();
+   if (d->down) {
+      option->state |= QStyle::State_Sunken;
+   }
+   option->state |= (d->checked) ? QStyle::State_On : QStyle::State_Off;
+   if (testAttribute(Qt::WA_Hover) && underMouse()) {
+      if (d->hovering) {
+         option->state |= QStyle::State_MouseOver;
+      } else {
+         option->state &= ~QStyle::State_MouseOver;
+      }
+   }
 }
 
 /*!
@@ -172,19 +175,21 @@ void QRadioButton::initStyleOption(QStyleOptionButton *option) const
 */
 QSize QRadioButton::sizeHint() const
 {
-    Q_D(const QRadioButton);
-    if (d->sizeHint.isValid())
-        return d->sizeHint;
-    ensurePolished();
-    QStyleOptionButton opt;
-    initStyleOption(&opt);
-    QSize sz = style()->itemTextRect(fontMetrics(), QRect(), Qt::TextShowMnemonic,
-                                     false, text()).size();
-    if (!opt.icon.isNull())
-        sz = QSize(sz.width() + opt.iconSize.width() + 4, qMax(sz.height(), opt.iconSize.height()));
-    d->sizeHint = (style()->sizeFromContents(QStyle::CT_RadioButton, &opt, sz, this).
+   Q_D(const QRadioButton);
+   if (d->sizeHint.isValid()) {
+      return d->sizeHint;
+   }
+   ensurePolished();
+   QStyleOptionButton opt;
+   initStyleOption(&opt);
+   QSize sz = style()->itemTextRect(fontMetrics(), QRect(), Qt::TextShowMnemonic,
+                                    false, text()).size();
+   if (!opt.icon.isNull()) {
+      sz = QSize(sz.width() + opt.iconSize.width() + 4, qMax(sz.height(), opt.iconSize.height()));
+   }
+   d->sizeHint = (style()->sizeFromContents(QStyle::CT_RadioButton, &opt, sz, this).
                   expandedTo(QApplication::globalStrut()));
-    return d->sizeHint;
+   return d->sizeHint;
 }
 
 /*!
@@ -193,7 +198,7 @@ QSize QRadioButton::sizeHint() const
 */
 QSize QRadioButton::minimumSizeHint() const
 {
-    return sizeHint();
+   return sizeHint();
 }
 
 /*!
@@ -201,9 +206,9 @@ QSize QRadioButton::minimumSizeHint() const
 */
 bool QRadioButton::hitButton(const QPoint &pos) const
 {
-    QStyleOptionButton opt;
-    initStyleOption(&opt);
-    return style()->subElementRect(QStyle::SE_RadioButtonClickRect, &opt, this).contains(pos);
+   QStyleOptionButton opt;
+   initStyleOption(&opt);
+   return style()->subElementRect(QStyle::SE_RadioButtonClickRect, &opt, this).contains(pos);
 }
 
 /*!
@@ -211,42 +216,44 @@ bool QRadioButton::hitButton(const QPoint &pos) const
 */
 void QRadioButton::mouseMoveEvent(QMouseEvent *e)
 {
-    Q_D(QRadioButton);
-    if (testAttribute(Qt::WA_Hover)) {
-        bool hit = false;
-        if (underMouse())
-            hit = hitButton(e->pos());
+   Q_D(QRadioButton);
+   if (testAttribute(Qt::WA_Hover)) {
+      bool hit = false;
+      if (underMouse()) {
+         hit = hitButton(e->pos());
+      }
 
-        if (hit != d->hovering) {
-            update();
-            d->hovering = hit;
-        }
-    }
+      if (hit != d->hovering) {
+         update();
+         d->hovering = hit;
+      }
+   }
 
-    QAbstractButton::mouseMoveEvent(e);
+   QAbstractButton::mouseMoveEvent(e);
 }
 
 /*!\reimp
  */
 void QRadioButton::paintEvent(QPaintEvent *)
 {
-    QStylePainter p(this);
-    QStyleOptionButton opt;
-    initStyleOption(&opt);
-    p.drawControl(QStyle::CE_RadioButton, opt);
+   QStylePainter p(this);
+   QStyleOptionButton opt;
+   initStyleOption(&opt);
+   p.drawControl(QStyle::CE_RadioButton, opt);
 }
 
 /*! \reimp */
 bool QRadioButton::event(QEvent *e)
 {
-    Q_D(QRadioButton);
-    if (e->type() == QEvent::StyleChange
+   Q_D(QRadioButton);
+   if (e->type() == QEvent::StyleChange
 #ifdef Q_OS_MAC
-            || e->type() == QEvent::MacSizeChange
+         || e->type() == QEvent::MacSizeChange
 #endif
-            )
-        d->setLayoutItemMargins(QStyle::SE_RadioButtonLayoutItem);
-    return QAbstractButton::event(e);
+      ) {
+      d->setLayoutItemMargins(QStyle::SE_RadioButtonLayoutItem);
+   }
+   return QAbstractButton::event(e);
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,21 +49,21 @@ class QUnixSocketServerPrivate : public QObject
 {
    CS_OBJECT(QUnixSocketServerPrivate)
 
-public:
-    QUnixSocketServerPrivate(QUnixSocketServer * parent)
-    : QObject(), me(parent), fd(-1), maxConns(30),
-      error(QUnixSocketServer::NoError), acceptNotifier(0)
-    {}
+ public:
+   QUnixSocketServerPrivate(QUnixSocketServer *parent)
+      : QObject(), me(parent), fd(-1), maxConns(30),
+        error(QUnixSocketServer::NoError), acceptNotifier(0) {
+   }
 
-    QUnixSocketServer * me;
-    int fd;
-    int maxConns;
-    QByteArray address;
-    QUnixSocketServer::ServerError error;
-    QSocketNotifier * acceptNotifier;
+   QUnixSocketServer *me;
+   int fd;
+   int maxConns;
+   QByteArray address;
+   QUnixSocketServer::ServerError error;
+   QSocketNotifier *acceptNotifier;
 
-    GUI_CS_SLOT_1(Public,void acceptActivated())
-    GUI_CS_SLOT_2(acceptActivated)
+   GUI_CS_SLOT_1(Public, void acceptActivated())
+   GUI_CS_SLOT_2(acceptActivated)
 };
 
 /*!
@@ -119,7 +119,7 @@ public:
   Create a new Unix socket server with the given \a parent.
   */
 QUnixSocketServer::QUnixSocketServer(QObject *parent)
-: QObject(parent), d(0)
+   : QObject(parent), d(0)
 {
 }
 
@@ -128,9 +128,10 @@ QUnixSocketServer::QUnixSocketServer(QObject *parent)
   */
 QUnixSocketServer::~QUnixSocketServer()
 {
-    close();
-    if(d)
-        delete d;
+   close();
+   if (d) {
+      delete d;
+   }
 }
 
 /*!
@@ -141,30 +142,31 @@ QUnixSocketServer::~QUnixSocketServer()
   */
 void QUnixSocketServer::close()
 {
-    if(!d)
-        return;
+   if (!d) {
+      return;
+   }
 
-    if(d->acceptNotifier) {
-        d->acceptNotifier->setEnabled(false);
-        delete d->acceptNotifier;
-    }
-    d->acceptNotifier = 0;
+   if (d->acceptNotifier) {
+      d->acceptNotifier->setEnabled(false);
+      delete d->acceptNotifier;
+   }
+   d->acceptNotifier = 0;
 
-    if(-1 != d->fd) {
+   if (-1 != d->fd) {
 #ifdef QUNIXSOCKET_DEBUG
-        int closerv =
+      int closerv =
 #endif
-            ::close(d->fd);
+         ::close(d->fd);
 #ifdef QUNIXSOCKET_DEBUG
-        if(0 != closerv) {
-            qDebug() << "QUnixSocketServer: Unable to close socket ("
-                     << strerror(errno) << ')';
-        }
+      if (0 != closerv) {
+         qDebug() << "QUnixSocketServer: Unable to close socket ("
+                  << strerror(errno) << ')';
+      }
 #endif
-    }
-    d->fd = -1;
-    d->address = QByteArray();
-    d->error = NoError;
+   }
+   d->fd = -1;
+   d->address = QByteArray();
+   d->error = NoError;
 }
 
 /*!
@@ -178,10 +180,11 @@ void QUnixSocketServer::close()
   */
 QUnixSocketServer::ServerError QUnixSocketServer::serverError() const
 {
-    if(!d)
-        return NoError;
+   if (!d) {
+      return NoError;
+   }
 
-    return d->error;
+   return d->error;
 }
 
 /*!
@@ -192,10 +195,11 @@ QUnixSocketServer::ServerError QUnixSocketServer::serverError() const
   */
 bool QUnixSocketServer::isListening() const
 {
-    if(!d)
-        return false;
+   if (!d) {
+      return false;
+   }
 
-    return (-1 != d->fd);
+   return (-1 != d->fd);
 }
 
 /*!
@@ -212,69 +216,70 @@ bool QUnixSocketServer::isListening() const
 
   \sa QUnixSocketServer::close()
   */
-bool QUnixSocketServer::listen(const QByteArray & path)
+bool QUnixSocketServer::listen(const QByteArray &path)
 {
-    if(d) {
-        close(); // Any existing server is destroyed
-    } else {
-        d = new QUnixSocketServerPrivate(this);
-    }
+   if (d) {
+      close(); // Any existing server is destroyed
+   } else {
+      d = new QUnixSocketServerPrivate(this);
+   }
 
-    if(path.isEmpty() || path.size() > UNIX_PATH_MAX) {
-        d->error = InvalidPath;
-        return false;
-    }
-    unlink( path );  // ok if this fails
+   if (path.isEmpty() || path.size() > UNIX_PATH_MAX) {
+      d->error = InvalidPath;
+      return false;
+   }
+   unlink( path );  // ok if this fails
 
-    // Create the socket
-    d->fd = ::socket(PF_UNIX, SOCK_STREAM, 0);
-    if(-1 == d->fd) {
+   // Create the socket
+   d->fd = ::socket(PF_UNIX, SOCK_STREAM, 0);
+   if (-1 == d->fd) {
 #ifdef QUNIXSOCKETSERVER_DEBUG
-        qDebug() << "QUnixSocketServer: Unable to create socket ("
-                 << strerror(errno) << ')';
+      qDebug() << "QUnixSocketServer: Unable to create socket ("
+               << strerror(errno) << ')';
 #endif
-        close();
-        d->error = ResourceError;
-        return false;
-    }
+      close();
+      d->error = ResourceError;
+      return false;
+   }
 
-    // Construct our unix address
-    struct ::sockaddr_un addr;
-    addr.sun_family = AF_UNIX;
-    ::memcpy(addr.sun_path, path.data(), path.size());
-    if(path.size() < UNIX_PATH_MAX)
-        addr.sun_path[path.size()] = '\0';
+   // Construct our unix address
+   struct ::sockaddr_un addr;
+   addr.sun_family = AF_UNIX;
+   ::memcpy(addr.sun_path, path.data(), path.size());
+   if (path.size() < UNIX_PATH_MAX) {
+      addr.sun_path[path.size()] = '\0';
+   }
 
-    // Attempt to bind
-    if(-1 == ::bind(d->fd, (sockaddr *)&addr, sizeof(sockaddr_un))) {
+   // Attempt to bind
+   if (-1 == ::bind(d->fd, (sockaddr *)&addr, sizeof(sockaddr_un))) {
 #ifdef QUNIXSOCKETSERVER_DEBUG
-        qDebug() << "QUnixSocketServer: Unable to bind socket ("
-                 << strerror(errno) << ')';
+      qDebug() << "QUnixSocketServer: Unable to bind socket ("
+               << strerror(errno) << ')';
 #endif
-        close();
-        d->error = BindError;
-        return false;
-    }
+      close();
+      d->error = BindError;
+      return false;
+   }
 
-    // Listen to socket
-    if(-1 == ::listen(d->fd, d->maxConns)) {
+   // Listen to socket
+   if (-1 == ::listen(d->fd, d->maxConns)) {
 #ifdef QUNIXSOCKETSERVER_DEBUG
-        qDebug() << "QUnixSocketServer: Unable to listen socket ("
-                 << strerror(errno) << ')';
+      qDebug() << "QUnixSocketServer: Unable to listen socket ("
+               << strerror(errno) << ')';
 #endif
-        close();
-        d->error = ListenError;
-        return false;
-    }
+      close();
+      d->error = ListenError;
+      return false;
+   }
 
-    // Success!
-    d->address = path;
-    d->acceptNotifier = new QSocketNotifier(d->fd, QSocketNotifier::Read, d);
-    d->acceptNotifier->setEnabled(true);
-    QObject::connect(d->acceptNotifier, SIGNAL(activated(int)),
-                     d, SLOT(acceptActivated()));
+   // Success!
+   d->address = path;
+   d->acceptNotifier = new QSocketNotifier(d->fd, QSocketNotifier::Read, d);
+   d->acceptNotifier->setEnabled(true);
+   QObject::connect(d->acceptNotifier, SIGNAL(activated(int)),
+                    d, SLOT(acceptActivated()));
 
-    return true;
+   return true;
 }
 
 /*!
@@ -283,16 +288,18 @@ bool QUnixSocketServer::listen(const QByteArray & path)
   */
 QByteArray QUnixSocketServer::serverAddress() const
 {
-    if(!d)
-        return QByteArray();
-    return d->address;
+   if (!d) {
+      return QByteArray();
+   }
+   return d->address;
 }
 
 int QUnixSocketServer::socketDescriptor() const
 {
-    if (!d)
-        return -1;
-    return d->fd;
+   if (!d) {
+      return -1;
+   }
+   return d->fd;
 }
 
 
@@ -309,10 +316,11 @@ int QUnixSocketServer::socketDescriptor() const
   */
 int QUnixSocketServer::maxPendingConnections() const
 {
-    if(!d)
-        return 30;
+   if (!d) {
+      return 30;
+   }
 
-    return d->maxConns;
+   return d->maxConns;
 }
 
 /*!
@@ -325,11 +333,12 @@ int QUnixSocketServer::maxPendingConnections() const
   */
 void QUnixSocketServer::setMaxPendingConnections(int numConnections)
 {
-    Q_ASSERT(numConnections >= 1);
-    if(!d)
-        d = new QUnixSocketServerPrivate(this);
+   Q_ASSERT(numConnections >= 1);
+   if (!d) {
+      d = new QUnixSocketServerPrivate(this);
+   }
 
-    d->maxConns = numConnections;
+   d->maxConns = numConnections;
 }
 
 /*!
@@ -347,14 +356,15 @@ void QUnixSocketServer::setMaxPendingConnections(int numConnections)
 
 void QUnixSocketServerPrivate::acceptActivated()
 {
-    ::sockaddr_un r;
-    socklen_t len = sizeof(sockaddr_un);
-    int connsock = ::accept(fd, (sockaddr *)&r, &len);
+   ::sockaddr_un r;
+   socklen_t len = sizeof(sockaddr_un);
+   int connsock = ::accept(fd, (sockaddr *)&r, &len);
 #ifdef QUNIXSOCKETSERVER_DEBUG
-    qDebug() << "QUnixSocketServer: Accept connection " << connsock;
+   qDebug() << "QUnixSocketServer: Accept connection " << connsock;
 #endif
-    if(-1 != connsock)
-        me->incomingConnection(connsock);
+   if (-1 != connsock) {
+      me->incomingConnection(connsock);
+   }
 }
 
 QT_END_NAMESPACE

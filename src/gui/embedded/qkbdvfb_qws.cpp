@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,62 +44,66 @@
 QT_BEGIN_NAMESPACE
 
 QVFbKeyboardHandler::QVFbKeyboardHandler(const QString &device)
-    : QObject()
+   : QObject()
 {
-    terminalName = device;
-    if (terminalName.isEmpty())
-        terminalName = QLatin1String("/dev/vkdb");
-    kbdFD = -1;
-    kbdIdx = 0;
-    kbdBufferLen = sizeof(QVFbKeyData) * 5;
-    kbdBuffer = new unsigned char [kbdBufferLen];
+   terminalName = device;
+   if (terminalName.isEmpty()) {
+      terminalName = QLatin1String("/dev/vkdb");
+   }
+   kbdFD = -1;
+   kbdIdx = 0;
+   kbdBufferLen = sizeof(QVFbKeyData) * 5;
+   kbdBuffer = new unsigned char [kbdBufferLen];
 
-    if ((kbdFD = QT_OPEN(terminalName.toLatin1().constData(), O_RDONLY | O_NDELAY)) < 0) {
-        qWarning("Cannot open %s (%s)", terminalName.toLatin1().constData(),
-        strerror(errno));
-    } else {
-        // Clear pending input
-        char buf[2];
-        while (QT_READ(kbdFD, buf, 1) > 0) { }
+   if ((kbdFD = QT_OPEN(terminalName.toLatin1().constData(), O_RDONLY | O_NDELAY)) < 0) {
+      qWarning("Cannot open %s (%s)", terminalName.toLatin1().constData(),
+               strerror(errno));
+   } else {
+      // Clear pending input
+      char buf[2];
+      while (QT_READ(kbdFD, buf, 1) > 0) { }
 
-        notifier = new QSocketNotifier(kbdFD, QSocketNotifier::Read, this);
-        connect(notifier, SIGNAL(activated(int)),this, SLOT(readKeyboardData()));
-    }
+      notifier = new QSocketNotifier(kbdFD, QSocketNotifier::Read, this);
+      connect(notifier, SIGNAL(activated(int)), this, SLOT(readKeyboardData()));
+   }
 }
 
 QVFbKeyboardHandler::~QVFbKeyboardHandler()
 {
-    if (kbdFD >= 0)
-        QT_CLOSE(kbdFD);
-    delete [] kbdBuffer;
+   if (kbdFD >= 0) {
+      QT_CLOSE(kbdFD);
+   }
+   delete [] kbdBuffer;
 }
 
 
 void QVFbKeyboardHandler::readKeyboardData()
 {
-    int n;
-    do {
-        n  = QT_READ(kbdFD, kbdBuffer+kbdIdx, kbdBufferLen - kbdIdx);
-        if (n > 0)
-            kbdIdx += n;
-    } while (n > 0);
+   int n;
+   do {
+      n  = QT_READ(kbdFD, kbdBuffer + kbdIdx, kbdBufferLen - kbdIdx);
+      if (n > 0) {
+         kbdIdx += n;
+      }
+   } while (n > 0);
 
-    int idx = 0;
-    while (kbdIdx - idx >= (int)sizeof(QVFbKeyData)) {
-        QVFbKeyData *kd = (QVFbKeyData *)(kbdBuffer + idx);
-        if (kd->unicode == 0 && kd->keycode == 0 && kd->modifiers == 0 && kd->press) {
-            // magic exit key
-            qWarning("Instructed to quit by Virtual Keyboard");
-            qApp->quit();
-        }
-        QWSServer::processKeyEvent(kd->unicode ? kd->unicode : 0xffff, kd->keycode, kd->modifiers, kd->press, kd->repeat);
-        idx += sizeof(QVFbKeyData);
-    }
+   int idx = 0;
+   while (kbdIdx - idx >= (int)sizeof(QVFbKeyData)) {
+      QVFbKeyData *kd = (QVFbKeyData *)(kbdBuffer + idx);
+      if (kd->unicode == 0 && kd->keycode == 0 && kd->modifiers == 0 && kd->press) {
+         // magic exit key
+         qWarning("Instructed to quit by Virtual Keyboard");
+         qApp->quit();
+      }
+      QWSServer::processKeyEvent(kd->unicode ? kd->unicode : 0xffff, kd->keycode, kd->modifiers, kd->press, kd->repeat);
+      idx += sizeof(QVFbKeyData);
+   }
 
-    int surplus = kbdIdx - idx;
-    for (int i = 0; i < surplus; i++)
-        kbdBuffer[i] = kbdBuffer[idx+i];
-    kbdIdx = surplus;
+   int surplus = kbdIdx - idx;
+   for (int i = 0; i < surplus; i++) {
+      kbdBuffer[i] = kbdBuffer[idx + i];
+   }
+   kbdIdx = surplus;
 }
 
 QT_END_NAMESPACE

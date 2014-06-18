@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -79,13 +79,13 @@ QT_BEGIN_NAMESPACE
 
 class QGraphicsGridLayoutPrivate : public QGraphicsLayoutPrivate
 {
-public:
-    QGraphicsGridLayoutPrivate() { }
-    QLayoutStyleInfo styleInfo() const;
+ public:
+   QGraphicsGridLayoutPrivate() { }
+   QLayoutStyleInfo styleInfo() const;
 
-    QGridLayoutEngine engine;
+   QGridLayoutEngine engine;
 #ifdef QT_DEBUG
-    void dump(int indent) const;
+   void dump(int indent) const;
 #endif
 };
 
@@ -93,9 +93,9 @@ Q_GLOBAL_STATIC(QWidget, globalStyleInfoWidget);
 
 QLayoutStyleInfo QGraphicsGridLayoutPrivate::styleInfo() const
 {
-    QGraphicsItem *item = parentItem();
-    QStyle *style = (item && item->isWidget()) ? static_cast<QGraphicsWidget*>(item)->style() : QApplication::style();
-    return QLayoutStyleInfo(style, globalStyleInfoWidget());
+   QGraphicsItem *item = parentItem();
+   QStyle *style = (item && item->isWidget()) ? static_cast<QGraphicsWidget *>(item)->style() : QApplication::style();
+   return QLayoutStyleInfo(style, globalStyleInfoWidget());
 }
 
 /*!
@@ -103,7 +103,7 @@ QLayoutStyleInfo QGraphicsGridLayoutPrivate::styleInfo() const
     QGraphicsLayout's constructor.
 */
 QGraphicsGridLayout::QGraphicsGridLayout(QGraphicsLayoutItem *parent)
-    : QGraphicsLayout(*new QGraphicsGridLayoutPrivate(), parent)
+   : QGraphicsLayout(*new QGraphicsGridLayoutPrivate(), parent)
 {
 }
 
@@ -112,18 +112,19 @@ QGraphicsGridLayout::QGraphicsGridLayout(QGraphicsLayoutItem *parent)
 */
 QGraphicsGridLayout::~QGraphicsGridLayout()
 {
-    for (int i = count() - 1; i >= 0; --i) {
-        QGraphicsLayoutItem *item = itemAt(i);
-        // The following lines can be removed, but this removes the item
-        // from the layout more efficiently than the implementation of
-        // ~QGraphicsLayoutItem.
-        removeAt(i);
-        if (item) {
-            item->setParentLayoutItem(0);
-            if (item->ownedByLayout())
-                delete item;
-        }
-    }
+   for (int i = count() - 1; i >= 0; --i) {
+      QGraphicsLayoutItem *item = itemAt(i);
+      // The following lines can be removed, but this removes the item
+      // from the layout more efficiently than the implementation of
+      // ~QGraphicsLayoutItem.
+      removeAt(i);
+      if (item) {
+         item->setParentLayoutItem(0);
+         if (item->ownedByLayout()) {
+            delete item;
+         }
+      }
+   }
 }
 
 /*!
@@ -133,30 +134,30 @@ QGraphicsGridLayout::~QGraphicsGridLayout()
 void QGraphicsGridLayout::addItem(QGraphicsLayoutItem *item, int row, int column,
                                   int rowSpan, int columnSpan, Qt::Alignment alignment)
 {
-    Q_D(QGraphicsGridLayout);
-    if (row < 0 || column < 0) {
-        qWarning("QGraphicsGridLayout::addItem: invalid row/column: %d",
-                 row < 0 ? row : column);
-        return;
-    }
-    if (columnSpan < 1 || rowSpan < 1) {
-        qWarning("QGraphicsGridLayout::addItem: invalid row span/column span: %d",
-                 rowSpan < 1 ? rowSpan : columnSpan);
-        return;
-    }
-    if (!item) {
-        qWarning("QGraphicsGridLayout::addItem: cannot add null item");
-        return;
-    }
-    if (item == this) {
-        qWarning("QGraphicsGridLayout::addItem: cannot insert itself");
-        return;
-    }
+   Q_D(QGraphicsGridLayout);
+   if (row < 0 || column < 0) {
+      qWarning("QGraphicsGridLayout::addItem: invalid row/column: %d",
+               row < 0 ? row : column);
+      return;
+   }
+   if (columnSpan < 1 || rowSpan < 1) {
+      qWarning("QGraphicsGridLayout::addItem: invalid row span/column span: %d",
+               rowSpan < 1 ? rowSpan : columnSpan);
+      return;
+   }
+   if (!item) {
+      qWarning("QGraphicsGridLayout::addItem: cannot add null item");
+      return;
+   }
+   if (item == this) {
+      qWarning("QGraphicsGridLayout::addItem: cannot insert itself");
+      return;
+   }
 
-    d->addChildLayoutItem(item);
+   d->addChildLayoutItem(item);
 
-    new QGridLayoutItem(&d->engine, item, row, column, rowSpan, columnSpan, alignment);
-    invalidate();
+   new QGridLayoutItem(&d->engine, item, row, column, rowSpan, columnSpan, alignment);
+   invalidate();
 }
 
 /*!
@@ -171,9 +172,9 @@ void QGraphicsGridLayout::addItem(QGraphicsLayoutItem *item, int row, int column
 */
 void QGraphicsGridLayout::setHorizontalSpacing(qreal spacing)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setSpacing(spacing, Qt::Horizontal);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setSpacing(spacing, Qt::Horizontal);
+   invalidate();
 }
 
 /*!
@@ -181,8 +182,8 @@ void QGraphicsGridLayout::setHorizontalSpacing(qreal spacing)
 */
 qreal QGraphicsGridLayout::horizontalSpacing() const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.spacing(d->styleInfo(), Qt::Horizontal);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.spacing(d->styleInfo(), Qt::Horizontal);
 }
 
 /*!
@@ -190,9 +191,9 @@ qreal QGraphicsGridLayout::horizontalSpacing() const
 */
 void QGraphicsGridLayout::setVerticalSpacing(qreal spacing)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setSpacing(spacing, Qt::Vertical);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setSpacing(spacing, Qt::Vertical);
+   invalidate();
 }
 
 /*!
@@ -200,8 +201,8 @@ void QGraphicsGridLayout::setVerticalSpacing(qreal spacing)
 */
 qreal QGraphicsGridLayout::verticalSpacing() const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.spacing(d->styleInfo(), Qt::Vertical);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.spacing(d->styleInfo(), Qt::Vertical);
 }
 
 /*!
@@ -212,9 +213,9 @@ qreal QGraphicsGridLayout::verticalSpacing() const
 */
 void QGraphicsGridLayout::setSpacing(qreal spacing)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setSpacing(spacing, Qt::Horizontal | Qt::Vertical);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setSpacing(spacing, Qt::Horizontal | Qt::Vertical);
+   invalidate();
 }
 
 /*!
@@ -222,9 +223,9 @@ void QGraphicsGridLayout::setSpacing(qreal spacing)
 */
 void QGraphicsGridLayout::setRowSpacing(int row, qreal spacing)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowSpacing(row, spacing, Qt::Vertical);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowSpacing(row, spacing, Qt::Vertical);
+   invalidate();
 }
 
 /*!
@@ -232,8 +233,8 @@ void QGraphicsGridLayout::setRowSpacing(int row, qreal spacing)
 */
 qreal QGraphicsGridLayout::rowSpacing(int row) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowSpacing(row, Qt::Vertical);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowSpacing(row, Qt::Vertical);
 }
 
 /*!
@@ -241,9 +242,9 @@ qreal QGraphicsGridLayout::rowSpacing(int row) const
 */
 void QGraphicsGridLayout::setColumnSpacing(int column, qreal spacing)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowSpacing(column, spacing, Qt::Horizontal);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowSpacing(column, spacing, Qt::Horizontal);
+   invalidate();
 }
 
 /*!
@@ -251,8 +252,8 @@ void QGraphicsGridLayout::setColumnSpacing(int column, qreal spacing)
 */
 qreal QGraphicsGridLayout::columnSpacing(int column) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowSpacing(column, Qt::Horizontal);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowSpacing(column, Qt::Horizontal);
 }
 
 /*!
@@ -260,9 +261,9 @@ qreal QGraphicsGridLayout::columnSpacing(int column) const
 */
 void QGraphicsGridLayout::setRowStretchFactor(int row, int stretch)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowStretchFactor(row, stretch, Qt::Vertical);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowStretchFactor(row, stretch, Qt::Vertical);
+   invalidate();
 }
 
 /*!
@@ -270,8 +271,8 @@ void QGraphicsGridLayout::setRowStretchFactor(int row, int stretch)
 */
 int QGraphicsGridLayout::rowStretchFactor(int row) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowStretchFactor(row, Qt::Vertical);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowStretchFactor(row, Qt::Vertical);
 }
 
 /*!
@@ -279,9 +280,9 @@ int QGraphicsGridLayout::rowStretchFactor(int row) const
 */
 void QGraphicsGridLayout::setColumnStretchFactor(int column, int stretch)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowStretchFactor(column, stretch, Qt::Horizontal);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowStretchFactor(column, stretch, Qt::Horizontal);
+   invalidate();
 }
 
 /*!
@@ -289,8 +290,8 @@ void QGraphicsGridLayout::setColumnStretchFactor(int column, int stretch)
 */
 int QGraphicsGridLayout::columnStretchFactor(int column) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowStretchFactor(column, Qt::Horizontal);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowStretchFactor(column, Qt::Horizontal);
 }
 
 /*!
@@ -298,9 +299,9 @@ int QGraphicsGridLayout::columnStretchFactor(int column) const
 */
 void QGraphicsGridLayout::setRowMinimumHeight(int row, qreal height)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowSizeHint(Qt::MinimumSize, row, height, Qt::Vertical);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowSizeHint(Qt::MinimumSize, row, height, Qt::Vertical);
+   invalidate();
 }
 
 /*!
@@ -308,8 +309,8 @@ void QGraphicsGridLayout::setRowMinimumHeight(int row, qreal height)
 */
 qreal QGraphicsGridLayout::rowMinimumHeight(int row) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowSizeHint(Qt::MinimumSize, row, Qt::Vertical);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowSizeHint(Qt::MinimumSize, row, Qt::Vertical);
 }
 
 /*!
@@ -317,9 +318,9 @@ qreal QGraphicsGridLayout::rowMinimumHeight(int row) const
 */
 void QGraphicsGridLayout::setRowPreferredHeight(int row, qreal height)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowSizeHint(Qt::PreferredSize, row, height, Qt::Vertical);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowSizeHint(Qt::PreferredSize, row, height, Qt::Vertical);
+   invalidate();
 }
 
 /*!
@@ -327,8 +328,8 @@ void QGraphicsGridLayout::setRowPreferredHeight(int row, qreal height)
 */
 qreal QGraphicsGridLayout::rowPreferredHeight(int row) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowSizeHint(Qt::PreferredSize, row, Qt::Vertical);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowSizeHint(Qt::PreferredSize, row, Qt::Vertical);
 }
 
 /*!
@@ -336,9 +337,9 @@ qreal QGraphicsGridLayout::rowPreferredHeight(int row) const
 */
 void QGraphicsGridLayout::setRowMaximumHeight(int row, qreal height)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowSizeHint(Qt::MaximumSize, row, height, Qt::Vertical);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowSizeHint(Qt::MaximumSize, row, height, Qt::Vertical);
+   invalidate();
 }
 
 /*!
@@ -346,8 +347,8 @@ void QGraphicsGridLayout::setRowMaximumHeight(int row, qreal height)
 */
 qreal QGraphicsGridLayout::rowMaximumHeight(int row) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowSizeHint(Qt::MaximumSize, row, Qt::Vertical);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowSizeHint(Qt::MaximumSize, row, Qt::Vertical);
 }
 
 /*!
@@ -355,10 +356,10 @@ qreal QGraphicsGridLayout::rowMaximumHeight(int row) const
 */
 void QGraphicsGridLayout::setRowFixedHeight(int row, qreal height)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowSizeHint(Qt::MinimumSize, row, height, Qt::Vertical);
-    d->engine.setRowSizeHint(Qt::MaximumSize, row, height, Qt::Vertical);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowSizeHint(Qt::MinimumSize, row, height, Qt::Vertical);
+   d->engine.setRowSizeHint(Qt::MaximumSize, row, height, Qt::Vertical);
+   invalidate();
 }
 
 /*!
@@ -366,9 +367,9 @@ void QGraphicsGridLayout::setRowFixedHeight(int row, qreal height)
 */
 void QGraphicsGridLayout::setColumnMinimumWidth(int column, qreal width)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowSizeHint(Qt::MinimumSize, column, width, Qt::Horizontal);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowSizeHint(Qt::MinimumSize, column, width, Qt::Horizontal);
+   invalidate();
 }
 
 /*!
@@ -376,8 +377,8 @@ void QGraphicsGridLayout::setColumnMinimumWidth(int column, qreal width)
 */
 qreal QGraphicsGridLayout::columnMinimumWidth(int column) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowSizeHint(Qt::MinimumSize, column, Qt::Horizontal);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowSizeHint(Qt::MinimumSize, column, Qt::Horizontal);
 }
 
 /*!
@@ -385,9 +386,9 @@ qreal QGraphicsGridLayout::columnMinimumWidth(int column) const
 */
 void QGraphicsGridLayout::setColumnPreferredWidth(int column, qreal width)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowSizeHint(Qt::PreferredSize, column, width, Qt::Horizontal);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowSizeHint(Qt::PreferredSize, column, width, Qt::Horizontal);
+   invalidate();
 }
 
 /*!
@@ -395,8 +396,8 @@ void QGraphicsGridLayout::setColumnPreferredWidth(int column, qreal width)
 */
 qreal QGraphicsGridLayout::columnPreferredWidth(int column) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowSizeHint(Qt::PreferredSize, column, Qt::Horizontal);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowSizeHint(Qt::PreferredSize, column, Qt::Horizontal);
 }
 
 /*!
@@ -404,9 +405,9 @@ qreal QGraphicsGridLayout::columnPreferredWidth(int column) const
 */
 void QGraphicsGridLayout::setColumnMaximumWidth(int column, qreal width)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowSizeHint(Qt::MaximumSize, column, width, Qt::Horizontal);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowSizeHint(Qt::MaximumSize, column, width, Qt::Horizontal);
+   invalidate();
 }
 
 /*!
@@ -414,8 +415,8 @@ void QGraphicsGridLayout::setColumnMaximumWidth(int column, qreal width)
 */
 qreal QGraphicsGridLayout::columnMaximumWidth(int column) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowSizeHint(Qt::MaximumSize, column, Qt::Horizontal);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowSizeHint(Qt::MaximumSize, column, Qt::Horizontal);
 }
 
 /*!
@@ -423,10 +424,10 @@ qreal QGraphicsGridLayout::columnMaximumWidth(int column) const
 */
 void QGraphicsGridLayout::setColumnFixedWidth(int column, qreal width)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowSizeHint(Qt::MinimumSize, column, width, Qt::Horizontal);
-    d->engine.setRowSizeHint(Qt::MaximumSize, column, width, Qt::Horizontal);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowSizeHint(Qt::MinimumSize, column, width, Qt::Horizontal);
+   d->engine.setRowSizeHint(Qt::MaximumSize, column, width, Qt::Horizontal);
+   invalidate();
 }
 
 /*!
@@ -434,9 +435,9 @@ void QGraphicsGridLayout::setColumnFixedWidth(int column, qreal width)
 */
 void QGraphicsGridLayout::setRowAlignment(int row, Qt::Alignment alignment)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowAlignment(row, alignment, Qt::Vertical);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowAlignment(row, alignment, Qt::Vertical);
+   invalidate();
 }
 
 /*!
@@ -444,8 +445,8 @@ void QGraphicsGridLayout::setRowAlignment(int row, Qt::Alignment alignment)
 */
 Qt::Alignment QGraphicsGridLayout::rowAlignment(int row) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowAlignment(row, Qt::Vertical);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowAlignment(row, Qt::Vertical);
 }
 
 /*!
@@ -453,9 +454,9 @@ Qt::Alignment QGraphicsGridLayout::rowAlignment(int row) const
 */
 void QGraphicsGridLayout::setColumnAlignment(int column, Qt::Alignment alignment)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setRowAlignment(column, alignment, Qt::Horizontal);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setRowAlignment(column, alignment, Qt::Horizontal);
+   invalidate();
 }
 
 /*!
@@ -463,8 +464,8 @@ void QGraphicsGridLayout::setColumnAlignment(int column, Qt::Alignment alignment
 */
 Qt::Alignment QGraphicsGridLayout::columnAlignment(int column) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.rowAlignment(column, Qt::Horizontal);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.rowAlignment(column, Qt::Horizontal);
 }
 
 /*!
@@ -472,9 +473,9 @@ Qt::Alignment QGraphicsGridLayout::columnAlignment(int column) const
 */
 void QGraphicsGridLayout::setAlignment(QGraphicsLayoutItem *item, Qt::Alignment alignment)
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.setAlignment(item, alignment);
-    invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.setAlignment(item, alignment);
+   invalidate();
 }
 
 /*!
@@ -482,8 +483,8 @@ void QGraphicsGridLayout::setAlignment(QGraphicsLayoutItem *item, Qt::Alignment 
 */
 Qt::Alignment QGraphicsGridLayout::alignment(QGraphicsLayoutItem *item) const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.alignment(item);
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.alignment(item);
 }
 
 /*!
@@ -493,8 +494,8 @@ Qt::Alignment QGraphicsGridLayout::alignment(QGraphicsLayoutItem *item) const
 */
 int QGraphicsGridLayout::rowCount() const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.effectiveLastRow(Qt::Vertical) + 1;
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.effectiveLastRow(Qt::Vertical) + 1;
 }
 
 /*!
@@ -504,8 +505,8 @@ int QGraphicsGridLayout::rowCount() const
 */
 int QGraphicsGridLayout::columnCount() const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.effectiveLastRow(Qt::Horizontal) + 1;
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.effectiveLastRow(Qt::Horizontal) + 1;
 }
 
 /*!
@@ -513,14 +514,15 @@ int QGraphicsGridLayout::columnCount() const
 */
 QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int row, int column) const
 {
-    Q_D(const QGraphicsGridLayout);
-    if (row < 0 || row >= rowCount() || column < 0 || column >= columnCount()) {
-        qWarning("QGraphicsGridLayout::itemAt: invalid row, column %d, %d", row, column);
-        return 0;
-    }
-    if (QGridLayoutItem *item = d->engine.itemAt(row, column))
-        return item->layoutItem();
-    return 0;
+   Q_D(const QGraphicsGridLayout);
+   if (row < 0 || row >= rowCount() || column < 0 || column >= columnCount()) {
+      qWarning("QGraphicsGridLayout::itemAt: invalid row, column %d, %d", row, column);
+      return 0;
+   }
+   if (QGridLayoutItem *item = d->engine.itemAt(row, column)) {
+      return item->layoutItem();
+   }
+   return 0;
 }
 
 /*!
@@ -528,8 +530,8 @@ QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int row, int column) const
 */
 int QGraphicsGridLayout::count() const
 {
-    Q_D(const QGraphicsGridLayout);
-    return d->engine.itemCount();
+   Q_D(const QGraphicsGridLayout);
+   return d->engine.itemCount();
 }
 
 /*!
@@ -538,15 +540,16 @@ int QGraphicsGridLayout::count() const
 */
 QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int index) const
 {
-    Q_D(const QGraphicsGridLayout);
-    if (index < 0 || index >= d->engine.itemCount()) {
-        qWarning("QGraphicsGridLayout::itemAt: invalid index %d", index);
-        return 0;
-    }
-    QGraphicsLayoutItem *item = 0;
-    if (QGridLayoutItem *gridItem = d->engine.itemAt(index))
-        item = gridItem->layoutItem();
-    return item;
+   Q_D(const QGraphicsGridLayout);
+   if (index < 0 || index >= d->engine.itemCount()) {
+      qWarning("QGraphicsGridLayout::itemAt: invalid index %d", index);
+      return 0;
+   }
+   QGraphicsLayoutItem *item = 0;
+   if (QGridLayoutItem *gridItem = d->engine.itemAt(index)) {
+      item = gridItem->layoutItem();
+   }
+   return item;
 }
 
 /*!
@@ -557,30 +560,31 @@ QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int index) const
 */
 void QGraphicsGridLayout::removeAt(int index)
 {
-    Q_D(QGraphicsGridLayout);
-    if (index < 0 || index >= d->engine.itemCount()) {
-        qWarning("QGraphicsGridLayout::removeAt: invalid index %d", index);
-        return;
-    }
-    if (QGridLayoutItem *gridItem = d->engine.itemAt(index)) {
-        if (QGraphicsLayoutItem *layoutItem = gridItem->layoutItem())
-            layoutItem->setParentLayoutItem(0);
-        d->engine.removeItem(gridItem);
+   Q_D(QGraphicsGridLayout);
+   if (index < 0 || index >= d->engine.itemCount()) {
+      qWarning("QGraphicsGridLayout::removeAt: invalid index %d", index);
+      return;
+   }
+   if (QGridLayoutItem *gridItem = d->engine.itemAt(index)) {
+      if (QGraphicsLayoutItem *layoutItem = gridItem->layoutItem()) {
+         layoutItem->setParentLayoutItem(0);
+      }
+      d->engine.removeItem(gridItem);
 
-        // recalculate rowInfo.count if we remove an item that is on the right/bottommost row
-        for (int j = 0; j < NOrientations; ++j) {
-            // 0: Hor, 1: Ver
-            const Qt::Orientation orient = (j == 0 ? Qt::Horizontal : Qt::Vertical);
-            const int oldCount = d->engine.rowCount(orient);
-            if (gridItem->lastRow(orient) == oldCount - 1) {
-                const int newCount = d->engine.effectiveLastRow(orient) + 1;
-                d->engine.removeRows(newCount, oldCount - newCount, orient);
-            }
-        }
+      // recalculate rowInfo.count if we remove an item that is on the right/bottommost row
+      for (int j = 0; j < NOrientations; ++j) {
+         // 0: Hor, 1: Ver
+         const Qt::Orientation orient = (j == 0 ? Qt::Horizontal : Qt::Vertical);
+         const int oldCount = d->engine.rowCount(orient);
+         if (gridItem->lastRow(orient) == oldCount - 1) {
+            const int newCount = d->engine.effectiveLastRow(orient) + 1;
+            d->engine.removeRows(newCount, oldCount - newCount, orient);
+         }
+      }
 
-        delete gridItem;
-        invalidate();
-    }
+      delete gridItem;
+      invalidate();
+   }
 }
 
 /*!
@@ -593,26 +597,26 @@ void QGraphicsGridLayout::removeAt(int index)
 */
 void QGraphicsGridLayout::removeItem(QGraphicsLayoutItem *item)
 {
-    Q_D(QGraphicsGridLayout);
-    int index = d->engine.indexOf(item);
-    removeAt(index);
+   Q_D(QGraphicsGridLayout);
+   int index = d->engine.indexOf(item);
+   removeAt(index);
 }
 /*!
     \reimp
 */
 void QGraphicsGridLayout::invalidate()
 {
-    Q_D(QGraphicsGridLayout);
-    d->engine.invalidate();
-    QGraphicsLayout::invalidate();
+   Q_D(QGraphicsGridLayout);
+   d->engine.invalidate();
+   QGraphicsLayout::invalidate();
 }
 
 #ifdef QT_DEBUG
 void QGraphicsGridLayoutPrivate::dump(int indent) const
 {
-    if (qt_graphicsLayoutDebug()) {
-        engine.dump(indent + 1);
-    }
+   if (qt_graphicsLayoutDebug()) {
+      engine.dump(indent + 1);
+   }
 }
 #endif
 
@@ -621,24 +625,25 @@ void QGraphicsGridLayoutPrivate::dump(int indent) const
 */
 void QGraphicsGridLayout::setGeometry(const QRectF &rect)
 {
-    Q_D(QGraphicsGridLayout);
-    QGraphicsLayout::setGeometry(rect);
-    QRectF effectiveRect = geometry();
-    qreal left, top, right, bottom;
-    getContentsMargins(&left, &top, &right, &bottom);
-    Qt::LayoutDirection visualDir = d->visualDirection();
-    d->engine.setVisualDirection(visualDir);
-    if (visualDir == Qt::RightToLeft)
-        qSwap(left, right);
-    effectiveRect.adjust(+left, +top, -right, -bottom);
-    d->engine.setGeometries(d->styleInfo(), effectiveRect);
+   Q_D(QGraphicsGridLayout);
+   QGraphicsLayout::setGeometry(rect);
+   QRectF effectiveRect = geometry();
+   qreal left, top, right, bottom;
+   getContentsMargins(&left, &top, &right, &bottom);
+   Qt::LayoutDirection visualDir = d->visualDirection();
+   d->engine.setVisualDirection(visualDir);
+   if (visualDir == Qt::RightToLeft) {
+      qSwap(left, right);
+   }
+   effectiveRect.adjust(+left, +top, -right, -bottom);
+   d->engine.setGeometries(d->styleInfo(), effectiveRect);
 #ifdef QT_DEBUG
-    if (qt_graphicsLayoutDebug()) {
-        static int counter = 0;
-        qDebug("==== BEGIN DUMP OF QGraphicsGridLayout (%d)====", counter++);
-        d->dump(1);
-        qDebug("==== END DUMP OF QGraphicsGridLayout ====");
-    }
+   if (qt_graphicsLayoutDebug()) {
+      static int counter = 0;
+      qDebug("==== BEGIN DUMP OF QGraphicsGridLayout (%d)====", counter++);
+      d->dump(1);
+      qDebug("==== END DUMP OF QGraphicsGridLayout ====");
+   }
 #endif
 }
 
@@ -647,11 +652,11 @@ void QGraphicsGridLayout::setGeometry(const QRectF &rect)
 */
 QSizeF QGraphicsGridLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
-    Q_D(const QGraphicsGridLayout);
-    qreal left, top, right, bottom;
-    getContentsMargins(&left, &top, &right, &bottom);
-    const QSizeF extraMargins(left + right, top + bottom);
-    return d->engine.sizeHint(d->styleInfo(), which , constraint - extraMargins) + extraMargins;
+   Q_D(const QGraphicsGridLayout);
+   qreal left, top, right, bottom;
+   getContentsMargins(&left, &top, &right, &bottom);
+   const QSizeF extraMargins(left + right, top + bottom);
+   return d->engine.sizeHint(d->styleInfo(), which , constraint - extraMargins) + extraMargins;
 }
 
 QT_END_NAMESPACE

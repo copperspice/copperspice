@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,62 +39,62 @@ class QRegion;
 class QWidget;
 struct QGLWindowSurfacePrivate;
 
-Q_OPENGL_EXPORT QGLWidget* qt_gl_share_widget();
+Q_OPENGL_EXPORT QGLWidget *qt_gl_share_widget();
 Q_OPENGL_EXPORT void qt_destroy_gl_share_widget();
 bool qt_initializing_gl_share_widget();
 
 class QGLWindowSurfaceGLPaintDevice : public QGLPaintDevice
 {
-public:
-    QPaintEngine* paintEngine() const;
-    QSize size() const;
-    int metric(PaintDeviceMetric m) const;
-    QGLContext* context() const;
-    QGLWindowSurfacePrivate* d;
+ public:
+   QPaintEngine *paintEngine() const;
+   QSize size() const;
+   int metric(PaintDeviceMetric m) const;
+   QGLContext *context() const;
+   QGLWindowSurfacePrivate *d;
 };
 
 class Q_OPENGL_EXPORT QGLWindowSurface : public QObject, public QWindowSurface // , public QPaintDevice
 {
-    CS_OBJECT(QGLWindowSurface)
-public:
-    QGLWindowSurface(QWidget *window);
-    ~QGLWindowSurface();
+   CS_OBJECT(QGLWindowSurface)
+ public:
+   QGLWindowSurface(QWidget *window);
+   ~QGLWindowSurface();
 
-    QPaintDevice *paintDevice();
-    void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
+   QPaintDevice *paintDevice();
+   void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
 
 #if !defined(Q_WS_QPA)
-    void setGeometry(const QRect &rect);
+   void setGeometry(const QRect &rect);
 #else
-    virtual void resize(const QSize &size);
+   virtual void resize(const QSize &size);
 #endif
 
-    void updateGeometry();
-    bool scroll(const QRegion &area, int dx, int dy);
+   void updateGeometry();
+   bool scroll(const QRegion &area, int dx, int dy);
 
-    void beginPaint(const QRegion &region);
-    void endPaint(const QRegion &region);
+   void beginPaint(const QRegion &region);
+   void endPaint(const QRegion &region);
 
-    QImage *buffer(const QWidget *widget);
+   QImage *buffer(const QWidget *widget);
 
-    WindowSurfaceFeatures features() const;
+   WindowSurfaceFeatures features() const;
 
-    QGLContext *context() const;
+   QGLContext *context() const;
 
-    static QGLFormat surfaceFormat;
+   static QGLFormat surfaceFormat;
 
-    enum SwapMode { AutomaticSwap, AlwaysFullSwap, AlwaysPartialSwap, KillSwap };
-    static SwapMode swapBehavior;
+   enum SwapMode { AutomaticSwap, AlwaysFullSwap, AlwaysPartialSwap, KillSwap };
+   static SwapMode swapBehavior;
 
-private :
-    OPENGL_CS_SLOT_1(Private, void deleted(QObject * object))
-    OPENGL_CS_SLOT_2(deleted) 
+ private :
+   OPENGL_CS_SLOT_1(Private, void deleted(QObject *object))
+   OPENGL_CS_SLOT_2(deleted)
 
-private:
-    void hijackWindow(QWidget *widget);
-    bool initializeOffscreenTexture(const QSize &size);
+ private:
+   void hijackWindow(QWidget *widget);
+   bool initializeOffscreenTexture(const QSize &size);
 
-    QGLWindowSurfacePrivate *d_ptr;
+   QGLWindowSurfacePrivate *d_ptr;
 };
 
 QT_END_NAMESPACE

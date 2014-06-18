@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -58,160 +58,161 @@ class QHttpNetworkConnectionPrivate;
 
 class QHttpNetworkConnection : public QObject
 {
-    CS_OBJECT(QHttpNetworkConnection)
+   CS_OBJECT(QHttpNetworkConnection)
 
-public:
+ public:
 
 #ifndef QT_NO_BEARERMANAGEMENT
-    QHttpNetworkConnection(const QString &hostName, quint16 port = 80, bool encrypt = false, 
-         QObject *parent = 0, QSharedPointer<QNetworkSession> networkSession = QSharedPointer<QNetworkSession>());
+   QHttpNetworkConnection(const QString &hostName, quint16 port = 80, bool encrypt = false,
+                          QObject *parent = 0, QSharedPointer<QNetworkSession> networkSession = QSharedPointer<QNetworkSession>());
 
-    QHttpNetworkConnection(quint16 channelCount, const QString &hostName, quint16 port = 80, 
-         bool encrypt = false, QObject *parent = 0, 
-         QSharedPointer<QNetworkSession> networkSession = QSharedPointer<QNetworkSession>());
+   QHttpNetworkConnection(quint16 channelCount, const QString &hostName, quint16 port = 80,
+                          bool encrypt = false, QObject *parent = 0,
+                          QSharedPointer<QNetworkSession> networkSession = QSharedPointer<QNetworkSession>());
 
 #else
-    QHttpNetworkConnection(const QString &hostName, quint16 port = 80, bool encrypt = false, 
-         QObject *parent = 0);
+   QHttpNetworkConnection(const QString &hostName, quint16 port = 80, bool encrypt = false,
+                          QObject *parent = 0);
 
-    QHttpNetworkConnection(quint16 channelCount, const QString &hostName, 
-         quint16 port = 80, bool encrypt = false, QObject *parent = 0);
+   QHttpNetworkConnection(quint16 channelCount, const QString &hostName,
+                          quint16 port = 80, bool encrypt = false, QObject *parent = 0);
 #endif
 
-    ~QHttpNetworkConnection();
+   ~QHttpNetworkConnection();
 
-    //The hostname to which this is connected to.
-    QString hostName() const;
-    //The HTTP port in use.
-    quint16 port() const;
+   //The hostname to which this is connected to.
+   QString hostName() const;
+   //The HTTP port in use.
+   quint16 port() const;
 
-    //add a new HTTP request through this connection
-    QHttpNetworkReply* sendRequest(const QHttpNetworkRequest &request);
+   //add a new HTTP request through this connection
+   QHttpNetworkReply *sendRequest(const QHttpNetworkRequest &request);
 
 #ifndef QT_NO_NETWORKPROXY
-    //set the proxy for this connection
-    void setCacheProxy(const QNetworkProxy &networkProxy);
-    QNetworkProxy cacheProxy() const;
-    void setTransparentProxy(const QNetworkProxy &networkProxy);
-    QNetworkProxy transparentProxy() const;
+   //set the proxy for this connection
+   void setCacheProxy(const QNetworkProxy &networkProxy);
+   QNetworkProxy cacheProxy() const;
+   void setTransparentProxy(const QNetworkProxy &networkProxy);
+   QNetworkProxy transparentProxy() const;
 #endif
 
-    bool isSsl() const;
+   bool isSsl() const;
 
-    QHttpNetworkConnectionChannel *channels() const;
+   QHttpNetworkConnectionChannel *channels() const;
 
 #ifndef QT_NO_OPENSSL
-    void setSslConfiguration(const QSslConfiguration &config);
-    void ignoreSslErrors(int channel = -1);
-    void ignoreSslErrors(const QList<QSslError> &errors, int channel = -1);
+   void setSslConfiguration(const QSslConfiguration &config);
+   void ignoreSslErrors(int channel = -1);
+   void ignoreSslErrors(const QList<QSslError> &errors, int channel = -1);
 #endif
 
-private:
-    Q_DECLARE_PRIVATE(QHttpNetworkConnection)
-    Q_DISABLE_COPY(QHttpNetworkConnection)
+ private:
+   Q_DECLARE_PRIVATE(QHttpNetworkConnection)
+   Q_DISABLE_COPY(QHttpNetworkConnection)
 
-    friend class QHttpNetworkReply;
-    friend class QHttpNetworkReplyPrivate;
-    friend class QHttpNetworkConnectionChannel;
+   friend class QHttpNetworkReply;
+   friend class QHttpNetworkReplyPrivate;
+   friend class QHttpNetworkConnectionChannel;
 
-    NET_CS_SLOT_1(Private, void _q_startNextRequest())
-    NET_CS_SLOT_2(_q_startNextRequest)
+   NET_CS_SLOT_1(Private, void _q_startNextRequest())
+   NET_CS_SLOT_2(_q_startNextRequest)
 
-protected:
-	 QScopedPointer<QHttpNetworkConnectionPrivate> d_ptr;
+ protected:
+   QScopedPointer<QHttpNetworkConnectionPrivate> d_ptr;
 };
 
 
 // private classes
-typedef QPair<QHttpNetworkRequest, QHttpNetworkReply*> HttpMessagePair;
+typedef QPair<QHttpNetworkRequest, QHttpNetworkReply *> HttpMessagePair;
 
 
 class QHttpNetworkConnectionPrivate
 {
-    Q_DECLARE_PUBLIC(QHttpNetworkConnection)
+   Q_DECLARE_PUBLIC(QHttpNetworkConnection)
 
-public:
-    static const int defaultChannelCount;
-    static const int defaultPipelineLength;
-    static const int defaultRePipelineLength;
+ public:
+   static const int defaultChannelCount;
+   static const int defaultPipelineLength;
+   static const int defaultRePipelineLength;
 
-    enum ConnectionState {
-        RunningState = 0,
-        PausedState = 1,
-    };
+   enum ConnectionState {
+      RunningState = 0,
+      PausedState = 1,
+   };
 
-    QHttpNetworkConnectionPrivate(const QString &hostName, quint16 port, bool encrypt);
-    QHttpNetworkConnectionPrivate(quint16 channelCount, const QString &hostName, quint16 port, bool encrypt);
+   QHttpNetworkConnectionPrivate(const QString &hostName, quint16 port, bool encrypt);
+   QHttpNetworkConnectionPrivate(quint16 channelCount, const QString &hostName, quint16 port, bool encrypt);
 
-    virtual ~QHttpNetworkConnectionPrivate();
-    void init();
+   virtual ~QHttpNetworkConnectionPrivate();
+   void init();
 
-    void pauseConnection();
-    void resumeConnection();
-    ConnectionState state;
+   void pauseConnection();
+   void resumeConnection();
+   ConnectionState state;
 
-    enum { ChunkSize = 4096 };
+   enum { ChunkSize = 4096 };
 
-    int indexOf(QAbstractSocket *socket) const;
+   int indexOf(QAbstractSocket *socket) const;
 
-    QHttpNetworkReply *queueRequest(const QHttpNetworkRequest &request);
-    void requeueRequest(const HttpMessagePair &pair); // e.g. after pipeline broke
-    bool dequeueRequest(QAbstractSocket *socket);
-    void prepareRequest(HttpMessagePair &request);
-    QHttpNetworkRequest predictNextRequest();
+   QHttpNetworkReply *queueRequest(const QHttpNetworkRequest &request);
+   void requeueRequest(const HttpMessagePair &pair); // e.g. after pipeline broke
+   bool dequeueRequest(QAbstractSocket *socket);
+   void prepareRequest(HttpMessagePair &request);
+   QHttpNetworkRequest predictNextRequest();
 
-    void fillPipeline(QAbstractSocket *socket);
-    bool fillPipeline(QList<HttpMessagePair> &queue, QHttpNetworkConnectionChannel &channel);
+   void fillPipeline(QAbstractSocket *socket);
+   bool fillPipeline(QList<HttpMessagePair> &queue, QHttpNetworkConnectionChannel &channel);
 
-    // read more HTTP body after the next event loop spin
-    void readMoreLater(QHttpNetworkReply *reply);
+   // read more HTTP body after the next event loop spin
+   void readMoreLater(QHttpNetworkReply *reply);
 
-    void copyCredentials(int fromChannel, QAuthenticator *auth, bool isProxy);
+   void copyCredentials(int fromChannel, QAuthenticator *auth, bool isProxy);
 
-    // private slots
-    void _q_startNextRequest(); // send the next request from the queue
+   // private slots
+   void _q_startNextRequest(); // send the next request from the queue
 
-    void createAuthorization(QAbstractSocket *socket, QHttpNetworkRequest &request);
+   void createAuthorization(QAbstractSocket *socket, QHttpNetworkRequest &request);
 
-    QString errorDetail(QNetworkReply::NetworkError errorCode, QAbstractSocket *socket,
-                        const QString &extraDetail = QString());
+   QString errorDetail(QNetworkReply::NetworkError errorCode, QAbstractSocket *socket,
+                       const QString &extraDetail = QString());
 
 #ifndef QT_NO_COMPRESS
-    bool expand(QAbstractSocket *socket, QHttpNetworkReply *reply, bool dataComplete);
+   bool expand(QAbstractSocket *socket, QHttpNetworkReply *reply, bool dataComplete);
 #endif
-    void removeReply(QHttpNetworkReply *reply);
+   void removeReply(QHttpNetworkReply *reply);
 
-    QString hostName;
-    quint16 port;
-    bool encrypt;
+   QString hostName;
+   quint16 port;
+   bool encrypt;
 
-    const int channelCount;
-    QHttpNetworkConnectionChannel *channels; // parallel connections to the server
+   const int channelCount;
+   QHttpNetworkConnectionChannel *channels; // parallel connections to the server
 
-    qint64 uncompressedBytesAvailable(const QHttpNetworkReply &reply) const;
-    qint64 uncompressedBytesAvailableNextBlock(const QHttpNetworkReply &reply) const;
+   qint64 uncompressedBytesAvailable(const QHttpNetworkReply &reply) const;
+   qint64 uncompressedBytesAvailableNextBlock(const QHttpNetworkReply &reply) const;
 
 
-    void emitReplyError(QAbstractSocket *socket, QHttpNetworkReply *reply, QNetworkReply::NetworkError errorCode);
-    bool handleAuthenticateChallenge(QAbstractSocket *socket, QHttpNetworkReply *reply, bool isProxy, bool &resend);
+   void emitReplyError(QAbstractSocket *socket, QHttpNetworkReply *reply, QNetworkReply::NetworkError errorCode);
+   bool handleAuthenticateChallenge(QAbstractSocket *socket, QHttpNetworkReply *reply, bool isProxy, bool &resend);
 
 #ifndef QT_NO_NETWORKPROXY
-    QNetworkProxy networkProxy;
-    void emitProxyAuthenticationRequired(const QHttpNetworkConnectionChannel *chan, const QNetworkProxy &proxy, QAuthenticator* auth);
+   QNetworkProxy networkProxy;
+   void emitProxyAuthenticationRequired(const QHttpNetworkConnectionChannel *chan, const QNetworkProxy &proxy,
+                                        QAuthenticator *auth);
 #endif
 
-    //The request queues
-    QList<HttpMessagePair> highPriorityQueue;
-    QList<HttpMessagePair> lowPriorityQueue;
+   //The request queues
+   QList<HttpMessagePair> highPriorityQueue;
+   QList<HttpMessagePair> lowPriorityQueue;
 
 #ifndef QT_NO_BEARERMANAGEMENT
-    QSharedPointer<QNetworkSession> networkSession;
+   QSharedPointer<QNetworkSession> networkSession;
 #endif
 
-    friend class QHttpNetworkConnectionChannel;
+   friend class QHttpNetworkConnectionChannel;
 
-protected:
-	 QHttpNetworkConnection *q_ptr;
+ protected:
+   QHttpNetworkConnection *q_ptr;
 
 };
 

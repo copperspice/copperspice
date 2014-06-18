@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,30 +38,30 @@ class QTextCursor;
 class Q_GUI_EXPORT QTextDocumentFragment
 {
 
-public:
-    QTextDocumentFragment();
-    explicit QTextDocumentFragment(const QTextDocument *document);
-    explicit QTextDocumentFragment(const QTextCursor &range);
-    QTextDocumentFragment(const QTextDocumentFragment &rhs);
-    QTextDocumentFragment &operator=(const QTextDocumentFragment &rhs);
-    ~QTextDocumentFragment();
+ public:
+   QTextDocumentFragment();
+   explicit QTextDocumentFragment(const QTextDocument *document);
+   explicit QTextDocumentFragment(const QTextCursor &range);
+   QTextDocumentFragment(const QTextDocumentFragment &rhs);
+   QTextDocumentFragment &operator=(const QTextDocumentFragment &rhs);
+   ~QTextDocumentFragment();
 
-    bool isEmpty() const;
+   bool isEmpty() const;
 
-    QString toPlainText() const;
-    static QTextDocumentFragment fromPlainText(const QString &plainText);
+   QString toPlainText() const;
+   static QTextDocumentFragment fromPlainText(const QString &plainText);
 
 #ifndef QT_NO_TEXTHTMLPARSER
-    QString toHtml(const QByteArray &encoding = QByteArray()) const;
+   QString toHtml(const QByteArray &encoding = QByteArray()) const;
 
-    static QTextDocumentFragment fromHtml(const QString &html);
-    static QTextDocumentFragment fromHtml(const QString &html, const QTextDocument *resourceProvider);
+   static QTextDocumentFragment fromHtml(const QString &html);
+   static QTextDocumentFragment fromHtml(const QString &html, const QTextDocument *resourceProvider);
 #endif
 
-private:
-    QTextDocumentFragmentPrivate *d;
-    friend class QTextCursor;
-    friend class QTextDocumentWriter;
+ private:
+   QTextDocumentFragmentPrivate *d;
+   friend class QTextCursor;
+   friend class QTextDocumentWriter;
 };
 
 QT_END_NAMESPACE

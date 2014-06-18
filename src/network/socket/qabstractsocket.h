@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,183 +46,184 @@ class QNetworkProxy;
 
 class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
 {
-    CS_OBJECT(QAbstractSocket)
+   CS_OBJECT(QAbstractSocket)
 
-    NET_CS_ENUM(SocketType)
-    NET_CS_ENUM(NetworkLayerProtocol)
-    NET_CS_ENUM(SocketError)
-    NET_CS_ENUM(SocketState)
-    NET_CS_ENUM(SocketOption)
+   NET_CS_ENUM(SocketType)
+   NET_CS_ENUM(NetworkLayerProtocol)
+   NET_CS_ENUM(SocketError)
+   NET_CS_ENUM(SocketState)
+   NET_CS_ENUM(SocketOption)
 
-public:
-    enum SocketType {
-        TcpSocket,
-        UdpSocket,
-        UnknownSocketType = -1
-    };
-    enum NetworkLayerProtocol {
-        IPv4Protocol,
-        IPv6Protocol,
-        AnyIPProtocol,
-        UnknownNetworkLayerProtocol = -1
-    };
-    enum SocketError {
-        ConnectionRefusedError,
-        RemoteHostClosedError,
-        HostNotFoundError,
-        SocketAccessError,
-        SocketResourceError,
-        SocketTimeoutError,                     /* 5 */
-        DatagramTooLargeError,
-        NetworkError,
-        AddressInUseError,
-        SocketAddressNotAvailableError,
-        UnsupportedSocketOperationError,        /* 10 */
-        UnfinishedSocketOperationError,
-        ProxyAuthenticationRequiredError,
-        SslHandshakeFailedError,
-        ProxyConnectionRefusedError,
-        ProxyConnectionClosedError,             /* 15 */
-        ProxyConnectionTimeoutError,
-        ProxyNotFoundError,
-        ProxyProtocolError,
+ public:
+   enum SocketType {
+      TcpSocket,
+      UdpSocket,
+      UnknownSocketType = -1
+   };
+   enum NetworkLayerProtocol {
+      IPv4Protocol,
+      IPv6Protocol,
+      AnyIPProtocol,
+      UnknownNetworkLayerProtocol = -1
+   };
+   enum SocketError {
+      ConnectionRefusedError,
+      RemoteHostClosedError,
+      HostNotFoundError,
+      SocketAccessError,
+      SocketResourceError,
+      SocketTimeoutError,                     /* 5 */
+      DatagramTooLargeError,
+      NetworkError,
+      AddressInUseError,
+      SocketAddressNotAvailableError,
+      UnsupportedSocketOperationError,        /* 10 */
+      UnfinishedSocketOperationError,
+      ProxyAuthenticationRequiredError,
+      SslHandshakeFailedError,
+      ProxyConnectionRefusedError,
+      ProxyConnectionClosedError,             /* 15 */
+      ProxyConnectionTimeoutError,
+      ProxyNotFoundError,
+      ProxyProtocolError,
 
-        UnknownSocketError = -1
-    };
+      UnknownSocketError = -1
+   };
 
-    enum SocketState {
-        UnconnectedState,
-        HostLookupState,
-        ConnectingState,
-        ConnectedState,
-        BoundState,
-        ListeningState,
-        ClosingState
-    };
+   enum SocketState {
+      UnconnectedState,
+      HostLookupState,
+      ConnectingState,
+      ConnectedState,
+      BoundState,
+      ListeningState,
+      ClosingState
+   };
 
-    enum SocketOption {
-        LowDelayOption, // TCP_NODELAY
-        KeepAliveOption, // SO_KEEPALIVE
-        MulticastTtlOption, // IP_MULTICAST_TTL
-        MulticastLoopbackOption // IP_MULTICAST_LOOPBACK
-    };
+   enum SocketOption {
+      LowDelayOption, // TCP_NODELAY
+      KeepAliveOption, // SO_KEEPALIVE
+      MulticastTtlOption, // IP_MULTICAST_TTL
+      MulticastLoopbackOption // IP_MULTICAST_LOOPBACK
+   };
 
-    QAbstractSocket(SocketType socketType, QObject *parent);
-    virtual ~QAbstractSocket();
+   QAbstractSocket(SocketType socketType, QObject *parent);
+   virtual ~QAbstractSocket();
 
-    // ### Qt5/Make connectToHost() and disconnectFromHost() virtual.
-    void connectToHost(const QString &hostName, quint16 port, OpenMode mode = ReadWrite);
-    void connectToHost(const QHostAddress &address, quint16 port, OpenMode mode = ReadWrite);
-    void disconnectFromHost();
+   // ### Qt5/Make connectToHost() and disconnectFromHost() virtual.
+   void connectToHost(const QString &hostName, quint16 port, OpenMode mode = ReadWrite);
+   void connectToHost(const QHostAddress &address, quint16 port, OpenMode mode = ReadWrite);
+   void disconnectFromHost();
 
-    bool isValid() const;
+   bool isValid() const;
 
-    qint64 bytesAvailable() const;
-    qint64 bytesToWrite() const;
+   qint64 bytesAvailable() const;
+   qint64 bytesToWrite() const;
 
-    bool canReadLine() const;
+   bool canReadLine() const;
 
-    quint16 localPort() const;
-    QHostAddress localAddress() const;
-    quint16 peerPort() const;
-    QHostAddress peerAddress() const;
-    QString peerName() const;
+   quint16 localPort() const;
+   QHostAddress localAddress() const;
+   quint16 peerPort() const;
+   QHostAddress peerAddress() const;
+   QString peerName() const;
 
-    // ### Qt5/Make setReadBufferSize() virtual
-    qint64 readBufferSize() const;
-    void setReadBufferSize(qint64 size);
+   // ### Qt5/Make setReadBufferSize() virtual
+   qint64 readBufferSize() const;
+   void setReadBufferSize(qint64 size);
 
-    void abort();
+   void abort();
 
-    // ### Qt5/Make socketDescriptor() and setSocketDescriptor() virtual.
-    int socketDescriptor() const;
-    bool setSocketDescriptor(int socketDescriptor, SocketState state = ConnectedState,
-                             OpenMode openMode = ReadWrite);
+   // ### Qt5/Make socketDescriptor() and setSocketDescriptor() virtual.
+   int socketDescriptor() const;
+   bool setSocketDescriptor(int socketDescriptor, SocketState state = ConnectedState,
+                            OpenMode openMode = ReadWrite);
 
-    // ### Qt5/Make virtual?
-    void setSocketOption(QAbstractSocket::SocketOption option, const QVariant &value);
-    QVariant socketOption(QAbstractSocket::SocketOption option);
+   // ### Qt5/Make virtual?
+   void setSocketOption(QAbstractSocket::SocketOption option, const QVariant &value);
+   QVariant socketOption(QAbstractSocket::SocketOption option);
 
-    SocketType socketType() const;
-    SocketState state() const;
-    SocketError error() const;
+   SocketType socketType() const;
+   SocketState state() const;
+   SocketError error() const;
 
-    // from QIODevice
-    void close();
-    bool isSequential() const;
-    bool atEnd() const;
-    bool flush();
+   // from QIODevice
+   void close();
+   bool isSequential() const;
+   bool atEnd() const;
+   bool flush();
 
-    // for synchronous access
-    // ### Qt5/Make waitForConnected() and waitForDisconnected() virtual.
-    bool waitForConnected(int msecs = 30000);
-    bool waitForReadyRead(int msecs = 30000);
-    bool waitForBytesWritten(int msecs = 30000);
-    bool waitForDisconnected(int msecs = 30000);
-
-#ifndef QT_NO_NETWORKPROXY
-    void setProxy(const QNetworkProxy &networkProxy);
-    QNetworkProxy proxy() const;
-#endif
-
-    NET_CS_SIGNAL_1(Public, void hostFound())
-    NET_CS_SIGNAL_2(hostFound) 
-
-    NET_CS_SIGNAL_1(Public, void connected())
-    NET_CS_SIGNAL_2(connected) 
-
-    NET_CS_SIGNAL_1(Public, void disconnected())
-    NET_CS_SIGNAL_2(disconnected) 
-
-    NET_CS_SIGNAL_1(Public, void stateChanged(QAbstractSocket::SocketState un_named_arg1))
-    NET_CS_SIGNAL_2(stateChanged,un_named_arg1) 
-
-    NET_CS_SIGNAL_1(Public, void error(QAbstractSocket::SocketError un_named_arg1))
-    NET_CS_SIGNAL_OVERLOAD(error,(QAbstractSocket::SocketError),un_named_arg1) 
+   // for synchronous access
+   // ### Qt5/Make waitForConnected() and waitForDisconnected() virtual.
+   bool waitForConnected(int msecs = 30000);
+   bool waitForReadyRead(int msecs = 30000);
+   bool waitForBytesWritten(int msecs = 30000);
+   bool waitForDisconnected(int msecs = 30000);
 
 #ifndef QT_NO_NETWORKPROXY
-    NET_CS_SIGNAL_1(Public, void proxyAuthenticationRequired(const QNetworkProxy & proxy,QAuthenticator * authenticator))
-    NET_CS_SIGNAL_2(proxyAuthenticationRequired,proxy,authenticator) 
+   void setProxy(const QNetworkProxy &networkProxy);
+   QNetworkProxy proxy() const;
 #endif
 
-protected :
-    virtual void connectToHostImplementation(const QString & hostName,unsigned short port,QIODevice::OpenMode mode = ReadWrite);
+   NET_CS_SIGNAL_1(Public, void hostFound())
+   NET_CS_SIGNAL_2(hostFound)
 
-    NET_CS_SLOT_1(Protected, void disconnectFromHostImplementation())
-    NET_CS_SLOT_2(disconnectFromHostImplementation) 
+   NET_CS_SIGNAL_1(Public, void connected())
+   NET_CS_SIGNAL_2(connected)
 
-    qint64 readData(char *data, qint64 maxlen);
-    qint64 readLineData(char *data, qint64 maxlen);
-    qint64 writeData(const char *data, qint64 len);
+   NET_CS_SIGNAL_1(Public, void disconnected())
+   NET_CS_SIGNAL_2(disconnected)
 
-    void setSocketState(SocketState state);
-    void setSocketError(SocketError socketError);
-    void setLocalPort(quint16 port);
-    void setLocalAddress(const QHostAddress &address);
-    void setPeerPort(quint16 port);
-    void setPeerAddress(const QHostAddress &address);
-    void setPeerName(const QString &name);
+   NET_CS_SIGNAL_1(Public, void stateChanged(QAbstractSocket::SocketState un_named_arg1))
+   NET_CS_SIGNAL_2(stateChanged, un_named_arg1)
 
-    QAbstractSocket(SocketType socketType, QAbstractSocketPrivate &dd, QObject *parent = 0);
+   NET_CS_SIGNAL_1(Public, void error(QAbstractSocket::SocketError un_named_arg1))
+   NET_CS_SIGNAL_OVERLOAD(error, (QAbstractSocket::SocketError), un_named_arg1)
 
-private:
-    Q_DECLARE_PRIVATE(QAbstractSocket)
-    Q_DISABLE_COPY(QAbstractSocket)
+#ifndef QT_NO_NETWORKPROXY
+   NET_CS_SIGNAL_1(Public, void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator))
+   NET_CS_SIGNAL_2(proxyAuthenticationRequired, proxy, authenticator)
+#endif
 
-    NET_CS_SLOT_1(Private, void _q_connectToNextAddress())
-    NET_CS_SLOT_2(_q_connectToNextAddress)
+ protected :
+   virtual void connectToHostImplementation(const QString &hostName, unsigned short port,
+         QIODevice::OpenMode mode = ReadWrite);
 
-    NET_CS_SLOT_1(Private, void _q_startConnecting(const QHostInfo & un_named_arg1))
-    NET_CS_SLOT_2(_q_startConnecting)
+   NET_CS_SLOT_1(Protected, void disconnectFromHostImplementation())
+   NET_CS_SLOT_2(disconnectFromHostImplementation)
 
-    NET_CS_SLOT_1(Private, void _q_abortConnectionAttempt())
-    NET_CS_SLOT_2(_q_abortConnectionAttempt)
+   qint64 readData(char *data, qint64 maxlen);
+   qint64 readLineData(char *data, qint64 maxlen);
+   qint64 writeData(const char *data, qint64 len);
 
-    NET_CS_SLOT_1(Private, void _q_testConnection())
-    NET_CS_SLOT_2(_q_testConnection)
+   void setSocketState(SocketState state);
+   void setSocketError(SocketError socketError);
+   void setLocalPort(quint16 port);
+   void setLocalAddress(const QHostAddress &address);
+   void setPeerPort(quint16 port);
+   void setPeerAddress(const QHostAddress &address);
+   void setPeerName(const QString &name);
 
-    NET_CS_SLOT_1(Private, void _q_forceDisconnect())
-    NET_CS_SLOT_2(_q_forceDisconnect)
+   QAbstractSocket(SocketType socketType, QAbstractSocketPrivate &dd, QObject *parent = 0);
+
+ private:
+   Q_DECLARE_PRIVATE(QAbstractSocket)
+   Q_DISABLE_COPY(QAbstractSocket)
+
+   NET_CS_SLOT_1(Private, void _q_connectToNextAddress())
+   NET_CS_SLOT_2(_q_connectToNextAddress)
+
+   NET_CS_SLOT_1(Private, void _q_startConnecting(const QHostInfo &un_named_arg1))
+   NET_CS_SLOT_2(_q_startConnecting)
+
+   NET_CS_SLOT_1(Private, void _q_abortConnectionAttempt())
+   NET_CS_SLOT_2(_q_abortConnectionAttempt)
+
+   NET_CS_SLOT_1(Private, void _q_testConnection())
+   NET_CS_SLOT_2(_q_testConnection)
+
+   NET_CS_SLOT_1(Private, void _q_forceDisconnect())
+   NET_CS_SLOT_2(_q_forceDisconnect)
 };
 
 #ifndef QT_NO_DEBUG_STREAM

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -93,7 +93,7 @@ QT_BEGIN_NAMESPACE
     Constructs an action with \a parent.
 */
 QWidgetAction::QWidgetAction(QObject *parent)
-    : QAction(*(new QWidgetActionPrivate), parent)
+   : QAction(*(new QWidgetActionPrivate), parent)
 {
 }
 
@@ -102,14 +102,14 @@ QWidgetAction::QWidgetAction(QObject *parent)
 */
 QWidgetAction::~QWidgetAction()
 {
-    Q_D(QWidgetAction);
-    for (int i = 0; i < d->createdWidgets.count(); ++i)
-        disconnect(d->createdWidgets.at(i), SIGNAL(destroyed(QObject*)),
-                   this, SLOT(_q_widgetDestroyed(QObject*)));
-    QList<QWidget *> widgetsToDelete = d->createdWidgets;
-    d->createdWidgets.clear();
-    qDeleteAll(widgetsToDelete);
-    delete d->defaultWidget;
+   Q_D(QWidgetAction);
+   for (int i = 0; i < d->createdWidgets.count(); ++i)
+      disconnect(d->createdWidgets.at(i), SIGNAL(destroyed(QObject *)),
+                 this, SLOT(_q_widgetDestroyed(QObject *)));
+   QList<QWidget *> widgetsToDelete = d->createdWidgets;
+   d->createdWidgets.clear();
+   qDeleteAll(widgetsToDelete);
+   delete d->defaultWidget;
 }
 
 /*!
@@ -121,20 +121,23 @@ QWidgetAction::~QWidgetAction()
 */
 void QWidgetAction::setDefaultWidget(QWidget *widget)
 {
-    Q_D(QWidgetAction);
-    if (widget == d->defaultWidget || d->defaultWidgetInUse)
-        return;
-    delete d->defaultWidget;
-    d->defaultWidget = widget;
-    if (!widget)
-        return;
+   Q_D(QWidgetAction);
+   if (widget == d->defaultWidget || d->defaultWidgetInUse) {
+      return;
+   }
+   delete d->defaultWidget;
+   d->defaultWidget = widget;
+   if (!widget) {
+      return;
+   }
 
-    setVisible(!(widget->isHidden() && widget->testAttribute(Qt::WA_WState_ExplicitShowHide)));
-    d->defaultWidget->hide();
-    d->defaultWidget->setParent(0);
-    d->defaultWidgetInUse = false;
-    if (!isEnabled())
-        d->defaultWidget->setEnabled(false);
+   setVisible(!(widget->isHidden() && widget->testAttribute(Qt::WA_WState_ExplicitShowHide)));
+   d->defaultWidget->hide();
+   d->defaultWidget->setParent(0);
+   d->defaultWidgetInUse = false;
+   if (!isEnabled()) {
+      d->defaultWidget->setEnabled(false);
+   }
 }
 
 /*!
@@ -142,8 +145,8 @@ void QWidgetAction::setDefaultWidget(QWidget *widget)
 */
 QWidget *QWidgetAction::defaultWidget() const
 {
-    Q_D(const QWidgetAction);
-    return d->defaultWidget;
+   Q_D(const QWidgetAction);
+   return d->defaultWidget;
 }
 
 /*!
@@ -157,21 +160,22 @@ QWidget *QWidgetAction::defaultWidget() const
 */
 QWidget *QWidgetAction::requestWidget(QWidget *parent)
 {
-    Q_D(QWidgetAction);
+   Q_D(QWidgetAction);
 
-    QWidget *w = createWidget(parent);
-    if (!w) {
-        if (d->defaultWidgetInUse || !d->defaultWidget)
-            return 0;
-        d->defaultWidget->setParent(parent);
-        d->defaultWidgetInUse = true;
-        return d->defaultWidget;
-    }
+   QWidget *w = createWidget(parent);
+   if (!w) {
+      if (d->defaultWidgetInUse || !d->defaultWidget) {
+         return 0;
+      }
+      d->defaultWidget->setParent(parent);
+      d->defaultWidgetInUse = true;
+      return d->defaultWidget;
+   }
 
-    connect(w, SIGNAL(destroyed(QObject*)),
-            this, SLOT(_q_widgetDestroyed(QObject*)));
-    d->createdWidgets.append(w);
-    return w;
+   connect(w, SIGNAL(destroyed(QObject *)),
+           this, SLOT(_q_widgetDestroyed(QObject *)));
+   d->createdWidgets.append(w);
+   return w;
 }
 
 /*!
@@ -184,22 +188,23 @@ QWidget *QWidgetAction::requestWidget(QWidget *parent)
 */
 void QWidgetAction::releaseWidget(QWidget *widget)
 {
-    Q_D(QWidgetAction);
+   Q_D(QWidgetAction);
 
-    if (widget == d->defaultWidget) {
-        d->defaultWidget->hide();
-        d->defaultWidget->setParent(0);
-        d->defaultWidgetInUse = false;
-        return;
-    }
+   if (widget == d->defaultWidget) {
+      d->defaultWidget->hide();
+      d->defaultWidget->setParent(0);
+      d->defaultWidgetInUse = false;
+      return;
+   }
 
-    if (!d->createdWidgets.contains(widget))
-        return;
+   if (!d->createdWidgets.contains(widget)) {
+      return;
+   }
 
-    disconnect(widget, SIGNAL(destroyed(QObject*)),
-               this, SLOT(_q_widgetDestroyed(QObject*)));
-    d->createdWidgets.removeAll(widget);
-    deleteWidget(widget);
+   disconnect(widget, SIGNAL(destroyed(QObject *)),
+              this, SLOT(_q_widgetDestroyed(QObject *)));
+   d->createdWidgets.removeAll(widget);
+   deleteWidget(widget);
 }
 
 /*!
@@ -207,14 +212,16 @@ void QWidgetAction::releaseWidget(QWidget *widget)
 */
 bool QWidgetAction::event(QEvent *event)
 {
-    Q_D(QWidgetAction);
-    if (event->type() == QEvent::ActionChanged) {
-        if (d->defaultWidget)
-            d->defaultWidget->setEnabled(isEnabled());
-        for (int i = 0; i < d->createdWidgets.count(); ++i)
-            d->createdWidgets.at(i)->setEnabled(isEnabled());
-    }
-    return QAction::event(event);
+   Q_D(QWidgetAction);
+   if (event->type() == QEvent::ActionChanged) {
+      if (d->defaultWidget) {
+         d->defaultWidget->setEnabled(isEnabled());
+      }
+      for (int i = 0; i < d->createdWidgets.count(); ++i) {
+         d->createdWidgets.at(i)->setEnabled(isEnabled());
+      }
+   }
+   return QAction::event(event);
 }
 
 /*!
@@ -222,7 +229,7 @@ bool QWidgetAction::event(QEvent *event)
  */
 bool QWidgetAction::eventFilter(QObject *obj, QEvent *event)
 {
-    return QAction::eventFilter(obj,event);
+   return QAction::eventFilter(obj, event);
 }
 
 /*!
@@ -235,8 +242,8 @@ bool QWidgetAction::eventFilter(QObject *obj, QEvent *event)
 */
 QWidget *QWidgetAction::createWidget(QWidget *parent)
 {
-    Q_UNUSED(parent)
-    return 0;
+   Q_UNUSED(parent)
+   return 0;
 }
 
 /*!
@@ -250,8 +257,8 @@ QWidget *QWidgetAction::createWidget(QWidget *parent)
 */
 void QWidgetAction::deleteWidget(QWidget *widget)
 {
-    widget->hide();
-    widget->deleteLater();
+   widget->hide();
+   widget->deleteLater();
 }
 
 /*!
@@ -260,14 +267,14 @@ void QWidgetAction::deleteWidget(QWidget *widget)
 */
 QList<QWidget *> QWidgetAction::createdWidgets() const
 {
-    Q_D(const QWidgetAction);
-    return d->createdWidgets;
+   Q_D(const QWidgetAction);
+   return d->createdWidgets;
 }
 
-void QWidgetAction::_q_widgetDestroyed(QObject * un_named_arg1)
+void QWidgetAction::_q_widgetDestroyed(QObject *un_named_arg1)
 {
-	Q_D(QWidgetAction);
-	d->_q_widgetDestroyed(un_named_arg1);
+   Q_D(QWidgetAction);
+   d->_q_widgetDestroyed(un_named_arg1);
 }
 
 QT_END_NAMESPACE

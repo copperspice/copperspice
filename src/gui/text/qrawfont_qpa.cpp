@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,14 +38,15 @@ void QRawFontPrivate::platformCleanUp()
 }
 
 void QRawFontPrivate::platformLoadFromData(const QByteArray &fontData, qreal pixelSize,
-                                           QFont::HintingPreference hintingPreference)
+      QFont::HintingPreference hintingPreference)
 {
-    Q_ASSERT(fontEngine == 0);
+   Q_ASSERT(fontEngine == 0);
 
-    QPlatformFontDatabase *pfdb = QApplicationPrivate::platformIntegration()->fontDatabase();
-    fontEngine = pfdb->fontEngine(fontData, pixelSize, hintingPreference);
-    if (fontEngine != 0)
-        fontEngine->ref.ref();
+   QPlatformFontDatabase *pfdb = QApplicationPrivate::platformIntegration()->fontDatabase();
+   fontEngine = pfdb->fontEngine(fontData, pixelSize, hintingPreference);
+   if (fontEngine != 0) {
+      fontEngine->ref.ref();
+   }
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -165,7 +165,7 @@ QT_BEGIN_NAMESPACE
    This signal is emitted when the specified \a block has been updated.
 
    Subclasses of QAbstractTextDocumentLayout should emit this signal when
-   the layout of \a block has changed in order to repaint. 
+   the layout of \a block has changed in order to repaint.
 */
 
 /*!
@@ -370,22 +370,23 @@ QT_BEGIN_NAMESPACE
 QAbstractTextDocumentLayout::QAbstractTextDocumentLayout(QTextDocument *document)
    : QObject(document), d_ptr(new QAbstractTextDocumentLayoutPrivate)
 {
-    d_ptr->q_ptr = this;
-    Q_D(QAbstractTextDocumentLayout);
+   d_ptr->q_ptr = this;
+   Q_D(QAbstractTextDocumentLayout);
 
-    d->setDocument(document);
+   d->setDocument(document);
 }
 
 /*!
     \internal
 */
-QAbstractTextDocumentLayout::QAbstractTextDocumentLayout(QAbstractTextDocumentLayoutPrivate &dd, QTextDocument *document)
+QAbstractTextDocumentLayout::QAbstractTextDocumentLayout(QAbstractTextDocumentLayoutPrivate &dd,
+      QTextDocument *document)
    : QObject(document), d_ptr(&dd)
 {
-    d_ptr->q_ptr = this;
-    Q_D(QAbstractTextDocumentLayout);
+   d_ptr->q_ptr = this;
+   Q_D(QAbstractTextDocumentLayout);
 
-    d->setDocument(document);
+   d->setDocument(document);
 }
 
 /*!
@@ -406,18 +407,19 @@ QAbstractTextDocumentLayout::~QAbstractTextDocumentLayout()
 */
 void QAbstractTextDocumentLayout::registerHandler(int formatType, QObject *component)
 {
-    Q_D(QAbstractTextDocumentLayout);
+   Q_D(QAbstractTextDocumentLayout);
 
-    QTextObjectInterface *iface = qobject_cast<QTextObjectInterface *>(component);
-    if (!iface)
-        return; // ### print error message on terminal?
+   QTextObjectInterface *iface = qobject_cast<QTextObjectInterface *>(component);
+   if (!iface) {
+      return;   // ### print error message on terminal?
+   }
 
-    connect(component, SIGNAL(destroyed(QObject*)), this, SLOT(_q_handlerDestroyed(QObject*)));
+   connect(component, SIGNAL(destroyed(QObject *)), this, SLOT(_q_handlerDestroyed(QObject *)));
 
-    QTextObjectHandler h;
-    h.iface = iface;
-    h.component = component;
-    d->handlers.insert(formatType, h);
+   QTextObjectHandler h;
+   h.iface = iface;
+   h.component = component;
+   d->handlers.insert(formatType, h);
 }
 
 /*!
@@ -425,13 +427,14 @@ void QAbstractTextDocumentLayout::registerHandler(int formatType, QObject *compo
 */
 QTextObjectInterface *QAbstractTextDocumentLayout::handlerForObject(int objectType) const
 {
-    Q_D(const QAbstractTextDocumentLayout);
+   Q_D(const QAbstractTextDocumentLayout);
 
-    QTextObjectHandler handler = d->handlers.value(objectType);
-    if (!handler.component)
-        return 0;
+   QTextObjectHandler handler = d->handlers.value(objectType);
+   if (!handler.component) {
+      return 0;
+   }
 
-    return handler.iface;
+   return handler.iface;
 }
 
 /*!
@@ -445,20 +448,22 @@ QTextObjectInterface *QAbstractTextDocumentLayout::handlerForObject(int objectTy
     within Qt. Subclasses can reimplement this function to customize the
     resizing of inline objects.
 */
-void QAbstractTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format)
+void QAbstractTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int posInDocument,
+      const QTextFormat &format)
 {
-    Q_D(QAbstractTextDocumentLayout);
+   Q_D(QAbstractTextDocumentLayout);
 
-    QTextCharFormat f = format.toCharFormat();
-    Q_ASSERT(f.isValid());
-    QTextObjectHandler handler = d->handlers.value(f.objectType());
-    if (!handler.component)
-        return;
+   QTextCharFormat f = format.toCharFormat();
+   Q_ASSERT(f.isValid());
+   QTextObjectHandler handler = d->handlers.value(f.objectType());
+   if (!handler.component) {
+      return;
+   }
 
-    QSizeF s = handler.iface->intrinsicSize(document(), posInDocument, format);
-    item.setWidth(s.width());
-    item.setAscent(s.height());
-    item.setDescent(0);
+   QSizeF s = handler.iface->intrinsicSize(document(), posInDocument, format);
+   item.setWidth(s.width());
+   item.setAscent(s.height());
+   item.setDescent(0);
 }
 
 /*!
@@ -472,11 +477,12 @@ void QAbstractTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int
 
     \sa drawInlineObject()
 */
-void QAbstractTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format)
+void QAbstractTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posInDocument,
+      const QTextFormat &format)
 {
-    Q_UNUSED(item);
-    Q_UNUSED(posInDocument);
-    Q_UNUSED(format);
+   Q_UNUSED(item);
+   Q_UNUSED(posInDocument);
+   Q_UNUSED(format);
 }
 
 /*!
@@ -495,28 +501,30 @@ void QAbstractTextDocumentLayout::positionInlineObject(QTextInlineObject item, i
     \sa draw()
 */
 void QAbstractTextDocumentLayout::drawInlineObject(QPainter *p, const QRectF &rect, QTextInlineObject item,
-                                                   int posInDocument, const QTextFormat &format)
+      int posInDocument, const QTextFormat &format)
 {
-    Q_UNUSED(item);
-    Q_D(QAbstractTextDocumentLayout);
+   Q_UNUSED(item);
+   Q_D(QAbstractTextDocumentLayout);
 
-    QTextCharFormat f = format.toCharFormat();
-    Q_ASSERT(f.isValid());
-    QTextObjectHandler handler = d->handlers.value(f.objectType());
-    if (!handler.component)
-        return;
+   QTextCharFormat f = format.toCharFormat();
+   Q_ASSERT(f.isValid());
+   QTextObjectHandler handler = d->handlers.value(f.objectType());
+   if (!handler.component) {
+      return;
+   }
 
-    handler.iface->drawObject(p, rect, document(), posInDocument, format);
+   handler.iface->drawObject(p, rect, document(), posInDocument, format);
 }
 
 void QAbstractTextDocumentLayoutPrivate::_q_handlerDestroyed(QObject *obj)
 {
-    HandlerHash::Iterator it = handlers.begin();
-    while (it != handlers.end())
-        if ((*it).component == obj)
-            it = handlers.erase(it);
-        else
-            ++it;
+   HandlerHash::Iterator it = handlers.begin();
+   while (it != handlers.end())
+      if ((*it).component == obj) {
+         it = handlers.erase(it);
+      } else {
+         ++it;
+      }
 }
 
 /*!
@@ -526,8 +534,8 @@ void QAbstractTextDocumentLayoutPrivate::_q_handlerDestroyed(QObject *obj)
 */
 int QAbstractTextDocumentLayout::formatIndex(int pos)
 {
-    QTextDocumentPrivate *pieceTable = qobject_cast<QTextDocument *>(parent())->docHandle();
-    return pieceTable->find(pos).value()->format;
+   QTextDocumentPrivate *pieceTable = qobject_cast<QTextDocument *>(parent())->docHandle();
+   return pieceTable->find(pos).value()->format;
 }
 
 /*!
@@ -537,9 +545,9 @@ int QAbstractTextDocumentLayout::formatIndex(int pos)
 */
 QTextCharFormat QAbstractTextDocumentLayout::format(int pos)
 {
-    QTextDocumentPrivate *pieceTable = qobject_cast<QTextDocument *>(parent())->docHandle();
-    int idx = pieceTable->find(pos).value()->format;
-    return pieceTable->formatCollection()->charFormat(idx);
+   QTextDocumentPrivate *pieceTable = qobject_cast<QTextDocument *>(parent())->docHandle();
+   int idx = pieceTable->find(pos).value()->format;
+   return pieceTable->formatCollection()->charFormat(idx);
 }
 
 
@@ -549,8 +557,8 @@ QTextCharFormat QAbstractTextDocumentLayout::format(int pos)
 */
 QTextDocument *QAbstractTextDocumentLayout::document() const
 {
-    Q_D(const QAbstractTextDocumentLayout);
-    return d->document;
+   Q_D(const QAbstractTextDocumentLayout);
+   return d->document;
 }
 
 /*!
@@ -559,16 +567,17 @@ QTextDocument *QAbstractTextDocumentLayout::document() const
     Returns the reference of the anchor the given \a position, or an empty
     string if no anchor exists at that point.
 */
-QString QAbstractTextDocumentLayout::anchorAt(const QPointF& pos) const
+QString QAbstractTextDocumentLayout::anchorAt(const QPointF &pos) const
 {
-    int cursorPos = hitTest(pos, Qt::ExactHit);
-    if (cursorPos == -1)
-        return QString();
+   int cursorPos = hitTest(pos, Qt::ExactHit);
+   if (cursorPos == -1) {
+      return QString();
+   }
 
-    QTextDocumentPrivate *pieceTable = qobject_cast<const QTextDocument *>(parent())->docHandle();
-    QTextDocumentPrivate::FragmentIterator it = pieceTable->find(cursorPos);
-    QTextCharFormat fmt = pieceTable->formatCollection()->charFormat(it->format);
-    return fmt.anchorHref();
+   QTextDocumentPrivate *pieceTable = qobject_cast<const QTextDocument *>(parent())->docHandle();
+   QTextDocumentPrivate::FragmentIterator it = pieceTable->find(cursorPos);
+   QTextCharFormat fmt = pieceTable->formatCollection()->charFormat(it->format);
+   return fmt.anchorHref();
 }
 
 /*!
@@ -591,8 +600,8 @@ QString QAbstractTextDocumentLayout::anchorAt(const QPointF& pos) const
 */
 void QAbstractTextDocumentLayout::setPaintDevice(QPaintDevice *device)
 {
-    Q_D(QAbstractTextDocumentLayout);
-    d->paintDevice = device;
+   Q_D(QAbstractTextDocumentLayout);
+   d->paintDevice = device;
 }
 
 /*!
@@ -602,26 +611,26 @@ void QAbstractTextDocumentLayout::setPaintDevice(QPaintDevice *device)
 */
 QPaintDevice *QAbstractTextDocumentLayout::paintDevice() const
 {
-    Q_D(const QAbstractTextDocumentLayout);
-    return d->paintDevice;
+   Q_D(const QAbstractTextDocumentLayout);
+   return d->paintDevice;
 }
 
-void QAbstractTextDocumentLayout::_q_handlerDestroyed(QObject * obj)
+void QAbstractTextDocumentLayout::_q_handlerDestroyed(QObject *obj)
 {
-	Q_D(QAbstractTextDocumentLayout);
-	d->_q_handlerDestroyed(obj);
+   Q_D(QAbstractTextDocumentLayout);
+   d->_q_handlerDestroyed(obj);
 }
 
 int QAbstractTextDocumentLayout::_q_dynamicPageCountSlot()
 {
-	Q_D(QAbstractTextDocumentLayout);
-	return d->_q_dynamicPageCountSlot();
+   Q_D(QAbstractTextDocumentLayout);
+   return d->_q_dynamicPageCountSlot();
 }
 
 QSizeF QAbstractTextDocumentLayout::_q_dynamicDocumentSizeSlot()
 {
-	Q_D(QAbstractTextDocumentLayout);
-	return d->_q_dynamicDocumentSizeSlot();
+   Q_D(QAbstractTextDocumentLayout);
+   return d->_q_dynamicDocumentSizeSlot();
 }
 
 QT_END_NAMESPACE

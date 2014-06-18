@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,17 +35,18 @@ class QTextImageFormat;
 
 class QTextImageHandler : public QObject, public QTextObjectInterface
 {
-    CS_OBJECT(QTextImageHandler)
-    CS_INTERFACES(QTextObjectInterface)
+   CS_OBJECT(QTextImageHandler)
+   CS_INTERFACES(QTextObjectInterface)
 
-public:
-    explicit QTextImageHandler(QObject *parent = 0);
+ public:
+   explicit QTextImageHandler(QObject *parent = 0);
 
-    virtual QSizeF intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format);
-    virtual void drawObject(QPainter *p, const QRectF &rect, QTextDocument *doc, int posInDocument, const QTextFormat &format);
+   virtual QSizeF intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format);
+   virtual void drawObject(QPainter *p, const QRectF &rect, QTextDocument *doc, int posInDocument,
+                           const QTextFormat &format);
 
-    typedef QImage (*ExternalImageLoaderFunction)(const QString &name, const QString &context);
-   
+   typedef QImage (*ExternalImageLoaderFunction)(const QString &name, const QString &context);
+
 };
 
 QT_END_NAMESPACE

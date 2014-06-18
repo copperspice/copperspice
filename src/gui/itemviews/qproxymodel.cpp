@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,20 +33,20 @@
 QT_BEGIN_NAMESPACE
 
 QProxyModel::QProxyModel(QObject *parent)
-    : QAbstractItemModel(*new QProxyModelPrivate, parent)
+   : QAbstractItemModel(*new QProxyModelPrivate, parent)
 {
-    Q_D(QProxyModel);
-    setModel(&d->empty);
+   Q_D(QProxyModel);
+   setModel(&d->empty);
 }
 
 /*!
     \internal
 */
 QProxyModel::QProxyModel(QProxyModelPrivate &dd, QObject *parent)
-    : QAbstractItemModel(dd, parent)
+   : QAbstractItemModel(dd, parent)
 {
-    Q_D(QProxyModel);
-    setModel(&d->empty);
+   Q_D(QProxyModel);
+   setModel(&d->empty);
 }
 
 /*!
@@ -61,15 +61,16 @@ QProxyModel::~QProxyModel()
 */
 void QProxyModel::setModel(QAbstractItemModel *model)
 {
-    Q_D(QProxyModel);
-    if (d->model && d->model != &d->empty)
-        disconnectFromModel(d->model);
-    if (model) {
-        d->model = model;
-        connectToModel(model);
-    } else {
-        d->model = &d->empty;
-    }
+   Q_D(QProxyModel);
+   if (d->model && d->model != &d->empty) {
+      disconnectFromModel(d->model);
+   }
+   if (model) {
+      d->model = model;
+      connectToModel(model);
+   } else {
+      d->model = &d->empty;
+   }
 }
 
 /*!
@@ -78,8 +79,8 @@ void QProxyModel::setModel(QAbstractItemModel *model)
 */
 QAbstractItemModel *QProxyModel::model() const
 {
-    Q_D(const QProxyModel);
-    return d->model;
+   Q_D(const QProxyModel);
+   return d->model;
 }
 
 /*!
@@ -89,8 +90,8 @@ QAbstractItemModel *QProxyModel::model() const
 */
 QModelIndex QProxyModel::index(int row, int column, const QModelIndex &parent) const
 {
-    Q_D(const QProxyModel);
-    return setProxyModel(d->model->index(row, column, setSourceModel(parent)));
+   Q_D(const QProxyModel);
+   return setProxyModel(d->model->index(row, column, setSourceModel(parent)));
 }
 
 /*!
@@ -99,8 +100,8 @@ QModelIndex QProxyModel::index(int row, int column, const QModelIndex &parent) c
 */
 QModelIndex QProxyModel::parent(const QModelIndex &child) const
 {
-    Q_D(const QProxyModel);
-    return setProxyModel(d->model->parent(setSourceModel(child)));
+   Q_D(const QProxyModel);
+   return setProxyModel(d->model->parent(setSourceModel(child)));
 }
 
 /*!
@@ -110,8 +111,8 @@ QModelIndex QProxyModel::parent(const QModelIndex &child) const
 */
 int QProxyModel::rowCount(const QModelIndex &parent) const
 {
-    Q_D(const QProxyModel);
-    return d->model->rowCount(setSourceModel(parent));
+   Q_D(const QProxyModel);
+   return d->model->rowCount(setSourceModel(parent));
 }
 
 /*!
@@ -121,8 +122,8 @@ int QProxyModel::rowCount(const QModelIndex &parent) const
 */
 int QProxyModel::columnCount(const QModelIndex &parent) const
 {
-    Q_D(const QProxyModel);
-    return d->model->columnCount(setSourceModel(parent));
+   Q_D(const QProxyModel);
+   return d->model->columnCount(setSourceModel(parent));
 }
 
 /*!
@@ -133,8 +134,8 @@ int QProxyModel::columnCount(const QModelIndex &parent) const
 */
 bool QProxyModel::hasChildren(const QModelIndex &parent) const
 {
-    Q_D(const QProxyModel);
-    return d->model->hasChildren(setSourceModel(parent));
+   Q_D(const QProxyModel);
+   return d->model->hasChildren(setSourceModel(parent));
 }
 
 /*!
@@ -143,8 +144,8 @@ bool QProxyModel::hasChildren(const QModelIndex &parent) const
 */
 QVariant QProxyModel::data(const QModelIndex &index, int role) const
 {
-    Q_D(const QProxyModel);
-    return d->model->data(setSourceModel(index), role);
+   Q_D(const QProxyModel);
+   return d->model->data(setSourceModel(index), role);
 }
 
 /*!
@@ -158,8 +159,8 @@ QVariant QProxyModel::data(const QModelIndex &index, int role) const
 */
 bool QProxyModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    Q_D(const QProxyModel);
-    return d->model->setData(setSourceModel(index), value, role);
+   Q_D(const QProxyModel);
+   return d->model->setData(setSourceModel(index), value, role);
 }
 
 /*!
@@ -168,8 +169,8 @@ bool QProxyModel::setData(const QModelIndex &index, const QVariant &value, int r
 */
 QVariant QProxyModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    Q_D(const QProxyModel);
-    return d->model->headerData(section, orientation, role);
+   Q_D(const QProxyModel);
+   return d->model->headerData(section, orientation, role);
 }
 
 /*!
@@ -181,8 +182,8 @@ QVariant QProxyModel::headerData(int section, Qt::Orientation orientation, int r
 bool QProxyModel::setHeaderData(int section, Qt::Orientation orientation,
                                 const QVariant &value, int role)
 {
-    Q_D(const QProxyModel);
-    return d->model->setHeaderData(section, orientation, value, role);
+   Q_D(const QProxyModel);
+   return d->model->setHeaderData(section, orientation, value, role);
 }
 
 /*!
@@ -190,8 +191,8 @@ bool QProxyModel::setHeaderData(int section, Qt::Orientation orientation,
 */
 QStringList QProxyModel::mimeTypes() const
 {
-    Q_D(const QProxyModel);
-    return d->model->mimeTypes();
+   Q_D(const QProxyModel);
+   return d->model->mimeTypes();
 }
 
 /*!
@@ -199,11 +200,12 @@ QStringList QProxyModel::mimeTypes() const
 */
 QMimeData *QProxyModel::mimeData(const QModelIndexList &indexes) const
 {
-    Q_D(const QProxyModel);
-    QModelIndexList lst;
-    for (int i = 0; i < indexes.count(); ++i)
-        lst.append(setSourceModel(indexes.at(i)));
-    return d->model->mimeData(lst);
+   Q_D(const QProxyModel);
+   QModelIndexList lst;
+   for (int i = 0; i < indexes.count(); ++i) {
+      lst.append(setSourceModel(indexes.at(i)));
+   }
+   return d->model->mimeData(lst);
 }
 
 /*!
@@ -217,8 +219,8 @@ QMimeData *QProxyModel::mimeData(const QModelIndexList &indexes) const
 bool QProxyModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                                int row, int column, const QModelIndex &parent)
 {
-    Q_D(const QProxyModel);
-    return d->model->dropMimeData(data, action, row, column, setSourceModel(parent));
+   Q_D(const QProxyModel);
+   return d->model->dropMimeData(data, action, row, column, setSourceModel(parent));
 }
 
 /*!
@@ -232,8 +234,8 @@ bool QProxyModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
 */
 Qt::DropActions QProxyModel::supportedDropActions() const
 {
-    Q_D(const QProxyModel);
-    return d->model->supportedDropActions();
+   Q_D(const QProxyModel);
+   return d->model->supportedDropActions();
 }
 
 /*!
@@ -248,8 +250,8 @@ Qt::DropActions QProxyModel::supportedDropActions() const
     \sa QAbstractItemModel::insertRows()*/
 bool QProxyModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    Q_D(const QProxyModel);
-    return d->model->insertRows(row, count, setSourceModel(parent));
+   Q_D(const QProxyModel);
+   return d->model->insertRows(row, count, setSourceModel(parent));
 }
 
 /*!
@@ -265,8 +267,8 @@ bool QProxyModel::insertRows(int row, int count, const QModelIndex &parent)
 */
 bool QProxyModel::insertColumns(int column, int count, const QModelIndex &parent)
 {
-    Q_D(const QProxyModel);
-    return d->model->insertColumns(column, count, setSourceModel(parent));
+   Q_D(const QProxyModel);
+   return d->model->insertColumns(column, count, setSourceModel(parent));
 }
 
 /*!
@@ -277,8 +279,8 @@ bool QProxyModel::insertColumns(int column, int count, const QModelIndex &parent
 */
 void QProxyModel::fetchMore(const QModelIndex &parent)
 {
-    Q_D(const QProxyModel);
-    d->model->fetchMore(parent);
+   Q_D(const QProxyModel);
+   d->model->fetchMore(parent);
 }
 
 /*!
@@ -286,8 +288,8 @@ void QProxyModel::fetchMore(const QModelIndex &parent)
 */
 Qt::ItemFlags QProxyModel::flags(const QModelIndex &index) const
 {
-    Q_D(const QProxyModel);
-    return d->model->flags(setSourceModel(index));
+   Q_D(const QProxyModel);
+   return d->model->flags(setSourceModel(index));
 }
 
 /*!
@@ -298,8 +300,8 @@ Qt::ItemFlags QProxyModel::flags(const QModelIndex &index) const
 */
 void QProxyModel::sort(int column, Qt::SortOrder order)
 {
-    Q_D(QProxyModel);
-    d->model->sort(column, order);
+   Q_D(QProxyModel);
+   d->model->sort(column, order);
 }
 
 /*!
@@ -316,8 +318,8 @@ QModelIndexList QProxyModel::match(const QModelIndex &start,
                                    int role, const QVariant &value,
                                    int hits, Qt::MatchFlags flags) const
 {
-    Q_D(const QProxyModel);
-    return d->model->match(start, role, value, hits, flags);
+   Q_D(const QProxyModel);
+   return d->model->match(start, role, value, hits, flags);
 }
 
 /*!
@@ -325,24 +327,24 @@ QModelIndexList QProxyModel::match(const QModelIndex &start,
 */
 QSize QProxyModel::span(const QModelIndex &index) const
 {
-    Q_D(const QProxyModel);
-    return d->model->span(setSourceModel(index));
+   Q_D(const QProxyModel);
+   return d->model->span(setSourceModel(index));
 }
 
 /*!
  */
 bool QProxyModel::submit()
 {
-    Q_D(QProxyModel);
-    return d->model->submit();
+   Q_D(QProxyModel);
+   return d->model->submit();
 }
 
 /*!
  */
 void QProxyModel::revert()
 {
-    Q_D(QProxyModel);
-    d->model->revert();
+   Q_D(QProxyModel);
+   d->model->revert();
 }
 
 /*!
@@ -351,10 +353,11 @@ void QProxyModel::revert()
  */
 QModelIndex QProxyModel::setProxyModel(const QModelIndex &source_index) const
 {
-    QModelIndex proxy_index = source_index;
-    if (proxy_index.isValid())
-        proxy_index.m = this;
-    return proxy_index;
+   QModelIndex proxy_index = source_index;
+   if (proxy_index.isValid()) {
+      proxy_index.m = this;
+   }
+   return proxy_index;
 }
 
 /*!
@@ -363,10 +366,10 @@ QModelIndex QProxyModel::setProxyModel(const QModelIndex &source_index) const
  */
 QModelIndex QProxyModel::setSourceModel(const QModelIndex &proxy_index) const
 {
-    Q_D(const QProxyModel);
-    QModelIndex source_index = proxy_index;
-    source_index.m = d->model;
-    return source_index;
+   Q_D(const QProxyModel);
+   QModelIndex source_index = proxy_index;
+   source_index.m = d->model;
+   return source_index;
 }
 
 /*!
@@ -375,39 +378,39 @@ QModelIndex QProxyModel::setSourceModel(const QModelIndex &proxy_index) const
 */
 void QProxyModel::connectToModel(const QAbstractItemModel *model) const
 {
-    connect(model, SIGNAL(dataChanged(const QModelIndex &,const QModelIndex &)),
-            this, SLOT(_q_sourceDataChanged(QModelIndex,QModelIndex)));
+   connect(model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+           this, SLOT(_q_sourceDataChanged(QModelIndex, QModelIndex)));
 
-    connect(model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
-            this, SLOT(headerDataChanged(Qt::Orientation,int,int))); // signal to signal
+   connect(model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)),
+           this, SLOT(headerDataChanged(Qt::Orientation, int, int))); // signal to signal
 
-    connect(model, SIGNAL(rowsAboutToBeInserted(const QModelIndex &,int,int)),
-            this, SLOT(_q_sourceRowsAboutToBeInserted(const QModelIndex &,int,int)));
+   connect(model, SIGNAL(rowsAboutToBeInserted(const QModelIndex &, int, int)),
+           this, SLOT(_q_sourceRowsAboutToBeInserted(const QModelIndex &, int, int)));
 
-    connect(model, SIGNAL(rowsInserted(const QModelIndex &,int,int)),
-            this, SLOT(_q_sourceRowsInserted(const QModelIndex &,int,int)));
+   connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+           this, SLOT(_q_sourceRowsInserted(const QModelIndex &, int, int)));
 
-    connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &,int,int)),
-            this, SLOT(_q_sourceRowsAboutToBeRemoved(const QModelIndex &,int,int)));
+   connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)),
+           this, SLOT(_q_sourceRowsAboutToBeRemoved(const QModelIndex &, int, int)));
 
-    connect(model, SIGNAL(rowsRemoved(const QModelIndex &,int,int)),
-            this, SLOT(_q_sourceRowsRemoved(const QModelIndex &,int,int)));
+   connect(model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
+           this, SLOT(_q_sourceRowsRemoved(const QModelIndex &, int, int)));
 
-    connect(model, SIGNAL(columnsAboutToBeInserted(const QModelIndex &,int,int)),
-            this, SLOT(_q_sourceColumnsAboutToBeInserted(const QModelIndex &,int,int)));
+   connect(model, SIGNAL(columnsAboutToBeInserted(const QModelIndex &, int, int)),
+           this, SLOT(_q_sourceColumnsAboutToBeInserted(const QModelIndex &, int, int)));
 
-    connect(model, SIGNAL(columnsInserted(const QModelIndex &,int,int)),
-            this, SLOT(_q_sourceColumnsInserted(const QModelIndex &,int,int)));
+   connect(model, SIGNAL(columnsInserted(const QModelIndex &, int, int)),
+           this, SLOT(_q_sourceColumnsInserted(const QModelIndex &, int, int)));
 
-    connect(model, SIGNAL(columnsAboutToBeRemoved(const QModelIndex &,int,int)),
-            this, SLOT(_q_sourceColumnsAboutToBeRemoved(const QModelIndex &,int,int)));
+   connect(model, SIGNAL(columnsAboutToBeRemoved(const QModelIndex &, int, int)),
+           this, SLOT(_q_sourceColumnsAboutToBeRemoved(const QModelIndex &, int, int)));
 
-    connect(model, SIGNAL(columnsRemoved(const QModelIndex &,int,int)),
-            this, SLOT(_q_sourceColumnsRemoved(QModelIndex,int,int)));
+   connect(model, SIGNAL(columnsRemoved(const QModelIndex &, int, int)),
+           this, SLOT(_q_sourceColumnsRemoved(QModelIndex, int, int)));
 
-    connect(model, SIGNAL(modelReset()), this, SLOT(modelReset())); 
-    connect(model, SIGNAL(layoutAboutToBeChanged()), this, SLOT(layoutAboutToBeChanged())); 
-    connect(model, SIGNAL(layoutChanged()), this, SLOT(layoutChanged())); 
+   connect(model, SIGNAL(modelReset()), this, SLOT(modelReset()));
+   connect(model, SIGNAL(layoutAboutToBeChanged()), this, SLOT(layoutAboutToBeChanged()));
+   connect(model, SIGNAL(layoutChanged()), this, SLOT(layoutChanged()));
 }
 
 /*!
@@ -416,39 +419,39 @@ void QProxyModel::connectToModel(const QAbstractItemModel *model) const
  */
 void QProxyModel::disconnectFromModel(const QAbstractItemModel *model) const
 {
-    disconnect(model, SIGNAL(dataChanged(const QModelIndex &,const QModelIndex &)),
-               this, SLOT(_q_sourceDataChanged(const QModelIndex &,const QModelIndex &)));
+   disconnect(model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+              this, SLOT(_q_sourceDataChanged(const QModelIndex &, const QModelIndex &)));
 
-    disconnect(model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
-               this, SLOT(headerDataChanged(Qt::Orientation,int,int))); // signal to signal
+   disconnect(model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)),
+              this, SLOT(headerDataChanged(Qt::Orientation, int, int))); // signal to signal
 
-    disconnect(model, SIGNAL(rowsAboutToBeInserted(const QModelIndex &,int,int)),
-               this, SLOT(_q_sourceRowsAboutToBeInserted(const QModelIndex &,int,int)));
+   disconnect(model, SIGNAL(rowsAboutToBeInserted(const QModelIndex &, int, int)),
+              this, SLOT(_q_sourceRowsAboutToBeInserted(const QModelIndex &, int, int)));
 
-    disconnect(model, SIGNAL(rowsInserted(const QModelIndex &,int,int)),
-               this, SLOT(rowsInserted(const QModelIndex &,int,int)));
+   disconnect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+              this, SLOT(rowsInserted(const QModelIndex &, int, int)));
 
-    disconnect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &,int,int)),
-               this, SLOT(_q_sourceRowsAboutToBeRemoved(const QModelIndex &,int,int)));
+   disconnect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)),
+              this, SLOT(_q_sourceRowsAboutToBeRemoved(const QModelIndex &, int, int)));
 
-    disconnect(model, SIGNAL(rowsRemoved(const QModelIndex &,int,int)),
-               this, SLOT(_q_sourceRowsRemoved(const QModelIndex &,int,int)));
+   disconnect(model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
+              this, SLOT(_q_sourceRowsRemoved(const QModelIndex &, int, int)));
 
-    disconnect(model, SIGNAL(columnsAboutToBeInserted(const QModelIndex &ex,int,int)),
-               this, SLOT(_q_sourceColumnsAboutToBeInserted(const QModelIndex &,int,int)));
+   disconnect(model, SIGNAL(columnsAboutToBeInserted(const QModelIndex & ex, int, int)),
+              this, SLOT(_q_sourceColumnsAboutToBeInserted(const QModelIndex &, int, int)));
 
-    disconnect(model, SIGNAL(columnsInserted(const QModelIndex &,int,int)),
-               this, SLOT(_q_sourceColumnsInserted(const QModelIndex &,int,int)));
+   disconnect(model, SIGNAL(columnsInserted(const QModelIndex &, int, int)),
+              this, SLOT(_q_sourceColumnsInserted(const QModelIndex &, int, int)));
 
-    disconnect(model, SIGNAL(columnsAboutToBeRemoved(const QModelIndex &,int,int)),
-               this, SLOT(_q_sourceColumnsAboutToBeRemoved(const QModelIndex &,int,int)));
+   disconnect(model, SIGNAL(columnsAboutToBeRemoved(const QModelIndex &, int, int)),
+              this, SLOT(_q_sourceColumnsAboutToBeRemoved(const QModelIndex &, int, int)));
 
-    disconnect(model, SIGNAL(columnsRemoved(const QModelIndex &,int,int)),
-               this, SLOT(_q_sourceColumnsRemoved(const QModelIndex &,int,int)));
+   disconnect(model, SIGNAL(columnsRemoved(const QModelIndex &, int, int)),
+              this, SLOT(_q_sourceColumnsRemoved(const QModelIndex &, int, int)));
 
-    disconnect(model, SIGNAL(modelReset()), this, SLOT(modelReset()));
-    disconnect(model, SIGNAL(layoutAboutToBeChanged()), this, SLOT(layoutAboutToBeChanged()));
-    disconnect(model, SIGNAL(layoutChanged()), this, SLOT(layoutChanged()));
+   disconnect(model, SIGNAL(modelReset()), this, SLOT(modelReset()));
+   disconnect(model, SIGNAL(layoutAboutToBeChanged()), this, SLOT(layoutAboutToBeChanged()));
+   disconnect(model, SIGNAL(layoutChanged()), this, SLOT(layoutChanged()));
 }
 
 /*!
@@ -456,113 +459,115 @@ void QProxyModel::disconnectFromModel(const QAbstractItemModel *model) const
   \internal
 */
 
-void QProxyModelPrivate::_q_sourceDataChanged(const QModelIndex &tl,const QModelIndex &br)
+void QProxyModelPrivate::_q_sourceDataChanged(const QModelIndex &tl, const QModelIndex &br)
 {
-    Q_Q(QProxyModel);
-    emit q->dataChanged(q->setProxyModel(tl), q->setProxyModel(br));
+   Q_Q(QProxyModel);
+   emit q->dataChanged(q->setProxyModel(tl), q->setProxyModel(br));
 }
 
-void QProxyModelPrivate::_q_sourceRowsAboutToBeInserted(const QModelIndex &parent, int first ,int last)
+void QProxyModelPrivate::_q_sourceRowsAboutToBeInserted(const QModelIndex &parent, int first , int last)
 {
-    Q_Q(QProxyModel);
-    q->beginInsertRows(q->setProxyModel(parent), first, last);
+   Q_Q(QProxyModel);
+   q->beginInsertRows(q->setProxyModel(parent), first, last);
 }
 
 void QProxyModelPrivate::_q_sourceRowsInserted(const QModelIndex &, int, int)
 {
-    Q_Q(QProxyModel);
-    q->endInsertRows();
+   Q_Q(QProxyModel);
+   q->endInsertRows();
 }
 
 void QProxyModelPrivate::_q_sourceRowsAboutToBeRemoved(const QModelIndex &parent, int first, int last)
 {
-    Q_Q(QProxyModel);
-    q->beginRemoveRows(q->setProxyModel(parent), first, last);
+   Q_Q(QProxyModel);
+   q->beginRemoveRows(q->setProxyModel(parent), first, last);
 }
 
 void QProxyModelPrivate::_q_sourceRowsRemoved(const QModelIndex &, int, int)
 {
-    Q_Q(QProxyModel);
-    q->endRemoveRows();
+   Q_Q(QProxyModel);
+   q->endRemoveRows();
 }
 
 void QProxyModelPrivate::_q_sourceColumnsAboutToBeInserted(const QModelIndex &parent, int first, int last)
 {
-    Q_Q(QProxyModel);
-    q->beginInsertColumns(q->setProxyModel(parent), first, last);
+   Q_Q(QProxyModel);
+   q->beginInsertColumns(q->setProxyModel(parent), first, last);
 }
 
 void QProxyModelPrivate::_q_sourceColumnsInserted(const QModelIndex &, int, int)
 {
-    Q_Q(QProxyModel);
-    q->endInsertColumns();
+   Q_Q(QProxyModel);
+   q->endInsertColumns();
 }
 
 void QProxyModelPrivate::_q_sourceColumnsAboutToBeRemoved(const QModelIndex &parent, int first, int last)
 {
-    Q_Q(QProxyModel);
-    q->beginRemoveColumns(q->setProxyModel(parent), first, last);
+   Q_Q(QProxyModel);
+   q->beginRemoveColumns(q->setProxyModel(parent), first, last);
 }
 
 
 void QProxyModelPrivate::_q_sourceColumnsRemoved(const QModelIndex &, int, int)
 {
-    Q_Q(QProxyModel);
-    q->endRemoveColumns();
+   Q_Q(QProxyModel);
+   q->endRemoveColumns();
 }
 
-void QProxyModel::_q_sourceDataChanged(const QModelIndex & un_named_arg1,const QModelIndex & un_named_arg2)
+void QProxyModel::_q_sourceDataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2)
 {
-	Q_D(QProxyModel);
-	d->_q_sourceDataChanged(un_named_arg1, un_named_arg2);
+   Q_D(QProxyModel);
+   d->_q_sourceDataChanged(un_named_arg1, un_named_arg2);
 }
 
-void QProxyModel::_q_sourceRowsAboutToBeInserted(const QModelIndex & un_named_arg1,int un_named_arg2,int un_named_arg3)
+void QProxyModel::_q_sourceRowsAboutToBeInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
 {
-	Q_D(QProxyModel);
-	d->_q_sourceRowsAboutToBeInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   Q_D(QProxyModel);
+   d->_q_sourceRowsAboutToBeInserted(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
-void QProxyModel::_q_sourceRowsInserted(const QModelIndex & un_named_arg1,int un_named_arg2,int un_named_arg3)
+void QProxyModel::_q_sourceRowsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
 {
-	Q_D(QProxyModel);
-	d->_q_sourceRowsInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   Q_D(QProxyModel);
+   d->_q_sourceRowsInserted(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
-void QProxyModel::_q_sourceRowsAboutToBeRemoved(const QModelIndex & un_named_arg1,int un_named_arg2,int un_named_arg3)
+void QProxyModel::_q_sourceRowsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
 {
-	Q_D(QProxyModel);
-	d->_q_sourceRowsAboutToBeRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   Q_D(QProxyModel);
+   d->_q_sourceRowsAboutToBeRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
-void QProxyModel::_q_sourceRowsRemoved(const QModelIndex & un_named_arg1,int un_named_arg2,int un_named_arg3)
+void QProxyModel::_q_sourceRowsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
 {
-	Q_D(QProxyModel);
-	d->_q_sourceRowsRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   Q_D(QProxyModel);
+   d->_q_sourceRowsRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
-void QProxyModel::_q_sourceColumnsAboutToBeInserted(const QModelIndex & un_named_arg1,int un_named_arg2,int un_named_arg3)
+void QProxyModel::_q_sourceColumnsAboutToBeInserted(const QModelIndex &un_named_arg1, int un_named_arg2,
+      int un_named_arg3)
 {
-	Q_D(QProxyModel);
-	d->_q_sourceColumnsAboutToBeInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   Q_D(QProxyModel);
+   d->_q_sourceColumnsAboutToBeInserted(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
-void QProxyModel::_q_sourceColumnsInserted(const QModelIndex & un_named_arg1,int un_named_arg2,int un_named_arg3)
+void QProxyModel::_q_sourceColumnsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
 {
-	Q_D(QProxyModel);
-	d->_q_sourceColumnsInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   Q_D(QProxyModel);
+   d->_q_sourceColumnsInserted(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
-void QProxyModel::_q_sourceColumnsAboutToBeRemoved(const QModelIndex & un_named_arg1,int un_named_arg2,int un_named_arg3)
+void QProxyModel::_q_sourceColumnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
+      int un_named_arg3)
 {
-	Q_D(QProxyModel);
-	d->_q_sourceColumnsAboutToBeRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   Q_D(QProxyModel);
+   d->_q_sourceColumnsAboutToBeRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
-void QProxyModel::_q_sourceColumnsRemoved(const QModelIndex & un_named_arg1,int un_named_arg2,int un_named_arg3)
+void QProxyModel::_q_sourceColumnsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
 {
-	Q_D(QProxyModel);
-	d->_q_sourceColumnsRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   Q_D(QProxyModel);
+   d->_q_sourceColumnsRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
 QT_END_NAMESPACE

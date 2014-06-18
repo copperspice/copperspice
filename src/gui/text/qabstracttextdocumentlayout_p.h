@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,47 +30,49 @@
 
 QT_BEGIN_NAMESPACE
 
-struct QTextObjectHandler
-{
-    QTextObjectHandler() : iface(0) {}
-    QTextObjectInterface *iface;
-    QPointer<QObject> component;
+struct QTextObjectHandler {
+   QTextObjectHandler() : iface(0) {}
+   QTextObjectInterface *iface;
+   QPointer<QObject> component;
 };
 typedef QHash<int, QTextObjectHandler> HandlerHash;
 
 class QAbstractTextDocumentLayoutPrivate
 {
 
-public:
-    Q_DECLARE_PUBLIC(QAbstractTextDocumentLayout)
+ public:
+   Q_DECLARE_PUBLIC(QAbstractTextDocumentLayout)
 
-    inline QAbstractTextDocumentLayoutPrivate()
-        : paintDevice(0) {}
+   inline QAbstractTextDocumentLayoutPrivate()
+      : paintDevice(0) {}
 
-    virtual ~QAbstractTextDocumentLayoutPrivate() {}
+   virtual ~QAbstractTextDocumentLayoutPrivate() {}
 
-    inline void setDocument(QTextDocument *doc) {
-        document = doc;
-        docPrivate = 0;
-        if (doc)
-            docPrivate = doc->docHandle();
-    }
+   inline void setDocument(QTextDocument *doc) {
+      document = doc;
+      docPrivate = 0;
+      if (doc) {
+         docPrivate = doc->docHandle();
+      }
+   }
 
-    inline int _q_dynamicPageCountSlot() const
-    { return q_func()->pageCount(); }
-    inline QSizeF _q_dynamicDocumentSizeSlot() const
-    { return q_func()->documentSize(); }
+   inline int _q_dynamicPageCountSlot() const {
+      return q_func()->pageCount();
+   }
+   inline QSizeF _q_dynamicDocumentSizeSlot() const {
+      return q_func()->documentSize();
+   }
 
-    HandlerHash handlers;
+   HandlerHash handlers;
 
-    void _q_handlerDestroyed(QObject *obj);
-    QPaintDevice *paintDevice;
+   void _q_handlerDestroyed(QObject *obj);
+   QPaintDevice *paintDevice;
 
-    QTextDocument *document;
-    QTextDocumentPrivate *docPrivate;
+   QTextDocument *document;
+   QTextDocumentPrivate *docPrivate;
 
-protected:
-	 QAbstractTextDocumentLayout *q_ptr;
+ protected:
+   QAbstractTextDocumentLayout *q_ptr;
 
 };
 

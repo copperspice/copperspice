@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -53,36 +53,35 @@ QT_BEGIN_NAMESPACE
  */
 QGuiPlatformPlugin *qt_guiPlatformPlugin()
 {
-    static QGuiPlatformPlugin *plugin;
-    if (!plugin)
-    {
+   static QGuiPlatformPlugin *plugin;
+   if (!plugin) {
 
 
-        QString key = QString::fromLocal8Bit(qgetenv("QT_PLATFORM_PLUGIN"));
+      QString key = QString::fromLocal8Bit(qgetenv("QT_PLATFORM_PLUGIN"));
 #ifdef Q_WS_X11
-        if (key.isEmpty()) {
-            switch(X11->desktopEnvironment) {
+      if (key.isEmpty()) {
+         switch (X11->desktopEnvironment) {
             case DE_KDE:
-                key = QString::fromLatin1("kde");
-                break;
+               key = QString::fromLatin1("kde");
+               break;
             default:
-                key = QString::fromLocal8Bit(qgetenv("DESKTOP_SESSION"));
-                break;
-            }
-        }
+               key = QString::fromLocal8Bit(qgetenv("DESKTOP_SESSION"));
+               break;
+         }
+      }
 #endif
 
-        if (!key.isEmpty() && QApplication::desktopSettingsAware()) {
-            QFactoryLoader loader(QGuiPlatformPluginInterface_iid, QLatin1String("/gui_platform"));
-            plugin = qobject_cast<QGuiPlatformPlugin *>(loader.instance(key));
-        }
+      if (!key.isEmpty() && QApplication::desktopSettingsAware()) {
+         QFactoryLoader loader(QGuiPlatformPluginInterface_iid, QLatin1String("/gui_platform"));
+         plugin = qobject_cast<QGuiPlatformPlugin *>(loader.instance(key));
+      }
 
-        if(!plugin) {
-            static QGuiPlatformPlugin def;
-            plugin = &def;
-        }
-    }
-    return plugin;
+      if (!plugin) {
+         static QGuiPlatformPlugin def;
+         plugin = &def;
+      }
+   }
+   return plugin;
 }
 
 
@@ -106,56 +105,60 @@ QString QGuiPlatformPlugin::styleName()
 {
 
 #if defined(Q_OS_WIN)
-    if ((QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA
-        && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)))
-        return QLatin1String("WindowsVista");
+   if ((QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA
+         && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
+      return QLatin1String("WindowsVista");
+   }
 
-    else if ((QSysInfo::WindowsVersion >= QSysInfo::WV_XP
-        && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)))
-        return QLatin1String("WindowsXP");
+   else if ((QSysInfo::WindowsVersion >= QSysInfo::WV_XP
+             && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
+      return QLatin1String("WindowsXP");
+   }
 
-    else
-        return QLatin1String("Windows");                // default styles for Windows
+   else {
+      return QLatin1String("Windows");   // default styles for Windows
+   }
 
 #elif defined(Q_WS_X11) && defined(Q_OS_SOLARIS)
-    return QLatin1String("CDE");                        // default style for X11 on Solaris
+   return QLatin1String("CDE");                        // default style for X11 on Solaris
 
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
-    return QLatin1String("Plastique");                  // default style for X11 and small devices
+   return QLatin1String("Plastique");                  // default style for X11 and small devices
 
 #elif defined(Q_OS_MAC)
-    return QLatin1String("Macintosh");                  // default style for all Mac's
+   return QLatin1String("Macintosh");                  // default style for all Mac's
 
 #elif defined(Q_WS_X11)
-    QString stylename;
-    switch(X11->desktopEnvironment) {
-    case DE_KDE:
-        stylename = QKde::kdeStyle();
-        break;
+   QString stylename;
+   switch (X11->desktopEnvironment) {
+      case DE_KDE:
+         stylename = QKde::kdeStyle();
+         break;
 
-    case DE_GNOME: {
-        QStringList availableStyles = QStyleFactory::keys();
-        // Set QGtkStyle for GNOME if available
-        QString gtkStyleKey = QString::fromLatin1("GTK+");
-        if (availableStyles.contains(gtkStyleKey)) {
+      case DE_GNOME: {
+         QStringList availableStyles = QStyleFactory::keys();
+         // Set QGtkStyle for GNOME if available
+         QString gtkStyleKey = QString::fromLatin1("GTK+");
+         if (availableStyles.contains(gtkStyleKey)) {
             stylename = gtkStyleKey;
             break;
-        }
-        if (X11->use_xrender)
+         }
+         if (X11->use_xrender) {
             stylename = QLatin1String("cleanlooks");
-        else
+         } else {
             stylename = QLatin1String("windows");
-        break;
-    }
-    case DE_CDE:
-        stylename = QLatin1String("cde");
-        break;
+         }
+         break;
+      }
+      case DE_CDE:
+         stylename = QLatin1String("cde");
+         break;
 
-    default:
-        // Don't do anything
-        break;
-    }
-    return stylename;
+      default:
+         // Don't do anything
+         break;
+   }
+   return stylename;
 #endif
 }
 
@@ -163,109 +166,113 @@ QString QGuiPlatformPlugin::styleName()
 QPalette QGuiPlatformPlugin::palette()
 {
 #ifdef Q_WS_X11
-    if (QApplication::desktopSettingsAware() && X11->desktopEnvironment == DE_KDE)
-        return QKde::kdePalette();
+   if (QApplication::desktopSettingsAware() && X11->desktopEnvironment == DE_KDE) {
+      return QKde::kdePalette();
+   }
 #endif
 
-    return QPalette();
+   return QPalette();
 }
 
 /* the default icon theme name for QIcon::fromTheme. */
 QString QGuiPlatformPlugin::systemIconThemeName()
 {
-    QString result;
+   QString result;
 #ifdef Q_WS_X11
-    if (X11->desktopEnvironment == DE_GNOME) {
+   if (X11->desktopEnvironment == DE_GNOME) {
 #ifndef QT_NO_STYLE_GTK
-        result = QGtkStylePrivate::getIconThemeName();
+      result = QGtkStylePrivate::getIconThemeName();
 #endif
-        if (result.isEmpty()) {
-            result = QString::fromLatin1("gnome");
-        }
-    } else if (X11->desktopEnvironment == DE_KDE) {
-        result =  X11->desktopVersion >= 4 ? QString::fromLatin1("oxygen") : QString::fromLatin1("crystalsvg");
-        QSettings settings(QKde::kdeHome() + QLatin1String("/share/config/kdeglobals"), QSettings::IniFormat);
-        settings.beginGroup(QLatin1String("Icons"));
-        result = settings.value(QLatin1String("Theme"), result).toString();
-    }
+      if (result.isEmpty()) {
+         result = QString::fromLatin1("gnome");
+      }
+   } else if (X11->desktopEnvironment == DE_KDE) {
+      result =  X11->desktopVersion >= 4 ? QString::fromLatin1("oxygen") : QString::fromLatin1("crystalsvg");
+      QSettings settings(QKde::kdeHome() + QLatin1String("/share/config/kdeglobals"), QSettings::IniFormat);
+      settings.beginGroup(QLatin1String("Icons"));
+      result = settings.value(QLatin1String("Theme"), result).toString();
+   }
 #endif
-    return result;
+   return result;
 }
 
 
 QStringList QGuiPlatformPlugin::iconThemeSearchPaths()
 {
-    QStringList paths;
+   QStringList paths;
 #if defined(Q_WS_X11)
-    QString xdgDirString = QFile::decodeName(getenv("XDG_DATA_DIRS"));
-    if (xdgDirString.isEmpty())
-        xdgDirString = QLatin1String("/usr/local/share/:/usr/share/");
+   QString xdgDirString = QFile::decodeName(getenv("XDG_DATA_DIRS"));
+   if (xdgDirString.isEmpty()) {
+      xdgDirString = QLatin1String("/usr/local/share/:/usr/share/");
+   }
 
-    QStringList xdgDirs = xdgDirString.split(QLatin1Char(':'));
+   QStringList xdgDirs = xdgDirString.split(QLatin1Char(':'));
 
-    for (int i = 0 ; i < xdgDirs.size() ; ++i) {
-        QDir dir(xdgDirs[i]);
-        if (dir.exists())
-            paths.append(dir.path() + QLatin1String("/icons"));
-    }
-    if (X11->desktopEnvironment == DE_KDE) {
-        paths << QLatin1Char(':') + QKde::kdeHome() + QLatin1String("/share/icons");
-        QStringList kdeDirs = QFile::decodeName(getenv("KDEDIRS")).split(QLatin1Char(':'));
-        for (int i = 0 ; i< kdeDirs.count() ; ++i) {
-            QDir dir(QLatin1Char(':') + kdeDirs.at(i) + QLatin1String("/share/icons"));
-            if (dir.exists())
-                paths.append(dir.path());
-        }
-    }
+   for (int i = 0 ; i < xdgDirs.size() ; ++i) {
+      QDir dir(xdgDirs[i]);
+      if (dir.exists()) {
+         paths.append(dir.path() + QLatin1String("/icons"));
+      }
+   }
+   if (X11->desktopEnvironment == DE_KDE) {
+      paths << QLatin1Char(':') + QKde::kdeHome() + QLatin1String("/share/icons");
+      QStringList kdeDirs = QFile::decodeName(getenv("KDEDIRS")).split(QLatin1Char(':'));
+      for (int i = 0 ; i < kdeDirs.count() ; ++i) {
+         QDir dir(QLatin1Char(':') + kdeDirs.at(i) + QLatin1String("/share/icons"));
+         if (dir.exists()) {
+            paths.append(dir.path());
+         }
+      }
+   }
 
-    // Add home directory first in search path
-    QDir homeDir(QDir::homePath() + QLatin1String("/.icons"));
-    if (homeDir.exists())
-        paths.prepend(homeDir.path());
+   // Add home directory first in search path
+   QDir homeDir(QDir::homePath() + QLatin1String("/.icons"));
+   if (homeDir.exists()) {
+      paths.prepend(homeDir.path());
+   }
 #endif
 
 #if defined(Q_OS_WIN)
-    paths.append(qApp->applicationDirPath() + QLatin1String("/icons"));
+   paths.append(qApp->applicationDirPath() + QLatin1String("/icons"));
 #elif defined(Q_OS_MAC)
-    paths.append(qApp->applicationDirPath() + QLatin1String("/../Resources/icons"));
+   paths.append(qApp->applicationDirPath() + QLatin1String("/../Resources/icons"));
 #endif
-    return paths;
+   return paths;
 }
 
 /* backend for QFileIconProvider,  null icon means default */
 QIcon QGuiPlatformPlugin::fileSystemIcon(const QFileInfo &)
 {
-    return QIcon();
+   return QIcon();
 }
 
 /* Like QStyle::styleHint */
 int QGuiPlatformPlugin::platformHint(PlatformHint hint)
 {
-    int ret = 0;
-    switch(hint)
-    {
-        case PH_ToolButtonStyle:
-            ret = Qt::ToolButtonIconOnly;
+   int ret = 0;
+   switch (hint) {
+      case PH_ToolButtonStyle:
+         ret = Qt::ToolButtonIconOnly;
 #ifdef Q_WS_X11
-            if (X11->desktopEnvironment == DE_KDE && X11->desktopVersion >= 4
-                && QApplication::desktopSettingsAware()) {
-                ret = QKde::kdeToolButtonStyle();
-            }
+         if (X11->desktopEnvironment == DE_KDE && X11->desktopVersion >= 4
+               && QApplication::desktopSettingsAware()) {
+            ret = QKde::kdeToolButtonStyle();
+         }
 #endif
-            break;
-        case PH_ToolBarIconSize:
+         break;
+      case PH_ToolBarIconSize:
 #ifdef Q_WS_X11
-            if (X11->desktopEnvironment == DE_KDE && X11->desktopVersion >= 4
-                && QApplication::desktopSettingsAware()) {
-                ret = QKde::kdeToolBarIconSize();
-            }
+         if (X11->desktopEnvironment == DE_KDE && X11->desktopVersion >= 4
+               && QApplication::desktopSettingsAware()) {
+            ret = QKde::kdeToolBarIconSize();
+         }
 #endif
-            //by default keep ret = 0 so QCommonStyle will use the style default
-            break;
-        default:
-            break;
-    }
-    return ret;
+         //by default keep ret = 0 so QCommonStyle will use the style default
+         break;
+      default:
+         break;
+   }
+   return ret;
 }
 
 

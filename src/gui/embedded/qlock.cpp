@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 /* no multiprocess - use a dummy */
 
 QLock::QLock(const QString & /*filename*/, char /*id*/, bool /*create*/)
-    : type(Read), data(0)
+   : type(Read), data(0)
 {
 }
 
@@ -42,23 +42,23 @@ QLock::~QLock()
 
 bool QLock::isValid() const
 {
-    return true;
+   return true;
 }
 
 void QLock::lock(Type t)
 {
-    data = (QLockData *)-1;
-    type = t;
+   data = (QLockData *) - 1;
+   type = t;
 }
 
 void QLock::unlock()
 {
-    data = 0;
+   data = 0;
 }
 
 bool QLock::locked() const
 {
-    return data;
+   return data;
 }
 
 QT_END_NAMESPACE
@@ -95,19 +95,19 @@ QT_BEGIN_NAMESPACE
 
 class QLockData
 {
-public:
+ public:
 #if defined(QT_NO_SEMAPHORE) || defined(QT_POSIX_IPC)
-    QByteArray file;
+   QByteArray file;
 #endif
 #if !defined(QT_POSIX_IPC)
-    int id;
+   int id;
 #else
-    sem_t *id;    // Read mode resource counter
-    sem_t *rsem;  // Read mode lock
-    sem_t *wsem;  // Write mode lock
+   sem_t *id;    // Read mode resource counter
+   sem_t *rsem;  // Read mode lock
+   sem_t *wsem;  // Write mode lock
 #endif
-    int count;
-    bool owned;
+   int count;
+   bool owned;
 };
 
 
@@ -140,61 +140,62 @@ public:
 */
 QLock::QLock(const QString &filename, char id, bool create)
 {
-    data = new QLockData;
-    data->count = 0;
+   data = new QLockData;
+   data->count = 0;
 #if defined(QT_NO_SEMAPHORE)
-    data->file = filename.toLocal8Bit() + id;
-    for (int x = 0; x < 2; ++x) {
-        data->id = QT_OPEN(data->file.constData(), O_RDWR | (x ? O_CREAT : 0), S_IRWXU);
-        if (data->id != -1 || !create) {
-            data->owned = x;
-            break;
-        }
-    }
+   data->file = filename.toLocal8Bit() + id;
+   for (int x = 0; x < 2; ++x) {
+      data->id = QT_OPEN(data->file.constData(), O_RDWR | (x ? O_CREAT : 0), S_IRWXU);
+      if (data->id != -1 || !create) {
+         data->owned = x;
+         break;
+      }
+   }
 #elif !defined(QT_POSIX_IPC)
-    key_t semkey = ftok(filename.toLocal8Bit().constData(), id);
-    data->id = semget(semkey, 0, 0);
-    data->owned = create;
-    if (create) {
-        qt_semun arg;
-        arg.val = 0;
-        if (data->id != -1)
-            semctl(data->id, 0, IPC_RMID, arg);
-        data->id = semget(semkey, 1, IPC_CREAT | 0600);
-        arg.val = MAX_LOCKS;
-        semctl(data->id, 0, SETVAL, arg);
-    }
+   key_t semkey = ftok(filename.toLocal8Bit().constData(), id);
+   data->id = semget(semkey, 0, 0);
+   data->owned = create;
+   if (create) {
+      qt_semun arg;
+      arg.val = 0;
+      if (data->id != -1) {
+         semctl(data->id, 0, IPC_RMID, arg);
+      }
+      data->id = semget(semkey, 1, IPC_CREAT | 0600);
+      arg.val = MAX_LOCKS;
+      semctl(data->id, 0, SETVAL, arg);
+   }
 #else
-    data->file = filename.toLocal8Bit() + id;
-    data->owned = create;
+   data->file = filename.toLocal8Bit() + id;
+   data->owned = create;
 
-    char ids[3] = { 'c', 'r', 'w' };
-    sem_t **sems[3] = { &data->id, &data->rsem, &data->wsem };
-    unsigned short initialValues[3] = { MAX_LOCKS, 1, 1 };
-    for (int i = 0; i < 3; ++i) {
-        QByteArray file = data->file + ids[i];
-        do {
-            *sems[i] = sem_open(file.constData(), 0, 0666, 0);
-        } while (*sems[i] == SEM_FAILED && errno == EINTR);
-        if (create) {
-            if (*sems[i] != SEM_FAILED) {
-                sem_close(*sems[i]);
-                sem_unlink(file.constData());
-            }
-            do {
-                *sems[i] = sem_open(file.constData(), O_CREAT, 0666, initialValues[i]);
-            } while (*sems[i] == SEM_FAILED && errno == EINTR);
-        }
-    }
+   char ids[3] = { 'c', 'r', 'w' };
+   sem_t **sems[3] = { &data->id, &data->rsem, &data->wsem };
+   unsigned short initialValues[3] = { MAX_LOCKS, 1, 1 };
+   for (int i = 0; i < 3; ++i) {
+      QByteArray file = data->file + ids[i];
+      do {
+         *sems[i] = sem_open(file.constData(), 0, 0666, 0);
+      } while (*sems[i] == SEM_FAILED && errno == EINTR);
+      if (create) {
+         if (*sems[i] != SEM_FAILED) {
+            sem_close(*sems[i]);
+            sem_unlink(file.constData());
+         }
+         do {
+            *sems[i] = sem_open(file.constData(), O_CREAT, 0666, initialValues[i]);
+         } while (*sems[i] == SEM_FAILED && errno == EINTR);
+      }
+   }
 #endif
-    if (!isValid()) {
-        qWarning("QLock::QLock: Cannot %s semaphore %s '%c' (%d, %s)",
-                 (create ? "create" : "get"), qPrintable(filename), id,
-                 errno, strerror(errno));
-    }
+   if (!isValid()) {
+      qWarning("QLock::QLock: Cannot %s semaphore %s '%c' (%d, %s)",
+               (create ? "create" : "get"), qPrintable(filename), id,
+               errno, strerror(errno));
+   }
 
 #ifndef QT_NO_QWS_SIGNALHANDLER
-    QWSSignalHandler::instance()->addLock(this);
+   QWSSignalHandler::instance()->addLock(this);
 #endif
 }
 
@@ -204,41 +205,46 @@ QLock::QLock(const QString &filename, char id, bool create)
 QLock::~QLock()
 {
 #ifndef QT_NO_QWS_SIGNALHANDLER
-    QWSSignalHandler::instance()->removeLock(this);
+   QWSSignalHandler::instance()->removeLock(this);
 #endif
 
-    while (locked())
-        unlock();
+   while (locked()) {
+      unlock();
+   }
 
 #if defined(QT_NO_SEMAPHORE)
-    if (isValid())
-        QT_CLOSE(data->id);
+   if (isValid()) {
+      QT_CLOSE(data->id);
+   }
 #elif defined(QT_POSIX_IPC)
-    if (data->id != SEM_FAILED)
-        sem_close(data->id);
-    if (data->rsem != SEM_FAILED)
-        sem_close(data->rsem);
-    if (data->wsem != SEM_FAILED)
-        sem_close(data->wsem);
+   if (data->id != SEM_FAILED) {
+      sem_close(data->id);
+   }
+   if (data->rsem != SEM_FAILED) {
+      sem_close(data->rsem);
+   }
+   if (data->wsem != SEM_FAILED) {
+      sem_close(data->wsem);
+   }
 #endif
 
-    if (data->owned) {
+   if (data->owned) {
 #if defined(QT_NO_SEMAPHORE)
-        unlink(data->file.constData());
+      unlink(data->file.constData());
 #elif !defined(QT_POSIX_IPC)
-        qt_semun semval;
-        semval.val = 0;
-        semctl(data->id, 0, IPC_RMID, semval);
+      qt_semun semval;
+      semval.val = 0;
+      semctl(data->id, 0, IPC_RMID, semval);
 #else
-        char ids[3] = { 'c', 'r', 'w' };
-        for (int i = 0; i < 3; ++i) {
-            QByteArray file = data->file + ids[i];
-            sem_unlink(file.constData());
-        }
+      char ids[3] = { 'c', 'r', 'w' };
+      for (int i = 0; i < 3; ++i) {
+         QByteArray file = data->file + ids[i];
+         sem_unlink(file.constData());
+      }
 #endif
-    }
-    delete data;
-    data = 0;
+   }
+   delete data;
+   data = 0;
 }
 
 /*!
@@ -248,9 +254,9 @@ QLock::~QLock()
 bool QLock::isValid() const
 {
 #if !defined(QT_POSIX_IPC)
-    return data && data->id != -1;
+   return data && data->id != -1;
 #else
-    return data && data->id != SEM_FAILED && data->rsem != SEM_FAILED && data->wsem != SEM_FAILED;
+   return data && data->id != SEM_FAILED && data->rsem != SEM_FAILED && data->wsem != SEM_FAILED;
 #endif
 }
 
@@ -267,57 +273,60 @@ bool QLock::isValid() const
 */
 void QLock::lock(Type t)
 {
-    if (!isValid())
-        return;
+   if (!isValid()) {
+      return;
+   }
 
-    if (!data->count) {
-        type = t;
+   if (!data->count) {
+      type = t;
 
-        int rv;
+      int rv;
 #if defined(QT_NO_SEMAPHORE)
-        int op = type == Write ? LOCK_EX : LOCK_SH;
+      int op = type == Write ? LOCK_EX : LOCK_SH;
 
-        EINTR_LOOP(rv, flock(data->id, op));
+      EINTR_LOOP(rv, flock(data->id, op));
 #elif !defined(QT_POSIX_IPC)
-        sembuf sops;
-        sops.sem_num = 0;
-        sops.sem_op = type == Write ? -MAX_LOCKS : -1;
-        sops.sem_flg = SEM_UNDO;
+      sembuf sops;
+      sops.sem_num = 0;
+      sops.sem_op = type == Write ? -MAX_LOCKS : -1;
+      sops.sem_flg = SEM_UNDO;
 
-        EINTR_LOOP(rv, semop(data->id, &sops, 1));
+      EINTR_LOOP(rv, semop(data->id, &sops, 1));
 #else
-        if (type == Write) {
-            EINTR_LOOP(rv, sem_wait(data->rsem));
-            if (rv != -1) {
-                EINTR_LOOP(rv, sem_wait(data->wsem));
-                if (rv == -1)
-                    sem_post(data->rsem);
-            }
-        } else {
+      if (type == Write) {
+         EINTR_LOOP(rv, sem_wait(data->rsem));
+         if (rv != -1) {
             EINTR_LOOP(rv, sem_wait(data->wsem));
-            if (rv != -1) {
-                EINTR_LOOP(rv, sem_trywait(data->rsem));
-                if (rv != -1 || errno == EAGAIN) {
-                    EINTR_LOOP(rv, sem_wait(data->id));
-                    if (rv == -1) {
-                        int semval;
-                        sem_getvalue(data->id, &semval);
-                        if (semval == MAX_LOCKS)
-                            sem_post(data->rsem);
-                    }
-                }
-                rv = sem_post(data->wsem);
+            if (rv == -1) {
+               sem_post(data->rsem);
             }
-        }
+         }
+      } else {
+         EINTR_LOOP(rv, sem_wait(data->wsem));
+         if (rv != -1) {
+            EINTR_LOOP(rv, sem_trywait(data->rsem));
+            if (rv != -1 || errno == EAGAIN) {
+               EINTR_LOOP(rv, sem_wait(data->id));
+               if (rv == -1) {
+                  int semval;
+                  sem_getvalue(data->id, &semval);
+                  if (semval == MAX_LOCKS) {
+                     sem_post(data->rsem);
+                  }
+               }
+            }
+            rv = sem_post(data->wsem);
+         }
+      }
 #endif
-        if (rv == -1) {
-            qDebug("QLock::lock(): %s", strerror(errno));
-            return;
-        }
-    } else if (type == Read && t == Write) {
-        qDebug("QLock::lock(): Attempt to lock for write while locked for read");
-    }
-    data->count++;
+      if (rv == -1) {
+         qDebug("QLock::lock(): %s", strerror(errno));
+         return;
+      }
+   } else if (type == Read && t == Write) {
+      qDebug("QLock::lock(): Attempt to lock for write while locked for read");
+   }
+   data->count++;
 }
 
 /*!
@@ -327,44 +336,47 @@ void QLock::lock(Type t)
 */
 void QLock::unlock()
 {
-    if (!isValid())
-        return;
+   if (!isValid()) {
+      return;
+   }
 
-    if (data->count > 0) {
-        data->count--;
-        if (!data->count) {
-            int rv;
+   if (data->count > 0) {
+      data->count--;
+      if (!data->count) {
+         int rv;
 #if defined(QT_NO_SEMAPHORE)
-            EINTR_LOOP(rv, flock(data->id, LOCK_UN));
+         EINTR_LOOP(rv, flock(data->id, LOCK_UN));
 #elif !defined(QT_POSIX_IPC)
-            sembuf sops;
-            sops.sem_num = 0;
-            sops.sem_op = type == Write ? MAX_LOCKS : 1;
-            sops.sem_flg = SEM_UNDO;
+         sembuf sops;
+         sops.sem_num = 0;
+         sops.sem_op = type == Write ? MAX_LOCKS : 1;
+         sops.sem_flg = SEM_UNDO;
 
-            EINTR_LOOP(rv, semop(data->id, &sops, 1));
+         EINTR_LOOP(rv, semop(data->id, &sops, 1));
 #else
-            if (type == Write) {
-                sem_post(data->wsem);
-                rv = sem_post(data->rsem);
-            } else {
-                EINTR_LOOP(rv, sem_wait(data->wsem));
-                if (rv != -1) {
-                    sem_post(data->id);
-                    int semval;
-                    sem_getvalue(data->id, &semval);
-                    if (semval == MAX_LOCKS)
-                        sem_post(data->rsem);
-                    rv = sem_post(data->wsem);
-                }
+         if (type == Write) {
+            sem_post(data->wsem);
+            rv = sem_post(data->rsem);
+         } else {
+            EINTR_LOOP(rv, sem_wait(data->wsem));
+            if (rv != -1) {
+               sem_post(data->id);
+               int semval;
+               sem_getvalue(data->id, &semval);
+               if (semval == MAX_LOCKS) {
+                  sem_post(data->rsem);
+               }
+               rv = sem_post(data->wsem);
             }
+         }
 #endif
-            if (rv == -1)
-                qDebug("QLock::unlock(): %s", strerror(errno));
-        }
-    } else {
-        qDebug("QLock::unlock(): Unlock without corresponding lock");
-    }
+         if (rv == -1) {
+            qDebug("QLock::unlock(): %s", strerror(errno));
+         }
+      }
+   } else {
+      qDebug("QLock::unlock(): Unlock without corresponding lock");
+   }
 }
 
 /*!
@@ -373,7 +385,7 @@ void QLock::unlock()
 */
 bool QLock::locked() const
 {
-    return isValid() && data->count > 0;
+   return isValid() && data->count > 0;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,121 +34,121 @@ class QPlatformWindowFormatPrivate;
 class Q_GUI_EXPORT QPlatformWindowFormat
 {
 
-public:
-    enum FormatOption {
-        DoubleBuffer            = 0x0001,
-        DepthBuffer             = 0x0002,
-        Rgba                    = 0x0004,
-        AlphaChannel            = 0x0008,
-        AccumBuffer             = 0x0010,
-        StencilBuffer           = 0x0020,
-        StereoBuffers           = 0x0040,
-        DirectRendering         = 0x0080,
-        HasOverlay              = 0x0100,
-        SampleBuffers           = 0x0200,
-        DeprecatedFunctions     = 0x0400,
-        HasWindowSurface        = 0x0800,
-        SingleBuffer            = DoubleBuffer    << 16,
-        NoDepthBuffer           = DepthBuffer     << 16,
-        ColorIndex              = Rgba            << 16,
-        NoAlphaChannel          = AlphaChannel    << 16,
-        NoAccumBuffer           = AccumBuffer     << 16,
-        NoStencilBuffer         = StencilBuffer   << 16,
-        NoStereoBuffers         = StereoBuffers   << 16,
-        IndirectRendering       = DirectRendering << 16,
-        NoOverlay               = HasOverlay      << 16,
-        NoSampleBuffers         = SampleBuffers   << 16,
-        NoDeprecatedFunctions   = DeprecatedFunctions << 16,
-        NoWindowSurface         = HasWindowSurface << 16
+ public:
+   enum FormatOption {
+      DoubleBuffer            = 0x0001,
+      DepthBuffer             = 0x0002,
+      Rgba                    = 0x0004,
+      AlphaChannel            = 0x0008,
+      AccumBuffer             = 0x0010,
+      StencilBuffer           = 0x0020,
+      StereoBuffers           = 0x0040,
+      DirectRendering         = 0x0080,
+      HasOverlay              = 0x0100,
+      SampleBuffers           = 0x0200,
+      DeprecatedFunctions     = 0x0400,
+      HasWindowSurface        = 0x0800,
+      SingleBuffer            = DoubleBuffer    << 16,
+      NoDepthBuffer           = DepthBuffer     << 16,
+      ColorIndex              = Rgba            << 16,
+      NoAlphaChannel          = AlphaChannel    << 16,
+      NoAccumBuffer           = AccumBuffer     << 16,
+      NoStencilBuffer         = StencilBuffer   << 16,
+      NoStereoBuffers         = StereoBuffers   << 16,
+      IndirectRendering       = DirectRendering << 16,
+      NoOverlay               = HasOverlay      << 16,
+      NoSampleBuffers         = SampleBuffers   << 16,
+      NoDeprecatedFunctions   = DeprecatedFunctions << 16,
+      NoWindowSurface         = HasWindowSurface << 16
 
-    };
-    using FormatOptions = QFlags<FormatOption>;
+   };
+   using FormatOptions = QFlags<FormatOption>;
 
-    enum WindowApi {
-        Raster,
-        OpenGL,
-        OpenVG
-    };
+   enum WindowApi {
+      Raster,
+      OpenGL,
+      OpenVG
+   };
 
-    QPlatformWindowFormat();
-    QPlatformWindowFormat(FormatOptions options);
-    QPlatformWindowFormat(const QPlatformWindowFormat &other);
-    QPlatformWindowFormat &operator=(const QPlatformWindowFormat &other);
-    ~QPlatformWindowFormat();
+   QPlatformWindowFormat();
+   QPlatformWindowFormat(FormatOptions options);
+   QPlatformWindowFormat(const QPlatformWindowFormat &other);
+   QPlatformWindowFormat &operator=(const QPlatformWindowFormat &other);
+   ~QPlatformWindowFormat();
 
-    void setDepthBufferSize(int size);
-    int  depthBufferSize() const;
+   void setDepthBufferSize(int size);
+   int  depthBufferSize() const;
 
-    void setAccumBufferSize(int size);
-    int  accumBufferSize() const;
+   void setAccumBufferSize(int size);
+   int  accumBufferSize() const;
 
-    void setRedBufferSize(int size);
-    int  redBufferSize() const;
+   void setRedBufferSize(int size);
+   int  redBufferSize() const;
 
-    void setGreenBufferSize(int size);
-    int  greenBufferSize() const;
+   void setGreenBufferSize(int size);
+   int  greenBufferSize() const;
 
-    void setBlueBufferSize(int size);
-    int  blueBufferSize() const;
+   void setBlueBufferSize(int size);
+   int  blueBufferSize() const;
 
-    void setAlphaBufferSize(int size);
-    int  alphaBufferSize() const;
+   void setAlphaBufferSize(int size);
+   int  alphaBufferSize() const;
 
-    void setStencilBufferSize(int size);
-    int  stencilBufferSize() const;
+   void setStencilBufferSize(int size);
+   int  stencilBufferSize() const;
 
-    void setSampleBuffers(bool enable);
-    bool sampleBuffers() const;
+   void setSampleBuffers(bool enable);
+   bool sampleBuffers() const;
 
-    void setSamples(int numSamples);
-    int  samples() const;
+   void setSamples(int numSamples);
+   int  samples() const;
 
-    void setSwapInterval(int interval);
-    int  swapInterval() const;
+   void setSwapInterval(int interval);
+   int  swapInterval() const;
 
-    void setWindowApi(QPlatformWindowFormat::WindowApi api);
-    WindowApi windowApi() const;
+   void setWindowApi(QPlatformWindowFormat::WindowApi api);
+   WindowApi windowApi() const;
 
-    void setSharedContext(QPlatformGLContext *context);
-    QPlatformGLContext *sharedGLContext() const;
+   void setSharedContext(QPlatformGLContext *context);
+   QPlatformGLContext *sharedGLContext() const;
 
-    bool doubleBuffer() const;
-    void setDoubleBuffer(bool enable);
-    bool depth() const;
-    void setDepth(bool enable);
-    bool rgba() const;
-    void setRgba(bool enable);
-    bool alpha() const;
-    void setAlpha(bool enable);
-    bool accum() const;
-    void setAccum(bool enable);
-    bool stencil() const;
-    void setStencil(bool enable);
-    bool stereo() const;
-    void setStereo(bool enable);
-    bool directRendering() const;
-    void setDirectRendering(bool enable);
-    bool hasWindowSurface() const;
-    void setWindowSurface(bool enable);
+   bool doubleBuffer() const;
+   void setDoubleBuffer(bool enable);
+   bool depth() const;
+   void setDepth(bool enable);
+   bool rgba() const;
+   void setRgba(bool enable);
+   bool alpha() const;
+   void setAlpha(bool enable);
+   bool accum() const;
+   void setAccum(bool enable);
+   bool stencil() const;
+   void setStencil(bool enable);
+   bool stereo() const;
+   void setStereo(bool enable);
+   bool directRendering() const;
+   void setDirectRendering(bool enable);
+   bool hasWindowSurface() const;
+   void setWindowSurface(bool enable);
 
-    void setOption(QPlatformWindowFormat::FormatOptions opt);
-    bool testOption(QPlatformWindowFormat::FormatOptions opt) const;
+   void setOption(QPlatformWindowFormat::FormatOptions opt);
+   bool testOption(QPlatformWindowFormat::FormatOptions opt) const;
 
-    static QPlatformWindowFormat defaultFormat();
-    static void setDefaultFormat(const QPlatformWindowFormat& f);
+   static QPlatformWindowFormat defaultFormat();
+   static void setDefaultFormat(const QPlatformWindowFormat &f);
 
-private:
-    QPlatformWindowFormatPrivate *d;
+ private:
+   QPlatformWindowFormatPrivate *d;
 
-    void detach();
+   void detach();
 
-    friend Q_GUI_EXPORT bool operator==(const QPlatformWindowFormat&, const QPlatformWindowFormat&);
-    friend Q_GUI_EXPORT bool operator!=(const QPlatformWindowFormat&, const QPlatformWindowFormat&);
-    friend Q_GUI_EXPORT QDebug operator<<(QDebug, const QPlatformWindowFormat &);
+   friend Q_GUI_EXPORT bool operator==(const QPlatformWindowFormat &, const QPlatformWindowFormat &);
+   friend Q_GUI_EXPORT bool operator!=(const QPlatformWindowFormat &, const QPlatformWindowFormat &);
+   friend Q_GUI_EXPORT QDebug operator<<(QDebug, const QPlatformWindowFormat &);
 };
 
-Q_GUI_EXPORT bool operator==(const QPlatformWindowFormat&, const QPlatformWindowFormat&);
-Q_GUI_EXPORT bool operator!=(const QPlatformWindowFormat&, const QPlatformWindowFormat&);
+Q_GUI_EXPORT bool operator==(const QPlatformWindowFormat &, const QPlatformWindowFormat &);
+Q_GUI_EXPORT bool operator!=(const QPlatformWindowFormat &, const QPlatformWindowFormat &);
 
 Q_OPENGL_EXPORT QDebug operator<<(QDebug, const QPlatformWindowFormat &);
 
@@ -156,52 +156,52 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QPlatformWindowFormat::FormatOptions)
 
 inline bool QPlatformWindowFormat::doubleBuffer() const
 {
-    return testOption(QPlatformWindowFormat::DoubleBuffer);
+   return testOption(QPlatformWindowFormat::DoubleBuffer);
 }
 
 inline bool QPlatformWindowFormat::depth() const
 {
-    return testOption(QPlatformWindowFormat::DepthBuffer);
+   return testOption(QPlatformWindowFormat::DepthBuffer);
 }
 
 inline bool QPlatformWindowFormat::rgba() const
 {
-    return testOption(QPlatformWindowFormat::Rgba);
+   return testOption(QPlatformWindowFormat::Rgba);
 }
 
 inline bool QPlatformWindowFormat::alpha() const
 {
-    return testOption(QPlatformWindowFormat::AlphaChannel);
+   return testOption(QPlatformWindowFormat::AlphaChannel);
 }
 
 inline bool QPlatformWindowFormat::accum() const
 {
-    return testOption(QPlatformWindowFormat::AccumBuffer);
+   return testOption(QPlatformWindowFormat::AccumBuffer);
 }
 
 inline bool QPlatformWindowFormat::stencil() const
 {
-    return testOption(QPlatformWindowFormat::StencilBuffer);
+   return testOption(QPlatformWindowFormat::StencilBuffer);
 }
 
 inline bool QPlatformWindowFormat::stereo() const
 {
-    return testOption(QPlatformWindowFormat::StereoBuffers);
+   return testOption(QPlatformWindowFormat::StereoBuffers);
 }
 
 inline bool QPlatformWindowFormat::directRendering() const
 {
-    return testOption(QPlatformWindowFormat::DirectRendering);
+   return testOption(QPlatformWindowFormat::DirectRendering);
 }
 
 inline bool QPlatformWindowFormat::hasWindowSurface() const
 {
-    return testOption(QPlatformWindowFormat::HasWindowSurface);
+   return testOption(QPlatformWindowFormat::HasWindowSurface);
 }
 
 inline bool QPlatformWindowFormat::sampleBuffers() const
 {
-    return testOption(QPlatformWindowFormat::SampleBuffers);
+   return testOption(QPlatformWindowFormat::SampleBuffers);
 }
 
 QT_END_NAMESPACE

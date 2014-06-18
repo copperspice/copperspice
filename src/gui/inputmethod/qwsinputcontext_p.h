@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,29 +38,33 @@ class QWSIMInitEvent;
 
 class QWSInputContext : public QInputContext
 {
-    CS_OBJECT(QWSInputContext)
-public:
-    explicit QWSInputContext(QObject* parent = 0);
-    ~QWSInputContext() {}
+   CS_OBJECT(QWSInputContext)
+ public:
+   explicit QWSInputContext(QObject *parent = 0);
+   ~QWSInputContext() {}
 
 
-    QString identifierName() { return QString(); }
-    QString language() { return QString(); }
+   QString identifierName() {
+      return QString();
+   }
+   QString language() {
+      return QString();
+   }
 
-    void reset();
-    void update();
-    void mouseHandler( int x, QMouseEvent *event);
+   void reset();
+   void update();
+   void mouseHandler( int x, QMouseEvent *event);
 
-    void setFocusWidget( QWidget *w );
-    void widgetDestroyed(QWidget *w);
+   void setFocusWidget( QWidget *w );
+   void widgetDestroyed(QWidget *w);
 
-    bool isComposing() const;
+   bool isComposing() const;
 
-    static QWidget *activeWidget();
-    static bool translateIMEvent(QWidget *w, const QWSIMEvent *e);
-    static bool translateIMQueryEvent(QWidget *w, const QWSIMQueryEvent *e);
-    static bool translateIMInitEvent(const QWSIMInitEvent *e);
-    static void updateImeStatus(QWidget *w, bool hasFocus);
+   static QWidget *activeWidget();
+   static bool translateIMEvent(QWidget *w, const QWSIMEvent *e);
+   static bool translateIMQueryEvent(QWidget *w, const QWSIMQueryEvent *e);
+   static bool translateIMInitEvent(const QWSIMInitEvent *e);
+   static void updateImeStatus(QWidget *w, bool hasFocus);
 };
 
 QT_END_NAMESPACE

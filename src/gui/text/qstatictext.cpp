@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,8 +44,8 @@ QT_BEGIN_NAMESPACE
     \mainclass
 
     QStaticText provides a way to cache layout data for a block of text so that it can be drawn
-    more efficiently than by using QPainter::drawText() in which the layout information is 
-    recalculated with every call. 
+    more efficiently than by using QPainter::drawText() in which the layout information is
+    recalculated with every call.
 
     The class primarily provides an optimization for cases where the text, its font and the
     transformations on the painter are static over several paint events. If the text or its layout
@@ -81,8 +81,8 @@ QT_BEGIN_NAMESPACE
     \endcode
 
     The QStaticText class can be used to mimic the behavior of QPainter::drawText() to a specific
-    point with no boundaries, and also when QPainter::drawText() is called with a bounding 
-    rectangle. 
+    point with no boundaries, and also when QPainter::drawText() is called with a bounding
+    rectangle.
 
     If a bounding rectangle is not required, create a QStaticText object without setting a preferred
     text width. The text will then occupy a single line.
@@ -135,8 +135,8 @@ QT_BEGIN_NAMESPACE
 /*!
     Constructs an empty QStaticText
 */
-QStaticText::QStaticText()    
-    : data(new QStaticTextPrivate)
+QStaticText::QStaticText()
+   : data(new QStaticTextPrivate)
 {
 }
 
@@ -144,18 +144,18 @@ QStaticText::QStaticText()
     Constructs a QStaticText object with the given \a text.
 */
 QStaticText::QStaticText(const QString &text)
-    : data(new QStaticTextPrivate)
-{    
-    data->text = text;
-    data->invalidate();
+   : data(new QStaticTextPrivate)
+{
+   data->text = text;
+   data->invalidate();
 }
 
 /*!
     Constructs a QStaticText object which is a copy of \a other.
 */
-QStaticText::QStaticText(const QStaticText &other)    
+QStaticText::QStaticText(const QStaticText &other)
 {
-    data = other.data;
+   data = other.data;
 }
 
 /*!
@@ -163,16 +163,17 @@ QStaticText::QStaticText(const QStaticText &other)
 */
 QStaticText::~QStaticText()
 {
-    Q_ASSERT(!data || data->ref.load() >= 1);
+   Q_ASSERT(!data || data->ref.load() >= 1);
 }
 
 /*!
     \internal
 */
 void QStaticText::detach()
-{    
-    if (data->ref.load() != 1)
-        data.detach();
+{
+   if (data->ref.load() != 1) {
+      data.detach();
+   }
 }
 
 /*!
@@ -193,9 +194,9 @@ void QStaticText::detach()
 */
 void QStaticText::prepare(const QTransform &matrix, const QFont &font)
 {
-    data->matrix = matrix;
-    data->font = font;
-    data->init();
+   data->matrix = matrix;
+   data->font = font;
+   data->init();
 }
 
 
@@ -203,9 +204,9 @@ void QStaticText::prepare(const QTransform &matrix, const QFont &font)
     Assigns \a other to this QStaticText.
 */
 QStaticText &QStaticText::operator=(const QStaticText &other)
-{    
-    data = other.data;
-    return *this;
+{
+   data = other.data;
+   return *this;
 }
 
 /*!
@@ -214,10 +215,10 @@ QStaticText &QStaticText::operator=(const QStaticText &other)
 */
 bool QStaticText::operator==(const QStaticText &other) const
 {
-    return (data == other.data
-            || (data->text == other.data->text
-                && data->font == other.data->font
-                && data->textWidth == other.data->textWidth));
+   return (data == other.data
+           || (data->text == other.data->text
+               && data->font == other.data->font
+               && data->textWidth == other.data->textWidth));
 }
 
 /*!
@@ -226,7 +227,7 @@ bool QStaticText::operator==(const QStaticText &other) const
 */
 bool QStaticText::operator!=(const QStaticText &other) const
 {
-    return !(*this == other);
+   return !(*this == other);
 }
 
 /*!
@@ -238,9 +239,9 @@ bool QStaticText::operator!=(const QStaticText &other) const
 */
 void QStaticText::setText(const QString &text)
 {
-    detach();
-    data->text = text;
-    data->invalidate();
+   detach();
+   data->text = text;
+   data->invalidate();
 }
 
 /*!
@@ -256,9 +257,9 @@ void QStaticText::setText(const QString &text)
 */
 void QStaticText::setTextFormat(Qt::TextFormat textFormat)
 {
-    detach();
-    data->textFormat = textFormat;
-    data->invalidate();
+   detach();
+   data->textFormat = textFormat;
+   data->invalidate();
 }
 
 /*!
@@ -268,7 +269,7 @@ void QStaticText::setTextFormat(Qt::TextFormat textFormat)
 */
 Qt::TextFormat QStaticText::textFormat() const
 {
-    return Qt::TextFormat(data->textFormat);
+   return Qt::TextFormat(data->textFormat);
 }
 
 /*!
@@ -276,9 +277,9 @@ Qt::TextFormat QStaticText::textFormat() const
 
     \sa setText()
 */
-QString QStaticText::text() const 
+QString QStaticText::text() const
 {
-    return data->text;
+   return data->text;
 }
 
 /*!
@@ -295,13 +296,13 @@ QString QStaticText::text() const
 */
 void QStaticText::setPerformanceHint(PerformanceHint performanceHint)
 {
-    if ((performanceHint == ModerateCaching && !data->useBackendOptimizations)
-        || (performanceHint == AggressiveCaching && data->useBackendOptimizations)) {
-        return;
-    }
-    detach();
-    data->useBackendOptimizations = (performanceHint == AggressiveCaching);
-    data->invalidate();
+   if ((performanceHint == ModerateCaching && !data->useBackendOptimizations)
+         || (performanceHint == AggressiveCaching && data->useBackendOptimizations)) {
+      return;
+   }
+   detach();
+   data->useBackendOptimizations = (performanceHint == AggressiveCaching);
+   data->invalidate();
 }
 
 /*!
@@ -311,7 +312,7 @@ void QStaticText::setPerformanceHint(PerformanceHint performanceHint)
 */
 QStaticText::PerformanceHint QStaticText::performanceHint() const
 {
-    return data->useBackendOptimizations ? AggressiveCaching : ModerateCaching;
+   return data->useBackendOptimizations ? AggressiveCaching : ModerateCaching;
 }
 
 /*!
@@ -321,9 +322,9 @@ QStaticText::PerformanceHint QStaticText::performanceHint() const
 */
 void QStaticText::setTextOption(const QTextOption &textOption)
 {
-    detach();
-    data->textOption = textOption;
-    data->invalidate();
+   detach();
+   data->textOption = textOption;
+   data->invalidate();
 }
 
 /*!
@@ -331,7 +332,7 @@ void QStaticText::setTextOption(const QTextOption &textOption)
 */
 QTextOption QStaticText::textOption() const
 {
-    return data->textOption;
+   return data->textOption;
 }
 
 /*!
@@ -349,9 +350,9 @@ QTextOption QStaticText::textOption() const
 */
 void QStaticText::setTextWidth(qreal textWidth)
 {
-    detach();
-    data->textWidth = textWidth;
-    data->invalidate();
+   detach();
+   data->textWidth = textWidth;
+   data->invalidate();
 }
 
 /*!
@@ -361,7 +362,7 @@ void QStaticText::setTextWidth(qreal textWidth)
 */
 qreal QStaticText::textWidth() const
 {
-    return data->textWidth;
+   return data->textWidth;
 }
 
 /*!
@@ -371,351 +372,348 @@ qreal QStaticText::textWidth() const
 */
 QSizeF QStaticText::size() const
 {
-    if (data->needsRelayout)
-        data->init();
-    return data->actualSize;
+   if (data->needsRelayout) {
+      data->init();
+   }
+   return data->actualSize;
 }
 
 QStaticTextPrivate::QStaticTextPrivate()
-        : textWidth(-1.0), items(0), itemCount(0), glyphPool(0), positionPool(0), charPool(0),
-          needsRelayout(true), useBackendOptimizations(false), textFormat(Qt::AutoText),
-          untransformedCoordinates(false)
+   : textWidth(-1.0), items(0), itemCount(0), glyphPool(0), positionPool(0), charPool(0),
+     needsRelayout(true), useBackendOptimizations(false), textFormat(Qt::AutoText),
+     untransformedCoordinates(false)
 {
 }
 
 QStaticTextPrivate::QStaticTextPrivate(const QStaticTextPrivate &other)
-    : text(other.text), font(other.font), textWidth(other.textWidth), matrix(other.matrix),
-      items(0), itemCount(0), glyphPool(0), positionPool(0), charPool(0), textOption(other.textOption),
-      needsRelayout(true), useBackendOptimizations(other.useBackendOptimizations),
-      textFormat(other.textFormat), untransformedCoordinates(other.untransformedCoordinates)
+   : text(other.text), font(other.font), textWidth(other.textWidth), matrix(other.matrix),
+     items(0), itemCount(0), glyphPool(0), positionPool(0), charPool(0), textOption(other.textOption),
+     needsRelayout(true), useBackendOptimizations(other.useBackendOptimizations),
+     textFormat(other.textFormat), untransformedCoordinates(other.untransformedCoordinates)
 {
 }
 
 QStaticTextPrivate::~QStaticTextPrivate()
 {
-    delete[] items;
-    delete[] glyphPool;
-    delete[] positionPool;
-    delete[] charPool;
+   delete[] items;
+   delete[] glyphPool;
+   delete[] positionPool;
+   delete[] charPool;
 }
 
 QStaticTextPrivate *QStaticTextPrivate::get(const QStaticText *q)
 {
-    return q->data.data();
+   return q->data.data();
 }
 
 namespace {
 
-    class DrawTextItemRecorder: public QPaintEngine
-    {
-    public:
-        DrawTextItemRecorder(bool untransformedCoordinates, bool useBackendOptimizations)
-                : m_dirtyPen(false), m_useBackendOptimizations(useBackendOptimizations),
-                  m_untransformedCoordinates(untransformedCoordinates), m_currentColor(Qt::black)
-        {
-        }
+class DrawTextItemRecorder: public QPaintEngine
+{
+ public:
+   DrawTextItemRecorder(bool untransformedCoordinates, bool useBackendOptimizations)
+      : m_dirtyPen(false), m_useBackendOptimizations(useBackendOptimizations),
+        m_untransformedCoordinates(untransformedCoordinates), m_currentColor(Qt::black) {
+   }
 
-        virtual void updateState(const QPaintEngineState &newState)
-        {
-            if (newState.state() & QPaintEngine::DirtyPen
-                && newState.pen().color() != m_currentColor) {
-                m_dirtyPen = true;
-                m_currentColor = newState.pen().color();
-            }
-        }
+   virtual void updateState(const QPaintEngineState &newState) {
+      if (newState.state() & QPaintEngine::DirtyPen
+            && newState.pen().color() != m_currentColor) {
+         m_dirtyPen = true;
+         m_currentColor = newState.pen().color();
+      }
+   }
 
-        virtual void drawTextItem(const QPointF &position, const QTextItem &textItem)
-        {
-            const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
+   virtual void drawTextItem(const QPointF &position, const QTextItem &textItem) {
+      const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
 
-            QStaticTextItem currentItem;
-            currentItem.setFontEngine(ti.fontEngine);
-            currentItem.font = ti.font();
-            currentItem.charOffset = m_chars.size();
-            currentItem.numChars = ti.num_chars;
-            currentItem.glyphOffset = m_glyphs.size(); // Store offset into glyph pool
-            currentItem.positionOffset = m_glyphs.size(); // Offset into position pool
-            currentItem.useBackendOptimizations = m_useBackendOptimizations;
-            if (m_dirtyPen)
-                currentItem.color = m_currentColor;
+      QStaticTextItem currentItem;
+      currentItem.setFontEngine(ti.fontEngine);
+      currentItem.font = ti.font();
+      currentItem.charOffset = m_chars.size();
+      currentItem.numChars = ti.num_chars;
+      currentItem.glyphOffset = m_glyphs.size(); // Store offset into glyph pool
+      currentItem.positionOffset = m_glyphs.size(); // Offset into position pool
+      currentItem.useBackendOptimizations = m_useBackendOptimizations;
+      if (m_dirtyPen) {
+         currentItem.color = m_currentColor;
+      }
 
-            QTransform matrix = m_untransformedCoordinates ? QTransform() : state->transform();
-            matrix.translate(position.x(), position.y());
+      QTransform matrix = m_untransformedCoordinates ? QTransform() : state->transform();
+      matrix.translate(position.x(), position.y());
 
-            QVarLengthArray<glyph_t> glyphs;
-            QVarLengthArray<QFixedPoint> positions;
-            ti.fontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
+      QVarLengthArray<glyph_t> glyphs;
+      QVarLengthArray<QFixedPoint> positions;
+      ti.fontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
 
-            int size = glyphs.size();
-            Q_ASSERT(size == positions.size());
-            currentItem.numGlyphs = size;
+      int size = glyphs.size();
+      Q_ASSERT(size == positions.size());
+      currentItem.numGlyphs = size;
 
-            m_glyphs.resize(m_glyphs.size() + size);
-            m_positions.resize(m_glyphs.size());
-            m_chars.resize(m_chars.size() + ti.num_chars);
+      m_glyphs.resize(m_glyphs.size() + size);
+      m_positions.resize(m_glyphs.size());
+      m_chars.resize(m_chars.size() + ti.num_chars);
 
-            glyph_t *glyphsDestination = m_glyphs.data() + currentItem.glyphOffset;
-            memcpy(glyphsDestination, glyphs.constData(), sizeof(glyph_t) * currentItem.numGlyphs);
+      glyph_t *glyphsDestination = m_glyphs.data() + currentItem.glyphOffset;
+      memcpy(glyphsDestination, glyphs.constData(), sizeof(glyph_t) * currentItem.numGlyphs);
 
-            QFixedPoint *positionsDestination = m_positions.data() + currentItem.positionOffset;
-            memcpy(positionsDestination, positions.constData(), sizeof(QFixedPoint) * currentItem.numGlyphs);
+      QFixedPoint *positionsDestination = m_positions.data() + currentItem.positionOffset;
+      memcpy(positionsDestination, positions.constData(), sizeof(QFixedPoint) * currentItem.numGlyphs);
 
-            QChar *charsDestination = m_chars.data() + currentItem.charOffset;
-            memcpy(charsDestination, ti.chars, sizeof(QChar) * currentItem.numChars);
+      QChar *charsDestination = m_chars.data() + currentItem.charOffset;
+      memcpy(charsDestination, ti.chars, sizeof(QChar) * currentItem.numChars);
 
-            m_items.append(currentItem);
-        }
+      m_items.append(currentItem);
+   }
 
-        virtual void drawPolygon(const QPointF *, int , PolygonDrawMode )
-        {
-            /* intentionally empty */
-        }
+   virtual void drawPolygon(const QPointF *, int , PolygonDrawMode ) {
+      /* intentionally empty */
+   }
 
-        virtual bool begin(QPaintDevice *)  { return true; }
-        virtual bool end() { return true; }
-        virtual void drawPixmap(const QRectF &, const QPixmap &, const QRectF &) {}
-        virtual Type type() const
-        {
-            return User;
-        }
+   virtual bool begin(QPaintDevice *)  {
+      return true;
+   }
+   virtual bool end() {
+      return true;
+   }
+   virtual void drawPixmap(const QRectF &, const QPixmap &, const QRectF &) {}
+   virtual Type type() const {
+      return User;
+   }
 
-        QVector<QStaticTextItem> items() const
-        {
-            return m_items;
-        }
+   QVector<QStaticTextItem> items() const {
+      return m_items;
+   }
 
-        QVector<QFixedPoint> positions() const
-        {
-            return m_positions;
-        }
+   QVector<QFixedPoint> positions() const {
+      return m_positions;
+   }
 
-        QVector<glyph_t> glyphs() const
-        {
-            return m_glyphs;
-        }
+   QVector<glyph_t> glyphs() const {
+      return m_glyphs;
+   }
 
-        QVector<QChar> chars() const
-        {
-            return m_chars;
-        }
+   QVector<QChar> chars() const {
+      return m_chars;
+   }
 
-    private:
-        QVector<QStaticTextItem> m_items;
-        QVector<QFixedPoint> m_positions;
-        QVector<glyph_t> m_glyphs;
-        QVector<QChar> m_chars;
+ private:
+   QVector<QStaticTextItem> m_items;
+   QVector<QFixedPoint> m_positions;
+   QVector<glyph_t> m_glyphs;
+   QVector<QChar> m_chars;
 
-        bool m_dirtyPen;
-        bool m_useBackendOptimizations;
-        bool m_untransformedCoordinates;
-        QColor m_currentColor;
-    };
+   bool m_dirtyPen;
+   bool m_useBackendOptimizations;
+   bool m_untransformedCoordinates;
+   QColor m_currentColor;
+};
 
-    class DrawTextItemDevice: public QPaintDevice
-    {
-    public:
-        DrawTextItemDevice(bool untransformedCoordinates, bool useBackendOptimizations)
-        {
-            m_paintEngine = new DrawTextItemRecorder(untransformedCoordinates,
-                                                     useBackendOptimizations);
-        }
+class DrawTextItemDevice: public QPaintDevice
+{
+ public:
+   DrawTextItemDevice(bool untransformedCoordinates, bool useBackendOptimizations) {
+      m_paintEngine = new DrawTextItemRecorder(untransformedCoordinates,
+            useBackendOptimizations);
+   }
 
-        ~DrawTextItemDevice()
-        {
-            delete m_paintEngine;
-        }
+   ~DrawTextItemDevice() {
+      delete m_paintEngine;
+   }
 
-        int metric(PaintDeviceMetric m) const
-        {
-            int val;
-            switch (m) {
-            case PdmWidth:
-            case PdmHeight:
-            case PdmWidthMM:
-            case PdmHeightMM:
-                val = 0;
-                break;
-            case PdmDpiX:
-            case PdmPhysicalDpiX:
-                val = qt_defaultDpiX();
-                break;
-            case PdmDpiY:
-            case PdmPhysicalDpiY:
-                val = qt_defaultDpiY();
-                break;
-            case PdmNumColors:
-                val = 16777216;
-                break;
-            case PdmDepth:
-                val = 24;
-                break;
-            default:
-                val = 0;
-                qWarning("DrawTextItemDevice::metric: Invalid metric command");
-            }
-            return val;
-        }
+   int metric(PaintDeviceMetric m) const {
+      int val;
+      switch (m) {
+         case PdmWidth:
+         case PdmHeight:
+         case PdmWidthMM:
+         case PdmHeightMM:
+            val = 0;
+            break;
+         case PdmDpiX:
+         case PdmPhysicalDpiX:
+            val = qt_defaultDpiX();
+            break;
+         case PdmDpiY:
+         case PdmPhysicalDpiY:
+            val = qt_defaultDpiY();
+            break;
+         case PdmNumColors:
+            val = 16777216;
+            break;
+         case PdmDepth:
+            val = 24;
+            break;
+         default:
+            val = 0;
+            qWarning("DrawTextItemDevice::metric: Invalid metric command");
+      }
+      return val;
+   }
 
-        virtual QPaintEngine *paintEngine() const
-        {
-            return m_paintEngine;
-        }
+   virtual QPaintEngine *paintEngine() const {
+      return m_paintEngine;
+   }
 
-        QVector<glyph_t> glyphs() const
-        {
-            return m_paintEngine->glyphs();
-        }
+   QVector<glyph_t> glyphs() const {
+      return m_paintEngine->glyphs();
+   }
 
-        QVector<QFixedPoint> positions() const
-        {
-            return m_paintEngine->positions();
-        }
+   QVector<QFixedPoint> positions() const {
+      return m_paintEngine->positions();
+   }
 
-        QVector<QStaticTextItem> items() const
-        {
-            return m_paintEngine->items();
-        }
+   QVector<QStaticTextItem> items() const {
+      return m_paintEngine->items();
+   }
 
-        QVector<QChar> chars() const
-        {
-            return m_paintEngine->chars();
-        }
+   QVector<QChar> chars() const {
+      return m_paintEngine->chars();
+   }
 
-    private:
-        DrawTextItemRecorder *m_paintEngine;
-    };
+ private:
+   DrawTextItemRecorder *m_paintEngine;
+};
 }
 
 void QStaticTextPrivate::paintText(const QPointF &topLeftPosition, QPainter *p)
 {
-    bool preferRichText = textFormat == Qt::RichText
-                          || (textFormat == Qt::AutoText && Qt::mightBeRichText(text));
+   bool preferRichText = textFormat == Qt::RichText
+                         || (textFormat == Qt::AutoText && Qt::mightBeRichText(text));
 
-    if (!preferRichText) {
-        QTextLayout textLayout;
-        textLayout.setText(text);
-        textLayout.setFont(font);
-        textLayout.setTextOption(textOption);
+   if (!preferRichText) {
+      QTextLayout textLayout;
+      textLayout.setText(text);
+      textLayout.setFont(font);
+      textLayout.setTextOption(textOption);
 
-        qreal leading = QFontMetricsF(font).leading();
-        qreal height = -leading;
+      qreal leading = QFontMetricsF(font).leading();
+      qreal height = -leading;
 
-        textLayout.beginLayout();
-        while (1) {
-            QTextLine line = textLayout.createLine();
-            if (!line.isValid())
-                break;
+      textLayout.beginLayout();
+      while (1) {
+         QTextLine line = textLayout.createLine();
+         if (!line.isValid()) {
+            break;
+         }
 
-            if (textWidth >= 0.0)
-                line.setLineWidth(textWidth);
-            height += leading;
-            line.setPosition(QPointF(0.0, height));
-            height += line.height();
-        }
-        textLayout.endLayout();
+         if (textWidth >= 0.0) {
+            line.setLineWidth(textWidth);
+         }
+         height += leading;
+         line.setPosition(QPointF(0.0, height));
+         height += line.height();
+      }
+      textLayout.endLayout();
 
-        actualSize = textLayout.boundingRect().size();
-        textLayout.draw(p, topLeftPosition);
-    } else {
-        QTextDocument document;
+      actualSize = textLayout.boundingRect().size();
+      textLayout.draw(p, topLeftPosition);
+   } else {
+      QTextDocument document;
 #ifndef QT_NO_CSSPARSER
-        QColor color = p->pen().color();
-        document.setDefaultStyleSheet(QString::fromLatin1("body { color: #%1%2%3 }")
-                                      .arg(QString::number(color.red(), 16), 2, QLatin1Char('0'))
-                                      .arg(QString::number(color.green(), 16), 2, QLatin1Char('0'))
-                                      .arg(QString::number(color.blue(), 16), 2, QLatin1Char('0')));
+      QColor color = p->pen().color();
+      document.setDefaultStyleSheet(QString::fromLatin1("body { color: #%1%2%3 }")
+                                    .arg(QString::number(color.red(), 16), 2, QLatin1Char('0'))
+                                    .arg(QString::number(color.green(), 16), 2, QLatin1Char('0'))
+                                    .arg(QString::number(color.blue(), 16), 2, QLatin1Char('0')));
 #endif
-        document.setDefaultFont(font);
-        document.setDocumentMargin(0.0);        
+      document.setDefaultFont(font);
+      document.setDocumentMargin(0.0);
 #ifndef QT_NO_TEXTHTMLPARSER
-        document.setHtml(text);
+      document.setHtml(text);
 #else
-        document.setPlainText(text);
+      document.setPlainText(text);
 #endif
-        if (textWidth >= 0.0)
-            document.setTextWidth(textWidth);
-        else
-            document.adjustSize();
-        document.setDefaultTextOption(textOption);
+      if (textWidth >= 0.0) {
+         document.setTextWidth(textWidth);
+      } else {
+         document.adjustSize();
+      }
+      document.setDefaultTextOption(textOption);
 
-        p->save();
-        p->translate(topLeftPosition);
-        QAbstractTextDocumentLayout::PaintContext ctx;
-        ctx.palette.setColor(QPalette::Text, p->pen().color());
-        document.documentLayout()->draw(p, ctx);
-        p->restore();
+      p->save();
+      p->translate(topLeftPosition);
+      QAbstractTextDocumentLayout::PaintContext ctx;
+      ctx.palette.setColor(QPalette::Text, p->pen().color());
+      document.documentLayout()->draw(p, ctx);
+      p->restore();
 
-        if (textWidth >= 0.0)
-            document.adjustSize(); // Find optimal size
+      if (textWidth >= 0.0) {
+         document.adjustSize();   // Find optimal size
+      }
 
-        actualSize = document.size();
-    }
+      actualSize = document.size();
+   }
 }
 
 void QStaticTextPrivate::init()
 {
-    delete[] items;
-    delete[] glyphPool;
-    delete[] positionPool;
-    delete[] charPool;
+   delete[] items;
+   delete[] glyphPool;
+   delete[] positionPool;
+   delete[] charPool;
 
-    position = QPointF(0, 0);
+   position = QPointF(0, 0);
 
-    DrawTextItemDevice device(untransformedCoordinates, useBackendOptimizations);
-    {
-        QPainter painter(&device);
-        painter.setFont(font);
-        painter.setTransform(matrix);
+   DrawTextItemDevice device(untransformedCoordinates, useBackendOptimizations);
+   {
+      QPainter painter(&device);
+      painter.setFont(font);
+      painter.setTransform(matrix);
 
-        paintText(QPointF(0, 0), &painter);
-    }
+      paintText(QPointF(0, 0), &painter);
+   }
 
-    QVector<QStaticTextItem> deviceItems = device.items();
-    QVector<QFixedPoint> positions = device.positions();
-    QVector<glyph_t> glyphs = device.glyphs();
-    QVector<QChar> chars = device.chars();
+   QVector<QStaticTextItem> deviceItems = device.items();
+   QVector<QFixedPoint> positions = device.positions();
+   QVector<glyph_t> glyphs = device.glyphs();
+   QVector<QChar> chars = device.chars();
 
-    itemCount = deviceItems.size();
-    items = new QStaticTextItem[itemCount];
+   itemCount = deviceItems.size();
+   items = new QStaticTextItem[itemCount];
 
-    glyphPool = new glyph_t[glyphs.size()];
-    memcpy(glyphPool, glyphs.constData(), glyphs.size() * sizeof(glyph_t));
+   glyphPool = new glyph_t[glyphs.size()];
+   memcpy(glyphPool, glyphs.constData(), glyphs.size() * sizeof(glyph_t));
 
-    positionPool = new QFixedPoint[positions.size()];
-    memcpy(positionPool, positions.constData(), positions.size() * sizeof(QFixedPoint));
+   positionPool = new QFixedPoint[positions.size()];
+   memcpy(positionPool, positions.constData(), positions.size() * sizeof(QFixedPoint));
 
-    charPool = new QChar[chars.size()];
-    memcpy(charPool, chars.constData(), chars.size() * sizeof(QChar));
+   charPool = new QChar[chars.size()];
+   memcpy(charPool, chars.constData(), chars.size() * sizeof(QChar));
 
-    for (int i=0; i<itemCount; ++i) {
-        items[i] = deviceItems.at(i);
+   for (int i = 0; i < itemCount; ++i) {
+      items[i] = deviceItems.at(i);
 
-        items[i].glyphs = glyphPool + items[i].glyphOffset;
-        items[i].glyphPositions = positionPool + items[i].positionOffset;
-        items[i].chars = charPool + items[i].charOffset;
-    }
+      items[i].glyphs = glyphPool + items[i].glyphOffset;
+      items[i].glyphPositions = positionPool + items[i].positionOffset;
+      items[i].chars = charPool + items[i].charOffset;
+   }
 
-    needsRelayout = false;
+   needsRelayout = false;
 }
 
 QStaticTextItem::~QStaticTextItem()
 {
-    if (m_userData != 0 && !m_userData->ref.deref())
-        delete m_userData;
-    if (!m_fontEngine->ref.deref())
-        delete m_fontEngine;
+   if (m_userData != 0 && !m_userData->ref.deref()) {
+      delete m_userData;
+   }
+   if (!m_fontEngine->ref.deref()) {
+      delete m_fontEngine;
+   }
 }
 
 void QStaticTextItem::setFontEngine(QFontEngine *fe)
 {
-    if (m_fontEngine != 0) {
-        if (!m_fontEngine->ref.deref())
-            delete m_fontEngine;
-    }
+   if (m_fontEngine != 0) {
+      if (!m_fontEngine->ref.deref()) {
+         delete m_fontEngine;
+      }
+   }
 
-    m_fontEngine = fe;
-    if (m_fontEngine != 0)
-        m_fontEngine->ref.ref();
+   m_fontEngine = fe;
+   if (m_fontEngine != 0) {
+      m_fontEngine->ref.ref();
+   }
 }
 
 QT_END_NAMESPACE

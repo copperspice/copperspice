@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,51 +37,54 @@ class QStyleOptionRubberBand;
 
 class Q_GUI_EXPORT QRubberBand : public QWidget
 {
-    CS_OBJECT(QRubberBand)
+   CS_OBJECT(QRubberBand)
 
-public:
-    enum Shape { Line, Rectangle };
-    explicit QRubberBand(Shape, QWidget * =0);
-    ~QRubberBand();
+ public:
+   enum Shape { Line, Rectangle };
+   explicit QRubberBand(Shape, QWidget * = 0);
+   ~QRubberBand();
 
-    Shape shape() const;
+   Shape shape() const;
 
-    void setGeometry(const QRect &r);
+   void setGeometry(const QRect &r);
 
-    inline void setGeometry(int x, int y, int w, int h);
-    inline void move(int x, int y);
+   inline void setGeometry(int x, int y, int w, int h);
+   inline void move(int x, int y);
 
-    inline void move(const QPoint &p)
-       { move(p.x(), p.y()); }
+   inline void move(const QPoint &p) {
+      move(p.x(), p.y());
+   }
 
-    inline void resize(int w, int h)
-       { setGeometry(geometry().x(), geometry().y(), w, h); }
+   inline void resize(int w, int h) {
+      setGeometry(geometry().x(), geometry().y(), w, h);
+   }
 
-    inline void resize(const QSize &s)
-       { resize(s.width(), s.height()); }
+   inline void resize(const QSize &s) {
+      resize(s.width(), s.height());
+   }
 
-protected:
-    bool event(QEvent *e);
-    void paintEvent(QPaintEvent *);
-    void changeEvent(QEvent *);
-    void showEvent(QShowEvent *);
-    void resizeEvent(QResizeEvent *);
-    void moveEvent(QMoveEvent *);
-    void initStyleOption(QStyleOptionRubberBand *option) const;
+ protected:
+   bool event(QEvent *e);
+   void paintEvent(QPaintEvent *);
+   void changeEvent(QEvent *);
+   void showEvent(QShowEvent *);
+   void resizeEvent(QResizeEvent *);
+   void moveEvent(QMoveEvent *);
+   void initStyleOption(QStyleOptionRubberBand *option) const;
 
-private:
-    Q_DECLARE_PRIVATE(QRubberBand)
+ private:
+   Q_DECLARE_PRIVATE(QRubberBand)
 };
 
 void QRubberBand::setGeometry(int ax, int ay, int aw, int ah)
-{ 
+{
    setGeometry(QRect(ax, ay, aw, ah));
 }
 
 void QRubberBand::move(int ax, int ay)
-{ 
+{
    setGeometry(ax, ay, width(), height());
-}      
+}
 
 #endif // QT_NO_RUBBERBAND
 

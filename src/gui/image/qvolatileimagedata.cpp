@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -29,70 +29,70 @@
 QT_BEGIN_NAMESPACE
 
 QVolatileImageData::QVolatileImageData()
-    : pengine(0)
+   : pengine(0)
 {
 }
 
 QVolatileImageData::QVolatileImageData(int w, int h, QImage::Format format)
-    : pengine(0)
+   : pengine(0)
 {
-    image = QImage(w, h, format);
+   image = QImage(w, h, format);
 }
 
 QVolatileImageData::QVolatileImageData(const QImage &sourceImage)
-    : pengine(0)
+   : pengine(0)
 {
-    image = sourceImage;
+   image = sourceImage;
 }
 
 QVolatileImageData::QVolatileImageData(void *, void *)
-    : pengine(0)
+   : pengine(0)
 {
-    // Not supported.
+   // Not supported.
 }
 
 QVolatileImageData::QVolatileImageData(const QVolatileImageData &other)
-    : QSharedData()
+   : QSharedData()
 {
-    image = other.image;
-    // The detach is not mandatory here but we do it nonetheless in order to
-    // keep the behavior consistent with other platforms.
-    image.detach();
-    pengine = 0;
+   image = other.image;
+   // The detach is not mandatory here but we do it nonetheless in order to
+   // keep the behavior consistent with other platforms.
+   image.detach();
+   pengine = 0;
 }
 
 QVolatileImageData::~QVolatileImageData()
 {
-    delete pengine;
+   delete pengine;
 }
 
 void QVolatileImageData::beginDataAccess() const
 {
-    // nothing to do here
+   // nothing to do here
 }
 
 void QVolatileImageData::endDataAccess(bool readOnly) const
 {
-    Q_UNUSED(readOnly);
-    // nothing to do here
+   Q_UNUSED(readOnly);
+   // nothing to do here
 }
 
 bool QVolatileImageData::ensureFormat(QImage::Format format)
 {
-    if (image.format() != format) {
-        image = image.convertToFormat(format);
-    }
-    return true;
+   if (image.format() != format) {
+      image = image.convertToFormat(format);
+   }
+   return true;
 }
 
 void *QVolatileImageData::duplicateNativeImage() const
 {
-    return 0;
+   return 0;
 }
 
 void QVolatileImageData::ensureImage()
 {
-    // nothing to do here
+   // nothing to do here
 }
 
 QT_END_NAMESPACE

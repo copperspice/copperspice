@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,30 +36,30 @@ QT_BEGIN_NAMESPACE
 
 class QPrinterInfoPrivate
 {
-public:
-    QPrinterInfoPrivate(const QString& name = QString()) :
-        name(name), isDefault(false)
+ public:
+   QPrinterInfoPrivate(const QString &name = QString()) :
+      name(name), isDefault(false)
 
 #if (defined(Q_OS_UNIX) && !defined(Q_OS_MAC)) || defined(Q_WS_QPA)
 #if !defined(QT_NO_CUPS)
-        , cupsPrinterIndex(0), hasPaperSizes(false)
+      , cupsPrinterIndex(0), hasPaperSizes(false)
 #endif
 #endif
 
-    {}
-    ~QPrinterInfoPrivate()
-    {}
+   {}
+   ~QPrinterInfoPrivate() {
+   }
 
-    static QPrinterInfoPrivate shared_null;
+   static QPrinterInfoPrivate shared_null;
 
-    QString name;
-    bool isDefault;
+   QString name;
+   bool isDefault;
 
 #if (defined(Q_OS_UNIX) && !defined(Q_OS_MAC)) || defined(Q_WS_QPA)
 #if !defined(QT_NO_CUPS)
-    int cupsPrinterIndex;
-    mutable bool hasPaperSizes;
-    mutable QList<QPrinter::PaperSize> paperSizes;
+   int cupsPrinterIndex;
+   mutable bool hasPaperSizes;
+   mutable QList<QPrinter::PaperSize> paperSizes;
 #endif
 #endif
 };
@@ -67,12 +67,12 @@ public:
 
 class QPrinterInfoPrivateDeleter
 {
-public:
-    static inline void cleanup(QPrinterInfoPrivate *d)
-    {
-        if (d != &QPrinterInfoPrivate::shared_null)
-            delete d;
-    }
+ public:
+   static inline void cleanup(QPrinterInfoPrivate *d) {
+      if (d != &QPrinterInfoPrivate::shared_null) {
+         delete d;
+      }
+   }
 };
 
 QT_END_NAMESPACE

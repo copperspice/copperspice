@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,35 +33,36 @@ QT_BEGIN_NAMESPACE
 
 class QClipboardData
 {
-public:
-    QClipboardData();
+ public:
+   QClipboardData();
    ~QClipboardData();
 
-    void setSource(QMimeData* s)
-    {
-        if (s == src)
-            return;
-        delete src;
-        src = s;
-    }
-    QMimeData* source()
-        { return src; }
+   void setSource(QMimeData *s) {
+      if (s == src) {
+         return;
+      }
+      delete src;
+      src = s;
+   }
+   QMimeData *source() {
+      return src;
+   }
 
-private:
-    QMimeData* src;
+ private:
+   QMimeData *src;
 };
 
 QClipboardData::QClipboardData()
 {
-    src = 0;
+   src = 0;
 }
 
 QClipboardData::~QClipboardData()
 {
-    delete src;
+   delete src;
 }
 
-Q_GLOBAL_STATIC(QClipboardData,q_clipboardData);
+Q_GLOBAL_STATIC(QClipboardData, q_clipboardData);
 
 QPlatformClipboard::~QPlatformClipboard()
 {
@@ -70,26 +71,26 @@ QPlatformClipboard::~QPlatformClipboard()
 
 QMimeData *QPlatformClipboard::mimeData(QClipboard::Mode mode)
 {
-    //we know its clipboard
-    Q_UNUSED(mode);
-    return q_clipboardData()->source();
+   //we know its clipboard
+   Q_UNUSED(mode);
+   return q_clipboardData()->source();
 }
 
 void QPlatformClipboard::setMimeData(QMimeData *data, QClipboard::Mode mode)
 {
-    //we know its clipboard
-    Q_UNUSED(mode);
-    q_clipboardData()->setSource(data);
+   //we know its clipboard
+   Q_UNUSED(mode);
+   q_clipboardData()->setSource(data);
 }
 
 bool QPlatformClipboard::supportsMode(QClipboard::Mode mode) const
 {
-    return mode == QClipboard::Clipboard;
+   return mode == QClipboard::Clipboard;
 }
 
 void QPlatformClipboard::emitChanged(QClipboard::Mode mode)
 {
-    QApplication::clipboard()->emitChanged(mode);
+   QApplication::clipboard()->emitChanged(mode);
 }
 
 QT_END_NAMESPACE

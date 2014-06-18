@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -88,7 +88,7 @@ QT_BEGIN_NAMESPACE
   \value On  Display the pixmap when the widget is in an "on" state
 */
 
-static QBasicAtomicInt serialNumCounter = QBasicAtomicInt{Q_BASIC_ATOMIC_INITIALIZER(1)};
+static QBasicAtomicInt serialNumCounter = QBasicAtomicInt {Q_BASIC_ATOMIC_INITIALIZER(1)};
 
 static void qt_cleanup_icon_cache();
 typedef QCache<QString, QIcon> IconCache;
@@ -96,15 +96,15 @@ Q_GLOBAL_STATIC_WITH_INITIALIZER(IconCache, qtIconCache, qAddPostRoutine(qt_clea
 
 static void qt_cleanup_icon_cache()
 {
-    qtIconCache()->clear();
+   qtIconCache()->clear();
 }
 
 QIconPrivate::QIconPrivate()
-    : engine(0), ref(1),
-    serialNum(serialNumCounter.fetchAndAddRelaxed(1)),
-    detach_no(0),
-    engine_version(2),
-    v1RefCount(0)
+   : engine(0), ref(1),
+     serialNum(serialNumCounter.fetchAndAddRelaxed(1)),
+     detach_no(0),
+     engine_version(2),
+     v1RefCount(0)
 {
 }
 
@@ -113,7 +113,7 @@ QPixmapIconEngine::QPixmapIconEngine()
 }
 
 QPixmapIconEngine::QPixmapIconEngine(const QPixmapIconEngine &other)
-    : QIconEngineV2(other), pixmaps(other.pixmaps)
+   : QIconEngineV2(other), pixmaps(other.pixmaps)
 {
 }
 
@@ -123,311 +123,347 @@ QPixmapIconEngine::~QPixmapIconEngine()
 
 void QPixmapIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state)
 {
-    QSize pixmapSize = rect.size();
+   QSize pixmapSize = rect.size();
 #if defined(Q_OS_MAC)
-    pixmapSize *= qt_mac_get_scalefactor();
+   pixmapSize *= qt_mac_get_scalefactor();
 #endif
-    painter->drawPixmap(rect, pixmap(pixmapSize, mode, state));
+   painter->drawPixmap(rect, pixmap(pixmapSize, mode, state));
 }
 
-static inline int area(const QSize &s) { return s.width() * s.height(); }
+static inline int area(const QSize &s)
+{
+   return s.width() * s.height();
+}
 
 // returns the smallest of the two that is still larger than or equal to size.
 static QPixmapIconEngineEntry *bestSizeMatch( const QSize &size, QPixmapIconEngineEntry *pa, QPixmapIconEngineEntry *pb)
 {
-    int s = area(size);
-    if (pa->size == QSize() && pa->pixmap.isNull()) {
-        pa->pixmap = QPixmap(pa->fileName);
-        pa->size = pa->pixmap.size();
-    }
-    int a = area(pa->size);
-    if (pb->size == QSize() && pb->pixmap.isNull()) {
-        pb->pixmap = QPixmap(pb->fileName);
-        pb->size = pb->pixmap.size();
-    }
-    int b = area(pb->size);
-    int res = a;
-    if (qMin(a,b) >= s)
-        res = qMin(a,b);
-    else
-        res = qMax(a,b);
-    if (res == a)
-        return pa;
-    return pb;
+   int s = area(size);
+   if (pa->size == QSize() && pa->pixmap.isNull()) {
+      pa->pixmap = QPixmap(pa->fileName);
+      pa->size = pa->pixmap.size();
+   }
+   int a = area(pa->size);
+   if (pb->size == QSize() && pb->pixmap.isNull()) {
+      pb->pixmap = QPixmap(pb->fileName);
+      pb->size = pb->pixmap.size();
+   }
+   int b = area(pb->size);
+   int res = a;
+   if (qMin(a, b) >= s) {
+      res = qMin(a, b);
+   } else {
+      res = qMax(a, b);
+   }
+   if (res == a) {
+      return pa;
+   }
+   return pb;
 }
 
 QPixmapIconEngineEntry *QPixmapIconEngine::tryMatch(const QSize &size, QIcon::Mode mode, QIcon::State state)
 {
-    QPixmapIconEngineEntry *pe = 0;
-    for (int i = 0; i < pixmaps.count(); ++i)
-        if (pixmaps.at(i).mode == mode && pixmaps.at(i).state == state) {
-            if (pe)
-                pe = bestSizeMatch(size, &pixmaps[i], pe);
-            else
-                pe = &pixmaps[i];
-        }
-    return pe;
+   QPixmapIconEngineEntry *pe = 0;
+   for (int i = 0; i < pixmaps.count(); ++i)
+      if (pixmaps.at(i).mode == mode && pixmaps.at(i).state == state) {
+         if (pe) {
+            pe = bestSizeMatch(size, &pixmaps[i], pe);
+         } else {
+            pe = &pixmaps[i];
+         }
+      }
+   return pe;
 }
 
 
-QPixmapIconEngineEntry *QPixmapIconEngine::bestMatch(const QSize &size, QIcon::Mode mode, QIcon::State state, bool sizeOnly)
+QPixmapIconEngineEntry *QPixmapIconEngine::bestMatch(const QSize &size, QIcon::Mode mode, QIcon::State state,
+      bool sizeOnly)
 {
-    QPixmapIconEngineEntry *pe = tryMatch(size, mode, state);
-    while (!pe){
-        QIcon::State oppositeState = (state == QIcon::On) ? QIcon::Off : QIcon::On;
-        if (mode == QIcon::Disabled || mode == QIcon::Selected) {
-            QIcon::Mode oppositeMode = (mode == QIcon::Disabled) ? QIcon::Selected : QIcon::Disabled;
-            if ((pe = tryMatch(size, QIcon::Normal, state)))
-                break;
-            if ((pe = tryMatch(size, QIcon::Active, state)))
-                break;
-            if ((pe = tryMatch(size, mode, oppositeState)))
-                break;
-            if ((pe = tryMatch(size, QIcon::Normal, oppositeState)))
-                break;
-            if ((pe = tryMatch(size, QIcon::Active, oppositeState)))
-                break;
-            if ((pe = tryMatch(size, oppositeMode, state)))
-                break;
-            if ((pe = tryMatch(size, oppositeMode, oppositeState)))
-                break;
-        } else {
-            QIcon::Mode oppositeMode = (mode == QIcon::Normal) ? QIcon::Active : QIcon::Normal;
-            if ((pe = tryMatch(size, oppositeMode, state)))
-                break;
-            if ((pe = tryMatch(size, mode, oppositeState)))
-                break;
-            if ((pe = tryMatch(size, oppositeMode, oppositeState)))
-                break;
-            if ((pe = tryMatch(size, QIcon::Disabled, state)))
-                break;
-            if ((pe = tryMatch(size, QIcon::Selected, state)))
-                break;
-            if ((pe = tryMatch(size, QIcon::Disabled, oppositeState)))
-                break;
-            if ((pe = tryMatch(size, QIcon::Selected, oppositeState)))
-                break;
-        }
+   QPixmapIconEngineEntry *pe = tryMatch(size, mode, state);
+   while (!pe) {
+      QIcon::State oppositeState = (state == QIcon::On) ? QIcon::Off : QIcon::On;
+      if (mode == QIcon::Disabled || mode == QIcon::Selected) {
+         QIcon::Mode oppositeMode = (mode == QIcon::Disabled) ? QIcon::Selected : QIcon::Disabled;
+         if ((pe = tryMatch(size, QIcon::Normal, state))) {
+            break;
+         }
+         if ((pe = tryMatch(size, QIcon::Active, state))) {
+            break;
+         }
+         if ((pe = tryMatch(size, mode, oppositeState))) {
+            break;
+         }
+         if ((pe = tryMatch(size, QIcon::Normal, oppositeState))) {
+            break;
+         }
+         if ((pe = tryMatch(size, QIcon::Active, oppositeState))) {
+            break;
+         }
+         if ((pe = tryMatch(size, oppositeMode, state))) {
+            break;
+         }
+         if ((pe = tryMatch(size, oppositeMode, oppositeState))) {
+            break;
+         }
+      } else {
+         QIcon::Mode oppositeMode = (mode == QIcon::Normal) ? QIcon::Active : QIcon::Normal;
+         if ((pe = tryMatch(size, oppositeMode, state))) {
+            break;
+         }
+         if ((pe = tryMatch(size, mode, oppositeState))) {
+            break;
+         }
+         if ((pe = tryMatch(size, oppositeMode, oppositeState))) {
+            break;
+         }
+         if ((pe = tryMatch(size, QIcon::Disabled, state))) {
+            break;
+         }
+         if ((pe = tryMatch(size, QIcon::Selected, state))) {
+            break;
+         }
+         if ((pe = tryMatch(size, QIcon::Disabled, oppositeState))) {
+            break;
+         }
+         if ((pe = tryMatch(size, QIcon::Selected, oppositeState))) {
+            break;
+         }
+      }
 
-        if (!pe)
-            return pe;
-    }
+      if (!pe) {
+         return pe;
+      }
+   }
 
-    if (sizeOnly ? (pe->size.isNull() || !pe->size.isValid()) : pe->pixmap.isNull()) {
-        pe->pixmap = QPixmap(pe->fileName);
-        if (!pe->pixmap.isNull())
-            pe->size = pe->pixmap.size();
-    }
+   if (sizeOnly ? (pe->size.isNull() || !pe->size.isValid()) : pe->pixmap.isNull()) {
+      pe->pixmap = QPixmap(pe->fileName);
+      if (!pe->pixmap.isNull()) {
+         pe->size = pe->pixmap.size();
+      }
+   }
 
-    return pe;
+   return pe;
 }
 
 QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state)
 {
-    QPixmap pm;
-    QPixmapIconEngineEntry *pe = bestMatch(size, mode, state, false);
-    if (pe)
-        pm = pe->pixmap;
+   QPixmap pm;
+   QPixmapIconEngineEntry *pe = bestMatch(size, mode, state, false);
+   if (pe) {
+      pm = pe->pixmap;
+   }
 
-    if (pm.isNull()) {
-        int idx = pixmaps.count();
-        while (--idx >= 0) {
-            if (pe == &pixmaps[idx]) {
-                pixmaps.remove(idx);
-                break;
-            }
-        }
-        if (pixmaps.isEmpty())
+   if (pm.isNull()) {
+      int idx = pixmaps.count();
+      while (--idx >= 0) {
+         if (pe == &pixmaps[idx]) {
+            pixmaps.remove(idx);
+            break;
+         }
+      }
+      if (pixmaps.isEmpty()) {
+         return pm;
+      } else {
+         return pixmap(size, mode, state);
+      }
+   }
+
+   QSize actualSize = pm.size();
+   if (!actualSize.isNull() && (actualSize.width() > size.width() || actualSize.height() > size.height())) {
+      actualSize.scale(size, Qt::KeepAspectRatio);
+   }
+
+   QString key = QLatin1Literal("qt_")
+                 % HexString<quint64>(pm.cacheKey())
+                 % HexString<uint>(pe->mode)
+                 % HexString<quint64>(QApplication::palette().cacheKey())
+                 % HexString<uint>(actualSize.width())
+                 % HexString<uint>(actualSize.height());
+
+   if (mode == QIcon::Active) {
+      if (QPixmapCache::find(key % HexString<uint>(mode), pm)) {
+         return pm;   // horray
+      }
+      if (QPixmapCache::find(key % HexString<uint>(QIcon::Normal), pm)) {
+         QStyleOption opt(0);
+         opt.palette = QApplication::palette();
+         QPixmap active = QApplication::style()->generatedIconPixmap(QIcon::Active, pm, &opt);
+         if (pm.cacheKey() == active.cacheKey()) {
             return pm;
-        else
-            return pixmap(size, mode, state);
-    }
+         }
+      }
+   }
 
-    QSize actualSize = pm.size();
-    if (!actualSize.isNull() && (actualSize.width() > size.width() || actualSize.height() > size.height()))
-        actualSize.scale(size, Qt::KeepAspectRatio);
-
-    QString key = QLatin1Literal("qt_")
-                  % HexString<quint64>(pm.cacheKey())
-                  % HexString<uint>(pe->mode)
-                  % HexString<quint64>(QApplication::palette().cacheKey())
-                  % HexString<uint>(actualSize.width())
-                  % HexString<uint>(actualSize.height());
-
-    if (mode == QIcon::Active) {
-        if (QPixmapCache::find(key % HexString<uint>(mode), pm))
-            return pm; // horray
-        if (QPixmapCache::find(key % HexString<uint>(QIcon::Normal), pm)) {
-            QStyleOption opt(0);
-            opt.palette = QApplication::palette();
-            QPixmap active = QApplication::style()->generatedIconPixmap(QIcon::Active, pm, &opt);
-            if (pm.cacheKey() == active.cacheKey())
-                return pm;
-        }
-    }
-
-    if (!QPixmapCache::find(key % HexString<uint>(mode), pm)) {
-        if (pm.size() != actualSize)
-            pm = pm.scaled(actualSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        if (pe->mode != mode && mode != QIcon::Normal) {
-            QStyleOption opt(0);
-            opt.palette = QApplication::palette();
-            QPixmap generated = QApplication::style()->generatedIconPixmap(mode, pm, &opt);
-            if (!generated.isNull())
-                pm = generated;
-        }
-        QPixmapCache::insert(key % HexString<uint>(mode), pm);
-    }
-    return pm;
+   if (!QPixmapCache::find(key % HexString<uint>(mode), pm)) {
+      if (pm.size() != actualSize) {
+         pm = pm.scaled(actualSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+      }
+      if (pe->mode != mode && mode != QIcon::Normal) {
+         QStyleOption opt(0);
+         opt.palette = QApplication::palette();
+         QPixmap generated = QApplication::style()->generatedIconPixmap(mode, pm, &opt);
+         if (!generated.isNull()) {
+            pm = generated;
+         }
+      }
+      QPixmapCache::insert(key % HexString<uint>(mode), pm);
+   }
+   return pm;
 }
 
 QSize QPixmapIconEngine::actualSize(const QSize &size, QIcon::Mode mode, QIcon::State state)
 {
-    QSize actualSize;
-    if (QPixmapIconEngineEntry *pe = bestMatch(size, mode, state, true))
-        actualSize = pe->size;
+   QSize actualSize;
+   if (QPixmapIconEngineEntry *pe = bestMatch(size, mode, state, true)) {
+      actualSize = pe->size;
+   }
 
-    if (actualSize.isNull())
-        return actualSize;
+   if (actualSize.isNull()) {
+      return actualSize;
+   }
 
-    if (!actualSize.isNull() && (actualSize.width() > size.width() || actualSize.height() > size.height()))
-        actualSize.scale(size, Qt::KeepAspectRatio);
-    return actualSize;
+   if (!actualSize.isNull() && (actualSize.width() > size.width() || actualSize.height() > size.height())) {
+      actualSize.scale(size, Qt::KeepAspectRatio);
+   }
+   return actualSize;
 }
 
 void QPixmapIconEngine::addPixmap(const QPixmap &pixmap, QIcon::Mode mode, QIcon::State state)
 {
-    if (!pixmap.isNull()) {
-        QPixmapIconEngineEntry *pe = tryMatch(pixmap.size(), mode, state);
-        if(pe && pe->size == pixmap.size()) {
-            pe->pixmap = pixmap;
-            pe->fileName.clear();
-        } else {
-            pixmaps += QPixmapIconEngineEntry(pixmap, mode, state);
-        }
-    }
+   if (!pixmap.isNull()) {
+      QPixmapIconEngineEntry *pe = tryMatch(pixmap.size(), mode, state);
+      if (pe && pe->size == pixmap.size()) {
+         pe->pixmap = pixmap;
+         pe->fileName.clear();
+      } else {
+         pixmaps += QPixmapIconEngineEntry(pixmap, mode, state);
+      }
+   }
 }
 
 void QPixmapIconEngine::addFile(const QString &fileName, const QSize &_size, QIcon::Mode mode, QIcon::State state)
 {
-    if (!fileName.isEmpty()) {
-        QSize size = _size;
-        QPixmap pixmap;
+   if (!fileName.isEmpty()) {
+      QSize size = _size;
+      QPixmap pixmap;
 
-        QString abs = fileName;
-        if (fileName.at(0) != QLatin1Char(':'))
-            abs = QFileInfo(fileName).absoluteFilePath();
+      QString abs = fileName;
+      if (fileName.at(0) != QLatin1Char(':')) {
+         abs = QFileInfo(fileName).absoluteFilePath();
+      }
 
-        for (int i = 0; i < pixmaps.count(); ++i) {
-            if (pixmaps.at(i).mode == mode && pixmaps.at(i).state == state) {
-                QPixmapIconEngineEntry *pe = &pixmaps[i];
-                if(size == QSize()) {
-                    pixmap = QPixmap(abs);
-                    size = pixmap.size();
-                }
-                if (pe->size == QSize() && pe->pixmap.isNull()) {
-                    pe->pixmap = QPixmap(pe->fileName);
-                    pe->size = pe->pixmap.size();
-                }
-                if(pe->size == size) {
-                    pe->pixmap = pixmap;
-                    pe->fileName = abs;
-                    return;
-                }
+      for (int i = 0; i < pixmaps.count(); ++i) {
+         if (pixmaps.at(i).mode == mode && pixmaps.at(i).state == state) {
+            QPixmapIconEngineEntry *pe = &pixmaps[i];
+            if (size == QSize()) {
+               pixmap = QPixmap(abs);
+               size = pixmap.size();
             }
-        }
-        QPixmapIconEngineEntry e(abs, size, mode, state);
-        e.pixmap = pixmap;
-        pixmaps += e;
-    }
+            if (pe->size == QSize() && pe->pixmap.isNull()) {
+               pe->pixmap = QPixmap(pe->fileName);
+               pe->size = pe->pixmap.size();
+            }
+            if (pe->size == size) {
+               pe->pixmap = pixmap;
+               pe->fileName = abs;
+               return;
+            }
+         }
+      }
+      QPixmapIconEngineEntry e(abs, size, mode, state);
+      e.pixmap = pixmap;
+      pixmaps += e;
+   }
 }
 
 QString QPixmapIconEngine::key() const
 {
-    return QLatin1String("QPixmapIconEngine");
+   return QLatin1String("QPixmapIconEngine");
 }
 
 QIconEngineV2 *QPixmapIconEngine::clone() const
 {
-    return new QPixmapIconEngine(*this);
+   return new QPixmapIconEngine(*this);
 }
 
 bool QPixmapIconEngine::read(QDataStream &in)
 {
-    int num_entries;
-    QPixmap pm;
-    QString fileName;
-    QSize sz;
-    uint mode;
-    uint state;
+   int num_entries;
+   QPixmap pm;
+   QString fileName;
+   QSize sz;
+   uint mode;
+   uint state;
 
-    in >> num_entries;
-    for (int i=0; i < num_entries; ++i) {
-        if (in.atEnd()) {
-            pixmaps.clear();
-            return false;
-        }
-        in >> pm;
-        in >> fileName;
-        in >> sz;
-        in >> mode;
-        in >> state;
-        if (pm.isNull()) {
-            addFile(fileName, sz, QIcon::Mode(mode), QIcon::State(state));
-        } else {
-            QPixmapIconEngineEntry pe(fileName, sz, QIcon::Mode(mode), QIcon::State(state));
-            pe.pixmap = pm;
-            pixmaps += pe;
-        }
-    }
-    return true;
+   in >> num_entries;
+   for (int i = 0; i < num_entries; ++i) {
+      if (in.atEnd()) {
+         pixmaps.clear();
+         return false;
+      }
+      in >> pm;
+      in >> fileName;
+      in >> sz;
+      in >> mode;
+      in >> state;
+      if (pm.isNull()) {
+         addFile(fileName, sz, QIcon::Mode(mode), QIcon::State(state));
+      } else {
+         QPixmapIconEngineEntry pe(fileName, sz, QIcon::Mode(mode), QIcon::State(state));
+         pe.pixmap = pm;
+         pixmaps += pe;
+      }
+   }
+   return true;
 }
 
 bool QPixmapIconEngine::write(QDataStream &out) const
 {
-    int num_entries = pixmaps.size();
-    out << num_entries;
-    for (int i=0; i < num_entries; ++i) {
-        if (pixmaps.at(i).pixmap.isNull())
-            out << QPixmap(pixmaps.at(i).fileName);
-        else
-            out << pixmaps.at(i).pixmap;
-        out << pixmaps.at(i).fileName;
-        out << pixmaps.at(i).size;
-        out << (uint) pixmaps.at(i).mode;
-        out << (uint) pixmaps.at(i).state;
-    }
-    return true;
+   int num_entries = pixmaps.size();
+   out << num_entries;
+   for (int i = 0; i < num_entries; ++i) {
+      if (pixmaps.at(i).pixmap.isNull()) {
+         out << QPixmap(pixmaps.at(i).fileName);
+      } else {
+         out << pixmaps.at(i).pixmap;
+      }
+      out << pixmaps.at(i).fileName;
+      out << pixmaps.at(i).size;
+      out << (uint) pixmaps.at(i).mode;
+      out << (uint) pixmaps.at(i).state;
+   }
+   return true;
 }
 
 void QPixmapIconEngine::virtual_hook(int id, void *data)
 {
-    switch (id) {
-    case QIconEngineV2::AvailableSizesHook: {
-        QIconEngineV2::AvailableSizesArgument &arg =
-            *reinterpret_cast<QIconEngineV2::AvailableSizesArgument*>(data);
-        arg.sizes.clear();
-        for (int i = 0; i < pixmaps.size(); ++i) {
+   switch (id) {
+      case QIconEngineV2::AvailableSizesHook: {
+         QIconEngineV2::AvailableSizesArgument &arg =
+            *reinterpret_cast<QIconEngineV2::AvailableSizesArgument *>(data);
+         arg.sizes.clear();
+         for (int i = 0; i < pixmaps.size(); ++i) {
             QPixmapIconEngineEntry &pe = pixmaps[i];
             if (pe.size == QSize() && pe.pixmap.isNull()) {
-                pe.pixmap = QPixmap(pe.fileName);
-                pe.size = pe.pixmap.size();
+               pe.pixmap = QPixmap(pe.fileName);
+               pe.size = pe.pixmap.size();
             }
-            if (pe.mode == arg.mode && pe.state == arg.state && !pe.size.isEmpty())
-                arg.sizes.push_back(pe.size);
-        }
-        break;
-    }
-    default:
-        QIconEngineV2::virtual_hook(id, data);
-    }
+            if (pe.mode == arg.mode && pe.state == arg.state && !pe.size.isEmpty()) {
+               arg.sizes.push_back(pe.size);
+            }
+         }
+         break;
+      }
+      default:
+         QIconEngineV2::virtual_hook(id, data);
+   }
 }
 
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QIconEngineFactoryInterface_iid, QLatin1String("/iconengines"), Qt::CaseInsensitive))
+                          (QIconEngineFactoryInterface_iid, QLatin1String("/iconengines"), Qt::CaseInsensitive))
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loaderV2,
-    (QIconEngineFactoryInterfaceV2_iid, QLatin1String("/iconengines"), Qt::CaseInsensitive))
+                          (QIconEngineFactoryInterfaceV2_iid, QLatin1String("/iconengines"), Qt::CaseInsensitive))
 
 /*!
   \class QIcon
@@ -499,7 +535,7 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loaderV2,
   Constructs a null icon.
 */
 QIcon::QIcon()
-    : d(0)
+   : d(0)
 {
 }
 
@@ -507,19 +543,20 @@ QIcon::QIcon()
   Constructs an icon from a \a pixmap.
  */
 QIcon::QIcon(const QPixmap &pixmap)
-    :d(0)
+   : d(0)
 {
-    addPixmap(pixmap);
+   addPixmap(pixmap);
 }
 
 /*!
   Constructs a copy of \a other. This is very fast.
 */
 QIcon::QIcon(const QIcon &other)
-    :d(other.d)
+   : d(other.d)
 {
-    if (d)
-        d->ref.ref();
+   if (d) {
+      d->ref.ref();
+   }
 }
 
 /*!
@@ -541,9 +578,9 @@ QIcon::QIcon(const QIcon &other)
     complete list of the supported file formats.
 */
 QIcon::QIcon(const QString &fileName)
-    : d(0)
+   : d(0)
 {
-    addFile(fileName);
+   addFile(fileName);
 }
 
 
@@ -552,11 +589,11 @@ QIcon::QIcon(const QString &fileName)
     ownership of the engine.
 */
 QIcon::QIcon(QIconEngine *engine)
-    :d(new QIconPrivate)
+   : d(new QIconPrivate)
 {
-    d->engine_version = 1;
-    d->engine = engine;
-    d->v1RefCount = new QAtomicInt(1);
+   d->engine_version = 1;
+   d->engine = engine;
+   d->v1RefCount = new QAtomicInt(1);
 }
 
 /*!
@@ -564,10 +601,10 @@ QIcon::QIcon(QIconEngine *engine)
     ownership of the engine.
 */
 QIcon::QIcon(QIconEngineV2 *engine)
-    :d(new QIconPrivate)
+   : d(new QIconPrivate)
 {
-    d->engine_version = 2;
-    d->engine = engine;
+   d->engine_version = 2;
+   d->engine = engine;
 }
 
 /*!
@@ -575,8 +612,9 @@ QIcon::QIcon(QIconEngineV2 *engine)
 */
 QIcon::~QIcon()
 {
-    if (d && !d->ref.deref())
-        delete d;
+   if (d && !d->ref.deref()) {
+      delete d;
+   }
 }
 
 /*!
@@ -585,12 +623,14 @@ QIcon::~QIcon()
 */
 QIcon &QIcon::operator=(const QIcon &other)
 {
-    if (other.d)
-        other.d->ref.ref();
-    if (d && !d->ref.deref())
-        delete d;
-    d = other.d;
-    return *this;
+   if (other.d) {
+      other.d->ref.ref();
+   }
+   if (d && !d->ref.deref()) {
+      delete d;
+   }
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -606,7 +646,7 @@ QIcon &QIcon::operator=(const QIcon &other)
 */
 QIcon::operator QVariant() const
 {
-    return QVariant(QVariant::Icon, this);
+   return QVariant(QVariant::Icon, this);
 }
 
 /*! \obsolete
@@ -628,7 +668,7 @@ QIcon::operator QVariant() const
 
 int QIcon::serialNumber() const
 {
-    return d ? d->serialNum : 0;
+   return d ? d->serialNum : 0;
 }
 
 /*!
@@ -646,9 +686,10 @@ int QIcon::serialNumber() const
 */
 qint64 QIcon::cacheKey() const
 {
-    if (!d)
-        return 0;
-    return (((qint64) d->serialNum) << 32) | ((qint64) (d->detach_no));
+   if (!d) {
+      return 0;
+   }
+   return (((qint64) d->serialNum) << 32) | ((qint64) (d->detach_no));
 }
 
 /*!
@@ -660,9 +701,10 @@ qint64 QIcon::cacheKey() const
 */
 QPixmap QIcon::pixmap(const QSize &size, Mode mode, State state) const
 {
-    if (!d)
-        return QPixmap();
-    return d->engine->pixmap(size, mode, state);
+   if (!d) {
+      return QPixmap();
+   }
+   return d->engine->pixmap(size, mode, state);
 }
 
 /*!
@@ -691,9 +733,10 @@ QPixmap QIcon::pixmap(const QSize &size, Mode mode, State state) const
 */
 QSize QIcon::actualSize(const QSize &size, Mode mode, State state) const
 {
-    if (!d)
-        return QSize();
-    return d->engine->actualSize(size, mode, state);
+   if (!d) {
+      return QSize();
+   }
+   return d->engine->actualSize(size, mode, state);
 }
 
 
@@ -705,10 +748,12 @@ QSize QIcon::actualSize(const QSize &size, Mode mode, State state) const
 */
 void QIcon::paint(QPainter *painter, const QRect &rect, Qt::Alignment alignment, Mode mode, State state) const
 {
-    if (!d || !painter)
-        return;
-    QRect alignedRect = QStyle::alignedRect(painter->layoutDirection(), alignment, d->engine->actualSize(rect.size(), mode, state), rect);
-    d->engine->paint(painter, alignedRect, mode, state);
+   if (!d || !painter) {
+      return;
+   }
+   QRect alignedRect = QStyle::alignedRect(painter->layoutDirection(), alignment, d->engine->actualSize(rect.size(), mode,
+                                           state), rect);
+   d->engine->paint(painter, alignedRect, mode, state);
 }
 
 /*!
@@ -730,38 +775,39 @@ void QIcon::paint(QPainter *painter, const QRect &rect, Qt::Alignment alignment,
 */
 bool QIcon::isNull() const
 {
-    return !d;
+   return !d;
 }
 
 /*!\internal
  */
 bool QIcon::isDetached() const
 {
-    return !d || d->ref.load() == 1;
+   return !d || d->ref.load() == 1;
 }
 
 /*! \internal
  */
 void QIcon::detach()
 {
-    if (d) {
-        if (d->ref.load() != 1) {
-            QIconPrivate *x = new QIconPrivate;
-            if (d->engine_version > 1) {
-                QIconEngineV2 *engine = static_cast<QIconEngineV2 *>(d->engine);
-                x->engine = engine->clone();
-            } else {
-                x->engine = d->engine;
-                x->v1RefCount = d->v1RefCount;
-                x->v1RefCount->ref();
-            }
-            x->engine_version = d->engine_version;
-            if (!d->ref.deref())
-                delete d;
-            d = x;
-        }
-        ++d->detach_no;
-    }
+   if (d) {
+      if (d->ref.load() != 1) {
+         QIconPrivate *x = new QIconPrivate;
+         if (d->engine_version > 1) {
+            QIconEngineV2 *engine = static_cast<QIconEngineV2 *>(d->engine);
+            x->engine = engine->clone();
+         } else {
+            x->engine = d->engine;
+            x->v1RefCount = d->v1RefCount;
+            x->v1RefCount->ref();
+         }
+         x->engine_version = d->engine_version;
+         if (!d->ref.deref()) {
+            delete d;
+         }
+         d = x;
+      }
+      ++d->detach_no;
+   }
 }
 
 /*!
@@ -775,15 +821,16 @@ void QIcon::detach()
 */
 void QIcon::addPixmap(const QPixmap &pixmap, Mode mode, State state)
 {
-    if (pixmap.isNull())
-        return;
-    if (!d) {
-        d = new QIconPrivate;
-        d->engine = new QPixmapIconEngine;
-    } else {
-        detach();
-    }
-    d->engine->addPixmap(pixmap, mode, state);
+   if (pixmap.isNull()) {
+      return;
+   }
+   if (!d) {
+      d = new QIconPrivate;
+      d->engine = new QPixmapIconEngine;
+   } else {
+      detach();
+   }
+   d->engine->addPixmap(pixmap, mode, state);
 }
 
 
@@ -813,42 +860,44 @@ void QIcon::addPixmap(const QPixmap &pixmap, Mode mode, State state)
  */
 void QIcon::addFile(const QString &fileName, const QSize &size, Mode mode, State state)
 {
-    if (fileName.isEmpty())
-        return;
-    if (!d) {
+   if (fileName.isEmpty()) {
+      return;
+   }
+   if (!d) {
 #if !defined(QT_NO_SETTINGS)
-        QFileInfo info(fileName);
-        QString suffix = info.suffix();
-        if (!suffix.isEmpty()) {
-            // first try version 2 engines..
-            if (QIconEngineFactoryInterfaceV2 *factory = qobject_cast<QIconEngineFactoryInterfaceV2*>(loaderV2()->instance(suffix))) {
-                if (QIconEngine *engine = factory->create(fileName)) {
-                    d = new QIconPrivate;
-                    d->engine = engine;
-                }
+      QFileInfo info(fileName);
+      QString suffix = info.suffix();
+      if (!suffix.isEmpty()) {
+         // first try version 2 engines..
+         if (QIconEngineFactoryInterfaceV2 *factory = qobject_cast<QIconEngineFactoryInterfaceV2 *>(loaderV2()->instance(
+                  suffix))) {
+            if (QIconEngine *engine = factory->create(fileName)) {
+               d = new QIconPrivate;
+               d->engine = engine;
             }
-            // ..then fall back and try to load version 1 engines
-            if (!d) {
-                if (QIconEngineFactoryInterface *factory = qobject_cast<QIconEngineFactoryInterface*>(loader()->instance(suffix))) {
-                    if (QIconEngine *engine = factory->create(fileName)) {
-                        d = new QIconPrivate;
-                        d->engine = engine;
-                        d->engine_version = 1;
-                        d->v1RefCount = new QAtomicInt(1);
-                    }
-                }
+         }
+         // ..then fall back and try to load version 1 engines
+         if (!d) {
+            if (QIconEngineFactoryInterface *factory = qobject_cast<QIconEngineFactoryInterface *>(loader()->instance(suffix))) {
+               if (QIconEngine *engine = factory->create(fileName)) {
+                  d = new QIconPrivate;
+                  d->engine = engine;
+                  d->engine_version = 1;
+                  d->v1RefCount = new QAtomicInt(1);
+               }
             }
-        }
+         }
+      }
 #endif
-        // ...then fall back to the default engine
-        if (!d) {
-            d = new QIconPrivate;
-            d->engine = new QPixmapIconEngine;
-        }
-    } else {
-        detach();
-    }
-    d->engine->addFile(fileName, size, mode, state);
+      // ...then fall back to the default engine
+      if (!d) {
+         d = new QIconPrivate;
+         d->engine = new QPixmapIconEngine;
+      }
+   } else {
+      detach();
+   }
+   d->engine->addFile(fileName, size, mode, state);
 }
 
 /*!
@@ -859,10 +908,11 @@ void QIcon::addFile(const QString &fileName, const QSize &size, Mode mode, State
 */
 QList<QSize> QIcon::availableSizes(Mode mode, State state) const
 {
-    if (!d || !d->engine || d->engine_version < 2)
-        return QList<QSize>();
-    QIconEngineV2 *engine = static_cast<QIconEngineV2*>(d->engine);
-    return engine->availableSizes(mode, state);
+   if (!d || !d->engine || d->engine_version < 2) {
+      return QList<QSize>();
+   }
+   QIconEngineV2 *engine = static_cast<QIconEngineV2 *>(d->engine);
+   return engine->availableSizes(mode, state);
 }
 
 /*!
@@ -878,10 +928,11 @@ QList<QSize> QIcon::availableSizes(Mode mode, State state) const
 */
 QString QIcon::name() const
 {
-    if (!d || !d->engine || d->engine_version < 2)
-        return QString();
-    QIconEngineV2 *engine = static_cast<QIconEngineV2*>(d->engine);
-    return engine->iconName();
+   if (!d || !d->engine || d->engine_version < 2) {
+      return QString();
+   }
+   QIconEngineV2 *engine = static_cast<QIconEngineV2 *>(d->engine);
+   return engine->iconName();
 }
 
 /*!
@@ -892,7 +943,7 @@ QString QIcon::name() const
 */
 void QIcon::setThemeSearchPaths(const QStringList &paths)
 {
-    QIconLoader::instance()->setThemeSearchPath(paths);
+   QIconLoader::instance()->setThemeSearchPath(paths);
 }
 
 /*!
@@ -913,7 +964,7 @@ void QIcon::setThemeSearchPaths(const QStringList &paths)
 */
 QStringList QIcon::themeSearchPaths()
 {
-    return QIconLoader::instance()->themeSearchPaths();
+   return QIconLoader::instance()->themeSearchPaths();
 }
 
 /*!
@@ -929,7 +980,7 @@ QStringList QIcon::themeSearchPaths()
 */
 void QIcon::setThemeName(const QString &name)
 {
-    QIconLoader::instance()->setThemeName(name);
+   QIconLoader::instance()->setThemeName(name);
 }
 
 /*!
@@ -945,7 +996,7 @@ void QIcon::setThemeName(const QString &name)
 */
 QString QIcon::themeName()
 {
-    return QIconLoader::instance()->themeName();
+   return QIconLoader::instance()->themeName();
 }
 
 /*!
@@ -981,22 +1032,23 @@ QString QIcon::themeName()
 */
 QIcon QIcon::fromTheme(const QString &name, const QIcon &fallback)
 {
-    QIcon icon;
+   QIcon icon;
 
-    if (qtIconCache()->contains(name)) {
-        icon = *qtIconCache()->object(name);
-    } else {
-        QIcon *cachedIcon  = new QIcon(new QIconLoaderEngine(name));
-        qtIconCache()->insert(name, cachedIcon);
-        icon = *cachedIcon;
-    }
+   if (qtIconCache()->contains(name)) {
+      icon = *qtIconCache()->object(name);
+   } else {
+      QIcon *cachedIcon  = new QIcon(new QIconLoaderEngine(name));
+      qtIconCache()->insert(name, cachedIcon);
+      icon = *cachedIcon;
+   }
 
-    // Note the qapp check is to allow lazy loading of static icons
-    // Supporting fallbacks will not work for this case.
-    if (qApp && icon.availableSizes().isEmpty())
-        return fallback;
+   // Note the qapp check is to allow lazy loading of static icons
+   // Supporting fallbacks will not work for this case.
+   if (qApp && icon.availableSizes().isEmpty()) {
+      return fallback;
+   }
 
-    return icon;
+   return icon;
 }
 
 /*!
@@ -1009,9 +1061,9 @@ QIcon QIcon::fromTheme(const QString &name, const QIcon &fallback)
 */
 bool QIcon::hasThemeIcon(const QString &name)
 {
-    QIcon icon = fromTheme(name);
+   QIcon icon = fromTheme(name);
 
-    return !icon.isNull();
+   return !icon.isNull();
 }
 
 
@@ -1032,38 +1084,38 @@ bool QIcon::hasThemeIcon(const QString &name)
 
 QDataStream &operator<<(QDataStream &s, const QIcon &icon)
 {
-    if (s.version() >= QDataStream::Qt_4_3) {
-        if (icon.isNull()) {
-            s << QString();
-        } else {
-            if (icon.d->engine_version > 1) {
-                QIconEngineV2 *engine = static_cast<QIconEngineV2 *>(icon.d->engine);
-                s << engine->key();
-                engine->write(s);
-            } else {
-                // not really supported
-                qWarning("QIcon: Cannot stream QIconEngine. Use QIconEngineV2 instead.");
-            }
-        }
-    } else if (s.version() == QDataStream::Qt_4_2) {
-        if (icon.isNull()) {
-            s << 0;
-        } else {
-            QPixmapIconEngine *engine = static_cast<QPixmapIconEngine *>(icon.d->engine);
-            int num_entries = engine->pixmaps.size();
-            s << num_entries;
-            for (int i=0; i < num_entries; ++i) {
-                s << engine->pixmaps.at(i).pixmap;
-                s << engine->pixmaps.at(i).fileName;
-                s << engine->pixmaps.at(i).size;
-                s << (uint) engine->pixmaps.at(i).mode;
-                s << (uint) engine->pixmaps.at(i).state;
-            }
-        }
-    } else {
-        s << QPixmap(icon.pixmap(22,22));
-    }
-    return s;
+   if (s.version() >= QDataStream::Qt_4_3) {
+      if (icon.isNull()) {
+         s << QString();
+      } else {
+         if (icon.d->engine_version > 1) {
+            QIconEngineV2 *engine = static_cast<QIconEngineV2 *>(icon.d->engine);
+            s << engine->key();
+            engine->write(s);
+         } else {
+            // not really supported
+            qWarning("QIcon: Cannot stream QIconEngine. Use QIconEngineV2 instead.");
+         }
+      }
+   } else if (s.version() == QDataStream::Qt_4_2) {
+      if (icon.isNull()) {
+         s << 0;
+      } else {
+         QPixmapIconEngine *engine = static_cast<QPixmapIconEngine *>(icon.d->engine);
+         int num_entries = engine->pixmaps.size();
+         s << num_entries;
+         for (int i = 0; i < num_entries; ++i) {
+            s << engine->pixmaps.at(i).pixmap;
+            s << engine->pixmaps.at(i).fileName;
+            s << engine->pixmaps.at(i).size;
+            s << (uint) engine->pixmaps.at(i).mode;
+            s << (uint) engine->pixmaps.at(i).state;
+         }
+      }
+   } else {
+      s << QPixmap(icon.pixmap(22, 22));
+   }
+   return s;
 }
 
 /*!
@@ -1077,56 +1129,58 @@ QDataStream &operator<<(QDataStream &s, const QIcon &icon)
 
 QDataStream &operator>>(QDataStream &s, QIcon &icon)
 {
-    if (s.version() >= QDataStream::Qt_4_3) {
-        icon = QIcon();
-        QString key;
-        s >> key;
-        if (key == QLatin1String("QPixmapIconEngine")) {
-            icon.d = new QIconPrivate;
-            QIconEngineV2 *engine = new QPixmapIconEngine;
-            icon.d->engine = engine;
-            engine->read(s);
-        } else if (key == QLatin1String("QIconLoaderEngine")) {
-            icon.d = new QIconPrivate;
-            QIconEngineV2 *engine = new QIconLoaderEngine();
-            icon.d->engine = engine;
-            engine->read(s);
+   if (s.version() >= QDataStream::Qt_4_3) {
+      icon = QIcon();
+      QString key;
+      s >> key;
+      if (key == QLatin1String("QPixmapIconEngine")) {
+         icon.d = new QIconPrivate;
+         QIconEngineV2 *engine = new QPixmapIconEngine;
+         icon.d->engine = engine;
+         engine->read(s);
+      } else if (key == QLatin1String("QIconLoaderEngine")) {
+         icon.d = new QIconPrivate;
+         QIconEngineV2 *engine = new QIconLoaderEngine();
+         icon.d->engine = engine;
+         engine->read(s);
 #if ! defined(QT_NO_SETTINGS)
-        } else if (QIconEngineFactoryInterfaceV2 *factory = qobject_cast<QIconEngineFactoryInterfaceV2*>(loaderV2()->instance(key))) {
-            if (QIconEngineV2 *engine= factory->create()) {
-                icon.d = new QIconPrivate;
-                icon.d->engine = engine;
-                engine->read(s);
-            }
+      } else if (QIconEngineFactoryInterfaceV2 *factory = qobject_cast<QIconEngineFactoryInterfaceV2 *>(loaderV2()->instance(
+                    key))) {
+         if (QIconEngineV2 *engine = factory->create()) {
+            icon.d = new QIconPrivate;
+            icon.d->engine = engine;
+            engine->read(s);
+         }
 #endif
-        }
-    } else if (s.version() == QDataStream::Qt_4_2) {
-        icon = QIcon();
-        int num_entries;
-        QPixmap pm;
-        QString fileName;
-        QSize sz;
-        uint mode;
-        uint state;
+      }
+   } else if (s.version() == QDataStream::Qt_4_2) {
+      icon = QIcon();
+      int num_entries;
+      QPixmap pm;
+      QString fileName;
+      QSize sz;
+      uint mode;
+      uint state;
 
-        s >> num_entries;
-        for (int i=0; i < num_entries; ++i) {
-            s >> pm;
-            s >> fileName;
-            s >> sz;
-            s >> mode;
-            s >> state;
-            if (pm.isNull())
-                icon.addFile(fileName, sz, QIcon::Mode(mode), QIcon::State(state));
-            else
-                icon.addPixmap(pm, QIcon::Mode(mode), QIcon::State(state));
-        }
-    } else {
-        QPixmap pm;
-        s >> pm;
-        icon.addPixmap(pm);
-    }
-    return s;
+      s >> num_entries;
+      for (int i = 0; i < num_entries; ++i) {
+         s >> pm;
+         s >> fileName;
+         s >> sz;
+         s >> mode;
+         s >> state;
+         if (pm.isNull()) {
+            icon.addFile(fileName, sz, QIcon::Mode(mode), QIcon::State(state));
+         } else {
+            icon.addPixmap(pm, QIcon::Mode(mode), QIcon::State(state));
+         }
+      }
+   } else {
+      QPixmap pm;
+      s >> pm;
+      icon.addPixmap(pm);
+   }
+   return s;
 }
 
 #endif //QT_NO_DATASTREAM

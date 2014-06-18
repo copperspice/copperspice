@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -261,7 +261,7 @@
 
 /*!
     \fn void QSslSocket::sslErrors(const QList<QSslError> &errors);
-    
+
     QSslSocket emits this signal after the SSL handshake to indicate that one
     or more errors have occurred while establishing the identity of the
     peer. The errors are usually an indication that QSslSocket is unable to
@@ -275,7 +275,7 @@
 
     \a errors contains one or more errors that prevent QSslSocket from
     verifying the identity of the peer.
-    
+
     Note: You cannot use Qt::QueuedConnection when connecting to this signal,
     or calling QSslSocket::ignoreSslErrors() will have no effect.
 
@@ -302,21 +302,22 @@ QT_BEGIN_NAMESPACE
 */
 static int qt_timeout_value(int msecs, int elapsed)
 {
-    if (msecs == -1)
-        return -1;
+   if (msecs == -1) {
+      return -1;
+   }
 
-    int timeout = msecs - elapsed;
-    return timeout < 0 ? 0 : timeout;
+   int timeout = msecs - elapsed;
+   return timeout < 0 ? 0 : timeout;
 }
 
 class QSslSocketGlobalData
 {
-public:
-    QSslSocketGlobalData() : config(new QSslConfigurationPrivate) {}
+ public:
+   QSslSocketGlobalData() : config(new QSslConfigurationPrivate) {}
 
-    QMutex mutex;
-    QList<QSslCipher> supportedCiphers;
-    QExplicitlySharedDataPointer<QSslConfigurationPrivate> config;
+   QMutex mutex;
+   QList<QSslCipher> supportedCiphers;
+   QExplicitlySharedDataPointer<QSslConfigurationPrivate> config;
 };
 Q_GLOBAL_STATIC(QSslSocketGlobalData, globalData)
 
@@ -326,14 +327,14 @@ Q_GLOBAL_STATIC(QSslSocketGlobalData, globalData)
     set to the one returned by the static method defaultCiphers().
 */
 QSslSocket::QSslSocket(QObject *parent)
-    : QTcpSocket(*new QSslSocketBackendPrivate, parent)
+   : QTcpSocket(*new QSslSocketBackendPrivate, parent)
 {
-    Q_D(QSslSocket);
+   Q_D(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::QSslSocket(" << parent << "), this =" << (void *)this;
+   qDebug() << "QSslSocket::QSslSocket(" << parent << "), this =" << (void *)this;
 #endif
-    d->q_ptr = this;
-    d->init();
+   d->q_ptr = this;
+   d->init();
 }
 
 /*!
@@ -341,12 +342,12 @@ QSslSocket::QSslSocket(QObject *parent)
 */
 QSslSocket::~QSslSocket()
 {
-    Q_D(QSslSocket);
+   Q_D(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::~QSslSocket(), this =" << (void *)this;
+   qDebug() << "QSslSocket::~QSslSocket(), this =" << (void *)this;
 #endif
-    delete d->plainSocket;
-    d->plainSocket = 0;
+   delete d->plainSocket;
+   d->plainSocket = 0;
 }
 
 /*!
@@ -391,19 +392,19 @@ QSslSocket::~QSslSocket()
 */
 void QSslSocket::connectToHostEncrypted(const QString &hostName, quint16 port, OpenMode mode)
 {
-    Q_D(QSslSocket);
-    if (d->state == ConnectedState || d->state == ConnectingState) {
-        qWarning("QSslSocket::connectToHostEncrypted() called when already connecting/connected");
-        return;
-    }
+   Q_D(QSslSocket);
+   if (d->state == ConnectedState || d->state == ConnectingState) {
+      qWarning("QSslSocket::connectToHostEncrypted() called when already connecting/connected");
+      return;
+   }
 
-    d->init();
-    d->autoStartHandshake = true;
-    d->initialized = true;
+   d->init();
+   d->autoStartHandshake = true;
+   d->initialized = true;
 
-    // Note: When connecting to localhost, some platforms (e.g., HP-UX and some BSDs)
-    // establish the connection immediately (i.e., first attempt).
-    connectToHost(hostName, port, mode);
+   // Note: When connecting to localhost, some platforms (e.g., HP-UX and some BSDs)
+   // establish the connection immediately (i.e., first attempt).
+   connectToHost(hostName, port, mode);
 }
 
 /*!
@@ -411,7 +412,7 @@ void QSslSocket::connectToHostEncrypted(const QString &hostName, quint16 port, O
     \overload
 
     In addition to the original behaviour of connectToHostEncrypted,
-    this overloaded method enables the usage of a different hostname 
+    this overloaded method enables the usage of a different hostname
     (\a sslPeerName) for the certificate validation instead of
     the one used for the TCP connection (\a hostName).
 
@@ -420,20 +421,20 @@ void QSslSocket::connectToHostEncrypted(const QString &hostName, quint16 port, O
 void QSslSocket::connectToHostEncrypted(const QString &hostName, quint16 port,
                                         const QString &sslPeerName, OpenMode mode)
 {
-    Q_D(QSslSocket);
-    if (d->state == ConnectedState || d->state == ConnectingState) {
-        qWarning("QSslSocket::connectToHostEncrypted() called when already connecting/connected");
-        return;
-    }
+   Q_D(QSslSocket);
+   if (d->state == ConnectedState || d->state == ConnectingState) {
+      qWarning("QSslSocket::connectToHostEncrypted() called when already connecting/connected");
+      return;
+   }
 
-    d->init();
-    d->autoStartHandshake = true;
-    d->initialized = true;
-    d->verificationPeerName = sslPeerName;
+   d->init();
+   d->autoStartHandshake = true;
+   d->initialized = true;
+   d->verificationPeerName = sslPeerName;
 
-    // Note: When connecting to localhost, some platforms (e.g., HP-UX and some BSDs)
-    // establish the connection immediately (i.e., first attempt).
-    connectToHost(hostName, port, mode);
+   // Note: When connecting to localhost, some platforms (e.g., HP-UX and some BSDs)
+   // establish the connection immediately (i.e., first attempt).
+   connectToHost(hostName, port, mode);
 }
 
 /*!
@@ -450,24 +451,25 @@ void QSslSocket::connectToHostEncrypted(const QString &hostName, quint16 port,
 */
 bool QSslSocket::setSocketDescriptor(int socketDescriptor, SocketState state, OpenMode openMode)
 {
-    Q_D(QSslSocket);
+   Q_D(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::setSocketDescriptor(" << socketDescriptor << ','
-             << state << ',' << openMode << ')';
+   qDebug() << "QSslSocket::setSocketDescriptor(" << socketDescriptor << ','
+            << state << ',' << openMode << ')';
 #endif
-    if (!d->plainSocket)
-        d->createPlainSocket(openMode);
-    bool retVal = d->plainSocket->setSocketDescriptor(socketDescriptor, state, openMode);
-    d->cachedSocketDescriptor = d->plainSocket->socketDescriptor();
-    setSocketError(d->plainSocket->error());
-    setSocketState(state);
-    setOpenMode(openMode);
-    setLocalPort(d->plainSocket->localPort());
-    setLocalAddress(d->plainSocket->localAddress());
-    setPeerPort(d->plainSocket->peerPort());
-    setPeerAddress(d->plainSocket->peerAddress());
-    setPeerName(d->plainSocket->peerName());
-    return retVal;
+   if (!d->plainSocket) {
+      d->createPlainSocket(openMode);
+   }
+   bool retVal = d->plainSocket->setSocketDescriptor(socketDescriptor, state, openMode);
+   d->cachedSocketDescriptor = d->plainSocket->socketDescriptor();
+   setSocketError(d->plainSocket->error());
+   setSocketState(state);
+   setOpenMode(openMode);
+   setLocalPort(d->plainSocket->localPort());
+   setLocalAddress(d->plainSocket->localAddress());
+   setPeerPort(d->plainSocket->peerPort());
+   setPeerAddress(d->plainSocket->peerAddress());
+   setPeerName(d->plainSocket->peerName());
+   return retVal;
 }
 
 /*!
@@ -478,9 +480,10 @@ bool QSslSocket::setSocketDescriptor(int socketDescriptor, SocketState state, Op
 */
 void QSslSocket::setSocketOption(QAbstractSocket::SocketOption option, const QVariant &value)
 {
-    Q_D(QSslSocket);
-    if (d->plainSocket)
-        d->plainSocket->setSocketOption(option, value);
+   Q_D(QSslSocket);
+   if (d->plainSocket) {
+      d->plainSocket->setSocketOption(option, value);
+   }
 }
 
 /*!
@@ -491,11 +494,12 @@ void QSslSocket::setSocketOption(QAbstractSocket::SocketOption option, const QVa
 */
 QVariant QSslSocket::socketOption(QAbstractSocket::SocketOption option)
 {
-    Q_D(QSslSocket);
-    if (d->plainSocket)
-        return d->plainSocket->socketOption(option);
-    else
-        return QVariant();
+   Q_D(QSslSocket);
+   if (d->plainSocket) {
+      return d->plainSocket->socketOption(option);
+   } else {
+      return QVariant();
+   }
 }
 
 /*!
@@ -510,8 +514,8 @@ QVariant QSslSocket::socketOption(QAbstractSocket::SocketOption option)
 */
 QSslSocket::SslMode QSslSocket::mode() const
 {
-    Q_D(const QSslSocket);
-    return d->mode;
+   Q_D(const QSslSocket);
+   return d->mode;
 }
 
 /*!
@@ -531,8 +535,8 @@ QSslSocket::SslMode QSslSocket::mode() const
 */
 bool QSslSocket::isEncrypted() const
 {
-    Q_D(const QSslSocket);
-    return d->connectionEncrypted;
+   Q_D(const QSslSocket);
+   return d->connectionEncrypted;
 }
 
 /*!
@@ -542,8 +546,8 @@ bool QSslSocket::isEncrypted() const
 */
 QSsl::SslProtocol QSslSocket::protocol() const
 {
-    Q_D(const QSslSocket);
-    return d->configuration.protocol;
+   Q_D(const QSslSocket);
+   return d->configuration.protocol;
 }
 
 /*!
@@ -553,8 +557,8 @@ QSsl::SslProtocol QSslSocket::protocol() const
 */
 void QSslSocket::setProtocol(QSsl::SslProtocol protocol)
 {
-    Q_D(QSslSocket);
-    d->configuration.protocol = protocol;
+   Q_D(QSslSocket);
+   d->configuration.protocol = protocol;
 }
 
 /*!
@@ -573,8 +577,8 @@ void QSslSocket::setProtocol(QSsl::SslProtocol protocol)
 */
 QSslSocket::PeerVerifyMode QSslSocket::peerVerifyMode() const
 {
-    Q_D(const QSslSocket);
-    return d->configuration.peerVerifyMode;
+   Q_D(const QSslSocket);
+   return d->configuration.peerVerifyMode;
 }
 
 /*!
@@ -596,8 +600,8 @@ QSslSocket::PeerVerifyMode QSslSocket::peerVerifyMode() const
 */
 void QSslSocket::setPeerVerifyMode(QSslSocket::PeerVerifyMode mode)
 {
-    Q_D(QSslSocket);
-    d->configuration.peerVerifyMode = mode;
+   Q_D(QSslSocket);
+   d->configuration.peerVerifyMode = mode;
 }
 
 /*!
@@ -615,8 +619,8 @@ void QSslSocket::setPeerVerifyMode(QSslSocket::PeerVerifyMode mode)
 */
 int QSslSocket::peerVerifyDepth() const
 {
-    Q_D(const QSslSocket);
-    return d->configuration.peerVerifyDepth;
+   Q_D(const QSslSocket);
+   return d->configuration.peerVerifyDepth;
 }
 
 /*!
@@ -634,12 +638,12 @@ int QSslSocket::peerVerifyDepth() const
 */
 void QSslSocket::setPeerVerifyDepth(int depth)
 {
-    Q_D(QSslSocket);
-    if (depth < 0) {
-        qWarning("QSslSocket::setPeerVerifyDepth: cannot set negative depth of %d", depth);
-        return;
-    }
-    d->configuration.peerVerifyDepth = depth;
+   Q_D(QSslSocket);
+   if (depth < 0) {
+      qWarning("QSslSocket::setPeerVerifyDepth: cannot set negative depth of %d", depth);
+      return;
+   }
+   d->configuration.peerVerifyDepth = depth;
 }
 
 /*!
@@ -652,8 +656,8 @@ void QSslSocket::setPeerVerifyDepth(int depth)
 */
 QString QSslSocket::peerVerifyName() const
 {
-    Q_D(const QSslSocket);
-    return d->verificationPeerName;
+   Q_D(const QSslSocket);
+   return d->verificationPeerName;
 }
 
 /*!
@@ -666,8 +670,8 @@ QString QSslSocket::peerVerifyName() const
 */
 void QSslSocket::setPeerVerifyName(const QString &hostName)
 {
-    Q_D(QSslSocket);
-    d->verificationPeerName = hostName;
+   Q_D(QSslSocket);
+   d->verificationPeerName = hostName;
 }
 
 /*!
@@ -678,10 +682,11 @@ void QSslSocket::setPeerVerifyName(const QString &hostName)
 */
 qint64 QSslSocket::bytesAvailable() const
 {
-    Q_D(const QSslSocket);
-    if (d->mode == UnencryptedMode)
-        return QIODevice::bytesAvailable() + (d->plainSocket ? d->plainSocket->bytesAvailable() : 0);
-    return QIODevice::bytesAvailable() + d->readBuffer.size();
+   Q_D(const QSslSocket);
+   if (d->mode == UnencryptedMode) {
+      return QIODevice::bytesAvailable() + (d->plainSocket ? d->plainSocket->bytesAvailable() : 0);
+   }
+   return QIODevice::bytesAvailable() + d->readBuffer.size();
 }
 
 /*!
@@ -692,10 +697,11 @@ qint64 QSslSocket::bytesAvailable() const
 */
 qint64 QSslSocket::bytesToWrite() const
 {
-    Q_D(const QSslSocket);
-    if (d->mode == UnencryptedMode)
-        return d->plainSocket ? d->plainSocket->bytesToWrite() : 0;
-    return d->writeBuffer.size();
+   Q_D(const QSslSocket);
+   if (d->mode == UnencryptedMode) {
+      return d->plainSocket ? d->plainSocket->bytesToWrite() : 0;
+   }
+   return d->writeBuffer.size();
 }
 
 /*!
@@ -707,10 +713,11 @@ qint64 QSslSocket::bytesToWrite() const
 */
 qint64 QSslSocket::encryptedBytesAvailable() const
 {
-    Q_D(const QSslSocket);
-    if (d->mode == UnencryptedMode)
-        return 0;
-    return d->plainSocket->bytesAvailable();
+   Q_D(const QSslSocket);
+   if (d->mode == UnencryptedMode) {
+      return 0;
+   }
+   return d->plainSocket->bytesAvailable();
 }
 
 /*!
@@ -721,10 +728,11 @@ qint64 QSslSocket::encryptedBytesAvailable() const
 */
 qint64 QSslSocket::encryptedBytesToWrite() const
 {
-    Q_D(const QSslSocket);
-    if (d->mode == UnencryptedMode)
-        return 0;
-    return d->plainSocket->bytesToWrite();
+   Q_D(const QSslSocket);
+   if (d->mode == UnencryptedMode) {
+      return 0;
+   }
+   return d->plainSocket->bytesToWrite();
 }
 
 /*!
@@ -735,10 +743,11 @@ qint64 QSslSocket::encryptedBytesToWrite() const
 */
 bool QSslSocket::canReadLine() const
 {
-    Q_D(const QSslSocket);
-    if (d->mode == UnencryptedMode)
-        return QIODevice::canReadLine() || (d->plainSocket && d->plainSocket->canReadLine());
-    return QIODevice::canReadLine() || (!d->readBuffer.isEmpty() && d->readBuffer.canReadLine());
+   Q_D(const QSslSocket);
+   if (d->mode == UnencryptedMode) {
+      return QIODevice::canReadLine() || (d->plainSocket && d->plainSocket->canReadLine());
+   }
+   return QIODevice::canReadLine() || (!d->readBuffer.isEmpty() && d->readBuffer.canReadLine());
 }
 
 /*!
@@ -747,20 +756,21 @@ bool QSslSocket::canReadLine() const
 void QSslSocket::close()
 {
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::close()";
+   qDebug() << "QSslSocket::close()";
 #endif
-    Q_D(QSslSocket);
-    if (d->plainSocket)
-        d->plainSocket->close();
-    QTcpSocket::close();
+   Q_D(QSslSocket);
+   if (d->plainSocket) {
+      d->plainSocket->close();
+   }
+   QTcpSocket::close();
 
-    // must be cleared, reading/writing not possible on closed socket:
-    d->readBuffer.clear();
-    d->writeBuffer.clear();
-    // for QTcpSocket this is already done because it uses the readBuffer/writeBuffer
-    // if the QIODevice it is based on
-    // ### FIXME QSslSocket should probably do similar instead of having
-    // its own readBuffer/writeBuffer
+   // must be cleared, reading/writing not possible on closed socket:
+   d->readBuffer.clear();
+   d->writeBuffer.clear();
+   // for QTcpSocket this is already done because it uses the readBuffer/writeBuffer
+   // if the QIODevice it is based on
+   // ### FIXME QSslSocket should probably do similar instead of having
+   // its own readBuffer/writeBuffer
 }
 
 /*!
@@ -768,10 +778,11 @@ void QSslSocket::close()
 */
 bool QSslSocket::atEnd() const
 {
-    Q_D(const QSslSocket);
-    if (d->mode == UnencryptedMode)
-        return QIODevice::atEnd() && (!d->plainSocket || d->plainSocket->atEnd());
-    return QIODevice::atEnd() && d->readBuffer.isEmpty();
+   Q_D(const QSslSocket);
+   if (d->mode == UnencryptedMode) {
+      return QIODevice::atEnd() && (!d->plainSocket || d->plainSocket->atEnd());
+   }
+   return QIODevice::atEnd() && d->readBuffer.isEmpty();
 }
 
 /*!
@@ -791,29 +802,32 @@ bool QSslSocket::atEnd() const
 // Note! docs copied from QAbstractSocket::flush()
 bool QSslSocket::flush()
 {
-    Q_D(QSslSocket);
+   Q_D(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::flush()";
+   qDebug() << "QSslSocket::flush()";
 #endif
-    if (d->mode != UnencryptedMode)
-        // encrypt any unencrypted bytes in our buffer
-        d->transmit();
+   if (d->mode != UnencryptedMode)
+      // encrypt any unencrypted bytes in our buffer
+   {
+      d->transmit();
+   }
 
-    return d->plainSocket ? d->plainSocket->flush() : false;
+   return d->plainSocket ? d->plainSocket->flush() : false;
 }
 
 /*!
     \since 4.4
 
-    Sets the size of QSslSocket's internal read buffer to be \a size bytes. 
+    Sets the size of QSslSocket's internal read buffer to be \a size bytes.
 */
 void QSslSocket::setReadBufferSize(qint64 size)
 {
-    Q_D(QSslSocket);
-    d->readBufferMaxSize = size;
+   Q_D(QSslSocket);
+   d->readBufferMaxSize = size;
 
-    if (d->plainSocket)
-        d->plainSocket->setReadBufferSize(size);
+   if (d->plainSocket) {
+      d->plainSocket->setReadBufferSize(size);
+   }
 }
 
 /*!
@@ -825,13 +839,14 @@ void QSslSocket::setReadBufferSize(qint64 size)
 */
 void QSslSocket::abort()
 {
-    Q_D(QSslSocket);
+   Q_D(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::abort()";
+   qDebug() << "QSslSocket::abort()";
 #endif
-    if (d->plainSocket)
-        d->plainSocket->abort();
-    close();
+   if (d->plainSocket) {
+      d->plainSocket->abort();
+   }
+   close();
 }
 
 /*!
@@ -849,14 +864,14 @@ void QSslSocket::abort()
 */
 QSslConfiguration QSslSocket::sslConfiguration() const
 {
-    Q_D(const QSslSocket);
+   Q_D(const QSslSocket);
 
-    // create a deep copy of our configuration
-    QSslConfigurationPrivate *copy = new QSslConfigurationPrivate(d->configuration);
-    copy->ref = 0;              // the QSslConfiguration constructor refs up
-    copy->sessionCipher = d->sessionCipher();
+   // create a deep copy of our configuration
+   QSslConfigurationPrivate *copy = new QSslConfigurationPrivate(d->configuration);
+   copy->ref = 0;              // the QSslConfiguration constructor refs up
+   copy->sessionCipher = d->sessionCipher();
 
-    return QSslConfiguration(copy);
+   return QSslConfiguration(copy);
 }
 
 /*!
@@ -872,21 +887,22 @@ QSslConfiguration QSslSocket::sslConfiguration() const
 */
 void QSslSocket::setSslConfiguration(const QSslConfiguration &configuration)
 {
-    Q_D(QSslSocket);
-    d->configuration.localCertificate = configuration.localCertificate();
-    d->configuration.privateKey = configuration.privateKey();
-    d->configuration.ciphers = configuration.ciphers();
-    d->configuration.caCertificates = configuration.caCertificates();
-    d->configuration.peerVerifyDepth = configuration.peerVerifyDepth();
-    d->configuration.peerVerifyMode = configuration.peerVerifyMode();
-    d->configuration.protocol = configuration.protocol();
-    d->configuration.sslOptions = configuration.d->sslOptions;
+   Q_D(QSslSocket);
+   d->configuration.localCertificate = configuration.localCertificate();
+   d->configuration.privateKey = configuration.privateKey();
+   d->configuration.ciphers = configuration.ciphers();
+   d->configuration.caCertificates = configuration.caCertificates();
+   d->configuration.peerVerifyDepth = configuration.peerVerifyDepth();
+   d->configuration.peerVerifyMode = configuration.peerVerifyMode();
+   d->configuration.protocol = configuration.protocol();
+   d->configuration.sslOptions = configuration.d->sslOptions;
 
-    // if the CA certificates were set explicitly (either via
-    // QSslConfiguration::setCaCertificates() or QSslSocket::setCaCertificates(),
-    // we cannot load the certificates on demand
-    if (!configuration.d->allowRootCertOnDemandLoading)
-        d->allowRootCertOnDemandLoading = false;
+   // if the CA certificates were set explicitly (either via
+   // QSslConfiguration::setCaCertificates() or QSslSocket::setCaCertificates(),
+   // we cannot load the certificates on demand
+   if (!configuration.d->allowRootCertOnDemandLoading) {
+      d->allowRootCertOnDemandLoading = false;
+   }
 }
 
 /*!
@@ -903,24 +919,25 @@ void QSslSocket::setSslConfiguration(const QSslConfiguration &configuration)
 */
 void QSslSocket::setLocalCertificate(const QSslCertificate &certificate)
 {
-    Q_D(QSslSocket);
-    d->configuration.localCertificate = certificate;
+   Q_D(QSslSocket);
+   d->configuration.localCertificate = certificate;
 }
 
 /*!
     \overload
 
     Sets the socket's local \l {QSslCertificate} {certificate} to the
-    first one found in file \a path, which is parsed according to the 
+    first one found in file \a path, which is parsed according to the
     specified \a format.
 */
 void QSslSocket::setLocalCertificate(const QString &path,
                                      QSsl::EncodingFormat format)
 {
-    Q_D(QSslSocket);
-    QFile file(path);
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-        d->configuration.localCertificate = QSslCertificate(file.readAll(), format);
+   Q_D(QSslSocket);
+   QFile file(path);
+   if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      d->configuration.localCertificate = QSslCertificate(file.readAll(), format);
+   }
 }
 
 /*!
@@ -931,15 +948,15 @@ void QSslSocket::setLocalCertificate(const QString &path,
 */
 QSslCertificate QSslSocket::localCertificate() const
 {
-    Q_D(const QSslSocket);
-    return d->configuration.localCertificate;
+   Q_D(const QSslSocket);
+   return d->configuration.localCertificate;
 }
 
 /*!
     Returns the peer's digital certificate (i.e., the immediate
     certificate of the host you are connected to), or a null
     certificate, if the peer has not assigned a certificate.
-    
+
     The peer certificate is checked automatically during the
     handshake phase, so this function is normally used to fetch
     the certificate for display or for connection diagnostic
@@ -962,8 +979,8 @@ QSslCertificate QSslSocket::localCertificate() const
 */
 QSslCertificate QSslSocket::peerCertificate() const
 {
-    Q_D(const QSslSocket);
-    return d->configuration.peerCertificate;
+   Q_D(const QSslSocket);
+   return d->configuration.peerCertificate;
 }
 
 /*!
@@ -991,8 +1008,8 @@ QSslCertificate QSslSocket::peerCertificate() const
 */
 QList<QSslCertificate> QSslSocket::peerCertificateChain() const
 {
-    Q_D(const QSslSocket);
-    return d->configuration.peerCertificateChain;
+   Q_D(const QSslSocket);
+   return d->configuration.peerCertificateChain;
 }
 
 /*!
@@ -1011,8 +1028,8 @@ QList<QSslCertificate> QSslSocket::peerCertificateChain() const
 */
 QSslCipher QSslSocket::sessionCipher() const
 {
-    Q_D(const QSslSocket);
-    return d->sessionCipher();
+   Q_D(const QSslSocket);
+   return d->sessionCipher();
 }
 
 /*!
@@ -1030,8 +1047,8 @@ QSslCipher QSslSocket::sessionCipher() const
 */
 void QSslSocket::setPrivateKey(const QSslKey &key)
 {
-    Q_D(QSslSocket);
-    d->configuration.privateKey = key;
+   Q_D(QSslSocket);
+   d->configuration.privateKey = key;
 }
 
 /*!
@@ -1051,18 +1068,18 @@ void QSslSocket::setPrivateKey(const QSslKey &key)
     creating an SSL server socket. If you are creating an SSL client
     socket, the key and local certificate are required if your client
     must identify itself to an SSL server.
-    
+
     \sa privateKey(), setLocalCertificate()
 */
 void QSslSocket::setPrivateKey(const QString &fileName, QSsl::KeyAlgorithm algorithm,
                                QSsl::EncodingFormat format, const QByteArray &passPhrase)
 {
-    Q_D(QSslSocket);
-    QFile file(fileName);
-    if (file.open(QIODevice::ReadOnly)) {
-        d->configuration.privateKey = QSslKey(file.readAll(), algorithm,
-                                              format, QSsl::PrivateKey, passPhrase);
-    }
+   Q_D(QSslSocket);
+   QFile file(fileName);
+   if (file.open(QIODevice::ReadOnly)) {
+      d->configuration.privateKey = QSslKey(file.readAll(), algorithm,
+                                            format, QSsl::PrivateKey, passPhrase);
+   }
 }
 
 /*!
@@ -1072,8 +1089,8 @@ void QSslSocket::setPrivateKey(const QString &fileName, QSsl::KeyAlgorithm algor
 */
 QSslKey QSslSocket::privateKey() const
 {
-    Q_D(const QSslSocket);
-    return d->configuration.privateKey;
+   Q_D(const QSslSocket);
+   return d->configuration.privateKey;
 }
 
 /*!
@@ -1103,8 +1120,8 @@ QSslKey QSslSocket::privateKey() const
 */
 QList<QSslCipher> QSslSocket::ciphers() const
 {
-    Q_D(const QSslSocket);
-    return d->configuration.ciphers;
+   Q_D(const QSslSocket);
+   return d->configuration.ciphers;
 }
 
 /*!
@@ -1119,8 +1136,8 @@ QList<QSslCipher> QSslSocket::ciphers() const
 */
 void QSslSocket::setCiphers(const QList<QSslCipher> &ciphers)
 {
-    Q_D(QSslSocket);
-    d->configuration.ciphers = ciphers;
+   Q_D(QSslSocket);
+   d->configuration.ciphers = ciphers;
 }
 
 /*!
@@ -1139,16 +1156,17 @@ void QSslSocket::setCiphers(const QList<QSslCipher> &ciphers)
 */
 void QSslSocket::setCiphers(const QString &ciphers)
 {
-    Q_D(QSslSocket);
-    d->configuration.ciphers.clear();
-    foreach (const QString &cipherName, ciphers.split(QLatin1String(":"),QString::SkipEmptyParts)) {
-        for (int i = 0; i < 3; ++i) {
-            // ### Crude
-            QSslCipher cipher(cipherName, QSsl::SslProtocol(i));
-            if (!cipher.isNull())
-                d->configuration.ciphers << cipher;
-        }
-    }
+   Q_D(QSslSocket);
+   d->configuration.ciphers.clear();
+   foreach (const QString & cipherName, ciphers.split(QLatin1String(":"), QString::SkipEmptyParts)) {
+      for (int i = 0; i < 3; ++i) {
+         // ### Crude
+         QSslCipher cipher(cipherName, QSsl::SslProtocol(i));
+         if (!cipher.isNull()) {
+            d->configuration.ciphers << cipher;
+         }
+      }
+   }
 }
 
 /*!
@@ -1164,7 +1182,7 @@ void QSslSocket::setCiphers(const QString &ciphers)
 */
 void QSslSocket::setDefaultCiphers(const QList<QSslCipher> &ciphers)
 {
-    QSslSocketPrivate::setDefaultCiphers(ciphers);
+   QSslSocketPrivate::setDefaultCiphers(ciphers);
 }
 
 /*!
@@ -1183,7 +1201,7 @@ void QSslSocket::setDefaultCiphers(const QList<QSslCipher> &ciphers)
 */
 QList<QSslCipher> QSslSocket::defaultCiphers()
 {
-    return QSslSocketPrivate::defaultCiphers();
+   return QSslSocketPrivate::defaultCiphers();
 }
 
 /*!
@@ -1195,7 +1213,7 @@ QList<QSslCipher> QSslSocket::defaultCiphers()
 */
 QList<QSslCipher> QSslSocket::supportedCiphers()
 {
-    return QSslSocketPrivate::supportedCiphers();
+   return QSslSocketPrivate::supportedCiphers();
 }
 
 /*!
@@ -1216,13 +1234,14 @@ QList<QSslCipher> QSslSocket::supportedCiphers()
 bool QSslSocket::addCaCertificates(const QString &path, QSsl::EncodingFormat format,
                                    QRegExp::PatternSyntax syntax)
 {
-    Q_D(QSslSocket);
-    QList<QSslCertificate> certs = QSslCertificate::fromPath(path, format, syntax);
-    if (certs.isEmpty())
-        return false;
+   Q_D(QSslSocket);
+   QList<QSslCertificate> certs = QSslCertificate::fromPath(path, format, syntax);
+   if (certs.isEmpty()) {
+      return false;
+   }
 
-    d->configuration.caCertificates += certs;
-    return true;
+   d->configuration.caCertificates += certs;
+   return true;
 }
 
 /*!
@@ -1236,8 +1255,8 @@ bool QSslSocket::addCaCertificates(const QString &path, QSsl::EncodingFormat for
 */
 void QSslSocket::addCaCertificate(const QSslCertificate &certificate)
 {
-    Q_D(QSslSocket);
-    d->configuration.caCertificates += certificate;
+   Q_D(QSslSocket);
+   d->configuration.caCertificates += certificate;
 }
 
 /*!
@@ -1251,8 +1270,8 @@ void QSslSocket::addCaCertificate(const QSslCertificate &certificate)
 */
 void QSslSocket::addCaCertificates(const QList<QSslCertificate> &certificates)
 {
-    Q_D(QSslSocket);
-    d->configuration.caCertificates += certificates;
+   Q_D(QSslSocket);
+   d->configuration.caCertificates += certificates;
 }
 
 /*!
@@ -1269,9 +1288,9 @@ void QSslSocket::addCaCertificates(const QList<QSslCertificate> &certificates)
 */
 void QSslSocket::setCaCertificates(const QList<QSslCertificate> &certificates)
 {
-    Q_D(QSslSocket);
-    d->configuration.caCertificates = certificates;
-    d->allowRootCertOnDemandLoading = false;
+   Q_D(QSslSocket);
+   d->configuration.caCertificates = certificates;
+   d->allowRootCertOnDemandLoading = false;
 }
 
 /*!
@@ -1288,8 +1307,8 @@ void QSslSocket::setCaCertificates(const QList<QSslCertificate> &certificates)
 */
 QList<QSslCertificate> QSslSocket::caCertificates() const
 {
-    Q_D(const QSslSocket);
-    return d->configuration.caCertificates;
+   Q_D(const QSslSocket);
+   return d->configuration.caCertificates;
 }
 
 /*!
@@ -1305,9 +1324,9 @@ QList<QSslCertificate> QSslSocket::caCertificates() const
     \sa defaultCaCertificates(), addCaCertificates(), addDefaultCaCertificate()
 */
 bool QSslSocket::addDefaultCaCertificates(const QString &path, QSsl::EncodingFormat encoding,
-                                          QRegExp::PatternSyntax syntax)
+      QRegExp::PatternSyntax syntax)
 {
-    return QSslSocketPrivate::addDefaultCaCertificates(path, encoding, syntax);
+   return QSslSocketPrivate::addDefaultCaCertificates(path, encoding, syntax);
 }
 
 /*!
@@ -1319,7 +1338,7 @@ bool QSslSocket::addDefaultCaCertificates(const QString &path, QSsl::EncodingFor
 */
 void QSslSocket::addDefaultCaCertificate(const QSslCertificate &certificate)
 {
-    QSslSocketPrivate::addDefaultCaCertificate(certificate);
+   QSslSocketPrivate::addDefaultCaCertificate(certificate);
 }
 
 /*!
@@ -1331,7 +1350,7 @@ void QSslSocket::addDefaultCaCertificate(const QSslCertificate &certificate)
 */
 void QSslSocket::addDefaultCaCertificates(const QList<QSslCertificate> &certificates)
 {
-    QSslSocketPrivate::addDefaultCaCertificates(certificates);
+   QSslSocketPrivate::addDefaultCaCertificates(certificates);
 }
 
 /*!
@@ -1348,7 +1367,7 @@ void QSslSocket::addDefaultCaCertificates(const QList<QSslCertificate> &certific
 */
 void QSslSocket::setDefaultCaCertificates(const QList<QSslCertificate> &certificates)
 {
-    QSslSocketPrivate::setDefaultCaCertificates(certificates);
+   QSslSocketPrivate::setDefaultCaCertificates(certificates);
 }
 
 /*!
@@ -1368,7 +1387,7 @@ void QSslSocket::setDefaultCaCertificates(const QList<QSslCertificate> &certific
 */
 QList<QSslCertificate> QSslSocket::defaultCaCertificates()
 {
-    return QSslSocketPrivate::defaultCaCertificates();
+   return QSslSocketPrivate::defaultCaCertificates();
 }
 
 /*!
@@ -1382,8 +1401,8 @@ QList<QSslCertificate> QSslSocket::defaultCaCertificates()
 */
 QList<QSslCertificate> QSslSocket::systemCaCertificates()
 {
-    // we are calling ensureInitialized() in the method below
-    return QSslSocketPrivate::systemCaCertificates();
+   // we are calling ensureInitialized() in the method below
+   return QSslSocketPrivate::systemCaCertificates();
 }
 
 /*!
@@ -1395,16 +1414,17 @@ QList<QSslCertificate> QSslSocket::systemCaCertificates()
 */
 bool QSslSocket::waitForConnected(int msecs)
 {
-    Q_D(QSslSocket);
-    if (!d->plainSocket)
-        return false;
-    bool retVal = d->plainSocket->waitForConnected(msecs);
-    if (!retVal) {
-        setSocketState(d->plainSocket->state());
-        setSocketError(d->plainSocket->error());
-        setErrorString(d->plainSocket->errorString());
-    }
-    return retVal;
+   Q_D(QSslSocket);
+   if (!d->plainSocket) {
+      return false;
+   }
+   bool retVal = d->plainSocket->waitForConnected(msecs);
+   if (!retVal) {
+      setSocketState(d->plainSocket->state());
+      setSocketError(d->plainSocket->error());
+      setErrorString(d->plainSocket->errorString());
+   }
+   return retVal;
 }
 
 /*!
@@ -1425,31 +1445,36 @@ bool QSslSocket::waitForConnected(int msecs)
 */
 bool QSslSocket::waitForEncrypted(int msecs)
 {
-    Q_D(QSslSocket);
-    if (!d->plainSocket || d->connectionEncrypted)
-        return false;
-    if (d->mode == UnencryptedMode && !d->autoStartHandshake)
-        return false;
+   Q_D(QSslSocket);
+   if (!d->plainSocket || d->connectionEncrypted) {
+      return false;
+   }
+   if (d->mode == UnencryptedMode && !d->autoStartHandshake) {
+      return false;
+   }
 
-    QElapsedTimer stopWatch;
-    stopWatch.start();
+   QElapsedTimer stopWatch;
+   stopWatch.start();
 
-    if (d->plainSocket->state() != QAbstractSocket::ConnectedState) {
-        // Wait until we've entered connected state.
-        if (!d->plainSocket->waitForConnected(msecs))
-            return false;
-    }
+   if (d->plainSocket->state() != QAbstractSocket::ConnectedState) {
+      // Wait until we've entered connected state.
+      if (!d->plainSocket->waitForConnected(msecs)) {
+         return false;
+      }
+   }
 
-    while (!d->connectionEncrypted) {
-        // Start the handshake, if this hasn't been started yet.
-        if (d->mode == UnencryptedMode)
-            startClientEncryption();
-        // Loop, waiting until the connection has been encrypted or an error
-        // occurs.
-        if (!d->plainSocket->waitForReadyRead(qt_timeout_value(msecs, stopWatch.elapsed())))
-            return false;
-    }
-    return d->connectionEncrypted;
+   while (!d->connectionEncrypted) {
+      // Start the handshake, if this hasn't been started yet.
+      if (d->mode == UnencryptedMode) {
+         startClientEncryption();
+      }
+      // Loop, waiting until the connection has been encrypted or an error
+      // occurs.
+      if (!d->plainSocket->waitForReadyRead(qt_timeout_value(msecs, stopWatch.elapsed()))) {
+         return false;
+      }
+   }
+   return d->connectionEncrypted;
 }
 
 /*!
@@ -1457,44 +1482,46 @@ bool QSslSocket::waitForEncrypted(int msecs)
 */
 bool QSslSocket::waitForReadyRead(int msecs)
 {
-    Q_D(QSslSocket);
-    if (!d->plainSocket)
-        return false;
-    if (d->mode == UnencryptedMode && !d->autoStartHandshake)
-        return d->plainSocket->waitForReadyRead(msecs);
+   Q_D(QSslSocket);
+   if (!d->plainSocket) {
+      return false;
+   }
+   if (d->mode == UnencryptedMode && !d->autoStartHandshake) {
+      return d->plainSocket->waitForReadyRead(msecs);
+   }
 
-    // This function must return true if and only if readyRead() *was* emitted.
-    // So we initialize "readyReadEmitted" to false and check if it was set to true.
-    // waitForReadyRead() could be called recursively, so we can't use the same variable
-    // (the inner waitForReadyRead() may fail, but the outer one still succeeded)
-    bool readyReadEmitted = false;
-    bool *previousReadyReadEmittedPointer = d->readyReadEmittedPointer;
-    d->readyReadEmittedPointer = &readyReadEmitted;
+   // This function must return true if and only if readyRead() *was* emitted.
+   // So we initialize "readyReadEmitted" to false and check if it was set to true.
+   // waitForReadyRead() could be called recursively, so we can't use the same variable
+   // (the inner waitForReadyRead() may fail, but the outer one still succeeded)
+   bool readyReadEmitted = false;
+   bool *previousReadyReadEmittedPointer = d->readyReadEmittedPointer;
+   d->readyReadEmittedPointer = &readyReadEmitted;
 
-    QElapsedTimer stopWatch;
-    stopWatch.start();
+   QElapsedTimer stopWatch;
+   stopWatch.start();
 
-    if (!d->connectionEncrypted) {
-        // Wait until we've entered encrypted mode, or until a failure occurs.
-        if (!waitForEncrypted(msecs)) {
-            d->readyReadEmittedPointer = previousReadyReadEmittedPointer;
-            return false;
-        }
-    }
+   if (!d->connectionEncrypted) {
+      // Wait until we've entered encrypted mode, or until a failure occurs.
+      if (!waitForEncrypted(msecs)) {
+         d->readyReadEmittedPointer = previousReadyReadEmittedPointer;
+         return false;
+      }
+   }
 
-    if (!d->writeBuffer.isEmpty()) {
-        // empty our cleartext write buffer first
-        d->transmit();
-    }
+   if (!d->writeBuffer.isEmpty()) {
+      // empty our cleartext write buffer first
+      d->transmit();
+   }
 
-    // test readyReadEmitted first because either operation above
-    // (waitForEncrypted or transmit) may have set it
-    while (!readyReadEmitted &&
-           d->plainSocket->waitForReadyRead(qt_timeout_value(msecs, stopWatch.elapsed()))) {
-    }
+   // test readyReadEmitted first because either operation above
+   // (waitForEncrypted or transmit) may have set it
+   while (!readyReadEmitted &&
+          d->plainSocket->waitForReadyRead(qt_timeout_value(msecs, stopWatch.elapsed()))) {
+   }
 
-    d->readyReadEmittedPointer = previousReadyReadEmittedPointer;
-    return readyReadEmitted;
+   d->readyReadEmittedPointer = previousReadyReadEmittedPointer;
+   return readyReadEmitted;
 }
 
 /*!
@@ -1502,26 +1529,29 @@ bool QSslSocket::waitForReadyRead(int msecs)
 */
 bool QSslSocket::waitForBytesWritten(int msecs)
 {
-    Q_D(QSslSocket);
-    if (!d->plainSocket)
-        return false;
-    if (d->mode == UnencryptedMode)
-        return d->plainSocket->waitForBytesWritten(msecs);
+   Q_D(QSslSocket);
+   if (!d->plainSocket) {
+      return false;
+   }
+   if (d->mode == UnencryptedMode) {
+      return d->plainSocket->waitForBytesWritten(msecs);
+   }
 
-    QElapsedTimer stopWatch;
-    stopWatch.start();
+   QElapsedTimer stopWatch;
+   stopWatch.start();
 
-    if (!d->connectionEncrypted) {
-        // Wait until we've entered encrypted mode, or until a failure occurs.
-        if (!waitForEncrypted(msecs))
-            return false;
-    }
-    if (!d->writeBuffer.isEmpty()) {
-        // empty our cleartext write buffer first
-        d->transmit();
-    }
+   if (!d->connectionEncrypted) {
+      // Wait until we've entered encrypted mode, or until a failure occurs.
+      if (!waitForEncrypted(msecs)) {
+         return false;
+      }
+   }
+   if (!d->writeBuffer.isEmpty()) {
+      // empty our cleartext write buffer first
+      d->transmit();
+   }
 
-    return d->plainSocket->waitForBytesWritten(qt_timeout_value(msecs, stopWatch.elapsed()));
+   return d->plainSocket->waitForBytesWritten(qt_timeout_value(msecs, stopWatch.elapsed()));
 }
 
 /*!
@@ -1533,34 +1563,37 @@ bool QSslSocket::waitForBytesWritten(int msecs)
 */
 bool QSslSocket::waitForDisconnected(int msecs)
 {
-    Q_D(QSslSocket);
+   Q_D(QSslSocket);
 
-    // require calling connectToHost() before waitForDisconnected()
-    if (state() == UnconnectedState) {
-        qWarning("QSslSocket::waitForDisconnected() is not allowed in UnconnectedState");
-        return false;
-    }
+   // require calling connectToHost() before waitForDisconnected()
+   if (state() == UnconnectedState) {
+      qWarning("QSslSocket::waitForDisconnected() is not allowed in UnconnectedState");
+      return false;
+   }
 
-    if (!d->plainSocket)
-        return false;
-    if (d->mode == UnencryptedMode)
-        return d->plainSocket->waitForDisconnected(msecs);
+   if (!d->plainSocket) {
+      return false;
+   }
+   if (d->mode == UnencryptedMode) {
+      return d->plainSocket->waitForDisconnected(msecs);
+   }
 
-    QElapsedTimer stopWatch;
-    stopWatch.start();
+   QElapsedTimer stopWatch;
+   stopWatch.start();
 
-    if (!d->connectionEncrypted) {
-        // Wait until we've entered encrypted mode, or until a failure occurs.
-        if (!waitForEncrypted(msecs))
-            return false;
-    }
-    bool retVal = d->plainSocket->waitForDisconnected(qt_timeout_value(msecs, stopWatch.elapsed()));
-    if (!retVal) {
-        setSocketState(d->plainSocket->state());
-        setSocketError(d->plainSocket->error());
-        setErrorString(d->plainSocket->errorString());
-    }
-    return retVal;
+   if (!d->connectionEncrypted) {
+      // Wait until we've entered encrypted mode, or until a failure occurs.
+      if (!waitForEncrypted(msecs)) {
+         return false;
+      }
+   }
+   bool retVal = d->plainSocket->waitForDisconnected(qt_timeout_value(msecs, stopWatch.elapsed()));
+   if (!retVal) {
+      setSocketState(d->plainSocket->state());
+      setSocketError(d->plainSocket->error());
+      setErrorString(d->plainSocket->errorString());
+   }
+   return retVal;
 }
 
 /*!
@@ -1573,8 +1606,8 @@ bool QSslSocket::waitForDisconnected(int msecs)
 */
 QList<QSslError> QSslSocket::sslErrors() const
 {
-    Q_D(const QSslSocket);
-    return d->sslErrors;
+   Q_D(const QSslSocket);
+   return d->sslErrors;
 }
 
 /*!
@@ -1584,7 +1617,7 @@ QList<QSslError> QSslSocket::sslErrors() const
 */
 bool QSslSocket::supportsSsl()
 {
-    return QSslSocketPrivate::supportsSsl();
+   return QSslSocketPrivate::supportsSsl();
 }
 
 /*!
@@ -1602,17 +1635,17 @@ bool QSslSocket::supportsSsl()
 */
 void QSslSocket::startClientEncryption()
 {
-    Q_D(QSslSocket);
-    if (d->mode != UnencryptedMode) {
-        qWarning("QSslSocket::startClientEncryption: cannot start handshake on non-plain connection");
-        return;
-    }
+   Q_D(QSslSocket);
+   if (d->mode != UnencryptedMode) {
+      qWarning("QSslSocket::startClientEncryption: cannot start handshake on non-plain connection");
+      return;
+   }
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::startClientEncryption()";
+   qDebug() << "QSslSocket::startClientEncryption()";
 #endif
-    d->mode = SslClientMode;
-    emit modeChanged(d->mode);
-    d->startClientEncryption();
+   d->mode = SslClientMode;
+   emit modeChanged(d->mode);
+   d->startClientEncryption();
 }
 
 /*!
@@ -1632,22 +1665,22 @@ void QSslSocket::startClientEncryption()
     subclass of QTcpServer and reimplement
     QTcpServer::incomingConnection(). The returned socket descriptor
     is then passed to QSslSocket::setSocketDescriptor().
-    
+
     \sa connectToHostEncrypted(), startClientEncryption()
 */
 void QSslSocket::startServerEncryption()
 {
-    Q_D(QSslSocket);
-    if (d->mode != UnencryptedMode) {
-        qWarning("QSslSocket::startServerEncryption: cannot start handshake on non-plain connection");
-        return;
-    }
+   Q_D(QSslSocket);
+   if (d->mode != UnencryptedMode) {
+      qWarning("QSslSocket::startServerEncryption: cannot start handshake on non-plain connection");
+      return;
+   }
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::startServerEncryption()";
+   qDebug() << "QSslSocket::startServerEncryption()";
 #endif
-    d->mode = SslServerMode;
-    emit modeChanged(d->mode);
-    d->startServerEncryption();
+   d->mode = SslServerMode;
+   emit modeChanged(d->mode);
+   d->startServerEncryption();
 }
 
 /*!
@@ -1677,8 +1710,8 @@ void QSslSocket::startServerEncryption()
 */
 void QSslSocket::ignoreSslErrors()
 {
-    Q_D(QSslSocket);
-    d->ignoreAllSslErrors = true;
+   Q_D(QSslSocket);
+   d->ignoreAllSslErrors = true;
 }
 
 /*!
@@ -1703,8 +1736,8 @@ void QSslSocket::ignoreSslErrors()
 */
 void QSslSocket::ignoreSslErrors(const QList<QSslError> &errors)
 {
-    Q_D(QSslSocket);
-    d->ignoreErrorsList = errors;
+   Q_D(QSslSocket);
+   d->ignoreErrorsList = errors;
 }
 
 /*!
@@ -1712,29 +1745,30 @@ void QSslSocket::ignoreSslErrors(const QList<QSslError> &errors)
 */
 void QSslSocket::connectToHostImplementation(const QString &hostName, unsigned short port, OpenMode openMode)
 {
-    Q_D(QSslSocket);
-    if (!d->initialized)
-        d->init();
-    d->initialized = false;
+   Q_D(QSslSocket);
+   if (!d->initialized) {
+      d->init();
+   }
+   d->initialized = false;
 
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::connectToHostImplementation("
-             << hostName << ',' << port << ',' << openMode << ')';
+   qDebug() << "QSslSocket::connectToHostImplementation("
+            << hostName << ',' << port << ',' << openMode << ')';
 #endif
-    if (!d->plainSocket) {
+   if (!d->plainSocket) {
 #ifdef QSSLSOCKET_DEBUG
-        qDebug() << "\tcreating internal plain socket";
+      qDebug() << "\tcreating internal plain socket";
 #endif
-        d->createPlainSocket(openMode);
-    }
+      d->createPlainSocket(openMode);
+   }
 #ifndef QT_NO_NETWORKPROXY
-    d->plainSocket->setProxy(proxy());
-    //copy user agent down to the plain socket (if it has been set)
-    d->plainSocket->setProperty("_q_user-agent", property("_q_user-agent"));
+   d->plainSocket->setProxy(proxy());
+   //copy user agent down to the plain socket (if it has been set)
+   d->plainSocket->setProperty("_q_user-agent", property("_q_user-agent"));
 #endif
-    QIODevice::open(openMode);
-    d->plainSocket->connectToHost(hostName, port, openMode);
-    d->cachedSocketDescriptor = d->plainSocket->socketDescriptor();
+   QIODevice::open(openMode);
+   d->plainSocket->connectToHost(hostName, port, openMode);
+   d->cachedSocketDescriptor = d->plainSocket->socketDescriptor();
 }
 
 /*!
@@ -1742,37 +1776,40 @@ void QSslSocket::connectToHostImplementation(const QString &hostName, unsigned s
 */
 void QSslSocket::disconnectFromHostImplementation()
 {
-    Q_D(QSslSocket);
+   Q_D(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::disconnectFromHostImplementation()";
+   qDebug() << "QSslSocket::disconnectFromHostImplementation()";
 #endif
-    if (!d->plainSocket)
-        return;
-    if (d->state == UnconnectedState)
-        return;
-    if (d->mode == UnencryptedMode && !d->autoStartHandshake) {
-        d->plainSocket->disconnectFromHost();
-        return;
-    }
-    if (d->state <= ConnectingState) {
-        d->pendingClose = true;
-        return;
-    }
+   if (!d->plainSocket) {
+      return;
+   }
+   if (d->state == UnconnectedState) {
+      return;
+   }
+   if (d->mode == UnencryptedMode && !d->autoStartHandshake) {
+      d->plainSocket->disconnectFromHost();
+      return;
+   }
+   if (d->state <= ConnectingState) {
+      d->pendingClose = true;
+      return;
+   }
 
-    // Perhaps emit closing()
-    if (d->state != ClosingState) {
-        d->state = ClosingState;
-        emit stateChanged(d->state);
-    }
+   // Perhaps emit closing()
+   if (d->state != ClosingState) {
+      d->state = ClosingState;
+      emit stateChanged(d->state);
+   }
 
-    if (!d->writeBuffer.isEmpty())
-        return;
+   if (!d->writeBuffer.isEmpty()) {
+      return;
+   }
 
-    if (d->mode == UnencryptedMode) {
-        d->plainSocket->disconnectFromHost();
-    } else {
-        d->disconnectFromHost();
-    }
+   if (d->mode == UnencryptedMode) {
+      d->plainSocket->disconnectFromHost();
+   } else {
+      d->disconnectFromHost();
+   }
 }
 
 /*!
@@ -1780,29 +1817,30 @@ void QSslSocket::disconnectFromHostImplementation()
 */
 qint64 QSslSocket::readData(char *data, qint64 maxlen)
 {
-    Q_D(QSslSocket);
-    qint64 readBytes = 0;
+   Q_D(QSslSocket);
+   qint64 readBytes = 0;
 
-    if (d->mode == UnencryptedMode && !d->autoStartHandshake) {
-        readBytes = d->plainSocket->read(data, maxlen);
-    } else {
-        do {
-            const char *readPtr = d->readBuffer.readPointer();
-            int bytesToRead = qMin<int>(maxlen - readBytes, d->readBuffer.nextDataBlockSize());
-            ::memcpy(data + readBytes, readPtr, bytesToRead);
-            readBytes += bytesToRead;
-            d->readBuffer.free(bytesToRead);
-        } while (!d->readBuffer.isEmpty() && readBytes < maxlen);
-    }
+   if (d->mode == UnencryptedMode && !d->autoStartHandshake) {
+      readBytes = d->plainSocket->read(data, maxlen);
+   } else {
+      do {
+         const char *readPtr = d->readBuffer.readPointer();
+         int bytesToRead = qMin<int>(maxlen - readBytes, d->readBuffer.nextDataBlockSize());
+         ::memcpy(data + readBytes, readPtr, bytesToRead);
+         readBytes += bytesToRead;
+         d->readBuffer.free(bytesToRead);
+      } while (!d->readBuffer.isEmpty() && readBytes < maxlen);
+   }
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::readData(" << (void *)data << ',' << maxlen << ") ==" << readBytes;
+   qDebug() << "QSslSocket::readData(" << (void *)data << ',' << maxlen << ") ==" << readBytes;
 #endif
 
-    // possibly trigger another transmit() to decrypt more data from the socket
-    if (d->readBuffer.isEmpty() && d->plainSocket->bytesAvailable())
-        QMetaObject::invokeMethod(this, "_q_flushReadBuffer", Qt::QueuedConnection);
+   // possibly trigger another transmit() to decrypt more data from the socket
+   if (d->readBuffer.isEmpty() && d->plainSocket->bytesAvailable()) {
+      QMetaObject::invokeMethod(this, "_q_flushReadBuffer", Qt::QueuedConnection);
+   }
 
-    return readBytes;
+   return readBytes;
 }
 
 /*!
@@ -1810,37 +1848,38 @@ qint64 QSslSocket::readData(char *data, qint64 maxlen)
 */
 qint64 QSslSocket::writeData(const char *data, qint64 len)
 {
-    Q_D(QSslSocket);
+   Q_D(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::writeData(" << (void *)data << ',' << len << ')';
+   qDebug() << "QSslSocket::writeData(" << (void *)data << ',' << len << ')';
 #endif
-    if (d->mode == UnencryptedMode && !d->autoStartHandshake)
-        return d->plainSocket->write(data, len);
+   if (d->mode == UnencryptedMode && !d->autoStartHandshake) {
+      return d->plainSocket->write(data, len);
+   }
 
-    char *writePtr = d->writeBuffer.reserve(len);
-    ::memcpy(writePtr, data, len);
+   char *writePtr = d->writeBuffer.reserve(len);
+   ::memcpy(writePtr, data, len);
 
-    // make sure we flush to the plain socket's buffer
-    QMetaObject::invokeMethod(this, "_q_flushWriteBuffer", Qt::QueuedConnection);
+   // make sure we flush to the plain socket's buffer
+   QMetaObject::invokeMethod(this, "_q_flushWriteBuffer", Qt::QueuedConnection);
 
-    return len;
+   return len;
 }
 
 /*!
     \internal
 */
 QSslSocketPrivate::QSslSocketPrivate()
-    : initialized(false)
-    , mode(QSslSocket::UnencryptedMode)
-    , autoStartHandshake(false)
-    , connectionEncrypted(false)
-    , shutdown(false)
-    , ignoreAllSslErrors(false)
-    , readyReadEmittedPointer(0)
-    , allowRootCertOnDemandLoading(true)
-    , plainSocket(0)
+   : initialized(false)
+   , mode(QSslSocket::UnencryptedMode)
+   , autoStartHandshake(false)
+   , connectionEncrypted(false)
+   , shutdown(false)
+   , ignoreAllSslErrors(false)
+   , readyReadEmittedPointer(0)
+   , allowRootCertOnDemandLoading(true)
+   , plainSocket(0)
 {
-    QSslConfigurationPrivate::deepCopyDefaultConfiguration(&configuration);
+   QSslConfigurationPrivate::deepCopyDefaultConfiguration(&configuration);
 }
 
 /*!
@@ -1855,20 +1894,20 @@ QSslSocketPrivate::~QSslSocketPrivate()
 */
 void QSslSocketPrivate::init()
 {
-    mode = QSslSocket::UnencryptedMode;
-    autoStartHandshake = false;
-    connectionEncrypted = false;
-    ignoreAllSslErrors = false;
-    shutdown = false;
+   mode = QSslSocket::UnencryptedMode;
+   autoStartHandshake = false;
+   connectionEncrypted = false;
+   ignoreAllSslErrors = false;
+   shutdown = false;
 
-    // we don't want to clear the ignoreErrorsList, so
-    // that it is possible setting it before connecting
-//    ignoreErrorsList.clear();
+   // we don't want to clear the ignoreErrorsList, so
+   // that it is possible setting it before connecting
+   //    ignoreErrorsList.clear();
 
-    readBuffer.clear();
-    writeBuffer.clear();
-    configuration.peerCertificate.clear();
-    configuration.peerCertificateChain.clear();
+   readBuffer.clear();
+   writeBuffer.clear();
+   configuration.peerCertificate.clear();
+   configuration.peerCertificateChain.clear();
 }
 
 /*!
@@ -1876,8 +1915,8 @@ void QSslSocketPrivate::init()
 */
 QList<QSslCipher> QSslSocketPrivate::defaultCiphers()
 {
-    QMutexLocker locker(&globalData()->mutex);
-    return globalData()->config->ciphers;
+   QMutexLocker locker(&globalData()->mutex);
+   return globalData()->config->ciphers;
 }
 
 /*!
@@ -1885,9 +1924,9 @@ QList<QSslCipher> QSslSocketPrivate::defaultCiphers()
 */
 QList<QSslCipher> QSslSocketPrivate::supportedCiphers()
 {
-    QSslSocketPrivate::ensureInitialized();
-    QMutexLocker locker(&globalData()->mutex);
-    return globalData()->supportedCiphers;
+   QSslSocketPrivate::ensureInitialized();
+   QMutexLocker locker(&globalData()->mutex);
+   return globalData()->supportedCiphers;
 }
 
 /*!
@@ -1895,9 +1934,9 @@ QList<QSslCipher> QSslSocketPrivate::supportedCiphers()
 */
 void QSslSocketPrivate::setDefaultCiphers(const QList<QSslCipher> &ciphers)
 {
-    QMutexLocker locker(&globalData()->mutex);
-    globalData()->config.detach();
-    globalData()->config->ciphers = ciphers;
+   QMutexLocker locker(&globalData()->mutex);
+   globalData()->config.detach();
+   globalData()->config->ciphers = ciphers;
 }
 
 /*!
@@ -1905,9 +1944,9 @@ void QSslSocketPrivate::setDefaultCiphers(const QList<QSslCipher> &ciphers)
 */
 void QSslSocketPrivate::setDefaultSupportedCiphers(const QList<QSslCipher> &ciphers)
 {
-    QMutexLocker locker(&globalData()->mutex);
-    globalData()->config.detach();
-    globalData()->supportedCiphers = ciphers;
+   QMutexLocker locker(&globalData()->mutex);
+   globalData()->config.detach();
+   globalData()->supportedCiphers = ciphers;
 }
 
 /*!
@@ -1915,10 +1954,10 @@ void QSslSocketPrivate::setDefaultSupportedCiphers(const QList<QSslCipher> &ciph
 */
 QList<QSslCertificate> QSslSocketPrivate::defaultCaCertificates()
 {
-    // ### Qt5/rename everything containing "caCertificates" to "rootCertificates" or similar
-    QSslSocketPrivate::ensureInitialized();
-    QMutexLocker locker(&globalData()->mutex);
-    return globalData()->config->caCertificates;
+   // ### Qt5/rename everything containing "caCertificates" to "rootCertificates" or similar
+   QSslSocketPrivate::ensureInitialized();
+   QMutexLocker locker(&globalData()->mutex);
+   return globalData()->config->caCertificates;
 }
 
 /*!
@@ -1926,30 +1965,31 @@ QList<QSslCertificate> QSslSocketPrivate::defaultCaCertificates()
 */
 void QSslSocketPrivate::setDefaultCaCertificates(const QList<QSslCertificate> &certs)
 {
-    QSslSocketPrivate::ensureInitialized();
-    QMutexLocker locker(&globalData()->mutex);
-    globalData()->config.detach();
-    globalData()->config->caCertificates = certs;
-    // when the certificates are set explicitly, we do not want to
-    // load the system certificates on demand
-    s_loadRootCertsOnDemand = false;
+   QSslSocketPrivate::ensureInitialized();
+   QMutexLocker locker(&globalData()->mutex);
+   globalData()->config.detach();
+   globalData()->config->caCertificates = certs;
+   // when the certificates are set explicitly, we do not want to
+   // load the system certificates on demand
+   s_loadRootCertsOnDemand = false;
 }
 
 /*!
     \internal
 */
 bool QSslSocketPrivate::addDefaultCaCertificates(const QString &path, QSsl::EncodingFormat format,
-                                                 QRegExp::PatternSyntax syntax)
+      QRegExp::PatternSyntax syntax)
 {
-    QSslSocketPrivate::ensureInitialized();
-    QList<QSslCertificate> certs = QSslCertificate::fromPath(path, format, syntax);
-    if (certs.isEmpty())
-        return false;
+   QSslSocketPrivate::ensureInitialized();
+   QList<QSslCertificate> certs = QSslCertificate::fromPath(path, format, syntax);
+   if (certs.isEmpty()) {
+      return false;
+   }
 
-    QMutexLocker locker(&globalData()->mutex);
-    globalData()->config.detach();
-    globalData()->config->caCertificates += certs;
-    return true;
+   QMutexLocker locker(&globalData()->mutex);
+   globalData()->config.detach();
+   globalData()->config->caCertificates += certs;
+   return true;
 }
 
 /*!
@@ -1957,10 +1997,10 @@ bool QSslSocketPrivate::addDefaultCaCertificates(const QString &path, QSsl::Enco
 */
 void QSslSocketPrivate::addDefaultCaCertificate(const QSslCertificate &cert)
 {
-    QSslSocketPrivate::ensureInitialized();
-    QMutexLocker locker(&globalData()->mutex);
-    globalData()->config.detach();
-    globalData()->config->caCertificates += cert;
+   QSslSocketPrivate::ensureInitialized();
+   QMutexLocker locker(&globalData()->mutex);
+   globalData()->config.detach();
+   globalData()->config->caCertificates += cert;
 }
 
 /*!
@@ -1968,10 +2008,10 @@ void QSslSocketPrivate::addDefaultCaCertificate(const QSslCertificate &cert)
 */
 void QSslSocketPrivate::addDefaultCaCertificates(const QList<QSslCertificate> &certs)
 {
-    QSslSocketPrivate::ensureInitialized();
-    QMutexLocker locker(&globalData()->mutex);
-    globalData()->config.detach();
-    globalData()->config->caCertificates += certs;
+   QSslSocketPrivate::ensureInitialized();
+   QMutexLocker locker(&globalData()->mutex);
+   globalData()->config.detach();
+   globalData()->config->caCertificates += certs;
 }
 
 /*!
@@ -1979,9 +2019,9 @@ void QSslSocketPrivate::addDefaultCaCertificates(const QList<QSslCertificate> &c
 */
 QSslConfiguration QSslConfigurationPrivate::defaultConfiguration()
 {
-    QSslSocketPrivate::ensureInitialized();
-    QMutexLocker locker(&globalData()->mutex);
-    return QSslConfiguration(globalData()->config.data());
+   QSslSocketPrivate::ensureInitialized();
+   QMutexLocker locker(&globalData()->mutex);
+   return QSslConfiguration(globalData()->config.data());
 }
 
 /*!
@@ -1989,12 +2029,13 @@ QSslConfiguration QSslConfigurationPrivate::defaultConfiguration()
 */
 void QSslConfigurationPrivate::setDefaultConfiguration(const QSslConfiguration &configuration)
 {
-    QSslSocketPrivate::ensureInitialized();
-    QMutexLocker locker(&globalData()->mutex);
-    if (globalData()->config == configuration.d)
-        return;                 // nothing to do
+   QSslSocketPrivate::ensureInitialized();
+   QMutexLocker locker(&globalData()->mutex);
+   if (globalData()->config == configuration.d) {
+      return;   // nothing to do
+   }
 
-    globalData()->config = const_cast<QSslConfigurationPrivate*>(configuration.d.constData());
+   globalData()->config = const_cast<QSslConfigurationPrivate *>(configuration.d.constData());
 }
 
 /*!
@@ -2002,27 +2043,27 @@ void QSslConfigurationPrivate::setDefaultConfiguration(const QSslConfiguration &
 */
 void QSslConfigurationPrivate::deepCopyDefaultConfiguration(QSslConfigurationPrivate *ptr)
 {
-    QSslSocketPrivate::ensureInitialized();
-    QMutexLocker locker(&globalData()->mutex);
-    const QSslConfigurationPrivate *global = globalData()->config.constData();
+   QSslSocketPrivate::ensureInitialized();
+   QMutexLocker locker(&globalData()->mutex);
+   const QSslConfigurationPrivate *global = globalData()->config.constData();
 
-    if (!global) {
-        ptr = 0;
-        return;
-    }
+   if (!global) {
+      ptr = 0;
+      return;
+   }
 
-    ptr->ref = 1;
-    ptr->peerCertificate = global->peerCertificate;
-    ptr->peerCertificateChain = global->peerCertificateChain;
-    ptr->localCertificate = global->localCertificate;
-    ptr->privateKey = global->privateKey;
-    ptr->sessionCipher = global->sessionCipher;
-    ptr->ciphers = global->ciphers;
-    ptr->caCertificates = global->caCertificates;
-    ptr->protocol = global->protocol;
-    ptr->peerVerifyMode = global->peerVerifyMode;
-    ptr->peerVerifyDepth = global->peerVerifyDepth;
-    ptr->sslOptions = global->sslOptions;
+   ptr->ref = 1;
+   ptr->peerCertificate = global->peerCertificate;
+   ptr->peerCertificateChain = global->peerCertificateChain;
+   ptr->localCertificate = global->localCertificate;
+   ptr->privateKey = global->privateKey;
+   ptr->sessionCipher = global->sessionCipher;
+   ptr->ciphers = global->ciphers;
+   ptr->caCertificates = global->caCertificates;
+   ptr->protocol = global->protocol;
+   ptr->peerVerifyMode = global->peerVerifyMode;
+   ptr->peerVerifyDepth = global->peerVerifyDepth;
+   ptr->sslOptions = global->sslOptions;
 }
 
 /*!
@@ -2030,63 +2071,65 @@ void QSslConfigurationPrivate::deepCopyDefaultConfiguration(QSslConfigurationPri
 */
 void QSslSocketPrivate::createPlainSocket(QIODevice::OpenMode openMode)
 {
-    Q_Q(QSslSocket);
-    q->setOpenMode(openMode); // <- from QIODevice
-    q->setSocketState(QAbstractSocket::UnconnectedState);
-    q->setSocketError(QAbstractSocket::UnknownSocketError);
-    q->setLocalPort(0);
-    q->setLocalAddress(QHostAddress());
-    q->setPeerPort(0);
-    q->setPeerAddress(QHostAddress());
-    q->setPeerName(QString());
+   Q_Q(QSslSocket);
+   q->setOpenMode(openMode); // <- from QIODevice
+   q->setSocketState(QAbstractSocket::UnconnectedState);
+   q->setSocketError(QAbstractSocket::UnknownSocketError);
+   q->setLocalPort(0);
+   q->setLocalAddress(QHostAddress());
+   q->setPeerPort(0);
+   q->setPeerAddress(QHostAddress());
+   q->setPeerName(QString());
 
-    plainSocket = new QTcpSocket(q);
+   plainSocket = new QTcpSocket(q);
 #ifndef QT_NO_BEARERMANAGEMENT
-    //copy network session down to the plain socket (if it has been set)
-    plainSocket->setProperty("_q_networksession", q->property("_q_networksession"));
+   //copy network session down to the plain socket (if it has been set)
+   plainSocket->setProperty("_q_networksession", q->property("_q_networksession"));
 #endif
-    q->connect(plainSocket, SIGNAL(connected()), q, SLOT(_q_connectedSlot()), Qt::DirectConnection);
+   q->connect(plainSocket, SIGNAL(connected()), q, SLOT(_q_connectedSlot()), Qt::DirectConnection);
 
-    q->connect(plainSocket, SIGNAL(hostFound()), q, SLOT(_q_hostFoundSlot()), Qt::DirectConnection);
+   q->connect(plainSocket, SIGNAL(hostFound()), q, SLOT(_q_hostFoundSlot()), Qt::DirectConnection);
 
-    q->connect(plainSocket, SIGNAL(disconnected()), q, SLOT(_q_disconnectedSlot()), Qt::DirectConnection);
+   q->connect(plainSocket, SIGNAL(disconnected()), q, SLOT(_q_disconnectedSlot()), Qt::DirectConnection);
 
-    q->connect(plainSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
-               q, SLOT(_q_stateChangedSlot(QAbstractSocket::SocketState)), Qt::DirectConnection);
+   q->connect(plainSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
+              q, SLOT(_q_stateChangedSlot(QAbstractSocket::SocketState)), Qt::DirectConnection);
 
-    q->connect(plainSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-               q, SLOT(_q_errorSlot(QAbstractSocket::SocketError)), Qt::DirectConnection);
+   q->connect(plainSocket, SIGNAL(error(QAbstractSocket::SocketError)),
+              q, SLOT(_q_errorSlot(QAbstractSocket::SocketError)), Qt::DirectConnection);
 
-    q->connect(plainSocket, SIGNAL(readyRead()), q, SLOT(_q_readyReadSlot()), Qt::DirectConnection);
+   q->connect(plainSocket, SIGNAL(readyRead()), q, SLOT(_q_readyReadSlot()), Qt::DirectConnection);
 
-    q->connect(plainSocket, SIGNAL(bytesWritten(qint64)), q, SLOT(_q_bytesWrittenSlot(qint64)),Qt::DirectConnection);
+   q->connect(plainSocket, SIGNAL(bytesWritten(qint64)), q, SLOT(_q_bytesWrittenSlot(qint64)), Qt::DirectConnection);
 
 #ifndef QT_NO_NETWORKPROXY
-    q->connect(plainSocket, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &,QAuthenticator*)),
-               q, SLOT(proxyAuthenticationRequired(const QNetworkProxy &,QAuthenticator*)));
+   q->connect(plainSocket, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)),
+              q, SLOT(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)));
 #endif
 
-    readBuffer.clear();
-    writeBuffer.clear();
-    connectionEncrypted = false;
-    configuration.peerCertificate.clear();
-    configuration.peerCertificateChain.clear();
-    mode = QSslSocket::UnencryptedMode;
-    q->setReadBufferSize(readBufferMaxSize);
+   readBuffer.clear();
+   writeBuffer.clear();
+   connectionEncrypted = false;
+   configuration.peerCertificate.clear();
+   configuration.peerCertificateChain.clear();
+   mode = QSslSocket::UnencryptedMode;
+   q->setReadBufferSize(readBufferMaxSize);
 }
 
 void QSslSocketPrivate::pauseSocketNotifiers(QSslSocket *socket)
 {
-    if (!socket->d_func()->plainSocket)
-        return;
-    QAbstractSocketPrivate::pauseSocketNotifiers(socket->d_func()->plainSocket);
+   if (!socket->d_func()->plainSocket) {
+      return;
+   }
+   QAbstractSocketPrivate::pauseSocketNotifiers(socket->d_func()->plainSocket);
 }
 
 void QSslSocketPrivate::resumeSocketNotifiers(QSslSocket *socket)
 {
-    if (!socket->d_func()->plainSocket)
-        return;
-    QAbstractSocketPrivate::resumeSocketNotifiers(socket->d_func()->plainSocket);
+   if (!socket->d_func()->plainSocket) {
+      return;
+   }
+   QAbstractSocketPrivate::resumeSocketNotifiers(socket->d_func()->plainSocket);
 }
 
 /*!
@@ -2094,29 +2137,29 @@ void QSslSocketPrivate::resumeSocketNotifiers(QSslSocket *socket)
 */
 void QSslSocketPrivate::_q_connectedSlot()
 {
-    Q_Q(QSslSocket);
-    q->setLocalPort(plainSocket->localPort());
-    q->setLocalAddress(plainSocket->localAddress());
-    q->setPeerPort(plainSocket->peerPort());
-    q->setPeerAddress(plainSocket->peerAddress());
-    q->setPeerName(plainSocket->peerName());
-    cachedSocketDescriptor = plainSocket->socketDescriptor();
+   Q_Q(QSslSocket);
+   q->setLocalPort(plainSocket->localPort());
+   q->setLocalAddress(plainSocket->localAddress());
+   q->setPeerPort(plainSocket->peerPort());
+   q->setPeerAddress(plainSocket->peerAddress());
+   q->setPeerName(plainSocket->peerName());
+   cachedSocketDescriptor = plainSocket->socketDescriptor();
 
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::_q_connectedSlot()";
-    qDebug() << "\tstate =" << q->state();
-    qDebug() << "\tpeer =" << q->peerName() << q->peerAddress() << q->peerPort();
-    qDebug() << "\tlocal =" << QHostInfo::fromName(q->localAddress().toString()).hostName()
-             << q->localAddress() << q->localPort();
+   qDebug() << "QSslSocket::_q_connectedSlot()";
+   qDebug() << "\tstate =" << q->state();
+   qDebug() << "\tpeer =" << q->peerName() << q->peerAddress() << q->peerPort();
+   qDebug() << "\tlocal =" << QHostInfo::fromName(q->localAddress().toString()).hostName()
+            << q->localAddress() << q->localPort();
 #endif
-    emit q->connected();
+   emit q->connected();
 
-    if (autoStartHandshake) {
-        q->startClientEncryption();
-    } else if (pendingClose) {
-        pendingClose = false;
-        q->disconnectFromHost();
-    }
+   if (autoStartHandshake) {
+      q->startClientEncryption();
+   } else if (pendingClose) {
+      pendingClose = false;
+      q->disconnectFromHost();
+   }
 }
 
 /*!
@@ -2124,12 +2167,12 @@ void QSslSocketPrivate::_q_connectedSlot()
 */
 void QSslSocketPrivate::_q_hostFoundSlot()
 {
-    Q_Q(QSslSocket);
+   Q_Q(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::_q_hostFoundSlot()";
-    qDebug() << "\tstate =" << q->state();
+   qDebug() << "QSslSocket::_q_hostFoundSlot()";
+   qDebug() << "\tstate =" << q->state();
 #endif
-    emit q->hostFound();
+   emit q->hostFound();
 }
 
 /*!
@@ -2137,13 +2180,13 @@ void QSslSocketPrivate::_q_hostFoundSlot()
 */
 void QSslSocketPrivate::_q_disconnectedSlot()
 {
-    Q_Q(QSslSocket);
+   Q_Q(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::_q_disconnectedSlot()";
-    qDebug() << "\tstate =" << q->state();
+   qDebug() << "QSslSocket::_q_disconnectedSlot()";
+   qDebug() << "\tstate =" << q->state();
 #endif
-    disconnected();
-    emit q->disconnected();
+   disconnected();
+   emit q->disconnected();
 }
 
 /*!
@@ -2151,12 +2194,12 @@ void QSslSocketPrivate::_q_disconnectedSlot()
 */
 void QSslSocketPrivate::_q_stateChangedSlot(QAbstractSocket::SocketState state)
 {
-    Q_Q(QSslSocket);
+   Q_Q(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::_q_stateChangedSlot(" << state << ')';
+   qDebug() << "QSslSocket::_q_stateChangedSlot(" << state << ')';
 #endif
-    q->setSocketState(state);
-    emit q->stateChanged(state);
+   q->setSocketState(state);
+   emit q->stateChanged(state);
 }
 
 /*!
@@ -2164,15 +2207,15 @@ void QSslSocketPrivate::_q_stateChangedSlot(QAbstractSocket::SocketState state)
 */
 void QSslSocketPrivate::_q_errorSlot(QAbstractSocket::SocketError error)
 {
-    Q_Q(QSslSocket);
+   Q_Q(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::_q_errorSlot(" << error << ')';
-    qDebug() << "\tstate =" << q->state();
-    qDebug() << "\terrorString =" << q->errorString();
+   qDebug() << "QSslSocket::_q_errorSlot(" << error << ')';
+   qDebug() << "\tstate =" << q->state();
+   qDebug() << "\terrorString =" << q->errorString();
 #endif
-    q->setSocketError(plainSocket->error());
-    q->setErrorString(plainSocket->errorString());
-    emit q->error(error);
+   q->setSocketError(plainSocket->error());
+   q->setErrorString(plainSocket->errorString());
+   emit q->error(error);
 }
 
 /*!
@@ -2180,18 +2223,19 @@ void QSslSocketPrivate::_q_errorSlot(QAbstractSocket::SocketError error)
 */
 void QSslSocketPrivate::_q_readyReadSlot()
 {
-    Q_Q(QSslSocket);
+   Q_Q(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::_q_readyReadSlot() -" << plainSocket->bytesAvailable() << "bytes available";
+   qDebug() << "QSslSocket::_q_readyReadSlot() -" << plainSocket->bytesAvailable() << "bytes available";
 #endif
-    if (mode == QSslSocket::UnencryptedMode) {
-        if (readyReadEmittedPointer)
-            *readyReadEmittedPointer = true;
-        emit q->readyRead();
-        return;
-    }
+   if (mode == QSslSocket::UnencryptedMode) {
+      if (readyReadEmittedPointer) {
+         *readyReadEmittedPointer = true;
+      }
+      emit q->readyRead();
+      return;
+   }
 
-    transmit();
+   transmit();
 }
 
 /*!
@@ -2199,17 +2243,19 @@ void QSslSocketPrivate::_q_readyReadSlot()
 */
 void QSslSocketPrivate::_q_bytesWrittenSlot(qint64 written)
 {
-    Q_Q(QSslSocket);
+   Q_Q(QSslSocket);
 #ifdef QSSLSOCKET_DEBUG
-    qDebug() << "QSslSocket::_q_bytesWrittenSlot(" << written << ')';
+   qDebug() << "QSslSocket::_q_bytesWrittenSlot(" << written << ')';
 #endif
 
-    if (mode == QSslSocket::UnencryptedMode)
-        emit q->bytesWritten(written);
-    else
-        emit q->encryptedBytesWritten(written);
-    if (state == QAbstractSocket::ClosingState && writeBuffer.isEmpty())
-        q->disconnectFromHost();
+   if (mode == QSslSocket::UnencryptedMode) {
+      emit q->bytesWritten(written);
+   } else {
+      emit q->encryptedBytesWritten(written);
+   }
+   if (state == QAbstractSocket::ClosingState && writeBuffer.isEmpty()) {
+      q->disconnectFromHost();
+   }
 }
 
 /*!
@@ -2217,9 +2263,10 @@ void QSslSocketPrivate::_q_bytesWrittenSlot(qint64 written)
 */
 void QSslSocketPrivate::_q_flushWriteBuffer()
 {
-    Q_Q(QSslSocket);
-    if (!writeBuffer.isEmpty())
-        q->flush();
+   Q_Q(QSslSocket);
+   if (!writeBuffer.isEmpty()) {
+      q->flush();
+   }
 }
 
 /*!
@@ -2227,9 +2274,10 @@ void QSslSocketPrivate::_q_flushWriteBuffer()
 */
 void QSslSocketPrivate::_q_flushReadBuffer()
 {
-    // trigger a read from the plainSocket into SSL
-    if (mode != QSslSocket::UnencryptedMode)
-        transmit();
+   // trigger a read from the plainSocket into SSL
+   if (mode != QSslSocket::UnencryptedMode) {
+      transmit();
+   }
 }
 
 /*!
@@ -2237,26 +2285,28 @@ void QSslSocketPrivate::_q_flushReadBuffer()
 */
 qint64 QSslSocketPrivate::peek(char *data, qint64 maxSize)
 {
-    if (mode == QSslSocket::UnencryptedMode && !autoStartHandshake) {
-        //unencrypted mode - do not use QIODevice::peek, as it reads ahead data from the plain socket
-        //peek at data already in the QIODevice buffer (from a previous read)
-        qint64 r = buffer.peek(data, maxSize);
-        if (r == maxSize)
-            return r;
-        data += r;
-        //peek at data in the plain socket
-        if (plainSocket) {
-            qint64 r2 = plainSocket->peek(data, maxSize - r);
-            if (r2 < 0)
-                return (r > 0 ? r : r2);
-            return r + r2;
-        } else {
-            return -1;
-        }
-    } else {
-        //encrypted mode - the socket engine will read and decrypt data into the QIODevice buffer
-        return QTcpSocketPrivate::peek(data, maxSize);
-    }
+   if (mode == QSslSocket::UnencryptedMode && !autoStartHandshake) {
+      //unencrypted mode - do not use QIODevice::peek, as it reads ahead data from the plain socket
+      //peek at data already in the QIODevice buffer (from a previous read)
+      qint64 r = buffer.peek(data, maxSize);
+      if (r == maxSize) {
+         return r;
+      }
+      data += r;
+      //peek at data in the plain socket
+      if (plainSocket) {
+         qint64 r2 = plainSocket->peek(data, maxSize - r);
+         if (r2 < 0) {
+            return (r > 0 ? r : r2);
+         }
+         return r + r2;
+      } else {
+         return -1;
+      }
+   } else {
+      //encrypted mode - the socket engine will read and decrypt data into the QIODevice buffer
+      return QTcpSocketPrivate::peek(data, maxSize);
+   }
 }
 
 /*!
@@ -2264,23 +2314,25 @@ qint64 QSslSocketPrivate::peek(char *data, qint64 maxSize)
 */
 QByteArray QSslSocketPrivate::peek(qint64 maxSize)
 {
-    if (mode == QSslSocket::UnencryptedMode && !autoStartHandshake) {
-        //unencrypted mode - do not use QIODevice::peek, as it reads ahead data from the plain socket
-        //peek at data already in the QIODevice buffer (from a previous read)
-        QByteArray ret;
-        ret.reserve(maxSize);
-        ret.resize(buffer.peek(ret.data(), maxSize));
-        if (ret.length() == maxSize)
-            return ret;
-        //peek at data in the plain socket
-        if (plainSocket)
-            return ret + plainSocket->peek(maxSize - ret.length());
-        else
-            return QByteArray();
-    } else {
-        //encrypted mode - the socket engine will read and decrypt data into the QIODevice buffer
-        return QTcpSocketPrivate::peek(maxSize);
-    }
+   if (mode == QSslSocket::UnencryptedMode && !autoStartHandshake) {
+      //unencrypted mode - do not use QIODevice::peek, as it reads ahead data from the plain socket
+      //peek at data already in the QIODevice buffer (from a previous read)
+      QByteArray ret;
+      ret.reserve(maxSize);
+      ret.resize(buffer.peek(ret.data(), maxSize));
+      if (ret.length() == maxSize) {
+         return ret;
+      }
+      //peek at data in the plain socket
+      if (plainSocket) {
+         return ret + plainSocket->peek(maxSize - ret.length());
+      } else {
+         return QByteArray();
+      }
+   } else {
+      //encrypted mode - the socket engine will read and decrypt data into the QIODevice buffer
+      return QTcpSocketPrivate::peek(maxSize);
+   }
 }
 
 /*!
@@ -2288,7 +2340,7 @@ QByteArray QSslSocketPrivate::peek(qint64 maxSize)
 */
 bool QSslSocketPrivate::rootCertOnDemandLoadingSupported()
 {
-    return s_loadRootCertsOnDemand;
+   return s_loadRootCertsOnDemand;
 }
 
 /*!
@@ -2296,67 +2348,67 @@ bool QSslSocketPrivate::rootCertOnDemandLoadingSupported()
 */
 QList<QByteArray> QSslSocketPrivate::unixRootCertDirectories()
 {
-    return QList<QByteArray>() <<  "/etc/ssl/certs/" // (K)ubuntu, OpenSUSE, Mandriva, MeeGo ...
-                               << "/usr/lib/ssl/certs/" // Gentoo, Mandrake
-                               << "/usr/share/ssl/" // Centos, Redhat, SuSE
-                               << "/usr/local/ssl/" // Normal OpenSSL Tarball
-                               << "/var/ssl/certs/" // AIX
-                               << "/usr/local/ssl/certs/" // Solaris
-                               << "/opt/openssl/certs/"; // HP-UX
+   return QList<QByteArray>() <<  "/etc/ssl/certs/" // (K)ubuntu, OpenSUSE, Mandriva, MeeGo ...
+          << "/usr/lib/ssl/certs/" // Gentoo, Mandrake
+          << "/usr/share/ssl/" // Centos, Redhat, SuSE
+          << "/usr/local/ssl/" // Normal OpenSSL Tarball
+          << "/var/ssl/certs/" // AIX
+          << "/usr/local/ssl/certs/" // Solaris
+          << "/opt/openssl/certs/"; // HP-UX
 }
 
 void QSslSocket::_q_connectedSlot()
 {
-	Q_D(QSslSocket);
-	d->_q_connectedSlot();
+   Q_D(QSslSocket);
+   d->_q_connectedSlot();
 }
 
 void QSslSocket::_q_hostFoundSlot()
 {
-	Q_D(QSslSocket);
-	d->_q_hostFoundSlot();
+   Q_D(QSslSocket);
+   d->_q_hostFoundSlot();
 }
 
 void QSslSocket::_q_disconnectedSlot()
 {
-	Q_D(QSslSocket);
-	d->_q_disconnectedSlot();
+   Q_D(QSslSocket);
+   d->_q_disconnectedSlot();
 }
 
 void QSslSocket::_q_stateChangedSlot(QAbstractSocket::SocketState un_named_arg1)
 {
-	Q_D(QSslSocket);
-	d->_q_stateChangedSlot(un_named_arg1);
+   Q_D(QSslSocket);
+   d->_q_stateChangedSlot(un_named_arg1);
 }
 
 void QSslSocket::_q_errorSlot(QAbstractSocket::SocketError un_named_arg1)
 {
-	Q_D(QSslSocket);
-	d->_q_errorSlot(un_named_arg1);
+   Q_D(QSslSocket);
+   d->_q_errorSlot(un_named_arg1);
 }
 
 void QSslSocket::_q_readyReadSlot()
 {
-	Q_D(QSslSocket);
-	d->_q_readyReadSlot();
+   Q_D(QSslSocket);
+   d->_q_readyReadSlot();
 }
 
 void QSslSocket::_q_bytesWrittenSlot(qint64 un_named_arg1)
 {
-	Q_D(QSslSocket);
-	d->_q_bytesWrittenSlot(un_named_arg1);
+   Q_D(QSslSocket);
+   d->_q_bytesWrittenSlot(un_named_arg1);
 }
 
 void QSslSocket::_q_flushWriteBuffer()
 {
-	Q_D(QSslSocket);
-	d->_q_flushWriteBuffer();
+   Q_D(QSslSocket);
+   d->_q_flushWriteBuffer();
 }
 
 void QSslSocket::_q_flushReadBuffer()
 {
-	Q_D(QSslSocket);
-	d->_q_flushReadBuffer();
+   Q_D(QSslSocket);
+   d->_q_flushReadBuffer();
 }
 
 QT_END_NAMESPACE

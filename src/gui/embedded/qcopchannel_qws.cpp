@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,32 +41,32 @@
 
 QT_BEGIN_NAMESPACE
 
-typedef QMap<QString, QList<QWSClient*> > QCopServerMap;
+typedef QMap<QString, QList<QWSClient *> > QCopServerMap;
 static QCopServerMap *qcopServerMap = 0;
 
 class QCopServerRegexp
 {
-public:
-    QCopServerRegexp( const QString& channel, QWSClient *client );
-    QCopServerRegexp( const QCopServerRegexp& other );
+ public:
+   QCopServerRegexp( const QString &channel, QWSClient *client );
+   QCopServerRegexp( const QCopServerRegexp &other );
 
-    QString channel;
-    QWSClient *client;
-    QRegExp regexp;
+   QString channel;
+   QWSClient *client;
+   QRegExp regexp;
 };
 
-QCopServerRegexp::QCopServerRegexp( const QString& channel, QWSClient *client )
+QCopServerRegexp::QCopServerRegexp( const QString &channel, QWSClient *client )
 {
-    this->channel = channel;
-    this->client = client;
-    this->regexp = QRegExp( channel, Qt::CaseSensitive, QRegExp::Wildcard );
+   this->channel = channel;
+   this->client = client;
+   this->regexp = QRegExp( channel, Qt::CaseSensitive, QRegExp::Wildcard );
 }
 
-QCopServerRegexp::QCopServerRegexp( const QCopServerRegexp& other )
+QCopServerRegexp::QCopServerRegexp( const QCopServerRegexp &other )
 {
-    channel = other.channel;
-    client = other.client;
-    regexp = other.regexp;
+   channel = other.channel;
+   client = other.client;
+   regexp = other.regexp;
 }
 
 typedef QList<QCopServerRegexp> QCopServerRegexpList;
@@ -78,15 +78,15 @@ static QCopClientMap *qcopClientMap = 0;
 Q_GLOBAL_STATIC(QMutex, qcopClientMapMutex)
 
 // Determine if a channel name contains wildcard characters.
-static bool containsWildcards( const QString& channel )
+static bool containsWildcards( const QString &channel )
 {
-    return channel.contains(QLatin1Char('*'));
+   return channel.contains(QLatin1Char('*'));
 }
 
 class QCopChannelPrivate
 {
-public:
-    QString channel;
+ public:
+   QString channel;
 };
 
 /*!
@@ -135,42 +135,43 @@ public:
     \sa isRegistered(), channel()
 */
 
-QCopChannel::QCopChannel(const QString& channel, QObject *parent) :
-    QObject(parent)
+QCopChannel::QCopChannel(const QString &channel, QObject *parent) :
+   QObject(parent)
 {
-    init(channel);
+   init(channel);
 }
 
-void QCopChannel::init(const QString& channel)
+void QCopChannel::init(const QString &channel)
 {
-    d = new QCopChannelPrivate;
-    d->channel = channel;
+   d = new QCopChannelPrivate;
+   d->channel = channel;
 
-    if (!qt_fbdpy) {
-        qFatal("QCopChannel: Must construct a QApplication "
-                "before QCopChannel");
-        return;
-    }
+   if (!qt_fbdpy) {
+      qFatal("QCopChannel: Must construct a QApplication "
+             "before QCopChannel");
+      return;
+   }
 
-    {
-	QMutexLocker locker(qcopClientMapMutex());
+   {
+      QMutexLocker locker(qcopClientMapMutex());
 
-	if (!qcopClientMap)
-	    qcopClientMap = new QCopClientMap;
+      if (!qcopClientMap) {
+         qcopClientMap = new QCopClientMap;
+      }
 
-	// do we need a new channel list ?
-	QCopClientMap::Iterator it = qcopClientMap->find(channel);
-	if (it != qcopClientMap->end()) {
-	    it.value().append(this);
-	    return;
-	}
+      // do we need a new channel list ?
+      QCopClientMap::Iterator it = qcopClientMap->find(channel);
+      if (it != qcopClientMap->end()) {
+         it.value().append(this);
+         return;
+      }
 
-	it = qcopClientMap->insert(channel, QList< QPointer<QCopChannel> >());
-	it.value().append(QPointer<QCopChannel>(this));
-    }
+      it = qcopClientMap->insert(channel, QList< QPointer<QCopChannel> >());
+      it.value().append(QPointer<QCopChannel>(this));
+   }
 
-    // inform server about this channel
-    qt_fbdpy->registerChannel(channel);
+   // inform server about this channel
+   qt_fbdpy->registerChannel(channel);
 }
 
 /*!
@@ -180,11 +181,12 @@ void QCopChannel::init(const QString& channel)
   */
 void QCopChannel::reregisterAll()
 {
-    if(qcopClientMap)
-        for(QCopClientMap::Iterator iter = qcopClientMap->begin();
+   if (qcopClientMap)
+      for (QCopClientMap::Iterator iter = qcopClientMap->begin();
             iter != qcopClientMap->end();
-            ++iter)
-            qt_fbdpy->registerChannel(iter.key());
+            ++iter) {
+         qt_fbdpy->registerChannel(iter.key());
+      }
 }
 
 /*!
@@ -199,21 +201,22 @@ void QCopChannel::reregisterAll()
 
 QCopChannel::~QCopChannel()
 {
-    QMutexLocker locker(qcopClientMapMutex());
-    QCopClientMap::Iterator it = qcopClientMap->find(d->channel);
-    Q_ASSERT(it != qcopClientMap->end());
-    it.value().removeAll(this);
-    // still any clients connected locally ?
-    if (it.value().isEmpty()) {
-        QByteArray data;
-        QDataStream s(&data, QIODevice::WriteOnly);
-        s << d->channel;
-        if (qt_fbdpy)
-            send(QLatin1String(""), QLatin1String("detach()"), data);
-        qcopClientMap->remove(d->channel);
-    }
+   QMutexLocker locker(qcopClientMapMutex());
+   QCopClientMap::Iterator it = qcopClientMap->find(d->channel);
+   Q_ASSERT(it != qcopClientMap->end());
+   it.value().removeAll(this);
+   // still any clients connected locally ?
+   if (it.value().isEmpty()) {
+      QByteArray data;
+      QDataStream s(&data, QIODevice::WriteOnly);
+      s << d->channel;
+      if (qt_fbdpy) {
+         send(QLatin1String(""), QLatin1String("detach()"), data);
+      }
+      qcopClientMap->remove(d->channel);
+   }
 
-    delete d;
+   delete d;
 }
 
 /*!
@@ -224,7 +227,7 @@ QCopChannel::~QCopChannel()
 
 QString QCopChannel::channel() const
 {
-    return d->channel;
+   return d->channel;
 }
 
 /*!
@@ -251,9 +254,9 @@ QString QCopChannel::channel() const
 
     \sa send(), channel(), received()
  */
-void QCopChannel::receive(const QString& msg, const QByteArray &data)
+void QCopChannel::receive(const QString &msg, const QByteArray &data)
 {
-    emit received(msg, data);
+   emit received(msg, data);
 }
 
 /*!
@@ -273,18 +276,19 @@ void QCopChannel::receive(const QString& msg, const QByteArray &data)
     \sa channel(), send()
 */
 
-bool QCopChannel::isRegistered(const QString&  channel)
+bool QCopChannel::isRegistered(const QString  &channel)
 {
-    QByteArray data;
-    QDataStream s(&data, QIODevice::WriteOnly);
-    s << channel;
-    if (!send(QLatin1String(""), QLatin1String("isRegistered()"), data))
-        return false;
+   QByteArray data;
+   QDataStream s(&data, QIODevice::WriteOnly);
+   s << channel;
+   if (!send(QLatin1String(""), QLatin1String("isRegistered()"), data)) {
+      return false;
+   }
 
-    QWSQCopMessageEvent *e = qt_fbdpy->waitForQCopResponse();
-    bool known = e->message == "known";
-    delete e;
-    return known;
+   QWSQCopMessageEvent *e = qt_fbdpy->waitForQCopResponse();
+   bool known = e->message == "known";
+   delete e;
+   return known;
 }
 
 /*!
@@ -292,10 +296,10 @@ bool QCopChannel::isRegistered(const QString&  channel)
     \overload
 */
 
-bool QCopChannel::send(const QString& channel, const QString& msg)
+bool QCopChannel::send(const QString &channel, const QString &msg)
 {
-    QByteArray data;
-    return send(channel, msg, data);
+   QByteArray data;
+   return send(channel, msg, data);
 }
 
 /*!
@@ -326,18 +330,18 @@ bool QCopChannel::send(const QString& channel, const QString& msg)
     \sa receive(), isRegistered()
 */
 
-bool QCopChannel::send(const QString& channel, const QString& msg,
+bool QCopChannel::send(const QString &channel, const QString &msg,
                        const QByteArray &data)
 {
-    if (!qt_fbdpy) {
-        qFatal("QCopChannel::send: Must construct a QApplication "
-                "before using QCopChannel");
-        return false;
-    }
+   if (!qt_fbdpy) {
+      qFatal("QCopChannel::send: Must construct a QApplication "
+             "before using QCopChannel");
+      return false;
+   }
 
-    qt_fbdpy->sendMessage(channel, msg, data);
+   qt_fbdpy->sendMessage(channel, msg, data);
 
-    return true;
+   return true;
 }
 
 /*!
@@ -353,37 +357,40 @@ bool QCopChannel::send(const QString& channel, const QString& msg,
 */
 bool QCopChannel::flush()
 {
-    if (!qt_fbdpy) {
-        qFatal("QCopChannel::flush: Must construct a QApplication "
-                "before using QCopChannel");
-        return false;
-    }
+   if (!qt_fbdpy) {
+      qFatal("QCopChannel::flush: Must construct a QApplication "
+             "before using QCopChannel");
+      return false;
+   }
 
-    qt_fbdpy->flushCommands();
+   qt_fbdpy->flushCommands();
 
-    return true;
+   return true;
 }
 
-class QWSServerSignalBridge : public QObject {
-  CS_OBJECT(QWSServerSignalBridge)
+class QWSServerSignalBridge : public QObject
+{
+   CS_OBJECT(QWSServerSignalBridge)
 
-public:
-  void emitNewChannel(const QString &channel);
-  void emitRemovedChannel(const QString &channel);
+ public:
+   void emitNewChannel(const QString &channel);
+   void emitRemovedChannel(const QString &channel);
 
-  GUI_CS_SIGNAL_1(Public,void newChannel(const QString &channel))
-  GUI_CS_SIGNAL_2(newChannel,channel)
+   GUI_CS_SIGNAL_1(Public, void newChannel(const QString &channel))
+   GUI_CS_SIGNAL_2(newChannel, channel)
 
-  GUI_CS_SIGNAL_1(Public,void removedChannel(const QString &channel))
-  GUI_CS_SIGNAL_2(removedChannel,channel)
+   GUI_CS_SIGNAL_1(Public, void removedChannel(const QString &channel))
+   GUI_CS_SIGNAL_2(removedChannel, channel)
 };
 
-void QWSServerSignalBridge::emitNewChannel(const QString &channel){
-  emit newChannel(channel);
+void QWSServerSignalBridge::emitNewChannel(const QString &channel)
+{
+   emit newChannel(channel);
 }
 
-void QWSServerSignalBridge::emitRemovedChannel(const QString &channel) {
-  emit removedChannel(channel);
+void QWSServerSignalBridge::emitRemovedChannel(const QString &channel)
+{
+   emit removedChannel(channel);
 }
 
 /*!
@@ -391,34 +398,37 @@ void QWSServerSignalBridge::emitRemovedChannel(const QString &channel) {
     Server side: subscribe client \a cl on channel \a ch.
 */
 
-void QCopChannel::registerChannel(const QString& ch, QWSClient *cl)
+void QCopChannel::registerChannel(const QString &ch, QWSClient *cl)
 {
-    if (!qcopServerMap)
-        qcopServerMap = new QCopServerMap;
+   if (!qcopServerMap) {
+      qcopServerMap = new QCopServerMap;
+   }
 
-    // do we need a new channel list ?
-    QCopServerMap::Iterator it = qcopServerMap->find(ch);
-    if (it == qcopServerMap->end())
-      it = qcopServerMap->insert(ch, QList<QWSClient*>());
+   // do we need a new channel list ?
+   QCopServerMap::Iterator it = qcopServerMap->find(ch);
+   if (it == qcopServerMap->end()) {
+      it = qcopServerMap->insert(ch, QList<QWSClient *>());
+   }
 
-    // If the channel name contains wildcard characters, then we also
-    // register it on the server regexp matching list.
-    if (containsWildcards( ch )) {
-	QCopServerRegexp item(ch, cl);
-	if (!qcopServerRegexpList)
-	    qcopServerRegexpList = new QCopServerRegexpList;
-	qcopServerRegexpList->append( item );
-    }
+   // If the channel name contains wildcard characters, then we also
+   // register it on the server regexp matching list.
+   if (containsWildcards( ch )) {
+      QCopServerRegexp item(ch, cl);
+      if (!qcopServerRegexpList) {
+         qcopServerRegexpList = new QCopServerRegexpList;
+      }
+      qcopServerRegexpList->append( item );
+   }
 
-    // If this is the first client in the channel, announce the channel as being created.
-    if (it.value().count() == 0) {
-      QWSServerSignalBridge* qwsBridge = new QWSServerSignalBridge();
+   // If this is the first client in the channel, announce the channel as being created.
+   if (it.value().count() == 0) {
+      QWSServerSignalBridge *qwsBridge = new QWSServerSignalBridge();
       connect(qwsBridge, SIGNAL(newChannel(const QString &)), qwsServer, SIGNAL(newChannel(const QString &)));
       qwsBridge->emitNewChannel(ch);
       delete qwsBridge;
-    }
+   }
 
-    it.value().append(cl);
+   it.value().append(cl);
 }
 
 /*!
@@ -428,33 +438,36 @@ void QCopChannel::registerChannel(const QString& ch, QWSClient *cl)
 
 void QCopChannel::detach(QWSClient *cl)
 {
-    if (!qcopServerMap)
-        return;
+   if (!qcopServerMap) {
+      return;
+   }
 
-    QCopServerMap::Iterator it = qcopServerMap->begin();
-    for (; it != qcopServerMap->end(); ++it) {
+   QCopServerMap::Iterator it = qcopServerMap->begin();
+   for (; it != qcopServerMap->end(); ++it) {
       if (it.value().contains(cl)) {
-        it.value().removeAll(cl);
-        // If this was the last client in the channel, announce the channel as dead.
-        if (it.value().count() == 0) {
-          QWSServerSignalBridge* qwsBridge = new QWSServerSignalBridge();
-          connect(qwsBridge, SIGNAL(removedChannel(const QString &)), qwsServer, SIGNAL(removedChannel(const QString &)));
-          qwsBridge->emitRemovedChannel(it.key());
-          delete qwsBridge;
-        }
+         it.value().removeAll(cl);
+         // If this was the last client in the channel, announce the channel as dead.
+         if (it.value().count() == 0) {
+            QWSServerSignalBridge *qwsBridge = new QWSServerSignalBridge();
+            connect(qwsBridge, SIGNAL(removedChannel(const QString &)), qwsServer, SIGNAL(removedChannel(const QString &)));
+            qwsBridge->emitRemovedChannel(it.key());
+            delete qwsBridge;
+         }
       }
-    }
+   }
 
-    if (!qcopServerRegexpList)
-	return;
+   if (!qcopServerRegexpList) {
+      return;
+   }
 
-    QCopServerRegexpList::Iterator it2 = qcopServerRegexpList->begin();
-    while(it2 != qcopServerRegexpList->end()) {
-	if ((*it2).client == cl)
-	    it2 = qcopServerRegexpList->erase(it2);
-	else
-	    ++it2;
-    }
+   QCopServerRegexpList::Iterator it2 = qcopServerRegexpList->begin();
+   while (it2 != qcopServerRegexpList->end()) {
+      if ((*it2).client == cl) {
+         it2 = qcopServerRegexpList->erase(it2);
+      } else {
+         ++it2;
+      }
+   }
 }
 
 /*!
@@ -463,88 +476,89 @@ void QCopChannel::detach(QWSClient *cl)
     specified channel.
 */
 
-void QCopChannel::answer(QWSClient *cl, const QString& ch,
-                          const QString& msg, const QByteArray &data)
+void QCopChannel::answer(QWSClient *cl, const QString &ch,
+                         const QString &msg, const QByteArray &data)
 {
-    // internal commands
-    if (ch.isEmpty()) {
-        if (msg == QLatin1String("isRegistered()")) {
-            QString c;
-            QDataStream s(data);
-            s >> c;
-            bool known = qcopServerMap && qcopServerMap->contains(c)
-                        && !((*qcopServerMap)[c]).isEmpty();
-            // Yes, it's a typo, it's not user-visible, and we choose not to fix it for compatibility
-            QLatin1String ans = QLatin1String(known ? "known" : "unknown");
-            QWSServerPrivate::sendQCopEvent(cl, QLatin1String(""),
-                                            ans, data, true);
-            return;
-        } else if (msg == QLatin1String("detach()")) {
-            QString c;
-            QDataStream s(data);
-            s >> c;
-            Q_ASSERT(qcopServerMap);
-            QCopServerMap::Iterator it = qcopServerMap->find(c);
-            if (it != qcopServerMap->end()) {
-                //Q_ASSERT(it.value().contains(cl));
-                it.value().removeAll(cl);
-                if (it.value().isEmpty()) {
-                  // If this was the last client in the channel, announce the channel as dead
-                  QWSServerSignalBridge* qwsBridge = new QWSServerSignalBridge();
-                  connect(qwsBridge, SIGNAL(removedChannel(const QString &)), qwsServer, SIGNAL(removedChannel(const QString &)));
-                  qwsBridge->emitRemovedChannel(it.key());
-                  delete qwsBridge;
-                  qcopServerMap->erase(it);
-                }
+   // internal commands
+   if (ch.isEmpty()) {
+      if (msg == QLatin1String("isRegistered()")) {
+         QString c;
+         QDataStream s(data);
+         s >> c;
+         bool known = qcopServerMap && qcopServerMap->contains(c)
+                      && !((*qcopServerMap)[c]).isEmpty();
+         // Yes, it's a typo, it's not user-visible, and we choose not to fix it for compatibility
+         QLatin1String ans = QLatin1String(known ? "known" : "unknown");
+         QWSServerPrivate::sendQCopEvent(cl, QLatin1String(""),
+                                         ans, data, true);
+         return;
+      } else if (msg == QLatin1String("detach()")) {
+         QString c;
+         QDataStream s(data);
+         s >> c;
+         Q_ASSERT(qcopServerMap);
+         QCopServerMap::Iterator it = qcopServerMap->find(c);
+         if (it != qcopServerMap->end()) {
+            //Q_ASSERT(it.value().contains(cl));
+            it.value().removeAll(cl);
+            if (it.value().isEmpty()) {
+               // If this was the last client in the channel, announce the channel as dead
+               QWSServerSignalBridge *qwsBridge = new QWSServerSignalBridge();
+               connect(qwsBridge, SIGNAL(removedChannel(const QString &)), qwsServer, SIGNAL(removedChannel(const QString &)));
+               qwsBridge->emitRemovedChannel(it.key());
+               delete qwsBridge;
+               qcopServerMap->erase(it);
             }
-	    if (qcopServerRegexpList && containsWildcards(c)) {
-		// Remove references to a wildcarded channel.
-		QCopServerRegexpList::Iterator it
-		    = qcopServerRegexpList->begin();
-		while(it != qcopServerRegexpList->end()) {
-		    if ((*it).client == cl && (*it).channel == c)
-			it = qcopServerRegexpList->erase(it);
-		    else
-			++it;
-		}
-	    }
-            return;
-        }
-        qWarning("QCopChannel: unknown internal command %s", qPrintable(msg));
-        QWSServerPrivate::sendQCopEvent(cl, QLatin1String(""),
-                                        QLatin1String("bad"), data);
-        return;
-    }
+         }
+         if (qcopServerRegexpList && containsWildcards(c)) {
+            // Remove references to a wildcarded channel.
+            QCopServerRegexpList::Iterator it
+               = qcopServerRegexpList->begin();
+            while (it != qcopServerRegexpList->end()) {
+               if ((*it).client == cl && (*it).channel == c) {
+                  it = qcopServerRegexpList->erase(it);
+               } else {
+                  ++it;
+               }
+            }
+         }
+         return;
+      }
+      qWarning("QCopChannel: unknown internal command %s", qPrintable(msg));
+      QWSServerPrivate::sendQCopEvent(cl, QLatin1String(""),
+                                      QLatin1String("bad"), data);
+      return;
+   }
 
-    if (qcopServerMap) {
-        QList<QWSClient*> clist = qcopServerMap->value(ch);
-        for (int i=0; i < clist.size(); ++i) {
-            QWSClient *c = clist.at(i);
-            QWSServerPrivate::sendQCopEvent(c, ch, msg, data);
-        }
-    }
+   if (qcopServerMap) {
+      QList<QWSClient *> clist = qcopServerMap->value(ch);
+      for (int i = 0; i < clist.size(); ++i) {
+         QWSClient *c = clist.at(i);
+         QWSServerPrivate::sendQCopEvent(c, ch, msg, data);
+      }
+   }
 
-    if(qcopServerRegexpList && !containsWildcards(ch)) {
-	// Search for wildcard matches and forward the message on.
-	QCopServerRegexpList::ConstIterator it = qcopServerRegexpList->constBegin();
-	for (; it != qcopServerRegexpList->constEnd(); ++it) {
-	    if ((*it).regexp.exactMatch(ch)) {
-		QByteArray newData;
-		{
-		    QDataStream stream
-			(&newData, QIODevice::WriteOnly | QIODevice::Append);
-		    stream << ch;
-		    stream << msg;
-		    stream << data;
-		    // Stream is flushed and closed at this point.
-		}
-		QWSServerPrivate::sendQCopEvent
-		    ((*it).client, (*it).channel,
-		     QLatin1String("forwardedMessage(QString,QString,QByteArray)"),
-		     newData);
-	    }
-	}
-    }
+   if (qcopServerRegexpList && !containsWildcards(ch)) {
+      // Search for wildcard matches and forward the message on.
+      QCopServerRegexpList::ConstIterator it = qcopServerRegexpList->constBegin();
+      for (; it != qcopServerRegexpList->constEnd(); ++it) {
+         if ((*it).regexp.exactMatch(ch)) {
+            QByteArray newData;
+            {
+               QDataStream stream
+               (&newData, QIODevice::WriteOnly | QIODevice::Append);
+               stream << ch;
+               stream << msg;
+               stream << data;
+               // Stream is flushed and closed at this point.
+            }
+            QWSServerPrivate::sendQCopEvent
+            ((*it).client, (*it).channel,
+             QLatin1String("forwardedMessage(QString,QString,QByteArray)"),
+             newData);
+         }
+      }
+   }
 }
 
 /*!
@@ -552,26 +566,28 @@ void QCopChannel::answer(QWSClient *cl, const QString& ch,
     Client side: distribute received event to the QCop instance managing the
     channel.
 */
-void QCopChannel::sendLocally(const QString& ch, const QString& msg,
-                                const QByteArray &data)
+void QCopChannel::sendLocally(const QString &ch, const QString &msg,
+                              const QByteArray &data)
 {
-    Q_ASSERT(qcopClientMap);
+   Q_ASSERT(qcopClientMap);
 
-    // filter out internal events
-    if (ch.isEmpty())
-        return;
+   // filter out internal events
+   if (ch.isEmpty()) {
+      return;
+   }
 
-    // feed local clients with received data
-    QList< QPointer<QCopChannel> > clients;
-    {
-	QMutexLocker locker(qcopClientMapMutex());
-	clients = (*qcopClientMap)[ch];
-    }
-    for (int i = 0; i < clients.size(); ++i) {
-	QCopChannel *channel = (QCopChannel *)clients.at(i);
-	if ( channel )
-	    channel->receive(msg, data);
-    }
+   // feed local clients with received data
+   QList< QPointer<QCopChannel> > clients;
+   {
+      QMutexLocker locker(qcopClientMapMutex());
+      clients = (*qcopClientMap)[ch];
+   }
+   for (int i = 0; i < clients.size(); ++i) {
+      QCopChannel *channel = (QCopChannel *)clients.at(i);
+      if ( channel ) {
+         channel->receive(msg, data);
+      }
+   }
 }
 
 QT_END_NAMESPACE

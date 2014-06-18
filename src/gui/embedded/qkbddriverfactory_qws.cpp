@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,8 +42,8 @@ QT_BEGIN_NAMESPACE
 
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QWSKeyboardHandlerFactoryInterface_iid,
-     QLatin1String("/kbddrivers"), Qt::CaseInsensitive))
+                          (QWSKeyboardHandlerFactoryInterface_iid,
+                           QLatin1String("/kbddrivers"), Qt::CaseInsensitive))
 
 #endif //QT_MAKEDLL
 
@@ -82,38 +82,44 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
 
     \sa keys()
 */
-QWSKeyboardHandler *QKbdDriverFactory::create(const QString& key, const QString& device)
+QWSKeyboardHandler *QKbdDriverFactory::create(const QString &key, const QString &device)
 {
-    QString driver = key.toLower();
+   QString driver = key.toLower();
 
 #ifndef QT_NO_QWS_KEYBOARD
 # ifndef QT_NO_QWS_KBD_TTY
-    if (driver == QLatin1String("tty") || driver.isEmpty())
-        return new QWSTtyKeyboardHandler(device);
+   if (driver == QLatin1String("tty") || driver.isEmpty()) {
+      return new QWSTtyKeyboardHandler(device);
+   }
 # endif
 # ifndef QT_NO_QWS_KBD_LINUXINPUT
-    if (driver == QLatin1String("linuxinput") || \
-        driver == QLatin1String("usb") || \
-        driver == QLatin1String("linuxis"))
-        return new QWSLinuxInputKeyboardHandler(device);
+   if (driver == QLatin1String("linuxinput") || \
+         driver == QLatin1String("usb") || \
+         driver == QLatin1String("linuxis")) {
+      return new QWSLinuxInputKeyboardHandler(device);
+   }
 # endif
 # ifndef QT_NO_QWS_KBD_UM
-    if (driver == QLatin1String("um") || driver == QLatin1String("qvfbkeyboard"))
-        return new QWSUmKeyboardHandler(device);
+   if (driver == QLatin1String("um") || driver == QLatin1String("qvfbkeyboard")) {
+      return new QWSUmKeyboardHandler(device);
+   }
 # endif
 # ifndef QT_NO_QWS_KBD_QVFB
-    if (driver == QLatin1String("qvfbkbd")
-        || driver == QLatin1String("qvfbkeyboard")
-        || driver == QLatin1String("qvfb"))
-        return new QVFbKeyboardHandler(device);
+   if (driver == QLatin1String("qvfbkbd")
+         || driver == QLatin1String("qvfbkeyboard")
+         || driver == QLatin1String("qvfb")) {
+      return new QVFbKeyboardHandler(device);
+   }
 # endif
 #endif
 
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
-    if (QWSKeyboardHandlerFactoryInterface *factory = qobject_cast<QWSKeyboardHandlerFactoryInterface*>(loader()->instance(driver)))
-        return factory->create(driver, device);
+   if (QWSKeyboardHandlerFactoryInterface *factory = qobject_cast<QWSKeyboardHandlerFactoryInterface *>(loader()->instance(
+            driver))) {
+      return factory->create(driver, device);
+   }
 #endif
-    return 0;
+   return 0;
 }
 
 /*!
@@ -124,27 +130,28 @@ QWSKeyboardHandler *QKbdDriverFactory::create(const QString& key, const QString&
 */
 QStringList QKbdDriverFactory::keys()
 {
-    QStringList list;
+   QStringList list;
 
 #ifndef QT_NO_QWS_KBD_TTY
-    list << QLatin1String("TTY");
+   list << QLatin1String("TTY");
 #endif
 #ifndef QT_NO_QWS_KBD_LINUXINPUT
-    list << QLatin1String("LinuxInput");
+   list << QLatin1String("LinuxInput");
 #endif
 #ifndef QT_NO_QWS_KBD_UM
-    list << QLatin1String("UM");
+   list << QLatin1String("UM");
 #endif
 
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
-    QStringList plugins = loader()->keys();
-    for (int i = 0; i < plugins.size(); ++i) {
-        if (!list.contains(plugins.at(i)))
-            list += plugins.at(i);
-    }
+   QStringList plugins = loader()->keys();
+   for (int i = 0; i < plugins.size(); ++i) {
+      if (!list.contains(plugins.at(i))) {
+         list += plugins.at(i);
+      }
+   }
 #endif //QT_MAKEDLL
 
-    return list;
+   return list;
 }
 
 QT_END_NAMESPACE

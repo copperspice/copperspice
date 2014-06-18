@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,32 +39,32 @@ class QBasicMouseEventTransitionPrivate;
 
 class QBasicMouseEventTransition : public QAbstractTransition
 {
-    CS_OBJECT(QBasicMouseEventTransition)
+   CS_OBJECT(QBasicMouseEventTransition)
 
-public:
-    QBasicMouseEventTransition(QState *sourceState = 0);
-    QBasicMouseEventTransition(QEvent::Type type, Qt::MouseButton button, QState *sourceState = 0);
-    ~QBasicMouseEventTransition();
+ public:
+   QBasicMouseEventTransition(QState *sourceState = 0);
+   QBasicMouseEventTransition(QEvent::Type type, Qt::MouseButton button, QState *sourceState = 0);
+   ~QBasicMouseEventTransition();
 
-    QEvent::Type eventType() const;
-    void setEventType(QEvent::Type type);
+   QEvent::Type eventType() const;
+   void setEventType(QEvent::Type type);
 
-    Qt::MouseButton button() const;
-    void setButton(Qt::MouseButton button);
+   Qt::MouseButton button() const;
+   void setButton(Qt::MouseButton button);
 
-    Qt::KeyboardModifiers modifierMask() const;
-    void setModifierMask(Qt::KeyboardModifiers modifiers);
+   Qt::KeyboardModifiers modifierMask() const;
+   void setModifierMask(Qt::KeyboardModifiers modifiers);
 
-    QPainterPath hitTestPath() const;
-    void setHitTestPath(const QPainterPath &path);
+   QPainterPath hitTestPath() const;
+   void setHitTestPath(const QPainterPath &path);
 
-protected:
-    bool eventTest(QEvent *event);
-    void onTransition(QEvent *);
+ protected:
+   bool eventTest(QEvent *event);
+   void onTransition(QEvent *);
 
-private:
-    Q_DISABLE_COPY(QBasicMouseEventTransition)
-    Q_DECLARE_PRIVATE(QBasicMouseEventTransition)
+ private:
+   Q_DISABLE_COPY(QBasicMouseEventTransition)
+   Q_DECLARE_PRIVATE(QBasicMouseEventTransition)
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,97 +35,119 @@ class QImageReader;
 
 class Q_GUI_EXPORT QPixmapData
 {
-public:
-    enum PixelType {
-        // WARNING: Do not change the first two must match QPixmap::Type
-        PixmapType, BitmapType
-    };
+ public:
+   enum PixelType {
+      // WARNING: Do not change the first two must match QPixmap::Type
+      PixmapType, BitmapType
+   };
 
-    enum ClassId { RasterClass, X11Class, MacClass, DirectFBClass,
-                   OpenGLClass, OpenVGClass, RuntimeClass, BlitterClass,
-                   CustomClass = 1024 };
+   enum ClassId { RasterClass, X11Class, MacClass, DirectFBClass,
+                  OpenGLClass, OpenVGClass, RuntimeClass, BlitterClass,
+                  CustomClass = 1024
+                };
 
-    QPixmapData(PixelType pixelType, int classId);
-    virtual ~QPixmapData();
+   QPixmapData(PixelType pixelType, int classId);
+   virtual ~QPixmapData();
 
-    virtual QPixmapData *createCompatiblePixmapData() const;
+   virtual QPixmapData *createCompatiblePixmapData() const;
 
-    virtual void resize(int width, int height) = 0;
-    virtual void fromImage(const QImage &image,
-                           Qt::ImageConversionFlags flags) = 0;
-    virtual void fromImageReader(QImageReader *imageReader,
-                                 Qt::ImageConversionFlags flags);
+   virtual void resize(int width, int height) = 0;
+   virtual void fromImage(const QImage &image,
+                          Qt::ImageConversionFlags flags) = 0;
+   virtual void fromImageReader(QImageReader *imageReader,
+                                Qt::ImageConversionFlags flags);
 
-    virtual bool fromFile(const QString &filename, const char *format,
-                          Qt::ImageConversionFlags flags);
-    virtual bool fromData(const uchar *buffer, uint len, const char *format,
-                          Qt::ImageConversionFlags flags);
+   virtual bool fromFile(const QString &filename, const char *format,
+                         Qt::ImageConversionFlags flags);
+   virtual bool fromData(const uchar *buffer, uint len, const char *format,
+                         Qt::ImageConversionFlags flags);
 
-    virtual void copy(const QPixmapData *data, const QRect &rect);
-    virtual bool scroll(int dx, int dy, const QRect &rect);
+   virtual void copy(const QPixmapData *data, const QRect &rect);
+   virtual bool scroll(int dx, int dy, const QRect &rect);
 
-    virtual int metric(QPaintDevice::PaintDeviceMetric metric) const = 0;
-    virtual void fill(const QColor &color) = 0;
-    virtual QBitmap mask() const;
-    virtual void setMask(const QBitmap &mask);
-    virtual bool hasAlphaChannel() const = 0;
-    virtual QPixmap transformed(const QTransform &matrix,
-                                Qt::TransformationMode mode) const;
-    virtual void setAlphaChannel(const QPixmap &alphaChannel);
-    virtual QPixmap alphaChannel() const;
-    virtual QImage toImage() const = 0;
-    virtual QImage toImage(const QRect &rect) const;
-    virtual QPaintEngine* paintEngine() const = 0;
+   virtual int metric(QPaintDevice::PaintDeviceMetric metric) const = 0;
+   virtual void fill(const QColor &color) = 0;
+   virtual QBitmap mask() const;
+   virtual void setMask(const QBitmap &mask);
+   virtual bool hasAlphaChannel() const = 0;
+   virtual QPixmap transformed(const QTransform &matrix,
+                               Qt::TransformationMode mode) const;
+   virtual void setAlphaChannel(const QPixmap &alphaChannel);
+   virtual QPixmap alphaChannel() const;
+   virtual QImage toImage() const = 0;
+   virtual QImage toImage(const QRect &rect) const;
+   virtual QPaintEngine *paintEngine() const = 0;
 
-    inline int serialNumber() const { return ser_no; }
+   inline int serialNumber() const {
+      return ser_no;
+   }
 
-    inline PixelType pixelType() const { return type; }
-    inline ClassId classId() const { return static_cast<ClassId>(id); }
+   inline PixelType pixelType() const {
+      return type;
+   }
+   inline ClassId classId() const {
+      return static_cast<ClassId>(id);
+   }
 
-    virtual QImage* buffer();
+   virtual QImage *buffer();
 
-    inline int width() const { return w; }
-    inline int height() const { return h; }
-    QT_DEPRECATED inline int numColors() const { return metric(QPaintDevice::PdmNumColors); }
-    inline int colorCount() const { return metric(QPaintDevice::PdmNumColors); }
-    inline int depth() const { return d; }
-    inline bool isNull() const { return is_null; }
-    inline qint64 cacheKey() const {
-        int classKey = id;
-        if (classKey >= 1024)
-            classKey = -(classKey >> 10);
-        return ((((qint64) classKey) << 56)
-                | (((qint64) ser_no) << 32)
-                | ((qint64) detach_no));
-    }
+   inline int width() const {
+      return w;
+   }
+   inline int height() const {
+      return h;
+   }
+   QT_DEPRECATED inline int numColors() const {
+      return metric(QPaintDevice::PdmNumColors);
+   }
+   inline int colorCount() const {
+      return metric(QPaintDevice::PdmNumColors);
+   }
+   inline int depth() const {
+      return d;
+   }
+   inline bool isNull() const {
+      return is_null;
+   }
+   inline qint64 cacheKey() const {
+      int classKey = id;
+      if (classKey >= 1024) {
+         classKey = -(classKey >> 10);
+      }
+      return ((((qint64) classKey) << 56)
+              | (((qint64) ser_no) << 32)
+              | ((qint64) detach_no));
+   }
 
-    static QPixmapData *create(int w, int h, PixelType type);
+   static QPixmapData *create(int w, int h, PixelType type);
 
-    virtual QPixmapData *runtimeData() const { return 0; }
+   virtual QPixmapData *runtimeData() const {
+      return 0;
+   }
 
-protected:
+ protected:
 
-    void setSerialNumber(int serNo);
-    int w;
-    int h;
-    int d;
-    bool is_null;
+   void setSerialNumber(int serNo);
+   int w;
+   int h;
+   int d;
+   bool is_null;
 
-private:
-    friend class QPixmap;
-    friend class QX11PixmapData;
-    friend class QSymbianRasterPixmapData;
-    friend class QImagePixmapCleanupHooks; // Needs to set is_cached
-    friend class QGLTextureCache; //Needs to check the reference count
-    friend class QExplicitlySharedDataPointer<QPixmapData>;
+ private:
+   friend class QPixmap;
+   friend class QX11PixmapData;
+   friend class QSymbianRasterPixmapData;
+   friend class QImagePixmapCleanupHooks; // Needs to set is_cached
+   friend class QGLTextureCache; //Needs to check the reference count
+   friend class QExplicitlySharedDataPointer<QPixmapData>;
 
-    QAtomicInt ref;
-    int detach_no;
+   QAtomicInt ref;
+   int detach_no;
 
-    PixelType type;
-    int id;
-    int ser_no;
-    uint is_cached;
+   PixelType type;
+   int id;
+   int ser_no;
+   uint is_cached;
 };
 
 #  define QT_XFORM_TYPE_MSBFIRST 0
@@ -133,7 +155,7 @@ private:
 #  if defined(Q_OS_WIN)
 #    define QT_XFORM_TYPE_WINDOWSPIXMAP 2
 #  endif
-extern bool qt_xForm_helper(const QTransform&, int, int, int, uchar*, int, int, int, const uchar*, int, int, int);
+extern bool qt_xForm_helper(const QTransform &, int, int, int, uchar *, int, int, int, const uchar *, int, int, int);
 
 QT_END_NAMESPACE
 

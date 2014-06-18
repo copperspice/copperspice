@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,43 +38,43 @@ class QSizeGrip;
 
 class QDialogPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QDialog)
-public:
+   Q_DECLARE_PUBLIC(QDialog)
+ public:
 
-    QDialogPrivate()
-        : mainDef(0), orientation(Qt::Horizontal),extension(0), doShowExtension(false),
+   QDialogPrivate()
+      : mainDef(0), orientation(Qt::Horizontal), extension(0), doShowExtension(false),
 #ifndef QT_NO_SIZEGRIP
-          resizer(0),
-          sizeGripEnabled(false),
+        resizer(0),
+        sizeGripEnabled(false),
 #endif
-          rescode(0), resetModalityTo(-1), wasModalitySet(true), eventLoop(0)
-        {}
+        rescode(0), resetModalityTo(-1), wasModalitySet(true), eventLoop(0) {
+   }
 
-    QPointer<QPushButton> mainDef;
-    Qt::Orientation orientation;
-    QWidget *extension;
-    bool doShowExtension;
-    QSize size, min, max;
+   QPointer<QPushButton> mainDef;
+   Qt::Orientation orientation;
+   QWidget *extension;
+   bool doShowExtension;
+   QSize size, min, max;
 #ifndef QT_NO_SIZEGRIP
-    QSizeGrip *resizer;
-    bool sizeGripEnabled;
+   QSizeGrip *resizer;
+   bool sizeGripEnabled;
 #endif
-    QPoint lastRMBPress;
+   QPoint lastRMBPress;
 
-    void setDefault(QPushButton *);
-    void setMainDefault(QPushButton *);
-    void hideDefault();
-    void resetModalitySetByOpen();
+   void setDefault(QPushButton *);
+   void setMainDefault(QPushButton *);
+   void hideDefault();
+   void resetModalitySetByOpen();
 
 #ifdef Q_OS_MAC
-    virtual void mac_nativeDialogModalHelp() {}
+   virtual void mac_nativeDialogModalHelp() {}
 #endif
 
-    int rescode;
-    int resetModalityTo;
-    bool wasModalitySet;
+   int rescode;
+   int resetModalityTo;
+   bool wasModalitySet;
 
-    QPointer<QEventLoop> eventLoop;
+   QPointer<QEventLoop> eventLoop;
 };
 
 QT_END_NAMESPACE

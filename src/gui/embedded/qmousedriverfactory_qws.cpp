@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,8 +42,8 @@ QT_BEGIN_NAMESPACE
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QWSMouseHandlerFactoryInterface_iid,
-     QLatin1String("/mousedrivers"), Qt::CaseInsensitive))
+                          (QWSMouseHandlerFactoryInterface_iid,
+                           QLatin1String("/mousedrivers"), Qt::CaseInsensitive))
 
 #endif //QT_MAKEDLL
 
@@ -82,44 +82,50 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
 
     \sa keys()
 */
-QWSMouseHandler *QMouseDriverFactory::create(const QString& key, const QString &device)
+QWSMouseHandler *QMouseDriverFactory::create(const QString &key, const QString &device)
 {
-    QString driver = key.toLower();
+   QString driver = key.toLower();
 
 #ifndef QT_NO_QWS_MOUSE_LINUXTP
-    if (driver == QLatin1String("linuxtp") || driver.isEmpty())
-        return new QWSLinuxTPMouseHandler(key, device);
+   if (driver == QLatin1String("linuxtp") || driver.isEmpty()) {
+      return new QWSLinuxTPMouseHandler(key, device);
+   }
 #endif
 #ifndef QT_NO_QWS_MOUSE_PC
-    if (driver == QLatin1String("auto")
-        || driver == QLatin1String("intellimouse")
-        || driver == QLatin1String("microsoft")
-        || driver == QLatin1String("mousesystems")
-        || driver == QLatin1String("mouseman")
-        || driver.isEmpty()) {
-        return new QWSPcMouseHandler(key, device);
-    }
+   if (driver == QLatin1String("auto")
+         || driver == QLatin1String("intellimouse")
+         || driver == QLatin1String("microsoft")
+         || driver == QLatin1String("mousesystems")
+         || driver == QLatin1String("mouseman")
+         || driver.isEmpty()) {
+      return new QWSPcMouseHandler(key, device);
+   }
 #endif
 #ifndef QT_NO_QWS_MOUSE_TSLIB
-    if (driver == QLatin1String("tslib") || driver.isEmpty())
-        return new QWSTslibMouseHandler(key, device);
+   if (driver == QLatin1String("tslib") || driver.isEmpty()) {
+      return new QWSTslibMouseHandler(key, device);
+   }
 #endif
 # ifndef QT_NO_QWS_MOUSE_LINUXINPUT
-    if (driver == QLatin1String("linuxinput") || \
-        driver == QLatin1String("usb") || \
-        driver == QLatin1String("linuxis"))
-        return new QWSLinuxInputMouseHandler(device);
+   if (driver == QLatin1String("linuxinput") || \
+         driver == QLatin1String("usb") || \
+         driver == QLatin1String("linuxis")) {
+      return new QWSLinuxInputMouseHandler(device);
+   }
 # endif
 #ifndef QT_NO_QWS_MOUSE_QVFB
-    if (driver == QLatin1String("qvfbmouse") || driver == QLatin1String("qvfb"))
-        return new QVFbMouseHandler(key, device);
+   if (driver == QLatin1String("qvfbmouse") || driver == QLatin1String("qvfb")) {
+      return new QVFbMouseHandler(key, device);
+   }
 #endif
 
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
-    if (QWSMouseHandlerFactoryInterface *factory = qobject_cast<QWSMouseHandlerFactoryInterface*>(loader()->instance(driver)))
-        return factory->create(driver, device);
+   if (QWSMouseHandlerFactoryInterface *factory = qobject_cast<QWSMouseHandlerFactoryInterface *>(loader()->instance(
+            driver))) {
+      return factory->create(driver, device);
+   }
 #endif
-    return 0;
+   return 0;
 }
 
 /*!
@@ -129,33 +135,34 @@ QWSMouseHandler *QMouseDriverFactory::create(const QString& key, const QString &
 */
 QStringList QMouseDriverFactory::keys()
 {
-    QStringList list;
+   QStringList list;
 
 #ifndef QT_NO_QWS_MOUSE_LINUXTP
-    list << QLatin1String("LinuxTP");
+   list << QLatin1String("LinuxTP");
 #endif
 #ifndef QT_NO_QWS_MOUSE_PC
-    list << QLatin1String("Auto")
-         << QLatin1String("IntelliMouse")
-         << QLatin1String("Microsoft")
-         << QLatin1String("MouseSystems")
-         << QLatin1String("MouseMan");
+   list << QLatin1String("Auto")
+        << QLatin1String("IntelliMouse")
+        << QLatin1String("Microsoft")
+        << QLatin1String("MouseSystems")
+        << QLatin1String("MouseMan");
 #endif
 #ifndef QT_NO_QWS_MOUSE_TSLIB
-    list << QLatin1String("Tslib");
+   list << QLatin1String("Tslib");
 #endif
 #ifndef QT_NO_QWS_MOUSE_LINUXINPUT
-    list << QLatin1String("LinuxInput");
+   list << QLatin1String("LinuxInput");
 #endif
 
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
-    QStringList plugins = loader()->keys();
-    for (int i = 0; i < plugins.size(); ++i) {
-        if (!list.contains(plugins.at(i)))
-            list += plugins.at(i);
-    }
+   QStringList plugins = loader()->keys();
+   for (int i = 0; i < plugins.size(); ++i) {
+      if (!list.contains(plugins.at(i))) {
+         list += plugins.at(i);
+      }
+   }
 #endif //QT_MAKEDLL
-    return list;
+   return list;
 }
 
 QT_END_NAMESPACE

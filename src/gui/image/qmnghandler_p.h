@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,27 +40,27 @@ class QMngHandlerPrivate;
 class QMngHandler : public QImageIOHandler
 {
 
-public:
-    QMngHandler();
-    ~QMngHandler();
-    virtual bool canRead() const;
-    virtual QByteArray name() const;
-    virtual bool read(QImage *image);
-    virtual bool write(const QImage &image);
-    virtual int currentImageNumber() const;
-    virtual int imageCount() const;
-    virtual bool jumpToImage(int imageNumber);
-    virtual bool jumpToNextImage();
-    virtual int loopCount() const;
-    virtual int nextImageDelay() const;
-    static bool canRead(QIODevice *device);
-    virtual QVariant option(ImageOption option) const;
-    virtual void setOption(ImageOption option, const QVariant & value);
-    virtual bool supportsOption(ImageOption option) const;
+ public:
+   QMngHandler();
+   ~QMngHandler();
+   virtual bool canRead() const;
+   virtual QByteArray name() const;
+   virtual bool read(QImage *image);
+   virtual bool write(const QImage &image);
+   virtual int currentImageNumber() const;
+   virtual int imageCount() const;
+   virtual bool jumpToImage(int imageNumber);
+   virtual bool jumpToNextImage();
+   virtual int loopCount() const;
+   virtual int nextImageDelay() const;
+   static bool canRead(QIODevice *device);
+   virtual QVariant option(ImageOption option) const;
+   virtual void setOption(ImageOption option, const QVariant &value);
+   virtual bool supportsOption(ImageOption option) const;
 
-private:
-    Q_DECLARE_PRIVATE(QMngHandler)
-    QScopedPointer<QMngHandlerPrivate> d_ptr;
+ private:
+   Q_DECLARE_PRIVATE(QMngHandler)
+   QScopedPointer<QMngHandlerPrivate> d_ptr;
 };
 
 QT_END_NAMESPACE

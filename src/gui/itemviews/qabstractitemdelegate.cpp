@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,7 +42,7 @@ QT_BEGIN_NAMESPACE
 /*!
     Creates a new abstract item delegate with the given \a parent.
 */
-QAbstractItemDelegate::QAbstractItemDelegate(QObject *parent)   
+QAbstractItemDelegate::QAbstractItemDelegate(QObject *parent)
    : QObject(parent)
 {
 }
@@ -57,15 +57,15 @@ QAbstractItemDelegate::~QAbstractItemDelegate()
 }
 
 QWidget *QAbstractItemDelegate::createEditor(QWidget *,
-                   const QStyleOptionViewItem &, const QModelIndex &) const
+      const QStyleOptionViewItem &, const QModelIndex &) const
 {
-    return 0;
+   return 0;
 }
 
 
 void QAbstractItemDelegate::setEditorData(QWidget *, const QModelIndex &) const
 {
-    // does nothing
+   // does nothing
 }
 
 /*!
@@ -78,10 +78,10 @@ void QAbstractItemDelegate::setEditorData(QWidget *, const QModelIndex &) const
     \sa setEditorData()
 */
 void QAbstractItemDelegate::setModelData(QWidget *,
-                                         QAbstractItemModel *,
-                                         const QModelIndex &) const
+      QAbstractItemModel *,
+      const QModelIndex &) const
 {
-    // do nothing
+   // do nothing
 }
 
 /*!
@@ -95,10 +95,10 @@ void QAbstractItemDelegate::setModelData(QWidget *,
     you must reimplement this function.
 */
 void QAbstractItemDelegate::updateEditorGeometry(QWidget *,
-                                                 const QStyleOptionViewItem &,
-                                                 const QModelIndex &) const
+      const QStyleOptionViewItem &,
+      const QModelIndex &) const
 {
-    // do nothing
+   // do nothing
 }
 
 /*!
@@ -119,8 +119,8 @@ bool QAbstractItemDelegate::editorEvent(QEvent *,
                                         const QStyleOptionViewItem &,
                                         const QModelIndex &)
 {
-    // do nothing
-    return false;
+   // do nothing
+   return false;
 }
 
 /*!
@@ -138,9 +138,9 @@ bool QAbstractItemDelegate::editorEvent(QEvent *,
 */
 
 QString QAbstractItemDelegate::elidedText(const QFontMetrics &fontMetrics, int width,
-                                          Qt::TextElideMode mode, const QString &text)
+      Qt::TextElideMode mode, const QString &text)
 {
-    return fontMetrics.elidedText(text, mode, width);
+   return fontMetrics.elidedText(text, mode, width);
 }
 
 /*!
@@ -164,39 +164,44 @@ bool QAbstractItemDelegate::helpEvent(QHelpEvent *event,
                                       const QStyleOptionViewItem &option,
                                       const QModelIndex &index)
 {
-    Q_UNUSED(option);
+   Q_UNUSED(option);
 
-    if (!event || !view)
-        return false;
-    switch (event->type()) {
+   if (!event || !view) {
+      return false;
+   }
+   switch (event->type()) {
 #ifndef QT_NO_TOOLTIP
-    case QEvent::ToolTip: {
-        QHelpEvent *he = static_cast<QHelpEvent*>(event);
-        QVariant tooltip = index.data(Qt::ToolTipRole);
-        if (tooltip.canConvert<QString>()) {
+      case QEvent::ToolTip: {
+         QHelpEvent *he = static_cast<QHelpEvent *>(event);
+         QVariant tooltip = index.data(Qt::ToolTipRole);
+         if (tooltip.canConvert<QString>()) {
             QToolTip::showText(he->globalPos(), tooltip.toString(), view);
             return true;
-        }
-        break;}
+         }
+         break;
+      }
 #endif
 #ifndef QT_NO_WHATSTHIS
-    case QEvent::QueryWhatsThis: {
-        if (index.data(Qt::WhatsThisRole).isValid())
+      case QEvent::QueryWhatsThis: {
+         if (index.data(Qt::WhatsThisRole).isValid()) {
             return true;
-        break; }
-    case QEvent::WhatsThis: {
-        QHelpEvent *he = static_cast<QHelpEvent*>(event);
-        QVariant whatsthis = index.data(Qt::WhatsThisRole);
-        if (whatsthis.canConvert<QString>()) {
+         }
+         break;
+      }
+      case QEvent::WhatsThis: {
+         QHelpEvent *he = static_cast<QHelpEvent *>(event);
+         QVariant whatsthis = index.data(Qt::WhatsThisRole);
+         if (whatsthis.canConvert<QString>()) {
             QWhatsThis::showText(he->globalPos(), whatsthis.toString(), view);
             return true;
-        }
-        break ; }
+         }
+         break ;
+      }
 #endif
-    default:
-        break;
-    }
-    return false;
+      default:
+         break;
+   }
+   return false;
 }
 
 QT_END_NAMESPACE

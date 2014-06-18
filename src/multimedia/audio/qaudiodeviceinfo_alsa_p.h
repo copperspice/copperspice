@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,53 +41,53 @@ QT_BEGIN_NAMESPACE
 
 const unsigned int MAX_SAMPLE_RATES = 5;
 const unsigned int SAMPLE_RATES[] =
-    { 8000, 11025, 22050, 44100, 48000 };
+{ 8000, 11025, 22050, 44100, 48000 };
 
 class QAudioDeviceInfoInternal : public QAbstractAudioDeviceInfo
 {
-    CS_OBJECT(QAudioDeviceInfoInternal)
-public:
-    QAudioDeviceInfoInternal(QByteArray dev,QAudio::Mode mode);
-    ~QAudioDeviceInfoInternal();
+   CS_OBJECT(QAudioDeviceInfoInternal)
+ public:
+   QAudioDeviceInfoInternal(QByteArray dev, QAudio::Mode mode);
+   ~QAudioDeviceInfoInternal();
 
-    bool testSettings(const QAudioFormat& format) const;
-    void updateLists();
-    QAudioFormat preferredFormat() const;
-    bool isFormatSupported(const QAudioFormat& format) const;
-    QAudioFormat nearestFormat(const QAudioFormat& format) const;
-    QString deviceName() const;
-    QStringList codecList();
-    QList<int> frequencyList();
-    QList<int> channelsList();
-    QList<int> sampleSizeList();
-    QList<QAudioFormat::Endian> byteOrderList();
-    QList<QAudioFormat::SampleType> sampleTypeList();
-    static QByteArray defaultInputDevice();
-    static QByteArray defaultOutputDevice();
-    static QList<QByteArray> availableDevices(QAudio::Mode);
+   bool testSettings(const QAudioFormat &format) const;
+   void updateLists();
+   QAudioFormat preferredFormat() const;
+   bool isFormatSupported(const QAudioFormat &format) const;
+   QAudioFormat nearestFormat(const QAudioFormat &format) const;
+   QString deviceName() const;
+   QStringList codecList();
+   QList<int> frequencyList();
+   QList<int> channelsList();
+   QList<int> sampleSizeList();
+   QList<QAudioFormat::Endian> byteOrderList();
+   QList<QAudioFormat::SampleType> sampleTypeList();
+   static QByteArray defaultInputDevice();
+   static QByteArray defaultOutputDevice();
+   static QList<QByteArray> availableDevices(QAudio::Mode);
 
-private:
-    bool open();
-    void close();
+ private:
+   bool open();
+   void close();
 
 #if (SND_LIB_MAJOR == 1 && SND_LIB_MINOR == 0 && SND_LIB_SUBMINOR >= 14)
-    void checkSurround();
-    bool surround40;
-    bool surround51;
-    bool surround71;
+   void checkSurround();
+   bool surround40;
+   bool surround51;
+   bool surround71;
 #endif
 
-    QString device;
-    QAudio::Mode mode;
-    QAudioFormat nearest;
-    QList<int> freqz;
-    QList<int> channelz;
-    QList<int> sizez;
-    QList<QAudioFormat::Endian> byteOrderz;
-    QStringList codecz;
-    QList<QAudioFormat::SampleType> typez;
-    snd_pcm_t* handle;
-    snd_pcm_hw_params_t *params;
+   QString device;
+   QAudio::Mode mode;
+   QAudioFormat nearest;
+   QList<int> freqz;
+   QList<int> channelz;
+   QList<int> sizez;
+   QList<QAudioFormat::Endian> byteOrderz;
+   QStringList codecz;
+   QList<QAudioFormat::SampleType> typez;
+   snd_pcm_t *handle;
+   snd_pcm_hw_params_t *params;
 };
 
 QT_END_NAMESPACE

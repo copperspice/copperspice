@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,34 +42,36 @@ extern QGLWidget *qt_gl_getShareWidget();
 
 QPixmapData *QGLGraphicsSystem::createPixmapData(QPixmapData::PixelType type) const
 {
-    return new QGLPixmapData(type);
+   return new QGLPixmapData(type);
 }
 
 QWindowSurface *QGLGraphicsSystem::createWindowSurface(QWidget *widget) const
 {
 #ifdef Q_OS_WIN
-    // On Windows the QGLWindowSurface class can't handle
-    // drop shadows and native effects, e.g. fading a menu in/out using
-    // top level window opacity.
-    if (widget->windowType() == Qt::Popup)
-        return new QRasterWindowSurface(widget);
+   // On Windows the QGLWindowSurface class can't handle
+   // drop shadows and native effects, e.g. fading a menu in/out using
+   // top level window opacity.
+   if (widget->windowType() == Qt::Popup) {
+      return new QRasterWindowSurface(widget);
+   }
 #endif
 
 #if defined(Q_WS_X11) && !defined(QT_NO_EGL)
-    if (m_useX11GL && QX11GLPixmapData::hasX11GLPixmaps()) {
-        // If the widget is a QGraphicsView which will be re-drawing the entire
-        // scene each frame anyway, we should use QGLWindowSurface as this may
-        // provide proper buffer flipping, which should be faster than QX11GL's
-        // blitting approach:
-        QGraphicsView* qgv = qobject_cast<QGraphicsView*>(widget);
-        if (qgv && qgv->viewportUpdateMode() == QGraphicsView::FullViewportUpdate)
-            return new QGLWindowSurface(widget);
-        else
-            return new QX11GLWindowSurface(widget);
-    }
+   if (m_useX11GL && QX11GLPixmapData::hasX11GLPixmaps()) {
+      // If the widget is a QGraphicsView which will be re-drawing the entire
+      // scene each frame anyway, we should use QGLWindowSurface as this may
+      // provide proper buffer flipping, which should be faster than QX11GL's
+      // blitting approach:
+      QGraphicsView *qgv = qobject_cast<QGraphicsView *>(widget);
+      if (qgv && qgv->viewportUpdateMode() == QGraphicsView::FullViewportUpdate) {
+         return new QGLWindowSurface(widget);
+      } else {
+         return new QX11GLWindowSurface(widget);
+      }
+   }
 #endif
 
-    return new QGLWindowSurface(widget);
+   return new QGLWindowSurface(widget);
 }
 
 QT_END_NAMESPACE

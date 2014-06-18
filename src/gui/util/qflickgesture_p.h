@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,42 +41,42 @@ class QGraphicsItem;
 
 class Q_GUI_EXPORT QFlickGesture : public QGesture
 {
-    CS_OBJECT(QFlickGesture)
-    Q_DECLARE_PRIVATE(QFlickGesture)
+   CS_OBJECT(QFlickGesture)
+   Q_DECLARE_PRIVATE(QFlickGesture)
 
-public:
-    QFlickGesture(QObject *receiver, Qt::MouseButton button, QObject *parent = 0);
-    ~QFlickGesture();
+ public:
+   QFlickGesture(QObject *receiver, Qt::MouseButton button, QObject *parent = 0);
+   ~QFlickGesture();
 
-    friend class QFlickGestureRecognizer;
+   friend class QFlickGestureRecognizer;
 };
 
 class PressDelayHandler;
 
 class QFlickGesturePrivate : public QGesturePrivate
 {
-    Q_DECLARE_PUBLIC(QFlickGesture)
-public:
-    QFlickGesturePrivate();
+   Q_DECLARE_PUBLIC(QFlickGesture)
+ public:
+   QFlickGesturePrivate();
 
-    QPointer<QObject> receiver;
-    QScroller *receiverScroller;
-    Qt::MouseButton button; // NoButton == Touch
-    bool macIgnoreWheel;
-    static PressDelayHandler *pressDelayHandler;
+   QPointer<QObject> receiver;
+   QScroller *receiverScroller;
+   Qt::MouseButton button; // NoButton == Touch
+   bool macIgnoreWheel;
+   static PressDelayHandler *pressDelayHandler;
 };
 
 class QFlickGestureRecognizer : public QGestureRecognizer
 {
-public:
-    QFlickGestureRecognizer(Qt::MouseButton button);
+ public:
+   QFlickGestureRecognizer(Qt::MouseButton button);
 
-    QGesture *create(QObject *target);
-    QGestureRecognizer::Result recognize(QGesture *state, QObject *watched, QEvent *event);
-    void reset(QGesture *state);
+   QGesture *create(QObject *target);
+   QGestureRecognizer::Result recognize(QGesture *state, QObject *watched, QEvent *event);
+   void reset(QGesture *state);
 
-private:
-    Qt::MouseButton button; // NoButton == Touch
+ private:
+   Qt::MouseButton button; // NoButton == Touch
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,296 +35,304 @@
 
 QT_BEGIN_NAMESPACE
 
-QAudioDeviceInfoInternal::QAudioDeviceInfoInternal(QByteArray const& handle, QAudio::Mode)
+QAudioDeviceInfoInternal::QAudioDeviceInfoInternal(QByteArray const &handle, QAudio::Mode)
 {
-    QDataStream ds(handle);
-    quint32 did, tm;
+   QDataStream ds(handle);
+   quint32 did, tm;
 
-    ds >> did >> tm >> name;
-    deviceId = AudioDeviceID(did);
-    mode = QAudio::Mode(tm);
+   ds >> did >> tm >> name;
+   deviceId = AudioDeviceID(did);
+   mode = QAudio::Mode(tm);
 }
 
-bool QAudioDeviceInfoInternal::isFormatSupported(const QAudioFormat& format) const
+bool QAudioDeviceInfoInternal::isFormatSupported(const QAudioFormat &format) const
 {
-    QAudioDeviceInfoInternal *self = const_cast<QAudioDeviceInfoInternal*>(this);
+   QAudioDeviceInfoInternal *self = const_cast<QAudioDeviceInfoInternal *>(this);
 
-    return format.isValid()
-            && format.codec() == QString::fromLatin1("audio/pcm")
-            && self->frequencyList().contains(format.frequency())
-            && self->channelsList().contains(format.channels())
-            && self->sampleSizeList().contains(format.sampleSize());
+   return format.isValid()
+          && format.codec() == QString::fromLatin1("audio/pcm")
+          && self->frequencyList().contains(format.frequency())
+          && self->channelsList().contains(format.channels())
+          && self->sampleSizeList().contains(format.sampleSize());
 }
 
 QAudioFormat QAudioDeviceInfoInternal::preferredFormat() const
 {
-    QAudioFormat    rc;
+   QAudioFormat    rc;
 
-    UInt32  propSize = 0;
+   UInt32  propSize = 0;
 
-    if (AudioDeviceGetPropertyInfo(deviceId,
+   if (AudioDeviceGetPropertyInfo(deviceId,
+                                  0,
+                                  mode == QAudio::AudioInput,
+                                  kAudioDevicePropertyStreams,
+                                  &propSize,
+                                  0) == noErr) {
+
+      const int sc = propSize / sizeof(AudioStreamID);
+
+      if (sc > 0) {
+         AudioStreamID  *streams = new AudioStreamID[sc];
+
+         if (AudioDeviceGetProperty(deviceId,
                                     0,
                                     mode == QAudio::AudioInput,
                                     kAudioDevicePropertyStreams,
                                     &propSize,
-                                    0) == noErr) {
+                                    streams) == noErr) {
 
-        const int sc = propSize / sizeof(AudioStreamID);
+            for (int i = 0; i < sc; ++i) {
+               if (AudioStreamGetPropertyInfo(streams[i],
+                                              0,
+                                              kAudioStreamPropertyPhysicalFormat,
+                                              &propSize,
+                                              0) == noErr) {
 
-        if (sc > 0) {
-            AudioStreamID*  streams = new AudioStreamID[sc];
+                  AudioStreamBasicDescription sf;
 
-            if (AudioDeviceGetProperty(deviceId,
-                                        0,
-                                        mode == QAudio::AudioInput,
-                                        kAudioDevicePropertyStreams,
-                                        &propSize,
-                                        streams) == noErr) {
-
-                for (int i = 0; i < sc; ++i) {
-                    if (AudioStreamGetPropertyInfo(streams[i],
-                                                    0,
-                                                    kAudioStreamPropertyPhysicalFormat,
-                                                    &propSize,
-                                                    0) == noErr) {
-
-                        AudioStreamBasicDescription sf;
-
-                        if (AudioStreamGetProperty(streams[i],
-                                                    0,
-                                                    kAudioStreamPropertyPhysicalFormat,
-                                                    &propSize,
-                                                    &sf) == noErr) {
-                            rc = toQAudioFormat(sf);
-                            break;
-                        }
-                    }
-                }
+                  if (AudioStreamGetProperty(streams[i],
+                                             0,
+                                             kAudioStreamPropertyPhysicalFormat,
+                                             &propSize,
+                                             &sf) == noErr) {
+                     rc = toQAudioFormat(sf);
+                     break;
+                  }
+               }
             }
+         }
 
-            delete[] streams;
-        }
-    }
+         delete[] streams;
+      }
+   }
 
-    return rc;
+   return rc;
 }
 
-QAudioFormat QAudioDeviceInfoInternal::nearestFormat(const QAudioFormat& format) const
+QAudioFormat QAudioDeviceInfoInternal::nearestFormat(const QAudioFormat &format) const
 {
-    QAudioFormat    rc(format);
-    QAudioFormat    target = preferredFormat();
+   QAudioFormat    rc(format);
+   QAudioFormat    target = preferredFormat();
 
-    if (!format.codec().isEmpty() && format.codec() != QString::fromLatin1("audio/pcm"))
-        return QAudioFormat();
+   if (!format.codec().isEmpty() && format.codec() != QString::fromLatin1("audio/pcm")) {
+      return QAudioFormat();
+   }
 
-    rc.setCodec(QString::fromLatin1("audio/pcm"));
+   rc.setCodec(QString::fromLatin1("audio/pcm"));
 
-    if (rc.frequency() != target.frequency())
-        rc.setFrequency(target.frequency());
-    if (rc.channels() != target.channels())
-        rc.setChannels(target.channels());
-    if (rc.sampleSize() != target.sampleSize())
-        rc.setSampleSize(target.sampleSize());
-    if (rc.byteOrder() != target.byteOrder())
-        rc.setByteOrder(target.byteOrder());
-    if (rc.sampleType() != target.sampleType())
-        rc.setSampleType(target.sampleType());
+   if (rc.frequency() != target.frequency()) {
+      rc.setFrequency(target.frequency());
+   }
+   if (rc.channels() != target.channels()) {
+      rc.setChannels(target.channels());
+   }
+   if (rc.sampleSize() != target.sampleSize()) {
+      rc.setSampleSize(target.sampleSize());
+   }
+   if (rc.byteOrder() != target.byteOrder()) {
+      rc.setByteOrder(target.byteOrder());
+   }
+   if (rc.sampleType() != target.sampleType()) {
+      rc.setSampleType(target.sampleType());
+   }
 
-    return rc;
+   return rc;
 }
 
 QString QAudioDeviceInfoInternal::deviceName() const
 {
-    return name;
+   return name;
 }
 
 QStringList QAudioDeviceInfoInternal::codecList()
 {
-    return QStringList() << QString::fromLatin1("audio/pcm");
+   return QStringList() << QString::fromLatin1("audio/pcm");
 }
 
 QList<int> QAudioDeviceInfoInternal::frequencyList()
 {
-    QSet<int>  rc;
+   QSet<int>  rc;
 
-    // Add some common frequencies
-    rc << 8000 << 11025 << 22050 << 44100;
+   // Add some common frequencies
+   rc << 8000 << 11025 << 22050 << 44100;
 
-    //
-    UInt32  propSize = 0;
+   //
+   UInt32  propSize = 0;
 
-    if (AudioDeviceGetPropertyInfo(deviceId,
+   if (AudioDeviceGetPropertyInfo(deviceId,
+                                  0,
+                                  mode == QAudio::AudioInput,
+                                  kAudioDevicePropertyAvailableNominalSampleRates,
+                                  &propSize,
+                                  0) == noErr) {
+
+      const int pc = propSize / sizeof(AudioValueRange);
+
+      if (pc > 0) {
+         AudioValueRange    *vr = new AudioValueRange[pc];
+
+         if (AudioDeviceGetProperty(deviceId,
                                     0,
                                     mode == QAudio::AudioInput,
                                     kAudioDevicePropertyAvailableNominalSampleRates,
                                     &propSize,
-                                    0) == noErr) {
+                                    vr) == noErr) {
 
-        const int pc = propSize / sizeof(AudioValueRange);
-
-        if (pc > 0) {
-            AudioValueRange*    vr = new AudioValueRange[pc];
-
-            if (AudioDeviceGetProperty(deviceId,
-                                        0,
-                                        mode == QAudio::AudioInput,
-                                        kAudioDevicePropertyAvailableNominalSampleRates,
-                                        &propSize,
-                                        vr) == noErr) {
-
-                for (int i = 0; i < pc; ++i)
-                    rc << vr[i].mMaximum;
+            for (int i = 0; i < pc; ++i) {
+               rc << vr[i].mMaximum;
             }
+         }
 
-            delete[] vr;
-        }
-    }
+         delete[] vr;
+      }
+   }
 
-    return rc.toList();
+   return rc.toList();
 }
 
 QList<int> QAudioDeviceInfoInternal::channelsList()
 {
-    QList<int>  rc;
+   QList<int>  rc;
 
-    // Can mix down to 1 channel
-    rc << 1;
+   // Can mix down to 1 channel
+   rc << 1;
 
-    UInt32  propSize = 0;
-    int     channels = 0;
+   UInt32  propSize = 0;
+   int     channels = 0;
 
-    if (AudioDeviceGetPropertyInfo(deviceId, 
+   if (AudioDeviceGetPropertyInfo(deviceId,
+                                  0,
+                                  mode == QAudio::AudioInput,
+                                  kAudioDevicePropertyStreamConfiguration,
+                                  &propSize,
+                                  0) == noErr) {
+
+      AudioBufferList *audioBufferList = static_cast<AudioBufferList *>(qMalloc(propSize));
+
+      if (audioBufferList != 0) {
+         if (AudioDeviceGetProperty(deviceId,
                                     0,
                                     mode == QAudio::AudioInput,
                                     kAudioDevicePropertyStreamConfiguration,
-                                    &propSize, 
-                                    0) == noErr) {
+                                    &propSize,
+                                    audioBufferList) == noErr) {
 
-        AudioBufferList* audioBufferList = static_cast<AudioBufferList*>(qMalloc(propSize));
-
-        if (audioBufferList != 0) {
-            if (AudioDeviceGetProperty(deviceId, 
-                                        0,
-                                        mode == QAudio::AudioInput,
-                                        kAudioDevicePropertyStreamConfiguration,
-                                        &propSize,
-                                        audioBufferList) == noErr) {
-
-                for (int i = 0; i < int(audioBufferList->mNumberBuffers); ++i) {
-                    channels += audioBufferList->mBuffers[i].mNumberChannels;
-                    rc << channels;
-                }
+            for (int i = 0; i < int(audioBufferList->mNumberBuffers); ++i) {
+               channels += audioBufferList->mBuffers[i].mNumberChannels;
+               rc << channels;
             }
+         }
 
-            qFree(audioBufferList);
-        }
-    }
+         qFree(audioBufferList);
+      }
+   }
 
-    return rc;
+   return rc;
 }
 
 QList<int> QAudioDeviceInfoInternal::sampleSizeList()
 {
-    return QList<int>() << 8 << 16 << 24 << 32 << 64;
+   return QList<int>() << 8 << 16 << 24 << 32 << 64;
 }
 
 QList<QAudioFormat::Endian> QAudioDeviceInfoInternal::byteOrderList()
 {
-    return QList<QAudioFormat::Endian>() << QAudioFormat::LittleEndian << QAudioFormat::BigEndian;
+   return QList<QAudioFormat::Endian>() << QAudioFormat::LittleEndian << QAudioFormat::BigEndian;
 }
 
 QList<QAudioFormat::SampleType> QAudioDeviceInfoInternal::sampleTypeList()
 {
-    return QList<QAudioFormat::SampleType>() << QAudioFormat::SignedInt << QAudioFormat::UnSignedInt << QAudioFormat::Float;
+   return QList<QAudioFormat::SampleType>() << QAudioFormat::SignedInt << QAudioFormat::UnSignedInt << QAudioFormat::Float;
 }
 
 static QByteArray get_device_info(AudioDeviceID audioDevice, QAudio::Mode mode)
 {
-    UInt32      size;
-    QByteArray  device;
-    QDataStream ds(&device, QIODevice::WriteOnly);
-    AudioStreamBasicDescription     sf;
-    CFStringRef name;
-    Boolean     isInput = mode == QAudio::AudioInput;
+   UInt32      size;
+   QByteArray  device;
+   QDataStream ds(&device, QIODevice::WriteOnly);
+   AudioStreamBasicDescription     sf;
+   CFStringRef name;
+   Boolean     isInput = mode == QAudio::AudioInput;
 
-    // Id
-    ds << quint32(audioDevice);
+   // Id
+   ds << quint32(audioDevice);
 
-    // Mode
-    size = sizeof(AudioStreamBasicDescription);
-    if (AudioDeviceGetProperty(audioDevice, 0, isInput, kAudioDevicePropertyStreamFormat,
-                                &size, &sf) != noErr) {
-        return QByteArray();
-    }
-    ds << quint32(mode);
+   // Mode
+   size = sizeof(AudioStreamBasicDescription);
+   if (AudioDeviceGetProperty(audioDevice, 0, isInput, kAudioDevicePropertyStreamFormat,
+                              &size, &sf) != noErr) {
+      return QByteArray();
+   }
+   ds << quint32(mode);
 
-    // Name
-    size = sizeof(CFStringRef);
-    if (AudioDeviceGetProperty(audioDevice, 0, isInput, kAudioObjectPropertyName,
-                                &size, &name) != noErr) {
-        qWarning() << "QAudioDeviceInfo: Unable to find device name";
-    }
-    ds << QCFString::toQString(name);
+   // Name
+   size = sizeof(CFStringRef);
+   if (AudioDeviceGetProperty(audioDevice, 0, isInput, kAudioObjectPropertyName,
+                              &size, &name) != noErr) {
+      qWarning() << "QAudioDeviceInfo: Unable to find device name";
+   }
+   ds << QCFString::toQString(name);
 
-    CFRelease(name);
+   CFRelease(name);
 
-    return device;
+   return device;
 }
 
 QByteArray QAudioDeviceInfoInternal::defaultInputDevice()
 {
-    AudioDeviceID   audioDevice;
-    UInt32          size = sizeof(audioDevice);
+   AudioDeviceID   audioDevice;
+   UInt32          size = sizeof(audioDevice);
 
-    if (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &size,
-                                    &audioDevice) != noErr) {
-        qWarning() << "QAudioDeviceInfo: Unable to find default input device";
-        return QByteArray();
-    }
+   if (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &size,
+                                &audioDevice) != noErr) {
+      qWarning() << "QAudioDeviceInfo: Unable to find default input device";
+      return QByteArray();
+   }
 
-    return get_device_info(audioDevice, QAudio::AudioInput);
+   return get_device_info(audioDevice, QAudio::AudioInput);
 }
 
 QByteArray QAudioDeviceInfoInternal::defaultOutputDevice()
 {
-    AudioDeviceID audioDevice;
-    UInt32        size = sizeof(audioDevice);
+   AudioDeviceID audioDevice;
+   UInt32        size = sizeof(audioDevice);
 
-    if (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size,
-                                    &audioDevice) != noErr) {
-        qWarning() << "QAudioDeviceInfo: Unable to find default output device";
-        return QByteArray();
-    }
+   if (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size,
+                                &audioDevice) != noErr) {
+      qWarning() << "QAudioDeviceInfo: Unable to find default output device";
+      return QByteArray();
+   }
 
-    return get_device_info(audioDevice, QAudio::AudioOutput);
+   return get_device_info(audioDevice, QAudio::AudioOutput);
 }
 
 QList<QByteArray> QAudioDeviceInfoInternal::availableDevices(QAudio::Mode mode)
 {
-    QList<QByteArray>   devices;
+   QList<QByteArray>   devices;
 
-    UInt32  propSize = 0;
+   UInt32  propSize = 0;
 
-    if (AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &propSize, 0) == noErr) {
+   if (AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &propSize, 0) == noErr) {
 
-        const int dc = propSize / sizeof(AudioDeviceID);
+      const int dc = propSize / sizeof(AudioDeviceID);
 
-        if (dc > 0) {
-            AudioDeviceID*  audioDevices = new AudioDeviceID[dc];
+      if (dc > 0) {
+         AudioDeviceID  *audioDevices = new AudioDeviceID[dc];
 
-            if (AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &propSize, audioDevices) == noErr) {
-                for (int i = 0; i < dc; ++i) {
-                    QByteArray info = get_device_info(audioDevices[i], mode);
-                    if (!info.isNull())
-                        devices << info;
-                }
+         if (AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &propSize, audioDevices) == noErr) {
+            for (int i = 0; i < dc; ++i) {
+               QByteArray info = get_device_info(audioDevices[i], mode);
+               if (!info.isNull()) {
+                  devices << info;
+               }
             }
+         }
 
-            delete[] audioDevices;
-        }
-    }
+         delete[] audioDevices;
+      }
+   }
 
-    return devices;
+   return devices;
 }
 
 

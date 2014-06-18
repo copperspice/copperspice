@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,22 +39,22 @@ class QAbstractAudioDeviceInfo;
 
 class QAudioDeviceFactory
 {
-public:
-    static QList<QAudioDeviceInfo> availableDevices(QAudio::Mode mode);
+ public:
+   static QList<QAudioDeviceInfo> availableDevices(QAudio::Mode mode);
 
-    static QAudioDeviceInfo defaultInputDevice();
-    static QAudioDeviceInfo defaultOutputDevice();
+   static QAudioDeviceInfo defaultInputDevice();
+   static QAudioDeviceInfo defaultOutputDevice();
 
-    static QAbstractAudioDeviceInfo* audioDeviceInfo(const QString &realm, const QByteArray &handle, QAudio::Mode mode);
+   static QAbstractAudioDeviceInfo *audioDeviceInfo(const QString &realm, const QByteArray &handle, QAudio::Mode mode);
 
-    static QAbstractAudioInput* createDefaultInputDevice(QAudioFormat const &format);
-    static QAbstractAudioOutput* createDefaultOutputDevice(QAudioFormat const &format);
+   static QAbstractAudioInput *createDefaultInputDevice(QAudioFormat const &format);
+   static QAbstractAudioOutput *createDefaultOutputDevice(QAudioFormat const &format);
 
-    static QAbstractAudioInput* createInputDevice(QAudioDeviceInfo const &device, QAudioFormat const &format);
-    static QAbstractAudioOutput* createOutputDevice(QAudioDeviceInfo const &device, QAudioFormat const &format);
+   static QAbstractAudioInput *createInputDevice(QAudioDeviceInfo const &device, QAudioFormat const &format);
+   static QAbstractAudioOutput *createOutputDevice(QAudioDeviceInfo const &device, QAudioFormat const &format);
 
-    static QAbstractAudioInput* createNullInput();
-    static QAbstractAudioOutput* createNullOutput();
+   static QAbstractAudioInput *createNullInput();
+   static QAbstractAudioOutput *createNullOutput();
 };
 
 QT_END_NAMESPACE

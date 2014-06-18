@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,42 +38,42 @@ class QHostInfoPrivate;
 class Q_NETWORK_EXPORT QHostInfo
 {
 
-public:
-    enum HostInfoError {
-        NoError,
-        HostNotFound,
-        UnknownError
-    };
+ public:
+   enum HostInfoError {
+      NoError,
+      HostNotFound,
+      UnknownError
+   };
 
-    QHostInfo(int lookupId = -1);
-    QHostInfo(const QHostInfo &d);
-    QHostInfo &operator=(const QHostInfo &d);
-    ~QHostInfo();
+   QHostInfo(int lookupId = -1);
+   QHostInfo(const QHostInfo &d);
+   QHostInfo &operator=(const QHostInfo &d);
+   ~QHostInfo();
 
-    QString hostName() const;
-    void setHostName(const QString &name);
+   QString hostName() const;
+   void setHostName(const QString &name);
 
-    QList<QHostAddress> addresses() const;
-    void setAddresses(const QList<QHostAddress> &addresses);
+   QList<QHostAddress> addresses() const;
+   void setAddresses(const QList<QHostAddress> &addresses);
 
-    HostInfoError error() const;
-    void setError(HostInfoError error);
+   HostInfoError error() const;
+   void setError(HostInfoError error);
 
-    QString errorString() const;
-    void setErrorString(const QString &errorString);
+   QString errorString() const;
+   void setErrorString(const QString &errorString);
 
-    void setLookupId(int id);
-    int lookupId() const;
+   void setLookupId(int id);
+   int lookupId() const;
 
-    static int lookupHost(const QString &name, QObject *receiver, const char *member);
-    static void abortHostLookup(int lookupId);
+   static int lookupHost(const QString &name, QObject *receiver, const char *member);
+   static void abortHostLookup(int lookupId);
 
-    static QHostInfo fromName(const QString &name);
-    static QString localHostName();
-    static QString localDomainName();
+   static QHostInfo fromName(const QString &name);
+   static QString localHostName();
+   static QString localDomainName();
 
-private:
-    QScopedPointer<QHostInfoPrivate> d;
+ private:
+   QScopedPointer<QHostInfoPrivate> d;
 };
 
 QT_END_NAMESPACE

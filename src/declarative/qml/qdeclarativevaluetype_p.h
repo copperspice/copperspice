@@ -26,21 +26,9 @@
 #ifndef QDECLARATIVEVALUETYPE_P_H
 #define QDECLARATIVEVALUETYPE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include "qdeclarativeproperty.h"
-#include "private/qdeclarativeproperty_p.h"
-#include "private/qdeclarativenullablevalue_p_p.h"
-
+#include "qdeclarativeproperty_p.h"
+#include "qdeclarativenullablevalue_p_p.h"
 #include <QtCore/qobject.h>
 #include <QtCore/qrect.h>
 #include <QtCore/qeasingcurve.h>

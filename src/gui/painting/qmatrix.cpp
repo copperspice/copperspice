@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -160,7 +160,7 @@ QT_BEGIN_NAMESPACE
     \snippet doc/src/snippets/matrix/matrix.cpp 2
     \endtable
 
-    \sa QPainter, QTransform, {Coordinate System}, 
+    \sa QPainter, QTransform, {Coordinate System},
     {demos/affine}{Affine Transformations Demo}, {Transformations Example}
 */
 
@@ -200,12 +200,12 @@ QT_BEGIN_NAMESPACE
 */
 
 QMatrix::QMatrix()
-    : _m11(1.)
-    , _m12(0.)
-    , _m21(0.)
-    , _m22(1.)
-    , _dx(0.)
-    , _dy(0.)
+   : _m11(1.)
+   , _m12(0.)
+   , _m21(0.)
+   , _m22(1.)
+   , _dx(0.)
+   , _dy(0.)
 {
 }
 
@@ -217,12 +217,12 @@ QMatrix::QMatrix()
 */
 
 QMatrix::QMatrix(qreal m11, qreal m12, qreal m21, qreal m22, qreal dx, qreal dy)
-    : _m11(m11)
-    , _m12(m12)
-    , _m21(m21)
-    , _m22(m22)
-    , _dx(dx)
-    , _dy(dy)
+   : _m11(m11)
+   , _m12(m12)
+   , _m21(m21)
+   , _m22(m22)
+   , _dx(dx)
+   , _dy(dy)
 {
 }
 
@@ -231,12 +231,12 @@ QMatrix::QMatrix(qreal m11, qreal m12, qreal m21, qreal m22, qreal dx, qreal dy)
      Constructs a matrix that is a copy of the given \a matrix.
  */
 QMatrix::QMatrix(const QMatrix &matrix)
-    : _m11(matrix._m11)
-    , _m12(matrix._m12)
-    , _m21(matrix._m21)
-    , _m22(matrix._m22)
-    , _dx(matrix._dx)
-    , _dy(matrix._dy)
+   : _m11(matrix._m11)
+   , _m12(matrix._m12)
+   , _m21(matrix._m21)
+   , _m22(matrix._m22)
+   , _dx(matrix._dx)
+   , _dy(matrix._dy)
 {
 }
 
@@ -254,12 +254,12 @@ QMatrix::QMatrix(const QMatrix &matrix)
 
 void QMatrix::setMatrix(qreal m11, qreal m12, qreal m21, qreal m22, qreal dx, qreal dy)
 {
-    _m11 = m11;
-    _m12 = m12;
-    _m21 = m21;
-    _m22 = m22;
-    _dx  = dx;
-    _dy  = dy;
+   _m11 = m11;
+   _m12 = m12;
+   _m21 = m21;
+   _m22 = m22;
+   _dx  = dx;
+   _dy  = dy;
 }
 
 
@@ -335,7 +335,7 @@ void QMatrix::setMatrix(qreal m11, qreal m12, qreal m21, qreal m22, qreal dx, qr
 
 void QMatrix::map(qreal x, qreal y, qreal *tx, qreal *ty) const
 {
-    MAPDOUBLE(x, y, *tx, *ty);
+   MAPDOUBLE(x, y, *tx, *ty);
 }
 
 
@@ -351,53 +351,53 @@ void QMatrix::map(qreal x, qreal y, qreal *tx, qreal *ty) const
 
 void QMatrix::map(int x, int y, int *tx, int *ty) const
 {
-    MAPINT(x, y, *tx, *ty);
+   MAPINT(x, y, *tx, *ty);
 }
 
 QRect QMatrix::mapRect(const QRect &rect) const
 {
-    QRect result;
-    if (_m12 == 0.0F && _m21 == 0.0F) {
-        int x = qRound(_m11*rect.x() + _dx);
-        int y = qRound(_m22*rect.y() + _dy);
-        int w = qRound(_m11*rect.width());
-        int h = qRound(_m22*rect.height());
-        if (w < 0) {
-            w = -w;
-            x -= w;
-        }
-        if (h < 0) {
-            h = -h;
-            y -= h;
-        }
-        result = QRect(x, y, w, h);
-    } else {
-        // see mapToPolygon for explanations of the algorithm.
-        qreal x0, y0;
-        qreal x, y;
-        MAPDOUBLE(rect.left(), rect.top(), x0, y0);
-        qreal xmin = x0;
-        qreal ymin = y0;
-        qreal xmax = x0;
-        qreal ymax = y0;
-        MAPDOUBLE(rect.right() + 1, rect.top(), x, y);
-        xmin = qMin(xmin, x);
-        ymin = qMin(ymin, y);
-        xmax = qMax(xmax, x);
-        ymax = qMax(ymax, y);
-        MAPDOUBLE(rect.right() + 1, rect.bottom() + 1, x, y);
-        xmin = qMin(xmin, x);
-        ymin = qMin(ymin, y);
-        xmax = qMax(xmax, x);
-        ymax = qMax(ymax, y);
-        MAPDOUBLE(rect.left(), rect.bottom() + 1, x, y);
-        xmin = qMin(xmin, x);
-        ymin = qMin(ymin, y);
-        xmax = qMax(xmax, x);
-        ymax = qMax(ymax, y);
-        result = QRect(qRound(xmin), qRound(ymin), qRound(xmax)-qRound(xmin), qRound(ymax)-qRound(ymin));
-    }
-    return result;
+   QRect result;
+   if (_m12 == 0.0F && _m21 == 0.0F) {
+      int x = qRound(_m11 * rect.x() + _dx);
+      int y = qRound(_m22 * rect.y() + _dy);
+      int w = qRound(_m11 * rect.width());
+      int h = qRound(_m22 * rect.height());
+      if (w < 0) {
+         w = -w;
+         x -= w;
+      }
+      if (h < 0) {
+         h = -h;
+         y -= h;
+      }
+      result = QRect(x, y, w, h);
+   } else {
+      // see mapToPolygon for explanations of the algorithm.
+      qreal x0, y0;
+      qreal x, y;
+      MAPDOUBLE(rect.left(), rect.top(), x0, y0);
+      qreal xmin = x0;
+      qreal ymin = y0;
+      qreal xmax = x0;
+      qreal ymax = y0;
+      MAPDOUBLE(rect.right() + 1, rect.top(), x, y);
+      xmin = qMin(xmin, x);
+      ymin = qMin(ymin, y);
+      xmax = qMax(xmax, x);
+      ymax = qMax(ymax, y);
+      MAPDOUBLE(rect.right() + 1, rect.bottom() + 1, x, y);
+      xmin = qMin(xmin, x);
+      ymin = qMin(ymin, y);
+      xmax = qMax(xmax, x);
+      ymax = qMax(ymax, y);
+      MAPDOUBLE(rect.left(), rect.bottom() + 1, x, y);
+      xmin = qMin(xmin, x);
+      ymin = qMin(ymin, y);
+      xmax = qMax(xmax, x);
+      ymax = qMax(ymax, y);
+      result = QRect(qRound(xmin), qRound(ymin), qRound(xmax) - qRound(xmin), qRound(ymax) - qRound(ymin));
+   }
+   return result;
 }
 
 /*!
@@ -421,47 +421,47 @@ QRect QMatrix::mapRect(const QRect &rect) const
 */
 QRectF QMatrix::mapRect(const QRectF &rect) const
 {
-    QRectF result;
-    if (_m12 == 0.0F && _m21 == 0.0F) {
-        qreal x = _m11*rect.x() + _dx;
-        qreal y = _m22*rect.y() + _dy;
-        qreal w = _m11*rect.width();
-        qreal h = _m22*rect.height();
-        if (w < 0) {
-            w = -w;
-            x -= w;
-        }
-        if (h < 0) {
-            h = -h;
-            y -= h;
-        }
-        result = QRectF(x, y, w, h);
-    } else {
-        qreal x0, y0;
-        qreal x, y;
-        MAPDOUBLE(rect.x(), rect.y(), x0, y0);
-        qreal xmin = x0;
-        qreal ymin = y0;
-        qreal xmax = x0;
-        qreal ymax = y0;
-        MAPDOUBLE(rect.x() + rect.width(), rect.y(), x, y);
-        xmin = qMin(xmin, x);
-        ymin = qMin(ymin, y);
-        xmax = qMax(xmax, x);
-        ymax = qMax(ymax, y);
-        MAPDOUBLE(rect.x() + rect.width(), rect.y() + rect.height(), x, y);
-        xmin = qMin(xmin, x);
-        ymin = qMin(ymin, y);
-        xmax = qMax(xmax, x);
-        ymax = qMax(ymax, y);
-        MAPDOUBLE(rect.x(), rect.y() + rect.height(), x, y);
-        xmin = qMin(xmin, x);
-        ymin = qMin(ymin, y);
-        xmax = qMax(xmax, x);
-        ymax = qMax(ymax, y);
-        result = QRectF(xmin, ymin, xmax-xmin, ymax - ymin);
-    }
-    return result;
+   QRectF result;
+   if (_m12 == 0.0F && _m21 == 0.0F) {
+      qreal x = _m11 * rect.x() + _dx;
+      qreal y = _m22 * rect.y() + _dy;
+      qreal w = _m11 * rect.width();
+      qreal h = _m22 * rect.height();
+      if (w < 0) {
+         w = -w;
+         x -= w;
+      }
+      if (h < 0) {
+         h = -h;
+         y -= h;
+      }
+      result = QRectF(x, y, w, h);
+   } else {
+      qreal x0, y0;
+      qreal x, y;
+      MAPDOUBLE(rect.x(), rect.y(), x0, y0);
+      qreal xmin = x0;
+      qreal ymin = y0;
+      qreal xmax = x0;
+      qreal ymax = y0;
+      MAPDOUBLE(rect.x() + rect.width(), rect.y(), x, y);
+      xmin = qMin(xmin, x);
+      ymin = qMin(ymin, y);
+      xmax = qMax(xmax, x);
+      ymax = qMax(ymax, y);
+      MAPDOUBLE(rect.x() + rect.width(), rect.y() + rect.height(), x, y);
+      xmin = qMin(xmin, x);
+      ymin = qMin(ymin, y);
+      xmax = qMax(xmax, x);
+      ymax = qMax(ymax, y);
+      MAPDOUBLE(rect.x(), rect.y() + rect.height(), x, y);
+      xmin = qMin(xmin, x);
+      ymin = qMin(ymin, y);
+      xmax = qMax(xmax, x);
+      ymax = qMax(ymax, y);
+      result = QRectF(xmin, ymin, xmax - xmin, ymax - ymin);
+   }
+   return result;
 }
 
 /*!
@@ -486,10 +486,10 @@ QRectF QMatrix::mapRect(const QRectF &rect) const
 
 QPoint QMatrix::map(const QPoint &p) const
 {
-    qreal fx = p.x();
-    qreal fy = p.y();
-    return QPoint(qRound(_m11*fx + _m21*fy + _dx),
-                   qRound(_m12*fx + _m22*fy + _dy));
+   qreal fx = p.x();
+   qreal fy = p.y();
+   return QPoint(qRound(_m11 * fx + _m21 * fy + _dx),
+                 qRound(_m12 * fx + _m22 * fy + _dy));
 }
 
 /*!
@@ -510,9 +510,9 @@ QPoint QMatrix::map(const QPoint &p) const
 */
 QPointF QMatrix::map(const QPointF &point) const
 {
-    qreal fx = point.x();
-    qreal fy = point.y();
-    return QPointF(_m11*fx + _m21*fy + _dx, _m12*fx + _m22*fy + _dy);
+   qreal fx = point.x();
+   qreal fy = point.y();
+   return QPointF(_m11 * fx + _m21 * fy + _dx, _m12 * fx + _m22 * fy + _dy);
 }
 
 /*!
@@ -551,7 +551,7 @@ QPointF QMatrix::map(const QPointF &point) const
 */
 QLineF QMatrix::map(const QLineF &line) const
 {
-    return QLineF(map(line.p1()), map(line.p2()));
+   return QLineF(map(line.p1()), map(line.p2()));
 }
 
 /*!
@@ -564,7 +564,7 @@ QLineF QMatrix::map(const QLineF &line) const
 */
 QLine QMatrix::map(const QLine &line) const
 {
-    return QLine(map(line.p1()), map(line.p2()));
+   return QLine(map(line.p1()), map(line.p2()));
 }
 
 /*!
@@ -587,15 +587,15 @@ QLine QMatrix::map(const QLine &line) const
 
 QPolygon QMatrix::map(const QPolygon &a) const
 {
-    int size = a.size();
-    int i;
-    QPolygon p(size);
-    const QPoint *da = a.constData();
-    QPoint *dp = p.data();
-    for(i = 0; i < size; i++) {
-        MAPINT(da[i].x(), da[i].y(), dp[i].rx(), dp[i].ry());
-    }
-    return p;
+   int size = a.size();
+   int i;
+   QPolygon p(size);
+   const QPoint *da = a.constData();
+   QPoint *dp = p.data();
+   for (i = 0; i < size; i++) {
+      MAPINT(da[i].x(), da[i].y(), dp[i].rx(), dp[i].ry());
+   }
+   return p;
 }
 
 /*!
@@ -608,15 +608,15 @@ QPolygon QMatrix::map(const QPolygon &a) const
 */
 QPolygonF QMatrix::map(const QPolygonF &a) const
 {
-    int size = a.size();
-    int i;
-    QPolygonF p(size);
-    const QPointF *da = a.constData();
-    QPointF *dp = p.data();
-    for(i = 0; i < size; i++) {
-        MAPDOUBLE(da[i].xp, da[i].yp, dp[i].xp, dp[i].yp);
-    }
-    return p;
+   int size = a.size();
+   int i;
+   QPolygonF p(size);
+   const QPointF *da = a.constData();
+   QPointF *dp = p.data();
+   for (i = 0; i < size; i++) {
+      MAPDOUBLE(da[i].xp, da[i].yp, dp[i].xp, dp[i].yp);
+   }
+   return p;
 }
 
 /*!
@@ -652,16 +652,17 @@ extern QPainterPath qt_regionToPath(const QRegion &region);
 */
 QRegion QMatrix::map(const QRegion &r) const
 {
-    if (_m11 == 1.0 && _m22 == 1.0 && _m12 == 0.0 && _m21 == 0.0) { // translate or identity
-        if (_dx == 0.0 && _dy == 0.0) // Identity
-            return r;
-        QRegion copy(r);
-        copy.translate(qRound(_dx), qRound(_dy));
-        return copy;
-    }
+   if (_m11 == 1.0 && _m22 == 1.0 && _m12 == 0.0 && _m21 == 0.0) { // translate or identity
+      if (_dx == 0.0 && _dy == 0.0) { // Identity
+         return r;
+      }
+      QRegion copy(r);
+      copy.translate(qRound(_dx), qRound(_dy));
+      return copy;
+   }
 
-    QPainterPath p = map(qt_regionToPath(r));
-    return p.toFillPolygon().toPolygon();
+   QPainterPath p = map(qt_regionToPath(r));
+   return p.toFillPolygon().toPolygon();
 }
 
 /*!
@@ -682,36 +683,37 @@ QRegion QMatrix::map(const QRegion &r) const
 */
 QPainterPath QMatrix::map(const QPainterPath &path) const
 {
-    if (path.isEmpty())
-        return QPainterPath();
+   if (path.isEmpty()) {
+      return QPainterPath();
+   }
 
-    QPainterPath copy = path;
+   QPainterPath copy = path;
 
-    // Translate or identity
-    if (_m11 == 1.0 && _m22 == 1.0 && _m12 == 0.0 && _m21 == 0.0) {
+   // Translate or identity
+   if (_m11 == 1.0 && _m22 == 1.0 && _m12 == 0.0 && _m21 == 0.0) {
 
-        // Translate
-        if (_dx != 0.0 || _dy != 0.0) {
-            copy.detach();
-            for (int i=0; i<path.elementCount(); ++i) {
-                QPainterPath::Element &e = copy.d_ptr->elements[i];
-                e.x += _dx;
-                e.y += _dy;
-            }
-        }
-
-    // Full xform
-    } else {
-        copy.detach();
-        for (int i=0; i<path.elementCount(); ++i) {
+      // Translate
+      if (_dx != 0.0 || _dy != 0.0) {
+         copy.detach();
+         for (int i = 0; i < path.elementCount(); ++i) {
             QPainterPath::Element &e = copy.d_ptr->elements[i];
-            qreal fx = e.x, fy = e.y;
-            e.x = _m11*fx + _m21*fy + _dx;
-            e.y =  _m12*fx + _m22*fy + _dy;
-        }
-    }
+            e.x += _dx;
+            e.y += _dy;
+         }
+      }
 
-    return copy;
+      // Full xform
+   } else {
+      copy.detach();
+      for (int i = 0; i < path.elementCount(); ++i) {
+         QPainterPath::Element &e = copy.d_ptr->elements[i];
+         qreal fx = e.x, fy = e.y;
+         e.x = _m11 * fx + _m21 * fy + _dx;
+         e.y =  _m12 * fx + _m22 * fy + _dy;
+      }
+   }
+
+   return copy;
 }
 
 /*!
@@ -746,43 +748,43 @@ QPainterPath QMatrix::map(const QPainterPath &path) const
 */
 QPolygon QMatrix::mapToPolygon(const QRect &rect) const
 {
-    QPolygon a(4);
-    qreal x[4], y[4];
-    if (_m12 == 0.0F && _m21 == 0.0F) {
-        x[0] = _m11*rect.x() + _dx;
-        y[0] = _m22*rect.y() + _dy;
-        qreal w = _m11*rect.width();
-        qreal h = _m22*rect.height();
-        if (w < 0) {
-            w = -w;
-            x[0] -= w;
-        }
-        if (h < 0) {
-            h = -h;
-            y[0] -= h;
-        }
-        x[1] = x[0]+w;
-        x[2] = x[1];
-        x[3] = x[0];
-        y[1] = y[0];
-        y[2] = y[0]+h;
-        y[3] = y[2];
-    } else {
-        qreal right = rect.x() + rect.width();
-        qreal bottom = rect.y() + rect.height();
-        MAPDOUBLE(rect.x(), rect.y(), x[0], y[0]);
-        MAPDOUBLE(right, rect.y(), x[1], y[1]);
-        MAPDOUBLE(right, bottom, x[2], y[2]);
-        MAPDOUBLE(rect.x(), bottom, x[3], y[3]);
-    }
+   QPolygon a(4);
+   qreal x[4], y[4];
+   if (_m12 == 0.0F && _m21 == 0.0F) {
+      x[0] = _m11 * rect.x() + _dx;
+      y[0] = _m22 * rect.y() + _dy;
+      qreal w = _m11 * rect.width();
+      qreal h = _m22 * rect.height();
+      if (w < 0) {
+         w = -w;
+         x[0] -= w;
+      }
+      if (h < 0) {
+         h = -h;
+         y[0] -= h;
+      }
+      x[1] = x[0] + w;
+      x[2] = x[1];
+      x[3] = x[0];
+      y[1] = y[0];
+      y[2] = y[0] + h;
+      y[3] = y[2];
+   } else {
+      qreal right = rect.x() + rect.width();
+      qreal bottom = rect.y() + rect.height();
+      MAPDOUBLE(rect.x(), rect.y(), x[0], y[0]);
+      MAPDOUBLE(right, rect.y(), x[1], y[1]);
+      MAPDOUBLE(right, bottom, x[2], y[2]);
+      MAPDOUBLE(rect.x(), bottom, x[3], y[3]);
+   }
 
-    // all coordinates are correctly, tranform to a pointarray
-    // (rounding to the next integer)
-    a.setPoints(4, qRound(x[0]), qRound(y[0]),
-                 qRound(x[1]), qRound(y[1]),
-                 qRound(x[2]), qRound(y[2]),
-                 qRound(x[3]), qRound(y[3]));
-    return a;
+   // all coordinates are correctly, tranform to a pointarray
+   // (rounding to the next integer)
+   a.setPoints(4, qRound(x[0]), qRound(y[0]),
+               qRound(x[1]), qRound(y[1]),
+               qRound(x[2]), qRound(y[2]),
+               qRound(x[3]), qRound(y[3]));
+   return a;
 }
 
 /*!
@@ -796,8 +798,8 @@ QPolygon QMatrix::mapToPolygon(const QRect &rect) const
 
 void QMatrix::reset()
 {
-    _m11 = _m22 = 1.0;
-    _m12 = _m21 = _dx = _dy = 0.0;
+   _m11 = _m22 = 1.0;
+   _m12 = _m21 = _dx = _dy = 0.0;
 }
 
 /*!
@@ -818,9 +820,9 @@ void QMatrix::reset()
 
 QMatrix &QMatrix::translate(qreal dx, qreal dy)
 {
-    _dx += dx*_m11 + dy*_m21;
-    _dy += dy*_m22 + dx*_m12;
-    return *this;
+   _dx += dx * _m11 + dy * _m21;
+   _dy += dy * _m22 + dx * _m12;
+   return *this;
 }
 
 /*!
@@ -834,11 +836,11 @@ QMatrix &QMatrix::translate(qreal dx, qreal dy)
 
 QMatrix &QMatrix::scale(qreal sx, qreal sy)
 {
-    _m11 *= sx;
-    _m12 *= sx;
-    _m21 *= sy;
-    _m22 *= sy;
-    return *this;
+   _m11 *= sx;
+   _m12 *= sx;
+   _m21 *= sy;
+   _m22 *= sy;
+   return *this;
 }
 
 /*!
@@ -850,15 +852,15 @@ QMatrix &QMatrix::scale(qreal sx, qreal sy)
 
 QMatrix &QMatrix::shear(qreal sh, qreal sv)
 {
-    qreal tm11 = sv*_m21;
-    qreal tm12 = sv*_m22;
-    qreal tm21 = sh*_m11;
-    qreal tm22 = sh*_m12;
-    _m11 += tm11;
-    _m12 += tm12;
-    _m21 += tm21;
-    _m22 += tm22;
-    return *this;
+   qreal tm11 = sv * _m21;
+   qreal tm12 = sv * _m22;
+   qreal tm21 = sh * _m11;
+   qreal tm22 = sh * _m12;
+   _m11 += tm11;
+   _m12 += tm12;
+   _m21 += tm21;
+   _m22 += tm22;
+   return *this;
 }
 
 const qreal deg2rad = qreal(0.017453292519943295769);        // pi/180
@@ -880,26 +882,28 @@ const qreal deg2rad = qreal(0.017453292519943295769);        // pi/180
 
 QMatrix &QMatrix::rotate(qreal a)
 {
-    qreal sina = 0;
-    qreal cosa = 0;
-    if (a == 90. || a == -270.)
-        sina = 1.;
-    else if (a == 270. || a == -90.)
-        sina = -1.;
-    else if (a == 180.)
-        cosa = -1.;
-    else{
-        qreal b = deg2rad*a;                        // convert to radians
-        sina = qSin(b);               // fast and convenient
-        cosa = qCos(b);
-    }
-    qreal tm11 = cosa*_m11 + sina*_m21;
-    qreal tm12 = cosa*_m12 + sina*_m22;
-    qreal tm21 = -sina*_m11 + cosa*_m21;
-    qreal tm22 = -sina*_m12 + cosa*_m22;
-    _m11 = tm11; _m12 = tm12;
-    _m21 = tm21; _m22 = tm22;
-    return *this;
+   qreal sina = 0;
+   qreal cosa = 0;
+   if (a == 90. || a == -270.) {
+      sina = 1.;
+   } else if (a == 270. || a == -90.) {
+      sina = -1.;
+   } else if (a == 180.) {
+      cosa = -1.;
+   } else {
+      qreal b = deg2rad * a;                      // convert to radians
+      sina = qSin(b);               // fast and convenient
+      cosa = qCos(b);
+   }
+   qreal tm11 = cosa * _m11 + sina * _m21;
+   qreal tm12 = cosa * _m12 + sina * _m22;
+   qreal tm21 = -sina * _m11 + cosa * _m21;
+   qreal tm22 = -sina * _m12 + cosa * _m22;
+   _m11 = tm11;
+   _m12 = tm12;
+   _m21 = tm21;
+   _m22 = tm22;
+   return *this;
 }
 
 /*!
@@ -947,22 +951,23 @@ QMatrix &QMatrix::rotate(qreal a)
 
 QMatrix QMatrix::inverted(bool *invertible) const
 {
-    qreal dtr = determinant();
-    if (dtr == 0.0) {
-        if (invertible)
-            *invertible = false;                // singular matrix
-        return QMatrix(true);
-    }
-    else {                                        // invertible matrix
-        if (invertible)
-            *invertible = true;
-        qreal dinv = 1.0/dtr;
-        return QMatrix((_m22*dinv),        (-_m12*dinv),
-                       (-_m21*dinv), (_m11*dinv),
-                       ((_m21*_dy - _m22*_dx)*dinv),
-                       ((_m12*_dx - _m11*_dy)*dinv),
-                       true);
-    }
+   qreal dtr = determinant();
+   if (dtr == 0.0) {
+      if (invertible) {
+         *invertible = false;   // singular matrix
+      }
+      return QMatrix(true);
+   } else {                                      // invertible matrix
+      if (invertible) {
+         *invertible = true;
+      }
+      qreal dinv = 1.0 / dtr;
+      return QMatrix((_m22 * dinv),        (-_m12 * dinv),
+                     (-_m21 * dinv), (_m11 * dinv),
+                     ((_m21 * _dy - _m22 * _dx) * dinv),
+                     ((_m12 * _dx - _m11 * _dy) * dinv),
+                     true);
+   }
 }
 
 
@@ -975,12 +980,12 @@ QMatrix QMatrix::inverted(bool *invertible) const
 
 bool QMatrix::operator==(const QMatrix &m) const
 {
-    return _m11 == m._m11 &&
-           _m12 == m._m12 &&
-           _m21 == m._m21 &&
-           _m22 == m._m22 &&
-           _dx == m._dx &&
-           _dy == m._dy;
+   return _m11 == m._m11 &&
+          _m12 == m._m12 &&
+          _m21 == m._m21 &&
+          _m22 == m._m22 &&
+          _dx == m._dx &&
+          _dy == m._dy;
 }
 
 /*!
@@ -992,12 +997,12 @@ bool QMatrix::operator==(const QMatrix &m) const
 
 bool QMatrix::operator!=(const QMatrix &m) const
 {
-    return _m11 != m._m11 ||
-           _m12 != m._m12 ||
-           _m21 != m._m21 ||
-           _m22 != m._m22 ||
-           _dx != m._dx ||
-           _dy != m._dy;
+   return _m11 != m._m11 ||
+          _m12 != m._m12 ||
+          _m21 != m._m21 ||
+          _m22 != m._m22 ||
+          _dx != m._dx ||
+          _dy != m._dy;
 }
 
 /*!
@@ -1010,18 +1015,21 @@ bool QMatrix::operator!=(const QMatrix &m) const
 
 QMatrix &QMatrix::operator *=(const QMatrix &m)
 {
-    qreal tm11 = _m11*m._m11 + _m12*m._m21;
-    qreal tm12 = _m11*m._m12 + _m12*m._m22;
-    qreal tm21 = _m21*m._m11 + _m22*m._m21;
-    qreal tm22 = _m21*m._m12 + _m22*m._m22;
+   qreal tm11 = _m11 * m._m11 + _m12 * m._m21;
+   qreal tm12 = _m11 * m._m12 + _m12 * m._m22;
+   qreal tm21 = _m21 * m._m11 + _m22 * m._m21;
+   qreal tm22 = _m21 * m._m12 + _m22 * m._m22;
 
-    qreal tdx  = _dx*m._m11  + _dy*m._m21 + m._dx;
-    qreal tdy =  _dx*m._m12  + _dy*m._m22 + m._dy;
+   qreal tdx  = _dx * m._m11  + _dy * m._m21 + m._dx;
+   qreal tdy =  _dx * m._m12  + _dy * m._m22 + m._dy;
 
-    _m11 = tm11; _m12 = tm12;
-    _m21 = tm21; _m22 = tm22;
-    _dx = tdx; _dy = tdy;
-    return *this;
+   _m11 = tm11;
+   _m12 = tm12;
+   _m21 = tm21;
+   _m22 = tm22;
+   _dx = tdx;
+   _dy = tdy;
+   return *this;
 }
 
 /*!
@@ -1036,14 +1044,14 @@ QMatrix &QMatrix::operator *=(const QMatrix &m)
 
 QMatrix QMatrix::operator *(const QMatrix &m) const
 {
-    qreal tm11 = _m11*m._m11 + _m12*m._m21;
-    qreal tm12 = _m11*m._m12 + _m12*m._m22;
-    qreal tm21 = _m21*m._m11 + _m22*m._m21;
-    qreal tm22 = _m21*m._m12 + _m22*m._m22;
+   qreal tm11 = _m11 * m._m11 + _m12 * m._m21;
+   qreal tm12 = _m11 * m._m12 + _m12 * m._m22;
+   qreal tm21 = _m21 * m._m11 + _m22 * m._m21;
+   qreal tm22 = _m21 * m._m12 + _m22 * m._m22;
 
-    qreal tdx  = _dx*m._m11  + _dy*m._m21 + m._dx;
-    qreal tdy =  _dx*m._m12  + _dy*m._m22 + m._dy;
-    return QMatrix(tm11, tm12, tm21, tm22, tdx, tdy, true);
+   qreal tdx  = _dx * m._m11  + _dy * m._m21 + m._dx;
+   qreal tdy =  _dx * m._m12  + _dy * m._m22 + m._dy;
+   return QMatrix(tm11, tm12, tm21, tm22, tdx, tdy, true);
 }
 
 /*!
@@ -1051,13 +1059,13 @@ QMatrix QMatrix::operator *(const QMatrix &m) const
 */
 QMatrix &QMatrix::operator=(const QMatrix &matrix)
 {
-    _m11 = matrix._m11;
-    _m12 = matrix._m12;
-    _m21 = matrix._m21;
-    _m22 = matrix._m22;
-    _dx  = matrix._dx;
-    _dy  = matrix._dy;
-    return *this;
+   _m11 = matrix._m11;
+   _m12 = matrix._m12;
+   _m21 = matrix._m21;
+   _m22 = matrix._m22;
+   _dx  = matrix._dx;
+   _dy  = matrix._dy;
+   return *this;
 }
 
 /*!
@@ -1067,12 +1075,12 @@ QMatrix &QMatrix::operator=(const QMatrix &matrix)
 */
 QMatrix::operator QVariant() const
 {
-    return QVariant(QVariant::Matrix, this);
+   return QVariant(QVariant::Matrix, this);
 }
 
 Q_GUI_EXPORT QPainterPath operator *(const QPainterPath &p, const QMatrix &m)
 {
-    return m.map(p);
+   return m.map(p);
 }
 
 
@@ -1092,18 +1100,18 @@ Q_GUI_EXPORT QPainterPath operator *(const QPainterPath &p, const QMatrix &m)
 
 QDataStream &operator<<(QDataStream &s, const QMatrix &m)
 {
-    if (s.version() == 1) {
-        s << (float)m.m11() << (float)m.m12() << (float)m.m21()
-          << (float)m.m22() << (float)m.dx()  << (float)m.dy();
-    } else {
-        s << double(m.m11())
-          << double(m.m12())
-          << double(m.m21())
-          << double(m.m22())
-          << double(m.dx())
-          << double(m.dy());
-    }
-    return s;
+   if (s.version() == 1) {
+      s << (float)m.m11() << (float)m.m12() << (float)m.m21()
+        << (float)m.m22() << (float)m.dx()  << (float)m.dy();
+   } else {
+      s << double(m.m11())
+        << double(m.m12())
+        << double(m.m21())
+        << double(m.m22())
+        << double(m.dx())
+        << double(m.dy());
+   }
+   return s;
 }
 
 /*!
@@ -1118,37 +1126,40 @@ QDataStream &operator<<(QDataStream &s, const QMatrix &m)
 
 QDataStream &operator>>(QDataStream &s, QMatrix &m)
 {
-    if (s.version() == 1) {
-        float m11, m12, m21, m22, dx, dy;
-        s >> m11;  s >> m12;  s >> m21;  s >> m22;
-        s >> dx;   s >> dy;
-        m.setMatrix(m11, m12, m21, m22, dx, dy);
-    }
-    else {
-        double m11, m12, m21, m22, dx, dy;
-        s >> m11;
-        s >> m12;
-        s >> m21;
-        s >> m22;
-        s >> dx;
-        s >> dy;
-        m.setMatrix(m11, m12, m21, m22, dx, dy);
-    }
-    return s;
+   if (s.version() == 1) {
+      float m11, m12, m21, m22, dx, dy;
+      s >> m11;
+      s >> m12;
+      s >> m21;
+      s >> m22;
+      s >> dx;
+      s >> dy;
+      m.setMatrix(m11, m12, m21, m22, dx, dy);
+   } else {
+      double m11, m12, m21, m22, dx, dy;
+      s >> m11;
+      s >> m12;
+      s >> m21;
+      s >> m22;
+      s >> dx;
+      s >> dy;
+      m.setMatrix(m11, m12, m21, m22, dx, dy);
+   }
+   return s;
 }
 #endif // QT_NO_DATASTREAM
 
 QDebug operator<<(QDebug dbg, const QMatrix &m)
 {
-    dbg.nospace() << "QMatrix("
-                  << "11=" << m.m11()
-                  << " 12=" << m.m12()
-                  << " 21=" << m.m21()
-                  << " 22=" << m.m22()
-                  << " dx=" << m.dx()
-                  << " dy=" << m.dy()
-                  << ')';
-    return dbg.space();
+   dbg.nospace() << "QMatrix("
+                 << "11=" << m.m11()
+                 << " 12=" << m.m12()
+                 << " 21=" << m.m21()
+                 << " 22=" << m.m22()
+                 << " dx=" << m.dx()
+                 << " dy=" << m.dy()
+                 << ')';
+   return dbg.space();
 }
 
 

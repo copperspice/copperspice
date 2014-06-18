@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,318 +43,326 @@ class QGraphicsViewPrivate;
 
 class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 {
-    CS_OBJECT(QGraphicsView)
+   CS_OBJECT(QGraphicsView)
 
-    GUI_CS_FLAG(OptimizationFlag, OptimizationFlags)
-    GUI_CS_FLAG(CacheModeFlag, CacheMode)
+   GUI_CS_FLAG(OptimizationFlag, OptimizationFlags)
+   GUI_CS_FLAG(CacheModeFlag, CacheMode)
 
-    GUI_CS_ENUM(ViewportAnchor)
-    GUI_CS_ENUM(DragMode)
-    GUI_CS_ENUM(ViewportUpdateMode)
+   GUI_CS_ENUM(ViewportAnchor)
+   GUI_CS_ENUM(DragMode)
+   GUI_CS_ENUM(ViewportUpdateMode)
 
-    GUI_CS_PROPERTY_READ(backgroundBrush, backgroundBrush)
-    GUI_CS_PROPERTY_WRITE(backgroundBrush, setBackgroundBrush)
-    GUI_CS_PROPERTY_READ(foregroundBrush, foregroundBrush)
-    GUI_CS_PROPERTY_WRITE(foregroundBrush, setForegroundBrush)
-    GUI_CS_PROPERTY_READ(interactive, isInteractive)
-    GUI_CS_PROPERTY_WRITE(interactive, setInteractive)
+   GUI_CS_PROPERTY_READ(backgroundBrush, backgroundBrush)
+   GUI_CS_PROPERTY_WRITE(backgroundBrush, setBackgroundBrush)
+   GUI_CS_PROPERTY_READ(foregroundBrush, foregroundBrush)
+   GUI_CS_PROPERTY_WRITE(foregroundBrush, setForegroundBrush)
+   GUI_CS_PROPERTY_READ(interactive, isInteractive)
+   GUI_CS_PROPERTY_WRITE(interactive, setInteractive)
 
-    GUI_CS_PROPERTY_READ(sceneRect, sceneRect)
-    GUI_CS_PROPERTY_WRITE(sceneRect, cs_setSceneRect)
+   GUI_CS_PROPERTY_READ(sceneRect, sceneRect)
+   GUI_CS_PROPERTY_WRITE(sceneRect, cs_setSceneRect)
 
-    GUI_CS_PROPERTY_READ(alignment, alignment)
-    GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
+   GUI_CS_PROPERTY_READ(alignment, alignment)
+   GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
 
-    GUI_CS_PROPERTY_READ(renderHints, renderHints)
-    GUI_CS_PROPERTY_WRITE(renderHints, setRenderHints)
-    GUI_CS_PROPERTY_READ(dragMode, dragMode)
-    GUI_CS_PROPERTY_WRITE(dragMode, setDragMode)
-    GUI_CS_PROPERTY_READ(cacheMode, cacheMode)
-    GUI_CS_PROPERTY_WRITE(cacheMode, setCacheMode)
-    GUI_CS_PROPERTY_READ(transformationAnchor, transformationAnchor)
-    GUI_CS_PROPERTY_WRITE(transformationAnchor, setTransformationAnchor)
-    GUI_CS_PROPERTY_READ(resizeAnchor, resizeAnchor)
-    GUI_CS_PROPERTY_WRITE(resizeAnchor, setResizeAnchor)
-    GUI_CS_PROPERTY_READ(viewportUpdateMode, viewportUpdateMode)
-    GUI_CS_PROPERTY_WRITE(viewportUpdateMode, setViewportUpdateMode)
-
-#ifndef QT_NO_RUBBERBAND
-    GUI_CS_PROPERTY_READ(rubberBandSelectionMode, rubberBandSelectionMode)
-    GUI_CS_PROPERTY_WRITE(rubberBandSelectionMode, setRubberBandSelectionMode)
-#endif
-
-    GUI_CS_PROPERTY_READ(optimizationFlags, optimizationFlags)
-    GUI_CS_PROPERTY_WRITE(optimizationFlags, setOptimizationFlags)
-
-public:
-    enum ViewportAnchor {
-        NoAnchor,
-        AnchorViewCenter,
-        AnchorUnderMouse
-    };
-
-    enum CacheModeFlag {
-        CacheNone = 0x0,
-        CacheBackground = 0x1
-    };
-    using CacheMode = QFlags<CacheModeFlag>;
-
-    enum DragMode {
-        NoDrag,
-        ScrollHandDrag,
-        RubberBandDrag
-    };
-
-    enum ViewportUpdateMode {
-        FullViewportUpdate,
-        MinimalViewportUpdate,
-        SmartViewportUpdate,
-        NoViewportUpdate,
-        BoundingRectViewportUpdate
-    };
-
-    enum OptimizationFlag {
-        DontClipPainter = 0x1, // obsolete
-        DontSavePainterState = 0x2,
-        DontAdjustForAntialiasing = 0x4,
-        IndirectPainting = 0x8
-    };
-    using OptimizationFlags = QFlags<OptimizationFlag>;
-
-    QGraphicsView(QWidget *parent = 0);
-    QGraphicsView(QGraphicsScene *scene, QWidget *parent = 0);
-    ~QGraphicsView();
-
-    QSize sizeHint() const;
-
-    QPainter::RenderHints renderHints() const;
-    void setRenderHint(QPainter::RenderHint hint, bool enabled = true);
-    void setRenderHints(QPainter::RenderHints hints);
-
-    Qt::Alignment alignment() const;
-    void setAlignment(Qt::Alignment alignment);
-
-    ViewportAnchor transformationAnchor() const;
-    void setTransformationAnchor(ViewportAnchor anchor);
-
-    ViewportAnchor resizeAnchor() const;
-    void setResizeAnchor(ViewportAnchor anchor);
-
-    ViewportUpdateMode viewportUpdateMode() const;
-    void setViewportUpdateMode(ViewportUpdateMode mode);
-
-    OptimizationFlags optimizationFlags() const;
-    void setOptimizationFlag(OptimizationFlag flag, bool enabled = true);
-    void setOptimizationFlags(OptimizationFlags flags);
-
-    DragMode dragMode() const;
-    void setDragMode(DragMode mode);
+   GUI_CS_PROPERTY_READ(renderHints, renderHints)
+   GUI_CS_PROPERTY_WRITE(renderHints, setRenderHints)
+   GUI_CS_PROPERTY_READ(dragMode, dragMode)
+   GUI_CS_PROPERTY_WRITE(dragMode, setDragMode)
+   GUI_CS_PROPERTY_READ(cacheMode, cacheMode)
+   GUI_CS_PROPERTY_WRITE(cacheMode, setCacheMode)
+   GUI_CS_PROPERTY_READ(transformationAnchor, transformationAnchor)
+   GUI_CS_PROPERTY_WRITE(transformationAnchor, setTransformationAnchor)
+   GUI_CS_PROPERTY_READ(resizeAnchor, resizeAnchor)
+   GUI_CS_PROPERTY_WRITE(resizeAnchor, setResizeAnchor)
+   GUI_CS_PROPERTY_READ(viewportUpdateMode, viewportUpdateMode)
+   GUI_CS_PROPERTY_WRITE(viewportUpdateMode, setViewportUpdateMode)
 
 #ifndef QT_NO_RUBBERBAND
-    Qt::ItemSelectionMode rubberBandSelectionMode() const;
-    void setRubberBandSelectionMode(Qt::ItemSelectionMode mode);
+   GUI_CS_PROPERTY_READ(rubberBandSelectionMode, rubberBandSelectionMode)
+   GUI_CS_PROPERTY_WRITE(rubberBandSelectionMode, setRubberBandSelectionMode)
 #endif
 
-    CacheMode cacheMode() const;
-    void setCacheMode(CacheMode mode);
-    void resetCachedContent();
+   GUI_CS_PROPERTY_READ(optimizationFlags, optimizationFlags)
+   GUI_CS_PROPERTY_WRITE(optimizationFlags, setOptimizationFlags)
 
-    bool isInteractive() const;
-    void setInteractive(bool allowed);
+ public:
+   enum ViewportAnchor {
+      NoAnchor,
+      AnchorViewCenter,
+      AnchorUnderMouse
+   };
 
-    QGraphicsScene *scene() const;
-    void setScene(QGraphicsScene *scene);
+   enum CacheModeFlag {
+      CacheNone = 0x0,
+      CacheBackground = 0x1
+   };
+   using CacheMode = QFlags<CacheModeFlag>;
 
-    QRectF sceneRect() const;
-    void setSceneRect(const QRectF &rect);
-    inline void setSceneRect(qreal x, qreal y, qreal w, qreal h);
+   enum DragMode {
+      NoDrag,
+      ScrollHandDrag,
+      RubberBandDrag
+   };
 
-    // wrapper for overloaded method
-    inline void cs_setSceneRect(const QRectF &rect); 
-    
-    QMatrix matrix() const;
-    void setMatrix(const QMatrix &matrix, bool combine = false);
-    void resetMatrix();
-    QTransform transform() const;
-    QTransform viewportTransform() const;
-    bool isTransformed() const;
-    void setTransform(const QTransform &matrix, bool combine = false);
-    void resetTransform();
-    void rotate(qreal angle);
-    void scale(qreal sx, qreal sy);
-    void shear(qreal sh, qreal sv);
-    void translate(qreal dx, qreal dy);
+   enum ViewportUpdateMode {
+      FullViewportUpdate,
+      MinimalViewportUpdate,
+      SmartViewportUpdate,
+      NoViewportUpdate,
+      BoundingRectViewportUpdate
+   };
 
-    void centerOn(const QPointF &pos);
-    inline void centerOn(qreal x, qreal y);
-    void centerOn(const QGraphicsItem *item);
+   enum OptimizationFlag {
+      DontClipPainter = 0x1, // obsolete
+      DontSavePainterState = 0x2,
+      DontAdjustForAntialiasing = 0x4,
+      IndirectPainting = 0x8
+   };
+   using OptimizationFlags = QFlags<OptimizationFlag>;
 
-    void ensureVisible(const QRectF &rect, int xmargin = 50, int ymargin = 50);
-    inline void ensureVisible(qreal x, qreal y, qreal w, qreal h, int xmargin = 50, int ymargin = 50);
-    void ensureVisible(const QGraphicsItem *item, int xmargin = 50, int ymargin = 50);
+   QGraphicsView(QWidget *parent = 0);
+   QGraphicsView(QGraphicsScene *scene, QWidget *parent = 0);
+   ~QGraphicsView();
 
-    void fitInView(const QRectF &rect, Qt::AspectRatioMode aspectRadioMode = Qt::IgnoreAspectRatio);
+   QSize sizeHint() const;
 
-    inline void fitInView(qreal x, qreal y, qreal w, qreal h, Qt::AspectRatioMode aspectRadioMode = Qt::IgnoreAspectRatio);
-    void fitInView(const QGraphicsItem *item, Qt::AspectRatioMode aspectRadioMode = Qt::IgnoreAspectRatio);
+   QPainter::RenderHints renderHints() const;
+   void setRenderHint(QPainter::RenderHint hint, bool enabled = true);
+   void setRenderHints(QPainter::RenderHints hints);
 
-    void render(QPainter *painter, const QRectF &target = QRectF(), const QRect &source = QRect(),
-                  Qt::AspectRatioMode aspectRatioMode = Qt::KeepAspectRatio);
+   Qt::Alignment alignment() const;
+   void setAlignment(Qt::Alignment alignment);
 
-    QList<QGraphicsItem *> items() const;
-    QList<QGraphicsItem *> items(const QPoint &pos) const;
-    inline QList<QGraphicsItem *> items(int x, int y) const;
-    QList<QGraphicsItem *> items(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
-    inline QList<QGraphicsItem *> items(int x, int y, int w, int h, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
-    QList<QGraphicsItem *> items(const QPolygon &polygon, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
-    QList<QGraphicsItem *> items(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
-    QGraphicsItem *itemAt(const QPoint &pos) const;
-    inline QGraphicsItem *itemAt(int x, int y) const;
+   ViewportAnchor transformationAnchor() const;
+   void setTransformationAnchor(ViewportAnchor anchor);
 
-    QPointF mapToScene(const QPoint &point) const;
-    QPolygonF mapToScene(const QRect &rect) const;
-    QPolygonF mapToScene(const QPolygon &polygon) const;
-    QPainterPath mapToScene(const QPainterPath &path) const;
-    QPoint mapFromScene(const QPointF &point) const;
-    QPolygon mapFromScene(const QRectF &rect) const;
-    QPolygon mapFromScene(const QPolygonF &polygon) const;
-    QPainterPath mapFromScene(const QPainterPath &path) const;
-    inline QPointF mapToScene(int x, int y) const;
-    inline QPolygonF mapToScene(int x, int y, int w, int h) const;
-    inline QPoint mapFromScene(qreal x, qreal y) const;
-    inline QPolygon mapFromScene(qreal x, qreal y, qreal w, qreal h) const;
+   ViewportAnchor resizeAnchor() const;
+   void setResizeAnchor(ViewportAnchor anchor);
 
-    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+   ViewportUpdateMode viewportUpdateMode() const;
+   void setViewportUpdateMode(ViewportUpdateMode mode);
 
-    QBrush backgroundBrush() const;
-    void setBackgroundBrush(const QBrush &brush);
+   OptimizationFlags optimizationFlags() const;
+   void setOptimizationFlag(OptimizationFlag flag, bool enabled = true);
+   void setOptimizationFlags(OptimizationFlags flags);
 
-    QBrush foregroundBrush() const;
-    void setForegroundBrush(const QBrush &brush);
+   DragMode dragMode() const;
+   void setDragMode(DragMode mode);
 
-public :
-    GUI_CS_SLOT_1(Public, void updateScene(const QList <QRectF> & rects))
-    GUI_CS_SLOT_2(updateScene) 
+#ifndef QT_NO_RUBBERBAND
+   Qt::ItemSelectionMode rubberBandSelectionMode() const;
+   void setRubberBandSelectionMode(Qt::ItemSelectionMode mode);
+#endif
 
-    GUI_CS_SLOT_1(Public, void invalidateScene(const QRectF & rect = QRectF(),QGraphicsScene::SceneLayers layers = QGraphicsScene::AllLayers))
-    GUI_CS_SLOT_2(invalidateScene) 
+   CacheMode cacheMode() const;
+   void setCacheMode(CacheMode mode);
+   void resetCachedContent();
 
-    GUI_CS_SLOT_1(Public, void updateSceneRect(const QRectF & rect))
-    GUI_CS_SLOT_2(updateSceneRect) 
+   bool isInteractive() const;
+   void setInteractive(bool allowed);
 
-protected :
-    GUI_CS_SLOT_1(Protected, void setupViewport(QWidget * widget))
-    GUI_CS_SLOT_2(setupViewport) 
+   QGraphicsScene *scene() const;
+   void setScene(QGraphicsScene *scene);
 
-    QGraphicsView(QGraphicsViewPrivate &, QWidget *parent = 0);
-    bool event(QEvent *event);
-    bool viewportEvent(QEvent *event);
+   QRectF sceneRect() const;
+   void setSceneRect(const QRectF &rect);
+   inline void setSceneRect(qreal x, qreal y, qreal w, qreal h);
+
+   // wrapper for overloaded method
+   inline void cs_setSceneRect(const QRectF &rect);
+
+   QMatrix matrix() const;
+   void setMatrix(const QMatrix &matrix, bool combine = false);
+   void resetMatrix();
+   QTransform transform() const;
+   QTransform viewportTransform() const;
+   bool isTransformed() const;
+   void setTransform(const QTransform &matrix, bool combine = false);
+   void resetTransform();
+   void rotate(qreal angle);
+   void scale(qreal sx, qreal sy);
+   void shear(qreal sh, qreal sv);
+   void translate(qreal dx, qreal dy);
+
+   void centerOn(const QPointF &pos);
+   inline void centerOn(qreal x, qreal y);
+   void centerOn(const QGraphicsItem *item);
+
+   void ensureVisible(const QRectF &rect, int xmargin = 50, int ymargin = 50);
+   inline void ensureVisible(qreal x, qreal y, qreal w, qreal h, int xmargin = 50, int ymargin = 50);
+   void ensureVisible(const QGraphicsItem *item, int xmargin = 50, int ymargin = 50);
+
+   void fitInView(const QRectF &rect, Qt::AspectRatioMode aspectRadioMode = Qt::IgnoreAspectRatio);
+
+   inline void fitInView(qreal x, qreal y, qreal w, qreal h, Qt::AspectRatioMode aspectRadioMode = Qt::IgnoreAspectRatio);
+   void fitInView(const QGraphicsItem *item, Qt::AspectRatioMode aspectRadioMode = Qt::IgnoreAspectRatio);
+
+   void render(QPainter *painter, const QRectF &target = QRectF(), const QRect &source = QRect(),
+               Qt::AspectRatioMode aspectRatioMode = Qt::KeepAspectRatio);
+
+   QList<QGraphicsItem *> items() const;
+   QList<QGraphicsItem *> items(const QPoint &pos) const;
+   inline QList<QGraphicsItem *> items(int x, int y) const;
+   QList<QGraphicsItem *> items(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
+   inline QList<QGraphicsItem *> items(int x, int y, int w, int h,
+                                       Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
+   QList<QGraphicsItem *> items(const QPolygon &polygon, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
+   QList<QGraphicsItem *> items(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
+   QGraphicsItem *itemAt(const QPoint &pos) const;
+   inline QGraphicsItem *itemAt(int x, int y) const;
+
+   QPointF mapToScene(const QPoint &point) const;
+   QPolygonF mapToScene(const QRect &rect) const;
+   QPolygonF mapToScene(const QPolygon &polygon) const;
+   QPainterPath mapToScene(const QPainterPath &path) const;
+   QPoint mapFromScene(const QPointF &point) const;
+   QPolygon mapFromScene(const QRectF &rect) const;
+   QPolygon mapFromScene(const QPolygonF &polygon) const;
+   QPainterPath mapFromScene(const QPainterPath &path) const;
+   inline QPointF mapToScene(int x, int y) const;
+   inline QPolygonF mapToScene(int x, int y, int w, int h) const;
+   inline QPoint mapFromScene(qreal x, qreal y) const;
+   inline QPolygon mapFromScene(qreal x, qreal y, qreal w, qreal h) const;
+
+   QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+
+   QBrush backgroundBrush() const;
+   void setBackgroundBrush(const QBrush &brush);
+
+   QBrush foregroundBrush() const;
+   void setForegroundBrush(const QBrush &brush);
+
+ public :
+   GUI_CS_SLOT_1(Public, void updateScene(const QList <QRectF> &rects))
+   GUI_CS_SLOT_2(updateScene)
+
+   GUI_CS_SLOT_1(Public, void invalidateScene(const QRectF &rect = QRectF(),
+                 QGraphicsScene::SceneLayers layers = QGraphicsScene::AllLayers))
+   GUI_CS_SLOT_2(invalidateScene)
+
+   GUI_CS_SLOT_1(Public, void updateSceneRect(const QRectF &rect))
+   GUI_CS_SLOT_2(updateSceneRect)
+
+ protected :
+   GUI_CS_SLOT_1(Protected, void setupViewport(QWidget *widget))
+   GUI_CS_SLOT_2(setupViewport)
+
+   QGraphicsView(QGraphicsViewPrivate &, QWidget *parent = 0);
+   bool event(QEvent *event);
+   bool viewportEvent(QEvent *event);
 
 #ifndef QT_NO_CONTEXTMENU
-    void contextMenuEvent(QContextMenuEvent *event);
+   void contextMenuEvent(QContextMenuEvent *event);
 #endif
 
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dragLeaveEvent(QDragLeaveEvent *event);
-    void dragMoveEvent(QDragMoveEvent *event);
-    void dropEvent(QDropEvent *event);
-    void focusInEvent(QFocusEvent *event);
-    bool focusNextPrevChild(bool next);
-    void focusOutEvent(QFocusEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+   void dragEnterEvent(QDragEnterEvent *event);
+   void dragLeaveEvent(QDragLeaveEvent *event);
+   void dragMoveEvent(QDragMoveEvent *event);
+   void dropEvent(QDropEvent *event);
+   void focusInEvent(QFocusEvent *event);
+   bool focusNextPrevChild(bool next);
+   void focusOutEvent(QFocusEvent *event);
+   void keyPressEvent(QKeyEvent *event);
+   void keyReleaseEvent(QKeyEvent *event);
+   void mouseDoubleClickEvent(QMouseEvent *event);
+   void mousePressEvent(QMouseEvent *event);
+   void mouseMoveEvent(QMouseEvent *event);
+   void mouseReleaseEvent(QMouseEvent *event);
 
 #ifndef QT_NO_WHEELEVENT
-    void wheelEvent(QWheelEvent *event);
+   void wheelEvent(QWheelEvent *event);
 #endif
 
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
-    void scrollContentsBy(int dx, int dy);
-    void showEvent(QShowEvent *event);
-    void inputMethodEvent(QInputMethodEvent *event);
+   void paintEvent(QPaintEvent *event);
+   void resizeEvent(QResizeEvent *event);
+   void scrollContentsBy(int dx, int dy);
+   void showEvent(QShowEvent *event);
+   void inputMethodEvent(QInputMethodEvent *event);
 
-    virtual void drawBackground(QPainter *painter, const QRectF &rect);
-    virtual void drawForeground(QPainter *painter, const QRectF &rect);
-    virtual void drawItems(QPainter *painter, int numItems,QGraphicsItem *items[], const QStyleOptionGraphicsItem options[]);
+   virtual void drawBackground(QPainter *painter, const QRectF &rect);
+   virtual void drawForeground(QPainter *painter, const QRectF &rect);
+   virtual void drawItems(QPainter *painter, int numItems, QGraphicsItem *items[],
+                          const QStyleOptionGraphicsItem options[]);
 
-private:
-    Q_DECLARE_PRIVATE(QGraphicsView)
-    Q_DISABLE_COPY(QGraphicsView)
+ private:
+   Q_DECLARE_PRIVATE(QGraphicsView)
+   Q_DISABLE_COPY(QGraphicsView)
 
 #ifndef QT_NO_CURSOR
-    GUI_CS_SLOT_1(Private, void _q_setViewportCursor(const QCursor & un_named_arg1))
-    GUI_CS_SLOT_2(_q_setViewportCursor)
+   GUI_CS_SLOT_1(Private, void _q_setViewportCursor(const QCursor &un_named_arg1))
+   GUI_CS_SLOT_2(_q_setViewportCursor)
 
-    GUI_CS_SLOT_1(Private, void _q_unsetViewportCursor())
-    GUI_CS_SLOT_2(_q_unsetViewportCursor)
-#endif  
+   GUI_CS_SLOT_1(Private, void _q_unsetViewportCursor())
+   GUI_CS_SLOT_2(_q_unsetViewportCursor)
+#endif
 
-    friend class QGraphicsSceneWidget;
-    friend class QGraphicsScene;
-    friend class QGraphicsScenePrivate;
-    friend class QGraphicsItemPrivate;
+   friend class QGraphicsSceneWidget;
+   friend class QGraphicsScene;
+   friend class QGraphicsScenePrivate;
+   friend class QGraphicsItemPrivate;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsView::CacheMode)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsView::OptimizationFlags)
 
-void QGraphicsView::cs_setSceneRect(const QRectF &rect) 
-{ 
+void QGraphicsView::cs_setSceneRect(const QRectF &rect)
+{
    setSceneRect(rect);
 }
 
 void QGraphicsView::setSceneRect(qreal ax, qreal ay, qreal aw, qreal ah)
-{ 
+{
    setSceneRect(QRectF(ax, ay, aw, ah));
 }
 
 void QGraphicsView::centerOn(qreal ax, qreal ay)
-{ 
+{
    centerOn(QPointF(ax, ay));
 }
 
 void QGraphicsView::ensureVisible(qreal ax, qreal ay, qreal aw, qreal ah, int xmargin, int ymargin)
-{ 
+{
    ensureVisible(QRectF(ax, ay, aw, ah), xmargin, ymargin);
 }
 
 void QGraphicsView::fitInView(qreal ax, qreal ay, qreal w, qreal h, Qt::AspectRatioMode mode)
-{ 
+{
    fitInView(QRectF(ax, ay, w, h), mode);
 }
 
 QList<QGraphicsItem *> QGraphicsView::items(int ax, int ay) const
-   { return items(QPoint(ax, ay)); }
+{
+   return items(QPoint(ax, ay));
+}
 
 QList<QGraphicsItem *> QGraphicsView::items(int ax, int ay, int w, int h, Qt::ItemSelectionMode mode) const
-{ 
-   return items(QRect(ax, ay, w, h), mode); }
+{
+   return items(QRect(ax, ay, w, h), mode);
+}
 
 QGraphicsItem *QGraphicsView::itemAt(int ax, int ay) const
-{ 
-   return itemAt(QPoint(ax, ay)); }
+{
+   return itemAt(QPoint(ax, ay));
+}
 
 QPointF QGraphicsView::mapToScene(int ax, int ay) const
-{ 
-   return mapToScene(QPoint(ax, ay)); }
+{
+   return mapToScene(QPoint(ax, ay));
+}
 
 QPolygonF QGraphicsView::mapToScene(int ax, int ay, int w, int h) const
-{ 
+{
    return mapToScene(QRect(ax, ay, w, h));
 }
 
 QPoint QGraphicsView::mapFromScene(qreal ax, qreal ay) const
-{ 
+{
    return mapFromScene(QPointF(ax, ay));
 }
 
 QPolygon QGraphicsView::mapFromScene(qreal ax, qreal ay, qreal w, qreal h) const
-{ 
+{
    return mapFromScene(QRectF(ax, ay, w, h));
 }
 

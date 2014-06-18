@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -145,90 +145,94 @@ QT_BEGIN_NAMESPACE
 
 static inline QScreen *getPrimaryScreen()
 {
-    QScreen *screen = QScreen::instance();
-    if (!screen->base()) {
-        QList<QScreen*> subScreens = screen->subScreens();
-        if (subScreens.size() < 1)
-            return 0;
-        screen = subScreens.at(0);
-    }
-    return screen;
+   QScreen *screen = QScreen::instance();
+   if (!screen->base()) {
+      QList<QScreen *> subScreens = screen->subScreens();
+      if (subScreens.size() < 1) {
+         return 0;
+      }
+      screen = subScreens.at(0);
+   }
+   return screen;
 }
 
 static inline QSize screenS()
 {
-    QScreen *screen = getPrimaryScreen();
-    if (!screen)
-        return QSize();
-    return QSize(screen->width(), screen->height());
+   QScreen *screen = getPrimaryScreen();
+   if (!screen) {
+      return QSize();
+   }
+   return QSize(screen->width(), screen->height());
 }
 
 static inline QSize devS()
 {
-    QScreen *screen = getPrimaryScreen();
-    if (!screen)
-        return QSize();
-    return QSize(screen->deviceWidth(), screen->deviceHeight());
+   QScreen *screen = getPrimaryScreen();
+   if (!screen) {
+      return QSize();
+   }
+   return QSize(screen->deviceWidth(), screen->deviceHeight());
 }
 
 
 class QDirectPainterPrivate
 {
-    Q_DECLARE_PUBLIC(QDirectPainter);
+   Q_DECLARE_PUBLIC(QDirectPainter);
 
-public:
+ public:
 
-    QDirectPainterPrivate() : surface(0), seenRegion(false) {}
+   QDirectPainterPrivate() : surface(0), seenRegion(false) {}
 
-    virtual ~QDirectPainterPrivate() {
-        if (QPaintDevice::qwsDisplay()) { // make sure not in QApplication destructor
-            qApp->d_func()->directPainters->remove(surface->windowId());
-            surface->setGeometry(QRect());
-        }
-        delete surface;
-    }
+   virtual ~QDirectPainterPrivate() {
+      if (QPaintDevice::qwsDisplay()) { // make sure not in QApplication destructor
+         qApp->d_func()->directPainters->remove(surface->windowId());
+         surface->setGeometry(QRect());
+      }
+      delete surface;
+   }
 
-    QWSDirectPainterSurface *surface;
-    QRegion requested_region;
+   QWSDirectPainterSurface *surface;
+   QRegion requested_region;
 
-    static QDirectPainter *staticPainter;
-    bool seenRegion;
+   static QDirectPainter *staticPainter;
+   bool seenRegion;
 };
 
 QDirectPainter *QDirectPainterPrivate::staticPainter = 0;
 
 void qt_directpainter_region(QDirectPainter *dp, const QRegion &alloc, int type)
 {
-    QDirectPainterPrivate *d = dp->d_func();
+   QDirectPainterPrivate *d = dp->d_func();
 
-    QRegion r = alloc;
-    QScreen *screen = d->surface->screen();
-    if (screen->isTransformed()) {
-        const QSize screenSize(screen->width(), screen->height());
-        r = screen->mapToDevice(r, screenSize);
-    }
-    if (type == QWSRegionEvent::Allocation) {
-        d->surface->setClipRegion(alloc);
-        d->seenRegion = true;
-        if (dp != QDirectPainterPrivate::staticPainter) {
-            if (!d->surface->flushingRegionEvents) // recursion guard
-                dp->regionChanged(r);
-        }
-    }
+   QRegion r = alloc;
+   QScreen *screen = d->surface->screen();
+   if (screen->isTransformed()) {
+      const QSize screenSize(screen->width(), screen->height());
+      r = screen->mapToDevice(r, screenSize);
+   }
+   if (type == QWSRegionEvent::Allocation) {
+      d->surface->setClipRegion(alloc);
+      d->seenRegion = true;
+      if (dp != QDirectPainterPrivate::staticPainter) {
+         if (!d->surface->flushingRegionEvents) { // recursion guard
+            dp->regionChanged(r);
+         }
+      }
+   }
 }
 
 #ifndef QT_NO_QWSEMBEDWIDGET
 void qt_directpainter_embedevent(QDirectPainter *dp, const QWSEmbedEvent *event)
 {
-    if (event->type | QWSEmbedEvent::Region) {
-        QScreen *screen = dp->d_func()->surface->screen();
-        QRegion r = event->region;
-        if (screen->isTransformed()) {
-            const QSize screenSize(screen->width(), screen->height());
-            r = screen->mapToDevice(r, screenSize);
-        }
-        dp->setRegion(r);
-    }
+   if (event->type | QWSEmbedEvent::Region) {
+      QScreen *screen = dp->d_func()->surface->screen();
+      QRegion r = event->region;
+      if (screen->isTransformed()) {
+         const QSize screenSize(screen->width(), screen->height());
+         r = screen->mapToDevice(r, screenSize);
+      }
+      dp->setRegion(r);
+   }
 }
 #endif
 
@@ -237,18 +241,20 @@ void qt_directpainter_embedevent(QDirectPainter *dp, const QWSEmbedEvent *event)
     surface \a flag.
 */
 QDirectPainter::QDirectPainter(QObject *parent, SurfaceFlag flag)
-    :QObject(*new QDirectPainterPrivate, parent)
+   : QObject(*new QDirectPainterPrivate, parent)
 {
-    Q_D(QDirectPainter);
-    d->surface = new QWSDirectPainterSurface(true, flag);
+   Q_D(QDirectPainter);
+   d->surface = new QWSDirectPainterSurface(true, flag);
 
-    if (flag != NonReserved)
-        d->surface->setReserved();
+   if (flag != NonReserved) {
+      d->surface->setReserved();
+   }
 
-    QApplicationPrivate *ad = qApp->d_func();
-    if (!ad->directPainters)
-        ad->directPainters = new QMap<WId, QDirectPainter*>;
-    ad->directPainters->insert(d->surface->windowId(), this);
+   QApplicationPrivate *ad = qApp->d_func();
+   if (!ad->directPainters) {
+      ad->directPainters = new QMap<WId, QDirectPainter *>;
+   }
+   ad->directPainters->insert(d->surface->windowId(), this);
 }
 
 /*!
@@ -258,10 +264,10 @@ QDirectPainter::QDirectPainter(QObject *parent, SurfaceFlag flag)
 */
 QDirectPainter::~QDirectPainter()
 {
-    /* should not be necessary
-    if (this == QDirectPainterPrivate::staticPainter)
-        QDirectPainterPrivate::staticPainter = 0;
-    */
+   /* should not be necessary
+   if (this == QDirectPainterPrivate::staticPainter)
+       QDirectPainterPrivate::staticPainter = 0;
+   */
 }
 
 /*!
@@ -278,7 +284,7 @@ QDirectPainter::~QDirectPainter()
 */
 void QDirectPainter::setGeometry(const QRect &rect)
 {
-    setRegion(rect);
+   setRegion(rect);
 }
 
 /*!
@@ -290,8 +296,8 @@ void QDirectPainter::setGeometry(const QRect &rect)
 */
 QRect QDirectPainter::geometry() const
 {
-    Q_D(const QDirectPainter);
-    return d->requested_region.boundingRect();
+   Q_D(const QDirectPainter);
+   return d->requested_region.boundingRect();
 }
 
 /*!
@@ -307,17 +313,17 @@ QRect QDirectPainter::geometry() const
 */
 void QDirectPainter::setRegion(const QRegion &region)
 {
-    Q_D(QDirectPainter);
-    d->requested_region = region;
+   Q_D(QDirectPainter);
+   d->requested_region = region;
 
-    const QScreen *screen = d->surface->screen();
-    if (screen->isTransformed()) {
-        const QSize devSize(screen->deviceWidth(), screen->deviceHeight());
-        const QRegion r = screen->mapFromDevice(region, devSize);
-        d->surface->setRegion(r);
-    } else {
-        d->surface->setRegion(region);
-    }
+   const QScreen *screen = d->surface->screen();
+   if (screen->isTransformed()) {
+      const QSize devSize(screen->deviceWidth(), screen->deviceHeight());
+      const QRegion r = screen->mapFromDevice(region, devSize);
+      d->surface->setRegion(r);
+   } else {
+      d->surface->setRegion(region);
+   }
 }
 
 /*!
@@ -334,8 +340,8 @@ void QDirectPainter::setRegion(const QRegion &region)
 */
 QRegion QDirectPainter::requestedRegion() const
 {
-    Q_D(const QDirectPainter);
-    return d->requested_region;
+   Q_D(const QDirectPainter);
+   return d->requested_region;
 }
 
 /*!
@@ -352,14 +358,14 @@ QRegion QDirectPainter::requestedRegion() const
 */
 QRegion QDirectPainter::allocatedRegion() const
 {
-    Q_D(const QDirectPainter);
-    const QScreen *screen = d->surface->screen();
-    if (screen->isTransformed()) {
-        const QSize screenSize(screen->width(), screen->height());
-        return screen->mapToDevice(d->surface->region(), screenSize);
-    } else {
-        return d->surface->region();
-    }
+   Q_D(const QDirectPainter);
+   const QScreen *screen = d->surface->screen();
+   if (screen->isTransformed()) {
+      const QSize screenSize(screen->width(), screen->height());
+      return screen->mapToDevice(d->surface->region(), screenSize);
+   } else {
+      return d->surface->region();
+   }
 }
 
 /*!
@@ -369,8 +375,8 @@ QRegion QDirectPainter::allocatedRegion() const
 */
 WId QDirectPainter::winId() const
 {
-    Q_D(const QDirectPainter);
-    return d->surface->windowId();
+   Q_D(const QDirectPainter);
+   return d->surface->windowId();
 }
 
 /*!
@@ -391,7 +397,7 @@ WId QDirectPainter::winId() const
 */
 void QDirectPainter::regionChanged(const QRegion &region)
 {
-    Q_UNUSED(region);
+   Q_UNUSED(region);
 }
 
 /*!
@@ -416,17 +422,17 @@ void QDirectPainter::regionChanged(const QRegion &region)
 */
 void QDirectPainter::startPainting(bool lockDisplay)
 {
-    Q_D(QDirectPainter);
-    d->surface->setLocking(lockDisplay);
+   Q_D(QDirectPainter);
+   d->surface->setLocking(lockDisplay);
 
-    const QScreen *screen = d->surface->screen();
-    if (screen->isTransformed()) {
-        const QSize devSize(screen->deviceWidth(), screen->deviceHeight());
-        const QRegion r = screen->mapFromDevice(d->surface->region(), devSize);
-        d->surface->beginPaint(r);
-    } else {
-        d->surface->beginPaint(d->surface->region());
-    }
+   const QScreen *screen = d->surface->screen();
+   if (screen->isTransformed()) {
+      const QSize devSize(screen->deviceWidth(), screen->deviceHeight());
+      const QRegion r = screen->mapFromDevice(d->surface->region(), devSize);
+      d->surface->beginPaint(r);
+   } else {
+      d->surface->beginPaint(d->surface->region());
+   }
 }
 
 /*!
@@ -438,16 +444,16 @@ void QDirectPainter::startPainting(bool lockDisplay)
 */
 void QDirectPainter::endPainting()
 {
-    Q_D(QDirectPainter);
+   Q_D(QDirectPainter);
 
-    const QScreen *screen = d->surface->screen();
-    if (screen->isTransformed()) {
-        const QSize devSize(screen->deviceWidth(), screen->deviceHeight());
-        const QRegion r = screen->mapFromDevice(d->surface->region(), devSize);
-        d->surface->endPaint(r);
-    } else {
-        d->surface->endPaint(d->surface->region());
-    }
+   const QScreen *screen = d->surface->screen();
+   if (screen->isTransformed()) {
+      const QSize devSize(screen->deviceWidth(), screen->deviceHeight());
+      const QRegion r = screen->mapFromDevice(d->surface->region(), devSize);
+      d->surface->endPaint(r);
+   } else {
+      d->surface->endPaint(d->surface->region());
+   }
 }
 
 /*!
@@ -460,8 +466,8 @@ void QDirectPainter::endPainting()
 */
 void QDirectPainter::endPainting(const QRegion &region)
 {
-    endPainting();
-    flush(region);
+   endPainting();
+   flush(region);
 }
 
 /*!
@@ -471,16 +477,16 @@ void QDirectPainter::endPainting(const QRegion &region)
 */
 void QDirectPainter::flush(const QRegion &region)
 {
-    Q_D(QDirectPainter);
+   Q_D(QDirectPainter);
 
-    const QScreen *screen = d->surface->screen();
-    if (screen->isTransformed()) {
-        const QSize devSize(screen->deviceWidth(), screen->deviceHeight());
-        const QRegion r = screen->mapFromDevice(region, devSize);
-        d->surface->flush(0, r, QPoint());
-    } else {
-        d->surface->flush(0, region, QPoint());
-    }
+   const QScreen *screen = d->surface->screen();
+   if (screen->isTransformed()) {
+      const QSize devSize(screen->deviceWidth(), screen->deviceHeight());
+      const QRegion r = screen->mapFromDevice(region, devSize);
+      d->surface->flush(0, r, QPoint());
+   } else {
+      d->surface->flush(0, region, QPoint());
+   }
 }
 
 /*!
@@ -495,7 +501,7 @@ void QDirectPainter::flush(const QRegion &region)
 */
 void QDirectPainter::raise()
 {
-    QWidget::qwsDisplay()->setAltitude(winId(),QWSChangeAltitudeCommand::Raise);
+   QWidget::qwsDisplay()->setAltitude(winId(), QWSChangeAltitudeCommand::Raise);
 }
 
 /*!
@@ -510,7 +516,7 @@ void QDirectPainter::raise()
 */
 void QDirectPainter::lower()
 {
-    QWidget::qwsDisplay()->setAltitude(winId(),QWSChangeAltitudeCommand::Lower);
+   QWidget::qwsDisplay()->setAltitude(winId(), QWSChangeAltitudeCommand::Lower);
 }
 
 
@@ -532,13 +538,14 @@ void QDirectPainter::lower()
 */
 QRegion QDirectPainter::reserveRegion(const QRegion &reg)
 {
-    if (!QDirectPainterPrivate::staticPainter)
-        QDirectPainterPrivate::staticPainter = new QDirectPainter(qApp, ReservedSynchronous);
+   if (!QDirectPainterPrivate::staticPainter) {
+      QDirectPainterPrivate::staticPainter = new QDirectPainter(qApp, ReservedSynchronous);
+   }
 
-    QDirectPainter *dp = QDirectPainterPrivate::staticPainter;
-    dp->setRegion(reg);
+   QDirectPainter *dp = QDirectPainterPrivate::staticPainter;
+   dp->setRegion(reg);
 
-    return dp->allocatedRegion();
+   return dp->allocatedRegion();
 }
 
 /*!
@@ -558,12 +565,13 @@ QRegion QDirectPainter::reserveRegion(const QRegion &reg)
 
     \sa requestedRegion(), allocatedRegion(), linestep()
 */
-uchar* QDirectPainter::frameBuffer()
+uchar *QDirectPainter::frameBuffer()
 {
-    QScreen *screen = getPrimaryScreen();
-    if (!screen)
-        return 0;
-    return screen->base();
+   QScreen *screen = getPrimaryScreen();
+   if (!screen) {
+      return 0;
+   }
+   return screen->base();
 }
 
 /*!
@@ -579,8 +587,8 @@ uchar* QDirectPainter::frameBuffer()
 */
 QRegion QDirectPainter::reservedRegion()
 {
-    return QDirectPainterPrivate::staticPainter
-        ? QDirectPainterPrivate::staticPainter->allocatedRegion() : QRegion();
+   return QDirectPainterPrivate::staticPainter
+          ? QDirectPainterPrivate::staticPainter->allocatedRegion() : QRegion();
 }
 
 /*!
@@ -590,10 +598,11 @@ QRegion QDirectPainter::reservedRegion()
 */
 int QDirectPainter::screenDepth()
 {
-    QScreen *screen = getPrimaryScreen();
-    if (!screen)
-        return 0;
-    return screen->depth();
+   QScreen *screen = getPrimaryScreen();
+   if (!screen) {
+      return 0;
+   }
+   return screen->depth();
 }
 
 /*!
@@ -603,10 +612,11 @@ int QDirectPainter::screenDepth()
 */
 int QDirectPainter::screenWidth()
 {
-    QScreen *screen = getPrimaryScreen();
-    if (!screen)
-        return 0;
-    return screen->deviceWidth();
+   QScreen *screen = getPrimaryScreen();
+   if (!screen) {
+      return 0;
+   }
+   return screen->deviceWidth();
 }
 
 /*!
@@ -616,10 +626,11 @@ int QDirectPainter::screenWidth()
 */
 int QDirectPainter::screenHeight()
 {
-    QScreen *screen = getPrimaryScreen();
-    if (!screen)
-        return 0;
-    return screen->deviceHeight();
+   QScreen *screen = getPrimaryScreen();
+   if (!screen) {
+      return 0;
+   }
+   return screen->deviceHeight();
 }
 
 /*!
@@ -629,10 +640,11 @@ int QDirectPainter::screenHeight()
 */
 int QDirectPainter::linestep()
 {
-    QScreen *screen = getPrimaryScreen();
-    if (!screen)
-        return 0;
-    return screen->linestep();
+   QScreen *screen = getPrimaryScreen();
+   if (!screen) {
+      return 0;
+   }
+   return screen->linestep();
 }
 
 
@@ -646,7 +658,7 @@ int QDirectPainter::linestep()
 */
 void QDirectPainter::lock()
 {
-    QWSDisplay::grab(true);
+   QWSDisplay::grab(true);
 }
 /*!
   Unlocks the lock on the framebuffer (set using the lock()
@@ -656,7 +668,7 @@ void QDirectPainter::lock()
  */
 void QDirectPainter::unlock()
 {
-    QWSDisplay::ungrab();
+   QWSDisplay::ungrab();
 }
 
 #endif //QT_NO_DIRECTPAINTER

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -93,7 +93,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if defined(Q_WS_X11) || defined(Q_OS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA) 
+#if defined(Q_WS_X11) || defined(Q_OS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA)
 QGLExtensionFuncs QGLContextPrivate::qt_extensionFuncs;
 #endif
 
@@ -102,11 +102,12 @@ extern const QX11Info *qt_x11Info(const QPaintDevice *pd);
 #endif
 
 struct QGLThreadContext {
-    ~QGLThreadContext() {
-        if (context)
-            context->doneCurrent();
-    }
-    QGLContext *context;
+   ~QGLThreadContext() {
+      if (context) {
+         context->doneCurrent();
+      }
+   }
+   QGLContext *context;
 };
 
 #ifndef Q_WS_QPA
@@ -117,82 +118,86 @@ Q_GLOBAL_STATIC(QGLFormat, qgl_default_format)
 
 class QGLDefaultOverlayFormat: public QGLFormat
 {
-public:
-    inline QGLDefaultOverlayFormat()
-    {
-        setOption(QGL::FormatOption(0xffff << 16)); // turn off all options
-        setOption(QGL::DirectRendering);
-        setPlane(1);
-    }
+ public:
+   inline QGLDefaultOverlayFormat() {
+      setOption(QGL::FormatOption(0xffff << 16)); // turn off all options
+      setOption(QGL::DirectRendering);
+      setPlane(1);
+   }
 };
 Q_GLOBAL_STATIC(QGLDefaultOverlayFormat, defaultOverlayFormatInstance)
 
 Q_GLOBAL_STATIC(QGLSignalProxy, theSignalProxy)
 QGLSignalProxy *QGLSignalProxy::instance()
 {
-    QGLSignalProxy *proxy = theSignalProxy();
-    if (proxy && proxy->thread() != qApp->thread()) {
-        if (proxy->thread() == QThread::currentThread())
-            proxy->moveToThread(qApp->thread());
-    }
-    return proxy;
+   QGLSignalProxy *proxy = theSignalProxy();
+   if (proxy && proxy->thread() != qApp->thread()) {
+      if (proxy->thread() == QThread::currentThread()) {
+         proxy->moveToThread(qApp->thread());
+      }
+   }
+   return proxy;
 }
 
 
 class QGLEngineSelector
 {
-public:
-    QGLEngineSelector() : engineType(QPaintEngine::MaxUser)
-    {
-    }
+ public:
+   QGLEngineSelector() : engineType(QPaintEngine::MaxUser) {
+   }
 
-    void setPreferredPaintEngine(QPaintEngine::Type type) {
-        if (type == QPaintEngine::OpenGL || type == QPaintEngine::OpenGL2)
-            engineType = type;
-    }
+   void setPreferredPaintEngine(QPaintEngine::Type type) {
+      if (type == QPaintEngine::OpenGL || type == QPaintEngine::OpenGL2) {
+         engineType = type;
+      }
+   }
 
-    QPaintEngine::Type preferredPaintEngine() {
+   QPaintEngine::Type preferredPaintEngine() {
 #ifdef Q_OS_MAC
-        // The ATI X1600 driver for Mac OS X does not support return
-        // values from functions in GLSL. Since working around this in
-        // the GL2 engine would require a big, ugly rewrite, we're
-        // falling back to the GL 1 engine..
-        static bool mac_x1600_check_done = false;
-        if (!mac_x1600_check_done) {
-            QGLTemporaryContext *tmp = 0;
-            if (!QGLContext::currentContext())
-                tmp = new QGLTemporaryContext();
-            if (strstr((char *) glGetString(GL_RENDERER), "X1600"))
-                engineType = QPaintEngine::OpenGL;
-            if (tmp)
-                delete tmp;
-            mac_x1600_check_done = true;
-        }
+      // The ATI X1600 driver for Mac OS X does not support return
+      // values from functions in GLSL. Since working around this in
+      // the GL2 engine would require a big, ugly rewrite, we're
+      // falling back to the GL 1 engine..
+      static bool mac_x1600_check_done = false;
+      if (!mac_x1600_check_done) {
+         QGLTemporaryContext *tmp = 0;
+         if (!QGLContext::currentContext()) {
+            tmp = new QGLTemporaryContext();
+         }
+         if (strstr((char *) glGetString(GL_RENDERER), "X1600")) {
+            engineType = QPaintEngine::OpenGL;
+         }
+         if (tmp) {
+            delete tmp;
+         }
+         mac_x1600_check_done = true;
+      }
 #endif
-        if (engineType == QPaintEngine::MaxUser) {
-            // No user-set engine - use the defaults
+      if (engineType == QPaintEngine::MaxUser) {
+         // No user-set engine - use the defaults
 #if defined(QT_OPENGL_ES_2)
-            engineType = QPaintEngine::OpenGL2;
+         engineType = QPaintEngine::OpenGL2;
 #else
-            // We can't do this in the constructor for this object because it
-            // needs to be called *before* the QApplication constructor.
-            // Also check for the FragmentShader extension in conjunction with
-            // the 2.0 version flag, to cover the case where we export the display
-            // from an old GL 1.1 server to a GL 2.x client. In that case we can't
-            // use GL 2.0.
-            if ((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0)
-                && (QGLExtensions::glExtensions() & QGLExtensions::FragmentShader)
-                && qgetenv("QT_GL_USE_OPENGL1ENGINE").isEmpty())
-                engineType = QPaintEngine::OpenGL2;
-            else
-                engineType = QPaintEngine::OpenGL;
+         // We can't do this in the constructor for this object because it
+         // needs to be called *before* the QApplication constructor.
+         // Also check for the FragmentShader extension in conjunction with
+         // the 2.0 version flag, to cover the case where we export the display
+         // from an old GL 1.1 server to a GL 2.x client. In that case we can't
+         // use GL 2.0.
+         if ((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0)
+               && (QGLExtensions::glExtensions() & QGLExtensions::FragmentShader)
+               && qgetenv("QT_GL_USE_OPENGL1ENGINE").isEmpty()) {
+            engineType = QPaintEngine::OpenGL2;
+         } else {
+            engineType = QPaintEngine::OpenGL;
+         }
 #endif
-        }
-        return engineType;
-    }
+      }
+      return engineType;
+   }
 
-private:
-    QPaintEngine::Type engineType;
+ private:
+   QPaintEngine::Type engineType;
 };
 
 Q_GLOBAL_STATIC(QGLEngineSelector, qgl_engine_selector)
@@ -200,7 +205,7 @@ Q_GLOBAL_STATIC(QGLEngineSelector, qgl_engine_selector)
 
 bool qt_gl_preferGL2Engine()
 {
-    return qgl_engine_selector()->preferredPaintEngine() == QPaintEngine::OpenGL2;
+   return qgl_engine_selector()->preferredPaintEngine() == QPaintEngine::OpenGL2;
 }
 
 
@@ -272,7 +277,7 @@ bool qt_gl_preferGL2Engine()
 */
 void QGL::setPreferredPaintEngine(QPaintEngine::Type engineType)
 {
-    qgl_engine_selector()->setPreferredPaintEngine(engineType);
+   qgl_engine_selector()->setPreferredPaintEngine(engineType);
 }
 
 
@@ -356,14 +361,14 @@ static inline void transform_point(GLdouble out[4], const GLdouble m[16], const 
 # pragma GCC diagnostic ignored "-Warray-bounds"
 #endif
 #define M(row,col)  m[col*4+row]
-    out[0] =
-        M(0, 0) * in[0] + M(0, 1) * in[1] + M(0, 2) * in[2] + M(0, 3) * in[3];
-    out[1] =
-        M(1, 0) * in[0] + M(1, 1) * in[1] + M(1, 2) * in[2] + M(1, 3) * in[3];
-    out[2] =
-        M(2, 0) * in[0] + M(2, 1) * in[1] + M(2, 2) * in[2] + M(2, 3) * in[3];
-    out[3] =
-        M(3, 0) * in[0] + M(3, 1) * in[1] + M(3, 2) * in[2] + M(3, 3) * in[3];
+   out[0] =
+      M(0, 0) * in[0] + M(0, 1) * in[1] + M(0, 2) * in[2] + M(0, 3) * in[3];
+   out[1] =
+      M(1, 0) * in[0] + M(1, 1) * in[1] + M(1, 2) * in[2] + M(1, 3) * in[3];
+   out[2] =
+      M(2, 0) * in[0] + M(2, 1) * in[1] + M(2, 2) * in[2] + M(2, 3) * in[3];
+   out[3] =
+      M(3, 0) * in[0] + M(3, 1) * in[1] + M(3, 2) * in[2] + M(3, 3) * in[3];
 #undef M
 #if defined(Q_CC_GNU) && (__GNUC__ * 100 + __GNUC_MINOR__ >= 406)
 # pragma GCC diagnostic pop
@@ -371,9 +376,9 @@ static inline void transform_point(GLdouble out[4], const GLdouble m[16], const 
 }
 
 static inline GLint qgluProject(GLdouble objx, GLdouble objy, GLdouble objz,
-           const GLdouble model[16], const GLdouble proj[16],
-           const GLint viewport[4],
-           GLdouble * winx, GLdouble * winy, GLdouble * winz)
+                                const GLdouble model[16], const GLdouble proj[16],
+                                const GLint viewport[4],
+                                GLdouble *winx, GLdouble *winy, GLdouble *winz)
 {
    GLdouble in[4], out[4];
 
@@ -384,8 +389,9 @@ static inline GLint qgluProject(GLdouble objx, GLdouble objy, GLdouble objz,
    transform_point(out, model, in);
    transform_point(in, proj, out);
 
-   if (in[3] == 0.0)
+   if (in[3] == 0.0) {
       return GL_FALSE;
+   }
 
    in[0] /= in[3];
    in[1] /= in[3];
@@ -419,7 +425,7 @@ static inline GLint qgluProject(GLdouble objx, GLdouble objy, GLdouble objz,
 
 QGLFormat::QGLFormat()
 {
-    d = new QGLFormatPrivate;
+   d = new QGLFormatPrivate;
 }
 
 
@@ -448,12 +454,12 @@ QGLFormat::QGLFormat()
 
 QGLFormat::QGLFormat(QGL::FormatOptions options, int plane)
 {
-    d = new QGLFormatPrivate;
-    QGL::FormatOptions newOpts = options;
-    d->opts = defaultFormat().d->opts;
-    d->opts |= (newOpts & 0xffff);
-    d->opts &= ~(newOpts >> 16);
-    d->pln = plane;
+   d = new QGLFormatPrivate;
+   QGL::FormatOptions newOpts = options;
+   d->opts = defaultFormat().d->opts;
+   d->opts |= (newOpts & 0xffff);
+   d->opts &= ~(newOpts >> 16);
+   d->pln = plane;
 }
 
 /*!
@@ -461,12 +467,13 @@ QGLFormat::QGLFormat(QGL::FormatOptions options, int plane)
 */
 void QGLFormat::detach()
 {
-    if (d->ref.load() != 1) {
-        QGLFormatPrivate *newd = new QGLFormatPrivate(d);
-        if (!d->ref.deref())
-            delete d;
-        d = newd;
-    }
+   if (d->ref.load() != 1) {
+      QGLFormatPrivate *newd = new QGLFormatPrivate(d);
+      if (!d->ref.deref()) {
+         delete d;
+      }
+      d = newd;
+   }
 }
 
 /*!
@@ -475,8 +482,8 @@ void QGLFormat::detach()
 
 QGLFormat::QGLFormat(const QGLFormat &other)
 {
-    d = other.d;
-    d->ref.ref();
+   d = other.d;
+   d->ref.ref();
 }
 
 /*!
@@ -485,13 +492,14 @@ QGLFormat::QGLFormat(const QGLFormat &other)
 
 QGLFormat &QGLFormat::operator=(const QGLFormat &other)
 {
-    if (d != other.d) {
-        other.d->ref.ref();
-        if (!d->ref.deref())
-            delete d;
-        d = other.d;
-    }
-    return *this;
+   if (d != other.d) {
+      other.d->ref.ref();
+      if (!d->ref.deref()) {
+         delete d;
+      }
+      d = other.d;
+   }
+   return *this;
 }
 
 /*!
@@ -499,8 +507,9 @@ QGLFormat &QGLFormat::operator=(const QGLFormat &other)
 */
 QGLFormat::~QGLFormat()
 {
-    if (!d->ref.deref())
-        delete d;
+   if (!d->ref.deref()) {
+      delete d;
+   }
 }
 
 /*!
@@ -533,7 +542,7 @@ QGLFormat::~QGLFormat()
 
 void QGLFormat::setDoubleBuffer(bool enable)
 {
-    setOption(enable ? QGL::DoubleBuffer : QGL::SingleBuffer);
+   setOption(enable ? QGL::DoubleBuffer : QGL::SingleBuffer);
 }
 
 
@@ -563,7 +572,7 @@ void QGLFormat::setDoubleBuffer(bool enable)
 
 void QGLFormat::setDepth(bool enable)
 {
-    setOption(enable ? QGL::DepthBuffer : QGL::NoDepthBuffer);
+   setOption(enable ? QGL::DepthBuffer : QGL::NoDepthBuffer);
 }
 
 
@@ -594,7 +603,7 @@ void QGLFormat::setDepth(bool enable)
 
 void QGLFormat::setRgba(bool enable)
 {
-    setOption(enable ? QGL::Rgba : QGL::ColorIndex);
+   setOption(enable ? QGL::Rgba : QGL::ColorIndex);
 }
 
 
@@ -622,7 +631,7 @@ void QGLFormat::setRgba(bool enable)
 
 void QGLFormat::setAlpha(bool enable)
 {
-    setOption(enable ? QGL::AlphaChannel : QGL::NoAlphaChannel);
+   setOption(enable ? QGL::AlphaChannel : QGL::NoAlphaChannel);
 }
 
 
@@ -649,7 +658,7 @@ void QGLFormat::setAlpha(bool enable)
 
 void QGLFormat::setAccum(bool enable)
 {
-    setOption(enable ? QGL::AccumBuffer : QGL::NoAccumBuffer);
+   setOption(enable ? QGL::AccumBuffer : QGL::NoAccumBuffer);
 }
 
 
@@ -676,7 +685,7 @@ void QGLFormat::setAccum(bool enable)
 
 void QGLFormat::setStencil(bool enable)
 {
-    setOption(enable ? QGL::StencilBuffer: QGL::NoStencilBuffer);
+   setOption(enable ? QGL::StencilBuffer : QGL::NoStencilBuffer);
 }
 
 
@@ -703,7 +712,7 @@ void QGLFormat::setStencil(bool enable)
 
 void QGLFormat::setStereo(bool enable)
 {
-    setOption(enable ? QGL::StereoBuffers : QGL::NoStereoBuffers);
+   setOption(enable ? QGL::StereoBuffers : QGL::NoStereoBuffers);
 }
 
 
@@ -733,7 +742,7 @@ void QGLFormat::setStereo(bool enable)
 
 void QGLFormat::setDirectRendering(bool enable)
 {
-    setOption(enable ? QGL::DirectRendering : QGL::IndirectRendering);
+   setOption(enable ? QGL::DirectRendering : QGL::IndirectRendering);
 }
 
 /*!
@@ -755,7 +764,7 @@ void QGLFormat::setDirectRendering(bool enable)
 */
 void QGLFormat::setSampleBuffers(bool enable)
 {
-    setOption(enable ? QGL::SampleBuffers : QGL::NoSampleBuffers);
+   setOption(enable ? QGL::SampleBuffers : QGL::NoSampleBuffers);
 }
 
 /*!
@@ -779,13 +788,13 @@ int QGLFormat::samples() const
 */
 void QGLFormat::setSamples(int numSamples)
 {
-    detach();
-    if (numSamples < 0) {
-        qWarning("QGLFormat::setSamples: Cannot have negative number of samples per pixel %d", numSamples);
-        return;
-    }
-    d->numSamples = numSamples;
-    setSampleBuffers(numSamples > 0);
+   detach();
+   if (numSamples < 0) {
+      qWarning("QGLFormat::setSamples: Cannot have negative number of samples per pixel %d", numSamples);
+      return;
+   }
+   d->numSamples = numSamples;
+   setSampleBuffers(numSamples > 0);
 }
 
 /*!
@@ -808,8 +817,8 @@ void QGLFormat::setSamples(int numSamples)
 */
 void QGLFormat::setSwapInterval(int interval)
 {
-    detach();
-    d->swapInterval = interval;
+   detach();
+   d->swapInterval = interval;
 }
 
 /*!
@@ -820,7 +829,7 @@ void QGLFormat::setSwapInterval(int interval)
 */
 int QGLFormat::swapInterval() const
 {
-    return d->swapInterval;
+   return d->swapInterval;
 }
 
 /*!
@@ -846,7 +855,7 @@ int QGLFormat::swapInterval() const
 
 void QGLFormat::setOverlay(bool enable)
 {
-    setOption(enable ? QGL::HasOverlay : QGL::NoOverlay);
+   setOption(enable ? QGL::HasOverlay : QGL::NoOverlay);
 }
 
 /*!
@@ -858,7 +867,7 @@ void QGLFormat::setOverlay(bool enable)
 */
 int QGLFormat::plane() const
 {
-    return d->pln;
+   return d->pln;
 }
 
 /*!
@@ -876,8 +885,8 @@ int QGLFormat::plane() const
 */
 void QGLFormat::setPlane(int plane)
 {
-    detach();
-    d->pln = plane;
+   detach();
+   d->pln = plane;
 }
 
 /*!
@@ -888,11 +897,12 @@ void QGLFormat::setPlane(int plane)
 
 void QGLFormat::setOption(QGL::FormatOptions opt)
 {
-    detach();
-    if (opt & 0xffff)
-        d->opts |= opt;
-    else
-       d->opts &= ~(opt >> 16);
+   detach();
+   if (opt & 0xffff) {
+      d->opts |= opt;
+   } else {
+      d->opts &= ~(opt >> 16);
+   }
 }
 
 
@@ -905,10 +915,11 @@ void QGLFormat::setOption(QGL::FormatOptions opt)
 
 bool QGLFormat::testOption(QGL::FormatOptions opt) const
 {
-    if (opt & 0xffff)
-       return (d->opts & opt) != 0;
-    else
-       return (d->opts & (opt >> 16)) == 0;
+   if (opt & 0xffff) {
+      return (d->opts & opt) != 0;
+   } else {
+      return (d->opts & (opt >> 16)) == 0;
+   }
 }
 
 /*!
@@ -918,13 +929,13 @@ bool QGLFormat::testOption(QGL::FormatOptions opt) const
 */
 void QGLFormat::setDepthBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QGLFormat::setDepthBufferSize: Cannot set negative depth buffer size %d", size);
-        return;
-    }
-    d->depthSize = size;
-    setDepth(size > 0);
+   detach();
+   if (size < 0) {
+      qWarning("QGLFormat::setDepthBufferSize: Cannot set negative depth buffer size %d", size);
+      return;
+   }
+   d->depthSize = size;
+   setDepth(size > 0);
 }
 
 /*!
@@ -946,12 +957,12 @@ int QGLFormat::depthBufferSize() const
 */
 void QGLFormat::setRedBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QGLFormat::setRedBufferSize: Cannot set negative red buffer size %d", size);
-        return;
-    }
-    d->redSize = size;
+   detach();
+   if (size < 0) {
+      qWarning("QGLFormat::setRedBufferSize: Cannot set negative red buffer size %d", size);
+      return;
+   }
+   d->redSize = size;
 }
 
 /*!
@@ -975,12 +986,12 @@ int QGLFormat::redBufferSize() const
 */
 void QGLFormat::setGreenBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QGLFormat::setGreenBufferSize: Cannot set negative green buffer size %d", size);
-        return;
-    }
-    d->greenSize = size;
+   detach();
+   if (size < 0) {
+      qWarning("QGLFormat::setGreenBufferSize: Cannot set negative green buffer size %d", size);
+      return;
+   }
+   d->greenSize = size;
 }
 
 /*!
@@ -1004,12 +1015,12 @@ int QGLFormat::greenBufferSize() const
 */
 void QGLFormat::setBlueBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QGLFormat::setBlueBufferSize: Cannot set negative blue buffer size %d", size);
-        return;
-    }
-    d->blueSize = size;
+   detach();
+   if (size < 0) {
+      qWarning("QGLFormat::setBlueBufferSize: Cannot set negative blue buffer size %d", size);
+      return;
+   }
+   d->blueSize = size;
 }
 
 /*!
@@ -1032,13 +1043,13 @@ int QGLFormat::blueBufferSize() const
 */
 void QGLFormat::setAlphaBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QGLFormat::setAlphaBufferSize: Cannot set negative alpha buffer size %d", size);
-        return;
-    }
-    d->alphaSize = size;
-    setAlpha(size > 0);
+   detach();
+   if (size < 0) {
+      qWarning("QGLFormat::setAlphaBufferSize: Cannot set negative alpha buffer size %d", size);
+      return;
+   }
+   d->alphaSize = size;
+   setAlpha(size > 0);
 }
 
 /*!
@@ -1059,13 +1070,13 @@ int QGLFormat::alphaBufferSize() const
 */
 void QGLFormat::setAccumBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QGLFormat::setAccumBufferSize: Cannot set negative accumulate buffer size %d", size);
-        return;
-    }
-    d->accumSize = size;
-    setAccum(size > 0);
+   detach();
+   if (size < 0) {
+      qWarning("QGLFormat::setAccumBufferSize: Cannot set negative accumulate buffer size %d", size);
+      return;
+   }
+   d->accumSize = size;
+   setAccum(size > 0);
 }
 
 /*!
@@ -1085,13 +1096,13 @@ int QGLFormat::accumBufferSize() const
 */
 void QGLFormat::setStencilBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QGLFormat::setStencilBufferSize: Cannot set negative stencil buffer size %d", size);
-        return;
-    }
-    d->stencilSize = size;
-    setStencil(size > 0);
+   detach();
+   if (size < 0) {
+      qWarning("QGLFormat::setStencilBufferSize: Cannot set negative stencil buffer size %d", size);
+      return;
+   }
+   d->stencilSize = size;
+   setStencil(size > 0);
 }
 
 /*!
@@ -1115,13 +1126,13 @@ int QGLFormat::stencilBufferSize() const
 */
 void QGLFormat::setVersion(int major, int minor)
 {
-    if (major < 1 || minor < 0) {
-        qWarning("QGLFormat::setVersion: Cannot set zero or negative version number %d.%d", major, minor);
-        return;
-    }
-    detach();
-    d->majorVersion = major;
-    d->minorVersion = minor;
+   if (major < 1 || minor < 0) {
+      qWarning("QGLFormat::setVersion: Cannot set zero or negative version number %d.%d", major, minor);
+      return;
+   }
+   detach();
+   d->majorVersion = major;
+   d->minorVersion = minor;
 }
 
 /*!
@@ -1133,7 +1144,7 @@ void QGLFormat::setVersion(int major, int minor)
 */
 int QGLFormat::majorVersion() const
 {
-    return d->majorVersion;
+   return d->majorVersion;
 }
 
 /*!
@@ -1145,7 +1156,7 @@ int QGLFormat::majorVersion() const
 */
 int QGLFormat::minorVersion() const
 {
-    return d->minorVersion;
+   return d->minorVersion;
 }
 
 /*!
@@ -1171,8 +1182,8 @@ int QGLFormat::minorVersion() const
 */
 void QGLFormat::setProfile(OpenGLContextProfile profile)
 {
-    detach();
-    d->profile = profile;
+   detach();
+   d->profile = profile;
 }
 
 /*!
@@ -1184,7 +1195,7 @@ void QGLFormat::setProfile(OpenGLContextProfile profile)
 */
 QGLFormat::OpenGLContextProfile QGLFormat::profile() const
 {
-    return d->profile;
+   return d->profile;
 }
 
 
@@ -1212,111 +1223,113 @@ QGLFormat::OpenGLContextProfile QGLFormat::profile() const
 
 QGLFormat::OpenGLVersionFlags qOpenGLVersionFlagsFromString(const QString &versionString)
 {
-    QGLFormat::OpenGLVersionFlags versionFlags = QGLFormat::OpenGL_Version_None;
+   QGLFormat::OpenGLVersionFlags versionFlags = QGLFormat::OpenGL_Version_None;
 
-    if (versionString.startsWith(QLatin1String("OpenGL ES"))) {
-        QStringList parts = versionString.split(QLatin1Char(' '));
-        if (parts.size() >= 3) {
-            if (parts[2].startsWith(QLatin1String("1."))) {
-                if (parts[1].endsWith(QLatin1String("-CM"))) {
-                    versionFlags |= QGLFormat::OpenGL_ES_Common_Version_1_0 |
-                                    QGLFormat::OpenGL_ES_CommonLite_Version_1_0;
-                    if (parts[2].startsWith(QLatin1String("1.1")))
-                        versionFlags |= QGLFormat::OpenGL_ES_Common_Version_1_1 |
-                                        QGLFormat::OpenGL_ES_CommonLite_Version_1_1;
-                } else {
-                    // Not -CM, must be CL, CommonLite
-                    versionFlags |= QGLFormat::OpenGL_ES_CommonLite_Version_1_0;
-                    if (parts[2].startsWith(QLatin1String("1.1")))
-                        versionFlags |= QGLFormat::OpenGL_ES_CommonLite_Version_1_1;
-                }
+   if (versionString.startsWith(QLatin1String("OpenGL ES"))) {
+      QStringList parts = versionString.split(QLatin1Char(' '));
+      if (parts.size() >= 3) {
+         if (parts[2].startsWith(QLatin1String("1."))) {
+            if (parts[1].endsWith(QLatin1String("-CM"))) {
+               versionFlags |= QGLFormat::OpenGL_ES_Common_Version_1_0 |
+                               QGLFormat::OpenGL_ES_CommonLite_Version_1_0;
+               if (parts[2].startsWith(QLatin1String("1.1")))
+                  versionFlags |= QGLFormat::OpenGL_ES_Common_Version_1_1 |
+                                  QGLFormat::OpenGL_ES_CommonLite_Version_1_1;
             } else {
-                // OpenGL ES version 2.0 or higher
-                versionFlags |= QGLFormat::OpenGL_ES_Version_2_0;
+               // Not -CM, must be CL, CommonLite
+               versionFlags |= QGLFormat::OpenGL_ES_CommonLite_Version_1_0;
+               if (parts[2].startsWith(QLatin1String("1.1"))) {
+                  versionFlags |= QGLFormat::OpenGL_ES_CommonLite_Version_1_1;
+               }
             }
-        } else {
-            // if < 3 parts to the name, it is an unrecognised OpenGL ES
-            qWarning("Unrecognised OpenGL ES version");
-        }
-    } else {
-        // not ES, regular OpenGL, the version numbers are first in the string
-        if (versionString.startsWith(QLatin1String("1."))) {
-            switch (versionString[2].toAscii()) {
+         } else {
+            // OpenGL ES version 2.0 or higher
+            versionFlags |= QGLFormat::OpenGL_ES_Version_2_0;
+         }
+      } else {
+         // if < 3 parts to the name, it is an unrecognised OpenGL ES
+         qWarning("Unrecognised OpenGL ES version");
+      }
+   } else {
+      // not ES, regular OpenGL, the version numbers are first in the string
+      if (versionString.startsWith(QLatin1String("1."))) {
+         switch (versionString[2].toAscii()) {
             case '5':
-                versionFlags |= QGLFormat::OpenGL_Version_1_5;
+               versionFlags |= QGLFormat::OpenGL_Version_1_5;
             case '4':
-                versionFlags |= QGLFormat::OpenGL_Version_1_4;
+               versionFlags |= QGLFormat::OpenGL_Version_1_4;
             case '3':
-                versionFlags |= QGLFormat::OpenGL_Version_1_3;
+               versionFlags |= QGLFormat::OpenGL_Version_1_3;
             case '2':
-                versionFlags |= QGLFormat::OpenGL_Version_1_2;
+               versionFlags |= QGLFormat::OpenGL_Version_1_2;
             case '1':
-                versionFlags |= QGLFormat::OpenGL_Version_1_1;
+               versionFlags |= QGLFormat::OpenGL_Version_1_1;
             default:
-                break;
-            }
-        } else if (versionString.startsWith(QLatin1String("2."))) {
-            versionFlags |= QGLFormat::OpenGL_Version_1_1 |
-                            QGLFormat::OpenGL_Version_1_2 |
-                            QGLFormat::OpenGL_Version_1_3 |
-                            QGLFormat::OpenGL_Version_1_4 |
-                            QGLFormat::OpenGL_Version_1_5 |
-                            QGLFormat::OpenGL_Version_2_0;
-            if (versionString[2].toAscii() == '1')
-                versionFlags |= QGLFormat::OpenGL_Version_2_1;
-        } else if (versionString.startsWith(QLatin1String("3."))) {
-            versionFlags |= QGLFormat::OpenGL_Version_1_1 |
-                            QGLFormat::OpenGL_Version_1_2 |
-                            QGLFormat::OpenGL_Version_1_3 |
-                            QGLFormat::OpenGL_Version_1_4 |
-                            QGLFormat::OpenGL_Version_1_5 |
-                            QGLFormat::OpenGL_Version_2_0 |
-                            QGLFormat::OpenGL_Version_2_1 |
-                            QGLFormat::OpenGL_Version_3_0;
-            switch (versionString[2].toAscii()) {
+               break;
+         }
+      } else if (versionString.startsWith(QLatin1String("2."))) {
+         versionFlags |= QGLFormat::OpenGL_Version_1_1 |
+                         QGLFormat::OpenGL_Version_1_2 |
+                         QGLFormat::OpenGL_Version_1_3 |
+                         QGLFormat::OpenGL_Version_1_4 |
+                         QGLFormat::OpenGL_Version_1_5 |
+                         QGLFormat::OpenGL_Version_2_0;
+         if (versionString[2].toAscii() == '1') {
+            versionFlags |= QGLFormat::OpenGL_Version_2_1;
+         }
+      } else if (versionString.startsWith(QLatin1String("3."))) {
+         versionFlags |= QGLFormat::OpenGL_Version_1_1 |
+                         QGLFormat::OpenGL_Version_1_2 |
+                         QGLFormat::OpenGL_Version_1_3 |
+                         QGLFormat::OpenGL_Version_1_4 |
+                         QGLFormat::OpenGL_Version_1_5 |
+                         QGLFormat::OpenGL_Version_2_0 |
+                         QGLFormat::OpenGL_Version_2_1 |
+                         QGLFormat::OpenGL_Version_3_0;
+         switch (versionString[2].toAscii()) {
             case '3':
-                versionFlags |= QGLFormat::OpenGL_Version_3_3;
+               versionFlags |= QGLFormat::OpenGL_Version_3_3;
             case '2':
-                versionFlags |= QGLFormat::OpenGL_Version_3_2;
+               versionFlags |= QGLFormat::OpenGL_Version_3_2;
             case '1':
-                versionFlags |= QGLFormat::OpenGL_Version_3_1;
+               versionFlags |= QGLFormat::OpenGL_Version_3_1;
             case '0':
-                break;
+               break;
             default:
-                versionFlags |= QGLFormat::OpenGL_Version_3_1 |
-                                QGLFormat::OpenGL_Version_3_2 |
-                                QGLFormat::OpenGL_Version_3_3;
-                break;
-            }
-        } else if (versionString.startsWith(QLatin1String("4."))) {
-            versionFlags |= QGLFormat::OpenGL_Version_1_1 |
-                            QGLFormat::OpenGL_Version_1_2 |
-                            QGLFormat::OpenGL_Version_1_3 |
-                            QGLFormat::OpenGL_Version_1_4 |
-                            QGLFormat::OpenGL_Version_1_5 |
-                            QGLFormat::OpenGL_Version_2_0 |
-                            QGLFormat::OpenGL_Version_2_1 |
-                            QGLFormat::OpenGL_Version_3_0 |
-                            QGLFormat::OpenGL_Version_3_1 |
-                            QGLFormat::OpenGL_Version_3_2 |
-                            QGLFormat::OpenGL_Version_3_3 |
-                            QGLFormat::OpenGL_Version_4_0;
-        } else {
-            versionFlags |= QGLFormat::OpenGL_Version_1_1 |
-                            QGLFormat::OpenGL_Version_1_2 |
-                            QGLFormat::OpenGL_Version_1_3 |
-                            QGLFormat::OpenGL_Version_1_4 |
-                            QGLFormat::OpenGL_Version_1_5 |
-                            QGLFormat::OpenGL_Version_2_0 |
-                            QGLFormat::OpenGL_Version_2_1 |
-                            QGLFormat::OpenGL_Version_3_0 |
-                            QGLFormat::OpenGL_Version_3_1 |
-                            QGLFormat::OpenGL_Version_3_2 |
-                            QGLFormat::OpenGL_Version_3_3 |
-                            QGLFormat::OpenGL_Version_4_0;
-        }
-    }
-    return versionFlags;
+               versionFlags |= QGLFormat::OpenGL_Version_3_1 |
+                               QGLFormat::OpenGL_Version_3_2 |
+                               QGLFormat::OpenGL_Version_3_3;
+               break;
+         }
+      } else if (versionString.startsWith(QLatin1String("4."))) {
+         versionFlags |= QGLFormat::OpenGL_Version_1_1 |
+                         QGLFormat::OpenGL_Version_1_2 |
+                         QGLFormat::OpenGL_Version_1_3 |
+                         QGLFormat::OpenGL_Version_1_4 |
+                         QGLFormat::OpenGL_Version_1_5 |
+                         QGLFormat::OpenGL_Version_2_0 |
+                         QGLFormat::OpenGL_Version_2_1 |
+                         QGLFormat::OpenGL_Version_3_0 |
+                         QGLFormat::OpenGL_Version_3_1 |
+                         QGLFormat::OpenGL_Version_3_2 |
+                         QGLFormat::OpenGL_Version_3_3 |
+                         QGLFormat::OpenGL_Version_4_0;
+      } else {
+         versionFlags |= QGLFormat::OpenGL_Version_1_1 |
+                         QGLFormat::OpenGL_Version_1_2 |
+                         QGLFormat::OpenGL_Version_1_3 |
+                         QGLFormat::OpenGL_Version_1_4 |
+                         QGLFormat::OpenGL_Version_1_5 |
+                         QGLFormat::OpenGL_Version_2_0 |
+                         QGLFormat::OpenGL_Version_2_1 |
+                         QGLFormat::OpenGL_Version_3_0 |
+                         QGLFormat::OpenGL_Version_3_1 |
+                         QGLFormat::OpenGL_Version_3_2 |
+                         QGLFormat::OpenGL_Version_3_3 |
+                         QGLFormat::OpenGL_Version_4_0;
+      }
+   }
+   return versionFlags;
 }
 
 /*!
@@ -1396,37 +1409,39 @@ QGLFormat::OpenGLVersionFlags qOpenGLVersionFlagsFromString(const QString &versi
 */
 QGLFormat::OpenGLVersionFlags QGLFormat::openGLVersionFlags()
 {
-    static bool cachedDefault = false;
-    static OpenGLVersionFlags defaultVersionFlags = OpenGL_Version_None;
-    QGLContext *currentCtx = const_cast<QGLContext *>(QGLContext::currentContext());
-    QGLTemporaryContext *tmpContext = 0;
+   static bool cachedDefault = false;
+   static OpenGLVersionFlags defaultVersionFlags = OpenGL_Version_None;
+   QGLContext *currentCtx = const_cast<QGLContext *>(QGLContext::currentContext());
+   QGLTemporaryContext *tmpContext = 0;
 
-    if (currentCtx && currentCtx->d_func()->version_flags_cached)
-        return currentCtx->d_func()->version_flags;
+   if (currentCtx && currentCtx->d_func()->version_flags_cached) {
+      return currentCtx->d_func()->version_flags;
+   }
 
-    if (!currentCtx) {
-        if (cachedDefault) {
+   if (!currentCtx) {
+      if (cachedDefault) {
+         return defaultVersionFlags;
+      } else {
+         if (!hasOpenGL()) {
             return defaultVersionFlags;
-        } else {
-            if (!hasOpenGL())
-                return defaultVersionFlags;
-            tmpContext = new QGLTemporaryContext;
-            cachedDefault = true;
-        }
-    }
+         }
+         tmpContext = new QGLTemporaryContext;
+         cachedDefault = true;
+      }
+   }
 
-    QString versionString(QLatin1String(reinterpret_cast<const char*>(glGetString(GL_VERSION))));
-    OpenGLVersionFlags versionFlags = qOpenGLVersionFlagsFromString(versionString);
-    if (currentCtx) {
-        currentCtx->d_func()->version_flags_cached = true;
-        currentCtx->d_func()->version_flags = versionFlags;
-    }
-    if (tmpContext) {
-        defaultVersionFlags = versionFlags;
-        delete tmpContext;
-    }
+   QString versionString(QLatin1String(reinterpret_cast<const char *>(glGetString(GL_VERSION))));
+   OpenGLVersionFlags versionFlags = qOpenGLVersionFlagsFromString(versionString);
+   if (currentCtx) {
+      currentCtx->d_func()->version_flags_cached = true;
+      currentCtx->d_func()->version_flags = versionFlags;
+   }
+   if (tmpContext) {
+      defaultVersionFlags = versionFlags;
+      delete tmpContext;
+   }
 
-    return versionFlags;
+   return versionFlags;
 }
 
 
@@ -1444,7 +1459,7 @@ QGLFormat::OpenGLVersionFlags QGLFormat::openGLVersionFlags()
 
 QGLFormat QGLFormat::defaultFormat()
 {
-    return *qgl_default_format();
+   return *qgl_default_format();
 }
 
 /*!
@@ -1458,7 +1473,7 @@ QGLFormat QGLFormat::defaultFormat()
 
 void QGLFormat::setDefaultFormat(const QGLFormat &f)
 {
-    *qgl_default_format() = f;
+   *qgl_default_format() = f;
 }
 
 
@@ -1485,7 +1500,7 @@ void QGLFormat::setDefaultFormat(const QGLFormat &f)
 
 QGLFormat QGLFormat::defaultOverlayFormat()
 {
-    return *defaultOverlayFormatInstance();
+   return *defaultOverlayFormatInstance();
 }
 
 /*!
@@ -1509,12 +1524,12 @@ QGLFormat QGLFormat::defaultOverlayFormat()
 
 void QGLFormat::setDefaultOverlayFormat(const QGLFormat &f)
 {
-    QGLFormat *defaultFormat = defaultOverlayFormatInstance();
-    *defaultFormat = f;
-    // Make sure the user doesn't request that the overlays themselves
-    // have overlays, since it is unlikely that the system supports
-    // infinitely many planes...
-    defaultFormat->setOverlay(false);
+   QGLFormat *defaultFormat = defaultOverlayFormatInstance();
+   *defaultFormat = f;
+   // Make sure the user doesn't request that the overlays themselves
+   // have overlays, since it is unlikely that the system supports
+   // infinitely many planes...
+   defaultFormat->setOverlay(false);
 }
 
 
@@ -1525,46 +1540,46 @@ void QGLFormat::setDefaultOverlayFormat(const QGLFormat &f)
     \relates QGLFormat
 */
 
-bool operator==(const QGLFormat& a, const QGLFormat& b)
+bool operator==(const QGLFormat &a, const QGLFormat &b)
 {
-    return (a.d == b.d) || ((int) a.d->opts == (int) b.d->opts
-        && a.d->pln == b.d->pln
-        && a.d->alphaSize == b.d->alphaSize
-        && a.d->accumSize == b.d->accumSize
-        && a.d->stencilSize == b.d->stencilSize
-        && a.d->depthSize == b.d->depthSize
-        && a.d->redSize == b.d->redSize
-        && a.d->greenSize == b.d->greenSize
-        && a.d->blueSize == b.d->blueSize
-        && a.d->numSamples == b.d->numSamples
-        && a.d->swapInterval == b.d->swapInterval
-        && a.d->majorVersion == b.d->majorVersion
-        && a.d->minorVersion == b.d->minorVersion
-        && a.d->profile == b.d->profile);
+   return (a.d == b.d) || ((int) a.d->opts == (int) b.d->opts
+                           && a.d->pln == b.d->pln
+                           && a.d->alphaSize == b.d->alphaSize
+                           && a.d->accumSize == b.d->accumSize
+                           && a.d->stencilSize == b.d->stencilSize
+                           && a.d->depthSize == b.d->depthSize
+                           && a.d->redSize == b.d->redSize
+                           && a.d->greenSize == b.d->greenSize
+                           && a.d->blueSize == b.d->blueSize
+                           && a.d->numSamples == b.d->numSamples
+                           && a.d->swapInterval == b.d->swapInterval
+                           && a.d->majorVersion == b.d->majorVersion
+                           && a.d->minorVersion == b.d->minorVersion
+                           && a.d->profile == b.d->profile);
 }
 
 QDebug operator<<(QDebug dbg, const QGLFormat &f)
 {
-    const QGLFormatPrivate * const d = f.d;
+   const QGLFormatPrivate *const d = f.d;
 
-    dbg.nospace() << "QGLFormat("
-                  << "options " << d->opts
-                  << ", plane " << d->pln
-                  << ", depthBufferSize " << d->depthSize
-                  << ", accumBufferSize " << d->accumSize
-                  << ", stencilBufferSize " << d->stencilSize
-                  << ", redBufferSize " << d->redSize
-                  << ", greenBufferSize " << d->greenSize
-                  << ", blueBufferSize " << d->blueSize
-                  << ", alphaBufferSize " << d->alphaSize
-                  << ", samples " << d->numSamples
-                  << ", swapInterval " << d->swapInterval
-                  << ", majorVersion " << d->majorVersion
-                  << ", minorVersion " << d->minorVersion
-                  << ", profile " << d->profile
-                  << ')';
+   dbg.nospace() << "QGLFormat("
+                 << "options " << d->opts
+                 << ", plane " << d->pln
+                 << ", depthBufferSize " << d->depthSize
+                 << ", accumBufferSize " << d->accumSize
+                 << ", stencilBufferSize " << d->stencilSize
+                 << ", redBufferSize " << d->redSize
+                 << ", greenBufferSize " << d->greenSize
+                 << ", blueBufferSize " << d->blueSize
+                 << ", alphaBufferSize " << d->alphaSize
+                 << ", samples " << d->numSamples
+                 << ", swapInterval " << d->swapInterval
+                 << ", majorVersion " << d->majorVersion
+                 << ", minorVersion " << d->minorVersion
+                 << ", profile " << d->profile
+                 << ')';
 
-    return dbg.space();
+   return dbg.space();
 }
 
 /*!
@@ -1574,24 +1589,24 @@ QDebug operator<<(QDebug dbg, const QGLFormat &f)
     \relates QGLFormat
 */
 
-bool operator!=(const QGLFormat& a, const QGLFormat& b)
+bool operator!=(const QGLFormat &a, const QGLFormat &b)
 {
-    return !(a == b);
+   return !(a == b);
 }
 
 struct QGLContextGroupList {
-    void append(QGLContextGroup *group) {
-        QMutexLocker locker(&m_mutex);
-        m_list.append(group);
-    }
+   void append(QGLContextGroup *group) {
+      QMutexLocker locker(&m_mutex);
+      m_list.append(group);
+   }
 
-    void remove(QGLContextGroup *group) {
-        QMutexLocker locker(&m_mutex);
-        m_list.removeOne(group);
-    }
+   void remove(QGLContextGroup *group) {
+      QMutexLocker locker(&m_mutex);
+      m_list.removeOne(group);
+   }
 
-    QList<QGLContextGroup *> m_list;
-    QMutex m_mutex;
+   QList<QGLContextGroup *> m_list;
+   QMutex m_mutex;
 };
 
 Q_GLOBAL_STATIC(QGLContextGroupList, qt_context_groups)
@@ -1601,139 +1616,145 @@ Q_GLOBAL_STATIC(QGLContextGroupList, qt_context_groups)
  *****************************************************************************/
 
 QGLContextGroup::QGLContextGroup(const QGLContext *context)
-    : m_context(context), m_guards(0), m_refs(1)
+   : m_context(context), m_guards(0), m_refs(1)
 {
-    qt_context_groups()->append(this);
+   qt_context_groups()->append(this);
 }
 
 QGLContextGroup::~QGLContextGroup()
 {
-    // Clear any remaining QGLSharedResourceGuard objects on the group.
-    QGLSharedResourceGuard *guard = m_guards;
-    while (guard != 0) {
-        guard->m_group = 0;
-        guard->m_id = 0;
-        guard = guard->m_next;
-    }
-    qt_context_groups()->remove(this);
+   // Clear any remaining QGLSharedResourceGuard objects on the group.
+   QGLSharedResourceGuard *guard = m_guards;
+   while (guard != 0) {
+      guard->m_group = 0;
+      guard->m_id = 0;
+      guard = guard->m_next;
+   }
+   qt_context_groups()->remove(this);
 }
 
 void QGLContextGroup::addGuard(QGLSharedResourceGuard *guard)
 {
-    if (m_guards)
-        m_guards->m_prev = guard;
-    guard->m_next = m_guards;
-    guard->m_prev = 0;
-    m_guards = guard;
+   if (m_guards) {
+      m_guards->m_prev = guard;
+   }
+   guard->m_next = m_guards;
+   guard->m_prev = 0;
+   m_guards = guard;
 }
 
 void QGLContextGroup::removeGuard(QGLSharedResourceGuard *guard)
 {
-    if (guard->m_next)
-        guard->m_next->m_prev = guard->m_prev;
-    if (guard->m_prev)
-        guard->m_prev->m_next = guard->m_next;
-    else
-        m_guards = guard->m_next;
+   if (guard->m_next) {
+      guard->m_next->m_prev = guard->m_prev;
+   }
+   if (guard->m_prev) {
+      guard->m_prev->m_next = guard->m_next;
+   } else {
+      m_guards = guard->m_next;
+   }
 }
 
 const QGLContext *qt_gl_transfer_context(const QGLContext *ctx)
 {
-    if (!ctx)
-        return 0;
-    QList<const QGLContext *> shares
-        (QGLContextPrivate::contextGroup(ctx)->shares());
-    if (shares.size() >= 2)
-        return (ctx == shares.at(0)) ? shares.at(1) : shares.at(0);
-    else
-        return 0;
+   if (!ctx) {
+      return 0;
+   }
+   QList<const QGLContext *> shares
+   (QGLContextPrivate::contextGroup(ctx)->shares());
+   if (shares.size() >= 2) {
+      return (ctx == shares.at(0)) ? shares.at(1) : shares.at(0);
+   } else {
+      return 0;
+   }
 }
 
 QGLContextPrivate::QGLContextPrivate(QGLContext *context)
-    : internal_context(false)
-    , q_ptr(context)
+   : internal_context(false)
+   , q_ptr(context)
 {
-    group = new QGLContextGroup(context);
-    texture_destroyer = new QGLTextureDestroyer;
-    texture_destroyer->moveToThread(qApp->thread());
+   group = new QGLContextGroup(context);
+   texture_destroyer = new QGLTextureDestroyer;
+   texture_destroyer->moveToThread(qApp->thread());
 }
 
 QGLContextPrivate::~QGLContextPrivate()
 {
-    if (!group->m_refs.deref()) {
-        Q_ASSERT(group->context() == q_ptr);
-        delete group;
-    }
+   if (!group->m_refs.deref()) {
+      Q_ASSERT(group->context() == q_ptr);
+      delete group;
+   }
 
-    delete texture_destroyer;
+   delete texture_destroyer;
 }
 
 void QGLContextPrivate::init(QPaintDevice *dev, const QGLFormat &format)
 {
-    Q_Q(QGLContext);
-    glFormat = reqFormat = format;
-    valid = false;
-    q->setDevice(dev);
+   Q_Q(QGLContext);
+   glFormat = reqFormat = format;
+   valid = false;
+   q->setDevice(dev);
 
 #if defined(Q_WS_X11)
-    pbuf = 0;
-    gpm = 0;
-    vi = 0;
-    screen = QX11Info::appScreen();
+   pbuf = 0;
+   gpm = 0;
+   vi = 0;
+   screen = QX11Info::appScreen();
 #endif
 
 #if defined(Q_OS_WIN)
-    dc = 0;
-    win = 0;
-    threadId = 0;
-    pixelFormatId = 0;
-    cmap = 0;
-    hbitmap = 0;
-    hbitmap_hdc = 0;
+   dc = 0;
+   win = 0;
+   threadId = 0;
+   pixelFormatId = 0;
+   cmap = 0;
+   hbitmap = 0;
+   hbitmap_hdc = 0;
 #endif
 
 #if defined(Q_OS_MAC)
-    vi = 0;
+   vi = 0;
 #endif
 
 #if defined(Q_WS_QPA)
-    platformContext = 0;
+   platformContext = 0;
 #endif
 
 #if !defined(QT_NO_EGL)
-    ownsEglContext = false;
-    eglContext = 0;
-    eglSurface = EGL_NO_SURFACE;
+   ownsEglContext = false;
+   eglContext = 0;
+   eglSurface = EGL_NO_SURFACE;
 #endif
-    fbo = 0;
-    crWin = false;
-    initDone = false;
-    sharing = false;
-    max_texture_size = -1;
-    version_flags_cached = false;
-    version_flags = QGLFormat::OpenGL_Version_None;
-    extension_flags_cached = false;
-    extension_flags = 0;
-    current_fbo = 0;
-    default_fbo = 0;
-    active_engine = 0;
-    workaround_needsFullClearOnEveryFrame = false;
-    workaround_brokenFBOReadBack = false;
-    workaround_brokenTexSubImage = false;
-    workaroundsCached = false;
+   fbo = 0;
+   crWin = false;
+   initDone = false;
+   sharing = false;
+   max_texture_size = -1;
+   version_flags_cached = false;
+   version_flags = QGLFormat::OpenGL_Version_None;
+   extension_flags_cached = false;
+   extension_flags = 0;
+   current_fbo = 0;
+   default_fbo = 0;
+   active_engine = 0;
+   workaround_needsFullClearOnEveryFrame = false;
+   workaround_brokenFBOReadBack = false;
+   workaround_brokenTexSubImage = false;
+   workaroundsCached = false;
 
-    workaround_brokenTextureFromPixmap = false;
-    workaround_brokenTextureFromPixmap_init = false;
+   workaround_brokenTextureFromPixmap = false;
+   workaround_brokenTextureFromPixmap_init = false;
 
-    workaround_brokenScissor = false;
-    workaround_brokenAlphaTexSubImage = false;
-    workaround_brokenAlphaTexSubImage_init = false;
+   workaround_brokenScissor = false;
+   workaround_brokenAlphaTexSubImage = false;
+   workaround_brokenAlphaTexSubImage_init = false;
 
-    for (int i = 0; i < QT_GL_VERTEX_ARRAY_TRACKED_COUNT; ++i)
-        vertexAttributeArraysEnabledState[i] = false;
+   for (int i = 0; i < QT_GL_VERTEX_ARRAY_TRACKED_COUNT; ++i) {
+      vertexAttributeArraysEnabledState[i] = false;
+   }
 }
 
-QGLContext* QGLContext::currentCtx = 0;
+QGLContext *QGLContext::currentCtx = 0;
 
 /*
    Read back the contents of the currently bound framebuffer, used in
@@ -1743,82 +1764,82 @@ QGLContext* QGLContext::currentCtx = 0;
 
 static void convertFromGLImage(QImage &img, int w, int h, bool alpha_format, bool include_alpha)
 {
-    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-        // OpenGL gives RGBA; Qt wants ARGB
-        uint *p = (uint*)img.bits();
-        uint *end = p + w*h;
-        if (alpha_format && include_alpha) {
-            while (p < end) {
-                uint a = *p << 24;
-                *p = (*p >> 8) | a;
-                p++;
+   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+      // OpenGL gives RGBA; Qt wants ARGB
+      uint *p = (uint *)img.bits();
+      uint *end = p + w * h;
+      if (alpha_format && include_alpha) {
+         while (p < end) {
+            uint a = *p << 24;
+            *p = (*p >> 8) | a;
+            p++;
+         }
+      } else {
+         // This is an old legacy fix for PowerPC based Macs, which
+         // we shouldn't remove
+         while (p < end) {
+            *p = 0xff000000 | (*p >> 8);
+            ++p;
+         }
+      }
+   } else {
+      // OpenGL gives ABGR (i.e. RGBA backwards); Qt wants ARGB
+      for (int y = 0; y < h; y++) {
+         uint *q = (uint *)img.scanLine(y);
+         for (int x = 0; x < w; ++x) {
+            const uint pixel = *q;
+            if (alpha_format && include_alpha) {
+               *q = ((pixel << 16) & 0xff0000) | ((pixel >> 16) & 0xff)
+                    | (pixel & 0xff00ff00);
+            } else {
+               *q = 0xff000000 | ((pixel << 16) & 0xff0000)
+                    | ((pixel >> 16) & 0xff) | (pixel & 0x00ff00);
             }
-        } else {
-            // This is an old legacy fix for PowerPC based Macs, which
-            // we shouldn't remove
-            while (p < end) {
-                *p = 0xff000000 | (*p>>8);
-                ++p;
-            }
-        }
-    } else {
-        // OpenGL gives ABGR (i.e. RGBA backwards); Qt wants ARGB
-        for (int y = 0; y < h; y++) {
-            uint *q = (uint*)img.scanLine(y);
-            for (int x=0; x < w; ++x) {
-                const uint pixel = *q;
-                if (alpha_format && include_alpha) {
-                    *q = ((pixel << 16) & 0xff0000) | ((pixel >> 16) & 0xff)
-                         | (pixel & 0xff00ff00);
-                } else {
-                    *q = 0xff000000 | ((pixel << 16) & 0xff0000)
-                         | ((pixel >> 16) & 0xff) | (pixel & 0x00ff00);
-                }
 
-                q++;
-            }
-        }
+            q++;
+         }
+      }
 
-    }
-    img = img.mirrored();
+   }
+   img = img.mirrored();
 }
 
 QImage qt_gl_read_framebuffer(const QSize &size, bool alpha_format, bool include_alpha)
 {
-    QImage img(size, (alpha_format && include_alpha) ? QImage::Format_ARGB32_Premultiplied
-                                                     : QImage::Format_RGB32);
-    int w = size.width();
-    int h = size.height();
-    glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, img.bits());
-    convertFromGLImage(img, w, h, alpha_format, include_alpha);
-    return img;
+   QImage img(size, (alpha_format && include_alpha) ? QImage::Format_ARGB32_Premultiplied
+              : QImage::Format_RGB32);
+   int w = size.width();
+   int h = size.height();
+   glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, img.bits());
+   convertFromGLImage(img, w, h, alpha_format, include_alpha);
+   return img;
 }
 
 QImage qt_gl_read_texture(const QSize &size, bool alpha_format, bool include_alpha)
 {
-    QImage img(size, alpha_format ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32);
-    int w = size.width();
-    int h = size.height();
+   QImage img(size, alpha_format ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32);
+   int w = size.width();
+   int h = size.height();
 #if !defined(QT_OPENGL_ES_2) && !defined(QT_OPENGL_ES_1)
-    //### glGetTexImage not in GL ES 2.0, need to do something else here!
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.bits());
+   //### glGetTexImage not in GL ES 2.0, need to do something else here!
+   glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.bits());
 #endif
-    convertFromGLImage(img, w, h, alpha_format, include_alpha);
-    return img;
+   convertFromGLImage(img, w, h, alpha_format, include_alpha);
+   return img;
 }
 
 // returns the highest number closest to v, which is a power of 2
 // NB! assumes 32 bit ints
 int qt_next_power_of_two(int v)
 {
-    v--;
-    v |= v >> 1;
-    v |= v >> 2;
-    v |= v >> 4;
-    v |= v >> 8;
-    v |= v >> 16;
-    ++v;
-    return v;
+   v--;
+   v |= v >> 1;
+   v |= v >> 2;
+   v |= v >> 4;
+   v |= v >> 8;
+   v |= v >> 16;
+   ++v;
+   return v;
 }
 
 typedef void (*_qt_pixmap_cleanup_hook_64)(qint64);
@@ -1831,63 +1852,64 @@ extern Q_GUI_EXPORT _qt_image_cleanup_hook_64 qt_image_cleanup_hook_64;
 Q_GLOBAL_STATIC(QGLTextureCache, qt_gl_texture_cache)
 
 QGLTextureCache::QGLTextureCache()
-    : m_cache(64*1024) // cache ~64 MB worth of textures - this is not accurate though
+   : m_cache(64 * 1024) // cache ~64 MB worth of textures - this is not accurate though
 {
-    QImagePixmapCleanupHooks::instance()->addPixmapDataModificationHook(cleanupTexturesForPixampData);
-    QImagePixmapCleanupHooks::instance()->addPixmapDataDestructionHook(cleanupBeforePixmapDestruction);
-    QImagePixmapCleanupHooks::instance()->addImageHook(cleanupTexturesForCacheKey);
+   QImagePixmapCleanupHooks::instance()->addPixmapDataModificationHook(cleanupTexturesForPixampData);
+   QImagePixmapCleanupHooks::instance()->addPixmapDataDestructionHook(cleanupBeforePixmapDestruction);
+   QImagePixmapCleanupHooks::instance()->addImageHook(cleanupTexturesForCacheKey);
 }
 
 QGLTextureCache::~QGLTextureCache()
 {
-    QImagePixmapCleanupHooks::instance()->removePixmapDataModificationHook(cleanupTexturesForPixampData);
-    QImagePixmapCleanupHooks::instance()->removePixmapDataDestructionHook(cleanupBeforePixmapDestruction);
-    QImagePixmapCleanupHooks::instance()->removeImageHook(cleanupTexturesForCacheKey);
+   QImagePixmapCleanupHooks::instance()->removePixmapDataModificationHook(cleanupTexturesForPixampData);
+   QImagePixmapCleanupHooks::instance()->removePixmapDataDestructionHook(cleanupBeforePixmapDestruction);
+   QImagePixmapCleanupHooks::instance()->removeImageHook(cleanupTexturesForCacheKey);
 }
 
-void QGLTextureCache::insert(QGLContext* ctx, qint64 key, QGLTexture* texture, int cost)
+void QGLTextureCache::insert(QGLContext *ctx, qint64 key, QGLTexture *texture, int cost)
 {
-    QWriteLocker locker(&m_lock);
-    const QGLTextureCacheKey cacheKey = {key, QGLContextPrivate::contextGroup(ctx)};
-    m_cache.insert(cacheKey, texture, cost);
+   QWriteLocker locker(&m_lock);
+   const QGLTextureCacheKey cacheKey = {key, QGLContextPrivate::contextGroup(ctx)};
+   m_cache.insert(cacheKey, texture, cost);
 }
 
 void QGLTextureCache::remove(qint64 key)
 {
-    QWriteLocker locker(&m_lock);
-    QMutexLocker groupLocker(&qt_context_groups()->m_mutex);
-    QList<QGLContextGroup *>::const_iterator it = qt_context_groups()->m_list.constBegin();
-    while (it != qt_context_groups()->m_list.constEnd()) {
-        const QGLTextureCacheKey cacheKey = {key, *it};
-        m_cache.remove(cacheKey);
-        ++it;
-    }
+   QWriteLocker locker(&m_lock);
+   QMutexLocker groupLocker(&qt_context_groups()->m_mutex);
+   QList<QGLContextGroup *>::const_iterator it = qt_context_groups()->m_list.constBegin();
+   while (it != qt_context_groups()->m_list.constEnd()) {
+      const QGLTextureCacheKey cacheKey = {key, *it};
+      m_cache.remove(cacheKey);
+      ++it;
+   }
 }
 
-bool QGLTextureCache::remove(QGLContext* ctx, GLuint textureId)
+bool QGLTextureCache::remove(QGLContext *ctx, GLuint textureId)
 {
-    QWriteLocker locker(&m_lock);
-    QList<QGLTextureCacheKey> keys = m_cache.keys();
-    for (int i = 0; i < keys.size(); ++i) {
-        QGLTexture *tex = m_cache.object(keys.at(i));
-        if (tex->id == textureId && tex->context == ctx) {
-            tex->options |= QGLContext::MemoryManagedBindOption; // forces a glDeleteTextures() call
-            m_cache.remove(keys.at(i));
-            return true;
-        }
-    }
-    return false;
+   QWriteLocker locker(&m_lock);
+   QList<QGLTextureCacheKey> keys = m_cache.keys();
+   for (int i = 0; i < keys.size(); ++i) {
+      QGLTexture *tex = m_cache.object(keys.at(i));
+      if (tex->id == textureId && tex->context == ctx) {
+         tex->options |= QGLContext::MemoryManagedBindOption; // forces a glDeleteTextures() call
+         m_cache.remove(keys.at(i));
+         return true;
+      }
+   }
+   return false;
 }
 
-void QGLTextureCache::removeContextTextures(QGLContext* ctx)
+void QGLTextureCache::removeContextTextures(QGLContext *ctx)
 {
-    QWriteLocker locker(&m_lock);
-    QList<QGLTextureCacheKey> keys = m_cache.keys();
-    for (int i = 0; i < keys.size(); ++i) {
-        const QGLTextureCacheKey &key = keys.at(i);
-        if (m_cache.object(key)->context == ctx)
-            m_cache.remove(key);
-    }
+   QWriteLocker locker(&m_lock);
+   QList<QGLTextureCacheKey> keys = m_cache.keys();
+   for (int i = 0; i < keys.size(); ++i) {
+      const QGLTextureCacheKey &key = keys.at(i);
+      if (m_cache.object(key)->context == ctx) {
+         m_cache.remove(key);
+      }
+   }
 }
 
 /*
@@ -1896,48 +1918,48 @@ void QGLTextureCache::removeContextTextures(QGLContext* ctx)
 */
 void QGLTextureCache::cleanupTexturesForCacheKey(qint64 cacheKey)
 {
-    qt_gl_texture_cache()->remove(cacheKey);
+   qt_gl_texture_cache()->remove(cacheKey);
 }
 
 
-void QGLTextureCache::cleanupTexturesForPixampData(QPixmapData* pmd)
+void QGLTextureCache::cleanupTexturesForPixampData(QPixmapData *pmd)
 {
-    cleanupTexturesForCacheKey(pmd->cacheKey());
+   cleanupTexturesForCacheKey(pmd->cacheKey());
 }
 
-void QGLTextureCache::cleanupBeforePixmapDestruction(QPixmapData* pmd)
+void QGLTextureCache::cleanupBeforePixmapDestruction(QPixmapData *pmd)
 {
-    // Remove any bound textures first:
-    cleanupTexturesForPixampData(pmd);
+   // Remove any bound textures first:
+   cleanupTexturesForPixampData(pmd);
 
 #if defined(Q_WS_X11)
-    if (pmd->classId() == QPixmapData::X11Class) {
-        Q_ASSERT(pmd->ref.load() == 0); // Make sure reference counting isn't broken
-        QGLContextPrivate::destroyGlSurfaceForPixmap(pmd);
-    }
+   if (pmd->classId() == QPixmapData::X11Class) {
+      Q_ASSERT(pmd->ref.load() == 0); // Make sure reference counting isn't broken
+      QGLContextPrivate::destroyGlSurfaceForPixmap(pmd);
+   }
 #endif
 }
 
 QGLTextureCache *QGLTextureCache::instance()
 {
-    return qt_gl_texture_cache();
+   return qt_gl_texture_cache();
 }
 
 // DDS format structure
 struct DDSFormat {
-    quint32 dwSize;
-    quint32 dwFlags;
-    quint32 dwHeight;
-    quint32 dwWidth;
-    quint32 dwLinearSize;
-    quint32 dummy1;
-    quint32 dwMipMapCount;
-    quint32 dummy2[11];
-    struct {
-        quint32 dummy3[2];
-        quint32 dwFourCC;
-        quint32 dummy4[5];
-    } ddsPixelFormat;
+   quint32 dwSize;
+   quint32 dwFlags;
+   quint32 dwHeight;
+   quint32 dwWidth;
+   quint32 dwLinearSize;
+   quint32 dummy1;
+   quint32 dwMipMapCount;
+   quint32 dummy2[11];
+   struct {
+      quint32 dummy3[2];
+      quint32 dwFourCC;
+      quint32 dummy4[5];
+   } ddsPixelFormat;
 };
 
 // compressed texture pixel formats
@@ -2049,10 +2071,10 @@ struct DDSFormat {
 */
 
 QGLContext::QGLContext(const QGLFormat &format, QPaintDevice *device)
-    : d_ptr(new QGLContextPrivate(this))
+   : d_ptr(new QGLContextPrivate(this))
 {
-    Q_D(QGLContext);
-    d->init(device, format);
+   Q_D(QGLContext);
+   d->init(device, format);
 }
 
 /*!
@@ -2072,10 +2094,10 @@ QGLContext::QGLContext(const QGLFormat &format, QPaintDevice *device)
     \sa format(), isValid()
 */
 QGLContext::QGLContext(const QGLFormat &format)
-    : d_ptr(new QGLContextPrivate(this))
+   : d_ptr(new QGLContextPrivate(this))
 {
-    Q_D(QGLContext);
-    d->init(0, format);
+   Q_D(QGLContext);
+   d->init(0, format);
 }
 
 /*!
@@ -2084,54 +2106,58 @@ QGLContext::QGLContext(const QGLFormat &format)
 
 QGLContext::~QGLContext()
 {
-    // remove any textures cached in this context
-    QGLTextureCache::instance()->removeContextTextures(this);
+   // remove any textures cached in this context
+   QGLTextureCache::instance()->removeContextTextures(this);
 
-    // clean up resources specific to this context
-    d_ptr->cleanup();
-    // clean up resources belonging to this context's group
-    d_ptr->group->cleanupResources(this);
+   // clean up resources specific to this context
+   d_ptr->cleanup();
+   // clean up resources belonging to this context's group
+   d_ptr->group->cleanupResources(this);
 
-    QGLSignalProxy::instance()->emitAboutToDestroyContext(this);
-    reset();
+   QGLSignalProxy::instance()->emitAboutToDestroyContext(this);
+   reset();
 }
 
 void QGLContextPrivate::cleanup()
 {
-    QHash<QGLContextResourceBase *, void *>::ConstIterator it;
-    for (it = m_resources.begin(); it != m_resources.end(); ++it)
-        it.key()->freeResource(it.value());
-    m_resources.clear();
+   QHash<QGLContextResourceBase *, void *>::ConstIterator it;
+   for (it = m_resources.begin(); it != m_resources.end(); ++it) {
+      it.key()->freeResource(it.value());
+   }
+   m_resources.clear();
 }
 
 #define ctx q_ptr
 void QGLContextPrivate::setVertexAttribArrayEnabled(int arrayIndex, bool enabled)
 {
-    Q_ASSERT(arrayIndex < QT_GL_VERTEX_ARRAY_TRACKED_COUNT);
+   Q_ASSERT(arrayIndex < QT_GL_VERTEX_ARRAY_TRACKED_COUNT);
 #ifdef glEnableVertexAttribArray
-    Q_ASSERT(glEnableVertexAttribArray);
+   Q_ASSERT(glEnableVertexAttribArray);
 #endif
 
-    if (vertexAttributeArraysEnabledState[arrayIndex] && !enabled)
-        glDisableVertexAttribArray(arrayIndex);
+   if (vertexAttributeArraysEnabledState[arrayIndex] && !enabled) {
+      glDisableVertexAttribArray(arrayIndex);
+   }
 
-    if (!vertexAttributeArraysEnabledState[arrayIndex] && enabled)
-        glEnableVertexAttribArray(arrayIndex);
+   if (!vertexAttributeArraysEnabledState[arrayIndex] && enabled) {
+      glEnableVertexAttribArray(arrayIndex);
+   }
 
-    vertexAttributeArraysEnabledState[arrayIndex] = enabled;
+   vertexAttributeArraysEnabledState[arrayIndex] = enabled;
 }
 
 void QGLContextPrivate::syncGlState()
 {
 #ifdef glEnableVertexAttribArray
-    Q_ASSERT(glEnableVertexAttribArray);
+   Q_ASSERT(glEnableVertexAttribArray);
 #endif
-    for (int i = 0; i < QT_GL_VERTEX_ARRAY_TRACKED_COUNT; ++i) {
-        if (vertexAttributeArraysEnabledState[i])
-            glEnableVertexAttribArray(i);
-        else
-            glDisableVertexAttribArray(i);
-    }
+   for (int i = 0; i < QT_GL_VERTEX_ARRAY_TRACKED_COUNT; ++i) {
+      if (vertexAttributeArraysEnabledState[i]) {
+         glEnableVertexAttribArray(i);
+      } else {
+         glDisableVertexAttribArray(i);
+      }
+   }
 
 }
 #undef ctx
@@ -2139,8 +2165,8 @@ void QGLContextPrivate::syncGlState()
 #ifdef QT_NO_EGL
 void QGLContextPrivate::swapRegion(const QRegion &)
 {
-    Q_Q(QGLContext);
-    q->swapBuffers();
+   Q_Q(QGLContext);
+   q->swapBuffers();
 }
 #endif
 
@@ -2165,176 +2191,179 @@ void QGLContextPrivate::swapRegion(const QRegion &)
 
 GLuint QGLContext::bindTexture(const QString &fileName)
 {
-    QGLTexture texture(this);
-    QSize size = texture.bindCompressedTexture(fileName);
-    if (!size.isValid())
-        return 0;
-    return texture.id;
+   QGLTexture texture(this);
+   QSize size = texture.bindCompressedTexture(fileName);
+   if (!size.isValid()) {
+      return 0;
+   }
+   return texture.id;
 }
 
 static inline QRgb qt_gl_convertToGLFormatHelper(QRgb src_pixel, GLenum texture_format)
 {
-    if (texture_format == GL_BGRA) {
-        if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-            return ((src_pixel << 24) & 0xff000000)
-                   | ((src_pixel >> 24) & 0x000000ff)
-                   | ((src_pixel << 8) & 0x00ff0000)
-                   | ((src_pixel >> 8) & 0x0000ff00);
-        } else {
-            return src_pixel;
-        }
-    } else {  // GL_RGBA
-        if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-            return (src_pixel << 8) | ((src_pixel >> 24) & 0xff);
-        } else {
-            return ((src_pixel << 16) & 0xff0000)
-                   | ((src_pixel >> 16) & 0xff)
-                   | (src_pixel & 0xff00ff00);
-        }
-    }
+   if (texture_format == GL_BGRA) {
+      if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+         return ((src_pixel << 24) & 0xff000000)
+                | ((src_pixel >> 24) & 0x000000ff)
+                | ((src_pixel << 8) & 0x00ff0000)
+                | ((src_pixel >> 8) & 0x0000ff00);
+      } else {
+         return src_pixel;
+      }
+   } else {  // GL_RGBA
+      if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+         return (src_pixel << 8) | ((src_pixel >> 24) & 0xff);
+      } else {
+         return ((src_pixel << 16) & 0xff0000)
+                | ((src_pixel >> 16) & 0xff)
+                | (src_pixel & 0xff00ff00);
+      }
+   }
 }
 
 QRgb qt_gl_convertToGLFormat(QRgb src_pixel, GLenum texture_format)
 {
-    return qt_gl_convertToGLFormatHelper(src_pixel, texture_format);
+   return qt_gl_convertToGLFormatHelper(src_pixel, texture_format);
 }
 
 static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum texture_format)
 {
-    Q_ASSERT(dst.depth() == 32);
-    Q_ASSERT(img.depth() == 32);
+   Q_ASSERT(dst.depth() == 32);
+   Q_ASSERT(img.depth() == 32);
 
-    if (dst.size() != img.size()) {
-        int target_width = dst.width();
-        int target_height = dst.height();
-        qreal sx = target_width / qreal(img.width());
-        qreal sy = target_height / qreal(img.height());
+   if (dst.size() != img.size()) {
+      int target_width = dst.width();
+      int target_height = dst.height();
+      qreal sx = target_width / qreal(img.width());
+      qreal sy = target_height / qreal(img.height());
 
-        quint32 *dest = (quint32 *) dst.scanLine(0); // NB! avoid detach here
-        uchar *srcPixels = (uchar *) img.scanLine(img.height() - 1);
-        int sbpl = img.bytesPerLine();
-        int dbpl = dst.bytesPerLine();
+      quint32 *dest = (quint32 *) dst.scanLine(0); // NB! avoid detach here
+      uchar *srcPixels = (uchar *) img.scanLine(img.height() - 1);
+      int sbpl = img.bytesPerLine();
+      int dbpl = dst.bytesPerLine();
 
-        int ix = int(0x00010000 / sx);
-        int iy = int(0x00010000 / sy);
+      int ix = int(0x00010000 / sx);
+      int iy = int(0x00010000 / sy);
 
-        quint32 basex = int(0.5 * ix);
-        quint32 srcy = int(0.5 * iy);
+      quint32 basex = int(0.5 * ix);
+      quint32 srcy = int(0.5 * iy);
 
-        // scale, swizzle and mirror in one loop
-        while (target_height--) {
-            const uint *src = (const quint32 *) (srcPixels - (srcy >> 16) * sbpl);
-            int srcx = basex;
-            for (int x=0; x<target_width; ++x) {
-                dest[x] = qt_gl_convertToGLFormatHelper(src[srcx >> 16], texture_format);
-                srcx += ix;
+      // scale, swizzle and mirror in one loop
+      while (target_height--) {
+         const uint *src = (const quint32 *) (srcPixels - (srcy >> 16) * sbpl);
+         int srcx = basex;
+         for (int x = 0; x < target_width; ++x) {
+            dest[x] = qt_gl_convertToGLFormatHelper(src[srcx >> 16], texture_format);
+            srcx += ix;
+         }
+         dest = (quint32 *)(((uchar *) dest) + dbpl);
+         srcy += iy;
+      }
+   } else {
+      const int width = img.width();
+      const int height = img.height();
+      const uint *p = (const uint *) img.scanLine(img.height() - 1);
+      uint *q = (uint *) dst.scanLine(0);
+
+      if (texture_format == GL_BGRA) {
+         if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+            // mirror + swizzle
+            for (int i = 0; i < height; ++i) {
+               const uint *end = p + width;
+               while (p < end) {
+                  *q = ((*p << 24) & 0xff000000)
+                       | ((*p >> 24) & 0x000000ff)
+                       | ((*p << 8) & 0x00ff0000)
+                       | ((*p >> 8) & 0x0000ff00);
+                  p++;
+                  q++;
+               }
+               p -= 2 * width;
             }
-            dest = (quint32 *)(((uchar *) dest) + dbpl);
-            srcy += iy;
-        }
-    } else {
-        const int width = img.width();
-        const int height = img.height();
-        const uint *p = (const uint*) img.scanLine(img.height() - 1);
-        uint *q = (uint*) dst.scanLine(0);
-
-        if (texture_format == GL_BGRA) {
-            if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-                // mirror + swizzle
-                for (int i=0; i < height; ++i) {
-                    const uint *end = p + width;
-                    while (p < end) {
-                        *q = ((*p << 24) & 0xff000000)
-                             | ((*p >> 24) & 0x000000ff)
-                             | ((*p << 8) & 0x00ff0000)
-                             | ((*p >> 8) & 0x0000ff00);
-                        p++;
-                        q++;
-                    }
-                    p -= 2 * width;
-                }
-            } else {
-                const uint bytesPerLine = img.bytesPerLine();
-                for (int i=0; i < height; ++i) {
-                    memcpy(q, p, bytesPerLine);
-                    q += width;
-                    p -= width;
-                }
+         } else {
+            const uint bytesPerLine = img.bytesPerLine();
+            for (int i = 0; i < height; ++i) {
+               memcpy(q, p, bytesPerLine);
+               q += width;
+               p -= width;
             }
-        } else {
-            if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-                for (int i=0; i < height; ++i) {
-                    const uint *end = p + width;
-                    while (p < end) {
-                        *q = (*p << 8) | ((*p >> 24) & 0xff);
-                        p++;
-                        q++;
-                    }
-                    p -= 2 * width;
-                }
-            } else {
-                for (int i=0; i < height; ++i) {
-                    const uint *end = p + width;
-                    while (p < end) {
-                        *q = ((*p << 16) & 0xff0000) | ((*p >> 16) & 0xff) | (*p & 0xff00ff00);
-                        p++;
-                        q++;
-                    }
-                    p -= 2 * width;
-                }
+         }
+      } else {
+         if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+            for (int i = 0; i < height; ++i) {
+               const uint *end = p + width;
+               while (p < end) {
+                  *q = (*p << 8) | ((*p >> 24) & 0xff);
+                  p++;
+                  q++;
+               }
+               p -= 2 * width;
             }
-        }
-    }
+         } else {
+            for (int i = 0; i < height; ++i) {
+               const uint *end = p + width;
+               while (p < end) {
+                  *q = ((*p << 16) & 0xff0000) | ((*p >> 16) & 0xff) | (*p & 0xff00ff00);
+                  p++;
+                  q++;
+               }
+               p -= 2 * width;
+            }
+         }
+      }
+   }
 }
 
 #if defined(Q_WS_X11) || defined(Q_OS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA)
-QGLExtensionFuncs& QGLContextPrivate::extensionFuncs(const QGLContext *)
+QGLExtensionFuncs &QGLContextPrivate::extensionFuncs(const QGLContext *)
 {
-    return qt_extensionFuncs;
+   return qt_extensionFuncs;
 }
 #endif
 
 QImage QGLContextPrivate::convertToGLFormat(const QImage &image, bool force_premul,
-                                            GLenum texture_format)
+      GLenum texture_format)
 {
-    QImage::Format target_format = image.format();
-    if (force_premul || image.format() != QImage::Format_ARGB32)
-        target_format = QImage::Format_ARGB32_Premultiplied;
+   QImage::Format target_format = image.format();
+   if (force_premul || image.format() != QImage::Format_ARGB32) {
+      target_format = QImage::Format_ARGB32_Premultiplied;
+   }
 
-    QImage result(image.width(), image.height(), target_format);
-    convertToGLFormatHelper(result, image.convertToFormat(target_format), texture_format);
-    return result;
+   QImage result(image.width(), image.height(), target_format);
+   convertToGLFormatHelper(result, image.convertToFormat(target_format), texture_format);
+   return result;
 }
 
 /*! \internal */
 QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, GLint format,
-                                           QGLContext::BindOptions options)
+      QGLContext::BindOptions options)
 {
-    Q_Q(QGLContext);
+   Q_Q(QGLContext);
 
-    const qint64 key = image.cacheKey();
-    QGLTexture *texture = textureCacheLookup(key, target);
-    if (texture) {
-        if (image.paintingActive()) {
-            // A QPainter is active on the image - take the safe route and replace the texture.
-            q->deleteTexture(texture->id);
-            texture = 0;
-        } else {
-            glBindTexture(target, texture->id);
-            return texture;
-        }
-    }
+   const qint64 key = image.cacheKey();
+   QGLTexture *texture = textureCacheLookup(key, target);
+   if (texture) {
+      if (image.paintingActive()) {
+         // A QPainter is active on the image - take the safe route and replace the texture.
+         q->deleteTexture(texture->id);
+         texture = 0;
+      } else {
+         glBindTexture(target, texture->id);
+         return texture;
+      }
+   }
 
-    if (!texture)
-        texture = bindTexture(image, target, format, key, options);
-    // NOTE: bindTexture(const QImage&, GLenum, GLint, const qint64, bool) should never return null
-    Q_ASSERT(texture);
+   if (!texture) {
+      texture = bindTexture(image, target, format, key, options);
+   }
+   // NOTE: bindTexture(const QImage&, GLenum, GLint, const qint64, bool) should never return null
+   Q_ASSERT(texture);
 
-    // Enable the cleanup hooks for this image so that the texture cache entry is removed when the
-    // image gets deleted:
-    QImagePixmapCleanupHooks::enableCleanupHooks(image);
+   // Enable the cleanup hooks for this image so that the texture cache entry is removed when the
+   // image gets deleted:
+   QImagePixmapCleanupHooks::enableCleanupHooks(image);
 
-    return texture;
+   return texture;
 }
 
 // #define QGL_BIND_TEXTURE_DEBUG
@@ -2342,354 +2371,360 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
 // map from Qt's ARGB endianness-dependent format to GL's big-endian RGBA layout
 static inline void qgl_byteSwapImage(QImage &img, GLenum pixel_type)
 {
-    const int width = img.width();
-    const int height = img.height();
+   const int width = img.width();
+   const int height = img.height();
 
-    if (pixel_type == GL_UNSIGNED_INT_8_8_8_8_REV
-        || (pixel_type == GL_UNSIGNED_BYTE && QSysInfo::ByteOrder == QSysInfo::LittleEndian))
-    {
-        for (int i = 0; i < height; ++i) {
-            uint *p = (uint *) img.scanLine(i);
-            for (int x = 0; x < width; ++x)
-                p[x] = ((p[x] << 16) & 0xff0000) | ((p[x] >> 16) & 0xff) | (p[x] & 0xff00ff00);
-        }
-    } else {
-        for (int i = 0; i < height; ++i) {
-            uint *p = (uint *) img.scanLine(i);
-            for (int x = 0; x < width; ++x)
-                p[x] = (p[x] << 8) | ((p[x] >> 24) & 0xff);
-        }
-    }
+   if (pixel_type == GL_UNSIGNED_INT_8_8_8_8_REV
+         || (pixel_type == GL_UNSIGNED_BYTE && QSysInfo::ByteOrder == QSysInfo::LittleEndian)) {
+      for (int i = 0; i < height; ++i) {
+         uint *p = (uint *) img.scanLine(i);
+         for (int x = 0; x < width; ++x) {
+            p[x] = ((p[x] << 16) & 0xff0000) | ((p[x] >> 16) & 0xff) | (p[x] & 0xff00ff00);
+         }
+      }
+   } else {
+      for (int i = 0; i < height; ++i) {
+         uint *p = (uint *) img.scanLine(i);
+         for (int x = 0; x < width; ++x) {
+            p[x] = (p[x] << 8) | ((p[x] >> 24) & 0xff);
+         }
+      }
+   }
 }
 
-QGLTexture* QGLContextPrivate::bindTexture(const QImage &image, GLenum target, GLint internalFormat,
-                                           const qint64 key, QGLContext::BindOptions options)
+QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, GLint internalFormat,
+      const qint64 key, QGLContext::BindOptions options)
 {
-    Q_Q(QGLContext);
+   Q_Q(QGLContext);
 
 #ifdef QGL_BIND_TEXTURE_DEBUG
-    printf("QGLContextPrivate::bindTexture(), imageSize=(%d,%d), internalFormat =0x%x, options=%x, key=%llx\n",
-           image.width(), image.height(), internalFormat, int(options), key);
-    QTime time;
-    time.start();
+   printf("QGLContextPrivate::bindTexture(), imageSize=(%d,%d), internalFormat =0x%x, options=%x, key=%llx\n",
+          image.width(), image.height(), internalFormat, int(options), key);
+   QTime time;
+   time.start();
 #endif
 
 #ifndef QT_NO_DEBUG
-    // Reset the gl error stack...git
-    while (glGetError() != GL_NO_ERROR) ;
+   // Reset the gl error stack...git
+   while (glGetError() != GL_NO_ERROR) ;
 #endif
 
-    // Scale the pixmap if needed. GL textures needs to have the
-    // dimensions 2^n+2(border) x 2^m+2(border), unless we're using GL
-    // 2.0 or use the GL_TEXTURE_RECTANGLE texture target
-    int tx_w = qt_next_power_of_two(image.width());
-    int tx_h = qt_next_power_of_two(image.height());
+   // Scale the pixmap if needed. GL textures needs to have the
+   // dimensions 2^n+2(border) x 2^m+2(border), unless we're using GL
+   // 2.0 or use the GL_TEXTURE_RECTANGLE texture target
+   int tx_w = qt_next_power_of_two(image.width());
+   int tx_h = qt_next_power_of_two(image.height());
 
-    QImage img = image;
+   QImage img = image;
 
-    if (!(QGLExtensions::glExtensions() & QGLExtensions::NPOTTextures)
-        && !(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0)
-        && (target == GL_TEXTURE_2D && (tx_w != image.width() || tx_h != image.height())))
-    {
-        img = img.scaled(tx_w, tx_h);
+   if (!(QGLExtensions::glExtensions() & QGLExtensions::NPOTTextures)
+         && !(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0)
+         && (target == GL_TEXTURE_2D && (tx_w != image.width() || tx_h != image.height()))) {
+      img = img.scaled(tx_w, tx_h);
 #ifdef QGL_BIND_TEXTURE_DEBUG
-        printf(" - upscaled to %dx%d (%d ms)\n", tx_w, tx_h, time.elapsed());
+      printf(" - upscaled to %dx%d (%d ms)\n", tx_w, tx_h, time.elapsed());
 
 #endif
-    }
+   }
 
-    GLuint filtering = options & QGLContext::LinearFilteringBindOption ? GL_LINEAR : GL_NEAREST;
+   GLuint filtering = options & QGLContext::LinearFilteringBindOption ? GL_LINEAR : GL_NEAREST;
 
-    GLuint tx_id;
-    glGenTextures(1, &tx_id);
-    glBindTexture(target, tx_id);
-    glTexParameterf(target, GL_TEXTURE_MAG_FILTER, filtering);
+   GLuint tx_id;
+   glGenTextures(1, &tx_id);
+   glBindTexture(target, tx_id);
+   glTexParameterf(target, GL_TEXTURE_MAG_FILTER, filtering);
 
 #if defined(QT_OPENGL_ES_2)
-    bool genMipmap = false;
+   bool genMipmap = false;
 #endif
-    if (glFormat.directRendering()
-        && (QGLExtensions::glExtensions() & QGLExtensions::GenerateMipmap)
-        && target == GL_TEXTURE_2D
-        && (options & QGLContext::MipmapBindOption))
-    {
+   if (glFormat.directRendering()
+         && (QGLExtensions::glExtensions() & QGLExtensions::GenerateMipmap)
+         && target == GL_TEXTURE_2D
+         && (options & QGLContext::MipmapBindOption)) {
 #if !defined(QT_OPENGL_ES_2)
-        glHint(GL_GENERATE_MIPMAP_HINT_SGIS, GL_NICEST);
+      glHint(GL_GENERATE_MIPMAP_HINT_SGIS, GL_NICEST);
 #ifndef QT_OPENGL_ES
-        glTexParameteri(target, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
+      glTexParameteri(target, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 #else
-        glTexParameterf(target, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
+      glTexParameterf(target, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 #endif
 #else
-        glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
-        genMipmap = true;
+      glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+      genMipmap = true;
 #endif
-        glTexParameterf(target, GL_TEXTURE_MIN_FILTER, options & QGLContext::LinearFilteringBindOption
-                        ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
+      glTexParameterf(target, GL_TEXTURE_MIN_FILTER, options & QGLContext::LinearFilteringBindOption
+                      ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
 #ifdef QGL_BIND_TEXTURE_DEBUG
-        printf(" - generating mipmaps (%d ms)\n", time.elapsed());
+      printf(" - generating mipmaps (%d ms)\n", time.elapsed());
 #endif
-    } else {
-        glTexParameterf(target, GL_TEXTURE_MIN_FILTER, filtering);
-    }
+   } else {
+      glTexParameterf(target, GL_TEXTURE_MIN_FILTER, filtering);
+   }
 
-    QImage::Format target_format = img.format();
-    bool premul = options & QGLContext::PremultipliedAlphaBindOption;
-    GLenum externalFormat;
-    GLuint pixel_type;
-    if (QGLExtensions::glExtensions() & QGLExtensions::BGRATextureFormat) {
-        externalFormat = GL_BGRA;
-        if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_2)
-            pixel_type = GL_UNSIGNED_INT_8_8_8_8_REV;
-        else
-            pixel_type = GL_UNSIGNED_BYTE;
-    } else {
-        externalFormat = GL_RGBA;
-        pixel_type = GL_UNSIGNED_BYTE;
-    }
+   QImage::Format target_format = img.format();
+   bool premul = options & QGLContext::PremultipliedAlphaBindOption;
+   GLenum externalFormat;
+   GLuint pixel_type;
+   if (QGLExtensions::glExtensions() & QGLExtensions::BGRATextureFormat) {
+      externalFormat = GL_BGRA;
+      if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_2) {
+         pixel_type = GL_UNSIGNED_INT_8_8_8_8_REV;
+      } else {
+         pixel_type = GL_UNSIGNED_BYTE;
+      }
+   } else {
+      externalFormat = GL_RGBA;
+      pixel_type = GL_UNSIGNED_BYTE;
+   }
 
-    switch (target_format) {
-    case QImage::Format_ARGB32:
-        if (premul) {
+   switch (target_format) {
+      case QImage::Format_ARGB32:
+         if (premul) {
             img = img.convertToFormat(target_format = QImage::Format_ARGB32_Premultiplied);
 #ifdef QGL_BIND_TEXTURE_DEBUG
             printf(" - converted ARGB32 -> ARGB32_Premultiplied (%d ms) \n", time.elapsed());
 #endif
-        }
-        break;
-    case QImage::Format_ARGB32_Premultiplied:
-        if (!premul) {
+         }
+         break;
+      case QImage::Format_ARGB32_Premultiplied:
+         if (!premul) {
             img = img.convertToFormat(target_format = QImage::Format_ARGB32);
 #ifdef QGL_BIND_TEXTURE_DEBUG
             printf(" - converted ARGB32_Premultiplied -> ARGB32 (%d ms)\n", time.elapsed());
 #endif
-        }
-        break;
-    case QImage::Format_RGB16:
-        pixel_type = GL_UNSIGNED_SHORT_5_6_5;
-        externalFormat = GL_RGB;
-        internalFormat = GL_RGB;
-        break;
-    case QImage::Format_RGB32:
-        break;
-    default:
-        if (img.hasAlphaChannel()) {
+         }
+         break;
+      case QImage::Format_RGB16:
+         pixel_type = GL_UNSIGNED_SHORT_5_6_5;
+         externalFormat = GL_RGB;
+         internalFormat = GL_RGB;
+         break;
+      case QImage::Format_RGB32:
+         break;
+      default:
+         if (img.hasAlphaChannel()) {
             img = img.convertToFormat(premul
                                       ? QImage::Format_ARGB32_Premultiplied
                                       : QImage::Format_ARGB32);
 #ifdef QGL_BIND_TEXTURE_DEBUG
             printf(" - converted to 32-bit alpha format (%d ms)\n", time.elapsed());
 #endif
-        } else {
+         } else {
             img = img.convertToFormat(QImage::Format_RGB32);
 #ifdef QGL_BIND_TEXTURE_DEBUG
             printf(" - converted to 32-bit (%d ms)\n", time.elapsed());
 #endif
-        }
-    }
+         }
+   }
 
-    if (options & QGLContext::InvertedYBindOption) {
-        if (img.isDetached()) {
-            int ipl = img.bytesPerLine() / 4;
-            int h = img.height();
-            for (int y=0; y<h/2; ++y) {
-                int *a = (int *) img.scanLine(y);
-                int *b = (int *) img.scanLine(h - y - 1);
-                for (int x=0; x<ipl; ++x)
-                    qSwap(a[x], b[x]);
+   if (options & QGLContext::InvertedYBindOption) {
+      if (img.isDetached()) {
+         int ipl = img.bytesPerLine() / 4;
+         int h = img.height();
+         for (int y = 0; y < h / 2; ++y) {
+            int *a = (int *) img.scanLine(y);
+            int *b = (int *) img.scanLine(h - y - 1);
+            for (int x = 0; x < ipl; ++x) {
+               qSwap(a[x], b[x]);
             }
-        } else {
-            // Create a new image and copy across.  If we use the
-            // above in-place code then a full copy of the image is
-            // made before the lines are swapped, which processes the
-            // data twice.  This version should only do it once.
-            img = img.mirrored();
-        }
+         }
+      } else {
+         // Create a new image and copy across.  If we use the
+         // above in-place code then a full copy of the image is
+         // made before the lines are swapped, which processes the
+         // data twice.  This version should only do it once.
+         img = img.mirrored();
+      }
 #ifdef QGL_BIND_TEXTURE_DEBUG
-            printf(" - flipped bits over y (%d ms)\n", time.elapsed());
+      printf(" - flipped bits over y (%d ms)\n", time.elapsed());
 #endif
-    }
+   }
 
-    if (externalFormat == GL_RGBA) {
-        // The only case where we end up with a depth different from
-        // 32 in the switch above is for the RGB16 case, where we set
-        // the format to GL_RGB
-        Q_ASSERT(img.depth() == 32);
-        qgl_byteSwapImage(img, pixel_type);
+   if (externalFormat == GL_RGBA) {
+      // The only case where we end up with a depth different from
+      // 32 in the switch above is for the RGB16 case, where we set
+      // the format to GL_RGB
+      Q_ASSERT(img.depth() == 32);
+      qgl_byteSwapImage(img, pixel_type);
 #ifdef QGL_BIND_TEXTURE_DEBUG
-            printf(" - did byte swapping (%d ms)\n", time.elapsed());
+      printf(" - did byte swapping (%d ms)\n", time.elapsed());
 #endif
-    }
+   }
 #ifdef QT_OPENGL_ES
-    // OpenGL/ES requires that the internal and external formats be
-    // identical.
-    internalFormat = externalFormat;
+   // OpenGL/ES requires that the internal and external formats be
+   // identical.
+   internalFormat = externalFormat;
 #endif
 #ifdef QGL_BIND_TEXTURE_DEBUG
-    printf(" - uploading, image.format=%d, externalFormat=0x%x, internalFormat=0x%x, pixel_type=0x%x\n",
-           img.format(), externalFormat, internalFormat, pixel_type);
+   printf(" - uploading, image.format=%d, externalFormat=0x%x, internalFormat=0x%x, pixel_type=0x%x\n",
+          img.format(), externalFormat, internalFormat, pixel_type);
 #endif
 
-    const QImage &constRef = img; // to avoid detach in bits()...
+   const QImage &constRef = img; // to avoid detach in bits()...
 
-    glTexImage2D(target, 0, internalFormat, img.width(), img.height(), 0, externalFormat,
-                 pixel_type, constRef.bits());
+   glTexImage2D(target, 0, internalFormat, img.width(), img.height(), 0, externalFormat,
+                pixel_type, constRef.bits());
 
 #if defined(QT_OPENGL_ES_2)
-    if (genMipmap)
-        glGenerateMipmap(target);
+   if (genMipmap) {
+      glGenerateMipmap(target);
+   }
 #endif
 
 #ifndef QT_NO_DEBUG
-    GLenum error = glGetError();
-    if (error != GL_NO_ERROR) {
-        qWarning(" - texture upload failed, error code 0x%x, enum: %d (%x)\n", error, target, target);
-    }
+   GLenum error = glGetError();
+   if (error != GL_NO_ERROR) {
+      qWarning(" - texture upload failed, error code 0x%x, enum: %d (%x)\n", error, target, target);
+   }
 #endif
 
 #ifdef QGL_BIND_TEXTURE_DEBUG
-    static int totalUploadTime = 0;
-    totalUploadTime += time.elapsed();
-    printf(" - upload done in %d ms, (accumulated: %d ms)\n", time.elapsed(), totalUploadTime);
+   static int totalUploadTime = 0;
+   totalUploadTime += time.elapsed();
+   printf(" - upload done in %d ms, (accumulated: %d ms)\n", time.elapsed(), totalUploadTime);
 #endif
 
 
-    // this assumes the size of a texture is always smaller than the max cache size
-    int cost = img.width()*img.height()*4/1024;
-    QGLTexture *texture = new QGLTexture(q, tx_id, target, options);
-    QGLTextureCache::instance()->insert(q, key, texture, cost);
+   // this assumes the size of a texture is always smaller than the max cache size
+   int cost = img.width() * img.height() * 4 / 1024;
+   QGLTexture *texture = new QGLTexture(q, tx_id, target, options);
+   QGLTextureCache::instance()->insert(q, key, texture, cost);
 
-    return texture;
+   return texture;
 }
 
 QGLTexture *QGLContextPrivate::textureCacheLookup(const qint64 key, GLenum target)
 {
-    Q_Q(QGLContext);
-    QGLTexture *texture = QGLTextureCache::instance()->getTexture(q, key);
-    if (texture && texture->target == target
-        && (texture->context == q || QGLContext::areSharing(q, texture->context)))
-    {
-        return texture;
-    }
-    return 0;
+   Q_Q(QGLContext);
+   QGLTexture *texture = QGLTextureCache::instance()->getTexture(q, key);
+   if (texture && texture->target == target
+         && (texture->context == q || QGLContext::areSharing(q, texture->context))) {
+      return texture;
+   }
+   return 0;
 }
 
 /*! \internal */
-QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target, GLint format, QGLContext::BindOptions options)
+QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target, GLint format,
+      QGLContext::BindOptions options)
 {
-    Q_Q(QGLContext);
-    QPixmapData *pd = pixmap.pixmapData();
+   Q_Q(QGLContext);
+   QPixmapData *pd = pixmap.pixmapData();
 #if !defined(QT_OPENGL_ES_1)
-    if (target == GL_TEXTURE_2D && pd->classId() == QPixmapData::OpenGLClass) {
-        const QGLPixmapData *data = static_cast<const QGLPixmapData *>(pd);
+   if (target == GL_TEXTURE_2D && pd->classId() == QPixmapData::OpenGLClass) {
+      const QGLPixmapData *data = static_cast<const QGLPixmapData *>(pd);
 
-        if (data->isValidContext(q)) {
-            data->bind();
-            return data->texture();
-        }
-    }
+      if (data->isValidContext(q)) {
+         data->bind();
+         return data->texture();
+      }
+   }
 #else
-    Q_UNUSED(pd);
+   Q_UNUSED(pd);
 #endif
 
-    const qint64 key = pixmap.cacheKey();
-    QGLTexture *texture = textureCacheLookup(key, target);
-    if (texture) {
-        if (pixmap.paintingActive()) {
-            // A QPainter is active on the pixmap - take the safe route and replace the texture.
-            q->deleteTexture(texture->id);
-            texture = 0;
-        } else {
-            glBindTexture(target, texture->id);
-            return texture;
-        }
-    }
+   const qint64 key = pixmap.cacheKey();
+   QGLTexture *texture = textureCacheLookup(key, target);
+   if (texture) {
+      if (pixmap.paintingActive()) {
+         // A QPainter is active on the pixmap - take the safe route and replace the texture.
+         q->deleteTexture(texture->id);
+         texture = 0;
+      } else {
+         glBindTexture(target, texture->id);
+         return texture;
+      }
+   }
 
 #if defined(Q_WS_X11)
-    // Try to use texture_from_pixmap
-    const QX11Info *xinfo = qt_x11Info(paintDevice);
-    if (pd->classId() == QPixmapData::X11Class && pd->pixelType() == QPixmapData::PixmapType
-        && xinfo && xinfo->screen() == pixmap.x11Info().screen()
-        && target == GL_TEXTURE_2D
-        && QApplication::instance()->thread() == QThread::currentThread())
-    {
-        if (!workaround_brokenTextureFromPixmap_init) {
-            workaround_brokenTextureFromPixmap_init = true;
+   // Try to use texture_from_pixmap
+   const QX11Info *xinfo = qt_x11Info(paintDevice);
+   if (pd->classId() == QPixmapData::X11Class && pd->pixelType() == QPixmapData::PixmapType
+         && xinfo && xinfo->screen() == pixmap.x11Info().screen()
+         && target == GL_TEXTURE_2D
+         && QApplication::instance()->thread() == QThread::currentThread()) {
+      if (!workaround_brokenTextureFromPixmap_init) {
+         workaround_brokenTextureFromPixmap_init = true;
 
-            const QByteArray versionString(reinterpret_cast<const char*>(glGetString(GL_VERSION)));
-            const int pos = versionString.indexOf("NVIDIA ");
+         const QByteArray versionString(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
+         const int pos = versionString.indexOf("NVIDIA ");
 
-            if (pos >= 0) {
-                const QByteArray nvidiaVersionString = versionString.mid(pos + strlen("NVIDIA "));
+         if (pos >= 0) {
+            const QByteArray nvidiaVersionString = versionString.mid(pos + strlen("NVIDIA "));
 
-                if (nvidiaVersionString.startsWith("195") || nvidiaVersionString.startsWith("256"))
-                    workaround_brokenTextureFromPixmap = true;
+            if (nvidiaVersionString.startsWith("195") || nvidiaVersionString.startsWith("256")) {
+               workaround_brokenTextureFromPixmap = true;
             }
-        }
+         }
+      }
 
-        if (!workaround_brokenTextureFromPixmap) {
-            texture = bindTextureFromNativePixmap(const_cast<QPixmap*>(&pixmap), key, options);
-            if (texture) {
-                texture->options |= QGLContext::MemoryManagedBindOption;
-                texture->boundPixmap = pd;
-                boundPixmaps.insert(pd, QPixmap(pixmap));
-            }
-        }
-    }
+      if (!workaround_brokenTextureFromPixmap) {
+         texture = bindTextureFromNativePixmap(const_cast<QPixmap *>(&pixmap), key, options);
+         if (texture) {
+            texture->options |= QGLContext::MemoryManagedBindOption;
+            texture->boundPixmap = pd;
+            boundPixmaps.insert(pd, QPixmap(pixmap));
+         }
+      }
+   }
 #endif
 
-    if (!texture) {
+   if (!texture) {
 
-        QImage image = pixmap.toImage();
-        // If the system depth is 16 and the pixmap doesn't have an alpha channel
-        // then we convert it to RGB16 in the hope that it gets uploaded as a 16
-        // bit texture which is much faster to access than a 32-bit one.
-        if (pixmap.depth() == 16 && !image.hasAlphaChannel() )
-            image = image.convertToFormat(QImage::Format_RGB16);
-        texture = bindTexture(image, target, format, key, options);
+      QImage image = pixmap.toImage();
+      // If the system depth is 16 and the pixmap doesn't have an alpha channel
+      // then we convert it to RGB16 in the hope that it gets uploaded as a 16
+      // bit texture which is much faster to access than a 32-bit one.
+      if (pixmap.depth() == 16 && !image.hasAlphaChannel() ) {
+         image = image.convertToFormat(QImage::Format_RGB16);
+      }
+      texture = bindTexture(image, target, format, key, options);
 
-    }
-    // NOTE: bindTexture(const QImage&, GLenum, GLint, const qint64, bool) should never return null
-    Q_ASSERT(texture);
+   }
+   // NOTE: bindTexture(const QImage&, GLenum, GLint, const qint64, bool) should never return null
+   Q_ASSERT(texture);
 
-    if (texture->id > 0)
-        QImagePixmapCleanupHooks::enableCleanupHooks(pixmap);
+   if (texture->id > 0) {
+      QImagePixmapCleanupHooks::enableCleanupHooks(pixmap);
+   }
 
-    return texture;
+   return texture;
 }
 
 /*! \internal */
 int QGLContextPrivate::maxTextureSize()
 {
-    if (max_texture_size != -1)
-        return max_texture_size;
+   if (max_texture_size != -1) {
+      return max_texture_size;
+   }
 
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
+   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
 
 #if defined(QT_OPENGL_ES)
-    return max_texture_size;
+   return max_texture_size;
 #else
-    GLenum proxy = GL_PROXY_TEXTURE_2D;
+   GLenum proxy = GL_PROXY_TEXTURE_2D;
 
-    GLint size;
-    GLint next = 64;
-    glTexImage2D(proxy, 0, GL_RGBA, next, next, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    glGetTexLevelParameteriv(proxy, 0, GL_TEXTURE_WIDTH, &size);
-    if (size == 0) {
-        return max_texture_size;
-    }
-    do {
-        size = next;
-        next = size * 2;
+   GLint size;
+   GLint next = 64;
+   glTexImage2D(proxy, 0, GL_RGBA, next, next, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+   glGetTexLevelParameteriv(proxy, 0, GL_TEXTURE_WIDTH, &size);
+   if (size == 0) {
+      return max_texture_size;
+   }
+   do {
+      size = next;
+      next = size * 2;
 
-        if (next > max_texture_size)
-            break;
-        glTexImage2D(proxy, 0, GL_RGBA, next, next, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-        glGetTexLevelParameteriv(proxy, 0, GL_TEXTURE_WIDTH, &next);
-    } while (next > size);
+      if (next > max_texture_size) {
+         break;
+      }
+      glTexImage2D(proxy, 0, GL_RGBA, next, next, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+      glGetTexLevelParameteriv(proxy, 0, GL_TEXTURE_WIDTH, &next);
+   } while (next > size);
 
-    max_texture_size = size;
-    return max_texture_size;
+   max_texture_size = size;
+   return max_texture_size;
 #endif
 }
 
@@ -2702,12 +2737,13 @@ int QGLContextPrivate::maxTextureSize()
 */
 GLuint QGLContext::bindTexture(const QImage &image, GLenum target, GLint format)
 {
-    if (image.isNull())
-        return 0;
+   if (image.isNull()) {
+      return 0;
+   }
 
-    Q_D(QGLContext);
-    QGLTexture *texture = d->bindTexture(image, target, format, DefaultBindOption);
-    return texture->id;
+   Q_D(QGLContext);
+   QGLTexture *texture = d->bindTexture(image, target, format, DefaultBindOption);
+   return texture->id;
 }
 
 /*!
@@ -2737,36 +2773,39 @@ GLuint QGLContext::bindTexture(const QImage &image, GLenum target, GLint format)
 */
 GLuint QGLContext::bindTexture(const QImage &image, GLenum target, GLint format, BindOptions options)
 {
-    if (image.isNull())
-        return 0;
+   if (image.isNull()) {
+      return 0;
+   }
 
-    Q_D(QGLContext);
-    QGLTexture *texture = d->bindTexture(image, target, format, options);
-    return texture->id;
+   Q_D(QGLContext);
+   QGLTexture *texture = d->bindTexture(image, target, format, options);
+   return texture->id;
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
 /*! \internal */
 GLuint QGLContext::bindTexture(const QImage &image, QMacCompatGLenum target, QMacCompatGLint format)
 {
-    if (image.isNull())
-        return 0;
+   if (image.isNull()) {
+      return 0;
+   }
 
-    Q_D(QGLContext);
-    QGLTexture *texture = d->bindTexture(image, GLenum(target), GLint(format), DefaultBindOption);
-    return texture->id;
+   Q_D(QGLContext);
+   QGLTexture *texture = d->bindTexture(image, GLenum(target), GLint(format), DefaultBindOption);
+   return texture->id;
 }
 
 /*! \internal */
 GLuint QGLContext::bindTexture(const QImage &image, QMacCompatGLenum target, QMacCompatGLint format,
                                BindOptions options)
 {
-    if (image.isNull())
-        return 0;
+   if (image.isNull()) {
+      return 0;
+   }
 
-    Q_D(QGLContext);
-    QGLTexture *texture = d->bindTexture(image, GLenum(target), GLint(format), options);
-    return texture->id;
+   Q_D(QGLContext);
+   QGLTexture *texture = d->bindTexture(image, GLenum(target), GLint(format), options);
+   return texture->id;
 }
 #endif
 
@@ -2776,12 +2815,13 @@ GLuint QGLContext::bindTexture(const QImage &image, QMacCompatGLenum target, QMa
 */
 GLuint QGLContext::bindTexture(const QPixmap &pixmap, GLenum target, GLint format)
 {
-    if (pixmap.isNull())
-        return 0;
+   if (pixmap.isNull()) {
+      return 0;
+   }
 
-    Q_D(QGLContext);
-    QGLTexture *texture = d->bindTexture(pixmap, target, format, DefaultBindOption);
-    return texture->id;
+   Q_D(QGLContext);
+   QGLTexture *texture = d->bindTexture(pixmap, target, format, DefaultBindOption);
+   return texture->id;
 }
 
 /*!
@@ -2793,35 +2833,38 @@ GLuint QGLContext::bindTexture(const QPixmap &pixmap, GLenum target, GLint forma
 */
 GLuint QGLContext::bindTexture(const QPixmap &pixmap, GLenum target, GLint format, BindOptions options)
 {
-    if (pixmap.isNull())
-        return 0;
+   if (pixmap.isNull()) {
+      return 0;
+   }
 
-    Q_D(QGLContext);
-    QGLTexture *texture = d->bindTexture(pixmap, target, format, options);
-    return texture->id;
+   Q_D(QGLContext);
+   QGLTexture *texture = d->bindTexture(pixmap, target, format, options);
+   return texture->id;
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
 /*! \internal */
 GLuint QGLContext::bindTexture(const QPixmap &pixmap, QMacCompatGLenum target, QMacCompatGLint format)
 {
-    if (pixmap.isNull())
-        return 0;
+   if (pixmap.isNull()) {
+      return 0;
+   }
 
-    Q_D(QGLContext);
-    QGLTexture *texture = d->bindTexture(pixmap, GLenum(target), GLint(format), DefaultBindOption);
-    return texture->id;
+   Q_D(QGLContext);
+   QGLTexture *texture = d->bindTexture(pixmap, GLenum(target), GLint(format), DefaultBindOption);
+   return texture->id;
 }
 /*! \internal */
 GLuint QGLContext::bindTexture(const QPixmap &pixmap, QMacCompatGLenum target, QMacCompatGLint format,
                                BindOptions options)
 {
-    if (pixmap.isNull())
-        return 0;
+   if (pixmap.isNull()) {
+      return 0;
+   }
 
-    Q_D(QGLContext);
-    QGLTexture *texture = d->bindTexture(pixmap, GLenum(target), GLint(format), options);
-    return texture->id;
+   Q_D(QGLContext);
+   QGLTexture *texture = d->bindTexture(pixmap, GLenum(target), GLint(format), options);
+   return texture->id;
 }
 #endif
 
@@ -2834,87 +2877,88 @@ GLuint QGLContext::bindTexture(const QPixmap &pixmap, QMacCompatGLenum target, Q
 */
 void QGLContext::deleteTexture(GLuint id)
 {
-    if (QGLTextureCache::instance()->remove(this, id))
-        return;
-    glDeleteTextures(1, &id);
+   if (QGLTextureCache::instance()->remove(this, id)) {
+      return;
+   }
+   glDeleteTextures(1, &id);
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
 /*! \internal */
 void QGLContext::deleteTexture(QMacCompatGLuint id)
 {
-    return deleteTexture(GLuint(id));
+   return deleteTexture(GLuint(id));
 }
 #endif
 
 void qt_add_rect_to_array(const QRectF &r, GLfloat *array)
 {
-    qreal left = r.left();
-    qreal right = r.right();
-    qreal top = r.top();
-    qreal bottom = r.bottom();
+   qreal left = r.left();
+   qreal right = r.right();
+   qreal top = r.top();
+   qreal bottom = r.bottom();
 
-    array[0] = left;
-    array[1] = top;
-    array[2] = right;
-    array[3] = top;
-    array[4] = right;
-    array[5] = bottom;
-    array[6] = left;
-    array[7] = bottom;
+   array[0] = left;
+   array[1] = top;
+   array[2] = right;
+   array[3] = top;
+   array[4] = right;
+   array[5] = bottom;
+   array[6] = left;
+   array[7] = bottom;
 }
 
 void qt_add_texcoords_to_array(qreal x1, qreal y1, qreal x2, qreal y2, GLfloat *array)
 {
-    array[0] = x1;
-    array[1] = y1;
-    array[2] = x2;
-    array[3] = y1;
-    array[4] = x2;
-    array[5] = y2;
-    array[6] = x1;
-    array[7] = y2;
+   array[0] = x1;
+   array[1] = y1;
+   array[2] = x2;
+   array[3] = y1;
+   array[4] = x2;
+   array[5] = y2;
+   array[6] = x1;
+   array[7] = y2;
 }
 
 #if !defined(QT_OPENGL_ES_2)
 
 static void qDrawTextureRect(const QRectF &target, GLint textureWidth, GLint textureHeight, GLenum textureTarget)
 {
-    GLfloat tx = 1.0f;
-    GLfloat ty = 1.0f;
+   GLfloat tx = 1.0f;
+   GLfloat ty = 1.0f;
 
 #ifdef QT_OPENGL_ES
-    Q_UNUSED(textureWidth);
-    Q_UNUSED(textureHeight);
-    Q_UNUSED(textureTarget);
+   Q_UNUSED(textureWidth);
+   Q_UNUSED(textureHeight);
+   Q_UNUSED(textureTarget);
 #else
-    if (textureTarget != GL_TEXTURE_2D) {
-        if (textureWidth == -1 || textureHeight == -1) {
-            glGetTexLevelParameteriv(textureTarget, 0, GL_TEXTURE_WIDTH, &textureWidth);
-            glGetTexLevelParameteriv(textureTarget, 0, GL_TEXTURE_HEIGHT, &textureHeight);
-        }
+   if (textureTarget != GL_TEXTURE_2D) {
+      if (textureWidth == -1 || textureHeight == -1) {
+         glGetTexLevelParameteriv(textureTarget, 0, GL_TEXTURE_WIDTH, &textureWidth);
+         glGetTexLevelParameteriv(textureTarget, 0, GL_TEXTURE_HEIGHT, &textureHeight);
+      }
 
-        tx = GLfloat(textureWidth);
-        ty = GLfloat(textureHeight);
-    }
+      tx = GLfloat(textureWidth);
+      ty = GLfloat(textureHeight);
+   }
 #endif
 
-    GLfloat texCoordArray[4*2] = {
-        0, ty, tx, ty, tx, 0, 0, 0
-    };
+   GLfloat texCoordArray[4 * 2] = {
+      0, ty, tx, ty, tx, 0, 0, 0
+   };
 
-    GLfloat vertexArray[4*2];
-    qt_add_rect_to_array(target, vertexArray);
+   GLfloat vertexArray[4 * 2];
+   qt_add_rect_to_array(target, vertexArray);
 
-    glVertexPointer(2, GL_FLOAT, 0, vertexArray);
-    glTexCoordPointer(2, GL_FLOAT, 0, texCoordArray);
+   glVertexPointer(2, GL_FLOAT, 0, vertexArray);
+   glTexCoordPointer(2, GL_FLOAT, 0, texCoordArray);
 
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+   glEnableClientState(GL_VERTEX_ARRAY);
+   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+   glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+   glDisableClientState(GL_VERTEX_ARRAY);
+   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 #endif // !QT_OPENGL_ES_2
@@ -2942,47 +2986,49 @@ static void qDrawTextureRect(const QRectF &target, GLint textureWidth, GLint tex
 void QGLContext::drawTexture(const QRectF &target, GLuint textureId, GLenum textureTarget)
 {
 #if !defined(QT_OPENGL_ES) || defined(QT_OPENGL_ES_2)
-     if (d_ptr->active_engine &&
+   if (d_ptr->active_engine &&
          d_ptr->active_engine->type() == QPaintEngine::OpenGL2) {
-         QGL2PaintEngineEx *eng = static_cast<QGL2PaintEngineEx*>(d_ptr->active_engine);
-         if (!eng->isNativePaintingActive()) {
-            QRectF src(0, 0, target.width(), target.height());
-            QSize size(target.width(), target.height());
-            if (eng->drawTexture(target, textureId, size, src))
-                return;
-        }
-     }
+      QGL2PaintEngineEx *eng = static_cast<QGL2PaintEngineEx *>(d_ptr->active_engine);
+      if (!eng->isNativePaintingActive()) {
+         QRectF src(0, 0, target.width(), target.height());
+         QSize size(target.width(), target.height());
+         if (eng->drawTexture(target, textureId, size, src)) {
+            return;
+         }
+      }
+   }
 #endif
 
 #ifndef QT_OPENGL_ES_2
 #ifdef QT_OPENGL_ES
-    if (textureTarget != GL_TEXTURE_2D) {
-        qWarning("QGLContext::drawTexture(): texture target must be GL_TEXTURE_2D on OpenGL ES");
-        return;
-    }
+   if (textureTarget != GL_TEXTURE_2D) {
+      qWarning("QGLContext::drawTexture(): texture target must be GL_TEXTURE_2D on OpenGL ES");
+      return;
+   }
 #else
-    const bool wasEnabled = glIsEnabled(GL_TEXTURE_2D);
-    GLint oldTexture;
-    glGetIntegerv(GL_TEXTURE_BINDING_2D, &oldTexture);
+   const bool wasEnabled = glIsEnabled(GL_TEXTURE_2D);
+   GLint oldTexture;
+   glGetIntegerv(GL_TEXTURE_BINDING_2D, &oldTexture);
 #endif
 
-    glEnable(textureTarget);
-    glBindTexture(textureTarget, textureId);
+   glEnable(textureTarget);
+   glBindTexture(textureTarget, textureId);
 
-    qDrawTextureRect(target, -1, -1, textureTarget);
+   qDrawTextureRect(target, -1, -1, textureTarget);
 
 #ifdef QT_OPENGL_ES
-    glDisable(textureTarget);
+   glDisable(textureTarget);
 #else
-    if (!wasEnabled)
-        glDisable(textureTarget);
-    glBindTexture(textureTarget, oldTexture);
+   if (!wasEnabled) {
+      glDisable(textureTarget);
+   }
+   glBindTexture(textureTarget, oldTexture);
 #endif
 #else
-    Q_UNUSED(target);
-    Q_UNUSED(textureId);
-    Q_UNUSED(textureTarget);
-    qWarning("drawTexture() with OpenGL ES 2.0 requires an active OpenGL2 paint engine");
+   Q_UNUSED(target);
+   Q_UNUSED(textureId);
+   Q_UNUSED(textureTarget);
+   qWarning("drawTexture() with OpenGL ES 2.0 requires an active OpenGL2 paint engine");
 #endif
 }
 
@@ -2990,7 +3036,7 @@ void QGLContext::drawTexture(const QRectF &target, GLuint textureId, GLenum text
 /*! \internal */
 void QGLContext::drawTexture(const QRectF &target, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget)
 {
-    drawTexture(target, GLuint(textureId), GLenum(textureTarget));
+   drawTexture(target, GLuint(textureId), GLenum(textureTarget));
 }
 #endif
 
@@ -3018,42 +3064,44 @@ void QGLContext::drawTexture(const QRectF &target, QMacCompatGLuint textureId, Q
 void QGLContext::drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget)
 {
 #ifdef QT_OPENGL_ES
-    Q_UNUSED(point);
-    Q_UNUSED(textureId);
-    Q_UNUSED(textureTarget);
-    qWarning("drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget) not supported with OpenGL ES, use rect version instead");
+   Q_UNUSED(point);
+   Q_UNUSED(textureId);
+   Q_UNUSED(textureTarget);
+   qWarning("drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget) not supported with OpenGL ES, use rect version instead");
 #else
 
-    const bool wasEnabled = glIsEnabled(GL_TEXTURE_2D);
-    GLint oldTexture;
-    glGetIntegerv(GL_TEXTURE_BINDING_2D, &oldTexture);
+   const bool wasEnabled = glIsEnabled(GL_TEXTURE_2D);
+   GLint oldTexture;
+   glGetIntegerv(GL_TEXTURE_BINDING_2D, &oldTexture);
 
-    glEnable(textureTarget);
-    glBindTexture(textureTarget, textureId);
+   glEnable(textureTarget);
+   glBindTexture(textureTarget, textureId);
 
-    GLint textureWidth;
-    GLint textureHeight;
+   GLint textureWidth;
+   GLint textureHeight;
 
-    glGetTexLevelParameteriv(textureTarget, 0, GL_TEXTURE_WIDTH, &textureWidth);
-    glGetTexLevelParameteriv(textureTarget, 0, GL_TEXTURE_HEIGHT, &textureHeight);
+   glGetTexLevelParameteriv(textureTarget, 0, GL_TEXTURE_WIDTH, &textureWidth);
+   glGetTexLevelParameteriv(textureTarget, 0, GL_TEXTURE_HEIGHT, &textureHeight);
 
-    if (d_ptr->active_engine &&
-        d_ptr->active_engine->type() == QPaintEngine::OpenGL2) {
-        QGL2PaintEngineEx *eng = static_cast<QGL2PaintEngineEx*>(d_ptr->active_engine);
-        if (!eng->isNativePaintingActive()) {
-            QRectF dest(point, QSizeF(textureWidth, textureHeight));
-            QRectF src(0, 0, textureWidth, textureHeight);
-            QSize size(textureWidth, textureHeight);
-            if (eng->drawTexture(dest, textureId, size, src))
-                return;
-        }
-    }
+   if (d_ptr->active_engine &&
+         d_ptr->active_engine->type() == QPaintEngine::OpenGL2) {
+      QGL2PaintEngineEx *eng = static_cast<QGL2PaintEngineEx *>(d_ptr->active_engine);
+      if (!eng->isNativePaintingActive()) {
+         QRectF dest(point, QSizeF(textureWidth, textureHeight));
+         QRectF src(0, 0, textureWidth, textureHeight);
+         QSize size(textureWidth, textureHeight);
+         if (eng->drawTexture(dest, textureId, size, src)) {
+            return;
+         }
+      }
+   }
 
-    qDrawTextureRect(QRectF(point, QSizeF(textureWidth, textureHeight)), textureWidth, textureHeight, textureTarget);
+   qDrawTextureRect(QRectF(point, QSizeF(textureWidth, textureHeight)), textureWidth, textureHeight, textureTarget);
 
-    if (!wasEnabled)
-        glDisable(textureTarget);
-    glBindTexture(textureTarget, oldTexture);
+   if (!wasEnabled) {
+      glDisable(textureTarget);
+   }
+   glBindTexture(textureTarget, oldTexture);
 #endif
 }
 
@@ -3061,7 +3109,7 @@ void QGLContext::drawTexture(const QPointF &point, GLuint textureId, GLenum text
 /*! \internal */
 void QGLContext::drawTexture(const QPointF &point, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget)
 {
-    drawTexture(point, GLuint(textureId), GLenum(textureTarget));
+   drawTexture(point, GLuint(textureId), GLenum(textureTarget));
 }
 #endif
 
@@ -3076,7 +3124,7 @@ void QGLContext::drawTexture(const QPointF &point, QMacCompatGLuint textureId, Q
 */
 void QGLContext::setTextureCacheLimit(int size)
 {
-    QGLTextureCache::instance()->setMaxCost(size);
+   QGLTextureCache::instance()->setMaxCost(size);
 }
 
 /*!
@@ -3086,7 +3134,7 @@ void QGLContext::setTextureCacheLimit(int size)
 */
 int QGLContext::textureCacheLimit()
 {
-    return QGLTextureCache::instance()->maxCost();
+   return QGLTextureCache::instance()->maxCost();
 }
 
 
@@ -3122,9 +3170,9 @@ int QGLContext::textureCacheLimit()
 
 void QGLContext::setFormat(const QGLFormat &format)
 {
-    Q_D(QGLContext);
-    reset();
-    d->glFormat = d->reqFormat = format;
+   Q_D(QGLContext);
+   reset();
+   d->glFormat = d->reqFormat = format;
 }
 
 /*!
@@ -3132,15 +3180,16 @@ void QGLContext::setFormat(const QGLFormat &format)
 */
 void QGLContext::setDevice(QPaintDevice *pDev)
 {
-    Q_D(QGLContext);
-    if (isValid())
-        reset();
-    d->paintDevice = pDev;
-    if (d->paintDevice && (d->paintDevice->devType() != QInternal::Widget
-                           && d->paintDevice->devType() != QInternal::Pixmap
-                           && d->paintDevice->devType() != QInternal::Pbuffer)) {
-        qWarning("QGLContext: Unsupported paint device type");
-    }
+   Q_D(QGLContext);
+   if (isValid()) {
+      reset();
+   }
+   d->paintDevice = pDev;
+   if (d->paintDevice && (d->paintDevice->devType() != QInternal::Widget
+                          && d->paintDevice->devType() != QInternal::Pixmap
+                          && d->paintDevice->devType() != QInternal::Pbuffer)) {
+      qWarning("QGLContext: Unsupported paint device type");
+   }
 }
 
 /*!
@@ -3175,9 +3224,10 @@ void QGLContext::setDevice(QPaintDevice *pDev)
 */
 bool QGLContext::areSharing(const QGLContext *context1, const QGLContext *context2)
 {
-    if (!context1 || !context2)
-        return false;
-    return context1->d_ptr->group == context2->d_ptr->group;
+   if (!context1 || !context2) {
+      return false;
+   }
+   return context1->d_ptr->group == context2->d_ptr->group;
 }
 
 /*!
@@ -3287,130 +3337,131 @@ bool QGLContext::areSharing(const QGLContext *context1, const QGLContext *contex
     \sa chooseContext(), format(), isValid()
 */
 
-bool QGLContext::create(const QGLContext* shareContext)
+bool QGLContext::create(const QGLContext *shareContext)
 {
-    Q_D(QGLContext);
+   Q_D(QGLContext);
 #ifdef Q_WS_QPA
-    if (!d->paintDevice && !d->platformContext)
+   if (!d->paintDevice && !d->platformContext)
 #else
-    if (!d->paintDevice)
+   if (!d->paintDevice)
 #endif
-        return false;
+      return false;
 
-    reset();
-    d->valid = chooseContext(shareContext);
-    if (d->valid && d->paintDevice && d->paintDevice->devType() == QInternal::Widget) {
-        QWidgetPrivate *wd = qt_widget_private(static_cast<QWidget *>(d->paintDevice));
-        wd->usesDoubleBufferedGLContext = d->glFormat.doubleBuffer();
-    }
+   reset();
+   d->valid = chooseContext(shareContext);
+   if (d->valid && d->paintDevice && d->paintDevice->devType() == QInternal::Widget) {
+      QWidgetPrivate *wd = qt_widget_private(static_cast<QWidget *>(d->paintDevice));
+      wd->usesDoubleBufferedGLContext = d->glFormat.doubleBuffer();
+   }
 #ifndef Q_WS_QPA //We do this in choose context->setupSharing()
-    if (d->sharing)  // ok, we managed to share
-        QGLContextGroup::addShare(this, shareContext);
+   if (d->sharing) { // ok, we managed to share
+      QGLContextGroup::addShare(this, shareContext);
+   }
 #endif
-    return d->valid;
+   return d->valid;
 }
 
 bool QGLContext::isValid() const
 {
-    Q_D(const QGLContext);
-    return d->valid;
+   Q_D(const QGLContext);
+   return d->valid;
 }
 
 void QGLContext::setValid(bool valid)
 {
-    Q_D(QGLContext);
-    d->valid = valid;
+   Q_D(QGLContext);
+   d->valid = valid;
 }
 
 bool QGLContext::isSharing() const
 {
-    Q_D(const QGLContext);
-    return d->group->isSharing();
+   Q_D(const QGLContext);
+   return d->group->isSharing();
 }
 
 QGLFormat QGLContext::format() const
 {
-    Q_D(const QGLContext);
-    return d->glFormat;
+   Q_D(const QGLContext);
+   return d->glFormat;
 }
 
 QGLFormat QGLContext::requestedFormat() const
 {
-    Q_D(const QGLContext);
-    return d->reqFormat;
+   Q_D(const QGLContext);
+   return d->reqFormat;
 }
 
- QPaintDevice* QGLContext::device() const
+QPaintDevice *QGLContext::device() const
 {
-    Q_D(const QGLContext);
-    return d->paintDevice;
+   Q_D(const QGLContext);
+   return d->paintDevice;
 }
 
 bool QGLContext::deviceIsPixmap() const
 {
-    Q_D(const QGLContext);
-    return d->paintDevice->devType() == QInternal::Pixmap;
+   Q_D(const QGLContext);
+   return d->paintDevice->devType() == QInternal::Pixmap;
 }
 
 
 bool QGLContext::windowCreated() const
 {
-    Q_D(const QGLContext);
-    return d->crWin;
+   Q_D(const QGLContext);
+   return d->crWin;
 }
 
 
 void QGLContext::setWindowCreated(bool on)
 {
-    Q_D(QGLContext);
-    d->crWin = on;
+   Q_D(QGLContext);
+   d->crWin = on;
 }
 
 bool QGLContext::initialized() const
 {
-    Q_D(const QGLContext);
-    return d->initDone;
+   Q_D(const QGLContext);
+   return d->initDone;
 }
 
 void QGLContext::setInitialized(bool on)
 {
-    Q_D(QGLContext);
-    d->initDone = on;
+   Q_D(QGLContext);
+   d->initDone = on;
 }
 
-const QGLContext* QGLContext::currentContext()
+const QGLContext *QGLContext::currentContext()
 {
 #ifdef Q_WS_QPA
-    if (const QPlatformGLContext *threadContext = QPlatformGLContext::currentContext()) {
-        return QGLContext::fromPlatformGLContext(const_cast<QPlatformGLContext *>(threadContext));
-    }
-    return 0;
+   if (const QPlatformGLContext *threadContext = QPlatformGLContext::currentContext()) {
+      return QGLContext::fromPlatformGLContext(const_cast<QPlatformGLContext *>(threadContext));
+   }
+   return 0;
 #else
-    QGLThreadContext *threadContext = qgl_context_storage.localData();
-    if (threadContext) {
-        return threadContext->context;
-    }
-    return 0;
+   QGLThreadContext *threadContext = qgl_context_storage.localData();
+   if (threadContext) {
+      return threadContext->context;
+   }
+   return 0;
 #endif
 }
 
 void QGLContextPrivate::setCurrentContext(QGLContext *context)
 {
 #ifdef Q_WS_QPA
-    Q_UNUSED(context);
+   Q_UNUSED(context);
 #else
-    QGLThreadContext *threadContext = qgl_context_storage.localData();
-    if (!threadContext) {
-        if (!QThread::currentThread()) {
-            // We don't have a current QThread, so just set the static.
-            QGLContext::currentCtx = context;
-            return;
-        }
-        threadContext = new QGLThreadContext;
-        qgl_context_storage.setLocalData(threadContext);
-    }
-    threadContext->context = context;
-    QGLContext::currentCtx = context; // XXX: backwards-compat, not thread-safe
+   QGLThreadContext *threadContext = qgl_context_storage.localData();
+   if (!threadContext) {
+      if (!QThread::currentThread()) {
+         // We don't have a current QThread, so just set the static.
+         QGLContext::currentCtx = context;
+         return;
+      }
+      threadContext = new QGLThreadContext;
+      qgl_context_storage.setLocalData(threadContext);
+   }
+   threadContext->context = context;
+   QGLContext::currentCtx = context; // XXX: backwards-compat, not thread-safe
 #endif
 }
 
@@ -3761,14 +3812,14 @@ void QGLContextPrivate::setCurrentContext(QGLContext *context)
     \sa QGLFormat::defaultFormat(), {Textures Example}
 */
 
-QGLWidget::QGLWidget(QWidget *parent, const QGLWidget* shareWidget, Qt::WindowFlags f)
-    : QWidget(*(new QGLWidgetPrivate), parent, f | Qt::MSWindowsOwnDC)
+QGLWidget::QGLWidget(QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags f)
+   : QWidget(*(new QGLWidgetPrivate), parent, f | Qt::MSWindowsOwnDC)
 {
-    Q_D(QGLWidget);
-    setAttribute(Qt::WA_PaintOnScreen);
-    setAttribute(Qt::WA_NoSystemBackground);
-    setAutoFillBackground(true); // for compatibility
-    d->init(new QGLContext(QGLFormat::defaultFormat(), this), shareWidget);
+   Q_D(QGLWidget);
+   setAttribute(Qt::WA_PaintOnScreen);
+   setAttribute(Qt::WA_NoSystemBackground);
+   setAutoFillBackground(true); // for compatibility
+   d->init(new QGLContext(QGLFormat::defaultFormat(), this), shareWidget);
 }
 
 
@@ -3800,15 +3851,15 @@ QGLWidget::QGLWidget(QWidget *parent, const QGLWidget* shareWidget, Qt::WindowFl
     \sa QGLFormat::defaultFormat(), isValid()
 */
 
-QGLWidget::QGLWidget(const QGLFormat &format, QWidget *parent, const QGLWidget* shareWidget,
+QGLWidget::QGLWidget(const QGLFormat &format, QWidget *parent, const QGLWidget *shareWidget,
                      Qt::WindowFlags f)
-    : QWidget(*(new QGLWidgetPrivate), parent, f | Qt::MSWindowsOwnDC)
+   : QWidget(*(new QGLWidgetPrivate), parent, f | Qt::MSWindowsOwnDC)
 {
-    Q_D(QGLWidget);
-    setAttribute(Qt::WA_PaintOnScreen);
-    setAttribute(Qt::WA_NoSystemBackground);
-    setAutoFillBackground(true); // for compatibility
-    d->init(new QGLContext(format, this), shareWidget);
+   Q_D(QGLWidget);
+   setAttribute(Qt::WA_PaintOnScreen);
+   setAttribute(Qt::WA_NoSystemBackground);
+   setAutoFillBackground(true); // for compatibility
+   d->init(new QGLContext(format, this), shareWidget);
 }
 
 /*!
@@ -3838,13 +3889,13 @@ QGLWidget::QGLWidget(const QGLFormat &format, QWidget *parent, const QGLWidget* 
 */
 QGLWidget::QGLWidget(QGLContext *context, QWidget *parent, const QGLWidget *shareWidget,
                      Qt::WindowFlags f)
-    : QWidget(*(new QGLWidgetPrivate), parent, f | Qt::MSWindowsOwnDC)
+   : QWidget(*(new QGLWidgetPrivate), parent, f | Qt::MSWindowsOwnDC)
 {
-    Q_D(QGLWidget);
-    setAttribute(Qt::WA_PaintOnScreen);
-    setAttribute(Qt::WA_NoSystemBackground);
-    setAutoFillBackground(true); // for compatibility
-    d->init(context, shareWidget);
+   Q_D(QGLWidget);
+   setAttribute(Qt::WA_PaintOnScreen);
+   setAttribute(Qt::WA_NoSystemBackground);
+   setAutoFillBackground(true); // for compatibility
+   d->init(context, shareWidget);
 }
 
 /*!
@@ -3853,30 +3904,32 @@ QGLWidget::QGLWidget(QGLContext *context, QWidget *parent, const QGLWidget *shar
 
 QGLWidget::~QGLWidget()
 {
-    Q_D(QGLWidget);
+   Q_D(QGLWidget);
 #if defined(GLX_MESA_release_buffers) && defined(QGL_USE_MESA_EXT)
-    bool doRelease = (glcx && glcx->windowCreated());
+   bool doRelease = (glcx && glcx->windowCreated());
 #endif
-    delete d->glcx;
-    d->glcx = 0;
+   delete d->glcx;
+   d->glcx = 0;
 #if defined(Q_OS_WIN)
-    delete d->olcx;
-    d->olcx = 0;
+   delete d->olcx;
+   d->olcx = 0;
 #endif
 #if defined(GLX_MESA_release_buffers) && defined(QGL_USE_MESA_EXT)
-    if (doRelease)
-        glXReleaseBuffersMESA(x11Display(), winId());
+   if (doRelease) {
+      glXReleaseBuffersMESA(x11Display(), winId());
+   }
 #endif
-    d->cleanupColormaps();
+   d->cleanupColormaps();
 
 #ifdef Q_OS_MAC
-    QWidget *current = parentWidget();
-    while (current) {
-        qt_widget_private(current)->glWidgets.removeAll(QWidgetPrivate::GlWidgetInfo(this));
-        if (current->isWindow())
-            break;
-        current = current->parentWidget();
-    };
+   QWidget *current = parentWidget();
+   while (current) {
+      qt_widget_private(current)->glWidgets.removeAll(QWidgetPrivate::GlWidgetInfo(this));
+      if (current->isWindow()) {
+         break;
+      }
+      current = current->parentWidget();
+   };
 #endif
 }
 
@@ -3937,8 +3990,8 @@ QGLWidget::~QGLWidget()
 
 bool QGLWidget::isValid() const
 {
-    Q_D(const QGLWidget);
-    return d->glcx && d->glcx->isValid();
+   Q_D(const QGLWidget);
+   return d->glcx && d->glcx->isValid();
 }
 
 /*!
@@ -3953,8 +4006,8 @@ bool QGLWidget::isValid() const
 
 bool QGLWidget::isSharing() const
 {
-    Q_D(const QGLWidget);
-    return d->glcx->isSharing();
+   Q_D(const QGLWidget);
+   return d->glcx->isSharing();
 }
 
 /*!
@@ -3967,8 +4020,8 @@ bool QGLWidget::isSharing() const
 
 void QGLWidget::makeCurrent()
 {
-    Q_D(QGLWidget);
-    d->glcx->makeCurrent();
+   Q_D(QGLWidget);
+   d->glcx->makeCurrent();
 }
 
 /*!
@@ -3981,8 +4034,8 @@ void QGLWidget::makeCurrent()
 
 void QGLWidget::doneCurrent()
 {
-    Q_D(QGLWidget);
-    d->glcx->doneCurrent();
+   Q_D(QGLWidget);
+   d->glcx->doneCurrent();
 }
 
 /*!
@@ -4000,8 +4053,8 @@ void QGLWidget::doneCurrent()
 
 void QGLWidget::swapBuffers()
 {
-    Q_D(QGLWidget);
-    d->glcx->swapBuffers();
+   Q_D(QGLWidget);
+   d->glcx->swapBuffers();
 }
 
 
@@ -4053,7 +4106,7 @@ void QGLWidget::swapBuffers()
 
 void QGLWidget::setFormat(const QGLFormat &format)
 {
-    setContext(new QGLContext(format,this));
+   setContext(new QGLContext(format, this));
 }
 
 
@@ -4108,8 +4161,9 @@ void QGLWidget::setFormat(const QGLFormat &format)
 
 void QGLWidget::updateGL()
 {
-    if (updatesEnabled())
-        glDraw();
+   if (updatesEnabled()) {
+      glDraw();
+   }
 }
 
 
@@ -4229,85 +4283,88 @@ void QGLWidget::resizeOverlayGL(int, int)
 #if !defined(Q_WS_QWS) && !defined(Q_WS_QPA)
 bool QGLWidget::event(QEvent *e)
 {
-    Q_D(QGLWidget);
+   Q_D(QGLWidget);
 
-    if (e->type() == QEvent::Paint) {
-        QPoint offset;
-        QPaintDevice *redirectedDevice = d->redirected(&offset);
-        if (redirectedDevice && redirectedDevice->devType() == QInternal::Pixmap) {
-            d->restoreRedirected();
-            QPixmap pixmap = renderPixmap();
-            d->setRedirected(redirectedDevice, offset);
-            QPainter p(redirectedDevice);
-            p.drawPixmap(-offset, pixmap);
-            return true;
-        }
-    }
+   if (e->type() == QEvent::Paint) {
+      QPoint offset;
+      QPaintDevice *redirectedDevice = d->redirected(&offset);
+      if (redirectedDevice && redirectedDevice->devType() == QInternal::Pixmap) {
+         d->restoreRedirected();
+         QPixmap pixmap = renderPixmap();
+         d->setRedirected(redirectedDevice, offset);
+         QPainter p(redirectedDevice);
+         p.drawPixmap(-offset, pixmap);
+         return true;
+      }
+   }
 
 #if defined(Q_WS_X11)
-    if (e->type() == QEvent::ParentChange) {
-        // if we've reparented a window that has the current context
-        // bound, we need to rebind that context to the new window id
-        if (d->glcx == QGLContext::currentContext())
-            makeCurrent();
+   if (e->type() == QEvent::ParentChange) {
+      // if we've reparented a window that has the current context
+      // bound, we need to rebind that context to the new window id
+      if (d->glcx == QGLContext::currentContext()) {
+         makeCurrent();
+      }
 
-        if (d->glcx->d_func()->screen != d->xinfo.screen() || testAttribute(Qt::WA_TranslucentBackground)) {
-            setContext(new QGLContext(d->glcx->requestedFormat(), this));
-            // ### recreating the overlay isn't supported atm
-        }
-    }
+      if (d->glcx->d_func()->screen != d->xinfo.screen() || testAttribute(Qt::WA_TranslucentBackground)) {
+         setContext(new QGLContext(d->glcx->requestedFormat(), this));
+         // ### recreating the overlay isn't supported atm
+      }
+   }
 
 #ifndef QT_NO_EGL
-    // A re-parent is likely to destroy the X11 window and re-create it. It is important
-    // that we free the EGL surface _before_ the winID changes - otherwise we can leak.
-    if (e->type() == QEvent::ParentAboutToChange)
-        d->glcx->d_func()->destroyEglSurfaceForDevice();
+   // A re-parent is likely to destroy the X11 window and re-create it. It is important
+   // that we free the EGL surface _before_ the winID changes - otherwise we can leak.
+   if (e->type() == QEvent::ParentAboutToChange) {
+      d->glcx->d_func()->destroyEglSurfaceForDevice();
+   }
 
-    if ((e->type() == QEvent::ParentChange) || (e->type() == QEvent::WindowStateChange)) {
-        // The window may have been re-created during re-parent or state change - if so, the EGL
-        // surface will need to be re-created.
-        d->recreateEglSurface();
-    }
+   if ((e->type() == QEvent::ParentChange) || (e->type() == QEvent::WindowStateChange)) {
+      // The window may have been re-created during re-parent or state change - if so, the EGL
+      // surface will need to be re-created.
+      d->recreateEglSurface();
+   }
 #endif
 
 #elif defined(Q_OS_WIN)
-    if (e->type() == QEvent::ParentChange) {
-        QGLContext *newContext = new QGLContext(d->glcx->requestedFormat(), this);
-        setContext(newContext, d->glcx);
+   if (e->type() == QEvent::ParentChange) {
+      QGLContext *newContext = new QGLContext(d->glcx->requestedFormat(), this);
+      setContext(newContext, d->glcx);
 
-        // the overlay needs to be recreated as well
-        delete d->olcx;
-        if (isValid() && context()->format().hasOverlay()) {
-            d->olcx = new QGLContext(QGLFormat::defaultOverlayFormat(), this);
-            if (!d->olcx->create(isSharing() ? d->glcx : 0)) {
-                delete d->olcx;
-                d->olcx = 0;
-                d->glcx->d_func()->glFormat.setOverlay(false);
-            }
-        } else {
+      // the overlay needs to be recreated as well
+      delete d->olcx;
+      if (isValid() && context()->format().hasOverlay()) {
+         d->olcx = new QGLContext(QGLFormat::defaultOverlayFormat(), this);
+         if (!d->olcx->create(isSharing() ? d->glcx : 0)) {
+            delete d->olcx;
             d->olcx = 0;
-        }
-    } else if (e->type() == QEvent::Show) {
-        if (!format().rgba())
-            d->updateColormap();
-    }
+            d->glcx->d_func()->glFormat.setOverlay(false);
+         }
+      } else {
+         d->olcx = 0;
+      }
+   } else if (e->type() == QEvent::Show) {
+      if (!format().rgba()) {
+         d->updateColormap();
+      }
+   }
 #elif defined(Q_OS_MAC)
-    if (e->type() == QEvent::MacGLWindowChange) {
-        if (d->needWindowChange) {
-            d->needWindowChange = false;
-            d->glcx->updatePaintDevice();
-            update();
-        }
-        return true;
+   if (e->type() == QEvent::MacGLWindowChange) {
+      if (d->needWindowChange) {
+         d->needWindowChange = false;
+         d->glcx->updatePaintDevice();
+         update();
+      }
+      return true;
 
-    } else if (e->type() == QEvent::MacGLClearDrawable) {
-        d->glcx->d_ptr->clearDrawable();
+   } else if (e->type() == QEvent::MacGLClearDrawable) {
+      d->glcx->d_ptr->clearDrawable();
 
-    }
+   }
 
 #endif
 
-    return QWidget::event(e);
+   return QWidget::event(e);
 }
 #endif
 
@@ -4323,10 +4380,10 @@ bool QGLWidget::event(QEvent *e)
 
 void QGLWidget::paintEvent(QPaintEvent *)
 {
-    if (updatesEnabled()) {
-        glDraw();
-        updateOverlayGL();
-    }
+   if (updatesEnabled()) {
+      glDraw();
+      updateOverlayGL();
+   }
 }
 
 
@@ -4379,74 +4436,77 @@ void QGLWidget::paintEvent(QPaintEvent *)
 
 QPixmap QGLWidget::renderPixmap(int w, int h, bool useContext)
 {
-    Q_D(QGLWidget);
-    QSize sz = size();
-    if ((w > 0) && (h > 0))
-        sz = QSize(w, h);
+   Q_D(QGLWidget);
+   QSize sz = size();
+   if ((w > 0) && (h > 0)) {
+      sz = QSize(w, h);
+   }
 
 #if defined(Q_WS_X11)
-    extern int qt_x11_preferred_pixmap_depth;
-    int old_depth = qt_x11_preferred_pixmap_depth;
-    qt_x11_preferred_pixmap_depth = x11Info().depth();
+   extern int qt_x11_preferred_pixmap_depth;
+   int old_depth = qt_x11_preferred_pixmap_depth;
+   qt_x11_preferred_pixmap_depth = x11Info().depth();
 
-    QPixmapData *data = new QX11PixmapData(QPixmapData::PixmapType);
-    data->resize(sz.width(), sz.height());
-    QPixmap pm(data);
-    qt_x11_preferred_pixmap_depth = old_depth;
-    QX11Info xinfo = x11Info();
+   QPixmapData *data = new QX11PixmapData(QPixmapData::PixmapType);
+   data->resize(sz.width(), sz.height());
+   QPixmap pm(data);
+   qt_x11_preferred_pixmap_depth = old_depth;
+   QX11Info xinfo = x11Info();
 
-    // make sure we use a pixmap with the same depth/visual as the widget
-    if (xinfo.visual() != QX11Info::appVisual()) {
-        QX11InfoData* xd = pm.x11Info().getX11Data(true);
-        xd->depth = xinfo.depth();
-        xd->visual = static_cast<Visual *>(xinfo.visual());
-        const_cast<QX11Info &>(pm.x11Info()).setX11Data(xd);
-    }
+   // make sure we use a pixmap with the same depth/visual as the widget
+   if (xinfo.visual() != QX11Info::appVisual()) {
+      QX11InfoData *xd = pm.x11Info().getX11Data(true);
+      xd->depth = xinfo.depth();
+      xd->visual = static_cast<Visual *>(xinfo.visual());
+      const_cast<QX11Info &>(pm.x11Info()).setX11Data(xd);
+   }
 
 #else
-    QPixmap pm(sz);
+   QPixmap pm(sz);
 #endif
 
-    d->glcx->doneCurrent();
+   d->glcx->doneCurrent();
 
-    bool success = true;
+   bool success = true;
 
-    if (useContext && isValid() && d->renderCxPm(&pm))
-        return pm;
+   if (useContext && isValid() && d->renderCxPm(&pm)) {
+      return pm;
+   }
 
-    QGLFormat fmt = d->glcx->requestedFormat();
-    fmt.setDirectRendering(false);                // Direct is unlikely to work
-    fmt.setDoubleBuffer(false);                // We don't need dbl buf
+   QGLFormat fmt = d->glcx->requestedFormat();
+   fmt.setDirectRendering(false);                // Direct is unlikely to work
+   fmt.setDoubleBuffer(false);                // We don't need dbl buf
 #ifdef Q_OS_MAC // crash prevention on the Mac - it's unlikely to work anyway
-    fmt.setSampleBuffers(false);
+   fmt.setSampleBuffers(false);
 #endif
 
-    QGLContext* ocx = d->glcx;
-    ocx->doneCurrent();
-    d->glcx = new QGLContext(fmt, &pm);
-    d->glcx->create();
+   QGLContext *ocx = d->glcx;
+   ocx->doneCurrent();
+   d->glcx = new QGLContext(fmt, &pm);
+   d->glcx->create();
 
-    if (d->glcx->isValid())
-        updateGL();
-    else
-        success = false;
+   if (d->glcx->isValid()) {
+      updateGL();
+   } else {
+      success = false;
+   }
 
-    delete d->glcx;
-    d->glcx = ocx;
+   delete d->glcx;
+   d->glcx = ocx;
 
-    ocx->makeCurrent();
+   ocx->makeCurrent();
 
-    if (success) {
+   if (success) {
 #if defined(Q_WS_X11)
-        if (xinfo.visual() != QX11Info::appVisual()) {
-            QImage image = pm.toImage();
-            QPixmap p = QPixmap::fromImage(image);
-            return p;
-        }
+      if (xinfo.visual() != QX11Info::appVisual()) {
+         QImage image = pm.toImage();
+         QPixmap p = QPixmap::fromImage(image);
+         return p;
+      }
 #endif
-        return pm;
-    }
-    return QPixmap();
+      return pm;
+   }
+   return QPixmap();
 }
 
 /*!
@@ -4459,27 +4519,28 @@ QPixmap QGLWidget::renderPixmap(int w, int h, bool useContext)
 */
 QImage QGLWidget::grabFrameBuffer(bool withAlpha)
 {
-    makeCurrent();
-    QImage res;
-    int w = width();
-    int h = height();
-    if (format().rgba()) {
-        res = qt_gl_read_framebuffer(QSize(w, h), format().alpha(), withAlpha);
-    } else {
+   makeCurrent();
+   QImage res;
+   int w = width();
+   int h = height();
+   if (format().rgba()) {
+      res = qt_gl_read_framebuffer(QSize(w, h), format().alpha(), withAlpha);
+   } else {
 #if defined (Q_OS_WIN) && !defined(QT_OPENGL_ES)
-        res = QImage(w, h, QImage::Format_Indexed8);
-        glReadPixels(0, 0, w, h, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, res.bits());
-        const QVector<QColor> pal = QColormap::instance().colormap();
-        if (pal.size()) {
-            res.setColorCount(pal.size());
-            for (int i = 0; i < pal.size(); i++)
-                res.setColor(i, pal.at(i).rgb());
-        }
-        res = res.mirrored();
+      res = QImage(w, h, QImage::Format_Indexed8);
+      glReadPixels(0, 0, w, h, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, res.bits());
+      const QVector<QColor> pal = QColormap::instance().colormap();
+      if (pal.size()) {
+         res.setColorCount(pal.size());
+         for (int i = 0; i < pal.size(); i++) {
+            res.setColor(i, pal.at(i).rgb());
+         }
+      }
+      res = res.mirrored();
 #endif
-    }
+   }
 
-    return res;
+   return res;
 }
 
 
@@ -4491,12 +4552,13 @@ QImage QGLWidget::grabFrameBuffer(bool withAlpha)
 
 void QGLWidget::glInit()
 {
-    Q_D(QGLWidget);
-    if (!isValid())
-        return;
-    makeCurrent();
-    initializeGL();
-    d->glcx->setInitialized(true);
+   Q_D(QGLWidget);
+   if (!isValid()) {
+      return;
+   }
+   makeCurrent();
+   initializeGL();
+   d->glcx->setInitialized(true);
 }
 
 
@@ -4509,27 +4571,30 @@ void QGLWidget::glInit()
 
 void QGLWidget::glDraw()
 {
-    Q_D(QGLWidget);
-    if (!isValid())
-        return;
+   Q_D(QGLWidget);
+   if (!isValid()) {
+      return;
+   }
 
-    makeCurrent();
+   makeCurrent();
 
 #ifndef QT_OPENGL_ES
-    if (d->glcx->deviceIsPixmap())
-        glDrawBuffer(GL_FRONT);
+   if (d->glcx->deviceIsPixmap()) {
+      glDrawBuffer(GL_FRONT);
+   }
 #endif
-    if (!d->glcx->initialized()) {
-        glInit();
-        resizeGL(d->glcx->device()->width(), d->glcx->device()->height()); // New context needs this "resize"
-    }
-    paintGL();
-    if (doubleBuffer()) {
-        if (d->autoSwap)
-            swapBuffers();
-    } else {
-        glFlush();
-    }
+   if (!d->glcx->initialized()) {
+      glInit();
+      resizeGL(d->glcx->device()->width(), d->glcx->device()->height()); // New context needs this "resize"
+   }
+   paintGL();
+   if (doubleBuffer()) {
+      if (d->autoSwap) {
+         swapBuffers();
+      }
+   } else {
+      glFlush();
+   }
 }
 
 /*!
@@ -4542,28 +4607,30 @@ void QGLWidget::glDraw()
     \sa qglClearColor(), QGLContext::currentContext(), QColor
 */
 
-void QGLWidget::qglColor(const QColor& c) const
+void QGLWidget::qglColor(const QColor &c) const
 {
 #if !defined(QT_OPENGL_ES_2)
 #ifdef QT_OPENGL_ES
-    glColor4f(c.redF(), c.greenF(), c.blueF(), c.alphaF());
+   glColor4f(c.redF(), c.greenF(), c.blueF(), c.alphaF());
 #else
-    Q_D(const QGLWidget);
-    const QGLContext *ctx = QGLContext::currentContext();
-    if (ctx) {
-        if (ctx->format().rgba())
-            glColor4f(c.redF(), c.greenF(), c.blueF(), c.alphaF());
-        else if (!d->cmap.isEmpty()) { // QGLColormap in use?
-            int i = d->cmap.find(c.rgb());
-            if (i < 0)
-                i = d->cmap.findNearest(c.rgb());
-            glIndexi(i);
-        } else
-            glIndexi(ctx->colorIndex(c));
-    }
+   Q_D(const QGLWidget);
+   const QGLContext *ctx = QGLContext::currentContext();
+   if (ctx) {
+      if (ctx->format().rgba()) {
+         glColor4f(c.redF(), c.greenF(), c.blueF(), c.alphaF());
+      } else if (!d->cmap.isEmpty()) { // QGLColormap in use?
+         int i = d->cmap.find(c.rgb());
+         if (i < 0) {
+            i = d->cmap.findNearest(c.rgb());
+         }
+         glIndexi(i);
+      } else {
+         glIndexi(ctx->colorIndex(c));
+      }
+   }
 #endif //QT_OPENGL_ES
 #else
-    Q_UNUSED(c);
+   Q_UNUSED(c);
 #endif //QT_OPENGL_ES_2
 }
 
@@ -4575,24 +4642,26 @@ void QGLWidget::qglColor(const QColor& c) const
     \sa qglColor(), QGLContext::currentContext(), QColor
 */
 
-void QGLWidget::qglClearColor(const QColor& c) const
+void QGLWidget::qglClearColor(const QColor &c) const
 {
 #ifdef QT_OPENGL_ES
-    glClearColor(c.redF(), c.greenF(), c.blueF(), c.alphaF());
+   glClearColor(c.redF(), c.greenF(), c.blueF(), c.alphaF());
 #else
-    Q_D(const QGLWidget);
-    const QGLContext *ctx = QGLContext::currentContext();
-    if (ctx) {
-        if (ctx->format().rgba())
-            glClearColor(c.redF(), c.greenF(), c.blueF(), c.alphaF());
-        else if (!d->cmap.isEmpty()) { // QGLColormap in use?
-            int i = d->cmap.find(c.rgb());
-            if (i < 0)
-                i = d->cmap.findNearest(c.rgb());
-            glClearIndex(i);
-        } else
-            glClearIndex(ctx->colorIndex(c));
-    }
+   Q_D(const QGLWidget);
+   const QGLContext *ctx = QGLContext::currentContext();
+   if (ctx) {
+      if (ctx->format().rgba()) {
+         glClearColor(c.redF(), c.greenF(), c.blueF(), c.alphaF());
+      } else if (!d->cmap.isEmpty()) { // QGLColormap in use?
+         int i = d->cmap.find(c.rgb());
+         if (i < 0) {
+            i = d->cmap.findNearest(c.rgb());
+         }
+         glClearIndex(i);
+      } else {
+         glClearIndex(ctx->colorIndex(c));
+      }
+   }
 #endif
 }
 
@@ -4638,11 +4707,11 @@ void QGLWidget::qglClearColor(const QColor& c) const
     \endomit
 */
 
-QImage QGLWidget::convertToGLFormat(const QImage& img)
+QImage QGLWidget::convertToGLFormat(const QImage &img)
 {
-    QImage res(img.size(), QImage::Format_ARGB32);
-    convertToGLFormatHelper(res, img.convertToFormat(QImage::Format_ARGB32), GL_RGBA);
-    return res;
+   QImage res(img.size(), QImage::Format_ARGB32);
+   convertToGLFormatHelper(res, img.convertToFormat(QImage::Format_ARGB32), GL_RGBA);
+   return res;
 }
 
 
@@ -4681,53 +4750,53 @@ QImage QGLWidget::convertToGLFormat(const QImage& img)
 
     \note This function is not supported on OpenGL/ES systems.
 */
-int QGLWidget::fontDisplayListBase(const QFont & font, int listBase)
+int QGLWidget::fontDisplayListBase(const QFont &font, int listBase)
 {
 #ifndef QT_OPENGL_ES
-    Q_D(QGLWidget);
-    int base;
+   Q_D(QGLWidget);
+   int base;
 
-    if (!d->glcx) { // this can't happen unless we run out of mem
-        return 0;
-    }
+   if (!d->glcx) { // this can't happen unless we run out of mem
+      return 0;
+   }
 
-    // always regenerate font disp. lists for pixmaps - hw accelerated
-    // contexts can't handle this otherwise
-    bool regenerate = d->glcx->deviceIsPixmap();
+   // always regenerate font disp. lists for pixmaps - hw accelerated
+   // contexts can't handle this otherwise
+   bool regenerate = d->glcx->deviceIsPixmap();
 #ifndef QT_NO_FONTCONFIG
-    // font color needs to be part of the font cache key when using
-    // antialiased fonts since one set of glyphs needs to be generated
-    // for each font color
-    QString color_key;
-    if (font.styleStrategy() != QFont::NoAntialias) {
-        GLfloat color[4];
-        glGetFloatv(GL_CURRENT_COLOR, color);
-        color_key.sprintf("%f_%f_%f",color[0], color[1], color[2]);
-    }
-    QString key = font.key() + color_key + QString::number((int) regenerate);
+   // font color needs to be part of the font cache key when using
+   // antialiased fonts since one set of glyphs needs to be generated
+   // for each font color
+   QString color_key;
+   if (font.styleStrategy() != QFont::NoAntialias) {
+      GLfloat color[4];
+      glGetFloatv(GL_CURRENT_COLOR, color);
+      color_key.sprintf("%f_%f_%f", color[0], color[1], color[2]);
+   }
+   QString key = font.key() + color_key + QString::number((int) regenerate);
 #else
-    QString key = font.key() + QString::number((int) regenerate);
+   QString key = font.key() + QString::number((int) regenerate);
 #endif
-    if (!regenerate && (d->displayListCache.find(key) != d->displayListCache.end())) {
-        base = d->displayListCache[key];
-    } else {
-        int maxBase = listBase - 256;
-        QMap<QString,int>::ConstIterator it;
-        for (it = d->displayListCache.constBegin(); it != d->displayListCache.constEnd(); ++it) {
-            if (maxBase < it.value()) {
-                maxBase = it.value();
-            }
-        }
-        maxBase += 256;
-        d->glcx->generateFontDisplayLists(font, maxBase);
-        d->displayListCache[key] = maxBase;
-        base = maxBase;
-    }
-    return base;
+   if (!regenerate && (d->displayListCache.find(key) != d->displayListCache.end())) {
+      base = d->displayListCache[key];
+   } else {
+      int maxBase = listBase - 256;
+      QMap<QString, int>::ConstIterator it;
+      for (it = d->displayListCache.constBegin(); it != d->displayListCache.constEnd(); ++it) {
+         if (maxBase < it.value()) {
+            maxBase = it.value();
+         }
+      }
+      maxBase += 256;
+      d->glcx->generateFontDisplayLists(font, maxBase);
+      d->displayListCache[key] = maxBase;
+      base = maxBase;
+   }
+   return base;
 #else // QT_OPENGL_ES
-    Q_UNUSED(font);
-    Q_UNUSED(listBase);
-    return 0;
+   Q_UNUSED(font);
+   Q_UNUSED(listBase);
+   return 0;
 #endif
 }
 
@@ -4735,54 +4804,54 @@ int QGLWidget::fontDisplayListBase(const QFont & font, int listBase)
 
 static void qt_save_gl_state()
 {
-    glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glMatrixMode(GL_TEXTURE);
-    glPushMatrix();
-    glLoadIdentity();
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
+   glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+   glPushAttrib(GL_ALL_ATTRIB_BITS);
+   glMatrixMode(GL_TEXTURE);
+   glPushMatrix();
+   glLoadIdentity();
+   glMatrixMode(GL_PROJECTION);
+   glPushMatrix();
+   glMatrixMode(GL_MODELVIEW);
+   glPushMatrix();
 
-    glShadeModel(GL_FLAT);
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_LIGHTING);
-    glDisable(GL_STENCIL_TEST);
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+   glShadeModel(GL_FLAT);
+   glDisable(GL_CULL_FACE);
+   glDisable(GL_LIGHTING);
+   glDisable(GL_STENCIL_TEST);
+   glDisable(GL_DEPTH_TEST);
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 static void qt_restore_gl_state()
 {
-    glMatrixMode(GL_TEXTURE);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glPopAttrib();
-    glPopClientAttrib();
+   glMatrixMode(GL_TEXTURE);
+   glPopMatrix();
+   glMatrixMode(GL_PROJECTION);
+   glPopMatrix();
+   glMatrixMode(GL_MODELVIEW);
+   glPopMatrix();
+   glPopAttrib();
+   glPopClientAttrib();
 }
 
 static void qt_gl_draw_text(QPainter *p, int x, int y, const QString &str,
                             const QFont &font)
 {
-    GLfloat color[4];
-    glGetFloatv(GL_CURRENT_COLOR, &color[0]);
+   GLfloat color[4];
+   glGetFloatv(GL_CURRENT_COLOR, &color[0]);
 
-    QColor col;
-    col.setRgbF(color[0], color[1], color[2],color[3]);
-    QPen old_pen = p->pen();
-    QFont old_font = p->font();
+   QColor col;
+   col.setRgbF(color[0], color[1], color[2], color[3]);
+   QPen old_pen = p->pen();
+   QFont old_font = p->font();
 
-    p->setPen(col);
-    p->setFont(font);
-    p->drawText(x, y, str);
+   p->setPen(col);
+   p->setFont(font);
+   p->drawText(x, y, str);
 
-    p->setPen(old_pen);
-    p->setFont(old_font);
+   p->setPen(old_pen);
+   p->setFont(old_font);
 }
 
 #endif // !QT_OPENGL_ES
@@ -4820,80 +4889,82 @@ static void qt_gl_draw_text(QPainter *p, int x, int y, const QString &str,
 void QGLWidget::renderText(int x, int y, const QString &str, const QFont &font, int)
 {
 #ifndef QT_OPENGL_ES
-    Q_D(QGLWidget);
-    if (str.isEmpty() || !isValid())
-        return;
+   Q_D(QGLWidget);
+   if (str.isEmpty() || !isValid()) {
+      return;
+   }
 
-    GLint view[4];
-    bool use_scissor_testing = glIsEnabled(GL_SCISSOR_TEST);
-    if (!use_scissor_testing)
-        glGetIntegerv(GL_VIEWPORT, &view[0]);
-    int width = d->glcx->device()->width();
-    int height = d->glcx->device()->height();
-    bool auto_swap = autoBufferSwap();
+   GLint view[4];
+   bool use_scissor_testing = glIsEnabled(GL_SCISSOR_TEST);
+   if (!use_scissor_testing) {
+      glGetIntegerv(GL_VIEWPORT, &view[0]);
+   }
+   int width = d->glcx->device()->width();
+   int height = d->glcx->device()->height();
+   bool auto_swap = autoBufferSwap();
 
-    QPaintEngine::Type oldEngineType = qgl_engine_selector()->preferredPaintEngine();
+   QPaintEngine::Type oldEngineType = qgl_engine_selector()->preferredPaintEngine();
 
-    QPaintEngine *engine = paintEngine();
-    if (engine && (oldEngineType == QPaintEngine::OpenGL2) && engine->isActive()) {
-        qWarning("QGLWidget::renderText(): Calling renderText() while a GL 2 paint engine is"
-                 " active on the same device is not allowed.");
-        return;
-    }
+   QPaintEngine *engine = paintEngine();
+   if (engine && (oldEngineType == QPaintEngine::OpenGL2) && engine->isActive()) {
+      qWarning("QGLWidget::renderText(): Calling renderText() while a GL 2 paint engine is"
+               " active on the same device is not allowed.");
+      return;
+   }
 
-    // this changes what paintEngine() returns
-    qgl_engine_selector()->setPreferredPaintEngine(QPaintEngine::OpenGL);
-    engine = paintEngine();
-    QPainter *p;
-    bool reuse_painter = false;
-    if (engine->isActive()) {
-        reuse_painter = true;
-        p = engine->painter();
-        qt_save_gl_state();
+   // this changes what paintEngine() returns
+   qgl_engine_selector()->setPreferredPaintEngine(QPaintEngine::OpenGL);
+   engine = paintEngine();
+   QPainter *p;
+   bool reuse_painter = false;
+   if (engine->isActive()) {
+      reuse_painter = true;
+      p = engine->painter();
+      qt_save_gl_state();
 
-        glDisable(GL_DEPTH_TEST);
-        glViewport(0, 0, width, height);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0, width, height, 0, 0, 1);
-        glMatrixMode(GL_MODELVIEW);
+      glDisable(GL_DEPTH_TEST);
+      glViewport(0, 0, width, height);
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      glOrtho(0, width, height, 0, 0, 1);
+      glMatrixMode(GL_MODELVIEW);
 
-        glLoadIdentity();
-    } else {
-        setAutoBufferSwap(false);
-        // disable glClear() as a result of QPainter::begin()
-        d->disable_clear_on_painter_begin = true;
-        p = new QPainter(this);
-    }
+      glLoadIdentity();
+   } else {
+      setAutoBufferSwap(false);
+      // disable glClear() as a result of QPainter::begin()
+      d->disable_clear_on_painter_begin = true;
+      p = new QPainter(this);
+   }
 
-    QRect viewport(view[0], view[1], view[2], view[3]);
-    if (!use_scissor_testing && viewport != rect()) {
-        // if the user hasn't set a scissor box, we set one that
-        // covers the current viewport
-        glScissor(view[0], view[1], view[2], view[3]);
-        glEnable(GL_SCISSOR_TEST);
-    } else if (use_scissor_testing) {
-        // use the scissor box set by the user
-        glEnable(GL_SCISSOR_TEST);
-    }
+   QRect viewport(view[0], view[1], view[2], view[3]);
+   if (!use_scissor_testing && viewport != rect()) {
+      // if the user hasn't set a scissor box, we set one that
+      // covers the current viewport
+      glScissor(view[0], view[1], view[2], view[3]);
+      glEnable(GL_SCISSOR_TEST);
+   } else if (use_scissor_testing) {
+      // use the scissor box set by the user
+      glEnable(GL_SCISSOR_TEST);
+   }
 
-    qt_gl_draw_text(p, x, y, str, font);
+   qt_gl_draw_text(p, x, y, str, font);
 
-    if (reuse_painter) {
-        qt_restore_gl_state();
-    } else {
-        p->end();
-        delete p;
-        setAutoBufferSwap(auto_swap);
-        d->disable_clear_on_painter_begin = false;
-    }
-    qgl_engine_selector()->setPreferredPaintEngine(oldEngineType);
+   if (reuse_painter) {
+      qt_restore_gl_state();
+   } else {
+      p->end();
+      delete p;
+      setAutoBufferSwap(auto_swap);
+      d->disable_clear_on_painter_begin = false;
+   }
+   qgl_engine_selector()->setPreferredPaintEngine(oldEngineType);
 #else // QT_OPENGL_ES
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-    Q_UNUSED(str);
-    Q_UNUSED(font);
-    qWarning("QGLWidget::renderText is not supported under OpenGL/ES");
+   Q_UNUSED(x);
+   Q_UNUSED(y);
+   Q_UNUSED(str);
+   Q_UNUSED(font);
+   qWarning("QGLWidget::renderText is not supported under OpenGL/ES");
 #endif
 }
 
@@ -4917,119 +4988,121 @@ void QGLWidget::renderText(int x, int y, const QString &str, const QFont &font, 
 void QGLWidget::renderText(double x, double y, double z, const QString &str, const QFont &font, int)
 {
 #ifndef QT_OPENGL_ES
-    Q_D(QGLWidget);
-    if (str.isEmpty() || !isValid())
-        return;
+   Q_D(QGLWidget);
+   if (str.isEmpty() || !isValid()) {
+      return;
+   }
 
-    bool auto_swap = autoBufferSwap();
+   bool auto_swap = autoBufferSwap();
 
-    int width = d->glcx->device()->width();
-    int height = d->glcx->device()->height();
-    GLdouble model[4][4], proj[4][4];
-    GLint view[4];
-    glGetDoublev(GL_MODELVIEW_MATRIX, &model[0][0]);
-    glGetDoublev(GL_PROJECTION_MATRIX, &proj[0][0]);
-    glGetIntegerv(GL_VIEWPORT, &view[0]);
-    GLdouble win_x = 0, win_y = 0, win_z = 0;
-    qgluProject(x, y, z, &model[0][0], &proj[0][0], &view[0],
-                &win_x, &win_y, &win_z);
-    win_y = height - win_y; // y is inverted
+   int width = d->glcx->device()->width();
+   int height = d->glcx->device()->height();
+   GLdouble model[4][4], proj[4][4];
+   GLint view[4];
+   glGetDoublev(GL_MODELVIEW_MATRIX, &model[0][0]);
+   glGetDoublev(GL_PROJECTION_MATRIX, &proj[0][0]);
+   glGetIntegerv(GL_VIEWPORT, &view[0]);
+   GLdouble win_x = 0, win_y = 0, win_z = 0;
+   qgluProject(x, y, z, &model[0][0], &proj[0][0], &view[0],
+               &win_x, &win_y, &win_z);
+   win_y = height - win_y; // y is inverted
 
-    QPaintEngine::Type oldEngineType = qgl_engine_selector()->preferredPaintEngine();
-    QPaintEngine *engine = paintEngine();
+   QPaintEngine::Type oldEngineType = qgl_engine_selector()->preferredPaintEngine();
+   QPaintEngine *engine = paintEngine();
 
-    if (engine && (oldEngineType == QPaintEngine::OpenGL2) && engine->isActive()) {
-        qWarning("QGLWidget::renderText(): Calling renderText() while a GL 2 paint engine is"
-                 " active on the same device is not allowed.");
-        return;
-    }
+   if (engine && (oldEngineType == QPaintEngine::OpenGL2) && engine->isActive()) {
+      qWarning("QGLWidget::renderText(): Calling renderText() while a GL 2 paint engine is"
+               " active on the same device is not allowed.");
+      return;
+   }
 
-    // this changes what paintEngine() returns
-    qgl_engine_selector()->setPreferredPaintEngine(QPaintEngine::OpenGL);
-    engine = paintEngine();
-    QPainter *p;
-    bool reuse_painter = false;
-    bool use_depth_testing = glIsEnabled(GL_DEPTH_TEST);
-    bool use_scissor_testing = glIsEnabled(GL_SCISSOR_TEST);
+   // this changes what paintEngine() returns
+   qgl_engine_selector()->setPreferredPaintEngine(QPaintEngine::OpenGL);
+   engine = paintEngine();
+   QPainter *p;
+   bool reuse_painter = false;
+   bool use_depth_testing = glIsEnabled(GL_DEPTH_TEST);
+   bool use_scissor_testing = glIsEnabled(GL_SCISSOR_TEST);
 
-    if (engine->isActive()) {
-        reuse_painter = true;
-        p = engine->painter();
-        qt_save_gl_state();
-    } else {
-        setAutoBufferSwap(false);
-        // disable glClear() as a result of QPainter::begin()
-        d->disable_clear_on_painter_begin = true;
-        p = new QPainter(this);
-    }
+   if (engine->isActive()) {
+      reuse_painter = true;
+      p = engine->painter();
+      qt_save_gl_state();
+   } else {
+      setAutoBufferSwap(false);
+      // disable glClear() as a result of QPainter::begin()
+      d->disable_clear_on_painter_begin = true;
+      p = new QPainter(this);
+   }
 
-    QRect viewport(view[0], view[1], view[2], view[3]);
-    if (!use_scissor_testing && viewport != rect()) {
-        glScissor(view[0], view[1], view[2], view[3]);
-        glEnable(GL_SCISSOR_TEST);
-    } else if (use_scissor_testing) {
-        glEnable(GL_SCISSOR_TEST);
-    }
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glViewport(0, 0, width, height);
-    glOrtho(0, width, height, 0, 0, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glAlphaFunc(GL_GREATER, 0.0);
-    glEnable(GL_ALPHA_TEST);
-    if (use_depth_testing)
-        glEnable(GL_DEPTH_TEST);
-    glTranslated(0, 0, -win_z);
-    qt_gl_draw_text(p, qRound(win_x), qRound(win_y), str, font);
+   QRect viewport(view[0], view[1], view[2], view[3]);
+   if (!use_scissor_testing && viewport != rect()) {
+      glScissor(view[0], view[1], view[2], view[3]);
+      glEnable(GL_SCISSOR_TEST);
+   } else if (use_scissor_testing) {
+      glEnable(GL_SCISSOR_TEST);
+   }
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   glViewport(0, 0, width, height);
+   glOrtho(0, width, height, 0, 0, 1);
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
+   glAlphaFunc(GL_GREATER, 0.0);
+   glEnable(GL_ALPHA_TEST);
+   if (use_depth_testing) {
+      glEnable(GL_DEPTH_TEST);
+   }
+   glTranslated(0, 0, -win_z);
+   qt_gl_draw_text(p, qRound(win_x), qRound(win_y), str, font);
 
-    if (reuse_painter) {
-        qt_restore_gl_state();
-    } else {
-        p->end();
-        delete p;
-        setAutoBufferSwap(auto_swap);
-        d->disable_clear_on_painter_begin = false;
-    }
-    qgl_engine_selector()->setPreferredPaintEngine(oldEngineType);
+   if (reuse_painter) {
+      qt_restore_gl_state();
+   } else {
+      p->end();
+      delete p;
+      setAutoBufferSwap(auto_swap);
+      d->disable_clear_on_painter_begin = false;
+   }
+   qgl_engine_selector()->setPreferredPaintEngine(oldEngineType);
 #else // QT_OPENGL_ES
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-    Q_UNUSED(z);
-    Q_UNUSED(str);
-    Q_UNUSED(font);
-    qWarning("QGLWidget::renderText is not supported under OpenGL/ES");
+   Q_UNUSED(x);
+   Q_UNUSED(y);
+   Q_UNUSED(z);
+   Q_UNUSED(str);
+   Q_UNUSED(font);
+   qWarning("QGLWidget::renderText is not supported under OpenGL/ES");
 #endif
 }
 
 QGLFormat QGLWidget::format() const
 {
-    Q_D(const QGLWidget);
-    return d->glcx->format();
+   Q_D(const QGLWidget);
+   return d->glcx->format();
 }
 
 const QGLContext *QGLWidget::context() const
 {
-    Q_D(const QGLWidget);
-    return d->glcx;
+   Q_D(const QGLWidget);
+   return d->glcx;
 }
 
 bool QGLWidget::doubleBuffer() const
 {
-    Q_D(const QGLWidget);
-    return d->glcx->d_ptr->glFormat.testOption(QGL::DoubleBuffer);
+   Q_D(const QGLWidget);
+   return d->glcx->d_ptr->glFormat.testOption(QGL::DoubleBuffer);
 }
 
 void QGLWidget::setAutoBufferSwap(bool on)
 {
-    Q_D(QGLWidget);
-    d->autoSwap = on;
+   Q_D(QGLWidget);
+   d->autoSwap = on;
 }
 
 bool QGLWidget::autoBufferSwap() const
 {
-    Q_D(const QGLWidget);
-    return d->autoSwap;
+   Q_D(const QGLWidget);
+   return d->autoSwap;
 }
 
 /*!
@@ -5040,11 +5113,12 @@ bool QGLWidget::autoBufferSwap() const
 */
 GLuint QGLWidget::bindTexture(const QImage &image, GLenum target, GLint format)
 {
-    if (image.isNull())
-        return 0;
+   if (image.isNull()) {
+      return 0;
+   }
 
-    Q_D(QGLWidget);
-    return d->glcx->bindTexture(image, target, format, QGLContext::DefaultBindOption);
+   Q_D(QGLWidget);
+   return d->glcx->bindTexture(image, target, format, QGLContext::DefaultBindOption);
 }
 
 /*!
@@ -5056,11 +5130,12 @@ GLuint QGLWidget::bindTexture(const QImage &image, GLenum target, GLint format)
  */
 GLuint QGLWidget::bindTexture(const QImage &image, GLenum target, GLint format, QGLContext::BindOptions options)
 {
-    if (image.isNull())
-        return 0;
+   if (image.isNull()) {
+      return 0;
+   }
 
-    Q_D(QGLWidget);
-    return d->glcx->bindTexture(image, target, format, options);
+   Q_D(QGLWidget);
+   return d->glcx->bindTexture(image, target, format, options);
 }
 
 
@@ -5068,8 +5143,9 @@ GLuint QGLWidget::bindTexture(const QImage &image, GLenum target, GLint format, 
 /*! \internal */
 GLuint QGLWidget::bindTexture(const QImage &image, QMacCompatGLenum target, QMacCompatGLint format)
 {
-    if (image.isNull())
-        return 0;
+   if (image.isNull()) {
+      return 0;
+   }
 
    Q_D(QGLWidget);
    return d->glcx->bindTexture(image, GLenum(target), GLint(format), QGLContext::DefaultBindOption);
@@ -5078,8 +5154,9 @@ GLuint QGLWidget::bindTexture(const QImage &image, QMacCompatGLenum target, QMac
 GLuint QGLWidget::bindTexture(const QImage &image, QMacCompatGLenum target, QMacCompatGLint format,
                               QGLContext::BindOptions options)
 {
-    if (image.isNull())
-        return 0;
+   if (image.isNull()) {
+      return 0;
+   }
 
    Q_D(QGLWidget);
    return d->glcx->bindTexture(image, GLenum(target), GLint(format), options);
@@ -5094,11 +5171,12 @@ GLuint QGLWidget::bindTexture(const QImage &image, QMacCompatGLenum target, QMac
 */
 GLuint QGLWidget::bindTexture(const QPixmap &pixmap, GLenum target, GLint format)
 {
-    if (pixmap.isNull())
-        return 0;
+   if (pixmap.isNull()) {
+      return 0;
+   }
 
-    Q_D(QGLWidget);
-    return d->glcx->bindTexture(pixmap, target, format, QGLContext::DefaultBindOption);
+   Q_D(QGLWidget);
+   return d->glcx->bindTexture(pixmap, target, format, QGLContext::DefaultBindOption);
 }
 
 /*!
@@ -5114,23 +5192,23 @@ GLuint QGLWidget::bindTexture(const QPixmap &pixmap, GLenum target, GLint format
 GLuint QGLWidget::bindTexture(const QPixmap &pixmap, GLenum target, GLint format,
                               QGLContext::BindOptions options)
 {
-    Q_D(QGLWidget);
-    return d->glcx->bindTexture(pixmap, target, format, options);
+   Q_D(QGLWidget);
+   return d->glcx->bindTexture(pixmap, target, format, options);
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
 /*! \internal */
 GLuint QGLWidget::bindTexture(const QPixmap &pixmap, QMacCompatGLenum target, QMacCompatGLint format)
 {
-    Q_D(QGLWidget);
-    return d->glcx->bindTexture(pixmap, target, format, QGLContext::DefaultBindOption);
+   Q_D(QGLWidget);
+   return d->glcx->bindTexture(pixmap, target, format, QGLContext::DefaultBindOption);
 }
 
 GLuint QGLWidget::bindTexture(const QPixmap &pixmap, QMacCompatGLenum target, QMacCompatGLint format,
                               QGLContext::BindOptions options)
 {
-    Q_D(QGLWidget);
-    return d->glcx->bindTexture(pixmap, target, format, options);
+   Q_D(QGLWidget);
+   return d->glcx->bindTexture(pixmap, target, format, options);
 }
 #endif
 
@@ -5143,8 +5221,8 @@ GLuint QGLWidget::bindTexture(const QPixmap &pixmap, QMacCompatGLenum target, QM
 */
 GLuint QGLWidget::bindTexture(const QString &fileName)
 {
-    Q_D(QGLWidget);
-    return d->glcx->bindTexture(fileName);
+   Q_D(QGLWidget);
+   return d->glcx->bindTexture(fileName);
 }
 
 /*!
@@ -5155,16 +5233,16 @@ GLuint QGLWidget::bindTexture(const QString &fileName)
 */
 void QGLWidget::deleteTexture(GLuint id)
 {
-    Q_D(QGLWidget);
-    d->glcx->deleteTexture(id);
+   Q_D(QGLWidget);
+   d->glcx->deleteTexture(id);
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
 /*! \internal */
 void QGLWidget::deleteTexture(QMacCompatGLuint id)
 {
-    Q_D(QGLWidget);
-    d->glcx->deleteTexture(GLuint(id));
+   Q_D(QGLWidget);
+   d->glcx->deleteTexture(GLuint(id));
 }
 #endif
 
@@ -5177,16 +5255,16 @@ void QGLWidget::deleteTexture(QMacCompatGLuint id)
 */
 void QGLWidget::drawTexture(const QRectF &target, GLuint textureId, GLenum textureTarget)
 {
-    Q_D(QGLWidget);
-    d->glcx->drawTexture(target, textureId, textureTarget);
+   Q_D(QGLWidget);
+   d->glcx->drawTexture(target, textureId, textureTarget);
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
 /*! \internal */
 void QGLWidget::drawTexture(const QRectF &target, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget)
 {
-    Q_D(QGLWidget);
-    d->glcx->drawTexture(target, GLint(textureId), GLenum(textureTarget));
+   Q_D(QGLWidget);
+   d->glcx->drawTexture(target, GLint(textureId), GLenum(textureTarget));
 }
 #endif
 
@@ -5199,16 +5277,16 @@ void QGLWidget::drawTexture(const QRectF &target, QMacCompatGLuint textureId, QM
 */
 void QGLWidget::drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget)
 {
-    Q_D(QGLWidget);
-    d->glcx->drawTexture(point, textureId, textureTarget);
+   Q_D(QGLWidget);
+   d->glcx->drawTexture(point, textureId, textureTarget);
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
 /*! \internal */
 void QGLWidget::drawTexture(const QPointF &point, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget)
 {
-    Q_D(QGLWidget);
-    d->glcx->drawTexture(point, GLuint(textureId), GLenum(textureTarget));
+   Q_D(QGLWidget);
+   d->glcx->drawTexture(point, GLuint(textureId), GLenum(textureTarget));
 }
 #endif
 
@@ -5220,17 +5298,18 @@ Q_GLOBAL_STATIC(QGLEngineThreadStorage<QGL2PaintEngineEx>, qt_gl_2_engine)
 Q_GLOBAL_STATIC(QGLEngineThreadStorage<QOpenGLPaintEngine>, qt_gl_engine)
 #endif
 
-Q_OPENGL_EXPORT QPaintEngine* qt_qgl_paint_engine()
+Q_OPENGL_EXPORT QPaintEngine *qt_qgl_paint_engine()
 {
 #if defined(QT_OPENGL_ES_1)
-    return qt_gl_engine()->engine();
+   return qt_gl_engine()->engine();
 #elif defined(QT_OPENGL_ES_2)
-    return qt_gl_2_engine()->engine();
+   return qt_gl_2_engine()->engine();
 #else
-    if (qt_gl_preferGL2Engine())
-        return qt_gl_2_engine()->engine();
-    else
-        return qt_gl_engine()->engine();
+   if (qt_gl_preferGL2Engine()) {
+      return qt_gl_2_engine()->engine();
+   } else {
+      return qt_gl_engine()->engine();
+   }
 #endif
 }
 
@@ -5242,10 +5321,10 @@ Q_OPENGL_EXPORT QPaintEngine* qt_qgl_paint_engine()
 */
 QPaintEngine *QGLWidget::paintEngine() const
 {
-    return qt_qgl_paint_engine();
+   return qt_qgl_paint_engine();
 }
 
-typedef const GLubyte * (APIENTRY *qt_glGetStringi)(GLenum, GLuint);
+typedef const GLubyte *(APIENTRY *qt_glGetStringi)(GLenum, GLuint);
 
 #ifndef GL_NUM_EXTENSIONS
 #define GL_NUM_EXTENSIONS 0x821D
@@ -5253,53 +5332,55 @@ typedef const GLubyte * (APIENTRY *qt_glGetStringi)(GLenum, GLuint);
 
 QGLExtensionMatcher::QGLExtensionMatcher(const char *str)
 {
-    init(str);
+   init(str);
 }
 
 QGLExtensionMatcher::QGLExtensionMatcher()
 {
-    const char *extensionStr = reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS));
+   const char *extensionStr = reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS));
 
-    if (extensionStr) {
-        init(extensionStr);
-    } else {
-        // clear error state
-        while (glGetError()) {}
+   if (extensionStr) {
+      init(extensionStr);
+   } else {
+      // clear error state
+      while (glGetError()) {}
 
-        const QGLContext *ctx = QGLContext::currentContext();
-        if (ctx) {
-            qt_glGetStringi glGetStringi = (qt_glGetStringi)ctx->getProcAddress(QLatin1String("glGetStringi"));
+      const QGLContext *ctx = QGLContext::currentContext();
+      if (ctx) {
+         qt_glGetStringi glGetStringi = (qt_glGetStringi)ctx->getProcAddress(QLatin1String("glGetStringi"));
 
-            GLint numExtensions;
-            glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
+         GLint numExtensions;
+         glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
 
-            for (int i = 0; i < numExtensions; ++i) {
-                const char *str = reinterpret_cast<const char *>(glGetStringi(GL_EXTENSIONS, i));
+         for (int i = 0; i < numExtensions; ++i) {
+            const char *str = reinterpret_cast<const char *>(glGetStringi(GL_EXTENSIONS, i));
 
-                m_offsets << m_extensions.size();
+            m_offsets << m_extensions.size();
 
-                while (*str != 0)
-                    m_extensions.append(*str++);
-                m_extensions.append(' ');
+            while (*str != 0) {
+               m_extensions.append(*str++);
             }
-        }
-    }
+            m_extensions.append(' ');
+         }
+      }
+   }
 }
 
 void QGLExtensionMatcher::init(const char *str)
 {
-    m_extensions = str;
+   m_extensions = str;
 
-    // make sure extension string ends with a space
-    if (!m_extensions.endsWith(' '))
-        m_extensions.append(' ');
+   // make sure extension string ends with a space
+   if (!m_extensions.endsWith(' ')) {
+      m_extensions.append(' ');
+   }
 
-    int index = 0;
-    int next = 0;
-    while ((next = m_extensions.indexOf(' ', index)) >= 0) {
-        m_offsets << index;
-        index = next + 1;
-    }
+   int index = 0;
+   int next = 0;
+   while ((next = m_extensions.indexOf(' ', index)) >= 0) {
+      m_offsets << index;
+      index = next + 1;
+   }
 }
 
 /*
@@ -5307,103 +5388,129 @@ void QGLExtensionMatcher::init(const char *str)
 */
 QGLExtensions::Extensions QGLExtensions::currentContextExtensions()
 {
-    QGLExtensionMatcher extensions;
-    Extensions glExtensions;
+   QGLExtensionMatcher extensions;
+   Extensions glExtensions;
 
-    if (extensions.match("GL_ARB_texture_rectangle"))
-        glExtensions |= TextureRectangle;
-    if (extensions.match("GL_ARB_multisample"))
-        glExtensions |= SampleBuffers;
-    if (extensions.match("GL_SGIS_generate_mipmap"))
-        glExtensions |= GenerateMipmap;
-    if (extensions.match("GL_ARB_texture_compression"))
-        glExtensions |= TextureCompression;
-    if (extensions.match("GL_EXT_texture_compression_s3tc"))
-        glExtensions |= DDSTextureCompression;
-    if (extensions.match("GL_OES_compressed_ETC1_RGB8_texture"))
-        glExtensions |= ETC1TextureCompression;
-    if (extensions.match("GL_IMG_texture_compression_pvrtc"))
-        glExtensions |= PVRTCTextureCompression;
-    if (extensions.match("GL_ARB_fragment_program"))
-        glExtensions |= FragmentProgram;
-    if (extensions.match("GL_ARB_fragment_shader"))
-        glExtensions |= FragmentShader;
-    if (extensions.match("GL_ARB_shader_objects"))
-        glExtensions |= FragmentShader;
-    if (extensions.match("GL_ARB_texture_mirrored_repeat"))
-        glExtensions |= MirroredRepeat;
-    if (extensions.match("GL_EXT_framebuffer_object"))
-        glExtensions |= FramebufferObject;
-    if (extensions.match("GL_EXT_stencil_two_side"))
-        glExtensions |= StencilTwoSide;
-    if (extensions.match("GL_EXT_stencil_wrap"))
-        glExtensions |= StencilWrap;
-    if (extensions.match("GL_EXT_packed_depth_stencil"))
-        glExtensions |= PackedDepthStencil;
-    if (extensions.match("GL_NV_float_buffer"))
-        glExtensions |= NVFloatBuffer;
-    if (extensions.match("GL_ARB_pixel_buffer_object"))
-        glExtensions |= PixelBufferObject;
-    if (extensions.match("GL_IMG_texture_format_BGRA8888")
-        || extensions.match("GL_EXT_texture_format_BGRA8888"))
-        glExtensions |= BGRATextureFormat;
+   if (extensions.match("GL_ARB_texture_rectangle")) {
+      glExtensions |= TextureRectangle;
+   }
+   if (extensions.match("GL_ARB_multisample")) {
+      glExtensions |= SampleBuffers;
+   }
+   if (extensions.match("GL_SGIS_generate_mipmap")) {
+      glExtensions |= GenerateMipmap;
+   }
+   if (extensions.match("GL_ARB_texture_compression")) {
+      glExtensions |= TextureCompression;
+   }
+   if (extensions.match("GL_EXT_texture_compression_s3tc")) {
+      glExtensions |= DDSTextureCompression;
+   }
+   if (extensions.match("GL_OES_compressed_ETC1_RGB8_texture")) {
+      glExtensions |= ETC1TextureCompression;
+   }
+   if (extensions.match("GL_IMG_texture_compression_pvrtc")) {
+      glExtensions |= PVRTCTextureCompression;
+   }
+   if (extensions.match("GL_ARB_fragment_program")) {
+      glExtensions |= FragmentProgram;
+   }
+   if (extensions.match("GL_ARB_fragment_shader")) {
+      glExtensions |= FragmentShader;
+   }
+   if (extensions.match("GL_ARB_shader_objects")) {
+      glExtensions |= FragmentShader;
+   }
+   if (extensions.match("GL_ARB_texture_mirrored_repeat")) {
+      glExtensions |= MirroredRepeat;
+   }
+   if (extensions.match("GL_EXT_framebuffer_object")) {
+      glExtensions |= FramebufferObject;
+   }
+   if (extensions.match("GL_EXT_stencil_two_side")) {
+      glExtensions |= StencilTwoSide;
+   }
+   if (extensions.match("GL_EXT_stencil_wrap")) {
+      glExtensions |= StencilWrap;
+   }
+   if (extensions.match("GL_EXT_packed_depth_stencil")) {
+      glExtensions |= PackedDepthStencil;
+   }
+   if (extensions.match("GL_NV_float_buffer")) {
+      glExtensions |= NVFloatBuffer;
+   }
+   if (extensions.match("GL_ARB_pixel_buffer_object")) {
+      glExtensions |= PixelBufferObject;
+   }
+   if (extensions.match("GL_IMG_texture_format_BGRA8888")
+         || extensions.match("GL_EXT_texture_format_BGRA8888")) {
+      glExtensions |= BGRATextureFormat;
+   }
 #if defined(QT_OPENGL_ES_2)
-    glExtensions |= FramebufferObject;
-    glExtensions |= GenerateMipmap;
-    glExtensions |= FragmentShader;
+   glExtensions |= FramebufferObject;
+   glExtensions |= GenerateMipmap;
+   glExtensions |= FragmentShader;
 #endif
 #if defined(QT_OPENGL_ES_1)
-    if (extensions.match("GL_OES_framebuffer_object"))
-        glExtensions |= FramebufferObject;
+   if (extensions.match("GL_OES_framebuffer_object")) {
+      glExtensions |= FramebufferObject;
+   }
 #endif
 #if defined(QT_OPENGL_ES)
-    if (extensions.match("GL_OES_packed_depth_stencil"))
-        glExtensions |= PackedDepthStencil;
-    if (extensions.match("GL_OES_element_index_uint"))
-        glExtensions |= ElementIndexUint;
-    if (extensions.match("GL_OES_depth24"))
-        glExtensions |= Depth24;
+   if (extensions.match("GL_OES_packed_depth_stencil")) {
+      glExtensions |= PackedDepthStencil;
+   }
+   if (extensions.match("GL_OES_element_index_uint")) {
+      glExtensions |= ElementIndexUint;
+   }
+   if (extensions.match("GL_OES_depth24")) {
+      glExtensions |= Depth24;
+   }
 #else
-    glExtensions |= ElementIndexUint;
+   glExtensions |= ElementIndexUint;
 #endif
-    if (extensions.match("GL_ARB_framebuffer_object")) {
-        // ARB_framebuffer_object also includes EXT_framebuffer_blit.
-        glExtensions |= FramebufferObject;
-        glExtensions |= FramebufferBlit;
-    }
+   if (extensions.match("GL_ARB_framebuffer_object")) {
+      // ARB_framebuffer_object also includes EXT_framebuffer_blit.
+      glExtensions |= FramebufferObject;
+      glExtensions |= FramebufferBlit;
+   }
 
-    if (extensions.match("GL_EXT_framebuffer_blit"))
-        glExtensions |= FramebufferBlit;
+   if (extensions.match("GL_EXT_framebuffer_blit")) {
+      glExtensions |= FramebufferBlit;
+   }
 
-    if (extensions.match("GL_ARB_texture_non_power_of_two"))
-        glExtensions |= NPOTTextures;
+   if (extensions.match("GL_ARB_texture_non_power_of_two")) {
+      glExtensions |= NPOTTextures;
+   }
 
-    if (extensions.match("GL_EXT_bgra"))
-        glExtensions |= BGRATextureFormat;
+   if (extensions.match("GL_EXT_bgra")) {
+      glExtensions |= BGRATextureFormat;
+   }
 
-    {
-        GLboolean srgbCapableFramebuffers = false;
-        glGetBooleanv(FRAMEBUFFER_SRGB_CAPABLE_EXT, &srgbCapableFramebuffers);
-        if (srgbCapableFramebuffers)
-            glExtensions |= SRGBFrameBuffer;
-        // Clear possible error which is generated if
-        // FRAMEBUFFER_SRGB_CAPABLE_EXT isn't supported.
-        glGetError();
-    }
+   {
+      GLboolean srgbCapableFramebuffers = false;
+      glGetBooleanv(FRAMEBUFFER_SRGB_CAPABLE_EXT, &srgbCapableFramebuffers);
+      if (srgbCapableFramebuffers) {
+         glExtensions |= SRGBFrameBuffer;
+      }
+      // Clear possible error which is generated if
+      // FRAMEBUFFER_SRGB_CAPABLE_EXT isn't supported.
+      glGetError();
+   }
 
-    return glExtensions;
+   return glExtensions;
 }
 
 
 class QGLDefaultExtensions
 {
-public:
-    QGLDefaultExtensions() {
-        QGLTemporaryContext tempContext;
-        extensions = QGLExtensions::currentContextExtensions();
-    }
+ public:
+   QGLDefaultExtensions() {
+      QGLTemporaryContext tempContext;
+      extensions = QGLExtensions::currentContextExtensions();
+   }
 
-    QGLExtensions::Extensions extensions;
+   QGLExtensions::Extensions extensions;
 };
 
 Q_GLOBAL_STATIC(QGLDefaultExtensions, qtDefaultExtensions)
@@ -5415,256 +5522,271 @@ Q_GLOBAL_STATIC(QGLDefaultExtensions, qtDefaultExtensions)
 */
 QGLExtensions::Extensions QGLExtensions::glExtensions()
 {
-    Extensions extensionFlags = 0;
-    QGLContext *currentCtx = const_cast<QGLContext *>(QGLContext::currentContext());
+   Extensions extensionFlags = 0;
+   QGLContext *currentCtx = const_cast<QGLContext *>(QGLContext::currentContext());
 
-    if (currentCtx && currentCtx->d_func()->extension_flags_cached)
-        return currentCtx->d_func()->extension_flags;
+   if (currentCtx && currentCtx->d_func()->extension_flags_cached) {
+      return currentCtx->d_func()->extension_flags;
+   }
 
-    if (!currentCtx) {
-        extensionFlags = qtDefaultExtensions()->extensions;
-    } else {
-        extensionFlags = currentContextExtensions();
-        currentCtx->d_func()->extension_flags_cached = true;
-        currentCtx->d_func()->extension_flags = extensionFlags;
-    }
-    return extensionFlags;
+   if (!currentCtx) {
+      extensionFlags = qtDefaultExtensions()->extensions;
+   } else {
+      extensionFlags = currentContextExtensions();
+      currentCtx->d_func()->extension_flags_cached = true;
+      currentCtx->d_func()->extension_flags = extensionFlags;
+   }
+   return extensionFlags;
 }
 
 /*
   This is the shared initialization for all platforms. Called from QGLWidgetPrivate::init()
 */
-void QGLWidgetPrivate::initContext(QGLContext *context, const QGLWidget* shareWidget)
+void QGLWidgetPrivate::initContext(QGLContext *context, const QGLWidget *shareWidget)
 {
-    Q_Q(QGLWidget);
+   Q_Q(QGLWidget);
 
-    glDevice.setWidget(q);
+   glDevice.setWidget(q);
 
-    glcx = 0;
-    autoSwap = true;
+   glcx = 0;
+   autoSwap = true;
 
-    if (context && !context->device())
-        context->setDevice(q);
-    q->setContext(context, shareWidget ? shareWidget->context() : 0);
+   if (context && !context->device()) {
+      context->setDevice(q);
+   }
+   q->setContext(context, shareWidget ? shareWidget->context() : 0);
 
-    if (!glcx)
-        glcx = new QGLContext(QGLFormat::defaultFormat(), q);
+   if (!glcx) {
+      glcx = new QGLContext(QGLFormat::defaultFormat(), q);
+   }
 }
 
 #if defined(Q_WS_X11) || defined(Q_OS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA)
 Q_GLOBAL_STATIC(QString, qt_gl_lib_name)
 
-Q_OPENGL_EXPORT void qt_set_gl_library_name(const QString& name)
+Q_OPENGL_EXPORT void qt_set_gl_library_name(const QString &name)
 {
-    qt_gl_lib_name()->operator=(name);
+   qt_gl_lib_name()->operator=(name);
 }
 
 Q_OPENGL_EXPORT const QString qt_gl_library_name()
 {
-    if (qt_gl_lib_name()->isNull()) {
+   if (qt_gl_lib_name()->isNull()) {
 
 #ifdef Q_OS_MAC
-        // BROOM (can wait) consider changing the path
-        return QLatin1String("/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib");
+      // BROOM (can wait) consider changing the path
+      return QLatin1String("/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib");
 #else
 
 # if defined(QT_OPENGL_ES_1)
-        return QLatin1String("GLES_CM");
+      return QLatin1String("GLES_CM");
 
 # elif defined(QT_OPENGL_ES_2)
-        return QLatin1String("GLESv2");
+      return QLatin1String("GLESv2");
 
 # else
-        return QLatin1String("GL");
+      return QLatin1String("GL");
 # endif
 
 #endif
 
-    }
-    return *qt_gl_lib_name();
+   }
+   return *qt_gl_lib_name();
 }
 #endif
 
-void QGLContextGroup::addShare(const QGLContext *context, const QGLContext *share) {
-    Q_ASSERT(context && share);
-    if (context->d_ptr->group == share->d_ptr->group)
-        return;
+void QGLContextGroup::addShare(const QGLContext *context, const QGLContext *share)
+{
+   Q_ASSERT(context && share);
+   if (context->d_ptr->group == share->d_ptr->group) {
+      return;
+   }
 
-    // Make sure 'context' is not already shared with another group of contexts.
-    Q_ASSERT(context->d_ptr->group->m_refs.load() == 1);
+   // Make sure 'context' is not already shared with another group of contexts.
+   Q_ASSERT(context->d_ptr->group->m_refs.load() == 1);
 
-    // Free 'context' group resources and make it use the same resources as 'share'.
-    QGLContextGroup *group = share->d_ptr->group;
-    delete context->d_ptr->group;
-    context->d_ptr->group = group;
-    group->m_refs.ref();
+   // Free 'context' group resources and make it use the same resources as 'share'.
+   QGLContextGroup *group = share->d_ptr->group;
+   delete context->d_ptr->group;
+   context->d_ptr->group = group;
+   group->m_refs.ref();
 
-    // Maintain a list of all the contexts in each group of sharing contexts.
-    // The list is empty if the "share" context wasn't sharing already.
-    if (group->m_shares.isEmpty())
-        group->m_shares.append(share);
-    group->m_shares.append(context);
+   // Maintain a list of all the contexts in each group of sharing contexts.
+   // The list is empty if the "share" context wasn't sharing already.
+   if (group->m_shares.isEmpty()) {
+      group->m_shares.append(share);
+   }
+   group->m_shares.append(context);
 }
 
-void QGLContextGroup::removeShare(const QGLContext *context) {
-    // Remove the context from the group.
-    QGLContextGroup *group = context->d_ptr->group;
-    if (group->m_shares.isEmpty())
-        return;
-    group->m_shares.removeAll(context);
+void QGLContextGroup::removeShare(const QGLContext *context)
+{
+   // Remove the context from the group.
+   QGLContextGroup *group = context->d_ptr->group;
+   if (group->m_shares.isEmpty()) {
+      return;
+   }
+   group->m_shares.removeAll(context);
 
-    // Update context group representative.
-    Q_ASSERT(group->m_shares.size() != 0);
-    if (group->m_context == context)
-        group->m_context = group->m_shares[0];
+   // Update context group representative.
+   Q_ASSERT(group->m_shares.size() != 0);
+   if (group->m_context == context) {
+      group->m_context = group->m_shares[0];
+   }
 
-    // If there is only one context left, then make the list empty.
-    if (group->m_shares.size() == 1)
-        group->m_shares.clear();
+   // If there is only one context left, then make the list empty.
+   if (group->m_shares.size() == 1) {
+      group->m_shares.clear();
+   }
 }
 
 QGLContextGroupResourceBase::QGLContextGroupResourceBase()
-    : active(0)
+   : active(0)
 {
 #ifdef QT_GL_CONTEXT_RESOURCE_DEBUG
-    qDebug("Creating context group resource object %p.", this);
+   qDebug("Creating context group resource object %p.", this);
 #endif
 }
 
 QGLContextGroupResourceBase::~QGLContextGroupResourceBase()
 {
 #ifdef QT_GL_CONTEXT_RESOURCE_DEBUG
-    qDebug("Deleting context group resource %p. Group size: %d.", this, m_groups.size());
+   qDebug("Deleting context group resource %p. Group size: %d.", this, m_groups.size());
 #endif
-    for (int i = 0; i < m_groups.size(); ++i) {
-        m_groups.at(i)->m_resources.remove(this);
-        active.deref();
-    }
+   for (int i = 0; i < m_groups.size(); ++i) {
+      m_groups.at(i)->m_resources.remove(this);
+      active.deref();
+   }
 #ifndef QT_NO_DEBUG
-    if (active.load() != 0) {
-        qWarning("QtOpenGL: Resources are still available at program shutdown.\n"
-                 "          This is possibly caused by a leaked QGLWidget, \n"
-                 "          QGLFramebufferObject or QGLPixelBuffer.");
-    }
+   if (active.load() != 0) {
+      qWarning("QtOpenGL: Resources are still available at program shutdown.\n"
+               "          This is possibly caused by a leaked QGLWidget, \n"
+               "          QGLFramebufferObject or QGLPixelBuffer.");
+   }
 #endif
 }
 
 void QGLContextGroupResourceBase::insert(const QGLContext *context, void *value)
 {
 #ifdef QT_GL_CONTEXT_RESOURCE_DEBUG
-    qDebug("Inserting context group resource %p for context %p, managed by %p.", value, context, this);
+   qDebug("Inserting context group resource %p for context %p, managed by %p.", value, context, this);
 #endif
-    QGLContextGroup *group = QGLContextPrivate::contextGroup(context);
-    Q_ASSERT(!group->m_resources.contains(this));
-    group->m_resources.insert(this, value);
-    m_groups.append(group);
-    active.ref();
+   QGLContextGroup *group = QGLContextPrivate::contextGroup(context);
+   Q_ASSERT(!group->m_resources.contains(this));
+   group->m_resources.insert(this, value);
+   m_groups.append(group);
+   active.ref();
 }
 
 void *QGLContextGroupResourceBase::value(const QGLContext *context)
 {
-    QGLContextGroup *group = QGLContextPrivate::contextGroup(context);
-    return group->m_resources.value(this, 0);
+   QGLContextGroup *group = QGLContextPrivate::contextGroup(context);
+   return group->m_resources.value(this, 0);
 }
 
 void QGLContextGroupResourceBase::cleanup(const QGLContext *ctx)
 {
-    void *resource = value(ctx);
+   void *resource = value(ctx);
 
-    if (resource != 0) {
-        QGLShareContextScope scope(ctx);
-        freeResource(resource);
+   if (resource != 0) {
+      QGLShareContextScope scope(ctx);
+      freeResource(resource);
 
-        QGLContextGroup *group = QGLContextPrivate::contextGroup(ctx);
-        group->m_resources.remove(this);
-        m_groups.removeOne(group);
-        active.deref();
-    }
+      QGLContextGroup *group = QGLContextPrivate::contextGroup(ctx);
+      group->m_resources.remove(this);
+      m_groups.removeOne(group);
+      active.deref();
+   }
 }
 
 void QGLContextGroupResourceBase::contextDeleted(const QGLContext *ctx)
 {
-    Q_UNUSED(ctx);
+   Q_UNUSED(ctx);
 }
 
 void QGLContextGroupResourceBase::cleanup(const QGLContext *ctx, void *value)
 {
 #ifdef QT_GL_CONTEXT_RESOURCE_DEBUG
-    qDebug("Cleaning up context group resource %p, for context %p in thread %p.", this, ctx, QThread::currentThread());
+   qDebug("Cleaning up context group resource %p, for context %p in thread %p.", this, ctx, QThread::currentThread());
 #endif
-    QGLShareContextScope scope(ctx);
-    freeResource(value);
-    active.deref();
+   QGLShareContextScope scope(ctx);
+   freeResource(value);
+   active.deref();
 
-    QGLContextGroup *group = QGLContextPrivate::contextGroup(ctx);
-    m_groups.removeOne(group);
+   QGLContextGroup *group = QGLContextPrivate::contextGroup(ctx);
+   m_groups.removeOne(group);
 }
 
 void QGLContextGroup::cleanupResources(const QGLContext *context)
 {
-    // Notify all resources that a context has been deleted
-    QHash<QGLContextGroupResourceBase *, void *>::ConstIterator it;
-    for (it = m_resources.begin(); it != m_resources.end(); ++it)
-        it.key()->contextDeleted(context);
+   // Notify all resources that a context has been deleted
+   QHash<QGLContextGroupResourceBase *, void *>::ConstIterator it;
+   for (it = m_resources.begin(); it != m_resources.end(); ++it) {
+      it.key()->contextDeleted(context);
+   }
 
-    // If there are still shares, then no cleanup to be done yet.
-    if (m_shares.size() > 1)
-        return;
+   // If there are still shares, then no cleanup to be done yet.
+   if (m_shares.size() > 1) {
+      return;
+   }
 
-    // Iterate over all resources and free each in turn.
-    for (it = m_resources.begin(); it != m_resources.end(); ++it)
-        it.key()->cleanup(context, it.value());
+   // Iterate over all resources and free each in turn.
+   for (it = m_resources.begin(); it != m_resources.end(); ++it) {
+      it.key()->cleanup(context, it.value());
+   }
 }
 
 QGLSharedResourceGuard::~QGLSharedResourceGuard()
 {
-    if (m_group)
-        m_group->removeGuard(this);
+   if (m_group) {
+      m_group->removeGuard(this);
+   }
 }
 
 void QGLSharedResourceGuard::setContext(const QGLContext *context)
 {
-    if (m_group)
-        m_group->removeGuard(this);
-    if (context) {
-        m_group = QGLContextPrivate::contextGroup(context);
-        m_group->addGuard(this);
-    } else {
-        m_group = 0;
-    }
+   if (m_group) {
+      m_group->removeGuard(this);
+   }
+   if (context) {
+      m_group = QGLContextPrivate::contextGroup(context);
+      m_group->addGuard(this);
+   } else {
+      m_group = 0;
+   }
 }
 
 QSize QGLTexture::bindCompressedTexture
-    (const QString& fileName, const char *format)
+(const QString &fileName, const char *format)
 {
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly))
-        return QSize();
-    QByteArray contents = file.readAll();
-    file.close();
-    return bindCompressedTexture
-        (contents.constData(), contents.size(), format);
+   QFile file(fileName);
+   if (!file.open(QIODevice::ReadOnly)) {
+      return QSize();
+   }
+   QByteArray contents = file.readAll();
+   file.close();
+   return bindCompressedTexture
+          (contents.constData(), contents.size(), format);
 }
 
 // PVR header format for container files that store textures compressed
 // with the ETC1, PVRTC2, and PVRTC4 encodings.  Format information from the
 // PowerVR SDK at http://www.imgtec.com/powervr/insider/powervr-sdk.asp
 // "PVRTexTool Reference Manual, version 1.11f".
-struct PvrHeader
-{
-    quint32 headerSize;
-    quint32 height;
-    quint32 width;
-    quint32 mipMapCount;
-    quint32 flags;
-    quint32 dataSize;
-    quint32 bitsPerPixel;
-    quint32 redMask;
-    quint32 greenMask;
-    quint32 blueMask;
-    quint32 alphaMask;
-    quint32 magic;
-    quint32 surfaceCount;
+struct PvrHeader {
+   quint32 headerSize;
+   quint32 height;
+   quint32 width;
+   quint32 mipMapCount;
+   quint32 flags;
+   quint32 dataSize;
+   quint32 bitsPerPixel;
+   quint32 redMask;
+   quint32 greenMask;
+   quint32 blueMask;
+   quint32 alphaMask;
+   quint32 magic;
+   quint32 surfaceCount;
 };
 
 #define PVR_MAGIC               0x21525650      // "PVR!" in little-endian
@@ -5696,281 +5818,295 @@ struct PvrHeader
 #endif
 
 bool QGLTexture::canBindCompressedTexture
-    (const char *buf, int len, const char *format, bool *hasAlpha)
+(const char *buf, int len, const char *format, bool *hasAlpha)
 {
-    if (QSysInfo::ByteOrder != QSysInfo::LittleEndian) {
-        // Compressed texture loading only supported on little-endian
-        // systems such as x86 and ARM at the moment.
-        return false;
-    }
-    if (!format) {
-        // Auto-detect the format from the header.
-        if (len >= 4 && !qstrncmp(buf, "DDS ", 4)) {
+   if (QSysInfo::ByteOrder != QSysInfo::LittleEndian) {
+      // Compressed texture loading only supported on little-endian
+      // systems such as x86 and ARM at the moment.
+      return false;
+   }
+   if (!format) {
+      // Auto-detect the format from the header.
+      if (len >= 4 && !qstrncmp(buf, "DDS ", 4)) {
+         *hasAlpha = true;
+         return true;
+      } else if (len >= 52 && !qstrncmp(buf + 44, "PVR!", 4)) {
+         const PvrHeader *pvrHeader =
+            reinterpret_cast<const PvrHeader *>(buf);
+         *hasAlpha = (pvrHeader->alphaMask != 0);
+         return true;
+      }
+   } else {
+      // Validate the format against the header.
+      if (!qstricmp(format, "DDS")) {
+         if (len >= 4 && !qstrncmp(buf, "DDS ", 4)) {
             *hasAlpha = true;
             return true;
-        } else if (len >= 52 && !qstrncmp(buf + 44, "PVR!", 4)) {
+         }
+      } else if (!qstricmp(format, "PVR") || !qstricmp(format, "ETC1")) {
+         if (len >= 52 && !qstrncmp(buf + 44, "PVR!", 4)) {
             const PvrHeader *pvrHeader =
-                reinterpret_cast<const PvrHeader *>(buf);
+               reinterpret_cast<const PvrHeader *>(buf);
             *hasAlpha = (pvrHeader->alphaMask != 0);
             return true;
-        }
-    } else {
-        // Validate the format against the header.
-        if (!qstricmp(format, "DDS")) {
-            if (len >= 4 && !qstrncmp(buf, "DDS ", 4)) {
-                *hasAlpha = true;
-                return true;
-            }
-        } else if (!qstricmp(format, "PVR") || !qstricmp(format, "ETC1")) {
-            if (len >= 52 && !qstrncmp(buf + 44, "PVR!", 4)) {
-                const PvrHeader *pvrHeader =
-                    reinterpret_cast<const PvrHeader *>(buf);
-                *hasAlpha = (pvrHeader->alphaMask != 0);
-                return true;
-            }
-        }
-    }
-    return false;
+         }
+      }
+   }
+   return false;
 }
 
 #define ctx QGLContext::currentContext()
 
 QSize QGLTexture::bindCompressedTexture
-    (const char *buf, int len, const char *format)
+(const char *buf, int len, const char *format)
 {
-    if (QSysInfo::ByteOrder != QSysInfo::LittleEndian) {
-        // Compressed texture loading only supported on little-endian
-        // systems such as x86 and ARM at the moment.
-        return QSize();
-    }
+   if (QSysInfo::ByteOrder != QSysInfo::LittleEndian) {
+      // Compressed texture loading only supported on little-endian
+      // systems such as x86 and ARM at the moment.
+      return QSize();
+   }
 #if !defined(QT_OPENGL_ES)
-    if (!glCompressedTexImage2D) {
-        if (!(QGLExtensions::glExtensions() & QGLExtensions::TextureCompression)) {
-            qWarning("QGLContext::bindTexture(): The GL implementation does "
-                     "not support texture compression extensions.");
-            return QSize();
-        }
-        glCompressedTexImage2D = (_glCompressedTexImage2DARB) ctx->getProcAddress(QLatin1String("glCompressedTexImage2DARB"));
-        if (!glCompressedTexImage2D) {
-            qWarning("QGLContext::bindTexture(): could not resolve "
-                     "glCompressedTexImage2DARB.");
-            return QSize();
-        }
-    }
+   if (!glCompressedTexImage2D) {
+      if (!(QGLExtensions::glExtensions() & QGLExtensions::TextureCompression)) {
+         qWarning("QGLContext::bindTexture(): The GL implementation does "
+                  "not support texture compression extensions.");
+         return QSize();
+      }
+      glCompressedTexImage2D = (_glCompressedTexImage2DARB) ctx->getProcAddress(QLatin1String("glCompressedTexImage2DARB"));
+      if (!glCompressedTexImage2D) {
+         qWarning("QGLContext::bindTexture(): could not resolve "
+                  "glCompressedTexImage2DARB.");
+         return QSize();
+      }
+   }
 #endif
-    if (!format) {
-        // Auto-detect the format from the header.
-        if (len >= 4 && !qstrncmp(buf, "DDS ", 4))
+   if (!format) {
+      // Auto-detect the format from the header.
+      if (len >= 4 && !qstrncmp(buf, "DDS ", 4)) {
+         return bindCompressedTextureDDS(buf, len);
+      } else if (len >= 52 && !qstrncmp(buf + 44, "PVR!", 4)) {
+         return bindCompressedTexturePVR(buf, len);
+      }
+   } else {
+      // Validate the format against the header.
+      if (!qstricmp(format, "DDS")) {
+         if (len >= 4 && !qstrncmp(buf, "DDS ", 4)) {
             return bindCompressedTextureDDS(buf, len);
-        else if (len >= 52 && !qstrncmp(buf + 44, "PVR!", 4))
+         }
+      } else if (!qstricmp(format, "PVR") || !qstricmp(format, "ETC1")) {
+         if (len >= 52 && !qstrncmp(buf + 44, "PVR!", 4)) {
             return bindCompressedTexturePVR(buf, len);
-    } else {
-        // Validate the format against the header.
-        if (!qstricmp(format, "DDS")) {
-            if (len >= 4 && !qstrncmp(buf, "DDS ", 4))
-                return bindCompressedTextureDDS(buf, len);
-        } else if (!qstricmp(format, "PVR") || !qstricmp(format, "ETC1")) {
-            if (len >= 52 && !qstrncmp(buf + 44, "PVR!", 4))
-                return bindCompressedTexturePVR(buf, len);
-        }
-    }
-    return QSize();
+         }
+      }
+   }
+   return QSize();
 }
 
 QSize QGLTexture::bindCompressedTextureDDS(const char *buf, int len)
 {
-    // We only support 2D texture loading at present.
-    if (target != GL_TEXTURE_2D)
-        return QSize();
+   // We only support 2D texture loading at present.
+   if (target != GL_TEXTURE_2D) {
+      return QSize();
+   }
 
-    // Bail out if the necessary extension is not present.
-    if (!(QGLExtensions::glExtensions() & QGLExtensions::DDSTextureCompression)) {
-        qWarning("QGLContext::bindTexture(): DDS texture compression is not supported.");
-        return QSize();
-    }
+   // Bail out if the necessary extension is not present.
+   if (!(QGLExtensions::glExtensions() & QGLExtensions::DDSTextureCompression)) {
+      qWarning("QGLContext::bindTexture(): DDS texture compression is not supported.");
+      return QSize();
+   }
 
-    const DDSFormat *ddsHeader = reinterpret_cast<const DDSFormat *>(buf + 4);
-    if (!ddsHeader->dwLinearSize) {
-        qWarning("QGLContext::bindTexture(): DDS image size is not valid.");
-        return QSize();
-    }
+   const DDSFormat *ddsHeader = reinterpret_cast<const DDSFormat *>(buf + 4);
+   if (!ddsHeader->dwLinearSize) {
+      qWarning("QGLContext::bindTexture(): DDS image size is not valid.");
+      return QSize();
+   }
 
-    int blockSize = 16;
-    GLenum format;
+   int blockSize = 16;
+   GLenum format;
 
-    switch(ddsHeader->ddsPixelFormat.dwFourCC) {
-    case FOURCC_DXT1:
-        format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-        blockSize = 8;
-        break;
-    case FOURCC_DXT3:
-        format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
-        break;
-    case FOURCC_DXT5:
-        format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
-        break;
-    default:
-        qWarning("QGLContext::bindTexture(): DDS image format not supported.");
-        return QSize();
-    }
+   switch (ddsHeader->ddsPixelFormat.dwFourCC) {
+      case FOURCC_DXT1:
+         format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+         blockSize = 8;
+         break;
+      case FOURCC_DXT3:
+         format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+         break;
+      case FOURCC_DXT5:
+         format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+         break;
+      default:
+         qWarning("QGLContext::bindTexture(): DDS image format not supported.");
+         return QSize();
+   }
 
-    const GLubyte *pixels =
-        reinterpret_cast<const GLubyte *>(buf + ddsHeader->dwSize + 4);
+   const GLubyte *pixels =
+      reinterpret_cast<const GLubyte *>(buf + ddsHeader->dwSize + 4);
 
-    glGenTextures(1, &id);
-    glBindTexture(GL_TEXTURE_2D, id);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glGenTextures(1, &id);
+   glBindTexture(GL_TEXTURE_2D, id);
+   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-    int size;
-    int offset = 0;
-    int available = len - int(ddsHeader->dwSize + 4);
-    int w = ddsHeader->dwWidth;
-    int h = ddsHeader->dwHeight;
+   int size;
+   int offset = 0;
+   int available = len - int(ddsHeader->dwSize + 4);
+   int w = ddsHeader->dwWidth;
+   int h = ddsHeader->dwHeight;
 
-    // load mip-maps
-    for(int i = 0; i < (int) ddsHeader->dwMipMapCount; ++i) {
-        if (w == 0) w = 1;
-        if (h == 0) h = 1;
+   // load mip-maps
+   for (int i = 0; i < (int) ddsHeader->dwMipMapCount; ++i) {
+      if (w == 0) {
+         w = 1;
+      }
+      if (h == 0) {
+         h = 1;
+      }
 
-        size = ((w+3)/4) * ((h+3)/4) * blockSize;
-        if (size > available)
-            break;
-        glCompressedTexImage2D(GL_TEXTURE_2D, i, format, w, h, 0,
-                               size, pixels + offset);
-        offset += size;
-        available -= size;
+      size = ((w + 3) / 4) * ((h + 3) / 4) * blockSize;
+      if (size > available) {
+         break;
+      }
+      glCompressedTexImage2D(GL_TEXTURE_2D, i, format, w, h, 0,
+                             size, pixels + offset);
+      offset += size;
+      available -= size;
 
-        // half size for each mip-map level
-        w = w/2;
-        h = h/2;
-    }
+      // half size for each mip-map level
+      w = w / 2;
+      h = h / 2;
+   }
 
-    // DDS images are not inverted.
-    options &= ~QGLContext::InvertedYBindOption;
+   // DDS images are not inverted.
+   options &= ~QGLContext::InvertedYBindOption;
 
-    return QSize(ddsHeader->dwWidth, ddsHeader->dwHeight);
+   return QSize(ddsHeader->dwWidth, ddsHeader->dwHeight);
 }
 
 QSize QGLTexture::bindCompressedTexturePVR(const char *buf, int len)
 {
-    // We only support 2D texture loading at present.  Cube maps later.
-    if (target != GL_TEXTURE_2D)
-        return QSize();
+   // We only support 2D texture loading at present.  Cube maps later.
+   if (target != GL_TEXTURE_2D) {
+      return QSize();
+   }
 
-    // Determine which texture format we will be loading.
-    const PvrHeader *pvrHeader = reinterpret_cast<const PvrHeader *>(buf);
-    GLenum textureFormat;
-    quint32 minWidth, minHeight;
-    switch (pvrHeader->flags & PVR_FORMAT_MASK) {
-    case PVR_FORMAT_PVRTC2:
-        if (pvrHeader->alphaMask)
+   // Determine which texture format we will be loading.
+   const PvrHeader *pvrHeader = reinterpret_cast<const PvrHeader *>(buf);
+   GLenum textureFormat;
+   quint32 minWidth, minHeight;
+   switch (pvrHeader->flags & PVR_FORMAT_MASK) {
+      case PVR_FORMAT_PVRTC2:
+         if (pvrHeader->alphaMask) {
             textureFormat = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
-        else
+         } else {
             textureFormat = GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
-        minWidth = 16;
-        minHeight = 8;
-        break;
+         }
+         minWidth = 16;
+         minHeight = 8;
+         break;
 
-    case PVR_FORMAT_PVRTC4:
-        if (pvrHeader->alphaMask)
+      case PVR_FORMAT_PVRTC4:
+         if (pvrHeader->alphaMask) {
             textureFormat = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
-        else
+         } else {
             textureFormat = GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
-        minWidth = 8;
-        minHeight = 8;
-        break;
+         }
+         minWidth = 8;
+         minHeight = 8;
+         break;
 
-    case PVR_FORMAT_ETC1:
-        textureFormat = GL_ETC1_RGB8_OES;
-        minWidth = 4;
-        minHeight = 4;
-        break;
+      case PVR_FORMAT_ETC1:
+         textureFormat = GL_ETC1_RGB8_OES;
+         minWidth = 4;
+         minHeight = 4;
+         break;
 
-    default:
-        qWarning("QGLContext::bindTexture(): PVR image format 0x%x not supported.", int(pvrHeader->flags & PVR_FORMAT_MASK));
-        return QSize();
-    }
+      default:
+         qWarning("QGLContext::bindTexture(): PVR image format 0x%x not supported.", int(pvrHeader->flags & PVR_FORMAT_MASK));
+         return QSize();
+   }
 
-    // Bail out if the necessary extension is not present.
-    if (textureFormat == GL_ETC1_RGB8_OES) {
-        if (!(QGLExtensions::glExtensions() &
-                    QGLExtensions::ETC1TextureCompression)) {
-            qWarning("QGLContext::bindTexture(): ETC1 texture compression is not supported.");
-            return QSize();
-        }
-    } else {
-        if (!(QGLExtensions::glExtensions() &
-                    QGLExtensions::PVRTCTextureCompression)) {
-            qWarning("QGLContext::bindTexture(): PVRTC texture compression is not supported.");
-            return QSize();
-        }
-    }
+   // Bail out if the necessary extension is not present.
+   if (textureFormat == GL_ETC1_RGB8_OES) {
+      if (!(QGLExtensions::glExtensions() &
+            QGLExtensions::ETC1TextureCompression)) {
+         qWarning("QGLContext::bindTexture(): ETC1 texture compression is not supported.");
+         return QSize();
+      }
+   } else {
+      if (!(QGLExtensions::glExtensions() &
+            QGLExtensions::PVRTCTextureCompression)) {
+         qWarning("QGLContext::bindTexture(): PVRTC texture compression is not supported.");
+         return QSize();
+      }
+   }
 
-    // Boundary check on the buffer size.
-    quint32 bufferSize = pvrHeader->headerSize + pvrHeader->dataSize;
-    if (bufferSize > quint32(len)) {
-        qWarning("QGLContext::bindTexture(): PVR image size is not valid.");
-        return QSize();
-    }
+   // Boundary check on the buffer size.
+   quint32 bufferSize = pvrHeader->headerSize + pvrHeader->dataSize;
+   if (bufferSize > quint32(len)) {
+      qWarning("QGLContext::bindTexture(): PVR image size is not valid.");
+      return QSize();
+   }
 
-    // Create the texture.
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glGenTextures(1, &id);
-    glBindTexture(GL_TEXTURE_2D, id);
-    if (pvrHeader->mipMapCount) {
-        if ((options & QGLContext::LinearFilteringBindOption) != 0) {
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        } else {
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-        }
-    } else if ((options & QGLContext::LinearFilteringBindOption) != 0) {
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    } else {
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    }
+   // Create the texture.
+   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+   glGenTextures(1, &id);
+   glBindTexture(GL_TEXTURE_2D, id);
+   if (pvrHeader->mipMapCount) {
+      if ((options & QGLContext::LinearFilteringBindOption) != 0) {
+         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+      } else {
+         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+      }
+   } else if ((options & QGLContext::LinearFilteringBindOption) != 0) {
+      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   } else {
+      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+   }
 
-    // Load the compressed mipmap levels.
-    const GLubyte *buffer =
-        reinterpret_cast<const GLubyte *>(buf + pvrHeader->headerSize);
-    bufferSize = pvrHeader->dataSize;
-    quint32 level = 0;
-    quint32 width = pvrHeader->width;
-    quint32 height = pvrHeader->height;
-    while (bufferSize > 0 && level <= pvrHeader->mipMapCount) {
-        quint32 size =
-            (qMax(width, minWidth) * qMax(height, minHeight) *
-             pvrHeader->bitsPerPixel) / 8;
-        if (size > bufferSize)
-            break;
-        glCompressedTexImage2D(GL_TEXTURE_2D, GLint(level), textureFormat,
-                               GLsizei(width), GLsizei(height), 0,
-                               GLsizei(size), buffer);
-        width /= 2;
-        height /= 2;
-        buffer += size;
-        ++level;
-    }
+   // Load the compressed mipmap levels.
+   const GLubyte *buffer =
+      reinterpret_cast<const GLubyte *>(buf + pvrHeader->headerSize);
+   bufferSize = pvrHeader->dataSize;
+   quint32 level = 0;
+   quint32 width = pvrHeader->width;
+   quint32 height = pvrHeader->height;
+   while (bufferSize > 0 && level <= pvrHeader->mipMapCount) {
+      quint32 size =
+         (qMax(width, minWidth) * qMax(height, minHeight) *
+          pvrHeader->bitsPerPixel) / 8;
+      if (size > bufferSize) {
+         break;
+      }
+      glCompressedTexImage2D(GL_TEXTURE_2D, GLint(level), textureFormat,
+                             GLsizei(width), GLsizei(height), 0,
+                             GLsizei(size), buffer);
+      width /= 2;
+      height /= 2;
+      buffer += size;
+      ++level;
+   }
 
-    // Restore the default pixel alignment for later texture uploads.
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+   // Restore the default pixel alignment for later texture uploads.
+   glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
-    // Set the invert flag for the texture.  The "vertical flip"
-    // flag in PVR is the opposite sense to our sense of inversion.
-    if ((pvrHeader->flags & PVR_VERTICAL_FLIP) != 0)
-        options &= ~QGLContext::InvertedYBindOption;
-    else
-        options |= QGLContext::InvertedYBindOption;
+   // Set the invert flag for the texture.  The "vertical flip"
+   // flag in PVR is the opposite sense to our sense of inversion.
+   if ((pvrHeader->flags & PVR_VERTICAL_FLIP) != 0) {
+      options &= ~QGLContext::InvertedYBindOption;
+   } else {
+      options |= QGLContext::InvertedYBindOption;
+   }
 
-    return QSize(pvrHeader->width, pvrHeader->height);
+   return QSize(pvrHeader->width, pvrHeader->height);
 }
 #undef ctx
 
-void QGLTextureDestroyer::freeTexture_slot(QGLContext * context,QPixmapData * boundPixmap,GLuint id)
+void QGLTextureDestroyer::freeTexture_slot(QGLContext *context, QPixmapData *boundPixmap, GLuint id)
 {
    Q_UNUSED(boundPixmap);
 
@@ -5987,10 +6123,11 @@ void QGLTextureDestroyer::freeTexture_slot(QGLContext * context,QPixmapData * bo
       QGLContextPrivate::unbindPixmapFromTexture(boundPixmap);
       glDeleteTextures(1, &id);
 
-      if (oldContext)
-          oldContext->makeCurrent();
+      if (oldContext) {
+         oldContext->makeCurrent();
+      }
       return;
-  }
+   }
 #endif
 
    QGLShareContextScope scope(context);

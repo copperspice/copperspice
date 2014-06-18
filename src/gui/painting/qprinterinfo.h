@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,27 +39,27 @@ class QPrinterInfoPrivateDeleter;
 class Q_GUI_EXPORT QPrinterInfo
 {
 
-public:
-    QPrinterInfo();
-    QPrinterInfo(const QPrinterInfo &other);
-    QPrinterInfo(const QPrinter &printer);
-    ~QPrinterInfo();
+ public:
+   QPrinterInfo();
+   QPrinterInfo(const QPrinterInfo &other);
+   QPrinterInfo(const QPrinter &printer);
+   ~QPrinterInfo();
 
-    QPrinterInfo &operator=(const QPrinterInfo &other);
+   QPrinterInfo &operator=(const QPrinterInfo &other);
 
-    QString printerName() const;
-    bool isNull() const;
-    bool isDefault() const;
-    QList<QPrinter::PaperSize> supportedPaperSizes() const;
+   QString printerName() const;
+   bool isNull() const;
+   bool isDefault() const;
+   QList<QPrinter::PaperSize> supportedPaperSizes() const;
 
-    static QList<QPrinterInfo> availablePrinters();
-    static QPrinterInfo defaultPrinter();
+   static QList<QPrinterInfo> availablePrinters();
+   static QPrinterInfo defaultPrinter();
 
-private:
-    QPrinterInfo(const QString &name);
+ private:
+   QPrinterInfo(const QString &name);
 
-    Q_DECLARE_PRIVATE(QPrinterInfo)
-    QScopedPointer<QPrinterInfoPrivate, QPrinterInfoPrivateDeleter> d_ptr;
+   Q_DECLARE_PRIVATE(QPrinterInfo)
+   QScopedPointer<QPrinterInfoPrivate, QPrinterInfoPrivateDeleter> d_ptr;
 };
 
 #endif // QT_NO_PRINTER

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,29 +31,29 @@ extern void qt_painter_removePaintDevice(QPaintDevice *); //qpainter.cpp
 
 QPaintDevice::QPaintDevice()
 {
-    painters = 0;
+   painters = 0;
 }
 
 QPaintDevice::~QPaintDevice()
 {
-    if (paintingActive())
-        qWarning("QPaintDevice: Cannot destroy paint device that is being "
-                  "painted");
-    qt_painter_removePaintDevice(this);
+   if (paintingActive())
+      qWarning("QPaintDevice: Cannot destroy paint device that is being "
+               "painted");
+   qt_painter_removePaintDevice(this);
 }
 
 
 #ifndef Q_WS_QPA
 int QPaintDevice::metric(PaintDeviceMetric) const
 {
-    qWarning("QPaintDevice::metrics: Device has no metric information");
-    return 0;
+   qWarning("QPaintDevice::metrics: Device has no metric information");
+   return 0;
 }
 #endif
 
 Q_GUI_EXPORT int qt_paint_device_metric(const QPaintDevice *device, QPaintDevice::PaintDeviceMetric metric)
 {
-    return device->metric(metric);
+   return device->metric(metric);
 }
 
 QT_END_NAMESPACE

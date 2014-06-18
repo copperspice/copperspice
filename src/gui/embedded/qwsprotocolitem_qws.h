@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,33 +38,32 @@ QT_BEGIN_NAMESPACE
 
 class QIODevice;
 
-struct QWSProtocolItem
-{
-    // ctor - dtor
-    QWSProtocolItem(int t, int len, char *ptr) : type(t),
-        simpleLen(len), rawLen(-1), deleteRaw(false), simpleDataPtr(ptr),
-        rawDataPtr(0), bytesRead(0) { }
-    virtual ~QWSProtocolItem();
+struct QWSProtocolItem {
+   // ctor - dtor
+   QWSProtocolItem(int t, int len, char *ptr) : type(t),
+      simpleLen(len), rawLen(-1), deleteRaw(false), simpleDataPtr(ptr),
+      rawDataPtr(0), bytesRead(0) { }
+   virtual ~QWSProtocolItem();
 
-    // data
-    int type;
-    int simpleLen;
-    int rawLen;
-    bool deleteRaw;
+   // data
+   int type;
+   int simpleLen;
+   int rawLen;
+   bool deleteRaw;
 
-    // functions
+   // functions
 #ifndef QT_NO_QWS_MULTIPROCESS
-    void write(QIODevice *s);
-    bool read(QIODevice *s);
+   void write(QIODevice *s);
+   bool read(QIODevice *s);
 #endif
-    void copyFrom(const QWSProtocolItem *item);
+   void copyFrom(const QWSProtocolItem *item);
 
-    virtual void setData(const char *data, int len, bool allocateMem = true);
+   virtual void setData(const char *data, int len, bool allocateMem = true);
 
-    char *simpleDataPtr;
-    char *rawDataPtr;
-    // temp variables
-    int bytesRead;
+   char *simpleDataPtr;
+   char *rawDataPtr;
+   // temp variables
+   int bytesRead;
 };
 
 // This should probably be a method on QWSProtocolItem, but this way avoids

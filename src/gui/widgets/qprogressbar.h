@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,100 +37,100 @@ class QStyleOptionProgressBar;
 
 class Q_GUI_EXPORT QProgressBar : public QWidget
 {
-    CS_OBJECT(QProgressBar)
+   CS_OBJECT(QProgressBar)
 
-    GUI_CS_ENUM(Direction)
+   GUI_CS_ENUM(Direction)
 
-    GUI_CS_PROPERTY_READ(minimum, minimum)
-    GUI_CS_PROPERTY_WRITE(minimum, setMinimum)
+   GUI_CS_PROPERTY_READ(minimum, minimum)
+   GUI_CS_PROPERTY_WRITE(minimum, setMinimum)
 
-    GUI_CS_PROPERTY_READ(maximum, maximum)
-    GUI_CS_PROPERTY_WRITE(maximum, setMaximum)
+   GUI_CS_PROPERTY_READ(maximum, maximum)
+   GUI_CS_PROPERTY_WRITE(maximum, setMaximum)
 
-    GUI_CS_PROPERTY_READ(text, text)
+   GUI_CS_PROPERTY_READ(text, text)
 
-    GUI_CS_PROPERTY_READ(value, value)
-    GUI_CS_PROPERTY_WRITE(value, setValue)
-    GUI_CS_PROPERTY_NOTIFY(value, valueChanged)
+   GUI_CS_PROPERTY_READ(value, value)
+   GUI_CS_PROPERTY_WRITE(value, setValue)
+   GUI_CS_PROPERTY_NOTIFY(value, valueChanged)
 
-    GUI_CS_PROPERTY_READ(alignment, alignment)
-    GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
+   GUI_CS_PROPERTY_READ(alignment, alignment)
+   GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
 
-    GUI_CS_PROPERTY_READ(textVisible, isTextVisible)
-    GUI_CS_PROPERTY_WRITE(textVisible, setTextVisible)
+   GUI_CS_PROPERTY_READ(textVisible, isTextVisible)
+   GUI_CS_PROPERTY_WRITE(textVisible, setTextVisible)
 
-    GUI_CS_PROPERTY_READ(orientation, orientation)
-    GUI_CS_PROPERTY_WRITE(orientation, setOrientation)
+   GUI_CS_PROPERTY_READ(orientation, orientation)
+   GUI_CS_PROPERTY_WRITE(orientation, setOrientation)
 
-    GUI_CS_PROPERTY_READ(invertedAppearance, invertedAppearance)   
-    GUI_CS_PROPERTY_WRITE(invertedAppearance, setInvertedAppearance) 
+   GUI_CS_PROPERTY_READ(invertedAppearance, invertedAppearance)
+   GUI_CS_PROPERTY_WRITE(invertedAppearance, setInvertedAppearance)
 
-    GUI_CS_PROPERTY_READ(textDirection, textDirection)
-    GUI_CS_PROPERTY_WRITE(textDirection, setTextDirection)
+   GUI_CS_PROPERTY_READ(textDirection, textDirection)
+   GUI_CS_PROPERTY_WRITE(textDirection, setTextDirection)
 
-    GUI_CS_PROPERTY_READ(format, format)
-    GUI_CS_PROPERTY_WRITE(format, setFormat)
+   GUI_CS_PROPERTY_READ(format, format)
+   GUI_CS_PROPERTY_WRITE(format, setFormat)
 
-public:
-    enum Direction { TopToBottom, BottomToTop };
+ public:
+   enum Direction { TopToBottom, BottomToTop };
 
-    explicit QProgressBar(QWidget *parent = 0);
+   explicit QProgressBar(QWidget *parent = 0);
 
-    int minimum() const;
-    int maximum() const;
+   int minimum() const;
+   int maximum() const;
 
-    int value() const;
+   int value() const;
 
-    virtual QString text() const;
-    void setTextVisible(bool visible);
-    bool isTextVisible() const;
+   virtual QString text() const;
+   void setTextVisible(bool visible);
+   bool isTextVisible() const;
 
-    Qt::Alignment alignment() const;
-    void setAlignment(Qt::Alignment alignment);
+   Qt::Alignment alignment() const;
+   void setAlignment(Qt::Alignment alignment);
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+   QSize sizeHint() const;
+   QSize minimumSizeHint() const;
 
-    Qt::Orientation orientation() const;
+   Qt::Orientation orientation() const;
 
-    void setInvertedAppearance(bool invert);
-    bool invertedAppearance() const;    
-  
-    void setTextDirection(QProgressBar::Direction textDirection);
-    QProgressBar::Direction textDirection() const;
-   
-    void setFormat(const QString &format);
-    QString format() const;
+   void setInvertedAppearance(bool invert);
+   bool invertedAppearance() const;
 
-    GUI_CS_SLOT_1(Public, void reset())
-    GUI_CS_SLOT_2(reset) 
+   void setTextDirection(QProgressBar::Direction textDirection);
+   QProgressBar::Direction textDirection() const;
 
-    GUI_CS_SLOT_1(Public, void setRange(int minimum,int maximum))
-    GUI_CS_SLOT_2(setRange) 
+   void setFormat(const QString &format);
+   QString format() const;
 
-    GUI_CS_SLOT_1(Public, void setMinimum(int minimum))
-    GUI_CS_SLOT_2(setMinimum) 
+   GUI_CS_SLOT_1(Public, void reset())
+   GUI_CS_SLOT_2(reset)
 
-    GUI_CS_SLOT_1(Public, void setMaximum(int maximum))
-    GUI_CS_SLOT_2(setMaximum) 
+   GUI_CS_SLOT_1(Public, void setRange(int minimum, int maximum))
+   GUI_CS_SLOT_2(setRange)
 
-    GUI_CS_SLOT_1(Public, void setValue(int value))
-    GUI_CS_SLOT_2(setValue) 
+   GUI_CS_SLOT_1(Public, void setMinimum(int minimum))
+   GUI_CS_SLOT_2(setMinimum)
 
-    GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation un_named_arg1))
-    GUI_CS_SLOT_2(setOrientation) 
+   GUI_CS_SLOT_1(Public, void setMaximum(int maximum))
+   GUI_CS_SLOT_2(setMaximum)
 
-    GUI_CS_SIGNAL_1(Public, void valueChanged(int value))
-    GUI_CS_SIGNAL_2(valueChanged,value) 
+   GUI_CS_SLOT_1(Public, void setValue(int value))
+   GUI_CS_SLOT_2(setValue)
 
-protected:
-    bool event(QEvent *e);
-    void paintEvent(QPaintEvent *);
-    void initStyleOption(QStyleOptionProgressBar *option) const;
+   GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation un_named_arg1))
+   GUI_CS_SLOT_2(setOrientation)
 
-private:
-    Q_DECLARE_PRIVATE(QProgressBar)
-    Q_DISABLE_COPY(QProgressBar)
+   GUI_CS_SIGNAL_1(Public, void valueChanged(int value))
+   GUI_CS_SIGNAL_2(valueChanged, value)
+
+ protected:
+   bool event(QEvent *e);
+   void paintEvent(QPaintEvent *);
+   void initStyleOption(QStyleOptionProgressBar *option) const;
+
+ private:
+   Q_DECLARE_PRIVATE(QProgressBar)
+   Q_DISABLE_COPY(QProgressBar)
 };
 
 #endif // QT_NO_PROGRESSBAR

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,14 +43,14 @@ QT_BEGIN_NAMESPACE
 
 class QPixmapFilterPrivate
 {
-    Q_DECLARE_PUBLIC(QPixmapFilter)
+   Q_DECLARE_PUBLIC(QPixmapFilter)
 
-public:
-    virtual ~QPixmapFilterPrivate() {}
-    QPixmapFilter::FilterType type;
+ public:
+   virtual ~QPixmapFilterPrivate() {}
+   QPixmapFilter::FilterType type;
 
-protected:
-	 QPixmapFilter *q_ptr;
+ protected:
+   QPixmapFilter *q_ptr;
 };
 
 /*!
@@ -102,10 +102,10 @@ protected:
     \internal
 */
 QPixmapFilter::QPixmapFilter(FilterType type, QObject *parent)
-    : QObject(parent), d_ptr(new QPixmapFilterPrivate)   
+   : QObject(parent), d_ptr(new QPixmapFilterPrivate)
 {
-    d_ptr->q_ptr = this;	
-    d_func()->type = type;
+   d_ptr->q_ptr = this;
+   d_func()->type = type;
 }
 
 
@@ -113,10 +113,10 @@ QPixmapFilter::QPixmapFilter(FilterType type, QObject *parent)
    \internal
 */
 QPixmapFilter::QPixmapFilter(QPixmapFilterPrivate &dd, QPixmapFilter::FilterType type, QObject *parent)
-     : QObject(parent), d_ptr(&dd)  
+   : QObject(parent), d_ptr(&dd)
 {
-    d_ptr->q_ptr = this;	
-    d_func()->type = type;
+   d_ptr->q_ptr = this;
+   d_func()->type = type;
 }
 
 
@@ -137,8 +137,8 @@ QPixmapFilter::~QPixmapFilter()
 */
 QPixmapFilter::FilterType QPixmapFilter::type() const
 {
-    Q_D(const QPixmapFilter);
-    return d->type;
+   Q_D(const QPixmapFilter);
+   return d->type;
 }
 
 /*!
@@ -149,7 +149,7 @@ QPixmapFilter::FilterType QPixmapFilter::type() const
 */
 QRectF QPixmapFilter::boundingRectFor(const QRectF &rect) const
 {
-    return rect;
+   return rect;
 }
 
 /*!
@@ -196,16 +196,16 @@ QRectF QPixmapFilter::boundingRectFor(const QRectF &rect) const
 
 class QPixmapConvolutionFilterPrivate : public QPixmapFilterPrivate
 {
-public:
-    QPixmapConvolutionFilterPrivate(): convolutionKernel(0), kernelWidth(0), kernelHeight(0), convoluteAlpha(false) {}
-    ~QPixmapConvolutionFilterPrivate() {
-        delete[] convolutionKernel;
-    }
+ public:
+   QPixmapConvolutionFilterPrivate(): convolutionKernel(0), kernelWidth(0), kernelHeight(0), convoluteAlpha(false) {}
+   ~QPixmapConvolutionFilterPrivate() {
+      delete[] convolutionKernel;
+   }
 
-    qreal *convolutionKernel;
-    int kernelWidth;
-    int kernelHeight;
-    bool convoluteAlpha;
+   qreal *convolutionKernel;
+   int kernelWidth;
+   int kernelHeight;
+   bool convoluteAlpha;
 };
 
 
@@ -217,10 +217,10 @@ public:
     \internal
 */
 QPixmapConvolutionFilter::QPixmapConvolutionFilter(QObject *parent)
-    : QPixmapFilter(*new QPixmapConvolutionFilterPrivate, ConvolutionFilter, parent)
+   : QPixmapFilter(*new QPixmapConvolutionFilterPrivate, ConvolutionFilter, parent)
 {
-    Q_D(QPixmapConvolutionFilter);
-    d->convoluteAlpha = true;
+   Q_D(QPixmapConvolutionFilter);
+   d->convoluteAlpha = true;
 }
 
 /*!
@@ -245,12 +245,12 @@ QPixmapConvolutionFilter::~QPixmapConvolutionFilter()
 */
 void QPixmapConvolutionFilter::setConvolutionKernel(const qreal *kernel, int rows, int columns)
 {
-    Q_D(QPixmapConvolutionFilter);
-    delete [] d->convolutionKernel;
-    d->convolutionKernel = new qreal[rows * columns];
-    memcpy(d->convolutionKernel, kernel, sizeof(qreal) * rows * columns);
-    d->kernelWidth = columns;
-    d->kernelHeight = rows;
+   Q_D(QPixmapConvolutionFilter);
+   delete [] d->convolutionKernel;
+   d->convolutionKernel = new qreal[rows * columns];
+   memcpy(d->convolutionKernel, kernel, sizeof(qreal) * rows * columns);
+   d->kernelWidth = columns;
+   d->kernelHeight = rows;
 }
 
 /*!
@@ -260,8 +260,8 @@ void QPixmapConvolutionFilter::setConvolutionKernel(const qreal *kernel, int row
 */
 const qreal *QPixmapConvolutionFilter::convolutionKernel() const
 {
-    Q_D(const QPixmapConvolutionFilter);
-    return d->convolutionKernel;
+   Q_D(const QPixmapConvolutionFilter);
+   return d->convolutionKernel;
 }
 
 /*!
@@ -271,8 +271,8 @@ const qreal *QPixmapConvolutionFilter::convolutionKernel() const
 */
 int QPixmapConvolutionFilter::rows() const
 {
-    Q_D(const QPixmapConvolutionFilter);
-    return d->kernelHeight;
+   Q_D(const QPixmapConvolutionFilter);
+   return d->kernelHeight;
 }
 
 /*!
@@ -282,8 +282,8 @@ int QPixmapConvolutionFilter::rows() const
 */
 int QPixmapConvolutionFilter::columns() const
 {
-    Q_D(const QPixmapConvolutionFilter);
-    return d->kernelWidth;
+   Q_D(const QPixmapConvolutionFilter);
+   return d->kernelWidth;
 }
 
 
@@ -292,184 +292,195 @@ int QPixmapConvolutionFilter::columns() const
 */
 QRectF QPixmapConvolutionFilter::boundingRectFor(const QRectF &rect) const
 {
-    Q_D(const QPixmapConvolutionFilter);
-    return rect.adjusted(-d->kernelWidth / 2, -d->kernelHeight / 2, (d->kernelWidth - 1) / 2, (d->kernelHeight - 1) / 2);
+   Q_D(const QPixmapConvolutionFilter);
+   return rect.adjusted(-d->kernelWidth / 2, -d->kernelHeight / 2, (d->kernelWidth - 1) / 2, (d->kernelHeight - 1) / 2);
 }
 
 // Convolutes the image
 static void convolute(
-        QImage *destImage,
-        const QPointF &pos,
-        const QImage &srcImage,
-        const QRectF &srcRect,
-        QPainter::CompositionMode mode,
-        qreal *kernel,
-        int kernelWidth,
-        int kernelHeight )
+   QImage *destImage,
+   const QPointF &pos,
+   const QImage &srcImage,
+   const QRectF &srcRect,
+   QPainter::CompositionMode mode,
+   qreal *kernel,
+   int kernelWidth,
+   int kernelHeight )
 {
-    const QImage processImage = (srcImage.format() != QImage::Format_ARGB32_Premultiplied ) ?               srcImage.convertToFormat(QImage::Format_ARGB32_Premultiplied) : srcImage;
-    // TODO: support also other formats directly without copying
+   const QImage processImage = (srcImage.format() != QImage::Format_ARGB32_Premultiplied ) ?
+                               srcImage.convertToFormat(QImage::Format_ARGB32_Premultiplied) : srcImage;
+   // TODO: support also other formats directly without copying
 
-    int *fixedKernel = new int[kernelWidth*kernelHeight];
-    for(int i = 0; i < kernelWidth*kernelHeight; i++)
-    {
-        fixedKernel[i] = (int)(65536 * kernel[i]);
-    }
-    QRectF trect = srcRect.isNull() ? processImage.rect() : srcRect;
-    trect.moveTo(pos);
-    QRectF bounded = trect.adjusted(-kernelWidth / 2, -kernelHeight / 2, (kernelWidth - 1) / 2, (kernelHeight - 1) / 2);
-    QRect rect = bounded.toAlignedRect();
-    QRect targetRect = rect.intersected(destImage->rect());
+   int *fixedKernel = new int[kernelWidth * kernelHeight];
+   for (int i = 0; i < kernelWidth * kernelHeight; i++) {
+      fixedKernel[i] = (int)(65536 * kernel[i]);
+   }
+   QRectF trect = srcRect.isNull() ? processImage.rect() : srcRect;
+   trect.moveTo(pos);
+   QRectF bounded = trect.adjusted(-kernelWidth / 2, -kernelHeight / 2, (kernelWidth - 1) / 2, (kernelHeight - 1) / 2);
+   QRect rect = bounded.toAlignedRect();
+   QRect targetRect = rect.intersected(destImage->rect());
 
-    QRectF srect = srcRect.isNull() ? processImage.rect() : srcRect;
-    QRectF sbounded = srect.adjusted(-kernelWidth / 2, -kernelHeight / 2, (kernelWidth - 1) / 2, (kernelHeight - 1) / 2);
-    QPoint srcStartPoint = sbounded.toAlignedRect().topLeft()+(targetRect.topLeft()-rect.topLeft());
+   QRectF srect = srcRect.isNull() ? processImage.rect() : srcRect;
+   QRectF sbounded = srect.adjusted(-kernelWidth / 2, -kernelHeight / 2, (kernelWidth - 1) / 2, (kernelHeight - 1) / 2);
+   QPoint srcStartPoint = sbounded.toAlignedRect().topLeft() + (targetRect.topLeft() - rect.topLeft());
 
-    const uint *sourceStart = (uint*)processImage.scanLine(0);
-    uint *outputStart = (uint*)destImage->scanLine(0);
+   const uint *sourceStart = (uint *)processImage.scanLine(0);
+   uint *outputStart = (uint *)destImage->scanLine(0);
 
-    int yk = srcStartPoint.y();
-    for (int y = targetRect.top(); y <= targetRect.bottom(); y++) {
-        uint* output = outputStart + (destImage->bytesPerLine()/sizeof(uint))*y+targetRect.left();
-        int xk = srcStartPoint.x();
-        for(int x = targetRect.left(); x <= targetRect.right(); x++) {
-            int r = 0;
-            int g = 0;
-            int b = 0;
-            int a = 0;
+   int yk = srcStartPoint.y();
+   for (int y = targetRect.top(); y <= targetRect.bottom(); y++) {
+      uint *output = outputStart + (destImage->bytesPerLine() / sizeof(uint)) * y + targetRect.left();
+      int xk = srcStartPoint.x();
+      for (int x = targetRect.left(); x <= targetRect.right(); x++) {
+         int r = 0;
+         int g = 0;
+         int b = 0;
+         int a = 0;
 
-            // some out of bounds pre-checking to avoid inner-loop ifs
-            int kernely = -kernelHeight/2;
-            int starty = 0;
-            int endy = kernelHeight;
-            if(yk+kernely+endy >= srcImage.height())
-                endy = kernelHeight-((yk+kernely+endy)-srcImage.height())-1;
-            if(yk+kernely < 0)
-                starty = -(yk+kernely);
+         // some out of bounds pre-checking to avoid inner-loop ifs
+         int kernely = -kernelHeight / 2;
+         int starty = 0;
+         int endy = kernelHeight;
+         if (yk + kernely + endy >= srcImage.height()) {
+            endy = kernelHeight - ((yk + kernely + endy) - srcImage.height()) - 1;
+         }
+         if (yk + kernely < 0) {
+            starty = -(yk + kernely);
+         }
 
-            int kernelx = -kernelWidth/2;
-            int startx = 0;
-            int endx = kernelWidth;
-            if(xk+kernelx+endx >= srcImage.width())
-                endx = kernelWidth-((xk+kernelx+endx)-srcImage.width())-1;
-            if(xk+kernelx < 0)
-                startx = -(xk+kernelx);
+         int kernelx = -kernelWidth / 2;
+         int startx = 0;
+         int endx = kernelWidth;
+         if (xk + kernelx + endx >= srcImage.width()) {
+            endx = kernelWidth - ((xk + kernelx + endx) - srcImage.width()) - 1;
+         }
+         if (xk + kernelx < 0) {
+            startx = -(xk + kernelx);
+         }
 
-            for (int ys = starty; ys < endy; ys ++) {
-                const uint *pix = sourceStart + (processImage.bytesPerLine()/sizeof(uint))*(yk+kernely+ys) + ((xk+kernelx+startx));
-                const uint *endPix = pix+endx-startx;
-                int kernelPos = ys*kernelWidth+startx;
-                while (pix < endPix) {
-                    int factor = fixedKernel[kernelPos++];
-                    a += (((*pix) & 0xff000000)>>24) * factor;
-                    r += (((*pix) & 0x00ff0000)>>16) * factor;
-                    g += (((*pix) & 0x0000ff00)>>8 ) * factor;
-                    b += (((*pix) & 0x000000ff)    ) * factor;
-                    pix++;
-                }
+         for (int ys = starty; ys < endy; ys ++) {
+            const uint *pix = sourceStart + (processImage.bytesPerLine() / sizeof(uint)) * (yk + kernely + ys) + ((
+                                 xk + kernelx + startx));
+            const uint *endPix = pix + endx - startx;
+            int kernelPos = ys * kernelWidth + startx;
+            while (pix < endPix) {
+               int factor = fixedKernel[kernelPos++];
+               a += (((*pix) & 0xff000000) >> 24) * factor;
+               r += (((*pix) & 0x00ff0000) >> 16) * factor;
+               g += (((*pix) & 0x0000ff00) >> 8 ) * factor;
+               b += (((*pix) & 0x000000ff)    ) * factor;
+               pix++;
             }
+         }
 
-            r = qBound((int)0, r >> 16, (int)255);
-            g = qBound((int)0, g >> 16, (int)255);
-            b = qBound((int)0, b >> 16, (int)255);
-            a = qBound((int)0, a >> 16, (int)255);
-            // composition mode checking could be moved outside of loop
-            if(mode == QPainter::CompositionMode_Source) {
-                uint color = (a<<24)+(r<<16)+(g<<8)+b;
-                *output++ = color;
-            } else {
-                uint current = *output;
-                uchar ca = (current&0xff000000)>>24;
-                uchar cr = (current&0x00ff0000)>>16;
-                uchar cg = (current&0x0000ff00)>>8;
-                uchar cb = (current&0x000000ff);
-                uint color =
-                        (((ca*(255-a) >> 8)+a) << 24)+
-                        (((cr*(255-a) >> 8)+r) << 16)+
-                        (((cg*(255-a) >> 8)+g) << 8)+
-                        (((cb*(255-a) >> 8)+b));
-                *output++ = color;;
-            }
-            xk++;
-        }
-        yk++;
-    }
-    delete[] fixedKernel;
+         r = qBound((int)0, r >> 16, (int)255);
+         g = qBound((int)0, g >> 16, (int)255);
+         b = qBound((int)0, b >> 16, (int)255);
+         a = qBound((int)0, a >> 16, (int)255);
+         // composition mode checking could be moved outside of loop
+         if (mode == QPainter::CompositionMode_Source) {
+            uint color = (a << 24) + (r << 16) + (g << 8) + b;
+            *output++ = color;
+         } else {
+            uint current = *output;
+            uchar ca = (current & 0xff000000) >> 24;
+            uchar cr = (current & 0x00ff0000) >> 16;
+            uchar cg = (current & 0x0000ff00) >> 8;
+            uchar cb = (current & 0x000000ff);
+            uint color =
+               (((ca * (255 - a) >> 8) + a) << 24) +
+               (((cr * (255 - a) >> 8) + r) << 16) +
+               (((cg * (255 - a) >> 8) + g) << 8) +
+               (((cb * (255 - a) >> 8) + b));
+            *output++ = color;;
+         }
+         xk++;
+      }
+      yk++;
+   }
+   delete[] fixedKernel;
 }
 
 /*!
     \internal
 */
-void QPixmapConvolutionFilter::draw(QPainter *painter, const QPointF &p, const QPixmap &src, const QRectF& srcRect) const
+void QPixmapConvolutionFilter::draw(QPainter *painter, const QPointF &p, const QPixmap &src,
+                                    const QRectF &srcRect) const
 {
-    Q_D(const QPixmapConvolutionFilter);
-    if (!painter->isActive())
-        return;
+   Q_D(const QPixmapConvolutionFilter);
+   if (!painter->isActive()) {
+      return;
+   }
 
-    if(d->kernelWidth<=0 || d->kernelHeight <= 0)
-        return;
+   if (d->kernelWidth <= 0 || d->kernelHeight <= 0) {
+      return;
+   }
 
-    if (src.isNull())
-        return;
+   if (src.isNull()) {
+      return;
+   }
 
-    QPixmapFilter *filter = painter->paintEngine() && painter->paintEngine()->isExtended() ?
-        static_cast<QPaintEngineEx *>(painter->paintEngine())->pixmapFilter(type(), this) : 0;
-    QPixmapConvolutionFilter *convolutionFilter = static_cast<QPixmapConvolutionFilter*>(filter);
-    if (convolutionFilter) {
-        convolutionFilter->setConvolutionKernel(d->convolutionKernel, d->kernelWidth, d->kernelHeight);
-        convolutionFilter->d_func()->convoluteAlpha = d->convoluteAlpha;
-        convolutionFilter->draw(painter, p, src, srcRect);
-        return;
-    }
+   QPixmapFilter *filter = painter->paintEngine() && painter->paintEngine()->isExtended() ?
+                           static_cast<QPaintEngineEx *>(painter->paintEngine())->pixmapFilter(type(), this) : 0;
+   QPixmapConvolutionFilter *convolutionFilter = static_cast<QPixmapConvolutionFilter *>(filter);
+   if (convolutionFilter) {
+      convolutionFilter->setConvolutionKernel(d->convolutionKernel, d->kernelWidth, d->kernelHeight);
+      convolutionFilter->d_func()->convoluteAlpha = d->convoluteAlpha;
+      convolutionFilter->draw(painter, p, src, srcRect);
+      return;
+   }
 
-    // falling back to raster implementation
+   // falling back to raster implementation
 
-    QImage *target = 0;
-    if (painter->paintEngine()->paintDevice()->devType() == QInternal::Image) {
-        target = static_cast<QImage *>(painter->paintEngine()->paintDevice());
+   QImage *target = 0;
+   if (painter->paintEngine()->paintDevice()->devType() == QInternal::Image) {
+      target = static_cast<QImage *>(painter->paintEngine()->paintDevice());
 
-        QTransform mat = painter->combinedTransform();
+      QTransform mat = painter->combinedTransform();
 
-        if (mat.type() > QTransform::TxTranslate) {
-            // Disabled because of transformation...
+      if (mat.type() > QTransform::TxTranslate) {
+         // Disabled because of transformation...
+         target = 0;
+      } else {
+         QRasterPaintEngine *pe = static_cast<QRasterPaintEngine *>(painter->paintEngine());
+         if (pe->clipType() == QRasterPaintEngine::ComplexClip)
+            // disabled because of complex clipping...
+         {
             target = 0;
-        } else {
-            QRasterPaintEngine *pe = static_cast<QRasterPaintEngine *>(painter->paintEngine());
-            if (pe->clipType() == QRasterPaintEngine::ComplexClip)
-                // disabled because of complex clipping...
-                target = 0;
-            else {
-                QRectF clip = pe->clipBoundingRect();
-                QRectF rect = boundingRectFor(srcRect.isEmpty() ? src.rect() : srcRect);
-                QTransform x = painter->deviceTransform();
-                if (!clip.contains(rect.translated(x.dx() + p.x(), x.dy() + p.y()))) {
-                    target = 0;
-                }
-
+         } else {
+            QRectF clip = pe->clipBoundingRect();
+            QRectF rect = boundingRectFor(srcRect.isEmpty() ? src.rect() : srcRect);
+            QTransform x = painter->deviceTransform();
+            if (!clip.contains(rect.translated(x.dx() + p.x(), x.dy() + p.y()))) {
+               target = 0;
             }
-        }
-    }
 
-    if (target) {
-        QTransform x = painter->deviceTransform();
-        QPointF offset(x.dx(), x.dy());
+         }
+      }
+   }
 
-        convolute(target, p+offset, src.toImage(), srcRect, QPainter::CompositionMode_SourceOver, d->convolutionKernel, d->kernelWidth, d->kernelHeight);
-    } else {
-        QRect srect = srcRect.isNull() ? src.rect() : srcRect.toRect();
-        QRect rect = boundingRectFor(srect).toRect();
-        QImage result = QImage(rect.size(), QImage::Format_ARGB32_Premultiplied);
-        QPoint offset = srect.topLeft() - rect.topLeft();
-        convolute(&result,
-                  offset,
-                  src.toImage(),
-                  srect,
-                  QPainter::CompositionMode_Source,
-                  d->convolutionKernel,
-                  d->kernelWidth,
-                  d->kernelHeight);
-        painter->drawImage(p - offset, result);
-    }
+   if (target) {
+      QTransform x = painter->deviceTransform();
+      QPointF offset(x.dx(), x.dy());
+
+      convolute(target, p + offset, src.toImage(), srcRect, QPainter::CompositionMode_SourceOver, d->convolutionKernel,
+                d->kernelWidth, d->kernelHeight);
+   } else {
+      QRect srect = srcRect.isNull() ? src.rect() : srcRect.toRect();
+      QRect rect = boundingRectFor(srect).toRect();
+      QImage result = QImage(rect.size(), QImage::Format_ARGB32_Premultiplied);
+      QPoint offset = srect.topLeft() - rect.topLeft();
+      convolute(&result,
+                offset,
+                src.toImage(),
+                srect,
+                QPainter::CompositionMode_Source,
+                d->convolutionKernel,
+                d->kernelWidth,
+                d->kernelHeight);
+      painter->drawImage(p - offset, result);
+   }
 }
 
 /*!
@@ -498,11 +509,11 @@ void QPixmapConvolutionFilter::draw(QPainter *painter, const QPointF &p, const Q
 
 class QPixmapBlurFilterPrivate : public QPixmapFilterPrivate
 {
-public:
-    QPixmapBlurFilterPrivate() : radius(5), hints(QGraphicsBlurEffect::PerformanceHint) {}
+ public:
+   QPixmapBlurFilterPrivate() : radius(5), hints(QGraphicsBlurEffect::PerformanceHint) {}
 
-    qreal radius;
-    QGraphicsBlurEffect::BlurHints hints;
+   qreal radius;
+   QGraphicsBlurEffect::BlurHints hints;
 };
 
 
@@ -512,7 +523,7 @@ public:
     \internal
 */
 QPixmapBlurFilter::QPixmapBlurFilter(QObject *parent)
-    : QPixmapFilter(*new QPixmapBlurFilterPrivate, BlurFilter, parent)
+   : QPixmapFilter(*new QPixmapBlurFilterPrivate, BlurFilter, parent)
 {
 }
 
@@ -532,8 +543,8 @@ QPixmapBlurFilter::~QPixmapBlurFilter()
 */
 void QPixmapBlurFilter::setRadius(qreal radius)
 {
-    Q_D(QPixmapBlurFilter);
-    d->radius = radius;
+   Q_D(QPixmapBlurFilter);
+   d->radius = radius;
 }
 
 /*!
@@ -543,8 +554,8 @@ void QPixmapBlurFilter::setRadius(qreal radius)
 */
 qreal QPixmapBlurFilter::radius() const
 {
-    Q_D(const QPixmapBlurFilter);
-    return d->radius;
+   Q_D(const QPixmapBlurFilter);
+   return d->radius;
 }
 
 /*!
@@ -564,8 +575,8 @@ qreal QPixmapBlurFilter::radius() const
 */
 void QPixmapBlurFilter::setBlurHints(QGraphicsBlurEffect::BlurHints hints)
 {
-    Q_D(QPixmapBlurFilter);
-    d->hints = hints;
+   Q_D(QPixmapBlurFilter);
+   d->hints = hints;
 }
 
 /*!
@@ -575,8 +586,8 @@ void QPixmapBlurFilter::setBlurHints(QGraphicsBlurEffect::BlurHints hints)
 */
 QGraphicsBlurEffect::BlurHints QPixmapBlurFilter::blurHints() const
 {
-    Q_D(const QPixmapBlurFilter);
-    return d->hints;
+   Q_D(const QPixmapBlurFilter);
+   return d->hints;
 }
 
 const qreal radiusScale = qreal(2.5);
@@ -586,50 +597,51 @@ const qreal radiusScale = qreal(2.5);
 */
 QRectF QPixmapBlurFilter::boundingRectFor(const QRectF &rect) const
 {
-    Q_D(const QPixmapBlurFilter);
-    const qreal delta = radiusScale * d->radius + 1;
-    return rect.adjusted(-delta, -delta, delta, delta);
+   Q_D(const QPixmapBlurFilter);
+   const qreal delta = radiusScale * d->radius + 1;
+   return rect.adjusted(-delta, -delta, delta, delta);
 }
 
 template <int shift>
 inline int qt_static_shift(int value)
 {
-    if (shift == 0)
-        return value;
-    else if (shift > 0)
-        return value << (uint(shift) & 0x1f);
-    else
-        return value >> (uint(-shift) & 0x1f);
+   if (shift == 0) {
+      return value;
+   } else if (shift > 0) {
+      return value << (uint(shift) & 0x1f);
+   } else {
+      return value >> (uint(-shift) & 0x1f);
+   }
 }
 
 template<int aprec, int zprec>
 inline void qt_blurinner(uchar *bptr, int &zR, int &zG, int &zB, int &zA, int alpha)
 {
-    QRgb *pixel = (QRgb *)bptr;
+   QRgb *pixel = (QRgb *)bptr;
 
 #define Z_MASK (0xff << zprec)
-    const int A_zprec = qt_static_shift<zprec - 24>(*pixel) & Z_MASK;
-    const int R_zprec = qt_static_shift<zprec - 16>(*pixel) & Z_MASK;
-    const int G_zprec = qt_static_shift<zprec - 8>(*pixel)  & Z_MASK;
-    const int B_zprec = qt_static_shift<zprec>(*pixel)      & Z_MASK;
+   const int A_zprec = qt_static_shift < zprec - 24 > (*pixel) & Z_MASK;
+   const int R_zprec = qt_static_shift < zprec - 16 > (*pixel) & Z_MASK;
+   const int G_zprec = qt_static_shift < zprec - 8 > (*pixel)  & Z_MASK;
+   const int B_zprec = qt_static_shift<zprec>(*pixel)      & Z_MASK;
 #undef Z_MASK
 
-    const int zR_zprec = zR >> aprec;
-    const int zG_zprec = zG >> aprec;
-    const int zB_zprec = zB >> aprec;
-    const int zA_zprec = zA >> aprec;
+   const int zR_zprec = zR >> aprec;
+   const int zG_zprec = zG >> aprec;
+   const int zB_zprec = zB >> aprec;
+   const int zA_zprec = zA >> aprec;
 
-    zR += alpha * (R_zprec - zR_zprec);
-    zG += alpha * (G_zprec - zG_zprec);
-    zB += alpha * (B_zprec - zB_zprec);
-    zA += alpha * (A_zprec - zA_zprec);
+   zR += alpha * (R_zprec - zR_zprec);
+   zG += alpha * (G_zprec - zG_zprec);
+   zB += alpha * (B_zprec - zB_zprec);
+   zA += alpha * (A_zprec - zA_zprec);
 
 #define ZA_MASK (0xff << (zprec + aprec))
-    *pixel =
-        qt_static_shift<24 - zprec - aprec>(zA & ZA_MASK)
-        | qt_static_shift<16 - zprec - aprec>(zR & ZA_MASK)
-        | qt_static_shift<8 - zprec - aprec>(zG & ZA_MASK)
-        | qt_static_shift<-zprec - aprec>(zB & ZA_MASK);
+   *pixel =
+      qt_static_shift < 24 - zprec - aprec > (zA & ZA_MASK)
+      | qt_static_shift < 16 - zprec - aprec > (zR & ZA_MASK)
+      | qt_static_shift < 8 - zprec - aprec > (zG & ZA_MASK)
+      | qt_static_shift < -zprec - aprec > (zB & ZA_MASK);
 #undef ZA_MASK
 }
 
@@ -638,41 +650,44 @@ const int alphaIndex = (QSysInfo::ByteOrder == QSysInfo::BigEndian ? 0 : 3);
 template<int aprec, int zprec>
 inline void qt_blurinner_alphaOnly(uchar *bptr, int &z, int alpha)
 {
-    const int A_zprec = int(*(bptr)) << zprec;
-    const int z_zprec = z >> aprec;
-    z += alpha * (A_zprec - z_zprec);
-    *(bptr) = z >> (zprec + aprec);
+   const int A_zprec = int(*(bptr)) << zprec;
+   const int z_zprec = z >> aprec;
+   z += alpha * (A_zprec - z_zprec);
+   *(bptr) = z >> (zprec + aprec);
 }
 
 template<int aprec, int zprec, bool alphaOnly>
-inline void qt_blurrow(QImage & im, int line, int alpha)
+inline void qt_blurrow(QImage &im, int line, int alpha)
 {
-    uchar *bptr = im.scanLine(line);
+   uchar *bptr = im.scanLine(line);
 
-    int zR = 0, zG = 0, zB = 0, zA = 0;
+   int zR = 0, zG = 0, zB = 0, zA = 0;
 
-    if (alphaOnly && im.format() != QImage::Format_Indexed8)
-        bptr += alphaIndex;
+   if (alphaOnly && im.format() != QImage::Format_Indexed8) {
+      bptr += alphaIndex;
+   }
 
-    const int stride = im.depth() >> 3;
-    const int im_width = im.width();
-    for (int index = 0; index < im_width; ++index) {
-        if (alphaOnly)
-            qt_blurinner_alphaOnly<aprec, zprec>(bptr, zA, alpha);
-        else
-            qt_blurinner<aprec, zprec>(bptr, zR, zG, zB, zA, alpha);
-        bptr += stride;
-    }
+   const int stride = im.depth() >> 3;
+   const int im_width = im.width();
+   for (int index = 0; index < im_width; ++index) {
+      if (alphaOnly) {
+         qt_blurinner_alphaOnly<aprec, zprec>(bptr, zA, alpha);
+      } else {
+         qt_blurinner<aprec, zprec>(bptr, zR, zG, zB, zA, alpha);
+      }
+      bptr += stride;
+   }
 
-    bptr -= stride;
+   bptr -= stride;
 
-    for (int index = im_width - 2; index >= 0; --index) {
-        bptr -= stride;
-        if (alphaOnly)
-            qt_blurinner_alphaOnly<aprec, zprec>(bptr, zA, alpha);
-        else
-            qt_blurinner<aprec, zprec>(bptr, zR, zG, zB, zA, alpha);
-    }
+   for (int index = im_width - 2; index >= 0; --index) {
+      bptr -= stride;
+      if (alphaOnly) {
+         qt_blurinner_alphaOnly<aprec, zprec>(bptr, zA, alpha);
+      } else {
+         qt_blurinner<aprec, zprec>(bptr, zR, zG, zB, zA, alpha);
+      }
+   }
 }
 
 /*
@@ -695,201 +710,208 @@ inline void qt_blurrow(QImage & im, int line, int alpha)
 template <int aprec, int zprec, bool alphaOnly>
 void expblur(QImage &img, qreal radius, bool improvedQuality = false, int transposed = 0)
 {
-    // halve the radius if we're using two passes
-    if (improvedQuality)
-        radius *= qreal(0.5);
+   // halve the radius if we're using two passes
+   if (improvedQuality) {
+      radius *= qreal(0.5);
+   }
 
-    Q_ASSERT(img.format() == QImage::Format_ARGB32_Premultiplied
-             || img.format() == QImage::Format_RGB32
-             || img.format() == QImage::Format_Indexed8);
+   Q_ASSERT(img.format() == QImage::Format_ARGB32_Premultiplied
+            || img.format() == QImage::Format_RGB32
+            || img.format() == QImage::Format_Indexed8);
 
-    // choose the alpha such that pixels at radius distance from a fully
-    // saturated pixel will have an alpha component of no greater than
-    // the cutOffIntensity
-    const qreal cutOffIntensity = 2;
-    int alpha = radius <= qreal(1e-5)
-        ? ((1 << aprec)-1)
-        : qRound((1<<aprec)*(1 - qPow(cutOffIntensity * (1 / qreal(255)), 1 / radius)));
+   // choose the alpha such that pixels at radius distance from a fully
+   // saturated pixel will have an alpha component of no greater than
+   // the cutOffIntensity
+   const qreal cutOffIntensity = 2;
+   int alpha = radius <= qreal(1e-5)
+               ? ((1 << aprec) - 1)
+               : qRound((1 << aprec) * (1 - qPow(cutOffIntensity * (1 / qreal(255)), 1 / radius)));
 
-    int img_height = img.height();
-    for (int row = 0; row < img_height; ++row) {
-        for (int i = 0; i <= int(improvedQuality); ++i)
-            qt_blurrow<aprec, zprec, alphaOnly>(img, row, alpha);
-    }
+   int img_height = img.height();
+   for (int row = 0; row < img_height; ++row) {
+      for (int i = 0; i <= int(improvedQuality); ++i) {
+         qt_blurrow<aprec, zprec, alphaOnly>(img, row, alpha);
+      }
+   }
 
-    QImage temp(img.height(), img.width(), img.format());
-    if (transposed >= 0) {
-        if (img.depth() == 8) {
-            qt_memrotate270(reinterpret_cast<const quint8*>(img.bits()),
-                            img.width(), img.height(), img.bytesPerLine(),
-                            reinterpret_cast<quint8*>(temp.bits()),
-                            temp.bytesPerLine());
-        } else {
-            qt_memrotate270(reinterpret_cast<const quint32*>(img.bits()),
-                            img.width(), img.height(), img.bytesPerLine(),
-                            reinterpret_cast<quint32*>(temp.bits()),
-                            temp.bytesPerLine());
-        }
-    } else {
-        if (img.depth() == 8) {
-            qt_memrotate90(reinterpret_cast<const quint8*>(img.bits()),
-                           img.width(), img.height(), img.bytesPerLine(),
-                           reinterpret_cast<quint8*>(temp.bits()),
-                           temp.bytesPerLine());
-        } else {
-            qt_memrotate90(reinterpret_cast<const quint32*>(img.bits()),
-                           img.width(), img.height(), img.bytesPerLine(),
-                           reinterpret_cast<quint32*>(temp.bits()),
-                           temp.bytesPerLine());
-        }
-    }
+   QImage temp(img.height(), img.width(), img.format());
+   if (transposed >= 0) {
+      if (img.depth() == 8) {
+         qt_memrotate270(reinterpret_cast<const quint8 *>(img.bits()),
+                         img.width(), img.height(), img.bytesPerLine(),
+                         reinterpret_cast<quint8 *>(temp.bits()),
+                         temp.bytesPerLine());
+      } else {
+         qt_memrotate270(reinterpret_cast<const quint32 *>(img.bits()),
+                         img.width(), img.height(), img.bytesPerLine(),
+                         reinterpret_cast<quint32 *>(temp.bits()),
+                         temp.bytesPerLine());
+      }
+   } else {
+      if (img.depth() == 8) {
+         qt_memrotate90(reinterpret_cast<const quint8 *>(img.bits()),
+                        img.width(), img.height(), img.bytesPerLine(),
+                        reinterpret_cast<quint8 *>(temp.bits()),
+                        temp.bytesPerLine());
+      } else {
+         qt_memrotate90(reinterpret_cast<const quint32 *>(img.bits()),
+                        img.width(), img.height(), img.bytesPerLine(),
+                        reinterpret_cast<quint32 *>(temp.bits()),
+                        temp.bytesPerLine());
+      }
+   }
 
-    img_height = temp.height();
-    for (int row = 0; row < img_height; ++row) {
-        for (int i = 0; i <= int(improvedQuality); ++i)
-            qt_blurrow<aprec, zprec, alphaOnly>(temp, row, alpha);
-    }
+   img_height = temp.height();
+   for (int row = 0; row < img_height; ++row) {
+      for (int i = 0; i <= int(improvedQuality); ++i) {
+         qt_blurrow<aprec, zprec, alphaOnly>(temp, row, alpha);
+      }
+   }
 
-    if (transposed == 0) {
-        if (img.depth() == 8) {
-            qt_memrotate90(reinterpret_cast<const quint8*>(temp.bits()),
-                           temp.width(), temp.height(), temp.bytesPerLine(),
-                           reinterpret_cast<quint8*>(img.bits()),
-                           img.bytesPerLine());
-        } else {
-            qt_memrotate90(reinterpret_cast<const quint32*>(temp.bits()),
-                           temp.width(), temp.height(), temp.bytesPerLine(),
-                           reinterpret_cast<quint32*>(img.bits()),
-                           img.bytesPerLine());
-        }
-    } else {
-        img = temp;
-    }
+   if (transposed == 0) {
+      if (img.depth() == 8) {
+         qt_memrotate90(reinterpret_cast<const quint8 *>(temp.bits()),
+                        temp.width(), temp.height(), temp.bytesPerLine(),
+                        reinterpret_cast<quint8 *>(img.bits()),
+                        img.bytesPerLine());
+      } else {
+         qt_memrotate90(reinterpret_cast<const quint32 *>(temp.bits()),
+                        temp.width(), temp.height(), temp.bytesPerLine(),
+                        reinterpret_cast<quint32 *>(img.bits()),
+                        img.bytesPerLine());
+      }
+   } else {
+      img = temp;
+   }
 }
 #define AVG(a,b)  ( ((((a)^(b)) & 0xfefefefeUL) >> 1) + ((a)&(b)) )
 #define AVG16(a,b)  ( ((((a)^(b)) & 0xf7deUL) >> 1) + ((a)&(b)) )
 
 Q_GUI_EXPORT QImage qt_halfScaled(const QImage &source)
 {
-    if (source.width() < 2 || source.height() < 2)
-        return QImage();
+   if (source.width() < 2 || source.height() < 2) {
+      return QImage();
+   }
 
-    QImage srcImage = source;
+   QImage srcImage = source;
 
-    if (source.format() == QImage::Format_Indexed8) {
-        // assumes grayscale
-        QImage dest(source.width() / 2, source.height() / 2, srcImage.format());
+   if (source.format() == QImage::Format_Indexed8) {
+      // assumes grayscale
+      QImage dest(source.width() / 2, source.height() / 2, srcImage.format());
 
-        const uchar *src = reinterpret_cast<const uchar*>(const_cast<const QImage &>(srcImage).bits());
-        int sx = srcImage.bytesPerLine();
-        int sx2 = sx << 1;
+      const uchar *src = reinterpret_cast<const uchar *>(const_cast<const QImage &>(srcImage).bits());
+      int sx = srcImage.bytesPerLine();
+      int sx2 = sx << 1;
 
-        uchar *dst = reinterpret_cast<uchar*>(dest.bits());
-        int dx = dest.bytesPerLine();
-        int ww = dest.width();
-        int hh = dest.height();
+      uchar *dst = reinterpret_cast<uchar *>(dest.bits());
+      int dx = dest.bytesPerLine();
+      int ww = dest.width();
+      int hh = dest.height();
 
-        for (int y = hh; y; --y, dst += dx, src += sx2) {
-            const uchar *p1 = src;
-            const uchar *p2 = src + sx;
-            uchar *q = dst;
-            for (int x = ww; x; --x, ++q, p1 += 2, p2 += 2)
-                *q = ((int(p1[0]) + int(p1[1]) + int(p2[0]) + int(p2[1])) + 2) >> 2;
-        }
+      for (int y = hh; y; --y, dst += dx, src += sx2) {
+         const uchar *p1 = src;
+         const uchar *p2 = src + sx;
+         uchar *q = dst;
+         for (int x = ww; x; --x, ++q, p1 += 2, p2 += 2) {
+            *q = ((int(p1[0]) + int(p1[1]) + int(p2[0]) + int(p2[1])) + 2) >> 2;
+         }
+      }
 
-        return dest;
-    } else if (source.format() == QImage::Format_ARGB8565_Premultiplied) {
-        QImage dest(source.width() / 2, source.height() / 2, srcImage.format());
+      return dest;
+   } else if (source.format() == QImage::Format_ARGB8565_Premultiplied) {
+      QImage dest(source.width() / 2, source.height() / 2, srcImage.format());
 
-        const uchar *src = reinterpret_cast<const uchar*>(const_cast<const QImage &>(srcImage).bits());
-        int sx = srcImage.bytesPerLine();
-        int sx2 = sx << 1;
+      const uchar *src = reinterpret_cast<const uchar *>(const_cast<const QImage &>(srcImage).bits());
+      int sx = srcImage.bytesPerLine();
+      int sx2 = sx << 1;
 
-        uchar *dst = reinterpret_cast<uchar*>(dest.bits());
-        int dx = dest.bytesPerLine();
-        int ww = dest.width();
-        int hh = dest.height();
+      uchar *dst = reinterpret_cast<uchar *>(dest.bits());
+      int dx = dest.bytesPerLine();
+      int ww = dest.width();
+      int hh = dest.height();
 
-        for (int y = hh; y; --y, dst += dx, src += sx2) {
-            const uchar *p1 = src;
-            const uchar *p2 = src + sx;
-            uchar *q = dst;
-            for (int x = ww; x; --x, q += 3, p1 += 6, p2 += 6) {
-                // alpha
-                q[0] = AVG(AVG(p1[0], p1[3]), AVG(p2[0], p2[3]));
-                // rgb
-                const quint16 p16_1 = (p1[2] << 8) | p1[1];
-                const quint16 p16_2 = (p1[5] << 8) | p1[4];
-                const quint16 p16_3 = (p2[2] << 8) | p2[1];
-                const quint16 p16_4 = (p2[5] << 8) | p2[4];
-                const quint16 result = AVG16(AVG16(p16_1, p16_2), AVG16(p16_3, p16_4));
-                q[1] = result & 0xff;
-                q[2] = result >> 8;
-            }
-        }
+      for (int y = hh; y; --y, dst += dx, src += sx2) {
+         const uchar *p1 = src;
+         const uchar *p2 = src + sx;
+         uchar *q = dst;
+         for (int x = ww; x; --x, q += 3, p1 += 6, p2 += 6) {
+            // alpha
+            q[0] = AVG(AVG(p1[0], p1[3]), AVG(p2[0], p2[3]));
+            // rgb
+            const quint16 p16_1 = (p1[2] << 8) | p1[1];
+            const quint16 p16_2 = (p1[5] << 8) | p1[4];
+            const quint16 p16_3 = (p2[2] << 8) | p2[1];
+            const quint16 p16_4 = (p2[5] << 8) | p2[4];
+            const quint16 result = AVG16(AVG16(p16_1, p16_2), AVG16(p16_3, p16_4));
+            q[1] = result & 0xff;
+            q[2] = result >> 8;
+         }
+      }
 
-        return dest;
-    } else if (source.format() != QImage::Format_ARGB32_Premultiplied
-               && source.format() != QImage::Format_RGB32)
-    {
-        srcImage = source.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-    }
+      return dest;
+   } else if (source.format() != QImage::Format_ARGB32_Premultiplied
+              && source.format() != QImage::Format_RGB32) {
+      srcImage = source.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+   }
 
-    QImage dest(source.width() / 2, source.height() / 2, srcImage.format());
+   QImage dest(source.width() / 2, source.height() / 2, srcImage.format());
 
-    const quint32 *src = reinterpret_cast<const quint32*>(const_cast<const QImage &>(srcImage).bits());
-    int sx = srcImage.bytesPerLine() >> 2;
-    int sx2 = sx << 1;
+   const quint32 *src = reinterpret_cast<const quint32 *>(const_cast<const QImage &>(srcImage).bits());
+   int sx = srcImage.bytesPerLine() >> 2;
+   int sx2 = sx << 1;
 
-    quint32 *dst = reinterpret_cast<quint32*>(dest.bits());
-    int dx = dest.bytesPerLine() >> 2;
-    int ww = dest.width();
-    int hh = dest.height();
+   quint32 *dst = reinterpret_cast<quint32 *>(dest.bits());
+   int dx = dest.bytesPerLine() >> 2;
+   int ww = dest.width();
+   int hh = dest.height();
 
-    for (int y = hh; y; --y, dst += dx, src += sx2) {
-        const quint32 *p1 = src;
-        const quint32 *p2 = src + sx;
-        quint32 *q = dst;
-        for (int x = ww; x; --x, q++, p1 += 2, p2 += 2)
-            *q = AVG(AVG(p1[0], p1[1]), AVG(p2[0], p2[1]));
-    }
+   for (int y = hh; y; --y, dst += dx, src += sx2) {
+      const quint32 *p1 = src;
+      const quint32 *p2 = src + sx;
+      quint32 *q = dst;
+      for (int x = ww; x; --x, q++, p1 += 2, p2 += 2) {
+         *q = AVG(AVG(p1[0], p1[1]), AVG(p2[0], p2[1]));
+      }
+   }
 
-    return dest;
+   return dest;
 }
 
-Q_GUI_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0)
+Q_GUI_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly,
+                               int transposed = 0)
 {
-    if (blurImage.format() != QImage::Format_ARGB32_Premultiplied
-        && blurImage.format() != QImage::Format_RGB32)
-    {
-        blurImage = blurImage.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-    }
+   if (blurImage.format() != QImage::Format_ARGB32_Premultiplied
+         && blurImage.format() != QImage::Format_RGB32) {
+      blurImage = blurImage.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+   }
 
-    qreal scale = 1;
-    if (radius >= 4 && blurImage.width() >= 2 && blurImage.height() >= 2) {
-        blurImage = qt_halfScaled(blurImage);
-        scale = 2;
-        radius *= qreal(0.5);
-    }
+   qreal scale = 1;
+   if (radius >= 4 && blurImage.width() >= 2 && blurImage.height() >= 2) {
+      blurImage = qt_halfScaled(blurImage);
+      scale = 2;
+      radius *= qreal(0.5);
+   }
 
-    if (alphaOnly)
-        expblur<12, 10, true>(blurImage, radius, quality, transposed);
-    else
-        expblur<12, 10, false>(blurImage, radius, quality, transposed);
+   if (alphaOnly) {
+      expblur<12, 10, true>(blurImage, radius, quality, transposed);
+   } else {
+      expblur<12, 10, false>(blurImage, radius, quality, transposed);
+   }
 
-    if (p) {
-        p->scale(scale, scale);
-        p->setRenderHint(QPainter::SmoothPixmapTransform);
-        p->drawImage(QRect(0, 0, blurImage.width(), blurImage.height()), blurImage);
-    }
+   if (p) {
+      p->scale(scale, scale);
+      p->setRenderHint(QPainter::SmoothPixmapTransform);
+      p->drawImage(QRect(0, 0, blurImage.width(), blurImage.height()), blurImage);
+   }
 }
 
 Q_GUI_EXPORT void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed = 0)
 {
-    if (blurImage.format() == QImage::Format_Indexed8)
-        expblur<12, 10, true>(blurImage, radius, quality, transposed);
-    else
-        expblur<12, 10, false>(blurImage, radius, quality, transposed);
+   if (blurImage.format() == QImage::Format_Indexed8) {
+      expblur<12, 10, true>(blurImage, radius, quality, transposed);
+   } else {
+      expblur<12, 10, false>(blurImage, radius, quality, transposed);
+   }
 }
 
 Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
@@ -899,90 +921,94 @@ Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale
 */
 void QPixmapBlurFilter::draw(QPainter *painter, const QPointF &p, const QPixmap &src, const QRectF &rect) const
 {
-    Q_D(const QPixmapBlurFilter);
-    if (!painter->isActive())
-        return;
+   Q_D(const QPixmapBlurFilter);
+   if (!painter->isActive()) {
+      return;
+   }
 
-    if (src.isNull())
-        return;
+   if (src.isNull()) {
+      return;
+   }
 
-    QRectF srcRect = rect;
-    if (srcRect.isNull())
-        srcRect = src.rect();
+   QRectF srcRect = rect;
+   if (srcRect.isNull()) {
+      srcRect = src.rect();
+   }
 
-    if (d->radius <= 1) {
-        painter->drawPixmap(srcRect.translated(p), src, srcRect);
-        return;
-    }
+   if (d->radius <= 1) {
+      painter->drawPixmap(srcRect.translated(p), src, srcRect);
+      return;
+   }
 
-    qreal scaledRadius = radiusScale * d->radius;
-    qreal scale;
-    if (qt_scaleForTransform(painter->transform(), &scale))
-        scaledRadius /= scale;
+   qreal scaledRadius = radiusScale * d->radius;
+   qreal scale;
+   if (qt_scaleForTransform(painter->transform(), &scale)) {
+      scaledRadius /= scale;
+   }
 
-    QPixmapFilter *filter = painter->paintEngine() && painter->paintEngine()->isExtended() ?
-        static_cast<QPaintEngineEx *>(painter->paintEngine())->pixmapFilter(type(), this) : 0;
-    QPixmapBlurFilter *blurFilter = static_cast<QPixmapBlurFilter*>(filter);
-    if (blurFilter) {
-        blurFilter->setRadius(scaledRadius);
-        blurFilter->setBlurHints(d->hints);
-        blurFilter->draw(painter, p, src, srcRect);
-        return;
-    }
+   QPixmapFilter *filter = painter->paintEngine() && painter->paintEngine()->isExtended() ?
+                           static_cast<QPaintEngineEx *>(painter->paintEngine())->pixmapFilter(type(), this) : 0;
+   QPixmapBlurFilter *blurFilter = static_cast<QPixmapBlurFilter *>(filter);
+   if (blurFilter) {
+      blurFilter->setRadius(scaledRadius);
+      blurFilter->setBlurHints(d->hints);
+      blurFilter->draw(painter, p, src, srcRect);
+      return;
+   }
 
-    QImage srcImage;
-    QImage destImage;
+   QImage srcImage;
+   QImage destImage;
 
-    if (srcRect == src.rect()) {
-        srcImage = src.toImage();
-    } else {
-        QRect rect = srcRect.toAlignedRect().intersected(src.rect());
-        srcImage = src.copy(rect).toImage();
-    }
+   if (srcRect == src.rect()) {
+      srcImage = src.toImage();
+   } else {
+      QRect rect = srcRect.toAlignedRect().intersected(src.rect());
+      srcImage = src.copy(rect).toImage();
+   }
 
-    QTransform transform = painter->worldTransform();
-    painter->translate(p);
-    qt_blurImage(painter, srcImage, scaledRadius, (d->hints & QGraphicsBlurEffect::QualityHint), false);
-    painter->setWorldTransform(transform);
+   QTransform transform = painter->worldTransform();
+   painter->translate(p);
+   qt_blurImage(painter, srcImage, scaledRadius, (d->hints & QGraphicsBlurEffect::QualityHint), false);
+   painter->setWorldTransform(transform);
 }
 
 // grayscales the image to dest (could be same). If rect isn't defined
 // destination image size is used to determine the dimension of grayscaling
 // process.
-static void grayscale(const QImage &image, QImage &dest, const QRect& rect = QRect())
+static void grayscale(const QImage &image, QImage &dest, const QRect &rect = QRect())
 {
-    QRect destRect = rect;
-    QRect srcRect = rect;
-    if (rect.isNull()) {
-        srcRect = dest.rect();
-        destRect = dest.rect();
-    }
-    if (&image != &dest) {
-        destRect.moveTo(QPoint(0, 0));
-    }
+   QRect destRect = rect;
+   QRect srcRect = rect;
+   if (rect.isNull()) {
+      srcRect = dest.rect();
+      destRect = dest.rect();
+   }
+   if (&image != &dest) {
+      destRect.moveTo(QPoint(0, 0));
+   }
 
-    unsigned int *data = (unsigned int *)image.bits();
-    unsigned int *outData = (unsigned int *)dest.bits();
+   unsigned int *data = (unsigned int *)image.bits();
+   unsigned int *outData = (unsigned int *)dest.bits();
 
-    if (dest.size() == image.size() && image.rect() == srcRect) {
-        // a bit faster loop for grayscaling everything
-        int pixels = dest.width() * dest.height();
-        for (int i = 0; i < pixels; ++i) {
-            int val = qGray(data[i]);
-            outData[i] = qRgba(val, val, val, qAlpha(data[i]));
-        }
-    } else {
-        int yd = destRect.top();
-        for (int y = srcRect.top(); y <= srcRect.bottom() && y < image.height(); y++) {
-            data = (unsigned int*)image.scanLine(y);
-            outData = (unsigned int*)dest.scanLine(yd++);
-            int xd = destRect.left();
-            for (int x = srcRect.left(); x <= srcRect.right() && x < image.width(); x++) {
-                int val = qGray(data[x]);
-                outData[xd++] = qRgba(val, val, val, qAlpha(data[x]));
-            }
-        }
-    }
+   if (dest.size() == image.size() && image.rect() == srcRect) {
+      // a bit faster loop for grayscaling everything
+      int pixels = dest.width() * dest.height();
+      for (int i = 0; i < pixels; ++i) {
+         int val = qGray(data[i]);
+         outData[i] = qRgba(val, val, val, qAlpha(data[i]));
+      }
+   } else {
+      int yd = destRect.top();
+      for (int y = srcRect.top(); y <= srcRect.bottom() && y < image.height(); y++) {
+         data = (unsigned int *)image.scanLine(y);
+         outData = (unsigned int *)dest.scanLine(yd++);
+         int xd = destRect.left();
+         for (int x = srcRect.left(); x <= srcRect.right() && x < image.width(); x++) {
+            int val = qGray(data[x]);
+            outData[xd++] = qRgba(val, val, val, qAlpha(data[x]));
+         }
+      }
+   }
 }
 
 /*!
@@ -1007,13 +1033,13 @@ static void grayscale(const QImage &image, QImage &dest, const QRect& rect = QRe
 */
 class QPixmapColorizeFilterPrivate : public QPixmapFilterPrivate
 {
-    Q_DECLARE_PUBLIC(QPixmapColorizeFilter)
-public:
-    QColor color;
-    qreal strength;
-    quint32 opaque : 1;
-    quint32 alphaBlend : 1;
-    quint32 padding : 30;
+   Q_DECLARE_PUBLIC(QPixmapColorizeFilter)
+ public:
+   QColor color;
+   qreal strength;
+   quint32 opaque : 1;
+   quint32 alphaBlend : 1;
+   quint32 padding : 30;
 };
 
 /*!
@@ -1024,13 +1050,13 @@ public:
     \internal
 */
 QPixmapColorizeFilter::QPixmapColorizeFilter(QObject *parent)
-    : QPixmapFilter(*new QPixmapColorizeFilterPrivate, ColorizeFilter, parent)
+   : QPixmapFilter(*new QPixmapColorizeFilterPrivate, ColorizeFilter, parent)
 {
-    Q_D(QPixmapColorizeFilter);
-    d->color = QColor(0, 0, 192);
-    d->strength = qreal(1);
-    d->opaque = true;
-    d->alphaBlend = false;
+   Q_D(QPixmapColorizeFilter);
+   d->color = QColor(0, 0, 192);
+   d->strength = qreal(1);
+   d->opaque = true;
+   d->alphaBlend = false;
 }
 
 /*!
@@ -1040,8 +1066,8 @@ QPixmapColorizeFilter::QPixmapColorizeFilter(QObject *parent)
 */
 QColor QPixmapColorizeFilter::color() const
 {
-    Q_D(const QPixmapColorizeFilter);
-    return d->color;
+   Q_D(const QPixmapColorizeFilter);
+   return d->color;
 }
 
 /*!
@@ -1051,8 +1077,8 @@ QColor QPixmapColorizeFilter::color() const
 */
 void QPixmapColorizeFilter::setColor(const QColor &color)
 {
-    Q_D(QPixmapColorizeFilter);
-    d->color = color;
+   Q_D(QPixmapColorizeFilter);
+   d->color = color;
 }
 
 /*!
@@ -1063,8 +1089,8 @@ void QPixmapColorizeFilter::setColor(const QColor &color)
 */
 qreal QPixmapColorizeFilter::strength() const
 {
-    Q_D(const QPixmapColorizeFilter);
-    return d->strength;
+   Q_D(const QPixmapColorizeFilter);
+   return d->strength;
 }
 
 /*!
@@ -1074,86 +1100,91 @@ qreal QPixmapColorizeFilter::strength() const
 */
 void QPixmapColorizeFilter::setStrength(qreal strength)
 {
-    Q_D(QPixmapColorizeFilter);
-    d->strength = qBound(qreal(0), strength, qreal(1));
-    d->opaque = !qFuzzyIsNull(d->strength);
-    d->alphaBlend = !qFuzzyIsNull(d->strength - 1);
+   Q_D(QPixmapColorizeFilter);
+   d->strength = qBound(qreal(0), strength, qreal(1));
+   d->opaque = !qFuzzyIsNull(d->strength);
+   d->alphaBlend = !qFuzzyIsNull(d->strength - 1);
 }
 
 /*!
     \internal
 */
-void QPixmapColorizeFilter::draw(QPainter *painter, const QPointF &dest, const QPixmap &src, const QRectF &srcRect) const
+void QPixmapColorizeFilter::draw(QPainter *painter, const QPointF &dest, const QPixmap &src,
+                                 const QRectF &srcRect) const
 {
-    Q_D(const QPixmapColorizeFilter);
+   Q_D(const QPixmapColorizeFilter);
 
-    if (src.isNull())
-        return;
+   if (src.isNull()) {
+      return;
+   }
 
-    QPixmapFilter *filter = painter->paintEngine() && painter->paintEngine()->isExtended() ?
-        static_cast<QPaintEngineEx *>(painter->paintEngine())->pixmapFilter(type(), this) : 0;
-    QPixmapColorizeFilter *colorizeFilter = static_cast<QPixmapColorizeFilter*>(filter);
-    if (colorizeFilter) {
-        colorizeFilter->setColor(d->color);
-        colorizeFilter->setStrength(d->strength);
-        colorizeFilter->draw(painter, dest, src, srcRect);
-        return;
-    }
+   QPixmapFilter *filter = painter->paintEngine() && painter->paintEngine()->isExtended() ?
+                           static_cast<QPaintEngineEx *>(painter->paintEngine())->pixmapFilter(type(), this) : 0;
+   QPixmapColorizeFilter *colorizeFilter = static_cast<QPixmapColorizeFilter *>(filter);
+   if (colorizeFilter) {
+      colorizeFilter->setColor(d->color);
+      colorizeFilter->setStrength(d->strength);
+      colorizeFilter->draw(painter, dest, src, srcRect);
+      return;
+   }
 
-    // falling back to raster implementation
+   // falling back to raster implementation
 
-    if (!d->opaque) {
-        painter->drawPixmap(dest, src, srcRect);
-        return;
-    }
+   if (!d->opaque) {
+      painter->drawPixmap(dest, src, srcRect);
+      return;
+   }
 
-    QImage srcImage;
-    QImage destImage;
+   QImage srcImage;
+   QImage destImage;
 
-    if (srcRect.isNull()) {
-        srcImage = src.toImage();
-        srcImage = srcImage.convertToFormat(srcImage.hasAlphaChannel() ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32);
-        destImage = QImage(srcImage.size(), srcImage.format());
-    } else {
-        QRect rect = srcRect.toAlignedRect().intersected(src.rect());
+   if (srcRect.isNull()) {
+      srcImage = src.toImage();
+      srcImage = srcImage.convertToFormat(srcImage.hasAlphaChannel() ? QImage::Format_ARGB32_Premultiplied :
+                                          QImage::Format_RGB32);
+      destImage = QImage(srcImage.size(), srcImage.format());
+   } else {
+      QRect rect = srcRect.toAlignedRect().intersected(src.rect());
 
-        srcImage = src.copy(rect).toImage();
-        srcImage = srcImage.convertToFormat(srcImage.hasAlphaChannel() ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32);
-        destImage = QImage(rect.size(), srcImage.format());
-    }
+      srcImage = src.copy(rect).toImage();
+      srcImage = srcImage.convertToFormat(srcImage.hasAlphaChannel() ? QImage::Format_ARGB32_Premultiplied :
+                                          QImage::Format_RGB32);
+      destImage = QImage(rect.size(), srcImage.format());
+   }
 
-    // do colorizing
-    QPainter destPainter(&destImage);
-    grayscale(srcImage, destImage, srcImage.rect());
-    destPainter.setCompositionMode(QPainter::CompositionMode_Screen);
-    destPainter.fillRect(srcImage.rect(), d->color);
-    destPainter.end();
+   // do colorizing
+   QPainter destPainter(&destImage);
+   grayscale(srcImage, destImage, srcImage.rect());
+   destPainter.setCompositionMode(QPainter::CompositionMode_Screen);
+   destPainter.fillRect(srcImage.rect(), d->color);
+   destPainter.end();
 
-    if (d->alphaBlend) {
-        // alpha blending srcImage and destImage
-        QImage buffer = srcImage;
-        QPainter bufPainter(&buffer);
-        bufPainter.setOpacity(d->strength);
-        bufPainter.drawImage(0, 0, destImage);
-        bufPainter.end();
-        destImage = buffer;
-    }
+   if (d->alphaBlend) {
+      // alpha blending srcImage and destImage
+      QImage buffer = srcImage;
+      QPainter bufPainter(&buffer);
+      bufPainter.setOpacity(d->strength);
+      bufPainter.drawImage(0, 0, destImage);
+      bufPainter.end();
+      destImage = buffer;
+   }
 
-    if (srcImage.hasAlphaChannel())
-        destImage.setAlphaChannel(srcImage.alphaChannel());
+   if (srcImage.hasAlphaChannel()) {
+      destImage.setAlphaChannel(srcImage.alphaChannel());
+   }
 
-    painter->drawImage(dest, destImage);
+   painter->drawImage(dest, destImage);
 }
 
 class QPixmapDropShadowFilterPrivate : public QPixmapFilterPrivate
 {
-public:
-    QPixmapDropShadowFilterPrivate()
-        : offset(8, 8), color(63, 63, 63, 180), radius(1) {}
+ public:
+   QPixmapDropShadowFilterPrivate()
+      : offset(8, 8), color(63, 63, 63, 180), radius(1) {}
 
-    QPointF offset;
-    QColor color;
-    qreal radius;
+   QPointF offset;
+   QColor color;
+   qreal radius;
 };
 
 /*!
@@ -1195,7 +1226,7 @@ public:
     \internal
 */
 QPixmapDropShadowFilter::QPixmapDropShadowFilter(QObject *parent)
-    : QPixmapFilter(*new QPixmapDropShadowFilterPrivate, DropShadowFilter, parent)
+   : QPixmapFilter(*new QPixmapDropShadowFilterPrivate, DropShadowFilter, parent)
 {
 }
 
@@ -1219,8 +1250,8 @@ QPixmapDropShadowFilter::~QPixmapDropShadowFilter()
 */
 qreal QPixmapDropShadowFilter::blurRadius() const
 {
-    Q_D(const QPixmapDropShadowFilter);
-    return d->radius;
+   Q_D(const QPixmapDropShadowFilter);
+   return d->radius;
 }
 
 /*!
@@ -1234,8 +1265,8 @@ qreal QPixmapDropShadowFilter::blurRadius() const
 */
 void QPixmapDropShadowFilter::setBlurRadius(qreal radius)
 {
-    Q_D(QPixmapDropShadowFilter);
-    d->radius = radius;
+   Q_D(QPixmapDropShadowFilter);
+   d->radius = radius;
 }
 
 /*!
@@ -1247,8 +1278,8 @@ void QPixmapDropShadowFilter::setBlurRadius(qreal radius)
 */
 QColor QPixmapDropShadowFilter::color() const
 {
-    Q_D(const QPixmapDropShadowFilter);
-    return d->color;
+   Q_D(const QPixmapDropShadowFilter);
+   return d->color;
 }
 
 /*!
@@ -1260,8 +1291,8 @@ QColor QPixmapDropShadowFilter::color() const
 */
 void QPixmapDropShadowFilter::setColor(const QColor &color)
 {
-    Q_D(QPixmapDropShadowFilter);
-    d->color = color;
+   Q_D(QPixmapDropShadowFilter);
+   d->color = color;
 }
 
 /*!
@@ -1273,8 +1304,8 @@ void QPixmapDropShadowFilter::setColor(const QColor &color)
 */
 QPointF QPixmapDropShadowFilter::offset() const
 {
-    Q_D(const QPixmapDropShadowFilter);
-    return d->offset;
+   Q_D(const QPixmapDropShadowFilter);
+   return d->offset;
 }
 
 /*!
@@ -1286,8 +1317,8 @@ QPointF QPixmapDropShadowFilter::offset() const
 */
 void QPixmapDropShadowFilter::setOffset(const QPointF &offset)
 {
-    Q_D(QPixmapDropShadowFilter);
-    d->offset = offset;
+   Q_D(QPixmapDropShadowFilter);
+   d->offset = offset;
 }
 
 /*!
@@ -1307,8 +1338,8 @@ void QPixmapDropShadowFilter::setOffset(const QPointF &offset)
  */
 QRectF QPixmapDropShadowFilter::boundingRectFor(const QRectF &rect) const
 {
-    Q_D(const QPixmapDropShadowFilter);
-    return rect.united(rect.translated(d->offset).adjusted(-d->radius, -d->radius, d->radius, d->radius));
+   Q_D(const QPixmapDropShadowFilter);
+   return rect.united(rect.translated(d->offset).adjusted(-d->radius, -d->radius, d->radius, d->radius));
 }
 
 /*!
@@ -1319,47 +1350,48 @@ void QPixmapDropShadowFilter::draw(QPainter *p,
                                    const QPixmap &px,
                                    const QRectF &src) const
 {
-    Q_D(const QPixmapDropShadowFilter);
+   Q_D(const QPixmapDropShadowFilter);
 
-    if (px.isNull())
-        return;
+   if (px.isNull()) {
+      return;
+   }
 
-    QPixmapFilter *filter = p->paintEngine() && p->paintEngine()->isExtended() ?
-        static_cast<QPaintEngineEx *>(p->paintEngine())->pixmapFilter(type(), this) : 0;
-    QPixmapDropShadowFilter *dropShadowFilter = static_cast<QPixmapDropShadowFilter*>(filter);
-    if (dropShadowFilter) {
-        dropShadowFilter->setColor(d->color);
-        dropShadowFilter->setBlurRadius(d->radius);
-        dropShadowFilter->setOffset(d->offset);
-        dropShadowFilter->draw(p, pos, px, src);
-        return;
-    }
+   QPixmapFilter *filter = p->paintEngine() && p->paintEngine()->isExtended() ?
+                           static_cast<QPaintEngineEx *>(p->paintEngine())->pixmapFilter(type(), this) : 0;
+   QPixmapDropShadowFilter *dropShadowFilter = static_cast<QPixmapDropShadowFilter *>(filter);
+   if (dropShadowFilter) {
+      dropShadowFilter->setColor(d->color);
+      dropShadowFilter->setBlurRadius(d->radius);
+      dropShadowFilter->setOffset(d->offset);
+      dropShadowFilter->draw(p, pos, px, src);
+      return;
+   }
 
-    QImage tmp(px.size(), QImage::Format_ARGB32_Premultiplied);
-    tmp.fill(0);
-    QPainter tmpPainter(&tmp);
-    tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
-    tmpPainter.drawPixmap(d->offset, px);
-    tmpPainter.end();
+   QImage tmp(px.size(), QImage::Format_ARGB32_Premultiplied);
+   tmp.fill(0);
+   QPainter tmpPainter(&tmp);
+   tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
+   tmpPainter.drawPixmap(d->offset, px);
+   tmpPainter.end();
 
-    // blur the alpha channel
-    QImage blurred(tmp.size(), QImage::Format_ARGB32_Premultiplied);
-    blurred.fill(0);
-    QPainter blurPainter(&blurred);
-    qt_blurImage(&blurPainter, tmp, d->radius, false, true);
-    blurPainter.end();
+   // blur the alpha channel
+   QImage blurred(tmp.size(), QImage::Format_ARGB32_Premultiplied);
+   blurred.fill(0);
+   QPainter blurPainter(&blurred);
+   qt_blurImage(&blurPainter, tmp, d->radius, false, true);
+   blurPainter.end();
 
-    // blacken the image...
-    QPainter blackenPainter(&blurred);
-    blackenPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    blackenPainter.fillRect(blurred.rect(), d->color);
-    blackenPainter.end();
+   // blacken the image...
+   QPainter blackenPainter(&blurred);
+   blackenPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+   blackenPainter.fillRect(blurred.rect(), d->color);
+   blackenPainter.end();
 
-    // draw the blurred drop shadow...
-    p->drawImage(pos, blurred);
+   // draw the blurred drop shadow...
+   p->drawImage(pos, blurred);
 
-    // Draw the actual pixmap...
-    p->drawPixmap(pos, px, src);
+   // Draw the actual pixmap...
+   p->drawPixmap(pos, px, src);
 }
 
 QT_END_NAMESPACE

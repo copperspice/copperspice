@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -98,7 +98,7 @@ QT_BEGIN_NAMESPACE
     Once any setter methods are called, isNull() will return false.
 */
 QSslConfiguration::QSslConfiguration()
-    : d(new QSslConfigurationPrivate)
+   : d(new QSslConfigurationPrivate)
 {
 }
 
@@ -107,7 +107,7 @@ QSslConfiguration::QSslConfiguration()
     null, this object will be null too.
 */
 QSslConfiguration::QSslConfiguration(const QSslConfiguration &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -116,7 +116,7 @@ QSslConfiguration::QSslConfiguration(const QSslConfiguration &other)
 */
 QSslConfiguration::~QSslConfiguration()
 {
-    // QSharedDataPointer deletes d for us if necessary
+   // QSharedDataPointer deletes d for us if necessary
 }
 
 /*!
@@ -125,8 +125,8 @@ QSslConfiguration::~QSslConfiguration()
 */
 QSslConfiguration &QSslConfiguration::operator=(const QSslConfiguration &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -140,20 +140,21 @@ QSslConfiguration &QSslConfiguration::operator=(const QSslConfiguration &other)
 */
 bool QSslConfiguration::operator==(const QSslConfiguration &other) const
 {
-    if (d == other.d)
-        return true;
-    return d->peerCertificate == other.d->peerCertificate &&
-        d->peerCertificateChain == other.d->peerCertificateChain &&
-        d->localCertificate == other.d->localCertificate &&
-        d->privateKey == other.d->privateKey &&
-        d->sessionCipher == other.d->sessionCipher &&
-        d->ciphers == other.d->ciphers &&
-        d->caCertificates == other.d->caCertificates &&
-        d->protocol == other.d->protocol &&
-        d->peerVerifyMode == other.d->peerVerifyMode &&
-        d->peerVerifyDepth == other.d->peerVerifyDepth &&
-        d->allowRootCertOnDemandLoading == other.d->allowRootCertOnDemandLoading &&
-        d->sslOptions == other.d->sslOptions;
+   if (d == other.d) {
+      return true;
+   }
+   return d->peerCertificate == other.d->peerCertificate &&
+          d->peerCertificateChain == other.d->peerCertificateChain &&
+          d->localCertificate == other.d->localCertificate &&
+          d->privateKey == other.d->privateKey &&
+          d->sessionCipher == other.d->sessionCipher &&
+          d->ciphers == other.d->ciphers &&
+          d->caCertificates == other.d->caCertificates &&
+          d->protocol == other.d->protocol &&
+          d->peerVerifyMode == other.d->peerVerifyMode &&
+          d->peerVerifyDepth == other.d->peerVerifyDepth &&
+          d->allowRootCertOnDemandLoading == other.d->allowRootCertOnDemandLoading &&
+          d->sslOptions == other.d->sslOptions;
 }
 
 /*!
@@ -177,19 +178,19 @@ bool QSslConfiguration::operator==(const QSslConfiguration &other) const
 */
 bool QSslConfiguration::isNull() const
 {
-    return (d->protocol == QSsl::SecureProtocols &&
-            d->peerVerifyMode == QSslSocket::AutoVerifyPeer &&
-            d->peerVerifyDepth == 0 &&
-            d->allowRootCertOnDemandLoading == true &&
-            d->caCertificates.count() == 0 &&
-            d->ciphers.count() == 0 &&
-            d->localCertificate.isNull() &&
-            d->privateKey.isNull() &&
-            d->peerCertificate.isNull() &&
-            d->peerCertificateChain.count() == 0 &&
-            d->sslOptions == ( QSsl::SslOptionDisableEmptyFragments
-                              |QSsl::SslOptionDisableLegacyRenegotiation
-                              |QSsl::SslOptionDisableCompression));
+   return (d->protocol == QSsl::SecureProtocols &&
+           d->peerVerifyMode == QSslSocket::AutoVerifyPeer &&
+           d->peerVerifyDepth == 0 &&
+           d->allowRootCertOnDemandLoading == true &&
+           d->caCertificates.count() == 0 &&
+           d->ciphers.count() == 0 &&
+           d->localCertificate.isNull() &&
+           d->privateKey.isNull() &&
+           d->peerCertificate.isNull() &&
+           d->peerCertificateChain.count() == 0 &&
+           d->sslOptions == ( QSsl::SslOptionDisableEmptyFragments
+                              | QSsl::SslOptionDisableLegacyRenegotiation
+                              | QSsl::SslOptionDisableCompression));
 }
 
 /*!
@@ -199,7 +200,7 @@ bool QSslConfiguration::isNull() const
 */
 QSsl::SslProtocol QSslConfiguration::protocol() const
 {
-    return d->protocol;
+   return d->protocol;
 }
 
 /*!
@@ -213,7 +214,7 @@ QSsl::SslProtocol QSslConfiguration::protocol() const
 */
 void QSslConfiguration::setProtocol(QSsl::SslProtocol protocol)
 {
-    d->protocol = protocol;
+   d->protocol = protocol;
 }
 
 /*!
@@ -229,7 +230,7 @@ void QSslConfiguration::setProtocol(QSsl::SslProtocol protocol)
 */
 QSslSocket::PeerVerifyMode QSslConfiguration::peerVerifyMode() const
 {
-    return d->peerVerifyMode;
+   return d->peerVerifyMode;
 }
 
 /*!
@@ -245,7 +246,7 @@ QSslSocket::PeerVerifyMode QSslConfiguration::peerVerifyMode() const
 */
 void QSslConfiguration::setPeerVerifyMode(QSslSocket::PeerVerifyMode mode)
 {
-    d->peerVerifyMode = mode;
+   d->peerVerifyMode = mode;
 }
 
 
@@ -262,7 +263,7 @@ void QSslConfiguration::setPeerVerifyMode(QSslSocket::PeerVerifyMode mode)
 */
 int QSslConfiguration::peerVerifyDepth() const
 {
-    return d->peerVerifyDepth;
+   return d->peerVerifyDepth;
 }
 
 /*!
@@ -278,11 +279,11 @@ int QSslConfiguration::peerVerifyDepth() const
 */
 void QSslConfiguration::setPeerVerifyDepth(int depth)
 {
-    if (depth < 0) {
-        qWarning("QSslConfiguration::setPeerVerifyDepth: cannot set negative depth of %d", depth);
-        return;
-    }
-    d->peerVerifyDepth = depth;
+   if (depth < 0) {
+      qWarning("QSslConfiguration::setPeerVerifyDepth: cannot set negative depth of %d", depth);
+      return;
+   }
+   d->peerVerifyDepth = depth;
 }
 
 /*!
@@ -293,7 +294,7 @@ void QSslConfiguration::setPeerVerifyDepth(int depth)
 */
 QSslCertificate QSslConfiguration::localCertificate() const
 {
-    return d->localCertificate;
+   return d->localCertificate;
 }
 
 /*!
@@ -314,7 +315,7 @@ QSslCertificate QSslConfiguration::localCertificate() const
 */
 void QSslConfiguration::setLocalCertificate(const QSslCertificate &certificate)
 {
-    d->localCertificate = certificate;
+   d->localCertificate = certificate;
 }
 
 /*!
@@ -347,7 +348,7 @@ void QSslConfiguration::setLocalCertificate(const QSslCertificate &certificate)
 */
 QSslCertificate QSslConfiguration::peerCertificate() const
 {
-    return d->peerCertificate;
+   return d->peerCertificate;
 }
 
 /*!
@@ -379,7 +380,7 @@ QSslCertificate QSslConfiguration::peerCertificate() const
 */
 QList<QSslCertificate> QSslConfiguration::peerCertificateChain() const
 {
-    return d->peerCertificateChain;
+   return d->peerCertificateChain;
 }
 
 /*!
@@ -397,7 +398,7 @@ QList<QSslCertificate> QSslConfiguration::peerCertificateChain() const
 */
 QSslCipher QSslConfiguration::sessionCipher() const
 {
-    return d->sessionCipher;
+   return d->sessionCipher;
 }
 
 /*!
@@ -408,7 +409,7 @@ QSslCipher QSslConfiguration::sessionCipher() const
 */
 QSslKey QSslConfiguration::privateKey() const
 {
-    return d->privateKey;
+   return d->privateKey;
 }
 
 /*!
@@ -426,7 +427,7 @@ QSslKey QSslConfiguration::privateKey() const
 */
 void QSslConfiguration::setPrivateKey(const QSslKey &key)
 {
-    d->privateKey = key;
+   d->privateKey = key;
 }
 
 /*!
@@ -450,7 +451,7 @@ void QSslConfiguration::setPrivateKey(const QSslKey &key)
 */
 QList<QSslCipher> QSslConfiguration::ciphers() const
 {
-    return d->ciphers;
+   return d->ciphers;
 }
 
 /*!
@@ -465,7 +466,7 @@ QList<QSslCipher> QSslConfiguration::ciphers() const
 */
 void QSslConfiguration::setCiphers(const QList<QSslCipher> &ciphers)
 {
-    d->ciphers = ciphers;
+   d->ciphers = ciphers;
 }
 
 /*!
@@ -480,7 +481,7 @@ void QSslConfiguration::setCiphers(const QList<QSslCipher> &ciphers)
 */
 QList<QSslCertificate> QSslConfiguration::caCertificates() const
 {
-    return d->caCertificates;
+   return d->caCertificates;
 }
 
 /*!
@@ -493,8 +494,8 @@ QList<QSslCertificate> QSslConfiguration::caCertificates() const
 */
 void QSslConfiguration::setCaCertificates(const QList<QSslCertificate> &certificates)
 {
-    d->caCertificates = certificates;
-    d->allowRootCertOnDemandLoading = false;
+   d->caCertificates = certificates;
+   d->allowRootCertOnDemandLoading = false;
 }
 
 /*!
@@ -504,10 +505,11 @@ void QSslConfiguration::setCaCertificates(const QList<QSslCertificate> &certific
 */
 void QSslConfiguration::setSslOption(QSsl::SslOption option, bool on)
 {
-    if (on)
-        d->sslOptions |= option;
-    else
-        d->sslOptions &= ~option;
+   if (on) {
+      d->sslOptions |= option;
+   } else {
+      d->sslOptions &= ~option;
+   }
 }
 
 /*!
@@ -517,7 +519,7 @@ void QSslConfiguration::setSslOption(QSsl::SslOption option, bool on)
 */
 bool QSslConfiguration::testSslOption(QSsl::SslOption option) const
 {
-    return d->sslOptions & option;
+   return d->sslOptions & option;
 }
 
 /*!
@@ -538,7 +540,7 @@ bool QSslConfiguration::testSslOption(QSsl::SslOption option) const
 */
 QSslConfiguration QSslConfiguration::defaultConfiguration()
 {
-    return QSslConfigurationPrivate::defaultConfiguration();
+   return QSslConfigurationPrivate::defaultConfiguration();
 }
 
 /*!
@@ -550,7 +552,7 @@ QSslConfiguration QSslConfiguration::defaultConfiguration()
 */
 void QSslConfiguration::setDefaultConfiguration(const QSslConfiguration &configuration)
 {
-    QSslConfigurationPrivate::setDefaultConfiguration(configuration);
+   QSslConfigurationPrivate::setDefaultConfiguration(configuration);
 }
 
 QT_END_NAMESPACE

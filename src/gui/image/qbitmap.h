@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,28 +35,32 @@ class QVariant;
 class Q_GUI_EXPORT QBitmap : public QPixmap
 {
 
-public:
-    QBitmap();
-    QBitmap(const QPixmap &);
-    QBitmap(int w, int h);
-    explicit QBitmap(const QSize &);
-    explicit QBitmap(const QString &fileName, const char *format=0);
-    ~QBitmap();
+ public:
+   QBitmap();
+   QBitmap(const QPixmap &);
+   QBitmap(int w, int h);
+   explicit QBitmap(const QSize &);
+   explicit QBitmap(const QString &fileName, const char *format = 0);
+   ~QBitmap();
 
-    QBitmap &operator=(const QPixmap &);
-    inline void swap(QBitmap &other) { QPixmap::swap(other); } // prevent QBitmap<->QPixmap swaps
-    operator QVariant() const;
+   QBitmap &operator=(const QPixmap &);
+   inline void swap(QBitmap &other) {
+      QPixmap::swap(other);   // prevent QBitmap<->QPixmap swaps
+   }
+   operator QVariant() const;
 
-    inline void clear() { fill(Qt::color0); }
+   inline void clear() {
+      fill(Qt::color0);
+   }
 
-    static QBitmap fromImage(const QImage &image, Qt::ImageConversionFlags flags = Qt::AutoColor);
-    static QBitmap fromData(const QSize &size, const uchar *bits,
-                            QImage::Format monoFormat = QImage::Format_MonoLSB);
+   static QBitmap fromImage(const QImage &image, Qt::ImageConversionFlags flags = Qt::AutoColor);
+   static QBitmap fromData(const QSize &size, const uchar *bits,
+                           QImage::Format monoFormat = QImage::Format_MonoLSB);
 
-    QBitmap transformed(const QMatrix &) const;
-    QBitmap transformed(const QTransform &matrix) const;
+   QBitmap transformed(const QMatrix &) const;
+   QBitmap transformed(const QTransform &matrix) const;
 
-    typedef QExplicitlySharedDataPointer<QPixmapData> DataPtr;
+   typedef QExplicitlySharedDataPointer<QPixmapData> DataPtr;
 };
 Q_DECLARE_SHARED(QBitmap)
 

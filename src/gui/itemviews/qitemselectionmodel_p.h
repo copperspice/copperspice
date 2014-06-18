@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,55 +32,55 @@ QT_BEGIN_NAMESPACE
 
 class QItemSelectionModelPrivate
 {
-    Q_DECLARE_PUBLIC(QItemSelectionModel)
+   Q_DECLARE_PUBLIC(QItemSelectionModel)
 
-public:
-    QItemSelectionModelPrivate()
-      : model(0),currentCommand(QItemSelectionModel::NoUpdate),
+ public:
+   QItemSelectionModelPrivate()
+      : model(0), currentCommand(QItemSelectionModel::NoUpdate),
         tableSelected(false), tableColCount(0), tableRowCount(0) {}
 
-    virtual ~QItemSelectionModelPrivate() {}
+   virtual ~QItemSelectionModelPrivate() {}
 
-    QItemSelection expandSelection(const QItemSelection &selection,
-                                   QItemSelectionModel::SelectionFlags command) const;
+   QItemSelection expandSelection(const QItemSelection &selection,
+                                  QItemSelectionModel::SelectionFlags command) const;
 
-    void initModel(QAbstractItemModel *model);
+   void initModel(QAbstractItemModel *model);
 
-    void _q_rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
-    void _q_columnsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
-    void _q_rowsAboutToBeInserted(const QModelIndex &parent, int start, int end);
-    void _q_columnsAboutToBeInserted(const QModelIndex &parent, int start, int end);
-    void _q_layoutAboutToBeChanged();
-    void _q_layoutChanged();
+   void _q_rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
+   void _q_columnsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
+   void _q_rowsAboutToBeInserted(const QModelIndex &parent, int start, int end);
+   void _q_columnsAboutToBeInserted(const QModelIndex &parent, int start, int end);
+   void _q_layoutAboutToBeChanged();
+   void _q_layoutChanged();
 
-    inline void remove(QList<QItemSelectionRange> &r)
-    {
-        QList<QItemSelectionRange>::const_iterator it = r.constBegin();
-        for (; it != r.constEnd(); ++it)
-            ranges.removeAll(*it);
-    }
+   inline void remove(QList<QItemSelectionRange> &r) {
+      QList<QItemSelectionRange>::const_iterator it = r.constBegin();
+      for (; it != r.constEnd(); ++it) {
+         ranges.removeAll(*it);
+      }
+   }
 
-    inline void finalize()
-    {
-        ranges.merge(currentSelection, currentCommand);
-        if (!currentSelection.isEmpty())  // ### perhaps this should be in QList
-            currentSelection.clear();
-    }
+   inline void finalize() {
+      ranges.merge(currentSelection, currentCommand);
+      if (!currentSelection.isEmpty()) { // ### perhaps this should be in QList
+         currentSelection.clear();
+      }
+   }
 
-    QPointer<QAbstractItemModel> model;
-    QItemSelection ranges;
-    QItemSelection currentSelection;
-    QPersistentModelIndex currentIndex;
-    QItemSelectionModel::SelectionFlags currentCommand;
-    QList<QPersistentModelIndex> savedPersistentIndexes;
-    QList<QPersistentModelIndex> savedPersistentCurrentIndexes;
-    // optimization when all indexes are selected
-    bool tableSelected;
-    QPersistentModelIndex tableParent;
-    int tableColCount, tableRowCount;
+   QPointer<QAbstractItemModel> model;
+   QItemSelection ranges;
+   QItemSelection currentSelection;
+   QPersistentModelIndex currentIndex;
+   QItemSelectionModel::SelectionFlags currentCommand;
+   QList<QPersistentModelIndex> savedPersistentIndexes;
+   QList<QPersistentModelIndex> savedPersistentCurrentIndexes;
+   // optimization when all indexes are selected
+   bool tableSelected;
+   QPersistentModelIndex tableParent;
+   int tableColCount, tableRowCount;
 
-protected:
-	 QItemSelectionModel *q_ptr;
+ protected:
+   QItemSelectionModel *q_ptr;
 
 };
 

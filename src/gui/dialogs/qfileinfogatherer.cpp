@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,12 +41,12 @@ QT_BEGIN_NAMESPACE
 static bool fetchedRoot = false;
 void qt_test_resetFetchedRoot()
 {
-    fetchedRoot = false;
+   fetchedRoot = false;
 }
 
 bool qt_test_isFetchedRoot()
 {
-    return fetchedRoot;
+   return fetchedRoot;
 }
 #endif
 
@@ -54,26 +54,26 @@ bool qt_test_isFetchedRoot()
     Creates thread
 */
 QFileInfoGatherer::QFileInfoGatherer(QObject *parent)
-    : QThread(parent), abort(false),
+   : QThread(parent), abort(false),
 #ifndef QT_NO_FILESYSTEMWATCHER
-      watcher(0),
+     watcher(0),
 #endif
-      m_resolveSymlinks(false), m_iconProvider(&defaultProvider)
+     m_resolveSymlinks(false), m_iconProvider(&defaultProvider)
 {
 #ifdef Q_OS_WIN
-    m_resolveSymlinks = true;
+   m_resolveSymlinks = true;
 #else
-    userId = getuid();
-    groupId = getgid();
+   userId = getuid();
+   groupId = getgid();
 #endif
 
 #ifndef QT_NO_FILESYSTEMWATCHER
-    watcher = new QFileSystemWatcher(this);
-    connect(watcher, SIGNAL(directoryChanged(const QString &)), this, SLOT(list(const QString &)));
-    connect(watcher, SIGNAL(fileChanged(const QString &)), this, SLOT(updateFile(const QString &)));
+   watcher = new QFileSystemWatcher(this);
+   connect(watcher, SIGNAL(directoryChanged(const QString &)), this, SLOT(list(const QString &)));
+   connect(watcher, SIGNAL(fileChanged(const QString &)), this, SLOT(updateFile(const QString &)));
 #endif
 
-    start(LowPriority);
+   start(LowPriority);
 }
 
 /*!
@@ -81,36 +81,36 @@ QFileInfoGatherer::QFileInfoGatherer(QObject *parent)
 */
 QFileInfoGatherer::~QFileInfoGatherer()
 {
-    QMutexLocker locker(&mutex);
-    abort = true;
-    condition.wakeOne();
-    locker.unlock();
-    wait();
+   QMutexLocker locker(&mutex);
+   abort = true;
+   condition.wakeOne();
+   locker.unlock();
+   wait();
 }
 
 void QFileInfoGatherer::setResolveSymlinks(bool enable)
 {
-    Q_UNUSED(enable);
+   Q_UNUSED(enable);
 #ifdef Q_OS_WIN
-    QMutexLocker locker(&mutex);
-    m_resolveSymlinks = enable;
+   QMutexLocker locker(&mutex);
+   m_resolveSymlinks = enable;
 #endif
 }
 
 bool QFileInfoGatherer::resolveSymlinks() const
 {
-    return m_resolveSymlinks;
+   return m_resolveSymlinks;
 }
 
 void QFileInfoGatherer::setIconProvider(QFileIconProvider *provider)
 {
-    QMutexLocker locker(&mutex);
-    m_iconProvider = provider;
+   QMutexLocker locker(&mutex);
+   m_iconProvider = provider;
 }
 
 QFileIconProvider *QFileInfoGatherer::iconProvider() const
 {
-    return m_iconProvider;
+   return m_iconProvider;
 }
 
 /*!
@@ -120,18 +120,18 @@ QFileIconProvider *QFileInfoGatherer::iconProvider() const
 */
 void QFileInfoGatherer::fetchExtendedInformation(const QString &path, const QStringList &files)
 {
-    QMutexLocker locker(&mutex);
-    // See if we already have this dir/file in our que
-    int loc = this->path.lastIndexOf(path);
-    while (loc > 0)  {
-        if (this->files.at(loc) == files) {
-            return;
-        }
-        loc = this->path.lastIndexOf(path, loc - 1);
-    }
-    this->path.push(path);
-    this->files.push(files);
-    condition.wakeAll();
+   QMutexLocker locker(&mutex);
+   // See if we already have this dir/file in our que
+   int loc = this->path.lastIndexOf(path);
+   while (loc > 0)  {
+      if (this->files.at(loc) == files) {
+         return;
+      }
+      loc = this->path.lastIndexOf(path, loc - 1);
+   }
+   this->path.push(path);
+   this->files.push(files);
+   condition.wakeAll();
 }
 
 /*!
@@ -141,9 +141,9 @@ void QFileInfoGatherer::fetchExtendedInformation(const QString &path, const QStr
 */
 void QFileInfoGatherer::updateFile(const QString &filePath)
 {
-    QString dir = filePath.mid(0, filePath.lastIndexOf(QDir::separator()));
-    QString fileName = filePath.mid(dir.length() + 1);
-    fetchExtendedInformation(dir, QStringList(fileName));
+   QString dir = filePath.mid(0, filePath.lastIndexOf(QDir::separator()));
+   QString fileName = filePath.mid(dir.length() + 1);
+   fetchExtendedInformation(dir, QStringList(fileName));
 }
 
 /*
@@ -154,9 +154,9 @@ void QFileInfoGatherer::updateFile(const QString &filePath)
 void QFileInfoGatherer::clear()
 {
 #ifndef QT_NO_FILESYSTEMWATCHER
-    QMutexLocker locker(&mutex);
-    watcher->removePaths(watcher->files());
-    watcher->removePaths(watcher->directories());
+   QMutexLocker locker(&mutex);
+   watcher->removePaths(watcher->files());
+   watcher->removePaths(watcher->directories());
 #endif
 }
 
@@ -168,8 +168,8 @@ void QFileInfoGatherer::clear()
 void QFileInfoGatherer::removePath(const QString &path)
 {
 #ifndef QT_NO_FILESYSTEMWATCHER
-    QMutexLocker locker(&mutex);
-    watcher->removePath(path);
+   QMutexLocker locker(&mutex);
+   watcher->removePath(path);
 #endif
 }
 
@@ -180,7 +180,7 @@ void QFileInfoGatherer::removePath(const QString &path)
 */
 void QFileInfoGatherer::list(const QString &directoryPath)
 {
-    fetchExtendedInformation(directoryPath, QStringList());
+   fetchExtendedInformation(directoryPath, QStringList());
 }
 
 /*
@@ -188,78 +188,86 @@ void QFileInfoGatherer::list(const QString &directoryPath)
 */
 void QFileInfoGatherer::run()
 {
-    forever {
-        bool updateFiles = false;
-        QMutexLocker locker(&mutex);
-        if (abort) {
-            return;
-        }
-        if (this->path.isEmpty())
-            condition.wait(&mutex);
-        QString path;
-        QStringList list;
-        if (!this->path.isEmpty()) {
-            path = this->path.first();
-            list = this->files.first();
-            this->path.pop_front();
-            this->files.pop_front();
-            updateFiles = true;
-        }
-        locker.unlock();
-        if (updateFiles)
-            getFileInfos(path, list);
-    }
+   forever {
+      bool updateFiles = false;
+      QMutexLocker locker(&mutex);
+      if (abort)
+      {
+         return;
+      }
+      if (this->path.isEmpty())
+      {
+         condition.wait(&mutex);
+      }
+      QString path;
+      QStringList list;
+      if (!this->path.isEmpty())
+      {
+         path = this->path.first();
+         list = this->files.first();
+         this->path.pop_front();
+         this->files.pop_front();
+         updateFiles = true;
+      }
+      locker.unlock();
+      if (updateFiles)
+      {
+         getFileInfos(path, list);
+      }
+   }
 }
 
 QExtendedInformation QFileInfoGatherer::getInfo(const QFileInfo &fileInfo) const
 {
-    QExtendedInformation info(fileInfo);
-    info.icon = m_iconProvider->icon(fileInfo);
-    info.displayType = m_iconProvider->type(fileInfo);
+   QExtendedInformation info(fileInfo);
+   info.icon = m_iconProvider->icon(fileInfo);
+   info.displayType = m_iconProvider->type(fileInfo);
 
 #ifndef QT_NO_FILESYSTEMWATCHER
-    // ### Not ready to listen all modifications
-    #if 0
-        // Enable the next two commented out lines to get updates when the file sizes change...
-        if (!fileInfo.exists() && !fileInfo.isSymLink()) {
-            info.size = -1;
-            //watcher->removePath(fileInfo.absoluteFilePath());
-        } else {
-            if (!fileInfo.absoluteFilePath().isEmpty() && fileInfo.exists() && fileInfo.isReadable()
-                && !watcher->files().contains(fileInfo.absoluteFilePath())) {
-                //watcher->addPath(fileInfo.absoluteFilePath());
-            }
-        }
-    #endif
+   // ### Not ready to listen all modifications
+#if 0
+   // Enable the next two commented out lines to get updates when the file sizes change...
+   if (!fileInfo.exists() && !fileInfo.isSymLink()) {
+      info.size = -1;
+      //watcher->removePath(fileInfo.absoluteFilePath());
+   } else {
+      if (!fileInfo.absoluteFilePath().isEmpty() && fileInfo.exists() && fileInfo.isReadable()
+            && !watcher->files().contains(fileInfo.absoluteFilePath())) {
+         //watcher->addPath(fileInfo.absoluteFilePath());
+      }
+   }
+#endif
 #endif
 
-    if (m_resolveSymlinks && info.isSymLink(/* ignoreNtfsSymLinks = */ true)) {
-        QFileInfo resolvedInfo(fileInfo.symLinkTarget());
-        resolvedInfo = resolvedInfo.canonicalFilePath();
+   if (m_resolveSymlinks && info.isSymLink(/* ignoreNtfsSymLinks = */ true)) {
+      QFileInfo resolvedInfo(fileInfo.symLinkTarget());
+      resolvedInfo = resolvedInfo.canonicalFilePath();
 
-        if (resolvedInfo.exists()) {
-            // resolves having a const method call a non const Signal 01/09/2014
-            emit const_cast<QFileInfoGatherer *> (this)->nameResolved(fileInfo.filePath(), resolvedInfo.fileName());
-        }
-    }
+      if (resolvedInfo.exists()) {
+         // resolves having a const method call a non const Signal 01/09/2014
+         emit const_cast<QFileInfoGatherer *> (this)->nameResolved(fileInfo.filePath(), resolvedInfo.fileName());
+      }
+   }
 
-    return info;
+   return info;
 }
 
 QString QFileInfoGatherer::translateDriveName(const QFileInfo &drive) const
 {
-    QString driveName = drive.absoluteFilePath();
+   QString driveName = drive.absoluteFilePath();
 
 #if defined(Q_OS_WIN)
-    if (driveName.startsWith(QLatin1Char('/'))) // UNC host
-        return drive.fileName();
+   if (driveName.startsWith(QLatin1Char('/'))) { // UNC host
+      return drive.fileName();
+   }
 #endif
 
 #if defined(Q_OS_WIN)
-    if (driveName.endsWith(QLatin1Char('/')))
-        driveName.chop(1);
+   if (driveName.endsWith(QLatin1Char('/'))) {
+      driveName.chop(1);
+   }
 #endif
-    return driveName;
+   return driveName;
 }
 
 /*
@@ -269,75 +277,80 @@ QString QFileInfoGatherer::translateDriveName(const QFileInfo &drive) const
 void QFileInfoGatherer::getFileInfos(const QString &path, const QStringList &files)
 {
 #ifndef QT_NO_FILESYSTEMWATCHER
-    if (files.isEmpty()
-        && !watcher->directories().contains(path)
-        && !path.isEmpty()
-        && !path.startsWith(QLatin1String("//")) /*don't watch UNC path*/) {
-        watcher->addPath(path);
-    }
+   if (files.isEmpty()
+         && !watcher->directories().contains(path)
+         && !path.isEmpty()
+         && !path.startsWith(QLatin1String("//")) /*don't watch UNC path*/) {
+      watcher->addPath(path);
+   }
 #endif
 
-    // List drives
-    if (path.isEmpty()) {
+   // List drives
+   if (path.isEmpty()) {
 #ifdef QT_BUILD_INTERNAL
-        fetchedRoot = true;
+      fetchedRoot = true;
 #endif
-        QFileInfoList infoList;
-        if (files.isEmpty()) {
-            infoList = QDir::drives();
-        } else {
-            for (int i = 0; i < files.count(); ++i)
-                infoList << QFileInfo(files.at(i));
-        }
-        for (int i = infoList.count() - 1; i >= 0; --i) {
-            QString driveName = translateDriveName(infoList.at(i));
-            QList<QPair<QString,QFileInfo> > updatedFiles;
-            updatedFiles.append(QPair<QString,QFileInfo>(driveName, infoList.at(i)));
-            emit updates(path, updatedFiles);
-        }
-        return;
-    }
+      QFileInfoList infoList;
+      if (files.isEmpty()) {
+         infoList = QDir::drives();
+      } else {
+         for (int i = 0; i < files.count(); ++i) {
+            infoList << QFileInfo(files.at(i));
+         }
+      }
+      for (int i = infoList.count() - 1; i >= 0; --i) {
+         QString driveName = translateDriveName(infoList.at(i));
+         QList<QPair<QString, QFileInfo> > updatedFiles;
+         updatedFiles.append(QPair<QString, QFileInfo>(driveName, infoList.at(i)));
+         emit updates(path, updatedFiles);
+      }
+      return;
+   }
 
-    QElapsedTimer base;
-    base.start();
-    QFileInfo fileInfo;
-    bool firstTime = true;
-    QList<QPair<QString, QFileInfo> > updatedFiles;
-    QStringList filesToCheck = files;
+   QElapsedTimer base;
+   base.start();
+   QFileInfo fileInfo;
+   bool firstTime = true;
+   QList<QPair<QString, QFileInfo> > updatedFiles;
+   QStringList filesToCheck = files;
 
-    QString itPath = QDir::fromNativeSeparators(files.isEmpty() ? path : QLatin1String(""));
-    QDirIterator dirIt(itPath, QDir::AllEntries | QDir::System | QDir::Hidden);
-    QStringList allFiles;
-    while(!abort && dirIt.hasNext()) {
-        dirIt.next();
-        fileInfo = dirIt.fileInfo();
-        allFiles.append(fileInfo.fileName());
-	fetch(fileInfo, base, firstTime, updatedFiles, path);
-    }
-    if (!allFiles.isEmpty())
-        emit newListOfFiles(path, allFiles);
+   QString itPath = QDir::fromNativeSeparators(files.isEmpty() ? path : QLatin1String(""));
+   QDirIterator dirIt(itPath, QDir::AllEntries | QDir::System | QDir::Hidden);
+   QStringList allFiles;
+   while (!abort && dirIt.hasNext()) {
+      dirIt.next();
+      fileInfo = dirIt.fileInfo();
+      allFiles.append(fileInfo.fileName());
+      fetch(fileInfo, base, firstTime, updatedFiles, path);
+   }
+   if (!allFiles.isEmpty()) {
+      emit newListOfFiles(path, allFiles);
+   }
 
-    QStringList::const_iterator filesIt = filesToCheck.constBegin();
-    while(!abort && filesIt != filesToCheck.constEnd()) {
-        fileInfo.setFile(path + QDir::separator() + *filesIt);
-        ++filesIt;
-        fetch(fileInfo, base, firstTime, updatedFiles, path);
-    }
-    if (!updatedFiles.isEmpty())
-        emit updates(path, updatedFiles);
-    emit directoryLoaded(path);
+   QStringList::const_iterator filesIt = filesToCheck.constBegin();
+   while (!abort && filesIt != filesToCheck.constEnd()) {
+      fileInfo.setFile(path + QDir::separator() + *filesIt);
+      ++filesIt;
+      fetch(fileInfo, base, firstTime, updatedFiles, path);
+   }
+   if (!updatedFiles.isEmpty()) {
+      emit updates(path, updatedFiles);
+   }
+   emit directoryLoaded(path);
 }
 
-void QFileInfoGatherer::fetch(const QFileInfo &fileInfo, QElapsedTimer &base, bool &firstTime, QList<QPair<QString, QFileInfo> > &updatedFiles, const QString &path) {
-    updatedFiles.append(QPair<QString, QFileInfo>(fileInfo.fileName(), fileInfo));
-    QElapsedTimer current;
-    current.start();
-    if ((firstTime && updatedFiles.count() > 100) || base.msecsTo(current) > 1000) {
-        emit updates(path, updatedFiles);
-        updatedFiles.clear();
-        base = current;
-        firstTime = false;
-    }
+void QFileInfoGatherer::fetch(const QFileInfo &fileInfo, QElapsedTimer &base, bool &firstTime,
+                              QList<QPair<QString, QFileInfo> > &updatedFiles, const QString &path)
+{
+   updatedFiles.append(QPair<QString, QFileInfo>(fileInfo.fileName(), fileInfo));
+   QElapsedTimer current;
+   current.start();
+   if ((firstTime && updatedFiles.count() > 100) || base.msecsTo(current) > 1000) {
+      emit updates(path, updatedFiles);
+      updatedFiles.clear();
+      base = current;
+      firstTime = false;
+   }
 }
 
 #endif // QT_NO_FILESYSTEMMODEL

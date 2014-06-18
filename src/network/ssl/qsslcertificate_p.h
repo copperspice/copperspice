@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,41 +36,40 @@ QT_BEGIN_NAMESPACE
 
 class QSslCertificatePrivate
 {
-public:
-    QSslCertificatePrivate()
-        : null(true), x509(0)
-    {
-        QSslSocketPrivate::ensureInitialized();
-    }
+ public:
+   QSslCertificatePrivate()
+      : null(true), x509(0) {
+      QSslSocketPrivate::ensureInitialized();
+   }
 
-    ~QSslCertificatePrivate()
-    {
-        if (x509)
-            q_X509_free(x509);
-    }
+   ~QSslCertificatePrivate() {
+      if (x509) {
+         q_X509_free(x509);
+      }
+   }
 
-    bool null;
-    QByteArray versionString;
-    QByteArray serialNumberString;
+   bool null;
+   QByteArray versionString;
+   QByteArray serialNumberString;
 
-    QMap<QString, QString> issuerInfo;
-    QMap<QString, QString> subjectInfo;
-    QDateTime notValidAfter;
-    QDateTime notValidBefore;
+   QMap<QString, QString> issuerInfo;
+   QMap<QString, QString> subjectInfo;
+   QDateTime notValidAfter;
+   QDateTime notValidBefore;
 
-    X509 *x509;
+   X509 *x509;
 
-    void init(const QByteArray &data, QSsl::EncodingFormat format);
+   void init(const QByteArray &data, QSsl::EncodingFormat format);
 
-    static QByteArray QByteArray_from_X509(X509 *x509, QSsl::EncodingFormat format);
-    static QSslCertificate QSslCertificate_from_X509(X509 *x509);
-    static QList<QSslCertificate> certificatesFromPem(const QByteArray &pem, int count = -1);
-    static QList<QSslCertificate> certificatesFromDer(const QByteArray &der, int count = -1);
-    static bool isBlacklisted(const QSslCertificate &certificate);
+   static QByteArray QByteArray_from_X509(X509 *x509, QSsl::EncodingFormat format);
+   static QSslCertificate QSslCertificate_from_X509(X509 *x509);
+   static QList<QSslCertificate> certificatesFromPem(const QByteArray &pem, int count = -1);
+   static QList<QSslCertificate> certificatesFromDer(const QByteArray &der, int count = -1);
+   static bool isBlacklisted(const QSslCertificate &certificate);
 
-    friend class QSslSocketBackendPrivate;
+   friend class QSslSocketBackendPrivate;
 
-    QAtomicInt ref;
+   QAtomicInt ref;
 };
 
 QT_END_NAMESPACE

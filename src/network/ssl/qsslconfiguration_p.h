@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,42 +36,42 @@ QT_BEGIN_NAMESPACE
 
 class QSslConfigurationPrivate: public QSharedData
 {
-public:
-    QSslConfigurationPrivate()
-        : protocol(QSsl::SecureProtocols),
-          peerVerifyMode(QSslSocket::AutoVerifyPeer),
-          peerVerifyDepth(0),
-          allowRootCertOnDemandLoading(true),
-          sslOptions(QSsl::SslOptionDisableEmptyFragments
-                     |QSsl::SslOptionDisableLegacyRenegotiation
-                     |QSsl::SslOptionDisableCompression)
-    { }
+ public:
+   QSslConfigurationPrivate()
+      : protocol(QSsl::SecureProtocols),
+        peerVerifyMode(QSslSocket::AutoVerifyPeer),
+        peerVerifyDepth(0),
+        allowRootCertOnDemandLoading(true),
+        sslOptions(QSsl::SslOptionDisableEmptyFragments
+                   | QSsl::SslOptionDisableLegacyRenegotiation
+                   | QSsl::SslOptionDisableCompression) {
+   }
 
-    QSslCertificate peerCertificate;
-    QList<QSslCertificate> peerCertificateChain;
-    QSslCertificate localCertificate;
+   QSslCertificate peerCertificate;
+   QList<QSslCertificate> peerCertificateChain;
+   QSslCertificate localCertificate;
 
-    QSslKey privateKey;
-    QSslCipher sessionCipher;
-    QList<QSslCipher> ciphers;
-    QList<QSslCertificate> caCertificates;
+   QSslKey privateKey;
+   QSslCipher sessionCipher;
+   QList<QSslCipher> ciphers;
+   QList<QSslCertificate> caCertificates;
 
-    QSsl::SslProtocol protocol;
-    QSslSocket::PeerVerifyMode peerVerifyMode;
-    int peerVerifyDepth;
-    bool allowRootCertOnDemandLoading;
+   QSsl::SslProtocol protocol;
+   QSslSocket::PeerVerifyMode peerVerifyMode;
+   int peerVerifyDepth;
+   bool allowRootCertOnDemandLoading;
 
-    QSsl::SslOptions sslOptions;
+   QSsl::SslOptions sslOptions;
 
-    // in qsslsocket.cpp:
-    static QSslConfiguration defaultConfiguration();
-    static void setDefaultConfiguration(const QSslConfiguration &configuration);
-    static void deepCopyDefaultConfiguration(QSslConfigurationPrivate *config);
+   // in qsslsocket.cpp:
+   static QSslConfiguration defaultConfiguration();
+   static void setDefaultConfiguration(const QSslConfiguration &configuration);
+   static void deepCopyDefaultConfiguration(QSslConfigurationPrivate *config);
 };
 
 // implemented here for inlining purposes
 inline QSslConfiguration::QSslConfiguration(QSslConfigurationPrivate *dd)
-    : d(dd)
+   : d(dd)
 {
 }
 

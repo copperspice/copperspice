@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -51,43 +51,42 @@ class QGLScreenPrivate;
 
 class Q_OPENGL_EXPORT QGLScreenSurfaceFunctions
 {
-public:
-    virtual bool createNativeWindow(QWidget *widget, EGLNativeWindowType *native);
-    virtual bool createNativePixmap(QPixmap *pixmap, EGLNativePixmapType *native);
-    virtual bool createNativeImage(QImage *image, EGLNativePixmapType *native);
+ public:
+   virtual bool createNativeWindow(QWidget *widget, EGLNativeWindowType *native);
+   virtual bool createNativePixmap(QPixmap *pixmap, EGLNativePixmapType *native);
+   virtual bool createNativeImage(QImage *image, EGLNativePixmapType *native);
 };
 
 class Q_OPENGL_EXPORT QGLScreen : public QScreen
 {
-    Q_DECLARE_PRIVATE(QGLScreen)
+   Q_DECLARE_PRIVATE(QGLScreen)
 
-public:
-    QGLScreen(int displayId);
-    virtual ~QGLScreen();
+ public:
+   QGLScreen(int displayId);
+   virtual ~QGLScreen();
 
-    enum Option
-    {
-        NoOptions       = 0,
-        NativeWindows   = 1,
-        NativePixmaps   = 2,
-        NativeImages    = 4,
-        Overlays        = 8
-    };
-    using Options = QFlags<Option>;
+   enum Option {
+      NoOptions       = 0,
+      NativeWindows   = 1,
+      NativePixmaps   = 2,
+      NativeImages    = 4,
+      Overlays        = 8
+   };
+   using Options = QFlags<Option>;
 
-    QGLScreen::Options options() const;
+   QGLScreen::Options options() const;
 
-    virtual bool chooseContext(QGLContext *context, const QGLContext *shareContext);
-    virtual bool hasOpenGL() = 0;
+   virtual bool chooseContext(QGLContext *context, const QGLContext *shareContext);
+   virtual bool hasOpenGL() = 0;
 
-    QGLScreenSurfaceFunctions *surfaceFunctions() const;
+   QGLScreenSurfaceFunctions *surfaceFunctions() const;
 
-protected:
-    void setOptions(QGLScreen::Options value);
-    void setSurfaceFunctions(QGLScreenSurfaceFunctions *functions);
+ protected:
+   void setOptions(QGLScreen::Options value);
+   void setSurfaceFunctions(QGLScreenSurfaceFunctions *functions);
 
-private:
-    QGLScreenPrivate *d_ptr;
+ private:
+   QGLScreenPrivate *d_ptr;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGLScreen::Options)

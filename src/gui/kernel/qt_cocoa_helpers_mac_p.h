@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,8 +33,8 @@
 #include <qt_mac_p.h>
 
 #ifdef __OBJC__
-   // OS X framework
-   #include <AppKit/AppKit.h>
+// OS X framework
+#include <AppKit/AppKit.h>
 #endif
 
 #include <qapplication.h>
@@ -60,8 +60,8 @@ typedef struct CGPoint NSPoint;
 QT_BEGIN_NAMESPACE
 
 enum {
-    QtCocoaEventSubTypeWakeup       = SHRT_MAX,
-    QtCocoaEventSubTypePostMessage  = SHRT_MAX-1
+   QtCocoaEventSubTypeWakeup       = SHRT_MAX,
+   QtCocoaEventSubTypePostMessage  = SHRT_MAX - 1
 };
 
 Qt::MouseButtons qt_mac_get_buttons(int buttons);
@@ -69,7 +69,7 @@ Qt::MouseButtons qt_mac_get_buttons(int buttons);
 void macWindowFade(void * /*OSWindowRef*/ window, float durationSeconds = 0.15);
 bool macWindowIsTextured(void * /*OSWindowRef*/ window);
 void macWindowToolbarShow(const QWidget *widget, bool show );
-void macWindowToolbarSet( void * /*OSWindowRef*/ window, void* toolbarRef );
+void macWindowToolbarSet( void * /*OSWindowRef*/ window, void *toolbarRef );
 bool macWindowToolbarIsVisible( void * /*OSWindowRef*/ window );
 void macWindowSetHasShadow( void * /*OSWindowRef*/ window, bool hasShadow );
 void macWindowFlush(void * /*OSWindowRef*/ window);
@@ -95,7 +95,10 @@ void qt_mac_menu_collapseSeparators(void * /*NSMenu */ menu, bool collapse);
 bool qt_dispatchKeyEvent(void * /*NSEvent * */ keyEvent, QWidget *widgetToGetEvent);
 void qt_dispatchModifiersChanged(void * /*NSEvent * */flagsChangedEvent, QWidget *widgetToGetEvent);
 bool qt_mac_handleTabletEvent(void * /*QCocoaView * */view, void * /*NSEvent * */event);
-inline QApplication *qAppInstance() { return static_cast<QApplication *>(QCoreApplication::instance()); }
+inline QApplication *qAppInstance()
+{
+   return static_cast<QApplication *>(QCoreApplication::instance());
+}
 
 void qt_dispatchTabletProximityEvent(const ::TabletProximityRec &proxRec);
 Qt::KeyboardModifiers qt_cocoaModifiers2QtModifiers(ulong modifierFlags);
@@ -106,12 +109,11 @@ void qt_mac_constructQIconFromIconRef(const IconRef icon, const IconRef overlayI
 
 #ifdef __OBJC__
 
-struct DnDParams
-{
-    NSView *view;
-    NSEvent *theEvent;
-    QPoint globalPoint;
-    NSDragOperation performedAction;
+struct DnDParams {
+   NSView *view;
+   NSEvent *theEvent;
+   QPoint globalPoint;
+   NSDragOperation performedAction;
 };
 
 DnDParams *macCurrentDnDParameters();
@@ -122,9 +124,10 @@ Qt::DropActions qt_mac_mapNSDragOperations(NSDragOperation nsActions);
 
 QWidget *qt_mac_getTargetForKeyEvent(QWidget *widgetThatReceivedEvent);
 QWidget *qt_mac_getTargetForMouseEvent(NSEvent *event, QEvent::Type eventType,
-    QPoint &returnLocalPoint, QPoint &returnGlobalPoint, QWidget *nativeWidget, QWidget **returnWidgetUnderMouse);
+                                       QPoint &returnLocalPoint, QPoint &returnGlobalPoint, QWidget *nativeWidget, QWidget **returnWidgetUnderMouse);
 
-bool qt_mac_handleMouseEvent(NSEvent *event, QEvent::Type eventType, Qt::MouseButton button, QWidget *nativeWidget, bool fakeEvent = false);
+bool qt_mac_handleMouseEvent(NSEvent *event, QEvent::Type eventType, Qt::MouseButton button, QWidget *nativeWidget,
+                             bool fakeEvent = false);
 void qt_mac_handleNonClientAreaMouseEvent(NSWindow *window, NSEvent *event);
 
 #endif
@@ -132,12 +135,12 @@ void qt_mac_handleNonClientAreaMouseEvent(NSWindow *window, NSEvent *event);
 
 inline int flipYCoordinate(int y)
 {
-    return QApplication::desktop()->screenGeometry(0).height() - y;    
+   return QApplication::desktop()->screenGeometry(0).height() - y;
 }
 
 inline qreal flipYCoordinate(qreal y)
 {
-    return QApplication::desktop()->screenGeometry(0).height() - y;
+   return QApplication::desktop()->screenGeometry(0).height() - y;
 }
 
 QPointF flipPoint(const NSPoint &p);
@@ -155,99 +158,100 @@ QString qt_mac_get_pasteboardString(OSPasteboardRef paste);
 #ifdef __OBJC__
 
 inline NSMutableArray *qt_mac_QStringListToNSMutableArray(const QStringList &qstrlist)
-{ 
-   return reinterpret_cast<NSMutableArray *>(qt_mac_QStringListToNSMutableArrayVoid(qstrlist)); 
+{
+   return reinterpret_cast<NSMutableArray *>(qt_mac_QStringListToNSMutableArrayVoid(qstrlist));
 }
 
 inline QString qt_mac_NSStringToQString(const NSString *nsstr)
-{ 
-   return QCFString::toQString(reinterpret_cast<const CFStringRef>(nsstr)); 
+{
+   return QCFString::toQString(reinterpret_cast<const CFStringRef>(nsstr));
 }
 
 inline NSString *qt_mac_QStringToNSString(const QString &qstr)
-{ 
-   return [const_cast<NSString *>(reinterpret_cast<const NSString *>(QCFString::toCFStringRef(qstr))) autorelease]; 
+{
+   return [const_cast<NSString *>(reinterpret_cast<const NSString *>(QCFString::toCFStringRef(qstr))) autorelease];
 }
 
 class QCocoaPostMessageArgs
 {
-   public:
-       id target;
-       SEL selector;
-       int argCount;
-       id arg1;
-       id arg2;
-   
-       QCocoaPostMessageArgs(id target, SEL selector, int argCount=0, id arg1=0, id arg2=0)
-           : target(target), selector(selector), argCount(argCount), arg1(arg1), arg2(arg2)
-       {
-           [target retain];
-           [arg1 retain];
-           [arg2 retain];
-       }
-   
-       ~QCocoaPostMessageArgs()
-       {
-           [arg2 release];
-           [arg1 release];
-           [target release];
-       }
+ public:
+   id target;
+   SEL selector;
+   int argCount;
+   id arg1;
+   id arg2;
+
+   QCocoaPostMessageArgs(id target, SEL selector, int argCount = 0, id arg1 = 0, id arg2 = 0)
+      : target(target), selector(selector), argCount(argCount), arg1(arg1), arg2(arg2) {
+      [target retain];
+      [arg1 retain];
+      [arg2 retain];
+   }
+
+   ~QCocoaPostMessageArgs() {
+      [arg2 release];
+      [arg1 release];
+      [target release];
+   }
 };
-void qt_cocoaPostMessage(id target, SEL selector, int argCount=0, id arg1=0, id arg2=0);
-void qt_cocoaPostMessageAfterEventLoopExit(id target, SEL selector, int argCount=0, id arg1=0, id arg2=0);
+void qt_cocoaPostMessage(id target, SEL selector, int argCount = 0, id arg1 = 0, id arg2 = 0);
+void qt_cocoaPostMessageAfterEventLoopExit(id target, SEL selector, int argCount = 0, id arg1 = 0, id arg2 = 0);
 #endif
 
-class QMacScrollOptimization {
-    // This class is made to optimize for the case when the user
-    // scrolls both horizontally and vertically at the same
-    // time. This will result in two QWheelEvents (one for each
-    // direction), which will typically result in two calls to
-    // QWidget::_scroll_sys. Rather than copying pixels twize on
-    // screen because of this, we add this helper class to try to
-    // get away with only one blit.
-    static QWidgetPrivate *_target;
-    static bool _inWheelEvent;
-    static int _dx;
-    static int _dy;
-    static QRect _scrollRect;
+class QMacScrollOptimization
+{
+   // This class is made to optimize for the case when the user
+   // scrolls both horizontally and vertically at the same
+   // time. This will result in two QWheelEvents (one for each
+   // direction), which will typically result in two calls to
+   // QWidget::_scroll_sys. Rather than copying pixels twize on
+   // screen because of this, we add this helper class to try to
+   // get away with only one blit.
+   static QWidgetPrivate *_target;
+   static bool _inWheelEvent;
+   static int _dx;
+   static int _dy;
+   static QRect _scrollRect;
 
-public:
-    static void initDelayedScroll()
-    {
-        _inWheelEvent = true;
-    }
+ public:
+   static void initDelayedScroll() {
+      _inWheelEvent = true;
+   }
 
-    static bool delayScroll(QWidgetPrivate *target, int dx, int dy, const QRect &scrollRect)
-    {
-        if (!_inWheelEvent)
-            return false;
-        if (_target && _target != target)
-            return false;
-        if (_scrollRect.width() != -1 && _scrollRect != scrollRect)
-            return false;
+   static bool delayScroll(QWidgetPrivate *target, int dx, int dy, const QRect &scrollRect) {
+      if (!_inWheelEvent) {
+         return false;
+      }
+      if (_target && _target != target) {
+         return false;
+      }
+      if (_scrollRect.width() != -1 && _scrollRect != scrollRect) {
+         return false;
+      }
 
-        _target = target;
-        _dx += dx;
-        _dy += dy;
-        _scrollRect = scrollRect;
-        return true;
-    }
+      _target = target;
+      _dx += dx;
+      _dy += dy;
+      _scrollRect = scrollRect;
+      return true;
+   }
 
-    static void performDelayedScroll()
-    {
-        if (!_inWheelEvent)
-            return;
-        _inWheelEvent = false;
-        if (!_target)
-            return;
+   static void performDelayedScroll() {
+      if (!_inWheelEvent) {
+         return;
+      }
+      _inWheelEvent = false;
+      if (!_target) {
+         return;
+      }
 
-        _target->scroll_sys(_dx, _dy, _scrollRect);
+      _target->scroll_sys(_dx, _dy, _scrollRect);
 
-        _target = 0;
-        _dx = 0;
-        _dy = 0;
-        _scrollRect = QRect(0, 0, -1, -1);
-    }
+      _target = 0;
+      _dx = 0;
+      _dy = 0;
+      _scrollRect = QRect(0, 0, -1, -1);
+   }
 };
 
 void qt_mac_post_retranslateAppMenu();
@@ -262,27 +266,27 @@ void qt_mac_setNeedsDisplayInRect(QWidget *widget, QRegion region);
 
 inline void qt_mac_retain_graphics_context(CGContextRef context)
 {
-    CGContextRetain(context);
-    CGContextSaveGState(context);
+   CGContextRetain(context);
+   CGContextSaveGState(context);
 }
 
 inline void qt_mac_release_graphics_context(CGContextRef context)
 {
-    CGContextRestoreGState(context);
-    CGContextRelease(context);
+   CGContextRestoreGState(context);
+   CGContextRelease(context);
 }
 
 inline void qt_mac_draw_image(CGContextRef context, CGContextRef imageContext, CGRect area, CGRect drawingArea)
 {
-    CGImageRef image = CGBitmapContextCreateImage(imageContext);
-    CGImageRef subImage = CGImageCreateWithImageInRect(image, area);
+   CGImageRef image = CGBitmapContextCreateImage(imageContext);
+   CGImageRef subImage = CGImageCreateWithImageInRect(image, area);
 
-    CGContextTranslateCTM (context, 0, drawingArea.origin.y + CGRectGetMaxY(drawingArea));
-    CGContextScaleCTM(context, 1, -1);
-    CGContextDrawImage(context, drawingArea, subImage);
+   CGContextTranslateCTM (context, 0, drawingArea.origin.y + CGRectGetMaxY(drawingArea));
+   CGContextScaleCTM(context, 1, -1);
+   CGContextDrawImage(context, drawingArea, subImage);
 
-    CGImageRelease(subImage);
-    CGImageRelease(image);
+   CGImageRelease(subImage);
+   CGImageRelease(image);
 }
 
 QT_END_NAMESPACE

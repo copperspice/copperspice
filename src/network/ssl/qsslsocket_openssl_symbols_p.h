@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -174,7 +174,7 @@ QT_BEGIN_NAMESPACE
 
 bool q_resolveOpenSslSymbols();
 long q_ASN1_INTEGER_get(ASN1_INTEGER *a);
-unsigned char * q_ASN1_STRING_data(ASN1_STRING *a);
+unsigned char *q_ASN1_STRING_data(ASN1_STRING *a);
 int q_ASN1_STRING_length(ASN1_STRING *a);
 int q_ASN1_STRING_to_UTF8(unsigned char **a, ASN1_STRING *b);
 long q_BIO_ctrl(BIO *a, int b, long c, void *d);
@@ -234,10 +234,10 @@ int q_sk_num(STACK *a);
 void q_sk_pop_free(STACK *a, void (*b)(void *));
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
 void q_sk_free(_STACK *a);
-void * q_sk_value(STACK *a, int b);
+void *q_sk_value(STACK *a, int b);
 #else
 void q_sk_free(STACK *a);
-char * q_sk_value(STACK *a, int b);
+char *q_sk_value(STACK *a, int b);
 #endif
 int q_SSL_accept(SSL *a);
 int q_SSL_clear(SSL *a);
@@ -290,7 +290,7 @@ int q_SSL_library_init();
 void q_SSL_load_error_strings();
 SSL *q_SSL_new(SSL_CTX *a);
 #if OPENSSL_VERSION_NUMBER >= 0x0090806fL && !defined(OPENSSL_NO_TLSEXT)
-long q_SSL_ctrl(SSL *ssl,int cmd, long larg, void *parg);
+long q_SSL_ctrl(SSL *ssl, int cmd, long larg, void *parg);
 #endif
 int q_SSL_read(SSL *a, void *b, int c);
 void q_SSL_set_bio(SSL *a, BIO *b, BIO *c);
@@ -334,7 +334,7 @@ X509_NAME *q_X509_get_issuer_name(X509 *a);
 X509_NAME *q_X509_get_subject_name(X509 *a);
 int q_X509_verify_cert(X509_STORE_CTX *ctx);
 int q_X509_NAME_entry_count(X509_NAME *a);
-X509_NAME_ENTRY *q_X509_NAME_get_entry(X509_NAME *a,int b);
+X509_NAME_ENTRY *q_X509_NAME_get_entry(X509_NAME *a, int b);
 ASN1_STRING *q_X509_NAME_ENTRY_get_data(X509_NAME_ENTRY *a);
 ASN1_OBJECT *q_X509_NAME_ENTRY_get_object(X509_NAME_ENTRY *a);
 EVP_PKEY *q_X509_PUBKEY_get(X509_PUBKEY *a);

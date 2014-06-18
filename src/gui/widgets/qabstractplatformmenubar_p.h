@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,9 +43,8 @@ class QWidget;
 
 class QAbstractPlatformMenuBar;
 
-struct QPlatformMenuBarFactoryInterface : public QFactoryInterface
-{
-    virtual QAbstractPlatformMenuBar *create() = 0;
+struct QPlatformMenuBarFactoryInterface : public QFactoryInterface {
+   virtual QAbstractPlatformMenuBar *create() = 0;
 };
 
 #define QPlatformMenuBarFactoryInterface_iid "com.copperspice.QPlatformMenuBarFactoryInterface"
@@ -56,33 +55,33 @@ CS_DECLARE_INTERFACE(QPlatformMenuBarFactoryInterface, QPlatformMenuBarFactoryIn
 */
 class QAbstractPlatformMenuBar
 {
-public:
-    virtual ~QAbstractPlatformMenuBar() {}
+ public:
+   virtual ~QAbstractPlatformMenuBar() {}
 
-    virtual void init(QMenuBar *) = 0;
+   virtual void init(QMenuBar *) = 0;
 
-    virtual void setVisible(bool visible) = 0;
+   virtual void setVisible(bool visible) = 0;
 
-    virtual void actionEvent(QActionEvent *) = 0;
+   virtual void actionEvent(QActionEvent *) = 0;
 
-    virtual void handleReparent(QWidget *oldParent, QWidget *newParent, QWidget *oldWindow, QWidget *newWindow) = 0;
+   virtual void handleReparent(QWidget *oldParent, QWidget *newParent, QWidget *oldWindow, QWidget *newWindow) = 0;
 
-    virtual bool allowCornerWidgets() const = 0;
+   virtual bool allowCornerWidgets() const = 0;
 
-    virtual void popupAction(QAction *) = 0;
+   virtual void popupAction(QAction *) = 0;
 
-    virtual void setNativeMenuBar(bool) = 0;
+   virtual void setNativeMenuBar(bool) = 0;
 
-    virtual bool isNativeMenuBar() const = 0;
+   virtual bool isNativeMenuBar() const = 0;
 
-    /*!
-        Return true if the native menubar is capable of listening to the
-        shortcut keys. If false is returned, QMenuBar will trigger actions on
-        shortcut itself.
-    */
-    virtual bool shortcutsHandledByNativeMenuBar() const = 0;
+   /*!
+       Return true if the native menubar is capable of listening to the
+       shortcut keys. If false is returned, QMenuBar will trigger actions on
+       shortcut itself.
+   */
+   virtual bool shortcutsHandledByNativeMenuBar() const = 0;
 
-    virtual bool menuBarEventFilter(QObject *, QEvent *event) = 0;
+   virtual bool menuBarEventFilter(QObject *, QEvent *event) = 0;
 };
 
 QT_END_NAMESPACE

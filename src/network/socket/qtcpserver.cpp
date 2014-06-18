@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -102,53 +102,53 @@ QT_BEGIN_NAMESPACE
 
 class QTcpServerPrivate : public QAbstractSocketEngineReceiver
 {
-    Q_DECLARE_PUBLIC(QTcpServer)
+   Q_DECLARE_PUBLIC(QTcpServer)
 
-public:
-    QTcpServerPrivate();
-    virtual ~QTcpServerPrivate();
+ public:
+   QTcpServerPrivate();
+   virtual ~QTcpServerPrivate();
 
-    QList<QTcpSocket *> pendingConnections;
+   QList<QTcpSocket *> pendingConnections;
 
-    quint16 port;
-    QHostAddress address;
+   quint16 port;
+   QHostAddress address;
 
-    QAbstractSocket::SocketState state;
-    QAbstractSocketEngine *socketEngine;
+   QAbstractSocket::SocketState state;
+   QAbstractSocketEngine *socketEngine;
 
-    QAbstractSocket::SocketError serverSocketError;
-    QString serverSocketErrorString;
+   QAbstractSocket::SocketError serverSocketError;
+   QString serverSocketErrorString;
 
-    int maxConnections;
-
-#ifndef QT_NO_NETWORKPROXY
-    QNetworkProxy proxy;
-    QNetworkProxy resolveProxy(const QHostAddress &address, quint16 port);
-#endif
-
-    // from QAbstractSocketEngineReceiver
-    void readNotification();
-    inline void writeNotification() {}
-    inline void exceptionNotification() {}
-    inline void connectionNotification() {}
+   int maxConnections;
 
 #ifndef QT_NO_NETWORKPROXY
-    inline void proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *) {}
+   QNetworkProxy proxy;
+   QNetworkProxy resolveProxy(const QHostAddress &address, quint16 port);
 #endif
 
-protected:
-	 QTcpServer *q_ptr;
+   // from QAbstractSocketEngineReceiver
+   void readNotification();
+   inline void writeNotification() {}
+   inline void exceptionNotification() {}
+   inline void connectionNotification() {}
+
+#ifndef QT_NO_NETWORKPROXY
+   inline void proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *) {}
+#endif
+
+ protected:
+   QTcpServer *q_ptr;
 
 };
 
 /*! \internal
 */
 QTcpServerPrivate::QTcpServerPrivate()
- : port(0)
- , state(QAbstractSocket::UnconnectedState)
- , socketEngine(0)
- , serverSocketError(QAbstractSocket::UnknownSocketError)
- , maxConnections(30)
+   : port(0)
+   , state(QAbstractSocket::UnconnectedState)
+   , socketEngine(0)
+   , serverSocketError(QAbstractSocket::UnknownSocketError)
+   , maxConnections(30)
 {
 }
 
@@ -165,29 +165,31 @@ QTcpServerPrivate::~QTcpServerPrivate()
 */
 QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint16 port)
 {
-    if (address == QHostAddress::LocalHost ||
-        address == QHostAddress::LocalHostIPv6)
-        return QNetworkProxy::NoProxy;
+   if (address == QHostAddress::LocalHost ||
+         address == QHostAddress::LocalHostIPv6) {
+      return QNetworkProxy::NoProxy;
+   }
 
-    QList<QNetworkProxy> proxies;
-    if (proxy.type() != QNetworkProxy::DefaultProxy) {
-        // a non-default proxy was set with setProxy
-        proxies << proxy;
-    } else {
-        // try the application settings instead
-        QNetworkProxyQuery query(port, QString(), QNetworkProxyQuery::TcpServer);
-        proxies = QNetworkProxyFactory::proxyForQuery(query);
-    }
+   QList<QNetworkProxy> proxies;
+   if (proxy.type() != QNetworkProxy::DefaultProxy) {
+      // a non-default proxy was set with setProxy
+      proxies << proxy;
+   } else {
+      // try the application settings instead
+      QNetworkProxyQuery query(port, QString(), QNetworkProxyQuery::TcpServer);
+      proxies = QNetworkProxyFactory::proxyForQuery(query);
+   }
 
-    // return the first that we can use
-    foreach (const QNetworkProxy &p, proxies) {
-        if (p.capabilities() & QNetworkProxy::ListeningCapability)
-            return p;
-    }
+   // return the first that we can use
+   foreach (const QNetworkProxy & p, proxies) {
+      if (p.capabilities() & QNetworkProxy::ListeningCapability) {
+         return p;
+      }
+   }
 
-    // no proxy found
-    // DefaultProxy will raise an error
-    return QNetworkProxy(QNetworkProxy::DefaultProxy);
+   // no proxy found
+   // DefaultProxy will raise an error
+   return QNetworkProxy(QNetworkProxy::DefaultProxy);
 }
 #endif
 
@@ -195,30 +197,33 @@ QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint
 */
 void QTcpServerPrivate::readNotification()
 {
-    Q_Q(QTcpServer);
-    for (;;) {
-        if (pendingConnections.count() >= maxConnections) {
+   Q_Q(QTcpServer);
+   for (;;) {
+      if (pendingConnections.count() >= maxConnections) {
 #if defined (QTCPSERVER_DEBUG)
-            qDebug("QTcpServerPrivate::_q_processIncomingConnection() too many connections");
+         qDebug("QTcpServerPrivate::_q_processIncomingConnection() too many connections");
 #endif
-            if (socketEngine->isReadNotificationEnabled())
-                socketEngine->setReadNotificationEnabled(false);
-            return;
-        }
+         if (socketEngine->isReadNotificationEnabled()) {
+            socketEngine->setReadNotificationEnabled(false);
+         }
+         return;
+      }
 
-        int descriptor = socketEngine->accept();
-        if (descriptor == -1)
-            break;
+      int descriptor = socketEngine->accept();
+      if (descriptor == -1) {
+         break;
+      }
 #if defined (QTCPSERVER_DEBUG)
-        qDebug("QTcpServerPrivate::_q_processIncomingConnection() accepted socket %i", descriptor);
+      qDebug("QTcpServerPrivate::_q_processIncomingConnection() accepted socket %i", descriptor);
 #endif
-        q->incomingConnection(descriptor);
+      q->incomingConnection(descriptor);
 
-        QPointer<QTcpServer> that = q;
-        emit q->newConnection();
-        if (!that || !q->isListening())
-            return;
-    }
+      QPointer<QTcpServer> that = q;
+      emit q->newConnection();
+      if (!that || !q->isListening()) {
+         return;
+      }
+   }
 }
 
 /*!
@@ -229,7 +234,7 @@ void QTcpServerPrivate::readNotification()
     \sa listen(), setSocketDescriptor()
 */
 QTcpServer::QTcpServer(QObject *parent)
-   : QObject(parent), d_ptr(new QTcpServerPrivate)    
+   : QObject(parent), d_ptr(new QTcpServerPrivate)
 {
    d_ptr->q_ptr = this;
 }
@@ -245,7 +250,7 @@ QTcpServer::QTcpServer(QObject *parent)
 */
 QTcpServer::~QTcpServer()
 {
-    close();
+   close();
 }
 
 /*!
@@ -260,73 +265,73 @@ QTcpServer::~QTcpServer()
 */
 bool QTcpServer::listen(const QHostAddress &address, quint16 port)
 {
-    Q_D(QTcpServer);
-    if (d->state == QAbstractSocket::ListeningState) {
-        qWarning("QTcpServer::listen() called when already listening");
-        return false;
-    }
+   Q_D(QTcpServer);
+   if (d->state == QAbstractSocket::ListeningState) {
+      qWarning("QTcpServer::listen() called when already listening");
+      return false;
+   }
 
-    QAbstractSocket::NetworkLayerProtocol proto = address.protocol();
+   QAbstractSocket::NetworkLayerProtocol proto = address.protocol();
 
 #ifdef QT_NO_NETWORKPROXY
-    static const QNetworkProxy &proxy = *(QNetworkProxy *)0;
+   static const QNetworkProxy &proxy = *(QNetworkProxy *)0;
 #else
-    QNetworkProxy proxy = d->resolveProxy(address, port);
+   QNetworkProxy proxy = d->resolveProxy(address, port);
 #endif
 
-    delete d->socketEngine;
-    d->socketEngine = QAbstractSocketEngine::createSocketEngine(QAbstractSocket::TcpSocket, proxy, this);
-    if (!d->socketEngine) {
-        d->serverSocketError = QAbstractSocket::UnsupportedSocketOperationError;
-        d->serverSocketErrorString = tr("Operation on socket is not supported");
-        return false;
-    }
+   delete d->socketEngine;
+   d->socketEngine = QAbstractSocketEngine::createSocketEngine(QAbstractSocket::TcpSocket, proxy, this);
+   if (!d->socketEngine) {
+      d->serverSocketError = QAbstractSocket::UnsupportedSocketOperationError;
+      d->serverSocketErrorString = tr("Operation on socket is not supported");
+      return false;
+   }
 #ifndef QT_NO_BEARERMANAGEMENT
-    //copy network session down to the socket engine (if it has been set)
-    d->socketEngine->setProperty("_q_networksession", property("_q_networksession"));
+   //copy network session down to the socket engine (if it has been set)
+   d->socketEngine->setProperty("_q_networksession", property("_q_networksession"));
 #endif
-    if (!d->socketEngine->initialize(QAbstractSocket::TcpSocket, proto)) {
-        d->serverSocketError = d->socketEngine->error();
-        d->serverSocketErrorString = d->socketEngine->errorString();
-        return false;
-    }
+   if (!d->socketEngine->initialize(QAbstractSocket::TcpSocket, proto)) {
+      d->serverSocketError = d->socketEngine->error();
+      d->serverSocketErrorString = d->socketEngine->errorString();
+      return false;
+   }
 
 #if defined(Q_OS_UNIX)
-    // Under Unix, we want to be able to bind to the port, even if a socket on
-    // the same address-port is in TIME_WAIT. Under Windows this is possible
-    // anyway -- furthermore, the meaning of reusable on Windows is different:
-    // it means that you can use the same address-port for multiple listening
-    // sockets.
-    // Don't abort though if we can't set that option. For example the socks
-    // engine doesn't support that option, but that shouldn't prevent us from
-    // trying to bind/listen.
-    d->socketEngine->setOption(QAbstractSocketEngine::AddressReusable, 1);
+   // Under Unix, we want to be able to bind to the port, even if a socket on
+   // the same address-port is in TIME_WAIT. Under Windows this is possible
+   // anyway -- furthermore, the meaning of reusable on Windows is different:
+   // it means that you can use the same address-port for multiple listening
+   // sockets.
+   // Don't abort though if we can't set that option. For example the socks
+   // engine doesn't support that option, but that shouldn't prevent us from
+   // trying to bind/listen.
+   d->socketEngine->setOption(QAbstractSocketEngine::AddressReusable, 1);
 #endif
 
-    if (!d->socketEngine->bind(address, port)) {
-        d->serverSocketError = d->socketEngine->error();
-        d->serverSocketErrorString = d->socketEngine->errorString();
-        return false;
-    }
+   if (!d->socketEngine->bind(address, port)) {
+      d->serverSocketError = d->socketEngine->error();
+      d->serverSocketErrorString = d->socketEngine->errorString();
+      return false;
+   }
 
-    if (!d->socketEngine->listen()) {
-        d->serverSocketError = d->socketEngine->error();
-        d->serverSocketErrorString = d->socketEngine->errorString();
-        return false;
-    }
+   if (!d->socketEngine->listen()) {
+      d->serverSocketError = d->socketEngine->error();
+      d->serverSocketErrorString = d->socketEngine->errorString();
+      return false;
+   }
 
-    d->socketEngine->setReceiver(d);
-    d->socketEngine->setReadNotificationEnabled(true);
+   d->socketEngine->setReceiver(d);
+   d->socketEngine->setReadNotificationEnabled(true);
 
-    d->state = QAbstractSocket::ListeningState;
-    d->address = d->socketEngine->localAddress();
-    d->port = d->socketEngine->localPort();
+   d->state = QAbstractSocket::ListeningState;
+   d->address = d->socketEngine->localAddress();
+   d->port = d->socketEngine->localPort();
 
 #if defined (QTCPSERVER_DEBUG)
-    qDebug("QTcpServer::listen(%i, \"%s\") == true (listening on port %i)", port,
-           address.toString().toLatin1().constData(), d->socketEngine->localPort());
+   qDebug("QTcpServer::listen(%i, \"%s\") == true (listening on port %i)", port,
+          address.toString().toLatin1().constData(), d->socketEngine->localPort());
 #endif
-    return true;
+   return true;
 }
 
 /*!
@@ -337,9 +342,9 @@ bool QTcpServer::listen(const QHostAddress &address, quint16 port)
 */
 bool QTcpServer::isListening() const
 {
-    Q_D(const QTcpServer);
-    Q_CHECK_SOCKETENGINE(false);
-    return d->socketEngine->state() == QAbstractSocket::ListeningState;
+   Q_D(const QTcpServer);
+   Q_CHECK_SOCKETENGINE(false);
+   return d->socketEngine->state() == QAbstractSocket::ListeningState;
 }
 
 /*!
@@ -350,23 +355,23 @@ bool QTcpServer::isListening() const
 */
 void QTcpServer::close()
 {
-    Q_D(QTcpServer);
+   Q_D(QTcpServer);
 
-    qDeleteAll(d->pendingConnections);
-    d->pendingConnections.clear();
+   qDeleteAll(d->pendingConnections);
+   d->pendingConnections.clear();
 
-    if (d->socketEngine) {
-        d->socketEngine->close();
-        QT_TRY {
-            d->socketEngine->deleteLater();
-        } QT_CATCH(const std::bad_alloc &) {
-            // in out of memory situations, the socketEngine
-            // will be deleted in ~QTcpServer (it's a child-object of this)
-        }
-        d->socketEngine = 0;
-    }
+   if (d->socketEngine) {
+      d->socketEngine->close();
+      QT_TRY {
+         d->socketEngine->deleteLater();
+      } QT_CATCH(const std::bad_alloc &) {
+         // in out of memory situations, the socketEngine
+         // will be deleted in ~QTcpServer (it's a child-object of this)
+      }
+      d->socketEngine = 0;
+   }
 
-    d->state = QAbstractSocket::UnconnectedState;
+   d->state = QAbstractSocket::UnconnectedState;
 }
 
 /*!
@@ -380,9 +385,9 @@ void QTcpServer::close()
 */
 int QTcpServer::socketDescriptor() const
 {
-    Q_D(const QTcpServer);
-    Q_CHECK_SOCKETENGINE(-1);
-    return d->socketEngine->socketDescriptor();
+   Q_D(const QTcpServer);
+   Q_CHECK_SOCKETENGINE(-1);
+   return d->socketEngine->socketDescriptor();
 }
 
 /*!
@@ -396,45 +401,46 @@ int QTcpServer::socketDescriptor() const
 */
 bool QTcpServer::setSocketDescriptor(int socketDescriptor)
 {
-    Q_D(QTcpServer);
-    if (isListening()) {
-        qWarning("QTcpServer::setSocketDescriptor() called when already listening");
-        return false;
-    }
+   Q_D(QTcpServer);
+   if (isListening()) {
+      qWarning("QTcpServer::setSocketDescriptor() called when already listening");
+      return false;
+   }
 
-    if (d->socketEngine)
-        delete d->socketEngine;
-    d->socketEngine = QAbstractSocketEngine::createSocketEngine(socketDescriptor, this);
-    if (!d->socketEngine) {
-        d->serverSocketError = QAbstractSocket::UnsupportedSocketOperationError;
-        d->serverSocketErrorString = tr("Operation on socket is not supported");
-        return false;
-    }
+   if (d->socketEngine) {
+      delete d->socketEngine;
+   }
+   d->socketEngine = QAbstractSocketEngine::createSocketEngine(socketDescriptor, this);
+   if (!d->socketEngine) {
+      d->serverSocketError = QAbstractSocket::UnsupportedSocketOperationError;
+      d->serverSocketErrorString = tr("Operation on socket is not supported");
+      return false;
+   }
 #ifndef QT_NO_BEARERMANAGEMENT
-    //copy network session down to the socket engine (if it has been set)
-    d->socketEngine->setProperty("_q_networksession", property("_q_networksession"));
+   //copy network session down to the socket engine (if it has been set)
+   d->socketEngine->setProperty("_q_networksession", property("_q_networksession"));
 #endif
-    if (!d->socketEngine->initialize(socketDescriptor, QAbstractSocket::ListeningState)) {
-        d->serverSocketError = d->socketEngine->error();
-        d->serverSocketErrorString = d->socketEngine->errorString();
+   if (!d->socketEngine->initialize(socketDescriptor, QAbstractSocket::ListeningState)) {
+      d->serverSocketError = d->socketEngine->error();
+      d->serverSocketErrorString = d->socketEngine->errorString();
 #if defined (QTCPSERVER_DEBUG)
-        qDebug("QTcpServer::setSocketDescriptor(%i) failed (%s)", socketDescriptor,
-               d->serverSocketErrorString.toLatin1().constData());
+      qDebug("QTcpServer::setSocketDescriptor(%i) failed (%s)", socketDescriptor,
+             d->serverSocketErrorString.toLatin1().constData());
 #endif
-        return false;
-    }
+      return false;
+   }
 
-    d->socketEngine->setReceiver(d);
-    d->socketEngine->setReadNotificationEnabled(true);
+   d->socketEngine->setReceiver(d);
+   d->socketEngine->setReadNotificationEnabled(true);
 
-    d->state = d->socketEngine->state();
-    d->address = d->socketEngine->localAddress();
-    d->port = d->socketEngine->localPort();
+   d->state = d->socketEngine->state();
+   d->address = d->socketEngine->localAddress();
+   d->port = d->socketEngine->localPort();
 
 #if defined (QTCPSERVER_DEBUG)
-    qDebug("QTcpServer::setSocketDescriptor(%i) succeeded.", socketDescriptor);
+   qDebug("QTcpServer::setSocketDescriptor(%i) succeeded.", socketDescriptor);
 #endif
-    return true;
+   return true;
 }
 
 /*!
@@ -445,9 +451,9 @@ bool QTcpServer::setSocketDescriptor(int socketDescriptor)
 */
 quint16 QTcpServer::serverPort() const
 {
-    Q_D(const QTcpServer);
-    Q_CHECK_SOCKETENGINE(0);
-    return d->socketEngine->localPort();
+   Q_D(const QTcpServer);
+   Q_CHECK_SOCKETENGINE(0);
+   return d->socketEngine->localPort();
 }
 
 /*!
@@ -458,9 +464,9 @@ quint16 QTcpServer::serverPort() const
 */
 QHostAddress QTcpServer::serverAddress() const
 {
-    Q_D(const QTcpServer);
-    Q_CHECK_SOCKETENGINE(QHostAddress(QHostAddress::Null));
-    return d->socketEngine->localAddress();
+   Q_D(const QTcpServer);
+   Q_CHECK_SOCKETENGINE(QHostAddress(QHostAddress::Null));
+   return d->socketEngine->localAddress();
 }
 
 /*!
@@ -484,22 +490,24 @@ QHostAddress QTcpServer::serverAddress() const
 */
 bool QTcpServer::waitForNewConnection(int msec, bool *timedOut)
 {
-    Q_D(QTcpServer);
-    if (d->state != QAbstractSocket::ListeningState)
-        return false;
+   Q_D(QTcpServer);
+   if (d->state != QAbstractSocket::ListeningState) {
+      return false;
+   }
 
-    if (!d->socketEngine->waitForRead(msec, timedOut)) {
-        d->serverSocketError = d->socketEngine->error();
-        d->serverSocketErrorString = d->socketEngine->errorString();
-        return false;
-    }
+   if (!d->socketEngine->waitForRead(msec, timedOut)) {
+      d->serverSocketError = d->socketEngine->error();
+      d->serverSocketErrorString = d->socketEngine->errorString();
+      return false;
+   }
 
-    if (timedOut && *timedOut)
-        return false;
+   if (timedOut && *timedOut) {
+      return false;
+   }
 
-    d->readNotification();
+   d->readNotification();
 
-    return true;
+   return true;
 }
 
 /*!
@@ -510,7 +518,7 @@ bool QTcpServer::waitForNewConnection(int msec, bool *timedOut)
 */
 bool QTcpServer::hasPendingConnections() const
 {
-    return !d_func()->pendingConnections.isEmpty();
+   return !d_func()->pendingConnections.isEmpty();
 }
 
 /*!
@@ -533,14 +541,16 @@ bool QTcpServer::hasPendingConnections() const
 */
 QTcpSocket *QTcpServer::nextPendingConnection()
 {
-    Q_D(QTcpServer);
-    if (d->pendingConnections.isEmpty())
-        return 0;
+   Q_D(QTcpServer);
+   if (d->pendingConnections.isEmpty()) {
+      return 0;
+   }
 
-    if (!d->socketEngine->isReadNotificationEnabled())
-        d->socketEngine->setReadNotificationEnabled(true);
+   if (!d->socketEngine->isReadNotificationEnabled()) {
+      d->socketEngine->setReadNotificationEnabled(true);
+   }
 
-    return d->pendingConnections.takeFirst();
+   return d->pendingConnections.takeFirst();
 }
 
 /*!
@@ -569,12 +579,12 @@ QTcpSocket *QTcpServer::nextPendingConnection()
 void QTcpServer::incomingConnection(int socketDescriptor)
 {
 #if defined (QTCPSERVER_DEBUG)
-    qDebug("QTcpServer::incomingConnection(%i)", socketDescriptor);
+   qDebug("QTcpServer::incomingConnection(%i)", socketDescriptor);
 #endif
 
-    QTcpSocket *socket = new QTcpSocket(this);
-    socket->setSocketDescriptor(socketDescriptor);
-    addPendingConnection(socket);
+   QTcpSocket *socket = new QTcpSocket(this);
+   socket->setSocketDescriptor(socketDescriptor);
+   addPendingConnection(socket);
 }
 
 /*!
@@ -588,9 +598,9 @@ void QTcpServer::incomingConnection(int socketDescriptor)
     \sa incomingConnection()
     \since 4.7
 */
-void QTcpServer::addPendingConnection(QTcpSocket* socket)
+void QTcpServer::addPendingConnection(QTcpSocket *socket)
 {
-    d_func()->pendingConnections.append(socket);
+   d_func()->pendingConnections.append(socket);
 }
 
 /*!
@@ -610,7 +620,7 @@ void QTcpServer::addPendingConnection(QTcpSocket* socket)
 */
 void QTcpServer::setMaxPendingConnections(int numConnections)
 {
-    d_func()->maxConnections = numConnections;
+   d_func()->maxConnections = numConnections;
 }
 
 /*!
@@ -621,7 +631,7 @@ void QTcpServer::setMaxPendingConnections(int numConnections)
 */
 int QTcpServer::maxPendingConnections() const
 {
-    return d_func()->maxConnections;
+   return d_func()->maxConnections;
 }
 
 /*!
@@ -631,7 +641,7 @@ int QTcpServer::maxPendingConnections() const
 */
 QAbstractSocket::SocketError QTcpServer::serverError() const
 {
-    return d_func()->serverSocketError;
+   return d_func()->serverSocketError;
 }
 
 /*!
@@ -642,7 +652,7 @@ QAbstractSocket::SocketError QTcpServer::serverError() const
 */
 QString QTcpServer::errorString() const
 {
-    return d_func()->serverSocketErrorString;
+   return d_func()->serverSocketErrorString;
 }
 
 #ifndef QT_NO_NETWORKPROXY
@@ -660,8 +670,8 @@ QString QTcpServer::errorString() const
 */
 void QTcpServer::setProxy(const QNetworkProxy &networkProxy)
 {
-    Q_D(QTcpServer);
-    d->proxy = networkProxy;
+   Q_D(QTcpServer);
+   d->proxy = networkProxy;
 }
 
 /*!
@@ -674,8 +684,8 @@ void QTcpServer::setProxy(const QNetworkProxy &networkProxy)
 */
 QNetworkProxy QTcpServer::proxy() const
 {
-    Q_D(const QTcpServer);
-    return d->proxy;
+   Q_D(const QTcpServer);
+   return d->proxy;
 }
 #endif // QT_NO_NETWORKPROXY
 

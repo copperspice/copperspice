@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,91 +32,94 @@ QT_BEGIN_NAMESPACE
 
 class QGLCustomShaderStagePrivate
 {
-public:
-    QGLCustomShaderStagePrivate() :
-        m_manager(0) {}
+ public:
+   QGLCustomShaderStagePrivate() :
+      m_manager(0) {}
 
-    QPointer<QGLEngineShaderManager> m_manager;
-    QByteArray              m_source;
+   QPointer<QGLEngineShaderManager> m_manager;
+   QByteArray              m_source;
 };
 
 
 
 
 QGLCustomShaderStage::QGLCustomShaderStage()
-    : d_ptr(new QGLCustomShaderStagePrivate)
+   : d_ptr(new QGLCustomShaderStagePrivate)
 {
 }
 
 QGLCustomShaderStage::~QGLCustomShaderStage()
 {
-    Q_D(QGLCustomShaderStage);
-    if (d->m_manager) {
-        d->m_manager->removeCustomStage();
-        d->m_manager->sharedShaders->cleanupCustomStage(this);
-    }
+   Q_D(QGLCustomShaderStage);
+   if (d->m_manager) {
+      d->m_manager->removeCustomStage();
+      d->m_manager->sharedShaders->cleanupCustomStage(this);
+   }
 }
 
 void QGLCustomShaderStage::setUniformsDirty()
 {
-    Q_D(QGLCustomShaderStage);
-    if (d->m_manager)
-        d->m_manager->setDirty(); // ### Probably a bit overkill!
+   Q_D(QGLCustomShaderStage);
+   if (d->m_manager) {
+      d->m_manager->setDirty();   // ### Probably a bit overkill!
+   }
 }
 
-bool QGLCustomShaderStage::setOnPainter(QPainter* p)
+bool QGLCustomShaderStage::setOnPainter(QPainter *p)
 {
-    Q_D(QGLCustomShaderStage);
-    if (p->paintEngine()->type() != QPaintEngine::OpenGL2) {
-        qWarning("QGLCustomShaderStage::setOnPainter() - paint engine not OpenGL2");
-        return false;
-    }
-    if (d->m_manager)
-        qWarning("Custom shader is already set on a painter");
+   Q_D(QGLCustomShaderStage);
+   if (p->paintEngine()->type() != QPaintEngine::OpenGL2) {
+      qWarning("QGLCustomShaderStage::setOnPainter() - paint engine not OpenGL2");
+      return false;
+   }
+   if (d->m_manager) {
+      qWarning("Custom shader is already set on a painter");
+   }
 
-    QGL2PaintEngineEx *engine = static_cast<QGL2PaintEngineEx*>(p->paintEngine());
-    d->m_manager = QGL2PaintEngineExPrivate::shaderManagerForEngine(engine);
-    Q_ASSERT(d->m_manager);
+   QGL2PaintEngineEx *engine = static_cast<QGL2PaintEngineEx *>(p->paintEngine());
+   d->m_manager = QGL2PaintEngineExPrivate::shaderManagerForEngine(engine);
+   Q_ASSERT(d->m_manager);
 
-    d->m_manager->setCustomStage(this);
-    return true;
+   d->m_manager->setCustomStage(this);
+   return true;
 }
 
-void QGLCustomShaderStage::removeFromPainter(QPainter* p)
+void QGLCustomShaderStage::removeFromPainter(QPainter *p)
 {
-    Q_D(QGLCustomShaderStage);
-    if (p->paintEngine()->type() != QPaintEngine::OpenGL2)
-        return;
+   Q_D(QGLCustomShaderStage);
+   if (p->paintEngine()->type() != QPaintEngine::OpenGL2) {
+      return;
+   }
 
-    QGL2PaintEngineEx *engine = static_cast<QGL2PaintEngineEx*>(p->paintEngine());
-    d->m_manager = QGL2PaintEngineExPrivate::shaderManagerForEngine(engine);
-    Q_ASSERT(d->m_manager);
+   QGL2PaintEngineEx *engine = static_cast<QGL2PaintEngineEx *>(p->paintEngine());
+   d->m_manager = QGL2PaintEngineExPrivate::shaderManagerForEngine(engine);
+   Q_ASSERT(d->m_manager);
 
-    // Just set the stage to null, don't call removeCustomStage().
-    // This should leave the program in a compiled/linked state
-    // if the next custom shader stage is this one again.
-    d->m_manager->setCustomStage(0);
-    d->m_manager = 0;
+   // Just set the stage to null, don't call removeCustomStage().
+   // This should leave the program in a compiled/linked state
+   // if the next custom shader stage is this one again.
+   d->m_manager->setCustomStage(0);
+   d->m_manager = 0;
 }
 
 QByteArray QGLCustomShaderStage::source() const
 {
-    Q_D(const QGLCustomShaderStage);
-    return d->m_source;
+   Q_D(const QGLCustomShaderStage);
+   return d->m_source;
 }
 
 // Called by the shader manager if another custom shader is attached or
 // the manager is deleted
 void QGLCustomShaderStage::setInactive()
 {
-    Q_D(QGLCustomShaderStage);
-    d->m_manager = 0;
+   Q_D(QGLCustomShaderStage);
+   d->m_manager = 0;
 }
 
-void QGLCustomShaderStage::setSource(const QByteArray& s)
+void QGLCustomShaderStage::setSource(const QByteArray &s)
 {
-    Q_D(QGLCustomShaderStage);
-    d->m_source = s;
+   Q_D(QGLCustomShaderStage);
+   d->m_source = s;
 }
 
 QT_END_NAMESPACE

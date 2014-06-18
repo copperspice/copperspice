@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -56,15 +56,15 @@ QPoint QWSManagerPrivate::mousePos;
 
 
 QWSManagerPrivate::QWSManagerPrivate()
-    : activeRegion(QDecoration::None), managed(0), popup(0),
-      previousRegionType(0), previousRegionRepainted(false), entireDecorationNeedsRepaint(false)
+   : activeRegion(QDecoration::None), managed(0), popup(0),
+     previousRegionType(0), previousRegionRepainted(false), entireDecorationNeedsRepaint(false)
 {
-    cached_region.regionType = 0;
+   cached_region.regionType = 0;
 }
 
 QRegion &QWSManager::cachedRegion()
 {
-    return d_func()->cached_region.region;
+   return d_func()->cached_region.region;
 }
 
 /*!
@@ -77,440 +77,461 @@ QRegion &QWSManager::cachedRegion()
 
 */
 QWSManager::QWSManager(QWidget *w)
-    : QObject(*new QWSManagerPrivate, (QObject*)0)
+   : QObject(*new QWSManagerPrivate, (QObject *)0)
 {
-    d_func()->managed = w;
+   d_func()->managed = w;
 
 }
 
 QWSManager::~QWSManager()
 {
-    Q_D(QWSManager);
+   Q_D(QWSManager);
 #ifndef QT_NO_MENU
-    if (d->popup)
-        delete d->popup;
+   if (d->popup) {
+      delete d->popup;
+   }
 #endif
-    if (d->managed == QWSManagerPrivate::active)
-        QWSManagerPrivate::active = 0;
+   if (d->managed == QWSManagerPrivate::active) {
+      QWSManagerPrivate::active = 0;
+   }
 }
 
 QWidget *QWSManager::widget()
 {
-    Q_D(QWSManager);
-    return d->managed;
+   Q_D(QWSManager);
+   return d->managed;
 }
 
 QWidget *QWSManager::grabbedMouse()
 {
-    return QWSManagerPrivate::active;
+   return QWSManagerPrivate::active;
 }
 
 QRegion QWSManager::region()
 {
-    Q_D(QWSManager);
-    return QApplication::qwsDecoration().region(d->managed, d->managed->geometry());
+   Q_D(QWSManager);
+   return QApplication::qwsDecoration().region(d->managed, d->managed->geometry());
 }
 
 bool QWSManager::event(QEvent *e)
 {
-    if (QObject::event(e))
-        return true;
+   if (QObject::event(e)) {
+      return true;
+   }
 
-    switch (e->type()) {
-        case QEvent::MouseMove:
-            mouseMoveEvent((QMouseEvent*)e);
-            break;
+   switch (e->type()) {
+      case QEvent::MouseMove:
+         mouseMoveEvent((QMouseEvent *)e);
+         break;
 
-        case QEvent::MouseButtonPress:
-            mousePressEvent((QMouseEvent*)e);
-            break;
+      case QEvent::MouseButtonPress:
+         mousePressEvent((QMouseEvent *)e);
+         break;
 
-        case QEvent::MouseButtonRelease:
-            mouseReleaseEvent((QMouseEvent*)e);
-            break;
+      case QEvent::MouseButtonRelease:
+         mouseReleaseEvent((QMouseEvent *)e);
+         break;
 
-        case QEvent::MouseButtonDblClick:
-            mouseDoubleClickEvent((QMouseEvent*)e);
-            break;
+      case QEvent::MouseButtonDblClick:
+         mouseDoubleClickEvent((QMouseEvent *)e);
+         break;
 
-        case QEvent::Paint:
-            paintEvent((QPaintEvent*)e);
-            break;
+      case QEvent::Paint:
+         paintEvent((QPaintEvent *)e);
+         break;
 
-        default:
-            return false;
-            break;
-    }
+      default:
+         return false;
+         break;
+   }
 
-    return true;
+   return true;
 }
 
 void QWSManager::mousePressEvent(QMouseEvent *e)
 {
-    Q_D(QWSManager);
-    d->mousePos = e->globalPos();
-    d->activeRegion = QApplication::qwsDecoration().regionAt(d->managed, d->mousePos);
-    if(d->cached_region.regionType)
-        d->previousRegionRepainted |= repaintRegion(d->cached_region.regionType, QDecoration::Pressed);
+   Q_D(QWSManager);
+   d->mousePos = e->globalPos();
+   d->activeRegion = QApplication::qwsDecoration().regionAt(d->managed, d->mousePos);
+   if (d->cached_region.regionType) {
+      d->previousRegionRepainted |= repaintRegion(d->cached_region.regionType, QDecoration::Pressed);
+   }
 
-    if (d->activeRegion == QDecoration::Menu) {
-        QPoint pos = (QApplication::layoutDirection() == Qt::LeftToRight
-                      ? d->managed->geometry().topLeft()
-                      : d->managed->geometry().topRight());
-        menu(pos);
-    }
-    if (d->activeRegion != QDecoration::None &&
+   if (d->activeRegion == QDecoration::Menu) {
+      QPoint pos = (QApplication::layoutDirection() == Qt::LeftToRight
+                    ? d->managed->geometry().topLeft()
+                    : d->managed->geometry().topRight());
+      menu(pos);
+   }
+   if (d->activeRegion != QDecoration::None &&
          d->activeRegion != QDecoration::Menu) {
-        d->active = d->managed;
-        d->managed->grabMouse();
-    }
-    if (d->activeRegion != QDecoration::None &&
+      d->active = d->managed;
+      d->managed->grabMouse();
+   }
+   if (d->activeRegion != QDecoration::None &&
          d->activeRegion != QDecoration::Close &&
          d->activeRegion != QDecoration::Minimize &&
          d->activeRegion != QDecoration::Menu) {
-        d->managed->raise();
-    }
+      d->managed->raise();
+   }
 
-    if (e->button() == Qt::RightButton) {
-        menu(e->globalPos());
-    }
+   if (e->button() == Qt::RightButton) {
+      menu(e->globalPos());
+   }
 }
 
 void QWSManager::mouseReleaseEvent(QMouseEvent *e)
 {
-    Q_D(QWSManager);
-    d->managed->releaseMouse();
-    if (d->cached_region.regionType && d->previousRegionRepainted && QApplication::mouseButtons() == 0) {
-        bool doesHover = repaintRegion(d->cached_region.regionType, QDecoration::Hover);
-        if (!doesHover) {
-            repaintRegion(d->cached_region.regionType, QDecoration::Normal);
-            d->previousRegionRepainted = false;
-        }
-    }
+   Q_D(QWSManager);
+   d->managed->releaseMouse();
+   if (d->cached_region.regionType && d->previousRegionRepainted && QApplication::mouseButtons() == 0) {
+      bool doesHover = repaintRegion(d->cached_region.regionType, QDecoration::Hover);
+      if (!doesHover) {
+         repaintRegion(d->cached_region.regionType, QDecoration::Normal);
+         d->previousRegionRepainted = false;
+      }
+   }
 
-    if (e->button() == Qt::LeftButton) {
-        //handleMove();
-        int itm = QApplication::qwsDecoration().regionAt(d->managed, e->globalPos());
-        int activatedItem = d->activeRegion;
-        d->activeRegion = QDecoration::None;
-        d->active = 0;
-        if (activatedItem == itm)
-            QApplication::qwsDecoration().regionClicked(d->managed, itm);
-    } else if (d->activeRegion == QDecoration::None) {
-        d->active = 0;
-    }
+   if (e->button() == Qt::LeftButton) {
+      //handleMove();
+      int itm = QApplication::qwsDecoration().regionAt(d->managed, e->globalPos());
+      int activatedItem = d->activeRegion;
+      d->activeRegion = QDecoration::None;
+      d->active = 0;
+      if (activatedItem == itm) {
+         QApplication::qwsDecoration().regionClicked(d->managed, itm);
+      }
+   } else if (d->activeRegion == QDecoration::None) {
+      d->active = 0;
+   }
 }
 
 void QWSManager::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    Q_D(QWSManager);
-    if (e->button() == Qt::LeftButton)
-        QApplication::qwsDecoration().regionDoubleClicked(d->managed,
+   Q_D(QWSManager);
+   if (e->button() == Qt::LeftButton)
+      QApplication::qwsDecoration().regionDoubleClicked(d->managed,
             QApplication::qwsDecoration().regionAt(d->managed, e->globalPos()));
 }
 
 static inline Qt::CursorShape regionToShape(int region)
 {
-    if (region == QDecoration::None)
-        return Qt::ArrowCursor;
+   if (region == QDecoration::None) {
+      return Qt::ArrowCursor;
+   }
 
-    static const struct {
-        int region;
-        Qt::CursorShape shape;
-    } r2s[] = {
-        { QDecoration::TopLeft,     Qt::SizeFDiagCursor },
-        { QDecoration::Top,         Qt::SizeVerCursor},
-        { QDecoration::TopRight,    Qt::SizeBDiagCursor},
-        { QDecoration::Left,        Qt::SizeHorCursor},
-        { QDecoration::Right,       Qt::SizeHorCursor},
-        { QDecoration::BottomLeft,  Qt::SizeBDiagCursor},
-        { QDecoration::Bottom,      Qt::SizeVerCursor},
-        { QDecoration::BottomRight, Qt::SizeFDiagCursor},
-        { QDecoration::None,        Qt::ArrowCursor}
-    };
+   static const struct {
+      int region;
+      Qt::CursorShape shape;
+   } r2s[] = {
+      { QDecoration::TopLeft,     Qt::SizeFDiagCursor },
+      { QDecoration::Top,         Qt::SizeVerCursor},
+      { QDecoration::TopRight,    Qt::SizeBDiagCursor},
+      { QDecoration::Left,        Qt::SizeHorCursor},
+      { QDecoration::Right,       Qt::SizeHorCursor},
+      { QDecoration::BottomLeft,  Qt::SizeBDiagCursor},
+      { QDecoration::Bottom,      Qt::SizeVerCursor},
+      { QDecoration::BottomRight, Qt::SizeFDiagCursor},
+      { QDecoration::None,        Qt::ArrowCursor}
+   };
 
-    int i = 0;
-    while (region != r2s[i].region && r2s[i].region)
-        ++i;
-    return r2s[i].shape;
+   int i = 0;
+   while (region != r2s[i].region && r2s[i].region) {
+      ++i;
+   }
+   return r2s[i].shape;
 }
 
 void QWSManager::mouseMoveEvent(QMouseEvent *e)
 {
-    Q_D(QWSManager);
-    if (d->newCachedRegion(e->globalPos())) {
-        if(d->previousRegionType && d->previousRegionRepainted)
-            repaintRegion(d->previousRegionType, QDecoration::Normal);
-        if(d->cached_region.regionType) {
-            d->previousRegionRepainted = repaintRegion(d->cached_region.regionType, QDecoration::Hover);
-        }
-    }
+   Q_D(QWSManager);
+   if (d->newCachedRegion(e->globalPos())) {
+      if (d->previousRegionType && d->previousRegionRepainted) {
+         repaintRegion(d->previousRegionType, QDecoration::Normal);
+      }
+      if (d->cached_region.regionType) {
+         d->previousRegionRepainted = repaintRegion(d->cached_region.regionType, QDecoration::Hover);
+      }
+   }
 
 
 #ifndef QT_NO_CURSOR
-    if (d->managed->minimumSize() != d->managed->maximumSize()) {
-        QWSDisplay *qwsd = QApplication::desktop()->qwsDisplay();
-        qwsd->selectCursor(d->managed, regionToShape(d->cachedRegionAt()));
-    }
+   if (d->managed->minimumSize() != d->managed->maximumSize()) {
+      QWSDisplay *qwsd = QApplication::desktop()->qwsDisplay();
+      qwsd->selectCursor(d->managed, regionToShape(d->cachedRegionAt()));
+   }
 #endif //QT_NO_CURSOR
 
-    if (d->activeRegion)
-        handleMove(e->globalPos());
+   if (d->activeRegion) {
+      handleMove(e->globalPos());
+   }
 }
 
 void QWSManager::handleMove(QPoint g)
 {
-    Q_D(QWSManager);
+   Q_D(QWSManager);
 
-    // don't allow dragging to where the user probably cannot click!
-    QApplicationPrivate *ap = QApplicationPrivate::instance();
-    const QRect maxWindowRect = ap->maxWindowRect(qt_screen);
-    if (maxWindowRect.isValid()) {
-        if (g.x() < maxWindowRect.x())
-            g.setX(maxWindowRect.x());
-        if (g.y() < maxWindowRect.y())
-            g.setY(maxWindowRect.y());
-        if (g.x() > maxWindowRect.right())
-            g.setX(maxWindowRect.right());
-        if (g.y() > maxWindowRect.bottom())
-            g.setY(maxWindowRect.bottom());
-    }
+   // don't allow dragging to where the user probably cannot click!
+   QApplicationPrivate *ap = QApplicationPrivate::instance();
+   const QRect maxWindowRect = ap->maxWindowRect(qt_screen);
+   if (maxWindowRect.isValid()) {
+      if (g.x() < maxWindowRect.x()) {
+         g.setX(maxWindowRect.x());
+      }
+      if (g.y() < maxWindowRect.y()) {
+         g.setY(maxWindowRect.y());
+      }
+      if (g.x() > maxWindowRect.right()) {
+         g.setX(maxWindowRect.right());
+      }
+      if (g.y() > maxWindowRect.bottom()) {
+         g.setY(maxWindowRect.bottom());
+      }
+   }
 
-    if (g == d->mousePos)
-        return;
+   if (g == d->mousePos) {
+      return;
+   }
 
-    if ( d->managed->isMaximized() )
-        return;
+   if ( d->managed->isMaximized() ) {
+      return;
+   }
 
-    int x = d->managed->geometry().x();
-    int y = d->managed->geometry().y();
-    int w = d->managed->width();
-    int h = d->managed->height();
+   int x = d->managed->geometry().x();
+   int y = d->managed->geometry().y();
+   int w = d->managed->width();
+   int h = d->managed->height();
 
-    QRect geom(d->managed->geometry());
+   QRect geom(d->managed->geometry());
 
-    QPoint delta = g - d->mousePos;
-    d->mousePos = g;
+   QPoint delta = g - d->mousePos;
+   d->mousePos = g;
 
-    if (d->activeRegion == QDecoration::Title) {
-        geom = QRect(x + delta.x(), y + delta.y(), w, h);
-    } else {
-        bool keepTop = true;
-        bool keepLeft = true;
-        switch (d->activeRegion) {
-        case QDecoration::Top:
+   if (d->activeRegion == QDecoration::Title) {
+      geom = QRect(x + delta.x(), y + delta.y(), w, h);
+   } else {
+      bool keepTop = true;
+      bool keepLeft = true;
+      switch (d->activeRegion) {
+         case QDecoration::Top:
             geom.setTop(geom.top() + delta.y());
             keepTop = false;
             break;
-        case QDecoration::Bottom:
+         case QDecoration::Bottom:
             geom.setBottom(geom.bottom() + delta.y());
             keepTop = true;
             break;
-        case QDecoration::Left:
+         case QDecoration::Left:
             geom.setLeft(geom.left() + delta.x());
             keepLeft = false;
             break;
-        case QDecoration::Right:
+         case QDecoration::Right:
             geom.setRight(geom.right() + delta.x());
             keepLeft = true;
             break;
-        case QDecoration::TopRight:
+         case QDecoration::TopRight:
             geom.setTopRight(geom.topRight() + delta);
             keepLeft = true;
             keepTop = false;
             break;
-        case QDecoration::TopLeft:
+         case QDecoration::TopLeft:
             geom.setTopLeft(geom.topLeft() + delta);
             keepLeft = false;
             keepTop = false;
             break;
-        case QDecoration::BottomLeft:
+         case QDecoration::BottomLeft:
             geom.setBottomLeft(geom.bottomLeft() + delta);
             keepLeft = false;
             keepTop = true;
             break;
-        case QDecoration::BottomRight:
+         case QDecoration::BottomRight:
             geom.setBottomRight(geom.bottomRight() + delta);
             keepLeft = true;
             keepTop = true;
             break;
-        default:
+         default:
             return;
-        }
+      }
 
-        QSize newSize = QLayout::closestAcceptableSize(d->managed, geom.size());
+      QSize newSize = QLayout::closestAcceptableSize(d->managed, geom.size());
 
-        int dx = newSize.width() - geom.width();
-        int dy = newSize.height() - geom.height();
+      int dx = newSize.width() - geom.width();
+      int dy = newSize.height() - geom.height();
 
-        if (keepTop) {
-            geom.setBottom(geom.bottom() + dy);
-            d->mousePos.ry() += dy;
-        } else {
-            geom.setTop(geom.top() - dy);
-            d->mousePos.ry() -= dy;
-        }
-        if (keepLeft) {
-            geom.setRight(geom.right() + dx);
-            d->mousePos.rx() += dx;
-        } else {
-            geom.setLeft(geom.left() - dx);
-            d->mousePos.rx() -= dx;
-        }
-    }
-    if (geom != d->managed->geometry()) {
-        QApplication::sendPostedEvents();
-        d->managed->setGeometry(geom);
-    }
+      if (keepTop) {
+         geom.setBottom(geom.bottom() + dy);
+         d->mousePos.ry() += dy;
+      } else {
+         geom.setTop(geom.top() - dy);
+         d->mousePos.ry() -= dy;
+      }
+      if (keepLeft) {
+         geom.setRight(geom.right() + dx);
+         d->mousePos.rx() += dx;
+      } else {
+         geom.setLeft(geom.left() - dx);
+         d->mousePos.rx() -= dx;
+      }
+   }
+   if (geom != d->managed->geometry()) {
+      QApplication::sendPostedEvents();
+      d->managed->setGeometry(geom);
+   }
 }
 
 void QWSManager::paintEvent(QPaintEvent *)
 {
-     Q_D(QWSManager);
-     d->dirtyRegion(QDecoration::All, QDecoration::Normal);
+   Q_D(QWSManager);
+   d->dirtyRegion(QDecoration::All, QDecoration::Normal);
 }
 
 void QWSManagerPrivate::dirtyRegion(int decorationRegion,
                                     QDecoration::DecorationState state,
                                     const QRegion &clip)
 {
-    QTLWExtra *topextra = managed->d_func()->extra->topextra;
-    QWidgetBackingStore *bs = topextra->backingStore.data();
-    const bool pendingUpdateRequest = bs->isDirty();
+   QTLWExtra *topextra = managed->d_func()->extra->topextra;
+   QWidgetBackingStore *bs = topextra->backingStore.data();
+   const bool pendingUpdateRequest = bs->isDirty();
 
-    if (decorationRegion == QDecoration::All) {
-        if (clip.isEmpty())
-            entireDecorationNeedsRepaint = true;
-        dirtyRegions.clear();
-        dirtyStates.clear();
-    }
-    int i = dirtyRegions.indexOf(decorationRegion);
-    if (i >= 0) {
-        dirtyRegions.removeAt(i);
-        dirtyStates.removeAt(i);
-    }
+   if (decorationRegion == QDecoration::All) {
+      if (clip.isEmpty()) {
+         entireDecorationNeedsRepaint = true;
+      }
+      dirtyRegions.clear();
+      dirtyStates.clear();
+   }
+   int i = dirtyRegions.indexOf(decorationRegion);
+   if (i >= 0) {
+      dirtyRegions.removeAt(i);
+      dirtyStates.removeAt(i);
+   }
 
-    dirtyRegions.append(decorationRegion);
-    dirtyStates.append(state);
-    if (!entireDecorationNeedsRepaint)
-        dirtyClip += clip;
+   dirtyRegions.append(decorationRegion);
+   dirtyStates.append(state);
+   if (!entireDecorationNeedsRepaint) {
+      dirtyClip += clip;
+   }
 
-    if (!pendingUpdateRequest)
-        QApplication::postEvent(managed, new QEvent(QEvent::UpdateRequest), Qt::LowEventPriority);
+   if (!pendingUpdateRequest) {
+      QApplication::postEvent(managed, new QEvent(QEvent::UpdateRequest), Qt::LowEventPriority);
+   }
 }
 
 void QWSManagerPrivate::clearDirtyRegions()
 {
-    dirtyRegions.clear();
-    dirtyStates.clear();
-    dirtyClip = QRegion();
-    entireDecorationNeedsRepaint = false;
+   dirtyRegions.clear();
+   dirtyStates.clear();
+   dirtyClip = QRegion();
+   entireDecorationNeedsRepaint = false;
 }
 
 bool QWSManager::repaintRegion(int decorationRegion, QDecoration::DecorationState state)
 {
-    Q_D(QWSManager);
+   Q_D(QWSManager);
 
-    d->dirtyRegion(decorationRegion, state);
-    return true;
+   d->dirtyRegion(decorationRegion, state);
+   return true;
 }
 
 void QWSManager::menu(const QPoint &pos)
 {
 #ifdef QT_NO_MENU
-    Q_UNUSED(pos);
+   Q_UNUSED(pos);
 #else
-    Q_D(QWSManager);
-    if (d->popup)
-        delete d->popup;
+   Q_D(QWSManager);
+   if (d->popup) {
+      delete d->popup;
+   }
 
-    // Basic window operation menu
-    d->popup = new QMenu();
-    QApplication::qwsDecoration().buildSysMenu(d->managed, d->popup);
-    connect(d->popup, SIGNAL(triggered(QAction*)), SLOT(menuTriggered(QAction*)));
+   // Basic window operation menu
+   d->popup = new QMenu();
+   QApplication::qwsDecoration().buildSysMenu(d->managed, d->popup);
+   connect(d->popup, SIGNAL(triggered(QAction *)), SLOT(menuTriggered(QAction *)));
 
-    d->popup->popup(pos);
-    d->activeRegion = QDecoration::None;
+   d->popup->popup(pos);
+   d->activeRegion = QDecoration::None;
 #endif // QT_NO_MENU
 }
 
 void QWSManager::menuTriggered(QAction *action)
 {
 #ifdef QT_NO_MENU
-    Q_UNUSED(action);
+   Q_UNUSED(action);
 #else
-    Q_D(QWSManager);
-    QApplication::qwsDecoration().menuTriggered(d->managed, action);
-    d->popup->deleteLater();
-    d->popup = 0;
+   Q_D(QWSManager);
+   QApplication::qwsDecoration().menuTriggered(d->managed, action);
+   d->popup->deleteLater();
+   d->popup = 0;
 #endif
 }
 
 void QWSManager::startMove()
 {
-    Q_D(QWSManager);
-    d->mousePos = QCursor::pos();
-    d->activeRegion = QDecoration::Title;
-    d->active = d->managed;
-    d->managed->grabMouse();
+   Q_D(QWSManager);
+   d->mousePos = QCursor::pos();
+   d->activeRegion = QDecoration::Title;
+   d->active = d->managed;
+   d->managed->grabMouse();
 }
 
 void QWSManager::startResize()
 {
-    Q_D(QWSManager);
-    d->activeRegion = QDecoration::BottomRight;
-    d->active = d->managed;
-    d->managed->grabMouse();
+   Q_D(QWSManager);
+   d->activeRegion = QDecoration::BottomRight;
+   d->active = d->managed;
+   d->managed->grabMouse();
 }
 
 void QWSManager::maximize()
 {
-    Q_D(QWSManager);
-    // find out how much space the decoration needs
-    const int screen = QApplication::desktop()->screenNumber(d->managed);
-    const QRect desk = QApplication::desktop()->availableGeometry(screen);
-    QRect dummy(0, 0, 1, 1);
-    QRect nr;
-    QRegion r = QApplication::qwsDecoration().region(d->managed, dummy);
-    if (r.isEmpty()) {
-        nr = desk;
-    } else {
-        r += dummy; // make sure we get the full window region in case of 0 width borders
-        QRect rect = r.boundingRect();
-        nr = QRect(desk.x()-rect.x(), desk.y()-rect.y(),
-                desk.width() - (rect.width()==1 ? 0 : rect.width()-1), // ==1 -> dummy
-                desk.height() - (rect.height()==1 ? 0 : rect.height()-1));
-    }
-    d->managed->setGeometry(nr);
+   Q_D(QWSManager);
+   // find out how much space the decoration needs
+   const int screen = QApplication::desktop()->screenNumber(d->managed);
+   const QRect desk = QApplication::desktop()->availableGeometry(screen);
+   QRect dummy(0, 0, 1, 1);
+   QRect nr;
+   QRegion r = QApplication::qwsDecoration().region(d->managed, dummy);
+   if (r.isEmpty()) {
+      nr = desk;
+   } else {
+      r += dummy; // make sure we get the full window region in case of 0 width borders
+      QRect rect = r.boundingRect();
+      nr = QRect(desk.x() - rect.x(), desk.y() - rect.y(),
+                 desk.width() - (rect.width() == 1 ? 0 : rect.width() - 1), // ==1 -> dummy
+                 desk.height() - (rect.height() == 1 ? 0 : rect.height() - 1));
+   }
+   d->managed->setGeometry(nr);
 }
 
 bool QWSManagerPrivate::newCachedRegion(const QPoint &pos)
 {
-    // Check if anything has changed that would affect the region caching
-    if (managed->windowFlags() == cached_region.windowFlags
-        && managed->geometry() == cached_region.windowGeometry
-        && cached_region.region.contains(pos))
-        return false;
+   // Check if anything has changed that would affect the region caching
+   if (managed->windowFlags() == cached_region.windowFlags
+         && managed->geometry() == cached_region.windowGeometry
+         && cached_region.region.contains(pos)) {
+      return false;
+   }
 
-    // Update the cached region
-    int reg = QApplication::qwsDecoration().regionAt(managed, pos);
-    if (QWidget::mouseGrabber())
-        reg = QDecoration::None;
+   // Update the cached region
+   int reg = QApplication::qwsDecoration().regionAt(managed, pos);
+   if (QWidget::mouseGrabber()) {
+      reg = QDecoration::None;
+   }
 
-    previousRegionType = cached_region.regionType;
-    cached_region.regionType = reg;
-    cached_region.region = QApplication::qwsDecoration().region(managed, managed->geometry(),
-                                                                reg);
-    // Make room for borders around the widget, even if the decoration doesn't have a frame.
-    if (reg && !(reg & int(QDecoration::Borders))) {
-        cached_region.region -= QApplication::qwsDecoration().region(managed, managed->geometry(), QDecoration::Borders);
-    }
-    cached_region.windowFlags = managed->windowFlags();
-    cached_region.windowGeometry = managed->geometry();
-//    QRect rec = cached_region.region.boundingRect();
-//    qDebug("Updated cached region: 0x%04x (%d, %d)  (%d, %d,  %d, %d)",
-//           reg, pos.x(), pos.y(), rec.x(), rec.y(), rec.right(), rec.bottom());
-    return true;
+   previousRegionType = cached_region.regionType;
+   cached_region.regionType = reg;
+   cached_region.region = QApplication::qwsDecoration().region(managed, managed->geometry(),
+                          reg);
+   // Make room for borders around the widget, even if the decoration doesn't have a frame.
+   if (reg && !(reg & int(QDecoration::Borders))) {
+      cached_region.region -= QApplication::qwsDecoration().region(managed, managed->geometry(), QDecoration::Borders);
+   }
+   cached_region.windowFlags = managed->windowFlags();
+   cached_region.windowGeometry = managed->geometry();
+   //    QRect rec = cached_region.region.boundingRect();
+   //    qDebug("Updated cached region: 0x%04x (%d, %d)  (%d, %d,  %d, %d)",
+   //           reg, pos.x(), pos.y(), rec.x(), rec.y(), rec.right(), rec.bottom());
+   return true;
 }
 
 QT_END_NAMESPACE

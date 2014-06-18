@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,22 +32,21 @@ QT_BEGIN_NAMESPACE
 
 class QImageVideoBufferPrivate : public QAbstractVideoBufferPrivate
 {
-public:
-    QImageVideoBufferPrivate()
-        : mapMode(QAbstractVideoBuffer::NotMapped)
-    {
-    }
+ public:
+   QImageVideoBufferPrivate()
+      : mapMode(QAbstractVideoBuffer::NotMapped) {
+   }
 
-    QAbstractVideoBuffer::MapMode mapMode;
-    QImage image;
+   QAbstractVideoBuffer::MapMode mapMode;
+   QImage image;
 };
 
 QImageVideoBuffer::QImageVideoBuffer(const QImage &image)
-    : QAbstractVideoBuffer(*new QImageVideoBufferPrivate, NoHandle)
+   : QAbstractVideoBuffer(*new QImageVideoBufferPrivate, NoHandle)
 {
-    Q_D(QImageVideoBuffer);
+   Q_D(QImageVideoBuffer);
 
-    d->image = image;
+   d->image = image;
 }
 
 QImageVideoBuffer::~QImageVideoBuffer()
@@ -56,33 +55,35 @@ QImageVideoBuffer::~QImageVideoBuffer()
 
 QAbstractVideoBuffer::MapMode QImageVideoBuffer::mapMode() const
 {
-    return d_func()->mapMode;
+   return d_func()->mapMode;
 }
 
 uchar *QImageVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPerLine)
 {
-    Q_D(QImageVideoBuffer);
+   Q_D(QImageVideoBuffer);
 
-    if (d->mapMode == NotMapped && d->image.bits() && mode != NotMapped) {
-        d->mapMode = mode;
+   if (d->mapMode == NotMapped && d->image.bits() && mode != NotMapped) {
+      d->mapMode = mode;
 
-        if (numBytes)
-            *numBytes = d->image.byteCount();
+      if (numBytes) {
+         *numBytes = d->image.byteCount();
+      }
 
-        if (bytesPerLine)
-            *bytesPerLine = d->image.bytesPerLine();
+      if (bytesPerLine) {
+         *bytesPerLine = d->image.bytesPerLine();
+      }
 
-        return d->image.bits();
-    } else {
-        return 0;
-    }
+      return d->image.bits();
+   } else {
+      return 0;
+   }
 }
 
 void QImageVideoBuffer::unmap()
 {
-    Q_D(QImageVideoBuffer);
+   Q_D(QImageVideoBuffer);
 
-    d->mapMode = NotMapped;
+   d->mapMode = NotMapped;
 }
 
 QT_END_NAMESPACE

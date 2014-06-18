@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,89 +41,89 @@ class QProxyScreenCursorPrivate;
 class Q_GUI_EXPORT QProxyScreenCursor : public QScreenCursor
 {
 
-public:
-    QProxyScreenCursor();
-    ~QProxyScreenCursor();
+ public:
+   QProxyScreenCursor();
+   ~QProxyScreenCursor();
 
-    void setScreenCursor(QScreenCursor *cursor);
-    QScreenCursor* screenCursor() const;
+   void setScreenCursor(QScreenCursor *cursor);
+   QScreenCursor *screenCursor() const;
 
-    void set(const QImage &image, int hotx, int hoty);
-    void move(int x, int y);
-    void show();
-    void hide();
+   void set(const QImage &image, int hotx, int hoty);
+   void move(int x, int y);
+   void show();
+   void hide();
 
-private:
-    void configure();
+ private:
+   void configure();
 
-    QScreenCursor *realCursor;
-    QProxyScreenCursorPrivate *d_ptr;
+   QScreenCursor *realCursor;
+   QProxyScreenCursorPrivate *d_ptr;
 };
 
 #endif // QT_NO_QWS_CURSOR
 
 class Q_GUI_EXPORT QProxyScreen : public QScreen
 {
-public:
-    QProxyScreen(int display_id, ClassId = ProxyClass);
-    ~QProxyScreen();
+ public:
+   QProxyScreen(int display_id, ClassId = ProxyClass);
+   ~QProxyScreen();
 
-    void setScreen(QScreen *screen);
-    QScreen *screen() const;
+   void setScreen(QScreen *screen);
+   QScreen *screen() const;
 
-    QSize mapToDevice(const QSize &s) const;
-    QSize mapFromDevice(const QSize &s) const;
+   QSize mapToDevice(const QSize &s) const;
+   QSize mapFromDevice(const QSize &s) const;
 
-    QPoint mapToDevice(const QPoint &, const QSize &) const;
-    QPoint mapFromDevice(const QPoint &, const QSize &) const;
+   QPoint mapToDevice(const QPoint &, const QSize &) const;
+   QPoint mapFromDevice(const QPoint &, const QSize &) const;
 
-    QRect mapToDevice(const QRect &, const QSize &) const;
-    QRect mapFromDevice(const QRect &, const QSize &) const;
+   QRect mapToDevice(const QRect &, const QSize &) const;
+   QRect mapFromDevice(const QRect &, const QSize &) const;
 
-    QRegion mapToDevice(const QRegion &, const QSize &) const;
-    QRegion mapFromDevice(const QRegion &, const QSize &) const;
+   QRegion mapToDevice(const QRegion &, const QSize &) const;
+   QRegion mapFromDevice(const QRegion &, const QSize &) const;
 
-    bool connect(const QString &displaySpec);
-    bool initDevice();
-    void shutdownDevice();
-    void disconnect();
+   bool connect(const QString &displaySpec);
+   bool initDevice();
+   void shutdownDevice();
+   void disconnect();
 
-    void setMode(int width, int height, int depth);
-    bool supportsDepth(int) const;
+   void setMode(int width, int height, int depth);
+   bool supportsDepth(int) const;
 
-    void save();
-    void restore();
-    void blank(bool on);
+   void save();
+   void restore();
+   void blank(bool on);
 
-    bool onCard(const unsigned char *) const;
-    bool onCard(const unsigned char *, ulong& out_offset) const;
+   bool onCard(const unsigned char *) const;
+   bool onCard(const unsigned char *, ulong &out_offset) const;
 
-    bool isInterlaced() const;
-    bool isTransformed() const;
-    int transformOrientation() const;
+   bool isInterlaced() const;
+   bool isTransformed() const;
+   int transformOrientation() const;
 
-    int memoryNeeded(const QString&);
-    int sharedRamSize(void *);
+   int memoryNeeded(const QString &);
+   int sharedRamSize(void *);
 
-    void haltUpdates();
-    void resumeUpdates();
+   void haltUpdates();
+   void resumeUpdates();
 
-    void exposeRegion(QRegion r, int changing);
-    void blit(const QImage &img, const QPoint &topLeft, const QRegion &region);
-    void solidFill(const QColor &color, const QRegion &region);
-    void setDirty(const QRect&);
+   void exposeRegion(QRegion r, int changing);
+   void blit(const QImage &img, const QPoint &topLeft, const QRegion &region);
+   void solidFill(const QColor &color, const QRegion &region);
+   void setDirty(const QRect &);
 
-    QWSWindowSurface* createSurface(QWidget *widget) const;
-    QWSWindowSurface* createSurface(const QString &key) const;
+   QWSWindowSurface *createSurface(QWidget *widget) const;
+   QWSWindowSurface *createSurface(const QString &key) const;
 
-    QList<QScreen*> subScreens() const;
-    QRegion region() const;
+   QList<QScreen *> subScreens() const;
+   QRegion region() const;
 
-private:
-    void configure();
+ private:
+   void configure();
 
-    QScreen *realScreen;
-    QProxyScreenPrivate *d_ptr;
+   QScreen *realScreen;
+   QProxyScreenPrivate *d_ptr;
 };
 
 QT_END_NAMESPACE

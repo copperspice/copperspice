@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,45 +39,48 @@
 #include <qfontdatabase.h>
 
 QT_BEGIN_NAMESPACE
-        
+
 extern HDC   shared_dc();                // common dc for all fonts
 extern QFont::Weight weightFromInteger(int weight); // qfontdatabase.cpp
 
 // ### maybe move to qapplication_win
-QFont qt_LOGFONTtoQFont(LOGFONT& lf, bool /*scale*/)
+QFont qt_LOGFONTtoQFont(LOGFONT &lf, bool /*scale*/)
 {
-    QString family = QString::fromWCharArray(lf.lfFaceName);
-    QFont qf(family);
-    qf.setItalic(lf.lfItalic);
-    if (lf.lfWeight != FW_DONTCARE)
-        qf.setWeight(weightFromInteger(lf.lfWeight));
-    int lfh = qAbs(lf.lfHeight);
-    qf.setPointSizeF(lfh * 72.0 / GetDeviceCaps(shared_dc(),LOGPIXELSY));
-    qf.setUnderline(false);
-    qf.setOverline(false);
-    qf.setStrikeOut(false);
-    return qf;
+   QString family = QString::fromWCharArray(lf.lfFaceName);
+   QFont qf(family);
+   qf.setItalic(lf.lfItalic);
+   if (lf.lfWeight != FW_DONTCARE) {
+      qf.setWeight(weightFromInteger(lf.lfWeight));
+   }
+   int lfh = qAbs(lf.lfHeight);
+   qf.setPointSizeF(lfh * 72.0 / GetDeviceCaps(shared_dc(), LOGPIXELSY));
+   qf.setUnderline(false);
+   qf.setOverline(false);
+   qf.setStrikeOut(false);
+   return qf;
 }
 
 
 static inline float pixelSize(const QFontDef &request, int dpi)
 {
-    float pSize;
-    if (request.pointSize != -1)
-        pSize = request.pointSize * dpi/ 72.;
-    else
-        pSize = request.pixelSize;
-    return pSize;
+   float pSize;
+   if (request.pointSize != -1) {
+      pSize = request.pointSize * dpi / 72.;
+   } else {
+      pSize = request.pixelSize;
+   }
+   return pSize;
 }
 
 static inline float pointSize(const QFontDef &fd, int dpi)
 {
-    float pSize;
-    if (fd.pointSize < 0)
-        pSize = fd.pixelSize * 72. / ((float)dpi);
-    else
-        pSize = fd.pointSize;
-    return pSize;
+   float pSize;
+   if (fd.pointSize < 0) {
+      pSize = fd.pixelSize * 72. / ((float)dpi);
+   } else {
+      pSize = fd.pointSize;
+   }
+   return pSize;
 }
 
 /*****************************************************************************
@@ -90,60 +93,62 @@ void QFont::initialize()
 
 void QFont::cleanup()
 {
-    QFontCache::cleanup();
+   QFontCache::cleanup();
 }
 
 HFONT QFont::handle() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    if (engine->type() == QFontEngine::Multi)
-        engine = static_cast<QFontEngineMulti *>(engine)->engine(0);
-    if (engine->type() == QFontEngine::Win)
-	return static_cast<QFontEngineWin *>(engine)->hfont;
-    return 0;
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   if (engine->type() == QFontEngine::Multi) {
+      engine = static_cast<QFontEngineMulti *>(engine)->engine(0);
+   }
+   if (engine->type() == QFontEngine::Win) {
+      return static_cast<QFontEngineWin *>(engine)->hfont;
+   }
+   return 0;
 }
 
 QString QFont::rawName() const
 {
-    return family();
+   return family();
 }
 
 void QFont::setRawName(const QString &name)
 {
-    setFamily(name);
+   setFamily(name);
 }
 
 QString QFont::defaultFamily() const
 {
-    switch(d->request.styleHint) {
-        case QFont::Times:
-            return QString::fromLatin1("Times New Roman");
-        case QFont::Courier:
-        case QFont::Monospace:
-            return QString::fromLatin1("Courier New");
-        case QFont::Decorative:
-            return QString::fromLatin1("Bookman Old Style");
-        case QFont::Cursive:
-            return QString::fromLatin1("Comic Sans MS");
-        case QFont::Fantasy:
-            return QString::fromLatin1("Impact");
-        case QFont::Helvetica:
-            return QString::fromLatin1("Arial");
-        case QFont::System:
-        default:
-            return QString::fromLatin1("MS Sans Serif");
-    }
+   switch (d->request.styleHint) {
+      case QFont::Times:
+         return QString::fromLatin1("Times New Roman");
+      case QFont::Courier:
+      case QFont::Monospace:
+         return QString::fromLatin1("Courier New");
+      case QFont::Decorative:
+         return QString::fromLatin1("Bookman Old Style");
+      case QFont::Cursive:
+         return QString::fromLatin1("Comic Sans MS");
+      case QFont::Fantasy:
+         return QString::fromLatin1("Impact");
+      case QFont::Helvetica:
+         return QString::fromLatin1("Arial");
+      case QFont::System:
+      default:
+         return QString::fromLatin1("MS Sans Serif");
+   }
 }
 
 QString QFont::lastResortFamily() const
 {
-    return QString::fromLatin1("helvetica");
+   return QString::fromLatin1("helvetica");
 }
 
 QString QFont::lastResortFont() const
 {
-    return QString::fromLatin1("arial");
+   return QString::fromLatin1("arial");
 }
 
 QT_END_NAMESPACE

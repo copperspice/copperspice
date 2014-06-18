@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,20 +34,22 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QToolTip
 {
-    QToolTip();
+   QToolTip();
 
-public:
-    static void showText(const QPoint &pos, const QString &text, QWidget *w = 0);
-    static void showText(const QPoint &pos, const QString &text, QWidget *w, const QRect &rect);
-    static inline void hideText() { showText(QPoint(), QString()); }
+ public:
+   static void showText(const QPoint &pos, const QString &text, QWidget *w = 0);
+   static void showText(const QPoint &pos, const QString &text, QWidget *w, const QRect &rect);
+   static inline void hideText() {
+      showText(QPoint(), QString());
+   }
 
-    static bool isVisible();
-    static QString text();
+   static bool isVisible();
+   static QString text();
 
-    static QPalette palette();
-    static void setPalette(const QPalette &);
-    static QFont font();
-    static void setFont(const QFont &);
+   static QPalette palette();
+   static void setPalette(const QPalette &);
+   static QFont font();
+   static void setFont(const QFont &);
 };
 
 #endif // QT_NO_TOOLTIP

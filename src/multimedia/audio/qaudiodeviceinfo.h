@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,44 +43,44 @@ class QAudioDeviceInfoPrivate;
 
 class Q_MULTIMEDIA_EXPORT QAudioDeviceInfo
 {
-    friend class QAudioDeviceFactory;
+   friend class QAudioDeviceFactory;
 
-public:
-    QAudioDeviceInfo();
-    QAudioDeviceInfo(const QAudioDeviceInfo& other);
-    ~QAudioDeviceInfo();
+ public:
+   QAudioDeviceInfo();
+   QAudioDeviceInfo(const QAudioDeviceInfo &other);
+   ~QAudioDeviceInfo();
 
-    QAudioDeviceInfo& operator=(const QAudioDeviceInfo& other);
+   QAudioDeviceInfo &operator=(const QAudioDeviceInfo &other);
 
-    bool isNull() const;
+   bool isNull() const;
 
-    QString deviceName() const;
+   QString deviceName() const;
 
-    bool isFormatSupported(const QAudioFormat &format) const;
-    QAudioFormat preferredFormat() const;
-    QAudioFormat nearestFormat(const QAudioFormat &format) const;
+   bool isFormatSupported(const QAudioFormat &format) const;
+   QAudioFormat preferredFormat() const;
+   QAudioFormat nearestFormat(const QAudioFormat &format) const;
 
-    QStringList supportedCodecs() const;
-    QList<int> supportedFrequencies() const;
-    QList<int> supportedSampleRates() const;
-    QList<int> supportedChannels() const;
-    QList<int> supportedChannelCounts() const;
-    QList<int> supportedSampleSizes() const;
-    QList<QAudioFormat::Endian> supportedByteOrders() const;
-    QList<QAudioFormat::SampleType> supportedSampleTypes() const;
+   QStringList supportedCodecs() const;
+   QList<int> supportedFrequencies() const;
+   QList<int> supportedSampleRates() const;
+   QList<int> supportedChannels() const;
+   QList<int> supportedChannelCounts() const;
+   QList<int> supportedSampleSizes() const;
+   QList<QAudioFormat::Endian> supportedByteOrders() const;
+   QList<QAudioFormat::SampleType> supportedSampleTypes() const;
 
-    static QAudioDeviceInfo defaultInputDevice();
-    static QAudioDeviceInfo defaultOutputDevice();
+   static QAudioDeviceInfo defaultInputDevice();
+   static QAudioDeviceInfo defaultOutputDevice();
 
-    static QList<QAudioDeviceInfo> availableDevices(QAudio::Mode mode);
+   static QList<QAudioDeviceInfo> availableDevices(QAudio::Mode mode);
 
-private:
-    QAudioDeviceInfo(const QString &realm, const QByteArray &handle, QAudio::Mode mode);
-    QString realm() const;
-    QByteArray handle() const;
-    QAudio::Mode mode() const;
+ private:
+   QAudioDeviceInfo(const QString &realm, const QByteArray &handle, QAudio::Mode mode);
+   QString realm() const;
+   QByteArray handle() const;
+   QAudio::Mode mode() const;
 
-    QSharedDataPointer<QAudioDeviceInfoPrivate> d;
+   QSharedDataPointer<QAudioDeviceInfoPrivate> d;
 };
 
 QT_END_NAMESPACE

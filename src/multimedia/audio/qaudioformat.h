@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,44 +35,44 @@ class QAudioFormatPrivate;
 
 class Q_MULTIMEDIA_EXPORT QAudioFormat
 {
-public:
-    enum SampleType { Unknown, SignedInt, UnSignedInt, Float };
-    enum Endian { BigEndian = QSysInfo::BigEndian, LittleEndian = QSysInfo::LittleEndian };
+ public:
+   enum SampleType { Unknown, SignedInt, UnSignedInt, Float };
+   enum Endian { BigEndian = QSysInfo::BigEndian, LittleEndian = QSysInfo::LittleEndian };
 
-    QAudioFormat();
-    QAudioFormat(const QAudioFormat &other);
-    ~QAudioFormat();
+   QAudioFormat();
+   QAudioFormat(const QAudioFormat &other);
+   ~QAudioFormat();
 
-    QAudioFormat& operator=(const QAudioFormat &other);
-    bool operator==(const QAudioFormat &other) const;
-    bool operator!=(const QAudioFormat &other) const;
+   QAudioFormat &operator=(const QAudioFormat &other);
+   bool operator==(const QAudioFormat &other) const;
+   bool operator!=(const QAudioFormat &other) const;
 
-    bool isValid() const;
+   bool isValid() const;
 
-    void setFrequency(int frequency);
-    int frequency() const;
-    void setSampleRate(int sampleRate);
-    int sampleRate() const;
+   void setFrequency(int frequency);
+   int frequency() const;
+   void setSampleRate(int sampleRate);
+   int sampleRate() const;
 
-    void setChannels(int channels);
-    int channels() const;
-    void setChannelCount(int channelCount);
-    int channelCount() const;
+   void setChannels(int channels);
+   int channels() const;
+   void setChannelCount(int channelCount);
+   int channelCount() const;
 
-    void setSampleSize(int sampleSize);
-    int sampleSize() const;
+   void setSampleSize(int sampleSize);
+   int sampleSize() const;
 
-    void setCodec(const QString &codec);
-    QString codec() const;
+   void setCodec(const QString &codec);
+   QString codec() const;
 
-    void setByteOrder(QAudioFormat::Endian byteOrder);
-    QAudioFormat::Endian byteOrder() const;
+   void setByteOrder(QAudioFormat::Endian byteOrder);
+   QAudioFormat::Endian byteOrder() const;
 
-    void setSampleType(QAudioFormat::SampleType sampleType);
-    QAudioFormat::SampleType sampleType() const;
+   void setSampleType(QAudioFormat::SampleType sampleType);
+   QAudioFormat::SampleType sampleType() const;
 
-private:
-    QSharedDataPointer<QAudioFormatPrivate> d;
+ private:
+   QSharedDataPointer<QAudioFormatPrivate> d;
 };
 
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,33 +36,35 @@ class QUrl;
 
 class Q_NETWORK_EXPORT QAuthenticator
 {
-public:
-    QAuthenticator();
-    ~QAuthenticator();
+ public:
+   QAuthenticator();
+   ~QAuthenticator();
 
-    QAuthenticator(const QAuthenticator &other);
-    QAuthenticator &operator=(const QAuthenticator &other);
+   QAuthenticator(const QAuthenticator &other);
+   QAuthenticator &operator=(const QAuthenticator &other);
 
-    bool operator==(const QAuthenticator &other) const;
-    inline bool operator!=(const QAuthenticator &other) const { return !operator==(other); }
-    
-    QString user() const;
-    void setUser(const QString &user);
+   bool operator==(const QAuthenticator &other) const;
+   inline bool operator!=(const QAuthenticator &other) const {
+      return !operator==(other);
+   }
 
-    QString password() const;
-    void setPassword(const QString &password);
+   QString user() const;
+   void setUser(const QString &user);
 
-    QString realm() const;
+   QString password() const;
+   void setPassword(const QString &password);
 
-    QVariant option(const QString &opt) const;
-    QVariantHash options() const;
-    void setOption(const QString &opt, const QVariant &value);
+   QString realm() const;
 
-    bool isNull() const;
-    void detach();
-private:
-    friend class QAuthenticatorPrivate;
-    QAuthenticatorPrivate *d;
+   QVariant option(const QString &opt) const;
+   QVariantHash options() const;
+   void setOption(const QString &opt, const QVariant &value);
+
+   bool isNull() const;
+   void detach();
+ private:
+   friend class QAuthenticatorPrivate;
+   QAuthenticatorPrivate *d;
 };
 
 QT_END_NAMESPACE

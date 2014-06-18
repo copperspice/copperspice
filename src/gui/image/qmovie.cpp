@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,119 +46,121 @@ QT_BEGIN_NAMESPACE
 
 class QFrameInfo
 {
-public:
-    QPixmap pixmap;
-    int delay;
-    bool endMark;
-    inline QFrameInfo(bool endMark)
-        : pixmap(QPixmap()), delay(QMOVIE_INVALID_DELAY), endMark(endMark)
-    { }
-    
-    inline QFrameInfo()
-        : pixmap(QPixmap()), delay(QMOVIE_INVALID_DELAY), endMark(false)
-    { }
-    
-    inline QFrameInfo(const QPixmap &pixmap, int delay)
-        : pixmap(pixmap), delay(delay), endMark(false)
-    { }
-    
-    inline bool isValid()
-    {
-        return endMark || !(pixmap.isNull() && (delay == QMOVIE_INVALID_DELAY));
-    }
-    
-    inline bool isEndMarker()
-    { return endMark; }
-    
-    static inline QFrameInfo endMarker()
-    { return QFrameInfo(true); }
+ public:
+   QPixmap pixmap;
+   int delay;
+   bool endMark;
+   inline QFrameInfo(bool endMark)
+      : pixmap(QPixmap()), delay(QMOVIE_INVALID_DELAY), endMark(endMark) {
+   }
+
+   inline QFrameInfo()
+      : pixmap(QPixmap()), delay(QMOVIE_INVALID_DELAY), endMark(false) {
+   }
+
+   inline QFrameInfo(const QPixmap &pixmap, int delay)
+      : pixmap(pixmap), delay(delay), endMark(false) {
+   }
+
+   inline bool isValid() {
+      return endMark || !(pixmap.isNull() && (delay == QMOVIE_INVALID_DELAY));
+   }
+
+   inline bool isEndMarker() {
+      return endMark;
+   }
+
+   static inline QFrameInfo endMarker() {
+      return QFrameInfo(true);
+   }
 };
 
 class QMoviePrivate
 {
-    Q_DECLARE_PUBLIC(QMovie)
+   Q_DECLARE_PUBLIC(QMovie)
 
-public:
-    QMoviePrivate(QMovie *qq);
-    virtual ~QMoviePrivate() {}
+ public:
+   QMoviePrivate(QMovie *qq);
+   virtual ~QMoviePrivate() {}
 
-    bool isDone();
-    bool next();
-    int speedAdjustedDelay(int delay) const;
-    bool isValid() const;
-    bool jumpToFrame(int frameNumber);
-    int frameCount() const;
-    bool jumpToNextFrame();
-    QFrameInfo infoForFrame(int frameNumber);
-    void reset();
+   bool isDone();
+   bool next();
+   int speedAdjustedDelay(int delay) const;
+   bool isValid() const;
+   bool jumpToFrame(int frameNumber);
+   int frameCount() const;
+   bool jumpToNextFrame();
+   QFrameInfo infoForFrame(int frameNumber);
+   void reset();
 
-    inline void enterState(QMovie::MovieState newState) {
-        movieState = newState;
-        emit q_func()->stateChanged(newState);
-    }
+   inline void enterState(QMovie::MovieState newState) {
+      movieState = newState;
+      emit q_func()->stateChanged(newState);
+   }
 
-    // private slots
-    void _q_loadNextFrame();
-    void _q_loadNextFrame(bool starting);
+   // private slots
+   void _q_loadNextFrame();
+   void _q_loadNextFrame(bool starting);
 
-    QImageReader *reader;
-    int speed;
-    QMovie::MovieState movieState;
-    QRect frameRect;
-    QPixmap currentPixmap;
-    int currentFrameNumber;
-    int nextFrameNumber;
-    int greatestFrameNumber;
-    int nextDelay;
-    int playCounter;
-    qint64 initialDevicePos;
-    QMovie::CacheMode cacheMode;
-    bool haveReadAll;
-    bool isFirstIteration;
-    QMap<int, QFrameInfo> frameMap;
-    QString absoluteFilePath;
+   QImageReader *reader;
+   int speed;
+   QMovie::MovieState movieState;
+   QRect frameRect;
+   QPixmap currentPixmap;
+   int currentFrameNumber;
+   int nextFrameNumber;
+   int greatestFrameNumber;
+   int nextDelay;
+   int playCounter;
+   qint64 initialDevicePos;
+   QMovie::CacheMode cacheMode;
+   bool haveReadAll;
+   bool isFirstIteration;
+   QMap<int, QFrameInfo> frameMap;
+   QString absoluteFilePath;
 
-    QTimer nextImageTimer;
+   QTimer nextImageTimer;
 
-protected:
-	 QMovie *q_ptr;
+ protected:
+   QMovie *q_ptr;
 
 };
 
 /*! \internal
  */
 QMoviePrivate::QMoviePrivate(QMovie *qq)
-    : reader(0), speed(100), movieState(QMovie::NotRunning),
-      currentFrameNumber(-1), nextFrameNumber(0), greatestFrameNumber(-1),
-      nextDelay(0), playCounter(-1),
-      cacheMode(QMovie::CacheNone), haveReadAll(false), isFirstIteration(true)
+   : reader(0), speed(100), movieState(QMovie::NotRunning),
+     currentFrameNumber(-1), nextFrameNumber(0), greatestFrameNumber(-1),
+     nextDelay(0), playCounter(-1),
+     cacheMode(QMovie::CacheNone), haveReadAll(false), isFirstIteration(true)
 {
-    q_ptr = qq;
-    nextImageTimer.setSingleShot(true);
+   q_ptr = qq;
+   nextImageTimer.setSingleShot(true);
 }
 
 /*! \internal
  */
 void QMoviePrivate::reset()
 {
-    nextImageTimer.stop();
-    if (reader->device())
-        initialDevicePos = reader->device()->pos();
-    currentFrameNumber = -1;
-    nextFrameNumber = 0;
-    greatestFrameNumber = -1;
-    nextDelay = 0;
-    playCounter = -1;
-    haveReadAll = false;
-    isFirstIteration = true;
-    frameMap.clear();
+   nextImageTimer.stop();
+   if (reader->device()) {
+      initialDevicePos = reader->device()->pos();
+   }
+   currentFrameNumber = -1;
+   nextFrameNumber = 0;
+   greatestFrameNumber = -1;
+   nextDelay = 0;
+   playCounter = -1;
+   haveReadAll = false;
+   isFirstIteration = true;
+   frameMap.clear();
 }
 
 /*! \internal
  */
 bool QMoviePrivate::isDone()
 {
-    return (playCounter == 0);
+   return (playCounter == 0);
 }
 
 /*!
@@ -171,7 +173,7 @@ bool QMoviePrivate::isDone()
 */
 int QMoviePrivate::speedAdjustedDelay(int delay) const
 {
-    return int( (qint64(delay) * qint64(100) ) / qint64(speed) );
+   return int( (qint64(delay) * qint64(100) ) / qint64(speed) );
 }
 
 /*!
@@ -188,95 +190,100 @@ int QMoviePrivate::speedAdjustedDelay(int delay) const
 */
 QFrameInfo QMoviePrivate::infoForFrame(int frameNumber)
 {
-    if (frameNumber < 0)
-        return QFrameInfo(); // Invalid
+   if (frameNumber < 0) {
+      return QFrameInfo();   // Invalid
+   }
 
-    if (haveReadAll && (frameNumber > greatestFrameNumber)) {
-        if (frameNumber == greatestFrameNumber+1)
-            return QFrameInfo::endMarker();
-        return QFrameInfo(); // Invalid
-    }
+   if (haveReadAll && (frameNumber > greatestFrameNumber)) {
+      if (frameNumber == greatestFrameNumber + 1) {
+         return QFrameInfo::endMarker();
+      }
+      return QFrameInfo(); // Invalid
+   }
 
-    if (cacheMode == QMovie::CacheNone) {
-        if (frameNumber != currentFrameNumber+1) {
-            // Non-sequential frame access
-            if (!reader->jumpToImage(frameNumber)) {
-                if (frameNumber == 0) {
-                    // Special case: Attempt to "rewind" so we can loop
-                    // ### This could be implemented as QImageReader::rewind()
-                    if (reader->device()->isSequential())
-                        return QFrameInfo(); // Invalid
-                    QString fileName = reader->fileName();
-                    QByteArray format = reader->format();
-                    QIODevice *device = reader->device();
-                    QColor bgColor = reader->backgroundColor();
-                    QSize scaledSize = reader->scaledSize();
-                    delete reader;
-                    if (fileName.isEmpty())
-                        reader = new QImageReader(device, format);
-                    else
-                        reader = new QImageReader(absoluteFilePath, format);
-                    (void)reader->canRead(); // Provoke a device->open() call
-                    reader->device()->seek(initialDevicePos);
-                    reader->setBackgroundColor(bgColor);
-                    reader->setScaledSize(scaledSize);
-                } else {
-                    return QFrameInfo(); // Invalid
-                }
+   if (cacheMode == QMovie::CacheNone) {
+      if (frameNumber != currentFrameNumber + 1) {
+         // Non-sequential frame access
+         if (!reader->jumpToImage(frameNumber)) {
+            if (frameNumber == 0) {
+               // Special case: Attempt to "rewind" so we can loop
+               // ### This could be implemented as QImageReader::rewind()
+               if (reader->device()->isSequential()) {
+                  return QFrameInfo();   // Invalid
+               }
+               QString fileName = reader->fileName();
+               QByteArray format = reader->format();
+               QIODevice *device = reader->device();
+               QColor bgColor = reader->backgroundColor();
+               QSize scaledSize = reader->scaledSize();
+               delete reader;
+               if (fileName.isEmpty()) {
+                  reader = new QImageReader(device, format);
+               } else {
+                  reader = new QImageReader(absoluteFilePath, format);
+               }
+               (void)reader->canRead(); // Provoke a device->open() call
+               reader->device()->seek(initialDevicePos);
+               reader->setBackgroundColor(bgColor);
+               reader->setScaledSize(scaledSize);
+            } else {
+               return QFrameInfo(); // Invalid
             }
-        }
-        if (reader->canRead()) {
+         }
+      }
+      if (reader->canRead()) {
+         // reader says we can read. Attempt to actually read image
+         QImage anImage = reader->read();
+         if (anImage.isNull()) {
+            // Reading image failed.
+            return QFrameInfo(); // Invalid
+         }
+         if (frameNumber > greatestFrameNumber) {
+            greatestFrameNumber = frameNumber;
+         }
+         QPixmap aPixmap = QPixmap::fromImage(anImage);
+         int aDelay = reader->nextImageDelay();
+         return QFrameInfo(aPixmap, aDelay);
+      } else if (frameNumber != 0) {
+         // We've read all frames now. Return an end marker
+         haveReadAll = true;
+         return QFrameInfo::endMarker();
+      } else {
+         // No readable frames
+         haveReadAll = true;
+         return QFrameInfo();
+      }
+   }
+
+   // CacheMode == CacheAll
+   if (frameNumber > greatestFrameNumber) {
+      // Frame hasn't been read from file yet. Try to do it
+      for (int i = greatestFrameNumber + 1; i <= frameNumber; ++i) {
+         if (reader->canRead()) {
             // reader says we can read. Attempt to actually read image
             QImage anImage = reader->read();
             if (anImage.isNull()) {
-                // Reading image failed.
-                return QFrameInfo(); // Invalid
+               // Reading image failed.
+               return QFrameInfo(); // Invalid
             }
-            if (frameNumber > greatestFrameNumber)
-                greatestFrameNumber = frameNumber;
+            greatestFrameNumber = i;
             QPixmap aPixmap = QPixmap::fromImage(anImage);
             int aDelay = reader->nextImageDelay();
-            return QFrameInfo(aPixmap, aDelay);
-        } else if (frameNumber != 0) {
+            QFrameInfo info(aPixmap, aDelay);
+            // Cache it!
+            frameMap.insert(i, info);
+            if (i == frameNumber) {
+               return info;
+            }
+         } else {
             // We've read all frames now. Return an end marker
             haveReadAll = true;
             return QFrameInfo::endMarker();
-        } else {
-            // No readable frames
-            haveReadAll = true;
-            return QFrameInfo();
-        }
-    }
-
-    // CacheMode == CacheAll
-    if (frameNumber > greatestFrameNumber) {
-        // Frame hasn't been read from file yet. Try to do it
-        for (int i = greatestFrameNumber + 1; i <= frameNumber; ++i) {
-            if (reader->canRead()) {
-                // reader says we can read. Attempt to actually read image
-                QImage anImage = reader->read();
-                if (anImage.isNull()) {
-                    // Reading image failed.
-                    return QFrameInfo(); // Invalid
-                }
-                greatestFrameNumber = i;
-                QPixmap aPixmap = QPixmap::fromImage(anImage);
-                int aDelay = reader->nextImageDelay();
-                QFrameInfo info(aPixmap, aDelay);
-                // Cache it!
-                frameMap.insert(i, info);
-                if (i == frameNumber) {
-                    return info;
-                }
-            } else {
-                // We've read all frames now. Return an end marker
-                haveReadAll = true;
-                return QFrameInfo::endMarker();
-            }
-        }
-    }
-    // Return info for requested (cached) frame
-    return frameMap.value(frameNumber);
+         }
+      }
+   }
+   // Return info for requested (cached) frame
+   return frameMap.value(frameNumber);
 }
 
 /*!
@@ -292,90 +299,95 @@ QFrameInfo QMoviePrivate::infoForFrame(int frameNumber)
 */
 bool QMoviePrivate::next()
 {
-    QTime time;
-    time.start();
-    QFrameInfo info = infoForFrame(nextFrameNumber);
-    if (!info.isValid())
-        return false;
-    if (info.isEndMarker()) {
-        // We reached the end of the animation.
-        if (isFirstIteration) {
-            if (nextFrameNumber == 0) {
-                // No frames could be read at all (error).
-                return false;
-            }
-            // End of first iteration. Initialize play counter
-            playCounter = reader->loopCount();
-            isFirstIteration = false;
-        }
-        // Loop as appropriate
-        if (playCounter != 0) {
-            if (playCounter != -1) // Infinite?
-                playCounter--;     // Nope
-            nextFrameNumber = 0;
-            return next();
-        }
-        // Loop no more. Done
-        return false;
-    }
-    // Image and delay OK, update internal state
-    currentFrameNumber = nextFrameNumber++;
-    QSize scaledSize = reader->scaledSize();
-    if (scaledSize.isValid() && (scaledSize != info.pixmap.size()))
-        currentPixmap = QPixmap::fromImage( info.pixmap.toImage().scaled(scaledSize) );
-    else
-        currentPixmap = info.pixmap;
-    nextDelay = speedAdjustedDelay(info.delay);
-    // Adjust delay according to the time it took to read the frame
-    int processingTime = time.elapsed();
-    if (processingTime > nextDelay)
-        nextDelay = 0;
-    else
-        nextDelay = nextDelay - processingTime;
-    return true;
+   QTime time;
+   time.start();
+   QFrameInfo info = infoForFrame(nextFrameNumber);
+   if (!info.isValid()) {
+      return false;
+   }
+   if (info.isEndMarker()) {
+      // We reached the end of the animation.
+      if (isFirstIteration) {
+         if (nextFrameNumber == 0) {
+            // No frames could be read at all (error).
+            return false;
+         }
+         // End of first iteration. Initialize play counter
+         playCounter = reader->loopCount();
+         isFirstIteration = false;
+      }
+      // Loop as appropriate
+      if (playCounter != 0) {
+         if (playCounter != -1) { // Infinite?
+            playCounter--;   // Nope
+         }
+         nextFrameNumber = 0;
+         return next();
+      }
+      // Loop no more. Done
+      return false;
+   }
+   // Image and delay OK, update internal state
+   currentFrameNumber = nextFrameNumber++;
+   QSize scaledSize = reader->scaledSize();
+   if (scaledSize.isValid() && (scaledSize != info.pixmap.size())) {
+      currentPixmap = QPixmap::fromImage( info.pixmap.toImage().scaled(scaledSize) );
+   } else {
+      currentPixmap = info.pixmap;
+   }
+   nextDelay = speedAdjustedDelay(info.delay);
+   // Adjust delay according to the time it took to read the frame
+   int processingTime = time.elapsed();
+   if (processingTime > nextDelay) {
+      nextDelay = 0;
+   } else {
+      nextDelay = nextDelay - processingTime;
+   }
+   return true;
 }
 
 /*! \internal
  */
 void QMoviePrivate::_q_loadNextFrame()
 {
-    _q_loadNextFrame(false);
+   _q_loadNextFrame(false);
 }
 
 void QMoviePrivate::_q_loadNextFrame(bool starting)
 {
-    Q_Q(QMovie);
-    if (next()) {
-        if (starting && movieState == QMovie::NotRunning) {
-            enterState(QMovie::Running);
-            emit q->started();
-        }
+   Q_Q(QMovie);
+   if (next()) {
+      if (starting && movieState == QMovie::NotRunning) {
+         enterState(QMovie::Running);
+         emit q->started();
+      }
 
-        if (frameRect.size() != currentPixmap.rect().size()) {
-            frameRect = currentPixmap.rect();
-            emit q->resized(frameRect.size());
-        }
+      if (frameRect.size() != currentPixmap.rect().size()) {
+         frameRect = currentPixmap.rect();
+         emit q->resized(frameRect.size());
+      }
 
-        emit q->updated(frameRect);
-        emit q->frameChanged(currentFrameNumber);
+      emit q->updated(frameRect);
+      emit q->frameChanged(currentFrameNumber);
 
-        if (movieState == QMovie::Running)
-            nextImageTimer.start(nextDelay);
-    } else {
-        // Could not read another frame
-        if (!isDone()) {
-            emit q->error(reader->error());
-        }
+      if (movieState == QMovie::Running) {
+         nextImageTimer.start(nextDelay);
+      }
+   } else {
+      // Could not read another frame
+      if (!isDone()) {
+         emit q->error(reader->error());
+      }
 
-        // Graceful finish
-        if (movieState != QMovie::Paused) {
-            nextFrameNumber = 0;
-            isFirstIteration = true;
-            playCounter = -1;
-            enterState(QMovie::NotRunning);
-            emit q->finished();
-        }
-    }
+      // Graceful finish
+      if (movieState != QMovie::Paused) {
+         nextFrameNumber = 0;
+         isFirstIteration = true;
+         playCounter = -1;
+         enterState(QMovie::NotRunning);
+         emit q->finished();
+      }
+   }
 }
 
 /*!
@@ -383,8 +395,8 @@ void QMoviePrivate::_q_loadNextFrame(bool starting)
 */
 bool QMoviePrivate::isValid() const
 {
-    return (greatestFrameNumber >= 0) // have we seen valid data
-        || reader->canRead(); // or does the reader see valid data
+   return (greatestFrameNumber >= 0) // have we seen valid data
+          || reader->canRead(); // or does the reader see valid data
 }
 
 /*!
@@ -392,15 +404,18 @@ bool QMoviePrivate::isValid() const
 */
 bool QMoviePrivate::jumpToFrame(int frameNumber)
 {
-    if (frameNumber < 0)
-        return false;
-    if (currentFrameNumber == frameNumber)
-        return true;
-    nextFrameNumber = frameNumber;
-    if (movieState == QMovie::Running)
-        nextImageTimer.stop();
-    _q_loadNextFrame();
-    return (nextFrameNumber == currentFrameNumber+1);
+   if (frameNumber < 0) {
+      return false;
+   }
+   if (currentFrameNumber == frameNumber) {
+      return true;
+   }
+   nextFrameNumber = frameNumber;
+   if (movieState == QMovie::Running) {
+      nextImageTimer.stop();
+   }
+   _q_loadNextFrame();
+   return (nextFrameNumber == currentFrameNumber + 1);
 }
 
 /*!
@@ -408,12 +423,14 @@ bool QMoviePrivate::jumpToFrame(int frameNumber)
 */
 int QMoviePrivate::frameCount() const
 {
-    int result;
-    if ((result = reader->imageCount()) != 0)
-        return result;
-    if (haveReadAll)
-        return greatestFrameNumber+1;
-    return 0; // Don't know
+   int result;
+   if ((result = reader->imageCount()) != 0) {
+      return result;
+   }
+   if (haveReadAll) {
+      return greatestFrameNumber + 1;
+   }
+   return 0; // Don't know
 }
 
 /*!
@@ -421,7 +438,7 @@ int QMoviePrivate::frameCount() const
 */
 bool QMoviePrivate::jumpToNextFrame()
 {
-    return jumpToFrame(currentFrameNumber+1);
+   return jumpToFrame(currentFrameNumber + 1);
 }
 
 /*!
@@ -433,11 +450,11 @@ bool QMoviePrivate::jumpToNextFrame()
 QMovie::QMovie(QObject *parent)
    : QObject(parent), d_ptr(new QMoviePrivate(this))
 {
-    d_ptr->q_ptr = this;
-    Q_D(QMovie);
+   d_ptr->q_ptr = this;
+   Q_D(QMovie);
 
-    d->reader = new QImageReader;
-    connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
+   d->reader = new QImageReader;
+   connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
 }
 
 /*!
@@ -451,12 +468,12 @@ QMovie::QMovie(QObject *parent)
 QMovie::QMovie(QIODevice *device, const QByteArray &format, QObject *parent)
    : QObject(parent), d_ptr(new QMoviePrivate(this))
 {
-    d_ptr->q_ptr = this;
-    Q_D(QMovie);
+   d_ptr->q_ptr = this;
+   Q_D(QMovie);
 
-    d->reader = new QImageReader(device, format);
-    d->initialDevicePos = device->pos();
-    connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
+   d->reader = new QImageReader(device, format);
+   d->initialDevicePos = device->pos();
+   connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
 }
 
 /*!
@@ -470,14 +487,15 @@ QMovie::QMovie(QIODevice *device, const QByteArray &format, QObject *parent)
 QMovie::QMovie(const QString &fileName, const QByteArray &format, QObject *parent)
    : QObject(parent), d_ptr(new QMoviePrivate(this))
 {
-    d_ptr->q_ptr = this;
-    Q_D(QMovie);
+   d_ptr->q_ptr = this;
+   Q_D(QMovie);
 
-    d->absoluteFilePath = QDir(fileName).absolutePath();
-    d->reader = new QImageReader(fileName, format);
-    if (d->reader->device())
-        d->initialDevicePos = d->reader->device()->pos();
-    connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
+   d->absoluteFilePath = QDir(fileName).absolutePath();
+   d->reader = new QImageReader(fileName, format);
+   if (d->reader->device()) {
+      d->initialDevicePos = d->reader->device()->pos();
+   }
+   connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
 }
 
 /*!
@@ -485,8 +503,8 @@ QMovie::QMovie(const QString &fileName, const QByteArray &format, QObject *paren
 */
 QMovie::~QMovie()
 {
-    Q_D(QMovie);
-    delete d->reader;
+   Q_D(QMovie);
+   delete d->reader;
 }
 
 /*!
@@ -497,9 +515,9 @@ QMovie::~QMovie()
 */
 void QMovie::setDevice(QIODevice *device)
 {
-    Q_D(QMovie);
-    d->reader->setDevice(device);
-    d->reset();
+   Q_D(QMovie);
+   d->reader->setDevice(device);
+   d->reset();
 }
 
 /*!
@@ -510,8 +528,8 @@ void QMovie::setDevice(QIODevice *device)
 */
 QIODevice *QMovie::device() const
 {
-    Q_D(const QMovie);
-    return d->reader->device();
+   Q_D(const QMovie);
+   return d->reader->device();
 }
 
 /*!
@@ -522,10 +540,10 @@ QIODevice *QMovie::device() const
 */
 void QMovie::setFileName(const QString &fileName)
 {
-    Q_D(QMovie);
-    d->absoluteFilePath = QDir(fileName).absolutePath();
-    d->reader->setFileName(fileName);
-    d->reset();
+   Q_D(QMovie);
+   d->absoluteFilePath = QDir(fileName).absolutePath();
+   d->reader->setFileName(fileName);
+   d->reset();
 }
 
 /*!
@@ -537,8 +555,8 @@ void QMovie::setFileName(const QString &fileName)
 */
 QString QMovie::fileName() const
 {
-    Q_D(const QMovie);
-    return d->reader->fileName();
+   Q_D(const QMovie);
+   return d->reader->fileName();
 }
 
 /*!
@@ -553,8 +571,8 @@ QString QMovie::fileName() const
 */
 void QMovie::setFormat(const QByteArray &format)
 {
-    Q_D(QMovie);
-    d->reader->setFormat(format);
+   Q_D(QMovie);
+   d->reader->setFormat(format);
 }
 
 /*!
@@ -565,8 +583,8 @@ void QMovie::setFormat(const QByteArray &format)
 */
 QByteArray QMovie::format() const
 {
-    Q_D(const QMovie);
-    return d->reader->format();
+   Q_D(const QMovie);
+   return d->reader->format();
 }
 
 /*!
@@ -577,8 +595,8 @@ QByteArray QMovie::format() const
 */
 void QMovie::setBackgroundColor(const QColor &color)
 {
-    Q_D(QMovie);
-    d->reader->setBackgroundColor(color);
+   Q_D(QMovie);
+   d->reader->setBackgroundColor(color);
 }
 
 /*!
@@ -589,8 +607,8 @@ void QMovie::setBackgroundColor(const QColor &color)
 */
 QColor QMovie::backgroundColor() const
 {
-    Q_D(const QMovie);
-    return d->reader->backgroundColor();
+   Q_D(const QMovie);
+   return d->reader->backgroundColor();
 }
 
 /*!
@@ -600,8 +618,8 @@ QColor QMovie::backgroundColor() const
 */
 QMovie::MovieState QMovie::state() const
 {
-    Q_D(const QMovie);
-    return d->movieState;
+   Q_D(const QMovie);
+   return d->movieState;
 }
 
 /*!
@@ -612,8 +630,8 @@ QMovie::MovieState QMovie::state() const
 */
 QRect QMovie::frameRect() const
 {
-    Q_D(const QMovie);
-    return d->frameRect;
+   Q_D(const QMovie);
+   return d->frameRect;
 }
 
 /*! \fn QImage QMovie::framePixmap() const
@@ -638,8 +656,8 @@ QRect QMovie::frameRect() const
 */
 QPixmap QMovie::currentPixmap() const
 {
-    Q_D(const QMovie);
-    return d->currentPixmap;
+   Q_D(const QMovie);
+   return d->currentPixmap;
 }
 
 /*! \fn QImage QMovie::frameImage() const
@@ -654,8 +672,8 @@ QPixmap QMovie::currentPixmap() const
 */
 QImage QMovie::currentImage() const
 {
-    Q_D(const QMovie);
-    return d->currentPixmap.toImage();
+   Q_D(const QMovie);
+   return d->currentPixmap.toImage();
 }
 
 /*!
@@ -664,8 +682,8 @@ QImage QMovie::currentImage() const
 */
 bool QMovie::isValid() const
 {
-    Q_D(const QMovie);
-    return d->isValid();
+   Q_D(const QMovie);
+   return d->isValid();
 }
 
 /*! \fn bool QMovie::running() const
@@ -712,8 +730,8 @@ bool QMovie::isValid() const
 */
 int QMovie::frameCount() const
 {
-    Q_D(const QMovie);
-    return d->frameCount();
+   Q_D(const QMovie);
+   return d->frameCount();
 }
 
 /*!
@@ -722,8 +740,8 @@ int QMovie::frameCount() const
 */
 int QMovie::nextFrameDelay() const
 {
-    Q_D(const QMovie);
-    return d->nextDelay;
+   Q_D(const QMovie);
+   return d->nextDelay;
 }
 
 /*!
@@ -732,8 +750,8 @@ int QMovie::nextFrameDelay() const
 */
 int QMovie::currentFrameNumber() const
 {
-    Q_D(const QMovie);
-    return d->currentFrameNumber;
+   Q_D(const QMovie);
+   return d->currentFrameNumber;
 }
 
 /*!
@@ -741,8 +759,8 @@ int QMovie::currentFrameNumber() const
 */
 bool QMovie::jumpToNextFrame()
 {
-    Q_D(QMovie);
-    return d->jumpToNextFrame();
+   Q_D(QMovie);
+   return d->jumpToNextFrame();
 }
 
 /*!
@@ -751,8 +769,8 @@ bool QMovie::jumpToNextFrame()
 */
 bool QMovie::jumpToFrame(int frameNumber)
 {
-    Q_D(QMovie);
-    return d->jumpToFrame(frameNumber);
+   Q_D(QMovie);
+   return d->jumpToFrame(frameNumber);
 }
 
 /*!
@@ -766,8 +784,8 @@ bool QMovie::jumpToFrame(int frameNumber)
 */
 int QMovie::loopCount() const
 {
-    Q_D(const QMovie);
-    return d->reader->loopCount();
+   Q_D(const QMovie);
+   return d->reader->loopCount();
 }
 
 /*!
@@ -779,18 +797,20 @@ int QMovie::loopCount() const
 */
 void QMovie::setPaused(bool paused)
 {
-    Q_D(QMovie);
-    if (paused) {
-        if (d->movieState == NotRunning)
-            return;
-        d->enterState(Paused);
-        d->nextImageTimer.stop();
-    } else {
-        if (d->movieState == Running)
-            return;
-        d->enterState(Running);
-        d->nextImageTimer.start(nextFrameDelay());
-    }
+   Q_D(QMovie);
+   if (paused) {
+      if (d->movieState == NotRunning) {
+         return;
+      }
+      d->enterState(Paused);
+      d->nextImageTimer.stop();
+   } else {
+      if (d->movieState == Running) {
+         return;
+      }
+      d->enterState(Running);
+      d->nextImageTimer.start(nextFrameDelay());
+   }
 }
 
 /*!
@@ -805,14 +825,14 @@ void QMovie::setPaused(bool paused)
 */
 void QMovie::setSpeed(int percentSpeed)
 {
-    Q_D(QMovie);
-    d->speed = percentSpeed;
+   Q_D(QMovie);
+   d->speed = percentSpeed;
 }
 
 int QMovie::speed() const
 {
-    Q_D(const QMovie);
-    return d->speed;
+   Q_D(const QMovie);
+   return d->speed;
 }
 
 /*!
@@ -827,12 +847,12 @@ int QMovie::speed() const
 */
 void QMovie::start()
 {
-    Q_D(QMovie);
-    if (d->movieState == NotRunning) {
-        d->_q_loadNextFrame(true);
-    } else if (d->movieState == Paused) {
-        setPaused(false);
-    }
+   Q_D(QMovie);
+   if (d->movieState == NotRunning) {
+      d->_q_loadNextFrame(true);
+   } else if (d->movieState == Paused) {
+      setPaused(false);
+   }
 }
 
 /*!
@@ -847,12 +867,13 @@ void QMovie::start()
 */
 void QMovie::stop()
 {
-    Q_D(QMovie);
-    if (d->movieState == NotRunning)
-        return;
-    d->enterState(NotRunning);
-    d->nextImageTimer.stop();
-    d->nextFrameNumber = 0;
+   Q_D(QMovie);
+   if (d->movieState == NotRunning) {
+      return;
+   }
+   d->enterState(NotRunning);
+   d->nextImageTimer.stop();
+   d->nextFrameNumber = 0;
 }
 
 /*!
@@ -864,8 +885,8 @@ void QMovie::stop()
 */
 QSize QMovie::scaledSize()
 {
-    Q_D(QMovie);
-    return d->reader->scaledSize();
+   Q_D(QMovie);
+   return d->reader->scaledSize();
 }
 
 /*!
@@ -877,8 +898,8 @@ QSize QMovie::scaledSize()
 */
 void QMovie::setScaledSize(const QSize &size)
 {
-    Q_D(QMovie);
-    d->reader->setScaledSize(size);
+   Q_D(QMovie);
+   d->reader->setScaledSize(size);
 }
 
 /*!
@@ -890,16 +911,17 @@ void QMovie::setScaledSize(const QSize &size)
 */
 QList<QByteArray> QMovie::supportedFormats()
 {
-    QList<QByteArray> list = QImageReader::supportedImageFormats();
-    QMutableListIterator<QByteArray> it(list);
-    QBuffer buffer;
-    buffer.open(QIODevice::ReadOnly);
-    while (it.hasNext()) {
-        QImageReader reader(&buffer, it.next());
-        if (!reader.supportsAnimation())
-            it.remove();
-    }
-    return list;
+   QList<QByteArray> list = QImageReader::supportedImageFormats();
+   QMutableListIterator<QByteArray> it(list);
+   QBuffer buffer;
+   buffer.open(QIODevice::ReadOnly);
+   while (it.hasNext()) {
+      QImageReader reader(&buffer, it.next());
+      if (!reader.supportsAnimation()) {
+         it.remove();
+      }
+   }
+   return list;
 }
 
 /*!
@@ -925,20 +947,20 @@ QList<QByteArray> QMovie::supportedFormats()
 
 QMovie::CacheMode QMovie::cacheMode() const
 {
-    Q_D(const QMovie);
-    return d->cacheMode;
+   Q_D(const QMovie);
+   return d->cacheMode;
 }
 
 void QMovie::setCacheMode(CacheMode cacheMode)
 {
-    Q_D(QMovie);
-    d->cacheMode = cacheMode;
+   Q_D(QMovie);
+   d->cacheMode = cacheMode;
 }
 
 void QMovie::_q_loadNextFrame()
 {
-	Q_D(QMovie);
-	d->_q_loadNextFrame();
+   Q_D(QMovie);
+   d->_q_loadNextFrame();
 }
 
 

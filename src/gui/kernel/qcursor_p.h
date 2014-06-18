@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -52,53 +52,53 @@ class QBitmap;
 
 class QCursorData
 {
-public:
-    QCursorData(Qt::CursorShape s = Qt::ArrowCursor);
-    ~QCursorData();
+ public:
+   QCursorData(Qt::CursorShape s = Qt::ArrowCursor);
+   ~QCursorData();
 
-    static void initialize();
-    static void cleanup();
+   static void initialize();
+   static void cleanup();
 
-    QAtomicInt ref;
-    Qt::CursorShape cshape;
-    QBitmap *bm, *bmm;
-    QPixmap pixmap;
-    short hx, hy;
+   QAtomicInt ref;
+   Qt::CursorShape cshape;
+   QBitmap *bm, *bmm;
+   QPixmap pixmap;
+   short hx, hy;
 
 #if defined (Q_OS_MAC)
-    int mId;
+   int mId;
 
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
-    int id;
+   int id;
 
 #endif
 
 #if defined (Q_OS_WIN)
-    HCURSOR hcurs;
+   HCURSOR hcurs;
 
 #elif defined (Q_WS_X11)
-    XColor fg, bg;
-    Cursor hcurs;
-    Pixmap pm, pmm;
+   XColor fg, bg;
+   Cursor hcurs;
+   Pixmap pm, pmm;
 
 #elif defined (Q_OS_MAC)
-    enum { TYPE_None, TYPE_ImageCursor, TYPE_ThemeCursor } type;
+   enum { TYPE_None, TYPE_ImageCursor, TYPE_ThemeCursor } type;
 
-    union {
-        struct {
-            uint my_cursor:1;
-            void *nscursor;
-        } cp;       
+   union {
+      struct {
+         uint my_cursor: 1;
+         void *nscursor;
+      } cp;
 
-    } curs;
+   } curs;
 
-    void initCursorFromBitmap();
-    void initCursorFromPixmap();
+   void initCursorFromBitmap();
+   void initCursorFromPixmap();
 #endif
 
-    static bool initialized;
-    void update();
-    static QCursorData *setBitmap(const QBitmap &bitmap, const QBitmap &mask, int hotX, int hotY);
+   static bool initialized;
+   void update();
+   static QCursorData *setBitmap(const QBitmap &bitmap, const QBitmap &mask, int hotX, int hotY);
 };
 
 extern QCursorData *qt_cursorTable[Qt::LastCursor + 1]; // qcursor.cpp

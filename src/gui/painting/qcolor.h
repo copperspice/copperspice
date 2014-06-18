@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,222 +45,239 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &);
 
 class Q_GUI_EXPORT QColor
 {
-public:
-    enum Spec { Invalid, Rgb, Hsv, Cmyk, Hsl };
+ public:
+   enum Spec { Invalid, Rgb, Hsv, Cmyk, Hsl };
 
-    QColor();
-    QColor(Qt::GlobalColor color);
-    QColor(int r, int g, int b, int a = 255);
-    QColor(QRgb rgb);
-    QColor(const QString& name);
-    QColor(const char *name);
-    QColor(const QColor &color);
-    QColor(Spec spec);
+   QColor();
+   QColor(Qt::GlobalColor color);
+   QColor(int r, int g, int b, int a = 255);
+   QColor(QRgb rgb);
+   QColor(const QString &name);
+   QColor(const char *name);
+   QColor(const QColor &color);
+   QColor(Spec spec);
 
-    bool isValid() const;
+   bool isValid() const;
 
-    QString name() const;
-    void setNamedColor(const QString& name);
+   QString name() const;
+   void setNamedColor(const QString &name);
 
-    static QStringList colorNames();
+   static QStringList colorNames();
 
-    inline Spec spec() const
-    { return cspec; }
+   inline Spec spec() const {
+      return cspec;
+   }
 
-    int alpha() const;
-    void setAlpha(int alpha);
+   int alpha() const;
+   void setAlpha(int alpha);
 
-    qreal alphaF() const;
-    void setAlphaF(qreal alpha);
+   qreal alphaF() const;
+   void setAlphaF(qreal alpha);
 
-    int red() const;
-    int green() const;
-    int blue() const;
-    void setRed(int red);
-    void setGreen(int green);
-    void setBlue(int blue);
+   int red() const;
+   int green() const;
+   int blue() const;
+   void setRed(int red);
+   void setGreen(int green);
+   void setBlue(int blue);
 
-    qreal redF() const;
-    qreal greenF() const;
-    qreal blueF() const;
-    void setRedF(qreal red);
-    void setGreenF(qreal green);
-    void setBlueF(qreal blue);
+   qreal redF() const;
+   qreal greenF() const;
+   qreal blueF() const;
+   void setRedF(qreal red);
+   void setGreenF(qreal green);
+   void setBlueF(qreal blue);
 
-    void getRgb(int *r, int *g, int *b, int *a = 0) const;
-    void setRgb(int r, int g, int b, int a = 255);
+   void getRgb(int *r, int *g, int *b, int *a = 0) const;
+   void setRgb(int r, int g, int b, int a = 255);
 
-    void getRgbF(qreal *r, qreal *g, qreal *b, qreal *a = 0) const;
-    void setRgbF(qreal r, qreal g, qreal b, qreal a = 1.0);
+   void getRgbF(qreal *r, qreal *g, qreal *b, qreal *a = 0) const;
+   void setRgbF(qreal r, qreal g, qreal b, qreal a = 1.0);
 
-    QRgb rgba() const;
-    void setRgba(QRgb rgba);
+   QRgb rgba() const;
+   void setRgba(QRgb rgba);
 
-    QRgb rgb() const;
-    void setRgb(QRgb rgb);
+   QRgb rgb() const;
+   void setRgb(QRgb rgb);
 
-    int hue() const; // 0 <= hue < 360
-    int saturation() const;
-    int hsvHue() const; // 0 <= hue < 360
-    int hsvSaturation() const;
-    int value() const;
+   int hue() const; // 0 <= hue < 360
+   int saturation() const;
+   int hsvHue() const; // 0 <= hue < 360
+   int hsvSaturation() const;
+   int value() const;
 
-    qreal hueF() const; // 0.0 <= hueF < 360.0
-    qreal saturationF() const;
-    qreal hsvHueF() const; // 0.0 <= hueF < 360.0
-    qreal hsvSaturationF() const;
-    qreal valueF() const;
+   qreal hueF() const; // 0.0 <= hueF < 360.0
+   qreal saturationF() const;
+   qreal hsvHueF() const; // 0.0 <= hueF < 360.0
+   qreal hsvSaturationF() const;
+   qreal valueF() const;
 
-    void getHsv(int *h, int *s, int *v, int *a = 0) const;
-    void setHsv(int h, int s, int v, int a = 255);
+   void getHsv(int *h, int *s, int *v, int *a = 0) const;
+   void setHsv(int h, int s, int v, int a = 255);
 
-    void getHsvF(qreal *h, qreal *s, qreal *v, qreal *a = 0) const;
-    void setHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
+   void getHsvF(qreal *h, qreal *s, qreal *v, qreal *a = 0) const;
+   void setHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
 
-    int cyan() const;
-    int magenta() const;
-    int yellow() const;
-    int black() const;
+   int cyan() const;
+   int magenta() const;
+   int yellow() const;
+   int black() const;
 
-    qreal cyanF() const;
-    qreal magentaF() const;
-    qreal yellowF() const;
-    qreal blackF() const;
+   qreal cyanF() const;
+   qreal magentaF() const;
+   qreal yellowF() const;
+   qreal blackF() const;
 
-    void getCmyk(int *c, int *m, int *y, int *k, int *a = 0);
-    void setCmyk(int c, int m, int y, int k, int a = 255);
+   void getCmyk(int *c, int *m, int *y, int *k, int *a = 0);
+   void setCmyk(int c, int m, int y, int k, int a = 255);
 
-    void getCmykF(qreal *c, qreal *m, qreal *y, qreal *k, qreal *a = 0);
-    void setCmykF(qreal c, qreal m, qreal y, qreal k, qreal a = 1.0);
+   void getCmykF(qreal *c, qreal *m, qreal *y, qreal *k, qreal *a = 0);
+   void setCmykF(qreal c, qreal m, qreal y, qreal k, qreal a = 1.0);
 
-    int hslHue() const; // 0 <= hue < 360
-    int hslSaturation() const;
-    int lightness() const;
+   int hslHue() const; // 0 <= hue < 360
+   int hslSaturation() const;
+   int lightness() const;
 
-    qreal hslHueF() const; // 0.0 <= hueF < 360.0
-    qreal hslSaturationF() const;
-    qreal lightnessF() const;
+   qreal hslHueF() const; // 0.0 <= hueF < 360.0
+   qreal hslSaturationF() const;
+   qreal lightnessF() const;
 
-    void getHsl(int *h, int *s, int *l, int *a = 0) const;
-    void setHsl(int h, int s, int l, int a = 255);
+   void getHsl(int *h, int *s, int *l, int *a = 0) const;
+   void setHsl(int h, int s, int l, int a = 255);
 
-    void getHslF(qreal *h, qreal *s, qreal *l, qreal *a = 0) const;
-    void setHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
+   void getHslF(qreal *h, qreal *s, qreal *l, qreal *a = 0) const;
+   void setHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
 
-    QColor toRgb() const;
-    QColor toHsv() const;
-    QColor toCmyk() const;
-    QColor toHsl() const;
+   QColor toRgb() const;
+   QColor toHsv() const;
+   QColor toCmyk() const;
+   QColor toHsl() const;
 
-    QColor convertTo(Spec colorSpec) const;
+   QColor convertTo(Spec colorSpec) const;
 
-    static QColor fromRgb(QRgb rgb);
-    static QColor fromRgba(QRgb rgba);
+   static QColor fromRgb(QRgb rgb);
+   static QColor fromRgba(QRgb rgba);
 
-    static QColor fromRgb(int r, int g, int b, int a = 255);
-    static QColor fromRgbF(qreal r, qreal g, qreal b, qreal a = 1.0);
+   static QColor fromRgb(int r, int g, int b, int a = 255);
+   static QColor fromRgbF(qreal r, qreal g, qreal b, qreal a = 1.0);
 
-    static QColor fromHsv(int h, int s, int v, int a = 255);
-    static QColor fromHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
+   static QColor fromHsv(int h, int s, int v, int a = 255);
+   static QColor fromHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
 
-    static QColor fromCmyk(int c, int m, int y, int k, int a = 255);
-    static QColor fromCmykF(qreal c, qreal m, qreal y, qreal k, qreal a = 1.0);
+   static QColor fromCmyk(int c, int m, int y, int k, int a = 255);
+   static QColor fromCmykF(qreal c, qreal m, qreal y, qreal k, qreal a = 1.0);
 
-    static QColor fromHsl(int h, int s, int l, int a = 255);
-    static QColor fromHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
+   static QColor fromHsl(int h, int s, int l, int a = 255);
+   static QColor fromHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
 
-    QColor light(int f = 150) const;
-    QColor lighter(int f = 150) const;
-    QColor dark(int f = 200) const;
-    QColor darker(int f = 200) const;
+   QColor light(int f = 150) const;
+   QColor lighter(int f = 150) const;
+   QColor dark(int f = 200) const;
+   QColor darker(int f = 200) const;
 
-    QColor &operator=(const QColor &);
-    QColor &operator=(Qt::GlobalColor color);
+   QColor &operator=(const QColor &);
+   QColor &operator=(Qt::GlobalColor color);
 
-    bool operator==(const QColor &c) const;
-    bool operator!=(const QColor &c) const;
+   bool operator==(const QColor &c) const;
+   bool operator!=(const QColor &c) const;
 
-    operator QVariant() const;
+   operator QVariant() const;
 
 #ifdef Q_WS_X11
-    static bool allowX11ColorNames();
-    static void setAllowX11ColorNames(bool enabled);
+   static bool allowX11ColorNames();
+   static void setAllowX11ColorNames(bool enabled);
 #endif
 
 
 
-    static bool isValidColor(const QString &name);
+   static bool isValidColor(const QString &name);
 
-private:
+ private:
 
-    void invalidate();
-    bool setColorFromString(const QString &name);
+   void invalidate();
+   bool setColorFromString(const QString &name);
 
-    Spec cspec;
-    union {
-        struct {
-            ushort alpha;
-            ushort red;
-            ushort green;
-            ushort blue;
-            ushort pad;
-        } argb;
-        struct {
-            ushort alpha;
-            ushort hue;
-            ushort saturation;
-            ushort value;
-            ushort pad;
-        } ahsv;
-        struct {
-            ushort alpha;
-            ushort cyan;
-            ushort magenta;
-            ushort yellow;
-            ushort black;
-        } acmyk;
-        struct {
-            ushort alpha;
-            ushort hue;
-            ushort saturation;
-            ushort lightness;
-            ushort pad;
-        } ahsl;
-        ushort array[5];
-    } ct;
+   Spec cspec;
+   union {
+      struct {
+         ushort alpha;
+         ushort red;
+         ushort green;
+         ushort blue;
+         ushort pad;
+      } argb;
+      struct {
+         ushort alpha;
+         ushort hue;
+         ushort saturation;
+         ushort value;
+         ushort pad;
+      } ahsv;
+      struct {
+         ushort alpha;
+         ushort cyan;
+         ushort magenta;
+         ushort yellow;
+         ushort black;
+      } acmyk;
+      struct {
+         ushort alpha;
+         ushort hue;
+         ushort saturation;
+         ushort lightness;
+         ushort pad;
+      } ahsl;
+      ushort array[5];
+   } ct;
 
-    friend class QColormap;
+   friend class QColormap;
 
 #ifndef QT_NO_DATASTREAM
-    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QColor &);
-    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QColor &);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &);
 #endif
 };
 
 inline QColor::QColor()
-{ invalidate(); }
+{
+   invalidate();
+}
 
 inline QColor::QColor(int r, int g, int b, int a)
-{ setRgb(r, g, b, a); }
+{
+   setRgb(r, g, b, a);
+}
 
 inline QColor::QColor(const char *aname)
-{ setNamedColor(QLatin1String(aname)); }
+{
+   setNamedColor(QLatin1String(aname));
+}
 
-inline QColor::QColor(const QString& aname)
-{ setNamedColor(aname); }
+inline QColor::QColor(const QString &aname)
+{
+   setNamedColor(aname);
+}
 
 inline QColor::QColor(const QColor &acolor)
-    : cspec(acolor.cspec)
-{ ct.argb = acolor.ct.argb; }
+   : cspec(acolor.cspec)
+{
+   ct.argb = acolor.ct.argb;
+}
 
 inline bool QColor::isValid() const
-{ return cspec != Invalid; }
+{
+   return cspec != Invalid;
+}
 
-inline QColor QColor::lighter(int f) const 
-{ return light(f); }
+inline QColor QColor::lighter(int f) const
+{
+   return light(f);
+}
 
-inline QColor QColor::darker(int f) const 
-{ return dark(f); }
+inline QColor QColor::darker(int f) const
+{
+   return dark(f);
+}
 
 QT_END_NAMESPACE
 

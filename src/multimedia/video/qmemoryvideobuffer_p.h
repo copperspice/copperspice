@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,16 +34,16 @@ class QMemoryVideoBufferPrivate;
 
 class Q_MULTIMEDIA_EXPORT QMemoryVideoBuffer : public QAbstractVideoBuffer
 {
-    Q_DECLARE_PRIVATE(QMemoryVideoBuffer)
+   Q_DECLARE_PRIVATE(QMemoryVideoBuffer)
 
-public:
-    QMemoryVideoBuffer(const QByteArray &data, int bytesPerLine);
-    ~QMemoryVideoBuffer();
+ public:
+   QMemoryVideoBuffer(const QByteArray &data, int bytesPerLine);
+   ~QMemoryVideoBuffer();
 
-    MapMode mapMode() const;
+   MapMode mapMode() const;
 
-    uchar *map(MapMode mode, int *numBytes, int *bytesPerLine);
-    void unmap();
+   uchar *map(MapMode mode, int *numBytes, int *bytesPerLine);
+   void unmap();
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -81,7 +81,7 @@ QGlyphRun::QGlyphRun() : d(new QGlyphRunPrivate)
 */
 QGlyphRun::QGlyphRun(const QGlyphRun &other)
 {
-    d = other.d;
+   d = other.d;
 }
 
 /*!
@@ -89,7 +89,7 @@ QGlyphRun::QGlyphRun(const QGlyphRun &other)
 */
 QGlyphRun::~QGlyphRun()
 {
-    // Required for QExplicitlySharedDataPointer
+   // Required for QExplicitlySharedDataPointer
 }
 
 /*!
@@ -97,8 +97,9 @@ QGlyphRun::~QGlyphRun()
 */
 void QGlyphRun::detach()
 {
-    if (d->ref.load() != 1)
-        d.detach();
+   if (d->ref.load() != 1) {
+      d.detach();
+   }
 }
 
 /*!
@@ -106,8 +107,8 @@ void QGlyphRun::detach()
 */
 QGlyphRun &QGlyphRun::operator=(const QGlyphRun &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -116,31 +117,34 @@ QGlyphRun &QGlyphRun::operator=(const QGlyphRun &other)
 */
 bool QGlyphRun::operator==(const QGlyphRun &other) const
 {
-    if (d == other.d)
-        return true;
+   if (d == other.d) {
+      return true;
+   }
 
-    if ((d->glyphIndexDataSize != other.d->glyphIndexDataSize)
-     || (d->glyphPositionDataSize != other.d->glyphPositionDataSize)) {
-        return false;
-    }
+   if ((d->glyphIndexDataSize != other.d->glyphIndexDataSize)
+         || (d->glyphPositionDataSize != other.d->glyphPositionDataSize)) {
+      return false;
+   }
 
-    if (d->glyphIndexData != other.d->glyphIndexData) {
-        for (int i = 0; i < d->glyphIndexDataSize; ++i) {
-            if (d->glyphIndexData[i] != other.d->glyphIndexData[i])
-               return false;
-        }
-    }
-    if (d->glyphPositionData != other.d->glyphPositionData) {
-        for (int i = 0; i < d->glyphPositionDataSize; ++i) {
-            if (d->glyphPositionData[i] != other.d->glyphPositionData[i])
-               return false;
-        }
-    }
+   if (d->glyphIndexData != other.d->glyphIndexData) {
+      for (int i = 0; i < d->glyphIndexDataSize; ++i) {
+         if (d->glyphIndexData[i] != other.d->glyphIndexData[i]) {
+            return false;
+         }
+      }
+   }
+   if (d->glyphPositionData != other.d->glyphPositionData) {
+      for (int i = 0; i < d->glyphPositionDataSize; ++i) {
+         if (d->glyphPositionData[i] != other.d->glyphPositionData[i]) {
+            return false;
+         }
+      }
+   }
 
-    return (d->overline == other.d->overline
-            && d->underline == other.d->underline
-            && d->strikeOut == other.d->strikeOut
-            && d->rawFont == other.d->rawFont);
+   return (d->overline == other.d->overline
+           && d->underline == other.d->underline
+           && d->strikeOut == other.d->strikeOut
+           && d->rawFont == other.d->rawFont);
 }
 
 /*!
@@ -157,7 +161,7 @@ bool QGlyphRun::operator==(const QGlyphRun &other) const
 */
 QRawFont QGlyphRun::rawFont() const
 {
-    return d->rawFont;
+   return d->rawFont;
 }
 
 /*!
@@ -168,8 +172,8 @@ QRawFont QGlyphRun::rawFont() const
 */
 void QGlyphRun::setRawFont(const QRawFont &rawFont)
 {
-    detach();
-    d->rawFont = rawFont;
+   detach();
+   d->rawFont = rawFont;
 }
 
 /*!
@@ -179,13 +183,13 @@ void QGlyphRun::setRawFont(const QRawFont &rawFont)
 */
 QVector<quint32> QGlyphRun::glyphIndexes() const
 {
-    if (d->glyphIndexes.constData() == d->glyphIndexData) {
-        return d->glyphIndexes;
-    } else {
-        QVector<quint32> indexes(d->glyphIndexDataSize);
-        memcpy(indexes.data(), d->glyphIndexData, d->glyphIndexDataSize * sizeof(quint32));
-        return indexes;
-    }
+   if (d->glyphIndexes.constData() == d->glyphIndexData) {
+      return d->glyphIndexes;
+   } else {
+      QVector<quint32> indexes(d->glyphIndexDataSize);
+      memcpy(indexes.data(), d->glyphIndexData, d->glyphIndexDataSize * sizeof(quint32));
+      return indexes;
+   }
 }
 
 /*!
@@ -194,10 +198,10 @@ QVector<quint32> QGlyphRun::glyphIndexes() const
 */
 void QGlyphRun::setGlyphIndexes(const QVector<quint32> &glyphIndexes)
 {
-    detach();
-    d->glyphIndexes = glyphIndexes; // Keep a reference to the QVector to avoid copying
-    d->glyphIndexData = glyphIndexes.constData();
-    d->glyphIndexDataSize = glyphIndexes.size();
+   detach();
+   d->glyphIndexes = glyphIndexes; // Keep a reference to the QVector to avoid copying
+   d->glyphIndexData = glyphIndexes.constData();
+   d->glyphIndexDataSize = glyphIndexes.size();
 }
 
 /*!
@@ -205,14 +209,14 @@ void QGlyphRun::setGlyphIndexes(const QVector<quint32> &glyphIndexes)
 */
 QVector<QPointF> QGlyphRun::positions() const
 {
-    if (d->glyphPositions.constData() == d->glyphPositionData) {
-        return d->glyphPositions;
-    } else {
-        QVector<QPointF> glyphPositions(d->glyphPositionDataSize);
-        memcpy(glyphPositions.data(), d->glyphPositionData,
-                 d->glyphPositionDataSize * sizeof(QPointF));
-        return glyphPositions;
-    }
+   if (d->glyphPositions.constData() == d->glyphPositionData) {
+      return d->glyphPositions;
+   } else {
+      QVector<QPointF> glyphPositions(d->glyphPositionDataSize);
+      memcpy(glyphPositions.data(), d->glyphPositionData,
+             d->glyphPositionDataSize * sizeof(QPointF));
+      return glyphPositions;
+   }
 }
 
 /*!
@@ -221,10 +225,10 @@ QVector<QPointF> QGlyphRun::positions() const
 */
 void QGlyphRun::setPositions(const QVector<QPointF> &positions)
 {
-    detach();
-    d->glyphPositions = positions; // Keep a reference to the vector to avoid copying
-    d->glyphPositionData = positions.constData();
-    d->glyphPositionDataSize = positions.size();
+   detach();
+   d->glyphPositions = positions; // Keep a reference to the vector to avoid copying
+   d->glyphPositionData = positions.constData();
+   d->glyphPositionDataSize = positions.size();
 }
 
 /*!
@@ -232,14 +236,14 @@ void QGlyphRun::setPositions(const QVector<QPointF> &positions)
 */
 void QGlyphRun::clear()
 {
-    detach();
-    d->rawFont = QRawFont();
-    d->strikeOut = false;
-    d->overline = false;
-    d->underline = false;
+   detach();
+   d->rawFont = QRawFont();
+   d->strikeOut = false;
+   d->overline = false;
+   d->underline = false;
 
-    setPositions(QVector<QPointF>());
-    setGlyphIndexes(QVector<quint32>());
+   setPositions(QVector<QPointF>());
+   setGlyphIndexes(QVector<quint32>());
 }
 
 /*!
@@ -253,13 +257,13 @@ void QGlyphRun::clear()
 void QGlyphRun::setRawData(const quint32 *glyphIndexArray, const QPointF *glyphPositionArray,
                            int size)
 {
-    detach();
-    d->glyphIndexes.clear();
-    d->glyphPositions.clear();
+   detach();
+   d->glyphIndexes.clear();
+   d->glyphPositions.clear();
 
-    d->glyphIndexData = glyphIndexArray;
-    d->glyphPositionData = glyphPositionArray;
-    d->glyphIndexDataSize = d->glyphPositionDataSize = size;
+   d->glyphIndexData = glyphIndexArray;
+   d->glyphPositionData = glyphPositionArray;
+   d->glyphIndexDataSize = d->glyphPositionDataSize = size;
 }
 
 /*!
@@ -269,7 +273,7 @@ void QGlyphRun::setRawData(const quint32 *glyphIndexArray, const QPointF *glyphP
 */
 bool QGlyphRun::overline() const
 {
-    return d->overline;
+   return d->overline;
 }
 
 /*!
@@ -280,11 +284,12 @@ bool QGlyphRun::overline() const
 */
 void QGlyphRun::setOverline(bool overline)
 {
-    if (d->overline == overline)
-        return;
+   if (d->overline == overline) {
+      return;
+   }
 
-    detach();
-    d->overline = overline;
+   detach();
+   d->overline = overline;
 }
 
 /*!
@@ -294,7 +299,7 @@ void QGlyphRun::setOverline(bool overline)
 */
 bool QGlyphRun::underline() const
 {
-    return d->underline;
+   return d->underline;
 }
 
 /*!
@@ -305,11 +310,12 @@ bool QGlyphRun::underline() const
 */
 void QGlyphRun::setUnderline(bool underline)
 {
-    if (d->underline == underline)
-        return;
+   if (d->underline == underline) {
+      return;
+   }
 
-    detach();
-    d->underline = underline;
+   detach();
+   d->underline = underline;
 }
 
 /*!
@@ -319,7 +325,7 @@ void QGlyphRun::setUnderline(bool underline)
 */
 bool QGlyphRun::strikeOut() const
 {
-    return d->strikeOut;
+   return d->strikeOut;
 }
 
 /*!
@@ -330,11 +336,12 @@ bool QGlyphRun::strikeOut() const
 */
 void QGlyphRun::setStrikeOut(bool strikeOut)
 {
-    if (d->strikeOut == strikeOut)
-        return;
+   if (d->strikeOut == strikeOut) {
+      return;
+   }
 
-    detach();
-    d->strikeOut = strikeOut;
+   detach();
+   d->strikeOut = strikeOut;
 }
 
 QT_END_NAMESPACE

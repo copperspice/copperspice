@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,54 +35,58 @@ QT_BEGIN_NAMESPACE
 class QDirectPainterPrivate;
 struct QWSEmbedEvent;
 
-class Q_GUI_EXPORT QDirectPainter : public QObject {
-    CS_OBJECT(QDirectPainter)
-    Q_DECLARE_PRIVATE(QDirectPainter)
+class Q_GUI_EXPORT QDirectPainter : public QObject
+{
+   CS_OBJECT(QDirectPainter)
+   Q_DECLARE_PRIVATE(QDirectPainter)
 
-public:
+ public:
 
-    enum SurfaceFlag { NonReserved = 0,
-                       Reserved = 1,
-                       ReservedSynchronous = 3 };
+   enum SurfaceFlag { NonReserved = 0,
+                      Reserved = 1,
+                      ReservedSynchronous = 3
+                    };
 
-    explicit QDirectPainter(QObject *parentObject = 0, SurfaceFlag flag = NonReserved);
-    ~QDirectPainter();
+   explicit QDirectPainter(QObject *parentObject = 0, SurfaceFlag flag = NonReserved);
+   ~QDirectPainter();
 
-    void setRegion(const QRegion&);
-    QRegion requestedRegion() const;
-    QRegion allocatedRegion() const;
+   void setRegion(const QRegion &);
+   QRegion requestedRegion() const;
+   QRegion allocatedRegion() const;
 
-    void setGeometry(const QRect&);
-    QRect geometry() const;
+   void setGeometry(const QRect &);
+   QRect geometry() const;
 
-    WId winId() const;
-    virtual void regionChanged(const QRegion &exposedRegion);
+   WId winId() const;
+   virtual void regionChanged(const QRegion &exposedRegion);
 
-    void startPainting(bool lockDisplay = true);
-    void endPainting();
-    void endPainting(const QRegion &region);
-    void flush(const QRegion &region);
+   void startPainting(bool lockDisplay = true);
+   void endPainting();
+   void endPainting(const QRegion &region);
+   void flush(const QRegion &region);
 
-    void raise();
-    void lower();
+   void raise();
+   void lower();
 
 
-    static QRegion reserveRegion(const QRegion&);
-    static QRegion reservedRegion();
-    static QRegion region() { return reservedRegion(); }
+   static QRegion reserveRegion(const QRegion &);
+   static QRegion reservedRegion();
+   static QRegion region() {
+      return reservedRegion();
+   }
 
-    static uchar* frameBuffer();
-    static int screenDepth();
-    static int screenWidth();
-    static int screenHeight();
-    static int linestep();
+   static uchar *frameBuffer();
+   static int screenDepth();
+   static int screenWidth();
+   static int screenHeight();
+   static int linestep();
 
-    static void lock();
-    static void unlock();
+   static void lock();
+   static void unlock();
 
-private:
-    friend  void qt_directpainter_region(QDirectPainter *dp, const QRegion &alloc, int type);
-    friend void qt_directpainter_embedevent(QDirectPainter*, const QWSEmbedEvent*);
+ private:
+   friend  void qt_directpainter_region(QDirectPainter *dp, const QRegion &alloc, int type);
+   friend void qt_directpainter_embedevent(QDirectPainter *, const QWSEmbedEvent *);
 };
 
 #endif

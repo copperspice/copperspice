@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,22 +41,23 @@ QT_USE_NAMESPACE
 
 @implementation NSWindow (QT_MANGLE_NAMESPACE(QWidgetIntegration))
 
-- (id)QT_MANGLE_NAMESPACE(qt_initWithQWidget):(QWidget*)widget contentRect:(NSRect)rect styleMask:(NSUInteger)mask
+- (id)QT_MANGLE_NAMESPACE(qt_initWithQWidget): (QWidget *)widget contentRect: (NSRect)rect styleMask: (NSUInteger)mask
 {
-    self = [self initWithContentRect:rect styleMask:mask backing:NSBackingStoreBuffered defer:YES];
-    if (self) {
-        [[QT_MANGLE_NAMESPACE(QCocoaWindowDelegate) sharedDelegate] becomeDelegateForWindow:self widget:widget];
-        [self setReleasedWhenClosed:NO];
-    }
-    return self;
+   self = [self initWithContentRect: rect styleMask: mask backing: NSBackingStoreBuffered defer: YES];
+   if (self) {
+      [[QT_MANGLE_NAMESPACE(QCocoaWindowDelegate) sharedDelegate] becomeDelegateForWindow: self widget: widget];
+      [self setReleasedWhenClosed: NO];
+   }
+   return self;
 }
 
 - (QWidget *)QT_MANGLE_NAMESPACE(qt_qwidget)
 {
-    QWidget *widget = 0;
-    if ([self delegate] == [QT_MANGLE_NAMESPACE(QCocoaWindowDelegate) sharedDelegate])
-        widget = [[QT_MANGLE_NAMESPACE(QCocoaWindowDelegate) sharedDelegate] qt_qwidgetForWindow:self];
-    return widget;
+   QWidget *widget = 0;
+   if ([self delegate] == [QT_MANGLE_NAMESPACE(QCocoaWindowDelegate) sharedDelegate]) {
+      widget = [[QT_MANGLE_NAMESPACE(QCocoaWindowDelegate) sharedDelegate] qt_qwidgetForWindow: self];
+   }
+   return widget;
 }
 
 @end

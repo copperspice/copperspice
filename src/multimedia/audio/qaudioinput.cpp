@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -118,11 +118,11 @@ QT_BEGIN_NAMESPACE
 */
 
 QAudioInput::QAudioInput(const QAudioFormat &format, QObject *parent):
-    QObject(parent)
+   QObject(parent)
 {
-    d = QAudioDeviceFactory::createDefaultInputDevice(format);
-    connect(d, SIGNAL(notify()), SIGNAL(notify()));
-    connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
+   d = QAudioDeviceFactory::createDefaultInputDevice(format);
+   connect(d, SIGNAL(notify()), SIGNAL(notify()));
+   connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
 }
 
 /*!
@@ -132,11 +132,11 @@ QAudioInput::QAudioInput(const QAudioFormat &format, QObject *parent):
 */
 
 QAudioInput::QAudioInput(const QAudioDeviceInfo &audioDevice, const QAudioFormat &format, QObject *parent):
-    QObject(parent)
+   QObject(parent)
 {
-    d = QAudioDeviceFactory::createInputDevice(audioDevice, format);
-    connect(d, SIGNAL(notify()), SIGNAL(notify()));
-    connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
+   d = QAudioDeviceFactory::createInputDevice(audioDevice, format);
+   connect(d, SIGNAL(notify()), SIGNAL(notify()));
+   connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
 }
 
 /*!
@@ -145,7 +145,7 @@ QAudioInput::QAudioInput(const QAudioDeviceInfo &audioDevice, const QAudioFormat
 
 QAudioInput::~QAudioInput()
 {
-    delete d;
+   delete d;
 }
 
 /*!
@@ -171,9 +171,9 @@ QAudioInput::~QAudioInput()
      \sa QIODevice
 */
 
-void QAudioInput::start(QIODevice* device)
+void QAudioInput::start(QIODevice *device)
 {
-    d->start(device);
+   d->start(device);
 }
 
 /*!
@@ -196,9 +196,9 @@ void QAudioInput::start(QIODevice* device)
     \sa QIODevice
 */
 
-QIODevice* QAudioInput::start()
+QIODevice *QAudioInput::start()
 {
-    return d->start(0);
+   return d->start(0);
 }
 
 /*!
@@ -207,7 +207,7 @@ QIODevice* QAudioInput::start()
 
 QAudioFormat QAudioInput::format() const
 {
-    return d->format();
+   return d->format();
 }
 
 /*!
@@ -219,7 +219,7 @@ QAudioFormat QAudioInput::format() const
 
 void QAudioInput::stop()
 {
-    d->stop();
+   d->stop();
 }
 
 /*!
@@ -228,7 +228,7 @@ void QAudioInput::stop()
 
 void QAudioInput::reset()
 {
-    d->reset();
+   d->reset();
 }
 
 /*!
@@ -240,7 +240,7 @@ void QAudioInput::reset()
 
 void QAudioInput::suspend()
 {
-    d->suspend();
+   d->suspend();
 }
 
 /*!
@@ -254,7 +254,7 @@ void QAudioInput::suspend()
 
 void QAudioInput::resume()
 {
-     d->resume();
+   d->resume();
 }
 
 /*!
@@ -269,7 +269,7 @@ void QAudioInput::resume()
 
 void QAudioInput::setBufferSize(int value)
 {
-    d->setBufferSize(value);
+   d->setBufferSize(value);
 }
 
 /*!
@@ -284,7 +284,7 @@ void QAudioInput::setBufferSize(int value)
 
 int QAudioInput::bufferSize() const
 {
-    return d->bufferSize();
+   return d->bufferSize();
 }
 
 /*!
@@ -296,11 +296,11 @@ int QAudioInput::bufferSize() const
 
 int QAudioInput::bytesReady() const
 {
-    /*
-    -If not ActiveState|IdleState, return 0
-    -return amount of audio data available to read
-    */
-    return d->bytesReady();
+   /*
+   -If not ActiveState|IdleState, return 0
+   -return amount of audio data available to read
+   */
+   return d->bytesReady();
 }
 
 /*!
@@ -311,7 +311,7 @@ int QAudioInput::bytesReady() const
 
 int QAudioInput::periodSize() const
 {
-    return d->periodSize();
+   return d->periodSize();
 }
 
 /*!
@@ -325,7 +325,7 @@ int QAudioInput::periodSize() const
 
 void QAudioInput::setNotifyInterval(int ms)
 {
-    d->setNotifyInterval(ms);
+   d->setNotifyInterval(ms);
 }
 
 /*!
@@ -334,7 +334,7 @@ void QAudioInput::setNotifyInterval(int ms)
 
 int QAudioInput::notifyInterval() const
 {
-    return d->notifyInterval();
+   return d->notifyInterval();
 }
 
 /*!
@@ -344,7 +344,7 @@ int QAudioInput::notifyInterval() const
 
 qint64 QAudioInput::processedUSecs() const
 {
-    return d->processedUSecs();
+   return d->processedUSecs();
 }
 
 /*!
@@ -354,7 +354,7 @@ qint64 QAudioInput::processedUSecs() const
 
 qint64 QAudioInput::elapsedUSecs() const
 {
-    return d->elapsedUSecs();
+   return d->elapsedUSecs();
 }
 
 /*!
@@ -363,7 +363,7 @@ qint64 QAudioInput::elapsedUSecs() const
 
 QAudio::Error QAudioInput::error() const
 {
-    return d->error();
+   return d->error();
 }
 
 /*!
@@ -372,7 +372,7 @@ QAudio::Error QAudioInput::error() const
 
 QAudio::State QAudioInput::state() const
 {
-    return d->state();
+   return d->state();
 }
 
 /*!

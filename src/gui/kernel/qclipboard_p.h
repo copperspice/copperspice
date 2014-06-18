@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,69 +35,70 @@ class QClipboardPrivate;
 
 class QMimeDataWrapper : public QMimeSource
 {
-public:
-    QMimeDataWrapper() {}
+ public:
+   QMimeDataWrapper() {}
 
-    const char* format(int n) const;
-    QByteArray encodedData(const char*) const;
+   const char *format(int n) const;
+   QByteArray encodedData(const char *) const;
 
-    mutable QList<QByteArray> formats;
-    const QMimeData *data;
+   mutable QList<QByteArray> formats;
+   const QMimeData *data;
 };
 
 class QMimeSourceWrapper : public QMimeData
 {
-public:
-    QMimeSourceWrapper(QClipboardPrivate *priv, QClipboard::Mode m);
-    ~QMimeSourceWrapper();
+ public:
+   QMimeSourceWrapper(QClipboardPrivate *priv, QClipboard::Mode m);
+   ~QMimeSourceWrapper();
 
-    bool hasFormat(const QString &mimetype) const;
-    QStringList formats() const;
+   bool hasFormat(const QString &mimetype) const;
+   QStringList formats() const;
 
-protected:
-    QVariant retrieveData(const QString &mimetype, QVariant::Type) const;
-private:
-    QClipboardPrivate *d;
-    QClipboard::Mode mode;
-    QMimeSource *source;
+ protected:
+   QVariant retrieveData(const QString &mimetype, QVariant::Type) const;
+ private:
+   QClipboardPrivate *d;
+   QClipboard::Mode mode;
+   QMimeSource *source;
 };
 
 
 class QClipboardPrivate
 {
 
-public:
-    QClipboardPrivate() {
-        for (int i = 0; i <= QClipboard::LastMode; ++i) {
-            compat_data[i] = 0;
-            wrapper[i] = new QMimeDataWrapper();
-        }
-    }
+ public:
+   QClipboardPrivate() {
+      for (int i = 0; i <= QClipboard::LastMode; ++i) {
+         compat_data[i] = 0;
+         wrapper[i] = new QMimeDataWrapper();
+      }
+   }
 
-    virtual ~QClipboardPrivate() {
-        for (int i = 0; i <= QClipboard::LastMode; ++i) {
-            delete wrapper[i];
-            delete compat_data[i];
-        }
-    }
+   virtual ~QClipboardPrivate() {
+      for (int i = 0; i <= QClipboard::LastMode; ++i) {
+         delete wrapper[i];
+         delete compat_data[i];
+      }
+   }
 
-    mutable QMimeDataWrapper *wrapper[QClipboard::LastMode + 1];
-    mutable QMimeSource *compat_data[QClipboard::LastMode + 1];
+   mutable QMimeDataWrapper *wrapper[QClipboard::LastMode + 1];
+   mutable QMimeSource *compat_data[QClipboard::LastMode + 1];
 };
 
 inline QMimeSourceWrapper::QMimeSourceWrapper(QClipboardPrivate *priv, QClipboard::Mode m)
-    : QMimeData()
+   : QMimeData()
 {
-    d = priv;
-    mode = m;
-    source = d->compat_data[mode];
+   d = priv;
+   mode = m;
+   source = d->compat_data[mode];
 }
 
 inline QMimeSourceWrapper::~QMimeSourceWrapper()
 {
-    if (d->compat_data[mode] == source)
-        d->compat_data[mode] = 0;
-    delete source;
+   if (d->compat_data[mode] == source) {
+      d->compat_data[mode] = 0;
+   }
+   delete source;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,33 +33,34 @@ QT_BEGIN_NAMESPACE
 
 class QMacCocoaViewContainerPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QMacCocoaViewContainer)
+   Q_DECLARE_PUBLIC(QMacCocoaViewContainer)
 
-public:
-    NSView *nsview;
+ public:
+   NSView *nsview;
 
-    QMacCocoaViewContainerPrivate();
-    ~QMacCocoaViewContainerPrivate();
+   QMacCocoaViewContainerPrivate();
+   ~QMacCocoaViewContainerPrivate();
 };
 
 QMacCocoaViewContainerPrivate::QMacCocoaViewContainerPrivate()
-     : nsview(0)
+   : nsview(0)
 {
 }
 
 QMacCocoaViewContainerPrivate::~QMacCocoaViewContainerPrivate()
 {
-    [nsview release];
+   [nsview release];
 }
 
 QMacCocoaViewContainer::QMacCocoaViewContainer(void *cocoaViewToWrap, QWidget *parent)
    : QWidget(*new QMacCocoaViewContainerPrivate, parent, 0)
 {
-    if (cocoaViewToWrap)
-        setCocoaView(cocoaViewToWrap);
+   if (cocoaViewToWrap) {
+      setCocoaView(cocoaViewToWrap);
+   }
 
-    // QMacCocoaViewContainer requires a native window handle.
-    setAttribute(Qt::WA_NativeWindow);
+   // QMacCocoaViewContainer requires a native window handle.
+   setAttribute(Qt::WA_NativeWindow);
 }
 
 /*!
@@ -76,8 +77,8 @@ QMacCocoaViewContainer::~QMacCocoaViewContainer()
 */
 void *QMacCocoaViewContainer::cocoaView() const
 {
-    Q_D(const QMacCocoaViewContainer);
-    return [[d->nsview retain] autorelease];
+   Q_D(const QMacCocoaViewContainer);
+   return [[d->nsview retain] autorelease];
 }
 
 /*!
@@ -86,17 +87,17 @@ void *QMacCocoaViewContainer::cocoaView() const
 */
 void QMacCocoaViewContainer::setCocoaView(void *cocoaViewToWrap)
 {
-    Q_D(QMacCocoaViewContainer);
-    QMacCocoaAutoReleasePool pool;
-    NSView *view = static_cast<NSView *>(cocoaViewToWrap);
-    NSView *oldView = d->nsview;
-    destroy(true, true);
-    [view retain];
-    d->nsview = view;
+   Q_D(QMacCocoaViewContainer);
+   QMacCocoaAutoReleasePool pool;
+   NSView *view = static_cast<NSView *>(cocoaViewToWrap);
+   NSView *oldView = d->nsview;
+   destroy(true, true);
+   [view retain];
+   d->nsview = view;
 
-    create(WId(d->nsview), false, true);
+   create(WId(d->nsview), false, true);
 
-    [oldView release];
+   [oldView release];
 }
 
 QT_END_NAMESPACE

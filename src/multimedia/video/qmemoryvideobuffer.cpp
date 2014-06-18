@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,16 +31,15 @@ QT_BEGIN_NAMESPACE
 
 class QMemoryVideoBufferPrivate : public QAbstractVideoBufferPrivate
 {
-public:
-    QMemoryVideoBufferPrivate()
-        : bytesPerLine(0)
-        , mapMode(QAbstractVideoBuffer::NotMapped)
-    {
-    }
+ public:
+   QMemoryVideoBufferPrivate()
+      : bytesPerLine(0)
+      , mapMode(QAbstractVideoBuffer::NotMapped) {
+   }
 
-    int bytesPerLine;
-    QAbstractVideoBuffer::MapMode mapMode;
-    QByteArray data;
+   int bytesPerLine;
+   QAbstractVideoBuffer::MapMode mapMode;
+   QByteArray data;
 };
 
 /*!
@@ -56,12 +55,12 @@ public:
     Constructs a video buffer with an image stride of \a bytesPerLine from a byte \a array.
 */
 QMemoryVideoBuffer::QMemoryVideoBuffer(const QByteArray &array, int bytesPerLine)
-    : QAbstractVideoBuffer(*new QMemoryVideoBufferPrivate, NoHandle)
+   : QAbstractVideoBuffer(*new QMemoryVideoBufferPrivate, NoHandle)
 {
-    Q_D(QMemoryVideoBuffer);
+   Q_D(QMemoryVideoBuffer);
 
-    d->data = array;
-    d->bytesPerLine = bytesPerLine;
+   d->data = array;
+   d->bytesPerLine = bytesPerLine;
 }
 
 /*!
@@ -76,7 +75,7 @@ QMemoryVideoBuffer::~QMemoryVideoBuffer()
 */
 QAbstractVideoBuffer::MapMode QMemoryVideoBuffer::mapMode() const
 {
-    return d_func()->mapMode;
+   return d_func()->mapMode;
 }
 
 /*!
@@ -84,21 +83,23 @@ QAbstractVideoBuffer::MapMode QMemoryVideoBuffer::mapMode() const
 */
 uchar *QMemoryVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPerLine)
 {
-    Q_D(QMemoryVideoBuffer);
+   Q_D(QMemoryVideoBuffer);
 
-    if (d->mapMode == NotMapped && d->data.data() && mode != NotMapped) {
-        d->mapMode = mode;
+   if (d->mapMode == NotMapped && d->data.data() && mode != NotMapped) {
+      d->mapMode = mode;
 
-        if (numBytes)
-            *numBytes = d->data.size();
+      if (numBytes) {
+         *numBytes = d->data.size();
+      }
 
-        if (bytesPerLine)
-            *bytesPerLine = d->bytesPerLine;
+      if (bytesPerLine) {
+         *bytesPerLine = d->bytesPerLine;
+      }
 
-        return reinterpret_cast<uchar *>(d->data.data());
-    } else {
-        return 0;
-    }
+      return reinterpret_cast<uchar *>(d->data.data());
+   } else {
+      return 0;
+   }
 }
 
 /*!
@@ -106,7 +107,7 @@ uchar *QMemoryVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPerLine)
 */
 void QMemoryVideoBuffer::unmap()
 {
-    d_func()->mapMode = NotMapped;
+   d_func()->mapMode = NotMapped;
 }
 
 QT_END_NAMESPACE

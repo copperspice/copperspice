@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,7 +39,7 @@ void QSystemTrayIconPrivate::remove_sys()
 
 QRect QSystemTrayIconPrivate::geometry_sys() const
 {
-    return QRect();
+   return QRect();
 }
 
 void QSystemTrayIconPrivate::updateIcon_sys()
@@ -56,23 +56,23 @@ void QSystemTrayIconPrivate::updateToolTip_sys()
 
 bool QSystemTrayIconPrivate::isSystemTrayAvailable_sys()
 {
-    return false;
+   return false;
 }
 
 bool QSystemTrayIconPrivate::supportsMessages_sys()
 {
-    return false;
+   return false;
 }
 
 void QSystemTrayIconPrivate::showMessage_sys(const QString &message,
-                                             const QString &title,
-                                             QSystemTrayIcon::MessageIcon icon,
-                                             int msecs)
+      const QString &title,
+      QSystemTrayIcon::MessageIcon icon,
+      int msecs)
 {
-    Q_UNUSED(message);
-    Q_UNUSED(title);
-    Q_UNUSED(icon);
-    Q_UNUSED(msecs);
+   Q_UNUSED(message);
+   Q_UNUSED(title);
+   Q_UNUSED(icon);
+   Q_UNUSED(msecs);
 }
 
 QT_END_NAMESPACE

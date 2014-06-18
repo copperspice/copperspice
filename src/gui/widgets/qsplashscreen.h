@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,35 +36,36 @@ class QSplashScreenPrivate;
 
 class Q_GUI_EXPORT QSplashScreen : public QWidget
 {
-    CS_OBJECT(QSplashScreen)
+   CS_OBJECT(QSplashScreen)
 
-public:
-    explicit QSplashScreen(const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = 0);
-    QSplashScreen(QWidget *parent, const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = 0);
-    virtual ~QSplashScreen();
+ public:
+   explicit QSplashScreen(const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = 0);
+   QSplashScreen(QWidget *parent, const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = 0);
+   virtual ~QSplashScreen();
 
-    void setPixmap(const QPixmap &pixmap);
-    const QPixmap pixmap() const;
-    void finish(QWidget *w);
-    void repaint();
+   void setPixmap(const QPixmap &pixmap);
+   const QPixmap pixmap() const;
+   void finish(QWidget *w);
+   void repaint();
 
-    GUI_CS_SLOT_1(Public, void showMessage(const QString & message,int alignment = Qt::AlignLeft,const QColor & color = Qt::black))
-    GUI_CS_SLOT_2(showMessage) 
+   GUI_CS_SLOT_1(Public, void showMessage(const QString &message, int alignment = Qt::AlignLeft,
+                                          const QColor &color = Qt::black))
+   GUI_CS_SLOT_2(showMessage)
 
-    GUI_CS_SLOT_1(Public, void clearMessage())
-    GUI_CS_SLOT_2(clearMessage) 
+   GUI_CS_SLOT_1(Public, void clearMessage())
+   GUI_CS_SLOT_2(clearMessage)
 
-    GUI_CS_SIGNAL_1(Public, void messageChanged(const QString & message))
-    GUI_CS_SIGNAL_2(messageChanged,message) 
+   GUI_CS_SIGNAL_1(Public, void messageChanged(const QString &message))
+   GUI_CS_SIGNAL_2(messageChanged, message)
 
-protected:
-    bool event(QEvent *e);
-    virtual void drawContents(QPainter *painter);
-    void mousePressEvent(QMouseEvent *);
+ protected:
+   bool event(QEvent *e);
+   virtual void drawContents(QPainter *painter);
+   void mousePressEvent(QMouseEvent *);
 
-private:
-    Q_DISABLE_COPY(QSplashScreen)
-    Q_DECLARE_PRIVATE(QSplashScreen)
+ private:
+   Q_DISABLE_COPY(QSplashScreen)
+   Q_DECLARE_PRIVATE(QSplashScreen)
 };
 
 #endif // QT_NO_SPLASHSCREEN

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,32 +36,32 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QStringListModel : public QAbstractListModel
 {
-    CS_OBJECT(QStringListModel)
+   CS_OBJECT(QStringListModel)
 
-public:
-    explicit QStringListModel(QObject *parent = 0);
-    QStringListModel(const QStringList &strings, QObject *parent = 0);
+ public:
+   explicit QStringListModel(QObject *parent = 0);
+   QStringListModel(const QStringList &strings, QObject *parent = 0);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+   int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-    QVariant data(const QModelIndex &index, int role) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+   QVariant data(const QModelIndex &index, int role) const;
+   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+   Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
-    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+   void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
-    QStringList stringList() const;
-    void setStringList(const QStringList &strings);
+   QStringList stringList() const;
+   void setStringList(const QStringList &strings);
 
-    Qt::DropActions supportedDropActions() const;
+   Qt::DropActions supportedDropActions() const;
 
-private:
-    Q_DISABLE_COPY(QStringListModel)
-    QStringList lst;
+ private:
+   Q_DISABLE_COPY(QStringListModel)
+   QStringList lst;
 };
 
 #endif // QT_NO_STRINGLISTMODEL

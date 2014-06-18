@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,67 +32,73 @@ QT_BEGIN_NAMESPACE
 // set the glyph attributes heuristically. Assumes a 1 to 1 relationship between chars and glyphs
 // and no reordering.
 // also computes logClusters heuristically
-static void heuristicSetGlyphAttributes(const QChar *uc, int length, QGlyphLayout *glyphs, unsigned short *logClusters, int num_glyphs)
+static void heuristicSetGlyphAttributes(const QChar *uc, int length, QGlyphLayout *glyphs, unsigned short *logClusters,
+                                        int num_glyphs)
 {
-    // ### zeroWidth and justification are missing here!!!!!
+   // ### zeroWidth and justification are missing here!!!!!
 
-    Q_UNUSED(num_glyphs);
+   Q_UNUSED(num_glyphs);
 
-//     qDebug("QScriptEngine::heuristicSetGlyphAttributes, num_glyphs=%d", item->num_glyphs);
+   //     qDebug("QScriptEngine::heuristicSetGlyphAttributes, num_glyphs=%d", item->num_glyphs);
 
-    const bool symbolFont = false; // ####
-    glyphs->attributes[0].mark = false;
-    glyphs->attributes[0].clusterStart = true;
-    glyphs->attributes[0].dontPrint = (!symbolFont && uc[0].unicode() == 0x00ad) || qIsControlChar(uc[0].unicode());
+   const bool symbolFont = false; // ####
+   glyphs->attributes[0].mark = false;
+   glyphs->attributes[0].clusterStart = true;
+   glyphs->attributes[0].dontPrint = (!symbolFont && uc[0].unicode() == 0x00ad) || qIsControlChar(uc[0].unicode());
 
-    int pos = 0;
-    int lastCat = QChar::category(uc[0].unicode());
-    for (int i = 1; i < length; ++i) {
-        if (logClusters[i] == pos)
-            // same glyph
-            continue;
-        ++pos;
-        while (pos < logClusters[i]) {
-            ++pos;
-        }
-        // hide soft-hyphens by default
-        if ((!symbolFont && uc[i].unicode() == 0x00ad) || qIsControlChar(uc[i].unicode()))
-            glyphs->attributes[pos].dontPrint = true;
-        const QUnicodeTables::Properties *prop = QUnicodeTables::properties(uc[i].unicode());
-        int cat = prop->category;
+   int pos = 0;
+   int lastCat = QChar::category(uc[0].unicode());
+   for (int i = 1; i < length; ++i) {
+      if (logClusters[i] == pos)
+         // same glyph
+      {
+         continue;
+      }
+      ++pos;
+      while (pos < logClusters[i]) {
+         ++pos;
+      }
+      // hide soft-hyphens by default
+      if ((!symbolFont && uc[i].unicode() == 0x00ad) || qIsControlChar(uc[i].unicode())) {
+         glyphs->attributes[pos].dontPrint = true;
+      }
+      const QUnicodeTables::Properties *prop = QUnicodeTables::properties(uc[i].unicode());
+      int cat = prop->category;
 
-        // one gets an inter character justification point if the current char is not a non spacing mark.
-        // as then the current char belongs to the last one and one gets a space justification point
-        // after the space char.
-        if (lastCat == QChar::Separator_Space)
-            glyphs->attributes[pos-1].justification = HB_Space;
-        else if (cat != QChar::Mark_NonSpacing)
-            glyphs->attributes[pos-1].justification = HB_Character;
-        else
-            glyphs->attributes[pos-1].justification = HB_NoJustification;
+      // one gets an inter character justification point if the current char is not a non spacing mark.
+      // as then the current char belongs to the last one and one gets a space justification point
+      // after the space char.
+      if (lastCat == QChar::Separator_Space) {
+         glyphs->attributes[pos - 1].justification = HB_Space;
+      } else if (cat != QChar::Mark_NonSpacing) {
+         glyphs->attributes[pos - 1].justification = HB_Character;
+      } else {
+         glyphs->attributes[pos - 1].justification = HB_NoJustification;
+      }
 
-        lastCat = cat;
-    }
-    pos = logClusters[length-1];
-    if (lastCat == QChar::Separator_Space)
-        glyphs->attributes[pos].justification = HB_Space;
-    else
-        glyphs->attributes[pos].justification = HB_Character;
+      lastCat = cat;
+   }
+   pos = logClusters[length - 1];
+   if (lastCat == QChar::Separator_Space) {
+      glyphs->attributes[pos].justification = HB_Space;
+   } else {
+      glyphs->attributes[pos].justification = HB_Character;
+   }
 }
 
 struct QArabicProperties {
-    unsigned char shape;
-    unsigned char justification;
+   unsigned char shape;
+   unsigned char justification;
 };
 Q_DECLARE_TYPEINFO(QArabicProperties, Q_PRIMITIVE_TYPE);
 
 enum QArabicShape {
-    XIsolated,
-    XFinal,
-    XInitial,
-    XMedial,
-    // intermediate state
-    XCausing
+   XIsolated,
+   XFinal,
+   XInitial,
+   XMedial,
+   // intermediate state
+   XCausing
 };
 
 
@@ -103,201 +109,202 @@ enum QArabicShape {
 // I'm not sure the mapping of syriac to arabic enums is correct with regards to justification, but as
 // I couldn't find any better document I'll hope for the best.
 enum ArabicGroup {
-    // NonJoining
-    ArabicNone,
-    ArabicSpace,
-    // Transparent
-    Transparent,
-    // Causing
-    Center,
-    Kashida,
+   // NonJoining
+   ArabicNone,
+   ArabicSpace,
+   // Transparent
+   Transparent,
+   // Causing
+   Center,
+   Kashida,
 
-    // Arabic
-    // Dual
-    Beh,
-    Noon,
-    Meem = Noon,
-    Heh = Noon,
-    KnottedHeh = Noon,
-    HehGoal = Noon,
-    SwashKaf = Noon,
-    Yeh,
-    Hah,
-    Seen,
-    Sad = Seen,
-    Tah,
-    Kaf = Tah,
-    Gaf = Tah,
-    Lam = Tah,
-    Ain,
-    Feh = Ain,
-    Qaf = Ain,
-    // Right
-    Alef,
-    Waw,
-    Dal,
-    TehMarbuta = Dal,
-    Reh,
-    HamzaOnHehGoal,
-    YehWithTail = HamzaOnHehGoal,
-    YehBarre = HamzaOnHehGoal,
+   // Arabic
+   // Dual
+   Beh,
+   Noon,
+   Meem = Noon,
+   Heh = Noon,
+   KnottedHeh = Noon,
+   HehGoal = Noon,
+   SwashKaf = Noon,
+   Yeh,
+   Hah,
+   Seen,
+   Sad = Seen,
+   Tah,
+   Kaf = Tah,
+   Gaf = Tah,
+   Lam = Tah,
+   Ain,
+   Feh = Ain,
+   Qaf = Ain,
+   // Right
+   Alef,
+   Waw,
+   Dal,
+   TehMarbuta = Dal,
+   Reh,
+   HamzaOnHehGoal,
+   YehWithTail = HamzaOnHehGoal,
+   YehBarre = HamzaOnHehGoal,
 
-    // Syriac
-    // Dual
-    Beth = Beh,
-    Gamal = Ain,
-    Heth = Noon,
-    Teth = Hah,
-    Yudh = Noon,
-    Kaph = Noon,
-    Lamadh = Lam,
-    Mim = Noon,
-    Nun = Noon,
-    Semakh = Noon,
-    FinalSemakh = Noon,
-    SyriacE = Ain,
-    Pe = Ain,
-    ReversedPe = Hah,
-    Qaph = Noon,
-    Shin = Noon,
-    Fe = Ain,
+   // Syriac
+   // Dual
+   Beth = Beh,
+   Gamal = Ain,
+   Heth = Noon,
+   Teth = Hah,
+   Yudh = Noon,
+   Kaph = Noon,
+   Lamadh = Lam,
+   Mim = Noon,
+   Nun = Noon,
+   Semakh = Noon,
+   FinalSemakh = Noon,
+   SyriacE = Ain,
+   Pe = Ain,
+   ReversedPe = Hah,
+   Qaph = Noon,
+   Shin = Noon,
+   Fe = Ain,
 
-    // Right
-    Alaph = Alef,
-    Dalath = Dal,
-    He = Dal,
-    SyriacWaw = Waw,
-    Zain = Alef,
-    YudhHe = Waw,
-    Sadhe = HamzaOnHehGoal,
-    Taw = Dal,
+   // Right
+   Alaph = Alef,
+   Dalath = Dal,
+   He = Dal,
+   SyriacWaw = Waw,
+   Zain = Alef,
+   YudhHe = Waw,
+   Sadhe = HamzaOnHehGoal,
+   Taw = Dal,
 
-    // Compiler bug? Otherwise ArabicGroupsEnd would be equal to Dal + 1.
-    Dummy = HamzaOnHehGoal,
-    ArabicGroupsEnd
+   // Compiler bug? Otherwise ArabicGroupsEnd would be equal to Dal + 1.
+   Dummy = HamzaOnHehGoal,
+   ArabicGroupsEnd
 };
 
 static const unsigned char arabic_group[0x150] = {
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
 
-    Transparent, Transparent, Transparent, Transparent,
-    Transparent, Transparent, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   Transparent, Transparent, Transparent, Transparent,
+   Transparent, Transparent, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
 
-    ArabicNone, ArabicNone, Alef, Alef,
-    Waw, Alef, Yeh, Alef,
-    Beh, TehMarbuta, Beh, Beh,
-    Hah, Hah, Hah, Dal,
+   ArabicNone, ArabicNone, Alef, Alef,
+   Waw, Alef, Yeh, Alef,
+   Beh, TehMarbuta, Beh, Beh,
+   Hah, Hah, Hah, Dal,
 
-    Dal, Reh, Reh, Seen,
-    Seen, Sad, Sad, Tah,
-    Tah, Ain, Ain, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   Dal, Reh, Reh, Seen,
+   Seen, Sad, Sad, Tah,
+   Tah, Ain, Ain, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
 
-    // 0x640
-    Kashida, Feh, Qaf, Kaf,
-    Lam, Meem, Noon, Heh,
-    Waw, Yeh, Yeh, Transparent,
-    Transparent, Transparent, Transparent, Transparent,
+   // 0x640
+   Kashida, Feh, Qaf, Kaf,
+   Lam, Meem, Noon, Heh,
+   Waw, Yeh, Yeh, Transparent,
+   Transparent, Transparent, Transparent, Transparent,
 
-    Transparent, Transparent, Transparent, Transparent,
-    Transparent, Transparent, Transparent, Transparent,
-    Transparent, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   Transparent, Transparent, Transparent, Transparent,
+   Transparent, Transparent, Transparent, Transparent,
+   Transparent, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
 
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, Beh, Qaf,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, Beh, Qaf,
 
-    Transparent, Alef, Alef, Alef,
-    ArabicNone, Alef, Waw, Waw,
-    Yeh, Beh, Beh, Beh,
-    Beh, Beh, Beh, Beh,
+   Transparent, Alef, Alef, Alef,
+   ArabicNone, Alef, Waw, Waw,
+   Yeh, Beh, Beh, Beh,
+   Beh, Beh, Beh, Beh,
 
-    // 0x680
-    Beh, Hah, Hah, Hah,
-    Hah, Hah, Hah, Hah,
-    Dal, Dal, Dal, Dal,
-    Dal, Dal, Dal, Dal,
+   // 0x680
+   Beh, Hah, Hah, Hah,
+   Hah, Hah, Hah, Hah,
+   Dal, Dal, Dal, Dal,
+   Dal, Dal, Dal, Dal,
 
-    Dal, Reh, Reh, Reh,
-    Reh, Reh, Reh, Reh,
-    Reh, Reh, Seen, Seen,
-    Seen, Sad, Sad, Tah,
+   Dal, Reh, Reh, Reh,
+   Reh, Reh, Reh, Reh,
+   Reh, Reh, Seen, Seen,
+   Seen, Sad, Sad, Tah,
 
-    Ain, Feh, Feh, Feh,
-    Feh, Feh, Feh, Qaf,
-    Qaf, Gaf, SwashKaf, Gaf,
-    Kaf, Kaf, Kaf, Gaf,
+   Ain, Feh, Feh, Feh,
+   Feh, Feh, Feh, Qaf,
+   Qaf, Gaf, SwashKaf, Gaf,
+   Kaf, Kaf, Kaf, Gaf,
 
-    Gaf, Gaf, Gaf, Gaf,
-    Gaf, Lam, Lam, Lam,
-    Lam, Noon, Noon, Noon,
-    Noon, Noon, KnottedHeh, Hah,
+   Gaf, Gaf, Gaf, Gaf,
+   Gaf, Lam, Lam, Lam,
+   Lam, Noon, Noon, Noon,
+   Noon, Noon, KnottedHeh, Hah,
 
-    // 0x6c0
-    TehMarbuta, HehGoal, HamzaOnHehGoal, HamzaOnHehGoal,
-    Waw, Waw, Waw, Waw,
-    Waw, Waw, Waw, Waw,
-    Yeh, YehWithTail, Yeh, Waw,
+   // 0x6c0
+   TehMarbuta, HehGoal, HamzaOnHehGoal, HamzaOnHehGoal,
+   Waw, Waw, Waw, Waw,
+   Waw, Waw, Waw, Waw,
+   Yeh, YehWithTail, Yeh, Waw,
 
-    Yeh, Yeh, YehBarre, YehBarre,
-    ArabicNone, TehMarbuta, Transparent, Transparent,
-    Transparent, Transparent, Transparent, Transparent,
-    Transparent, ArabicNone, ArabicNone, Transparent,
+   Yeh, Yeh, YehBarre, YehBarre,
+   ArabicNone, TehMarbuta, Transparent, Transparent,
+   Transparent, Transparent, Transparent, Transparent,
+   Transparent, ArabicNone, ArabicNone, Transparent,
 
-    Transparent, Transparent, Transparent, Transparent,
-    Transparent, ArabicNone, ArabicNone, Transparent,
-    Transparent, ArabicNone, Transparent, Transparent,
-    Transparent, Transparent, Dal, Reh,
+   Transparent, Transparent, Transparent, Transparent,
+   Transparent, ArabicNone, ArabicNone, Transparent,
+   Transparent, ArabicNone, Transparent, Transparent,
+   Transparent, Transparent, Dal, Reh,
 
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, Seen, Sad,
-    Ain, ArabicNone, ArabicNone, KnottedHeh,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, Seen, Sad,
+   Ain, ArabicNone, ArabicNone, KnottedHeh,
 
-    // 0x700
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
-    ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   // 0x700
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
+   ArabicNone, ArabicNone, ArabicNone, ArabicNone,
 
-    Alaph, Transparent, Beth, Gamal,
-    Gamal, Dalath, Dalath, He,
-    SyriacWaw, Zain, Heth, Teth,
-    Teth, Yudh, YudhHe, Kaph,
+   Alaph, Transparent, Beth, Gamal,
+   Gamal, Dalath, Dalath, He,
+   SyriacWaw, Zain, Heth, Teth,
+   Teth, Yudh, YudhHe, Kaph,
 
-    Lamadh, Mim, Nun, Semakh,
-    FinalSemakh, SyriacE, Pe, ReversedPe,
-    Sadhe, Qaph, Dalath, Shin,
-    Taw, Beth, Gamal, Dalath,
+   Lamadh, Mim, Nun, Semakh,
+   FinalSemakh, SyriacE, Pe, ReversedPe,
+   Sadhe, Qaph, Dalath, Shin,
+   Taw, Beth, Gamal, Dalath,
 
-    Transparent, Transparent, Transparent, Transparent,
-    Transparent, Transparent, Transparent, Transparent,
-    Transparent, Transparent, Transparent, Transparent,
-    Transparent, Transparent, Transparent, Transparent,
+   Transparent, Transparent, Transparent, Transparent,
+   Transparent, Transparent, Transparent, Transparent,
+   Transparent, Transparent, Transparent, Transparent,
+   Transparent, Transparent, Transparent, Transparent,
 
-    Transparent, Transparent, Transparent, Transparent,
-    Transparent, Transparent, Transparent, Transparent,
-    Transparent, Transparent, Transparent, ArabicNone,
-    ArabicNone, Zain, Kaph, Fe,
+   Transparent, Transparent, Transparent, Transparent,
+   Transparent, Transparent, Transparent, Transparent,
+   Transparent, Transparent, Transparent, ArabicNone,
+   ArabicNone, Zain, Kaph, Fe,
 };
 
 static inline ArabicGroup arabicGroup(unsigned short uc)
 {
-    if (uc >= 0x0600 && uc < 0x750)
-        return (ArabicGroup) arabic_group[uc-0x600];
-    else if (uc == 0x200d)
-        return Center;
-    else if (QChar::category(uc) == QChar::Separator_Space)
-        return ArabicSpace;
-    else
-        return ArabicNone;
+   if (uc >= 0x0600 && uc < 0x750) {
+      return (ArabicGroup) arabic_group[uc - 0x600];
+   } else if (uc == 0x200d) {
+      return Center;
+   } else if (QChar::category(uc) == QChar::Separator_Space) {
+      return ArabicSpace;
+   } else {
+      return ArabicNone;
+   }
 }
 
 
@@ -335,52 +342,52 @@ static inline ArabicGroup arabicGroup(unsigned short uc)
 */
 
 enum Joining {
-    JNone,
-    JCausing,
-    JDual,
-    JRight,
-    JTransparent
+   JNone,
+   JCausing,
+   JDual,
+   JRight,
+   JTransparent
 };
 
 static const Joining joining_for_group[ArabicGroupsEnd] = {
-    // NonJoining
-    JNone, // ArabicNone
-    JNone, // ArabicSpace
-    // Transparent
-    JTransparent, // Transparent
-    // Causing
-    JCausing, // Center
-    JCausing, // Kashida
-    // Dual
-    JDual, // Beh
-    JDual, // Noon
-    JDual, // Yeh
-    JDual, // Hah
-    JDual, // Seen
-    JDual, // Tah
-    JDual, // Ain
-    // Right
-    JRight, // Alef
-    JRight, // Waw
-    JRight, // Dal
-    JRight, // Reh
-    JRight  // HamzaOnHehGoal
+   // NonJoining
+   JNone, // ArabicNone
+   JNone, // ArabicSpace
+   // Transparent
+   JTransparent, // Transparent
+   // Causing
+   JCausing, // Center
+   JCausing, // Kashida
+   // Dual
+   JDual, // Beh
+   JDual, // Noon
+   JDual, // Yeh
+   JDual, // Hah
+   JDual, // Seen
+   JDual, // Tah
+   JDual, // Ain
+   // Right
+   JRight, // Alef
+   JRight, // Waw
+   JRight, // Dal
+   JRight, // Reh
+   JRight  // HamzaOnHehGoal
 };
 
 
 struct JoiningPair {
-    QArabicShape form1;
-    QArabicShape form2;
+   QArabicShape form1;
+   QArabicShape form2;
 };
 
 static const JoiningPair joining_table[5][4] =
-// None, Causing, Dual, Right
+   // None, Causing, Dual, Right
 {
-    { { XIsolated, XIsolated }, { XIsolated, XCausing }, { XIsolated, XInitial }, { XIsolated, XIsolated } }, // XIsolated
-    { { XFinal, XIsolated }, { XFinal, XCausing }, { XFinal, XInitial }, { XFinal, XIsolated } }, // XFinal
-    { { XIsolated, XIsolated }, { XInitial, XCausing }, { XInitial, XMedial }, { XInitial, XFinal } }, // XInitial
-    { { XFinal, XIsolated }, { XMedial, XCausing }, { XMedial, XMedial }, { XMedial, XFinal } }, // XMedial
-    { { XIsolated, XIsolated }, { XIsolated, XCausing }, { XIsolated, XMedial }, { XIsolated, XFinal } }, // XCausing
+   { { XIsolated, XIsolated }, { XIsolated, XCausing }, { XIsolated, XInitial }, { XIsolated, XIsolated } }, // XIsolated
+   { { XFinal, XIsolated }, { XFinal, XCausing }, { XFinal, XInitial }, { XFinal, XIsolated } }, // XFinal
+   { { XIsolated, XIsolated }, { XInitial, XCausing }, { XInitial, XMedial }, { XInitial, XFinal } }, // XInitial
+   { { XFinal, XIsolated }, { XMedial, XCausing }, { XMedial, XMedial }, { XMedial, XFinal } }, // XMedial
+   { { XIsolated, XIsolated }, { XIsolated, XCausing }, { XIsolated, XMedial }, { XIsolated, XFinal } }, // XCausing
 };
 
 
@@ -428,211 +435,222 @@ This seems to imply that we have at most one kashida point per arabic word.
 
 void qt_getArabicProperties(const unsigned short *chars, int len, QArabicProperties *properties)
 {
-//     qDebug("arabicSyriacOpenTypeShape: properties:");
-    int lastPos = 0;
-    int lastGroup = ArabicNone;
+   //     qDebug("arabicSyriacOpenTypeShape: properties:");
+   int lastPos = 0;
+   int lastGroup = ArabicNone;
 
-    ArabicGroup group = arabicGroup(chars[0]);
-    Joining j = joining_for_group[group];
-    QArabicShape shape = joining_table[XIsolated][j].form2;
-    properties[0].justification = HB_NoJustification;
+   ArabicGroup group = arabicGroup(chars[0]);
+   Joining j = joining_for_group[group];
+   QArabicShape shape = joining_table[XIsolated][j].form2;
+   properties[0].justification = HB_NoJustification;
 
-    for (int i = 1; i < len; ++i) {
-        // #### fix handling for spaces and punktuation
-        properties[i].justification = HB_NoJustification;
+   for (int i = 1; i < len; ++i) {
+      // #### fix handling for spaces and punktuation
+      properties[i].justification = HB_NoJustification;
 
-        group = arabicGroup(chars[i]);
-        j = joining_for_group[group];
+      group = arabicGroup(chars[i]);
+      j = joining_for_group[group];
 
-        if (j == JTransparent) {
-            properties[i].shape = XIsolated;
-            continue;
-        }
+      if (j == JTransparent) {
+         properties[i].shape = XIsolated;
+         continue;
+      }
 
-        properties[lastPos].shape = joining_table[shape][j].form1;
-        shape = joining_table[shape][j].form2;
+      properties[lastPos].shape = joining_table[shape][j].form1;
+      shape = joining_table[shape][j].form2;
 
-        switch(lastGroup) {
-        case Seen:
-            if (properties[lastPos].shape == XInitial || properties[lastPos].shape == XMedial)
-                properties[i-1].justification = HB_Arabic_Seen;
+      switch (lastGroup) {
+         case Seen:
+            if (properties[lastPos].shape == XInitial || properties[lastPos].shape == XMedial) {
+               properties[i - 1].justification = HB_Arabic_Seen;
+            }
             break;
-        case Hah:
-            if (properties[lastPos].shape == XFinal)
-                properties[lastPos-1].justification = HB_Arabic_HaaDal;
+         case Hah:
+            if (properties[lastPos].shape == XFinal) {
+               properties[lastPos - 1].justification = HB_Arabic_HaaDal;
+            }
             break;
-        case Alef:
-            if (properties[lastPos].shape == XFinal)
-                properties[lastPos-1].justification = HB_Arabic_Alef;
+         case Alef:
+            if (properties[lastPos].shape == XFinal) {
+               properties[lastPos - 1].justification = HB_Arabic_Alef;
+            }
             break;
-        case Ain:
-            if (properties[lastPos].shape == XFinal)
-                properties[lastPos-1].justification = HB_Arabic_Waw;
+         case Ain:
+            if (properties[lastPos].shape == XFinal) {
+               properties[lastPos - 1].justification = HB_Arabic_Waw;
+            }
             break;
-        case Noon:
-            if (properties[lastPos].shape == XFinal)
-                properties[lastPos-1].justification = HB_Arabic_Normal;
+         case Noon:
+            if (properties[lastPos].shape == XFinal) {
+               properties[lastPos - 1].justification = HB_Arabic_Normal;
+            }
             break;
-        case ArabicNone:
+         case ArabicNone:
             break;
 
-        default:
+         default:
             Q_ASSERT(false);
-        }
+      }
 
-        lastGroup = ArabicNone;
+      lastGroup = ArabicNone;
 
-        switch(group) {
-        case ArabicNone:
-        case Transparent:
-        // ### Center should probably be treated as transparent when it comes to justification.
-        case Center:
+      switch (group) {
+         case ArabicNone:
+         case Transparent:
+         // ### Center should probably be treated as transparent when it comes to justification.
+         case Center:
             break;
-        case ArabicSpace:
+         case ArabicSpace:
             properties[i].justification = HB_Arabic_Space;
             break;
-        case Kashida:
+         case Kashida:
             properties[i].justification = HB_Arabic_Kashida;
             break;
-        case Seen:
+         case Seen:
             lastGroup = Seen;
             break;
 
-        case Hah:
-        case Dal:
+         case Hah:
+         case Dal:
             lastGroup = Hah;
             break;
 
-        case Alef:
-        case Tah:
+         case Alef:
+         case Tah:
             lastGroup = Alef;
             break;
 
-        case Yeh:
-        case Reh:
-            if (properties[lastPos].shape == XMedial && arabicGroup(chars[lastPos]) == Beh)
-                properties[lastPos-1].justification = HB_Arabic_BaRa;
+         case Yeh:
+         case Reh:
+            if (properties[lastPos].shape == XMedial && arabicGroup(chars[lastPos]) == Beh) {
+               properties[lastPos - 1].justification = HB_Arabic_BaRa;
+            }
             break;
 
-        case Ain:
-        case Waw:
+         case Ain:
+         case Waw:
             lastGroup = Ain;
             break;
 
-        case Noon:
-        case Beh:
-        case HamzaOnHehGoal:
+         case Noon:
+         case Beh:
+         case HamzaOnHehGoal:
             lastGroup = Noon;
             break;
-        case ArabicGroupsEnd:
+         case ArabicGroupsEnd:
             Q_ASSERT(false);
-        }
+      }
 
-        lastPos = i;
-    }
-    properties[lastPos].shape = joining_table[shape][JNone].form1;
+      lastPos = i;
+   }
+   properties[lastPos].shape = joining_table[shape][JNone].form1;
 
 
-//     for (int i = 0; i < len; ++i)
-//         qDebug("arabic properties(%d): uc=%x shape=%d, justification=%d", i, chars[i], properties[i].shape, properties[i].justification);
+   //     for (int i = 0; i < len; ++i)
+   //         qDebug("arabic properties(%d): uc=%x shape=%d, justification=%d", i, chars[i], properties[i].shape, properties[i].justification);
 }
 
 void QTextEngine::shapeTextMac(int item) const
 {
-    QScriptItem &si = layoutData->items[item];
+   QScriptItem &si = layoutData->items[item];
 
-    si.glyph_data_offset = layoutData->used;
+   si.glyph_data_offset = layoutData->used;
 
-    QFontEngine *font = fontEngine(si, &si.ascent, &si.descent, &si.leading);
-    if (font->type() != QFontEngine::Multi) {
-        shapeTextWithHarfbuzz(item);
-        return;
-    }
+   QFontEngine *font = fontEngine(si, &si.ascent, &si.descent, &si.leading);
+   if (font->type() != QFontEngine::Multi) {
+      shapeTextWithHarfbuzz(item);
+      return;
+   }
 
-    QCoreTextFontEngineMulti *fe = static_cast<QCoreTextFontEngineMulti *>(font);
+   QCoreTextFontEngineMulti *fe = static_cast<QCoreTextFontEngineMulti *>(font);
 
-    QTextEngine::ShaperFlags flags;
-    if (si.analysis.bidiLevel % 2)
-        flags |= RightToLeft;
-    if (option.useDesignMetrics())
-	flags |= DesignMetrics;
+   QTextEngine::ShaperFlags flags;
+   if (si.analysis.bidiLevel % 2) {
+      flags |= RightToLeft;
+   }
+   if (option.useDesignMetrics()) {
+      flags |= DesignMetrics;
+   }
 
-    attributes(); // pre-initialize char attributes
+   attributes(); // pre-initialize char attributes
 
-    const int len = length(item);
-    int num_glyphs = length(item);
-    const QChar *str = layoutData->string.unicode() + si.position;
-    ushort upperCased[256];
-    if (si.analysis.flags == QScriptAnalysis::SmallCaps || si.analysis.flags == QScriptAnalysis::Uppercase
-            || si.analysis.flags == QScriptAnalysis::Lowercase) {
-        ushort *uc = upperCased;
-        if (len > 256)
-            uc = new ushort[len];
-        for (int i = 0; i < len; ++i) {
-            if(si.analysis.flags == QScriptAnalysis::Lowercase)
-                uc[i] = str[i].toLower().unicode();
-            else
-                uc[i] = str[i].toUpper().unicode();
-        }
-        str = reinterpret_cast<const QChar *>(uc);
-    }
+   const int len = length(item);
+   int num_glyphs = length(item);
+   const QChar *str = layoutData->string.unicode() + si.position;
+   ushort upperCased[256];
+   if (si.analysis.flags == QScriptAnalysis::SmallCaps || si.analysis.flags == QScriptAnalysis::Uppercase
+         || si.analysis.flags == QScriptAnalysis::Lowercase) {
+      ushort *uc = upperCased;
+      if (len > 256) {
+         uc = new ushort[len];
+      }
+      for (int i = 0; i < len; ++i) {
+         if (si.analysis.flags == QScriptAnalysis::Lowercase) {
+            uc[i] = str[i].toLower().unicode();
+         } else {
+            uc[i] = str[i].toUpper().unicode();
+         }
+      }
+      str = reinterpret_cast<const QChar *>(uc);
+   }
 
-    ensureSpace(num_glyphs);
-    num_glyphs = layoutData->glyphLayout.numGlyphs - layoutData->used;
+   ensureSpace(num_glyphs);
+   num_glyphs = layoutData->glyphLayout.numGlyphs - layoutData->used;
 
-    QGlyphLayout g = availableGlyphs(&si);
-    g.numGlyphs = num_glyphs;
-    unsigned short *log_clusters = logClusters(&si);
+   QGlyphLayout g = availableGlyphs(&si);
+   g.numGlyphs = num_glyphs;
+   unsigned short *log_clusters = logClusters(&si);
 
-    bool stringToCMapFailed = false;
+   bool stringToCMapFailed = false;
 
-    if (!fe->stringToCMap(str, len, &g, &num_glyphs, flags, log_clusters, attributes(), &si)) {
-        ensureSpace(num_glyphs);
-        g = availableGlyphs(&si);
-        stringToCMapFailed = !fe->stringToCMap(str, len, &g, &num_glyphs, flags, log_clusters,
-                                               attributes(), &si);
-    }
+   if (!fe->stringToCMap(str, len, &g, &num_glyphs, flags, log_clusters, attributes(), &si)) {
+      ensureSpace(num_glyphs);
+      g = availableGlyphs(&si);
+      stringToCMapFailed = !fe->stringToCMap(str, len, &g, &num_glyphs, flags, log_clusters,
+                                             attributes(), &si);
+   }
 
-    if (!stringToCMapFailed) {
-        heuristicSetGlyphAttributes(str, len, &g, log_clusters, num_glyphs);
+   if (!stringToCMapFailed) {
+      heuristicSetGlyphAttributes(str, len, &g, log_clusters, num_glyphs);
 
-        si.num_glyphs = num_glyphs;
+      si.num_glyphs = num_glyphs;
 
-        layoutData->used += si.num_glyphs;
+      layoutData->used += si.num_glyphs;
 
-        QGlyphLayout g = shapedGlyphs(&si);
+      QGlyphLayout g = shapedGlyphs(&si);
 
-        if (si.analysis.script == QUnicodeTables::Arabic) {
-            QVarLengthArray<QArabicProperties> props(len + 2);
-            QArabicProperties *properties = props.data();
-            int f = si.position;
-            int l = len;
-            if (f > 0) {
-                --f;
-                ++l;
-                ++properties;
-            }
-            if (f + l < layoutData->string.length()) {
-                ++l;
-            }
-            qt_getArabicProperties((const unsigned short *)(layoutData->string.unicode()+f), l, props.data());
+      if (si.analysis.script == QUnicodeTables::Arabic) {
+         QVarLengthArray<QArabicProperties> props(len + 2);
+         QArabicProperties *properties = props.data();
+         int f = si.position;
+         int l = len;
+         if (f > 0) {
+            --f;
+            ++l;
+            ++properties;
+         }
+         if (f + l < layoutData->string.length()) {
+            ++l;
+         }
+         qt_getArabicProperties((const unsigned short *)(layoutData->string.unicode() + f), l, props.data());
 
-            unsigned short *log_clusters = logClusters(&si);
+         unsigned short *log_clusters = logClusters(&si);
 
-            for (int i = 0; i < len; ++i) {
-                int gpos = log_clusters[i];
-                g.attributes[gpos].justification = properties[i].justification;
-            }
-        }
-    }
+         for (int i = 0; i < len; ++i) {
+            int gpos = log_clusters[i];
+            g.attributes[gpos].justification = properties[i].justification;
+         }
+      }
+   }
 
 cleanUp:
-    const ushort *uc = reinterpret_cast<const ushort *>(str);
+   const ushort *uc = reinterpret_cast<const ushort *>(str);
 
-    if ((si.analysis.flags == QScriptAnalysis::SmallCaps || si.analysis.flags == QScriptAnalysis::Uppercase
+   if ((si.analysis.flags == QScriptAnalysis::SmallCaps || si.analysis.flags == QScriptAnalysis::Uppercase
          || si.analysis.flags == QScriptAnalysis::Lowercase)
-        && uc != upperCased)
-        delete [] uc;
+         && uc != upperCased) {
+      delete [] uc;
+   }
 }
 
 QT_END_NAMESPACE

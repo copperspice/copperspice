@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,84 +30,85 @@
 
 QT_BEGIN_NAMESPACE
 
-struct QMacWindowSurfacePrivate
-{
-    QWidget *widget;
-    QPixmap device;
+struct QMacWindowSurfacePrivate {
+   QWidget *widget;
+   QPixmap device;
 };
 
 QMacWindowSurface::QMacWindowSurface(QWidget *widget)
-    : QWindowSurface(widget), d_ptr(new QMacWindowSurfacePrivate)
+   : QWindowSurface(widget), d_ptr(new QMacWindowSurfacePrivate)
 {
-    d_ptr->widget = widget;
+   d_ptr->widget = widget;
 }
 
 QMacWindowSurface::~QMacWindowSurface()
 {
-    delete d_ptr;
+   delete d_ptr;
 }
 
 QPaintDevice *QMacWindowSurface::paintDevice()
 {
-    return &d_ptr->device;
+   return &d_ptr->device;
 }
 
 void QMacWindowSurface::flush(QWidget *widget, const QRegion &rgn, const QPoint &offset)
 {
-    Q_UNUSED(offset);
+   Q_UNUSED(offset);
 
-    // Get a context for the widget
-    extern CGContextRef qt_mac_graphicsContextFor(QWidget *);
-    CGContextRef context = qt_mac_graphicsContextFor(widget);
+   // Get a context for the widget
+   extern CGContextRef qt_mac_graphicsContextFor(QWidget *);
+   CGContextRef context = qt_mac_graphicsContextFor(widget);
 
-    CGContextRetain(context);
-    CGContextSaveGState(context);
+   CGContextRetain(context);
+   CGContextSaveGState(context);
 
-    // Flip context.
-    CGContextTranslateCTM(context, 0, widget->height());
-    CGContextScaleCTM(context, 1, -1);
+   // Flip context.
+   CGContextTranslateCTM(context, 0, widget->height());
+   CGContextScaleCTM(context, 1, -1);
 
-    // Clip to region.
-    const QVector<QRect> &rects = rgn.rects();
-    for (int i = 0; i < rects.size(); ++i) {
-        const QRect &rect = rects.at(i);
-        CGContextAddRect(context, CGRectMake(rect.x(), rect.y(), rect.width(), rect.height()));
-    }
-    CGContextClip(context);
+   // Clip to region.
+   const QVector<QRect> &rects = rgn.rects();
+   for (int i = 0; i < rects.size(); ++i) {
+      const QRect &rect = rects.at(i);
+      CGContextAddRect(context, CGRectMake(rect.x(), rect.y(), rect.width(), rect.height()));
+   }
+   CGContextClip(context);
 
-    // Draw the image onto the window.
-    const CGRect dest = CGRectMake(0, 0, widget->width(), widget->height());
-    const CGImageRef image = d_ptr->device.toMacCGImageRef();
-    qt_mac_drawCGImage(context, &dest, image);
-    CFRelease(image);
+   // Draw the image onto the window.
+   const CGRect dest = CGRectMake(0, 0, widget->width(), widget->height());
+   const CGImageRef image = d_ptr->device.toMacCGImageRef();
+   qt_mac_drawCGImage(context, &dest, image);
+   CFRelease(image);
 
-    // Restore context
-    CGContextRestoreGState(context);
-    CGContextFlush(context);
-    CGContextRelease(context);
+   // Restore context
+   CGContextRestoreGState(context);
+   CGContextFlush(context);
+   CGContextRelease(context);
 }
 
 void QMacWindowSurface::setGeometry(const QRect &rect)
 {
-    QWindowSurface::setGeometry(rect);
-    const QSize size = rect.size();
-    if (d_ptr->device.size() != size)
-        d_ptr->device = QPixmap(size);
+   QWindowSurface::setGeometry(rect);
+   const QSize size = rect.size();
+   if (d_ptr->device.size() != size) {
+      d_ptr->device = QPixmap(size);
+   }
 }
 
 bool QMacWindowSurface::scroll(const QRegion &area, int dx, int dy)
 {
-    if (d_ptr->device.size().isNull())
-        return false;
+   if (d_ptr->device.size().isNull()) {
+      return false;
+   }
 
-    QCFType<CGImageRef> image = d_ptr->device.toMacCGImageRef();
-    const QRect rect(area.boundingRect());
-    const CGRect dest = CGRectMake(rect.x(), rect.y(), rect.width(), rect.height());
-    QCFType<CGImageRef> subimage = CGImageCreateWithImageInRect(image, dest);
-    QCFType<CGContextRef> context = qt_mac_cg_context(&d_ptr->device);
-    CGContextTranslateCTM(context, dx, dy);
-    qt_mac_drawCGImage(context, &dest, subimage);
-    return true;
+   QCFType<CGImageRef> image = d_ptr->device.toMacCGImageRef();
+   const QRect rect(area.boundingRect());
+   const CGRect dest = CGRectMake(rect.x(), rect.y(), rect.width(), rect.height());
+   QCFType<CGImageRef> subimage = CGImageCreateWithImageInRect(image, dest);
+   QCFType<CGContextRef> context = qt_mac_cg_context(&d_ptr->device);
+   CGContextTranslateCTM(context, dx, dy);
+   qt_mac_drawCGImage(context, &dest, subimage);
+   return true;
 }
 
 QT_END_NAMESPACE

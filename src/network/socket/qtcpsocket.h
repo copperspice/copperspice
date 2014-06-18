@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,18 +35,18 @@ class QTcpSocketPrivate;
 
 class Q_NETWORK_EXPORT QTcpSocket : public QAbstractSocket
 {
-    CS_OBJECT(QTcpSocket)
+   CS_OBJECT(QTcpSocket)
 
-public:
-    explicit QTcpSocket(QObject *parent = 0);
-    virtual ~QTcpSocket();
+ public:
+   explicit QTcpSocket(QObject *parent = 0);
+   virtual ~QTcpSocket();
 
-protected:
-    QTcpSocket(QTcpSocketPrivate &dd, QObject *parent = 0);
+ protected:
+   QTcpSocket(QTcpSocketPrivate &dd, QObject *parent = 0);
 
-private:
-    Q_DISABLE_COPY(QTcpSocket)
-    Q_DECLARE_PRIVATE(QTcpSocket)
+ private:
+   Q_DISABLE_COPY(QTcpSocket)
+   Q_DECLARE_PRIVATE(QTcpSocket)
 };
 
 QT_END_NAMESPACE

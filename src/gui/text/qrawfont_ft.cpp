@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,83 +40,83 @@ QT_BEGIN_NAMESPACE
 class QFontEngineFTRawFont
 
 #if defined(Q_WS_X11) && !defined(QT_NO_FONTCONFIG)
-        : public QFontEngineX11FT
+   : public QFontEngineX11FT
 #else
-        : public QFontEngineFT
+   : public QFontEngineFT
 #endif
 
 {
-public:
-    QFontEngineFTRawFont(const QFontDef &fontDef)
+ public:
+   QFontEngineFTRawFont(const QFontDef &fontDef)
 #if defined(Q_WS_X11) && !defined(QT_NO_FONTCONFIG)
-        : QFontEngineX11FT(fontDef)
+      : QFontEngineX11FT(fontDef)
 #else
-        : QFontEngineFT(fontDef)
+      : QFontEngineFT(fontDef)
 #endif
-    {
-    }
+   {
+   }
 
-    void updateFamilyNameAndStyle()
-    {
-        fontDef.family = QString::fromAscii(freetype->face->family_name);
+   void updateFamilyNameAndStyle() {
+      fontDef.family = QString::fromAscii(freetype->face->family_name);
 
-        if (freetype->face->style_flags & FT_STYLE_FLAG_ITALIC)
-            fontDef.style = QFont::StyleItalic;
+      if (freetype->face->style_flags & FT_STYLE_FLAG_ITALIC) {
+         fontDef.style = QFont::StyleItalic;
+      }
 
-        if (freetype->face->style_flags & FT_STYLE_FLAG_BOLD)
-            fontDef.weight = QFont::Bold;
-    }
+      if (freetype->face->style_flags & FT_STYLE_FLAG_BOLD) {
+         fontDef.weight = QFont::Bold;
+      }
+   }
 
-    bool initFromData(const QByteArray &fontData)
-    {
-        FaceId faceId;
-        faceId.filename = "";
-        faceId.index = 0;
-        faceId.uuid = QUuid::createUuid().toByteArray();
+   bool initFromData(const QByteArray &fontData) {
+      FaceId faceId;
+      faceId.filename = "";
+      faceId.index = 0;
+      faceId.uuid = QUuid::createUuid().toByteArray();
 
-        return init(faceId, true, Format_None, fontData);
-    }
+      return init(faceId, true, Format_None, fontData);
+   }
 };
 
 
 void QRawFontPrivate::platformCleanUp()
 {
-    // Font engine handles all resources
+   // Font engine handles all resources
 }
 
 void QRawFontPrivate::platformLoadFromData(const QByteArray &fontData, qreal pixelSize,
-                                           QFont::HintingPreference hintingPreference)
+      QFont::HintingPreference hintingPreference)
 {
-    Q_ASSERT(fontEngine == 0);
+   Q_ASSERT(fontEngine == 0);
 
-    QFontDef fontDef;
-    fontDef.pixelSize = pixelSize;
+   QFontDef fontDef;
+   fontDef.pixelSize = pixelSize;
 
-    QFontEngineFTRawFont *fe = new QFontEngineFTRawFont(fontDef);
-    if (!fe->initFromData(fontData)) {
-        delete fe;
-        return;
-    }
+   QFontEngineFTRawFont *fe = new QFontEngineFTRawFont(fontDef);
+   if (!fe->initFromData(fontData)) {
+      delete fe;
+      return;
+   }
 
-    fe->updateFamilyNameAndStyle();
+   fe->updateFamilyNameAndStyle();
 
-    switch (hintingPreference) {
-    case QFont::PreferNoHinting:
-        fe->setDefaultHintStyle(QFontEngineFT::HintNone);
-        break;
-    case QFont::PreferFullHinting:
-        fe->setDefaultHintStyle(QFontEngineFT::HintFull);
-        break;
-    case QFont::PreferVerticalHinting:
-        fe->setDefaultHintStyle(QFontEngineFT::HintLight);
-        break;
-    default:
-        // Leave it as it is
-        break;
-    }
+   switch (hintingPreference) {
+      case QFont::PreferNoHinting:
+         fe->setDefaultHintStyle(QFontEngineFT::HintNone);
+         break;
+      case QFont::PreferFullHinting:
+         fe->setDefaultHintStyle(QFontEngineFT::HintFull);
+         break;
+      case QFont::PreferVerticalHinting:
+         fe->setDefaultHintStyle(QFontEngineFT::HintLight);
+         break;
+      default:
+         // Leave it as it is
+         break;
+   }
 
-    fontEngine = fe;
-    fontEngine->ref.ref();
+   fontEngine = fe;
+   fontEngine->ref.ref();
 }
 
 QT_END_NAMESPACE

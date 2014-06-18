@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -72,135 +72,139 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
 
 
 static QImageIOHandler *createWriteHandlerHelper(QIODevice *device,
-    const QByteArray &format)
+      const QByteArray &format)
 {
-    QByteArray form = format.toLower();
-    QByteArray suffix;
-    QImageIOHandler *handler = 0;
+   QByteArray form = format.toLower();
+   QByteArray suffix;
+   QImageIOHandler *handler = 0;
 
-    // check if any plugins can write the image
-    QFactoryLoader *l = loader();
-    QStringList keys = l->keys();
-    int suffixPluginIndex = -1;
+   // check if any plugins can write the image
+   QFactoryLoader *l = loader();
+   QStringList keys = l->keys();
+   int suffixPluginIndex = -1;
 
-    if (device && format.isEmpty()) {
-        // if there's no format, see if \a device is a file, and if so, find
-        // the file suffix and find support for that format among our plugins.
-        // this allows plugins to override our built-in handlers.
-        if (QFile *file = qobject_cast<QFile *>(device)) {
-            if (!(suffix = QFileInfo(file->fileName()).suffix().toLower().toLatin1()).isEmpty()) {
+   if (device && format.isEmpty()) {
+      // if there's no format, see if \a device is a file, and if so, find
+      // the file suffix and find support for that format among our plugins.
+      // this allows plugins to override our built-in handlers.
+      if (QFile *file = qobject_cast<QFile *>(device)) {
+         if (!(suffix = QFileInfo(file->fileName()).suffix().toLower().toLatin1()).isEmpty()) {
 
-                int index = keys.indexOf(QString::fromLatin1(suffix));
-                if (index != -1)
-                    suffixPluginIndex = index;
-
+            int index = keys.indexOf(QString::fromLatin1(suffix));
+            if (index != -1) {
+               suffixPluginIndex = index;
             }
-        }
-    }
 
-    QByteArray testFormat = !form.isEmpty() ? form : suffix;
+         }
+      }
+   }
+
+   QByteArray testFormat = !form.isEmpty() ? form : suffix;
 
 
-    if (suffixPluginIndex != -1) {
-        // when format is missing, check if we can find a plugin for the
-        // suffix.
-        QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(l->instance(QString::fromLatin1(suffix)));
-        if (plugin && (plugin->capabilities(device, suffix) & QImageIOPlugin::CanWrite))
-            handler = plugin->create(device, suffix);
-    }
+   if (suffixPluginIndex != -1) {
+      // when format is missing, check if we can find a plugin for the
+      // suffix.
+      QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(l->instance(QString::fromLatin1(suffix)));
+      if (plugin && (plugin->capabilities(device, suffix) & QImageIOPlugin::CanWrite)) {
+         handler = plugin->create(device, suffix);
+      }
+   }
 
-    // check if any built-in handlers can write the image
-    if (!handler && !testFormat.isEmpty()) {
-        if (false) {
+   // check if any built-in handlers can write the image
+   if (!handler && !testFormat.isEmpty()) {
+      if (false) {
 #ifndef QT_NO_IMAGEFORMAT_PNG
-        } else if (testFormat == "png") {
-            handler = new QPngHandler;
+      } else if (testFormat == "png") {
+         handler = new QPngHandler;
 #endif
 #ifndef QT_NO_IMAGEFORMAT_JPEG
-        } else if (testFormat == "jpg" || testFormat == "jpeg") {
-            handler = new QJpegHandler;
+      } else if (testFormat == "jpg" || testFormat == "jpeg") {
+         handler = new QJpegHandler;
 #endif
 #ifndef QT_NO_IMAGEFORMAT_MNG
-        } else if (testFormat == "mng") {
-            handler = new QMngHandler;
+      } else if (testFormat == "mng") {
+         handler = new QMngHandler;
 #endif
 #ifndef QT_NO_IMAGEFORMAT_TIFF
-        } else if (testFormat == "tif" || testFormat == "tiff") {
-            handler = new QTiffHandler;
+      } else if (testFormat == "tif" || testFormat == "tiff") {
+         handler = new QTiffHandler;
 #endif
 #ifdef QT_BUILTIN_GIF_READER
-        } else if (testFormat == "gif") {
-            handler = new QGifHandler;
+      } else if (testFormat == "gif") {
+         handler = new QGifHandler;
 #endif
 #ifndef QT_NO_IMAGEFORMAT_BMP
-        } else if (testFormat == "bmp") {
-            handler = new QBmpHandler;
+      } else if (testFormat == "bmp") {
+         handler = new QBmpHandler;
 #endif
 #ifndef QT_NO_IMAGEFORMAT_XPM
-        } else if (testFormat == "xpm") {
-            handler = new QXpmHandler;
+      } else if (testFormat == "xpm") {
+         handler = new QXpmHandler;
 #endif
 #ifndef QT_NO_IMAGEFORMAT_XBM
-        } else if (testFormat == "xbm") {
-            handler = new QXbmHandler;
-            handler->setOption(QImageIOHandler::SubType, testFormat);
+      } else if (testFormat == "xbm") {
+         handler = new QXbmHandler;
+         handler->setOption(QImageIOHandler::SubType, testFormat);
 #endif
 #ifndef QT_NO_IMAGEFORMAT_PPM
-        } else if (testFormat == "pbm" || testFormat == "pbmraw" || testFormat == "pgm"
+      } else if (testFormat == "pbm" || testFormat == "pbmraw" || testFormat == "pgm"
                  || testFormat == "pgmraw" || testFormat == "ppm" || testFormat == "ppmraw") {
-            handler = new QPpmHandler;
-            handler->setOption(QImageIOHandler::SubType, testFormat);
+         handler = new QPpmHandler;
+         handler->setOption(QImageIOHandler::SubType, testFormat);
 #endif
 #ifndef QT_NO_IMAGEFORMAT_ICO
-	} else if (testFormat == "ico") {
-	    handler = new QIcoHandler;
+      } else if (testFormat == "ico") {
+         handler = new QIcoHandler;
 #endif
-        }
-    }
+      }
+   }
 
-    if (!testFormat.isEmpty()) {
-        for (int i = 0; i < keys.size(); ++i) {
-            QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(l->instance(keys.at(i)));
-            if (plugin && (plugin->capabilities(device, testFormat) & QImageIOPlugin::CanWrite)) {
-                delete handler;
-                handler = plugin->create(device, testFormat);
-                break;
-            }
-        }
-    }
+   if (!testFormat.isEmpty()) {
+      for (int i = 0; i < keys.size(); ++i) {
+         QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(l->instance(keys.at(i)));
+         if (plugin && (plugin->capabilities(device, testFormat) & QImageIOPlugin::CanWrite)) {
+            delete handler;
+            handler = plugin->create(device, testFormat);
+            break;
+         }
+      }
+   }
 
-    if (!handler)
-        return 0;
+   if (!handler) {
+      return 0;
+   }
 
-    handler->setDevice(device);
-    if (!testFormat.isEmpty())
-        handler->setFormat(testFormat);
-    return handler;
+   handler->setDevice(device);
+   if (!testFormat.isEmpty()) {
+      handler->setFormat(testFormat);
+   }
+   return handler;
 }
 
 class QImageWriterPrivate
 {
-public:
-    QImageWriterPrivate(QImageWriter *qq);
+ public:
+   QImageWriterPrivate(QImageWriter *qq);
 
-    // device
-    QByteArray format;
-    QIODevice *device;
-    bool deleteDevice;
-    QImageIOHandler *handler;
+   // device
+   QByteArray format;
+   QIODevice *device;
+   bool deleteDevice;
+   QImageIOHandler *handler;
 
-    // image options
-    int quality;
-    int compression;
-    float gamma;
-    QString description;
-    QString text;
+   // image options
+   int quality;
+   int compression;
+   float gamma;
+   QString description;
+   QString text;
 
-    // error
-    QImageWriter::ImageWriterError imageWriterError;
-    QString errorString;
+   // error
+   QImageWriter::ImageWriterError imageWriterError;
+   QString errorString;
 
-    QImageWriter *q;
+   QImageWriter *q;
 };
 
 /*!
@@ -208,16 +212,16 @@ public:
 */
 QImageWriterPrivate::QImageWriterPrivate(QImageWriter *qq)
 {
-    device = 0;
-    deleteDevice = false;
-    handler = 0;
-    quality = -1;
-    compression = 0;
-    gamma = 0.0;
-    imageWriterError = QImageWriter::UnknownError;
-    errorString = QT_TRANSLATE_NOOP(QImageWriter, QLatin1String("Unknown error"));
+   device = 0;
+   deleteDevice = false;
+   handler = 0;
+   quality = -1;
+   compression = 0;
+   gamma = 0.0;
+   imageWriterError = QImageWriter::UnknownError;
+   errorString = QT_TRANSLATE_NOOP(QImageWriter, QLatin1String("Unknown error"));
 
-    q = qq;
+   q = qq;
 }
 
 /*!
@@ -226,7 +230,7 @@ QImageWriterPrivate::QImageWriterPrivate(QImageWriter *qq)
     setFileName().
 */
 QImageWriter::QImageWriter()
-    : d(new QImageWriterPrivate(this))
+   : d(new QImageWriterPrivate(this))
 {
 }
 
@@ -235,10 +239,10 @@ QImageWriter::QImageWriter()
     image format \a format.
 */
 QImageWriter::QImageWriter(QIODevice *device, const QByteArray &format)
-    : d(new QImageWriterPrivate(this))
+   : d(new QImageWriterPrivate(this))
 {
-    d->device = device;
-    d->format = format;
+   d->device = device;
+   d->format = format;
 }
 
 /*!
@@ -248,12 +252,12 @@ QImageWriter::QImageWriter(QIODevice *device, const QByteArray &format)
     by inspecting the extension of \a fileName.
 */
 QImageWriter::QImageWriter(const QString &fileName, const QByteArray &format)
-    : d(new QImageWriterPrivate(this))
+   : d(new QImageWriterPrivate(this))
 {
-    QFile *file = new QFile(fileName);
-    d->device = file;
-    d->deleteDevice = true;
-    d->format = format;
+   QFile *file = new QFile(fileName);
+   d->device = file;
+   d->deleteDevice = true;
+   d->format = format;
 }
 
 /*!
@@ -261,10 +265,11 @@ QImageWriter::QImageWriter(const QString &fileName, const QByteArray &format)
 */
 QImageWriter::~QImageWriter()
 {
-    if (d->deleteDevice)
-        delete d->device;
-    delete d->handler;
-    delete d;
+   if (d->deleteDevice) {
+      delete d->device;
+   }
+   delete d->handler;
+   delete d;
 }
 
 /*!
@@ -280,7 +285,7 @@ QImageWriter::~QImageWriter()
 */
 void QImageWriter::setFormat(const QByteArray &format)
 {
-    d->format = format;
+   d->format = format;
 }
 
 /*!
@@ -290,7 +295,7 @@ void QImageWriter::setFormat(const QByteArray &format)
 */
 QByteArray QImageWriter::format() const
 {
-    return d->format;
+   return d->format;
 }
 
 /*!
@@ -308,13 +313,14 @@ QByteArray QImageWriter::format() const
 */
 void QImageWriter::setDevice(QIODevice *device)
 {
-    if (d->device && d->deleteDevice)
-        delete d->device;
+   if (d->device && d->deleteDevice) {
+      delete d->device;
+   }
 
-    d->device = device;
-    d->deleteDevice = false;
-    delete d->handler;
-    d->handler = 0;
+   d->device = device;
+   d->deleteDevice = false;
+   delete d->handler;
+   d->handler = 0;
 }
 
 /*!
@@ -323,7 +329,7 @@ void QImageWriter::setDevice(QIODevice *device)
 */
 QIODevice *QImageWriter::device() const
 {
-    return d->device;
+   return d->device;
 }
 
 /*!
@@ -335,8 +341,8 @@ QIODevice *QImageWriter::device() const
 */
 void QImageWriter::setFileName(const QString &fileName)
 {
-    setDevice(new QFile(fileName));
-    d->deleteDevice = true;
+   setDevice(new QFile(fileName));
+   d->deleteDevice = true;
 }
 
 /*!
@@ -350,8 +356,8 @@ void QImageWriter::setFileName(const QString &fileName)
 */
 QString QImageWriter::fileName() const
 {
-    QFile *file = qobject_cast<QFile *>(d->device);
-    return file ? file->fileName() : QString();
+   QFile *file = qobject_cast<QFile *>(d->device);
+   return file ? file->fileName() : QString();
 }
 
 /*!
@@ -367,7 +373,7 @@ QString QImageWriter::fileName() const
 */
 void QImageWriter::setQuality(int quality)
 {
-    d->quality = quality;
+   d->quality = quality;
 }
 
 /*!
@@ -377,7 +383,7 @@ void QImageWriter::setQuality(int quality)
 */
 int QImageWriter::quality() const
 {
-    return d->quality;
+   return d->quality;
 }
 
 /*!
@@ -393,7 +399,7 @@ int QImageWriter::quality() const
 */
 void QImageWriter::setCompression(int compression)
 {
-    d->compression = compression;
+   d->compression = compression;
 }
 
 /*!
@@ -403,7 +409,7 @@ void QImageWriter::setCompression(int compression)
 */
 int QImageWriter::compression() const
 {
-    return d->compression;
+   return d->compression;
 }
 
 /*!
@@ -418,7 +424,7 @@ int QImageWriter::compression() const
 */
 void QImageWriter::setGamma(float gamma)
 {
-    d->gamma = gamma;
+   d->gamma = gamma;
 }
 
 /*!
@@ -428,7 +434,7 @@ void QImageWriter::setGamma(float gamma)
 */
 float QImageWriter::gamma() const
 {
-    return d->gamma;
+   return d->gamma;
 }
 
 /*!
@@ -446,7 +452,7 @@ float QImageWriter::gamma() const
 */
 void QImageWriter::setDescription(const QString &description)
 {
-    d->description = description;
+   d->description = description;
 }
 
 /*!
@@ -460,7 +466,7 @@ void QImageWriter::setDescription(const QString &description)
 */
 QString QImageWriter::description() const
 {
-    return d->description;
+   return d->description;
 }
 
 /*!
@@ -486,9 +492,10 @@ QString QImageWriter::description() const
 */
 void QImageWriter::setText(const QString &key, const QString &text)
 {
-    if (!d->description.isEmpty())
-        d->description += QLatin1String("\n\n");
-    d->description += key.simplified() + QLatin1String(": ") + text.simplified();
+   if (!d->description.isEmpty()) {
+      d->description += QLatin1String("\n\n");
+   }
+   d->description += key.simplified() + QLatin1String(": ") + text.simplified();
 }
 
 /*!
@@ -499,21 +506,22 @@ void QImageWriter::setText(const QString &key, const QString &text)
 */
 bool QImageWriter::canWrite() const
 {
-    if (d->device && !d->handler && (d->handler = createWriteHandlerHelper(d->device, d->format)) == 0) {
-        d->imageWriterError = QImageWriter::UnsupportedFormatError;
-        d->errorString = QT_TRANSLATE_NOOP(QImageWriter,
-                                           QLatin1String("Unsupported image format"));
-        return false;
-    }
-    if (d->device && !d->device->isOpen())
-        d->device->open(QIODevice::WriteOnly);
-    if (!d->device || !d->device->isWritable()) {
-        d->imageWriterError = QImageWriter::DeviceError;
-        d->errorString = QT_TRANSLATE_NOOP(QImageWriter,
-                                           QLatin1String("Device not writable"));
-        return false;
-    }
-    return true;
+   if (d->device && !d->handler && (d->handler = createWriteHandlerHelper(d->device, d->format)) == 0) {
+      d->imageWriterError = QImageWriter::UnsupportedFormatError;
+      d->errorString = QT_TRANSLATE_NOOP(QImageWriter,
+                                         QLatin1String("Unsupported image format"));
+      return false;
+   }
+   if (d->device && !d->device->isOpen()) {
+      d->device->open(QIODevice::WriteOnly);
+   }
+   if (!d->device || !d->device->isWritable()) {
+      d->imageWriterError = QImageWriter::DeviceError;
+      d->errorString = QT_TRANSLATE_NOOP(QImageWriter,
+                                         QLatin1String("Device not writable"));
+      return false;
+   }
+   return true;
 }
 
 /*!
@@ -527,23 +535,30 @@ bool QImageWriter::canWrite() const
 */
 bool QImageWriter::write(const QImage &image)
 {
-    if (!canWrite())
-        return false;
+   if (!canWrite()) {
+      return false;
+   }
 
-    if (d->handler->supportsOption(QImageIOHandler::Quality))
-        d->handler->setOption(QImageIOHandler::Quality, d->quality);
-    if (d->handler->supportsOption(QImageIOHandler::CompressionRatio))
-        d->handler->setOption(QImageIOHandler::CompressionRatio, d->compression);
-    if (d->handler->supportsOption(QImageIOHandler::Gamma))
-        d->handler->setOption(QImageIOHandler::Gamma, d->gamma);
-    if (!d->description.isEmpty() && d->handler->supportsOption(QImageIOHandler::Description))
-        d->handler->setOption(QImageIOHandler::Description, d->description);
+   if (d->handler->supportsOption(QImageIOHandler::Quality)) {
+      d->handler->setOption(QImageIOHandler::Quality, d->quality);
+   }
+   if (d->handler->supportsOption(QImageIOHandler::CompressionRatio)) {
+      d->handler->setOption(QImageIOHandler::CompressionRatio, d->compression);
+   }
+   if (d->handler->supportsOption(QImageIOHandler::Gamma)) {
+      d->handler->setOption(QImageIOHandler::Gamma, d->gamma);
+   }
+   if (!d->description.isEmpty() && d->handler->supportsOption(QImageIOHandler::Description)) {
+      d->handler->setOption(QImageIOHandler::Description, d->description);
+   }
 
-    if (!d->handler->write(image))
-        return false;
-    if (QFile *file = qobject_cast<QFile *>(d->device))
-        file->flush();
-    return true;
+   if (!d->handler->write(image)) {
+      return false;
+   }
+   if (QFile *file = qobject_cast<QFile *>(d->device)) {
+      file->flush();
+   }
+   return true;
 }
 
 /*!
@@ -553,7 +568,7 @@ bool QImageWriter::write(const QImage &image)
 */
 QImageWriter::ImageWriterError QImageWriter::error() const
 {
-    return d->imageWriterError;
+   return d->imageWriterError;
 }
 
 /*!
@@ -563,7 +578,7 @@ QImageWriter::ImageWriterError QImageWriter::error() const
 */
 QString QImageWriter::errorString() const
 {
-    return d->errorString;
+   return d->errorString;
 }
 
 /*!
@@ -585,14 +600,14 @@ QString QImageWriter::errorString() const
 */
 bool QImageWriter::supportsOption(QImageIOHandler::ImageOption option) const
 {
-    if (!d->handler && (d->handler = createWriteHandlerHelper(d->device, d->format)) == 0) {
-        d->imageWriterError = QImageWriter::UnsupportedFormatError;
-        d->errorString = QT_TRANSLATE_NOOP(QImageWriter,
-                                           QLatin1String("Unsupported image format"));
-        return false;
-    }
+   if (!d->handler && (d->handler = createWriteHandlerHelper(d->device, d->format)) == 0) {
+      d->imageWriterError = QImageWriter::UnsupportedFormatError;
+      d->errorString = QT_TRANSLATE_NOOP(QImageWriter,
+                                         QLatin1String("Unsupported image format"));
+      return false;
+   }
 
-    return d->handler->supportsOption(option);
+   return d->handler->supportsOption(option);
 }
 
 /*!
@@ -622,50 +637,52 @@ bool QImageWriter::supportsOption(QImageIOHandler::ImageOption option) const
 */
 QList<QByteArray> QImageWriter::supportedImageFormats()
 {
-    QSet<QByteArray> formats;
-    formats << "bmp";
+   QSet<QByteArray> formats;
+   formats << "bmp";
 #ifndef QT_NO_IMAGEFORMAT_PPM
-    formats << "ppm";
+   formats << "ppm";
 #endif
 #ifndef QT_NO_IMAGEFORMAT_XBM
-    formats << "xbm";
+   formats << "xbm";
 #endif
 #ifndef QT_NO_IMAGEFORMAT_XPM
-    formats << "xpm";
+   formats << "xpm";
 #endif
 #ifndef QT_NO_IMAGEFORMAT_PNG
-    formats << "png";
+   formats << "png";
 #endif
 #ifndef QT_NO_IMAGEFORMAT_JPEG
-    formats << "jpg" << "jpeg";
+   formats << "jpg" << "jpeg";
 #endif
 #ifndef QT_NO_IMAGEFORMAT_MNG
-    formats << "mng";
+   formats << "mng";
 #endif
 #ifndef QT_NO_IMAGEFORMAT_TIFF
-    formats << "tif" << "tiff";
+   formats << "tif" << "tiff";
 #endif
 #ifdef QT_BUILTIN_GIF_READER
-    formats << "gif";
+   formats << "gif";
 #endif
 #ifndef QT_NO_IMAGEFORMAT_ICO
-    formats << "ico";
+   formats << "ico";
 #endif
 
-    QFactoryLoader *l = loader();
-    QStringList keys = l->keys();
-    for (int i = 0; i < keys.count(); ++i) {
-        QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(l->instance(keys.at(i)));
-        if (plugin && (plugin->capabilities(0, keys.at(i).toLatin1()) & QImageIOPlugin::CanWrite) != 0)
-            formats << keys.at(i).toLatin1();
-    }
+   QFactoryLoader *l = loader();
+   QStringList keys = l->keys();
+   for (int i = 0; i < keys.count(); ++i) {
+      QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(l->instance(keys.at(i)));
+      if (plugin && (plugin->capabilities(0, keys.at(i).toLatin1()) & QImageIOPlugin::CanWrite) != 0) {
+         formats << keys.at(i).toLatin1();
+      }
+   }
 
-    QList<QByteArray> sortedFormats;
-    for (QSet<QByteArray>::ConstIterator it = formats.constBegin(); it != formats.constEnd(); ++it)
-        sortedFormats << *it;
+   QList<QByteArray> sortedFormats;
+   for (QSet<QByteArray>::ConstIterator it = formats.constBegin(); it != formats.constEnd(); ++it) {
+      sortedFormats << *it;
+   }
 
-    qSort(sortedFormats);
-    return sortedFormats;
+   qSort(sortedFormats);
+   return sortedFormats;
 }
 
 QT_END_NAMESPACE

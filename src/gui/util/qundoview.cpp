@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,206 +38,222 @@ QT_BEGIN_NAMESPACE
 
 class QUndoModel : public QAbstractItemModel
 {
-    CS_OBJECT(QUndoModel)
+   CS_OBJECT(QUndoModel)
 
-public:
-    QUndoModel(QObject *parent = 0);
+ public:
+   QUndoModel(QObject *parent = 0);
 
-    QUndoStack *stack() const;
+   QUndoStack *stack() const;
 
-    virtual QModelIndex index(int row, int column,
-                const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex &child) const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+   virtual QModelIndex index(int row, int column,
+                             const QModelIndex &parent = QModelIndex()) const;
+   virtual QModelIndex parent(const QModelIndex &child) const;
+   virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+   virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-    QModelIndex selectedIndex() const;
-    QItemSelectionModel *selectionModel() const;
+   QModelIndex selectedIndex() const;
+   QItemSelectionModel *selectionModel() const;
 
-    QString emptyLabel() const;
-    void setEmptyLabel(const QString &label);
+   QString emptyLabel() const;
+   void setEmptyLabel(const QString &label);
 
-    void setCleanIcon(const QIcon &icon);
-    QIcon cleanIcon() const;
+   void setCleanIcon(const QIcon &icon);
+   QIcon cleanIcon() const;
 
-    GUI_CS_SLOT_1(Public,void setStack(QUndoStack *stack))
-    GUI_CS_SLOT_2(setStack)
+   GUI_CS_SLOT_1(Public, void setStack(QUndoStack *stack))
+   GUI_CS_SLOT_2(setStack)
 
-private:
-    GUI_CS_SLOT_1(Private,void stackChanged())
-    GUI_CS_SLOT_2(stackChanged)
+ private:
+   GUI_CS_SLOT_1(Private, void stackChanged())
+   GUI_CS_SLOT_2(stackChanged)
 
-    GUI_CS_SLOT_1(Private,void stackDestroyed(QObject *obj))
-    GUI_CS_SLOT_2(stackDestroyed)
+   GUI_CS_SLOT_1(Private, void stackDestroyed(QObject *obj))
+   GUI_CS_SLOT_2(stackDestroyed)
 
-    GUI_CS_SLOT_1(Private,void setStackCurrentIndex(const QModelIndex &index))
-    GUI_CS_SLOT_2(setStackCurrentIndex)
+   GUI_CS_SLOT_1(Private, void setStackCurrentIndex(const QModelIndex &index))
+   GUI_CS_SLOT_2(setStackCurrentIndex)
 
-    QUndoStack *m_stack;
-    QItemSelectionModel *m_sel_model;
-    QString m_emty_label;
-    QIcon m_clean_icon;
+   QUndoStack *m_stack;
+   QItemSelectionModel *m_sel_model;
+   QString m_emty_label;
+   QIcon m_clean_icon;
 };
 
 QUndoModel::QUndoModel(QObject *parent)
-    : QAbstractItemModel(parent)
+   : QAbstractItemModel(parent)
 {
-    m_stack = 0;
-    m_sel_model = new QItemSelectionModel(this, this);
+   m_stack = 0;
+   m_sel_model = new QItemSelectionModel(this, this);
 
-    connect(m_sel_model, SIGNAL(currentChanged(const QModelIndex &,const QModelIndex &)),
-            this, SLOT(setStackCurrentIndex(const QModelIndex &)));
+   connect(m_sel_model, SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
+           this, SLOT(setStackCurrentIndex(const QModelIndex &)));
 
-    m_emty_label = tr("<empty>");
+   m_emty_label = tr("<empty>");
 }
 
 QItemSelectionModel *QUndoModel::selectionModel() const
 {
-    return m_sel_model;
+   return m_sel_model;
 }
 
 QUndoStack *QUndoModel::stack() const
 {
-    return m_stack;
+   return m_stack;
 }
 
 void QUndoModel::setStack(QUndoStack *stack)
 {
-    if (m_stack == stack)
-        return;
+   if (m_stack == stack) {
+      return;
+   }
 
-    if (m_stack != 0) {
-        disconnect(m_stack, SIGNAL(cleanChanged(bool)),  this, SLOT(stackChanged()));
-        disconnect(m_stack, SIGNAL(indexChanged(int)),   this, SLOT(stackChanged()));
-        disconnect(m_stack, SIGNAL(destroyed(QObject*)), this, SLOT(stackDestroyed(QObject*)));
-    }
-    m_stack = stack;
-    if (m_stack != 0) {
-        connect(m_stack, SIGNAL(cleanChanged(bool)),  this, SLOT(stackChanged()));
-        connect(m_stack, SIGNAL(indexChanged(int)),   this, SLOT(stackChanged()));
-        connect(m_stack, SIGNAL(destroyed(QObject*)), this, SLOT(stackDestroyed(QObject*)));
-    }
+   if (m_stack != 0) {
+      disconnect(m_stack, SIGNAL(cleanChanged(bool)),  this, SLOT(stackChanged()));
+      disconnect(m_stack, SIGNAL(indexChanged(int)),   this, SLOT(stackChanged()));
+      disconnect(m_stack, SIGNAL(destroyed(QObject *)), this, SLOT(stackDestroyed(QObject *)));
+   }
+   m_stack = stack;
+   if (m_stack != 0) {
+      connect(m_stack, SIGNAL(cleanChanged(bool)),  this, SLOT(stackChanged()));
+      connect(m_stack, SIGNAL(indexChanged(int)),   this, SLOT(stackChanged()));
+      connect(m_stack, SIGNAL(destroyed(QObject *)), this, SLOT(stackDestroyed(QObject *)));
+   }
 
-    stackChanged();
+   stackChanged();
 }
 
 void QUndoModel::stackDestroyed(QObject *obj)
 {
-    if (obj != m_stack)
-        return;
-    m_stack = 0;
+   if (obj != m_stack) {
+      return;
+   }
+   m_stack = 0;
 
-    stackChanged();
+   stackChanged();
 }
 
 void QUndoModel::stackChanged()
 {
-    reset();
-    m_sel_model->setCurrentIndex(selectedIndex(), QItemSelectionModel::ClearAndSelect);
+   reset();
+   m_sel_model->setCurrentIndex(selectedIndex(), QItemSelectionModel::ClearAndSelect);
 }
 
 void QUndoModel::setStackCurrentIndex(const QModelIndex &index)
 {
-    if (m_stack == 0)
-        return;
+   if (m_stack == 0) {
+      return;
+   }
 
-    if (index == selectedIndex())
-        return;
+   if (index == selectedIndex()) {
+      return;
+   }
 
-    if (index.column() != 0)
-        return;
+   if (index.column() != 0) {
+      return;
+   }
 
-    m_stack->setIndex(index.row());
+   m_stack->setIndex(index.row());
 }
 
 QModelIndex QUndoModel::selectedIndex() const
 {
-    return m_stack == 0 ? QModelIndex() : createIndex(m_stack->index(), 0);
+   return m_stack == 0 ? QModelIndex() : createIndex(m_stack->index(), 0);
 }
 
 QModelIndex QUndoModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (m_stack == 0)
-        return QModelIndex();
+   if (m_stack == 0) {
+      return QModelIndex();
+   }
 
-    if (parent.isValid())
-        return QModelIndex();
+   if (parent.isValid()) {
+      return QModelIndex();
+   }
 
-    if (column != 0)
-        return QModelIndex();
+   if (column != 0) {
+      return QModelIndex();
+   }
 
-    if (row < 0 || row > m_stack->count())
-        return QModelIndex();
+   if (row < 0 || row > m_stack->count()) {
+      return QModelIndex();
+   }
 
-    return createIndex(row, column);
+   return createIndex(row, column);
 }
 
-QModelIndex QUndoModel::parent(const QModelIndex&) const
+QModelIndex QUndoModel::parent(const QModelIndex &) const
 {
-    return QModelIndex();
+   return QModelIndex();
 }
 
 int QUndoModel::rowCount(const QModelIndex &parent) const
 {
-    if (m_stack == 0)
-        return 0;
+   if (m_stack == 0) {
+      return 0;
+   }
 
-    if (parent.isValid())
-        return 0;
+   if (parent.isValid()) {
+      return 0;
+   }
 
-    return m_stack->count() + 1;
+   return m_stack->count() + 1;
 }
 
-int QUndoModel::columnCount(const QModelIndex&) const
+int QUndoModel::columnCount(const QModelIndex &) const
 {
-    return 1;
+   return 1;
 }
 
 QVariant QUndoModel::data(const QModelIndex &index, int role) const
 {
-    if (m_stack == 0)
-        return QVariant();
+   if (m_stack == 0) {
+      return QVariant();
+   }
 
-    if (index.column() != 0)
-        return QVariant();
+   if (index.column() != 0) {
+      return QVariant();
+   }
 
-    if (index.row() < 0 || index.row() > m_stack->count())
-        return QVariant();
+   if (index.row() < 0 || index.row() > m_stack->count()) {
+      return QVariant();
+   }
 
-    if (role == Qt::DisplayRole) {
-        if (index.row() == 0)
-            return m_emty_label;
-        return m_stack->text(index.row() - 1);
-    } else if (role == Qt::DecorationRole) {
-        if (index.row() == m_stack->cleanIndex() && !m_clean_icon.isNull())
-            return m_clean_icon;
-        return QVariant();
-    }
+   if (role == Qt::DisplayRole) {
+      if (index.row() == 0) {
+         return m_emty_label;
+      }
+      return m_stack->text(index.row() - 1);
+   } else if (role == Qt::DecorationRole) {
+      if (index.row() == m_stack->cleanIndex() && !m_clean_icon.isNull()) {
+         return m_clean_icon;
+      }
+      return QVariant();
+   }
 
-    return QVariant();
+   return QVariant();
 }
 
 QString QUndoModel::emptyLabel() const
 {
-    return m_emty_label;
+   return m_emty_label;
 }
 
 void QUndoModel::setEmptyLabel(const QString &label)
 {
-    m_emty_label = label;
-    stackChanged();
+   m_emty_label = label;
+   stackChanged();
 }
 
 void QUndoModel::setCleanIcon(const QIcon &icon)
 {
-    m_clean_icon = icon;
-    stackChanged();
+   m_clean_icon = icon;
+   stackChanged();
 }
 
 QIcon QUndoModel::cleanIcon() const
 {
-    return m_clean_icon;
+   return m_clean_icon;
 }
 
 /*!
@@ -261,29 +277,29 @@ QIcon QUndoModel::cleanIcon() const
 
 class QUndoViewPrivate : public QListViewPrivate
 {
-    Q_DECLARE_PUBLIC(QUndoView)
-public:
-    QUndoViewPrivate() :
+   Q_DECLARE_PUBLIC(QUndoView)
+ public:
+   QUndoViewPrivate() :
 #ifndef QT_NO_UNDOGROUP
-        group(0),
+      group(0),
 #endif
-        model(0) {}
+      model(0) {}
 
 #ifndef QT_NO_UNDOGROUP
-    QPointer<QUndoGroup> group;
+   QPointer<QUndoGroup> group;
 #endif
-    QUndoModel *model;
+   QUndoModel *model;
 
-    void init();
+   void init();
 };
 
 void QUndoViewPrivate::init()
 {
-    Q_Q(QUndoView);
+   Q_Q(QUndoView);
 
-    model = new QUndoModel(q);
-    q->setModel(model);
-    q->setSelectionModel(model->selectionModel());
+   model = new QUndoModel(q);
+   q->setModel(model);
+   q->setSelectionModel(model->selectionModel());
 }
 
 /*!
@@ -291,10 +307,10 @@ void QUndoViewPrivate::init()
 */
 
 QUndoView::QUndoView(QWidget *parent)
-    : QListView(*new QUndoViewPrivate(), parent)
+   : QListView(*new QUndoViewPrivate(), parent)
 {
-    Q_D(QUndoView);
-    d->init();
+   Q_D(QUndoView);
+   d->init();
 }
 
 /*!
@@ -302,11 +318,11 @@ QUndoView::QUndoView(QWidget *parent)
 */
 
 QUndoView::QUndoView(QUndoStack *stack, QWidget *parent)
-    : QListView(*new QUndoViewPrivate(), parent)
+   : QListView(*new QUndoViewPrivate(), parent)
 {
-    Q_D(QUndoView);
-    d->init();
-    setStack(stack);
+   Q_D(QUndoView);
+   d->init();
+   setStack(stack);
 }
 
 #ifndef QT_NO_UNDOGROUP
@@ -318,11 +334,11 @@ QUndoView::QUndoView(QUndoStack *stack, QWidget *parent)
 */
 
 QUndoView::QUndoView(QUndoGroup *group, QWidget *parent)
-    : QListView(*new QUndoViewPrivate(), parent)
+   : QListView(*new QUndoViewPrivate(), parent)
 {
-    Q_D(QUndoView);
-    d->init();
-    setGroup(group);
+   Q_D(QUndoView);
+   d->init();
+   setGroup(group);
 }
 
 #endif // QT_NO_UNDOGROUP
@@ -344,8 +360,8 @@ QUndoView::~QUndoView()
 
 QUndoStack *QUndoView::stack() const
 {
-    Q_D(const QUndoView);
-    return d->model->stack();
+   Q_D(const QUndoView);
+   return d->model->stack();
 }
 
 /*!
@@ -359,42 +375,43 @@ QUndoStack *QUndoView::stack() const
 
 void QUndoView::setStack(QUndoStack *stack)
 {
-    Q_D(QUndoView);
+   Q_D(QUndoView);
 #ifndef QT_NO_UNDOGROUP
-    setGroup(0);
+   setGroup(0);
 #endif
-    d->model->setStack(stack);
+   d->model->setStack(stack);
 }
 
 #ifndef QT_NO_UNDOGROUP
 
 void QUndoView::setGroup(QUndoGroup *group)
 {
-    Q_D(QUndoView);
+   Q_D(QUndoView);
 
-    if (d->group == group)
-        return;
+   if (d->group == group) {
+      return;
+   }
 
-    if (d->group != 0) {
-        disconnect(d->group, SIGNAL(activeStackChanged(QUndoStack*)), d->model, SLOT(setStack(QUndoStack*)));
-    }
+   if (d->group != 0) {
+      disconnect(d->group, SIGNAL(activeStackChanged(QUndoStack *)), d->model, SLOT(setStack(QUndoStack *)));
+   }
 
-    d->group = group;
+   d->group = group;
 
-    if (d->group != 0) {
-        connect(d->group, SIGNAL(activeStackChanged(QUndoStack*)),d->model, SLOT(setStack(QUndoStack*)));
-        d->model->setStack(d->group->activeStack());
+   if (d->group != 0) {
+      connect(d->group, SIGNAL(activeStackChanged(QUndoStack *)), d->model, SLOT(setStack(QUndoStack *)));
+      d->model->setStack(d->group->activeStack());
 
-    } else {
-        d->model->setStack(0);
+   } else {
+      d->model->setStack(0);
 
-    }
+   }
 }
 
 QUndoGroup *QUndoView::group() const
 {
-    Q_D(const QUndoView);
-    return d->group;
+   Q_D(const QUndoView);
+   return d->group;
 }
 
 #endif // QT_NO_UNDOGROUP
@@ -410,14 +427,14 @@ QUndoGroup *QUndoView::group() const
 
 void QUndoView::setEmptyLabel(const QString &label)
 {
-    Q_D(QUndoView);
-    d->model->setEmptyLabel(label);
+   Q_D(QUndoView);
+   d->model->setEmptyLabel(label);
 }
 
 QString QUndoView::emptyLabel() const
 {
-    Q_D(const QUndoView);
-    return d->model->emptyLabel();
+   Q_D(const QUndoView);
+   return d->model->emptyLabel();
 }
 
 /*!
@@ -432,15 +449,15 @@ QString QUndoView::emptyLabel() const
 
 void QUndoView::setCleanIcon(const QIcon &icon)
 {
-    Q_D(const QUndoView);
-    d->model->setCleanIcon(icon);
+   Q_D(const QUndoView);
+   d->model->setCleanIcon(icon);
 
 }
 
 QIcon QUndoView::cleanIcon() const
 {
-    Q_D(const QUndoView);
-    return d->model->cleanIcon();
+   Q_D(const QUndoView);
+   return d->model->cleanIcon();
 }
 
 QT_END_NAMESPACE

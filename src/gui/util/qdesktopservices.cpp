@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -53,37 +53,36 @@ QT_BEGIN_NAMESPACE
 
 class QOpenUrlHandlerRegistry : public QObject
 {
-    CS_OBJECT(QOpenUrlHandlerRegistry)
+   CS_OBJECT(QOpenUrlHandlerRegistry)
 
-public:
-    inline QOpenUrlHandlerRegistry() : mutex(QMutex::Recursive) {}
+ public:
+   inline QOpenUrlHandlerRegistry() : mutex(QMutex::Recursive) {}
 
-    QMutex mutex;
+   QMutex mutex;
 
-    struct Handler
-    {
-        QObject *receiver;
-        QByteArray name;
-    };
-    typedef QHash<QString, Handler> HandlerHash;
-    HandlerHash handlers;
+   struct Handler {
+      QObject *receiver;
+      QByteArray name;
+   };
+   typedef QHash<QString, Handler> HandlerHash;
+   HandlerHash handlers;
 
-    GUI_CS_SLOT_1(Public,void handlerDestroyed(QObject *handler))
-    GUI_CS_SLOT_2(handlerDestroyed)
+   GUI_CS_SLOT_1(Public, void handlerDestroyed(QObject *handler))
+   GUI_CS_SLOT_2(handlerDestroyed)
 };
 
 Q_GLOBAL_STATIC(QOpenUrlHandlerRegistry, handlerRegistry)
 
 void QOpenUrlHandlerRegistry::handlerDestroyed(QObject *handler)
 {
-    HandlerHash::Iterator it = handlers.begin();
-    while (it != handlers.end()) {
-        if (it->receiver == handler) {
-            it = handlers.erase(it);
-        } else {
-            ++it;
-        }
-    }
+   HandlerHash::Iterator it = handlers.begin();
+   while (it != handlers.end()) {
+      if (it->receiver == handler) {
+         it = handlers.erase(it);
+      } else {
+         ++it;
+      }
+   }
 }
 
 /*!
@@ -170,29 +169,31 @@ void QOpenUrlHandlerRegistry::handlerDestroyed(QObject *handler)
 */
 bool QDesktopServices::openUrl(const QUrl &url)
 {
-    QOpenUrlHandlerRegistry *registry = handlerRegistry();
-    QMutexLocker locker(&registry->mutex);
-    static bool insideOpenUrlHandler = false;
+   QOpenUrlHandlerRegistry *registry = handlerRegistry();
+   QMutexLocker locker(&registry->mutex);
+   static bool insideOpenUrlHandler = false;
 
-    if (!insideOpenUrlHandler) {
-        QOpenUrlHandlerRegistry::HandlerHash::ConstIterator handler = registry->handlers.constFind(url.scheme());
+   if (!insideOpenUrlHandler) {
+      QOpenUrlHandlerRegistry::HandlerHash::ConstIterator handler = registry->handlers.constFind(url.scheme());
 
-        if (handler != registry->handlers.constEnd()) {
-            insideOpenUrlHandler = true;
+      if (handler != registry->handlers.constEnd()) {
+         insideOpenUrlHandler = true;
 
-            bool result = QMetaObject::invokeMethod(handler->receiver, handler->name.constData(), Qt::DirectConnection, Q_ARG(const QUrl &, url));
-            insideOpenUrlHandler = false;
-            return result;
-        }
-    }
+         bool result = QMetaObject::invokeMethod(handler->receiver, handler->name.constData(), Qt::DirectConnection,
+                                                 Q_ARG(const QUrl &, url));
+         insideOpenUrlHandler = false;
+         return result;
+      }
+   }
 
-    bool result;
-    if (url.scheme() == QLatin1String("file"))
-        result = openDocument(url);
-    else
-        result = launchWebBrowser(url);
+   bool result;
+   if (url.scheme() == QLatin1String("file")) {
+      result = openDocument(url);
+   } else {
+      result = launchWebBrowser(url);
+   }
 
-    return result;
+   return result;
 }
 
 /*!
@@ -219,18 +220,18 @@ bool QDesktopServices::openUrl(const QUrl &url)
 */
 void QDesktopServices::setUrlHandler(const QString &scheme, QObject *receiver, const char *method)
 {
-    QOpenUrlHandlerRegistry *registry = handlerRegistry();
-    QMutexLocker locker(&registry->mutex);
-    if (!receiver) {
-        registry->handlers.remove(scheme);
-        return;
-    }
-    QOpenUrlHandlerRegistry::Handler h;
-    h.receiver = receiver;
-    h.name = method;
-    registry->handlers.insert(scheme, h);
-    QObject::connect(receiver, SIGNAL(destroyed(QObject*)),
-                     registry, SLOT(handlerDestroyed(QObject*)));
+   QOpenUrlHandlerRegistry *registry = handlerRegistry();
+   QMutexLocker locker(&registry->mutex);
+   if (!receiver) {
+      registry->handlers.remove(scheme);
+      return;
+   }
+   QOpenUrlHandlerRegistry::Handler h;
+   h.receiver = receiver;
+   h.name = method;
+   registry->handlers.insert(scheme, h);
+   QObject::connect(receiver, SIGNAL(destroyed(QObject *)),
+                    registry, SLOT(handlerDestroyed(QObject *)));
 }
 
 /*!
@@ -240,7 +241,7 @@ void QDesktopServices::setUrlHandler(const QString &scheme, QObject *receiver, c
 */
 void QDesktopServices::unsetUrlHandler(const QString &scheme)
 {
-    setUrlHandler(scheme, 0, 0);
+   setUrlHandler(scheme, 0, 0);
 }
 
 /*!

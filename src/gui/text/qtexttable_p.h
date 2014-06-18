@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,28 +33,30 @@ QT_BEGIN_NAMESPACE
 
 class QTextTablePrivate : public QTextFramePrivate
 {
-    Q_DECLARE_PUBLIC(QTextTable)
-public:
-    QTextTablePrivate(QTextDocument *document) : QTextFramePrivate(document), grid(0), nRows(0), nCols(0), dirty(true), blockFragmentUpdates(false) {}
-    ~QTextTablePrivate();
+   Q_DECLARE_PUBLIC(QTextTable)
+ public:
+   QTextTablePrivate(QTextDocument *document) : QTextFramePrivate(document), grid(0), nRows(0), nCols(0), dirty(true),
+      blockFragmentUpdates(false) {}
+   ~QTextTablePrivate();
 
-    static QTextTable *createTable(QTextDocumentPrivate *, int pos, int rows, int cols, const QTextTableFormat &tableFormat);
-    void fragmentAdded(const QChar &type, uint fragment);
-    void fragmentRemoved(const QChar &type, uint fragment);
+   static QTextTable *createTable(QTextDocumentPrivate *, int pos, int rows, int cols,
+                                  const QTextTableFormat &tableFormat);
+   void fragmentAdded(const QChar &type, uint fragment);
+   void fragmentRemoved(const QChar &type, uint fragment);
 
-    void update() const;
+   void update() const;
 
-    int findCellIndex(int fragment) const;
+   int findCellIndex(int fragment) const;
 
-    QList<int> cells;
-    // symmetric to cells array and maps to indecs in grid,
-    // used for fast-lookup for row/column by fragment
-    mutable QVector<int> cellIndices;
-    mutable int *grid;
-    mutable int nRows;
-    mutable int nCols;
-    mutable bool dirty;
-    bool blockFragmentUpdates;
+   QList<int> cells;
+   // symmetric to cells array and maps to indecs in grid,
+   // used for fast-lookup for row/column by fragment
+   mutable QVector<int> cellIndices;
+   mutable int *grid;
+   mutable int nRows;
+   mutable int nCols;
+   mutable bool dirty;
+   bool blockFragmentUpdates;
 };
 
 QT_END_NAMESPACE

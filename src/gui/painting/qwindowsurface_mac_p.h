@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,17 +39,17 @@ struct QMacWindowSurfacePrivate;
 
 class QMacWindowSurface : public QWindowSurface
 {
-public:
-    QMacWindowSurface(QWidget *widget);
-    ~QMacWindowSurface();
+ public:
+   QMacWindowSurface(QWidget *widget);
+   ~QMacWindowSurface();
 
-    QPaintDevice *paintDevice();
-    void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
-    void setGeometry(const QRect &rect);
-    bool scroll(const QRegion &area, int dx, int dy);
+   QPaintDevice *paintDevice();
+   void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
+   void setGeometry(const QRect &rect);
+   bool scroll(const QRegion &area, int dx, int dy);
 
-private:
-    QMacWindowSurfacePrivate *d_ptr;
+ private:
+   QMacWindowSurfacePrivate *d_ptr;
 };
 
 QT_END_NAMESPACE

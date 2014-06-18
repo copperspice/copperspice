@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,25 +36,25 @@ class QSocketNotifier;
 
 class QVFbMouseHandler : public QObject, public QWSMouseHandler
 {
-    CS_OBJECT_MULTIPLE(QVFbMouseHandler, QObject)
+   CS_OBJECT_MULTIPLE(QVFbMouseHandler, QObject)
 
-public:
-    QVFbMouseHandler(const QString &driver = QString(),
-            const QString &device = QString());
-    ~QVFbMouseHandler();
+ public:
+   QVFbMouseHandler(const QString &driver = QString(),
+                    const QString &device = QString());
+   ~QVFbMouseHandler();
 
-    void resume();
-    void suspend();
+   void resume();
+   void suspend();
 
-private:
-    int mouseFD;
-    int mouseIdx;
-    enum {mouseBufSize = 128};
-    uchar mouseBuf[mouseBufSize];
-    QSocketNotifier *mouseNotifier;
+ private:
+   int mouseFD;
+   int mouseIdx;
+   enum {mouseBufSize = 128};
+   uchar mouseBuf[mouseBufSize];
+   QSocketNotifier *mouseNotifier;
 
-    GUI_CS_SLOT_1(Private, void readMouseData())
-    GUI_CS_SLOT_2(readMouseData) 
+   GUI_CS_SLOT_1(Private, void readMouseData())
+   GUI_CS_SLOT_2(readMouseData)
 };
 #endif // QT_NO_QWS_MOUSE_QVFB
 

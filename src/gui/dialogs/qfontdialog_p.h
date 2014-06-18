@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,89 +45,93 @@ class QLineEdit;
 
 class QFontDialogPrivate : public QDialogPrivate
 {
-    Q_DECLARE_PUBLIC(QFontDialog)
+   Q_DECLARE_PUBLIC(QFontDialog)
 
-public:
-    inline QFontDialogPrivate()
-        : writingSystem(QFontDatabase::Any)
-    { }
+ public:
+   inline QFontDialogPrivate()
+      : writingSystem(QFontDatabase::Any) {
+   }
 
-    void updateFamilies();
-    void updateStyles();
-    void updateSizes();
+   void updateFamilies();
+   void updateStyles();
+   void updateSizes();
 
-    static QFont getFont(bool *ok, const QFont &initial, QWidget *parent,
-                         const QString &title, QFontDialog::FontDialogOptions options);
+   static QFont getFont(bool *ok, const QFont &initial, QWidget *parent,
+                        const QString &title, QFontDialog::FontDialogOptions options);
 
-    void init();
-    void _q_sizeChanged(const QString &);
-    void _q_familyHighlighted(int);
-    void _q_writingSystemHighlighted(int);
-    void _q_styleHighlighted(int);
-    void _q_sizeHighlighted(int);
-    void _q_updateSample();
-    void updateSampleFont(const QFont &newFont);
-    void retranslateStrings();
+   void init();
+   void _q_sizeChanged(const QString &);
+   void _q_familyHighlighted(int);
+   void _q_writingSystemHighlighted(int);
+   void _q_styleHighlighted(int);
+   void _q_sizeHighlighted(int);
+   void _q_updateSample();
+   void updateSampleFont(const QFont &newFont);
+   void retranslateStrings();
 
-    QLabel *familyAccel;
-    QLineEdit *familyEdit;
-    QFontListView *familyList;
+   QLabel *familyAccel;
+   QLineEdit *familyEdit;
+   QFontListView *familyList;
 
-    QLabel *styleAccel;
-    QLineEdit *styleEdit;
-    QFontListView *styleList;
+   QLabel *styleAccel;
+   QLineEdit *styleEdit;
+   QFontListView *styleList;
 
-    QLabel *sizeAccel;
-    QLineEdit *sizeEdit;
-    QFontListView *sizeList;
+   QLabel *sizeAccel;
+   QLineEdit *sizeEdit;
+   QFontListView *sizeList;
 
-    QGroupBox *effects;
-    QCheckBox *strikeout;
-    QCheckBox *underline;
-    QComboBox *color;
+   QGroupBox *effects;
+   QCheckBox *strikeout;
+   QCheckBox *underline;
+   QComboBox *color;
 
-    QGroupBox *sample;
-    QLineEdit *sampleEdit;
+   QGroupBox *sample;
+   QLineEdit *sampleEdit;
 
-    QLabel *writingSystemAccel;
-    QComboBox *writingSystemCombo;
+   QLabel *writingSystemAccel;
+   QComboBox *writingSystemCombo;
 
-    QBoxLayout *buttonLayout;
-    QBoxLayout *effectsLayout;
-    QBoxLayout *sampleLayout;
-    QBoxLayout *sampleEditLayout;
+   QBoxLayout *buttonLayout;
+   QBoxLayout *effectsLayout;
+   QBoxLayout *sampleLayout;
+   QBoxLayout *sampleEditLayout;
 
-    QDialogButtonBox *buttonBox;
+   QDialogButtonBox *buttonBox;
 
-    QFontDatabase fdb;
-    QString family;
-    QFontDatabase::WritingSystem writingSystem;
-    QString style;
-    int size;
-    bool smoothScalable;
-    QFont selectedFont;
-    QFontDialog::FontDialogOptions opts;
-    QPointer<QObject> receiverToDisconnectOnClose;
-    QByteArray memberToDisconnectOnClose;
+   QFontDatabase fdb;
+   QString family;
+   QFontDatabase::WritingSystem writingSystem;
+   QString style;
+   int size;
+   bool smoothScalable;
+   QFont selectedFont;
+   QFontDialog::FontDialogOptions opts;
+   QPointer<QObject> receiverToDisconnectOnClose;
+   QByteArray memberToDisconnectOnClose;
 
 #ifdef Q_OS_MAC
-    static void setFont(void *delegate, const QFont &font);
+   static void setFont(void *delegate, const QFont &font);
 
-    inline void done(int result) { q_func()->done(result); }
-    inline QFontDialog *fontDialog() { return q_func(); }
+   inline void done(int result) {
+      q_func()->done(result);
+   }
+   inline QFontDialog *fontDialog() {
+      return q_func();
+   }
 
-    void *delegate;
-    void closeCocoaFontPanel();
-    bool nativeDialogInUse;
-    bool canBeNativeDialog();
-    bool setVisible_sys(bool visible);
-    void createNSFontPanelDelegate();
-    void _q_macRunNativeAppModalPanel();
-    void mac_nativeDialogModalHelp();
-    bool showCocoaFontPanel();
-    bool hideCocoaFontPanel();
+   void *delegate;
+   void closeCocoaFontPanel();
+   bool nativeDialogInUse;
+   bool canBeNativeDialog();
+   bool setVisible_sys(bool visible);
+   void createNSFontPanelDelegate();
+   void _q_macRunNativeAppModalPanel();
+   void mac_nativeDialogModalHelp();
+   bool showCocoaFontPanel();
+   bool hideCocoaFontPanel();
 
-    static bool sharedFontPanelAvailable;
+   static bool sharedFontPanelAvailable;
 #endif
 };
 

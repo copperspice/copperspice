@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,61 +39,62 @@ class QHttpMultiPartPrivate;
 
 class Q_NETWORK_EXPORT QHttpPart
 {
-public:
-    QHttpPart();
-    QHttpPart(const QHttpPart &other);
-    ~QHttpPart();
+ public:
+   QHttpPart();
+   QHttpPart(const QHttpPart &other);
+   ~QHttpPart();
 
-    QHttpPart &operator=(const QHttpPart &other);
-    bool operator==(const QHttpPart &other) const;
-    inline bool operator!=(const QHttpPart &other) const
-    { return !operator==(other); }
+   QHttpPart &operator=(const QHttpPart &other);
+   bool operator==(const QHttpPart &other) const;
+   inline bool operator!=(const QHttpPart &other) const {
+      return !operator==(other);
+   }
 
-    void setHeader(QNetworkRequest::KnownHeaders header, const QVariant &value);
-    void setRawHeader(const QByteArray &headerName, const QByteArray &headerValue);
+   void setHeader(QNetworkRequest::KnownHeaders header, const QVariant &value);
+   void setRawHeader(const QByteArray &headerName, const QByteArray &headerValue);
 
-    void setBody(const QByteArray &body);
-    void setBodyDevice(QIODevice *device);
+   void setBody(const QByteArray &body);
+   void setBodyDevice(QIODevice *device);
 
-private:
-    QSharedDataPointer<QHttpPartPrivate> d;
+ private:
+   QSharedDataPointer<QHttpPartPrivate> d;
 
-    friend class QHttpMultiPartIODevice;
+   friend class QHttpMultiPartIODevice;
 };
 
 class Q_NETWORK_EXPORT QHttpMultiPart : public QObject
 {
-    CS_OBJECT(QHttpMultiPart)
+   CS_OBJECT(QHttpMultiPart)
 
-public:
+ public:
 
-    enum ContentType {
-        MixedType,
-        RelatedType,
-        FormDataType,
-        AlternativeType
-    };
+   enum ContentType {
+      MixedType,
+      RelatedType,
+      FormDataType,
+      AlternativeType
+   };
 
-    QHttpMultiPart(QObject *parent = 0);
-    QHttpMultiPart(ContentType contentType, QObject *parent = 0);
-    ~QHttpMultiPart();
+   QHttpMultiPart(QObject *parent = 0);
+   QHttpMultiPart(ContentType contentType, QObject *parent = 0);
+   ~QHttpMultiPart();
 
-    void append(const QHttpPart &httpPart);
+   void append(const QHttpPart &httpPart);
 
-    void setContentType(ContentType contentType);
+   void setContentType(ContentType contentType);
 
-    QByteArray boundary() const;
-    void setBoundary(const QByteArray &boundary);
+   QByteArray boundary() const;
+   void setBoundary(const QByteArray &boundary);
 
-private:
-    Q_DECLARE_PRIVATE(QHttpMultiPart)
-    Q_DISABLE_COPY(QHttpMultiPart)
+ private:
+   Q_DECLARE_PRIVATE(QHttpMultiPart)
+   Q_DISABLE_COPY(QHttpMultiPart)
 
-    friend class QNetworkAccessManager;
-    friend class QNetworkAccessManagerPrivate;
+   friend class QNetworkAccessManager;
+   friend class QNetworkAccessManagerPrivate;
 
-protected:
-	 QScopedPointer<QHttpMultiPartPrivate> d_ptr;
+ protected:
+   QScopedPointer<QHttpMultiPartPrivate> d_ptr;
 
 };
 

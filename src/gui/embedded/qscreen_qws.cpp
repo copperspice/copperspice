@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -47,10 +47,10 @@ QT_BEGIN_NAMESPACE
 // #define QT_USE_MEMCPY_DUFF
 
 #ifndef QT_NO_QWS_CURSOR
-Q_GUI_EXPORT QScreenCursor * qt_screencursor = 0;
+Q_GUI_EXPORT QScreenCursor *qt_screencursor = 0;
 #endif
 
-Q_GUI_EXPORT QScreen * qt_screen = 0;
+Q_GUI_EXPORT QScreen *qt_screen = 0;
 
 ClearCacheFunc QScreen::clearCacheFunc = 0;
 
@@ -107,11 +107,11 @@ ClearCacheFunc QScreen::clearCacheFunc = 0;
 */
 QScreenCursor::QScreenCursor()
 {
-    pos = QPoint(qt_screen->deviceWidth()/2, qt_screen->deviceHeight()/2);
-    size = QSize(0,0);
-    enable = true;
-    hwaccel = false;
-    supportsAlpha = true;
+   pos = QPoint(qt_screen->deviceWidth() / 2, qt_screen->deviceHeight() / 2);
+   size = QSize(0, 0);
+   enable = true;
+   hwaccel = false;
+   supportsAlpha = true;
 }
 
 /*!
@@ -128,11 +128,12 @@ QScreenCursor::~QScreenCursor()
 */
 void QScreenCursor::hide()
 {
-    if (enable) {
-        enable = false;
-        if (!hwaccel)
-            qt_screen->exposeRegion(boundingRect(), 0);
-    }
+   if (enable) {
+      enable = false;
+      if (!hwaccel) {
+         qt_screen->exposeRegion(boundingRect(), 0);
+      }
+   }
 }
 
 /*!
@@ -142,11 +143,12 @@ void QScreenCursor::hide()
 */
 void QScreenCursor::show()
 {
-    if (!enable) {
-        enable = true;
-        if (!hwaccel)
-            qt_screen->exposeRegion(boundingRect(), 0);
-    }
+   if (!enable) {
+      enable = true;
+      if (!hwaccel) {
+         qt_screen->exposeRegion(boundingRect(), 0);
+      }
+   }
 }
 
 /*!
@@ -160,34 +162,35 @@ void QScreenCursor::show()
 */
 void QScreenCursor::set(const QImage &image, int hotx, int hoty)
 {
-    const QRect r = boundingRect();
+   const QRect r = boundingRect();
 
-    hotspot = QPoint(hotx, hoty);
-    // These are in almost all cases the fastest formats to blend
-    QImage::Format f;
-    switch (qt_screen->depth()) {
-    case 12:
-        f = QImage::Format_ARGB4444_Premultiplied;
-        break;
-    case 15:
-        f =  QImage::Format_ARGB8555_Premultiplied;
-        break;
-    case 16:
-        f = QImage::Format_ARGB8565_Premultiplied;
-        break;
-    case 18:
-        f = QImage::Format_ARGB6666_Premultiplied;
-        break;
-    default:
-        f =  QImage::Format_ARGB32_Premultiplied;
-    }
+   hotspot = QPoint(hotx, hoty);
+   // These are in almost all cases the fastest formats to blend
+   QImage::Format f;
+   switch (qt_screen->depth()) {
+      case 12:
+         f = QImage::Format_ARGB4444_Premultiplied;
+         break;
+      case 15:
+         f =  QImage::Format_ARGB8555_Premultiplied;
+         break;
+      case 16:
+         f = QImage::Format_ARGB8565_Premultiplied;
+         break;
+      case 18:
+         f = QImage::Format_ARGB6666_Premultiplied;
+         break;
+      default:
+         f =  QImage::Format_ARGB32_Premultiplied;
+   }
 
-    cursor = image.convertToFormat(f);
+   cursor = image.convertToFormat(f);
 
-    size = image.size();
+   size = image.size();
 
-    if (enable && !hwaccel)
-        qt_screen->exposeRegion(r | boundingRect(), 0);
+   if (enable && !hwaccel) {
+      qt_screen->exposeRegion(r | boundingRect(), 0);
+   }
 }
 
 /*!
@@ -201,12 +204,12 @@ void QScreenCursor::set(const QImage &image, int hotx, int hoty)
 */
 void QScreenCursor::move(int x, int y)
 {
-    QRegion r = boundingRect();
-    pos = QPoint(x,y);
-    if (enable && !hwaccel) {
-        r |= boundingRect();
-        qt_screen->exposeRegion(r, 0);
-    }
+   QRegion r = boundingRect();
+   pos = QPoint(x, y);
+   if (enable && !hwaccel) {
+      r |= boundingRect();
+      qt_screen->exposeRegion(r, 0);
+   }
 }
 
 
@@ -224,7 +227,7 @@ void QScreenCursor::move(int x, int y)
 */
 void QScreenCursor::initSoftwareCursor()
 {
-    qt_screencursor = new QScreenCursor;
+   qt_screencursor = new QScreenCursor;
 }
 
 
@@ -336,78 +339,78 @@ void QScreenCursor::initSoftwareCursor()
 
 class QScreenPrivate
 {
-public:
-    QScreenPrivate(QScreen *parent, QScreen::ClassId id = QScreen::CustomClass);
-    ~QScreenPrivate();
+ public:
+   QScreenPrivate(QScreen *parent, QScreen::ClassId id = QScreen::CustomClass);
+   ~QScreenPrivate();
 
-    inline QImage::Format preferredImageFormat() const;
+   inline QImage::Format preferredImageFormat() const;
 
-    typedef void (*SolidFillFunc)(QScreen*, const QColor&, const QRegion&);
-    typedef void (*BlitFunc)(QScreen*, const QImage&, const QPoint&, const QRegion&);
+   typedef void (*SolidFillFunc)(QScreen *, const QColor &, const QRegion &);
+   typedef void (*BlitFunc)(QScreen *, const QImage &, const QPoint &, const QRegion &);
 
-    SolidFillFunc solidFill;
-    BlitFunc blit;
+   SolidFillFunc solidFill;
+   BlitFunc blit;
 
-    QPoint offset;
-    QList<QScreen*> subScreens;
-    QPixmapDataFactory* pixmapFactory;
-    QGraphicsSystem* graphicsSystem;
-    QWSGraphicsSystem defaultGraphicsSystem; //###
-    QImage::Format pixelFormat;
+   QPoint offset;
+   QList<QScreen *> subScreens;
+   QPixmapDataFactory *pixmapFactory;
+   QGraphicsSystem *graphicsSystem;
+   QWSGraphicsSystem defaultGraphicsSystem; //###
+   QImage::Format pixelFormat;
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
-    bool fb_is_littleEndian;
+   bool fb_is_littleEndian;
 #endif
 #ifdef QT_QWS_CLIENTBLIT
-    bool supportsBlitInClients;
+   bool supportsBlitInClients;
 #endif
-    int classId;
-    QScreen *q_ptr;
+   int classId;
+   QScreen *q_ptr;
 };
 
 template <typename T>
 static void solidFill_template(QScreen *screen, const QColor &color,
                                const QRegion &region)
 {
-    T *dest = reinterpret_cast<T*>(screen->base());
-    const T c = qt_colorConvert<T, quint32>(color.rgba(), 0);
-    const int stride = screen->linestep();
-    const QVector<QRect> rects = region.rects();
+   T *dest = reinterpret_cast<T *>(screen->base());
+   const T c = qt_colorConvert<T, quint32>(color.rgba(), 0);
+   const int stride = screen->linestep();
+   const QVector<QRect> rects = region.rects();
 
-    for (int i = 0; i < rects.size(); ++i) {
-        const QRect r = rects.at(i);
-        qt_rectfill(dest, c, r.x(), r.y(), r.width(), r.height(), stride);
-    }
+   for (int i = 0; i < rects.size(); ++i) {
+      const QRect r = rects.at(i);
+      qt_rectfill(dest, c, r.x(), r.y(), r.width(), r.height(), stride);
+   }
 }
 
 #ifdef QT_QWS_DEPTH_GENERIC
 static void solidFill_rgb_32bpp(QScreen *screen, const QColor &color,
                                 const QRegion &region)
 {
-    quint32 *dest = reinterpret_cast<quint32*>(screen->base());
-    const quint32 c = qt_convertToRgb<quint32>(color.rgba());
+   quint32 *dest = reinterpret_cast<quint32 *>(screen->base());
+   const quint32 c = qt_convertToRgb<quint32>(color.rgba());
 
-    const int stride = screen->linestep();
-    const QVector<QRect> rects = region.rects();
+   const int stride = screen->linestep();
+   const QVector<QRect> rects = region.rects();
 
-    for (int i = 0; i < rects.size(); ++i) {
-        const QRect r = rects.at(i);
-        qt_rectfill(dest, c, r.x(), r.y(), r.width(), r.height(), stride);
-    }
+   for (int i = 0; i < rects.size(); ++i) {
+      const QRect r = rects.at(i);
+      qt_rectfill(dest, c, r.x(), r.y(), r.width(), r.height(), stride);
+   }
 }
 
 static void solidFill_rgb_16bpp(QScreen *screen, const QColor &color,
                                 const QRegion &region)
 {
-    quint16 *dest = reinterpret_cast<quint16*>(screen->base());
-    const quint16 c = qt_convertToRgb<quint32>(color.rgba());
+   quint16 *dest = reinterpret_cast<quint16 *>(screen->base());
+   const quint16 c = qt_convertToRgb<quint32>(color.rgba());
 
-    const int stride = screen->linestep();
-    const QVector<QRect> rects = region.rects();
+   const int stride = screen->linestep();
+   const QVector<QRect> rects = region.rects();
 
-    for (int i = 0; i < rects.size(); ++i) {
-        const QRect r = rects.at(i);
-        qt_rectfill(dest, c, r.x(), r.y(), r.width(), r.height(), stride);
-    }
+   for (int i = 0; i < rects.size(); ++i) {
+      const QRect r = rects.at(i);
+      qt_rectfill(dest, c, r.x(), r.y(), r.width(), r.height(), stride);
+   }
 }
 #endif // QT_QWS_DEPTH_GENERIC
 
@@ -416,40 +419,42 @@ static inline void qt_rectfill_gray4(quint8 *dest, quint8 value,
                                      int x, int y, int width, int height,
                                      int stride)
 {
-    const int pixelsPerByte = 2;
-    dest += y * stride + x / pixelsPerByte;
-    const int doAlign = x & 1;
-    const int doTail = (width - doAlign) & 1;
-    const int width8 = (width - doAlign) / pixelsPerByte;
+   const int pixelsPerByte = 2;
+   dest += y * stride + x / pixelsPerByte;
+   const int doAlign = x & 1;
+   const int doTail = (width - doAlign) & 1;
+   const int width8 = (width - doAlign) / pixelsPerByte;
 
-    for (int j = 0; j < height; ++j) {
-        if (doAlign)
-            *dest = (*dest & 0xf0) | (value & 0x0f);
-        if (width8)
-            qt_memfill<quint8>(dest + doAlign, value, width8);
-        if (doTail) {
-            quint8 *d = dest + doAlign + width8;
-            *d = (*d & 0x0f) | (value & 0xf0);
-        }
-        dest += stride;
-    }
+   for (int j = 0; j < height; ++j) {
+      if (doAlign) {
+         *dest = (*dest & 0xf0) | (value & 0x0f);
+      }
+      if (width8) {
+         qt_memfill<quint8>(dest + doAlign, value, width8);
+      }
+      if (doTail) {
+         quint8 *d = dest + doAlign + width8;
+         *d = (*d & 0x0f) | (value & 0xf0);
+      }
+      dest += stride;
+   }
 }
 
 static void solidFill_gray4(QScreen *screen, const QColor &color,
                             const QRegion &region)
 {
-    quint8 *dest = reinterpret_cast<quint8*>(screen->base());
-    const quint8 c = qGray(color.rgba()) >> 4;
-    const quint8 c8 = (c << 4) | c;
+   quint8 *dest = reinterpret_cast<quint8 *>(screen->base());
+   const quint8 c = qGray(color.rgba()) >> 4;
+   const quint8 c8 = (c << 4) | c;
 
-    const int stride = screen->linestep();
-    const QVector<QRect> rects = region.rects();
+   const int stride = screen->linestep();
+   const QVector<QRect> rects = region.rects();
 
-    for (int i = 0; i < rects.size(); ++i) {
-        const QRect r = rects.at(i);
-        qt_rectfill_gray4(dest, c8, r.x(), r.y(), r.width(), r.height(),
-                          stride);
-    }
+   for (int i = 0; i < rects.size(); ++i) {
+      const QRect r = rects.at(i);
+      qt_rectfill_gray4(dest, c8, r.x(), r.y(), r.width(), r.height(),
+                        stride);
+   }
 }
 #endif // QT_QWS_DEPTH_4
 
@@ -458,171 +463,176 @@ static inline void qt_rectfill_mono(quint8 *dest, quint8 value,
                                     int x, int y, int width, int height,
                                     int stride)
 {
-    const int pixelsPerByte = 8;
-    const int alignWidth = qMin(width, (8 - (x & 7)) & 7);
-    const int doAlign = (alignWidth > 0 ? 1 : 0);
-    const int alignStart = pixelsPerByte - 1 - (x & 7);
-    const int alignStop = alignStart - (alignWidth - 1);
-    const quint8 alignMask = ((1 << alignWidth) - 1) << alignStop;
-    const int tailWidth = (width - alignWidth) & 7;
-    const int doTail = (tailWidth > 0 ? 1 : 0);
-    const quint8 tailMask = (1 << (pixelsPerByte - tailWidth)) - 1;
-    const int width8 = (width - alignWidth) / pixelsPerByte;
+   const int pixelsPerByte = 8;
+   const int alignWidth = qMin(width, (8 - (x & 7)) & 7);
+   const int doAlign = (alignWidth > 0 ? 1 : 0);
+   const int alignStart = pixelsPerByte - 1 - (x & 7);
+   const int alignStop = alignStart - (alignWidth - 1);
+   const quint8 alignMask = ((1 << alignWidth) - 1) << alignStop;
+   const int tailWidth = (width - alignWidth) & 7;
+   const int doTail = (tailWidth > 0 ? 1 : 0);
+   const quint8 tailMask = (1 << (pixelsPerByte - tailWidth)) - 1;
+   const int width8 = (width - alignWidth) / pixelsPerByte;
 
-    dest += y * stride + x / pixelsPerByte;
-    stride -= (doAlign + width8);
+   dest += y * stride + x / pixelsPerByte;
+   stride -= (doAlign + width8);
 
-    for (int j = 0; j < height; ++j) {
-        if (doAlign) {
-            *dest = (*dest & ~alignMask) | (value & alignMask);
-            ++dest;
-        }
-        if (width8) {
-            qt_memfill<quint8>(dest, value, width8);
-            dest += width8;
-        }
-        if (doTail)
-            *dest = (*dest & tailMask) | (value & ~tailMask);
-        dest += stride;
-    }
+   for (int j = 0; j < height; ++j) {
+      if (doAlign) {
+         *dest = (*dest & ~alignMask) | (value & alignMask);
+         ++dest;
+      }
+      if (width8) {
+         qt_memfill<quint8>(dest, value, width8);
+         dest += width8;
+      }
+      if (doTail) {
+         *dest = (*dest & tailMask) | (value & ~tailMask);
+      }
+      dest += stride;
+   }
 }
 
 static void solidFill_mono(QScreen *screen, const QColor &color,
                            const QRegion &region)
 {
-    quint8 *dest = reinterpret_cast<quint8*>(screen->base());
-    const quint8 c8 = (qGray(color.rgba()) >> 7) * 0xff;
+   quint8 *dest = reinterpret_cast<quint8 *>(screen->base());
+   const quint8 c8 = (qGray(color.rgba()) >> 7) * 0xff;
 
-    const int stride = screen->linestep();
-    const QVector<QRect> rects = region.rects();
+   const int stride = screen->linestep();
+   const QVector<QRect> rects = region.rects();
 
-    for (int i = 0; i < rects.size(); ++i) {
-        const QRect r = rects.at(i);
-        qt_rectfill_mono(dest, c8, r.x(), r.y(), r.width(), r.height(),
-                         stride);
-    }
+   for (int i = 0; i < rects.size(); ++i) {
+      const QRect r = rects.at(i);
+      qt_rectfill_mono(dest, c8, r.x(), r.y(), r.width(), r.height(),
+                       stride);
+   }
 }
 #endif // QT_QWS_DEPTH_1
 
 void qt_solidFill_setup(QScreen *screen, const QColor &color,
                         const QRegion &region)
 {
-    switch (screen->depth()) {
+   switch (screen->depth()) {
 #ifdef QT_QWS_DEPTH_32
-    case 32:
-        if (screen->pixelType() == QScreen::NormalPixel)
+      case 32:
+         if (screen->pixelType() == QScreen::NormalPixel) {
             screen->d_ptr->solidFill = solidFill_template<quint32>;
-        else
+         } else {
             screen->d_ptr->solidFill = solidFill_template<qabgr8888>;
-        break;
+         }
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_24
-    case 24:
-        if (screen->pixelType() == QScreen::NormalPixel)
+      case 24:
+         if (screen->pixelType() == QScreen::NormalPixel) {
             screen->d_ptr->solidFill = solidFill_template<qrgb888>;
-        else
+         } else {
             screen->d_ptr->solidFill = solidFill_template<quint24>;
-        break;
+         }
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_18
-    case 18:
-        screen->d_ptr->solidFill = solidFill_template<quint18>;
-        break;
+      case 18:
+         screen->d_ptr->solidFill = solidFill_template<quint18>;
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_16
-    case 16:
-        if (screen->pixelType() == QScreen::NormalPixel)
+      case 16:
+         if (screen->pixelType() == QScreen::NormalPixel) {
             screen->d_ptr->solidFill = solidFill_template<quint16>;
-        else
+         } else {
             screen->d_ptr->solidFill = solidFill_template<qbgr565>;
-        break;
+         }
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_15
-    case 15:
-        if (screen->pixelType() == QScreen::NormalPixel)
+      case 15:
+         if (screen->pixelType() == QScreen::NormalPixel) {
             screen->d_ptr->solidFill = solidFill_template<qrgb555>;
-        else
+         } else {
             screen->d_ptr->solidFill = solidFill_template<qbgr555>;
-        break;
+         }
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_12
-    case 12:
-        screen->d_ptr->solidFill = solidFill_template<qrgb444>;
-        break;
+      case 12:
+         screen->d_ptr->solidFill = solidFill_template<qrgb444>;
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_8
-    case 8:
-        screen->d_ptr->solidFill = solidFill_template<quint8>;
-        break;
+      case 8:
+         screen->d_ptr->solidFill = solidFill_template<quint8>;
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_4
-    case 4:
-        screen->d_ptr->solidFill = solidFill_gray4;
-        break;
+      case 4:
+         screen->d_ptr->solidFill = solidFill_gray4;
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_1
-    case 1:
-        screen->d_ptr->solidFill = solidFill_mono;
-        break;
+      case 1:
+         screen->d_ptr->solidFill = solidFill_mono;
+         break;
 #endif
-     default:
-        qFatal("solidFill_setup(): Screen depth %d not supported!",
-               screen->depth());
-        screen->d_ptr->solidFill = 0;
-        break;
-    }
-    screen->d_ptr->solidFill(screen, color, region);
+      default:
+         qFatal("solidFill_setup(): Screen depth %d not supported!",
+                screen->depth());
+         screen->d_ptr->solidFill = 0;
+         break;
+   }
+   screen->d_ptr->solidFill(screen, color, region);
 }
 
 template <typename DST, typename SRC>
 static void blit_template(QScreen *screen, const QImage &image,
                           const QPoint &topLeft, const QRegion &region)
 {
-    DST *dest = reinterpret_cast<DST*>(screen->base());
-    const int screenStride = screen->linestep();
-    const int imageStride = image.bytesPerLine();
+   DST *dest = reinterpret_cast<DST *>(screen->base());
+   const int screenStride = screen->linestep();
+   const int imageStride = image.bytesPerLine();
 
-    if (region.rectCount() == 1) {
-        const QRect r = region.boundingRect();
-        const SRC *src = reinterpret_cast<const SRC*>(image.scanLine(r.y()))
-                         + r.x();
-        qt_rectconvert<DST, SRC>(dest, src,
-                                 r.x() + topLeft.x(), r.y() + topLeft.y(),
-                                 r.width(), r.height(),
-                                 screenStride, imageStride);
-    } else {
-        const QVector<QRect> rects = region.rects();
+   if (region.rectCount() == 1) {
+      const QRect r = region.boundingRect();
+      const SRC *src = reinterpret_cast<const SRC *>(image.scanLine(r.y()))
+                       + r.x();
+      qt_rectconvert<DST, SRC>(dest, src,
+                               r.x() + topLeft.x(), r.y() + topLeft.y(),
+                               r.width(), r.height(),
+                               screenStride, imageStride);
+   } else {
+      const QVector<QRect> rects = region.rects();
 
-        for (int i = 0; i < rects.size(); ++i) {
-            const QRect r = rects.at(i);
-            const SRC *src = reinterpret_cast<const SRC*>(image.scanLine(r.y()))
-                             + r.x();
-            qt_rectconvert<DST, SRC>(dest, src,
-                                     r.x() + topLeft.x(), r.y() + topLeft.y(),
-                                     r.width(), r.height(),
-                                     screenStride, imageStride);
-        }
-    }
+      for (int i = 0; i < rects.size(); ++i) {
+         const QRect r = rects.at(i);
+         const SRC *src = reinterpret_cast<const SRC *>(image.scanLine(r.y()))
+                          + r.x();
+         qt_rectconvert<DST, SRC>(dest, src,
+                                  r.x() + topLeft.x(), r.y() + topLeft.y(),
+                                  r.width(), r.height(),
+                                  screenStride, imageStride);
+      }
+   }
 }
 
 #ifdef QT_QWS_DEPTH_32
 static void blit_32(QScreen *screen, const QImage &image,
                     const QPoint &topLeft, const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_RGB32:
-    case QImage::Format_ARGB32:
-    case QImage::Format_ARGB32_Premultiplied:
-        blit_template<quint32, quint32>(screen, image, topLeft, region);
-        return;
+   switch (image.format()) {
+      case QImage::Format_RGB32:
+      case QImage::Format_ARGB32:
+      case QImage::Format_ARGB32_Premultiplied:
+         blit_template<quint32, quint32>(screen, image, topLeft, region);
+         return;
 #ifdef QT_QWS_DEPTH_16
-    case QImage::Format_RGB16:
-        blit_template<quint32, quint16>(screen, image, topLeft, region);
-        return;
+      case QImage::Format_RGB16:
+         blit_template<quint32, quint16>(screen, image, topLeft, region);
+         return;
 #endif
-    default:
-        qCritical("blit_32(): Image format %d not supported!", image.format());
-    }
+      default:
+         qCritical("blit_32(): Image format %d not supported!", image.format());
+   }
 }
 #endif // QT_QWS_DEPTH_32
 
@@ -630,46 +640,46 @@ static void blit_32(QScreen *screen, const QImage &image,
 static void blit_24(QScreen *screen, const QImage &image,
                     const QPoint &topLeft, const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_RGB32:
-    case QImage::Format_ARGB32:
-    case QImage::Format_ARGB32_Premultiplied:
-        blit_template<quint24, quint32>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB888:
-        blit_template<quint24, qrgb888>(screen, image, topLeft, region);
-        return;
+   switch (image.format()) {
+      case QImage::Format_RGB32:
+      case QImage::Format_ARGB32:
+      case QImage::Format_ARGB32_Premultiplied:
+         blit_template<quint24, quint32>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB888:
+         blit_template<quint24, qrgb888>(screen, image, topLeft, region);
+         return;
 #ifdef QT_QWS_DEPTH_16
-    case QImage::Format_RGB16:
-        blit_template<quint24, quint16>(screen, image, topLeft, region);
-        return;
+      case QImage::Format_RGB16:
+         blit_template<quint24, quint16>(screen, image, topLeft, region);
+         return;
 #endif
-    default:
-        qCritical("blit_24(): Image format %d not supported!", image.format());
-    }
+      default:
+         qCritical("blit_24(): Image format %d not supported!", image.format());
+   }
 }
 
 static void blit_qrgb888(QScreen *screen, const QImage &image,
                          const QPoint &topLeft, const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_RGB32:
-    case QImage::Format_ARGB32:
-    case QImage::Format_ARGB32_Premultiplied:
-        blit_template<qrgb888, quint32>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB888:
-        blit_template<qrgb888, qrgb888>(screen, image, topLeft, region);
-        return;
+   switch (image.format()) {
+      case QImage::Format_RGB32:
+      case QImage::Format_ARGB32:
+      case QImage::Format_ARGB32_Premultiplied:
+         blit_template<qrgb888, quint32>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB888:
+         blit_template<qrgb888, qrgb888>(screen, image, topLeft, region);
+         return;
 #ifdef QT_QWS_DEPTH_16
-    case QImage::Format_RGB16:
-        blit_template<qrgb888, quint16>(screen, image, topLeft, region);
-        return;
+      case QImage::Format_RGB16:
+         blit_template<qrgb888, quint16>(screen, image, topLeft, region);
+         return;
 #endif
-    default:
-        qCritical("blit_24(): Image format %d not supported!", image.format());
-        break;
-    }
+      default:
+         qCritical("blit_24(): Image format %d not supported!", image.format());
+         break;
+   }
 }
 #endif // QT_QWS_DEPTH_24
 
@@ -677,54 +687,53 @@ static void blit_qrgb888(QScreen *screen, const QImage &image,
 static void blit_18(QScreen *screen, const QImage &image,
                     const QPoint &topLeft, const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_RGB32:
-    case QImage::Format_ARGB32:
-    case QImage::Format_ARGB32_Premultiplied:
-        blit_template<qrgb666, quint32>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB666:
-        blit_template<qrgb666, qrgb666>(screen, image, topLeft, region);
-        return;
+   switch (image.format()) {
+      case QImage::Format_RGB32:
+      case QImage::Format_ARGB32:
+      case QImage::Format_ARGB32_Premultiplied:
+         blit_template<qrgb666, quint32>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB666:
+         blit_template<qrgb666, qrgb666>(screen, image, topLeft, region);
+         return;
 #ifdef QT_QWS_DEPTH_16
-    case QImage::Format_RGB16:
-        blit_template<qrgb666, quint16>(screen, image, topLeft, region);
-        return;
+      case QImage::Format_RGB16:
+         blit_template<qrgb666, quint16>(screen, image, topLeft, region);
+         return;
 #endif
-    default:
-        qCritical("blit_18(): Image format %d not supported!", image.format());
-    }
+      default:
+         qCritical("blit_18(): Image format %d not supported!", image.format());
+   }
 }
 #endif // QT_QWS_DEPTH_18
 
 #if (Q_BYTE_ORDER == Q_BIG_ENDIAN) && (defined(QT_QWS_DEPTH_16) || defined(QT_QWS_DEPTH_15))
 class quint16LE
 {
-public:
-    inline quint16LE(quint32 v) {
-        data = ((v & 0xff00) >> 8) | ((v & 0x00ff) << 8);
-    }
+ public:
+   inline quint16LE(quint32 v) {
+      data = ((v & 0xff00) >> 8) | ((v & 0x00ff) << 8);
+   }
 
-    inline quint16LE(int v) {
-        data = ((v & 0xff00) >> 8) | ((v & 0x00ff) << 8);
-    }
+   inline quint16LE(int v) {
+      data = ((v & 0xff00) >> 8) | ((v & 0x00ff) << 8);
+   }
 
-    inline quint16LE(quint16 v) {
-        data = ((v & 0xff00) >> 8) | ((v & 0x00ff) << 8);
-    }
+   inline quint16LE(quint16 v) {
+      data = ((v & 0xff00) >> 8) | ((v & 0x00ff) << 8);
+   }
 
-    inline quint16LE(qrgb555 v) {
-        data = (( (quint16)v & 0xff00) >> 8) |
-               (( (quint16)v & 0x00ff) << 8);
-    }
+   inline quint16LE(qrgb555 v) {
+      data = (( (quint16)v & 0xff00) >> 8) |
+             (( (quint16)v & 0x00ff) << 8);
+   }
 
-    inline bool operator==(const quint16LE &v) const
-    {
-        return data == v.data;
-    }
+   inline bool operator==(const quint16LE &v) const {
+      return data == v.data;
+   }
 
-private:
-    quint16 data;
+ private:
+   quint16 data;
 };
 #endif
 
@@ -732,19 +741,19 @@ private:
 static void blit_16(QScreen *screen, const QImage &image,
                     const QPoint &topLeft, const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_RGB32:
-    case QImage::Format_ARGB32:
-    case QImage::Format_ARGB32_Premultiplied:
-        // ### This probably doesn't work but it's a case which should never happen
-        blit_template<quint16, quint32>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB16:
-        blit_template<quint16, quint16>(screen, image, topLeft, region);
-        return;
-    default:
-        qCritical("blit_16(): Image format %d not supported!", image.format());
-    }
+   switch (image.format()) {
+      case QImage::Format_RGB32:
+      case QImage::Format_ARGB32:
+      case QImage::Format_ARGB32_Premultiplied:
+         // ### This probably doesn't work but it's a case which should never happen
+         blit_template<quint16, quint32>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB16:
+         blit_template<quint16, quint16>(screen, image, topLeft, region);
+         return;
+      default:
+         qCritical("blit_16(): Image format %d not supported!", image.format());
+   }
 }
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
@@ -752,18 +761,18 @@ static void blit_16_bigToLittleEndian(QScreen *screen, const QImage &image,
                                       const QPoint &topLeft,
                                       const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_RGB32:
-    case QImage::Format_ARGB32:
-    case QImage::Format_ARGB32_Premultiplied:
-        blit_template<quint16LE, quint32>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB16:
-        blit_template<quint16LE, quint16>(screen, image, topLeft, region);
-        return;
-    default:
-        qCritical("blit_16_bigToLittleEndian(): Image format %d not supported!", image.format());
-    }
+   switch (image.format()) {
+      case QImage::Format_RGB32:
+      case QImage::Format_ARGB32:
+      case QImage::Format_ARGB32_Premultiplied:
+         blit_template<quint16LE, quint32>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB16:
+         blit_template<quint16LE, quint16>(screen, image, topLeft, region);
+         return;
+      default:
+         qCritical("blit_16_bigToLittleEndian(): Image format %d not supported!", image.format());
+   }
 }
 
 #endif // Q_BIG_ENDIAN
@@ -773,21 +782,21 @@ static void blit_16_bigToLittleEndian(QScreen *screen, const QImage &image,
 static void blit_15(QScreen *screen, const QImage &image,
                     const QPoint &topLeft, const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_RGB32:
-    case QImage::Format_ARGB32:
-    case QImage::Format_ARGB32_Premultiplied:
-        blit_template<qrgb555, quint32>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB555:
-        blit_template<qrgb555, qrgb555>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB16:
-        blit_template<qrgb555, quint16>(screen, image, topLeft, region);
-        return;
-    default:
-        qCritical("blit_15(): Image format %d not supported!", image.format());
-    }
+   switch (image.format()) {
+      case QImage::Format_RGB32:
+      case QImage::Format_ARGB32:
+      case QImage::Format_ARGB32_Premultiplied:
+         blit_template<qrgb555, quint32>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB555:
+         blit_template<qrgb555, qrgb555>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB16:
+         blit_template<qrgb555, quint16>(screen, image, topLeft, region);
+         return;
+      default:
+         qCritical("blit_15(): Image format %d not supported!", image.format());
+   }
 }
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
@@ -795,13 +804,13 @@ static void blit_15_bigToLittleEndian(QScreen *screen, const QImage &image,
                                       const QPoint &topLeft,
                                       const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_RGB555:
-        blit_template<quint16LE, qrgb555>(screen, image, topLeft, region);
-        return;
-    default:
-        qCritical("blit_15_bigToLittleEndian(): Image format %d not supported!", image.format());
-    }
+   switch (image.format()) {
+      case QImage::Format_RGB555:
+         blit_template<quint16LE, qrgb555>(screen, image, topLeft, region);
+         return;
+      default:
+         qCritical("blit_15_bigToLittleEndian(): Image format %d not supported!", image.format());
+   }
 }
 #endif // Q_BIG_ENDIAN
 #endif // QT_QWS_DEPTH_15
@@ -811,16 +820,16 @@ static void blit_15_bigToLittleEndian(QScreen *screen, const QImage &image,
 static void blit_12(QScreen *screen, const QImage &image,
                     const QPoint &topLeft, const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_ARGB4444_Premultiplied:
-        blit_template<qrgb444, qargb4444>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB444:
-        blit_template<qrgb444, qrgb444>(screen, image, topLeft, region);
-        return;
-    default:
-        qCritical("blit_12(): Image format %d not supported!", image.format());
-    }
+   switch (image.format()) {
+      case QImage::Format_ARGB4444_Premultiplied:
+         blit_template<qrgb444, qargb4444>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB444:
+         blit_template<qrgb444, qrgb444>(screen, image, topLeft, region);
+         return;
+      default:
+         qCritical("blit_12(): Image format %d not supported!", image.format());
+   }
 }
 #endif // QT_QWS_DEPTH_12
 
@@ -828,30 +837,32 @@ static void blit_12(QScreen *screen, const QImage &image,
 static void blit_8(QScreen *screen, const QImage &image,
                    const QPoint &topLeft, const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_RGB32:
-    case QImage::Format_ARGB32:
-    case QImage::Format_ARGB32_Premultiplied:
-        blit_template<quint8, quint32>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB16:
-        blit_template<quint8, quint16>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_ARGB4444_Premultiplied:
-        blit_template<quint8, qargb4444>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB444:
-        blit_template<quint8, qrgb444>(screen, image, topLeft, region);
-        return;
-    default:
-        qCritical("blit_8(): Image format %d not supported!", image.format());
-    }
+   switch (image.format()) {
+      case QImage::Format_RGB32:
+      case QImage::Format_ARGB32:
+      case QImage::Format_ARGB32_Premultiplied:
+         blit_template<quint8, quint32>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB16:
+         blit_template<quint8, quint16>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_ARGB4444_Premultiplied:
+         blit_template<quint8, qargb4444>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB444:
+         blit_template<quint8, qrgb444>(screen, image, topLeft, region);
+         return;
+      default:
+         qCritical("blit_8(): Image format %d not supported!", image.format());
+   }
 }
 #endif // QT_QWS_DEPTH_8
 
 #ifdef QT_QWS_DEPTH_4
 
-struct qgray4 { quint8 dummy; } Q_PACKED;
+struct qgray4 {
+   quint8 dummy;
+} Q_PACKED;
 
 template <typename SRC>
 Q_STATIC_TEMPLATE_FUNCTION inline quint8 qt_convertToGray4(SRC color);
@@ -859,77 +870,82 @@ Q_STATIC_TEMPLATE_FUNCTION inline quint8 qt_convertToGray4(SRC color);
 template <>
 inline quint8 qt_convertToGray4(quint32 color)
 {
-    return qGray(color) >> 4;
+   return qGray(color) >> 4;
 }
 
 template <>
 inline quint8 qt_convertToGray4(quint16 color)
 {
-    const int r = (color & 0xf800) >> 11;
-    const int g = (color & 0x07e0) >> 6; // only keep 5 bit
-    const int b = (color & 0x001f);
-    return (r * 11 + g * 16 + b * 5) >> 6;
+   const int r = (color & 0xf800) >> 11;
+   const int g = (color & 0x07e0) >> 6; // only keep 5 bit
+   const int b = (color & 0x001f);
+   return (r * 11 + g * 16 + b * 5) >> 6;
 }
 
 template <>
 inline quint8 qt_convertToGray4(qrgb444 color)
 {
-    return qt_convertToGray4(quint32(color));
+   return qt_convertToGray4(quint32(color));
 }
 
 template <>
 inline quint8 qt_convertToGray4(qargb4444 color)
 {
-    return qt_convertToGray4(quint32(color));
+   return qt_convertToGray4(quint32(color));
 }
 
 template <typename SRC>
 Q_STATIC_TEMPLATE_FUNCTION inline void qt_rectconvert_gray4(qgray4 *dest4, const SRC *src,
-                                        int x, int y, int width, int height,
-                                        int dstStride, int srcStride)
+      int x, int y, int width, int height,
+      int dstStride, int srcStride)
 {
-    const int pixelsPerByte = 2;
-    quint8 *dest8 = reinterpret_cast<quint8*>(dest4)
-                    + y * dstStride + x / pixelsPerByte;
-    const int doAlign = x & 1;
-    const int doTail = (width - doAlign) & 1;
-    const int width8 = (width - doAlign) / pixelsPerByte;
-    const int count8 = (width8 + 3) / 4;
+   const int pixelsPerByte = 2;
+   quint8 *dest8 = reinterpret_cast<quint8 *>(dest4)
+                   + y * dstStride + x / pixelsPerByte;
+   const int doAlign = x & 1;
+   const int doTail = (width - doAlign) & 1;
+   const int width8 = (width - doAlign) / pixelsPerByte;
+   const int count8 = (width8 + 3) / 4;
 
-    srcStride = srcStride / sizeof(SRC) - width;
-    dstStride -= (width8 + doAlign);
+   srcStride = srcStride / sizeof(SRC) - width;
+   dstStride -= (width8 + doAlign);
 
-    for (int i = 0; i < height; ++i) {
-        if (doAlign) {
-            *dest8 = (*dest8 & 0xf0) | qt_convertToGray4<SRC>(*src++);
-            ++dest8;
-        }
-        if (count8) {
-            int n = count8;
-            switch (width8 & 0x03) // duff's device
-            {
-            case 0: do { *dest8++ = qt_convertToGray4<SRC>(src[0]) << 4
-                                    | qt_convertToGray4<SRC>(src[1]);
-                         src += 2;
-            case 3:      *dest8++ = qt_convertToGray4<SRC>(src[0]) << 4
-                                    | qt_convertToGray4<SRC>(src[1]);
-                         src += 2;
-            case 2:      *dest8++ = qt_convertToGray4<SRC>(src[0]) << 4
-                                    | qt_convertToGray4<SRC>(src[1]);
-                         src += 2;
-            case 1:      *dest8++ = qt_convertToGray4<SRC>(src[0]) << 4
-                                    | qt_convertToGray4<SRC>(src[1]);
-                         src += 2;
-            } while (--n > 0);
-            }
-        }
+   for (int i = 0; i < height; ++i) {
+      if (doAlign) {
+         *dest8 = (*dest8 & 0xf0) | qt_convertToGray4<SRC>(*src++);
+         ++dest8;
+      }
+      if (count8) {
+         int n = count8;
+         switch (width8 & 0x03) { // duff's device
+            case 0:
+               do {
+                  *dest8++ = qt_convertToGray4<SRC>(src[0]) << 4
+                             | qt_convertToGray4<SRC>(src[1]);
+                  src += 2;
+               case 3:
+                  *dest8++ = qt_convertToGray4<SRC>(src[0]) << 4
+                             | qt_convertToGray4<SRC>(src[1]);
+                  src += 2;
+               case 2:
+                  *dest8++ = qt_convertToGray4<SRC>(src[0]) << 4
+                             | qt_convertToGray4<SRC>(src[1]);
+                  src += 2;
+               case 1:
+                  *dest8++ = qt_convertToGray4<SRC>(src[0]) << 4
+                             | qt_convertToGray4<SRC>(src[1]);
+                  src += 2;
+               } while (--n > 0);
+         }
+      }
 
-        if (doTail)
-            *dest8 = qt_convertToGray4<SRC>(*src++) << 4 | (*dest8 & 0x0f);
+      if (doTail) {
+         *dest8 = qt_convertToGray4<SRC>(*src++) << 4 | (*dest8 & 0x0f);
+      }
 
-        dest8 += dstStride;
-        src += srcStride;
-    }
+      dest8 += dstStride;
+      src += srcStride;
+   }
 }
 
 template <>
@@ -937,8 +953,8 @@ void qt_rectconvert(qgray4 *dest, const quint32 *src,
                     int x, int y, int width, int height,
                     int dstStride, int srcStride)
 {
-    qt_rectconvert_gray4<quint32>(dest, src, x, y, width, height,
-                                  dstStride, srcStride);
+   qt_rectconvert_gray4<quint32>(dest, src, x, y, width, height,
+                                 dstStride, srcStride);
 }
 
 template <>
@@ -946,8 +962,8 @@ void qt_rectconvert(qgray4 *dest, const quint16 *src,
                     int x, int y, int width, int height,
                     int dstStride, int srcStride)
 {
-    qt_rectconvert_gray4<quint16>(dest, src, x, y, width, height,
-                                  dstStride, srcStride);
+   qt_rectconvert_gray4<quint16>(dest, src, x, y, width, height,
+                                 dstStride, srcStride);
 }
 
 template <>
@@ -955,8 +971,8 @@ void qt_rectconvert(qgray4 *dest, const qrgb444 *src,
                     int x, int y, int width, int height,
                     int dstStride, int srcStride)
 {
-    qt_rectconvert_gray4<qrgb444>(dest, src, x, y, width, height,
-                                  dstStride, srcStride);
+   qt_rectconvert_gray4<qrgb444>(dest, src, x, y, width, height,
+                                 dstStride, srcStride);
 }
 
 template <>
@@ -964,35 +980,37 @@ void qt_rectconvert(qgray4 *dest, const qargb4444 *src,
                     int x, int y, int width, int height,
                     int dstStride, int srcStride)
 {
-    qt_rectconvert_gray4<qargb4444>(dest, src, x, y, width, height,
-                                    dstStride, srcStride);
+   qt_rectconvert_gray4<qargb4444>(dest, src, x, y, width, height,
+                                   dstStride, srcStride);
 }
 
 static void blit_4(QScreen *screen, const QImage &image,
                    const QPoint &topLeft, const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_ARGB32_Premultiplied:
-        blit_template<qgray4, quint32>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB16:
-        blit_template<qgray4, quint16>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB444:
-        blit_template<qgray4, qrgb444>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_ARGB4444_Premultiplied:
-        blit_template<qgray4, qargb4444>(screen, image, topLeft, region);
-        return;
-    default:
-        qCritical("blit_4(): Image format %d not supported!", image.format());
-    }
+   switch (image.format()) {
+      case QImage::Format_ARGB32_Premultiplied:
+         blit_template<qgray4, quint32>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB16:
+         blit_template<qgray4, quint16>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB444:
+         blit_template<qgray4, qrgb444>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_ARGB4444_Premultiplied:
+         blit_template<qgray4, qargb4444>(screen, image, topLeft, region);
+         return;
+      default:
+         qCritical("blit_4(): Image format %d not supported!", image.format());
+   }
 }
 #endif // QT_QWS_DEPTH_4
 
 #ifdef QT_QWS_DEPTH_1
 
-struct qmono { quint8 dummy; } Q_PACKED;
+struct qmono {
+   quint8 dummy;
+} Q_PACKED;
 
 template <typename SRC>
 Q_STATIC_TEMPLATE_FUNCTION inline quint8 qt_convertToMono(SRC color);
@@ -1000,84 +1018,92 @@ Q_STATIC_TEMPLATE_FUNCTION inline quint8 qt_convertToMono(SRC color);
 template <>
 inline quint8 qt_convertToMono(quint32 color)
 {
-    return qGray(color) >> 7;
+   return qGray(color) >> 7;
 }
 
 template <>
 inline quint8 qt_convertToMono(quint16 color)
 {
-    return (qGray(qt_colorConvert<quint32, quint16>(color, 0)) >> 7);
+   return (qGray(qt_colorConvert<quint32, quint16>(color, 0)) >> 7);
 }
 
 template <>
 inline quint8 qt_convertToMono(qargb4444 color)
 {
-    return (qGray(quint32(color)) >> 7);
+   return (qGray(quint32(color)) >> 7);
 }
 
 template <>
 inline quint8 qt_convertToMono(qrgb444 color)
 {
-    return (qGray(quint32(color)) >> 7);
+   return (qGray(quint32(color)) >> 7);
 }
 
 template <typename SRC>
 inline void qt_rectconvert_mono(qmono *dest, const SRC *src,
-                                       int x, int y, int width, int height,
-                                       int dstStride, int srcStride)
+                                int x, int y, int width, int height,
+                                int dstStride, int srcStride)
 {
-    const int pixelsPerByte = 8;
-    quint8 *dest8 = reinterpret_cast<quint8*>(dest)
-                    + y * dstStride + x / pixelsPerByte;
-    const int alignWidth = qMin(width, (8 - (x & 7)) & 7);
-    const int doAlign = (alignWidth > 0 ? 1 : 0);
-    const int alignStart = pixelsPerByte - 1 - (x & 7);
-    const int alignStop = alignStart - (alignWidth - 1);
-    const quint8 alignMask = ((1 << alignWidth) - 1) << alignStop;
-    const int tailWidth = (width - alignWidth) & 7;
-    const int doTail = (tailWidth > 0 ? 1 : 0);
-    const quint8 tailMask = (1 << (pixelsPerByte - tailWidth)) - 1;
-    const int width8 = (width - alignWidth) / pixelsPerByte;
+   const int pixelsPerByte = 8;
+   quint8 *dest8 = reinterpret_cast<quint8 *>(dest)
+                   + y * dstStride + x / pixelsPerByte;
+   const int alignWidth = qMin(width, (8 - (x & 7)) & 7);
+   const int doAlign = (alignWidth > 0 ? 1 : 0);
+   const int alignStart = pixelsPerByte - 1 - (x & 7);
+   const int alignStop = alignStart - (alignWidth - 1);
+   const quint8 alignMask = ((1 << alignWidth) - 1) << alignStop;
+   const int tailWidth = (width - alignWidth) & 7;
+   const int doTail = (tailWidth > 0 ? 1 : 0);
+   const quint8 tailMask = (1 << (pixelsPerByte - tailWidth)) - 1;
+   const int width8 = (width - alignWidth) / pixelsPerByte;
 
-    srcStride = srcStride / sizeof(SRC) - (width8 * 8 + alignWidth);
-    dstStride -= (width8 + doAlign);
+   srcStride = srcStride / sizeof(SRC) - (width8 * 8 + alignWidth);
+   dstStride -= (width8 + doAlign);
 
-    for (int j = 0;  j < height; ++j) {
-        if (doAlign) {
-            quint8 d = *dest8 & ~alignMask;
-            for (int i = alignStart; i >= alignStop; --i)
-                d |= qt_convertToMono<SRC>(*src++) << i;
-            *dest8++ = d;
-        }
-        for (int i = 0; i < width8; ++i) {
-            *dest8 = (qt_convertToMono<SRC>(src[0]) << 7)
-                     | (qt_convertToMono<SRC>(src[1]) << 6)
-                     | (qt_convertToMono<SRC>(src[2]) << 5)
-                     | (qt_convertToMono<SRC>(src[3]) << 4)
-                     | (qt_convertToMono<SRC>(src[4]) << 3)
-                     | (qt_convertToMono<SRC>(src[5]) << 2)
-                     | (qt_convertToMono<SRC>(src[6]) << 1)
-                     | (qt_convertToMono<SRC>(src[7]));
-            src += 8;
-            ++dest8;
-        }
-        if (doTail) {
-            quint8 d = *dest8 & tailMask;
-            switch (tailWidth) {
-            case 7: d |= qt_convertToMono<SRC>(src[6]) << 1;
-            case 6: d |= qt_convertToMono<SRC>(src[5]) << 2;
-            case 5: d |= qt_convertToMono<SRC>(src[4]) << 3;
-            case 4: d |= qt_convertToMono<SRC>(src[3]) << 4;
-            case 3: d |= qt_convertToMono<SRC>(src[2]) << 5;
-            case 2: d |= qt_convertToMono<SRC>(src[1]) << 6;
-            case 1: d |= qt_convertToMono<SRC>(src[0]) << 7;
-            }
-            *dest8 = d;
-        }
+   for (int j = 0;  j < height; ++j) {
+      if (doAlign) {
+         quint8 d = *dest8 & ~alignMask;
+         for (int i = alignStart; i >= alignStop; --i) {
+            d |= qt_convertToMono<SRC>(*src++) << i;
+         }
+         *dest8++ = d;
+      }
+      for (int i = 0; i < width8; ++i) {
+         *dest8 = (qt_convertToMono<SRC>(src[0]) << 7)
+                  | (qt_convertToMono<SRC>(src[1]) << 6)
+                  | (qt_convertToMono<SRC>(src[2]) << 5)
+                  | (qt_convertToMono<SRC>(src[3]) << 4)
+                  | (qt_convertToMono<SRC>(src[4]) << 3)
+                  | (qt_convertToMono<SRC>(src[5]) << 2)
+                  | (qt_convertToMono<SRC>(src[6]) << 1)
+                  | (qt_convertToMono<SRC>(src[7]));
+         src += 8;
+         ++dest8;
+      }
+      if (doTail) {
+         quint8 d = *dest8 & tailMask;
+         switch (tailWidth) {
+            case 7:
+               d |= qt_convertToMono<SRC>(src[6]) << 1;
+            case 6:
+               d |= qt_convertToMono<SRC>(src[5]) << 2;
+            case 5:
+               d |= qt_convertToMono<SRC>(src[4]) << 3;
+            case 4:
+               d |= qt_convertToMono<SRC>(src[3]) << 4;
+            case 3:
+               d |= qt_convertToMono<SRC>(src[2]) << 5;
+            case 2:
+               d |= qt_convertToMono<SRC>(src[1]) << 6;
+            case 1:
+               d |= qt_convertToMono<SRC>(src[0]) << 7;
+         }
+         *dest8 = d;
+      }
 
-        dest8 += dstStride;
-        src += srcStride;
-    }
+      dest8 += dstStride;
+      src += srcStride;
+   }
 }
 
 template <>
@@ -1085,8 +1111,8 @@ void qt_rectconvert(qmono *dest, const quint32 *src,
                     int x, int y, int width, int height,
                     int dstStride, int srcStride)
 {
-    qt_rectconvert_mono<quint32>(dest, src, x, y, width, height,
-                                 dstStride, srcStride);
+   qt_rectconvert_mono<quint32>(dest, src, x, y, width, height,
+                                dstStride, srcStride);
 }
 
 template <>
@@ -1094,8 +1120,8 @@ void qt_rectconvert(qmono *dest, const quint16 *src,
                     int x, int y, int width, int height,
                     int dstStride, int srcStride)
 {
-    qt_rectconvert_mono<quint16>(dest, src, x, y, width, height,
-                                 dstStride, srcStride);
+   qt_rectconvert_mono<quint16>(dest, src, x, y, width, height,
+                                dstStride, srcStride);
 }
 
 template <>
@@ -1103,8 +1129,8 @@ void qt_rectconvert(qmono *dest, const qrgb444 *src,
                     int x, int y, int width, int height,
                     int dstStride, int srcStride)
 {
-    qt_rectconvert_mono<qrgb444>(dest, src, x, y, width, height,
-                                 dstStride, srcStride);
+   qt_rectconvert_mono<qrgb444>(dest, src, x, y, width, height,
+                                dstStride, srcStride);
 }
 
 template <>
@@ -1112,29 +1138,29 @@ void qt_rectconvert(qmono *dest, const qargb4444 *src,
                     int x, int y, int width, int height,
                     int dstStride, int srcStride)
 {
-    qt_rectconvert_mono<qargb4444>(dest, src, x, y, width, height,
-                                   dstStride, srcStride);
+   qt_rectconvert_mono<qargb4444>(dest, src, x, y, width, height,
+                                  dstStride, srcStride);
 }
 
 static void blit_1(QScreen *screen, const QImage &image,
                    const QPoint &topLeft, const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_ARGB32_Premultiplied:
-        blit_template<qmono, quint32>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB16:
-        blit_template<qmono, quint16>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB444:
-        blit_template<qmono, qrgb444>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_ARGB4444_Premultiplied:
-        blit_template<qmono, qargb4444>(screen, image, topLeft, region);
-        return;
-    default:
-        qCritical("blit_1(): Image format %d not supported!", image.format());
-    }
+   switch (image.format()) {
+      case QImage::Format_ARGB32_Premultiplied:
+         blit_template<qmono, quint32>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB16:
+         blit_template<qmono, quint16>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB444:
+         blit_template<qmono, qrgb444>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_ARGB4444_Premultiplied:
+         blit_template<qmono, qargb4444>(screen, image, topLeft, region);
+         return;
+      default:
+         qCritical("blit_1(): Image format %d not supported!", image.format());
+   }
 }
 #endif // QT_QWS_DEPTH_1
 
@@ -1143,36 +1169,37 @@ static void blit_1(QScreen *screen, const QImage &image,
 static void blit_rgb(QScreen *screen, const QImage &image,
                      const QPoint &topLeft, const QRegion &region)
 {
-    switch (image.format()) {
-    case QImage::Format_ARGB32_Premultiplied:
-        blit_template<qrgb, quint32>(screen, image, topLeft, region);
-        return;
-    case QImage::Format_RGB16:
-        blit_template<qrgb, quint16>(screen, image, topLeft, region);
-        return;
-    default:
-        qCritical("blit_rgb(): Image format %d not supported!", image.format());
-    }
+   switch (image.format()) {
+      case QImage::Format_ARGB32_Premultiplied:
+         blit_template<qrgb, quint32>(screen, image, topLeft, region);
+         return;
+      case QImage::Format_RGB16:
+         blit_template<qrgb, quint16>(screen, image, topLeft, region);
+         return;
+      default:
+         qCritical("blit_rgb(): Image format %d not supported!", image.format());
+   }
 }
 
 void qt_set_generic_blit(QScreen *screen, int bpp,
                          int len_red, int len_green, int len_blue, int len_alpha,
                          int off_red, int off_green, int off_blue, int off_alpha)
 {
-    qrgb::bpp = bpp / 8;
-    qrgb::len_red = len_red;
-    qrgb::len_green = len_green;
-    qrgb::len_blue = len_blue;
-    qrgb::len_alpha = len_alpha;
-    qrgb::off_red = off_red;
-    qrgb::off_green = off_green;
-    qrgb::off_blue = off_blue;
-    qrgb::off_alpha = off_alpha;
-    screen->d_ptr->blit = blit_rgb;
-    if (bpp == 16)
-        screen->d_ptr->solidFill = solidFill_rgb_16bpp;
-    else if (bpp == 32)
-        screen->d_ptr->solidFill = solidFill_rgb_32bpp;
+   qrgb::bpp = bpp / 8;
+   qrgb::len_red = len_red;
+   qrgb::len_green = len_green;
+   qrgb::len_blue = len_blue;
+   qrgb::len_alpha = len_alpha;
+   qrgb::off_red = off_red;
+   qrgb::off_green = off_green;
+   qrgb::off_blue = off_blue;
+   qrgb::off_alpha = off_alpha;
+   screen->d_ptr->blit = blit_rgb;
+   if (bpp == 16) {
+      screen->d_ptr->solidFill = solidFill_rgb_16bpp;
+   } else if (bpp == 32) {
+      screen->d_ptr->solidFill = solidFill_rgb_32bpp;
+   }
 }
 
 #endif // QT_QWS_DEPTH_GENERIC
@@ -1180,98 +1207,102 @@ void qt_set_generic_blit(QScreen *screen, int bpp,
 void qt_blit_setup(QScreen *screen, const QImage &image,
                    const QPoint &topLeft, const QRegion &region)
 {
-    switch (screen->depth()) {
+   switch (screen->depth()) {
 #ifdef QT_QWS_DEPTH_32
-    case 32:
-        if (screen->pixelType() == QScreen::NormalPixel)
+      case 32:
+         if (screen->pixelType() == QScreen::NormalPixel) {
             screen->d_ptr->blit = blit_32;
-        else
+         } else {
             screen->d_ptr->blit = blit_template<qabgr8888, quint32>;
-        break;
+         }
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_24
-    case 24:
-        if (screen->pixelType() == QScreen::NormalPixel)
+      case 24:
+         if (screen->pixelType() == QScreen::NormalPixel) {
             screen->d_ptr->blit = blit_qrgb888;
-        else
+         } else {
             screen->d_ptr->blit = blit_24;
-        break;
+         }
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_18
-    case 18:
-        screen->d_ptr->blit = blit_18;
-        break;
+      case 18:
+         screen->d_ptr->blit = blit_18;
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_16
-    case 16:
+      case 16:
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
-        if (screen->d_ptr->fb_is_littleEndian)
+         if (screen->d_ptr->fb_is_littleEndian) {
             screen->d_ptr->blit = blit_16_bigToLittleEndian;
-        else
+         } else
 #endif
-        if (screen->pixelType() == QScreen::NormalPixel)
-            screen->d_ptr->blit = blit_16;
-        else
-            screen->d_ptr->blit = blit_template<qbgr565, quint16>;
-        break;
+            if (screen->pixelType() == QScreen::NormalPixel) {
+               screen->d_ptr->blit = blit_16;
+            } else {
+               screen->d_ptr->blit = blit_template<qbgr565, quint16>;
+            }
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_15
-    case 15:
+      case 15:
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
-        if (screen->d_ptr->fb_is_littleEndian)
+         if (screen->d_ptr->fb_is_littleEndian) {
             screen->d_ptr->blit = blit_15_bigToLittleEndian;
-        else
+         } else
 #endif // Q_BIG_ENDIAN
-        if (screen->pixelType() == QScreen::NormalPixel)
-            screen->d_ptr->blit = blit_15;
-        else
-            screen->d_ptr->blit = blit_template<qbgr555, qrgb555>;
-        break;
+            if (screen->pixelType() == QScreen::NormalPixel) {
+               screen->d_ptr->blit = blit_15;
+            } else {
+               screen->d_ptr->blit = blit_template<qbgr555, qrgb555>;
+            }
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_12
-    case 12:
-        screen->d_ptr->blit = blit_12;
-        break;
+      case 12:
+         screen->d_ptr->blit = blit_12;
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_8
-    case 8:
-        screen->d_ptr->blit = blit_8;
-        break;
+      case 8:
+         screen->d_ptr->blit = blit_8;
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_4
-    case 4:
-        screen->d_ptr->blit = blit_4;
-        break;
+      case 4:
+         screen->d_ptr->blit = blit_4;
+         break;
 #endif
 #ifdef QT_QWS_DEPTH_1
-    case 1:
-        screen->d_ptr->blit = blit_1;
-        break;
+      case 1:
+         screen->d_ptr->blit = blit_1;
+         break;
 #endif
-    default:
-        qFatal("blit_setup(): Screen depth %d not supported!",
-               screen->depth());
-        screen->d_ptr->blit = 0;
-        break;
-    }
-    screen->d_ptr->blit(screen, image, topLeft, region);
+      default:
+         qFatal("blit_setup(): Screen depth %d not supported!",
+                screen->depth());
+         screen->d_ptr->blit = 0;
+         break;
+   }
+   screen->d_ptr->blit(screen, image, topLeft, region);
 }
 
 QScreenPrivate::QScreenPrivate(QScreen *parent, QScreen::ClassId id)
-    : defaultGraphicsSystem(QWSGraphicsSystem(parent)),
-      pixelFormat(QImage::Format_Invalid),
+   : defaultGraphicsSystem(QWSGraphicsSystem(parent)),
+     pixelFormat(QImage::Format_Invalid),
 #ifdef QT_QWS_CLIENTBLIT
-      supportsBlitInClients(false),
+     supportsBlitInClients(false),
 #endif
-      classId(id), q_ptr(parent)
+     classId(id), q_ptr(parent)
 {
-    solidFill = qt_solidFill_setup;
-    blit = qt_blit_setup;
+   solidFill = qt_solidFill_setup;
+   blit = qt_blit_setup;
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
-    fb_is_littleEndian = false;
+   fb_is_littleEndian = false;
 #endif
-    pixmapFactory = 0;
-    graphicsSystem = &defaultGraphicsSystem;
+   pixmapFactory = 0;
+   graphicsSystem = &defaultGraphicsSystem;
 }
 
 QScreenPrivate::~QScreenPrivate()
@@ -1280,13 +1311,15 @@ QScreenPrivate::~QScreenPrivate()
 
 QImage::Format QScreenPrivate::preferredImageFormat() const
 {
-    if (pixelFormat > QImage::Format_Indexed8)
-        return pixelFormat;
+   if (pixelFormat > QImage::Format_Indexed8) {
+      return pixelFormat;
+   }
 
-    if (q_ptr->depth() <= 16)
-        return QImage::Format_RGB16;
-    else
-        return QImage::Format_ARGB32_Premultiplied;
+   if (q_ptr->depth() <= 16) {
+      return QImage::Format_RGB16;
+   } else {
+      return QImage::Format_ARGB32_Premultiplied;
+   }
 }
 
 /*!
@@ -2012,21 +2045,21 @@ QImage::Format QScreenPrivate::preferredImageFormat() const
     identifier.
 */
 QScreen::QScreen(int display_id, ClassId classId)
-    : screencols(0), data(0), entries(0), entryp(0), lowest(0),
-      w(0), lstep(0), h(0), d(1), pixeltype(NormalPixel), grayscale(false),
-      dw(0), dh(0), size(0), mapsize(0), displayId(display_id),
-      physWidth(0), physHeight(0), d_ptr(new QScreenPrivate(this, classId))
+   : screencols(0), data(0), entries(0), entryp(0), lowest(0),
+     w(0), lstep(0), h(0), d(1), pixeltype(NormalPixel), grayscale(false),
+     dw(0), dh(0), size(0), mapsize(0), displayId(display_id),
+     physWidth(0), physHeight(0), d_ptr(new QScreenPrivate(this, classId))
 {
-    clearCacheFunc = 0;
+   clearCacheFunc = 0;
 }
 
 QScreen::QScreen(int display_id)
-    : screencols(0), data(0), entries(0), entryp(0), lowest(0),
-      w(0), lstep(0), h(0), d(1), pixeltype(NormalPixel), grayscale(false),
-      dw(0), dh(0), size(0), mapsize(0), displayId(display_id),
-      physWidth(0), physHeight(0), d_ptr(new QScreenPrivate(this))
+   : screencols(0), data(0), entries(0), entryp(0), lowest(0),
+     w(0), lstep(0), h(0), d(1), pixeltype(NormalPixel), grayscale(false),
+     dw(0), dh(0), size(0), mapsize(0), displayId(display_id),
+     physWidth(0), physHeight(0), d_ptr(new QScreenPrivate(this))
 {
-    clearCacheFunc = 0;
+   clearCacheFunc = 0;
 }
 
 /*!
@@ -2035,7 +2068,7 @@ QScreen::QScreen(int display_id)
 
 QScreen::~QScreen()
 {
-    delete d_ptr;
+   delete d_ptr;
 }
 
 /*!
@@ -2052,8 +2085,9 @@ QScreen::~QScreen()
 void QScreen::shutdownDevice()
 {
 #ifndef QT_NO_QWS_CURSOR
-    if (qt_screencursor)
-        qt_screencursor->hide();
+   if (qt_screencursor) {
+      qt_screencursor->hide();
+   }
 #endif
 }
 
@@ -2072,7 +2106,7 @@ extern bool qws_accel; //in qapplication_qws.cpp
 */
 QImage::Format QScreen::pixelFormat() const
 {
-    return d_ptr->pixelFormat;
+   return d_ptr->pixelFormat;
 }
 
 /*!
@@ -2080,7 +2114,7 @@ QImage::Format QScreen::pixelFormat() const
  */
 void QScreen::setPixelFormat(QImage::Format format)
 {
-    d_ptr->pixelFormat = format;
+   d_ptr->pixelFormat = format;
 }
 
 
@@ -2097,46 +2131,48 @@ void QScreen::setPixelFormat(QImage::Format format)
     \sa clut(), colorCount()
 */
 
-int QScreen::alloc(unsigned int r,unsigned int g,unsigned int b)
+int QScreen::alloc(unsigned int r, unsigned int g, unsigned int b)
 {
-    int ret = 0;
-    if (d == 8) {
-        if (grayscale)
-            return qGray(r, g, b);
+   int ret = 0;
+   if (d == 8) {
+      if (grayscale) {
+         return qGray(r, g, b);
+      }
 
-        // First we look to see if we match a default color
-        const int pos = (r + 25) / 51 * 36 + (g + 25) / 51 * 6 + (b + 25) / 51;
-        if (pos < screencols && screenclut[pos] == qRgb(r, g, b)) {
-            return pos;
-        }
+      // First we look to see if we match a default color
+      const int pos = (r + 25) / 51 * 36 + (g + 25) / 51 * 6 + (b + 25) / 51;
+      if (pos < screencols && screenclut[pos] == qRgb(r, g, b)) {
+         return pos;
+      }
 
-        // search for nearest color
-        unsigned int mindiff = 0xffffffff;
-        unsigned int diff;
-        int dr,dg,db;
+      // search for nearest color
+      unsigned int mindiff = 0xffffffff;
+      unsigned int diff;
+      int dr, dg, db;
 
-        for (int loopc = 0; loopc < screencols; ++loopc) {
-            dr = qRed(screenclut[loopc]) - r;
-            dg = qGreen(screenclut[loopc]) - g;
-            db = qBlue(screenclut[loopc]) - b;
-            diff = dr*dr + dg*dg + db*db;
+      for (int loopc = 0; loopc < screencols; ++loopc) {
+         dr = qRed(screenclut[loopc]) - r;
+         dg = qGreen(screenclut[loopc]) - g;
+         db = qBlue(screenclut[loopc]) - b;
+         diff = dr * dr + dg * dg + db * db;
 
-            if (diff < mindiff) {
-                ret = loopc;
-                if (!diff)
-                    break;
-                mindiff = diff;
+         if (diff < mindiff) {
+            ret = loopc;
+            if (!diff) {
+               break;
             }
-        }
-    } else if (d == 4) {
-        ret = qGray(r, g, b) >> 4;
-    } else if (d == 1) {
-        ret = qGray(r, g, b) >= 128;
-    } else {
-        qFatal("cannot alloc %dbpp color", d);
-    }
+            mindiff = diff;
+         }
+      }
+   } else if (d == 4) {
+      ret = qGray(r, g, b) >> 4;
+   } else if (d == 1) {
+      ret = qGray(r, g, b) >= 128;
+   } else {
+      qFatal("cannot alloc %dbpp color", d);
+   }
 
-    return ret;
+   return ret;
 }
 
 /*!
@@ -2194,42 +2230,42 @@ void QScreen::set(unsigned int, unsigned int, unsigned int, unsigned int)
 
 bool QScreen::supportsDepth(int d) const
 {
-    if (false) {
-        //Just to simplify the ifdeffery
+   if (false) {
+      //Just to simplify the ifdeffery
 #ifdef QT_QWS_DEPTH_1
-    } else if(d==1) {
-        return true;
+   } else if (d == 1) {
+      return true;
 #endif
 #ifdef QT_QWS_DEPTH_4
-    } else if(d==4) {
-        return true;
+   } else if (d == 4) {
+      return true;
 #endif
 #ifdef QT_QWS_DEPTH_8
-    } else if(d==8) {
-        return true;
+   } else if (d == 8) {
+      return true;
 #endif
 #ifdef QT_QWS_DEPTH_16
-    } else if(d==16) {
-        return true;
+   } else if (d == 16) {
+      return true;
 #endif
 #ifdef QT_QWS_DEPTH_15
-    } else if (d == 15) {
-        return true;
+   } else if (d == 15) {
+      return true;
 #endif
 #ifdef QT_QWS_DEPTH_18
-    } else if(d==18 || d==19) {
-        return true;
+   } else if (d == 18 || d == 19) {
+      return true;
 #endif
 #ifdef QT_QWS_DEPTH_24
-    } else if(d==24) {
-        return true;
+   } else if (d == 24) {
+      return true;
 #endif
 #ifdef QT_QWS_DEPTH_32
-    } else if(d==32) {
-        return true;
+   } else if (d == 32) {
+      return true;
 #endif
-    }
-    return false;
+   }
+   return false;
 }
 
 /*!
@@ -2241,15 +2277,17 @@ bool QScreen::supportsDepth(int d) const
     \sa base(), totalSize()
 */
 
-bool QScreen::onCard(const unsigned char * p) const
+bool QScreen::onCard(const unsigned char *p) const
 {
-    long t=(unsigned long)p;
-    long bmin=(unsigned long)data;
-    if (t < bmin)
-        return false;
-    if(t >= bmin+mapsize)
-        return false;
-    return true;
+   long t = (unsigned long)p;
+   long bmin = (unsigned long)data;
+   if (t < bmin) {
+      return false;
+   }
+   if (t >= bmin + mapsize) {
+      return false;
+   }
+   return true;
 }
 
 /*!
@@ -2262,17 +2300,19 @@ bool QScreen::onCard(const unsigned char * p) const
     parameter.
 */
 
-bool QScreen::onCard(const unsigned char * p, ulong& offset) const
+bool QScreen::onCard(const unsigned char *p, ulong &offset) const
 {
-    long t=(unsigned long)p;
-    long bmin=(unsigned long)data;
-    if (t < bmin)
-        return false;
-    long o = t - bmin;
-    if (o >= mapsize)
-        return false;
-    offset = o;
-    return true;
+   long t = (unsigned long)p;
+   long bmin = (unsigned long)data;
+   if (t < bmin) {
+      return false;
+   }
+   long o = t - bmin;
+   if (o >= mapsize) {
+      return false;
+   }
+   offset = o;
+   return true;
 }
 
 /*
@@ -2295,76 +2335,80 @@ QScreen-descendant into QScreenDriverFactory or use the QScreenDriverPlugin
 to make a dynamically loadable driver.
 */
 
-Q_GUI_EXPORT QScreen* qt_get_screen(int display_id, const char *spec)
+Q_GUI_EXPORT QScreen *qt_get_screen(int display_id, const char *spec)
 {
-    QString displaySpec = QString::fromAscii(spec);
-    QString driver = displaySpec;
-    int colon = displaySpec.indexOf(QLatin1Char(':'));
-    if (colon >= 0)
-        driver.truncate(colon);
-    driver = driver.trimmed();
+   QString displaySpec = QString::fromAscii(spec);
+   QString driver = displaySpec;
+   int colon = displaySpec.indexOf(QLatin1Char(':'));
+   if (colon >= 0) {
+      driver.truncate(colon);
+   }
+   driver = driver.trimmed();
 
-    bool foundDriver = false;
-    QString driverName = driver;
+   bool foundDriver = false;
+   QString driverName = driver;
 
-    QStringList driverList;
-    if (!driver.isEmpty())
-        driverList << driver;
-    else
-        driverList = QScreenDriverFactory::keys();
+   QStringList driverList;
+   if (!driver.isEmpty()) {
+      driverList << driver;
+   } else {
+      driverList = QScreenDriverFactory::keys();
+   }
 
-    for (int i = 0; i < driverList.size(); ++i) {
-        const QString driverName = driverList.at(i);
-        qt_screen = QScreenDriverFactory::create(driverName, display_id);
-        if (qt_screen) {
-            foundDriver = true;
-            if (qt_screen->connect(displaySpec)) {
-                return qt_screen;
-            } else {
-                delete qt_screen;
-                qt_screen = 0;
-            }
-        }
-    }
+   for (int i = 0; i < driverList.size(); ++i) {
+      const QString driverName = driverList.at(i);
+      qt_screen = QScreenDriverFactory::create(driverName, display_id);
+      if (qt_screen) {
+         foundDriver = true;
+         if (qt_screen->connect(displaySpec)) {
+            return qt_screen;
+         } else {
+            delete qt_screen;
+            qt_screen = 0;
+         }
+      }
+   }
 
-    if (driver.isNull())
-        qFatal("No suitable driver found");
-    else if (foundDriver)
-        qFatal("%s: driver cannot connect", driver.toLatin1().constData());
-    else
-        qFatal("%s: driver not found", driver.toLatin1().constData());
+   if (driver.isNull()) {
+      qFatal("No suitable driver found");
+   } else if (foundDriver) {
+      qFatal("%s: driver cannot connect", driver.toLatin1().constData());
+   } else {
+      qFatal("%s: driver not found", driver.toLatin1().constData());
+   }
 
-    return 0;
+   return 0;
 }
 
 #ifndef QT_NO_QWS_CURSOR
 static void blendCursor(QImage *dest, const QImage &cursor, const QPoint &offset)
 {
-    QRasterBuffer rb;
-    rb.prepare(dest);
+   QRasterBuffer rb;
+   rb.prepare(dest);
 
-    QSpanData spanData;
-    spanData.init(&rb, 0);
-    spanData.type = QSpanData::Texture;
-    spanData.initTexture(&cursor, 256);
-    spanData.dx = -offset.x();
-    spanData.dy = -offset.y();
-    if (!spanData.blend)
-        return;
+   QSpanData spanData;
+   spanData.init(&rb, 0);
+   spanData.type = QSpanData::Texture;
+   spanData.initTexture(&cursor, 256);
+   spanData.dx = -offset.x();
+   spanData.dy = -offset.y();
+   if (!spanData.blend) {
+      return;
+   }
 
-    const QRect rect = QRect(offset, cursor.size())
-                       & QRect(QPoint(0, 0), dest->size());
-    const int w = rect.width();
-    const int h = rect.height();
+   const QRect rect = QRect(offset, cursor.size())
+                      & QRect(QPoint(0, 0), dest->size());
+   const int w = rect.width();
+   const int h = rect.height();
 
-    QVarLengthArray<QT_FT_Span, 32> spans(h);
-    for (int i = 0; i < h; ++i) {
-        spans[i].x = rect.x();
-        spans[i].len = w;
-        spans[i].y = rect.y() + i;
-        spans[i].coverage = 255;
-    }
-    spanData.blend(h, spans.constData(), &spanData);
+   QVarLengthArray<QT_FT_Span, 32> spans(h);
+   for (int i = 0; i < h; ++i) {
+      spans[i].x = rect.x();
+      spans[i].len = w;
+      spans[i].y = rect.y() + i;
+      spans[i].coverage = 255;
+   }
+   spanData.blend(h, spans.constData(), &spanData);
 }
 #endif // QT_NO_QWS_CURSOR
 
@@ -2393,66 +2437,70 @@ static void blendCursor(QImage *dest, const QImage &cursor, const QPoint &offset
 */
 void QScreen::exposeRegion(QRegion r, int windowIndex)
 {
-    r &= region();
-    if (r.isEmpty())
-        return;
+   r &= region();
+   if (r.isEmpty()) {
+      return;
+   }
 
-    int changing = windowIndex;
-    // when we have just lowered a window, we have to expose all the windows below where the
-    // window used to be.
-    if (changing && qwsServer->clientWindows().at(changing)->state() == QWSWindow::Lowering)
-        changing = 0;
+   int changing = windowIndex;
+   // when we have just lowered a window, we have to expose all the windows below where the
+   // window used to be.
+   if (changing && qwsServer->clientWindows().at(changing)->state() == QWSWindow::Lowering) {
+      changing = 0;
+   }
 #ifdef QTOPIA_PERFTEST
-    static enum { PerfTestUnknown, PerfTestOn, PerfTestOff } perfTestState = PerfTestUnknown;
-    if(PerfTestUnknown == perfTestState) {
-        if(::getenv("QTOPIA_PERFTEST"))
-            perfTestState = PerfTestOn;
-        else
-            perfTestState = PerfTestOff;
-    }
-    if(PerfTestOn == perfTestState) {
-        QWSWindow *changed = qwsServer->clientWindows().at(changing);
-        if(!changed->client()->identity().isEmpty())
-            qDebug() << "Performance  :  expose_region  :"
-                     << changed->client()->identity()
-                     << r.boundingRect() << ": "
-                     << qPrintable( QTime::currentTime().toString( "h:mm:ss.zzz" ) );
-    }
+   static enum { PerfTestUnknown, PerfTestOn, PerfTestOff } perfTestState = PerfTestUnknown;
+   if (PerfTestUnknown == perfTestState) {
+      if (::getenv("QTOPIA_PERFTEST")) {
+         perfTestState = PerfTestOn;
+      } else {
+         perfTestState = PerfTestOff;
+      }
+   }
+   if (PerfTestOn == perfTestState) {
+      QWSWindow *changed = qwsServer->clientWindows().at(changing);
+      if (!changed->client()->identity().isEmpty())
+         qDebug() << "Performance  :  expose_region  :"
+                  << changed->client()->identity()
+                  << r.boundingRect() << ": "
+                  << qPrintable( QTime::currentTime().toString( "h:mm:ss.zzz" ) );
+   }
 #endif
 
-    const QRect bounds = r.boundingRect();
-    QRegion blendRegion;
-    QImage *blendBuffer = 0;
+   const QRect bounds = r.boundingRect();
+   QRegion blendRegion;
+   QImage *blendBuffer = 0;
 
 #ifndef QT_NO_QWS_CURSOR
-    if (qt_screencursor && !qt_screencursor->isAccelerated()) {
-        blendRegion = r & qt_screencursor->boundingRect();
-    }
+   if (qt_screencursor && !qt_screencursor->isAccelerated()) {
+      blendRegion = r & qt_screencursor->boundingRect();
+   }
 #endif
-    compose(0, r, blendRegion, &blendBuffer, changing);
+   compose(0, r, blendRegion, &blendBuffer, changing);
 
-    if (blendBuffer && !blendBuffer->isNull()) {
-        const QPoint offset = blendRegion.boundingRect().topLeft();
+   if (blendBuffer && !blendBuffer->isNull()) {
+      const QPoint offset = blendRegion.boundingRect().topLeft();
 #ifndef QT_NO_QWS_CURSOR
-        if (qt_screencursor && !qt_screencursor->isAccelerated()) {
-            const QRect cursorRect = qt_screencursor->boundingRect();
-            if (blendRegion.intersects(cursorRect)) {
-                blendCursor(blendBuffer, qt_screencursor->image(),
-                            cursorRect.topLeft() - offset);
-            }
-        }
+      if (qt_screencursor && !qt_screencursor->isAccelerated()) {
+         const QRect cursorRect = qt_screencursor->boundingRect();
+         if (blendRegion.intersects(cursorRect)) {
+            blendCursor(blendBuffer, qt_screencursor->image(),
+                        cursorRect.topLeft() - offset);
+         }
+      }
 #endif // QT_NO_QWS_CURSOR
-        blit(*blendBuffer, offset, blendRegion);
-        delete blendBuffer;
-    }
+      blit(*blendBuffer, offset, blendRegion);
+      delete blendBuffer;
+   }
 
-    if (r.rectCount() == 1) {
-        setDirty(r.boundingRect());
-    } else {
-        const QVector<QRect> rects = r.rects();
-        for (int i = 0; i < rects.size(); ++i)
-            setDirty(rects.at(i));
-    }
+   if (r.rectCount() == 1) {
+      setDirty(r.boundingRect());
+   } else {
+      const QVector<QRect> rects = r.rects();
+      for (int i = 0; i < rects.size(); ++i) {
+         setDirty(rects.at(i));
+      }
+   }
 }
 
 /*!
@@ -2475,11 +2523,11 @@ void QScreen::exposeRegion(QRegion r, int windowIndex)
 */
 void QScreen::blit(const QImage &img, const QPoint &topLeft, const QRegion &reg)
 {
-    const QRect bound = (region() & QRect(topLeft, img.size())).boundingRect();
-    QWSDisplay::grab();
-    d_ptr->blit(this, img, topLeft - offset(),
-            (reg & bound).translated(-topLeft));
-    QWSDisplay::ungrab();
+   const QRect bound = (region() & QRect(topLeft, img.size())).boundingRect();
+   QWSDisplay::grab();
+   d_ptr->blit(this, img, topLeft - offset(),
+               (reg & bound).translated(-topLeft));
+   QWSDisplay::ungrab();
 }
 
 #ifdef QT_QWS_CLIENTBLIT
@@ -2495,7 +2543,7 @@ void QScreen::blit(const QImage &img, const QPoint &topLeft, const QRegion &reg)
  */
 bool QScreen::supportsBlitInClients() const
 {
-    return d_ptr->supportsBlitInClients;
+   return d_ptr->supportsBlitInClients;
 }
 
 /*!
@@ -2506,7 +2554,7 @@ bool QScreen::supportsBlitInClients() const
  */
 void QScreen::setSupportsBlitInClients(bool supported)
 {
-    d_ptr->supportsBlitInClients = supported;
+   d_ptr->supportsBlitInClients = supported;
 }
 #endif
 
@@ -2516,31 +2564,34 @@ void QScreen::setSupportsBlitInClients(bool supported)
 
 void QScreen::blit(QWSWindow *win, const QRegion &clip)
 {
-    QWSWindowSurface *surface = win->windowSurface();
-    if (!surface)
-        return;
+   QWSWindowSurface *surface = win->windowSurface();
+   if (!surface) {
+      return;
+   }
 
-    const QImage &img = surface->image();
-    if (img.isNull())
-        return;
+   const QImage &img = surface->image();
+   if (img.isNull()) {
+      return;
+   }
 
-    const QRegion rgn = clip & win->paintedRegion();
-    if (rgn.isEmpty())
-        return;
+   const QRegion rgn = clip & win->paintedRegion();
+   if (rgn.isEmpty()) {
+      return;
+   }
 
-    surface->lock();
-    blit(img, win->requestedRegion().boundingRect().topLeft(), rgn);
-    surface->unlock();
+   surface->lock();
+   blit(img, win->requestedRegion().boundingRect().topLeft(), rgn);
+   surface->unlock();
 }
 
 struct fill_data {
-    quint32 color;
-    uchar *data;
-    int lineStep;
-    int x;
-    int y;
-    int w;
-    int h;
+   quint32 color;
+   uchar *data;
+   int lineStep;
+   int x;
+   int y;
+   int w;
+   int h;
 };
 
 /*!
@@ -2562,10 +2613,10 @@ struct fill_data {
 // the base class implementation works in device coordinates, so that transformed drivers can use it
 void QScreen::solidFill(const QColor &color, const QRegion &region)
 {
-    QWSDisplay::grab();
-    d_ptr->solidFill(this, color,
-                     region.translated(-offset()) & QRect(0, 0, dw, dh));
-    QWSDisplay::ungrab();
+   QWSDisplay::grab();
+   d_ptr->solidFill(this, color,
+                    region.translated(-offset()) & QRect(0, 0, dw, dh));
+   QWSDisplay::ungrab();
 }
 
 /*!
@@ -2586,50 +2637,57 @@ void QScreen::solidFill(const QColor &color, const QRegion &region)
 
     \sa {Qt for Embedded Linux Architecture}
 */
-QWSWindowSurface* QScreen::createSurface(const QString &key) const
+QWSWindowSurface *QScreen::createSurface(const QString &key) const
 {
 #ifndef QT_NO_PAINTONSCREEN
-    if (key == QLatin1String("OnScreen"))
-        return new QWSOnScreenSurface;
-    else
+   if (key == QLatin1String("OnScreen")) {
+      return new QWSOnScreenSurface;
+   } else
 #endif
-    if (key == QLatin1String("mem"))
-        return new QWSLocalMemSurface;
+      if (key == QLatin1String("mem")) {
+         return new QWSLocalMemSurface;
+      }
 #ifndef QT_NO_QWS_MULTIPROCESS
-    else if (key == QLatin1String("shm"))
-        return new QWSSharedMemSurface;
+      else if (key == QLatin1String("shm")) {
+         return new QWSSharedMemSurface;
+      }
 #endif
 #ifndef QT_NO_PAINT_DEBUG
-    else if (key == QLatin1String("Yellow"))
-        return new QWSYellowSurface;
+      else if (key == QLatin1String("Yellow")) {
+         return new QWSYellowSurface;
+      }
 #endif
 #ifndef QT_NO_DIRECTPAINTER
-    else if (key == QLatin1String("DirectPainter"))
-        return new QWSDirectPainterSurface;
+      else if (key == QLatin1String("DirectPainter")) {
+         return new QWSDirectPainterSurface;
+      }
 #endif
 
-    return 0;
+   return 0;
 }
 
 #ifndef QT_NO_PAINTONSCREEN
 bool QScreen::isWidgetPaintOnScreen(const QWidget *w)
 {
-    static int doOnScreen = -1;
-    if (doOnScreen == -1) {
-        const QByteArray env = qgetenv("QT_ONSCREEN_PAINT");
-        if (env == "force")
-            doOnScreen = 2;
-        else
-            doOnScreen = (env.toInt() > 0 ? 1 : 0);
-    }
+   static int doOnScreen = -1;
+   if (doOnScreen == -1) {
+      const QByteArray env = qgetenv("QT_ONSCREEN_PAINT");
+      if (env == "force") {
+         doOnScreen = 2;
+      } else {
+         doOnScreen = (env.toInt() > 0 ? 1 : 0);
+      }
+   }
 
-    if (doOnScreen == 2) // force
-        return true;
+   if (doOnScreen == 2) { // force
+      return true;
+   }
 
-    if (doOnScreen == 0 && !w->testAttribute(Qt::WA_PaintOnScreen))
-        return false;
+   if (doOnScreen == 0 && !w->testAttribute(Qt::WA_PaintOnScreen)) {
+      return false;
+   }
 
-    return w->d_func()->isOpaque;
+   return w->d_func()->isOpaque;
 }
 #endif
 
@@ -2638,184 +2696,193 @@ bool QScreen::isWidgetPaintOnScreen(const QWidget *w)
 
     Creates and returns a new window surface for the given \a widget.
 */
-QWSWindowSurface* QScreen::createSurface(QWidget *widget) const
+QWSWindowSurface *QScreen::createSurface(QWidget *widget) const
 {
 #ifndef QT_NO_PAINTONSCREEN
-    if (isWidgetPaintOnScreen(widget) && base())
-        return new QWSOnScreenSurface(widget);
-    else
+   if (isWidgetPaintOnScreen(widget) && base()) {
+      return new QWSOnScreenSurface(widget);
+   } else
 #endif
-    if (QApplication::type() == QApplication::GuiServer)
-        return new QWSLocalMemSurface(widget);
+      if (QApplication::type() == QApplication::GuiServer) {
+         return new QWSLocalMemSurface(widget);
+      }
 #ifndef QT_NO_QWS_MULTIPROCESS
-    else
-        return new QWSSharedMemSurface(widget);
+      else {
+         return new QWSSharedMemSurface(widget);
+      }
 #endif
 
-    return 0;
+   return 0;
 }
 
 void QScreen::compose(int level, const QRegion &exposed, QRegion &blend,
                       QImage **blendbuffer, int changing_level)
 {
-    QRect exposed_bounds = exposed.boundingRect();
-    QWSWindow *win = 0;
-    do {
-        win = qwsServer->clientWindows().value(level); // null is background
-        ++level;
-    } while (win && !win->paintedRegion().boundingRect().intersects(exposed_bounds));
+   QRect exposed_bounds = exposed.boundingRect();
+   QWSWindow *win = 0;
+   do {
+      win = qwsServer->clientWindows().value(level); // null is background
+      ++level;
+   } while (win && !win->paintedRegion().boundingRect().intersects(exposed_bounds));
 
-    QWSWindowSurface *surface = (win ? win->windowSurface() : 0);
-    bool above_changing = level <= changing_level; // 0 is topmost
+   QWSWindowSurface *surface = (win ? win->windowSurface() : 0);
+   bool above_changing = level <= changing_level; // 0 is topmost
 
-    QRegion exposedBelow = exposed;
-    bool opaque = true;
+   QRegion exposedBelow = exposed;
+   bool opaque = true;
 
-    if (win) {
-        opaque = win->isOpaque() || !surface->isBuffered();
-        if (opaque) {
-            exposedBelow -= win->paintedRegion();
-            if (above_changing || !surface->isBuffered())
-                blend -= exposed & win->paintedRegion();
-        } else {
-            blend += exposed & win->paintedRegion();
-        }
-    }
-    if (win && !exposedBelow.isEmpty()) {
-        compose(level, exposedBelow, blend, blendbuffer, changing_level);
-    } else {
-        QSize blendSize = blend.boundingRect().size();
-        if (!blendSize.isNull()) {
-            *blendbuffer = new QImage(blendSize, d_ptr->preferredImageFormat());
-        }
-    }
+   if (win) {
+      opaque = win->isOpaque() || !surface->isBuffered();
+      if (opaque) {
+         exposedBelow -= win->paintedRegion();
+         if (above_changing || !surface->isBuffered()) {
+            blend -= exposed & win->paintedRegion();
+         }
+      } else {
+         blend += exposed & win->paintedRegion();
+      }
+   }
+   if (win && !exposedBelow.isEmpty()) {
+      compose(level, exposedBelow, blend, blendbuffer, changing_level);
+   } else {
+      QSize blendSize = blend.boundingRect().size();
+      if (!blendSize.isNull()) {
+         *blendbuffer = new QImage(blendSize, d_ptr->preferredImageFormat());
+      }
+   }
 
-    const QRegion blitRegion = exposed - blend;
-    if (!win)
-        paintBackground(blitRegion);
-    else if (!above_changing && surface->isBuffered())
-        blit(win, blitRegion);
+   const QRegion blitRegion = exposed - blend;
+   if (!win) {
+      paintBackground(blitRegion);
+   } else if (!above_changing && surface->isBuffered()) {
+      blit(win, blitRegion);
+   }
 
-    QRegion blendRegion = exposed & blend;
+   QRegion blendRegion = exposed & blend;
 
-    if (win)
-        blendRegion &= win->paintedRegion();
-    if (!blendRegion.isEmpty()) {
+   if (win) {
+      blendRegion &= win->paintedRegion();
+   }
+   if (!blendRegion.isEmpty()) {
 
-        QPoint off = blend.boundingRect().topLeft();
+      QPoint off = blend.boundingRect().topLeft();
 
-        QRasterBuffer rb;
-        rb.prepare(*blendbuffer);
-        QSpanData spanData;
-        spanData.init(&rb, 0);
-        if (!win) {
-            const QImage::Format format = (*blendbuffer)->format();
-            switch (format) {
+      QRasterBuffer rb;
+      rb.prepare(*blendbuffer);
+      QSpanData spanData;
+      spanData.init(&rb, 0);
+      if (!win) {
+         const QImage::Format format = (*blendbuffer)->format();
+         switch (format) {
             case QImage::Format_ARGB32_Premultiplied:
             case QImage::Format_ARGB32:
             case QImage::Format_ARGB8565_Premultiplied:
             case QImage::Format_ARGB8555_Premultiplied:
             case QImage::Format_ARGB6666_Premultiplied:
             case QImage::Format_ARGB4444_Premultiplied:
-                spanData.rasterBuffer->compositionMode = QPainter::CompositionMode_Source;
-                break;
+               spanData.rasterBuffer->compositionMode = QPainter::CompositionMode_Source;
+               break;
             default:
-                break;
-            }
-            spanData.setup(qwsServer->backgroundBrush(), 256, QPainter::CompositionMode_Source);
-            spanData.dx = off.x();
-            spanData.dy = off.y();
-        } else if (!surface->isBuffered()) {
-                return;
-        } else {
-            const QImage &img = surface->image();
-            QPoint winoff = off - win->requestedRegion().boundingRect().topLeft();
-            // convert win->opacity() from scale [0..255] to [0..256]
-            int const_alpha = win->opacity();
-            const_alpha += (const_alpha >> 7);
-            spanData.type = QSpanData::Texture;
-            spanData.initTexture(&img, const_alpha);
-            spanData.dx = winoff.x();
-            spanData.dy = winoff.y();
-        }
-        if (!spanData.blend)
-            return;
+               break;
+         }
+         spanData.setup(qwsServer->backgroundBrush(), 256, QPainter::CompositionMode_Source);
+         spanData.dx = off.x();
+         spanData.dy = off.y();
+      } else if (!surface->isBuffered()) {
+         return;
+      } else {
+         const QImage &img = surface->image();
+         QPoint winoff = off - win->requestedRegion().boundingRect().topLeft();
+         // convert win->opacity() from scale [0..255] to [0..256]
+         int const_alpha = win->opacity();
+         const_alpha += (const_alpha >> 7);
+         spanData.type = QSpanData::Texture;
+         spanData.initTexture(&img, const_alpha);
+         spanData.dx = winoff.x();
+         spanData.dy = winoff.y();
+      }
+      if (!spanData.blend) {
+         return;
+      }
 
-        if (surface)
-            surface->lock();
-        const QVector<QRect> rects = blendRegion.rects();
-        const int nspans = 256;
-        QT_FT_Span spans[nspans];
-        for (int i = 0; i < rects.size(); ++i) {
-            int y = rects.at(i).y() - off.y();
-            int ye = y + rects.at(i).height();
-            int x = rects.at(i).x() - off.x();
-            int len = rects.at(i).width();
-            while (y < ye) {
-                int n = qMin(nspans, ye - y);
-                int i = 0;
-                while (i < n) {
-                    spans[i].x = x;
-                    spans[i].len = len;
-                    spans[i].y = y + i;
-                    spans[i].coverage = 255;
-                    ++i;
-                }
-                spanData.blend(n, spans, &spanData);
-                y += n;
+      if (surface) {
+         surface->lock();
+      }
+      const QVector<QRect> rects = blendRegion.rects();
+      const int nspans = 256;
+      QT_FT_Span spans[nspans];
+      for (int i = 0; i < rects.size(); ++i) {
+         int y = rects.at(i).y() - off.y();
+         int ye = y + rects.at(i).height();
+         int x = rects.at(i).x() - off.x();
+         int len = rects.at(i).width();
+         while (y < ye) {
+            int n = qMin(nspans, ye - y);
+            int i = 0;
+            while (i < n) {
+               spans[i].x = x;
+               spans[i].len = len;
+               spans[i].y = y + i;
+               spans[i].coverage = 255;
+               ++i;
             }
-        }
-        if (surface)
-            surface->unlock();
-    }
+            spanData.blend(n, spans, &spanData);
+            y += n;
+         }
+      }
+      if (surface) {
+         surface->unlock();
+      }
+   }
 }
 
 void QScreen::paintBackground(const QRegion &r)
 {
-    const QBrush &bg = qwsServer->backgroundBrush();
-    Qt::BrushStyle bs = bg.style();
-    if (bs == Qt::NoBrush || r.isEmpty())
-        return;
+   const QBrush &bg = qwsServer->backgroundBrush();
+   Qt::BrushStyle bs = bg.style();
+   if (bs == Qt::NoBrush || r.isEmpty()) {
+      return;
+   }
 
-    if (bs == Qt::SolidPattern) {
-        solidFill(bg.color(), r);
-    } else {
-        const QRect br = r.boundingRect();
-        QImage img(br.size(), d_ptr->preferredImageFormat());
-        QPoint off = br.topLeft();
-        QRasterBuffer rb;
-        rb.prepare(&img);
-        QSpanData spanData;
-        spanData.init(&rb, 0);
-        spanData.setup(bg, 256, QPainter::CompositionMode_Source);
-        spanData.dx = off.x();
-        spanData.dy = off.y();
-        Q_ASSERT(spanData.blend);
+   if (bs == Qt::SolidPattern) {
+      solidFill(bg.color(), r);
+   } else {
+      const QRect br = r.boundingRect();
+      QImage img(br.size(), d_ptr->preferredImageFormat());
+      QPoint off = br.topLeft();
+      QRasterBuffer rb;
+      rb.prepare(&img);
+      QSpanData spanData;
+      spanData.init(&rb, 0);
+      spanData.setup(bg, 256, QPainter::CompositionMode_Source);
+      spanData.dx = off.x();
+      spanData.dy = off.y();
+      Q_ASSERT(spanData.blend);
 
-        const QVector<QRect> rects = r.rects();
-        const int nspans = 256;
-        QT_FT_Span spans[nspans];
-        for (int i = 0; i < rects.size(); ++i) {
-            int y = rects.at(i).y() - off.y();
-            int ye = y + rects.at(i).height();
-            int x = rects.at(i).x() - off.x();
-            int len = rects.at(i).width();
-            while (y < ye) {
-                int n = qMin(nspans, ye - y);
-                int i = 0;
-                while (i < n) {
-                    spans[i].x = x;
-                    spans[i].len = len;
-                    spans[i].y = y + i;
-                    spans[i].coverage = 255;
-                    ++i;
-                }
-                spanData.blend(n, spans, &spanData);
-                y += n;
+      const QVector<QRect> rects = r.rects();
+      const int nspans = 256;
+      QT_FT_Span spans[nspans];
+      for (int i = 0; i < rects.size(); ++i) {
+         int y = rects.at(i).y() - off.y();
+         int ye = y + rects.at(i).height();
+         int x = rects.at(i).x() - off.x();
+         int len = rects.at(i).width();
+         while (y < ye) {
+            int n = qMin(nspans, ye - y);
+            int i = 0;
+            while (i < n) {
+               spans[i].x = x;
+               spans[i].len = len;
+               spans[i].y = y + i;
+               spans[i].coverage = 255;
+               ++i;
             }
-        }
-        blit(img, br.topLeft(), r);
-    }
+            spanData.blend(n, spans, &spanData);
+            y += n;
+         }
+      }
+      blit(img, br.topLeft(), r);
+   }
 }
 
 /*!
@@ -2834,7 +2901,7 @@ void QScreen::paintBackground(const QRegion &r)
     altered.
 */
 
-void QScreen::setDirty(const QRect&)
+void QScreen::setDirty(const QRect &)
 {
 }
 
@@ -2849,7 +2916,7 @@ void QScreen::setDirty(const QRect&)
 
 bool QScreen::isTransformed() const
 {
-    return false;
+   return false;
 }
 
 /*!
@@ -2867,7 +2934,7 @@ bool QScreen::isTransformed() const
 
 bool QScreen::isInterlaced() const
 {
-    return false;//qws_screen_is_interlaced;;
+   return false;//qws_screen_is_interlaced;;
 }
 
 /*!
@@ -2885,7 +2952,7 @@ bool QScreen::isInterlaced() const
 
 QSize QScreen::mapToDevice(const QSize &s) const
 {
-    return s;
+   return s;
 }
 
 /*!
@@ -2903,7 +2970,7 @@ QSize QScreen::mapToDevice(const QSize &s) const
 
 QSize QScreen::mapFromDevice(const QSize &s) const
 {
-    return s;
+   return s;
 }
 
 /*!
@@ -2918,7 +2985,7 @@ QSize QScreen::mapFromDevice(const QSize &s) const
 
 QPoint QScreen::mapToDevice(const QPoint &p, const QSize &) const
 {
-    return p;
+   return p;
 }
 
 /*!
@@ -2933,7 +3000,7 @@ QPoint QScreen::mapToDevice(const QPoint &p, const QSize &) const
 
 QPoint QScreen::mapFromDevice(const QPoint &p, const QSize &) const
 {
-    return p;
+   return p;
 }
 
 /*!
@@ -2948,7 +3015,7 @@ QPoint QScreen::mapFromDevice(const QPoint &p, const QSize &) const
 
 QRect QScreen::mapToDevice(const QRect &r, const QSize &) const
 {
-    return r;
+   return r;
 }
 
 /*!
@@ -2963,7 +3030,7 @@ QRect QScreen::mapToDevice(const QRect &r, const QSize &) const
 
 QRect QScreen::mapFromDevice(const QRect &r, const QSize &) const
 {
-    return r;
+   return r;
 }
 
 /*!
@@ -2977,7 +3044,7 @@ QRect QScreen::mapFromDevice(const QRect &r, const QSize &) const
 
 QImage QScreen::mapToDevice(const QImage &i) const
 {
-    return i;
+   return i;
 }
 
 /*!
@@ -2991,7 +3058,7 @@ QImage QScreen::mapToDevice(const QImage &i) const
 
 QImage QScreen::mapFromDevice(const QImage &i) const
 {
-    return i;
+   return i;
 }
 
 /*!
@@ -3006,7 +3073,7 @@ QImage QScreen::mapFromDevice(const QImage &i) const
 
 QRegion QScreen::mapToDevice(const QRegion &r, const QSize &) const
 {
-    return r;
+   return r;
 }
 
 /*!
@@ -3021,7 +3088,7 @@ QRegion QScreen::mapToDevice(const QRegion &r, const QSize &) const
 
 QRegion QScreen::mapFromDevice(const QRegion &r, const QSize &) const
 {
-    return r;
+   return r;
 }
 
 /*!
@@ -3037,20 +3104,20 @@ QRegion QScreen::mapFromDevice(const QRegion &r, const QSize &) const
 
 int QScreen::transformOrientation() const
 {
-    return 0;
+   return 0;
 }
 
 int QScreen::pixmapDepth() const
 {
-    return depth();
+   return depth();
 }
 
 /*!
     \internal
 */
-int QScreen::memoryNeeded(const QString&)
+int QScreen::memoryNeeded(const QString &)
 {
-    return 0;
+   return 0;
 }
 
 /*!
@@ -3081,7 +3148,7 @@ void QScreen::resumeUpdates()
 */
 void QScreen::setOffset(const QPoint &p)
 {
-    d_ptr->offset = p;
+   d_ptr->offset = p;
 }
 
 /*!
@@ -3092,18 +3159,18 @@ void QScreen::setOffset(const QPoint &p)
 */
 QPoint QScreen::offset() const
 {
-    return d_ptr->offset;
+   return d_ptr->offset;
 }
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
 void QScreen::setFrameBufferLittleEndian(bool littleEndian)
 {
-    d_ptr->fb_is_littleEndian = littleEndian;
+   d_ptr->fb_is_littleEndian = littleEndian;
 }
 
 bool QScreen::frameBufferLittleEndian() const
 {
-    return d_ptr->fb_is_littleEndian;
+   return d_ptr->fb_is_littleEndian;
 }
 #endif
 
@@ -3121,14 +3188,15 @@ bool QScreen::frameBufferLittleEndian() const
 */
 int QScreen::subScreenIndexAt(const QPoint &p) const
 {
-    const QList<QScreen*> screens = subScreens();
-    const int n = screens.count();
-    for (int i = 0; i < n; ++i) {
-        if (screens.at(i)->region().contains(p))
-            return i;
-    }
+   const QList<QScreen *> screens = subScreens();
+   const int n = screens.count();
+   for (int i = 0; i < n; ++i) {
+      if (screens.at(i)->region().contains(p)) {
+         return i;
+      }
+   }
 
-    return -1;
+   return -1;
 }
 
 /*!
@@ -3137,40 +3205,40 @@ int QScreen::subScreenIndexAt(const QPoint &p) const
 */
 void QScreen::setPixmapDataFactory(QPixmapDataFactory *factory)
 {
-    static bool shownWarning = false;
-    if (!shownWarning) {
-        qWarning("QScreen::setPixmapDataFactory() is deprecated - use setGraphicsSystem() instead");
-        shownWarning = true;
-    }
+   static bool shownWarning = false;
+   if (!shownWarning) {
+      qWarning("QScreen::setPixmapDataFactory() is deprecated - use setGraphicsSystem() instead");
+      shownWarning = true;
+   }
 
-    d_ptr->pixmapFactory = factory;
+   d_ptr->pixmapFactory = factory;
 }
 
 /*!
     \internal
     \since 4.4
 */
-QPixmapDataFactory* QScreen::pixmapDataFactory() const
+QPixmapDataFactory *QScreen::pixmapDataFactory() const
 {
-    return d_ptr->pixmapFactory;
+   return d_ptr->pixmapFactory;
 }
 
 /*!
     \internal
     \since 4.5
 */
-void QScreen::setGraphicsSystem(QGraphicsSystem* system)
+void QScreen::setGraphicsSystem(QGraphicsSystem *system)
 {
-    d_ptr->graphicsSystem = system;
+   d_ptr->graphicsSystem = system;
 }
 
 /*!
     \internal
     \since 4.5
 */
-QGraphicsSystem* QScreen::graphicsSystem() const
+QGraphicsSystem *QScreen::graphicsSystem() const
 {
-    return d_ptr->graphicsSystem;
+   return d_ptr->graphicsSystem;
 }
 
 /*!
@@ -3180,7 +3248,7 @@ QGraphicsSystem* QScreen::graphicsSystem() const
 */
 QScreen::ClassId QScreen::classId() const
 {
-    return static_cast<ClassId>(d_ptr->classId);
+   return static_cast<ClassId>(d_ptr->classId);
 }
 
 QT_END_NAMESPACE

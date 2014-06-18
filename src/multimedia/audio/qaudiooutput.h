@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,47 +38,48 @@ class QAbstractAudioOutput;
 
 class Q_MULTIMEDIA_EXPORT QAudioOutput : public QObject
 {
-    CS_OBJECT(QAudioOutput)
+   CS_OBJECT(QAudioOutput)
 
-public:
-    explicit QAudioOutput(const QAudioFormat &format = QAudioFormat(), QObject *parent = 0);
-    explicit QAudioOutput(const QAudioDeviceInfo &audioDeviceInfo, const QAudioFormat &format = QAudioFormat(), QObject *parent = 0);
-    ~QAudioOutput();
+ public:
+   explicit QAudioOutput(const QAudioFormat &format = QAudioFormat(), QObject *parent = 0);
+   explicit QAudioOutput(const QAudioDeviceInfo &audioDeviceInfo, const QAudioFormat &format = QAudioFormat(),
+                         QObject *parent = 0);
+   ~QAudioOutput();
 
-    QAudioFormat format() const;
+   QAudioFormat format() const;
 
-    void start(QIODevice *device);
-    QIODevice* start();
+   void start(QIODevice *device);
+   QIODevice *start();
 
-    void stop();
-    void reset();
-    void suspend();
-    void resume();
+   void stop();
+   void reset();
+   void suspend();
+   void resume();
 
-    void setBufferSize(int bytes);
-    int bufferSize() const;
+   void setBufferSize(int bytes);
+   int bufferSize() const;
 
-    int bytesFree() const;
-    int periodSize() const;
+   int bytesFree() const;
+   int periodSize() const;
 
-    void setNotifyInterval(int milliSeconds);
-    int notifyInterval() const;
+   void setNotifyInterval(int milliSeconds);
+   int notifyInterval() const;
 
-    qint64 processedUSecs() const;
-    qint64 elapsedUSecs() const;
+   qint64 processedUSecs() const;
+   qint64 elapsedUSecs() const;
 
-    QAudio::Error error() const;
-    QAudio::State state() const;
+   QAudio::Error error() const;
+   QAudio::State state() const;
 
-    MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State un_named_arg1))
-    MULTI_CS_SIGNAL_2(stateChanged,un_named_arg1) 
-    MULTI_CS_SIGNAL_1(Public, void notify())
-    MULTI_CS_SIGNAL_2(notify) 
+   MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State un_named_arg1))
+   MULTI_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void notify())
+   MULTI_CS_SIGNAL_2(notify)
 
-private:
-    Q_DISABLE_COPY(QAudioOutput)
+ private:
+   Q_DISABLE_COPY(QAudioOutput)
 
-    QAbstractAudioOutput* d;
+   QAbstractAudioOutput *d;
 };
 
 QT_END_NAMESPACE

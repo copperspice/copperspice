@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -57,7 +57,7 @@
   is building in debug mode, the  check(assertion) will conflict with QItemDelegate::check
 
   To avoid this problem, add the folling #undef check
- 
+
   after including AssertMacros.h ( mabye Cocoa.h also )
 */
 
@@ -72,15 +72,15 @@
 #endif
 
 #ifdef __OBJC__
-   typedef NSWindow *OSWindowRef;
-   typedef NSView   *OSViewRef;
-   typedef NSMenu   *OSMenuRef;
-   typedef NSEvent  *OSEventRef;
+typedef NSWindow *OSWindowRef;
+typedef NSView   *OSViewRef;
+typedef NSMenu   *OSMenuRef;
+typedef NSEvent  *OSEventRef;
 #else
-   typedef void *OSWindowRef;
-   typedef void *OSViewRef;
-   typedef void *OSMenuRef;
-   typedef void *OSEventRef;
+typedef void *OSWindowRef;
+typedef void *OSViewRef;
+typedef void *OSMenuRef;
+typedef void *OSEventRef;
 #endif
 
 #endif

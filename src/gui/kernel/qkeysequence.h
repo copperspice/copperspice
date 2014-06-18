@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,153 +45,163 @@ class QKeySequencePrivate;
 
 class Q_GUI_EXPORT QKeySequence
 {
-    CS_GADGET(QKeySequence)
+   CS_GADGET(QKeySequence)
 
-    GUI_CS_ENUM(StandardKey)
+   GUI_CS_ENUM(StandardKey)
 
-public:
-    enum StandardKey {
-        UnknownKey,
-        HelpContents,
-        WhatsThis,
-        Open,
-        Close,
-        Save,
-        New,
-        Delete,
-        Cut,
-        Copy,
-        Paste,
-        Undo,
-        Redo,
-        Back,
-        Forward,
-        Refresh,
-        ZoomIn,
-        ZoomOut,
-        Print,
-        AddTab,
-        NextChild,
-        PreviousChild,
-        Find,
-        FindNext,
-        FindPrevious,
-        Replace,
-        SelectAll,
-        Bold,
-        Italic,
-        Underline,
-        MoveToNextChar,
-        MoveToPreviousChar,
-        MoveToNextWord,
-        MoveToPreviousWord,
-        MoveToNextLine,
-        MoveToPreviousLine,
-        MoveToNextPage,
-        MoveToPreviousPage,
-        MoveToStartOfLine,
-        MoveToEndOfLine,
-        MoveToStartOfBlock,
-        MoveToEndOfBlock,
-        MoveToStartOfDocument,
-        MoveToEndOfDocument,
-        SelectNextChar,
-        SelectPreviousChar,
-        SelectNextWord,
-        SelectPreviousWord,
-        SelectNextLine,
-        SelectPreviousLine,
-        SelectNextPage,
-        SelectPreviousPage,
-        SelectStartOfLine,
-        SelectEndOfLine,
-        SelectStartOfBlock,
-        SelectEndOfBlock,
-        SelectStartOfDocument,
-        SelectEndOfDocument,
-        DeleteStartOfWord,
-        DeleteEndOfWord,
-        DeleteEndOfLine,
-        InsertParagraphSeparator,
-        InsertLineSeparator,
-        SaveAs,
-        Preferences,
-        Quit
-     };
+ public:
+   enum StandardKey {
+      UnknownKey,
+      HelpContents,
+      WhatsThis,
+      Open,
+      Close,
+      Save,
+      New,
+      Delete,
+      Cut,
+      Copy,
+      Paste,
+      Undo,
+      Redo,
+      Back,
+      Forward,
+      Refresh,
+      ZoomIn,
+      ZoomOut,
+      Print,
+      AddTab,
+      NextChild,
+      PreviousChild,
+      Find,
+      FindNext,
+      FindPrevious,
+      Replace,
+      SelectAll,
+      Bold,
+      Italic,
+      Underline,
+      MoveToNextChar,
+      MoveToPreviousChar,
+      MoveToNextWord,
+      MoveToPreviousWord,
+      MoveToNextLine,
+      MoveToPreviousLine,
+      MoveToNextPage,
+      MoveToPreviousPage,
+      MoveToStartOfLine,
+      MoveToEndOfLine,
+      MoveToStartOfBlock,
+      MoveToEndOfBlock,
+      MoveToStartOfDocument,
+      MoveToEndOfDocument,
+      SelectNextChar,
+      SelectPreviousChar,
+      SelectNextWord,
+      SelectPreviousWord,
+      SelectNextLine,
+      SelectPreviousLine,
+      SelectNextPage,
+      SelectPreviousPage,
+      SelectStartOfLine,
+      SelectEndOfLine,
+      SelectStartOfBlock,
+      SelectEndOfBlock,
+      SelectStartOfDocument,
+      SelectEndOfDocument,
+      DeleteStartOfWord,
+      DeleteEndOfWord,
+      DeleteEndOfLine,
+      InsertParagraphSeparator,
+      InsertLineSeparator,
+      SaveAs,
+      Preferences,
+      Quit
+   };
 
-    enum SequenceFormat {
-        NativeText,
-        PortableText
-    };
+   enum SequenceFormat {
+      NativeText,
+      PortableText
+   };
 
-    QKeySequence();
-    QKeySequence(const QString &key);
-    QKeySequence(const QString &key, SequenceFormat format);
-    QKeySequence(int k1, int k2 = 0, int k3 = 0, int k4 = 0);
-    QKeySequence(const QKeySequence &ks);
-    QKeySequence(StandardKey key);
-    ~QKeySequence();
+   QKeySequence();
+   QKeySequence(const QString &key);
+   QKeySequence(const QString &key, SequenceFormat format);
+   QKeySequence(int k1, int k2 = 0, int k3 = 0, int k4 = 0);
+   QKeySequence(const QKeySequence &ks);
+   QKeySequence(StandardKey key);
+   ~QKeySequence();
 
-    uint count() const; // ### Qt5/return 'int'
-    bool isEmpty() const;
+   uint count() const; // ### Qt5/return 'int'
+   bool isEmpty() const;
 
-    enum SequenceMatch {
-        NoMatch,
-        PartialMatch,
-        ExactMatch
-    };
+   enum SequenceMatch {
+      NoMatch,
+      PartialMatch,
+      ExactMatch
+   };
 
-    QString toString(SequenceFormat format = PortableText) const;
-    static QKeySequence fromString(const QString &str, SequenceFormat format = PortableText);
+   QString toString(SequenceFormat format = PortableText) const;
+   static QKeySequence fromString(const QString &str, SequenceFormat format = PortableText);
 
-    static QList<QKeySequence> listFromString(const QString &str, SequenceFormat format = PortableText);
-    static QString listToString(const QList<QKeySequence> &list, SequenceFormat format = PortableText);
+   static QList<QKeySequence> listFromString(const QString &str, SequenceFormat format = PortableText);
+   static QString listToString(const QList<QKeySequence> &list, SequenceFormat format = PortableText);
 
-    SequenceMatch matches(const QKeySequence &seq) const;
-    static QKeySequence mnemonic(const QString &text);
-    static QList<QKeySequence> keyBindings(StandardKey key);
+   SequenceMatch matches(const QKeySequence &seq) const;
+   static QKeySequence mnemonic(const QString &text);
+   static QList<QKeySequence> keyBindings(StandardKey key);
 
-    // ### Qt5/kill 'operator QString' - it's evil
-    operator QString() const;
-    operator QVariant() const;
-    operator int() const;
-    int operator[](uint i) const;
-    QKeySequence &operator=(const QKeySequence &other);
+   // ### Qt5/kill 'operator QString' - it's evil
+   operator QString() const;
+   operator QVariant() const;
+   operator int() const;
+   int operator[](uint i) const;
+   QKeySequence &operator=(const QKeySequence &other);
 
-    inline QKeySequence &operator=(QKeySequence &&other)
-    { qSwap(d, other.d); return *this; }
+   inline QKeySequence &operator=(QKeySequence && other) {
+      qSwap(d, other.d);
+      return *this;
+   }
 
-    inline void swap(QKeySequence &other) { qSwap(d, other.d); }
-    bool operator==(const QKeySequence &other) const;
-    inline bool operator!= (const QKeySequence &other) const
-    { return !(*this == other); }
-    bool operator< (const QKeySequence &ks) const;
-    inline bool operator> (const QKeySequence &other) const
-    { return other < *this; }
-    inline bool operator<= (const QKeySequence &other) const
-    { return !(other < *this); }
-    inline bool operator>= (const QKeySequence &other) const
-    { return !(*this < other); }
+   inline void swap(QKeySequence &other) {
+      qSwap(d, other.d);
+   }
+   bool operator==(const QKeySequence &other) const;
+   inline bool operator!= (const QKeySequence &other) const {
+      return !(*this == other);
+   }
+   bool operator< (const QKeySequence &ks) const;
+   inline bool operator> (const QKeySequence &other) const {
+      return other < *this;
+   }
+   inline bool operator<= (const QKeySequence &other) const {
+      return !(other < *this);
+   }
+   inline bool operator>= (const QKeySequence &other) const {
+      return !(*this < other);
+   }
 
-    bool isDetached() const;
+   bool isDetached() const;
 
-private:
-    static int decodeString(const QString &ks);
-    static QString encodeString(int key);
-    int assign(const QString &str);
-    int assign(const QString &str, SequenceFormat format);
-    void setKey(int key, int index);
+ private:
+   static int decodeString(const QString &ks);
+   static QString encodeString(int key);
+   int assign(const QString &str);
+   int assign(const QString &str, SequenceFormat format);
+   void setKey(int key, int index);
 
-    QKeySequencePrivate *d;
+   QKeySequencePrivate *d;
 
-    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QKeySequence &ks);
-    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QKeySequence &ks);
-    friend class QShortcutMap;
-    friend class QShortcut;
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QKeySequence &ks);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QKeySequence &ks);
+   friend class QShortcutMap;
+   friend class QShortcut;
 
-public:
-    typedef QKeySequencePrivate * DataPtr;
-    inline DataPtr &data_ptr() { return d; }
+ public:
+   typedef QKeySequencePrivate *DataPtr;
+   inline DataPtr &data_ptr() {
+      return d;
+   }
 
 };
 Q_DECLARE_TYPEINFO(QKeySequence, Q_MOVABLE_TYPE);
@@ -204,9 +214,9 @@ Q_GUI_EXPORT QDebug operator<<(QDebug, const QKeySequence &);
 
 class Q_GUI_EXPORT QKeySequence
 {
-public:
-    QKeySequence() {}
-    QKeySequence(int) {}
+ public:
+   QKeySequence() {}
+   QKeySequence(int) {}
 };
 
 #endif // QT_NO_SHORTCUT

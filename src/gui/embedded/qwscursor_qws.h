@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,24 +33,29 @@ QT_BEGIN_NAMESPACE
 
 class QWSCursor
 {
-public:
-    QWSCursor() {}
-    QWSCursor(const uchar *data, const uchar *mask, int width, int height,int hotX, int hotY)
-        { set(data, mask, width, height, hotX, hotY); }
+ public:
+   QWSCursor() {}
+   QWSCursor(const uchar *data, const uchar *mask, int width, int height, int hotX, int hotY) {
+      set(data, mask, width, height, hotX, hotY);
+   }
 
-    void set(const uchar *data, const uchar *mask, int width, int height, int hotX, int hotY);
+   void set(const uchar *data, const uchar *mask, int width, int height, int hotX, int hotY);
 
-    QPoint hotSpot() const { return hot; }
-    QImage &image() { return cursor; }
+   QPoint hotSpot() const {
+      return hot;
+   }
+   QImage &image() {
+      return cursor;
+   }
 
-    static QWSCursor *systemCursor(int id);
+   static QWSCursor *systemCursor(int id);
 
-private:
-    static void createSystemCursor(int id);
-    void createDropShadow(int dropx, int dropy);
+ private:
+   static void createSystemCursor(int id);
+   void createDropShadow(int dropx, int dropy);
 
-    QPoint hot;
-    QImage cursor;
+   QPoint hot;
+   QImage cursor;
 };
 
 QT_END_NAMESPACE

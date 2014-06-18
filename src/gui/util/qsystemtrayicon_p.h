@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,59 +43,59 @@ class QLabel;
 
 class QSystemTrayIconPrivate
 {
-    Q_DECLARE_PUBLIC(QSystemTrayIcon)
+   Q_DECLARE_PUBLIC(QSystemTrayIcon)
 
-public:
-    QSystemTrayIconPrivate() : sys(0), visible(false) { }
-    virtual ~QSystemTrayIconPrivate() {}
+ public:
+   QSystemTrayIconPrivate() : sys(0), visible(false) { }
+   virtual ~QSystemTrayIconPrivate() {}
 
-    void install_sys();
-    void remove_sys();
-    void updateIcon_sys();
-    void updateToolTip_sys();
-    void updateMenu_sys();
-    QRect geometry_sys() const;
-    void showMessage_sys(const QString &msg, const QString &title, QSystemTrayIcon::MessageIcon icon, int secs);
+   void install_sys();
+   void remove_sys();
+   void updateIcon_sys();
+   void updateToolTip_sys();
+   void updateMenu_sys();
+   QRect geometry_sys() const;
+   void showMessage_sys(const QString &msg, const QString &title, QSystemTrayIcon::MessageIcon icon, int secs);
 
-    static bool isSystemTrayAvailable_sys();
-    static bool supportsMessages_sys();
+   static bool isSystemTrayAvailable_sys();
+   static bool supportsMessages_sys();
 
-    QPointer<QMenu> menu;
-    QIcon icon;
-    QString toolTip;
-    QSystemTrayIconSys *sys;
-    bool visible;
+   QPointer<QMenu> menu;
+   QIcon icon;
+   QString toolTip;
+   QSystemTrayIconSys *sys;
+   bool visible;
 
-protected:
-	 QSystemTrayIcon *q_ptr;
+ protected:
+   QSystemTrayIcon *q_ptr;
 };
 
 class QBalloonTip : public QWidget
 {
-    CS_OBJECT(QBalloonTip)
-public:
-    static void showBalloon(QSystemTrayIcon::MessageIcon icon, const QString& title,
-                            const QString& msg, QSystemTrayIcon *trayIcon,
-                            const QPoint& pos, int timeout, bool showArrow = true);
-    static void hideBalloon();
-    static bool isBalloonVisible();
+   CS_OBJECT(QBalloonTip)
+ public:
+   static void showBalloon(QSystemTrayIcon::MessageIcon icon, const QString &title,
+                           const QString &msg, QSystemTrayIcon *trayIcon,
+                           const QPoint &pos, int timeout, bool showArrow = true);
+   static void hideBalloon();
+   static bool isBalloonVisible();
 
-private:
-    QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString& title,
-                const QString& msg, QSystemTrayIcon *trayIcon);
-    ~QBalloonTip();
-    void balloon(const QPoint&, int, bool);
+ private:
+   QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title,
+               const QString &msg, QSystemTrayIcon *trayIcon);
+   ~QBalloonTip();
+   void balloon(const QPoint &, int, bool);
 
-protected:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
-    void mousePressEvent(QMouseEvent *e);
-    void timerEvent(QTimerEvent *e);
+ protected:
+   void paintEvent(QPaintEvent *);
+   void resizeEvent(QResizeEvent *);
+   void mousePressEvent(QMouseEvent *e);
+   void timerEvent(QTimerEvent *e);
 
-private:
-    QSystemTrayIcon *trayIcon;
-    QPixmap pixmap;
-    int timerId;
+ private:
+   QSystemTrayIcon *trayIcon;
+   QPixmap pixmap;
+   int timerId;
 };
 
 #if defined(Q_WS_X11)
@@ -108,49 +108,50 @@ QT_END_INCLUDE_NAMESPACE
 
 class QSystemTrayIconSys : public QWidget
 {
-    friend class QSystemTrayIconPrivate;
+   friend class QSystemTrayIconPrivate;
 
-public:
-    QSystemTrayIconSys(QSystemTrayIcon *q);
-    ~QSystemTrayIconSys();
-    enum {
-        SYSTEM_TRAY_REQUEST_DOCK = 0,
-        SYSTEM_TRAY_BEGIN_MESSAGE = 1,
-        SYSTEM_TRAY_CANCEL_MESSAGE =2
-    };
+ public:
+   QSystemTrayIconSys(QSystemTrayIcon *q);
+   ~QSystemTrayIconSys();
+   enum {
+      SYSTEM_TRAY_REQUEST_DOCK = 0,
+      SYSTEM_TRAY_BEGIN_MESSAGE = 1,
+      SYSTEM_TRAY_CANCEL_MESSAGE = 2
+   };
 
-    void addToTray();
-    void updateIcon();
-    XVisualInfo* getSysTrayVisualInfo();
+   void addToTray();
+   void updateIcon();
+   XVisualInfo *getSysTrayVisualInfo();
 
-    // QObject::event is public but QWidget's ::event() re-implementation
-    // is protected ;(
-    inline bool deliverToolTipEvent(QEvent *e)
-    { return QWidget::event(e); }
+   // QObject::event is public but QWidget's ::event() re-implementation
+   // is protected ;(
+   inline bool deliverToolTipEvent(QEvent *e) {
+      return QWidget::event(e);
+   }
 
-    static Window sysTrayWindow;
-    static QList<QSystemTrayIconSys *> trayIcons;
-    static QCoreApplication::EventFilter oldEventFilter;
-    static bool sysTrayTracker(void *message, long *result);
-    static Window locateSystemTray();
-    static Atom sysTraySelection;
-    static XVisualInfo sysTrayVisual;
+   static Window sysTrayWindow;
+   static QList<QSystemTrayIconSys *> trayIcons;
+   static QCoreApplication::EventFilter oldEventFilter;
+   static bool sysTrayTracker(void *message, long *result);
+   static Window locateSystemTray();
+   static Atom sysTraySelection;
+   static XVisualInfo sysTrayVisual;
 
-protected:
-    void paintEvent(QPaintEvent *pe);
-    void resizeEvent(QResizeEvent *re);
-    bool x11Event(XEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
+ protected:
+   void paintEvent(QPaintEvent *pe);
+   void resizeEvent(QResizeEvent *re);
+   bool x11Event(XEvent *event);
+   void mousePressEvent(QMouseEvent *event);
+   void mouseDoubleClickEvent(QMouseEvent *event);
 #ifndef QT_NO_WHEELEVENT
-    void wheelEvent(QWheelEvent *event);
+   void wheelEvent(QWheelEvent *event);
 #endif
-    bool event(QEvent *e);
+   bool event(QEvent *e);
 
-private:
-    QPixmap background;
-    QSystemTrayIcon *q;
-    Colormap colormap;
+ private:
+   QPixmap background;
+   QSystemTrayIcon *q;
+   Colormap colormap;
 };
 #endif // Q_WS_X11
 

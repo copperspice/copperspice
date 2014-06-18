@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -94,14 +94,14 @@ QT_BEGIN_NAMESPACE
 QDrag::QDrag(QWidget *dragSource)
    : QObject(dragSource), d_ptr(new QDragPrivate)
 {
-    Q_D(QDrag);
-    d->source = dragSource;
-    d->target = 0;
-    d->data = 0;
-    d->hotspot = QPoint(-10, -10);
-    d->possible_actions = Qt::CopyAction;
-    d->executed_action = Qt::IgnoreAction;
-    d->defaultDropAction = Qt::IgnoreAction;
+   Q_D(QDrag);
+   d->source = dragSource;
+   d->target = 0;
+   d->data = 0;
+   d->hotspot = QPoint(-10, -10);
+   d->possible_actions = Qt::CopyAction;
+   d->executed_action = Qt::IgnoreAction;
+   d->defaultDropAction = Qt::IgnoreAction;
 }
 
 /*!
@@ -109,11 +109,12 @@ QDrag::QDrag(QWidget *dragSource)
 */
 QDrag::~QDrag()
 {
-    Q_D(QDrag);
-    delete d->data;
-    QDragManager *manager = QDragManager::self();
-    if (manager && manager->object == this)
-        manager->cancel(false);
+   Q_D(QDrag);
+   delete d->data;
+   QDragManager *manager = QDragManager::self();
+   if (manager && manager->object == this) {
+      manager->cancel(false);
+   }
 }
 
 /*!
@@ -122,12 +123,14 @@ QDrag::~QDrag()
 */
 void QDrag::setMimeData(QMimeData *data)
 {
-    Q_D(QDrag);
-    if (d->data == data)
-        return;
-    if (d->data != 0)
-        delete d->data;
-    d->data = data;
+   Q_D(QDrag);
+   if (d->data == data) {
+      return;
+   }
+   if (d->data != 0) {
+      delete d->data;
+   }
+   d->data = data;
 }
 
 /*!
@@ -135,8 +138,8 @@ void QDrag::setMimeData(QMimeData *data)
 */
 QMimeData *QDrag::mimeData() const
 {
-    Q_D(const QDrag);
-    return d->data;
+   Q_D(const QDrag);
+   return d->data;
 }
 
 /*!
@@ -146,8 +149,8 @@ QMimeData *QDrag::mimeData() const
 */
 void QDrag::setPixmap(const QPixmap &pixmap)
 {
-    Q_D(QDrag);
-    d->pixmap = pixmap;
+   Q_D(QDrag);
+   d->pixmap = pixmap;
 }
 
 /*!
@@ -155,8 +158,8 @@ void QDrag::setPixmap(const QPixmap &pixmap)
 */
 QPixmap QDrag::pixmap() const
 {
-    Q_D(const QDrag);
-    return d->pixmap;
+   Q_D(const QDrag);
+   return d->pixmap;
 }
 
 /*!
@@ -167,10 +170,10 @@ QPixmap QDrag::pixmap() const
     movements if the hot spot causes the pixmap to be displayed
     directly under the cursor.
 */
-void QDrag::setHotSpot(const QPoint& hotspot)
+void QDrag::setHotSpot(const QPoint &hotspot)
 {
-    Q_D(QDrag);
-    d->hotspot = hotspot;
+   Q_D(QDrag);
+   d->hotspot = hotspot;
 }
 
 /*!
@@ -179,8 +182,8 @@ void QDrag::setHotSpot(const QPoint& hotspot)
 */
 QPoint QDrag::hotSpot() const
 {
-    Q_D(const QDrag);
-    return d->hotspot;
+   Q_D(const QDrag);
+   return d->hotspot;
 }
 
 /*!
@@ -189,8 +192,8 @@ QPoint QDrag::hotSpot() const
 */
 QWidget *QDrag::source() const
 {
-    Q_D(const QDrag);
-    return d->source;
+   Q_D(const QDrag);
+   return d->source;
 }
 
 /*!
@@ -199,8 +202,8 @@ QWidget *QDrag::source() const
 */
 QWidget *QDrag::target() const
 {
-    Q_D(const QDrag);
-    return d->target;
+   Q_D(const QDrag);
+   return d->target;
 }
 
 /*!
@@ -220,7 +223,7 @@ QWidget *QDrag::target() const
 
 Qt::DropAction QDrag::exec(Qt::DropActions supportedActions)
 {
-    return exec(supportedActions, Qt::IgnoreAction);
+   return exec(supportedActions, Qt::IgnoreAction);
 }
 
 /*!
@@ -244,31 +247,31 @@ Qt::DropAction QDrag::exec(Qt::DropActions supportedActions)
 
 Qt::DropAction QDrag::exec(Qt::DropActions supportedActions, Qt::DropAction defaultDropAction)
 {
-    Q_D(QDrag);
-    if (!d->data) {
-        qWarning("QDrag: No mimedata set before starting the drag");
-        return d->executed_action;
-    }
-    QDragManager *manager = QDragManager::self();
-    d->defaultDropAction = Qt::IgnoreAction;
-    d->possible_actions = supportedActions;
+   Q_D(QDrag);
+   if (!d->data) {
+      qWarning("QDrag: No mimedata set before starting the drag");
+      return d->executed_action;
+   }
+   QDragManager *manager = QDragManager::self();
+   d->defaultDropAction = Qt::IgnoreAction;
+   d->possible_actions = supportedActions;
 
-    if (manager) {
-        if (defaultDropAction == Qt::IgnoreAction) {
-            if (supportedActions & Qt::MoveAction) {
-                d->defaultDropAction = Qt::MoveAction;
-            } else if (supportedActions & Qt::CopyAction) {
-                d->defaultDropAction = Qt::CopyAction;
-            } else if (supportedActions & Qt::LinkAction) {
-                d->defaultDropAction = Qt::LinkAction;
-            }
-        } else {
-            d->defaultDropAction = defaultDropAction;
-        }
-        d->executed_action = manager->drag(this);
-    }
+   if (manager) {
+      if (defaultDropAction == Qt::IgnoreAction) {
+         if (supportedActions & Qt::MoveAction) {
+            d->defaultDropAction = Qt::MoveAction;
+         } else if (supportedActions & Qt::CopyAction) {
+            d->defaultDropAction = Qt::CopyAction;
+         } else if (supportedActions & Qt::LinkAction) {
+            d->defaultDropAction = Qt::LinkAction;
+         }
+      } else {
+         d->defaultDropAction = defaultDropAction;
+      }
+      d->executed_action = manager->drag(this);
+   }
 
-    return d->executed_action;
+   return d->executed_action;
 }
 
 /*!
@@ -288,17 +291,18 @@ Qt::DropAction QDrag::exec(Qt::DropActions supportedActions, Qt::DropAction defa
 */
 Qt::DropAction QDrag::start(Qt::DropActions request)
 {
-    Q_D(QDrag);
-    if (!d->data) {
-        qWarning("QDrag: No mimedata set before starting the drag");
-        return d->executed_action;
-    }
-    QDragManager *manager = QDragManager::self();
-    d->defaultDropAction = Qt::IgnoreAction;
-    d->possible_actions = request | Qt::CopyAction;
-    if (manager)
-        d->executed_action = manager->drag(this);
-    return d->executed_action;
+   Q_D(QDrag);
+   if (!d->data) {
+      qWarning("QDrag: No mimedata set before starting the drag");
+      return d->executed_action;
+   }
+   QDragManager *manager = QDragManager::self();
+   d->defaultDropAction = Qt::IgnoreAction;
+   d->possible_actions = request | Qt::CopyAction;
+   if (manager) {
+      d->executed_action = manager->drag(this);
+   }
+   return d->executed_action;
 }
 
 /*!
@@ -311,13 +315,15 @@ Qt::DropAction QDrag::start(Qt::DropActions request)
 */
 void QDrag::setDragCursor(const QPixmap &cursor, Qt::DropAction action)
 {
-    Q_D(QDrag);
-    if (action != Qt::CopyAction && action != Qt::MoveAction && action != Qt::LinkAction)
-        return;
-    if (cursor.isNull())
-        d->customCursors.remove(action);
-    else
-        d->customCursors[action] = cursor;
+   Q_D(QDrag);
+   if (action != Qt::CopyAction && action != Qt::MoveAction && action != Qt::LinkAction) {
+      return;
+   }
+   if (cursor.isNull()) {
+      d->customCursors.remove(action);
+   } else {
+      d->customCursors[action] = cursor;
+   }
 }
 
 /*!

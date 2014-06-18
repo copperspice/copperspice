@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,34 +39,38 @@ QT_BEGIN_NAMESPACE
 
 class QGraphicsSceneLinearIndex : public QGraphicsSceneIndex
 {
-    CS_OBJECT(QGraphicsSceneLinearIndex)
+   CS_OBJECT(QGraphicsSceneLinearIndex)
 
-public:
-    QGraphicsSceneLinearIndex(QGraphicsScene *scene = 0) : QGraphicsSceneIndex(scene)
-    { }
+ public:
+   QGraphicsSceneLinearIndex(QGraphicsScene *scene = 0) : QGraphicsSceneIndex(scene) {
+   }
 
-    QList<QGraphicsItem *> items(Qt::SortOrder order = Qt::DescendingOrder) const
-    { Q_UNUSED(order); return m_items; }
+   QList<QGraphicsItem *> items(Qt::SortOrder order = Qt::DescendingOrder) const {
+      Q_UNUSED(order);
+      return m_items;
+   }
 
-    virtual QList<QGraphicsItem *> estimateItems(const QRectF &rect, Qt::SortOrder order) const
-    {
-        Q_UNUSED(rect);
-        Q_UNUSED(order);
-        return m_items;
-    }
+   virtual QList<QGraphicsItem *> estimateItems(const QRectF &rect, Qt::SortOrder order) const {
+      Q_UNUSED(rect);
+      Q_UNUSED(order);
+      return m_items;
+   }
 
-protected :
-    virtual void clear()
-    { m_items.clear(); }
+ protected :
+   virtual void clear() {
+      m_items.clear();
+   }
 
-    virtual void addItem(QGraphicsItem *item)
-    { m_items << item; }
+   virtual void addItem(QGraphicsItem *item) {
+      m_items << item;
+   }
 
-    virtual void removeItem(QGraphicsItem *item)
-    { m_items.removeOne(item); }
+   virtual void removeItem(QGraphicsItem *item) {
+      m_items.removeOne(item);
+   }
 
-private:
-    QList<QGraphicsItem*> m_items;
+ private:
+   QList<QGraphicsItem *> m_items;
 };
 
 #endif // QT_NO_GRAPHICSVIEW

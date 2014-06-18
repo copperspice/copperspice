@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,18 +40,18 @@ QT_BEGIN_NAMESPACE
 
 class QTextDocumentWriterPrivate
 {
-public:
-    QTextDocumentWriterPrivate(QTextDocumentWriter* qq);
+ public:
+   QTextDocumentWriterPrivate(QTextDocumentWriter *qq);
 
-    // device
-    QByteArray format;
-    QIODevice *device;
-    bool deleteDevice;
+   // device
+   QByteArray format;
+   QIODevice *device;
+   bool deleteDevice;
 #ifndef QT_NO_TEXTCODEC
-    QTextCodec *codec;
+   QTextCodec *codec;
 #endif
 
-    QTextDocumentWriter *q;
+   QTextDocumentWriter *q;
 };
 
 /*!
@@ -85,12 +85,12 @@ public:
     \internal
 */
 QTextDocumentWriterPrivate::QTextDocumentWriterPrivate(QTextDocumentWriter *qq)
-    : device(0),
-    deleteDevice(false),
+   : device(0),
+     deleteDevice(false),
 #ifndef QT_NO_TEXTCODEC
-    codec(QTextCodec::codecForName("utf-8")),
+     codec(QTextCodec::codecForName("utf-8")),
 #endif
-    q(qq)
+     q(qq)
 {
 }
 
@@ -100,7 +100,7 @@ QTextDocumentWriterPrivate::QTextDocumentWriterPrivate(QTextDocumentWriter *qq)
     setFileName().
 */
 QTextDocumentWriter::QTextDocumentWriter()
-    : d(new QTextDocumentWriterPrivate(this))
+   : d(new QTextDocumentWriterPrivate(this))
 {
 }
 
@@ -109,10 +109,10 @@ QTextDocumentWriter::QTextDocumentWriter()
     in the document format specified by \a format.
 */
 QTextDocumentWriter::QTextDocumentWriter(QIODevice *device, const QByteArray &format)
-    : d(new QTextDocumentWriterPrivate(this))
+   : d(new QTextDocumentWriterPrivate(this))
 {
-    d->device = device;
-    d->format = format;
+   d->device = device;
+   d->format = format;
 }
 
 /*!
@@ -122,12 +122,12 @@ QTextDocumentWriter::QTextDocumentWriter(QIODevice *device, const QByteArray &fo
     format by inspecting the extension of \a fileName.
 */
 QTextDocumentWriter::QTextDocumentWriter(const QString &fileName, const QByteArray &format)
-    : d(new QTextDocumentWriterPrivate(this))
+   : d(new QTextDocumentWriterPrivate(this))
 {
-    QFile *file = new QFile(fileName);
-    d->device = file;
-    d->deleteDevice = true;
-    d->format = format;
+   QFile *file = new QFile(fileName);
+   d->device = file;
+   d->deleteDevice = true;
+   d->format = format;
 }
 
 /*!
@@ -135,9 +135,10 @@ QTextDocumentWriter::QTextDocumentWriter(const QString &fileName, const QByteArr
 */
 QTextDocumentWriter::~QTextDocumentWriter()
 {
-    if (d->deleteDevice)
-        delete d->device;
-    delete d;
+   if (d->deleteDevice) {
+      delete d->device;
+   }
+   delete d;
 }
 
 /*!
@@ -153,7 +154,7 @@ QTextDocumentWriter::~QTextDocumentWriter()
 */
 void QTextDocumentWriter::setFormat (const QByteArray &format)
 {
-    d->format = format;
+   d->format = format;
 }
 
 /*!
@@ -163,7 +164,7 @@ void QTextDocumentWriter::setFormat (const QByteArray &format)
 */
 QByteArray QTextDocumentWriter::format () const
 {
-    return d->format;
+   return d->format;
 }
 
 /*!
@@ -182,11 +183,12 @@ QByteArray QTextDocumentWriter::format () const
 */
 void QTextDocumentWriter::setDevice (QIODevice *device)
 {
-    if (d->device && d->deleteDevice)
-        delete d->device;
+   if (d->device && d->deleteDevice) {
+      delete d->device;
+   }
 
-    d->device = device;
-    d->deleteDevice = false;
+   d->device = device;
+   d->deleteDevice = false;
 }
 
 /*!
@@ -195,7 +197,7 @@ void QTextDocumentWriter::setDevice (QIODevice *device)
 */
 QIODevice *QTextDocumentWriter::device () const
 {
-    return d->device;
+   return d->device;
 }
 
 /*!
@@ -207,8 +209,8 @@ QIODevice *QTextDocumentWriter::device () const
 */
 void QTextDocumentWriter::setFileName (const QString &fileName)
 {
-    setDevice(new QFile(fileName));
-    d->deleteDevice = true;
+   setDevice(new QFile(fileName));
+   d->deleteDevice = true;
 }
 
 /*!
@@ -220,8 +222,8 @@ void QTextDocumentWriter::setFileName (const QString &fileName)
 */
 QString QTextDocumentWriter::fileName () const
 {
-    QFile *file = qobject_cast<QFile *>(d->device);
-    return file ? file->fileName() : QString();
+   QFile *file = qobject_cast<QFile *>(d->device);
+   return file ? file->fileName() : QString();
 }
 
 /*!
@@ -230,57 +232,58 @@ QString QTextDocumentWriter::fileName () const
 */
 bool QTextDocumentWriter::write(const QTextDocument *document)
 {
-    QByteArray suffix;
+   QByteArray suffix;
 
-    if (d->device && d->format.isEmpty()) {
-        // if there's no format, see if device is a file, and if so, find
-        // the file suffix
-        if (QFile *file = qobject_cast<QFile *>(d->device))
-            suffix = QFileInfo(file->fileName()).suffix().toLower().toLatin1();
-    }
+   if (d->device && d->format.isEmpty()) {
+      // if there's no format, see if device is a file, and if so, find
+      // the file suffix
+      if (QFile *file = qobject_cast<QFile *>(d->device)) {
+         suffix = QFileInfo(file->fileName()).suffix().toLower().toLatin1();
+      }
+   }
 
-    QByteArray format = !d->format.isEmpty() ? d->format.toLower() : suffix;
+   QByteArray format = !d->format.isEmpty() ? d->format.toLower() : suffix;
 
 #ifndef QT_NO_TEXTODFWRITER
-    if (format == "odf" || format == "opendocumentformat" || format == "odt") {
-        QTextOdfWriter writer(*document, d->device);
+   if (format == "odf" || format == "opendocumentformat" || format == "odt") {
+      QTextOdfWriter writer(*document, d->device);
 #ifndef QT_NO_TEXTCODEC
-        writer.setCodec(d->codec);
+      writer.setCodec(d->codec);
 #endif
-        return writer.writeAll();
-    }
+      return writer.writeAll();
+   }
 #endif // QT_NO_TEXTODFWRITER
 
 #ifndef QT_NO_TEXTHTMLPARSER
-    if (format == "html" || format == "htm") {
-        if (!d->device->isWritable() && ! d->device->open(QIODevice::WriteOnly)) {
-            qWarning() << "QTextDocumentWriter::write: the device can not be opened for writing";
-            return false;
-        }
-        QTextStream ts(d->device);
+   if (format == "html" || format == "htm") {
+      if (!d->device->isWritable() && ! d->device->open(QIODevice::WriteOnly)) {
+         qWarning() << "QTextDocumentWriter::write: the device can not be opened for writing";
+         return false;
+      }
+      QTextStream ts(d->device);
 #ifndef QT_NO_TEXTCODEC
-        ts.setCodec(d->codec);
-        ts << document->toHtml(d->codec->name());
+      ts.setCodec(d->codec);
+      ts << document->toHtml(d->codec->name());
 #endif
-        d->device->close();
-        return true;
-    }
+      d->device->close();
+      return true;
+   }
 #endif
-    if (format == "txt" || format == "plaintext") {
-        if (!d->device->isWritable() && ! d->device->open(QIODevice::WriteOnly)) {
-            qWarning() << "QTextDocumentWriter::write: the device can not be opened for writing";
-            return false;
-        }
-        QTextStream ts(d->device);
+   if (format == "txt" || format == "plaintext") {
+      if (!d->device->isWritable() && ! d->device->open(QIODevice::WriteOnly)) {
+         qWarning() << "QTextDocumentWriter::write: the device can not be opened for writing";
+         return false;
+      }
+      QTextStream ts(d->device);
 #ifndef QT_NO_TEXTCODEC
-        ts.setCodec(d->codec);
+      ts.setCodec(d->codec);
 #endif
-        ts << document->toPlainText();
-        d->device->close();
-        return true;
-    }
+      ts << document->toPlainText();
+      d->device->close();
+      return true;
+   }
 
-    return false;
+   return false;
 }
 
 /*!
@@ -289,12 +292,14 @@ bool QTextDocumentWriter::write(const QTextDocument *document)
 */
 bool QTextDocumentWriter::write(const QTextDocumentFragment &fragment)
 {
-    if (fragment.d == 0)
-        return false; // invalid fragment.
-    QTextDocument *doc = fragment.d->doc;
-    if (doc)
-        return write(doc);
-    return false;
+   if (fragment.d == 0) {
+      return false;   // invalid fragment.
+   }
+   QTextDocument *doc = fragment.d->doc;
+   if (doc) {
+      return write(doc);
+   }
+   return false;
 }
 
 /*!
@@ -306,10 +311,11 @@ bool QTextDocumentWriter::write(const QTextDocumentFragment &fragment)
 #ifndef QT_NO_TEXTCODEC
 void QTextDocumentWriter::setCodec(QTextCodec *codec)
 {
-    if (codec == 0)
-        codec = QTextCodec::codecForName("UTF-8");
-    Q_ASSERT(codec);
-    d->codec = codec;
+   if (codec == 0) {
+      codec = QTextCodec::codecForName("UTF-8");
+   }
+   Q_ASSERT(codec);
+   d->codec = codec;
 }
 #endif
 
@@ -319,7 +325,7 @@ void QTextDocumentWriter::setCodec(QTextCodec *codec)
 #ifndef QT_NO_TEXTCODEC
 QTextCodec *QTextDocumentWriter::codec() const
 {
-    return d->codec;
+   return d->codec;
 }
 #endif
 
@@ -339,18 +345,18 @@ QTextCodec *QTextDocumentWriter::codec() const
 */
 QList<QByteArray> QTextDocumentWriter::supportedDocumentFormats()
 {
-    QList<QByteArray> answer;
-    answer << "plaintext";
+   QList<QByteArray> answer;
+   answer << "plaintext";
 
 #ifndef QT_NO_TEXTHTMLPARSER
-    answer << "HTML";
+   answer << "HTML";
 #endif
 #ifndef QT_NO_TEXTODFWRITER
-    answer << "ODF";
+   answer << "ODF";
 #endif // QT_NO_TEXTODFWRITER
 
-    qSort(answer);
-    return answer;
+   qSort(answer);
+   return answer;
 }
 
 QT_END_NAMESPACE

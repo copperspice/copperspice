@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -82,34 +82,35 @@
 QT_BEGIN_NAMESPACE
 void QGraphicsTransformPrivate::setItem(QGraphicsItem *i)
 {
-    if (item == i)
-        return;
+   if (item == i) {
+      return;
+   }
 
-    if (item) {
-        Q_Q(QGraphicsTransform);
-        QGraphicsItemPrivate *d_ptr = item->d_ptr.data();
+   if (item) {
+      Q_Q(QGraphicsTransform);
+      QGraphicsItemPrivate *d_ptr = item->d_ptr.data();
 
-        item->prepareGeometryChange();
-        Q_ASSERT(d_ptr->transformData);
-        d_ptr->transformData->graphicsTransforms.removeAll(q);
-        d_ptr->dirtySceneTransform = 1;
-        item = 0;
-    }
+      item->prepareGeometryChange();
+      Q_ASSERT(d_ptr->transformData);
+      d_ptr->transformData->graphicsTransforms.removeAll(q);
+      d_ptr->dirtySceneTransform = 1;
+      item = 0;
+   }
 
-    item = i;
+   item = i;
 }
 
 void QGraphicsTransformPrivate::updateItem(QGraphicsItem *item)
 {
-    item->prepareGeometryChange();
-    item->d_ptr->dirtySceneTransform = 1;
+   item->prepareGeometryChange();
+   item->d_ptr->dirtySceneTransform = 1;
 }
 
 /*!
     Constructs a new QGraphicsTransform with the given \a parent.
 */
 QGraphicsTransform::QGraphicsTransform(QObject *parent)
-   : QObject(parent), d_ptr(new QGraphicsTransformPrivate)    
+   : QObject(parent), d_ptr(new QGraphicsTransformPrivate)
 {
    d_ptr->q_ptr = this;
 }
@@ -118,7 +119,7 @@ QGraphicsTransform::QGraphicsTransform(QObject *parent)
     \internal
 */
 QGraphicsTransform::QGraphicsTransform(QGraphicsTransformPrivate &dd, QObject *parent)
-    : QObject(parent), d_ptr(&dd) 
+   : QObject(parent), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
 }
@@ -128,8 +129,8 @@ QGraphicsTransform::QGraphicsTransform(QGraphicsTransformPrivate &dd, QObject *p
 */
 QGraphicsTransform::~QGraphicsTransform()
 {
-    Q_D(QGraphicsTransform);
-    d->setItem(0);
+   Q_D(QGraphicsTransform);
+   d->setItem(0);
 }
 
 
@@ -155,9 +156,10 @@ QGraphicsTransform::~QGraphicsTransform()
 */
 void QGraphicsTransform::update()
 {
-    Q_D(QGraphicsTransform);
-    if (d->item)
-        d->updateItem(d->item);
+   Q_D(QGraphicsTransform);
+   if (d->item) {
+      d->updateItem(d->item);
+   }
 }
 
 /*!
@@ -184,20 +186,20 @@ void QGraphicsTransform::update()
 
 class QGraphicsScalePrivate : public QGraphicsTransformPrivate
 {
-public:
-    QGraphicsScalePrivate()
-        : xScale(1), yScale(1), zScale(1) {}
-    QVector3D origin;
-    qreal xScale;
-    qreal yScale;
-    qreal zScale;
+ public:
+   QGraphicsScalePrivate()
+      : xScale(1), yScale(1), zScale(1) {}
+   QVector3D origin;
+   qreal xScale;
+   qreal yScale;
+   qreal zScale;
 };
 
 /*!
     Constructs an empty QGraphicsScale object with the given \a parent.
 */
 QGraphicsScale::QGraphicsScale(QObject *parent)
-    : QGraphicsTransform(*new QGraphicsScalePrivate, parent)
+   : QGraphicsTransform(*new QGraphicsScalePrivate, parent)
 {
 }
 
@@ -219,17 +221,18 @@ QGraphicsScale::~QGraphicsScale()
 */
 QVector3D QGraphicsScale::origin() const
 {
-    Q_D(const QGraphicsScale);
-    return d->origin;
+   Q_D(const QGraphicsScale);
+   return d->origin;
 }
 void QGraphicsScale::setOrigin(const QVector3D &point)
 {
-    Q_D(QGraphicsScale);
-    if (d->origin == point)
-        return;
-    d->origin = point;
-    update();
-    emit originChanged();
+   Q_D(QGraphicsScale);
+   if (d->origin == point) {
+      return;
+   }
+   d->origin = point;
+   update();
+   emit originChanged();
 }
 
 /*!
@@ -245,18 +248,19 @@ void QGraphicsScale::setOrigin(const QVector3D &point)
 */
 qreal QGraphicsScale::xScale() const
 {
-    Q_D(const QGraphicsScale);
-    return d->xScale;
+   Q_D(const QGraphicsScale);
+   return d->xScale;
 }
 void QGraphicsScale::setXScale(qreal scale)
 {
-    Q_D(QGraphicsScale);
-    if (d->xScale == scale)
-        return;
-    d->xScale = scale;
-    update();
-    emit xScaleChanged();
-    emit scaleChanged();
+   Q_D(QGraphicsScale);
+   if (d->xScale == scale) {
+      return;
+   }
+   d->xScale = scale;
+   update();
+   emit xScaleChanged();
+   emit scaleChanged();
 }
 
 /*!
@@ -272,18 +276,19 @@ void QGraphicsScale::setXScale(qreal scale)
 */
 qreal QGraphicsScale::yScale() const
 {
-    Q_D(const QGraphicsScale);
-    return d->yScale;
+   Q_D(const QGraphicsScale);
+   return d->yScale;
 }
 void QGraphicsScale::setYScale(qreal scale)
 {
-    Q_D(QGraphicsScale);
-    if (d->yScale == scale)
-        return;
-    d->yScale = scale;
-    update();
-    emit yScaleChanged();
-    emit scaleChanged();
+   Q_D(QGraphicsScale);
+   if (d->yScale == scale) {
+      return;
+   }
+   d->yScale = scale;
+   update();
+   emit yScaleChanged();
+   emit scaleChanged();
 }
 
 /*!
@@ -299,18 +304,19 @@ void QGraphicsScale::setYScale(qreal scale)
 */
 qreal QGraphicsScale::zScale() const
 {
-    Q_D(const QGraphicsScale);
-    return d->zScale;
+   Q_D(const QGraphicsScale);
+   return d->zScale;
 }
 void QGraphicsScale::setZScale(qreal scale)
 {
-    Q_D(QGraphicsScale);
-    if (d->zScale == scale)
-        return;
-    d->zScale = scale;
-    update();
-    emit zScaleChanged();
-    emit scaleChanged();
+   Q_D(QGraphicsScale);
+   if (d->zScale == scale) {
+      return;
+   }
+   d->zScale = scale;
+   update();
+   emit zScaleChanged();
+   emit scaleChanged();
 }
 
 /*!
@@ -318,10 +324,10 @@ void QGraphicsScale::setZScale(qreal scale)
 */
 void QGraphicsScale::applyTo(QMatrix4x4 *matrix) const
 {
-    Q_D(const QGraphicsScale);
-    matrix->translate(d->origin);
-    matrix->scale(d->xScale, d->yScale, d->zScale);
-    matrix->translate(-d->origin);
+   Q_D(const QGraphicsScale);
+   matrix->translate(d->origin);
+   matrix->scale(d->xScale, d->yScale, d->zScale);
+   matrix->translate(-d->origin);
 }
 
 /*!
@@ -399,19 +405,19 @@ void QGraphicsScale::applyTo(QMatrix4x4 *matrix) const
 
 class QGraphicsRotationPrivate : public QGraphicsTransformPrivate
 {
-public:
-    QGraphicsRotationPrivate()
-        : angle(0), axis(0, 0, 1) {}
-    QVector3D origin;
-    qreal angle;
-    QVector3D axis;
+ public:
+   QGraphicsRotationPrivate()
+      : angle(0), axis(0, 0, 1) {}
+   QVector3D origin;
+   qreal angle;
+   QVector3D axis;
 };
 
 /*!
     Constructs a new QGraphicsRotation with the given \a parent.
 */
 QGraphicsRotation::QGraphicsRotation(QObject *parent)
-    : QGraphicsTransform(*new QGraphicsRotationPrivate, parent)
+   : QGraphicsTransform(*new QGraphicsRotationPrivate, parent)
 {
 }
 
@@ -433,17 +439,18 @@ QGraphicsRotation::~QGraphicsRotation()
 */
 QVector3D QGraphicsRotation::origin() const
 {
-    Q_D(const QGraphicsRotation);
-    return d->origin;
+   Q_D(const QGraphicsRotation);
+   return d->origin;
 }
 void QGraphicsRotation::setOrigin(const QVector3D &point)
 {
-    Q_D(QGraphicsRotation);
-    if (d->origin == point)
-        return;
-    d->origin = point;
-    update();
-    emit originChanged();
+   Q_D(QGraphicsRotation);
+   if (d->origin == point) {
+      return;
+   }
+   d->origin = point;
+   update();
+   emit originChanged();
 }
 
 /*!
@@ -461,17 +468,18 @@ void QGraphicsRotation::setOrigin(const QVector3D &point)
 */
 qreal QGraphicsRotation::angle() const
 {
-    Q_D(const QGraphicsRotation);
-    return d->angle;
+   Q_D(const QGraphicsRotation);
+   return d->angle;
 }
 void QGraphicsRotation::setAngle(qreal angle)
 {
-    Q_D(QGraphicsRotation);
-    if (d->angle == angle)
-        return;
-    d->angle = angle;
-    update();
-    emit angleChanged();
+   Q_D(QGraphicsRotation);
+   if (d->angle == angle) {
+      return;
+   }
+   d->angle = angle;
+   update();
+   emit angleChanged();
 }
 
 /*!
@@ -504,17 +512,18 @@ void QGraphicsRotation::setAngle(qreal angle)
 */
 QVector3D QGraphicsRotation::axis() const
 {
-    Q_D(const QGraphicsRotation);
-    return d->axis;
+   Q_D(const QGraphicsRotation);
+   return d->axis;
 }
 void QGraphicsRotation::setAxis(const QVector3D &axis)
 {
-    Q_D(QGraphicsRotation);
-    if (d->axis == axis)
-         return;
-    d->axis = axis;
-    update();
-    emit axisChanged();
+   Q_D(QGraphicsRotation);
+   if (d->axis == axis) {
+      return;
+   }
+   d->axis = axis;
+   update();
+   emit axisChanged();
 }
 
 /*!
@@ -538,18 +547,17 @@ void QGraphicsRotation::setAxis(const QVector3D &axis)
 */
 void QGraphicsRotation::setAxis(Qt::Axis axis)
 {
-    switch (axis)
-    {
-    case Qt::XAxis:
-        setAxis(QVector3D(1, 0, 0));
-        break;
-    case Qt::YAxis:
-        setAxis(QVector3D(0, 1, 0));
-        break;
-    case Qt::ZAxis:
-        setAxis(QVector3D(0, 0, 1));
-        break;
-    }
+   switch (axis) {
+      case Qt::XAxis:
+         setAxis(QVector3D(1, 0, 0));
+         break;
+      case Qt::YAxis:
+         setAxis(QVector3D(0, 1, 0));
+         break;
+      case Qt::ZAxis:
+         setAxis(QVector3D(0, 0, 1));
+         break;
+   }
 }
 
 /*!
@@ -557,14 +565,15 @@ void QGraphicsRotation::setAxis(Qt::Axis axis)
 */
 void QGraphicsRotation::applyTo(QMatrix4x4 *matrix) const
 {
-    Q_D(const QGraphicsRotation);
+   Q_D(const QGraphicsRotation);
 
-    if (d->angle == 0. || d->axis.isNull() || qIsNaN(d->angle))
-        return;
+   if (d->angle == 0. || d->axis.isNull() || qIsNaN(d->angle)) {
+      return;
+   }
 
-    matrix->translate(d->origin);
-    matrix->projectedRotate(d->angle, d->axis.x(), d->axis.y(), d->axis.z());
-    matrix->translate(-d->origin);
+   matrix->translate(d->origin);
+   matrix->projectedRotate(d->angle, d->axis.x(), d->axis.y(), d->axis.z());
+   matrix->translate(-d->origin);
 }
 
 /*!

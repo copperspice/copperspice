@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,73 +38,76 @@ QT_BEGIN_NAMESPACE
 
 class QIconPrivate
 {
-public:
-    QIconPrivate();
+ public:
+   QIconPrivate();
 
-    ~QIconPrivate() {
-        if (engine_version == 1) {
-            if (!v1RefCount->deref()) {
-                delete engine;
-                delete v1RefCount;
-            }
-        } else if (engine_version == 2) {
+   ~QIconPrivate() {
+      if (engine_version == 1) {
+         if (!v1RefCount->deref()) {
             delete engine;
-        }
-    }
+            delete v1RefCount;
+         }
+      } else if (engine_version == 2) {
+         delete engine;
+      }
+   }
 
-    QIconEngine *engine;
+   QIconEngine *engine;
 
-    QAtomicInt ref;
-    int serialNum;
-    int detach_no;
-    int engine_version;
+   QAtomicInt ref;
+   int serialNum;
+   int detach_no;
+   int engine_version;
 
-    QAtomicInt *v1RefCount;
+   QAtomicInt *v1RefCount;
 };
 
 
-struct QPixmapIconEngineEntry
+struct QPixmapIconEngineEntry {
+   QPixmapIconEngineEntry(): mode(QIcon::Normal), state(QIcon::Off) {}
+   QPixmapIconEngineEntry(const QPixmap &pm, QIcon::Mode m = QIcon::Normal, QIcon::State s = QIcon::Off)
+      : pixmap(pm), size(pm.size()), mode(m), state(s) {}
+   QPixmapIconEngineEntry(const QString &file, const QSize &sz = QSize(), QIcon::Mode m = QIcon::Normal,
+                          QIcon::State s = QIcon::Off)
+      : fileName(file), size(sz), mode(m), state(s) {}
+   QPixmap pixmap;
+   QString fileName;
+   QSize size;
+   QIcon::Mode mode;
+   QIcon::State state;
+   bool isNull() const {
+      return (fileName.isEmpty() && pixmap.isNull());
+   }
+};
+
+
+
+class QPixmapIconEngine : public QIconEngineV2
 {
-    QPixmapIconEngineEntry():mode(QIcon::Normal), state(QIcon::Off){}
-    QPixmapIconEngineEntry(const QPixmap &pm, QIcon::Mode m = QIcon::Normal, QIcon::State s = QIcon::Off)
-        :pixmap(pm), size(pm.size()), mode(m), state(s){}
-    QPixmapIconEngineEntry(const QString &file, const QSize &sz = QSize(), QIcon::Mode m = QIcon::Normal, QIcon::State s = QIcon::Off)
-        :fileName(file), size(sz), mode(m), state(s){}
-    QPixmap pixmap;
-    QString fileName;
-    QSize size;
-    QIcon::Mode mode;
-    QIcon::State state;
-    bool isNull() const {return (fileName.isEmpty() && pixmap.isNull()); }
-};
+ public:
+   QPixmapIconEngine();
+   QPixmapIconEngine(const QPixmapIconEngine &);
+   ~QPixmapIconEngine();
+   void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state);
+   QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state);
+   QPixmapIconEngineEntry *bestMatch(const QSize &size, QIcon::Mode mode, QIcon::State state, bool sizeOnly);
+   QSize actualSize(const QSize &size, QIcon::Mode mode, QIcon::State state);
+   void addPixmap(const QPixmap &pixmap, QIcon::Mode mode, QIcon::State state);
+   void addFile(const QString &fileName, const QSize &size, QIcon::Mode mode, QIcon::State state);
 
+   // v2 functions
+   QString key() const;
+   QIconEngineV2 *clone() const;
+   bool read(QDataStream &in);
+   bool write(QDataStream &out) const;
+   void virtual_hook(int id, void *data);
 
+ private:
+   QPixmapIconEngineEntry *tryMatch(const QSize &size, QIcon::Mode mode, QIcon::State state);
+   QVector<QPixmapIconEngineEntry> pixmaps;
 
-class QPixmapIconEngine : public QIconEngineV2 {
-public:
-    QPixmapIconEngine();
-    QPixmapIconEngine(const QPixmapIconEngine &);
-    ~QPixmapIconEngine();
-    void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state);
-    QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state);
-    QPixmapIconEngineEntry *bestMatch(const QSize &size, QIcon::Mode mode, QIcon::State state, bool sizeOnly);
-    QSize actualSize(const QSize &size, QIcon::Mode mode, QIcon::State state);
-    void addPixmap(const QPixmap &pixmap, QIcon::Mode mode, QIcon::State state);
-    void addFile(const QString &fileName, const QSize &size, QIcon::Mode mode, QIcon::State state);
-
-    // v2 functions
-    QString key() const;
-    QIconEngineV2 *clone() const;
-    bool read(QDataStream &in);
-    bool write(QDataStream &out) const;
-    void virtual_hook(int id, void *data);
-
-private:
-    QPixmapIconEngineEntry *tryMatch(const QSize &size, QIcon::Mode mode, QIcon::State state);
-    QVector<QPixmapIconEngineEntry> pixmaps;
-
-    friend QDataStream &operator<<(QDataStream &s, const QIcon &icon);
-    friend class QIconThemeEngine;
+   friend QDataStream &operator<<(QDataStream &s, const QIcon &icon);
+   friend class QIconThemeEngine;
 };
 
 QT_END_NAMESPACE

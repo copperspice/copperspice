@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,49 +31,49 @@
 
 QT_BEGIN_NAMESPACE
 
- /*!
-    \class QGesture
-    \since 4.6
-    \ingroup gestures
+/*!
+   \class QGesture
+   \since 4.6
+   \ingroup gestures
 
-    \brief The QGesture class represents a gesture, containing properties that
-    describe the corresponding user input.
+   \brief The QGesture class represents a gesture, containing properties that
+   describe the corresponding user input.
 
-    Gesture objects are not constructed directly by developers. They are created by
-    the QGestureRecognizer object that is registered with the application; see
-    QGestureRecognizer::registerRecognizer().
+   Gesture objects are not constructed directly by developers. They are created by
+   the QGestureRecognizer object that is registered with the application; see
+   QGestureRecognizer::registerRecognizer().
 
-    For an overview of gesture handling in Qt and information on using gestures
-    in your applications, see the \l{Gestures Programming} document.
+   For an overview of gesture handling in Qt and information on using gestures
+   in your applications, see the \l{Gestures Programming} document.
 
-    \section1 Gesture Properties
+   \section1 Gesture Properties
 
-    The class has a list of properties that can be queried by the user to get
-    some gesture-specific arguments. For example, the pinch gesture has a scale
-    factor that is exposed as a property.
+   The class has a list of properties that can be queried by the user to get
+   some gesture-specific arguments. For example, the pinch gesture has a scale
+   factor that is exposed as a property.
 
-    Developers of custom gesture recognizers can add additional properties in
-    order to provide additional information about a gesture. This can be done
-    by adding new dynamic properties to a QGesture object, or by subclassing
-    the QGesture class (or one of its subclasses).
+   Developers of custom gesture recognizers can add additional properties in
+   order to provide additional information about a gesture. This can be done
+   by adding new dynamic properties to a QGesture object, or by subclassing
+   the QGesture class (or one of its subclasses).
 
-    \section1 Lifecycle of a Gesture Object
+   \section1 Lifecycle of a Gesture Object
 
-    A QGesture instance is implicitly created when needed and is owned by Qt.
-    Developers should never destroy them or store them for later use as Qt may
-    destroy particular instances of them and create new ones to replace them.
+   A QGesture instance is implicitly created when needed and is owned by Qt.
+   Developers should never destroy them or store them for later use as Qt may
+   destroy particular instances of them and create new ones to replace them.
 
-    The registered gesture recognizer monitors the input events for the target
-    object via its \l{QGestureRecognizer::}{recognize()} function, updating the
-    properties of the gesture object as required.
+   The registered gesture recognizer monitors the input events for the target
+   object via its \l{QGestureRecognizer::}{recognize()} function, updating the
+   properties of the gesture object as required.
 
-    The gesture object may be delivered to the target object in a QGestureEvent if
-    the corresponding gesture is active or has just been canceled. Each event that
-    is delivered contains a list of gesture objects, since support for more than
-    one gesture may be enabled for the target object. Due to the way events are
-    handled in Qt, gesture events may be filtered by other objects.
+   The gesture object may be delivered to the target object in a QGestureEvent if
+   the corresponding gesture is active or has just been canceled. Each event that
+   is delivered contains a list of gesture objects, since support for more than
+   one gesture may be enabled for the target object. Due to the way events are
+   handled in Qt, gesture events may be filtered by other objects.
 
-    \sa QGestureEvent, QGestureRecognizer
+   \sa QGestureEvent, QGestureRecognizer
 */
 
 /*!
@@ -82,20 +82,20 @@ QT_BEGIN_NAMESPACE
     QGesture objects are created by gesture recognizers in the
     QGestureRecognizer::create() function.
 */
-QGesture::QGesture(QObject *parent)  
+QGesture::QGesture(QObject *parent)
    : QObject(parent), d_ptr(new QGesturePrivate)
 {
-    d_ptr->q_ptr = this;	
-    d_func()->gestureType = Qt::CustomGesture;
+   d_ptr->q_ptr = this;
+   d_func()->gestureType = Qt::CustomGesture;
 }
 
 /*!
     \internal
 */
 QGesture::QGesture(QGesturePrivate &dd, QObject *parent)
-      : QObject(parent), d_ptr(&dd)
+   : QObject(parent), d_ptr(&dd)
 {
-   d_ptr->q_ptr = this;	
+   d_ptr->q_ptr = this;
 }
 
 /*!
@@ -135,34 +135,34 @@ QGesture::~QGesture()
 
 Qt::GestureType QGesture::gestureType() const
 {
-    return d_func()->gestureType;
+   return d_func()->gestureType;
 }
 
 Qt::GestureState QGesture::state() const
 {
-    return d_func()->state;
+   return d_func()->state;
 }
 
 QPointF QGesture::hotSpot() const
 {
-    return d_func()->hotSpot;
+   return d_func()->hotSpot;
 }
 
 void QGesture::setHotSpot(const QPointF &value)
 {
-    Q_D(QGesture);
-    d->hotSpot = value;
-    d->isHotSpotSet = true;
+   Q_D(QGesture);
+   d->hotSpot = value;
+   d->isHotSpotSet = true;
 }
 
 bool QGesture::hasHotSpot() const
 {
-    return d_func()->isHotSpotSet;
+   return d_func()->isHotSpotSet;
 }
 
 void QGesture::unsetHotSpot()
 {
-    d_func()->isHotSpotSet = false;
+   d_func()->isHotSpotSet = false;
 }
 
 /*!
@@ -190,14 +190,14 @@ void QGesture::unsetHotSpot()
 
 void QGesture::setGestureCancelPolicy(GestureCancelPolicy policy)
 {
-    Q_D(QGesture);
-    d->gestureCancelPolicy = static_cast<uint>(policy);
+   Q_D(QGesture);
+   d->gestureCancelPolicy = static_cast<uint>(policy);
 }
 
 QGesture::GestureCancelPolicy QGesture::gestureCancelPolicy() const
 {
-    Q_D(const QGesture);
-    return static_cast<GestureCancelPolicy>(d->gestureCancelPolicy);
+   Q_D(const QGesture);
+   return static_cast<GestureCancelPolicy>(d->gestureCancelPolicy);
 }
 
 /*!
@@ -273,46 +273,46 @@ QGesture::GestureCancelPolicy QGesture::gestureCancelPolicy() const
     \internal
 */
 QPanGesture::QPanGesture(QObject *parent)
-    : QGesture(*new QPanGesturePrivate, parent)
+   : QGesture(*new QPanGesturePrivate, parent)
 {
-    d_func()->gestureType = Qt::PanGesture;
+   d_func()->gestureType = Qt::PanGesture;
 }
 
 
 QPointF QPanGesture::lastOffset() const
 {
-    return d_func()->lastOffset;
+   return d_func()->lastOffset;
 }
 
 QPointF QPanGesture::offset() const
 {
-    return d_func()->offset;
+   return d_func()->offset;
 }
 
 QPointF QPanGesture::delta() const
 {
-    Q_D(const QPanGesture);
-    return d->offset - d->lastOffset;
+   Q_D(const QPanGesture);
+   return d->offset - d->lastOffset;
 }
 
 qreal QPanGesture::acceleration() const
 {
-    return d_func()->acceleration;
+   return d_func()->acceleration;
 }
 
 void QPanGesture::setLastOffset(const QPointF &value)
 {
-    d_func()->lastOffset = value;
+   d_func()->lastOffset = value;
 }
 
 void QPanGesture::setOffset(const QPointF &value)
 {
-    d_func()->offset = value;
+   d_func()->offset = value;
 }
 
 void QPanGesture::setAcceleration(qreal value)
 {
-    d_func()->acceleration = value;
+   d_func()->acceleration = value;
 }
 
 /*!
@@ -343,7 +343,7 @@ void QPanGesture::setAcceleration(qreal value)
 
 /*!
     \enum QPinchGesture::ChangeFlag
-    
+
     This enum describes the changes that can occur to the properties of
     the gesture object.
 
@@ -463,121 +463,121 @@ void QPanGesture::setAcceleration(qreal value)
     \internal
 */
 QPinchGesture::QPinchGesture(QObject *parent)
-    : QGesture(*new QPinchGesturePrivate, parent)
+   : QGesture(*new QPinchGesturePrivate, parent)
 {
-    d_func()->gestureType = Qt::PinchGesture;
+   d_func()->gestureType = Qt::PinchGesture;
 }
 
 QPinchGesture::ChangeFlags QPinchGesture::totalChangeFlags() const
 {
-    return d_func()->totalChangeFlags;
+   return d_func()->totalChangeFlags;
 }
 
 void QPinchGesture::setTotalChangeFlags(QPinchGesture::ChangeFlags value)
 {
-    d_func()->totalChangeFlags = value;
+   d_func()->totalChangeFlags = value;
 }
 
 QPinchGesture::ChangeFlags QPinchGesture::changeFlags() const
 {
-    return d_func()->changeFlags;
+   return d_func()->changeFlags;
 }
 
 void QPinchGesture::setChangeFlags(QPinchGesture::ChangeFlags value)
 {
-    d_func()->changeFlags = value;
+   d_func()->changeFlags = value;
 }
 
 QPointF QPinchGesture::startCenterPoint() const
 {
-    return d_func()->startCenterPoint;
+   return d_func()->startCenterPoint;
 }
 
 QPointF QPinchGesture::lastCenterPoint() const
 {
-    return d_func()->lastCenterPoint;
+   return d_func()->lastCenterPoint;
 }
 
 QPointF QPinchGesture::centerPoint() const
 {
-    return d_func()->centerPoint;
+   return d_func()->centerPoint;
 }
 
 void QPinchGesture::setStartCenterPoint(const QPointF &value)
 {
-    d_func()->startCenterPoint = value;
+   d_func()->startCenterPoint = value;
 }
 
 void QPinchGesture::setLastCenterPoint(const QPointF &value)
 {
-    d_func()->lastCenterPoint = value;
+   d_func()->lastCenterPoint = value;
 }
 
 void QPinchGesture::setCenterPoint(const QPointF &value)
 {
-    d_func()->centerPoint = value;
+   d_func()->centerPoint = value;
 }
 
 
 qreal QPinchGesture::totalScaleFactor() const
 {
-    return d_func()->totalScaleFactor;
+   return d_func()->totalScaleFactor;
 }
 
 qreal QPinchGesture::lastScaleFactor() const
 {
-    return d_func()->lastScaleFactor;
+   return d_func()->lastScaleFactor;
 }
 
 qreal QPinchGesture::scaleFactor() const
 {
-    return d_func()->scaleFactor;
+   return d_func()->scaleFactor;
 }
 
 void QPinchGesture::setTotalScaleFactor(qreal value)
 {
-    d_func()->totalScaleFactor = value;
+   d_func()->totalScaleFactor = value;
 }
 
 void QPinchGesture::setLastScaleFactor(qreal value)
 {
-    d_func()->lastScaleFactor = value;
+   d_func()->lastScaleFactor = value;
 }
 
 void QPinchGesture::setScaleFactor(qreal value)
 {
-    d_func()->scaleFactor = value;
+   d_func()->scaleFactor = value;
 }
 
 
 qreal QPinchGesture::totalRotationAngle() const
 {
-    return d_func()->totalRotationAngle;
+   return d_func()->totalRotationAngle;
 }
 
 qreal QPinchGesture::lastRotationAngle() const
 {
-    return d_func()->lastRotationAngle;
+   return d_func()->lastRotationAngle;
 }
 
 qreal QPinchGesture::rotationAngle() const
 {
-    return d_func()->rotationAngle;
+   return d_func()->rotationAngle;
 }
 
 void QPinchGesture::setTotalRotationAngle(qreal value)
 {
-    d_func()->totalRotationAngle = value;
+   d_func()->totalRotationAngle = value;
 }
 
 void QPinchGesture::setLastRotationAngle(qreal value)
 {
-    d_func()->lastRotationAngle = value;
+   d_func()->lastRotationAngle = value;
 }
 
 void QPinchGesture::setRotationAngle(qreal value)
 {
-    d_func()->rotationAngle = value;
+   d_func()->rotationAngle = value;
 }
 
 /*!
@@ -649,41 +649,43 @@ void QPinchGesture::setRotationAngle(qreal value)
     \internal
 */
 QSwipeGesture::QSwipeGesture(QObject *parent)
-    : QGesture(*new QSwipeGesturePrivate, parent)
+   : QGesture(*new QSwipeGesturePrivate, parent)
 {
-    d_func()->gestureType = Qt::SwipeGesture;
+   d_func()->gestureType = Qt::SwipeGesture;
 }
 
 QSwipeGesture::SwipeDirection QSwipeGesture::horizontalDirection() const
 {
-    Q_D(const QSwipeGesture);
-    if (d->swipeAngle < 0 || d->swipeAngle == 90 || d->swipeAngle == 270)
-        return QSwipeGesture::NoDirection;
-    else if (d->swipeAngle < 90 || d->swipeAngle > 270)
-        return QSwipeGesture::Right;
-    else
-        return QSwipeGesture::Left;
+   Q_D(const QSwipeGesture);
+   if (d->swipeAngle < 0 || d->swipeAngle == 90 || d->swipeAngle == 270) {
+      return QSwipeGesture::NoDirection;
+   } else if (d->swipeAngle < 90 || d->swipeAngle > 270) {
+      return QSwipeGesture::Right;
+   } else {
+      return QSwipeGesture::Left;
+   }
 }
 
 QSwipeGesture::SwipeDirection QSwipeGesture::verticalDirection() const
 {
-    Q_D(const QSwipeGesture);
-    if (d->swipeAngle <= 0 || d->swipeAngle == 180)
-        return QSwipeGesture::NoDirection;
-    else if (d->swipeAngle < 180)
-        return QSwipeGesture::Up;
-    else
-        return QSwipeGesture::Down;
+   Q_D(const QSwipeGesture);
+   if (d->swipeAngle <= 0 || d->swipeAngle == 180) {
+      return QSwipeGesture::NoDirection;
+   } else if (d->swipeAngle < 180) {
+      return QSwipeGesture::Up;
+   } else {
+      return QSwipeGesture::Down;
+   }
 }
 
 qreal QSwipeGesture::swipeAngle() const
 {
-    return d_func()->swipeAngle;
+   return d_func()->swipeAngle;
 }
 
 void QSwipeGesture::setSwipeAngle(qreal value)
 {
-    d_func()->swipeAngle = value;
+   d_func()->swipeAngle = value;
 }
 
 /*!
@@ -707,19 +709,19 @@ void QSwipeGesture::setSwipeAngle(qreal value)
     \internal
 */
 QTapGesture::QTapGesture(QObject *parent)
-    : QGesture(*new QTapGesturePrivate, parent)
+   : QGesture(*new QTapGesturePrivate, parent)
 {
-    d_func()->gestureType = Qt::TapGesture;
+   d_func()->gestureType = Qt::TapGesture;
 }
 
 QPointF QTapGesture::position() const
 {
-    return d_func()->position;
+   return d_func()->position;
 }
 
 void QTapGesture::setPosition(const QPointF &value)
 {
-    d_func()->position = value;
+   d_func()->position = value;
 }
 /*!
     \class QTapAndHoldGesture
@@ -743,19 +745,19 @@ void QTapGesture::setPosition(const QPointF &value)
     \internal
 */
 QTapAndHoldGesture::QTapAndHoldGesture(QObject *parent)
-    : QGesture(*new QTapAndHoldGesturePrivate, parent)
+   : QGesture(*new QTapAndHoldGesturePrivate, parent)
 {
-    d_func()->gestureType = Qt::TapAndHoldGesture;
+   d_func()->gestureType = Qt::TapAndHoldGesture;
 }
 
 QPointF QTapAndHoldGesture::position() const
 {
-    return d_func()->position;
+   return d_func()->position;
 }
 
 void QTapAndHoldGesture::setPosition(const QPointF &value)
 {
-    d_func()->position = value;
+   d_func()->position = value;
 }
 
 /*!
@@ -769,7 +771,7 @@ void QTapAndHoldGesture::setPosition(const QPointF &value)
 // static
 void QTapAndHoldGesture::setTimeout(int msecs)
 {
-    QTapAndHoldGesturePrivate::Timeout = msecs;
+   QTapAndHoldGesturePrivate::Timeout = msecs;
 }
 
 /*!
@@ -783,7 +785,7 @@ void QTapAndHoldGesture::setTimeout(int msecs)
 // static
 int QTapAndHoldGesture::timeout()
 {
-    return QTapAndHoldGesturePrivate::Timeout;
+   return QTapAndHoldGesturePrivate::Timeout;
 }
 
 int QTapAndHoldGesturePrivate::Timeout = 700; // in ms
@@ -791,16 +793,16 @@ int QTapAndHoldGesturePrivate::Timeout = 700; // in ms
 
 // wrapper for overloaded method
 qreal QPanGesture::cs_horizontalVelocity() const
-{ 
+{
    Q_D(const QPanGesture);
    return d->horizontalVelocity();
 }
 
 // wrapper for overloaded method
-void QPanGesture::cs_setHorizontalVelocity(qreal velocity) 
-{ 
+void QPanGesture::cs_setHorizontalVelocity(qreal velocity)
+{
    Q_D(QPanGesture);
-   d->setHorizontalVelocity(velocity); 
+   d->setHorizontalVelocity(velocity);
 }
 
 // wrapper for overloaded method
@@ -812,23 +814,23 @@ qreal QPanGesture::cs_verticalVelocity() const
 
 // wrapper for overloaded method
 void QPanGesture::cs_setVerticalVelocity(qreal velocity)
-{ 
+{
    Q_D(QPanGesture);
-   d->setVerticalVelocity(velocity); 
+   d->setVerticalVelocity(velocity);
 }
 
 // wrapper for overloaded method
 qreal QSwipeGesture::cs_velocity() const
-{ 
+{
    Q_D(const QSwipeGesture);
-   return d->velocity(); 
+   return d->velocity();
 }
 
 // wrapper for overloaded method
 void QSwipeGesture::cs_setVelocity(qreal velocity)
-{ 
+{
    Q_D(QSwipeGesture);
-   d->setVelocity(velocity); 
+   d->setVelocity(velocity);
 }
 
 

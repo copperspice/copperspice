@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,88 +38,96 @@
 QT_BEGIN_NAMESPACE
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QAccessibleBridgeFactoryInterface_iid, QLatin1String("/accessiblebridge")))
+                          (QAccessibleBridgeFactoryInterface_iid, QLatin1String("/accessiblebridge")))
 
 Q_GLOBAL_STATIC(QVector<QAccessibleBridge *>, bridges)
 static bool isInit = false;
 
 void QAccessible::initialize()
 {
-    if (isInit)
-        return;
-    isInit = true;
+   if (isInit) {
+      return;
+   }
+   isInit = true;
 
-    if (qgetenv("QT_ACCESSIBILITY") != "1")
-        return;
+   if (qgetenv("QT_ACCESSIBILITY") != "1") {
+      return;
+   }
 
-    const QStringList l = loader()->keys();
-    for (int i = 0; i < l.count(); ++i) {
-        if (QAccessibleBridgeFactoryInterface *factory =
-                qobject_cast<QAccessibleBridgeFactoryInterface*>(loader()->instance(l.at(i)))) {
-            QAccessibleBridge * bridge = factory->create(l.at(i));
-            if (bridge)
-                bridges()->append(bridge);
-        }
-    }
+   const QStringList l = loader()->keys();
+   for (int i = 0; i < l.count(); ++i) {
+      if (QAccessibleBridgeFactoryInterface *factory =
+               qobject_cast<QAccessibleBridgeFactoryInterface *>(loader()->instance(l.at(i)))) {
+         QAccessibleBridge *bridge = factory->create(l.at(i));
+         if (bridge) {
+            bridges()->append(bridge);
+         }
+      }
+   }
 
 }
 
 void QAccessible::cleanup()
 {
-    qDeleteAll(*bridges());
+   qDeleteAll(*bridges());
 }
 
 void QAccessible::updateAccessibility(QObject *o, int who, Event reason)
 {
-    Q_ASSERT(o);
+   Q_ASSERT(o);
 
-    if (updateHandler) {
-        updateHandler(o, who, reason);
-        return;
-    }
+   if (updateHandler) {
+      updateHandler(o, who, reason);
+      return;
+   }
 
-    initialize();
-    if (!bridges() || bridges()->isEmpty())
-        return;
+   initialize();
+   if (!bridges() || bridges()->isEmpty()) {
+      return;
+   }
 
-    QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(o);
-    if (!iface)
-        return;
+   QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(o);
+   if (!iface) {
+      return;
+   }
 
-    // updates for List/Table/Tree should send child
-    if (who) {
-        QAccessibleInterface *child;
-        iface->navigate(QAccessible::Child, who, &child);
-        if (child) {
-            delete iface;
-            iface = child;
-            who = 0;
-        }
-    }
+   // updates for List/Table/Tree should send child
+   if (who) {
+      QAccessibleInterface *child;
+      iface->navigate(QAccessible::Child, who, &child);
+      if (child) {
+         delete iface;
+         iface = child;
+         who = 0;
+      }
+   }
 
-    for (int i = 0; i < bridges()->count(); ++i)
-        bridges()->at(i)->notifyAccessibilityUpdate(reason, iface, who);
-    delete iface;
+   for (int i = 0; i < bridges()->count(); ++i) {
+      bridges()->at(i)->notifyAccessibilityUpdate(reason, iface, who);
+   }
+   delete iface;
 }
 
 void QAccessible::setRootObject(QObject *o)
 {
-    if (rootObjectHandler) {
-        rootObjectHandler(o);
-        return;
-    }
+   if (rootObjectHandler) {
+      rootObjectHandler(o);
+      return;
+   }
 
-    initialize();
-    if (bridges()->isEmpty())
-        return;
+   initialize();
+   if (bridges()->isEmpty()) {
+      return;
+   }
 
-    if (!o)
-        return;
+   if (!o) {
+      return;
+   }
 
-    for (int i = 0; i < bridges()->count(); ++i) {
-        QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(o);
-        bridges()->at(i)->setRootObject(iface);
-    }
+   for (int i = 0; i < bridges()->count(); ++i) {
+      QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(o);
+      bridges()->at(i)->setRootObject(iface);
+   }
 }
 
 QT_END_NAMESPACE

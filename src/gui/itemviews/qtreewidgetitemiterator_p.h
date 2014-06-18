@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,44 +36,41 @@ QT_BEGIN_NAMESPACE
 class QTreeModel;
 class QTreeWidgetItem;
 
-class QTreeWidgetItemIteratorPrivate {
-    Q_DECLARE_PUBLIC(QTreeWidgetItemIterator)
-public:
-    QTreeWidgetItemIteratorPrivate(QTreeWidgetItemIterator *q, QTreeModel *model)
-        : m_currentIndex(0), m_model(model), q_ptr(q)
-    {
+class QTreeWidgetItemIteratorPrivate
+{
+   Q_DECLARE_PUBLIC(QTreeWidgetItemIterator)
+ public:
+   QTreeWidgetItemIteratorPrivate(QTreeWidgetItemIterator *q, QTreeModel *model)
+      : m_currentIndex(0), m_model(model), q_ptr(q) {
 
-    }
+   }
 
-    QTreeWidgetItemIteratorPrivate(const QTreeWidgetItemIteratorPrivate& other)
-        : m_currentIndex(other.m_currentIndex), m_model(other.m_model),
-          m_parentIndex(other.m_parentIndex), q_ptr(other.q_ptr)
-    {
+   QTreeWidgetItemIteratorPrivate(const QTreeWidgetItemIteratorPrivate &other)
+      : m_currentIndex(other.m_currentIndex), m_model(other.m_model),
+        m_parentIndex(other.m_parentIndex), q_ptr(other.q_ptr) {
 
-    }
+   }
 
-    QTreeWidgetItemIteratorPrivate &operator=(const QTreeWidgetItemIteratorPrivate& other)
-    {
-        m_currentIndex = other.m_currentIndex;
-        m_parentIndex = other.m_parentIndex;
-        m_model = other.m_model;
-        return (*this);
-    }
+   QTreeWidgetItemIteratorPrivate &operator=(const QTreeWidgetItemIteratorPrivate &other) {
+      m_currentIndex = other.m_currentIndex;
+      m_parentIndex = other.m_parentIndex;
+      m_model = other.m_model;
+      return (*this);
+   }
 
-    ~QTreeWidgetItemIteratorPrivate()
-    {
-    }
+   ~QTreeWidgetItemIteratorPrivate() {
+   }
 
-    QTreeWidgetItem* nextSibling(const QTreeWidgetItem* item) const;
-    void ensureValidIterator(const QTreeWidgetItem *itemToBeRemoved);
+   QTreeWidgetItem *nextSibling(const QTreeWidgetItem *item) const;
+   void ensureValidIterator(const QTreeWidgetItem *itemToBeRemoved);
 
-    QTreeWidgetItem *next(const QTreeWidgetItem *current);
-    QTreeWidgetItem *previous(const QTreeWidgetItem *current);
-private:
-    int             m_currentIndex;
-    QTreeModel     *m_model;        // This iterator class should not have ownership of the model.
-    QStack<int>     m_parentIndex;
-    QTreeWidgetItemIterator *q_ptr;
+   QTreeWidgetItem *next(const QTreeWidgetItem *current);
+   QTreeWidgetItem *previous(const QTreeWidgetItem *current);
+ private:
+   int             m_currentIndex;
+   QTreeModel     *m_model;        // This iterator class should not have ownership of the model.
+   QStack<int>     m_parentIndex;
+   QTreeWidgetItemIterator *q_ptr;
 };
 
 QT_END_NAMESPACE

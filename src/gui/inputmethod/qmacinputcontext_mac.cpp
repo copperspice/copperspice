@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,11 +37,11 @@
 
 QT_BEGIN_NAMESPACE
 
-extern bool qt_sendSpontaneousEvent(QObject*, QEvent*);
+extern bool qt_sendSpontaneousEvent(QObject *, QEvent *);
 
 QMacInputContext::QMacInputContext(QObject *parent)
-    : QInputContext(parent), composing(false), recursionGuard(false), keydownEvent(0), lastFocusWid(0)
-{   
+   : QInputContext(parent), composing(false), recursionGuard(false), keydownEvent(0), lastFocusWid(0)
+{
 }
 
 QMacInputContext::~QMacInputContext()
@@ -54,22 +54,22 @@ void QMacInputContext::createTextDocument()
 
 QString QMacInputContext::language()
 {
-    return QString();
+   return QString();
 }
 
 void QMacInputContext::mouseHandler(int pos, QMouseEvent *e)
 {
-    Q_UNUSED(pos);
-    Q_UNUSED(e);
+   Q_UNUSED(pos);
+   Q_UNUSED(e);
 }
 
 void QMacInputContext::setFocusWidget(QWidget *w)
 {
-    if (! w) {
-        lastFocusWid = focusWidget();
-    }
-    
-    QInputContext::setFocusWidget(w);
+   if (! w) {
+      lastFocusWid = focusWidget();
+   }
+
+   QInputContext::setFocusWidget(w);
 }
 
 void QMacInputContext::initialize()
@@ -82,14 +82,16 @@ void QMacInputContext::cleanup()
 
 void QMacInputContext::setLastKeydownEvent(EventRef event)
 {
-    EventRef tmpEvent = keydownEvent;
-    keydownEvent = event;
+   EventRef tmpEvent = keydownEvent;
+   keydownEvent = event;
 
-    if (keydownEvent)
-        CS_RetainEvent(keydownEvent);
+   if (keydownEvent) {
+      CS_RetainEvent(keydownEvent);
+   }
 
-    if (tmpEvent)
-        CS_ReleaseEvent(tmpEvent);
+   if (tmpEvent) {
+      CS_ReleaseEvent(tmpEvent);
+   }
 }
 
 QT_END_NAMESPACE

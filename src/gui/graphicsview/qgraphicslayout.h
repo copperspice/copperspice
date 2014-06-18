@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,34 +38,34 @@ class QGraphicsWidget;
 
 class Q_GUI_EXPORT QGraphicsLayout : public QGraphicsLayoutItem
 {
-public:
-    QGraphicsLayout(QGraphicsLayoutItem *parent = 0);
-    ~QGraphicsLayout();
+ public:
+   QGraphicsLayout(QGraphicsLayoutItem *parent = 0);
+   ~QGraphicsLayout();
 
-    void setContentsMargins(qreal left, qreal top, qreal right, qreal bottom);
-    void getContentsMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const;
+   void setContentsMargins(qreal left, qreal top, qreal right, qreal bottom);
+   void getContentsMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const;
 
-    void activate();
-    bool isActivated() const;
-    virtual void invalidate();
-    virtual void updateGeometry();
+   void activate();
+   bool isActivated() const;
+   virtual void invalidate();
+   virtual void updateGeometry();
 
-    virtual void widgetEvent(QEvent *e);
+   virtual void widgetEvent(QEvent *e);
 
-    virtual int count() const = 0;
-    virtual QGraphicsLayoutItem *itemAt(int i) const = 0;
-    virtual void removeAt(int index) = 0;
+   virtual int count() const = 0;
+   virtual QGraphicsLayoutItem *itemAt(int i) const = 0;
+   virtual void removeAt(int index) = 0;
 
-    static void setInstantInvalidatePropagation(bool enable);
-    static bool instantInvalidatePropagation();
-protected:
-    QGraphicsLayout(QGraphicsLayoutPrivate &, QGraphicsLayoutItem *);
-    void addChildLayoutItem(QGraphicsLayoutItem *layoutItem);
+   static void setInstantInvalidatePropagation(bool enable);
+   static bool instantInvalidatePropagation();
+ protected:
+   QGraphicsLayout(QGraphicsLayoutPrivate &, QGraphicsLayoutItem *);
+   void addChildLayoutItem(QGraphicsLayoutItem *layoutItem);
 
-private:
-    Q_DISABLE_COPY(QGraphicsLayout)
-    Q_DECLARE_PRIVATE(QGraphicsLayout)
-    friend class QGraphicsWidget;
+ private:
+   Q_DISABLE_COPY(QGraphicsLayout)
+   Q_DECLARE_PRIVATE(QGraphicsLayout)
+   friend class QGraphicsWidget;
 };
 
 CS_DECLARE_INTERFACE(QGraphicsLayout, "com.copperspice.QGraphicsLayout")

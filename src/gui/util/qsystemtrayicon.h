@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,80 +44,80 @@ class QPoint;
 
 class Q_GUI_EXPORT QSystemTrayIcon : public QObject
 {
-    CS_OBJECT(QSystemTrayIcon)
+   CS_OBJECT(QSystemTrayIcon)
 
-    GUI_CS_PROPERTY_READ(toolTip, toolTip)
-    GUI_CS_PROPERTY_WRITE(toolTip, setToolTip)
+   GUI_CS_PROPERTY_READ(toolTip, toolTip)
+   GUI_CS_PROPERTY_WRITE(toolTip, setToolTip)
 
-    GUI_CS_PROPERTY_READ(icon, icon)
-    GUI_CS_PROPERTY_WRITE(icon, setIcon)
+   GUI_CS_PROPERTY_READ(icon, icon)
+   GUI_CS_PROPERTY_WRITE(icon, setIcon)
 
-    GUI_CS_PROPERTY_READ(visible, isVisible)
-    GUI_CS_PROPERTY_WRITE(visible, setVisible)
+   GUI_CS_PROPERTY_READ(visible, isVisible)
+   GUI_CS_PROPERTY_WRITE(visible, setVisible)
 
-    GUI_CS_PROPERTY_DESIGNABLE(visible, false)
+   GUI_CS_PROPERTY_DESIGNABLE(visible, false)
 
-public:
-    QSystemTrayIcon(QObject *parent = 0);
-    QSystemTrayIcon(const QIcon &icon, QObject *parent = 0);
-    ~QSystemTrayIcon();
+ public:
+   QSystemTrayIcon(QObject *parent = 0);
+   QSystemTrayIcon(const QIcon &icon, QObject *parent = 0);
+   ~QSystemTrayIcon();
 
-    enum ActivationReason {
-        Unknown,
-        Context,
-        DoubleClick,
-        Trigger,
-        MiddleClick
-    };
+   enum ActivationReason {
+      Unknown,
+      Context,
+      DoubleClick,
+      Trigger,
+      MiddleClick
+   };
 
 #ifndef QT_NO_MENU
-    void setContextMenu(QMenu *menu);
-    QMenu *contextMenu() const;
+   void setContextMenu(QMenu *menu);
+   QMenu *contextMenu() const;
 #endif
 
-    QIcon icon() const;
-    void setIcon(const QIcon &icon);
+   QIcon icon() const;
+   void setIcon(const QIcon &icon);
 
-    QString toolTip() const;
-    void setToolTip(const QString &tip);
+   QString toolTip() const;
+   void setToolTip(const QString &tip);
 
-    static bool isSystemTrayAvailable();
-    static bool supportsMessages();
+   static bool isSystemTrayAvailable();
+   static bool supportsMessages();
 
-    enum MessageIcon { NoIcon, Information, Warning, Critical };
-    void showMessage(const QString &title, const QString &msg,
-                     MessageIcon icon = Information, int msecs = 10000);
+   enum MessageIcon { NoIcon, Information, Warning, Critical };
+   void showMessage(const QString &title, const QString &msg,
+                    MessageIcon icon = Information, int msecs = 10000);
 
-    QRect geometry() const;
-    bool isVisible() const;
+   QRect geometry() const;
+   bool isVisible() const;
 
-    GUI_CS_SLOT_1(Public, void setVisible(bool visible))
-    GUI_CS_SLOT_2(setVisible) 
+   GUI_CS_SLOT_1(Public, void setVisible(bool visible))
+   GUI_CS_SLOT_2(setVisible)
 
-    GUI_CS_SLOT_1(Public, void show())
-    GUI_CS_SLOT_2(show) 
+   GUI_CS_SLOT_1(Public, void show())
+   GUI_CS_SLOT_2(show)
 
-    GUI_CS_SLOT_1(Public, void hide())
-    GUI_CS_SLOT_2(hide) 
+   GUI_CS_SLOT_1(Public, void hide())
+   GUI_CS_SLOT_2(hide)
 
-    GUI_CS_SIGNAL_1(Public, void activated(QSystemTrayIcon::ActivationReason reason))
-    GUI_CS_SIGNAL_2(activated,reason) 
+   GUI_CS_SIGNAL_1(Public, void activated(QSystemTrayIcon::ActivationReason reason))
+   GUI_CS_SIGNAL_2(activated, reason)
 
-    GUI_CS_SIGNAL_1(Public, void messageClicked())
-    GUI_CS_SIGNAL_2(messageClicked) 
+   GUI_CS_SIGNAL_1(Public, void messageClicked())
+   GUI_CS_SIGNAL_2(messageClicked)
 
-protected:
-    bool event(QEvent *event);
+ protected:
+   bool event(QEvent *event);
 
-	 QScopedPointer<QSystemTrayIconPrivate> d_ptr;
+   QScopedPointer<QSystemTrayIconPrivate> d_ptr;
 
-private:
-    Q_DISABLE_COPY(QSystemTrayIcon)
-    Q_DECLARE_PRIVATE(QSystemTrayIcon)
+ private:
+   Q_DISABLE_COPY(QSystemTrayIcon)
+   Q_DECLARE_PRIVATE(QSystemTrayIcon)
 
-    friend class QSystemTrayIconSys;
-    friend class QBalloonTip;
-    friend void qtsystray_sendActivated(QSystemTrayIcon *, int);
+   friend class QSystemTrayIconSys;
+   friend class QBalloonTip;
+   friend void qtsystray_sendActivated(QSystemTrayIcon *, int);
 
 };
 

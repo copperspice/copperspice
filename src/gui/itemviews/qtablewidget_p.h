@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,155 +38,161 @@
 QT_BEGIN_NAMESPACE
 
 // workaround for VC++ 6.0 linker bug
-typedef bool(*LessThan)(const QPair<QTableWidgetItem*,int>&,const QPair<QTableWidgetItem*,int>&);
+typedef bool(*LessThan)(const QPair<QTableWidgetItem *, int> &, const QPair<QTableWidgetItem *, int> &);
 
 class QTableWidgetMimeData : public QMimeData
 {
-    CS_OBJECT(QTableWidgetMimeData)
-public:
-    QList<QTableWidgetItem*> items;
+   CS_OBJECT(QTableWidgetMimeData)
+ public:
+   QList<QTableWidgetItem *> items;
 };
 
 class QTableModelLessThan
 {
-public:
-    inline bool operator()(QTableWidgetItem *i1, QTableWidgetItem *i2) const
-        { return (*i1 < *i2); }
+ public:
+   inline bool operator()(QTableWidgetItem *i1, QTableWidgetItem *i2) const {
+      return (*i1 < *i2);
+   }
 };
 
 class QTableModelGreaterThan
 {
-public:
-    inline bool operator()(QTableWidgetItem *i1, QTableWidgetItem *i2) const
-        { return (*i2 < *i1); }
+ public:
+   inline bool operator()(QTableWidgetItem *i1, QTableWidgetItem *i2) const {
+      return (*i2 < *i1);
+   }
 };
 
 class QTableModel : public QAbstractTableModel
 {
-    CS_OBJECT(QTableModel)
-public:
-    enum ItemFlagsExtension {
-        ItemIsHeaderItem = 128
-    }; // we need this to separate header items from other items
+   CS_OBJECT(QTableModel)
+ public:
+   enum ItemFlagsExtension {
+      ItemIsHeaderItem = 128
+   }; // we need this to separate header items from other items
 
-    QTableModel(int rows, int columns, QTableWidget *parent);
-    ~QTableModel();
+   QTableModel(int rows, int columns, QTableWidget *parent);
+   ~QTableModel();
 
-    bool insertRows(int row, int count = 1, const QModelIndex &parent = QModelIndex());
-    bool insertColumns(int column, int count = 1, const QModelIndex &parent = QModelIndex());
+   bool insertRows(int row, int count = 1, const QModelIndex &parent = QModelIndex());
+   bool insertColumns(int column, int count = 1, const QModelIndex &parent = QModelIndex());
 
-    bool removeRows(int row, int count = 1, const QModelIndex &parent = QModelIndex());
-    bool removeColumns(int column, int count = 1, const QModelIndex &parent = QModelIndex());
+   bool removeRows(int row, int count = 1, const QModelIndex &parent = QModelIndex());
+   bool removeColumns(int column, int count = 1, const QModelIndex &parent = QModelIndex());
 
-    void setItem(int row, int column, QTableWidgetItem *item);
-    QTableWidgetItem *takeItem(int row, int column);
-    QTableWidgetItem *item(int row, int column) const;
-    QTableWidgetItem *item(const QModelIndex &index) const;
-    void removeItem(QTableWidgetItem *item);
+   void setItem(int row, int column, QTableWidgetItem *item);
+   QTableWidgetItem *takeItem(int row, int column);
+   QTableWidgetItem *item(int row, int column) const;
+   QTableWidgetItem *item(const QModelIndex &index) const;
+   void removeItem(QTableWidgetItem *item);
 
-    void setHorizontalHeaderItem(int section, QTableWidgetItem *item);
-    void setVerticalHeaderItem(int section, QTableWidgetItem *item);
-    QTableWidgetItem *takeHorizontalHeaderItem(int section);
-    QTableWidgetItem *takeVerticalHeaderItem(int section);
-    QTableWidgetItem *horizontalHeaderItem(int section);
-    QTableWidgetItem *verticalHeaderItem(int section);
+   void setHorizontalHeaderItem(int section, QTableWidgetItem *item);
+   void setVerticalHeaderItem(int section, QTableWidgetItem *item);
+   QTableWidgetItem *takeHorizontalHeaderItem(int section);
+   QTableWidgetItem *takeVerticalHeaderItem(int section);
+   QTableWidgetItem *horizontalHeaderItem(int section);
+   QTableWidgetItem *verticalHeaderItem(int section);
 
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const
-        { return QAbstractTableModel::index(row, column, parent); }
+   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const {
+      return QAbstractTableModel::index(row, column, parent);
+   }
 
-    QModelIndex index(const QTableWidgetItem *item) const;
+   QModelIndex index(const QTableWidgetItem *item) const;
 
-    void setRowCount(int rows);
-    void setColumnCount(int columns);
+   void setRowCount(int rows);
+   void setColumnCount(int columns);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+   int rowCount(const QModelIndex &parent = QModelIndex()) const;
+   int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
-    bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
+   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+   bool setData(const QModelIndex &index, const QVariant &value, int role);
+   bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
 
-    QMap<int, QVariant> itemData(const QModelIndex &index) const;
+   QMap<int, QVariant> itemData(const QModelIndex &index) const;
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role);
+   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role);
 
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+   Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    void sort(int column, Qt::SortOrder order);
-    static bool itemLessThan(const QPair<QTableWidgetItem*,int> &left,
-                             const QPair<QTableWidgetItem*,int> &right);
-    static bool itemGreaterThan(const QPair<QTableWidgetItem*,int> &left,
-                                const QPair<QTableWidgetItem*,int> &right);
+   void sort(int column, Qt::SortOrder order);
+   static bool itemLessThan(const QPair<QTableWidgetItem *, int> &left,
+                            const QPair<QTableWidgetItem *, int> &right);
+   static bool itemGreaterThan(const QPair<QTableWidgetItem *, int> &left,
+                               const QPair<QTableWidgetItem *, int> &right);
 
-    void ensureSorted(int column, Qt::SortOrder order, int start, int end);
-    QVector<QTableWidgetItem*> columnItems(int column) const;
-    void updateRowIndexes(QModelIndexList &indexes, int movedFromRow, int movedToRow);
-    static QVector<QTableWidgetItem*>::iterator sortedInsertionIterator(
-        const QVector<QTableWidgetItem*>::iterator &begin,
-        const QVector<QTableWidgetItem*>::iterator &end,
-        Qt::SortOrder order, QTableWidgetItem *item);
+   void ensureSorted(int column, Qt::SortOrder order, int start, int end);
+   QVector<QTableWidgetItem *> columnItems(int column) const;
+   void updateRowIndexes(QModelIndexList &indexes, int movedFromRow, int movedToRow);
+   static QVector<QTableWidgetItem *>::iterator sortedInsertionIterator(
+      const QVector<QTableWidgetItem *>::iterator &begin,
+      const QVector<QTableWidgetItem *>::iterator &end,
+      Qt::SortOrder order, QTableWidgetItem *item);
 
-    bool isValid(const QModelIndex &index) const;
-    inline long tableIndex(int row, int column) const
-        { return (row * horizontalHeaderItems.count()) + column; }
+   bool isValid(const QModelIndex &index) const;
+   inline long tableIndex(int row, int column) const {
+      return (row * horizontalHeaderItems.count()) + column;
+   }
 
-    void clear();
-    void clearContents();
-    void itemChanged(QTableWidgetItem *item);
+   void clear();
+   void clearContents();
+   void itemChanged(QTableWidgetItem *item);
 
-    QTableWidgetItem *createItem() const;
-    const QTableWidgetItem *itemPrototype() const;
-    void setItemPrototype(const QTableWidgetItem *item);
+   QTableWidgetItem *createItem() const;
+   const QTableWidgetItem *itemPrototype() const;
+   void setItemPrototype(const QTableWidgetItem *item);
 
-    // dnd
-    QStringList mimeTypes() const;
-    QMimeData *mimeData(const QModelIndexList &indexes) const;
-    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-            int row, int column, const QModelIndex &parent);
-    Qt::DropActions supportedDropActions() const;
+   // dnd
+   QStringList mimeTypes() const;
+   QMimeData *mimeData(const QModelIndexList &indexes) const;
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action,
+                     int row, int column, const QModelIndex &parent);
+   Qt::DropActions supportedDropActions() const;
 
-    QMimeData *internalMimeData()  const;
+   QMimeData *internalMimeData()  const;
 
-private:
-    const QTableWidgetItem *prototype;
-    QVector<QTableWidgetItem*> tableItems;
-    QVector<QTableWidgetItem*> verticalHeaderItems;
-    QVector<QTableWidgetItem*> horizontalHeaderItems;
+ private:
+   const QTableWidgetItem *prototype;
+   QVector<QTableWidgetItem *> tableItems;
+   QVector<QTableWidgetItem *> verticalHeaderItems;
+   QVector<QTableWidgetItem *> horizontalHeaderItems;
 
-    // A cache must be mutable if get-functions should have const modifiers
-    mutable QModelIndexList cachedIndexes;
+   // A cache must be mutable if get-functions should have const modifiers
+   mutable QModelIndexList cachedIndexes;
 };
 
 class QTableWidgetPrivate : public QTableViewPrivate
 {
-    Q_DECLARE_PUBLIC(QTableWidget)
-public:
-    QTableWidgetPrivate() : QTableViewPrivate() {}
-    inline QTableModel *tableModel() const { return qobject_cast<QTableModel*>(model); }
-    void setup();
+   Q_DECLARE_PUBLIC(QTableWidget)
+ public:
+   QTableWidgetPrivate() : QTableViewPrivate() {}
+   inline QTableModel *tableModel() const {
+      return qobject_cast<QTableModel *>(model);
+   }
+   void setup();
 
-    // view signals
-    void _q_emitItemPressed(const QModelIndex &index);
-    void _q_emitItemClicked(const QModelIndex &index);
-    void _q_emitItemDoubleClicked(const QModelIndex &index);
-    void _q_emitItemActivated(const QModelIndex &index);
-    void _q_emitItemEntered(const QModelIndex &index);
-    // model signals
-    void _q_emitItemChanged(const QModelIndex &index);
-    // selection signals
-    void _q_emitCurrentItemChanged(const QModelIndex &previous, const QModelIndex &current);
-    // sorting
-    void _q_sort();
-    void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+   // view signals
+   void _q_emitItemPressed(const QModelIndex &index);
+   void _q_emitItemClicked(const QModelIndex &index);
+   void _q_emitItemDoubleClicked(const QModelIndex &index);
+   void _q_emitItemActivated(const QModelIndex &index);
+   void _q_emitItemEntered(const QModelIndex &index);
+   // model signals
+   void _q_emitItemChanged(const QModelIndex &index);
+   // selection signals
+   void _q_emitCurrentItemChanged(const QModelIndex &previous, const QModelIndex &current);
+   // sorting
+   void _q_sort();
+   void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 };
 
 class QTableWidgetItemPrivate
 {
-public:
-    QTableWidgetItemPrivate(QTableWidgetItem *item) : q(item), id(-1) {}
-    QTableWidgetItem *q;
-    int id;
+ public:
+   QTableWidgetItemPrivate(QTableWidgetItem *item) : q(item), id(-1) {}
+   QTableWidgetItem *q;
+   int id;
 };
 
 QT_END_NAMESPACE

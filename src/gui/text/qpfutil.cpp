@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,33 +18,33 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
 static const QFontEngineQPF::TagType tagTypes[QFontEngineQPF::NumTags] = {
-    QFontEngineQPF::StringType, // FontName
-    QFontEngineQPF::StringType, // FileName
-    QFontEngineQPF::UInt32Type, // FileIndex
-    QFontEngineQPF::UInt32Type, // FontRevision
-    QFontEngineQPF::StringType, // FreeText
-    QFontEngineQPF::FixedType,  // Ascent
-    QFontEngineQPF::FixedType,  // Descent
-    QFontEngineQPF::FixedType,  // Leading
-    QFontEngineQPF::FixedType,  // XHeight
-    QFontEngineQPF::FixedType,  // AverageCharWidth
-    QFontEngineQPF::FixedType,  // MaxCharWidth
-    QFontEngineQPF::FixedType,  // LineThickness
-    QFontEngineQPF::FixedType,  // MinLeftBearing
-    QFontEngineQPF::FixedType,  // MinRightBearing
-    QFontEngineQPF::FixedType,  // UnderlinePosition
-    QFontEngineQPF::UInt8Type,  // GlyphFormat
-    QFontEngineQPF::UInt8Type,  // PixelSize
-    QFontEngineQPF::UInt8Type,  // Weight
-    QFontEngineQPF::UInt8Type,  // Style
-    QFontEngineQPF::StringType, // EndOfHeader
-    QFontEngineQPF::BitFieldType// WritingSystems
+   QFontEngineQPF::StringType, // FontName
+   QFontEngineQPF::StringType, // FileName
+   QFontEngineQPF::UInt32Type, // FileIndex
+   QFontEngineQPF::UInt32Type, // FontRevision
+   QFontEngineQPF::StringType, // FreeText
+   QFontEngineQPF::FixedType,  // Ascent
+   QFontEngineQPF::FixedType,  // Descent
+   QFontEngineQPF::FixedType,  // Leading
+   QFontEngineQPF::FixedType,  // XHeight
+   QFontEngineQPF::FixedType,  // AverageCharWidth
+   QFontEngineQPF::FixedType,  // MaxCharWidth
+   QFontEngineQPF::FixedType,  // LineThickness
+   QFontEngineQPF::FixedType,  // MinLeftBearing
+   QFontEngineQPF::FixedType,  // MinRightBearing
+   QFontEngineQPF::FixedType,  // UnderlinePosition
+   QFontEngineQPF::UInt8Type,  // GlyphFormat
+   QFontEngineQPF::UInt8Type,  // PixelSize
+   QFontEngineQPF::UInt8Type,  // Weight
+   QFontEngineQPF::UInt8Type,  // Style
+   QFontEngineQPF::StringType, // EndOfHeader
+   QFontEngineQPF::BitFieldType// WritingSystems
 };
 
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,28 +42,30 @@ class QSound;
   QAuBucket is whatever you want.
 */
 
-class QAuBucket {
-   public:
-       virtual ~QAuBucket();
+class QAuBucket
+{
+ public:
+   virtual ~QAuBucket();
 };
 
-class QAuServer : public QObject {
-    CS_OBJECT(QAuServer)
+class QAuServer : public QObject
+{
+   CS_OBJECT(QAuServer)
 
-   public:
-       explicit QAuServer(QObject* parent);
-       ~QAuServer();
-   
-       virtual void init(QSound*);
-       virtual void play(const QString& filename);
-       virtual void play(QSound*)=0;
-       virtual void stop(QSound*)=0;
-       virtual bool okay()=0;
-   
-   protected:
-       void setBucket(QSound*, QAuBucket*);
-       QAuBucket* bucket(QSound*);
-       int decLoop(QSound*);
+ public:
+   explicit QAuServer(QObject *parent);
+   ~QAuServer();
+
+   virtual void init(QSound *);
+   virtual void play(const QString &filename);
+   virtual void play(QSound *) = 0;
+   virtual void stop(QSound *) = 0;
+   virtual bool okay() = 0;
+
+ protected:
+   void setBucket(QSound *, QAuBucket *);
+   QAuBucket *bucket(QSound *);
+   int decLoop(QSound *);
 };
 
 #endif // QT_NO_SOUND

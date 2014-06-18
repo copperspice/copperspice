@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,38 +36,38 @@ void QRawFontPrivate::platformCleanUp()
 {
 }
 
-static void releaseFontData(void* info, const void* data, size_t size)
+static void releaseFontData(void *info, const void *data, size_t size)
 {
-    Q_UNUSED(data);
-    Q_UNUSED(size);
-    delete (QByteArray*)info;
+   Q_UNUSED(data);
+   Q_UNUSED(size);
+   delete (QByteArray *)info;
 }
 
 extern int qt_defaultDpi();
 
 void QRawFontPrivate::platformLoadFromData(const QByteArray &fontData,
-                                           qreal pixelSize,
-                                           QFont::HintingPreference hintingPreference)
+      qreal pixelSize,
+      QFont::HintingPreference hintingPreference)
 {
-    // Mac OS X ignores it
-    Q_UNUSED(hintingPreference);
+   // Mac OS X ignores it
+   Q_UNUSED(hintingPreference);
 
-    QByteArray* fontDataCopy = new QByteArray(fontData);
-    QCFType<CGDataProviderRef> dataProvider = CGDataProviderCreateWithData(fontDataCopy,
-            fontDataCopy->constData(), fontDataCopy->size(), releaseFontData);
+   QByteArray *fontDataCopy = new QByteArray(fontData);
+   QCFType<CGDataProviderRef> dataProvider = CGDataProviderCreateWithData(fontDataCopy,
+         fontDataCopy->constData(), fontDataCopy->size(), releaseFontData);
 
-    CGFontRef cgFont = CGFontCreateWithDataProvider(dataProvider);
+   CGFontRef cgFont = CGFontCreateWithDataProvider(dataProvider);
 
-    if (cgFont == NULL) {
-        qWarning("QRawFont::platformLoadFromData: CGFontCreateWithDataProvider failed");
-    } else {
-        QFontDef def;
-        def.pixelSize = pixelSize;
-        def.pointSize = pixelSize * 72.0 / qt_defaultDpi();
-        fontEngine = new QCoreTextFontEngine(cgFont, def);
-        CFRelease(cgFont);
-        fontEngine->ref.ref();
-    }
+   if (cgFont == NULL) {
+      qWarning("QRawFont::platformLoadFromData: CGFontCreateWithDataProvider failed");
+   } else {
+      QFontDef def;
+      def.pixelSize = pixelSize;
+      def.pointSize = pixelSize * 72.0 / qt_defaultDpi();
+      fontEngine = new QCoreTextFontEngine(cgFont, def);
+      CFRelease(cgFont);
+      fontEngine->ref.ref();
+   }
 }
 
 QT_END_NAMESPACE

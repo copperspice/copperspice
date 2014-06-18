@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -104,47 +104,47 @@ QT_BEGIN_NAMESPACE
 
 class QTipLabel : public QLabel
 {
-    CS_OBJECT(QTipLabel)
+   CS_OBJECT(QTipLabel)
 
-public:
-    QTipLabel(const QString &text, QWidget *w);
-    ~QTipLabel();
-    static QTipLabel *instance;
+ public:
+   QTipLabel(const QString &text, QWidget *w);
+   ~QTipLabel();
+   static QTipLabel *instance;
 
-    bool eventFilter(QObject *, QEvent *);
+   bool eventFilter(QObject *, QEvent *);
 
-    QBasicTimer hideTimer, expireTimer;
+   QBasicTimer hideTimer, expireTimer;
 
-    bool fadingOut;
+   bool fadingOut;
 
-    void reuseTip(const QString &text);
-    void hideTip();
-    void hideTipImmediately();
-    void setTipRect(QWidget *w, const QRect &r);
-    void restartExpireTimer();
-    bool tipChanged(const QPoint &pos, const QString &text, QObject *o);
-    void placeTip(const QPoint &pos, QWidget *w);
+   void reuseTip(const QString &text);
+   void hideTip();
+   void hideTipImmediately();
+   void setTipRect(QWidget *w, const QRect &r);
+   void restartExpireTimer();
+   bool tipChanged(const QPoint &pos, const QString &text, QObject *o);
+   void placeTip(const QPoint &pos, QWidget *w);
 
-    static int getTipScreen(const QPoint &pos, QWidget *w);
+   static int getTipScreen(const QPoint &pos, QWidget *w);
 
-protected:
-    void timerEvent(QTimerEvent *e);
-    void paintEvent(QPaintEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
-    void resizeEvent(QResizeEvent *e);
+ protected:
+   void timerEvent(QTimerEvent *e);
+   void paintEvent(QPaintEvent *e);
+   void mouseMoveEvent(QMouseEvent *e);
+   void resizeEvent(QResizeEvent *e);
 
-private:
-    QWidget *widget;
-    QRect rect;
+ private:
+   QWidget *widget;
+   QRect rect;
 
 #ifndef QT_NO_STYLE_STYLESHEET
-public:
-    // internal, Cleanup the _q_stylesheet_parent propery
-    GUI_CS_SLOT_1(Public,void styleSheetParentDestroyed())
-    GUI_CS_SLOT_2(styleSheetParentDestroyed)        
+ public:
+   // internal, Cleanup the _q_stylesheet_parent propery
+   GUI_CS_SLOT_1(Public, void styleSheetParentDestroyed())
+   GUI_CS_SLOT_2(styleSheetParentDestroyed)
 
-private:
-    QWidget *styleSheetParent;
+ private:
+   QWidget *styleSheetParent;
 #endif
 
 };
@@ -153,29 +153,29 @@ QTipLabel *QTipLabel::instance = 0;
 
 QTipLabel::QTipLabel(const QString &text, QWidget *w)
 #ifndef QT_NO_STYLE_STYLESHEET
-    : QLabel(w, Qt::ToolTip | Qt::BypassGraphicsProxyWidget), styleSheetParent(0), widget(0)
+   : QLabel(w, Qt::ToolTip | Qt::BypassGraphicsProxyWidget), styleSheetParent(0), widget(0)
 #else
-    : QLabel(w, Qt::ToolTip | Qt::BypassGraphicsProxyWidget), widget(0)
+   : QLabel(w, Qt::ToolTip | Qt::BypassGraphicsProxyWidget), widget(0)
 #endif
 {
-    delete instance;
-    instance = this;
-    setForegroundRole(QPalette::ToolTipText);
-    setBackgroundRole(QPalette::ToolTipBase);
-    setPalette(QToolTip::palette());
-    ensurePolished();
-    setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, this));
-    setFrameStyle(QFrame::NoFrame);
-    setAlignment(Qt::AlignLeft);
-    setIndent(1);
-    qApp->installEventFilter(this);
-    setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, 0, this) / qreal(255.0));
-    setMouseTracking(true);
-    fadingOut = false;
-    reuseTip(text);
+   delete instance;
+   instance = this;
+   setForegroundRole(QPalette::ToolTipText);
+   setBackgroundRole(QPalette::ToolTipBase);
+   setPalette(QToolTip::palette());
+   ensurePolished();
+   setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, this));
+   setFrameStyle(QFrame::NoFrame);
+   setAlignment(Qt::AlignLeft);
+   setIndent(1);
+   qApp->installEventFilter(this);
+   setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, 0, this) / qreal(255.0));
+   setMouseTracking(true);
+   fadingOut = false;
+   reuseTip(text);
 }
 
-void QTipLabel::styleSheetParentDestroyed() 
+void QTipLabel::styleSheetParentDestroyed()
 {
    setProperty("_q_stylesheet_parent", QVariant());
    styleSheetParent = 0;
@@ -183,232 +183,251 @@ void QTipLabel::styleSheetParentDestroyed()
 
 void QTipLabel::restartExpireTimer()
 {
-    int time = 10000 + 40 * qMax(0, text().length()-100);
-    expireTimer.start(time, this);
-    hideTimer.stop();
+   int time = 10000 + 40 * qMax(0, text().length() - 100);
+   expireTimer.start(time, this);
+   hideTimer.stop();
 }
 
 void QTipLabel::reuseTip(const QString &text)
 {
 #ifndef QT_NO_STYLE_STYLESHEET
-    if (styleSheetParent){
-        disconnect(styleSheetParent, SIGNAL(destroyed()),
-                   QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
-        styleSheetParent = 0;
-    }
+   if (styleSheetParent) {
+      disconnect(styleSheetParent, SIGNAL(destroyed()),
+                 QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
+      styleSheetParent = 0;
+   }
 #endif
 
-    setWordWrap(Qt::mightBeRichText(text));
-    setText(text);
-    QFontMetrics fm(font());
-    QSize extra(1, 0);
-    // Make it look good with the default ToolTip font on Mac, which has a small descent.
-    if (fm.descent() == 2 && fm.ascent() >= 11)
-        ++extra.rheight();
-    resize(sizeHint() + extra);
-    restartExpireTimer();
+   setWordWrap(Qt::mightBeRichText(text));
+   setText(text);
+   QFontMetrics fm(font());
+   QSize extra(1, 0);
+   // Make it look good with the default ToolTip font on Mac, which has a small descent.
+   if (fm.descent() == 2 && fm.ascent() >= 11) {
+      ++extra.rheight();
+   }
+   resize(sizeHint() + extra);
+   restartExpireTimer();
 }
 
 void QTipLabel::paintEvent(QPaintEvent *ev)
 {
-    QStylePainter p(this);
-    QStyleOptionFrame opt;
-    opt.init(this);
-    p.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
-    p.end();
+   QStylePainter p(this);
+   QStyleOptionFrame opt;
+   opt.init(this);
+   p.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
+   p.end();
 
-    QLabel::paintEvent(ev);
+   QLabel::paintEvent(ev);
 }
 
 void QTipLabel::resizeEvent(QResizeEvent *e)
 {
-    QStyleHintReturnMask frameMask;
-    QStyleOption option;
-    option.init(this);
-    if (style()->styleHint(QStyle::SH_ToolTip_Mask, &option, this, &frameMask))
-        setMask(frameMask.region);
+   QStyleHintReturnMask frameMask;
+   QStyleOption option;
+   option.init(this);
+   if (style()->styleHint(QStyle::SH_ToolTip_Mask, &option, this, &frameMask)) {
+      setMask(frameMask.region);
+   }
 
-    QLabel::resizeEvent(e);
+   QLabel::resizeEvent(e);
 }
 
 void QTipLabel::mouseMoveEvent(QMouseEvent *e)
 {
-    if (rect.isNull())
-        return;
-    QPoint pos = e->globalPos();
-    if (widget)
-        pos = widget->mapFromGlobal(pos);
-    if (!rect.contains(pos))
-        hideTip();
-    QLabel::mouseMoveEvent(e);
+   if (rect.isNull()) {
+      return;
+   }
+   QPoint pos = e->globalPos();
+   if (widget) {
+      pos = widget->mapFromGlobal(pos);
+   }
+   if (!rect.contains(pos)) {
+      hideTip();
+   }
+   QLabel::mouseMoveEvent(e);
 }
 
 QTipLabel::~QTipLabel()
 {
-    instance = 0;
+   instance = 0;
 }
 
 void QTipLabel::hideTip()
 {
-    if (!hideTimer.isActive())
-        hideTimer.start(300, this);
+   if (!hideTimer.isActive()) {
+      hideTimer.start(300, this);
+   }
 }
 
 void QTipLabel::hideTipImmediately()
 {
-    close(); // to trigger QEvent::Close which stops the animation
-    deleteLater();
+   close(); // to trigger QEvent::Close which stops the animation
+   deleteLater();
 }
 
 void QTipLabel::setTipRect(QWidget *w, const QRect &r)
 {
-    if (!rect.isNull() && !w)
-        qWarning("QToolTip::setTipRect: Cannot pass null widget if rect is set");
-    else{
-        widget = w;
-        rect = r;
-    }
+   if (!rect.isNull() && !w) {
+      qWarning("QToolTip::setTipRect: Cannot pass null widget if rect is set");
+   } else {
+      widget = w;
+      rect = r;
+   }
 }
 
 void QTipLabel::timerEvent(QTimerEvent *e)
 {
-    if (e->timerId() == hideTimer.timerId()
-        || e->timerId() == expireTimer.timerId()){
-        hideTimer.stop();
-        expireTimer.stop();
+   if (e->timerId() == hideTimer.timerId()
+         || e->timerId() == expireTimer.timerId()) {
+      hideTimer.stop();
+      expireTimer.stop();
 #if defined(Q_OS_MAC) && !defined(QT_NO_EFFECTS)
-        if (QApplication::isEffectEnabled(Qt::UI_FadeTooltip)){
-            // Fade out tip on mac (makes it invisible).
-            // The tip will not be deleted until a new tip is shown.
+      if (QApplication::isEffectEnabled(Qt::UI_FadeTooltip)) {
+         // Fade out tip on mac (makes it invisible).
+         // The tip will not be deleted until a new tip is shown.
 
-                        // DRSWAT - Cocoa
-                        macWindowFade(qt_mac_window_for(this));
-            QTipLabel::instance->fadingOut = true; // will never be false again.
-        }
-        else
-            hideTipImmediately();
+         // DRSWAT - Cocoa
+         macWindowFade(qt_mac_window_for(this));
+         QTipLabel::instance->fadingOut = true; // will never be false again.
+      } else {
+         hideTipImmediately();
+      }
 #else
-        hideTipImmediately();
+      hideTipImmediately();
 #endif
-    }
+   }
 }
 
 bool QTipLabel::eventFilter(QObject *o, QEvent *e)
 {
-    switch (e->type()) {
+   switch (e->type()) {
 #ifdef Q_OS_MAC
-    case QEvent::KeyPress:
-    case QEvent::KeyRelease: {
-        int key = static_cast<QKeyEvent *>(e)->key();
-        Qt::KeyboardModifiers mody = static_cast<QKeyEvent *>(e)->modifiers();
-        if (!(mody & Qt::KeyboardModifierMask)
-            && key != Qt::Key_Shift && key != Qt::Key_Control
-            && key != Qt::Key_Alt && key != Qt::Key_Meta)
+      case QEvent::KeyPress:
+      case QEvent::KeyRelease: {
+         int key = static_cast<QKeyEvent *>(e)->key();
+         Qt::KeyboardModifiers mody = static_cast<QKeyEvent *>(e)->modifiers();
+         if (!(mody & Qt::KeyboardModifierMask)
+               && key != Qt::Key_Shift && key != Qt::Key_Control
+               && key != Qt::Key_Alt && key != Qt::Key_Meta) {
             hideTip();
-        break;
-    }
+         }
+         break;
+      }
 #endif
-    case QEvent::Leave:
-        hideTip();
-        break;
-    case QEvent::WindowActivate:
-    case QEvent::WindowDeactivate:
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseButtonRelease:
-    case QEvent::MouseButtonDblClick:
-    case QEvent::FocusIn:
-    case QEvent::FocusOut:
-    case QEvent::Wheel:
-        hideTipImmediately();
-        break;
+      case QEvent::Leave:
+         hideTip();
+         break;
+      case QEvent::WindowActivate:
+      case QEvent::WindowDeactivate:
+      case QEvent::MouseButtonPress:
+      case QEvent::MouseButtonRelease:
+      case QEvent::MouseButtonDblClick:
+      case QEvent::FocusIn:
+      case QEvent::FocusOut:
+      case QEvent::Wheel:
+         hideTipImmediately();
+         break;
 
-    case QEvent::MouseMove:
-        if (o == widget && !rect.isNull() && !rect.contains(static_cast<QMouseEvent*>(e)->pos()))
+      case QEvent::MouseMove:
+         if (o == widget && !rect.isNull() && !rect.contains(static_cast<QMouseEvent *>(e)->pos())) {
             hideTip();
-    default:
-        break;
-    }
-    return false;
+         }
+      default:
+         break;
+   }
+   return false;
 }
 
 int QTipLabel::getTipScreen(const QPoint &pos, QWidget *w)
 {
-    if (QApplication::desktop()->isVirtualDesktop())
-        return QApplication::desktop()->screenNumber(pos);
-    else
-        return QApplication::desktop()->screenNumber(w);
+   if (QApplication::desktop()->isVirtualDesktop()) {
+      return QApplication::desktop()->screenNumber(pos);
+   } else {
+      return QApplication::desktop()->screenNumber(w);
+   }
 }
 
 void QTipLabel::placeTip(const QPoint &pos, QWidget *w)
 {
 #ifndef QT_NO_STYLE_STYLESHEET
-    if (testAttribute(Qt::WA_StyleSheet) || (w && qobject_cast<QStyleSheetStyle *>(w->style()))) {
-        //the stylesheet need to know the real parent
-        QTipLabel::instance->setProperty("_q_stylesheet_parent", QVariant::fromValue(w));
-        //we force the style to be the QStyleSheetStyle, and force to clear the cache as well.
-        QTipLabel::instance->setStyleSheet(QLatin1String("/* */"));
+   if (testAttribute(Qt::WA_StyleSheet) || (w && qobject_cast<QStyleSheetStyle *>(w->style()))) {
+      //the stylesheet need to know the real parent
+      QTipLabel::instance->setProperty("_q_stylesheet_parent", QVariant::fromValue(w));
+      //we force the style to be the QStyleSheetStyle, and force to clear the cache as well.
+      QTipLabel::instance->setStyleSheet(QLatin1String("/* */"));
 
-        // Set up for cleaning up this later...
-        QTipLabel::instance->styleSheetParent = w;
-        if (w) {
-            connect(w, SIGNAL(destroyed()),
-                QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
-        }
-    }
+      // Set up for cleaning up this later...
+      QTipLabel::instance->styleSheetParent = w;
+      if (w) {
+         connect(w, SIGNAL(destroyed()),
+                 QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
+      }
+   }
 #endif
 
 
 #ifdef Q_OS_MAC
-    // When in full screen mode, there is no Dock nor Menu so we can use
-    // the whole screen for displaying the tooltip. However when not in
-    // full screen mode we need to save space for the dock, so we use
-    // availableGeometry instead.
-    extern bool qt_mac_app_fullscreen; //qapplication_mac.mm
-    QRect screen;
-    if(qt_mac_app_fullscreen)
-        screen = QApplication::desktop()->screenGeometry(getTipScreen(pos, w));
-    else
-        screen = QApplication::desktop()->availableGeometry(getTipScreen(pos, w));
+   // When in full screen mode, there is no Dock nor Menu so we can use
+   // the whole screen for displaying the tooltip. However when not in
+   // full screen mode we need to save space for the dock, so we use
+   // availableGeometry instead.
+   extern bool qt_mac_app_fullscreen; //qapplication_mac.mm
+   QRect screen;
+   if (qt_mac_app_fullscreen) {
+      screen = QApplication::desktop()->screenGeometry(getTipScreen(pos, w));
+   } else {
+      screen = QApplication::desktop()->availableGeometry(getTipScreen(pos, w));
+   }
 #else
-    QRect screen = QApplication::desktop()->screenGeometry(getTipScreen(pos, w));
+   QRect screen = QApplication::desktop()->screenGeometry(getTipScreen(pos, w));
 
 #endif
 
-    QPoint p = pos;
-    p += QPoint(2,
+   QPoint p = pos;
+   p += QPoint(2,
 #ifdef Q_OS_WIN
-                21
+               21
 #else
-                16
+               16
 #endif
-        );
-    if (p.x() + this->width() > screen.x() + screen.width())
-        p.rx() -= 4 + this->width();
-    if (p.y() + this->height() > screen.y() + screen.height())
-        p.ry() -= 24 + this->height();
-    if (p.y() < screen.y())
-        p.setY(screen.y());
-    if (p.x() + this->width() > screen.x() + screen.width())
-        p.setX(screen.x() + screen.width() - this->width());
-    if (p.x() < screen.x())
-        p.setX(screen.x());
-    if (p.y() + this->height() > screen.y() + screen.height())
-        p.setY(screen.y() + screen.height() - this->height());
-    this->move(p);
+              );
+   if (p.x() + this->width() > screen.x() + screen.width()) {
+      p.rx() -= 4 + this->width();
+   }
+   if (p.y() + this->height() > screen.y() + screen.height()) {
+      p.ry() -= 24 + this->height();
+   }
+   if (p.y() < screen.y()) {
+      p.setY(screen.y());
+   }
+   if (p.x() + this->width() > screen.x() + screen.width()) {
+      p.setX(screen.x() + screen.width() - this->width());
+   }
+   if (p.x() < screen.x()) {
+      p.setX(screen.x());
+   }
+   if (p.y() + this->height() > screen.y() + screen.height()) {
+      p.setY(screen.y() + screen.height() - this->height());
+   }
+   this->move(p);
 }
 
 bool QTipLabel::tipChanged(const QPoint &pos, const QString &text, QObject *o)
 {
-    if (QTipLabel::instance->text() != text)
-        return true;
+   if (QTipLabel::instance->text() != text) {
+      return true;
+   }
 
-    if (o != widget)
-        return true;
+   if (o != widget) {
+      return true;
+   }
 
-    if (!rect.isNull())
-        return !rect.contains(pos);
-    else
-       return false;
+   if (!rect.isNull()) {
+      return !rect.contains(pos);
+   } else {
+      return false;
+   }
 }
 
 /*!
@@ -432,52 +451,53 @@ bool QTipLabel::tipChanged(const QPoint &pos, const QString &text, QObject *o)
 
 void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w, const QRect &rect)
 {
-    if (QTipLabel::instance && QTipLabel::instance->isVisible()){ // a tip does already exist
-        if (text.isEmpty()){ // empty text means hide current tip
-            QTipLabel::instance->hideTip();
-            return;
-        }
-        else if (!QTipLabel::instance->fadingOut){
-            // If the tip has changed, reuse the one
-            // that is showing (removes flickering)
-            QPoint localPos = pos;
-            if (w)
-                localPos = w->mapFromGlobal(pos);
-            if (QTipLabel::instance->tipChanged(localPos, text, w)){
-                QTipLabel::instance->reuseTip(text);
-                QTipLabel::instance->setTipRect(w, rect);
-                QTipLabel::instance->placeTip(pos, w);
-            }
-            return;
-        }
-    }
+   if (QTipLabel::instance && QTipLabel::instance->isVisible()) { // a tip does already exist
+      if (text.isEmpty()) { // empty text means hide current tip
+         QTipLabel::instance->hideTip();
+         return;
+      } else if (!QTipLabel::instance->fadingOut) {
+         // If the tip has changed, reuse the one
+         // that is showing (removes flickering)
+         QPoint localPos = pos;
+         if (w) {
+            localPos = w->mapFromGlobal(pos);
+         }
+         if (QTipLabel::instance->tipChanged(localPos, text, w)) {
+            QTipLabel::instance->reuseTip(text);
+            QTipLabel::instance->setTipRect(w, rect);
+            QTipLabel::instance->placeTip(pos, w);
+         }
+         return;
+      }
+   }
 
-    if (!text.isEmpty()){ // no tip can be reused, create new tip:
+   if (!text.isEmpty()) { // no tip can be reused, create new tip:
 
 #ifndef Q_OS_WIN
-        new QTipLabel(text, w); // sets QTipLabel::instance to itself
+      new QTipLabel(text, w); // sets QTipLabel::instance to itself
 #else
-        // On windows, we can't use the widget as parent otherwise the window will be
-        // raised when the tooltip will be shown
-        new QTipLabel(text, QApplication::desktop()->screen(QTipLabel::getTipScreen(pos, w)));
+      // On windows, we can't use the widget as parent otherwise the window will be
+      // raised when the tooltip will be shown
+      new QTipLabel(text, QApplication::desktop()->screen(QTipLabel::getTipScreen(pos, w)));
 #endif
 
-        QTipLabel::instance->setTipRect(w, rect);
-        QTipLabel::instance->placeTip(pos, w);
-        QTipLabel::instance->setObjectName(QLatin1String("qtooltip_label"));
+      QTipLabel::instance->setTipRect(w, rect);
+      QTipLabel::instance->placeTip(pos, w);
+      QTipLabel::instance->setObjectName(QLatin1String("qtooltip_label"));
 
 
 #if !defined(QT_NO_EFFECTS) && !defined(Q_OS_MAC)
-        if (QApplication::isEffectEnabled(Qt::UI_FadeTooltip))
-            qFadeEffect(QTipLabel::instance);
-        else if (QApplication::isEffectEnabled(Qt::UI_AnimateTooltip))
-            qScrollEffect(QTipLabel::instance);
-        else
-            QTipLabel::instance->show();
+      if (QApplication::isEffectEnabled(Qt::UI_FadeTooltip)) {
+         qFadeEffect(QTipLabel::instance);
+      } else if (QApplication::isEffectEnabled(Qt::UI_AnimateTooltip)) {
+         qScrollEffect(QTipLabel::instance);
+      } else {
+         QTipLabel::instance->show();
+      }
 #else
-        QTipLabel::instance->show();
+      QTipLabel::instance->show();
 #endif
-    }
+   }
 }
 
 /*!
@@ -488,7 +508,7 @@ void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w, cons
 
 void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w)
 {
-    QToolTip::showText(pos, text, w, QRect());
+   QToolTip::showText(pos, text, w, QRect());
 }
 
 
@@ -512,7 +532,7 @@ void QToolTip::showText(const QPoint &pos, const QString &text, QWidget *w)
  */
 bool QToolTip::isVisible()
 {
-    return (QTipLabel::instance != 0 && QTipLabel::instance->isVisible());
+   return (QTipLabel::instance != 0 && QTipLabel::instance->isVisible());
 }
 
 /*!
@@ -523,9 +543,10 @@ bool QToolTip::isVisible()
  */
 QString QToolTip::text()
 {
-    if (QTipLabel::instance)
-        return QTipLabel::instance->text();
-    return QString();
+   if (QTipLabel::instance) {
+      return QTipLabel::instance->text();
+   }
+   return QString();
 }
 
 
@@ -539,7 +560,7 @@ Q_GLOBAL_STATIC(QPalette, tooltip_palette)
 */
 QPalette QToolTip::palette()
 {
-    return *tooltip_palette();
+   return *tooltip_palette();
 }
 
 /*!
@@ -549,7 +570,7 @@ QPalette QToolTip::palette()
 */
 QFont QToolTip::font()
 {
-    return QApplication::font("QTipLabel");
+   return QApplication::font("QTipLabel");
 }
 
 /*!
@@ -562,9 +583,10 @@ QFont QToolTip::font()
 */
 void QToolTip::setPalette(const QPalette &palette)
 {
-    *tooltip_palette() = palette;
-    if (QTipLabel::instance)
-        QTipLabel::instance->setPalette(palette);
+   *tooltip_palette() = palette;
+   if (QTipLabel::instance) {
+      QTipLabel::instance->setPalette(palette);
+   }
 }
 
 /*!
@@ -574,7 +596,7 @@ void QToolTip::setPalette(const QPalette &palette)
 */
 void QToolTip::setFont(const QFont &font)
 {
-    QApplication::setFont(font, "QTipLabel");
+   QApplication::setFont(font, "QTipLabel");
 }
 
 

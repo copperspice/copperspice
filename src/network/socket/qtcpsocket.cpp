@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,14 +18,14 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
 //#define QTCPSOCKET_DEBUG
 
-/*! 
+/*!
     \class QTcpSocket
 
     \brief The QTcpSocket class provides a TCP socket.
@@ -75,12 +75,12 @@ QT_BEGIN_NAMESPACE
     \sa socketType()
 */
 QTcpSocket::QTcpSocket(QObject *parent)
-    : QAbstractSocket(TcpSocket, *new QTcpSocketPrivate, parent)
+   : QAbstractSocket(TcpSocket, *new QTcpSocketPrivate, parent)
 {
 #if defined(QTCPSOCKET_DEBUG)
-    qDebug("QTcpSocket::QTcpSocket()");
+   qDebug("QTcpSocket::QTcpSocket()");
 #endif
-    d_func()->isBuffered = true;
+   d_func()->isBuffered = true;
 }
 
 /*!
@@ -92,7 +92,7 @@ QTcpSocket::QTcpSocket(QObject *parent)
 QTcpSocket::~QTcpSocket()
 {
 #if defined(QTCPSOCKET_DEBUG)
-    qDebug("QTcpSocket::~QTcpSocket()");
+   qDebug("QTcpSocket::~QTcpSocket()");
 #endif
 }
 
@@ -100,9 +100,9 @@ QTcpSocket::~QTcpSocket()
     \internal
 */
 QTcpSocket::QTcpSocket(QTcpSocketPrivate &dd, QObject *parent)
-    : QAbstractSocket(TcpSocket, dd, parent)
+   : QAbstractSocket(TcpSocket, dd, parent)
 {
-    d_func()->isBuffered = true;
+   d_func()->isBuffered = true;
 }
 
 QT_END_NAMESPACE

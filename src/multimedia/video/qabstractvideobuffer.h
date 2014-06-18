@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,45 +35,43 @@ class QAbstractVideoBufferPrivate;
 
 class Q_MULTIMEDIA_EXPORT QAbstractVideoBuffer
 {
-public:
-    enum HandleType
-    {
-        NoHandle,
-        GLTextureHandle,
-        XvShmImageHandle,
-        CoreImageHandle,
-        QPixmapHandle,
-        UserHandle = 1000
-    };
+ public:
+   enum HandleType {
+      NoHandle,
+      GLTextureHandle,
+      XvShmImageHandle,
+      CoreImageHandle,
+      QPixmapHandle,
+      UserHandle = 1000
+   };
 
-    enum MapMode
-    {
-        NotMapped = 0x00,
-        ReadOnly  = 0x01,
-        WriteOnly = 0x02,
-        ReadWrite = ReadOnly | WriteOnly
-    };
+   enum MapMode {
+      NotMapped = 0x00,
+      ReadOnly  = 0x01,
+      WriteOnly = 0x02,
+      ReadWrite = ReadOnly | WriteOnly
+   };
 
-    QAbstractVideoBuffer(HandleType type);
-    virtual ~QAbstractVideoBuffer();
+   QAbstractVideoBuffer(HandleType type);
+   virtual ~QAbstractVideoBuffer();
 
-    HandleType handleType() const;
+   HandleType handleType() const;
 
-    virtual MapMode mapMode() const = 0;
+   virtual MapMode mapMode() const = 0;
 
-    virtual uchar *map(MapMode mode, int *numBytes, int *bytesPerLine) = 0;
-    virtual void unmap() = 0;
+   virtual uchar *map(MapMode mode, int *numBytes, int *bytesPerLine) = 0;
+   virtual void unmap() = 0;
 
-    virtual QVariant handle() const;
+   virtual QVariant handle() const;
 
-protected:
-    QAbstractVideoBuffer(QAbstractVideoBufferPrivate &dd, HandleType type);
+ protected:
+   QAbstractVideoBuffer(QAbstractVideoBufferPrivate &dd, HandleType type);
 
-    QAbstractVideoBufferPrivate *d_ptr;
+   QAbstractVideoBufferPrivate *d_ptr;
 
-private:
-    Q_DECLARE_PRIVATE(QAbstractVideoBuffer)
-    Q_DISABLE_COPY(QAbstractVideoBuffer)
+ private:
+   Q_DECLARE_PRIVATE(QAbstractVideoBuffer)
+   Q_DISABLE_COPY(QAbstractVideoBuffer)
 };
 
 QT_END_NAMESPACE

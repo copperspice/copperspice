@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,49 +38,53 @@ class QHttpResponseHeader;
 
 class QAuthenticatorPrivate
 {
-public:
-    enum Method { None, Basic, Plain, Login, Ntlm, CramMd5, DigestMd5 };
-    QAuthenticatorPrivate();
-    ~QAuthenticatorPrivate();
+ public:
+   enum Method { None, Basic, Plain, Login, Ntlm, CramMd5, DigestMd5 };
+   QAuthenticatorPrivate();
+   ~QAuthenticatorPrivate();
 
-    QString user;
-    QString extractedUser;
-    QString password;
-    QVariantHash options;
-    Method method;
-    QString realm;
-    QByteArray challenge;
-    bool hasFailed; //credentials have been tried but rejected by server.
+   QString user;
+   QString extractedUser;
+   QString password;
+   QVariantHash options;
+   Method method;
+   QString realm;
+   QByteArray challenge;
+   bool hasFailed; //credentials have been tried but rejected by server.
 
-    enum Phase {
-        Start,
-        Phase2,
-        Done,
-        Invalid
-    };
-    Phase phase;
+   enum Phase {
+      Start,
+      Phase2,
+      Done,
+      Invalid
+   };
+   Phase phase;
 
-    // digest specific
-    QByteArray cnonce;
-    int nonceCount;
+   // digest specific
+   QByteArray cnonce;
+   int nonceCount;
 
-    // ntlm specific
-    QString workstation;
-    QString userDomain;
+   // ntlm specific
+   QString workstation;
+   QString userDomain;
 
-    QByteArray calculateResponse(const QByteArray &method, const QByteArray &path);
+   QByteArray calculateResponse(const QByteArray &method, const QByteArray &path);
 
-    inline static QAuthenticatorPrivate *getPrivate(QAuthenticator &auth) { return auth.d; }
-    inline static const QAuthenticatorPrivate *getPrivate(const QAuthenticator &auth) { return auth.d; }
+   inline static QAuthenticatorPrivate *getPrivate(QAuthenticator &auth) {
+      return auth.d;
+   }
+   inline static const QAuthenticatorPrivate *getPrivate(const QAuthenticator &auth) {
+      return auth.d;
+   }
 
-    QByteArray digestMd5Response(const QByteArray &challenge, const QByteArray &method, const QByteArray &path);
-    static QHash<QByteArray, QByteArray> parseDigestAuthenticationChallenge(const QByteArray &challenge);
+   QByteArray digestMd5Response(const QByteArray &challenge, const QByteArray &method, const QByteArray &path);
+   static QHash<QByteArray, QByteArray> parseDigestAuthenticationChallenge(const QByteArray &challenge);
 
 #ifndef QT_NO_HTTP
-    void parseHttpResponse(const QHttpResponseHeader &, bool isProxy);
+   void parseHttpResponse(const QHttpResponseHeader &, bool isProxy);
 #endif
-    void parseHttpResponse(const QList<QPair<QByteArray, QByteArray> >&, bool isProxy);
-    void updateCredentials();
+   void parseHttpResponse(const QList<QPair<QByteArray, QByteArray> > &, bool isProxy);
+   void updateCredentials();
 };
 
 

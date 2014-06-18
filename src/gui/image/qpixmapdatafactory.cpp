@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -54,27 +54,28 @@ QT_BEGIN_NAMESPACE
 
 class QSimplePixmapDataFactory : public QPixmapDataFactory
 {
-public:
-    ~QSimplePixmapDataFactory() {}
-    QPixmapData* create(QPixmapData::PixelType type);
+ public:
+   ~QSimplePixmapDataFactory() {}
+   QPixmapData *create(QPixmapData::PixelType type);
 };
 
-QPixmapData* QSimplePixmapDataFactory::create(QPixmapData::PixelType type)
+QPixmapData *QSimplePixmapDataFactory::create(QPixmapData::PixelType type)
 {
-    if (QApplicationPrivate::graphicsSystem())
-        return QApplicationPrivate::graphicsSystem()->createPixmapData(type);
+   if (QApplicationPrivate::graphicsSystem()) {
+      return QApplicationPrivate::graphicsSystem()->createPixmapData(type);
+   }
 
 #if defined(Q_WS_X11)
-    return new QX11PixmapData(type);
+   return new QX11PixmapData(type);
 
 #elif defined(Q_OS_WIN)
-    return new QRasterPixmapData(type);
+   return new QRasterPixmapData(type);
 
 #elif defined(Q_OS_MAC)
-    return new QMacPixmapData(type);
+   return new QMacPixmapData(type);
 
 #elif defined(Q_WS_QPA)
-    return new QRasterPixmapData(type);
+   return new QRasterPixmapData(type);
 
 #error QSimplePixmapDataFactory::create() not implemented
 #endif
@@ -87,13 +88,13 @@ QPixmapDataFactory::~QPixmapDataFactory()
 {
 }
 
-QPixmapDataFactory* QPixmapDataFactory::instance(int screen)
+QPixmapDataFactory *QPixmapDataFactory::instance(int screen)
 {
-    Q_UNUSED(screen);
+   Q_UNUSED(screen);
 #ifdef Q_WS_QWS
-    return QScreen::instance()->pixmapDataFactory();
+   return QScreen::instance()->pixmapDataFactory();
 #else
-    return factory();
+   return factory();
 #endif
 }
 

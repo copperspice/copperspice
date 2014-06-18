@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,36 +34,36 @@ QT_BEGIN_NAMESPACE
 
 class QSslKeyPrivate
 {
-public:
-    inline QSslKeyPrivate()
-        : rsa(0)
-        , dsa(0)
-    {
-        clear();
-    }
+ public:
+   inline QSslKeyPrivate()
+      : rsa(0)
+      , dsa(0) {
+      clear();
+   }
 
-    inline ~QSslKeyPrivate()
-    { clear(); }
+   inline ~QSslKeyPrivate() {
+      clear();
+   }
 
-    void clear(bool deep = true);
+   void clear(bool deep = true);
 
-    void decodePem(const QByteArray &pem, const QByteArray &passPhrase,
-                   bool deepClear = true);
-    QByteArray pemHeader() const;
-    QByteArray pemFooter() const;
-    QByteArray pemFromDer(const QByteArray &der) const;
-    QByteArray derFromPem(const QByteArray &pem) const;
+   void decodePem(const QByteArray &pem, const QByteArray &passPhrase,
+                  bool deepClear = true);
+   QByteArray pemHeader() const;
+   QByteArray pemFooter() const;
+   QByteArray pemFromDer(const QByteArray &der) const;
+   QByteArray derFromPem(const QByteArray &pem) const;
 
-    bool isNull;
-    QSsl::KeyType type;
-    QSsl::KeyAlgorithm algorithm;
-    RSA *rsa;
-    DSA *dsa;
+   bool isNull;
+   QSsl::KeyType type;
+   QSsl::KeyAlgorithm algorithm;
+   RSA *rsa;
+   DSA *dsa;
 
-    QAtomicInt ref;
+   QAtomicInt ref;
 
-private:
-    Q_DISABLE_COPY(QSslKeyPrivate)
+ private:
+   Q_DISABLE_COPY(QSslKeyPrivate)
 };
 
 QT_END_NAMESPACE

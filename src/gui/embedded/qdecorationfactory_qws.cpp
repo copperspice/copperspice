@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,7 +35,7 @@
 QT_BEGIN_NAMESPACE
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QDecorationFactoryInterface_iid, QLatin1String("/decorations"), Qt::CaseInsensitive))
+                          (QDecorationFactoryInterface_iid, QLatin1String("/decorations"), Qt::CaseInsensitive))
 
 /*!
     \class QDecorationFactory
@@ -70,34 +70,35 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
     \sa keys()
 */
 
-QDecoration *QDecorationFactory::create(const QString& key)
+QDecoration *QDecorationFactory::create(const QString &key)
 {
-    QDecoration *ret = 0;
-    QString decoration = key.toLower();
+   QDecoration *ret = 0;
+   QString decoration = key.toLower();
 #ifndef QT_NO_QWS_DECORATION_DEFAULT
-    if (decoration == QLatin1String("default"))
-        ret = new QDecorationDefault;
-    else
+   if (decoration == QLatin1String("default")) {
+      ret = new QDecorationDefault;
+   } else
 #endif
 #ifndef QT_NO_QWS_DECORATION_WINDOWS
-    if (decoration == QLatin1String("windows"))
-        ret = new QDecorationWindows;
-    else
+      if (decoration == QLatin1String("windows")) {
+         ret = new QDecorationWindows;
+      } else
 #endif
 #ifndef QT_NO_QWS_DECORATION_STYLED
-    if (decoration == QLatin1String("styled"))
-        ret = new QDecorationStyled;
-    else
+         if (decoration == QLatin1String("styled")) {
+            ret = new QDecorationStyled;
+         } else
 #endif
-    { } // Keep these here - they make the #ifdefery above work
+         { } // Keep these here - they make the #ifdefery above work
 
-    if (!ret) {
-        if (QDecorationFactoryInterface *factory = qobject_cast<QDecorationFactoryInterface*>(loader()->instance(decoration))) {
-            ret = factory->create(decoration);
-        }
-    }
+   if (!ret) {
+      if (QDecorationFactoryInterface *factory = qobject_cast<QDecorationFactoryInterface *>(loader()->instance(
+               decoration))) {
+         ret = factory->create(decoration);
+      }
+   }
 
-    return ret;
+   return ret;
 }
 
 /*!
@@ -107,26 +108,27 @@ QDecoration *QDecorationFactory::create(const QString& key)
 */
 QStringList QDecorationFactory::keys()
 {
-    QStringList list;
+   QStringList list;
 #ifndef QT_NO_QWS_DECORATION_STYLED
-    list << QLatin1String("Styled");
+   list << QLatin1String("Styled");
 #endif
 #ifndef QT_NO_QWS_DECORATION_DEFAULT
-    list << QLatin1String("Default");
+   list << QLatin1String("Default");
 #endif
 #ifndef QT_NO_QWS_DECORATION_WINDOWS
-    list << QLatin1String("Windows");
+   list << QLatin1String("Windows");
 #endif
 
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
-    QStringList plugins = loader()->keys();
-    for (int i = 0; i < plugins.size(); ++i) {
-        if (!list.contains(plugins.at(i)))
-            list += plugins.at(i);
-    }
+   QStringList plugins = loader()->keys();
+   for (int i = 0; i < plugins.size(); ++i) {
+      if (!list.contains(plugins.at(i))) {
+         list += plugins.at(i);
+      }
+   }
 #endif //QT_MAKEDLL
 
-    return list;
+   return list;
 }
 
 QT_END_NAMESPACE

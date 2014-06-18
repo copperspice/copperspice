@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,55 +41,57 @@ class QHelpEvent;
 
 class Q_GUI_EXPORT QAbstractItemDelegate : public QObject
 {
-    CS_OBJECT(QAbstractItemDelegate)
+   CS_OBJECT(QAbstractItemDelegate)
 
-public:
+ public:
 
-    enum EndEditHint {
-        NoHint,
-        EditNextItem,
-        EditPreviousItem,
-        SubmitModelCache,
-        RevertModelCache
-    };
+   enum EndEditHint {
+      NoHint,
+      EditNextItem,
+      EditPreviousItem,
+      SubmitModelCache,
+      RevertModelCache
+   };
 
-    explicit QAbstractItemDelegate(QObject *parent = 0);
-    virtual ~QAbstractItemDelegate();
+   explicit QAbstractItemDelegate(QObject *parent = 0);
+   virtual ~QAbstractItemDelegate();
 
-    // painting
-    virtual void paint(QPainter *painter,const QStyleOptionViewItem &option,const QModelIndex &index) const = 0;
+   // painting
+   virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const = 0;
 
-    virtual QSize sizeHint(const QStyleOptionViewItem &option,const QModelIndex &index) const = 0;
+   virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const = 0;
 
-    // editing
-    virtual QWidget *createEditor(QWidget *parent,const QStyleOptionViewItem &option,const QModelIndex &index) const;
+   // editing
+   virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
+   virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
 
-    virtual void setModelData(QWidget *editor,QAbstractItemModel *model,const QModelIndex &index) const;
+   virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 
-    virtual void updateEditorGeometry(QWidget *editor,const QStyleOptionViewItem &option,const QModelIndex &index) const;
+   virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    // for non-widget editors
-    virtual bool editorEvent(QEvent *event,QAbstractItemModel *model,const QStyleOptionViewItem &option,const QModelIndex &index);
+   // for non-widget editors
+   virtual bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option,
+                            const QModelIndex &index);
 
-    static QString elidedText(const QFontMetrics &fontMetrics, int width, Qt::TextElideMode mode, const QString &text);
+   static QString elidedText(const QFontMetrics &fontMetrics, int width, Qt::TextElideMode mode, const QString &text);
 
-    // 
-    virtual bool helpEvent(QHelpEvent * event,QAbstractItemView * view, const QStyleOptionViewItem & option,const QModelIndex & index);
-     
-    GUI_CS_SIGNAL_1(Public, void commitData(QWidget * editor))
-    GUI_CS_SIGNAL_2(commitData,editor) 
+   //
+   virtual bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option,
+                          const QModelIndex &index);
 
-    GUI_CS_SIGNAL_1(Public, void closeEditor(QWidget * editor,QAbstractItemDelegate::EndEditHint hint = NoHint))
-    GUI_CS_SIGNAL_2(closeEditor,editor,hint) 
+   GUI_CS_SIGNAL_1(Public, void commitData(QWidget *editor))
+   GUI_CS_SIGNAL_2(commitData, editor)
 
-    GUI_CS_SIGNAL_1(Public, void sizeHintChanged(const QModelIndex & un_named_arg1))
-    GUI_CS_SIGNAL_2(sizeHintChanged,un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint = NoHint))
+   GUI_CS_SIGNAL_2(closeEditor, editor, hint)
 
-private:
-    Q_DISABLE_COPY(QAbstractItemDelegate)
-                  
+   GUI_CS_SIGNAL_1(Public, void sizeHintChanged(const QModelIndex &un_named_arg1))
+   GUI_CS_SIGNAL_2(sizeHintChanged, un_named_arg1)
+
+ private:
+   Q_DISABLE_COPY(QAbstractItemDelegate)
+
 };
 
 #endif // QT_NO_ITEMVIEWS

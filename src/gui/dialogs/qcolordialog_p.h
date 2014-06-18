@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,69 +44,71 @@ class QWellArray;
 
 class QColorDialogPrivate : public QDialogPrivate
 {
-    Q_DECLARE_PUBLIC(QColorDialog)
+   Q_DECLARE_PUBLIC(QColorDialog)
 
-public:
-    void init(const QColor &initial);
-    QRgb currentColor() const;
-    QColor currentQColor() const;
-    void setCurrentColor(QRgb rgb);
-    void setCurrentQColor(const QColor &color);
-    bool selectColor(const QColor &color);
+ public:
+   void init(const QColor &initial);
+   QRgb currentColor() const;
+   QColor currentQColor() const;
+   void setCurrentColor(QRgb rgb);
+   void setCurrentQColor(const QColor &color);
+   bool selectColor(const QColor &color);
 
-    int currentAlpha() const;
-    void setCurrentAlpha(int a);
-    void showAlpha(bool b);
-    bool isAlphaVisible() const;
-    void retranslateStrings();
+   int currentAlpha() const;
+   void setCurrentAlpha(int a);
+   void showAlpha(bool b);
+   bool isAlphaVisible() const;
+   void retranslateStrings();
 
-    void _q_addCustom();
+   void _q_addCustom();
 
-    void _q_newHsv(int h, int s, int v);
-    void _q_newColorTypedIn(const QRgb &rgb);
-    void _q_newCustom(int, int);
-    void _q_newStandard(int, int);
+   void _q_newHsv(int h, int s, int v);
+   void _q_newColorTypedIn(const QRgb &rgb);
+   void _q_newCustom(int, int);
+   void _q_newStandard(int, int);
 
-    QWellArray *custom;
-    QWellArray *standard;
+   QWellArray *custom;
+   QWellArray *standard;
 
-    QDialogButtonBox *buttons;
-    QVBoxLayout *leftLay;
-    QColorPicker *cp;
-    QColorLuminancePicker *lp;
-    QColorShower *cs;
-    QLabel *lblBasicColors;
-    QLabel *lblCustomColors;
-    QPushButton *ok;
-    QPushButton *cancel;
-    QPushButton *addCusBt;
-    QColor selectedQColor;
-    int nextCust;
-    bool smallDisplay;
-    QColorDialog::ColorDialogOptions opts;
-    QPointer<QObject> receiverToDisconnectOnClose;
-    QByteArray memberToDisconnectOnClose;
-    bool nativeDialogInUse;
+   QDialogButtonBox *buttons;
+   QVBoxLayout *leftLay;
+   QColorPicker *cp;
+   QColorLuminancePicker *lp;
+   QColorShower *cs;
+   QLabel *lblBasicColors;
+   QLabel *lblCustomColors;
+   QPushButton *ok;
+   QPushButton *cancel;
+   QPushButton *addCusBt;
+   QColor selectedQColor;
+   int nextCust;
+   bool smallDisplay;
+   QColorDialog::ColorDialogOptions opts;
+   QPointer<QObject> receiverToDisconnectOnClose;
+   QByteArray memberToDisconnectOnClose;
+   bool nativeDialogInUse;
 
 #ifdef Q_OS_MAC
-    void openCocoaColorPanel(const QColor &initial,
-            QWidget *parent, const QString &title, QColorDialog::ColorDialogOptions options);
-    void closeCocoaColorPanel();
-    void releaseCocoaColorPanelDelegate();
-    void setCocoaPanelColor(const QColor &color);
+   void openCocoaColorPanel(const QColor &initial,
+                            QWidget *parent, const QString &title, QColorDialog::ColorDialogOptions options);
+   void closeCocoaColorPanel();
+   void releaseCocoaColorPanelDelegate();
+   void setCocoaPanelColor(const QColor &color);
 
-    inline void done(int result) 
-      { q_func()->done(result); }
+   inline void done(int result) {
+      q_func()->done(result);
+   }
 
-    inline QColorDialog *colorDialog()
-      { return q_func(); }
+   inline QColorDialog *colorDialog() {
+      return q_func();
+   }
 
-    void *delegate;
+   void *delegate;
 
-    static bool sharedColorPanelAvailable;
+   static bool sharedColorPanelAvailable;
 
-    void _q_macRunNativeAppModalPanel();
-    void mac_nativeDialogModalHelp();
+   void _q_macRunNativeAppModalPanel();
+   void mac_nativeDialogModalHelp();
 #endif
 
 };

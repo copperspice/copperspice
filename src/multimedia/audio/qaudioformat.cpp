@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,45 +31,42 @@ QT_BEGIN_NAMESPACE
 
 class QAudioFormatPrivate : public QSharedData
 {
-public:
-    QAudioFormatPrivate()
-    {
-        frequency = -1;
-        channels = -1;
-        sampleSize = -1;
-        byteOrder = QAudioFormat::Endian(QSysInfo::ByteOrder);
-        sampleType = QAudioFormat::Unknown;
-    }
+ public:
+   QAudioFormatPrivate() {
+      frequency = -1;
+      channels = -1;
+      sampleSize = -1;
+      byteOrder = QAudioFormat::Endian(QSysInfo::ByteOrder);
+      sampleType = QAudioFormat::Unknown;
+   }
 
-    QAudioFormatPrivate(const QAudioFormatPrivate &other):
-        QSharedData(other),
-        codec(other.codec),
-        byteOrder(other.byteOrder),
-        sampleType(other.sampleType),
-        frequency(other.frequency),
-        channels(other.channels),
-        sampleSize(other.sampleSize)
-    {
-    }
+   QAudioFormatPrivate(const QAudioFormatPrivate &other):
+      QSharedData(other),
+      codec(other.codec),
+      byteOrder(other.byteOrder),
+      sampleType(other.sampleType),
+      frequency(other.frequency),
+      channels(other.channels),
+      sampleSize(other.sampleSize) {
+   }
 
-    QAudioFormatPrivate& operator=(const QAudioFormatPrivate &other)
-    {
-        codec = other.codec;
-        byteOrder = other.byteOrder;
-        sampleType = other.sampleType;
-        frequency = other.frequency;
-        channels = other.channels;
-        sampleSize = other.sampleSize;
+   QAudioFormatPrivate &operator=(const QAudioFormatPrivate &other) {
+      codec = other.codec;
+      byteOrder = other.byteOrder;
+      sampleType = other.sampleType;
+      frequency = other.frequency;
+      channels = other.channels;
+      sampleSize = other.sampleSize;
 
-        return *this;
-    }
+      return *this;
+   }
 
-    QString codec;
-    QAudioFormat::Endian byteOrder;
-    QAudioFormat::SampleType sampleType;
-    int frequency;
-    int channels;
-    int sampleSize;
+   QString codec;
+   QAudioFormat::Endian byteOrder;
+   QAudioFormat::SampleType sampleType;
+   int frequency;
+   int channels;
+   int sampleSize;
 };
 
 /*!
@@ -137,7 +134,7 @@ public:
 */
 
 QAudioFormat::QAudioFormat():
-    d(new QAudioFormatPrivate)
+   d(new QAudioFormatPrivate)
 {
 }
 
@@ -146,7 +143,7 @@ QAudioFormat::QAudioFormat():
 */
 
 QAudioFormat::QAudioFormat(const QAudioFormat &other):
-    d(other.d)
+   d(other.d)
 {
 }
 
@@ -162,10 +159,10 @@ QAudioFormat::~QAudioFormat()
     Assigns \a other to this QAudioFormat implementation.
 */
 
-QAudioFormat& QAudioFormat::operator=(const QAudioFormat &other)
+QAudioFormat &QAudioFormat::operator=(const QAudioFormat &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -177,12 +174,12 @@ QAudioFormat& QAudioFormat::operator=(const QAudioFormat &other)
 
 bool QAudioFormat::operator==(const QAudioFormat &other) const
 {
-    return d->frequency == other.d->frequency &&
-            d->channels == other.d->channels &&
-            d->sampleSize == other.d->sampleSize &&
-            d->byteOrder == other.d->byteOrder &&
-            d->codec == other.d->codec &&
-            d->sampleType == other.d->sampleType;
+   return d->frequency == other.d->frequency &&
+          d->channels == other.d->channels &&
+          d->sampleSize == other.d->sampleSize &&
+          d->byteOrder == other.d->byteOrder &&
+          d->codec == other.d->codec &&
+          d->sampleType == other.d->sampleType;
 }
 
 /*!
@@ -192,9 +189,9 @@ bool QAudioFormat::operator==(const QAudioFormat &other) const
   All elements of QAudioFormat are used for the comparison.
 */
 
-bool QAudioFormat::operator!=(const QAudioFormat& other) const
+bool QAudioFormat::operator!=(const QAudioFormat &other) const
 {
-    return !(*this == other);
+   return !(*this == other);
 }
 
 /*!
@@ -203,8 +200,8 @@ bool QAudioFormat::operator!=(const QAudioFormat& other) const
 
 bool QAudioFormat::isValid() const
 {
-    return d->frequency != -1 && d->channels != -1 && d->sampleSize != -1 &&
-            d->sampleType != QAudioFormat::Unknown && !d->codec.isEmpty();
+   return d->frequency != -1 && d->channels != -1 && d->sampleSize != -1 &&
+          d->sampleType != QAudioFormat::Unknown && !d->codec.isEmpty();
 }
 
 /*!
@@ -215,7 +212,7 @@ bool QAudioFormat::isValid() const
 
 void QAudioFormat::setSampleRate(int samplerate)
 {
-    d->frequency = samplerate;
+   d->frequency = samplerate;
 }
 
 /*!
@@ -226,7 +223,7 @@ void QAudioFormat::setSampleRate(int samplerate)
 
 void QAudioFormat::setFrequency(int frequency)
 {
-    d->frequency = frequency;
+   d->frequency = frequency;
 }
 
 /*!
@@ -237,7 +234,7 @@ void QAudioFormat::setFrequency(int frequency)
 
 int QAudioFormat::sampleRate() const
 {
-    return d->frequency;
+   return d->frequency;
 }
 
 /*!
@@ -248,7 +245,7 @@ int QAudioFormat::sampleRate() const
 
 int QAudioFormat::frequency() const
 {
-    return d->frequency;
+   return d->frequency;
 }
 
 /*!
@@ -259,7 +256,7 @@ int QAudioFormat::frequency() const
 
 void QAudioFormat::setChannelCount(int channels)
 {
-    d->channels = channels;
+   d->channels = channels;
 }
 
 /*!
@@ -270,7 +267,7 @@ void QAudioFormat::setChannelCount(int channels)
 
 void QAudioFormat::setChannels(int channels)
 {
-    d->channels = channels;
+   d->channels = channels;
 }
 
 /*!
@@ -281,7 +278,7 @@ void QAudioFormat::setChannels(int channels)
 
 int QAudioFormat::channelCount() const
 {
-    return d->channels;
+   return d->channels;
 }
 
 /*!
@@ -292,7 +289,7 @@ int QAudioFormat::channelCount() const
 
 int QAudioFormat::channels() const
 {
-    return d->channels;
+   return d->channels;
 }
 
 /*!
@@ -301,7 +298,7 @@ int QAudioFormat::channels() const
 
 void QAudioFormat::setSampleSize(int sampleSize)
 {
-    d->sampleSize = sampleSize;
+   d->sampleSize = sampleSize;
 }
 
 /*!
@@ -310,7 +307,7 @@ void QAudioFormat::setSampleSize(int sampleSize)
 
 int QAudioFormat::sampleSize() const
 {
-    return d->sampleSize;
+   return d->sampleSize;
 }
 
 /*!
@@ -321,7 +318,7 @@ int QAudioFormat::sampleSize() const
 
 void QAudioFormat::setCodec(const QString &codec)
 {
-    d->codec = codec;
+   d->codec = codec;
 }
 
 /*!
@@ -332,7 +329,7 @@ void QAudioFormat::setCodec(const QString &codec)
 
 QString QAudioFormat::codec() const
 {
-    return d->codec;
+   return d->codec;
 }
 
 /*!
@@ -341,7 +338,7 @@ QString QAudioFormat::codec() const
 
 void QAudioFormat::setByteOrder(QAudioFormat::Endian byteOrder)
 {
-    d->byteOrder = byteOrder;
+   d->byteOrder = byteOrder;
 }
 
 /*!
@@ -350,7 +347,7 @@ void QAudioFormat::setByteOrder(QAudioFormat::Endian byteOrder)
 
 QAudioFormat::Endian QAudioFormat::byteOrder() const
 {
-    return d->byteOrder;
+   return d->byteOrder;
 }
 
 /*!
@@ -359,7 +356,7 @@ QAudioFormat::Endian QAudioFormat::byteOrder() const
 
 void QAudioFormat::setSampleType(QAudioFormat::SampleType sampleType)
 {
-    d->sampleType = sampleType;
+   d->sampleType = sampleType;
 }
 
 /*!
@@ -368,7 +365,7 @@ void QAudioFormat::setSampleType(QAudioFormat::SampleType sampleType)
 
 QAudioFormat::SampleType QAudioFormat::sampleType() const
 {
-    return d->sampleType;
+   return d->sampleType;
 }
 
 /*!

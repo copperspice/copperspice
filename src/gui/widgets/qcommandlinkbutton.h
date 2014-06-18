@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,33 +32,33 @@ QT_BEGIN_NAMESPACE
 
 class QCommandLinkButtonPrivate;
 
-class Q_GUI_EXPORT QCommandLinkButton: public QPushButton 
+class Q_GUI_EXPORT QCommandLinkButton: public QPushButton
 {
-    CS_OBJECT(QCommandLinkButton)
+   CS_OBJECT(QCommandLinkButton)
 
-    GUI_CS_PROPERTY_READ(description, description)
-    GUI_CS_PROPERTY_WRITE(description, setDescription)
-    GUI_CS_PROPERTY_READ(flat, isFlat)
-    GUI_CS_PROPERTY_WRITE(flat, setFlat)
-    GUI_CS_PROPERTY_DESIGNABLE(flat, false)
+   GUI_CS_PROPERTY_READ(description, description)
+   GUI_CS_PROPERTY_WRITE(description, setDescription)
+   GUI_CS_PROPERTY_READ(flat, isFlat)
+   GUI_CS_PROPERTY_WRITE(flat, setFlat)
+   GUI_CS_PROPERTY_DESIGNABLE(flat, false)
 
-public:
-    explicit QCommandLinkButton(QWidget *parent=0);
-    explicit QCommandLinkButton(const QString &text, QWidget *parent=0);
-    QCommandLinkButton(const QString &text, const QString &description, QWidget *parent=0);
-    QString description() const;
-    void setDescription(const QString &description);
+ public:
+   explicit QCommandLinkButton(QWidget *parent = 0);
+   explicit QCommandLinkButton(const QString &text, QWidget *parent = 0);
+   QCommandLinkButton(const QString &text, const QString &description, QWidget *parent = 0);
+   QString description() const;
+   void setDescription(const QString &description);
 
-protected:
-    QSize sizeHint() const;
-    int heightForWidth(int) const;
-    QSize minimumSizeHint() const;
-    bool event(QEvent *e);
-    void paintEvent(QPaintEvent *);
+ protected:
+   QSize sizeHint() const;
+   int heightForWidth(int) const;
+   QSize minimumSizeHint() const;
+   bool event(QEvent *e);
+   void paintEvent(QPaintEvent *);
 
-private:
-    Q_DISABLE_COPY(QCommandLinkButton)
-    Q_DECLARE_PRIVATE(QCommandLinkButton)
+ private:
+   Q_DISABLE_COPY(QCommandLinkButton)
+   Q_DECLARE_PRIVATE(QCommandLinkButton)
 };
 
 QT_END_NAMESPACE

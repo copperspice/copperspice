@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -229,251 +229,254 @@ class QGLEngineShaderProg;
 
 class Q_OPENGL_EXPORT QGLEngineSharedShaders
 {
-    CS_GADGET(QGLEngineSharedShaders)
-public:
+   CS_GADGET(QGLEngineSharedShaders)
+ public:
 
-    enum SnippetName {
-        MainVertexShader,
-        MainWithTexCoordsVertexShader,
-        MainWithTexCoordsAndOpacityVertexShader,
+   enum SnippetName {
+      MainVertexShader,
+      MainWithTexCoordsVertexShader,
+      MainWithTexCoordsAndOpacityVertexShader,
 
-        // UntransformedPositionVertexShader must be first in the list:
-        UntransformedPositionVertexShader,
-        PositionOnlyVertexShader,
-        ComplexGeometryPositionOnlyVertexShader,
-        PositionWithPatternBrushVertexShader,
-        PositionWithLinearGradientBrushVertexShader,
-        PositionWithConicalGradientBrushVertexShader,
-        PositionWithRadialGradientBrushVertexShader,
-        PositionWithTextureBrushVertexShader,
-        AffinePositionWithPatternBrushVertexShader,
-        AffinePositionWithLinearGradientBrushVertexShader,
-        AffinePositionWithConicalGradientBrushVertexShader,
-        AffinePositionWithRadialGradientBrushVertexShader,
-        AffinePositionWithTextureBrushVertexShader,
+      // UntransformedPositionVertexShader must be first in the list:
+      UntransformedPositionVertexShader,
+      PositionOnlyVertexShader,
+      ComplexGeometryPositionOnlyVertexShader,
+      PositionWithPatternBrushVertexShader,
+      PositionWithLinearGradientBrushVertexShader,
+      PositionWithConicalGradientBrushVertexShader,
+      PositionWithRadialGradientBrushVertexShader,
+      PositionWithTextureBrushVertexShader,
+      AffinePositionWithPatternBrushVertexShader,
+      AffinePositionWithLinearGradientBrushVertexShader,
+      AffinePositionWithConicalGradientBrushVertexShader,
+      AffinePositionWithRadialGradientBrushVertexShader,
+      AffinePositionWithTextureBrushVertexShader,
 
-        // MainFragmentShader_CMO must be first in the list:
-        MainFragmentShader_CMO,
-        MainFragmentShader_CM,
-        MainFragmentShader_MO,
-        MainFragmentShader_M,
-        MainFragmentShader_CO,
-        MainFragmentShader_C,
-        MainFragmentShader_O,
-        MainFragmentShader,
-        MainFragmentShader_ImageArrays,
+      // MainFragmentShader_CMO must be first in the list:
+      MainFragmentShader_CMO,
+      MainFragmentShader_CM,
+      MainFragmentShader_MO,
+      MainFragmentShader_M,
+      MainFragmentShader_CO,
+      MainFragmentShader_C,
+      MainFragmentShader_O,
+      MainFragmentShader,
+      MainFragmentShader_ImageArrays,
 
-        // ImageSrcFragmentShader must be first in the list::
-        ImageSrcFragmentShader,
-        ImageSrcWithPatternFragmentShader,
-        NonPremultipliedImageSrcFragmentShader,
-        CustomImageSrcFragmentShader,
-        SolidBrushSrcFragmentShader,
-        TextureBrushSrcFragmentShader,
-        TextureBrushSrcWithPatternFragmentShader,
-        PatternBrushSrcFragmentShader,
-        LinearGradientBrushSrcFragmentShader,
-        RadialGradientBrushSrcFragmentShader,
-        ConicalGradientBrushSrcFragmentShader,
-        ShockingPinkSrcFragmentShader,
+      // ImageSrcFragmentShader must be first in the list::
+      ImageSrcFragmentShader,
+      ImageSrcWithPatternFragmentShader,
+      NonPremultipliedImageSrcFragmentShader,
+      CustomImageSrcFragmentShader,
+      SolidBrushSrcFragmentShader,
+      TextureBrushSrcFragmentShader,
+      TextureBrushSrcWithPatternFragmentShader,
+      PatternBrushSrcFragmentShader,
+      LinearGradientBrushSrcFragmentShader,
+      RadialGradientBrushSrcFragmentShader,
+      ConicalGradientBrushSrcFragmentShader,
+      ShockingPinkSrcFragmentShader,
 
-        // NoMaskFragmentShader must be first in the list:
-        NoMaskFragmentShader,
-        MaskFragmentShader,
-        RgbMaskFragmentShaderPass1,
-        RgbMaskFragmentShaderPass2,
-        RgbMaskWithGammaFragmentShader,
+      // NoMaskFragmentShader must be first in the list:
+      NoMaskFragmentShader,
+      MaskFragmentShader,
+      RgbMaskFragmentShaderPass1,
+      RgbMaskFragmentShaderPass2,
+      RgbMaskWithGammaFragmentShader,
 
-        // NoCompositionModeFragmentShader must be first in the list:
-        NoCompositionModeFragmentShader,
-        MultiplyCompositionModeFragmentShader,
-        ScreenCompositionModeFragmentShader,
-        OverlayCompositionModeFragmentShader,
-        DarkenCompositionModeFragmentShader,
-        LightenCompositionModeFragmentShader,
-        ColorDodgeCompositionModeFragmentShader,
-        ColorBurnCompositionModeFragmentShader,
-        HardLightCompositionModeFragmentShader,
-        SoftLightCompositionModeFragmentShader,
-        DifferenceCompositionModeFragmentShader,
-        ExclusionCompositionModeFragmentShader,
+      // NoCompositionModeFragmentShader must be first in the list:
+      NoCompositionModeFragmentShader,
+      MultiplyCompositionModeFragmentShader,
+      ScreenCompositionModeFragmentShader,
+      OverlayCompositionModeFragmentShader,
+      DarkenCompositionModeFragmentShader,
+      LightenCompositionModeFragmentShader,
+      ColorDodgeCompositionModeFragmentShader,
+      ColorBurnCompositionModeFragmentShader,
+      HardLightCompositionModeFragmentShader,
+      SoftLightCompositionModeFragmentShader,
+      DifferenceCompositionModeFragmentShader,
+      ExclusionCompositionModeFragmentShader,
 
-        TotalSnippetCount, InvalidSnippetName
-    };
+      TotalSnippetCount, InvalidSnippetName
+   };
 #if defined (QT_DEBUG)
-    CS_ENUM(SnippetName)
-    static QByteArray snippetNameStr(SnippetName snippetName);
+   CS_ENUM(SnippetName)
+   static QByteArray snippetNameStr(SnippetName snippetName);
 #endif
 
-/*
-    // These allow the ShaderName enum to be used as a cache key
-    const int mainVertexOffset = 0;
-    const int positionVertexOffset = (1<<2) - PositionOnlyVertexShader;
-    const int mainFragOffset = (1<<6) - MainFragmentShader_CMO;
-    const int srcPixelOffset = (1<<10) - ImageSrcFragmentShader;
-    const int maskOffset = (1<<14) - NoMaskShader;
-    const int compositionOffset = (1 << 16) - MultiplyCompositionModeFragmentShader;
-*/
+   /*
+       // These allow the ShaderName enum to be used as a cache key
+       const int mainVertexOffset = 0;
+       const int positionVertexOffset = (1<<2) - PositionOnlyVertexShader;
+       const int mainFragOffset = (1<<6) - MainFragmentShader_CMO;
+       const int srcPixelOffset = (1<<10) - ImageSrcFragmentShader;
+       const int maskOffset = (1<<14) - NoMaskShader;
+       const int compositionOffset = (1 << 16) - MultiplyCompositionModeFragmentShader;
+   */
 
-    QGLEngineSharedShaders(const QGLContext *context);
-    ~QGLEngineSharedShaders();
+   QGLEngineSharedShaders(const QGLContext *context);
+   ~QGLEngineSharedShaders();
 
-    QGLShaderProgram *simpleProgram() { return simpleShaderProg; }
-    QGLShaderProgram *blitProgram() { return blitShaderProg; }
-    // Compile the program if it's not already in the cache, return the item in the cache.
-    QGLEngineShaderProg *findProgramInCache(const QGLEngineShaderProg &prog);
-    // Compile the custom shader if it's not already in the cache, return the item in the cache.
+   QGLShaderProgram *simpleProgram() {
+      return simpleShaderProg;
+   }
+   QGLShaderProgram *blitProgram() {
+      return blitShaderProg;
+   }
+   // Compile the program if it's not already in the cache, return the item in the cache.
+   QGLEngineShaderProg *findProgramInCache(const QGLEngineShaderProg &prog);
+   // Compile the custom shader if it's not already in the cache, return the item in the cache.
 
-    static QGLEngineSharedShaders *shadersForContext(const QGLContext *context);
+   static QGLEngineSharedShaders *shadersForContext(const QGLContext *context);
 
-    // Ideally, this would be static and cleanup all programs in all contexts which
-    // contain the custom code. Currently it is just a hint and we rely on deleted
-    // custom shaders being cleaned up by being kicked out of the cache when it's
-    // full.
-    void cleanupCustomStage(QGLCustomShaderStage* stage);
+   // Ideally, this would be static and cleanup all programs in all contexts which
+   // contain the custom code. Currently it is just a hint and we rely on deleted
+   // custom shaders being cleaned up by being kicked out of the cache when it's
+   // full.
+   void cleanupCustomStage(QGLCustomShaderStage *stage);
 
-private:
-    QGLSharedResourceGuard ctxGuard;
-    QGLShaderProgram *blitShaderProg;
-    QGLShaderProgram *simpleShaderProg;
-    QList<QGLEngineShaderProg*> cachedPrograms;
-    QList<QGLShader *> shaders;
+ private:
+   QGLSharedResourceGuard ctxGuard;
+   QGLShaderProgram *blitShaderProg;
+   QGLShaderProgram *simpleShaderProg;
+   QList<QGLEngineShaderProg *> cachedPrograms;
+   QList<QGLShader *> shaders;
 
-    static const char* qShaderSnippets[TotalSnippetCount];
+   static const char *qShaderSnippets[TotalSnippetCount];
 };
 
 
 class QGLEngineShaderProg
 {
-public:
-    QGLEngineShaderProg() : program(0) {}
+ public:
+   QGLEngineShaderProg() : program(0) {}
 
-    ~QGLEngineShaderProg() {
-        if (program)
-            delete program;
-    }
+   ~QGLEngineShaderProg() {
+      if (program) {
+         delete program;
+      }
+   }
 
-    QGLEngineSharedShaders::SnippetName mainVertexShader;
-    QGLEngineSharedShaders::SnippetName positionVertexShader;
-    QGLEngineSharedShaders::SnippetName mainFragShader;
-    QGLEngineSharedShaders::SnippetName srcPixelFragShader;
-    QGLEngineSharedShaders::SnippetName maskFragShader;
-    QGLEngineSharedShaders::SnippetName compositionFragShader;
+   QGLEngineSharedShaders::SnippetName mainVertexShader;
+   QGLEngineSharedShaders::SnippetName positionVertexShader;
+   QGLEngineSharedShaders::SnippetName mainFragShader;
+   QGLEngineSharedShaders::SnippetName srcPixelFragShader;
+   QGLEngineSharedShaders::SnippetName maskFragShader;
+   QGLEngineSharedShaders::SnippetName compositionFragShader;
 
-    QByteArray          customStageSource; //TODO: Decent cache key for custom stages
-    QGLShaderProgram*   program;
+   QByteArray          customStageSource; //TODO: Decent cache key for custom stages
+   QGLShaderProgram   *program;
 
-    QVector<uint> uniformLocations;
+   QVector<uint> uniformLocations;
 
-    bool                useTextureCoords;
-    bool                useOpacityAttribute;
-    bool                usePmvMatrixAttribute;
+   bool                useTextureCoords;
+   bool                useOpacityAttribute;
+   bool                usePmvMatrixAttribute;
 
-    bool operator==(const QGLEngineShaderProg& other) {
-        // We don't care about the program
-        return ( mainVertexShader      == other.mainVertexShader &&
-                 positionVertexShader  == other.positionVertexShader &&
-                 mainFragShader        == other.mainFragShader &&
-                 srcPixelFragShader    == other.srcPixelFragShader &&
-                 maskFragShader        == other.maskFragShader &&
-                 compositionFragShader == other.compositionFragShader &&
-                 customStageSource     == other.customStageSource
-               );
-    }
+   bool operator==(const QGLEngineShaderProg &other) {
+      // We don't care about the program
+      return ( mainVertexShader      == other.mainVertexShader &&
+               positionVertexShader  == other.positionVertexShader &&
+               mainFragShader        == other.mainFragShader &&
+               srcPixelFragShader    == other.srcPixelFragShader &&
+               maskFragShader        == other.maskFragShader &&
+               compositionFragShader == other.compositionFragShader &&
+               customStageSource     == other.customStageSource
+             );
+   }
 };
 
 class Q_OPENGL_EXPORT QGLEngineShaderManager : public QObject
 {
-    CS_OBJECT(QGLEngineShaderManager)
-public:
-    QGLEngineShaderManager(QGLContext* context);
-    ~QGLEngineShaderManager();
+   CS_OBJECT(QGLEngineShaderManager)
+ public:
+   QGLEngineShaderManager(QGLContext *context);
+   ~QGLEngineShaderManager();
 
-    enum MaskType {NoMask, PixelMask, SubPixelMaskPass1, SubPixelMaskPass2, SubPixelWithGammaMask};
-    enum PixelSrcType {
-        ImageSrc = Qt::TexturePattern+1,
-        NonPremultipliedImageSrc = Qt::TexturePattern+2,
-        PatternSrc = Qt::TexturePattern+3,
-        TextureSrcWithPattern = Qt::TexturePattern+4
-    };
+   enum MaskType {NoMask, PixelMask, SubPixelMaskPass1, SubPixelMaskPass2, SubPixelWithGammaMask};
+   enum PixelSrcType {
+      ImageSrc = Qt::TexturePattern + 1,
+      NonPremultipliedImageSrc = Qt::TexturePattern + 2,
+      PatternSrc = Qt::TexturePattern + 3,
+      TextureSrcWithPattern = Qt::TexturePattern + 4
+   };
 
-    enum Uniform {
-        ImageTexture,
-        PatternColor,
-        GlobalOpacity,
-        Depth,
-        MaskTexture,
-        FragmentColor,
-        LinearData,
-        Angle,
-        HalfViewportSize,
-        Fmp,
-        Fmp2MRadius2,
-        Inverse2Fmp2MRadius2,
-        SqrFr,
-        BRadius,
-        InvertedTextureSize,
-        BrushTransform,
-        BrushTexture,
-        Matrix,
-        NumUniforms
-    };
+   enum Uniform {
+      ImageTexture,
+      PatternColor,
+      GlobalOpacity,
+      Depth,
+      MaskTexture,
+      FragmentColor,
+      LinearData,
+      Angle,
+      HalfViewportSize,
+      Fmp,
+      Fmp2MRadius2,
+      Inverse2Fmp2MRadius2,
+      SqrFr,
+      BRadius,
+      InvertedTextureSize,
+      BrushTransform,
+      BrushTexture,
+      Matrix,
+      NumUniforms
+   };
 
-    enum OpacityMode {
-        NoOpacity,
-        UniformOpacity,
-        AttributeOpacity
-    };
+   enum OpacityMode {
+      NoOpacity,
+      UniformOpacity,
+      AttributeOpacity
+   };
 
-    // There are optimizations we can do, depending on the brush transform:
-    //    1) May not have to apply perspective-correction
-    //    2) Can use lower precision for matrix
-    void optimiseForBrushTransform(QTransform::TransformationType transformType);
-    void setSrcPixelType(Qt::BrushStyle);
-    void setSrcPixelType(PixelSrcType); // For non-brush sources, like pixmaps & images
-    void setOpacityMode(OpacityMode);
-    void setMaskType(MaskType);
-    void setCompositionMode(QPainter::CompositionMode);
-    void setCustomStage(QGLCustomShaderStage* stage);
-    void removeCustomStage();
+   // There are optimizations we can do, depending on the brush transform:
+   //    1) May not have to apply perspective-correction
+   //    2) Can use lower precision for matrix
+   void optimiseForBrushTransform(QTransform::TransformationType transformType);
+   void setSrcPixelType(Qt::BrushStyle);
+   void setSrcPixelType(PixelSrcType); // For non-brush sources, like pixmaps & images
+   void setOpacityMode(OpacityMode);
+   void setMaskType(MaskType);
+   void setCompositionMode(QPainter::CompositionMode);
+   void setCustomStage(QGLCustomShaderStage *stage);
+   void removeCustomStage();
 
-    GLuint getUniformLocation(Uniform id);
+   GLuint getUniformLocation(Uniform id);
 
-    void setDirty(); // someone has manually changed the current shader program
-    bool useCorrectShaderProg(); // returns true if the shader program needed to be changed
+   void setDirty(); // someone has manually changed the current shader program
+   bool useCorrectShaderProg(); // returns true if the shader program needed to be changed
 
-    void useSimpleProgram();
-    void useBlitProgram();
-    void setHasComplexGeometry(bool hasComplexGeometry)
-    {
-        complexGeometry = hasComplexGeometry;
-        shaderProgNeedsChanging = true;
-    }
-    bool hasComplexGeometry() const
-    {
-        return complexGeometry;
-    }
+   void useSimpleProgram();
+   void useBlitProgram();
+   void setHasComplexGeometry(bool hasComplexGeometry) {
+      complexGeometry = hasComplexGeometry;
+      shaderProgNeedsChanging = true;
+   }
+   bool hasComplexGeometry() const {
+      return complexGeometry;
+   }
 
-    QGLShaderProgram* currentProgram(); // Returns pointer to the shader the manager has chosen
-    QGLShaderProgram* simpleProgram(); // Used to draw into e.g. stencil buffers
-    QGLShaderProgram* blitProgram(); // Used to blit a texture into the framebuffer
+   QGLShaderProgram *currentProgram(); // Returns pointer to the shader the manager has chosen
+   QGLShaderProgram *simpleProgram(); // Used to draw into e.g. stencil buffers
+   QGLShaderProgram *blitProgram(); // Used to blit a texture into the framebuffer
 
-    QGLEngineSharedShaders* sharedShaders;
+   QGLEngineSharedShaders *sharedShaders;
 
-private:
-    QGLContext*     ctx;
-    bool            shaderProgNeedsChanging;
-    bool            complexGeometry;
+ private:
+   QGLContext     *ctx;
+   bool            shaderProgNeedsChanging;
+   bool            complexGeometry;
 
-    // Current state variables which influence the choice of shader:
-    QTransform                  brushTransform;
-    int                         srcPixelType;
-    OpacityMode                 opacityMode;
-    MaskType                    maskType;
-    QPainter::CompositionMode   compositionMode;
-    QGLCustomShaderStage*       customSrcStage;
+   // Current state variables which influence the choice of shader:
+   QTransform                  brushTransform;
+   int                         srcPixelType;
+   OpacityMode                 opacityMode;
+   MaskType                    maskType;
+   QPainter::CompositionMode   compositionMode;
+   QGLCustomShaderStage       *customSrcStage;
 
-    QGLEngineShaderProg*    currentShaderProg;
+   QGLEngineShaderProg    *currentShaderProg;
 };
 
 QT_END_NAMESPACE

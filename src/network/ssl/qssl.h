@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,44 +32,44 @@
 QT_BEGIN_NAMESPACE
 
 namespace QSsl {
-    enum KeyType {
-        PrivateKey,
-        PublicKey
-    };
+enum KeyType {
+   PrivateKey,
+   PublicKey
+};
 
-    enum EncodingFormat {
-        Pem,
-        Der
-    };
+enum EncodingFormat {
+   Pem,
+   Der
+};
 
-    enum KeyAlgorithm {
-        Rsa,
-        Dsa
-    };
+enum KeyAlgorithm {
+   Rsa,
+   Dsa
+};
 
-    enum AlternateNameEntryType {
-        EmailEntry,
-        DnsEntry
-    };
+enum AlternateNameEntryType {
+   EmailEntry,
+   DnsEntry
+};
 
-    enum SslProtocol {
-        SslV3,
-        SslV2,
-        TlsV1, // ### Qt5/rename to TlsV1_0 or so
-        AnyProtocol,
-        TlsV1SslV3,
-        SecureProtocols,
-        UnknownProtocol = -1
-    };
+enum SslProtocol {
+   SslV3,
+   SslV2,
+   TlsV1, // ### Qt5/rename to TlsV1_0 or so
+   AnyProtocol,
+   TlsV1SslV3,
+   SecureProtocols,
+   UnknownProtocol = -1
+};
 
-    enum SslOption {
-        SslOptionDisableEmptyFragments = 0x01,
-        SslOptionDisableSessionTickets = 0x02,
-        SslOptionDisableCompression = 0x04,
-        SslOptionDisableServerNameIndication = 0x08,
-        SslOptionDisableLegacyRenegotiation = 0x10
-    };
-    using SslOptions = QFlags<SslOption>;
+enum SslOption {
+   SslOptionDisableEmptyFragments = 0x01,
+   SslOptionDisableSessionTickets = 0x02,
+   SslOptionDisableCompression = 0x04,
+   SslOptionDisableServerNameIndication = 0x08,
+   SslOptionDisableLegacyRenegotiation = 0x10
+};
+using SslOptions = QFlags<SslOption>;
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QSsl::SslOptions)

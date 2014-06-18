@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,47 +39,47 @@ QT_BEGIN_NAMESPACE
 class QStaticTextPrivate;
 
 class Q_GUI_EXPORT QStaticText
-{    
+{
 
-public:
-    enum PerformanceHint {
-        ModerateCaching,
-        AggressiveCaching
-    };
+ public:
+   enum PerformanceHint {
+      ModerateCaching,
+      AggressiveCaching
+   };
 
-    QStaticText();
-    QStaticText(const QString &text);
-    QStaticText(const QStaticText &other);
-    ~QStaticText();
+   QStaticText();
+   QStaticText(const QString &text);
+   QStaticText(const QStaticText &other);
+   ~QStaticText();
 
-    void setText(const QString &text);
-    QString text() const;
+   void setText(const QString &text);
+   QString text() const;
 
-    void setTextFormat(Qt::TextFormat textFormat);
-    Qt::TextFormat textFormat() const;
+   void setTextFormat(Qt::TextFormat textFormat);
+   Qt::TextFormat textFormat() const;
 
-    void setTextWidth(qreal textWidth);
-    qreal textWidth() const;
+   void setTextWidth(qreal textWidth);
+   qreal textWidth() const;
 
-    void setTextOption(const QTextOption &textOption);
-    QTextOption textOption() const;
+   void setTextOption(const QTextOption &textOption);
+   QTextOption textOption() const;
 
-    QSizeF size() const;
+   QSizeF size() const;
 
-    void prepare(const QTransform &matrix = QTransform(), const QFont &font = QFont());
+   void prepare(const QTransform &matrix = QTransform(), const QFont &font = QFont());
 
-    void setPerformanceHint(PerformanceHint performanceHint);
-    PerformanceHint performanceHint() const;
+   void setPerformanceHint(PerformanceHint performanceHint);
+   PerformanceHint performanceHint() const;
 
-    QStaticText &operator=(const QStaticText &);
-    bool operator==(const QStaticText &) const;
-    bool operator!=(const QStaticText &) const;
+   QStaticText &operator=(const QStaticText &);
+   bool operator==(const QStaticText &) const;
+   bool operator!=(const QStaticText &) const;
 
-private:
-    void detach();
+ private:
+   void detach();
 
-    QExplicitlySharedDataPointer<QStaticTextPrivate> data;
-    friend class QStaticTextPrivate;
+   QExplicitlySharedDataPointer<QStaticTextPrivate> data;
+   friend class QStaticTextPrivate;
 };
 
 QT_END_NAMESPACE

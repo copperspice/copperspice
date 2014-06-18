@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,7 +43,7 @@ QT_BEGIN_NAMESPACE
 // #define QTRANSPORTAUTH_DEBUG 1
 
 #ifdef QTRANSPORTAUTH_DEBUG
-void hexstring( char *buf, const unsigned char* key, size_t sz );
+void hexstring( char *buf, const unsigned char *key, size_t sz );
 #endif
 
 // proj id for ftok usage in sxe
@@ -54,7 +54,7 @@ void hexstring( char *buf, const unsigned char* key, size_t sz );
   memset for security purposes, guaranteed not to be optimized away
   http://www.faqs.org/docs/Linux-HOWTO/Secure-Programs-HOWTO.html
 */
-void *guaranteed_memset(void *v,int c,size_t n);
+void *guaranteed_memset(void *v, int c, size_t n);
 
 class QUnixSocketMessage;
 
@@ -95,36 +95,38 @@ class QUnixSocketMessage;
 
 class SxeRegistryLocker : public QObject
 {
-    CS_OBJECT(SxeRegistryLocker)
+   CS_OBJECT(SxeRegistryLocker)
 
-public:
-    SxeRegistryLocker( QObject * );
-    ~SxeRegistryLocker();
-    bool success() const { return m_success; }
-private:
-    bool m_success;
-    QObject *m_reg;
+ public:
+   SxeRegistryLocker( QObject *);
+   ~SxeRegistryLocker();
+   bool success() const {
+      return m_success;
+   }
+ private:
+   bool m_success;
+   QObject *m_reg;
 };
 
 class QTransportAuthPrivate
 {
-    Q_DECLARE_PUBLIC(QTransportAuth)
+   Q_DECLARE_PUBLIC(QTransportAuth)
 
-public:
-    QTransportAuthPrivate();
-    virtual ~QTransportAuthPrivate();
+ public:
+   QTransportAuthPrivate();
+   virtual ~QTransportAuthPrivate();
 
-    const unsigned char *getClientKey( unsigned char progId );
-    void invalidateClientKeyCache();
+   const unsigned char *getClientKey( unsigned char progId );
+   void invalidateClientKeyCache();
 
-    bool keyInitialised;
-    QString m_logFilePath;
-    QString m_keyFilePath;
-    QObject *m_packageRegistry;
-    AuthCookie authKey;
-    QCache<unsigned char, char> keyCache;
-    QHash< QObject*, QIODevice*> buffersByClient;
-    QMutex keyfileMutex;
+   bool keyInitialised;
+   QString m_logFilePath;
+   QString m_keyFilePath;
+   QObject *m_packageRegistry;
+   AuthCookie authKey;
+   QCache<unsigned char, char> keyCache;
+   QHash< QObject *, QIODevice *> buffersByClient;
+   QMutex keyfileMutex;
 };
 
 /*!
@@ -134,24 +136,24 @@ public:
 */
 class FAREnforcer
 {
-    public:
-        static FAREnforcer *getInstance();
-        void logAuthAttempt( QDateTime time = QDateTime::currentDateTime() );
-        void reset();
+ public:
+   static FAREnforcer *getInstance();
+   void logAuthAttempt( QDateTime time = QDateTime::currentDateTime() );
+   void reset();
 
 #ifndef TEST_FAR_ENFORCER
-    private:
+ private:
 #endif
-        FAREnforcer();
-        FAREnforcer( const FAREnforcer & );
-        FAREnforcer &operator=(FAREnforcer const & );
+   FAREnforcer();
+   FAREnforcer( const FAREnforcer &);
+   FAREnforcer &operator=(FAREnforcer const &);
 
-        static const QString FARMessage;
-        static const int minutelyRate;
-        static const QString SxeTag;
-        static const int minute;
+   static const QString FARMessage;
+   static const int minutelyRate;
+   static const QString SxeTag;
+   static const int minute;
 
-        QList<QDateTime> authAttempts;
+   QList<QDateTime> authAttempts;
 };
 
 QT_END_NAMESPACE

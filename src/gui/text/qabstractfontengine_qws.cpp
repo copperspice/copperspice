@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,16 +34,16 @@ QT_BEGIN_NAMESPACE
 
 class QFontEngineInfoPrivate
 {
-public:
-    inline QFontEngineInfoPrivate()
-        : pixelSize(0), weight(QFont::Normal), style(QFont::StyleNormal)
-    {}
+ public:
+   inline QFontEngineInfoPrivate()
+      : pixelSize(0), weight(QFont::Normal), style(QFont::StyleNormal) {
+   }
 
-    QString family;
-    qreal pixelSize;
-    int weight;
-    QFont::Style style;
-    QList<QFontDatabase::WritingSystem> writingSystems;
+   QString family;
+   qreal pixelSize;
+   int weight;
+   QFont::Style style;
+   QList<QFontDatabase::WritingSystem> writingSystems;
 };
 
 /*!
@@ -66,7 +66,7 @@ public:
 */
 QFontEngineInfo::QFontEngineInfo()
 {
-    d = new QFontEngineInfoPrivate;
+   d = new QFontEngineInfoPrivate;
 }
 
 /*!
@@ -76,15 +76,15 @@ QFontEngineInfo::QFontEngineInfo()
 */
 QFontEngineInfo::QFontEngineInfo(const QString &family)
 {
-    d = new QFontEngineInfoPrivate;
-    d->family = family;
+   d = new QFontEngineInfoPrivate;
+   d->family = family;
 }
 
 /*!
    Creates a new font engine info object with the same attributes as \a other.
 */
 QFontEngineInfo::QFontEngineInfo(const QFontEngineInfo &other)
-    : d(new QFontEngineInfoPrivate(*other.d))
+   : d(new QFontEngineInfoPrivate(*other.d))
 {
 }
 
@@ -94,8 +94,8 @@ QFontEngineInfo::QFontEngineInfo(const QFontEngineInfo &other)
 */
 QFontEngineInfo &QFontEngineInfo::operator=(const QFontEngineInfo &other)
 {
-    *d = *other.d;
-    return *this;
+   *d = *other.d;
+   return *this;
 }
 
 /*!
@@ -103,7 +103,7 @@ QFontEngineInfo &QFontEngineInfo::operator=(const QFontEngineInfo &other)
 */
 QFontEngineInfo::~QFontEngineInfo()
 {
-    delete d;
+   delete d;
 }
 
 /*!
@@ -113,12 +113,12 @@ QFontEngineInfo::~QFontEngineInfo()
 
 void QFontEngineInfo::setFamily(const QString &family)
 {
-    d->family = family;
+   d->family = family;
 }
 
 QString QFontEngineInfo::family() const
 {
-    return d->family;
+   return d->family;
 }
 
 /*!
@@ -130,12 +130,12 @@ QString QFontEngineInfo::family() const
 
 void QFontEngineInfo::setPixelSize(qreal size)
 {
-    d->pixelSize = size;
+   d->pixelSize = size;
 }
 
 qreal QFontEngineInfo::pixelSize() const
 {
-    return d->pixelSize;
+   return d->pixelSize;
 }
 
 /*!
@@ -147,12 +147,12 @@ qreal QFontEngineInfo::pixelSize() const
 
 void QFontEngineInfo::setWeight(int weight)
 {
-    d->weight = weight;
+   d->weight = weight;
 }
 
 int QFontEngineInfo::weight() const
 {
-    return d->weight;
+   return d->weight;
 }
 
 /*!
@@ -162,12 +162,12 @@ int QFontEngineInfo::weight() const
 
 void QFontEngineInfo::setStyle(QFont::Style style)
 {
-    d->style = style;
+   d->style = style;
 }
 
 QFont::Style QFontEngineInfo::style() const
 {
-    return d->style;
+   return d->style;
 }
 
 /*!
@@ -179,21 +179,21 @@ QFont::Style QFontEngineInfo::style() const
 
 QList<QFontDatabase::WritingSystem> QFontEngineInfo::writingSystems() const
 {
-    return d->writingSystems;
+   return d->writingSystems;
 }
 
 void QFontEngineInfo::setWritingSystems(const QList<QFontDatabase::WritingSystem> &writingSystems)
 {
-    d->writingSystems = writingSystems;
+   d->writingSystems = writingSystems;
 }
 
 class QFontEnginePluginPrivate
 {
-    Q_DECLARE_PUBLIC(QFontEnginePlugin)
+   Q_DECLARE_PUBLIC(QFontEnginePlugin)
 
-    QString foundry;
+   QString foundry;
 
-public: 
+ public:
    virtual ~QFontEnginePluginPrivate() {}
 
 };
@@ -222,10 +222,10 @@ public:
   specified \a foundry and \a parent.
 */
 QFontEnginePlugin::QFontEnginePlugin(const QString &foundry, QObject *parent)
-    : QObject(*new QFontEnginePluginPrivate, parent)
+   : QObject(*new QFontEnginePluginPrivate, parent)
 {
-    Q_D(QFontEnginePlugin);
-    d->foundry = foundry;
+   Q_D(QFontEnginePlugin);
+   d->foundry = foundry;
 }
 
 /*!
@@ -241,8 +241,8 @@ QFontEnginePlugin::~QFontEnginePlugin()
 */
 QStringList QFontEnginePlugin::keys() const
 {
-    Q_D(const QFontEnginePlugin);
-    return QStringList(d->foundry);
+   Q_D(const QFontEnginePlugin);
+   return QStringList(d->foundry);
 }
 
 /*!
@@ -261,10 +261,10 @@ QStringList QFontEnginePlugin::keys() const
 
 class QAbstractFontEnginePrivate
 {
-    Q_DECLARE_PUBLIC(QAbstractFontEngine)
+   Q_DECLARE_PUBLIC(QAbstractFontEngine)
 
-public:
-    virtual ~QAbstractFontEnginePrivate() {}
+ public:
+   virtual ~QAbstractFontEnginePrivate() {}
 
 };
 
@@ -396,7 +396,7 @@ public:
    Constructs a new QAbstractFontEngine with the given \a parent.
 */
 QAbstractFontEngine::QAbstractFontEngine(QObject *parent)
-    : QObject(*new QAbstractFontEnginePrivate, parent)
+   : QObject(*new QAbstractFontEnginePrivate, parent)
 {
 }
 
@@ -457,13 +457,13 @@ QAbstractFontEngine::~QAbstractFontEngine()
 */
 bool QAbstractFontEngine::renderGlyph(uint glyph, int depth, int bytesPerLine, int height, uchar *buffer)
 {
-    Q_UNUSED(glyph)
-    Q_UNUSED(depth)
-    Q_UNUSED(bytesPerLine)
-    Q_UNUSED(height)
-    Q_UNUSED(buffer)
-    qWarning("QAbstractFontEngine: renderGlyph is not implemented in font plugin!");
-    return false;
+   Q_UNUSED(glyph)
+   Q_UNUSED(depth)
+   Q_UNUSED(bytesPerLine)
+   Q_UNUSED(height)
+   Q_UNUSED(buffer)
+   qWarning("QAbstractFontEngine: renderGlyph is not implemented in font plugin!");
+   return false;
 }
 
 /*!
@@ -472,11 +472,11 @@ bool QAbstractFontEngine::renderGlyph(uint glyph, int depth, int bytesPerLine, i
 */
 void QAbstractFontEngine::addGlyphOutlinesToPath(uint *glyphs, int numGlyphs, FixedPoint *positions, QPainterPath *path)
 {
-    Q_UNUSED(glyphs)
-    Q_UNUSED(numGlyphs)
-    Q_UNUSED(positions)
-    Q_UNUSED(path)
-    qWarning("QAbstractFontEngine: addGlyphOutlinesToPath is not implemented in font plugin!");
+   Q_UNUSED(glyphs)
+   Q_UNUSED(numGlyphs)
+   Q_UNUSED(positions)
+   Q_UNUSED(path)
+   qWarning("QAbstractFontEngine: addGlyphOutlinesToPath is not implemented in font plugin!");
 }
 
 /*
@@ -495,258 +495,276 @@ QVariant QAbstractFontEngine::extension(Extension extension, const QVariant &arg
 */
 
 QProxyFontEngine::QProxyFontEngine(QAbstractFontEngine *customEngine, const QFontDef &def)
-    : engine(customEngine)
+   : engine(customEngine)
 {
-    fontDef = def;
-    engineCapabilities = engine->capabilities();
+   fontDef = def;
+   engineCapabilities = engine->capabilities();
 }
 
 QProxyFontEngine::~QProxyFontEngine()
 {
-    delete engine;
+   delete engine;
 }
 
-bool QProxyFontEngine::stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const
+bool QProxyFontEngine::stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
+                                    QTextEngine::ShaperFlags flags) const
 {
-    if (*nglyphs < len) {
-        *nglyphs = len;
-        return false;
-    }
+   if (*nglyphs < len) {
+      *nglyphs = len;
+      return false;
+   }
 
-    QVarLengthArray<uint> glyphIndicies(*nglyphs);
-    if (!engine->convertStringToGlyphIndices(str, len, glyphIndicies.data(), nglyphs, QAbstractFontEngine::TextShapingFlags(int(flags))))
-        return false;
+   QVarLengthArray<uint> glyphIndicies(*nglyphs);
+   if (!engine->convertStringToGlyphIndices(str, len, glyphIndicies.data(), nglyphs,
+         QAbstractFontEngine::TextShapingFlags(int(flags)))) {
+      return false;
+   }
 
-    // ### use memcopy instead
-    for (int i = 0; i < *nglyphs; ++i) {
-        glyphs->glyphs[i] = glyphIndicies[i];
-    }
-    glyphs->numGlyphs = *nglyphs;
+   // ### use memcopy instead
+   for (int i = 0; i < *nglyphs; ++i) {
+      glyphs->glyphs[i] = glyphIndicies[i];
+   }
+   glyphs->numGlyphs = *nglyphs;
 
-    recalcAdvances(glyphs, flags);
-    return true;
+   recalcAdvances(glyphs, flags);
+   return true;
 }
 
 void QProxyFontEngine::recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFlags flags) const
 {
-    const int nglyphs = glyphs->numGlyphs;
+   const int nglyphs = glyphs->numGlyphs;
 
-    QVarLengthArray<QAbstractFontEngine::Fixed> advances(nglyphs);
-    engine->getGlyphAdvances(glyphs->glyphs, nglyphs, advances.data(), QAbstractFontEngine::TextShapingFlags(int(flags)));
+   QVarLengthArray<QAbstractFontEngine::Fixed> advances(nglyphs);
+   engine->getGlyphAdvances(glyphs->glyphs, nglyphs, advances.data(), QAbstractFontEngine::TextShapingFlags(int(flags)));
 
 
-    // ### use memcopy instead
-    for (int i = 0; i < nglyphs; ++i) {
-        glyphs->advances_x[i] = QFixed::fromFixed(advances[i]);
-        glyphs->advances_y[i] = 0;
-    }
+   // ### use memcopy instead
+   for (int i = 0; i < nglyphs; ++i) {
+      glyphs->advances_x[i] = QFixed::fromFixed(advances[i]);
+      glyphs->advances_y[i] = 0;
+   }
 }
 
 
 static QImage alphaMapFromPath(QFontEngine *fe, glyph_t glyph)
 {
-    glyph_metrics_t gm = fe->boundingBox(glyph);
-    int glyph_x = qFloor(gm.x.toReal());
-    int glyph_y = qFloor(gm.y.toReal());
-    int glyph_width = qCeil((gm.x + gm.width).toReal()) -  glyph_x;
-    int glyph_height = qCeil((gm.y + gm.height).toReal()) - glyph_y;
+   glyph_metrics_t gm = fe->boundingBox(glyph);
+   int glyph_x = qFloor(gm.x.toReal());
+   int glyph_y = qFloor(gm.y.toReal());
+   int glyph_width = qCeil((gm.x + gm.width).toReal()) -  glyph_x;
+   int glyph_height = qCeil((gm.y + gm.height).toReal()) - glyph_y;
 
-    if (glyph_width <= 0 || glyph_height <= 0)
-        return QImage();
-    QFixedPoint pt;
-    pt.x = 0;
-    pt.y = -glyph_y; // the baseline
-    QPainterPath path;
-    QImage im(glyph_width + qAbs(glyph_x) + 4, glyph_height, QImage::Format_ARGB32_Premultiplied);
-    im.fill(Qt::transparent);
-    QPainter p(&im);
-    p.setRenderHint(QPainter::Antialiasing);
-    fe->addGlyphsToPath(&glyph, &pt, 1, &path, 0);
-    p.setPen(Qt::NoPen);
-    p.setBrush(Qt::black);
-    p.drawPath(path);
-    p.end();
+   if (glyph_width <= 0 || glyph_height <= 0) {
+      return QImage();
+   }
+   QFixedPoint pt;
+   pt.x = 0;
+   pt.y = -glyph_y; // the baseline
+   QPainterPath path;
+   QImage im(glyph_width + qAbs(glyph_x) + 4, glyph_height, QImage::Format_ARGB32_Premultiplied);
+   im.fill(Qt::transparent);
+   QPainter p(&im);
+   p.setRenderHint(QPainter::Antialiasing);
+   fe->addGlyphsToPath(&glyph, &pt, 1, &path, 0);
+   p.setPen(Qt::NoPen);
+   p.setBrush(Qt::black);
+   p.drawPath(path);
+   p.end();
 
-    QImage indexed(im.width(), im.height(), QImage::Format_Indexed8);
-    QVector<QRgb> colors(256);
-    for (int i=0; i<256; ++i)
-        colors[i] = qRgba(0, 0, 0, i);
-    indexed.setColorTable(colors);
+   QImage indexed(im.width(), im.height(), QImage::Format_Indexed8);
+   QVector<QRgb> colors(256);
+   for (int i = 0; i < 256; ++i) {
+      colors[i] = qRgba(0, 0, 0, i);
+   }
+   indexed.setColorTable(colors);
 
-    for (int y=0; y<im.height(); ++y) {
-        uchar *dst = (uchar *) indexed.scanLine(y);
-        uint *src = (uint *) im.scanLine(y);
-        for (int x=0; x<im.width(); ++x)
-            dst[x] = qAlpha(src[x]);
-    }
+   for (int y = 0; y < im.height(); ++y) {
+      uchar *dst = (uchar *) indexed.scanLine(y);
+      uint *src = (uint *) im.scanLine(y);
+      for (int x = 0; x < im.width(); ++x) {
+         dst[x] = qAlpha(src[x]);
+      }
+   }
 
-    return indexed;
+   return indexed;
 }
 
 
 QImage QProxyFontEngine::alphaMapForGlyph(glyph_t glyph)
 {
-    if (!(engineCapabilities & QAbstractFontEngine::CanRenderGlyphs_Gray))
-        return alphaMapFromPath(this, glyph);
+   if (!(engineCapabilities & QAbstractFontEngine::CanRenderGlyphs_Gray)) {
+      return alphaMapFromPath(this, glyph);
+   }
 
-    QAbstractFontEngine::GlyphMetrics metrics = engine->glyphMetrics(glyph);
-    if (metrics.width <= 0 || metrics.height <= 0)
-        return QImage();
+   QAbstractFontEngine::GlyphMetrics metrics = engine->glyphMetrics(glyph);
+   if (metrics.width <= 0 || metrics.height <= 0) {
+      return QImage();
+   }
 
-    QImage img(metrics.width >> 6, metrics.height >> 6, QImage::Format_Indexed8);
+   QImage img(metrics.width >> 6, metrics.height >> 6, QImage::Format_Indexed8);
 
-    // ### we should have QImage::Format_GrayScale8
-    static QVector<QRgb> colorMap;
-    if (colorMap.isEmpty()) {
-        colorMap.resize(256);
-        for (int i=0; i<256; ++i)
-            colorMap[i] = qRgba(0, 0, 0, i);
-    }
+   // ### we should have QImage::Format_GrayScale8
+   static QVector<QRgb> colorMap;
+   if (colorMap.isEmpty()) {
+      colorMap.resize(256);
+      for (int i = 0; i < 256; ++i) {
+         colorMap[i] = qRgba(0, 0, 0, i);
+      }
+   }
 
-    img.setColorTable(colorMap);
+   img.setColorTable(colorMap);
 
-    engine->renderGlyph(glyph, /*depth*/8, img.bytesPerLine(), img.height(), img.bits());
+   engine->renderGlyph(glyph, /*depth*/8, img.bytesPerLine(), img.height(), img.bits());
 
-    return img;
+   return img;
 }
 
-void QProxyFontEngine::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path, QTextItem::RenderFlags flags)
+void QProxyFontEngine::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path,
+                                       QTextItem::RenderFlags flags)
 {
-    if (engineCapabilities & QAbstractFontEngine::CanOutlineGlyphs)
-        engine->addGlyphOutlinesToPath(glyphs, nglyphs, reinterpret_cast<QAbstractFontEngine::FixedPoint *>(positions), path);
-    else
-        QFontEngine::addGlyphsToPath(glyphs, positions, nglyphs, path, flags);
+   if (engineCapabilities & QAbstractFontEngine::CanOutlineGlyphs) {
+      engine->addGlyphOutlinesToPath(glyphs, nglyphs, reinterpret_cast<QAbstractFontEngine::FixedPoint *>(positions), path);
+   } else {
+      QFontEngine::addGlyphsToPath(glyphs, positions, nglyphs, path, flags);
+   }
 }
 
 glyph_metrics_t QProxyFontEngine::boundingBox(const QGlyphLayout &glyphs)
 {
-    if (glyphs.numGlyphs == 0)
-        return glyph_metrics_t();
+   if (glyphs.numGlyphs == 0) {
+      return glyph_metrics_t();
+   }
 
-    QFixed w = 0;
-    for (int i = 0; i < glyphs.numGlyphs; ++i)
-        w += glyphs.effectiveAdvance(i);
+   QFixed w = 0;
+   for (int i = 0; i < glyphs.numGlyphs; ++i) {
+      w += glyphs.effectiveAdvance(i);
+   }
 
-    return glyph_metrics_t(0, -ascent(), w, ascent() + descent(), w, 0);
+   return glyph_metrics_t(0, -ascent(), w, ascent() + descent(), w, 0);
 }
 
 glyph_metrics_t QProxyFontEngine::boundingBox(glyph_t glyph)
 {
-    glyph_metrics_t m;
+   glyph_metrics_t m;
 
-    QAbstractFontEngine::GlyphMetrics metrics = engine->glyphMetrics(glyph);
-    m.x = QFixed::fromFixed(metrics.x);
-    m.y = QFixed::fromFixed(metrics.y);
-    m.width = QFixed::fromFixed(metrics.width);
-    m.height = QFixed::fromFixed(metrics.height);
-    m.xoff = QFixed::fromFixed(metrics.advance);
+   QAbstractFontEngine::GlyphMetrics metrics = engine->glyphMetrics(glyph);
+   m.x = QFixed::fromFixed(metrics.x);
+   m.y = QFixed::fromFixed(metrics.y);
+   m.width = QFixed::fromFixed(metrics.width);
+   m.height = QFixed::fromFixed(metrics.height);
+   m.xoff = QFixed::fromFixed(metrics.advance);
 
-    return m;
+   return m;
 }
 
 QFixed QProxyFontEngine::ascent() const
 {
-    return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::Ascent).toInt());
+   return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::Ascent).toInt());
 }
 
 QFixed QProxyFontEngine::descent() const
 {
-    return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::Descent).toInt());
+   return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::Descent).toInt());
 }
 
 QFixed QProxyFontEngine::leading() const
 {
-    return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::Leading).toInt());
+   return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::Leading).toInt());
 }
 
 QFixed QProxyFontEngine::xHeight() const
 {
-    return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::XHeight).toInt());
+   return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::XHeight).toInt());
 }
 
 QFixed QProxyFontEngine::averageCharWidth() const
 {
-    return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::AverageCharWidth).toInt());
+   return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::AverageCharWidth).toInt());
 }
 
 QFixed QProxyFontEngine::lineThickness() const
 {
-    return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::LineThickness).toInt());
+   return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::LineThickness).toInt());
 }
 
 QFixed QProxyFontEngine::underlinePosition() const
 {
-    return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::UnderlinePosition).toInt());
+   return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::UnderlinePosition).toInt());
 }
 
 qreal QProxyFontEngine::maxCharWidth() const
 {
-    return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::MaxCharWidth).toInt()).toReal();
+   return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::MaxCharWidth).toInt()).toReal();
 }
 
 qreal QProxyFontEngine::minLeftBearing() const
 {
-    return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::MinLeftBearing).toInt()).toReal();
+   return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::MinLeftBearing).toInt()).toReal();
 }
 
 qreal QProxyFontEngine::minRightBearing() const
 {
-    return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::MinRightBearing).toInt()).toReal();
+   return QFixed::fromFixed(engine->fontProperty(QAbstractFontEngine::MinRightBearing).toInt()).toReal();
 }
 
 int QProxyFontEngine::glyphCount() const
 {
-    return engine->fontProperty(QAbstractFontEngine::GlyphCount).toInt();
+   return engine->fontProperty(QAbstractFontEngine::GlyphCount).toInt();
 }
 
 bool QProxyFontEngine::canRender(const QChar *string, int len)
 {
-    QVarLengthArray<uint> glyphs(len);
-    int numGlyphs = len;
+   QVarLengthArray<uint> glyphs(len);
+   int numGlyphs = len;
 
-    if (!engine->convertStringToGlyphIndices(string, len, glyphs.data(), &numGlyphs, /*flags*/0))
-        return false;
+   if (!engine->convertStringToGlyphIndices(string, len, glyphs.data(), &numGlyphs, /*flags*/0)) {
+      return false;
+   }
 
-    for (int i = 0; i < numGlyphs; ++i)
-        if (!glyphs[i])
-            return false;
+   for (int i = 0; i < numGlyphs; ++i)
+      if (!glyphs[i]) {
+         return false;
+      }
 
-    return true;
+   return true;
 }
 
 void QProxyFontEngine::draw(QPaintEngine *p, qreal _x, qreal _y, const QTextItemInt &si)
 {
-    QPaintEngineState *pState = p->state;
-    QRasterPaintEngine *paintEngine = static_cast<QRasterPaintEngine*>(p);
+   QPaintEngineState *pState = p->state;
+   QRasterPaintEngine *paintEngine = static_cast<QRasterPaintEngine *>(p);
 
-    QTransform matrix = pState->transform();
-    matrix.translate(_x, _y);
-    QFixed x = QFixed::fromReal(matrix.dx());
-    QFixed y = QFixed::fromReal(matrix.dy());
+   QTransform matrix = pState->transform();
+   matrix.translate(_x, _y);
+   QFixed x = QFixed::fromReal(matrix.dx());
+   QFixed y = QFixed::fromReal(matrix.dy());
 
-    QVarLengthArray<QFixedPoint> positions;
-    QVarLengthArray<glyph_t> glyphs;
-    getGlyphPositions(si.glyphs, matrix, si.flags, glyphs, positions);
-    if (glyphs.size() == 0)
-        return;
+   QVarLengthArray<QFixedPoint> positions;
+   QVarLengthArray<glyph_t> glyphs;
+   getGlyphPositions(si.glyphs, matrix, si.flags, glyphs, positions);
+   if (glyphs.size() == 0) {
+      return;
+   }
 
-    for(int i = 0; i < glyphs.size(); i++) {
-        QImage glyph = alphaMapForGlyph(glyphs[i]);
-        if (glyph.isNull())
-            continue;
+   for (int i = 0; i < glyphs.size(); i++) {
+      QImage glyph = alphaMapForGlyph(glyphs[i]);
+      if (glyph.isNull()) {
+         continue;
+      }
 
-        if (glyph.format() != QImage::Format_Indexed8
-            && glyph.format() != QImage::Format_Mono)
-            continue;
+      if (glyph.format() != QImage::Format_Indexed8
+            && glyph.format() != QImage::Format_Mono) {
+         continue;
+      }
 
-        QAbstractFontEngine::GlyphMetrics metrics = engine->glyphMetrics(glyphs[i]);
+      QAbstractFontEngine::GlyphMetrics metrics = engine->glyphMetrics(glyphs[i]);
 
-        int depth = glyph.format() == QImage::Format_Mono ? 1 : 8;
-        paintEngine->alphaPenBlt(glyph.bits(), glyph.bytesPerLine(), depth,
-                                 qRound(positions[i].x + QFixed::fromFixed(metrics.x)),
-                                 qRound(positions[i].y + QFixed::fromFixed(metrics.y)),
-                                 glyph.width(), glyph.height());
-    }
+      int depth = glyph.format() == QImage::Format_Mono ? 1 : 8;
+      paintEngine->alphaPenBlt(glyph.bits(), glyph.bytesPerLine(), depth,
+                               qRound(positions[i].x + QFixed::fromFixed(metrics.x)),
+                               qRound(positions[i].y + QFixed::fromFixed(metrics.y)),
+                               glyph.width(), glyph.height());
+   }
 }
 
 /*
@@ -756,11 +774,12 @@ void QProxyFontEngine::draw(QPaintEngine *p, qreal _x, qreal _y, const QTextItem
  */
 bool QProxyFontEngine::drawAsOutline() const
 {
-    if (!(engineCapabilities & QAbstractFontEngine::CanOutlineGlyphs))
-        return false;
+   if (!(engineCapabilities & QAbstractFontEngine::CanOutlineGlyphs)) {
+      return false;
+   }
 
-    QVariant outlineHint = engine->fontProperty(QAbstractFontEngine::OutlineGlyphsHint);
-    return !outlineHint.isValid() || outlineHint.toBool();
+   QVariant outlineHint = engine->fontProperty(QAbstractFontEngine::OutlineGlyphsHint);
+   return !outlineHint.isValid() || outlineHint.toBool();
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,21 +35,21 @@ QT_BEGIN_NAMESPACE
 
 class QKeyEventTransitionPrivate : public QEventTransitionPrivate
 {
-    Q_DECLARE_PUBLIC(QKeyEventTransition)
-public:
-    QKeyEventTransitionPrivate() {}
+   Q_DECLARE_PUBLIC(QKeyEventTransition)
+ public:
+   QKeyEventTransitionPrivate() {}
 
-    QBasicKeyEventTransition *transition;
+   QBasicKeyEventTransition *transition;
 };
 
 /*!
   Constructs a new key event transition with the given \a sourceState.
 */
 QKeyEventTransition::QKeyEventTransition(QState *sourceState)
-    : QEventTransition(*new QKeyEventTransitionPrivate, sourceState)
+   : QEventTransition(*new QKeyEventTransitionPrivate, sourceState)
 {
-    Q_D(QKeyEventTransition);
-    d->transition = new QBasicKeyEventTransition();
+   Q_D(QKeyEventTransition);
+   d->transition = new QBasicKeyEventTransition();
 }
 
 /*!
@@ -57,11 +57,11 @@ QKeyEventTransition::QKeyEventTransition(QState *sourceState)
   the given \a object, with the given \a key and \a sourceState.
 */
 QKeyEventTransition::QKeyEventTransition(QObject *object, QEvent::Type type,
-                                         int key, QState *sourceState)
-    : QEventTransition(*new QKeyEventTransitionPrivate, object, type, sourceState)
+      int key, QState *sourceState)
+   : QEventTransition(*new QKeyEventTransitionPrivate, object, type, sourceState)
 {
-    Q_D(QKeyEventTransition);
-    d->transition = new QBasicKeyEventTransition(type, key);
+   Q_D(QKeyEventTransition);
+   d->transition = new QBasicKeyEventTransition(type, key);
 }
 
 /*!
@@ -69,8 +69,8 @@ QKeyEventTransition::QKeyEventTransition(QObject *object, QEvent::Type type,
 */
 QKeyEventTransition::~QKeyEventTransition()
 {
-    Q_D(QKeyEventTransition);
-    delete d->transition;
+   Q_D(QKeyEventTransition);
+   delete d->transition;
 }
 
 /*!
@@ -78,8 +78,8 @@ QKeyEventTransition::~QKeyEventTransition()
 */
 int QKeyEventTransition::key() const
 {
-    Q_D(const QKeyEventTransition);
-    return d->transition->key();
+   Q_D(const QKeyEventTransition);
+   return d->transition->key();
 }
 
 /*!
@@ -87,8 +87,8 @@ int QKeyEventTransition::key() const
 */
 void QKeyEventTransition::setKey(int key)
 {
-    Q_D(QKeyEventTransition);
-    d->transition->setKey(key);
+   Q_D(QKeyEventTransition);
+   d->transition->setKey(key);
 }
 
 /*!
@@ -97,8 +97,8 @@ void QKeyEventTransition::setKey(int key)
 */
 Qt::KeyboardModifiers QKeyEventTransition::modifierMask() const
 {
-    Q_D(const QKeyEventTransition);
-    return d->transition->modifierMask();
+   Q_D(const QKeyEventTransition);
+   return d->transition->modifierMask();
 }
 
 /*!
@@ -107,8 +107,8 @@ Qt::KeyboardModifiers QKeyEventTransition::modifierMask() const
 */
 void QKeyEventTransition::setModifierMask(Qt::KeyboardModifiers modifierMask)
 {
-    Q_D(QKeyEventTransition);
-    d->transition->setModifierMask(modifierMask);
+   Q_D(QKeyEventTransition);
+   d->transition->setModifierMask(modifierMask);
 }
 
 /*!
@@ -116,12 +116,13 @@ void QKeyEventTransition::setModifierMask(Qt::KeyboardModifiers modifierMask)
 */
 bool QKeyEventTransition::eventTest(QEvent *event)
 {
-    Q_D(const QKeyEventTransition);
-    if (!QEventTransition::eventTest(event))
-        return false;
-    QStateMachine::WrappedEvent *we = static_cast<QStateMachine::WrappedEvent*>(event);
-    d->transition->setEventType(we->event()->type());
-    return QAbstractTransitionPrivate::get(d->transition)->callEventTest(we->event());
+   Q_D(const QKeyEventTransition);
+   if (!QEventTransition::eventTest(event)) {
+      return false;
+   }
+   QStateMachine::WrappedEvent *we = static_cast<QStateMachine::WrappedEvent *>(event);
+   d->transition->setEventType(we->event()->type());
+   return QAbstractTransitionPrivate::get(d->transition)->callEventTest(we->event());
 }
 
 /*!
@@ -129,7 +130,7 @@ bool QKeyEventTransition::eventTest(QEvent *event)
 */
 void QKeyEventTransition::onTransition(QEvent *event)
 {
-    QEventTransition::onTransition(event);
+   QEventTransition::onTransition(event);
 }
 
 QT_END_NAMESPACE

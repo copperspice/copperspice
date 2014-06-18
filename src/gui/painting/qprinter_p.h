@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,62 +44,61 @@ class QPicture;
 
 class QPrinterPrivate
 {
-    Q_DECLARE_PUBLIC(QPrinter)
+   Q_DECLARE_PUBLIC(QPrinter)
 
-public:
-    QPrinterPrivate(QPrinter *printer)
-        : printEngine(0)
-        , paintEngine(0)
-        , q_ptr(printer)
-        , printRange(QPrinter::AllPages)
-        , minPage(1)
-        , maxPage(INT_MAX)
-        , fromPage(0)
-        , toPage(0)
-        , use_default_engine(true)
-        , validPrinter(false)
-        , hasCustomPageMargins(false)
-        , hasUserSetPageSize(false)
-    {
-    }
+ public:
+   QPrinterPrivate(QPrinter *printer)
+      : printEngine(0)
+      , paintEngine(0)
+      , q_ptr(printer)
+      , printRange(QPrinter::AllPages)
+      , minPage(1)
+      , maxPage(INT_MAX)
+      , fromPage(0)
+      , toPage(0)
+      , use_default_engine(true)
+      , validPrinter(false)
+      , hasCustomPageMargins(false)
+      , hasUserSetPageSize(false) {
+   }
 
-    virtual ~QPrinterPrivate() {
+   virtual ~QPrinterPrivate() {
 
-    }
+   }
 
-    void createDefaultEngines();
+   void createDefaultEngines();
 #ifndef QT_NO_PRINTPREVIEWWIDGET
-    QList<const QPicture *> previewPages() const;
-    void setPreviewMode(bool);
+   QList<const QPicture *> previewPages() const;
+   void setPreviewMode(bool);
 #endif
 
-    void addToManualSetList(QPrintEngine::PrintEnginePropertyKey key);
+   void addToManualSetList(QPrintEngine::PrintEnginePropertyKey key);
 
-    QPrinter::PrinterMode printerMode;
-    QPrinter::OutputFormat outputFormat;
-    QPrintEngine *printEngine;
-    QPaintEngine *paintEngine;
+   QPrinter::PrinterMode printerMode;
+   QPrinter::OutputFormat outputFormat;
+   QPrintEngine *printEngine;
+   QPaintEngine *paintEngine;
 
-    QPrintEngine *realPrintEngine;
-    QPaintEngine *realPaintEngine;
+   QPrintEngine *realPrintEngine;
+   QPaintEngine *realPaintEngine;
 #ifndef QT_NO_PRINTPREVIEWWIDGET
-    QPreviewPaintEngine *previewEngine;
+   QPreviewPaintEngine *previewEngine;
 #endif
 
-    QPrinter *q_ptr;
+   QPrinter *q_ptr;
 
-    QPrinter::PrintRange printRange;
-    int minPage, maxPage, fromPage, toPage;
+   QPrinter::PrintRange printRange;
+   int minPage, maxPage, fromPage, toPage;
 
-    uint use_default_engine : 1;
-    uint had_default_engines : 1;
+   uint use_default_engine : 1;
+   uint had_default_engines : 1;
 
-    uint validPrinter : 1;
-    uint hasCustomPageMargins : 1;
-    uint hasUserSetPageSize : 1;
+   uint validPrinter : 1;
+   uint hasCustomPageMargins : 1;
+   uint hasUserSetPageSize : 1;
 
-    // Used to remember which properties have been manually set by the user.
-    QList<QPrintEngine::PrintEnginePropertyKey> manualSetList;
+   // Used to remember which properties have been manually set by the user.
+   QList<QPrintEngine::PrintEnginePropertyKey> manualSetList;
 };
 
 QT_END_NAMESPACE

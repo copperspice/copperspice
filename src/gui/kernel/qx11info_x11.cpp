@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -52,7 +52,7 @@ QT_BEGIN_NAMESPACE
     Constructs an empty QX11Info object.
 */
 QX11Info::QX11Info()
-    : x11data(0)
+   : x11data(0)
 {
 }
 
@@ -61,9 +61,10 @@ QX11Info::QX11Info()
 */
 QX11Info::QX11Info(const QX11Info &other)
 {
-    x11data = other.x11data;
-    if (x11data)
-        ++x11data->ref;
+   x11data = other.x11data;
+   if (x11data) {
+      ++x11data->ref;
+   }
 }
 
 /*!
@@ -72,12 +73,14 @@ QX11Info::QX11Info(const QX11Info &other)
 */
 QX11Info &QX11Info::operator=(const QX11Info &other)
 {
-    if (other.x11data)
-        ++other.x11data->ref;
-    if (x11data && !--x11data->ref)
-        delete x11data;
-    x11data = other.x11data;
-    return *this;
+   if (other.x11data) {
+      ++other.x11data->ref;
+   }
+   if (x11data && !--x11data->ref) {
+      delete x11data;
+   }
+   x11data = other.x11data;
+   return *this;
 }
 
 /*!
@@ -85,8 +88,9 @@ QX11Info &QX11Info::operator=(const QX11Info &other)
 */
 QX11Info::~QX11Info()
 {
-    if (x11data && !--x11data->ref)
-        delete x11data;
+   if (x11data && !--x11data->ref) {
+      delete x11data;
+   }
 }
 
 /*!
@@ -97,14 +101,15 @@ QX11Info::~QX11Info()
 
 void QX11Info::copyX11Data(const QPaintDevice *fromDevice)
 {
-    QX11InfoData *xd = 0;
-    if (fromDevice) {
-        if (fromDevice->devType() == QInternal::Widget)
-            xd = static_cast<const QWidget *>(fromDevice)->x11Info().x11data;
-        else if (fromDevice->devType() == QInternal::Pixmap)
-            xd = static_cast<const QPixmap *>(fromDevice)->x11Info().x11data;
-    }
-    setX11Data(xd);
+   QX11InfoData *xd = 0;
+   if (fromDevice) {
+      if (fromDevice->devType() == QInternal::Widget) {
+         xd = static_cast<const QWidget *>(fromDevice)->x11Info().x11data;
+      } else if (fromDevice->devType() == QInternal::Pixmap) {
+         xd = static_cast<const QPixmap *>(fromDevice)->x11Info().x11data;
+      }
+   }
+   setX11Data(xd);
 }
 
 /*!
@@ -115,19 +120,19 @@ void QX11Info::copyX11Data(const QPaintDevice *fromDevice)
 
 void QX11Info::cloneX11Data(const QPaintDevice *fromDevice)
 {
-    QX11InfoData *d = 0;
-    if (fromDevice) {
-        QX11InfoData *xd;
-        if (fromDevice->devType() == QInternal::Widget) {
-            xd = static_cast<const QWidget *>(fromDevice)->x11Info().x11data;
-	} else {
-	    Q_ASSERT(fromDevice->devType() == QInternal::Pixmap);
-            xd = static_cast<const QPixmap *>(fromDevice)->x11Info().x11data;
-	}
-        d = new QX11InfoData(*xd);
-        d->ref = 0;
-    }
-    setX11Data(d);
+   QX11InfoData *d = 0;
+   if (fromDevice) {
+      QX11InfoData *xd;
+      if (fromDevice->devType() == QInternal::Widget) {
+         xd = static_cast<const QWidget *>(fromDevice)->x11Info().x11data;
+      } else {
+         Q_ASSERT(fromDevice->devType() == QInternal::Pixmap);
+         xd = static_cast<const QPixmap *>(fromDevice)->x11Info().x11data;
+      }
+      d = new QX11InfoData(*xd);
+      d->ref = 0;
+   }
+   setX11Data(d);
 }
 
 /*!
@@ -136,13 +141,15 @@ void QX11Info::cloneX11Data(const QPaintDevice *fromDevice)
     class. This function increments the reference code of \a d.
 */
 
-void QX11Info::setX11Data(const QX11InfoData* d)
+void QX11Info::setX11Data(const QX11InfoData *d)
 {
-    if (x11data && !--x11data->ref)
-        delete x11data;
-    x11data = (QX11InfoData *)d;
-    if (x11data)
-        ++x11data->ref;
+   if (x11data && !--x11data->ref) {
+      delete x11data;
+   }
+   x11data = (QX11InfoData *)d;
+   if (x11data) {
+      ++x11data->ref;
+   }
 }
 
 
@@ -158,25 +165,25 @@ void QX11Info::setX11Data(const QX11InfoData* d)
     the returned QX11Data* is 0.
 */
 
-QX11InfoData* QX11Info::getX11Data(bool def) const
+QX11InfoData *QX11Info::getX11Data(bool def) const
 {
-    QX11InfoData* res = 0;
-    if (def) {
-        res = new QX11InfoData;
-        res->ref = 0;
-        res->screen = appScreen();
-        res->depth = appDepth();
-        res->cells = appCells();
-        res->colormap = colormap();
-        res->defaultColormap = appDefaultColormap();
-        res->visual = (Visual*) appVisual();
-        res->defaultVisual = appDefaultVisual();
-    } else if (x11data) {
-        res = new QX11InfoData;
-        *res = *x11data;
-        res->ref = 0;
-    }
-    return res;
+   QX11InfoData *res = 0;
+   if (def) {
+      res = new QX11InfoData;
+      res->ref = 0;
+      res->screen = appScreen();
+      res->depth = appDepth();
+      res->cells = appCells();
+      res->colormap = colormap();
+      res->defaultColormap = appDefaultColormap();
+      res->visual = (Visual *) appVisual();
+      res->defaultVisual = appDefaultVisual();
+   } else if (x11data) {
+      res = new QX11InfoData;
+      *res = *x11data;
+      res->ref = 0;
+   }
+   return res;
 }
 
 /*!
@@ -192,13 +199,16 @@ QX11InfoData* QX11Info::getX11Data(bool def) const
 */
 int QX11Info::appDpiX(int screen)
 {
-    if (!X11)
-        return 75;
-    if (screen < 0)
-        screen = X11->defaultScreen;
-    if (screen > X11->screenCount)
-        return 0;
-    return X11->screens[screen].dpiX;
+   if (!X11) {
+      return 75;
+   }
+   if (screen < 0) {
+      screen = X11->defaultScreen;
+   }
+   if (screen > X11->screenCount) {
+      return 0;
+   }
+   return X11->screens[screen].dpiX;
 }
 
 /*!
@@ -215,13 +225,16 @@ int QX11Info::appDpiX(int screen)
 
 void QX11Info::setAppDpiX(int screen, int xdpi)
 {
-    if (!X11)
-        return;
-    if (screen < 0)
-        screen = X11->defaultScreen;
-    if (screen > X11->screenCount)
-        return;
-    X11->screens[screen].dpiX = xdpi;
+   if (!X11) {
+      return;
+   }
+   if (screen < 0) {
+      screen = X11->defaultScreen;
+   }
+   if (screen > X11->screenCount) {
+      return;
+   }
+   X11->screens[screen].dpiX = xdpi;
 }
 
 /*!
@@ -238,13 +251,16 @@ void QX11Info::setAppDpiX(int screen, int xdpi)
 
 int QX11Info::appDpiY(int screen)
 {
-    if (!X11)
-        return 75;
-    if (screen < 0)
-        screen = X11->defaultScreen;
-    if (screen > X11->screenCount)
-        return 0;
-    return X11->screens[screen].dpiY;
+   if (!X11) {
+      return 75;
+   }
+   if (screen < 0) {
+      screen = X11->defaultScreen;
+   }
+   if (screen > X11->screenCount) {
+      return 0;
+   }
+   return X11->screens[screen].dpiY;
 }
 
 /*!
@@ -260,13 +276,16 @@ int QX11Info::appDpiY(int screen)
 */
 void QX11Info::setAppDpiY(int screen, int ydpi)
 {
-    if (!X11)
-        return;
-    if (screen < 0)
-        screen = X11->defaultScreen;
-    if (screen > X11->screenCount)
-        return;
-    X11->screens[screen].dpiY = ydpi;
+   if (!X11) {
+      return;
+   }
+   if (screen < 0) {
+      screen = X11->defaultScreen;
+   }
+   if (screen > X11->screenCount) {
+      return;
+   }
+   X11->screens[screen].dpiY = ydpi;
 }
 
 /*!
@@ -276,7 +295,7 @@ void QX11Info::setAppDpiY(int screen, int ydpi)
 */
 unsigned long QX11Info::appTime()
 {
-    return X11 ? X11->time : 0;
+   return X11 ? X11->time : 0;
 }
 
 /*!
@@ -286,9 +305,9 @@ unsigned long QX11Info::appTime()
 */
 void QX11Info::setAppTime(unsigned long time)
 {
-    if (X11) {
-        X11->time = time;
-    }
+   if (X11) {
+      X11->time = time;
+   }
 }
 
 /*!
@@ -298,7 +317,7 @@ void QX11Info::setAppTime(unsigned long time)
 */
 unsigned long QX11Info::appUserTime()
 {
-    return X11 ? X11->userTime : 0;
+   return X11 ? X11->userTime : 0;
 }
 
 /*!
@@ -308,9 +327,9 @@ unsigned long QX11Info::appUserTime()
 */
 void QX11Info::setAppUserTime(unsigned long time)
 {
-    if (X11) {
-        X11->userTime = time;
-    }
+   if (X11) {
+      X11->userTime = time;
+   }
 }
 
 
@@ -330,7 +349,7 @@ void QX11Info::setAppUserTime(unsigned long time)
 
 Display *QX11Info::display()
 {
-    return X11 ? X11->display : 0;
+   return X11 ? X11->display : 0;
 }
 
 /*!
@@ -341,7 +360,7 @@ Display *QX11Info::display()
 */
 int QX11Info::appScreen()
 {
-    return X11 ? X11->defaultScreen : 0;
+   return X11 ? X11->defaultScreen : 0;
 }
 
 /*!
@@ -356,7 +375,7 @@ int QX11Info::appScreen()
 */
 Qt::HANDLE QX11Info::appColormap(int screen)
 {
-    return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].colormap : 0;
+   return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].colormap : 0;
 }
 
 /*!
@@ -373,7 +392,7 @@ Qt::HANDLE QX11Info::appColormap(int screen)
 
 void *QX11Info::appVisual(int screen)
 {
-    return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].visual : 0;
+   return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].visual : 0;
 }
 
 /*!
@@ -388,7 +407,7 @@ void *QX11Info::appVisual(int screen)
 */
 Qt::HANDLE QX11Info::appRootWindow(int screen)
 {
-    return X11 ? RootWindow(X11->display, screen == -1 ? X11->defaultScreen : screen) : 0;
+   return X11 ? RootWindow(X11->display, screen == -1 ? X11->defaultScreen : screen) : 0;
 }
 
 /*!
@@ -405,7 +424,7 @@ Qt::HANDLE QX11Info::appRootWindow(int screen)
 
 int QX11Info::appDepth(int screen)
 {
-    return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].depth : 32;
+   return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].depth : 32;
 }
 
 /*!
@@ -420,7 +439,9 @@ int QX11Info::appDepth(int screen)
 */
 
 int QX11Info::appCells(int screen)
-{ return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].cells : 0; }
+{
+   return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].cells : 0;
+}
 
 /*!
     Returns true if the application has a default color map on the given
@@ -432,7 +453,9 @@ int QX11Info::appCells(int screen)
     query for information about Xinerama screens.
 */
 bool QX11Info::appDefaultColormap(int screen)
-{ return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].defaultColormap : true; }
+{
+   return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].defaultColormap : true;
+}
 
 /*!
     Returns true if the application has a default visual on the given \a screen;
@@ -444,7 +467,9 @@ bool QX11Info::appDefaultColormap(int screen)
     query for information about Xinerama screens.
 */
 bool QX11Info::appDefaultVisual(int screen)
-{ return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].defaultVisual : true; }
+{
+   return X11 ? X11->screens[screen == -1 ? X11->defaultScreen : screen].defaultVisual : true;
+}
 
 /*!
     Returns the number of the screen currently in use.
@@ -457,7 +482,9 @@ bool QX11Info::appDefaultVisual(int screen)
     \sa appScreen()
 */
 int QX11Info::screen() const
-{ return x11data ? x11data->screen : QX11Info::appScreen(); }
+{
+   return x11data ? x11data->screen : QX11Info::appScreen();
+}
 
 /*!
     Returns the color depth (bits per pixel) of the X display.
@@ -466,7 +493,9 @@ int QX11Info::screen() const
 */
 
 int QX11Info::depth() const
-{ return x11data ? x11data->depth : QX11Info::appDepth(); }
+{
+   return x11data ? x11data->depth : QX11Info::appDepth();
+}
 
 /*!
     Returns the number of cells.
@@ -475,7 +504,9 @@ int QX11Info::depth() const
 */
 
 int QX11Info::cells() const
-{ return x11data ? x11data->cells : QX11Info::appCells(); }
+{
+   return x11data ? x11data->cells : QX11Info::appCells();
+}
 
 /*!
     Returns a handle for the color map.
@@ -484,7 +515,9 @@ int QX11Info::cells() const
 */
 
 Qt::HANDLE QX11Info::colormap() const
-{ return x11data ? x11data->colormap : QX11Info::appColormap(); }
+{
+   return x11data ? x11data->colormap : QX11Info::appColormap();
+}
 
 /*!
     Returns true if there is a default color map; otherwise returns false.
@@ -493,7 +526,9 @@ Qt::HANDLE QX11Info::colormap() const
 */
 
 bool QX11Info::defaultColormap() const
-{ return x11data ? x11data->defaultColormap : QX11Info::appDefaultColormap(); }
+{
+   return x11data ? x11data->defaultColormap : QX11Info::appDefaultColormap();
+}
 
 /*!
     Returns the current visual.
@@ -502,7 +537,9 @@ bool QX11Info::defaultColormap() const
 */
 
 void *QX11Info::visual() const
-{ return x11data ? x11data->visual : QX11Info::appVisual(); }
+{
+   return x11data ? x11data->visual : QX11Info::appVisual();
+}
 
 /*!
     Returns true if there is a default visual; otherwise returns false.
@@ -511,7 +548,9 @@ void *QX11Info::visual() const
 */
 
 bool QX11Info::defaultVisual() const
-{ return x11data ? x11data->defaultVisual : QX11Info::appDefaultVisual(); }
+{
+   return x11data ? x11data->defaultVisual : QX11Info::appDefaultVisual();
+}
 
 
 /*!
@@ -521,7 +560,7 @@ bool QX11Info::defaultVisual() const
 */
 bool QX11Info::isCompositingManagerRunning()
 {
-    return X11 ? X11->compositingManagerRunning : false;
+   return X11 ? X11->compositingManagerRunning : false;
 }
 
 QT_END_NAMESPACE

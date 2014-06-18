@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,36 +38,36 @@ class QColumnViewGrip : public QWidget
 {
    CS_OBJECT(QColumnViewGrip)
 
-public:
-    GUI_CS_SIGNAL_1(Public, void gripMoved(int offset))
-    GUI_CS_SIGNAL_2(gripMoved,offset) 
+ public:
+   GUI_CS_SIGNAL_1(Public, void gripMoved(int offset))
+   GUI_CS_SIGNAL_2(gripMoved, offset)
 
-    explicit QColumnViewGrip(QWidget *parent = 0);
-    ~QColumnViewGrip();
-    int moveGrip(int offset);
+   explicit QColumnViewGrip(QWidget *parent = 0);
+   ~QColumnViewGrip();
+   int moveGrip(int offset);
 
-protected:
-    QColumnViewGrip(QColumnViewGripPrivate &, QWidget *parent = 0, Qt::WFlags f = 0);
-    void paintEvent(QPaintEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
+ protected:
+   QColumnViewGrip(QColumnViewGripPrivate &, QWidget *parent = 0, Qt::WFlags f = 0);
+   void paintEvent(QPaintEvent *event);
+   void mouseDoubleClickEvent(QMouseEvent *event);
+   void mouseMoveEvent(QMouseEvent *event);
+   void mouseReleaseEvent(QMouseEvent *event);
+   void mousePressEvent(QMouseEvent *event);
 
-private:
-    Q_DECLARE_PRIVATE(QColumnViewGrip)
-    Q_DISABLE_COPY(QColumnViewGrip)
+ private:
+   Q_DECLARE_PRIVATE(QColumnViewGrip)
+   Q_DISABLE_COPY(QColumnViewGrip)
 };
 
 class QColumnViewGripPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QColumnViewGrip)
+   Q_DECLARE_PUBLIC(QColumnViewGrip)
 
-public:
-    QColumnViewGripPrivate();
-    ~QColumnViewGripPrivate() {}
+ public:
+   QColumnViewGripPrivate();
+   ~QColumnViewGripPrivate() {}
 
-    int originalXLocation;
+   int originalXLocation;
 };
 
 QT_END_NAMESPACE

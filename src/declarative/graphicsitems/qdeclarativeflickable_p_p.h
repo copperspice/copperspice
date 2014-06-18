@@ -26,26 +26,12 @@
 #ifndef QDECLARATIVEFLICKABLE_P_H
 #define QDECLARATIVEFLICKABLE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "private/qdeclarativeflickable_p.h"
-
-#include "private/qdeclarativeitem_p.h"
-#include "private/qdeclarativeitemchangelistener_p.h"
-
+#include "qdeclarativeflickable_p.h"
+#include "qdeclarativeitem_p.h"
+#include "qdeclarativeitemchangelistener_p.h"
 #include <qdeclarative.h>
 #include <qdeclarativetimeline_p_p.h>
 #include <qdeclarativeanimation_p_p.h>
-
 #include <qdatetime.h>
 #include "qplatformdefs.h"
 

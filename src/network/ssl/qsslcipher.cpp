@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -56,7 +56,7 @@ QT_BEGIN_NAMESPACE
     Constructs an empty QSslCipher object.
 */
 QSslCipher::QSslCipher()
-    : d(new QSslCipherPrivate)
+   : d(new QSslCipherPrivate)
 {
 }
 
@@ -71,23 +71,23 @@ QSslCipher::QSslCipher()
     \a protocol correctly identified a supported cipher.
 */
 QSslCipher::QSslCipher(const QString &name, QSsl::SslProtocol protocol)
-    : d(new QSslCipherPrivate)
+   : d(new QSslCipherPrivate)
 {
-    foreach (const QSslCipher &cipher, QSslSocket::supportedCiphers()) {
-        if (cipher.name() == name && cipher.protocol() == protocol) {
-            *this = cipher;
-            return;
-        }
-    }
+   foreach (const QSslCipher & cipher, QSslSocket::supportedCiphers()) {
+      if (cipher.name() == name && cipher.protocol() == protocol) {
+         *this = cipher;
+         return;
+      }
+   }
 }
 
 /*!
     Constructs an identical copy of the \a other cipher.
 */
 QSslCipher::QSslCipher(const QSslCipher &other)
-    : d(new QSslCipherPrivate)
+   : d(new QSslCipherPrivate)
 {
-    *d.data() = *other.d.data();
+   *d.data() = *other.d.data();
 }
 
 /*!
@@ -103,8 +103,8 @@ QSslCipher::~QSslCipher()
 */
 QSslCipher &QSslCipher::operator=(const QSslCipher &other)
 {
-    *d.data() = *other.d.data();
-    return *this;
+   *d.data() = *other.d.data();
+   return *this;
 }
 
 /*!
@@ -113,7 +113,7 @@ QSslCipher &QSslCipher::operator=(const QSslCipher &other)
 */
 bool QSslCipher::operator==(const QSslCipher &other) const
 {
-    return d->name == other.d->name && d->protocol == other.d->protocol;
+   return d->name == other.d->name && d->protocol == other.d->protocol;
 }
 
 /*!
@@ -128,7 +128,7 @@ bool QSslCipher::operator==(const QSslCipher &other) const
 */
 bool QSslCipher::isNull() const
 {
-    return d->isNull;
+   return d->isNull;
 }
 
 /*!
@@ -139,7 +139,7 @@ bool QSslCipher::isNull() const
 */
 QString QSslCipher::name() const
 {
-    return d->name;
+   return d->name;
 }
 
 /*!
@@ -149,7 +149,7 @@ QString QSslCipher::name() const
 */
 int QSslCipher::supportedBits()const
 {
-    return d->supportedBits;
+   return d->supportedBits;
 }
 
 /*!
@@ -159,7 +159,7 @@ int QSslCipher::supportedBits()const
 */
 int QSslCipher::usedBits() const
 {
-    return d->bits;
+   return d->bits;
 }
 
 /*!
@@ -167,15 +167,15 @@ int QSslCipher::usedBits() const
 */
 QString QSslCipher::keyExchangeMethod() const
 {
-    return d->keyExchangeMethod;
+   return d->keyExchangeMethod;
 }
- 
+
 /*!
     Returns the cipher's authentication method as a QString.
 */
 QString QSslCipher::authenticationMethod() const
 {
-    return d->authenticationMethod;
+   return d->authenticationMethod;
 }
 
 /*!
@@ -183,7 +183,7 @@ QString QSslCipher::authenticationMethod() const
 */
 QString QSslCipher::encryptionMethod() const
 {
-    return d->encryptionMethod;
+   return d->encryptionMethod;
 }
 
 /*!
@@ -193,7 +193,7 @@ QString QSslCipher::encryptionMethod() const
 */
 QString QSslCipher::protocolString() const
 {
-    return d->protocolString;
+   return d->protocolString;
 }
 
 /*!
@@ -205,17 +205,17 @@ QString QSslCipher::protocolString() const
 */
 QSsl::SslProtocol QSslCipher::protocol() const
 {
-    return d->protocol;
+   return d->protocol;
 }
 
 #ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug debug, const QSslCipher &cipher)
 {
-    debug << "QSslCipher(name=" << qPrintable(cipher.name())
-          << ", bits=" << cipher.usedBits()
-          << ", proto=" << qPrintable(cipher.protocolString())
-          << ')';
-    return debug;
+   debug << "QSslCipher(name=" << qPrintable(cipher.name())
+         << ", bits=" << cipher.usedBits()
+         << ", proto=" << qPrintable(cipher.protocolString())
+         << ')';
+   return debug;
 }
 #endif
 

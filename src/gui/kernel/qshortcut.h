@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,60 +38,61 @@ class QShortcutPrivate;
 
 class Q_GUI_EXPORT QShortcut : public QObject
 {
-    CS_OBJECT(QShortcut)
-    Q_DECLARE_PRIVATE(QShortcut)
+   CS_OBJECT(QShortcut)
+   Q_DECLARE_PRIVATE(QShortcut)
 
-    GUI_CS_PROPERTY_READ(key, key)
-    GUI_CS_PROPERTY_WRITE(key, setKey)
+   GUI_CS_PROPERTY_READ(key, key)
+   GUI_CS_PROPERTY_WRITE(key, setKey)
 
-    GUI_CS_PROPERTY_READ(whatsThis, whatsThis)
-    GUI_CS_PROPERTY_WRITE(whatsThis, setWhatsThis)
+   GUI_CS_PROPERTY_READ(whatsThis, whatsThis)
+   GUI_CS_PROPERTY_WRITE(whatsThis, setWhatsThis)
 
-    GUI_CS_PROPERTY_READ(enabled, isEnabled)
-    GUI_CS_PROPERTY_WRITE(enabled, setEnabled)
+   GUI_CS_PROPERTY_READ(enabled, isEnabled)
+   GUI_CS_PROPERTY_WRITE(enabled, setEnabled)
 
-    GUI_CS_PROPERTY_READ(autoRepeat, autoRepeat)
-    GUI_CS_PROPERTY_WRITE(autoRepeat, setAutoRepeat)
+   GUI_CS_PROPERTY_READ(autoRepeat, autoRepeat)
+   GUI_CS_PROPERTY_WRITE(autoRepeat, setAutoRepeat)
 
-    GUI_CS_PROPERTY_READ(context, context) 
-    GUI_CS_PROPERTY_WRITE(context, setContext)
+   GUI_CS_PROPERTY_READ(context, context)
+   GUI_CS_PROPERTY_WRITE(context, setContext)
 
-public:
-    explicit QShortcut(QWidget *parent);
-    QShortcut(const QKeySequence& key, QWidget *parent,
-              const char *member = 0, const char *ambiguousMember = 0,
-              Qt::ShortcutContext context = Qt::WindowShortcut);
-    ~QShortcut();
+ public:
+   explicit QShortcut(QWidget *parent);
+   QShortcut(const QKeySequence &key, QWidget *parent,
+             const char *member = 0, const char *ambiguousMember = 0,
+             Qt::ShortcutContext context = Qt::WindowShortcut);
+   ~QShortcut();
 
-    void setKey(const QKeySequence& key);
-    QKeySequence key() const;
+   void setKey(const QKeySequence &key);
+   QKeySequence key() const;
 
-    void setEnabled(bool enable);
-    bool isEnabled() const;
+   void setEnabled(bool enable);
+   bool isEnabled() const;
 
-    void setContext(Qt::ShortcutContext context);
-    Qt::ShortcutContext context() const;
+   void setContext(Qt::ShortcutContext context);
+   Qt::ShortcutContext context() const;
 
-    void setWhatsThis(const QString &text);
-    QString whatsThis() const;
+   void setWhatsThis(const QString &text);
+   QString whatsThis() const;
 
-    void setAutoRepeat(bool on);
-    bool autoRepeat() const;
+   void setAutoRepeat(bool on);
+   bool autoRepeat() const;
 
-    int id() const;
+   int id() const;
 
-    inline QWidget *parentWidget() const
-       { return static_cast<QWidget *>(QObject::parent()); }
+   inline QWidget *parentWidget() const {
+      return static_cast<QWidget *>(QObject::parent());
+   }
 
-    GUI_CS_SIGNAL_1(Public, void activated())
-    GUI_CS_SIGNAL_2(activated) 
+   GUI_CS_SIGNAL_1(Public, void activated())
+   GUI_CS_SIGNAL_2(activated)
 
-    GUI_CS_SIGNAL_1(Public, void activatedAmbiguously())
-    GUI_CS_SIGNAL_2(activatedAmbiguously) 
+   GUI_CS_SIGNAL_1(Public, void activatedAmbiguously())
+   GUI_CS_SIGNAL_2(activatedAmbiguously)
 
-protected:
-    bool event(QEvent *e);
-	 QScopedPointer<QShortcutPrivate> d_ptr;
+ protected:
+   bool event(QEvent *e);
+   QScopedPointer<QShortcutPrivate> d_ptr;
 
 };
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -189,7 +189,7 @@ QT_BEGIN_NAMESPACE
     \sa isValid()
 */
 QNetworkConfiguration::QNetworkConfiguration()
-    : d(0)
+   : d(0)
 {
 }
 
@@ -197,7 +197,7 @@ QNetworkConfiguration::QNetworkConfiguration()
     Creates a copy of the QNetworkConfiguration object contained in \a other.
 */
 QNetworkConfiguration::QNetworkConfiguration(const QNetworkConfiguration &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -213,8 +213,8 @@ QNetworkConfiguration::~QNetworkConfiguration()
 */
 QNetworkConfiguration &QNetworkConfiguration::operator=(const QNetworkConfiguration &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -223,7 +223,7 @@ QNetworkConfiguration &QNetworkConfiguration::operator=(const QNetworkConfigurat
 */
 bool QNetworkConfiguration::operator==(const QNetworkConfiguration &other) const
 {
-    return (d == other.d);
+   return (d == other.d);
 }
 
 /*!
@@ -241,11 +241,12 @@ bool QNetworkConfiguration::operator==(const QNetworkConfiguration &other) const
 */
 QString QNetworkConfiguration::name() const
 {
-    if (!d)
-        return QString();
+   if (!d) {
+      return QString();
+   }
 
-    QMutexLocker locker(&d->mutex);
-    return d->name;
+   QMutexLocker locker(&d->mutex);
+   return d->name;
 }
 
 /*!
@@ -254,11 +255,12 @@ QString QNetworkConfiguration::name() const
 */
 QString QNetworkConfiguration::identifier() const
 {
-    if (!d)
-        return QString();
+   if (!d) {
+      return QString();
+   }
 
-    QMutexLocker locker(&d->mutex);
-    return d->id;
+   QMutexLocker locker(&d->mutex);
+   return d->id;
 }
 
 /*!
@@ -271,11 +273,12 @@ QString QNetworkConfiguration::identifier() const
 */
 QNetworkConfiguration::Type QNetworkConfiguration::type() const
 {
-    if (!d)
-        return QNetworkConfiguration::Invalid;
+   if (!d) {
+      return QNetworkConfiguration::Invalid;
+   }
 
-    QMutexLocker locker(&d->mutex);
-    return d->type;
+   QMutexLocker locker(&d->mutex);
+   return d->type;
 }
 
 /*!
@@ -290,11 +293,12 @@ QNetworkConfiguration::Type QNetworkConfiguration::type() const
 */
 bool QNetworkConfiguration::isValid() const
 {
-    if (!d)
-        return false;
+   if (!d) {
+      return false;
+   }
 
-    QMutexLocker locker(&d->mutex);
-    return d->isValid;
+   QMutexLocker locker(&d->mutex);
+   return d->isValid;
 }
 
 /*!
@@ -302,11 +306,12 @@ bool QNetworkConfiguration::isValid() const
 */
 QNetworkConfiguration::StateFlags QNetworkConfiguration::state() const
 {
-    if (!d)
-        return QNetworkConfiguration::Undefined;
+   if (!d) {
+      return QNetworkConfiguration::Undefined;
+   }
 
-    QMutexLocker locker(&d->mutex);
-    return d->state;
+   QMutexLocker locker(&d->mutex);
+   return d->state;
 }
 
 /*!
@@ -318,11 +323,12 @@ QNetworkConfiguration::StateFlags QNetworkConfiguration::state() const
 */
 QNetworkConfiguration::Purpose QNetworkConfiguration::purpose() const
 {
-    if (!d)
-        return QNetworkConfiguration::UnknownPurpose;
+   if (!d) {
+      return QNetworkConfiguration::UnknownPurpose;
+   }
 
-    QMutexLocker locker(&d->mutex);
-    return d->purpose;
+   QMutexLocker locker(&d->mutex);
+   return d->purpose;
 }
 
 /*!
@@ -330,11 +336,12 @@ QNetworkConfiguration::Purpose QNetworkConfiguration::purpose() const
 */
 bool QNetworkConfiguration::isRoamingAvailable() const
 {
-    if (!d)
-        return false;
+   if (!d) {
+      return false;
+   }
 
-    QMutexLocker locker(&d->mutex);
-    return d->roamingSupported;
+   QMutexLocker locker(&d->mutex);
+   return d->roamingSupported;
 }
 
 /*!
@@ -346,38 +353,40 @@ bool QNetworkConfiguration::isRoamingAvailable() const
 */
 QList<QNetworkConfiguration> QNetworkConfiguration::children() const
 {
-    QList<QNetworkConfiguration> results;
+   QList<QNetworkConfiguration> results;
 
-    if (!d)
-        return results;
+   if (!d) {
+      return results;
+   }
 
-    QMutexLocker locker(&d->mutex);
+   QMutexLocker locker(&d->mutex);
 
-    if (d->type != QNetworkConfiguration::ServiceNetwork || !d->isValid)
-        return results;
+   if (d->type != QNetworkConfiguration::ServiceNetwork || !d->isValid) {
+      return results;
+   }
 
-    QMutableMapIterator<unsigned int, QNetworkConfigurationPrivatePointer> i(d->serviceNetworkMembers);
-    while (i.hasNext()) {
-        i.next();
+   QMutableMapIterator<unsigned int, QNetworkConfigurationPrivatePointer> i(d->serviceNetworkMembers);
+   while (i.hasNext()) {
+      i.next();
 
-        QNetworkConfigurationPrivatePointer p = i.value();
+      QNetworkConfigurationPrivatePointer p = i.value();
 
-        //if we have an invalid member get rid of it -> was deleted earlier on
-        {
-            QMutexLocker childLocker(&p->mutex);
+      //if we have an invalid member get rid of it -> was deleted earlier on
+      {
+         QMutexLocker childLocker(&p->mutex);
 
-            if (!p->isValid) {
-                i.remove();
-                continue;
-            }
-        }
+         if (!p->isValid) {
+            i.remove();
+            continue;
+         }
+      }
 
-        QNetworkConfiguration item;
-        item.d = p;
-        results << item;
-    }
+      QNetworkConfiguration item;
+      item.d = p;
+      results << item;
+   }
 
-    return results;
+   return results;
 }
 
 /*!
@@ -398,12 +407,13 @@ QList<QNetworkConfiguration> QNetworkConfiguration::children() const
 */
 QNetworkConfiguration::BearerType QNetworkConfiguration::bearerType() const
 {
-    if (!isValid())
-        return BearerUnknown;
+   if (!isValid()) {
+      return BearerUnknown;
+   }
 
-    QMutexLocker locker(&d->mutex);
+   QMutexLocker locker(&d->mutex);
 
-    return d->bearerType;
+   return d->bearerType;
 }
 
 /*!
@@ -457,37 +467,39 @@ QNetworkConfiguration::BearerType QNetworkConfiguration::bearerType() const
 */
 QString QNetworkConfiguration::bearerTypeName() const
 {
-    if (!isValid())
-        return QString();
+   if (!isValid()) {
+      return QString();
+   }
 
-    QMutexLocker locker(&d->mutex);
+   QMutexLocker locker(&d->mutex);
 
-    if (d->type == QNetworkConfiguration::ServiceNetwork ||
-        d->type == QNetworkConfiguration::UserChoice)
-        return QString();
+   if (d->type == QNetworkConfiguration::ServiceNetwork ||
+         d->type == QNetworkConfiguration::UserChoice) {
+      return QString();
+   }
 
-    switch (d->bearerType) {
-    case BearerUnknown:
-        return d->bearerTypeName();
-    case BearerEthernet:
-        return QLatin1String("Ethernet");
-    case BearerWLAN:
-        return QLatin1String("WLAN");
-    case Bearer2G:
-        return QLatin1String("2G");
-    case BearerCDMA2000:
-        return QLatin1String("CDMA2000");
-    case BearerWCDMA:
-        return QLatin1String("WCDMA");
-    case BearerHSPA:
-        return QLatin1String("HSPA");
-    case BearerBluetooth:
-        return QLatin1String("Bluetooth");
-    case BearerWiMAX:
-        return QLatin1String("WiMAX");
-    }
+   switch (d->bearerType) {
+      case BearerUnknown:
+         return d->bearerTypeName();
+      case BearerEthernet:
+         return QLatin1String("Ethernet");
+      case BearerWLAN:
+         return QLatin1String("WLAN");
+      case Bearer2G:
+         return QLatin1String("2G");
+      case BearerCDMA2000:
+         return QLatin1String("CDMA2000");
+      case BearerWCDMA:
+         return QLatin1String("WCDMA");
+      case BearerHSPA:
+         return QLatin1String("HSPA");
+      case BearerBluetooth:
+         return QLatin1String("Bluetooth");
+      case BearerWiMAX:
+         return QLatin1String("WiMAX");
+   }
 
-    return QLatin1String("Unknown");
+   return QLatin1String("Unknown");
 }
 
 QT_END_NAMESPACE

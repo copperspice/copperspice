@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,45 +39,48 @@ QT_BEGIN_NAMESPACE
 
 QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkProxyQuery &query)
 {
-    QList<QNetworkProxy> proxyList;
+   QList<QNetworkProxy> proxyList;
 
-    const QString queryProtocol = query.protocolTag().toLower();
-    QByteArray proxy_env;
+   const QString queryProtocol = query.protocolTag().toLower();
+   QByteArray proxy_env;
 
-    if (queryProtocol == QLatin1String("http"))
-        proxy_env = qgetenv("http_proxy");
-    else if (queryProtocol == QLatin1String("https"))
-        proxy_env = qgetenv("https_proxy");
-    else if (queryProtocol == QLatin1String("ftp"))
-        proxy_env = qgetenv("ftp_proxy");
-    else
-        proxy_env = qgetenv("all_proxy");
+   if (queryProtocol == QLatin1String("http")) {
+      proxy_env = qgetenv("http_proxy");
+   } else if (queryProtocol == QLatin1String("https")) {
+      proxy_env = qgetenv("https_proxy");
+   } else if (queryProtocol == QLatin1String("ftp")) {
+      proxy_env = qgetenv("ftp_proxy");
+   } else {
+      proxy_env = qgetenv("all_proxy");
+   }
 
-    // Fallback to http_proxy is no protocol specific proxy was found
-    if (proxy_env.isEmpty())
-        proxy_env = qgetenv("http_proxy");
+   // Fallback to http_proxy is no protocol specific proxy was found
+   if (proxy_env.isEmpty()) {
+      proxy_env = qgetenv("http_proxy");
+   }
 
-    if (!proxy_env.isEmpty()) {
-        QUrl url = QUrl(QString::fromLocal8Bit(proxy_env));
-        if (url.scheme() == QLatin1String("socks5")) {
-            QNetworkProxy proxy(QNetworkProxy::Socks5Proxy, url.host(),
-                    url.port() ? url.port() : 1080, url.userName(), url.password());
-            proxyList << proxy;
-        } else if (url.scheme() == QLatin1String("socks5h")) {
-            QNetworkProxy proxy(QNetworkProxy::Socks5Proxy, url.host(),
-                    url.port() ? url.port() : 1080, url.userName(), url.password());
-            proxy.setCapabilities(QNetworkProxy::HostNameLookupCapability);
-            proxyList << proxy;
-        } else if (url.scheme() == QLatin1String("http") || url.scheme().isEmpty()) {
-            QNetworkProxy proxy(QNetworkProxy::HttpProxy, url.host(),
-                    url.port() ? url.port() : 8080, url.userName(), url.password());
-            proxyList << proxy;
-        }
-    }
-    if (proxyList.isEmpty())
-        proxyList << QNetworkProxy::NoProxy;
+   if (!proxy_env.isEmpty()) {
+      QUrl url = QUrl(QString::fromLocal8Bit(proxy_env));
+      if (url.scheme() == QLatin1String("socks5")) {
+         QNetworkProxy proxy(QNetworkProxy::Socks5Proxy, url.host(),
+                             url.port() ? url.port() : 1080, url.userName(), url.password());
+         proxyList << proxy;
+      } else if (url.scheme() == QLatin1String("socks5h")) {
+         QNetworkProxy proxy(QNetworkProxy::Socks5Proxy, url.host(),
+                             url.port() ? url.port() : 1080, url.userName(), url.password());
+         proxy.setCapabilities(QNetworkProxy::HostNameLookupCapability);
+         proxyList << proxy;
+      } else if (url.scheme() == QLatin1String("http") || url.scheme().isEmpty()) {
+         QNetworkProxy proxy(QNetworkProxy::HttpProxy, url.host(),
+                             url.port() ? url.port() : 8080, url.userName(), url.password());
+         proxyList << proxy;
+      }
+   }
+   if (proxyList.isEmpty()) {
+      proxyList << QNetworkProxy::NoProxy;
+   }
 
-    return proxyList;
+   return proxyList;
 }
 
 QT_END_NAMESPACE

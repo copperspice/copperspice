@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,18 +35,18 @@ QT_BEGIN_NAMESPACE
 class Q_GUI_EXPORT QDecorationWindows : public QDecorationDefault
 {
 
-public:
-    QDecorationWindows();
-    virtual ~QDecorationWindows();
+ public:
+   QDecorationWindows();
+   virtual ~QDecorationWindows();
 
-    QRegion region(const QWidget *widget, const QRect &rect, int decorationRegion = All);
-    bool paint(QPainter *painter, const QWidget *widget, int decorationRegion = All,
-               DecorationState state = Normal);
+   QRegion region(const QWidget *widget, const QRect &rect, int decorationRegion = All);
+   bool paint(QPainter *painter, const QWidget *widget, int decorationRegion = All,
+              DecorationState state = Normal);
 
-protected:
-    void paintButton(QPainter *painter, const QWidget *widget, int buttonRegion, 
-               DecorationState state, const QPalette &pal);
-    const char **xpmForRegion(int reg);
+ protected:
+   void paintButton(QPainter *painter, const QWidget *widget, int buttonRegion,
+                    DecorationState state, const QPalette &pal);
+   const char **xpmForRegion(int reg);
 };
 
 #endif // QT_NO_QWS_DECORATION_WINDOWS

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,44 +36,44 @@ class QPageSetupDialogPrivate;
 
 class Q_GUI_EXPORT QPageSetupDialog : public QAbstractPageSetupDialog
 {
-    CS_OBJECT(QPageSetupDialog)    
-    Q_DECLARE_PRIVATE(QPageSetupDialog)
+   CS_OBJECT(QPageSetupDialog)
+   Q_DECLARE_PRIVATE(QPageSetupDialog)
 
-    GUI_CS_ENUM(PageSetupDialogOption)
-    GUI_CS_PROPERTY_READ(options, options)
-    GUI_CS_PROPERTY_WRITE(options, setOptions)
+   GUI_CS_ENUM(PageSetupDialogOption)
+   GUI_CS_PROPERTY_READ(options, options)
+   GUI_CS_PROPERTY_WRITE(options, setOptions)
 
-public:
-    enum PageSetupDialogOption {
-        None                    = 0x00000000, // internal
-        DontUseSheet            = 0x00000001,
-        OwnsPrinter             = 0x80000000  // internal
-    };
+ public:
+   enum PageSetupDialogOption {
+      None                    = 0x00000000, // internal
+      DontUseSheet            = 0x00000001,
+      OwnsPrinter             = 0x80000000  // internal
+   };
 
-    using PageSetupDialogOptions = QFlags<PageSetupDialogOption>;
+   using PageSetupDialogOptions = QFlags<PageSetupDialogOption>;
 
-    explicit QPageSetupDialog(QPrinter *printer, QWidget *parent = 0);
-    explicit QPageSetupDialog(QWidget *parent = 0);
+   explicit QPageSetupDialog(QPrinter *printer, QWidget *parent = 0);
+   explicit QPageSetupDialog(QWidget *parent = 0);
 
-    // obsolete
-    void addEnabledOption(PageSetupDialogOption option);
-    void setEnabledOptions(PageSetupDialogOptions options);
-    PageSetupDialogOptions enabledOptions() const;
-    bool isOptionEnabled(PageSetupDialogOption option) const;
+   // obsolete
+   void addEnabledOption(PageSetupDialogOption option);
+   void setEnabledOptions(PageSetupDialogOptions options);
+   PageSetupDialogOptions enabledOptions() const;
+   bool isOptionEnabled(PageSetupDialogOption option) const;
 
-    void setOption(PageSetupDialogOption option, bool on = true);
-    bool testOption(PageSetupDialogOption option) const;
-    void setOptions(PageSetupDialogOptions options);
-    PageSetupDialogOptions options() const;
+   void setOption(PageSetupDialogOption option, bool on = true);
+   bool testOption(PageSetupDialogOption option) const;
+   void setOptions(PageSetupDialogOptions options);
+   PageSetupDialogOptions options() const;
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-    virtual void setVisible(bool visible);
+   virtual void setVisible(bool visible);
 #endif
 
-    virtual int exec();
-    using QDialog::open;
+   virtual int exec();
+   using QDialog::open;
 
-    void open(QObject *receiver, const char *member);
+   void open(QObject *receiver, const char *member);
 };
 
 #endif // QT_NO_PRINTDIALOG

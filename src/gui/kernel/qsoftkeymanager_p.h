@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,45 +38,45 @@ class QSoftKeyManagerPrivate;
 
 class QSoftKeyManager : public QObject
 {
-    CS_OBJECT(QSoftKeyManager)
-    Q_DECLARE_PRIVATE(QSoftKeyManager)
+   CS_OBJECT(QSoftKeyManager)
+   Q_DECLARE_PRIVATE(QSoftKeyManager)
 
-public:
+ public:
 
-    enum StandardSoftKey {
-        OkSoftKey,
-        SelectSoftKey,
-        DoneSoftKey,
-        MenuSoftKey,
-        CancelSoftKey
-    };
+   enum StandardSoftKey {
+      OkSoftKey,
+      SelectSoftKey,
+      DoneSoftKey,
+      MenuSoftKey,
+      CancelSoftKey
+   };
 
-    static void updateSoftKeys();
-    static QAction *createAction(StandardSoftKey standardKey, QWidget *actionWidget);
-    static QAction *createKeyedAction(StandardSoftKey standardKey, Qt::Key key, QWidget *actionWidget);
-    static QString standardSoftKeyText(StandardSoftKey standardKey);
-    static void setForceEnabledInSoftkeys(QAction *action);
-    static bool isForceEnabledInSofkeys(QAction *action);
+   static void updateSoftKeys();
+   static QAction *createAction(StandardSoftKey standardKey, QWidget *actionWidget);
+   static QAction *createKeyedAction(StandardSoftKey standardKey, Qt::Key key, QWidget *actionWidget);
+   static QString standardSoftKeyText(StandardSoftKey standardKey);
+   static void setForceEnabledInSoftkeys(QAction *action);
+   static bool isForceEnabledInSofkeys(QAction *action);
 
-protected:
-    bool event(QEvent *e);
-    QScopedPointer<QSoftKeyManagerPrivate> d_ptr;
+ protected:
+   bool event(QEvent *e);
+   QScopedPointer<QSoftKeyManagerPrivate> d_ptr;
 
-private:
-    QSoftKeyManager();
-    static QSoftKeyManager *instance();
-    bool appendSoftkeys(const QWidget &source, int level);
-    QWidget *softkeySource(QWidget *previousSource, bool& recursiveMerging);
-    bool handleUpdateSoftKeys();
+ private:
+   QSoftKeyManager();
+   static QSoftKeyManager *instance();
+   bool appendSoftkeys(const QWidget &source, int level);
+   QWidget *softkeySource(QWidget *previousSource, bool &recursiveMerging);
+   bool handleUpdateSoftKeys();
 
-    GUI_CS_SLOT_1(Private, void cleanupHash(QObject * obj))
-    GUI_CS_SLOT_2(cleanupHash) 
+   GUI_CS_SLOT_1(Private, void cleanupHash(QObject *obj))
+   GUI_CS_SLOT_2(cleanupHash)
 
-    GUI_CS_SLOT_1(Private, void sendKeyEvent())
-    GUI_CS_SLOT_2(sendKeyEvent) 
+   GUI_CS_SLOT_1(Private, void sendKeyEvent())
+   GUI_CS_SLOT_2(sendKeyEvent)
 
-    Q_DISABLE_COPY(QSoftKeyManager)
- 
+   Q_DISABLE_COPY(QSoftKeyManager)
+
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -61,7 +61,7 @@ QT_END_INCLUDE_NAMESPACE
 #endif
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QStyleFactoryInterface_iid, QLatin1String("/styles"), Qt::CaseInsensitive))
+                          (QStyleFactoryInterface_iid, QLatin1String("/styles"), Qt::CaseInsensitive))
 
 /*!
     \class QStyleFactory
@@ -95,69 +95,72 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
 
     \sa keys()
 */
-QStyle *QStyleFactory::create(const QString& key)
+QStyle *QStyleFactory::create(const QString &key)
 {
-    QStyle *ret = 0;
-    QString style = key.toLower();
+   QStyle *ret = 0;
+   QString style = key.toLower();
 #ifndef QT_NO_STYLE_WINDOWS
-    if (style == QLatin1String("windows"))
-        ret = new QWindowsStyle;
-    else
+   if (style == QLatin1String("windows")) {
+      ret = new QWindowsStyle;
+   } else
 #endif
 #ifndef QT_NO_STYLE_WINDOWSXP
-    if (style == QLatin1String("windowsxp"))
-        ret = new QWindowsXPStyle;
-    else
+      if (style == QLatin1String("windowsxp")) {
+         ret = new QWindowsXPStyle;
+      } else
 #endif
 #ifndef QT_NO_STYLE_WINDOWSVISTA
-    if (style == QLatin1String("windowsvista"))
-        ret = new QWindowsVistaStyle;
-    else
+         if (style == QLatin1String("windowsvista")) {
+            ret = new QWindowsVistaStyle;
+         } else
 #endif
 #ifndef QT_NO_STYLE_MOTIF
-    if (style == QLatin1String("motif"))
-        ret = new QMotifStyle;
-    else
+            if (style == QLatin1String("motif")) {
+               ret = new QMotifStyle;
+            } else
 #endif
 #ifndef QT_NO_STYLE_CDE
-    if (style == QLatin1String("cde"))
-        ret = new QCDEStyle;
-    else
+               if (style == QLatin1String("cde")) {
+                  ret = new QCDEStyle;
+               } else
 #endif
 #ifndef QT_NO_STYLE_PLASTIQUE
-    if (style == QLatin1String("plastique"))
-        ret = new QPlastiqueStyle;
-    else
+                  if (style == QLatin1String("plastique")) {
+                     ret = new QPlastiqueStyle;
+                  } else
 #endif
 #ifndef QT_NO_STYLE_CLEANLOOKS
-    if (style == QLatin1String("cleanlooks"))
-        ret = new QCleanlooksStyle;
-    else
+                     if (style == QLatin1String("cleanlooks")) {
+                        ret = new QCleanlooksStyle;
+                     } else
 #endif
 #ifndef QT_NO_STYLE_GTK
-    if (style == QLatin1String("gtk") || style == QLatin1String("gtk+"))
-        ret = new QGtkStyle;
-    else
+                        if (style == QLatin1String("gtk") || style == QLatin1String("gtk+")) {
+                           ret = new QGtkStyle;
+                        } else
 #endif
 #ifndef QT_NO_STYLE_MAC
-    if (style.startsWith(QLatin1String("macintosh"))) {
-        ret = new QMacStyle;
+                           if (style.startsWith(QLatin1String("macintosh"))) {
+                              ret = new QMacStyle;
 #  ifdef Q_OS_MAC
-        if (style == QLatin1String("macintosh"))
-            style += QLatin1String(" (aqua)");
+                              if (style == QLatin1String("macintosh")) {
+                                 style += QLatin1String(" (aqua)");
+                              }
 #  endif
-    } else
+                           } else
 #endif
-    { } // Keep these here - they make the #ifdefery above work
+                           { } // Keep these here - they make the #ifdefery above work
 #if  ! defined(QT_NO_SETTINGS)
-    if(!ret) {
-        if (QStyleFactoryInterface *factory = qobject_cast<QStyleFactoryInterface*>(loader()->instance(style)))
-            ret = factory->create(style);
-    }
+   if (!ret) {
+      if (QStyleFactoryInterface *factory = qobject_cast<QStyleFactoryInterface *>(loader()->instance(style))) {
+         ret = factory->create(style);
+      }
+   }
 #endif
-    if(ret)
-        ret->setObjectName(style);
-    return ret;
+   if (ret) {
+      ret->setObjectName(style);
+   }
+   return ret;
 }
 
 /*!
@@ -169,53 +172,62 @@ QStyle *QStyleFactory::create(const QString& key)
 QStringList QStyleFactory::keys()
 {
 #if ! defined(QT_NO_SETTINGS)
-    QStringList list = loader()->keys();
+   QStringList list = loader()->keys();
 #else
-    QStringList list;
+   QStringList list;
 #endif
 #ifndef QT_NO_STYLE_WINDOWS
-    if (!list.contains(QLatin1String("Windows")))
-        list << QLatin1String("Windows");
+   if (!list.contains(QLatin1String("Windows"))) {
+      list << QLatin1String("Windows");
+   }
 #endif
 #ifndef QT_NO_STYLE_WINDOWSXP
-    if (!list.contains(QLatin1String("WindowsXP")) &&
-        (QSysInfo::WindowsVersion >= QSysInfo::WV_XP && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)))
-        list << QLatin1String("WindowsXP");
+   if (!list.contains(QLatin1String("WindowsXP")) &&
+         (QSysInfo::WindowsVersion >= QSysInfo::WV_XP && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
+      list << QLatin1String("WindowsXP");
+   }
 #endif
 #ifndef QT_NO_STYLE_WINDOWSVISTA
-    if (!list.contains(QLatin1String("WindowsVista")) &&
-        (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)))
-        list << QLatin1String("WindowsVista");
+   if (!list.contains(QLatin1String("WindowsVista")) &&
+         (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
+      list << QLatin1String("WindowsVista");
+   }
 #endif
 #ifndef QT_NO_STYLE_MOTIF
-    if (!list.contains(QLatin1String("Motif")))
-        list << QLatin1String("Motif");
+   if (!list.contains(QLatin1String("Motif"))) {
+      list << QLatin1String("Motif");
+   }
 #endif
 #ifndef QT_NO_STYLE_CDE
-    if (!list.contains(QLatin1String("CDE")))
-        list << QLatin1String("CDE");
+   if (!list.contains(QLatin1String("CDE"))) {
+      list << QLatin1String("CDE");
+   }
 #endif
 #ifndef QT_NO_STYLE_PLASTIQUE
-    if (!list.contains(QLatin1String("Plastique")))
-        list << QLatin1String("Plastique");
+   if (!list.contains(QLatin1String("Plastique"))) {
+      list << QLatin1String("Plastique");
+   }
 #endif
 #ifndef QT_NO_STYLE_GTK
-    if (!list.contains(QLatin1String("GTK+")))
-        list << QLatin1String("GTK+");
+   if (!list.contains(QLatin1String("GTK+"))) {
+      list << QLatin1String("GTK+");
+   }
 #endif
 #ifndef QT_NO_STYLE_CLEANLOOKS
-    if (!list.contains(QLatin1String("Cleanlooks")))
-        list << QLatin1String("Cleanlooks");
+   if (!list.contains(QLatin1String("Cleanlooks"))) {
+      list << QLatin1String("Cleanlooks");
+   }
 #endif
 #ifndef QT_NO_STYLE_MAC
-    QString mstyle = QLatin1String("Macintosh");
+   QString mstyle = QLatin1String("Macintosh");
 # ifdef Q_OS_MAC
-    mstyle += QLatin1String(" (aqua)");
+   mstyle += QLatin1String(" (aqua)");
 # endif
-    if (!list.contains(mstyle))
-        list << mstyle;
+   if (!list.contains(mstyle)) {
+      list << mstyle;
+   }
 #endif
-    return list;
+   return list;
 }
 
 QT_END_NAMESPACE

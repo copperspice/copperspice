@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,52 +40,52 @@ QT_BEGIN_NAMESPACE
 
 class QNetworkAddressEntryPrivate
 {
-public:
-    QHostAddress address;
-    QNetmaskAddress netmask;
-    QHostAddress broadcast;
+ public:
+   QHostAddress address;
+   QNetmaskAddress netmask;
+   QHostAddress broadcast;
 };
 
 class QNetworkInterfacePrivate: public QSharedData
 {
-public:
-    QNetworkInterfacePrivate() : index(0), flags(0)
-    { }
-    ~QNetworkInterfacePrivate()
-    { }
+ public:
+   QNetworkInterfacePrivate() : index(0), flags(0) {
+   }
+   ~QNetworkInterfacePrivate() {
+   }
 
-    int index;                  // interface index, if know
-    QNetworkInterface::InterfaceFlags flags;
+   int index;                  // interface index, if know
+   QNetworkInterface::InterfaceFlags flags;
 
-    QString name;
-    QString friendlyName;
-    QString hardwareAddress;
+   QString name;
+   QString friendlyName;
+   QString hardwareAddress;
 
-    QList<QNetworkAddressEntry> addressEntries;
+   QList<QNetworkAddressEntry> addressEntries;
 
-    static QString makeHwAddress(int len, uchar *data);
+   static QString makeHwAddress(int len, uchar *data);
 
-private:
-    // disallow copying -- avoid detaching
-    QNetworkInterfacePrivate &operator=(const QNetworkInterfacePrivate &other);
-    QNetworkInterfacePrivate(const QNetworkInterfacePrivate &other);
+ private:
+   // disallow copying -- avoid detaching
+   QNetworkInterfacePrivate &operator=(const QNetworkInterfacePrivate &other);
+   QNetworkInterfacePrivate(const QNetworkInterfacePrivate &other);
 };
 
 class QNetworkInterfaceManager
 {
-public:
-    QNetworkInterfaceManager();
-    ~QNetworkInterfaceManager();
+ public:
+   QNetworkInterfaceManager();
+   ~QNetworkInterfaceManager();
 
-    QSharedDataPointer<QNetworkInterfacePrivate> interfaceFromName(const QString &name);
-    QSharedDataPointer<QNetworkInterfacePrivate> interfaceFromIndex(int index);
-    QList<QSharedDataPointer<QNetworkInterfacePrivate> > allInterfaces();
+   QSharedDataPointer<QNetworkInterfacePrivate> interfaceFromName(const QString &name);
+   QSharedDataPointer<QNetworkInterfacePrivate> interfaceFromIndex(int index);
+   QList<QSharedDataPointer<QNetworkInterfacePrivate> > allInterfaces();
 
-    // convenience:
-    QSharedDataPointer<QNetworkInterfacePrivate> empty;
+   // convenience:
+   QSharedDataPointer<QNetworkInterfacePrivate> empty;
 
-private:
-    QList<QNetworkInterfacePrivate *> scan();
+ private:
+   QList<QNetworkInterfacePrivate *> scan();
 };
 
 

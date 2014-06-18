@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,69 +36,69 @@ class QGroupBoxPrivate;
 class QStyleOptionGroupBox;
 class Q_GUI_EXPORT QGroupBox : public QWidget
 {
-    CS_OBJECT(QGroupBox)
+   CS_OBJECT(QGroupBox)
 
-    GUI_CS_PROPERTY_READ(title, title)
-    GUI_CS_PROPERTY_WRITE(title, setTitle)
-    GUI_CS_PROPERTY_READ(alignment, alignment)
-    GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
-    GUI_CS_PROPERTY_READ(flat, isFlat)
-    GUI_CS_PROPERTY_WRITE(flat, setFlat)
+   GUI_CS_PROPERTY_READ(title, title)
+   GUI_CS_PROPERTY_WRITE(title, setTitle)
+   GUI_CS_PROPERTY_READ(alignment, alignment)
+   GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
+   GUI_CS_PROPERTY_READ(flat, isFlat)
+   GUI_CS_PROPERTY_WRITE(flat, setFlat)
 
-    GUI_CS_PROPERTY_READ(checkable, isCheckable)
-    GUI_CS_PROPERTY_WRITE(checkable, setCheckable)
-    GUI_CS_PROPERTY_READ(checked, isChecked)
-    GUI_CS_PROPERTY_WRITE(checked, setChecked)
-    GUI_CS_PROPERTY_DESIGNABLE_NONSTATIC(checked, isCheckable())
-    GUI_CS_PROPERTY_NOTIFY(checked, toggled)
-    GUI_CS_PROPERTY_USER(checked, true)
+   GUI_CS_PROPERTY_READ(checkable, isCheckable)
+   GUI_CS_PROPERTY_WRITE(checkable, setCheckable)
+   GUI_CS_PROPERTY_READ(checked, isChecked)
+   GUI_CS_PROPERTY_WRITE(checked, setChecked)
+   GUI_CS_PROPERTY_DESIGNABLE_NONSTATIC(checked, isCheckable())
+   GUI_CS_PROPERTY_NOTIFY(checked, toggled)
+   GUI_CS_PROPERTY_USER(checked, true)
 
-public:
-    explicit QGroupBox(QWidget* parent=0);
-    explicit QGroupBox(const QString &title, QWidget* parent=0);
-    ~QGroupBox();
+ public:
+   explicit QGroupBox(QWidget *parent = 0);
+   explicit QGroupBox(const QString &title, QWidget *parent = 0);
+   ~QGroupBox();
 
-    QString title() const;
-    void setTitle(const QString &title);
+   QString title() const;
+   void setTitle(const QString &title);
 
-    Qt::Alignment alignment() const;
-    void setAlignment(int alignment);
+   Qt::Alignment alignment() const;
+   void setAlignment(int alignment);
 
-    QSize minimumSizeHint() const;
+   QSize minimumSizeHint() const;
 
-    bool isFlat() const;
-    void setFlat(bool flat);
-    bool isCheckable() const;
-    void setCheckable(bool checkable);
-    bool isChecked() const;
+   bool isFlat() const;
+   void setFlat(bool flat);
+   bool isCheckable() const;
+   void setCheckable(bool checkable);
+   bool isChecked() const;
 
-    GUI_CS_SLOT_1(Public, void setChecked(bool checked))
-    GUI_CS_SLOT_2(setChecked) 
+   GUI_CS_SLOT_1(Public, void setChecked(bool checked))
+   GUI_CS_SLOT_2(setChecked)
 
-    GUI_CS_SIGNAL_1(Public, void clicked(bool checked = false))
-    GUI_CS_SIGNAL_2(clicked,checked) 
-    GUI_CS_SIGNAL_1(Public, void toggled(bool un_named_arg1))
-    GUI_CS_SIGNAL_2(toggled,un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void clicked(bool checked = false))
+   GUI_CS_SIGNAL_2(clicked, checked)
+   GUI_CS_SIGNAL_1(Public, void toggled(bool un_named_arg1))
+   GUI_CS_SIGNAL_2(toggled, un_named_arg1)
 
-protected:
-    bool event(QEvent *event);
-    void childEvent(QChildEvent *event);
-    void resizeEvent(QResizeEvent *event);
-    void paintEvent(QPaintEvent *event);
-    void focusInEvent(QFocusEvent *event);
-    void changeEvent(QEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);  
-    void initStyleOption(QStyleOptionGroupBox *option) const;
+ protected:
+   bool event(QEvent *event);
+   void childEvent(QChildEvent *event);
+   void resizeEvent(QResizeEvent *event);
+   void paintEvent(QPaintEvent *event);
+   void focusInEvent(QFocusEvent *event);
+   void changeEvent(QEvent *event);
+   void mousePressEvent(QMouseEvent *event);
+   void mouseMoveEvent(QMouseEvent *event);
+   void mouseReleaseEvent(QMouseEvent *event);
+   void initStyleOption(QStyleOptionGroupBox *option) const;
 
-private:
-    Q_DISABLE_COPY(QGroupBox)
-    Q_DECLARE_PRIVATE(QGroupBox)
+ private:
+   Q_DISABLE_COPY(QGroupBox)
+   Q_DECLARE_PRIVATE(QGroupBox)
 
-    GUI_CS_SLOT_1(Private, void _q_setChildrenEnabled(bool b))
-    GUI_CS_SLOT_2(_q_setChildrenEnabled)
-  
+   GUI_CS_SLOT_1(Private, void _q_setChildrenEnabled(bool b))
+   GUI_CS_SLOT_2(_q_setChildrenEnabled)
+
 };
 
 #endif // QT_NO_GROUPBOX

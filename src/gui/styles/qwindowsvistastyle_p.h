@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -112,78 +112,106 @@ QT_BEGIN_NAMESPACE
 
 class QWindowsVistaAnimation
 {
-public :
-    QWindowsVistaAnimation() : _running(true) { }
-    virtual ~QWindowsVistaAnimation() { }
-    QWidget * widget() const { return _widget; }
-    bool running() const { return _running; }
-    const QTime &startTime() const { return _startTime; }
-    void setRunning(bool val) { _running = val; }
-    void setWidget(QWidget *widget) { _widget = widget; }
-    void setStartTime(const QTime &startTime) { _startTime = startTime; }
-    virtual void paint(QPainter *painter, const QStyleOption *option);
+ public :
+   QWindowsVistaAnimation() : _running(true) { }
+   virtual ~QWindowsVistaAnimation() { }
+   QWidget *widget() const {
+      return _widget;
+   }
+   bool running() const {
+      return _running;
+   }
+   const QTime &startTime() const {
+      return _startTime;
+   }
+   void setRunning(bool val) {
+      _running = val;
+   }
+   void setWidget(QWidget *widget) {
+      _widget = widget;
+   }
+   void setStartTime(const QTime &startTime) {
+      _startTime = startTime;
+   }
+   virtual void paint(QPainter *painter, const QStyleOption *option);
 
-protected:
-    void drawBlendedImage(QPainter *painter, QRect rect, float value);
-    QTime _startTime;
-    QPointer<QWidget> _widget;
-    QImage _primaryImage;
-    QImage _secondaryImage;
-    QImage _tempImage;
-    bool _running;
+ protected:
+   void drawBlendedImage(QPainter *painter, QRect rect, float value);
+   QTime _startTime;
+   QPointer<QWidget> _widget;
+   QImage _primaryImage;
+   QImage _secondaryImage;
+   QImage _tempImage;
+   bool _running;
 };
 
 
 // Handles state transition animations
 class QWindowsVistaTransition : public QWindowsVistaAnimation
 {
-public :
-    QWindowsVistaTransition() : QWindowsVistaAnimation() {}
-    virtual ~QWindowsVistaTransition() { }
-    void setDuration(int duration) { _duration = duration; }
-    void setStartImage(const QImage &image) { _primaryImage = image; }
-    void setEndImage(const QImage &image) { _secondaryImage = image; }
-    virtual void paint(QPainter *painter, const QStyleOption *option);
-    int duration() const { return _duration; }
-    int _duration; //set time in ms to complete a state transition
+ public :
+   QWindowsVistaTransition() : QWindowsVistaAnimation() {}
+   virtual ~QWindowsVistaTransition() { }
+   void setDuration(int duration) {
+      _duration = duration;
+   }
+   void setStartImage(const QImage &image) {
+      _primaryImage = image;
+   }
+   void setEndImage(const QImage &image) {
+      _secondaryImage = image;
+   }
+   virtual void paint(QPainter *painter, const QStyleOption *option);
+   int duration() const {
+      return _duration;
+   }
+   int _duration; //set time in ms to complete a state transition
 };
 
 
 // Handles pulse animations (default buttons)
 class QWindowsVistaPulse: public QWindowsVistaAnimation
 {
-public :
-    QWindowsVistaPulse() : QWindowsVistaAnimation() {}
-    virtual ~QWindowsVistaPulse() { }
-    void setDuration(int duration) { _duration = duration; }
-    void setPrimaryImage(const QImage &image) { _primaryImage = image; }
-    void setAlternateImage(const QImage &image) { _secondaryImage = image; }
-    virtual void paint(QPainter *painter, const QStyleOption *option);
-    int duration() const { return _duration; }
-    int _duration; //time in ms to complete a pulse cycle
+ public :
+   QWindowsVistaPulse() : QWindowsVistaAnimation() {}
+   virtual ~QWindowsVistaPulse() { }
+   void setDuration(int duration) {
+      _duration = duration;
+   }
+   void setPrimaryImage(const QImage &image) {
+      _primaryImage = image;
+   }
+   void setAlternateImage(const QImage &image) {
+      _secondaryImage = image;
+   }
+   virtual void paint(QPainter *painter, const QStyleOption *option);
+   int duration() const {
+      return _duration;
+   }
+   int _duration; //time in ms to complete a pulse cycle
 };
 
 
 class QWindowsVistaStylePrivate :  public QWindowsXPStylePrivate
 {
-    Q_DECLARE_PUBLIC(QWindowsVistaStyle)
+   Q_DECLARE_PUBLIC(QWindowsVistaStyle)
 
-public:
-    QWindowsVistaStylePrivate();
-    ~QWindowsVistaStylePrivate();
-    static bool resolveSymbols();
-    static inline bool useVista();
-    void startAnimation(QWindowsVistaAnimation *);
-    void stopAnimation(const QWidget *);
-    QWindowsVistaAnimation* widgetAnimation(const QWidget *) const;
-    void timerEvent();
-    bool transitionsEnabled() const;
-    QWidget *treeViewHelper();
+ public:
+   QWindowsVistaStylePrivate();
+   ~QWindowsVistaStylePrivate();
+   static bool resolveSymbols();
+   static inline bool useVista();
+   void startAnimation(QWindowsVistaAnimation *);
+   void stopAnimation(const QWidget *);
+   QWindowsVistaAnimation *widgetAnimation(const QWidget *) const;
+   void timerEvent();
+   bool transitionsEnabled() const;
+   QWidget *treeViewHelper();
 
-private:
-    QList <QWindowsVistaAnimation*> animations;
-    QBasicTimer animationTimer;
-    QWidget *m_treeViewHelper;
+ private:
+   QList <QWindowsVistaAnimation *> animations;
+   QBasicTimer animationTimer;
+   QWidget *m_treeViewHelper;
 };
 
 QT_END_NAMESPACE

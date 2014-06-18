@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,77 +37,80 @@ class QScrollBar;
 class QAbstractScrollAreaScrollBarContainer;
 class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
 {
-    Q_DECLARE_PUBLIC(QAbstractScrollArea)
+   Q_DECLARE_PUBLIC(QAbstractScrollArea)
 
-public:
-    QAbstractScrollAreaPrivate();
+ public:
+   QAbstractScrollAreaPrivate();
 
-    void replaceScrollBar(QScrollBar *scrollBar, Qt::Orientation orientation);
+   void replaceScrollBar(QScrollBar *scrollBar, Qt::Orientation orientation);
 
-    QAbstractScrollAreaScrollBarContainer *scrollBarContainers[Qt::Vertical + 1];
-    QScrollBar *hbar, *vbar;
-    Qt::ScrollBarPolicy vbarpolicy, hbarpolicy;
+   QAbstractScrollAreaScrollBarContainer *scrollBarContainers[Qt::Vertical + 1];
+   QScrollBar *hbar, *vbar;
+   Qt::ScrollBarPolicy vbarpolicy, hbarpolicy;
 
-    QWidget *viewport;
-    QWidget *cornerWidget;
-    QRect cornerPaintingRect;
+   QWidget *viewport;
+   QWidget *cornerWidget;
+   QRect cornerPaintingRect;
 #ifdef Q_OS_MAC
-    QRect reverseCornerPaintingRect;
+   QRect reverseCornerPaintingRect;
 #endif
-    int left, top, right, bottom; // viewport margin
+   int left, top, right, bottom; // viewport margin
 
-    int xoffset, yoffset;
+   int xoffset, yoffset;
 
-    void init();
-    void layoutChildren();
-    // ### Fix for 4.4, talk to Bjoern E or Girish.
-    virtual void scrollBarPolicyChanged(Qt::Orientation, Qt::ScrollBarPolicy) {}
+   void init();
+   void layoutChildren();
+   // ### Fix for 4.4, talk to Bjoern E or Girish.
+   virtual void scrollBarPolicyChanged(Qt::Orientation, Qt::ScrollBarPolicy) {}
 
-    void _q_hslide(int);
-    void _q_vslide(int);
-    void _q_showOrHideScrollBars();
+   void _q_hslide(int);
+   void _q_vslide(int);
+   void _q_showOrHideScrollBars();
 
-    virtual QPoint contentsOffset() const;
+   virtual QPoint contentsOffset() const;
 
-    inline bool viewportEvent(QEvent *event)
-    { return q_func()->viewportEvent(event); }
-    QScopedPointer<QObject> viewportFilter;
+   inline bool viewportEvent(QEvent *event) {
+      return q_func()->viewportEvent(event);
+   }
+   QScopedPointer<QObject> viewportFilter;
 
 #ifdef Q_OS_WIN
-    bool singleFingerPanEnabled;
-    void setSingleFingerPanEnabled(bool on = true);
+   bool singleFingerPanEnabled;
+   void setSingleFingerPanEnabled(bool on = true);
 #endif
 };
 
 class QAbstractScrollAreaFilter : public QObject
 {
-    CS_OBJECT(QAbstractScrollAreaFilter)
-public:
-    QAbstractScrollAreaFilter(QAbstractScrollAreaPrivate *p) : d(p)
-    { setObjectName(QLatin1String("qt_abstractscrollarea_filter")); }
-    bool eventFilter(QObject *o, QEvent *e)
-    { return (o == d->viewport ? d->viewportEvent(e) : false); }
-private:
-    QAbstractScrollAreaPrivate *d;
+   CS_OBJECT(QAbstractScrollAreaFilter)
+ public:
+   QAbstractScrollAreaFilter(QAbstractScrollAreaPrivate *p) : d(p) {
+      setObjectName(QLatin1String("qt_abstractscrollarea_filter"));
+   }
+   bool eventFilter(QObject *o, QEvent *e) {
+      return (o == d->viewport ? d->viewportEvent(e) : false);
+   }
+ private:
+   QAbstractScrollAreaPrivate *d;
 };
 
 class QBoxLayout;
 class QAbstractScrollAreaScrollBarContainer : public QWidget
 {
-public:
-    enum LogicalPosition { LogicalLeft = 1, LogicalRight = 2 };
+ public:
+   enum LogicalPosition { LogicalLeft = 1, LogicalRight = 2 };
 
-    QAbstractScrollAreaScrollBarContainer(Qt::Orientation orientation, QWidget *parent);
-    void addWidget(QWidget *widget, LogicalPosition position);
-    QWidgetList widgets(LogicalPosition position);
-    void removeWidget(QWidget *widget);
+   QAbstractScrollAreaScrollBarContainer(Qt::Orientation orientation, QWidget *parent);
+   void addWidget(QWidget *widget, LogicalPosition position);
+   QWidgetList widgets(LogicalPosition position);
+   void removeWidget(QWidget *widget);
 
-    QScrollBar *scrollBar;
-    QBoxLayout *layout;
-private:
-    int scrollBarLayoutIndex() const;
+   QScrollBar *scrollBar;
+   QBoxLayout *layout;
+ private:
+   int scrollBarLayoutIndex() const;
 
-    Qt::Orientation orientation;
+   Qt::Orientation orientation;
 };
 
 #endif // QT_NO_SCROLLAREA

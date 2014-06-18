@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,29 +39,31 @@ class QSslCipherPrivate;
 class Q_NETWORK_EXPORT QSslCipher
 {
 
-public:
-    QSslCipher();
-    QSslCipher(const QString &name, QSsl::SslProtocol protocol);
-    QSslCipher(const QSslCipher &other);
-    ~QSslCipher();
-    QSslCipher &operator=(const QSslCipher &other);
-    bool operator==(const QSslCipher &other) const;
-    inline bool operator!=(const QSslCipher &other) const { return !operator==(other); }
+ public:
+   QSslCipher();
+   QSslCipher(const QString &name, QSsl::SslProtocol protocol);
+   QSslCipher(const QSslCipher &other);
+   ~QSslCipher();
+   QSslCipher &operator=(const QSslCipher &other);
+   bool operator==(const QSslCipher &other) const;
+   inline bool operator!=(const QSslCipher &other) const {
+      return !operator==(other);
+   }
 
-    bool isNull() const;
-    QString name() const;
-    int supportedBits() const;
-    int usedBits() const;
+   bool isNull() const;
+   QString name() const;
+   int supportedBits() const;
+   int usedBits() const;
 
-    QString keyExchangeMethod() const;
-    QString authenticationMethod() const;
-    QString encryptionMethod() const;
-    QString protocolString() const;
-    QSsl::SslProtocol protocol() const;
+   QString keyExchangeMethod() const;
+   QString authenticationMethod() const;
+   QString encryptionMethod() const;
+   QString protocolString() const;
+   QSsl::SslProtocol protocol() const;
 
-private:
-    QScopedPointer<QSslCipherPrivate> d;
-    friend class QSslSocketBackendPrivate;
+ private:
+   QScopedPointer<QSslCipherPrivate> d;
+   friend class QSslSocketBackendPrivate;
 };
 
 #ifndef QT_NO_DEBUG_STREAM

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,73 +40,71 @@ class QVideoSurfaceFormatPrivate;
 
 class Q_MULTIMEDIA_EXPORT QVideoSurfaceFormat
 {
-public:
-    enum Direction
-    {
-        TopToBottom,
-        BottomToTop
-    };
+ public:
+   enum Direction {
+      TopToBottom,
+      BottomToTop
+   };
 
-    enum YCbCrColorSpace
-    {
-        YCbCr_Undefined,
-        YCbCr_BT601,
-        YCbCr_BT709,
-        YCbCr_xvYCC601,
-        YCbCr_xvYCC709,
-        YCbCr_JPEG,
-        YCbCr_CustomMatrix
-    };
+   enum YCbCrColorSpace {
+      YCbCr_Undefined,
+      YCbCr_BT601,
+      YCbCr_BT709,
+      YCbCr_xvYCC601,
+      YCbCr_xvYCC709,
+      YCbCr_JPEG,
+      YCbCr_CustomMatrix
+   };
 
-    QVideoSurfaceFormat();
-    QVideoSurfaceFormat(
-            const QSize &size,
-            QVideoFrame::PixelFormat pixelFormat,
-            QAbstractVideoBuffer::HandleType handleType = QAbstractVideoBuffer::NoHandle);
-    QVideoSurfaceFormat(const QVideoSurfaceFormat &format);
-    ~QVideoSurfaceFormat();
+   QVideoSurfaceFormat();
+   QVideoSurfaceFormat(
+      const QSize &size,
+      QVideoFrame::PixelFormat pixelFormat,
+      QAbstractVideoBuffer::HandleType handleType = QAbstractVideoBuffer::NoHandle);
+   QVideoSurfaceFormat(const QVideoSurfaceFormat &format);
+   ~QVideoSurfaceFormat();
 
-    QVideoSurfaceFormat &operator =(const QVideoSurfaceFormat &format);
+   QVideoSurfaceFormat &operator =(const QVideoSurfaceFormat &format);
 
-    bool operator ==(const QVideoSurfaceFormat &format) const;
-    bool operator !=(const QVideoSurfaceFormat &format) const;
+   bool operator ==(const QVideoSurfaceFormat &format) const;
+   bool operator !=(const QVideoSurfaceFormat &format) const;
 
-    bool isValid() const;
+   bool isValid() const;
 
-    QVideoFrame::PixelFormat pixelFormat() const;
-    QAbstractVideoBuffer::HandleType handleType() const;
+   QVideoFrame::PixelFormat pixelFormat() const;
+   QAbstractVideoBuffer::HandleType handleType() const;
 
-    QSize frameSize() const;
-    void setFrameSize(const QSize &size);
-    void setFrameSize(int width, int height);
+   QSize frameSize() const;
+   void setFrameSize(const QSize &size);
+   void setFrameSize(int width, int height);
 
-    int frameWidth() const;
-    int frameHeight() const;
+   int frameWidth() const;
+   int frameHeight() const;
 
-    QRect viewport() const;
-    void setViewport(const QRect &viewport);
+   QRect viewport() const;
+   void setViewport(const QRect &viewport);
 
-    Direction scanLineDirection() const;
-    void setScanLineDirection(Direction direction);
+   Direction scanLineDirection() const;
+   void setScanLineDirection(Direction direction);
 
-    qreal frameRate() const;
-    void setFrameRate(qreal rate);
+   qreal frameRate() const;
+   void setFrameRate(qreal rate);
 
-    QSize pixelAspectRatio() const;
-    void setPixelAspectRatio(const QSize &ratio);
-    void setPixelAspectRatio(int width, int height);
+   QSize pixelAspectRatio() const;
+   void setPixelAspectRatio(const QSize &ratio);
+   void setPixelAspectRatio(int width, int height);
 
-    YCbCrColorSpace yCbCrColorSpace() const;
-    void setYCbCrColorSpace(YCbCrColorSpace colorSpace);
+   YCbCrColorSpace yCbCrColorSpace() const;
+   void setYCbCrColorSpace(YCbCrColorSpace colorSpace);
 
-    QSize sizeHint() const;
+   QSize sizeHint() const;
 
-    QList<QByteArray> propertyNames() const;
-    QVariant property(const char *name) const;
-    void setProperty(const char *name, const QVariant &value);
+   QList<QByteArray> propertyNames() const;
+   QVariant property(const char *name) const;
+   void setProperty(const char *name, const QVariant &value);
 
-private:
-    QSharedDataPointer<QVideoSurfaceFormatPrivate> d;
+ private:
+   QSharedDataPointer<QVideoSurfaceFormatPrivate> d;
 };
 
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, const QVideoSurfaceFormat &);

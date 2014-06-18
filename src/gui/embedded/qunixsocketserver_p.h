@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,37 +34,38 @@ class QUnixSocketServerPrivate;
 
 class Q_GUI_EXPORT QUnixSocketServer : public QObject
 {
-    CS_OBJECT(QUnixSocketServer)
+   CS_OBJECT(QUnixSocketServer)
 
-public:
-    enum ServerError { NoError, InvalidPath, ResourceError, BindError,
-                       ListenError };
+ public:
+   enum ServerError { NoError, InvalidPath, ResourceError, BindError,
+                      ListenError
+                    };
 
-    QUnixSocketServer(QObject *parent=0);
-    virtual ~QUnixSocketServer();
+   QUnixSocketServer(QObject *parent = 0);
+   virtual ~QUnixSocketServer();
 
-    void close();
+   void close();
 
-    ServerError serverError() const;
+   ServerError serverError() const;
 
-    bool isListening() const;
-    bool listen(const QByteArray & path);
+   bool isListening() const;
+   bool listen(const QByteArray &path);
 
-    int socketDescriptor() const;
-    QByteArray serverAddress() const;
-   
-    int maxPendingConnections() const; 
-    void setMaxPendingConnections(int numConnections);
+   int socketDescriptor() const;
+   QByteArray serverAddress() const;
 
-protected:
-    virtual void incomingConnection(int socketDescriptor) = 0;
+   int maxPendingConnections() const;
+   void setMaxPendingConnections(int numConnections);
 
-private:
-    QUnixSocketServer(const QUnixSocketServer &);
-    QUnixSocketServer & operator=(const QUnixSocketServer &);
+ protected:
+   virtual void incomingConnection(int socketDescriptor) = 0;
 
-    friend class QUnixSocketServerPrivate;
-    QUnixSocketServerPrivate * d;
+ private:
+   QUnixSocketServer(const QUnixSocketServer &);
+   QUnixSocketServer &operator=(const QUnixSocketServer &);
+
+   friend class QUnixSocketServerPrivate;
+   QUnixSocketServerPrivate *d;
 };
 
 

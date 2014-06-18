@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -72,7 +72,7 @@ QT_BEGIN_NAMESPACE
     automatically by the Q_EXPORT_PLUGIN2() macro.
 */
 QIconEnginePlugin::QIconEnginePlugin(QObject *parent)
-    : QObject(parent)
+   : QObject(parent)
 {
 }
 
@@ -94,10 +94,10 @@ QIconEnginePlugin::~QIconEnginePlugin()
 
     \ingroup plugins
     \since 4.3
- 
+
     Icon engine plugins produces \l{QIconEngine}s for \l{QIcon}s; an
     icon engine is used to render the icon. The keys that identifies
-    the engines the plugin can create are suffixes of 
+    the engines the plugin can create are suffixes of
     icon filenames; they are returned by keys(). The create() function
     receives the icon filename to return an engine for; it should
     return 0 if it cannot produce an engine for the file.
@@ -138,7 +138,7 @@ QIconEnginePlugin::~QIconEnginePlugin()
     automatically by the Q_EXPORT_PLUGIN2() macro.
 */
 QIconEnginePluginV2::QIconEnginePluginV2(QObject *parent)
-    : QObject(parent)
+   : QObject(parent)
 {
 }
 

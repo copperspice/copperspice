@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,77 +40,87 @@ class QIconEngineV2;
 class Q_GUI_EXPORT QIcon
 {
 
-public:
-    enum Mode { Normal, Disabled, Active, Selected };
-    enum State { On, Off };
+ public:
+   enum Mode { Normal, Disabled, Active, Selected };
+   enum State { On, Off };
 
-    QIcon();
-    QIcon(const QPixmap &pixmap);
-    QIcon(const QIcon &other);
-    explicit QIcon(const QString &fileName); // file or resource name
-    explicit QIcon(QIconEngine *engine);
-    explicit QIcon(QIconEngineV2 *engine);
-    ~QIcon();
-    QIcon &operator=(const QIcon &other);
+   QIcon();
+   QIcon(const QPixmap &pixmap);
+   QIcon(const QIcon &other);
+   explicit QIcon(const QString &fileName); // file or resource name
+   explicit QIcon(QIconEngine *engine);
+   explicit QIcon(QIconEngineV2 *engine);
+   ~QIcon();
+   QIcon &operator=(const QIcon &other);
 
-    inline QIcon &operator=(QIcon &&other)
-    { qSwap(d, other.d); return *this; }
+   inline QIcon &operator=(QIcon && other) {
+      qSwap(d, other.d);
+      return *this;
+   }
 
-    inline void swap(QIcon &other) { qSwap(d, other.d); }
+   inline void swap(QIcon &other) {
+      qSwap(d, other.d);
+   }
 
-    operator QVariant() const;
+   operator QVariant() const;
 
-    QPixmap pixmap(const QSize &size, Mode mode = Normal, State state = Off) const;
-    inline QPixmap pixmap(int w, int h, Mode mode = Normal, State state = Off) const
-        { return pixmap(QSize(w, h), mode, state); }
-    inline QPixmap pixmap(int extent, Mode mode = Normal, State state = Off) const
-        { return pixmap(QSize(extent, extent), mode, state); }
+   QPixmap pixmap(const QSize &size, Mode mode = Normal, State state = Off) const;
+   inline QPixmap pixmap(int w, int h, Mode mode = Normal, State state = Off) const {
+      return pixmap(QSize(w, h), mode, state);
+   }
+   inline QPixmap pixmap(int extent, Mode mode = Normal, State state = Off) const {
+      return pixmap(QSize(extent, extent), mode, state);
+   }
 
-    QSize actualSize(const QSize &size, Mode mode = Normal, State state = Off) const;
+   QSize actualSize(const QSize &size, Mode mode = Normal, State state = Off) const;
 
-    QString name() const;
+   QString name() const;
 
-    void paint(QPainter *painter, const QRect &rect, Qt::Alignment alignment = Qt::AlignCenter, Mode mode = Normal, State state = Off) const;
+   void paint(QPainter *painter, const QRect &rect, Qt::Alignment alignment = Qt::AlignCenter, Mode mode = Normal,
+              State state = Off) const;
 
-    inline void paint(QPainter *painter, int x, int y, int w, int h, 
-            Qt::Alignment alignment = Qt::AlignCenter, Mode mode = Normal, State state = Off) const
-        { paint(painter, QRect(x, y, w, h), alignment, mode, state); }
+   inline void paint(QPainter *painter, int x, int y, int w, int h,
+                     Qt::Alignment alignment = Qt::AlignCenter, Mode mode = Normal, State state = Off) const {
+      paint(painter, QRect(x, y, w, h), alignment, mode, state);
+   }
 
-    bool isNull() const;
-    bool isDetached() const;
-    void detach();
+   bool isNull() const;
+   bool isDetached() const;
+   void detach();
 
-    int serialNumber() const;
-    qint64 cacheKey() const;
+   int serialNumber() const;
+   qint64 cacheKey() const;
 
-    void addPixmap(const QPixmap &pixmap, Mode mode = Normal, State state = Off);
-    void addFile(const QString &fileName, const QSize &size = QSize(), Mode mode = Normal, State state = Off);
+   void addPixmap(const QPixmap &pixmap, Mode mode = Normal, State state = Off);
+   void addFile(const QString &fileName, const QSize &size = QSize(), Mode mode = Normal, State state = Off);
 
-    QList<QSize> availableSizes(Mode mode = Normal, State state = Off) const;
+   QList<QSize> availableSizes(Mode mode = Normal, State state = Off) const;
 
-    static QIcon fromTheme(const QString &name, const QIcon &fallback = QIcon());
-    static bool hasThemeIcon(const QString &name);
+   static QIcon fromTheme(const QString &name, const QIcon &fallback = QIcon());
+   static bool hasThemeIcon(const QString &name);
 
-    static QStringList themeSearchPaths();
-    static void setThemeSearchPaths(const QStringList &searchpath);
+   static QStringList themeSearchPaths();
+   static void setThemeSearchPaths(const QStringList &searchpath);
 
-    static QString themeName();
-    static void setThemeName(const QString &path);
+   static QString themeName();
+   static void setThemeName(const QString &path);
 
-    Q_DUMMY_COMPARISON_OPERATOR(QIcon)
+   Q_DUMMY_COMPARISON_OPERATOR(QIcon)
 
-    typedef QIconPrivate * DataPtr;
-    inline DataPtr &data_ptr() { return d; }
+   typedef QIconPrivate *DataPtr;
+   inline DataPtr &data_ptr() {
+      return d;
+   }
 
-private:
-    QIconPrivate *d;
+ private:
+   QIconPrivate *d;
 
 #if !defined(QT_NO_DATASTREAM)
-    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QIcon &);
-    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QIcon &);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QIcon &);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QIcon &);
 #endif
 
-   
+
 };
 
 Q_DECLARE_SHARED(QIcon)

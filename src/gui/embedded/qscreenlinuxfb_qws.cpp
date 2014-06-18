@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -64,92 +64,97 @@ extern int qws_client_id;
 
 class QLinuxFbScreenPrivate : public QObject
 {
-public:
-    QLinuxFbScreenPrivate();
-    ~QLinuxFbScreenPrivate();
+ public:
+   QLinuxFbScreenPrivate();
+   ~QLinuxFbScreenPrivate();
 
-    void openTty();
-    void closeTty();
+   void openTty();
+   void closeTty();
 
-    int fd;
-    int startupw;
-    int startuph;
-    int startupd;
-    bool blank;
-    QLinuxFbScreen::DriverTypes driverType;
+   int fd;
+   int startupw;
+   int startuph;
+   int startupd;
+   bool blank;
+   QLinuxFbScreen::DriverTypes driverType;
 
-    bool doGraphicsMode;
+   bool doGraphicsMode;
 #ifdef QT_QWS_DEPTH_GENERIC
-    bool doGenericColors;
+   bool doGenericColors;
 #endif
-    int ttyfd;
-    long oldKdMode;
-    QString ttyDevice;
-    QString displaySpec;
+   int ttyfd;
+   long oldKdMode;
+   QString ttyDevice;
+   QString displaySpec;
 };
 
 QLinuxFbScreenPrivate::QLinuxFbScreenPrivate()
-    : fd(-1), blank(true), doGraphicsMode(true),
+   : fd(-1), blank(true), doGraphicsMode(true),
 #ifdef QT_QWS_DEPTH_GENERIC
-      doGenericColors(false),
+     doGenericColors(false),
 #endif
-      ttyfd(-1), oldKdMode(KD_TEXT)
+     ttyfd(-1), oldKdMode(KD_TEXT)
 {
 #ifndef QT_NO_QWS_SIGNALHANDLER
-    QWSSignalHandler::instance()->addObject(this);
+   QWSSignalHandler::instance()->addObject(this);
 #endif
 }
 
 QLinuxFbScreenPrivate::~QLinuxFbScreenPrivate()
 {
-    closeTty();
+   closeTty();
 }
 
 void QLinuxFbScreenPrivate::openTty()
 {
-    const char *const devs[] = {"/dev/tty0", "/dev/tty", "/dev/console", 0};
+   const char *const devs[] = {"/dev/tty0", "/dev/tty", "/dev/console", 0};
 
-    if (ttyDevice.isEmpty()) {
-        for (const char * const *dev = devs; *dev; ++dev) {
-            ttyfd = QT_OPEN(*dev, O_RDWR);
-            if (ttyfd != -1)
-                break;
-        }
-    } else {
-        ttyfd = QT_OPEN(ttyDevice.toAscii().constData(), O_RDWR);
-    }
+   if (ttyDevice.isEmpty()) {
+      for (const char *const *dev = devs; *dev; ++dev) {
+         ttyfd = QT_OPEN(*dev, O_RDWR);
+         if (ttyfd != -1) {
+            break;
+         }
+      }
+   } else {
+      ttyfd = QT_OPEN(ttyDevice.toAscii().constData(), O_RDWR);
+   }
 
-    if (ttyfd == -1)
-        return;
+   if (ttyfd == -1) {
+      return;
+   }
 
-    if (doGraphicsMode) {
-        ioctl(ttyfd, KDGETMODE, &oldKdMode);
-        if (oldKdMode != KD_GRAPHICS) {
-            int ret = ioctl(ttyfd, KDSETMODE, KD_GRAPHICS);
-            if (ret == -1)
-                doGraphicsMode = false;
-        }
-    }
+   if (doGraphicsMode) {
+      ioctl(ttyfd, KDGETMODE, &oldKdMode);
+      if (oldKdMode != KD_GRAPHICS) {
+         int ret = ioctl(ttyfd, KDSETMODE, KD_GRAPHICS);
+         if (ret == -1) {
+            doGraphicsMode = false;
+         }
+      }
+   }
 
-    // No blankin' screen, no blinkin' cursor!, no cursor!
-    const char termctl[] = "\033[9;0]\033[?33l\033[?25l\033[?1c";
-    QT_WRITE(ttyfd, termctl, sizeof(termctl));
+   // No blankin' screen, no blinkin' cursor!, no cursor!
+   const char termctl[] = "\033[9;0]\033[?33l\033[?25l\033[?1c";
+   QT_WRITE(ttyfd, termctl, sizeof(termctl));
 }
 
 void QLinuxFbScreenPrivate::closeTty()
 {
-    if (ttyfd == -1)
-        return;
+   if (ttyfd == -1) {
+      return;
+   }
 
-    if (doGraphicsMode)
-        ioctl(ttyfd, KDSETMODE, oldKdMode);
+   if (doGraphicsMode) {
+      ioctl(ttyfd, KDSETMODE, oldKdMode);
+   }
 
-    // Blankin' screen, blinkin' cursor!
-    const char termctl[] = "\033[9;15]\033[?33h\033[?25h\033[?0c";
-    QT_WRITE(ttyfd, termctl, sizeof(termctl));
+   // Blankin' screen, blinkin' cursor!
+   const char termctl[] = "\033[9;15]\033[?33h\033[?25h\033[?0c";
+   QT_WRITE(ttyfd, termctl, sizeof(termctl));
 
-    QT_CLOSE(ttyfd);
-    ttyfd = -1;
+   QT_CLOSE(ttyfd);
+   ttyfd = -1;
 }
 
 /*!
@@ -171,15 +176,15 @@ void QLinuxFbScreenPrivate::closeTty()
  */
 void QLinuxFbScreen::fixupScreenInfo(fb_fix_screeninfo &finfo, fb_var_screeninfo &vinfo)
 {
-    // 8Track e-ink devices (as found in Sony PRS-505) lie
-    // about their bit depth -- they claim they're 1 bit per
-    // pixel while the only supported mode is 8 bit per pixel
-    // grayscale.
-    // Caused by this, they also miscalculate their line length.
-    if(!strcmp(finfo.id, "8TRACKFB") && vinfo.bits_per_pixel == 1) {
-        vinfo.bits_per_pixel = 8;
-        finfo.line_length = vinfo.xres;
-    }
+   // 8Track e-ink devices (as found in Sony PRS-505) lie
+   // about their bit depth -- they claim they're 1 bit per
+   // pixel while the only supported mode is 8 bit per pixel
+   // grayscale.
+   // Caused by this, they also miscalculate their line length.
+   if (!strcmp(finfo.id, "8TRACKFB") && vinfo.bits_per_pixel == 1) {
+      vinfo.bits_per_pixel = 8;
+      finfo.line_length = vinfo.xres;
+   }
 }
 
 /*!
@@ -235,12 +240,12 @@ void QLinuxFbScreen::fixupScreenInfo(fb_fix_screeninfo &finfo, fb_var_screeninfo
 */
 
 QLinuxFbScreen::QLinuxFbScreen(int display_id)
-    : QScreen(display_id, LinuxFBClass), d_ptr(new QLinuxFbScreenPrivate)
+   : QScreen(display_id, LinuxFBClass), d_ptr(new QLinuxFbScreenPrivate)
 {
-    canaccel=false;
-    clearCacheFunc = &clearCache;
+   canaccel = false;
+   clearCacheFunc = &clearCache;
 #ifdef QT_QWS_CLIENTBLIT
-    setSupportsBlitInClients(true);
+   setSupportsBlitInClients(true);
 #endif
 }
 
@@ -251,7 +256,7 @@ QLinuxFbScreen::QLinuxFbScreen(int display_id)
 QLinuxFbScreen::~QLinuxFbScreen()
 {
 #ifdef QT_NO_QWS_SIGNALHANDLER
-    delete d_ptr;
+   delete d_ptr;
 #endif
 }
 
@@ -269,235 +274,251 @@ QLinuxFbScreen::~QLinuxFbScreen()
 
 bool QLinuxFbScreen::connect(const QString &displaySpec)
 {
-    d_ptr->displaySpec = displaySpec;
+   d_ptr->displaySpec = displaySpec;
 
-    const QStringList args = displaySpec.split(QLatin1Char(':'));
+   const QStringList args = displaySpec.split(QLatin1Char(':'));
 
-    if (args.contains(QLatin1String("nographicsmodeswitch")))
-        d_ptr->doGraphicsMode = false;
+   if (args.contains(QLatin1String("nographicsmodeswitch"))) {
+      d_ptr->doGraphicsMode = false;
+   }
 
 #ifdef QT_QWS_DEPTH_GENERIC
-    if (args.contains(QLatin1String("genericcolors")))
-        d_ptr->doGenericColors = true;
+   if (args.contains(QLatin1String("genericcolors"))) {
+      d_ptr->doGenericColors = true;
+   }
 #endif
 
-    QRegExp ttyRegExp(QLatin1String("tty=(.*)"));
-    if (args.indexOf(ttyRegExp) != -1)
-        d_ptr->ttyDevice = ttyRegExp.cap(1);
+   QRegExp ttyRegExp(QLatin1String("tty=(.*)"));
+   if (args.indexOf(ttyRegExp) != -1) {
+      d_ptr->ttyDevice = ttyRegExp.cap(1);
+   }
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
 #ifndef QT_QWS_FRAMEBUFFER_LITTLE_ENDIAN
-    if (args.contains(QLatin1String("littleendian")))
+   if (args.contains(QLatin1String("littleendian")))
 #endif
-        QScreen::setFrameBufferLittleEndian(true);
+      QScreen::setFrameBufferLittleEndian(true);
 #endif
 
-    QString dev = QLatin1String("/dev/fb0");
-    foreach(QString d, args) {
-	if (d.startsWith(QLatin1Char('/'))) {
-	    dev = d;
-	    break;
-	}
-    }
+   QString dev = QLatin1String("/dev/fb0");
+   foreach(QString d, args) {
+      if (d.startsWith(QLatin1Char('/'))) {
+         dev = d;
+         break;
+      }
+   }
 
-    if (access(dev.toLatin1().constData(), R_OK|W_OK) == 0)
-        d_ptr->fd = QT_OPEN(dev.toLatin1().constData(), O_RDWR);
-    if (d_ptr->fd == -1) {
-        if (QApplication::type() == QApplication::GuiServer) {
-            perror("QScreenLinuxFb::connect");
-            qCritical("Error opening framebuffer device %s", qPrintable(dev));
-            return false;
-        }
-        if (access(dev.toLatin1().constData(), R_OK) == 0)
-            d_ptr->fd = QT_OPEN(dev.toLatin1().constData(), O_RDONLY);
-    }
+   if (access(dev.toLatin1().constData(), R_OK | W_OK) == 0) {
+      d_ptr->fd = QT_OPEN(dev.toLatin1().constData(), O_RDWR);
+   }
+   if (d_ptr->fd == -1) {
+      if (QApplication::type() == QApplication::GuiServer) {
+         perror("QScreenLinuxFb::connect");
+         qCritical("Error opening framebuffer device %s", qPrintable(dev));
+         return false;
+      }
+      if (access(dev.toLatin1().constData(), R_OK) == 0) {
+         d_ptr->fd = QT_OPEN(dev.toLatin1().constData(), O_RDONLY);
+      }
+   }
 
-    ::fb_fix_screeninfo finfo;
-    ::fb_var_screeninfo vinfo;
-    //#######################
-    // Shut up Valgrind
-    memset(&vinfo, 0, sizeof(vinfo));
-    memset(&finfo, 0, sizeof(finfo));
-    //#######################
+   ::fb_fix_screeninfo finfo;
+   ::fb_var_screeninfo vinfo;
+   //#######################
+   // Shut up Valgrind
+   memset(&vinfo, 0, sizeof(vinfo));
+   memset(&finfo, 0, sizeof(finfo));
+   //#######################
 
-    /* Get fixed screen information */
-    if (d_ptr->fd != -1 && ioctl(d_ptr->fd, FBIOGET_FSCREENINFO, &finfo)) {
-        perror("QLinuxFbScreen::connect");
-        qWarning("Error reading fixed information");
-        return false;
-    }
+   /* Get fixed screen information */
+   if (d_ptr->fd != -1 && ioctl(d_ptr->fd, FBIOGET_FSCREENINFO, &finfo)) {
+      perror("QLinuxFbScreen::connect");
+      qWarning("Error reading fixed information");
+      return false;
+   }
 
-    d_ptr->driverType = strcmp(finfo.id, "8TRACKFB") ? GenericDriver : EInk8Track;
+   d_ptr->driverType = strcmp(finfo.id, "8TRACKFB") ? GenericDriver : EInk8Track;
 
-    if (finfo.type == FB_TYPE_VGA_PLANES) {
-        qWarning("VGA16 video mode not supported");
-        return false;
-    }
+   if (finfo.type == FB_TYPE_VGA_PLANES) {
+      qWarning("VGA16 video mode not supported");
+      return false;
+   }
 
-    /* Get variable screen information */
-    if (d_ptr->fd != -1 && ioctl(d_ptr->fd, FBIOGET_VSCREENINFO, &vinfo)) {
-        perror("QLinuxFbScreen::connect");
-        qWarning("Error reading variable information");
-        return false;
-    }
+   /* Get variable screen information */
+   if (d_ptr->fd != -1 && ioctl(d_ptr->fd, FBIOGET_VSCREENINFO, &vinfo)) {
+      perror("QLinuxFbScreen::connect");
+      qWarning("Error reading variable information");
+      return false;
+   }
 
-    fixupScreenInfo(finfo, vinfo);
+   fixupScreenInfo(finfo, vinfo);
 
-    grayscale = vinfo.grayscale;
-    d = vinfo.bits_per_pixel;
-    if (d == 24) {
-        d = vinfo.red.length + vinfo.green.length + vinfo.blue.length;
-        if (d <= 0)
-            d = 24; // reset if color component lengths are not reported
-    } else if (d == 16) {
-        d = vinfo.red.length + vinfo.green.length + vinfo.blue.length;
-        if (d <= 0)
-            d = 16;
-    }
-    lstep = finfo.line_length;
+   grayscale = vinfo.grayscale;
+   d = vinfo.bits_per_pixel;
+   if (d == 24) {
+      d = vinfo.red.length + vinfo.green.length + vinfo.blue.length;
+      if (d <= 0) {
+         d = 24;   // reset if color component lengths are not reported
+      }
+   } else if (d == 16) {
+      d = vinfo.red.length + vinfo.green.length + vinfo.blue.length;
+      if (d <= 0) {
+         d = 16;
+      }
+   }
+   lstep = finfo.line_length;
 
-    int xoff = vinfo.xoffset;
-    int yoff = vinfo.yoffset;
-    const char* qwssize;
-    if((qwssize=::getenv("QWS_SIZE")) && sscanf(qwssize,"%dx%d",&w,&h)==2) {
-        if (d_ptr->fd != -1) {
-            if ((uint)w > vinfo.xres) w = vinfo.xres;
-            if ((uint)h > vinfo.yres) h = vinfo.yres;
-        }
-        dw=w;
-        dh=h;
-        int xxoff, yyoff;
-        if (sscanf(qwssize, "%*dx%*d+%d+%d", &xxoff, &yyoff) == 2) {
-            if (xxoff < 0 || xxoff + w > (int)vinfo.xres)
-                xxoff = vinfo.xres - w;
-            if (yyoff < 0 || yyoff + h > (int)vinfo.yres)
-                yyoff = vinfo.yres - h;
-            xoff += xxoff;
-            yoff += yyoff;
-        } else {
-            xoff += (vinfo.xres - w)/2;
-            yoff += (vinfo.yres - h)/2;
-        }
-    } else {
-        dw=w=vinfo.xres;
-        dh=h=vinfo.yres;
-    }
+   int xoff = vinfo.xoffset;
+   int yoff = vinfo.yoffset;
+   const char *qwssize;
+   if ((qwssize =::getenv("QWS_SIZE")) && sscanf(qwssize, "%dx%d", &w, &h) == 2) {
+      if (d_ptr->fd != -1) {
+         if ((uint)w > vinfo.xres) {
+            w = vinfo.xres;
+         }
+         if ((uint)h > vinfo.yres) {
+            h = vinfo.yres;
+         }
+      }
+      dw = w;
+      dh = h;
+      int xxoff, yyoff;
+      if (sscanf(qwssize, "%*dx%*d+%d+%d", &xxoff, &yyoff) == 2) {
+         if (xxoff < 0 || xxoff + w > (int)vinfo.xres) {
+            xxoff = vinfo.xres - w;
+         }
+         if (yyoff < 0 || yyoff + h > (int)vinfo.yres) {
+            yyoff = vinfo.yres - h;
+         }
+         xoff += xxoff;
+         yoff += yyoff;
+      } else {
+         xoff += (vinfo.xres - w) / 2;
+         yoff += (vinfo.yres - h) / 2;
+      }
+   } else {
+      dw = w = vinfo.xres;
+      dh = h = vinfo.yres;
+   }
 
-    if (w == 0 || h == 0) {
-        qWarning("QScreenLinuxFb::connect(): Unable to find screen geometry, "
-                 "will use 320x240.");
-        dw = w = 320;
-        dh = h = 240;
-    }
+   if (w == 0 || h == 0) {
+      qWarning("QScreenLinuxFb::connect(): Unable to find screen geometry, "
+               "will use 320x240.");
+      dw = w = 320;
+      dh = h = 240;
+   }
 
-    setPixelFormat(vinfo);
+   setPixelFormat(vinfo);
 
-    // Handle display physical size spec.
-    QStringList displayArgs = displaySpec.split(QLatin1Char(':'));
-    QRegExp mmWidthRx(QLatin1String("mmWidth=?(\\d+)"));
-    int dimIdxW = displayArgs.indexOf(mmWidthRx);
-    QRegExp mmHeightRx(QLatin1String("mmHeight=?(\\d+)"));
-    int dimIdxH = displayArgs.indexOf(mmHeightRx);
-    if (dimIdxW >= 0) {
-        mmWidthRx.exactMatch(displayArgs.at(dimIdxW));
-        physWidth = mmWidthRx.cap(1).toInt();
-        if (dimIdxH < 0)
-            physHeight = dh*physWidth/dw;
-    }
-    if (dimIdxH >= 0) {
-        mmHeightRx.exactMatch(displayArgs.at(dimIdxH));
-        physHeight = mmHeightRx.cap(1).toInt();
-        if (dimIdxW < 0)
-            physWidth = dw*physHeight/dh;
-    }
-    if (dimIdxW < 0 && dimIdxH < 0) {
-        if (vinfo.width != 0 && vinfo.height != 0
+   // Handle display physical size spec.
+   QStringList displayArgs = displaySpec.split(QLatin1Char(':'));
+   QRegExp mmWidthRx(QLatin1String("mmWidth=?(\\d+)"));
+   int dimIdxW = displayArgs.indexOf(mmWidthRx);
+   QRegExp mmHeightRx(QLatin1String("mmHeight=?(\\d+)"));
+   int dimIdxH = displayArgs.indexOf(mmHeightRx);
+   if (dimIdxW >= 0) {
+      mmWidthRx.exactMatch(displayArgs.at(dimIdxW));
+      physWidth = mmWidthRx.cap(1).toInt();
+      if (dimIdxH < 0) {
+         physHeight = dh * physWidth / dw;
+      }
+   }
+   if (dimIdxH >= 0) {
+      mmHeightRx.exactMatch(displayArgs.at(dimIdxH));
+      physHeight = mmHeightRx.cap(1).toInt();
+      if (dimIdxW < 0) {
+         physWidth = dw * physHeight / dh;
+      }
+   }
+   if (dimIdxW < 0 && dimIdxH < 0) {
+      if (vinfo.width != 0 && vinfo.height != 0
             && vinfo.width != UINT_MAX && vinfo.height != UINT_MAX) {
-            physWidth = vinfo.width;
-            physHeight = vinfo.height;
-        } else {
-            const int dpi = 72;
-            physWidth = qRound(dw * 25.4 / dpi);
-            physHeight = qRound(dh * 25.4 / dpi);
-        }
-    }
+         physWidth = vinfo.width;
+         physHeight = vinfo.height;
+      } else {
+         const int dpi = 72;
+         physWidth = qRound(dw * 25.4 / dpi);
+         physHeight = qRound(dh * 25.4 / dpi);
+      }
+   }
 
-    dataoffset = yoff * lstep + xoff * d / 8;
-    //qDebug("Using %dx%dx%d screen",w,h,d);
+   dataoffset = yoff * lstep + xoff * d / 8;
+   //qDebug("Using %dx%dx%d screen",w,h,d);
 
-    /* Figure out the size of the screen in bytes */
-    size = h * lstep;
+   /* Figure out the size of the screen in bytes */
+   size = h * lstep;
 
-    mapsize = finfo.smem_len;
+   mapsize = finfo.smem_len;
 
-    data = (unsigned char *)-1;
-    if (d_ptr->fd != -1)
-        data = (unsigned char *)mmap(0, mapsize, PROT_READ | PROT_WRITE,
-                                     MAP_SHARED, d_ptr->fd, 0);
+   data = (unsigned char *) - 1;
+   if (d_ptr->fd != -1)
+      data = (unsigned char *)mmap(0, mapsize, PROT_READ | PROT_WRITE,
+                                   MAP_SHARED, d_ptr->fd, 0);
 
-    if ((long)data == -1) {
-        if (QApplication::type() == QApplication::GuiServer) {
-            perror("QLinuxFbScreen::connect");
-            qWarning("Error: failed to map framebuffer device to memory.");
-            return false;
-        }
-        data = 0;
-    } else {
-        data += dataoffset;
-    }
+   if ((long)data == -1) {
+      if (QApplication::type() == QApplication::GuiServer) {
+         perror("QLinuxFbScreen::connect");
+         qWarning("Error: failed to map framebuffer device to memory.");
+         return false;
+      }
+      data = 0;
+   } else {
+      data += dataoffset;
+   }
 
-    canaccel = useOffscreen();
-    if(canaccel)
-        setupOffScreen();
+   canaccel = useOffscreen();
+   if (canaccel) {
+      setupOffScreen();
+   }
 
-    // Now read in palette
-    if((vinfo.bits_per_pixel==8) || (vinfo.bits_per_pixel==4)) {
-        screencols= (vinfo.bits_per_pixel==8) ? 256 : 16;
-        int loopc;
-        ::fb_cmap startcmap;
-        startcmap.start=0;
-        startcmap.len=screencols;
-        startcmap.red=(unsigned short int *)
-                 malloc(sizeof(unsigned short int)*screencols);
-        startcmap.green=(unsigned short int *)
-                   malloc(sizeof(unsigned short int)*screencols);
-        startcmap.blue=(unsigned short int *)
-                  malloc(sizeof(unsigned short int)*screencols);
-        startcmap.transp=(unsigned short int *)
-                    malloc(sizeof(unsigned short int)*screencols);
-        if (d_ptr->fd == -1 || ioctl(d_ptr->fd, FBIOGETCMAP, &startcmap)) {
-            perror("QLinuxFbScreen::connect");
-            qWarning("Error reading palette from framebuffer, using default palette");
-            createPalette(startcmap, vinfo, finfo);
-        }
-        int bits_used = 0;
-        for(loopc=0;loopc<screencols;loopc++) {
-            screenclut[loopc]=qRgb(startcmap.red[loopc] >> 8,
-                                   startcmap.green[loopc] >> 8,
-                                   startcmap.blue[loopc] >> 8);
-            bits_used |= startcmap.red[loopc]
-                         | startcmap.green[loopc]
-                         | startcmap.blue[loopc];
-        }
-        // WORKAROUND: Some framebuffer drivers only return 8 bit
-        // color values, so we need to not bit shift them..
-        if ((bits_used & 0x00ff) && !(bits_used & 0xff00)) {
-            for(loopc=0;loopc<screencols;loopc++) {
-                screenclut[loopc] = qRgb(startcmap.red[loopc],
-                                         startcmap.green[loopc],
-                                         startcmap.blue[loopc]);
-            }
-            qWarning("8 bits cmap returned due to faulty FB driver, colors corrected");
-        }
-        free(startcmap.red);
-        free(startcmap.green);
-        free(startcmap.blue);
-        free(startcmap.transp);
-    } else {
-        screencols=0;
-    }
+   // Now read in palette
+   if ((vinfo.bits_per_pixel == 8) || (vinfo.bits_per_pixel == 4)) {
+      screencols = (vinfo.bits_per_pixel == 8) ? 256 : 16;
+      int loopc;
+      ::fb_cmap startcmap;
+      startcmap.start = 0;
+      startcmap.len = screencols;
+      startcmap.red = (unsigned short int *)
+                      malloc(sizeof(unsigned short int) * screencols);
+      startcmap.green = (unsigned short int *)
+                        malloc(sizeof(unsigned short int) * screencols);
+      startcmap.blue = (unsigned short int *)
+                       malloc(sizeof(unsigned short int) * screencols);
+      startcmap.transp = (unsigned short int *)
+                         malloc(sizeof(unsigned short int) * screencols);
+      if (d_ptr->fd == -1 || ioctl(d_ptr->fd, FBIOGETCMAP, &startcmap)) {
+         perror("QLinuxFbScreen::connect");
+         qWarning("Error reading palette from framebuffer, using default palette");
+         createPalette(startcmap, vinfo, finfo);
+      }
+      int bits_used = 0;
+      for (loopc = 0; loopc < screencols; loopc++) {
+         screenclut[loopc] = qRgb(startcmap.red[loopc] >> 8,
+                                  startcmap.green[loopc] >> 8,
+                                  startcmap.blue[loopc] >> 8);
+         bits_used |= startcmap.red[loopc]
+                      | startcmap.green[loopc]
+                      | startcmap.blue[loopc];
+      }
+      // WORKAROUND: Some framebuffer drivers only return 8 bit
+      // color values, so we need to not bit shift them..
+      if ((bits_used & 0x00ff) && !(bits_used & 0xff00)) {
+         for (loopc = 0; loopc < screencols; loopc++) {
+            screenclut[loopc] = qRgb(startcmap.red[loopc],
+                                     startcmap.green[loopc],
+                                     startcmap.blue[loopc]);
+         }
+         qWarning("8 bits cmap returned due to faulty FB driver, colors corrected");
+      }
+      free(startcmap.red);
+      free(startcmap.green);
+      free(startcmap.blue);
+      free(startcmap.transp);
+   } else {
+      screencols = 0;
+   }
 
-    return true;
+   return true;
 }
 
 /*!
@@ -510,142 +531,144 @@ bool QLinuxFbScreen::connect(const QString &displaySpec)
 
 void QLinuxFbScreen::disconnect()
 {
-    data -= dataoffset;
-    if (data)
-        munmap((char*)data,mapsize);
-    close(d_ptr->fd);
+   data -= dataoffset;
+   if (data) {
+      munmap((char *)data, mapsize);
+   }
+   close(d_ptr->fd);
 }
 
 // #define DEBUG_VINFO
 
 void QLinuxFbScreen::createPalette(fb_cmap &cmap, fb_var_screeninfo &vinfo, fb_fix_screeninfo &finfo)
 {
-    if((vinfo.bits_per_pixel==8) || (vinfo.bits_per_pixel==4)) {
-        screencols= (vinfo.bits_per_pixel==8) ? 256 : 16;
-        cmap.start=0;
-        cmap.len=screencols;
-        cmap.red=(unsigned short int *)
-                 malloc(sizeof(unsigned short int)*screencols);
-        cmap.green=(unsigned short int *)
-                   malloc(sizeof(unsigned short int)*screencols);
-        cmap.blue=(unsigned short int *)
-                  malloc(sizeof(unsigned short int)*screencols);
-        cmap.transp=(unsigned short int *)
-                    malloc(sizeof(unsigned short int)*screencols);
+   if ((vinfo.bits_per_pixel == 8) || (vinfo.bits_per_pixel == 4)) {
+      screencols = (vinfo.bits_per_pixel == 8) ? 256 : 16;
+      cmap.start = 0;
+      cmap.len = screencols;
+      cmap.red = (unsigned short int *)
+                 malloc(sizeof(unsigned short int) * screencols);
+      cmap.green = (unsigned short int *)
+                   malloc(sizeof(unsigned short int) * screencols);
+      cmap.blue = (unsigned short int *)
+                  malloc(sizeof(unsigned short int) * screencols);
+      cmap.transp = (unsigned short int *)
+                    malloc(sizeof(unsigned short int) * screencols);
 
-        if (screencols==16) {
-            if (finfo.type == FB_TYPE_PACKED_PIXELS) {
-                // We'll setup a grayscale cmap for 4bpp linear
-                int val = 0;
-                for (int idx = 0; idx < 16; ++idx, val += 17) {
-                    cmap.red[idx] = (val<<8)|val;
-                    cmap.green[idx] = (val<<8)|val;
-                    cmap.blue[idx] = (val<<8)|val;
-                    screenclut[idx]=qRgb(val, val, val);
-                }
-            } else {
-                // Default 16 colour palette                
-                //                             black  d_gray l_gray white  red  green  blue cyan magenta yellow
+      if (screencols == 16) {
+         if (finfo.type == FB_TYPE_PACKED_PIXELS) {
+            // We'll setup a grayscale cmap for 4bpp linear
+            int val = 0;
+            for (int idx = 0; idx < 16; ++idx, val += 17) {
+               cmap.red[idx] = (val << 8) | val;
+               cmap.green[idx] = (val << 8) | val;
+               cmap.blue[idx] = (val << 8) | val;
+               screenclut[idx] = qRgb(val, val, val);
+            }
+         } else {
+            // Default 16 colour palette
+            //                             black  d_gray l_gray white  red  green  blue cyan magenta yellow
 
-                unsigned char reds[16]   = { 0x00, 0x7F, 0xBF, 0xFF, 0xFF, 0xA2, 0x00, 0xFF, 0xFF, 0x00, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x82 };
-                unsigned char greens[16] = { 0x00, 0x7F, 0xBF, 0xFF, 0x00, 0xC5, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x7F, 0x7F, 0x7F };
-                unsigned char blues[16]  = { 0x00, 0x7F, 0xBF, 0xFF, 0x00, 0x11, 0xFF, 0x00, 0xFF, 0xFF, 0x00, 0x7F, 0x7F, 0x7F, 0x00, 0x00 };
+            unsigned char reds[16]   = { 0x00, 0x7F, 0xBF, 0xFF, 0xFF, 0xA2, 0x00, 0xFF, 0xFF, 0x00, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x82 };
+            unsigned char greens[16] = { 0x00, 0x7F, 0xBF, 0xFF, 0x00, 0xC5, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x7F, 0x7F, 0x7F };
+            unsigned char blues[16]  = { 0x00, 0x7F, 0xBF, 0xFF, 0x00, 0x11, 0xFF, 0x00, 0xFF, 0xFF, 0x00, 0x7F, 0x7F, 0x7F, 0x00, 0x00 };
 
-                for (int idx = 0; idx < 16; ++idx) {
-                    cmap.red[idx] = ((reds[idx]) << 8)|reds[idx];
-                    cmap.green[idx] = ((greens[idx]) << 8)|greens[idx];
-                    cmap.blue[idx] = ((blues[idx]) << 8)|blues[idx];
-                    cmap.transp[idx] = 0;
-                    screenclut[idx]=qRgb(reds[idx], greens[idx], blues[idx]);
-                }
+            for (int idx = 0; idx < 16; ++idx) {
+               cmap.red[idx] = ((reds[idx]) << 8) | reds[idx];
+               cmap.green[idx] = ((greens[idx]) << 8) | greens[idx];
+               cmap.blue[idx] = ((blues[idx]) << 8) | blues[idx];
+               cmap.transp[idx] = 0;
+               screenclut[idx] = qRgb(reds[idx], greens[idx], blues[idx]);
             }
-        } else {
-            if (grayscale) {
-                // Build grayscale palette
-                int i;
-                for(i=0;i<screencols;++i) {
-                    int bval = screencols == 256 ? i : (i << 4);
-                    ushort val = (bval << 8) | bval;
-                    cmap.red[i] = val;
-                    cmap.green[i] = val;
-                    cmap.blue[i] = val;
-                    cmap.transp[i] = 0;
-                    screenclut[i] = qRgb(bval,bval,bval);
-                }
-            } else {
-                // 6x6x6 216 color cube
-                int idx = 0;
-                for(int ir = 0x0; ir <= 0xff; ir+=0x33) {
-                    for(int ig = 0x0; ig <= 0xff; ig+=0x33) {
-                        for(int ib = 0x0; ib <= 0xff; ib+=0x33) {
-                            cmap.red[idx] = (ir << 8)|ir;
-                            cmap.green[idx] = (ig << 8)|ig;
-                            cmap.blue[idx] = (ib << 8)|ib;
-                            cmap.transp[idx] = 0;
-                            screenclut[idx]=qRgb(ir, ig, ib);
-                            ++idx;
-                        }
-                    }
-                }
-                // Fill in rest with 0
-                for (int loopc=0; loopc<40; ++loopc) {
-                    screenclut[idx]=0;
-                    ++idx;
-                }
-                screencols=idx;
+         }
+      } else {
+         if (grayscale) {
+            // Build grayscale palette
+            int i;
+            for (i = 0; i < screencols; ++i) {
+               int bval = screencols == 256 ? i : (i << 4);
+               ushort val = (bval << 8) | bval;
+               cmap.red[i] = val;
+               cmap.green[i] = val;
+               cmap.blue[i] = val;
+               cmap.transp[i] = 0;
+               screenclut[i] = qRgb(bval, bval, bval);
             }
-        }
-    } else if(finfo.visual==FB_VISUAL_DIRECTCOLOR) {
-        cmap.start=0;
-        int rbits=0,gbits=0,bbits=0;
-        switch (vinfo.bits_per_pixel) {
-        case 8:
-            rbits=vinfo.red.length;
-            gbits=vinfo.green.length;
-            bbits=vinfo.blue.length;
-            if(rbits==0 && gbits==0 && bbits==0) {
-                // cyber2000 driver bug hack
-                rbits=3;
-                gbits=3;
-                bbits=2;
+         } else {
+            // 6x6x6 216 color cube
+            int idx = 0;
+            for (int ir = 0x0; ir <= 0xff; ir += 0x33) {
+               for (int ig = 0x0; ig <= 0xff; ig += 0x33) {
+                  for (int ib = 0x0; ib <= 0xff; ib += 0x33) {
+                     cmap.red[idx] = (ir << 8) | ir;
+                     cmap.green[idx] = (ig << 8) | ig;
+                     cmap.blue[idx] = (ib << 8) | ib;
+                     cmap.transp[idx] = 0;
+                     screenclut[idx] = qRgb(ir, ig, ib);
+                     ++idx;
+                  }
+               }
+            }
+            // Fill in rest with 0
+            for (int loopc = 0; loopc < 40; ++loopc) {
+               screenclut[idx] = 0;
+               ++idx;
+            }
+            screencols = idx;
+         }
+      }
+   } else if (finfo.visual == FB_VISUAL_DIRECTCOLOR) {
+      cmap.start = 0;
+      int rbits = 0, gbits = 0, bbits = 0;
+      switch (vinfo.bits_per_pixel) {
+         case 8:
+            rbits = vinfo.red.length;
+            gbits = vinfo.green.length;
+            bbits = vinfo.blue.length;
+            if (rbits == 0 && gbits == 0 && bbits == 0) {
+               // cyber2000 driver bug hack
+               rbits = 3;
+               gbits = 3;
+               bbits = 2;
             }
             break;
-        case 15:
-            rbits=5;
-            gbits=5;
-            bbits=5;
+         case 15:
+            rbits = 5;
+            gbits = 5;
+            bbits = 5;
             break;
-        case 16:
-            rbits=5;
-            gbits=6;
-            bbits=5;
+         case 16:
+            rbits = 5;
+            gbits = 6;
+            bbits = 5;
             break;
-        case 18:
-        case 19:
-            rbits=6;
-            gbits=6;
-            bbits=6;
+         case 18:
+         case 19:
+            rbits = 6;
+            gbits = 6;
+            bbits = 6;
             break;
-        case 24: case 32:
-            rbits=gbits=bbits=8;
+         case 24:
+         case 32:
+            rbits = gbits = bbits = 8;
             break;
-        }
-        screencols=cmap.len=1<<qMax(rbits,qMax(gbits,bbits));
-        cmap.red=(unsigned short int *)
-                 malloc(sizeof(unsigned short int)*256);
-        cmap.green=(unsigned short int *)
-                   malloc(sizeof(unsigned short int)*256);
-        cmap.blue=(unsigned short int *)
-                  malloc(sizeof(unsigned short int)*256);
-        cmap.transp=(unsigned short int *)
-                    malloc(sizeof(unsigned short int)*256);
-        for(unsigned int i = 0x0; i < cmap.len; i++) {
-            cmap.red[i] = i*65535/((1<<rbits)-1);
-            cmap.green[i] = i*65535/((1<<gbits)-1);
-            cmap.blue[i] = i*65535/((1<<bbits)-1);
-            cmap.transp[i] = 0;
-        }
-    }
+      }
+      screencols = cmap.len = 1 << qMax(rbits, qMax(gbits, bbits));
+      cmap.red = (unsigned short int *)
+                 malloc(sizeof(unsigned short int) * 256);
+      cmap.green = (unsigned short int *)
+                   malloc(sizeof(unsigned short int) * 256);
+      cmap.blue = (unsigned short int *)
+                  malloc(sizeof(unsigned short int) * 256);
+      cmap.transp = (unsigned short int *)
+                    malloc(sizeof(unsigned short int) * 256);
+      for (unsigned int i = 0x0; i < cmap.len; i++) {
+         cmap.red[i] = i * 65535 / ((1 << rbits) - 1);
+         cmap.green[i] = i * 65535 / ((1 << gbits) - 1);
+         cmap.blue[i] = i * 65535 / ((1 << bbits) - 1);
+         cmap.transp[i] = 0;
+      }
+   }
 }
 
 /*!
@@ -659,127 +682,125 @@ void QLinuxFbScreen::createPalette(fb_cmap &cmap, fb_var_screeninfo &vinfo, fb_f
 
 bool QLinuxFbScreen::initDevice()
 {
-    d_ptr->openTty();
+   d_ptr->openTty();
 
-    // Grab current mode so we can reset it
-    fb_var_screeninfo vinfo;
-    fb_fix_screeninfo finfo;
-    //#######################
-    // Shut up Valgrind
-    memset(&vinfo, 0, sizeof(vinfo));
-    memset(&finfo, 0, sizeof(finfo));
-    //#######################
+   // Grab current mode so we can reset it
+   fb_var_screeninfo vinfo;
+   fb_fix_screeninfo finfo;
+   //#######################
+   // Shut up Valgrind
+   memset(&vinfo, 0, sizeof(vinfo));
+   memset(&finfo, 0, sizeof(finfo));
+   //#######################
 
-    if (ioctl(d_ptr->fd, FBIOGET_VSCREENINFO, &vinfo)) {
-        perror("QLinuxFbScreen::initDevice");
-        qFatal("Error reading variable information in card init");
-        return false;
-    }
+   if (ioctl(d_ptr->fd, FBIOGET_VSCREENINFO, &vinfo)) {
+      perror("QLinuxFbScreen::initDevice");
+      qFatal("Error reading variable information in card init");
+      return false;
+   }
 
 #ifdef DEBUG_VINFO
-    qDebug("Greyscale %d",vinfo.grayscale);
-    qDebug("Nonstd %d",vinfo.nonstd);
-    qDebug("Red %d %d %d",vinfo.red.offset,vinfo.red.length,
-           vinfo.red.msb_right);
-    qDebug("Green %d %d %d",vinfo.green.offset,vinfo.green.length,
-           vinfo.green.msb_right);
-    qDebug("Blue %d %d %d",vinfo.blue.offset,vinfo.blue.length,
-           vinfo.blue.msb_right);
-    qDebug("Transparent %d %d %d",vinfo.transp.offset,vinfo.transp.length,
-           vinfo.transp.msb_right);
+   qDebug("Greyscale %d", vinfo.grayscale);
+   qDebug("Nonstd %d", vinfo.nonstd);
+   qDebug("Red %d %d %d", vinfo.red.offset, vinfo.red.length,
+          vinfo.red.msb_right);
+   qDebug("Green %d %d %d", vinfo.green.offset, vinfo.green.length,
+          vinfo.green.msb_right);
+   qDebug("Blue %d %d %d", vinfo.blue.offset, vinfo.blue.length,
+          vinfo.blue.msb_right);
+   qDebug("Transparent %d %d %d", vinfo.transp.offset, vinfo.transp.length,
+          vinfo.transp.msb_right);
 #endif
 
-    if (ioctl(d_ptr->fd, FBIOGET_FSCREENINFO, &finfo)) {
-        perror("QLinuxFbScreen::initDevice");
-        qCritical("Error reading fixed information in card init");
-        // It's not an /error/ as such, though definitely a bad sign
-        // so we return true
-        return true;
-    }
+   if (ioctl(d_ptr->fd, FBIOGET_FSCREENINFO, &finfo)) {
+      perror("QLinuxFbScreen::initDevice");
+      qCritical("Error reading fixed information in card init");
+      // It's not an /error/ as such, though definitely a bad sign
+      // so we return true
+      return true;
+   }
 
-    fixupScreenInfo(finfo, vinfo);
+   fixupScreenInfo(finfo, vinfo);
 
-    d_ptr->startupw=vinfo.xres;
-    d_ptr->startuph=vinfo.yres;
-    d_ptr->startupd=vinfo.bits_per_pixel;
-    grayscale = vinfo.grayscale;
+   d_ptr->startupw = vinfo.xres;
+   d_ptr->startuph = vinfo.yres;
+   d_ptr->startupd = vinfo.bits_per_pixel;
+   grayscale = vinfo.grayscale;
 
 #ifdef __i386__
-    // Now init mtrr
-    if(!::getenv("QWS_NOMTRR")) {
-        int mfd=QT_OPEN("/proc/mtrr",O_WRONLY,0);
-        // MTRR entry goes away when file is closed - i.e.
-        // hopefully when QWS is killed
-        if(mfd != -1) {
-            mtrr_sentry sentry;
-            sentry.base=(unsigned long int)finfo.smem_start;
-            //qDebug("Physical framebuffer address %p",(void*)finfo.smem_start);
-            // Size needs to be in 4k chunks, but that's not always
-            // what we get thanks to graphics card registers. Write combining
-            // these is Not Good, so we write combine what we can
-            // (which is not much - 4 megs on an 8 meg card, it seems)
-            unsigned int size=finfo.smem_len;
-            size=size >> 22;
-            size=size << 22;
-            sentry.size=size;
-            sentry.type=MTRR_TYPE_WRCOMB;
-            if(ioctl(mfd,MTRRIOC_ADD_ENTRY,&sentry)==-1) {
-                //printf("Couldn't add mtrr entry for %lx %lx, %s\n",
-                //sentry.base,sentry.size,strerror(errno));
-            }
-        }
+   // Now init mtrr
+   if (!::getenv("QWS_NOMTRR")) {
+      int mfd = QT_OPEN("/proc/mtrr", O_WRONLY, 0);
+      // MTRR entry goes away when file is closed - i.e.
+      // hopefully when QWS is killed
+      if (mfd != -1) {
+         mtrr_sentry sentry;
+         sentry.base = (unsigned long int)finfo.smem_start;
+         //qDebug("Physical framebuffer address %p",(void*)finfo.smem_start);
+         // Size needs to be in 4k chunks, but that's not always
+         // what we get thanks to graphics card registers. Write combining
+         // these is Not Good, so we write combine what we can
+         // (which is not much - 4 megs on an 8 meg card, it seems)
+         unsigned int size = finfo.smem_len;
+         size = size >> 22;
+         size = size << 22;
+         sentry.size = size;
+         sentry.type = MTRR_TYPE_WRCOMB;
+         if (ioctl(mfd, MTRRIOC_ADD_ENTRY, &sentry) == -1) {
+            //printf("Couldn't add mtrr entry for %lx %lx, %s\n",
+            //sentry.base,sentry.size,strerror(errno));
+         }
+      }
 
-        // Should we close mfd here?
-        //QT_CLOSE(mfd);
-    }
+      // Should we close mfd here?
+      //QT_CLOSE(mfd);
+   }
 #endif
-    if ((vinfo.bits_per_pixel==8) || (vinfo.bits_per_pixel==4) || (finfo.visual==FB_VISUAL_DIRECTCOLOR))
-    {
-        fb_cmap cmap;
-        createPalette(cmap, vinfo, finfo);
-        if (ioctl(d_ptr->fd, FBIOPUTCMAP, &cmap)) {
-            perror("QLinuxFbScreen::initDevice");
-            qWarning("Error writing palette to framebuffer");
-        }
-        free(cmap.red);
-        free(cmap.green);
-        free(cmap.blue);
-        free(cmap.transp);
-    }
+   if ((vinfo.bits_per_pixel == 8) || (vinfo.bits_per_pixel == 4) || (finfo.visual == FB_VISUAL_DIRECTCOLOR)) {
+      fb_cmap cmap;
+      createPalette(cmap, vinfo, finfo);
+      if (ioctl(d_ptr->fd, FBIOPUTCMAP, &cmap)) {
+         perror("QLinuxFbScreen::initDevice");
+         qWarning("Error writing palette to framebuffer");
+      }
+      free(cmap.red);
+      free(cmap.green);
+      free(cmap.blue);
+      free(cmap.transp);
+   }
 
-    if (canaccel) {
-        *entryp=0;
-        *lowest = mapsize;
-        insert_entry(*entryp, *lowest, *lowest);  // dummy entry to mark start
-    }
+   if (canaccel) {
+      *entryp = 0;
+      *lowest = mapsize;
+      insert_entry(*entryp, *lowest, *lowest);  // dummy entry to mark start
+   }
 
-    shared->fifocount = 0;
-    shared->buffer_offset = 0xffffffff;  // 0 would be a sensible offset (screen)
-    shared->linestep = 0;
-    shared->cliptop = 0xffffffff;
-    shared->clipleft = 0xffffffff;
-    shared->clipright = 0xffffffff;
-    shared->clipbottom = 0xffffffff;
-    shared->rop = 0xffffffff;
+   shared->fifocount = 0;
+   shared->buffer_offset = 0xffffffff;  // 0 would be a sensible offset (screen)
+   shared->linestep = 0;
+   shared->cliptop = 0xffffffff;
+   shared->clipleft = 0xffffffff;
+   shared->clipright = 0xffffffff;
+   shared->clipbottom = 0xffffffff;
+   shared->rop = 0xffffffff;
 
 #ifdef QT_QWS_DEPTH_GENERIC
-    if (pixelFormat() == QImage::Format_Invalid && screencols == 0
-        && d_ptr->doGenericColors)
-    {
-        qt_set_generic_blit(this, vinfo.bits_per_pixel,
-                            vinfo.red.length, vinfo.green.length,
-                            vinfo.blue.length, vinfo.transp.length,
-                            vinfo.red.offset, vinfo.green.offset,
-                            vinfo.blue.offset, vinfo.transp.offset);
-    }
+   if (pixelFormat() == QImage::Format_Invalid && screencols == 0
+         && d_ptr->doGenericColors) {
+      qt_set_generic_blit(this, vinfo.bits_per_pixel,
+                          vinfo.red.length, vinfo.green.length,
+                          vinfo.blue.length, vinfo.transp.length,
+                          vinfo.red.offset, vinfo.green.offset,
+                          vinfo.blue.offset, vinfo.transp.offset);
+   }
 #endif
 
 #ifndef QT_NO_QWS_CURSOR
-    QScreenCursor::initSoftwareCursor();
+   QScreenCursor::initSoftwareCursor();
 #endif
-    blank(false);
+   blank(false);
 
-    return true;
+   return true;
 }
 
 /*
@@ -799,64 +820,65 @@ bool QLinuxFbScreen::initDevice()
 
 void QLinuxFbScreen::delete_entry(int pos)
 {
-    if (pos > *entryp || pos < 0) {
-        qWarning("Attempt to delete odd pos! %d %d", pos, *entryp);
-        return;
-    }
+   if (pos > *entryp || pos < 0) {
+      qWarning("Attempt to delete odd pos! %d %d", pos, *entryp);
+      return;
+   }
 
 #ifdef DEBUG_CACHE
-    qDebug("Remove entry: %d", pos);
+   qDebug("Remove entry: %d", pos);
 #endif
 
-    QPoolEntry *qpe = &entries[pos];
-    if (qpe->start <= *lowest) {
-        // Lowest goes up again
-        *lowest = entries[pos-1].start;
+   QPoolEntry *qpe = &entries[pos];
+   if (qpe->start <= *lowest) {
+      // Lowest goes up again
+      *lowest = entries[pos - 1].start;
 #ifdef DEBUG_CACHE
-        qDebug("   moved lowest to %d", *lowest);
+      qDebug("   moved lowest to %d", *lowest);
 #endif
-    }
+   }
 
-    (*entryp)--;
-    if (pos == *entryp)
-        return;
+   (*entryp)--;
+   if (pos == *entryp) {
+      return;
+   }
 
-    int size = (*entryp)-pos;
-    memmove(&entries[pos], &entries[pos+1], size*sizeof(QPoolEntry));
+   int size = (*entryp) - pos;
+   memmove(&entries[pos], &entries[pos + 1], size * sizeof(QPoolEntry));
 }
 
 void QLinuxFbScreen::insert_entry(int pos, int start, int end)
 {
-    if (pos > *entryp) {
-        qWarning("Attempt to insert odd pos! %d %d",pos,*entryp);
-        return;
-    }
+   if (pos > *entryp) {
+      qWarning("Attempt to insert odd pos! %d %d", pos, *entryp);
+      return;
+   }
 
 #ifdef DEBUG_CACHE
-    qDebug("Insert entry: %d, %d -> %d", pos, start, end);
+   qDebug("Insert entry: %d, %d -> %d", pos, start, end);
 #endif
 
-    if (start < (int)*lowest) {
-        *lowest = start;
+   if (start < (int)*lowest) {
+      *lowest = start;
 #ifdef DEBUG_CACHE
-        qDebug("    moved lowest to %d", *lowest);
+      qDebug("    moved lowest to %d", *lowest);
 #endif
-    }
+   }
 
-    if (pos == *entryp) {
-        entries[pos].start = start;
-        entries[pos].end = end;
-        entries[pos].clientId = qws_client_id;
-        (*entryp)++;
-        return;
-    }
+   if (pos == *entryp) {
+      entries[pos].start = start;
+      entries[pos].end = end;
+      entries[pos].clientId = qws_client_id;
+      (*entryp)++;
+      return;
+   }
 
-    int size=(*entryp)-pos;
-    memmove(&entries[pos+1],&entries[pos],size*sizeof(QPoolEntry));
-    entries[pos].start=start;
-    entries[pos].end=end;
-    entries[pos].clientId=qws_client_id;
-    (*entryp)++;
+   int size = (*entryp) - pos;
+   memmove(&entries[pos + 1], &entries[pos], size * sizeof(QPoolEntry));
+   entries[pos].start = start;
+   entries[pos].end = end;
+   entries[pos].clientId = qws_client_id;
+   (*entryp)++;
 }
 
 /*!
@@ -876,64 +898,65 @@ void QLinuxFbScreen::insert_entry(int pos, int start, int end)
     \sa uncache(), clearCache(), deleteEntry()
 */
 
-uchar * QLinuxFbScreen::cache(int amount)
+uchar *QLinuxFbScreen::cache(int amount)
 {
-    if (!canaccel || entryp == 0)
-        return 0;
+   if (!canaccel || entryp == 0) {
+      return 0;
+   }
 
-    qt_fbdpy->grab();
+   qt_fbdpy->grab();
 
-    int startp = cacheStart + (*entryp+1) * sizeof(QPoolEntry);
-    if (startp >= (int)*lowest) {
-        // We don't have room for another cache QPoolEntry.
+   int startp = cacheStart + (*entryp + 1) * sizeof(QPoolEntry);
+   if (startp >= (int)*lowest) {
+      // We don't have room for another cache QPoolEntry.
 #ifdef DEBUG_CACHE
-        qDebug("No room for pool entry in VRAM");
+      qDebug("No room for pool entry in VRAM");
 #endif
-        qt_fbdpy->ungrab();
-        return 0;
-    }
+      qt_fbdpy->ungrab();
+      return 0;
+   }
 
-    int align = pixmapOffsetAlignment();
+   int align = pixmapOffsetAlignment();
 
-    if (*entryp > 1) {
-        // Try to find a gap in the allocated blocks.
-        for (int loopc = 0; loopc < *entryp-1; loopc++) {
-            int freestart = entries[loopc+1].end;
-            int freeend = entries[loopc].start;
-            if (freestart != freeend) {
-                while (freestart % align) {
-                    freestart++;
-                }
-                int len=freeend-freestart;
-                if (len >= amount) {
-                    insert_entry(loopc+1, freestart, freestart+amount);
-                    qt_fbdpy->ungrab();
-                    return data+freestart;
-                }
+   if (*entryp > 1) {
+      // Try to find a gap in the allocated blocks.
+      for (int loopc = 0; loopc < *entryp - 1; loopc++) {
+         int freestart = entries[loopc + 1].end;
+         int freeend = entries[loopc].start;
+         if (freestart != freeend) {
+            while (freestart % align) {
+               freestart++;
             }
-        }
-    }
+            int len = freeend - freestart;
+            if (len >= amount) {
+               insert_entry(loopc + 1, freestart, freestart + amount);
+               qt_fbdpy->ungrab();
+               return data + freestart;
+            }
+         }
+      }
+   }
 
-    // No free blocks in already-taken memory; get some more
-    // if we can
-    int newlowest = (*lowest)-amount;
-    if (newlowest % align) {
-        newlowest -= align;
-        while (newlowest % align) {
-            newlowest++;
-        }
-    }
-    if (startp >= newlowest) {
-        qt_fbdpy->ungrab();
+   // No free blocks in already-taken memory; get some more
+   // if we can
+   int newlowest = (*lowest) - amount;
+   if (newlowest % align) {
+      newlowest -= align;
+      while (newlowest % align) {
+         newlowest++;
+      }
+   }
+   if (startp >= newlowest) {
+      qt_fbdpy->ungrab();
 #ifdef DEBUG_CACHE
-        qDebug("No VRAM available for %d bytes", amount);
+      qDebug("No VRAM available for %d bytes", amount);
 #endif
-        return 0;
-    }
-    insert_entry(*entryp, newlowest, *lowest);
-    qt_fbdpy->ungrab();
+      return 0;
+   }
+   insert_entry(*entryp, newlowest, *lowest);
+   qt_fbdpy->ungrab();
 
-    return data + newlowest;
+   return data + newlowest;
 }
 
 /*!
@@ -956,11 +979,11 @@ uchar * QLinuxFbScreen::cache(int amount)
 
     \sa cache(), deleteEntry(), clearCache()
  */
-void QLinuxFbScreen::uncache(uchar * c)
+void QLinuxFbScreen::uncache(uchar *c)
 {
-    // need to sync graphics card
+   // need to sync graphics card
 
-    deleteEntry(c);
+   deleteEntry(c);
 }
 
 /*!
@@ -971,25 +994,25 @@ void QLinuxFbScreen::uncache(uchar * c)
 
     \sa uncache(), cache(), clearCache()
 */
-void QLinuxFbScreen::deleteEntry(uchar * c)
+void QLinuxFbScreen::deleteEntry(uchar *c)
 {
-    qt_fbdpy->grab();
-    unsigned long pos=(unsigned long)c;
-    pos-=((unsigned long)data);
-    unsigned int hold=(*entryp);
-    for(unsigned int loopc=1;loopc<hold;loopc++) {
-        if (entries[loopc].start==pos) {
-            if (entries[loopc].clientId == qws_client_id)
-                delete_entry(loopc);
-            else
-                qWarning("Attempt to delete client id %d cache entry",
-                         entries[loopc].clientId);
-            qt_fbdpy->ungrab();
-            return;
-        }
-    }
-    qt_fbdpy->ungrab();
-    qWarning("Attempt to delete unknown offset %ld",pos);
+   qt_fbdpy->grab();
+   unsigned long pos = (unsigned long)c;
+   pos -= ((unsigned long)data);
+   unsigned int hold = (*entryp);
+   for (unsigned int loopc = 1; loopc < hold; loopc++) {
+      if (entries[loopc].start == pos) {
+         if (entries[loopc].clientId == qws_client_id) {
+            delete_entry(loopc);
+         } else
+            qWarning("Attempt to delete client id %d cache entry",
+                     entries[loopc].clientId);
+         qt_fbdpy->ungrab();
+         return;
+      }
+   }
+   qt_fbdpy->ungrab();
+   qWarning("Attempt to delete unknown offset %ld", pos);
 }
 
 /*!
@@ -1003,41 +1026,42 @@ void QLinuxFbScreen::deleteEntry(uchar * c)
 */
 void QLinuxFbScreen::clearCache(QScreen *instance, int clientId)
 {
-    QLinuxFbScreen *screen = (QLinuxFbScreen *)instance;
-    if (!screen->canaccel || !screen->entryp)
-        return;
-    qt_fbdpy->grab();
-    for (int loopc = 0; loopc < *(screen->entryp); loopc++) {
-        if (screen->entries[loopc].clientId == clientId) {
-            screen->delete_entry(loopc);
-            loopc--;
-        }
-    }
-    qt_fbdpy->ungrab();
+   QLinuxFbScreen *screen = (QLinuxFbScreen *)instance;
+   if (!screen->canaccel || !screen->entryp) {
+      return;
+   }
+   qt_fbdpy->grab();
+   for (int loopc = 0; loopc < * (screen->entryp); loopc++) {
+      if (screen->entries[loopc].clientId == clientId) {
+         screen->delete_entry(loopc);
+         loopc--;
+      }
+   }
+   qt_fbdpy->ungrab();
 }
 
 
 void QLinuxFbScreen::setupOffScreen()
 {
-    // Figure out position of offscreen memory
-    // Set up pool entries pointer table and 64-bit align it
-    int psize = size;
+   // Figure out position of offscreen memory
+   // Set up pool entries pointer table and 64-bit align it
+   int psize = size;
 
-    // hw: this causes the limitation of cursors to 64x64
-    // the cursor should rather use the normal pixmap mechanism
-    psize += 4096;  // cursor data
-    psize += 8;     // for alignment
-    psize &= ~0x7;  // align
+   // hw: this causes the limitation of cursors to 64x64
+   // the cursor should rather use the normal pixmap mechanism
+   psize += 4096;  // cursor data
+   psize += 8;     // for alignment
+   psize &= ~0x7;  // align
 
-    unsigned long pos = (unsigned long)data;
-    pos += psize;
-    entryp = ((int *)pos);
-    lowest = ((unsigned int *)pos)+1;
-    pos += (sizeof(int))*4;
-    entries = (QPoolEntry *)pos;
+   unsigned long pos = (unsigned long)data;
+   pos += psize;
+   entryp = ((int *)pos);
+   lowest = ((unsigned int *)pos) + 1;
+   pos += (sizeof(int)) * 4;
+   entries = (QPoolEntry *)pos;
 
-    // beginning of offscreen memory available for pixmaps.
-    cacheStart = psize + 4*sizeof(int) + sizeof(QPoolEntry);
+   // beginning of offscreen memory available for pixmaps.
+   cacheStart = psize + 4 * sizeof(int) + sizeof(QPoolEntry);
 }
 
 /*!
@@ -1051,20 +1075,20 @@ void QLinuxFbScreen::setupOffScreen()
 
 void QLinuxFbScreen::shutdownDevice()
 {
-    // Causing crashes. Not needed.
-    //setMode(startupw,startuph,startupd);
-/*
-    if (startupd == 8) {
-        ioctl(fd,FBIOPUTCMAP,startcmap);
-        free(startcmap->red);
-        free(startcmap->green);
-        free(startcmap->blue);
-        free(startcmap->transp);
-        delete startcmap;
-        startcmap = 0;
-    }
-*/
-    d_ptr->closeTty();
+   // Causing crashes. Not needed.
+   //setMode(startupw,startuph,startupd);
+   /*
+       if (startupd == 8) {
+           ioctl(fd,FBIOPUTCMAP,startcmap);
+           free(startcmap->red);
+           free(startcmap->green);
+           free(startcmap->blue);
+           free(startcmap->transp);
+           delete startcmap;
+           startcmap = 0;
+       }
+   */
+   d_ptr->closeTty();
 }
 
 /*!
@@ -1074,31 +1098,31 @@ void QLinuxFbScreen::shutdownDevice()
     red, \a green, \a blue), when in paletted graphics modes.
 */
 
-void QLinuxFbScreen::set(unsigned int i,unsigned int r,unsigned int g,unsigned int b)
+void QLinuxFbScreen::set(unsigned int i, unsigned int r, unsigned int g, unsigned int b)
 {
-    if (d_ptr->fd != -1) {
-        fb_cmap cmap;
-        cmap.start=i;
-        cmap.len=1;
-        cmap.red=(unsigned short int *)
-                 malloc(sizeof(unsigned short int)*256);
-        cmap.green=(unsigned short int *)
-                   malloc(sizeof(unsigned short int)*256);
-        cmap.blue=(unsigned short int *)
-                  malloc(sizeof(unsigned short int)*256);
-        cmap.transp=(unsigned short int *)
-                    malloc(sizeof(unsigned short int)*256);
-        cmap.red[0]=r << 8;
-        cmap.green[0]=g << 8;
-        cmap.blue[0]=b << 8;
-        cmap.transp[0]=0;
-        ioctl(d_ptr->fd, FBIOPUTCMAP, &cmap);
-        free(cmap.red);
-        free(cmap.green);
-        free(cmap.blue);
-        free(cmap.transp);
-    }
-    screenclut[i] = qRgb(r, g, b);
+   if (d_ptr->fd != -1) {
+      fb_cmap cmap;
+      cmap.start = i;
+      cmap.len = 1;
+      cmap.red = (unsigned short int *)
+                 malloc(sizeof(unsigned short int) * 256);
+      cmap.green = (unsigned short int *)
+                   malloc(sizeof(unsigned short int) * 256);
+      cmap.blue = (unsigned short int *)
+                  malloc(sizeof(unsigned short int) * 256);
+      cmap.transp = (unsigned short int *)
+                    malloc(sizeof(unsigned short int) * 256);
+      cmap.red[0] = r << 8;
+      cmap.green[0] = g << 8;
+      cmap.blue[0] = b << 8;
+      cmap.transp[0] = 0;
+      ioctl(d_ptr->fd, FBIOPUTCMAP, &cmap);
+      free(cmap.red);
+      free(cmap.green);
+      free(cmap.blue);
+      free(cmap.transp);
+   }
+   screenclut[i] = qRgb(r, g, b);
 }
 
 /*!
@@ -1112,47 +1136,48 @@ void QLinuxFbScreen::set(unsigned int i,unsigned int r,unsigned int g,unsigned i
     call setMode() to the same mode and redraw.
 */
 
-void QLinuxFbScreen::setMode(int nw,int nh,int nd)
+void QLinuxFbScreen::setMode(int nw, int nh, int nd)
 {
-    if (d_ptr->fd == -1)
-        return;
+   if (d_ptr->fd == -1) {
+      return;
+   }
 
-    fb_fix_screeninfo finfo;
-    fb_var_screeninfo vinfo;
-    //#######################
-    // Shut up Valgrind
-    memset(&vinfo, 0, sizeof(vinfo));
-    memset(&finfo, 0, sizeof(finfo));
-    //#######################
+   fb_fix_screeninfo finfo;
+   fb_var_screeninfo vinfo;
+   //#######################
+   // Shut up Valgrind
+   memset(&vinfo, 0, sizeof(vinfo));
+   memset(&finfo, 0, sizeof(finfo));
+   //#######################
 
-    if (ioctl(d_ptr->fd, FBIOGET_VSCREENINFO, &vinfo)) {
-        perror("QLinuxFbScreen::setMode");
-        qFatal("Error reading variable information in mode change");
-    }
+   if (ioctl(d_ptr->fd, FBIOGET_VSCREENINFO, &vinfo)) {
+      perror("QLinuxFbScreen::setMode");
+      qFatal("Error reading variable information in mode change");
+   }
 
-    vinfo.xres=nw;
-    vinfo.yres=nh;
-    vinfo.bits_per_pixel=nd;
+   vinfo.xres = nw;
+   vinfo.yres = nh;
+   vinfo.bits_per_pixel = nd;
 
-    if (ioctl(d_ptr->fd, FBIOPUT_VSCREENINFO, &vinfo)) {
-        perror("QLinuxFbScreen::setMode");
-        qCritical("Error writing variable information in mode change");
-    }
+   if (ioctl(d_ptr->fd, FBIOPUT_VSCREENINFO, &vinfo)) {
+      perror("QLinuxFbScreen::setMode");
+      qCritical("Error writing variable information in mode change");
+   }
 
-    if (ioctl(d_ptr->fd, FBIOGET_VSCREENINFO, &vinfo)) {
-        perror("QLinuxFbScreen::setMode");
-        qFatal("Error reading changed variable information in mode change");
-    }
+   if (ioctl(d_ptr->fd, FBIOGET_VSCREENINFO, &vinfo)) {
+      perror("QLinuxFbScreen::setMode");
+      qFatal("Error reading changed variable information in mode change");
+   }
 
-    if (ioctl(d_ptr->fd, FBIOGET_FSCREENINFO, &finfo)) {
-        perror("QLinuxFbScreen::setMode");
-        qFatal("Error reading fixed information");
-    }
+   if (ioctl(d_ptr->fd, FBIOGET_FSCREENINFO, &finfo)) {
+      perror("QLinuxFbScreen::setMode");
+      qFatal("Error reading fixed information");
+   }
 
-    fixupScreenInfo(finfo, vinfo);
-    disconnect();
-    connect(d_ptr->displaySpec);
-    exposeRegion(region(), 0);
+   fixupScreenInfo(finfo, vinfo);
+   disconnect();
+   connect(d_ptr->displaySpec);
+   exposeRegion(region(), 0);
 }
 
 // save the state of the graphics card
@@ -1169,7 +1194,7 @@ void QLinuxFbScreen::setMode(int nw,int nh,int nd)
 
 void QLinuxFbScreen::save()
 {
-    // nothing to do.
+   // nothing to do.
 }
 
 
@@ -1182,33 +1207,34 @@ void QLinuxFbScreen::save()
 */
 void QLinuxFbScreen::restore()
 {
-    if (d_ptr->fd == -1)
-        return;
+   if (d_ptr->fd == -1) {
+      return;
+   }
 
-    if ((d == 8) || (d == 4)) {
-        fb_cmap cmap;
-        cmap.start=0;
-        cmap.len=screencols;
-        cmap.red=(unsigned short int *)
-                 malloc(sizeof(unsigned short int)*256);
-        cmap.green=(unsigned short int *)
-                   malloc(sizeof(unsigned short int)*256);
-        cmap.blue=(unsigned short int *)
-                  malloc(sizeof(unsigned short int)*256);
-        cmap.transp=(unsigned short int *)
-                    malloc(sizeof(unsigned short int)*256);
-        for (int loopc = 0; loopc < screencols; loopc++) {
-            cmap.red[loopc] = qRed(screenclut[loopc]) << 8;
-            cmap.green[loopc] = qGreen(screenclut[loopc]) << 8;
-            cmap.blue[loopc] = qBlue(screenclut[loopc]) << 8;
-            cmap.transp[loopc] = 0;
-        }
-        ioctl(d_ptr->fd, FBIOPUTCMAP, &cmap);
-        free(cmap.red);
-        free(cmap.green);
-        free(cmap.blue);
-        free(cmap.transp);
-    }
+   if ((d == 8) || (d == 4)) {
+      fb_cmap cmap;
+      cmap.start = 0;
+      cmap.len = screencols;
+      cmap.red = (unsigned short int *)
+                 malloc(sizeof(unsigned short int) * 256);
+      cmap.green = (unsigned short int *)
+                   malloc(sizeof(unsigned short int) * 256);
+      cmap.blue = (unsigned short int *)
+                  malloc(sizeof(unsigned short int) * 256);
+      cmap.transp = (unsigned short int *)
+                    malloc(sizeof(unsigned short int) * 256);
+      for (int loopc = 0; loopc < screencols; loopc++) {
+         cmap.red[loopc] = qRed(screenclut[loopc]) << 8;
+         cmap.green[loopc] = qGreen(screenclut[loopc]) << 8;
+         cmap.blue[loopc] = qBlue(screenclut[loopc]) << 8;
+         cmap.transp[loopc] = 0;
+      }
+      ioctl(d_ptr->fd, FBIOPUTCMAP, &cmap);
+      free(cmap.red);
+      free(cmap.green);
+      free(cmap.blue);
+      free(cmap.transp);
+   }
 }
 
 /*!
@@ -1218,11 +1244,11 @@ void QLinuxFbScreen::restore()
 
 // This works like the QScreenCursor code. end points to the end
 // of our shared structure, we return the amount of memory we reserved
-int QLinuxFbScreen::sharedRamSize(void * end)
+int QLinuxFbScreen::sharedRamSize(void *end)
 {
-    shared=(QLinuxFb_Shared *)end;
-    shared--;
-    return sizeof(QLinuxFb_Shared);
+   shared = (QLinuxFb_Shared *)end;
+   shared--;
+   return sizeof(QLinuxFb_Shared);
 }
 
 /*!
@@ -1230,19 +1256,20 @@ int QLinuxFbScreen::sharedRamSize(void * end)
 */
 void QLinuxFbScreen::setDirty(const QRect &r)
 {
-    if(d_ptr->driverType == EInk8Track) {
-        // e-Ink displays need a trigger to actually show what is
-        // in their framebuffer memory. The 8-Track driver does this
-        // by adding custom IOCTLs - FBIO_EINK_DISP_PIC (0x46a2) takes
-        // an argument specifying whether or not to flash the screen
-        // while updating.
-        // There doesn't seem to be a way to tell it to just update
-        // a subset of the screen.
-        if(r.left() == 0 && r.top() == 0 && r.width() == dw && r.height() == dh)
-            ioctl(d_ptr->fd, 0x46a2, 1);
-        else
-            ioctl(d_ptr->fd, 0x46a2, 0);
-    }
+   if (d_ptr->driverType == EInk8Track) {
+      // e-Ink displays need a trigger to actually show what is
+      // in their framebuffer memory. The 8-Track driver does this
+      // by adding custom IOCTLs - FBIO_EINK_DISP_PIC (0x46a2) takes
+      // an argument specifying whether or not to flash the screen
+      // while updating.
+      // There doesn't seem to be a way to tell it to just update
+      // a subset of the screen.
+      if (r.left() == 0 && r.top() == 0 && r.width() == dw && r.height() == dh) {
+         ioctl(d_ptr->fd, 0x46a2, 1);
+      } else {
+         ioctl(d_ptr->fd, 0x46a2, 0);
+      }
+   }
 }
 
 /*!
@@ -1250,125 +1277,142 @@ void QLinuxFbScreen::setDirty(const QRect &r)
 */
 void QLinuxFbScreen::blank(bool on)
 {
-    if (d_ptr->blank == on)
-        return;
+   if (d_ptr->blank == on) {
+      return;
+   }
 
 #if defined(QT_QWS_IPAQ)
-    if (on)
-        system("apm -suspend");
+   if (on) {
+      system("apm -suspend");
+   }
 #else
-    if (d_ptr->fd == -1)
-        return;
-// Some old kernel versions don't have this.  These defines should go
-// away eventually
+   if (d_ptr->fd == -1) {
+      return;
+   }
+   // Some old kernel versions don't have this.  These defines should go
+   // away eventually
 #if defined(FBIOBLANK)
 #if defined(VESA_POWERDOWN) && defined(VESA_NO_BLANKING)
-    ioctl(d_ptr->fd, FBIOBLANK, on ? VESA_POWERDOWN : VESA_NO_BLANKING);
+   ioctl(d_ptr->fd, FBIOBLANK, on ? VESA_POWERDOWN : VESA_NO_BLANKING);
 #else
-    ioctl(d_ptr->fd, FBIOBLANK, on ? 1 : 0);
+   ioctl(d_ptr->fd, FBIOBLANK, on ? 1 : 0);
 #endif
 #endif
 #endif
 
-    d_ptr->blank = on;
+   d_ptr->blank = on;
 }
 
 void QLinuxFbScreen::setPixelFormat(struct fb_var_screeninfo info)
 {
-    const fb_bitfield rgba[4] = { info.red, info.green,
-                                  info.blue, info.transp };
+   const fb_bitfield rgba[4] = { info.red, info.green,
+                                 info.blue, info.transp
+                               };
 
-    QImage::Format format = QImage::Format_Invalid;
+   QImage::Format format = QImage::Format_Invalid;
 
-    switch (d) {
-    case 32: {
-        const fb_bitfield argb8888[4] = {{16, 8, 0}, {8, 8, 0},
-                                         {0, 8, 0}, {24, 8, 0}};
-        const fb_bitfield abgr8888[4] = {{0, 8, 0}, {8, 8, 0},
-                                         {16, 8, 0}, {24, 8, 0}};
-        if (memcmp(rgba, argb8888, 4 * sizeof(fb_bitfield)) == 0) {
+   switch (d) {
+      case 32: {
+         const fb_bitfield argb8888[4] = {{16, 8, 0}, {8, 8, 0},
+            {0, 8, 0}, {24, 8, 0}
+         };
+         const fb_bitfield abgr8888[4] = {{0, 8, 0}, {8, 8, 0},
+            {16, 8, 0}, {24, 8, 0}
+         };
+         if (memcmp(rgba, argb8888, 4 * sizeof(fb_bitfield)) == 0) {
             format = QImage::Format_ARGB32;
-        } else if (memcmp(rgba, argb8888, 3 * sizeof(fb_bitfield)) == 0) {
+         } else if (memcmp(rgba, argb8888, 3 * sizeof(fb_bitfield)) == 0) {
             format = QImage::Format_RGB32;
-        } else if (memcmp(rgba, abgr8888, 3 * sizeof(fb_bitfield)) == 0) {
+         } else if (memcmp(rgba, abgr8888, 3 * sizeof(fb_bitfield)) == 0) {
             format = QImage::Format_RGB32;
             pixeltype = QScreen::BGRPixel;
-        }
-        break;
-    }
-    case 24: {
-        const fb_bitfield rgb888[4] = {{16, 8, 0}, {8, 8, 0},
-                                       {0, 8, 0}, {0, 0, 0}};
-        const fb_bitfield bgr888[4] = {{0, 8, 0}, {8, 8, 0},
-                                       {16, 8, 0}, {0, 0, 0}};
-        if (memcmp(rgba, rgb888, 3 * sizeof(fb_bitfield)) == 0) {
+         }
+         break;
+      }
+      case 24: {
+         const fb_bitfield rgb888[4] = {{16, 8, 0}, {8, 8, 0},
+            {0, 8, 0}, {0, 0, 0}
+         };
+         const fb_bitfield bgr888[4] = {{0, 8, 0}, {8, 8, 0},
+            {16, 8, 0}, {0, 0, 0}
+         };
+         if (memcmp(rgba, rgb888, 3 * sizeof(fb_bitfield)) == 0) {
             format = QImage::Format_RGB888;
-        } else if (memcmp(rgba, bgr888, 3 * sizeof(fb_bitfield)) == 0) {
+         } else if (memcmp(rgba, bgr888, 3 * sizeof(fb_bitfield)) == 0) {
             format = QImage::Format_RGB888;
             pixeltype = QScreen::BGRPixel;
-        }
-        break;
-    }
-    case 18: {
-        const fb_bitfield rgb666[4] = {{12, 6, 0}, {6, 6, 0},
-                                       {0, 6, 0}, {0, 0, 0}};
-        if (memcmp(rgba, rgb666, 3 * sizeof(fb_bitfield)) == 0)
+         }
+         break;
+      }
+      case 18: {
+         const fb_bitfield rgb666[4] = {{12, 6, 0}, {6, 6, 0},
+            {0, 6, 0}, {0, 0, 0}
+         };
+         if (memcmp(rgba, rgb666, 3 * sizeof(fb_bitfield)) == 0) {
             format = QImage::Format_RGB666;
-        break;
-    }
-    case 16: {
-        const fb_bitfield rgb565[4] = {{11, 5, 0}, {5, 6, 0},
-                                       {0, 5, 0}, {0, 0, 0}};
-        const fb_bitfield bgr565[4] = {{0, 5, 0}, {5, 6, 0},
-                                       {11, 5, 0}, {0, 0, 0}};
-        if (memcmp(rgba, rgb565, 3 * sizeof(fb_bitfield)) == 0) {
+         }
+         break;
+      }
+      case 16: {
+         const fb_bitfield rgb565[4] = {{11, 5, 0}, {5, 6, 0},
+            {0, 5, 0}, {0, 0, 0}
+         };
+         const fb_bitfield bgr565[4] = {{0, 5, 0}, {5, 6, 0},
+            {11, 5, 0}, {0, 0, 0}
+         };
+         if (memcmp(rgba, rgb565, 3 * sizeof(fb_bitfield)) == 0) {
             format = QImage::Format_RGB16;
-        } else if (memcmp(rgba, bgr565, 3 * sizeof(fb_bitfield)) == 0) {
+         } else if (memcmp(rgba, bgr565, 3 * sizeof(fb_bitfield)) == 0) {
             format = QImage::Format_RGB16;
             pixeltype = QScreen::BGRPixel;
-        }
-        break;
-    }
-    case 15: {
-        const fb_bitfield rgb1555[4] = {{10, 5, 0}, {5, 5, 0},
-                                        {0, 5, 0}, {15, 1, 0}};
-        const fb_bitfield bgr1555[4] = {{0, 5, 0}, {5, 5, 0},
-                                        {10, 5, 0}, {15, 1, 0}};
-        if (memcmp(rgba, rgb1555, 3 * sizeof(fb_bitfield)) == 0) {
+         }
+         break;
+      }
+      case 15: {
+         const fb_bitfield rgb1555[4] = {{10, 5, 0}, {5, 5, 0},
+            {0, 5, 0}, {15, 1, 0}
+         };
+         const fb_bitfield bgr1555[4] = {{0, 5, 0}, {5, 5, 0},
+            {10, 5, 0}, {15, 1, 0}
+         };
+         if (memcmp(rgba, rgb1555, 3 * sizeof(fb_bitfield)) == 0) {
             format = QImage::Format_RGB555;
-        } else if (memcmp(rgba, bgr1555, 3 * sizeof(fb_bitfield)) == 0) {
+         } else if (memcmp(rgba, bgr1555, 3 * sizeof(fb_bitfield)) == 0) {
             format = QImage::Format_RGB555;
             pixeltype = QScreen::BGRPixel;
-        }
-        break;
-    }
-    case 12: {
-        const fb_bitfield rgb444[4] = {{8, 4, 0}, {4, 4, 0},
-                                       {0, 4, 0}, {0, 0, 0}};
-        if (memcmp(rgba, rgb444, 3 * sizeof(fb_bitfield)) == 0)
+         }
+         break;
+      }
+      case 12: {
+         const fb_bitfield rgb444[4] = {{8, 4, 0}, {4, 4, 0},
+            {0, 4, 0}, {0, 0, 0}
+         };
+         if (memcmp(rgba, rgb444, 3 * sizeof(fb_bitfield)) == 0) {
             format = QImage::Format_RGB444;
-        break;
-    }
-    case 8:
-        break;
-    case 1:
-        format = QImage::Format_Mono; //###: LSB???
-        break;
-    default:
-        break;
-    }
+         }
+         break;
+      }
+      case 8:
+         break;
+      case 1:
+         format = QImage::Format_Mono; //###: LSB???
+         break;
+      default:
+         break;
+   }
 
-    QScreen::setPixelFormat(format);
+   QScreen::setPixelFormat(format);
 }
 
 bool QLinuxFbScreen::useOffscreen()
 {
-    // Not done for 8Track because on e-Ink displays,
-    // everything is offscreen anyway
-    if (d_ptr->driverType == EInk8Track || ((mapsize - size) < 16*1024))
-        return false;
+   // Not done for 8Track because on e-Ink displays,
+   // everything is offscreen anyway
+   if (d_ptr->driverType == EInk8Track || ((mapsize - size) < 16 * 1024)) {
+      return false;
+   }
 
-    return true;
+   return true;
 }
 
 QT_END_NAMESPACE

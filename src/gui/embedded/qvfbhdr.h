@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -66,30 +66,28 @@ QT_BEGIN_NAMESPACE
 #define QTE_PIPE_QVFB(DISPLAY)        QTE_PIPE(DISPLAY)
 #endif
 
-struct QVFbHeader
-{
-    int width;
-    int height;
-    int depth;
-    int linestep;
-    int dataoffset;
-    QRect update;
-    bool dirty;
-    int  numcols;
-    QRgb clut[256];
-    int viewerVersion;
-    int serverVersion;
-    int brightness; // since 4.4.0
-    WId windowId; // since 4.5.0
+struct QVFbHeader {
+   int width;
+   int height;
+   int depth;
+   int linestep;
+   int dataoffset;
+   QRect update;
+   bool dirty;
+   int  numcols;
+   QRgb clut[256];
+   int viewerVersion;
+   int serverVersion;
+   int brightness; // since 4.4.0
+   WId windowId; // since 4.5.0
 };
 
-struct QVFbKeyData
-{
-    unsigned int keycode;
-    Qt::KeyboardModifiers modifiers;
-    unsigned short int unicode;
-    bool press;
-    bool repeat;
+struct QVFbKeyData {
+   unsigned int keycode;
+   Qt::KeyboardModifiers modifiers;
+   unsigned short int unicode;
+   bool press;
+   bool repeat;
 };
 
 QT_END_NAMESPACE

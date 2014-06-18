@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,33 +37,33 @@ class QSoundPrivate;
 
 class Q_GUI_EXPORT QSound : public QObject
 {
-    CS_OBJECT(QSound)
+   CS_OBJECT(QSound)
 
-public:
-    static bool isAvailable();
-    static void play(const QString& filename);
+ public:
+   static bool isAvailable();
+   static void play(const QString &filename);
 
-    explicit QSound(const QString& filename, QObject* parent = 0);
-    ~QSound();
+   explicit QSound(const QString &filename, QObject *parent = 0);
+   ~QSound();
 
-    int loops() const;
-    int loopsRemaining() const;
-    void setLoops(int);
-    QString fileName() const;
-    bool isFinished() const;
+   int loops() const;
+   int loopsRemaining() const;
+   void setLoops(int);
+   QString fileName() const;
+   bool isFinished() const;
 
-    GUI_CS_SLOT_1(Public, void play())
-    GUI_CS_SLOT_OVERLOAD(play,()) 
+   GUI_CS_SLOT_1(Public, void play())
+   GUI_CS_SLOT_OVERLOAD(play, ())
 
-    GUI_CS_SLOT_1(Public, void stop())
-    GUI_CS_SLOT_2(stop) 
+   GUI_CS_SLOT_1(Public, void stop())
+   GUI_CS_SLOT_2(stop)
 
-private:
-    Q_DECLARE_PRIVATE(QSound)
-    friend class QAuServer;
+ private:
+   Q_DECLARE_PRIVATE(QSound)
+   friend class QAuServer;
 
-protected:
-	 QScopedPointer<QSoundPrivate> d_ptr;
+ protected:
+   QScopedPointer<QSoundPrivate> d_ptr;
 
 };
 

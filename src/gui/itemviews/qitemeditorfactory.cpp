@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,16 +46,16 @@ QT_BEGIN_NAMESPACE
 
 class QBooleanComboBox : public QComboBox
 {
-    CS_OBJECT(QBooleanComboBox)
+   CS_OBJECT(QBooleanComboBox)
 
-    GUI_CS_PROPERTY_READ(value, value)
-    GUI_CS_PROPERTY_WRITE(value, setValue)
-    GUI_CS_PROPERTY_USER(value, true)
+   GUI_CS_PROPERTY_READ(value, value)
+   GUI_CS_PROPERTY_WRITE(value, setValue)
+   GUI_CS_PROPERTY_USER(value, true)
 
-public:
-    QBooleanComboBox(QWidget *parent);
-    void setValue(bool);
-    bool value() const;
+ public:
+   QBooleanComboBox(QWidget *parent);
+   void setValue(bool);
+   bool value() const;
 };
 
 #endif // QT_NO_COMBOBOX
@@ -119,12 +119,12 @@ public:
 */
 QWidget *QItemEditorFactory::createEditor(QVariant::Type type, QWidget *parent) const
 {
-    QItemEditorCreatorBase *creator = creatorMap.value(type, 0);
-    if (!creator) {
-        const QItemEditorFactory *dfactory = defaultFactory();
-        return dfactory == this ? 0 : dfactory->createEditor(type, parent);
-    }
-    return creator->createWidget(parent);
+   QItemEditorCreatorBase *creator = creatorMap.value(type, 0);
+   if (!creator) {
+      const QItemEditorFactory *dfactory = defaultFactory();
+      return dfactory == this ? 0 : dfactory->createEditor(type, parent);
+   }
+   return creator->createWidget(parent);
 }
 
 /*!
@@ -132,12 +132,12 @@ QWidget *QItemEditorFactory::createEditor(QVariant::Type type, QWidget *parent) 
 */
 QByteArray QItemEditorFactory::valuePropertyName(QVariant::Type type) const
 {
-    QItemEditorCreatorBase *creator = creatorMap.value(type, 0);
-    if (!creator) {
-        const QItemEditorFactory *dfactory = defaultFactory();
-        return dfactory == this ? QByteArray() : dfactory->valuePropertyName(type);
-    }
-    return creator->valuePropertyName();
+   QItemEditorCreatorBase *creator = creatorMap.value(type, 0);
+   if (!creator) {
+      const QItemEditorFactory *dfactory = defaultFactory();
+      return dfactory == this ? QByteArray() : dfactory->valuePropertyName(type);
+   }
+   return creator->valuePropertyName();
 }
 
 /*!
@@ -145,10 +145,10 @@ QByteArray QItemEditorFactory::valuePropertyName(QVariant::Type type) const
 */
 QItemEditorFactory::~QItemEditorFactory()
 {
-    //we make sure we delete all the QItemEditorCreatorBase
-    //this has to be done only once, hence the QSet
-    QSet<QItemEditorCreatorBase*> set = creatorMap.values().toSet();
-    qDeleteAll(set);
+   //we make sure we delete all the QItemEditorCreatorBase
+   //this has to be done only once, hence the QSet
+   QSet<QItemEditorCreatorBase *> set = creatorMap.values().toSet();
+   qDeleteAll(set);
 }
 
 /*!
@@ -161,122 +161,134 @@ QItemEditorFactory::~QItemEditorFactory()
 */
 void QItemEditorFactory::registerEditor(QVariant::Type type, QItemEditorCreatorBase *creator)
 {
-    QHash<QVariant::Type, QItemEditorCreatorBase *>::iterator it = creatorMap.find(type);
-    if (it != creatorMap.end()) {
-        QItemEditorCreatorBase *oldCreator = it.value();
-        Q_ASSERT(oldCreator);
-        creatorMap.erase(it);
-        if (!creatorMap.values().contains(oldCreator))
-            delete oldCreator; // if it is no more in use we can delete it
-    }
+   QHash<QVariant::Type, QItemEditorCreatorBase *>::iterator it = creatorMap.find(type);
+   if (it != creatorMap.end()) {
+      QItemEditorCreatorBase *oldCreator = it.value();
+      Q_ASSERT(oldCreator);
+      creatorMap.erase(it);
+      if (!creatorMap.values().contains(oldCreator)) {
+         delete oldCreator;   // if it is no more in use we can delete it
+      }
+   }
 
-    creatorMap[type] = creator;
+   creatorMap[type] = creator;
 }
 
 class QDefaultItemEditorFactory : public QItemEditorFactory
 {
-public:
-    inline QDefaultItemEditorFactory() {}
-    QWidget *createEditor(QVariant::Type type, QWidget *parent) const;
-    QByteArray valuePropertyName(QVariant::Type) const;
+ public:
+   inline QDefaultItemEditorFactory() {}
+   QWidget *createEditor(QVariant::Type type, QWidget *parent) const;
+   QByteArray valuePropertyName(QVariant::Type) const;
 };
 
 QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *parent) const
 {
-    switch (type) {
+   switch (type) {
 #ifndef QT_NO_COMBOBOX
-    case QVariant::Bool: {
-        QBooleanComboBox *cb = new QBooleanComboBox(parent);
-        cb->setFrame(false);
-        return cb; }
+      case QVariant::Bool: {
+         QBooleanComboBox *cb = new QBooleanComboBox(parent);
+         cb->setFrame(false);
+         return cb;
+      }
 #endif
 #ifndef QT_NO_SPINBOX
-    case QVariant::UInt: {
-        QSpinBox *sb = new QSpinBox(parent);
-        sb->setFrame(false);
-        sb->setMaximum(INT_MAX);
-        return sb; }
-    case QVariant::Int: {
-        QSpinBox *sb = new QSpinBox(parent);
-        sb->setFrame(false);
-        sb->setMinimum(INT_MIN);
-        sb->setMaximum(INT_MAX);
-        return sb; }
+      case QVariant::UInt: {
+         QSpinBox *sb = new QSpinBox(parent);
+         sb->setFrame(false);
+         sb->setMaximum(INT_MAX);
+         return sb;
+      }
+      case QVariant::Int: {
+         QSpinBox *sb = new QSpinBox(parent);
+         sb->setFrame(false);
+         sb->setMinimum(INT_MIN);
+         sb->setMaximum(INT_MAX);
+         return sb;
+      }
 #endif
 #ifndef QT_NO_DATETIMEEDIT
-    case QVariant::Date: {
-        QDateTimeEdit *ed = new QDateEdit(parent);
-        ed->setFrame(false);
-        return ed; }
-    case QVariant::Time: {
-        QDateTimeEdit *ed = new QTimeEdit(parent);
-        ed->setFrame(false);
-        return ed; }
-    case QVariant::DateTime: {
-        QDateTimeEdit *ed = new QDateTimeEdit(parent);
-        ed->setFrame(false);
-        return ed; }
+      case QVariant::Date: {
+         QDateTimeEdit *ed = new QDateEdit(parent);
+         ed->setFrame(false);
+         return ed;
+      }
+      case QVariant::Time: {
+         QDateTimeEdit *ed = new QTimeEdit(parent);
+         ed->setFrame(false);
+         return ed;
+      }
+      case QVariant::DateTime: {
+         QDateTimeEdit *ed = new QDateTimeEdit(parent);
+         ed->setFrame(false);
+         return ed;
+      }
 #endif
-    case QVariant::Pixmap:
-        return new QLabel(parent);
+      case QVariant::Pixmap:
+         return new QLabel(parent);
 #ifndef QT_NO_SPINBOX
-    case QVariant::Double: {
-        QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
-        sb->setFrame(false);
-        sb->setMinimum(-DBL_MAX);
-        sb->setMaximum(DBL_MAX);
-        return sb; }
+      case QVariant::Double: {
+         QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
+         sb->setFrame(false);
+         sb->setMinimum(-DBL_MAX);
+         sb->setMaximum(DBL_MAX);
+         return sb;
+      }
 #endif
 #ifndef QT_NO_LINEEDIT
-    case QVariant::String:
-    default: {
-        // the default editor is a lineedit
-        QExpandingLineEdit *le = new QExpandingLineEdit(parent);
-        le->setFrame(le->style()->styleHint(QStyle::SH_ItemView_DrawDelegateFrame, 0, le));
-        if (!le->style()->styleHint(QStyle::SH_ItemView_ShowDecorationSelected, 0, le))
+      case QVariant::String:
+      default: {
+         // the default editor is a lineedit
+         QExpandingLineEdit *le = new QExpandingLineEdit(parent);
+         le->setFrame(le->style()->styleHint(QStyle::SH_ItemView_DrawDelegateFrame, 0, le));
+         if (!le->style()->styleHint(QStyle::SH_ItemView_ShowDecorationSelected, 0, le)) {
             le->setWidgetOwnsGeometry(true);
-        return le; }
+         }
+         return le;
+      }
 #else
-    default:
-        break;
+      default:
+         break;
 #endif
-    }
-    return 0;
+   }
+   return 0;
 }
 
 QByteArray QDefaultItemEditorFactory::valuePropertyName(QVariant::Type type) const
 {
-    switch (type) {
+   switch (type) {
 #ifndef QT_NO_COMBOBOX
-    case QVariant::Bool:
-        return "currentIndex";
+      case QVariant::Bool:
+         return "currentIndex";
 #endif
 #ifndef QT_NO_SPINBOX
-    case QVariant::UInt:
-    case QVariant::Int:
-    case QVariant::Double:
-        return "value";
+      case QVariant::UInt:
+      case QVariant::Int:
+      case QVariant::Double:
+         return "value";
 #endif
 #ifndef QT_NO_DATETIMEEDIT
-    case QVariant::Date:
-        return "date";
-    case QVariant::Time:
-        return "time";
-    case QVariant::DateTime:
-        return "dateTime";
+      case QVariant::Date:
+         return "date";
+      case QVariant::Time:
+         return "time";
+      case QVariant::DateTime:
+         return "dateTime";
 #endif
-    case QVariant::String:
-    default:
-        // the default editor is a lineedit
-        return "text";
-    }
+      case QVariant::String:
+      default:
+         // the default editor is a lineedit
+         return "text";
+   }
 }
 
 static QItemEditorFactory *q_default_factory = 0;
-struct QDefaultFactoryCleaner
-{
-    inline QDefaultFactoryCleaner() {}
-    ~QDefaultFactoryCleaner() { delete q_default_factory; q_default_factory = 0; }
+struct QDefaultFactoryCleaner {
+   inline QDefaultFactoryCleaner() {}
+   ~QDefaultFactoryCleaner() {
+      delete q_default_factory;
+      q_default_factory = 0;
+   }
 };
 
 /*!
@@ -286,10 +298,11 @@ struct QDefaultFactoryCleaner
 */
 const QItemEditorFactory *QItemEditorFactory::defaultFactory()
 {
-    static const QDefaultItemEditorFactory factory;
-    if (q_default_factory)
-        return q_default_factory;
-    return &factory;
+   static const QDefaultItemEditorFactory factory;
+   if (q_default_factory) {
+      return q_default_factory;
+   }
+   return &factory;
 }
 
 /*!
@@ -300,9 +313,9 @@ const QItemEditorFactory *QItemEditorFactory::defaultFactory()
 */
 void QItemEditorFactory::setDefaultFactory(QItemEditorFactory *factory)
 {
-    static const QDefaultFactoryCleaner cleaner;
-    delete q_default_factory;
-    q_default_factory = factory;
+   static const QDefaultFactoryCleaner cleaner;
+   delete q_default_factory;
+   q_default_factory = factory;
 }
 
 /*!
@@ -476,61 +489,63 @@ void QItemEditorFactory::setDefaultFactory(QItemEditorFactory *factory)
 #ifndef QT_NO_LINEEDIT
 
 QExpandingLineEdit::QExpandingLineEdit(QWidget *parent)
-    : QLineEdit(parent), originalWidth(-1), widgetOwnsGeometry(false)
+   : QLineEdit(parent), originalWidth(-1), widgetOwnsGeometry(false)
 {
-    connect(this, SIGNAL(textChanged(const QString &)), this, SLOT(resizeToContents()));
-    updateMinimumWidth();
+   connect(this, SIGNAL(textChanged(const QString &)), this, SLOT(resizeToContents()));
+   updateMinimumWidth();
 }
 
 void QExpandingLineEdit::changeEvent(QEvent *e)
 {
-    switch (e->type())
-    {
-    case QEvent::FontChange:
-    case QEvent::StyleChange:
-    case QEvent::ContentsRectChange:
-        updateMinimumWidth();
-        break;
-    default:
-        break;
-    }
+   switch (e->type()) {
+      case QEvent::FontChange:
+      case QEvent::StyleChange:
+      case QEvent::ContentsRectChange:
+         updateMinimumWidth();
+         break;
+      default:
+         break;
+   }
 
-    QLineEdit::changeEvent(e);
+   QLineEdit::changeEvent(e);
 }
 
 void QExpandingLineEdit::updateMinimumWidth()
 {
-    int left, right;
-    getTextMargins(&left, 0, &right, 0);
-    int width = left + right + 4 /*horizontalMargin in qlineedit.cpp*/;
-    getContentsMargins(&left, 0, &right, 0);
-    width += left + right;
+   int left, right;
+   getTextMargins(&left, 0, &right, 0);
+   int width = left + right + 4 /*horizontalMargin in qlineedit.cpp*/;
+   getContentsMargins(&left, 0, &right, 0);
+   width += left + right;
 
-    QStyleOptionFrameV2 opt;
-    initStyleOption(&opt);
-    
-    int minWidth = style()->sizeFromContents(QStyle::CT_LineEdit, &opt, QSize(width, 0).
-                                      expandedTo(QApplication::globalStrut()), this).width();
-    setMinimumWidth(minWidth);
+   QStyleOptionFrameV2 opt;
+   initStyleOption(&opt);
+
+   int minWidth = style()->sizeFromContents(QStyle::CT_LineEdit, &opt, QSize(width, 0).
+                  expandedTo(QApplication::globalStrut()), this).width();
+   setMinimumWidth(minWidth);
 }
 
 void QExpandingLineEdit::resizeToContents()
 {
-    int oldWidth = width();
-    if (originalWidth == -1)
-        originalWidth = oldWidth;
-    if (QWidget *parent = parentWidget()) {
-        QPoint position = pos();
-        int hintWidth = minimumWidth() + fontMetrics().width(displayText());
-        int parentWidth = parent->width();
-        int maxWidth = isRightToLeft() ? position.x() + oldWidth : parentWidth - position.x();
-        int newWidth = qBound(originalWidth, hintWidth, maxWidth);
-        if (widgetOwnsGeometry)
-            setMaximumWidth(newWidth);
-        if (isRightToLeft())
-            move(position.x() - newWidth + oldWidth, position.y());
-        resize(newWidth, height());
-    }
+   int oldWidth = width();
+   if (originalWidth == -1) {
+      originalWidth = oldWidth;
+   }
+   if (QWidget *parent = parentWidget()) {
+      QPoint position = pos();
+      int hintWidth = minimumWidth() + fontMetrics().width(displayText());
+      int parentWidth = parent->width();
+      int maxWidth = isRightToLeft() ? position.x() + oldWidth : parentWidth - position.x();
+      int newWidth = qBound(originalWidth, hintWidth, maxWidth);
+      if (widgetOwnsGeometry) {
+         setMaximumWidth(newWidth);
+      }
+      if (isRightToLeft()) {
+         move(position.x() - newWidth + oldWidth, position.y());
+      }
+      resize(newWidth, height());
+   }
 }
 
 #endif // QT_NO_LINEEDIT
@@ -538,20 +553,20 @@ void QExpandingLineEdit::resizeToContents()
 #ifndef QT_NO_COMBOBOX
 
 QBooleanComboBox::QBooleanComboBox(QWidget *parent)
-    : QComboBox(parent)
+   : QComboBox(parent)
 {
-    addItem(QComboBox::tr("False"));
-    addItem(QComboBox::tr("True"));
+   addItem(QComboBox::tr("False"));
+   addItem(QComboBox::tr("True"));
 }
 
 void QBooleanComboBox::setValue(bool value)
 {
-    setCurrentIndex(value ? 1 : 0);
+   setCurrentIndex(value ? 1 : 0);
 }
 
 bool QBooleanComboBox::value() const
 {
-    return (currentIndex() == 1);
+   return (currentIndex() == 1);
 }
 
 #endif // QT_NO_COMBOBOX

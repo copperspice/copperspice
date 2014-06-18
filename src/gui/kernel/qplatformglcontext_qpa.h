@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,32 +35,32 @@ class QPlatformGLContextPrivate;
 
 class Q_OPENGL_EXPORT QPlatformGLContext
 {
-Q_DECLARE_PRIVATE(QPlatformGLContext);
+   Q_DECLARE_PRIVATE(QPlatformGLContext);
 
-public:
-    explicit QPlatformGLContext();
-    virtual ~QPlatformGLContext();
+ public:
+   explicit QPlatformGLContext();
+   virtual ~QPlatformGLContext();
 
-    virtual void makeCurrent();
-    virtual void doneCurrent();
-    virtual void swapBuffers() = 0;
-    virtual void* getProcAddress(const QString& procName) = 0;
+   virtual void makeCurrent();
+   virtual void doneCurrent();
+   virtual void swapBuffers() = 0;
+   virtual void *getProcAddress(const QString &procName) = 0;
 
-    virtual QPlatformWindowFormat platformWindowFormat() const = 0;
+   virtual QPlatformWindowFormat platformWindowFormat() const = 0;
 
-    const static QPlatformGLContext *currentContext();
+   const static QPlatformGLContext *currentContext();
 
-protected:
-    QScopedPointer<QPlatformGLContextPrivate> d_ptr;
+ protected:
+   QScopedPointer<QPlatformGLContextPrivate> d_ptr;
 
-private:
-    //hack to make it work with QGLContext::CurrentContext
-    friend class QGLContext;
-    friend class QWidgetPrivate;
-    void *qGLContextHandle() const;
-    void setQGLContextHandle(void *handle,void (*qGLContextDeleteFunction)(void *));
-    void deleteQGLContext();
-    Q_DISABLE_COPY(QPlatformGLContext);
+ private:
+   //hack to make it work with QGLContext::CurrentContext
+   friend class QGLContext;
+   friend class QWidgetPrivate;
+   void *qGLContextHandle() const;
+   void setQGLContextHandle(void *handle, void (*qGLContextDeleteFunction)(void *));
+   void deleteQGLContext();
+   Q_DISABLE_COPY(QPlatformGLContext);
 };
 
 QT_END_NAMESPACE

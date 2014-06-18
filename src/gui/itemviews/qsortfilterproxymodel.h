@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,193 +39,194 @@ class QSortFilterProxyModelLessThan;
 class QSortFilterProxyModelGreaterThan;
 
 class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
-{ 
-    CS_OBJECT(QSortFilterProxyModel)
+{
+   CS_OBJECT(QSortFilterProxyModel)
 
-    GUI_CS_PROPERTY_READ(filterRegExp, filterRegExp)
-    GUI_CS_PROPERTY_WRITE(filterRegExp, cs_setFilterRegExp)  
+   GUI_CS_PROPERTY_READ(filterRegExp, filterRegExp)
+   GUI_CS_PROPERTY_WRITE(filterRegExp, cs_setFilterRegExp)
 
-    GUI_CS_PROPERTY_READ(filterKeyColumn, filterKeyColumn)
-    GUI_CS_PROPERTY_WRITE(filterKeyColumn, setFilterKeyColumn)
+   GUI_CS_PROPERTY_READ(filterKeyColumn, filterKeyColumn)
+   GUI_CS_PROPERTY_WRITE(filterKeyColumn, setFilterKeyColumn)
 
-    GUI_CS_PROPERTY_READ(dynamicSortFilter, dynamicSortFilter)
-    GUI_CS_PROPERTY_WRITE(dynamicSortFilter, setDynamicSortFilter)
+   GUI_CS_PROPERTY_READ(dynamicSortFilter, dynamicSortFilter)
+   GUI_CS_PROPERTY_WRITE(dynamicSortFilter, setDynamicSortFilter)
 
-    GUI_CS_PROPERTY_READ(filterCaseSensitivity, filterCaseSensitivity)
-    GUI_CS_PROPERTY_WRITE(filterCaseSensitivity, setFilterCaseSensitivity)
+   GUI_CS_PROPERTY_READ(filterCaseSensitivity, filterCaseSensitivity)
+   GUI_CS_PROPERTY_WRITE(filterCaseSensitivity, setFilterCaseSensitivity)
 
-    GUI_CS_PROPERTY_READ(sortCaseSensitivity, sortCaseSensitivity)
-    GUI_CS_PROPERTY_WRITE(sortCaseSensitivity, setSortCaseSensitivity)
+   GUI_CS_PROPERTY_READ(sortCaseSensitivity, sortCaseSensitivity)
+   GUI_CS_PROPERTY_WRITE(sortCaseSensitivity, setSortCaseSensitivity)
 
-    GUI_CS_PROPERTY_READ(isSortLocaleAware, isSortLocaleAware)
-    GUI_CS_PROPERTY_WRITE(isSortLocaleAware, setSortLocaleAware)
+   GUI_CS_PROPERTY_READ(isSortLocaleAware, isSortLocaleAware)
+   GUI_CS_PROPERTY_WRITE(isSortLocaleAware, setSortLocaleAware)
 
-    GUI_CS_PROPERTY_READ(sortRole, sortRole)
-    GUI_CS_PROPERTY_WRITE(sortRole, setSortRole)
+   GUI_CS_PROPERTY_READ(sortRole, sortRole)
+   GUI_CS_PROPERTY_WRITE(sortRole, setSortRole)
 
-    GUI_CS_PROPERTY_READ(filterRole, filterRole)
-    GUI_CS_PROPERTY_WRITE(filterRole, setFilterRole)
+   GUI_CS_PROPERTY_READ(filterRole, filterRole)
+   GUI_CS_PROPERTY_WRITE(filterRole, setFilterRole)
 
-    friend class QSortFilterProxyModelLessThan;
-    friend class QSortFilterProxyModelGreaterThan;
+   friend class QSortFilterProxyModelLessThan;
+   friend class QSortFilterProxyModelGreaterThan;
 
-public:
-    QSortFilterProxyModel(QObject *parent = 0);
-    ~QSortFilterProxyModel();
+ public:
+   QSortFilterProxyModel(QObject *parent = 0);
+   ~QSortFilterProxyModel();
 
-    void setSourceModel(QAbstractItemModel *sourceModel);
+   void setSourceModel(QAbstractItemModel *sourceModel);
 
-    QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
-    QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
+   QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
+   QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
 
-    QItemSelection mapSelectionToSource(const QItemSelection &proxySelection) const;
-    QItemSelection mapSelectionFromSource(const QItemSelection &sourceSelection) const;
+   QItemSelection mapSelectionToSource(const QItemSelection &proxySelection) const;
+   QItemSelection mapSelectionFromSource(const QItemSelection &sourceSelection) const;
 
-    QRegExp filterRegExp() const;
-    void setFilterRegExp(const QRegExp &regExp);
-  
-    // wrapper for overloaded method
-    inline void cs_setFilterRegExp(const QRegExp &regExp); 
-       
-    int filterKeyColumn() const;
-    void setFilterKeyColumn(int column);
+   QRegExp filterRegExp() const;
+   void setFilterRegExp(const QRegExp &regExp);
 
-    Qt::CaseSensitivity filterCaseSensitivity() const;
-    void setFilterCaseSensitivity(Qt::CaseSensitivity cs);
+   // wrapper for overloaded method
+   inline void cs_setFilterRegExp(const QRegExp &regExp);
 
-    Qt::CaseSensitivity sortCaseSensitivity() const;
-    void setSortCaseSensitivity(Qt::CaseSensitivity cs);
+   int filterKeyColumn() const;
+   void setFilterKeyColumn(int column);
 
-    bool isSortLocaleAware() const;
-    void setSortLocaleAware(bool on);
+   Qt::CaseSensitivity filterCaseSensitivity() const;
+   void setFilterCaseSensitivity(Qt::CaseSensitivity cs);
 
-    int sortColumn() const;
-    Qt::SortOrder sortOrder() const;
+   Qt::CaseSensitivity sortCaseSensitivity() const;
+   void setSortCaseSensitivity(Qt::CaseSensitivity cs);
 
-    bool dynamicSortFilter() const;
-    void setDynamicSortFilter(bool enable);
+   bool isSortLocaleAware() const;
+   void setSortLocaleAware(bool on);
 
-    int sortRole() const;
-    void setSortRole(int role);
+   int sortColumn() const;
+   Qt::SortOrder sortOrder() const;
 
-    int filterRole() const;
-    void setFilterRole(int role);
+   bool dynamicSortFilter() const;
+   void setDynamicSortFilter(bool enable);
 
-    GUI_CS_SLOT_1(Public, void setFilterRegExp(const QString & pattern))
-    GUI_CS_SLOT_OVERLOAD(setFilterRegExp,(const QString &))   
+   int sortRole() const;
+   void setSortRole(int role);
 
-    GUI_CS_SLOT_1(Public, void setFilterWildcard(const QString & pattern))
-    GUI_CS_SLOT_2(setFilterWildcard) 
+   int filterRole() const;
+   void setFilterRole(int role);
 
-    GUI_CS_SLOT_1(Public, void setFilterFixedString(const QString & pattern))
-    GUI_CS_SLOT_2(setFilterFixedString) 
+   GUI_CS_SLOT_1(Public, void setFilterRegExp(const QString &pattern))
+   GUI_CS_SLOT_OVERLOAD(setFilterRegExp, (const QString &))
 
-    GUI_CS_SLOT_1(Public, void clear())
-    GUI_CS_SLOT_2(clear) 
+   GUI_CS_SLOT_1(Public, void setFilterWildcard(const QString &pattern))
+   GUI_CS_SLOT_2(setFilterWildcard)
 
-    GUI_CS_SLOT_1(Public, void invalidate())
-    GUI_CS_SLOT_2(invalidate) 
+   GUI_CS_SLOT_1(Public, void setFilterFixedString(const QString &pattern))
+   GUI_CS_SLOT_2(setFilterFixedString)
 
-    using QObject::parent;
+   GUI_CS_SLOT_1(Public, void clear())
+   GUI_CS_SLOT_2(clear)
 
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &child) const;
+   GUI_CS_SLOT_1(Public, void invalidate())
+   GUI_CS_SLOT_2(invalidate)
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
+   using QObject::parent;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+   QModelIndex parent(const QModelIndex &child) const;
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    bool setHeaderData(int section, Qt::Orientation orientation,
-                  const QVariant &value, int role = Qt::EditRole);
+   int rowCount(const QModelIndex &parent = QModelIndex()) const;
+   int columnCount(const QModelIndex &parent = QModelIndex()) const;
+   bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
 
-    QMimeData *mimeData(const QModelIndexList &indexes) const;
-    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                  int row, int column, const QModelIndex &parent);
+   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex());
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
+   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+   bool setHeaderData(int section, Qt::Orientation orientation,
+                      const QVariant &value, int role = Qt::EditRole);
 
-    void fetchMore(const QModelIndex &parent);
-    bool canFetchMore(const QModelIndex &parent) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+   QMimeData *mimeData(const QModelIndexList &indexes) const;
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action,
+                     int row, int column, const QModelIndex &parent);
 
-    QModelIndex buddy(const QModelIndex &index) const;
-    QModelIndexList match(const QModelIndex &start, int role,const QVariant &value, int hits = 1,
-                  Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
+   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+   bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex());
+   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+   bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
 
-    QSize span(const QModelIndex &index) const;
-    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+   void fetchMore(const QModelIndex &parent);
+   bool canFetchMore(const QModelIndex &parent) const;
+   Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    QStringList mimeTypes() const;
-    Qt::DropActions supportedDropActions() const;
+   QModelIndex buddy(const QModelIndex &index) const;
+   QModelIndexList match(const QModelIndex &start, int role, const QVariant &value, int hits = 1,
+                         Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const;
 
-protected:
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
-    virtual bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const;
-    virtual bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+   QSize span(const QModelIndex &index) const;
+   void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
-    void filterChanged();
-    void invalidateFilter();
+   QStringList mimeTypes() const;
+   Qt::DropActions supportedDropActions() const;
 
-private:
-    Q_DECLARE_PRIVATE(QSortFilterProxyModel)
-    Q_DISABLE_COPY(QSortFilterProxyModel)
+ protected:
+   virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+   virtual bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const;
+   virtual bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
 
-    GUI_CS_SLOT_1(Private, void _q_sourceDataChanged(const QModelIndex & source_top_left,const QModelIndex & source_bottom_right))
-    GUI_CS_SLOT_2(_q_sourceDataChanged)
+   void filterChanged();
+   void invalidateFilter();
 
-    GUI_CS_SLOT_1(Private, void _q_sourceHeaderDataChanged(Qt::Orientation orientation,int start,int end))
-    GUI_CS_SLOT_2(_q_sourceHeaderDataChanged)
+ private:
+   Q_DECLARE_PRIVATE(QSortFilterProxyModel)
+   Q_DISABLE_COPY(QSortFilterProxyModel)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceAboutToBeReset())
-    GUI_CS_SLOT_2(_q_sourceAboutToBeReset)
+   GUI_CS_SLOT_1(Private, void _q_sourceDataChanged(const QModelIndex &source_top_left,
+                 const QModelIndex &source_bottom_right))
+   GUI_CS_SLOT_2(_q_sourceDataChanged)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceReset())
-    GUI_CS_SLOT_2(_q_sourceReset)
+   GUI_CS_SLOT_1(Private, void _q_sourceHeaderDataChanged(Qt::Orientation orientation, int start, int end))
+   GUI_CS_SLOT_2(_q_sourceHeaderDataChanged)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceLayoutAboutToBeChanged())
-    GUI_CS_SLOT_2(_q_sourceLayoutAboutToBeChanged)
+   GUI_CS_SLOT_1(Private, void _q_sourceAboutToBeReset())
+   GUI_CS_SLOT_2(_q_sourceAboutToBeReset)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceLayoutChanged())
-    GUI_CS_SLOT_2(_q_sourceLayoutChanged)
+   GUI_CS_SLOT_1(Private, void _q_sourceReset())
+   GUI_CS_SLOT_2(_q_sourceReset)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeInserted(const QModelIndex & source_parent,int start,int end))
-    GUI_CS_SLOT_2(_q_sourceRowsAboutToBeInserted)
+   GUI_CS_SLOT_1(Private, void _q_sourceLayoutAboutToBeChanged())
+   GUI_CS_SLOT_2(_q_sourceLayoutAboutToBeChanged)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceRowsInserted(const QModelIndex & source_parent,int start,int end))
-    GUI_CS_SLOT_2(_q_sourceRowsInserted)
+   GUI_CS_SLOT_1(Private, void _q_sourceLayoutChanged())
+   GUI_CS_SLOT_2(_q_sourceLayoutChanged)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeRemoved(const QModelIndex & source_parent,int start,int end))
-    GUI_CS_SLOT_2(_q_sourceRowsAboutToBeRemoved)
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeInserted(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_2(_q_sourceRowsAboutToBeInserted)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceRowsRemoved(const QModelIndex & source_parent,int start,int end))
-    GUI_CS_SLOT_2(_q_sourceRowsRemoved)
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsInserted(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_2(_q_sourceRowsInserted)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeInserted(const QModelIndex & source_parent,int start,int end))
-    GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeInserted)
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeRemoved(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_2(_q_sourceRowsAboutToBeRemoved)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceColumnsInserted(const QModelIndex & source_parent,int start,int end))
-    GUI_CS_SLOT_2(_q_sourceColumnsInserted)
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsRemoved(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_2(_q_sourceRowsRemoved)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeRemoved(const QModelIndex & source_parent,int start,int end))
-    GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeRemoved)
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeInserted(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeInserted)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceColumnsRemoved(const QModelIndex & source_parent,int start,int end))
-    GUI_CS_SLOT_2(_q_sourceColumnsRemoved)
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsInserted(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_2(_q_sourceColumnsInserted)
 
-    GUI_CS_SLOT_1(Private, void _q_clearMapping())
-    GUI_CS_SLOT_2(_q_clearMapping)
-   
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeRemoved(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeRemoved)
+
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsRemoved(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_2(_q_sourceColumnsRemoved)
+
+   GUI_CS_SLOT_1(Private, void _q_clearMapping())
+   GUI_CS_SLOT_2(_q_clearMapping)
+
 };
 
-void QSortFilterProxyModel::cs_setFilterRegExp(const QRegExp &regExp) 
-{ 
+void QSortFilterProxyModel::cs_setFilterRegExp(const QRegExp &regExp)
+{
    setFilterRegExp(regExp);
 }
 

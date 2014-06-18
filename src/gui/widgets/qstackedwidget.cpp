@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,49 +42,51 @@ QT_BEGIN_NAMESPACE
  */
 class QStackedLayoutHFW : public QStackedLayout
 {
-public:
-    QStackedLayoutHFW(QWidget *parent = 0) : QStackedLayout(parent) {}
-    bool hasHeightForWidth() const;
-    int heightForWidth(int width) const;
+ public:
+   QStackedLayoutHFW(QWidget *parent = 0) : QStackedLayout(parent) {}
+   bool hasHeightForWidth() const;
+   int heightForWidth(int width) const;
 };
 
 bool QStackedLayoutHFW::hasHeightForWidth() const
 {
-    const int n = count();
+   const int n = count();
 
-    for (int i = 0; i < n; ++i) {
-        if (QLayoutItem *item = itemAt(i)) {
-            if (item->hasHeightForWidth())
-                return true;
-        }
-    }
-    return false;
+   for (int i = 0; i < n; ++i) {
+      if (QLayoutItem *item = itemAt(i)) {
+         if (item->hasHeightForWidth()) {
+            return true;
+         }
+      }
+   }
+   return false;
 }
 
 int QStackedLayoutHFW::heightForWidth(int width) const
 {
-    const int n = count();
+   const int n = count();
 
-    int hfw = 0;
-    for (int i = 0; i < n; ++i) {
-        if (QLayoutItem *item = itemAt(i)) {
-            if (QWidget *w = item->widget())
-                hfw = qMax(hfw, w->heightForWidth(width));
-        }
-    }
+   int hfw = 0;
+   for (int i = 0; i < n; ++i) {
+      if (QLayoutItem *item = itemAt(i)) {
+         if (QWidget *w = item->widget()) {
+            hfw = qMax(hfw, w->heightForWidth(width));
+         }
+      }
+   }
 
-    hfw = qMax(hfw, minimumSize().height());
-    return hfw;
+   hfw = qMax(hfw, minimumSize().height());
+   return hfw;
 }
 
 
 class QStackedWidgetPrivate : public QFramePrivate
 {
-    Q_DECLARE_PUBLIC(QStackedWidget)
-public:
-    QStackedWidgetPrivate():layout(0){}
-    QStackedLayoutHFW *layout;
-    bool blockChildAdd;
+   Q_DECLARE_PUBLIC(QStackedWidget)
+ public:
+   QStackedWidgetPrivate(): layout(0) {}
+   QStackedLayoutHFW *layout;
+   bool blockChildAdd;
 };
 
 /*!
@@ -164,13 +166,13 @@ public:
     \sa addWidget(), insertWidget()
 */
 QStackedWidget::QStackedWidget(QWidget *parent)
-    : QFrame(*new QStackedWidgetPrivate, parent)
+   : QFrame(*new QStackedWidgetPrivate, parent)
 {
-    Q_D(QStackedWidget);
-    d->layout = new QStackedLayoutHFW(this);
+   Q_D(QStackedWidget);
+   d->layout = new QStackedLayoutHFW(this);
 
-    connect(d->layout, SIGNAL(widgetRemoved(int)),  this, SLOT(widgetRemoved(int)));
-    connect(d->layout, SIGNAL(currentChanged(int)), this, SLOT(currentChanged(int)));
+   connect(d->layout, SIGNAL(widgetRemoved(int)),  this, SLOT(widgetRemoved(int)));
+   connect(d->layout, SIGNAL(currentChanged(int)), this, SLOT(currentChanged(int)));
 }
 
 /*!
@@ -192,7 +194,7 @@ QStackedWidget::~QStackedWidget()
 */
 int QStackedWidget::addWidget(QWidget *widget)
 {
-    return d_func()->layout->addWidget(widget);
+   return d_func()->layout->addWidget(widget);
 }
 
 /*!
@@ -212,7 +214,7 @@ int QStackedWidget::addWidget(QWidget *widget)
 */
 int QStackedWidget::insertWidget(int index, QWidget *widget)
 {
-    return d_func()->layout->insertWidget(index, widget);
+   return d_func()->layout->insertWidget(index, widget);
 }
 
 /*!
@@ -226,7 +228,7 @@ int QStackedWidget::insertWidget(int index, QWidget *widget)
 */
 void QStackedWidget::removeWidget(QWidget *widget)
 {
-    d_func()->layout->removeWidget(widget);
+   d_func()->layout->removeWidget(widget);
 }
 
 /*!
@@ -243,12 +245,12 @@ void QStackedWidget::removeWidget(QWidget *widget)
 
 void QStackedWidget::setCurrentIndex(int index)
 {
-    d_func()->layout->setCurrentIndex(index);
+   d_func()->layout->setCurrentIndex(index);
 }
 
 int QStackedWidget::currentIndex() const
 {
-    return d_func()->layout->currentIndex();
+   return d_func()->layout->currentIndex();
 }
 
 /*!
@@ -258,7 +260,7 @@ int QStackedWidget::currentIndex() const
 */
 QWidget *QStackedWidget::currentWidget() const
 {
-    return d_func()->layout->currentWidget();
+   return d_func()->layout->currentWidget();
 }
 
 
@@ -272,12 +274,12 @@ QWidget *QStackedWidget::currentWidget() const
  */
 void QStackedWidget::setCurrentWidget(QWidget *widget)
 {
-    Q_D(QStackedWidget);
-    if (d->layout->indexOf(widget) == -1) {
-        qWarning("QStackedWidget::setCurrentWidget: widget %p not contained in stack", widget);
-        return;
-    }
-    d->layout->setCurrentWidget(widget);
+   Q_D(QStackedWidget);
+   if (d->layout->indexOf(widget) == -1) {
+      qWarning("QStackedWidget::setCurrentWidget: widget %p not contained in stack", widget);
+      return;
+   }
+   d->layout->setCurrentWidget(widget);
 }
 
 /*!
@@ -288,7 +290,7 @@ void QStackedWidget::setCurrentWidget(QWidget *widget)
 */
 int QStackedWidget::indexOf(QWidget *widget) const
 {
-    return d_func()->layout->indexOf(widget);
+   return d_func()->layout->indexOf(widget);
 }
 
 /*!
@@ -299,7 +301,7 @@ int QStackedWidget::indexOf(QWidget *widget) const
 */
 QWidget *QStackedWidget::widget(int index) const
 {
-    return d_func()->layout->widget(index);
+   return d_func()->layout->widget(index);
 }
 
 /*!
@@ -312,13 +314,13 @@ QWidget *QStackedWidget::widget(int index) const
 */
 int QStackedWidget::count() const
 {
-    return d_func()->layout->count();
+   return d_func()->layout->count();
 }
 
 /*! \reimp */
 bool QStackedWidget::event(QEvent *e)
 {
-    return QFrame::event(e);
+   return QFrame::event(e);
 }
 
 QT_END_NAMESPACE

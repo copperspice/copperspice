@@ -26,20 +26,8 @@
 #ifndef QDECLARATIVEIMAGEBASE_P_H
 #define QDECLARATIVEIMAGEBASE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "private/qdeclarativeimplicitsizeitem_p_p.h"
-#include "private/qdeclarativepixmapcache_p.h"
-
+#include "qdeclarativeimplicitsizeitem_p_p.h"
+#include "qdeclarativepixmapcache_p.h"
 #include <QtCore/QPointer>
 
 QT_BEGIN_NAMESPACE

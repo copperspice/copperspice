@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,38 +36,43 @@ QT_BEGIN_NAMESPACE
 
 class QGL2GradientCache
 {
-    struct CacheInfo
-    {
-        inline CacheInfo(QGradientStops s, qreal op, QGradient::InterpolationMode mode) :
-            stops(s), opacity(op), interpolationMode(mode) {}
+   struct CacheInfo {
+      inline CacheInfo(QGradientStops s, qreal op, QGradient::InterpolationMode mode) :
+         stops(s), opacity(op), interpolationMode(mode) {}
 
-        GLuint texId;
-        QGradientStops stops;
-        qreal opacity;
-        QGradient::InterpolationMode interpolationMode;
-    };
+      GLuint texId;
+      QGradientStops stops;
+      qreal opacity;
+      QGradient::InterpolationMode interpolationMode;
+   };
 
-    typedef QMultiHash<quint64, CacheInfo> QGLGradientColorTableHash;
+   typedef QMultiHash<quint64, CacheInfo> QGLGradientColorTableHash;
 
-public:
-    static QGL2GradientCache *cacheForContext(const QGLContext *context);
+ public:
+   static QGL2GradientCache *cacheForContext(const QGLContext *context);
 
-    QGL2GradientCache(const QGLContext *) {}
-    ~QGL2GradientCache() { cleanCache(); }
+   QGL2GradientCache(const QGLContext *) {}
+   ~QGL2GradientCache() {
+      cleanCache();
+   }
 
-    GLuint getBuffer(const QGradient &gradient, qreal opacity);
-    inline int paletteSize() const { return 1024; }
+   GLuint getBuffer(const QGradient &gradient, qreal opacity);
+   inline int paletteSize() const {
+      return 1024;
+   }
 
-private:
-    inline int maxCacheSize() const { return 60; }
-    inline void generateGradientColorTable(const QGradient& gradient,
-                                           uint *colorTable,
-                                           int size, qreal opacity) const;
-    GLuint addCacheElement(quint64 hash_val, const QGradient &gradient, qreal opacity);
-    void cleanCache();
+ private:
+   inline int maxCacheSize() const {
+      return 60;
+   }
+   inline void generateGradientColorTable(const QGradient &gradient,
+                                          uint *colorTable,
+                                          int size, qreal opacity) const;
+   GLuint addCacheElement(quint64 hash_val, const QGradient &gradient, qreal opacity);
+   void cleanCache();
 
-    QGLGradientColorTableHash cache;
-    QMutex m_mutex;
+   QGLGradientColorTableHash cache;
+   QMutex m_mutex;
 };
 
 QT_END_NAMESPACE

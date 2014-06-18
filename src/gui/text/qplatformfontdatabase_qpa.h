@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,22 +41,22 @@ class QFontRequestPrivate;
 class Q_GUI_EXPORT QSupportedWritingSystems
 {
 
-public:
-    QSupportedWritingSystems();
-    QSupportedWritingSystems(const QSupportedWritingSystems &other);
-    QSupportedWritingSystems &operator=(const QSupportedWritingSystems &other);
-    ~QSupportedWritingSystems();
+ public:
+   QSupportedWritingSystems();
+   QSupportedWritingSystems(const QSupportedWritingSystems &other);
+   QSupportedWritingSystems &operator=(const QSupportedWritingSystems &other);
+   ~QSupportedWritingSystems();
 
-    void setSupported(QFontDatabase::WritingSystem, bool supported = true);
-    bool supported(QFontDatabase::WritingSystem) const;
+   void setSupported(QFontDatabase::WritingSystem, bool supported = true);
+   bool supported(QFontDatabase::WritingSystem) const;
 
-private:
-    void detach();
+ private:
+   void detach();
 
-    QWritingSystemsPrivate *d;
+   QWritingSystemsPrivate *d;
 
-    friend Q_GUI_EXPORT bool operator==(const QSupportedWritingSystems &, const QSupportedWritingSystems &);
-    friend Q_GUI_EXPORT bool operator!=(const QSupportedWritingSystems &, const QSupportedWritingSystems &);
+   friend Q_GUI_EXPORT bool operator==(const QSupportedWritingSystems &, const QSupportedWritingSystems &);
+   friend Q_GUI_EXPORT bool operator!=(const QSupportedWritingSystems &, const QSupportedWritingSystems &);
 };
 
 Q_GUI_EXPORT bool operator==(const QSupportedWritingSystems &, const QSupportedWritingSystems &);
@@ -65,24 +65,25 @@ Q_GUI_EXPORT bool operator!=(const QSupportedWritingSystems &, const QSupportedW
 class Q_GUI_EXPORT QPlatformFontDatabase
 {
 
-public:
-    virtual void populateFontDatabase();
-    virtual QFontEngine *fontEngine(const QFontDef &fontDef, QUnicodeTables::Script script, void *handle);
-    virtual QStringList fallbacksForFamily(const QString family, const QFont::Style &style, 
-         const QFont::StyleHint &styleHint, const QUnicodeTables::Script &script) const;
+ public:
+   virtual void populateFontDatabase();
+   virtual QFontEngine *fontEngine(const QFontDef &fontDef, QUnicodeTables::Script script, void *handle);
+   virtual QStringList fallbacksForFamily(const QString family, const QFont::Style &style,
+                                          const QFont::StyleHint &styleHint, const QUnicodeTables::Script &script) const;
 
-    virtual QStringList addApplicationFont(const QByteArray &fontData, const QString &fileName);
-    virtual void releaseHandle(void *handle);
+   virtual QStringList addApplicationFont(const QByteArray &fontData, const QString &fileName);
+   virtual void releaseHandle(void *handle);
 
-    virtual QFontEngine *fontEngine(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference);
+   virtual QFontEngine *fontEngine(const QByteArray &fontData, qreal pixelSize,
+                                   QFont::HintingPreference hintingPreference);
 
-    virtual QString fontDir() const;
+   virtual QString fontDir() const;
 
-    //callback
-    static void registerQPF2Font(const QByteArray &dataArray, void *handle);
-    static void registerFont(const QString &familyname, const QString &foundryname, QFont::Weight weight,
-                             QFont::Style style, QFont::Stretch stretch, bool antialiased, bool scalable, int pixelSize,
-                             const QSupportedWritingSystems &writingSystems, void *handle);
+   //callback
+   static void registerQPF2Font(const QByteArray &dataArray, void *handle);
+   static void registerFont(const QString &familyname, const QString &foundryname, QFont::Weight weight,
+                            QFont::Style style, QFont::Stretch stretch, bool antialiased, bool scalable, int pixelSize,
+                            const QSupportedWritingSystems &writingSystems, void *handle);
 };
 
 QT_END_NAMESPACE

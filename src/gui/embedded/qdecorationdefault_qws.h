@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,38 +39,38 @@ QT_BEGIN_NAMESPACE
 class Q_GUI_EXPORT QDecorationDefault : public QDecoration
 {
 
-public:
-    QDecorationDefault();
-    virtual ~QDecorationDefault();
+ public:
+   QDecorationDefault();
+   virtual ~QDecorationDefault();
 
-    virtual QRegion region(const QWidget *widget, const QRect &rect, int decorationRegion = All);
-    virtual bool paint(QPainter *painter, const QWidget *widget, int decorationRegion = All,
-                       DecorationState state = Normal);
+   virtual QRegion region(const QWidget *widget, const QRect &rect, int decorationRegion = All);
+   virtual bool paint(QPainter *painter, const QWidget *widget, int decorationRegion = All,
+                      DecorationState state = Normal);
 
-protected:
-    virtual int titleBarHeight(const QWidget *widget);
+ protected:
+   virtual int titleBarHeight(const QWidget *widget);
 
-    virtual void paintButton(QPainter *painter, const QWidget *widget, int buttonRegion,
-                             DecorationState state, const QPalette &pal);
-    virtual QPixmap pixmapFor(const QWidget *widget, int decorationRegion, int &xoff, int &yoff);
-    virtual const char **xpmForRegion(int region);
+   virtual void paintButton(QPainter *painter, const QWidget *widget, int buttonRegion,
+                            DecorationState state, const QPalette &pal);
+   virtual QPixmap pixmapFor(const QWidget *widget, int decorationRegion, int &xoff, int &yoff);
+   virtual const char **xpmForRegion(int region);
 
-    QString windowTitleFor(const QWidget *widget) const;
+   QString windowTitleFor(const QWidget *widget) const;
 
-    int menu_width;
-    int help_width;
-    int close_width;
-    int minimize_width;
-    int maximize_width;
-    int normalize_width;
+   int menu_width;
+   int help_width;
+   int close_width;
+   int minimize_width;
+   int maximize_width;
+   int normalize_width;
 
-private:
-    static QPixmap *staticHelpPixmap;
-    static QPixmap *staticMenuPixmap;
-    static QPixmap *staticClosePixmap;
-    static QPixmap *staticMinimizePixmap;
-    static QPixmap *staticMaximizePixmap;
-    static QPixmap *staticNormalizePixmap;
+ private:
+   static QPixmap *staticHelpPixmap;
+   static QPixmap *staticMenuPixmap;
+   static QPixmap *staticClosePixmap;
+   static QPixmap *staticMinimizePixmap;
+   static QPixmap *staticMaximizePixmap;
+   static QPixmap *staticNormalizePixmap;
 
 };
 

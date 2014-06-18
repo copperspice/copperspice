@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,59 +39,59 @@ class QButtonGroupPrivate;
 
 class Q_GUI_EXPORT QButtonGroup : public QObject
 {
-    CS_OBJECT(QButtonGroup)
+   CS_OBJECT(QButtonGroup)
 
-    GUI_CS_PROPERTY_READ(exclusive, exclusive)
-    GUI_CS_PROPERTY_WRITE(exclusive, setExclusive)
+   GUI_CS_PROPERTY_READ(exclusive, exclusive)
+   GUI_CS_PROPERTY_WRITE(exclusive, setExclusive)
 
-public:
-    explicit QButtonGroup(QObject *parent = 0);
-    ~QButtonGroup();
+ public:
+   explicit QButtonGroup(QObject *parent = 0);
+   ~QButtonGroup();
 
-    void setExclusive(bool);
-    bool exclusive() const;
+   void setExclusive(bool);
+   bool exclusive() const;
 
-    void addButton(QAbstractButton *);
-    void addButton(QAbstractButton *, int id);
-    void removeButton(QAbstractButton *);
+   void addButton(QAbstractButton *);
+   void addButton(QAbstractButton *, int id);
+   void removeButton(QAbstractButton *);
 
-    QList<QAbstractButton*> buttons() const;
+   QList<QAbstractButton *> buttons() const;
 
-    QAbstractButton * checkedButton() const;
-    // no setter on purpose!
+   QAbstractButton *checkedButton() const;
+   // no setter on purpose!
 
-    QAbstractButton *button(int id) const;
-    void setId(QAbstractButton *button, int id);
-    int id(QAbstractButton *button) const;
-    int checkedId() const;
+   QAbstractButton *button(int id) const;
+   void setId(QAbstractButton *button, int id);
+   int id(QAbstractButton *button) const;
+   int checkedId() const;
 
-    GUI_CS_SIGNAL_1(Public, void buttonClicked(QAbstractButton * un_named_arg1))
-    GUI_CS_SIGNAL_OVERLOAD(buttonClicked,(QAbstractButton *),un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void buttonClicked(QAbstractButton *un_named_arg1))
+   GUI_CS_SIGNAL_OVERLOAD(buttonClicked, (QAbstractButton *), un_named_arg1)
 
-    GUI_CS_SIGNAL_1(Public, void buttonClicked(int un_named_arg1))
-    GUI_CS_SIGNAL_OVERLOAD(buttonClicked,(int),un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void buttonClicked(int un_named_arg1))
+   GUI_CS_SIGNAL_OVERLOAD(buttonClicked, (int), un_named_arg1)
 
-    GUI_CS_SIGNAL_1(Public, void buttonPressed(QAbstractButton * un_named_arg1))
-    GUI_CS_SIGNAL_OVERLOAD(buttonPressed,(QAbstractButton *),un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void buttonPressed(QAbstractButton *un_named_arg1))
+   GUI_CS_SIGNAL_OVERLOAD(buttonPressed, (QAbstractButton *), un_named_arg1)
 
-    GUI_CS_SIGNAL_1(Public, void buttonPressed(int un_named_arg1))
-    GUI_CS_SIGNAL_OVERLOAD(buttonPressed,(int),un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void buttonPressed(int un_named_arg1))
+   GUI_CS_SIGNAL_OVERLOAD(buttonPressed, (int), un_named_arg1)
 
-    GUI_CS_SIGNAL_1(Public, void buttonReleased(QAbstractButton * un_named_arg1))
-    GUI_CS_SIGNAL_OVERLOAD(buttonReleased,(QAbstractButton *),un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void buttonReleased(QAbstractButton *un_named_arg1))
+   GUI_CS_SIGNAL_OVERLOAD(buttonReleased, (QAbstractButton *), un_named_arg1)
 
-    GUI_CS_SIGNAL_1(Public, void buttonReleased(int un_named_arg1))
-    GUI_CS_SIGNAL_OVERLOAD(buttonReleased,(int),un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void buttonReleased(int un_named_arg1))
+   GUI_CS_SIGNAL_OVERLOAD(buttonReleased, (int), un_named_arg1)
 
-private:
-    Q_DISABLE_COPY(QButtonGroup)
-    Q_DECLARE_PRIVATE(QButtonGroup)
+ private:
+   Q_DISABLE_COPY(QButtonGroup)
+   Q_DECLARE_PRIVATE(QButtonGroup)
 
-    friend class QAbstractButton;
-    friend class QAbstractButtonPrivate;
+   friend class QAbstractButton;
+   friend class QAbstractButtonPrivate;
 
-protected:
-	 QScopedPointer<QButtonGroupPrivate> d_ptr;
+ protected:
+   QScopedPointer<QButtonGroupPrivate> d_ptr;
 
 };
 

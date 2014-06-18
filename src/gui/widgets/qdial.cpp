@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -51,46 +51,47 @@ QT_BEGIN_NAMESPACE
 
 class QDialPrivate : public QAbstractSliderPrivate
 {
-    Q_DECLARE_PUBLIC(QDial)
-public:
-    QDialPrivate()
-    {
-        wrapping = false;
-        tracking = true;
-        doNotEmit = false;
-        target = qreal(3.7);
-    }
+   Q_DECLARE_PUBLIC(QDial)
+ public:
+   QDialPrivate() {
+      wrapping = false;
+      tracking = true;
+      doNotEmit = false;
+      target = qreal(3.7);
+   }
 
-    qreal target;
-    uint showNotches : 1;
-    uint wrapping : 1;
-    uint doNotEmit : 1;
+   qreal target;
+   uint showNotches : 1;
+   uint wrapping : 1;
+   uint doNotEmit : 1;
 
-    int valueFromPoint(const QPoint &) const;
-    double angle(const QPoint &, const QPoint &) const;
-    void init();
-    virtual int bound(int val) const;
+   int valueFromPoint(const QPoint &) const;
+   double angle(const QPoint &, const QPoint &) const;
+   void init();
+   virtual int bound(int val) const;
 };
 
 void QDialPrivate::init()
 {
-    Q_Q(QDial);
-    showNotches = false;
-    q->setFocusPolicy(Qt::WheelFocus);
+   Q_Q(QDial);
+   showNotches = false;
+   q->setFocusPolicy(Qt::WheelFocus);
 }
 
 int QDialPrivate::bound(int val) const
 {
-    if (wrapping) {
-        if ((val >= minimum) && (val <= maximum))
-            return val;
-        val = minimum + ((val - minimum) % (maximum - minimum));
-        if (val < minimum)
-            val += maximum - minimum;
-        return val;
-    } else {
-        return QAbstractSliderPrivate::bound(val);
-    }
+   if (wrapping) {
+      if ((val >= minimum) && (val <= maximum)) {
+         return val;
+      }
+      val = minimum + ((val - minimum) % (maximum - minimum));
+      if (val < minimum) {
+         val += maximum - minimum;
+      }
+      return val;
+   } else {
+      return QAbstractSliderPrivate::bound(val);
+   }
 }
 
 /*!
@@ -102,61 +103,65 @@ int QDialPrivate::bound(int val) const
 */
 void QDial::initStyleOption(QStyleOptionSlider *option) const
 {
-    if (!option)
-        return;
+   if (!option) {
+      return;
+   }
 
-    Q_D(const QDial);
-    option->initFrom(this);
-    option->minimum = d->minimum;
-    option->maximum = d->maximum;
-    option->sliderPosition = d->position;
-    option->sliderValue = d->value;
-    option->singleStep = d->singleStep;
-    option->pageStep = d->pageStep;
-    option->upsideDown = !d->invertedAppearance;
-    option->notchTarget = d->target;
-    option->dialWrapping = d->wrapping;
-    option->subControls = QStyle::SC_All;
-    option->activeSubControls = QStyle::SC_None;
-    if (!d->showNotches) {
-        option->subControls &= ~QStyle::SC_DialTickmarks;
-        option->tickPosition = QSlider::TicksAbove;
-    } else {
-        option->tickPosition = QSlider::NoTicks;
-    }
-    option->tickInterval = notchSize();
+   Q_D(const QDial);
+   option->initFrom(this);
+   option->minimum = d->minimum;
+   option->maximum = d->maximum;
+   option->sliderPosition = d->position;
+   option->sliderValue = d->value;
+   option->singleStep = d->singleStep;
+   option->pageStep = d->pageStep;
+   option->upsideDown = !d->invertedAppearance;
+   option->notchTarget = d->target;
+   option->dialWrapping = d->wrapping;
+   option->subControls = QStyle::SC_All;
+   option->activeSubControls = QStyle::SC_None;
+   if (!d->showNotches) {
+      option->subControls &= ~QStyle::SC_DialTickmarks;
+      option->tickPosition = QSlider::TicksAbove;
+   } else {
+      option->tickPosition = QSlider::NoTicks;
+   }
+   option->tickInterval = notchSize();
 }
 
 int QDialPrivate::valueFromPoint(const QPoint &p) const
 {
-    Q_Q(const QDial);
-    double yy = (double)q->height()/2.0 - p.y();
-    double xx = (double)p.x() - q->width()/2.0;
-    double a = (xx || yy) ? qAtan2(yy, xx) : 0;
+   Q_Q(const QDial);
+   double yy = (double)q->height() / 2.0 - p.y();
+   double xx = (double)p.x() - q->width() / 2.0;
+   double a = (xx || yy) ? qAtan2(yy, xx) : 0;
 
-    if (a < Q_PI / -2)
-        a = a + Q_PI * 2;
+   if (a < Q_PI / -2) {
+      a = a + Q_PI * 2;
+   }
 
-    int dist = 0;
-    int minv = minimum, maxv = maximum;
+   int dist = 0;
+   int minv = minimum, maxv = maximum;
 
-    if (minimum < 0) {
-        dist = -minimum;
-        minv = 0;
-        maxv = maximum + dist;
-    }
+   if (minimum < 0) {
+      dist = -minimum;
+      minv = 0;
+      maxv = maximum + dist;
+   }
 
-    int r = maxv - minv;
-    int v;
-    if (wrapping)
-        v =  (int)(0.5 + minv + r * (Q_PI * 3 / 2 - a) / (2 * Q_PI));
-    else
-        v =  (int)(0.5 + minv + r* (Q_PI * 4 / 3 - a) / (Q_PI * 10 / 6));
+   int r = maxv - minv;
+   int v;
+   if (wrapping) {
+      v =  (int)(0.5 + minv + r * (Q_PI * 3 / 2 - a) / (2 * Q_PI));
+   } else {
+      v =  (int)(0.5 + minv + r * (Q_PI * 4 / 3 - a) / (Q_PI * 10 / 6));
+   }
 
-    if (dist > 0)
-        v -= dist;
+   if (dist > 0) {
+      v -= dist;
+   }
 
-    return !invertedAppearance ? bound(v) : maximum - bound(v);
+   return !invertedAppearance ? bound(v) : maximum - bound(v);
 }
 
 /*!
@@ -234,10 +239,10 @@ int QDialPrivate::valueFromPoint(const QPoint &p) const
     The \a parent argument is sent to the QAbstractSlider constructor.
 */
 QDial::QDial(QWidget *parent)
-    : QAbstractSlider(*new QDialPrivate, parent)
+   : QAbstractSlider(*new QDialPrivate, parent)
 {
-    Q_D(QDial);
-    d->init();
+   Q_D(QDial);
+   d->init();
 }
 
 
@@ -251,7 +256,7 @@ QDial::~QDial()
 /*! \reimp */
 void QDial::resizeEvent(QResizeEvent *e)
 {
-    QWidget::resizeEvent(e);
+   QWidget::resizeEvent(e);
 }
 
 /*!
@@ -260,10 +265,10 @@ void QDial::resizeEvent(QResizeEvent *e)
 
 void QDial::paintEvent(QPaintEvent *)
 {
-    QStylePainter p(this);
-    QStyleOptionSlider option;
-    initStyleOption(&option);
-    p.drawComplexControl(QStyle::CC_Dial, option);
+   QStylePainter p(this);
+   QStyleOptionSlider option;
+   initStyleOption(&option);
+   p.drawComplexControl(QStyle::CC_Dial, option);
 }
 
 /*!
@@ -272,20 +277,20 @@ void QDial::paintEvent(QPaintEvent *)
 
 void QDial::mousePressEvent(QMouseEvent *e)
 {
-    Q_D(QDial);
-    if (d->maximum == d->minimum ||
-        (e->button() != Qt::LeftButton)  ||
-        (e->buttons() ^ e->button())) {
-        e->ignore();
-        return;
-    }
-    e->accept();
-    setSliderPosition(d->valueFromPoint(e->pos()));
-    // ### This isn't quite right,
-    // we should be doing a hit test and only setting this if it's
-    // the actual dial thingie (similar to what QSlider does), but we have no
-    // subControls for QDial.
-    setSliderDown(true);
+   Q_D(QDial);
+   if (d->maximum == d->minimum ||
+         (e->button() != Qt::LeftButton)  ||
+         (e->buttons() ^ e->button())) {
+      e->ignore();
+      return;
+   }
+   e->accept();
+   setSliderPosition(d->valueFromPoint(e->pos()));
+   // ### This isn't quite right,
+   // we should be doing a hit test and only setting this if it's
+   // the actual dial thingie (similar to what QSlider does), but we have no
+   // subControls for QDial.
+   setSliderDown(true);
 }
 
 
@@ -293,17 +298,17 @@ void QDial::mousePressEvent(QMouseEvent *e)
   \reimp
 */
 
-void QDial::mouseReleaseEvent(QMouseEvent * e)
+void QDial::mouseReleaseEvent(QMouseEvent *e)
 {
-    Q_D(QDial);
-    if (e->buttons() & (~e->button()) ||
-       (e->button() != Qt::LeftButton)) {
-        e->ignore();
-        return;
-    }
-    e->accept();
-    setValue(d->valueFromPoint(e->pos()));
-    setSliderDown(false);
+   Q_D(QDial);
+   if (e->buttons() & (~e->button()) ||
+         (e->button() != Qt::LeftButton)) {
+      e->ignore();
+      return;
+   }
+   e->accept();
+   setValue(d->valueFromPoint(e->pos()));
+   setSliderDown(false);
 }
 
 
@@ -311,17 +316,17 @@ void QDial::mouseReleaseEvent(QMouseEvent * e)
   \reimp
 */
 
-void QDial::mouseMoveEvent(QMouseEvent * e)
+void QDial::mouseMoveEvent(QMouseEvent *e)
 {
-    Q_D(QDial);
-    if (!(e->buttons() & Qt::LeftButton)) {
-        e->ignore();
-        return;
-    }
-    e->accept();
-    d->doNotEmit = true;
-    setSliderPosition(d->valueFromPoint(e->pos()));
-    d->doNotEmit = false;
+   Q_D(QDial);
+   if (!(e->buttons() & Qt::LeftButton)) {
+      e->ignore();
+      return;
+   }
+   e->accept();
+   d->doNotEmit = true;
+   setSliderPosition(d->valueFromPoint(e->pos()));
+   d->doNotEmit = false;
 }
 
 
@@ -331,16 +336,17 @@ void QDial::mouseMoveEvent(QMouseEvent * e)
 
 void QDial::sliderChange(SliderChange change)
 {
-    QAbstractSlider::sliderChange(change);
+   QAbstractSlider::sliderChange(change);
 }
 
 void QDial::setWrapping(bool enable)
 {
-    Q_D(QDial);
-    if (d->wrapping == enable)
-        return;
-    d->wrapping = enable;
-    update();
+   Q_D(QDial);
+   if (d->wrapping == enable) {
+      return;
+   }
+   d->wrapping = enable;
+   update();
 }
 
 
@@ -361,8 +367,8 @@ void QDial::setWrapping(bool enable)
 
 bool QDial::wrapping() const
 {
-    Q_D(const QDial);
-    return d->wrapping;
+   Q_D(const QDial);
+   return d->wrapping;
 }
 
 
@@ -381,31 +387,34 @@ bool QDial::wrapping() const
 
 int QDial::notchSize() const
 {
-    Q_D(const QDial);
-    // radius of the arc
-    int r = qMin(width(), height())/2;
-    // length of the whole arc
-    int l = (int)(r * (d->wrapping ? 6 : 5) * Q_PI / 6);
-    // length of the arc from minValue() to minValue()+pageStep()
-    if (d->maximum > d->minimum + d->pageStep)
-        l = (int)(0.5 + l * d->pageStep / (d->maximum - d->minimum));
-    // length of a singleStep arc
-    l = l * d->singleStep / (d->pageStep ? d->pageStep : 1);
-    if (l < 1)
-        l = 1;
-    // how many times singleStep can be draw in d->target pixels
-    l = (int)(0.5 + d->target / l);
-    // we want notchSize() to be a non-zero multiple of lineStep()
-    if (!l)
-        l = 1;
-    return d->singleStep * l;
+   Q_D(const QDial);
+   // radius of the arc
+   int r = qMin(width(), height()) / 2;
+   // length of the whole arc
+   int l = (int)(r * (d->wrapping ? 6 : 5) * Q_PI / 6);
+   // length of the arc from minValue() to minValue()+pageStep()
+   if (d->maximum > d->minimum + d->pageStep) {
+      l = (int)(0.5 + l * d->pageStep / (d->maximum - d->minimum));
+   }
+   // length of a singleStep arc
+   l = l * d->singleStep / (d->pageStep ? d->pageStep : 1);
+   if (l < 1) {
+      l = 1;
+   }
+   // how many times singleStep can be draw in d->target pixels
+   l = (int)(0.5 + d->target / l);
+   // we want notchSize() to be a non-zero multiple of lineStep()
+   if (!l) {
+      l = 1;
+   }
+   return d->singleStep * l;
 }
 
 void QDial::setNotchTarget(double target)
 {
-    Q_D(QDial);
-    d->target = target;
-    update();
+   Q_D(QDial);
+   d->target = target;
+   update();
 }
 
 /*!
@@ -421,16 +430,16 @@ void QDial::setNotchTarget(double target)
 */
 qreal QDial::notchTarget() const
 {
-    Q_D(const QDial);
-    return d->target;
+   Q_D(const QDial);
+   return d->target;
 }
 
 
 void QDial::setNotchesVisible(bool visible)
 {
-    Q_D(QDial);
-    d->showNotches = visible;
-    update();
+   Q_D(QDial);
+   d->showNotches = visible;
+   update();
 }
 
 /*!
@@ -445,8 +454,8 @@ void QDial::setNotchesVisible(bool visible)
 */
 bool QDial::notchesVisible() const
 {
-    Q_D(const QDial);
-    return d->showNotches;
+   Q_D(const QDial);
+   return d->showNotches;
 }
 
 /*!
@@ -455,7 +464,7 @@ bool QDial::notchesVisible() const
 
 QSize QDial::minimumSizeHint() const
 {
-    return QSize(50, 50);
+   return QSize(50, 50);
 }
 
 /*!
@@ -464,7 +473,7 @@ QSize QDial::minimumSizeHint() const
 
 QSize QDial::sizeHint() const
 {
-    return QSize(100, 100).expandedTo(QApplication::globalStrut());
+   return QSize(100, 100).expandedTo(QApplication::globalStrut());
 }
 
 /*!
@@ -472,7 +481,7 @@ QSize QDial::sizeHint() const
 */
 bool QDial::event(QEvent *e)
 {
-    return QAbstractSlider::event(e);
+   return QAbstractSlider::event(e);
 }
 
 /*!

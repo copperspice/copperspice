@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,22 +40,22 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 
 
 QAbstractPrintDialog::QAbstractPrintDialog(QPrinter *printer, QWidget *parent)
-    : QDialog(*(new QAbstractPrintDialogPrivate), parent)
+   : QDialog(*(new QAbstractPrintDialogPrivate), parent)
 {
-    Q_D(QAbstractPrintDialog);
-    setWindowTitle(QCoreApplication::translate("QPrintDialog", "Print"));
-    d->setPrinter(printer);
+   Q_D(QAbstractPrintDialog);
+   setWindowTitle(QCoreApplication::translate("QPrintDialog", "Print"));
+   d->setPrinter(printer);
 }
 
 /*!
      \internal
 */
 QAbstractPrintDialog::QAbstractPrintDialog(QAbstractPrintDialogPrivate &ptr, QPrinter *printer, QWidget *parent)
-    : QDialog(ptr, parent)
+   : QDialog(ptr, parent)
 {
-    Q_D(QAbstractPrintDialog);
-    setWindowTitle(QCoreApplication::translate("QPrintDialog", "Print"));
-    d->setPrinter(printer);
+   Q_D(QAbstractPrintDialog);
+   setWindowTitle(QCoreApplication::translate("QPrintDialog", "Print"));
+   d->setPrinter(printer);
 }
 
 /*!
@@ -63,9 +63,10 @@ QAbstractPrintDialog::QAbstractPrintDialog(QAbstractPrintDialogPrivate &ptr, QPr
 */
 QAbstractPrintDialog::~QAbstractPrintDialog()
 {
-    Q_D(QAbstractPrintDialog);
-    if (d->ownsPrinter)
-        delete d->printer;
+   Q_D(QAbstractPrintDialog);
+   if (d->ownsPrinter) {
+      delete d->printer;
+   }
 }
 
 /*!
@@ -76,9 +77,10 @@ QAbstractPrintDialog::~QAbstractPrintDialog()
 */
 void QPrintDialog::setOption(PrintDialogOption option, bool on)
 {
-    Q_D(QPrintDialog);
-    if (!(d->options & option) != !on)
-        setOptions(d->options ^ option);
+   Q_D(QPrintDialog);
+   if (!(d->options & option) != !on) {
+      setOptions(d->options ^ option);
+   }
 }
 
 /*!
@@ -89,25 +91,26 @@ void QPrintDialog::setOption(PrintDialogOption option, bool on)
 */
 bool QPrintDialog::testOption(PrintDialogOption option) const
 {
-    Q_D(const QPrintDialog);
-    return (d->options & option) != 0;
+   Q_D(const QPrintDialog);
+   return (d->options & option) != 0;
 }
 
 void QPrintDialog::setOptions(PrintDialogOptions options)
 {
-    Q_D(QPrintDialog);
+   Q_D(QPrintDialog);
 
-    PrintDialogOptions changed = (options ^ d->options);
-    if (!changed)
-        return;
+   PrintDialogOptions changed = (options ^ d->options);
+   if (!changed) {
+      return;
+   }
 
-    d->options = options;
+   d->options = options;
 }
 
 QPrintDialog::PrintDialogOptions QPrintDialog::options() const
 {
-    Q_D(const QPrintDialog);
-    return d->options;
+   Q_D(const QPrintDialog);
+   return d->options;
 }
 
 /*!
@@ -117,8 +120,8 @@ QPrintDialog::PrintDialogOptions QPrintDialog::options() const
 */
 void QAbstractPrintDialog::setEnabledOptions(PrintDialogOptions options)
 {
-    Q_D(QAbstractPrintDialog);
-    d->options = options;
+   Q_D(QAbstractPrintDialog);
+   d->options = options;
 }
 
 /*!
@@ -128,8 +131,8 @@ void QAbstractPrintDialog::setEnabledOptions(PrintDialogOptions options)
 */
 void QAbstractPrintDialog::addEnabledOption(PrintDialogOption option)
 {
-    Q_D(QAbstractPrintDialog);
-    d->options |= option;
+   Q_D(QAbstractPrintDialog);
+   d->options |= option;
 }
 
 /*!
@@ -139,8 +142,8 @@ void QAbstractPrintDialog::addEnabledOption(PrintDialogOption option)
 */
 QAbstractPrintDialog::PrintDialogOptions QAbstractPrintDialog::enabledOptions() const
 {
-    Q_D(const QAbstractPrintDialog);
-    return d->options;
+   Q_D(const QAbstractPrintDialog);
+   return d->options;
 }
 
 /*!
@@ -150,8 +153,8 @@ QAbstractPrintDialog::PrintDialogOptions QAbstractPrintDialog::enabledOptions() 
 */
 bool QAbstractPrintDialog::isOptionEnabled(PrintDialogOption option) const
 {
-    Q_D(const QAbstractPrintDialog);
-    return d->options & option;
+   Q_D(const QAbstractPrintDialog);
+   return d->options & option;
 }
 
 /*!
@@ -159,8 +162,8 @@ bool QAbstractPrintDialog::isOptionEnabled(PrintDialogOption option) const
  */
 void QAbstractPrintDialog::setPrintRange(PrintRange range)
 {
-    Q_D(QAbstractPrintDialog);
-    d->pd->printRange = QPrinter::PrintRange(range);
+   Q_D(QAbstractPrintDialog);
+   d->pd->printRange = QPrinter::PrintRange(range);
 }
 
 /*!
@@ -168,8 +171,8 @@ void QAbstractPrintDialog::setPrintRange(PrintRange range)
 */
 QAbstractPrintDialog::PrintRange QAbstractPrintDialog::printRange() const
 {
-    Q_D(const QAbstractPrintDialog);
-    return QAbstractPrintDialog::PrintRange(d->pd->printRange);
+   Q_D(const QAbstractPrintDialog);
+   return QAbstractPrintDialog::PrintRange(d->pd->printRange);
 }
 
 /*!
@@ -178,12 +181,12 @@ QAbstractPrintDialog::PrintRange QAbstractPrintDialog::printRange() const
 */
 void QAbstractPrintDialog::setMinMax(int min, int max)
 {
-    Q_D(QAbstractPrintDialog);
-    Q_ASSERT_X(min <= max, "QAbstractPrintDialog::setMinMax",
-               "'min' must be less than or equal to 'max'");
-    d->pd->minPage = min;
-    d->pd->maxPage = max;
-    d->options |= PrintPageRange;
+   Q_D(QAbstractPrintDialog);
+   Q_ASSERT_X(min <= max, "QAbstractPrintDialog::setMinMax",
+              "'min' must be less than or equal to 'max'");
+   d->pd->minPage = min;
+   d->pd->maxPage = max;
+   d->options |= PrintPageRange;
 }
 
 /*!
@@ -192,8 +195,8 @@ void QAbstractPrintDialog::setMinMax(int min, int max)
 */
 int QAbstractPrintDialog::minPage() const
 {
-    Q_D(const QAbstractPrintDialog);
-    return d->pd->minPage;
+   Q_D(const QAbstractPrintDialog);
+   return d->pd->minPage;
 }
 
 /*!
@@ -203,8 +206,8 @@ int QAbstractPrintDialog::minPage() const
 */
 int QAbstractPrintDialog::maxPage() const
 {
-    Q_D(const QAbstractPrintDialog);
-    return d->pd->maxPage;
+   Q_D(const QAbstractPrintDialog);
+   return d->pd->maxPage;
 }
 
 /*!
@@ -212,14 +215,15 @@ int QAbstractPrintDialog::maxPage() const
 */
 void QAbstractPrintDialog::setFromTo(int from, int to)
 {
-    Q_D(QAbstractPrintDialog);
-    Q_ASSERT_X(from <= to, "QAbstractPrintDialog::setFromTo",
-               "'from' must be less than or equal to 'to'");
-    d->pd->fromPage = from;
-    d->pd->toPage = to;
+   Q_D(QAbstractPrintDialog);
+   Q_ASSERT_X(from <= to, "QAbstractPrintDialog::setFromTo",
+              "'from' must be less than or equal to 'to'");
+   d->pd->fromPage = from;
+   d->pd->toPage = to;
 
-    if (d->pd->minPage == 0 && d->pd->maxPage == 0)
-        setMinMax(1, to);
+   if (d->pd->minPage == 0 && d->pd->maxPage == 0) {
+      setMinMax(1, to);
+   }
 }
 
 /*!
@@ -228,8 +232,8 @@ void QAbstractPrintDialog::setFromTo(int from, int to)
 */
 int QAbstractPrintDialog::fromPage() const
 {
-    Q_D(const QAbstractPrintDialog);
-    return d->pd->fromPage;
+   Q_D(const QAbstractPrintDialog);
+   return d->pd->fromPage;
 }
 
 /*!
@@ -238,8 +242,8 @@ int QAbstractPrintDialog::fromPage() const
 */
 int QAbstractPrintDialog::toPage() const
 {
-    Q_D(const QAbstractPrintDialog);
-    return d->pd->toPage;
+   Q_D(const QAbstractPrintDialog);
+   return d->pd->toPage;
 }
 
 
@@ -249,22 +253,23 @@ int QAbstractPrintDialog::toPage() const
 */
 QPrinter *QAbstractPrintDialog::printer() const
 {
-    Q_D(const QAbstractPrintDialog);
-    return d->printer;
+   Q_D(const QAbstractPrintDialog);
+   return d->printer;
 }
 
 void QAbstractPrintDialogPrivate::setPrinter(QPrinter *newPrinter)
 {
-    if (newPrinter) {
-        printer = newPrinter;
-        ownsPrinter = false;
-        if (printer->fromPage() || printer->toPage())
-            options |= QAbstractPrintDialog::PrintPageRange;
-    } else {
-        printer = new QPrinter;
-        ownsPrinter = true;
-    }
-    pd = printer->d_func();
+   if (newPrinter) {
+      printer = newPrinter;
+      ownsPrinter = false;
+      if (printer->fromPage() || printer->toPage()) {
+         options |= QAbstractPrintDialog::PrintPageRange;
+      }
+   } else {
+      printer = new QPrinter;
+      ownsPrinter = true;
+   }
+   pd = printer->d_func();
 }
 
 /*!
@@ -349,24 +354,25 @@ void QAbstractPrintDialogPrivate::setPrinter(QPrinter *newPrinter)
 
     Setting the option tabs will transfer their ownership to the print dialog.
 */
-void QAbstractPrintDialog::setOptionTabs(const QList<QWidget*> &tabs)
+void QAbstractPrintDialog::setOptionTabs(const QList<QWidget *> &tabs)
 {
-    Q_D(QAbstractPrintDialog);
-    d->setTabs(tabs);
+   Q_D(QAbstractPrintDialog);
+   d->setTabs(tabs);
 }
 
 void QPrintDialog::done(int result)
 {
-    Q_D(QPrintDialog);
-    QDialog::done(result);
-    if (result == Accepted)
-        emit accepted(printer());
-    if (d->receiverToDisconnectOnClose) {
-        disconnect(this, SIGNAL(accepted(QPrinter*)),
-                   d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
-        d->receiverToDisconnectOnClose = 0;
-    }
-    d->memberToDisconnectOnClose.clear();
+   Q_D(QPrintDialog);
+   QDialog::done(result);
+   if (result == Accepted) {
+      emit accepted(printer());
+   }
+   if (d->receiverToDisconnectOnClose) {
+      disconnect(this, SIGNAL(accepted(QPrinter *)),
+                 d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+      d->receiverToDisconnectOnClose = 0;
+   }
+   d->memberToDisconnectOnClose.clear();
 }
 
 /*!
@@ -380,11 +386,11 @@ void QPrintDialog::done(int result)
 */
 void QPrintDialog::open(QObject *receiver, const char *member)
 {
-    Q_D(QPrintDialog);
-    connect(this, SIGNAL(accepted(QPrinter*)), receiver, member);
-    d->receiverToDisconnectOnClose = receiver;
-    d->memberToDisconnectOnClose = member;
-    QDialog::open();
+   Q_D(QPrintDialog);
+   connect(this, SIGNAL(accepted(QPrinter *)), receiver, member);
+   d->receiverToDisconnectOnClose = receiver;
+   d->memberToDisconnectOnClose = member;
+   QDialog::open();
 }
 
 QT_END_NAMESPACE

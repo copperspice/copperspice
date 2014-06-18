@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,47 +38,46 @@ class QStringList;
 
 class QCommonStylePrivate : public QStylePrivate
 {
-    Q_DECLARE_PUBLIC(QCommonStyle)
+   Q_DECLARE_PUBLIC(QCommonStyle)
 
-public:
-    inline QCommonStylePrivate()
+ public:
+   inline QCommonStylePrivate()
 #ifndef QT_NO_ITEMVIEWS
-    : cachedOption(0)
+      : cachedOption(0)
 #endif
-    { }
+   { }
 
 #ifndef QT_NO_ITEMVIEWS
-    ~QCommonStylePrivate()
-    {
-        delete cachedOption;
-    }
-    void viewItemDrawText(QPainter *p, const QStyleOptionViewItemV4 *option, const QRect &rect) const;
-    void viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRect *checkRect,
-                        QRect *pixmapRect, QRect *textRect, bool sizehint) const;
-    QSize viewItemSize(const QStyleOptionViewItemV4 *option, int role) const;
+   ~QCommonStylePrivate() {
+      delete cachedOption;
+   }
+   void viewItemDrawText(QPainter *p, const QStyleOptionViewItemV4 *option, const QRect &rect) const;
+   void viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRect *checkRect,
+                       QRect *pixmapRect, QRect *textRect, bool sizehint) const;
+   QSize viewItemSize(const QStyleOptionViewItemV4 *option, int role) const;
 
-    mutable QRect decorationRect, displayRect, checkRect;
-    mutable QStyleOptionViewItemV4 *cachedOption;
-    bool isViewItemCached(const QStyleOptionViewItemV4 &option) const {
-        return cachedOption && (option.rect == cachedOption->rect
-               && option.direction == cachedOption->direction
-               && option.state == cachedOption->state
-               && option.displayAlignment == cachedOption->displayAlignment
-               && option.decorationAlignment == cachedOption->decorationAlignment
-               && option.decorationPosition == cachedOption->decorationPosition
-               && option.decorationSize == cachedOption->decorationSize
-               && option.font == cachedOption->font
-               && option.features == cachedOption->features
-               && option.widget == cachedOption->widget
-               && option.index == cachedOption->index
-               && option.icon.isNull() == cachedOption->icon.isNull()
-               && option.text == cachedOption->text
-               && option.viewItemPosition == cachedOption->viewItemPosition);
-    }
+   mutable QRect decorationRect, displayRect, checkRect;
+   mutable QStyleOptionViewItemV4 *cachedOption;
+   bool isViewItemCached(const QStyleOptionViewItemV4 &option) const {
+      return cachedOption && (option.rect == cachedOption->rect
+                              && option.direction == cachedOption->direction
+                              && option.state == cachedOption->state
+                              && option.displayAlignment == cachedOption->displayAlignment
+                              && option.decorationAlignment == cachedOption->decorationAlignment
+                              && option.decorationPosition == cachedOption->decorationPosition
+                              && option.decorationSize == cachedOption->decorationSize
+                              && option.font == cachedOption->font
+                              && option.features == cachedOption->features
+                              && option.widget == cachedOption->widget
+                              && option.index == cachedOption->index
+                              && option.icon.isNull() == cachedOption->icon.isNull()
+                              && option.text == cachedOption->text
+                              && option.viewItemPosition == cachedOption->viewItemPosition);
+   }
 #endif
-    mutable QIcon tabBarcloseButtonIcon;
+   mutable QIcon tabBarcloseButtonIcon;
 #ifndef QT_NO_TABBAR
-    void tabLayout(const QStyleOptionTabV3 *opt, const QWidget *widget, QRect *textRect, QRect *pixmapRect) const;
+   void tabLayout(const QStyleOptionTabV3 *opt, const QWidget *widget, QRect *textRect, QRect *pixmapRect) const;
 #endif
 };
 

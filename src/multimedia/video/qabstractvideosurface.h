@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,53 +38,52 @@ class QAbstractVideoSurfacePrivate;
 
 class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject
 {
-    CS_OBJECT(QAbstractVideoSurface)
+   CS_OBJECT(QAbstractVideoSurface)
 
-public:
-    enum Error
-    {
-        NoError,
-        UnsupportedFormatError,
-        IncorrectFormatError,
-        StoppedError,
-        ResourceError
-    };
+ public:
+   enum Error {
+      NoError,
+      UnsupportedFormatError,
+      IncorrectFormatError,
+      StoppedError,
+      ResourceError
+   };
 
-    explicit QAbstractVideoSurface(QObject *parent = 0);
-    ~QAbstractVideoSurface();
+   explicit QAbstractVideoSurface(QObject *parent = 0);
+   ~QAbstractVideoSurface();
 
-    virtual QList<QVideoFrame::PixelFormat> supportedPixelFormats(
-            QAbstractVideoBuffer::HandleType handleType = QAbstractVideoBuffer::NoHandle) const = 0;
-    virtual bool isFormatSupported(const QVideoSurfaceFormat &format) const;
-    virtual QVideoSurfaceFormat nearestFormat(const QVideoSurfaceFormat &format) const;
+   virtual QList<QVideoFrame::PixelFormat> supportedPixelFormats(
+      QAbstractVideoBuffer::HandleType handleType = QAbstractVideoBuffer::NoHandle) const = 0;
+   virtual bool isFormatSupported(const QVideoSurfaceFormat &format) const;
+   virtual QVideoSurfaceFormat nearestFormat(const QVideoSurfaceFormat &format) const;
 
-    QVideoSurfaceFormat surfaceFormat() const;
+   QVideoSurfaceFormat surfaceFormat() const;
 
-    virtual bool start(const QVideoSurfaceFormat &format);
-    virtual void stop();
+   virtual bool start(const QVideoSurfaceFormat &format);
+   virtual void stop();
 
-    bool isActive() const;
+   bool isActive() const;
 
-    virtual bool present(const QVideoFrame &frame) = 0;
+   virtual bool present(const QVideoFrame &frame) = 0;
 
-    Error error() const;
+   Error error() const;
 
-    MULTI_CS_SIGNAL_1(Public, void activeChanged(bool active))
-    MULTI_CS_SIGNAL_2(activeChanged,active) 
-    MULTI_CS_SIGNAL_1(Public, void surfaceFormatChanged(const QVideoSurfaceFormat & format))
-    MULTI_CS_SIGNAL_2(surfaceFormatChanged,format) 
-    MULTI_CS_SIGNAL_1(Public, void supportedFormatsChanged())
-    MULTI_CS_SIGNAL_2(supportedFormatsChanged) 
+   MULTI_CS_SIGNAL_1(Public, void activeChanged(bool active))
+   MULTI_CS_SIGNAL_2(activeChanged, active)
+   MULTI_CS_SIGNAL_1(Public, void surfaceFormatChanged(const QVideoSurfaceFormat &format))
+   MULTI_CS_SIGNAL_2(surfaceFormatChanged, format)
+   MULTI_CS_SIGNAL_1(Public, void supportedFormatsChanged())
+   MULTI_CS_SIGNAL_2(supportedFormatsChanged)
 
-protected:
-    QAbstractVideoSurface(QAbstractVideoSurfacePrivate &dd, QObject *parent);
-    QScopedPointer<QAbstractVideoSurfacePrivate> d_ptr;
+ protected:
+   QAbstractVideoSurface(QAbstractVideoSurfacePrivate &dd, QObject *parent);
+   QScopedPointer<QAbstractVideoSurfacePrivate> d_ptr;
 
-    void setError(Error error);
+   void setError(Error error);
 
-private:
-    Q_DECLARE_PRIVATE(QAbstractVideoSurface)
-	 
+ private:
+   Q_DECLARE_PRIVATE(QAbstractVideoSurface)
+
 };
 
 QT_END_NAMESPACE

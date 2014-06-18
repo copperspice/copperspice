@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -47,118 +47,120 @@ class ExtraArea;
 
 class QPlainTextEditControl : public QTextControl
 {
-    CS_OBJECT(QPlainTextEditControl)
+   CS_OBJECT(QPlainTextEditControl)
 
-public:
-    QPlainTextEditControl(QPlainTextEdit *parent);
-
-
-    QMimeData *createMimeDataFromSelection() const;
-    bool canInsertFromMimeData(const QMimeData *source) const;
-    void insertFromMimeData(const QMimeData *source);
-    int hitTest(const QPointF &point, Qt::HitTestAccuracy = Qt::FuzzyHit) const;
-    QRectF blockBoundingRect(const QTextBlock &block) const;
-
-    inline QRectF cursorRect(const QTextCursor &cursor) const 
-       {
-           QRectF r = QTextControl::cursorRect(cursor);
-           r.setLeft(qMax(r.left(), (qreal) 0.));
-           return r;
-       }
-
-    inline QRectF cursorRect()
-       { return cursorRect(textCursor()); }
-
-    inline void ensureCursorVisible()
-       {
-           textEdit->ensureCursorVisible();
-           emit microFocusChanged();
-       }
+ public:
+   QPlainTextEditControl(QPlainTextEdit *parent);
 
 
-    QPlainTextEdit *textEdit;
-    int topBlock;
-    QTextBlock firstVisibleBlock() const;
+   QMimeData *createMimeDataFromSelection() const;
+   bool canInsertFromMimeData(const QMimeData *source) const;
+   void insertFromMimeData(const QMimeData *source);
+   int hitTest(const QPointF &point, Qt::HitTestAccuracy = Qt::FuzzyHit) const;
+   QRectF blockBoundingRect(const QTextBlock &block) const;
 
-    QVariant loadResource(int type, const QUrl &name) {
-        return textEdit->loadResource(type, name);
-    }
+   inline QRectF cursorRect(const QTextCursor &cursor) const {
+      QRectF r = QTextControl::cursorRect(cursor);
+      r.setLeft(qMax(r.left(), (qreal) 0.));
+      return r;
+   }
+
+   inline QRectF cursorRect() {
+      return cursorRect(textCursor());
+   }
+
+   inline void ensureCursorVisible() {
+      textEdit->ensureCursorVisible();
+      emit microFocusChanged();
+   }
+
+
+   QPlainTextEdit *textEdit;
+   int topBlock;
+   QTextBlock firstVisibleBlock() const;
+
+   QVariant loadResource(int type, const QUrl &name) {
+      return textEdit->loadResource(type, name);
+   }
 
 };
 
 
 class QPlainTextEditPrivate : public QAbstractScrollAreaPrivate
 {
-    Q_DECLARE_PUBLIC(QPlainTextEdit)
+   Q_DECLARE_PUBLIC(QPlainTextEdit)
 
-public:
-    QPlainTextEditPrivate();
+ public:
+   QPlainTextEditPrivate();
 
-    void init(const QString &txt = QString());
-    void _q_repaintContents(const QRectF &contentsRect);
+   void init(const QString &txt = QString());
+   void _q_repaintContents(const QRectF &contentsRect);
 
-    inline QPoint mapToContents(const QPoint &point) const
-        { return QPoint(point.x() + horizontalOffset(), point.y() + verticalOffset()); }
+   inline QPoint mapToContents(const QPoint &point) const {
+      return QPoint(point.x() + horizontalOffset(), point.y() + verticalOffset());
+   }
 
-    void _q_adjustScrollbars();
-    void _q_verticalScrollbarActionTriggered(int action);
-    void ensureViewportLayouted();
-    void relayoutDocument();
+   void _q_adjustScrollbars();
+   void _q_verticalScrollbarActionTriggered(int action);
+   void ensureViewportLayouted();
+   void relayoutDocument();
 
-    void pageUpDown(QTextCursor::MoveOperation op, QTextCursor::MoveMode moveMode, bool moveCursor = true);
+   void pageUpDown(QTextCursor::MoveOperation op, QTextCursor::MoveMode moveMode, bool moveCursor = true);
 
-    inline int horizontalOffset() const
-        { return (q_func()->isRightToLeft() ? (hbar->maximum() - hbar->value()) : hbar->value()); }
+   inline int horizontalOffset() const {
+      return (q_func()->isRightToLeft() ? (hbar->maximum() - hbar->value()) : hbar->value());
+   }
 
-    qreal verticalOffset(int topBlock, int topLine) const;
-    qreal verticalOffset() const;
+   qreal verticalOffset(int topBlock, int topLine) const;
+   qreal verticalOffset() const;
 
-    inline void sendControlEvent(QEvent *e)
-        { control->processEvent(e, QPointF(horizontalOffset(), verticalOffset()), viewport); }
+   inline void sendControlEvent(QEvent *e) {
+      control->processEvent(e, QPointF(horizontalOffset(), verticalOffset()), viewport);
+   }
 
-    void updateDefaultTextOption();
+   void updateDefaultTextOption();
 
-    QPlainTextEditControl *control;
+   QPlainTextEditControl *control;
 
-    bool tabChangesFocus;
+   bool tabChangesFocus;
 
-    QBasicTimer autoScrollTimer;
-    QPoint autoScrollDragPos;
+   QBasicTimer autoScrollTimer;
+   QPoint autoScrollDragPos;
 
-    QPlainTextEdit::LineWrapMode lineWrap;
-    QTextOption::WrapMode wordWrap;
+   QPlainTextEdit::LineWrapMode lineWrap;
+   QTextOption::WrapMode wordWrap;
 
-    uint showCursorOnInitialShow : 1;
-    uint backgroundVisible : 1;
-    uint centerOnScroll : 1;
-    uint inDrag : 1;
-    uint clickCausedFocus : 1;
+   uint showCursorOnInitialShow : 1;
+   uint backgroundVisible : 1;
+   uint centerOnScroll : 1;
+   uint inDrag : 1;
+   uint clickCausedFocus : 1;
 
-    int topLine;
-    qreal topLineFracture; // for non-int sized fonts
+   int topLine;
+   qreal topLineFracture; // for non-int sized fonts
 
-    void setTopLine(int visualTopLine, int dx = 0);
-    void setTopBlock(int newTopBlock, int newTopLine, int dx = 0);
+   void setTopLine(int visualTopLine, int dx = 0);
+   void setTopBlock(int newTopBlock, int newTopLine, int dx = 0);
 
-    void ensureVisible(int position, bool center, bool forceCenter = false);
-    void ensureCursorVisible(bool center = false);
-    void updateViewport();
+   void ensureVisible(int position, bool center, bool forceCenter = false);
+   void ensureCursorVisible(bool center = false);
+   void updateViewport();
 
-    QPointer<QPlainTextDocumentLayout> documentLayoutPtr;
+   QPointer<QPlainTextDocumentLayout> documentLayoutPtr;
 
-    void append(const QString &text, Qt::TextFormat format = Qt::AutoText);
+   void append(const QString &text, Qt::TextFormat format = Qt::AutoText);
 
-    qreal pageUpDownLastCursorY;
-    bool pageUpDownLastCursorYIsValid;
+   qreal pageUpDownLastCursorY;
+   bool pageUpDownLastCursorYIsValid;
 
 #ifdef QT_KEYPAD_NAVIGATION
-    QBasicTimer deleteAllTimer;
+   QBasicTimer deleteAllTimer;
 #endif
 
-    void _q_cursorPositionChanged();
-    void _q_modificationChanged(bool);
+   void _q_cursorPositionChanged();
+   void _q_modificationChanged(bool);
 
-    int originalOffsetY;
+   int originalOffsetY;
 };
 
 QT_END_NAMESPACE

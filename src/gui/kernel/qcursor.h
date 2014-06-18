@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,13 +39,15 @@ class QVariant;
 
 class Q_GUI_EXPORT QCursor
 {
-public:
-    static QPoint pos();
-    static void setPos(int x, int y);
-    inline static void setPos(const QPoint &p) { setPos(p.x(), p.y()); }
+ public:
+   static QPoint pos();
+   static void setPos(int x, int y);
+   inline static void setPos(const QPoint &p) {
+      setPos(p.x(), p.y());
+   }
 
-private:
-    QCursor();
+ private:
+   QCursor();
 };
 
 #endif
@@ -64,54 +66,58 @@ void qt_mac_set_cursor(const QCursor *c);
 
 class Q_GUI_EXPORT QCursor
 {
-public:
-    QCursor();
-    QCursor(Qt::CursorShape shape);
-    QCursor(const QBitmap &bitmap, const QBitmap &mask, int hotX=-1, int hotY=-1);
-    QCursor(const QPixmap &pixmap, int hotX=-1, int hotY=-1);
-    QCursor(const QCursor &cursor);
-    ~QCursor();
-    QCursor &operator=(const QCursor &cursor);
+ public:
+   QCursor();
+   QCursor(Qt::CursorShape shape);
+   QCursor(const QBitmap &bitmap, const QBitmap &mask, int hotX = -1, int hotY = -1);
+   QCursor(const QPixmap &pixmap, int hotX = -1, int hotY = -1);
+   QCursor(const QCursor &cursor);
+   ~QCursor();
+   QCursor &operator=(const QCursor &cursor);
 
-    inline QCursor &operator=(QCursor &&other)
-    { qSwap(d, other.d); return *this; }
+   inline QCursor &operator=(QCursor && other) {
+      qSwap(d, other.d);
+      return *this;
+   }
 
-    operator QVariant() const;
+   operator QVariant() const;
 
-    Qt::CursorShape shape() const;
-    void setShape(Qt::CursorShape newShape);
+   Qt::CursorShape shape() const;
+   void setShape(Qt::CursorShape newShape);
 
-    const QBitmap *bitmap() const;
-    const QBitmap *mask() const;
-    QPixmap pixmap() const;
-    QPoint hotSpot() const;
+   const QBitmap *bitmap() const;
+   const QBitmap *mask() const;
+   QPixmap pixmap() const;
+   QPoint hotSpot() const;
 
-    static QPoint pos();
-    static void setPos(int x, int y);
-    inline static void setPos(const QPoint &p) { setPos(p.x(), p.y()); }
-    
+   static QPoint pos();
+   static void setPos(int x, int y);
+   inline static void setPos(const QPoint &p) {
+      setPos(p.x(), p.y());
+   }
+
 
 
 #if defined(Q_OS_WIN)
-    HCURSOR handle() const;
-    QCursor(HCURSOR cursor);
+   HCURSOR handle() const;
+   QCursor(HCURSOR cursor);
 #elif defined(Q_WS_X11)
-    Qt::HANDLE handle() const;
-    QCursor(Qt::HANDLE cursor);
-    static int x11Screen();
+   Qt::HANDLE handle() const;
+   QCursor(Qt::HANDLE cursor);
+   static int x11Screen();
 #elif defined(Q_OS_MAC)
-    Qt::HANDLE handle() const;
+   Qt::HANDLE handle() const;
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
-    int handle() const;
+   int handle() const;
 #endif
 
 
-private:
-    QCursorData *d;
+ private:
+   QCursorData *d;
 #if defined(Q_OS_MAC)
-    friend void *qt_mac_nsCursorForQCursor(const QCursor &c);
-    friend void qt_mac_set_cursor(const QCursor *c);
-    friend void qt_mac_updateCursorWithWidgetUnderMouse(QWidget *widgetUnderMouse);
+   friend void *qt_mac_nsCursorForQCursor(const QCursor &c);
+   friend void qt_mac_set_cursor(const QCursor *c);
+   friend void qt_mac_updateCursorWithWidgetUnderMouse(QWidget *widgetUnderMouse);
 #endif
 };
 

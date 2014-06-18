@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,19 +38,19 @@ QT_BEGIN_NAMESPACE
 
 class QLinuxFb_Shared
 {
-public:
-    volatile int lastop;
-    volatile int optype;
-    volatile int fifocount;   // Accel drivers only
-    volatile int fifomax;
-    volatile int forecol;     // Foreground colour caching
-    volatile unsigned int buffer_offset;   // Destination
-    volatile int linestep;
-    volatile int cliptop;    // Clip rectangle
-    volatile int clipleft;
-    volatile int clipright;
-    volatile int clipbottom;
-    volatile unsigned int rop;
+ public:
+   volatile int lastop;
+   volatile int optype;
+   volatile int fifocount;   // Accel drivers only
+   volatile int fifomax;
+   volatile int forecol;     // Foreground colour caching
+   volatile unsigned int buffer_offset;   // Destination
+   volatile int linestep;
+   volatile int cliptop;    // Clip rectangle
+   volatile int clipleft;
+   volatile int clipright;
+   volatile int clipbottom;
+   volatile unsigned int rop;
 
 };
 
@@ -58,51 +58,51 @@ class QLinuxFbScreenPrivate;
 
 class Q_GUI_EXPORT QLinuxFbScreen : public QScreen
 {
-public:
-    explicit QLinuxFbScreen(int display_id);
-    virtual ~QLinuxFbScreen();
+ public:
+   explicit QLinuxFbScreen(int display_id);
+   virtual ~QLinuxFbScreen();
 
-    virtual bool initDevice();
-    virtual bool connect(const QString &displaySpec);
+   virtual bool initDevice();
+   virtual bool connect(const QString &displaySpec);
 
-    virtual bool useOffscreen();
+   virtual bool useOffscreen();
 
-    enum DriverTypes { GenericDriver, EInk8Track };
+   enum DriverTypes { GenericDriver, EInk8Track };
 
-    virtual void disconnect();
-    virtual void shutdownDevice();
-    virtual void setMode(int,int,int);
-    virtual void save();
-    virtual void restore();
-    virtual void blank(bool on);
-    virtual void set(unsigned int,unsigned int,unsigned int,unsigned int);
-    virtual uchar * cache(int);
-    virtual void uncache(uchar *);
-    virtual int sharedRamSize(void *);
-    virtual void setDirty(const QRect&);
+   virtual void disconnect();
+   virtual void shutdownDevice();
+   virtual void setMode(int, int, int);
+   virtual void save();
+   virtual void restore();
+   virtual void blank(bool on);
+   virtual void set(unsigned int, unsigned int, unsigned int, unsigned int);
+   virtual uchar *cache(int);
+   virtual void uncache(uchar *);
+   virtual int sharedRamSize(void *);
+   virtual void setDirty(const QRect &);
 
-    QLinuxFb_Shared * shared;
+   QLinuxFb_Shared *shared;
 
-protected:
+ protected:
 
-    void deleteEntry(uchar *);
+   void deleteEntry(uchar *);
 
-    bool canaccel;
-    int dataoffset;
-    int cacheStart;
+   bool canaccel;
+   int dataoffset;
+   int cacheStart;
 
-    virtual void fixupScreenInfo(fb_fix_screeninfo &finfo, fb_var_screeninfo &vinfo);
-    static void clearCache(QScreen *instance, int);
+   virtual void fixupScreenInfo(fb_fix_screeninfo &finfo, fb_var_screeninfo &vinfo);
+   static void clearCache(QScreen *instance, int);
 
-private:
+ private:
 
-    void delete_entry(int);
-    void insert_entry(int,int,int);
-    void setupOffScreen();
-    void createPalette(fb_cmap &cmap, fb_var_screeninfo &vinfo, fb_fix_screeninfo &finfo);
-    void setPixelFormat(struct fb_var_screeninfo);
+   void delete_entry(int);
+   void insert_entry(int, int, int);
+   void setupOffScreen();
+   void createPalette(fb_cmap &cmap, fb_var_screeninfo &vinfo, fb_fix_screeninfo &finfo);
+   void setPixelFormat(struct fb_var_screeninfo);
 
-    QLinuxFbScreenPrivate *d_ptr;
+   QLinuxFbScreenPrivate *d_ptr;
 };
 
 #endif // QT_NO_QWS_LINUXFB

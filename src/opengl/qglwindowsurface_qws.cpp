@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,12 +33,12 @@ QT_BEGIN_NAMESPACE
 
 class QWSGLWindowSurfacePrivate
 {
-public:
-    QWSGLWindowSurfacePrivate() :
-        qglContext(0), ownsContext(false) {}
+ public:
+   QWSGLWindowSurfacePrivate() :
+      qglContext(0), ownsContext(false) {}
 
-    QGLContext *qglContext;
-    bool ownsContext;
+   QGLContext *qglContext;
+   bool ownsContext;
 };
 
 /*!
@@ -47,8 +47,8 @@ public:
     is typically allocated in setGeometry().
 */
 QWSGLWindowSurface::QWSGLWindowSurface(QWidget *window)
-    : QWSWindowSurface(window),
-      d_ptr(new QWSGLWindowSurfacePrivate)
+   : QWSWindowSurface(window),
+     d_ptr(new QWSGLWindowSurfacePrivate)
 {
 }
 
@@ -56,7 +56,7 @@ QWSGLWindowSurface::QWSGLWindowSurface(QWidget *window)
     Constructs an empty QWSGLWindowSurface.
 */
 QWSGLWindowSurface::QWSGLWindowSurface()
-    : d_ptr(new QWSGLWindowSurfacePrivate)
+   : d_ptr(new QWSGLWindowSurfacePrivate)
 {
 }
 
@@ -66,10 +66,11 @@ QWSGLWindowSurface::QWSGLWindowSurface()
  */
 QWSGLWindowSurface::~QWSGLWindowSurface()
 {
-    Q_D(QWSGLWindowSurface);
-    if (d->ownsContext)
-        delete d->qglContext;
-    delete d;
+   Q_D(QWSGLWindowSurface);
+   if (d->ownsContext) {
+      delete d->qglContext;
+   }
+   delete d;
 }
 
 /*!
@@ -77,13 +78,13 @@ QWSGLWindowSurface::~QWSGLWindowSurface()
 */
 QGLContext *QWSGLWindowSurface::context() const
 {
-    Q_D(const QWSGLWindowSurface);
-    if (!d->qglContext) {
-        QWSGLWindowSurface *that = const_cast<QWSGLWindowSurface*>(this);
-        that->setContext(new QGLContext(QGLFormat::defaultFormat()));
-        that->d_func()->ownsContext = true;
-    }
-    return d->qglContext;
+   Q_D(const QWSGLWindowSurface);
+   if (!d->qglContext) {
+      QWSGLWindowSurface *that = const_cast<QWSGLWindowSurface *>(this);
+      that->setContext(new QGLContext(QGLFormat::defaultFormat()));
+      that->d_func()->ownsContext = true;
+   }
+   return d->qglContext;
 }
 
 /*!
@@ -91,12 +92,12 @@ QGLContext *QWSGLWindowSurface::context() const
 */
 void QWSGLWindowSurface::setContext(QGLContext *context)
 {
-    Q_D(QWSGLWindowSurface);
-    if (d->ownsContext) {
-        delete d->qglContext;
-        d->ownsContext = false;
-    }
-    d->qglContext = context;
+   Q_D(QWSGLWindowSurface);
+   if (d->ownsContext) {
+      delete d->qglContext;
+      d->ownsContext = false;
+   }
+   d->qglContext = context;
 }
 
 QT_END_NAMESPACE

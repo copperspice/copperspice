@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -82,30 +82,30 @@
 // The Xinerama API is not documented. In theory it could change but it
 // probably won't because Sun are using it in at least dtlogin (bug 4221829).
 extern "C" Bool XPanoramiXQueryExtension(
-    Display*,
-    int*,
-    int*
+   Display *,
+   int *,
+   int *
 );
 extern "C" Status XPanoramiXQueryVersion(
-    Display*,
-    int*,
-    int*
+   Display *,
+   int *,
+   int *
 );
 extern "C" Status XPanoramiXGetState(
-    Display*,
-    Drawable,
-    XPanoramiXInfo*
+   Display *,
+   Drawable,
+   XPanoramiXInfo *
 );
 extern "C" Status XPanoramiXGetScreenCount(
-    Display *,
-    Drawable,
-    XPanoramiXInfo*
+   Display *,
+   Drawable,
+   XPanoramiXInfo *
 );
 extern "C" Status XPanoramiXGetScreenSize(
-    Display*,
-    Drawable,
-    int,
-    XPanoramiXInfo*
+   Display *,
+   Drawable,
+   int,
+   XPanoramiXInfo *
 );
 #  else // XFree86
 // XFree86 does not C++ify Xinerama (at least up to XFree86 4.0.3).
@@ -145,11 +145,11 @@ typedef char *XPointer;
 #endif
 
 #if defined(X11R4)
-  // X11R4 does not have XIM
+// X11R4 does not have XIM
 # define QT_NO_XIM
 
 #elif defined(Q_OS_HPUX) && defined(__LP64__)
-  // XCreateIC broken when compiling 64-bit ELF on HP-UX 11.0
+// XCreateIC broken when compiling 64-bit ELF on HP-UX 11.0
 # define QT_NO_XIM
 
 #endif // QT_NO_XIM
@@ -184,8 +184,8 @@ typedef Bool (*PtrXRRQueryExtension)(Display *, int *, int *);
 
 #ifndef QT_NO_XINPUT
 typedef int (*PtrXCloseDevice)(Display *, XDevice *);
-typedef XDeviceInfo* (*PtrXListInputDevices)(Display *, int *);
-typedef XDevice* (*PtrXOpenDevice)(Display *, XID);
+typedef XDeviceInfo *(*PtrXListInputDevices)(Display *, int *);
+typedef XDevice *(*PtrXOpenDevice)(Display *, XID);
 typedef void (*PtrXFreeDeviceList)(XDeviceInfo *);
 typedef int (*PtrXSelectExtensionEvent)(Display *, Window, XEventClass *, int);
 #endif
@@ -207,21 +207,21 @@ typedef int (*PtrXSelectExtensionEvent)(Display *, Window, XEventClass *, int);
 //######### Therefore, we have to declare these functions ourselves.
 
 extern "C" Bool XRegisterIMInstantiateCallback(
-    Display*,
-    struct _XrmHashBucketRec*,
-    char*,
-    char*,
-    XIMProc, //XFree86 has XIDProc, which has to be wrong
-    XPointer
+   Display *,
+   struct _XrmHashBucketRec *,
+   char *,
+   char *,
+   XIMProc, //XFree86 has XIDProc, which has to be wrong
+   XPointer
 );
 
 extern "C" Bool XUnregisterIMInstantiateCallback(
-    Display*,
-    struct _XrmHashBucketRec*,
-    char*,
-    char*,
-    XIMProc, //XFree86 has XIDProc, which has to be wrong
-    XPointer
+   Display *,
+   struct _XrmHashBucketRec *,
+   char *,
+   char *,
+   XIMProc, //XFree86 has XIDProc, which has to be wrong
+   XPointer
 );
 
 extern "C" char *XSetIMValues(XIM /* im */, ...);
@@ -257,28 +257,27 @@ QT_BEGIN_NAMESPACE
 class QWidget;
 
 struct QX11InfoData {
-    uint ref;
-    int screen;
-    int dpiX;
-    int dpiY;
-    int depth;
-    int cells;
-    Colormap colormap;
-    Visual *visual;
-    bool defaultColormap;
-    bool defaultVisual;
-    int subpixel;
+   uint ref;
+   int screen;
+   int dpiX;
+   int dpiY;
+   int depth;
+   int cells;
+   Colormap colormap;
+   Visual *visual;
+   bool defaultColormap;
+   bool defaultVisual;
+   int subpixel;
 };
 
 class QDrag;
-struct QXdndDropTransaction
-{
-    Time timestamp;
-    Window target;
-    Window proxy_target;
-    QWidget *targetWidget;
-    QWidget *embedding_widget;
-    QDrag *object;
+struct QXdndDropTransaction {
+   Time timestamp;
+   Window target;
+   Window proxy_target;
+   QWidget *targetWidget;
+   QWidget *embedding_widget;
+   QDrag *object;
 };
 
 class QMimeData;
@@ -287,384 +286,385 @@ struct QX11Data;
 extern Q_GUI_EXPORT QX11Data *qt_x11Data;
 
 enum DesktopEnvironment {
-    DE_UNKNOWN,
-    DE_KDE,
-    DE_GNOME,
-    DE_CDE,
-    DE_MEEGO_COMPOSITOR,
-    DE_4DWM
+   DE_UNKNOWN,
+   DE_KDE,
+   DE_GNOME,
+   DE_CDE,
+   DE_MEEGO_COMPOSITOR,
+   DE_4DWM
 };
 
-struct QX11Data
-{
-    static Qt::KeyboardModifiers translateModifiers(int s);
+struct QX11Data {
+   static Qt::KeyboardModifiers translateModifiers(int s);
 
-    Window findClientWindow(Window, Atom, bool);
+   Window findClientWindow(Window, Atom, bool);
 
-    // from qclipboard_x11.cpp
-    bool clipboardWaitForEvent(Window win, int type, XEvent *event, int timeout, bool checkManager = false);
-    bool clipboardReadProperty(Window win, Atom property, bool deleteProperty,
-                            QByteArray *buffer, int *size, Atom *type, int *format);
-    QByteArray clipboardReadIncrementalProperty(Window win, Atom property, int nbytes, bool nullterm);
+   // from qclipboard_x11.cpp
+   bool clipboardWaitForEvent(Window win, int type, XEvent *event, int timeout, bool checkManager = false);
+   bool clipboardReadProperty(Window win, Atom property, bool deleteProperty,
+                              QByteArray *buffer, int *size, Atom *type, int *format);
+   QByteArray clipboardReadIncrementalProperty(Window win, Atom property, int nbytes, bool nullterm);
 
-    // from qdnd_x11.cpp
-    bool dndEnable(QWidget* w, bool on);
-    static void xdndSetup();
-    void xdndHandleEnter(QWidget *, const XEvent *, bool);
-    void xdndHandlePosition(QWidget *, const XEvent *, bool);
-    void xdndHandleStatus(QWidget *, const XEvent *, bool);
-    void xdndHandleLeave(QWidget *, const XEvent *, bool);
-    void xdndHandleDrop(QWidget *, const XEvent *, bool);
-    void xdndHandleFinished(QWidget *, const XEvent *, bool);
-    void xdndHandleSelectionRequest(const XSelectionRequestEvent *);
-    static bool xdndHandleBadwindow();
-    QByteArray xdndAtomToString(Atom a);
-    Atom xdndStringToAtom(const char *);
+   // from qdnd_x11.cpp
+   bool dndEnable(QWidget *w, bool on);
+   static void xdndSetup();
+   void xdndHandleEnter(QWidget *, const XEvent *, bool);
+   void xdndHandlePosition(QWidget *, const XEvent *, bool);
+   void xdndHandleStatus(QWidget *, const XEvent *, bool);
+   void xdndHandleLeave(QWidget *, const XEvent *, bool);
+   void xdndHandleDrop(QWidget *, const XEvent *, bool);
+   void xdndHandleFinished(QWidget *, const XEvent *, bool);
+   void xdndHandleSelectionRequest(const XSelectionRequestEvent *);
+   static bool xdndHandleBadwindow();
+   QByteArray xdndAtomToString(Atom a);
+   Atom xdndStringToAtom(const char *);
 
-    QString xdndMimeAtomToString(Atom a);
-    Atom xdndMimeStringToAtom(const QString &mimeType);
-    QStringList xdndMimeFormatsForAtom(Atom a);
-    bool xdndMimeDataForAtom(Atom a, QMimeData *mimeData, QByteArray *data, Atom *atomFormat, int *dataFormat);
-    QList<Atom> xdndMimeAtomsForFormat(const QString &format);
-    QVariant xdndMimeConvertToFormat(Atom a, const QByteArray &data, const QString &format, QVariant::Type requestedType, const QByteArray &encoding);
-    Atom xdndMimeAtomForFormat(const QString &format, QVariant::Type requestedType, const QList<Atom> &atoms, QByteArray *requestedEncoding);
+   QString xdndMimeAtomToString(Atom a);
+   Atom xdndMimeStringToAtom(const QString &mimeType);
+   QStringList xdndMimeFormatsForAtom(Atom a);
+   bool xdndMimeDataForAtom(Atom a, QMimeData *mimeData, QByteArray *data, Atom *atomFormat, int *dataFormat);
+   QList<Atom> xdndMimeAtomsForFormat(const QString &format);
+   QVariant xdndMimeConvertToFormat(Atom a, const QByteArray &data, const QString &format, QVariant::Type requestedType,
+                                    const QByteArray &encoding);
+   Atom xdndMimeAtomForFormat(const QString &format, QVariant::Type requestedType, const QList<Atom> &atoms,
+                              QByteArray *requestedEncoding);
 
-    QList<QXdndDropTransaction> dndDropTransactions;
+   QList<QXdndDropTransaction> dndDropTransactions;
 
-    // from qmotifdnd_x11.cpp
-    void motifdndHandle(QWidget *, const XEvent *, bool);
-    void motifdndEnable(QWidget *, bool);
-    QVariant motifdndObtainData(const char *format);
-    QByteArray motifdndFormat(int n);
-    bool motifdnd_active;
+   // from qmotifdnd_x11.cpp
+   void motifdndHandle(QWidget *, const XEvent *, bool);
+   void motifdndEnable(QWidget *, bool);
+   QVariant motifdndObtainData(const char *format);
+   QByteArray motifdndFormat(int n);
+   bool motifdnd_active;
 
-    Display *display;
-    char *displayName;
-    bool foreignDisplay;
-    // current focus model
-    enum {
-        FM_Unknown = -1,
-        FM_Other = 0,
-        FM_PointerRoot = 1
-    };
-    int focus_model;
+   Display *display;
+   char *displayName;
+   bool foreignDisplay;
+   // current focus model
+   enum {
+      FM_Unknown = -1,
+      FM_Other = 0,
+      FM_PointerRoot = 1
+   };
+   int focus_model;
 
-    // true if Qt is compiled w/ RANDR support and RANDR is supported on the connected Display
-    bool use_xrandr;
-    int xrandr_major;
-    int xrandr_eventbase;
-    int xrandr_errorbase;
+   // true if Qt is compiled w/ RANDR support and RANDR is supported on the connected Display
+   bool use_xrandr;
+   int xrandr_major;
+   int xrandr_eventbase;
+   int xrandr_errorbase;
 
-    // true if Qt is compiled w/ RENDER support and RENDER is supported on the connected Display
-    bool use_xrender;
-    int xrender_major;
-    int xrender_version;
+   // true if Qt is compiled w/ RENDER support and RENDER is supported on the connected Display
+   bool use_xrender;
+   int xrender_major;
+   int xrender_version;
 
-    // true if Qt is compiled w/ XFIXES support and XFIXES is supported on the connected Display
-    bool use_xfixes;
-    int xfixes_major;
-    int xfixes_eventbase;
-    int xfixes_errorbase;
+   // true if Qt is compiled w/ XFIXES support and XFIXES is supported on the connected Display
+   bool use_xfixes;
+   int xfixes_major;
+   int xfixes_eventbase;
+   int xfixes_errorbase;
 
 #ifndef QT_NO_XFIXES
-    PtrXFixesQueryExtension ptrXFixesQueryExtension;
-    PtrXFixesQueryVersion ptrXFixesQueryVersion;
-    PtrXFixesSetCursorName ptrXFixesSetCursorName;
-    PtrXFixesSelectSelectionInput ptrXFixesSelectSelectionInput;
+   PtrXFixesQueryExtension ptrXFixesQueryExtension;
+   PtrXFixesQueryVersion ptrXFixesQueryVersion;
+   PtrXFixesSetCursorName ptrXFixesSetCursorName;
+   PtrXFixesSelectSelectionInput ptrXFixesSelectSelectionInput;
 #endif
 
 #ifndef QT_NO_XINPUT
-    PtrXCloseDevice ptrXCloseDevice;
-    PtrXListInputDevices ptrXListInputDevices;
-    PtrXOpenDevice ptrXOpenDevice;
-    PtrXFreeDeviceList ptrXFreeDeviceList;
-    PtrXSelectExtensionEvent ptrXSelectExtensionEvent;
+   PtrXCloseDevice ptrXCloseDevice;
+   PtrXListInputDevices ptrXListInputDevices;
+   PtrXOpenDevice ptrXOpenDevice;
+   PtrXFreeDeviceList ptrXFreeDeviceList;
+   PtrXSelectExtensionEvent ptrXSelectExtensionEvent;
 #endif // QT_NO_XINPUT
 
 
-    // true if Qt is compiled w/ MIT-SHM support and MIT-SHM is supported on the connected Display
-    bool use_mitshm;
-    bool use_mitshm_pixmaps;
-    int mitshm_major;
+   // true if Qt is compiled w/ MIT-SHM support and MIT-SHM is supported on the connected Display
+   bool use_mitshm;
+   bool use_mitshm_pixmaps;
+   int mitshm_major;
 
-    // true if Qt is compiled w/ Tablet support and we have a tablet.
-    bool use_xinput;
-    int xinput_major;
-    int xinput_eventbase;
-    int xinput_errorbase;
+   // true if Qt is compiled w/ Tablet support and we have a tablet.
+   bool use_xinput;
+   int xinput_major;
+   int xinput_eventbase;
+   int xinput_errorbase;
 
-    // for XKEYBOARD support
-    bool use_xkb;
-    int xkb_major;
-    int xkb_eventbase;
-    int xkb_errorbase;
+   // for XKEYBOARD support
+   bool use_xkb;
+   int xkb_major;
+   int xkb_eventbase;
+   int xkb_errorbase;
 
-    QList<QWidget *> deferred_map;
-    struct ScrollInProgress {
-        long id;
-        QWidget* scrolled_widget;
-        int dx, dy;
-    };
-    long sip_serial;
-    QList<ScrollInProgress> sip_list;
+   QList<QWidget *> deferred_map;
+   struct ScrollInProgress {
+      long id;
+      QWidget *scrolled_widget;
+      int dx, dy;
+   };
+   long sip_serial;
+   QList<ScrollInProgress> sip_list;
 
-    // window managers list of supported "stuff"
-    Atom *net_supported_list;
-    // list of virtual root windows
-    Window *net_virtual_root_list;
-    // client leader window
-    Window wm_client_leader;
+   // window managers list of supported "stuff"
+   Atom *net_supported_list;
+   // list of virtual root windows
+   Window *net_virtual_root_list;
+   // client leader window
+   Window wm_client_leader;
 
-    QX11InfoData *screens;
-    Visual **argbVisuals;
-    Colormap *argbColormaps;
-    int screenCount;
-    int defaultScreen;
-    QHash<int, int> bppForDepth;
+   QX11InfoData *screens;
+   Visual **argbVisuals;
+   Colormap *argbColormaps;
+   int screenCount;
+   int defaultScreen;
+   QHash<int, int> bppForDepth;
 
-    Time time;
-    Time userTime;
+   Time time;
+   Time userTime;
 
-    QString default_im;
+   QString default_im;
 
-    // starts to ignore bad window errors from X
-    static inline void ignoreBadwindow() {
-        qt_x11Data->ignore_badwindow = true;
-        qt_x11Data->seen_badwindow = false;
-    }
+   // starts to ignore bad window errors from X
+   static inline void ignoreBadwindow() {
+      qt_x11Data->ignore_badwindow = true;
+      qt_x11Data->seen_badwindow = false;
+   }
 
-    // ends ignoring bad window errors and returns whether an error had happened.
-    static inline bool badwindow() {
-        qt_x11Data->ignore_badwindow = false;
-        return qt_x11Data->seen_badwindow;
-    }
+   // ends ignoring bad window errors and returns whether an error had happened.
+   static inline bool badwindow() {
+      qt_x11Data->ignore_badwindow = false;
+      return qt_x11Data->seen_badwindow;
+   }
 
-    bool ignore_badwindow;
-    bool seen_badwindow;
+   bool ignore_badwindow;
+   bool seen_badwindow;
 
-    // options
-    int visual_class;
-    int visual_id;
-    int color_count;
-    bool custom_cmap;
+   // options
+   int visual_class;
+   int visual_id;
+   int color_count;
+   bool custom_cmap;
 
-    // outside visual/colormap
-    Visual *visual;
-    Colormap colormap;
+   // outside visual/colormap
+   Visual *visual;
+   Colormap colormap;
 
 #ifndef QT_NO_XRENDER
-    enum { solid_fill_count = 16 };
-    struct SolidFills {
-        XRenderColor color;
-        int screen;
-        Picture picture;
-    } solid_fills[solid_fill_count];
-    enum { pattern_fill_count = 16 };
-    struct PatternFills {
-        XRenderColor color;
-        XRenderColor bg_color;
-        int screen;
-        int style;
-        bool opaque;
-        Picture picture;
-    } pattern_fills[pattern_fill_count];
-    Picture getSolidFill(int screen, const QColor &c);
-    XRenderColor preMultiply(const QColor &c);
+   enum { solid_fill_count = 16 };
+   struct SolidFills {
+      XRenderColor color;
+      int screen;
+      Picture picture;
+   } solid_fills[solid_fill_count];
+   enum { pattern_fill_count = 16 };
+   struct PatternFills {
+      XRenderColor color;
+      XRenderColor bg_color;
+      int screen;
+      int style;
+      bool opaque;
+      Picture picture;
+   } pattern_fills[pattern_fill_count];
+   Picture getSolidFill(int screen, const QColor &c);
+   XRenderColor preMultiply(const QColor &c);
 #endif
 
-    bool has_fontconfig;
-    qreal fc_scale;
-    bool fc_antialias;
-    int fc_hint_style;
+   bool has_fontconfig;
+   qreal fc_scale;
+   bool fc_antialias;
+   int fc_hint_style;
 
-    char *startupId;
+   char *startupId;
 
-    DesktopEnvironment desktopEnvironment : 8;
-    uint desktopVersion : 8;  /* Used only for KDE */
+   DesktopEnvironment desktopEnvironment : 8;
+   uint desktopVersion : 8;  /* Used only for KDE */
 
-    /* Warning: if you modify this list, modify the names of atoms in qapplication_x11.cpp as well! */
-    enum X11Atom {
-        // window-manager <-> client protocols
-        WM_PROTOCOLS,
-        WM_DELETE_WINDOW,
-        WM_TAKE_FOCUS,
-        _NET_WM_PING,
-        _NET_WM_CONTEXT_HELP,
-        _NET_WM_SYNC_REQUEST,
-        _NET_WM_SYNC_REQUEST_COUNTER,
+   /* Warning: if you modify this list, modify the names of atoms in qapplication_x11.cpp as well! */
+   enum X11Atom {
+      // window-manager <-> client protocols
+      WM_PROTOCOLS,
+      WM_DELETE_WINDOW,
+      WM_TAKE_FOCUS,
+      _NET_WM_PING,
+      _NET_WM_CONTEXT_HELP,
+      _NET_WM_SYNC_REQUEST,
+      _NET_WM_SYNC_REQUEST_COUNTER,
 
-        // ICCCM window state
-        WM_STATE,
-        WM_CHANGE_STATE,
+      // ICCCM window state
+      WM_STATE,
+      WM_CHANGE_STATE,
 
-        // Session management
-        WM_CLIENT_LEADER,
-        WM_WINDOW_ROLE,
-        SM_CLIENT_ID,
+      // Session management
+      WM_CLIENT_LEADER,
+      WM_WINDOW_ROLE,
+      SM_CLIENT_ID,
 
-        // Clipboard
-        CLIPBOARD,
-        INCR,
-        TARGETS,
-        MULTIPLE,
-        TIMESTAMP,
-        SAVE_TARGETS,
-        CLIP_TEMPORARY,
-        _QT_SELECTION,
-        _QT_CLIPBOARD_SENTINEL,
-        _QT_SELECTION_SENTINEL,
-        CLIPBOARD_MANAGER,
+      // Clipboard
+      CLIPBOARD,
+      INCR,
+      TARGETS,
+      MULTIPLE,
+      TIMESTAMP,
+      SAVE_TARGETS,
+      CLIP_TEMPORARY,
+      _QT_SELECTION,
+      _QT_CLIPBOARD_SENTINEL,
+      _QT_SELECTION_SENTINEL,
+      CLIPBOARD_MANAGER,
 
-        RESOURCE_MANAGER,
+      RESOURCE_MANAGER,
 
-        _XSETROOT_ID,
+      _XSETROOT_ID,
 
-        _QT_SCROLL_DONE,
-        _QT_INPUT_ENCODING,
+      _QT_SCROLL_DONE,
+      _QT_INPUT_ENCODING,
 
-        _MOTIF_WM_HINTS,
+      _MOTIF_WM_HINTS,
 
-        DTWM_IS_RUNNING,
-        ENLIGHTENMENT_DESKTOP,
-        _DT_SAVE_MODE,
-        _SGI_DESKS_MANAGER,
+      DTWM_IS_RUNNING,
+      ENLIGHTENMENT_DESKTOP,
+      _DT_SAVE_MODE,
+      _SGI_DESKS_MANAGER,
 
-        // EWMH (aka NETWM)
-        _NET_SUPPORTED,
-        _NET_VIRTUAL_ROOTS,
-        _NET_WORKAREA,
+      // EWMH (aka NETWM)
+      _NET_SUPPORTED,
+      _NET_VIRTUAL_ROOTS,
+      _NET_WORKAREA,
 
-        _NET_MOVERESIZE_WINDOW,
-        _NET_WM_MOVERESIZE,
+      _NET_MOVERESIZE_WINDOW,
+      _NET_WM_MOVERESIZE,
 
-        _NET_WM_NAME,
-        _NET_WM_ICON_NAME,
-        _NET_WM_ICON,
+      _NET_WM_NAME,
+      _NET_WM_ICON_NAME,
+      _NET_WM_ICON,
 
-        _NET_WM_PID,
+      _NET_WM_PID,
 
-        _NET_WM_WINDOW_OPACITY,
+      _NET_WM_WINDOW_OPACITY,
 
-        _NET_WM_STATE,
-        _NET_WM_STATE_ABOVE,
-        _NET_WM_STATE_BELOW,
-        _NET_WM_STATE_FULLSCREEN,
-        _NET_WM_STATE_MAXIMIZED_HORZ,
-        _NET_WM_STATE_MAXIMIZED_VERT,
-        _NET_WM_STATE_MODAL,
-        _NET_WM_STATE_STAYS_ON_TOP,
-        _NET_WM_STATE_DEMANDS_ATTENTION,
+      _NET_WM_STATE,
+      _NET_WM_STATE_ABOVE,
+      _NET_WM_STATE_BELOW,
+      _NET_WM_STATE_FULLSCREEN,
+      _NET_WM_STATE_MAXIMIZED_HORZ,
+      _NET_WM_STATE_MAXIMIZED_VERT,
+      _NET_WM_STATE_MODAL,
+      _NET_WM_STATE_STAYS_ON_TOP,
+      _NET_WM_STATE_DEMANDS_ATTENTION,
 
-        _NET_WM_USER_TIME,
-        _NET_WM_USER_TIME_WINDOW,
-        _NET_WM_FULL_PLACEMENT,
+      _NET_WM_USER_TIME,
+      _NET_WM_USER_TIME_WINDOW,
+      _NET_WM_FULL_PLACEMENT,
 
-        _NET_WM_WINDOW_TYPE,
-        _NET_WM_WINDOW_TYPE_DESKTOP,
-        _NET_WM_WINDOW_TYPE_DOCK,
-        _NET_WM_WINDOW_TYPE_TOOLBAR,
-        _NET_WM_WINDOW_TYPE_MENU,
-        _NET_WM_WINDOW_TYPE_UTILITY,
-        _NET_WM_WINDOW_TYPE_SPLASH,
-        _NET_WM_WINDOW_TYPE_DIALOG,
-        _NET_WM_WINDOW_TYPE_DROPDOWN_MENU,
-        _NET_WM_WINDOW_TYPE_POPUP_MENU,
-        _NET_WM_WINDOW_TYPE_TOOLTIP,
-        _NET_WM_WINDOW_TYPE_NOTIFICATION,
-        _NET_WM_WINDOW_TYPE_COMBO,
-        _NET_WM_WINDOW_TYPE_DND,
-        _NET_WM_WINDOW_TYPE_NORMAL,
-        _KDE_NET_WM_WINDOW_TYPE_OVERRIDE,
+      _NET_WM_WINDOW_TYPE,
+      _NET_WM_WINDOW_TYPE_DESKTOP,
+      _NET_WM_WINDOW_TYPE_DOCK,
+      _NET_WM_WINDOW_TYPE_TOOLBAR,
+      _NET_WM_WINDOW_TYPE_MENU,
+      _NET_WM_WINDOW_TYPE_UTILITY,
+      _NET_WM_WINDOW_TYPE_SPLASH,
+      _NET_WM_WINDOW_TYPE_DIALOG,
+      _NET_WM_WINDOW_TYPE_DROPDOWN_MENU,
+      _NET_WM_WINDOW_TYPE_POPUP_MENU,
+      _NET_WM_WINDOW_TYPE_TOOLTIP,
+      _NET_WM_WINDOW_TYPE_NOTIFICATION,
+      _NET_WM_WINDOW_TYPE_COMBO,
+      _NET_WM_WINDOW_TYPE_DND,
+      _NET_WM_WINDOW_TYPE_NORMAL,
+      _KDE_NET_WM_WINDOW_TYPE_OVERRIDE,
 
-        _KDE_NET_WM_FRAME_STRUT,
+      _KDE_NET_WM_FRAME_STRUT,
 
-        _NET_STARTUP_INFO,
-        _NET_STARTUP_INFO_BEGIN,
+      _NET_STARTUP_INFO,
+      _NET_STARTUP_INFO_BEGIN,
 
-        _NET_SUPPORTING_WM_CHECK,
+      _NET_SUPPORTING_WM_CHECK,
 
-        _NET_WM_CM_S0,
+      _NET_WM_CM_S0,
 
-        _NET_SYSTEM_TRAY_VISUAL,
+      _NET_SYSTEM_TRAY_VISUAL,
 
-        _NET_ACTIVE_WINDOW,
+      _NET_ACTIVE_WINDOW,
 
-        // Property formats
-        COMPOUND_TEXT,
-        TEXT,
-        UTF8_STRING,
+      // Property formats
+      COMPOUND_TEXT,
+      TEXT,
+      UTF8_STRING,
 
-        // Xdnd
-        XdndEnter,
-        XdndPosition,
-        XdndStatus,
-        XdndLeave,
-        XdndDrop,
-        XdndFinished,
-        XdndTypelist,
-        XdndActionList,
+      // Xdnd
+      XdndEnter,
+      XdndPosition,
+      XdndStatus,
+      XdndLeave,
+      XdndDrop,
+      XdndFinished,
+      XdndTypelist,
+      XdndActionList,
 
-        XdndSelection,
+      XdndSelection,
 
-        XdndAware,
-        XdndProxy,
+      XdndAware,
+      XdndProxy,
 
-        XdndActionCopy,
-        XdndActionLink,
-        XdndActionMove,
-        XdndActionPrivate,
+      XdndActionCopy,
+      XdndActionLink,
+      XdndActionMove,
+      XdndActionPrivate,
 
-        // Motif DND
-        _MOTIF_DRAG_AND_DROP_MESSAGE,
-        _MOTIF_DRAG_INITIATOR_INFO,
-        _MOTIF_DRAG_RECEIVER_INFO,
-        _MOTIF_DRAG_WINDOW,
-        _MOTIF_DRAG_TARGETS,
+      // Motif DND
+      _MOTIF_DRAG_AND_DROP_MESSAGE,
+      _MOTIF_DRAG_INITIATOR_INFO,
+      _MOTIF_DRAG_RECEIVER_INFO,
+      _MOTIF_DRAG_WINDOW,
+      _MOTIF_DRAG_TARGETS,
 
-        XmTRANSFER_SUCCESS,
-        XmTRANSFER_FAILURE,
+      XmTRANSFER_SUCCESS,
+      XmTRANSFER_FAILURE,
 
-        // Xkb
-        _XKB_RULES_NAMES,
+      // Xkb
+      _XKB_RULES_NAMES,
 
-        // XEMBED
-        _XEMBED,
-        _XEMBED_INFO,
+      // XEMBED
+      _XEMBED,
+      _XEMBED_INFO,
 
-        XWacomStylus,
-        XWacomCursor,
-        XWacomEraser,
+      XWacomStylus,
+      XWacomCursor,
+      XWacomEraser,
 
-        XTabletStylus,
-        XTabletEraser,
-        XTablet,
+      XTabletStylus,
+      XTabletEraser,
+      XTablet,
 
-        NPredefinedAtoms,
+      NPredefinedAtoms,
 
-        _QT_SETTINGS_TIMESTAMP = NPredefinedAtoms,
-        NAtoms
-    };
-    Atom atoms[NAtoms];
+      _QT_SETTINGS_TIMESTAMP = NPredefinedAtoms,
+      NAtoms
+   };
+   Atom atoms[NAtoms];
 
-    bool isSupportedByWM(Atom atom);
+   bool isSupportedByWM(Atom atom);
 
-    bool compositingManagerRunning;
+   bool compositingManagerRunning;
 
 #ifndef QT_NO_XCURSOR
-    PtrXcursorLibraryLoadCursor ptrXcursorLibraryLoadCursor;
+   PtrXcursorLibraryLoadCursor ptrXcursorLibraryLoadCursor;
 #endif // QT_NO_XCURSOR
 
 #ifndef QT_NO_XINERAMA
-    PtrXineramaQueryExtension ptrXineramaQueryExtension;
-    PtrXineramaIsActive ptrXineramaIsActive;
-    PtrXineramaQueryScreens ptrXineramaQueryScreens;
+   PtrXineramaQueryExtension ptrXineramaQueryExtension;
+   PtrXineramaIsActive ptrXineramaIsActive;
+   PtrXineramaQueryScreens ptrXineramaQueryScreens;
 #endif // QT_NO_XINERAMA
 
 #ifndef QT_NO_XRANDR
-    PtrXRRSelectInput ptrXRRSelectInput;
-    PtrXRRUpdateConfiguration ptrXRRUpdateConfiguration;
-    PtrXRRRootToScreen ptrXRRRootToScreen;
-    PtrXRRQueryExtension ptrXRRQueryExtension;
+   PtrXRRSelectInput ptrXRRSelectInput;
+   PtrXRRUpdateConfiguration ptrXRRUpdateConfiguration;
+   PtrXRRRootToScreen ptrXRRRootToScreen;
+   PtrXRRQueryExtension ptrXRRQueryExtension;
 #endif // QT_NO_XRANDR
 };
 
@@ -675,14 +675,14 @@ extern QX11Data *qt_x11Data;
 // rename a couple of X defines to get rid of name clashes
 // resolve the conflict between X11's FocusIn and QEvent::FocusIn
 enum {
-    XFocusOut = FocusOut,
-    XFocusIn = FocusIn,
-    XKeyPress = KeyPress,
-    XKeyRelease = KeyRelease,
-    XNone = None,
-    XRevertToParent = RevertToParent,
-    XGrayScale = GrayScale,
-    XCursorShape = CursorShape
+   XFocusOut = FocusOut,
+   XFocusIn = FocusIn,
+   XKeyPress = KeyPress,
+   XKeyRelease = KeyRelease,
+   XNone = None,
+   XRevertToParent = RevertToParent,
+   XGrayScale = GrayScale,
+   XCursorShape = CursorShape
 };
 #undef FocusOut
 #undef FocusIn

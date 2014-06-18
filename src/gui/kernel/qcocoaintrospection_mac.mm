@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,7 +31,8 @@
 
 QT_BEGIN_NAMESPACE
 
-void qt_cocoa_change_implementation(Class baseClass, SEL originalSel, Class proxyClass, SEL replacementSel, SEL backupSel)
+void qt_cocoa_change_implementation(Class baseClass, SEL originalSel, Class proxyClass, SEL replacementSel,
+                                    SEL backupSel)
 {
    // The following code replaces the _implementation_ for the selector we want to hack
    // (originalSel) with the implementation found in proxyClass. Then it creates
@@ -43,18 +44,19 @@ void qt_cocoa_change_implementation(Class baseClass, SEL originalSel, Class prox
    // NB: You will typically never create any instances of proxyClass; we use it
    // only for stealing its contents and put it into baseClass.
 
-   if (! replacementSel)
+   if (! replacementSel) {
       replacementSel = originalSel;
-   
+   }
+
    Method originalMethod = class_getInstanceMethod(baseClass, originalSel);
    Method replacementMethod = class_getInstanceMethod(proxyClass, replacementSel);
    IMP originalImp = method_setImplementation(originalMethod, method_getImplementation(replacementMethod));
-   
+
    if (backupSel) {
       Method backupMethod = class_getInstanceMethod(proxyClass, backupSel);
       class_addMethod(baseClass, backupSel, originalImp, method_getTypeEncoding(backupMethod));
    }
-    
+
 }
 
 void qt_cocoa_change_back_implementation(Class baseClass, SEL originalSel, SEL backupSel)

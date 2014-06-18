@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,18 +33,22 @@
 QT_BEGIN_NAMESPACE
 
 /* WGL_WGLEXT_PROTOTYPES */
-typedef const char * (WINAPI * PFNWGLGETEXTENSIONSSTRINGARBPROC) (HDC hdc);
-typedef HPBUFFERARB (WINAPI * PFNWGLCREATEPBUFFERARBPROC) (HDC hDC, int iPixelFormat, int iWidth, int iHeight, const int *piAttribList);
-typedef HDC (WINAPI * PFNWGLGETPBUFFERDCARBPROC) (HPBUFFERARB hPbuffer);
-typedef int (WINAPI * PFNWGLRELEASEPBUFFERDCARBPROC) (HPBUFFERARB hPbuffer, HDC hDC);
-typedef BOOL (WINAPI * PFNWGLDESTROYPBUFFERARBPROC) (HPBUFFERARB hPbuffer);
-typedef BOOL (WINAPI * PFNWGLQUERYPBUFFERARBPROC) (HPBUFFERARB hPbuffer, int iAttribute, int *piValue);
-typedef BOOL (WINAPI * PFNWGLGETPIXELFORMATATTRIBIVARBPROC) (HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, int *piValues);
-typedef BOOL (WINAPI * PFNWGLGETPIXELFORMATATTRIBFVARBPROC) (HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, FLOAT *pfValues);
-typedef BOOL (WINAPI * PFNWGLCHOOSEPIXELFORMATARBPROC) (HDC hdc, const int *piAttribIList, const FLOAT *pfAttribFList, UINT nMaxFormats, int *piFormats, UINT *nNumFormats);
-typedef BOOL (WINAPI * PFNWGLBINDTEXIMAGEARBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
-typedef BOOL (WINAPI * PFNWGLRELEASETEXIMAGEARBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
-typedef BOOL (WINAPI * PFNWGLSETPBUFFERATTRIBARBPROC) (HPBUFFERARB hPbuffer, const int * piAttribList);
+typedef const char *(WINAPI *PFNWGLGETEXTENSIONSSTRINGARBPROC) (HDC hdc);
+typedef HPBUFFERARB (WINAPI *PFNWGLCREATEPBUFFERARBPROC) (HDC hDC, int iPixelFormat, int iWidth, int iHeight,
+      const int *piAttribList);
+typedef HDC (WINAPI *PFNWGLGETPBUFFERDCARBPROC) (HPBUFFERARB hPbuffer);
+typedef int (WINAPI *PFNWGLRELEASEPBUFFERDCARBPROC) (HPBUFFERARB hPbuffer, HDC hDC);
+typedef BOOL (WINAPI *PFNWGLDESTROYPBUFFERARBPROC) (HPBUFFERARB hPbuffer);
+typedef BOOL (WINAPI *PFNWGLQUERYPBUFFERARBPROC) (HPBUFFERARB hPbuffer, int iAttribute, int *piValue);
+typedef BOOL (WINAPI *PFNWGLGETPIXELFORMATATTRIBIVARBPROC) (HDC hdc, int iPixelFormat, int iLayerPlane,
+      UINT nAttributes, const int *piAttributes, int *piValues);
+typedef BOOL (WINAPI *PFNWGLGETPIXELFORMATATTRIBFVARBPROC) (HDC hdc, int iPixelFormat, int iLayerPlane,
+      UINT nAttributes, const int *piAttributes, FLOAT *pfValues);
+typedef BOOL (WINAPI *PFNWGLCHOOSEPIXELFORMATARBPROC) (HDC hdc, const int *piAttribIList, const FLOAT *pfAttribFList,
+      UINT nMaxFormats, int *piFormats, UINT *nNumFormats);
+typedef BOOL (WINAPI *PFNWGLBINDTEXIMAGEARBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
+typedef BOOL (WINAPI *PFNWGLRELEASETEXIMAGEARBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
+typedef BOOL (WINAPI *PFNWGLSETPBUFFERATTRIBARBPROC) (HPBUFFERARB hPbuffer, const int *piAttribList);
 
 #ifndef WGL_ARB_pbuffer
 #define WGL_DRAW_TO_PBUFFER_ARB        0x202D
@@ -162,225 +166,233 @@ QGLFormat pfiToQGLFormat(HDC hdc, int pfi);
 
 static void qt_format_to_attrib_list(bool has_render_texture, const QGLFormat &f, int attribs[])
 {
-    int i = 0;
-    attribs[i++] = WGL_SUPPORT_OPENGL_ARB;
-    attribs[i++] = TRUE;
-    attribs[i++] = WGL_DRAW_TO_PBUFFER_ARB;
-    attribs[i++] = TRUE;
+   int i = 0;
+   attribs[i++] = WGL_SUPPORT_OPENGL_ARB;
+   attribs[i++] = TRUE;
+   attribs[i++] = WGL_DRAW_TO_PBUFFER_ARB;
+   attribs[i++] = TRUE;
 
-    if (has_render_texture) {
-        attribs[i++] = WGL_BIND_TO_TEXTURE_RGBA_ARB;
-        attribs[i++] = TRUE;
-    }
+   if (has_render_texture) {
+      attribs[i++] = WGL_BIND_TO_TEXTURE_RGBA_ARB;
+      attribs[i++] = TRUE;
+   }
 
-    attribs[i++] = WGL_COLOR_BITS_ARB;
-    attribs[i++] = 32;
-    attribs[i++] = WGL_DOUBLE_BUFFER_ARB;
-    attribs[i++] = FALSE;
+   attribs[i++] = WGL_COLOR_BITS_ARB;
+   attribs[i++] = 32;
+   attribs[i++] = WGL_DOUBLE_BUFFER_ARB;
+   attribs[i++] = FALSE;
 
-    if (f.stereo()) {
-        attribs[i++] = WGL_STEREO_ARB;
-        attribs[i++] = TRUE;
-    }
-    if (f.depth()) {
-        attribs[i++] = WGL_DEPTH_BITS_ARB;
-        attribs[i++] = f.depthBufferSize() == -1 ? 24 : f.depthBufferSize();
-    }
-    if (f.redBufferSize() != -1) {
-        attribs[i++] = WGL_RED_BITS_ARB;
-        attribs[i++] = f.redBufferSize();
-    }
-    if (f.greenBufferSize() != -1) {
-        attribs[i++] = WGL_GREEN_BITS_ARB;
-        attribs[i++] = f.greenBufferSize();
-    }
-    if (f.blueBufferSize() != -1) {
-        attribs[i++] = WGL_BLUE_BITS_ARB;
-        attribs[i++] = f.blueBufferSize();
-    }
-    if (f.alpha()) {
-        attribs[i++] = WGL_ALPHA_BITS_ARB;
-        attribs[i++] = f.alphaBufferSize() == -1 ? 8 : f.alphaBufferSize();
-    }
-    if (f.accum()) {
-        attribs[i++] = WGL_ACCUM_BITS_ARB;
-        attribs[i++] = f.accumBufferSize() == -1 ? 16 : f.accumBufferSize();
-    }
-    if (f.stencil()) {
-        attribs[i++] = WGL_STENCIL_BITS_ARB;
-        attribs[i++] = f.stencilBufferSize() == -1 ? 8 : f.stencilBufferSize();
-    }
-    if ((f.redBufferSize() > 8 || f.greenBufferSize() > 8
+   if (f.stereo()) {
+      attribs[i++] = WGL_STEREO_ARB;
+      attribs[i++] = TRUE;
+   }
+   if (f.depth()) {
+      attribs[i++] = WGL_DEPTH_BITS_ARB;
+      attribs[i++] = f.depthBufferSize() == -1 ? 24 : f.depthBufferSize();
+   }
+   if (f.redBufferSize() != -1) {
+      attribs[i++] = WGL_RED_BITS_ARB;
+      attribs[i++] = f.redBufferSize();
+   }
+   if (f.greenBufferSize() != -1) {
+      attribs[i++] = WGL_GREEN_BITS_ARB;
+      attribs[i++] = f.greenBufferSize();
+   }
+   if (f.blueBufferSize() != -1) {
+      attribs[i++] = WGL_BLUE_BITS_ARB;
+      attribs[i++] = f.blueBufferSize();
+   }
+   if (f.alpha()) {
+      attribs[i++] = WGL_ALPHA_BITS_ARB;
+      attribs[i++] = f.alphaBufferSize() == -1 ? 8 : f.alphaBufferSize();
+   }
+   if (f.accum()) {
+      attribs[i++] = WGL_ACCUM_BITS_ARB;
+      attribs[i++] = f.accumBufferSize() == -1 ? 16 : f.accumBufferSize();
+   }
+   if (f.stencil()) {
+      attribs[i++] = WGL_STENCIL_BITS_ARB;
+      attribs[i++] = f.stencilBufferSize() == -1 ? 8 : f.stencilBufferSize();
+   }
+   if ((f.redBufferSize() > 8 || f.greenBufferSize() > 8
          || f.blueBufferSize() > 8 || f.alphaBufferSize() > 8)
-        && (QGLExtensions::glExtensions() & QGLExtensions::NVFloatBuffer))
-    {
-        attribs[i++] = WGL_FLOAT_COMPONENTS_NV;
-        attribs[i++] = TRUE;
-    }
-    if (f.sampleBuffers()) {
-        attribs[i++] = WGL_SAMPLE_BUFFERS_ARB;
-        attribs[i++] = 1;
-        attribs[i++] = WGL_SAMPLES_ARB;
-        attribs[i++] = f.samples() == -1 ? 16 : f.samples();
-    }
-    attribs[i] = 0;
+         && (QGLExtensions::glExtensions() & QGLExtensions::NVFloatBuffer)) {
+      attribs[i++] = WGL_FLOAT_COMPONENTS_NV;
+      attribs[i++] = TRUE;
+   }
+   if (f.sampleBuffers()) {
+      attribs[i++] = WGL_SAMPLE_BUFFERS_ARB;
+      attribs[i++] = 1;
+      attribs[i++] = WGL_SAMPLES_ARB;
+      attribs[i++] = f.samples() == -1 ? 16 : f.samples();
+   }
+   attribs[i] = 0;
 }
 
 bool QGLPixelBufferPrivate::init(const QSize &size, const QGLFormat &f, QGLWidget *shareWidget)
 {
-    QGLTemporaryContext tempContext;
+   QGLTemporaryContext tempContext;
 
-    PFNWGLCREATEPBUFFERARBPROC wglCreatePbufferARB =
-        (PFNWGLCREATEPBUFFERARBPROC) wglGetProcAddress("wglCreatePbufferARB");
-    PFNWGLGETPBUFFERDCARBPROC wglGetPbufferDCARB =
-        (PFNWGLGETPBUFFERDCARBPROC) wglGetProcAddress("wglGetPbufferDCARB");
-    PFNWGLQUERYPBUFFERARBPROC wglQueryPbufferARB =
-        (PFNWGLQUERYPBUFFERARBPROC) wglGetProcAddress("wglQueryPbufferARB");
-    PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB =
-        (PFNWGLCHOOSEPIXELFORMATARBPROC) wglGetProcAddress("wglChoosePixelFormatARB");
+   PFNWGLCREATEPBUFFERARBPROC wglCreatePbufferARB =
+      (PFNWGLCREATEPBUFFERARBPROC) wglGetProcAddress("wglCreatePbufferARB");
+   PFNWGLGETPBUFFERDCARBPROC wglGetPbufferDCARB =
+      (PFNWGLGETPBUFFERDCARBPROC) wglGetProcAddress("wglGetPbufferDCARB");
+   PFNWGLQUERYPBUFFERARBPROC wglQueryPbufferARB =
+      (PFNWGLQUERYPBUFFERARBPROC) wglGetProcAddress("wglQueryPbufferARB");
+   PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB =
+      (PFNWGLCHOOSEPIXELFORMATARBPROC) wglGetProcAddress("wglChoosePixelFormatARB");
 
-    if (!wglCreatePbufferARB) // assumes that if one can be resolved, all of them can
-        return false;
+   if (!wglCreatePbufferARB) { // assumes that if one can be resolved, all of them can
+      return false;
+   }
 
-    dc = wglGetCurrentDC();
-    Q_ASSERT(dc);
-    has_render_texture = false;
+   dc = wglGetCurrentDC();
+   Q_ASSERT(dc);
+   has_render_texture = false;
 
-    // sample buffers doesn't work in conjunction with the render_texture extension
-    if (!f.sampleBuffers()) {
-        PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB =
-                (PFNWGLGETEXTENSIONSSTRINGARBPROC) wglGetProcAddress("wglGetExtensionsStringARB");
+   // sample buffers doesn't work in conjunction with the render_texture extension
+   if (!f.sampleBuffers()) {
+      PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB =
+         (PFNWGLGETEXTENSIONSSTRINGARBPROC) wglGetProcAddress("wglGetExtensionsStringARB");
 
-        if (wglGetExtensionsStringARB) {
-            QString extensions(QLatin1String(wglGetExtensionsStringARB(dc)));
-            has_render_texture = extensions.contains(QLatin1String("WGL_ARB_render_texture"));
-        }
-    }
+      if (wglGetExtensionsStringARB) {
+         QString extensions(QLatin1String(wglGetExtensionsStringARB(dc)));
+         has_render_texture = extensions.contains(QLatin1String("WGL_ARB_render_texture"));
+      }
+   }
 
-    int attribs[40];
-    qt_format_to_attrib_list(has_render_texture, f, attribs);
+   int attribs[40];
+   qt_format_to_attrib_list(has_render_texture, f, attribs);
 
-    // Find pbuffer capable pixel format.
-    unsigned int num_formats = 0;
-    int pixel_format;
-    wglChoosePixelFormatARB(dc, attribs, 0, 1, &pixel_format, &num_formats);
+   // Find pbuffer capable pixel format.
+   unsigned int num_formats = 0;
+   int pixel_format;
+   wglChoosePixelFormatARB(dc, attribs, 0, 1, &pixel_format, &num_formats);
 
-    // some GL implementations don't support pbuffers with accum
-    // buffers, so try that before we give up
-    if (num_formats == 0 && f.accum()) {
-        QGLFormat tmp = f;
-        tmp.setAccum(false);
-        qt_format_to_attrib_list(has_render_texture, tmp, attribs);
-        wglChoosePixelFormatARB(dc, attribs, 0, 1, &pixel_format, &num_formats);
-    }
+   // some GL implementations don't support pbuffers with accum
+   // buffers, so try that before we give up
+   if (num_formats == 0 && f.accum()) {
+      QGLFormat tmp = f;
+      tmp.setAccum(false);
+      qt_format_to_attrib_list(has_render_texture, tmp, attribs);
+      wglChoosePixelFormatARB(dc, attribs, 0, 1, &pixel_format, &num_formats);
+   }
 
-    if (num_formats == 0) {
-        qWarning("QGLPixelBuffer: Unable to find a pixel format with pbuffer  - giving up.");
-        return false;
-    }
-    format = pfiToQGLFormat(dc, pixel_format);
+   if (num_formats == 0) {
+      qWarning("QGLPixelBuffer: Unable to find a pixel format with pbuffer  - giving up.");
+      return false;
+   }
+   format = pfiToQGLFormat(dc, pixel_format);
 
-    // NB! The below ONLY works if the width/height are powers of 2.
-    // Set some pBuffer attributes so that we can use this pBuffer as
-    // a 2D RGBA texture target.
-    int pb_attribs[] = {WGL_TEXTURE_FORMAT_ARB, WGL_TEXTURE_RGBA_ARB,
-                        WGL_TEXTURE_TARGET_ARB, WGL_TEXTURE_2D_ARB, 0};
-    int pb_attribs_null[] = {0};
+   // NB! The below ONLY works if the width/height are powers of 2.
+   // Set some pBuffer attributes so that we can use this pBuffer as
+   // a 2D RGBA texture target.
+   int pb_attribs[] = {WGL_TEXTURE_FORMAT_ARB, WGL_TEXTURE_RGBA_ARB,
+                       WGL_TEXTURE_TARGET_ARB, WGL_TEXTURE_2D_ARB, 0
+                      };
+   int pb_attribs_null[] = {0};
 
-    pbuf = wglCreatePbufferARB(dc, pixel_format, size.width(), size.height(),
-                               has_render_texture ? pb_attribs : pb_attribs_null);
-    if (!pbuf) {
-        // try again without the render_texture extension
-        pbuf = wglCreatePbufferARB(dc, pixel_format, size.width(), size.height(), pb_attribs_null);
-        has_render_texture = false;
-        if (!pbuf) {
-            qWarning("QGLPixelBuffer: Unable to create pbuffer [w=%d, h=%d] - giving up.", size.width(), size.height());
-            return false;
-        }
-    }
+   pbuf = wglCreatePbufferARB(dc, pixel_format, size.width(), size.height(),
+                              has_render_texture ? pb_attribs : pb_attribs_null);
+   if (!pbuf) {
+      // try again without the render_texture extension
+      pbuf = wglCreatePbufferARB(dc, pixel_format, size.width(), size.height(), pb_attribs_null);
+      has_render_texture = false;
+      if (!pbuf) {
+         qWarning("QGLPixelBuffer: Unable to create pbuffer [w=%d, h=%d] - giving up.", size.width(), size.height());
+         return false;
+      }
+   }
 
-    dc = wglGetPbufferDCARB(pbuf);
-    ctx = wglCreateContext(dc);
-    if (!dc || !ctx) {
-        qWarning("QGLPixelBuffer: Unable to create pbuffer context - giving up.");
-        return false;
-    }
+   dc = wglGetPbufferDCARB(pbuf);
+   ctx = wglCreateContext(dc);
+   if (!dc || !ctx) {
+      qWarning("QGLPixelBuffer: Unable to create pbuffer context - giving up.");
+      return false;
+   }
 
-    // Explicitly disable the render_texture extension if we have a 
-    // multi-sampled pbuffer context. This seems to be a problem only with 
-    // ATI cards if multi-sampling is forced globally in the driver.
-    wglMakeCurrent(dc, ctx);
-    GLint samples = 0;
-    glGetIntegerv(GL_SAMPLES_ARB, &samples);
-    if (has_render_texture && samples != 0)
-        has_render_texture = false;
+   // Explicitly disable the render_texture extension if we have a
+   // multi-sampled pbuffer context. This seems to be a problem only with
+   // ATI cards if multi-sampling is forced globally in the driver.
+   wglMakeCurrent(dc, ctx);
+   GLint samples = 0;
+   glGetIntegerv(GL_SAMPLES_ARB, &samples);
+   if (has_render_texture && samples != 0) {
+      has_render_texture = false;
+   }
 
-    HGLRC share_ctx = shareWidget ? shareWidget->d_func()->glcx->d_func()->rc : 0;
-    if (share_ctx && !wglShareLists(share_ctx, ctx))
-        qWarning("QGLPixelBuffer: Unable to share display lists - with share widget.");
+   HGLRC share_ctx = shareWidget ? shareWidget->d_func()->glcx->d_func()->rc : 0;
+   if (share_ctx && !wglShareLists(share_ctx, ctx)) {
+      qWarning("QGLPixelBuffer: Unable to share display lists - with share widget.");
+   }
 
-    int width, height;
-    wglQueryPbufferARB(pbuf, WGL_PBUFFER_WIDTH_ARB, &width);
-    wglQueryPbufferARB(pbuf, WGL_PBUFFER_HEIGHT_ARB, &height);
-    return true;
+   int width, height;
+   wglQueryPbufferARB(pbuf, WGL_PBUFFER_WIDTH_ARB, &width);
+   wglQueryPbufferARB(pbuf, WGL_PBUFFER_HEIGHT_ARB, &height);
+   return true;
 }
 
 bool QGLPixelBufferPrivate::cleanup()
 {
-    PFNWGLRELEASEPBUFFERDCARBPROC wglReleasePbufferDCARB =
-        (PFNWGLRELEASEPBUFFERDCARBPROC) wglGetProcAddress("wglReleasePbufferDCARB");
-    PFNWGLDESTROYPBUFFERARBPROC wglDestroyPbufferARB =
-        (PFNWGLDESTROYPBUFFERARBPROC) wglGetProcAddress("wglDestroyPbufferARB");
-    if (!invalid && wglReleasePbufferDCARB && wglDestroyPbufferARB) {
-        wglReleasePbufferDCARB(pbuf, dc);
-        wglDestroyPbufferARB(pbuf);
-    }
-    return true;
+   PFNWGLRELEASEPBUFFERDCARBPROC wglReleasePbufferDCARB =
+      (PFNWGLRELEASEPBUFFERDCARBPROC) wglGetProcAddress("wglReleasePbufferDCARB");
+   PFNWGLDESTROYPBUFFERARBPROC wglDestroyPbufferARB =
+      (PFNWGLDESTROYPBUFFERARBPROC) wglGetProcAddress("wglDestroyPbufferARB");
+   if (!invalid && wglReleasePbufferDCARB && wglDestroyPbufferARB) {
+      wglReleasePbufferDCARB(pbuf, dc);
+      wglDestroyPbufferARB(pbuf);
+   }
+   return true;
 }
 
 bool QGLPixelBuffer::bindToDynamicTexture(GLuint texture_id)
 {
-    Q_D(QGLPixelBuffer);
-    if (d->invalid || !d->has_render_texture)
-        return false;
-    PFNWGLBINDTEXIMAGEARBPROC wglBindTexImageARB =
-        (PFNWGLBINDTEXIMAGEARBPROC) wglGetProcAddress("wglBindTexImageARB");
-    if (wglBindTexImageARB) {
-        glBindTexture(GL_TEXTURE_2D, texture_id);
-        return wglBindTexImageARB(d->pbuf, WGL_FRONT_LEFT_ARB);
-    }
-    return false;
+   Q_D(QGLPixelBuffer);
+   if (d->invalid || !d->has_render_texture) {
+      return false;
+   }
+   PFNWGLBINDTEXIMAGEARBPROC wglBindTexImageARB =
+      (PFNWGLBINDTEXIMAGEARBPROC) wglGetProcAddress("wglBindTexImageARB");
+   if (wglBindTexImageARB) {
+      glBindTexture(GL_TEXTURE_2D, texture_id);
+      return wglBindTexImageARB(d->pbuf, WGL_FRONT_LEFT_ARB);
+   }
+   return false;
 }
 
 void QGLPixelBuffer::releaseFromDynamicTexture()
 {
-    Q_D(QGLPixelBuffer);
-    if (d->invalid || !d->has_render_texture)
-        return;
-    PFNWGLRELEASETEXIMAGEARBPROC wglReleaseTexImageARB =
-        (PFNWGLRELEASETEXIMAGEARBPROC) wglGetProcAddress("wglReleaseTexImageARB");
-    if (wglReleaseTexImageARB)
-        wglReleaseTexImageARB(d->pbuf, WGL_FRONT_LEFT_ARB);
+   Q_D(QGLPixelBuffer);
+   if (d->invalid || !d->has_render_texture) {
+      return;
+   }
+   PFNWGLRELEASETEXIMAGEARBPROC wglReleaseTexImageARB =
+      (PFNWGLRELEASETEXIMAGEARBPROC) wglGetProcAddress("wglReleaseTexImageARB");
+   if (wglReleaseTexImageARB) {
+      wglReleaseTexImageARB(d->pbuf, WGL_FRONT_LEFT_ARB);
+   }
 }
 
 bool QGLPixelBuffer::hasOpenGLPbuffers()
 {
-    bool ret = false;
-    QGLTemporaryContext *tmpContext = 0;
-    if (!QGLContext::currentContext())
-        tmpContext = new QGLTemporaryContext;
-    PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB =
-        (PFNWGLGETEXTENSIONSSTRINGARBPROC) wglGetProcAddress("wglGetExtensionsStringARB");
-    if (wglGetExtensionsStringARB) {
-        QString extensions(QLatin1String(wglGetExtensionsStringARB(wglGetCurrentDC())));
-        if (extensions.contains(QLatin1String("WGL_ARB_pbuffer"))
+   bool ret = false;
+   QGLTemporaryContext *tmpContext = 0;
+   if (!QGLContext::currentContext()) {
+      tmpContext = new QGLTemporaryContext;
+   }
+   PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB =
+      (PFNWGLGETEXTENSIONSSTRINGARBPROC) wglGetProcAddress("wglGetExtensionsStringARB");
+   if (wglGetExtensionsStringARB) {
+      QString extensions(QLatin1String(wglGetExtensionsStringARB(wglGetCurrentDC())));
+      if (extensions.contains(QLatin1String("WGL_ARB_pbuffer"))
             && extensions.contains(QLatin1String("WGL_ARB_pixel_format"))) {
-            ret = true;
-        }
-    }
-    if (tmpContext)
-        delete tmpContext;
-    return ret;
+         ret = true;
+      }
+   }
+   if (tmpContext) {
+      delete tmpContext;
+   }
+   return ret;
 }
 
 QT_END_NAMESPACE

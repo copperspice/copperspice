@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,103 +42,111 @@ Q_GLOBAL_STATIC(QImagePixmapCleanupHooks, qt_image_and_pixmap_cleanup_hooks)
 
 QImagePixmapCleanupHooks *QImagePixmapCleanupHooks::instance()
 {
-    return qt_image_and_pixmap_cleanup_hooks();
+   return qt_image_and_pixmap_cleanup_hooks();
 }
 
 void QImagePixmapCleanupHooks::addPixmapDataModificationHook(_qt_pixmap_cleanup_hook_pmd hook)
 {
-    pixmapModificationHooks.append(hook);
+   pixmapModificationHooks.append(hook);
 }
 
 void QImagePixmapCleanupHooks::addPixmapDataDestructionHook(_qt_pixmap_cleanup_hook_pmd hook)
 {
-    pixmapDestructionHooks.append(hook);
+   pixmapDestructionHooks.append(hook);
 }
 
 
 void QImagePixmapCleanupHooks::addImageHook(_qt_image_cleanup_hook_64 hook)
 {
-    imageHooks.append(hook);
+   imageHooks.append(hook);
 }
 
 void QImagePixmapCleanupHooks::removePixmapDataModificationHook(_qt_pixmap_cleanup_hook_pmd hook)
 {
-    pixmapModificationHooks.removeAll(hook);
+   pixmapModificationHooks.removeAll(hook);
 }
 
 void QImagePixmapCleanupHooks::removePixmapDataDestructionHook(_qt_pixmap_cleanup_hook_pmd hook)
 {
-    pixmapDestructionHooks.removeAll(hook);
+   pixmapDestructionHooks.removeAll(hook);
 }
 
 void QImagePixmapCleanupHooks::removeImageHook(_qt_image_cleanup_hook_64 hook)
 {
-    imageHooks.removeAll(hook);
+   imageHooks.removeAll(hook);
 }
 
-void QImagePixmapCleanupHooks::executePixmapDataModificationHooks(QPixmapData* pmd)
+void QImagePixmapCleanupHooks::executePixmapDataModificationHooks(QPixmapData *pmd)
 {
-    QImagePixmapCleanupHooks *h = qt_image_and_pixmap_cleanup_hooks();
-    // the global destructor for the pixmap and image hooks might have
-    // been called already if the app is "leaking" global
-    // pixmaps/images
-    if (!h)
-        return;
-    for (int i = 0; i < h->pixmapModificationHooks.count(); ++i)
-        h->pixmapModificationHooks[i](pmd);
+   QImagePixmapCleanupHooks *h = qt_image_and_pixmap_cleanup_hooks();
+   // the global destructor for the pixmap and image hooks might have
+   // been called already if the app is "leaking" global
+   // pixmaps/images
+   if (!h) {
+      return;
+   }
+   for (int i = 0; i < h->pixmapModificationHooks.count(); ++i) {
+      h->pixmapModificationHooks[i](pmd);
+   }
 
-    if (qt_pixmap_cleanup_hook_64)
-        qt_pixmap_cleanup_hook_64(pmd->cacheKey());
+   if (qt_pixmap_cleanup_hook_64) {
+      qt_pixmap_cleanup_hook_64(pmd->cacheKey());
+   }
 }
 
-void QImagePixmapCleanupHooks::executePixmapDataDestructionHooks(QPixmapData* pmd)
+void QImagePixmapCleanupHooks::executePixmapDataDestructionHooks(QPixmapData *pmd)
 {
-    QImagePixmapCleanupHooks *h = qt_image_and_pixmap_cleanup_hooks();
-    // the global destructor for the pixmap and image hooks might have
-    // been called already if the app is "leaking" global
-    // pixmaps/images
-    if (!h)
-        return;
-    for (int i = 0; i < h->pixmapDestructionHooks.count(); ++i)
-        h->pixmapDestructionHooks[i](pmd);
+   QImagePixmapCleanupHooks *h = qt_image_and_pixmap_cleanup_hooks();
+   // the global destructor for the pixmap and image hooks might have
+   // been called already if the app is "leaking" global
+   // pixmaps/images
+   if (!h) {
+      return;
+   }
+   for (int i = 0; i < h->pixmapDestructionHooks.count(); ++i) {
+      h->pixmapDestructionHooks[i](pmd);
+   }
 
-    if (qt_pixmap_cleanup_hook_64)
-        qt_pixmap_cleanup_hook_64(pmd->cacheKey());
+   if (qt_pixmap_cleanup_hook_64) {
+      qt_pixmap_cleanup_hook_64(pmd->cacheKey());
+   }
 }
 
 void QImagePixmapCleanupHooks::executeImageHooks(qint64 key)
 {
-    for (int i = 0; i < qt_image_and_pixmap_cleanup_hooks()->imageHooks.count(); ++i)
-        qt_image_and_pixmap_cleanup_hooks()->imageHooks[i](key);
+   for (int i = 0; i < qt_image_and_pixmap_cleanup_hooks()->imageHooks.count(); ++i) {
+      qt_image_and_pixmap_cleanup_hooks()->imageHooks[i](key);
+   }
 
-    if (qt_image_cleanup_hook_64)
-        qt_image_cleanup_hook_64(key);
+   if (qt_image_cleanup_hook_64) {
+      qt_image_cleanup_hook_64(key);
+   }
 }
 
 
 void QImagePixmapCleanupHooks::enableCleanupHooks(QPixmapData *pixmapData)
 {
-    pixmapData->is_cached = true;
+   pixmapData->is_cached = true;
 }
 
 void QImagePixmapCleanupHooks::enableCleanupHooks(const QPixmap &pixmap)
 {
-    enableCleanupHooks(const_cast<QPixmap &>(pixmap).data_ptr().data());
+   enableCleanupHooks(const_cast<QPixmap &>(pixmap).data_ptr().data());
 }
 
 void QImagePixmapCleanupHooks::enableCleanupHooks(const QImage &image)
 {
-    const_cast<QImage &>(image).data_ptr()->is_cached = true;
+   const_cast<QImage &>(image).data_ptr()->is_cached = true;
 }
 
 bool QImagePixmapCleanupHooks::isImageCached(const QImage &image)
 {
-    return const_cast<QImage &>(image).data_ptr()->is_cached;
+   return const_cast<QImage &>(image).data_ptr()->is_cached;
 }
 
 bool QImagePixmapCleanupHooks::isPixmapCached(const QPixmap &pixmap)
 {
-    return const_cast<QPixmap&>(pixmap).data_ptr().data()->is_cached;
+   return const_cast<QPixmap &>(pixmap).data_ptr().data()->is_cached;
 }
 
 

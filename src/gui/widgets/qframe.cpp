@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,33 +36,33 @@
 QT_BEGIN_NAMESPACE
 
 QFramePrivate::QFramePrivate()
-    : frect(QRect(0, 0, 0, 0)),
-      frameStyle(QFrame::NoFrame | QFrame::Plain),
-      lineWidth(1),
-      midLineWidth(0),
-      frameWidth(0),
-      leftFrameWidth(0), rightFrameWidth(0),
-      topFrameWidth(0), bottomFrameWidth(0)
+   : frect(QRect(0, 0, 0, 0)),
+     frameStyle(QFrame::NoFrame | QFrame::Plain),
+     lineWidth(1),
+     midLineWidth(0),
+     frameWidth(0),
+     leftFrameWidth(0), rightFrameWidth(0),
+     topFrameWidth(0), bottomFrameWidth(0)
 {
 }
 
 inline void QFramePrivate::init()
 {
-    setLayoutItemMargins(QStyle::SE_FrameLayoutItem);
+   setLayoutItemMargins(QStyle::SE_FrameLayoutItem);
 }
 
-QFrame::QFrame(QWidget* parent, Qt::WindowFlags f)
-    : QWidget(*new QFramePrivate, parent, f)
+QFrame::QFrame(QWidget *parent, Qt::WindowFlags f)
+   : QWidget(*new QFramePrivate, parent, f)
 {
-    Q_D(QFrame);
-    d->init();
+   Q_D(QFrame);
+   d->init();
 }
 
-QFrame::QFrame(QFramePrivate &dd, QWidget* parent, Qt::WindowFlags f)
-    : QWidget(dd, parent, f)
+QFrame::QFrame(QFramePrivate &dd, QWidget *parent, Qt::WindowFlags f)
+   : QWidget(dd, parent, f)
 {
-    Q_D(QFrame);
-    d->init();
+   Q_D(QFrame);
+   d->init();
 }
 
 QFrame::~QFrame()
@@ -71,20 +71,20 @@ QFrame::~QFrame()
 
 int QFrame::frameStyle() const
 {
-    Q_D(const QFrame);
-    return d->frameStyle;
+   Q_D(const QFrame);
+   return d->frameStyle;
 }
 
 QFrame::Shape QFrame::frameShape() const
 {
-    Q_D(const QFrame);
-    return (Shape) (d->frameStyle & Shape_Mask);
+   Q_D(const QFrame);
+   return (Shape) (d->frameStyle & Shape_Mask);
 }
 
 void QFrame::setFrameShape(QFrame::Shape s)
 {
-    Q_D(QFrame);
-    setFrameStyle((d->frameStyle & Shadow_Mask) | s);
+   Q_D(QFrame);
+   setFrameStyle((d->frameStyle & Shadow_Mask) | s);
 }
 
 
@@ -96,14 +96,14 @@ void QFrame::setFrameShape(QFrame::Shape s)
 */
 QFrame::Shadow QFrame::frameShadow() const
 {
-    Q_D(const QFrame);
-    return (Shadow) (d->frameStyle & Shadow_Mask);
+   Q_D(const QFrame);
+   return (Shadow) (d->frameStyle & Shadow_Mask);
 }
 
 void QFrame::setFrameShadow(QFrame::Shadow s)
 {
-    Q_D(QFrame);
-    setFrameStyle((d->frameStyle & Shape_Mask) | s);
+   Q_D(QFrame);
+   setFrameStyle((d->frameStyle & Shape_Mask) | s);
 }
 
 /*!
@@ -126,26 +126,26 @@ void QFrame::setFrameShadow(QFrame::Shadow s)
 
 void QFrame::setFrameStyle(int style)
 {
-    Q_D(QFrame);
-    if (!testAttribute(Qt::WA_WState_OwnSizePolicy)) {
-        QSizePolicy sp;
+   Q_D(QFrame);
+   if (!testAttribute(Qt::WA_WState_OwnSizePolicy)) {
+      QSizePolicy sp;
 
-        switch (style & Shape_Mask) {
-        case HLine:
+      switch (style & Shape_Mask) {
+         case HLine:
             sp = QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed, QSizePolicy::Line);
             break;
-        case VLine:
+         case VLine:
             sp = QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum, QSizePolicy::Line);
             break;
-        default:
+         default:
             sp = QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, QSizePolicy::Frame);
-        }
-        setSizePolicy(sp);
-        setAttribute(Qt::WA_WState_OwnSizePolicy, false);
-    }
-    d->frameStyle = (short)style;
-    update();
-    d->updateFrameWidth();
+      }
+      setSizePolicy(sp);
+      setAttribute(Qt::WA_WState_OwnSizePolicy, false);
+   }
+   d->frameStyle = (short)style;
+   update();
+   d->updateFrameWidth();
 }
 
 /*!
@@ -162,17 +162,18 @@ void QFrame::setFrameStyle(int style)
 
 void QFrame::setLineWidth(int w)
 {
-    Q_D(QFrame);
-    if (short(w) == d->lineWidth)
-        return;
-    d->lineWidth = short(w);
-    d->updateFrameWidth();
+   Q_D(QFrame);
+   if (short(w) == d->lineWidth) {
+      return;
+   }
+   d->lineWidth = short(w);
+   d->updateFrameWidth();
 }
 
 int QFrame::lineWidth() const
 {
-    Q_D(const QFrame);
-    return d->lineWidth;
+   Q_D(const QFrame);
+   return d->lineWidth;
 }
 
 /*!
@@ -186,17 +187,18 @@ int QFrame::lineWidth() const
 
 void QFrame::setMidLineWidth(int w)
 {
-    Q_D(QFrame);
-    if (short(w) == d->midLineWidth)
-        return;
-    d->midLineWidth = short(w);
-    d->updateFrameWidth();
+   Q_D(QFrame);
+   if (short(w) == d->midLineWidth) {
+      return;
+   }
+   d->midLineWidth = short(w);
+   d->updateFrameWidth();
 }
 
 int QFrame::midLineWidth() const
 {
-    Q_D(const QFrame);
-    return d->midLineWidth;
+   Q_D(const QFrame);
+   return d->midLineWidth;
 }
 
 /*!
@@ -205,20 +207,20 @@ int QFrame::midLineWidth() const
 */
 void QFramePrivate::updateStyledFrameWidths()
 {
-    Q_Q(const QFrame);
-    QStyleOptionFrameV3 opt;
-    opt.initFrom(q);
-    opt.lineWidth = lineWidth;
-    opt.midLineWidth = midLineWidth;
-    opt.frameShape = QFrame::Shape(frameStyle & QFrame::Shape_Mask);
+   Q_Q(const QFrame);
+   QStyleOptionFrameV3 opt;
+   opt.initFrom(q);
+   opt.lineWidth = lineWidth;
+   opt.midLineWidth = midLineWidth;
+   opt.frameShape = QFrame::Shape(frameStyle & QFrame::Shape_Mask);
 
-    QRect cr = q->style()->subElementRect(QStyle::SE_ShapedFrameContents, &opt, q);
-    leftFrameWidth = cr.left() - opt.rect.left();
-    topFrameWidth = cr.top() - opt.rect.top();
-    rightFrameWidth = opt.rect.right() - cr.right(),
-    bottomFrameWidth = opt.rect.bottom() - cr.bottom();
-    frameWidth = qMax(qMax(leftFrameWidth, rightFrameWidth),
-                      qMax(topFrameWidth, bottomFrameWidth));
+   QRect cr = q->style()->subElementRect(QStyle::SE_ShapedFrameContents, &opt, q);
+   leftFrameWidth = cr.left() - opt.rect.left();
+   topFrameWidth = cr.top() - opt.rect.top();
+   rightFrameWidth = opt.rect.right() - cr.right(),
+   bottomFrameWidth = opt.rect.bottom() - cr.bottom();
+   frameWidth = qMax(qMax(leftFrameWidth, rightFrameWidth),
+                     qMax(topFrameWidth, bottomFrameWidth));
 }
 
 /*!
@@ -228,11 +230,11 @@ void QFramePrivate::updateStyledFrameWidths()
 
 void QFramePrivate::updateFrameWidth()
 {
-    Q_Q(QFrame);
-    QRect fr = q->frameRect();
-    updateStyledFrameWidths();
-    q->setFrameRect(fr);
-    setLayoutItemMargins(QStyle::SE_FrameLayoutItem);
+   Q_Q(QFrame);
+   QRect fr = q->frameRect();
+   updateStyledFrameWidths();
+   q->setFrameRect(fr);
+   setLayoutItemMargins(QStyle::SE_FrameLayoutItem);
 }
 
 /*!
@@ -248,8 +250,8 @@ void QFramePrivate::updateFrameWidth()
 */
 int QFrame::frameWidth() const
 {
-    Q_D(const QFrame);
-    return d->frameWidth;
+   Q_D(const QFrame);
+   return d->frameWidth;
 }
 
 
@@ -269,36 +271,36 @@ int QFrame::frameWidth() const
 
 QRect QFrame::frameRect() const
 {
-    Q_D(const QFrame);
-    QRect fr = contentsRect();
-    fr.adjust(-d->leftFrameWidth, -d->topFrameWidth, d->rightFrameWidth, d->bottomFrameWidth);
-    return fr;
+   Q_D(const QFrame);
+   QRect fr = contentsRect();
+   fr.adjust(-d->leftFrameWidth, -d->topFrameWidth, d->rightFrameWidth, d->bottomFrameWidth);
+   return fr;
 }
 
 void QFrame::setFrameRect(const QRect &r)
 {
-    Q_D(QFrame);
-    QRect cr = r.isValid() ? r : rect();
-    cr.adjust(d->leftFrameWidth, d->topFrameWidth, -d->rightFrameWidth, -d->bottomFrameWidth);
-    setContentsMargins(cr.left(), cr.top(), rect().right() - cr.right(), rect().bottom() - cr.bottom());
+   Q_D(QFrame);
+   QRect cr = r.isValid() ? r : rect();
+   cr.adjust(d->leftFrameWidth, d->topFrameWidth, -d->rightFrameWidth, -d->bottomFrameWidth);
+   setContentsMargins(cr.left(), cr.top(), rect().right() - cr.right(), rect().bottom() - cr.bottom());
 }
 
 /*!\reimp
 */
 QSize QFrame::sizeHint() const
 {
-    Q_D(const QFrame);
-    //   Returns a size hint for the frame - for HLine and VLine
-    //   shapes, this is stretchable one way and 3 pixels wide the
-    //   other.  For other shapes, QWidget::sizeHint() is used.
-    switch (d->frameStyle & Shape_Mask) {
-    case HLine:
-        return QSize(-1,3);
-    case VLine:
-        return QSize(3,-1);
-    default:
-        return QWidget::sizeHint();
-    }
+   Q_D(const QFrame);
+   //   Returns a size hint for the frame - for HLine and VLine
+   //   shapes, this is stretchable one way and 3 pixels wide the
+   //   other.  For other shapes, QWidget::sizeHint() is used.
+   switch (d->frameStyle & Shape_Mask) {
+      case HLine:
+         return QSize(-1, 3);
+      case VLine:
+         return QSize(3, -1);
+      default:
+         return QWidget::sizeHint();
+   }
 }
 
 /*!\reimp
@@ -306,45 +308,46 @@ QSize QFrame::sizeHint() const
 
 void QFrame::paintEvent(QPaintEvent *)
 {
-    QPainter paint(this);
-    drawFrame(&paint);
+   QPainter paint(this);
+   drawFrame(&paint);
 }
 
 /*!
-    \internal    
+    \internal
 */
 void QFrame::drawFrame(QPainter *p)
 {
-    Q_D(QFrame);
-    QStyleOptionFrameV3 opt;
-    opt.init(this);
-    int frameShape  = d->frameStyle & QFrame::Shape_Mask;
-    int frameShadow = d->frameStyle & QFrame::Shadow_Mask;
-    opt.frameShape = Shape(int(opt.frameShape) | frameShape);
-    opt.rect = frameRect();
+   Q_D(QFrame);
+   QStyleOptionFrameV3 opt;
+   opt.init(this);
+   int frameShape  = d->frameStyle & QFrame::Shape_Mask;
+   int frameShadow = d->frameStyle & QFrame::Shadow_Mask;
+   opt.frameShape = Shape(int(opt.frameShape) | frameShape);
+   opt.rect = frameRect();
 
-    switch (frameShape) {
-        case QFrame::Box:
-        case QFrame::HLine:
-        case QFrame::VLine:
-        case QFrame::StyledPanel:
-        case QFrame::Panel:
-            opt.lineWidth = d->lineWidth;
-            opt.midLineWidth = d->midLineWidth;
-            break;
-        default:
-            // most frame styles do not handle customized line and midline widths
-            // (see updateFrameWidth()).
-            opt.lineWidth = d->frameWidth;
-            break;
-    }
+   switch (frameShape) {
+      case QFrame::Box:
+      case QFrame::HLine:
+      case QFrame::VLine:
+      case QFrame::StyledPanel:
+      case QFrame::Panel:
+         opt.lineWidth = d->lineWidth;
+         opt.midLineWidth = d->midLineWidth;
+         break;
+      default:
+         // most frame styles do not handle customized line and midline widths
+         // (see updateFrameWidth()).
+         opt.lineWidth = d->frameWidth;
+         break;
+   }
 
-    if (frameShadow == Sunken)
-        opt.state |= QStyle::State_Sunken;
-    else if (frameShadow == Raised)
-        opt.state |= QStyle::State_Raised;
+   if (frameShadow == Sunken) {
+      opt.state |= QStyle::State_Sunken;
+   } else if (frameShadow == Raised) {
+      opt.state |= QStyle::State_Raised;
+   }
 
-    style()->drawControl(QStyle::CE_ShapedFrame, &opt, p, this);
+   style()->drawControl(QStyle::CE_ShapedFrame, &opt, p, this);
 }
 
 
@@ -352,27 +355,30 @@ void QFrame::drawFrame(QPainter *p)
  */
 void QFrame::changeEvent(QEvent *ev)
 {
-    Q_D(QFrame);
+   Q_D(QFrame);
 
-    if (ev->type() == QEvent::StyleChange
+   if (ev->type() == QEvent::StyleChange
 #ifdef Q_OS_MAC
-            || ev->type() == QEvent::MacSizeChange
+         || ev->type() == QEvent::MacSizeChange
 #endif
-            )
-        d->updateFrameWidth();
-    QWidget::changeEvent(ev);
+      ) {
+      d->updateFrameWidth();
+   }
+   QWidget::changeEvent(ev);
 }
 
 /*! \reimp */
 bool QFrame::event(QEvent *e)
 {
-    if (e->type() == QEvent::ParentChange)
-        d_func()->updateFrameWidth();
-    bool result = QWidget::event(e);
-    //this has to be done after the widget has been polished
-    if (e->type() == QEvent::Polish)
-        d_func()->updateFrameWidth();
-    return result;
+   if (e->type() == QEvent::ParentChange) {
+      d_func()->updateFrameWidth();
+   }
+   bool result = QWidget::event(e);
+   //this has to be done after the widget has been polished
+   if (e->type() == QEvent::Polish) {
+      d_func()->updateFrameWidth();
+   }
+   return result;
 }
 
 QT_END_NAMESPACE

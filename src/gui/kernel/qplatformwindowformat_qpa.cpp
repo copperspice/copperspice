@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,56 +31,54 @@ Q_GLOBAL_STATIC(QPlatformWindowFormat, q_platformwindow_default_format);
 
 class QPlatformWindowFormatPrivate
 {
-public:
-    QPlatformWindowFormatPrivate()
-        : ref(1)
-        , opts(QPlatformWindowFormat::DoubleBuffer | QPlatformWindowFormat::DepthBuffer
+ public:
+   QPlatformWindowFormatPrivate()
+      : ref(1)
+      , opts(QPlatformWindowFormat::DoubleBuffer | QPlatformWindowFormat::DepthBuffer
              | QPlatformWindowFormat::Rgba | QPlatformWindowFormat::DirectRendering
              | QPlatformWindowFormat::StencilBuffer | QPlatformWindowFormat::DeprecatedFunctions
              | QPlatformWindowFormat::HasWindowSurface)
-        , depthSize(-1)
-        , accumSize(-1)
-        , stencilSize(-1)
-        , redSize(-1)
-        , greenSize(-1)
-        , blueSize(-1)
-        , alphaSize(-1)
-        , numSamples(-1)
-        , swapInterval(-1)
-        , windowApi(QPlatformWindowFormat::Raster)
-        , sharedContext(0)
-    {
-    }
+      , depthSize(-1)
+      , accumSize(-1)
+      , stencilSize(-1)
+      , redSize(-1)
+      , greenSize(-1)
+      , blueSize(-1)
+      , alphaSize(-1)
+      , numSamples(-1)
+      , swapInterval(-1)
+      , windowApi(QPlatformWindowFormat::Raster)
+      , sharedContext(0) {
+   }
 
-    QPlatformWindowFormatPrivate(const QPlatformWindowFormatPrivate *other)
-        : ref(1),
-          opts(other->opts),
-          depthSize(other->depthSize),
-          accumSize(other->accumSize),
-          stencilSize(other->stencilSize),
-          redSize(other->redSize),
-          greenSize(other->greenSize),
-          blueSize(other->blueSize),
-          alphaSize(other->alphaSize),
-          numSamples(other->numSamples),
-          swapInterval(other->swapInterval),
-          windowApi(other->windowApi),
-          sharedContext(other->sharedContext)
-    {
-    }
-    QAtomicInt ref;
-    QPlatformWindowFormat::FormatOptions opts;
-    int depthSize;
-    int accumSize;
-    int stencilSize;
-    int redSize;
-    int greenSize;
-    int blueSize;
-    int alphaSize;
-    int numSamples;
-    int swapInterval;
-    QPlatformWindowFormat::WindowApi windowApi;
-    QPlatformGLContext *sharedContext;
+   QPlatformWindowFormatPrivate(const QPlatformWindowFormatPrivate *other)
+      : ref(1),
+        opts(other->opts),
+        depthSize(other->depthSize),
+        accumSize(other->accumSize),
+        stencilSize(other->stencilSize),
+        redSize(other->redSize),
+        greenSize(other->greenSize),
+        blueSize(other->blueSize),
+        alphaSize(other->alphaSize),
+        numSamples(other->numSamples),
+        swapInterval(other->swapInterval),
+        windowApi(other->windowApi),
+        sharedContext(other->sharedContext) {
+   }
+   QAtomicInt ref;
+   QPlatformWindowFormat::FormatOptions opts;
+   int depthSize;
+   int accumSize;
+   int stencilSize;
+   int redSize;
+   int greenSize;
+   int blueSize;
+   int alphaSize;
+   int numSamples;
+   int swapInterval;
+   QPlatformWindowFormat::WindowApi windowApi;
+   QPlatformGLContext *sharedContext;
 };
 
 /*!
@@ -170,7 +168,7 @@ public:
 
 QPlatformWindowFormat::QPlatformWindowFormat()
 {
-    d = new QPlatformWindowFormatPrivate;
+   d = new QPlatformWindowFormatPrivate;
 }
 
 
@@ -195,11 +193,11 @@ QPlatformWindowFormat::QPlatformWindowFormat()
 
 QPlatformWindowFormat::QPlatformWindowFormat(QPlatformWindowFormat::FormatOptions options)
 {
-    d = new QPlatformWindowFormatPrivate;
-    QPlatformWindowFormat::FormatOptions newOpts = options;
-    d->opts = defaultFormat().d->opts;
-    d->opts |= (newOpts & 0xffff);
-    d->opts &= ~(newOpts >> 16);
+   d = new QPlatformWindowFormatPrivate;
+   QPlatformWindowFormat::FormatOptions newOpts = options;
+   d->opts = defaultFormat().d->opts;
+   d->opts |= (newOpts & 0xffff);
+   d->opts &= ~(newOpts >> 16);
 }
 
 /*!
@@ -207,12 +205,13 @@ QPlatformWindowFormat::QPlatformWindowFormat(QPlatformWindowFormat::FormatOption
 */
 void QPlatformWindowFormat::detach()
 {
-    if (d->ref != 1) {
-        QPlatformWindowFormatPrivate *newd = new QPlatformWindowFormatPrivate(d);
-        if (!d->ref.deref())
-            delete d;
-        d = newd;
-    }
+   if (d->ref != 1) {
+      QPlatformWindowFormatPrivate *newd = new QPlatformWindowFormatPrivate(d);
+      if (!d->ref.deref()) {
+         delete d;
+      }
+      d = newd;
+   }
 }
 
 /*!
@@ -221,8 +220,8 @@ void QPlatformWindowFormat::detach()
 
 QPlatformWindowFormat::QPlatformWindowFormat(const QPlatformWindowFormat &other)
 {
-    d = other.d;
-    d->ref.ref();
+   d = other.d;
+   d->ref.ref();
 }
 
 /*!
@@ -231,13 +230,14 @@ QPlatformWindowFormat::QPlatformWindowFormat(const QPlatformWindowFormat &other)
 
 QPlatformWindowFormat &QPlatformWindowFormat::operator=(const QPlatformWindowFormat &other)
 {
-    if (d != other.d) {
-        other.d->ref.ref();
-        if (!d->ref.deref())
-            delete d;
-        d = other.d;
-    }
-    return *this;
+   if (d != other.d) {
+      other.d->ref.ref();
+      if (!d->ref.deref()) {
+         delete d;
+      }
+      d = other.d;
+   }
+   return *this;
 }
 
 /*!
@@ -245,8 +245,9 @@ QPlatformWindowFormat &QPlatformWindowFormat::operator=(const QPlatformWindowFor
 */
 QPlatformWindowFormat::~QPlatformWindowFormat()
 {
-    if (!d->ref.deref())
-        delete d;
+   if (!d->ref.deref()) {
+      delete d;
+   }
 }
 
 /*!
@@ -276,7 +277,7 @@ QPlatformWindowFormat::~QPlatformWindowFormat()
 
 void QPlatformWindowFormat::setDoubleBuffer(bool enable)
 {
-    setOption(enable ? QPlatformWindowFormat::DoubleBuffer : QPlatformWindowFormat::SingleBuffer);
+   setOption(enable ? QPlatformWindowFormat::DoubleBuffer : QPlatformWindowFormat::SingleBuffer);
 }
 
 
@@ -306,7 +307,7 @@ void QPlatformWindowFormat::setDoubleBuffer(bool enable)
 
 void QPlatformWindowFormat::setDepth(bool enable)
 {
-    setOption(enable ? QPlatformWindowFormat::DepthBuffer : QPlatformWindowFormat::NoDepthBuffer);
+   setOption(enable ? QPlatformWindowFormat::DepthBuffer : QPlatformWindowFormat::NoDepthBuffer);
 }
 
 
@@ -337,7 +338,7 @@ void QPlatformWindowFormat::setDepth(bool enable)
 
 void QPlatformWindowFormat::setRgba(bool enable)
 {
-    setOption(enable ? QPlatformWindowFormat::Rgba : QPlatformWindowFormat::ColorIndex);
+   setOption(enable ? QPlatformWindowFormat::Rgba : QPlatformWindowFormat::ColorIndex);
 }
 
 
@@ -365,7 +366,7 @@ void QPlatformWindowFormat::setRgba(bool enable)
 
 void QPlatformWindowFormat::setAlpha(bool enable)
 {
-    setOption(enable ? QPlatformWindowFormat::AlphaChannel : QPlatformWindowFormat::NoAlphaChannel);
+   setOption(enable ? QPlatformWindowFormat::AlphaChannel : QPlatformWindowFormat::NoAlphaChannel);
 }
 
 
@@ -392,7 +393,7 @@ void QPlatformWindowFormat::setAlpha(bool enable)
 
 void QPlatformWindowFormat::setAccum(bool enable)
 {
-    setOption(enable ? QPlatformWindowFormat::AccumBuffer : QPlatformWindowFormat::NoAccumBuffer);
+   setOption(enable ? QPlatformWindowFormat::AccumBuffer : QPlatformWindowFormat::NoAccumBuffer);
 }
 
 
@@ -419,7 +420,7 @@ void QPlatformWindowFormat::setAccum(bool enable)
 
 void QPlatformWindowFormat::setStencil(bool enable)
 {
-    setOption(enable ? QPlatformWindowFormat::StencilBuffer: QPlatformWindowFormat::NoStencilBuffer);
+   setOption(enable ? QPlatformWindowFormat::StencilBuffer : QPlatformWindowFormat::NoStencilBuffer);
 }
 
 
@@ -446,7 +447,7 @@ void QPlatformWindowFormat::setStencil(bool enable)
 
 void QPlatformWindowFormat::setStereo(bool enable)
 {
-    setOption(enable ? QPlatformWindowFormat::StereoBuffers : QPlatformWindowFormat::NoStereoBuffers);
+   setOption(enable ? QPlatformWindowFormat::StereoBuffers : QPlatformWindowFormat::NoStereoBuffers);
 }
 
 
@@ -476,7 +477,7 @@ void QPlatformWindowFormat::setStereo(bool enable)
 
 void QPlatformWindowFormat::setDirectRendering(bool enable)
 {
-    setOption(enable ? QPlatformWindowFormat::DirectRendering : QPlatformWindowFormat::IndirectRendering);
+   setOption(enable ? QPlatformWindowFormat::DirectRendering : QPlatformWindowFormat::IndirectRendering);
 }
 
 /*!
@@ -498,7 +499,7 @@ void QPlatformWindowFormat::setDirectRendering(bool enable)
 */
 void QPlatformWindowFormat::setSampleBuffers(bool enable)
 {
-    setOption(enable ? QPlatformWindowFormat::SampleBuffers : QPlatformWindowFormat::NoSampleBuffers);
+   setOption(enable ? QPlatformWindowFormat::SampleBuffers : QPlatformWindowFormat::NoSampleBuffers);
 }
 
 /*!
@@ -522,13 +523,13 @@ int QPlatformWindowFormat::samples() const
 */
 void QPlatformWindowFormat::setSamples(int numSamples)
 {
-    detach();
-    if (numSamples < 0) {
-        qWarning("QPlatformWindowFormat::setSamples: Cannot have negative number of samples per pixel %d", numSamples);
-        return;
-    }
-    d->numSamples = numSamples;
-    setSampleBuffers(numSamples > 0);
+   detach();
+   if (numSamples < 0) {
+      qWarning("QPlatformWindowFormat::setSamples: Cannot have negative number of samples per pixel %d", numSamples);
+      return;
+   }
+   d->numSamples = numSamples;
+   setSampleBuffers(numSamples > 0);
 }
 
 /*!
@@ -551,8 +552,8 @@ void QPlatformWindowFormat::setSamples(int numSamples)
 */
 void QPlatformWindowFormat::setSwapInterval(int interval)
 {
-    detach();
-    d->swapInterval = interval;
+   detach();
+   d->swapInterval = interval;
 }
 
 /*!
@@ -563,28 +564,28 @@ void QPlatformWindowFormat::setSwapInterval(int interval)
 */
 int QPlatformWindowFormat::swapInterval() const
 {
-    return d->swapInterval;
+   return d->swapInterval;
 }
 
 void QPlatformWindowFormat::setWindowApi(QPlatformWindowFormat::WindowApi api)
 {
-    detach();
-    d->windowApi = api;
+   detach();
+   d->windowApi = api;
 }
 
 QPlatformWindowFormat::WindowApi QPlatformWindowFormat::windowApi() const
 {
-    return d->windowApi;
+   return d->windowApi;
 }
 
 void QPlatformWindowFormat::setSharedContext(QPlatformGLContext *context)
 {
-    d->sharedContext = context;
+   d->sharedContext = context;
 }
 
 QPlatformGLContext *QPlatformWindowFormat::sharedGLContext() const
 {
-    return d->sharedContext;
+   return d->sharedContext;
 }
 
 /*!
@@ -607,7 +608,7 @@ QPlatformGLContext *QPlatformWindowFormat::sharedGLContext() const
 
 void QPlatformWindowFormat::setWindowSurface(bool enable)
 {
-    setOption(enable ? QPlatformWindowFormat::HasWindowSurface : QPlatformWindowFormat::NoWindowSurface);
+   setOption(enable ? QPlatformWindowFormat::HasWindowSurface : QPlatformWindowFormat::NoWindowSurface);
 }
 
 /*!
@@ -618,11 +619,12 @@ void QPlatformWindowFormat::setWindowSurface(bool enable)
 
 void QPlatformWindowFormat::setOption(QPlatformWindowFormat::FormatOptions opt)
 {
-    detach();
-    if (opt & 0xffff)
-        d->opts |= opt;
-    else
-       d->opts &= ~(opt >> 16);
+   detach();
+   if (opt & 0xffff) {
+      d->opts |= opt;
+   } else {
+      d->opts &= ~(opt >> 16);
+   }
 }
 
 
@@ -635,10 +637,11 @@ void QPlatformWindowFormat::setOption(QPlatformWindowFormat::FormatOptions opt)
 
 bool QPlatformWindowFormat::testOption(QPlatformWindowFormat::FormatOptions opt) const
 {
-    if (opt & 0xffff)
-       return (d->opts & opt) != 0;
-    else
-       return (d->opts & (opt >> 16)) == 0;
+   if (opt & 0xffff) {
+      return (d->opts & opt) != 0;
+   } else {
+      return (d->opts & (opt >> 16)) == 0;
+   }
 }
 
 /*!
@@ -648,13 +651,13 @@ bool QPlatformWindowFormat::testOption(QPlatformWindowFormat::FormatOptions opt)
 */
 void QPlatformWindowFormat::setDepthBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QPlatformWindowFormat::setDepthBufferSize: Cannot set negative depth buffer size %d", size);
-        return;
-    }
-    d->depthSize = size;
-    setDepth(size > 0);
+   detach();
+   if (size < 0) {
+      qWarning("QPlatformWindowFormat::setDepthBufferSize: Cannot set negative depth buffer size %d", size);
+      return;
+   }
+   d->depthSize = size;
+   setDepth(size > 0);
 }
 
 /*!
@@ -676,12 +679,12 @@ int QPlatformWindowFormat::depthBufferSize() const
 */
 void QPlatformWindowFormat::setRedBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QPlatformWindowFormat::setRedBufferSize: Cannot set negative red buffer size %d", size);
-        return;
-    }
-    d->redSize = size;
+   detach();
+   if (size < 0) {
+      qWarning("QPlatformWindowFormat::setRedBufferSize: Cannot set negative red buffer size %d", size);
+      return;
+   }
+   d->redSize = size;
 }
 
 /*!
@@ -705,12 +708,12 @@ int QPlatformWindowFormat::redBufferSize() const
 */
 void QPlatformWindowFormat::setGreenBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QPlatformWindowFormat::setGreenBufferSize: Cannot set negative green buffer size %d", size);
-        return;
-    }
-    d->greenSize = size;
+   detach();
+   if (size < 0) {
+      qWarning("QPlatformWindowFormat::setGreenBufferSize: Cannot set negative green buffer size %d", size);
+      return;
+   }
+   d->greenSize = size;
 }
 
 /*!
@@ -734,12 +737,12 @@ int QPlatformWindowFormat::greenBufferSize() const
 */
 void QPlatformWindowFormat::setBlueBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QPlatformWindowFormat::setBlueBufferSize: Cannot set negative blue buffer size %d", size);
-        return;
-    }
-    d->blueSize = size;
+   detach();
+   if (size < 0) {
+      qWarning("QPlatformWindowFormat::setBlueBufferSize: Cannot set negative blue buffer size %d", size);
+      return;
+   }
+   d->blueSize = size;
 }
 
 /*!
@@ -762,13 +765,13 @@ int QPlatformWindowFormat::blueBufferSize() const
 */
 void QPlatformWindowFormat::setAlphaBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QPlatformWindowFormat::setAlphaBufferSize: Cannot set negative alpha buffer size %d", size);
-        return;
-    }
-    d->alphaSize = size;
-    setAlpha(size > 0);
+   detach();
+   if (size < 0) {
+      qWarning("QPlatformWindowFormat::setAlphaBufferSize: Cannot set negative alpha buffer size %d", size);
+      return;
+   }
+   d->alphaSize = size;
+   setAlpha(size > 0);
 }
 
 /*!
@@ -789,13 +792,13 @@ int QPlatformWindowFormat::alphaBufferSize() const
 */
 void QPlatformWindowFormat::setAccumBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QPlatformWindowFormat::setAccumBufferSize: Cannot set negative accumulate buffer size %d", size);
-        return;
-    }
-    d->accumSize = size;
-    setAccum(size > 0);
+   detach();
+   if (size < 0) {
+      qWarning("QPlatformWindowFormat::setAccumBufferSize: Cannot set negative accumulate buffer size %d", size);
+      return;
+   }
+   d->accumSize = size;
+   setAccum(size > 0);
 }
 
 /*!
@@ -815,13 +818,13 @@ int QPlatformWindowFormat::accumBufferSize() const
 */
 void QPlatformWindowFormat::setStencilBufferSize(int size)
 {
-    detach();
-    if (size < 0) {
-        qWarning("QPlatformWindowFormat::setStencilBufferSize: Cannot set negative stencil buffer size %d", size);
-        return;
-    }
-    d->stencilSize = size;
-    setStencil(size > 0);
+   detach();
+   if (size < 0) {
+      qWarning("QPlatformWindowFormat::setStencilBufferSize: Cannot set negative stencil buffer size %d", size);
+      return;
+   }
+   d->stencilSize = size;
+   setStencil(size > 0);
 }
 
 /*!
@@ -848,7 +851,7 @@ int QPlatformWindowFormat::stencilBufferSize() const
 
 QPlatformWindowFormat QPlatformWindowFormat::defaultFormat()
 {
-    return *q_platformwindow_default_format();
+   return *q_platformwindow_default_format();
 }
 
 /*!
@@ -862,7 +865,7 @@ QPlatformWindowFormat QPlatformWindowFormat::defaultFormat()
 
 void QPlatformWindowFormat::setDefaultFormat(const QPlatformWindowFormat &f)
 {
-    *q_platformwindow_default_format() = f;
+   *q_platformwindow_default_format() = f;
 }
 
 
@@ -929,19 +932,19 @@ void QPlatformWindowFormat::setDefaultFormat(const QPlatformWindowFormat &f)
     \relates QPlatformWindowFormat
 */
 
-bool operator==(const QPlatformWindowFormat& a, const QPlatformWindowFormat& b)
+bool operator==(const QPlatformWindowFormat &a, const QPlatformWindowFormat &b)
 {
-    return (a.d == b.d) || ((int) a.d->opts == (int) b.d->opts
-        && a.d->alphaSize == b.d->alphaSize
-        && a.d->accumSize == b.d->accumSize
-        && a.d->stencilSize == b.d->stencilSize
-        && a.d->depthSize == b.d->depthSize
-        && a.d->redSize == b.d->redSize
-        && a.d->greenSize == b.d->greenSize
-        && a.d->blueSize == b.d->blueSize
-        && a.d->numSamples == b.d->numSamples
-        && a.d->swapInterval == b.d->swapInterval
-        && a.d->windowApi == b.d->windowApi);
+   return (a.d == b.d) || ((int) a.d->opts == (int) b.d->opts
+                           && a.d->alphaSize == b.d->alphaSize
+                           && a.d->accumSize == b.d->accumSize
+                           && a.d->stencilSize == b.d->stencilSize
+                           && a.d->depthSize == b.d->depthSize
+                           && a.d->redSize == b.d->redSize
+                           && a.d->greenSize == b.d->greenSize
+                           && a.d->blueSize == b.d->blueSize
+                           && a.d->numSamples == b.d->numSamples
+                           && a.d->swapInterval == b.d->swapInterval
+                           && a.d->windowApi == b.d->windowApi);
 }
 
 
@@ -954,27 +957,27 @@ bool operator==(const QPlatformWindowFormat& a, const QPlatformWindowFormat& b)
     \relates QPlatformWindowFormat
 */
 
-bool operator!=(const QPlatformWindowFormat& a, const QPlatformWindowFormat& b)
+bool operator!=(const QPlatformWindowFormat &a, const QPlatformWindowFormat &b)
 {
-    return !(a == b);
+   return !(a == b);
 }
 
 QDebug operator<<(QDebug dbg, const QPlatformWindowFormat &f)
 {
-    const QPlatformWindowFormatPrivate * const d = f.d;
+   const QPlatformWindowFormatPrivate *const d = f.d;
 
-    dbg.nospace() << "QGLFormat("
-                  << "options " << d->opts
-                  << ", depthBufferSize " << d->depthSize
-                  << ", accumBufferSize " << d->accumSize
-                  << ", stencilBufferSize " << d->stencilSize
-                  << ", redBufferSize " << d->redSize
-                  << ", greenBufferSize " << d->greenSize
-                  << ", blueBufferSize " << d->blueSize
-                  << ", alphaBufferSize " << d->alphaSize
-                  << ", samples " << d->numSamples
-                  << ", swapInterval " << d->swapInterval
-                  << ')';
+   dbg.nospace() << "QGLFormat("
+                 << "options " << d->opts
+                 << ", depthBufferSize " << d->depthSize
+                 << ", accumBufferSize " << d->accumSize
+                 << ", stencilBufferSize " << d->stencilSize
+                 << ", redBufferSize " << d->redSize
+                 << ", greenBufferSize " << d->greenSize
+                 << ", blueBufferSize " << d->blueSize
+                 << ", alphaBufferSize " << d->alphaSize
+                 << ", samples " << d->numSamples
+                 << ", swapInterval " << d->swapInterval
+                 << ')';
 
-    return dbg.space();
+   return dbg.space();
 }

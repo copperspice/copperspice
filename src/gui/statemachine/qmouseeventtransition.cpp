@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,12 +36,12 @@ QT_BEGIN_NAMESPACE
 
 class QMouseEventTransitionPrivate : public QEventTransitionPrivate
 {
-    Q_DECLARE_PUBLIC(QMouseEventTransition)
+   Q_DECLARE_PUBLIC(QMouseEventTransition)
 
-public:
-    QMouseEventTransitionPrivate();
+ public:
+   QMouseEventTransitionPrivate();
 
-    QBasicMouseEventTransition *transition;
+   QBasicMouseEventTransition *transition;
 };
 
 QMouseEventTransitionPrivate::QMouseEventTransitionPrivate()
@@ -52,10 +52,10 @@ QMouseEventTransitionPrivate::QMouseEventTransitionPrivate()
   Constructs a new mouse event transition with the given \a sourceState.
 */
 QMouseEventTransition::QMouseEventTransition(QState *sourceState)
-    : QEventTransition(*new QMouseEventTransitionPrivate, sourceState)
+   : QEventTransition(*new QMouseEventTransitionPrivate, sourceState)
 {
-    Q_D(QMouseEventTransition);
-    d->transition = new QBasicMouseEventTransition();
+   Q_D(QMouseEventTransition);
+   d->transition = new QBasicMouseEventTransition();
 }
 
 /*!
@@ -63,12 +63,12 @@ QMouseEventTransition::QMouseEventTransition(QState *sourceState)
   the given \a object, with the given \a button and \a sourceState.
 */
 QMouseEventTransition::QMouseEventTransition(QObject *object, QEvent::Type type,
-                                             Qt::MouseButton button,
-                                             QState *sourceState)
-    : QEventTransition(*new QMouseEventTransitionPrivate, object, type, sourceState)
+      Qt::MouseButton button,
+      QState *sourceState)
+   : QEventTransition(*new QMouseEventTransitionPrivate, object, type, sourceState)
 {
-    Q_D(QMouseEventTransition);
-    d->transition = new QBasicMouseEventTransition(type, button);
+   Q_D(QMouseEventTransition);
+   d->transition = new QBasicMouseEventTransition(type, button);
 }
 
 /*!
@@ -76,8 +76,8 @@ QMouseEventTransition::QMouseEventTransition(QObject *object, QEvent::Type type,
 */
 QMouseEventTransition::~QMouseEventTransition()
 {
-    Q_D(QMouseEventTransition);
-    delete d->transition;
+   Q_D(QMouseEventTransition);
+   delete d->transition;
 }
 
 /*!
@@ -85,8 +85,8 @@ QMouseEventTransition::~QMouseEventTransition()
 */
 Qt::MouseButton QMouseEventTransition::button() const
 {
-    Q_D(const QMouseEventTransition);
-    return d->transition->button();
+   Q_D(const QMouseEventTransition);
+   return d->transition->button();
 }
 
 /*!
@@ -94,8 +94,8 @@ Qt::MouseButton QMouseEventTransition::button() const
 */
 void QMouseEventTransition::setButton(Qt::MouseButton button)
 {
-    Q_D(QMouseEventTransition);
-    d->transition->setButton(button);
+   Q_D(QMouseEventTransition);
+   d->transition->setButton(button);
 }
 
 /*!
@@ -104,8 +104,8 @@ void QMouseEventTransition::setButton(Qt::MouseButton button)
 */
 Qt::KeyboardModifiers QMouseEventTransition::modifierMask() const
 {
-    Q_D(const QMouseEventTransition);
-    return d->transition->modifierMask();
+   Q_D(const QMouseEventTransition);
+   return d->transition->modifierMask();
 }
 
 /*!
@@ -114,8 +114,8 @@ Qt::KeyboardModifiers QMouseEventTransition::modifierMask() const
 */
 void QMouseEventTransition::setModifierMask(Qt::KeyboardModifiers modifierMask)
 {
-    Q_D(QMouseEventTransition);
-    d->transition->setModifierMask(modifierMask);
+   Q_D(QMouseEventTransition);
+   d->transition->setModifierMask(modifierMask);
 }
 
 /*!
@@ -123,8 +123,8 @@ void QMouseEventTransition::setModifierMask(Qt::KeyboardModifiers modifierMask)
 */
 QPainterPath QMouseEventTransition::hitTestPath() const
 {
-    Q_D(const QMouseEventTransition);
-    return d->transition->hitTestPath();
+   Q_D(const QMouseEventTransition);
+   return d->transition->hitTestPath();
 }
 
 /*!
@@ -136,8 +136,8 @@ QPainterPath QMouseEventTransition::hitTestPath() const
 */
 void QMouseEventTransition::setHitTestPath(const QPainterPath &path)
 {
-    Q_D(QMouseEventTransition);
-    d->transition->setHitTestPath(path);
+   Q_D(QMouseEventTransition);
+   d->transition->setHitTestPath(path);
 }
 
 /*!
@@ -145,12 +145,13 @@ void QMouseEventTransition::setHitTestPath(const QPainterPath &path)
 */
 bool QMouseEventTransition::eventTest(QEvent *event)
 {
-    Q_D(const QMouseEventTransition);
-    if (!QEventTransition::eventTest(event))
-        return false;
-    QStateMachine::WrappedEvent *we = static_cast<QStateMachine::WrappedEvent*>(event);
-    d->transition->setEventType(we->event()->type());
-    return QAbstractTransitionPrivate::get(d->transition)->callEventTest(we->event());
+   Q_D(const QMouseEventTransition);
+   if (!QEventTransition::eventTest(event)) {
+      return false;
+   }
+   QStateMachine::WrappedEvent *we = static_cast<QStateMachine::WrappedEvent *>(event);
+   d->transition->setEventType(we->event()->type());
+   return QAbstractTransitionPrivate::get(d->transition)->callEventTest(we->event());
 }
 
 /*!
@@ -158,7 +159,7 @@ bool QMouseEventTransition::eventTest(QEvent *event)
 */
 void QMouseEventTransition::onTransition(QEvent *event)
 {
-    QEventTransition::onTransition(event);
+   QEventTransition::onTransition(event);
 }
 
 QT_END_NAMESPACE

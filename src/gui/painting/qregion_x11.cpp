@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,44 +32,46 @@ QRegion::QRegionData QRegion::shared_empty = {Q_BASIC_ATOMIC_INITIALIZER(1), 0, 
 
 void QRegion::updateX11Region() const
 {
-    d->rgn = XCreateRegion();
-    if (!d->qt_rgn)
-        return;
+   d->rgn = XCreateRegion();
+   if (!d->qt_rgn) {
+      return;
+   }
 
-    int n = d->qt_rgn->numRects;
-    const QRect *rect = (n == 1 ? &d->qt_rgn->extents : d->qt_rgn->rects.constData());
-    while (n--) {
-        XRectangle r;
-        r.x = qMax(SHRT_MIN, rect->x());
-        r.y = qMax(SHRT_MIN, rect->y());
-        r.width = qMin((int)USHRT_MAX, rect->width());
-        r.height = qMin((int)USHRT_MAX, rect->height());
-        XUnionRectWithRegion(&r, d->rgn, d->rgn);
-        ++rect;
-    }
+   int n = d->qt_rgn->numRects;
+   const QRect *rect = (n == 1 ? &d->qt_rgn->extents : d->qt_rgn->rects.constData());
+   while (n--) {
+      XRectangle r;
+      r.x = qMax(SHRT_MIN, rect->x());
+      r.y = qMax(SHRT_MIN, rect->y());
+      r.width = qMin((int)USHRT_MAX, rect->width());
+      r.height = qMin((int)USHRT_MAX, rect->height());
+      XUnionRectWithRegion(&r, d->rgn, d->rgn);
+      ++rect;
+   }
 }
 
 void *QRegion::clipRectangles(int &num) const
 {
-    if (!d->xrectangles && !(d == &shared_empty || d->qt_rgn->numRects == 0)) {
-        XRectangle *r = static_cast<XRectangle*>(malloc(d->qt_rgn->numRects * sizeof(XRectangle)));
-        d->xrectangles = r;
-        int n = d->qt_rgn->numRects;
-        const QRect *rect = (n == 1 ? &d->qt_rgn->extents : d->qt_rgn->rects.constData());
-        while (n--) {
-            r->x = qMax(SHRT_MIN, rect->x());
-            r->y = qMax(SHRT_MIN, rect->y());
-            r->width = qMin((int)USHRT_MAX, rect->width());
-            r->height = qMin((int)USHRT_MAX, rect->height());
-            ++r;
-            ++rect;
-        }
-    }
-    if (d == &shared_empty || d->qt_rgn->numRects == 0)
-        num = 0;
-    else
-        num = d->qt_rgn->numRects;
-    return d->xrectangles;
+   if (!d->xrectangles && !(d == &shared_empty || d->qt_rgn->numRects == 0)) {
+      XRectangle *r = static_cast<XRectangle *>(malloc(d->qt_rgn->numRects * sizeof(XRectangle)));
+      d->xrectangles = r;
+      int n = d->qt_rgn->numRects;
+      const QRect *rect = (n == 1 ? &d->qt_rgn->extents : d->qt_rgn->rects.constData());
+      while (n--) {
+         r->x = qMax(SHRT_MIN, rect->x());
+         r->y = qMax(SHRT_MIN, rect->y());
+         r->width = qMin((int)USHRT_MAX, rect->width());
+         r->height = qMin((int)USHRT_MAX, rect->height());
+         ++r;
+         ++rect;
+      }
+   }
+   if (d == &shared_empty || d->qt_rgn->numRects == 0) {
+      num = 0;
+   } else {
+      num = d->qt_rgn->numRects;
+   }
+   return d->xrectangles;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,8 +34,8 @@ QT_BEGIN_NAMESPACE
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QGenericPluginFactoryInterface_iid,
-     QLatin1String("/generic"), Qt::CaseInsensitive))
+                          (QGenericPluginFactoryInterface_iid,
+                           QLatin1String("/generic"), Qt::CaseInsensitive))
 
 #endif
 
@@ -59,15 +59,17 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
 
     \sa keys()
 */
-QObject *QGenericPluginFactory::create(const QString& key, const QString &specification)
+QObject *QGenericPluginFactory::create(const QString &key, const QString &specification)
 {
-    QString driver = key.toLower();
+   QString driver = key.toLower();
 
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
-    if (QGenericPluginFactoryInterface *factory = qobject_cast<QGenericPluginFactoryInterface*>(loader()->instance(driver)))
-        return factory->create(driver, specification);
+   if (QGenericPluginFactoryInterface *factory = qobject_cast<QGenericPluginFactoryInterface *>(loader()->instance(
+            driver))) {
+      return factory->create(driver, specification);
+   }
 #endif
-    return 0;
+   return 0;
 }
 
 /*!
@@ -77,16 +79,17 @@ QObject *QGenericPluginFactory::create(const QString& key, const QString &specif
 */
 QStringList QGenericPluginFactory::keys()
 {
-    QStringList list;
+   QStringList list;
 
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
-    QStringList plugins = loader()->keys();
-    for (int i = 0; i < plugins.size(); ++i) {
-        if (!list.contains(plugins.at(i)))
-            list += plugins.at(i);
-    }
+   QStringList plugins = loader()->keys();
+   for (int i = 0; i < plugins.size(); ++i) {
+      if (!list.contains(plugins.at(i))) {
+         list += plugins.at(i);
+      }
+   }
 #endif //QT_MAKEDLL
-    return list;
+   return list;
 }
 
 QT_END_NAMESPACE

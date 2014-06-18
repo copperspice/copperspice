@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,30 +33,30 @@ QT_BEGIN_NAMESPACE
 
 class QAudioDeviceInfoInternal : public QAbstractAudioDeviceInfo
 {
-public:
-    AudioDeviceID   deviceId;
-    QString         name;
-    QAudio::Mode   mode;
+ public:
+   AudioDeviceID   deviceId;
+   QString         name;
+   QAudio::Mode   mode;
 
-    QAudioDeviceInfoInternal(QByteArray const& handle, QAudio::Mode mode);
+   QAudioDeviceInfoInternal(QByteArray const &handle, QAudio::Mode mode);
 
-    bool isFormatSupported(const QAudioFormat& format) const;
-    QAudioFormat preferredFormat() const;
-    QAudioFormat nearestFormat(const QAudioFormat& format) const;
+   bool isFormatSupported(const QAudioFormat &format) const;
+   QAudioFormat preferredFormat() const;
+   QAudioFormat nearestFormat(const QAudioFormat &format) const;
 
-    QString deviceName() const;
+   QString deviceName() const;
 
-    QStringList codecList();
-    QList<int> frequencyList();
-    QList<int> channelsList();
-    QList<int> sampleSizeList();
-    QList<QAudioFormat::Endian> byteOrderList();
-    QList<QAudioFormat::SampleType> sampleTypeList();
+   QStringList codecList();
+   QList<int> frequencyList();
+   QList<int> channelsList();
+   QList<int> sampleSizeList();
+   QList<QAudioFormat::Endian> byteOrderList();
+   QList<QAudioFormat::SampleType> sampleTypeList();
 
-    static QByteArray defaultInputDevice();
-    static QByteArray defaultOutputDevice();
+   static QByteArray defaultInputDevice();
+   static QByteArray defaultOutputDevice();
 
-    static QList<QByteArray> availableDevices(QAudio::Mode mode);
+   static QList<QByteArray> availableDevices(QAudio::Mode mode);
 };
 
 QT_END_NAMESPACE

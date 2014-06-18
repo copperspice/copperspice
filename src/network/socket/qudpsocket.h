@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,47 +38,48 @@ class QUdpSocketPrivate;
 
 class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
 {
-    CS_OBJECT(QUdpSocket)
-public:
-    enum BindFlag {
-        DefaultForPlatform = 0x0,
-        ShareAddress = 0x1,
-        DontShareAddress = 0x2,
-        ReuseAddressHint = 0x4
-    };
-    using BindMode = QFlags<BindFlag>;
+   CS_OBJECT(QUdpSocket)
+ public:
+   enum BindFlag {
+      DefaultForPlatform = 0x0,
+      ShareAddress = 0x1,
+      DontShareAddress = 0x2,
+      ReuseAddressHint = 0x4
+   };
+   using BindMode = QFlags<BindFlag>;
 
-    explicit QUdpSocket(QObject *parent = 0);
-    virtual ~QUdpSocket();
+   explicit QUdpSocket(QObject *parent = 0);
+   virtual ~QUdpSocket();
 
-    bool bind(const QHostAddress &address, quint16 port);
-    bool bind(quint16 port = 0);
-    bool bind(const QHostAddress &address, quint16 port, BindMode mode);
-    bool bind(quint16 port, BindMode mode);
-    // ### Qt5/Merge the bind functions
+   bool bind(const QHostAddress &address, quint16 port);
+   bool bind(quint16 port = 0);
+   bool bind(const QHostAddress &address, quint16 port, BindMode mode);
+   bool bind(quint16 port, BindMode mode);
+   // ### Qt5/Merge the bind functions
 
 #ifndef QT_NO_NETWORKINTERFACE
-    bool joinMulticastGroup(const QHostAddress &groupAddress);
-    bool joinMulticastGroup(const QHostAddress &groupAddress,
+   bool joinMulticastGroup(const QHostAddress &groupAddress);
+   bool joinMulticastGroup(const QHostAddress &groupAddress,
+                           const QNetworkInterface &iface);
+   bool leaveMulticastGroup(const QHostAddress &groupAddress);
+   bool leaveMulticastGroup(const QHostAddress &groupAddress,
                             const QNetworkInterface &iface);
-    bool leaveMulticastGroup(const QHostAddress &groupAddress);
-    bool leaveMulticastGroup(const QHostAddress &groupAddress,
-                             const QNetworkInterface &iface);
 
-    QNetworkInterface multicastInterface() const;
-    void setMulticastInterface(const QNetworkInterface &iface);
+   QNetworkInterface multicastInterface() const;
+   void setMulticastInterface(const QNetworkInterface &iface);
 #endif
 
-    bool hasPendingDatagrams() const;
-    qint64 pendingDatagramSize() const;
-    qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *host = 0, quint16 *port = 0);
-    qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &host, quint16 port);
-    inline qint64 writeDatagram(const QByteArray &datagram, const QHostAddress &host, quint16 port)
-        { return writeDatagram(datagram.constData(), datagram.size(), host, port); }
+   bool hasPendingDatagrams() const;
+   qint64 pendingDatagramSize() const;
+   qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *host = 0, quint16 *port = 0);
+   qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &host, quint16 port);
+   inline qint64 writeDatagram(const QByteArray &datagram, const QHostAddress &host, quint16 port) {
+      return writeDatagram(datagram.constData(), datagram.size(), host, port);
+   }
 
-private:
-    Q_DISABLE_COPY(QUdpSocket)
-    Q_DECLARE_PRIVATE(QUdpSocket)
+ private:
+   Q_DISABLE_COPY(QUdpSocket)
+   Q_DECLARE_PRIVATE(QUdpSocket)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QUdpSocket::BindMode)

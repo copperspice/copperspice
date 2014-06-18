@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,8 +49,8 @@ typedef int EGLBoolean;
 typedef int EGLint;
 typedef int EGLenum;
 typedef int    NativeDisplayType;
-typedef void*  NativeWindowType;
-typedef void*  NativePixmapType;
+typedef void  *NativeWindowType;
+typedef void  *NativePixmapType;
 typedef int EGLDisplay;
 typedef int EGLConfig;
 typedef int EGLSurface;
@@ -131,59 +131,58 @@ typedef void *EGLImageKHR;
 class QEglProperties;
 
 namespace QEgl {
-    enum API
-    {
-        OpenGL,
-        OpenVG
-    };
+enum API {
+   OpenGL,
+   OpenVG
+};
 
-    enum PixelFormatMatch
-    {
-        ExactPixelFormat,
-        BestPixelFormat
-    };
+enum PixelFormatMatch {
+   ExactPixelFormat,
+   BestPixelFormat
+};
 
-    enum ConfigOption
-    {
-        NoOptions   = 0,
-        Translucent = 0x01,
-        Renderable  = 0x02  // Config will be compatable with the paint engines (VG or GL)
-    };
-    using ConfigOptions = QFlags<ConfigOption>;
+enum ConfigOption {
+   NoOptions   = 0,
+   Translucent = 0x01,
+   Renderable  = 0x02  // Config will be compatable with the paint engines (VG or GL)
+};
+using ConfigOptions = QFlags<ConfigOption>;
 
-    // Most of the time we use the same config for things like widgets & pixmaps, so rather than
-    // go through the eglChooseConfig loop every time, we use defaultConfig, which will return
-    // the config for a particular device/api/option combo. This function assumes that once a
-    // config is chosen for a particular combo, it's safe to always use that combo.
-    Q_GUI_EXPORT EGLConfig  defaultConfig(int devType, API api, ConfigOptions options);
+// Most of the time we use the same config for things like widgets & pixmaps, so rather than
+// go through the eglChooseConfig loop every time, we use defaultConfig, which will return
+// the config for a particular device/api/option combo. This function assumes that once a
+// config is chosen for a particular combo, it's safe to always use that combo.
+Q_GUI_EXPORT EGLConfig  defaultConfig(int devType, API api, ConfigOptions options);
 
-    Q_GUI_EXPORT EGLConfig  chooseConfig(const QEglProperties* configAttribs, QEgl::PixelFormatMatch match = QEgl::ExactPixelFormat);
-    Q_GUI_EXPORT EGLSurface createSurface(QPaintDevice *device, EGLConfig cfg, const QEglProperties *surfaceAttribs = 0);
+Q_GUI_EXPORT EGLConfig  chooseConfig(const QEglProperties *configAttribs,
+                                     QEgl::PixelFormatMatch match = QEgl::ExactPixelFormat);
+Q_GUI_EXPORT EGLSurface createSurface(QPaintDevice *device, EGLConfig cfg, const QEglProperties *surfaceAttribs = 0);
 
-    Q_GUI_EXPORT void dumpAllConfigs();
+Q_GUI_EXPORT void dumpAllConfigs();
 
 #ifdef QT_NO_EGL
-    Q_GUI_EXPORT QString errorString(EGLint code = 0);
+Q_GUI_EXPORT QString errorString(EGLint code = 0);
 #else
-    Q_GUI_EXPORT QString errorString(EGLint code = eglGetError());
+Q_GUI_EXPORT QString errorString(EGLint code = eglGetError());
 #endif
 
-    Q_GUI_EXPORT QString extensions();
-    Q_GUI_EXPORT bool hasExtension(const char* extensionName);
+Q_GUI_EXPORT QString extensions();
+Q_GUI_EXPORT bool hasExtension(const char *extensionName);
 
-    Q_GUI_EXPORT EGLDisplay display();
+Q_GUI_EXPORT EGLDisplay display();
 
-    Q_GUI_EXPORT EGLNativeDisplayType nativeDisplay();
-    Q_GUI_EXPORT EGLNativeWindowType  nativeWindow(QWidget*);
-    Q_GUI_EXPORT EGLNativePixmapType  nativePixmap(QPixmap*);
+Q_GUI_EXPORT EGLNativeDisplayType nativeDisplay();
+Q_GUI_EXPORT EGLNativeWindowType  nativeWindow(QWidget *);
+Q_GUI_EXPORT EGLNativePixmapType  nativePixmap(QPixmap *);
 
-    // Extension functions
-    Q_GUI_EXPORT EGLImageKHR eglCreateImageKHR(EGLDisplay dpy, EGLContext ctx, EGLenum target, EGLClientBuffer buffer, const EGLint *attrib_list);
-    Q_GUI_EXPORT EGLBoolean  eglDestroyImageKHR(EGLDisplay dpy, EGLImageKHR img);
-    Q_GUI_EXPORT EGLBoolean eglSwapBuffersRegion2NOK(EGLDisplay dpy, EGLSurface surface, EGLint count, const EGLint *rects);
+// Extension functions
+Q_GUI_EXPORT EGLImageKHR eglCreateImageKHR(EGLDisplay dpy, EGLContext ctx, EGLenum target, EGLClientBuffer buffer,
+      const EGLint *attrib_list);
+Q_GUI_EXPORT EGLBoolean  eglDestroyImageKHR(EGLDisplay dpy, EGLImageKHR img);
+Q_GUI_EXPORT EGLBoolean eglSwapBuffersRegion2NOK(EGLDisplay dpy, EGLSurface surface, EGLint count, const EGLint *rects);
 
 #ifdef Q_WS_X11
-    Q_GUI_EXPORT VisualID getCompatibleVisualId(EGLConfig config);
+Q_GUI_EXPORT VisualID getCompatibleVisualId(EGLConfig config);
 #endif
 }
 

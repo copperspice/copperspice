@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -60,19 +60,22 @@ QT_BEGIN_NAMESPACE
  */
 void QSslKeyPrivate::clear(bool deep)
 {
-    isNull = true;
-    if (!QSslSocket::supportsSsl())
-        return;
-    if (rsa) {
-        if (deep)
-            q_RSA_free(rsa);
-        rsa = 0;
-    }
-    if (dsa) {
-        if (deep)
-            q_DSA_free(dsa);
-        dsa = 0;
-    }
+   isNull = true;
+   if (!QSslSocket::supportsSsl()) {
+      return;
+   }
+   if (rsa) {
+      if (deep) {
+         q_RSA_free(rsa);
+      }
+      rsa = 0;
+   }
+   if (dsa) {
+      if (deep) {
+         q_DSA_free(dsa);
+      }
+      dsa = 0;
+   }
 }
 
 /*!
@@ -91,35 +94,40 @@ void QSslKeyPrivate::clear(bool deep)
 void QSslKeyPrivate::decodePem(const QByteArray &pem, const QByteArray &passPhrase,
                                bool deepClear)
 {
-    if (pem.isEmpty())
-        return;
+   if (pem.isEmpty()) {
+      return;
+   }
 
-    clear(deepClear);
+   clear(deepClear);
 
-    if (!QSslSocket::supportsSsl())
-        return;
+   if (!QSslSocket::supportsSsl()) {
+      return;
+   }
 
-    BIO *bio = q_BIO_new_mem_buf(const_cast<char *>(pem.data()), pem.size());
-    if (!bio)
-        return;
+   BIO *bio = q_BIO_new_mem_buf(const_cast<char *>(pem.data()), pem.size());
+   if (!bio) {
+      return;
+   }
 
-    void *phrase = (void *)passPhrase.constData();
+   void *phrase = (void *)passPhrase.constData();
 
-    if (algorithm == QSsl::Rsa) {
-        RSA *result = (type == QSsl::PublicKey)
-            ? q_PEM_read_bio_RSA_PUBKEY(bio, &rsa, 0, phrase)
-            : q_PEM_read_bio_RSAPrivateKey(bio, &rsa, 0, phrase);
-        if (rsa && rsa == result)
-            isNull = false;
-    } else {
-        DSA *result = (type == QSsl::PublicKey)
-            ? q_PEM_read_bio_DSA_PUBKEY(bio, &dsa, 0, phrase)
-            : q_PEM_read_bio_DSAPrivateKey(bio, &dsa, 0, phrase);
-        if (dsa && dsa == result)
-            isNull = false;
-    }
+   if (algorithm == QSsl::Rsa) {
+      RSA *result = (type == QSsl::PublicKey)
+                    ? q_PEM_read_bio_RSA_PUBKEY(bio, &rsa, 0, phrase)
+                    : q_PEM_read_bio_RSAPrivateKey(bio, &rsa, 0, phrase);
+      if (rsa && rsa == result) {
+         isNull = false;
+      }
+   } else {
+      DSA *result = (type == QSsl::PublicKey)
+                    ? q_PEM_read_bio_DSA_PUBKEY(bio, &dsa, 0, phrase)
+                    : q_PEM_read_bio_DSAPrivateKey(bio, &dsa, 0, phrase);
+      if (dsa && dsa == result) {
+         isNull = false;
+      }
+   }
 
-    q_BIO_free(bio);
+   q_BIO_free(bio);
 }
 
 /*!
@@ -128,7 +136,7 @@ void QSslKeyPrivate::decodePem(const QByteArray &pem, const QByteArray &passPhra
     \sa isNull()
 */
 QSslKey::QSslKey()
-    : d(new QSslKeyPrivate)
+   : d(new QSslKeyPrivate)
 {
 }
 
@@ -137,12 +145,13 @@ QSslKey::QSslKey()
 */
 QByteArray QSslKeyPrivate::pemHeader() const
 {
-    // ### use QByteArray::fromRawData() instead
-    if (type == QSsl::PublicKey)
-        return QByteArray("-----BEGIN PUBLIC KEY-----\n");
-    else if (algorithm == QSsl::Rsa)
-        return QByteArray("-----BEGIN RSA PRIVATE KEY-----\n");
-    return QByteArray("-----BEGIN DSA PRIVATE KEY-----\n");
+   // ### use QByteArray::fromRawData() instead
+   if (type == QSsl::PublicKey) {
+      return QByteArray("-----BEGIN PUBLIC KEY-----\n");
+   } else if (algorithm == QSsl::Rsa) {
+      return QByteArray("-----BEGIN RSA PRIVATE KEY-----\n");
+   }
+   return QByteArray("-----BEGIN DSA PRIVATE KEY-----\n");
 }
 
 /*!
@@ -150,12 +159,13 @@ QByteArray QSslKeyPrivate::pemHeader() const
 */
 QByteArray QSslKeyPrivate::pemFooter() const
 {
-    // ### use QByteArray::fromRawData() instead
-    if (type == QSsl::PublicKey)
-        return QByteArray("-----END PUBLIC KEY-----\n");
-    else if (algorithm == QSsl::Rsa)
-        return QByteArray("-----END RSA PRIVATE KEY-----\n");
-    return QByteArray("-----END DSA PRIVATE KEY-----\n");
+   // ### use QByteArray::fromRawData() instead
+   if (type == QSsl::PublicKey) {
+      return QByteArray("-----END PUBLIC KEY-----\n");
+   } else if (algorithm == QSsl::Rsa) {
+      return QByteArray("-----END RSA PRIVATE KEY-----\n");
+   }
+   return QByteArray("-----END DSA PRIVATE KEY-----\n");
 }
 
 /*!
@@ -165,22 +175,24 @@ QByteArray QSslKeyPrivate::pemFooter() const
 */
 QByteArray QSslKeyPrivate::pemFromDer(const QByteArray &der) const
 {
-    QByteArray pem(der.toBase64());
+   QByteArray pem(der.toBase64());
 
-    const int lineWidth = 64; // RFC 1421
-    const int newLines = pem.size() / lineWidth;
-    const bool rem = pem.size() % lineWidth;
+   const int lineWidth = 64; // RFC 1421
+   const int newLines = pem.size() / lineWidth;
+   const bool rem = pem.size() % lineWidth;
 
-    // ### optimize
-    for (int i = 0; i < newLines; ++i)
-        pem.insert((i + 1) * lineWidth + i, '\n');
-    if (rem)
-        pem.append('\n'); // ###
+   // ### optimize
+   for (int i = 0; i < newLines; ++i) {
+      pem.insert((i + 1) * lineWidth + i, '\n');
+   }
+   if (rem) {
+      pem.append('\n');   // ###
+   }
 
-    pem.prepend(pemHeader());
-    pem.append(pemFooter());
+   pem.prepend(pemHeader());
+   pem.append(pemFooter());
 
-    return pem;
+   return pem;
 }
 
 /*!
@@ -190,19 +202,20 @@ QByteArray QSslKeyPrivate::pemFromDer(const QByteArray &der) const
 */
 QByteArray QSslKeyPrivate::derFromPem(const QByteArray &pem) const
 {
-    const QByteArray header = pemHeader();
-    const QByteArray footer = pemFooter();
+   const QByteArray header = pemHeader();
+   const QByteArray footer = pemFooter();
 
-    QByteArray der(pem);
+   QByteArray der(pem);
 
-    const int headerIndex = der.indexOf(header);
-    const int footerIndex = der.indexOf(footer);
-    if (headerIndex == -1 || footerIndex == -1)
-        return QByteArray();
+   const int headerIndex = der.indexOf(header);
+   const int footerIndex = der.indexOf(footer);
+   if (headerIndex == -1 || footerIndex == -1) {
+      return QByteArray();
+   }
 
-    der = der.mid(headerIndex + header.size(), footerIndex - (headerIndex + header.size()));
+   der = der.mid(headerIndex + header.size(), footerIndex - (headerIndex + header.size()));
 
-    return QByteArray::fromBase64(der); // ignores newlines
+   return QByteArray::fromBase64(der); // ignores newlines
 }
 
 /*!
@@ -216,13 +229,13 @@ QByteArray QSslKeyPrivate::derFromPem(const QByteArray &pem) const
 */
 QSslKey::QSslKey(const QByteArray &encoded, QSsl::KeyAlgorithm algorithm,
                  QSsl::EncodingFormat encoding, QSsl::KeyType type, const QByteArray &passPhrase)
-    : d(new QSslKeyPrivate)
+   : d(new QSslKeyPrivate)
 {
-    d->type = type;
-    d->algorithm = algorithm;
-    d->decodePem((encoding == QSsl::Der)
-                 ? d->pemFromDer(encoded) : encoded,
-                 passPhrase);
+   d->type = type;
+   d->algorithm = algorithm;
+   d->decodePem((encoding == QSsl::Der)
+                ? d->pemFromDer(encoded) : encoded,
+                passPhrase);
 }
 
 /*!
@@ -235,17 +248,18 @@ QSslKey::QSslKey(const QByteArray &encoded, QSsl::KeyAlgorithm algorithm,
     a valid key.
 */
 QSslKey::QSslKey(QIODevice *device, QSsl::KeyAlgorithm algorithm, QSsl::EncodingFormat encoding,
-		 QSsl::KeyType type, const QByteArray &passPhrase)
-    : d(new QSslKeyPrivate)
+                 QSsl::KeyType type, const QByteArray &passPhrase)
+   : d(new QSslKeyPrivate)
 {
-    QByteArray encoded;
-    if (device)
-        encoded = device->readAll();
-    d->type = type;
-    d->algorithm = algorithm;
-    d->decodePem((encoding == QSsl::Der) ?
-                 d->pemFromDer(encoded) : encoded,
-                 passPhrase);
+   QByteArray encoded;
+   if (device) {
+      encoded = device->readAll();
+   }
+   d->type = type;
+   d->algorithm = algorithm;
+   d->decodePem((encoding == QSsl::Der) ?
+                d->pemFromDer(encoded) : encoded,
+                passPhrase);
 }
 
 /*!
@@ -270,8 +284,8 @@ QSslKey::~QSslKey()
 */
 QSslKey &QSslKey::operator=(const QSslKey &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -281,7 +295,7 @@ QSslKey &QSslKey::operator=(const QSslKey &other)
 */
 bool QSslKey::isNull() const
 {
-    return d->isNull;
+   return d->isNull;
 }
 
 /*!
@@ -291,7 +305,7 @@ bool QSslKey::isNull() const
 */
 void QSslKey::clear()
 {
-    d = new QSslKeyPrivate;
+   d = new QSslKeyPrivate;
 }
 
 /*!
@@ -299,10 +313,11 @@ void QSslKey::clear()
 */
 int QSslKey::length() const
 {
-    if (d->isNull)
-        return -1;
-    return (d->algorithm == QSsl::Rsa)
-           ? q_BN_num_bits(d->rsa->n) : q_BN_num_bits(d->dsa->p);
+   if (d->isNull) {
+      return -1;
+   }
+   return (d->algorithm == QSsl::Rsa)
+          ? q_BN_num_bits(d->rsa->n) : q_BN_num_bits(d->dsa->p);
 }
 
 /*!
@@ -310,7 +325,7 @@ int QSslKey::length() const
 */
 QSsl::KeyType QSslKey::type() const
 {
-    return d->type;
+   return d->type;
 }
 
 /*!
@@ -318,7 +333,7 @@ QSsl::KeyType QSslKey::type() const
 */
 QSsl::KeyAlgorithm QSslKey::algorithm() const
 {
-    return d->algorithm;
+   return d->algorithm;
 }
 
 /*!
@@ -329,9 +344,10 @@ QSsl::KeyAlgorithm QSslKey::algorithm() const
 // ### autotest failure for non-empty passPhrase and private key
 QByteArray QSslKey::toDer(const QByteArray &passPhrase) const
 {
-    if (d->isNull)
-        return QByteArray();
-    return d->derFromPem(toPem(passPhrase));
+   if (d->isNull) {
+      return QByteArray();
+   }
+   return d->derFromPem(toPem(passPhrase));
 }
 
 /*!
@@ -341,51 +357,55 @@ QByteArray QSslKey::toDer(const QByteArray &passPhrase) const
 */
 QByteArray QSslKey::toPem(const QByteArray &passPhrase) const
 {
-    if (!QSslSocket::supportsSsl() || d->isNull)
-        return QByteArray();
+   if (!QSslSocket::supportsSsl() || d->isNull) {
+      return QByteArray();
+   }
 
-    BIO *bio = q_BIO_new(q_BIO_s_mem());
-    if (!bio)
-        return QByteArray();
+   BIO *bio = q_BIO_new(q_BIO_s_mem());
+   if (!bio) {
+      return QByteArray();
+   }
 
-    bool fail = false;
+   bool fail = false;
 
-    if (d->algorithm == QSsl::Rsa) {
-        if (d->type == QSsl::PublicKey) {
-            if (!q_PEM_write_bio_RSA_PUBKEY(bio, d->rsa))
-                fail = true;
-        } else {
-            if (!q_PEM_write_bio_RSAPrivateKey(
-                    bio, d->rsa,
-                    // ### the cipher should be selectable in the API:
-                    passPhrase.isEmpty() ? (const EVP_CIPHER *)0 : q_EVP_des_ede3_cbc(),
-                    (uchar *)passPhrase.data(), passPhrase.size(), 0, 0)) {
-                fail = true;
-            }
-        }
-    } else {
-        if (d->type == QSsl::PublicKey) {
-            if (!q_PEM_write_bio_DSA_PUBKEY(bio, d->dsa))
-                fail = true;
-        } else {
-            if (!q_PEM_write_bio_DSAPrivateKey(
-                    bio, d->dsa,
-                    // ### the cipher should be selectable in the API:
-                    passPhrase.isEmpty() ? (const EVP_CIPHER *)0 : q_EVP_des_ede3_cbc(),
-                    (uchar *)passPhrase.data(), passPhrase.size(), 0, 0)) {
-                fail = true;
-            }
-        }
-    }
+   if (d->algorithm == QSsl::Rsa) {
+      if (d->type == QSsl::PublicKey) {
+         if (!q_PEM_write_bio_RSA_PUBKEY(bio, d->rsa)) {
+            fail = true;
+         }
+      } else {
+         if (!q_PEM_write_bio_RSAPrivateKey(
+                  bio, d->rsa,
+                  // ### the cipher should be selectable in the API:
+                  passPhrase.isEmpty() ? (const EVP_CIPHER *)0 : q_EVP_des_ede3_cbc(),
+                  (uchar *)passPhrase.data(), passPhrase.size(), 0, 0)) {
+            fail = true;
+         }
+      }
+   } else {
+      if (d->type == QSsl::PublicKey) {
+         if (!q_PEM_write_bio_DSA_PUBKEY(bio, d->dsa)) {
+            fail = true;
+         }
+      } else {
+         if (!q_PEM_write_bio_DSAPrivateKey(
+                  bio, d->dsa,
+                  // ### the cipher should be selectable in the API:
+                  passPhrase.isEmpty() ? (const EVP_CIPHER *)0 : q_EVP_des_ede3_cbc(),
+                  (uchar *)passPhrase.data(), passPhrase.size(), 0, 0)) {
+            fail = true;
+         }
+      }
+   }
 
-    QByteArray pem;
-    if (!fail) {
-        char *data;
-        long size = q_BIO_get_mem_data(bio, &data);
-        pem = QByteArray(data, size);
-    }
-    q_BIO_free(bio);
-    return pem;
+   QByteArray pem;
+   if (!fail) {
+      char *data;
+      long size = q_BIO_get_mem_data(bio, &data);
+      pem = QByteArray(data, size);
+   }
+   q_BIO_free(bio);
+   return pem;
 }
 
 /*!
@@ -401,7 +421,7 @@ QByteArray QSslKey::toPem(const QByteArray &passPhrase) const
 */
 Qt::HANDLE QSslKey::handle() const
 {
-    return (d->algorithm == QSsl::Rsa) ? Qt::HANDLE(d->rsa) : Qt::HANDLE(d->dsa);
+   return (d->algorithm == QSsl::Rsa) ? Qt::HANDLE(d->rsa) : Qt::HANDLE(d->dsa);
 }
 
 /*!
@@ -409,17 +429,22 @@ Qt::HANDLE QSslKey::handle() const
 */
 bool QSslKey::operator==(const QSslKey &other) const
 {
-    if (isNull())
-        return other.isNull();
-    if (other.isNull())
-        return isNull();
-    if (algorithm() != other.algorithm())
-        return false;
-    if (type() != other.type())
-        return false;
-    if (length() != other.length())
-        return false;
-    return toDer() == other.toDer();
+   if (isNull()) {
+      return other.isNull();
+   }
+   if (other.isNull()) {
+      return isNull();
+   }
+   if (algorithm() != other.algorithm()) {
+      return false;
+   }
+   if (type() != other.type()) {
+      return false;
+   }
+   if (length() != other.length()) {
+      return false;
+   }
+   return toDer() == other.toDer();
 }
 
 /*! \fn bool QSslKey::operator!=(const QSslKey &other) const
@@ -432,12 +457,12 @@ bool QSslKey::operator==(const QSslKey &other) const
 class QDebug;
 QDebug operator<<(QDebug debug, const QSslKey &key)
 {
-    debug << "QSslKey("
-          << (key.type() == QSsl::PublicKey ? "PublicKey" : "PrivateKey")
-          << ", " << (key.algorithm() == QSsl::Rsa ? "RSA" : "DSA")
-          << ", " << key.length()
-          << ')';
-    return debug;
+   debug << "QSslKey("
+         << (key.type() == QSsl::PublicKey ? "PublicKey" : "PrivateKey")
+         << ", " << (key.algorithm() == QSsl::Rsa ? "RSA" : "DSA")
+         << ", " << key.length()
+         << ')';
+   return debug;
 }
 #endif
 

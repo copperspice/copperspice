@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,66 +30,80 @@ QT_BEGIN_NAMESPACE
 
 class QColormapPrivate
 {
-public:
-    inline QColormapPrivate()
-        : ref(1)
-    { }
+ public:
+   inline QColormapPrivate()
+      : ref(1) {
+   }
 
-    QAtomicInt ref;
+   QAtomicInt ref;
 };
 static QColormap *qt_mac_global_map = 0;
 
 void QColormap::initialize()
 {
-    qt_mac_global_map = new QColormap;
+   qt_mac_global_map = new QColormap;
 }
 
 void QColormap::cleanup()
 {
-    delete qt_mac_global_map;
-    qt_mac_global_map = 0;
+   delete qt_mac_global_map;
+   qt_mac_global_map = 0;
 }
 
 QColormap QColormap::instance(int)
 {
-    return *qt_mac_global_map;
+   return *qt_mac_global_map;
 }
 
 QColormap::QColormap() : d(new QColormapPrivate)
 {}
 
-QColormap::QColormap(const QColormap &colormap) :d (colormap.d)
-{ d->ref.ref(); }
+QColormap::QColormap(const QColormap &colormap) : d (colormap.d)
+{
+   d->ref.ref();
+}
 
 QColormap::~QColormap()
 {
-    if (!d->ref.deref())
-        delete d;
+   if (!d->ref.deref()) {
+      delete d;
+   }
 }
 
 QColormap::Mode QColormap::mode() const
-{ return QColormap::Direct; }
+{
+   return QColormap::Direct;
+}
 
 int QColormap::depth() const
 {
-    return 32;
+   return 32;
 }
 
 int QColormap::size() const
 {
-    return -1;
+   return -1;
 }
 
 uint QColormap::pixel(const QColor &color) const
-{ return color.rgba(); }
+{
+   return color.rgba();
+}
 
 const QColor QColormap::colorAt(uint pixel) const
-{ return QColor(pixel); }
+{
+   return QColor(pixel);
+}
 
 const QVector<QColor> QColormap::colormap() const
-{ return QVector<QColor>(); }
+{
+   return QVector<QColor>();
+}
 
 QColormap &QColormap::operator=(const QColormap &colormap)
-{ qAtomicAssign(d, colormap.d); return *this; }
+{
+   qAtomicAssign(d, colormap.d);
+   return *this;
+}
 
 QT_END_NAMESPACE

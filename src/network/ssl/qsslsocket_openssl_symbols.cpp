@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -127,13 +127,19 @@ DEFINEFUNC(const char *, OBJ_nid2sn, int a, a, return 0, return)
 DEFINEFUNC(int, OBJ_obj2nid, const ASN1_OBJECT *a, a, return NID_undef, return)
 
 #ifdef SSLEAY_MACROS
-DEFINEFUNC6(void *, PEM_ASN1_read_bio, d2i_of_void *a, a, const char *b, b, BIO *c, c, void **d, d, pem_password_cb *e, e, void *f, f, return 0, return)
-DEFINEFUNC6(void *, PEM_ASN1_write_bio, d2i_of_void *a, a, const char *b, b, BIO *c, c, void **d, d, pem_password_cb *e, e, void *f, f, return 0, return)
+DEFINEFUNC6(void *, PEM_ASN1_read_bio, d2i_of_void *a, a, const char *b, b, BIO *c, c, void **d, d, pem_password_cb *e,
+            e, void *f, f, return 0, return)
+DEFINEFUNC6(void *, PEM_ASN1_write_bio, d2i_of_void *a, a, const char *b, b, BIO *c, c, void **d, d, pem_password_cb *e,
+            e, void *f, f, return 0, return)
 #else
-DEFINEFUNC4(DSA *, PEM_read_bio_DSAPrivateKey, BIO *a, a, DSA **b, b, pem_password_cb *c, c, void *d, d, return 0, return)
-DEFINEFUNC4(RSA *, PEM_read_bio_RSAPrivateKey, BIO *a, a, RSA **b, b, pem_password_cb *c, c, void *d, d, return 0, return)
-DEFINEFUNC7(int, PEM_write_bio_DSAPrivateKey, BIO *a, a, DSA *b, b, const EVP_CIPHER *c, c, unsigned char *d, d, int e, e, pem_password_cb *f, f, void *g, g, return 0, return)
-DEFINEFUNC7(int, PEM_write_bio_RSAPrivateKey, BIO *a, a, RSA *b, b, const EVP_CIPHER *c, c, unsigned char *d, d, int e, e, pem_password_cb *f, f, void *g, g, return 0, return)
+DEFINEFUNC4(DSA *, PEM_read_bio_DSAPrivateKey, BIO *a, a, DSA **b, b, pem_password_cb *c, c, void *d, d, return 0,
+            return)
+DEFINEFUNC4(RSA *, PEM_read_bio_RSAPrivateKey, BIO *a, a, RSA **b, b, pem_password_cb *c, c, void *d, d, return 0,
+            return)
+DEFINEFUNC7(int, PEM_write_bio_DSAPrivateKey, BIO *a, a, DSA *b, b, const EVP_CIPHER *c, c, unsigned char *d, d, int e,
+            e, pem_password_cb *f, f, void *g, g, return 0, return)
+DEFINEFUNC7(int, PEM_write_bio_RSAPrivateKey, BIO *a, a, RSA *b, b, const EVP_CIPHER *c, c, unsigned char *d, d, int e,
+            e, pem_password_cb *f, f, void *g, g, return 0, return)
 #endif
 
 DEFINEFUNC4(DSA *, PEM_read_bio_DSA_PUBKEY, BIO *a, a, DSA **b, b, pem_password_cb *c, c, void *d, d, return 0, return)
@@ -144,7 +150,7 @@ DEFINEFUNC2(void, RAND_seed, const void *a, a, int b, b, return, DUMMYARG)
 DEFINEFUNC(int, RAND_status, void, DUMMYARG, return -1, return)
 DEFINEFUNC(void, RSA_free, RSA *a, a, return, DUMMYARG)
 DEFINEFUNC(int, sk_num, STACK *a, a, return -1, return)
-DEFINEFUNC2(void, sk_pop_free, STACK *a, a, void (*b)(void*), b, return, DUMMYARG)
+DEFINEFUNC2(void, sk_pop_free, STACK *a, a, void (*b)(void *), b, return, DUMMYARG)
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
 DEFINEFUNC(void, sk_free, _STACK *a, a, return, DUMMYARG)
 DEFINEFUNC2(void *, sk_value, STACK *a, a, int b, b, return 0, return)
@@ -261,7 +267,8 @@ DEFINEFUNC(void, X509_STORE_free, X509_STORE *a, a, return, DUMMYARG)
 DEFINEFUNC(X509_STORE *, X509_STORE_new, DUMMYARG, DUMMYARG, return 0, return)
 DEFINEFUNC2(int, X509_STORE_add_cert, X509_STORE *a, a, X509 *b, b, return 0, return)
 DEFINEFUNC(void, X509_STORE_CTX_free, X509_STORE_CTX *a, a, return, DUMMYARG)
-DEFINEFUNC4(int, X509_STORE_CTX_init, X509_STORE_CTX *a, a, X509_STORE *b, b, X509 *c, c, STACK_OF(X509) *d, d, return -1, return)
+DEFINEFUNC4(int, X509_STORE_CTX_init, X509_STORE_CTX *a, a, X509_STORE *b, b, X509 *c, c, STACK_OF(X509) * d, d,
+            return -1, return)
 DEFINEFUNC2(int, X509_STORE_CTX_set_purpose, X509_STORE_CTX *a, a, int b, b, return -1, return)
 DEFINEFUNC(int, X509_STORE_CTX_get_error, X509_STORE_CTX *a, a, return -1, return)
 DEFINEFUNC(int, X509_STORE_CTX_get_error_depth, X509_STORE_CTX *a, a, return -1, return)
@@ -276,7 +283,8 @@ DEFINEFUNC3(DSA *, d2i_DSAPrivateKey, DSA **a, a, unsigned char **b, b, long c, 
 #endif
 DEFINEFUNC(void, OPENSSL_add_all_algorithms_noconf, void, DUMMYARG, return, DUMMYARG)
 DEFINEFUNC(void, OPENSSL_add_all_algorithms_conf, void, DUMMYARG, return, DUMMYARG)
-DEFINEFUNC3(int, SSL_CTX_load_verify_locations, SSL_CTX *ctx, ctx, const char *CAfile, CAfile, const char *CApath, CApath, return 0, return)
+DEFINEFUNC3(int, SSL_CTX_load_verify_locations, SSL_CTX *ctx, ctx, const char *CAfile, CAfile, const char *CApath,
+            CApath, return 0, return)
 DEFINEFUNC(long, SSLeay, void, DUMMYARG, return 0, return)
 
 #define RESOLVEFUNC(func) \
@@ -290,431 +298,444 @@ DEFINEFUNC(long, SSLeay, void, DUMMYARG, return 0, return)
 # ifdef Q_OS_UNIX
 static bool libGreaterThan(const QString &lhs, const QString &rhs)
 {
-    QStringList lhsparts = lhs.split(QLatin1Char('.'));
-    QStringList rhsparts = rhs.split(QLatin1Char('.'));
-    Q_ASSERT(lhsparts.count() > 1 && rhsparts.count() > 1);
+   QStringList lhsparts = lhs.split(QLatin1Char('.'));
+   QStringList rhsparts = rhs.split(QLatin1Char('.'));
+   Q_ASSERT(lhsparts.count() > 1 && rhsparts.count() > 1);
 
-    for (int i = 1; i < rhsparts.count(); ++i) {
-        if (lhsparts.count() <= i)
-            // left hand side is shorter, so it's less than rhs
-            return false;
+   for (int i = 1; i < rhsparts.count(); ++i) {
+      if (lhsparts.count() <= i)
+         // left hand side is shorter, so it's less than rhs
+      {
+         return false;
+      }
 
-        bool ok = false;
-        int b = 0;
-        int a = lhsparts.at(i).toInt(&ok);
-        if (ok)
-            b = rhsparts.at(i).toInt(&ok);
-        if (ok) {
-            // both toInt succeeded
-            if (a == b)
-                continue;
-            return a > b;
-        } else {
-            // compare as strings;
-            if (lhsparts.at(i) == rhsparts.at(i))
-                continue;
-            return lhsparts.at(i) > rhsparts.at(i);
-        }
-    }
+      bool ok = false;
+      int b = 0;
+      int a = lhsparts.at(i).toInt(&ok);
+      if (ok) {
+         b = rhsparts.at(i).toInt(&ok);
+      }
+      if (ok) {
+         // both toInt succeeded
+         if (a == b) {
+            continue;
+         }
+         return a > b;
+      } else {
+         // compare as strings;
+         if (lhsparts.at(i) == rhsparts.at(i)) {
+            continue;
+         }
+         return lhsparts.at(i) > rhsparts.at(i);
+      }
+   }
 
-    // they compared strictly equally so far
-    // lhs cannot be less than rhs
-    return true;
+   // they compared strictly equally so far
+   // lhs cannot be less than rhs
+   return true;
 }
 
 #ifdef Q_OS_LINUX
 static int dlIterateCallback(struct dl_phdr_info *info, size_t size, void *data)
 {
-    if (size < sizeof (info->dlpi_addr) + sizeof (info->dlpi_name))
-        return 1;
-    QSet<QString> *paths = (QSet<QString> *)data;
-    QString path = QString::fromLocal8Bit(info->dlpi_name);
-    if (!path.isEmpty()) {
-        QFileInfo fi(path);
-        path = fi.absolutePath();
-        if (!path.isEmpty())
-            paths->insert(path);
-    }
-    return 0;
+   if (size < sizeof (info->dlpi_addr) + sizeof (info->dlpi_name)) {
+      return 1;
+   }
+   QSet<QString> *paths = (QSet<QString> *)data;
+   QString path = QString::fromLocal8Bit(info->dlpi_name);
+   if (!path.isEmpty()) {
+      QFileInfo fi(path);
+      path = fi.absolutePath();
+      if (!path.isEmpty()) {
+         paths->insert(path);
+      }
+   }
+   return 0;
 }
 #endif
 
 static QStringList libraryPathList()
 {
-    QStringList paths;
+   QStringList paths;
 #  ifdef Q_OS_DARWIN
-    paths = QString::fromLatin1(qgetenv("DYLD_LIBRARY_PATH"))
-            .split(QLatin1Char(':'), QString::SkipEmptyParts);
+   paths = QString::fromLatin1(qgetenv("DYLD_LIBRARY_PATH"))
+           .split(QLatin1Char(':'), QString::SkipEmptyParts);
 #  else
-    paths = QString::fromLatin1(qgetenv("LD_LIBRARY_PATH"))
-            .split(QLatin1Char(':'), QString::SkipEmptyParts);
+   paths = QString::fromLatin1(qgetenv("LD_LIBRARY_PATH"))
+           .split(QLatin1Char(':'), QString::SkipEmptyParts);
 #  endif
-    paths << QLatin1String("/lib") << QLatin1String("/usr/lib") << QLatin1String("/usr/local/lib");
-    paths << QLatin1String("/lib64") << QLatin1String("/usr/lib64") << QLatin1String("/usr/local/lib64");
-    paths << QLatin1String("/lib32") << QLatin1String("/usr/lib32") << QLatin1String("/usr/local/lib32");
+   paths << QLatin1String("/lib") << QLatin1String("/usr/lib") << QLatin1String("/usr/local/lib");
+   paths << QLatin1String("/lib64") << QLatin1String("/usr/lib64") << QLatin1String("/usr/local/lib64");
+   paths << QLatin1String("/lib32") << QLatin1String("/usr/lib32") << QLatin1String("/usr/local/lib32");
 
 #ifdef Q_OS_LINUX
-    // discover paths of already loaded libraries
-    QSet<QString> loadedPaths;
-    dl_iterate_phdr(dlIterateCallback, &loadedPaths);
-    paths.append(loadedPaths.toList());
+   // discover paths of already loaded libraries
+   QSet<QString> loadedPaths;
+   dl_iterate_phdr(dlIterateCallback, &loadedPaths);
+   paths.append(loadedPaths.toList());
 #endif
 
-    return paths;
+   return paths;
 }
 
 
 static QStringList findAllLibSsl()
 {
-    QStringList paths = libraryPathList();
-    QStringList foundSsls;
+   QStringList paths = libraryPathList();
+   QStringList foundSsls;
 
-    foreach (const QString &path, paths) {
-        QDir dir(path);
-        QStringList entryList = dir.entryList(QStringList() << QLatin1String("libssl.*"), QDir::Files);
+   foreach (const QString & path, paths) {
+      QDir dir(path);
+      QStringList entryList = dir.entryList(QStringList() << QLatin1String("libssl.*"), QDir::Files);
 
-        qSort(entryList.begin(), entryList.end(), libGreaterThan);
-        foreach (const QString &entry, entryList)
-            foundSsls << path + QLatin1Char('/') + entry;
-    }
+      qSort(entryList.begin(), entryList.end(), libGreaterThan);
+      foreach (const QString & entry, entryList)
+      foundSsls << path + QLatin1Char('/') + entry;
+   }
 
-    return foundSsls;
+   return foundSsls;
 }
 
 static QStringList findAllLibCrypto()
 {
-    QStringList paths = libraryPathList();
+   QStringList paths = libraryPathList();
 
-    QStringList foundCryptos;
-    foreach (const QString &path, paths) {
-        QDir dir(path);
-        QStringList entryList = dir.entryList(QStringList() << QLatin1String("libcrypto.*"), QDir::Files);
+   QStringList foundCryptos;
+   foreach (const QString & path, paths) {
+      QDir dir(path);
+      QStringList entryList = dir.entryList(QStringList() << QLatin1String("libcrypto.*"), QDir::Files);
 
-        qSort(entryList.begin(), entryList.end(), libGreaterThan);
-        foreach (const QString &entry, entryList)
-            foundCryptos << path + QLatin1Char('/') + entry;
-    }
+      qSort(entryList.begin(), entryList.end(), libGreaterThan);
+      foreach (const QString & entry, entryList)
+      foundCryptos << path + QLatin1Char('/') + entry;
+   }
 
-    return foundCryptos;
+   return foundCryptos;
 }
 # endif  // Q_OS_UNIX
 
 #ifdef Q_OS_WIN
-static bool tryToLoadOpenSslWin32Library(QLatin1String ssleay32LibName, QLatin1String libeay32LibName, QPair<QSystemLibrary*, QSystemLibrary*> &pair)
+static bool tryToLoadOpenSslWin32Library(QLatin1String ssleay32LibName, QLatin1String libeay32LibName,
+      QPair<QSystemLibrary *, QSystemLibrary *> &pair)
 {
-    pair.first = 0;
-    pair.second = 0;
+   pair.first = 0;
+   pair.second = 0;
 
-    QSystemLibrary *ssleay32 = new QSystemLibrary(ssleay32LibName);
-    if (!ssleay32->load(false)) {
-        delete ssleay32;
-        return FALSE;
-    }
+   QSystemLibrary *ssleay32 = new QSystemLibrary(ssleay32LibName);
+   if (!ssleay32->load(false)) {
+      delete ssleay32;
+      return FALSE;
+   }
 
-    QSystemLibrary *libeay32 = new QSystemLibrary(libeay32LibName);
-    if (!libeay32->load(false)) {
-        delete ssleay32;
-        delete libeay32;
-        return FALSE;
-    }
+   QSystemLibrary *libeay32 = new QSystemLibrary(libeay32LibName);
+   if (!libeay32->load(false)) {
+      delete ssleay32;
+      delete libeay32;
+      return FALSE;
+   }
 
-    pair.first = ssleay32;
-    pair.second = libeay32;
-    return TRUE;
+   pair.first = ssleay32;
+   pair.second = libeay32;
+   return TRUE;
 }
 
-static QPair<QSystemLibrary*, QSystemLibrary*> loadOpenSslWin32()
+static QPair<QSystemLibrary *, QSystemLibrary *> loadOpenSslWin32()
 {
-    QPair<QSystemLibrary*,QSystemLibrary*> pair;
-    pair.first = 0;
-    pair.second = 0;
+   QPair<QSystemLibrary *, QSystemLibrary *> pair;
+   pair.first = 0;
+   pair.second = 0;
 
-    // When OpenSSL is built using MSVC then the libraries are named 'ssleay32.dll' and 'libeay32'dll'.
-    // When OpenSSL is built using GCC then different library names are used (depending on the OpenSSL version)
-    // The oldest version of a GCC-based OpenSSL which can be detected by the code below is 0.9.8g (released in 2007)
-    if (!tryToLoadOpenSslWin32Library(QLatin1String("ssleay32"), QLatin1String("libeay32"), pair)) {
-        if (!tryToLoadOpenSslWin32Library(QLatin1String("libssl-10"), QLatin1String("libcrypto-10"), pair)) {
-            if (!tryToLoadOpenSslWin32Library(QLatin1String("libssl-8"), QLatin1String("libcrypto-8"), pair)) {
-                tryToLoadOpenSslWin32Library(QLatin1String("libssl-7"), QLatin1String("libcrypto-7"), pair);
-            }
-        }
-    }
+   // When OpenSSL is built using MSVC then the libraries are named 'ssleay32.dll' and 'libeay32'dll'.
+   // When OpenSSL is built using GCC then different library names are used (depending on the OpenSSL version)
+   // The oldest version of a GCC-based OpenSSL which can be detected by the code below is 0.9.8g (released in 2007)
+   if (!tryToLoadOpenSslWin32Library(QLatin1String("ssleay32"), QLatin1String("libeay32"), pair)) {
+      if (!tryToLoadOpenSslWin32Library(QLatin1String("libssl-10"), QLatin1String("libcrypto-10"), pair)) {
+         if (!tryToLoadOpenSslWin32Library(QLatin1String("libssl-8"), QLatin1String("libcrypto-8"), pair)) {
+            tryToLoadOpenSslWin32Library(QLatin1String("libssl-7"), QLatin1String("libcrypto-7"), pair);
+         }
+      }
+   }
 
-    return pair;
+   return pair;
 }
 #else   // Q_OS_WIN
 
-static QPair<QLibrary*, QLibrary*> loadOpenSsl()
+static QPair<QLibrary *, QLibrary *> loadOpenSsl()
 {
-    QPair<QLibrary*,QLibrary*> pair;
-    pair.first = 0;
-    pair.second = 0;
+   QPair<QLibrary *, QLibrary *> pair;
+   pair.first = 0;
+   pair.second = 0;
 
 # if defined(Q_OS_UNIX)
-    QLibrary *&libssl = pair.first;
-    QLibrary *&libcrypto = pair.second;
-    libssl = new QLibrary;
-    libcrypto = new QLibrary;
+   QLibrary *&libssl = pair.first;
+   QLibrary *&libcrypto = pair.second;
+   libssl = new QLibrary;
+   libcrypto = new QLibrary;
 
-    // Try to find the libssl library on the system.
-    //
-    // Up until Qt 4.3, this only searched for the "ssl" library at version -1, that
-    // is, libssl.so on most Unix systems.  However, the .so file isn't present in
-    // user installations because it's considered a development file.
-    //
-    // The right thing to do is to load the library at the major version we know how
-    // to work with: the SHLIB_VERSION_NUMBER version (macro defined in opensslv.h)
-    //
-    // However, OpenSSL is a well-known case of binary-compatibility breakage. To
-    // avoid such problems, many system integrators and Linux distributions change
-    // the soname of the binary, letting the full version number be the soname. So
-    // we'll find libssl.so.0.9.7, libssl.so.0.9.8, etc. in the system. For that
-    // reason, we will search a few common paths (see findAllLibSsl() above) in hopes
-    // we find one that works.
-    //
-    // It is important, however, to try the canonical name and the unversioned name
-    // without going through the loop. By not specifying a path, we let the system
-    // dlopen(3) function determine it for us. This will include any DT_RUNPATH or
-    // DT_RPATH tags on our library header as well as other system-specific search
-    // paths. See the man page for dlopen(3) on your system for more information.
+   // Try to find the libssl library on the system.
+   //
+   // Up until Qt 4.3, this only searched for the "ssl" library at version -1, that
+   // is, libssl.so on most Unix systems.  However, the .so file isn't present in
+   // user installations because it's considered a development file.
+   //
+   // The right thing to do is to load the library at the major version we know how
+   // to work with: the SHLIB_VERSION_NUMBER version (macro defined in opensslv.h)
+   //
+   // However, OpenSSL is a well-known case of binary-compatibility breakage. To
+   // avoid such problems, many system integrators and Linux distributions change
+   // the soname of the binary, letting the full version number be the soname. So
+   // we'll find libssl.so.0.9.7, libssl.so.0.9.8, etc. in the system. For that
+   // reason, we will search a few common paths (see findAllLibSsl() above) in hopes
+   // we find one that works.
+   //
+   // It is important, however, to try the canonical name and the unversioned name
+   // without going through the loop. By not specifying a path, we let the system
+   // dlopen(3) function determine it for us. This will include any DT_RUNPATH or
+   // DT_RPATH tags on our library header as well as other system-specific search
+   // paths. See the man page for dlopen(3) on your system for more information.
 
 #ifdef Q_OS_OPENBSD
-    libcrypto->setLoadHints(QLibrary::ExportExternalSymbolsHint);
+   libcrypto->setLoadHints(QLibrary::ExportExternalSymbolsHint);
 #endif
 
 #ifdef SHLIB_VERSION_NUMBER
-    // first attempt: the canonical name is libssl.so.<SHLIB_VERSION_NUMBER>
-    libssl->setFileNameAndVersion(QLatin1String("ssl"), QLatin1String(SHLIB_VERSION_NUMBER));
-    libssl->setLoadHints(QLibrary::ImprovedSearchHeuristics);
-    libcrypto->setFileNameAndVersion(QLatin1String("crypto"), QLatin1String(SHLIB_VERSION_NUMBER));
-    libcrypto->setLoadHints(libcrypto->loadHints() | QLibrary::ImprovedSearchHeuristics);
-    if (libcrypto->load() && libssl->load()) {
-        // libssl.so.<SHLIB_VERSION_NUMBER> and libcrypto.so.<SHLIB_VERSION_NUMBER> found
-        return pair;
-    } else {
-        libssl->unload();
-        libcrypto->unload();
-    }
+   // first attempt: the canonical name is libssl.so.<SHLIB_VERSION_NUMBER>
+   libssl->setFileNameAndVersion(QLatin1String("ssl"), QLatin1String(SHLIB_VERSION_NUMBER));
+   libssl->setLoadHints(QLibrary::ImprovedSearchHeuristics);
+   libcrypto->setFileNameAndVersion(QLatin1String("crypto"), QLatin1String(SHLIB_VERSION_NUMBER));
+   libcrypto->setLoadHints(libcrypto->loadHints() | QLibrary::ImprovedSearchHeuristics);
+   if (libcrypto->load() && libssl->load()) {
+      // libssl.so.<SHLIB_VERSION_NUMBER> and libcrypto.so.<SHLIB_VERSION_NUMBER> found
+      return pair;
+   } else {
+      libssl->unload();
+      libcrypto->unload();
+   }
 #endif
 
-    // second attempt: find the development files libssl.so and libcrypto.so
-    libssl->setFileNameAndVersion(QLatin1String("ssl"), -1);
-    libcrypto->setFileNameAndVersion(QLatin1String("crypto"), -1);
-    if (libcrypto->load() && libssl->load()) {
-        // libssl.so.0 and libcrypto.so.0 found
-        return pair;
-    } else {
-        libssl->unload();
-        libcrypto->unload();
-    }
+   // second attempt: find the development files libssl.so and libcrypto.so
+   libssl->setFileNameAndVersion(QLatin1String("ssl"), -1);
+   libcrypto->setFileNameAndVersion(QLatin1String("crypto"), -1);
+   if (libcrypto->load() && libssl->load()) {
+      // libssl.so.0 and libcrypto.so.0 found
+      return pair;
+   } else {
+      libssl->unload();
+      libcrypto->unload();
+   }
 
-    // third attempt: loop on the most common library paths and find libssl
-    QStringList sslList = findAllLibSsl();
-    QStringList cryptoList = findAllLibCrypto();
+   // third attempt: loop on the most common library paths and find libssl
+   QStringList sslList = findAllLibSsl();
+   QStringList cryptoList = findAllLibCrypto();
 
-    foreach (const QString &crypto, cryptoList) {
-        libcrypto->setFileNameAndVersion(crypto, -1);
-        if (libcrypto->load()) {
-            QFileInfo fi(crypto);
-            QString version = fi.completeSuffix();
+   foreach (const QString & crypto, cryptoList) {
+      libcrypto->setFileNameAndVersion(crypto, -1);
+      if (libcrypto->load()) {
+         QFileInfo fi(crypto);
+         QString version = fi.completeSuffix();
 
-            foreach (const QString &ssl, sslList) {
-                if (!ssl.endsWith(version))
-                    continue;
-
-                libssl->setFileNameAndVersion(ssl, -1);
-
-                if (libssl->load()) {
-                    // libssl.so.x and libcrypto.so.x found
-                    return pair;
-                } else {
-                    libssl->unload();
-                }
+         foreach (const QString & ssl, sslList) {
+            if (!ssl.endsWith(version)) {
+               continue;
             }
-        }
-        libcrypto->unload();
-    }
 
-    // failed to load anything
-    delete libssl;
-    delete libcrypto;
-    libssl = libcrypto = 0;
-    return pair;
+            libssl->setFileNameAndVersion(ssl, -1);
+
+            if (libssl->load()) {
+               // libssl.so.x and libcrypto.so.x found
+               return pair;
+            } else {
+               libssl->unload();
+            }
+         }
+      }
+      libcrypto->unload();
+   }
+
+   // failed to load anything
+   delete libssl;
+   delete libcrypto;
+   libssl = libcrypto = 0;
+   return pair;
 
 # else
-    // not implemented for this platform yet
-    return pair;
+   // not implemented for this platform yet
+   return pair;
 # endif  // Q_OS_UNIX
 }
 #endif   // Q_OS_WIN
 
 bool q_resolveOpenSslSymbols()
 {
-    static volatile bool symbolsResolved = false;
-    static volatile bool triedToResolveSymbols = false;
+   static volatile bool symbolsResolved = false;
+   static volatile bool triedToResolveSymbols = false;
 
-    QMutexLocker locker(QMutexPool::globalInstanceGet((void *)&q_SSL_library_init));
+   QMutexLocker locker(QMutexPool::globalInstanceGet((void *)&q_SSL_library_init));
 
-    if (symbolsResolved)
-        return true;
-    if (triedToResolveSymbols)
-        return false;
-    triedToResolveSymbols = true;
+   if (symbolsResolved) {
+      return true;
+   }
+   if (triedToResolveSymbols) {
+      return false;
+   }
+   triedToResolveSymbols = true;
 
 #ifdef Q_OS_WIN
-    QPair<QSystemLibrary *, QSystemLibrary *> libs = loadOpenSslWin32();
+   QPair<QSystemLibrary *, QSystemLibrary *> libs = loadOpenSslWin32();
 #else
-    QPair<QLibrary *, QLibrary *> libs = loadOpenSsl();
+   QPair<QLibrary *, QLibrary *> libs = loadOpenSsl();
 #endif
-    if (!libs.first || !libs.second)
-        // failed to load them
-        return false;
+   if (!libs.first || !libs.second)
+      // failed to load them
+   {
+      return false;
+   }
 
 #ifdef SSLEAY_MACROS
-    RESOLVEFUNC(ASN1_dup)
+   RESOLVEFUNC(ASN1_dup)
 #endif
-    RESOLVEFUNC(ASN1_INTEGER_get)
-    RESOLVEFUNC(ASN1_STRING_data)
-    RESOLVEFUNC(ASN1_STRING_length)
-    RESOLVEFUNC(ASN1_STRING_to_UTF8)
-    RESOLVEFUNC(BIO_ctrl)
-    RESOLVEFUNC(BIO_free)
-    RESOLVEFUNC(BIO_new)
-    RESOLVEFUNC(BIO_new_mem_buf)
-    RESOLVEFUNC(BIO_read)
-    RESOLVEFUNC(BIO_s_mem)
-    RESOLVEFUNC(BIO_write)
-    RESOLVEFUNC(BN_num_bits)
-    RESOLVEFUNC(CRYPTO_free)
-    RESOLVEFUNC(CRYPTO_num_locks)
-    RESOLVEFUNC(CRYPTO_set_id_callback)
-    RESOLVEFUNC(CRYPTO_set_locking_callback)
-    RESOLVEFUNC(DSA_free)
-    RESOLVEFUNC(ERR_error_string)
-    RESOLVEFUNC(ERR_get_error)
-    RESOLVEFUNC(EVP_des_ede3_cbc)
-    RESOLVEFUNC(EVP_PKEY_assign)
-    RESOLVEFUNC(EVP_PKEY_set1_RSA)
-    RESOLVEFUNC(EVP_PKEY_set1_DSA)
-    RESOLVEFUNC(EVP_PKEY_free)
-    RESOLVEFUNC(EVP_PKEY_get1_DSA)
-    RESOLVEFUNC(EVP_PKEY_get1_RSA)
-    RESOLVEFUNC(EVP_PKEY_new)
-    RESOLVEFUNC(EVP_PKEY_type)
-    RESOLVEFUNC(OBJ_nid2sn)
-    RESOLVEFUNC(OBJ_obj2nid)
+   RESOLVEFUNC(ASN1_INTEGER_get)
+   RESOLVEFUNC(ASN1_STRING_data)
+   RESOLVEFUNC(ASN1_STRING_length)
+   RESOLVEFUNC(ASN1_STRING_to_UTF8)
+   RESOLVEFUNC(BIO_ctrl)
+   RESOLVEFUNC(BIO_free)
+   RESOLVEFUNC(BIO_new)
+   RESOLVEFUNC(BIO_new_mem_buf)
+   RESOLVEFUNC(BIO_read)
+   RESOLVEFUNC(BIO_s_mem)
+   RESOLVEFUNC(BIO_write)
+   RESOLVEFUNC(BN_num_bits)
+   RESOLVEFUNC(CRYPTO_free)
+   RESOLVEFUNC(CRYPTO_num_locks)
+   RESOLVEFUNC(CRYPTO_set_id_callback)
+   RESOLVEFUNC(CRYPTO_set_locking_callback)
+   RESOLVEFUNC(DSA_free)
+   RESOLVEFUNC(ERR_error_string)
+   RESOLVEFUNC(ERR_get_error)
+   RESOLVEFUNC(EVP_des_ede3_cbc)
+   RESOLVEFUNC(EVP_PKEY_assign)
+   RESOLVEFUNC(EVP_PKEY_set1_RSA)
+   RESOLVEFUNC(EVP_PKEY_set1_DSA)
+   RESOLVEFUNC(EVP_PKEY_free)
+   RESOLVEFUNC(EVP_PKEY_get1_DSA)
+   RESOLVEFUNC(EVP_PKEY_get1_RSA)
+   RESOLVEFUNC(EVP_PKEY_new)
+   RESOLVEFUNC(EVP_PKEY_type)
+   RESOLVEFUNC(OBJ_nid2sn)
+   RESOLVEFUNC(OBJ_obj2nid)
 #ifdef SSLEAY_MACROS // ### verify
-    RESOLVEFUNC(PEM_ASN1_read_bio)
+   RESOLVEFUNC(PEM_ASN1_read_bio)
 #else
-    RESOLVEFUNC(PEM_read_bio_DSAPrivateKey)
-    RESOLVEFUNC(PEM_read_bio_RSAPrivateKey)
-    RESOLVEFUNC(PEM_write_bio_DSAPrivateKey)
-    RESOLVEFUNC(PEM_write_bio_RSAPrivateKey)
+   RESOLVEFUNC(PEM_read_bio_DSAPrivateKey)
+   RESOLVEFUNC(PEM_read_bio_RSAPrivateKey)
+   RESOLVEFUNC(PEM_write_bio_DSAPrivateKey)
+   RESOLVEFUNC(PEM_write_bio_RSAPrivateKey)
 #endif
-    RESOLVEFUNC(PEM_read_bio_DSA_PUBKEY)
-    RESOLVEFUNC(PEM_read_bio_RSA_PUBKEY)
-    RESOLVEFUNC(PEM_write_bio_DSA_PUBKEY)
-    RESOLVEFUNC(PEM_write_bio_RSA_PUBKEY)
-    RESOLVEFUNC(RAND_seed)
-    RESOLVEFUNC(RAND_status)
-    RESOLVEFUNC(RSA_free)
-    RESOLVEFUNC(sk_free)
-    RESOLVEFUNC(sk_num)
-    RESOLVEFUNC(sk_pop_free)
-    RESOLVEFUNC(sk_value)
-    RESOLVEFUNC(SSL_CIPHER_description)
-    RESOLVEFUNC(SSL_CTX_check_private_key)
-    RESOLVEFUNC(SSL_CTX_ctrl)
-    RESOLVEFUNC(SSL_CTX_free)
-    RESOLVEFUNC(SSL_CTX_new)
-    RESOLVEFUNC(SSL_CTX_set_cipher_list)
-    RESOLVEFUNC(SSL_CTX_set_default_verify_paths)
-    RESOLVEFUNC(SSL_CTX_set_verify)
-    RESOLVEFUNC(SSL_CTX_set_verify_depth)
-    RESOLVEFUNC(SSL_CTX_use_certificate)
-    RESOLVEFUNC(SSL_CTX_use_certificate_file)
-    RESOLVEFUNC(SSL_CTX_use_PrivateKey)
-    RESOLVEFUNC(SSL_CTX_use_RSAPrivateKey)
-    RESOLVEFUNC(SSL_CTX_use_PrivateKey_file)
-    RESOLVEFUNC(SSL_accept)
-    RESOLVEFUNC(SSL_clear)
-    RESOLVEFUNC(SSL_connect)
-    RESOLVEFUNC(SSL_free)
-    RESOLVEFUNC(SSL_get_ciphers)
-    RESOLVEFUNC(SSL_get_current_cipher)
-    RESOLVEFUNC(SSL_get_error)
-    RESOLVEFUNC(SSL_get_peer_cert_chain)
-    RESOLVEFUNC(SSL_get_peer_certificate)
-    RESOLVEFUNC(SSL_get_verify_result)
-    RESOLVEFUNC(SSL_library_init)
-    RESOLVEFUNC(SSL_load_error_strings)
-    RESOLVEFUNC(SSL_new)
+   RESOLVEFUNC(PEM_read_bio_DSA_PUBKEY)
+   RESOLVEFUNC(PEM_read_bio_RSA_PUBKEY)
+   RESOLVEFUNC(PEM_write_bio_DSA_PUBKEY)
+   RESOLVEFUNC(PEM_write_bio_RSA_PUBKEY)
+   RESOLVEFUNC(RAND_seed)
+   RESOLVEFUNC(RAND_status)
+   RESOLVEFUNC(RSA_free)
+   RESOLVEFUNC(sk_free)
+   RESOLVEFUNC(sk_num)
+   RESOLVEFUNC(sk_pop_free)
+   RESOLVEFUNC(sk_value)
+   RESOLVEFUNC(SSL_CIPHER_description)
+   RESOLVEFUNC(SSL_CTX_check_private_key)
+   RESOLVEFUNC(SSL_CTX_ctrl)
+   RESOLVEFUNC(SSL_CTX_free)
+   RESOLVEFUNC(SSL_CTX_new)
+   RESOLVEFUNC(SSL_CTX_set_cipher_list)
+   RESOLVEFUNC(SSL_CTX_set_default_verify_paths)
+   RESOLVEFUNC(SSL_CTX_set_verify)
+   RESOLVEFUNC(SSL_CTX_set_verify_depth)
+   RESOLVEFUNC(SSL_CTX_use_certificate)
+   RESOLVEFUNC(SSL_CTX_use_certificate_file)
+   RESOLVEFUNC(SSL_CTX_use_PrivateKey)
+   RESOLVEFUNC(SSL_CTX_use_RSAPrivateKey)
+   RESOLVEFUNC(SSL_CTX_use_PrivateKey_file)
+   RESOLVEFUNC(SSL_accept)
+   RESOLVEFUNC(SSL_clear)
+   RESOLVEFUNC(SSL_connect)
+   RESOLVEFUNC(SSL_free)
+   RESOLVEFUNC(SSL_get_ciphers)
+   RESOLVEFUNC(SSL_get_current_cipher)
+   RESOLVEFUNC(SSL_get_error)
+   RESOLVEFUNC(SSL_get_peer_cert_chain)
+   RESOLVEFUNC(SSL_get_peer_certificate)
+   RESOLVEFUNC(SSL_get_verify_result)
+   RESOLVEFUNC(SSL_library_init)
+   RESOLVEFUNC(SSL_load_error_strings)
+   RESOLVEFUNC(SSL_new)
 #if OPENSSL_VERSION_NUMBER >= 0x0090806fL && !defined(OPENSSL_NO_TLSEXT)
-    RESOLVEFUNC(SSL_ctrl)
+   RESOLVEFUNC(SSL_ctrl)
 #endif
-    RESOLVEFUNC(SSL_read)
-    RESOLVEFUNC(SSL_set_accept_state)
-    RESOLVEFUNC(SSL_set_bio)
-    RESOLVEFUNC(SSL_set_connect_state)
-    RESOLVEFUNC(SSL_shutdown)
-    RESOLVEFUNC(SSL_write)
+   RESOLVEFUNC(SSL_read)
+   RESOLVEFUNC(SSL_set_accept_state)
+   RESOLVEFUNC(SSL_set_bio)
+   RESOLVEFUNC(SSL_set_connect_state)
+   RESOLVEFUNC(SSL_shutdown)
+   RESOLVEFUNC(SSL_write)
 #ifndef OPENSSL_NO_SSL2
-    RESOLVEFUNC(SSLv2_client_method)
+   RESOLVEFUNC(SSLv2_client_method)
 #endif
-    RESOLVEFUNC(SSLv3_client_method)
-    RESOLVEFUNC(SSLv23_client_method)
-    RESOLVEFUNC(TLSv1_client_method)
+   RESOLVEFUNC(SSLv3_client_method)
+   RESOLVEFUNC(SSLv23_client_method)
+   RESOLVEFUNC(TLSv1_client_method)
 #ifndef OPENSSL_NO_SSL2
-    RESOLVEFUNC(SSLv2_server_method)
+   RESOLVEFUNC(SSLv2_server_method)
 #endif
-    RESOLVEFUNC(SSLv3_server_method)
-    RESOLVEFUNC(SSLv23_server_method)
-    RESOLVEFUNC(TLSv1_server_method)
-    RESOLVEFUNC(X509_NAME_entry_count)
-    RESOLVEFUNC(X509_NAME_get_entry)
-    RESOLVEFUNC(X509_NAME_ENTRY_get_data)
-    RESOLVEFUNC(X509_NAME_ENTRY_get_object)
-    RESOLVEFUNC(X509_PUBKEY_get)
-    RESOLVEFUNC(X509_STORE_free)
-    RESOLVEFUNC(X509_STORE_new)
-    RESOLVEFUNC(X509_STORE_add_cert)
-    RESOLVEFUNC(X509_STORE_CTX_free)
-    RESOLVEFUNC(X509_STORE_CTX_init)
-    RESOLVEFUNC(X509_STORE_CTX_new)
-    RESOLVEFUNC(X509_STORE_CTX_set_purpose)
-    RESOLVEFUNC(X509_STORE_CTX_get_error)
-    RESOLVEFUNC(X509_STORE_CTX_get_error_depth)
-    RESOLVEFUNC(X509_STORE_CTX_get_current_cert)
-    RESOLVEFUNC(X509_STORE_CTX_get_chain)
-    RESOLVEFUNC(X509_cmp)
+   RESOLVEFUNC(SSLv3_server_method)
+   RESOLVEFUNC(SSLv23_server_method)
+   RESOLVEFUNC(TLSv1_server_method)
+   RESOLVEFUNC(X509_NAME_entry_count)
+   RESOLVEFUNC(X509_NAME_get_entry)
+   RESOLVEFUNC(X509_NAME_ENTRY_get_data)
+   RESOLVEFUNC(X509_NAME_ENTRY_get_object)
+   RESOLVEFUNC(X509_PUBKEY_get)
+   RESOLVEFUNC(X509_STORE_free)
+   RESOLVEFUNC(X509_STORE_new)
+   RESOLVEFUNC(X509_STORE_add_cert)
+   RESOLVEFUNC(X509_STORE_CTX_free)
+   RESOLVEFUNC(X509_STORE_CTX_init)
+   RESOLVEFUNC(X509_STORE_CTX_new)
+   RESOLVEFUNC(X509_STORE_CTX_set_purpose)
+   RESOLVEFUNC(X509_STORE_CTX_get_error)
+   RESOLVEFUNC(X509_STORE_CTX_get_error_depth)
+   RESOLVEFUNC(X509_STORE_CTX_get_current_cert)
+   RESOLVEFUNC(X509_STORE_CTX_get_chain)
+   RESOLVEFUNC(X509_cmp)
 #ifndef SSLEAY_MACROS
-    RESOLVEFUNC(X509_dup)
+   RESOLVEFUNC(X509_dup)
 #endif
-    RESOLVEFUNC(X509_EXTENSION_get_object)
-    RESOLVEFUNC(X509_free)
-    RESOLVEFUNC(X509_get_ext)
-    RESOLVEFUNC(X509_get_ext_count)
-    RESOLVEFUNC(X509_get_ext_d2i)
-    RESOLVEFUNC(X509_get_issuer_name)
-    RESOLVEFUNC(X509_get_subject_name)
-    RESOLVEFUNC(X509_verify_cert)
-    RESOLVEFUNC(d2i_X509)
-    RESOLVEFUNC(i2d_X509)
+   RESOLVEFUNC(X509_EXTENSION_get_object)
+   RESOLVEFUNC(X509_free)
+   RESOLVEFUNC(X509_get_ext)
+   RESOLVEFUNC(X509_get_ext_count)
+   RESOLVEFUNC(X509_get_ext_d2i)
+   RESOLVEFUNC(X509_get_issuer_name)
+   RESOLVEFUNC(X509_get_subject_name)
+   RESOLVEFUNC(X509_verify_cert)
+   RESOLVEFUNC(d2i_X509)
+   RESOLVEFUNC(i2d_X509)
 #ifdef SSLEAY_MACROS
-    RESOLVEFUNC(i2d_DSAPrivateKey)
-    RESOLVEFUNC(i2d_RSAPrivateKey)
-    RESOLVEFUNC(d2i_DSAPrivateKey)
-    RESOLVEFUNC(d2i_RSAPrivateKey)
+   RESOLVEFUNC(i2d_DSAPrivateKey)
+   RESOLVEFUNC(i2d_RSAPrivateKey)
+   RESOLVEFUNC(d2i_DSAPrivateKey)
+   RESOLVEFUNC(d2i_RSAPrivateKey)
 #endif
-    RESOLVEFUNC(OPENSSL_add_all_algorithms_noconf)
-    RESOLVEFUNC(OPENSSL_add_all_algorithms_conf)
-    RESOLVEFUNC(SSL_CTX_load_verify_locations)
-    RESOLVEFUNC(SSLeay)
+   RESOLVEFUNC(OPENSSL_add_all_algorithms_noconf)
+   RESOLVEFUNC(OPENSSL_add_all_algorithms_conf)
+   RESOLVEFUNC(SSL_CTX_load_verify_locations)
+   RESOLVEFUNC(SSLeay)
 
-    symbolsResolved = true;
-    delete libs.first;
-    delete libs.second;
-    return true;
+   symbolsResolved = true;
+   delete libs.first;
+   delete libs.second;
+   return true;
 }
 
 #else // !defined QT_LINKED_OPENSSL
@@ -722,9 +743,9 @@ bool q_resolveOpenSslSymbols()
 bool q_resolveOpenSslSymbols()
 {
 #ifdef QT_NO_OPENSSL
-    return false;
+   return false;
 #endif
-    return true;
+   return true;
 }
 #endif // !defined QT_LINKED_OPENSSL
 
@@ -734,94 +755,100 @@ bool q_resolveOpenSslSymbols()
 //==============================================================================
 QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime)
 {
-    size_t lTimeLength = aTime->length;
-    char *pString = (char *) aTime->data;
+   size_t lTimeLength = aTime->length;
+   char *pString = (char *) aTime->data;
 
-    if (aTime->type == V_ASN1_UTCTIME) {
+   if (aTime->type == V_ASN1_UTCTIME) {
 
-        char lBuffer[24];
-        char *pBuffer = lBuffer;
+      char lBuffer[24];
+      char *pBuffer = lBuffer;
 
-        if ((lTimeLength < 11) || (lTimeLength > 17))
-            return QDateTime();
+      if ((lTimeLength < 11) || (lTimeLength > 17)) {
+         return QDateTime();
+      }
 
-        memcpy(pBuffer, pString, 10);
-        pBuffer += 10;
-        pString += 10;
+      memcpy(pBuffer, pString, 10);
+      pBuffer += 10;
+      pString += 10;
 
-        if ((*pString == 'Z') || (*pString == '-') || (*pString == '+')) {
-            *pBuffer++ = '0';
-            *pBuffer++ = '0';
-        } else {
-            *pBuffer++ = *pString++;
-            *pBuffer++ = *pString++;
-            // Skip any fractional seconds...
-            if (*pString == '.') {
-                pString++;
-                while ((*pString >= '0') && (*pString <= '9'))
-                    pString++;
+      if ((*pString == 'Z') || (*pString == '-') || (*pString == '+')) {
+         *pBuffer++ = '0';
+         *pBuffer++ = '0';
+      } else {
+         *pBuffer++ = *pString++;
+         *pBuffer++ = *pString++;
+         // Skip any fractional seconds...
+         if (*pString == '.') {
+            pString++;
+            while ((*pString >= '0') && (*pString <= '9')) {
+               pString++;
             }
-        }
+         }
+      }
 
-        *pBuffer++ = 'Z';
-        *pBuffer++ = '\0';
+      *pBuffer++ = 'Z';
+      *pBuffer++ = '\0';
 
-        time_t lSecondsFromUCT;
-        if (*pString == 'Z') {
-            lSecondsFromUCT = 0;
-        } else {
-            if ((*pString != '+') && (*pString != '-'))
-                return QDateTime();
+      time_t lSecondsFromUCT;
+      if (*pString == 'Z') {
+         lSecondsFromUCT = 0;
+      } else {
+         if ((*pString != '+') && (*pString != '-')) {
+            return QDateTime();
+         }
 
-            lSecondsFromUCT = ((pString[1] - '0') * 10 + (pString[2] - '0')) * 60;
-            lSecondsFromUCT += (pString[3] - '0') * 10 + (pString[4] - '0');
-            lSecondsFromUCT *= 60;
-            if (*pString == '-')
-                lSecondsFromUCT = -lSecondsFromUCT;
-        }
+         lSecondsFromUCT = ((pString[1] - '0') * 10 + (pString[2] - '0')) * 60;
+         lSecondsFromUCT += (pString[3] - '0') * 10 + (pString[4] - '0');
+         lSecondsFromUCT *= 60;
+         if (*pString == '-') {
+            lSecondsFromUCT = -lSecondsFromUCT;
+         }
+      }
 
-        tm lTime;
-        lTime.tm_sec = ((lBuffer[10] - '0') * 10) + (lBuffer[11] - '0');
-        lTime.tm_min = ((lBuffer[8] - '0') * 10) + (lBuffer[9] - '0');
-        lTime.tm_hour = ((lBuffer[6] - '0') * 10) + (lBuffer[7] - '0');
-        lTime.tm_mday = ((lBuffer[4] - '0') * 10) + (lBuffer[5] - '0');
-        lTime.tm_mon = (((lBuffer[2] - '0') * 10) + (lBuffer[3] - '0')) - 1;
-        lTime.tm_year = ((lBuffer[0] - '0') * 10) + (lBuffer[1] - '0');
-        if (lTime.tm_year < 50)
-            lTime.tm_year += 100; // RFC 2459
+      tm lTime;
+      lTime.tm_sec = ((lBuffer[10] - '0') * 10) + (lBuffer[11] - '0');
+      lTime.tm_min = ((lBuffer[8] - '0') * 10) + (lBuffer[9] - '0');
+      lTime.tm_hour = ((lBuffer[6] - '0') * 10) + (lBuffer[7] - '0');
+      lTime.tm_mday = ((lBuffer[4] - '0') * 10) + (lBuffer[5] - '0');
+      lTime.tm_mon = (((lBuffer[2] - '0') * 10) + (lBuffer[3] - '0')) - 1;
+      lTime.tm_year = ((lBuffer[0] - '0') * 10) + (lBuffer[1] - '0');
+      if (lTime.tm_year < 50) {
+         lTime.tm_year += 100;   // RFC 2459
+      }
 
-        QDate resDate(lTime.tm_year + 1900, lTime.tm_mon + 1, lTime.tm_mday);
-        QTime resTime(lTime.tm_hour, lTime.tm_min, lTime.tm_sec);
+      QDate resDate(lTime.tm_year + 1900, lTime.tm_mon + 1, lTime.tm_mday);
+      QTime resTime(lTime.tm_hour, lTime.tm_min, lTime.tm_sec);
 
-        QDateTime result(resDate, resTime, Qt::UTC);
-        result = result.addSecs(lSecondsFromUCT);
-        return result;
+      QDateTime result(resDate, resTime, Qt::UTC);
+      result = result.addSecs(lSecondsFromUCT);
+      return result;
 
-    } else if (aTime->type == V_ASN1_GENERALIZEDTIME) {
+   } else if (aTime->type == V_ASN1_GENERALIZEDTIME) {
 
-        if (lTimeLength < 15)
-            return QDateTime(); // hopefully never triggered
+      if (lTimeLength < 15) {
+         return QDateTime();   // hopefully never triggered
+      }
 
-        // generalized time is always YYYYMMDDHHMMSSZ (RFC 2459, section 4.1.2.5.2)
-        tm lTime;
-        lTime.tm_sec = ((pString[12] - '0') * 10) + (pString[13] - '0');
-        lTime.tm_min = ((pString[10] - '0') * 10) + (pString[11] - '0');
-        lTime.tm_hour = ((pString[8] - '0') * 10) + (pString[9] - '0');
-        lTime.tm_mday = ((pString[6] - '0') * 10) + (pString[7] - '0');
-        lTime.tm_mon = (((pString[4] - '0') * 10) + (pString[5] - '0'));
-        lTime.tm_year = ((pString[0] - '0') * 1000) + ((pString[1] - '0') * 100) +
-                        ((pString[2] - '0') * 10) + (pString[3] - '0');
+      // generalized time is always YYYYMMDDHHMMSSZ (RFC 2459, section 4.1.2.5.2)
+      tm lTime;
+      lTime.tm_sec = ((pString[12] - '0') * 10) + (pString[13] - '0');
+      lTime.tm_min = ((pString[10] - '0') * 10) + (pString[11] - '0');
+      lTime.tm_hour = ((pString[8] - '0') * 10) + (pString[9] - '0');
+      lTime.tm_mday = ((pString[6] - '0') * 10) + (pString[7] - '0');
+      lTime.tm_mon = (((pString[4] - '0') * 10) + (pString[5] - '0'));
+      lTime.tm_year = ((pString[0] - '0') * 1000) + ((pString[1] - '0') * 100) +
+                      ((pString[2] - '0') * 10) + (pString[3] - '0');
 
-        QDate resDate(lTime.tm_year, lTime.tm_mon, lTime.tm_mday);
-        QTime resTime(lTime.tm_hour, lTime.tm_min, lTime.tm_sec);
+      QDate resDate(lTime.tm_year, lTime.tm_mon, lTime.tm_mday);
+      QTime resTime(lTime.tm_hour, lTime.tm_min, lTime.tm_sec);
 
-        QDateTime result(resDate, resTime, Qt::UTC);
-        return result;
+      QDateTime result(resDate, resTime, Qt::UTC);
+      return result;
 
-    } else {
-        qWarning("unsupported date format detected");
-        return QDateTime();
-    }
+   } else {
+      qWarning("unsupported date format detected");
+      return QDateTime();
+   }
 
 }
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,55 +41,60 @@ QT_BEGIN_NAMESPACE
 
 static QScreen *screenForDevice(QPaintDevice *device)
 {
-    QScreen *screen = qt_screen;
-    if (!screen)
-        return 0;
-    if (screen->classId() == QScreen::MultiClass) {
-        int screenNumber;
-        if (device && device->devType() == QInternal::Widget)
-            screenNumber = qApp->desktop()->screenNumber(static_cast<QWidget *>(device));
-        else
-            screenNumber = 0;
-        screen = screen->subScreens()[screenNumber];
-    }
-    while (screen->classId() == QScreen::ProxyClass ||
-           screen->classId() == QScreen::TransformedClass) {
-        screen = static_cast<QProxyScreen *>(screen)->screen();
-    }
-    return screen;
+   QScreen *screen = qt_screen;
+   if (!screen) {
+      return 0;
+   }
+   if (screen->classId() == QScreen::MultiClass) {
+      int screenNumber;
+      if (device && device->devType() == QInternal::Widget) {
+         screenNumber = qApp->desktop()->screenNumber(static_cast<QWidget *>(device));
+      } else {
+         screenNumber = 0;
+      }
+      screen = screen->subScreens()[screenNumber];
+   }
+   while (screen->classId() == QScreen::ProxyClass ||
+          screen->classId() == QScreen::TransformedClass) {
+      screen = static_cast<QProxyScreen *>(screen)->screen();
+   }
+   return screen;
 }
 
 // Set pixel format and other properties based on a paint device.
 void QEglProperties::setPaintDeviceFormat(QPaintDevice *dev)
 {
-    if (!dev)
-        return;
+   if (!dev) {
+      return;
+   }
 
-    // Find the QGLScreen for this paint device.
-    QScreen *screen = screenForDevice(dev);
-    if (!screen)
-        return;
-    int devType = dev->devType();
-    if (devType == QInternal::Image)
-        setPixelFormat(static_cast<QImage *>(dev)->format());
-    else
-        setPixelFormat(screen->pixelFormat());
+   // Find the QGLScreen for this paint device.
+   QScreen *screen = screenForDevice(dev);
+   if (!screen) {
+      return;
+   }
+   int devType = dev->devType();
+   if (devType == QInternal::Image) {
+      setPixelFormat(static_cast<QImage *>(dev)->format());
+   } else {
+      setPixelFormat(screen->pixelFormat());
+   }
 }
 
 EGLNativeDisplayType QEgl::nativeDisplay()
 {
-    return  EGLNativeDisplayType(EGL_DEFAULT_DISPLAY);
+   return  EGLNativeDisplayType(EGL_DEFAULT_DISPLAY);
 }
 
-EGLNativeWindowType QEgl::nativeWindow(QWidget* widget)
+EGLNativeWindowType QEgl::nativeWindow(QWidget *widget)
 {
-    return (EGLNativeWindowType)(widget->winId()); // Might work
+   return (EGLNativeWindowType)(widget->winId()); // Might work
 }
 
-EGLNativePixmapType QEgl::nativePixmap(QPixmap*)
+EGLNativePixmapType QEgl::nativePixmap(QPixmap *)
 {
-    qWarning("QEgl: EGL pixmap surfaces not supported on QWS");
-    return (EGLNativePixmapType)0;
+   qWarning("QEgl: EGL pixmap surfaces not supported on QWS");
+   return (EGLNativePixmapType)0;
 }
 
 

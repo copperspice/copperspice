@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,56 +45,57 @@ class QSslErrorPrivate;
 
 class Q_NETWORK_EXPORT QSslError
 {
-public:
-    enum SslError {
-        NoError,
-        UnableToGetIssuerCertificate,
-        UnableToDecryptCertificateSignature,
-        UnableToDecodeIssuerPublicKey,
-        CertificateSignatureFailed,
-        CertificateNotYetValid,
-        CertificateExpired,
-        InvalidNotBeforeField,
-        InvalidNotAfterField,
-        SelfSignedCertificate,
-        SelfSignedCertificateInChain,
-        UnableToGetLocalIssuerCertificate,
-        UnableToVerifyFirstCertificate,
-        CertificateRevoked,
-        InvalidCaCertificate,
-        PathLengthExceeded,
-        InvalidPurpose,
-        CertificateUntrusted,
-        CertificateRejected,
-        SubjectIssuerMismatch, // hostname mismatch?
-        AuthorityIssuerSerialNumberMismatch,
-        NoPeerCertificate,
-        HostNameMismatch,
-        NoSslSupport,
-        CertificateBlacklisted,
-        UnspecifiedError = -1
-    };
+ public:
+   enum SslError {
+      NoError,
+      UnableToGetIssuerCertificate,
+      UnableToDecryptCertificateSignature,
+      UnableToDecodeIssuerPublicKey,
+      CertificateSignatureFailed,
+      CertificateNotYetValid,
+      CertificateExpired,
+      InvalidNotBeforeField,
+      InvalidNotAfterField,
+      SelfSignedCertificate,
+      SelfSignedCertificateInChain,
+      UnableToGetLocalIssuerCertificate,
+      UnableToVerifyFirstCertificate,
+      CertificateRevoked,
+      InvalidCaCertificate,
+      PathLengthExceeded,
+      InvalidPurpose,
+      CertificateUntrusted,
+      CertificateRejected,
+      SubjectIssuerMismatch, // hostname mismatch?
+      AuthorityIssuerSerialNumberMismatch,
+      NoPeerCertificate,
+      HostNameMismatch,
+      NoSslSupport,
+      CertificateBlacklisted,
+      UnspecifiedError = -1
+   };
 
-    // RVCT compiler in debug build does not like about default values in const-
-    // So as an workaround we define all constructor overloads here explicitly
-    QSslError();
-    QSslError(SslError error);
-    QSslError(SslError error, const QSslCertificate &certificate);
+   // RVCT compiler in debug build does not like about default values in const-
+   // So as an workaround we define all constructor overloads here explicitly
+   QSslError();
+   QSslError(SslError error);
+   QSslError(SslError error, const QSslCertificate &certificate);
 
-    QSslError(const QSslError &other);
+   QSslError(const QSslError &other);
 
-    ~QSslError();
-    QSslError &operator=(const QSslError &other);
-    bool operator==(const QSslError &other) const;
-    inline bool operator!=(const QSslError &other) const
-    { return !(*this == other); }
+   ~QSslError();
+   QSslError &operator=(const QSslError &other);
+   bool operator==(const QSslError &other) const;
+   inline bool operator!=(const QSslError &other) const {
+      return !(*this == other);
+   }
 
-    SslError error() const;
-    QString errorString() const;
-    QSslCertificate certificate() const;
-    
-private:
-    QScopedPointer<QSslErrorPrivate> d;
+   SslError error() const;
+   QString errorString() const;
+   QSslCertificate certificate() const;
+
+ private:
+   QScopedPointer<QSslErrorPrivate> d;
 };
 
 #ifndef QT_NO_DEBUG_STREAM

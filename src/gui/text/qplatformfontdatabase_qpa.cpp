@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,8 +32,8 @@
 QT_BEGIN_NAMESPACE
 
 extern void qt_registerFont(const QString &familyname, const QString &foundryname, int weight,
-                                         QFont::Style style, int stretch, bool antialiased,bool scalable, int pixelSize,
-                                         const QSupportedWritingSystems &writingSystems, void *hanlde);
+                            QFont::Style style, int stretch, bool antialiased, bool scalable, int pixelSize,
+                            const QSupportedWritingSystems &writingSystems, void *hanlde);
 
 /*!
     \fn void QPlatformFontDatabase::registerQPF2Font(const QByteArray &dataArray, void *)
@@ -44,39 +44,43 @@ extern void qt_registerFont(const QString &familyname, const QString &foundrynam
 */
 void QPlatformFontDatabase::registerQPF2Font(const QByteArray &dataArray, void *handle)
 {
-    if (dataArray.size() == 0)
-        return;
+   if (dataArray.size() == 0) {
+      return;
+   }
 
-    const uchar *data = reinterpret_cast<const uchar *>(dataArray.constData());
-    if (QFontEngineQPA::verifyHeader(data, dataArray.size())) {
-        QString fontName = QFontEngineQPA::extractHeaderField(data, QFontEngineQPA::Tag_FontName).toString();
-        int pixelSize = QFontEngineQPA::extractHeaderField(data, QFontEngineQPA::Tag_PixelSize).toInt();
-        QVariant weight = QFontEngineQPA::extractHeaderField(data, QFontEngineQPA::Tag_Weight);
-        QVariant style = QFontEngineQPA::extractHeaderField(data, QFontEngineQPA::Tag_Style);
-        QByteArray writingSystemBits = QFontEngineQPA::extractHeaderField(data, QFontEngineQPA::Tag_WritingSystems).toByteArray();
+   const uchar *data = reinterpret_cast<const uchar *>(dataArray.constData());
+   if (QFontEngineQPA::verifyHeader(data, dataArray.size())) {
+      QString fontName = QFontEngineQPA::extractHeaderField(data, QFontEngineQPA::Tag_FontName).toString();
+      int pixelSize = QFontEngineQPA::extractHeaderField(data, QFontEngineQPA::Tag_PixelSize).toInt();
+      QVariant weight = QFontEngineQPA::extractHeaderField(data, QFontEngineQPA::Tag_Weight);
+      QVariant style = QFontEngineQPA::extractHeaderField(data, QFontEngineQPA::Tag_Style);
+      QByteArray writingSystemBits = QFontEngineQPA::extractHeaderField(data,
+                                     QFontEngineQPA::Tag_WritingSystems).toByteArray();
 
-        if (!fontName.isEmpty() && pixelSize) {
-            QFont::Weight fontWeight = QFont::Normal;
-            if (weight.type() == QVariant::Int || weight.type() == QVariant::UInt)
-                fontWeight = QFont::Weight(weight.toInt());
+      if (!fontName.isEmpty() && pixelSize) {
+         QFont::Weight fontWeight = QFont::Normal;
+         if (weight.type() == QVariant::Int || weight.type() == QVariant::UInt) {
+            fontWeight = QFont::Weight(weight.toInt());
+         }
 
-            QFont::Style fontStyle = static_cast<QFont::Style>(style.toInt());
+         QFont::Style fontStyle = static_cast<QFont::Style>(style.toInt());
 
-            QSupportedWritingSystems writingSystems;
-            for (int i = 0; i < writingSystemBits.count(); ++i) {
-                uchar currentByte = writingSystemBits.at(i);
-                for (int j = 0; j < 8; ++j) {
-                    if (currentByte & 1)
-                        writingSystems.setSupported(QFontDatabase::WritingSystem(i * 8 + j));
-                    currentByte >>= 1;
-                }
+         QSupportedWritingSystems writingSystems;
+         for (int i = 0; i < writingSystemBits.count(); ++i) {
+            uchar currentByte = writingSystemBits.at(i);
+            for (int j = 0; j < 8; ++j) {
+               if (currentByte & 1) {
+                  writingSystems.setSupported(QFontDatabase::WritingSystem(i * 8 + j));
+               }
+               currentByte >>= 1;
             }
-            QFont::Stretch stretch = QFont::Unstretched;
-            registerFont(fontName,QString(),fontWeight,fontStyle,stretch,true,false,pixelSize,writingSystems,handle);
-        }
-    } else {
-        qDebug() << "header verification of QPF2 font failed. maybe it is corrupt?";
-    }
+         }
+         QFont::Stretch stretch = QFont::Unstretched;
+         registerFont(fontName, QString(), fontWeight, fontStyle, stretch, true, false, pixelSize, writingSystems, handle);
+      }
+   } else {
+      qDebug() << "header verification of QPF2 font failed. maybe it is corrupt?";
+   }
 }
 
 /*!
@@ -106,42 +110,42 @@ void QPlatformFontDatabase::registerQPF2Font(const QByteArray &dataArray, void *
     \sa registerQPF2Font()
 */
 void QPlatformFontDatabase::registerFont(const QString &familyname, const QString &foundryname, QFont::Weight weight,
-                                         QFont::Style style, QFont::Stretch stretch, bool antialiased, bool scalable, int pixelSize,
-                                         const QSupportedWritingSystems &writingSystems, void *usrPtr)
+      QFont::Style style, QFont::Stretch stretch, bool antialiased, bool scalable, int pixelSize,
+      const QSupportedWritingSystems &writingSystems, void *usrPtr)
 {
-    if (scalable)
-        pixelSize = 0;
-    qt_registerFont(familyname,foundryname,weight,style,stretch,antialiased,scalable,pixelSize,writingSystems,usrPtr);
+   if (scalable) {
+      pixelSize = 0;
+   }
+   qt_registerFont(familyname, foundryname, weight, style, stretch, antialiased, scalable, pixelSize, writingSystems,
+                   usrPtr);
 }
 
 class QWritingSystemsPrivate
 {
-public:
-    QWritingSystemsPrivate()
-        : ref(1)
-        , vector(QFontDatabase::WritingSystemsCount,false)
-    {
-    }
+ public:
+   QWritingSystemsPrivate()
+      : ref(1)
+      , vector(QFontDatabase::WritingSystemsCount, false) {
+   }
 
-    QWritingSystemsPrivate(const QWritingSystemsPrivate *other)
-        : ref(1)
-        , vector(other->vector)
-    {
-    }
+   QWritingSystemsPrivate(const QWritingSystemsPrivate *other)
+      : ref(1)
+      , vector(other->vector) {
+   }
 
-    QAtomicInt ref;
-    QVector<bool> vector;
+   QAtomicInt ref;
+   QVector<bool> vector;
 };
 
 QSupportedWritingSystems::QSupportedWritingSystems()
 {
-    d = new QWritingSystemsPrivate;
+   d = new QWritingSystemsPrivate;
 }
 
 QSupportedWritingSystems::QSupportedWritingSystems(const QSupportedWritingSystems &other)
 {
-    d = other.d;
-    d->ref.ref();
+   d = other.d;
+   d->ref.ref();
 }
 
 /*!
@@ -149,13 +153,14 @@ QSupportedWritingSystems::QSupportedWritingSystems(const QSupportedWritingSystem
 */
 QSupportedWritingSystems &QSupportedWritingSystems::operator=(const QSupportedWritingSystems &other)
 {
-    if (d != other.d) {
-        other.d->ref.ref();
-        if (!d->ref.deref())
-            delete d;
-        d = other.d;
-    }
-    return *this;
+   if (d != other.d) {
+      other.d->ref.ref();
+      if (!d->ref.deref()) {
+         delete d;
+      }
+      d = other.d;
+   }
+   return *this;
 }
 
 /*!
@@ -163,18 +168,20 @@ QSupportedWritingSystems &QSupportedWritingSystems::operator=(const QSupportedWr
 */
 QSupportedWritingSystems::~QSupportedWritingSystems()
 {
-    if (!d->ref.deref())
-        delete d;
+   if (!d->ref.deref()) {
+      delete d;
+   }
 }
 
 void QSupportedWritingSystems::detach()
 {
-    if (d->ref.load() != 1) {
-        QWritingSystemsPrivate *newd = new QWritingSystemsPrivate(d);
-        if (!d->ref.deref())
-            delete d;
-        d = newd;
-    }
+   if (d->ref.load() != 1) {
+      QWritingSystemsPrivate *newd = new QWritingSystemsPrivate(d);
+      if (!d->ref.deref()) {
+         delete d;
+      }
+      d = newd;
+   }
 }
 
 /*!
@@ -187,8 +194,8 @@ void QSupportedWritingSystems::detach()
 */
 void QSupportedWritingSystems::setSupported(QFontDatabase::WritingSystem writingSystem, bool support)
 {
-    detach();
-    d->vector[writingSystem] = support;
+   detach();
+   d->vector[writingSystem] = support;
 }
 
 /*!
@@ -199,7 +206,7 @@ void QSupportedWritingSystems::setSupported(QFontDatabase::WritingSystem writing
 */
 bool QSupportedWritingSystems::supported(QFontDatabase::WritingSystem writingSystem) const
 {
-    return d->vector.at(writingSystem);
+   return d->vector.at(writingSystem);
 }
 
 /*!
@@ -222,25 +229,25 @@ bool QSupportedWritingSystems::supported(QFontDatabase::WritingSystem writingSys
 */
 void QPlatformFontDatabase::populateFontDatabase()
 {
-    QString fontpath = fontDir();
+   QString fontpath = fontDir();
 
-    if(!QFile::exists(fontpath)) {
-        qFatal("QFontDatabase: Cannot find font directory %s - is Qt installed correctly?",
-               qPrintable(fontpath));
-    }
+   if (!QFile::exists(fontpath)) {
+      qFatal("QFontDatabase: Cannot find font directory %s - is Qt installed correctly?",
+             qPrintable(fontpath));
+   }
 
-    QDir dir(fontpath);
-    dir.setNameFilters(QStringList() << QLatin1String("*.qpf2"));
-    dir.refresh();
-    for (int i = 0; i < int(dir.count()); ++i) {
-        const QByteArray fileName = QFile::encodeName(dir.absoluteFilePath(dir[i]));
-        QFile file(QString::fromLocal8Bit(fileName));
-        if (file.open(QFile::ReadOnly)) {
-            const QByteArray fileData = file.readAll();
-            QByteArray *fileDataPtr = new QByteArray(fileData);
-            registerQPF2Font(fileData, fileDataPtr);
-        }
-    }
+   QDir dir(fontpath);
+   dir.setNameFilters(QStringList() << QLatin1String("*.qpf2"));
+   dir.refresh();
+   for (int i = 0; i < int(dir.count()); ++i) {
+      const QByteArray fileName = QFile::encodeName(dir.absoluteFilePath(dir[i]));
+      QFile file(QString::fromLocal8Bit(fileName));
+      if (file.open(QFile::ReadOnly)) {
+         const QByteArray fileData = file.readAll();
+         QByteArray *fileDataPtr = new QByteArray(fileData);
+         registerQPF2Font(fileData, fileDataPtr);
+      }
+   }
 }
 
 /*!
@@ -249,35 +256,36 @@ void QPlatformFontDatabase::populateFontDatabase()
 */
 QFontEngine *QPlatformFontDatabase::fontEngine(const QFontDef &fontDef, QUnicodeTables::Script script, void *handle)
 {
-    Q_UNUSED(script);
-    Q_UNUSED(handle);
-    QByteArray *fileDataPtr = static_cast<QByteArray *>(handle);
-    QFontEngineQPA *engine = new QFontEngineQPA(fontDef,*fileDataPtr);
-    //qDebug() << fontDef.pixelSize << fontDef.weight << fontDef.style << fontDef.stretch << fontDef.styleHint << fontDef.styleStrategy << fontDef.family << script;
-    return engine;
+   Q_UNUSED(script);
+   Q_UNUSED(handle);
+   QByteArray *fileDataPtr = static_cast<QByteArray *>(handle);
+   QFontEngineQPA *engine = new QFontEngineQPA(fontDef, *fileDataPtr);
+   //qDebug() << fontDef.pixelSize << fontDef.weight << fontDef.style << fontDef.stretch << fontDef.styleHint << fontDef.styleStrategy << fontDef.family << script;
+   return engine;
 }
 
 QFontEngine *QPlatformFontDatabase::fontEngine(const QByteArray &fontData, qreal pixelSize,
-                                               QFont::HintingPreference hintingPreference)
+      QFont::HintingPreference hintingPreference)
 {
-    Q_UNUSED(fontData);
-    Q_UNUSED(pixelSize);
-    Q_UNUSED(hintingPreference);
-    qWarning("This plugin does not support font engines created directly from font data");
-    return 0;
+   Q_UNUSED(fontData);
+   Q_UNUSED(pixelSize);
+   Q_UNUSED(hintingPreference);
+   qWarning("This plugin does not support font engines created directly from font data");
+   return 0;
 }
 
 /*!
     Returns a list of alternative fonts for the specified \a family and
     \a style and \a script using the \a styleHint given.
 */
-QStringList QPlatformFontDatabase::fallbacksForFamily(const QString family, const QFont::Style &style, const QFont::StyleHint &styleHint, const QUnicodeTables::Script &script) const
+QStringList QPlatformFontDatabase::fallbacksForFamily(const QString family, const QFont::Style &style,
+      const QFont::StyleHint &styleHint, const QUnicodeTables::Script &script) const
 {
-    Q_UNUSED(family);
-    Q_UNUSED(style);
-    Q_UNUSED(styleHint);
-    Q_UNUSED(script);
-    return QStringList();
+   Q_UNUSED(family);
+   Q_UNUSED(style);
+   Q_UNUSED(styleHint);
+   Q_UNUSED(script);
+   return QStringList();
 }
 
 /*!
@@ -291,11 +299,11 @@ QStringList QPlatformFontDatabase::fallbacksForFamily(const QString family, cons
 */
 QStringList QPlatformFontDatabase::addApplicationFont(const QByteArray &fontData, const QString &fileName)
 {
-    Q_UNUSED(fontData);
-    Q_UNUSED(fileName);
+   Q_UNUSED(fontData);
+   Q_UNUSED(fileName);
 
-    qWarning("This plugin does not support application fonts");
-    return QStringList();
+   qWarning("This plugin does not support application fonts");
+   return QStringList();
 }
 
 /*!
@@ -303,8 +311,8 @@ QStringList QPlatformFontDatabase::addApplicationFont(const QByteArray &fontData
 */
 void QPlatformFontDatabase::releaseHandle(void *handle)
 {
-    QByteArray *fileDataPtr = static_cast<QByteArray *>(handle);
-    delete fileDataPtr;
+   QByteArray *fileDataPtr = static_cast<QByteArray *>(handle);
+   delete fileDataPtr;
 }
 
 /*!
@@ -318,15 +326,15 @@ void QPlatformFontDatabase::releaseHandle(void *handle)
 */
 QString QPlatformFontDatabase::fontDir() const
 {
-    QString fontpath = QString::fromLocal8Bit(qgetenv("QT_QPA_FONTDIR"));
-    if (fontpath.isEmpty()) {
+   QString fontpath = QString::fromLocal8Bit(qgetenv("QT_QPA_FONTDIR"));
+   if (fontpath.isEmpty()) {
 #ifndef QT_NO_SETTINGS
-        fontpath = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
-        fontpath += QLatin1String("/fonts");
+      fontpath = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+      fontpath += QLatin1String("/fonts");
 #endif
-    }
+   }
 
-    return fontpath;
+   return fontpath;
 }
 
 /*!

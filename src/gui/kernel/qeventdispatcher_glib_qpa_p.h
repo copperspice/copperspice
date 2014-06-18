@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,24 +35,24 @@ class QPAEventDispatcherGlibPrivate;
 
 class QPAEventDispatcherGlib : public QEventDispatcherGlib
 {
-    CS_OBJECT(QPAEventDispatcherGlib)
-    Q_DECLARE_PRIVATE(QPAEventDispatcherGlib)
+   CS_OBJECT(QPAEventDispatcherGlib)
+   Q_DECLARE_PRIVATE(QPAEventDispatcherGlib)
 
-public:
-    explicit QPAEventDispatcherGlib(QObject *parent = 0);
-    ~QPAEventDispatcherGlib();
+ public:
+   explicit QPAEventDispatcherGlib(QObject *parent = 0);
+   ~QPAEventDispatcherGlib();
 
-    bool processEvents(QEventLoop::ProcessEventsFlags flags);
+   bool processEvents(QEventLoop::ProcessEventsFlags flags);
 };
 
 struct GUserEventSource;
 
 class QPAEventDispatcherGlibPrivate : public QEventDispatcherGlibPrivate
 {
-    Q_DECLARE_PUBLIC(QPAEventDispatcherGlib)
-public:
-    QPAEventDispatcherGlibPrivate(GMainContext *context = 0);
-    GUserEventSource *userEventSource;
+   Q_DECLARE_PUBLIC(QPAEventDispatcherGlib)
+ public:
+   QPAEventDispatcherGlibPrivate(GMainContext *context = 0);
+   GUserEventSource *userEventSource;
 };
 
 

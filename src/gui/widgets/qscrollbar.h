@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,35 +38,35 @@ class QStyleOptionSlider;
 
 class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
 {
-    CS_OBJECT(QScrollBar)
+   CS_OBJECT(QScrollBar)
 
-public:
-    explicit QScrollBar(QWidget *parent=0);
-    explicit QScrollBar(Qt::Orientation, QWidget *parent=0);
-    ~QScrollBar();
+ public:
+   explicit QScrollBar(QWidget *parent = 0);
+   explicit QScrollBar(Qt::Orientation, QWidget *parent = 0);
+   ~QScrollBar();
 
-    QSize sizeHint() const;
-    bool event(QEvent *event);
+   QSize sizeHint() const;
+   bool event(QEvent *event);
 
-protected:
-    void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void hideEvent(QHideEvent*);
-    void sliderChange(SliderChange change);
+ protected:
+   void paintEvent(QPaintEvent *);
+   void mousePressEvent(QMouseEvent *);
+   void mouseReleaseEvent(QMouseEvent *);
+   void mouseMoveEvent(QMouseEvent *);
+   void hideEvent(QHideEvent *);
+   void sliderChange(SliderChange change);
 
 #ifndef QT_NO_CONTEXTMENU
-    void contextMenuEvent(QContextMenuEvent *);
+   void contextMenuEvent(QContextMenuEvent *);
 #endif
 
-    void initStyleOption(QStyleOptionSlider *option) const;
+   void initStyleOption(QStyleOptionSlider *option) const;
 
-private:
-    friend Q_GUI_EXPORT QStyleOptionSlider qt_qscrollbarStyleOption(QScrollBar *scrollBar);
+ private:
+   friend Q_GUI_EXPORT QStyleOptionSlider qt_qscrollbarStyleOption(QScrollBar *scrollBar);
 
-    Q_DISABLE_COPY(QScrollBar)
-    Q_DECLARE_PRIVATE(QScrollBar)
+   Q_DISABLE_COPY(QScrollBar)
+   Q_DECLARE_PRIVATE(QScrollBar)
 };
 
 #endif // QT_NO_SCROLLBAR

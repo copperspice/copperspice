@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,67 +38,70 @@ extern QPrinter::PaperSize mapDevmodePaperSize(int s);
 
 QList<QPrinterInfo> QPrinterInfo::availablePrinters()
 {
-    QList<QPrinterInfo> printers;
+   QList<QPrinterInfo> printers;
 
-    DWORD needed = 0;
-    DWORD returned = 0;
-    if (!EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, NULL, 4, 0, 0, &needed, &returned)) {
-        LPBYTE buffer = new BYTE[needed];
-        if (EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, NULL, 4, buffer, needed, &needed, &returned)) {
-            PPRINTER_INFO_4 infoList = reinterpret_cast<PPRINTER_INFO_4>(buffer);
-            QPrinterInfo defPrn = defaultPrinter();
-            for (uint i = 0; i < returned; ++i) {
-                QString printerName(QString::fromWCharArray(infoList[i].pPrinterName));
+   DWORD needed = 0;
+   DWORD returned = 0;
+   if (!EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, NULL, 4, 0, 0, &needed, &returned)) {
+      LPBYTE buffer = new BYTE[needed];
+      if (EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, NULL, 4, buffer, needed, &needed, &returned)) {
+         PPRINTER_INFO_4 infoList = reinterpret_cast<PPRINTER_INFO_4>(buffer);
+         QPrinterInfo defPrn = defaultPrinter();
+         for (uint i = 0; i < returned; ++i) {
+            QString printerName(QString::fromWCharArray(infoList[i].pPrinterName));
 
-                QPrinterInfo printerInfo(printerName);
-                if (printerInfo.printerName() == defPrn.printerName())
-                    printerInfo.d_ptr->isDefault = true;
-                printers.append(printerInfo);
+            QPrinterInfo printerInfo(printerName);
+            if (printerInfo.printerName() == defPrn.printerName()) {
+               printerInfo.d_ptr->isDefault = true;
             }
-        }
-        delete [] buffer;
-    }
+            printers.append(printerInfo);
+         }
+      }
+      delete [] buffer;
+   }
 
-    return printers;
+   return printers;
 }
 
 QPrinterInfo QPrinterInfo::defaultPrinter()
 {
-    QString noPrinters(QLatin1String("qt_no_printers"));
-    wchar_t buffer[256];
-    GetProfileString(L"windows", L"device", (wchar_t*)noPrinters.utf16(), buffer, 256);
-    QString output = QString::fromWCharArray(buffer);
-    if (output != noPrinters) {
-        // Filter out the name of the printer, which should be everything before a comma.
-        QString printerName = output.split(QLatin1Char(',')).value(0);
-        QPrinterInfo printerInfo(printerName);
-        printerInfo.d_ptr->isDefault = true;
-        return printerInfo;
-    }
+   QString noPrinters(QLatin1String("qt_no_printers"));
+   wchar_t buffer[256];
+   GetProfileString(L"windows", L"device", (wchar_t *)noPrinters.utf16(), buffer, 256);
+   QString output = QString::fromWCharArray(buffer);
+   if (output != noPrinters) {
+      // Filter out the name of the printer, which should be everything before a comma.
+      QString printerName = output.split(QLatin1Char(',')).value(0);
+      QPrinterInfo printerInfo(printerName);
+      printerInfo.d_ptr->isDefault = true;
+      return printerInfo;
+   }
 
-    return QPrinterInfo();
+   return QPrinterInfo();
 }
 
 QList<QPrinter::PaperSize> QPrinterInfo::supportedPaperSizes() const
 {
-    const Q_D(QPrinterInfo);
+   const Q_D(QPrinterInfo);
 
-    QList<QPrinter::PaperSize> paperSizes;
-    if (isNull())
-        return paperSizes;
+   QList<QPrinter::PaperSize> paperSizes;
+   if (isNull()) {
+      return paperSizes;
+   }
 
-    DWORD size = DeviceCapabilities(reinterpret_cast<const wchar_t*>(d->name.utf16()),
-                                    NULL, DC_PAPERS, NULL, NULL);
-    if ((int)size != -1) {
-        wchar_t *papers = new wchar_t[size];
-        size = DeviceCapabilities(reinterpret_cast<const wchar_t*>(d->name.utf16()),
-                                  NULL, DC_PAPERS, papers, NULL);
-        for (int c = 0; c < (int)size; ++c)
-            paperSizes.append(mapDevmodePaperSize(papers[c]));
-        delete [] papers;
-    }
+   DWORD size = DeviceCapabilities(reinterpret_cast<const wchar_t *>(d->name.utf16()),
+                                   NULL, DC_PAPERS, NULL, NULL);
+   if ((int)size != -1) {
+      wchar_t *papers = new wchar_t[size];
+      size = DeviceCapabilities(reinterpret_cast<const wchar_t *>(d->name.utf16()),
+                                NULL, DC_PAPERS, papers, NULL);
+      for (int c = 0; c < (int)size; ++c) {
+         paperSizes.append(mapDevmodePaperSize(papers[c]));
+      }
+      delete [] papers;
+   }
 
-    return paperSizes;
+   return paperSizes;
 }
 
 #endif // QT_NO_PRINTER

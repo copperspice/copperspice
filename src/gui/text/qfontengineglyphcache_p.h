@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,22 +46,24 @@ QT_BEGIN_NAMESPACE
 
 class QFontEngineGlyphCache: public QSharedData
 {
-public:
-    enum Type {
-        Raster_RGBMask,
-        Raster_A8,
-        Raster_Mono,
-        Raster_ARGB
-    };
+ public:
+   enum Type {
+      Raster_RGBMask,
+      Raster_A8,
+      Raster_Mono,
+      Raster_ARGB
+   };
 
-    QFontEngineGlyphCache(const QTransform &matrix, Type type) : m_transform(matrix), m_type(type) { }
+   QFontEngineGlyphCache(const QTransform &matrix, Type type) : m_transform(matrix), m_type(type) { }
 
-    virtual ~QFontEngineGlyphCache() { }
+   virtual ~QFontEngineGlyphCache() { }
 
-    Type cacheType() const { return m_type; }
+   Type cacheType() const {
+      return m_type;
+   }
 
-    QTransform m_transform;
-    QFontEngineGlyphCache::Type m_type;
+   QTransform m_transform;
+   QFontEngineGlyphCache::Type m_type;
 };
 typedef QHash<void *, QList<QFontEngineGlyphCache *> > GlyphPointerHash;
 typedef QHash<int, QList<QFontEngineGlyphCache *> > GlyphIntHash;

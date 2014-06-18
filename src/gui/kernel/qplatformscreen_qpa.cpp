@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,17 +37,18 @@
     Default implementation retrieves a list of all top level widgets and finds the first widget
     which contains point \a pos
 */
-QWidget *QPlatformScreen::topLevelAt(const QPoint & pos) const
+QWidget *QPlatformScreen::topLevelAt(const QPoint &pos) const
 {
-    QWidgetList list = QApplication::topLevelWidgets();
-    for (int i = list.size()-1; i >= 0; --i) {
-        QWidget *w = list[i];
-        //### mask is ignored
-        if (w != QApplication::desktop() && w->isVisible() && w->geometry().contains(pos))
-            return w;
-    }
+   QWidgetList list = QApplication::topLevelWidgets();
+   for (int i = list.size() - 1; i >= 0; --i) {
+      QWidget *w = list[i];
+      //### mask is ignored
+      if (w != QApplication::desktop() && w->isVisible() && w->geometry().contains(pos)) {
+         return w;
+      }
+   }
 
-    return 0;
+   return 0;
 }
 
 /*!
@@ -62,21 +63,21 @@ QWidget *QPlatformScreen::topLevelAt(const QPoint & pos) const
 */
 QSize QPlatformScreen::physicalSize() const
 {
-    static const int dpi = 100;
-    int width = geometry().width() / dpi * qreal(25.4) ;
-    int height = geometry().height() / dpi * qreal(25.4) ;
-    return QSize(width,height);
+   static const int dpi = 100;
+   int width = geometry().width() / dpi * qreal(25.4) ;
+   int height = geometry().height() / dpi * qreal(25.4) ;
+   return QSize(width, height);
 }
 
 Q_GUI_EXPORT extern QWidgetPrivate *qt_widget_private(QWidget *widget);
-QPlatformScreen * QPlatformScreen::platformScreenForWidget(const QWidget *widget)
+QPlatformScreen *QPlatformScreen::platformScreenForWidget(const QWidget *widget)
 {
-    QWidget *window = widget->window();
-    QWidgetPrivate *windowPrivate = qt_widget_private(window);
-    QTLWExtra * topData = windowPrivate->topData();
-    QPlatformIntegration *integration =
-            QApplicationPrivate::platformIntegration();
-    return integration->screens()[topData->screenIndex];
+   QWidget *window = widget->window();
+   QWidgetPrivate *windowPrivate = qt_widget_private(window);
+   QTLWExtra *topData = windowPrivate->topData();
+   QPlatformIntegration *integration =
+      QApplicationPrivate::platformIntegration();
+   return integration->screens()[topData->screenIndex];
 }
 
 /*!

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -132,47 +132,51 @@ QT_BEGIN_NAMESPACE
 */
 class QShortcutPrivate
 {
-    Q_DECLARE_PUBLIC(QShortcut)
+   Q_DECLARE_PUBLIC(QShortcut)
 
-public:
-    QShortcutPrivate() : sc_context(Qt::WindowShortcut), sc_enabled(true), sc_autorepeat(true), sc_id(0) {}
-    virtual ~QShortcutPrivate() {}
+ public:
+   QShortcutPrivate() : sc_context(Qt::WindowShortcut), sc_enabled(true), sc_autorepeat(true), sc_id(0) {}
+   virtual ~QShortcutPrivate() {}
 
-    QKeySequence sc_sequence;
-    Qt::ShortcutContext sc_context;
-    bool sc_enabled;
-    bool sc_autorepeat;
-    int sc_id;
-    QString sc_whatsthis;
-    void redoGrab(QShortcutMap &map);
+   QKeySequence sc_sequence;
+   Qt::ShortcutContext sc_context;
+   bool sc_enabled;
+   bool sc_autorepeat;
+   int sc_id;
+   QString sc_whatsthis;
+   void redoGrab(QShortcutMap &map);
 
-protected:
-	 QShortcut *q_ptr;
+ protected:
+   QShortcut *q_ptr;
 
 };
 
 void QShortcutPrivate::redoGrab(QShortcutMap &map)
 {
-    Q_Q(QShortcut);
+   Q_Q(QShortcut);
 
-    if (! q->parent()) {
-        qWarning("QShortcut: No widget parent defined");
-        return;
-    }
+   if (! q->parent()) {
+      qWarning("QShortcut: No widget parent defined");
+      return;
+   }
 
-    if (sc_id)
-        map.removeShortcut(sc_id, q);
+   if (sc_id) {
+      map.removeShortcut(sc_id, q);
+   }
 
-    if (sc_sequence.isEmpty())
-        return;
+   if (sc_sequence.isEmpty()) {
+      return;
+   }
 
-    sc_id = map.addShortcut(q, sc_sequence, sc_context);
+   sc_id = map.addShortcut(q, sc_sequence, sc_context);
 
-    if (!sc_enabled)
-        map.setShortcutEnabled(false, sc_id, q);
+   if (!sc_enabled) {
+      map.setShortcutEnabled(false, sc_id, q);
+   }
 
-    if (!sc_autorepeat)
-        map.setShortcutAutoRepeat(false, sc_id, q);
+   if (!sc_autorepeat) {
+      map.setShortcutAutoRepeat(false, sc_id, q);
+   }
 }
 
 /*!
@@ -182,59 +186,61 @@ void QShortcutPrivate::redoGrab(QShortcutMap &map)
 
     \sa setKey()
 */
-QShortcut::QShortcut(QWidget *parent)  
+QShortcut::QShortcut(QWidget *parent)
    : QObject(parent), d_ptr(new QShortcutPrivate)
 {
-    d_ptr->q_ptr = this;	
-    Q_ASSERT(parent != 0);
+   d_ptr->q_ptr = this;
+   Q_ASSERT(parent != 0);
 }
 
-QShortcut::QShortcut(const QKeySequence &key, QWidget *parent, const char *member, 
-            const char *ambiguousMember, Qt::ShortcutContext context)
-  : QObject(parent), d_ptr(new QShortcutPrivate)
+QShortcut::QShortcut(const QKeySequence &key, QWidget *parent, const char *member,
+                     const char *ambiguousMember, Qt::ShortcutContext context)
+   : QObject(parent), d_ptr(new QShortcutPrivate)
 {
-    d_ptr->q_ptr = this;	
-    QAPP_CHECK("QShortcut");
+   d_ptr->q_ptr = this;
+   QAPP_CHECK("QShortcut");
 
-    Q_D(QShortcut);
-    Q_ASSERT(parent != 0);
+   Q_D(QShortcut);
+   Q_ASSERT(parent != 0);
 
-    d->sc_context  = context;
-    d->sc_sequence = key;
-    d->redoGrab(qApp->d_func()->shortcutMap);
+   d->sc_context  = context;
+   d->sc_sequence = key;
+   d->redoGrab(qApp->d_func()->shortcutMap);
 
-    if (member) {
-        connect(this, SIGNAL(activated()), parent, member);
-    }
+   if (member) {
+      connect(this, SIGNAL(activated()), parent, member);
+   }
 
-    if (ambiguousMember) {
-        connect(this, SIGNAL(activatedAmbiguously()), parent, ambiguousMember);
-    }
+   if (ambiguousMember) {
+      connect(this, SIGNAL(activatedAmbiguously()), parent, ambiguousMember);
+   }
 }
 
 QShortcut::~QShortcut()
 {
-    Q_D(QShortcut);
-    if (qApp)
-        qApp->d_func()->shortcutMap.removeShortcut(d->sc_id, this);
+   Q_D(QShortcut);
+   if (qApp) {
+      qApp->d_func()->shortcutMap.removeShortcut(d->sc_id, this);
+   }
 }
 
 void QShortcut::setKey(const QKeySequence &key)
 {
-    Q_D(QShortcut);
+   Q_D(QShortcut);
 
-    if (d->sc_sequence == key)
-        return;
+   if (d->sc_sequence == key) {
+      return;
+   }
 
-    QAPP_CHECK("setKey");
-    d->sc_sequence = key;
-    d->redoGrab(qApp->d_func()->shortcutMap);
+   QAPP_CHECK("setKey");
+   d->sc_sequence = key;
+   d->redoGrab(qApp->d_func()->shortcutMap);
 }
 
 QKeySequence QShortcut::key() const
 {
-    Q_D(const QShortcut);
-    return d->sc_sequence;
+   Q_D(const QShortcut);
+   return d->sc_sequence;
 }
 
 /*!
@@ -254,18 +260,19 @@ QKeySequence QShortcut::key() const
 */
 void QShortcut::setEnabled(bool enable)
 {
-    Q_D(QShortcut);
-    if (d->sc_enabled == enable)
-        return;
-    QAPP_CHECK("setEnabled");
-    d->sc_enabled = enable;
-    qApp->d_func()->shortcutMap.setShortcutEnabled(enable, d->sc_id, this);
+   Q_D(QShortcut);
+   if (d->sc_enabled == enable) {
+      return;
+   }
+   QAPP_CHECK("setEnabled");
+   d->sc_enabled = enable;
+   qApp->d_func()->shortcutMap.setShortcutEnabled(enable, d->sc_id, this);
 }
 
 bool QShortcut::isEnabled() const
 {
-    Q_D(const QShortcut);
-    return d->sc_enabled;
+   Q_D(const QShortcut);
+   return d->sc_enabled;
 }
 
 /*!
@@ -282,18 +289,19 @@ bool QShortcut::isEnabled() const
 */
 void QShortcut::setContext(Qt::ShortcutContext context)
 {
-    Q_D(QShortcut);
-    if(d->sc_context == context)
-        return;
-    QAPP_CHECK("setContext");
-    d->sc_context = context;
-    d->redoGrab(qApp->d_func()->shortcutMap);
+   Q_D(QShortcut);
+   if (d->sc_context == context) {
+      return;
+   }
+   QAPP_CHECK("setContext");
+   d->sc_context = context;
+   d->redoGrab(qApp->d_func()->shortcutMap);
 }
 
 Qt::ShortcutContext QShortcut::context() const
 {
-    Q_D(const QShortcut);
-    return d->sc_context;
+   Q_D(const QShortcut);
+   return d->sc_context;
 }
 
 /*!
@@ -312,14 +320,14 @@ Qt::ShortcutContext QShortcut::context() const
 */
 void QShortcut::setWhatsThis(const QString &text)
 {
-    Q_D(QShortcut);
-    d->sc_whatsthis = text;
+   Q_D(QShortcut);
+   d->sc_whatsthis = text;
 }
 
 QString QShortcut::whatsThis() const
 {
-    Q_D(const QShortcut);
-    return d->sc_whatsthis;
+   Q_D(const QShortcut);
+   return d->sc_whatsthis;
 }
 
 /*!
@@ -334,18 +342,19 @@ QString QShortcut::whatsThis() const
 */
 void QShortcut::setAutoRepeat(bool on)
 {
-    Q_D(QShortcut);
-    if (d->sc_autorepeat == on)
-        return;
-    QAPP_CHECK("setAutoRepeat");
-    d->sc_autorepeat = on;
-    qApp->d_func()->shortcutMap.setShortcutAutoRepeat(on, d->sc_id, this);
+   Q_D(QShortcut);
+   if (d->sc_autorepeat == on) {
+      return;
+   }
+   QAPP_CHECK("setAutoRepeat");
+   d->sc_autorepeat = on;
+   qApp->d_func()->shortcutMap.setShortcutAutoRepeat(on, d->sc_id, this);
 }
 
 bool QShortcut::autoRepeat() const
 {
-    Q_D(const QShortcut);
-    return d->sc_autorepeat;
+   Q_D(const QShortcut);
+   return d->sc_autorepeat;
 }
 
 /*!
@@ -355,8 +364,8 @@ bool QShortcut::autoRepeat() const
 */
 int QShortcut::id() const
 {
-    Q_D(const QShortcut);
-    return d->sc_id;
+   Q_D(const QShortcut);
+   return d->sc_id;
 }
 
 /*!
@@ -364,25 +373,26 @@ int QShortcut::id() const
 */
 bool QShortcut::event(QEvent *e)
 {
-    Q_D(QShortcut);
-    bool handled = false;
-    if (d->sc_enabled && e->type() == QEvent::Shortcut) {
-        QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
-        if (se->shortcutId() == d->sc_id && se->key() == d->sc_sequence){
+   Q_D(QShortcut);
+   bool handled = false;
+   if (d->sc_enabled && e->type() == QEvent::Shortcut) {
+      QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
+      if (se->shortcutId() == d->sc_id && se->key() == d->sc_sequence) {
 #ifndef QT_NO_WHATSTHIS
-            if (QWhatsThis::inWhatsThisMode()) {
-                QWhatsThis::showText(QCursor::pos(), d->sc_whatsthis);
-                handled = true;
-            } else
-#endif
-            if (se->isAmbiguous())
-                emit activatedAmbiguously();
-            else
-                emit activated();
+         if (QWhatsThis::inWhatsThisMode()) {
+            QWhatsThis::showText(QCursor::pos(), d->sc_whatsthis);
             handled = true;
-        }
-    }
-    return handled;
+         } else
+#endif
+            if (se->isAmbiguous()) {
+               emit activatedAmbiguously();
+            } else {
+               emit activated();
+            }
+         handled = true;
+      }
+   }
+   return handled;
 }
 #endif // QT_NO_SHORTCUT
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -48,7 +48,7 @@ QT_BEGIN_NAMESPACE
 
 #if ! defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QScreenDriverFactoryInterface_iid, QLatin1String("/gfxdrivers"), Qt::CaseInsensitive))
+                          (QScreenDriverFactoryInterface_iid, QLatin1String("/gfxdrivers"), Qt::CaseInsensitive))
 
 #endif
 
@@ -87,39 +87,46 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
 
     \sa keys()
 */
-QScreen *QScreenDriverFactory::create(const QString& key, int displayId)
+QScreen *QScreenDriverFactory::create(const QString &key, int displayId)
 {
-    QString driver = key.toLower();
+   QString driver = key.toLower();
 
 #ifndef QT_NO_QWS_QVFB
-    if (driver == QLatin1String("qvfb") || driver.isEmpty())
-        return new QVFbScreen(displayId);
+   if (driver == QLatin1String("qvfb") || driver.isEmpty()) {
+      return new QVFbScreen(displayId);
+   }
 #endif
 #ifndef QT_NO_QWS_LINUXFB
-    if (driver == QLatin1String("linuxfb") || driver.isEmpty())
-        return new QLinuxFbScreen(displayId);
+   if (driver == QLatin1String("linuxfb") || driver.isEmpty()) {
+      return new QLinuxFbScreen(displayId);
+   }
 #endif
 #ifndef QT_NO_QWS_DIRECTFB
-    if (driver == QLatin1String("directfb") || driver.isEmpty())
-        return new QDirectFBScreen(displayId);
+   if (driver == QLatin1String("directfb") || driver.isEmpty()) {
+      return new QDirectFBScreen(displayId);
+   }
 #endif
 #ifndef QT_NO_QWS_TRANSFORMED
-    if (driver == QLatin1String("transformed"))
-        return new QTransformedScreen(displayId);
+   if (driver == QLatin1String("transformed")) {
+      return new QTransformedScreen(displayId);
+   }
 #endif
 #ifndef QT_NO_QWS_VNC
-    if (driver == QLatin1String("vnc"))
-        return new QVNCScreen(displayId);
+   if (driver == QLatin1String("vnc")) {
+      return new QVNCScreen(displayId);
+   }
 #endif
 #ifndef QT_NO_QWS_MULTISCREEN
-    if (driver == QLatin1String("multi"))
-        return new QMultiScreen(displayId);
+   if (driver == QLatin1String("multi")) {
+      return new QMultiScreen(displayId);
+   }
 #endif
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
-    if (QScreenDriverFactoryInterface *factory = qobject_cast<QScreenDriverFactoryInterface*>(loader()->instance(key)))
-        return factory->create(driver, displayId);
+   if (QScreenDriverFactoryInterface *factory = qobject_cast<QScreenDriverFactoryInterface *>(loader()->instance(key))) {
+      return factory->create(driver, displayId);
+   }
 #endif
-    return 0;
+   return 0;
 }
 
 /*!
@@ -129,38 +136,39 @@ QScreen *QScreenDriverFactory::create(const QString& key, int displayId)
 */
 QStringList QScreenDriverFactory::keys()
 {
-    QStringList list;
+   QStringList list;
 
 #ifndef QT_NO_QWS_QVFB
-    list << QLatin1String("QVFb");
+   list << QLatin1String("QVFb");
 #endif
 #ifndef QT_NO_QWS_LINUXFB
-    list << QLatin1String("LinuxFb");
+   list << QLatin1String("LinuxFb");
 #endif
 #ifndef QT_NO_QWS_TRANSFORMED
-    list << QLatin1String("Transformed");
+   list << QLatin1String("Transformed");
 #endif
 #ifndef QT_NO_QWS_VNC
-    list << QLatin1String("VNC");
+   list << QLatin1String("VNC");
 #endif
 #ifndef QT_NO_QWS_MULTISCREEN
-    list << QLatin1String("Multi");
+   list << QLatin1String("Multi");
 #endif
 
 #if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
-    QStringList plugins = loader()->keys();
-    for (int i = 0; i < plugins.size(); ++i) {
+   QStringList plugins = loader()->keys();
+   for (int i = 0; i < plugins.size(); ++i) {
 # ifdef QT_NO_QWS_QVFB
-        // give QVFb top priority for autodetection
-        if (plugins.at(i) == QLatin1String("QVFb"))
-            list.prepend(plugins.at(i));
-        else
+      // give QVFb top priority for autodetection
+      if (plugins.at(i) == QLatin1String("QVFb")) {
+         list.prepend(plugins.at(i));
+      } else
 # endif
-        if (!list.contains(plugins.at(i)))
+         if (!list.contains(plugins.at(i))) {
             list += plugins.at(i);
-    }
+         }
+   }
 #endif //QT_MAKEDLL
-    return list;
+   return list;
 }
 
 QT_END_NAMESPACE

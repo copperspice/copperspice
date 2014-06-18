@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,57 +33,58 @@ QRegion::QRegionData QRegion::shared_empty = { Q_BASIC_ATOMIC_INITIALIZER(1), 0 
 
 OSStatus QRegion::shape2QRegionHelper(int inMessage, HIShapeRef, const CGRect *inRect, void *inRefcon)
 {
-    QRegion *region = static_cast<QRegion *>(inRefcon);
-    if (!region)
-        return paramErr;
+   QRegion *region = static_cast<QRegion *>(inRefcon);
+   if (!region) {
+      return paramErr;
+   }
 
-    switch (inMessage) {
-       case kHIShapeEnumerateRect:
-           *region += QRect(inRect->origin.x, inRect->origin.y, inRect->size.width, inRect->size.height);
-           break;
-   
-       case kHIShapeEnumerateInit:
-           // Assume the region is already setup correctly
-   
-       case kHIShapeEnumerateTerminate:
-   
-       default:
-           break;
-    }
+   switch (inMessage) {
+      case kHIShapeEnumerateRect:
+         *region += QRect(inRect->origin.x, inRect->origin.y, inRect->size.width, inRect->size.height);
+         break;
 
-    return noErr;
+      case kHIShapeEnumerateInit:
+      // Assume the region is already setup correctly
+
+      case kHIShapeEnumerateTerminate:
+
+      default:
+         break;
+   }
+
+   return noErr;
 }
 
 HIMutableShapeRef QRegion::toHIMutableShape() const
 {
-    HIMutableShapeRef shape = HIShapeCreateMutable();
+   HIMutableShapeRef shape = HIShapeCreateMutable();
 
-    if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
+   if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
 
-        if (d->qt_rgn && d->qt_rgn->numRects) {
-            int n = d->qt_rgn->numRects;
-            const QRect *qt_r = (n == 1) ? &d->qt_rgn->extents : d->qt_rgn->rects.constData();
+      if (d->qt_rgn && d->qt_rgn->numRects) {
+         int n = d->qt_rgn->numRects;
+         const QRect *qt_r = (n == 1) ? &d->qt_rgn->extents : d->qt_rgn->rects.constData();
 
-            while (n--) {
-                CGRect cgRect = CGRectMake(qt_r->x(), qt_r->y(), qt_r->width(), qt_r->height());
-                HIShapeUnionWithRect(shape, &cgRect);
-                ++qt_r;
-            }
-        }
+         while (n--) {
+            CGRect cgRect = CGRectMake(qt_r->x(), qt_r->y(), qt_r->width(), qt_r->height());
+            HIShapeUnionWithRect(shape, &cgRect);
+            ++qt_r;
+         }
+      }
 
-    } 
+   }
 
-    return shape;
+   return shape;
 }
 
 QRegion QRegion::fromHIShapeRef(HIShapeRef shape)
 {
-    QRegion returnRegion;
-    returnRegion.detach();
-    
-    HIShapeEnumerate(shape, kHIShapeParseFromTopLeft, shape2QRegionHelper, &returnRegion);
+   QRegion returnRegion;
+   returnRegion.detach();
 
-    return returnRegion;
+   HIShapeEnumerate(shape, kHIShapeParseFromTopLeft, shape2QRegionHelper, &returnRegion);
+
+   return returnRegion;
 }
 
 QT_END_NAMESPACE

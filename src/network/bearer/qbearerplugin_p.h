@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,9 +35,8 @@
 
 QT_BEGIN_NAMESPACE
 
-struct Q_NETWORK_EXPORT QBearerEngineFactoryInterface : public QFactoryInterface
-{
-    virtual QBearerEngine *create(const QString &key) const = 0;
+struct Q_NETWORK_EXPORT QBearerEngineFactoryInterface : public QFactoryInterface {
+   virtual QBearerEngine *create(const QString &key) const = 0;
 };
 
 #define QBearerEngineFactoryInterface_iid "com.copperspice.QBearerEngineFactoryInterface"
@@ -45,15 +44,15 @@ CS_DECLARE_INTERFACE(QBearerEngineFactoryInterface, QBearerEngineFactoryInterfac
 
 class Q_NETWORK_EXPORT QBearerEnginePlugin : public QObject, public QBearerEngineFactoryInterface
 {
-    CS_OBJECT_MULTIPLE(QBearerEnginePlugin, QObject)
-    CS_INTERFACES(QBearerEngineFactoryInterface, QFactoryInterface)
+   CS_OBJECT_MULTIPLE(QBearerEnginePlugin, QObject)
+   CS_INTERFACES(QBearerEngineFactoryInterface, QFactoryInterface)
 
-   public:
-       explicit QBearerEnginePlugin(QObject *parent = 0);
-       virtual ~QBearerEnginePlugin();
-   
-       virtual QStringList keys() const = 0;
-       virtual QBearerEngine *create(const QString &key) const = 0;
+ public:
+   explicit QBearerEnginePlugin(QObject *parent = 0);
+   virtual ~QBearerEnginePlugin();
+
+   virtual QStringList keys() const = 0;
+   virtual QBearerEngine *create(const QString &key) const = 0;
 };
 
 QT_END_NAMESPACE

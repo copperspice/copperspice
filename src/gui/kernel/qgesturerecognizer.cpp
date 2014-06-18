@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -53,8 +53,8 @@ QGestureRecognizer::~QGestureRecognizer()
 */
 QGesture *QGestureRecognizer::create(QObject *target)
 {
-    Q_UNUSED(target);
-    return new QGesture;
+   Q_UNUSED(target);
+   return new QGesture;
 }
 
 /*!
@@ -66,13 +66,13 @@ QGesture *QGestureRecognizer::create(QObject *target)
 */
 void QGestureRecognizer::reset(QGesture *gesture)
 {
-    if (gesture) {
-        QGesturePrivate *d = gesture->d_func();
-        d->state = Qt::NoGesture;
-        d->hotSpot = QPointF();
-        d->sceneHotSpot = QPointF();
-        d->isHotSpotSet = false;
-    }
+   if (gesture) {
+      QGesturePrivate *d = gesture->d_func();
+      d->state = Qt::NoGesture;
+      d->hotSpot = QPointF();
+      d->sceneHotSpot = QPointF();
+      d->isHotSpotSet = false;
+   }
 }
 
 /*!
@@ -104,7 +104,7 @@ void QGestureRecognizer::reset(QGesture *gesture)
 */
 Qt::GestureType QGestureRecognizer::registerRecognizer(QGestureRecognizer *recognizer)
 {
-    return QGestureManager::instance()->registerGestureRecognizer(recognizer);
+   return QGestureManager::instance()->registerGestureRecognizer(recognizer);
 }
 
 /*!
@@ -114,7 +114,7 @@ Qt::GestureType QGestureRecognizer::registerRecognizer(QGestureRecognizer *recog
 */
 void QGestureRecognizer::unregisterRecognizer(Qt::GestureType type)
 {
-    QGestureManager::instance()->unregisterGestureRecognizer(type);
+   QGestureManager::instance()->unregisterGestureRecognizer(type);
 }
 
 QT_END_NAMESPACE

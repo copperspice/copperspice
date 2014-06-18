@@ -168,22 +168,26 @@ bool loadUI(Translator &translator, const QString &filename, ConversionData &cd)
 {
     cd.m_sourceFileName = filename;
     QFile file(filename);
+
     if (!file.open(QIODevice::ReadOnly)) {
-        cd.appendError(LU::tr("Cannot open %1: %2").arg(filename, file.errorString()));
+        cd.appendError(LU::tr("Can not open %1: %2").arg(filename, file.errorString()));
         return false;
     }
     QXmlInputSource in(&file);
     QXmlSimpleReader reader;
     reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), false);
     reader.setFeature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"), true);
-    reader.setFeature(QLatin1String(
-            "http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
+    reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
+
     UiReader handler(translator, cd);
     reader.setContentHandler(&handler);
     reader.setErrorHandler(&handler);
+
     bool result = reader.parse(in);
+
     if (!result)
         cd.appendError(LU::tr("Parse error in UI file"));
+
     reader.setContentHandler(0);
     reader.setErrorHandler(0);
     return result;

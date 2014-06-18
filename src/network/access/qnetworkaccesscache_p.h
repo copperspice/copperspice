@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,64 +41,66 @@ class QUrl;
 // QNetworkAccessManager, e.g. existing TCP connections or credentials.
 class QNetworkAccessCache: public QObject
 {
-    CS_OBJECT(QNetworkAccessCache)
+   CS_OBJECT(QNetworkAccessCache)
 
-public:
-    struct Node;
-    typedef QHash<QByteArray, Node> NodeHash;
+ public:
+   struct Node;
+   typedef QHash<QByteArray, Node> NodeHash;
 
-    class CacheableObject
-    {
-        friend class QNetworkAccessCache;
-        QByteArray key;
-        bool expires;
-        bool shareable;
+   class CacheableObject
+   {
+      friend class QNetworkAccessCache;
+      QByteArray key;
+      bool expires;
+      bool shareable;
     public:
-        CacheableObject();
-        virtual ~CacheableObject();
-        virtual void dispose() = 0;
-        inline QByteArray cacheKey() const { return key; }
+      CacheableObject();
+      virtual ~CacheableObject();
+      virtual void dispose() = 0;
+      inline QByteArray cacheKey() const {
+         return key;
+      }
 
     protected:
-        void setExpires(bool enable);
-        void setShareable(bool enable);
-    };
+      void setExpires(bool enable);
+      void setShareable(bool enable);
+   };
 
-    QNetworkAccessCache();
-    ~QNetworkAccessCache();
+   QNetworkAccessCache();
+   ~QNetworkAccessCache();
 
-    void clear();
+   void clear();
 
-    void addEntry(const QByteArray &key, CacheableObject *entry);
-    bool hasEntry(const QByteArray &key) const;
-    bool requestEntry(const QByteArray &key, QObject *target, const char *member);
-    CacheableObject *requestEntryNow(const QByteArray &key);
-    void releaseEntry(const QByteArray &key);
-    void removeEntry(const QByteArray &key);
+   void addEntry(const QByteArray &key, CacheableObject *entry);
+   bool hasEntry(const QByteArray &key) const;
+   bool requestEntry(const QByteArray &key, QObject *target, const char *member);
+   CacheableObject *requestEntryNow(const QByteArray &key);
+   void releaseEntry(const QByteArray &key);
+   void removeEntry(const QByteArray &key);
 
-public:
-    NET_CS_SIGNAL_1(Public, void entryReady(QNetworkAccessCache::CacheableObject * un_named_arg1))
-    NET_CS_SIGNAL_2(entryReady,un_named_arg1) 
+ public:
+   NET_CS_SIGNAL_1(Public, void entryReady(QNetworkAccessCache::CacheableObject *un_named_arg1))
+   NET_CS_SIGNAL_2(entryReady, un_named_arg1)
 
-protected:
-    void timerEvent(QTimerEvent *);
+ protected:
+   void timerEvent(QTimerEvent *);
 
-private:
-    // idea copied from qcache.h
-    NodeHash hash;
-    Node *oldest;
-    Node *newest;
+ private:
+   // idea copied from qcache.h
+   NodeHash hash;
+   Node *oldest;
+   Node *newest;
 
-    QBasicTimer timer;
+   QBasicTimer timer;
 
-    void linkEntry(const QByteArray &key);
-    bool unlinkEntry(const QByteArray &key);
-    void updateTimer();
-    bool emitEntryReady(Node *node, QObject *target, const char *member);
+   void linkEntry(const QByteArray &key);
+   bool unlinkEntry(const QByteArray &key);
+   void updateTimer();
+   bool emitEntryReady(Node *node, QObject *target, const char *member);
 };
 
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(QNetworkAccessCache::CacheableObject*)
+Q_DECLARE_METATYPE(QNetworkAccessCache::CacheableObject *)
 
 #endif

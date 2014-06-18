@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,62 +32,63 @@
 
 QT_BEGIN_NAMESPACE
 
-static QList<QAuServer*> *servers=0;
+static QList<QAuServer *> *servers = 0;
 
-QAuServer::QAuServer(QObject* parent)
-    : QObject(parent)
+QAuServer::QAuServer(QObject *parent)
+   : QObject(parent)
 {
-    if (!servers)
-        servers = new QList<QAuServer*>;
-    servers->prepend(this);
+   if (!servers) {
+      servers = new QList<QAuServer *>;
+   }
+   servers->prepend(this);
 }
 
 QAuServer::~QAuServer()
 {
-    servers->removeAll(this);
-    if (servers->count() == 0) {
-        delete servers;
-        servers = 0;
-    }
+   servers->removeAll(this);
+   if (servers->count() == 0) {
+      delete servers;
+      servers = 0;
+   }
 }
 
-void QAuServer::play(const QString& filename)
+void QAuServer::play(const QString &filename)
 {
-    QSound s(filename);
-    play(&s);
+   QSound s(filename);
+   play(&s);
 }
 
-extern QAuServer* qt_new_audio_server();
+extern QAuServer *qt_new_audio_server();
 
-static QAuServer& server()
+static QAuServer &server()
 {
-    if (!servers) qt_new_audio_server();
-    return *servers->first();
+   if (!servers) {
+      qt_new_audio_server();
+   }
+   return *servers->first();
 }
 
 class QSoundPrivate
 {
-public:
-    QSoundPrivate(const QString & fname)
-        : filename(fname), bucket(0), looprem(0), looptotal(1)
-    {
-    }
+ public:
+   QSoundPrivate(const QString &fname)
+      : filename(fname), bucket(0), looprem(0), looptotal(1) {
+   }
 
-    virtual ~QSoundPrivate()
-    {
-        delete bucket;
-    }
+   virtual ~QSoundPrivate() {
+      delete bucket;
+   }
 
-    QString filename;
-    QAuBucket* bucket;
-    int looprem;
-    int looptotal;
+   QString filename;
+   QAuBucket *bucket;
+   int looprem;
+   int looptotal;
 };
 
 
-void QSound::play(const QString& filename)
+void QSound::play(const QString &filename)
 {
-    server().play(filename);
+   server().play(filename);
 }
 
 /*!
@@ -100,10 +101,10 @@ void QSound::play(const QString& filename)
 
     \sa play()
 */
-QSound::QSound(const QString& filename, QObject* parent)
-   : QObject(parent), d_ptr(new QSoundPrivate(filename))   
+QSound::QSound(const QString &filename, QObject *parent)
+   : QObject(parent), d_ptr(new QSoundPrivate(filename))
 {
-    server().init(this);
+   server().init(this);
 }
 
 /*!
@@ -115,8 +116,9 @@ QSound::QSound(const QString& filename, QObject* parent)
 */
 QSound::~QSound()
 {
-    if (!isFinished())
-        stop();
+   if (!isFinished()) {
+      stop();
+   }
 }
 
 /*!
@@ -126,8 +128,8 @@ QSound::~QSound()
 */
 bool QSound::isFinished() const
 {
-    Q_D(const QSound);
-    return d->looprem == 0;
+   Q_D(const QSound);
+   return d->looprem == 0;
 }
 
 /*!
@@ -144,9 +146,9 @@ bool QSound::isFinished() const
 */
 void QSound::play()
 {
-    Q_D(QSound);
-    d->looprem = d->looptotal;
-    server().play(this);
+   Q_D(QSound);
+   d->looprem = d->looptotal;
+   server().play(this);
 }
 
 /*!
@@ -156,8 +158,8 @@ void QSound::play()
 */
 int QSound::loops() const
 {
-    Q_D(const QSound);
-    return d->looptotal;
+   Q_D(const QSound);
+   return d->looptotal;
 }
 
 /*!
@@ -168,8 +170,8 @@ int QSound::loops() const
 */
 int QSound::loopsRemaining() const
 {
-    Q_D(const QSound);
-    return d->looprem;
+   Q_D(const QSound);
+   return d->looprem;
 }
 
 /*!
@@ -185,8 +187,8 @@ int QSound::loopsRemaining() const
 */
 void QSound::setLoops(int n)
 {
-    Q_D(QSound);
-    d->looptotal = n;
+   Q_D(QSound);
+   d->looptotal = n;
 }
 
 /*!
@@ -196,8 +198,8 @@ void QSound::setLoops(int n)
 */
 QString QSound::fileName() const
 {
-    Q_D(const QSound);
-    return d->filename;
+   Q_D(const QSound);
+   return d->filename;
 }
 
 /*!
@@ -210,9 +212,9 @@ QString QSound::fileName() const
 */
 void QSound::stop()
 {
-    Q_D(QSound);
-    server().stop(this);
-    d->looprem = 0;
+   Q_D(QSound);
+   server().stop(this);
+   d->looprem = 0;
 }
 
 
@@ -231,42 +233,43 @@ void QSound::stop()
 */
 bool QSound::isAvailable()
 {
-    return server().okay();
+   return server().okay();
 }
 
 /*!
     Sets the internal bucket record of sound \a s to \a b, deleting
     any previous setting.
 */
-void QAuServer::setBucket(QSound* s, QAuBucket* b)
+void QAuServer::setBucket(QSound *s, QAuBucket *b)
 {
-    delete s->d_func()->bucket;
-    s->d_func()->bucket = b;
+   delete s->d_func()->bucket;
+   s->d_func()->bucket = b;
 }
 
 /*!
     Returns the internal bucket record of sound \a s.
 */
-QAuBucket* QAuServer::bucket(QSound* s)
+QAuBucket *QAuServer::bucket(QSound *s)
 {
-    return s->d_func()->bucket;
+   return s->d_func()->bucket;
 }
 
 /*!
     Decrements the QSound::loopRemaining() value for sound \a s,
     returning the result.
 */
-int QAuServer::decLoop(QSound* s)
+int QAuServer::decLoop(QSound *s)
 {
-    if (s->d_func()->looprem > 0)
-        --s->d_func()->looprem;
-    return s->d_func()->looprem;
+   if (s->d_func()->looprem > 0) {
+      --s->d_func()->looprem;
+   }
+   return s->d_func()->looprem;
 }
 
 /*!
     Initializes the sound. The default implementation does nothing.
 */
-void QAuServer::init(QSound*)
+void QAuServer::init(QSound *)
 {
 }
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -29,9 +29,8 @@
 
 QT_BEGIN_NAMESPACE
 
-struct QTextOptionPrivate
-{
-    QList<QTextOption::Tab> tabStops;
+struct QTextOptionPrivate {
+   QList<QTextOption::Tab> tabStops;
 };
 
 /*!
@@ -41,15 +40,15 @@ struct QTextOptionPrivate
     using of design metrics flag is set to false.
 */
 QTextOption::QTextOption()
-    : align(Qt::AlignLeft),
-      wordWrap(QTextOption::WordWrap),
-      design(false),
-      unused(0),
-      f(0),
-      tab(-1),
-      d(0)
+   : align(Qt::AlignLeft),
+     wordWrap(QTextOption::WordWrap),
+     design(false),
+     unused(0),
+     f(0),
+     tab(-1),
+     d(0)
 {
-    direction = Qt::LayoutDirectionAuto;
+   direction = Qt::LayoutDirectionAuto;
 }
 
 /*!
@@ -58,15 +57,15 @@ QTextOption::QTextOption()
     of design metrics flag is set to false.
 */
 QTextOption::QTextOption(Qt::Alignment alignment)
-    : align(alignment),
-      wordWrap(QTextOption::WordWrap),
-      design(false),
-      unused(0),
-      f(0),
-      tab(-1),
-      d(0)
+   : align(alignment),
+     wordWrap(QTextOption::WordWrap),
+     design(false),
+     unused(0),
+     f(0),
+     tab(-1),
+     d(0)
 {
-    direction = QApplication::layoutDirection();
+   direction = QApplication::layoutDirection();
 }
 
 /*!
@@ -74,7 +73,7 @@ QTextOption::QTextOption(Qt::Alignment alignment)
 */
 QTextOption::~QTextOption()
 {
-    delete d;
+   delete d;
 }
 
 /*!
@@ -83,17 +82,18 @@ QTextOption::~QTextOption()
     Construct a copy of the \a other text option.
 */
 QTextOption::QTextOption(const QTextOption &o)
-    : align(o.align),
-      wordWrap(o.wordWrap),
-      design(o.design),
-      direction(o.direction),
-      unused(o.unused),
-      f(o.f),
-      tab(o.tab),
-      d(0)
+   : align(o.align),
+     wordWrap(o.wordWrap),
+     design(o.design),
+     direction(o.direction),
+     unused(o.unused),
+     f(o.f),
+     tab(o.tab),
+     d(0)
 {
-    if (o.d)
-        d = new QTextOptionPrivate(*o.d);
+   if (o.d) {
+      d = new QTextOptionPrivate(*o.d);
+   }
 }
 
 /*!
@@ -104,23 +104,25 @@ QTextOption::QTextOption(const QTextOption &o)
 */
 QTextOption &QTextOption::operator=(const QTextOption &o)
 {
-    if (this == &o)
-        return *this;
+   if (this == &o) {
+      return *this;
+   }
 
-    QTextOptionPrivate* dNew = 0;
-    if (o.d)
-        dNew = new QTextOptionPrivate(*o.d);
-    delete d;
-    d = dNew;
+   QTextOptionPrivate *dNew = 0;
+   if (o.d) {
+      dNew = new QTextOptionPrivate(*o.d);
+   }
+   delete d;
+   d = dNew;
 
-    align = o.align;
-    wordWrap = o.wordWrap;
-    design = o.design;
-    direction = o.direction;
-    unused = o.unused;
-    f = o.f;
-    tab = o.tab;
-    return *this;
+   align = o.align;
+   wordWrap = o.wordWrap;
+   design = o.design;
+   direction = o.direction;
+   unused = o.unused;
+   f = o.f;
+   tab = o.tab;
+   return *this;
 }
 
 /*!
@@ -131,15 +133,16 @@ QTextOption &QTextOption::operator=(const QTextOption &o)
 */
 void QTextOption::setTabArray(QList<qreal> tabStops) // Qt5/const ref
 {
-    if (!d)
-        d = new QTextOptionPrivate;
-    QList<QTextOption::Tab> tabs;
-    QTextOption::Tab tab;
-    foreach (qreal pos, tabStops) {
-        tab.position = pos;
-        tabs.append(tab);
-    }
-    d->tabStops = tabs;
+   if (!d) {
+      d = new QTextOptionPrivate;
+   }
+   QList<QTextOption::Tab> tabs;
+   QTextOption::Tab tab;
+   foreach (qreal pos, tabStops) {
+      tab.position = pos;
+      tabs.append(tab);
+   }
+   d->tabStops = tabs;
 }
 
 /*!
@@ -151,9 +154,10 @@ void QTextOption::setTabArray(QList<qreal> tabStops) // Qt5/const ref
 */
 void QTextOption::setTabs(QList<QTextOption::Tab> tabStops) // Qt5/const ref
 {
-    if (!d)
-        d = new QTextOptionPrivate;
-    d->tabStops = tabStops;
+   if (!d) {
+      d = new QTextOptionPrivate;
+   }
+   d->tabStops = tabStops;
 }
 
 /*!
@@ -163,24 +167,26 @@ void QTextOption::setTabs(QList<QTextOption::Tab> tabStops) // Qt5/const ref
 */
 QList<qreal> QTextOption::tabArray() const
 {
-    if (!d)
-        return QList<qreal>();
+   if (!d) {
+      return QList<qreal>();
+   }
 
-    QList<qreal> answer;
-    QList<QTextOption::Tab>::ConstIterator iter = d->tabStops.constBegin();
-    while(iter != d->tabStops.constEnd()) {
-        answer.append( (*iter).position);
-        ++iter;
-    }
-    return answer;
+   QList<qreal> answer;
+   QList<QTextOption::Tab>::ConstIterator iter = d->tabStops.constBegin();
+   while (iter != d->tabStops.constEnd()) {
+      answer.append( (*iter).position);
+      ++iter;
+   }
+   return answer;
 }
 
 
 QList<QTextOption::Tab> QTextOption::tabs() const
 {
-    if (!d)
-        return QList<QTextOption::Tab>();
-    return d->tabStops;
+   if (!d) {
+      return QList<QTextOption::Tab>();
+   }
+   return d->tabStops;
 }
 
 /*!
@@ -376,7 +382,7 @@ QList<QTextOption::Tab> QTextOption::tabs() const
 
 /*!
     \fn Tab::Tab(qreal pos, TabType tabType, QChar delim = QChar())
-    
+
     Creates a tab with the given position, tab type, and delimiter
     (\a pos, \a tabType, \a delim).
 

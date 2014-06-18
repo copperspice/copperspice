@@ -26,22 +26,12 @@
 #ifndef QMETAOBJECTBUILDER_H
 #define QMETAOBJECTBUILDER_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API. This header file may change from version 
-// to version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtCore/qobject.h>
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qdatastream.h>
 #include <QtCore/qmap.h>
 
-#include <private/qdeclarativeglobal_p.h>
+#include <qdeclarativeglobal_p.h>
 
 QT_BEGIN_NAMESPACE
 

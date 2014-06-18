@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,39 +35,39 @@ QT_BEGIN_NAMESPACE
 class QGIFFormat;
 class QGifHandler : public QImageIOHandler
 {
-public:
-    QGifHandler();
-    ~QGifHandler();
+ public:
+   QGifHandler();
+   ~QGifHandler();
 
-    bool canRead() const;
-    bool read(QImage *image);
-    bool write(const QImage &image);
+   bool canRead() const;
+   bool read(QImage *image);
+   bool write(const QImage &image);
 
-    QByteArray name() const;
+   QByteArray name() const;
 
-    static bool canRead(QIODevice *device);
+   static bool canRead(QIODevice *device);
 
-    QVariant option(ImageOption option) const;
-    void setOption(ImageOption option, const QVariant &value);
-    bool supportsOption(ImageOption option) const;
+   QVariant option(ImageOption option) const;
+   void setOption(ImageOption option, const QVariant &value);
+   bool supportsOption(ImageOption option) const;
 
-    int imageCount() const;
-    int loopCount() const;
-    int nextImageDelay() const;
-    int currentImageNumber() const;
+   int imageCount() const;
+   int loopCount() const;
+   int nextImageDelay() const;
+   int currentImageNumber() const;
 
-private:
-    bool imageIsComing() const;
-    QGIFFormat *gifFormat;
-    QString fileName;
-    mutable QByteArray buffer;
-    mutable QImage lastImage;
+ private:
+   bool imageIsComing() const;
+   QGIFFormat *gifFormat;
+   QString fileName;
+   mutable QByteArray buffer;
+   mutable QImage lastImage;
 
-    mutable int nextDelay;
-    mutable int loopCnt;
-    int frameNumber;
-    mutable QVector<QSize> imageSizes;
-    mutable bool scanIsCached;
+   mutable int nextDelay;
+   mutable int loopCnt;
+   int frameNumber;
+   mutable QVector<QSize> imageSizes;
+   mutable bool scanIsCached;
 };
 
 QT_END_NAMESPACE

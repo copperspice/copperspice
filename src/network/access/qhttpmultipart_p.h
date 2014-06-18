@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,54 +35,50 @@ QT_BEGIN_NAMESPACE
 class QHttpPartPrivate: public QSharedData, public QNetworkHeadersPrivate
 {
 
-public:
-    inline QHttpPartPrivate() : bodyDevice(0), headerCreated(false), readPointer(0)
-    {
-    }
+ public:
+   inline QHttpPartPrivate() : bodyDevice(0), headerCreated(false), readPointer(0) {
+   }
 
-    ~QHttpPartPrivate()
-    {
-    }
+   ~QHttpPartPrivate() {
+   }
 
 
-    QHttpPartPrivate(const QHttpPartPrivate &other)
-        : QSharedData(other), QNetworkHeadersPrivate(other), body(other.body),
-        header(other.header), headerCreated(other.headerCreated), readPointer(other.readPointer)
-    {
-        bodyDevice = other.bodyDevice;
-    }
+   QHttpPartPrivate(const QHttpPartPrivate &other)
+      : QSharedData(other), QNetworkHeadersPrivate(other), body(other.body),
+        header(other.header), headerCreated(other.headerCreated), readPointer(other.readPointer) {
+      bodyDevice = other.bodyDevice;
+   }
 
-    inline bool operator==(const QHttpPartPrivate &other) const
-    {
-        return rawHeaders == other.rawHeaders && body == other.body &&
-                bodyDevice == other.bodyDevice && readPointer == other.readPointer;
-    }
+   inline bool operator==(const QHttpPartPrivate &other) const {
+      return rawHeaders == other.rawHeaders && body == other.body &&
+             bodyDevice == other.bodyDevice && readPointer == other.readPointer;
+   }
 
-    void setBodyDevice(QIODevice *device) {
-        bodyDevice = device;
-        readPointer = 0;
-    }
-    void setBody(const QByteArray &newBody) {
-        body = newBody;
-        readPointer = 0;
-    }
+   void setBodyDevice(QIODevice *device) {
+      bodyDevice = device;
+      readPointer = 0;
+   }
+   void setBody(const QByteArray &newBody) {
+      body = newBody;
+      readPointer = 0;
+   }
 
-    // QIODevice-style methods called by QHttpMultiPartIODevice (but this class is
-    // not a QIODevice):
-    qint64 bytesAvailable() const;
-    qint64 readData(char *data, qint64 maxSize);
-    qint64 size() const;
-    bool reset();
+   // QIODevice-style methods called by QHttpMultiPartIODevice (but this class is
+   // not a QIODevice):
+   qint64 bytesAvailable() const;
+   qint64 readData(char *data, qint64 maxSize);
+   qint64 size() const;
+   bool reset();
 
-    QByteArray body;
-    QIODevice *bodyDevice;
+   QByteArray body;
+   QIODevice *bodyDevice;
 
-private:
-    void checkHeaderCreated() const;
+ private:
+   void checkHeaderCreated() const;
 
-    mutable QByteArray header;
-    mutable bool headerCreated;
-    qint64 readPointer;
+   mutable QByteArray header;
+   mutable bool headerCreated;
+   qint64 readPointer;
 };
 
 
@@ -91,62 +87,61 @@ class QHttpMultiPartPrivate;
 
 class QHttpMultiPartIODevice : public QIODevice
 {
-public:
-    QHttpMultiPartIODevice(QHttpMultiPartPrivate *parentMultiPart) :
-            QIODevice(), multiPart(parentMultiPart), readPointer(0), deviceSize(-1) {
-    }
+ public:
+   QHttpMultiPartIODevice(QHttpMultiPartPrivate *parentMultiPart) :
+      QIODevice(), multiPart(parentMultiPart), readPointer(0), deviceSize(-1) {
+   }
 
-    ~QHttpMultiPartIODevice() {
-    }
+   ~QHttpMultiPartIODevice() {
+   }
 
-    virtual bool atEnd() const {
-        return readPointer == size();
-    }
+   virtual bool atEnd() const {
+      return readPointer == size();
+   }
 
-    virtual qint64 bytesAvailable() const {
-        return size() - readPointer;
-    }
+   virtual qint64 bytesAvailable() const {
+      return size() - readPointer;
+   }
 
-    virtual void close() {
-        readPointer = 0;
-        partOffsets.clear();
-        deviceSize = -1;
-        QIODevice::close();
-    }
+   virtual void close() {
+      readPointer = 0;
+      partOffsets.clear();
+      deviceSize = -1;
+      QIODevice::close();
+   }
 
-    virtual qint64 bytesToWrite() const {
-        return 0;
-    }
+   virtual qint64 bytesToWrite() const {
+      return 0;
+   }
 
-    virtual qint64 size() const;
-    virtual bool isSequential() const;
-    virtual bool reset();
-    virtual qint64 readData(char *data, qint64 maxSize);
-    virtual qint64 writeData(const char *data, qint64 maxSize);
+   virtual qint64 size() const;
+   virtual bool isSequential() const;
+   virtual bool reset();
+   virtual qint64 readData(char *data, qint64 maxSize);
+   virtual qint64 writeData(const char *data, qint64 maxSize);
 
-    QHttpMultiPartPrivate *multiPart;
-    qint64 readPointer;
-    mutable QList<qint64> partOffsets;
-    mutable qint64 deviceSize;
+   QHttpMultiPartPrivate *multiPart;
+   qint64 readPointer;
+   mutable QList<qint64> partOffsets;
+   mutable qint64 deviceSize;
 };
 
 
 
 class QHttpMultiPartPrivate
 {
-public:
+ public:
 
-    QHttpMultiPartPrivate();
+   QHttpMultiPartPrivate();
 
-    virtual ~QHttpMultiPartPrivate()
-    {
-        delete device;
-    }
+   virtual ~QHttpMultiPartPrivate() {
+      delete device;
+   }
 
-    QList<QHttpPart> parts;
-    QByteArray boundary;
-    QHttpMultiPart::ContentType contentType;
-    QHttpMultiPartIODevice *device;
+   QList<QHttpPart> parts;
+   QByteArray boundary;
+   QHttpMultiPart::ContentType contentType;
+   QHttpMultiPartIODevice *device;
 
 };
 

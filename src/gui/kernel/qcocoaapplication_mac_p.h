@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,16 +38,17 @@ QT_FORWARD_DECLARE_CLASS(QApplicationPrivate)
 @class QT_MANGLE_NAMESPACE(QCocoaMenuLoader);
 
 @interface NSApplication (QT_MANGLE_NAMESPACE(QApplicationIntegration))
-- (void)QT_MANGLE_NAMESPACE(qt_setDockMenu):(NSMenu *)newMenu;
+- (void)QT_MANGLE_NAMESPACE(qt_setDockMenu): (NSMenu *)newMenu;
 - (QApplicationPrivate *)QT_MANGLE_NAMESPACE(qt_qappPrivate);
 - (QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *)QT_MANGLE_NAMESPACE(qt_qcocoamenuLoader);
-- (int)QT_MANGLE_NAMESPACE(qt_validModesForFontPanel):(NSFontPanel *)fontPanel;
+- (int)QT_MANGLE_NAMESPACE(qt_validModesForFontPanel): (NSFontPanel *)fontPanel;
 
-- (void)QT_MANGLE_NAMESPACE(qt_sendPostedMessage):(NSEvent *)event;
-- (BOOL)QT_MANGLE_NAMESPACE(qt_filterEvent):(NSEvent *)event;
+- (void)QT_MANGLE_NAMESPACE(qt_sendPostedMessage): (NSEvent *)event;
+- (BOOL)QT_MANGLE_NAMESPACE(qt_filterEvent): (NSEvent *)event;
 @end
 
-@interface QT_MANGLE_NAMESPACE(QNSApplication) : NSApplication {
+@interface QT_MANGLE_NAMESPACE(QNSApplication) : NSApplication
+{
 }
 @end
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,82 +38,84 @@ class QGraphicsGridLayoutPrivate;
 class Q_GUI_EXPORT QGraphicsGridLayout : public QGraphicsLayout
 {
 
-public:
-    QGraphicsGridLayout(QGraphicsLayoutItem *parent = 0);
-    virtual ~QGraphicsGridLayout();
+ public:
+   QGraphicsGridLayout(QGraphicsLayoutItem *parent = 0);
+   virtual ~QGraphicsGridLayout();
 
-    void addItem(QGraphicsLayoutItem *item, int row, int column, int rowSpan, int columnSpan,
-                   Qt::Alignment alignment = 0);
-    inline void addItem(QGraphicsLayoutItem *item, int row, int column, Qt::Alignment alignment = 0);
+   void addItem(QGraphicsLayoutItem *item, int row, int column, int rowSpan, int columnSpan,
+                Qt::Alignment alignment = 0);
+   inline void addItem(QGraphicsLayoutItem *item, int row, int column, Qt::Alignment alignment = 0);
 
-    void setHorizontalSpacing(qreal spacing);
-    qreal horizontalSpacing() const;
-    void setVerticalSpacing(qreal spacing);
-    qreal verticalSpacing() const;
-    void setSpacing(qreal spacing);
+   void setHorizontalSpacing(qreal spacing);
+   qreal horizontalSpacing() const;
+   void setVerticalSpacing(qreal spacing);
+   qreal verticalSpacing() const;
+   void setSpacing(qreal spacing);
 
-    void setRowSpacing(int row, qreal spacing);
-    qreal rowSpacing(int row) const;
-    void setColumnSpacing(int column, qreal spacing);
-    qreal columnSpacing(int column) const;
+   void setRowSpacing(int row, qreal spacing);
+   qreal rowSpacing(int row) const;
+   void setColumnSpacing(int column, qreal spacing);
+   qreal columnSpacing(int column) const;
 
-    void setRowStretchFactor(int row, int stretch);
-    int rowStretchFactor(int row) const;
-    void setColumnStretchFactor(int column, int stretch);
-    int columnStretchFactor(int column) const;
+   void setRowStretchFactor(int row, int stretch);
+   int rowStretchFactor(int row) const;
+   void setColumnStretchFactor(int column, int stretch);
+   int columnStretchFactor(int column) const;
 
-    void setRowMinimumHeight(int row, qreal height);
-    qreal rowMinimumHeight(int row) const;
-    void setRowPreferredHeight(int row, qreal height);
-    qreal rowPreferredHeight(int row) const;
-    void setRowMaximumHeight(int row, qreal height);
-    qreal rowMaximumHeight(int row) const;
-    void setRowFixedHeight(int row, qreal height);
+   void setRowMinimumHeight(int row, qreal height);
+   qreal rowMinimumHeight(int row) const;
+   void setRowPreferredHeight(int row, qreal height);
+   qreal rowPreferredHeight(int row) const;
+   void setRowMaximumHeight(int row, qreal height);
+   qreal rowMaximumHeight(int row) const;
+   void setRowFixedHeight(int row, qreal height);
 
-    void setColumnMinimumWidth(int column, qreal width);
-    qreal columnMinimumWidth(int column) const;
-    void setColumnPreferredWidth(int column, qreal width);
-    qreal columnPreferredWidth(int column) const;
-    void setColumnMaximumWidth(int column, qreal width);
-    qreal columnMaximumWidth(int column) const;
-    void setColumnFixedWidth(int column, qreal width);
+   void setColumnMinimumWidth(int column, qreal width);
+   qreal columnMinimumWidth(int column) const;
+   void setColumnPreferredWidth(int column, qreal width);
+   qreal columnPreferredWidth(int column) const;
+   void setColumnMaximumWidth(int column, qreal width);
+   qreal columnMaximumWidth(int column) const;
+   void setColumnFixedWidth(int column, qreal width);
 
-    void setRowAlignment(int row, Qt::Alignment alignment);
-    Qt::Alignment rowAlignment(int row) const;
-    void setColumnAlignment(int column, Qt::Alignment alignment);
-    Qt::Alignment columnAlignment(int column) const;
+   void setRowAlignment(int row, Qt::Alignment alignment);
+   Qt::Alignment rowAlignment(int row) const;
+   void setColumnAlignment(int column, Qt::Alignment alignment);
+   Qt::Alignment columnAlignment(int column) const;
 
-    void setAlignment(QGraphicsLayoutItem *item, Qt::Alignment alignment);
-    Qt::Alignment alignment(QGraphicsLayoutItem *item) const;
+   void setAlignment(QGraphicsLayoutItem *item, Qt::Alignment alignment);
+   Qt::Alignment alignment(QGraphicsLayoutItem *item) const;
 
-    int rowCount() const;
-    int columnCount() const;
+   int rowCount() const;
+   int columnCount() const;
 
-    QGraphicsLayoutItem *itemAt(int row, int column) const;
+   QGraphicsLayoutItem *itemAt(int row, int column) const;
 
-    // inherited from QGraphicsLayout
-    int count() const;
-    QGraphicsLayoutItem *itemAt(int index) const;
-    void removeAt(int index);
-    void removeItem(QGraphicsLayoutItem *item);
+   // inherited from QGraphicsLayout
+   int count() const;
+   QGraphicsLayoutItem *itemAt(int index) const;
+   void removeAt(int index);
+   void removeItem(QGraphicsLayoutItem *item);
 
-    void invalidate();
+   void invalidate();
 
-    // inherited from QGraphicsLayoutItem
-    void setGeometry(const QRectF &rect);
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+   // inherited from QGraphicsLayoutItem
+   void setGeometry(const QRectF &rect);
+   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
-    // ####
-    //QRect cellRect(int row, int column, int rowSpan = 1, int columnSpan = 1) const;
-    //QSizePolicy::ControlTypes controlTypes(LayoutSide side) const;
+   // ####
+   //QRect cellRect(int row, int column, int rowSpan = 1, int columnSpan = 1) const;
+   //QSizePolicy::ControlTypes controlTypes(LayoutSide side) const;
 
-private:
-    Q_DISABLE_COPY(QGraphicsGridLayout)
-    Q_DECLARE_PRIVATE(QGraphicsGridLayout)
+ private:
+   Q_DISABLE_COPY(QGraphicsGridLayout)
+   Q_DECLARE_PRIVATE(QGraphicsGridLayout)
 };
 
 inline void QGraphicsGridLayout::addItem(QGraphicsLayoutItem *aitem, int arow, int acolumn, Qt::Alignment aalignment)
-{ addItem(aitem, arow, acolumn, 1, 1, aalignment); }
+{
+   addItem(aitem, arow, acolumn, 1, 1, aalignment);
+}
 
 #endif
 

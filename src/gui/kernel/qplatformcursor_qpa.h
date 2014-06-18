@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,47 +42,56 @@ class QPlatformCursor;
 class Q_GUI_EXPORT QPlatformCursorImage
 {
 
-public:
-    QPlatformCursorImage(const uchar *data, const uchar *mask, int width, int height, int hotX, int hotY)
-    { set(data, mask, width, height, hotX, hotY); }
-    QImage * image() { return &cursorImage; }
-    QPoint hotspot() { return hot; }
-    void set(const uchar *data, const uchar *mask, int width, int height, int hotX, int hotY);
-    void set(const QImage &image, int hx, int hy);
-    void set(Qt::CursorShape);
-private:
-    static void createSystemCursor(int id);
-    QImage cursorImage;
-    QPoint hot;
+ public:
+   QPlatformCursorImage(const uchar *data, const uchar *mask, int width, int height, int hotX, int hotY) {
+      set(data, mask, width, height, hotX, hotY);
+   }
+   QImage *image() {
+      return &cursorImage;
+   }
+   QPoint hotspot() {
+      return hot;
+   }
+   void set(const uchar *data, const uchar *mask, int width, int height, int hotX, int hotY);
+   void set(const QImage &image, int hx, int hy);
+   void set(Qt::CursorShape);
+ private:
+   static void createSystemCursor(int id);
+   QImage cursorImage;
+   QPoint hot;
 };
 
 class QPlatformCursorPrivate
 {
 
-public:
-    static QList<QWeakPointer<QPlatformCursor> > getInstances() { return instances; }
-    static QList<QWeakPointer<QPlatformCursor> > instances;
+ public:
+   static QList<QWeakPointer<QPlatformCursor> > getInstances() {
+      return instances;
+   }
+   static QList<QWeakPointer<QPlatformCursor> > instances;
 };
 
 class Q_GUI_EXPORT QPlatformCursor : public QObject
 {
 
-public:
-    QPlatformCursor(QPlatformScreen *);
+ public:
+   QPlatformCursor(QPlatformScreen *);
 
-    // input methods
-    virtual void pointerEvent(const QMouseEvent & event) { Q_UNUSED(event); }
-    virtual void changeCursor(QCursor * widgetCursor, QWidget * widget) = 0;
-    virtual QPoint pos() const;
-    virtual void setPos(const QPoint &pos);
+   // input methods
+   virtual void pointerEvent(const QMouseEvent &event) {
+      Q_UNUSED(event);
+   }
+   virtual void changeCursor(QCursor *widgetCursor, QWidget *widget) = 0;
+   virtual QPoint pos() const;
+   virtual void setPos(const QPoint &pos);
 
-protected:
-    QPlatformScreen* screen;  // Where to request an update
+ protected:
+   QPlatformScreen *screen;  // Where to request an update
 
-private:
-    Q_DECLARE_PRIVATE(QPlatformCursor);
-    friend void qt_qpa_set_cursor(QWidget * w, bool force);
-    friend class QApplicationPrivate;
+ private:
+   Q_DECLARE_PRIVATE(QPlatformCursor);
+   friend void qt_qpa_set_cursor(QWidget *w, bool force);
+   friend class QApplicationPrivate;
 };
 
 QT_END_NAMESPACE

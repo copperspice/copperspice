@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,171 +43,173 @@ class QInputContext;
 
 class QTextControlPrivate
 {
-    Q_DECLARE_PUBLIC(QTextControl)
+   Q_DECLARE_PUBLIC(QTextControl)
 
-public:
-    QTextControlPrivate();
-    virtual ~QTextControlPrivate() {}
+ public:
+   QTextControlPrivate();
+   virtual ~QTextControlPrivate() {}
 
-    bool cursorMoveKeyEvent(QKeyEvent *e);
+   bool cursorMoveKeyEvent(QKeyEvent *e);
 
-    void updateCurrentCharFormat();
+   void updateCurrentCharFormat();
 
-    void indent();
-    void outdent();
+   void indent();
+   void outdent();
 
-    void gotoNextTableCell();
-    void gotoPreviousTableCell();
+   void gotoNextTableCell();
+   void gotoPreviousTableCell();
 
-    void createAutoBulletList();
+   void createAutoBulletList();
 
-    void init(Qt::TextFormat format = Qt::RichText, const QString &text = QString(),
-              QTextDocument *document = 0);
-    void setContent(Qt::TextFormat format = Qt::RichText, const QString &text = QString(),
-                    QTextDocument *document = 0);
-    void startDrag();
+   void init(Qt::TextFormat format = Qt::RichText, const QString &text = QString(),
+             QTextDocument *document = 0);
+   void setContent(Qt::TextFormat format = Qt::RichText, const QString &text = QString(),
+                   QTextDocument *document = 0);
+   void startDrag();
 
-    void paste(const QMimeData *source);
+   void paste(const QMimeData *source);
 
-    void setCursorPosition(const QPointF &pos);
-    void setCursorPosition(int pos, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
+   void setCursorPosition(const QPointF &pos);
+   void setCursorPosition(int pos, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
-    void repaintCursor();
-    inline void repaintSelection()
-    { repaintOldAndNewSelection(QTextCursor()); }
-    void repaintOldAndNewSelection(const QTextCursor &oldSelection);
+   void repaintCursor();
+   inline void repaintSelection() {
+      repaintOldAndNewSelection(QTextCursor());
+   }
+   void repaintOldAndNewSelection(const QTextCursor &oldSelection);
 
-    void selectionChanged(bool forceEmitSelectionChanged = false);
+   void selectionChanged(bool forceEmitSelectionChanged = false);
 
-    void _q_updateCurrentCharFormatAndSelection();
+   void _q_updateCurrentCharFormatAndSelection();
 
 #ifndef QT_NO_CLIPBOARD
-    void setClipboardSelection();
+   void setClipboardSelection();
 #endif
 
-    void _q_emitCursorPosChanged(const QTextCursor &someCursor);
+   void _q_emitCursorPosChanged(const QTextCursor &someCursor);
 
-    void setBlinkingCursorEnabled(bool enable);
+   void setBlinkingCursorEnabled(bool enable);
 
-    void extendWordwiseSelection(int suggestedNewPosition, qreal mouseXPosition);
-    void extendBlockwiseSelection(int suggestedNewPosition);
+   void extendWordwiseSelection(int suggestedNewPosition, qreal mouseXPosition);
+   void extendBlockwiseSelection(int suggestedNewPosition);
 
-    void _q_deleteSelected();
+   void _q_deleteSelected();
 
-    void _q_setCursorAfterUndoRedo(int undoPosition, int charsAdded, int charsRemoved);
+   void _q_setCursorAfterUndoRedo(int undoPosition, int charsAdded, int charsRemoved);
 
-    QRectF cursorRectPlusUnicodeDirectionMarkers(const QTextCursor &cursor) const;
-    QRectF rectForPosition(int position) const;
-    QRectF selectionRect(const QTextCursor &cursor) const;
-    inline QRectF selectionRect() const
-    { return selectionRect(this->cursor); }
+   QRectF cursorRectPlusUnicodeDirectionMarkers(const QTextCursor &cursor) const;
+   QRectF rectForPosition(int position) const;
+   QRectF selectionRect(const QTextCursor &cursor) const;
+   inline QRectF selectionRect() const {
+      return selectionRect(this->cursor);
+   }
 
-    QString anchorForCursor(const QTextCursor &anchor) const;
+   QString anchorForCursor(const QTextCursor &anchor) const;
 
-    void keyPressEvent(QKeyEvent *e);
-    void mousePressEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
-                         Qt::KeyboardModifiers modifiers,
-                         Qt::MouseButtons buttons,
-                         const QPoint &globalPos);
-    void mouseMoveEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
+   void keyPressEvent(QKeyEvent *e);
+   void mousePressEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
                         Qt::KeyboardModifiers modifiers,
                         Qt::MouseButtons buttons,
                         const QPoint &globalPos);
-    void mouseReleaseEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
-                           Qt::KeyboardModifiers modifiers,
-                           Qt::MouseButtons buttons,
-                           const QPoint &globalPos);
-    void mouseDoubleClickEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
-                               Qt::KeyboardModifiers modifiers,
-                               Qt::MouseButtons buttons,
-                               const QPoint &globalPos);
-    bool sendMouseEventToInputContext(QEvent *e,  QEvent::Type eventType, Qt::MouseButton button,
-                                      const QPointF &pos,
-                                      Qt::KeyboardModifiers modifiers,
-                                      Qt::MouseButtons buttons,
-                                      const QPoint &globalPos);
-    void contextMenuEvent(const QPoint &screenPos, const QPointF &docPos, QWidget *contextWidget);
-    void focusEvent(QFocusEvent *e);
+   void mouseMoveEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
+                       Qt::KeyboardModifiers modifiers,
+                       Qt::MouseButtons buttons,
+                       const QPoint &globalPos);
+   void mouseReleaseEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
+                          Qt::KeyboardModifiers modifiers,
+                          Qt::MouseButtons buttons,
+                          const QPoint &globalPos);
+   void mouseDoubleClickEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
+                              Qt::KeyboardModifiers modifiers,
+                              Qt::MouseButtons buttons,
+                              const QPoint &globalPos);
+   bool sendMouseEventToInputContext(QEvent *e,  QEvent::Type eventType, Qt::MouseButton button,
+                                     const QPointF &pos,
+                                     Qt::KeyboardModifiers modifiers,
+                                     Qt::MouseButtons buttons,
+                                     const QPoint &globalPos);
+   void contextMenuEvent(const QPoint &screenPos, const QPointF &docPos, QWidget *contextWidget);
+   void focusEvent(QFocusEvent *e);
 #ifdef QT_KEYPAD_NAVIGATION
-    void editFocusEvent(QEvent *e);
+   void editFocusEvent(QEvent *e);
 #endif
-    bool dragEnterEvent(QEvent *e, const QMimeData *mimeData);
-    void dragLeaveEvent();
-    bool dragMoveEvent(QEvent *e, const QMimeData *mimeData, const QPointF &pos);
-    bool dropEvent(const QMimeData *mimeData, const QPointF &pos, Qt::DropAction dropAction, QWidget *source);
+   bool dragEnterEvent(QEvent *e, const QMimeData *mimeData);
+   void dragLeaveEvent();
+   bool dragMoveEvent(QEvent *e, const QMimeData *mimeData, const QPointF &pos);
+   bool dropEvent(const QMimeData *mimeData, const QPointF &pos, Qt::DropAction dropAction, QWidget *source);
 
-    void inputMethodEvent(QInputMethodEvent *);
+   void inputMethodEvent(QInputMethodEvent *);
 
-    void activateLinkUnderCursor(QString href = QString());
+   void activateLinkUnderCursor(QString href = QString());
 
 #ifndef QT_NO_TOOLTIP
-    void showToolTip(const QPoint &globalPos, const QPointF &pos, QWidget *contextWidget);
+   void showToolTip(const QPoint &globalPos, const QPointF &pos, QWidget *contextWidget);
 #endif
 
-    void append(const QString &text, Qt::TextFormat format = Qt::AutoText);
+   void append(const QString &text, Qt::TextFormat format = Qt::AutoText);
 
-    QInputContext *inputContext();
+   QInputContext *inputContext();
 
-    QTextDocument *doc;
-    bool cursorOn;
-    QTextCursor cursor;
-    bool cursorIsFocusIndicator;
-    QTextCharFormat lastCharFormat;
+   QTextDocument *doc;
+   bool cursorOn;
+   QTextCursor cursor;
+   bool cursorIsFocusIndicator;
+   QTextCharFormat lastCharFormat;
 
-    QTextCursor dndFeedbackCursor;
+   QTextCursor dndFeedbackCursor;
 
-    Qt::TextInteractionFlags interactionFlags;
+   Qt::TextInteractionFlags interactionFlags;
 
-    QBasicTimer cursorBlinkTimer;
-    QBasicTimer trippleClickTimer;
-    QPointF trippleClickPoint;
+   QBasicTimer cursorBlinkTimer;
+   QBasicTimer trippleClickTimer;
+   QPointF trippleClickPoint;
 
-    bool dragEnabled;
+   bool dragEnabled;
 
-    bool mousePressed;
+   bool mousePressed;
 
-    bool mightStartDrag;
-    QPoint dragStartPos;
-    QPointer<QWidget> contextWidget;
+   bool mightStartDrag;
+   QPoint dragStartPos;
+   QPointer<QWidget> contextWidget;
 
-    bool lastSelectionState;
+   bool lastSelectionState;
 
-    bool ignoreAutomaticScrollbarAdjustement;
+   bool ignoreAutomaticScrollbarAdjustement;
 
-    QTextCursor selectedWordOnDoubleClick;
-    QTextCursor selectedBlockOnTrippleClick;
+   QTextCursor selectedWordOnDoubleClick;
+   QTextCursor selectedBlockOnTrippleClick;
 
-    bool overwriteMode;
-    bool acceptRichText;
+   bool overwriteMode;
+   bool acceptRichText;
 
-    int preeditCursor;
-    bool hideCursor; // used to hide the cursor in the preedit area
+   int preeditCursor;
+   bool hideCursor; // used to hide the cursor in the preedit area
 
-    QVector<QAbstractTextDocumentLayout::Selection> extraSelections;
+   QVector<QAbstractTextDocumentLayout::Selection> extraSelections;
 
-    QPalette palette;
-    bool hasFocus;
+   QPalette palette;
+   bool hasFocus;
 #ifdef QT_KEYPAD_NAVIGATION
-    bool hasEditFocus;
+   bool hasEditFocus;
 #endif
-    bool isEnabled;
+   bool isEnabled;
 
-    QString highlightedAnchor; // Anchor below cursor
-    QString anchorOnMousePress;
-    bool hadSelectionOnMousePress;
+   QString highlightedAnchor; // Anchor below cursor
+   QString anchorOnMousePress;
+   bool hadSelectionOnMousePress;
 
-    bool ignoreUnusedNavigationEvents;
-    bool openExternalLinks;
+   bool ignoreUnusedNavigationEvents;
+   bool openExternalLinks;
 
-    bool wordSelectionEnabled;
+   bool wordSelectionEnabled;
 
-    QString linkToCopy;
-    void _q_copyLink();
-    void _q_updateBlock(const QTextBlock &);
-    void _q_documentLayoutChanged();
+   QString linkToCopy;
+   void _q_copyLink();
+   void _q_updateBlock(const QTextBlock &);
+   void _q_documentLayoutChanged();
 
-protected:
-	 QTextControl *q_ptr;
+ protected:
+   QTextControl *q_ptr;
 };
 
 QT_END_NAMESPACE

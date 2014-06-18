@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -52,37 +52,37 @@ QT_BEGIN_NAMESPACE
 
 class QVFbScreenPrivate
 {
-public:
-    QVFbScreenPrivate();
-    ~QVFbScreenPrivate();
+ public:
+   QVFbScreenPrivate();
+   ~QVFbScreenPrivate();
 
-    bool success;
-    unsigned char *shmrgn;
-    int brightness;
-    bool blank;
-    QVFbHeader *hdr;
-    QWSMouseHandler *mouse;
+   bool success;
+   unsigned char *shmrgn;
+   int brightness;
+   bool blank;
+   QVFbHeader *hdr;
+   QWSMouseHandler *mouse;
 #ifndef QT_NO_QWS_KEYBOARD
-    QWSKeyboardHandler *keyboard;
+   QWSKeyboardHandler *keyboard;
 #endif
 };
 
 QVFbScreenPrivate::QVFbScreenPrivate()
-    : mouse(0)
+   : mouse(0)
 
 {
 #ifndef QT_NO_QWS_KEYBOARD
-    keyboard = 0;
+   keyboard = 0;
 #endif
-    brightness = 255;
-    blank = false;
+   brightness = 255;
+   blank = false;
 }
 
 QVFbScreenPrivate::~QVFbScreenPrivate()
 {
-    delete mouse;
+   delete mouse;
 #ifndef QT_NO_QWS_KEYBOARD
-    delete keyboard;
+   delete keyboard;
 #endif
 }
 
@@ -157,11 +157,11 @@ QVFbScreenPrivate::~QVFbScreenPrivate()
     identifies the Qt for Embedded Linux server to connect to.
 */
 QVFbScreen::QVFbScreen(int display_id)
-    : QScreen(display_id, VFbClass), d_ptr(new QVFbScreenPrivate)
+   : QScreen(display_id, VFbClass), d_ptr(new QVFbScreenPrivate)
 {
-    d_ptr->shmrgn = 0;
-    d_ptr->hdr = 0;
-    data = 0;
+   d_ptr->shmrgn = 0;
+   d_ptr->hdr = 0;
+   data = 0;
 }
 
 /*!
@@ -169,216 +169,226 @@ QVFbScreen::QVFbScreen(int display_id)
 */
 QVFbScreen::~QVFbScreen()
 {
-    delete d_ptr;
+   delete d_ptr;
 }
 
 static QVFbScreen *connected = 0;
 
 bool QVFbScreen::connect(const QString &displaySpec)
 {
-    QStringList displayArgs = displaySpec.split(QLatin1Char(':'));
-    if (displayArgs.contains(QLatin1String("Gray")))
-        grayscale = true;
+   QStringList displayArgs = displaySpec.split(QLatin1Char(':'));
+   if (displayArgs.contains(QLatin1String("Gray"))) {
+      grayscale = true;
+   }
 
-    key_t key = ftok(QT_VFB_MOUSE_PIPE(displayId).toLocal8Bit(), 'b');
+   key_t key = ftok(QT_VFB_MOUSE_PIPE(displayId).toLocal8Bit(), 'b');
 
-    if (key == -1)
-        return false;
+   if (key == -1) {
+      return false;
+   }
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
 #ifndef QT_QWS_FRAMEBUFFER_LITTLE_ENDIAN
-    if (displayArgs.contains(QLatin1String("littleendian")))
+   if (displayArgs.contains(QLatin1String("littleendian")))
 #endif
-        QScreen::setFrameBufferLittleEndian(true);
+      QScreen::setFrameBufferLittleEndian(true);
 #endif
 
-    int shmId = shmget(key, 0, 0);
-    if (shmId != -1)
-        d_ptr->shmrgn = (unsigned char *)shmat(shmId, 0, 0);
-    else
-        return false;
+   int shmId = shmget(key, 0, 0);
+   if (shmId != -1) {
+      d_ptr->shmrgn = (unsigned char *)shmat(shmId, 0, 0);
+   } else {
+      return false;
+   }
 
-    if ((long)d_ptr->shmrgn == -1 || d_ptr->shmrgn == 0) {
-        qDebug("No shmrgn %ld", (long)d_ptr->shmrgn);
-        return false;
-    }
+   if ((long)d_ptr->shmrgn == -1 || d_ptr->shmrgn == 0) {
+      qDebug("No shmrgn %ld", (long)d_ptr->shmrgn);
+      return false;
+   }
 
-    d_ptr->hdr = (QVFbHeader *)d_ptr->shmrgn;
-    data = d_ptr->shmrgn + d_ptr->hdr->dataoffset;
+   d_ptr->hdr = (QVFbHeader *)d_ptr->shmrgn;
+   data = d_ptr->shmrgn + d_ptr->hdr->dataoffset;
 
-    dw = w = d_ptr->hdr->width;
-    dh = h = d_ptr->hdr->height;
-    d = d_ptr->hdr->depth;
+   dw = w = d_ptr->hdr->width;
+   dh = h = d_ptr->hdr->height;
+   d = d_ptr->hdr->depth;
 
-    switch (d) {
-    case 1:
-        setPixelFormat(QImage::Format_Mono);
-        break;
-    case 8:
-        setPixelFormat(QImage::Format_Indexed8);
-        break;
-    case 12:
-        setPixelFormat(QImage::Format_RGB444);
-        break;
-    case 15:
-        setPixelFormat(QImage::Format_RGB555);
-        break;
-    case 16:
-        setPixelFormat(QImage::Format_RGB16);
-        break;
-    case 18:
-        setPixelFormat(QImage::Format_RGB666);
-        break;
-    case 24:
-        setPixelFormat(QImage::Format_RGB888);
-        break;
-    case 32:
-        setPixelFormat(QImage::Format_ARGB32_Premultiplied);
-        break;
-    }
+   switch (d) {
+      case 1:
+         setPixelFormat(QImage::Format_Mono);
+         break;
+      case 8:
+         setPixelFormat(QImage::Format_Indexed8);
+         break;
+      case 12:
+         setPixelFormat(QImage::Format_RGB444);
+         break;
+      case 15:
+         setPixelFormat(QImage::Format_RGB555);
+         break;
+      case 16:
+         setPixelFormat(QImage::Format_RGB16);
+         break;
+      case 18:
+         setPixelFormat(QImage::Format_RGB666);
+         break;
+      case 24:
+         setPixelFormat(QImage::Format_RGB888);
+         break;
+      case 32:
+         setPixelFormat(QImage::Format_ARGB32_Premultiplied);
+         break;
+   }
 
-    lstep = d_ptr->hdr->linestep;
+   lstep = d_ptr->hdr->linestep;
 
-    // Handle display physical size spec.
-    int dimIdxW = -1;
-    int dimIdxH = -1;
-    for (int i = 0; i < displayArgs.size(); ++i) {
-        if (displayArgs.at(i).startsWith(QLatin1String("mmWidth"))) {
-            dimIdxW = i;
-            break;
-        }
-    }
-    for (int i = 0; i < displayArgs.size(); ++i) {
-        if (displayArgs.at(i).startsWith(QLatin1String("mmHeight"))) {
-            dimIdxH = i;
-            break;
-        }
-    }
-    if (dimIdxW >= 0) {
-        bool ok;
-        int pos = 7;
-        if (displayArgs.at(dimIdxW).at(pos) == QLatin1Char('='))
-            ++pos;
-        int pw = displayArgs.at(dimIdxW).mid(pos).toInt(&ok);
-        if (ok) {
-            physWidth = pw;
-            if (dimIdxH < 0)
-                physHeight = dh*physWidth/dw;
-        }
-    }
-    if (dimIdxH >= 0) {
-        bool ok;
-        int pos = 8;
-        if (displayArgs.at(dimIdxH).at(pos) == QLatin1Char('='))
-            ++pos;
-        int ph = displayArgs.at(dimIdxH).mid(pos).toInt(&ok);
-        if (ok) {
-            physHeight = ph;
-            if (dimIdxW < 0)
-                physWidth = dw*physHeight/dh;
-        }
-    }
-    if (dimIdxW < 0 && dimIdxH < 0) {
-        const int dpi = 72;
-        physWidth = qRound(dw * 25.4 / dpi);
-        physHeight = qRound(dh * 25.4 / dpi);
-    }
+   // Handle display physical size spec.
+   int dimIdxW = -1;
+   int dimIdxH = -1;
+   for (int i = 0; i < displayArgs.size(); ++i) {
+      if (displayArgs.at(i).startsWith(QLatin1String("mmWidth"))) {
+         dimIdxW = i;
+         break;
+      }
+   }
+   for (int i = 0; i < displayArgs.size(); ++i) {
+      if (displayArgs.at(i).startsWith(QLatin1String("mmHeight"))) {
+         dimIdxH = i;
+         break;
+      }
+   }
+   if (dimIdxW >= 0) {
+      bool ok;
+      int pos = 7;
+      if (displayArgs.at(dimIdxW).at(pos) == QLatin1Char('=')) {
+         ++pos;
+      }
+      int pw = displayArgs.at(dimIdxW).mid(pos).toInt(&ok);
+      if (ok) {
+         physWidth = pw;
+         if (dimIdxH < 0) {
+            physHeight = dh * physWidth / dw;
+         }
+      }
+   }
+   if (dimIdxH >= 0) {
+      bool ok;
+      int pos = 8;
+      if (displayArgs.at(dimIdxH).at(pos) == QLatin1Char('=')) {
+         ++pos;
+      }
+      int ph = displayArgs.at(dimIdxH).mid(pos).toInt(&ok);
+      if (ok) {
+         physHeight = ph;
+         if (dimIdxW < 0) {
+            physWidth = dw * physHeight / dh;
+         }
+      }
+   }
+   if (dimIdxW < 0 && dimIdxH < 0) {
+      const int dpi = 72;
+      physWidth = qRound(dw * 25.4 / dpi);
+      physHeight = qRound(dh * 25.4 / dpi);
+   }
 
-    qDebug("Connected to VFB server %s: %d x %d x %d %dx%dmm (%dx%ddpi)", displaySpec.toLatin1().data(),
-        w, h, d, physWidth, physHeight, qRound(dw*25.4/physWidth), qRound(dh*25.4/physHeight) );
+   qDebug("Connected to VFB server %s: %d x %d x %d %dx%dmm (%dx%ddpi)", displaySpec.toLatin1().data(),
+          w, h, d, physWidth, physHeight, qRound(dw * 25.4 / physWidth), qRound(dh * 25.4 / physHeight) );
 
-    size = lstep * h;
-    mapsize = size;
-    screencols = d_ptr->hdr->numcols;
-    memcpy(screenclut, d_ptr->hdr->clut, sizeof(QRgb) * screencols);
+   size = lstep * h;
+   mapsize = size;
+   screencols = d_ptr->hdr->numcols;
+   memcpy(screenclut, d_ptr->hdr->clut, sizeof(QRgb) * screencols);
 
-    connected = this;
+   connected = this;
 
-    if (qgetenv("QT_QVFB_BGR").toInt())
-        pixeltype = BGRPixel;
+   if (qgetenv("QT_QVFB_BGR").toInt()) {
+      pixeltype = BGRPixel;
+   }
 
-    return true;
+   return true;
 }
 
 void QVFbScreen::disconnect()
 {
-    connected = 0;
-    if ((long)d_ptr->shmrgn != -1 && d_ptr->shmrgn) {
-        if (qApp->type() == QApplication::GuiServer && d_ptr->hdr->dataoffset >= (int)sizeof(QVFbHeader)) {
-            d_ptr->hdr->serverVersion = 0;
-        }
-        shmdt((char*)d_ptr->shmrgn);
-    }
+   connected = 0;
+   if ((long)d_ptr->shmrgn != -1 && d_ptr->shmrgn) {
+      if (qApp->type() == QApplication::GuiServer && d_ptr->hdr->dataoffset >= (int)sizeof(QVFbHeader)) {
+         d_ptr->hdr->serverVersion = 0;
+      }
+      shmdt((char *)d_ptr->shmrgn);
+   }
 }
 
 bool QVFbScreen::initDevice()
 {
 #ifndef QT_NO_QWS_MOUSE_QVFB
-    const QString mouseDev = QT_VFB_MOUSE_PIPE(displayId);
-    d_ptr->mouse = new QVFbMouseHandler(QLatin1String("QVFbMouse"), mouseDev);
-    qwsServer->setDefaultMouse("None");
-    if (d_ptr->mouse)
-        d_ptr->mouse->setScreen(this);
+   const QString mouseDev = QT_VFB_MOUSE_PIPE(displayId);
+   d_ptr->mouse = new QVFbMouseHandler(QLatin1String("QVFbMouse"), mouseDev);
+   qwsServer->setDefaultMouse("None");
+   if (d_ptr->mouse) {
+      d_ptr->mouse->setScreen(this);
+   }
 #endif
 
 #if !defined(QT_NO_QWS_KBD_QVFB) && !defined(QT_NO_QWS_KEYBOARD)
-    const QString keyboardDev = QT_VFB_KEYBOARD_PIPE(displayId);
-    d_ptr->keyboard = new QVFbKeyboardHandler(keyboardDev);
-    qwsServer->setDefaultKeyboard("None");
+   const QString keyboardDev = QT_VFB_KEYBOARD_PIPE(displayId);
+   d_ptr->keyboard = new QVFbKeyboardHandler(keyboardDev);
+   qwsServer->setDefaultKeyboard("None");
 #endif
 
-    if (d_ptr->hdr->dataoffset >= (int)sizeof(QVFbHeader))
-        d_ptr->hdr->serverVersion = CS_VERSION;
+   if (d_ptr->hdr->dataoffset >= (int)sizeof(QVFbHeader)) {
+      d_ptr->hdr->serverVersion = CS_VERSION;
+   }
 
-    if(d==8) {
-        screencols=256;
-        if (grayscale) {
-            // Build grayscale palette
-            for(int loopc=0;loopc<256;loopc++) {
-                screenclut[loopc]=qRgb(loopc,loopc,loopc);
+   if (d == 8) {
+      screencols = 256;
+      if (grayscale) {
+         // Build grayscale palette
+         for (int loopc = 0; loopc < 256; loopc++) {
+            screenclut[loopc] = qRgb(loopc, loopc, loopc);
+         }
+      } else {
+         // 6x6x6 216 color cube
+         int idx = 0;
+         for (int ir = 0x0; ir <= 0xff; ir += 0x33) {
+            for (int ig = 0x0; ig <= 0xff; ig += 0x33) {
+               for (int ib = 0x0; ib <= 0xff; ib += 0x33) {
+                  screenclut[idx] = qRgb(ir, ig, ib);
+                  idx++;
+               }
             }
-        } else {
-            // 6x6x6 216 color cube
-            int idx = 0;
-            for(int ir = 0x0; ir <= 0xff; ir+=0x33) {
-                for(int ig = 0x0; ig <= 0xff; ig+=0x33) {
-                    for(int ib = 0x0; ib <= 0xff; ib+=0x33) {
-                        screenclut[idx]=qRgb(ir, ig, ib);
-                        idx++;
-                    }
-                }
-            }
-            screencols=idx;
-        }
-        memcpy(d_ptr->hdr->clut, screenclut, sizeof(QRgb) * screencols);
-        d_ptr->hdr->numcols = screencols;
-    } else if (d == 4) {
-        int val = 0;
-        for (int idx = 0; idx < 16; idx++, val += 17) {
-            screenclut[idx] = qRgb(val, val, val);
-        }
-        screencols = 16;
-        memcpy(d_ptr->hdr->clut, screenclut, sizeof(QRgb) * screencols);
-        d_ptr->hdr->numcols = screencols;
-    } else if (d == 1) {
-        screencols = 2;
-        screenclut[1] = qRgb(0xff, 0xff, 0xff);
-        screenclut[0] = qRgb(0, 0, 0);
-        memcpy(d_ptr->hdr->clut, screenclut, sizeof(QRgb) * screencols);
-        d_ptr->hdr->numcols = screencols;
-    }
+         }
+         screencols = idx;
+      }
+      memcpy(d_ptr->hdr->clut, screenclut, sizeof(QRgb) * screencols);
+      d_ptr->hdr->numcols = screencols;
+   } else if (d == 4) {
+      int val = 0;
+      for (int idx = 0; idx < 16; idx++, val += 17) {
+         screenclut[idx] = qRgb(val, val, val);
+      }
+      screencols = 16;
+      memcpy(d_ptr->hdr->clut, screenclut, sizeof(QRgb) * screencols);
+      d_ptr->hdr->numcols = screencols;
+   } else if (d == 1) {
+      screencols = 2;
+      screenclut[1] = qRgb(0xff, 0xff, 0xff);
+      screenclut[0] = qRgb(0, 0, 0);
+      memcpy(d_ptr->hdr->clut, screenclut, sizeof(QRgb) * screencols);
+      d_ptr->hdr->numcols = screencols;
+   }
 
 #ifndef QT_NO_QWS_CURSOR
-    QScreenCursor::initSoftwareCursor();
+   QScreenCursor::initSoftwareCursor();
 #endif
-    return true;
+   return true;
 }
 
 void QVFbScreen::shutdownDevice()
 {
 }
 
-void QVFbScreen::setMode(int ,int ,int)
+void QVFbScreen::setMode(int , int , int)
 {
 }
 
@@ -387,41 +397,42 @@ void QVFbScreen::setMode(int ,int ,int)
 // between linux virtual consoles.
 void QVFbScreen::save()
 {
-    // nothing to do.
+   // nothing to do.
 }
 
 // restore the state of the graphics card.
 void QVFbScreen::restore()
 {
 }
-void QVFbScreen::setDirty(const QRect& rect)
+void QVFbScreen::setDirty(const QRect &rect)
 {
-    const QRect r = rect.translated(-offset());
-    d_ptr->hdr->dirty = true;
-    d_ptr->hdr->update = d_ptr->hdr->update.united(r);
+   const QRect r = rect.translated(-offset());
+   d_ptr->hdr->dirty = true;
+   d_ptr->hdr->update = d_ptr->hdr->update.united(r);
 }
 
 void QVFbScreen::setBrightness(int b)
 {
-    if (connected) {
-        connected->d_ptr->brightness = b;
+   if (connected) {
+      connected->d_ptr->brightness = b;
 
-        QVFbHeader *hdr = connected->d_ptr->hdr;
-        if (hdr->viewerVersion < 0x040400) // brightness not supported
-            return;
+      QVFbHeader *hdr = connected->d_ptr->hdr;
+      if (hdr->viewerVersion < 0x040400) { // brightness not supported
+         return;
+      }
 
-        const int br = connected->d_ptr->blank ? 0 : b;
-        if (hdr->brightness != br) {
-            hdr->brightness = br;
-            connected->setDirty(connected->region().boundingRect());
-        }
-    }
+      const int br = connected->d_ptr->blank ? 0 : b;
+      if (hdr->brightness != br) {
+         hdr->brightness = br;
+         connected->setDirty(connected->region().boundingRect());
+      }
+   }
 }
 
 void QVFbScreen::blank(bool on)
 {
-    d_ptr->blank = on;
-    setBrightness(connected->d_ptr->brightness);
+   d_ptr->blank = on;
+   setBrightness(connected->d_ptr->brightness);
 }
 
 #endif // QT_NO_QWS_QVFB

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,22 +38,22 @@ class QSocketNotifier;
 
 class QVFbKeyboardHandler : public QObject, public QWSKeyboardHandler
 {
-    CS_OBJECT(QVFbKeyboardHandler)
+   CS_OBJECT(QVFbKeyboardHandler)
 
-public:
-    QVFbKeyboardHandler(const QString &device);
-    virtual ~QVFbKeyboardHandler();
+ public:
+   QVFbKeyboardHandler(const QString &device);
+   virtual ~QVFbKeyboardHandler();
 
-private :
-    GUI_CS_SLOT_1(Private, void readKeyboardData())
-    GUI_CS_SLOT_2(readKeyboardData) 
+ private :
+   GUI_CS_SLOT_1(Private, void readKeyboardData())
+   GUI_CS_SLOT_2(readKeyboardData)
 
-    QString terminalName;
-    int kbdFD;
-    int kbdIdx;
-    int kbdBufferLen;
-    unsigned char *kbdBuffer;
-    QSocketNotifier *notifier;
+   QString terminalName;
+   int kbdFD;
+   int kbdIdx;
+   int kbdBufferLen;
+   unsigned char *kbdBuffer;
+   QSocketNotifier *notifier;
 };
 
 #endif // QT_NO_QWS_KBD_QVFB

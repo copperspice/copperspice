@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,24 +37,24 @@ class QNetworkCookieJarPrivate;
 
 class Q_NETWORK_EXPORT QNetworkCookieJar: public QObject
 {
-    CS_OBJECT(QNetworkCookieJar)
+   CS_OBJECT(QNetworkCookieJar)
 
-public:
-    QNetworkCookieJar(QObject *parent = 0);
-    virtual ~QNetworkCookieJar();
+ public:
+   QNetworkCookieJar(QObject *parent = 0);
+   virtual ~QNetworkCookieJar();
 
-    virtual QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const;
-    virtual bool setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const QUrl &url);
+   virtual QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const;
+   virtual bool setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const QUrl &url);
 
-protected:
-    QList<QNetworkCookie> allCookies() const;
-    void setAllCookies(const QList<QNetworkCookie> &cookieList);
+ protected:
+   QList<QNetworkCookie> allCookies() const;
+   void setAllCookies(const QList<QNetworkCookie> &cookieList);
 
-    QScopedPointer<QNetworkCookieJarPrivate> d_ptr;
+   QScopedPointer<QNetworkCookieJarPrivate> d_ptr;
 
-private:
-    Q_DECLARE_PRIVATE(QNetworkCookieJar)
-    Q_DISABLE_COPY(QNetworkCookieJar)
+ private:
+   Q_DECLARE_PRIVATE(QNetworkCookieJar)
+   Q_DISABLE_COPY(QNetworkCookieJar)
 
 };
 

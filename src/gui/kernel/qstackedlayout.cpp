@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,13 +33,13 @@ QT_BEGIN_NAMESPACE
 
 class QStackedLayoutPrivate : public QLayoutPrivate
 {
-    Q_DECLARE_PUBLIC(QStackedLayout)
+   Q_DECLARE_PUBLIC(QStackedLayout)
 
-public:
-    QStackedLayoutPrivate() : index(-1), stackingMode(QStackedLayout::StackOne) {}
-    QList<QLayoutItem *> list;
-    int index;
-    QStackedLayout::StackingMode stackingMode;
+ public:
+   QStackedLayoutPrivate() : index(-1), stackingMode(QStackedLayout::StackOne) {}
+   QList<QLayoutItem *> list;
+   int index;
+   QStackedLayout::StackingMode stackingMode;
 };
 
 /*!
@@ -126,7 +126,7 @@ public:
     \sa addWidget(), insertWidget()
 */
 QStackedLayout::QStackedLayout()
-    : QLayout(*new QStackedLayoutPrivate, 0, 0)
+   : QLayout(*new QStackedLayoutPrivate, 0, 0)
 {
 }
 
@@ -137,7 +137,7 @@ QStackedLayout::QStackedLayout()
     manage the geometry of its children.
 */
 QStackedLayout::QStackedLayout(QWidget *parent)
-    : QLayout(*new QStackedLayoutPrivate, 0, parent)
+   : QLayout(*new QStackedLayoutPrivate, 0, parent)
 {
 }
 
@@ -146,7 +146,7 @@ QStackedLayout::QStackedLayout(QWidget *parent)
     the given \a parentLayout.
 */
 QStackedLayout::QStackedLayout(QLayout *parentLayout)
-    : QLayout(*new QStackedLayoutPrivate, parentLayout, 0)
+   : QLayout(*new QStackedLayoutPrivate, parentLayout, 0)
 {
 }
 
@@ -156,8 +156,8 @@ QStackedLayout::QStackedLayout(QLayout *parentLayout)
 */
 QStackedLayout::~QStackedLayout()
 {
-    Q_D(QStackedLayout);
-    qDeleteAll(d->list);
+   Q_D(QStackedLayout);
+   qDeleteAll(d->list);
 }
 
 /*!
@@ -171,8 +171,8 @@ QStackedLayout::~QStackedLayout()
 */
 int QStackedLayout::addWidget(QWidget *widget)
 {
-    Q_D(QStackedLayout);
-    return insertWidget(d->list.count(), widget);
+   Q_D(QStackedLayout);
+   return insertWidget(d->list.count(), widget);
 }
 
 /*!
@@ -191,24 +191,27 @@ int QStackedLayout::addWidget(QWidget *widget)
 */
 int QStackedLayout::insertWidget(int index, QWidget *widget)
 {
-    Q_D(QStackedLayout);
-    addChildWidget(widget);
-    index = qMin(index, d->list.count());
-    if (index < 0)
-        index = d->list.count();
-    QWidgetItem *wi = QLayoutPrivate::createWidgetItem(this, widget);
-    d->list.insert(index, wi);
-    invalidate();
-    if (d->index < 0) {
-        setCurrentIndex(index);
-    } else {
-        if (index <= d->index)
-            ++d->index;
-        if (d->stackingMode == StackOne)
-            widget->hide();
-        widget->lower();
-    }
-    return index;
+   Q_D(QStackedLayout);
+   addChildWidget(widget);
+   index = qMin(index, d->list.count());
+   if (index < 0) {
+      index = d->list.count();
+   }
+   QWidgetItem *wi = QLayoutPrivate::createWidgetItem(this, widget);
+   d->list.insert(index, wi);
+   invalidate();
+   if (d->index < 0) {
+      setCurrentIndex(index);
+   } else {
+      if (index <= d->index) {
+         ++d->index;
+      }
+      if (d->stackingMode == StackOne) {
+         widget->hide();
+      }
+      widget->lower();
+   }
+   return index;
 }
 
 /*!
@@ -216,8 +219,8 @@ int QStackedLayout::insertWidget(int index, QWidget *widget)
 */
 QLayoutItem *QStackedLayout::itemAt(int index) const
 {
-    Q_D(const QStackedLayout);
-    return d->list.value(index);
+   Q_D(const QStackedLayout);
+   return d->list.value(index);
 }
 
 // Code that enables proper handling of the case that takeAt() is
@@ -226,15 +229,17 @@ QLayoutItem *QStackedLayout::itemAt(int index) const
 
 class QtFriendlyLayoutWidget : public QWidget
 {
-public:
-    inline bool wasDeleted() const 
-      { 
-         bool wasDeleted = CSInternalRefCount::get_m_wasDeleted(this);
-         return wasDeleted; 
-      }
+ public:
+   inline bool wasDeleted() const {
+      bool wasDeleted = CSInternalRefCount::get_m_wasDeleted(this);
+      return wasDeleted;
+   }
 };
 
-static bool qt_wasDeleted(const QWidget *w) { return static_cast<const QtFriendlyLayoutWidget*>(w)->wasDeleted(); }
+static bool qt_wasDeleted(const QWidget *w)
+{
+   return static_cast<const QtFriendlyLayoutWidget *>(w)->wasDeleted();
+}
 
 
 /*!
@@ -242,25 +247,27 @@ static bool qt_wasDeleted(const QWidget *w) { return static_cast<const QtFriendl
 */
 QLayoutItem *QStackedLayout::takeAt(int index)
 {
-    Q_D(QStackedLayout);
-    if (index <0 || index >= d->list.size())
-        return 0;
-    QLayoutItem *item = d->list.takeAt(index);
-    if (index == d->index) {
-        d->index = -1;
-        if ( d->list.count() > 0 ) {
-            int newIndex = (index == d->list.count()) ? index-1 : index;
-            setCurrentIndex(newIndex);
-        } else {
-            emit currentChanged(-1);
-        }
-    } else if (index < d->index) {
-        --d->index;
-    }
-    emit widgetRemoved(index);
-    if (item->widget() && !qt_wasDeleted(item->widget()))
-        item->widget()->hide();
-    return item;
+   Q_D(QStackedLayout);
+   if (index < 0 || index >= d->list.size()) {
+      return 0;
+   }
+   QLayoutItem *item = d->list.takeAt(index);
+   if (index == d->index) {
+      d->index = -1;
+      if ( d->list.count() > 0 ) {
+         int newIndex = (index == d->list.count()) ? index - 1 : index;
+         setCurrentIndex(newIndex);
+      } else {
+         emit currentChanged(-1);
+      }
+   } else if (index < d->index) {
+      --d->index;
+   }
+   emit widgetRemoved(index);
+   if (item->widget() && !qt_wasDeleted(item->widget())) {
+      item->widget()->hide();
+   }
+   return item;
 }
 
 /*!
@@ -273,68 +280,72 @@ QLayoutItem *QStackedLayout::takeAt(int index)
 */
 void QStackedLayout::setCurrentIndex(int index)
 {
-    Q_D(QStackedLayout);
-    QWidget *prev = currentWidget();
-    QWidget *next = widget(index);
-    if (!next || next == prev)
-        return;
+   Q_D(QStackedLayout);
+   QWidget *prev = currentWidget();
+   QWidget *next = widget(index);
+   if (!next || next == prev) {
+      return;
+   }
 
-    bool reenableUpdates = false;
-    QWidget *parent = parentWidget();
+   bool reenableUpdates = false;
+   QWidget *parent = parentWidget();
 
-    if (parent && parent->updatesEnabled()) {
-        reenableUpdates = true;
-        parent->setUpdatesEnabled(false);
-    }
+   if (parent && parent->updatesEnabled()) {
+      reenableUpdates = true;
+      parent->setUpdatesEnabled(false);
+   }
 
-    QPointer<QWidget> fw = parent ? parent->window()->focusWidget() : 0;
-    const bool focusWasOnOldPage = fw && (prev && prev->isAncestorOf(fw));
+   QPointer<QWidget> fw = parent ? parent->window()->focusWidget() : 0;
+   const bool focusWasOnOldPage = fw && (prev && prev->isAncestorOf(fw));
 
-    if (prev) {
-        prev->clearFocus();
-        if (d->stackingMode == StackOne)
-            prev->hide();
-    }
+   if (prev) {
+      prev->clearFocus();
+      if (d->stackingMode == StackOne) {
+         prev->hide();
+      }
+   }
 
-    d->index = index;
-    next->raise();
-    next->show();
+   d->index = index;
+   next->raise();
+   next->show();
 
-    // try to move focus onto the incoming widget if focus
-    // was somewhere on the outgoing widget.
+   // try to move focus onto the incoming widget if focus
+   // was somewhere on the outgoing widget.
 
-    if (parent) {
-        if (focusWasOnOldPage) {
-            // look for the best focus widget we can find
-            if (QWidget *nfw = next->focusWidget())
-                nfw->setFocus();
-            else {
-                // second best: first child widget in the focus chain
-                if (QWidget *i = fw) {
-                    while ((i = i->nextInFocusChain()) != fw) {
-                        if (((i->focusPolicy() & Qt::TabFocus) == Qt::TabFocus)
-                            && !i->focusProxy() && i->isVisibleTo(next) && i->isEnabled()
-                            && next->isAncestorOf(i)) {
-                            i->setFocus();
-                            break;
-                        }
-                    }
-                    // third best: incoming widget
-                    if (i == fw )
-                        next->setFocus();
-                }
+   if (parent) {
+      if (focusWasOnOldPage) {
+         // look for the best focus widget we can find
+         if (QWidget *nfw = next->focusWidget()) {
+            nfw->setFocus();
+         } else {
+            // second best: first child widget in the focus chain
+            if (QWidget *i = fw) {
+               while ((i = i->nextInFocusChain()) != fw) {
+                  if (((i->focusPolicy() & Qt::TabFocus) == Qt::TabFocus)
+                        && !i->focusProxy() && i->isVisibleTo(next) && i->isEnabled()
+                        && next->isAncestorOf(i)) {
+                     i->setFocus();
+                     break;
+                  }
+               }
+               // third best: incoming widget
+               if (i == fw ) {
+                  next->setFocus();
+               }
             }
-        }
-    }
-    if (reenableUpdates)
-        parent->setUpdatesEnabled(true);
-    emit currentChanged(index);
+         }
+      }
+   }
+   if (reenableUpdates) {
+      parent->setUpdatesEnabled(true);
+   }
+   emit currentChanged(index);
 }
 
 int QStackedLayout::currentIndex() const
 {
-    Q_D(const QStackedLayout);
-    return d->index;
+   Q_D(const QStackedLayout);
+   return d->index;
 }
 
 
@@ -348,12 +359,12 @@ int QStackedLayout::currentIndex() const
  */
 void QStackedLayout::setCurrentWidget(QWidget *widget)
 {
-    int index = indexOf(widget);
-    if (index == -1) {
-        qWarning("QStackedLayout::setCurrentWidget: Widget %p not contained in stack", widget);
-        return;
-    }
-    setCurrentIndex(index);
+   int index = indexOf(widget);
+   if (index == -1) {
+      qWarning("QStackedLayout::setCurrentWidget: Widget %p not contained in stack", widget);
+      return;
+   }
+   setCurrentIndex(index);
 }
 
 
@@ -365,8 +376,8 @@ void QStackedLayout::setCurrentWidget(QWidget *widget)
 */
 QWidget *QStackedLayout::currentWidget() const
 {
-    Q_D(const QStackedLayout);
-    return d->index >= 0 ? d->list.at(d->index)->widget() : 0;
+   Q_D(const QStackedLayout);
+   return d->index >= 0 ? d->list.at(d->index)->widget() : 0;
 }
 
 /*!
@@ -377,10 +388,11 @@ QWidget *QStackedLayout::currentWidget() const
 */
 QWidget *QStackedLayout::widget(int index) const
 {
-    Q_D(const QStackedLayout);
-     if (index < 0 || index >= d->list.size())
-        return 0;
-    return d->list.at(index)->widget();
+   Q_D(const QStackedLayout);
+   if (index < 0 || index >= d->list.size()) {
+      return 0;
+   }
+   return d->list.at(index)->widget();
 }
 
 /*!
@@ -391,8 +403,8 @@ QWidget *QStackedLayout::widget(int index) const
 */
 int QStackedLayout::count() const
 {
-    Q_D(const QStackedLayout);
-    return d->list.size();
+   Q_D(const QStackedLayout);
+   return d->list.size();
 }
 
 
@@ -401,13 +413,13 @@ int QStackedLayout::count() const
 */
 void QStackedLayout::addItem(QLayoutItem *item)
 {
-    QWidget *widget = item->widget();
-    if (widget) {
-        addWidget(widget);
-        delete item;
-    } else {
-        qWarning("QStackedLayout::addItem: Only widgets can be added");
-    }
+   QWidget *widget = item->widget();
+   if (widget) {
+      addWidget(widget);
+      delete item;
+   } else {
+      qWarning("QStackedLayout::addItem: Only widgets can be added");
+   }
 }
 
 /*!
@@ -415,20 +427,22 @@ void QStackedLayout::addItem(QLayoutItem *item)
 */
 QSize QStackedLayout::sizeHint() const
 {
-    Q_D(const QStackedLayout);
-    QSize s(0, 0);
-    int n = d->list.count();
+   Q_D(const QStackedLayout);
+   QSize s(0, 0);
+   int n = d->list.count();
 
-    for (int i = 0; i < n; ++i)
-        if (QWidget *widget = d->list.at(i)->widget()) {
-            QSize ws(widget->sizeHint());
-            if (widget->sizePolicy().horizontalPolicy() == QSizePolicy::Ignored)
-                ws.setWidth(0);
-            if (widget->sizePolicy().verticalPolicy() == QSizePolicy::Ignored)
-                ws.setHeight(0);
-            s = s.expandedTo(ws);
-        }
-    return s;
+   for (int i = 0; i < n; ++i)
+      if (QWidget *widget = d->list.at(i)->widget()) {
+         QSize ws(widget->sizeHint());
+         if (widget->sizePolicy().horizontalPolicy() == QSizePolicy::Ignored) {
+            ws.setWidth(0);
+         }
+         if (widget->sizePolicy().verticalPolicy() == QSizePolicy::Ignored) {
+            ws.setHeight(0);
+         }
+         s = s.expandedTo(ws);
+      }
+   return s;
 }
 
 /*!
@@ -436,14 +450,15 @@ QSize QStackedLayout::sizeHint() const
 */
 QSize QStackedLayout::minimumSize() const
 {
-    Q_D(const QStackedLayout);
-    QSize s(0, 0);
-    int n = d->list.count();
+   Q_D(const QStackedLayout);
+   QSize s(0, 0);
+   int n = d->list.count();
 
-    for (int i = 0; i < n; ++i)
-        if (QWidget *widget = d->list.at(i)->widget())
-            s = s.expandedTo(qSmartMinSize(widget));
-    return s;
+   for (int i = 0; i < n; ++i)
+      if (QWidget *widget = d->list.at(i)->widget()) {
+         s = s.expandedTo(qSmartMinSize(widget));
+      }
+   return s;
 }
 
 /*!
@@ -451,19 +466,21 @@ QSize QStackedLayout::minimumSize() const
 */
 void QStackedLayout::setGeometry(const QRect &rect)
 {
-    Q_D(QStackedLayout);
-    switch (d->stackingMode) {
-    case StackOne:
-        if (QWidget *widget = currentWidget())
+   Q_D(QStackedLayout);
+   switch (d->stackingMode) {
+      case StackOne:
+         if (QWidget *widget = currentWidget()) {
             widget->setGeometry(rect);
-        break;
-    case StackAll:
-        if (const int n = d->list.count())
+         }
+         break;
+      case StackAll:
+         if (const int n = d->list.count())
             for (int i = 0; i < n; ++i)
-                if (QWidget *widget = d->list.at(i)->widget())
-                    widget->setGeometry(rect);
-        break;
-    }
+               if (QWidget *widget = d->list.at(i)->widget()) {
+                  widget->setGeometry(rect);
+               }
+         break;
+   }
 }
 
 /*!
@@ -494,41 +511,46 @@ void QStackedLayout::setGeometry(const QRect &rect)
 
 QStackedLayout::StackingMode QStackedLayout::stackingMode() const
 {
-    Q_D(const QStackedLayout);
-    return d->stackingMode;
+   Q_D(const QStackedLayout);
+   return d->stackingMode;
 }
 
 void QStackedLayout::setStackingMode(StackingMode stackingMode)
 {
-    Q_D(QStackedLayout);
-    if (d->stackingMode == stackingMode)
-        return;
-    d->stackingMode = stackingMode;
+   Q_D(QStackedLayout);
+   if (d->stackingMode == stackingMode) {
+      return;
+   }
+   d->stackingMode = stackingMode;
 
-    const int n = d->list.count();
-    if (n == 0)
-        return;
+   const int n = d->list.count();
+   if (n == 0) {
+      return;
+   }
 
-    switch (d->stackingMode) {
-    case StackOne:
-        if (const int idx = currentIndex())
+   switch (d->stackingMode) {
+      case StackOne:
+         if (const int idx = currentIndex())
             for (int i = 0; i < n; ++i)
-                if (QWidget *widget = d->list.at(i)->widget())
-                    widget->setVisible(i == idx);
-        break;
-    case StackAll: { // Turn overlay on: Make sure all widgets are the same size
-        QRect geometry;
-        if (const QWidget *widget = currentWidget())
+               if (QWidget *widget = d->list.at(i)->widget()) {
+                  widget->setVisible(i == idx);
+               }
+         break;
+      case StackAll: { // Turn overlay on: Make sure all widgets are the same size
+         QRect geometry;
+         if (const QWidget *widget = currentWidget()) {
             geometry = widget->geometry();
-        for (int i = 0; i < n; ++i)
+         }
+         for (int i = 0; i < n; ++i)
             if (QWidget *widget = d->list.at(i)->widget()) {
-                if (!geometry.isNull())
-                    widget->setGeometry(geometry);
-                widget->setVisible(true);
+               if (!geometry.isNull()) {
+                  widget->setGeometry(geometry);
+               }
+               widget->setVisible(true);
             }
-    }
-        break;
-    }
+      }
+      break;
+   }
 }
 
 QT_END_NAMESPACE

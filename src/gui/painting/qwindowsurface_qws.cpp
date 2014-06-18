@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,153 +44,158 @@ QT_BEGIN_NAMESPACE
 
 #ifdef Q_BACKINGSTORE_SUBSURFACES
 
-typedef QMap<int, QWSWindowSurface*> SurfaceMap;
+typedef QMap<int, QWSWindowSurface *> SurfaceMap;
 Q_GLOBAL_STATIC(SurfaceMap, winIdToSurfaceMap);
 
-QWSWindowSurface* qt_findWindowSurface(int winId)
+QWSWindowSurface *qt_findWindowSurface(int winId)
 {
-    return winIdToSurfaceMap()->value(winId);
+   return winIdToSurfaceMap()->value(winId);
 }
 
 static void qt_insertWindowSurface(int winId, QWSWindowSurface *surface)
 {
-    if (!surface)
-        winIdToSurfaceMap()->remove(winId);
-    else
-        winIdToSurfaceMap()->insert(winId, surface);
+   if (!surface) {
+      winIdToSurfaceMap()->remove(winId);
+   } else {
+      winIdToSurfaceMap()->insert(winId, surface);
+   }
 }
 
 #endif // Q_BACKINGSTORE_SUBSURFACES
 
 inline bool isWidgetOpaque(const QWidget *w)
 {
-    return w->d_func()->isOpaque && !w->testAttribute(Qt::WA_TranslucentBackground);
+   return w->d_func()->isOpaque && !w->testAttribute(Qt::WA_TranslucentBackground);
 }
 
 static inline QScreen *getScreen(const QWidget *w)
 {
-    const QList<QScreen*> subScreens = qt_screen->subScreens();
-    if (subScreens.isEmpty())
-        return qt_screen;
+   const QList<QScreen *> subScreens = qt_screen->subScreens();
+   if (subScreens.isEmpty()) {
+      return qt_screen;
+   }
 
-    const int screen = QApplication::desktop()->screenNumber(w);
+   const int screen = QApplication::desktop()->screenNumber(w);
 
-    return qt_screen->subScreens().at(screen < 0 ? 0 : screen);
+   return qt_screen->subScreens().at(screen < 0 ? 0 : screen);
 }
 
 static int bytesPerPixel(QImage::Format format)
 {
-    switch (format) {
-    case QImage::Format_Invalid:
-        return 0;
+   switch (format) {
+      case QImage::Format_Invalid:
+         return 0;
 #ifndef QT_NO_DEBUG
-    case QImage::Format_Mono:
-    case QImage::Format_MonoLSB:
-        qFatal("QWSWindowSurface: Invalid backingstore format: %i",
-               int(format));
+      case QImage::Format_Mono:
+      case QImage::Format_MonoLSB:
+         qFatal("QWSWindowSurface: Invalid backingstore format: %i",
+                int(format));
 #endif
-    case QImage::Format_Indexed8:
-        return 1;
-    case QImage::Format_RGB32:
-    case QImage::Format_ARGB32:
-    case QImage::Format_ARGB32_Premultiplied:
-        return 4;
-    case QImage::Format_RGB16:
-    case QImage::Format_RGB555:
-    case QImage::Format_RGB444:
-    case QImage::Format_ARGB4444_Premultiplied:
-        return 2;
-    case QImage::Format_ARGB8565_Premultiplied:
-    case QImage::Format_ARGB8555_Premultiplied:
-    case QImage::Format_ARGB6666_Premultiplied:
-    case QImage::Format_RGB666:
-    case QImage::Format_RGB888:
-        return 3;
-    default:
+      case QImage::Format_Indexed8:
+         return 1;
+      case QImage::Format_RGB32:
+      case QImage::Format_ARGB32:
+      case QImage::Format_ARGB32_Premultiplied:
+         return 4;
+      case QImage::Format_RGB16:
+      case QImage::Format_RGB555:
+      case QImage::Format_RGB444:
+      case QImage::Format_ARGB4444_Premultiplied:
+         return 2;
+      case QImage::Format_ARGB8565_Premultiplied:
+      case QImage::Format_ARGB8555_Premultiplied:
+      case QImage::Format_ARGB6666_Premultiplied:
+      case QImage::Format_RGB666:
+      case QImage::Format_RGB888:
+         return 3;
+      default:
 #ifndef QT_NO_DEBUG
-        qFatal("QWSWindowSurface: Invalid backingstore format: %i",
-               int(format));
+         qFatal("QWSWindowSurface: Invalid backingstore format: %i",
+                int(format));
 #endif
-        return 0;
-    }
+         return 0;
+   }
 }
 
 static inline int nextMulOf4(int n)
 {
-    return ((n + 3) & 0xfffffffc);
+   return ((n + 3) & 0xfffffffc);
 }
 
-static inline void setImageMetrics(QImage &img, QWidget *window) {
-    QScreen *myScreen = getScreen(window);
-    if (myScreen) {
-        int dpmx = myScreen->width()*1000 / myScreen->physicalWidth();
-        int dpmy = myScreen->height()*1000 / myScreen->physicalHeight();
-        img.setDotsPerMeterX(dpmx);
-        img.setDotsPerMeterY(dpmy);
-    }
+static inline void setImageMetrics(QImage &img, QWidget *window)
+{
+   QScreen *myScreen = getScreen(window);
+   if (myScreen) {
+      int dpmx = myScreen->width() * 1000 / myScreen->physicalWidth();
+      int dpmy = myScreen->height() * 1000 / myScreen->physicalHeight();
+      img.setDotsPerMeterX(dpmx);
+      img.setDotsPerMeterY(dpmy);
+   }
 }
 
 void QWSWindowSurface::invalidateBuffer()
 {
 
-    QWidget *win = window();
-    if (win) {
-        win->d_func()->invalidateBuffer(win->rect());
+   QWidget *win = window();
+   if (win) {
+      win->d_func()->invalidateBuffer(win->rect());
 #ifndef QT_NO_QWS_MANAGER
-        QTLWExtra *topextra = win->d_func()->extra->topextra;
-        QWSManager *manager = topextra->qwsManager;
-        if (manager)
-            manager->d_func()->dirtyRegion(QDecoration::All,
-                                           QDecoration::Normal);
+      QTLWExtra *topextra = win->d_func()->extra->topextra;
+      QWSManager *manager = topextra->qwsManager;
+      if (manager)
+         manager->d_func()->dirtyRegion(QDecoration::All,
+                                        QDecoration::Normal);
 #endif
-    }
+   }
 }
 
 QWSWindowSurfacePrivate::QWSWindowSurfacePrivate()
-    : flags(0),
+   : flags(0),
 #ifdef QT_QWS_CLIENTBLIT
-    directId(-1),
+     directId(-1),
 #endif
-    winId(0)
+     winId(0)
 {
 }
 
 void QWSWindowSurfacePrivate::setWinId(int id)
 {
-    winId = id;
+   winId = id;
 }
 
 int QWSWindowSurface::winId() const
 {
-    // XXX: the widget winId may change during the lifetime of the widget!!!
+   // XXX: the widget winId may change during the lifetime of the widget!!!
 
-    const QWidget *win = window();
-    if (win && win->isWindow())
-        return win->internalWinId();
+   const QWidget *win = window();
+   if (win && win->isWindow()) {
+      return win->internalWinId();
+   }
 
 #ifdef Q_BACKINGSTORE_SUBSURFACES
-    if (!d_ptr->winId) {
-        QWSWindowSurface *that = const_cast<QWSWindowSurface*>(this);
-        QWSDisplay *display = QWSDisplay::instance();
-        const int id = display->takeId();
-        qt_insertWindowSurface(id, that);
-        that->d_ptr->winId = id;
+   if (!d_ptr->winId) {
+      QWSWindowSurface *that = const_cast<QWSWindowSurface *>(this);
+      QWSDisplay *display = QWSDisplay::instance();
+      const int id = display->takeId();
+      qt_insertWindowSurface(id, that);
+      that->d_ptr->winId = id;
 
-        if (win)
-            display->nameRegion(id, win->objectName(), win->windowTitle());
-        else
-            display->nameRegion(id, QString(), QString());
+      if (win) {
+         display->nameRegion(id, win->objectName(), win->windowTitle());
+      } else {
+         display->nameRegion(id, QString(), QString());
+      }
 
-        display->setAltitude(id, 1, true); // XXX
-    }
+      display->setAltitude(id, 1, true); // XXX
+   }
 #endif
 
-    return d_ptr->winId;
+   return d_ptr->winId;
 }
 
 void QWSWindowSurface::setWinId(int id)
 {
-    d_ptr->winId = id;
+   d_ptr->winId = id;
 }
 
 /*!
@@ -390,7 +395,7 @@ void QWSWindowSurface::setWinId(int id)
     Constructs an empty surface.
 */
 QWSWindowSurface::QWSWindowSurface()
-    : QWindowSurface(0), d_ptr(new QWSWindowSurfacePrivate)
+   : QWindowSurface(0), d_ptr(new QWSWindowSurfacePrivate)
 {
 }
 
@@ -398,18 +403,19 @@ QWSWindowSurface::QWSWindowSurface()
     Constructs an empty surface for the given top-level \a widget.
 */
 QWSWindowSurface::QWSWindowSurface(QWidget *widget)
-    : QWindowSurface(widget), d_ptr(new QWSWindowSurfacePrivate)
+   : QWindowSurface(widget), d_ptr(new QWSWindowSurfacePrivate)
 {
 }
 
 QWSWindowSurface::~QWSWindowSurface()
 {
 #ifdef Q_BACKINGSTORE_SUBSURFACES
-    if (d_ptr->winId)
-        winIdToSurfaceMap()->remove(d_ptr->winId);
+   if (d_ptr->winId) {
+      winIdToSurfaceMap()->remove(d_ptr->winId);
+   }
 #endif
 
-    delete d_ptr;
+   delete d_ptr;
 }
 
 /*!
@@ -419,47 +425,48 @@ QWSWindowSurface::~QWSWindowSurface()
 */
 QPoint QWSWindowSurface::painterOffset() const
 {
-    const QWidget *w = window();
-    if (!w)
-        return QPoint();
-    return w->geometry().topLeft() - w->frameGeometry().topLeft();
+   const QWidget *w = window();
+   if (!w) {
+      return QPoint();
+   }
+   return w->geometry().topLeft() - w->frameGeometry().topLeft();
 }
 
 void QWSWindowSurface::beginPaint(const QRegion &)
 {
-    lock();
+   lock();
 }
 
 void QWSWindowSurface::endPaint(const QRegion &)
 {
-    unlock();
+   unlock();
 }
 
 // XXX: documentation!!!
 QByteArray QWSWindowSurface::transientState() const
 {
-    return QByteArray();
+   return QByteArray();
 }
 
 QByteArray QWSWindowSurface::permanentState() const
 {
-    return QByteArray();
+   return QByteArray();
 }
 
 void QWSWindowSurface::setTransientState(const QByteArray &state)
 {
-    Q_UNUSED(state);
+   Q_UNUSED(state);
 }
 
 void QWSWindowSurface::setPermanentState(const QByteArray &state)
 {
-    Q_UNUSED(state);
+   Q_UNUSED(state);
 }
 
 bool QWSWindowSurface::lock(int timeout)
 {
-    Q_UNUSED(timeout);
-    return true;
+   Q_UNUSED(timeout);
+   return true;
 }
 
 void QWSWindowSurface::unlock()
@@ -470,20 +477,20 @@ void QWSWindowSurface::unlock()
 /*! \internal */
 const QRegion QWSWindowSurface::directRegion() const
 {
-    return d_ptr->direct;
+   return d_ptr->direct;
 }
 
 /*! \internal */
 int QWSWindowSurface::directRegionId() const
 {
-    return d_ptr->directId;
+   return d_ptr->directId;
 }
 
 /*! \internal */
 void QWSWindowSurface::setDirectRegion(const QRegion &r, int id)
 {
-    d_ptr->direct = r;
-    d_ptr->directId = id;
+   d_ptr->direct = r;
+   d_ptr->directId = id;
 }
 #endif
 
@@ -494,7 +501,7 @@ void QWSWindowSurface::setDirectRegion(const QRegion &r, int id)
 */
 const QRegion QWSWindowSurface::clipRegion() const
 {
-    return d_ptr->clip;
+   return d_ptr->clip;
 }
 
 /*!
@@ -505,43 +512,46 @@ const QRegion QWSWindowSurface::clipRegion() const
 */
 void QWSWindowSurface::setClipRegion(const QRegion &clip)
 {
-    if (clip == d_ptr->clip)
-        return;
+   if (clip == d_ptr->clip) {
+      return;
+   }
 
-    QRegion expose = (clip - d_ptr->clip);
-    d_ptr->clip = clip;
+   QRegion expose = (clip - d_ptr->clip);
+   d_ptr->clip = clip;
 
-    if (expose.isEmpty() || clip.isEmpty())
-        return; // No repaint or flush required.
+   if (expose.isEmpty() || clip.isEmpty()) {
+      return;   // No repaint or flush required.
+   }
 
-    QWidget *win = window();
-    if (!win)
-        return;
+   QWidget *win = window();
+   if (!win) {
+      return;
+   }
 
-    if (isBuffered()) {
-        // No repaint required. Flush exposed area via the backing store.
-        win->d_func()->syncBackingStore(expose);
-        return;
-    }
+   if (isBuffered()) {
+      // No repaint required. Flush exposed area via the backing store.
+      win->d_func()->syncBackingStore(expose);
+      return;
+   }
 
 #ifndef QT_NO_QWS_MANAGER
-    // Invalidate exposed decoration area.
-    if (win && win->isWindow()) {
-        QTLWExtra *topextra = win->d_func()->extra->topextra;
-        if (QWSManager *manager = topextra->qwsManager) {
-            QRegion decorationExpose(manager->region());
-            decorationExpose.translate(-win->geometry().topLeft());
-            decorationExpose &= expose;
-            if (!decorationExpose.isEmpty()) {
-                expose -= decorationExpose;
-                manager->d_func()->dirtyRegion(QDecoration::All, QDecoration::Normal, decorationExpose);
-            }
-        }
-    }
+   // Invalidate exposed decoration area.
+   if (win && win->isWindow()) {
+      QTLWExtra *topextra = win->d_func()->extra->topextra;
+      if (QWSManager *manager = topextra->qwsManager) {
+         QRegion decorationExpose(manager->region());
+         decorationExpose.translate(-win->geometry().topLeft());
+         decorationExpose &= expose;
+         if (!decorationExpose.isEmpty()) {
+            expose -= decorationExpose;
+            manager->d_func()->dirtyRegion(QDecoration::All, QDecoration::Normal, decorationExpose);
+         }
+      }
+   }
 #endif
 
-    // Invalidate exposed widget area.
-    win->d_func()->invalidateBuffer(expose);
+   // Invalidate exposed widget area.
+   win->d_func()->invalidateBuffer(expose);
 }
 
 /*!
@@ -551,7 +561,7 @@ void QWSWindowSurface::setClipRegion(const QRegion &clip)
 */
 QWSWindowSurface::SurfaceFlags QWSWindowSurface::surfaceFlags() const
 {
-    return d_ptr->flags;
+   return d_ptr->flags;
 }
 
 /*!
@@ -562,138 +572,146 @@ QWSWindowSurface::SurfaceFlags QWSWindowSurface::surfaceFlags() const
 */
 void QWSWindowSurface::setSurfaceFlags(SurfaceFlags flags)
 {
-    d_ptr->flags = flags;
+   d_ptr->flags = flags;
 }
 
 void QWSWindowSurface::setGeometry(const QRect &rect)
 {
-    QRegion mask = rect;
+   QRegion mask = rect;
 
-    const QWidget *win = window();
-    if (win) {
+   const QWidget *win = window();
+   if (win) {
 #ifndef QT_NO_QWS_MANAGER
-        if (win->isWindow()) {
-            QTLWExtra *topextra = win->d_func()->extra->topextra;
-            QWSManager *manager = topextra->qwsManager;
+      if (win->isWindow()) {
+         QTLWExtra *topextra = win->d_func()->extra->topextra;
+         QWSManager *manager = topextra->qwsManager;
 
-            if (manager) {
-                // The frame geometry is the bounding rect of manager->region,
-                // which could be too much, so we need to clip.
-                mask &= (manager->region() + win->geometry());
-            }
-        }
+         if (manager) {
+            // The frame geometry is the bounding rect of manager->region,
+            // which could be too much, so we need to clip.
+            mask &= (manager->region() + win->geometry());
+         }
+      }
 #endif
 
-        const QRegion winMask = win->mask();
-        if (!winMask.isEmpty())
-            mask &= winMask.translated(win->geometry().topLeft());
-    }
+      const QRegion winMask = win->mask();
+      if (!winMask.isEmpty()) {
+         mask &= winMask.translated(win->geometry().topLeft());
+      }
+   }
 
-    setGeometry(rect, mask);
+   setGeometry(rect, mask);
 }
 
 void QWSWindowSurface::setGeometry(const QRect &rect, const QRegion &mask)
 {
-    if (rect == geometry()) // XXX: && mask == prevMask
-        return;
+   if (rect == geometry()) { // XXX: && mask == prevMask
+      return;
+   }
 
-    const bool isResize = rect.size() != geometry().size();
-    const bool needsRepaint = isResize || !isBuffered();
+   const bool isResize = rect.size() != geometry().size();
+   const bool needsRepaint = isResize || !isBuffered();
 
-    QWindowSurface::setGeometry(rect);
+   QWindowSurface::setGeometry(rect);
 
-    const QRegion region = mask & rect;
-    QWidget *win = window();
-    // Only request regions for widgets visible on the screen.
-    // (Added the !win check for compatibility reasons, because
-    // there was no "if (win)" check before).
-    const bool requestQWSRegion = !win || !win->testAttribute(Qt::WA_DontShowOnScreen);
-    if (requestQWSRegion)
-        QWidget::qwsDisplay()->requestRegion(winId(), key(), permanentState(), region);
+   const QRegion region = mask & rect;
+   QWidget *win = window();
+   // Only request regions for widgets visible on the screen.
+   // (Added the !win check for compatibility reasons, because
+   // there was no "if (win)" check before).
+   const bool requestQWSRegion = !win || !win->testAttribute(Qt::WA_DontShowOnScreen);
+   if (requestQWSRegion) {
+      QWidget::qwsDisplay()->requestRegion(winId(), key(), permanentState(), region);
+   }
 
-    if (needsRepaint)
-        invalidateBuffer();
+   if (needsRepaint) {
+      invalidateBuffer();
+   }
 
-    if (!requestQWSRegion) {
-        // We didn't request a region, hence we won't get a QWSRegionEvent::Allocation
-        // event back from the server so we set the clip directly. We have to
-        // do this after the invalidateBuffer() call above, as it might trigger a
-        // backing store sync, resulting in too many update requests.
-        setClipRegion(region);
-    }
+   if (!requestQWSRegion) {
+      // We didn't request a region, hence we won't get a QWSRegionEvent::Allocation
+      // event back from the server so we set the clip directly. We have to
+      // do this after the invalidateBuffer() call above, as it might trigger a
+      // backing store sync, resulting in too many update requests.
+      setClipRegion(region);
+   }
 }
 
 static inline void flushUpdate(QWidget *widget, const QRegion &region,
                                const QPoint &offset)
 {
 #ifdef QT_NO_PAINT_DEBUG
-    Q_UNUSED(widget);
-    Q_UNUSED(region);
-    Q_UNUSED(offset);
+   Q_UNUSED(widget);
+   Q_UNUSED(region);
+   Q_UNUSED(offset);
 #else
-    static int delay = -1;
+   static int delay = -1;
 
-    if (delay == -1)
-        delay = qgetenv("QT_FLUSH_UPDATE").toInt() * 10;
+   if (delay == -1) {
+      delay = qgetenv("QT_FLUSH_UPDATE").toInt() * 10;
+   }
 
-    if (delay == 0)
-        return;
+   if (delay == 0) {
+      return;
+   }
 
-    static QWSYellowSurface surface(true);
-    surface.setDelay(delay);
-    surface.flush(widget, region, offset);
+   static QWSYellowSurface surface(true);
+   surface.setDelay(delay);
+   surface.flush(widget, region, offset);
 #endif // QT_NO_PAINT_DEBUG
 }
 
 void QWSWindowSurface::flush(QWidget *widget, const QRegion &region,
                              const QPoint &offset)
 {
-    const QWidget *win = window();
-    if (!win)
-        return;
+   const QWidget *win = window();
+   if (!win) {
+      return;
+   }
 
 #ifndef QT_NO_GRAPHICSVIEW
-    QWExtra *extra = win->d_func()->extra;
-    if (extra && extra->proxyWidget)
-        return;
+   QWExtra *extra = win->d_func()->extra;
+   if (extra && extra->proxyWidget) {
+      return;
+   }
 #endif //QT_NO_GRAPHICSVIEW
 
-    Q_UNUSED(offset);
+   Q_UNUSED(offset);
 
-    const bool opaque = isOpaque();
+   const bool opaque = isOpaque();
 #ifdef QT_QWS_DISABLE_FLUSHCLIPPING
-    QRegion toFlush = region;
+   QRegion toFlush = region;
 #else
-    QRegion toFlush = region & d_ptr->clip;
+   QRegion toFlush = region & d_ptr->clip;
 #endif
 
-    if (!toFlush.isEmpty()) {
-        flushUpdate(widget, toFlush, QPoint(0, 0));
-        QPoint globalZero = win->mapToGlobal(QPoint(0, 0));
-        toFlush.translate(globalZero);
+   if (!toFlush.isEmpty()) {
+      flushUpdate(widget, toFlush, QPoint(0, 0));
+      QPoint globalZero = win->mapToGlobal(QPoint(0, 0));
+      toFlush.translate(globalZero);
 
 #ifdef QT_QWS_CLIENTBLIT
-        bool needRepaint = true;
-        if (opaque) {
-            QScreen* widgetScreen = getScreen(widget);
-            if (widgetScreen->supportsBlitInClients()) {
+      bool needRepaint = true;
+      if (opaque) {
+         QScreen *widgetScreen = getScreen(widget);
+         if (widgetScreen->supportsBlitInClients()) {
 
-                QWSDisplay::grab();
-                if(directRegion().intersected(toFlush) == toFlush) {
-                    QPoint translate = -globalZero + painterOffset() + geometry().topLeft();
-                    QRegion flushRegion = toFlush.translated(translate);
-                    widgetScreen->blit(image(), geometry().topLeft(), flushRegion);
-                    widgetScreen->setDirty(toFlush.boundingRect());
-                    needRepaint = false;
-                }
-                QWSDisplay::ungrab();
+            QWSDisplay::grab();
+            if (directRegion().intersected(toFlush) == toFlush) {
+               QPoint translate = -globalZero + painterOffset() + geometry().topLeft();
+               QRegion flushRegion = toFlush.translated(translate);
+               widgetScreen->blit(image(), geometry().topLeft(), flushRegion);
+               widgetScreen->setDirty(toFlush.boundingRect());
+               needRepaint = false;
             }
-        }
+            QWSDisplay::ungrab();
+         }
+      }
 
-        if(needRepaint)
+      if (needRepaint)
 #endif
-            win->qwsDisplay()->repaintRegion(winId(), win->windowFlags(), opaque, toFlush);
-    }
+         win->qwsDisplay()->repaintRegion(winId(), win->windowFlags(), opaque, toFlush);
+   }
 }
 
 /*!
@@ -712,8 +730,8 @@ void QWSWindowSurface::flush(QWidget *widget, const QRegion &region,
 */
 bool QWSWindowSurface::move(const QPoint &offset)
 {
-    QWindowSurface::setGeometry(geometry().translated(offset));
-    return isBuffered();
+   QWindowSurface::setGeometry(geometry().translated(offset));
+   return isBuffered();
 }
 
 /*!
@@ -733,9 +751,9 @@ bool QWSWindowSurface::move(const QPoint &offset)
 */
 QRegion QWSWindowSurface::move(const QPoint &offset, const QRegion &newClip)
 {
-    const QRegion oldGeometry = geometry();
-    QWindowSurface::setGeometry(geometry().translated(offset));
-    return oldGeometry + newClip;
+   const QRegion oldGeometry = geometry();
+   QWindowSurface::setGeometry(geometry().translated(offset));
+   return oldGeometry + newClip;
 }
 
 void QWSWindowSurface::releaseSurface()
@@ -744,53 +762,57 @@ void QWSWindowSurface::releaseSurface()
 
 bool QWSMemorySurface::lock(int timeout)
 {
-    Q_UNUSED(timeout);
+   Q_UNUSED(timeout);
 #ifndef QT_NO_QWS_MULTIPROCESS
-    if (memlock && !memlock->lock(QWSLock::BackingStore))
-        return false;
+   if (memlock && !memlock->lock(QWSLock::BackingStore)) {
+      return false;
+   }
 #endif
 
-    threadLock.lock();
-    return true;
+   threadLock.lock();
+   return true;
 }
 
 void QWSMemorySurface::unlock()
 {
-    threadLock.unlock();
+   threadLock.unlock();
 
 #ifndef QT_NO_QWS_MULTIPROCESS
-    if (memlock)
-        memlock->unlock(QWSLock::BackingStore);
+   if (memlock) {
+      memlock->unlock(QWSLock::BackingStore);
+   }
 #endif
 }
 
 QWSMemorySurface::QWSMemorySurface()
-    : QWSWindowSurface()
+   : QWSWindowSurface()
 #ifndef QT_NO_QWS_MULTIPROCESS
-    , memlock(0)
+   , memlock(0)
 #endif
 {
-    setSurfaceFlags(Buffered);
+   setSurfaceFlags(Buffered);
 }
 
 QWSMemorySurface::QWSMemorySurface(QWidget *w)
-    : QWSWindowSurface(w)
+   : QWSWindowSurface(w)
 {
-    SurfaceFlags flags = Buffered;
-    if (isWidgetOpaque(w))
-        flags |= Opaque;
-    setSurfaceFlags(flags);
+   SurfaceFlags flags = Buffered;
+   if (isWidgetOpaque(w)) {
+      flags |= Opaque;
+   }
+   setSurfaceFlags(flags);
 
 #ifndef QT_NO_QWS_MULTIPROCESS
-    memlock = QWSDisplay::Data::getClientLock();
+   memlock = QWSDisplay::Data::getClientLock();
 #endif
 }
 
 QWSMemorySurface::~QWSMemorySurface()
 {
 #ifndef QT_NO_QWS_MULTIPROCESS
-    if (memlock != QWSDisplay::Data::getClientLock())
-        delete memlock;
+   if (memlock != QWSDisplay::Data::getClientLock()) {
+      delete memlock;
+   }
 #endif
 }
 
@@ -798,84 +820,92 @@ QWSMemorySurface::~QWSMemorySurface()
 QImage::Format
 QWSMemorySurface::preferredImageFormat(const QWidget *widget) const
 {
-    QScreen *screen = getScreen(widget);
-    const int depth = screen->depth();
-    const bool opaque = isWidgetOpaque(widget);
+   QScreen *screen = getScreen(widget);
+   const int depth = screen->depth();
+   const bool opaque = isWidgetOpaque(widget);
 
-    if (!opaque) {
-        if (depth <= 12)
-            return QImage::Format_ARGB4444_Premultiplied;
-        else if (depth <= 15)
-            return QImage::Format_ARGB8555_Premultiplied;
-        else if (depth <= 16)
-            return QImage::Format_ARGB8565_Premultiplied;
-        else if (depth <= 18)
-            return QImage::Format_ARGB6666_Premultiplied;
-        else
-            return QImage::Format_ARGB32_Premultiplied;
-    }
+   if (!opaque) {
+      if (depth <= 12) {
+         return QImage::Format_ARGB4444_Premultiplied;
+      } else if (depth <= 15) {
+         return QImage::Format_ARGB8555_Premultiplied;
+      } else if (depth <= 16) {
+         return QImage::Format_ARGB8565_Premultiplied;
+      } else if (depth <= 18) {
+         return QImage::Format_ARGB6666_Premultiplied;
+      } else {
+         return QImage::Format_ARGB32_Premultiplied;
+      }
+   }
 
-    QImage::Format format = screen->pixelFormat();
-    if (format > QImage::Format_Indexed8) // ### assumes all new image formats supports a QPainter
-        return format;
+   QImage::Format format = screen->pixelFormat();
+   if (format > QImage::Format_Indexed8) { // ### assumes all new image formats supports a QPainter
+      return format;
+   }
 
-    if (depth <= 12)
-        return QImage::Format_RGB444;
-    else if (depth <= 15)
-        return QImage::Format_RGB555;
-    else if (depth <= 16)
-        return QImage::Format_RGB16;
-    else if (depth <= 18)
-        return QImage::Format_RGB666;
-    else if (depth <= 24)
-        return QImage::Format_RGB888;
-    else
-        return QImage::Format_ARGB32_Premultiplied;
+   if (depth <= 12) {
+      return QImage::Format_RGB444;
+   } else if (depth <= 15) {
+      return QImage::Format_RGB555;
+   } else if (depth <= 16) {
+      return QImage::Format_RGB16;
+   } else if (depth <= 18) {
+      return QImage::Format_RGB666;
+   } else if (depth <= 24) {
+      return QImage::Format_RGB888;
+   } else {
+      return QImage::Format_ARGB32_Premultiplied;
+   }
 }
 
 #ifndef QT_NO_QWS_MULTIPROCESS
 void QWSMemorySurface::setLock(int lockId)
 {
-    if (memlock && memlock->id() == lockId)
-        return;
-    if (memlock != QWSDisplay::Data::getClientLock())
-        delete memlock;
-    memlock = (lockId == -1 ? 0 : new QWSLock(lockId));
+   if (memlock && memlock->id() == lockId) {
+      return;
+   }
+   if (memlock != QWSDisplay::Data::getClientLock()) {
+      delete memlock;
+   }
+   memlock = (lockId == -1 ? 0 : new QWSLock(lockId));
 }
 #endif // QT_NO_QWS_MULTIPROCESS
 
 bool QWSMemorySurface::isValid() const
 {
-    if (img.isNull())
-        return true;
+   if (img.isNull()) {
+      return true;
+   }
 
-    const QWidget *win = window();
-    if (preferredImageFormat(win) != img.format())
-        return false;
+   const QWidget *win = window();
+   if (preferredImageFormat(win) != img.format()) {
+      return false;
+   }
 
-    if (isOpaque() != isWidgetOpaque(win)) // XXX: use QWidgetPrivate::isOpaque()
-        return false;
+   if (isOpaque() != isWidgetOpaque(win)) { // XXX: use QWidgetPrivate::isOpaque()
+      return false;
+   }
 
-    return true;
+   return true;
 }
 
 // ### copied from qwindowsurface_raster.cpp -- should be cross-platform
 void QWSMemorySurface::beginPaint(const QRegion &rgn)
 {
-    if (!isWidgetOpaque(window())) {
-        QPainter p(&img);
-        p.setCompositionMode(QPainter::CompositionMode_Source);
-        const QVector<QRect> rects = rgn.rects();
-        const QColor blank = Qt::transparent;
-        for (QVector<QRect>::const_iterator it = rects.begin(); it != rects.end(); ++it) {
-            QRect r = *it;
+   if (!isWidgetOpaque(window())) {
+      QPainter p(&img);
+      p.setCompositionMode(QPainter::CompositionMode_Source);
+      const QVector<QRect> rects = rgn.rects();
+      const QColor blank = Qt::transparent;
+      for (QVector<QRect>::const_iterator it = rects.begin(); it != rects.end(); ++it) {
+         QRect r = *it;
 #ifdef Q_BACKINGSTORE_SUBSURFACES
-            r.translate(painterOffset());
+         r.translate(painterOffset());
 #endif
-            p.fillRect(r, blank);
-        }
-    }
-    QWSWindowSurface::beginPaint(rgn);
+         p.fillRect(r, blank);
+      }
+   }
+   QWSWindowSurface::beginPaint(rgn);
 }
 
 // from qwindowsurface.cpp
@@ -883,286 +913,293 @@ extern void qt_scrollRectInImage(QImage &img, const QRect &rect, const QPoint &o
 
 bool QWSMemorySurface::scroll(const QRegion &area, int dx, int dy)
 {
-    const QVector<QRect> rects = area.rects();
-    for (int i = 0; i < rects.size(); ++i)
-        qt_scrollRectInImage(img, rects.at(i), QPoint(dx, dy));
+   const QVector<QRect> rects = area.rects();
+   for (int i = 0; i < rects.size(); ++i) {
+      qt_scrollRectInImage(img, rects.at(i), QPoint(dx, dy));
+   }
 
-    return true;
+   return true;
 }
 
 QPoint QWSMemorySurface::painterOffset() const
 {
-    const QWidget *w = window();
-    if (!w)
-        return QPoint();
+   const QWidget *w = window();
+   if (!w) {
+      return QPoint();
+   }
 
-    if (w->mask().isEmpty())
-        return QWSWindowSurface::painterOffset();
+   if (w->mask().isEmpty()) {
+      return QWSWindowSurface::painterOffset();
+   }
 
-    const QRegion region = w->mask()
-                           & w->frameGeometry().translated(-w->geometry().topLeft());
-    return -region.boundingRect().topLeft();
+   const QRegion region = w->mask()
+                          & w->frameGeometry().translated(-w->geometry().topLeft());
+   return -region.boundingRect().topLeft();
 }
 
 QWSLocalMemSurface::QWSLocalMemSurface()
-    : QWSMemorySurface(), mem(0), memsize(0)
+   : QWSMemorySurface(), mem(0), memsize(0)
 {
 }
 
 QWSLocalMemSurface::QWSLocalMemSurface(QWidget *w)
-    : QWSMemorySurface(w), mem(0), memsize(0)
+   : QWSMemorySurface(w), mem(0), memsize(0)
 {
 }
 
 QWSLocalMemSurface::~QWSLocalMemSurface()
 {
-    if (memsize)
-        delete[] mem;
+   if (memsize) {
+      delete[] mem;
+   }
 }
 
 void QWSLocalMemSurface::setGeometry(const QRect &rect)
 {
-    QSize size = rect.size();
+   QSize size = rect.size();
 
-    QWidget *win = window();
-    if (win && !win->mask().isEmpty()) {
-        const QRegion region = win->mask()
-                               & rect.translated(-win->geometry().topLeft());
-        size = region.boundingRect().size();
-    }
+   QWidget *win = window();
+   if (win && !win->mask().isEmpty()) {
+      const QRegion region = win->mask()
+                             & rect.translated(-win->geometry().topLeft());
+      size = region.boundingRect().size();
+   }
 
-    uchar *deleteLater = 0;
+   uchar *deleteLater = 0;
 
-    if (img.size() != size) {
-        if (size.isEmpty()) {
-            if (memsize) {
-                // In case of a Hide event we need to delete the memory after sending the
-                // event to the server in order to let the server animate the event.
-                deleteLater = mem;
-                memsize = 0;
-            }
-            mem = 0;
-            img = QImage();
-        } else {
-            const QImage::Format format = preferredImageFormat(win);
-            const int bpl = nextMulOf4(bytesPerPixel(format) * size.width());
-            const int imagesize = bpl * size.height();
-            if (memsize < imagesize) {
-                delete[] mem;
-                memsize = imagesize;
-                mem = new uchar[memsize];
-            }
-            img = QImage(mem, size.width(), size.height(), bpl, format);
-            setImageMetrics(img, win);
-        }
-    }
+   if (img.size() != size) {
+      if (size.isEmpty()) {
+         if (memsize) {
+            // In case of a Hide event we need to delete the memory after sending the
+            // event to the server in order to let the server animate the event.
+            deleteLater = mem;
+            memsize = 0;
+         }
+         mem = 0;
+         img = QImage();
+      } else {
+         const QImage::Format format = preferredImageFormat(win);
+         const int bpl = nextMulOf4(bytesPerPixel(format) * size.width());
+         const int imagesize = bpl * size.height();
+         if (memsize < imagesize) {
+            delete[] mem;
+            memsize = imagesize;
+            mem = new uchar[memsize];
+         }
+         img = QImage(mem, size.width(), size.height(), bpl, format);
+         setImageMetrics(img, win);
+      }
+   }
 
-    QWSWindowSurface::setGeometry(rect);
+   QWSWindowSurface::setGeometry(rect);
 
-    delete[] deleteLater;
+   delete[] deleteLater;
 }
 
 QByteArray QWSLocalMemSurface::permanentState() const
 {
-    QByteArray array(sizeof(uchar*) + 3 * sizeof(int) + sizeof(SurfaceFlags), Qt::Uninitialized);
+   QByteArray array(sizeof(uchar *) + 3 * sizeof(int) + sizeof(SurfaceFlags), Qt::Uninitialized);
 
-    char *ptr = array.data();
+   char *ptr = array.data();
 
-    *reinterpret_cast<uchar**>(ptr) = mem;
-    ptr += sizeof(uchar*);
+   *reinterpret_cast<uchar **>(ptr) = mem;
+   ptr += sizeof(uchar *);
 
-    reinterpret_cast<int*>(ptr)[0] = img.width();
-    reinterpret_cast<int*>(ptr)[1] = img.height();
-    ptr += 2 * sizeof(int);
+   reinterpret_cast<int *>(ptr)[0] = img.width();
+   reinterpret_cast<int *>(ptr)[1] = img.height();
+   ptr += 2 * sizeof(int);
 
-    *reinterpret_cast<int *>(ptr) = img.format();
-    ptr += sizeof(int);
+   *reinterpret_cast<int *>(ptr) = img.format();
+   ptr += sizeof(int);
 
-    *reinterpret_cast<SurfaceFlags*>(ptr) = surfaceFlags();
+   *reinterpret_cast<SurfaceFlags *>(ptr) = surfaceFlags();
 
-    return array;
+   return array;
 }
 
 void QWSLocalMemSurface::setPermanentState(const QByteArray &data)
 {
-    if (memsize) {
-        delete[] mem;
-        memsize = 0;
-    }
+   if (memsize) {
+      delete[] mem;
+      memsize = 0;
+   }
 
-    int width;
-    int height;
-    QImage::Format format;
-    SurfaceFlags flags;
+   int width;
+   int height;
+   QImage::Format format;
+   SurfaceFlags flags;
 
-    const char *ptr = data.constData();
+   const char *ptr = data.constData();
 
-    mem = *reinterpret_cast<uchar* const*>(ptr);
-    ptr += sizeof(uchar*);
+   mem = *reinterpret_cast<uchar *const *>(ptr);
+   ptr += sizeof(uchar *);
 
-    width = reinterpret_cast<const int*>(ptr)[0];
-    height = reinterpret_cast<const int*>(ptr)[1];
-    ptr += 2 * sizeof(int);
+   width = reinterpret_cast<const int *>(ptr)[0];
+   height = reinterpret_cast<const int *>(ptr)[1];
+   ptr += 2 * sizeof(int);
 
-    format = QImage::Format(*reinterpret_cast<const int*>(ptr));
-    ptr += sizeof(int);
+   format = QImage::Format(*reinterpret_cast<const int *>(ptr));
+   ptr += sizeof(int);
 
-    flags = *reinterpret_cast<const SurfaceFlags*>(ptr);
+   flags = *reinterpret_cast<const SurfaceFlags *>(ptr);
 
-    const int bpl = nextMulOf4(bytesPerPixel(format) * width);
-    QWSMemorySurface::img = QImage(mem, width, height, bpl, format);
-    setSurfaceFlags(flags);
+   const int bpl = nextMulOf4(bytesPerPixel(format) * width);
+   QWSMemorySurface::img = QImage(mem, width, height, bpl, format);
+   setSurfaceFlags(flags);
 }
 
 void QWSLocalMemSurface::releaseSurface()
 {
-    if (memsize) {
-        delete[] mem;
-        memsize = 0;
-    }
-    mem = 0;
-    img = QImage();
+   if (memsize) {
+      delete[] mem;
+      memsize = 0;
+   }
+   mem = 0;
+   img = QImage();
 }
 
 #ifndef QT_NO_QWS_MULTIPROCESS
 
 QWSSharedMemSurface::QWSSharedMemSurface()
-    : QWSMemorySurface()
+   : QWSMemorySurface()
 {
 }
 
 QWSSharedMemSurface::QWSSharedMemSurface(QWidget *widget)
-    : QWSMemorySurface(widget)
+   : QWSMemorySurface(widget)
 {
 }
 
 QWSSharedMemSurface::~QWSSharedMemSurface()
 {
-    // mem.detach() is done automatically by ~QSharedMemory
+   // mem.detach() is done automatically by ~QSharedMemory
 }
 
 bool QWSSharedMemSurface::setMemory(int memId)
 {
-    if (mem.id() == memId)
-        return true;
+   if (mem.id() == memId) {
+      return true;
+   }
 
-    mem.detach();
+   mem.detach();
 
-    if (memId != -1 && !mem.attach(memId)) {
+   if (memId != -1 && !mem.attach(memId)) {
 #ifndef QT_NO_DEBUG
-        perror("QWSSharedMemSurface: attaching to shared memory");
-        qCritical("QWSSharedMemSurface: Error attaching to shared memory 0x%x", memId);
+      perror("QWSSharedMemSurface: attaching to shared memory");
+      qCritical("QWSSharedMemSurface: Error attaching to shared memory 0x%x", memId);
 #endif
-        return false;
-    }
+      return false;
+   }
 
-    return true;
+   return true;
 }
 
 #ifdef QT_QWS_CLIENTBLIT
 void QWSSharedMemSurface::setDirectRegion(const QRegion &r, int id)
 {
-    QWSMemorySurface::setDirectRegion(r, id);
-    if (mem.address())
-        *(uint *)mem.address() = id;
+   QWSMemorySurface::setDirectRegion(r, id);
+   if (mem.address()) {
+      *(uint *)mem.address() = id;
+   }
 }
 
 const QRegion QWSSharedMemSurface::directRegion() const
 {
-    if (mem.address() && *(uint *)mem.address() == uint(directRegionId()))
-        return QWSMemorySurface::directRegion();
-    return QRegion();
+   if (mem.address() && *(uint *)mem.address() == uint(directRegionId())) {
+      return QWSMemorySurface::directRegion();
+   }
+   return QRegion();
 }
 #endif
 
 void QWSSharedMemSurface::setPermanentState(const QByteArray &data)
 {
-    int memId;
-    int width;
-    int height;
-    int lockId;
-    QImage::Format format;
-    SurfaceFlags flags;
+   int memId;
+   int width;
+   int height;
+   int lockId;
+   QImage::Format format;
+   SurfaceFlags flags;
 
-    const int *ptr = reinterpret_cast<const int*>(data.constData());
+   const int *ptr = reinterpret_cast<const int *>(data.constData());
 
-    memId = ptr[0];
-    width = ptr[1];
-    height = ptr[2];
-    lockId = ptr[3];
-    format = QImage::Format(ptr[4]);
-    flags = SurfaceFlags(ptr[5]);
+   memId = ptr[0];
+   width = ptr[1];
+   height = ptr[2];
+   lockId = ptr[3];
+   format = QImage::Format(ptr[4]);
+   flags = SurfaceFlags(ptr[5]);
 
-    setSurfaceFlags(flags);
-    setMemory(memId);
-    setLock(lockId);
+   setSurfaceFlags(flags);
+   setMemory(memId);
+   setLock(lockId);
 
 #ifdef QT_QWS_CLIENTBLIT
-    uchar *base = static_cast<uchar*>(mem.address()) + sizeof(uint);
+   uchar *base = static_cast<uchar *>(mem.address()) + sizeof(uint);
 #else
-    uchar *base = static_cast<uchar*>(mem.address());
+   uchar *base = static_cast<uchar *>(mem.address());
 #endif
-    const int bpl = nextMulOf4(bytesPerPixel(format) * width);
-    QWSMemorySurface::img = QImage(base, width, height, bpl, format);
+   const int bpl = nextMulOf4(bytesPerPixel(format) * width);
+   QWSMemorySurface::img = QImage(base, width, height, bpl, format);
 }
 
 void QWSSharedMemSurface::setGeometry(const QRect &rect)
 {
-    const QSize size = rect.size();
-    if (img.size() != size) {
-        if (size.isEmpty()) {
+   const QSize size = rect.size();
+   if (img.size() != size) {
+      if (size.isEmpty()) {
+         mem.detach();
+         img = QImage();
+      } else {
+         QWidget *win = window();
+         const QImage::Format format = preferredImageFormat(win);
+         const int bpl = nextMulOf4(bytesPerPixel(format) * size.width());
+#ifdef QT_QWS_CLIENTBLIT
+         const int imagesize = bpl * size.height() + sizeof(uint);
+#else
+         const int imagesize = bpl * size.height();
+#endif
+         if (mem.size() < imagesize) {
             mem.detach();
-            img = QImage();
-        } else {
-            QWidget *win = window();
-            const QImage::Format format = preferredImageFormat(win);
-            const int bpl = nextMulOf4(bytesPerPixel(format) * size.width());
-#ifdef QT_QWS_CLIENTBLIT
-            const int imagesize = bpl * size.height() + sizeof(uint);
-#else
-            const int imagesize = bpl * size.height();
-#endif
-            if (mem.size() < imagesize) {
-                mem.detach();
-                if (!mem.create(imagesize)) {
-                    perror("QWSSharedMemSurface::setGeometry allocating shared memory");
-                    qFatal("Error creating shared memory of size %d", imagesize);
-                }
+            if (!mem.create(imagesize)) {
+               perror("QWSSharedMemSurface::setGeometry allocating shared memory");
+               qFatal("Error creating shared memory of size %d", imagesize);
             }
+         }
 #ifdef QT_QWS_CLIENTBLIT
-            *((uint *)mem.address()) = 0;
-            uchar *base = static_cast<uchar*>(mem.address()) + sizeof(uint);
+         *((uint *)mem.address()) = 0;
+         uchar *base = static_cast<uchar *>(mem.address()) + sizeof(uint);
 #else
-            uchar *base = static_cast<uchar*>(mem.address());
+         uchar *base = static_cast<uchar *>(mem.address());
 #endif
-            img = QImage(base, size.width(), size.height(), bpl, format);
-            setImageMetrics(img, win);
-        }
-    }
+         img = QImage(base, size.width(), size.height(), bpl, format);
+         setImageMetrics(img, win);
+      }
+   }
 
-    QWSWindowSurface::setGeometry(rect);
+   QWSWindowSurface::setGeometry(rect);
 }
 
 QByteArray QWSSharedMemSurface::permanentState() const
 {
-    QByteArray array(6 * sizeof(int), Qt::Uninitialized);
+   QByteArray array(6 * sizeof(int), Qt::Uninitialized);
 
-    int *ptr = reinterpret_cast<int*>(array.data());
+   int *ptr = reinterpret_cast<int *>(array.data());
 
-    ptr[0] = mem.id();
-    ptr[1] = img.width();
-    ptr[2] = img.height();
-    ptr[3] = (memlock ? memlock->id() : -1);
-    ptr[4] = int(img.format());
-    ptr[5] = int(surfaceFlags());
+   ptr[0] = mem.id();
+   ptr[1] = img.width();
+   ptr[2] = img.height();
+   ptr[3] = (memlock ? memlock->id() : -1);
+   ptr[4] = int(img.format());
+   ptr[5] = int(surfaceFlags());
 
-    return array;
+   return array;
 }
 
 void QWSSharedMemSurface::releaseSurface()
 {
-    mem.detach();
-    img = QImage();
+   mem.detach();
+   img = QImage();
 }
 
 #endif // QT_NO_QWS_MULTIPROCESS
@@ -1170,32 +1207,32 @@ void QWSSharedMemSurface::releaseSurface()
 #ifndef QT_NO_PAINTONSCREEN
 
 QWSOnScreenSurface::QWSOnScreenSurface(QWidget *w)
-    : QWSMemorySurface(w)
+   : QWSMemorySurface(w)
 {
-    attachToScreen(getScreen(w));
-    setSurfaceFlags(Opaque);
+   attachToScreen(getScreen(w));
+   setSurfaceFlags(Opaque);
 }
 
 QWSOnScreenSurface::QWSOnScreenSurface()
-    : QWSMemorySurface()
+   : QWSMemorySurface()
 {
-    setSurfaceFlags(Opaque);
+   setSurfaceFlags(Opaque);
 }
 
 void QWSOnScreenSurface::attachToScreen(const QScreen *s)
 {
-    screen = s;
-    uchar *base = screen->base();
-    QImage::Format format  = screen->pixelFormat();
+   screen = s;
+   uchar *base = screen->base();
+   QImage::Format format  = screen->pixelFormat();
 
-    if (format == QImage::Format_Invalid || format == QImage::Format_Indexed8) {
-        //### currently we have no paint engine for indexed image formats
-        qFatal("QWSOnScreenSurface::attachToScreen(): screen depth %d "
-               "not implemented", screen->depth());
-        return;
-    }
-    QWSMemorySurface::img = QImage(base, screen->width(), screen->height(),
-                                   screen->linestep(), format );
+   if (format == QImage::Format_Invalid || format == QImage::Format_Indexed8) {
+      //### currently we have no paint engine for indexed image formats
+      qFatal("QWSOnScreenSurface::attachToScreen(): screen depth %d "
+             "not implemented", screen->depth());
+      return;
+   }
+   QWSMemorySurface::img = QImage(base, screen->width(), screen->height(),
+                                  screen->linestep(), format );
 }
 
 QWSOnScreenSurface::~QWSOnScreenSurface()
@@ -1204,37 +1241,40 @@ QWSOnScreenSurface::~QWSOnScreenSurface()
 
 QPoint QWSOnScreenSurface::painterOffset() const
 {
-    return geometry().topLeft() + QWSWindowSurface::painterOffset();
+   return geometry().topLeft() + QWSWindowSurface::painterOffset();
 }
 
 bool QWSOnScreenSurface::isValid() const
 {
-    const QWidget *win = window();
-    if (screen != getScreen(win))
-        return false;
-    if (img.isNull())
-        return false;
-    return QScreen::isWidgetPaintOnScreen(win);
+   const QWidget *win = window();
+   if (screen != getScreen(win)) {
+      return false;
+   }
+   if (img.isNull()) {
+      return false;
+   }
+   return QScreen::isWidgetPaintOnScreen(win);
 }
 
 QByteArray QWSOnScreenSurface::permanentState() const
 {
-    QByteArray array(sizeof(int), Qt::Uninitialized);
+   QByteArray array(sizeof(int), Qt::Uninitialized);
 
-    int *ptr = reinterpret_cast<int*>(array.data());
-    ptr[0] = QApplication::desktop()->screenNumber(window());
-    return array;
+   int *ptr = reinterpret_cast<int *>(array.data());
+   ptr[0] = QApplication::desktop()->screenNumber(window());
+   return array;
 }
 
 void QWSOnScreenSurface::setPermanentState(const QByteArray &data)
 {
-    const int *ptr = reinterpret_cast<const int*>(data.constData());
-    const int screenNo = ptr[0];
+   const int *ptr = reinterpret_cast<const int *>(data.constData());
+   const int screenNo = ptr[0];
 
-    QScreen *screen = qt_screen;
-    if (screenNo > 0)
-        screen = qt_screen->subScreens().at(screenNo);
-    attachToScreen(screen);
+   QScreen *screen = qt_screen;
+   if (screenNo > 0) {
+      screen = qt_screen->subScreens().at(screenNo);
+   }
+   attachToScreen(screen);
 }
 
 #endif // QT_NO_PAINTONSCREEN
@@ -1242,16 +1282,16 @@ void QWSOnScreenSurface::setPermanentState(const QByteArray &data)
 #ifndef QT_NO_PAINT_DEBUG
 
 QWSYellowSurface::QWSYellowSurface(bool isClient)
-    : QWSWindowSurface(), delay(10)
+   : QWSWindowSurface(), delay(10)
 {
-    if (isClient) {
-        setWinId(QWidget::qwsDisplay()->takeId());
-        QWidget::qwsDisplay()->nameRegion(winId(),
-                                          QLatin1String("Debug flush paint"),
-                                          QLatin1String("Silly yellow thing"));
-        QWidget::qwsDisplay()->setAltitude(winId(), 1, true);
-    }
-    setSurfaceFlags(Buffered);
+   if (isClient) {
+      setWinId(QWidget::qwsDisplay()->takeId());
+      QWidget::qwsDisplay()->nameRegion(winId(),
+                                        QLatin1String("Debug flush paint"),
+                                        QLatin1String("Silly yellow thing"));
+      QWidget::qwsDisplay()->setAltitude(winId(), 1, true);
+   }
+   setSurfaceFlags(Buffered);
 }
 
 QWSYellowSurface::~QWSYellowSurface()
@@ -1260,47 +1300,48 @@ QWSYellowSurface::~QWSYellowSurface()
 
 QByteArray QWSYellowSurface::permanentState() const
 {
-    QByteArray array(2 * sizeof(int), Qt::Uninitialized);
+   QByteArray array(2 * sizeof(int), Qt::Uninitialized);
 
-    int *ptr = reinterpret_cast<int*>(array.data());
-    ptr[0] = surfaceSize.width();
-    ptr[1] = surfaceSize.height();
+   int *ptr = reinterpret_cast<int *>(array.data());
+   ptr[0] = surfaceSize.width();
+   ptr[1] = surfaceSize.height();
 
-    return array;
+   return array;
 }
 
 void QWSYellowSurface::setPermanentState(const QByteArray &data)
 {
-    const int *ptr = reinterpret_cast<const int*>(data.constData());
+   const int *ptr = reinterpret_cast<const int *>(data.constData());
 
-    const int width = ptr[0];
-    const int height = ptr[1];
+   const int width = ptr[0];
+   const int height = ptr[1];
 
-    img = QImage(width, height, QImage::Format_ARGB32);
-    img.fill(qRgba(255,255,31,127));
+   img = QImage(width, height, QImage::Format_ARGB32);
+   img.fill(qRgba(255, 255, 31, 127));
 }
 
 void QWSYellowSurface::flush(QWidget *widget, const QRegion &region,
                              const QPoint &offset)
 {
-    Q_UNUSED(offset);
+   Q_UNUSED(offset);
 
-    QWSDisplay *display = QWidget::qwsDisplay();
-    QRegion rgn = region;
+   QWSDisplay *display = QWidget::qwsDisplay();
+   QRegion rgn = region;
 
-    if (widget)
-        rgn.translate(widget->mapToGlobal(QPoint(0, 0)));
+   if (widget) {
+      rgn.translate(widget->mapToGlobal(QPoint(0, 0)));
+   }
 
-    surfaceSize = region.boundingRect().size();
+   surfaceSize = region.boundingRect().size();
 
-    const int id = winId();
-    display->requestRegion(id, key(), permanentState(), rgn);
-    display->setAltitude(id, 1, true);
-    display->repaintRegion(id, 0, false, rgn);
+   const int id = winId();
+   display->requestRegion(id, key(), permanentState(), rgn);
+   display->setAltitude(id, 1, true);
+   display->repaintRegion(id, 0, false, rgn);
 
-    ::usleep(500 * delay);
-    display->requestRegion(id, key(), permanentState(), QRegion());
-    ::usleep(500 * delay);
+   ::usleep(500 * delay);
+   display->requestRegion(id, key(), permanentState(), QRegion());
+   ::usleep(500 * delay);
 }
 
 #endif // QT_NO_PAINT_DEBUG
@@ -1309,117 +1350,126 @@ void QWSYellowSurface::flush(QWidget *widget, const QRegion &region,
 
 static inline QScreen *getPrimaryScreen()
 {
-    QScreen *screen = QScreen::instance();
-    if (!screen->base()) {
-        QList<QScreen*> subScreens = screen->subScreens();
-        if (subScreens.size() < 1)
-            return 0;
-        screen = subScreens.at(0);
-    }
-    return screen;
+   QScreen *screen = QScreen::instance();
+   if (!screen->base()) {
+      QList<QScreen *> subScreens = screen->subScreens();
+      if (subScreens.size() < 1) {
+         return 0;
+      }
+      screen = subScreens.at(0);
+   }
+   return screen;
 }
 
 QWSDirectPainterSurface::QWSDirectPainterSurface(bool isClient,
-                                                 QDirectPainter::SurfaceFlag flags)
-    : QWSWindowSurface(), flushingRegionEvents(false), doLocking(false)
+      QDirectPainter::SurfaceFlag flags)
+   : QWSWindowSurface(), flushingRegionEvents(false), doLocking(false)
 {
-    setSurfaceFlags(Opaque);
-    synchronous = (flags == QDirectPainter::ReservedSynchronous);
+   setSurfaceFlags(Opaque);
+   synchronous = (flags == QDirectPainter::ReservedSynchronous);
 
-    if (isClient) {
-        setWinId(QWidget::qwsDisplay()->takeId());
-        QWidget::qwsDisplay()->nameRegion(winId(),
-                                          QLatin1String("QDirectPainter reserved space"),
-                                          QLatin1String("reserved"));
-    } else {
-        setWinId(0);
-    }
-    _screen = QScreen::instance();
-    if (!_screen->base()) {
-        QList<QScreen*> subScreens = _screen->subScreens();
-        if (subScreens.size() < 1)
-            _screen = 0;
-        else
-            _screen = subScreens.at(0);
-    }
+   if (isClient) {
+      setWinId(QWidget::qwsDisplay()->takeId());
+      QWidget::qwsDisplay()->nameRegion(winId(),
+                                        QLatin1String("QDirectPainter reserved space"),
+                                        QLatin1String("reserved"));
+   } else {
+      setWinId(0);
+   }
+   _screen = QScreen::instance();
+   if (!_screen->base()) {
+      QList<QScreen *> subScreens = _screen->subScreens();
+      if (subScreens.size() < 1) {
+         _screen = 0;
+      } else {
+         _screen = subScreens.at(0);
+      }
+   }
 }
 
 QWSDirectPainterSurface::~QWSDirectPainterSurface()
 {
-    if (winId() && QWSDisplay::instance()) // make sure not in QApplication destructor
-        QWidget::qwsDisplay()->destroyRegion(winId());
+   if (winId() && QWSDisplay::instance()) { // make sure not in QApplication destructor
+      QWidget::qwsDisplay()->destroyRegion(winId());
+   }
 }
 
 void QWSDirectPainterSurface::setRegion(const QRegion &region)
 {
-    const int id = winId();
-    QWidget::qwsDisplay()->requestRegion(id, key(), permanentState(), region);
+   const int id = winId();
+   QWidget::qwsDisplay()->requestRegion(id, key(), permanentState(), region);
 #ifndef QT_NO_QWS_MULTIPROCESS
-    if (synchronous)
-        QWSDisplay::instance()->d->waitForRegionAck(id);
+   if (synchronous) {
+      QWSDisplay::instance()->d->waitForRegionAck(id);
+   }
 #endif
 }
 
 void QWSDirectPainterSurface::flush(QWidget *, const QRegion &r, const QPoint &)
 {
-    QWSDisplay::instance()->repaintRegion(winId(), 0, true, r);
+   QWSDisplay::instance()->repaintRegion(winId(), 0, true, r);
 }
 
 QByteArray QWSDirectPainterSurface::permanentState() const
 {
-    QByteArray res;
-    if (isRegionReserved())
-        res.append( 'r');
-    return res;
+   QByteArray res;
+   if (isRegionReserved()) {
+      res.append( 'r');
+   }
+   return res;
 }
 
 void QWSDirectPainterSurface::setPermanentState(const QByteArray &ba)
 {
-    if (ba.size() > 0 && ba.at(0) == 'r')
-        setReserved();
-    setSurfaceFlags(surfaceFlags() | Opaque);
+   if (ba.size() > 0 && ba.at(0) == 'r') {
+      setReserved();
+   }
+   setSurfaceFlags(surfaceFlags() | Opaque);
 }
 
 void QWSDirectPainterSurface::beginPaint(const QRegion &region)
 {
-    QWSWindowSurface::beginPaint(region);
+   QWSWindowSurface::beginPaint(region);
 #ifndef QT_NO_QWS_MULTIPROCESS
-    if (!synchronous) {
-        flushingRegionEvents = true;
-        QWSDisplay::instance()->d->waitForRegionEvents(winId(), doLocking);
-        flushingRegionEvents = false;
-    }
+   if (!synchronous) {
+      flushingRegionEvents = true;
+      QWSDisplay::instance()->d->waitForRegionEvents(winId(), doLocking);
+      flushingRegionEvents = false;
+   }
 #endif
 }
 
 bool QWSDirectPainterSurface::hasPendingRegionEvents() const
 {
 #ifndef QT_NO_QWS_MULTIPROCESS
-    if (synchronous)
-        return false;
+   if (synchronous) {
+      return false;
+   }
 
-    return QWSDisplay::instance()->d->hasPendingRegionEvents();
+   return QWSDisplay::instance()->d->hasPendingRegionEvents();
 #else
-    return false;
+   return false;
 #endif
 }
 
 bool QWSDirectPainterSurface::lock(int timeout)
 {
-    threadLock.lock();
+   threadLock.lock();
 
-    Q_UNUSED(timeout);
-    if (doLocking)
-        QWSDisplay::grab(true);
-    return true;
+   Q_UNUSED(timeout);
+   if (doLocking) {
+      QWSDisplay::grab(true);
+   }
+   return true;
 }
 
 void QWSDirectPainterSurface::unlock()
 {
-    if (doLocking)
-        QWSDisplay::ungrab();
+   if (doLocking) {
+      QWSDisplay::ungrab();
+   }
 
-    threadLock.unlock();
+   threadLock.unlock();
 }
 
 #endif // QT_NO_DIRECTPAINTER

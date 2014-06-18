@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -51,92 +51,92 @@ class QEventLoop;
 
 class Q_GUI_EXPORT QInternalMimeData : public QMimeData
 {
-    CS_OBJECT(QInternalMimeData)
+   CS_OBJECT(QInternalMimeData)
 
-public:
-    QInternalMimeData();
-    ~QInternalMimeData();
+ public:
+   QInternalMimeData();
+   ~QInternalMimeData();
 
-    bool hasFormat(const QString &mimeType) const;
-    QStringList formats() const;
-    static bool canReadData(const QString &mimeType);
+   bool hasFormat(const QString &mimeType) const;
+   QStringList formats() const;
+   static bool canReadData(const QString &mimeType);
 
 
-    static QStringList formatsHelper(const QMimeData *data);
-    static bool hasFormatHelper(const QString &mimeType, const QMimeData *data);
-    static QByteArray renderDataHelper(const QString &mimeType, const QMimeData *data);
+   static QStringList formatsHelper(const QMimeData *data);
+   static bool hasFormatHelper(const QString &mimeType, const QMimeData *data);
+   static QByteArray renderDataHelper(const QString &mimeType, const QMimeData *data);
 
-protected:
-    QVariant retrieveData(const QString &mimeType, QVariant::Type type) const;
+ protected:
+   QVariant retrieveData(const QString &mimeType, QVariant::Type type) const;
 
-    virtual bool hasFormat_sys(const QString &mimeType) const = 0;
-    virtual QStringList formats_sys() const = 0;
-    virtual QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const = 0;
+   virtual bool hasFormat_sys(const QString &mimeType) const = 0;
+   virtual QStringList formats_sys() const = 0;
+   virtual QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const = 0;
 };
 
 #ifdef Q_OS_WIN
 class QOleDataObject : public IDataObject
 {
-public:
-    explicit QOleDataObject(QMimeData *mimeData);
-    virtual ~QOleDataObject();
+ public:
+   explicit QOleDataObject(QMimeData *mimeData);
+   virtual ~QOleDataObject();
 
-    void releaseQt();
-    const QMimeData *mimeData() const;
-    DWORD reportedPerformedEffect() const;
+   void releaseQt();
+   const QMimeData *mimeData() const;
+   DWORD reportedPerformedEffect() const;
 
-    // IUnknown methods
-    STDMETHOD(QueryInterface)(REFIID riid, void FAR* FAR* ppvObj);
-    STDMETHOD_(ULONG,AddRef)(void);
-    STDMETHOD_(ULONG,Release)(void);
+   // IUnknown methods
+   STDMETHOD(QueryInterface)(REFIID riid, void FAR *FAR *ppvObj);
+   STDMETHOD_(ULONG, AddRef)(void);
+   STDMETHOD_(ULONG, Release)(void);
 
-    // IDataObject methods
-    STDMETHOD(GetData)(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium);
-    STDMETHOD(GetDataHere)(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium);
-    STDMETHOD(QueryGetData)(LPFORMATETC pformatetc);
-    STDMETHOD(GetCanonicalFormatEtc)(LPFORMATETC pformatetc, LPFORMATETC pformatetcOut);
-    STDMETHOD(SetData)(LPFORMATETC pformatetc, STGMEDIUM FAR * pmedium,
-                       BOOL fRelease);
-    STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC FAR* ppenumFormatEtc);
-    STDMETHOD(DAdvise)(FORMATETC FAR* pFormatetc, DWORD advf,
-                      LPADVISESINK pAdvSink, DWORD FAR* pdwConnection);
-    STDMETHOD(DUnadvise)(DWORD dwConnection);
-    STDMETHOD(EnumDAdvise)(LPENUMSTATDATA FAR* ppenumAdvise);
+   // IDataObject methods
+   STDMETHOD(GetData)(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium);
+   STDMETHOD(GetDataHere)(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium);
+   STDMETHOD(QueryGetData)(LPFORMATETC pformatetc);
+   STDMETHOD(GetCanonicalFormatEtc)(LPFORMATETC pformatetc, LPFORMATETC pformatetcOut);
+   STDMETHOD(SetData)(LPFORMATETC pformatetc, STGMEDIUM FAR *pmedium,
+                      BOOL fRelease);
+   STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC FAR *ppenumFormatEtc);
+   STDMETHOD(DAdvise)(FORMATETC FAR *pFormatetc, DWORD advf,
+                      LPADVISESINK pAdvSink, DWORD FAR *pdwConnection);
+   STDMETHOD(DUnadvise)(DWORD dwConnection);
+   STDMETHOD(EnumDAdvise)(LPENUMSTATDATA FAR *ppenumAdvise);
 
-private:
-    ULONG m_refs;
-    QPointer<QMimeData> data;
-    int CF_PERFORMEDDROPEFFECT;
-    DWORD performedEffect;
+ private:
+   ULONG m_refs;
+   QPointer<QMimeData> data;
+   int CF_PERFORMEDDROPEFFECT;
+   DWORD performedEffect;
 };
 
 class QOleEnumFmtEtc : public IEnumFORMATETC
 {
-public:
-    explicit QOleEnumFmtEtc(const QVector<FORMATETC> &fmtetcs);
-    explicit QOleEnumFmtEtc(const QVector<LPFORMATETC> &lpfmtetcs);
-    virtual ~QOleEnumFmtEtc();
+ public:
+   explicit QOleEnumFmtEtc(const QVector<FORMATETC> &fmtetcs);
+   explicit QOleEnumFmtEtc(const QVector<LPFORMATETC> &lpfmtetcs);
+   virtual ~QOleEnumFmtEtc();
 
-    bool isNull() const;
+   bool isNull() const;
 
-    // IUnknown methods
-    STDMETHOD(QueryInterface)(REFIID riid, void FAR* FAR* ppvObj);
-    STDMETHOD_(ULONG,AddRef)(void);
-    STDMETHOD_(ULONG,Release)(void);
+   // IUnknown methods
+   STDMETHOD(QueryInterface)(REFIID riid, void FAR *FAR *ppvObj);
+   STDMETHOD_(ULONG, AddRef)(void);
+   STDMETHOD_(ULONG, Release)(void);
 
-    // IEnumFORMATETC methods
-    STDMETHOD(Next)(ULONG celt, LPFORMATETC rgelt, ULONG FAR* pceltFetched);
-    STDMETHOD(Skip)(ULONG celt);
-    STDMETHOD(Reset)(void);
-    STDMETHOD(Clone)(LPENUMFORMATETC FAR* newEnum);
+   // IEnumFORMATETC methods
+   STDMETHOD(Next)(ULONG celt, LPFORMATETC rgelt, ULONG FAR *pceltFetched);
+   STDMETHOD(Skip)(ULONG celt);
+   STDMETHOD(Reset)(void);
+   STDMETHOD(Clone)(LPENUMFORMATETC FAR *newEnum);
 
-private:
-    bool copyFormatEtc(LPFORMATETC dest, LPFORMATETC src) const;
+ private:
+   bool copyFormatEtc(LPFORMATETC dest, LPFORMATETC src) const;
 
-    ULONG m_dwRefs;
-    ULONG m_nIndex;
-    QVector<LPFORMATETC> m_lpfmtetcs;
-    bool m_isNull;
+   ULONG m_dwRefs;
+   ULONG m_nIndex;
+   QVector<LPFORMATETC> m_lpfmtetcs;
+   bool m_isNull;
 };
 
 #endif
@@ -148,106 +148,117 @@ private:
 class QDragPrivate
 {
 
-public:
-    virtual ~QDragPrivate() {};
+ public:
+   virtual ~QDragPrivate() {};
 
-    QWidget *source;
-    QWidget *target;
-    QMimeData *data;
-    QPixmap pixmap;
-    QPoint hotspot;
-    Qt::DropActions possible_actions;
-    Qt::DropAction executed_action;
-    QMap<Qt::DropAction, QPixmap> customCursors;
-    Qt::DropAction defaultDropAction;
+   QWidget *source;
+   QWidget *target;
+   QMimeData *data;
+   QPixmap pixmap;
+   QPoint hotspot;
+   Qt::DropActions possible_actions;
+   Qt::DropAction executed_action;
+   QMap<Qt::DropAction, QPixmap> customCursors;
+   Qt::DropAction defaultDropAction;
 };
 
 class QDropData : public QInternalMimeData
 {
-    CS_OBJECT(QDropData)
+   CS_OBJECT(QDropData)
 
-public:
-    QDropData();
-    ~QDropData();
+ public:
+   QDropData();
+   ~QDropData();
 
-protected:
-    bool hasFormat_sys(const QString &mimeType) const;
-    QStringList formats_sys() const;
-    QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const;
+ protected:
+   bool hasFormat_sys(const QString &mimeType) const;
+   QStringList formats_sys() const;
+   QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const;
 
 #if defined(Q_OS_WIN)
-public:
-    LPDATAOBJECT currentDataObject;
+ public:
+   LPDATAOBJECT currentDataObject;
 #endif
 };
 
-class QDragManager: public QObject {
-    CS_OBJECT(QDragManager)
+class QDragManager: public QObject
+{
+   CS_OBJECT(QDragManager)
 
-    QDragManager();
-    ~QDragManager();
-    // only friend classes can use QDragManager.
-    friend class QDrag;
-    friend class QDragMoveEvent;
-    friend class QDropEvent;
-    friend class QApplication;
+   QDragManager();
+   ~QDragManager();
+   // only friend classes can use QDragManager.
+   friend class QDrag;
+   friend class QDragMoveEvent;
+   friend class QDropEvent;
+   friend class QApplication;
 #ifdef Q_OS_MAC
-    friend class QWidgetPrivate; //dnd is implemented here
+   friend class QWidgetPrivate; //dnd is implemented here
 #endif
 
-    bool eventFilter(QObject *, QEvent *);
-    void timerEvent(QTimerEvent*);
+   bool eventFilter(QObject *, QEvent *);
+   void timerEvent(QTimerEvent *);
 
-public:
-    Qt::DropAction drag(QDrag *);
+ public:
+   Qt::DropAction drag(QDrag *);
 
-    void cancel(bool deleteSource = true);
-    void move(const QPoint &);
-    void drop();
-    void updatePixmap();
-    QWidget *source() const { return object ? object->d_func()->source : 0; }
-    QDragPrivate *dragPrivate() const { return object ? object->d_func() : 0; }
-    static QDragPrivate *dragPrivate(QDrag *drag) { return drag ? drag->d_func() : 0; }
+   void cancel(bool deleteSource = true);
+   void move(const QPoint &);
+   void drop();
+   void updatePixmap();
+   QWidget *source() const {
+      return object ? object->d_func()->source : 0;
+   }
+   QDragPrivate *dragPrivate() const {
+      return object ? object->d_func() : 0;
+   }
+   static QDragPrivate *dragPrivate(QDrag *drag) {
+      return drag ? drag->d_func() : 0;
+   }
 
-    static QDragManager *self();
-    Qt::DropAction defaultAction(Qt::DropActions possibleActions,
-                                 Qt::KeyboardModifiers modifiers) const;
+   static QDragManager *self();
+   Qt::DropAction defaultAction(Qt::DropActions possibleActions,
+                                Qt::KeyboardModifiers modifiers) const;
 
-    QDrag *object;
+   QDrag *object;
 
-    void updateCursor();
+   void updateCursor();
 
-    bool beingCancelled;
-    bool restoreCursor;
-    bool willDrop;
-    QEventLoop *eventLoop;
+   bool beingCancelled;
+   bool restoreCursor;
+   bool willDrop;
+   QEventLoop *eventLoop;
 
-    QPixmap dragCursor(Qt::DropAction action) const;
+   QPixmap dragCursor(Qt::DropAction action) const;
 
-    bool hasCustomDragCursors() const;
+   bool hasCustomDragCursors() const;
 
-    QDropData *dropData;
+   QDropData *dropData;
 
-    void emitActionChanged(Qt::DropAction newAction) { if (object) emit object->actionChanged(newAction); }
+   void emitActionChanged(Qt::DropAction newAction) {
+      if (object) {
+         emit object->actionChanged(newAction);
+      }
+   }
 
-    void setCurrentTarget(QWidget *target, bool dropped = false);
-    QWidget *currentTarget();
+   void setCurrentTarget(QWidget *target, bool dropped = false);
+   QWidget *currentTarget();
 
 #ifdef Q_WS_X11
-    QPixmap xdndMimeTransferedPixmap[2];
-    int xdndMimeTransferedPixmapIndex;
+   QPixmap xdndMimeTransferedPixmap[2];
+   int xdndMimeTransferedPixmapIndex;
 #endif
 
-private:
+ private:
 
 #if defined(Q_WS_QWS) || defined(Q_WS_QPA)
-    Qt::DropAction currentActionForOverrideCursor;
+   Qt::DropAction currentActionForOverrideCursor;
 #endif
 
-    QWidget *currentDropTarget;
+   QWidget *currentDropTarget;
 
-    static QDragManager *instance;
-    Q_DISABLE_COPY(QDragManager)
+   static QDragManager *instance;
+   Q_DISABLE_COPY(QDragManager)
 };
 
 
@@ -255,33 +266,33 @@ private:
 
 class QOleDropTarget : public IDropTarget
 {
-public:
-    QOleDropTarget(QWidget* w);
-    virtual ~QOleDropTarget() {}
+ public:
+   QOleDropTarget(QWidget *w);
+   virtual ~QOleDropTarget() {}
 
-    void releaseQt();
+   void releaseQt();
 
-    // IUnknown methods
-    STDMETHOD(QueryInterface)(REFIID riid, void FAR* FAR* ppvObj);
-    STDMETHOD_(ULONG, AddRef)(void);
-    STDMETHOD_(ULONG, Release)(void);
+   // IUnknown methods
+   STDMETHOD(QueryInterface)(REFIID riid, void FAR *FAR *ppvObj);
+   STDMETHOD_(ULONG, AddRef)(void);
+   STDMETHOD_(ULONG, Release)(void);
 
-    // IDropTarget methods
-    STDMETHOD(DragEnter)(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
-    STDMETHOD(DragOver)(DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
-    STDMETHOD(DragLeave)();
-    STDMETHOD(Drop)(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
+   // IDropTarget methods
+   STDMETHOD(DragEnter)(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
+   STDMETHOD(DragOver)(DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
+   STDMETHOD(DragLeave)();
+   STDMETHOD(Drop)(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
 
-private:
-    ULONG m_refs;
-    QWidget* widget;
-    QPointer<QWidget> currentWidget;
-    QRect answerRect;
-    QPoint lastPoint;
-    DWORD chosenEffect;
-    DWORD lastKeyState;
+ private:
+   ULONG m_refs;
+   QWidget *widget;
+   QPointer<QWidget> currentWidget;
+   QRect answerRect;
+   QPoint lastPoint;
+   DWORD chosenEffect;
+   DWORD lastKeyState;
 
-    void sendDragEnterEvent(QWidget *to, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
+   void sendDragEnterEvent(QWidget *to, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
 };
 
 #endif
@@ -289,17 +300,17 @@ private:
 #if defined (Q_OS_MAC)
 class QCocoaDropData : public QInternalMimeData
 {
-    CS_OBJECT(QCocoaDropData)
-public:
-    QCocoaDropData(CFStringRef pasteboard);
-    ~QCocoaDropData();
+   CS_OBJECT(QCocoaDropData)
+ public:
+   QCocoaDropData(CFStringRef pasteboard);
+   ~QCocoaDropData();
 
-protected:
-    bool hasFormat_sys(const QString &mimeType) const;
-    QStringList formats_sys() const;
-    QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const;
-public:
-    CFStringRef dropPasteboard;
+ protected:
+   bool hasFormat_sys(const QString &mimeType) const;
+   QStringList formats_sys() const;
+   QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const;
+ public:
+   CFStringRef dropPasteboard;
 };
 #endif
 

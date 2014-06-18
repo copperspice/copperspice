@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,396 +41,405 @@ QT_BEGIN_NAMESPACE
 namespace {
 class PageItem : public QGraphicsItem
 {
-public:
-    PageItem(int _pageNum, const QPicture* _pagePicture, QSize _paperSize, QRect _pageRect)
-        : pageNum(_pageNum), pagePicture(_pagePicture),
-          paperSize(_paperSize), pageRect(_pageRect)
-    {
-        qreal border = qMax(paperSize.height(), paperSize.width()) / 25;
-        brect = QRectF(QPointF(-border, -border),
-                       QSizeF(paperSize)+QSizeF(2*border, 2*border));
-        setCacheMode(DeviceCoordinateCache);
-    }
+ public:
+   PageItem(int _pageNum, const QPicture *_pagePicture, QSize _paperSize, QRect _pageRect)
+      : pageNum(_pageNum), pagePicture(_pagePicture),
+        paperSize(_paperSize), pageRect(_pageRect) {
+      qreal border = qMax(paperSize.height(), paperSize.width()) / 25;
+      brect = QRectF(QPointF(-border, -border),
+                     QSizeF(paperSize) + QSizeF(2 * border, 2 * border));
+      setCacheMode(DeviceCoordinateCache);
+   }
 
-    inline QRectF boundingRect() const
-    { return brect; }
+   inline QRectF boundingRect() const {
+      return brect;
+   }
 
-    inline int pageNumber() const
-    { return pageNum; }
+   inline int pageNumber() const {
+      return pageNum;
+   }
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget);
+   void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget);
 
-private:
-    int pageNum;
-    const QPicture* pagePicture;
-    QSize paperSize;
-    QRect pageRect;
-    QRectF brect;
+ private:
+   int pageNum;
+   const QPicture *pagePicture;
+   QSize paperSize;
+   QRect pageRect;
+   QRectF brect;
 };
 
 void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(widget);
+   Q_UNUSED(widget);
 
 #if 0
-    // Draw item bounding rect, for debugging
-    painter->save();
-    painter->setPen(QPen(Qt::red, 0));
-    painter->setBrush(Qt::NoBrush);
-    painter->drawRect(QRectF(-border()+1.0, -border()+1.0, boundingRect().width()-2, boundingRect().height()-2));
-    painter->restore();
+   // Draw item bounding rect, for debugging
+   painter->save();
+   painter->setPen(QPen(Qt::red, 0));
+   painter->setBrush(Qt::NoBrush);
+   painter->drawRect(QRectF(-border() + 1.0, -border() + 1.0, boundingRect().width() - 2, boundingRect().height() - 2));
+   painter->restore();
 #endif
 
-    QRectF paperRect(0,0, paperSize.width(), paperSize.height());
+   QRectF paperRect(0, 0, paperSize.width(), paperSize.height());
 
-    // Draw shadow
-    painter->setClipRect(option->exposedRect);
-    qreal shWidth = paperRect.width()/100;
-    QRectF rshadow(paperRect.topRight() + QPointF(0, shWidth),
-                   paperRect.bottomRight() + QPointF(shWidth, 0));
-    QLinearGradient rgrad(rshadow.topLeft(), rshadow.topRight());
-    rgrad.setColorAt(0.0, QColor(0,0,0,255));
-    rgrad.setColorAt(1.0, QColor(0,0,0,0));
-    painter->fillRect(rshadow, QBrush(rgrad));
-    QRectF bshadow(paperRect.bottomLeft() + QPointF(shWidth, 0),
-                   paperRect.bottomRight() + QPointF(0, shWidth));
-    QLinearGradient bgrad(bshadow.topLeft(), bshadow.bottomLeft());
-    bgrad.setColorAt(0.0, QColor(0,0,0,255));
-    bgrad.setColorAt(1.0, QColor(0,0,0,0));
-    painter->fillRect(bshadow, QBrush(bgrad));
-    QRectF cshadow(paperRect.bottomRight(),
-                   paperRect.bottomRight() + QPointF(shWidth, shWidth));
-    QRadialGradient cgrad(cshadow.topLeft(), shWidth, cshadow.topLeft());
-    cgrad.setColorAt(0.0, QColor(0,0,0,255));
-    cgrad.setColorAt(1.0, QColor(0,0,0,0));
-    painter->fillRect(cshadow, QBrush(cgrad));
+   // Draw shadow
+   painter->setClipRect(option->exposedRect);
+   qreal shWidth = paperRect.width() / 100;
+   QRectF rshadow(paperRect.topRight() + QPointF(0, shWidth),
+                  paperRect.bottomRight() + QPointF(shWidth, 0));
+   QLinearGradient rgrad(rshadow.topLeft(), rshadow.topRight());
+   rgrad.setColorAt(0.0, QColor(0, 0, 0, 255));
+   rgrad.setColorAt(1.0, QColor(0, 0, 0, 0));
+   painter->fillRect(rshadow, QBrush(rgrad));
+   QRectF bshadow(paperRect.bottomLeft() + QPointF(shWidth, 0),
+                  paperRect.bottomRight() + QPointF(0, shWidth));
+   QLinearGradient bgrad(bshadow.topLeft(), bshadow.bottomLeft());
+   bgrad.setColorAt(0.0, QColor(0, 0, 0, 255));
+   bgrad.setColorAt(1.0, QColor(0, 0, 0, 0));
+   painter->fillRect(bshadow, QBrush(bgrad));
+   QRectF cshadow(paperRect.bottomRight(),
+                  paperRect.bottomRight() + QPointF(shWidth, shWidth));
+   QRadialGradient cgrad(cshadow.topLeft(), shWidth, cshadow.topLeft());
+   cgrad.setColorAt(0.0, QColor(0, 0, 0, 255));
+   cgrad.setColorAt(1.0, QColor(0, 0, 0, 0));
+   painter->fillRect(cshadow, QBrush(cgrad));
 
-    painter->setClipRect(paperRect & option->exposedRect);
-    painter->fillRect(paperRect, Qt::white);
-    if (!pagePicture)
-        return;
-    painter->drawPicture(pageRect.topLeft(), *pagePicture);
+   painter->setClipRect(paperRect & option->exposedRect);
+   painter->fillRect(paperRect, Qt::white);
+   if (!pagePicture) {
+      return;
+   }
+   painter->drawPicture(pageRect.topLeft(), *pagePicture);
 
-    // Effect: make anything drawn in the margins look washed out.
-    QPainterPath path;
-    path.addRect(paperRect);
-    path.addRect(pageRect);
-    painter->setPen(QPen(Qt::NoPen));
-    painter->setBrush(QColor(255, 255, 255, 180));
-    painter->drawPath(path);
+   // Effect: make anything drawn in the margins look washed out.
+   QPainterPath path;
+   path.addRect(paperRect);
+   path.addRect(pageRect);
+   painter->setPen(QPen(Qt::NoPen));
+   painter->setBrush(QColor(255, 255, 255, 180));
+   painter->drawPath(path);
 
 #if 0
-    // Draw frame around paper.
-    painter->setPen(QPen(Qt::black, 0));
-    painter->setBrush(Qt::NoBrush);
-    painter->drawRect(paperRect);
+   // Draw frame around paper.
+   painter->setPen(QPen(Qt::black, 0));
+   painter->setBrush(Qt::NoBrush);
+   painter->drawRect(paperRect);
 #endif
 
-    // todo: drawtext "Page N" below paper
+   // todo: drawtext "Page N" below paper
 }
 
 class GraphicsView : public QGraphicsView
 {
-    CS_OBJECT(GraphicsView)
+   CS_OBJECT(GraphicsView)
 
-public:
-    GraphicsView(QWidget* parent = 0)
-        : QGraphicsView(parent)
-    {
+ public:
+   GraphicsView(QWidget *parent = 0)
+      : QGraphicsView(parent) {
 #ifdef Q_OS_MAC
-        setFrameStyle(QFrame::NoFrame);
+      setFrameStyle(QFrame::NoFrame);
 #endif
-    }
+   }
 
-    GUI_CS_SIGNAL_1(Public,void resized())
-    GUI_CS_SIGNAL_2(resized)
+   GUI_CS_SIGNAL_1(Public, void resized())
+   GUI_CS_SIGNAL_2(resized)
 
-protected:
-    void resizeEvent(QResizeEvent* e)
-    {
-        QGraphicsView::resizeEvent(e);
-        emit resized();
-    }
+ protected:
+   void resizeEvent(QResizeEvent *e) {
+      QGraphicsView::resizeEvent(e);
+      emit resized();
+   }
 
-    void showEvent(QShowEvent* e)
-    {
-        QGraphicsView::showEvent(e);
-        emit resized();
-    }
+   void showEvent(QShowEvent *e) {
+      QGraphicsView::showEvent(e);
+      emit resized();
+   }
 };
 
 } // anonymous namespace
 
 class QPrintPreviewWidgetPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QPrintPreviewWidget)
-public:
-    QPrintPreviewWidgetPrivate()
-        : scene(0), curPage(1),
-          viewMode(QPrintPreviewWidget::SinglePageView),
-          zoomMode(QPrintPreviewWidget::FitInView),
-          zoomFactor(1), initialized(false), fitting(true)
-    {}
+   Q_DECLARE_PUBLIC(QPrintPreviewWidget)
+ public:
+   QPrintPreviewWidgetPrivate()
+      : scene(0), curPage(1),
+        viewMode(QPrintPreviewWidget::SinglePageView),
+        zoomMode(QPrintPreviewWidget::FitInView),
+        zoomFactor(1), initialized(false), fitting(true) {
+   }
 
-    // private slots
-    void _q_fit(bool doFitting = false);
-    void _q_updateCurrentPage();
+   // private slots
+   void _q_fit(bool doFitting = false);
+   void _q_updateCurrentPage();
 
-    void init();
-    void populateScene();
-    void layoutPages();
-    void generatePreview();
-    void setCurrentPage(int pageNumber);
-    void zoom(qreal zoom);
-    void setZoomFactor(qreal zoomFactor);
-    int calcCurrentPage();
+   void init();
+   void populateScene();
+   void layoutPages();
+   void generatePreview();
+   void setCurrentPage(int pageNumber);
+   void zoom(qreal zoom);
+   void setZoomFactor(qreal zoomFactor);
+   int calcCurrentPage();
 
-    GraphicsView *graphicsView;
-    QGraphicsScene *scene;
+   GraphicsView *graphicsView;
+   QGraphicsScene *scene;
 
-    int curPage;
-    QList<const QPicture *> pictures;
-    QList<QGraphicsItem *> pages;
+   int curPage;
+   QList<const QPicture *> pictures;
+   QList<QGraphicsItem *> pages;
 
-    QPrintPreviewWidget::ViewMode viewMode;
-    QPrintPreviewWidget::ZoomMode zoomMode;
-    qreal zoomFactor;
-    bool ownPrinter;
-    QPrinter* printer;
-    bool initialized;
-    bool fitting;
+   QPrintPreviewWidget::ViewMode viewMode;
+   QPrintPreviewWidget::ZoomMode zoomMode;
+   qreal zoomFactor;
+   bool ownPrinter;
+   QPrinter *printer;
+   bool initialized;
+   bool fitting;
 };
 
 void QPrintPreviewWidgetPrivate::_q_fit(bool doFitting)
 {
-    Q_Q(QPrintPreviewWidget);
+   Q_Q(QPrintPreviewWidget);
 
-    if (curPage < 1 || curPage > pages.count())
-        return;
+   if (curPage < 1 || curPage > pages.count()) {
+      return;
+   }
 
-    if (!doFitting && !fitting)
-        return;
+   if (!doFitting && !fitting) {
+      return;
+   }
 
-    if (doFitting && fitting) {
-        QRect viewRect = graphicsView->viewport()->rect();
-        if (zoomMode == QPrintPreviewWidget::FitInView) {
-            QList<QGraphicsItem*> containedItems = graphicsView->items(viewRect, Qt::ContainsItemBoundingRect);
-            foreach(QGraphicsItem* item, containedItems) {
-                PageItem* pg = static_cast<PageItem*>(item);
-                if (pg->pageNumber() == curPage)
-                    return;
+   if (doFitting && fitting) {
+      QRect viewRect = graphicsView->viewport()->rect();
+      if (zoomMode == QPrintPreviewWidget::FitInView) {
+         QList<QGraphicsItem *> containedItems = graphicsView->items(viewRect, Qt::ContainsItemBoundingRect);
+         foreach(QGraphicsItem * item, containedItems) {
+            PageItem *pg = static_cast<PageItem *>(item);
+            if (pg->pageNumber() == curPage) {
+               return;
             }
-        }
+         }
+      }
 
-        int newPage = calcCurrentPage();
-        if (newPage != curPage)
-            curPage = newPage;
-    }
+      int newPage = calcCurrentPage();
+      if (newPage != curPage) {
+         curPage = newPage;
+      }
+   }
 
-    QRectF target = pages.at(curPage-1)->sceneBoundingRect();
-    if (viewMode == QPrintPreviewWidget::FacingPagesView) {
-        // fit two pages
-        if (curPage % 2)
-            target.setLeft(target.left() - target.width());
-        else
-            target.setRight(target.right() + target.width());
-    } else if (viewMode == QPrintPreviewWidget::AllPagesView) {
-        target = scene->itemsBoundingRect();
-    }
+   QRectF target = pages.at(curPage - 1)->sceneBoundingRect();
+   if (viewMode == QPrintPreviewWidget::FacingPagesView) {
+      // fit two pages
+      if (curPage % 2) {
+         target.setLeft(target.left() - target.width());
+      } else {
+         target.setRight(target.right() + target.width());
+      }
+   } else if (viewMode == QPrintPreviewWidget::AllPagesView) {
+      target = scene->itemsBoundingRect();
+   }
 
-    if (zoomMode == QPrintPreviewWidget::FitToWidth) {
-        QTransform t;
-        qreal scale = graphicsView->viewport()->width() / target.width();
-        t.scale(scale, scale);
-        graphicsView->setTransform(t);
-        if (doFitting && fitting) {
-            QRectF viewSceneRect = graphicsView->viewportTransform().mapRect(graphicsView->viewport()->rect());
-            viewSceneRect.moveTop(target.top());
-            graphicsView->ensureVisible(viewSceneRect); // Nah...
-        }
-    } else {
-        graphicsView->fitInView(target, Qt::KeepAspectRatio);
-        if (zoomMode == QPrintPreviewWidget::FitInView) {
-            int step = qRound(graphicsView->matrix().mapRect(target).height());
-            graphicsView->verticalScrollBar()->setSingleStep(step);
-            graphicsView->verticalScrollBar()->setPageStep(step);
-        }
-    }
+   if (zoomMode == QPrintPreviewWidget::FitToWidth) {
+      QTransform t;
+      qreal scale = graphicsView->viewport()->width() / target.width();
+      t.scale(scale, scale);
+      graphicsView->setTransform(t);
+      if (doFitting && fitting) {
+         QRectF viewSceneRect = graphicsView->viewportTransform().mapRect(graphicsView->viewport()->rect());
+         viewSceneRect.moveTop(target.top());
+         graphicsView->ensureVisible(viewSceneRect); // Nah...
+      }
+   } else {
+      graphicsView->fitInView(target, Qt::KeepAspectRatio);
+      if (zoomMode == QPrintPreviewWidget::FitInView) {
+         int step = qRound(graphicsView->matrix().mapRect(target).height());
+         graphicsView->verticalScrollBar()->setSingleStep(step);
+         graphicsView->verticalScrollBar()->setPageStep(step);
+      }
+   }
 
-    zoomFactor = graphicsView->transform().m11() * (float(printer->logicalDpiY()) / q->logicalDpiY());
-    emit q->previewChanged();
+   zoomFactor = graphicsView->transform().m11() * (float(printer->logicalDpiY()) / q->logicalDpiY());
+   emit q->previewChanged();
 }
 
 void QPrintPreviewWidgetPrivate::_q_updateCurrentPage()
 {
-    Q_Q(QPrintPreviewWidget);
+   Q_Q(QPrintPreviewWidget);
 
-    if (viewMode == QPrintPreviewWidget::AllPagesView)
-        return;
+   if (viewMode == QPrintPreviewWidget::AllPagesView) {
+      return;
+   }
 
-    int newPage = calcCurrentPage();
-    if (newPage != curPage) {
-        curPage = newPage;
-        emit q->previewChanged();
-    }
+   int newPage = calcCurrentPage();
+   if (newPage != curPage) {
+      curPage = newPage;
+      emit q->previewChanged();
+   }
 }
 
 int QPrintPreviewWidgetPrivate::calcCurrentPage()
 {
-    int maxArea = 0;
-    int newPage = curPage;
-    QRect viewRect = graphicsView->viewport()->rect();
-    QList<QGraphicsItem*> items = graphicsView->items(viewRect);
-    for (int i=0; i<items.size(); ++i) {
-        PageItem* pg = static_cast<PageItem*>(items.at(i));
-        QRect overlap = graphicsView->mapFromScene(pg->sceneBoundingRect()).boundingRect() & viewRect;
-        int area = overlap.width() * overlap.height();
-        if (area > maxArea) {
-            maxArea = area;
-            newPage = pg->pageNumber();
-        } else if (area == maxArea && pg->pageNumber() < newPage) {
-            newPage = pg->pageNumber();
-        }
-    }
-    return newPage;
+   int maxArea = 0;
+   int newPage = curPage;
+   QRect viewRect = graphicsView->viewport()->rect();
+   QList<QGraphicsItem *> items = graphicsView->items(viewRect);
+   for (int i = 0; i < items.size(); ++i) {
+      PageItem *pg = static_cast<PageItem *>(items.at(i));
+      QRect overlap = graphicsView->mapFromScene(pg->sceneBoundingRect()).boundingRect() & viewRect;
+      int area = overlap.width() * overlap.height();
+      if (area > maxArea) {
+         maxArea = area;
+         newPage = pg->pageNumber();
+      } else if (area == maxArea && pg->pageNumber() < newPage) {
+         newPage = pg->pageNumber();
+      }
+   }
+   return newPage;
 }
 
 void QPrintPreviewWidgetPrivate::init()
 {
-    Q_Q(QPrintPreviewWidget);
+   Q_Q(QPrintPreviewWidget);
 
-    graphicsView = new GraphicsView;
-    graphicsView->setInteractive(false);
-    graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-    graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
-    QObject::connect(graphicsView->verticalScrollBar(), SIGNAL(valueChanged(int)),
-                     q, SLOT(_q_updateCurrentPage()));
-    QObject::connect(graphicsView, SIGNAL(resized()), q, SLOT(_q_fit()));
+   graphicsView = new GraphicsView;
+   graphicsView->setInteractive(false);
+   graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+   graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+   QObject::connect(graphicsView->verticalScrollBar(), SIGNAL(valueChanged(int)),
+                    q, SLOT(_q_updateCurrentPage()));
+   QObject::connect(graphicsView, SIGNAL(resized()), q, SLOT(_q_fit()));
 
-    scene = new QGraphicsScene(graphicsView);
-    scene->setBackgroundBrush(Qt::gray);
-    graphicsView->setScene(scene);
+   scene = new QGraphicsScene(graphicsView);
+   scene->setBackgroundBrush(Qt::gray);
+   graphicsView->setScene(scene);
 
-    QVBoxLayout *layout = new QVBoxLayout;
-    q->setLayout(layout);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(graphicsView);
+   QVBoxLayout *layout = new QVBoxLayout;
+   q->setLayout(layout);
+   layout->setContentsMargins(0, 0, 0, 0);
+   layout->addWidget(graphicsView);
 }
 
 void QPrintPreviewWidgetPrivate::populateScene()
 {
-    // remove old pages
-    for (int i = 0; i < pages.size(); i++)
-        scene->removeItem(pages.at(i));
-    qDeleteAll(pages);
-    pages.clear();
+   // remove old pages
+   for (int i = 0; i < pages.size(); i++) {
+      scene->removeItem(pages.at(i));
+   }
+   qDeleteAll(pages);
+   pages.clear();
 
-    int numPages = pictures.count();
-    QSize paperSize = printer->paperRect().size();
-    QRect pageRect = printer->pageRect();
+   int numPages = pictures.count();
+   QSize paperSize = printer->paperRect().size();
+   QRect pageRect = printer->pageRect();
 
-    for (int i = 0; i < numPages; i++) {
-        PageItem* item = new PageItem(i+1, pictures.at(i), paperSize, pageRect);
-        scene->addItem(item);
-        pages.append(item);
-    }
+   for (int i = 0; i < numPages; i++) {
+      PageItem *item = new PageItem(i + 1, pictures.at(i), paperSize, pageRect);
+      scene->addItem(item);
+      pages.append(item);
+   }
 }
 
 void QPrintPreviewWidgetPrivate::layoutPages()
 {
-    int numPages = pages.count();
-    if (numPages < 1)
-        return;
+   int numPages = pages.count();
+   if (numPages < 1) {
+      return;
+   }
 
-    int numPagePlaces = numPages;
-    int cols = 1; // singleMode and default
-    if (viewMode == QPrintPreviewWidget::AllPagesView) {
-        if (printer->orientation() == QPrinter::Portrait)
-            cols = qCeil(qSqrt((float) numPages));
-        else
-            cols = qFloor(qSqrt((float) numPages));
-        cols += cols % 2;  // Nicer with an even number of cols
-    }
-    else if (viewMode == QPrintPreviewWidget::FacingPagesView) {
-        cols = 2;
-        numPagePlaces += 1;
-    }
-    int rows = qCeil(qreal(numPagePlaces) / cols);
+   int numPagePlaces = numPages;
+   int cols = 1; // singleMode and default
+   if (viewMode == QPrintPreviewWidget::AllPagesView) {
+      if (printer->orientation() == QPrinter::Portrait) {
+         cols = qCeil(qSqrt((float) numPages));
+      } else {
+         cols = qFloor(qSqrt((float) numPages));
+      }
+      cols += cols % 2;  // Nicer with an even number of cols
+   } else if (viewMode == QPrintPreviewWidget::FacingPagesView) {
+      cols = 2;
+      numPagePlaces += 1;
+   }
+   int rows = qCeil(qreal(numPagePlaces) / cols);
 
-    qreal itemWidth = pages.at(0)->boundingRect().width();
-    qreal itemHeight = pages.at(0)->boundingRect().height();
-    int pageNum = 1;
-    for (int i = 0; i < rows && pageNum <= numPages; i++) {
-        for (int j = 0; j < cols && pageNum <= numPages; j++) {
-            if (!i && !j && viewMode == QPrintPreviewWidget::FacingPagesView) {
-                // Front page doesn't have a facing page
-                continue;
-            } else {
-                pages.at(pageNum-1)->setPos(QPointF(j*itemWidth, i*itemHeight));
-                pageNum++;
-            }
-        }
-    }
-    scene->setSceneRect(scene->itemsBoundingRect());
+   qreal itemWidth = pages.at(0)->boundingRect().width();
+   qreal itemHeight = pages.at(0)->boundingRect().height();
+   int pageNum = 1;
+   for (int i = 0; i < rows && pageNum <= numPages; i++) {
+      for (int j = 0; j < cols && pageNum <= numPages; j++) {
+         if (!i && !j && viewMode == QPrintPreviewWidget::FacingPagesView) {
+            // Front page doesn't have a facing page
+            continue;
+         } else {
+            pages.at(pageNum - 1)->setPos(QPointF(j * itemWidth, i * itemHeight));
+            pageNum++;
+         }
+      }
+   }
+   scene->setSceneRect(scene->itemsBoundingRect());
 }
 
 void QPrintPreviewWidgetPrivate::generatePreview()
 {
-    //### If QPrinter::setPreviewMode() becomes public, handle the
-    //### case that we have been constructed with a printer that
-    //### _already_ has been preview-painted to, so we should
-    //### initially just show the pages it already contains, and not
-    //### emit paintRequested() until the user changes some parameter
+   //### If QPrinter::setPreviewMode() becomes public, handle the
+   //### case that we have been constructed with a printer that
+   //### _already_ has been preview-painted to, so we should
+   //### initially just show the pages it already contains, and not
+   //### emit paintRequested() until the user changes some parameter
 
-    Q_Q(QPrintPreviewWidget);
-    printer->d_func()->setPreviewMode(true);
-    emit q->paintRequested(printer);
-    printer->d_func()->setPreviewMode(false);
-    pictures = printer->d_func()->previewPages();
-    populateScene(); // i.e. setPreviewPrintedPictures() e.l.
-    layoutPages();
-    curPage = qBound(1, curPage, pages.count());
-    if (fitting)
-        _q_fit();
-    emit q->previewChanged();
+   Q_Q(QPrintPreviewWidget);
+   printer->d_func()->setPreviewMode(true);
+   emit q->paintRequested(printer);
+   printer->d_func()->setPreviewMode(false);
+   pictures = printer->d_func()->previewPages();
+   populateScene(); // i.e. setPreviewPrintedPictures() e.l.
+   layoutPages();
+   curPage = qBound(1, curPage, pages.count());
+   if (fitting) {
+      _q_fit();
+   }
+   emit q->previewChanged();
 }
 
 void QPrintPreviewWidgetPrivate::setCurrentPage(int pageNumber)
 {
-    if (pageNumber < 1 || pageNumber > pages.count())
-        return;
+   if (pageNumber < 1 || pageNumber > pages.count()) {
+      return;
+   }
 
-    int lastPage = curPage;
-    curPage = pageNumber;
+   int lastPage = curPage;
+   curPage = pageNumber;
 
-    if (lastPage != curPage && lastPage > 0 && lastPage <= pages.count()) {
-        if (zoomMode != QPrintPreviewWidget::FitInView) {
-            QScrollBar *hsc = graphicsView->horizontalScrollBar();
-            QScrollBar *vsc = graphicsView->verticalScrollBar();
-            QPointF pt = graphicsView->transform().map(pages.at(curPage-1)->pos());
-            vsc->setValue(int(pt.y()) - 10);
-            hsc->setValue(int(pt.x()) - 10);
-        } else {
-            graphicsView->centerOn(pages.at(curPage-1));
-        }
-    }
+   if (lastPage != curPage && lastPage > 0 && lastPage <= pages.count()) {
+      if (zoomMode != QPrintPreviewWidget::FitInView) {
+         QScrollBar *hsc = graphicsView->horizontalScrollBar();
+         QScrollBar *vsc = graphicsView->verticalScrollBar();
+         QPointF pt = graphicsView->transform().map(pages.at(curPage - 1)->pos());
+         vsc->setValue(int(pt.y()) - 10);
+         hsc->setValue(int(pt.x()) - 10);
+      } else {
+         graphicsView->centerOn(pages.at(curPage - 1));
+      }
+   }
 }
 
 void QPrintPreviewWidgetPrivate::zoom(qreal zoom)
 {
-    zoomFactor *= zoom;
-    graphicsView->scale(zoom, zoom);
+   zoomFactor *= zoom;
+   graphicsView->scale(zoom, zoom);
 }
 
 void QPrintPreviewWidgetPrivate::setZoomFactor(qreal _zoomFactor)
 {
-    Q_Q(QPrintPreviewWidget);
-    zoomFactor = _zoomFactor;
-    graphicsView->resetTransform();
-    int dpi_y = q->logicalDpiY();
-    int printer_dpi_y = printer->logicalDpiY();
-    graphicsView->scale(zoomFactor*(dpi_y/float(printer_dpi_y)),
-                        zoomFactor*(dpi_y/float(printer_dpi_y)));
+   Q_Q(QPrintPreviewWidget);
+   zoomFactor = _zoomFactor;
+   graphicsView->resetTransform();
+   int dpi_y = q->logicalDpiY();
+   int printer_dpi_y = printer->logicalDpiY();
+   graphicsView->scale(zoomFactor * (dpi_y / float(printer_dpi_y)),
+                       zoomFactor * (dpi_y / float(printer_dpi_y)));
 }
 
 ///////////////////////////////////////
@@ -508,12 +517,12 @@ void QPrintPreviewWidgetPrivate::setZoomFactor(qreal _zoomFactor)
     \sa QWidget::setWindowFlags()
 */
 QPrintPreviewWidget::QPrintPreviewWidget(QPrinter *printer, QWidget *parent, Qt::WindowFlags flags)
-    : QWidget(*new QPrintPreviewWidgetPrivate, parent, flags)
+   : QWidget(*new QPrintPreviewWidgetPrivate, parent, flags)
 {
-    Q_D(QPrintPreviewWidget);
-    d->printer = printer;
-    d->ownPrinter = false;
-    d->init();
+   Q_D(QPrintPreviewWidget);
+   d->printer = printer;
+   d->ownPrinter = false;
+   d->init();
 }
 
 /*!
@@ -524,12 +533,12 @@ QPrintPreviewWidget::QPrintPreviewWidget(QPrinter *printer, QWidget *parent, Qt:
     preview.
 */
 QPrintPreviewWidget::QPrintPreviewWidget(QWidget *parent, Qt::WindowFlags flags)
-    : QWidget(*new QPrintPreviewWidgetPrivate, parent, flags)
+   : QWidget(*new QPrintPreviewWidgetPrivate, parent, flags)
 {
-    Q_D(QPrintPreviewWidget);
-    d->printer = new QPrinter;
-    d->ownPrinter = true;
-    d->init();
+   Q_D(QPrintPreviewWidget);
+   d->printer = new QPrinter;
+   d->ownPrinter = true;
+   d->init();
 }
 
 
@@ -538,9 +547,10 @@ QPrintPreviewWidget::QPrintPreviewWidget(QWidget *parent, Qt::WindowFlags flags)
 */
 QPrintPreviewWidget::~QPrintPreviewWidget()
 {
-    Q_D(QPrintPreviewWidget);
-    if (d->ownPrinter)
-        delete d->printer;
+   Q_D(QPrintPreviewWidget);
+   if (d->ownPrinter) {
+      delete d->printer;
+   }
 }
 
 /*!
@@ -548,8 +558,8 @@ QPrintPreviewWidget::~QPrintPreviewWidget()
 */
 QPrintPreviewWidget::ViewMode QPrintPreviewWidget::viewMode() const
 {
-    Q_D(const QPrintPreviewWidget);
-    return d->viewMode;
+   Q_D(const QPrintPreviewWidget);
+   return d->viewMode;
 }
 
 /*!
@@ -558,19 +568,19 @@ QPrintPreviewWidget::ViewMode QPrintPreviewWidget::viewMode() const
 */
 void QPrintPreviewWidget::setViewMode(ViewMode mode)
 {
-    Q_D(QPrintPreviewWidget);
-    d->viewMode = mode;
-    d->layoutPages();
-    if (d->viewMode == AllPagesView) {
-        d->graphicsView->fitInView(d->scene->itemsBoundingRect(), Qt::KeepAspectRatio);
-        d->fitting = false;
-        d->zoomMode = QPrintPreviewWidget::CustomZoom;
-        d->zoomFactor = d->graphicsView->transform().m11() * (float(d->printer->logicalDpiY()) / logicalDpiY());
-        emit previewChanged();
-    } else {
-        d->fitting = true;
-        d->_q_fit();
-    }
+   Q_D(QPrintPreviewWidget);
+   d->viewMode = mode;
+   d->layoutPages();
+   if (d->viewMode == AllPagesView) {
+      d->graphicsView->fitInView(d->scene->itemsBoundingRect(), Qt::KeepAspectRatio);
+      d->fitting = false;
+      d->zoomMode = QPrintPreviewWidget::CustomZoom;
+      d->zoomFactor = d->graphicsView->transform().m11() * (float(d->printer->logicalDpiY()) / logicalDpiY());
+      emit previewChanged();
+   } else {
+      d->fitting = true;
+      d->_q_fit();
+   }
 }
 
 /*!
@@ -579,8 +589,8 @@ void QPrintPreviewWidget::setViewMode(ViewMode mode)
 */
 QPrinter::Orientation QPrintPreviewWidget::orientation() const
 {
-    Q_D(const QPrintPreviewWidget);
-    return d->printer->orientation();
+   Q_D(const QPrintPreviewWidget);
+   return d->printer->orientation();
 }
 
 /*!
@@ -589,9 +599,9 @@ QPrinter::Orientation QPrintPreviewWidget::orientation() const
 */
 void QPrintPreviewWidget::setOrientation(QPrinter::Orientation orientation)
 {
-    Q_D(QPrintPreviewWidget);
-    d->printer->setOrientation(orientation);
-    d->generatePreview();
+   Q_D(QPrintPreviewWidget);
+   d->printer->setOrientation(orientation);
+   d->generatePreview();
 }
 
 /*!
@@ -599,9 +609,9 @@ void QPrintPreviewWidget::setOrientation(QPrinter::Orientation orientation)
 */
 void QPrintPreviewWidget::print()
 {
-    Q_D(QPrintPreviewWidget);
-    // ### make use of the generated pages
-    emit paintRequested(d->printer);
+   Q_D(QPrintPreviewWidget);
+   // ### make use of the generated pages
+   emit paintRequested(d->printer);
 }
 
 /*!
@@ -610,10 +620,10 @@ void QPrintPreviewWidget::print()
 */
 void QPrintPreviewWidget::zoomIn(qreal factor)
 {
-    Q_D(QPrintPreviewWidget);
-    d->fitting = false;
-    d->zoomMode = QPrintPreviewWidget::CustomZoom;
-    d->zoom(factor);
+   Q_D(QPrintPreviewWidget);
+   d->fitting = false;
+   d->zoomMode = QPrintPreviewWidget::CustomZoom;
+   d->zoom(factor);
 }
 
 /*!
@@ -622,10 +632,10 @@ void QPrintPreviewWidget::zoomIn(qreal factor)
 */
 void QPrintPreviewWidget::zoomOut(qreal factor)
 {
-    Q_D(QPrintPreviewWidget);
-    d->fitting = false;
-    d->zoomMode = QPrintPreviewWidget::CustomZoom;
-    d->zoom(1/factor);
+   Q_D(QPrintPreviewWidget);
+   d->fitting = false;
+   d->zoomMode = QPrintPreviewWidget::CustomZoom;
+   d->zoom(1 / factor);
 }
 
 /*!
@@ -633,8 +643,8 @@ void QPrintPreviewWidget::zoomOut(qreal factor)
 */
 qreal QPrintPreviewWidget::zoomFactor() const
 {
-    Q_D(const QPrintPreviewWidget);
-    return d->zoomFactor;
+   Q_D(const QPrintPreviewWidget);
+   return d->zoomFactor;
 }
 
 /*!
@@ -646,10 +656,10 @@ qreal QPrintPreviewWidget::zoomFactor() const
 */
 void QPrintPreviewWidget::setZoomFactor(qreal factor)
 {
-    Q_D(QPrintPreviewWidget);
-    d->fitting = false;
-    d->zoomMode = QPrintPreviewWidget::CustomZoom;
-    d->setZoomFactor(factor);
+   Q_D(QPrintPreviewWidget);
+   d->fitting = false;
+   d->zoomMode = QPrintPreviewWidget::CustomZoom;
+   d->setZoomFactor(factor);
 }
 
 /*!
@@ -659,8 +669,8 @@ void QPrintPreviewWidget::setZoomFactor(qreal factor)
 */
 int QPrintPreviewWidget::numPages() const
 {
-    Q_D(const QPrintPreviewWidget);
-    return d->pages.size();
+   Q_D(const QPrintPreviewWidget);
+   return d->pages.size();
 }
 
 /*!
@@ -669,8 +679,8 @@ int QPrintPreviewWidget::numPages() const
 */
 int QPrintPreviewWidget::pageCount() const
 {
-    Q_D(const QPrintPreviewWidget);
-    return d->pages.size();
+   Q_D(const QPrintPreviewWidget);
+   return d->pages.size();
 }
 
 /*!
@@ -678,8 +688,8 @@ int QPrintPreviewWidget::pageCount() const
 */
 int QPrintPreviewWidget::currentPage() const
 {
-    Q_D(const QPrintPreviewWidget);
-    return d->curPage;
+   Q_D(const QPrintPreviewWidget);
+   return d->curPage;
 }
 
 /*!
@@ -688,8 +698,8 @@ int QPrintPreviewWidget::currentPage() const
 */
 void QPrintPreviewWidget::setCurrentPage(int page)
 {
-    Q_D(QPrintPreviewWidget);
-    d->setCurrentPage(page);
+   Q_D(QPrintPreviewWidget);
+   d->setCurrentPage(page);
 }
 
 /*!
@@ -698,7 +708,7 @@ void QPrintPreviewWidget::setCurrentPage(int page)
 */
 void QPrintPreviewWidget::fitToWidth()
 {
-    setZoomMode(FitToWidth);
+   setZoomMode(FitToWidth);
 }
 
 /*!
@@ -707,7 +717,7 @@ void QPrintPreviewWidget::fitToWidth()
 */
 void QPrintPreviewWidget::fitInView()
 {
-    setZoomMode(FitInView);
+   setZoomMode(FitInView);
 }
 
 /*!
@@ -717,14 +727,14 @@ void QPrintPreviewWidget::fitInView()
 */
 void QPrintPreviewWidget::setZoomMode(QPrintPreviewWidget::ZoomMode zoomMode)
 {
-    Q_D(QPrintPreviewWidget);
-    d->zoomMode = zoomMode;
-    if (d->zoomMode == FitInView || d->zoomMode == FitToWidth) {
-        d->fitting = true;
-        d->_q_fit(true);
-    } else {
-        d->fitting = false;
-    }
+   Q_D(QPrintPreviewWidget);
+   d->zoomMode = zoomMode;
+   if (d->zoomMode == FitInView || d->zoomMode == FitToWidth) {
+      d->fitting = true;
+      d->_q_fit(true);
+   } else {
+      d->fitting = false;
+   }
 }
 
 /*!
@@ -734,8 +744,8 @@ void QPrintPreviewWidget::setZoomMode(QPrintPreviewWidget::ZoomMode zoomMode)
 */
 QPrintPreviewWidget::ZoomMode QPrintPreviewWidget::zoomMode() const
 {
-    Q_D(const QPrintPreviewWidget);
-    return d->zoomMode;
+   Q_D(const QPrintPreviewWidget);
+   return d->zoomMode;
 }
 
 /*!
@@ -744,7 +754,7 @@ QPrintPreviewWidget::ZoomMode QPrintPreviewWidget::zoomMode() const
 */
 void QPrintPreviewWidget::setLandscapeOrientation()
 {
-    setOrientation(QPrinter::Landscape);
+   setOrientation(QPrinter::Landscape);
 }
 
 /*!
@@ -753,7 +763,7 @@ void QPrintPreviewWidget::setLandscapeOrientation()
 */
 void QPrintPreviewWidget::setPortraitOrientation()
 {
-    setOrientation(QPrinter::Portrait);
+   setOrientation(QPrinter::Portrait);
 }
 
 /*!
@@ -762,7 +772,7 @@ void QPrintPreviewWidget::setPortraitOrientation()
 */
 void QPrintPreviewWidget::setSinglePageViewMode()
 {
-    setViewMode(SinglePageView);
+   setViewMode(SinglePageView);
 }
 
 /*!
@@ -771,7 +781,7 @@ void QPrintPreviewWidget::setSinglePageViewMode()
 */
 void QPrintPreviewWidget::setFacingPagesViewMode()
 {
-    setViewMode(FacingPagesView);
+   setViewMode(FacingPagesView);
 }
 
 /*!
@@ -780,7 +790,7 @@ void QPrintPreviewWidget::setFacingPagesViewMode()
 */
 void QPrintPreviewWidget::setAllPagesViewMode()
 {
-    setViewMode(AllPagesView);
+   setViewMode(AllPagesView);
 }
 
 
@@ -790,32 +800,33 @@ void QPrintPreviewWidget::setAllPagesViewMode()
 */
 void QPrintPreviewWidget::updatePreview()
 {
-    Q_D(QPrintPreviewWidget);
-    d->initialized = true;
-    d->generatePreview();
-    d->graphicsView->updateGeometry();
+   Q_D(QPrintPreviewWidget);
+   d->initialized = true;
+   d->generatePreview();
+   d->graphicsView->updateGeometry();
 }
 
 /*! \reimp
 */
 void QPrintPreviewWidget::setVisible(bool visible)
 {
-    Q_D(QPrintPreviewWidget);
-    if (visible && !d->initialized)
-        updatePreview();
-    QWidget::setVisible(visible);
+   Q_D(QPrintPreviewWidget);
+   if (visible && !d->initialized) {
+      updatePreview();
+   }
+   QWidget::setVisible(visible);
 }
 
 void QPrintPreviewWidget::_q_fit()
 {
-	Q_D(QPrintPreviewWidget);
-	d->_q_fit();
+   Q_D(QPrintPreviewWidget);
+   d->_q_fit();
 }
 
 void QPrintPreviewWidget::_q_updateCurrentPage()
 {
-	Q_D(QPrintPreviewWidget);
-	d->_q_updateCurrentPage();
+   Q_D(QPrintPreviewWidget);
+   d->_q_updateCurrentPage();
 }
 
 

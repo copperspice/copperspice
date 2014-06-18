@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,44 +46,44 @@ class QNetworkConfiguration;
 
 class Q_NETWORK_EXPORT QBearerEngine : public QObject
 {
-    CS_OBJECT(QBearerEngine)
+   CS_OBJECT(QBearerEngine)
 
-    friend class QNetworkConfigurationManagerPrivate;
+   friend class QNetworkConfigurationManagerPrivate;
 
-public:
-    explicit QBearerEngine(QObject *parent = 0);
-    virtual ~QBearerEngine();
+ public:
+   explicit QBearerEngine(QObject *parent = 0);
+   virtual ~QBearerEngine();
 
-    virtual bool hasIdentifier(const QString &id) = 0;
+   virtual bool hasIdentifier(const QString &id) = 0;
 
-    virtual QNetworkConfigurationManager::Capabilities capabilities() const = 0;
+   virtual QNetworkConfigurationManager::Capabilities capabilities() const = 0;
 
-    virtual QNetworkSessionPrivate *createSessionBackend() = 0;
+   virtual QNetworkSessionPrivate *createSessionBackend() = 0;
 
-    virtual QNetworkConfigurationPrivatePointer defaultConfiguration() = 0;
+   virtual QNetworkConfigurationPrivatePointer defaultConfiguration() = 0;
 
-    virtual bool requiresPolling() const;
-    bool configurationsInUse() const;
+   virtual bool requiresPolling() const;
+   bool configurationsInUse() const;
 
-public:
-    NET_CS_SIGNAL_1(Public, void configurationAdded(QNetworkConfigurationPrivatePointer config))
-    NET_CS_SIGNAL_2(configurationAdded,config) 
-    NET_CS_SIGNAL_1(Public, void configurationRemoved(QNetworkConfigurationPrivatePointer config))
-    NET_CS_SIGNAL_2(configurationRemoved,config) 
-    NET_CS_SIGNAL_1(Public, void configurationChanged(QNetworkConfigurationPrivatePointer config))
-    NET_CS_SIGNAL_2(configurationChanged,config) 
-    NET_CS_SIGNAL_1(Public, void updateCompleted())
-    NET_CS_SIGNAL_2(updateCompleted) 
+ public:
+   NET_CS_SIGNAL_1(Public, void configurationAdded(QNetworkConfigurationPrivatePointer config))
+   NET_CS_SIGNAL_2(configurationAdded, config)
+   NET_CS_SIGNAL_1(Public, void configurationRemoved(QNetworkConfigurationPrivatePointer config))
+   NET_CS_SIGNAL_2(configurationRemoved, config)
+   NET_CS_SIGNAL_1(Public, void configurationChanged(QNetworkConfigurationPrivatePointer config))
+   NET_CS_SIGNAL_2(configurationChanged, config)
+   NET_CS_SIGNAL_1(Public, void updateCompleted())
+   NET_CS_SIGNAL_2(updateCompleted)
 
-protected:
-    //this table contains an up to date list of all configs at any time.
-    //it must be updated if configurations change, are added/removed or
-    //the members of ServiceNetworks change
-    QHash<QString, QNetworkConfigurationPrivatePointer> accessPointConfigurations;
-    QHash<QString, QNetworkConfigurationPrivatePointer> snapConfigurations;
-    QHash<QString, QNetworkConfigurationPrivatePointer> userChoiceConfigurations;
+ protected:
+   //this table contains an up to date list of all configs at any time.
+   //it must be updated if configurations change, are added/removed or
+   //the members of ServiceNetworks change
+   QHash<QString, QNetworkConfigurationPrivatePointer> accessPointConfigurations;
+   QHash<QString, QNetworkConfigurationPrivatePointer> snapConfigurations;
+   QHash<QString, QNetworkConfigurationPrivatePointer> userChoiceConfigurations;
 
-    mutable QMutex mutex;
+   mutable QMutex mutex;
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,35 +34,40 @@ QT_BEGIN_NAMESPACE
 
 class QFontSubset
 {
-public:
-    QFontSubset(QFontEngine *fe, int obj_id = 0)
-        : object_id(obj_id), noEmbed(false), fontEngine(fe), downloaded_glyphs(0), standard_font(false)
-        { fontEngine->ref.ref(); addGlyph(0); }
-    ~QFontSubset() {
-        if (!fontEngine->ref.deref())
-            delete fontEngine;
-    }
+ public:
+   QFontSubset(QFontEngine *fe, int obj_id = 0)
+      : object_id(obj_id), noEmbed(false), fontEngine(fe), downloaded_glyphs(0), standard_font(false) {
+      fontEngine->ref.ref();
+      addGlyph(0);
+   }
+   ~QFontSubset() {
+      if (!fontEngine->ref.deref()) {
+         delete fontEngine;
+      }
+   }
 
-    QByteArray toTruetype() const;
-    QByteArray toType1() const;
-    QByteArray type1AddedGlyphs() const;
-    QByteArray widthArray() const;
-    QByteArray createToUnicodeMap() const;
-    QVector<int> getReverseMap() const;
-    QByteArray glyphName(unsigned int glyph, const QVector<int> reverseMap) const;
+   QByteArray toTruetype() const;
+   QByteArray toType1() const;
+   QByteArray type1AddedGlyphs() const;
+   QByteArray widthArray() const;
+   QByteArray createToUnicodeMap() const;
+   QVector<int> getReverseMap() const;
+   QByteArray glyphName(unsigned int glyph, const QVector<int> reverseMap) const;
 
-    static QByteArray glyphName(unsigned short unicode, bool symbol);
+   static QByteArray glyphName(unsigned short unicode, bool symbol);
 
-    int addGlyph(int index);
-    const int object_id;
-    bool noEmbed;
-    QFontEngine *fontEngine;
-    QList<int> glyph_indices;
-    mutable int downloaded_glyphs;
-    mutable bool standard_font;
-    int nGlyphs() const { return glyph_indices.size(); }
-    mutable QFixed emSquare;
-    mutable QVector<QFixed> widths;
+   int addGlyph(int index);
+   const int object_id;
+   bool noEmbed;
+   QFontEngine *fontEngine;
+   QList<int> glyph_indices;
+   mutable int downloaded_glyphs;
+   mutable bool standard_font;
+   int nGlyphs() const {
+      return glyph_indices.size();
+   }
+   mutable QFixed emSquare;
+   mutable QVector<QFixed> widths;
 };
 
 QT_END_NAMESPACE

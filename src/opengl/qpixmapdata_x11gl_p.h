@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,27 +41,27 @@ class QX11GLSharedContexts;
 
 class QX11GLPixmapData : public QX11PixmapData, public QGLPaintDevice
 {
-public:
-    QX11GLPixmapData();
-    virtual ~QX11GLPixmapData();
+ public:
+   QX11GLPixmapData();
+   virtual ~QX11GLPixmapData();
 
-    // Re-implemented from QX11PixmapData:
-    void fill(const QColor &color);
-    void copy(const QPixmapData *data, const QRect &rect);
-    bool scroll(int dx, int dy, const QRect &rect);
+   // Re-implemented from QX11PixmapData:
+   void fill(const QColor &color);
+   void copy(const QPixmapData *data, const QRect &rect);
+   bool scroll(int dx, int dy, const QRect &rect);
 
-    // Re-implemented from QGLPaintDevice
-    QPaintEngine* paintEngine() const; // Also re-implements QX11PixmapData::paintEngine
-    void beginPaint();
-    QGLContext* context() const;
-    QSize size() const;
+   // Re-implemented from QGLPaintDevice
+   QPaintEngine *paintEngine() const; // Also re-implements QX11PixmapData::paintEngine
+   void beginPaint();
+   QGLContext *context() const;
+   QSize size() const;
 
-    static bool hasX11GLPixmaps();
-    static QGLFormat glFormat();
-    static QX11GLSharedContexts* sharedContexts();
+   static bool hasX11GLPixmaps();
+   static QGLFormat glFormat();
+   static QX11GLSharedContexts *sharedContexts();
 
-private:
-    mutable QGLContext* ctx;
+ private:
+   mutable QGLContext *ctx;
 };
 
 

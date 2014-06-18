@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -53,149 +53,152 @@ QT_BEGIN_NAMESPACE
 
 class QGraphicsSceneIndexRectIntersector : public QGraphicsSceneIndexIntersector
 {
-public:
-    bool intersect(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
-                   const QTransform &deviceTransform) const
-    {
-        QRectF brect = item->boundingRect();
-        _q_adjustRect(&brect);
+ public:
+   bool intersect(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
+                  const QTransform &deviceTransform) const {
+      QRectF brect = item->boundingRect();
+      _q_adjustRect(&brect);
 
-        // ### Add test for this (without making things slower?)
-        Q_UNUSED(exposeRect);
+      // ### Add test for this (without making things slower?)
+      Q_UNUSED(exposeRect);
 
-        bool keep = true;
-        const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
-        if (itemd->itemIsUntransformable()) {
-            // Untransformable items; map the scene rect to item coordinates.
-            const QTransform transform = item->deviceTransform(deviceTransform);
-            QRectF itemRect = (deviceTransform * transform.inverted()).mapRect(sceneRect);
-            if (mode == Qt::ContainsItemShape || mode == Qt::ContainsItemBoundingRect)
-                keep = itemRect.contains(brect) && itemRect != brect;
-            else
-                keep = itemRect.intersects(brect);
-            if (keep && (mode == Qt::ContainsItemShape || mode == Qt::IntersectsItemShape)) {
-                QPainterPath itemPath;
-                itemPath.addRect(itemRect);
-                keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, itemPath, mode);
+      bool keep = true;
+      const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
+      if (itemd->itemIsUntransformable()) {
+         // Untransformable items; map the scene rect to item coordinates.
+         const QTransform transform = item->deviceTransform(deviceTransform);
+         QRectF itemRect = (deviceTransform * transform.inverted()).mapRect(sceneRect);
+         if (mode == Qt::ContainsItemShape || mode == Qt::ContainsItemBoundingRect) {
+            keep = itemRect.contains(brect) && itemRect != brect;
+         } else {
+            keep = itemRect.intersects(brect);
+         }
+         if (keep && (mode == Qt::ContainsItemShape || mode == Qt::IntersectsItemShape)) {
+            QPainterPath itemPath;
+            itemPath.addRect(itemRect);
+            keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, itemPath, mode);
+         }
+      } else {
+         Q_ASSERT(!itemd->dirtySceneTransform);
+         const QRectF itemSceneBoundingRect = itemd->sceneTransformTranslateOnly
+                                              ? brect.translated(itemd->sceneTransform.dx(),
+                                                    itemd->sceneTransform.dy())
+                                              : itemd->sceneTransform.mapRect(brect);
+         if (mode == Qt::ContainsItemShape || mode == Qt::ContainsItemBoundingRect) {
+            keep = sceneRect != brect && sceneRect.contains(itemSceneBoundingRect);
+         } else {
+            keep = sceneRect.intersects(itemSceneBoundingRect);
+         }
+         if (keep && (mode == Qt::ContainsItemShape || mode == Qt::IntersectsItemShape)) {
+            QPainterPath rectPath;
+            rectPath.addRect(sceneRect);
+            if (itemd->sceneTransformTranslateOnly) {
+               rectPath.translate(-itemd->sceneTransform.dx(), -itemd->sceneTransform.dy());
+            } else {
+               rectPath = itemd->sceneTransform.inverted().map(rectPath);
             }
-        } else {
-            Q_ASSERT(!itemd->dirtySceneTransform);
-            const QRectF itemSceneBoundingRect = itemd->sceneTransformTranslateOnly
-                                               ? brect.translated(itemd->sceneTransform.dx(),
-                                                                  itemd->sceneTransform.dy())
-                                               : itemd->sceneTransform.mapRect(brect);
-            if (mode == Qt::ContainsItemShape || mode == Qt::ContainsItemBoundingRect)
-                keep = sceneRect != brect && sceneRect.contains(itemSceneBoundingRect);
-            else
-                keep = sceneRect.intersects(itemSceneBoundingRect);
-            if (keep && (mode == Qt::ContainsItemShape || mode == Qt::IntersectsItemShape)) {
-                QPainterPath rectPath;
-                rectPath.addRect(sceneRect);
-                if (itemd->sceneTransformTranslateOnly)
-                    rectPath.translate(-itemd->sceneTransform.dx(), -itemd->sceneTransform.dy());
-                else
-                    rectPath = itemd->sceneTransform.inverted().map(rectPath);
-                keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, rectPath, mode);
-            }
-        }
-        return keep;
-    }
+            keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, rectPath, mode);
+         }
+      }
+      return keep;
+   }
 
-    QRectF sceneRect;
+   QRectF sceneRect;
 };
 
 class QGraphicsSceneIndexPointIntersector : public QGraphicsSceneIndexIntersector
 {
-public:
-    bool intersect(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
-                   const QTransform &deviceTransform) const
-    {
-        QRectF brect = item->boundingRect();
-        _q_adjustRect(&brect);
+ public:
+   bool intersect(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
+                  const QTransform &deviceTransform) const {
+      QRectF brect = item->boundingRect();
+      _q_adjustRect(&brect);
 
-        // ### Add test for this (without making things slower?)
-        Q_UNUSED(exposeRect);
+      // ### Add test for this (without making things slower?)
+      Q_UNUSED(exposeRect);
 
-        bool keep = false;
-        const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
-        if (itemd->itemIsUntransformable()) {
-            // Untransformable items; map the scene point to item coordinates.
-            const QTransform transform = item->deviceTransform(deviceTransform);
-            QPointF itemPoint = (deviceTransform * transform.inverted()).map(scenePoint);
-            keep = brect.contains(itemPoint);
-            if (keep && (mode == Qt::ContainsItemShape || mode == Qt::IntersectsItemShape)) {
-                QPainterPath pointPath;
-                pointPath.addRect(QRectF(itemPoint, QSizeF(1, 1)));
-                keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, pointPath, mode);
-            }
-        } else {
-            Q_ASSERT(!itemd->dirtySceneTransform);
-            QRectF sceneBoundingRect = itemd->sceneTransformTranslateOnly
-                                     ? brect.translated(itemd->sceneTransform.dx(),
-                                                        itemd->sceneTransform.dy())
-                                     : itemd->sceneTransform.mapRect(brect);
-            keep = sceneBoundingRect.intersects(QRectF(scenePoint, QSizeF(1, 1)));
-            if (keep) {
-                QPointF p = itemd->sceneTransformTranslateOnly
-                          ? QPointF(scenePoint.x() - itemd->sceneTransform.dx(),
-                                    scenePoint.y() - itemd->sceneTransform.dy())
-                          : itemd->sceneTransform.inverted().map(scenePoint);
-                keep = item->contains(p);
-            }
-        }
+      bool keep = false;
+      const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
+      if (itemd->itemIsUntransformable()) {
+         // Untransformable items; map the scene point to item coordinates.
+         const QTransform transform = item->deviceTransform(deviceTransform);
+         QPointF itemPoint = (deviceTransform * transform.inverted()).map(scenePoint);
+         keep = brect.contains(itemPoint);
+         if (keep && (mode == Qt::ContainsItemShape || mode == Qt::IntersectsItemShape)) {
+            QPainterPath pointPath;
+            pointPath.addRect(QRectF(itemPoint, QSizeF(1, 1)));
+            keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, pointPath, mode);
+         }
+      } else {
+         Q_ASSERT(!itemd->dirtySceneTransform);
+         QRectF sceneBoundingRect = itemd->sceneTransformTranslateOnly
+                                    ? brect.translated(itemd->sceneTransform.dx(),
+                                          itemd->sceneTransform.dy())
+                                    : itemd->sceneTransform.mapRect(brect);
+         keep = sceneBoundingRect.intersects(QRectF(scenePoint, QSizeF(1, 1)));
+         if (keep) {
+            QPointF p = itemd->sceneTransformTranslateOnly
+                        ? QPointF(scenePoint.x() - itemd->sceneTransform.dx(),
+                                  scenePoint.y() - itemd->sceneTransform.dy())
+                        : itemd->sceneTransform.inverted().map(scenePoint);
+            keep = item->contains(p);
+         }
+      }
 
-        return keep;
-    }
+      return keep;
+   }
 
-    QPointF scenePoint;
+   QPointF scenePoint;
 };
 
 class QGraphicsSceneIndexPathIntersector : public QGraphicsSceneIndexIntersector
 {
-public:
-    bool intersect(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
-                   const QTransform &deviceTransform) const
-    {
-        QRectF brect = item->boundingRect();
-        _q_adjustRect(&brect);
+ public:
+   bool intersect(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
+                  const QTransform &deviceTransform) const {
+      QRectF brect = item->boundingRect();
+      _q_adjustRect(&brect);
 
-        // ### Add test for this (without making things slower?)
-        Q_UNUSED(exposeRect);
+      // ### Add test for this (without making things slower?)
+      Q_UNUSED(exposeRect);
 
-        bool keep = true;
-        const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
-        if (itemd->itemIsUntransformable()) {
-            // Untransformable items; map the scene rect to item coordinates.
-            const QTransform transform = item->deviceTransform(deviceTransform);
-            QPainterPath itemPath = (deviceTransform * transform.inverted()).map(scenePath);
-            if (mode == Qt::ContainsItemShape || mode == Qt::ContainsItemBoundingRect)
-                keep = itemPath.contains(brect);
-            else
-                keep = itemPath.intersects(brect);
-            if (keep && (mode == Qt::ContainsItemShape || mode == Qt::IntersectsItemShape))
-                keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, itemPath, mode);
-        } else {
-            Q_ASSERT(!itemd->dirtySceneTransform);
-            const QRectF itemSceneBoundingRect = itemd->sceneTransformTranslateOnly
-                                               ? brect.translated(itemd->sceneTransform.dx(),
-                                                                  itemd->sceneTransform.dy())
-                                               : itemd->sceneTransform.mapRect(brect);
-            if (mode == Qt::ContainsItemShape || mode == Qt::ContainsItemBoundingRect)
-                keep = scenePath.contains(itemSceneBoundingRect);
-            else
-                keep = scenePath.intersects(itemSceneBoundingRect);
-            if (keep && (mode == Qt::ContainsItemShape || mode == Qt::IntersectsItemShape)) {
-                QPainterPath itemPath = itemd->sceneTransformTranslateOnly
-                                      ? scenePath.translated(-itemd->sceneTransform.dx(),
-                                                             -itemd->sceneTransform.dy())
-                                      : itemd->sceneTransform.inverted().map(scenePath);
-                keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, itemPath, mode);
-            }
-        }
-        return keep;
-    }
+      bool keep = true;
+      const QGraphicsItemPrivate *itemd = QGraphicsItemPrivate::get(item);
+      if (itemd->itemIsUntransformable()) {
+         // Untransformable items; map the scene rect to item coordinates.
+         const QTransform transform = item->deviceTransform(deviceTransform);
+         QPainterPath itemPath = (deviceTransform * transform.inverted()).map(scenePath);
+         if (mode == Qt::ContainsItemShape || mode == Qt::ContainsItemBoundingRect) {
+            keep = itemPath.contains(brect);
+         } else {
+            keep = itemPath.intersects(brect);
+         }
+         if (keep && (mode == Qt::ContainsItemShape || mode == Qt::IntersectsItemShape)) {
+            keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, itemPath, mode);
+         }
+      } else {
+         Q_ASSERT(!itemd->dirtySceneTransform);
+         const QRectF itemSceneBoundingRect = itemd->sceneTransformTranslateOnly
+                                              ? brect.translated(itemd->sceneTransform.dx(),
+                                                    itemd->sceneTransform.dy())
+                                              : itemd->sceneTransform.mapRect(brect);
+         if (mode == Qt::ContainsItemShape || mode == Qt::ContainsItemBoundingRect) {
+            keep = scenePath.contains(itemSceneBoundingRect);
+         } else {
+            keep = scenePath.intersects(itemSceneBoundingRect);
+         }
+         if (keep && (mode == Qt::ContainsItemShape || mode == Qt::IntersectsItemShape)) {
+            QPainterPath itemPath = itemd->sceneTransformTranslateOnly
+                                    ? scenePath.translated(-itemd->sceneTransform.dx(),
+                                          -itemd->sceneTransform.dy())
+                                    : itemd->sceneTransform.inverted().map(scenePath);
+            keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, itemPath, mode);
+         }
+      }
+      return keep;
+   }
 
-    QPainterPath scenePath;
+   QPainterPath scenePath;
 };
 
 /*!
@@ -203,9 +206,9 @@ public:
 */
 QGraphicsSceneIndexPrivate::QGraphicsSceneIndexPrivate(QGraphicsScene *scene) : scene(scene)
 {
-    pointIntersector = new QGraphicsSceneIndexPointIntersector;
-    rectIntersector = new QGraphicsSceneIndexRectIntersector;
-    pathIntersector =  new QGraphicsSceneIndexPathIntersector;
+   pointIntersector = new QGraphicsSceneIndexPointIntersector;
+   rectIntersector = new QGraphicsSceneIndexRectIntersector;
+   pathIntersector =  new QGraphicsSceneIndexPathIntersector;
 }
 
 /*!
@@ -213,9 +216,9 @@ QGraphicsSceneIndexPrivate::QGraphicsSceneIndexPrivate(QGraphicsScene *scene) : 
 */
 QGraphicsSceneIndexPrivate::~QGraphicsSceneIndexPrivate()
 {
-    delete pointIntersector;
-    delete rectIntersector;
-    delete pathIntersector;
+   delete pointIntersector;
+   delete rectIntersector;
+   delete pathIntersector;
 }
 
 /*!
@@ -225,26 +228,27 @@ QGraphicsSceneIndexPrivate::~QGraphicsSceneIndexPrivate()
     doesn't collide, maybe its frame rect will.
 */
 bool QGraphicsSceneIndexPrivate::itemCollidesWithPath(const QGraphicsItem *item,
-                                                      const QPainterPath &path,
-                                                      Qt::ItemSelectionMode mode)
+      const QPainterPath &path,
+      Qt::ItemSelectionMode mode)
 {
-    if (item->collidesWithPath(path, mode))
-        return true;
-    if (item->isWidget()) {
-        // Check if this is a window, and if its frame rect collides.
-        const QGraphicsWidget *widget = static_cast<const QGraphicsWidget *>(item);
-        if (widget->isWindow()) {
-            QRectF frameRect = widget->windowFrameRect();
-            QPainterPath framePath;
-            framePath.addRect(frameRect);
-            bool intersects = path.intersects(frameRect);
-            if (mode == Qt::IntersectsItemShape || mode == Qt::IntersectsItemBoundingRect)
-                return intersects || path.contains(frameRect.topLeft())
-                    || framePath.contains(path.elementAt(0));
-            return !intersects && path.contains(frameRect.topLeft());
-        }
-    }
-    return false;
+   if (item->collidesWithPath(path, mode)) {
+      return true;
+   }
+   if (item->isWidget()) {
+      // Check if this is a window, and if its frame rect collides.
+      const QGraphicsWidget *widget = static_cast<const QGraphicsWidget *>(item);
+      if (widget->isWindow()) {
+         QRectF frameRect = widget->windowFrameRect();
+         QPainterPath framePath;
+         framePath.addRect(frameRect);
+         bool intersects = path.intersects(frameRect);
+         if (mode == Qt::IntersectsItemShape || mode == Qt::IntersectsItemBoundingRect)
+            return intersects || path.contains(frameRect.topLeft())
+                   || framePath.contains(path.elementAt(0));
+         return !intersects && path.contains(frameRect.topLeft());
+      }
+   }
+   return false;
 }
 
 /*!
@@ -252,93 +256,103 @@ bool QGraphicsSceneIndexPrivate::itemCollidesWithPath(const QGraphicsItem *item,
     This function returns the items in ascending order.
 */
 void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRectF exposeRect,
-                                                        QGraphicsSceneIndexIntersector *intersector,
-                                                        QList<QGraphicsItem *> *items,
-                                                        const QTransform &viewTransform,
-                                                        Qt::ItemSelectionMode mode,
-                                                        qreal parentOpacity) const
+      QGraphicsSceneIndexIntersector *intersector,
+      QList<QGraphicsItem *> *items,
+      const QTransform &viewTransform,
+      Qt::ItemSelectionMode mode,
+      qreal parentOpacity) const
 {
-    Q_ASSERT(item);
-    if (!item->d_ptr->visible)
-        return;
+   Q_ASSERT(item);
+   if (!item->d_ptr->visible) {
+      return;
+   }
 
-    const qreal opacity = item->d_ptr->combineOpacityFromParent(parentOpacity);
-    const bool itemIsFullyTransparent = QGraphicsItemPrivate::isOpacityNull(opacity);
-    const bool itemHasChildren = !item->d_ptr->children.isEmpty();
-    if (itemIsFullyTransparent && (!itemHasChildren || item->d_ptr->childrenCombineOpacity()))
-        return;
+   const qreal opacity = item->d_ptr->combineOpacityFromParent(parentOpacity);
+   const bool itemIsFullyTransparent = QGraphicsItemPrivate::isOpacityNull(opacity);
+   const bool itemHasChildren = !item->d_ptr->children.isEmpty();
+   if (itemIsFullyTransparent && (!itemHasChildren || item->d_ptr->childrenCombineOpacity())) {
+      return;
+   }
 
-    // Update the item's scene transform if dirty.
-    const bool itemIsUntransformable = item->d_ptr->itemIsUntransformable();
-    const bool wasDirtyParentSceneTransform = item->d_ptr->dirtySceneTransform && !itemIsUntransformable;
-    if (wasDirtyParentSceneTransform) {
-        item->d_ptr->updateSceneTransformFromParent();
-        Q_ASSERT(!item->d_ptr->dirtySceneTransform);
-    }
+   // Update the item's scene transform if dirty.
+   const bool itemIsUntransformable = item->d_ptr->itemIsUntransformable();
+   const bool wasDirtyParentSceneTransform = item->d_ptr->dirtySceneTransform && !itemIsUntransformable;
+   if (wasDirtyParentSceneTransform) {
+      item->d_ptr->updateSceneTransformFromParent();
+      Q_ASSERT(!item->d_ptr->dirtySceneTransform);
+   }
 
-    const bool itemClipsChildrenToShape = (item->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape);
-    bool processItem = !itemIsFullyTransparent;
-    if (processItem) {
-        processItem = intersector->intersect(item, exposeRect, mode, viewTransform);
-        if (!processItem && (!itemHasChildren || itemClipsChildrenToShape)) {
-            if (wasDirtyParentSceneTransform)
-                item->d_ptr->invalidateChildrenSceneTransform();
-            return;
-        }
-    } // else we know for sure this item has children we must process.
+   const bool itemClipsChildrenToShape = (item->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape);
+   bool processItem = !itemIsFullyTransparent;
+   if (processItem) {
+      processItem = intersector->intersect(item, exposeRect, mode, viewTransform);
+      if (!processItem && (!itemHasChildren || itemClipsChildrenToShape)) {
+         if (wasDirtyParentSceneTransform) {
+            item->d_ptr->invalidateChildrenSceneTransform();
+         }
+         return;
+      }
+   } // else we know for sure this item has children we must process.
 
-    int i = 0;
-    if (itemHasChildren) {
-        // Sort children.
-        item->d_ptr->ensureSortedChildren();
+   int i = 0;
+   if (itemHasChildren) {
+      // Sort children.
+      item->d_ptr->ensureSortedChildren();
 
-        // Clip to shape.
-        if (itemClipsChildrenToShape && !itemIsUntransformable) {
-            QPainterPath mappedShape = item->d_ptr->sceneTransformTranslateOnly
-                                     ? item->shape().translated(item->d_ptr->sceneTransform.dx(),
-                                                                item->d_ptr->sceneTransform.dy())
-                                     : item->d_ptr->sceneTransform.map(item->shape());
-            exposeRect &= mappedShape.controlPointRect();
-        }
+      // Clip to shape.
+      if (itemClipsChildrenToShape && !itemIsUntransformable) {
+         QPainterPath mappedShape = item->d_ptr->sceneTransformTranslateOnly
+                                    ? item->shape().translated(item->d_ptr->sceneTransform.dx(),
+                                          item->d_ptr->sceneTransform.dy())
+                                    : item->d_ptr->sceneTransform.map(item->shape());
+         exposeRect &= mappedShape.controlPointRect();
+      }
 
-        // Process children behind
-        for (i = 0; i < item->d_ptr->children.size(); ++i) {
-            QGraphicsItem *child = item->d_ptr->children.at(i);
-            if (wasDirtyParentSceneTransform)
-                child->d_ptr->dirtySceneTransform = 1;
-            if (!(child->d_ptr->flags & QGraphicsItem::ItemStacksBehindParent))
-                break;
-            if (itemIsFullyTransparent && !(child->d_ptr->flags & QGraphicsItem::ItemIgnoresParentOpacity))
-                continue;
-            recursive_items_helper(child, exposeRect, intersector, items, viewTransform,
-                                   mode, opacity);
-        }
-    }
+      // Process children behind
+      for (i = 0; i < item->d_ptr->children.size(); ++i) {
+         QGraphicsItem *child = item->d_ptr->children.at(i);
+         if (wasDirtyParentSceneTransform) {
+            child->d_ptr->dirtySceneTransform = 1;
+         }
+         if (!(child->d_ptr->flags & QGraphicsItem::ItemStacksBehindParent)) {
+            break;
+         }
+         if (itemIsFullyTransparent && !(child->d_ptr->flags & QGraphicsItem::ItemIgnoresParentOpacity)) {
+            continue;
+         }
+         recursive_items_helper(child, exposeRect, intersector, items, viewTransform,
+                                mode, opacity);
+      }
+   }
 
-    // Process item
-    if (processItem)
-        items->append(item);
+   // Process item
+   if (processItem) {
+      items->append(item);
+   }
 
-    // Process children in front
-    if (itemHasChildren) {
-        for (; i < item->d_ptr->children.size(); ++i) {
-            QGraphicsItem *child = item->d_ptr->children.at(i);
-            if (wasDirtyParentSceneTransform)
-                child->d_ptr->dirtySceneTransform = 1;
-            if (itemIsFullyTransparent && !(child->d_ptr->flags & QGraphicsItem::ItemIgnoresParentOpacity))
-                continue;
-            recursive_items_helper(child, exposeRect, intersector, items, viewTransform,
-                                   mode, opacity);
-        }
-    }
+   // Process children in front
+   if (itemHasChildren) {
+      for (; i < item->d_ptr->children.size(); ++i) {
+         QGraphicsItem *child = item->d_ptr->children.at(i);
+         if (wasDirtyParentSceneTransform) {
+            child->d_ptr->dirtySceneTransform = 1;
+         }
+         if (itemIsFullyTransparent && !(child->d_ptr->flags & QGraphicsItem::ItemIgnoresParentOpacity)) {
+            continue;
+         }
+         recursive_items_helper(child, exposeRect, intersector, items, viewTransform,
+                                mode, opacity);
+      }
+   }
 }
 
 void QGraphicsSceneIndexPrivate::init()
 {
-    if (!scene)
-        return;
+   if (!scene) {
+      return;
+   }
 
-    QObject::connect(scene, SIGNAL(sceneRectChanged(const QRectF &)), q_func(), SLOT(updateSceneRect(const QRectF &)));
+   QObject::connect(scene, SIGNAL(sceneRectChanged(const QRectF &)), q_func(), SLOT(updateSceneRect(const QRectF &)));
 }
 
 /*!
@@ -347,8 +361,8 @@ void QGraphicsSceneIndexPrivate::init()
 QGraphicsSceneIndex::QGraphicsSceneIndex(QGraphicsScene *scene)
    : QObject(scene), d_ptr(new QGraphicsSceneIndexPrivate(scene) )
 {
-    d_ptr->q_ptr = this;
-    d_func()->init();
+   d_ptr->q_ptr = this;
+   d_func()->init();
 }
 
 /*!
@@ -357,8 +371,8 @@ QGraphicsSceneIndex::QGraphicsSceneIndex(QGraphicsScene *scene)
 QGraphicsSceneIndex::QGraphicsSceneIndex(QGraphicsSceneIndexPrivate &dd, QGraphicsScene *scene)
    : QObject(scene), d_ptr(&dd)
 {
-    d_ptr->q_ptr = this;
-    d_func()->init();
+   d_ptr->q_ptr = this;
+   d_func()->init();
 }
 
 /*!
@@ -372,10 +386,10 @@ QGraphicsSceneIndex::~QGraphicsSceneIndex()
 /*!
     Returns the scene of this index.
 */
-QGraphicsScene* QGraphicsSceneIndex::scene() const
+QGraphicsScene *QGraphicsSceneIndex::scene() const
 {
-    Q_D(const QGraphicsSceneIndex);
-    return d->scene;
+   Q_D(const QGraphicsSceneIndex);
+   return d->scene;
 }
 
 /*!
@@ -399,14 +413,14 @@ QGraphicsScene* QGraphicsSceneIndex::scene() const
 
 */
 QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QPointF &pos, Qt::ItemSelectionMode mode,
-                                                  Qt::SortOrder order, const QTransform &deviceTransform) const
+      Qt::SortOrder order, const QTransform &deviceTransform) const
 {
 
-    Q_D(const QGraphicsSceneIndex);
-    QList<QGraphicsItem *> itemList;
-    d->pointIntersector->scenePoint = pos;
-    d->items_helper(QRectF(pos, QSizeF(1, 1)), d->pointIntersector, &itemList, deviceTransform, mode, order);
-    return itemList;
+   Q_D(const QGraphicsSceneIndex);
+   QList<QGraphicsItem *> itemList;
+   d->pointIntersector->scenePoint = pos;
+   d->items_helper(QRectF(pos, QSizeF(1, 1)), d->pointIntersector, &itemList, deviceTransform, mode, order);
+   return itemList;
 }
 
 /*!
@@ -432,15 +446,15 @@ QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QPointF &pos, Qt::ItemSe
 
 */
 QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QRectF &rect, Qt::ItemSelectionMode mode,
-                                                  Qt::SortOrder order, const QTransform &deviceTransform) const
+      Qt::SortOrder order, const QTransform &deviceTransform) const
 {
-    Q_D(const QGraphicsSceneIndex);
-    QRectF exposeRect = rect;
-    _q_adjustRect(&exposeRect);
-    QList<QGraphicsItem *> itemList;
-    d->rectIntersector->sceneRect = rect;
-    d->items_helper(exposeRect, d->rectIntersector, &itemList, deviceTransform, mode, order);
-    return itemList;
+   Q_D(const QGraphicsSceneIndex);
+   QRectF exposeRect = rect;
+   _q_adjustRect(&exposeRect);
+   QList<QGraphicsItem *> itemList;
+   d->rectIntersector->sceneRect = rect;
+   d->items_helper(exposeRect, d->rectIntersector, &itemList, deviceTransform, mode, order);
+   return itemList;
 }
 
 /*!
@@ -466,17 +480,17 @@ QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QRectF &rect, Qt::ItemSe
 
 */
 QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QPolygonF &polygon, Qt::ItemSelectionMode mode,
-                                                  Qt::SortOrder order, const QTransform &deviceTransform) const
+      Qt::SortOrder order, const QTransform &deviceTransform) const
 {
-    Q_D(const QGraphicsSceneIndex);
-    QList<QGraphicsItem *> itemList;
-    QRectF exposeRect = polygon.boundingRect();
-    _q_adjustRect(&exposeRect);
-    QPainterPath path;
-    path.addPolygon(polygon);
-    d->pathIntersector->scenePath = path;
-    d->items_helper(exposeRect, d->pathIntersector, &itemList, deviceTransform, mode, order);
-    return itemList;
+   Q_D(const QGraphicsSceneIndex);
+   QList<QGraphicsItem *> itemList;
+   QRectF exposeRect = polygon.boundingRect();
+   _q_adjustRect(&exposeRect);
+   QPainterPath path;
+   path.addPolygon(polygon);
+   d->pathIntersector->scenePath = path;
+   d->items_helper(exposeRect, d->pathIntersector, &itemList, deviceTransform, mode, order);
+   return itemList;
 }
 
 /*!
@@ -502,15 +516,15 @@ QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QPolygonF &polygon, Qt::
 
 */
 QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QPainterPath &path, Qt::ItemSelectionMode mode,
-                                                  Qt::SortOrder order, const QTransform &deviceTransform) const
+      Qt::SortOrder order, const QTransform &deviceTransform) const
 {
-    Q_D(const QGraphicsSceneIndex);
-    QList<QGraphicsItem *> itemList;
-    QRectF exposeRect = path.controlPointRect();
-    _q_adjustRect(&exposeRect);
-    d->pathIntersector->scenePath = path;
-    d->items_helper(exposeRect, d->pathIntersector, &itemList, deviceTransform, mode, order);
-    return itemList;
+   Q_D(const QGraphicsSceneIndex);
+   QList<QGraphicsItem *> itemList;
+   QRectF exposeRect = path.controlPointRect();
+   _q_adjustRect(&exposeRect);
+   d->pathIntersector->scenePath = path;
+   d->items_helper(exposeRect, d->pathIntersector, &itemList, deviceTransform, mode, order);
+   return itemList;
 }
 
 /*!
@@ -519,22 +533,23 @@ QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QPainterPath &path, Qt::
 */
 QList<QGraphicsItem *> QGraphicsSceneIndex::estimateItems(const QPointF &point, Qt::SortOrder order) const
 {
-    return estimateItems(QRectF(point, QSize(1, 1)), order);
+   return estimateItems(QRectF(point, QSize(1, 1)), order);
 }
 
 QList<QGraphicsItem *> QGraphicsSceneIndex::estimateTopLevelItems(const QRectF &rect, Qt::SortOrder order) const
 {
-    Q_D(const QGraphicsSceneIndex);
-    Q_UNUSED(rect);
-    QGraphicsScenePrivate *scened = d->scene->d_func();
-    scened->ensureSortedTopLevelItems();
-    if (order == Qt::DescendingOrder) {
-        QList<QGraphicsItem *> sorted;
-        for (int i = scened->topLevelItems.size() - 1; i >= 0; --i)
-            sorted << scened->topLevelItems.at(i);
-        return sorted;
-    }
-    return scened->topLevelItems;
+   Q_D(const QGraphicsSceneIndex);
+   Q_UNUSED(rect);
+   QGraphicsScenePrivate *scened = d->scene->d_func();
+   scened->ensureSortedTopLevelItems();
+   if (order == Qt::DescendingOrder) {
+      QList<QGraphicsItem *> sorted;
+      for (int i = scened->topLevelItems.size() - 1; i >= 0; --i) {
+         sorted << scened->topLevelItems.at(i);
+      }
+      return sorted;
+   }
+   return scened->topLevelItems;
 }
 
 /*!
@@ -553,7 +568,7 @@ QList<QGraphicsItem *> QGraphicsSceneIndex::estimateTopLevelItems(const QRectF &
 */
 void QGraphicsSceneIndex::updateSceneRect(const QRectF &rect)
 {
-    Q_UNUSED(rect);
+   Q_UNUSED(rect);
 }
 
 /*!
@@ -561,9 +576,10 @@ void QGraphicsSceneIndex::updateSceneRect(const QRectF &rect)
 */
 void QGraphicsSceneIndex::clear()
 {
-    const QList<QGraphicsItem *> allItems = items();
-    for (int i = 0 ; i < allItems.size(); ++i)
-        removeItem(allItems.at(i));
+   const QList<QGraphicsItem *> allItems = items();
+   for (int i = 0 ; i < allItems.size(); ++i) {
+      removeItem(allItems.at(i));
+   }
 }
 
 /*!
@@ -593,7 +609,7 @@ void QGraphicsSceneIndex::clear()
 */
 void QGraphicsSceneIndex::deleteItem(QGraphicsItem *item)
 {
-    removeItem(item);
+   removeItem(item);
 }
 
 /*!
@@ -609,11 +625,12 @@ void QGraphicsSceneIndex::deleteItem(QGraphicsItem *item)
 
     \sa QGraphicsItem::GraphicsItemChange
 */
-void QGraphicsSceneIndex::itemChange(const QGraphicsItem *item, QGraphicsItem::GraphicsItemChange change, const void *const value)
+void QGraphicsSceneIndex::itemChange(const QGraphicsItem *item, QGraphicsItem::GraphicsItemChange change,
+                                     const void *const value)
 {
-    Q_UNUSED(item);
-    Q_UNUSED(change);
-    Q_UNUSED(value);
+   Q_UNUSED(item);
+   Q_UNUSED(change);
+   Q_UNUSED(value);
 }
 
 /*!
@@ -623,7 +640,7 @@ void QGraphicsSceneIndex::itemChange(const QGraphicsItem *item, QGraphicsItem::G
 */
 void QGraphicsSceneIndex::prepareBoundingRectChange(const QGraphicsItem *item)
 {
-    Q_UNUSED(item);
+   Q_UNUSED(item);
 }
 
 QT_END_NAMESPACE

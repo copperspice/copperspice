@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,33 +32,36 @@
 QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QFontInfo
-{public:
-    QFontInfo(const QFont &);
-    QFontInfo(const QFontInfo &);
-    ~QFontInfo();
+{
+ public:
+   QFontInfo(const QFont &);
+   QFontInfo(const QFontInfo &);
+   ~QFontInfo();
 
-    QFontInfo &operator=(const QFontInfo &);
+   QFontInfo &operator=(const QFontInfo &);
 
-    QString family() const;
-    QString styleName() const;
-    int pixelSize() const;
-    int pointSize() const;
-    qreal pointSizeF() const;
-    bool italic() const;
-    QFont::Style style() const;
-    int weight() const;
-    inline bool bold() const { return weight() > QFont::Normal; }
-    bool underline() const;
-    bool overline() const;
-    bool strikeOut() const;
-    bool fixedPitch() const;
-    QFont::StyleHint styleHint() const;
-    bool rawMode() const;
+   QString family() const;
+   QString styleName() const;
+   int pixelSize() const;
+   int pointSize() const;
+   qreal pointSizeF() const;
+   bool italic() const;
+   QFont::Style style() const;
+   int weight() const;
+   inline bool bold() const {
+      return weight() > QFont::Normal;
+   }
+   bool underline() const;
+   bool overline() const;
+   bool strikeOut() const;
+   bool fixedPitch() const;
+   QFont::StyleHint styleHint() const;
+   bool rawMode() const;
 
-    bool exactMatch() const;
+   bool exactMatch() const;
 
-private:
-    QExplicitlySharedDataPointer<QFontPrivate> d;
+ private:
+   QExplicitlySharedDataPointer<QFontPrivate> d;
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -48,49 +48,49 @@ QTM_BEGIN_NAMESPACE
 class QNetworkConfigurationManagerPrivate;
 class QNetworkConfigurationManagerExport QNetworkConfigurationManager : public QObject
 {
-    CS_OBJECT(QNetworkConfigurationManager)
+   CS_OBJECT(QNetworkConfigurationManager)
 
-public:
-    enum Capability {
-         CanStartAndStopInterfaces  = 0x00000001,
-         DirectConnectionRouting = 0x00000002,
-         SystemSessionSupport = 0x00000004,
-         ApplicationLevelRoaming = 0x00000008,
-         ForcedRoaming = 0x00000010,
-         DataStatistics = 0x00000020,
-         NetworkSessionRequired = 0x00000040
-    };
+ public:
+   enum Capability {
+      CanStartAndStopInterfaces  = 0x00000001,
+      DirectConnectionRouting = 0x00000002,
+      SystemSessionSupport = 0x00000004,
+      ApplicationLevelRoaming = 0x00000008,
+      ForcedRoaming = 0x00000010,
+      DataStatistics = 0x00000020,
+      NetworkSessionRequired = 0x00000040
+   };
 
-    using Capabilities = QFlags<Capability>;
+   using Capabilities = QFlags<Capability>;
 
-    explicit QNetworkConfigurationManager(QObject *parent = 0);
-    virtual ~QNetworkConfigurationManager();
+   explicit QNetworkConfigurationManager(QObject *parent = 0);
+   virtual ~QNetworkConfigurationManager();
 
-    QNetworkConfigurationManager::Capabilities capabilities() const;
+   QNetworkConfigurationManager::Capabilities capabilities() const;
 
-    QNetworkConfiguration defaultConfiguration() const;
-    QList<QNetworkConfiguration> allConfigurations(QNetworkConfiguration::StateFlags flags = 0) const;
-    QNetworkConfiguration configurationFromIdentifier(const QString &identifier) const;
+   QNetworkConfiguration defaultConfiguration() const;
+   QList<QNetworkConfiguration> allConfigurations(QNetworkConfiguration::StateFlags flags = 0) const;
+   QNetworkConfiguration configurationFromIdentifier(const QString &identifier) const;
 
-    bool isOnline() const;
+   bool isOnline() const;
 
-    NET_CS_SLOT_1(Public, void updateConfigurations())
-    NET_CS_SLOT_2(updateConfigurations) 
+   NET_CS_SLOT_1(Public, void updateConfigurations())
+   NET_CS_SLOT_2(updateConfigurations)
 
-    NET_CS_SIGNAL_1(Public, void configurationAdded(const QNetworkConfiguration & config))
-    NET_CS_SIGNAL_2(configurationAdded,config) 
+   NET_CS_SIGNAL_1(Public, void configurationAdded(const QNetworkConfiguration &config))
+   NET_CS_SIGNAL_2(configurationAdded, config)
 
-    NET_CS_SIGNAL_1(Public, void configurationRemoved(const QNetworkConfiguration & config))
-    NET_CS_SIGNAL_2(configurationRemoved,config) 
+   NET_CS_SIGNAL_1(Public, void configurationRemoved(const QNetworkConfiguration &config))
+   NET_CS_SIGNAL_2(configurationRemoved, config)
 
-    NET_CS_SIGNAL_1(Public, void configurationChanged(const QNetworkConfiguration & config))
-    NET_CS_SIGNAL_2(configurationChanged,config) 
+   NET_CS_SIGNAL_1(Public, void configurationChanged(const QNetworkConfiguration &config))
+   NET_CS_SIGNAL_2(configurationChanged, config)
 
-    NET_CS_SIGNAL_1(Public, void onlineStateChanged(bool isOnline))
-    NET_CS_SIGNAL_2(onlineStateChanged,isOnline) 
+   NET_CS_SIGNAL_1(Public, void onlineStateChanged(bool isOnline))
+   NET_CS_SIGNAL_2(onlineStateChanged, isOnline)
 
-    NET_CS_SIGNAL_1(Public, void updateCompleted())
-    NET_CS_SIGNAL_2(updateCompleted) 
+   NET_CS_SIGNAL_1(Public, void updateCompleted())
+   NET_CS_SIGNAL_2(updateCompleted)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QNetworkConfigurationManager::Capabilities)

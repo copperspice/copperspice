@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,16 +38,16 @@ class QMacNativeWidgetPrivate : public QWidgetPrivate
 extern OSViewRef qt_mac_create_widget(QWidget *widget, QWidgetPrivate *widgetPrivate, OSViewRef parent);
 
 QMacNativeWidget::QMacNativeWidget(void *parentView)
-    : QWidget(*new QMacNativeWidgetPrivate, 0, Qt::Window)
+   : QWidget(*new QMacNativeWidgetPrivate, 0, Qt::Window)
 {
-    Q_D(QMacNativeWidget);
-    OSViewRef myView = qt_mac_create_widget(this, d, OSViewRef(parentView));
+   Q_D(QMacNativeWidget);
+   OSViewRef myView = qt_mac_create_widget(this, d, OSViewRef(parentView));
 
-    d->topData()->embedded = true;
-    create(WId(myView), false, false);
-    setPalette(QPalette(Qt::transparent));
-    setAttribute(Qt::WA_SetPalette, false);
-    setAttribute(Qt::WA_LayoutUsesWidgetRect);
+   d->topData()->embedded = true;
+   create(WId(myView), false, false);
+   setPalette(QPalette(Qt::transparent));
+   setAttribute(Qt::WA_SetPalette, false);
+   setAttribute(Qt::WA_LayoutUsesWidgetRect);
 }
 
 /*!
@@ -62,14 +62,14 @@ QMacNativeWidget::~QMacNativeWidget()
 */
 QSize QMacNativeWidget::sizeHint() const
 {
-    return QSize(200, 200);
+   return QSize(200, 200);
 }
 /*!
     \reimp
 */
 bool QMacNativeWidget::event(QEvent *ev)
 {
-    return QWidget::event(ev);
+   return QWidget::event(ev);
 }
 
 QT_END_NAMESPACE

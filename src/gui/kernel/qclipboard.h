@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,68 +41,68 @@ class QClipboardPrivate;
 
 class Q_GUI_EXPORT QClipboard : public QObject
 {
-    CS_OBJECT(QClipboard)
-    Q_DECLARE_PRIVATE(QClipboard)
+   CS_OBJECT(QClipboard)
+   Q_DECLARE_PRIVATE(QClipboard)
 
-private:
-    QClipboard(QObject *parent);
-    ~QClipboard();
+ private:
+   QClipboard(QObject *parent);
+   ~QClipboard();
 
-public:
-    enum Mode { Clipboard, Selection, FindBuffer, LastMode = FindBuffer };
+ public:
+   enum Mode { Clipboard, Selection, FindBuffer, LastMode = FindBuffer };
 
-    void clear(Mode mode = Clipboard);
+   void clear(Mode mode = Clipboard);
 
-    bool supportsSelection() const;
-    bool supportsFindBuffer() const;
+   bool supportsSelection() const;
+   bool supportsFindBuffer() const;
 
-    bool ownsSelection() const;
-    bool ownsClipboard() const;
-    bool ownsFindBuffer() const;
+   bool ownsSelection() const;
+   bool ownsClipboard() const;
+   bool ownsFindBuffer() const;
 
-    QString text(Mode mode = Clipboard) const;
-    QString text(QString& subtype, Mode mode = Clipboard) const;
-    void setText(const QString &, Mode mode = Clipboard);
+   QString text(Mode mode = Clipboard) const;
+   QString text(QString &subtype, Mode mode = Clipboard) const;
+   void setText(const QString &, Mode mode = Clipboard);
 
-    const QMimeData *mimeData(Mode mode = Clipboard ) const;
-    void setMimeData(QMimeData *data, Mode mode = Clipboard);
+   const QMimeData *mimeData(Mode mode = Clipboard ) const;
+   void setMimeData(QMimeData *data, Mode mode = Clipboard);
 
-    QImage image(Mode mode = Clipboard) const;
-    QPixmap pixmap(Mode mode = Clipboard) const;
-    void setImage(const QImage &, Mode mode  = Clipboard);
-    void setPixmap(const QPixmap &, Mode mode  = Clipboard);
+   QImage image(Mode mode = Clipboard) const;
+   QPixmap pixmap(Mode mode = Clipboard) const;
+   void setImage(const QImage &, Mode mode  = Clipboard);
+   void setPixmap(const QPixmap &, Mode mode  = Clipboard);
 
-    GUI_CS_SIGNAL_1(Public, void changed(QClipboard::Mode mode))
-    GUI_CS_SIGNAL_2(changed,mode) 
-    GUI_CS_SIGNAL_1(Public, void selectionChanged())
-    GUI_CS_SIGNAL_2(selectionChanged) 
-    GUI_CS_SIGNAL_1(Public, void findBufferChanged())
-    GUI_CS_SIGNAL_2(findBufferChanged) 
-    GUI_CS_SIGNAL_1(Public, void dataChanged())
-    GUI_CS_SIGNAL_2(dataChanged) 
-    
-protected:
-    void connectNotify(const char *);
-    bool event(QEvent *);
+   GUI_CS_SIGNAL_1(Public, void changed(QClipboard::Mode mode))
+   GUI_CS_SIGNAL_2(changed, mode)
+   GUI_CS_SIGNAL_1(Public, void selectionChanged())
+   GUI_CS_SIGNAL_2(selectionChanged)
+   GUI_CS_SIGNAL_1(Public, void findBufferChanged())
+   GUI_CS_SIGNAL_2(findBufferChanged)
+   GUI_CS_SIGNAL_1(Public, void dataChanged())
+   GUI_CS_SIGNAL_2(dataChanged)
 
-    QScopedPointer<QClipboardPrivate> d_ptr;
+ protected:
+   void connectNotify(const char *);
+   bool event(QEvent *);
 
-    friend class QApplication;
-    friend class QApplicationPrivate;
-    friend class QBaseApplication;
-    friend class QDragManager;
-    friend class QMimeSource;
-    friend class QPlatformClipboard;
+   QScopedPointer<QClipboardPrivate> d_ptr;
 
-private:
-    Q_DISABLE_COPY(QClipboard)
+   friend class QApplication;
+   friend class QApplicationPrivate;
+   friend class QBaseApplication;
+   friend class QDragManager;
+   friend class QMimeSource;
+   friend class QPlatformClipboard;
 
-    bool supportsMode(Mode mode) const;
-    bool ownsMode(Mode mode) const;
-    void emitChanged(Mode mode);
+ private:
+   Q_DISABLE_COPY(QClipboard)
 
-    GUI_CS_SLOT_1(Private, void ownerDestroyed())
-    GUI_CS_SLOT_2(ownerDestroyed) 
+   bool supportsMode(Mode mode) const;
+   bool ownsMode(Mode mode) const;
+   void emitChanged(Mode mode);
+
+   GUI_CS_SLOT_1(Private, void ownerDestroyed())
+   GUI_CS_SLOT_2(ownerDestroyed)
 
 
 };

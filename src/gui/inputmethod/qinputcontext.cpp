@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,10 +46,10 @@ QT_BEGIN_NAMESPACE
 /*!
     Constructs an input context with the given \a parent.
 */
-QInputContext::QInputContext(QObject* parent)
-   : QObject(parent), d_ptr(new QInputContextPrivate)    
+QInputContext::QInputContext(QObject *parent)
+   : QObject(parent), d_ptr(new QInputContextPrivate)
 {
-   d_ptr->q_ptr = this;	
+   d_ptr->q_ptr = this;
 }
 
 
@@ -75,8 +75,8 @@ QInputContext::~QInputContext()
 */
 QWidget *QInputContext::focusWidget() const
 {
-    Q_D(const QInputContext);
-    return d->focusWidget;
+   Q_D(const QInputContext);
+   return d->focusWidget;
 }
 
 
@@ -90,9 +90,9 @@ QWidget *QInputContext::focusWidget() const
 */
 void QInputContext::setFocusWidget(QWidget *widget)
 {
-    Q_ASSERT(!widget || widget->testAttribute(Qt::WA_InputMethodEnabled));
-    Q_D(QInputContext);
-    d->focusWidget = widget;
+   Q_ASSERT(!widget || widget->testAttribute(Qt::WA_InputMethodEnabled));
+   Q_D(QInputContext);
+   d->focusWidget = widget;
 }
 
 /*!
@@ -150,7 +150,7 @@ void QInputContext::setFocusWidget(QWidget *widget)
 */
 bool QInputContext::filterEvent(const QEvent * /*event*/)
 {
-    return false;
+   return false;
 }
 
 /*!
@@ -170,19 +170,20 @@ bool QInputContext::filterEvent(const QEvent * /*event*/)
 */
 void QInputContext::sendEvent(const QInputMethodEvent &event)
 {
-    // route events over input context parents to make chaining possible.
-    QInputContext *p = qobject_cast<QInputContext *>(parent());
-    if (p) {
-        p->sendEvent(event);
-        return;
-    }
+   // route events over input context parents to make chaining possible.
+   QInputContext *p = qobject_cast<QInputContext *>(parent());
+   if (p) {
+      p->sendEvent(event);
+      return;
+   }
 
-    QWidget *focus = focusWidget();
-    if (!focus)
-	return;
+   QWidget *focus = focusWidget();
+   if (!focus) {
+      return;
+   }
 
-    QInputMethodEvent e(event);
-    QApplication::sendEvent(focus, &e);
+   QInputMethodEvent e(event);
+   QApplication::sendEvent(focus, &e);
 }
 
 
@@ -205,10 +206,11 @@ void QInputContext::sendEvent(const QInputMethodEvent &event)
 */
 void QInputContext::mouseHandler(int /*x*/, QMouseEvent *event)
 {
-    // Default behavior for simple ephemeral input contexts. Some
-    // complex input contexts should not be reset here.
-    if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
-	reset();
+   // Default behavior for simple ephemeral input contexts. Some
+   // complex input contexts should not be reset here.
+   if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick) {
+      reset();
+   }
 }
 
 
@@ -217,11 +219,12 @@ void QInputContext::mouseHandler(int /*x*/, QMouseEvent *event)
 */
 QFont QInputContext::font() const
 {
-    Q_D(const QInputContext);
-    if (!d->focusWidget)
-        return QApplication::font();
+   Q_D(const QInputContext);
+   if (!d->focusWidget) {
+      return QApplication::font();
+   }
 
-    return qvariant_cast<QFont>(d->focusWidget->inputMethodQuery(Qt::ImFont));
+   return qvariant_cast<QFont>(d->focusWidget->inputMethodQuery(Qt::ImFont));
 }
 
 /*!
@@ -240,9 +243,10 @@ void QInputContext::update()
 */
 void QInputContext::widgetDestroyed(QWidget *widget)
 {
-    Q_D(QInputContext);
-    if (widget == d->focusWidget)
-        setFocusWidget(0);
+   Q_D(QInputContext);
+   if (widget == d->focusWidget) {
+      setFocusWidget(0);
+   }
 }
 
 /*!
@@ -310,7 +314,7 @@ void QInputContext::widgetDestroyed(QWidget *widget)
 */
 QList<QAction *> QInputContext::actions()
 {
-    return QList<QAction *>();
+   return QList<QAction *>();
 }
 
 /*!
@@ -328,24 +332,24 @@ QList<QAction *> QInputContext::actions()
 */
 QTextFormat QInputContext::standardFormat(StandardFormat s) const
 {
-    QWidget *focus = focusWidget();
-    const QPalette &pal = focus ? focus->palette() : QApplication::palette();
+   QWidget *focus = focusWidget();
+   const QPalette &pal = focus ? focus->palette() : QApplication::palette();
 
-    QTextCharFormat fmt;
-    QColor bg;
-    switch (s) {
-    case QInputContext::PreeditFormat: {
-        fmt.setUnderlineStyle(QTextCharFormat::DashUnderline);
-        break;
-    }
-    case QInputContext::SelectionFormat: {
-        bg = pal.text().color();
-        fmt.setBackground(QBrush(bg));
-        fmt.setForeground(pal.background());
-        break;
-    }
-    }
-    return fmt;
+   QTextCharFormat fmt;
+   QColor bg;
+   switch (s) {
+      case QInputContext::PreeditFormat: {
+         fmt.setUnderlineStyle(QTextCharFormat::DashUnderline);
+         break;
+      }
+      case QInputContext::SelectionFormat: {
+         bg = pal.text().color();
+         fmt.setBackground(QBrush(bg));
+         fmt.setForeground(pal.background());
+         break;
+      }
+   }
+   return fmt;
 }
 
 #ifdef Q_WS_X11
@@ -369,7 +373,7 @@ QTextFormat QInputContext::standardFormat(StandardFormat s) const
 */
 bool QInputContext::x11FilterEvent(QWidget * /*keywidget*/, XEvent * /*event*/)
 {
-    return false;
+   return false;
 }
 #endif // Q_WS_X11
 

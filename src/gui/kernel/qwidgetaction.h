@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,33 +36,33 @@ class QWidgetActionPrivate;
 
 class Q_GUI_EXPORT QWidgetAction : public QAction
 {
-    CS_OBJECT(QWidgetAction)
-    Q_DECLARE_PRIVATE(QWidgetAction)
+   CS_OBJECT(QWidgetAction)
+   Q_DECLARE_PRIVATE(QWidgetAction)
 
-public:
-    explicit QWidgetAction(QObject *parent);
-    virtual ~QWidgetAction();
-    
-    void setDefaultWidget(QWidget *w);
-    QWidget *defaultWidget() const;
+ public:
+   explicit QWidgetAction(QObject *parent);
+   virtual ~QWidgetAction();
 
-    QWidget *requestWidget(QWidget *parent);
-    void releaseWidget(QWidget *widget);
-    
-protected:
-    virtual bool event(QEvent *);
-    virtual bool eventFilter(QObject *, QEvent *);
-    virtual QWidget *createWidget(QWidget *parent);
-    virtual void deleteWidget(QWidget *widget);
-    QList<QWidget *> createdWidgets() const;
+   void setDefaultWidget(QWidget *w);
+   QWidget *defaultWidget() const;
 
-private:
-    Q_DISABLE_COPY(QWidgetAction)
+   QWidget *requestWidget(QWidget *parent);
+   void releaseWidget(QWidget *widget);
 
-    GUI_CS_SLOT_1(Private, void _q_widgetDestroyed(QObject * un_named_arg1))
-    GUI_CS_SLOT_2(_q_widgetDestroyed)
+ protected:
+   virtual bool event(QEvent *);
+   virtual bool eventFilter(QObject *, QEvent *);
+   virtual QWidget *createWidget(QWidget *parent);
+   virtual void deleteWidget(QWidget *widget);
+   QList<QWidget *> createdWidgets() const;
 
-    friend class QToolBar;
+ private:
+   Q_DISABLE_COPY(QWidgetAction)
+
+   GUI_CS_SLOT_1(Private, void _q_widgetDestroyed(QObject *un_named_arg1))
+   GUI_CS_SLOT_2(_q_widgetDestroyed)
+
+   friend class QToolBar;
 };
 
 #endif // QT_NO_ACTION

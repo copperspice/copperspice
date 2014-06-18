@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,53 +38,53 @@ class QStyleOptionSlider;
 
 class Q_GUI_EXPORT QSlider : public QAbstractSlider
 {
-    CS_OBJECT(QSlider)
+   CS_OBJECT(QSlider)
 
-    GUI_CS_ENUM(TickPosition)
-    
-    GUI_CS_PROPERTY_READ(tickPosition, tickPosition)
-    GUI_CS_PROPERTY_WRITE(tickPosition, setTickPosition)
-    GUI_CS_PROPERTY_READ(tickInterval, tickInterval)
-    GUI_CS_PROPERTY_WRITE(tickInterval, setTickInterval)
+   GUI_CS_ENUM(TickPosition)
 
-public:
-    enum TickPosition {
-        NoTicks = 0,
-        TicksAbove = 1,
-        TicksLeft = TicksAbove,
-        TicksBelow = 2,
-        TicksRight = TicksBelow,
-        TicksBothSides = 3
-    };
+   GUI_CS_PROPERTY_READ(tickPosition, tickPosition)
+   GUI_CS_PROPERTY_WRITE(tickPosition, setTickPosition)
+   GUI_CS_PROPERTY_READ(tickInterval, tickInterval)
+   GUI_CS_PROPERTY_WRITE(tickInterval, setTickInterval)
 
-    explicit QSlider(QWidget *parent = 0);
-    explicit QSlider(Qt::Orientation orientation, QWidget *parent = 0);
+ public:
+   enum TickPosition {
+      NoTicks = 0,
+      TicksAbove = 1,
+      TicksLeft = TicksAbove,
+      TicksBelow = 2,
+      TicksRight = TicksBelow,
+      TicksBothSides = 3
+   };
 
-    ~QSlider();
+   explicit QSlider(QWidget *parent = 0);
+   explicit QSlider(Qt::Orientation orientation, QWidget *parent = 0);
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+   ~QSlider();
 
-    void setTickPosition(TickPosition position);
-    TickPosition tickPosition() const;
+   QSize sizeHint() const;
+   QSize minimumSizeHint() const;
 
-    void setTickInterval(int ti);
-    int tickInterval() const;
+   void setTickPosition(TickPosition position);
+   TickPosition tickPosition() const;
 
-    bool event(QEvent *event);
+   void setTickInterval(int ti);
+   int tickInterval() const;
 
-protected:
-    void paintEvent(QPaintEvent *ev);
-    void mousePressEvent(QMouseEvent *ev);
-    void mouseReleaseEvent(QMouseEvent *ev);
-    void mouseMoveEvent(QMouseEvent *ev);
-    void initStyleOption(QStyleOptionSlider *option) const;
+   bool event(QEvent *event);
 
-private:
-    friend Q_GUI_EXPORT QStyleOptionSlider qt_qsliderStyleOption(QSlider *slider);
+ protected:
+   void paintEvent(QPaintEvent *ev);
+   void mousePressEvent(QMouseEvent *ev);
+   void mouseReleaseEvent(QMouseEvent *ev);
+   void mouseMoveEvent(QMouseEvent *ev);
+   void initStyleOption(QStyleOptionSlider *option) const;
 
-    Q_DISABLE_COPY(QSlider)
-    Q_DECLARE_PRIVATE(QSlider)
+ private:
+   friend Q_GUI_EXPORT QStyleOptionSlider qt_qsliderStyleOption(QSlider *slider);
+
+   Q_DISABLE_COPY(QSlider)
+   Q_DECLARE_PRIVATE(QSlider)
 };
 
 #endif // QT_NO_SLIDER

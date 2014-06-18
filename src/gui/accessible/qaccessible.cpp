@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,7 +39,7 @@
 QT_BEGIN_NAMESPACE
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QAccessibleFactoryInterface_iid, QLatin1String("/accessible")))
+                          (QAccessibleFactoryInterface_iid, QLatin1String("/accessible")))
 
 Q_GLOBAL_STATIC(QList<QAccessible::InterfaceFactory>, qAccessibleFactories)
 
@@ -50,21 +50,23 @@ static bool accessibility_active = false;
 static bool cleanupAdded = false;
 static void qAccessibleCleanup()
 {
-    qAccessibleFactories()->clear();
+   qAccessibleFactories()->clear();
 }
 
 void QAccessible::installFactory(InterfaceFactory factory)
 {
-    if (!factory)
-        return;
+   if (!factory) {
+      return;
+   }
 
-    if (!cleanupAdded) {
-        qAddPostRoutine(qAccessibleCleanup);
-        cleanupAdded = true;
-    }
-    if (qAccessibleFactories()->contains(factory))
-        return;
-    qAccessibleFactories()->append(factory);
+   if (!cleanupAdded) {
+      qAddPostRoutine(qAccessibleCleanup);
+      cleanupAdded = true;
+   }
+   if (qAccessibleFactories()->contains(factory)) {
+      return;
+   }
+   qAccessibleFactories()->append(factory);
 }
 
 /*!
@@ -72,7 +74,7 @@ void QAccessible::installFactory(InterfaceFactory factory)
 */
 void QAccessible::removeFactory(InterfaceFactory factory)
 {
-    qAccessibleFactories()->removeAll(factory);
+   qAccessibleFactories()->removeAll(factory);
 }
 
 /*!
@@ -84,9 +86,9 @@ void QAccessible::removeFactory(InterfaceFactory factory)
 */
 QAccessible::UpdateHandler QAccessible::installUpdateHandler(UpdateHandler handler)
 {
-    UpdateHandler old = updateHandler;
-    updateHandler = handler;
-    return old;
+   UpdateHandler old = updateHandler;
+   updateHandler = handler;
+   return old;
 }
 
 /*!
@@ -95,9 +97,9 @@ QAccessible::UpdateHandler QAccessible::installUpdateHandler(UpdateHandler handl
 */
 QAccessible::RootObjectHandler QAccessible::installRootObjectHandler(RootObjectHandler handler)
 {
-    RootObjectHandler old = rootObjectHandler;
-    rootObjectHandler = handler;
-    return old;
+   RootObjectHandler old = rootObjectHandler;
+   rootObjectHandler = handler;
+   return old;
 }
 
 /*!
@@ -121,38 +123,42 @@ QAccessible::RootObjectHandler QAccessible::installRootObjectHandler(RootObjectH
 */
 QAccessibleInterface *QAccessible::queryAccessibleInterface(QObject *object)
 {
-    accessibility_active = true;
-    QAccessibleInterface *iface = 0;
-    if (!object)
-        return 0;
+   accessibility_active = true;
+   QAccessibleInterface *iface = 0;
+   if (!object) {
+      return 0;
+   }
 
-    const QMetaObject *mo = object->metaObject();
-    while (mo) {
-        const QLatin1String cn(mo->className());
-        for (int i = qAccessibleFactories()->count(); i > 0; --i) {
-            InterfaceFactory factory = qAccessibleFactories()->at(i - 1);
-            iface = factory(cn, object);
-            if (iface)
-                return iface;
-        }
+   const QMetaObject *mo = object->metaObject();
+   while (mo) {
+      const QLatin1String cn(mo->className());
+      for (int i = qAccessibleFactories()->count(); i > 0; --i) {
+         InterfaceFactory factory = qAccessibleFactories()->at(i - 1);
+         iface = factory(cn, object);
+         if (iface) {
+            return iface;
+         }
+      }
 
-        QAccessibleFactoryInterface *factory = qobject_cast<QAccessibleFactoryInterface*>(loader()->instance(cn));
-        if (factory) {
-            iface = factory->create(cn, object);
-            if (iface)
-                return iface;
-        }
+      QAccessibleFactoryInterface *factory = qobject_cast<QAccessibleFactoryInterface *>(loader()->instance(cn));
+      if (factory) {
+         iface = factory->create(cn, object);
+         if (iface) {
+            return iface;
+         }
+      }
 
-        mo = mo->superClass();
-    }
+      mo = mo->superClass();
+   }
 
-    QWidget *widget = qobject_cast<QWidget*>(object);
-    if (widget)
-        return new QAccessibleWidget(widget);
-    else if (object == qApp)
-        return new QAccessibleApplication();
+   QWidget *widget = qobject_cast<QWidget *>(object);
+   if (widget) {
+      return new QAccessibleWidget(widget);
+   } else if (object == qApp) {
+      return new QAccessibleApplication();
+   }
 
-    return 0;
+   return 0;
 }
 
 /*!
@@ -164,7 +170,7 @@ QAccessibleInterface *QAccessible::queryAccessibleInterface(QObject *object)
 */
 bool QAccessible::isActive()
 {
-    return accessibility_active;
+   return accessibility_active;
 }
 
 /*!
@@ -673,23 +679,25 @@ const QAccessibleInterface *other, int otherChild) const
 */
 QVariant QAccessibleInterface::invokeMethod(Method method, int child, const QVariantList &params)
 {
-    if (!(state(0) & HasInvokeExtension))
-        return QVariant();
+   if (!(state(0) & HasInvokeExtension)) {
+      return QVariant();
+   }
 
-    return static_cast<QAccessibleInterfaceEx *>(this)->invokeMethodEx(method, child, params);
+   return static_cast<QAccessibleInterfaceEx *>(this)->invokeMethodEx(method, child, params);
 }
 
 QVariant QAccessibleInterfaceEx::virtual_hook(const QVariant &)
 {
-    return QVariant();
+   return QVariant();
 }
 
 /*! \internal */
 QAccessible2Interface *QAccessibleInterface::cast_helper(QAccessible2::InterfaceType t)
 {
-    if (state(0) & HasInvokeExtension)
-        return static_cast<QAccessibleInterfaceEx *>(this)->interface_cast(t);
-    return 0;
+   if (state(0) & HasInvokeExtension) {
+      return static_cast<QAccessibleInterfaceEx *>(this)->interface_cast(t);
+   }
+   return 0;
 }
 
 QT_END_NAMESPACE

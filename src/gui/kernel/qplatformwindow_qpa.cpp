@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,10 +30,10 @@
 
 class QPlatformWindowPrivate
 {
-    QWidget *tlw;
-    QRect rect;
-    Qt::WindowFlags flags;
-    friend class QPlatformWindow;
+   QWidget *tlw;
+   QRect rect;
+   Qt::WindowFlags flags;
+   friend class QPlatformWindow;
 };
 
 /*!
@@ -41,11 +41,11 @@ class QPlatformWindowPrivate
 */
 
 QPlatformWindow::QPlatformWindow(QWidget *tlw)
-    : d_ptr(new QPlatformWindowPrivate)
+   : d_ptr(new QPlatformWindowPrivate)
 {
-    Q_D(QPlatformWindow);
-    d->tlw = tlw;
-    tlw->setPlatformWindow(this);
+   Q_D(QPlatformWindow);
+   d->tlw = tlw;
+   tlw->setPlatformWindow(this);
 }
 
 /*!
@@ -60,8 +60,8 @@ QPlatformWindow::~QPlatformWindow()
 */
 QWidget *QPlatformWindow::widget() const
 {
-    Q_D(const QPlatformWindow);
-    return d->tlw;
+   Q_D(const QPlatformWindow);
+   return d->tlw;
 }
 
 /*!
@@ -72,8 +72,8 @@ QWidget *QPlatformWindow::widget() const
 */
 void QPlatformWindow::setGeometry(const QRect &rect)
 {
-    Q_D(QPlatformWindow);
-    d->rect = rect;
+   Q_D(QPlatformWindow);
+   d->rect = rect;
 }
 
 /*!
@@ -81,8 +81,8 @@ void QPlatformWindow::setGeometry(const QRect &rect)
 */
 QRect QPlatformWindow::geometry() const
 {
-    Q_D(const QPlatformWindow);
-    return d->rect;
+   Q_D(const QPlatformWindow);
+   return d->rect;
 }
 
 /*!
@@ -91,7 +91,7 @@ QRect QPlatformWindow::geometry() const
 */
 void QPlatformWindow::setVisible(bool visible)
 {
-    Q_UNUSED(visible);
+   Q_UNUSED(visible);
 }
 /*!
     Requests setting the window flags of this surface
@@ -99,9 +99,9 @@ void QPlatformWindow::setVisible(bool visible)
 */
 Qt::WindowFlags QPlatformWindow::setWindowFlags(Qt::WindowFlags flags)
 {
-    Q_D(QPlatformWindow);
-    d->flags = flags;
-    return flags;
+   Q_D(QPlatformWindow);
+   d->flags = flags;
+   return flags;
 }
 
 /*!
@@ -109,14 +109,17 @@ Qt::WindowFlags QPlatformWindow::setWindowFlags(Qt::WindowFlags flags)
 */
 Qt::WindowFlags QPlatformWindow::windowFlags() const
 {
-    Q_D(const QPlatformWindow);
-    return d->flags;
+   Q_D(const QPlatformWindow);
+   return d->flags;
 }
 
 /*!
   Reimplement in subclasses to return a handle to the native window
 */
-WId QPlatformWindow::winId() const { return WId(0); }
+WId QPlatformWindow::winId() const
+{
+   return WId(0);
+}
 
 /*!
     This function is called to enable native child widgets in QPA. It is common not to support this
@@ -127,32 +130,41 @@ WId QPlatformWindow::winId() const { return WId(0); }
 // supported the setParent. If not, then geometry would be in screen coordinates.
 void QPlatformWindow::setParent(const QPlatformWindow *parent)
 {
-    Q_UNUSED(parent);
-    qWarning("This plugin does not support setParent!");
+   Q_UNUSED(parent);
+   qWarning("This plugin does not support setParent!");
 }
 
 /*!
   Reimplement to set the window title to \a title
 */
-void QPlatformWindow::setWindowTitle(const QString &title) { Q_UNUSED(title); }
+void QPlatformWindow::setWindowTitle(const QString &title)
+{
+   Q_UNUSED(title);
+}
 
 /*!
   Reimplement to be able to let Qt rais windows to the top of the desktop
 */
-void QPlatformWindow::raise() { qWarning("This plugin does not support raise()"); }
+void QPlatformWindow::raise()
+{
+   qWarning("This plugin does not support raise()");
+}
 
 /*!
   Reimplement to be able to let Qt lower windows to the bottom of the desktop
 */
-void QPlatformWindow::lower() { qWarning("This plugin does not support lower()"); }
+void QPlatformWindow::lower()
+{
+   qWarning("This plugin does not support lower()");
+}
 
 /*!
   Reimplement to be able to let Qt set the opacity level of a window
 */
 void QPlatformWindow::setOpacity(qreal level)
 {
-    Q_UNUSED(level);
-    qWarning("This plugin does not support setting window opacity");
+   Q_UNUSED(level);
+   qWarning("This plugin does not support setting window opacity");
 }
 
 /*!
@@ -170,7 +182,7 @@ void QPlatformWindow::setOpacity(qreal level)
 */
 void QPlatformWindow::requestActivateWindow()
 {
-    QWindowSystemInterface::handleWindowActivated(widget());
+   QWindowSystemInterface::handleWindowActivated(widget());
 }
 
 /*!
@@ -178,7 +190,7 @@ void QPlatformWindow::requestActivateWindow()
 */
 QPlatformGLContext *QPlatformWindow::glContext() const
 {
-    return 0;
+   return 0;
 }
 
 /*!

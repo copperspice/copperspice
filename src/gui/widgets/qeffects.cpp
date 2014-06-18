@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -47,69 +47,70 @@ QT_BEGIN_NAMESPACE
 
 class QAlphaWidget: public QWidget, private QEffects
 {
-    CS_OBJECT(QAlphaWidget)
+   CS_OBJECT(QAlphaWidget)
 
-public:
-    QAlphaWidget(QWidget* w, Qt::WindowFlags f = 0);
-    ~QAlphaWidget();
+ public:
+   QAlphaWidget(QWidget *w, Qt::WindowFlags f = 0);
+   ~QAlphaWidget();
 
-    void run(int time);
+   void run(int time);
 
-protected:
-    void paintEvent(QPaintEvent* e);
-    void closeEvent(QCloseEvent*);
-    void alphaBlend();
-    bool eventFilter(QObject *, QEvent *);
-   
-    GUI_CS_SLOT_1(Protected,void render())
-    GUI_CS_SLOT_2(render)
+ protected:
+   void paintEvent(QPaintEvent *e);
+   void closeEvent(QCloseEvent *);
+   void alphaBlend();
+   bool eventFilter(QObject *, QEvent *);
 
-private:
-    QPixmap pm;
-    double alpha;
-    QImage backImage;
-    QImage frontImage;
-    QImage mixedImage;
-    QPointer<QWidget> widget;
-    int duration;
-    int elapsed;
-    bool showWidget;
-    QTimer anim;
-    QElapsedTimer checkTime;
+   GUI_CS_SLOT_1(Protected, void render())
+   GUI_CS_SLOT_2(render)
+
+ private:
+   QPixmap pm;
+   double alpha;
+   QImage backImage;
+   QImage frontImage;
+   QImage mixedImage;
+   QPointer<QWidget> widget;
+   int duration;
+   int elapsed;
+   bool showWidget;
+   QTimer anim;
+   QElapsedTimer checkTime;
 };
 
-static QAlphaWidget* q_blend = 0;
+static QAlphaWidget *q_blend = 0;
 
 /*
   Constructs a QAlphaWidget.
 */
-QAlphaWidget::QAlphaWidget(QWidget* w, Qt::WindowFlags f)
-    : QWidget(QApplication::desktop()->screen(QApplication::desktop()->screenNumber(w)), f)
+QAlphaWidget::QAlphaWidget(QWidget *w, Qt::WindowFlags f)
+   : QWidget(QApplication::desktop()->screen(QApplication::desktop()->screenNumber(w)), f)
 {
 #ifndef Q_OS_WIN
-    setEnabled(false);
+   setEnabled(false);
 #endif
-    setAttribute(Qt::WA_NoSystemBackground, true);
-    widget = w;
-    alpha = 0;
+   setAttribute(Qt::WA_NoSystemBackground, true);
+   widget = w;
+   alpha = 0;
 }
 
 QAlphaWidget::~QAlphaWidget()
 {
 #if defined(Q_OS_WIN)
-    // Restore user-defined opacity value
-    if (widget)
-        widget->setWindowOpacity(1);
+   // Restore user-defined opacity value
+   if (widget) {
+      widget->setWindowOpacity(1);
+   }
 #endif
 }
 
 /*
   \reimp
 */
-void QAlphaWidget::paintEvent(QPaintEvent*)
+void QAlphaWidget::paintEvent(QPaintEvent *)
 {
-    QPainter p(this);
-    p.drawPixmap(0, 0, pm);
+   QPainter p(this);
+   p.drawPixmap(0, 0, pm);
 }
 
 /*
@@ -118,51 +119,53 @@ void QAlphaWidget::paintEvent(QPaintEvent*)
 */
 void QAlphaWidget::run(int time)
 {
-    duration = time;
+   duration = time;
 
-    if (duration < 0)
-        duration = 150;
+   if (duration < 0) {
+      duration = 150;
+   }
 
-    if (!widget)
-        return;
+   if (!widget) {
+      return;
+   }
 
-    elapsed = 0;
-    checkTime.start();
+   elapsed = 0;
+   checkTime.start();
 
-    showWidget = true;
+   showWidget = true;
 #if defined(Q_OS_WIN)
-    qApp->installEventFilter(this);
-    widget->setWindowOpacity(0.0);
-    widget->show();
-    connect(&anim, SIGNAL(timeout()), this, SLOT(render()));
-    anim.start(1);
+   qApp->installEventFilter(this);
+   widget->setWindowOpacity(0.0);
+   widget->show();
+   connect(&anim, SIGNAL(timeout()), this, SLOT(render()));
+   anim.start(1);
 #else
-    //This is roughly equivalent to calling setVisible(true) without actually showing the widget
-    widget->setAttribute(Qt::WA_WState_ExplicitShowHide, true);
-    widget->setAttribute(Qt::WA_WState_Hidden, false);
+   //This is roughly equivalent to calling setVisible(true) without actually showing the widget
+   widget->setAttribute(Qt::WA_WState_ExplicitShowHide, true);
+   widget->setAttribute(Qt::WA_WState_Hidden, false);
 
-    qApp->installEventFilter(this);
+   qApp->installEventFilter(this);
 
-    move(widget->geometry().x(),widget->geometry().y());
-    resize(widget->size().width(), widget->size().height());
+   move(widget->geometry().x(), widget->geometry().y());
+   resize(widget->size().width(), widget->size().height());
 
-    frontImage = QPixmap::grabWidget(widget).toImage();
-    backImage = QPixmap::grabWindow(QApplication::desktop()->winId(),
-                                widget->geometry().x(), widget->geometry().y(),
-                                widget->geometry().width(), widget->geometry().height()).toImage();
+   frontImage = QPixmap::grabWidget(widget).toImage();
+   backImage = QPixmap::grabWindow(QApplication::desktop()->winId(),
+                                   widget->geometry().x(), widget->geometry().y(),
+                                   widget->geometry().width(), widget->geometry().height()).toImage();
 
-    if (!backImage.isNull() && checkTime.elapsed() < duration / 2) {
-        mixedImage = backImage.copy();
-        pm = QPixmap::fromImage(mixedImage);
-        show();
-        setEnabled(false);
+   if (!backImage.isNull() && checkTime.elapsed() < duration / 2) {
+      mixedImage = backImage.copy();
+      pm = QPixmap::fromImage(mixedImage);
+      show();
+      setEnabled(false);
 
-        connect(&anim, SIGNAL(timeout()), this, SLOT(render()));
-        anim.start(1);
-    } else {
-       duration = 0;
-       render();
-    }
+      connect(&anim, SIGNAL(timeout()), this, SLOT(render()));
+      anim.start(1);
+   } else {
+      duration = 0;
+      render();
+   }
 #endif
 }
 
@@ -171,36 +174,38 @@ void QAlphaWidget::run(int time)
 */
 bool QAlphaWidget::eventFilter(QObject *o, QEvent *e)
 {
-    switch (e->type()) {
-    case QEvent::Move:
-	    if (o != widget)
-	        break;
-	    move(widget->geometry().x(),widget->geometry().y());
-	    update();
-	    break;
-    case QEvent::Hide:
-    case QEvent::Close:
-	    if (o != widget)
-	        break;
-    case QEvent::MouseButtonPress:
-	case QEvent::MouseButtonDblClick:
-	    showWidget = false;
-	    render();
-	    break;
-    case QEvent::KeyPress: {
-	        QKeyEvent *ke = (QKeyEvent*)e;
-            if (ke->key() == Qt::Key_Escape) {
-		        showWidget = false;
-            } else {
-		        duration = 0;
-            }
-	        render();
-	        break;
-	}
-    default:
-	    break;
-    }
-    return QWidget::eventFilter(o, e);
+   switch (e->type()) {
+      case QEvent::Move:
+         if (o != widget) {
+            break;
+         }
+         move(widget->geometry().x(), widget->geometry().y());
+         update();
+         break;
+      case QEvent::Hide:
+      case QEvent::Close:
+         if (o != widget) {
+            break;
+         }
+      case QEvent::MouseButtonPress:
+      case QEvent::MouseButtonDblClick:
+         showWidget = false;
+         render();
+         break;
+      case QEvent::KeyPress: {
+         QKeyEvent *ke = (QKeyEvent *)e;
+         if (ke->key() == Qt::Key_Escape) {
+            showWidget = false;
+         } else {
+            duration = 0;
+         }
+         render();
+         break;
+      }
+      default:
+         break;
+   }
+   return QWidget::eventFilter(o, e);
 }
 
 /*
@@ -208,14 +213,15 @@ bool QAlphaWidget::eventFilter(QObject *o, QEvent *e)
 */
 void QAlphaWidget::closeEvent(QCloseEvent *e)
 {
-    e->accept();
-    if (!q_blend)
-        return;
+   e->accept();
+   if (!q_blend) {
+      return;
+   }
 
-    showWidget = false;
-    render();
+   showWidget = false;
+   render();
 
-    QWidget::closeEvent(e);
+   QWidget::closeEvent(e);
 }
 
 /*
@@ -226,54 +232,56 @@ void QAlphaWidget::closeEvent(QCloseEvent *e)
 */
 void QAlphaWidget::render()
 {
-    int tempel = checkTime.elapsed();
-    if (elapsed >= tempel)
-        elapsed++;
-    else
-        elapsed = tempel;
+   int tempel = checkTime.elapsed();
+   if (elapsed >= tempel) {
+      elapsed++;
+   } else {
+      elapsed = tempel;
+   }
 
-    if (duration != 0)
-        alpha = tempel / double(duration);
-    else
-        alpha = 1;
+   if (duration != 0) {
+      alpha = tempel / double(duration);
+   } else {
+      alpha = 1;
+   }
 
 #if defined(Q_OS_WIN)
-    if (alpha >= 1 || !showWidget) {
-        anim.stop();
-        qApp->removeEventFilter(this);
-        widget->setWindowOpacity(1);
-        q_blend = 0;
-        deleteLater();
-    } else {
-        widget->setWindowOpacity(alpha);
-    }
+   if (alpha >= 1 || !showWidget) {
+      anim.stop();
+      qApp->removeEventFilter(this);
+      widget->setWindowOpacity(1);
+      q_blend = 0;
+      deleteLater();
+   } else {
+      widget->setWindowOpacity(alpha);
+   }
 #else
-    if (alpha >= 1 || !showWidget) {
-        anim.stop();
-        qApp->removeEventFilter(this);
+   if (alpha >= 1 || !showWidget) {
+      anim.stop();
+      qApp->removeEventFilter(this);
 
-        if (widget) {
-            if (!showWidget) {
+      if (widget) {
+         if (!showWidget) {
 #ifdef Q_OS_WIN
-                setEnabled(true);
-                setFocus();
+            setEnabled(true);
+            setFocus();
 #endif
-                widget->hide();
-            } else {
-                //Since we are faking the visibility of the widget 
-                //we need to unset the hidden state on it before calling show
-                widget->setAttribute(Qt::WA_WState_Hidden, true);
-                widget->show();
-                lower();
-            }
-        }
-        q_blend = 0;
-        deleteLater();
-    } else {
-        alphaBlend();
-        pm = QPixmap::fromImage(mixedImage);
-        repaint();
-    }
+            widget->hide();
+         } else {
+            //Since we are faking the visibility of the widget
+            //we need to unset the hidden state on it before calling show
+            widget->setAttribute(Qt::WA_WState_Hidden, true);
+            widget->show();
+            lower();
+         }
+      }
+      q_blend = 0;
+      deleteLater();
+   } else {
+      alphaBlend();
+      pm = QPixmap::fromImage(mixedImage);
+      repaint();
+   }
 #endif // defined(Q_OS_WIN)
 }
 
@@ -282,39 +290,38 @@ void QAlphaWidget::render()
 */
 void QAlphaWidget::alphaBlend()
 {
-    const int a = qRound(alpha*256);
-    const int ia = 256 - a;
+   const int a = qRound(alpha * 256);
+   const int ia = 256 - a;
 
-    const int sw = frontImage.width();
-    const int sh = frontImage.height();
-    const int bpl = frontImage.bytesPerLine();
-    switch(frontImage.depth()) {
-    case 32:
-        {
-            uchar *mixed_data = mixedImage.bits();
-            const uchar *back_data = backImage.bits();
-            const uchar *front_data = frontImage.bits();
+   const int sw = frontImage.width();
+   const int sh = frontImage.height();
+   const int bpl = frontImage.bytesPerLine();
+   switch (frontImage.depth()) {
+      case 32: {
+         uchar *mixed_data = mixedImage.bits();
+         const uchar *back_data = backImage.bits();
+         const uchar *front_data = frontImage.bits();
 
-            for (int sy = 0; sy < sh; sy++) {
-                quint32* mixed = (quint32*)mixed_data;
-                const quint32* back = (const quint32*)back_data;
-                const quint32* front = (const quint32*)front_data;
-                for (int sx = 0; sx < sw; sx++) {
-                    quint32 bp = back[sx];
-                    quint32 fp = front[sx];
+         for (int sy = 0; sy < sh; sy++) {
+            quint32 *mixed = (quint32 *)mixed_data;
+            const quint32 *back = (const quint32 *)back_data;
+            const quint32 *front = (const quint32 *)front_data;
+            for (int sx = 0; sx < sw; sx++) {
+               quint32 bp = back[sx];
+               quint32 fp = front[sx];
 
-                    mixed[sx] =  qRgb((qRed(bp)*ia + qRed(fp)*a)>>8,
-                                      (qGreen(bp)*ia + qGreen(fp)*a)>>8,
-                                      (qBlue(bp)*ia + qBlue(fp)*a)>>8);
-                }
-                mixed_data += bpl;
-                back_data += bpl;
-                front_data += bpl;
+               mixed[sx] =  qRgb((qRed(bp) * ia + qRed(fp) * a) >> 8,
+                                 (qGreen(bp) * ia + qGreen(fp) * a) >> 8,
+                                 (qBlue(bp) * ia + qBlue(fp) * a) >> 8);
             }
-        }
-    default:
-        break;
-    }
+            mixed_data += bpl;
+            back_data += bpl;
+            front_data += bpl;
+         }
+      }
+      default:
+         break;
+   }
 }
 
 /*
@@ -326,86 +333,88 @@ void QAlphaWidget::alphaBlend()
 
 class QRollEffect : public QWidget, private QEffects
 {
-    CS_OBJECT(QRollEffect)
+   CS_OBJECT(QRollEffect)
 
-public:
-    QRollEffect(QWidget* w, Qt::WindowFlags f, DirFlags orient);
+ public:
+   QRollEffect(QWidget *w, Qt::WindowFlags f, DirFlags orient);
 
-    void run(int time);
+   void run(int time);
 
-protected:
-    void paintEvent(QPaintEvent*);
-    void closeEvent(QCloseEvent*);
+ protected:
+   void paintEvent(QPaintEvent *);
+   void closeEvent(QCloseEvent *);
 
-private:    
-    GUI_CS_SLOT_1(Private,void scroll())
-    GUI_CS_SLOT_2(scroll)
+ private:
+   GUI_CS_SLOT_1(Private, void scroll())
+   GUI_CS_SLOT_2(scroll)
 
-    QPointer<QWidget> widget;
+   QPointer<QWidget> widget;
 
-    int currentHeight;
-    int currentWidth;
-    int totalHeight;
-    int totalWidth;
+   int currentHeight;
+   int currentWidth;
+   int totalHeight;
+   int totalWidth;
 
-    int duration;
-    int elapsed;
-    bool done;
-    bool showWidget;
-    int orientation;
+   int duration;
+   int elapsed;
+   bool done;
+   bool showWidget;
+   int orientation;
 
-    QTimer anim;
-    QElapsedTimer checkTime;
+   QTimer anim;
+   QElapsedTimer checkTime;
 
-    QPixmap pm;
+   QPixmap pm;
 };
 
-static QRollEffect* q_roll = 0;
+static QRollEffect *q_roll = 0;
 
 /*
   Construct a QRollEffect widget.
 */
-QRollEffect::QRollEffect(QWidget* w, Qt::WindowFlags f, DirFlags orient)
-    : QWidget(0, f), orientation(orient)
+QRollEffect::QRollEffect(QWidget *w, Qt::WindowFlags f, DirFlags orient)
+   : QWidget(0, f), orientation(orient)
 {
 #ifndef Q_OS_WIN
-    setEnabled(false);
+   setEnabled(false);
 #endif
 
-    widget = w;
-    Q_ASSERT(widget);
+   widget = w;
+   Q_ASSERT(widget);
 
-    setAttribute(Qt::WA_NoSystemBackground, true);
+   setAttribute(Qt::WA_NoSystemBackground, true);
 
-    if (widget->testAttribute(Qt::WA_Resized)) {
-        totalWidth = widget->width();
-        totalHeight = widget->height();
-    } else {
-        totalWidth = widget->sizeHint().width();
-        totalHeight = widget->sizeHint().height();
-    }
+   if (widget->testAttribute(Qt::WA_Resized)) {
+      totalWidth = widget->width();
+      totalHeight = widget->height();
+   } else {
+      totalWidth = widget->sizeHint().width();
+      totalHeight = widget->sizeHint().height();
+   }
 
-    currentHeight = totalHeight;
-    currentWidth = totalWidth;
+   currentHeight = totalHeight;
+   currentWidth = totalWidth;
 
-    if (orientation & (RightScroll|LeftScroll))
-        currentWidth = 0;
-    if (orientation & (DownScroll|UpScroll))
-        currentHeight = 0;
+   if (orientation & (RightScroll | LeftScroll)) {
+      currentWidth = 0;
+   }
+   if (orientation & (DownScroll | UpScroll)) {
+      currentHeight = 0;
+   }
 
-    pm = QPixmap::grabWidget(widget);
+   pm = QPixmap::grabWidget(widget);
 }
 
 /*
   \reimp
 */
-void QRollEffect::paintEvent(QPaintEvent*)
+void QRollEffect::paintEvent(QPaintEvent *)
 {
-    int x = orientation & RightScroll ? qMin(0, currentWidth - totalWidth) : 0;
-    int y = orientation & DownScroll ? qMin(0, currentHeight - totalHeight) : 0;
+   int x = orientation & RightScroll ? qMin(0, currentWidth - totalWidth) : 0;
+   int y = orientation & DownScroll ? qMin(0, currentHeight - totalHeight) : 0;
 
-    QPainter p(this);
-    p.drawPixmap(x, y, pm);
+   QPainter p(this);
+   p.drawPixmap(x, y, pm);
 }
 
 /*
@@ -413,15 +422,16 @@ void QRollEffect::paintEvent(QPaintEvent*)
 */
 void QRollEffect::closeEvent(QCloseEvent *e)
 {
-    e->accept();
-    if (done)
-        return;
+   e->accept();
+   if (done) {
+      return;
+   }
 
-    showWidget = false;
-    done = true;
-    scroll();
+   showWidget = false;
+   done = true;
+   scroll();
 
-    QWidget::closeEvent(e);
+   QWidget::closeEvent(e);
 }
 
 /*
@@ -432,39 +442,42 @@ void QRollEffect::closeEvent(QCloseEvent *e)
 */
 void QRollEffect::run(int time)
 {
-    if (!widget)
-        return;
+   if (!widget) {
+      return;
+   }
 
-    duration  = time;
-    elapsed = 0;
+   duration  = time;
+   elapsed = 0;
 
-    if (duration < 0) {
-        int dist = 0;
-        if (orientation & (RightScroll|LeftScroll))
-            dist += totalWidth - currentWidth;
-        if (orientation & (DownScroll|UpScroll))
-            dist += totalHeight - currentHeight;
-        duration = qMin(qMax(dist/3, 50), 120);
-    }
+   if (duration < 0) {
+      int dist = 0;
+      if (orientation & (RightScroll | LeftScroll)) {
+         dist += totalWidth - currentWidth;
+      }
+      if (orientation & (DownScroll | UpScroll)) {
+         dist += totalHeight - currentHeight;
+      }
+      duration = qMin(qMax(dist / 3, 50), 120);
+   }
 
-    connect(&anim, SIGNAL(timeout()), this, SLOT(scroll()));
+   connect(&anim, SIGNAL(timeout()), this, SLOT(scroll()));
 
-    move(widget->geometry().x(),widget->geometry().y());
-    resize(qMin(currentWidth, totalWidth), qMin(currentHeight, totalHeight));
+   move(widget->geometry().x(), widget->geometry().y());
+   resize(qMin(currentWidth, totalWidth), qMin(currentHeight, totalHeight));
 
-    //This is roughly equivalent to calling setVisible(true) without actually showing the widget
-    widget->setAttribute(Qt::WA_WState_ExplicitShowHide, true);
-    widget->setAttribute(Qt::WA_WState_Hidden, false);
+   //This is roughly equivalent to calling setVisible(true) without actually showing the widget
+   widget->setAttribute(Qt::WA_WState_ExplicitShowHide, true);
+   widget->setAttribute(Qt::WA_WState_Hidden, false);
 
-    show();
-    setEnabled(false);
+   show();
+   setEnabled(false);
 
-    qApp->installEventFilter(this);
+   qApp->installEventFilter(this);
 
-    showWidget = true;
-    done = false;
-    anim.start(1);
-    checkTime.start();
+   showWidget = true;
+   done = false;
+   anim.start(1);
+   checkTime.start();
 }
 
 /*
@@ -472,120 +485,128 @@ void QRollEffect::run(int time)
 */
 void QRollEffect::scroll()
 {
-    if (!done && widget) {
-        int tempel = checkTime.elapsed();
-        if (elapsed >= tempel)
-            elapsed++;
-        else
-            elapsed = tempel;
+   if (!done && widget) {
+      int tempel = checkTime.elapsed();
+      if (elapsed >= tempel) {
+         elapsed++;
+      } else {
+         elapsed = tempel;
+      }
 
-        if (currentWidth != totalWidth) {
-            currentWidth = totalWidth * (elapsed/duration)
-                + (2 * totalWidth * (elapsed%duration) + duration)
-                / (2 * duration);
-            // equiv. to int((totalWidth*elapsed) / duration + 0.5)
-            done = (currentWidth >= totalWidth);
-        }
-        if (currentHeight != totalHeight) {
-            currentHeight = totalHeight * (elapsed/duration)
-                + (2 * totalHeight * (elapsed%duration) + duration)
-                / (2 * duration);
-            // equiv. to int((totalHeight*elapsed) / duration + 0.5)
-            done = (currentHeight >= totalHeight);
-        }
-        done = (currentHeight >= totalHeight) &&
-               (currentWidth >= totalWidth);
+      if (currentWidth != totalWidth) {
+         currentWidth = totalWidth * (elapsed / duration)
+                        + (2 * totalWidth * (elapsed % duration) + duration)
+                        / (2 * duration);
+         // equiv. to int((totalWidth*elapsed) / duration + 0.5)
+         done = (currentWidth >= totalWidth);
+      }
+      if (currentHeight != totalHeight) {
+         currentHeight = totalHeight * (elapsed / duration)
+                         + (2 * totalHeight * (elapsed % duration) + duration)
+                         / (2 * duration);
+         // equiv. to int((totalHeight*elapsed) / duration + 0.5)
+         done = (currentHeight >= totalHeight);
+      }
+      done = (currentHeight >= totalHeight) &&
+             (currentWidth >= totalWidth);
 
-        int w = totalWidth;
-        int h = totalHeight;
-        int x = widget->geometry().x();
-        int y = widget->geometry().y();
+      int w = totalWidth;
+      int h = totalHeight;
+      int x = widget->geometry().x();
+      int y = widget->geometry().y();
 
-        if (orientation & RightScroll || orientation & LeftScroll)
-            w = qMin(currentWidth, totalWidth);
-        if (orientation & DownScroll || orientation & UpScroll)
-            h = qMin(currentHeight, totalHeight);
+      if (orientation & RightScroll || orientation & LeftScroll) {
+         w = qMin(currentWidth, totalWidth);
+      }
+      if (orientation & DownScroll || orientation & UpScroll) {
+         h = qMin(currentHeight, totalHeight);
+      }
 
-        setUpdatesEnabled(false);
-        if (orientation & UpScroll)
-            y = widget->geometry().y() + qMax(0, totalHeight - currentHeight);
-        if (orientation & LeftScroll)
-            x = widget->geometry().x() + qMax(0, totalWidth - currentWidth);
-        if (orientation & UpScroll || orientation & LeftScroll)
-            move(x, y);
+      setUpdatesEnabled(false);
+      if (orientation & UpScroll) {
+         y = widget->geometry().y() + qMax(0, totalHeight - currentHeight);
+      }
+      if (orientation & LeftScroll) {
+         x = widget->geometry().x() + qMax(0, totalWidth - currentWidth);
+      }
+      if (orientation & UpScroll || orientation & LeftScroll) {
+         move(x, y);
+      }
 
-        resize(w, h);
-        setUpdatesEnabled(true);
-        repaint();
-    }
-    if (done || !widget) {
-        anim.stop();
-        qApp->removeEventFilter(this);
-        if (widget) {
-            if (!showWidget) {
+      resize(w, h);
+      setUpdatesEnabled(true);
+      repaint();
+   }
+   if (done || !widget) {
+      anim.stop();
+      qApp->removeEventFilter(this);
+      if (widget) {
+         if (!showWidget) {
 #ifdef Q_OS_WIN
-                setEnabled(true);
-                setFocus();
+            setEnabled(true);
+            setFocus();
 #endif
-                widget->hide();
-            } else {
-                //Since we are faking the visibility of the widget 
-                //we need to unset the hidden state on it before calling show
-                widget->setAttribute(Qt::WA_WState_Hidden, true);
-                widget->show();
-                lower();
-            }
-        }
-        q_roll = 0;
-        deleteLater();
-    }
+            widget->hide();
+         } else {
+            //Since we are faking the visibility of the widget
+            //we need to unset the hidden state on it before calling show
+            widget->setAttribute(Qt::WA_WState_Hidden, true);
+            widget->show();
+            lower();
+         }
+      }
+      q_roll = 0;
+      deleteLater();
+   }
 }
 
 /*!
     Scroll widget \a w in \a time ms. \a orient may be 1 (vertical), 2
     (horizontal) or 3 (diagonal).
 */
-void qScrollEffect(QWidget* w, QEffects::DirFlags orient, int time)
+void qScrollEffect(QWidget *w, QEffects::DirFlags orient, int time)
 {
-    if (q_roll) {
-        q_roll->deleteLater();
-        q_roll = 0;
-    }
+   if (q_roll) {
+      q_roll->deleteLater();
+      q_roll = 0;
+   }
 
-    if (!w)
-        return;
+   if (!w) {
+      return;
+   }
 
-    QApplication::sendPostedEvents(w, QEvent::Move);
-    QApplication::sendPostedEvents(w, QEvent::Resize);
-    Qt::WindowFlags flags = Qt::ToolTip;
+   QApplication::sendPostedEvents(w, QEvent::Move);
+   QApplication::sendPostedEvents(w, QEvent::Resize);
+   Qt::WindowFlags flags = Qt::ToolTip;
 
-    // those can be popups - they would steal the focus, but are disabled
-    q_roll = new QRollEffect(w, flags, orient);
-    q_roll->run(time);
+   // those can be popups - they would steal the focus, but are disabled
+   q_roll = new QRollEffect(w, flags, orient);
+   q_roll->run(time);
 }
 
 /*!
     Fade in widget \a w in \a time ms.
 */
-void qFadeEffect(QWidget* w, int time)
+void qFadeEffect(QWidget *w, int time)
 {
-    if (q_blend) {
-        q_blend->deleteLater();
-        q_blend = 0;
-    }
+   if (q_blend) {
+      q_blend->deleteLater();
+      q_blend = 0;
+   }
 
-    if (!w)
-        return;
+   if (!w) {
+      return;
+   }
 
-    QApplication::sendPostedEvents(w, QEvent::Move);
-    QApplication::sendPostedEvents(w, QEvent::Resize);
+   QApplication::sendPostedEvents(w, QEvent::Move);
+   QApplication::sendPostedEvents(w, QEvent::Resize);
 
-    Qt::WindowFlags flags = Qt::ToolTip;
+   Qt::WindowFlags flags = Qt::ToolTip;
 
-    // those can be popups - they would steal the focus, but are disabled
-    q_blend = new QAlphaWidget(w, flags);
+   // those can be popups - they would steal the focus, but are disabled
+   q_blend = new QAlphaWidget(w, flags);
 
-    q_blend->run(time);
+   q_blend->run(time);
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,82 +35,82 @@ class QX11EmbedContainerPrivate;
 
 class Q_GUI_EXPORT QX11EmbedWidget : public QWidget
 {
-    CS_OBJECT(QX11EmbedWidget)
+   CS_OBJECT(QX11EmbedWidget)
 
-public:
-    QX11EmbedWidget(QWidget *parent = 0);
-    ~QX11EmbedWidget();
+ public:
+   QX11EmbedWidget(QWidget *parent = 0);
+   ~QX11EmbedWidget();
 
-    void embedInto(WId id);
-    WId containerWinId() const;
+   void embedInto(WId id);
+   WId containerWinId() const;
 
-    enum Error {
-    	Unknown,
-   	Internal,
-   	InvalidWindowID
-    };
-    Error error() const;
+   enum Error {
+      Unknown,
+      Internal,
+      InvalidWindowID
+   };
+   Error error() const;
 
-    GUI_CS_SIGNAL_1(Public, void embedded())
-    GUI_CS_SIGNAL_2(embedded) 
-    GUI_CS_SIGNAL_1(Public, void containerClosed())
-    GUI_CS_SIGNAL_2(containerClosed) 
-    GUI_CS_SIGNAL_1(Public, void error(QX11EmbedWidget::Error error))
-    GUI_CS_SIGNAL_OVERLOAD(error,(QX11EmbedWidget::Error),error) 
+   GUI_CS_SIGNAL_1(Public, void embedded())
+   GUI_CS_SIGNAL_2(embedded)
+   GUI_CS_SIGNAL_1(Public, void containerClosed())
+   GUI_CS_SIGNAL_2(containerClosed)
+   GUI_CS_SIGNAL_1(Public, void error(QX11EmbedWidget::Error error))
+   GUI_CS_SIGNAL_OVERLOAD(error, (QX11EmbedWidget::Error), error)
 
-protected:
-    bool x11Event(XEvent *);
-    bool eventFilter(QObject *, QEvent *);
-    bool event(QEvent *);
-    void resizeEvent(QResizeEvent *);
+ protected:
+   bool x11Event(XEvent *);
+   bool eventFilter(QObject *, QEvent *);
+   bool event(QEvent *);
+   void resizeEvent(QResizeEvent *);
 
-private:
-    Q_DECLARE_PRIVATE(QX11EmbedWidget)
-    Q_DISABLE_COPY(QX11EmbedWidget)
+ private:
+   Q_DECLARE_PRIVATE(QX11EmbedWidget)
+   Q_DISABLE_COPY(QX11EmbedWidget)
 };
 
 
 class Q_GUI_EXPORT QX11EmbedContainer : public QWidget
 {
-    CS_OBJECT(QX11EmbedContainer)
+   CS_OBJECT(QX11EmbedContainer)
 
-public:
-    QX11EmbedContainer(QWidget *parent = 0);
-    ~QX11EmbedContainer();
+ public:
+   QX11EmbedContainer(QWidget *parent = 0);
+   ~QX11EmbedContainer();
 
-    void embedClient(WId id);
-    void discardClient();
+   void embedClient(WId id);
+   void discardClient();
 
-    WId clientWinId() const;
+   WId clientWinId() const;
 
-    QSize minimumSizeHint() const;
+   QSize minimumSizeHint() const;
 
-    enum Error {
-   	Unknown,
-   	Internal,
-	   InvalidWindowID
-    };
-    Error error() const;
+   enum Error {
+      Unknown,
+      Internal,
+      InvalidWindowID
+   };
+   Error error() const;
 
-    GUI_CS_SIGNAL_1(Public, void clientIsEmbedded())
-    GUI_CS_SIGNAL_2(clientIsEmbedded) 
-    GUI_CS_SIGNAL_1(Public, void clientClosed())
-    GUI_CS_SIGNAL_2(clientClosed) 
-    GUI_CS_SIGNAL_1(Public, void error(QX11EmbedContainer::Error un_named_arg1))
-    GUI_CS_SIGNAL_OVERLOAD(error,(QX11EmbedContainer::Error),un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void clientIsEmbedded())
+   GUI_CS_SIGNAL_2(clientIsEmbedded)
+   GUI_CS_SIGNAL_1(Public, void clientClosed())
+   GUI_CS_SIGNAL_2(clientClosed)
+   GUI_CS_SIGNAL_1(Public, void error(QX11EmbedContainer::Error un_named_arg1))
+   GUI_CS_SIGNAL_OVERLOAD(error, (QX11EmbedContainer::Error), un_named_arg1)
 
-protected:
-    bool x11Event(XEvent *);
-    bool eventFilter(QObject *, QEvent *);
-    void paintEvent(QPaintEvent *e);
-    void resizeEvent(QResizeEvent *);
-    void showEvent(QShowEvent *);
-    void hideEvent(QHideEvent *);
-    bool event(QEvent *);
+ protected:
+   bool x11Event(XEvent *);
+   bool eventFilter(QObject *, QEvent *);
+   void paintEvent(QPaintEvent *e);
+   void resizeEvent(QResizeEvent *);
+   void showEvent(QShowEvent *);
+   void hideEvent(QHideEvent *);
+   bool event(QEvent *);
 
-private:
-    Q_DECLARE_PRIVATE(QX11EmbedContainer)
-    Q_DISABLE_COPY(QX11EmbedContainer)
+ private:
+   Q_DECLARE_PRIVATE(QX11EmbedContainer)
+   Q_DISABLE_COPY(QX11EmbedContainer)
 };
 
 QT_END_NAMESPACE

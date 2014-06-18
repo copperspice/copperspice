@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,56 +38,56 @@ class QTextDocumentLayoutPrivate;
 
 class QTextDocumentLayout : public QAbstractTextDocumentLayout
 {
-    CS_OBJECT(QTextDocumentLayout)
-    Q_DECLARE_PRIVATE(QTextDocumentLayout)
-    
-    GUI_CS_PROPERTY_READ(cursorWidth, cursorWidth)
-    GUI_CS_PROPERTY_WRITE(cursorWidth, setCursorWidth)
-    GUI_CS_PROPERTY_READ(idealWidth, idealWidth)
-    GUI_CS_PROPERTY_READ(contentHasAlignment, contentHasAlignment)
+   CS_OBJECT(QTextDocumentLayout)
+   Q_DECLARE_PRIVATE(QTextDocumentLayout)
 
-public:
-    explicit QTextDocumentLayout(QTextDocument *doc);
+   GUI_CS_PROPERTY_READ(cursorWidth, cursorWidth)
+   GUI_CS_PROPERTY_WRITE(cursorWidth, setCursorWidth)
+   GUI_CS_PROPERTY_READ(idealWidth, idealWidth)
+   GUI_CS_PROPERTY_READ(contentHasAlignment, contentHasAlignment)
 
-    // from the abstract layout
-    void draw(QPainter *painter, const PaintContext &context);
-    int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
+ public:
+   explicit QTextDocumentLayout(QTextDocument *doc);
 
-    int pageCount() const;
-    QSizeF documentSize() const;
+   // from the abstract layout
+   void draw(QPainter *painter, const PaintContext &context);
+   int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
 
-    void setCursorWidth(int width);
-    int cursorWidth() const;
+   int pageCount() const;
+   QSizeF documentSize() const;
 
-    // internal, to support the ugly FixedColumnWidth wordwrap mode in QTextEdit
-    void setFixedColumnWidth(int width);
+   void setCursorWidth(int width);
+   int cursorWidth() const;
 
-    // internal for QTextEdit's NoWrap mode
-    void setViewport(const QRectF &viewport);
+   // internal, to support the ugly FixedColumnWidth wordwrap mode in QTextEdit
+   void setFixedColumnWidth(int width);
 
-    virtual QRectF frameBoundingRect(QTextFrame *frame) const;
-    virtual QRectF blockBoundingRect(const QTextBlock &block) const;
+   // internal for QTextEdit's NoWrap mode
+   void setViewport(const QRectF &viewport);
 
-    // ####
-    int layoutStatus() const;
-    int dynamicPageCount() const;
-    QSizeF dynamicDocumentSize() const;
-    void ensureLayouted(qreal);
+   virtual QRectF frameBoundingRect(QTextFrame *frame) const;
+   virtual QRectF blockBoundingRect(const QTextBlock &block) const;
 
-    qreal idealWidth() const;
+   // ####
+   int layoutStatus() const;
+   int dynamicPageCount() const;
+   QSizeF dynamicDocumentSize() const;
+   void ensureLayouted(qreal);
 
-    bool contentHasAlignment() const;
+   qreal idealWidth() const;
 
-protected:
-    void documentChanged(int from, int oldLength, int length);
-    void resizeInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format);
-    void positionInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format);
-    void drawInlineObject(QPainter *p, const QRectF &rect, QTextInlineObject item,
-                          int posInDocument, const QTextFormat &format);
-    virtual void timerEvent(QTimerEvent *e);
-private:
-    QRectF doLayout(int from, int oldLength, int length);
-    void layoutFinished();
+   bool contentHasAlignment() const;
+
+ protected:
+   void documentChanged(int from, int oldLength, int length);
+   void resizeInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format);
+   void positionInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format);
+   void drawInlineObject(QPainter *p, const QRectF &rect, QTextInlineObject item,
+                         int posInDocument, const QTextFormat &format);
+   virtual void timerEvent(QTimerEvent *e);
+ private:
+   QRectF doLayout(int from, int oldLength, int length);
+   void layoutFinished();
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,35 +37,35 @@ QT_BEGIN_NAMESPACE
 
 class QBasicMouseEventTransitionPrivate : public QAbstractTransitionPrivate
 {
-    Q_DECLARE_PUBLIC(QBasicMouseEventTransition)
+   Q_DECLARE_PUBLIC(QBasicMouseEventTransition)
 
-public:
-    QBasicMouseEventTransitionPrivate();
+ public:
+   QBasicMouseEventTransitionPrivate();
 
-    static QBasicMouseEventTransitionPrivate *get(QBasicMouseEventTransition *q);
+   static QBasicMouseEventTransitionPrivate *get(QBasicMouseEventTransition *q);
 
-    QEvent::Type eventType;
-    Qt::MouseButton button;
-    Qt::KeyboardModifiers modifierMask;
-    QPainterPath path;
+   QEvent::Type eventType;
+   Qt::MouseButton button;
+   Qt::KeyboardModifiers modifierMask;
+   QPainterPath path;
 };
 
 QBasicMouseEventTransitionPrivate::QBasicMouseEventTransitionPrivate()
 {
-    eventType = QEvent::None;
-    button = Qt::NoButton;
+   eventType = QEvent::None;
+   button = Qt::NoButton;
 }
 
 QBasicMouseEventTransitionPrivate *QBasicMouseEventTransitionPrivate::get(QBasicMouseEventTransition *q)
 {
-    return q->d_func();
+   return q->d_func();
 }
 
 /*!
   Constructs a new mouse event transition with the given \a sourceState.
 */
 QBasicMouseEventTransition::QBasicMouseEventTransition(QState *sourceState)
-    : QAbstractTransition(*new QBasicMouseEventTransitionPrivate, sourceState)
+   : QAbstractTransition(*new QBasicMouseEventTransitionPrivate, sourceState)
 {
 }
 
@@ -73,13 +73,13 @@ QBasicMouseEventTransition::QBasicMouseEventTransition(QState *sourceState)
   Constructs a new mouse event transition for events of the given \a type.
 */
 QBasicMouseEventTransition::QBasicMouseEventTransition(QEvent::Type type,
-                                                       Qt::MouseButton button,
-                                                       QState *sourceState)
-    : QAbstractTransition(*new QBasicMouseEventTransitionPrivate, sourceState)
+      Qt::MouseButton button,
+      QState *sourceState)
+   : QAbstractTransition(*new QBasicMouseEventTransitionPrivate, sourceState)
 {
-    Q_D(QBasicMouseEventTransition);
-    d->eventType = type;
-    d->button = button;
+   Q_D(QBasicMouseEventTransition);
+   d->eventType = type;
+   d->button = button;
 }
 
 /*!
@@ -94,8 +94,8 @@ QBasicMouseEventTransition::~QBasicMouseEventTransition()
 */
 QEvent::Type QBasicMouseEventTransition::eventType() const
 {
-    Q_D(const QBasicMouseEventTransition);
-    return d->eventType;
+   Q_D(const QBasicMouseEventTransition);
+   return d->eventType;
 }
 
 /*!
@@ -103,8 +103,8 @@ QEvent::Type QBasicMouseEventTransition::eventType() const
 */
 void QBasicMouseEventTransition::setEventType(QEvent::Type type)
 {
-    Q_D(QBasicMouseEventTransition);
-    d->eventType = type;
+   Q_D(QBasicMouseEventTransition);
+   d->eventType = type;
 }
 
 /*!
@@ -112,8 +112,8 @@ void QBasicMouseEventTransition::setEventType(QEvent::Type type)
 */
 Qt::MouseButton QBasicMouseEventTransition::button() const
 {
-    Q_D(const QBasicMouseEventTransition);
-    return d->button;
+   Q_D(const QBasicMouseEventTransition);
+   return d->button;
 }
 
 /*!
@@ -121,8 +121,8 @@ Qt::MouseButton QBasicMouseEventTransition::button() const
 */
 void QBasicMouseEventTransition::setButton(Qt::MouseButton button)
 {
-    Q_D(QBasicMouseEventTransition);
-    d->button = button;
+   Q_D(QBasicMouseEventTransition);
+   d->button = button;
 }
 
 /*!
@@ -131,8 +131,8 @@ void QBasicMouseEventTransition::setButton(Qt::MouseButton button)
 */
 Qt::KeyboardModifiers QBasicMouseEventTransition::modifierMask() const
 {
-    Q_D(const QBasicMouseEventTransition);
-    return d->modifierMask;
+   Q_D(const QBasicMouseEventTransition);
+   return d->modifierMask;
 }
 
 /*!
@@ -141,8 +141,8 @@ Qt::KeyboardModifiers QBasicMouseEventTransition::modifierMask() const
 */
 void QBasicMouseEventTransition::setModifierMask(Qt::KeyboardModifiers modifierMask)
 {
-    Q_D(QBasicMouseEventTransition);
-    d->modifierMask = modifierMask;
+   Q_D(QBasicMouseEventTransition);
+   d->modifierMask = modifierMask;
 }
 
 /*!
@@ -150,8 +150,8 @@ void QBasicMouseEventTransition::setModifierMask(Qt::KeyboardModifiers modifierM
 */
 QPainterPath QBasicMouseEventTransition::hitTestPath() const
 {
-    Q_D(const QBasicMouseEventTransition);
-    return d->path;
+   Q_D(const QBasicMouseEventTransition);
+   return d->path;
 }
 
 /*!
@@ -159,8 +159,8 @@ QPainterPath QBasicMouseEventTransition::hitTestPath() const
 */
 void QBasicMouseEventTransition::setHitTestPath(const QPainterPath &path)
 {
-    Q_D(QBasicMouseEventTransition);
-    d->path = path;
+   Q_D(QBasicMouseEventTransition);
+   d->path = path;
 }
 
 /*!
@@ -168,14 +168,14 @@ void QBasicMouseEventTransition::setHitTestPath(const QPainterPath &path)
 */
 bool QBasicMouseEventTransition::eventTest(QEvent *event)
 {
-    Q_D(const QBasicMouseEventTransition);
-    if (event->type() == d->eventType) {
-        QMouseEvent *me = static_cast<QMouseEvent*>(event);
-        return (me->button() == d->button)
-            && ((me->modifiers() & d->modifierMask) == d->modifierMask)
-            && (d->path.isEmpty() || d->path.contains(me->pos()));
-    }
-    return false;
+   Q_D(const QBasicMouseEventTransition);
+   if (event->type() == d->eventType) {
+      QMouseEvent *me = static_cast<QMouseEvent *>(event);
+      return (me->button() == d->button)
+             && ((me->modifiers() & d->modifierMask) == d->modifierMask)
+             && (d->path.isEmpty() || d->path.contains(me->pos()));
+   }
+   return false;
 }
 
 /*!

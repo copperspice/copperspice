@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,68 +45,72 @@ QWinNativePanGestureRecognizer::QWinNativePanGestureRecognizer()
 
 QGesture *QWinNativePanGestureRecognizer::create(QObject *target)
 {
-    if (!target)
-        return new QPanGesture; // a special case
-    if (!target->isWidgetType())
-        return 0;
-    if (qobject_cast<QGraphicsObject *>(target))
-        return 0;
+   if (!target) {
+      return new QPanGesture;   // a special case
+   }
+   if (!target->isWidgetType()) {
+      return 0;
+   }
+   if (qobject_cast<QGraphicsObject *>(target)) {
+      return 0;
+   }
 
-    QWidget *q = static_cast<QWidget *>(target);
-    QWidgetPrivate *d = q->d_func();
-    d->nativeGesturePanEnabled = true;
-    d->winSetupGestures();
+   QWidget *q = static_cast<QWidget *>(target);
+   QWidgetPrivate *d = q->d_func();
+   d->nativeGesturePanEnabled = true;
+   d->winSetupGestures();
 
-    return new QPanGesture;
+   return new QPanGesture;
 }
 
 QGestureRecognizer::Result QWinNativePanGestureRecognizer::recognize(QGesture *state,
-                                                                     QObject *,
-                                                                     QEvent *event)
+      QObject *,
+      QEvent *event)
 {
-    QPanGesture *q = static_cast<QPanGesture*>(state);
-    QPanGesturePrivate *d = q->d_func();
+   QPanGesture *q = static_cast<QPanGesture *>(state);
+   QPanGesturePrivate *d = q->d_func();
 
-    QGestureRecognizer::Result result = QGestureRecognizer::Ignore;
-    if (event->type() == QEvent::NativeGesture) {
-        QNativeGestureEvent *ev = static_cast<QNativeGestureEvent*>(event);
-        switch(ev->gestureType) {
-        case QNativeGestureEvent::GestureBegin:
+   QGestureRecognizer::Result result = QGestureRecognizer::Ignore;
+   if (event->type() == QEvent::NativeGesture) {
+      QNativeGestureEvent *ev = static_cast<QNativeGestureEvent *>(event);
+      switch (ev->gestureType) {
+         case QNativeGestureEvent::GestureBegin:
             break;
-        case QNativeGestureEvent::Pan:
+         case QNativeGestureEvent::Pan:
             result = QGestureRecognizer::TriggerGesture;
             event->accept();
             break;
-        case QNativeGestureEvent::GestureEnd:
-            if (q->state() == Qt::NoGesture)
-                return QGestureRecognizer::Ignore; // some other gesture has ended
+         case QNativeGestureEvent::GestureEnd:
+            if (q->state() == Qt::NoGesture) {
+               return QGestureRecognizer::Ignore;   // some other gesture has ended
+            }
             result = QGestureRecognizer::FinishGesture;
             break;
-        default:
+         default:
             return QGestureRecognizer::Ignore;
-        }
-        if (q->state() == Qt::NoGesture) {
-            d->lastOffset = d->offset = QPointF();
-            d->startPosition = ev->position;
-        } else {
-            d->lastOffset = d->offset;
-            d->offset = QPointF(ev->position.x() - d->startPosition.x(),
-                                ev->position.y() - d->startPosition.y());
-        }
-    }
-    return result;
+      }
+      if (q->state() == Qt::NoGesture) {
+         d->lastOffset = d->offset = QPointF();
+         d->startPosition = ev->position;
+      } else {
+         d->lastOffset = d->offset;
+         d->offset = QPointF(ev->position.x() - d->startPosition.x(),
+                             ev->position.y() - d->startPosition.y());
+      }
+   }
+   return result;
 }
 
 void QWinNativePanGestureRecognizer::reset(QGesture *state)
 {
-    QPanGesture *pan = static_cast<QPanGesture*>(state);
-    QPanGesturePrivate *d = pan->d_func();
+   QPanGesture *pan = static_cast<QPanGesture *>(state);
+   QPanGesturePrivate *d = pan->d_func();
 
-    d->lastOffset = d->offset = QPointF();
-    d->startPosition = QPoint();
-    d->acceleration = 0;
+   d->lastOffset = d->offset = QPointF();
+   d->startPosition = QPoint();
+   d->acceleration = 0;
 
-    QGestureRecognizer::reset(state);
+   QGestureRecognizer::reset(state);
 }
 
 #endif // QT_NO_NATIVE_GESTURES

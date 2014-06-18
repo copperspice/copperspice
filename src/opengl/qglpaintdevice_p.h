@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,29 +33,31 @@ QT_BEGIN_NAMESPACE
 
 class Q_OPENGL_EXPORT QGLPaintDevice : public QPaintDevice
 {
-public:
-    QGLPaintDevice();
-    virtual ~QGLPaintDevice();
+ public:
+   QGLPaintDevice();
+   virtual ~QGLPaintDevice();
 
-    int devType() const {return QInternal::OpenGL;}
+   int devType() const {
+      return QInternal::OpenGL;
+   }
 
-    virtual void beginPaint();
-    virtual void ensureActiveTarget();
-    virtual void endPaint();
+   virtual void beginPaint();
+   virtual void ensureActiveTarget();
+   virtual void endPaint();
 
-    virtual QGLContext* context() const = 0;
-    virtual QGLFormat format() const;
-    virtual QSize size() const = 0;
-    virtual bool alphaRequested() const;
-    virtual bool isFlipped() const;
+   virtual QGLContext *context() const = 0;
+   virtual QGLFormat format() const;
+   virtual QSize size() const = 0;
+   virtual bool alphaRequested() const;
+   virtual bool isFlipped() const;
 
-    // returns the QGLPaintDevice for the given QPaintDevice
-    static QGLPaintDevice* getDevice(QPaintDevice*);
+   // returns the QGLPaintDevice for the given QPaintDevice
+   static QGLPaintDevice *getDevice(QPaintDevice *);
 
-protected:
-    int metric(QPaintDevice::PaintDeviceMetric metric) const;
-    GLuint m_previousFBO;
-    GLuint m_thisFBO;
+ protected:
+   int metric(QPaintDevice::PaintDeviceMetric metric) const;
+   GLuint m_previousFBO;
+   GLuint m_thisFBO;
 };
 
 
@@ -63,22 +65,22 @@ protected:
 class QGLWidget;
 class QGLWidgetGLPaintDevice : public QGLPaintDevice
 {
-public:
-    QGLWidgetGLPaintDevice();
+ public:
+   QGLWidgetGLPaintDevice();
 
-    virtual QPaintEngine* paintEngine() const;
+   virtual QPaintEngine *paintEngine() const;
 
-    // QGLWidgets need to do swapBufers in endPaint:
-    virtual void beginPaint();
-    virtual void endPaint();
-    virtual QSize size() const;
-    virtual QGLContext* context() const;
+   // QGLWidgets need to do swapBufers in endPaint:
+   virtual void beginPaint();
+   virtual void endPaint();
+   virtual QSize size() const;
+   virtual QGLContext *context() const;
 
-    void setWidget(QGLWidget*);
+   void setWidget(QGLWidget *);
 
-private:
-    friend class QGLWidget;
-    QGLWidget *glWidget;
+ private:
+   friend class QGLWidget;
+   QGLWidget *glWidget;
 };
 
 QT_END_NAMESPACE

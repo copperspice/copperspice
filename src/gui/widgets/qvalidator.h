@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,81 +40,82 @@ class QValidatorPrivate;
 
 class Q_GUI_EXPORT QValidator : public QObject
 {
-    CS_OBJECT(QValidator)
+   CS_OBJECT(QValidator)
 
-public:
-    explicit QValidator(QObject * parent = 0);
-    ~QValidator();
+ public:
+   explicit QValidator(QObject *parent = 0);
+   ~QValidator();
 
-    enum State {
-        Invalid,
-        Intermediate,
-        Acceptable   };
+   enum State {
+      Invalid,
+      Intermediate,
+      Acceptable
+   };
 
-    void setLocale(const QLocale &locale);
-    QLocale locale() const;
+   void setLocale(const QLocale &locale);
+   QLocale locale() const;
 
-    virtual State validate(QString &, int &) const = 0;
-    virtual void fixup(QString &) const;
+   virtual State validate(QString &, int &) const = 0;
+   virtual void fixup(QString &) const;
 
-    GUI_CS_SIGNAL_1(Public, void changed())
-    GUI_CS_SIGNAL_2(changed) 
+   GUI_CS_SIGNAL_1(Public, void changed())
+   GUI_CS_SIGNAL_2(changed)
 
-protected:
-    QValidator(QValidatorPrivate &d, QObject *parent);
-	 QScopedPointer<QValidatorPrivate> d_ptr;
- 
-private:
-    Q_DISABLE_COPY(QValidator)
-    Q_DECLARE_PRIVATE(QValidator)
+ protected:
+   QValidator(QValidatorPrivate &d, QObject *parent);
+   QScopedPointer<QValidatorPrivate> d_ptr;
+
+ private:
+   Q_DISABLE_COPY(QValidator)
+   Q_DECLARE_PRIVATE(QValidator)
 
 };
 
 class Q_GUI_EXPORT QIntValidator : public QValidator
 {
-    CS_OBJECT(QIntValidator)
+   CS_OBJECT(QIntValidator)
 
-    GUI_CS_PROPERTY_READ(bottom, bottom)
-    GUI_CS_PROPERTY_WRITE(bottom, setBottom)
-    GUI_CS_PROPERTY_NOTIFY(bottom, bottomChanged)
-    GUI_CS_PROPERTY_READ(top, top)
-    GUI_CS_PROPERTY_WRITE(top, setTop)
-    GUI_CS_PROPERTY_NOTIFY(top, topChanged)
+   GUI_CS_PROPERTY_READ(bottom, bottom)
+   GUI_CS_PROPERTY_WRITE(bottom, setBottom)
+   GUI_CS_PROPERTY_NOTIFY(bottom, bottomChanged)
+   GUI_CS_PROPERTY_READ(top, top)
+   GUI_CS_PROPERTY_WRITE(top, setTop)
+   GUI_CS_PROPERTY_NOTIFY(top, topChanged)
 
-public:
-    explicit QIntValidator(QObject * parent = 0);
-    QIntValidator(int bottom, int top, QObject *parent = 0);
-    ~QIntValidator();
+ public:
+   explicit QIntValidator(QObject *parent = 0);
+   QIntValidator(int bottom, int top, QObject *parent = 0);
+   ~QIntValidator();
 
-    QValidator::State validate(QString &, int &) const;
-    void fixup(QString &input) const;
+   QValidator::State validate(QString &, int &) const;
+   void fixup(QString &input) const;
 
-    void setBottom(int);
-    void setTop(int);
-    virtual void setRange(int bottom, int top);
+   void setBottom(int);
+   void setTop(int);
+   virtual void setRange(int bottom, int top);
 
-    inline int bottom() const;
-    inline int top() const;
+   inline int bottom() const;
+   inline int top() const;
 
-    GUI_CS_SIGNAL_1(Public, void bottomChanged(int bottom))
-    GUI_CS_SIGNAL_2(bottomChanged,bottom) 
-    GUI_CS_SIGNAL_1(Public, void topChanged(int top))
-    GUI_CS_SIGNAL_2(topChanged,top) 
+   GUI_CS_SIGNAL_1(Public, void bottomChanged(int bottom))
+   GUI_CS_SIGNAL_2(bottomChanged, bottom)
+   GUI_CS_SIGNAL_1(Public, void topChanged(int top))
+   GUI_CS_SIGNAL_2(topChanged, top)
 
-private:
-    Q_DISABLE_COPY(QIntValidator)
+ private:
+   Q_DISABLE_COPY(QIntValidator)
 
-    int b;
-    int t;
+   int b;
+   int t;
 };
 
 int QIntValidator::bottom() const
-{ 
+{
    return b;
 }
 
 int QIntValidator::top() const
-{ 
+{
    return t;
 }
 
@@ -127,135 +128,135 @@ class QRegularExpressionValidatorPrivate;
 
 class Q_GUI_EXPORT QDoubleValidator : public QValidator
 {
-    CS_OBJECT(QDoubleValidator)
+   CS_OBJECT(QDoubleValidator)
 
-    GUI_CS_PROPERTY_READ(bottom, bottom)
-    GUI_CS_PROPERTY_WRITE(bottom, setBottom)
-    GUI_CS_PROPERTY_NOTIFY(bottom, bottomChanged)
-    GUI_CS_PROPERTY_READ(top, top)
-    GUI_CS_PROPERTY_WRITE(top, setTop)
-    GUI_CS_PROPERTY_NOTIFY(top, topChanged)
-    GUI_CS_PROPERTY_READ(decimals, decimals)
-    GUI_CS_PROPERTY_WRITE(decimals, setDecimals)
-    GUI_CS_PROPERTY_NOTIFY(decimals, decimalsChanged)
-    
-    GUI_CS_ENUM(Notation)
-    GUI_CS_PROPERTY_READ(notation, notation)
-    GUI_CS_PROPERTY_WRITE(notation, setNotation)
-    GUI_CS_PROPERTY_NOTIFY(notation, notationChanged)
+   GUI_CS_PROPERTY_READ(bottom, bottom)
+   GUI_CS_PROPERTY_WRITE(bottom, setBottom)
+   GUI_CS_PROPERTY_NOTIFY(bottom, bottomChanged)
+   GUI_CS_PROPERTY_READ(top, top)
+   GUI_CS_PROPERTY_WRITE(top, setTop)
+   GUI_CS_PROPERTY_NOTIFY(top, topChanged)
+   GUI_CS_PROPERTY_READ(decimals, decimals)
+   GUI_CS_PROPERTY_WRITE(decimals, setDecimals)
+   GUI_CS_PROPERTY_NOTIFY(decimals, decimalsChanged)
 
-public:
-    explicit QDoubleValidator(QObject * parent = 0);
-    QDoubleValidator(double bottom, double top, int decimals, QObject *parent = 0);
-    ~QDoubleValidator();
+   GUI_CS_ENUM(Notation)
+   GUI_CS_PROPERTY_READ(notation, notation)
+   GUI_CS_PROPERTY_WRITE(notation, setNotation)
+   GUI_CS_PROPERTY_NOTIFY(notation, notationChanged)
 
-    enum Notation {
-        StandardNotation,
-        ScientificNotation
-    };
-    QValidator::State validate(QString &, int &) const;
+ public:
+   explicit QDoubleValidator(QObject *parent = 0);
+   QDoubleValidator(double bottom, double top, int decimals, QObject *parent = 0);
+   ~QDoubleValidator();
 
-    virtual void setRange(double bottom, double top, int decimals = 0);
-    void setBottom(double);
-    void setTop(double);
-    void setDecimals(int);
-    void setNotation(Notation);
+   enum Notation {
+      StandardNotation,
+      ScientificNotation
+   };
+   QValidator::State validate(QString &, int &) const;
 
-    inline double bottom() const;
-    inline double top() const;
-    inline int decimals() const;
-    Notation notation() const;
+   virtual void setRange(double bottom, double top, int decimals = 0);
+   void setBottom(double);
+   void setTop(double);
+   void setDecimals(int);
+   void setNotation(Notation);
 
-    GUI_CS_SIGNAL_1(Public, void bottomChanged(double bottom))
-    GUI_CS_SIGNAL_2(bottomChanged,bottom) 
-    GUI_CS_SIGNAL_1(Public, void topChanged(double top))
-    GUI_CS_SIGNAL_2(topChanged,top) 
-    GUI_CS_SIGNAL_1(Public, void decimalsChanged(int decimals))
-    GUI_CS_SIGNAL_2(decimalsChanged,decimals) 
-    GUI_CS_SIGNAL_1(Public, void notationChanged(QDoubleValidator::Notation notation))
-    GUI_CS_SIGNAL_2(notationChanged,notation) 
+   inline double bottom() const;
+   inline double top() const;
+   inline int decimals() const;
+   Notation notation() const;
 
-private:
-    Q_DECLARE_PRIVATE(QDoubleValidator)
-    Q_DISABLE_COPY(QDoubleValidator)
+   GUI_CS_SIGNAL_1(Public, void bottomChanged(double bottom))
+   GUI_CS_SIGNAL_2(bottomChanged, bottom)
+   GUI_CS_SIGNAL_1(Public, void topChanged(double top))
+   GUI_CS_SIGNAL_2(topChanged, top)
+   GUI_CS_SIGNAL_1(Public, void decimalsChanged(int decimals))
+   GUI_CS_SIGNAL_2(decimalsChanged, decimals)
+   GUI_CS_SIGNAL_1(Public, void notationChanged(QDoubleValidator::Notation notation))
+   GUI_CS_SIGNAL_2(notationChanged, notation)
 
-    double b;
-    double t;
-    int dec;
+ private:
+   Q_DECLARE_PRIVATE(QDoubleValidator)
+   Q_DISABLE_COPY(QDoubleValidator)
+
+   double b;
+   double t;
+   int dec;
 };
 
 class Q_GUI_EXPORT QRegExpValidator : public QValidator
 {
-    CS_OBJECT(QRegExpValidator)
+   CS_OBJECT(QRegExpValidator)
 
-    GUI_CS_PROPERTY_READ(regExp, regExp)
-    GUI_CS_PROPERTY_WRITE(regExp, setRegExp)
-    GUI_CS_PROPERTY_NOTIFY(regExp, regExpChanged)
+   GUI_CS_PROPERTY_READ(regExp, regExp)
+   GUI_CS_PROPERTY_WRITE(regExp, setRegExp)
+   GUI_CS_PROPERTY_NOTIFY(regExp, regExpChanged)
 
-public:
-    explicit QRegExpValidator(QObject *parent = 0);
-    QRegExpValidator(const QRegExp& rx, QObject *parent = 0);
-    ~QRegExpValidator();
+ public:
+   explicit QRegExpValidator(QObject *parent = 0);
+   QRegExpValidator(const QRegExp &rx, QObject *parent = 0);
+   ~QRegExpValidator();
 
-    virtual QValidator::State validate(QString& input, int& pos) const;
+   virtual QValidator::State validate(QString &input, int &pos) const;
 
-    void setRegExp(const QRegExp& rx);
-    inline const QRegExp& regExp() const;
+   void setRegExp(const QRegExp &rx);
+   inline const QRegExp &regExp() const;
 
-    GUI_CS_SIGNAL_1(Public, void regExpChanged(const QRegExp & regExp))
-    GUI_CS_SIGNAL_2(regExpChanged,regExp) 
+   GUI_CS_SIGNAL_1(Public, void regExpChanged(const QRegExp &regExp))
+   GUI_CS_SIGNAL_2(regExpChanged, regExp)
 
-private:
-    Q_DISABLE_COPY(QRegExpValidator)
+ private:
+   Q_DISABLE_COPY(QRegExpValidator)
 
-    QRegExp r;
+   QRegExp r;
 };
 
 class Q_GUI_EXPORT QRegularExpressionValidator : public QValidator
 {
-    CS_OBJECT(QRegularExpressionValidator)
+   CS_OBJECT(QRegularExpressionValidator)
 
-    GUI_CS_PROPERTY_READ(regularExpression, regularExpression)
-    GUI_CS_PROPERTY_WRITE(regularExpression, setRegularExpression)
-    GUI_CS_PROPERTY_NOTIFY(regularExpression, regularExpressionChanged)
+   GUI_CS_PROPERTY_READ(regularExpression, regularExpression)
+   GUI_CS_PROPERTY_WRITE(regularExpression, setRegularExpression)
+   GUI_CS_PROPERTY_NOTIFY(regularExpression, regularExpressionChanged)
 
-public:
-    explicit QRegularExpressionValidator(QObject *parent = 0);
-    explicit QRegularExpressionValidator(const QRegExp &re, QObject *parent = 0);
-    ~QRegularExpressionValidator();
+ public:
+   explicit QRegularExpressionValidator(QObject *parent = 0);
+   explicit QRegularExpressionValidator(const QRegExp &re, QObject *parent = 0);
+   ~QRegularExpressionValidator();
 
-    virtual QValidator::State validate(QString &input, int &pos) const;
+   virtual QValidator::State validate(QString &input, int &pos) const;
 
-    QRegExp regularExpression() const;
+   QRegExp regularExpression() const;
 
-    GUI_CS_SLOT_1(Public, void setRegularExpression(const QRegExp & re))
-    GUI_CS_SLOT_2(setRegularExpression) 
+   GUI_CS_SLOT_1(Public, void setRegularExpression(const QRegExp &re))
+   GUI_CS_SLOT_2(setRegularExpression)
 
-    GUI_CS_SIGNAL_1(Public, void regularExpressionChanged(const QRegExp & re))
-    GUI_CS_SIGNAL_2(regularExpressionChanged,re) 
+   GUI_CS_SIGNAL_1(Public, void regularExpressionChanged(const QRegExp &re))
+   GUI_CS_SIGNAL_2(regularExpressionChanged, re)
 
-private:
-    Q_DISABLE_COPY(QRegularExpressionValidator)
-    Q_DECLARE_PRIVATE(QRegularExpressionValidator)
+ private:
+   Q_DISABLE_COPY(QRegularExpressionValidator)
+   Q_DECLARE_PRIVATE(QRegularExpressionValidator)
 };
 
-const QRegExp& QRegExpValidator::regExp() const
-{ 
+const QRegExp &QRegExpValidator::regExp() const
+{
    return r;
 }
 
 double QDoubleValidator::bottom() const
-{ 
+{
    return b;
 }
 
 double QDoubleValidator::top() const
-{ 
+{
    return t;
 }
 
 int QDoubleValidator::decimals() const
-{ 
+{
    return dec;
 }
 

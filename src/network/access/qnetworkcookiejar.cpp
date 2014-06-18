@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -65,7 +65,7 @@ QNetworkCookieJar::~QNetworkCookieJar()
 */
 QList<QNetworkCookie> QNetworkCookieJar::allCookies() const
 {
-    return d_func()->allCookies;
+   return d_func()->allCookies;
 }
 
 /*!
@@ -79,25 +79,28 @@ QList<QNetworkCookie> QNetworkCookieJar::allCookies() const
 */
 void QNetworkCookieJar::setAllCookies(const QList<QNetworkCookie> &cookieList)
 {
-    Q_D(QNetworkCookieJar);
-    d->allCookies = cookieList;
+   Q_D(QNetworkCookieJar);
+   d->allCookies = cookieList;
 }
 
 static inline bool isParentPath(QString path, QString reference)
 {
-    if (!path.endsWith(QLatin1Char('/')))
-        path += QLatin1Char('/');
-    if (!reference.endsWith(QLatin1Char('/')))
-        reference += QLatin1Char('/');
-    return path.startsWith(reference);
+   if (!path.endsWith(QLatin1Char('/'))) {
+      path += QLatin1Char('/');
+   }
+   if (!reference.endsWith(QLatin1Char('/'))) {
+      reference += QLatin1Char('/');
+   }
+   return path.startsWith(reference);
 }
 
 static inline bool isParentDomain(QString domain, QString reference)
 {
-    if (!reference.startsWith(QLatin1Char('.')))
-        return domain == reference;
+   if (!reference.startsWith(QLatin1Char('.'))) {
+      return domain == reference;
+   }
 
-    return domain.endsWith(reference) || domain == reference.mid(1);
+   return domain.endsWith(reference) || domain == reference.mid(1);
 }
 
 /*!
@@ -123,82 +126,88 @@ static inline bool isParentDomain(QString domain, QString reference)
     \sa cookiesForUrl(), QNetworkAccessManager::setCookieJar()
 */
 bool QNetworkCookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieList,
-                                          const QUrl &url)
+      const QUrl &url)
 {
-    Q_D(QNetworkCookieJar);
-    QString defaultDomain = url.host();
-    QString pathAndFileName = url.path();
-    QString defaultPath = pathAndFileName.left(pathAndFileName.lastIndexOf(QLatin1Char('/'))+1);
-    if (defaultPath.isEmpty())
-        defaultPath = QLatin1Char('/');
+   Q_D(QNetworkCookieJar);
+   QString defaultDomain = url.host();
+   QString pathAndFileName = url.path();
+   QString defaultPath = pathAndFileName.left(pathAndFileName.lastIndexOf(QLatin1Char('/')) + 1);
+   if (defaultPath.isEmpty()) {
+      defaultPath = QLatin1Char('/');
+   }
 
-    int added = 0;
-    QDateTime now = QDateTime::currentDateTime();
-    foreach (QNetworkCookie cookie, cookieList) {
-        bool isDeletion = !cookie.isSessionCookie() &&
-                          cookie.expirationDate() < now;
+   int added = 0;
+   QDateTime now = QDateTime::currentDateTime();
+   foreach (QNetworkCookie cookie, cookieList) {
+      bool isDeletion = !cookie.isSessionCookie() &&
+                        cookie.expirationDate() < now;
 
-        // validate the cookie & set the defaults if unset
-        if (cookie.path().isEmpty())
-            cookie.setPath(defaultPath);
-        // don't do path checking. See http://bugreports.qt-project.org/browse/QTBUG-5815
-//        else if (!isParentPath(pathAndFileName, cookie.path())) {
-//            continue;           // not accepted
-//        }
-        if (cookie.domain().isEmpty()) {
-            cookie.setDomain(defaultDomain);
-        } else {
-            // Ensure the domain starts with a dot if its field was not empty
-            // in the HTTP header. There are some servers that forget the
-            // leading dot and this is actually forbidden according to RFC 2109,
-            // but all browsers accept it anyway so we do that as well.
-            if (!cookie.domain().startsWith(QLatin1Char('.')))
-                cookie.setDomain(QLatin1Char('.') + cookie.domain());
+      // validate the cookie & set the defaults if unset
+      if (cookie.path().isEmpty()) {
+         cookie.setPath(defaultPath);
+      }
+      // don't do path checking. See http://bugreports.qt-project.org/browse/QTBUG-5815
+      //        else if (!isParentPath(pathAndFileName, cookie.path())) {
+      //            continue;           // not accepted
+      //        }
+      if (cookie.domain().isEmpty()) {
+         cookie.setDomain(defaultDomain);
+      } else {
+         // Ensure the domain starts with a dot if its field was not empty
+         // in the HTTP header. There are some servers that forget the
+         // leading dot and this is actually forbidden according to RFC 2109,
+         // but all browsers accept it anyway so we do that as well.
+         if (!cookie.domain().startsWith(QLatin1Char('.'))) {
+            cookie.setDomain(QLatin1Char('.') + cookie.domain());
+         }
 
-            QString domain = cookie.domain();
-            if (!(isParentDomain(domain, defaultDomain)
-                || isParentDomain(defaultDomain, domain)))
-                continue; // not accepted
+         QString domain = cookie.domain();
+         if (!(isParentDomain(domain, defaultDomain)
+               || isParentDomain(defaultDomain, domain))) {
+            continue;   // not accepted
+         }
 
-            // the check for effective TLDs makes the "embedded dot" rule from RFC 2109 section 4.3.2
-            // redundant; the "leading dot" rule has been relaxed anyway, see above
-            // we remove the leading dot for this check
-            if (qIsEffectiveTLD(domain.remove(0, 1)))
-                continue; // not accepted
-        }
+         // the check for effective TLDs makes the "embedded dot" rule from RFC 2109 section 4.3.2
+         // redundant; the "leading dot" rule has been relaxed anyway, see above
+         // we remove the leading dot for this check
+         if (qIsEffectiveTLD(domain.remove(0, 1))) {
+            continue;   // not accepted
+         }
+      }
 
-        for (int i = 0; i < d->allCookies.size(); ++i) {
-            // does this cookie already exist?
+      for (int i = 0; i < d->allCookies.size(); ++i) {
+         // does this cookie already exist?
+         const QNetworkCookie &current = d->allCookies.at(i);
+         if (cookie.name() == current.name() &&
+               cookie.domain() == current.domain() &&
+               cookie.path() == current.path()) {
+            // found a match
+            d->allCookies.removeAt(i);
+            break;
+         }
+      }
+
+      // did not find a match
+      if (!isDeletion) {
+         int countForDomain = 0;
+         for (int i = d->allCookies.size() - 1; i >= 0; --i) {
+            // Start from the end and delete the oldest cookies to keep a maximum count of 50.
             const QNetworkCookie &current = d->allCookies.at(i);
-            if (cookie.name() == current.name() &&
-                cookie.domain() == current.domain() &&
-                cookie.path() == current.path()) {
-                // found a match
-                d->allCookies.removeAt(i);
-                break;
+            if (isParentDomain(cookie.domain(), current.domain())
+                  || isParentDomain(current.domain(), cookie.domain())) {
+               if (countForDomain >= 49) {
+                  d->allCookies.removeAt(i);
+               } else {
+                  ++countForDomain;
+               }
             }
-        }
+         }
 
-        // did not find a match
-        if (!isDeletion) {
-            int countForDomain = 0;
-            for (int i = d->allCookies.size() - 1; i >= 0; --i) {
-                // Start from the end and delete the oldest cookies to keep a maximum count of 50.
-                const QNetworkCookie &current = d->allCookies.at(i);
-                if (isParentDomain(cookie.domain(), current.domain())
-                    || isParentDomain(current.domain(), cookie.domain())) {
-                    if (countForDomain >= 49)
-                        d->allCookies.removeAt(i);
-                    else
-                        ++countForDomain;
-                }
-            }
-
-            d->allCookies += cookie;
-            ++added;
-        }
-    }
-    return (added > 0);
+         d->allCookies += cookie;
+         ++added;
+      }
+   }
+   return (added > 0);
 }
 
 /*!
@@ -221,47 +230,52 @@ bool QNetworkCookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieLis
 */
 QList<QNetworkCookie> QNetworkCookieJar::cookiesForUrl(const QUrl &url) const
 {
-//     \b Warning! This is only a dumb implementation!
-//     It does NOT follow all of the recommendations from
-//     http://wp.netscape.com/newsref/std/cookie_spec.html
-//     It does not implement a very good cross-domain verification yet.
+   //     \b Warning! This is only a dumb implementation!
+   //     It does NOT follow all of the recommendations from
+   //     http://wp.netscape.com/newsref/std/cookie_spec.html
+   //     It does not implement a very good cross-domain verification yet.
 
-    Q_D(const QNetworkCookieJar);
-    QDateTime now = QDateTime::currentDateTime();
-    QList<QNetworkCookie> result;
-    bool isEncrypted = url.scheme().toLower() == QLatin1String("https");
+   Q_D(const QNetworkCookieJar);
+   QDateTime now = QDateTime::currentDateTime();
+   QList<QNetworkCookie> result;
+   bool isEncrypted = url.scheme().toLower() == QLatin1String("https");
 
-    // scan our cookies for something that matches
-    QList<QNetworkCookie>::ConstIterator it = d->allCookies.constBegin(),
+   // scan our cookies for something that matches
+   QList<QNetworkCookie>::ConstIterator it = d->allCookies.constBegin(),
                                         end = d->allCookies.constEnd();
-    for ( ; it != end; ++it) {
-        if (!isParentDomain(url.host(), it->domain()))
-            continue;
-        if (!isParentPath(url.path(), it->path()))
-            continue;
-        if (!(*it).isSessionCookie() && (*it).expirationDate() < now)
-            continue;
-        if ((*it).isSecure() && !isEncrypted)
-            continue;
+   for ( ; it != end; ++it) {
+      if (!isParentDomain(url.host(), it->domain())) {
+         continue;
+      }
+      if (!isParentPath(url.path(), it->path())) {
+         continue;
+      }
+      if (!(*it).isSessionCookie() && (*it).expirationDate() < now) {
+         continue;
+      }
+      if ((*it).isSecure() && !isEncrypted) {
+         continue;
+      }
 
-        // insert this cookie into result, sorted by path
-        QList<QNetworkCookie>::Iterator insertIt = result.begin();
-        while (insertIt != result.end()) {
-            if (insertIt->path().length() < it->path().length()) {
-                // insert here
-                insertIt = result.insert(insertIt, *it);
-                break;
-            } else {
-                ++insertIt;
-            }
-        }
+      // insert this cookie into result, sorted by path
+      QList<QNetworkCookie>::Iterator insertIt = result.begin();
+      while (insertIt != result.end()) {
+         if (insertIt->path().length() < it->path().length()) {
+            // insert here
+            insertIt = result.insert(insertIt, *it);
+            break;
+         } else {
+            ++insertIt;
+         }
+      }
 
-        // this is the shortest path yet, just append
-        if (insertIt == result.end())
-            result += *it;
-    }
+      // this is the shortest path yet, just append
+      if (insertIt == result.end()) {
+         result += *it;
+      }
+   }
 
-    return result;
+   return result;
 }
 
 QT_END_NAMESPACE

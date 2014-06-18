@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,292 +42,300 @@ class QCompleter;
 
 class Q_GUI_EXPORT QComboBox : public QWidget
 {
-    CS_OBJECT(QComboBox)
+   CS_OBJECT(QComboBox)
 
-    GUI_CS_ENUM(InsertPolicy)
-    GUI_CS_ENUM(SizeAdjustPolicy)
+   GUI_CS_ENUM(InsertPolicy)
+   GUI_CS_ENUM(SizeAdjustPolicy)
 
-    GUI_CS_PROPERTY_READ(editable, isEditable)
-    GUI_CS_PROPERTY_WRITE(editable, setEditable)
+   GUI_CS_PROPERTY_READ(editable, isEditable)
+   GUI_CS_PROPERTY_WRITE(editable, setEditable)
 
-    GUI_CS_PROPERTY_READ(count, count)
+   GUI_CS_PROPERTY_READ(count, count)
 
-    GUI_CS_PROPERTY_READ(currentText, currentText)
-    GUI_CS_PROPERTY_USER(currentText, true)
-    GUI_CS_PROPERTY_READ(currentIndex, currentIndex)
-    GUI_CS_PROPERTY_WRITE(currentIndex, setCurrentIndex)
-    GUI_CS_PROPERTY_NOTIFY(currentIndex, cs_currentIndexChanged)  
+   GUI_CS_PROPERTY_READ(currentText, currentText)
+   GUI_CS_PROPERTY_USER(currentText, true)
+   GUI_CS_PROPERTY_READ(currentIndex, currentIndex)
+   GUI_CS_PROPERTY_WRITE(currentIndex, setCurrentIndex)
+   GUI_CS_PROPERTY_NOTIFY(currentIndex, cs_currentIndexChanged)
 
-    GUI_CS_PROPERTY_READ(maxVisibleItems, maxVisibleItems)
-    GUI_CS_PROPERTY_WRITE(maxVisibleItems, setMaxVisibleItems)
+   GUI_CS_PROPERTY_READ(maxVisibleItems, maxVisibleItems)
+   GUI_CS_PROPERTY_WRITE(maxVisibleItems, setMaxVisibleItems)
 
-    GUI_CS_PROPERTY_READ(maxCount, maxCount)
-    GUI_CS_PROPERTY_WRITE(maxCount, setMaxCount)
+   GUI_CS_PROPERTY_READ(maxCount, maxCount)
+   GUI_CS_PROPERTY_WRITE(maxCount, setMaxCount)
 
-    GUI_CS_PROPERTY_READ(insertPolicy, insertPolicy)
-    GUI_CS_PROPERTY_WRITE(insertPolicy, setInsertPolicy)
+   GUI_CS_PROPERTY_READ(insertPolicy, insertPolicy)
+   GUI_CS_PROPERTY_WRITE(insertPolicy, setInsertPolicy)
 
-    GUI_CS_PROPERTY_READ(sizeAdjustPolicy, sizeAdjustPolicy)
-    GUI_CS_PROPERTY_WRITE(sizeAdjustPolicy, setSizeAdjustPolicy)
+   GUI_CS_PROPERTY_READ(sizeAdjustPolicy, sizeAdjustPolicy)
+   GUI_CS_PROPERTY_WRITE(sizeAdjustPolicy, setSizeAdjustPolicy)
 
-    GUI_CS_PROPERTY_READ(minimumContentsLength, minimumContentsLength)
-    GUI_CS_PROPERTY_WRITE(minimumContentsLength, setMinimumContentsLength)
+   GUI_CS_PROPERTY_READ(minimumContentsLength, minimumContentsLength)
+   GUI_CS_PROPERTY_WRITE(minimumContentsLength, setMinimumContentsLength)
 
-    GUI_CS_PROPERTY_READ(iconSize, iconSize)
-    GUI_CS_PROPERTY_WRITE(iconSize, setIconSize)
-
-#ifndef QT_NO_COMPLETER
-    GUI_CS_PROPERTY_READ(autoCompletion, autoCompletion)
-    GUI_CS_PROPERTY_WRITE(autoCompletion, setAutoCompletion)
-    GUI_CS_PROPERTY_DESIGNABLE(autoCompletion, false)
-    GUI_CS_PROPERTY_READ(autoCompletionCaseSensitivity, autoCompletionCaseSensitivity)
-    GUI_CS_PROPERTY_WRITE(autoCompletionCaseSensitivity, setAutoCompletionCaseSensitivity)
-    GUI_CS_PROPERTY_DESIGNABLE(autoCompletionCaseSensitivity, false)
-#endif
-
-    GUI_CS_PROPERTY_READ(duplicatesEnabled, duplicatesEnabled)
-    GUI_CS_PROPERTY_WRITE(duplicatesEnabled, setDuplicatesEnabled)
-    GUI_CS_PROPERTY_READ(frame, hasFrame)
-    GUI_CS_PROPERTY_WRITE(frame, setFrame)
-    GUI_CS_PROPERTY_READ(modelColumn, modelColumn)
-    GUI_CS_PROPERTY_WRITE(modelColumn, setModelColumn)
-
-public:
-    explicit QComboBox(QWidget *parent = 0);
-    ~QComboBox();
-
-    int maxVisibleItems() const;
-    void setMaxVisibleItems(int maxItems);
-
-    int count() const;
-    void setMaxCount(int max);
-    int maxCount() const;
+   GUI_CS_PROPERTY_READ(iconSize, iconSize)
+   GUI_CS_PROPERTY_WRITE(iconSize, setIconSize)
 
 #ifndef QT_NO_COMPLETER
-    bool autoCompletion() const;
-    void setAutoCompletion(bool enable);
-
-    Qt::CaseSensitivity autoCompletionCaseSensitivity() const;
-    void setAutoCompletionCaseSensitivity(Qt::CaseSensitivity sensitivity);
+   GUI_CS_PROPERTY_READ(autoCompletion, autoCompletion)
+   GUI_CS_PROPERTY_WRITE(autoCompletion, setAutoCompletion)
+   GUI_CS_PROPERTY_DESIGNABLE(autoCompletion, false)
+   GUI_CS_PROPERTY_READ(autoCompletionCaseSensitivity, autoCompletionCaseSensitivity)
+   GUI_CS_PROPERTY_WRITE(autoCompletionCaseSensitivity, setAutoCompletionCaseSensitivity)
+   GUI_CS_PROPERTY_DESIGNABLE(autoCompletionCaseSensitivity, false)
 #endif
 
-    bool duplicatesEnabled() const;
-    void setDuplicatesEnabled(bool enable);
+   GUI_CS_PROPERTY_READ(duplicatesEnabled, duplicatesEnabled)
+   GUI_CS_PROPERTY_WRITE(duplicatesEnabled, setDuplicatesEnabled)
+   GUI_CS_PROPERTY_READ(frame, hasFrame)
+   GUI_CS_PROPERTY_WRITE(frame, setFrame)
+   GUI_CS_PROPERTY_READ(modelColumn, modelColumn)
+   GUI_CS_PROPERTY_WRITE(modelColumn, setModelColumn)
 
-    void setFrame(bool);
-    bool hasFrame() const;
+ public:
+   explicit QComboBox(QWidget *parent = 0);
+   ~QComboBox();
 
-    inline int findText(const QString &text,
-                        Qt::MatchFlags flags = static_cast<Qt::MatchFlags>(Qt::MatchExactly|Qt::MatchCaseSensitive)) const
-        { return findData(text, Qt::DisplayRole, flags); }
-    int findData(const QVariant &data, int role = Qt::UserRole,
-                 Qt::MatchFlags flags = static_cast<Qt::MatchFlags>(Qt::MatchExactly|Qt::MatchCaseSensitive)) const;
+   int maxVisibleItems() const;
+   void setMaxVisibleItems(int maxItems);
 
-    enum InsertPolicy {
-        NoInsert,
-        InsertAtTop,
-        InsertAtCurrent,
-        InsertAtBottom,
-        InsertAfterCurrent,
-        InsertBeforeCurrent,
-        InsertAlphabetically
-    };
+   int count() const;
+   void setMaxCount(int max);
+   int maxCount() const;
 
-    InsertPolicy insertPolicy() const;
-    void setInsertPolicy(InsertPolicy policy);
+#ifndef QT_NO_COMPLETER
+   bool autoCompletion() const;
+   void setAutoCompletion(bool enable);
 
-    enum SizeAdjustPolicy {
-        AdjustToContents,
-        AdjustToContentsOnFirstShow,
-        AdjustToMinimumContentsLength, // ### Qt5/remove
-        AdjustToMinimumContentsLengthWithIcon
-    };
+   Qt::CaseSensitivity autoCompletionCaseSensitivity() const;
+   void setAutoCompletionCaseSensitivity(Qt::CaseSensitivity sensitivity);
+#endif
 
-    SizeAdjustPolicy sizeAdjustPolicy() const;
-    void setSizeAdjustPolicy(SizeAdjustPolicy policy);
-    int minimumContentsLength() const;
-    void setMinimumContentsLength(int characters);
-    QSize iconSize() const;
-    void setIconSize(const QSize &size);
+   bool duplicatesEnabled() const;
+   void setDuplicatesEnabled(bool enable);
 
-    bool isEditable() const;
-    void setEditable(bool editable);
-    void setLineEdit(QLineEdit *edit);
-    QLineEdit *lineEdit() const;
+   void setFrame(bool);
+   bool hasFrame() const;
+
+   inline int findText(const QString &text,
+                       Qt::MatchFlags flags = static_cast<Qt::MatchFlags>(Qt::MatchExactly | Qt::MatchCaseSensitive)) const {
+      return findData(text, Qt::DisplayRole, flags);
+   }
+   int findData(const QVariant &data, int role = Qt::UserRole,
+                Qt::MatchFlags flags = static_cast<Qt::MatchFlags>(Qt::MatchExactly | Qt::MatchCaseSensitive)) const;
+
+   enum InsertPolicy {
+      NoInsert,
+      InsertAtTop,
+      InsertAtCurrent,
+      InsertAtBottom,
+      InsertAfterCurrent,
+      InsertBeforeCurrent,
+      InsertAlphabetically
+   };
+
+   InsertPolicy insertPolicy() const;
+   void setInsertPolicy(InsertPolicy policy);
+
+   enum SizeAdjustPolicy {
+      AdjustToContents,
+      AdjustToContentsOnFirstShow,
+      AdjustToMinimumContentsLength, // ### Qt5/remove
+      AdjustToMinimumContentsLengthWithIcon
+   };
+
+   SizeAdjustPolicy sizeAdjustPolicy() const;
+   void setSizeAdjustPolicy(SizeAdjustPolicy policy);
+   int minimumContentsLength() const;
+   void setMinimumContentsLength(int characters);
+   QSize iconSize() const;
+   void setIconSize(const QSize &size);
+
+   bool isEditable() const;
+   void setEditable(bool editable);
+   void setLineEdit(QLineEdit *edit);
+   QLineEdit *lineEdit() const;
 
 #ifndef QT_NO_VALIDATOR
-    void setValidator(const QValidator *v);
-    const QValidator *validator() const;
+   void setValidator(const QValidator *v);
+   const QValidator *validator() const;
 #endif
 
 #ifndef QT_NO_COMPLETER
-    void setCompleter(QCompleter *c);
-    QCompleter *completer() const;
+   void setCompleter(QCompleter *c);
+   QCompleter *completer() const;
 #endif
 
-    QAbstractItemDelegate *itemDelegate() const;
-    void setItemDelegate(QAbstractItemDelegate *delegate);
+   QAbstractItemDelegate *itemDelegate() const;
+   void setItemDelegate(QAbstractItemDelegate *delegate);
 
-    QAbstractItemModel *model() const;
-    void setModel(QAbstractItemModel *model);
+   QAbstractItemModel *model() const;
+   void setModel(QAbstractItemModel *model);
 
-    QModelIndex rootModelIndex() const;
-    void setRootModelIndex(const QModelIndex &index);
+   QModelIndex rootModelIndex() const;
+   void setRootModelIndex(const QModelIndex &index);
 
-    int modelColumn() const;
-    void setModelColumn(int visibleColumn);
+   int modelColumn() const;
+   void setModelColumn(int visibleColumn);
 
-    int currentIndex() const;
+   int currentIndex() const;
 
-    QString currentText() const;
+   QString currentText() const;
 
-    QString itemText(int index) const;
-    QIcon itemIcon(int index) const;
-    QVariant itemData(int index, int role = Qt::UserRole) const;
+   QString itemText(int index) const;
+   QIcon itemIcon(int index) const;
+   QVariant itemData(int index, int role = Qt::UserRole) const;
 
-    inline void addItem(const QString &text, const QVariant &userData = QVariant());
-    inline void addItem(const QIcon &icon, const QString &text,
-                        const QVariant &userData = QVariant());
-    inline void addItems(const QStringList &texts)
-        { insertItems(count(), texts); }
+   inline void addItem(const QString &text, const QVariant &userData = QVariant());
+   inline void addItem(const QIcon &icon, const QString &text,
+                       const QVariant &userData = QVariant());
+   inline void addItems(const QStringList &texts) {
+      insertItems(count(), texts);
+   }
 
-    inline void insertItem(int index, const QString &text, const QVariant &userData = QVariant());
-    void insertItem(int index, const QIcon &icon, const QString &text,
-                    const QVariant &userData = QVariant());
-    void insertItems(int index, const QStringList &texts);
-    void insertSeparator(int index);
+   inline void insertItem(int index, const QString &text, const QVariant &userData = QVariant());
+   void insertItem(int index, const QIcon &icon, const QString &text,
+                   const QVariant &userData = QVariant());
+   void insertItems(int index, const QStringList &texts);
+   void insertSeparator(int index);
 
-    void removeItem(int index);
+   void removeItem(int index);
 
-    void setItemText(int index, const QString &text);
-    void setItemIcon(int index, const QIcon &icon);
-    void setItemData(int index, const QVariant &value, int role = Qt::UserRole);
+   void setItemText(int index, const QString &text);
+   void setItemIcon(int index, const QIcon &icon);
+   void setItemData(int index, const QVariant &value, int role = Qt::UserRole);
 
-    QAbstractItemView *view() const;
-    void setView(QAbstractItemView *itemView);
+   QAbstractItemView *view() const;
+   void setView(QAbstractItemView *itemView);
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+   QSize sizeHint() const;
+   QSize minimumSizeHint() const;
 
-    virtual void showPopup();
-    virtual void hidePopup();
+   virtual void showPopup();
+   virtual void hidePopup();
 
-    bool event(QEvent *event);
+   bool event(QEvent *event);
 
-public :
-    GUI_CS_SLOT_1(Public, void clear())
-    GUI_CS_SLOT_2(clear) 
-    GUI_CS_SLOT_1(Public, void clearEditText())
-    GUI_CS_SLOT_2(clearEditText) 
-    GUI_CS_SLOT_1(Public, void setEditText(const QString & text))
-    GUI_CS_SLOT_2(setEditText) 
-    GUI_CS_SLOT_1(Public, void setCurrentIndex(int index))
-    GUI_CS_SLOT_2(setCurrentIndex) 
+ public :
+   GUI_CS_SLOT_1(Public, void clear())
+   GUI_CS_SLOT_2(clear)
+   GUI_CS_SLOT_1(Public, void clearEditText())
+   GUI_CS_SLOT_2(clearEditText)
+   GUI_CS_SLOT_1(Public, void setEditText(const QString &text))
+   GUI_CS_SLOT_2(setEditText)
+   GUI_CS_SLOT_1(Public, void setCurrentIndex(int index))
+   GUI_CS_SLOT_2(setCurrentIndex)
 
-    GUI_CS_SIGNAL_1(Public, void editTextChanged(const QString & un_named_arg1))
-    GUI_CS_SIGNAL_2(editTextChanged,un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void editTextChanged(const QString &un_named_arg1))
+   GUI_CS_SIGNAL_2(editTextChanged, un_named_arg1)
 
-    GUI_CS_SIGNAL_1(Public, void activated(int index))
-    GUI_CS_SIGNAL_OVERLOAD(activated,(int),index) 
+   GUI_CS_SIGNAL_1(Public, void activated(int index))
+   GUI_CS_SIGNAL_OVERLOAD(activated, (int), index)
 
-    GUI_CS_SIGNAL_1(Public, void activated(const QString & un_named_arg1))
-    GUI_CS_SIGNAL_OVERLOAD(activated,(const QString &),un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void activated(const QString &un_named_arg1))
+   GUI_CS_SIGNAL_OVERLOAD(activated, (const QString &), un_named_arg1)
 
-    GUI_CS_SIGNAL_1(Public, void highlighted(int index))
-    GUI_CS_SIGNAL_OVERLOAD(highlighted,(int),index) 
+   GUI_CS_SIGNAL_1(Public, void highlighted(int index))
+   GUI_CS_SIGNAL_OVERLOAD(highlighted, (int), index)
 
-    GUI_CS_SIGNAL_1(Public, void highlighted(const QString & un_named_arg1))
-    GUI_CS_SIGNAL_OVERLOAD(highlighted,(const QString &),un_named_arg1)
- 
-    GUI_CS_SIGNAL_1(Public, void currentIndexChanged(int index))
-    GUI_CS_SIGNAL_OVERLOAD(currentIndexChanged,(int),index) 
+   GUI_CS_SIGNAL_1(Public, void highlighted(const QString &un_named_arg1))
+   GUI_CS_SIGNAL_OVERLOAD(highlighted, (const QString &), un_named_arg1)
 
-    GUI_CS_SIGNAL_1(Public, void currentIndexChanged(const QString & un_named_arg1))
-    GUI_CS_SIGNAL_OVERLOAD(currentIndexChanged,(const QString &),un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void currentIndexChanged(int index))
+   GUI_CS_SIGNAL_OVERLOAD(currentIndexChanged, (int), index)
 
-    GUI_CS_SIGNAL_1(Public, void cs_currentIndexChanged(int index))
-    GUI_CS_SIGNAL_2(cs_currentIndexChanged,index) 
+   GUI_CS_SIGNAL_1(Public, void currentIndexChanged(const QString &un_named_arg1))
+   GUI_CS_SIGNAL_OVERLOAD(currentIndexChanged, (const QString &), un_named_arg1)
 
-protected:
-    void focusInEvent(QFocusEvent *e);
-    void focusOutEvent(QFocusEvent *e);
-    void changeEvent(QEvent *e);
-    void resizeEvent(QResizeEvent *e);
-    void paintEvent(QPaintEvent *e);
-    void showEvent(QShowEvent *e);
-    void hideEvent(QHideEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    void keyPressEvent(QKeyEvent *e);
-    void keyReleaseEvent(QKeyEvent *e);
+   GUI_CS_SIGNAL_1(Public, void cs_currentIndexChanged(int index))
+   GUI_CS_SIGNAL_2(cs_currentIndexChanged, index)
+
+ protected:
+   void focusInEvent(QFocusEvent *e);
+   void focusOutEvent(QFocusEvent *e);
+   void changeEvent(QEvent *e);
+   void resizeEvent(QResizeEvent *e);
+   void paintEvent(QPaintEvent *e);
+   void showEvent(QShowEvent *e);
+   void hideEvent(QHideEvent *e);
+   void mousePressEvent(QMouseEvent *e);
+   void mouseReleaseEvent(QMouseEvent *e);
+   void keyPressEvent(QKeyEvent *e);
+   void keyReleaseEvent(QKeyEvent *e);
 
 #ifndef QT_NO_WHEELEVENT
-    void wheelEvent(QWheelEvent *e);
+   void wheelEvent(QWheelEvent *e);
 #endif
 
-    void contextMenuEvent(QContextMenuEvent *e);
-    void inputMethodEvent(QInputMethodEvent *);
-    QVariant inputMethodQuery(Qt::InputMethodQuery) const;
-    void initStyleOption(QStyleOptionComboBox *option) const;
+   void contextMenuEvent(QContextMenuEvent *e);
+   void inputMethodEvent(QInputMethodEvent *);
+   QVariant inputMethodQuery(Qt::InputMethodQuery) const;
+   void initStyleOption(QStyleOptionComboBox *option) const;
 
-protected:
-    QComboBox(QComboBoxPrivate &, QWidget *);
+ protected:
+   QComboBox(QComboBoxPrivate &, QWidget *);
 
-private:
-    Q_DECLARE_PRIVATE(QComboBox)
-    Q_DISABLE_COPY(QComboBox)
+ private:
+   Q_DECLARE_PRIVATE(QComboBox)
+   Q_DISABLE_COPY(QComboBox)
 
-    GUI_CS_SLOT_1(Private, void _q_itemSelected(const QModelIndex & item))
-    GUI_CS_SLOT_2(_q_itemSelected)
+   GUI_CS_SLOT_1(Private, void _q_itemSelected(const QModelIndex &item))
+   GUI_CS_SLOT_2(_q_itemSelected)
 
-    GUI_CS_SLOT_1(Private, void _q_emitHighlighted(const QModelIndex & un_named_arg1))
-    GUI_CS_SLOT_2(_q_emitHighlighted)
+   GUI_CS_SLOT_1(Private, void _q_emitHighlighted(const QModelIndex &un_named_arg1))
+   GUI_CS_SLOT_2(_q_emitHighlighted)
 
-    GUI_CS_SLOT_1(Private, void _q_emitCurrentIndexChanged(const QModelIndex & index))
-    GUI_CS_SLOT_2(_q_emitCurrentIndexChanged)
+   GUI_CS_SLOT_1(Private, void _q_emitCurrentIndexChanged(const QModelIndex &index))
+   GUI_CS_SLOT_2(_q_emitCurrentIndexChanged)
 
-    GUI_CS_SLOT_1(Private, void _q_editingFinished())
-    GUI_CS_SLOT_2(_q_editingFinished)
+   GUI_CS_SLOT_1(Private, void _q_editingFinished())
+   GUI_CS_SLOT_2(_q_editingFinished)
 
-    GUI_CS_SLOT_1(Private, void _q_returnPressed())
-    GUI_CS_SLOT_2(_q_returnPressed)
+   GUI_CS_SLOT_1(Private, void _q_returnPressed())
+   GUI_CS_SLOT_2(_q_returnPressed)
 
-    GUI_CS_SLOT_1(Private, void _q_resetButton())
-    GUI_CS_SLOT_2(_q_resetButton)
+   GUI_CS_SLOT_1(Private, void _q_resetButton())
+   GUI_CS_SLOT_2(_q_resetButton)
 
-    GUI_CS_SLOT_1(Private, void _q_dataChanged(const QModelIndex & un_named_arg1,const QModelIndex & un_named_arg2))
-    GUI_CS_SLOT_2(_q_dataChanged)
+   GUI_CS_SLOT_1(Private, void _q_dataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2))
+   GUI_CS_SLOT_2(_q_dataChanged)
 
-    GUI_CS_SLOT_1(Private, void _q_updateIndexBeforeChange())
-    GUI_CS_SLOT_2(_q_updateIndexBeforeChange)
+   GUI_CS_SLOT_1(Private, void _q_updateIndexBeforeChange())
+   GUI_CS_SLOT_2(_q_updateIndexBeforeChange)
 
-    GUI_CS_SLOT_1(Private, void _q_rowsInserted(const QModelIndex & parent,int start,int end))
-    GUI_CS_SLOT_2(_q_rowsInserted)
+   GUI_CS_SLOT_1(Private, void _q_rowsInserted(const QModelIndex &parent, int start, int end))
+   GUI_CS_SLOT_2(_q_rowsInserted)
 
-    GUI_CS_SLOT_1(Private, void _q_rowsRemoved(const QModelIndex & parent,int start,int end))
-    GUI_CS_SLOT_2(_q_rowsRemoved)
+   GUI_CS_SLOT_1(Private, void _q_rowsRemoved(const QModelIndex &parent, int start, int end))
+   GUI_CS_SLOT_2(_q_rowsRemoved)
 
-    GUI_CS_SLOT_1(Private, void _q_modelDestroyed())
-    GUI_CS_SLOT_2(_q_modelDestroyed)
+   GUI_CS_SLOT_1(Private, void _q_modelDestroyed())
+   GUI_CS_SLOT_2(_q_modelDestroyed)
 
-    GUI_CS_SLOT_1(Private, void _q_modelReset())
-    GUI_CS_SLOT_2(_q_modelReset)
+   GUI_CS_SLOT_1(Private, void _q_modelReset())
+   GUI_CS_SLOT_2(_q_modelReset)
 
 #ifdef QT_KEYPAD_NAVIGATION
-    GUI_CS_SLOT_1(Private, void _q_completerActivated())
-    GUI_CS_SLOT_2(_q_completerActivated)
+   GUI_CS_SLOT_1(Private, void _q_completerActivated())
+   GUI_CS_SLOT_2(_q_completerActivated)
 #endif
 
 };
 
 inline void QComboBox::addItem(const QString &atext, const QVariant &auserData)
-   { insertItem(count(), atext, auserData); }
+{
+   insertItem(count(), atext, auserData);
+}
 
-inline void QComboBox::addItem(const QIcon &aicon, const QString &atext,const QVariant &auserData)
-   { insertItem(count(), aicon, atext, auserData); }
+inline void QComboBox::addItem(const QIcon &aicon, const QString &atext, const QVariant &auserData)
+{
+   insertItem(count(), aicon, atext, auserData);
+}
 
 inline void QComboBox::insertItem(int aindex, const QString &atext, const QVariant &auserData)
-   { insertItem(aindex, QIcon(), atext, auserData); }
+{
+   insertItem(aindex, QIcon(), atext, auserData);
+}
 
 #endif // QT_NO_COMBOBOX
 

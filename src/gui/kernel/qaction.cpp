@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,32 +49,34 @@ QT_BEGIN_NAMESPACE
  */
 static QString qt_strippedText(QString s)
 {
-    s.remove( QString::fromLatin1("...") );
-    int i = 0;
-    while (i < s.size()) {
-        ++i;
-        if (s.at(i-1) != QLatin1Char('&'))
-            continue;
-        if (i < s.size() && s.at(i) == QLatin1Char('&'))
-            ++i;
-        s.remove(i-1,1);
-    }
-    return s.trimmed();
+   s.remove( QString::fromLatin1("...") );
+   int i = 0;
+   while (i < s.size()) {
+      ++i;
+      if (s.at(i - 1) != QLatin1Char('&')) {
+         continue;
+      }
+      if (i < s.size() && s.at(i) == QLatin1Char('&')) {
+         ++i;
+      }
+      s.remove(i - 1, 1);
+   }
+   return s.trimmed();
 }
 
 
 QActionPrivate::QActionPrivate() : group(0), enabled(1), forceDisabled(0),
-                                   visible(1), forceInvisible(0), checkable(0), checked(0), separator(0), fontSet(false),
-                                   forceEnabledInSoftkeys(false), menuActionSoftkeys(false),
-                                   iconVisibleInMenu(-1),
-                                   menuRole(QAction::TextHeuristicRole), softKeyRole(QAction::NoSoftKey),
-                                   priority(QAction::NormalPriority)
+   visible(1), forceInvisible(0), checkable(0), checked(0), separator(0), fontSet(false),
+   forceEnabledInSoftkeys(false), menuActionSoftkeys(false),
+   iconVisibleInMenu(-1),
+   menuRole(QAction::TextHeuristicRole), softKeyRole(QAction::NoSoftKey),
+   priority(QAction::NormalPriority)
 {
 
 #ifndef QT_NO_SHORTCUT
-    shortcutId = 0;
-    shortcutContext = Qt::WindowShortcut;
-    autorepeat = true;
+   shortcutId = 0;
+   shortcutContext = Qt::WindowShortcut;
+   autorepeat = true;
 #endif
 }
 
@@ -87,93 +89,102 @@ bool QActionPrivate::showStatusText(QWidget *widget, const QString &str)
    Q_Q(QAction);
 
 #ifdef QT_NO_STATUSTIP
-    Q_UNUSED(widget);
-    Q_UNUSED(str);
+   Q_UNUSED(widget);
+   Q_UNUSED(str);
 #else
-    if(QObject *object = widget ? widget : q->parent()) {
-        QStatusTipEvent tip(str);
-        QApplication::sendEvent(object, &tip);
-        return true;
-    }
+   if (QObject *object = widget ? widget : q->parent()) {
+      QStatusTipEvent tip(str);
+      QApplication::sendEvent(object, &tip);
+      return true;
+   }
 #endif
-    return false;
+   return false;
 }
 
 void QActionPrivate::sendDataChanged()
 {
-    Q_Q(QAction);
+   Q_Q(QAction);
 
-    QActionEvent e(QEvent::ActionChanged, q);
-    for (int i = 0; i < widgets.size(); ++i) {
-        QWidget *w = widgets.at(i);
-        QApplication::sendEvent(w, &e);
-    }
+   QActionEvent e(QEvent::ActionChanged, q);
+   for (int i = 0; i < widgets.size(); ++i) {
+      QWidget *w = widgets.at(i);
+      QApplication::sendEvent(w, &e);
+   }
 #ifndef QT_NO_GRAPHICSVIEW
-    for (int i = 0; i < graphicsWidgets.size(); ++i) {
-        QGraphicsWidget *w = graphicsWidgets.at(i);
-        QApplication::sendEvent(w, &e);
-    }
+   for (int i = 0; i < graphicsWidgets.size(); ++i) {
+      QGraphicsWidget *w = graphicsWidgets.at(i);
+      QApplication::sendEvent(w, &e);
+   }
 #endif
-    QApplication::sendEvent(q, &e);
+   QApplication::sendEvent(q, &e);
 
-    emit q->changed();
+   emit q->changed();
 }
 
 #ifndef QT_NO_SHORTCUT
 void QActionPrivate::redoGrab(QShortcutMap &map)
 {
-    Q_Q(QAction);
-    if (shortcutId)
-        map.removeShortcut(shortcutId, q);
-    if (shortcut.isEmpty())
-        return;
-    shortcutId = map.addShortcut(q, shortcut, shortcutContext);
-    if (!enabled)
-        map.setShortcutEnabled(false, shortcutId, q);
-    if (!autorepeat)
-        map.setShortcutAutoRepeat(false, shortcutId, q);
+   Q_Q(QAction);
+   if (shortcutId) {
+      map.removeShortcut(shortcutId, q);
+   }
+   if (shortcut.isEmpty()) {
+      return;
+   }
+   shortcutId = map.addShortcut(q, shortcut, shortcutContext);
+   if (!enabled) {
+      map.setShortcutEnabled(false, shortcutId, q);
+   }
+   if (!autorepeat) {
+      map.setShortcutAutoRepeat(false, shortcutId, q);
+   }
 }
 
 void QActionPrivate::redoGrabAlternate(QShortcutMap &map)
 {
-    Q_Q(QAction);
-    for(int i = 0; i < alternateShortcutIds.count(); ++i) {
-        if (const int id = alternateShortcutIds.at(i))
-            map.removeShortcut(id, q);
-    }
-    alternateShortcutIds.clear();
-    if (alternateShortcuts.isEmpty())
-        return;
-    for(int i = 0; i < alternateShortcuts.count(); ++i) {
-        const QKeySequence& alternate = alternateShortcuts.at(i);
-        if (!alternate.isEmpty())
-            alternateShortcutIds.append(map.addShortcut(q, alternate, shortcutContext));
-        else
-            alternateShortcutIds.append(0);
-    }
-    if (!enabled) {
-        for(int i = 0; i < alternateShortcutIds.count(); ++i) {
-            const int id = alternateShortcutIds.at(i);
-            map.setShortcutEnabled(false, id, q);
-        }
-    }
-    if (!autorepeat) {
-        for(int i = 0; i < alternateShortcutIds.count(); ++i) {
-            const int id = alternateShortcutIds.at(i);
-            map.setShortcutAutoRepeat(false, id, q);
-        }
-    }
+   Q_Q(QAction);
+   for (int i = 0; i < alternateShortcutIds.count(); ++i) {
+      if (const int id = alternateShortcutIds.at(i)) {
+         map.removeShortcut(id, q);
+      }
+   }
+   alternateShortcutIds.clear();
+   if (alternateShortcuts.isEmpty()) {
+      return;
+   }
+   for (int i = 0; i < alternateShortcuts.count(); ++i) {
+      const QKeySequence &alternate = alternateShortcuts.at(i);
+      if (!alternate.isEmpty()) {
+         alternateShortcutIds.append(map.addShortcut(q, alternate, shortcutContext));
+      } else {
+         alternateShortcutIds.append(0);
+      }
+   }
+   if (!enabled) {
+      for (int i = 0; i < alternateShortcutIds.count(); ++i) {
+         const int id = alternateShortcutIds.at(i);
+         map.setShortcutEnabled(false, id, q);
+      }
+   }
+   if (!autorepeat) {
+      for (int i = 0; i < alternateShortcutIds.count(); ++i) {
+         const int id = alternateShortcutIds.at(i);
+         map.setShortcutAutoRepeat(false, id, q);
+      }
+   }
 }
 
 void QActionPrivate::setShortcutEnabled(bool enable, QShortcutMap &map)
 {
-    Q_Q(QAction);
-    if (shortcutId)
-        map.setShortcutEnabled(enable, shortcutId, q);
-    for(int i = 0; i < alternateShortcutIds.count(); ++i) {
-        if (const int id = alternateShortcutIds.at(i))
-            map.setShortcutEnabled(enable, id, q);
-    }
+   Q_Q(QAction);
+   if (shortcutId) {
+      map.setShortcutEnabled(enable, shortcutId, q);
+   }
+   for (int i = 0; i < alternateShortcutIds.count(); ++i) {
+      if (const int id = alternateShortcutIds.at(i)) {
+         map.setShortcutEnabled(enable, id, q);
+      }
+   }
 }
 #endif // QT_NO_SHORTCUT
 
@@ -293,15 +304,16 @@ void QActionPrivate::setShortcutEnabled(bool enable, QShortcutMap &map)
     Constructs an action with \a parent. If \a parent is an action
     group the action will be automatically inserted into the group.
 */
-QAction::QAction(QObject* parent)  
-    : QObject(parent), d_ptr(new QActionPrivate)
+QAction::QAction(QObject *parent)
+   : QObject(parent), d_ptr(new QActionPrivate)
 {
-    d_ptr->q_ptr = this;
-    Q_D(QAction);
+   d_ptr->q_ptr = this;
+   Q_D(QAction);
 
-    d->group = qobject_cast<QActionGroup *>(parent);
-    if (d->group)
-        d->group->addAction(this);
+   d->group = qobject_cast<QActionGroup *>(parent);
+   if (d->group) {
+      d->group->addAction(this);
+   }
 }
 
 
@@ -318,16 +330,17 @@ QAction::QAction(QObject* parent)
     setToolTip().
 
 */
-QAction::QAction(const QString &text, QObject* parent)
+QAction::QAction(const QString &text, QObject *parent)
    : QObject(parent), d_ptr(new QActionPrivate)
 {
-    d_ptr->q_ptr = this;
-    Q_D(QAction);
+   d_ptr->q_ptr = this;
+   Q_D(QAction);
 
-    d->text = text;
-    d->group = qobject_cast<QActionGroup *>(parent);
-    if (d->group)
-        d->group->addAction(this);
+   d->text = text;
+   d->group = qobject_cast<QActionGroup *>(parent);
+   if (d->group) {
+      d->group->addAction(this);
+   }
 }
 
 /*!
@@ -342,31 +355,33 @@ QAction::QAction(const QString &text, QObject* parent)
     tooltips unless you specify a different text using
     setToolTip().
 */
-QAction::QAction(const QIcon &icon, const QString &text, QObject* parent)
-      : QObject(parent), d_ptr(new QActionPrivate)
+QAction::QAction(const QIcon &icon, const QString &text, QObject *parent)
+   : QObject(parent), d_ptr(new QActionPrivate)
 {
-    d_ptr->q_ptr = this;
-    Q_D(QAction);
+   d_ptr->q_ptr = this;
+   Q_D(QAction);
 
-    d->icon = icon;
-    d->text = text;
-    d->group = qobject_cast<QActionGroup *>(parent);
-    if (d->group)
-        d->group->addAction(this);
+   d->icon = icon;
+   d->text = text;
+   d->group = qobject_cast<QActionGroup *>(parent);
+   if (d->group) {
+      d->group->addAction(this);
+   }
 }
 
 /*!
     \internal
 */
 QAction::QAction(QActionPrivate &dd, QObject *parent)
-   : QObject(parent), d_ptr(&dd)   
+   : QObject(parent), d_ptr(&dd)
 {
-    d_ptr->q_ptr = this;
-    Q_D(QAction);
+   d_ptr->q_ptr = this;
+   Q_D(QAction);
 
-    d->group = qobject_cast<QActionGroup *>(parent);
-    if (d->group)
-        d->group->addAction(this);
+   d->group = qobject_cast<QActionGroup *>(parent);
+   if (d->group) {
+      d->group->addAction(this);
+   }
 }
 
 /*!
@@ -374,10 +389,11 @@ QAction::QAction(QActionPrivate &dd, QObject *parent)
 */
 QWidget *QAction::parentWidget() const
 {
-    QObject *ret = parent();
-    while (ret && !ret->isWidgetType())
-        ret = ret->parent();
-    return (QWidget*)ret;
+   QObject *ret = parent();
+   while (ret && !ret->isWidgetType()) {
+      ret = ret->parent();
+   }
+   return (QWidget *)ret;
 }
 
 /*!
@@ -388,8 +404,8 @@ QWidget *QAction::parentWidget() const
 */
 QList<QWidget *> QAction::associatedWidgets() const
 {
-    Q_D(const QAction);
-    return d->widgets;
+   Q_D(const QAction);
+   return d->widgets;
 }
 
 #ifndef QT_NO_GRAPHICSVIEW
@@ -401,8 +417,8 @@ QList<QWidget *> QAction::associatedWidgets() const
 */
 QList<QGraphicsWidget *> QAction::associatedGraphicsWidgets() const
 {
-    Q_D(const QAction);
-    return d->graphicsWidgets;
+   Q_D(const QAction);
+   return d->graphicsWidgets;
 }
 #endif
 
@@ -416,15 +432,16 @@ QList<QGraphicsWidget *> QAction::associatedGraphicsWidgets() const
 */
 void QAction::setShortcut(const QKeySequence &shortcut)
 {
-    QAPP_CHECK("setShortcut");
+   QAPP_CHECK("setShortcut");
 
-    Q_D(QAction);
-    if (d->shortcut == shortcut)
-        return;
+   Q_D(QAction);
+   if (d->shortcut == shortcut) {
+      return;
+   }
 
-    d->shortcut = shortcut;
-    d->redoGrab(qApp->d_func()->shortcutMap);
-    d->sendDataChanged();
+   d->shortcut = shortcut;
+   d->redoGrab(qApp->d_func()->shortcutMap);
+   d->sendDataChanged();
 }
 
 /*!
@@ -437,24 +454,26 @@ void QAction::setShortcut(const QKeySequence &shortcut)
 */
 void QAction::setShortcuts(const QList<QKeySequence> &shortcuts)
 {
-    Q_D(QAction);
+   Q_D(QAction);
 
-    QList <QKeySequence> listCopy = shortcuts;
+   QList <QKeySequence> listCopy = shortcuts;
 
-    QKeySequence primary;
-    if (!listCopy.isEmpty())
-        primary = listCopy.takeFirst();
+   QKeySequence primary;
+   if (!listCopy.isEmpty()) {
+      primary = listCopy.takeFirst();
+   }
 
-    if (d->shortcut == primary && d->alternateShortcuts == listCopy)
-        return;
+   if (d->shortcut == primary && d->alternateShortcuts == listCopy) {
+      return;
+   }
 
-    QAPP_CHECK("setShortcuts");
+   QAPP_CHECK("setShortcuts");
 
-    d->shortcut = primary;
-    d->alternateShortcuts = listCopy;
-    d->redoGrab(qApp->d_func()->shortcutMap);
-    d->redoGrabAlternate(qApp->d_func()->shortcutMap);
-    d->sendDataChanged();
+   d->shortcut = primary;
+   d->alternateShortcuts = listCopy;
+   d->redoGrab(qApp->d_func()->shortcutMap);
+   d->redoGrabAlternate(qApp->d_func()->shortcutMap);
+   d->sendDataChanged();
 }
 
 /*!
@@ -469,8 +488,8 @@ void QAction::setShortcuts(const QList<QKeySequence> &shortcuts)
 */
 void QAction::setShortcuts(QKeySequence::StandardKey key)
 {
-    QList <QKeySequence> list = QKeySequence::keyBindings(key);
-    setShortcuts(list);
+   QList <QKeySequence> list = QKeySequence::keyBindings(key);
+   setShortcuts(list);
 }
 
 /*!
@@ -480,8 +499,8 @@ void QAction::setShortcuts(QKeySequence::StandardKey key)
 */
 QKeySequence QAction::shortcut() const
 {
-    Q_D(const QAction);
-    return d->shortcut;
+   Q_D(const QAction);
+   return d->shortcut;
 }
 
 /*!
@@ -494,13 +513,15 @@ QKeySequence QAction::shortcut() const
 */
 QList<QKeySequence> QAction::shortcuts() const
 {
-    Q_D(const QAction);
-    QList <QKeySequence> shortcuts;
-    if (!d->shortcut.isEmpty())
-        shortcuts << d->shortcut;
-    if (!d->alternateShortcuts.isEmpty())
-        shortcuts << d->alternateShortcuts;
-    return shortcuts;
+   Q_D(const QAction);
+   QList <QKeySequence> shortcuts;
+   if (!d->shortcut.isEmpty()) {
+      shortcuts << d->shortcut;
+   }
+   if (!d->alternateShortcuts.isEmpty()) {
+      shortcuts << d->alternateShortcuts;
+   }
+   return shortcuts;
 }
 
 /*!
@@ -512,20 +533,21 @@ QList<QKeySequence> QAction::shortcuts() const
 */
 void QAction::setShortcutContext(Qt::ShortcutContext context)
 {
-    Q_D(QAction);
-    if (d->shortcutContext == context)
-        return;
-    QAPP_CHECK("setShortcutContext");
-    d->shortcutContext = context;
-    d->redoGrab(qApp->d_func()->shortcutMap);
-    d->redoGrabAlternate(qApp->d_func()->shortcutMap);
-    d->sendDataChanged();
+   Q_D(QAction);
+   if (d->shortcutContext == context) {
+      return;
+   }
+   QAPP_CHECK("setShortcutContext");
+   d->shortcutContext = context;
+   d->redoGrab(qApp->d_func()->shortcutMap);
+   d->redoGrabAlternate(qApp->d_func()->shortcutMap);
+   d->sendDataChanged();
 }
 
 Qt::ShortcutContext QAction::shortcutContext() const
 {
-    Q_D(const QAction);
-    return d->shortcutContext;
+   Q_D(const QAction);
+   return d->shortcutContext;
 }
 
 /*!
@@ -540,20 +562,21 @@ Qt::ShortcutContext QAction::shortcutContext() const
 */
 void QAction::setAutoRepeat(bool on)
 {
-    Q_D(QAction);
-    if (d->autorepeat == on)
-        return;
-    QAPP_CHECK("setAutoRepeat");
-    d->autorepeat = on;
-    d->redoGrab(qApp->d_func()->shortcutMap);
-    d->redoGrabAlternate(qApp->d_func()->shortcutMap);
-    d->sendDataChanged();
+   Q_D(QAction);
+   if (d->autorepeat == on) {
+      return;
+   }
+   QAPP_CHECK("setAutoRepeat");
+   d->autorepeat = on;
+   d->redoGrab(qApp->d_func()->shortcutMap);
+   d->redoGrabAlternate(qApp->d_func()->shortcutMap);
+   d->sendDataChanged();
 }
 
 bool QAction::autoRepeat() const
 {
-    Q_D(const QAction);
-    return d->autorepeat;
+   Q_D(const QAction);
+   return d->autorepeat;
 }
 #endif // QT_NO_SHORTCUT
 
@@ -571,19 +594,20 @@ bool QAction::autoRepeat() const
 */
 void QAction::setFont(const QFont &font)
 {
-    Q_D(QAction);
-    if (d->font == font)
-        return;
+   Q_D(QAction);
+   if (d->font == font) {
+      return;
+   }
 
-    d->fontSet = true;
-    d->font = font;
-    d->sendDataChanged();
+   d->fontSet = true;
+   d->font = font;
+   d->sendDataChanged();
 }
 
 QFont QAction::font() const
 {
-    Q_D(const QAction);
-    return d->font;
+   Q_D(const QAction);
+   return d->font;
 }
 
 /*!
@@ -591,27 +615,28 @@ QFont QAction::font() const
 */
 QAction::~QAction()
 {
-    Q_D(QAction);
-    for (int i = d->widgets.size()-1; i >= 0; --i) {
-        QWidget *w = d->widgets.at(i);
-        w->removeAction(this);
-    }
+   Q_D(QAction);
+   for (int i = d->widgets.size() - 1; i >= 0; --i) {
+      QWidget *w = d->widgets.at(i);
+      w->removeAction(this);
+   }
 #ifndef QT_NO_GRAPHICSVIEW
-    for (int i = d->graphicsWidgets.size()-1; i >= 0; --i) {
-        QGraphicsWidget *w = d->graphicsWidgets.at(i);
-        w->removeAction(this);
-    }
+   for (int i = d->graphicsWidgets.size() - 1; i >= 0; --i) {
+      QGraphicsWidget *w = d->graphicsWidgets.at(i);
+      w->removeAction(this);
+   }
 #endif
-    if (d->group)
-        d->group->removeAction(this);
+   if (d->group) {
+      d->group->removeAction(this);
+   }
 #ifndef QT_NO_SHORTCUT
-    if (d->shortcutId && qApp) {
-        qApp->d_func()->shortcutMap.removeShortcut(d->shortcutId, this);
-        for(int i = 0; i < d->alternateShortcutIds.count(); ++i) {
-            const int id = d->alternateShortcutIds.at(i);
-            qApp->d_func()->shortcutMap.removeShortcut(id, this);
-        }
-    }
+   if (d->shortcutId && qApp) {
+      qApp->d_func()->shortcutMap.removeShortcut(d->shortcutId, this);
+      for (int i = 0; i < d->alternateShortcutIds.count(); ++i) {
+         const int id = d->alternateShortcutIds.at(i);
+         qApp->d_func()->shortcutMap.removeShortcut(id, this);
+      }
+   }
 #endif
 }
 
@@ -625,15 +650,18 @@ QAction::~QAction()
 */
 void QAction::setActionGroup(QActionGroup *group)
 {
-    Q_D(QAction);
-    if(group == d->group)
-        return;
+   Q_D(QAction);
+   if (group == d->group) {
+      return;
+   }
 
-    if(d->group)
-        d->group->removeAction(this);
-    d->group = group;
-    if(group)
-        group->addAction(this);
+   if (d->group) {
+      d->group->removeAction(this);
+   }
+   d->group = group;
+   if (group) {
+      group->addAction(this);
+   }
 }
 
 /*!
@@ -644,8 +672,8 @@ void QAction::setActionGroup(QActionGroup *group)
 */
 QActionGroup *QAction::actionGroup() const
 {
-    Q_D(const QAction);
-    return d->group;
+   Q_D(const QAction);
+   return d->group;
 }
 
 
@@ -666,15 +694,15 @@ QActionGroup *QAction::actionGroup() const
 */
 void QAction::setIcon(const QIcon &icon)
 {
-    Q_D(QAction);
-    d->icon = icon;
-    d->sendDataChanged();
+   Q_D(QAction);
+   d->icon = icon;
+   d->sendDataChanged();
 }
 
 QIcon QAction::icon() const
 {
-    Q_D(const QAction);
-    return d->icon;
+   Q_D(const QAction);
+   return d->icon;
 }
 
 #ifndef QT_NO_MENU
@@ -687,8 +715,8 @@ QIcon QAction::icon() const
 */
 QMenu *QAction::menu() const
 {
-    Q_D(const QAction);
-    return d->menu;
+   Q_D(const QAction);
+   return d->menu;
 }
 
 /*!
@@ -696,13 +724,15 @@ QMenu *QAction::menu() const
 */
 void QAction::setMenu(QMenu *menu)
 {
-    Q_D(QAction);
-    if (d->menu)
-        d->menu->d_func()->setOverrideMenuAction(0); //we reset the default action of any previous menu
-    d->menu = menu;
-    if (menu)
-        menu->d_func()->setOverrideMenuAction(this);
-    d->sendDataChanged();
+   Q_D(QAction);
+   if (d->menu) {
+      d->menu->d_func()->setOverrideMenuAction(0);   //we reset the default action of any previous menu
+   }
+   d->menu = menu;
+   if (menu) {
+      menu->d_func()->setOverrideMenuAction(this);
+   }
+   d->sendDataChanged();
 }
 #endif // QT_NO_MENU
 
@@ -717,12 +747,13 @@ void QAction::setMenu(QMenu *menu)
 */
 void QAction::setSeparator(bool b)
 {
-    Q_D(QAction);
-    if (d->separator == b)
-        return;
+   Q_D(QAction);
+   if (d->separator == b) {
+      return;
+   }
 
-    d->separator = b;
-    d->sendDataChanged();
+   d->separator = b;
+   d->sendDataChanged();
 }
 
 /*!
@@ -733,8 +764,8 @@ void QAction::setSeparator(bool b)
 */
 bool QAction::isSeparator() const
 {
-    Q_D(const QAction);
-    return d->separator;
+   Q_D(const QAction);
+   return d->separator;
 }
 
 /*!
@@ -751,23 +782,24 @@ bool QAction::isSeparator() const
 */
 void QAction::setText(const QString &text)
 {
-    Q_D(QAction);
-    if (d->text == text)
-        return;
+   Q_D(QAction);
+   if (d->text == text) {
+      return;
+   }
 
-    d->text = text;
-    d->sendDataChanged();
+   d->text = text;
+   d->sendDataChanged();
 }
 
 QString QAction::text() const
 {
-    Q_D(const QAction);
-    QString s = d->text;
-    if(s.isEmpty()) {
-        s = d->iconText;
-        s.replace(QLatin1Char('&'), QLatin1String("&&"));
-    }
-    return s;
+   Q_D(const QAction);
+   QString s = d->text;
+   if (s.isEmpty()) {
+      s = d->iconText;
+      s.replace(QLatin1Char('&'), QLatin1String("&&"));
+   }
+   return s;
 }
 
 
@@ -795,20 +827,22 @@ QString QAction::text() const
 */
 void QAction::setIconText(const QString &text)
 {
-    Q_D(QAction);
-    if (d->iconText == text)
-        return;
+   Q_D(QAction);
+   if (d->iconText == text) {
+      return;
+   }
 
-    d->iconText = text;
-    d->sendDataChanged();
+   d->iconText = text;
+   d->sendDataChanged();
 }
 
 QString QAction::iconText() const
 {
-    Q_D(const QAction);
-    if (d->iconText.isEmpty())
-        return qt_strippedText(d->text);
-    return d->iconText;
+   Q_D(const QAction);
+   if (d->iconText.isEmpty()) {
+      return qt_strippedText(d->text);
+   }
+   return d->iconText;
 }
 
 /*!
@@ -824,23 +858,25 @@ QString QAction::iconText() const
 */
 void QAction::setToolTip(const QString &tooltip)
 {
-    Q_D(QAction);
-    if (d->tooltip == tooltip)
-        return;
+   Q_D(QAction);
+   if (d->tooltip == tooltip) {
+      return;
+   }
 
-    d->tooltip = tooltip;
-    d->sendDataChanged();
+   d->tooltip = tooltip;
+   d->sendDataChanged();
 }
 
 QString QAction::toolTip() const
 {
-    Q_D(const QAction);
-    if (d->tooltip.isEmpty()) {
-        if (!d->text.isEmpty())
-            return qt_strippedText(d->text);
-        return qt_strippedText(d->iconText);
-    }
-    return d->tooltip;
+   Q_D(const QAction);
+   if (d->tooltip.isEmpty()) {
+      if (!d->text.isEmpty()) {
+         return qt_strippedText(d->text);
+      }
+      return qt_strippedText(d->iconText);
+   }
+   return d->tooltip;
 }
 
 /*!
@@ -856,34 +892,36 @@ QString QAction::toolTip() const
 */
 void QAction::setStatusTip(const QString &statustip)
 {
-    Q_D(QAction);
-    if (d->statustip == statustip)
-        return;
+   Q_D(QAction);
+   if (d->statustip == statustip) {
+      return;
+   }
 
-    d->statustip = statustip;
-    d->sendDataChanged();
+   d->statustip = statustip;
+   d->sendDataChanged();
 }
 
 QString QAction::statusTip() const
 {
-    Q_D(const QAction);
-    return d->statustip;
+   Q_D(const QAction);
+   return d->statustip;
 }
 
 void QAction::setWhatsThis(const QString &whatsthis)
 {
-    Q_D(QAction);
-    if (d->whatsthis == whatsthis)
-        return;
+   Q_D(QAction);
+   if (d->whatsthis == whatsthis) {
+      return;
+   }
 
-    d->whatsthis = whatsthis;
-    d->sendDataChanged();
+   d->whatsthis = whatsthis;
+   d->sendDataChanged();
 }
 
 QString QAction::whatsThis() const
 {
-    Q_D(const QAction);
-    return d->whatsthis;
+   Q_D(const QAction);
+   return d->whatsthis;
 }
 
 /*!
@@ -919,18 +957,19 @@ QString QAction::whatsThis() const
 */
 void QAction::setPriority(Priority priority)
 {
-    Q_D(QAction);
-    if (d->priority == priority)
-        return;
+   Q_D(QAction);
+   if (d->priority == priority) {
+      return;
+   }
 
-    d->priority = priority;
-    d->sendDataChanged();
+   d->priority = priority;
+   d->sendDataChanged();
 }
 
 QAction::Priority QAction::priority() const
 {
-    Q_D(const QAction);
-    return d->priority;
+   Q_D(const QAction);
+   return d->priority;
 }
 
 /*!
@@ -954,19 +993,20 @@ QAction::Priority QAction::priority() const
 */
 void QAction::setCheckable(bool b)
 {
-    Q_D(QAction);
-    if (d->checkable == b)
-        return;
+   Q_D(QAction);
+   if (d->checkable == b) {
+      return;
+   }
 
-    d->checkable = b;
-    d->checked = false;
-    d->sendDataChanged();
+   d->checkable = b;
+   d->checked = false;
+   d->sendDataChanged();
 }
 
 bool QAction::isCheckable() const
 {
-    Q_D(const QAction);
-    return d->checkable;
+   Q_D(const QAction);
+   return d->checkable;
 }
 
 /*!
@@ -977,8 +1017,8 @@ bool QAction::isCheckable() const
 */
 void QAction::toggle()
 {
-    Q_D(QAction);
-    setChecked(!d->checked);
+   Q_D(QAction);
+   setChecked(!d->checked);
 }
 
 /*!
@@ -992,21 +1032,23 @@ void QAction::toggle()
 */
 void QAction::setChecked(bool b)
 {
-    Q_D(QAction);
-    if (!d->checkable || d->checked == b)
-        return;
+   Q_D(QAction);
+   if (!d->checkable || d->checked == b) {
+      return;
+   }
 
-    QPointer<QAction> guard(this);
-    d->checked = b;
-    d->sendDataChanged();
-    if (guard)
-        emit toggled(b);
+   QPointer<QAction> guard(this);
+   d->checked = b;
+   d->sendDataChanged();
+   if (guard) {
+      emit toggled(b);
+   }
 }
 
 bool QAction::isChecked() const
 {
-    Q_D(const QAction);
-    return d->checked;
+   Q_D(const QAction);
+   return d->checked;
 }
 
 /*!
@@ -1040,24 +1082,26 @@ bool QAction::isChecked() const
 */
 void QAction::setEnabled(bool b)
 {
-    Q_D(QAction);
-    if (b == d->enabled && b != d->forceDisabled)
-        return;
-    d->forceDisabled = !b;
-    if (b && (!d->visible || (d->group && !d->group->isEnabled())))
-        return;
-    QAPP_CHECK("setEnabled");
-    d->enabled = b;
+   Q_D(QAction);
+   if (b == d->enabled && b != d->forceDisabled) {
+      return;
+   }
+   d->forceDisabled = !b;
+   if (b && (!d->visible || (d->group && !d->group->isEnabled()))) {
+      return;
+   }
+   QAPP_CHECK("setEnabled");
+   d->enabled = b;
 #ifndef QT_NO_SHORTCUT
-    d->setShortcutEnabled(b, qApp->d_func()->shortcutMap);
+   d->setShortcutEnabled(b, qApp->d_func()->shortcutMap);
 #endif
-    d->sendDataChanged();
+   d->sendDataChanged();
 }
 
 bool QAction::isEnabled() const
 {
-    Q_D(const QAction);
-    return d->enabled;
+   Q_D(const QAction);
+   return d->enabled;
 }
 
 /*!
@@ -1075,24 +1119,25 @@ bool QAction::isEnabled() const
 */
 void QAction::setVisible(bool b)
 {
-    Q_D(QAction);
-    if (b == d->visible && b != d->forceInvisible)
-        return;
-    QAPP_CHECK("setVisible");
-    d->forceInvisible = !b;
-    d->visible = b;
-    d->enabled = b && !d->forceDisabled && (!d->group || d->group->isEnabled()) ;
+   Q_D(QAction);
+   if (b == d->visible && b != d->forceInvisible) {
+      return;
+   }
+   QAPP_CHECK("setVisible");
+   d->forceInvisible = !b;
+   d->visible = b;
+   d->enabled = b && !d->forceDisabled && (!d->group || d->group->isEnabled()) ;
 #ifndef QT_NO_SHORTCUT
-    d->setShortcutEnabled(d->enabled, qApp->d_func()->shortcutMap);
+   d->setShortcutEnabled(d->enabled, qApp->d_func()->shortcutMap);
 #endif
-    d->sendDataChanged();
+   d->sendDataChanged();
 }
 
 
 bool QAction::isVisible() const
 {
-    Q_D(const QAction);
-    return d->visible;
+   Q_D(const QAction);
+   return d->visible;
 }
 
 /*!
@@ -1102,19 +1147,20 @@ bool
 QAction::event(QEvent *e)
 {
 #ifndef QT_NO_SHORTCUT
-    if (e->type() == QEvent::Shortcut) {
-        QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
-        Q_ASSERT_X(se->key() == d_func()->shortcut || d_func()->alternateShortcuts.contains(se->key()),
-                   "QAction::event",
-                   "Received shortcut event from incorrect shortcut");
-        if (se->isAmbiguous())
-            qWarning("QAction::eventFilter: Ambiguous shortcut overload: %s", QString(se->key()).toLatin1().constData());
-        else
-            activate(Trigger);
-        return true;
-    }
+   if (e->type() == QEvent::Shortcut) {
+      QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
+      Q_ASSERT_X(se->key() == d_func()->shortcut || d_func()->alternateShortcuts.contains(se->key()),
+                 "QAction::event",
+                 "Received shortcut event from incorrect shortcut");
+      if (se->isAmbiguous()) {
+         qWarning("QAction::eventFilter: Ambiguous shortcut overload: %s", QString(se->key()).toLatin1().constData());
+      } else {
+         activate(Trigger);
+      }
+      return true;
+   }
 #endif
-    return QObject::event(e);
+   return QObject::event(e);
 }
 
 /*!
@@ -1125,8 +1171,8 @@ QAction::event(QEvent *e)
 QVariant
 QAction::data() const
 {
-    Q_D(const QAction);
-    return d->userData;
+   Q_D(const QAction);
+   return d->userData;
 }
 
 /*!
@@ -1139,9 +1185,9 @@ QAction::data() const
 void
 QAction::setData(const QVariant &data)
 {
-    Q_D(QAction);
-    d->userData = data;
-    d->sendDataChanged();
+   Q_D(QAction);
+   d->userData = data;
+   d->sendDataChanged();
 }
 
 
@@ -1157,7 +1203,7 @@ QAction::setData(const QVariant &data)
 bool
 QAction::showStatusText(QWidget *widget)
 {
-    return d_func()->showStatusText(widget, statusTip());
+   return d_func()->showStatusText(widget, statusTip());
 }
 
 /*!
@@ -1168,24 +1214,26 @@ QAction::showStatusText(QWidget *widget)
 */
 void QAction::activate(ActionEvent event)
 {
-    Q_D(QAction);
-    if(event == Trigger) {
-        QWeakPointer<QObject> guard = this;
-        if(d->checkable) {
-            // the checked action of an exclusive group cannot be  unchecked
-            if (d->checked && (d->group && d->group->isExclusive()
-                               && d->group->checkedAction() == this)) {
-                if (!guard.isNull())
-                    emit triggered(true);
-                return;
+   Q_D(QAction);
+   if (event == Trigger) {
+      QWeakPointer<QObject> guard = this;
+      if (d->checkable) {
+         // the checked action of an exclusive group cannot be  unchecked
+         if (d->checked && (d->group && d->group->isExclusive()
+                            && d->group->checkedAction() == this)) {
+            if (!guard.isNull()) {
+               emit triggered(true);
             }
-            setChecked(!d->checked);
-        }
-        if (!guard.isNull())
-            emit triggered(d->checked);
-    } else if(event == Hover) {
-        emit hovered();
-    }
+            return;
+         }
+         setChecked(!d->checked);
+      }
+      if (!guard.isNull()) {
+         emit triggered(d->checked);
+      }
+   } else if (event == Hover) {
+      emit hovered();
+   }
 }
 
 /*!
@@ -1353,18 +1401,19 @@ void QAction::activate(ActionEvent event)
 */
 void QAction::setMenuRole(MenuRole menuRole)
 {
-    Q_D(QAction);
-    if (d->menuRole == menuRole)
-        return;
+   Q_D(QAction);
+   if (d->menuRole == menuRole) {
+      return;
+   }
 
-    d->menuRole = menuRole;
-    d->sendDataChanged();
+   d->menuRole = menuRole;
+   d->sendDataChanged();
 }
 
 QAction::MenuRole QAction::menuRole() const
 {
-    Q_D(const QAction);
-    return d->menuRole;
+   Q_D(const QAction);
+   return d->menuRole;
 }
 
 #ifndef qdoc
@@ -1381,18 +1430,19 @@ QAction::MenuRole QAction::menuRole() const
 */
 void QAction::setSoftKeyRole(SoftKeyRole softKeyRole)
 {
-    Q_D(QAction);
-    if (d->softKeyRole == softKeyRole)
-        return;
+   Q_D(QAction);
+   if (d->softKeyRole == softKeyRole) {
+      return;
+   }
 
-    d->softKeyRole = softKeyRole;
-    d->sendDataChanged();
+   d->softKeyRole = softKeyRole;
+   d->sendDataChanged();
 }
 
 QAction::SoftKeyRole QAction::softKeyRole() const
 {
-    Q_D(const QAction);
-    return d->softKeyRole;
+   Q_D(const QAction);
+   return d->softKeyRole;
 }
 #endif
 /*!
@@ -1415,43 +1465,43 @@ QAction::SoftKeyRole QAction::softKeyRole() const
 */
 void QAction::setIconVisibleInMenu(bool visible)
 {
-    Q_D(QAction);
-    if (d->iconVisibleInMenu == -1 || visible != bool(d->iconVisibleInMenu)) {
-        int oldValue = d->iconVisibleInMenu;
-        d->iconVisibleInMenu = visible;
-        // Only send data changed if we really need to.
-        if (oldValue != -1
+   Q_D(QAction);
+   if (d->iconVisibleInMenu == -1 || visible != bool(d->iconVisibleInMenu)) {
+      int oldValue = d->iconVisibleInMenu;
+      d->iconVisibleInMenu = visible;
+      // Only send data changed if we really need to.
+      if (oldValue != -1
             || (oldValue == -1
                 && visible == !QApplication::instance()->testAttribute(Qt::AA_DontShowIconsInMenus))) {
-            d->sendDataChanged();
-        }
-    }
+         d->sendDataChanged();
+      }
+   }
 }
 
 bool QAction::isIconVisibleInMenu() const
 {
-    Q_D(const QAction);
-    if (d->iconVisibleInMenu == -1) {
-        return !QApplication::instance()->testAttribute(Qt::AA_DontShowIconsInMenus);
-    }
-    return d->iconVisibleInMenu;
+   Q_D(const QAction);
+   if (d->iconVisibleInMenu == -1) {
+      return !QApplication::instance()->testAttribute(Qt::AA_DontShowIconsInMenus);
+   }
+   return d->iconVisibleInMenu;
 }
 
-void QAction::trigger() 
-{ 
-   activate(Trigger); 
+void QAction::trigger()
+{
+   activate(Trigger);
 }
 
-void QAction::hover() 
-{ 
-   activate(Hover); 
+void QAction::hover()
+{
+   activate(Hover);
 }
 
 void QAction::setDisabled(bool b)
-{ 
+{
    setEnabled(!b);
-} 
-   
+}
+
 
 QT_END_NAMESPACE
 

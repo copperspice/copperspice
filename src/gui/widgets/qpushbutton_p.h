@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,36 +35,40 @@ class QPushButton;
 
 class QPushButtonPrivate : public QAbstractButtonPrivate
 {
-    Q_DECLARE_PUBLIC(QPushButton)
+   Q_DECLARE_PUBLIC(QPushButton)
 
-public:
-    enum AutoDefaultValue { Off = 0, On = 1, Auto = 2 };
+ public:
+   enum AutoDefaultValue { Off = 0, On = 1, Auto = 2 };
 
-    QPushButtonPrivate()
-        : QAbstractButtonPrivate(QSizePolicy::PushButton), autoDefault(Auto),
-          defaultButton(false), flat(false), menuOpen(false), lastAutoDefault(false) {}
+   QPushButtonPrivate()
+      : QAbstractButtonPrivate(QSizePolicy::PushButton), autoDefault(Auto),
+        defaultButton(false), flat(false), menuOpen(false), lastAutoDefault(false) {}
 
-    inline void init() { resetLayoutItemMargins(); }
-    static QPushButtonPrivate* get(QPushButton *b) { return b->d_func(); }
+   inline void init() {
+      resetLayoutItemMargins();
+   }
+   static QPushButtonPrivate *get(QPushButton *b) {
+      return b->d_func();
+   }
 
 #ifdef Q_OS_MAC
-    bool hitButton(const QPoint &pos);
+   bool hitButton(const QPoint &pos);
 #endif
 
 #ifndef QT_NO_MENU
-    QPoint adjustedMenuPosition();
+   QPoint adjustedMenuPosition();
 #endif
 
-    void resetLayoutItemMargins();
-    void _q_popupPressed();
-    QDialog *dialogParent() const;
+   void resetLayoutItemMargins();
+   void _q_popupPressed();
+   QDialog *dialogParent() const;
 
-    QPointer<QMenu> menu;
-    uint autoDefault : 2;
-    uint defaultButton : 1;
-    uint flat : 1;
-    uint menuOpen : 1;
-    mutable uint lastAutoDefault : 1;
+   QPointer<QMenu> menu;
+   uint autoDefault : 2;
+   uint defaultButton : 1;
+   uint flat : 1;
+   uint menuOpen : 1;
+   mutable uint lastAutoDefault : 1;
 };
 
 QT_END_NAMESPACE

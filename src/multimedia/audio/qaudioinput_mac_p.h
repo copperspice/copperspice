@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,90 +46,89 @@ class QTimer;
 class QIODevice;
 class QAbstractAudioDeviceInfo;
 
-namespace QtMultimediaInternal
-{
+namespace QtMultimediaInternal {
 class QAudioInputBuffer;
 }
 
 class QAudioInputPrivate : public QAbstractAudioInput
 {
-    CS_OBJECT(QAudioInputPrivate)
+   CS_OBJECT(QAudioInputPrivate)
 
-public:
-    bool            isOpen;
-    int             periodSizeBytes;
-    int             internalBufferSize;
-    qint64          totalFrames;
-    QAudioFormat    audioFormat;
-    QIODevice*      audioIO;
-    AudioUnit       audioUnit;
-    AudioDeviceID   audioDeviceId;
-    Float64         clockFrequency;
-    UInt64          startTime;
-    QAudio::Error   errorCode;
-    QAudio::State   stateCode;
-    QtMultimediaInternal::QAudioInputBuffer*   audioBuffer;
-    QMutex          mutex;
-    QWaitCondition  threadFinished;
-    QAtomicInt      audioThreadState;
-    QTimer*         intervalTimer;
-    AudioStreamBasicDescription streamFormat;
-    AudioStreamBasicDescription deviceFormat;
-    QAbstractAudioDeviceInfo *audioDeviceInfo;
+ public:
+   bool            isOpen;
+   int             periodSizeBytes;
+   int             internalBufferSize;
+   qint64          totalFrames;
+   QAudioFormat    audioFormat;
+   QIODevice      *audioIO;
+   AudioUnit       audioUnit;
+   AudioDeviceID   audioDeviceId;
+   Float64         clockFrequency;
+   UInt64          startTime;
+   QAudio::Error   errorCode;
+   QAudio::State   stateCode;
+   QtMultimediaInternal::QAudioInputBuffer   *audioBuffer;
+   QMutex          mutex;
+   QWaitCondition  threadFinished;
+   QAtomicInt      audioThreadState;
+   QTimer         *intervalTimer;
+   AudioStreamBasicDescription streamFormat;
+   AudioStreamBasicDescription deviceFormat;
+   QAbstractAudioDeviceInfo *audioDeviceInfo;
 
-    QAudioInputPrivate(const QByteArray& device, QAudioFormat const& format);
-    ~QAudioInputPrivate();
+   QAudioInputPrivate(const QByteArray &device, QAudioFormat const &format);
+   ~QAudioInputPrivate();
 
-    bool open();
-    void close();
+   bool open();
+   void close();
 
-    QAudioFormat format() const;
+   QAudioFormat format() const;
 
-    QIODevice* start(QIODevice* device);
-    void stop();
-    void reset();
-    void suspend();
-    void resume();
-    void idle();
+   QIODevice *start(QIODevice *device);
+   void stop();
+   void reset();
+   void suspend();
+   void resume();
+   void idle();
 
-    int bytesReady() const;
-    int periodSize() const;
+   int bytesReady() const;
+   int periodSize() const;
 
-    void setBufferSize(int value);
-    int bufferSize() const;
+   void setBufferSize(int value);
+   int bufferSize() const;
 
-    void setNotifyInterval(int milliSeconds);
-    int notifyInterval() const;
+   void setNotifyInterval(int milliSeconds);
+   int notifyInterval() const;
 
-    qint64 processedUSecs() const;
-    qint64 elapsedUSecs() const;
+   qint64 processedUSecs() const;
+   qint64 elapsedUSecs() const;
 
-    QAudio::Error error() const;
-    QAudio::State state() const;
+   QAudio::Error error() const;
+   QAudio::State state() const;
 
-    void audioThreadStart();
-    void audioThreadStop();
+   void audioThreadStart();
+   void audioThreadStop();
 
-    void audioDeviceStop();
-    void audioDeviceFull();
-    void audioDeviceError();
+   void audioDeviceStop();
+   void audioDeviceFull();
+   void audioDeviceError();
 
-    void startTimers();
-    void stopTimers();
+   void startTimers();
+   void stopTimers();
 
-private :
-    MULTI_CS_SLOT_1(Private, void deviceStopped())
-    MULTI_CS_SLOT_2(deviceStopped) 
+ private :
+   MULTI_CS_SLOT_1(Private, void deviceStopped())
+   MULTI_CS_SLOT_2(deviceStopped)
 
-    enum { Running, Stopped };
+   enum { Running, Stopped };
 
-    // Input callback
-    static OSStatus inputCallback(void* inRefCon,
-                                    AudioUnitRenderActionFlags* ioActionFlags,
-                                    const AudioTimeStamp* inTimeStamp,
-                                    UInt32 inBusNumber,
-                                    UInt32 inNumberFrames,
-                                    AudioBufferList* ioData);
+   // Input callback
+   static OSStatus inputCallback(void *inRefCon,
+                                 AudioUnitRenderActionFlags *ioActionFlags,
+                                 const AudioTimeStamp *inTimeStamp,
+                                 UInt32 inBusNumber,
+                                 UInt32 inNumberFrames,
+                                 AudioBufferList *ioData);
 };
 
 QT_END_NAMESPACE

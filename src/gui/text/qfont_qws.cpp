@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -50,7 +50,7 @@ void QFont::initialize()
 
 void QFont::cleanup()
 {
-    QFontCache::cleanup();
+   QFontCache::cleanup();
 }
 
 
@@ -61,28 +61,29 @@ void QFont::cleanup()
 Qt::HANDLE QFont::handle() const
 {
 #ifndef QT_NO_FREETYPE
-    return freetypeFace();
+   return freetypeFace();
 #endif
-    return 0;
+   return 0;
 }
 
 FT_Face QFont::freetypeFace() const
 {
 #ifndef QT_NO_FREETYPE
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    if (engine->type() == QFontEngine::Multi)
-        engine = static_cast<QFontEngineMulti *>(engine)->engine(0);
-    if (engine->type() == QFontEngine::Freetype) {
-        const QFontEngineFT *ft = static_cast<const QFontEngineFT *>(engine);
-        return ft->non_locked_face();
-    }
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   if (engine->type() == QFontEngine::Multi) {
+      engine = static_cast<QFontEngineMulti *>(engine)->engine(0);
+   }
+   if (engine->type() == QFontEngine::Freetype) {
+      const QFontEngineFT *ft = static_cast<const QFontEngineFT *>(engine);
+      return ft->non_locked_face();
+   }
 #endif
-    return 0;
+   return 0;
 }
 
 QString QFont::rawName() const
 {
-    return QLatin1String("unknown");
+   return QLatin1String("unknown");
 }
 
 void QFont::setRawName(const QString &)
@@ -91,31 +92,31 @@ void QFont::setRawName(const QString &)
 
 QString QFont::defaultFamily() const
 {
-    switch(d->request.styleHint) {
-        case QFont::Times:
-            return QString::fromLatin1("times");
-        case QFont::Courier:
-        case QFont::Monospace:
-            return QString::fromLatin1("courier");
-        case QFont::Decorative:
-            return QString::fromLatin1("old english");
-        case QFont::Helvetica:
-        case QFont::System:
-        default:
-            return QString::fromLatin1("helvetica");
-    }
+   switch (d->request.styleHint) {
+      case QFont::Times:
+         return QString::fromLatin1("times");
+      case QFont::Courier:
+      case QFont::Monospace:
+         return QString::fromLatin1("courier");
+      case QFont::Decorative:
+         return QString::fromLatin1("old english");
+      case QFont::Helvetica:
+      case QFont::System:
+      default:
+         return QString::fromLatin1("helvetica");
+   }
 }
 
 QString QFont::lastResortFamily() const
 {
-    return QString::fromLatin1("helvetica");
+   return QString::fromLatin1("helvetica");
 }
 
 QString QFont::lastResortFont() const
 {
-    qFatal("QFont::lastResortFont: Cannot find any reasonable font");
-    // Shut compiler up
-    return QString();
+   qFatal("QFont::lastResortFont: Cannot find any reasonable font");
+   // Shut compiler up
+   return QString();
 }
 
 

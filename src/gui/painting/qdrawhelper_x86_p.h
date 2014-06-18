@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -92,9 +92,9 @@ void qt_blend_argb32_on_argb32_sse2(uchar *destPixels, int dbpl,
                                     int w, int h,
                                     int const_alpha);
 void qt_blend_rgb32_on_rgb32_sse2(uchar *destPixels, int dbpl,
-                                 const uchar *srcPixels, int sbpl,
-                                 int w, int h,
-                                 int const_alpha);
+                                  const uchar *srcPixels, int sbpl,
+                                  int w, int h,
+                                  int const_alpha);
 
 extern CompositionFunction qt_functionForMode_onlySSE2[];
 extern CompositionFunctionSolid qt_functionForModeSolid_onlySSE2[];

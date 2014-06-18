@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -54,43 +54,45 @@ QT_BEGIN_NAMESPACE
 
 class QErrorMessagePrivate : public QDialogPrivate
 {
-    Q_DECLARE_PUBLIC(QErrorMessage)
-public:
-    QPushButton * ok;
-    QCheckBox * again;
-    QTextEdit * errors;
-    QLabel * icon;
+   Q_DECLARE_PUBLIC(QErrorMessage)
+ public:
+   QPushButton *ok;
+   QCheckBox *again;
+   QTextEdit *errors;
+   QLabel *icon;
 #ifdef QT_SOFTKEYS_ENABLED
-    QAction *okAction;
+   QAction *okAction;
 #endif
-    QQueue<QPair<QString, QString> > pending;
-    QSet<QString> doNotShow;
-    QSet<QString> doNotShowType;
-    QString currentMessage;
-    QString currentType;
+   QQueue<QPair<QString, QString> > pending;
+   QSet<QString> doNotShow;
+   QSet<QString> doNotShowType;
+   QString currentMessage;
+   QString currentType;
 
-    bool nextPending();
-    void retranslateStrings();
+   bool nextPending();
+   void retranslateStrings();
 };
 
 class QErrorMessageTextView : public QTextEdit
 {
-public:
-    QErrorMessageTextView(QWidget *parent)
-        : QTextEdit(parent) { setReadOnly(true); }
+ public:
+   QErrorMessageTextView(QWidget *parent)
+      : QTextEdit(parent) {
+      setReadOnly(true);
+   }
 
-    virtual QSize minimumSizeHint() const;
-    virtual QSize sizeHint() const;
+   virtual QSize minimumSizeHint() const;
+   virtual QSize sizeHint() const;
 };
 
 QSize QErrorMessageTextView::minimumSizeHint() const
 {
-    return QSize(50, 50);
+   return QSize(50, 50);
 }
 
 QSize QErrorMessageTextView::sizeHint() const
 {
-    return QSize(250, 75);
+   return QSize(250, 75);
 }
 
 /*!
@@ -131,51 +133,53 @@ QSize QErrorMessageTextView::sizeHint() const
     \sa QMessageBox, QStatusBar::showMessage(), {Standard Dialogs Example}
 */
 
-static QErrorMessage * qtMessageHandler = 0;
+static QErrorMessage *qtMessageHandler = 0;
 
 static void deleteStaticcQErrorMessage() // post-routine
 {
-    if (qtMessageHandler) {
-        delete qtMessageHandler;
-        qtMessageHandler = 0;
-    }
+   if (qtMessageHandler) {
+      delete qtMessageHandler;
+      qtMessageHandler = 0;
+   }
 }
 
 static bool metFatal = false;
 
-static void jump(QtMsgType t, const char * m)
+static void jump(QtMsgType t, const char *m)
 {
-    if (!qtMessageHandler)
-        return;
+   if (!qtMessageHandler) {
+      return;
+   }
 
-    QString rich;
+   QString rich;
 
-    switch (t) {
-    case QtDebugMsg:
-    default:
-        rich = QErrorMessage::tr("Debug Message:");
-        break;
-    case QtWarningMsg:
-        rich = QErrorMessage::tr("Warning:");
-        break;
-    case QtFatalMsg:
-        rich = QErrorMessage::tr("Fatal Error:");
-    }
-    rich = QString::fromLatin1("<p><b>%1</b></p>").arg(rich);
-    rich += Qt::convertFromPlainText(QLatin1String(m), Qt::WhiteSpaceNormal);
+   switch (t) {
+      case QtDebugMsg:
+      default:
+         rich = QErrorMessage::tr("Debug Message:");
+         break;
+      case QtWarningMsg:
+         rich = QErrorMessage::tr("Warning:");
+         break;
+      case QtFatalMsg:
+         rich = QErrorMessage::tr("Fatal Error:");
+   }
+   rich = QString::fromLatin1("<p><b>%1</b></p>").arg(rich);
+   rich += Qt::convertFromPlainText(QLatin1String(m), Qt::WhiteSpaceNormal);
 
-    // ### work around text engine quirk
-    if (rich.endsWith(QLatin1String("</p>")))
-        rich.chop(4);
+   // ### work around text engine quirk
+   if (rich.endsWith(QLatin1String("</p>"))) {
+      rich.chop(4);
+   }
 
-    if (!metFatal) {
-        if (QThread::currentThread() == qApp->thread()) {
-            qtMessageHandler->showMessage(rich);
-        } else {
-            QMetaObject::invokeMethod(qtMessageHandler, "showMessage", Qt::QueuedConnection, Q_ARG(const QString &, rich));
-        }
-        metFatal = (t == QtFatalMsg);
-    }
+   if (!metFatal) {
+      if (QThread::currentThread() == qApp->thread()) {
+         qtMessageHandler->showMessage(rich);
+      } else {
+         QMetaObject::invokeMethod(qtMessageHandler, "showMessage", Qt::QueuedConnection, Q_ARG(const QString &, rich));
+      }
+      metFatal = (t == QtFatalMsg);
+   }
 }
 
 
@@ -184,41 +188,41 @@ static void jump(QtMsgType t, const char * m)
     parent.
 */
 
-QErrorMessage::QErrorMessage(QWidget * parent)
-    : QDialog(*new QErrorMessagePrivate, parent)
+QErrorMessage::QErrorMessage(QWidget *parent)
+   : QDialog(*new QErrorMessagePrivate, parent)
 {
-    Q_D(QErrorMessage);
-    QGridLayout * grid = new QGridLayout(this);
-    d->icon = new QLabel(this);
+   Q_D(QErrorMessage);
+   QGridLayout *grid = new QGridLayout(this);
+   d->icon = new QLabel(this);
 #ifndef QT_NO_MESSAGEBOX
-    d->icon->setPixmap(QMessageBox::standardIcon(QMessageBox::Information));
-    d->icon->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+   d->icon->setPixmap(QMessageBox::standardIcon(QMessageBox::Information));
+   d->icon->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 #endif
 
-    const int preferredIconColumn = 0;
-    const int preferredTextColumn = 1;
+   const int preferredIconColumn = 0;
+   const int preferredTextColumn = 1;
 
-    grid->addWidget(d->icon, 0, preferredIconColumn, Qt::AlignTop);
-    d->errors = new QErrorMessageTextView(this);
-    grid->addWidget(d->errors, 0, preferredTextColumn);
-    d->again = new QCheckBox(this);
-    d->again->setChecked(true);
-    grid->addWidget(d->again, 1, preferredTextColumn, Qt::AlignTop);
-    d->ok = new QPushButton(this);
+   grid->addWidget(d->icon, 0, preferredIconColumn, Qt::AlignTop);
+   d->errors = new QErrorMessageTextView(this);
+   grid->addWidget(d->errors, 0, preferredTextColumn);
+   d->again = new QCheckBox(this);
+   d->again->setChecked(true);
+   grid->addWidget(d->again, 1, preferredTextColumn, Qt::AlignTop);
+   d->ok = new QPushButton(this);
 
 #ifdef QT_SOFTKEYS_ENABLED
-    d->okAction = new QAction(d->ok);
-    d->okAction->setSoftKeyRole(QAction::PositiveSoftKey);
-    connect(d->okAction, SIGNAL(triggered()), this, SLOT(accept()));
-    addAction(d->okAction);
+   d->okAction = new QAction(d->ok);
+   d->okAction->setSoftKeyRole(QAction::PositiveSoftKey);
+   connect(d->okAction, SIGNAL(triggered()), this, SLOT(accept()));
+   addAction(d->okAction);
 #endif
 
-    connect(d->ok, SIGNAL(clicked()), this, SLOT(accept()));
-    d->ok->setFocus();
-    grid->addWidget(d->ok, 2, 0, 1, 2, Qt::AlignCenter);
-    grid->setColumnStretch(preferredTextColumn, 42);
-    grid->setRowStretch(0, 42);
-    d->retranslateStrings();
+   connect(d->ok, SIGNAL(clicked()), this, SLOT(accept()));
+   d->ok->setFocus();
+   grid->addWidget(d->ok, 2, 0, 1, 2, Qt::AlignCenter);
+   grid->setColumnStretch(preferredTextColumn, 42);
+   grid->setRowStretch(0, 42);
+   d->retranslateStrings();
 }
 
 
@@ -228,13 +232,14 @@ QErrorMessage::QErrorMessage(QWidget * parent)
 
 QErrorMessage::~QErrorMessage()
 {
-    if (this == qtMessageHandler) {
-        qtMessageHandler = 0;
-        QtMsgHandler tmp = qInstallMsgHandler(0);
-        // in case someone else has later stuck in another...
-        if (tmp != jump)
-            qInstallMsgHandler(tmp);
-    }
+   if (this == qtMessageHandler) {
+      qtMessageHandler = 0;
+      QtMsgHandler tmp = qInstallMsgHandler(0);
+      // in case someone else has later stuck in another...
+      if (tmp != jump) {
+         qInstallMsgHandler(tmp);
+      }
+   }
 }
 
 
@@ -242,20 +247,21 @@ QErrorMessage::~QErrorMessage()
 
 void QErrorMessage::done(int a)
 {
-    Q_D(QErrorMessage);
-    if (!d->again->isChecked() && !d->currentMessage.isEmpty() && d->currentType.isEmpty()) {
-        d->doNotShow.insert(d->currentMessage);
-    }
-    if (!d->again->isChecked() && !d->currentType.isEmpty()) {
-        d->doNotShowType.insert(d->currentType);
-    }
-    d->currentMessage.clear();
-    d->currentType.clear();
-    if (!d->nextPending()) {
-        QDialog::done(a);
-        if (this == qtMessageHandler && metFatal)
-            exit(1);
-    }
+   Q_D(QErrorMessage);
+   if (!d->again->isChecked() && !d->currentMessage.isEmpty() && d->currentType.isEmpty()) {
+      d->doNotShow.insert(d->currentMessage);
+   }
+   if (!d->again->isChecked() && !d->currentType.isEmpty()) {
+      d->doNotShowType.insert(d->currentType);
+   }
+   d->currentMessage.clear();
+   d->currentType.clear();
+   if (!d->nextPending()) {
+      QDialog::done(a);
+      if (this == qtMessageHandler && metFatal) {
+         exit(1);
+      }
+   }
 }
 
 
@@ -265,15 +271,15 @@ void QErrorMessage::done(int a)
     isn't one already.
 */
 
-QErrorMessage * QErrorMessage::qtHandler()
+QErrorMessage *QErrorMessage::qtHandler()
 {
-    if (!qtMessageHandler) {
-        qtMessageHandler = new QErrorMessage(0);
-        qAddPostRoutine(deleteStaticcQErrorMessage); // clean up
-        qtMessageHandler->setWindowTitle(QApplication::applicationName());
-        qInstallMsgHandler(jump);
-    }
-    return qtMessageHandler;
+   if (!qtMessageHandler) {
+      qtMessageHandler = new QErrorMessage(0);
+      qAddPostRoutine(deleteStaticcQErrorMessage); // clean up
+      qtMessageHandler->setWindowTitle(QApplication::applicationName());
+      qInstallMsgHandler(jump);
+   }
+   return qtMessageHandler;
 }
 
 
@@ -281,22 +287,23 @@ QErrorMessage * QErrorMessage::qtHandler()
 
 bool QErrorMessagePrivate::nextPending()
 {
-    while (!pending.isEmpty()) {
-        QPair<QString,QString> pendingMessage = pending.dequeue();
-        QString message = pendingMessage.first;
-        QString type = pendingMessage.second;
-        if (!message.isEmpty() && ((type.isEmpty() && !doNotShow.contains(message)) || (!type.isEmpty() && !doNotShowType.contains(type)))) {
+   while (!pending.isEmpty()) {
+      QPair<QString, QString> pendingMessage = pending.dequeue();
+      QString message = pendingMessage.first;
+      QString type = pendingMessage.second;
+      if (!message.isEmpty() && ((type.isEmpty() && !doNotShow.contains(message)) || (!type.isEmpty() &&
+                                 !doNotShowType.contains(type)))) {
 #ifndef QT_NO_TEXTHTMLPARSER
-            errors->setHtml(message);
+         errors->setHtml(message);
 #else
-            errors->setPlainText(message);
+         errors->setPlainText(message);
 #endif
-            currentMessage = message;
-            currentType = type;
-            return true;
-        }
-    }
-    return false;
+         currentMessage = message;
+         currentType = type;
+         return true;
+      }
+   }
+   return false;
 }
 
 
@@ -311,12 +318,14 @@ bool QErrorMessagePrivate::nextPending()
 
 void QErrorMessage::showMessage(const QString &message)
 {
-    Q_D(QErrorMessage);
-    if (d->doNotShow.contains(message))
-        return;
-    d->pending.enqueue(qMakePair(message,QString()));
-    if (!isVisible() && d->nextPending())
-        show();
+   Q_D(QErrorMessage);
+   if (d->doNotShow.contains(message)) {
+      return;
+   }
+   d->pending.enqueue(qMakePair(message, QString()));
+   if (!isVisible() && d->nextPending()) {
+      show();
+   }
 }
 
 /*!
@@ -335,12 +344,14 @@ void QErrorMessage::showMessage(const QString &message)
 
 void QErrorMessage::showMessage(const QString &message, const QString &type)
 {
-    Q_D(QErrorMessage);
-    if (d->doNotShow.contains(message) && d->doNotShowType.contains(type))
-        return;
-     d->pending.push_back(qMakePair(message,type));
-    if (!isVisible() && d->nextPending())
-        show();
+   Q_D(QErrorMessage);
+   if (d->doNotShow.contains(message) && d->doNotShowType.contains(type)) {
+      return;
+   }
+   d->pending.push_back(qMakePair(message, type));
+   if (!isVisible() && d->nextPending()) {
+      show();
+   }
 }
 
 /*!
@@ -348,19 +359,19 @@ void QErrorMessage::showMessage(const QString &message, const QString &type)
 */
 void QErrorMessage::changeEvent(QEvent *e)
 {
-    Q_D(QErrorMessage);
-    if (e->type() == QEvent::LanguageChange) {
-        d->retranslateStrings();
-    }
-    QDialog::changeEvent(e);
+   Q_D(QErrorMessage);
+   if (e->type() == QEvent::LanguageChange) {
+      d->retranslateStrings();
+   }
+   QDialog::changeEvent(e);
 }
 
 void QErrorMessagePrivate::retranslateStrings()
 {
-    again->setText(QErrorMessage::tr("&Show this message again"));
-    ok->setText(QErrorMessage::tr("&OK"));
+   again->setText(QErrorMessage::tr("&Show this message again"));
+   ok->setText(QErrorMessage::tr("&OK"));
 #ifdef QT_SOFTKEYS_ENABLED
-    okAction->setText(ok->text());
+   okAction->setText(ok->text());
 #endif
 }
 

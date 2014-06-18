@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,72 +44,80 @@ QT_BEGIN_NAMESPACE
 // UnixWare 7 redefines socket -> _socket
 static inline int qt_safe_socket(int domain, int type, int protocol, int flags = 0)
 {
-    Q_ASSERT((flags & ~O_NONBLOCK) == 0);
+   Q_ASSERT((flags & ~O_NONBLOCK) == 0);
 
-    int fd;
+   int fd;
 #if defined(SOCK_CLOEXEC) && defined(SOCK_NONBLOCK)
-    int newtype = type | SOCK_CLOEXEC;
-    if (flags & O_NONBLOCK)
-        newtype |= SOCK_NONBLOCK;
-    fd = ::socket(domain, newtype, protocol);
-    if (fd != -1 || errno != EINVAL)
-        return fd;
+   int newtype = type | SOCK_CLOEXEC;
+   if (flags & O_NONBLOCK) {
+      newtype |= SOCK_NONBLOCK;
+   }
+   fd = ::socket(domain, newtype, protocol);
+   if (fd != -1 || errno != EINVAL) {
+      return fd;
+   }
 #endif
 
-    fd = ::socket(domain, type, protocol);
-    if (fd == -1)
-        return -1;
+   fd = ::socket(domain, type, protocol);
+   if (fd == -1) {
+      return -1;
+   }
 
-    ::fcntl(fd, F_SETFD, FD_CLOEXEC);
+   ::fcntl(fd, F_SETFD, FD_CLOEXEC);
 
-    // set non-block too?
-    if (flags & O_NONBLOCK)
-        ::fcntl(fd, F_SETFL, ::fcntl(fd, F_GETFL) | O_NONBLOCK);
+   // set non-block too?
+   if (flags & O_NONBLOCK) {
+      ::fcntl(fd, F_SETFL, ::fcntl(fd, F_GETFL) | O_NONBLOCK);
+   }
 
-    return fd;
+   return fd;
 }
 
 // Tru64 redefines accept -> _accept with _XOPEN_SOURCE_EXTENDED
 static inline int qt_safe_accept(int s, struct sockaddr *addr, QT_SOCKLEN_T *addrlen, int flags = 0)
 {
-    Q_ASSERT((flags & ~O_NONBLOCK) == 0);
+   Q_ASSERT((flags & ~O_NONBLOCK) == 0);
 
-    int fd;
+   int fd;
 #if QT_UNIX_SUPPORTS_THREADSAFE_CLOEXEC && defined(SOCK_CLOEXEC) && defined(SOCK_NONBLOCK)
-    // use accept4
-    int sockflags = SOCK_CLOEXEC;
-    if (flags & O_NONBLOCK)
-        sockflags |= SOCK_NONBLOCK;
-    fd = ::accept4(s, addr, static_cast<QT_SOCKLEN_T *>(addrlen), sockflags);
-    if (fd != -1 || !(errno == ENOSYS || errno == EINVAL))
-        return fd;
+   // use accept4
+   int sockflags = SOCK_CLOEXEC;
+   if (flags & O_NONBLOCK) {
+      sockflags |= SOCK_NONBLOCK;
+   }
+   fd = ::accept4(s, addr, static_cast<QT_SOCKLEN_T *>(addrlen), sockflags);
+   if (fd != -1 || !(errno == ENOSYS || errno == EINVAL)) {
+      return fd;
+   }
 #endif
 
-    fd = ::accept(s, addr, static_cast<QT_SOCKLEN_T *>(addrlen));
-    if (fd == -1)
-        return -1;
+   fd = ::accept(s, addr, static_cast<QT_SOCKLEN_T *>(addrlen));
+   if (fd == -1) {
+      return -1;
+   }
 
-    ::fcntl(fd, F_SETFD, FD_CLOEXEC);
+   ::fcntl(fd, F_SETFD, FD_CLOEXEC);
 
-    // set non-block too?
-    if (flags & O_NONBLOCK)
-        ::fcntl(fd, F_SETFL, ::fcntl(fd, F_GETFL) | O_NONBLOCK);
+   // set non-block too?
+   if (flags & O_NONBLOCK) {
+      ::fcntl(fd, F_SETFL, ::fcntl(fd, F_GETFL) | O_NONBLOCK);
+   }
 
-    return fd;
+   return fd;
 }
 
 // UnixWare 7 redefines listen -> _listen
 static inline int qt_safe_listen(int s, int backlog)
 {
-    return ::listen(s, backlog);
+   return ::listen(s, backlog);
 }
 
 static inline int qt_safe_connect(int sockfd, const struct sockaddr *addr, QT_SOCKLEN_T addrlen)
 {
-    int ret;
-    // Solaris e.g. expects a non-const 2nd parameter
-    EINTR_LOOP(ret, QT_SOCKET_CONNECT(sockfd, const_cast<struct sockaddr *>(addr), addrlen));
-    return ret;
+   int ret;
+   // Solaris e.g. expects a non-const 2nd parameter
+   EINTR_LOOP(ret, QT_SOCKET_CONNECT(sockfd, const_cast<struct sockaddr *>(addr), addrlen));
+   return ret;
 }
 #undef QT_SOCKET_CONNECT
 #define QT_SOCKET_CONNECT qt_safe_connect
@@ -138,18 +146,19 @@ static inline in_addr_t qt_safe_inet_addr(const char *cp)
 }
 
 // VxWorks' headers do not specify any const modifiers
-static inline int qt_safe_sendto(int sockfd, const void *buf, size_t len, int flags, const struct sockaddr *to, QT_SOCKLEN_T tolen)
+static inline int qt_safe_sendto(int sockfd, const void *buf, size_t len, int flags, const struct sockaddr *to,
+                                 QT_SOCKLEN_T tolen)
 {
 #ifdef MSG_NOSIGNAL
-    flags |= MSG_NOSIGNAL;
+   flags |= MSG_NOSIGNAL;
 #else
-    qt_ignore_sigpipe();
+   qt_ignore_sigpipe();
 #endif
 
-    int ret;
-    EINTR_LOOP(ret, ::sendto(sockfd, buf, len, flags, to, tolen));
+   int ret;
+   EINTR_LOOP(ret, ::sendto(sockfd, buf, len, flags, to, tolen));
 
-    return ret;
+   return ret;
 }
 
 QT_END_NAMESPACE

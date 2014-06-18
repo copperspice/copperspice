@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,18 +35,18 @@ extern void qt_painter_removePaintDevice(QPaintDevice *); //qpainter.cpp
 
 int QPaintDevice::metric(PaintDeviceMetric m) const
 {
-    qWarning("QPaintDevice::metrics: Device has no metric information");
-    if (m == PdmDpiX) {
-        return 72;
-    } else if (m == PdmDpiY) {
-        return 72;
-    } else if (m == PdmNumColors) {
-        // FIXME: does this need to be a real value?
-        return 256;
-    } else {
-        qDebug("Unrecognised metric %d!",m);
-        return 0;
-    }
+   qWarning("QPaintDevice::metrics: Device has no metric information");
+   if (m == PdmDpiX) {
+      return 72;
+   } else if (m == PdmDpiY) {
+      return 72;
+   } else if (m == PdmNumColors) {
+      // FIXME: does this need to be a real value?
+      return 256;
+   } else {
+      qDebug("Unrecognised metric %d!", m);
+      return 0;
+   }
 }
 
 QT_END_NAMESPACE

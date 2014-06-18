@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,14 +40,14 @@ QT_BEGIN_NAMESPACE
 
 class QSplashScreenPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QSplashScreen)
-public:
-    QPixmap pixmap;
-    QString currStatus;
-    QColor currColor;
-    int currAlign;
+   Q_DECLARE_PUBLIC(QSplashScreen)
+ public:
+   QPixmap pixmap;
+   QString currStatus;
+   QColor currColor;
+   int currAlign;
 
-    inline QSplashScreenPrivate();
+   inline QSplashScreenPrivate();
 };
 
 /*!
@@ -104,9 +104,9 @@ public:
     perhaps Qt::WindowStaysOnTopHint.
 */
 QSplashScreen::QSplashScreen(const QPixmap &pixmap, Qt::WindowFlags f)
-    : QWidget(*(new QSplashScreenPrivate()), 0, Qt::SplashScreen | Qt::FramelessWindowHint | f)
+   : QWidget(*(new QSplashScreenPrivate()), 0, Qt::SplashScreen | Qt::FramelessWindowHint | f)
 {
-    setPixmap(pixmap);  // Does an implicit repaint
+   setPixmap(pixmap);  // Does an implicit repaint
 }
 
 /*!
@@ -118,10 +118,10 @@ QSplashScreen::QSplashScreen(const QPixmap &pixmap, Qt::WindowFlags f)
     one. In that case pass the proper desktop() as the \a parent.
 */
 QSplashScreen::QSplashScreen(QWidget *parent, const QPixmap &pixmap, Qt::WindowFlags f)
-    : QWidget(*new QSplashScreenPrivate, parent, Qt::SplashScreen | f)
+   : QWidget(*new QSplashScreenPrivate, parent, Qt::SplashScreen | f)
 {
-    d_func()->pixmap = pixmap;
-    setPixmap(d_func()->pixmap);  // Does an implicit repaint
+   d_func()->pixmap = pixmap;
+   setPixmap(d_func()->pixmap);  // Does an implicit repaint
 }
 
 /*!
@@ -136,7 +136,7 @@ QSplashScreen::~QSplashScreen()
 */
 void QSplashScreen::mousePressEvent(QMouseEvent *)
 {
-    hide();
+   hide();
 }
 
 /*!
@@ -147,8 +147,8 @@ void QSplashScreen::mousePressEvent(QMouseEvent *)
 */
 void QSplashScreen::repaint()
 {
-    QWidget::repaint();
-    QApplication::flush();
+   QWidget::repaint();
+   QApplication::flush();
 }
 
 /*!
@@ -179,12 +179,12 @@ void QSplashScreen::repaint()
 void QSplashScreen::showMessage(const QString &message, int alignment,
                                 const QColor &color)
 {
-    Q_D(QSplashScreen);
-    d->currStatus = message;
-    d->currAlign = alignment;
-    d->currColor = color;
-    emit messageChanged(d->currStatus);
-    repaint();
+   Q_D(QSplashScreen);
+   d->currStatus = message;
+   d->currAlign = alignment;
+   d->currColor = color;
+   emit messageChanged(d->currStatus);
+   repaint();
 }
 
 /*!
@@ -194,9 +194,9 @@ void QSplashScreen::showMessage(const QString &message, int alignment,
  */
 void QSplashScreen::clearMessage()
 {
-    d_func()->currStatus.clear();
-    emit messageChanged(d_func()->currStatus);
-    repaint();
+   d_func()->currStatus.clear();
+   emit messageChanged(d_func()->currStatus);
+   repaint();
 }
 
 /*!
@@ -205,13 +205,13 @@ void QSplashScreen::clearMessage()
 */
 void QSplashScreen::finish(QWidget *mainWin)
 {
-    if (mainWin) {
+   if (mainWin) {
 #if defined(Q_WS_X11)
-        extern void qt_x11_wait_for_window_manager(QWidget *mainWin, bool);
-        qt_x11_wait_for_window_manager(mainWin, false);
+      extern void qt_x11_wait_for_window_manager(QWidget * mainWin, bool);
+      qt_x11_wait_for_window_manager(mainWin, false);
 #endif
-    }
-    close();
+   }
+   close();
 }
 
 /*!
@@ -220,16 +220,17 @@ void QSplashScreen::finish(QWidget *mainWin)
 */
 void QSplashScreen::setPixmap(const QPixmap &pixmap)
 {
-    Q_D(QSplashScreen);
+   Q_D(QSplashScreen);
 
-    d->pixmap = pixmap;
-    setAttribute(Qt::WA_TranslucentBackground, pixmap.hasAlpha());
+   d->pixmap = pixmap;
+   setAttribute(Qt::WA_TranslucentBackground, pixmap.hasAlpha());
 
-    QRect r(QPoint(), d->pixmap.size());
-    resize(r.size());
-    move(QApplication::desktop()->screenGeometry().center() - r.center());
-    if (isVisible())
-        repaint();
+   QRect r(QPoint(), d->pixmap.size());
+   resize(r.size());
+   move(QApplication::desktop()->screenGeometry().center() - r.center());
+   if (isVisible()) {
+      repaint();
+   }
 }
 
 /*!
@@ -238,7 +239,7 @@ void QSplashScreen::setPixmap(const QPixmap &pixmap)
 */
 const QPixmap QSplashScreen::pixmap() const
 {
-    return d_func()->pixmap;
+   return d_func()->pixmap;
 }
 
 /*!
@@ -256,29 +257,29 @@ inline QSplashScreenPrivate::QSplashScreenPrivate() : currAlign(Qt::AlignLeft)
 */
 void QSplashScreen::drawContents(QPainter *painter)
 {
-    Q_D(QSplashScreen);
-    painter->setPen(d->currColor);
-    QRect r = rect().adjusted(5, 5, -5, -5);
-    if (Qt::mightBeRichText(d->currStatus)) {
-        QTextDocument doc;
+   Q_D(QSplashScreen);
+   painter->setPen(d->currColor);
+   QRect r = rect().adjusted(5, 5, -5, -5);
+   if (Qt::mightBeRichText(d->currStatus)) {
+      QTextDocument doc;
 #ifdef QT_NO_TEXTHTMLPARSER
-        doc.setPlainText(d->currStatus);
+      doc.setPlainText(d->currStatus);
 #else
-        doc.setHtml(d->currStatus);
+      doc.setHtml(d->currStatus);
 #endif
-        doc.setTextWidth(r.width());
-        QTextCursor cursor(&doc);
-        cursor.select(QTextCursor::Document);
-        QTextBlockFormat fmt;
-        fmt.setAlignment(Qt::Alignment(d->currAlign));
-        cursor.mergeBlockFormat(fmt);
-        painter->save();
-        painter->translate(r.topLeft());
-        doc.drawContents(painter);
-        painter->restore();
-    } else {
-        painter->drawText(r, d->currAlign, d->currStatus);
-    }
+      doc.setTextWidth(r.width());
+      QTextCursor cursor(&doc);
+      cursor.select(QTextCursor::Document);
+      QTextBlockFormat fmt;
+      fmt.setAlignment(Qt::Alignment(d->currAlign));
+      cursor.mergeBlockFormat(fmt);
+      painter->save();
+      painter->translate(r.topLeft());
+      doc.drawContents(painter);
+      painter->restore();
+   } else {
+      painter->drawText(r, d->currAlign, d->currStatus);
+   }
 }
 
 /*!
@@ -299,14 +300,15 @@ void QSplashScreen::drawContents(QPainter *painter)
 /*! \reimp */
 bool QSplashScreen::event(QEvent *e)
 {
-    if (e->type() == QEvent::Paint) {
-        Q_D(QSplashScreen);
-        QPainter painter(this);
-        if (!d->pixmap.isNull())
-            painter.drawPixmap(QPoint(), d->pixmap);
-        drawContents(&painter);
-    }
-    return QWidget::event(e);
+   if (e->type() == QEvent::Paint) {
+      Q_D(QSplashScreen);
+      QPainter painter(this);
+      if (!d->pixmap.isNull()) {
+         painter.drawPixmap(QPoint(), d->pixmap);
+      }
+      drawContents(&painter);
+   }
+   return QWidget::event(e);
 }
 
 QT_END_NAMESPACE

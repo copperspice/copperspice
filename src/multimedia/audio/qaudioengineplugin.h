@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,12 +35,11 @@
 
 QT_BEGIN_NAMESPACE
 
-struct Q_MULTIMEDIA_EXPORT QAudioEngineFactoryInterface : public QFactoryInterface
-{
-    virtual QList<QByteArray> availableDevices(QAudio::Mode) const = 0;
-    virtual QAbstractAudioInput* createInput(const QByteArray& device, const QAudioFormat& format = QAudioFormat()) = 0;
-    virtual QAbstractAudioOutput* createOutput(const QByteArray& device, const QAudioFormat& format = QAudioFormat()) = 0;
-    virtual QAbstractAudioDeviceInfo* createDeviceInfo(const QByteArray& device, QAudio::Mode mode) = 0;
+struct Q_MULTIMEDIA_EXPORT QAudioEngineFactoryInterface : public QFactoryInterface {
+   virtual QList<QByteArray> availableDevices(QAudio::Mode) const = 0;
+   virtual QAbstractAudioInput *createInput(const QByteArray &device, const QAudioFormat &format = QAudioFormat()) = 0;
+   virtual QAbstractAudioOutput *createOutput(const QByteArray &device, const QAudioFormat &format = QAudioFormat()) = 0;
+   virtual QAbstractAudioDeviceInfo *createDeviceInfo(const QByteArray &device, QAudio::Mode mode) = 0;
 };
 
 #define QAudioEngineFactoryInterface_iid  "com.copperspice.QAudioEngineFactoryInterface"
@@ -48,18 +47,18 @@ CS_DECLARE_INTERFACE(QAudioEngineFactoryInterface, QAudioEngineFactoryInterface_
 
 class Q_MULTIMEDIA_EXPORT QAudioEnginePlugin : public QObject, public QAudioEngineFactoryInterface
 {
-    CS_OBJECT(QAudioEnginePlugin)
-    CS_INTERFACES(QAudioEngineFactoryInterface, QFactoryInterface)
+   CS_OBJECT(QAudioEnginePlugin)
+   CS_INTERFACES(QAudioEngineFactoryInterface, QFactoryInterface)
 
-   public:
-       QAudioEnginePlugin(QObject *parent = 0);
-       ~QAudioEnginePlugin();
-   
-       virtual QStringList keys() const = 0;
-       virtual QList<QByteArray> availableDevices(QAudio::Mode) const = 0;
-       virtual QAbstractAudioInput* createInput(const QByteArray& device, const QAudioFormat& format = QAudioFormat()) = 0;
-       virtual QAbstractAudioOutput* createOutput(const QByteArray& device, const QAudioFormat& format = QAudioFormat()) = 0;
-       virtual QAbstractAudioDeviceInfo* createDeviceInfo(const QByteArray& device, QAudio::Mode mode) = 0;
+ public:
+   QAudioEnginePlugin(QObject *parent = 0);
+   ~QAudioEnginePlugin();
+
+   virtual QStringList keys() const = 0;
+   virtual QList<QByteArray> availableDevices(QAudio::Mode) const = 0;
+   virtual QAbstractAudioInput *createInput(const QByteArray &device, const QAudioFormat &format = QAudioFormat()) = 0;
+   virtual QAbstractAudioOutput *createOutput(const QByteArray &device, const QAudioFormat &format = QAudioFormat()) = 0;
+   virtual QAbstractAudioDeviceInfo *createDeviceInfo(const QByteArray &device, QAudio::Mode mode) = 0;
 };
 
 QT_END_NAMESPACE

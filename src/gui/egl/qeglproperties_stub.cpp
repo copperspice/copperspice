@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 
 static void noegl(const char *fn)
 {
-    qWarning() << fn << " called, but Qt configured without EGL" << endl;
+   qWarning() << fn << " called, but Qt configured without EGL" << endl;
 }
 
 #define NOEGL noegl(__FUNCTION__);
@@ -41,44 +41,44 @@ static void noegl(const char *fn)
 // Initialize a property block.
 QEglProperties::QEglProperties()
 {
-    NOEGL
+   NOEGL
 }
 
 QEglProperties::QEglProperties(EGLConfig cfg)
 {
-    Q_UNUSED(cfg)
-    NOEGL
+   Q_UNUSED(cfg)
+   NOEGL
 }
 
 // Fetch the current value associated with a property.
 int QEglProperties::value(int name) const
 {
-    Q_UNUSED(name)
-    NOEGL
-    return 0;
+   Q_UNUSED(name)
+   NOEGL
+   return 0;
 }
 
 // Set the value associated with a property, replacing an existing
 // value if there is one.
 void QEglProperties::setValue(int name, int value)
 {
-    Q_UNUSED(name)
-    Q_UNUSED(value)
-    NOEGL
+   Q_UNUSED(name)
+   Q_UNUSED(value)
+   NOEGL
 }
 
 // Remove a property value.  Returns false if the property is not present.
 bool QEglProperties::removeValue(int name)
 {
-    Q_UNUSED(name)
-    NOEGL
-    return false;
+   Q_UNUSED(name)
+   NOEGL
+   return false;
 }
 
 void QEglProperties::setDeviceType(int devType)
 {
-    Q_UNUSED(devType)
-    NOEGL
+   Q_UNUSED(devType)
+   NOEGL
 }
 
 
@@ -86,15 +86,15 @@ void QEglProperties::setDeviceType(int devType)
 // Normally used to match a configuration request to the screen format.
 void QEglProperties::setPixelFormat(QImage::Format pixelFormat)
 {
-    Q_UNUSED(pixelFormat)
-    NOEGL
+   Q_UNUSED(pixelFormat)
+   NOEGL
 
 }
 
 void QEglProperties::setRenderableType(QEgl::API api)
 {
-    Q_UNUSED(api);
-    NOEGL
+   Q_UNUSED(api);
+   NOEGL
 }
 
 // Reduce the complexity of a configuration request to ask for less
@@ -103,28 +103,28 @@ void QEglProperties::setRenderableType(QEgl::API api)
 // reductions in complexity are possible.
 bool QEglProperties::reduceConfiguration()
 {
-    NOEGL
-    return false;
+   NOEGL
+   return false;
 }
 
-static void addTag(QString& str, const QString& tag)
+static void addTag(QString &str, const QString &tag)
 {
-    Q_UNUSED(str)
-    Q_UNUSED(tag)
-    NOEGL
+   Q_UNUSED(str)
+   Q_UNUSED(tag)
+   NOEGL
 }
 
 // Convert a property list to a string suitable for debug output.
 QString QEglProperties::toString() const
 {
-    NOEGL
-    return QString();
+   NOEGL
+   return QString();
 }
 
 void QEglProperties::setPaintDeviceFormat(QPaintDevice *dev)
 {
-    Q_UNUSED(dev)
-    NOEGL
+   Q_UNUSED(dev)
+   NOEGL
 }
 
 QT_END_NAMESPACE

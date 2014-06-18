@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,65 +35,65 @@ QT_BEGIN_NAMESPACE
 
 class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QGraphicsProxyWidget)
-public:
-    QGraphicsProxyWidgetPrivate()
-        : dragDropWidget(0),
-          posChangeMode(NoMode),
-          sizeChangeMode(NoMode),
-          visibleChangeMode(NoMode),
-          enabledChangeMode(NoMode),
-          styleChangeMode(NoMode),
-          paletteChangeMode(NoMode),
-          tooltipChangeMode(NoMode),
-          focusFromWidgetToProxy(0)
-    { }
-    void init();
-    void sendWidgetMouseEvent(QGraphicsSceneMouseEvent *event);
-    void sendWidgetMouseEvent(QGraphicsSceneHoverEvent *event);
-    void sendWidgetKeyEvent(QKeyEvent *event);
-    void setWidget_helper(QWidget *widget, bool autoShow);
+   Q_DECLARE_PUBLIC(QGraphicsProxyWidget)
+ public:
+   QGraphicsProxyWidgetPrivate()
+      : dragDropWidget(0),
+        posChangeMode(NoMode),
+        sizeChangeMode(NoMode),
+        visibleChangeMode(NoMode),
+        enabledChangeMode(NoMode),
+        styleChangeMode(NoMode),
+        paletteChangeMode(NoMode),
+        tooltipChangeMode(NoMode),
+        focusFromWidgetToProxy(0) {
+   }
+   void init();
+   void sendWidgetMouseEvent(QGraphicsSceneMouseEvent *event);
+   void sendWidgetMouseEvent(QGraphicsSceneHoverEvent *event);
+   void sendWidgetKeyEvent(QKeyEvent *event);
+   void setWidget_helper(QWidget *widget, bool autoShow);
 
-    QWidget *findFocusChild(QWidget *child, bool next) const;
-    void removeSubFocusHelper(QWidget *widget, Qt::FocusReason reason);
+   QWidget *findFocusChild(QWidget *child, bool next) const;
+   void removeSubFocusHelper(QWidget *widget, Qt::FocusReason reason);
 
-    // ### Qt5/Remove. Workaround for reimplementation added after Qt 4.4.
-    QVariant inputMethodQueryHelper(Qt::InputMethodQuery query) const;
+   // ### Qt5/Remove. Workaround for reimplementation added after Qt 4.4.
+   QVariant inputMethodQueryHelper(Qt::InputMethodQuery query) const;
 
-    void _q_removeWidgetSlot();
+   void _q_removeWidgetSlot();
 
-    void embedSubWindow(QWidget *);
-    void unembedSubWindow(QWidget *);
+   void embedSubWindow(QWidget *);
+   void unembedSubWindow(QWidget *);
 
-    bool isProxyWidget() const;
+   bool isProxyWidget() const;
 
-    QPointer<QWidget> widget;
-    QPointer<QWidget> lastWidgetUnderMouse;
-    QPointer<QWidget> embeddedMouseGrabber;
-    QWidget *dragDropWidget;
-    Qt::DropAction lastDropAction;
+   QPointer<QWidget> widget;
+   QPointer<QWidget> lastWidgetUnderMouse;
+   QPointer<QWidget> embeddedMouseGrabber;
+   QWidget *dragDropWidget;
+   Qt::DropAction lastDropAction;
 
-    void updateWidgetGeometryFromProxy();
-    void updateProxyGeometryFromWidget();
+   void updateWidgetGeometryFromProxy();
+   void updateProxyGeometryFromWidget();
 
-    void updateProxyInputMethodAcceptanceFromWidget();
+   void updateProxyInputMethodAcceptanceFromWidget();
 
-    QPointF mapToReceiver(const QPointF &pos, const QWidget *receiver) const;
+   QPointF mapToReceiver(const QPointF &pos, const QWidget *receiver) const;
 
-    enum ChangeMode {
-        NoMode,
-        ProxyToWidgetMode,
-        WidgetToProxyMode
-    };
-    quint32 posChangeMode : 2;
-    quint32 sizeChangeMode : 2;
-    quint32 visibleChangeMode : 2;
-    quint32 enabledChangeMode : 2;
-    quint32 styleChangeMode : 2;
-    quint32 paletteChangeMode : 2;
-    quint32 tooltipChangeMode : 2;
-    quint32 focusFromWidgetToProxy : 1;
-    quint32 proxyIsGivingFocus : 1;
+   enum ChangeMode {
+      NoMode,
+      ProxyToWidgetMode,
+      WidgetToProxyMode
+   };
+   quint32 posChangeMode : 2;
+   quint32 sizeChangeMode : 2;
+   quint32 visibleChangeMode : 2;
+   quint32 enabledChangeMode : 2;
+   quint32 styleChangeMode : 2;
+   quint32 paletteChangeMode : 2;
+   quint32 tooltipChangeMode : 2;
+   quint32 focusFromWidgetToProxy : 1;
+   quint32 proxyIsGivingFocus : 1;
 };
 
 QT_END_NAMESPACE

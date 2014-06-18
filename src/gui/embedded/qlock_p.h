@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,20 +34,20 @@ class QLockData;
 
 class Q_GUI_EXPORT QLock
 {
-public:
-    QLock(const QString &filename, char id, bool create = false);
-    ~QLock();
+ public:
+   QLock(const QString &filename, char id, bool create = false);
+   ~QLock();
 
-    enum Type { Read, Write };
+   enum Type { Read, Write };
 
-    bool isValid() const;
-    void lock(Type type);
-    void unlock();
-    bool locked() const;
+   bool isValid() const;
+   void lock(Type type);
+   void unlock();
+   bool locked() const;
 
-private:
-    Type type;
-    QLockData *data;
+ private:
+   Type type;
+   QLockData *data;
 };
 
 
@@ -56,16 +56,28 @@ private:
 // when QLockHandle is destructed.
 class Q_GUI_EXPORT QLockHandle
 {
-public:
-    QLockHandle(QLock *l, QLock::Type type) : qlock(l) { qlock->lock(type); }
-    ~QLockHandle() { if (locked()) qlock->unlock(); }
+ public:
+   QLockHandle(QLock *l, QLock::Type type) : qlock(l) {
+      qlock->lock(type);
+   }
+   ~QLockHandle() {
+      if (locked()) {
+         qlock->unlock();
+      }
+   }
 
-    void lock(QLock::Type type) { qlock->lock(type); }
-    void unlock() { qlock->unlock(); }
-    bool locked() const { return qlock->locked(); }
+   void lock(QLock::Type type) {
+      qlock->lock(type);
+   }
+   void unlock() {
+      qlock->unlock();
+   }
+   bool locked() const {
+      return qlock->locked();
+   }
 
-private:
-    QLock *qlock;
+ private:
+   QLock *qlock;
 };
 
 QT_END_NAMESPACE

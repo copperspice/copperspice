@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,57 +35,59 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QPrintEngine
 {
-public:
-    virtual ~QPrintEngine() {}
-    enum PrintEnginePropertyKey {
-        PPK_CollateCopies,
-        PPK_ColorMode,
-        PPK_Creator,
-        PPK_DocumentName,
-        PPK_FullPage,
-        PPK_NumberOfCopies,
-        PPK_Orientation,
-        PPK_OutputFileName,
-        PPK_PageOrder,
-        PPK_PageRect,
-        PPK_PageSize,
-        PPK_PaperRect,
-        PPK_PaperSource,
-        PPK_PrinterName,
-        PPK_PrinterProgram,
-        PPK_Resolution,
-        PPK_SelectionOption,
-        PPK_SupportedResolutions,
+ public:
+   virtual ~QPrintEngine() {}
+   enum PrintEnginePropertyKey {
+      PPK_CollateCopies,
+      PPK_ColorMode,
+      PPK_Creator,
+      PPK_DocumentName,
+      PPK_FullPage,
+      PPK_NumberOfCopies,
+      PPK_Orientation,
+      PPK_OutputFileName,
+      PPK_PageOrder,
+      PPK_PageRect,
+      PPK_PageSize,
+      PPK_PaperRect,
+      PPK_PaperSource,
+      PPK_PrinterName,
+      PPK_PrinterProgram,
+      PPK_Resolution,
+      PPK_SelectionOption,
+      PPK_SupportedResolutions,
 
-        PPK_WindowsPageSize,
-        PPK_FontEmbedding,
-        PPK_SuppressSystemPrintStatus,
+      PPK_WindowsPageSize,
+      PPK_FontEmbedding,
+      PPK_SuppressSystemPrintStatus,
 
-        PPK_Duplex,
+      PPK_Duplex,
 
-        PPK_PaperSources,
-        PPK_CustomPaperSize,
-        PPK_PageMargins,
-        PPK_CopyCount,
-        PPK_SupportsMultipleCopies,
-        PPK_PaperSize = PPK_PageSize,
+      PPK_PaperSources,
+      PPK_CustomPaperSize,
+      PPK_PageMargins,
+      PPK_CopyCount,
+      PPK_SupportsMultipleCopies,
+      PPK_PaperSize = PPK_PageSize,
 
-        PPK_CustomBase = 0xff00
-    };
+      PPK_CustomBase = 0xff00
+   };
 
-    virtual void setProperty(PrintEnginePropertyKey key, const QVariant &value) = 0;
-    virtual QVariant property(PrintEnginePropertyKey key) const = 0;
+   virtual void setProperty(PrintEnginePropertyKey key, const QVariant &value) = 0;
+   virtual QVariant property(PrintEnginePropertyKey key) const = 0;
 
-    virtual bool newPage() = 0;
-    virtual bool abort() = 0;
+   virtual bool newPage() = 0;
+   virtual bool abort() = 0;
 
-    virtual int metric(QPaintDevice::PaintDeviceMetric) const = 0;
+   virtual int metric(QPaintDevice::PaintDeviceMetric) const = 0;
 
-    virtual QPrinter::PrinterState printerState() const = 0;
+   virtual QPrinter::PrinterState printerState() const = 0;
 
 #ifdef Q_OS_WIN
-    virtual HDC getPrinterDC() const { return 0; }
-    virtual void releasePrinterDC(HDC) const { }
+   virtual HDC getPrinterDC() const {
+      return 0;
+   }
+   virtual void releasePrinterDC(HDC) const { }
 #endif
 
 };

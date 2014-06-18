@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,20 +36,21 @@ QT_BEGIN_NAMESPACE
 
 class QNetworkReplyPrivate: public QIODevicePrivate, public QNetworkHeadersPrivate
 {
-public:
-    QNetworkReplyPrivate();
-    QNetworkRequest request;
-    QUrl url;
-    QPointer<QNetworkAccessManager> manager;
-    qint64 readBufferMaxSize;
-    QNetworkAccessManager::Operation operation;
-    QNetworkReply::NetworkError errorCode;
-    bool isFinished;
+ public:
+   QNetworkReplyPrivate();
+   QNetworkRequest request;
+   QUrl url;
+   QPointer<QNetworkAccessManager> manager;
+   qint64 readBufferMaxSize;
+   QNetworkAccessManager::Operation operation;
+   QNetworkReply::NetworkError errorCode;
+   bool isFinished;
 
-    static inline void setManager(QNetworkReply *reply, QNetworkAccessManager *manager)
-    { reply->d_func()->manager = manager; }
+   static inline void setManager(QNetworkReply *reply, QNetworkAccessManager *manager) {
+      reply->d_func()->manager = manager;
+   }
 
-    Q_DECLARE_PUBLIC(QNetworkReply)
+   Q_DECLARE_PUBLIC(QNetworkReply)
 };
 
 QT_END_NAMESPACE

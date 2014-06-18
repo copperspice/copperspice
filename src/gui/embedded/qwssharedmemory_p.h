@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,25 +34,29 @@ QT_BEGIN_NAMESPACE
 
 class QWSSharedMemory
 {
-public:
-    QWSSharedMemory();
-    ~QWSSharedMemory();
+ public:
+   QWSSharedMemory();
+   ~QWSSharedMemory();
 
-    bool create(int size);
-    bool attach(int id);
-    void detach();
+   bool create(int size);
+   bool attach(int id);
+   void detach();
 
-    int id() const { return shmId; }
+   int id() const {
+      return shmId;
+   }
 
-    void *address() const { return shmBase; }
-    int size() const;
+   void *address() const {
+      return shmBase;
+   }
+   int size() const;
 
-private:
-    int shmId;
-    void *shmBase;
-    mutable int shmSize;
+ private:
+   int shmId;
+   void *shmBase;
+   mutable int shmSize;
 #ifdef QT_POSIX_IPC
-    int hand;
+   int hand;
 #endif
 };
 

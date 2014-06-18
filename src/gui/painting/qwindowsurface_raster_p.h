@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,21 +42,21 @@ QT_BEGIN_NAMESPACE
 #define Q_AC_SRC_ALPHA            0x00000001 // copied from AC_SRC_ALPHA in winuser.h
 
 struct Q_UPDATELAYEREDWINDOWINFO {
-    DWORD cbSize;
-    HDC hdcDst;
-    const POINT *pptDst;
-    const SIZE *psize;
-    HDC hdcSrc;
-    const POINT *pptSrc;
-    COLORREF crKey;
-    const BLENDFUNCTION *pblend;
-    DWORD dwFlags;
-    const RECT *prcDirty;
+   DWORD cbSize;
+   HDC hdcDst;
+   const POINT *pptDst;
+   const SIZE *psize;
+   HDC hdcSrc;
+   const POINT *pptSrc;
+   COLORREF crKey;
+   const BLENDFUNCTION *pblend;
+   DWORD dwFlags;
+   const RECT *prcDirty;
 };
 
 typedef BOOL (WINAPI *PtrUpdateLayeredWindow)(HWND hwnd, HDC hdcDst, const POINT *pptDst,
-             const SIZE *psize, HDC hdcSrc, const POINT *pptSrc, COLORREF crKey,
-             const BLENDFUNCTION *pblend, DWORD dwflags);
+      const SIZE *psize, HDC hdcSrc, const POINT *pptSrc, COLORREF crKey,
+      const BLENDFUNCTION *pblend, DWORD dwflags);
 typedef BOOL (WINAPI *PtrUpdateLayeredWindowIndirect)(HWND hwnd, const Q_UPDATELAYEREDWINDOWINFO *pULWInfo);
 extern PtrUpdateLayeredWindow ptrUpdateLayeredWindow;
 extern PtrUpdateLayeredWindowIndirect ptrUpdateLayeredWindowIndirect;
@@ -74,31 +74,31 @@ class QNativeImage;
 class Q_GUI_EXPORT QRasterWindowSurface : public QWindowSurface
 {
 
-public:
-    QRasterWindowSurface(QWidget *widget, bool setDefaultSurface = true);
-    ~QRasterWindowSurface();
+ public:
+   QRasterWindowSurface(QWidget *widget, bool setDefaultSurface = true);
+   ~QRasterWindowSurface();
 
-    QPaintDevice *paintDevice();
-    void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
-    void beginPaint(const QRegion &rgn);
-    void setGeometry(const QRect &rect);
-    bool scroll(const QRegion &area, int dx, int dy);
-    WindowSurfaceFeatures features() const;
+   QPaintDevice *paintDevice();
+   void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
+   void beginPaint(const QRegion &rgn);
+   void setGeometry(const QRect &rect);
+   bool scroll(const QRegion &area, int dx, int dy);
+   WindowSurfaceFeatures features() const;
 
 #ifdef Q_OS_MAC
-    CGContextRef imageContext();
+   CGContextRef imageContext();
 
-    bool needsFlush;
-    QRegion regionToFlush;
+   bool needsFlush;
+   QRegion regionToFlush;
 #endif
 
-private:
+ private:
 #if defined(Q_WS_X11) && !defined(QT_NO_MITSHM)
-    void syncX();
+   void syncX();
 #endif
-    void prepareBuffer(QImage::Format format, QWidget *widget);
-    Q_DECLARE_PRIVATE(QRasterWindowSurface)
-    QScopedPointer<QRasterWindowSurfacePrivate> d_ptr;
+   void prepareBuffer(QImage::Format format, QWidget *widget);
+   Q_DECLARE_PRIVATE(QRasterWindowSurface)
+   QScopedPointer<QRasterWindowSurfacePrivate> d_ptr;
 };
 
 QT_END_NAMESPACE

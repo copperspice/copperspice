@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -83,229 +83,242 @@ QT_BEGIN_NAMESPACE
 
 class QWSTslibMouseHandlerPrivate : public QObject
 {
-    CS_OBJECT(QWSTslibMouseHandlerPrivate
+   CS_OBJECT(QWSTslibMouseHandlerPrivate
 
-public:
-    QWSTslibMouseHandlerPrivate(QWSTslibMouseHandler *h,
-                                const QString &device);
-    ~QWSTslibMouseHandlerPrivate();
+             public:
+             QWSTslibMouseHandlerPrivate(QWSTslibMouseHandler *h,
+                                         const QString &device);
+             ~QWSTslibMouseHandlerPrivate();
 
-    void suspend();
-    void resume();
+             void suspend();
+             void resume();
 
-    void calibrate(const QWSPointerCalibrationData *data);
-    void clearCalibration();
+             void calibrate(const QWSPointerCalibrationData *data);
+             void clearCalibration();
 
-private:
-    QWSTslibMouseHandler *handler;
-    struct tsdev *dev;
-    QSocketNotifier *mouseNotifier;
-    int jitter_limit;
+             private:
+             QWSTslibMouseHandler *handler;
+             struct tsdev *dev;
+             QSocketNotifier *mouseNotifier;
+             int jitter_limit;
 
-    struct ts_sample lastSample;
-    bool wasPressed;
-    int lastdx;
-    int lastdy;
+             struct ts_sample lastSample;
+             bool wasPressed;
+             int lastdx;
+             int lastdy;
 
-    bool calibrated;
-    QString devName;
+             bool calibrated;
+             QString devName;
 
-    bool open();
-    void close();
-    inline bool get_sample(struct ts_sample *sample);
+             bool open();
+             void close();
+             inline bool get_sample(struct ts_sample *sample);
 
-    GUI_CS_SLOT_1(Private,void readMouseData())
-    GUI_CS_SLOT_2(readMouseData)
+             GUI_CS_SLOT_1(Private, void readMouseData())
+             GUI_CS_SLOT_2(readMouseData)
 };
 
-QWSTslibMouseHandlerPrivate::QWSTslibMouseHandlerPrivate(QWSTslibMouseHandler *h,const QString &device)
-    : handler(h), dev(0), mouseNotifier(0), jitter_limit(3)
+QWSTslibMouseHandlerPrivate::QWSTslibMouseHandlerPrivate(QWSTslibMouseHandler *h, const QString &device)
+   : handler(h), dev(0), mouseNotifier(0), jitter_limit(3)
 {
-    QStringList args = device.split(QLatin1Char(':'), QString::SkipEmptyParts);
-    QRegExp jitterRegex(QLatin1String("^jitter_limit=(\\d+)$"));
-    int index = args.indexOf(jitterRegex);
-    if (index >= 0) {
-        jitter_limit = jitterRegex.cap(1).toInt();
-        args.removeAt(index);
-    }
+   QStringList args = device.split(QLatin1Char(':'), QString::SkipEmptyParts);
+   QRegExp jitterRegex(QLatin1String("^jitter_limit=(\\d+)$"));
+   int index = args.indexOf(jitterRegex);
+   if (index >= 0) {
+      jitter_limit = jitterRegex.cap(1).toInt();
+      args.removeAt(index);
+   }
 
-    devName = args.join(QString());
+   devName = args.join(QString());
 
-    if (devName.isNull()) {
-        const char *str = getenv("TSLIB_TSDEVICE");
-        if (str)
-            devName = QString::fromLocal8Bit(str);
-    }
+   if (devName.isNull()) {
+      const char *str = getenv("TSLIB_TSDEVICE");
+      if (str) {
+         devName = QString::fromLocal8Bit(str);
+      }
+   }
 
-    if (devName.isNull())
-        devName = QLatin1String("/dev/ts");
+   if (devName.isNull()) {
+      devName = QLatin1String("/dev/ts");
+   }
 
-    if (!open())
-        return;
+   if (!open()) {
+      return;
+   }
 
-    calibrated = true;
+   calibrated = true;
 
-    int fd = ts_fd(dev);
-    mouseNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
-    connect(mouseNotifier, SIGNAL(activated(int)),this, SLOT(readMouseData()));
-    resume();
+   int fd = ts_fd(dev);
+   mouseNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
+   connect(mouseNotifier, SIGNAL(activated(int)), this, SLOT(readMouseData()));
+   resume();
 }
 
 QWSTslibMouseHandlerPrivate::~QWSTslibMouseHandlerPrivate()
 {
-    close();
+   close();
 }
 
 bool QWSTslibMouseHandlerPrivate::open()
 {
-    dev = ts_open(devName.toLocal8Bit().constData(), 1);
-    if (!dev) {
-        qCritical("QWSTslibMouseHandlerPrivate: ts_open() failed"
-                  " with error: '%s'", strerror(errno));
-        qCritical("Please check your tslib installation!");
-        return false;
-    }
+   dev = ts_open(devName.toLocal8Bit().constData(), 1);
+   if (!dev) {
+      qCritical("QWSTslibMouseHandlerPrivate: ts_open() failed"
+                " with error: '%s'", strerror(errno));
+      qCritical("Please check your tslib installation!");
+      return false;
+   }
 
-    if (ts_config(dev)) {
-        qCritical("QWSTslibMouseHandlerPrivate: ts_config() failed"
-                  " with error: '%s'", strerror(errno));
-        qCritical("Please check your tslib installation!");
-        close();
-        return false;
-    }
+   if (ts_config(dev)) {
+      qCritical("QWSTslibMouseHandlerPrivate: ts_config() failed"
+                " with error: '%s'", strerror(errno));
+      qCritical("Please check your tslib installation!");
+      close();
+      return false;
+   }
 
-    return true;
+   return true;
 }
 
 void QWSTslibMouseHandlerPrivate::close()
 {
-    if (dev)
-        ts_close(dev);
+   if (dev) {
+      ts_close(dev);
+   }
 }
 
 void QWSTslibMouseHandlerPrivate::suspend()
 {
-    if (mouseNotifier)
-        mouseNotifier->setEnabled(false);
+   if (mouseNotifier) {
+      mouseNotifier->setEnabled(false);
+   }
 }
 
 void QWSTslibMouseHandlerPrivate::resume()
 {
-    memset(&lastSample, 0, sizeof(lastSample));
-    wasPressed = false;
-    lastdx = 0;
-    lastdy = 0;
-    if (mouseNotifier)
-        mouseNotifier->setEnabled(true);
+   memset(&lastSample, 0, sizeof(lastSample));
+   wasPressed = false;
+   lastdx = 0;
+   lastdy = 0;
+   if (mouseNotifier) {
+      mouseNotifier->setEnabled(true);
+   }
 }
 
 bool QWSTslibMouseHandlerPrivate::get_sample(struct ts_sample *sample)
 {
-    if (!calibrated)
-        return (ts_read_raw(dev, sample, 1) == 1);
+   if (!calibrated) {
+      return (ts_read_raw(dev, sample, 1) == 1);
+   }
 
-    return (ts_read(dev, sample, 1) == 1);
+   return (ts_read(dev, sample, 1) == 1);
 }
 
 void QWSTslibMouseHandlerPrivate::readMouseData()
 {
-    if (!qt_screen)
-        return;
+   if (!qt_screen) {
+      return;
+   }
 
-    for(;;) {
-        struct ts_sample sample = lastSample;
-        bool pressed = wasPressed;
+   for (;;) {
+      struct ts_sample sample = lastSample;
+      bool pressed = wasPressed;
 
-        // Fast return if there's no events.
-        if (!get_sample(&sample))
-            return;
-        pressed = (sample.pressure > 0);
+      // Fast return if there's no events.
+      if (!get_sample(&sample)) {
+         return;
+      }
+      pressed = (sample.pressure > 0);
 
-        // Only return last sample unless there's a press/release event.
-        while (pressed == wasPressed) {
-            if (!get_sample(&sample))
-                break;
-            pressed = (sample.pressure > 0);
-        }
+      // Only return last sample unless there's a press/release event.
+      while (pressed == wasPressed) {
+         if (!get_sample(&sample)) {
+            break;
+         }
+         pressed = (sample.pressure > 0);
+      }
 
-        // work around missing coordinates on mouse release in raw mode
-        if (!calibrated && !pressed && sample.x == 0 && sample.y == 0) {
-            sample.x = lastSample.x;
-            sample.y = lastSample.y;
-        }
+      // work around missing coordinates on mouse release in raw mode
+      if (!calibrated && !pressed && sample.x == 0 && sample.y == 0) {
+         sample.x = lastSample.x;
+         sample.y = lastSample.y;
+      }
 
-        int dx = sample.x - lastSample.x;
-        int dy = sample.y - lastSample.y;
+      int dx = sample.x - lastSample.x;
+      int dy = sample.y - lastSample.y;
 
-        // Remove small movements in oppsite direction
-        if (dx * lastdx < 0 && qAbs(dx) < jitter_limit) {
-            sample.x = lastSample.x;
-            dx = 0;
-        }
-        if (dy * lastdy < 0 && qAbs(dy) < jitter_limit) {
-            sample.y = lastSample.y;
-            dy = 0;
-        }
+      // Remove small movements in oppsite direction
+      if (dx * lastdx < 0 && qAbs(dx) < jitter_limit) {
+         sample.x = lastSample.x;
+         dx = 0;
+      }
+      if (dy * lastdy < 0 && qAbs(dy) < jitter_limit) {
+         sample.y = lastSample.y;
+         dy = 0;
+      }
 
-        if (wasPressed == pressed && dx == 0 && dy == 0)
-            return;
+      if (wasPressed == pressed && dx == 0 && dy == 0) {
+         return;
+      }
 
 #ifdef TSLIBMOUSEHANDLER_DEBUG
-        qDebug() << "last" << QPoint(lastSample.x, lastSample.y)
-                 << "curr" << QPoint(sample.x, sample.y)
-                 << "dx,dy" << QPoint(dx, dy)
-                 << "ddx,ddy" << QPoint(dx*lastdx, dy*lastdy)
-                 << "pressed" << wasPressed << pressed;
+      qDebug() << "last" << QPoint(lastSample.x, lastSample.y)
+               << "curr" << QPoint(sample.x, sample.y)
+               << "dx,dy" << QPoint(dx, dy)
+               << "ddx,ddy" << QPoint(dx * lastdx, dy * lastdy)
+               << "pressed" << wasPressed << pressed;
 #endif
 
-        lastSample = sample;
-        wasPressed = pressed;
-        if (dx != 0)
-            lastdx = dx;
-        if (dy != 0)
-            lastdy = dy;
+      lastSample = sample;
+      wasPressed = pressed;
+      if (dx != 0) {
+         lastdx = dx;
+      }
+      if (dy != 0) {
+         lastdy = dy;
+      }
 
-        const QPoint p(sample.x, sample.y);
-        if (calibrated) {
-            // tslib should do all the translation and filtering, so we send a
-            // "raw" mouse event
-            handler->QWSMouseHandler::mouseChanged(p, pressed);
-        } else {
-            handler->sendFiltered(p, pressed);
-        }
-    }
+      const QPoint p(sample.x, sample.y);
+      if (calibrated) {
+         // tslib should do all the translation and filtering, so we send a
+         // "raw" mouse event
+         handler->QWSMouseHandler::mouseChanged(p, pressed);
+      } else {
+         handler->sendFiltered(p, pressed);
+      }
+   }
 }
 
 void QWSTslibMouseHandlerPrivate::clearCalibration()
 {
-    suspend();
-    close();
-    handler->QWSCalibratedMouseHandler::clearCalibration();
-    calibrated = false;
-    open();
-    resume();
+   suspend();
+   close();
+   handler->QWSCalibratedMouseHandler::clearCalibration();
+   calibrated = false;
+   open();
+   resume();
 }
 
 void QWSTslibMouseHandlerPrivate::calibrate(const QWSPointerCalibrationData *data)
 {
-    suspend();
-    close();
-    // default implementation writes to /etc/pointercal
-    // using the same format as the tslib linear module.
-    handler->QWSCalibratedMouseHandler::calibrate(data);
-    calibrated = true;
-    open();
-    resume();
+   suspend();
+   close();
+   // default implementation writes to /etc/pointercal
+   // using the same format as the tslib linear module.
+   handler->QWSCalibratedMouseHandler::calibrate(data);
+   calibrated = true;
+   open();
+   resume();
 }
 
 /*!
     \internal
 */
 QWSTslibMouseHandler::QWSTslibMouseHandler(const QString &driver,
-                                           const QString &device)
-    : QWSCalibratedMouseHandler(driver, device)
+      const QString &device)
+   : QWSCalibratedMouseHandler(driver, device)
 {
-    d = new QWSTslibMouseHandlerPrivate(this, device);
+   d = new QWSTslibMouseHandlerPrivate(this, device);
 }
 
 /*!
@@ -313,7 +326,7 @@ QWSTslibMouseHandler::QWSTslibMouseHandler(const QString &driver,
 */
 QWSTslibMouseHandler::~QWSTslibMouseHandler()
 {
-    delete d;
+   delete d;
 }
 
 /*!
@@ -321,7 +334,7 @@ QWSTslibMouseHandler::~QWSTslibMouseHandler()
 */
 void QWSTslibMouseHandler::suspend()
 {
-    d->suspend();
+   d->suspend();
 }
 
 /*!
@@ -329,7 +342,7 @@ void QWSTslibMouseHandler::suspend()
 */
 void QWSTslibMouseHandler::resume()
 {
-    d->resume();
+   d->resume();
 }
 
 /*!
@@ -337,7 +350,7 @@ void QWSTslibMouseHandler::resume()
 */
 void QWSTslibMouseHandler::clearCalibration()
 {
-    d->clearCalibration();
+   d->clearCalibration();
 }
 
 /*!
@@ -345,7 +358,7 @@ void QWSTslibMouseHandler::clearCalibration()
 */
 void QWSTslibMouseHandler::calibrate(const QWSPointerCalibrationData *data)
 {
-    d->calibrate(data);
+   d->calibrate(data);
 }
 
 QT_END_NAMESPACE

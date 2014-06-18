@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -198,7 +198,7 @@ QT_BEGIN_NAMESPACE
 */
 qreal QQuaternion::length() const
 {
-    return qSqrt(xp * xp + yp * yp + zp * zp + wp * wp);
+   return qSqrt(xp * xp + yp * yp + zp * zp + wp * wp);
 }
 
 /*!
@@ -208,7 +208,7 @@ qreal QQuaternion::length() const
 */
 qreal QQuaternion::lengthSquared() const
 {
-    return xp * xp + yp * yp + zp * zp + wp * wp;
+   return xp * xp + yp * yp + zp * zp + wp * wp;
 }
 
 /*!
@@ -223,17 +223,18 @@ qreal QQuaternion::lengthSquared() const
 */
 QQuaternion QQuaternion::normalized() const
 {
-    // Need some extra precision if the length is very small.
-    double len = double(xp) * double(xp) +
-                 double(yp) * double(yp) +
-                 double(zp) * double(zp) +
-                 double(wp) * double(wp);
-    if (qFuzzyIsNull(len - 1.0f))
-        return *this;
-    else if (!qFuzzyIsNull(len))
-        return *this / qSqrt(len);
-    else
-        return QQuaternion(0.0f, 0.0f, 0.0f, 0.0f);
+   // Need some extra precision if the length is very small.
+   double len = double(xp) * double(xp) +
+                double(yp) * double(yp) +
+                double(zp) * double(zp) +
+                double(wp) * double(wp);
+   if (qFuzzyIsNull(len - 1.0f)) {
+      return *this;
+   } else if (!qFuzzyIsNull(len)) {
+      return *this / qSqrt(len);
+   } else {
+      return QQuaternion(0.0f, 0.0f, 0.0f, 0.0f);
+   }
 }
 
 /*!
@@ -244,20 +245,21 @@ QQuaternion QQuaternion::normalized() const
 */
 void QQuaternion::normalize()
 {
-    // Need some extra precision if the length is very small.
-    double len = double(xp) * double(xp) +
-                 double(yp) * double(yp) +
-                 double(zp) * double(zp) +
-                 double(wp) * double(wp);
-    if (qFuzzyIsNull(len - 1.0f) || qFuzzyIsNull(len))
-        return;
+   // Need some extra precision if the length is very small.
+   double len = double(xp) * double(xp) +
+                double(yp) * double(yp) +
+                double(zp) * double(zp) +
+                double(wp) * double(wp);
+   if (qFuzzyIsNull(len - 1.0f) || qFuzzyIsNull(len)) {
+      return;
+   }
 
-    len = qSqrt(len);
+   len = qSqrt(len);
 
-    xp /= len;
-    yp /= len;
-    zp /= len;
-    wp /= len;
+   xp /= len;
+   yp /= len;
+   zp /= len;
+   wp /= len;
 }
 
 /*!
@@ -281,9 +283,9 @@ void QQuaternion::normalize()
     QVector3D result = (q * QQuaternion(0, vector) * q.conjugate()).vector();
     \endcode
 */
-QVector3D QQuaternion::rotatedVector(const QVector3D& vector) const
+QVector3D QQuaternion::rotatedVector(const QVector3D &vector) const
 {
-    return (*this * QQuaternion(0, vector) * conjugate()).vector();
+   return (*this * QQuaternion(0, vector) * conjugate()).vector();
 }
 
 /*!
@@ -335,17 +337,17 @@ QVector3D QQuaternion::rotatedVector(const QVector3D& vector) const
     Creates a normalized quaternion that corresponds to rotating through
     \a angle degrees about the specified 3D \a axis.
 */
-QQuaternion QQuaternion::fromAxisAndAngle(const QVector3D& axis, qreal angle)
+QQuaternion QQuaternion::fromAxisAndAngle(const QVector3D &axis, qreal angle)
 {
-    // Algorithm from:
-    // http://www.j3d.org/matrix_faq/matrfaq_latest.html#Q56
-    // We normalize the result just in case the values are close
-    // to zero, as suggested in the above FAQ.
-    qreal a = (angle / 2.0f) * M_PI / 180.0f;
-    qreal s = qSin(a);
-    qreal c = qCos(a);
-    QVector3D ax = axis.normalized();
-    return QQuaternion(c, ax.x() * s, ax.y() * s, ax.z() * s).normalized();
+   // Algorithm from:
+   // http://www.j3d.org/matrix_faq/matrfaq_latest.html#Q56
+   // We normalize the result just in case the values are close
+   // to zero, as suggested in the above FAQ.
+   qreal a = (angle / 2.0f) * M_PI / 180.0f;
+   qreal s = qSin(a);
+   qreal c = qCos(a);
+   QVector3D ax = axis.normalized();
+   return QQuaternion(c, ax.x() * s, ax.y() * s, ax.z() * s).normalized();
 }
 
 #endif
@@ -355,18 +357,18 @@ QQuaternion QQuaternion::fromAxisAndAngle(const QVector3D& axis, qreal angle)
     \a angle degrees about the 3D axis (\a x, \a y, \a z).
 */
 QQuaternion QQuaternion::fromAxisAndAngle
-        (qreal x, qreal y, qreal z, qreal angle)
+(qreal x, qreal y, qreal z, qreal angle)
 {
-    qreal length = qSqrt(x * x + y * y + z * z);
-    if (!qFuzzyIsNull(length - 1.0f) && !qFuzzyIsNull(length)) {
-        x /= length;
-        y /= length;
-        z /= length;
-    }
-    qreal a = (angle / 2.0f) * M_PI / 180.0f;
-    qreal s = qSin(a);
-    qreal c = qCos(a);
-    return QQuaternion(c, x * s, y * s, z * s).normalized();
+   qreal length = qSqrt(x * x + y * y + z * z);
+   if (!qFuzzyIsNull(length - 1.0f) && !qFuzzyIsNull(length)) {
+      x /= length;
+      y /= length;
+      z /= length;
+   }
+   qreal a = (angle / 2.0f) * M_PI / 180.0f;
+   qreal s = qSin(a);
+   qreal c = qCos(a);
+   return QQuaternion(c, x * s, y * s, z * s).normalized();
 }
 
 /*!
@@ -477,40 +479,41 @@ QQuaternion QQuaternion::fromAxisAndAngle
     \sa nlerp()
 */
 QQuaternion QQuaternion::slerp
-    (const QQuaternion& q1, const QQuaternion& q2, qreal t)
+(const QQuaternion &q1, const QQuaternion &q2, qreal t)
 {
-    // Handle the easy cases first.
-    if (t <= 0.0f)
-        return q1;
-    else if (t >= 1.0f)
-        return q2;
+   // Handle the easy cases first.
+   if (t <= 0.0f) {
+      return q1;
+   } else if (t >= 1.0f) {
+      return q2;
+   }
 
-    // Determine the angle between the two quaternions.
-    QQuaternion q2b;
-    qreal dot;
-    dot = q1.xp * q2.xp + q1.yp * q2.yp + q1.zp * q2.zp + q1.wp * q2.wp;
-    if (dot >= 0.0f) {
-        q2b = q2;
-    } else {
-        q2b = -q2;
-        dot = -dot;
-    }
+   // Determine the angle between the two quaternions.
+   QQuaternion q2b;
+   qreal dot;
+   dot = q1.xp * q2.xp + q1.yp * q2.yp + q1.zp * q2.zp + q1.wp * q2.wp;
+   if (dot >= 0.0f) {
+      q2b = q2;
+   } else {
+      q2b = -q2;
+      dot = -dot;
+   }
 
-    // Get the scale factors.  If they are too small,
-    // then revert to simple linear interpolation.
-    qreal factor1 = 1.0f - t;
-    qreal factor2 = t;
-    if ((1.0f - dot) > 0.0000001) {
-        qreal angle = qreal(qAcos(dot));
-        qreal sinOfAngle = qreal(qSin(angle));
-        if (sinOfAngle > 0.0000001) {
-            factor1 = qreal(qSin((1.0f - t) * angle)) / sinOfAngle;
-            factor2 = qreal(qSin(t * angle)) / sinOfAngle;
-        }
-    }
+   // Get the scale factors.  If they are too small,
+   // then revert to simple linear interpolation.
+   qreal factor1 = 1.0f - t;
+   qreal factor2 = t;
+   if ((1.0f - dot) > 0.0000001) {
+      qreal angle = qreal(qAcos(dot));
+      qreal sinOfAngle = qreal(qSin(angle));
+      if (sinOfAngle > 0.0000001) {
+         factor1 = qreal(qSin((1.0f - t) * angle)) / sinOfAngle;
+         factor2 = qreal(qSin(t * angle)) / sinOfAngle;
+      }
+   }
 
-    // Construct the result quaternion.
-    return q1 * factor1 + q2b * factor2;
+   // Construct the result quaternion.
+   return q1 * factor1 + q2b * factor2;
 }
 
 /*!
@@ -529,25 +532,27 @@ QQuaternion QQuaternion::slerp
     \sa slerp()
 */
 QQuaternion QQuaternion::nlerp
-    (const QQuaternion& q1, const QQuaternion& q2, qreal t)
+(const QQuaternion &q1, const QQuaternion &q2, qreal t)
 {
-    // Handle the easy cases first.
-    if (t <= 0.0f)
-        return q1;
-    else if (t >= 1.0f)
-        return q2;
+   // Handle the easy cases first.
+   if (t <= 0.0f) {
+      return q1;
+   } else if (t >= 1.0f) {
+      return q2;
+   }
 
-    // Determine the angle between the two quaternions.
-    QQuaternion q2b;
-    qreal dot;
-    dot = q1.xp * q2.xp + q1.yp * q2.yp + q1.zp * q2.zp + q1.wp * q2.wp;
-    if (dot >= 0.0f)
-        q2b = q2;
-    else
-        q2b = -q2;
+   // Determine the angle between the two quaternions.
+   QQuaternion q2b;
+   qreal dot;
+   dot = q1.xp * q2.xp + q1.yp * q2.yp + q1.zp * q2.zp + q1.wp * q2.wp;
+   if (dot >= 0.0f) {
+      q2b = q2;
+   } else {
+      q2b = -q2;
+   }
 
-    // Perform the linear interpolation.
-    return (q1 * (1.0f - t) + q2b * t).normalized();
+   // Perform the linear interpolation.
+   return (q1 * (1.0f - t) + q2b * t).normalized();
 }
 
 /*!
@@ -555,15 +560,15 @@ QQuaternion QQuaternion::nlerp
 */
 QQuaternion::operator QVariant() const
 {
-    return QVariant(QVariant::Quaternion, this);
+   return QVariant(QVariant::Quaternion, this);
 }
 
 QDebug operator<<(QDebug dbg, const QQuaternion &q)
 {
-    dbg.nospace() << "QQuaternion(scalar:" << q.scalar()
-        << ", vector:(" << q.x() << ", "
-        << q.y() << ", " << q.z() << "))";
-    return dbg.space();
+   dbg.nospace() << "QQuaternion(scalar:" << q.scalar()
+                 << ", vector:(" << q.x() << ", "
+                 << q.y() << ", " << q.z() << "))";
+   return dbg.space();
 }
 
 
@@ -581,9 +586,9 @@ QDebug operator<<(QDebug dbg, const QQuaternion &q)
 
 QDataStream &operator<<(QDataStream &stream, const QQuaternion &quaternion)
 {
-    stream << double(quaternion.scalar()) << double(quaternion.x())
-           << double(quaternion.y()) << double(quaternion.z());
-    return stream;
+   stream << double(quaternion.scalar()) << double(quaternion.x())
+          << double(quaternion.y()) << double(quaternion.z());
+   return stream;
 }
 
 /*!
@@ -598,16 +603,16 @@ QDataStream &operator<<(QDataStream &stream, const QQuaternion &quaternion)
 
 QDataStream &operator>>(QDataStream &stream, QQuaternion &quaternion)
 {
-    double scalar, x, y, z;
-    stream >> scalar;
-    stream >> x;
-    stream >> y;
-    stream >> z;
-    quaternion.setScalar(qreal(scalar));
-    quaternion.setX(qreal(x));
-    quaternion.setY(qreal(y));
-    quaternion.setZ(qreal(z));
-    return stream;
+   double scalar, x, y, z;
+   stream >> scalar;
+   stream >> x;
+   stream >> y;
+   stream >> z;
+   quaternion.setScalar(qreal(scalar));
+   quaternion.setX(qreal(x));
+   quaternion.setY(qreal(y));
+   quaternion.setZ(qreal(z));
+   return stream;
 }
 
 #endif // QT_NO_DATASTREAM

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,27 +36,27 @@ QT_BEGIN_NAMESPACE
 
 class QCocoaTouch
 {
-    public:
-        static QList<QTouchEvent::TouchPoint> getCurrentTouchPointList(NSEvent *event, bool acceptSingleTouch);
-        static void setMouseInDraggingState(bool inDraggingState);
+ public:
+   static QList<QTouchEvent::TouchPoint> getCurrentTouchPointList(NSEvent *event, bool acceptSingleTouch);
+   static void setMouseInDraggingState(bool inDraggingState);
 
-    private:
-        static QHash<qint64, QCocoaTouch*> _currentTouches;
-        static QPointF _screenReferencePos;
-        static QPointF _trackpadReferencePos;
-        static int _idAssignmentCount;
-        static int _touchCount;
-        static bool _updateInternalStateOnly;
+ private:
+   static QHash<qint64, QCocoaTouch *> _currentTouches;
+   static QPointF _screenReferencePos;
+   static QPointF _trackpadReferencePos;
+   static int _idAssignmentCount;
+   static int _touchCount;
+   static bool _updateInternalStateOnly;
 
-        QTouchEvent::TouchPoint _touchPoint;
-        qint64 _identity;
+   QTouchEvent::TouchPoint _touchPoint;
+   qint64 _identity;
 
-        QCocoaTouch(NSTouch *nstouch);
-        ~QCocoaTouch();
+   QCocoaTouch(NSTouch *nstouch);
+   ~QCocoaTouch();
 
-        void updateTouchData(NSTouch *nstouch, NSTouchPhase phase);
-        static QCocoaTouch *findQCocoaTouch(NSTouch *nstouch);
-        static Qt::TouchPointState toTouchPointState(NSTouchPhase nsState);
+   void updateTouchData(NSTouch *nstouch, NSTouchPhase phase);
+   static QCocoaTouch *findQCocoaTouch(NSTouch *nstouch);
+   static Qt::TouchPointState toTouchPointState(NSTouchPhase nsState);
 };
 
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,54 +40,55 @@ class QMenu;
 
 class QWSManagerPrivate
 {
-    Q_DECLARE_PUBLIC(QWSManager)
+   Q_DECLARE_PUBLIC(QWSManager)
 
-public:
-    QWSManagerPrivate();
-    virtual ~QWSManagerPrivate() {}
+ public:
+   QWSManagerPrivate();
+   virtual ~QWSManagerPrivate() {}
 
-    int activeRegion;
-    QWidget *managed;
-    QMenu *popup;
+   int activeRegion;
+   QWidget *managed;
+   QMenu *popup;
 
-    enum MenuAction {
-        NormalizeAction,
-        TitleAction,
-        BottomRightAction,
-        MinimizeAction,
-        MaximizeAction,
-        CloseAction,
-        LastMenuAction
-    };
-    QAction *menuActions[LastMenuAction];
+   enum MenuAction {
+      NormalizeAction,
+      TitleAction,
+      BottomRightAction,
+      MinimizeAction,
+      MaximizeAction,
+      CloseAction,
+      LastMenuAction
+   };
+   QAction *menuActions[LastMenuAction];
 
-    static QWidget *active;
-    static QPoint mousePos;
+   static QWidget *active;
+   static QPoint mousePos;
 
-    // Region caching to avoid getting a regiontype's
-    // QRegion for each mouse move event
-    int previousRegionType;
-    bool previousRegionRepainted; // Hover/Press handled
-    bool entireDecorationNeedsRepaint;
-    struct RegionCaching {
-        int regionType;
-        QRegion region;
-        Qt::WindowFlags windowFlags;
-        QRect windowGeometry;
-    } cached_region;
+   // Region caching to avoid getting a regiontype's
+   // QRegion for each mouse move event
+   int previousRegionType;
+   bool previousRegionRepainted; // Hover/Press handled
+   bool entireDecorationNeedsRepaint;
+   struct RegionCaching {
+      int regionType;
+      QRegion region;
+      Qt::WindowFlags windowFlags;
+      QRect windowGeometry;
+   } cached_region;
 
-    bool newCachedRegion(const QPoint &pos);
-    int cachedRegionAt()
-    { return cached_region.regionType; }
+   bool newCachedRegion(const QPoint &pos);
+   int cachedRegionAt() {
+      return cached_region.regionType;
+   }
 
-    void dirtyRegion(int decorationRegion,
-                     QDecoration::DecorationState state,
-                     const QRegion &clip = QRegion());
-    void clearDirtyRegions();
+   void dirtyRegion(int decorationRegion,
+                    QDecoration::DecorationState state,
+                    const QRegion &clip = QRegion());
+   void clearDirtyRegions();
 
-    QList<int> dirtyRegions;
-    QList<QDecoration::DecorationState> dirtyStates;
-    QRegion dirtyClip;
+   QList<int> dirtyRegions;
+   QList<QDecoration::DecorationState> dirtyStates;
+   QRegion dirtyClip;
 };
 
 #endif // QT_NO_QWS_MANAGER

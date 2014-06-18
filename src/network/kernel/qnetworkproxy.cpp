@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -223,109 +223,109 @@ class QHttpSocketEngineHandler;
 
 class QGlobalNetworkProxy
 {
-public:
-    QGlobalNetworkProxy()
-        : mutex(QMutex::Recursive)
-        , applicationLevelProxy(0)
-        , applicationLevelProxyFactory(0)
-        , socks5SocketEngineHandler(0)
-        , httpSocketEngineHandler(0)
-    {
+ public:
+   QGlobalNetworkProxy()
+      : mutex(QMutex::Recursive)
+      , applicationLevelProxy(0)
+      , applicationLevelProxyFactory(0)
+      , socks5SocketEngineHandler(0)
+      , httpSocketEngineHandler(0) {
 #ifdef QT_USE_SYSTEM_PROXIES
-        setApplicationProxyFactory(new QSystemConfigurationProxyFactory);
+      setApplicationProxyFactory(new QSystemConfigurationProxyFactory);
 #endif
 #ifndef QT_NO_SOCKS5
-        socks5SocketEngineHandler = new QSocks5SocketEngineHandler();
+      socks5SocketEngineHandler = new QSocks5SocketEngineHandler();
 #endif
 #ifndef QT_NO_HTTP
-        httpSocketEngineHandler = new QHttpSocketEngineHandler();
+      httpSocketEngineHandler = new QHttpSocketEngineHandler();
 #endif
-    }
+   }
 
-    ~QGlobalNetworkProxy()
-    {
-        delete applicationLevelProxy;
-        delete applicationLevelProxyFactory;
-        delete socks5SocketEngineHandler;
-        delete httpSocketEngineHandler;
-    }
+   ~QGlobalNetworkProxy() {
+      delete applicationLevelProxy;
+      delete applicationLevelProxyFactory;
+      delete socks5SocketEngineHandler;
+      delete httpSocketEngineHandler;
+   }
 
-    void setApplicationProxy(const QNetworkProxy &proxy)
-    {
-        QMutexLocker lock(&mutex);
-        if (!applicationLevelProxy)
-            applicationLevelProxy = new QNetworkProxy;
-        *applicationLevelProxy = proxy;
-        delete applicationLevelProxyFactory;
-        applicationLevelProxyFactory = 0;
-    }
+   void setApplicationProxy(const QNetworkProxy &proxy) {
+      QMutexLocker lock(&mutex);
+      if (!applicationLevelProxy) {
+         applicationLevelProxy = new QNetworkProxy;
+      }
+      *applicationLevelProxy = proxy;
+      delete applicationLevelProxyFactory;
+      applicationLevelProxyFactory = 0;
+   }
 
-    void setApplicationProxyFactory(QNetworkProxyFactory *factory)
-    {
-        QMutexLocker lock(&mutex);
-        if (applicationLevelProxy)
-            *applicationLevelProxy = QNetworkProxy();
-        delete applicationLevelProxyFactory;
-        applicationLevelProxyFactory = factory;
-    }
+   void setApplicationProxyFactory(QNetworkProxyFactory *factory) {
+      QMutexLocker lock(&mutex);
+      if (applicationLevelProxy) {
+         *applicationLevelProxy = QNetworkProxy();
+      }
+      delete applicationLevelProxyFactory;
+      applicationLevelProxyFactory = factory;
+   }
 
-    QNetworkProxy applicationProxy()
-    {
-        return proxyForQuery(QNetworkProxyQuery()).first();
-    }
+   QNetworkProxy applicationProxy() {
+      return proxyForQuery(QNetworkProxyQuery()).first();
+   }
 
-    QList<QNetworkProxy> proxyForQuery(const QNetworkProxyQuery &query);
+   QList<QNetworkProxy> proxyForQuery(const QNetworkProxyQuery &query);
 
-private:
-    QMutex mutex;
-    QNetworkProxy *applicationLevelProxy;
-    QNetworkProxyFactory *applicationLevelProxyFactory;
-    QSocks5SocketEngineHandler *socks5SocketEngineHandler;
-    QHttpSocketEngineHandler *httpSocketEngineHandler;
+ private:
+   QMutex mutex;
+   QNetworkProxy *applicationLevelProxy;
+   QNetworkProxyFactory *applicationLevelProxyFactory;
+   QSocks5SocketEngineHandler *socks5SocketEngineHandler;
+   QHttpSocketEngineHandler *httpSocketEngineHandler;
 };
 
 QList<QNetworkProxy> QGlobalNetworkProxy::proxyForQuery(const QNetworkProxyQuery &query)
 {
-    QMutexLocker locker(&mutex);
+   QMutexLocker locker(&mutex);
 
-    QList<QNetworkProxy> result;
+   QList<QNetworkProxy> result;
 
-    // don't look for proxies for a local connection
-    QHostAddress parsed;
-    QString hostname = query.url().host();
-    if (hostname == QLatin1String("localhost")
-        || hostname.startsWith(QLatin1String("localhost."))
-        || (parsed.setAddress(hostname)
-            && (parsed == QHostAddress::LocalHost
-                || parsed == QHostAddress::LocalHostIPv6))) {
-        result << QNetworkProxy(QNetworkProxy::NoProxy);
-        return result;
-    }
+   // don't look for proxies for a local connection
+   QHostAddress parsed;
+   QString hostname = query.url().host();
+   if (hostname == QLatin1String("localhost")
+         || hostname.startsWith(QLatin1String("localhost."))
+         || (parsed.setAddress(hostname)
+             && (parsed == QHostAddress::LocalHost
+                 || parsed == QHostAddress::LocalHostIPv6))) {
+      result << QNetworkProxy(QNetworkProxy::NoProxy);
+      return result;
+   }
 
-    if (!applicationLevelProxyFactory) {
-        if (applicationLevelProxy
-            && applicationLevelProxy->type() != QNetworkProxy::DefaultProxy)
-            result << *applicationLevelProxy;
-        else
-            result << QNetworkProxy(QNetworkProxy::NoProxy);
-        return result;
-    }
+   if (!applicationLevelProxyFactory) {
+      if (applicationLevelProxy
+            && applicationLevelProxy->type() != QNetworkProxy::DefaultProxy) {
+         result << *applicationLevelProxy;
+      } else {
+         result << QNetworkProxy(QNetworkProxy::NoProxy);
+      }
+      return result;
+   }
 
-    // we have a factory
-    result = applicationLevelProxyFactory->queryProxy(query);
-    if (result.isEmpty()) {
-        qWarning("QNetworkProxyFactory: factory %p has returned an empty result set",
-                 applicationLevelProxyFactory);
-        result << QNetworkProxy(QNetworkProxy::NoProxy);
-    }
-    return result;
+   // we have a factory
+   result = applicationLevelProxyFactory->queryProxy(query);
+   if (result.isEmpty()) {
+      qWarning("QNetworkProxyFactory: factory %p has returned an empty result set",
+               applicationLevelProxyFactory);
+      result << QNetworkProxy(QNetworkProxy::NoProxy);
+   }
+   return result;
 }
 
 Q_GLOBAL_STATIC(QGlobalNetworkProxy, globalNetworkProxy)
 
 namespace {
-    template<bool> struct StaticAssertTest;
-    template<> struct StaticAssertTest<true> { enum { Value = 1 }; };
+template<bool> struct StaticAssertTest;
+template<> struct StaticAssertTest<true> {
+   enum { Value = 1 };
+};
 }
 
 static inline void qt_noop_with_arg(int) {}
@@ -333,85 +333,86 @@ static inline void qt_noop_with_arg(int) {}
 
 static QNetworkProxy::Capabilities defaultCapabilitiesForType(QNetworkProxy::ProxyType type)
 {
-    q_static_assert(int(QNetworkProxy::DefaultProxy) == 0);
-    q_static_assert(int(QNetworkProxy::FtpCachingProxy) == 5);
-    static const int defaults[] =
-    {
-        /* [QNetworkProxy::DefaultProxy] = */
-        (int(QNetworkProxy::ListeningCapability) |
-         int(QNetworkProxy::TunnelingCapability) |
-         int(QNetworkProxy::UdpTunnelingCapability)),
-        /* [QNetworkProxy::Socks5Proxy] = */
-        (int(QNetworkProxy::TunnelingCapability) |
-         int(QNetworkProxy::ListeningCapability) |
-         int(QNetworkProxy::UdpTunnelingCapability) |
-         int(QNetworkProxy::HostNameLookupCapability)),
-        // it's weird to talk about the proxy capabilities of a "not proxy"...
-        /* [QNetworkProxy::NoProxy] = */
-        (int(QNetworkProxy::ListeningCapability) |
-         int(QNetworkProxy::TunnelingCapability) |
-         int(QNetworkProxy::UdpTunnelingCapability)),
-        /* [QNetworkProxy::HttpProxy] = */
-        (int(QNetworkProxy::TunnelingCapability) |
-         int(QNetworkProxy::CachingCapability) |
-         int(QNetworkProxy::HostNameLookupCapability)),
-        /* [QNetworkProxy::HttpCachingProxy] = */
-        (int(QNetworkProxy::CachingCapability) |
-         int(QNetworkProxy::HostNameLookupCapability)),
-        /* [QNetworkProxy::FtpCachingProxy] = */
-        (int(QNetworkProxy::CachingCapability) |
-         int(QNetworkProxy::HostNameLookupCapability)),
-    };
+   q_static_assert(int(QNetworkProxy::DefaultProxy) == 0);
+   q_static_assert(int(QNetworkProxy::FtpCachingProxy) == 5);
+   static const int defaults[] = {
+      /* [QNetworkProxy::DefaultProxy] = */
+      (int(QNetworkProxy::ListeningCapability) |
+      int(QNetworkProxy::TunnelingCapability) |
+      int(QNetworkProxy::UdpTunnelingCapability)),
+      /* [QNetworkProxy::Socks5Proxy] = */
+      (int(QNetworkProxy::TunnelingCapability) |
+      int(QNetworkProxy::ListeningCapability) |
+      int(QNetworkProxy::UdpTunnelingCapability) |
+      int(QNetworkProxy::HostNameLookupCapability)),
+      // it's weird to talk about the proxy capabilities of a "not proxy"...
+      /* [QNetworkProxy::NoProxy] = */
+      (int(QNetworkProxy::ListeningCapability) |
+      int(QNetworkProxy::TunnelingCapability) |
+      int(QNetworkProxy::UdpTunnelingCapability)),
+      /* [QNetworkProxy::HttpProxy] = */
+      (int(QNetworkProxy::TunnelingCapability) |
+      int(QNetworkProxy::CachingCapability) |
+      int(QNetworkProxy::HostNameLookupCapability)),
+      /* [QNetworkProxy::HttpCachingProxy] = */
+      (int(QNetworkProxy::CachingCapability) |
+      int(QNetworkProxy::HostNameLookupCapability)),
+      /* [QNetworkProxy::FtpCachingProxy] = */
+      (int(QNetworkProxy::CachingCapability) |
+      int(QNetworkProxy::HostNameLookupCapability)),
+   };
 
-    if (int(type) < 0 || int(type) > int(QNetworkProxy::FtpCachingProxy))
-        type = QNetworkProxy::DefaultProxy;
-    return QNetworkProxy::Capabilities(defaults[int(type)]);
+   if (int(type) < 0 || int(type) > int(QNetworkProxy::FtpCachingProxy)) {
+      type = QNetworkProxy::DefaultProxy;
+   }
+   return QNetworkProxy::Capabilities(defaults[int(type)]);
 }
 
 class QNetworkProxyPrivate: public QSharedData
 {
-public:
-    QString hostName;
-    QString user;
-    QString password;
-    QNetworkProxy::Capabilities capabilities;
-    quint16 port;
-    QNetworkProxy::ProxyType type;
-    bool capabilitiesSet;
+ public:
+   QString hostName;
+   QString user;
+   QString password;
+   QNetworkProxy::Capabilities capabilities;
+   quint16 port;
+   QNetworkProxy::ProxyType type;
+   bool capabilitiesSet;
 
-    inline QNetworkProxyPrivate(QNetworkProxy::ProxyType t = QNetworkProxy::DefaultProxy,
-                                const QString &h = QString(), quint16 p = 0,
-                                const QString &u = QString(), const QString &pw = QString())
-        : hostName(h),
-          user(u),
-          password(pw),
-          capabilities(defaultCapabilitiesForType(t)),
-          port(p),
-          type(t),
-          capabilitiesSet(false)
-    { }
+   inline QNetworkProxyPrivate(QNetworkProxy::ProxyType t = QNetworkProxy::DefaultProxy,
+                               const QString &h = QString(), quint16 p = 0,
+                               const QString &u = QString(), const QString &pw = QString())
+      : hostName(h),
+        user(u),
+        password(pw),
+        capabilities(defaultCapabilitiesForType(t)),
+        port(p),
+        type(t),
+        capabilitiesSet(false) {
+   }
 
-    inline bool operator==(const QNetworkProxyPrivate &other) const
-    {
-        return type == other.type &&
-            port == other.port &&
-            hostName == other.hostName &&
-            user == other.user &&
-            password == other.password &&
-            capabilities == other.capabilities;
-    }
+   inline bool operator==(const QNetworkProxyPrivate &other) const {
+      return type == other.type &&
+             port == other.port &&
+             hostName == other.hostName &&
+             user == other.user &&
+             password == other.password &&
+             capabilities == other.capabilities;
+   }
 };
 
 template<> void QSharedDataPointer<QNetworkProxyPrivate>::detach()
 {
-    if (d && d->ref.load() == 1)
-        return;
-    QNetworkProxyPrivate *x = (d ? new QNetworkProxyPrivate(*d)
-                               : new QNetworkProxyPrivate);
-    x->ref.ref();
-    if (d && !d->ref.deref())
-        delete d;
-    d = x;
+   if (d && d->ref.load() == 1) {
+      return;
+   }
+   QNetworkProxyPrivate *x = (d ? new QNetworkProxyPrivate(*d)
+                              : new QNetworkProxyPrivate);
+   x->ref.ref();
+   if (d && !d->ref.deref()) {
+      delete d;
+   }
+   d = x;
 }
 
 /*!
@@ -421,12 +422,12 @@ template<> void QSharedDataPointer<QNetworkProxyPrivate>::detach()
     \sa setType(), setApplicationProxy()
 */
 QNetworkProxy::QNetworkProxy()
-    : d(0)
+   : d(0)
 {
-    // make sure we have QGlobalNetworkProxy singleton created, otherwise
-    // you don't have any socket engine handler created when directly setting
-    // a proxy to the socket
-    globalNetworkProxy();
+   // make sure we have QGlobalNetworkProxy singleton created, otherwise
+   // you don't have any socket engine handler created when directly setting
+   // a proxy to the socket
+   globalNetworkProxy();
 }
 
 /*!
@@ -438,20 +439,20 @@ QNetworkProxy::QNetworkProxy()
     \sa capabilities()
 */
 QNetworkProxy::QNetworkProxy(ProxyType type, const QString &hostName, quint16 port,
-                  const QString &user, const QString &password)
-    : d(new QNetworkProxyPrivate(type, hostName, port, user, password))
+                             const QString &user, const QString &password)
+   : d(new QNetworkProxyPrivate(type, hostName, port, user, password))
 {
-    // make sure we have QGlobalNetworkProxy singleton created, otherwise
-    // you don't have any socket engine handler created when directly setting
-    // a proxy to a socket
-    globalNetworkProxy();
+   // make sure we have QGlobalNetworkProxy singleton created, otherwise
+   // you don't have any socket engine handler created when directly setting
+   // a proxy to a socket
+   globalNetworkProxy();
 }
 
 /*!
     Constructs a copy of \a other.
 */
 QNetworkProxy::QNetworkProxy(const QNetworkProxy &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -460,7 +461,7 @@ QNetworkProxy::QNetworkProxy(const QNetworkProxy &other)
 */
 QNetworkProxy::~QNetworkProxy()
 {
-    // QSharedDataPointer takes care of deleting for us
+   // QSharedDataPointer takes care of deleting for us
 }
 
 /*!
@@ -471,7 +472,7 @@ QNetworkProxy::~QNetworkProxy()
 */
 bool QNetworkProxy::operator==(const QNetworkProxy &other) const
 {
-    return d == other.d || (d && other.d && *d == *other.d);
+   return d == other.d || (d && other.d && *d == *other.d);
 }
 
 /*!
@@ -489,8 +490,8 @@ bool QNetworkProxy::operator==(const QNetworkProxy &other) const
 */
 QNetworkProxy &QNetworkProxy::operator=(const QNetworkProxy &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -504,9 +505,10 @@ QNetworkProxy &QNetworkProxy::operator=(const QNetworkProxy &other)
 */
 void QNetworkProxy::setType(QNetworkProxy::ProxyType type)
 {
-    d->type = type;
-    if (!d->capabilitiesSet)
-        d->capabilities = defaultCapabilitiesForType(type);
+   d->type = type;
+   if (!d->capabilitiesSet) {
+      d->capabilities = defaultCapabilitiesForType(type);
+   }
 }
 
 /*!
@@ -516,7 +518,7 @@ void QNetworkProxy::setType(QNetworkProxy::ProxyType type)
 */
 QNetworkProxy::ProxyType QNetworkProxy::type() const
 {
-    return d ? d->type : DefaultProxy;
+   return d ? d->type : DefaultProxy;
 }
 
 /*!
@@ -528,8 +530,8 @@ QNetworkProxy::ProxyType QNetworkProxy::type() const
 */
 void QNetworkProxy::setCapabilities(Capabilities capabilities)
 {
-    d->capabilities = capabilities;
-    d->capabilitiesSet = true;
+   d->capabilities = capabilities;
+   d->capabilitiesSet = true;
 }
 
 /*!
@@ -541,7 +543,7 @@ void QNetworkProxy::setCapabilities(Capabilities capabilities)
 */
 QNetworkProxy::Capabilities QNetworkProxy::capabilities() const
 {
-    return d ? d->capabilities : defaultCapabilitiesForType(DefaultProxy);
+   return d ? d->capabilities : defaultCapabilitiesForType(DefaultProxy);
 }
 
 /*!
@@ -558,7 +560,7 @@ QNetworkProxy::Capabilities QNetworkProxy::capabilities() const
 */
 bool QNetworkProxy::isCachingProxy() const
 {
-    return capabilities() & CachingCapability;
+   return capabilities() & CachingCapability;
 }
 
 /*!
@@ -576,7 +578,7 @@ bool QNetworkProxy::isCachingProxy() const
 */
 bool QNetworkProxy::isTransparentProxy() const
 {
-    return capabilities() & TunnelingCapability;
+   return capabilities() & TunnelingCapability;
 }
 
 /*!
@@ -586,7 +588,7 @@ bool QNetworkProxy::isTransparentProxy() const
 */
 void QNetworkProxy::setUser(const QString &user)
 {
-    d->user = user;
+   d->user = user;
 }
 
 /*!
@@ -596,7 +598,7 @@ void QNetworkProxy::setUser(const QString &user)
 */
 QString QNetworkProxy::user() const
 {
-    return d ? d->user : QString();
+   return d ? d->user : QString();
 }
 
 /*!
@@ -606,7 +608,7 @@ QString QNetworkProxy::user() const
 */
 void QNetworkProxy::setPassword(const QString &password)
 {
-    d->password = password;
+   d->password = password;
 }
 
 /*!
@@ -616,7 +618,7 @@ void QNetworkProxy::setPassword(const QString &password)
 */
 QString QNetworkProxy::password() const
 {
-    return d ? d->password : QString();
+   return d ? d->password : QString();
 }
 
 /*!
@@ -626,7 +628,7 @@ QString QNetworkProxy::password() const
 */
 void QNetworkProxy::setHostName(const QString &hostName)
 {
-    d->hostName = hostName;
+   d->hostName = hostName;
 }
 
 /*!
@@ -636,7 +638,7 @@ void QNetworkProxy::setHostName(const QString &hostName)
 */
 QString QNetworkProxy::hostName() const
 {
-    return d ? d->hostName : QString();
+   return d ? d->hostName : QString();
 }
 
 /*!
@@ -646,7 +648,7 @@ QString QNetworkProxy::hostName() const
 */
 void QNetworkProxy::setPort(quint16 port)
 {
-    d->port = port;
+   d->port = port;
 }
 
 /*!
@@ -656,7 +658,7 @@ void QNetworkProxy::setPort(quint16 port)
 */
 quint16 QNetworkProxy::port() const
 {
-    return d ? d->port : 0;
+   return d ? d->port : 0;
 }
 
 /*!
@@ -675,13 +677,14 @@ quint16 QNetworkProxy::port() const
 */
 void QNetworkProxy::setApplicationProxy(const QNetworkProxy &networkProxy)
 {
-    if (globalNetworkProxy()) {
-        // don't accept setting the proxy to DefaultProxy
-        if (networkProxy.type() == DefaultProxy)
-            globalNetworkProxy()->setApplicationProxy(QNetworkProxy::NoProxy);
-        else
-            globalNetworkProxy()->setApplicationProxy(networkProxy);
-    }
+   if (globalNetworkProxy()) {
+      // don't accept setting the proxy to DefaultProxy
+      if (networkProxy.type() == DefaultProxy) {
+         globalNetworkProxy()->setApplicationProxy(QNetworkProxy::NoProxy);
+      } else {
+         globalNetworkProxy()->setApplicationProxy(networkProxy);
+      }
+   }
 }
 
 /*!
@@ -695,43 +698,45 @@ void QNetworkProxy::setApplicationProxy(const QNetworkProxy &networkProxy)
 */
 QNetworkProxy QNetworkProxy::applicationProxy()
 {
-    if (globalNetworkProxy())
-        return globalNetworkProxy()->applicationProxy();
-    return QNetworkProxy();
+   if (globalNetworkProxy()) {
+      return globalNetworkProxy()->applicationProxy();
+   }
+   return QNetworkProxy();
 }
 
 class QNetworkProxyQueryPrivate: public QSharedData
 {
-public:
-    inline QNetworkProxyQueryPrivate()
-        : localPort(-1), type(QNetworkProxyQuery::TcpSocket)
-    { }
+ public:
+   inline QNetworkProxyQueryPrivate()
+      : localPort(-1), type(QNetworkProxyQuery::TcpSocket) {
+   }
 
-    bool operator==(const QNetworkProxyQueryPrivate &other) const
-    {
-        return type == other.type &&
-            localPort == other.localPort &&
-            remote == other.remote;
-    }
+   bool operator==(const QNetworkProxyQueryPrivate &other) const {
+      return type == other.type &&
+             localPort == other.localPort &&
+             remote == other.remote;
+   }
 
-    QUrl remote;
-    int localPort;
-    QNetworkProxyQuery::QueryType type;
+   QUrl remote;
+   int localPort;
+   QNetworkProxyQuery::QueryType type;
 #ifndef QT_NO_BEARERMANAGEMENT
-    QNetworkConfiguration config;
+   QNetworkConfiguration config;
 #endif
 };
 
 template<> void QSharedDataPointer<QNetworkProxyQueryPrivate>::detach()
 {
-    if (d && d->ref.load() == 1)
-        return;
-    QNetworkProxyQueryPrivate *x = (d ? new QNetworkProxyQueryPrivate(*d)
-                                    : new QNetworkProxyQueryPrivate);
-    x->ref.ref();
-    if (d && !d->ref.deref())
-        delete d;
-    d = x;
+   if (d && d->ref.load() == 1) {
+      return;
+   }
+   QNetworkProxyQueryPrivate *x = (d ? new QNetworkProxyQueryPrivate(*d)
+                                   : new QNetworkProxyQueryPrivate);
+   x->ref.ref();
+   if (d && !d->ref.deref()) {
+      delete d;
+   }
+   d = x;
 }
 
 /*!
@@ -870,8 +875,8 @@ QNetworkProxyQuery::QNetworkProxyQuery()
 */
 QNetworkProxyQuery::QNetworkProxyQuery(const QUrl &requestUrl, QueryType queryType)
 {
-    d->remote = requestUrl;
-    d->type = queryType;
+   d->remote = requestUrl;
+   d->type = queryType;
 }
 
 /*!
@@ -885,10 +890,10 @@ QNetworkProxyQuery::QNetworkProxyQuery(const QString &hostname, int port,
                                        const QString &protocolTag,
                                        QueryType queryType)
 {
-    d->remote.setScheme(protocolTag);
-    d->remote.setHost(hostname);
-    d->remote.setPort(port);
-    d->type = queryType;
+   d->remote.setScheme(protocolTag);
+   d->remote.setHost(hostname);
+   d->remote.setPort(port);
+   d->type = queryType;
 }
 
 /*!
@@ -906,9 +911,9 @@ QNetworkProxyQuery::QNetworkProxyQuery(const QString &hostname, int port,
 QNetworkProxyQuery::QNetworkProxyQuery(quint16 bindPort, const QString &protocolTag,
                                        QueryType queryType)
 {
-    d->remote.setScheme(protocolTag);
-    d->localPort = bindPort;
-    d->type = queryType;
+   d->remote.setScheme(protocolTag);
+   d->localPort = bindPort;
+   d->type = queryType;
 }
 
 #ifndef QT_NO_BEARERMANAGEMENT
@@ -924,9 +929,9 @@ QNetworkProxyQuery::QNetworkProxyQuery(quint16 bindPort, const QString &protocol
 QNetworkProxyQuery::QNetworkProxyQuery(const QNetworkConfiguration &networkConfiguration,
                                        const QUrl &requestUrl, QueryType queryType)
 {
-    d->config = networkConfiguration;
-    d->remote = requestUrl;
-    d->type = queryType;
+   d->config = networkConfiguration;
+   d->remote = requestUrl;
+   d->type = queryType;
 }
 
 /*!
@@ -946,11 +951,11 @@ QNetworkProxyQuery::QNetworkProxyQuery(const QNetworkConfiguration &networkConfi
                                        const QString &protocolTag,
                                        QueryType queryType)
 {
-    d->config = networkConfiguration;
-    d->remote.setScheme(protocolTag);
-    d->remote.setHost(hostname);
-    d->remote.setPort(port);
-    d->type = queryType;
+   d->config = networkConfiguration;
+   d->remote.setScheme(protocolTag);
+   d->remote.setHost(hostname);
+   d->remote.setPort(port);
+   d->type = queryType;
 }
 
 /*!
@@ -972,10 +977,10 @@ QNetworkProxyQuery::QNetworkProxyQuery(const QNetworkConfiguration &networkConfi
                                        quint16 bindPort, const QString &protocolTag,
                                        QueryType queryType)
 {
-    d->config = networkConfiguration;
-    d->remote.setScheme(protocolTag);
-    d->localPort = bindPort;
-    d->type = queryType;
+   d->config = networkConfiguration;
+   d->remote.setScheme(protocolTag);
+   d->localPort = bindPort;
+   d->type = queryType;
 }
 #endif
 
@@ -983,7 +988,7 @@ QNetworkProxyQuery::QNetworkProxyQuery(const QNetworkConfiguration &networkConfi
     Constructs a QNetworkProxyQuery object that is a copy of \a other.
 */
 QNetworkProxyQuery::QNetworkProxyQuery(const QNetworkProxyQuery &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -992,7 +997,7 @@ QNetworkProxyQuery::QNetworkProxyQuery(const QNetworkProxyQuery &other)
 */
 QNetworkProxyQuery::~QNetworkProxyQuery()
 {
-    // QSharedDataPointer automatically deletes
+   // QSharedDataPointer automatically deletes
 }
 
 /*!
@@ -1000,8 +1005,8 @@ QNetworkProxyQuery::~QNetworkProxyQuery()
 */
 QNetworkProxyQuery &QNetworkProxyQuery::operator=(const QNetworkProxyQuery &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -1010,7 +1015,7 @@ QNetworkProxyQuery &QNetworkProxyQuery::operator=(const QNetworkProxyQuery &othe
 */
 bool QNetworkProxyQuery::operator==(const QNetworkProxyQuery &other) const
 {
-    return d == other.d || (d && other.d && *d == *other.d);
+   return d == other.d || (d && other.d && *d == *other.d);
 }
 
 /*!
@@ -1025,7 +1030,7 @@ bool QNetworkProxyQuery::operator==(const QNetworkProxyQuery &other) const
 */
 QNetworkProxyQuery::QueryType QNetworkProxyQuery::queryType() const
 {
-    return d ? d->type : TcpSocket;
+   return d ? d->type : TcpSocket;
 }
 
 /*!
@@ -1033,7 +1038,7 @@ QNetworkProxyQuery::QueryType QNetworkProxyQuery::queryType() const
 */
 void QNetworkProxyQuery::setQueryType(QueryType type)
 {
-    d->type = type;
+   d->type = type;
 }
 
 /*!
@@ -1048,7 +1053,7 @@ void QNetworkProxyQuery::setQueryType(QueryType type)
 */
 int QNetworkProxyQuery::peerPort() const
 {
-    return d ? d->remote.port() : -1;
+   return d ? d->remote.port() : -1;
 }
 
 /*!
@@ -1065,7 +1070,7 @@ int QNetworkProxyQuery::peerPort() const
 */
 void QNetworkProxyQuery::setPeerPort(int port)
 {
-    d->remote.setPort(port);
+   d->remote.setPort(port);
 }
 
 /*!
@@ -1080,7 +1085,7 @@ void QNetworkProxyQuery::setPeerPort(int port)
 */
 QString QNetworkProxyQuery::peerHostName() const
 {
-    return d ? d->remote.host() : QString();
+   return d ? d->remote.host() : QString();
 }
 
 /*!
@@ -1097,7 +1102,7 @@ QString QNetworkProxyQuery::peerHostName() const
 */
 void QNetworkProxyQuery::setPeerHostName(const QString &hostname)
 {
-    d->remote.setHost(hostname);
+   d->remote.setHost(hostname);
 }
 
 /*!
@@ -1108,7 +1113,7 @@ void QNetworkProxyQuery::setPeerHostName(const QString &hostname)
 */
 int QNetworkProxyQuery::localPort() const
 {
-    return d ? d->localPort : -1;
+   return d ? d->localPort : -1;
 }
 
 /*!
@@ -1131,7 +1136,7 @@ int QNetworkProxyQuery::localPort() const
 */
 void QNetworkProxyQuery::setLocalPort(int port)
 {
-    d->localPort = port;
+   d->localPort = port;
 }
 
 /*!
@@ -1146,7 +1151,7 @@ void QNetworkProxyQuery::setLocalPort(int port)
 */
 QString QNetworkProxyQuery::protocolTag() const
 {
-    return d ? d->remote.scheme() : QString();
+   return d ? d->remote.scheme() : QString();
 }
 
 /*!
@@ -1165,7 +1170,7 @@ QString QNetworkProxyQuery::protocolTag() const
 */
 void QNetworkProxyQuery::setProtocolTag(const QString &protocolTag)
 {
-    d->remote.setScheme(protocolTag);
+   d->remote.setScheme(protocolTag);
 }
 
 /*!
@@ -1176,7 +1181,7 @@ void QNetworkProxyQuery::setProtocolTag(const QString &protocolTag)
 */
 QUrl QNetworkProxyQuery::url() const
 {
-    return d ? d->remote : QUrl();
+   return d ? d->remote : QUrl();
 }
 
 /*!
@@ -1190,7 +1195,7 @@ QUrl QNetworkProxyQuery::url() const
 */
 void QNetworkProxyQuery::setUrl(const QUrl &url)
 {
-    d->remote = url;
+   d->remote = url;
 }
 
 #ifndef QT_NO_BEARERMANAGEMENT
@@ -1201,7 +1206,7 @@ void QNetworkProxyQuery::setUrl(const QUrl &url)
 */
 QNetworkConfiguration QNetworkProxyQuery::networkConfiguration() const
 {
-    return d ? d->config : QNetworkConfiguration();
+   return d ? d->config : QNetworkConfiguration();
 }
 
 /*!
@@ -1220,7 +1225,7 @@ QNetworkConfiguration QNetworkProxyQuery::networkConfiguration() const
 */
 void QNetworkProxyQuery::setNetworkConfiguration(const QNetworkConfiguration &networkConfiguration)
 {
-    d->config = networkConfiguration;
+   d->config = networkConfiguration;
 }
 #endif
 
@@ -1300,11 +1305,11 @@ QNetworkProxyFactory::~QNetworkProxyFactory()
 */
 void QNetworkProxyFactory::setUseSystemConfiguration(bool enable)
 {
-    if (enable) {
-        setApplicationProxyFactory(new QSystemConfigurationProxyFactory);
-    } else {
-        setApplicationProxyFactory(0);
-    }
+   if (enable) {
+      setApplicationProxyFactory(new QSystemConfigurationProxyFactory);
+   } else {
+      setApplicationProxyFactory(0);
+   }
 }
 
 /*!
@@ -1327,8 +1332,9 @@ void QNetworkProxyFactory::setUseSystemConfiguration(bool enable)
 */
 void QNetworkProxyFactory::setApplicationProxyFactory(QNetworkProxyFactory *factory)
 {
-    if (globalNetworkProxy())
-        globalNetworkProxy()->setApplicationProxyFactory(factory);
+   if (globalNetworkProxy()) {
+      globalNetworkProxy()->setApplicationProxyFactory(factory);
+   }
 }
 
 /*!
@@ -1408,9 +1414,10 @@ void QNetworkProxyFactory::setApplicationProxyFactory(QNetworkProxyFactory *fact
 */
 QList<QNetworkProxy> QNetworkProxyFactory::proxyForQuery(const QNetworkProxyQuery &query)
 {
-    if (!globalNetworkProxy())
-        return QList<QNetworkProxy>() << QNetworkProxy(QNetworkProxy::NoProxy);
-    return globalNetworkProxy()->proxyForQuery(query);
+   if (!globalNetworkProxy()) {
+      return QList<QNetworkProxy>() << QNetworkProxy(QNetworkProxy::NoProxy);
+   }
+   return globalNetworkProxy()->proxyForQuery(query);
 }
 
 QT_END_NAMESPACE

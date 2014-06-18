@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,38 +37,38 @@ class QFileIconProvider;
 
 class QFileIconProviderPrivate
 {
-    Q_DECLARE_PUBLIC(QFileIconProvider)
+   Q_DECLARE_PUBLIC(QFileIconProvider)
 
-public:
-    QFileIconProviderPrivate();
-    void setUseCustomDirectoryIcons(bool enable);
-    QIcon getIcon(QStyle::StandardPixmap name) const;
+ public:
+   QFileIconProviderPrivate();
+   void setUseCustomDirectoryIcons(bool enable);
+   QIcon getIcon(QStyle::StandardPixmap name) const;
 
 #ifdef Q_OS_WIN
-    QIcon getWinIcon(const QFileInfo &fi) const;
+   QIcon getWinIcon(const QFileInfo &fi) const;
 #elif defined(Q_OS_MAC)
-    QIcon getMacIcon(const QFileInfo &fi) const;
+   QIcon getMacIcon(const QFileInfo &fi) const;
 #endif
 
-    QFileIconProvider * q_ptr;
-    const QString homePath;
+   QFileIconProvider *q_ptr;
+   const QString homePath;
 
-private:
-    bool useCustomDirectoryIcons;
-    mutable QIcon file;
-    mutable QIcon fileLink;
-    mutable QIcon directory;
-    mutable QIcon directoryLink;
-    mutable QIcon harddisk;
-    mutable QIcon floppy;
-    mutable QIcon cdrom;
-    mutable QIcon ram;
-    mutable QIcon network;
-    mutable QIcon computer;
-    mutable QIcon desktop;
-    mutable QIcon trashcan;
-    mutable QIcon generic;
-    mutable QIcon home;
+ private:
+   bool useCustomDirectoryIcons;
+   mutable QIcon file;
+   mutable QIcon fileLink;
+   mutable QIcon directory;
+   mutable QIcon directoryLink;
+   mutable QIcon harddisk;
+   mutable QIcon floppy;
+   mutable QIcon cdrom;
+   mutable QIcon ram;
+   mutable QIcon network;
+   mutable QIcon computer;
+   mutable QIcon desktop;
+   mutable QIcon trashcan;
+   mutable QIcon generic;
+   mutable QIcon home;
 };
 
 

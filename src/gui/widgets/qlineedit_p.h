@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,81 +43,78 @@ QT_BEGIN_NAMESPACE
 
 class QLineEditPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QLineEdit)
-public:
+   Q_DECLARE_PUBLIC(QLineEdit)
+ public:
 
-    QLineEditPrivate()
-        : control(0), frame(1), contextMenuEnabled(1), cursorVisible(0),
+   QLineEditPrivate()
+      : control(0), frame(1), contextMenuEnabled(1), cursorVisible(0),
         dragEnabled(0), clickCausedFocus(0), hscroll(0), vscroll(0),
         alignment(Qt::AlignLeading | Qt::AlignVCenter),
-        leftTextMargin(0), topTextMargin(0), rightTextMargin(0), bottomTextMargin(0)
-    {
-    }
+        leftTextMargin(0), topTextMargin(0), rightTextMargin(0), bottomTextMargin(0) {
+   }
 
-    ~QLineEditPrivate()
-    {
-    }
+   ~QLineEditPrivate() {
+   }
 
-    QLineControl *control;
+   QLineControl *control;
 
 #ifndef QT_NO_CONTEXTMENU
-    QPointer<QAction> selectAllAction;
+   QPointer<QAction> selectAllAction;
 #endif
-    void init(const QString&);
+   void init(const QString &);
 
-    QRect adjustedControlRect(const QRect &) const;
+   QRect adjustedControlRect(const QRect &) const;
 
-    int xToPos(int x, QTextLine::CursorPosition = QTextLine::CursorBetweenCharacters) const;
-    QRect cursorRect() const;
-    void setCursorVisible(bool visible);
+   int xToPos(int x, QTextLine::CursorPosition = QTextLine::CursorBetweenCharacters) const;
+   QRect cursorRect() const;
+   void setCursorVisible(bool visible);
 
-    void updatePasswordEchoEditing(bool);
+   void updatePasswordEchoEditing(bool);
 
-    inline bool shouldEnableInputMethod() const
-    {
-        return !control->isReadOnly();
-    }
+   inline bool shouldEnableInputMethod() const {
+      return !control->isReadOnly();
+   }
 
-    QPoint tripleClick;
-    QBasicTimer tripleClickTimer;
-    uint frame : 1;
-    uint contextMenuEnabled : 1;
-    uint cursorVisible : 1;
-    uint dragEnabled : 1;
-    uint clickCausedFocus : 1;
-    int hscroll;
-    int vscroll;
-    uint alignment;
-    static const int verticalMargin;
-    static const int horizontalMargin;
+   QPoint tripleClick;
+   QBasicTimer tripleClickTimer;
+   uint frame : 1;
+   uint contextMenuEnabled : 1;
+   uint cursorVisible : 1;
+   uint dragEnabled : 1;
+   uint clickCausedFocus : 1;
+   int hscroll;
+   int vscroll;
+   uint alignment;
+   static const int verticalMargin;
+   static const int horizontalMargin;
 
-    bool sendMouseEventToInputContext(QMouseEvent *e);
+   bool sendMouseEventToInputContext(QMouseEvent *e);
 
-    QRect adjustedContentsRect() const;
+   QRect adjustedContentsRect() const;
 
-    void _q_handleWindowActivate();
-    void _q_textEdited(const QString &);
-    void _q_cursorPositionChanged(int, int);
+   void _q_handleWindowActivate();
+   void _q_textEdited(const QString &);
+   void _q_cursorPositionChanged(int, int);
 #ifdef QT_KEYPAD_NAVIGATION
-    void _q_editFocusChange(bool);
+   void _q_editFocusChange(bool);
 #endif
-    void _q_selectionChanged();
-    void _q_updateNeeded(const QRect &);
+   void _q_selectionChanged();
+   void _q_updateNeeded(const QRect &);
 #ifndef QT_NO_COMPLETER
-    void _q_completionHighlighted(QString);
+   void _q_completionHighlighted(QString);
 #endif
 #ifndef QT_NO_DRAGANDDROP
-    QPoint dndPos;
-    QBasicTimer dndTimer;
-    void drag();
+   QPoint dndPos;
+   QBasicTimer dndTimer;
+   void drag();
 #endif
 
-    int leftTextMargin;
-    int topTextMargin;
-    int rightTextMargin;
-    int bottomTextMargin;
+   int leftTextMargin;
+   int topTextMargin;
+   int rightTextMargin;
+   int bottomTextMargin;
 
-    QString placeholderText;
+   QString placeholderText;
 };
 
 #endif // QT_NO_LINEEDIT

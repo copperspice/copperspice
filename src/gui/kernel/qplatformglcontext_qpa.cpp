@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,69 +32,68 @@
 
 class QPlatformGLThreadContext
 {
-public:
-    ~QPlatformGLThreadContext() {
-        if (context)
-            context->doneCurrent();
-    }
-    QPlatformGLContext *context;
+ public:
+   ~QPlatformGLThreadContext() {
+      if (context) {
+         context->doneCurrent();
+      }
+   }
+   QPlatformGLContext *context;
 };
 
 static QThreadStorage<QPlatformGLThreadContext *> qplatformgl_context_storage;
 
 class QPlatformGLContextPrivate
 {
-public:
-    QPlatformGLContextPrivate()
-        :qGLContextHandle(0)
-    {
-    }
+ public:
+   QPlatformGLContextPrivate()
+      : qGLContextHandle(0) {
+   }
 
-    virtual ~QPlatformGLContextPrivate()
-    {
-        //do not delete the QGLContext handle here as it is deleted in
-        //QWidgetPrivate::deleteTLSysExtra()
-    }
-    void *qGLContextHandle;
-    void (*qGLContextDeleteFunction)(void *handle);
-    static QPlatformGLContext *staticSharedContext;
+   virtual ~QPlatformGLContextPrivate() {
+      //do not delete the QGLContext handle here as it is deleted in
+      //QWidgetPrivate::deleteTLSysExtra()
+   }
+   void *qGLContextHandle;
+   void (*qGLContextDeleteFunction)(void *handle);
+   static QPlatformGLContext *staticSharedContext;
 
-    static void setCurrentContext(QPlatformGLContext *context);
+   static void setCurrentContext(QPlatformGLContext *context);
 };
 
 QPlatformGLContext *QPlatformGLContextPrivate::staticSharedContext = 0;
 
 void QPlatformGLContextPrivate::setCurrentContext(QPlatformGLContext *context)
 {
-    QPlatformGLThreadContext *threadContext = qplatformgl_context_storage.localData();
-    if (!threadContext) {
-        if (!QThread::currentThread()) {
-            qWarning("No QTLS available. currentContext wont work");
-            return;
-        }
-        threadContext = new QPlatformGLThreadContext;
-        qplatformgl_context_storage.setLocalData(threadContext);
-    }
-    threadContext->context = context;
+   QPlatformGLThreadContext *threadContext = qplatformgl_context_storage.localData();
+   if (!threadContext) {
+      if (!QThread::currentThread()) {
+         qWarning("No QTLS available. currentContext wont work");
+         return;
+      }
+      threadContext = new QPlatformGLThreadContext;
+      qplatformgl_context_storage.setLocalData(threadContext);
+   }
+   threadContext->context = context;
 }
 
 /*!
   Returns the last context which called makeCurrent. This function is thread aware.
 */
-const QPlatformGLContext* QPlatformGLContext::currentContext()
+const QPlatformGLContext *QPlatformGLContext::currentContext()
 {
-    QPlatformGLThreadContext *threadContext = qplatformgl_context_storage.localData();
-    if(threadContext) {
-        return threadContext->context;
-    }
-    return 0;
+   QPlatformGLThreadContext *threadContext = qplatformgl_context_storage.localData();
+   if (threadContext) {
+      return threadContext->context;
+   }
+   return 0;
 }
 
 /*!
     All subclasses needs to specify the platformWindow. It can be a null window.
 */
 QPlatformGLContext::QPlatformGLContext()
-    :d_ptr(new QPlatformGLContextPrivate())
+   : d_ptr(new QPlatformGLContextPrivate())
 {
 }
 
@@ -103,9 +102,9 @@ QPlatformGLContext::QPlatformGLContext()
 */
 QPlatformGLContext::~QPlatformGLContext()
 {
-    if (QPlatformGLContext::currentContext() == this) {
-        doneCurrent();
-    }
+   if (QPlatformGLContext::currentContext() == this) {
+      doneCurrent();
+   }
 
 }
 
@@ -114,7 +113,7 @@ QPlatformGLContext::~QPlatformGLContext()
 */
 void QPlatformGLContext::makeCurrent()
 {
-    QPlatformGLContextPrivate::setCurrentContext(this);
+   QPlatformGLContextPrivate::setCurrentContext(this);
 }
 
 /*!
@@ -123,7 +122,7 @@ void QPlatformGLContext::makeCurrent()
 */
 void QPlatformGLContext::doneCurrent()
 {
-    QPlatformGLContextPrivate::setCurrentContext(0);
+   QPlatformGLContextPrivate::setCurrentContext(0);
 }
 
 /*
@@ -132,25 +131,25 @@ void QPlatformGLContext::doneCurrent()
 */
 void *QPlatformGLContext::qGLContextHandle() const
 {
-    Q_D(const QPlatformGLContext);
-    return d->qGLContextHandle;
+   Q_D(const QPlatformGLContext);
+   return d->qGLContextHandle;
 }
 
-void QPlatformGLContext::setQGLContextHandle(void *handle,void (*qGLContextDeleteFunction)(void *))
+void QPlatformGLContext::setQGLContextHandle(void *handle, void (*qGLContextDeleteFunction)(void *))
 {
-    Q_D(QPlatformGLContext);
-    d->qGLContextHandle = handle;
-    d->qGLContextDeleteFunction = qGLContextDeleteFunction;
+   Q_D(QPlatformGLContext);
+   d->qGLContextHandle = handle;
+   d->qGLContextDeleteFunction = qGLContextDeleteFunction;
 }
 
 void QPlatformGLContext::deleteQGLContext()
 {
-    Q_D(QPlatformGLContext);
-    if (d->qGLContextDeleteFunction && d->qGLContextHandle) {
-        d->qGLContextDeleteFunction(d->qGLContextHandle);
-        d->qGLContextDeleteFunction = 0;
-        d->qGLContextHandle = 0;
-    }
+   Q_D(QPlatformGLContext);
+   if (d->qGLContextDeleteFunction && d->qGLContextHandle) {
+      d->qGLContextDeleteFunction(d->qGLContextHandle);
+      d->qGLContextDeleteFunction = 0;
+      d->qGLContextHandle = 0;
+   }
 }
 
 /*!

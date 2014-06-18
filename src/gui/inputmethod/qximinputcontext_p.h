@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -50,51 +50,51 @@ class QString;
 
 class QXIMInputContext : public QInputContext
 {
-    CS_OBJECT(QXIMInputContext)
+   CS_OBJECT(QXIMInputContext)
 
-public:
-    struct ICData {
-        XIC ic;
-        XFontSet fontset;
-        QWidget *widget;
-        QString text;
-        QBitArray selectedChars;
-        bool composing;
-        bool preeditEmpty;
-        void clear();
-    };
+ public:
+   struct ICData {
+      XIC ic;
+      XFontSet fontset;
+      QWidget *widget;
+      QString text;
+      QBitArray selectedChars;
+      bool composing;
+      bool preeditEmpty;
+      void clear();
+   };
 
-    QXIMInputContext();
-    ~QXIMInputContext();
+   QXIMInputContext();
+   ~QXIMInputContext();
 
-    QString identifierName();
-    QString language();
+   QString identifierName();
+   QString language();
 
-    void reset();
+   void reset();
 
-    void mouseHandler( int x, QMouseEvent *event);
-    bool isComposing() const;
+   void mouseHandler( int x, QMouseEvent *event);
+   bool isComposing() const;
 
-    void setFocusWidget( QWidget *w );
-    void widgetDestroyed(QWidget *w);
+   void setFocusWidget( QWidget *w );
+   void widgetDestroyed(QWidget *w);
 
-    void create_xim();
-    void close_xim();
+   void create_xim();
+   void close_xim();
 
-    void update();
+   void update();
 
-    ICData *icData() const;
-protected:
-    bool x11FilterEvent( QWidget *keywidget, XEvent *event );
+   ICData *icData() const;
+ protected:
+   bool x11FilterEvent( QWidget *keywidget, XEvent *event );
 
-private:
-    static XIMStyle xim_style;
+ private:
+   static XIMStyle xim_style;
 
-    QString _language;
-    XIM xim;
-    QHash<WId, ICData *> ximData;
+   QString _language;
+   XIM xim;
+   QHash<WId, ICData *> ximData;
 
-    ICData *createICData(QWidget *w);
+   ICData *createICData(QWidget *w);
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,74 +43,82 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPen &);
 
 class Q_GUI_EXPORT QPen
 {
-public:
-    QPen();
-    QPen(Qt::PenStyle);
-    QPen(const QColor &color);
-    QPen(const QBrush &brush, qreal width, Qt::PenStyle s = Qt::SolidLine,
-         Qt::PenCapStyle c = Qt::SquareCap, Qt::PenJoinStyle j = Qt::BevelJoin);
-    QPen(const QPen &pen);
+ public:
+   QPen();
+   QPen(Qt::PenStyle);
+   QPen(const QColor &color);
+   QPen(const QBrush &brush, qreal width, Qt::PenStyle s = Qt::SolidLine,
+        Qt::PenCapStyle c = Qt::SquareCap, Qt::PenJoinStyle j = Qt::BevelJoin);
+   QPen(const QPen &pen);
 
-    ~QPen();
+   ~QPen();
 
-    QPen &operator=(const QPen &pen);
+   QPen &operator=(const QPen &pen);
 
-    inline QPen &operator=(QPen &&other)
-    { qSwap(d, other.d); return *this; }
+   inline QPen &operator=(QPen && other) {
+      qSwap(d, other.d);
+      return *this;
+   }
 
-    inline void swap(QPen &other) { qSwap(d, other.d); }
+   inline void swap(QPen &other) {
+      qSwap(d, other.d);
+   }
 
-    Qt::PenStyle style() const;
-    void setStyle(Qt::PenStyle);
+   Qt::PenStyle style() const;
+   void setStyle(Qt::PenStyle);
 
-    QVector<qreal> dashPattern() const;
-    void setDashPattern(const QVector<qreal> &pattern);
+   QVector<qreal> dashPattern() const;
+   void setDashPattern(const QVector<qreal> &pattern);
 
-    qreal dashOffset() const;
-    void setDashOffset(qreal doffset);
+   qreal dashOffset() const;
+   void setDashOffset(qreal doffset);
 
-    qreal miterLimit() const;
-    void setMiterLimit(qreal limit);
+   qreal miterLimit() const;
+   void setMiterLimit(qreal limit);
 
-    qreal widthF() const;
-    void setWidthF(qreal width);
+   qreal widthF() const;
+   void setWidthF(qreal width);
 
-    int width() const;
-    void setWidth(int width);
+   int width() const;
+   void setWidth(int width);
 
-    QColor color() const;
-    void setColor(const QColor &color);
+   QColor color() const;
+   void setColor(const QColor &color);
 
-    QBrush brush() const;
-    void setBrush(const QBrush &brush);
+   QBrush brush() const;
+   void setBrush(const QBrush &brush);
 
-    bool isSolid() const;
+   bool isSolid() const;
 
-    Qt::PenCapStyle capStyle() const;
-    void setCapStyle(Qt::PenCapStyle pcs);
+   Qt::PenCapStyle capStyle() const;
+   void setCapStyle(Qt::PenCapStyle pcs);
 
-    Qt::PenJoinStyle joinStyle() const;
-    void setJoinStyle(Qt::PenJoinStyle pcs);
+   Qt::PenJoinStyle joinStyle() const;
+   void setJoinStyle(Qt::PenJoinStyle pcs);
 
-    bool isCosmetic() const;
-    void setCosmetic(bool cosmetic);
+   bool isCosmetic() const;
+   void setCosmetic(bool cosmetic);
 
-    bool operator==(const QPen &p) const;
-    inline bool operator!=(const QPen &p) const { return !(operator==(p)); }
-    operator QVariant() const;
+   bool operator==(const QPen &p) const;
+   inline bool operator!=(const QPen &p) const {
+      return !(operator==(p));
+   }
+   operator QVariant() const;
 
-    bool isDetached();
+   bool isDetached();
 
-    typedef QPenPrivate * DataPtr;
-    inline DataPtr &data_ptr() { return d; }
+   typedef QPenPrivate *DataPtr;
+   inline DataPtr &data_ptr() {
+      return d;
+   }
 
-private:
-    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPen &);
-    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPen &);
+ private:
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPen &);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPen &);
 
-    void detach();
-    class QPenPrivate *d;
-    
+   void detach();
+   class QPenPrivate *d;
+
 };
 
 Q_DECLARE_TYPEINFO(QPen, Q_MOVABLE_TYPE);

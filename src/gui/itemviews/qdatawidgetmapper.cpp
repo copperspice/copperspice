@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,207 +38,213 @@ QT_BEGIN_NAMESPACE
 class QDataWidgetMapperPrivate
 {
 
-public:
-    Q_DECLARE_PUBLIC(QDataWidgetMapper)
+ public:
+   Q_DECLARE_PUBLIC(QDataWidgetMapper)
 
-    QDataWidgetMapperPrivate()
-        : model(QAbstractItemModelPrivate::staticEmptyModel()), delegate(0),
-          orientation(Qt::Horizontal), submitPolicy(QDataWidgetMapper::AutoSubmit)
-    {
-    }
+   QDataWidgetMapperPrivate()
+      : model(QAbstractItemModelPrivate::staticEmptyModel()), delegate(0),
+        orientation(Qt::Horizontal), submitPolicy(QDataWidgetMapper::AutoSubmit) {
+   }
 
-    virtual ~QDataWidgetMapperPrivate() {}
+   virtual ~QDataWidgetMapperPrivate() {}
 
-    QAbstractItemModel *model;
-    QAbstractItemDelegate *delegate;
-    Qt::Orientation orientation;
-    QDataWidgetMapper::SubmitPolicy submitPolicy;
-    QPersistentModelIndex rootIndex;
-    QPersistentModelIndex currentTopLeft;
+   QAbstractItemModel *model;
+   QAbstractItemDelegate *delegate;
+   Qt::Orientation orientation;
+   QDataWidgetMapper::SubmitPolicy submitPolicy;
+   QPersistentModelIndex rootIndex;
+   QPersistentModelIndex currentTopLeft;
 
-    inline int itemCount()
-    {
-        return orientation == Qt::Horizontal
-            ? model->rowCount(rootIndex)
-            : model->columnCount(rootIndex);
-    }
+   inline int itemCount() {
+      return orientation == Qt::Horizontal
+             ? model->rowCount(rootIndex)
+             : model->columnCount(rootIndex);
+   }
 
-    inline int currentIdx() const
-    {
-        return orientation == Qt::Horizontal ? currentTopLeft.row() : currentTopLeft.column();
-    }
+   inline int currentIdx() const {
+      return orientation == Qt::Horizontal ? currentTopLeft.row() : currentTopLeft.column();
+   }
 
-    inline QModelIndex indexAt(int itemPos)
-    {
-        return orientation == Qt::Horizontal
-            ? model->index(currentIdx(), itemPos, rootIndex)
-            : model->index(itemPos, currentIdx(), rootIndex);
-    }
+   inline QModelIndex indexAt(int itemPos) {
+      return orientation == Qt::Horizontal
+             ? model->index(currentIdx(), itemPos, rootIndex)
+             : model->index(itemPos, currentIdx(), rootIndex);
+   }
 
-    inline void flipEventFilters(QAbstractItemDelegate *oldDelegate,
-                                 QAbstractItemDelegate *newDelegate)
-    {
-        for (int i = 0; i < widgetMap.count(); ++i) {
-            QWidget *w = widgetMap.at(i).widget;
-            if (!w)
-                continue;
-            w->removeEventFilter(oldDelegate);
-            w->installEventFilter(newDelegate);
-        }
-    }
+   inline void flipEventFilters(QAbstractItemDelegate *oldDelegate,
+                                QAbstractItemDelegate *newDelegate) {
+      for (int i = 0; i < widgetMap.count(); ++i) {
+         QWidget *w = widgetMap.at(i).widget;
+         if (!w) {
+            continue;
+         }
+         w->removeEventFilter(oldDelegate);
+         w->installEventFilter(newDelegate);
+      }
+   }
 
-    void populate();
+   void populate();
 
-    // private slots
-    void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-    void _q_commitData(QWidget *);
-    void _q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint);
-    void _q_modelDestroyed();
+   // private slots
+   void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+   void _q_commitData(QWidget *);
+   void _q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint);
+   void _q_modelDestroyed();
 
-    struct WidgetMapper
-    {
-        inline WidgetMapper(QWidget *w = 0, int c = 0, const QModelIndex &i = QModelIndex())
-            : widget(w), section(c), currentIndex(i) {}
-        inline WidgetMapper(QWidget *w, int c, const QModelIndex &i, const QByteArray &p)
-            : widget(w), section(c), currentIndex(i), property(p) {}
+   struct WidgetMapper {
+      inline WidgetMapper(QWidget *w = 0, int c = 0, const QModelIndex &i = QModelIndex())
+         : widget(w), section(c), currentIndex(i) {}
+      inline WidgetMapper(QWidget *w, int c, const QModelIndex &i, const QByteArray &p)
+         : widget(w), section(c), currentIndex(i), property(p) {}
 
-        QPointer<QWidget> widget;
-        int section;
-        QPersistentModelIndex currentIndex;
-        QByteArray property;
-    };
+      QPointer<QWidget> widget;
+      int section;
+      QPersistentModelIndex currentIndex;
+      QByteArray property;
+   };
 
-    void populate(WidgetMapper &m);
-    int findWidget(QWidget *w) const;
+   void populate(WidgetMapper &m);
+   int findWidget(QWidget *w) const;
 
-    bool commit(const WidgetMapper &m);
+   bool commit(const WidgetMapper &m);
 
-    QList<WidgetMapper> widgetMap;
+   QList<WidgetMapper> widgetMap;
 
-protected:
-	 QDataWidgetMapper *q_ptr;
+ protected:
+   QDataWidgetMapper *q_ptr;
 
 };
 
 int QDataWidgetMapperPrivate::findWidget(QWidget *w) const
 {
-    for (int i = 0; i < widgetMap.count(); ++i) {
-        if (widgetMap.at(i).widget == w)
-            return i;
-    }
-    return -1;
+   for (int i = 0; i < widgetMap.count(); ++i) {
+      if (widgetMap.at(i).widget == w) {
+         return i;
+      }
+   }
+   return -1;
 }
 
 bool QDataWidgetMapperPrivate::commit(const WidgetMapper &m)
 {
-    if (m.widget.isNull())
-        return true; // just ignore
+   if (m.widget.isNull()) {
+      return true;   // just ignore
+   }
 
-    if (!m.currentIndex.isValid())
-        return false;
+   if (!m.currentIndex.isValid()) {
+      return false;
+   }
 
-    // Create copy to avoid passing the widget mappers data
-    QModelIndex idx = m.currentIndex;
-    if (m.property.isEmpty())
-        delegate->setModelData(m.widget, model, idx);
-    else
-        model->setData(idx, m.widget->property(m.property), Qt::EditRole);
+   // Create copy to avoid passing the widget mappers data
+   QModelIndex idx = m.currentIndex;
+   if (m.property.isEmpty()) {
+      delegate->setModelData(m.widget, model, idx);
+   } else {
+      model->setData(idx, m.widget->property(m.property), Qt::EditRole);
+   }
 
-    return true;
+   return true;
 }
 
 void QDataWidgetMapperPrivate::populate(WidgetMapper &m)
 {
-    if (m.widget.isNull())
-        return;
+   if (m.widget.isNull()) {
+      return;
+   }
 
-    m.currentIndex = indexAt(m.section);
-    if (m.property.isEmpty())
-        delegate->setEditorData(m.widget, m.currentIndex);
-    else
-        m.widget->setProperty(m.property, m.currentIndex.data(Qt::EditRole));
+   m.currentIndex = indexAt(m.section);
+   if (m.property.isEmpty()) {
+      delegate->setEditorData(m.widget, m.currentIndex);
+   } else {
+      m.widget->setProperty(m.property, m.currentIndex.data(Qt::EditRole));
+   }
 }
 
 void QDataWidgetMapperPrivate::populate()
 {
-    for (int i = 0; i < widgetMap.count(); ++i)
-        populate(widgetMap[i]);
+   for (int i = 0; i < widgetMap.count(); ++i) {
+      populate(widgetMap[i]);
+   }
 }
 
 static bool qContainsIndex(const QModelIndex &idx, const QModelIndex &topLeft,
                            const QModelIndex &bottomRight)
 {
-    return idx.row() >= topLeft.row() && idx.row() <= bottomRight.row()
-           && idx.column() >= topLeft.column() && idx.column() <= bottomRight.column();
+   return idx.row() >= topLeft.row() && idx.row() <= bottomRight.row()
+          && idx.column() >= topLeft.column() && idx.column() <= bottomRight.column();
 }
 
 void QDataWidgetMapperPrivate::_q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
-    if (topLeft.parent() != rootIndex)
-        return; // not in our hierarchy
+   if (topLeft.parent() != rootIndex) {
+      return;   // not in our hierarchy
+   }
 
-    for (int i = 0; i < widgetMap.count(); ++i) {
-        WidgetMapper &m = widgetMap[i];
-        if (qContainsIndex(m.currentIndex, topLeft, bottomRight))
-            populate(m);
-    }
+   for (int i = 0; i < widgetMap.count(); ++i) {
+      WidgetMapper &m = widgetMap[i];
+      if (qContainsIndex(m.currentIndex, topLeft, bottomRight)) {
+         populate(m);
+      }
+   }
 }
 
 void QDataWidgetMapperPrivate::_q_commitData(QWidget *w)
 {
-    if (submitPolicy == QDataWidgetMapper::ManualSubmit)
-        return;
+   if (submitPolicy == QDataWidgetMapper::ManualSubmit) {
+      return;
+   }
 
-    int idx = findWidget(w);
-    if (idx == -1)
-        return; // not our widget
+   int idx = findWidget(w);
+   if (idx == -1) {
+      return;   // not our widget
+   }
 
-    commit(widgetMap.at(idx));
+   commit(widgetMap.at(idx));
 }
 
 class QFocusHelper: public QWidget
 {
-public:
-    bool focusNextPrevChild(bool next)
-    {
-        return QWidget::focusNextPrevChild(next);
-    }
+ public:
+   bool focusNextPrevChild(bool next) {
+      return QWidget::focusNextPrevChild(next);
+   }
 
-    static inline void focusNextPrevChild(QWidget *w, bool next)
-    {
-        static_cast<QFocusHelper *>(w)->focusNextPrevChild(next);
-    }
+   static inline void focusNextPrevChild(QWidget *w, bool next) {
+      static_cast<QFocusHelper *>(w)->focusNextPrevChild(next);
+   }
 };
 
 void QDataWidgetMapperPrivate::_q_closeEditor(QWidget *w, QAbstractItemDelegate::EndEditHint hint)
 {
-    int idx = findWidget(w);
-    if (idx == -1)
-        return; // not our widget
+   int idx = findWidget(w);
+   if (idx == -1) {
+      return;   // not our widget
+   }
 
-    switch (hint) {
-    case QAbstractItemDelegate::RevertModelCache: {
-        populate(widgetMap[idx]);
-        break; }
-    case QAbstractItemDelegate::EditNextItem:
-        QFocusHelper::focusNextPrevChild(w, true);
-        break;
-    case QAbstractItemDelegate::EditPreviousItem:
-        QFocusHelper::focusNextPrevChild(w, false);
-        break;
-    case QAbstractItemDelegate::SubmitModelCache:
-    case QAbstractItemDelegate::NoHint:
-        // nothing
-        break;
-    }
+   switch (hint) {
+      case QAbstractItemDelegate::RevertModelCache: {
+         populate(widgetMap[idx]);
+         break;
+      }
+      case QAbstractItemDelegate::EditNextItem:
+         QFocusHelper::focusNextPrevChild(w, true);
+         break;
+      case QAbstractItemDelegate::EditPreviousItem:
+         QFocusHelper::focusNextPrevChild(w, false);
+         break;
+      case QAbstractItemDelegate::SubmitModelCache:
+      case QAbstractItemDelegate::NoHint:
+         // nothing
+         break;
+   }
 }
 
 void QDataWidgetMapperPrivate::_q_modelDestroyed()
 {
-    Q_Q(QDataWidgetMapper);
+   Q_Q(QDataWidgetMapper);
 
-    model = 0;
-    q->setModel(QAbstractItemModelPrivate::staticEmptyModel());
+   model = 0;
+   q->setModel(QAbstractItemModelPrivate::staticEmptyModel());
 }
 
 /*!
@@ -332,10 +338,10 @@ void QDataWidgetMapperPrivate::_q_modelDestroyed()
     \sa setOrientation(), setSubmitPolicy()
  */
 QDataWidgetMapper::QDataWidgetMapper(QObject *parent)
-   : QObject(parent), d_ptr(new QDataWidgetMapperPrivate)    
+   : QObject(parent), d_ptr(new QDataWidgetMapperPrivate)
 {
-    d_ptr->q_ptr = this;	
-    setItemDelegate(new QItemDelegate(this));
+   d_ptr->q_ptr = this;
+   setItemDelegate(new QItemDelegate(this));
 }
 
 /*!
@@ -353,27 +359,28 @@ QDataWidgetMapper::~QDataWidgetMapper()
  */
 void QDataWidgetMapper::setModel(QAbstractItemModel *model)
 {
-    Q_D(QDataWidgetMapper);
+   Q_D(QDataWidgetMapper);
 
-    if (d->model == model)
-        return;
+   if (d->model == model) {
+      return;
+   }
 
-    if (d->model) {
-        disconnect(d->model, SIGNAL(dataChanged(const QModelIndex &,const QModelIndex &)), 
-               this,SLOT(_q_dataChanged(const QModelIndex &,const QModelIndex &)));
+   if (d->model) {
+      disconnect(d->model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+                 this, SLOT(_q_dataChanged(const QModelIndex &, const QModelIndex &)));
 
-        disconnect(d->model, SIGNAL(destroyed()), this, SLOT(_q_modelDestroyed()));
-    }
-    clearMapping();
-    d->rootIndex = QModelIndex();
-    d->currentTopLeft = QModelIndex();
+      disconnect(d->model, SIGNAL(destroyed()), this, SLOT(_q_modelDestroyed()));
+   }
+   clearMapping();
+   d->rootIndex = QModelIndex();
+   d->currentTopLeft = QModelIndex();
 
-    d->model = model;
+   d->model = model;
 
-    connect(model, SIGNAL(dataChanged(const QModelIndex &,const QModelIndex &)), 
-               this, SLOT(_q_dataChanged(const QModelIndex &,const QModelIndex &)));
+   connect(model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+           this, SLOT(_q_dataChanged(const QModelIndex &, const QModelIndex &)));
 
-    connect(model, SIGNAL(destroyed()), this, SLOT(_q_modelDestroyed()));
+   connect(model, SIGNAL(destroyed()), this, SLOT(_q_modelDestroyed()));
 }
 
 /*!
@@ -383,10 +390,10 @@ void QDataWidgetMapper::setModel(QAbstractItemModel *model)
  */
 QAbstractItemModel *QDataWidgetMapper::model() const
 {
-    Q_D(const QDataWidgetMapper);
-    return d->model == QAbstractItemModelPrivate::staticEmptyModel()
-            ? static_cast<QAbstractItemModel *>(0)
-            : d->model;
+   Q_D(const QDataWidgetMapper);
+   return d->model == QAbstractItemModelPrivate::staticEmptyModel()
+          ? static_cast<QAbstractItemModel *>(0)
+          : d->model;
 }
 
 /*!
@@ -404,23 +411,23 @@ QAbstractItemModel *QDataWidgetMapper::model() const
  */
 void QDataWidgetMapper::setItemDelegate(QAbstractItemDelegate *delegate)
 {
-    Q_D(QDataWidgetMapper);
-    QAbstractItemDelegate *oldDelegate = d->delegate;
-    if (oldDelegate) {
-        disconnect(oldDelegate, SIGNAL(commitData(QWidget*)), this, SLOT(_q_commitData(QWidget*)));
-        disconnect(oldDelegate, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)),
-                   this, SLOT(_q_closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)));
-    }
+   Q_D(QDataWidgetMapper);
+   QAbstractItemDelegate *oldDelegate = d->delegate;
+   if (oldDelegate) {
+      disconnect(oldDelegate, SIGNAL(commitData(QWidget *)), this, SLOT(_q_commitData(QWidget *)));
+      disconnect(oldDelegate, SIGNAL(closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)),
+                 this, SLOT(_q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)));
+   }
 
-    d->delegate = delegate;
+   d->delegate = delegate;
 
-    if (delegate) {
-        connect(delegate, SIGNAL(commitData(QWidget*)), this, SLOT(_q_commitData(QWidget*)));
-        connect(delegate, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)), this,
-                SLOT(_q_closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)));
-    }
+   if (delegate) {
+      connect(delegate, SIGNAL(commitData(QWidget *)), this, SLOT(_q_commitData(QWidget *)));
+      connect(delegate, SIGNAL(closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)), this,
+              SLOT(_q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)));
+   }
 
-    d->flipEventFilters(oldDelegate, delegate);
+   d->flipEventFilters(oldDelegate, delegate);
 }
 
 /*!
@@ -428,8 +435,8 @@ void QDataWidgetMapper::setItemDelegate(QAbstractItemDelegate *delegate)
  */
 QAbstractItemDelegate *QDataWidgetMapper::itemDelegate() const
 {
-    Q_D(const QDataWidgetMapper);
-    return d->delegate;
+   Q_D(const QDataWidgetMapper);
+   return d->delegate;
 }
 
 /*!
@@ -441,8 +448,8 @@ QAbstractItemDelegate *QDataWidgetMapper::itemDelegate() const
  */
 void QDataWidgetMapper::setRootIndex(const QModelIndex &index)
 {
-    Q_D(QDataWidgetMapper);
-    d->rootIndex = index;
+   Q_D(QDataWidgetMapper);
+   d->rootIndex = index;
 }
 
 /*!
@@ -452,8 +459,8 @@ void QDataWidgetMapper::setRootIndex(const QModelIndex &index)
 */
 QModelIndex QDataWidgetMapper::rootIndex() const
 {
-    Q_D(const QDataWidgetMapper);
-    return QModelIndex(d->rootIndex);
+   Q_D(const QDataWidgetMapper);
+   return QModelIndex(d->rootIndex);
 }
 
 /*!
@@ -482,11 +489,11 @@ QModelIndex QDataWidgetMapper::rootIndex() const
  */
 void QDataWidgetMapper::addMapping(QWidget *widget, int section)
 {
-    Q_D(QDataWidgetMapper);
+   Q_D(QDataWidgetMapper);
 
-    removeMapping(widget);
-    d->widgetMap.append(QDataWidgetMapperPrivate::WidgetMapper(widget, section, d->indexAt(section)));
-    widget->installEventFilter(d->delegate);
+   removeMapping(widget);
+   d->widgetMap.append(QDataWidgetMapperPrivate::WidgetMapper(widget, section, d->indexAt(section)));
+   widget->installEventFilter(d->delegate);
 }
 
 /*!
@@ -500,11 +507,11 @@ void QDataWidgetMapper::addMapping(QWidget *widget, int section)
 
 void QDataWidgetMapper::addMapping(QWidget *widget, int section, const QByteArray &propertyName)
 {
-    Q_D(QDataWidgetMapper);
+   Q_D(QDataWidgetMapper);
 
-    removeMapping(widget);
-    d->widgetMap.append(QDataWidgetMapperPrivate::WidgetMapper(widget, section, d->indexAt(section), propertyName));
-    widget->installEventFilter(d->delegate);
+   removeMapping(widget);
+   d->widgetMap.append(QDataWidgetMapperPrivate::WidgetMapper(widget, section, d->indexAt(section), propertyName));
+   widget->installEventFilter(d->delegate);
 }
 
 /*!
@@ -514,14 +521,15 @@ void QDataWidgetMapper::addMapping(QWidget *widget, int section, const QByteArra
  */
 void QDataWidgetMapper::removeMapping(QWidget *widget)
 {
-    Q_D(QDataWidgetMapper);
+   Q_D(QDataWidgetMapper);
 
-    int idx = d->findWidget(widget);
-    if (idx == -1)
-        return;
+   int idx = d->findWidget(widget);
+   if (idx == -1) {
+      return;
+   }
 
-    d->widgetMap.removeAt(idx);
-    widget->removeEventFilter(d->delegate);
+   d->widgetMap.removeAt(idx);
+   widget->removeEventFilter(d->delegate);
 }
 
 /*!
@@ -532,13 +540,14 @@ void QDataWidgetMapper::removeMapping(QWidget *widget)
  */
 int QDataWidgetMapper::mappedSection(QWidget *widget) const
 {
-    Q_D(const QDataWidgetMapper);
+   Q_D(const QDataWidgetMapper);
 
-    int idx = d->findWidget(widget);
-    if (idx == -1)
-        return -1;
+   int idx = d->findWidget(widget);
+   if (idx == -1) {
+      return -1;
+   }
 
-    return d->widgetMap.at(idx).section;
+   return d->widgetMap.at(idx).section;
 }
 
 /*!
@@ -551,16 +560,18 @@ int QDataWidgetMapper::mappedSection(QWidget *widget) const
 
 QByteArray QDataWidgetMapper::mappedPropertyName(QWidget *widget) const
 {
-    Q_D(const QDataWidgetMapper);
+   Q_D(const QDataWidgetMapper);
 
-    int idx = d->findWidget(widget);
-    if (idx == -1)
-        return QByteArray();
-    const QDataWidgetMapperPrivate::WidgetMapper &m = d->widgetMap.at(idx);
-    if (m.property.isEmpty())
-        return m.widget->metaObject()->userProperty().name();
-    else
-        return m.property;
+   int idx = d->findWidget(widget);
+   if (idx == -1) {
+      return QByteArray();
+   }
+   const QDataWidgetMapperPrivate::WidgetMapper &m = d->widgetMap.at(idx);
+   if (m.property.isEmpty()) {
+      return m.widget->metaObject()->userProperty().name();
+   } else {
+      return m.property;
+   }
 }
 
 /*!
@@ -571,14 +582,15 @@ QByteArray QDataWidgetMapper::mappedPropertyName(QWidget *widget) const
  */
 QWidget *QDataWidgetMapper::mappedWidgetAt(int section) const
 {
-    Q_D(const QDataWidgetMapper);
+   Q_D(const QDataWidgetMapper);
 
-    for (int i = 0; i < d->widgetMap.count(); ++i) {
-        if (d->widgetMap.at(i).section == section)
-            return d->widgetMap.at(i).widget;
-    }
+   for (int i = 0; i < d->widgetMap.count(); ++i) {
+      if (d->widgetMap.at(i).section == section) {
+         return d->widgetMap.at(i).widget;
+      }
+   }
 
-    return 0;
+   return 0;
 }
 
 /*!
@@ -589,9 +601,9 @@ QWidget *QDataWidgetMapper::mappedWidgetAt(int section) const
  */
 void QDataWidgetMapper::revert()
 {
-    Q_D(QDataWidgetMapper);
+   Q_D(QDataWidgetMapper);
 
-    d->populate();
+   d->populate();
 }
 
 /*!
@@ -610,15 +622,16 @@ void QDataWidgetMapper::revert()
  */
 bool QDataWidgetMapper::submit()
 {
-    Q_D(QDataWidgetMapper);
+   Q_D(QDataWidgetMapper);
 
-    for (int i = 0; i < d->widgetMap.count(); ++i) {
-        const QDataWidgetMapperPrivate::WidgetMapper &m = d->widgetMap.at(i);
-        if (!d->commit(m))
-            return false;
-    }
+   for (int i = 0; i < d->widgetMap.count(); ++i) {
+      const QDataWidgetMapperPrivate::WidgetMapper &m = d->widgetMap.at(i);
+      if (!d->commit(m)) {
+         return false;
+      }
+   }
 
-    return d->model->submit();
+   return d->model->submit();
 }
 
 /*!
@@ -632,7 +645,7 @@ bool QDataWidgetMapper::submit()
  */
 void QDataWidgetMapper::toFirst()
 {
-    setCurrentIndex(0);
+   setCurrentIndex(0);
 }
 
 /*!
@@ -646,8 +659,8 @@ void QDataWidgetMapper::toFirst()
  */
 void QDataWidgetMapper::toLast()
 {
-    Q_D(QDataWidgetMapper);
-    setCurrentIndex(d->itemCount() - 1);
+   Q_D(QDataWidgetMapper);
+   setCurrentIndex(d->itemCount() - 1);
 }
 
 
@@ -663,8 +676,8 @@ void QDataWidgetMapper::toLast()
  */
 void QDataWidgetMapper::toNext()
 {
-    Q_D(QDataWidgetMapper);
-    setCurrentIndex(d->currentIdx() + 1);
+   Q_D(QDataWidgetMapper);
+   setCurrentIndex(d->currentIdx() + 1);
 }
 
 /*!
@@ -679,8 +692,8 @@ void QDataWidgetMapper::toNext()
  */
 void QDataWidgetMapper::toPrevious()
 {
-    Q_D(QDataWidgetMapper);
-    setCurrentIndex(d->currentIdx() - 1);
+   Q_D(QDataWidgetMapper);
+   setCurrentIndex(d->currentIdx() - 1);
 }
 
 /*!
@@ -695,22 +708,23 @@ void QDataWidgetMapper::toPrevious()
 */
 void QDataWidgetMapper::setCurrentIndex(int index)
 {
-    Q_D(QDataWidgetMapper);
+   Q_D(QDataWidgetMapper);
 
-    if (index < 0 || index >= d->itemCount())
-        return;
-    d->currentTopLeft = d->orientation == Qt::Horizontal
-                            ? d->model->index(index, 0, d->rootIndex)
-                            : d->model->index(0, index, d->rootIndex);
-    d->populate();
+   if (index < 0 || index >= d->itemCount()) {
+      return;
+   }
+   d->currentTopLeft = d->orientation == Qt::Horizontal
+                       ? d->model->index(index, 0, d->rootIndex)
+                       : d->model->index(0, index, d->rootIndex);
+   d->populate();
 
-    emit currentIndexChanged(index);
+   emit currentIndexChanged(index);
 }
 
 int QDataWidgetMapper::currentIndex() const
 {
-    Q_D(const QDataWidgetMapper);
-    return d->currentIdx();
+   Q_D(const QDataWidgetMapper);
+   return d->currentIdx();
 }
 
 /*!
@@ -734,14 +748,15 @@ int QDataWidgetMapper::currentIndex() const
 */
 void QDataWidgetMapper::setCurrentModelIndex(const QModelIndex &index)
 {
-    Q_D(QDataWidgetMapper);
+   Q_D(QDataWidgetMapper);
 
-    if (!index.isValid()
-        || index.model() != d->model
-        || index.parent() != d->rootIndex)
-        return;
+   if (!index.isValid()
+         || index.model() != d->model
+         || index.parent() != d->rootIndex) {
+      return;
+   }
 
-    setCurrentIndex(d->orientation == Qt::Horizontal ? index.row() : index.column());
+   setCurrentIndex(d->orientation == Qt::Horizontal ? index.row() : index.column());
 }
 
 /*!
@@ -751,13 +766,14 @@ void QDataWidgetMapper::setCurrentModelIndex(const QModelIndex &index)
  */
 void QDataWidgetMapper::clearMapping()
 {
-    Q_D(QDataWidgetMapper);
+   Q_D(QDataWidgetMapper);
 
-    while (!d->widgetMap.isEmpty()) {
-        QWidget *w = d->widgetMap.takeLast().widget;
-        if (w)
-            w->removeEventFilter(d->delegate);
-    }
+   while (!d->widgetMap.isEmpty()) {
+      QWidget *w = d->widgetMap.takeLast().widget;
+      if (w) {
+         w->removeEventFilter(d->delegate);
+      }
+   }
 }
 
 /*!
@@ -796,19 +812,20 @@ void QDataWidgetMapper::clearMapping()
 */
 void QDataWidgetMapper::setOrientation(Qt::Orientation orientation)
 {
-    Q_D(QDataWidgetMapper);
+   Q_D(QDataWidgetMapper);
 
-    if (d->orientation == orientation)
-        return;
+   if (d->orientation == orientation) {
+      return;
+   }
 
-    clearMapping();
-    d->orientation = orientation;
+   clearMapping();
+   d->orientation = orientation;
 }
 
 Qt::Orientation QDataWidgetMapper::orientation() const
 {
-    Q_D(const QDataWidgetMapper);
-    return d->orientation;
+   Q_D(const QDataWidgetMapper);
+   return d->orientation;
 }
 
 /*!
@@ -820,42 +837,43 @@ Qt::Orientation QDataWidgetMapper::orientation() const
 */
 void QDataWidgetMapper::setSubmitPolicy(SubmitPolicy policy)
 {
-    Q_D(QDataWidgetMapper);
-    if (policy == d->submitPolicy)
-        return;
+   Q_D(QDataWidgetMapper);
+   if (policy == d->submitPolicy) {
+      return;
+   }
 
-    revert();
-    d->submitPolicy = policy;
+   revert();
+   d->submitPolicy = policy;
 }
 
 QDataWidgetMapper::SubmitPolicy QDataWidgetMapper::submitPolicy() const
 {
-    Q_D(const QDataWidgetMapper);
-    return d->submitPolicy;
+   Q_D(const QDataWidgetMapper);
+   return d->submitPolicy;
 }
 
-void QDataWidgetMapper::_q_dataChanged(const QModelIndex & un_named_arg1,const QModelIndex & un_named_arg2)
+void QDataWidgetMapper::_q_dataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2)
 {
-	Q_D(QDataWidgetMapper);
-	d->_q_dataChanged(un_named_arg1, un_named_arg2);
+   Q_D(QDataWidgetMapper);
+   d->_q_dataChanged(un_named_arg1, un_named_arg2);
 }
 
-void QDataWidgetMapper::_q_commitData(QWidget * un_named_arg1)
+void QDataWidgetMapper::_q_commitData(QWidget *un_named_arg1)
 {
-	Q_D(QDataWidgetMapper);
-	d->_q_commitData(un_named_arg1);
+   Q_D(QDataWidgetMapper);
+   d->_q_commitData(un_named_arg1);
 }
 
-void QDataWidgetMapper::_q_closeEditor(QWidget * un_named_arg1,QAbstractItemDelegate::EndEditHint un_named_arg2)
+void QDataWidgetMapper::_q_closeEditor(QWidget *un_named_arg1, QAbstractItemDelegate::EndEditHint un_named_arg2)
 {
-	Q_D(QDataWidgetMapper);
-	d->_q_closeEditor(un_named_arg1, un_named_arg2);
+   Q_D(QDataWidgetMapper);
+   d->_q_closeEditor(un_named_arg1, un_named_arg2);
 }
 
 void QDataWidgetMapper::_q_modelDestroyed()
 {
-	Q_D(QDataWidgetMapper);
-	d->_q_modelDestroyed();
+   Q_D(QDataWidgetMapper);
+   d->_q_modelDestroyed();
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,20 +33,19 @@ QT_BEGIN_NAMESPACE
 
 class QWindowSurfacePrivate
 {
-public:
-    QWindowSurfacePrivate(QWidget *w)
-        : window(w)
-    {
-    }
+ public:
+   QWindowSurfacePrivate(QWidget *w)
+      : window(w) {
+   }
 
-    QWidget *window;
+   QWidget *window;
 #if !defined(Q_WS_QPA)
-    QRect geometry;
+   QRect geometry;
 #else
-    QSize size;
+   QSize size;
 #endif //Q_WS_QPA
-    QRegion staticContents;
-    QList<QImage*> bufferImages;
+   QRegion staticContents;
+   QList<QImage *> bufferImages;
 };
 
 /*!
@@ -99,12 +98,13 @@ public:
     Constructs an empty surface for the given top-level \a window.
 */
 QWindowSurface::QWindowSurface(QWidget *window, bool setDefaultSurface)
-    : d_ptr(new QWindowSurfacePrivate(window))
+   : d_ptr(new QWindowSurfacePrivate(window))
 {
-    if (!QApplicationPrivate::runtime_graphics_system) {
-        if(setDefaultSurface && window)
-            window->setWindowSurface(this);
-    }
+   if (!QApplicationPrivate::runtime_graphics_system) {
+      if (setDefaultSurface && window) {
+         window->setWindowSurface(this);
+      }
+   }
 }
 
 /*!
@@ -112,18 +112,19 @@ QWindowSurface::QWindowSurface(QWidget *window, bool setDefaultSurface)
 */
 QWindowSurface::~QWindowSurface()
 {
-    if (d_ptr->window)
-        d_ptr->window->d_func()->extra->topextra->windowSurface = 0;
-    delete d_ptr;
+   if (d_ptr->window) {
+      d_ptr->window->d_func()->extra->topextra->windowSurface = 0;
+   }
+   delete d_ptr;
 }
 
 /*!
     Returns a pointer to the top-level window associated with this
     surface.
 */
-QWidget* QWindowSurface::window() const
+QWidget *QWindowSurface::window() const
 {
-    return d_ptr->window;
+   return d_ptr->window;
 }
 
 void QWindowSurface::beginPaint(const QRegion &)
@@ -132,9 +133,9 @@ void QWindowSurface::beginPaint(const QRegion &)
 
 void QWindowSurface::endPaint(const QRegion &)
 {
-//     QApplication::syncX();
-    qDeleteAll(d_ptr->bufferImages);
-    d_ptr->bufferImages.clear();
+   //     QApplication::syncX();
+   qDeleteAll(d_ptr->bufferImages);
+   d_ptr->bufferImages.clear();
 }
 
 #if !defined(Q_WS_QPA)
@@ -148,7 +149,7 @@ void QWindowSurface::endPaint(const QRegion &)
 */
 void QWindowSurface::setGeometry(const QRect &rect)
 {
-    d_ptr->geometry = rect;
+   d_ptr->geometry = rect;
 }
 
 /*!
@@ -156,7 +157,7 @@ void QWindowSurface::setGeometry(const QRect &rect)
 */
 QRect QWindowSurface::geometry() const
 {
-    return d_ptr->geometry;
+   return d_ptr->geometry;
 }
 #else
 
@@ -167,7 +168,7 @@ QRect QWindowSurface::geometry() const
 */
 void QWindowSurface::resize(const QSize &size)
 {
-    d_ptr->size = size;
+   d_ptr->size = size;
 }
 
 /*!
@@ -175,7 +176,7 @@ void QWindowSurface::resize(const QSize &size)
 */
 QSize QWindowSurface::size() const
 {
-    return d_ptr->size;
+   return d_ptr->size;
 }
 #endif //Q_WS_QPA
 
@@ -187,11 +188,11 @@ QSize QWindowSurface::size() const
 */
 bool QWindowSurface::scroll(const QRegion &area, int dx, int dy)
 {
-    Q_UNUSED(area);
-    Q_UNUSED(dx);
-    Q_UNUSED(dy);
+   Q_UNUSED(area);
+   Q_UNUSED(dx);
+   Q_UNUSED(dy);
 
-    return false;
+   return false;
 }
 
 /*!
@@ -201,30 +202,33 @@ bool QWindowSurface::scroll(const QRegion &area, int dx, int dy)
     You must call beginPaint() before you call this function and the returned
     pointer is only valid until endPaint() is called.
 */
-QImage* QWindowSurface::buffer(const QWidget *widget)
+QImage *QWindowSurface::buffer(const QWidget *widget)
 {
-    if (widget->window() != window())
-        return 0;
+   if (widget->window() != window()) {
+      return 0;
+   }
 
-    QPaintDevice *pdev = paintDevice();
-    if (!pdev || pdev->devType() != QInternal::Image)
-        return 0;
+   QPaintDevice *pdev = paintDevice();
+   if (!pdev || pdev->devType() != QInternal::Image) {
+      return 0;
+   }
 
-    const QPoint off = offset(widget);
-    QImage *img = static_cast<QImage*>(pdev);
+   const QPoint off = offset(widget);
+   QImage *img = static_cast<QImage *>(pdev);
 
-    QRect rect(off, widget->size());
-    rect &= QRect(QPoint(), img->size());
+   QRect rect(off, widget->size());
+   rect &= QRect(QPoint(), img->size());
 
-    if (rect.isEmpty())
-        return 0;
+   if (rect.isEmpty()) {
+      return 0;
+   }
 
-    img = new QImage(img->scanLine(rect.y()) + rect.x() * img->depth() / 8,
-                     rect.width(), rect.height(),
-                     img->bytesPerLine(), img->format());
-    d_ptr->bufferImages.append(img);
+   img = new QImage(img->scanLine(rect.y()) + rect.x() * img->depth() / 8,
+                    rect.width(), rect.height(),
+                    img->bytesPerLine(), img->format());
+   d_ptr->bufferImages.append(img);
 
-    return img;
+   return img;
 }
 
 /*!
@@ -243,31 +247,34 @@ QImage* QWindowSurface::buffer(const QWidget *widget)
 */
 QPixmap QWindowSurface::grabWidget(const QWidget *widget, const QRect &rectangle) const
 {
-    QPixmap result;
+   QPixmap result;
 
-    if (widget->window() != window())
-        return result;
+   if (widget->window() != window()) {
+      return result;
+   }
 
-    const QImage *img = const_cast<QWindowSurface *>(this)->buffer(widget->window());
+   const QImage *img = const_cast<QWindowSurface *>(this)->buffer(widget->window());
 
-    if (!img || img->isNull())
-        return result;
+   if (!img || img->isNull()) {
+      return result;
+   }
 
-    QRect rect = rectangle.isEmpty() ? widget->rect() : (widget->rect() & rectangle);
+   QRect rect = rectangle.isEmpty() ? widget->rect() : (widget->rect() & rectangle);
 
-    rect.translate(offset(widget) - offset(widget->window()));
-    rect &= QRect(QPoint(), img->size());
+   rect.translate(offset(widget) - offset(widget->window()));
+   rect &= QRect(QPoint(), img->size());
 
-    if (rect.isEmpty())
-        return result;
+   if (rect.isEmpty()) {
+      return result;
+   }
 
-    QImage subimg(img->scanLine(rect.y()) + rect.x() * img->depth() / 8,
-                  rect.width(), rect.height(),
-                  img->bytesPerLine(), img->format());
-    subimg.detach(); //### expensive -- maybe we should have a real SubImage that shares reference count
+   QImage subimg(img->scanLine(rect.y()) + rect.x() * img->depth() / 8,
+                 rect.width(), rect.height(),
+                 img->bytesPerLine(), img->format());
+   subimg.detach(); //### expensive -- maybe we should have a real SubImage that shares reference count
 
-    result = QPixmap::fromImage(subimg);
-    return result;
+   result = QPixmap::fromImage(subimg);
+   return result;
 }
 
 /*!
@@ -276,12 +283,12 @@ QPixmap QWindowSurface::grabWidget(const QWidget *widget, const QRect &rectangle
  */
 QPoint QWindowSurface::offset(const QWidget *widget) const
 {
-    QWidget *window = d_ptr->window;
-    QPoint offset = widget->mapTo(window, QPoint());
+   QWidget *window = d_ptr->window;
+   QPoint offset = widget->mapTo(window, QPoint());
 #ifdef Q_WS_QWS
-    offset += window->geometry().topLeft() - window->frameGeometry().topLeft();
+   offset += window->geometry().topLeft() - window->frameGeometry().topLeft();
 #endif
-    return offset;
+   return offset;
 }
 
 /*!
@@ -293,22 +300,22 @@ QPoint QWindowSurface::offset(const QWidget *widget) const
 
 void QWindowSurface::setStaticContents(const QRegion &region)
 {
-    d_ptr->staticContents = region;
+   d_ptr->staticContents = region;
 }
 
 QRegion QWindowSurface::staticContents() const
 {
-    return d_ptr->staticContents;
+   return d_ptr->staticContents;
 }
 
 bool QWindowSurface::hasStaticContents() const
 {
-    return hasFeature(QWindowSurface::StaticContents) && !d_ptr->staticContents.isEmpty();
+   return hasFeature(QWindowSurface::StaticContents) && !d_ptr->staticContents.isEmpty();
 }
 
 QWindowSurface::WindowSurfaceFeatures QWindowSurface::features() const
 {
-    return PartialUpdates | PreservedContents;
+   return PartialUpdates | PreservedContents;
 }
 
 #ifdef Q_WS_QPA
@@ -319,49 +326,50 @@ QWindowSurface::WindowSurfaceFeatures QWindowSurface::features() const
 
 void Q_EXPORT_SCROLLRECT qt_scrollRectInImage(QImage &img, const QRect &rect, const QPoint &offset)
 {
-    // make sure we don't detach
-    uchar *mem = const_cast<uchar*>(const_cast<const QImage &>(img).bits());
+   // make sure we don't detach
+   uchar *mem = const_cast<uchar *>(const_cast<const QImage &>(img).bits());
 
-    int lineskip = img.bytesPerLine();
-    int depth = img.depth() >> 3;
+   int lineskip = img.bytesPerLine();
+   int depth = img.depth() >> 3;
 
-    const QRect imageRect(0, 0, img.width(), img.height());
-    const QRect r = rect & imageRect & imageRect.translated(-offset);
-    const QPoint p = rect.topLeft() + offset;
+   const QRect imageRect(0, 0, img.width(), img.height());
+   const QRect r = rect & imageRect & imageRect.translated(-offset);
+   const QPoint p = rect.topLeft() + offset;
 
-    if (r.isEmpty())
-        return;
+   if (r.isEmpty()) {
+      return;
+   }
 
-    const uchar *src;
-    uchar *dest;
+   const uchar *src;
+   uchar *dest;
 
-    if (r.top() < p.y()) {
-        src = mem + r.bottom() * lineskip + r.left() * depth;
-        dest = mem + (p.y() + r.height() - 1) * lineskip + p.x() * depth;
-        lineskip = -lineskip;
-    } else {
-        src = mem + r.top() * lineskip + r.left() * depth;
-        dest = mem + p.y() * lineskip + p.x() * depth;
-    }
+   if (r.top() < p.y()) {
+      src = mem + r.bottom() * lineskip + r.left() * depth;
+      dest = mem + (p.y() + r.height() - 1) * lineskip + p.x() * depth;
+      lineskip = -lineskip;
+   } else {
+      src = mem + r.top() * lineskip + r.left() * depth;
+      dest = mem + p.y() * lineskip + p.x() * depth;
+   }
 
-    const int w = r.width();
-    int h = r.height();
-    const int bytes = w * depth;
+   const int w = r.width();
+   int h = r.height();
+   const int bytes = w * depth;
 
-    // overlapping segments?
-    if (offset.y() == 0 && qAbs(offset.x()) < w) {
-        do {
-            ::memmove(dest, src, bytes);
-            dest += lineskip;
-            src += lineskip;
-        } while (--h);
-    } else {
-        do {
-            ::memcpy(dest, src, bytes);
-            dest += lineskip;
-            src += lineskip;
-        } while (--h);
-    }
+   // overlapping segments?
+   if (offset.y() == 0 && qAbs(offset.x()) < w) {
+      do {
+         ::memmove(dest, src, bytes);
+         dest += lineskip;
+         src += lineskip;
+      } while (--h);
+   } else {
+      do {
+         ::memcpy(dest, src, bytes);
+         dest += lineskip;
+         src += lineskip;
+      } while (--h);
+   }
 }
 
 QT_END_NAMESPACE

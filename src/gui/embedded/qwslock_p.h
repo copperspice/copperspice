@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,28 +38,30 @@ QT_BEGIN_NAMESPACE
 
 class QWSLock
 {
-public:
-    enum LockType { BackingStore, Communication, RegionEvent };
+ public:
+   enum LockType { BackingStore, Communication, RegionEvent };
 
-    QWSLock(int lockId = -1);
-    ~QWSLock();
+   QWSLock(int lockId = -1);
+   ~QWSLock();
 
-    bool lock(LockType type, int timeout = -1);
-    void unlock(LockType type);
-    bool wait(LockType type, int timeout = -1);
-    bool hasLock(LockType type);
-    int id() const { return semId; }
+   bool lock(LockType type, int timeout = -1);
+   void unlock(LockType type);
+   bool wait(LockType type, int timeout = -1);
+   bool hasLock(LockType type);
+   int id() const {
+      return semId;
+   }
 
-private:
-    bool up(unsigned short semNum);
-    bool down(unsigned short semNum, int timeout);
-    int getValue(unsigned short semNum) const;
+ private:
+   bool up(unsigned short semNum);
+   bool down(unsigned short semNum, int timeout);
+   int getValue(unsigned short semNum) const;
 
-    int semId;
-    int lockCount[2];
+   int semId;
+   int lockCount[2];
 #ifdef QT_POSIX_IPC
-    sem_t *sems[3];
-    bool owned;
+   sem_t *sems[3];
+   bool owned;
 #endif
 };
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,55 +39,55 @@ class QImageWriterPrivate;
 class Q_GUI_EXPORT QImageWriter
 {
 
-public:
-    enum ImageWriterError {
-        UnknownError,
-        DeviceError,
-        UnsupportedFormatError
-    };
+ public:
+   enum ImageWriterError {
+      UnknownError,
+      DeviceError,
+      UnsupportedFormatError
+   };
 
-    QImageWriter();
-    explicit QImageWriter(QIODevice *device, const QByteArray &format);
-    explicit QImageWriter(const QString &fileName, const QByteArray &format = QByteArray());
-    ~QImageWriter();
+   QImageWriter();
+   explicit QImageWriter(QIODevice *device, const QByteArray &format);
+   explicit QImageWriter(const QString &fileName, const QByteArray &format = QByteArray());
+   ~QImageWriter();
 
-    void setFormat(const QByteArray &format);
-    QByteArray format() const;
+   void setFormat(const QByteArray &format);
+   QByteArray format() const;
 
-    void setDevice(QIODevice *device);
-    QIODevice *device() const;
+   void setDevice(QIODevice *device);
+   QIODevice *device() const;
 
-    void setFileName(const QString &fileName);
-    QString fileName() const;
+   void setFileName(const QString &fileName);
+   QString fileName() const;
 
-    void setQuality(int quality);
-    int quality() const;
+   void setQuality(int quality);
+   int quality() const;
 
-    void setCompression(int compression);
-    int compression() const;
+   void setCompression(int compression);
+   int compression() const;
 
-    void setGamma(float gamma);
-    float gamma() const;
+   void setGamma(float gamma);
+   float gamma() const;
 
-    // Obsolete as of 4.1
-    void setDescription(const QString &description);
-    QString description() const;
+   // Obsolete as of 4.1
+   void setDescription(const QString &description);
+   QString description() const;
 
-    void setText(const QString &key, const QString &text);
+   void setText(const QString &key, const QString &text);
 
-    bool canWrite() const;
-    bool write(const QImage &image);
+   bool canWrite() const;
+   bool write(const QImage &image);
 
-    ImageWriterError error() const;
-    QString errorString() const;
+   ImageWriterError error() const;
+   QString errorString() const;
 
-    bool supportsOption(QImageIOHandler::ImageOption option) const;
+   bool supportsOption(QImageIOHandler::ImageOption option) const;
 
-    static QList<QByteArray> supportedImageFormats();
+   static QList<QByteArray> supportedImageFormats();
 
-private:
-    Q_DISABLE_COPY(QImageWriter)
-    QImageWriterPrivate *d;
+ private:
+   Q_DISABLE_COPY(QImageWriter)
+   QImageWriterPrivate *d;
 };
 
 QT_END_NAMESPACE

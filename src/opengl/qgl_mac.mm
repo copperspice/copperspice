@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -50,19 +50,19 @@ QT_BEGIN_NAMESPACE
 
 void *qt_current_nsopengl_context()
 {
-    return [NSOpenGLContext currentContext];
+   return [NSOpenGLContext currentContext];
 }
 
 static GLint attribValue(NSOpenGLPixelFormat *fmt, NSOpenGLPixelFormatAttribute attrib)
 {
-    GLint res;
-    [fmt getValues:&res forAttribute:attrib forVirtualScreen:0];
-    return res;
+   GLint res;
+   [fmt getValues: &res forAttribute: attrib forVirtualScreen: 0];
+   return res;
 }
 
 static int def(int val, int defVal)
 {
-    return val != -1 ? val : defVal;
+   return val != -1 ? val : defVal;
 }
 
 extern quint32 *qt_mac_pixmap_get_base(const QPixmap *);
@@ -77,329 +77,347 @@ extern QRegion qt_mac_convert_mac_region(RgnHandle); //qregion_mac.cpp
 
 class QGLTemporaryContextPrivate
 {
-public:
-    NSOpenGLContext *ctx;
+ public:
+   NSOpenGLContext *ctx;
 
 };
 
 QGLTemporaryContext::QGLTemporaryContext(bool, QWidget *)
-    : d(new QGLTemporaryContextPrivate)
+   : d(new QGLTemporaryContextPrivate)
 {
-    d->ctx = 0;
+   d->ctx = 0;
 
-    QMacCocoaAutoReleasePool pool;
-    NSOpenGLPixelFormatAttribute attribs[] = { 0 };
-    NSOpenGLPixelFormat *fmt = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
-    if (!fmt) {
-        qWarning("QGLTemporaryContext: Cannot find any visuals");
-        return;
-    }
+   QMacCocoaAutoReleasePool pool;
+   NSOpenGLPixelFormatAttribute attribs[] = { 0 };
+   NSOpenGLPixelFormat *fmt = [[NSOpenGLPixelFormat alloc] initWithAttributes: attribs];
+   if (!fmt) {
+      qWarning("QGLTemporaryContext: Cannot find any visuals");
+      return;
+   }
 
-    d->ctx = [[NSOpenGLContext alloc] initWithFormat:fmt shareContext:0];
-    if (!d->ctx)
-        qWarning("QGLTemporaryContext: Cannot create context");
-    else
-        [d->ctx makeCurrentContext];
+   d->ctx = [[NSOpenGLContext alloc] initWithFormat: fmt shareContext: 0];
+   if (!d->ctx) {
+      qWarning("QGLTemporaryContext: Cannot create context");
+   } else {
+      [d->ctx makeCurrentContext];
+   }
 
-    [fmt release];
+   [fmt release];
 }
 
 QGLTemporaryContext::~QGLTemporaryContext()
 {
-    if (d->ctx) {
-        [NSOpenGLContext clearCurrentContext];
-        [d->ctx release];
-    }
+   if (d->ctx) {
+      [NSOpenGLContext clearCurrentContext];
+      [d->ctx release];
+   }
 }
 
 bool QGLFormat::hasOpenGL()
 {
-    return true;
+   return true;
 }
 
 bool QGLFormat::hasOpenGLOverlays()
 {
-    return false;
+   return false;
 }
 
 bool QGLContext::chooseContext(const QGLContext *shareContext)
 {
-    QMacCocoaAutoReleasePool pool;
-    Q_D(QGLContext);
-    d->cx = 0;
-    d->vi = chooseMacVisual(0);
-    if (!d->vi)
-        return false;
+   QMacCocoaAutoReleasePool pool;
+   Q_D(QGLContext);
+   d->cx = 0;
+   d->vi = chooseMacVisual(0);
+   if (!d->vi) {
+      return false;
+   }
 
 
-    NSOpenGLPixelFormat *fmt = static_cast<NSOpenGLPixelFormat *>(d->vi);
+   NSOpenGLPixelFormat *fmt = static_cast<NSOpenGLPixelFormat *>(d->vi);
 
-    d->glFormat = QGLFormat();
+   d->glFormat = QGLFormat();
 
-    // ### make sure to reset other options
-    d->glFormat.setDoubleBuffer(attribValue(fmt, NSOpenGLPFADoubleBuffer));
+   // ### make sure to reset other options
+   d->glFormat.setDoubleBuffer(attribValue(fmt, NSOpenGLPFADoubleBuffer));
 
-    int depthSize = attribValue(fmt, NSOpenGLPFADepthSize);
-    d->glFormat.setDepth(depthSize > 0);
-    if (depthSize > 0)
-        d->glFormat.setDepthBufferSize(depthSize);
+   int depthSize = attribValue(fmt, NSOpenGLPFADepthSize);
+   d->glFormat.setDepth(depthSize > 0);
+   if (depthSize > 0) {
+      d->glFormat.setDepthBufferSize(depthSize);
+   }
 
-    int alphaSize = attribValue(fmt, NSOpenGLPFAAlphaSize);
-    d->glFormat.setAlpha(alphaSize > 0);
-    if (alphaSize > 0)
-        d->glFormat.setAlphaBufferSize(alphaSize);
+   int alphaSize = attribValue(fmt, NSOpenGLPFAAlphaSize);
+   d->glFormat.setAlpha(alphaSize > 0);
+   if (alphaSize > 0) {
+      d->glFormat.setAlphaBufferSize(alphaSize);
+   }
 
-    int accumSize = attribValue(fmt, NSOpenGLPFAAccumSize);
-    d->glFormat.setAccum(accumSize > 0);
-    if (accumSize > 0)
-        d->glFormat.setAccumBufferSize(accumSize);
+   int accumSize = attribValue(fmt, NSOpenGLPFAAccumSize);
+   d->glFormat.setAccum(accumSize > 0);
+   if (accumSize > 0) {
+      d->glFormat.setAccumBufferSize(accumSize);
+   }
 
-    int stencilSize = attribValue(fmt, NSOpenGLPFAStencilSize);
-    d->glFormat.setStencil(stencilSize > 0);
-    if (stencilSize > 0)
-        d->glFormat.setStencilBufferSize(stencilSize);
+   int stencilSize = attribValue(fmt, NSOpenGLPFAStencilSize);
+   d->glFormat.setStencil(stencilSize > 0);
+   if (stencilSize > 0) {
+      d->glFormat.setStencilBufferSize(stencilSize);
+   }
 
-    d->glFormat.setStereo(attribValue(fmt, NSOpenGLPFAStereo));
+   d->glFormat.setStereo(attribValue(fmt, NSOpenGLPFAStereo));
 
-    int sampleBuffers = attribValue(fmt, NSOpenGLPFASampleBuffers);
-    d->glFormat.setSampleBuffers(sampleBuffers);
-    if (sampleBuffers > 0)
-        d->glFormat.setSamples(attribValue(fmt, NSOpenGLPFASamples));
+   int sampleBuffers = attribValue(fmt, NSOpenGLPFASampleBuffers);
+   d->glFormat.setSampleBuffers(sampleBuffers);
+   if (sampleBuffers > 0) {
+      d->glFormat.setSamples(attribValue(fmt, NSOpenGLPFASamples));
+   }
 
-    if (shareContext && (!shareContext->isValid() || !shareContext->d_func()->cx)) {
-        qWarning("QGLContext::chooseContext: Cannot share with invalid context");
-        shareContext = 0;
-    }
+   if (shareContext && (!shareContext->isValid() || !shareContext->d_func()->cx)) {
+      qWarning("QGLContext::chooseContext: Cannot share with invalid context");
+      shareContext = 0;
+   }
 
-    // sharing between rgba and color-index will give wrong colors
-    if (shareContext && (format().rgba() != shareContext->format().rgba()))
-        shareContext = 0;
+   // sharing between rgba and color-index will give wrong colors
+   if (shareContext && (format().rgba() != shareContext->format().rgba())) {
+      shareContext = 0;
+   }
 
 
-    NSOpenGLContext *ctx = [[NSOpenGLContext alloc] initWithFormat:fmt
-        shareContext:(shareContext ? static_cast<NSOpenGLContext *>(shareContext->d_func()->cx)
-                                   : 0)];
+   NSOpenGLContext *ctx = [[NSOpenGLContext alloc] initWithFormat: fmt
+                           shareContext: (shareContext ? static_cast<NSOpenGLContext *>(shareContext->d_func()->cx)
+                                          : 0)];
 
-    if (!ctx) {
+   if (!ctx) {
 
-        if (shareContext) {
-            ctx = [[NSOpenGLContext alloc] initWithFormat:fmt shareContext:0];
-            if (ctx) {
-                qWarning("QGLContext::chooseContext: Context sharing mismatch");
-                shareContext = 0;
-            }
-        }
+      if (shareContext) {
+         ctx = [[NSOpenGLContext alloc] initWithFormat: fmt shareContext: 0];
+         if (ctx) {
+            qWarning("QGLContext::chooseContext: Context sharing mismatch");
+            shareContext = 0;
+         }
+      }
 
-        if (!ctx) {
-            qWarning("QGLContext::chooseContext: Unable to create QGLContext");
-            return false;
-        }
-    }
-    d->cx = ctx;
-    if (shareContext && shareContext->d_func()->cx) {
-        QGLContext *share = const_cast<QGLContext *>(shareContext);
-        d->sharing = true;
-        share->d_func()->sharing = true;
-    }
-    if (deviceIsPixmap())
-        updatePaintDevice();
+      if (!ctx) {
+         qWarning("QGLContext::chooseContext: Unable to create QGLContext");
+         return false;
+      }
+   }
+   d->cx = ctx;
+   if (shareContext && shareContext->d_func()->cx) {
+      QGLContext *share = const_cast<QGLContext *>(shareContext);
+      d->sharing = true;
+      share->d_func()->sharing = true;
+   }
+   if (deviceIsPixmap()) {
+      updatePaintDevice();
+   }
 
-    // vblank syncing
-    GLint interval = d->reqFormat.swapInterval();
-    if (interval != -1) {
+   // vblank syncing
+   GLint interval = d->reqFormat.swapInterval();
+   if (interval != -1) {
 
-        [ctx setValues:&interval forParameter:NSOpenGLCPSwapInterval];
+      [ctx setValues: &interval forParameter: NSOpenGLCPSwapInterval];
 
-    }
+   }
 
-    [ctx getValues:&interval forParameter:NSOpenGLCPSwapInterval];
+   [ctx getValues: &interval forParameter: NSOpenGLCPSwapInterval];
 
-    d->glFormat.setSwapInterval(interval);
-    return true;
+   d->glFormat.setSwapInterval(interval);
+   return true;
 }
 
 void *QGLContextPrivate::tryFormat(const QGLFormat &format)
 {
-    static const int Max = 40;
- 
-    NSOpenGLPixelFormatAttribute attribs[Max];
-    int cnt = 0;
-    int devType = paintDevice->devType();
-    bool device_is_pixmap = (devType == QInternal::Pixmap);
-    int depth = device_is_pixmap ? static_cast<QPixmap *>(paintDevice)->depth() : 32;
+   static const int Max = 40;
 
-    attribs[cnt++] = NSOpenGLPFAColorSize;
-    attribs[cnt++] = depth;
+   NSOpenGLPixelFormatAttribute attribs[Max];
+   int cnt = 0;
+   int devType = paintDevice->devType();
+   bool device_is_pixmap = (devType == QInternal::Pixmap);
+   int depth = device_is_pixmap ? static_cast<QPixmap *>(paintDevice)->depth() : 32;
 
-    if (device_is_pixmap) {
-        attribs[cnt++] = NSOpenGLPFAOffScreen;
-    } else {
-        if (format.doubleBuffer())
-            attribs[cnt++] = NSOpenGLPFADoubleBuffer;
-    }
-    if (glFormat.stereo())
-        attribs[cnt++] = NSOpenGLPFAStereo;
-    if (device_is_pixmap || format.alpha()) {
-        attribs[cnt++] = NSOpenGLPFAAlphaSize;
-        attribs[cnt++] = def(format.alphaBufferSize(), 8);
-    }
-    if (format.stencil()) {
-        attribs[cnt++] = NSOpenGLPFAStencilSize;
-        attribs[cnt++] = def(format.stencilBufferSize(), 8);
-    }
-    if (format.depth()) {
-        attribs[cnt++] = NSOpenGLPFADepthSize;
-        attribs[cnt++] = def(format.depthBufferSize(), 32);
-    }
-    if (format.accum()) {
-        attribs[cnt++] = NSOpenGLPFAAccumSize;
-        attribs[cnt++] = def(format.accumBufferSize(), 1);
-    }
-    if (format.sampleBuffers()) {
-        attribs[cnt++] = NSOpenGLPFASampleBuffers;
-        attribs[cnt++] = 1;
-        attribs[cnt++] = NSOpenGLPFASamples;
-        attribs[cnt++] = def(format.samples(), 4);
-    }
+   attribs[cnt++] = NSOpenGLPFAColorSize;
+   attribs[cnt++] = depth;
 
-    if (devType == QInternal::Pbuffer)
-        attribs[cnt++] = NSOpenGLPFAPixelBuffer;
+   if (device_is_pixmap) {
+      attribs[cnt++] = NSOpenGLPFAOffScreen;
+   } else {
+      if (format.doubleBuffer()) {
+         attribs[cnt++] = NSOpenGLPFADoubleBuffer;
+      }
+   }
+   if (glFormat.stereo()) {
+      attribs[cnt++] = NSOpenGLPFAStereo;
+   }
+   if (device_is_pixmap || format.alpha()) {
+      attribs[cnt++] = NSOpenGLPFAAlphaSize;
+      attribs[cnt++] = def(format.alphaBufferSize(), 8);
+   }
+   if (format.stencil()) {
+      attribs[cnt++] = NSOpenGLPFAStencilSize;
+      attribs[cnt++] = def(format.stencilBufferSize(), 8);
+   }
+   if (format.depth()) {
+      attribs[cnt++] = NSOpenGLPFADepthSize;
+      attribs[cnt++] = def(format.depthBufferSize(), 32);
+   }
+   if (format.accum()) {
+      attribs[cnt++] = NSOpenGLPFAAccumSize;
+      attribs[cnt++] = def(format.accumBufferSize(), 1);
+   }
+   if (format.sampleBuffers()) {
+      attribs[cnt++] = NSOpenGLPFASampleBuffers;
+      attribs[cnt++] = 1;
+      attribs[cnt++] = NSOpenGLPFASamples;
+      attribs[cnt++] = def(format.samples(), 4);
+   }
 
-    attribs[cnt] = 0;
-    Q_ASSERT(cnt < Max);
-    return [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
+   if (devType == QInternal::Pbuffer) {
+      attribs[cnt++] = NSOpenGLPFAPixelBuffer;
+   }
+
+   attribs[cnt] = 0;
+   Q_ASSERT(cnt < Max);
+   return [[NSOpenGLPixelFormat alloc] initWithAttributes: attribs];
 
 }
 
 void QGLContextPrivate::clearDrawable()
 {
-    [static_cast<NSOpenGLContext *>(cx) clearDrawable];
+   [static_cast<NSOpenGLContext *>(cx) clearDrawable];
 }
 
 void *QGLContext::chooseMacVisual(GDHandle /* handle */)
 {
-    Q_D(QGLContext);
+   Q_D(QGLContext);
 
-    void *fmt = d->tryFormat(d->glFormat);
-    if (!fmt && d->glFormat.stereo()) {
-        d->glFormat.setStereo(false);
-        fmt = d->tryFormat(d->glFormat);
-    }
-    if (!fmt && d->glFormat.sampleBuffers()) {
-        d->glFormat.setSampleBuffers(false);
-        fmt = d->tryFormat(d->glFormat);
-    }
-    if (!fmt)
-        qWarning("QGLContext::chooseMacVisual: Unable to choose a pixel format");
-    return fmt;
+   void *fmt = d->tryFormat(d->glFormat);
+   if (!fmt && d->glFormat.stereo()) {
+      d->glFormat.setStereo(false);
+      fmt = d->tryFormat(d->glFormat);
+   }
+   if (!fmt && d->glFormat.sampleBuffers()) {
+      d->glFormat.setSampleBuffers(false);
+      fmt = d->tryFormat(d->glFormat);
+   }
+   if (!fmt) {
+      qWarning("QGLContext::chooseMacVisual: Unable to choose a pixel format");
+   }
+   return fmt;
 }
 
 void QGLContext::reset()
 {
-    Q_D(QGLContext);
-    if (!d->valid)
-        return;
-    d->cleanup();
-    doneCurrent();
+   Q_D(QGLContext);
+   if (!d->valid) {
+      return;
+   }
+   d->cleanup();
+   doneCurrent();
 
-    QMacCocoaAutoReleasePool pool;
-    [static_cast<NSOpenGLContext *>(d->cx) release];
+   QMacCocoaAutoReleasePool pool;
+   [static_cast<NSOpenGLContext *>(d->cx) release];
 
-    d->cx = 0;
-    [static_cast<NSOpenGLPixelFormat *>(d->vi) release];
+   d->cx = 0;
+   [static_cast<NSOpenGLPixelFormat *>(d->vi) release];
 
-    d->vi = 0;
-    d->crWin = false;
-    d->sharing = false;
-    d->valid = false;
-    d->transpColor = QColor();
-    d->initDone = false;
-    QGLContextGroup::removeShare(this);
+   d->vi = 0;
+   d->crWin = false;
+   d->sharing = false;
+   d->valid = false;
+   d->transpColor = QColor();
+   d->initDone = false;
+   QGLContextGroup::removeShare(this);
 }
 
 void QGLContext::makeCurrent()
 {
-    Q_D(QGLContext);
+   Q_D(QGLContext);
 
-    if (!d->valid) {
-        qWarning("QGLContext::makeCurrent: Cannot make invalid context current");
-        return;
-    }
+   if (!d->valid) {
+      qWarning("QGLContext::makeCurrent: Cannot make invalid context current");
+      return;
+   }
 
-    [static_cast<NSOpenGLContext *>(d->cx) makeCurrentContext];
+   [static_cast<NSOpenGLContext *>(d->cx) makeCurrentContext];
 
-    QGLContextPrivate::setCurrentContext(this);
+   QGLContextPrivate::setCurrentContext(this);
 }
 
 // internal
 void QGLContext::updatePaintDevice()
 {
-    Q_D(QGLContext);
+   Q_D(QGLContext);
 
-    QMacCocoaAutoReleasePool pool;
+   QMacCocoaAutoReleasePool pool;
 
-    if (d->paintDevice->devType() == QInternal::Widget) {
-        //get control information
-        QWidget *w = (QWidget *)d->paintDevice;
-        NSView *view = qt_mac_nativeview_for(w);
+   if (d->paintDevice->devType() == QInternal::Widget) {
+      //get control information
+      QWidget *w = (QWidget *)d->paintDevice;
+      NSView *view = qt_mac_nativeview_for(w);
 
-        // Trying to attach the GL context to the NSView will fail with
-        // "invalid drawable" if done too soon, but we have to make sure
-        // the connection is made before the first paint event. Using
-        // the NSView do to this check fails as the NSView is visible
-        // before it's safe to connect, and using the NSWindow fails as
-        // the NSWindow will become visible after the first paint event.
-        // This leaves us with the QWidget, who's visible state seems
-        // to match the point in time when it's safe to connect.
-        if (!w || !w->isVisible())
-            return; // Not safe to attach GL context to view yet
+      // Trying to attach the GL context to the NSView will fail with
+      // "invalid drawable" if done too soon, but we have to make sure
+      // the connection is made before the first paint event. Using
+      // the NSView do to this check fails as the NSView is visible
+      // before it's safe to connect, and using the NSWindow fails as
+      // the NSWindow will become visible after the first paint event.
+      // This leaves us with the QWidget, who's visible state seems
+      // to match the point in time when it's safe to connect.
+      if (!w || !w->isVisible()) {
+         return;   // Not safe to attach GL context to view yet
+      }
 
-        if ([static_cast<NSOpenGLContext *>(d->cx) view] != view && ![view isHidden])
-            [static_cast<NSOpenGLContext *>(d->cx) setView:view];
-    } else if (d->paintDevice->devType() == QInternal::Pixmap) {
-        const QPixmap *pm = static_cast<const QPixmap *>(d->paintDevice);
-        [static_cast<NSOpenGLContext *>(d->cx) setOffScreen:qt_mac_pixmap_get_base(pm)
-                                                      width:pm->width()
-                                                     height:pm->height()
-                                                   rowbytes:qt_mac_pixmap_get_bytes_per_line(pm)];
-    } else {
-        qWarning("QGLContext::updatePaintDevice: Not sure how to render OpenGL on this device");
-    }
+      if ([static_cast<NSOpenGLContext *>(d->cx) view] != view && ![view isHidden]) {
+         [static_cast<NSOpenGLContext *>(d->cx) setView: view];
+      }
+   } else if (d->paintDevice->devType() == QInternal::Pixmap) {
+      const QPixmap *pm = static_cast<const QPixmap *>(d->paintDevice);
+      [static_cast<NSOpenGLContext *>(d->cx) setOffScreen: qt_mac_pixmap_get_base(pm)
+       width: pm->width()
+       height: pm->height()
+       rowbytes: qt_mac_pixmap_get_bytes_per_line(pm)];
+   } else {
+      qWarning("QGLContext::updatePaintDevice: Not sure how to render OpenGL on this device");
+   }
 
-    [static_cast<NSOpenGLContext *>(d->cx) update];
+   [static_cast<NSOpenGLContext *>(d->cx) update];
 
 }
 
 void QGLContext::doneCurrent()
 {
-    if ( [NSOpenGLContext currentContext] != d_func()->cx)
-        return;
+   if ( [NSOpenGLContext currentContext] != d_func()->cx) {
+      return;
+   }
 
-    QGLContextPrivate::setCurrentContext(0);
-    [NSOpenGLContext clearCurrentContext];
+   QGLContextPrivate::setCurrentContext(0);
+   [NSOpenGLContext clearCurrentContext];
 }
 
 void QGLContext::swapBuffers() const
 {
-    Q_D(const QGLContext);
+   Q_D(const QGLContext);
 
-    if (!d->valid)
-        return;
+   if (!d->valid) {
+      return;
+   }
 
-    [static_cast<NSOpenGLContext *>(d->cx) flushBuffer];
+   [static_cast<NSOpenGLContext *>(d->cx) flushBuffer];
 
 }
 
 QColor QGLContext::overlayTransparentColor() const
 {
-    return QColor(0, 0, 0);                // Invalid color
+   return QColor(0, 0, 0);                // Invalid color
 }
 
 
 uint QGLContext::colorIndex(const QColor &c) const
 {
-    Q_UNUSED(c);
-    return 0;
+   Q_UNUSED(c);
+   return 0;
 }
 
 void QGLContext::generateFontDisplayLists(const QFont & /* fnt */, int /* listBase */)
@@ -408,50 +426,53 @@ void QGLContext::generateFontDisplayLists(const QFont & /* fnt */, int /* listBa
 
 static CFBundleRef qt_getOpenGLBundle()
 {
-    CFBundleRef bundle = 0;
-    CFStringRef urlString = QCFString::toCFStringRef(QLatin1String("/System/Library/Frameworks/OpenGL.framework"));
-    QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
-                 urlString, kCFURLPOSIXPathStyle, false);
-    if (url)
-        bundle = CFBundleCreate(kCFAllocatorDefault, url);
-    CFRelease(urlString);
-    return bundle;
+   CFBundleRef bundle = 0;
+   CFStringRef urlString = QCFString::toCFStringRef(QLatin1String("/System/Library/Frameworks/OpenGL.framework"));
+   QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
+                           urlString, kCFURLPOSIXPathStyle, false);
+   if (url) {
+      bundle = CFBundleCreate(kCFAllocatorDefault, url);
+   }
+   CFRelease(urlString);
+   return bundle;
 }
 
 void *QGLContext::getProcAddress(const QString &proc) const
 {
-    CFStringRef procName = QCFString(proc).toCFStringRef(proc);
-    void *result = CFBundleGetFunctionPointerForName(QCFType<CFBundleRef>(qt_getOpenGLBundle()),
-                                             procName);
-    CFRelease(procName);
-    return result;
+   CFStringRef procName = QCFString(proc).toCFStringRef(proc);
+   void *result = CFBundleGetFunctionPointerForName(QCFType<CFBundleRef>(qt_getOpenGLBundle()),
+                  procName);
+   CFRelease(procName);
+   return result;
 }
 
 void QGLWidget::setMouseTracking(bool enable)
 {
-    QWidget::setMouseTracking(enable);
+   QWidget::setMouseTracking(enable);
 }
 
 void QGLWidget::resizeEvent(QResizeEvent *)
 {
-    Q_D(QGLWidget);
+   Q_D(QGLWidget);
 
-    if (!isValid())
-        return;
+   if (!isValid()) {
+      return;
+   }
 
-    makeCurrent();
+   makeCurrent();
 
-    if (!d->glcx->initialized())
-        glInit();
+   if (!d->glcx->initialized()) {
+      glInit();
+   }
 
-    d->glcx->updatePaintDevice();
+   d->glcx->updatePaintDevice();
 
-    resizeGL(width(), height());
+   resizeGL(width(), height());
 }
 
-const QGLContext* QGLWidget::overlayContext() const
+const QGLContext *QGLWidget::overlayContext() const
 {
-    return 0;
+   return 0;
 }
 
 void QGLWidget::makeOverlayCurrent()
@@ -462,51 +483,55 @@ void QGLWidget::updateOverlayGL()
 {
 }
 
-void QGLWidget::setContext(QGLContext *context, const QGLContext* shareContext, bool deleteOldContext)
+void QGLWidget::setContext(QGLContext *context, const QGLContext *shareContext, bool deleteOldContext)
 {
-    Q_D(QGLWidget);
-    if (context == 0) {
-        qWarning("QGLWidget::setContext: Cannot set null context");
-        return;
-    }
+   Q_D(QGLWidget);
+   if (context == 0) {
+      qWarning("QGLWidget::setContext: Cannot set null context");
+      return;
+   }
 
-    if (d->glcx)
-        d->glcx->doneCurrent();
-    QGLContext* oldcx = d->glcx;
-    d->glcx = context;
-    if (!d->glcx->isValid())
-        d->glcx->create(shareContext ? shareContext : oldcx);
-    if (deleteOldContext && oldcx)
-        delete oldcx;
+   if (d->glcx) {
+      d->glcx->doneCurrent();
+   }
+   QGLContext *oldcx = d->glcx;
+   d->glcx = context;
+   if (!d->glcx->isValid()) {
+      d->glcx->create(shareContext ? shareContext : oldcx);
+   }
+   if (deleteOldContext && oldcx) {
+      delete oldcx;
+   }
 }
 
 void QGLWidgetPrivate::init(QGLContext *context, const QGLWidget *shareWidget)
 {
-    Q_Q(QGLWidget);
+   Q_Q(QGLWidget);
 
-    initContext(context, shareWidget);
+   initContext(context, shareWidget);
 
-    QWidget *current = q;
-    while (current) {
-        qt_widget_private(current)->glWidgets.append(QWidgetPrivate::GlWidgetInfo(q));
-        if (current->isWindow())
-            break;
-        current = current->parentWidget();
-    }
+   QWidget *current = q;
+   while (current) {
+      qt_widget_private(current)->glWidgets.append(QWidgetPrivate::GlWidgetInfo(q));
+      if (current->isWindow()) {
+         break;
+      }
+      current = current->parentWidget();
+   }
 }
 
-bool QGLWidgetPrivate::renderCxPm(QPixmap*)
+bool QGLWidgetPrivate::renderCxPm(QPixmap *)
 {
-    return false;
+   return false;
 }
 
 void QGLWidgetPrivate::cleanupColormaps()
 {
 }
 
-const QGLColormap & QGLWidget::colormap() const
+const QGLColormap &QGLWidget::colormap() const
 {
-    return d_func()->cmap;
+   return d_func()->cmap;
 }
 
 void QGLWidget::setColormap(const QGLColormap &)
@@ -515,9 +540,9 @@ void QGLWidget::setColormap(const QGLColormap &)
 
 void QGLWidgetPrivate::updatePaintDevice()
 {
-    Q_Q(QGLWidget);
-    glcx->updatePaintDevice();
-    q->update();
+   Q_Q(QGLWidget);
+   glcx->updatePaintDevice();
+   q->update();
 }
 
 #endif

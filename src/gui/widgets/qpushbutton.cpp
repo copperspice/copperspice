@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -229,10 +229,10 @@ QT_BEGIN_NAMESPACE
 */
 
 QPushButton::QPushButton(QWidget *parent)
-    : QAbstractButton(*new QPushButtonPrivate, parent)
+   : QAbstractButton(*new QPushButtonPrivate, parent)
 {
-    Q_D(QPushButton);
-    d->init();
+   Q_D(QPushButton);
+   d->init();
 }
 
 /*!
@@ -241,11 +241,11 @@ QPushButton::QPushButton(QWidget *parent)
 */
 
 QPushButton::QPushButton(const QString &text, QWidget *parent)
-    : QAbstractButton(*new QPushButtonPrivate, parent)
+   : QAbstractButton(*new QPushButtonPrivate, parent)
 {
-    Q_D(QPushButton);
-    setText(text);
-    d->init();
+   Q_D(QPushButton);
+   setText(text);
+   d->init();
 }
 
 
@@ -256,22 +256,22 @@ QPushButton::QPushButton(const QString &text, QWidget *parent)
     the implicit type conversion provided by C++).
 
 */
-QPushButton::QPushButton(const QIcon& icon, const QString &text, QWidget *parent)
-    : QAbstractButton(*new QPushButtonPrivate, parent)
+QPushButton::QPushButton(const QIcon &icon, const QString &text, QWidget *parent)
+   : QAbstractButton(*new QPushButtonPrivate, parent)
 {
-    Q_D(QPushButton);
-    setText(text);
-    setIcon(icon);
-    d->init();
+   Q_D(QPushButton);
+   setText(text);
+   setIcon(icon);
+   d->init();
 }
 
 /*! \internal
  */
 QPushButton::QPushButton(QPushButtonPrivate &dd, QWidget *parent)
-    : QAbstractButton(dd, parent)
+   : QAbstractButton(dd, parent)
 {
-    Q_D(QPushButton);
-    d->init();
+   Q_D(QPushButton);
+   d->init();
 }
 
 /*!
@@ -283,14 +283,15 @@ QPushButton::~QPushButton()
 
 QDialog *QPushButtonPrivate::dialogParent() const
 {
-    Q_Q(const QPushButton);
-    const QWidget *p = q;
-    while (p && !p->isWindow()) {
-        p = p->parentWidget();
-        if (const QDialog *dialog = qobject_cast<const QDialog *>(p))
-            return const_cast<QDialog *>(dialog);
-    }
-    return 0;
+   Q_Q(const QPushButton);
+   const QWidget *p = q;
+   while (p && !p->isWindow()) {
+      p = p->parentWidget();
+      if (const QDialog *dialog = qobject_cast<const QDialog *>(p)) {
+         return const_cast<QDialog *>(dialog);
+      }
+   }
+   return 0;
 }
 
 /*!
@@ -302,73 +303,85 @@ QDialog *QPushButtonPrivate::dialogParent() const
 */
 void QPushButton::initStyleOption(QStyleOptionButton *option) const
 {
-    if (!option)
-        return;
+   if (!option) {
+      return;
+   }
 
-    Q_D(const QPushButton);
-    option->initFrom(this);
-    option->features = QStyleOptionButton::None;
-    if (d->flat)
-        option->features |= QStyleOptionButton::Flat;
+   Q_D(const QPushButton);
+   option->initFrom(this);
+   option->features = QStyleOptionButton::None;
+   if (d->flat) {
+      option->features |= QStyleOptionButton::Flat;
+   }
 #ifndef QT_NO_MENU
-    if (d->menu)
-        option->features |= QStyleOptionButton::HasMenu;
+   if (d->menu) {
+      option->features |= QStyleOptionButton::HasMenu;
+   }
 #endif
-    if (autoDefault() || d->defaultButton)
-        option->features |= QStyleOptionButton::AutoDefaultButton;
-    if (d->defaultButton)
-        option->features |= QStyleOptionButton::DefaultButton;
-    if (d->down || d->menuOpen)
-        option->state |= QStyle::State_Sunken;
-    if (d->checked)
-        option->state |= QStyle::State_On;
-    if (!d->flat && !d->down)
-        option->state |= QStyle::State_Raised;
-    option->text = d->text;
-    option->icon = d->icon;
-    option->iconSize = iconSize();
+   if (autoDefault() || d->defaultButton) {
+      option->features |= QStyleOptionButton::AutoDefaultButton;
+   }
+   if (d->defaultButton) {
+      option->features |= QStyleOptionButton::DefaultButton;
+   }
+   if (d->down || d->menuOpen) {
+      option->state |= QStyle::State_Sunken;
+   }
+   if (d->checked) {
+      option->state |= QStyle::State_On;
+   }
+   if (!d->flat && !d->down) {
+      option->state |= QStyle::State_Raised;
+   }
+   option->text = d->text;
+   option->icon = d->icon;
+   option->iconSize = iconSize();
 }
 
 void QPushButton::setAutoDefault(bool enable)
 {
-    Q_D(QPushButton);
-    uint state = enable ? QPushButtonPrivate::On : QPushButtonPrivate::Off;
-    if (d->autoDefault != QPushButtonPrivate::Auto && d->autoDefault == state)
-        return;
-    d->autoDefault = state;
-    d->sizeHint = QSize();
-    update();
-    updateGeometry();
+   Q_D(QPushButton);
+   uint state = enable ? QPushButtonPrivate::On : QPushButtonPrivate::Off;
+   if (d->autoDefault != QPushButtonPrivate::Auto && d->autoDefault == state) {
+      return;
+   }
+   d->autoDefault = state;
+   d->sizeHint = QSize();
+   update();
+   updateGeometry();
 }
 
 bool QPushButton::autoDefault() const
 {
-    Q_D(const QPushButton);
-    if(d->autoDefault == QPushButtonPrivate::Auto)
-        return ( d->dialogParent() != 0 );
-    return d->autoDefault;
+   Q_D(const QPushButton);
+   if (d->autoDefault == QPushButtonPrivate::Auto) {
+      return ( d->dialogParent() != 0 );
+   }
+   return d->autoDefault;
 }
 
 void QPushButton::setDefault(bool enable)
 {
-    Q_D(QPushButton);
-    if (d->defaultButton == enable)
-        return;
-    d->defaultButton = enable;
-    if (d->defaultButton) {
-        if (QDialog *dlg = d->dialogParent())
-            dlg->d_func()->setMainDefault(this);
-    }
-    update();
+   Q_D(QPushButton);
+   if (d->defaultButton == enable) {
+      return;
+   }
+   d->defaultButton = enable;
+   if (d->defaultButton) {
+      if (QDialog *dlg = d->dialogParent()) {
+         dlg->d_func()->setMainDefault(this);
+      }
+   }
+   update();
 #ifndef QT_NO_ACCESSIBILITY
-    QAccessible::updateAccessibility(this, 0, QAccessible::StateChanged);
+   QAccessible::updateAccessibility(this, 0, QAccessible::StateChanged);
 #endif
 }
 
 bool QPushButton::isDefault() const
 {
-    Q_D(const QPushButton);
-    return d->defaultButton;
+   Q_D(const QPushButton);
+   return d->defaultButton;
 }
 
 /*!
@@ -376,48 +389,53 @@ bool QPushButton::isDefault() const
 */
 QSize QPushButton::sizeHint() const
 {
-    Q_D(const QPushButton);
-    if (d->sizeHint.isValid() && d->lastAutoDefault == autoDefault())
-        return d->sizeHint;
-    d->lastAutoDefault = autoDefault();
-    ensurePolished();
+   Q_D(const QPushButton);
+   if (d->sizeHint.isValid() && d->lastAutoDefault == autoDefault()) {
+      return d->sizeHint;
+   }
+   d->lastAutoDefault = autoDefault();
+   ensurePolished();
 
-    int w = 0, h = 0;
+   int w = 0, h = 0;
 
-    QStyleOptionButton opt;
-    initStyleOption(&opt);
+   QStyleOptionButton opt;
+   initStyleOption(&opt);
 
-    // calculate contents size...
+   // calculate contents size...
 #ifndef QT_NO_ICON
 
-    bool showButtonBoxIcons = qobject_cast<QDialogButtonBox*>(parentWidget())
-                          && style()->styleHint(QStyle::SH_DialogButtonBox_ButtonsHaveIcons);
+   bool showButtonBoxIcons = qobject_cast<QDialogButtonBox *>(parentWidget())
+                             && style()->styleHint(QStyle::SH_DialogButtonBox_ButtonsHaveIcons);
 
-    if (!icon().isNull() || showButtonBoxIcons) {
-        int ih = opt.iconSize.height();
-        int iw = opt.iconSize.width() + 4;
-        w += iw;
-        h = qMax(h, ih);
-    }
+   if (!icon().isNull() || showButtonBoxIcons) {
+      int ih = opt.iconSize.height();
+      int iw = opt.iconSize.width() + 4;
+      w += iw;
+      h = qMax(h, ih);
+   }
 #endif
-    QString s(text());
-    bool empty = s.isEmpty();
-    if (empty)
-        s = QString::fromLatin1("XXXX");
-    QFontMetrics fm = fontMetrics();
-    QSize sz = fm.size(Qt::TextShowMnemonic, s);
-    if(!empty || !w)
-        w += sz.width();
-    if(!empty || !h)
-        h = qMax(h, sz.height());
-    opt.rect.setSize(QSize(w, h)); // PM_MenuButtonIndicator depends on the height
+   QString s(text());
+   bool empty = s.isEmpty();
+   if (empty) {
+      s = QString::fromLatin1("XXXX");
+   }
+   QFontMetrics fm = fontMetrics();
+   QSize sz = fm.size(Qt::TextShowMnemonic, s);
+   if (!empty || !w) {
+      w += sz.width();
+   }
+   if (!empty || !h) {
+      h = qMax(h, sz.height());
+   }
+   opt.rect.setSize(QSize(w, h)); // PM_MenuButtonIndicator depends on the height
 #ifndef QT_NO_MENU
-    if (menu())
-        w += style()->pixelMetric(QStyle::PM_MenuButtonIndicator, &opt, this);
+   if (menu()) {
+      w += style()->pixelMetric(QStyle::PM_MenuButtonIndicator, &opt, this);
+   }
 #endif
-    d->sizeHint = (style()->sizeFromContents(QStyle::CT_PushButton, &opt, QSize(w, h), this).
+   d->sizeHint = (style()->sizeFromContents(QStyle::CT_PushButton, &opt, QSize(w, h), this).
                   expandedTo(QApplication::globalStrut()));
-    return d->sizeHint;
+   return d->sizeHint;
 }
 
 /*!
@@ -425,7 +443,7 @@ QSize QPushButton::sizeHint() const
  */
 QSize QPushButton::minimumSizeHint() const
 {
-    return sizeHint();
+   return sizeHint();
 }
 
 
@@ -433,28 +451,28 @@ QSize QPushButton::minimumSizeHint() const
 */
 void QPushButton::paintEvent(QPaintEvent *)
 {
-    QStylePainter p(this);
-    QStyleOptionButton option;
-    initStyleOption(&option);
-    p.drawControl(QStyle::CE_PushButton, option);
+   QStylePainter p(this);
+   QStyleOptionButton option;
+   initStyleOption(&option);
+   p.drawControl(QStyle::CE_PushButton, option);
 }
 
 
 /*! \reimp */
 void QPushButton::keyPressEvent(QKeyEvent *e)
 {
-    Q_D(QPushButton);
-    switch (e->key()) {
-    case Qt::Key_Enter:
-    case Qt::Key_Return:
-        if (autoDefault() || d->defaultButton) {
+   Q_D(QPushButton);
+   switch (e->key()) {
+      case Qt::Key_Enter:
+      case Qt::Key_Return:
+         if (autoDefault() || d->defaultButton) {
             click();
             break;
-        }
-        // fall through
-    default:
-        QAbstractButton::keyPressEvent(e);
-    }
+         }
+      // fall through
+      default:
+         QAbstractButton::keyPressEvent(e);
+   }
 }
 
 /*!
@@ -462,14 +480,15 @@ void QPushButton::keyPressEvent(QKeyEvent *e)
 */
 void QPushButton::focusInEvent(QFocusEvent *e)
 {
-    Q_D(QPushButton);
-    if (e->reason() != Qt::PopupFocusReason && autoDefault() && !d->defaultButton) {
-        d->defaultButton = true;
-        QDialog *dlg = qobject_cast<QDialog*>(window());
-        if (dlg)
-            dlg->d_func()->setDefault(this);
-    }
-    QAbstractButton::focusInEvent(e);
+   Q_D(QPushButton);
+   if (e->reason() != Qt::PopupFocusReason && autoDefault() && !d->defaultButton) {
+      d->defaultButton = true;
+      QDialog *dlg = qobject_cast<QDialog *>(window());
+      if (dlg) {
+         dlg->d_func()->setDefault(this);
+      }
+   }
+   QAbstractButton::focusInEvent(e);
 }
 
 /*!
@@ -477,19 +496,21 @@ void QPushButton::focusInEvent(QFocusEvent *e)
 */
 void QPushButton::focusOutEvent(QFocusEvent *e)
 {
-    Q_D(QPushButton);
-    if (e->reason() != Qt::PopupFocusReason && autoDefault() && d->defaultButton) {
-        QDialog *dlg = qobject_cast<QDialog*>(window());
-        if (dlg)
-            dlg->d_func()->setDefault(0);
-        else
-            d->defaultButton = false;
-    }
+   Q_D(QPushButton);
+   if (e->reason() != Qt::PopupFocusReason && autoDefault() && d->defaultButton) {
+      QDialog *dlg = qobject_cast<QDialog *>(window());
+      if (dlg) {
+         dlg->d_func()->setDefault(0);
+      } else {
+         d->defaultButton = false;
+      }
+   }
 
-    QAbstractButton::focusOutEvent(e);
+   QAbstractButton::focusOutEvent(e);
 #ifndef QT_NO_MENU
-    if (d->menu && d->menu->isVisible())        // restore pressed status
-        setDown(true);
+   if (d->menu && d->menu->isVisible()) {      // restore pressed status
+      setDown(true);
+   }
 #endif
 }
 
@@ -511,25 +532,28 @@ void QPushButton::focusOutEvent(QFocusEvent *e)
 
     \sa menu()
 */
-void QPushButton::setMenu(QMenu* menu)
+void QPushButton::setMenu(QMenu *menu)
 {
-    Q_D(QPushButton);
-    if (menu == d->menu)
-        return;
+   Q_D(QPushButton);
+   if (menu == d->menu) {
+      return;
+   }
 
-    if (menu && !d->menu) {
-        connect(this, SIGNAL(pressed()), this, SLOT(_q_popupPressed()), Qt::UniqueConnection);
-    }
-    if (d->menu)
-        removeAction(d->menu->menuAction());
-    d->menu = menu;
-    if (d->menu)
-        addAction(d->menu->menuAction());
+   if (menu && !d->menu) {
+      connect(this, SIGNAL(pressed()), this, SLOT(_q_popupPressed()), Qt::UniqueConnection);
+   }
+   if (d->menu) {
+      removeAction(d->menu->menuAction());
+   }
+   d->menu = menu;
+   if (d->menu) {
+      addAction(d->menu->menuAction());
+   }
 
-    d->resetLayoutItemMargins();
-    d->sizeHint = QSize();
-    update();
-    updateGeometry();
+   d->resetLayoutItemMargins();
+   d->sizeHint = QSize();
+   update();
+   updateGeometry();
 }
 
 /*!
@@ -538,10 +562,10 @@ void QPushButton::setMenu(QMenu* menu)
 
     \sa setMenu()
 */
-QMenu* QPushButton::menu() const
+QMenu *QPushButton::menu() const
 {
-    Q_D(const QPushButton);
-    return d->menu;
+   Q_D(const QPushButton);
+   return d->menu;
 }
 
 /*!
@@ -551,163 +575,171 @@ QMenu* QPushButton::menu() const
 */
 void QPushButton::showMenu()
 {
-    Q_D(QPushButton);
-    if (!d || !d->menu)
-        return;
-    setDown(true);
-    d->_q_popupPressed();
+   Q_D(QPushButton);
+   if (!d || !d->menu) {
+      return;
+   }
+   setDown(true);
+   d->_q_popupPressed();
 }
 
 void QPushButtonPrivate::_q_popupPressed()
 {
-    Q_Q(QPushButton);
-    if (!down || !menu)
-        return;
+   Q_Q(QPushButton);
+   if (!down || !menu) {
+      return;
+   }
 
-    menu->setNoReplayFor(q);
+   menu->setNoReplayFor(q);
 
-    QPoint menuPos = adjustedMenuPosition();
+   QPoint menuPos = adjustedMenuPosition();
 
-    QPointer<QPushButton> guard(q);
-    QMenuPrivate::get(menu)->causedPopup.widget = guard;
+   QPointer<QPushButton> guard(q);
+   QMenuPrivate::get(menu)->causedPopup.widget = guard;
 
-    //Because of a delay in menu effects, we must keep track of the
-    //menu visibility to avoid flicker on button release
-    menuOpen = true;
-    menu->exec(menuPos);
-    if (guard) {
-        menuOpen = false;
-        q->setDown(false);
-    }
+   //Because of a delay in menu effects, we must keep track of the
+   //menu visibility to avoid flicker on button release
+   menuOpen = true;
+   menu->exec(menuPos);
+   if (guard) {
+      menuOpen = false;
+      q->setDown(false);
+   }
 }
 
 QPoint QPushButtonPrivate::adjustedMenuPosition()
 {
-    Q_Q(QPushButton);
+   Q_Q(QPushButton);
 
-    bool horizontal = true;
+   bool horizontal = true;
 
 #if !defined(QT_NO_TOOLBAR)
-    QToolBar *tb = qobject_cast<QToolBar*>(q->parent());
-    if (tb && tb->orientation() == Qt::Vertical)
-        horizontal = false;
+   QToolBar *tb = qobject_cast<QToolBar *>(q->parent());
+   if (tb && tb->orientation() == Qt::Vertical) {
+      horizontal = false;
+   }
 #endif
 
-    QWidgetItem item(q);
-    QRect rect = item.geometry();
-    rect.setRect(rect.x() - q->x(), rect.y() - q->y(), rect.width(), rect.height());
+   QWidgetItem item(q);
+   QRect rect = item.geometry();
+   rect.setRect(rect.x() - q->x(), rect.y() - q->y(), rect.width(), rect.height());
 
-    QSize menuSize = menu->sizeHint();
-    QPoint globalPos = q->mapToGlobal(rect.topLeft());
-    int x = globalPos.x();
-    int y = globalPos.y();
-    if (horizontal) {
-        if (globalPos.y() + rect.height() + menuSize.height() <= QApplication::desktop()->availableGeometry(q).height()) {
-            y += rect.height();
-        } else {
-            y -= menuSize.height();
-        }
-        if (q->layoutDirection() == Qt::RightToLeft)
-            x += rect.width() - menuSize.width();
-    } else {
-        if (globalPos.x() + rect.width() + menu->sizeHint().width() <= QApplication::desktop()->availableGeometry(q).width())
-            x += rect.width();
-        else
-            x -= menuSize.width();
-    }
+   QSize menuSize = menu->sizeHint();
+   QPoint globalPos = q->mapToGlobal(rect.topLeft());
+   int x = globalPos.x();
+   int y = globalPos.y();
+   if (horizontal) {
+      if (globalPos.y() + rect.height() + menuSize.height() <= QApplication::desktop()->availableGeometry(q).height()) {
+         y += rect.height();
+      } else {
+         y -= menuSize.height();
+      }
+      if (q->layoutDirection() == Qt::RightToLeft) {
+         x += rect.width() - menuSize.width();
+      }
+   } else {
+      if (globalPos.x() + rect.width() + menu->sizeHint().width() <= QApplication::desktop()->availableGeometry(q).width()) {
+         x += rect.width();
+      } else {
+         x -= menuSize.width();
+      }
+   }
 
-    return QPoint(x,y);
+   return QPoint(x, y);
 }
 
 #endif // QT_NO_MENU
 
 void QPushButtonPrivate::resetLayoutItemMargins()
 {
-    Q_Q(QPushButton);
-    QStyleOptionButton opt;
-    q->initStyleOption(&opt);
-    setLayoutItemMargins(QStyle::SE_PushButtonLayoutItem, &opt);
+   Q_Q(QPushButton);
+   QStyleOptionButton opt;
+   q->initStyleOption(&opt);
+   setLayoutItemMargins(QStyle::SE_PushButtonLayoutItem, &opt);
 }
 
 void QPushButton::setFlat(bool flat)
 {
-    Q_D(QPushButton);
-    if (d->flat == flat)
-        return;
-    d->flat = flat;
-	d->resetLayoutItemMargins();
-    d->sizeHint = QSize();
-    update();
-    updateGeometry();
+   Q_D(QPushButton);
+   if (d->flat == flat) {
+      return;
+   }
+   d->flat = flat;
+   d->resetLayoutItemMargins();
+   d->sizeHint = QSize();
+   update();
+   updateGeometry();
 }
 
 bool QPushButton::isFlat() const
 {
-    Q_D(const QPushButton);
-    return d->flat;
+   Q_D(const QPushButton);
+   return d->flat;
 }
 
 /*! \reimp */
 bool QPushButton::event(QEvent *e)
 {
-    Q_D(QPushButton);
-    if (e->type() == QEvent::ParentChange) {
-        if (QDialog *dialog = d->dialogParent()) {
-            if (d->defaultButton)
-                dialog->d_func()->setMainDefault(this);
-        }
+   Q_D(QPushButton);
+   if (e->type() == QEvent::ParentChange) {
+      if (QDialog *dialog = d->dialogParent()) {
+         if (d->defaultButton) {
+            dialog->d_func()->setMainDefault(this);
+         }
+      }
 
-    } else if (e->type() == QEvent::StyleChange
+   } else if (e->type() == QEvent::StyleChange
 
 #ifdef Q_OS_MAC
-               || e->type() == QEvent::MacSizeChange
+              || e->type() == QEvent::MacSizeChange
 #endif
 
-               ) {
-		d->resetLayoutItemMargins();
-		updateGeometry();
-    } else if (e->type() == QEvent::PolishRequest) {
-        updateGeometry();
-    }
-    return QAbstractButton::event(e);
+             ) {
+      d->resetLayoutItemMargins();
+      updateGeometry();
+   } else if (e->type() == QEvent::PolishRequest) {
+      updateGeometry();
+   }
+   return QAbstractButton::event(e);
 }
 
 #ifdef Q_OS_MAC
 
 bool QPushButton::hitButton(const QPoint &pos) const
 {
-    QStyleOptionButton opt;
-    initStyleOption(&opt);
-    if (qt_mac_buttonIsRenderedFlat(this, &opt))
-        return QAbstractButton::hitButton(pos);
+   QStyleOptionButton opt;
+   initStyleOption(&opt);
+   if (qt_mac_buttonIsRenderedFlat(this, &opt)) {
+      return QAbstractButton::hitButton(pos);
+   }
 
-    // we know we are using the native style, proceed
-    Q_D(const QPushButton);
+   // we know we are using the native style, proceed
+   Q_D(const QPushButton);
 
-    QPushButtonPrivate *nonConst = const_cast<QPushButtonPrivate *>(d);
-    // In OSX buttons are round, which causes the hit method to be special.
-    // We cannot simply relay on detecting if something is inside the rect or not,
-    // we need to check if it is inside the "rounded area" or not. A point might
-    // be inside the rect but not inside the rounded area.
-    // Notice this method is only reimplemented for OSX.
-    return nonConst->hitButton(pos);
+   QPushButtonPrivate *nonConst = const_cast<QPushButtonPrivate *>(d);
+   // In OSX buttons are round, which causes the hit method to be special.
+   // We cannot simply relay on detecting if something is inside the rect or not,
+   // we need to check if it is inside the "rounded area" or not. A point might
+   // be inside the rect but not inside the rounded area.
+   // Notice this method is only reimplemented for OSX.
+   return nonConst->hitButton(pos);
 }
 
 bool QPushButtonPrivate::hitButton(const QPoint &pos)
 {
-    Q_Q(QPushButton);
-    QRect roundedRect(q->rect().left() + QMacStylePrivate::PushButtonLeftOffset,
-                      q->rect().top() + QMacStylePrivate::PushButtonContentPadding,
-                      q->rect().width() - QMacStylePrivate::PushButtonRightOffset,
-                      q->rect().height() - QMacStylePrivate::PushButtonBottomOffset);
-    return roundedRect.contains(pos);
+   Q_Q(QPushButton);
+   QRect roundedRect(q->rect().left() + QMacStylePrivate::PushButtonLeftOffset,
+                     q->rect().top() + QMacStylePrivate::PushButtonContentPadding,
+                     q->rect().width() - QMacStylePrivate::PushButtonRightOffset,
+                     q->rect().height() - QMacStylePrivate::PushButtonBottomOffset);
+   return roundedRect.contains(pos);
 }
 #endif
 
 void QPushButton::_q_popupPressed()
 {
-	Q_D(QPushButton);
-	d->_q_popupPressed();
+   Q_D(QPushButton);
+   d->_q_popupPressed();
 }
 
 QT_END_NAMESPACE

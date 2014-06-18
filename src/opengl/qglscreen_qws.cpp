@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,9 +32,9 @@ QT_BEGIN_NAMESPACE
 
 class QGLScreenPrivate
 {
-public:
-    QGLScreen::Options options;
-    QGLScreenSurfaceFunctions *functions;
+ public:
+   QGLScreen::Options options;
+   QGLScreenSurfaceFunctions *functions;
 };
 
 /*!
@@ -46,16 +46,16 @@ public:
 */
 
 QGLScreen::QGLScreen(int displayId)
-    : QScreen(displayId, GLClass), d_ptr(new QGLScreenPrivate)
+   : QScreen(displayId, GLClass), d_ptr(new QGLScreenPrivate)
 {
-    d_ptr->options = NoOptions;
-    d_ptr->functions = new QGLScreenSurfaceFunctions();
+   d_ptr->options = NoOptions;
+   d_ptr->functions = new QGLScreenSurfaceFunctions();
 }
 
 QGLScreen::~QGLScreen()
 {
-    delete d_ptr->functions;
-    delete d_ptr;
+   delete d_ptr->functions;
+   delete d_ptr;
 }
 
 /*!
@@ -88,9 +88,9 @@ QGLScreen::~QGLScreen()
 bool
 QGLScreen::chooseContext(QGLContext *context, const QGLContext *shareContext)
 {
-    Q_UNUSED(context);
-    Q_UNUSED(shareContext);
-    return false;
+   Q_UNUSED(context);
+   Q_UNUSED(shareContext);
+   return false;
 }
 
 /*!
@@ -113,7 +113,7 @@ QGLScreen::chooseContext(QGLContext *context, const QGLContext *shareContext)
 */
 QGLScreen::Options QGLScreen::options() const
 {
-    return d_ptr->options;
+   return d_ptr->options;
 }
 
 /*!
@@ -125,7 +125,7 @@ QGLScreen::Options QGLScreen::options() const
 */
 void QGLScreen::setOptions(QGLScreen::Options value)
 {
-    d_ptr->options = value;
+   d_ptr->options = value;
 }
 
 /*!
@@ -137,7 +137,7 @@ void QGLScreen::setOptions(QGLScreen::Options value)
 */
 QGLScreenSurfaceFunctions *QGLScreen::surfaceFunctions() const
 {
-    return d_ptr->functions;
+   return d_ptr->functions;
 }
 
 /*!
@@ -151,10 +151,10 @@ QGLScreenSurfaceFunctions *QGLScreen::surfaceFunctions() const
 */
 void QGLScreen::setSurfaceFunctions(QGLScreenSurfaceFunctions *functions)
 {
-    if (functions && functions != d_ptr->functions) {
-        delete d_ptr->functions;
-        d_ptr->functions = functions;
-    }
+   if (functions && functions != d_ptr->functions) {
+      delete d_ptr->functions;
+      d_ptr->functions = functions;
+   }
 }
 
 /*!
@@ -178,9 +178,9 @@ void QGLScreen::setSurfaceFunctions(QGLScreenSurfaceFunctions *functions)
 */
 bool QGLScreenSurfaceFunctions::createNativeWindow(QWidget *widget, EGLNativeWindowType *native)
 {
-    Q_UNUSED(widget);
-    Q_UNUSED(native);
-    return false;
+   Q_UNUSED(widget);
+   Q_UNUSED(native);
+   return false;
 }
 
 /*!
@@ -198,9 +198,9 @@ bool QGLScreenSurfaceFunctions::createNativeWindow(QWidget *widget, EGLNativeWin
 */
 bool QGLScreenSurfaceFunctions::createNativePixmap(QPixmap *pixmap, EGLNativePixmapType *native)
 {
-    Q_UNUSED(pixmap);
-    Q_UNUSED(native);
-    return false;
+   Q_UNUSED(pixmap);
+   Q_UNUSED(native);
+   return false;
 }
 
 /*!
@@ -218,9 +218,9 @@ bool QGLScreenSurfaceFunctions::createNativePixmap(QPixmap *pixmap, EGLNativePix
 */
 bool QGLScreenSurfaceFunctions::createNativeImage(QImage *image, EGLNativePixmapType *native)
 {
-    Q_UNUSED(image);
-    Q_UNUSED(native);
-    return false;
+   Q_UNUSED(image);
+   Q_UNUSED(native);
+   return false;
 }
 
 QT_END_NAMESPACE

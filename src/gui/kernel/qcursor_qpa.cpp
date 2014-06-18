@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,15 +41,15 @@ static int nextCursorId = Qt::BitmapCursor;
  *****************************************************************************/
 
 QCursorData::QCursorData(Qt::CursorShape s)
-    : cshape(s), bm(0), bmm(0), hx(0), hy(0), id(s)
+   : cshape(s), bm(0), bmm(0), hx(0), hy(0), id(s)
 {
-    ref = 1;
+   ref = 1;
 }
 
 QCursorData::~QCursorData()
 {
-    delete bm;
-    delete bmm;
+   delete bm;
+   delete bmm;
 }
 
 
@@ -61,29 +61,30 @@ extern QCursorData *qt_cursorTable[Qt::LastCursor + 1]; // qcursor.cpp
 
 int QCursor::handle() const
 {
-    return d->id;
+   return d->id;
 }
 
 
 QCursorData *QCursorData::setBitmap(const QBitmap &bitmap, const QBitmap &mask, int hotX, int hotY)
 {
-    if (!QCursorData::initialized)
-        QCursorData::initialize();
-    if (bitmap.depth() != 1 || mask.depth() != 1 || bitmap.size() != mask.size()) {
-        qWarning("QCursor: Cannot create bitmap cursor; invalid bitmap(s)");
-        QCursorData *c = qt_cursorTable[0];
-        c->ref.ref();
-        return c;
-    }
-    QCursorData *d = new QCursorData;
-    d->bm  = new QBitmap(bitmap);
-    d->bmm = new QBitmap(mask);
-    d->cshape = Qt::BitmapCursor;
-    d->id = ++nextCursorId;
-    d->hx = hotX >= 0 ? hotX : bitmap.width() / 2;
-    d->hy = hotY >= 0 ? hotY : bitmap.height() / 2;
+   if (!QCursorData::initialized) {
+      QCursorData::initialize();
+   }
+   if (bitmap.depth() != 1 || mask.depth() != 1 || bitmap.size() != mask.size()) {
+      qWarning("QCursor: Cannot create bitmap cursor; invalid bitmap(s)");
+      QCursorData *c = qt_cursorTable[0];
+      c->ref.ref();
+      return c;
+   }
+   QCursorData *d = new QCursorData;
+   d->bm  = new QBitmap(bitmap);
+   d->bmm = new QBitmap(mask);
+   d->cshape = Qt::BitmapCursor;
+   d->id = ++nextCursorId;
+   d->hx = hotX >= 0 ? hotX : bitmap.width() / 2;
+   d->hy = hotY >= 0 ? hotY : bitmap.height() / 2;
 
-    return d;
+   return d;
 }
 
 void QCursorData::update()
@@ -92,38 +93,41 @@ void QCursorData::update()
 
 #endif //QT_NO_CURSOR
 
-extern int qt_last_x,qt_last_y;
+extern int qt_last_x, qt_last_y;
 
 QPoint QCursor::pos()
 {
-    QList<QWeakPointer<QPlatformCursor> > cursors = QPlatformCursorPrivate::getInstances();
-    int cursorCount = cursors.count();
-    for (int i = 0; i < cursorCount; ++i) {
-        const QWeakPointer<QPlatformCursor> &cursor(cursors.at(i));
-        if (cursor)
-            return cursor.data()->pos();
-    }
-    return QPoint(qt_last_x, qt_last_y);
+   QList<QWeakPointer<QPlatformCursor> > cursors = QPlatformCursorPrivate::getInstances();
+   int cursorCount = cursors.count();
+   for (int i = 0; i < cursorCount; ++i) {
+      const QWeakPointer<QPlatformCursor> &cursor(cursors.at(i));
+      if (cursor) {
+         return cursor.data()->pos();
+      }
+   }
+   return QPoint(qt_last_x, qt_last_y);
 }
 
 void QCursor::setPos(int x, int y)
 {
-    QPoint target(x, y);
+   QPoint target(x, y);
 
-    // Need to check, since some X servers generate null mouse move
-    // events, causing looping in applications which call setPos() on
-    // every mouse move event.
-    //
-    if (pos() == target)
-        return;
+   // Need to check, since some X servers generate null mouse move
+   // events, causing looping in applications which call setPos() on
+   // every mouse move event.
+   //
+   if (pos() == target) {
+      return;
+   }
 
-    QList<QWeakPointer<QPlatformCursor> > cursors = QPlatformCursorPrivate::getInstances();
-    int cursorCount = cursors.count();
-    for (int i = 0; i < cursorCount; ++i) {
-        const QWeakPointer<QPlatformCursor> &cursor(cursors.at(i));
-        if (cursor)
-            cursor.data()->setPos(target);
-    }
+   QList<QWeakPointer<QPlatformCursor> > cursors = QPlatformCursorPrivate::getInstances();
+   int cursorCount = cursors.count();
+   for (int i = 0; i < cursorCount; ++i) {
+      const QWeakPointer<QPlatformCursor> &cursor(cursors.at(i));
+      if (cursor) {
+         cursor.data()->setPos(target);
+      }
+   }
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,53 +37,53 @@ class QItemSelection;
 
 class Q_GUI_EXPORT QAbstractProxyModel : public QAbstractItemModel
 {
-    CS_OBJECT(QAbstractProxyModel)
+   CS_OBJECT(QAbstractProxyModel)
 
-public:
-    QAbstractProxyModel(QObject *parent = 0);
-    ~QAbstractProxyModel();
+ public:
+   QAbstractProxyModel(QObject *parent = 0);
+   ~QAbstractProxyModel();
 
-    virtual void setSourceModel(QAbstractItemModel *sourceModel);
-    QAbstractItemModel *sourceModel() const;
+   virtual void setSourceModel(QAbstractItemModel *sourceModel);
+   QAbstractItemModel *sourceModel() const;
 
-    virtual QModelIndex mapToSource(const QModelIndex &proxyIndex) const = 0;
-    virtual QModelIndex mapFromSource(const QModelIndex &sourceIndex) const = 0;
+   virtual QModelIndex mapToSource(const QModelIndex &proxyIndex) const = 0;
+   virtual QModelIndex mapFromSource(const QModelIndex &sourceIndex) const = 0;
 
-    virtual QItemSelection mapSelectionToSource(const QItemSelection &selection) const;
-    virtual QItemSelection mapSelectionFromSource(const QItemSelection &selection) const;
+   virtual QItemSelection mapSelectionToSource(const QItemSelection &selection) const;
+   virtual QItemSelection mapSelectionFromSource(const QItemSelection &selection) const;
 
-    bool submit();
-    void revert();
+   bool submit();
+   void revert();
 
-    QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    QMap<int, QVariant> itemData(const QModelIndex &index) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+   QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const;
+   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+   QMap<int, QVariant> itemData(const QModelIndex &index) const;
+   Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    bool setItemData(const QModelIndex& index, const QMap<int, QVariant> &roles);
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
+   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+   bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
+   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
 
-    QModelIndex buddy(const QModelIndex &index) const;
-    bool canFetchMore(const QModelIndex &parent) const;
-    void fetchMore(const QModelIndex &parent);
-    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
-    QSize span(const QModelIndex &index) const;
-    bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
+   QModelIndex buddy(const QModelIndex &index) const;
+   bool canFetchMore(const QModelIndex &parent) const;
+   void fetchMore(const QModelIndex &parent);
+   void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+   QSize span(const QModelIndex &index) const;
+   bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
 
-    QMimeData* mimeData(const QModelIndexList &indexes) const;
-    QStringList mimeTypes() const;
-    Qt::DropActions supportedDropActions() const;
+   QMimeData *mimeData(const QModelIndexList &indexes) const;
+   QStringList mimeTypes() const;
+   Qt::DropActions supportedDropActions() const;
 
-protected:
-    QAbstractProxyModel(QAbstractProxyModelPrivate &, QObject *parent);
+ protected:
+   QAbstractProxyModel(QAbstractProxyModelPrivate &, QObject *parent);
 
-private:
-    Q_DECLARE_PRIVATE(QAbstractProxyModel)
-    Q_DISABLE_COPY(QAbstractProxyModel)
+ private:
+   Q_DECLARE_PRIVATE(QAbstractProxyModel)
+   Q_DISABLE_COPY(QAbstractProxyModel)
 
-    GUI_CS_SLOT_1(Private, void _q_sourceModelDestroyed())
-    GUI_CS_SLOT_2(_q_sourceModelDestroyed)
+   GUI_CS_SLOT_1(Private, void _q_sourceModelDestroyed())
+   GUI_CS_SLOT_2(_q_sourceModelDestroyed)
 };
 
 #endif // QT_NO_PROXYMODEL

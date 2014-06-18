@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,26 +34,26 @@ class QGLCustomShaderStagePrivate;
 
 class Q_OPENGL_EXPORT QGLCustomShaderStage
 {
-    Q_DECLARE_PRIVATE(QGLCustomShaderStage)
+   Q_DECLARE_PRIVATE(QGLCustomShaderStage)
 
-public:
-    QGLCustomShaderStage();
-    virtual ~QGLCustomShaderStage();
-    virtual void setUniforms(QGLShaderProgram*) {}
+ public:
+   QGLCustomShaderStage();
+   virtual ~QGLCustomShaderStage();
+   virtual void setUniforms(QGLShaderProgram *) {}
 
-    void setUniformsDirty();
+   void setUniformsDirty();
 
-    bool setOnPainter(QPainter*);
-    void removeFromPainter(QPainter*);
-    QByteArray source() const;
+   bool setOnPainter(QPainter *);
+   void removeFromPainter(QPainter *);
+   QByteArray source() const;
 
-    void setInactive();
+   void setInactive();
 
-protected:
-    void setSource(const QByteArray&);
+ protected:
+   void setSource(const QByteArray &);
 
-private:
-    QGLCustomShaderStagePrivate* d_ptr;
+ private:
+   QGLCustomShaderStagePrivate *d_ptr;
 };
 
 

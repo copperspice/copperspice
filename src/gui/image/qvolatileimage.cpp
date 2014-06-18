@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,40 +32,40 @@ QT_BEGIN_NAMESPACE
 
 class QVolatileImagePaintEnginePrivate : public QRasterPaintEnginePrivate
 {
-public:
-    QVolatileImagePaintEnginePrivate() { }
-    QVolatileImage *img;
+ public:
+   QVolatileImagePaintEnginePrivate() { }
+   QVolatileImage *img;
 };
 
 class QVolatileImagePaintEngine : public QRasterPaintEngine
 {
-    Q_DECLARE_PRIVATE(QVolatileImagePaintEngine)
+   Q_DECLARE_PRIVATE(QVolatileImagePaintEngine)
 
-public:
-    QVolatileImagePaintEngine(QPaintDevice *device, QVolatileImage *img);
-    bool begin(QPaintDevice *device);
-    bool end();
-    void drawPixmap(const QPointF &p, const QPixmap &pm);
-    void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
+ public:
+   QVolatileImagePaintEngine(QPaintDevice *device, QVolatileImage *img);
+   bool begin(QPaintDevice *device);
+   bool end();
+   void drawPixmap(const QPointF &p, const QPixmap &pm);
+   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
 };
 
 QVolatileImage::QVolatileImage()
-    : d(new QVolatileImageData)
+   : d(new QVolatileImageData)
 {
 }
 
 QVolatileImage::QVolatileImage(int w, int h, QImage::Format format)
-    : d(new QVolatileImageData(w, h, format))
+   : d(new QVolatileImageData(w, h, format))
 {
 }
 
 QVolatileImage::QVolatileImage(const QImage &sourceImage)
-    : d(new QVolatileImageData(sourceImage))
+   : d(new QVolatileImageData(sourceImage))
 {
 }
 
 QVolatileImage::QVolatileImage(void *nativeImage, void *nativeMask)
-    : d(new QVolatileImageData(nativeImage, nativeMask))
+   : d(new QVolatileImageData(nativeImage, nativeMask))
 {
 }
 
@@ -73,7 +73,7 @@ QVolatileImage::QVolatileImage(void *nativeImage, void *nativeMask)
 // fwd declared QSharedData working.
 
 QVolatileImage::QVolatileImage(const QVolatileImage &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -83,63 +83,63 @@ QVolatileImage::~QVolatileImage()
 
 QVolatileImage &QVolatileImage::operator=(const QVolatileImage &rhs)
 {
-    d = rhs.d;
-    return *this;
+   d = rhs.d;
+   return *this;
 }
 
 bool QVolatileImage::paintingActive() const
 {
-    return d->pengine && d->pengine->isActive();
+   return d->pengine && d->pengine->isActive();
 }
 
 bool QVolatileImage::isNull() const
 {
-    return d->image.isNull();
+   return d->image.isNull();
 }
 
 QImage::Format QVolatileImage::format() const
 {
-    return d->image.format();
+   return d->image.format();
 }
 
 int QVolatileImage::width() const
 {
-    return d->image.width();
+   return d->image.width();
 }
 
 int QVolatileImage::height() const
 {
-    return d->image.height();
+   return d->image.height();
 }
 
 int QVolatileImage::bytesPerLine() const
 {
-    return d->image.bytesPerLine();
+   return d->image.bytesPerLine();
 }
 
 int QVolatileImage::byteCount() const
 {
-    return d->image.byteCount();
+   return d->image.byteCount();
 }
 
 int QVolatileImage::depth() const
 {
-    return d->image.depth();
+   return d->image.depth();
 }
 
 bool QVolatileImage::hasAlphaChannel() const
 {
-    return d->image.hasAlphaChannel();
+   return d->image.hasAlphaChannel();
 }
 
 void QVolatileImage::beginDataAccess() const
 {
-    d->beginDataAccess();
+   d->beginDataAccess();
 }
 
 void QVolatileImage::endDataAccess(bool readOnly) const
 {
-    d->endDataAccess(readOnly);
+   d->endDataAccess(readOnly);
 }
 
 /*!
@@ -148,17 +148,17 @@ void QVolatileImage::endDataAccess(bool readOnly) const
  */
 uchar *QVolatileImage::bits()
 {
-    return d->image.bits();
+   return d->image.bits();
 }
 
 const uchar *QVolatileImage::constBits() const
 {
-    return d->image.constBits();
+   return d->image.constBits();
 }
 
 bool QVolatileImage::ensureFormat(QImage::Format format)
 {
-    return d->ensureFormat(format);
+   return d->ensureFormat(format);
 }
 
 /*!
@@ -166,10 +166,10 @@ bool QVolatileImage::ensureFormat(QImage::Format format)
  */
 QImage QVolatileImage::toImage() const
 {
-    d->beginDataAccess();
-    QImage newImage = d->image.copy(); // no sharing allowed
-    d->endDataAccess(true);
-    return newImage;
+   d->beginDataAccess();
+   QImage newImage = d->image.copy(); // no sharing allowed
+   d->endDataAccess(true);
+   return newImage;
 }
 
 /*!
@@ -180,8 +180,8 @@ QImage QVolatileImage::toImage() const
   */
 QImage &QVolatileImage::imageRef() // non-const, in order to cause a detach
 {
-    d->ensureImage();
-    return d->image;
+   d->ensureImage();
+   return d->image;
 }
 
 /*!
@@ -190,59 +190,59 @@ QImage &QVolatileImage::imageRef() // non-const, in order to cause a detach
  */
 const QImage &QVolatileImage::constImageRef() const
 {
-    const_cast<QVolatileImageData *>(d.data())->ensureImage();
-    return d->image;
+   const_cast<QVolatileImageData *>(d.data())->ensureImage();
+   return d->image;
 }
 
 void *QVolatileImage::duplicateNativeImage() const
 {
-    return d->duplicateNativeImage();
+   return d->duplicateNativeImage();
 }
 
 void QVolatileImage::setAlphaChannel(const QPixmap &alphaChannel)
 {
-    ensureFormat(QImage::Format_ARGB32_Premultiplied);
-    beginDataAccess();
-    imageRef().setAlphaChannel(alphaChannel.toImage());
-    endDataAccess();
-    d->ensureImage();
+   ensureFormat(QImage::Format_ARGB32_Premultiplied);
+   beginDataAccess();
+   imageRef().setAlphaChannel(alphaChannel.toImage());
+   endDataAccess();
+   d->ensureImage();
 }
 
 void QVolatileImage::fill(uint pixelValue)
 {
-    beginDataAccess();
-    imageRef().fill(pixelValue);
-    endDataAccess();
-    d->ensureImage();
+   beginDataAccess();
+   imageRef().fill(pixelValue);
+   endDataAccess();
+   d->ensureImage();
 }
 
 void QVolatileImage::copyFrom(QVolatileImage *source, const QRect &rect)
 {
-    if (source->isNull()) {
-        return;
-    }
-    QRect r = rect;
-    if (rect.isNull()) {
-        r = QRect(0, 0, source->width(), source->height());
-    }
-    source->beginDataAccess();
-    QImage &srcImgRef(source->imageRef());
-    int srcbpl = srcImgRef.bytesPerLine();
-    int srcbpp = srcImgRef.depth() / 8;
-    const uchar *sptr = srcImgRef.constBits() + r.y() * srcbpl;
-    beginDataAccess();
-    QImage &dstImgRef(imageRef());
-    if (!dstImgRef.isNull()) {
-        int dstbpl = dstImgRef.bytesPerLine();
-        uchar *dptr = dstImgRef.bits();
-        for (int y = 0; y < r.height(); ++y) {
-            memcpy(dptr, sptr + r.x() * srcbpp, r.width() * srcbpp);
-            sptr += srcbpl;
-            dptr += dstbpl;
-        }
-    }
-    endDataAccess();
-    source->endDataAccess(true);
+   if (source->isNull()) {
+      return;
+   }
+   QRect r = rect;
+   if (rect.isNull()) {
+      r = QRect(0, 0, source->width(), source->height());
+   }
+   source->beginDataAccess();
+   QImage &srcImgRef(source->imageRef());
+   int srcbpl = srcImgRef.bytesPerLine();
+   int srcbpp = srcImgRef.depth() / 8;
+   const uchar *sptr = srcImgRef.constBits() + r.y() * srcbpl;
+   beginDataAccess();
+   QImage &dstImgRef(imageRef());
+   if (!dstImgRef.isNull()) {
+      int dstbpl = dstImgRef.bytesPerLine();
+      uchar *dptr = dstImgRef.bits();
+      for (int y = 0; y < r.height(); ++y) {
+         memcpy(dptr, sptr + r.x() * srcbpp, r.width() * srcbpp);
+         sptr += srcbpl;
+         dptr += dstbpl;
+      }
+   }
+   endDataAccess();
+   source->endDataAccess(true);
 }
 
 /*!
@@ -250,33 +250,33 @@ void QVolatileImage::copyFrom(QVolatileImage *source, const QRect &rect)
   */
 QPaintEngine *QVolatileImage::paintEngine()
 {
-    if (!d->pengine) {
-        d->pengine = new QVolatileImagePaintEngine(&imageRef(), this);
-    }
-    return d->pengine;
+   if (!d->pengine) {
+      d->pengine = new QVolatileImagePaintEngine(&imageRef(), this);
+   }
+   return d->pengine;
 }
 
 QVolatileImagePaintEngine::QVolatileImagePaintEngine(QPaintDevice *device,
-                                                             QVolatileImage *img)
-    : QRasterPaintEngine(*(new QVolatileImagePaintEnginePrivate), device)
+      QVolatileImage *img)
+   : QRasterPaintEngine(*(new QVolatileImagePaintEnginePrivate), device)
 {
-    Q_D(QVolatileImagePaintEngine);
-    d->img = img;
+   Q_D(QVolatileImagePaintEngine);
+   d->img = img;
 }
 
 bool QVolatileImagePaintEngine::begin(QPaintDevice *device)
 {
-    Q_D(QVolatileImagePaintEngine);
-    d->img->beginDataAccess();
-    return QRasterPaintEngine::begin(device);
+   Q_D(QVolatileImagePaintEngine);
+   d->img->beginDataAccess();
+   return QRasterPaintEngine::begin(device);
 }
 
 bool QVolatileImagePaintEngine::end()
 {
-    Q_D(QVolatileImagePaintEngine);
-    bool ret = QRasterPaintEngine::end();
-    d->img->endDataAccess();
-    return ret;
+   Q_D(QVolatileImagePaintEngine);
+   bool ret = QRasterPaintEngine::end();
+   d->img->endDataAccess();
+   return ret;
 }
 
 // For non-RasterClass pixmaps drawPixmap() would call toImage() which is slow in
@@ -284,12 +284,12 @@ bool QVolatileImagePaintEngine::end()
 
 void QVolatileImagePaintEngine::drawPixmap(const QPointF &p, const QPixmap &pm)
 {
-    QRasterPaintEngine::drawPixmap(p, pm);
+   QRasterPaintEngine::drawPixmap(p, pm);
 }
 
 void QVolatileImagePaintEngine::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
 {
-    QRasterPaintEngine::drawPixmap(r, pm, sr);
+   QRasterPaintEngine::drawPixmap(r, pm, sr);
 }
 
 QT_END_NAMESPACE

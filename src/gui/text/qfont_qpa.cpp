@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,12 +30,12 @@ QT_BEGIN_NAMESPACE
 
 void QFont::initialize()
 {
-    QApplicationPrivate::platformIntegration()->fontDatabase()->populateFontDatabase();
+   QApplicationPrivate::platformIntegration()->fontDatabase()->populateFontDatabase();
 }
 
 void QFont::cleanup()
 {
-    QFontCache::cleanup();
+   QFontCache::cleanup();
 }
 
 
@@ -45,12 +45,12 @@ void QFont::cleanup()
 
 Qt::HANDLE QFont::handle() const
 {
-    return 0;
+   return 0;
 }
 
 QString QFont::rawName() const
 {
-    return QLatin1String("unknown");
+   return QLatin1String("unknown");
 }
 
 void QFont::setRawName(const QString &)
@@ -59,38 +59,39 @@ void QFont::setRawName(const QString &)
 
 QString QFont::defaultFamily() const
 {
-    QString familyName;
-    switch(d->request.styleHint) {
-        case QFont::Times:
-            familyName = QString::fromLatin1("times");
-        case QFont::Courier:
-        case QFont::Monospace:
-            familyName = QString::fromLatin1("monospace");
-        case QFont::Decorative:
-            familyName = QString::fromLatin1("old english");
-        case QFont::Helvetica:
-        case QFont::System:
-        default:
-            familyName = QString::fromLatin1("helvetica");
-    }
+   QString familyName;
+   switch (d->request.styleHint) {
+      case QFont::Times:
+         familyName = QString::fromLatin1("times");
+      case QFont::Courier:
+      case QFont::Monospace:
+         familyName = QString::fromLatin1("monospace");
+      case QFont::Decorative:
+         familyName = QString::fromLatin1("old english");
+      case QFont::Helvetica:
+      case QFont::System:
+      default:
+         familyName = QString::fromLatin1("helvetica");
+   }
 
-    QStringList list = QApplicationPrivate::platformIntegration()->fontDatabase()->fallbacksForFamily(familyName,QFont::StyleNormal,QFont::StyleHint(d->request.styleHint),QUnicodeTables::Common);
-    if (list.size()) {
-        familyName = list.at(0);
-    }
-    return familyName;
+   QStringList list = QApplicationPrivate::platformIntegration()->fontDatabase()->fallbacksForFamily(familyName,
+                      QFont::StyleNormal, QFont::StyleHint(d->request.styleHint), QUnicodeTables::Common);
+   if (list.size()) {
+      familyName = list.at(0);
+   }
+   return familyName;
 }
 
 QString QFont::lastResortFamily() const
 {
-    return QString::fromLatin1("helvetica");
+   return QString::fromLatin1("helvetica");
 }
 
 QString QFont::lastResortFont() const
 {
-    qFatal("QFont::lastResortFont: Cannot find any reasonable font");
-    // Shut compiler up
-    return QString();
+   qFatal("QFont::lastResortFont: Cannot find any reasonable font");
+   // Shut compiler up
+   return QString();
 }
 
 

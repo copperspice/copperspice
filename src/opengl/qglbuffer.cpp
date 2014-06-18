@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,21 +33,20 @@ QT_BEGIN_NAMESPACE
 
 class QGLBufferPrivate
 {
-public:
-    QGLBufferPrivate(QGLBuffer::Type t)
-        : ref(1),
-          type(t),
-          guard(0),
-          usagePattern(QGLBuffer::StaticDraw),
-          actualUsagePattern(QGLBuffer::StaticDraw)
-    {
-    }
+ public:
+   QGLBufferPrivate(QGLBuffer::Type t)
+      : ref(1),
+        type(t),
+        guard(0),
+        usagePattern(QGLBuffer::StaticDraw),
+        actualUsagePattern(QGLBuffer::StaticDraw) {
+   }
 
-    QAtomicInt ref;
-    QGLBuffer::Type type;
-    QGLSharedResourceGuard guard;
-    QGLBuffer::UsagePattern usagePattern;
-    QGLBuffer::UsagePattern actualUsagePattern;
+   QAtomicInt ref;
+   QGLBuffer::Type type;
+   QGLSharedResourceGuard guard;
+   QGLBuffer::UsagePattern usagePattern;
+   QGLBuffer::UsagePattern actualUsagePattern;
 };
 
 /*!
@@ -59,7 +58,7 @@ public:
     \sa create()
 */
 QGLBuffer::QGLBuffer()
-    : d_ptr(new QGLBufferPrivate(QGLBuffer::VertexBuffer))
+   : d_ptr(new QGLBufferPrivate(QGLBuffer::VertexBuffer))
 {
 }
 
@@ -72,7 +71,7 @@ QGLBuffer::QGLBuffer()
     \sa create()
 */
 QGLBuffer::QGLBuffer(QGLBuffer::Type type)
-    : d_ptr(new QGLBufferPrivate(type))
+   : d_ptr(new QGLBufferPrivate(type))
 {
 }
 
@@ -83,9 +82,9 @@ QGLBuffer::QGLBuffer(QGLBuffer::Type type)
     so \a other will be affected whenever the copy is modified.
 */
 QGLBuffer::QGLBuffer(const QGLBuffer &other)
-    : d_ptr(other.d_ptr)
+   : d_ptr(other.d_ptr)
 {
-    d_ptr->ref.ref();
+   d_ptr->ref.ref();
 }
 
 #define ctx d->guard.context()
@@ -96,10 +95,10 @@ QGLBuffer::QGLBuffer(const QGLBuffer &other)
 */
 QGLBuffer::~QGLBuffer()
 {
-    if (!d_ptr->ref.deref()) {
-        destroy();
-        delete d_ptr;
-    }
+   if (!d_ptr->ref.deref()) {
+      destroy();
+      delete d_ptr;
+   }
 }
 
 /*!
@@ -110,15 +109,15 @@ QGLBuffer::~QGLBuffer()
 */
 QGLBuffer &QGLBuffer::operator=(const QGLBuffer &other)
 {
-    if (d_ptr != other.d_ptr) {
-        other.d_ptr->ref.ref();
-        if (!d_ptr->ref.deref()) {
-            destroy();
-            delete d_ptr;
-        }
-        d_ptr = other.d_ptr;
-    }
-    return *this;
+   if (d_ptr != other.d_ptr) {
+      other.d_ptr->ref.ref();
+      if (!d_ptr->ref.deref()) {
+         destroy();
+         delete d_ptr;
+      }
+      d_ptr = other.d_ptr;
+   }
+   return *this;
 }
 
 /*!
@@ -126,8 +125,8 @@ QGLBuffer &QGLBuffer::operator=(const QGLBuffer &other)
 */
 QGLBuffer::Type QGLBuffer::type() const
 {
-    Q_D(const QGLBuffer);
-    return d->type;
+   Q_D(const QGLBuffer);
+   return d->type;
 }
 
 /*!
@@ -138,8 +137,8 @@ QGLBuffer::Type QGLBuffer::type() const
 */
 QGLBuffer::UsagePattern QGLBuffer::usagePattern() const
 {
-    Q_D(const QGLBuffer);
-    return d->usagePattern;
+   Q_D(const QGLBuffer);
+   return d->usagePattern;
 }
 
 /*!
@@ -150,17 +149,18 @@ QGLBuffer::UsagePattern QGLBuffer::usagePattern() const
 */
 void QGLBuffer::setUsagePattern(QGLBuffer::UsagePattern value)
 {
-    Q_D(QGLBuffer);
+   Q_D(QGLBuffer);
 #if defined(QT_OPENGL_ES_1)
-    // OpenGL/ES 1.1 does not support GL_STREAM_DRAW, so use GL_STATIC_DRAW.
-    // OpenGL/ES 2.0 does support GL_STREAM_DRAW.
-    d->usagePattern = value;
-    if (value == StreamDraw)
-        d->actualUsagePattern = StaticDraw;
-    else
-        d->actualUsagePattern = value;
+   // OpenGL/ES 1.1 does not support GL_STREAM_DRAW, so use GL_STATIC_DRAW.
+   // OpenGL/ES 2.0 does support GL_STREAM_DRAW.
+   d->usagePattern = value;
+   if (value == StreamDraw) {
+      d->actualUsagePattern = StaticDraw;
+   } else {
+      d->actualUsagePattern = value;
+   }
 #else
-    d->usagePattern = d->actualUsagePattern = value;
+   d->usagePattern = d->actualUsagePattern = value;
 #endif
 }
 
@@ -181,22 +181,24 @@ void QGLBuffer::setUsagePattern(QGLBuffer::UsagePattern value)
 */
 bool QGLBuffer::create()
 {
-    Q_D(QGLBuffer);
-    if (d->guard.id())
-        return true;
-    const QGLContext *ctx = QGLContext::currentContext();
-    if (ctx) {
-        if (!qt_resolve_buffer_extensions(const_cast<QGLContext *>(ctx)))
-            return false;
-        GLuint bufferId = 0;
-        glGenBuffers(1, &bufferId);
-        if (bufferId) {
-            d->guard.setContext(ctx);
-            d->guard.setId(bufferId);
-            return true;
-        }
-    }
-    return false;
+   Q_D(QGLBuffer);
+   if (d->guard.id()) {
+      return true;
+   }
+   const QGLContext *ctx = QGLContext::currentContext();
+   if (ctx) {
+      if (!qt_resolve_buffer_extensions(const_cast<QGLContext *>(ctx))) {
+         return false;
+      }
+      GLuint bufferId = 0;
+      glGenBuffers(1, &bufferId);
+      if (bufferId) {
+         d->guard.setContext(ctx);
+         d->guard.setId(bufferId);
+         return true;
+      }
+   }
+   return false;
 }
 
 #define ctx d->guard.context()
@@ -208,8 +210,8 @@ bool QGLBuffer::create()
 */
 bool QGLBuffer::isCreated() const
 {
-    Q_D(const QGLBuffer);
-    return d->guard.id() != 0;
+   Q_D(const QGLBuffer);
+   return d->guard.id() != 0;
 }
 
 /*!
@@ -219,15 +221,15 @@ bool QGLBuffer::isCreated() const
 */
 void QGLBuffer::destroy()
 {
-    Q_D(QGLBuffer);
-    GLuint bufferId = d->guard.id();
-    if (bufferId) {
-        // Switch to the original creating context to destroy it.
-        QGLShareContextScope scope(d->guard.context());
-        glDeleteBuffers(1, &bufferId);
-    }
-    d->guard.setId(0);
-    d->guard.setContext(0);
+   Q_D(QGLBuffer);
+   GLuint bufferId = d->guard.id();
+   if (bufferId) {
+      // Switch to the original creating context to destroy it.
+      QGLShareContextScope scope(d->guard.context());
+      glDeleteBuffers(1, &bufferId);
+   }
+   d->guard.setId(0);
+   d->guard.setContext(0);
 }
 
 /*!
@@ -243,17 +245,18 @@ void QGLBuffer::destroy()
 bool QGLBuffer::read(int offset, void *data, int count)
 {
 #if !defined(QT_OPENGL_ES)
-    Q_D(QGLBuffer);
-    if (!glGetBufferSubData || !d->guard.id())
-        return false;
-    while (glGetError() != GL_NO_ERROR) ; // Clear error state.
-    glGetBufferSubData(d->type, offset, count, data);
-    return glGetError() == GL_NO_ERROR;
+   Q_D(QGLBuffer);
+   if (!glGetBufferSubData || !d->guard.id()) {
+      return false;
+   }
+   while (glGetError() != GL_NO_ERROR) ; // Clear error state.
+   glGetBufferSubData(d->type, offset, count, data);
+   return glGetError() == GL_NO_ERROR;
 #else
-    Q_UNUSED(offset);
-    Q_UNUSED(data);
-    Q_UNUSED(count);
-    return false;
+   Q_UNUSED(offset);
+   Q_UNUSED(data);
+   Q_UNUSED(count);
+   return false;
 #endif
 }
 
@@ -270,12 +273,14 @@ bool QGLBuffer::read(int offset, void *data, int count)
 void QGLBuffer::write(int offset, const void *data, int count)
 {
 #ifndef QT_NO_DEBUG
-    if (!isCreated())
-        qWarning("QGLBuffer::allocate(): buffer not created");
+   if (!isCreated()) {
+      qWarning("QGLBuffer::allocate(): buffer not created");
+   }
 #endif
-    Q_D(QGLBuffer);
-    if (d->guard.id())
-        glBufferSubData(d->type, offset, count, data);
+   Q_D(QGLBuffer);
+   if (d->guard.id()) {
+      glBufferSubData(d->type, offset, count, data);
+   }
 }
 
 /*!
@@ -290,12 +295,14 @@ void QGLBuffer::write(int offset, const void *data, int count)
 void QGLBuffer::allocate(const void *data, int count)
 {
 #ifndef QT_NO_DEBUG
-    if (!isCreated())
-        qWarning("QGLBuffer::allocate(): buffer not created");
+   if (!isCreated()) {
+      qWarning("QGLBuffer::allocate(): buffer not created");
+   }
 #endif
-    Q_D(QGLBuffer);
-    if (d->guard.id())
-        glBufferData(d->type, count, data, d->actualUsagePattern);
+   Q_D(QGLBuffer);
+   if (d->guard.id()) {
+      glBufferData(d->type, count, data, d->actualUsagePattern);
+   }
 }
 
 /*!
@@ -325,24 +332,25 @@ void QGLBuffer::allocate(const void *data, int count)
 bool QGLBuffer::bind()
 {
 #ifndef QT_NO_DEBUG
-    if (!isCreated())
-        qWarning("QGLBuffer::bind(): buffer not created");
+   if (!isCreated()) {
+      qWarning("QGLBuffer::bind(): buffer not created");
+   }
 #endif
-    Q_D(const QGLBuffer);
-    GLuint bufferId = d->guard.id();
-    if (bufferId) {
-        if (!QGLContext::areSharing(QGLContext::currentContext(),
-                                    d->guard.context())) {
+   Q_D(const QGLBuffer);
+   GLuint bufferId = d->guard.id();
+   if (bufferId) {
+      if (!QGLContext::areSharing(QGLContext::currentContext(),
+                                  d->guard.context())) {
 #ifndef QT_NO_DEBUG
-            qWarning("QGLBuffer::bind: buffer is not valid in the current context");
+         qWarning("QGLBuffer::bind: buffer is not valid in the current context");
 #endif
-            return false;
-        }
-        glBindBuffer(d->type, bufferId);
-        return true;
-    } else {
-        return false;
-    }
+         return false;
+      }
+      glBindBuffer(d->type, bufferId);
+      return true;
+   } else {
+      return false;
+   }
 }
 
 /*!
@@ -357,12 +365,14 @@ bool QGLBuffer::bind()
 void QGLBuffer::release()
 {
 #ifndef QT_NO_DEBUG
-    if (!isCreated())
-        qWarning("QGLBuffer::release(): buffer not created");
+   if (!isCreated()) {
+      qWarning("QGLBuffer::release(): buffer not created");
+   }
 #endif
-    Q_D(const QGLBuffer);
-    if (d->guard.id())
-        glBindBuffer(d->type, 0);
+   Q_D(const QGLBuffer);
+   if (d->guard.id()) {
+      glBindBuffer(d->type, 0);
+   }
 }
 
 #undef ctx
@@ -382,9 +392,10 @@ void QGLBuffer::release()
 */
 void QGLBuffer::release(QGLBuffer::Type type)
 {
-    const QGLContext *ctx = QGLContext::currentContext();
-    if (ctx && qt_resolve_buffer_extensions(const_cast<QGLContext *>(ctx)))
-        glBindBuffer(GLenum(type), 0);
+   const QGLContext *ctx = QGLContext::currentContext();
+   if (ctx && qt_resolve_buffer_extensions(const_cast<QGLContext *>(ctx))) {
+      glBindBuffer(GLenum(type), 0);
+   }
 }
 
 #define ctx d->guard.context()
@@ -397,8 +408,8 @@ void QGLBuffer::release(QGLBuffer::Type type)
 */
 GLuint QGLBuffer::bufferId() const
 {
-    Q_D(const QGLBuffer);
-    return d->guard.id();
+   Q_D(const QGLBuffer);
+   return d->guard.id();
 }
 
 #ifndef GL_BUFFER_SIZE
@@ -416,12 +427,13 @@ GLuint QGLBuffer::bufferId() const
 */
 int QGLBuffer::size() const
 {
-    Q_D(const QGLBuffer);
-    if (!d->guard.id())
-        return -1;
-    GLint value = -1;
-    glGetBufferParameteriv(d->type, GL_BUFFER_SIZE, &value);
-    return value;
+   Q_D(const QGLBuffer);
+   if (!d->guard.id()) {
+      return -1;
+   }
+   GLint value = -1;
+   glGetBufferParameteriv(d->type, GL_BUFFER_SIZE, &value);
+   return value;
 }
 
 /*!
@@ -440,20 +452,24 @@ int QGLBuffer::size() const
 */
 void *QGLBuffer::map(QGLBuffer::Access access)
 {
-    Q_D(QGLBuffer);
+   Q_D(QGLBuffer);
 #ifndef QT_NO_DEBUG
-    if (!isCreated())
-        qWarning("QGLBuffer::map(): buffer not created");
+   if (!isCreated()) {
+      qWarning("QGLBuffer::map(): buffer not created");
+   }
 #endif
-    if (!d->guard.id())
-        return 0;
-    if (!glMapBufferARB)
-        return 0;
+   if (!d->guard.id()) {
+      return 0;
+   }
+   if (!glMapBufferARB) {
+      return 0;
+   }
 #ifdef QT_OPENGL_ES_2
-    if (access != QGLBuffer::WriteOnly)
-        return 0;
+   if (access != QGLBuffer::WriteOnly) {
+      return 0;
+   }
 #endif
-    return glMapBufferARB(d->type, access);
+   return glMapBufferARB(d->type, access);
 }
 
 /*!
@@ -471,16 +487,19 @@ void *QGLBuffer::map(QGLBuffer::Access access)
 */
 bool QGLBuffer::unmap()
 {
-    Q_D(QGLBuffer);
+   Q_D(QGLBuffer);
 #ifndef QT_NO_DEBUG
-    if (!isCreated())
-        qWarning("QGLBuffer::unmap(): buffer not created");
+   if (!isCreated()) {
+      qWarning("QGLBuffer::unmap(): buffer not created");
+   }
 #endif
-    if (!d->guard.id())
-        return false;
-    if (!glUnmapBufferARB)
-        return false;
-    return glUnmapBufferARB(d->type) == GL_TRUE;
+   if (!d->guard.id()) {
+      return false;
+   }
+   if (!glUnmapBufferARB) {
+      return false;
+   }
+   return glUnmapBufferARB(d->type) == GL_TRUE;
 }
 
 QT_END_NAMESPACE

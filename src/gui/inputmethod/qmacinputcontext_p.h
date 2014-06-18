@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,38 +36,44 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QMacInputContext : public QInputContext
 {
-    CS_OBJECT(QMacInputContext)
-    
-    void createTextDocument();
+   CS_OBJECT(QMacInputContext)
 
-public:
-    explicit QMacInputContext(QObject* parent = 0);
-    virtual ~QMacInputContext();
+   void createTextDocument();
 
-    virtual void setFocusWidget(QWidget *w);
-    virtual QString identifierName() { return QLatin1String("mac"); }
-    virtual QString language();
+ public:
+   explicit QMacInputContext(QObject *parent = 0);
+   virtual ~QMacInputContext();
 
-    virtual void reset();
-    virtual bool isComposing() const;
-    
-    static void initialize();
-    static void cleanup();
+   virtual void setFocusWidget(QWidget *w);
+   virtual QString identifierName() {
+      return QLatin1String("mac");
+   }
+   virtual QString language();
 
-    EventRef lastKeydownEvent() { return keydownEvent; }
-    void setLastKeydownEvent(EventRef);
-    QWidget *lastFocusWidget() const { return lastFocusWid; }
+   virtual void reset();
+   virtual bool isComposing() const;
 
-protected:
-    void mouseHandler(int pos, QMouseEvent *);
+   static void initialize();
+   static void cleanup();
 
-private:
-    bool composing;
-    bool recursionGuard;
-   
-    QString currentText;
-    EventRef keydownEvent;
-    QWidget *lastFocusWid;
+   EventRef lastKeydownEvent() {
+      return keydownEvent;
+   }
+   void setLastKeydownEvent(EventRef);
+   QWidget *lastFocusWidget() const {
+      return lastFocusWid;
+   }
+
+ protected:
+   void mouseHandler(int pos, QMouseEvent *);
+
+ private:
+   bool composing;
+   bool recursionGuard;
+
+   QString currentText;
+   EventRef keydownEvent;
+   QWidget *lastFocusWid;
 };
 
 QT_END_NAMESPACE

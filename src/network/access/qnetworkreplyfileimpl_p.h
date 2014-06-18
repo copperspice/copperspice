@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,33 +39,33 @@ class QNetworkReplyFileImplPrivate;
 
 class QNetworkReplyFileImpl: public QNetworkReply
 {
-    CS_OBJECT(QNetworkReplyFileImpl)
+   CS_OBJECT(QNetworkReplyFileImpl)
 
-public:
-    QNetworkReplyFileImpl(QObject *parent, const QNetworkRequest &req, const QNetworkAccessManager::Operation op);
-    ~QNetworkReplyFileImpl();
-    virtual void abort();
+ public:
+   QNetworkReplyFileImpl(QObject *parent, const QNetworkRequest &req, const QNetworkAccessManager::Operation op);
+   ~QNetworkReplyFileImpl();
+   virtual void abort();
 
-    // reimplemented from QNetworkReply
-    virtual void close();
-    virtual qint64 bytesAvailable() const;
-    virtual bool isSequential () const;
-    qint64 size() const;
+   // reimplemented from QNetworkReply
+   virtual void close();
+   virtual qint64 bytesAvailable() const;
+   virtual bool isSequential () const;
+   qint64 size() const;
 
-    virtual qint64 readData(char *data, qint64 maxlen);
+   virtual qint64 readData(char *data, qint64 maxlen);
 
-    Q_DECLARE_PRIVATE(QNetworkReplyFileImpl)
+   Q_DECLARE_PRIVATE(QNetworkReplyFileImpl)
 };
 
 class QNetworkReplyFileImplPrivate: public QNetworkReplyPrivate
 {
-public:
-    QNetworkReplyFileImplPrivate();
+ public:
+   QNetworkReplyFileImplPrivate();
 
-    QFile realFile;
-    qint64 realFileSize;
+   QFile realFile;
+   qint64 realFileSize;
 
-    Q_DECLARE_PUBLIC(QNetworkReplyFileImpl)
+   Q_DECLARE_PUBLIC(QNetworkReplyFileImpl)
 };
 
 QT_END_NAMESPACE

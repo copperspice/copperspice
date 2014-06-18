@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,31 +41,35 @@ QT_BEGIN_NAMESPACE
 static void qt_polygon_isect_line(const QPointF &p1, const QPointF &p2, const QPointF &pos,
                                   int *winding)
 {
-    qreal x1 = p1.x();
-    qreal y1 = p1.y();
-    qreal x2 = p2.x();
-    qreal y2 = p2.y();
-    qreal y = pos.y();
+   qreal x1 = p1.x();
+   qreal y1 = p1.y();
+   qreal x2 = p2.x();
+   qreal y2 = p2.y();
+   qreal y = pos.y();
 
-    int dir = 1;
+   int dir = 1;
 
-    if (qFuzzyCompare(y1, y2)) {
-        // ignore horizontal lines according to scan conversion rule
-        return;
-    } else if (y2 < y1) {
-        qreal x_tmp = x2; x2 = x1; x1 = x_tmp;
-        qreal y_tmp = y2; y2 = y1; y1 = y_tmp;
-        dir = -1;
-    }
+   if (qFuzzyCompare(y1, y2)) {
+      // ignore horizontal lines according to scan conversion rule
+      return;
+   } else if (y2 < y1) {
+      qreal x_tmp = x2;
+      x2 = x1;
+      x1 = x_tmp;
+      qreal y_tmp = y2;
+      y2 = y1;
+      y1 = y_tmp;
+      dir = -1;
+   }
 
-    if (y >= y1 && y < y2) {
-        qreal x = x1 + ((x2 - x1) / (y2 - y1)) * (y - y1);
+   if (y >= y1 && y < y2) {
+      qreal x = x1 + ((x2 - x1) / (y2 - y1)) * (y - y1);
 
-        // count up the winding number if we're
-        if (x<=pos.x()) {
-            (*winding) += dir;
-        }
-    }
+      // count up the winding number if we're
+      if (x <= pos.x()) {
+         (*winding) += dir;
+      }
+   }
 }
 
 /*!
@@ -160,13 +164,14 @@ static void qt_polygon_isect_line(const QPointF &p1, const QPointF &p2, const QP
 
 QPolygon::QPolygon(const QRect &r, bool closed)
 {
-    reserve(closed ? 5 : 4);
-    *this << QPoint(r.x(), r.y())
-          << QPoint(r.x() + r.width(), r.y())
-          << QPoint(r.x() + r.width(), r.y() + r.height())
-          << QPoint(r.x(), r.y() + r.height());
-    if (closed)
-        *this << QPoint(r.left(), r.top());
+   reserve(closed ? 5 : 4);
+   *this << QPoint(r.x(), r.y())
+         << QPoint(r.x() + r.width(), r.y())
+         << QPoint(r.x() + r.width(), r.y() + r.height())
+         << QPoint(r.x(), r.y() + r.height());
+   if (closed) {
+      *this << QPoint(r.left(), r.top());
+   }
 }
 
 /*!
@@ -179,7 +184,7 @@ QPolygon::QPolygon(const QRect &r, bool closed)
 
 QPolygon::QPolygon(int nPoints, const int *points)
 {
-    setPoints(nPoints, points);
+   setPoints(nPoints, points);
 }
 
 
@@ -198,16 +203,17 @@ QPolygon::QPolygon(int nPoints, const int *points)
 
 void QPolygon::translate(int dx, int dy)
 {
-    if (dx == 0 && dy == 0)
-        return;
+   if (dx == 0 && dy == 0) {
+      return;
+   }
 
-    QPoint *p = data();
-    int i = size();
-    QPoint pt(dx, dy);
-    while (i--) {
-        *p += pt;
-        ++p;
-    }
+   QPoint *p = data();
+   int i = size();
+   QPoint pt(dx, dy);
+   while (i--) {
+      *p += pt;
+      ++p;
+   }
 }
 
 /*!
@@ -227,9 +233,9 @@ void QPolygon::translate(int dx, int dy)
 */
 QPolygon QPolygon::translated(int dx, int dy) const
 {
-    QPolygon copy(*this);
-    copy.translate(dx, dy);
-    return copy;
+   QPolygon copy(*this);
+   copy.translate(dx, dy);
+   return copy;
 }
 
 /*!
@@ -251,11 +257,13 @@ QPolygon QPolygon::translated(int dx, int dy) const
 
 void QPolygon::point(int index, int *x, int *y) const
 {
-    QPoint p = at(index);
-    if (x)
-        *x = (int)p.x();
-    if (y)
-        *y = (int)p.y();
+   QPoint p = at(index);
+   if (x) {
+      *x = (int)p.x();
+   }
+   if (y) {
+      *y = (int)p.y();
+   }
 }
 
 /*!
@@ -295,12 +303,12 @@ void QPolygon::point(int index, int *x, int *y) const
 
 void QPolygon::setPoints(int nPoints, const int *points)
 {
-    resize(nPoints);
-    int i = 0;
-    while (nPoints--) {
-        setPoint(i++, *points, *(points+1));
-        points += 2;
-    }
+   resize(nPoints);
+   int i = 0;
+   while (nPoints--) {
+      setPoint(i++, *points, *(points + 1));
+      points += 2;
+   }
 }
 
 /*!
@@ -319,17 +327,17 @@ void QPolygon::setPoints(int nPoints, const int *points)
 
 void QPolygon::setPoints(int nPoints, int firstx, int firsty, ...)
 {
-    va_list ap;
-    resize(nPoints);
-    setPoint(0, firstx, firsty);
-    int i = 0, x, y;
-    va_start(ap, firsty);
-    while (--nPoints) {
-        x = va_arg(ap, int);
-        y = va_arg(ap, int);
-        setPoint(++i, x, y);
-    }
-    va_end(ap);
+   va_list ap;
+   resize(nPoints);
+   setPoint(0, firstx, firsty);
+   int i = 0, x, y;
+   va_start(ap, firsty);
+   while (--nPoints) {
+      x = va_arg(ap, int);
+      y = va_arg(ap, int);
+      setPoint(++i, x, y);
+   }
+   va_end(ap);
 }
 
 /*!
@@ -345,13 +353,14 @@ void QPolygon::setPoints(int nPoints, int firstx, int firsty, ...)
 
 void QPolygon::putPoints(int index, int nPoints, const int *points)
 {
-    if (index + nPoints > size())
-        resize(index + nPoints);
-    int i = index;
-    while (nPoints--) {
-        setPoint(i++, *points, *(points+1));
-        points += 2;
-    }
+   if (index + nPoints > size()) {
+      resize(index + nPoints);
+   }
+   int i = index;
+   while (nPoints--) {
+      setPoint(i++, *points, *(points + 1));
+      points += 2;
+   }
 }
 
 /*!
@@ -377,20 +386,22 @@ void QPolygon::putPoints(int index, int nPoints, const int *points)
 
 void QPolygon::putPoints(int index, int nPoints, int firstx, int firsty, ...)
 {
-    va_list ap;
-    if (index + nPoints > size())
-        resize(index + nPoints);
-    if (nPoints <= 0)
-        return;
-    setPoint(index, firstx, firsty);
-    int i = index, x, y;
-    va_start(ap, firsty);
-    while (--nPoints) {
-        x = va_arg(ap, int);
-        y = va_arg(ap, int);
-        setPoint(++i, x, y);
-    }
-    va_end(ap);
+   va_list ap;
+   if (index + nPoints > size()) {
+      resize(index + nPoints);
+   }
+   if (nPoints <= 0) {
+      return;
+   }
+   setPoint(index, firstx, firsty);
+   int i = index, x, y;
+   va_start(ap, firsty);
+   while (--nPoints) {
+      x = va_arg(ap, int);
+      y = va_arg(ap, int);
+      setPoint(++i, x, y);
+   }
+   va_end(ap);
 }
 
 
@@ -405,17 +416,19 @@ void QPolygon::putPoints(int index, int nPoints, int firstx, int firsty, ...)
     \snippet doc/src/snippets/polygon/polygon.cpp 6
 */
 
-void QPolygon::putPoints(int index, int nPoints, const QPolygon & from, int fromIndex)
+void QPolygon::putPoints(int index, int nPoints, const QPolygon &from, int fromIndex)
 {
-    if (index + nPoints > size())
-        resize(index + nPoints);
-    if (nPoints <= 0)
-        return;
-    int n = 0;
-    while(n < nPoints) {
-        setPoint(index + n, from[fromIndex+n]);
-        ++n;
-    }
+   if (index + nPoints > size()) {
+      resize(index + nPoints);
+   }
+   if (nPoints <= 0) {
+      return;
+   }
+   int n = 0;
+   while (n < nPoints) {
+      setPoint(index + n, from[fromIndex + n]);
+      ++n;
+   }
 }
 
 
@@ -428,66 +441,72 @@ void QPolygon::putPoints(int index, int nPoints, const QPolygon & from, int from
 
 QRect QPolygon::boundingRect() const
 {
-    if (isEmpty())
-        return QRect(0, 0, 0, 0);
-    const QPoint *pd = constData();
-    int minx, maxx, miny, maxy;
-    minx = maxx = pd->x();
-    miny = maxy = pd->y();
-    ++pd;
-    for (int i = 1; i < size(); ++i) {
-        if (pd->x() < minx)
-            minx = pd->x();
-        else if (pd->x() > maxx)
-            maxx = pd->x();
-        if (pd->y() < miny)
-            miny = pd->y();
-        else if (pd->y() > maxy)
-            maxy = pd->y();
-        ++pd;
-    }
-    return QRect(QPoint(minx,miny), QPoint(maxx,maxy));
+   if (isEmpty()) {
+      return QRect(0, 0, 0, 0);
+   }
+   const QPoint *pd = constData();
+   int minx, maxx, miny, maxy;
+   minx = maxx = pd->x();
+   miny = maxy = pd->y();
+   ++pd;
+   for (int i = 1; i < size(); ++i) {
+      if (pd->x() < minx) {
+         minx = pd->x();
+      } else if (pd->x() > maxx) {
+         maxx = pd->x();
+      }
+      if (pd->y() < miny) {
+         miny = pd->y();
+      } else if (pd->y() > maxy) {
+         maxy = pd->y();
+      }
+      ++pd;
+   }
+   return QRect(QPoint(minx, miny), QPoint(maxx, maxy));
 }
 
 QDebug operator<<(QDebug dbg, const QPolygon &a)
 {
-    dbg.nospace() << "QPolygon(";
-    for (int i = 0; i < a.count(); ++i)
-        dbg.nospace() << a.at(i);
-    dbg.nospace() << ')';
-    return dbg.space();
+   dbg.nospace() << "QPolygon(";
+   for (int i = 0; i < a.count(); ++i) {
+      dbg.nospace() << a.at(i);
+   }
+   dbg.nospace() << ')';
+   return dbg.space();
 }
 
 QPolygonF::QPolygonF(const QRectF &r)
 {
-    reserve(5);
-    append(QPointF(r.x(), r.y()));
-    append(QPointF(r.x() + r.width(), r.y()));
-    append(QPointF(r.x() + r.width(), r.y() + r.height()));
-    append(QPointF(r.x(), r.y() + r.height()));
-    append(QPointF(r.x(), r.y()));
+   reserve(5);
+   append(QPointF(r.x(), r.y()));
+   append(QPointF(r.x() + r.width(), r.y()));
+   append(QPointF(r.x() + r.width(), r.y() + r.height()));
+   append(QPointF(r.x(), r.y() + r.height()));
+   append(QPointF(r.x(), r.y()));
 }
 
 
 QPolygonF::QPolygonF(const QPolygon &a)
 {
-    reserve(a.size());
-    for (int i=0; i<a.size(); ++i)
-        append(a.at(i));
+   reserve(a.size());
+   for (int i = 0; i < a.size(); ++i) {
+      append(a.at(i));
+   }
 }
 
 
 void QPolygonF::translate(const QPointF &offset)
 {
-    if (offset.isNull())
-        return;
+   if (offset.isNull()) {
+      return;
+   }
 
-    QPointF *p = data();
-    int i = size();
-    while (i--) {
-        *p += offset;
-        ++p;
-    }
+   QPointF *p = data();
+   int i = size();
+   while (i--) {
+      *p += offset;
+      ++p;
+   }
 }
 
 /*!
@@ -507,9 +526,9 @@ void QPolygonF::translate(const QPointF &offset)
 */
 QPolygonF QPolygonF::translated(const QPointF &offset) const
 {
-    QPolygonF copy(*this);
-    copy.translate(offset);
-    return copy;
+   QPolygonF copy(*this);
+   copy.translate(offset);
+   return copy;
 }
 
 /*!
@@ -541,25 +560,28 @@ QPolygonF QPolygonF::translated(const QPointF &offset) const
 
 QRectF QPolygonF::boundingRect() const
 {
-    if (isEmpty())
-        return QRectF(0, 0, 0, 0);
-    const QPointF *pd = constData();
-    qreal minx, maxx, miny, maxy;
-    minx = maxx = pd->x();
-    miny = maxy = pd->y();
-    ++pd;
-    for (int i = 1; i < size(); ++i) {
-        if (pd->x() < minx)
-            minx = pd->x();
-        else if (pd->x() > maxx)
-            maxx = pd->x();
-        if (pd->y() < miny)
-            miny = pd->y();
-        else if (pd->y() > maxy)
-            maxy = pd->y();
-        ++pd;
-    }
-    return QRectF(minx,miny, maxx - minx, maxy - miny);
+   if (isEmpty()) {
+      return QRectF(0, 0, 0, 0);
+   }
+   const QPointF *pd = constData();
+   qreal minx, maxx, miny, maxy;
+   minx = maxx = pd->x();
+   miny = maxy = pd->y();
+   ++pd;
+   for (int i = 1; i < size(); ++i) {
+      if (pd->x() < minx) {
+         minx = pd->x();
+      } else if (pd->x() > maxx) {
+         maxx = pd->x();
+      }
+      if (pd->y() < miny) {
+         miny = pd->y();
+      } else if (pd->y() > maxy) {
+         maxy = pd->y();
+      }
+      ++pd;
+   }
+   return QRectF(minx, miny, maxx - minx, maxy - miny);
 }
 
 /*!
@@ -571,11 +593,12 @@ QRectF QPolygonF::boundingRect() const
 
 QPolygon QPolygonF::toPolygon() const
 {
-    QPolygon a;
-    a.reserve(size());
-    for (int i=0; i<size(); ++i)
-        a.append(at(i).toPoint());
-    return a;
+   QPolygon a;
+   a.reserve(size());
+   for (int i = 0; i < size(); ++i) {
+      a.append(at(i).toPoint());
+   }
+   return a;
 }
 
 /*!
@@ -599,7 +622,7 @@ QPolygon QPolygonF::toPolygon() const
 */
 QPolygon::operator QVariant() const
 {
-    return QVariant(QVariant::Polygon, this);
+   return QVariant(QVariant::Polygon, this);
 }
 
 /*****************************************************************************
@@ -618,8 +641,8 @@ QPolygon::operator QVariant() const
 */
 QDataStream &operator<<(QDataStream &s, const QPolygon &a)
 {
-    const QVector<QPoint> &v = a;
-    return s << v;
+   const QVector<QPoint> &v = a;
+   return s << v;
 }
 
 /*!
@@ -634,8 +657,8 @@ QDataStream &operator<<(QDataStream &s, const QPolygon &a)
 */
 QDataStream &operator>>(QDataStream &s, QPolygon &a)
 {
-    QVector<QPoint> &v = a;
-    return s >> v;
+   QVector<QPoint> &v = a;
+   return s >> v;
 }
 #endif // QT_NO_DATASTREAM
 
@@ -655,13 +678,14 @@ QDataStream &operator>>(QDataStream &s, QPolygon &a)
 
 QDataStream &operator<<(QDataStream &s, const QPolygonF &a)
 {
-    quint32 len = a.size();
-    uint i;
+   quint32 len = a.size();
+   uint i;
 
-    s << len;
-    for (i = 0; i < len; ++i)
-        s << a.at(i);
-    return s;
+   s << len;
+   for (i = 0; i < len; ++i) {
+      s << a.at(i);
+   }
+   return s;
 }
 
 /*!
@@ -676,51 +700,54 @@ QDataStream &operator<<(QDataStream &s, const QPolygonF &a)
 
 QDataStream &operator>>(QDataStream &s, QPolygonF &a)
 {
-    quint32 len;
-    uint i;
+   quint32 len;
+   uint i;
 
-    s >> len;
-    a.reserve(a.size() + (int)len);
-    QPointF p;
-    for (i = 0; i < len; ++i) {
-        s >> p;
-        a.insert(i, p);
-    }
-    return s;
+   s >> len;
+   a.reserve(a.size() + (int)len);
+   QPointF p;
+   for (i = 0; i < len; ++i) {
+      s >> p;
+      a.insert(i, p);
+   }
+   return s;
 }
 #endif //QT_NO_DATASTREAM
 
 QDebug operator<<(QDebug dbg, const QPolygonF &a)
 {
-    dbg.nospace() << "QPolygonF(";
-    for (int i = 0; i < a.count(); ++i)
-        dbg.nospace() << a.at(i);
-    dbg.nospace() << ')';
-    return dbg.space();
+   dbg.nospace() << "QPolygonF(";
+   for (int i = 0; i < a.count(); ++i) {
+      dbg.nospace() << a.at(i);
+   }
+   dbg.nospace() << ')';
+   return dbg.space();
 }
 
 bool QPolygonF::containsPoint(const QPointF &pt, Qt::FillRule fillRule) const
 {
-    if (isEmpty())
-        return false;
+   if (isEmpty()) {
+      return false;
+   }
 
-    int winding_number = 0;
+   int winding_number = 0;
 
-    QPointF last_pt = at(0);
-    QPointF last_start = at(0);
-    for (int i = 1; i < size(); ++i) {
-        const QPointF &e = at(i);
-        qt_polygon_isect_line(last_pt, e, pt, &winding_number);
-        last_pt = e;
-    }
+   QPointF last_pt = at(0);
+   QPointF last_start = at(0);
+   for (int i = 1; i < size(); ++i) {
+      const QPointF &e = at(i);
+      qt_polygon_isect_line(last_pt, e, pt, &winding_number);
+      last_pt = e;
+   }
 
-    // implicitly close last subpath
-    if (last_pt != last_start)
-        qt_polygon_isect_line(last_pt, last_start, pt, &winding_number);
+   // implicitly close last subpath
+   if (last_pt != last_start) {
+      qt_polygon_isect_line(last_pt, last_start, pt, &winding_number);
+   }
 
-    return (fillRule == Qt::WindingFill
-            ? (winding_number != 0)
-            : ((winding_number % 2) != 0));
+   return (fillRule == Qt::WindingFill
+           ? (winding_number != 0)
+           : ((winding_number % 2) != 0));
 }
 
 /*!
@@ -732,26 +759,28 @@ bool QPolygonF::containsPoint(const QPointF &pt, Qt::FillRule fillRule) const
 */
 bool QPolygon::containsPoint(const QPoint &pt, Qt::FillRule fillRule) const
 {
-    if (isEmpty())
-        return false;
+   if (isEmpty()) {
+      return false;
+   }
 
-    int winding_number = 0;
+   int winding_number = 0;
 
-    QPoint last_pt = at(0);
-    QPoint last_start = at(0);
-    for (int i = 1; i < size(); ++i) {
-        const QPoint &e = at(i);
-        qt_polygon_isect_line(last_pt, e, pt, &winding_number);
-        last_pt = e;
-    }
+   QPoint last_pt = at(0);
+   QPoint last_start = at(0);
+   for (int i = 1; i < size(); ++i) {
+      const QPoint &e = at(i);
+      qt_polygon_isect_line(last_pt, e, pt, &winding_number);
+      last_pt = e;
+   }
 
-    // implicitly close last subpath
-    if (last_pt != last_start)
-        qt_polygon_isect_line(last_pt, last_start, pt, &winding_number);
+   // implicitly close last subpath
+   if (last_pt != last_start) {
+      qt_polygon_isect_line(last_pt, last_start, pt, &winding_number);
+   }
 
-    return (fillRule == Qt::WindingFill
-            ? (winding_number != 0)
-            : ((winding_number % 2) != 0));
+   return (fillRule == Qt::WindingFill
+           ? (winding_number != 0)
+           : ((winding_number % 2) != 0));
 }
 
 /*!
@@ -767,10 +796,12 @@ bool QPolygon::containsPoint(const QPoint &pt, Qt::FillRule fillRule) const
 
 QPolygon QPolygon::united(const QPolygon &r) const
 {
-    QPainterPath subject; subject.addPolygon(*this);
-    QPainterPath clip; clip.addPolygon(r);
+   QPainterPath subject;
+   subject.addPolygon(*this);
+   QPainterPath clip;
+   clip.addPolygon(r);
 
-    return subject.united(clip).toFillPolygon().toPolygon();
+   return subject.united(clip).toFillPolygon().toPolygon();
 }
 
 /*!
@@ -784,10 +815,12 @@ QPolygon QPolygon::united(const QPolygon &r) const
 
 QPolygon QPolygon::intersected(const QPolygon &r) const
 {
-    QPainterPath subject; subject.addPolygon(*this);
-    QPainterPath clip; clip.addPolygon(r);
+   QPainterPath subject;
+   subject.addPolygon(*this);
+   QPainterPath clip;
+   clip.addPolygon(r);
 
-    return subject.intersected(clip).toFillPolygon().toPolygon();
+   return subject.intersected(clip).toFillPolygon().toPolygon();
 }
 
 /*!
@@ -802,10 +835,12 @@ QPolygon QPolygon::intersected(const QPolygon &r) const
 
 QPolygon QPolygon::subtracted(const QPolygon &r) const
 {
-    QPainterPath subject; subject.addPolygon(*this);
-    QPainterPath clip; clip.addPolygon(r);
+   QPainterPath subject;
+   subject.addPolygon(*this);
+   QPainterPath clip;
+   clip.addPolygon(r);
 
-    return subject.subtracted(clip).toFillPolygon().toPolygon();
+   return subject.subtracted(clip).toFillPolygon().toPolygon();
 }
 
 /*!
@@ -821,10 +856,12 @@ QPolygon QPolygon::subtracted(const QPolygon &r) const
 
 QPolygonF QPolygonF::united(const QPolygonF &r) const
 {
-    QPainterPath subject; subject.addPolygon(*this);
-    QPainterPath clip; clip.addPolygon(r);
+   QPainterPath subject;
+   subject.addPolygon(*this);
+   QPainterPath clip;
+   clip.addPolygon(r);
 
-    return subject.united(clip).toFillPolygon();
+   return subject.united(clip).toFillPolygon();
 }
 
 /*!
@@ -839,10 +876,12 @@ QPolygonF QPolygonF::united(const QPolygonF &r) const
 
 QPolygonF QPolygonF::intersected(const QPolygonF &r) const
 {
-    QPainterPath subject; subject.addPolygon(*this);
-    QPainterPath clip; clip.addPolygon(r);
+   QPainterPath subject;
+   subject.addPolygon(*this);
+   QPainterPath clip;
+   clip.addPolygon(r);
 
-    return subject.intersected(clip).toFillPolygon();
+   return subject.intersected(clip).toFillPolygon();
 }
 
 /*!
@@ -857,9 +896,11 @@ QPolygonF QPolygonF::intersected(const QPolygonF &r) const
 
 QPolygonF QPolygonF::subtracted(const QPolygonF &r) const
 {
-    QPainterPath subject; subject.addPolygon(*this);
-    QPainterPath clip; clip.addPolygon(r);
-    return subject.subtracted(clip).toFillPolygon();
+   QPainterPath subject;
+   subject.addPolygon(*this);
+   QPainterPath clip;
+   clip.addPolygon(r);
+   return subject.subtracted(clip).toFillPolygon();
 }
 
 QT_END_NAMESPACE

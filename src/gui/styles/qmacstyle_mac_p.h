@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -97,7 +97,8 @@ QT_BEGIN_NAMESPACE
 #define CT2(c1, c2) ((uint(c1) << 16) | uint(c2))
 
 enum QAquaWidgetSize { QAquaSizeLarge = 0, QAquaSizeSmall = 1, QAquaSizeMini = 2,
-                       QAquaSizeUnknown = -1 };
+                       QAquaSizeUnknown = -1
+                     };
 
 #define SIZE(large, small, mini) \
     (controlSize == QAquaSizeLarge ? (large) : controlSize == QAquaSizeSmall ? (small) : (mini))
@@ -113,88 +114,90 @@ bool qt_mac_buttonIsRenderedFlat(const QPushButton *pushButton, const QStyleOpti
 
 class QMacStylePrivate : public QObject
 {
-    CS_OBJECT(QMacStylePrivate)
+   CS_OBJECT(QMacStylePrivate)
 
-public:
-    QMacStylePrivate(QMacStyle *style);
+ public:
+   QMacStylePrivate(QMacStyle *style);
 
-    // Ideally these wouldn't exist, but since they already exist we need some accessors.
-    static const int PushButtonLeftOffset;
-    static const int PushButtonTopOffset;
-    static const int PushButtonRightOffset;
-    static const int PushButtonBottomOffset;
-    static const int MiniButtonH;
-    static const int SmallButtonH;
-    static const int BevelButtonW;
-    static const int BevelButtonH;
-    static const int PushButtonContentPadding;
+   // Ideally these wouldn't exist, but since they already exist we need some accessors.
+   static const int PushButtonLeftOffset;
+   static const int PushButtonTopOffset;
+   static const int PushButtonRightOffset;
+   static const int PushButtonBottomOffset;
+   static const int MiniButtonH;
+   static const int SmallButtonH;
+   static const int BevelButtonW;
+   static const int BevelButtonH;
+   static const int PushButtonContentPadding;
 
 
-    // Stuff from QAquaAnimate:
-    bool addWidget(QWidget *);
-    void removeWidget(QWidget *);
+   // Stuff from QAquaAnimate:
+   bool addWidget(QWidget *);
+   void removeWidget(QWidget *);
 
-    enum Animates { AquaPushButton, AquaProgressBar, AquaListViewItemOpen };
-    bool animatable(Animates, const QWidget *) const;
-    void stopAnimate(Animates, QWidget *);
-    void startAnimate(Animates, QWidget *);
-    static ThemeDrawState getDrawState(QStyle::State flags);
+   enum Animates { AquaPushButton, AquaProgressBar, AquaListViewItemOpen };
+   bool animatable(Animates, const QWidget *) const;
+   void stopAnimate(Animates, QWidget *);
+   void startAnimate(Animates, QWidget *);
+   static ThemeDrawState getDrawState(QStyle::State flags);
 
-    QAquaWidgetSize aquaSizeConstrain(const QStyleOption *option, const QWidget *widg,
-                             QStyle::ContentsType ct = QStyle::CT_CustomBase,
-                             QSize szHint=QSize(-1, -1), QSize *insz = 0) const;
+   QAquaWidgetSize aquaSizeConstrain(const QStyleOption *option, const QWidget *widg,
+                                     QStyle::ContentsType ct = QStyle::CT_CustomBase,
+                                     QSize szHint = QSize(-1, -1), QSize *insz = 0) const;
 
-    void getSliderInfo(QStyle::ComplexControl cc, const QStyleOptionSlider *slider,
-                          HIThemeTrackDrawInfo *tdi, const QWidget *needToRemoveMe);
+   void getSliderInfo(QStyle::ComplexControl cc, const QStyleOptionSlider *slider,
+                      HIThemeTrackDrawInfo *tdi, const QWidget *needToRemoveMe);
 
-    bool doAnimate(Animates);
-    inline int animateSpeed(Animates) const { return 33; }
+   bool doAnimate(Animates);
+   inline int animateSpeed(Animates) const {
+      return 33;
+   }
 
-    // Utility functions
-    void drawColorlessButton(const HIRect &macRect, HIThemeButtonDrawInfo *bdi, QPainter *p, const QStyleOption *opt) const;
+   // Utility functions
+   void drawColorlessButton(const HIRect &macRect, HIThemeButtonDrawInfo *bdi, QPainter *p, const QStyleOption *opt) const;
 
-    QSize pushButtonSizeFromContents(const QStyleOptionButton *btn) const;
+   QSize pushButtonSizeFromContents(const QStyleOptionButton *btn) const;
 
-    HIRect pushButtonContentBounds(const QStyleOptionButton *btn, const HIThemeButtonDrawInfo *bdi) const;
+   HIRect pushButtonContentBounds(const QStyleOptionButton *btn, const HIThemeButtonDrawInfo *bdi) const;
 
-    void initComboboxBdi(const QStyleOptionComboBox *combo, HIThemeButtonDrawInfo *bdi,
+   void initComboboxBdi(const QStyleOptionComboBox *combo, HIThemeButtonDrawInfo *bdi,
                         const QWidget *widget, const ThemeDrawState &tds);
 
-    static HIRect comboboxInnerBounds(const HIRect &outerBounds, int buttonKind);
+   static HIRect comboboxInnerBounds(const HIRect &outerBounds, int buttonKind);
 
-    static QRect comboboxEditBounds(const QRect &outerBounds, const HIThemeButtonDrawInfo &bdi);
+   static QRect comboboxEditBounds(const QRect &outerBounds, const HIThemeButtonDrawInfo &bdi);
 
-    static void drawCombobox(const HIRect &outerBounds, const HIThemeButtonDrawInfo &bdi, QPainter *p);
-    static void drawTableHeader(const HIRect &outerBounds, bool drawTopBorder, bool drawLeftBorder,
-                                     const HIThemeButtonDrawInfo &bdi, QPainter *p);
-    bool contentFitsInPushButton(const QStyleOptionButton *btn, HIThemeButtonDrawInfo *bdi,
-                                 ThemeButtonKind buttonKindToCheck) const;
-    void initHIThemePushButton(const QStyleOptionButton *btn, const QWidget *widget,
-                               const ThemeDrawState tds,
-                               HIThemeButtonDrawInfo *bdi) const;
-    QPixmap generateBackgroundPattern() const;
-protected:
-    bool eventFilter(QObject *, QEvent *);
-    void timerEvent(QTimerEvent *);
+   static void drawCombobox(const HIRect &outerBounds, const HIThemeButtonDrawInfo &bdi, QPainter *p);
+   static void drawTableHeader(const HIRect &outerBounds, bool drawTopBorder, bool drawLeftBorder,
+                               const HIThemeButtonDrawInfo &bdi, QPainter *p);
+   bool contentFitsInPushButton(const QStyleOptionButton *btn, HIThemeButtonDrawInfo *bdi,
+                                ThemeButtonKind buttonKindToCheck) const;
+   void initHIThemePushButton(const QStyleOptionButton *btn, const QWidget *widget,
+                              const ThemeDrawState tds,
+                              HIThemeButtonDrawInfo *bdi) const;
+   QPixmap generateBackgroundPattern() const;
+ protected:
+   bool eventFilter(QObject *, QEvent *);
+   void timerEvent(QTimerEvent *);
 
-private :
-    GUI_CS_SLOT_1(Private, void startAnimationTimer())
-    GUI_CS_SLOT_2(startAnimationTimer) 
+ private :
+   GUI_CS_SLOT_1(Private, void startAnimationTimer())
+   GUI_CS_SLOT_2(startAnimationTimer)
 
-public:
-    QPointer<QPushButton> defaultButton; //default push buttons
-    int timerID;
-    QList<QPointer<QWidget> > progressBars; //existing progress bars that need animation
+ public:
+   QPointer<QPushButton> defaultButton; //default push buttons
+   int timerID;
+   QList<QPointer<QWidget> > progressBars; //existing progress bars that need animation
 
-    struct ButtonState {
-        int frame;
-        enum { ButtonDark, ButtonLight } dir;
-    } buttonState;
-    UInt8 progressFrame;
-    QPointer<QFocusFrame> focusWidget;
-    CFAbsoluteTime defaultButtonStart;
-    QMacStyle *q;
-    bool mouseDown;
+   struct ButtonState {
+      int frame;
+      enum { ButtonDark, ButtonLight } dir;
+   } buttonState;
+   UInt8 progressFrame;
+   QPointer<QFocusFrame> focusWidget;
+   CFAbsoluteTime defaultButtonStart;
+   QMacStyle *q;
+   bool mouseDown;
 };
 
 QT_END_NAMESPACE

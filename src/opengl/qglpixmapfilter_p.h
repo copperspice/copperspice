@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,25 +36,26 @@ class QGLPixelBuffer;
 class QGLPixmapFilterBase
 {
 
-public:
-    virtual ~QGLPixmapFilterBase() {}
+ public:
+   virtual ~QGLPixmapFilterBase() {}
 
-protected:
-    void bindTexture(const QPixmap &src) const;
-    void drawImpl(QPainter *painter, const QPointF &pos, const QPixmap &src, const QRectF &srcRect = QRectF()) const;
+ protected:
+   void bindTexture(const QPixmap &src) const;
+   void drawImpl(QPainter *painter, const QPointF &pos, const QPixmap &src, const QRectF &srcRect = QRectF()) const;
 
-    virtual bool processGL(QPainter *painter, const QPointF &pos, const QPixmap &src, const QRectF &srcRect) const = 0;
+   virtual bool processGL(QPainter *painter, const QPointF &pos, const QPixmap &src, const QRectF &srcRect) const = 0;
 };
 
 template <typename Filter>
 class QGLPixmapFilter : public Filter, public QGLPixmapFilterBase
 {
-public:
-    void draw(QPainter *painter, const QPointF &pos, const QPixmap &src, const QRectF &srcRect = QRectF())  const {
-        const QRectF source = srcRect.isNull() ? QRectF(src.rect()) : srcRect;
-        if (painter)
-           drawImpl(painter, pos, src, source);
-    }
+ public:
+   void draw(QPainter *painter, const QPointF &pos, const QPixmap &src, const QRectF &srcRect = QRectF())  const {
+      const QRectF source = srcRect.isNull() ? QRectF(src.rect()) : srcRect;
+      if (painter) {
+         drawImpl(painter, pos, src, source);
+      }
+   }
 };
 
 QT_END_NAMESPACE

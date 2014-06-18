@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,63 +33,60 @@ QT_BEGIN_NAMESPACE
 
 class QTextDocumentPrivate;
 
-class QTextObjectPrivate 
+class QTextObjectPrivate
 {
-    Q_DECLARE_PUBLIC(QTextObject)
+   Q_DECLARE_PUBLIC(QTextObject)
 
-public:
-    QTextObjectPrivate(QTextDocument *doc)
-        : pieceTable(doc->d_func()), objectIndex(-1)
-    {
-    }
+ public:
+   QTextObjectPrivate(QTextDocument *doc)
+      : pieceTable(doc->d_func()), objectIndex(-1) {
+   }
 
-    virtual ~QTextObjectPrivate() {}
+   virtual ~QTextObjectPrivate() {}
 
-    QTextDocumentPrivate *pieceTable;
-    int objectIndex;
+   QTextDocumentPrivate *pieceTable;
+   int objectIndex;
 
-protected:
-	 QTextObject *q_ptr;
+ protected:
+   QTextObject *q_ptr;
 
 };
 
 
 class QTextBlockGroupPrivate : public QTextObjectPrivate
 {
-    Q_DECLARE_PUBLIC(QTextBlockGroup)
+   Q_DECLARE_PUBLIC(QTextBlockGroup)
 
-public:
-    QTextBlockGroupPrivate(QTextDocument *doc)
-        : QTextObjectPrivate(doc)
-    {
-    }
-    typedef QList<QTextBlock> BlockList;
-    BlockList blocks;
-    void markBlocksDirty();
+ public:
+   QTextBlockGroupPrivate(QTextDocument *doc)
+      : QTextObjectPrivate(doc) {
+   }
+   typedef QList<QTextBlock> BlockList;
+   BlockList blocks;
+   void markBlocksDirty();
 };
 
 class QTextFrameLayoutData;
 
 class QTextFramePrivate : public QTextObjectPrivate
 {
-    friend class QTextDocumentPrivate;
-    Q_DECLARE_PUBLIC(QTextFrame)
+   friend class QTextDocumentPrivate;
+   Q_DECLARE_PUBLIC(QTextFrame)
 
-public:
-    QTextFramePrivate(QTextDocument *doc)
-        : QTextObjectPrivate(doc), fragment_start(0), fragment_end(0), parentFrame(0), layoutData(0)
-    {
-    }
-    virtual void fragmentAdded(const QChar &type, uint fragment);
-    virtual void fragmentRemoved(const QChar &type, uint fragment);
-    void remove_me();
+ public:
+   QTextFramePrivate(QTextDocument *doc)
+      : QTextObjectPrivate(doc), fragment_start(0), fragment_end(0), parentFrame(0), layoutData(0) {
+   }
+   virtual void fragmentAdded(const QChar &type, uint fragment);
+   virtual void fragmentRemoved(const QChar &type, uint fragment);
+   void remove_me();
 
-    uint fragment_start;
-    uint fragment_end;
+   uint fragment_start;
+   uint fragment_end;
 
-    QTextFrame *parentFrame;
-    QList<QTextFrame *> childFrames;
-    QTextFrameLayoutData *layoutData;
+   QTextFrame *parentFrame;
+   QList<QTextFrame *> childFrames;
+   QTextFrameLayoutData *layoutData;
 };
 
 QT_END_NAMESPACE

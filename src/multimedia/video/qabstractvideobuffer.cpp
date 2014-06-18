@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -84,11 +84,11 @@ QT_BEGIN_NAMESPACE
 */
 
 QAbstractVideoBuffer::QAbstractVideoBuffer(HandleType type)
-    : d_ptr(new QAbstractVideoBufferPrivate)
+   : d_ptr(new QAbstractVideoBufferPrivate)
 {
-    Q_D(QAbstractVideoBuffer);
+   Q_D(QAbstractVideoBuffer);
 
-    d->handleType = type;
+   d->handleType = type;
 }
 
 /*!
@@ -96,11 +96,11 @@ QAbstractVideoBuffer::QAbstractVideoBuffer(HandleType type)
 */
 
 QAbstractVideoBuffer::QAbstractVideoBuffer(QAbstractVideoBufferPrivate &dd, HandleType type)
-    : d_ptr(&dd)
+   : d_ptr(&dd)
 {
-    Q_D(QAbstractVideoBuffer);
+   Q_D(QAbstractVideoBuffer);
 
-    d->handleType = type;
+   d->handleType = type;
 }
 
 /*!
@@ -109,7 +109,7 @@ QAbstractVideoBuffer::QAbstractVideoBuffer(QAbstractVideoBufferPrivate &dd, Hand
 
 QAbstractVideoBuffer::~QAbstractVideoBuffer()
 {
-    delete d_ptr;
+   delete d_ptr;
 }
 
 /*!
@@ -120,7 +120,7 @@ QAbstractVideoBuffer::~QAbstractVideoBuffer()
 
 QAbstractVideoBuffer::HandleType QAbstractVideoBuffer::handleType() const
 {
-    return d_func()->handleType;
+   return d_func()->handleType;
 }
 
 /*!
@@ -178,7 +178,7 @@ QAbstractVideoBuffer::HandleType QAbstractVideoBuffer::handleType() const
 
 QVariant QAbstractVideoBuffer::handle() const
 {
-    return QVariant();
+   return QVariant();
 }
 
 

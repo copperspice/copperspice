@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,9 +31,8 @@
 
 QT_BEGIN_NAMESPACE
 
-struct Q_GUI_EXPORT QGenericPluginFactoryInterface : public QFactoryInterface
-{
-    virtual QObject* create(const QString &name, const QString &spec) = 0;
+struct Q_GUI_EXPORT QGenericPluginFactoryInterface : public QFactoryInterface {
+   virtual QObject *create(const QString &name, const QString &spec) = 0;
 };
 
 #define QGenericPluginFactoryInterface_iid "com.copperspice.QGenericPluginFactoryInterface"
@@ -41,15 +40,15 @@ CS_DECLARE_INTERFACE(QGenericPluginFactoryInterface, QGenericPluginFactoryInterf
 
 class Q_GUI_EXPORT QGenericPlugin : public QObject, public QGenericPluginFactoryInterface
 {
-    CS_OBJECT(QGenericPlugin)
-    CS_INTERFACES(QGenericPluginFactoryInterface, QFactoryInterface)
+   CS_OBJECT(QGenericPlugin)
+   CS_INTERFACES(QGenericPluginFactoryInterface, QFactoryInterface)
 
-   public:
-       explicit QGenericPlugin(QObject *parent = 0);
-       ~QGenericPlugin();
-   
-       virtual QStringList keys() const = 0;
-       virtual QObject* create(const QString& name, const QString &spec) = 0;
+ public:
+   explicit QGenericPlugin(QObject *parent = 0);
+   ~QGenericPlugin();
+
+   virtual QStringList keys() const = 0;
+   virtual QObject *create(const QString &name, const QString &spec) = 0;
 };
 
 QT_END_NAMESPACE

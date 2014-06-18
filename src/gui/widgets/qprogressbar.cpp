@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,52 +42,55 @@ QT_BEGIN_NAMESPACE
 
 class QProgressBarPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QProgressBar)
+   Q_DECLARE_PUBLIC(QProgressBar)
 
-public:
-    QProgressBarPrivate();
+ public:
+   QProgressBarPrivate();
 
-    void init();
-    inline void resetLayoutItemMargins();
+   void init();
+   inline void resetLayoutItemMargins();
 
-    int minimum;
-    int maximum;
-    int value;
-    Qt::Alignment alignment;
-    uint textVisible : 1;
-    int lastPaintedValue;
-    Qt::Orientation orientation;
-    bool invertedAppearance;
-    QProgressBar::Direction textDirection;
-    QString format;
-    inline int bound(int val) const { return qMax(minimum-1, qMin(maximum, val)); }
-    bool repaintRequired() const;
+   int minimum;
+   int maximum;
+   int value;
+   Qt::Alignment alignment;
+   uint textVisible : 1;
+   int lastPaintedValue;
+   Qt::Orientation orientation;
+   bool invertedAppearance;
+   QProgressBar::Direction textDirection;
+   QString format;
+   inline int bound(int val) const {
+      return qMax(minimum - 1, qMin(maximum, val));
+   }
+   bool repaintRequired() const;
 };
 
 QProgressBarPrivate::QProgressBarPrivate()
-    : minimum(0), maximum(100), value(-1), alignment(Qt::AlignLeft), textVisible(true),
-      lastPaintedValue(-1), orientation(Qt::Horizontal), invertedAppearance(false),
-      textDirection(QProgressBar::TopToBottom), format(QLatin1String("%p%"))
+   : minimum(0), maximum(100), value(-1), alignment(Qt::AlignLeft), textVisible(true),
+     lastPaintedValue(-1), orientation(Qt::Horizontal), invertedAppearance(false),
+     textDirection(QProgressBar::TopToBottom), format(QLatin1String("%p%"))
 {
 }
 
 void QProgressBarPrivate::init()
 {
-    Q_Q(QProgressBar);
-    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    if (orientation == Qt::Vertical)
-        sp.transpose();
-    q->setSizePolicy(sp);
-    q->setAttribute(Qt::WA_WState_OwnSizePolicy, false);
-    resetLayoutItemMargins();
+   Q_Q(QProgressBar);
+   QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Fixed);
+   if (orientation == Qt::Vertical) {
+      sp.transpose();
+   }
+   q->setSizePolicy(sp);
+   q->setAttribute(Qt::WA_WState_OwnSizePolicy, false);
+   resetLayoutItemMargins();
 }
 
 void QProgressBarPrivate::resetLayoutItemMargins()
 {
-    Q_Q(QProgressBar);
-    QStyleOptionProgressBar option;
-    q->initStyleOption(&option);
-    setLayoutItemMargins(QStyle::SE_ProgressBarLayoutItem, &option);
+   Q_Q(QProgressBar);
+   QStyleOptionProgressBar option;
+   q->initStyleOption(&option);
+   setLayoutItemMargins(QStyle::SE_ProgressBarLayoutItem, &option);
 }
 
 /*!
@@ -101,57 +104,63 @@ void QProgressBarPrivate::resetLayoutItemMargins()
 */
 void QProgressBar::initStyleOption(QStyleOptionProgressBar *option) const
 {
-    if (!option)
-        return;
-    Q_D(const QProgressBar);
-    option->initFrom(this);
+   if (!option) {
+      return;
+   }
+   Q_D(const QProgressBar);
+   option->initFrom(this);
 
-    if (d->orientation == Qt::Horizontal)
-        option->state |= QStyle::State_Horizontal;
-    option->minimum = d->minimum;
-    option->maximum = d->maximum;
-    option->progress = d->value;
-    option->textAlignment = d->alignment;
-    option->textVisible = d->textVisible;
-    option->text = text();
+   if (d->orientation == Qt::Horizontal) {
+      option->state |= QStyle::State_Horizontal;
+   }
+   option->minimum = d->minimum;
+   option->maximum = d->maximum;
+   option->progress = d->value;
+   option->textAlignment = d->alignment;
+   option->textVisible = d->textVisible;
+   option->text = text();
 
-    if (QStyleOptionProgressBarV2 *optionV2
-            = qstyleoption_cast<QStyleOptionProgressBarV2 *>(option)) {
-        optionV2->orientation = d->orientation;  // ### Qt 5: use State_Horizontal instead
-        optionV2->invertedAppearance = d->invertedAppearance;
-        optionV2->bottomToTop = (d->textDirection == QProgressBar::BottomToTop);
-    }
+   if (QStyleOptionProgressBarV2 * optionV2
+         = qstyleoption_cast<QStyleOptionProgressBarV2 *>(option)) {
+      optionV2->orientation = d->orientation;  // ### Qt 5: use State_Horizontal instead
+      optionV2->invertedAppearance = d->invertedAppearance;
+      optionV2->bottomToTop = (d->textDirection == QProgressBar::BottomToTop);
+   }
 }
 
 bool QProgressBarPrivate::repaintRequired() const
 {
-    Q_Q(const QProgressBar);
-    if (value == lastPaintedValue)
-        return false;
+   Q_Q(const QProgressBar);
+   if (value == lastPaintedValue) {
+      return false;
+   }
 
-    int valueDifference = qAbs(value - lastPaintedValue);
+   int valueDifference = qAbs(value - lastPaintedValue);
 
-    // Check if the text needs to be repainted
-    if (value == minimum || value == maximum)
-        return true;
-    if (textVisible) {
-        if ((format.contains(QLatin1String("%v"))))
-            return true;
-        if ((format.contains(QLatin1String("%p"))
-             && valueDifference >= qAbs((maximum - minimum) / 100)))
-            return true;
-    }
+   // Check if the text needs to be repainted
+   if (value == minimum || value == maximum) {
+      return true;
+   }
+   if (textVisible) {
+      if ((format.contains(QLatin1String("%v")))) {
+         return true;
+      }
+      if ((format.contains(QLatin1String("%p"))
+            && valueDifference >= qAbs((maximum - minimum) / 100))) {
+         return true;
+      }
+   }
 
-    // Check if the bar needs to be repainted
-    QStyleOptionProgressBarV2 opt;
-    q->initStyleOption(&opt);
-    int cw = q->style()->pixelMetric(QStyle::PM_ProgressBarChunkWidth, &opt, q);
-    QRect groove  = q->style()->subElementRect(QStyle::SE_ProgressBarGroove, &opt, q);
-    // This expression is basically
-    // (valueDifference / (maximum - minimum) > cw / groove.width())
-    // transformed to avoid integer division.
-    int grooveBlock = (q->orientation() == Qt::Horizontal) ? groove.width() : groove.height();
-    return (valueDifference * grooveBlock > cw * (maximum - minimum));
+   // Check if the bar needs to be repainted
+   QStyleOptionProgressBarV2 opt;
+   q->initStyleOption(&opt);
+   int cw = q->style()->pixelMetric(QStyle::PM_ProgressBarChunkWidth, &opt, q);
+   QRect groove  = q->style()->subElementRect(QStyle::SE_ProgressBarGroove, &opt, q);
+   // This expression is basically
+   // (valueDifference / (maximum - minimum) > cw / groove.width())
+   // transformed to avoid integer division.
+   int grooveBlock = (q->orientation() == Qt::Horizontal) ? groove.width() : groove.height();
+   return (valueDifference * grooveBlock > cw * (maximum - minimum));
 }
 
 /*!
@@ -226,9 +235,9 @@ bool QProgressBarPrivate::repaintRequired() const
 */
 
 QProgressBar::QProgressBar(QWidget *parent)
-    : QWidget(*(new QProgressBarPrivate), parent, 0)
+   : QWidget(*(new QProgressBarPrivate), parent, 0)
 {
-    d_func()->init();
+   d_func()->init();
 }
 
 /*!
@@ -238,11 +247,12 @@ QProgressBar::QProgressBar(QWidget *parent)
 
 void QProgressBar::reset()
 {
-    Q_D(QProgressBar);
-    d->value = d->minimum - 1;
-    if (d->minimum == INT_MIN)
-        d->value = INT_MIN;
-    repaint();
+   Q_D(QProgressBar);
+   d->value = d->minimum - 1;
+   if (d->minimum == INT_MIN) {
+      d->value = INT_MIN;
+   }
+   repaint();
 }
 
 /*!
@@ -256,12 +266,12 @@ void QProgressBar::reset()
 */
 void QProgressBar::setMinimum(int minimum)
 {
-    setRange(minimum, qMax(d_func()->maximum, minimum));
+   setRange(minimum, qMax(d_func()->maximum, minimum));
 }
 
 int QProgressBar::minimum() const
 {
-    return d_func()->minimum;
+   return d_func()->minimum;
 }
 
 
@@ -277,12 +287,12 @@ int QProgressBar::minimum() const
 
 void QProgressBar::setMaximum(int maximum)
 {
-    setRange(qMin(d_func()->minimum, maximum), maximum);
+   setRange(qMin(d_func()->minimum, maximum), maximum);
 }
 
 int QProgressBar::maximum() const
 {
-    return d_func()->maximum;
+   return d_func()->maximum;
 }
 
 /*!
@@ -294,24 +304,27 @@ int QProgressBar::maximum() const
 */
 void QProgressBar::setValue(int value)
 {
-    Q_D(QProgressBar);
-    if (d->value == value
-            || ((value > d->maximum || value < d->minimum)
-                && (d->maximum != 0 || d->minimum != 0)))
-        return;
-    d->value = value;
-    emit valueChanged(value);
+   Q_D(QProgressBar);
+   if (d->value == value
+         || ((value > d->maximum || value < d->minimum)
+             && (d->maximum != 0 || d->minimum != 0))) {
+      return;
+   }
+   d->value = value;
+   emit valueChanged(value);
 #ifndef QT_NO_ACCESSIBILITY
-    if (isVisible())
-        QAccessible::updateAccessibility(this, 0, QAccessible::ValueChanged);
+   if (isVisible()) {
+      QAccessible::updateAccessibility(this, 0, QAccessible::ValueChanged);
+   }
 #endif
-    if (d->repaintRequired())
-        repaint();
+   if (d->repaintRequired()) {
+      repaint();
+   }
 }
 
 int QProgressBar::value() const
 {
-    return d_func()->value;
+   return d_func()->value;
 }
 
 /*!
@@ -328,16 +341,17 @@ int QProgressBar::value() const
 */
 void QProgressBar::setRange(int minimum, int maximum)
 {
-    Q_D(QProgressBar);
-    if (minimum != d->minimum || maximum != d->maximum) {
-        d->minimum = minimum;
-        d->maximum = qMax(minimum, maximum);
+   Q_D(QProgressBar);
+   if (minimum != d->minimum || maximum != d->maximum) {
+      d->minimum = minimum;
+      d->maximum = qMax(minimum, maximum);
 
-        if (d->value < (d->minimum - 1) || d->value > d->maximum)
-            reset();
-        else
-            update();
-    }
+      if (d->value < (d->minimum - 1) || d->value > d->maximum) {
+         reset();
+      } else {
+         update();
+      }
+   }
 }
 
 /*!
@@ -350,16 +364,16 @@ void QProgressBar::setRange(int minimum, int maximum)
 */
 void QProgressBar::setTextVisible(bool visible)
 {
-    Q_D(QProgressBar);
-    if (d->textVisible != visible) {
-        d->textVisible = visible;
-        repaint();
-    }
+   Q_D(QProgressBar);
+   if (d->textVisible != visible) {
+      d->textVisible = visible;
+      repaint();
+   }
 }
 
 bool QProgressBar::isTextVisible() const
 {
-    return d_func()->textVisible;
+   return d_func()->textVisible;
 }
 
 /*!
@@ -368,15 +382,15 @@ bool QProgressBar::isTextVisible() const
 */
 void QProgressBar::setAlignment(Qt::Alignment alignment)
 {
-    if (d_func()->alignment != alignment) {
-        d_func()->alignment = alignment;
-        repaint();
-    }
+   if (d_func()->alignment != alignment) {
+      d_func()->alignment = alignment;
+      repaint();
+   }
 }
 
 Qt::Alignment QProgressBar::alignment() const
 {
-    return d_func()->alignment;
+   return d_func()->alignment;
 }
 
 /*!
@@ -384,11 +398,11 @@ Qt::Alignment QProgressBar::alignment() const
 */
 void QProgressBar::paintEvent(QPaintEvent *)
 {
-    QStylePainter paint(this);
-    QStyleOptionProgressBarV2 opt;
-    initStyleOption(&opt);
-    paint.drawControl(QStyle::CE_ProgressBar, opt);
-    d_func()->lastPaintedValue = d_func()->value;
+   QStylePainter paint(this);
+   QStyleOptionProgressBarV2 opt;
+   initStyleOption(&opt);
+   paint.drawControl(QStyle::CE_ProgressBar, opt);
+   d_func()->lastPaintedValue = d_func()->value;
 }
 
 /*!
@@ -396,15 +410,16 @@ void QProgressBar::paintEvent(QPaintEvent *)
 */
 QSize QProgressBar::sizeHint() const
 {
-    ensurePolished();
-    QFontMetrics fm = fontMetrics();
-    QStyleOptionProgressBarV2 opt;
-    initStyleOption(&opt);
-    int cw = style()->pixelMetric(QStyle::PM_ProgressBarChunkWidth, &opt, this);
-    QSize size = QSize(qMax(9, cw) * 7 + fm.width(QLatin1Char('0')) * 4, fm.height() + 8);
-    if (opt.orientation == Qt::Vertical)
-        size.transpose();
-    return style()->sizeFromContents(QStyle::CT_ProgressBar, &opt, size, this);
+   ensurePolished();
+   QFontMetrics fm = fontMetrics();
+   QStyleOptionProgressBarV2 opt;
+   initStyleOption(&opt);
+   int cw = style()->pixelMetric(QStyle::PM_ProgressBarChunkWidth, &opt, this);
+   QSize size = QSize(qMax(9, cw) * 7 + fm.width(QLatin1Char('0')) * 4, fm.height() + 8);
+   if (opt.orientation == Qt::Vertical) {
+      size.transpose();
+   }
+   return style()->sizeFromContents(QStyle::CT_ProgressBar, &opt, size, this);
 }
 
 /*!
@@ -412,12 +427,13 @@ QSize QProgressBar::sizeHint() const
 */
 QSize QProgressBar::minimumSizeHint() const
 {
-    QSize size;
-    if (orientation() == Qt::Horizontal)
-        size = QSize(sizeHint().width(), fontMetrics().height() + 2);
-    else
-        size = QSize(fontMetrics().height() + 2, sizeHint().height());
-    return size;
+   QSize size;
+   if (orientation() == Qt::Horizontal) {
+      size = QSize(sizeHint().width(), fontMetrics().height() + 2);
+   } else {
+      size = QSize(fontMetrics().height() + 2, sizeHint().height());
+   }
+   return size;
 }
 
 /*!
@@ -437,28 +453,29 @@ QSize QProgressBar::minimumSizeHint() const
 */
 QString QProgressBar::text() const
 {
-    Q_D(const QProgressBar);
-    if ((d->maximum == 0 && d->minimum == 0) || d->value < d->minimum
-            || (d->value == INT_MIN && d->minimum == INT_MIN))
-        return QString();
+   Q_D(const QProgressBar);
+   if ((d->maximum == 0 && d->minimum == 0) || d->value < d->minimum
+         || (d->value == INT_MIN && d->minimum == INT_MIN)) {
+      return QString();
+   }
 
-    qint64 totalSteps = qint64(d->maximum) - d->minimum;
+   qint64 totalSteps = qint64(d->maximum) - d->minimum;
 
-    QString result = d->format;
-    result.replace(QLatin1String("%m"), QString::number(totalSteps));
-    result.replace(QLatin1String("%v"), QString::number(d->value));
+   QString result = d->format;
+   result.replace(QLatin1String("%m"), QString::number(totalSteps));
+   result.replace(QLatin1String("%v"), QString::number(d->value));
 
-    // If max and min are equal and we get this far, it means that the
-    // progress bar has one step and that we are on that step. Return
-    // 100% here in order to avoid division by zero further down.
-    if (totalSteps == 0) {
-        result.replace(QLatin1String("%p"), QString::number(100));
-        return result;
-    }
+   // If max and min are equal and we get this far, it means that the
+   // progress bar has one step and that we are on that step. Return
+   // 100% here in order to avoid division by zero further down.
+   if (totalSteps == 0) {
+      result.replace(QLatin1String("%p"), QString::number(100));
+      return result;
+   }
 
-    int progress = (qreal(d->value) - d->minimum) * qreal(100.0) / totalSteps;
-    result.replace(QLatin1String("%p"), QString::number(progress));
-    return result;
+   int progress = (qreal(d->value) - d->minimum) * qreal(100.0) / totalSteps;
+   result.replace(QLatin1String("%p"), QString::number(progress));
+   return result;
 }
 
 /*!
@@ -474,25 +491,26 @@ QString QProgressBar::text() const
 
 void QProgressBar::setOrientation(Qt::Orientation orientation)
 {
-    Q_D(QProgressBar);
-    if (d->orientation == orientation)
-        return;
-    d->orientation = orientation;
-    if (!testAttribute(Qt::WA_WState_OwnSizePolicy)) {
-        QSizePolicy sp = sizePolicy();
-        sp.transpose();
-        setSizePolicy(sp);
-        setAttribute(Qt::WA_WState_OwnSizePolicy, false);
-    }
-    d->resetLayoutItemMargins();
-    update();
-    updateGeometry();
+   Q_D(QProgressBar);
+   if (d->orientation == orientation) {
+      return;
+   }
+   d->orientation = orientation;
+   if (!testAttribute(Qt::WA_WState_OwnSizePolicy)) {
+      QSizePolicy sp = sizePolicy();
+      sp.transpose();
+      setSizePolicy(sp);
+      setAttribute(Qt::WA_WState_OwnSizePolicy, false);
+   }
+   d->resetLayoutItemMargins();
+   update();
+   updateGeometry();
 }
 
 Qt::Orientation QProgressBar::orientation() const
 {
-    Q_D(const QProgressBar);
-    return d->orientation;
+   Q_D(const QProgressBar);
+   return d->orientation;
 }
 
 /*!
@@ -509,15 +527,15 @@ Qt::Orientation QProgressBar::orientation() const
 
 void QProgressBar::setInvertedAppearance(bool invert)
 {
-    Q_D(QProgressBar);
-    d->invertedAppearance = invert;
-    update();
+   Q_D(QProgressBar);
+   d->invertedAppearance = invert;
+   update();
 }
 
 bool QProgressBar::invertedAppearance() const
 {
-    Q_D(const QProgressBar);
-    return d->invertedAppearance;
+   Q_D(const QProgressBar);
+   return d->invertedAppearance;
 }
 
 /*!
@@ -532,28 +550,29 @@ bool QProgressBar::invertedAppearance() const
 */
 void QProgressBar::setTextDirection(QProgressBar::Direction textDirection)
 {
-    Q_D(QProgressBar);
-    d->textDirection = textDirection;
-    update();
+   Q_D(QProgressBar);
+   d->textDirection = textDirection;
+   update();
 }
 
 QProgressBar::Direction QProgressBar::textDirection() const
 {
-    Q_D(const QProgressBar);
-    return d->textDirection;
+   Q_D(const QProgressBar);
+   return d->textDirection;
 }
 
 /*! \reimp */
 bool QProgressBar::event(QEvent *e)
 {
-    Q_D(QProgressBar);
-    if (e->type() == QEvent::StyleChange
+   Q_D(QProgressBar);
+   if (e->type() == QEvent::StyleChange
 #ifdef Q_OS_MAC
-            || e->type() == QEvent::MacSizeChange
+         || e->type() == QEvent::MacSizeChange
 #endif
-            )
-        d->resetLayoutItemMargins();
-    return QWidget::event(e);
+      ) {
+      d->resetLayoutItemMargins();
+   }
+   return QWidget::event(e);
 }
 
 /*!
@@ -571,17 +590,18 @@ bool QProgressBar::event(QEvent *e)
 */
 void QProgressBar::setFormat(const QString &format)
 {
-    Q_D(QProgressBar);
-    if (d->format == format)
-        return;
-    d->format = format;
-    update();
+   Q_D(QProgressBar);
+   if (d->format == format) {
+      return;
+   }
+   d->format = format;
+   update();
 }
 
 QString QProgressBar::format() const
 {
-    Q_D(const QProgressBar);
-    return d->format;
+   Q_D(const QProgressBar);
+   return d->format;
 }
 
 QT_END_NAMESPACE

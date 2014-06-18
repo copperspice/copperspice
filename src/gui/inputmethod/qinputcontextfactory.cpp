@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,7 +49,7 @@
 QT_BEGIN_NAMESPACE
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QInputContextFactoryInterface_iid, QLatin1String("/inputmethods")))
+                          (QInputContextFactoryInterface_iid, QLatin1String("/inputmethods")))
 
 /*!
     Creates and returns a QInputContext object for the input context
@@ -58,33 +58,34 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
 
     \sa keys()
 */
-QInputContext *QInputContextFactory::create( const QString& key, QObject *parent )
+QInputContext *QInputContextFactory::create( const QString &key, QObject *parent )
 {
-    QInputContext *result = 0;
+   QInputContext *result = 0;
 #if defined(Q_WS_X11) && !defined(QT_NO_XIM)
-    if (key == QLatin1String("xim")) {
-        result = new QXIMInputContext;
-    }
+   if (key == QLatin1String("xim")) {
+      result = new QXIMInputContext;
+   }
 #endif
 #if defined(Q_OS_WIN)
-    if (key == QLatin1String("win")) {
-        result = new QWinInputContext;
-    }
+   if (key == QLatin1String("win")) {
+      result = new QWinInputContext;
+   }
 #endif
 #if defined(Q_OS_MAC)
-    if (key == QLatin1String("mac")) {
-        result = new QMacInputContext;
-    }
+   if (key == QLatin1String("mac")) {
+      result = new QMacInputContext;
+   }
 #endif
 
-    if (QInputContextFactoryInterface *factory =
-        qobject_cast<QInputContextFactoryInterface*>(loader()->instance(key))) {
-        result = factory->create(key);
-    }
+   if (QInputContextFactoryInterface *factory =
+            qobject_cast<QInputContextFactoryInterface *>(loader()->instance(key))) {
+      result = factory->create(key);
+   }
 
-    if (result)
-        result->setParent(parent);
-    return result;
+   if (result) {
+      result->setParent(parent);
+   }
+   return result;
 }
 
 
@@ -101,19 +102,19 @@ QInputContext *QInputContextFactory::create( const QString& key, QObject *parent
 */
 QStringList QInputContextFactory::keys()
 {
-    QStringList result;
+   QStringList result;
 #if defined(Q_WS_X11) && !defined(QT_NO_XIM)
-    result << QLatin1String("xim");
+   result << QLatin1String("xim");
 #endif
 #if defined(Q_OS_WIN) && !defined(QT_NO_XIM)
-    result << QLatin1String("win");
+   result << QLatin1String("win");
 #endif
 #if defined(Q_OS_MAC)
-    result << QLatin1String("mac");
+   result << QLatin1String("mac");
 #endif
 
-    result += loader()->keys();
-    return result;
+   result += loader()->keys();
+   return result;
 }
 
 
@@ -133,28 +134,32 @@ QStringList QInputContextFactory::keys()
 */
 QStringList QInputContextFactory::languages( const QString &key )
 {
-    QStringList result;
+   QStringList result;
 #if defined(Q_WS_X11) && !defined(QT_NO_XIM)
-    if (key == QLatin1String("xim"))
-        return QStringList(QString());
+   if (key == QLatin1String("xim")) {
+      return QStringList(QString());
+   }
 #endif
 #if defined(Q_OS_WIN)
-    if (key == QLatin1String("win"))
-        return QStringList(QString());
+   if (key == QLatin1String("win")) {
+      return QStringList(QString());
+   }
 #endif
 #if defined(Q_OS_MAC)
-    if (key == QLatin1String("mac"))
-        return QStringList(QString());
+   if (key == QLatin1String("mac")) {
+      return QStringList(QString());
+   }
 #endif
 
 #if defined(QT_NO_SETTINGS)
-    Q_UNUSED(key);
+   Q_UNUSED(key);
 #else
-    if (QInputContextFactoryInterface *factory =
-        qobject_cast<QInputContextFactoryInterface*>(loader()->instance(key)))
-        result = factory->languages(key);
+   if (QInputContextFactoryInterface *factory =
+            qobject_cast<QInputContextFactoryInterface *>(loader()->instance(key))) {
+      result = factory->languages(key);
+   }
 #endif
-    return result;
+   return result;
 }
 
 /*!
@@ -166,20 +171,22 @@ QStringList QInputContextFactory::languages( const QString &key )
 */
 QString QInputContextFactory::displayName( const QString &key )
 {
-    QString result;
+   QString result;
 #if defined(Q_WS_X11) && !defined(QT_NO_XIM)
-    if (key == QLatin1String("xim"))
-        return QInputContext::tr( "XIM" );
+   if (key == QLatin1String("xim")) {
+      return QInputContext::tr( "XIM" );
+   }
 #endif
 
 #if defined(QT_NO_SETTINGS)
-    Q_UNUSED(key);
+   Q_UNUSED(key);
 #else
-    if (QInputContextFactoryInterface *factory =
-        qobject_cast<QInputContextFactoryInterface*>(loader()->instance(key)))
-        return factory->displayName(key);
+   if (QInputContextFactoryInterface *factory =
+            qobject_cast<QInputContextFactoryInterface *>(loader()->instance(key))) {
+      return factory->displayName(key);
+   }
 #endif
-    return QString();
+   return QString();
 }
 
 /*!
@@ -192,26 +199,30 @@ QString QInputContextFactory::displayName( const QString &key )
 QString QInputContextFactory::description( const QString &key )
 {
 #if defined(Q_WS_X11) && !defined(QT_NO_XIM)
-    if (key == QLatin1String("xim"))
-        return QInputContext::tr( "XIM input method" );
+   if (key == QLatin1String("xim")) {
+      return QInputContext::tr( "XIM input method" );
+   }
 #endif
 #if defined(Q_OS_WIN) && !defined(QT_NO_XIM)
-    if (key == QLatin1String("win"))
-        return QInputContext::tr( "Windows input method" );
+   if (key == QLatin1String("win")) {
+      return QInputContext::tr( "Windows input method" );
+   }
 #endif
 #if defined(Q_OS_MAC)
-    if (key == QLatin1String("mac"))
-        return QInputContext::tr( "Mac OS X input method" );
+   if (key == QLatin1String("mac")) {
+      return QInputContext::tr( "Mac OS X input method" );
+   }
 #endif
 
 #if defined(QT_NO_SETTINGS)
-    Q_UNUSED(key);
+   Q_UNUSED(key);
 #else
-    if (QInputContextFactoryInterface *factory =
-        qobject_cast<QInputContextFactoryInterface*>(loader()->instance(key)))
-        return factory->description(key);
+   if (QInputContextFactoryInterface *factory =
+            qobject_cast<QInputContextFactoryInterface *>(loader()->instance(key))) {
+      return factory->description(key);
+   }
 #endif
-    return QString();
+   return QString();
 }
 
 QT_END_NAMESPACE

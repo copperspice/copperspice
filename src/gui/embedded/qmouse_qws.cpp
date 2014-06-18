@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -80,10 +80,10 @@ QT_BEGIN_NAMESPACE
 
 class QWSMouseHandlerPrivate
 {
-public:
-    QWSMouseHandlerPrivate() : screen(qt_screen) {}
+ public:
+   QWSMouseHandlerPrivate() : screen(qt_screen) {}
 
-    const QScreen *screen;
+   const QScreen *screen;
 };
 
 /*!
@@ -182,7 +182,7 @@ public:
     it upon exit.
 */
 QWSMouseHandler::QWSMouseHandler(const QString &, const QString &)
-    : mousePos(QWSServer::mousePosition), d_ptr(new QWSMouseHandlerPrivate)
+   : mousePos(QWSServer::mousePosition), d_ptr(new QWSMouseHandlerPrivate)
 {
 }
 
@@ -196,7 +196,7 @@ QWSMouseHandler::QWSMouseHandler(const QString &, const QString &)
 */
 QWSMouseHandler::~QWSMouseHandler()
 {
-    delete d_ptr;
+   delete d_ptr;
 }
 
 /*!
@@ -208,8 +208,8 @@ QWSMouseHandler::~QWSMouseHandler()
 
 void QWSMouseHandler::limitToScreen(QPoint &position)
 {
-    position.setX(qMin(d_ptr->screen->deviceWidth() - 1, qMax(0, position.x())));
-    position.setY(qMin(d_ptr->screen->deviceHeight() - 1, qMax(0, position.y())));
+   position.setX(qMin(d_ptr->screen->deviceWidth() - 1, qMax(0, position.x())));
+   position.setY(qMin(d_ptr->screen->deviceHeight() - 1, qMax(0, position.y())));
 }
 
 /*!
@@ -221,7 +221,7 @@ void QWSMouseHandler::limitToScreen(QPoint &position)
 */
 void QWSMouseHandler::setScreen(const QScreen *screen)
 {
-    d_ptr->screen = (screen ? screen : qt_screen);
+   d_ptr->screen = (screen ? screen : qt_screen);
 }
 
 /*!
@@ -242,8 +242,8 @@ void QWSMouseHandler::setScreen(const QScreen *screen)
 */
 void QWSMouseHandler::mouseChanged(const QPoint &position, int state, int wheel)
 {
-    mousePos = position + d_ptr->screen->offset();
-    QWSServer::sendMouseEvent(mousePos, state, wheel);
+   mousePos = position + d_ptr->screen->offset();
+   QWSServer::sendMouseEvent(mousePos, state, wheel);
 }
 
 /*!
@@ -332,10 +332,10 @@ void QWSMouseHandler::mouseChanged(const QPoint &position, int state, int wheel)
  */
 
 QWSCalibratedMouseHandler::QWSCalibratedMouseHandler(const QString &, const QString &)
-    : samples(5), currSample(0), numSamples(0)
+   : samples(5), currSample(0), numSamples(0)
 {
-    clearCalibration();
-    readCalibration();
+   clearCalibration();
+   readCalibration();
 }
 
 /*!
@@ -346,16 +346,16 @@ QWSCalibratedMouseHandler::QWSCalibratedMouseHandler(const QString &, const QStr
 */
 void QWSCalibratedMouseHandler::getCalibration(QWSPointerCalibrationData *cd) const
 {
-    const qint64 scale = qint64(a) * qint64(e) - qint64(b) * qint64(d);
-    const qint64 xOff = qint64(b) * qint64(f) - qint64(c) * qint64(e);
-    const qint64 yOff = qint64(c) * qint64(d) - qint64(a) * qint64(f);
-    for (int i = 0; i <= QWSPointerCalibrationData::LastLocation; ++i) {
-        const qint64 sX = cd->screenPoints[i].x();
-        const qint64 sY = cd->screenPoints[i].y();
-        const qint64 dX = (s*(e*sX - b*sY) + xOff) / scale;
-        const qint64 dY = (s*(a*sY - d*sX) + yOff) / scale;
-        cd->devPoints[i] = QPoint(dX, dY);
-    }
+   const qint64 scale = qint64(a) * qint64(e) - qint64(b) * qint64(d);
+   const qint64 xOff = qint64(b) * qint64(f) - qint64(c) * qint64(e);
+   const qint64 yOff = qint64(c) * qint64(d) - qint64(a) * qint64(f);
+   for (int i = 0; i <= QWSPointerCalibrationData::LastLocation; ++i) {
+      const qint64 sX = cd->screenPoints[i].x();
+      const qint64 sY = cd->screenPoints[i].y();
+      const qint64 dX = (s * (e * sX - b * sY) + xOff) / scale;
+      const qint64 dY = (s * (a * sY - d * sX) + yOff) / scale;
+      cd->devPoints[i] = QPoint(dX, dY);
+   }
 }
 
 /*!
@@ -367,81 +367,85 @@ void QWSCalibratedMouseHandler::getCalibration(QWSPointerCalibrationData *cd) co
 */
 void QWSCalibratedMouseHandler::clearCalibration()
 {
-    a = 1;
-    b = 0;
-    c = 0;
-    d = 0;
-    e = 1;
-    f = 0;
-    s = 1;
+   a = 1;
+   b = 0;
+   c = 0;
+   d = 0;
+   e = 1;
+   f = 0;
+   s = 1;
 }
 
 
 void QWSCalibratedMouseHandler::writeCalibration()
 {
-    QString calFile;
-    calFile = QString::fromLocal8Bit(qgetenv("POINTERCAL_FILE"));
-    if (calFile.isEmpty())
-        calFile = QLatin1String("/etc/pointercal");
+   QString calFile;
+   calFile = QString::fromLocal8Bit(qgetenv("POINTERCAL_FILE"));
+   if (calFile.isEmpty()) {
+      calFile = QLatin1String("/etc/pointercal");
+   }
 
 
-    QFile file(calFile);
-    if (file.open(QIODevice::WriteOnly)) {
-        QTextStream t(&file);
-        t << a << ' ' << b << ' ' << c << ' ';
-        t << d << ' ' << e << ' ' << f << ' ' << s << endl;
-    } else
+   QFile file(calFile);
+   if (file.open(QIODevice::WriteOnly)) {
+      QTextStream t(&file);
+      t << a << ' ' << b << ' ' << c << ' ';
+      t << d << ' ' << e << ' ' << f << ' ' << s << endl;
+   } else
 
-    {
-        qCritical("QWSCalibratedMouseHandler::writeCalibration: "
-                  "Could not save calibration into %s", qPrintable(calFile));
-    }
+   {
+      qCritical("QWSCalibratedMouseHandler::writeCalibration: "
+                "Could not save calibration into %s", qPrintable(calFile));
+   }
 }
 
 void QWSCalibratedMouseHandler::readCalibration()
 {
-    QString calFile = QString::fromLocal8Bit(qgetenv("POINTERCAL_FILE"));
-    if (calFile.isEmpty())
-        calFile = QLatin1String("/etc/pointercal");
+   QString calFile = QString::fromLocal8Bit(qgetenv("POINTERCAL_FILE"));
+   if (calFile.isEmpty()) {
+      calFile = QLatin1String("/etc/pointercal");
+   }
 
-    QFile file(calFile);
-    if (file.open(QIODevice::ReadOnly)) {
-        QTextStream t(&file);
-        t >> a >> b >> c >> d >> e >> f >> s;
-        if (s == 0 || t.status() != QTextStream::Ok) {
-            qCritical("Corrupt calibration data");
-            clearCalibration();
-        }
-    } else
+   QFile file(calFile);
+   if (file.open(QIODevice::ReadOnly)) {
+      QTextStream t(&file);
+      t >> a >> b >> c >> d >> e >> f >> s;
+      if (s == 0 || t.status() != QTextStream::Ok) {
+         qCritical("Corrupt calibration data");
+         clearCalibration();
+      }
+   } else
 
-    {
-        qDebug() << "Could not read calibration:" <<calFile;
-    }
+   {
+      qDebug() << "Could not read calibration:" << calFile;
+   }
 }
 
 static int ilog2(quint32 n)
 {
-    int result = 0;
+   int result = 0;
 
-    if (n & 0xffff0000) {
-        n >>= 16;
-        result += 16;
-    }
-    if (n & 0xff00) {
-        n >>= 8;
-        result += 8;}
-    if (n & 0xf0) {
-        n >>= 4;
-        result += 4;
-    }
-    if (n & 0xc) {
-        n >>= 2;
-        result += 2;
-    }
-    if (n & 0x2)
-        result += 1;
+   if (n & 0xffff0000) {
+      n >>= 16;
+      result += 16;
+   }
+   if (n & 0xff00) {
+      n >>= 8;
+      result += 8;
+   }
+   if (n & 0xf0) {
+      n >>= 4;
+      result += 4;
+   }
+   if (n & 0xc) {
+      n >>= 2;
+      result += 2;
+   }
+   if (n & 0x2) {
+      result += 1;
+   }
 
-    return result;
+   return result;
 }
 
 /*!
@@ -456,49 +460,49 @@ static int ilog2(quint32 n)
 */
 void QWSCalibratedMouseHandler::calibrate(const QWSPointerCalibrationData *data)
 {
-    // Algorithm derived from
-    // "How To Calibrate Touch Screens" by Carlos E. Vidales,
-    // printed in Embedded Systems Programming, Vol. 15 no 6, June 2002
-    // URL: http://www.embedded.com/showArticle.jhtml?articleID=9900629
+   // Algorithm derived from
+   // "How To Calibrate Touch Screens" by Carlos E. Vidales,
+   // printed in Embedded Systems Programming, Vol. 15 no 6, June 2002
+   // URL: http://www.embedded.com/showArticle.jhtml?articleID=9900629
 
-    const QPoint pd0 = data->devPoints[QWSPointerCalibrationData::TopLeft];
-    const QPoint pd1 = data->devPoints[QWSPointerCalibrationData::TopRight];
-    const QPoint pd2 = data->devPoints[QWSPointerCalibrationData::BottomRight];
-    const QPoint p0 = data->screenPoints[QWSPointerCalibrationData::TopLeft];
-    const QPoint p1 = data->screenPoints[QWSPointerCalibrationData::TopRight];
-    const QPoint p2 = data->screenPoints[QWSPointerCalibrationData::BottomRight];
+   const QPoint pd0 = data->devPoints[QWSPointerCalibrationData::TopLeft];
+   const QPoint pd1 = data->devPoints[QWSPointerCalibrationData::TopRight];
+   const QPoint pd2 = data->devPoints[QWSPointerCalibrationData::BottomRight];
+   const QPoint p0 = data->screenPoints[QWSPointerCalibrationData::TopLeft];
+   const QPoint p1 = data->screenPoints[QWSPointerCalibrationData::TopRight];
+   const QPoint p2 = data->screenPoints[QWSPointerCalibrationData::BottomRight];
 
-    const qint64 xd0 = pd0.x();
-    const qint64 xd1 = pd1.x();
-    const qint64 xd2 = pd2.x();
-    const qint64 yd0 = pd0.y();
-    const qint64 yd1 = pd1.y();
-    const qint64 yd2 = pd2.y();
-    const qint64 x0 = p0.x();
-    const qint64 x1 = p1.x();
-    const qint64 x2 = p2.x();
-    const qint64 y0 = p0.y();
-    const qint64 y1 = p1.y();
-    const qint64 y2 = p2.y();
+   const qint64 xd0 = pd0.x();
+   const qint64 xd1 = pd1.x();
+   const qint64 xd2 = pd2.x();
+   const qint64 yd0 = pd0.y();
+   const qint64 yd1 = pd1.y();
+   const qint64 yd2 = pd2.y();
+   const qint64 x0 = p0.x();
+   const qint64 x1 = p1.x();
+   const qint64 x2 = p2.x();
+   const qint64 y0 = p0.y();
+   const qint64 y1 = p1.y();
+   const qint64 y2 = p2.y();
 
-    qint64 scale = ((xd0 - xd2)*(yd1 - yd2) - (xd1 - xd2)*(yd0 - yd2));
-    int shift = 0;
-    qint64 absScale = qAbs(scale);
-    // use maximum 16 bit precision to reduce risk of integer overflow
-    if (absScale > (1 << 16)) {
-        shift = ilog2(absScale >> 16) + 1;
-        scale >>= shift;
-    }
+   qint64 scale = ((xd0 - xd2) * (yd1 - yd2) - (xd1 - xd2) * (yd0 - yd2));
+   int shift = 0;
+   qint64 absScale = qAbs(scale);
+   // use maximum 16 bit precision to reduce risk of integer overflow
+   if (absScale > (1 << 16)) {
+      shift = ilog2(absScale >> 16) + 1;
+      scale >>= shift;
+   }
 
-    s = scale;
-    a = ((x0 - x2)*(yd1 - yd2) - (x1 - x2)*(yd0 - yd2)) >> shift;
-    b = ((xd0 - xd2)*(x1 - x2) - (x0 - x2)*(xd1 - xd2)) >> shift;
-    c = (yd0*(xd2*x1 - xd1*x2) + yd1*(xd0*x2 - xd2*x0) + yd2*(xd1*x0 - xd0*x1)) >> shift;
-    d = ((y0 - y2)*(yd1 - yd2) - (y1 - y2)*(yd0 - yd2)) >> shift;
-    e = ((xd0 - xd2)*(y1 - y2) - (y0 - y2)*(xd1 - xd2)) >> shift;
-    f = (yd0*(xd2*y1 - xd1*y2) + yd1*(xd0*y2 - xd2*y0) + yd2*(xd1*y0 - xd0*y1)) >> shift;
+   s = scale;
+   a = ((x0 - x2) * (yd1 - yd2) - (x1 - x2) * (yd0 - yd2)) >> shift;
+   b = ((xd0 - xd2) * (x1 - x2) - (x0 - x2) * (xd1 - xd2)) >> shift;
+   c = (yd0 * (xd2 * x1 - xd1 * x2) + yd1 * (xd0 * x2 - xd2 * x0) + yd2 * (xd1 * x0 - xd0 * x1)) >> shift;
+   d = ((y0 - y2) * (yd1 - yd2) - (y1 - y2) * (yd0 - yd2)) >> shift;
+   e = ((xd0 - xd2) * (y1 - y2) - (y0 - y2) * (xd1 - xd2)) >> shift;
+   f = (yd0 * (xd2 * y1 - xd1 * y2) + yd1 * (xd0 * y2 - xd2 * y0) + yd2 * (xd1 * y0 - xd0 * y1)) >> shift;
 
-    writeCalibration();
+   writeCalibration();
 }
 
 /*!
@@ -519,12 +523,12 @@ void QWSCalibratedMouseHandler::calibrate(const QWSPointerCalibrationData *data)
 */
 QPoint QWSCalibratedMouseHandler::transform(const QPoint &position)
 {
-    QPoint tp;
+   QPoint tp;
 
-    tp.setX((a * position.x() + b * position.y() + c) / s);
-    tp.setY((d * position.x() + e * position.y() + f) / s);
+   tp.setX((a * position.x() + b * position.y() + c) / s);
+   tp.setY((d * position.x() + e * position.y() + f) / s);
 
-    return tp;
+   return tp;
 }
 
 /*!
@@ -540,9 +544,9 @@ QPoint QWSCalibratedMouseHandler::transform(const QPoint &position)
 */
 void QWSCalibratedMouseHandler::setFilterSize(int size)
 {
-    samples.resize(qMax(1, size));
-    numSamples = 0;
-    currSample = 0;
+   samples.resize(qMax(1, size));
+   numSamples = 0;
+   currSample = 0;
 }
 
 /*!
@@ -566,51 +570,55 @@ void QWSCalibratedMouseHandler::setFilterSize(int size)
 */
 bool QWSCalibratedMouseHandler::sendFiltered(const QPoint &position, int button)
 {
-    if (!button) {
-        if (numSamples >= samples.count())
-            mouseChanged(transform(position), 0);
-        currSample = 0;
-        numSamples = 0;
-        return true;
-    }
+   if (!button) {
+      if (numSamples >= samples.count()) {
+         mouseChanged(transform(position), 0);
+      }
+      currSample = 0;
+      numSamples = 0;
+      return true;
+   }
 
-    bool sent = false;
-    samples[currSample] = position;
-    numSamples++;
-    if (numSamples >= samples.count()) {
+   bool sent = false;
+   samples[currSample] = position;
+   numSamples++;
+   if (numSamples >= samples.count()) {
 
-        int ignore = -1;
-        if (samples.count() > 2) { // throw away the "worst" sample
-            int maxd = 0;
-            for (int i = 0; i < samples.count(); i++) {
-                int d = (mousePos - samples[i]).manhattanLength();
-                if (d > maxd) {
-                    maxd = d;
-                    ignore = i;
-                }
+      int ignore = -1;
+      if (samples.count() > 2) { // throw away the "worst" sample
+         int maxd = 0;
+         for (int i = 0; i < samples.count(); i++) {
+            int d = (mousePos - samples[i]).manhattanLength();
+            if (d > maxd) {
+               maxd = d;
+               ignore = i;
             }
-        }
+         }
+      }
 
-        // average the rest
-        QPoint pos(0, 0);
-        int numAveraged = 0;
-        for (int i = 0; i < samples.count(); i++) {
-            if (ignore == i)
-                continue;
-            pos += samples[i];
-            ++numAveraged;
-        }
-        if (numAveraged)
-            pos /= numAveraged;
+      // average the rest
+      QPoint pos(0, 0);
+      int numAveraged = 0;
+      for (int i = 0; i < samples.count(); i++) {
+         if (ignore == i) {
+            continue;
+         }
+         pos += samples[i];
+         ++numAveraged;
+      }
+      if (numAveraged) {
+         pos /= numAveraged;
+      }
 
-        mouseChanged(transform(pos), button);
-        sent = true;
-    }
-    currSample++;
-    if (currSample >= samples.count())
-        currSample = 0;
+      mouseChanged(transform(pos), button);
+      sent = true;
+   }
+   currSample++;
+   if (currSample >= samples.count()) {
+      currSample = 0;
+   }
 
-    return sent;
+   return sent;
 }
 
 QT_END_NAMESPACE

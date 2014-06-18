@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -317,11 +317,11 @@ QT_BEGIN_NAMESPACE
     Creates a new local socket. The \a parent argument is passed to
     QObject's constructor.
  */
-QLocalSocket::QLocalSocket(QObject * parent)
-    : QIODevice(*new QLocalSocketPrivate, parent)
+QLocalSocket::QLocalSocket(QObject *parent)
+   : QIODevice(*new QLocalSocketPrivate, parent)
 {
-    Q_D(QLocalSocket);
-    d->init();
+   Q_D(QLocalSocket);
+   d->init();
 }
 
 /*!
@@ -329,10 +329,10 @@ QLocalSocket::QLocalSocket(QObject * parent)
  */
 QLocalSocket::~QLocalSocket()
 {
-    close();
+   close();
 #if !defined(Q_OS_WIN) && !defined(QT_LOCALSOCKET_TCP)
-    Q_D(QLocalSocket);
-    d->unixSocket.setParent(0);
+   Q_D(QLocalSocket);
+   d->unixSocket.setParent(0);
 #endif
 }
 
@@ -345,8 +345,8 @@ QLocalSocket::~QLocalSocket()
  */
 QString QLocalSocket::serverName() const
 {
-    Q_D(const QLocalSocket);
-    return d->serverName;
+   Q_D(const QLocalSocket);
+   return d->serverName;
 }
 
 /*!
@@ -358,8 +358,8 @@ QString QLocalSocket::serverName() const
  */
 QString QLocalSocket::fullServerName() const
 {
-    Q_D(const QLocalSocket);
-    return d->fullServerName;
+   Q_D(const QLocalSocket);
+   return d->fullServerName;
 }
 
 /*!
@@ -369,15 +369,15 @@ QString QLocalSocket::fullServerName() const
  */
 QLocalSocket::LocalSocketState QLocalSocket::state() const
 {
-    Q_D(const QLocalSocket);
-    return d->state;
+   Q_D(const QLocalSocket);
+   return d->state;
 }
 
 /*! \reimp
 */
 bool QLocalSocket::isSequential() const
 {
-    return true;
+   return true;
 }
 
 /*!
@@ -423,64 +423,64 @@ bool QLocalSocket::isSequential() const
 #ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug debug, QLocalSocket::LocalSocketError error)
 {
-    switch (error) {
-    case QLocalSocket::ConnectionRefusedError:
-        debug << "QLocalSocket::ConnectionRefusedError";
-        break;
-    case QLocalSocket::PeerClosedError:
-        debug << "QLocalSocket::PeerClosedError";
-        break;
-    case QLocalSocket::ServerNotFoundError:
-        debug << "QLocalSocket::ServerNotFoundError";
-        break;
-    case QLocalSocket::SocketAccessError:
-        debug << "QLocalSocket::SocketAccessError";
-        break;
-    case QLocalSocket::SocketResourceError:
-        debug << "QLocalSocket::SocketResourceError";
-        break;
-    case QLocalSocket::SocketTimeoutError:
-        debug << "QLocalSocket::SocketTimeoutError";
-        break;
-    case QLocalSocket::DatagramTooLargeError:
-        debug << "QLocalSocket::DatagramTooLargeError";
-        break;
-    case QLocalSocket::ConnectionError:
-        debug << "QLocalSocket::ConnectionError";
-        break;
-    case QLocalSocket::UnsupportedSocketOperationError:
-        debug << "QLocalSocket::UnsupportedSocketOperationError";
-        break;
-    case QLocalSocket::UnknownSocketError:
-        debug << "QLocalSocket::UnknownSocketError";
-        break;
-    default:
-        debug << "QLocalSocket::SocketError(" << int(error) << ')';
-        break;
-    }
-    return debug;
+   switch (error) {
+      case QLocalSocket::ConnectionRefusedError:
+         debug << "QLocalSocket::ConnectionRefusedError";
+         break;
+      case QLocalSocket::PeerClosedError:
+         debug << "QLocalSocket::PeerClosedError";
+         break;
+      case QLocalSocket::ServerNotFoundError:
+         debug << "QLocalSocket::ServerNotFoundError";
+         break;
+      case QLocalSocket::SocketAccessError:
+         debug << "QLocalSocket::SocketAccessError";
+         break;
+      case QLocalSocket::SocketResourceError:
+         debug << "QLocalSocket::SocketResourceError";
+         break;
+      case QLocalSocket::SocketTimeoutError:
+         debug << "QLocalSocket::SocketTimeoutError";
+         break;
+      case QLocalSocket::DatagramTooLargeError:
+         debug << "QLocalSocket::DatagramTooLargeError";
+         break;
+      case QLocalSocket::ConnectionError:
+         debug << "QLocalSocket::ConnectionError";
+         break;
+      case QLocalSocket::UnsupportedSocketOperationError:
+         debug << "QLocalSocket::UnsupportedSocketOperationError";
+         break;
+      case QLocalSocket::UnknownSocketError:
+         debug << "QLocalSocket::UnknownSocketError";
+         break;
+      default:
+         debug << "QLocalSocket::SocketError(" << int(error) << ')';
+         break;
+   }
+   return debug;
 }
 
 QDebug operator<<(QDebug debug, QLocalSocket::LocalSocketState state)
 {
-    switch (state) {
-    case QLocalSocket::UnconnectedState:
-        debug << "QLocalSocket::UnconnectedState";
-        break;
-    case QLocalSocket::ConnectingState:
-        debug << "QLocalSocket::ConnectingState";
-        break;
-    case QLocalSocket::ConnectedState:
-        debug << "QLocalSocket::ConnectedState";
-        break;
-    case QLocalSocket::ClosingState:
-        debug << "QLocalSocket::ClosingState";
-        break;
-    default:
-        debug << "QLocalSocket::SocketState(" << int(state) << ')';
-        break;
-    }
-    return debug;
+   switch (state) {
+      case QLocalSocket::UnconnectedState:
+         debug << "QLocalSocket::UnconnectedState";
+         break;
+      case QLocalSocket::ConnectingState:
+         debug << "QLocalSocket::ConnectingState";
+         break;
+      case QLocalSocket::ConnectedState:
+         debug << "QLocalSocket::ConnectedState";
+         break;
+      case QLocalSocket::ClosingState:
+         debug << "QLocalSocket::ClosingState";
+         break;
+      default:
+         debug << "QLocalSocket::SocketState(" << int(state) << ')';
+         break;
+   }
+   return debug;
 }
 #endif
 
@@ -489,66 +489,66 @@ QDebug operator<<(QDebug debug, QLocalSocket::LocalSocketState state)
 
 void QLocalSocket::_q_stateChanged(QAbstractSocket::SocketState un_named_arg1)
 {
-	Q_D(QLocalSocket);
-	d->_q_stateChanged(un_named_arg1);
+   Q_D(QLocalSocket);
+   d->_q_stateChanged(un_named_arg1);
 }
 
 void QLocalSocket::_q_error(QAbstractSocket::SocketError un_named_arg1)
 {
-	Q_D(QLocalSocket);
-	d->_q_error(un_named_arg1);
+   Q_D(QLocalSocket);
+   d->_q_error(un_named_arg1);
 }
 
 #elif defined(Q_OS_WIN)
 
 void QLocalSocket::_q_notified()
 {
-	Q_D(QLocalSocket);
-	d->_q_notified();
+   Q_D(QLocalSocket);
+   d->_q_notified();
 }
 
 void QLocalSocket::_q_canWrite()
 {
-	Q_D(QLocalSocket);
-	d->_q_canWrite();
+   Q_D(QLocalSocket);
+   d->_q_canWrite();
 }
 
 void QLocalSocket::_q_pipeClosed()
 {
-	Q_D(QLocalSocket);
-	d->_q_pipeClosed();
+   Q_D(QLocalSocket);
+   d->_q_pipeClosed();
 }
 
 void QLocalSocket::_q_emitReadyRead()
 {
-	Q_D(QLocalSocket);
-	d->_q_emitReadyRead();
+   Q_D(QLocalSocket);
+   d->_q_emitReadyRead();
 }
 
 #else
 
 void QLocalSocket::_q_stateChanged(QAbstractSocket::SocketState un_named_arg1)
 {
-	Q_D(QLocalSocket);
-	d->_q_stateChanged(un_named_arg1);
+   Q_D(QLocalSocket);
+   d->_q_stateChanged(un_named_arg1);
 }
 
 void QLocalSocket::_q_error(QAbstractSocket::SocketError un_named_arg1)
 {
-	Q_D(QLocalSocket);
-	d->_q_error(un_named_arg1);
+   Q_D(QLocalSocket);
+   d->_q_error(un_named_arg1);
 }
 
 void QLocalSocket::_q_connectToSocket()
 {
-	Q_D(QLocalSocket);
-	d->_q_connectToSocket();
+   Q_D(QLocalSocket);
+   d->_q_connectToSocket();
 }
 
 void QLocalSocket::_q_abortConnectionAttempt()
 {
-	Q_D(QLocalSocket);
-	d->_q_abortConnectionAttempt();
+   Q_D(QLocalSocket);
+   d->_q_abortConnectionAttempt();
 }
 
 #endif

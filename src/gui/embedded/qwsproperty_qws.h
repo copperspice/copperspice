@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,31 +34,31 @@ QT_BEGIN_NAMESPACE
 
 class QWSPropertyManager
 {
-public:
-    enum Mode {
-        PropReplace = 0,
-        PropPrepend,
-        PropAppend
-    };
+ public:
+   enum Mode {
+      PropReplace = 0,
+      PropPrepend,
+      PropAppend
+   };
 
-    // pre-defined properties
-    enum Atom {
-        PropSelection = 0
-    };
+   // pre-defined properties
+   enum Atom {
+      PropSelection = 0
+   };
 
-    QWSPropertyManager();
-    ~QWSPropertyManager();
+   QWSPropertyManager();
+   ~QWSPropertyManager();
 
-    bool setProperty(int winId, int property, int mode, const char *data, int len);
-    bool hasProperty(int winId, int property);
-    bool removeProperty(int winId, int property);
-    bool addProperty(int winId, int property);
-    bool getProperty(int winId, int property, const char *&data, int &len);
-    bool removeProperties(int winId);
+   bool setProperty(int winId, int property, int mode, const char *data, int len);
+   bool hasProperty(int winId, int property);
+   bool removeProperty(int winId, int property);
+   bool addProperty(int winId, int property);
+   bool getProperty(int winId, int property, const char *&data, int &len);
+   bool removeProperties(int winId);
 
-private:
-    class Data;
-    Data* d;
+ private:
+   class Data;
+   Data *d;
 };
 
 #endif // QT_NO_QWS_PROPERTIES

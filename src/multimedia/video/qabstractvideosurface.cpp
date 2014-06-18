@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -68,7 +68,7 @@ QT_BEGIN_NAMESPACE
 */
 
 QAbstractVideoSurface::QAbstractVideoSurface(QObject *parent)
-   : QObject(parent), d_ptr(new QAbstractVideoSurfacePrivate) 
+   : QObject(parent), d_ptr(new QAbstractVideoSurfacePrivate)
 {
 }
 
@@ -77,7 +77,7 @@ QAbstractVideoSurface::QAbstractVideoSurface(QObject *parent)
 */
 
 QAbstractVideoSurface::QAbstractVideoSurface(QAbstractVideoSurfacePrivate &dd, QObject *parent)
-    : QObject(parent), d_ptr(&dd)
+   : QObject(parent), d_ptr(&dd)
 {
 }
 
@@ -108,7 +108,7 @@ QAbstractVideoSurface::~QAbstractVideoSurface()
 
 bool QAbstractVideoSurface::isFormatSupported(const QVideoSurfaceFormat &format) const
 {
-    return supportedPixelFormats(format.handleType()).contains(format.pixelFormat());
+   return supportedPixelFormats(format.handleType()).contains(format.pixelFormat());
 }
 
 /*!
@@ -126,9 +126,9 @@ bool QAbstractVideoSurface::isFormatSupported(const QVideoSurfaceFormat &format)
 
 QVideoSurfaceFormat QAbstractVideoSurface::nearestFormat(const QVideoSurfaceFormat &format) const
 {
-    return isFormatSupported(format)
-            ? format
-            : QVideoSurfaceFormat();
+   return isFormatSupported(format)
+          ? format
+          : QVideoSurfaceFormat();
 }
 
 /*!
@@ -145,7 +145,7 @@ QVideoSurfaceFormat QAbstractVideoSurface::nearestFormat(const QVideoSurfaceForm
 
 QVideoSurfaceFormat QAbstractVideoSurface::surfaceFormat() const
 {
-    return d_func()->format;
+   return d_func()->format;
 }
 
 /*!
@@ -166,20 +166,21 @@ QVideoSurfaceFormat QAbstractVideoSurface::surfaceFormat() const
 
 bool QAbstractVideoSurface::start(const QVideoSurfaceFormat &format)
 {
-    Q_D(QAbstractVideoSurface);
+   Q_D(QAbstractVideoSurface);
 
-    bool wasActive  = d->active;
+   bool wasActive  = d->active;
 
-    d->active = true;
-    d->format = format;
-    d->error = NoError;
+   d->active = true;
+   d->format = format;
+   d->error = NoError;
 
-    emit surfaceFormatChanged(d->format);
+   emit surfaceFormatChanged(d->format);
 
-    if (!wasActive)
-        emit activeChanged(true);
+   if (!wasActive) {
+      emit activeChanged(true);
+   }
 
-    return true;
+   return true;
 }
 
 /*!
@@ -190,15 +191,15 @@ bool QAbstractVideoSurface::start(const QVideoSurfaceFormat &format)
 
 void QAbstractVideoSurface::stop()
 {
-    Q_D(QAbstractVideoSurface);
+   Q_D(QAbstractVideoSurface);
 
-    if (d->active) {
-        d->format = QVideoSurfaceFormat();
-        d->active = false;
+   if (d->active) {
+      d->format = QVideoSurfaceFormat();
+      d->active = false;
 
-        emit activeChanged(false);
-        emit surfaceFormatChanged(d->format);
-    }
+      emit activeChanged(false);
+      emit surfaceFormatChanged(d->format);
+   }
 }
 
 /*!
@@ -209,7 +210,7 @@ void QAbstractVideoSurface::stop()
 
 bool QAbstractVideoSurface::isActive() const
 {
-    return d_func()->active;
+   return d_func()->active;
 }
 
 /*!
@@ -250,7 +251,7 @@ bool QAbstractVideoSurface::isActive() const
 
 QAbstractVideoSurface::Error QAbstractVideoSurface::error() const
 {
-    return d_func()->error;
+   return d_func()->error;
 }
 
 /*!
@@ -259,9 +260,9 @@ QAbstractVideoSurface::Error QAbstractVideoSurface::error() const
 
 void QAbstractVideoSurface::setError(Error error)
 {
-    Q_D(QAbstractVideoSurface);
+   Q_D(QAbstractVideoSurface);
 
-    d->error = error;
+   d->error = error;
 }
 
 QT_END_NAMESPACE

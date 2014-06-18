@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,26 +39,26 @@ class QRect;
 
 class QWidgetAnimator : public QObject
 {
-    CS_OBJECT(QWidgetAnimator)
+   CS_OBJECT(QWidgetAnimator)
 
-public:
-    QWidgetAnimator(QMainWindowLayout *layout);
-    void animate(QWidget *widget, const QRect &final_geometry, bool animate);
-    bool animating() const;
+ public:
+   QWidgetAnimator(QMainWindowLayout *layout);
+   void animate(QWidget *widget, const QRect &final_geometry, bool animate);
+   bool animating() const;
 
-    void abort(QWidget *widget);
+   void abort(QWidget *widget);
 
 #ifndef QT_NO_ANIMATION
-private :
-    GUI_CS_SLOT_1(Private, void animationFinished())
-    GUI_CS_SLOT_2(animationFinished) 
+ private :
+   GUI_CS_SLOT_1(Private, void animationFinished())
+   GUI_CS_SLOT_2(animationFinished)
 #endif
 
-private:    
-    typedef QMap<QWidget*, QPointer<QPropertyAnimation> > AnimationMap;
-  
-    AnimationMap m_animation_map;
-    QMainWindowLayout *m_mainWindowLayout;
+ private:
+   typedef QMap<QWidget *, QPointer<QPropertyAnimation> > AnimationMap;
+
+   AnimationMap m_animation_map;
+   QMainWindowLayout *m_mainWindowLayout;
 };
 
 QT_END_NAMESPACE

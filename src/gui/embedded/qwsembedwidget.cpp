@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,61 +42,64 @@ QT_BEGIN_NAMESPACE
 
 class QWSEmbedWidgetPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QWSEmbedWidget);
+   Q_DECLARE_PUBLIC(QWSEmbedWidget);
 
-public:
-    QWSEmbedWidgetPrivate(int winId);
-    void updateWindow();
-    void resize(const QSize &size);
+ public:
+   QWSEmbedWidgetPrivate(int winId);
+   void updateWindow();
+   void resize(const QSize &size);
 
-    QWidget *window;
-    WId windowId;
-    WId embeddedId;
+   QWidget *window;
+   WId windowId;
+   WId embeddedId;
 };
 
 QWSEmbedWidgetPrivate::QWSEmbedWidgetPrivate(int winId)
-    : window(0), windowId(0), embeddedId(winId)
+   : window(0), windowId(0), embeddedId(winId)
 {
 }
 
 void QWSEmbedWidgetPrivate::updateWindow()
 {
-    Q_Q(QWSEmbedWidget);
+   Q_Q(QWSEmbedWidget);
 
-    QWidget *win = q->window();
-    if (win == window)
-        return;
+   QWidget *win = q->window();
+   if (win == window) {
+      return;
+   }
 
-    if (window) {
-        window->removeEventFilter(q);
-        QWSEmbedCommand command;
-        command.setData(windowId, embeddedId, QWSEmbedEvent::StopEmbed);
-        QWSDisplay::instance()->d->sendCommand(command);
-    }
+   if (window) {
+      window->removeEventFilter(q);
+      QWSEmbedCommand command;
+      command.setData(windowId, embeddedId, QWSEmbedEvent::StopEmbed);
+      QWSDisplay::instance()->d->sendCommand(command);
+   }
 
-    window = win;
-    if (!window)
-        return;
-    windowId = window->winId();
+   window = win;
+   if (!window) {
+      return;
+   }
+   windowId = window->winId();
 
-    QWSEmbedCommand command;
-    command.setData(windowId, embeddedId, QWSEmbedEvent::StartEmbed);
-    QWSDisplay::instance()->d->sendCommand(command);
-    window->installEventFilter(q);
-    q->installEventFilter(q);
+   QWSEmbedCommand command;
+   command.setData(windowId, embeddedId, QWSEmbedEvent::StartEmbed);
+   QWSDisplay::instance()->d->sendCommand(command);
+   window->installEventFilter(q);
+   q->installEventFilter(q);
 }
 
 void QWSEmbedWidgetPrivate::resize(const QSize &size)
 {
-    if (!window)
-        return;
+   if (!window) {
+      return;
+   }
 
-    Q_Q(QWSEmbedWidget);
+   Q_Q(QWSEmbedWidget);
 
-    QWSEmbedCommand command;
-    command.setData(windowId, embeddedId, QWSEmbedEvent::Region,
-                    QRect(q->mapToGlobal(QPoint(0, 0)), size));
-    QWSDisplay::instance()->d->sendCommand(command);
+   QWSEmbedCommand command;
+   command.setData(windowId, embeddedId, QWSEmbedEvent::Region,
+                   QRect(q->mapToGlobal(QPoint(0, 0)), size));
+   QWSDisplay::instance()->d->sendCommand(command);
 }
 
 /*!
@@ -128,10 +131,10 @@ void QWSEmbedWidgetPrivate::resize(const QSize &size)
     identified by the given window \a id.
 */
 QWSEmbedWidget::QWSEmbedWidget(WId id, QWidget *parent)
-    : QWidget(*new QWSEmbedWidgetPrivate(id), parent, 0)
+   : QWidget(*new QWSEmbedWidgetPrivate(id), parent, 0)
 {
-    Q_D(QWSEmbedWidget);
-    d->updateWindow();
+   Q_D(QWSEmbedWidget);
+   d->updateWindow();
 }
 
 /*!
@@ -139,13 +142,14 @@ QWSEmbedWidget::QWSEmbedWidget(WId id, QWidget *parent)
 */
 QWSEmbedWidget::~QWSEmbedWidget()
 {
-    Q_D(QWSEmbedWidget);
-    if (!d->window)
-        return;
+   Q_D(QWSEmbedWidget);
+   if (!d->window) {
+      return;
+   }
 
-    QWSEmbedCommand command;
-    command.setData(d->windowId, d->embeddedId, QWSEmbedEvent::StopEmbed);
-    QWSDisplay::instance()->d->sendCommand(command);
+   QWSEmbedCommand command;
+   command.setData(d->windowId, d->embeddedId, QWSEmbedEvent::StopEmbed);
+   QWSDisplay::instance()->d->sendCommand(command);
 }
 
 /*!
@@ -153,12 +157,13 @@ QWSEmbedWidget::~QWSEmbedWidget()
 */
 bool QWSEmbedWidget::eventFilter(QObject *object, QEvent *event)
 {
-    Q_D(QWSEmbedWidget);
-    if (object == d->window && event->type() == QEvent::Move)
-        resizeEvent(0);
-    else if (object == this && event->type() == QEvent::Hide)
-        d->resize(QSize());
-    return QWidget::eventFilter(object, event);
+   Q_D(QWSEmbedWidget);
+   if (object == d->window && event->type() == QEvent::Move) {
+      resizeEvent(0);
+   } else if (object == this && event->type() == QEvent::Hide) {
+      d->resize(QSize());
+   }
+   return QWidget::eventFilter(object, event);
 }
 
 /*!
@@ -166,44 +171,45 @@ bool QWSEmbedWidget::eventFilter(QObject *object, QEvent *event)
 */
 void QWSEmbedWidget::changeEvent(QEvent *event)
 {
-    Q_D(QWSEmbedWidget);
-    if (event->type() == QEvent::ParentChange)
-        d->updateWindow();
+   Q_D(QWSEmbedWidget);
+   if (event->type() == QEvent::ParentChange) {
+      d->updateWindow();
+   }
 }
 
 /*!
     \reimp
 */
-void QWSEmbedWidget::resizeEvent(QResizeEvent*)
+void QWSEmbedWidget::resizeEvent(QResizeEvent *)
 {
-    Q_D(QWSEmbedWidget);
-    d->resize(rect().size());
+   Q_D(QWSEmbedWidget);
+   d->resize(rect().size());
 }
 
 /*!
     \reimp
 */
-void QWSEmbedWidget::moveEvent(QMoveEvent*)
+void QWSEmbedWidget::moveEvent(QMoveEvent *)
 {
-    resizeEvent(0);
+   resizeEvent(0);
 }
 
 /*!
     \reimp
 */
-void QWSEmbedWidget::hideEvent(QHideEvent*)
+void QWSEmbedWidget::hideEvent(QHideEvent *)
 {
-    Q_D(QWSEmbedWidget);
-    d->resize(QSize());
+   Q_D(QWSEmbedWidget);
+   d->resize(QSize());
 }
 
 /*!
     \reimp
 */
-void QWSEmbedWidget::showEvent(QShowEvent*)
+void QWSEmbedWidget::showEvent(QShowEvent *)
 {
-    Q_D(QWSEmbedWidget);
-    d->resize(rect().size());
+   Q_D(QWSEmbedWidget);
+   d->resize(rect().size());
 }
 
 QT_END_NAMESPACE

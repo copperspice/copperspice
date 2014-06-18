@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,69 +49,71 @@ int QHostInfo::lookupHost(const QString &name, QObject *receiver, const char *me
 {
 
 #if defined QHOSTINFO_DEBUG
-    qDebug("QHostInfo::lookupHost(\"%s\", %p, %s)",
-           name.toLatin1().constData(), receiver, member ? member + 1 : 0);
+   qDebug("QHostInfo::lookupHost(\"%s\", %p, %s)",
+          name.toLatin1().constData(), receiver, member ? member + 1 : 0);
 #endif
 
-    if (! QAbstractEventDispatcher::instance(QThread::currentThread())) {
-        qWarning("QHostInfo::lookupHost() called with no event dispatcher");
-        return -1;
-    }
+   if (! QAbstractEventDispatcher::instance(QThread::currentThread())) {
+      qWarning("QHostInfo::lookupHost() called with no event dispatcher");
+      return -1;
+   }
 
-    qRegisterMetaType<QHostInfo>("QHostInfo");
+   qRegisterMetaType<QHostInfo>("QHostInfo");
 
-    // generate unique ID
-    int id = theIdCounter.fetchAndAddRelaxed(1); 
+   // generate unique ID
+   int id = theIdCounter.fetchAndAddRelaxed(1);
 
-    if (name.isEmpty()) {
+   if (name.isEmpty()) {
 
-        if (! receiver) {
-            return -1;
-        }
+      if (! receiver) {
+         return -1;
+      }
 
-        QHostInfo hostInfo(id);
-        hostInfo.setError(QHostInfo::HostNotFound);
-        hostInfo.setErrorString(QCoreApplication::translate("QHostInfo", "No host name given"));
+      QHostInfo hostInfo(id);
+      hostInfo.setError(QHostInfo::HostNotFound);
+      hostInfo.setErrorString(QCoreApplication::translate("QHostInfo", "No host name given"));
 
-        QScopedPointer<QHostInfoResult> result(new QHostInfoResult);
-        QObject::connect(result.data(), SIGNAL(resultsReady(const QHostInfo &)), receiver, member, Qt::QueuedConnection);
+      QScopedPointer<QHostInfoResult> result(new QHostInfoResult);
+      QObject::connect(result.data(), SIGNAL(resultsReady(const QHostInfo &)), receiver, member, Qt::QueuedConnection);
 
-        result.data()->emitResultsReady(hostInfo);
-        return id;
-    }
+      result.data()->emitResultsReady(hostInfo);
+      return id;
+   }
 
-    QHostInfoLookupManager *manager = theHostInfoLookupManager();
+   QHostInfoLookupManager *manager = theHostInfoLookupManager();
 
-    if (manager) {
-        // the application is still alive
-        if (manager->cache.isEnabled()) {
-            // check cache first
-            bool valid = false;
-            QHostInfo info = manager->cache.get(name, &valid);
-            if (valid) {
-                if (!receiver)
-                    return -1;
-
-                info.setLookupId(id);
-                QHostInfoResult result;
-
-                QObject::connect(&result, SIGNAL(resultsReady(const QHostInfo &)), receiver, member, Qt::QueuedConnection);
-                result.emitResultsReady(info);
-
-                return id;
+   if (manager) {
+      // the application is still alive
+      if (manager->cache.isEnabled()) {
+         // check cache first
+         bool valid = false;
+         QHostInfo info = manager->cache.get(name, &valid);
+         if (valid) {
+            if (!receiver) {
+               return -1;
             }
-        }
 
-        // cache is not enabled or it was not in the cache, do normal lookup
-        QHostInfoRunnable* runnable = new QHostInfoRunnable(name, id);
-        if (receiver) {
-            QObject::connect(&runnable->resultEmitter, SIGNAL(resultsReady(const QHostInfo &)), receiver, member, Qt::QueuedConnection);
-        }
+            info.setLookupId(id);
+            QHostInfoResult result;
 
-        manager->scheduleLookup(runnable);
-    }
+            QObject::connect(&result, SIGNAL(resultsReady(const QHostInfo &)), receiver, member, Qt::QueuedConnection);
+            result.emitResultsReady(info);
 
-    return id;
+            return id;
+         }
+      }
+
+      // cache is not enabled or it was not in the cache, do normal lookup
+      QHostInfoRunnable *runnable = new QHostInfoRunnable(name, id);
+      if (receiver) {
+         QObject::connect(&runnable->resultEmitter, SIGNAL(resultsReady(const QHostInfo &)), receiver, member,
+                          Qt::QueuedConnection);
+      }
+
+      manager->scheduleLookup(runnable);
+   }
+
+   return id;
 }
 
 /*!
@@ -121,32 +123,32 @@ int QHostInfo::lookupHost(const QString &name, QObject *receiver, const char *me
 */
 void QHostInfo::abortHostLookup(int id)
 {
-    theHostInfoLookupManager()->abortLookup(id);
+   theHostInfoLookupManager()->abortLookup(id);
 }
 
 QHostInfo QHostInfo::fromName(const QString &name)
 {
 #if defined QHOSTINFO_DEBUG
-    qDebug("QHostInfo::fromName(\"%s\")",name.toLatin1().constData());
+   qDebug("QHostInfo::fromName(\"%s\")", name.toLatin1().constData());
 #endif
 
-    QHostInfo hostInfo = QHostInfoAgent::fromName(name);
-    QAbstractHostInfoLookupManager* manager = theHostInfoLookupManager();
-    manager->cache.put(name, hostInfo);
-    return hostInfo;
+   QHostInfo hostInfo = QHostInfoAgent::fromName(name);
+   QAbstractHostInfoLookupManager *manager = theHostInfoLookupManager();
+   manager->cache.put(name, hostInfo);
+   return hostInfo;
 }
 
 #ifndef QT_NO_BEARERMANAGEMENT
 QHostInfo QHostInfoPrivate::fromName(const QString &name, QSharedPointer<QNetworkSession> session)
 {
 #if defined QHOSTINFO_DEBUG
-    qDebug("QHostInfoPrivate::fromName(\"%s\") with session %p",name.toLatin1().constData(), session.data());
+   qDebug("QHostInfoPrivate::fromName(\"%s\") with session %p", name.toLatin1().constData(), session.data());
 #endif
 
-    QHostInfo hostInfo = QHostInfoAgent::fromName(name, session);
-    QAbstractHostInfoLookupManager* manager = theHostInfoLookupManager();
-    manager->cache.put(name, hostInfo);
-    return hostInfo;
+   QHostInfo hostInfo = QHostInfoAgent::fromName(name, session);
+   QAbstractHostInfoLookupManager *manager = theHostInfoLookupManager();
+   manager->cache.put(name, hostInfo);
+   return hostInfo;
 }
 #endif
 
@@ -154,7 +156,7 @@ QHostInfo QHostInfoPrivate::fromName(const QString &name, QSharedPointer<QNetwor
 #ifndef QT_NO_BEARERMANAGEMENT
 QHostInfo QHostInfoAgent::fromName(const QString &hostName, QSharedPointer<QNetworkSession>)
 {
-    return QHostInfoAgent::fromName(hostName);
+   return QHostInfoAgent::fromName(hostName);
 }
 #endif
 
@@ -178,16 +180,16 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName, QSharedPointer<QNetw
     \sa lookupId()
 */
 QHostInfo::QHostInfo(int id)
-    : d(new QHostInfoPrivate)
+   : d(new QHostInfoPrivate)
 {
-    d->lookupId = id;
+   d->lookupId = id;
 }
 
 /*!
     Constructs a copy of \a other.
 */
 QHostInfo::QHostInfo(const QHostInfo &other)
-    : d(new QHostInfoPrivate(*other.d.data()))
+   : d(new QHostInfoPrivate(*other.d.data()))
 {
 }
 
@@ -197,8 +199,8 @@ QHostInfo::QHostInfo(const QHostInfo &other)
 */
 QHostInfo &QHostInfo::operator=(const QHostInfo &other)
 {
-    *d.data() = *other.d.data();
-    return *this;
+   *d.data() = *other.d.data();
+   return *this;
 }
 
 /*!
@@ -220,7 +222,7 @@ QHostInfo::~QHostInfo()
 */
 QList<QHostAddress> QHostInfo::addresses() const
 {
-    return d->addrs;
+   return d->addrs;
 }
 
 /*!
@@ -230,7 +232,7 @@ QList<QHostAddress> QHostInfo::addresses() const
 */
 void QHostInfo::setAddresses(const QList<QHostAddress> &addresses)
 {
-    d->addrs = addresses;
+   d->addrs = addresses;
 }
 
 /*!
@@ -240,7 +242,7 @@ void QHostInfo::setAddresses(const QList<QHostAddress> &addresses)
 */
 QString QHostInfo::hostName() const
 {
-    return d->hostName;
+   return d->hostName;
 }
 
 /*!
@@ -250,7 +252,7 @@ QString QHostInfo::hostName() const
 */
 void QHostInfo::setHostName(const QString &hostName)
 {
-    d->hostName = hostName;
+   d->hostName = hostName;
 }
 
 /*!
@@ -261,7 +263,7 @@ void QHostInfo::setHostName(const QString &hostName)
 */
 QHostInfo::HostInfoError QHostInfo::error() const
 {
-    return d->err;
+   return d->err;
 }
 
 /*!
@@ -271,7 +273,7 @@ QHostInfo::HostInfoError QHostInfo::error() const
 */
 void QHostInfo::setError(HostInfoError error)
 {
-    d->err = error;
+   d->err = error;
 }
 
 /*!
@@ -281,7 +283,7 @@ void QHostInfo::setError(HostInfoError error)
 */
 int QHostInfo::lookupId() const
 {
-    return d->lookupId;
+   return d->lookupId;
 }
 
 /*!
@@ -291,7 +293,7 @@ int QHostInfo::lookupId() const
 */
 void QHostInfo::setLookupId(int id)
 {
-    d->lookupId = id;
+   d->lookupId = id;
 }
 
 /*!
@@ -302,7 +304,7 @@ void QHostInfo::setLookupId(int id)
 */
 QString QHostInfo::errorString() const
 {
-    return d->errorStr;
+   return d->errorStr;
 }
 
 /*!
@@ -313,7 +315,7 @@ QString QHostInfo::errorString() const
 */
 void QHostInfo::setErrorString(const QString &str)
 {
-    d->errorStr = str;
+   d->errorStr = str;
 }
 
 /*!
@@ -337,268 +339,274 @@ void QHostInfo::setErrorString(const QString &str)
 
 QHostInfoRunnable::QHostInfoRunnable(QString hn, int i) : toBeLookedUp(hn), id(i)
 {
-    setAutoDelete(true);
+   setAutoDelete(true);
 }
 
 // the QHostInfoLookupManager will at some point call this via a QThreadPool
 void QHostInfoRunnable::run()
 {
-    QHostInfoLookupManager *manager = theHostInfoLookupManager();
-    // check aborted
-    if (manager->wasAborted(id)) {
-        manager->lookupFinished(this);
-        return;
-    }
+   QHostInfoLookupManager *manager = theHostInfoLookupManager();
+   // check aborted
+   if (manager->wasAborted(id)) {
+      manager->lookupFinished(this);
+      return;
+   }
 
-    QHostInfo hostInfo;
+   QHostInfo hostInfo;
 
-    // QHostInfo::lookupHost already checks the cache. However we need to check
-    // it here too because it might have been cache saved by another QHostInfoRunnable
-    // in the meanwhile while this QHostInfoRunnable was scheduled but not running
-    if (manager->cache.isEnabled()) {
-        // check the cache first
-        bool valid = false;
-        hostInfo = manager->cache.get(toBeLookedUp, &valid);
-        if (!valid) {
-            // not in cache, we need to do the lookup and store the result in the cache
-            hostInfo = QHostInfoAgent::fromName(toBeLookedUp);
-            manager->cache.put(toBeLookedUp, hostInfo);
-        }
-    } else {
-        // cache is not enabled, just do the lookup and continue
-        hostInfo = QHostInfoAgent::fromName(toBeLookedUp);
-    }
+   // QHostInfo::lookupHost already checks the cache. However we need to check
+   // it here too because it might have been cache saved by another QHostInfoRunnable
+   // in the meanwhile while this QHostInfoRunnable was scheduled but not running
+   if (manager->cache.isEnabled()) {
+      // check the cache first
+      bool valid = false;
+      hostInfo = manager->cache.get(toBeLookedUp, &valid);
+      if (!valid) {
+         // not in cache, we need to do the lookup and store the result in the cache
+         hostInfo = QHostInfoAgent::fromName(toBeLookedUp);
+         manager->cache.put(toBeLookedUp, hostInfo);
+      }
+   } else {
+      // cache is not enabled, just do the lookup and continue
+      hostInfo = QHostInfoAgent::fromName(toBeLookedUp);
+   }
 
-    // check aborted again
-    if (manager->wasAborted(id)) {
-        manager->lookupFinished(this);
-        return;
-    }
+   // check aborted again
+   if (manager->wasAborted(id)) {
+      manager->lookupFinished(this);
+      return;
+   }
 
-    // signal emission
-    hostInfo.setLookupId(id);
-    resultEmitter.emitResultsReady(hostInfo);
+   // signal emission
+   hostInfo.setLookupId(id);
+   resultEmitter.emitResultsReady(hostInfo);
 
-    // now also iterate through the postponed ones
-    {
-        QMutexLocker locker(&manager->mutex);
-        QMutableListIterator<QHostInfoRunnable*> iterator(manager->postponedLookups);
-        while (iterator.hasNext()) {
-            QHostInfoRunnable* postponed = iterator.next();
-            if (toBeLookedUp == postponed->toBeLookedUp) {
-                // we can now emit
-                iterator.remove();
-                hostInfo.setLookupId(postponed->id);
-                postponed->resultEmitter.emitResultsReady(hostInfo);
-                delete postponed;
-            }
-        }
-    }
+   // now also iterate through the postponed ones
+   {
+      QMutexLocker locker(&manager->mutex);
+      QMutableListIterator<QHostInfoRunnable *> iterator(manager->postponedLookups);
+      while (iterator.hasNext()) {
+         QHostInfoRunnable *postponed = iterator.next();
+         if (toBeLookedUp == postponed->toBeLookedUp) {
+            // we can now emit
+            iterator.remove();
+            hostInfo.setLookupId(postponed->id);
+            postponed->resultEmitter.emitResultsReady(hostInfo);
+            delete postponed;
+         }
+      }
+   }
 
-    manager->lookupFinished(this);
+   manager->lookupFinished(this);
 
-    // thread goes back to QThreadPool
+   // thread goes back to QThreadPool
 }
 
 QHostInfoLookupManager::QHostInfoLookupManager() : mutex(QMutex::Recursive), wasDeleted(false)
 {
-    moveToThread(QCoreApplicationPrivate::mainThread());
-    connect(QCoreApplication::instance(), SIGNAL(destroyed()), this, SLOT(waitForThreadPoolDone()), Qt::DirectConnection);
-    threadPool.setMaxThreadCount(5); // do 5 DNS lookups in parallel
+   moveToThread(QCoreApplicationPrivate::mainThread());
+   connect(QCoreApplication::instance(), SIGNAL(destroyed()), this, SLOT(waitForThreadPoolDone()), Qt::DirectConnection);
+   threadPool.setMaxThreadCount(5); // do 5 DNS lookups in parallel
 }
 
 QHostInfoLookupManager::~QHostInfoLookupManager()
 {
-    wasDeleted = true;
+   wasDeleted = true;
 
-    // don't qDeleteAll currentLookups, the QThreadPool has ownership
-    clear();
+   // don't qDeleteAll currentLookups, the QThreadPool has ownership
+   clear();
 }
 
 void QHostInfoLookupManager::clear()
 {
-    {
-        QMutexLocker locker(&mutex);
-        qDeleteAll(postponedLookups);
-        qDeleteAll(scheduledLookups);
-        qDeleteAll(finishedLookups);
-        postponedLookups.clear();
-        scheduledLookups.clear();
-        finishedLookups.clear();
-    }
+   {
+      QMutexLocker locker(&mutex);
+      qDeleteAll(postponedLookups);
+      qDeleteAll(scheduledLookups);
+      qDeleteAll(finishedLookups);
+      postponedLookups.clear();
+      scheduledLookups.clear();
+      finishedLookups.clear();
+   }
 
-    threadPool.waitForDone();
-    cache.clear();
+   threadPool.waitForDone();
+   cache.clear();
 }
 
 void QHostInfoLookupManager::work()
 {
-    if (wasDeleted)
-        return;
+   if (wasDeleted) {
+      return;
+   }
 
-    // goals of this function:
-    //  - launch new lookups via the thread pool
-    //  - make sure only one lookup per host/IP is in progress
+   // goals of this function:
+   //  - launch new lookups via the thread pool
+   //  - make sure only one lookup per host/IP is in progress
 
-    QMutexLocker locker(&mutex);
+   QMutexLocker locker(&mutex);
 
-    if (!finishedLookups.isEmpty()) {
-        // remove ID from aborted if it is in there
-        for (int i = 0; i < finishedLookups.length(); i++) {
-           abortedLookups.removeAll(finishedLookups.at(i)->id);
-        }
+   if (!finishedLookups.isEmpty()) {
+      // remove ID from aborted if it is in there
+      for (int i = 0; i < finishedLookups.length(); i++) {
+         abortedLookups.removeAll(finishedLookups.at(i)->id);
+      }
 
-        finishedLookups.clear();
-    }
+      finishedLookups.clear();
+   }
 
-    if (!postponedLookups.isEmpty()) {
-        // try to start the postponed ones
+   if (!postponedLookups.isEmpty()) {
+      // try to start the postponed ones
 
-        QMutableListIterator<QHostInfoRunnable*> iterator(postponedLookups);
-        while (iterator.hasNext()) {
-            QHostInfoRunnable* postponed = iterator.next();
+      QMutableListIterator<QHostInfoRunnable *> iterator(postponedLookups);
+      while (iterator.hasNext()) {
+         QHostInfoRunnable *postponed = iterator.next();
 
-            // check if none of the postponed hostnames is currently running
-            bool alreadyRunning = false;
-            for (int i = 0; i < currentLookups.length(); i++) {
-                if (currentLookups.at(i)->toBeLookedUp == postponed->toBeLookedUp) {
-                    alreadyRunning = true;
-                    break;
-                }
+         // check if none of the postponed hostnames is currently running
+         bool alreadyRunning = false;
+         for (int i = 0; i < currentLookups.length(); i++) {
+            if (currentLookups.at(i)->toBeLookedUp == postponed->toBeLookedUp) {
+               alreadyRunning = true;
+               break;
             }
-            if (!alreadyRunning) {
-                iterator.remove();
-                scheduledLookups.prepend(postponed); // prepend! we want to finish it ASAP
-            }
-        }
-    }
+         }
+         if (!alreadyRunning) {
+            iterator.remove();
+            scheduledLookups.prepend(postponed); // prepend! we want to finish it ASAP
+         }
+      }
+   }
 
-    if (!scheduledLookups.isEmpty()) {
-        // try to start the new ones
-        QMutableListIterator<QHostInfoRunnable*> iterator(scheduledLookups);
-        while (iterator.hasNext()) {
-            QHostInfoRunnable *scheduled = iterator.next();
+   if (!scheduledLookups.isEmpty()) {
+      // try to start the new ones
+      QMutableListIterator<QHostInfoRunnable *> iterator(scheduledLookups);
+      while (iterator.hasNext()) {
+         QHostInfoRunnable *scheduled = iterator.next();
 
-            // check if a lookup for this host is already running, then postpone
-            for (int i = 0; i < currentLookups.size(); i++) {
-                if (currentLookups.at(i)->toBeLookedUp == scheduled->toBeLookedUp) {
-                    iterator.remove();
-                    postponedLookups.append(scheduled);
-                    scheduled = 0;
-                    break;
-                }
+         // check if a lookup for this host is already running, then postpone
+         for (int i = 0; i < currentLookups.size(); i++) {
+            if (currentLookups.at(i)->toBeLookedUp == scheduled->toBeLookedUp) {
+               iterator.remove();
+               postponedLookups.append(scheduled);
+               scheduled = 0;
+               break;
             }
+         }
 
-            if (scheduled && currentLookups.size() < threadPool.maxThreadCount()) {
-                // runnable now running in new thread, track this in currentLookups
-                threadPool.start(scheduled);
-                iterator.remove();
-                currentLookups.append(scheduled);
-            } else {
-                // was postponed, continue iterating
-                continue;
-            }
-        };
-    }
+         if (scheduled && currentLookups.size() < threadPool.maxThreadCount()) {
+            // runnable now running in new thread, track this in currentLookups
+            threadPool.start(scheduled);
+            iterator.remove();
+            currentLookups.append(scheduled);
+         } else {
+            // was postponed, continue iterating
+            continue;
+         }
+      };
+   }
 }
 
 // called by QHostInfo
 void QHostInfoLookupManager::scheduleLookup(QHostInfoRunnable *r)
 {
-    if (wasDeleted)
-        return;
+   if (wasDeleted) {
+      return;
+   }
 
-    QMutexLocker locker(&this->mutex);
-    scheduledLookups.enqueue(r);
-    work();
+   QMutexLocker locker(&this->mutex);
+   scheduledLookups.enqueue(r);
+   work();
 }
 
 // called by QHostInfo
 void QHostInfoLookupManager::abortLookup(int id)
 {
-    if (wasDeleted)
-        return;
+   if (wasDeleted) {
+      return;
+   }
 
-    QMutexLocker locker(&this->mutex);
+   QMutexLocker locker(&this->mutex);
 
-    // is postponed? delete and return
-    for (int i = 0; i < postponedLookups.length(); i++) {
-        if (postponedLookups.at(i)->id == id) {
-            delete postponedLookups.takeAt(i);
-            return;
-        }
-    }
+   // is postponed? delete and return
+   for (int i = 0; i < postponedLookups.length(); i++) {
+      if (postponedLookups.at(i)->id == id) {
+         delete postponedLookups.takeAt(i);
+         return;
+      }
+   }
 
-    // is scheduled? delete and return
-    for (int i = 0; i < scheduledLookups.length(); i++) {
-        if (scheduledLookups.at(i)->id == id) {
-            delete scheduledLookups.takeAt(i);
-            return;
-        }
-    }
+   // is scheduled? delete and return
+   for (int i = 0; i < scheduledLookups.length(); i++) {
+      if (scheduledLookups.at(i)->id == id) {
+         delete scheduledLookups.takeAt(i);
+         return;
+      }
+   }
 
-    if (!abortedLookups.contains(id))
-        abortedLookups.append(id);
+   if (!abortedLookups.contains(id)) {
+      abortedLookups.append(id);
+   }
 }
 
 // called from QHostInfoRunnable
 bool QHostInfoLookupManager::wasAborted(int id)
 {
-    if (wasDeleted)
-        return true;
+   if (wasDeleted) {
+      return true;
+   }
 
-    QMutexLocker locker(&this->mutex);
-    return abortedLookups.contains(id);
+   QMutexLocker locker(&this->mutex);
+   return abortedLookups.contains(id);
 }
 
 // called from QHostInfoRunnable
 void QHostInfoLookupManager::lookupFinished(QHostInfoRunnable *r)
 {
-    if (wasDeleted)
-        return;
+   if (wasDeleted) {
+      return;
+   }
 
-    QMutexLocker locker(&this->mutex);
-    currentLookups.removeOne(r);
-    finishedLookups.append(r);
-    work();
+   QMutexLocker locker(&this->mutex);
+   currentLookups.removeOne(r);
+   finishedLookups.append(r);
+   work();
 }
 
 // This function returns immediately when we had a result in the cache, else it will later emit a signal
 QHostInfo qt_qhostinfo_lookup(const QString &name, QObject *receiver, const char *member, bool *valid, int *id)
 {
-    *valid = false;
-    *id = -1;
+   *valid = false;
+   *id = -1;
 
-    // check cache
-    QAbstractHostInfoLookupManager* manager = theHostInfoLookupManager();
-    if (manager && manager->cache.isEnabled()) {
-        QHostInfo info = manager->cache.get(name, valid);
-        if (*valid) {
-            return info;
-        }
-    }
+   // check cache
+   QAbstractHostInfoLookupManager *manager = theHostInfoLookupManager();
+   if (manager && manager->cache.isEnabled()) {
+      QHostInfo info = manager->cache.get(name, valid);
+      if (*valid) {
+         return info;
+      }
+   }
 
-    // was not in cache, trigger lookup
-    *id = QHostInfo::lookupHost(name, receiver, member);
+   // was not in cache, trigger lookup
+   *id = QHostInfo::lookupHost(name, receiver, member);
 
-    // return empty response, valid==false
-    return QHostInfo();
+   // return empty response, valid==false
+   return QHostInfo();
 }
 
 void qt_qhostinfo_clear_cache()
 {
-    QAbstractHostInfoLookupManager* manager = theHostInfoLookupManager();
-    if (manager) {
-        manager->clear();
-    }
+   QAbstractHostInfoLookupManager *manager = theHostInfoLookupManager();
+   if (manager) {
+      manager->clear();
+   }
 }
 
 void qt_qhostinfo_enable_cache(bool e)
 {
-    QAbstractHostInfoLookupManager* manager = theHostInfoLookupManager();
-    if (manager) {
-        manager->cache.setEnabled(e);
-    }
+   QAbstractHostInfoLookupManager *manager = theHostInfoLookupManager();
+   if (manager) {
+      manager->cache.setEnabled(e);
+   }
 }
 
 // cache for 60 seconds
@@ -606,71 +614,73 @@ void qt_qhostinfo_enable_cache(bool e)
 QHostInfoCache::QHostInfoCache() : max_age(60), enabled(true), cache(128)
 {
 #ifdef QT_QHOSTINFO_CACHE_DISABLED_BY_DEFAULT
-    enabled = false;
+   enabled = false;
 #endif
 }
 
 bool QHostInfoCache::isEnabled()
 {
-    return enabled;
+   return enabled;
 }
 
 // this function is currently only used for the auto tests
 // and not usable by public API
 void QHostInfoCache::setEnabled(bool e)
 {
-    enabled = e;
+   enabled = e;
 }
 
 
 QHostInfo QHostInfoCache::get(const QString &name, bool *valid)
 {
-    QMutexLocker locker(&this->mutex);
+   QMutexLocker locker(&this->mutex);
 
-    *valid = false;
-    if (cache.contains(name)) {
-        QHostInfoCacheElement *element = cache.object(name);
-        if (element->age.elapsed() < max_age*1000)
-            *valid = true;
-        return element->info;
+   *valid = false;
+   if (cache.contains(name)) {
+      QHostInfoCacheElement *element = cache.object(name);
+      if (element->age.elapsed() < max_age * 1000) {
+         *valid = true;
+      }
+      return element->info;
 
-        // FIXME idea:
-        // if too old but not expired, trigger a new lookup
-        // to freshen our cache
-    }
+      // FIXME idea:
+      // if too old but not expired, trigger a new lookup
+      // to freshen our cache
+   }
 
-    return QHostInfo();
+   return QHostInfo();
 }
 
 void QHostInfoCache::put(const QString &name, const QHostInfo &info)
 {
-    // if the lookup failed, don't cache
-    if (info.error() != QHostInfo::NoError)
-        return;
+   // if the lookup failed, don't cache
+   if (info.error() != QHostInfo::NoError) {
+      return;
+   }
 
-    QHostInfoCacheElement* element = new QHostInfoCacheElement();
-    element->info = info;
-    element->age = QElapsedTimer();
-    element->age.start();
+   QHostInfoCacheElement *element = new QHostInfoCacheElement();
+   element->info = info;
+   element->age = QElapsedTimer();
+   element->age.start();
 
-    QMutexLocker locker(&this->mutex);
-    cache.insert(name, element); // cache will take ownership
+   QMutexLocker locker(&this->mutex);
+   cache.insert(name, element); // cache will take ownership
 }
 
 void QHostInfoCache::clear()
 {
-    QMutexLocker locker(&this->mutex);
-    cache.clear();
+   QMutexLocker locker(&this->mutex);
+   cache.clear();
 }
 
-QAbstractHostInfoLookupManager* QAbstractHostInfoLookupManager::globalInstance()
+QAbstractHostInfoLookupManager *QAbstractHostInfoLookupManager::globalInstance()
 {
-    return theHostInfoLookupManager();
+   return theHostInfoLookupManager();
 }
 
 void QHostInfoLookupManager::waitForThreadPoolDone()
-{ 
-   threadPool.waitForDone(); 
+{
+   threadPool.waitForDone();
 }
 
 QT_END_NAMESPACE

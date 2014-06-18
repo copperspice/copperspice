@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,17 +33,17 @@ QT_BEGIN_NAMESPACE
 
 class QUndoGroupPrivate
 {
-    Q_DECLARE_PUBLIC(QUndoGroup)
+   Q_DECLARE_PUBLIC(QUndoGroup)
 
-public:
-    QUndoGroupPrivate() : active(0) {}
-    virtual ~QUndoGroupPrivate() {}
+ public:
+   QUndoGroupPrivate() : active(0) {}
+   virtual ~QUndoGroupPrivate() {}
 
-    QUndoStack *active;
-    QList<QUndoStack*> stack_list;
+   QUndoStack *active;
+   QList<QUndoStack *> stack_list;
 
-protected:
-	 QUndoGroup *q_ptr;
+ protected:
+   QUndoGroup *q_ptr;
 
 };
 
@@ -58,14 +58,14 @@ QUndoGroup::QUndoGroup(QObject *parent)
 */
 QUndoGroup::~QUndoGroup()
 {
-    // Ensure all QUndoStacks no longer refer to this group.
-    Q_D(QUndoGroup);
-    QList<QUndoStack *>::iterator it = d->stack_list.begin();
-    QList<QUndoStack *>::iterator end = d->stack_list.end();
-    while (it != end) {
-        (*it)->d_func()->group = 0;
-        ++it;
-    }
+   // Ensure all QUndoStacks no longer refer to this group.
+   Q_D(QUndoGroup);
+   QList<QUndoStack *>::iterator it = d->stack_list.begin();
+   QList<QUndoStack *>::iterator end = d->stack_list.end();
+   while (it != end) {
+      (*it)->d_func()->group = 0;
+      ++it;
+   }
 }
 
 /*!
@@ -79,15 +79,17 @@ QUndoGroup::~QUndoGroup()
 
 void QUndoGroup::addStack(QUndoStack *stack)
 {
-    Q_D(QUndoGroup);
+   Q_D(QUndoGroup);
 
-    if (d->stack_list.contains(stack))
-        return;
-    d->stack_list.append(stack);
+   if (d->stack_list.contains(stack)) {
+      return;
+   }
+   d->stack_list.append(stack);
 
-    if (QUndoGroup *other = stack->d_func()->group)
-        other->removeStack(stack);
-    stack->d_func()->group = this;
+   if (QUndoGroup *other = stack->d_func()->group) {
+      other->removeStack(stack);
+   }
+   stack->d_func()->group = this;
 }
 
 /*!
@@ -99,13 +101,15 @@ void QUndoGroup::addStack(QUndoStack *stack)
 
 void QUndoGroup::removeStack(QUndoStack *stack)
 {
-    Q_D(QUndoGroup);
+   Q_D(QUndoGroup);
 
-    if (d->stack_list.removeAll(stack) == 0)
-        return;
-    if (stack == d->active)
-        setActiveStack(0);
-    stack->d_func()->group = 0;
+   if (d->stack_list.removeAll(stack) == 0) {
+      return;
+   }
+   if (stack == d->active) {
+      setActiveStack(0);
+   }
+   stack->d_func()->group = 0;
 }
 
 /*!
@@ -114,10 +118,10 @@ void QUndoGroup::removeStack(QUndoStack *stack)
     \sa addStack() removeStack()
 */
 
-QList<QUndoStack*> QUndoGroup::stacks() const
+QList<QUndoStack *> QUndoGroup::stacks() const
 {
-    Q_D(const QUndoGroup);
-    return d->stack_list;
+   Q_D(const QUndoGroup);
+   return d->stack_list;
 }
 
 /*!
@@ -136,46 +140,47 @@ QList<QUndoStack*> QUndoGroup::stacks() const
 
 void QUndoGroup::setActiveStack(QUndoStack *stack)
 {
-    Q_D(QUndoGroup);
-    if (d->active == stack)
-        return;
+   Q_D(QUndoGroup);
+   if (d->active == stack) {
+      return;
+   }
 
-    if (d->active != 0) {
-        disconnect(d->active, SIGNAL(canUndoChanged(bool)),             this, SLOT(canUndoChanged(bool)));
-        disconnect(d->active, SIGNAL(undoTextChanged(const QString &)), this, SLOT(undoTextChanged(const QString &)));
-        disconnect(d->active, SIGNAL(canRedoChanged(bool)),             this, SLOT(canRedoChanged(bool)));
-        disconnect(d->active, SIGNAL(redoTextChanged(const QString &)), this, SLOT(redoTextChanged(const QString &)));
-        disconnect(d->active, SIGNAL(indexChanged(int)),                this, SLOT(indexChanged(int)));
-        disconnect(d->active, SIGNAL(cleanChanged(bool)),               this, SLOT(cleanChanged(bool)));
-    }
+   if (d->active != 0) {
+      disconnect(d->active, SIGNAL(canUndoChanged(bool)),             this, SLOT(canUndoChanged(bool)));
+      disconnect(d->active, SIGNAL(undoTextChanged(const QString &)), this, SLOT(undoTextChanged(const QString &)));
+      disconnect(d->active, SIGNAL(canRedoChanged(bool)),             this, SLOT(canRedoChanged(bool)));
+      disconnect(d->active, SIGNAL(redoTextChanged(const QString &)), this, SLOT(redoTextChanged(const QString &)));
+      disconnect(d->active, SIGNAL(indexChanged(int)),                this, SLOT(indexChanged(int)));
+      disconnect(d->active, SIGNAL(cleanChanged(bool)),               this, SLOT(cleanChanged(bool)));
+   }
 
-    d->active = stack;
+   d->active = stack;
 
-    if (d->active == 0) {
-        emit canUndoChanged(false);
-        emit undoTextChanged(QString());
-        emit canRedoChanged(false);
-        emit redoTextChanged(QString());
-        emit cleanChanged(true);
-        emit indexChanged(0);
+   if (d->active == 0) {
+      emit canUndoChanged(false);
+      emit undoTextChanged(QString());
+      emit canRedoChanged(false);
+      emit redoTextChanged(QString());
+      emit cleanChanged(true);
+      emit indexChanged(0);
 
-    } else {
-        connect(d->active, SIGNAL(canUndoChanged(bool)),              this, SLOT(canUndoChanged(bool)));
-        connect(d->active, SIGNAL(undoTextChanged(const QString &)),  this, SLOT(undoTextChanged(const QString &)));
-        connect(d->active, SIGNAL(canRedoChanged(bool)),              this, SLOT(canRedoChanged(bool)));
-        connect(d->active, SIGNAL(redoTextChanged(const QString &)),  this, SLOT(redoTextChanged(const QString &)));
-        connect(d->active, SIGNAL(indexChanged(int)),                 this, SLOT(indexChanged(int)));
-        connect(d->active, SIGNAL(cleanChanged(bool)),                this, SLOT(cleanChanged(bool)));
+   } else {
+      connect(d->active, SIGNAL(canUndoChanged(bool)),              this, SLOT(canUndoChanged(bool)));
+      connect(d->active, SIGNAL(undoTextChanged(const QString &)),  this, SLOT(undoTextChanged(const QString &)));
+      connect(d->active, SIGNAL(canRedoChanged(bool)),              this, SLOT(canRedoChanged(bool)));
+      connect(d->active, SIGNAL(redoTextChanged(const QString &)),  this, SLOT(redoTextChanged(const QString &)));
+      connect(d->active, SIGNAL(indexChanged(int)),                 this, SLOT(indexChanged(int)));
+      connect(d->active, SIGNAL(cleanChanged(bool)),                this, SLOT(cleanChanged(bool)));
 
-        emit canUndoChanged(d->active->canUndo());            
-        emit undoTextChanged(d->active->undoText());
-        emit canRedoChanged(d->active->canRedo());
-        emit redoTextChanged(d->active->redoText());
-        emit cleanChanged(d->active->isClean());
-        emit indexChanged(d->active->index());
-    }
+      emit canUndoChanged(d->active->canUndo());
+      emit undoTextChanged(d->active->undoText());
+      emit canRedoChanged(d->active->canRedo());
+      emit redoTextChanged(d->active->redoText());
+      emit cleanChanged(d->active->isClean());
+      emit indexChanged(d->active->index());
+   }
 
-    emit activeStackChanged(d->active);
+   emit activeStackChanged(d->active);
 }
 
 /*!
@@ -189,8 +194,8 @@ void QUndoGroup::setActiveStack(QUndoStack *stack)
 
 QUndoStack *QUndoGroup::activeStack() const
 {
-    Q_D(const QUndoGroup);
-    return d->active;
+   Q_D(const QUndoGroup);
+   return d->active;
 }
 
 /*!
@@ -204,9 +209,10 @@ QUndoStack *QUndoGroup::activeStack() const
 
 void QUndoGroup::undo()
 {
-    Q_D(QUndoGroup);
-    if (d->active != 0)
-        d->active->undo();
+   Q_D(QUndoGroup);
+   if (d->active != 0) {
+      d->active->undo();
+   }
 }
 
 /*!
@@ -221,9 +227,10 @@ void QUndoGroup::undo()
 
 void QUndoGroup::redo()
 {
-    Q_D(QUndoGroup);
-    if (d->active != 0)
-        d->active->redo();
+   Q_D(QUndoGroup);
+   if (d->active != 0) {
+      d->active->redo();
+   }
 }
 
 /*!
@@ -237,8 +244,8 @@ void QUndoGroup::redo()
 
 bool QUndoGroup::canUndo() const
 {
-    Q_D(const QUndoGroup);
-    return d->active != 0 && d->active->canUndo();
+   Q_D(const QUndoGroup);
+   return d->active != 0 && d->active->canUndo();
 }
 
 /*!
@@ -252,8 +259,8 @@ bool QUndoGroup::canUndo() const
 
 bool QUndoGroup::canRedo() const
 {
-    Q_D(const QUndoGroup);
-    return d->active != 0 && d->active->canRedo();
+   Q_D(const QUndoGroup);
+   return d->active != 0 && d->active->canRedo();
 }
 
 /*!
@@ -267,8 +274,8 @@ bool QUndoGroup::canRedo() const
 
 QString QUndoGroup::undoText() const
 {
-    Q_D(const QUndoGroup);
-    return d->active == 0 ? QString() : d->active->undoText();
+   Q_D(const QUndoGroup);
+   return d->active == 0 ? QString() : d->active->undoText();
 }
 
 /*!
@@ -282,8 +289,8 @@ QString QUndoGroup::undoText() const
 
 QString QUndoGroup::redoText() const
 {
-    Q_D(const QUndoGroup);
-    return d->active == 0 ? QString() : d->active->redoText();
+   Q_D(const QUndoGroup);
+   return d->active == 0 ? QString() : d->active->redoText();
 }
 
 /*!
@@ -297,8 +304,8 @@ QString QUndoGroup::redoText() const
 
 bool QUndoGroup::isClean() const
 {
-    Q_D(const QUndoGroup);
-    return d->active == 0 || d->active->isClean();
+   Q_D(const QUndoGroup);
+   return d->active == 0 || d->active->isClean();
 }
 
 #ifndef QT_NO_ACTION
@@ -320,18 +327,19 @@ bool QUndoGroup::isClean() const
 
 QAction *QUndoGroup::createUndoAction(QObject *parent, const QString &prefix) const
 {
-    QUndoAction *result = new QUndoAction(prefix, parent);
-    if (prefix.isEmpty())
-        result->setTextFormat(tr("Undo %1"), tr("Undo", "Default text for undo action"));
+   QUndoAction *result = new QUndoAction(prefix, parent);
+   if (prefix.isEmpty()) {
+      result->setTextFormat(tr("Undo %1"), tr("Undo", "Default text for undo action"));
+   }
 
-    result->setEnabled(canUndo());
-    result->setPrefixedText(undoText());
+   result->setEnabled(canUndo());
+   result->setPrefixedText(undoText());
 
-    connect(this, SIGNAL(canUndoChanged(bool)), result, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(undoTextChanged(const QString &)), result, SLOT(setPrefixedText(const QString &)));
-    connect(result, SIGNAL(triggered()), this, SLOT(undo()));
+   connect(this, SIGNAL(canUndoChanged(bool)), result, SLOT(setEnabled(bool)));
+   connect(this, SIGNAL(undoTextChanged(const QString &)), result, SLOT(setPrefixedText(const QString &)));
+   connect(result, SIGNAL(triggered()), this, SLOT(undo()));
 
-    return result;
+   return result;
 }
 
 /*!
@@ -351,18 +359,19 @@ QAction *QUndoGroup::createUndoAction(QObject *parent, const QString &prefix) co
 
 QAction *QUndoGroup::createRedoAction(QObject *parent, const QString &prefix) const
 {
-    QUndoAction *result = new QUndoAction(prefix, parent);
-    if (prefix.isEmpty())
-        result->setTextFormat(tr("Redo %1"), tr("Redo", "Default text for redo action"));
+   QUndoAction *result = new QUndoAction(prefix, parent);
+   if (prefix.isEmpty()) {
+      result->setTextFormat(tr("Redo %1"), tr("Redo", "Default text for redo action"));
+   }
 
-    result->setEnabled(canRedo());
-    result->setPrefixedText(redoText());
+   result->setEnabled(canRedo());
+   result->setPrefixedText(redoText());
 
-    connect(this, SIGNAL(canRedoChanged(bool)),             result, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(redoTextChanged(const QString &)), result, SLOT(setPrefixedText(const QString &)));
-    connect(result, SIGNAL(triggered()), this, SLOT(redo()));
+   connect(this, SIGNAL(canRedoChanged(bool)),             result, SLOT(setEnabled(bool)));
+   connect(this, SIGNAL(redoTextChanged(const QString &)), result, SLOT(setPrefixedText(const QString &)));
+   connect(result, SIGNAL(triggered()), this, SLOT(redo()));
 
-    return result;
+   return result;
 }
 
 #endif // QT_NO_ACTION

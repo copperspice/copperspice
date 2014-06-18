@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,22 +36,22 @@ class QWSEmbedWidgetPrivate;
 
 class Q_GUI_EXPORT QWSEmbedWidget : public QWidget
 {
-    CS_OBJECT(QWSEmbedWidget)
+   CS_OBJECT(QWSEmbedWidget)
 
-public:
-    QWSEmbedWidget(WId winId, QWidget *parent = 0);
-    ~QWSEmbedWidget();
+ public:
+   QWSEmbedWidget(WId winId, QWidget *parent = 0);
+   ~QWSEmbedWidget();
 
-protected:
-    bool eventFilter(QObject *object, QEvent *event);
-    void changeEvent(QEvent *event);
-    void resizeEvent(QResizeEvent *event);
-    void moveEvent(QMoveEvent *event);
-    void hideEvent(QHideEvent *event);
-    void showEvent(QShowEvent *event);
+ protected:
+   bool eventFilter(QObject *object, QEvent *event);
+   void changeEvent(QEvent *event);
+   void resizeEvent(QResizeEvent *event);
+   void moveEvent(QMoveEvent *event);
+   void hideEvent(QHideEvent *event);
+   void showEvent(QShowEvent *event);
 
-private:
-    Q_DECLARE_PRIVATE(QWSEmbedWidget)
+ private:
+   Q_DECLARE_PRIVATE(QWSEmbedWidget)
 };
 
 QT_END_NAMESPACE

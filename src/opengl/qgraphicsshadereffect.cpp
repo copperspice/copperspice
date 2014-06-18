@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,8 +37,8 @@
 
 QT_BEGIN_NAMESPACE
 
-static const char qglslDefaultImageFragmentShader[] = 
-    "lowp vec4 customShader(lowp sampler2D imageTexture, highp vec2 textureCoords) \
+static const char qglslDefaultImageFragmentShader[] =
+   "lowp vec4 customShader(lowp sampler2D imageTexture, highp vec2 textureCoords) \
     { \
         return texture2D(imageTexture, textureCoords); \
     }\n";
@@ -47,43 +47,42 @@ static const char qglslDefaultImageFragmentShader[] =
 
 class QGLCustomShaderEffectStage : public QGLCustomShaderStage
 {
-public:
-    QGLCustomShaderEffectStage
-            (QGraphicsShaderEffect *e, const QByteArray& source)
-        : QGLCustomShaderStage(),
-          effect(e)
-    {
-        setSource(source);
-    }
+ public:
+   QGLCustomShaderEffectStage
+   (QGraphicsShaderEffect *e, const QByteArray &source)
+      : QGLCustomShaderStage(),
+        effect(e) {
+      setSource(source);
+   }
 
-    void setUniforms(QGLShaderProgram *program);
+   void setUniforms(QGLShaderProgram *program);
 
-    QGraphicsShaderEffect *effect;
+   QGraphicsShaderEffect *effect;
 };
 
 void QGLCustomShaderEffectStage::setUniforms(QGLShaderProgram *program)
 {
-    effect->setUniforms(program);
+   effect->setUniforms(program);
 }
 
 #endif
 
 class QGraphicsShaderEffectPrivate : public QGraphicsEffectPrivate
 {
-    Q_DECLARE_PUBLIC(QGraphicsShaderEffect)
+   Q_DECLARE_PUBLIC(QGraphicsShaderEffect)
 
-public:
-    QGraphicsShaderEffectPrivate() : pixelShaderFragment(qglslDefaultImageFragmentShader)
+ public:
+   QGraphicsShaderEffectPrivate() : pixelShaderFragment(qglslDefaultImageFragmentShader)
 #ifdef QGL_HAVE_CUSTOM_SHADERS
-          , customShaderStage(0)
+      , customShaderStage(0)
 #endif
-    {
-    }
+   {
+   }
 
-    QByteArray pixelShaderFragment;
+   QByteArray pixelShaderFragment;
 
 #ifdef QGL_HAVE_CUSTOM_SHADERS
-    QGLCustomShaderEffectStage *customShaderStage;
+   QGLCustomShaderEffectStage *customShaderStage;
 #endif
 
 };
@@ -92,7 +91,7 @@ public:
     Constructs a shader effect and attaches it to \a parent.
 */
 QGraphicsShaderEffect::QGraphicsShaderEffect(QObject *parent)
-    : QGraphicsEffect(*new QGraphicsShaderEffectPrivate(), parent)
+   : QGraphicsEffect(*new QGraphicsShaderEffectPrivate(), parent)
 {
 }
 
@@ -102,8 +101,8 @@ QGraphicsShaderEffect::QGraphicsShaderEffect(QObject *parent)
 QGraphicsShaderEffect::~QGraphicsShaderEffect()
 {
 #ifdef QGL_HAVE_CUSTOM_SHADERS
-    Q_D(QGraphicsShaderEffect);
-    delete d->customShaderStage;
+   Q_D(QGraphicsShaderEffect);
+   delete d->customShaderStage;
 #endif
 }
 
@@ -117,8 +116,8 @@ QGraphicsShaderEffect::~QGraphicsShaderEffect()
 */
 QByteArray QGraphicsShaderEffect::pixelShaderFragment() const
 {
-    Q_D(const QGraphicsShaderEffect);
-    return d->pixelShaderFragment;
+   Q_D(const QGraphicsShaderEffect);
+   return d->pixelShaderFragment;
 }
 
 /*#
@@ -139,16 +138,16 @@ QByteArray QGraphicsShaderEffect::pixelShaderFragment() const
 
     \sa pixelShaderFragment(), setUniforms()
 */
-void QGraphicsShaderEffect::setPixelShaderFragment(const QByteArray& code)
+void QGraphicsShaderEffect::setPixelShaderFragment(const QByteArray &code)
 {
-    Q_D(QGraphicsShaderEffect);
-    if (d->pixelShaderFragment != code) {
-        d->pixelShaderFragment = code;
+   Q_D(QGraphicsShaderEffect);
+   if (d->pixelShaderFragment != code) {
+      d->pixelShaderFragment = code;
 #ifdef QGL_HAVE_CUSTOM_SHADERS
-        delete d->customShaderStage;
-        d->customShaderStage = 0;
+      delete d->customShaderStage;
+      d->customShaderStage = 0;
 #endif
-    }
+   }
 }
 
 /*#
@@ -156,37 +155,38 @@ void QGraphicsShaderEffect::setPixelShaderFragment(const QByteArray& code)
 */
 void QGraphicsShaderEffect::draw(QPainter *painter)
 {
-    Q_D(QGraphicsShaderEffect);
+   Q_D(QGraphicsShaderEffect);
 
 #ifdef QGL_HAVE_CUSTOM_SHADERS
-    // Set the custom shader on the paint engine.  The setOnPainter()
-    // call may fail if the paint engine is not GL2.  In that case,
-    // we fall through to drawing the pixmap normally.
-    if (!d->customShaderStage) {
-        d->customShaderStage = new QGLCustomShaderEffectStage
-            (this, d->pixelShaderFragment);
-    }
-    bool usingShader = d->customShaderStage->setOnPainter(painter);
+   // Set the custom shader on the paint engine.  The setOnPainter()
+   // call may fail if the paint engine is not GL2.  In that case,
+   // we fall through to drawing the pixmap normally.
+   if (!d->customShaderStage) {
+      d->customShaderStage = new QGLCustomShaderEffectStage
+      (this, d->pixelShaderFragment);
+   }
+   bool usingShader = d->customShaderStage->setOnPainter(painter);
 
-    QPoint offset;
-    if (sourceIsPixmap()) {
-        // No point in drawing in device coordinates (pixmap will be scaled anyways).
-        const QPixmap pixmap = sourcePixmap(Qt::LogicalCoordinates, &offset);
-        painter->drawPixmap(offset, pixmap);
-    } else {
-        // Draw pixmap in device coordinates to avoid pixmap scaling.
-        const QPixmap pixmap = sourcePixmap(Qt::DeviceCoordinates, &offset);
-        QTransform restoreTransform = painter->worldTransform();
-        painter->setWorldTransform(QTransform());
-        painter->drawPixmap(offset, pixmap);
-        painter->setWorldTransform(restoreTransform);
-    }
+   QPoint offset;
+   if (sourceIsPixmap()) {
+      // No point in drawing in device coordinates (pixmap will be scaled anyways).
+      const QPixmap pixmap = sourcePixmap(Qt::LogicalCoordinates, &offset);
+      painter->drawPixmap(offset, pixmap);
+   } else {
+      // Draw pixmap in device coordinates to avoid pixmap scaling.
+      const QPixmap pixmap = sourcePixmap(Qt::DeviceCoordinates, &offset);
+      QTransform restoreTransform = painter->worldTransform();
+      painter->setWorldTransform(QTransform());
+      painter->drawPixmap(offset, pixmap);
+      painter->setWorldTransform(restoreTransform);
+   }
 
-    // Remove the custom shader to return to normal painting operations.
-    if (usingShader)
-        d->customShaderStage->removeFromPainter(painter);
+   // Remove the custom shader to return to normal painting operations.
+   if (usingShader) {
+      d->customShaderStage->removeFromPainter(painter);
+   }
 #else
-    drawSource(painter);
+   drawSource(painter);
 #endif
 }
 
@@ -203,9 +203,10 @@ void QGraphicsShaderEffect::draw(QPainter *painter)
 void QGraphicsShaderEffect::setUniformsDirty()
 {
 #ifdef QGL_HAVE_CUSTOM_SHADERS
-    Q_D(QGraphicsShaderEffect);
-    if (d->customShaderStage)
-        d->customShaderStage->setUniformsDirty();
+   Q_D(QGraphicsShaderEffect);
+   if (d->customShaderStage) {
+      d->customShaderStage->setUniformsDirty();
+   }
 #endif
 }
 
@@ -221,7 +222,7 @@ void QGraphicsShaderEffect::setUniformsDirty()
 */
 void QGraphicsShaderEffect::setUniforms(QGLShaderProgram *program)
 {
-    Q_UNUSED(program);
+   Q_UNUSED(program);
 }
 
 QT_END_NAMESPACE

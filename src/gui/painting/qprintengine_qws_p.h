@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,140 +43,153 @@ class QImage;
 
 class QtopiaPrintEngine : public QPaintEngine, public QPrintEngine
 {
-    Q_DECLARE_PRIVATE(QtopiaPrintEngine)
-public:
-    QtopiaPrintEngine(QPrinter::PrinterMode mode);
+   Q_DECLARE_PRIVATE(QtopiaPrintEngine)
+ public:
+   QtopiaPrintEngine(QPrinter::PrinterMode mode);
 
-    // override QWSPaintEngine
-    bool begin(QPaintDevice *dev);
-    bool end();
-    void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
-    void drawTextItem(const QPointF &p, const QTextItem &ti);
-    QPaintEngine::Type type() const { return QPaintEngine::X11; }
+   // override QWSPaintEngine
+   bool begin(QPaintDevice *dev);
+   bool end();
+   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
+   void drawTextItem(const QPointF &p, const QTextItem &ti);
+   QPaintEngine::Type type() const {
+      return QPaintEngine::X11;
+   }
 
-    QPaintEngine *paintEngine() const;
+   QPaintEngine *paintEngine() const;
 
-    void updateState(const QPaintEngineState &state);
+   void updateState(const QPaintEngineState &state);
 
-    QRect paperRect() const;
-    QRect pageRect() const;
+   QRect paperRect() const;
+   QRect pageRect() const;
 
-    bool newPage();
-    bool abort();
+   bool newPage();
+   bool abort();
 
-    QPrinter::PrinterState printerState() const;
+   QPrinter::PrinterState printerState() const;
 
-    int metric(QPaintDevice::PaintDeviceMetric metricType) const;
+   int metric(QPaintDevice::PaintDeviceMetric metricType) const;
 
-    QVariant property(PrintEnginePropertyKey key) const;
-    void setProperty(PrintEnginePropertyKey key, const QVariant &value);
+   QVariant property(PrintEnginePropertyKey key) const;
+   void setProperty(PrintEnginePropertyKey key, const QVariant &value);
 
-private:
-    friend class QPrintDialog;
-    friend class QPageSetupDialog;
+ private:
+   friend class QPrintDialog;
+   friend class QPageSetupDialog;
 
-    void clearPage();
-    void flushPage();
+   void clearPage();
+   void flushPage();
 };
 
 class QtopiaPrintBuffer
 {
-public:
-    QtopiaPrintBuffer( bool bigEndian=FALSE ) { _bigEndian = bigEndian; }
-    ~QtopiaPrintBuffer() {}
+ public:
+   QtopiaPrintBuffer( bool bigEndian = FALSE ) {
+      _bigEndian = bigEndian;
+   }
+   ~QtopiaPrintBuffer() {}
 
-    const QByteArray& data() const { return _data; }
+   const QByteArray &data() const {
+      return _data;
+   }
 
-    int size() const { return _data.size(); }
+   int size() const {
+      return _data.size();
+   }
 
-    void clear() { _data.clear(); }
+   void clear() {
+      _data.clear();
+   }
 
-    void append( char value ) { _data.append( value ); }
-    void append( short value );
-    void append( int value );
-    void append( const QByteArray& array ) { _data.append( array ); }
+   void append( char value ) {
+      _data.append( value );
+   }
+   void append( short value );
+   void append( int value );
+   void append( const QByteArray &array ) {
+      _data.append( array );
+   }
 
-    void patch( int posn, int value );
+   void patch( int posn, int value );
 
-    void pad();
+   void pad();
 
-private:
-    QByteArray _data;
-    bool _bigEndian;
+ private:
+   QByteArray _data;
+   bool _bigEndian;
 };
 
 #define	QT_QWS_PRINTER_DEFAULT_DPI	   200
 
 class QtopiaPrintEnginePrivate : public QPaintEnginePrivate
 {
-    Q_DECLARE_PUBLIC(QtopiaPrintEngine)
-public:
-    QtopiaPrintEnginePrivate(QPrinter::PrinterMode m) :
-	mode(m),
-	printerState(QPrinter::Idle),
-	orientation(QPrinter::Portrait),
-	paperSize(QPrinter::A4),
-	pageOrder(QPrinter::FirstPageFirst),
-	colorMode(QPrinter::GrayScale),
-	paperSource(QPrinter::OnlyOne),
-        resolution(QT_QWS_PRINTER_DEFAULT_DPI),
-        _paintEngine(0),
-	numCopies(1),
-        outputToFile(false),
-        fullPage(false),
-        collateCopies(false),
-	pageNumber(0),
-	pageImage(0),
-	partialByte(0),
-	partialBits(0)
-    {
-    }
-    ~QtopiaPrintEnginePrivate();
+   Q_DECLARE_PUBLIC(QtopiaPrintEngine)
+ public:
+   QtopiaPrintEnginePrivate(QPrinter::PrinterMode m) :
+      mode(m),
+      printerState(QPrinter::Idle),
+      orientation(QPrinter::Portrait),
+      paperSize(QPrinter::A4),
+      pageOrder(QPrinter::FirstPageFirst),
+      colorMode(QPrinter::GrayScale),
+      paperSource(QPrinter::OnlyOne),
+      resolution(QT_QWS_PRINTER_DEFAULT_DPI),
+      _paintEngine(0),
+      numCopies(1),
+      outputToFile(false),
+      fullPage(false),
+      collateCopies(false),
+      pageNumber(0),
+      pageImage(0),
+      partialByte(0),
+      partialBits(0) {
+   }
+   ~QtopiaPrintEnginePrivate();
 
-    void initialize();
-    QPaintEngine *paintEngine();
+   void initialize();
+   QPaintEngine *paintEngine();
 
-    QPrinter::PrinterMode mode;
+   QPrinter::PrinterMode mode;
 
-    QString printerName;
-    QString outputFileName;
-    QString printProgram;
-    QString docName;
-    QString creator;
+   QString printerName;
+   QString outputFileName;
+   QString printProgram;
+   QString docName;
+   QString creator;
 
-    QPrinter::PrinterState printerState;
+   QPrinter::PrinterState printerState;
 
-    QPrinter::Orientation orientation;
-    QPrinter::PaperSize paperSize;
-    QPrinter::PageOrder pageOrder;
-    QPrinter::ColorMode colorMode;
-    QPrinter::PaperSource paperSource;
+   QPrinter::Orientation orientation;
+   QPrinter::PaperSize paperSize;
+   QPrinter::PageOrder pageOrder;
+   QPrinter::ColorMode colorMode;
+   QPrinter::PaperSource paperSource;
 
-    int resolution;
-    QPaintEngine *_paintEngine;
-    int numCopies;
+   int resolution;
+   QPaintEngine *_paintEngine;
+   int numCopies;
 
-    bool outputToFile;
-    bool fullPage;
-    bool collateCopies;
+   bool outputToFile;
+   bool fullPage;
+   bool collateCopies;
 
-    int pageNumber;
+   int pageNumber;
 
-    QImage *pageImage;
+   QImage *pageImage;
 
-    QtopiaPrintBuffer buffer;
+   QtopiaPrintBuffer buffer;
 
-    // Definitions that are only relevant to G3FAX output.
-    int ifdPatch;
-    int partialByte;
-    int partialBits;
-    void writeG3FaxHeader();
-    void writeG3FaxPage();
-    int writeG3IFDEntry( int tag, int type, int count, int value );
-    void writeG3Code( int code, int bits );
-    void writeG3WhiteRun( int len );
-    void writeG3BlackRun( int len );
-    void writeG3EOL();
+   // Definitions that are only relevant to G3FAX output.
+   int ifdPatch;
+   int partialByte;
+   int partialBits;
+   void writeG3FaxHeader();
+   void writeG3FaxPage();
+   int writeG3IFDEntry( int tag, int type, int count, int value );
+   void writeG3Code( int code, int bits );
+   void writeG3WhiteRun( int len );
+   void writeG3BlackRun( int len );
+   void writeG3EOL();
 };
 
 QT_END_NAMESPACE

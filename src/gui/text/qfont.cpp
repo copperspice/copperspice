@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -84,191 +84,205 @@ extern const QX11Info *qt_x11Info(const QPaintDevice *pd);
 
 bool QFontDef::exactMatch(const QFontDef &other) const
 {
-    /*
-      QFontDef comparison is more complicated than just simple
-      per-member comparisons.
+   /*
+     QFontDef comparison is more complicated than just simple
+     per-member comparisons.
 
-      When comparing point/pixel sizes, either point or pixelsize
-      could be -1.  in This case we have to compare the non negative
-      size value.
+     When comparing point/pixel sizes, either point or pixelsize
+     could be -1.  in This case we have to compare the non negative
+     size value.
 
-      This test will fail if the point-sizes differ by 1/2 point or
-      more or they do not round to the same value.  We have to do this
-      since our API still uses 'int' point-sizes in the API, but store
-      deci-point-sizes internally.
+     This test will fail if the point-sizes differ by 1/2 point or
+     more or they do not round to the same value.  We have to do this
+     since our API still uses 'int' point-sizes in the API, but store
+     deci-point-sizes internally.
 
-      To compare the family members, we need to parse the font names
-      and compare the family/foundry strings separately.  This allows
-      us to compare e.g. "Helvetica" and "Helvetica [Adobe]" with
-      positive results.
-    */
-    if (pixelSize != -1 && other.pixelSize != -1) {
-        if (pixelSize != other.pixelSize)
-            return false;
-    } else if (pointSize != -1 && other.pointSize != -1) {
-        if (pointSize != other.pointSize)
-            return false;
-    } else {
-        return false;
-    }
+     To compare the family members, we need to parse the font names
+     and compare the family/foundry strings separately.  This allows
+     us to compare e.g. "Helvetica" and "Helvetica [Adobe]" with
+     positive results.
+   */
+   if (pixelSize != -1 && other.pixelSize != -1) {
+      if (pixelSize != other.pixelSize) {
+         return false;
+      }
+   } else if (pointSize != -1 && other.pointSize != -1) {
+      if (pointSize != other.pointSize) {
+         return false;
+      }
+   } else {
+      return false;
+   }
 
-    if (!ignorePitch && !other.ignorePitch && fixedPitch != other.fixedPitch)
-        return false;
+   if (!ignorePitch && !other.ignorePitch && fixedPitch != other.fixedPitch) {
+      return false;
+   }
 
-    if (stretch != 0 && other.stretch != 0 && stretch != other.stretch)
-        return false;
+   if (stretch != 0 && other.stretch != 0 && stretch != other.stretch) {
+      return false;
+   }
 
-    QString this_family, this_foundry, other_family, other_foundry;
-    QFontDatabase::parseFontName(family, this_foundry, this_family);
-    QFontDatabase::parseFontName(other.family, other_foundry, other_family);
+   QString this_family, this_foundry, other_family, other_foundry;
+   QFontDatabase::parseFontName(family, this_foundry, this_family);
+   QFontDatabase::parseFontName(other.family, other_foundry, other_family);
 
-    this_family = QFontDatabase::resolveFontFamilyAlias(this_family);
-    other_family = QFontDatabase::resolveFontFamilyAlias(other_family);
+   this_family = QFontDatabase::resolveFontFamilyAlias(this_family);
+   other_family = QFontDatabase::resolveFontFamilyAlias(other_family);
 
-    return (styleHint     == other.styleHint
-            && styleStrategy == other.styleStrategy
-            && weight        == other.weight
-            && style        == other.style
-            && this_family   == other_family
-            && (styleName.isEmpty() || other.styleName.isEmpty() || styleName == other.styleName)
-            && (this_foundry.isEmpty()
-                || other_foundry.isEmpty()
-                || this_foundry == other_foundry)
+   return (styleHint     == other.styleHint
+           && styleStrategy == other.styleStrategy
+           && weight        == other.weight
+           && style        == other.style
+           && this_family   == other_family
+           && (styleName.isEmpty() || other.styleName.isEmpty() || styleName == other.styleName)
+           && (this_foundry.isEmpty()
+               || other_foundry.isEmpty()
+               || this_foundry == other_foundry)
 #ifdef Q_WS_X11
-            && addStyle == other.addStyle
+           && addStyle == other.addStyle
 #endif
-       );
+          );
 }
 
 extern bool qt_is_gui_used;
 
 Q_GUI_EXPORT int qt_defaultDpiX()
 {
-    if (!qt_is_gui_used)
-        return 75;
+   if (!qt_is_gui_used) {
+      return 75;
+   }
 
-    int dpi;
+   int dpi;
 #ifdef Q_WS_X11
-    dpi = QX11Info::appDpiX();
+   dpi = QX11Info::appDpiX();
 
 #elif defined(Q_OS_WIN)
-    dpi = GetDeviceCaps(shared_dc(),LOGPIXELSX);
+   dpi = GetDeviceCaps(shared_dc(), LOGPIXELSX);
 
 #elif defined(Q_OS_MAC)
-    extern float qt_mac_defaultDpi_x(); //qpaintdevice_mac.cpp
-    dpi = qt_mac_defaultDpi_x();
+   extern float qt_mac_defaultDpi_x(); //qpaintdevice_mac.cpp
+   dpi = qt_mac_defaultDpi_x();
 
 #elif defined(Q_WS_QWS)
-    if (!qt_screen)
-        return 72;
-    QScreen *screen = qt_screen;
-    const QList<QScreen*> subScreens = qt_screen->subScreens();
-    if (!subScreens.isEmpty())
-        screen = subScreens.at(0);
-    dpi = qRound(screen->width() / (screen->physicalWidth() / qreal(25.4)));
+   if (!qt_screen) {
+      return 72;
+   }
+   QScreen *screen = qt_screen;
+   const QList<QScreen *> subScreens = qt_screen->subScreens();
+   if (!subScreens.isEmpty()) {
+      screen = subScreens.at(0);
+   }
+   dpi = qRound(screen->width() / (screen->physicalWidth() / qreal(25.4)));
 
 #elif defined(Q_WS_QPA)
-    QPlatformIntegration *pi = QApplicationPrivate::platformIntegration();
-    if (pi) {
-        QPlatformScreen *screen = QApplicationPrivate::platformIntegration()->screens().at(0);
-        const QSize screenSize = screen->geometry().size();
-        const QSize physicalSize = screen->physicalSize();
-        dpi = qRound(screenSize.width() / (physicalSize.width() / qreal(25.4)));
-    } else {
-        //PI has not been initialised, or it is being initialised. Give a default dpi
-        dpi = 100;
-    }
+   QPlatformIntegration *pi = QApplicationPrivate::platformIntegration();
+   if (pi) {
+      QPlatformScreen *screen = QApplicationPrivate::platformIntegration()->screens().at(0);
+      const QSize screenSize = screen->geometry().size();
+      const QSize physicalSize = screen->physicalSize();
+      dpi = qRound(screenSize.width() / (physicalSize.width() / qreal(25.4)));
+   } else {
+      //PI has not been initialised, or it is being initialised. Give a default dpi
+      dpi = 100;
+   }
 #endif
 
-    return dpi;
+   return dpi;
 }
 
 Q_GUI_EXPORT int qt_defaultDpiY()
 {
-    if (!qt_is_gui_used)
-        return 75;
+   if (!qt_is_gui_used) {
+      return 75;
+   }
 
-    int dpi;
+   int dpi;
 #ifdef Q_WS_X11
-    dpi = QX11Info::appDpiY();
+   dpi = QX11Info::appDpiY();
 
 #elif defined(Q_OS_WIN)
-    dpi = GetDeviceCaps(shared_dc(),LOGPIXELSY);
+   dpi = GetDeviceCaps(shared_dc(), LOGPIXELSY);
 
 #elif defined(Q_OS_MAC)
-    extern float qt_mac_defaultDpi_y(); //qpaintdevice_mac.cpp
-    dpi = qt_mac_defaultDpi_y();
+   extern float qt_mac_defaultDpi_y(); //qpaintdevice_mac.cpp
+   dpi = qt_mac_defaultDpi_y();
 
 #elif defined(Q_WS_QWS)
-    if (!qt_screen)
-        return 72;
-    QScreen *screen = qt_screen;
-    const QList<QScreen*> subScreens = qt_screen->subScreens();
-    if (!subScreens.isEmpty())
-        screen = subScreens.at(0);
-    dpi = qRound(screen->height() / (screen->physicalHeight() / qreal(25.4)));
+   if (!qt_screen) {
+      return 72;
+   }
+   QScreen *screen = qt_screen;
+   const QList<QScreen *> subScreens = qt_screen->subScreens();
+   if (!subScreens.isEmpty()) {
+      screen = subScreens.at(0);
+   }
+   dpi = qRound(screen->height() / (screen->physicalHeight() / qreal(25.4)));
 
 #elif defined(Q_WS_QPA)
-    QPlatformIntegration *pi = QApplicationPrivate::platformIntegration();
-    if (pi) {
-        QPlatformScreen *screen = QApplicationPrivate::platformIntegration()->screens().at(0);
-        const QSize screenSize = screen->geometry().size();
-        const QSize physicalSize = screen->physicalSize();
-        dpi = qRound(screenSize.height() / (physicalSize.height() / qreal(25.4)));
-    } else {
-        //PI has not been initialised, or it is being initialised. Give a default dpi
-        dpi = 100;
-    }
+   QPlatformIntegration *pi = QApplicationPrivate::platformIntegration();
+   if (pi) {
+      QPlatformScreen *screen = QApplicationPrivate::platformIntegration()->screens().at(0);
+      const QSize screenSize = screen->geometry().size();
+      const QSize physicalSize = screen->physicalSize();
+      dpi = qRound(screenSize.height() / (physicalSize.height() / qreal(25.4)));
+   } else {
+      //PI has not been initialised, or it is being initialised. Give a default dpi
+      dpi = 100;
+   }
 #endif
 
-    return dpi;
+   return dpi;
 }
 
 Q_GUI_EXPORT int qt_defaultDpi()
 {
-    return qt_defaultDpiY();
+   return qt_defaultDpiY();
 }
 
 QFontPrivate::QFontPrivate()
-    : engineData(0), dpi(qt_defaultDpi()), screen(0),
-      rawMode(false), underline(false), overline(false), strikeOut(false), kerning(true),
-      capital(0), letterSpacingIsAbsolute(false), scFont(0)
+   : engineData(0), dpi(qt_defaultDpi()), screen(0),
+     rawMode(false), underline(false), overline(false), strikeOut(false), kerning(true),
+     capital(0), letterSpacingIsAbsolute(false), scFont(0)
 {
 #ifdef Q_WS_X11
-    if (QX11Info::display())
-        screen = QX11Info::appScreen();
-    else
-        screen = 0;
+   if (QX11Info::display()) {
+      screen = QX11Info::appScreen();
+   } else {
+      screen = 0;
+   }
 #endif
 
 #ifdef Q_OS_WIN
-    hdc = 0;
+   hdc = 0;
 #endif
 }
 
 QFontPrivate::QFontPrivate(const QFontPrivate &other)
-    : request(other.request), engineData(0), dpi(other.dpi), screen(other.screen),
-      rawMode(other.rawMode), underline(other.underline), overline(other.overline),
-      strikeOut(other.strikeOut), kerning(other.kerning),
-      capital(other.capital), letterSpacingIsAbsolute(other.letterSpacingIsAbsolute),
-      letterSpacing(other.letterSpacing), wordSpacing(other.wordSpacing),
-      scFont(other.scFont)
+   : request(other.request), engineData(0), dpi(other.dpi), screen(other.screen),
+     rawMode(other.rawMode), underline(other.underline), overline(other.overline),
+     strikeOut(other.strikeOut), kerning(other.kerning),
+     capital(other.capital), letterSpacingIsAbsolute(other.letterSpacingIsAbsolute),
+     letterSpacing(other.letterSpacing), wordSpacing(other.wordSpacing),
+     scFont(other.scFont)
 {
 #ifdef Q_OS_WIN
-    hdc = other.hdc;
+   hdc = other.hdc;
 #endif
-    if (scFont && scFont != this)
-        scFont->ref.ref();
+   if (scFont && scFont != this) {
+      scFont->ref.ref();
+   }
 }
 
 QFontPrivate::~QFontPrivate()
 {
-    if (engineData)
-        engineData->ref.deref();
-    engineData = 0;
-    if (scFont && scFont != this)
-        scFont->ref.deref();
-    scFont = 0;
+   if (engineData) {
+      engineData->ref.deref();
+   }
+   engineData = 0;
+   if (scFont && scFont != this) {
+      scFont->ref.deref();
+   }
+   scFont = 0;
 }
 
 extern QMutex *qt_fontdatabase_mutex();
@@ -281,138 +295,163 @@ extern QMutex *qt_fontdatabase_mutex();
 
 QFontEngine *QFontPrivate::engineForScript(int script) const
 {
-    QMutexLocker locker(qt_fontdatabase_mutex());
-    if (script >= QUnicodeTables::Inherited)
-        script = QUnicodeTables::Common;
-    if (engineData && engineData->fontCache != QFontCache::instance()) {
-        // throw out engineData that came from a different thread
-        engineData->ref.deref();
-        engineData = 0;
-    }
-    if (!engineData || !QT_FONT_ENGINE_FROM_DATA(engineData, script))
-        QFontDatabase::load(this, script);
-    return QT_FONT_ENGINE_FROM_DATA(engineData, script);
+   QMutexLocker locker(qt_fontdatabase_mutex());
+   if (script >= QUnicodeTables::Inherited) {
+      script = QUnicodeTables::Common;
+   }
+   if (engineData && engineData->fontCache != QFontCache::instance()) {
+      // throw out engineData that came from a different thread
+      engineData->ref.deref();
+      engineData = 0;
+   }
+   if (!engineData || !QT_FONT_ENGINE_FROM_DATA(engineData, script)) {
+      QFontDatabase::load(this, script);
+   }
+   return QT_FONT_ENGINE_FROM_DATA(engineData, script);
 }
 
-void QFontPrivate::alterCharForCapitalization(QChar &c) const {
-    switch (capital) {
-    case QFont::AllUppercase:
-    case QFont::SmallCaps:
-        c = c.toUpper();
-        break;
-    case QFont::AllLowercase:
-        c = c.toLower();
-        break;
-    case QFont::MixedCase:
-        break;
-    }
+void QFontPrivate::alterCharForCapitalization(QChar &c) const
+{
+   switch (capital) {
+      case QFont::AllUppercase:
+      case QFont::SmallCaps:
+         c = c.toUpper();
+         break;
+      case QFont::AllLowercase:
+         c = c.toLower();
+         break;
+      case QFont::MixedCase:
+         break;
+   }
 }
 
 QFontPrivate *QFontPrivate::smallCapsFontPrivate() const
 {
-    if (scFont)
-        return scFont;
-    QFont font(const_cast<QFontPrivate *>(this));
-    qreal pointSize = font.pointSizeF();
-    if (pointSize > 0)
-        font.setPointSizeF(pointSize * .7);
-    else
-        font.setPixelSize((font.pixelSize() * 7 + 5) / 10);
-    scFont = font.d.data();
-    if (scFont != this)
-        scFont->ref.ref();
-    return scFont;
+   if (scFont) {
+      return scFont;
+   }
+   QFont font(const_cast<QFontPrivate *>(this));
+   qreal pointSize = font.pointSizeF();
+   if (pointSize > 0) {
+      font.setPointSizeF(pointSize * .7);
+   } else {
+      font.setPixelSize((font.pixelSize() * 7 + 5) / 10);
+   }
+   scFont = font.d.data();
+   if (scFont != this) {
+      scFont->ref.ref();
+   }
+   return scFont;
 }
 
 
 void QFontPrivate::resolve(uint mask, const QFontPrivate *other)
 {
-    Q_ASSERT(other != 0);
+   Q_ASSERT(other != 0);
 
-    dpi = other->dpi;
+   dpi = other->dpi;
 
-    if ((mask & QFont::AllPropertiesResolved) == QFont::AllPropertiesResolved) return;
+   if ((mask & QFont::AllPropertiesResolved) == QFont::AllPropertiesResolved) {
+      return;
+   }
 
-    // assign the unset-bits with the set-bits of the other font def
-    if (! (mask & QFont::FamilyResolved))
-        request.family = other->request.family;
+   // assign the unset-bits with the set-bits of the other font def
+   if (! (mask & QFont::FamilyResolved)) {
+      request.family = other->request.family;
+   }
 
-    if (! (mask & QFont::StyleNameResolved))
-        request.styleName = other->request.styleName;
+   if (! (mask & QFont::StyleNameResolved)) {
+      request.styleName = other->request.styleName;
+   }
 
-    if (! (mask & QFont::SizeResolved)) {
-        request.pointSize = other->request.pointSize;
-        request.pixelSize = other->request.pixelSize;
-    }
+   if (! (mask & QFont::SizeResolved)) {
+      request.pointSize = other->request.pointSize;
+      request.pixelSize = other->request.pixelSize;
+   }
 
-    if (! (mask & QFont::StyleHintResolved))
-        request.styleHint = other->request.styleHint;
+   if (! (mask & QFont::StyleHintResolved)) {
+      request.styleHint = other->request.styleHint;
+   }
 
-    if (! (mask & QFont::StyleStrategyResolved))
-        request.styleStrategy = other->request.styleStrategy;
+   if (! (mask & QFont::StyleStrategyResolved)) {
+      request.styleStrategy = other->request.styleStrategy;
+   }
 
-    if (! (mask & QFont::WeightResolved))
-        request.weight = other->request.weight;
+   if (! (mask & QFont::WeightResolved)) {
+      request.weight = other->request.weight;
+   }
 
-    if (! (mask & QFont::StyleResolved))
-        request.style = other->request.style;
+   if (! (mask & QFont::StyleResolved)) {
+      request.style = other->request.style;
+   }
 
-    if (! (mask & QFont::FixedPitchResolved))
-        request.fixedPitch = other->request.fixedPitch;
+   if (! (mask & QFont::FixedPitchResolved)) {
+      request.fixedPitch = other->request.fixedPitch;
+   }
 
-    if (! (mask & QFont::StretchResolved))
-        request.stretch = other->request.stretch;
+   if (! (mask & QFont::StretchResolved)) {
+      request.stretch = other->request.stretch;
+   }
 
-    if (! (mask & QFont::HintingPreferenceResolved))
-        request.hintingPreference = other->request.hintingPreference;
+   if (! (mask & QFont::HintingPreferenceResolved)) {
+      request.hintingPreference = other->request.hintingPreference;
+   }
 
-    if (! (mask & QFont::UnderlineResolved))
-        underline = other->underline;
+   if (! (mask & QFont::UnderlineResolved)) {
+      underline = other->underline;
+   }
 
-    if (! (mask & QFont::OverlineResolved))
-        overline = other->overline;
+   if (! (mask & QFont::OverlineResolved)) {
+      overline = other->overline;
+   }
 
-    if (! (mask & QFont::StrikeOutResolved))
-        strikeOut = other->strikeOut;
+   if (! (mask & QFont::StrikeOutResolved)) {
+      strikeOut = other->strikeOut;
+   }
 
-    if (! (mask & QFont::KerningResolved))
-        kerning = other->kerning;
+   if (! (mask & QFont::KerningResolved)) {
+      kerning = other->kerning;
+   }
 
-    if (! (mask & QFont::LetterSpacingResolved)) {
-        letterSpacing = other->letterSpacing;
-        letterSpacingIsAbsolute = other->letterSpacingIsAbsolute;
-    }
-    if (! (mask & QFont::WordSpacingResolved))
-        wordSpacing = other->wordSpacing;
-    if (! (mask & QFont::CapitalizationResolved))
-        capital = other->capital;
+   if (! (mask & QFont::LetterSpacingResolved)) {
+      letterSpacing = other->letterSpacing;
+      letterSpacingIsAbsolute = other->letterSpacingIsAbsolute;
+   }
+   if (! (mask & QFont::WordSpacingResolved)) {
+      wordSpacing = other->wordSpacing;
+   }
+   if (! (mask & QFont::CapitalizationResolved)) {
+      capital = other->capital;
+   }
 }
 
 
 
 
 QFontEngineData::QFontEngineData()
-    : ref(1), fontCache(QFontCache::instance())
+   : ref(1), fontCache(QFontCache::instance())
 {
 #if !defined(Q_OS_MAC)
-    memset(engines, 0, QUnicodeTables::ScriptCount * sizeof(QFontEngine *));
+   memset(engines, 0, QUnicodeTables::ScriptCount * sizeof(QFontEngine *));
 #else
-    engine = 0;
+   engine = 0;
 #endif
 }
 
 QFontEngineData::~QFontEngineData()
 {
 #if !defined(Q_OS_MAC)
-    for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
-        if (engines[i])
-            engines[i]->ref.deref();
-        engines[i] = 0;
-    }
+   for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
+      if (engines[i]) {
+         engines[i]->ref.deref();
+      }
+      engines[i] = 0;
+   }
 #else
-    if (engine)
-        engine->ref.deref();
-    engine = 0;
+   if (engine) {
+      engine->ref.deref();
+   }
+   engine = 0;
 #endif
 }
 
@@ -721,28 +760,29 @@ QFontEngineData::~QFontEngineData()
   Constructs a font from \a font for use on the paint device \a pd.
 */
 QFont::QFont(const QFont &font, QPaintDevice *pd)
-    : resolve_mask(font.resolve_mask)
+   : resolve_mask(font.resolve_mask)
 {
-    Q_ASSERT(pd != 0);
-    int dpi = pd->logicalDpiY();
+   Q_ASSERT(pd != 0);
+   int dpi = pd->logicalDpiY();
 
 #ifdef Q_WS_X11
-    const QX11Info *info = qt_x11Info(pd);
-    int screen = info ? info->screen() : 0;
+   const QX11Info *info = qt_x11Info(pd);
+   int screen = info ? info->screen() : 0;
 #else
-    const int screen = 0;
+   const int screen = 0;
 #endif
 
-    if (font.d->dpi != dpi || font.d->screen != screen ) {
-        d = new QFontPrivate(*font.d);
-        d->dpi = dpi;
-        d->screen = screen;
-    } else {
-        d = font.d.data();
-    }
+   if (font.d->dpi != dpi || font.d->screen != screen ) {
+      d = new QFontPrivate(*font.d);
+      d->dpi = dpi;
+      d->screen = screen;
+   } else {
+      d = font.d.data();
+   }
 #ifdef Q_OS_WIN
-    if (pd->devType() == QInternal::Printer && pd->getDC())
-        d->hdc = pd->getDC();
+   if (pd->devType() == QInternal::Printer && pd->getDC()) {
+      d->hdc = pd->getDC();
+   }
 #endif
 }
 
@@ -750,7 +790,7 @@ QFont::QFont(const QFont &font, QPaintDevice *pd)
   \internal
 */
 QFont::QFont(QFontPrivate *data)
-    : d(data), resolve_mask(QFont::AllPropertiesResolved)
+   : d(data), resolve_mask(QFont::AllPropertiesResolved)
 {
 }
 
@@ -759,17 +799,19 @@ QFont::QFont(QFontPrivate *data)
 */
 void QFont::detach()
 {
-    if (d->ref.load() == 1) {
-        if (d->engineData)
-            d->engineData->ref.deref();
-        d->engineData = 0;
-        if (d->scFont && d->scFont != d.data())
-            d->scFont->ref.deref();
-        d->scFont = 0;
-        return;
-    }
+   if (d->ref.load() == 1) {
+      if (d->engineData) {
+         d->engineData->ref.deref();
+      }
+      d->engineData = 0;
+      if (d->scFont && d->scFont != d.data()) {
+         d->scFont->ref.deref();
+      }
+      d->scFont = 0;
+      return;
+   }
 
-    d.detach();
+   d.detach();
 }
 
 /*!
@@ -778,7 +820,7 @@ void QFont::detach()
     \sa QApplication::setFont(), QApplication::font()
 */
 QFont::QFont()
-    : d(QApplication::font().d.data()), resolve_mask(0)
+   : d(QApplication::font().d.data()), resolve_mask(0)
 {
 }
 
@@ -801,36 +843,37 @@ QFont::QFont()
     setStyleHint() QApplication::font()
 */
 QFont::QFont(const QString &family, int pointSize, int weight, bool italic)
-    : d(new QFontPrivate()), resolve_mask(QFont::FamilyResolved)
+   : d(new QFontPrivate()), resolve_mask(QFont::FamilyResolved)
 {
-    if (pointSize <= 0) {
-        pointSize = 12;
+   if (pointSize <= 0) {
+      pointSize = 12;
 
-    } else {
-        resolve_mask |= QFont::SizeResolved;
-    }
+   } else {
+      resolve_mask |= QFont::SizeResolved;
+   }
 
-    if (weight < 0) {
-        weight = Normal;
-    } else {
-        resolve_mask |= QFont::WeightResolved | QFont::StyleResolved;
-    }
+   if (weight < 0) {
+      weight = Normal;
+   } else {
+      resolve_mask |= QFont::WeightResolved | QFont::StyleResolved;
+   }
 
-    if (italic)
-        resolve_mask |= QFont::StyleResolved;
+   if (italic) {
+      resolve_mask |= QFont::StyleResolved;
+   }
 
-    d->request.family = family;
-    d->request.pointSize = qreal(pointSize);
-    d->request.pixelSize = -1;
-    d->request.weight = weight;
-    d->request.style = italic ? QFont::StyleItalic : QFont::StyleNormal;
+   d->request.family = family;
+   d->request.pointSize = qreal(pointSize);
+   d->request.pixelSize = -1;
+   d->request.weight = weight;
+   d->request.style = italic ? QFont::StyleItalic : QFont::StyleNormal;
 }
 
 /*!
     Constructs a font that is a copy of \a font.
 */
 QFont::QFont(const QFont &font)
-    : d(font.d.data()), resolve_mask(font.resolve_mask)
+   : d(font.d.data()), resolve_mask(font.resolve_mask)
 {
 }
 
@@ -846,9 +889,9 @@ QFont::~QFont()
 */
 QFont &QFont::operator=(const QFont &font)
 {
-    d = font.d.data();
-    resolve_mask = font.resolve_mask;
-    return *this;
+   d = font.d.data();
+   resolve_mask = font.resolve_mask;
+   return *this;
 }
 
 /*!
@@ -859,7 +902,7 @@ QFont &QFont::operator=(const QFont &font)
 */
 QString QFont::family() const
 {
-    return d->request.family;
+   return d->request.family;
 }
 
 /*!
@@ -877,15 +920,15 @@ QString QFont::family() const
 */
 void QFont::setFamily(const QString &family)
 {
-    detach();
+   detach();
 
-    d->request.family = family;
+   d->request.family = family;
 
 #if defined(Q_WS_X11)
-    d->request.addStyle.clear();
+   d->request.addStyle.clear();
 #endif
 
-    resolve_mask |= QFont::FamilyResolved;
+   resolve_mask |= QFont::FamilyResolved;
 }
 
 /*!
@@ -901,7 +944,7 @@ void QFont::setFamily(const QString &family)
 */
 QString QFont::styleName() const
 {
-    return d->request.styleName;
+   return d->request.styleName;
 }
 
 /*!
@@ -915,10 +958,10 @@ QString QFont::styleName() const
 */
 void QFont::setStyleName(const QString &styleName)
 {
-    detach();
+   detach();
 
-    d->request.styleName = styleName;
-    resolve_mask |= QFont::StyleNameResolved;
+   d->request.styleName = styleName;
+   resolve_mask |= QFont::StyleNameResolved;
 }
 
 /*!
@@ -929,7 +972,7 @@ void QFont::setStyleName(const QString &styleName)
 */
 int QFont::pointSize() const
 {
-    return qRound(d->request.pointSize);
+   return qRound(d->request.pointSize);
 }
 
 /*!
@@ -1014,11 +1057,11 @@ int QFont::pointSize() const
 */
 void QFont::setHintingPreference(HintingPreference hintingPreference)
 {
-    detach();
+   detach();
 
-    d->request.hintingPreference = hintingPreference;
+   d->request.hintingPreference = hintingPreference;
 
-    resolve_mask |= QFont::HintingPreferenceResolved;
+   resolve_mask |= QFont::HintingPreferenceResolved;
 }
 
 /*!
@@ -1028,7 +1071,7 @@ void QFont::setHintingPreference(HintingPreference hintingPreference)
 */
 QFont::HintingPreference QFont::hintingPreference() const
 {
-    return QFont::HintingPreference(d->request.hintingPreference);
+   return QFont::HintingPreference(d->request.hintingPreference);
 }
 
 /*!
@@ -1039,17 +1082,17 @@ QFont::HintingPreference QFont::hintingPreference() const
 */
 void QFont::setPointSize(int pointSize)
 {
-    if (pointSize <= 0) {
-        qWarning("QFont::setPointSize: Point size <= 0 (%d), must be greater than 0", pointSize);
-        return;
-    }
+   if (pointSize <= 0) {
+      qWarning("QFont::setPointSize: Point size <= 0 (%d), must be greater than 0", pointSize);
+      return;
+   }
 
-    detach();
+   detach();
 
-    d->request.pointSize = qreal(pointSize);
-    d->request.pixelSize = -1;
+   d->request.pointSize = qreal(pointSize);
+   d->request.pixelSize = -1;
 
-    resolve_mask |= QFont::SizeResolved;
+   resolve_mask |= QFont::SizeResolved;
 }
 
 /*!
@@ -1061,17 +1104,17 @@ void QFont::setPointSize(int pointSize)
 */
 void QFont::setPointSizeF(qreal pointSize)
 {
-    if (pointSize <= 0) {
-        qWarning("QFont::setPointSizeF: Point size <= 0 (%f), must be greater than 0", pointSize);
-        return;
-    }
+   if (pointSize <= 0) {
+      qWarning("QFont::setPointSizeF: Point size <= 0 (%f), must be greater than 0", pointSize);
+      return;
+   }
 
-    detach();
+   detach();
 
-    d->request.pointSize = pointSize;
-    d->request.pixelSize = -1;
+   d->request.pointSize = pointSize;
+   d->request.pixelSize = -1;
 
-    resolve_mask |= QFont::SizeResolved;
+   resolve_mask |= QFont::SizeResolved;
 }
 
 /*!
@@ -1082,7 +1125,7 @@ void QFont::setPointSizeF(qreal pointSize)
 */
 qreal QFont::pointSizeF() const
 {
-    return d->request.pointSize;
+   return d->request.pointSize;
 }
 
 /*!
@@ -1096,17 +1139,17 @@ qreal QFont::pointSizeF() const
 */
 void QFont::setPixelSize(int pixelSize)
 {
-    if (pixelSize <= 0) {
-        qWarning("QFont::setPixelSize: Pixel size <= 0 (%d)", pixelSize);
-        return;
-    }
+   if (pixelSize <= 0) {
+      qWarning("QFont::setPixelSize: Pixel size <= 0 (%d)", pixelSize);
+      return;
+   }
 
-    detach();
+   detach();
 
-    d->request.pixelSize = pixelSize;
-    d->request.pointSize = -1;
+   d->request.pixelSize = pixelSize;
+   d->request.pointSize = -1;
 
-    resolve_mask |= QFont::SizeResolved;
+   resolve_mask |= QFont::SizeResolved;
 }
 
 /*!
@@ -1118,7 +1161,7 @@ void QFont::setPixelSize(int pixelSize)
 */
 int QFont::pixelSize() const
 {
-    return d->request.pixelSize;
+   return d->request.pixelSize;
 }
 
 
@@ -1146,7 +1189,7 @@ int QFont::pixelSize() const
 */
 QFont::Style QFont::style() const
 {
-    return (QFont::Style)d->request.style;
+   return (QFont::Style)d->request.style;
 }
 
 
@@ -1157,10 +1200,10 @@ QFont::Style QFont::style() const
 */
 void QFont::setStyle(Style style)
 {
-    detach();
+   detach();
 
-    d->request.style = style;
-    resolve_mask |= QFont::StyleResolved;
+   d->request.style = style;
+   resolve_mask |= QFont::StyleResolved;
 }
 
 /*!
@@ -1171,7 +1214,7 @@ void QFont::setStyle(Style style)
 */
 int QFont::weight() const
 {
-    return d->request.weight;
+   return d->request.weight;
 }
 
 /*!
@@ -1198,12 +1241,12 @@ int QFont::weight() const
 */
 void QFont::setWeight(int weight)
 {
-    Q_ASSERT_X(weight >= 0 && weight <= 99, "QFont::setWeight", "Weight must be between 0 and 99");
+   Q_ASSERT_X(weight >= 0 && weight <= 99, "QFont::setWeight", "Weight must be between 0 and 99");
 
-    detach();
+   detach();
 
-    d->request.weight = weight;
-    resolve_mask |= QFont::WeightResolved;
+   d->request.weight = weight;
+   resolve_mask |= QFont::WeightResolved;
 }
 
 /*!
@@ -1234,7 +1277,7 @@ void QFont::setWeight(int weight)
 */
 bool QFont::underline() const
 {
-    return d->underline;
+   return d->underline;
 }
 
 /*!
@@ -1245,10 +1288,10 @@ bool QFont::underline() const
 */
 void QFont::setUnderline(bool enable)
 {
-    detach();
+   detach();
 
-    d->underline = enable;
-    resolve_mask |= QFont::UnderlineResolved;
+   d->underline = enable;
+   resolve_mask |= QFont::UnderlineResolved;
 }
 
 /*!
@@ -1258,7 +1301,7 @@ void QFont::setUnderline(bool enable)
 */
 bool QFont::overline() const
 {
-    return d->overline;
+   return d->overline;
 }
 
 /*!
@@ -1268,10 +1311,10 @@ bool QFont::overline() const
 */
 void QFont::setOverline(bool enable)
 {
-    detach();
+   detach();
 
-    d->overline = enable;
-    resolve_mask |= QFont::OverlineResolved;
+   d->overline = enable;
+   resolve_mask |= QFont::OverlineResolved;
 }
 
 /*!
@@ -1281,7 +1324,7 @@ void QFont::setOverline(bool enable)
 */
 bool QFont::strikeOut() const
 {
-    return d->strikeOut;
+   return d->strikeOut;
 }
 
 /*!
@@ -1292,10 +1335,10 @@ bool QFont::strikeOut() const
 */
 void QFont::setStrikeOut(bool enable)
 {
-    detach();
+   detach();
 
-    d->strikeOut = enable;
-    resolve_mask |= QFont::StrikeOutResolved;
+   d->strikeOut = enable;
+   resolve_mask |= QFont::StrikeOutResolved;
 }
 
 /*!
@@ -1305,7 +1348,7 @@ void QFont::setStrikeOut(bool enable)
 */
 bool QFont::fixedPitch() const
 {
-    return d->request.fixedPitch;
+   return d->request.fixedPitch;
 }
 
 /*!
@@ -1316,11 +1359,11 @@ bool QFont::fixedPitch() const
 */
 void QFont::setFixedPitch(bool enable)
 {
-    detach();
+   detach();
 
-    d->request.fixedPitch = enable;
-    d->request.ignorePitch = false;
-    resolve_mask |= QFont::FixedPitchResolved;
+   d->request.fixedPitch = enable;
+   d->request.ignorePitch = false;
+   resolve_mask |= QFont::FixedPitchResolved;
 }
 
 /*!
@@ -1330,7 +1373,7 @@ void QFont::setFixedPitch(bool enable)
 */
 bool QFont::kerning() const
 {
-    return d->kerning;
+   return d->kerning;
 }
 
 /*!
@@ -1346,9 +1389,9 @@ bool QFont::kerning() const
 */
 void QFont::setKerning(bool enable)
 {
-    detach();
-    d->kerning = enable;
-    resolve_mask |= QFont::KerningResolved;
+   detach();
+   d->kerning = enable;
+   resolve_mask |= QFont::KerningResolved;
 }
 
 /*!
@@ -1361,7 +1404,7 @@ void QFont::setKerning(bool enable)
 */
 QFont::StyleStrategy QFont::styleStrategy() const
 {
-    return (StyleStrategy) d->request.styleStrategy;
+   return (StyleStrategy) d->request.styleStrategy;
 }
 
 /*!
@@ -1374,7 +1417,7 @@ QFont::StyleStrategy QFont::styleStrategy() const
 */
 QFont::StyleHint QFont::styleHint() const
 {
-    return (StyleHint) d->request.styleHint;
+   return (StyleHint) d->request.styleHint;
 }
 
 /*!
@@ -1462,20 +1505,21 @@ QFont::StyleHint QFont::styleHint() const
 */
 void QFont::setStyleHint(StyleHint hint, StyleStrategy strategy)
 {
-    detach();
+   detach();
 
-    if ((resolve_mask & (QFont::StyleHintResolved | QFont::StyleStrategyResolved)) &&
+   if ((resolve_mask & (QFont::StyleHintResolved | QFont::StyleStrategyResolved)) &&
          (StyleHint) d->request.styleHint == hint &&
-         (StyleStrategy) d->request.styleStrategy == strategy)
-        return;
+         (StyleStrategy) d->request.styleStrategy == strategy) {
+      return;
+   }
 
-    d->request.styleHint = hint;
-    d->request.styleStrategy = strategy;
-    resolve_mask |= QFont::StyleHintResolved;
-    resolve_mask |= QFont::StyleStrategyResolved;
+   d->request.styleHint = hint;
+   d->request.styleStrategy = strategy;
+   resolve_mask |= QFont::StyleHintResolved;
+   resolve_mask |= QFont::StyleStrategyResolved;
 
 #if defined(Q_WS_X11)
-    d->request.addStyle.clear();
+   d->request.addStyle.clear();
 #endif
 }
 
@@ -1486,14 +1530,15 @@ void QFont::setStyleHint(StyleHint hint, StyleStrategy strategy)
 */
 void QFont::setStyleStrategy(StyleStrategy s)
 {
-    detach();
+   detach();
 
-    if ((resolve_mask & QFont::StyleStrategyResolved) &&
-         s == (StyleStrategy)d->request.styleStrategy)
-        return;
+   if ((resolve_mask & QFont::StyleStrategyResolved) &&
+         s == (StyleStrategy)d->request.styleStrategy) {
+      return;
+   }
 
-    d->request.styleStrategy = s;
-    resolve_mask |= QFont::StyleStrategyResolved;
+   d->request.styleStrategy = s;
+   resolve_mask |= QFont::StyleStrategyResolved;
 }
 
 
@@ -1523,7 +1568,7 @@ void QFont::setStyleStrategy(StyleStrategy s)
  */
 int QFont::stretch() const
 {
-    return d->request.stretch;
+   return d->request.stretch;
 }
 
 /*!
@@ -1546,19 +1591,20 @@ int QFont::stretch() const
 */
 void QFont::setStretch(int factor)
 {
-    if (factor < 1 || factor > 4000) {
-        qWarning("QFont::setStretch: Parameter '%d' out of range", factor);
-        return;
-    }
+   if (factor < 1 || factor > 4000) {
+      qWarning("QFont::setStretch: Parameter '%d' out of range", factor);
+      return;
+   }
 
-    if ((resolve_mask & QFont::StretchResolved) &&
-         d->request.stretch == (uint)factor)
-        return;
+   if ((resolve_mask & QFont::StretchResolved) &&
+         d->request.stretch == (uint)factor) {
+      return;
+   }
 
-    detach();
+   detach();
 
-    d->request.stretch = (uint)factor;
-    resolve_mask |= QFont::StretchResolved;
+   d->request.stretch = (uint)factor;
+   resolve_mask |= QFont::StretchResolved;
 }
 
 /*!
@@ -1579,7 +1625,7 @@ void QFont::setStretch(int factor)
  */
 qreal QFont::letterSpacing() const
 {
-    return d->letterSpacing.toReal();
+   return d->letterSpacing.toReal();
 }
 
 /*!
@@ -1595,18 +1641,19 @@ qreal QFont::letterSpacing() const
 */
 void QFont::setLetterSpacing(SpacingType type, qreal spacing)
 {
-    const QFixed newSpacing = QFixed::fromReal(spacing);
-    const bool absoluteSpacing = type == AbsoluteSpacing;
-    if ((resolve_mask & QFont::LetterSpacingResolved) &&
-        d->letterSpacingIsAbsolute == absoluteSpacing &&
-        d->letterSpacing == newSpacing)
-        return;
+   const QFixed newSpacing = QFixed::fromReal(spacing);
+   const bool absoluteSpacing = type == AbsoluteSpacing;
+   if ((resolve_mask & QFont::LetterSpacingResolved) &&
+         d->letterSpacingIsAbsolute == absoluteSpacing &&
+         d->letterSpacing == newSpacing) {
+      return;
+   }
 
-    detach();
+   detach();
 
-    d->letterSpacing = newSpacing;
-    d->letterSpacingIsAbsolute = absoluteSpacing;
-    resolve_mask |= QFont::LetterSpacingResolved;
+   d->letterSpacing = newSpacing;
+   d->letterSpacingIsAbsolute = absoluteSpacing;
+   resolve_mask |= QFont::LetterSpacingResolved;
 }
 
 /*!
@@ -1617,7 +1664,7 @@ void QFont::setLetterSpacing(SpacingType type, qreal spacing)
 */
 QFont::SpacingType QFont::letterSpacingType() const
 {
-    return d->letterSpacingIsAbsolute ? AbsoluteSpacing : PercentageSpacing;
+   return d->letterSpacingIsAbsolute ? AbsoluteSpacing : PercentageSpacing;
 }
 
 /*!
@@ -1628,7 +1675,7 @@ QFont::SpacingType QFont::letterSpacingType() const
  */
 qreal QFont::wordSpacing() const
 {
-    return d->wordSpacing.toReal();
+   return d->wordSpacing.toReal();
 }
 
 /*!
@@ -1647,15 +1694,16 @@ qreal QFont::wordSpacing() const
 */
 void QFont::setWordSpacing(qreal spacing)
 {
-    const QFixed newSpacing = QFixed::fromReal(spacing);
-    if ((resolve_mask & QFont::WordSpacingResolved) &&
-        d->wordSpacing == newSpacing)
-        return;
+   const QFixed newSpacing = QFixed::fromReal(spacing);
+   if ((resolve_mask & QFont::WordSpacingResolved) &&
+         d->wordSpacing == newSpacing) {
+      return;
+   }
 
-    detach();
+   detach();
 
-    d->wordSpacing = newSpacing;
-    resolve_mask |= QFont::WordSpacingResolved;
+   d->wordSpacing = newSpacing;
+   resolve_mask |= QFont::WordSpacingResolved;
 }
 
 /*!
@@ -1682,14 +1730,15 @@ void QFont::setWordSpacing(qreal spacing)
 */
 void QFont::setCapitalization(Capitalization caps)
 {
-    if ((resolve_mask & QFont::CapitalizationResolved) &&
-        capitalization() == caps)
-        return;
+   if ((resolve_mask & QFont::CapitalizationResolved) &&
+         capitalization() == caps) {
+      return;
+   }
 
-    detach();
+   detach();
 
-    d->capital = caps;
-    resolve_mask |= QFont::CapitalizationResolved;
+   d->capital = caps;
+   resolve_mask |= QFont::CapitalizationResolved;
 }
 
 /*!
@@ -1700,7 +1749,7 @@ void QFont::setCapitalization(Capitalization caps)
 */
 QFont::Capitalization QFont::capitalization() const
 {
-    return static_cast<QFont::Capitalization> (d->capital);
+   return static_cast<QFont::Capitalization> (d->capital);
 }
 
 
@@ -1723,11 +1772,13 @@ QFont::Capitalization QFont::capitalization() const
 */
 void QFont::setRawMode(bool enable)
 {
-    detach();
+   detach();
 
-    if ((bool) d->rawMode == enable) return;
+   if ((bool) d->rawMode == enable) {
+      return;
+   }
 
-    d->rawMode = enable;
+   d->rawMode = enable;
 }
 
 /*!
@@ -1738,11 +1789,11 @@ void QFont::setRawMode(bool enable)
 */
 bool QFont::exactMatch() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    return (d->rawMode
-            ? engine->type() != QFontEngine::Box
-            : d->request.exactMatch(engine->fontDef));
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   return (d->rawMode
+           ? engine->type() != QFontEngine::Box
+           : d->request.exactMatch(engine->fontDef));
 }
 
 /*!
@@ -1757,18 +1808,18 @@ bool QFont::exactMatch() const
 */
 bool QFont::operator==(const QFont &f) const
 {
-    return (f.d == d
-            || (f.d->request   == d->request
-                && f.d->request.pointSize == d->request.pointSize
-                && f.d->underline == d->underline
-                && f.d->overline  == d->overline
-                && f.d->strikeOut == d->strikeOut
-                && f.d->kerning == d->kerning
-                && f.d->capital == d->capital
-                && f.d->letterSpacingIsAbsolute == d->letterSpacingIsAbsolute
-                && f.d->letterSpacing == d->letterSpacing
-                && f.d->wordSpacing == d->wordSpacing
-            ));
+   return (f.d == d
+           || (f.d->request   == d->request
+               && f.d->request.pointSize == d->request.pointSize
+               && f.d->underline == d->underline
+               && f.d->overline  == d->overline
+               && f.d->strikeOut == d->strikeOut
+               && f.d->kerning == d->kerning
+               && f.d->capital == d->capital
+               && f.d->letterSpacingIsAbsolute == d->letterSpacingIsAbsolute
+               && f.d->letterSpacing == d->letterSpacing
+               && f.d->wordSpacing == d->wordSpacing
+              ));
 }
 
 
@@ -1785,31 +1836,59 @@ bool QFont::operator==(const QFont &f) const
 */
 bool QFont::operator<(const QFont &f) const
 {
-    if (f.d == d) return false;
-    // the < operator for fontdefs ignores point sizes.
-    QFontDef &r1 = f.d->request;
-    QFontDef &r2 = d->request;
-    if (r1.pointSize != r2.pointSize) return r1.pointSize < r2.pointSize;
-    if (r1.pixelSize != r2.pixelSize) return r1.pixelSize < r2.pixelSize;
-    if (r1.weight != r2.weight) return r1.weight < r2.weight;
-    if (r1.style != r2.style) return r1.style < r2.style;
-    if (r1.stretch != r2.stretch) return r1.stretch < r2.stretch;
-    if (r1.styleHint != r2.styleHint) return r1.styleHint < r2.styleHint;
-    if (r1.styleStrategy != r2.styleStrategy) return r1.styleStrategy < r2.styleStrategy;
-    if (r1.family != r2.family) return r1.family < r2.family;
+   if (f.d == d) {
+      return false;
+   }
+   // the < operator for fontdefs ignores point sizes.
+   QFontDef &r1 = f.d->request;
+   QFontDef &r2 = d->request;
+   if (r1.pointSize != r2.pointSize) {
+      return r1.pointSize < r2.pointSize;
+   }
+   if (r1.pixelSize != r2.pixelSize) {
+      return r1.pixelSize < r2.pixelSize;
+   }
+   if (r1.weight != r2.weight) {
+      return r1.weight < r2.weight;
+   }
+   if (r1.style != r2.style) {
+      return r1.style < r2.style;
+   }
+   if (r1.stretch != r2.stretch) {
+      return r1.stretch < r2.stretch;
+   }
+   if (r1.styleHint != r2.styleHint) {
+      return r1.styleHint < r2.styleHint;
+   }
+   if (r1.styleStrategy != r2.styleStrategy) {
+      return r1.styleStrategy < r2.styleStrategy;
+   }
+   if (r1.family != r2.family) {
+      return r1.family < r2.family;
+   }
 #ifdef Q_WS_X11
-    if (r1.addStyle != r2.addStyle) return r1.addStyle < r2.addStyle;
+   if (r1.addStyle != r2.addStyle) {
+      return r1.addStyle < r2.addStyle;
+   }
 #endif
-///
-    if (f.d->capital != d->capital) return f.d->capital < d->capital;
+   ///
+   if (f.d->capital != d->capital) {
+      return f.d->capital < d->capital;
+   }
 
-    if (f.d->letterSpacingIsAbsolute != d->letterSpacingIsAbsolute) return f.d->letterSpacingIsAbsolute < d->letterSpacingIsAbsolute;
-    if (f.d->letterSpacing != d->letterSpacing) return f.d->letterSpacing < d->letterSpacing;
-    if (f.d->wordSpacing != d->wordSpacing) return f.d->wordSpacing < d->wordSpacing;
+   if (f.d->letterSpacingIsAbsolute != d->letterSpacingIsAbsolute) {
+      return f.d->letterSpacingIsAbsolute < d->letterSpacingIsAbsolute;
+   }
+   if (f.d->letterSpacing != d->letterSpacing) {
+      return f.d->letterSpacing < d->letterSpacing;
+   }
+   if (f.d->wordSpacing != d->wordSpacing) {
+      return f.d->wordSpacing < d->wordSpacing;
+   }
 
-    int f1attrs = (f.d->underline << 3) + (f.d->overline << 2) + (f.d->strikeOut<<1) + f.d->kerning;
-    int f2attrs = (d->underline << 3) + (d->overline << 2) + (d->strikeOut<<1) + d->kerning;
-    return f1attrs < f2attrs;
+   int f1attrs = (f.d->underline << 3) + (f.d->overline << 2) + (f.d->strikeOut << 1) + f.d->kerning;
+   int f2attrs = (d->underline << 3) + (d->overline << 2) + (d->strikeOut << 1) + d->kerning;
+   return f1attrs < f2attrs;
 }
 
 
@@ -1825,7 +1904,7 @@ bool QFont::operator<(const QFont &f) const
 */
 bool QFont::operator!=(const QFont &f) const
 {
-    return !(operator==(f));
+   return !(operator==(f));
 }
 
 /*!
@@ -1833,7 +1912,7 @@ bool QFont::operator!=(const QFont &f) const
 */
 QFont::operator QVariant() const
 {
-    return QVariant(QVariant::Font, this);
+   return QVariant(QVariant::Font, this);
 }
 
 /*!
@@ -1843,9 +1922,9 @@ QFont::operator QVariant() const
 
     \sa operator=() operator==()
 */
-bool QFont::isCopyOf(const QFont & f) const
+bool QFont::isCopyOf(const QFont &f) const
 {
-    return d == f.d;
+   return d == f.d;
 }
 
 /*!
@@ -1856,7 +1935,7 @@ bool QFont::isCopyOf(const QFont & f) const
 */
 bool QFont::rawMode() const
 {
-    return d->rawMode;
+   return d->rawMode;
 }
 
 /*!
@@ -1865,19 +1944,19 @@ bool QFont::rawMode() const
 */
 QFont QFont::resolve(const QFont &other) const
 {
-    if (*this == other
-        && (resolve_mask == other.resolve_mask || resolve_mask == 0)
-        && d->dpi == other.d->dpi) {
-        QFont o = other;
-        o.resolve_mask = resolve_mask;
-        return o;
-    }
+   if (*this == other
+         && (resolve_mask == other.resolve_mask || resolve_mask == 0)
+         && d->dpi == other.d->dpi) {
+      QFont o = other;
+      o.resolve_mask = resolve_mask;
+      return o;
+   }
 
-    QFont font(*this);
-    font.detach();
-    font.d->resolve(resolve_mask, other.d.data());
+   QFont font(*this);
+   font.detach();
+   font.d->resolve(resolve_mask, other.d.data());
 
-    return font;
+   return font;
 }
 
 /*!
@@ -1900,41 +1979,43 @@ Q_GLOBAL_STATIC(QFontSubst, globalFontSubst)
 // create substitution dict
 static void initFontSubst()
 {
-    // default substitutions
-    static const char * const initTbl[] = {
+   // default substitutions
+   static const char *const initTbl[] = {
 
 #if defined(Q_WS_X11)
-        "arial",        "helvetica",
-        "times new roman", "times",
-        "courier new",  "courier",
-        "sans serif",   "helvetica",
+      "arial",        "helvetica",
+      "times new roman", "times",
+      "courier new",  "courier",
+      "sans serif",   "helvetica",
 #elif defined(Q_OS_MAC)
-        ".lucida grande ui", "lucida grande",
+      ".lucida grande ui", "lucida grande",
 #elif defined(Q_OS_WIN)
-        "times",        "times new roman",
-        "courier",      "courier new",
-        "helvetica",    "arial",
-        "sans serif",   "arial",
+      "times",        "times new roman",
+      "courier",      "courier new",
+      "helvetica",    "arial",
+      "sans serif",   "arial",
 #endif
 
-        0,              0
-    };
+      0,              0
+   };
 
-    QFontSubst *fontSubst = globalFontSubst();
-    Q_ASSERT(fontSubst != 0);
+   QFontSubst *fontSubst = globalFontSubst();
+   Q_ASSERT(fontSubst != 0);
 
-    if (!fontSubst->isEmpty())
-        return;
+   if (!fontSubst->isEmpty()) {
+      return;
+   }
 
 #if defined(Q_WS_X11) && !defined(QT_NO_FONTCONFIG)
-    if (X11->has_fontconfig)
-        return;
+   if (X11->has_fontconfig) {
+      return;
+   }
 #endif
 
-    for (int i=0; initTbl[i] != 0; i += 2) {
-        QStringList &list = (*fontSubst)[QString::fromLatin1(initTbl[i])];
-        list.append(QString::fromLatin1(initTbl[i+1]));
-    }
+   for (int i = 0; initTbl[i] != 0; i += 2) {
+      QStringList &list = (*fontSubst)[QString::fromLatin1(initTbl[i])];
+      list.append(QString::fromLatin1(initTbl[i + 1]));
+   }
 }
 
 /*!
@@ -1950,15 +2031,16 @@ static void initFontSubst()
 */
 QString QFont::substitute(const QString &familyName)
 {
-    initFontSubst();
+   initFontSubst();
 
-    QFontSubst *fontSubst = globalFontSubst();
-    Q_ASSERT(fontSubst != 0);
-    QFontSubst::ConstIterator it = fontSubst->constFind(familyName.toLower());
-    if (it != fontSubst->constEnd() && !(*it).isEmpty())
-        return (*it).first();
+   QFontSubst *fontSubst = globalFontSubst();
+   Q_ASSERT(fontSubst != 0);
+   QFontSubst::ConstIterator it = fontSubst->constFind(familyName.toLower());
+   if (it != fontSubst->constEnd() && !(*it).isEmpty()) {
+      return (*it).first();
+   }
 
-    return familyName;
+   return familyName;
 }
 
 
@@ -1973,11 +2055,11 @@ QString QFont::substitute(const QString &familyName)
  */
 QStringList QFont::substitutes(const QString &familyName)
 {
-    initFontSubst();
+   initFontSubst();
 
-    QFontSubst *fontSubst = globalFontSubst();
-    Q_ASSERT(fontSubst != 0);
-    return fontSubst->value(familyName.toLower(), QStringList());
+   QFontSubst *fontSubst = globalFontSubst();
+   Q_ASSERT(fontSubst != 0);
+   return fontSubst->value(familyName.toLower(), QStringList());
 }
 
 
@@ -1990,14 +2072,15 @@ QStringList QFont::substitutes(const QString &familyName)
 void QFont::insertSubstitution(const QString &familyName,
                                const QString &substituteName)
 {
-    initFontSubst();
+   initFontSubst();
 
-    QFontSubst *fontSubst = globalFontSubst();
-    Q_ASSERT(fontSubst != 0);
-    QStringList &list = (*fontSubst)[familyName.toLower()];
-    QString s = substituteName.toLower();
-    if (!list.contains(s))
-        list.append(s);
+   QFontSubst *fontSubst = globalFontSubst();
+   Q_ASSERT(fontSubst != 0);
+   QStringList &list = (*fontSubst)[familyName.toLower()];
+   QString s = substituteName.toLower();
+   if (!list.contains(s)) {
+      list.append(s);
+   }
 }
 
 
@@ -2010,18 +2093,19 @@ void QFont::insertSubstitution(const QString &familyName,
 void QFont::insertSubstitutions(const QString &familyName,
                                 const QStringList &substituteNames)
 {
-    initFontSubst();
+   initFontSubst();
 
-    QFontSubst *fontSubst = globalFontSubst();
-    Q_ASSERT(fontSubst != 0);
-    QStringList &list = (*fontSubst)[familyName.toLower()];
-    QStringList::ConstIterator it = substituteNames.constBegin();
-    while (it != substituteNames.constEnd()) {
-        QString s = (*it).toLower();
-        if (!list.contains(s))
-            list.append(s);
-        it++;
-    }
+   QFontSubst *fontSubst = globalFontSubst();
+   Q_ASSERT(fontSubst != 0);
+   QStringList &list = (*fontSubst)[familyName.toLower()];
+   QStringList::ConstIterator it = substituteNames.constBegin();
+   while (it != substituteNames.constEnd()) {
+      QString s = (*it).toLower();
+      if (!list.contains(s)) {
+         list.append(s);
+      }
+      it++;
+   }
 }
 
 /*! \fn void QFont::initialize()
@@ -2045,13 +2129,14 @@ void QFont::insertSubstitutions(const QString &familyName,
     \sa insertSubstitutions(), insertSubstitution(), substitutions(), substitute()
 */
 void QFont::removeSubstitution(const QString &familyName)
-{ // ### function name should be removeSubstitutions() or
-  // ### removeSubstitutionList()
-    initFontSubst();
+{
+   // ### function name should be removeSubstitutions() or
+   // ### removeSubstitutionList()
+   initFontSubst();
 
-    QFontSubst *fontSubst = globalFontSubst();
-    Q_ASSERT(fontSubst != 0);
-    fontSubst->remove(familyName.toLower());
+   QFontSubst *fontSubst = globalFontSubst();
+   Q_ASSERT(fontSubst != 0);
+   fontSubst->remove(familyName.toLower());
 }
 
 
@@ -2062,20 +2147,20 @@ void QFont::removeSubstitution(const QString &familyName)
 */
 QStringList QFont::substitutions()
 {
-    initFontSubst();
+   initFontSubst();
 
-    QFontSubst *fontSubst = globalFontSubst();
-    Q_ASSERT(fontSubst != 0);
-    QStringList ret;
-    QFontSubst::ConstIterator it = fontSubst->constBegin();
+   QFontSubst *fontSubst = globalFontSubst();
+   Q_ASSERT(fontSubst != 0);
+   QStringList ret;
+   QFontSubst::ConstIterator it = fontSubst->constBegin();
 
-    while (it != fontSubst->constEnd()) {
-        ret.append(it.key());
-        ++it;
-    }
+   while (it != fontSubst->constEnd()) {
+      ret.append(it.key());
+      ++it;
+   }
 
-    ret.sort();
-    return ret;
+   ret.sort();
+   return ret;
 }
 
 
@@ -2085,40 +2170,50 @@ QStringList QFont::substitutions()
 */
 static quint8 get_font_bits(int version, const QFontPrivate *f)
 {
-    Q_ASSERT(f != 0);
-    quint8 bits = 0;
-    if (f->request.style)
-        bits |= 0x01;
-    if (f->underline)
-        bits |= 0x02;
-    if (f->overline)
-        bits |= 0x40;
-    if (f->strikeOut)
-        bits |= 0x04;
-    if (f->request.fixedPitch)
-        bits |= 0x08;
-    // if (f.hintSetByUser)
-    // bits |= 0x10;
-    if (f->rawMode)
-        bits |= 0x20;
-    if (version >= QDataStream::Qt_4_0) {
-        if (f->kerning)
-            bits |= 0x10;
-    }
-    if (f->request.style == QFont::StyleOblique)
-        bits |= 0x80;
-    return bits;
+   Q_ASSERT(f != 0);
+   quint8 bits = 0;
+   if (f->request.style) {
+      bits |= 0x01;
+   }
+   if (f->underline) {
+      bits |= 0x02;
+   }
+   if (f->overline) {
+      bits |= 0x40;
+   }
+   if (f->strikeOut) {
+      bits |= 0x04;
+   }
+   if (f->request.fixedPitch) {
+      bits |= 0x08;
+   }
+   // if (f.hintSetByUser)
+   // bits |= 0x10;
+   if (f->rawMode) {
+      bits |= 0x20;
+   }
+   if (version >= QDataStream::Qt_4_0) {
+      if (f->kerning) {
+         bits |= 0x10;
+      }
+   }
+   if (f->request.style == QFont::StyleOblique) {
+      bits |= 0x80;
+   }
+   return bits;
 }
 
 static quint8 get_extended_font_bits(const QFontPrivate *f)
 {
-    Q_ASSERT(f != 0);
-    quint8 bits = 0;
-    if (f->request.ignorePitch)
-        bits |= 0x01;
-    if (f->letterSpacingIsAbsolute)
-        bits |= 0x02;
-    return bits;
+   Q_ASSERT(f != 0);
+   quint8 bits = 0;
+   if (f->request.ignorePitch) {
+      bits |= 0x01;
+   }
+   if (f->letterSpacingIsAbsolute) {
+      bits |= 0x02;
+   }
+   return bits;
 }
 
 #ifndef QT_NO_DATASTREAM
@@ -2129,25 +2224,27 @@ static quint8 get_extended_font_bits(const QFontPrivate *f)
 */
 static void set_font_bits(int version, quint8 bits, QFontPrivate *f)
 {
-    Q_ASSERT(f != 0);
-    f->request.style         = (bits & 0x01) != 0 ? QFont::StyleItalic : QFont::StyleNormal;
-    f->underline             = (bits & 0x02) != 0;
-    f->overline              = (bits & 0x40) != 0;
-    f->strikeOut             = (bits & 0x04) != 0;
-    f->request.fixedPitch    = (bits & 0x08) != 0;
-    // f->hintSetByUser      = (bits & 0x10) != 0;
-    f->rawMode               = (bits & 0x20) != 0;
-    if (version >= QDataStream::Qt_4_0)
-        f->kerning               = (bits & 0x10) != 0;
-    if ((bits & 0x80) != 0)
-        f->request.style         = QFont::StyleOblique;
+   Q_ASSERT(f != 0);
+   f->request.style         = (bits & 0x01) != 0 ? QFont::StyleItalic : QFont::StyleNormal;
+   f->underline             = (bits & 0x02) != 0;
+   f->overline              = (bits & 0x40) != 0;
+   f->strikeOut             = (bits & 0x04) != 0;
+   f->request.fixedPitch    = (bits & 0x08) != 0;
+   // f->hintSetByUser      = (bits & 0x10) != 0;
+   f->rawMode               = (bits & 0x20) != 0;
+   if (version >= QDataStream::Qt_4_0) {
+      f->kerning               = (bits & 0x10) != 0;
+   }
+   if ((bits & 0x80) != 0) {
+      f->request.style         = QFont::StyleOblique;
+   }
 }
 
 static void set_extended_font_bits(quint8 bits, QFontPrivate *f)
 {
-    Q_ASSERT(f != 0);
-    f->request.ignorePitch = (bits & 0x01) != 0;
-    f->letterSpacingIsAbsolute = (bits & 0x02) != 0;
+   Q_ASSERT(f != 0);
+   f->request.ignorePitch = (bits & 0x01) != 0;
+   f->letterSpacingIsAbsolute = (bits & 0x02) != 0;
 }
 #endif
 
@@ -2160,7 +2257,7 @@ static void set_extended_font_bits(quint8 bits, QFontPrivate *f)
 */
 QString QFont::key() const
 {
-    return toString();
+   return toString();
 }
 
 /*!
@@ -2172,17 +2269,17 @@ QString QFont::key() const
  */
 QString QFont::toString() const
 {
-    const QChar comma(QLatin1Char(','));
-    return family() + comma +
-        QString::number(     pointSizeF()) + comma +
-        QString::number(      pixelSize()) + comma +
-        QString::number((int) styleHint()) + comma +
-        QString::number(         weight()) + comma +
-        QString::number((int)     style()) + comma +
-        QString::number((int) underline()) + comma +
-        QString::number((int) strikeOut()) + comma +
-        QString::number((int)fixedPitch()) + comma +
-        QString::number((int)   rawMode());
+   const QChar comma(QLatin1Char(','));
+   return family() + comma +
+          QString::number(     pointSizeF()) + comma +
+          QString::number(      pixelSize()) + comma +
+          QString::number((int) styleHint()) + comma +
+          QString::number(         weight()) + comma +
+          QString::number((int)     style()) + comma +
+          QString::number((int) underline()) + comma +
+          QString::number((int) strikeOut()) + comma +
+          QString::number((int)fixedPitch()) + comma +
+          QString::number((int)   rawMode());
 }
 
 
@@ -2195,41 +2292,44 @@ QString QFont::toString() const
  */
 bool QFont::fromString(const QString &descrip)
 {
-    QStringList l(descrip.split(QLatin1Char(',')));
+   QStringList l(descrip.split(QLatin1Char(',')));
 
-    int count = l.count();
-    if (!count || (count > 2 && count < 9) || count > 11) {
-        qWarning("QFont::fromString: Invalid description '%s'",
-                 descrip.isEmpty() ? "(empty)" : descrip.toLatin1().data());
-        return false;
-    }
+   int count = l.count();
+   if (!count || (count > 2 && count < 9) || count > 11) {
+      qWarning("QFont::fromString: Invalid description '%s'",
+               descrip.isEmpty() ? "(empty)" : descrip.toLatin1().data());
+      return false;
+   }
 
-    setFamily(l[0]);
-    if (count > 1 && l[1].toDouble() > 0.0)
-        setPointSizeF(l[1].toDouble());
-    if (count == 9) {
-        setStyleHint((StyleHint) l[2].toInt());
-        setWeight(qMax(qMin(99, l[3].toInt()), 0));
-        setItalic(l[4].toInt());
-        setUnderline(l[5].toInt());
-        setStrikeOut(l[6].toInt());
-        setFixedPitch(l[7].toInt());
-        setRawMode(l[8].toInt());
-    } else if (count == 10) {
-        if (l[2].toInt() > 0)
-            setPixelSize(l[2].toInt());
-        setStyleHint((StyleHint) l[3].toInt());
-        setWeight(qMax(qMin(99, l[4].toInt()), 0));
-        setStyle((QFont::Style)l[5].toInt());
-        setUnderline(l[6].toInt());
-        setStrikeOut(l[7].toInt());
-        setFixedPitch(l[8].toInt());
-        setRawMode(l[9].toInt());
-    }
-    if (count >= 9 && !d->request.fixedPitch) // assume 'false' fixedPitch equals default
-        d->request.ignorePitch = true;
+   setFamily(l[0]);
+   if (count > 1 && l[1].toDouble() > 0.0) {
+      setPointSizeF(l[1].toDouble());
+   }
+   if (count == 9) {
+      setStyleHint((StyleHint) l[2].toInt());
+      setWeight(qMax(qMin(99, l[3].toInt()), 0));
+      setItalic(l[4].toInt());
+      setUnderline(l[5].toInt());
+      setStrikeOut(l[6].toInt());
+      setFixedPitch(l[7].toInt());
+      setRawMode(l[8].toInt());
+   } else if (count == 10) {
+      if (l[2].toInt() > 0) {
+         setPixelSize(l[2].toInt());
+      }
+      setStyleHint((StyleHint) l[3].toInt());
+      setWeight(qMax(qMin(99, l[4].toInt()), 0));
+      setStyle((QFont::Style)l[5].toInt());
+      setUnderline(l[6].toInt());
+      setStrikeOut(l[7].toInt());
+      setFixedPitch(l[8].toInt());
+      setRawMode(l[9].toInt());
+   }
+   if (count >= 9 && !d->request.fixedPitch) { // assume 'false' fixedPitch equals default
+      d->request.ignorePitch = true;
+   }
 
-    return true;
+   return true;
 }
 
 #if !defined(Q_WS_QWS)
@@ -2244,48 +2344,51 @@ void QFont::cacheStatistics()
 
 QDataStream &operator<<(QDataStream &s, const QFont &font)
 {
-    if (s.version() == 1) {
-        s << font.d->request.family.toLatin1();
-    } else {
-        s << font.d->request.family;
-    }
+   if (s.version() == 1) {
+      s << font.d->request.family.toLatin1();
+   } else {
+      s << font.d->request.family;
+   }
 
-    if (s.version() >= QDataStream::Qt_4_0) {
-        // 4.0
-        double pointSize = font.d->request.pointSize;
-        qint32 pixelSize = font.d->request.pixelSize;
-        s << pointSize;
-        s << pixelSize;
-    } else if (s.version() <= 3) {
-        qint16 pointSize = (qint16) (font.d->request.pointSize * 10);
-        if (pointSize < 0) {
+   if (s.version() >= QDataStream::Qt_4_0) {
+      // 4.0
+      double pointSize = font.d->request.pointSize;
+      qint32 pixelSize = font.d->request.pixelSize;
+      s << pointSize;
+      s << pixelSize;
+   } else if (s.version() <= 3) {
+      qint16 pointSize = (qint16) (font.d->request.pointSize * 10);
+      if (pointSize < 0) {
 #ifdef Q_WS_X11
-            pointSize = (qint16)(font.d->request.pixelSize*720/QX11Info::appDpiY());
+         pointSize = (qint16)(font.d->request.pixelSize * 720 / QX11Info::appDpiY());
 #else
-            pointSize = (qint16)QFontInfo(font).pointSize() * 10;
+         pointSize = (qint16)QFontInfo(font).pointSize() * 10;
 #endif
-        }
-        s << pointSize;
-    } else {
-        s << (qint16) (font.d->request.pointSize * 10);
-        s << (qint16) font.d->request.pixelSize;
-    }
+      }
+      s << pointSize;
+   } else {
+      s << (qint16) (font.d->request.pointSize * 10);
+      s << (qint16) font.d->request.pixelSize;
+   }
 
-    s << (quint8) font.d->request.styleHint;
-    if (s.version() >= QDataStream::Qt_3_1)
-        s << (quint8) font.d->request.styleStrategy;
-    s << (quint8) 0
-      << (quint8) font.d->request.weight
-      << get_font_bits(s.version(), font.d.data());
-    if (s.version() >= QDataStream::Qt_4_3)
-        s << (quint16)font.d->request.stretch;
-    if (s.version() >= QDataStream::Qt_4_4)
-        s << get_extended_font_bits(font.d.data());
-    if (s.version() >= QDataStream::Qt_4_5) {
-        s << font.d->letterSpacing.value();
-        s << font.d->wordSpacing.value();
-    }
-    return s;
+   s << (quint8) font.d->request.styleHint;
+   if (s.version() >= QDataStream::Qt_3_1) {
+      s << (quint8) font.d->request.styleStrategy;
+   }
+   s << (quint8) 0
+     << (quint8) font.d->request.weight
+     << get_font_bits(s.version(), font.d.data());
+   if (s.version() >= QDataStream::Qt_4_3) {
+      s << (quint16)font.d->request.stretch;
+   }
+   if (s.version() >= QDataStream::Qt_4_4) {
+      s << get_extended_font_bits(font.d.data());
+   }
+   if (s.version() >= QDataStream::Qt_4_5) {
+      s << font.d->letterSpacing.value();
+      s << font.d->wordSpacing.value();
+   }
+   return s;
 }
 
 
@@ -2299,69 +2402,71 @@ QDataStream &operator<<(QDataStream &s, const QFont &font)
 */
 QDataStream &operator>>(QDataStream &s, QFont &font)
 {
-    font.d = new QFontPrivate;
-    font.resolve_mask = QFont::AllPropertiesResolved;
+   font.d = new QFontPrivate;
+   font.resolve_mask = QFont::AllPropertiesResolved;
 
-    quint8 styleHint, styleStrategy = QFont::PreferDefault, charSet, weight, bits;
+   quint8 styleHint, styleStrategy = QFont::PreferDefault, charSet, weight, bits;
 
-    if (s.version() == 1) {
-        QByteArray fam;
-        s >> fam;
-        font.d->request.family = QString::fromLatin1(fam);
-    } else {
-        s >> font.d->request.family;
-    }
+   if (s.version() == 1) {
+      QByteArray fam;
+      s >> fam;
+      font.d->request.family = QString::fromLatin1(fam);
+   } else {
+      s >> font.d->request.family;
+   }
 
-    if (s.version() >= QDataStream::Qt_4_0) {
-        // 4.0
-        double pointSize;
-        qint32 pixelSize;
-        s >> pointSize;
-        s >> pixelSize;
-        font.d->request.pointSize = qreal(pointSize);
-        font.d->request.pixelSize = pixelSize;
-    } else {
-        qint16 pointSize, pixelSize = -1;
-        s >> pointSize;
-        if (s.version() >= 4)
-            s >> pixelSize;
-        font.d->request.pointSize = qreal(pointSize / 10.);
-        font.d->request.pixelSize = pixelSize;
-    }
-    s >> styleHint;
-    if (s.version() >= QDataStream::Qt_3_1)
-        s >> styleStrategy;
+   if (s.version() >= QDataStream::Qt_4_0) {
+      // 4.0
+      double pointSize;
+      qint32 pixelSize;
+      s >> pointSize;
+      s >> pixelSize;
+      font.d->request.pointSize = qreal(pointSize);
+      font.d->request.pixelSize = pixelSize;
+   } else {
+      qint16 pointSize, pixelSize = -1;
+      s >> pointSize;
+      if (s.version() >= 4) {
+         s >> pixelSize;
+      }
+      font.d->request.pointSize = qreal(pointSize / 10.);
+      font.d->request.pixelSize = pixelSize;
+   }
+   s >> styleHint;
+   if (s.version() >= QDataStream::Qt_3_1) {
+      s >> styleStrategy;
+   }
 
-    s >> charSet;
-    s >> weight;
-    s >> bits;
+   s >> charSet;
+   s >> weight;
+   s >> bits;
 
-    font.d->request.styleHint = styleHint;
-    font.d->request.styleStrategy = styleStrategy;
-    font.d->request.weight = weight;
+   font.d->request.styleHint = styleHint;
+   font.d->request.styleStrategy = styleStrategy;
+   font.d->request.weight = weight;
 
-    set_font_bits(s.version(), bits, font.d.data());
+   set_font_bits(s.version(), bits, font.d.data());
 
-    if (s.version() >= QDataStream::Qt_4_3) {
-        quint16 stretch;
-        s >> stretch;
-        font.d->request.stretch = stretch;
-    }
+   if (s.version() >= QDataStream::Qt_4_3) {
+      quint16 stretch;
+      s >> stretch;
+      font.d->request.stretch = stretch;
+   }
 
-    if (s.version() >= QDataStream::Qt_4_4) {
-        quint8 extendedBits;
-        s >> extendedBits;
-        set_extended_font_bits(extendedBits, font.d.data());
-    }
-    if (s.version() >= QDataStream::Qt_4_5) {
-        int value;
-        s >> value;
-        font.d->letterSpacing.setValue(value);
-        s >> value;
-        font.d->wordSpacing.setValue(value);
-    }
+   if (s.version() >= QDataStream::Qt_4_4) {
+      quint8 extendedBits;
+      s >> extendedBits;
+      set_extended_font_bits(extendedBits, font.d.data());
+   }
+   if (s.version() >= QDataStream::Qt_4_5) {
+      int value;
+      s >> value;
+      font.d->letterSpacing.setValue(value);
+      s >> value;
+      font.d->wordSpacing.setValue(value);
+   }
 
-    return s;
+   return s;
 }
 
 #endif // QT_NO_DATASTREAM
@@ -2432,7 +2537,7 @@ QDataStream &operator>>(QDataStream &s, QFont &font)
     that is not screen-compatible.
 */
 QFontInfo::QFontInfo(const QFont &font)
-    : d(font.d.data())
+   : d(font.d.data())
 {
 }
 
@@ -2440,7 +2545,7 @@ QFontInfo::QFontInfo(const QFont &font)
     Constructs a copy of \a fi.
 */
 QFontInfo::QFontInfo(const QFontInfo &fi)
-    : d(fi.d.data())
+   : d(fi.d.data())
 {
 }
 
@@ -2456,8 +2561,8 @@ QFontInfo::~QFontInfo()
 */
 QFontInfo &QFontInfo::operator=(const QFontInfo &fi)
 {
-    d = fi.d.data();
-    return *this;
+   d = fi.d.data();
+   return *this;
 }
 
 /*!
@@ -2467,9 +2572,9 @@ QFontInfo &QFontInfo::operator=(const QFontInfo &fi)
 */
 QString QFontInfo::family() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    return engine->fontDef.family;
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   return engine->fontDef.family;
 }
 
 /*!
@@ -2482,9 +2587,9 @@ QString QFontInfo::family() const
 */
 QString QFontInfo::styleName() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    return engine->fontDef.styleName;
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   return engine->fontDef.styleName;
 }
 
 /*!
@@ -2494,9 +2599,9 @@ QString QFontInfo::styleName() const
 */
 int QFontInfo::pointSize() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    return qRound(engine->fontDef.pointSize);
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   return qRound(engine->fontDef.pointSize);
 }
 
 /*!
@@ -2506,9 +2611,9 @@ int QFontInfo::pointSize() const
 */
 qreal QFontInfo::pointSizeF() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    return engine->fontDef.pointSize;
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   return engine->fontDef.pointSize;
 }
 
 /*!
@@ -2518,9 +2623,9 @@ qreal QFontInfo::pointSizeF() const
 */
 int QFontInfo::pixelSize() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    return engine->fontDef.pixelSize;
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   return engine->fontDef.pixelSize;
 }
 
 /*!
@@ -2530,9 +2635,9 @@ int QFontInfo::pixelSize() const
 */
 bool QFontInfo::italic() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    return engine->fontDef.style != QFont::StyleNormal;
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   return engine->fontDef.style != QFont::StyleNormal;
 }
 
 /*!
@@ -2542,9 +2647,9 @@ bool QFontInfo::italic() const
 */
 QFont::Style QFontInfo::style() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    return (QFont::Style)engine->fontDef.style;
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   return (QFont::Style)engine->fontDef.style;
 }
 
 /*!
@@ -2554,9 +2659,9 @@ QFont::Style QFontInfo::style() const
 */
 int QFontInfo::weight() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    return engine->fontDef.weight;
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   return engine->fontDef.weight;
 
 }
 
@@ -2581,7 +2686,7 @@ int QFontInfo::weight() const
 */
 bool QFontInfo::underline() const
 {
-    return d->underline;
+   return d->underline;
 }
 
 /*!
@@ -2596,7 +2701,7 @@ bool QFontInfo::underline() const
 */
 bool QFontInfo::overline() const
 {
-    return d->overline;
+   return d->overline;
 }
 
 /*!
@@ -2609,7 +2714,7 @@ bool QFontInfo::overline() const
 */
 bool QFontInfo::strikeOut() const
 {
-    return d->strikeOut;
+   return d->strikeOut;
 }
 
 /*!
@@ -2619,19 +2724,19 @@ bool QFontInfo::strikeOut() const
 */
 bool QFontInfo::fixedPitch() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
 #ifdef Q_OS_MAC
-    if (!engine->fontDef.fixedPitchComputed) {
-        QChar ch[2] = { QLatin1Char('i'), QLatin1Char('m') };
-        QGlyphLayoutArray<2> g;
-        int l = 2;
-        engine->stringToCMap(ch, 2, &g, &l, 0);
-        engine->fontDef.fixedPitch = g.advances_x[0] == g.advances_x[1];
-        engine->fontDef.fixedPitchComputed = true;
-    }
+   if (!engine->fontDef.fixedPitchComputed) {
+      QChar ch[2] = { QLatin1Char('i'), QLatin1Char('m') };
+      QGlyphLayoutArray<2> g;
+      int l = 2;
+      engine->stringToCMap(ch, 2, &g, &l, 0);
+      engine->fontDef.fixedPitch = g.advances_x[0] == g.advances_x[1];
+      engine->fontDef.fixedPitchComputed = true;
+   }
 #endif
-    return engine->fontDef.fixedPitch;
+   return engine->fontDef.fixedPitch;
 }
 
 /*!
@@ -2643,9 +2748,9 @@ bool QFontInfo::fixedPitch() const
 */
 QFont::StyleHint QFontInfo::styleHint() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    return (QFont::StyleHint) engine->fontDef.styleHint;
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   return (QFont::StyleHint) engine->fontDef.styleHint;
 }
 
 /*!
@@ -2660,7 +2765,7 @@ QFont::StyleHint QFontInfo::styleHint() const
 */
 bool QFontInfo::rawMode() const
 {
-    return d->rawMode;
+   return d->rawMode;
 }
 
 /*!
@@ -2671,11 +2776,11 @@ bool QFontInfo::rawMode() const
 */
 bool QFontInfo::exactMatch() const
 {
-    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
-    Q_ASSERT(engine != 0);
-    return (d->rawMode
-            ? engine->type() != QFontEngine::Box
-            : d->request.exactMatch(engine->fontDef));
+   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   Q_ASSERT(engine != 0);
+   return (d->rawMode
+           ? engine->type() != QFontEngine::Box
+           : d->request.exactMatch(engine->fontDef));
 }
 
 
@@ -2694,390 +2799,248 @@ static const int fast_timeout =  10000; // 10s
 static const int slow_timeout = 300000; //  5m
 #endif // QFONTCACHE_DEBUG
 
-const uint QFontCache::min_cost = 4*1024; // 4mb
+const uint QFontCache::min_cost = 4 * 1024; // 4mb
 
 
 Q_GLOBAL_STATIC(QThreadStorage<QFontCache *>, theFontCache)
 
 QFontCache *QFontCache::instance()
 {
-    QFontCache *&fontCache = theFontCache()->localData();
-    if (!fontCache)
-        fontCache = new QFontCache;
-    return fontCache;
+   QFontCache *&fontCache = theFontCache()->localData();
+   if (!fontCache) {
+      fontCache = new QFontCache;
+   }
+   return fontCache;
 }
 
 void QFontCache::cleanup()
 {
-    QThreadStorage<QFontCache *> *cache = 0;
-    QT_TRY {
-        cache = theFontCache();
-    } QT_CATCH (const std::bad_alloc &) {
-        // no cache - just ignore
-    }
-    if (cache && cache->hasLocalData())
-        cache->setLocalData(0);
+   QThreadStorage<QFontCache *> *cache = 0;
+   QT_TRY {
+      cache = theFontCache();
+   } QT_CATCH (const std::bad_alloc &) {
+      // no cache - just ignore
+   }
+   if (cache && cache->hasLocalData()) {
+      cache->setLocalData(0);
+   }
 }
 
 QFontCache::QFontCache()
-    : QObject(), total_cost(0), max_cost(min_cost),
-      current_timestamp(0), fast(false), timer_id(-1)
+   : QObject(), total_cost(0), max_cost(min_cost),
+     current_timestamp(0), fast(false), timer_id(-1)
 {
 }
 
 QFontCache::~QFontCache()
 {
-    clear();
-    {
-        EngineDataCache::ConstIterator it = engineDataCache.constBegin(),
-                                 end = engineDataCache.constEnd();
-        while (it != end) {
-            if (it.value()->ref.load() == 0)
-                delete it.value();
-            else
-                FC_DEBUG("QFontCache::~QFontCache: engineData %p still has refcount %d",
-                         it.value(), it.value()->ref.load());
-            ++it;
-        }
-    }
-    EngineCache::ConstIterator it = engineCache.constBegin(),
-                         end = engineCache.constEnd();
-    while (it != end) {
-        if (--it.value().data->cache_count == 0) {
-            if (it.value().data->ref.load() == 0) {
-                FC_DEBUG("QFontCache::~QFontCache: deleting engine %p key=(%d / %g %g %d %d %d)",
-                         it.value().data, it.key().script, it.key().def.pointSize,
-                         it.key().def.pixelSize, it.key().def.weight, it.key().def.style,
-                         it.key().def.fixedPitch);
+   clear();
+   {
+      EngineDataCache::ConstIterator it = engineDataCache.constBegin(),
+                                     end = engineDataCache.constEnd();
+      while (it != end) {
+         if (it.value()->ref.load() == 0) {
+            delete it.value();
+         } else
+            FC_DEBUG("QFontCache::~QFontCache: engineData %p still has refcount %d",
+                     it.value(), it.value()->ref.load());
+         ++it;
+      }
+   }
+   EngineCache::ConstIterator it = engineCache.constBegin(),
+                              end = engineCache.constEnd();
+   while (it != end) {
+      if (--it.value().data->cache_count == 0) {
+         if (it.value().data->ref.load() == 0) {
+            FC_DEBUG("QFontCache::~QFontCache: deleting engine %p key=(%d / %g %g %d %d %d)",
+                     it.value().data, it.key().script, it.key().def.pointSize,
+                     it.key().def.pixelSize, it.key().def.weight, it.key().def.style,
+                     it.key().def.fixedPitch);
 
-                delete it.value().data;
-            } else {
-                FC_DEBUG("QFontCache::~QFontCache: engine = %p still has refcount %d",
-                         it.value().data, it.value().data->ref.load());
-            }
-        }
-        ++it;
-    }
+            delete it.value().data;
+         } else {
+            FC_DEBUG("QFontCache::~QFontCache: engine = %p still has refcount %d",
+                     it.value().data, it.value().data->ref.load());
+         }
+      }
+      ++it;
+   }
 }
 
 void QFontCache::clear()
 {
-    {
-        EngineDataCache::Iterator it = engineDataCache.begin(),
-                                 end = engineDataCache.end();
-        while (it != end) {
-            QFontEngineData *data = it.value();
+   {
+      EngineDataCache::Iterator it = engineDataCache.begin(),
+                                end = engineDataCache.end();
+      while (it != end) {
+         QFontEngineData *data = it.value();
 #if !defined(Q_OS_MAC)
-            for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
-                if (data->engines[i]) {
-                    data->engines[i]->ref.deref();
-                    data->engines[i] = 0;
-                }
+         for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
+            if (data->engines[i]) {
+               data->engines[i]->ref.deref();
+               data->engines[i] = 0;
             }
+         }
 #else
-            if (data->engine) {
-                data->engine->ref.deref();
-                data->engine = 0;
-            }
+         if (data->engine) {
+            data->engine->ref.deref();
+            data->engine = 0;
+         }
 #endif
-            ++it;
-        }
-    }
+         ++it;
+      }
+   }
 
-    for (EngineCache::Iterator it = engineCache.begin(), end = engineCache.end();
+   for (EngineCache::Iterator it = engineCache.begin(), end = engineCache.end();
          it != end; ++it) {
-        if (it->data->ref.load() == 0) {
-            delete it->data;
-            it->data = 0;
-        }
-    }
+      if (it->data->ref.load() == 0) {
+         delete it->data;
+         it->data = 0;
+      }
+   }
 
-    for (EngineCache::Iterator it = engineCache.begin(), end = engineCache.end();
+   for (EngineCache::Iterator it = engineCache.begin(), end = engineCache.end();
          it != end; ++it) {
-        if (it->data && it->data->ref.load() == 0) {
-            delete it->data;
-            it->data = 0;
-        }
-    }
+      if (it->data && it->data->ref.load() == 0) {
+         delete it->data;
+         it->data = 0;
+      }
+   }
 
-    engineCache.clear();
+   engineCache.clear();
 }
 
 #if defined(Q_WS_QWS) && !defined(QT_NO_QWS_QPF2)
 void QFontCache::removeEngineForFont(const QByteArray &_fontName)
 {
 
-    /* This could be optimized but the code becomes much more complex if we want to handle multi
-     * font engines and it is probably not worth it. Therefore we just clear the entire font cache.
-     */
-    Q_UNUSED(_fontName);
-    clear();
+   /* This could be optimized but the code becomes much more complex if we want to handle multi
+    * font engines and it is probably not worth it. Therefore we just clear the entire font cache.
+    */
+   Q_UNUSED(_fontName);
+   clear();
 }
 #endif
 
 QFontEngineData *QFontCache::findEngineData(const Key &key) const
 {
-    EngineDataCache::ConstIterator it = engineDataCache.find(key),
+   EngineDataCache::ConstIterator it = engineDataCache.find(key),
                                   end = engineDataCache.end();
-    if (it == end) return 0;
+   if (it == end) {
+      return 0;
+   }
 
-    // found
-    return it.value();
+   // found
+   return it.value();
 }
 
 void QFontCache::insertEngineData(const Key &key, QFontEngineData *engineData)
 {
-    FC_DEBUG("QFontCache: inserting new engine data %p", engineData);
+   FC_DEBUG("QFontCache: inserting new engine data %p", engineData);
 
-    engineDataCache.insert(key, engineData);
-    increaseCost(sizeof(QFontEngineData));
+   engineDataCache.insert(key, engineData);
+   increaseCost(sizeof(QFontEngineData));
 }
 
 QFontEngine *QFontCache::findEngine(const Key &key)
 {
-    EngineCache::Iterator it = engineCache.find(key),
+   EngineCache::Iterator it = engineCache.find(key),
                          end = engineCache.end();
-    if (it == end) return 0;
+   if (it == end) {
+      return 0;
+   }
 
-    // found... update the hitcount and timestamp
-    it.value().hits++;
-    it.value().timestamp = ++current_timestamp;
+   // found... update the hitcount and timestamp
+   it.value().hits++;
+   it.value().timestamp = ++current_timestamp;
 
-    FC_DEBUG("QFontCache: found font engine\n"
-             "  %p: timestamp %4u hits %3u ref %2d/%2d, type '%s'",
-             it.value().data, it.value().timestamp, it.value().hits,
-             it.value().data->ref.load(), it.value().data->cache_count,
-             it.value().data->name());
+   FC_DEBUG("QFontCache: found font engine\n"
+            "  %p: timestamp %4u hits %3u ref %2d/%2d, type '%s'",
+            it.value().data, it.value().timestamp, it.value().hits,
+            it.value().data->ref.load(), it.value().data->cache_count,
+            it.value().data->name());
 
-    return it.value().data;
+   return it.value().data;
 }
 
 void QFontCache::insertEngine(const Key &key, QFontEngine *engine)
 {
-    FC_DEBUG("QFontCache: inserting new engine %p", engine);
+   FC_DEBUG("QFontCache: inserting new engine %p", engine);
 
-    Engine data(engine);
-    data.timestamp = ++current_timestamp;
+   Engine data(engine);
+   data.timestamp = ++current_timestamp;
 
-    engineCache.insert(key, data);
+   engineCache.insert(key, data);
 
-    // only increase the cost if this is the first time we insert the engine
-    if (engine->cache_count == 0)
-        increaseCost(engine->cache_cost);
+   // only increase the cost if this is the first time we insert the engine
+   if (engine->cache_count == 0) {
+      increaseCost(engine->cache_cost);
+   }
 
-    ++engine->cache_count;
+   ++engine->cache_count;
 }
 
 void QFontCache::increaseCost(uint cost)
 {
-    cost = (cost + 512) / 1024; // store cost in kb
-    cost = cost > 0 ? cost : 1;
-    total_cost += cost;
+   cost = (cost + 512) / 1024; // store cost in kb
+   cost = cost > 0 ? cost : 1;
+   total_cost += cost;
 
-    FC_DEBUG("  COST: increased %u kb, total_cost %u kb, max_cost %u kb",
+   FC_DEBUG("  COST: increased %u kb, total_cost %u kb, max_cost %u kb",
             cost, total_cost, max_cost);
 
-    if (total_cost > max_cost) {
-        max_cost = total_cost;
+   if (total_cost > max_cost) {
+      max_cost = total_cost;
 
-        if (timer_id == -1 || ! fast) {
-            FC_DEBUG("  TIMER: starting fast timer (%d ms)", fast_timeout);
+      if (timer_id == -1 || ! fast) {
+         FC_DEBUG("  TIMER: starting fast timer (%d ms)", fast_timeout);
 
-            if (timer_id != -1) killTimer(timer_id);
-            timer_id = startTimer(fast_timeout);
-            fast = true;
-        }
-    }
+         if (timer_id != -1) {
+            killTimer(timer_id);
+         }
+         timer_id = startTimer(fast_timeout);
+         fast = true;
+      }
+   }
 }
 
 void QFontCache::decreaseCost(uint cost)
 {
-    cost = (cost + 512) / 1024; // cost is stored in kb
-    cost = cost > 0 ? cost : 1;
-    Q_ASSERT(cost <= total_cost);
-    total_cost -= cost;
+   cost = (cost + 512) / 1024; // cost is stored in kb
+   cost = cost > 0 ? cost : 1;
+   Q_ASSERT(cost <= total_cost);
+   total_cost -= cost;
 
-    FC_DEBUG("  COST: decreased %u kb, total_cost %u kb, max_cost %u kb",
+   FC_DEBUG("  COST: decreased %u kb, total_cost %u kb, max_cost %u kb",
             cost, total_cost, max_cost);
 }
 
 #if defined(Q_OS_WIN) || defined (Q_WS_QWS)
 void QFontCache::cleanupPrinterFonts()
 {
-    FC_DEBUG("QFontCache::cleanupPrinterFonts");
+   FC_DEBUG("QFontCache::cleanupPrinterFonts");
 
-    {
-        FC_DEBUG("  CLEAN engine data:");
+   {
+      FC_DEBUG("  CLEAN engine data:");
 
-        // clean out all unused engine data
-        EngineDataCache::Iterator it = engineDataCache.begin(),
-                                 end = engineDataCache.end();
-        while (it != end) {
-            if (it.key().screen == 0) {
-                ++it;
-                continue;
-            }
-
-            if(it.value()->ref.load() != 0) {
-                for(int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
-                    if(it.value()->engines[i]) {
-                        it.value()->engines[i]->ref.deref();
-                        it.value()->engines[i] = 0;
-                    }
-                }
-                ++it;
-            } else {
-
-                EngineDataCache::Iterator rem = it++;
-
-                decreaseCost(sizeof(QFontEngineData));
-
-                FC_DEBUG("    %p", rem.value());
-
-                delete rem.value();
-                engineDataCache.erase(rem);
-            }
-        }
-    }
-
-    EngineCache::Iterator it = engineCache.begin(),
-                         end = engineCache.end();
-    while(it != end) {
-        if (it.value().data->ref.load() != 0 || it.key().screen == 0) {
+      // clean out all unused engine data
+      EngineDataCache::Iterator it = engineDataCache.begin(),
+                                end = engineDataCache.end();
+      while (it != end) {
+         if (it.key().screen == 0) {
             ++it;
             continue;
-        }
+         }
 
-        FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, type '%s'",
-                 it.value().data, it.value().timestamp, it.value().hits,
-                 it.value().data->ref.load(), it.value().data->cache_count,
-                 it.value().data->name());
-
-        if (--it.value().data->cache_count == 0) {
-            FC_DEBUG("    DELETE: last occurrence in cache");
-
-            decreaseCost(it.value().data->cache_cost);
-            delete it.value().data;
-        }
-
-        engineCache.erase(it++);
-    }
-}
-#endif
-
-void QFontCache::timerEvent(QTimerEvent *)
-{
-    FC_DEBUG("QFontCache::timerEvent: performing cache maintenance (timestamp %u)",
-              current_timestamp);
-
-    if (total_cost <= max_cost && max_cost <= min_cost) {
-        FC_DEBUG("  cache redused sufficiently, stopping timer");
-
-        killTimer(timer_id);
-        timer_id = -1;
-        fast = false;
-
-        return;
-    }
-
-    // go through the cache and count up everything in use
-    uint in_use_cost = 0;
-
-    {
-        FC_DEBUG("  SWEEP engine data:");
-
-        // make sure the cost of each engine data is at least 1kb
-        const uint engine_data_cost =
-            sizeof(QFontEngineData) > 1024 ? sizeof(QFontEngineData) : 1024;
-
-        EngineDataCache::ConstIterator it = engineDataCache.constBegin(),
-                                      end = engineDataCache.constEnd();
-        for (; it != end; ++it) {
-
-#ifdef QFONTCACHE_DEBUG
-            FC_DEBUG("    %p: ref %2d", it.value(), int(it.value()->ref));
-
-#  if defined(Q_WS_X11) || defined(Q_OS_WIN)
-            // print out all engines
+         if (it.value()->ref.load() != 0) {
             for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
-                if (! it.value()->engines[i])
-                    continue;
-                FC_DEBUG("      contains %p", it.value()->engines[i]);
+               if (it.value()->engines[i]) {
+                  it.value()->engines[i]->ref.deref();
+                  it.value()->engines[i] = 0;
+               }
             }
-#  endif
-
-#endif
-
-            if (it.value()->ref.load() != 0)
-                in_use_cost += engine_data_cost;
-        }
-    }
-
-    {
-        FC_DEBUG("  SWEEP engine:");
-
-        EngineCache::ConstIterator it = engineCache.constBegin(),
-                                  end = engineCache.constEnd();
-        for (; it != end; ++it) {
-            FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, cost %u bytes",
-                     it.value().data, it.value().timestamp, it.value().hits,
-                     it.value().data->ref.load(), it.value().data->cache_count,
-                     it.value().data->cache_cost);
-
-            if (it.value().data->ref.load() != 0)
-                in_use_cost += it.value().data->cache_cost / it.value().data->cache_count;
-        }
-
-        // attempt to make up for rounding errors
-        in_use_cost += engineCache.size();
-    }
-
-    in_use_cost = (in_use_cost + 512) / 1024; // cost is stored in kb
-
-    /*
-      calculate the new maximum cost for the cache
-
-      NOTE: in_use_cost is *not* correct due to rounding errors in the
-      above algorithm.  instead of worrying about getting the
-      calculation correct, we are more interested in speed, and use
-      in_use_cost as a floor for new_max_cost
-    */
-    uint new_max_cost = qMax(qMax(max_cost / 2, in_use_cost), min_cost);
-
-    FC_DEBUG("  after sweep, in use %u kb, total %u kb, max %u kb, new max %u kb",
-              in_use_cost, total_cost, max_cost, new_max_cost);
-
-    if (new_max_cost == max_cost) {
-        if (fast) {
-            FC_DEBUG("  cannot shrink cache, slowing timer");
-
-            killTimer(timer_id);
-            timer_id = startTimer(slow_timeout);
-            fast = false;
-        }
-
-        return;
-    } else if (! fast) {
-        FC_DEBUG("  dropping into passing gear");
-
-        killTimer(timer_id);
-        timer_id = startTimer(fast_timeout);
-        fast = true;
-    }
-
-    max_cost = new_max_cost;
-
-    {
-        FC_DEBUG("  CLEAN engine data:");
-
-        // clean out all unused engine data
-        EngineDataCache::Iterator it = engineDataCache.begin(),
-                                 end = engineDataCache.end();
-        while (it != end) {
-            if (it.value()->ref.load() != 0) {
-                ++it;
-                continue;
-            }
+            ++it;
+         } else {
 
             EngineDataCache::Iterator rem = it++;
 
@@ -3087,68 +3050,224 @@ void QFontCache::timerEvent(QTimerEvent *)
 
             delete rem.value();
             engineDataCache.erase(rem);
-        }
-    }
+         }
+      }
+   }
 
-    // clean out the engine cache just enough to get below our new max cost
-    uint current_cost;
-    do {
-        current_cost = total_cost;
+   EngineCache::Iterator it = engineCache.begin(),
+                         end = engineCache.end();
+   while (it != end) {
+      if (it.value().data->ref.load() != 0 || it.key().screen == 0) {
+         ++it;
+         continue;
+      }
 
-        EngineCache::Iterator it = engineCache.begin(),
-                             end = engineCache.end();
-        // determine the oldest and least popular of the unused engines
-        uint oldest = ~0u;
-        uint least_popular = ~0u;
+      FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, type '%s'",
+               it.value().data, it.value().timestamp, it.value().hits,
+               it.value().data->ref.load(), it.value().data->cache_count,
+               it.value().data->name());
 
-        for (; it != end; ++it) {
-            if (it.value().data->ref.load() != 0)
-                continue;
+      if (--it.value().data->cache_count == 0) {
+         FC_DEBUG("    DELETE: last occurrence in cache");
 
-            if (it.value().timestamp < oldest &&
-                 it.value().hits <= least_popular) {
-                oldest = it.value().timestamp;
-                least_popular = it.value().hits;
+         decreaseCost(it.value().data->cache_cost);
+         delete it.value().data;
+      }
+
+      engineCache.erase(it++);
+   }
+}
+#endif
+
+void QFontCache::timerEvent(QTimerEvent *)
+{
+   FC_DEBUG("QFontCache::timerEvent: performing cache maintenance (timestamp %u)",
+            current_timestamp);
+
+   if (total_cost <= max_cost && max_cost <= min_cost) {
+      FC_DEBUG("  cache redused sufficiently, stopping timer");
+
+      killTimer(timer_id);
+      timer_id = -1;
+      fast = false;
+
+      return;
+   }
+
+   // go through the cache and count up everything in use
+   uint in_use_cost = 0;
+
+   {
+      FC_DEBUG("  SWEEP engine data:");
+
+      // make sure the cost of each engine data is at least 1kb
+      const uint engine_data_cost =
+         sizeof(QFontEngineData) > 1024 ? sizeof(QFontEngineData) : 1024;
+
+      EngineDataCache::ConstIterator it = engineDataCache.constBegin(),
+                                     end = engineDataCache.constEnd();
+      for (; it != end; ++it) {
+
+#ifdef QFONTCACHE_DEBUG
+         FC_DEBUG("    %p: ref %2d", it.value(), int(it.value()->ref));
+
+#  if defined(Q_WS_X11) || defined(Q_OS_WIN)
+         // print out all engines
+         for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
+            if (! it.value()->engines[i]) {
+               continue;
             }
-        }
+            FC_DEBUG("      contains %p", it.value()->engines[i]);
+         }
+#  endif
 
-        FC_DEBUG("    oldest %u least popular %u", oldest, least_popular);
+#endif
 
-        for (it = engineCache.begin(); it != end; ++it) {
-            if (it.value().data->ref.load() == 0 &&
-                 it.value().timestamp == oldest &&
-                 it.value().hits == least_popular)
-                break;
-        }
+         if (it.value()->ref.load() != 0) {
+            in_use_cost += engine_data_cost;
+         }
+      }
+   }
 
-        if (it != end) {
-            FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, type '%s'",
-                     it.value().data, it.value().timestamp, it.value().hits,
-                     it.value().data->ref.load(), it.value().data->cache_count,
-                     it.value().data->name());
+   {
+      FC_DEBUG("  SWEEP engine:");
 
-            if (--it.value().data->cache_count == 0) {
-                FC_DEBUG("    DELETE: last occurrence in cache");
+      EngineCache::ConstIterator it = engineCache.constBegin(),
+                                 end = engineCache.constEnd();
+      for (; it != end; ++it) {
+         FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, cost %u bytes",
+                  it.value().data, it.value().timestamp, it.value().hits,
+                  it.value().data->ref.load(), it.value().data->cache_count,
+                  it.value().data->cache_cost);
 
-                decreaseCost(it.value().data->cache_cost);
-                delete it.value().data;
-            } else {
-                /*
-                  this particular font engine is in the cache multiple
-                  times...  set current_cost to zero, so that we can
-                  keep looping to get rid of all occurrences
-                */
-                current_cost = 0;
-            }
+         if (it.value().data->ref.load() != 0) {
+            in_use_cost += it.value().data->cache_cost / it.value().data->cache_count;
+         }
+      }
 
-            engineCache.erase(it);
-        }
-    } while (current_cost != total_cost && total_cost > max_cost);
+      // attempt to make up for rounding errors
+      in_use_cost += engineCache.size();
+   }
+
+   in_use_cost = (in_use_cost + 512) / 1024; // cost is stored in kb
+
+   /*
+     calculate the new maximum cost for the cache
+
+     NOTE: in_use_cost is *not* correct due to rounding errors in the
+     above algorithm.  instead of worrying about getting the
+     calculation correct, we are more interested in speed, and use
+     in_use_cost as a floor for new_max_cost
+   */
+   uint new_max_cost = qMax(qMax(max_cost / 2, in_use_cost), min_cost);
+
+   FC_DEBUG("  after sweep, in use %u kb, total %u kb, max %u kb, new max %u kb",
+            in_use_cost, total_cost, max_cost, new_max_cost);
+
+   if (new_max_cost == max_cost) {
+      if (fast) {
+         FC_DEBUG("  cannot shrink cache, slowing timer");
+
+         killTimer(timer_id);
+         timer_id = startTimer(slow_timeout);
+         fast = false;
+      }
+
+      return;
+   } else if (! fast) {
+      FC_DEBUG("  dropping into passing gear");
+
+      killTimer(timer_id);
+      timer_id = startTimer(fast_timeout);
+      fast = true;
+   }
+
+   max_cost = new_max_cost;
+
+   {
+      FC_DEBUG("  CLEAN engine data:");
+
+      // clean out all unused engine data
+      EngineDataCache::Iterator it = engineDataCache.begin(),
+                                end = engineDataCache.end();
+      while (it != end) {
+         if (it.value()->ref.load() != 0) {
+            ++it;
+            continue;
+         }
+
+         EngineDataCache::Iterator rem = it++;
+
+         decreaseCost(sizeof(QFontEngineData));
+
+         FC_DEBUG("    %p", rem.value());
+
+         delete rem.value();
+         engineDataCache.erase(rem);
+      }
+   }
+
+   // clean out the engine cache just enough to get below our new max cost
+   uint current_cost;
+   do {
+      current_cost = total_cost;
+
+      EngineCache::Iterator it = engineCache.begin(),
+                            end = engineCache.end();
+      // determine the oldest and least popular of the unused engines
+      uint oldest = ~0u;
+      uint least_popular = ~0u;
+
+      for (; it != end; ++it) {
+         if (it.value().data->ref.load() != 0) {
+            continue;
+         }
+
+         if (it.value().timestamp < oldest &&
+               it.value().hits <= least_popular) {
+            oldest = it.value().timestamp;
+            least_popular = it.value().hits;
+         }
+      }
+
+      FC_DEBUG("    oldest %u least popular %u", oldest, least_popular);
+
+      for (it = engineCache.begin(); it != end; ++it) {
+         if (it.value().data->ref.load() == 0 &&
+               it.value().timestamp == oldest &&
+               it.value().hits == least_popular) {
+            break;
+         }
+      }
+
+      if (it != end) {
+         FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, type '%s'",
+                  it.value().data, it.value().timestamp, it.value().hits,
+                  it.value().data->ref.load(), it.value().data->cache_count,
+                  it.value().data->name());
+
+         if (--it.value().data->cache_count == 0) {
+            FC_DEBUG("    DELETE: last occurrence in cache");
+
+            decreaseCost(it.value().data->cache_cost);
+            delete it.value().data;
+         } else {
+            /*
+              this particular font engine is in the cache multiple
+              times...  set current_cost to zero, so that we can
+              keep looping to get rid of all occurrences
+            */
+            current_cost = 0;
+         }
+
+         engineCache.erase(it);
+      }
+   } while (current_cost != total_cost && total_cost > max_cost);
 }
 
 QDebug operator<<(QDebug stream, const QFont &font)
 {
-    return stream << "QFont(" << font.toString() << ')';
+   return stream << "QFont(" << font.toString() << ')';
 }
 
 QT_END_NAMESPACE

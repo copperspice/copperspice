@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,22 +37,22 @@ struct QQnxScreenContext;
 class QQnxScreen : public QScreen
 {
 
-public:
-    explicit QQnxScreen(int display_id);
-    ~QQnxScreen();
+ public:
+   explicit QQnxScreen(int display_id);
+   ~QQnxScreen();
 
-    bool initDevice();
-    bool connect(const QString &displaySpec);
-    void disconnect();
-    void shutdownDevice();
-    void setMode(int,int,int);
-    bool supportsDepth(int) const;
-    void blank(bool on);
+   bool initDevice();
+   bool connect(const QString &displaySpec);
+   void disconnect();
+   void shutdownDevice();
+   void setMode(int, int, int);
+   bool supportsDepth(int) const;
+   void blank(bool on);
 
-    void exposeRegion(QRegion r, int changing);
+   void exposeRegion(QRegion r, int changing);
 
-private:
-    QQnxScreenContext * const d;
+ private:
+   QQnxScreenContext *const d;
 };
 
 QT_END_NAMESPACE

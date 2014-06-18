@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,84 +41,87 @@ QT_USE_NAMESPACE
 
 @class QT_MANGLE_NAMESPACE(QNSPanelProxy);
 
-@interface QT_MANGLE_NAMESPACE(QNSPanelProxy) : NSWindow {
+@interface QT_MANGLE_NAMESPACE(QNSPanelProxy) : NSWindow
+{
 }
-- (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle
-    backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation;
-- (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle
-    backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation screen:(NSScreen *)screen;
-- (id)qt_fakeInitWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle
-    backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation;
-- (id)qt_fakeInitWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle
-    backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation screen:(NSScreen *)screen;
+- (id)initWithContentRect: (NSRect)contentRect styleMask: (NSUInteger)windowStyle
+                  backing: (NSBackingStoreType)bufferingType defer: (BOOL)deferCreation;
+- (id)initWithContentRect: (NSRect)contentRect styleMask: (NSUInteger)windowStyle
+                  backing: (NSBackingStoreType)bufferingType defer: (BOOL)deferCreation screen: (NSScreen *)screen;
+- (id)qt_fakeInitWithContentRect: (NSRect)contentRect styleMask: (NSUInteger)windowStyle
+                         backing: (NSBackingStoreType)bufferingType defer: (BOOL)deferCreation;
+- (id)qt_fakeInitWithContentRect: (NSRect)contentRect styleMask: (NSUInteger)windowStyle
+                         backing: (NSBackingStoreType)bufferingType defer: (BOOL)deferCreation screen: (NSScreen *)screen;
 @end
 
 @implementation QT_MANGLE_NAMESPACE(QNSPanelProxy)
-- (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle
-      backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation
+- (id)initWithContentRect: (NSRect)contentRect styleMask: (NSUInteger)windowStyle
+                  backing: (NSBackingStoreType)bufferingType defer: (BOOL)deferCreation
 {
-    // remove evil flag
-    windowStyle &= ~NSUtilityWindowMask;
-	self = [self qt_fakeInitWithContentRect:contentRect styleMask:windowStyle
-	                                backing:bufferingType defer:deferCreation];
-    return self;
+   // remove evil flag
+   windowStyle &= ~NSUtilityWindowMask;
+   self = [self qt_fakeInitWithContentRect: contentRect styleMask: windowStyle
+           backing: bufferingType defer: deferCreation];
+   return self;
 }
 
-- (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle
-      backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation screen:(NSScreen *)screen
+- (id)initWithContentRect: (NSRect)contentRect styleMask: (NSUInteger)windowStyle
+                  backing: (NSBackingStoreType)bufferingType defer: (BOOL)deferCreation screen: (NSScreen *)screen
 {
-    // remove evil flag
-    windowStyle &= ~NSUtilityWindowMask;
-	return [self qt_fakeInitWithContentRect:contentRect styleMask:windowStyle
-	                                backing:bufferingType defer:deferCreation screen:screen];
+   // remove evil flag
+   windowStyle &= ~NSUtilityWindowMask;
+   return [self qt_fakeInitWithContentRect: contentRect styleMask: windowStyle
+           backing: bufferingType defer: deferCreation screen: screen];
 }
 
-- (id)qt_fakeInitWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle
-    backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation
+- (id)qt_fakeInitWithContentRect: (NSRect)contentRect styleMask: (NSUInteger)windowStyle
+                         backing: (NSBackingStoreType)bufferingType defer: (BOOL)deferCreation
 {
-    Q_UNUSED(contentRect);
-    Q_UNUSED(windowStyle);
-    Q_UNUSED(bufferingType);
-    Q_UNUSED(deferCreation);
-    return nil;
+   Q_UNUSED(contentRect);
+   Q_UNUSED(windowStyle);
+   Q_UNUSED(bufferingType);
+   Q_UNUSED(deferCreation);
+   return nil;
 }
 
-- (id)qt_fakeInitWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle
-    backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation screen:(NSScreen *)screen
+- (id)qt_fakeInitWithContentRect: (NSRect)contentRect styleMask: (NSUInteger)windowStyle
+                         backing: (NSBackingStoreType)bufferingType defer: (BOOL)deferCreation screen: (NSScreen *)screen
 {
-    Q_UNUSED(contentRect);
-    Q_UNUSED(windowStyle);
-    Q_UNUSED(bufferingType);
-    Q_UNUSED(deferCreation);
-    Q_UNUSED(screen);
-    return nil;
+   Q_UNUSED(contentRect);
+   Q_UNUSED(windowStyle);
+   Q_UNUSED(bufferingType);
+   Q_UNUSED(deferCreation);
+   Q_UNUSED(screen);
+   return nil;
 }
 @end
 
 @class QT_MANGLE_NAMESPACE(QNSWindowProxy);
 
-@interface QT_MANGLE_NAMESPACE(QNSWindowProxy) : NSWindow {
+@interface QT_MANGLE_NAMESPACE(QNSWindowProxy) : NSWindow
+{
 }
-- (void)setTitle:(NSString *)title;
-- (void)qt_fakeSetTitle:(NSString *)title;
+- (void)setTitle: (NSString *)title;
+- (void)qt_fakeSetTitle: (NSString *)title;
 @end
 
 @implementation QT_MANGLE_NAMESPACE(QNSWindowProxy)
-- (void)setTitle:(NSString *)title
+- (void)setTitle: (NSString *)title
 {
-    QCFString cftitle(currentWindow->windowTitle());
+   QCFString cftitle(currentWindow->windowTitle());
 
-    // evil reverse engineering
-    if ([title isEqualToString:@"Print"]
-            || [title isEqualToString:@"Page Setup"]
-            || [[self className] isEqualToString:@"PMPrintingWindow"])
-        title = (NSString *)(static_cast<CFStringRef>(cftitle));
-    return [self qt_fakeSetTitle:title];
+   // evil reverse engineering
+   if ([title isEqualToString: @"Print"]
+         || [title isEqualToString: @"Page Setup"]
+         || [[self className] isEqualToString: @"PMPrintingWindow"]) {
+      title = (NSString *)(static_cast<CFStringRef>(cftitle));
+   }
+   return [self qt_fakeSetTitle: title];
 }
 
-- (void)qt_fakeSetTitle:(NSString *)title
+- (void)qt_fakeSetTitle: (NSString *)title
 {
-    Q_UNUSED(title);
+   Q_UNUSED(title);
 }
 @end
 
@@ -135,18 +138,18 @@ QT_BEGIN_NAMESPACE
 */
 void macStartInterceptNSPanelCtor()
 {
-    qt_cocoa_change_implementation(
-            [NSPanel class],
-            @selector(initWithContentRect:styleMask:backing:defer:),
-            [QT_MANGLE_NAMESPACE(QNSPanelProxy) class],
-            @selector(initWithContentRect:styleMask:backing:defer:),
-            @selector(qt_fakeInitWithContentRect:styleMask:backing:defer:));
-    qt_cocoa_change_implementation(
-            [NSPanel class],
-            @selector(initWithContentRect:styleMask:backing:defer:screen:),
-            [QT_MANGLE_NAMESPACE(QNSPanelProxy) class],
-            @selector(initWithContentRect:styleMask:backing:defer:screen:),
-            @selector(qt_fakeInitWithContentRect:styleMask:backing:defer:screen:));
+   qt_cocoa_change_implementation(
+      [NSPanel class],
+      @selector(initWithContentRect: styleMask: backing: defer:),
+      [QT_MANGLE_NAMESPACE(QNSPanelProxy) class],
+      @selector(initWithContentRect: styleMask: backing: defer:),
+      @selector(qt_fakeInitWithContentRect: styleMask: backing: defer:));
+   qt_cocoa_change_implementation(
+      [NSPanel class],
+      @selector(initWithContentRect: styleMask: backing: defer: screen:),
+      [QT_MANGLE_NAMESPACE(QNSPanelProxy) class],
+      @selector(initWithContentRect: styleMask: backing: defer: screen:),
+      @selector(qt_fakeInitWithContentRect: styleMask: backing: defer: screen:));
 }
 
 /*
@@ -154,14 +157,14 @@ void macStartInterceptNSPanelCtor()
 */
 void macStopInterceptNSPanelCtor()
 {
-    qt_cocoa_change_back_implementation(
-            [NSPanel class],
-            @selector(initWithContentRect:styleMask:backing:defer:screen:),
-            @selector(qt_fakeInitWithContentRect:styleMask:backing:defer:screen:));
-    qt_cocoa_change_back_implementation(
-            [NSPanel class],
-            @selector(initWithContentRect:styleMask:backing:defer:),
-            @selector(qt_fakeInitWithContentRect:styleMask:backing:defer:));
+   qt_cocoa_change_back_implementation(
+      [NSPanel class],
+      @selector(initWithContentRect: styleMask: backing: defer: screen:),
+      @selector(qt_fakeInitWithContentRect: styleMask: backing: defer: screen:));
+   qt_cocoa_change_back_implementation(
+      [NSPanel class],
+      @selector(initWithContentRect: styleMask: backing: defer:),
+      @selector(qt_fakeInitWithContentRect: styleMask: backing: defer:));
 }
 
 /*
@@ -170,13 +173,13 @@ void macStopInterceptNSPanelCtor()
 */
 void macStartInterceptWindowTitle(QWidget *window)
 {
-    currentWindow = window;
-    qt_cocoa_change_implementation(
-            [NSWindow class],
-            @selector(setTitle:),
-            [QT_MANGLE_NAMESPACE(QNSWindowProxy) class],
-            @selector(setTitle:),
-            @selector(qt_fakeSetTitle:));
+   currentWindow = window;
+   qt_cocoa_change_implementation(
+      [NSWindow class],
+      @selector(setTitle:),
+      [QT_MANGLE_NAMESPACE(QNSWindowProxy) class],
+      @selector(setTitle:),
+      @selector(qt_fakeSetTitle:));
 }
 
 /*
@@ -184,11 +187,11 @@ void macStartInterceptWindowTitle(QWidget *window)
 */
 void macStopInterceptWindowTitle()
 {
-    currentWindow = 0;
-    qt_cocoa_change_back_implementation(
-            [NSWindow class],
-            @selector(setTitle:),
-            @selector(qt_fakeSetTitle:));
+   currentWindow = 0;
+   qt_cocoa_change_back_implementation(
+      [NSWindow class],
+      @selector(setTitle:),
+      @selector(qt_fakeSetTitle:));
 }
 
 /*
@@ -196,17 +199,17 @@ void macStopInterceptWindowTitle()
 */
 NSButton *macCreateButton(const char *text, NSView *superview)
 {
-    static const NSRect buttonFrameRect = { { 0.0, 0.0 }, { 0.0, 0.0 } };
+   static const NSRect buttonFrameRect = { { 0.0, 0.0 }, { 0.0, 0.0 } };
 
-    NSButton *button = [[NSButton alloc] initWithFrame:buttonFrameRect];
-    [button setButtonType:NSMomentaryLightButton];
-    [button setBezelStyle:NSRoundedBezelStyle];
-    [button setTitle:(NSString*)(CFStringRef)QCFString(QDialogButtonBox::tr(text)
-                                                       .remove(QLatin1Char('&')))];
-    [[button cell] setFont:[NSFont systemFontOfSize:
-            [NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
-    [superview addSubview:button];
-    return button;
+   NSButton *button = [[NSButton alloc] initWithFrame: buttonFrameRect];
+   [button setButtonType: NSMomentaryLightButton];
+   [button setBezelStyle: NSRoundedBezelStyle];
+   [button setTitle: (NSString *)(CFStringRef)QCFString(QDialogButtonBox::tr(text)
+         .remove(QLatin1Char('&')))];
+   [[button cell] setFont: [NSFont systemFontOfSize:
+                            [NSFont systemFontSizeForControlSize: NSRegularControlSize]]];
+   [superview addSubview: button];
+   return button;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,10 +33,11 @@ QT_BEGIN_NAMESPACE
 
 inline static void blend_pixel(quint32 &dst, const quint32 src)
 {
-    if (src >= 0xff000000)
-        dst = src;
-    else if (src != 0)
-        dst = src + BYTE_MUL(dst, qAlpha(~src));
+   if (src >= 0xff000000) {
+      dst = src;
+   } else if (src != 0) {
+      dst = src + BYTE_MUL(dst, qAlpha(~src));
+   }
 }
 
 
@@ -130,36 +131,36 @@ void qt_blend_argb32_on_argb32_ssse3(uchar *destPixels, int dbpl,
                                      int w, int h,
                                      int const_alpha)
 {
-    const quint32 *src = (const quint32 *) srcPixels;
-    quint32 *dst = (quint32 *) destPixels;
-    if (const_alpha == 256) {
-        const __m128i alphaMask = _mm_set1_epi32(0xff000000);
-        const __m128i nullVector = _mm_setzero_si128();
-        const __m128i half = _mm_set1_epi16(0x80);
-        const __m128i one = _mm_set1_epi16(0xff);
-        const __m128i colorMask = _mm_set1_epi32(0x00ff00ff);
+   const quint32 *src = (const quint32 *) srcPixels;
+   quint32 *dst = (quint32 *) destPixels;
+   if (const_alpha == 256) {
+      const __m128i alphaMask = _mm_set1_epi32(0xff000000);
+      const __m128i nullVector = _mm_setzero_si128();
+      const __m128i half = _mm_set1_epi16(0x80);
+      const __m128i one = _mm_set1_epi16(0xff);
+      const __m128i colorMask = _mm_set1_epi32(0x00ff00ff);
 
-        for (int y = 0; y < h; ++y) {
-            BLEND_SOURCE_OVER_ARGB32_SSSE3(dst, src, w, nullVector, half, one, colorMask, alphaMask);
-            dst = (quint32 *)(((uchar *) dst) + dbpl);
-            src = (const quint32 *)(((const uchar *) src) + sbpl);
-        }
-    } else if (const_alpha != 0) {
-        // dest = (s + d * sia) * ca + d * cia
-        //      = s * ca + d * (sia * ca + cia)
-        //      = s * ca + d * (1 - sa*ca)
-        const_alpha = (const_alpha * 255) >> 8;
-        const __m128i nullVector = _mm_setzero_si128();
-        const __m128i half = _mm_set1_epi16(0x80);
-        const __m128i one = _mm_set1_epi16(0xff);
-        const __m128i colorMask = _mm_set1_epi32(0x00ff00ff);
-        const __m128i constAlphaVector = _mm_set1_epi16(const_alpha);
-        for (int y = 0; y < h; ++y) {
-            BLEND_SOURCE_OVER_ARGB32_WITH_CONST_ALPHA_SSE2(dst, src, w, nullVector, half, one, colorMask, constAlphaVector)
-            dst = (quint32 *)(((uchar *) dst) + dbpl);
-            src = (const quint32 *)(((const uchar *) src) + sbpl);
-        }
-    }
+      for (int y = 0; y < h; ++y) {
+         BLEND_SOURCE_OVER_ARGB32_SSSE3(dst, src, w, nullVector, half, one, colorMask, alphaMask);
+         dst = (quint32 *)(((uchar *) dst) + dbpl);
+         src = (const quint32 *)(((const uchar *) src) + sbpl);
+      }
+   } else if (const_alpha != 0) {
+      // dest = (s + d * sia) * ca + d * cia
+      //      = s * ca + d * (sia * ca + cia)
+      //      = s * ca + d * (1 - sa*ca)
+      const_alpha = (const_alpha * 255) >> 8;
+      const __m128i nullVector = _mm_setzero_si128();
+      const __m128i half = _mm_set1_epi16(0x80);
+      const __m128i one = _mm_set1_epi16(0xff);
+      const __m128i colorMask = _mm_set1_epi32(0x00ff00ff);
+      const __m128i constAlphaVector = _mm_set1_epi16(const_alpha);
+      for (int y = 0; y < h; ++y) {
+         BLEND_SOURCE_OVER_ARGB32_WITH_CONST_ALPHA_SSE2(dst, src, w, nullVector, half, one, colorMask, constAlphaVector)
+         dst = (quint32 *)(((uchar *) dst) + dbpl);
+         src = (const quint32 *)(((const uchar *) src) + sbpl);
+      }
+   }
 }
 
 QT_END_NAMESPACE

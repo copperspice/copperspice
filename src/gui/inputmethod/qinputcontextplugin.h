@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,12 +37,11 @@ QT_BEGIN_NAMESPACE
 class QInputContext;
 class QInputContextPluginPrivate;
 
-struct Q_GUI_EXPORT QInputContextFactoryInterface : public QFactoryInterface
-{
-    virtual QInputContext *create( const QString &key ) = 0;
-    virtual QStringList languages( const QString &key ) = 0;
-    virtual QString displayName( const QString &key ) = 0;
-    virtual QString description( const QString &key ) = 0;
+struct Q_GUI_EXPORT QInputContextFactoryInterface : public QFactoryInterface {
+   virtual QInputContext *create( const QString &key ) = 0;
+   virtual QStringList languages( const QString &key ) = 0;
+   virtual QString displayName( const QString &key ) = 0;
+   virtual QString description( const QString &key ) = 0;
 };
 
 #define QInputContextFactoryInterface_iid "com.copperspice.QInputContextFactoryInterface"
@@ -50,18 +49,18 @@ CS_DECLARE_INTERFACE(QInputContextFactoryInterface, QInputContextFactoryInterfac
 
 class Q_GUI_EXPORT QInputContextPlugin : public QObject, public QInputContextFactoryInterface
 {
-    CS_OBJECT(QInputContextPlugin)
-    CS_INTERFACES(QInputContextFactoryInterface, QFactoryInterface)
+   CS_OBJECT(QInputContextPlugin)
+   CS_INTERFACES(QInputContextFactoryInterface, QFactoryInterface)
 
-public:
-    explicit QInputContextPlugin(QObject *parent = 0);
-    ~QInputContextPlugin();
+ public:
+   explicit QInputContextPlugin(QObject *parent = 0);
+   ~QInputContextPlugin();
 
-    virtual QStringList keys() const = 0;
-    virtual QInputContext *create( const QString &key ) = 0;
-    virtual QStringList languages( const QString &key ) = 0;
-    virtual QString displayName( const QString &key ) = 0;
-    virtual QString description( const QString &key ) = 0;
+   virtual QStringList keys() const = 0;
+   virtual QInputContext *create( const QString &key ) = 0;
+   virtual QStringList languages( const QString &key ) = 0;
+   virtual QString displayName( const QString &key ) = 0;
+   virtual QString description( const QString &key ) = 0;
 };
 
 #endif // QT_NO_IM

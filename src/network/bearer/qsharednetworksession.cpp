@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,45 +33,46 @@ QT_BEGIN_NAMESPACE
 
 QThreadStorage<QSharedNetworkSessionManager *> tls;
 
-inline QSharedNetworkSessionManager* sharedNetworkSessionManager()
+inline QSharedNetworkSessionManager *sharedNetworkSessionManager()
 {
-    QSharedNetworkSessionManager* rv = tls.localData();
-    if (!rv) {
-        rv = new QSharedNetworkSessionManager;
-        tls.setLocalData(rv);
-    }
-    return rv;
+   QSharedNetworkSessionManager *rv = tls.localData();
+   if (!rv) {
+      rv = new QSharedNetworkSessionManager;
+      tls.setLocalData(rv);
+   }
+   return rv;
 }
 
-static void doDeleteLater(QObject* obj)
+static void doDeleteLater(QObject *obj)
 {
-    obj->deleteLater();
+   obj->deleteLater();
 }
 
 QSharedPointer<QNetworkSession> QSharedNetworkSessionManager::getSession(QNetworkConfiguration config)
 {
-    QSharedNetworkSessionManager *m(sharedNetworkSessionManager());
-    //if already have a session, return it
-    if (m->sessions.contains(config)) {
-        QSharedPointer<QNetworkSession> p = m->sessions.value(config).toStrongRef();
-        if (!p.isNull())
-            return p;
-    }
-    //otherwise make one
-    QSharedPointer<QNetworkSession> session(new QNetworkSession(config), doDeleteLater);
-    m->sessions[config] = session;
-    return session;
+   QSharedNetworkSessionManager *m(sharedNetworkSessionManager());
+   //if already have a session, return it
+   if (m->sessions.contains(config)) {
+      QSharedPointer<QNetworkSession> p = m->sessions.value(config).toStrongRef();
+      if (!p.isNull()) {
+         return p;
+      }
+   }
+   //otherwise make one
+   QSharedPointer<QNetworkSession> session(new QNetworkSession(config), doDeleteLater);
+   m->sessions[config] = session;
+   return session;
 }
 
 void QSharedNetworkSessionManager::setSession(QNetworkConfiguration config, QSharedPointer<QNetworkSession> session)
 {
-    QSharedNetworkSessionManager *m(sharedNetworkSessionManager());
-    m->sessions[config] = session;
+   QSharedNetworkSessionManager *m(sharedNetworkSessionManager());
+   m->sessions[config] = session;
 }
 
-uint qHash(const QNetworkConfiguration& config)
+uint qHash(const QNetworkConfiguration &config)
 {
-    return ((uint)config.type()) | (((uint)config.bearerType()) << 8) | (((uint)config.purpose()) << 16);
+   return ((uint)config.type()) | (((uint)config.bearerType()) << 8) | (((uint)config.purpose()) << 16);
 }
 
 QT_END_NAMESPACE

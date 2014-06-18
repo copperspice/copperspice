@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,56 +37,56 @@ class QPrintPreviewDialogPrivate;
 
 class Q_GUI_EXPORT QPrintPreviewDialog : public QDialog
 {
-    CS_OBJECT(QPrintPreviewDialog)
-    Q_DECLARE_PRIVATE(QPrintPreviewDialog)
+   CS_OBJECT(QPrintPreviewDialog)
+   Q_DECLARE_PRIVATE(QPrintPreviewDialog)
 
-public:
-    explicit QPrintPreviewDialog(QWidget *parent = 0, Qt::WindowFlags flags = 0);
-    explicit QPrintPreviewDialog(QPrinter *printer, QWidget *parent = 0, Qt::WindowFlags flags = 0);
-    ~QPrintPreviewDialog();
+ public:
+   explicit QPrintPreviewDialog(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+   explicit QPrintPreviewDialog(QPrinter *printer, QWidget *parent = 0, Qt::WindowFlags flags = 0);
+   ~QPrintPreviewDialog();
 
-    using QDialog::open;
+   using QDialog::open;
 
-    void open(QObject *receiver, const char *member);
+   void open(QObject *receiver, const char *member);
 
-    QPrinter *printer();
+   QPrinter *printer();
 
-    void setVisible(bool visible);
-    void done(int result);
+   void setVisible(bool visible);
+   void done(int result);
 
-    GUI_CS_SIGNAL_1(Public, void paintRequested(QPrinter * printer))
-    GUI_CS_SIGNAL_2(paintRequested,printer) 
+   GUI_CS_SIGNAL_1(Public, void paintRequested(QPrinter *printer))
+   GUI_CS_SIGNAL_2(paintRequested, printer)
 
-private:
-    GUI_CS_SLOT_1(Private, void _q_fit(QAction * action))
-    GUI_CS_SLOT_2(_q_fit)
+ private:
+   GUI_CS_SLOT_1(Private, void _q_fit(QAction *action))
+   GUI_CS_SLOT_2(_q_fit)
 
-    GUI_CS_SLOT_1(Private, void _q_zoomIn())
-    GUI_CS_SLOT_2(_q_zoomIn)
+   GUI_CS_SLOT_1(Private, void _q_zoomIn())
+   GUI_CS_SLOT_2(_q_zoomIn)
 
-    GUI_CS_SLOT_1(Private, void _q_zoomOut())
-    GUI_CS_SLOT_2(_q_zoomOut)
+   GUI_CS_SLOT_1(Private, void _q_zoomOut())
+   GUI_CS_SLOT_2(_q_zoomOut)
 
-    GUI_CS_SLOT_1(Private, void _q_navigate(QAction * action))
-    GUI_CS_SLOT_2(_q_navigate)
+   GUI_CS_SLOT_1(Private, void _q_navigate(QAction *action))
+   GUI_CS_SLOT_2(_q_navigate)
 
-    GUI_CS_SLOT_1(Private, void _q_setMode(QAction * action))
-    GUI_CS_SLOT_2(_q_setMode)
+   GUI_CS_SLOT_1(Private, void _q_setMode(QAction *action))
+   GUI_CS_SLOT_2(_q_setMode)
 
-    GUI_CS_SLOT_1(Private, void _q_pageNumEdited())
-    GUI_CS_SLOT_2(_q_pageNumEdited)
+   GUI_CS_SLOT_1(Private, void _q_pageNumEdited())
+   GUI_CS_SLOT_2(_q_pageNumEdited)
 
-    GUI_CS_SLOT_1(Private, void _q_print())
-    GUI_CS_SLOT_2(_q_print)
+   GUI_CS_SLOT_1(Private, void _q_print())
+   GUI_CS_SLOT_2(_q_print)
 
-    GUI_CS_SLOT_1(Private, void _q_pageSetup())
-    GUI_CS_SLOT_2(_q_pageSetup)
+   GUI_CS_SLOT_1(Private, void _q_pageSetup())
+   GUI_CS_SLOT_2(_q_pageSetup)
 
-    GUI_CS_SLOT_1(Private, void _q_previewChanged())
-    GUI_CS_SLOT_2(_q_previewChanged)
+   GUI_CS_SLOT_1(Private, void _q_previewChanged())
+   GUI_CS_SLOT_2(_q_previewChanged)
 
-    GUI_CS_SLOT_1(Private, void _q_zoomFactorChanged())
-    GUI_CS_SLOT_2(_q_zoomFactorChanged)
+   GUI_CS_SLOT_1(Private, void _q_zoomFactorChanged())
+   GUI_CS_SLOT_2(_q_zoomFactorChanged)
 
 };
 

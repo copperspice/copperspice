@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,15 +36,15 @@
 
 QT_BEGIN_NAMESPACE
 
-class QWSPropertyManager::Data {
-public:
-    QByteArray find(int winId, int property)
-    {
-        return properties.value(winId).value(property);
-    }
+class QWSPropertyManager::Data
+{
+ public:
+   QByteArray find(int winId, int property) {
+      return properties.value(winId).value(property);
+   }
 
-    typedef QHash<int, QHash<int, QByteArray> > PropertyHash;
-    PropertyHash properties;
+   typedef QHash<int, QHash<int, QByteArray> > PropertyHash;
+   PropertyHash properties;
 };
 
 /*********************************************************************
@@ -55,73 +55,76 @@ public:
 
 QWSPropertyManager::QWSPropertyManager()
 {
-    d = new Data;
+   d = new Data;
 }
 
 QWSPropertyManager::~QWSPropertyManager()
 {
-    delete d;
+   delete d;
 }
 
 bool QWSPropertyManager::setProperty(int winId, int property, int mode, const char *data, int len)
 {
-    QHash<int, QByteArray> props = d->properties.value(winId);
-    QHash<int, QByteArray>::iterator it = props.find(property);
-    if (it == props.end())
-        return false;
+   QHash<int, QByteArray> props = d->properties.value(winId);
+   QHash<int, QByteArray>::iterator it = props.find(property);
+   if (it == props.end()) {
+      return false;
+   }
 
-    switch (mode) {
-    case PropReplace:
-        d->properties[winId][property] = QByteArray(data, len);
-        break;
-    case PropAppend:
-        d->properties[winId][property].append(data);
-        break;
-    case PropPrepend:
-        d->properties[winId][property].prepend(data);
-        break;
-    }
-    return true;
+   switch (mode) {
+      case PropReplace:
+         d->properties[winId][property] = QByteArray(data, len);
+         break;
+      case PropAppend:
+         d->properties[winId][property].append(data);
+         break;
+      case PropPrepend:
+         d->properties[winId][property].prepend(data);
+         break;
+   }
+   return true;
 }
 
 bool QWSPropertyManager::hasProperty(int winId, int property)
 {
-    return d->properties.value(winId).contains(property);
+   return d->properties.value(winId).contains(property);
 }
 
 bool QWSPropertyManager::removeProperty(int winId, int property)
 {
-    QWSPropertyManager::Data::PropertyHash::iterator it = d->properties.find(winId);
-    if (it == d->properties.end())
-        return false;
-    return d->properties[winId].remove( property );
+   QWSPropertyManager::Data::PropertyHash::iterator it = d->properties.find(winId);
+   if (it == d->properties.end()) {
+      return false;
+   }
+   return d->properties[winId].remove( property );
 }
 
 bool QWSPropertyManager::addProperty(int winId, int property)
 {
-    if( !d->properties[winId].contains(property) )
-	d->properties[winId][property] = QByteArray(); // only add if it doesn't exist
-    return true;
+   if ( !d->properties[winId].contains(property) ) {
+      d->properties[winId][property] = QByteArray();   // only add if it doesn't exist
+   }
+   return true;
 }
 
 bool QWSPropertyManager::getProperty(int winId, int property, const char *&data, int &len)
 {
-    QHash<int, QByteArray> props = d->properties.value(winId);
-    QHash<int, QByteArray>::iterator it = props.find(property);
-    if (it == props.end()) {
-        data = 0;
-        len = -1;
-        return false;
-    }
-    data = it.value().constData();
-    len = it.value().length();
+   QHash<int, QByteArray> props = d->properties.value(winId);
+   QHash<int, QByteArray>::iterator it = props.find(property);
+   if (it == props.end()) {
+      data = 0;
+      len = -1;
+      return false;
+   }
+   data = it.value().constData();
+   len = it.value().length();
 
-    return true;
+   return true;
 }
 
 bool QWSPropertyManager::removeProperties(int winId)
 {
-    return d->properties.remove(winId);
+   return d->properties.remove(winId);
 }
 
 QT_END_NAMESPACE

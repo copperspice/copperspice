@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,49 +36,49 @@ class QMultiScreenPrivate;
 
 class QMultiScreen : public QScreen
 {
-public:
-    QMultiScreen(int displayId);
-    ~QMultiScreen();
-    bool initDevice();
-    bool connect(const QString &displaySpec);
-    void disconnect();
-    void shutdownDevice();
-    void setMode(int,int,int);
-    bool supportsDepth(int) const;
+ public:
+   QMultiScreen(int displayId);
+   ~QMultiScreen();
+   bool initDevice();
+   bool connect(const QString &displaySpec);
+   void disconnect();
+   void shutdownDevice();
+   void setMode(int, int, int);
+   bool supportsDepth(int) const;
 
-    void save();
-    void restore();
-    void blank(bool on);
+   void save();
+   void restore();
+   void blank(bool on);
 
-    bool onCard(const unsigned char *) const;
-    bool onCard(const unsigned char *, ulong& out_offset) const;
+   bool onCard(const unsigned char *) const;
+   bool onCard(const unsigned char *, ulong &out_offset) const;
 
-    bool isInterlaced() const;
+   bool isInterlaced() const;
 
-    int memoryNeeded(const QString&);
-    int sharedRamSize(void *);
+   int memoryNeeded(const QString &);
+   int sharedRamSize(void *);
 
-    void haltUpdates();
-    void resumeUpdates();
+   void haltUpdates();
+   void resumeUpdates();
 
-    void exposeRegion(QRegion r, int changing);
+   void exposeRegion(QRegion r, int changing);
 
-    void blit(const QImage &img, const QPoint &topLeft, const QRegion &region);
-    void solidFill(const QColor &color, const QRegion &region);
-    void blit(QWSWindow *bs, const QRegion &clip);
-    void setDirty(const QRect&);
+   void blit(const QImage &img, const QPoint &topLeft, const QRegion &region);
+   void solidFill(const QColor &color, const QRegion &region);
+   void blit(QWSWindow *bs, const QRegion &clip);
+   void setDirty(const QRect &);
 
-    QWSWindowSurface* createSurface(QWidget *widget) const;
-    QWSWindowSurface* createSurface(const QString &key) const;
+   QWSWindowSurface *createSurface(QWidget *widget) const;
+   QWSWindowSurface *createSurface(const QString &key) const;
 
-    QList<QScreen*> subScreens() const;
-    QRegion region() const;
+   QList<QScreen *> subScreens() const;
+   QRegion region() const;
 
-private:
-    void addSubScreen(QScreen *screen);
-    void removeSubScreen(QScreen *screen);
+ private:
+   void addSubScreen(QScreen *screen);
+   void removeSubScreen(QScreen *screen);
 
-    QMultiScreenPrivate *d_ptr;
+   QMultiScreenPrivate *d_ptr;
 };
 
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,34 +36,34 @@ QT_BEGIN_NAMESPACE
 class QNetworkReplyDataImplPrivate;
 class QNetworkReplyDataImpl: public QNetworkReply
 {
-    CS_OBJECT(QNetworkReplyDataImpl)
+   CS_OBJECT(QNetworkReplyDataImpl)
 
-public:
-    QNetworkReplyDataImpl(QObject *parent, const QNetworkRequest &req, const QNetworkAccessManager::Operation op);
-    ~QNetworkReplyDataImpl();
-    virtual void abort();
+ public:
+   QNetworkReplyDataImpl(QObject *parent, const QNetworkRequest &req, const QNetworkAccessManager::Operation op);
+   ~QNetworkReplyDataImpl();
+   virtual void abort();
 
-    // reimplemented from QNetworkReply
-    virtual void close();
-    virtual qint64 bytesAvailable() const;
-    virtual bool isSequential () const;
-    qint64 size() const;
+   // reimplemented from QNetworkReply
+   virtual void close();
+   virtual qint64 bytesAvailable() const;
+   virtual bool isSequential () const;
+   qint64 size() const;
 
-    virtual qint64 readData(char *data, qint64 maxlen);
+   virtual qint64 readData(char *data, qint64 maxlen);
 
-    Q_DECLARE_PRIVATE(QNetworkReplyDataImpl)
+   Q_DECLARE_PRIVATE(QNetworkReplyDataImpl)
 };
 
 class QNetworkReplyDataImplPrivate: public QNetworkReplyPrivate
 {
-public:
-    QNetworkReplyDataImplPrivate();
-    ~QNetworkReplyDataImplPrivate();
+ public:
+   QNetworkReplyDataImplPrivate();
+   ~QNetworkReplyDataImplPrivate();
 
-    QPair<QString, QByteArray> decodeDataUrlResult;
-    QBuffer decodedData;
+   QPair<QString, QByteArray> decodeDataUrlResult;
+   QBuffer decodedData;
 
-    Q_DECLARE_PUBLIC(QNetworkReplyDataImpl)
+   Q_DECLARE_PUBLIC(QNetworkReplyDataImpl)
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,47 +35,51 @@
 QT_BEGIN_NAMESPACE
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QGraphicsSystemFactoryInterface_iid, QLatin1String("/graphicssystems"), Qt::CaseInsensitive))
+                          (QGraphicsSystemFactoryInterface_iid, QLatin1String("/graphicssystems"), Qt::CaseInsensitive))
 
-QGraphicsSystem *QGraphicsSystemFactory::create(const QString& key)
+QGraphicsSystem *QGraphicsSystemFactory::create(const QString &key)
 {
-    QGraphicsSystem *ret = 0;
-    QString system = key.toLower();
+   QGraphicsSystem *ret = 0;
+   QString system = key.toLower();
 
 #if defined (QT_GRAPHICSSYSTEM_OPENGL)
-    if (system.isEmpty()) {
-        system = QLatin1String("opengl");
-    }
+   if (system.isEmpty()) {
+      system = QLatin1String("opengl");
+   }
 #elif defined (QT_GRAPHICSSYSTEM_OPENVG)
-    if (system.isEmpty()) {
-        system = QLatin1String("openvg");
-    }
+   if (system.isEmpty()) {
+      system = QLatin1String("openvg");
+   }
 #elif defined (QT_GRAPHICSSYSTEM_RUNTIME)
-    if (system.isEmpty()) {
-        system = QLatin1String("runtime");
-    }
+   if (system.isEmpty()) {
+      system = QLatin1String("runtime");
+   }
 #elif defined (QT_GRAPHICSSYSTEM_RASTER) && !defined(Q_OS_WIN) || defined(Q_WS_X11)
-    if (system.isEmpty()) {
-        system = QLatin1String("raster");
-    }
+   if (system.isEmpty()) {
+      system = QLatin1String("raster");
+   }
 #endif
 
-    if (system == QLatin1String("raster"))
-        return new QRasterGraphicsSystem;
-    else if (system == QLatin1String("runtime"))
-        return new QRuntimeGraphicsSystem;
-    else if (system.isEmpty() || system == QLatin1String("native"))
-        return 0;
+   if (system == QLatin1String("raster")) {
+      return new QRasterGraphicsSystem;
+   } else if (system == QLatin1String("runtime")) {
+      return new QRuntimeGraphicsSystem;
+   } else if (system.isEmpty() || system == QLatin1String("native")) {
+      return 0;
+   }
 
-    if (!ret) {
-        if (QGraphicsSystemFactoryInterface *factory = qobject_cast<QGraphicsSystemFactoryInterface*>(loader()->instance(system)))
-            ret = factory->create(system);
-    }
+   if (!ret) {
+      if (QGraphicsSystemFactoryInterface *factory = qobject_cast<QGraphicsSystemFactoryInterface *>(loader()->instance(
+               system))) {
+         ret = factory->create(system);
+      }
+   }
 
-    if (!ret)
-        qWarning() << "Unable to load graphicssystem" << system;
+   if (!ret) {
+      qWarning() << "Unable to load graphicssystem" << system;
+   }
 
-    return ret;
+   return ret;
 }
 
 /*!
@@ -86,11 +90,12 @@ QGraphicsSystem *QGraphicsSystemFactory::create(const QString& key)
 */
 QStringList QGraphicsSystemFactory::keys()
 {
-    QStringList list = loader()->keys();
+   QStringList list = loader()->keys();
 
-    if (!list.contains(QLatin1String("Raster")))
-        list << QLatin1String("raster");
-    return list;
+   if (!list.contains(QLatin1String("Raster"))) {
+      list << QLatin1String("raster");
+   }
+   return list;
 }
 
 QT_END_NAMESPACE

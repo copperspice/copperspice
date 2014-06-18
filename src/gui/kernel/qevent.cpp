@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -52,7 +52,7 @@ QT_BEGIN_NAMESPACE
   \internal
 */
 QInputEvent::QInputEvent(Type type, Qt::KeyboardModifiers modifiers)
-    : QEvent(type), modState(modifiers)
+   : QEvent(type), modState(modifiers)
 {}
 
 /*!
@@ -147,9 +147,9 @@ QInputEvent::~QInputEvent()
 
 QMouseEvent::QMouseEvent(Type type, const QPoint &position, Qt::MouseButton button,
                          Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
-    : QInputEvent(type, modifiers), p(position), b(button), mouseState(buttons)
+   : QInputEvent(type, modifiers), p(position), b(button), mouseState(buttons)
 {
-    g = QCursor::pos();
+   g = QCursor::pos();
 }
 
 /*!
@@ -179,17 +179,17 @@ QMouseEvent::~QMouseEvent()
 QMouseEvent::QMouseEvent(Type type, const QPoint &pos, const QPoint &globalPos,
                          Qt::MouseButton button, Qt::MouseButtons buttons,
                          Qt::KeyboardModifiers modifiers)
-    : QInputEvent(type, modifiers), p(pos), g(globalPos), b(button), mouseState(buttons)
+   : QInputEvent(type, modifiers), p(pos), g(globalPos), b(button), mouseState(buttons)
 {}
 
 /*!
     \internal
 */
 QMouseEvent *QMouseEvent::createExtendedMouseEvent(Type type, const QPointF &pos,
-                                                   const QPoint &globalPos, Qt::MouseButton button,
-                                                   Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
+      const QPoint &globalPos, Qt::MouseButton button,
+      Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
 {
-    return new QMouseEventEx(type, pos, globalPos, button, buttons, modifiers);
+   return new QMouseEventEx(type, pos, globalPos, button, buttons, modifiers);
 }
 
 /*!
@@ -211,7 +211,7 @@ QMouseEvent *QMouseEvent::createExtendedMouseEvent(Type type, const QPointF &pos
 */
 QPointF QMouseEvent::posF() const
 {
-    return hasExtendedInfo() ? reinterpret_cast<const QMouseEventEx *>(this)->posF : QPointF(pos());
+   return hasExtendedInfo() ? reinterpret_cast<const QMouseEventEx *>(this)->posF : QPointF(pos());
 }
 
 /*!
@@ -220,9 +220,9 @@ QPointF QMouseEvent::posF() const
 QMouseEventEx::QMouseEventEx(Type type, const QPointF &pos, const QPoint &globalPos,
                              Qt::MouseButton button, Qt::MouseButtons buttons,
                              Qt::KeyboardModifiers modifiers)
-    : QMouseEvent(type, pos.toPoint(), globalPos, button, buttons, modifiers), posF(pos)
+   : QMouseEvent(type, pos.toPoint(), globalPos, button, buttons, modifiers), posF(pos)
 {
-    d = reinterpret_cast<QEventPrivate *>(this);
+   d = reinterpret_cast<QEventPrivate *>(this);
 }
 
 /*!
@@ -424,7 +424,7 @@ QMouseEventEx::~QMouseEventEx()
     position relative to the receiving widget.
 */
 QHoverEvent::QHoverEvent(Type type, const QPoint &pos, const QPoint &oldPos)
-    : QEvent(type), p(pos), op(oldPos)
+   : QEvent(type), p(pos), op(oldPos)
 {
 }
 
@@ -493,9 +493,9 @@ QHoverEvent::~QHoverEvent()
 QWheelEvent::QWheelEvent(const QPoint &pos, int delta,
                          Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
                          Qt::Orientation orient)
-    : QInputEvent(Wheel, modifiers), p(pos), d(delta), mouseState(buttons), o(orient)
+   : QInputEvent(Wheel, modifiers), p(pos), d(delta), mouseState(buttons), o(orient)
 {
-    g = QCursor::pos();
+   g = QCursor::pos();
 }
 
 /*!
@@ -516,10 +516,10 @@ QWheelEvent::~QWheelEvent()
 
     \sa pos() globalPos() delta() state()
 */
-QWheelEvent::QWheelEvent(const QPoint &pos, const QPoint& globalPos, int delta,
+QWheelEvent::QWheelEvent(const QPoint &pos, const QPoint &globalPos, int delta,
                          Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
                          Qt::Orientation orient)
-    : QInputEvent(Wheel, modifiers), p(pos), g(globalPos), d(delta), mouseState(buttons), o(orient)
+   : QInputEvent(Wheel, modifiers), p(pos), g(globalPos), d(delta), mouseState(buttons), o(orient)
 {}
 
 #endif // QT_NO_WHEELEVENT
@@ -660,9 +660,9 @@ QWheelEvent::QWheelEvent(const QPoint &pos, const QPoint& globalPos, int delta,
     isAutoRepeat() will be true. \a count is the number of keys involved
     in the event.
 */
-QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers, const QString& text,
+QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers, const QString &text,
                      bool autorep, ushort count)
-    : QInputEvent(type, modifiers), txt(text), k(key), c(count), autor(autorep)
+   : QInputEvent(type, modifiers), txt(text), k(key), c(count), autor(autorep)
 {
 }
 
@@ -677,12 +677,12 @@ QKeyEvent::~QKeyEvent()
     \internal
 */
 QKeyEvent *QKeyEvent::createExtendedKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers,
-                                             quint32 nativeScanCode, quint32 nativeVirtualKey,
-                                             quint32 nativeModifiers,
-                                             const QString& text, bool autorep, ushort count)
+      quint32 nativeScanCode, quint32 nativeVirtualKey,
+      quint32 nativeModifiers,
+      const QString &text, bool autorep, ushort count)
 {
-    return new QKeyEventEx(type, key, modifiers, text, autorep, count,
-                           nativeScanCode, nativeVirtualKey, nativeModifiers);
+   return new QKeyEventEx(type, key, modifiers, text, autorep, count,
+                          nativeScanCode, nativeVirtualKey, nativeModifiers);
 }
 
 /*!
@@ -705,8 +705,8 @@ QKeyEvent *QKeyEvent::createExtendedKeyEvent(Type type, int key, Qt::KeyboardMod
 */
 quint32 QKeyEvent::nativeScanCode() const
 {
-    return (reinterpret_cast<const QKeyEvent*>(d) != this
-            ? 0 : reinterpret_cast<const QKeyEventEx*>(this)->nScanCode);
+   return (reinterpret_cast<const QKeyEvent *>(d) != this
+           ? 0 : reinterpret_cast<const QKeyEventEx *>(this)->nScanCode);
 }
 
 /*!
@@ -719,8 +719,8 @@ quint32 QKeyEvent::nativeScanCode() const
 */
 quint32 QKeyEvent::nativeVirtualKey() const
 {
-    return (reinterpret_cast<const QKeyEvent*>(d) != this
-            ? 0 : reinterpret_cast<const QKeyEventEx*>(this)->nVirtualKey);
+   return (reinterpret_cast<const QKeyEvent *>(d) != this
+           ? 0 : reinterpret_cast<const QKeyEventEx *>(this)->nVirtualKey);
 }
 
 /*!
@@ -733,8 +733,8 @@ quint32 QKeyEvent::nativeVirtualKey() const
 */
 quint32 QKeyEvent::nativeModifiers() const
 {
-    return (reinterpret_cast<const QKeyEvent*>(d) != this
-            ? 0 : reinterpret_cast<const QKeyEventEx*>(this)->nModifiers);
+   return (reinterpret_cast<const QKeyEvent *>(d) != this
+           ? 0 : reinterpret_cast<const QKeyEventEx *>(this)->nModifiers);
 }
 
 /*!
@@ -746,10 +746,10 @@ quint32 QKeyEvent::nativeModifiers() const
 QKeyEventEx::QKeyEventEx(Type type, int key, Qt::KeyboardModifiers modifiers,
                          const QString &text, bool autorep, ushort count,
                          quint32 nativeScanCode, quint32 nativeVirtualKey, quint32 nativeModifiers)
-    : QKeyEvent(type, key, modifiers, text, autorep, count),
-      nScanCode(nativeScanCode), nVirtualKey(nativeVirtualKey), nModifiers(nativeModifiers)
+   : QKeyEvent(type, key, modifiers, text, autorep, count),
+     nScanCode(nativeScanCode), nVirtualKey(nativeVirtualKey), nModifiers(nativeModifiers)
 {
-    d = reinterpret_cast<QEventPrivate*>(this);
+   d = reinterpret_cast<QEventPrivate *>(this);
 }
 
 /*!
@@ -757,10 +757,10 @@ QKeyEventEx::QKeyEventEx(Type type, int key, Qt::KeyboardModifiers modifiers,
     Creates a copy of an other extended key event.
 */
 QKeyEventEx::QKeyEventEx(const QKeyEventEx &other)
-    : QKeyEvent(QEvent::Type(other.t), other.k, other.modState, other.txt, other.autor, other.c),
-      nScanCode(other.nScanCode), nVirtualKey(other.nVirtualKey), nModifiers(other.nModifiers)
+   : QKeyEvent(QEvent::Type(other.t), other.k, other.modState, other.txt, other.autor, other.c),
+     nScanCode(other.nScanCode), nVirtualKey(other.nVirtualKey), nModifiers(other.nModifiers)
 {
-    d = reinterpret_cast<QEventPrivate*>(this);
+   d = reinterpret_cast<QEventPrivate *>(this);
 }
 
 /*!
@@ -814,17 +814,22 @@ QKeyEventEx::~QKeyEventEx()
 
 Qt::KeyboardModifiers QKeyEvent::modifiers() const
 {
-    if (key() == Qt::Key_Shift)
-        return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::ShiftModifier);
-    if (key() == Qt::Key_Control)
-        return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::ControlModifier);
-    if (key() == Qt::Key_Alt)
-        return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::AltModifier);
-    if (key() == Qt::Key_Meta)
-        return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::MetaModifier);
-    if (key() == Qt::Key_AltGr)
-        return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::GroupSwitchModifier);
-    return QInputEvent::modifiers();
+   if (key() == Qt::Key_Shift) {
+      return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::ShiftModifier);
+   }
+   if (key() == Qt::Key_Control) {
+      return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::ControlModifier);
+   }
+   if (key() == Qt::Key_Alt) {
+      return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::AltModifier);
+   }
+   if (key() == Qt::Key_Meta) {
+      return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::MetaModifier);
+   }
+   if (key() == Qt::Key_AltGr) {
+      return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::GroupSwitchModifier);
+   }
+   return QInputEvent::modifiers();
 }
 
 #ifndef QT_NO_SHORTCUT
@@ -837,62 +842,64 @@ Qt::KeyboardModifiers QKeyEvent::modifiers() const
 */
 bool QKeyEvent::matches(QKeySequence::StandardKey matchKey) const
 {
-    uint searchkey = (modifiers() | key()) & ~(Qt::KeypadModifier | Qt::GroupSwitchModifier);
-    uint platform = QApplicationPrivate::currentPlatform();
+   uint searchkey = (modifiers() | key()) & ~(Qt::KeypadModifier | Qt::GroupSwitchModifier);
+   uint platform = QApplicationPrivate::currentPlatform();
 
 #ifdef Q_OS_MAC
-    if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)) {
-        uint oldSearchKey = searchkey;
-        searchkey &= ~(Qt::ControlModifier | Qt::MetaModifier);
-        if (oldSearchKey & Qt::ControlModifier)
-            searchkey |= Qt::MetaModifier;
-        if (oldSearchKey & Qt::MetaModifier)
-            searchkey |= Qt::ControlModifier;
-    }
+   if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)) {
+      uint oldSearchKey = searchkey;
+      searchkey &= ~(Qt::ControlModifier | Qt::MetaModifier);
+      if (oldSearchKey & Qt::ControlModifier) {
+         searchkey |= Qt::MetaModifier;
+      }
+      if (oldSearchKey & Qt::MetaModifier) {
+         searchkey |= Qt::ControlModifier;
+      }
+   }
 #endif
 
-    uint N = QKeySequencePrivate::numberOfKeyBindings;
-    int first = 0;
-    int last = N - 1;
+   uint N = QKeySequencePrivate::numberOfKeyBindings;
+   int first = 0;
+   int last = N - 1;
 
-    while (first <= last) {
-        int mid = (first + last) / 2;
-        QKeyBinding midVal = QKeySequencePrivate::keyBindings[mid];
+   while (first <= last) {
+      int mid = (first + last) / 2;
+      QKeyBinding midVal = QKeySequencePrivate::keyBindings[mid];
 
-        if (searchkey > midVal.shortcut){
-            first = mid + 1;  // Search in top half
-        }
-        else if (searchkey < midVal.shortcut){
-            last = mid - 1; // Search in bottom half
-        }
-        else {
-            //found correct shortcut value, now we must check for platform match
-            if ((midVal.platform & platform) && (midVal.standardKey == matchKey)) {
-                return true;
-            } else { //We may have several equal values for different platforms, so we must search in both directions
+      if (searchkey > midVal.shortcut) {
+         first = mid + 1;  // Search in top half
+      } else if (searchkey < midVal.shortcut) {
+         last = mid - 1; // Search in bottom half
+      } else {
+         //found correct shortcut value, now we must check for platform match
+         if ((midVal.platform & platform) && (midVal.standardKey == matchKey)) {
+            return true;
+         } else { //We may have several equal values for different platforms, so we must search in both directions
 
-                //search forward
-                for ( unsigned int i = mid + 1 ; i < N - 1 ; ++i) {
-                    QKeyBinding current = QKeySequencePrivate::keyBindings[i];
-                    if (current.shortcut != searchkey)
-                        break;
-                    else if (current.platform & platform && current.standardKey == matchKey)
-                        return true;
-                }
-
-                //search back
-                for ( int i = mid - 1 ; i >= 0 ; --i) {
-                    QKeyBinding current = QKeySequencePrivate::keyBindings[i];
-                    if (current.shortcut != searchkey)
-                        break;
-                    else if (current.platform & platform && current.standardKey == matchKey)
-                        return true;
-                }
-                return false; //we could not find it among the matching keySequences
+            //search forward
+            for ( unsigned int i = mid + 1 ; i < N - 1 ; ++i) {
+               QKeyBinding current = QKeySequencePrivate::keyBindings[i];
+               if (current.shortcut != searchkey) {
+                  break;
+               } else if (current.platform & platform && current.standardKey == matchKey) {
+                  return true;
+               }
             }
-        }
-    }
-    return false; //we could not find matching keySequences at all
+
+            //search back
+            for ( int i = mid - 1 ; i >= 0 ; --i) {
+               QKeyBinding current = QKeySequencePrivate::keyBindings[i];
+               if (current.shortcut != searchkey) {
+                  break;
+               } else if (current.platform & platform && current.standardKey == matchKey) {
+                  return true;
+               }
+            }
+            return false; //we could not find it among the matching keySequences
+         }
+      }
+   }
+   return false; //we could not find matching keySequences at all
 }
 #endif // QT_NO_SHORTCUT
 
@@ -946,7 +953,7 @@ bool QKeyEvent::matches(QKeySequence::StandardKey matchKey) const
     in focus.
 */
 QFocusEvent::QFocusEvent(Type type, Qt::FocusReason reason)
-    : QEvent(type), m_reason(reason)
+   : QEvent(type), m_reason(reason)
 {}
 
 /*!
@@ -962,7 +969,7 @@ QFocusEvent::~QFocusEvent()
  */
 Qt::FocusReason QFocusEvent::reason()
 {
-    return m_reason;
+   return m_reason;
 }
 
 /*!
@@ -970,7 +977,7 @@ Qt::FocusReason QFocusEvent::reason()
  */
 Qt::FocusReason QFocusEvent::reason() const
 {
-    return m_reason;
+   return m_reason;
 }
 
 /*!
@@ -1041,8 +1048,8 @@ Qt::FocusReason QFocusEvent::reason() const
     Constructs a paint event object with the region that needs to
     be updated. The region is specified by \a paintRegion.
 */
-QPaintEvent::QPaintEvent(const QRegion& paintRegion)
-    : QEvent(Paint), m_rect(paintRegion.boundingRect()), m_region(paintRegion), m_erased(false)
+QPaintEvent::QPaintEvent(const QRegion &paintRegion)
+   : QEvent(Paint), m_rect(paintRegion.boundingRect()), m_region(paintRegion), m_erased(false)
 {}
 
 /*!
@@ -1050,7 +1057,7 @@ QPaintEvent::QPaintEvent(const QRegion& paintRegion)
     to be updated. The region is specified by \a paintRect.
 */
 QPaintEvent::QPaintEvent(const QRect &paintRect)
-    : QEvent(Paint), m_rect(paintRect),m_region(paintRect), m_erased(false)
+   : QEvent(Paint), m_rect(paintRect), m_region(paintRect), m_erased(false)
 {}
 
 
@@ -1078,8 +1085,8 @@ QPaintEvent::~QPaintEvent()
 */
 
 
-QUpdateLaterEvent::QUpdateLaterEvent(const QRegion& paintRegion)
-    : QEvent(UpdateLater), m_region(paintRegion)
+QUpdateLaterEvent::QUpdateLaterEvent(const QRegion &paintRegion)
+   : QEvent(UpdateLater), m_region(paintRegion)
 {
 }
 
@@ -1106,7 +1113,7 @@ QUpdateLaterEvent::~QUpdateLaterEvent()
     \a pos and \a oldPos respectively.
 */
 QMoveEvent::QMoveEvent(const QPoint &pos, const QPoint &oldPos)
-    : QEvent(Move), p(pos), oldp(oldPos)
+   : QEvent(Move), p(pos), oldp(oldPos)
 {}
 
 /*!
@@ -1148,7 +1155,7 @@ QMoveEvent::~QMoveEvent()
     size and \a oldSize respectively.
 */
 QResizeEvent::QResizeEvent(const QSize &size, const QSize &oldSize)
-    : QEvent(Resize), s(size), olds(oldSize)
+   : QEvent(Resize), s(size), olds(oldSize)
 {}
 
 /*!
@@ -1227,7 +1234,7 @@ QResizeEvent::~QResizeEvent()
     \sa accept()
 */
 QCloseEvent::QCloseEvent()
-    : QEvent(Close)
+   : QEvent(Close)
 {}
 
 /*! \internal
@@ -1259,8 +1266,10 @@ QCloseEvent::~QCloseEvent()
     \sa accept()
 */
 QIconDragEvent::QIconDragEvent()
-    : QEvent(IconDrag)
-{ ignore(); }
+   : QEvent(IconDrag)
+{
+   ignore();
+}
 
 /*! \internal */
 QIconDragEvent::~QIconDragEvent()
@@ -1301,7 +1310,7 @@ QIconDragEvent::~QIconDragEvent()
     coordinates.
 */
 QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPos)
-    : QInputEvent(ContextMenu), p(pos), gp(globalPos), reas(reason)
+   : QInputEvent(ContextMenu), p(pos), gp(globalPos), reas(reason)
 {}
 
 /*!
@@ -1317,7 +1326,7 @@ QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos, const QPo
 */
 QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPos,
                                      Qt::KeyboardModifiers modifiers)
-    : QInputEvent(ContextMenu, modifiers), p(pos), gp(globalPos), reas(reason)
+   : QInputEvent(ContextMenu, modifiers), p(pos), gp(globalPos), reas(reason)
 {}
 
 /*! \internal */
@@ -1339,9 +1348,9 @@ QContextMenuEvent::~QContextMenuEvent()
     position explicitly.
 */
 QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos)
-    : QInputEvent(ContextMenu), p(pos), reas(reason)
+   : QInputEvent(ContextMenu), p(pos), reas(reason)
 {
-    gp = QCursor::pos();
+   gp = QCursor::pos();
 }
 
 /*!
@@ -1614,7 +1623,7 @@ QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos)
     \sa setCommitString()
 */
 QInputMethodEvent::QInputMethodEvent()
-    : QEvent(QEvent::InputMethod), replace_from(0), replace_length(0)
+   : QEvent(QEvent::InputMethod), replace_from(0), replace_length(0)
 {
 }
 
@@ -1629,8 +1638,8 @@ QInputMethodEvent::QInputMethodEvent()
     \sa preeditString(), attributes()
 */
 QInputMethodEvent::QInputMethodEvent(const QString &preeditText, const QList<Attribute> &attributes)
-    : QEvent(QEvent::InputMethod), preedit(preeditText), attrs(attributes),
-      replace_from(0), replace_length(0)
+   : QEvent(QEvent::InputMethod), preedit(preeditText), attrs(attributes),
+     replace_from(0), replace_length(0)
 {
 }
 
@@ -1638,8 +1647,8 @@ QInputMethodEvent::QInputMethodEvent(const QString &preeditText, const QList<Att
     Constructs a copy of \a other.
 */
 QInputMethodEvent::QInputMethodEvent(const QInputMethodEvent &other)
-    : QEvent(QEvent::InputMethod), preedit(other.preedit), attrs(other.attrs),
-      commit(other.commit), replace_from(other.replace_from), replace_length(other.replace_length)
+   : QEvent(QEvent::InputMethod), preedit(other.preedit), attrs(other.attrs),
+     commit(other.commit), replace_from(other.replace_from), replace_length(other.replace_length)
 {
 }
 
@@ -1661,9 +1670,9 @@ QInputMethodEvent::QInputMethodEvent(const QInputMethodEvent &other)
 */
 void QInputMethodEvent::setCommitString(const QString &commitString, int replaceFrom, int replaceLength)
 {
-    commit = commitString;
-    replace_from = replaceFrom;
-    replace_length = replaceLength;
+   commit = commitString;
+   replace_from = replaceFrom;
+   replace_length = replaceLength;
 }
 
 /*!
@@ -1825,20 +1834,20 @@ QTabletEvent::QTabletEvent(Type type, const QPoint &pos, const QPoint &globalPos
                            const QPointF &hiResGlobalPos, int device, int pointerType,
                            qreal pressure, int xTilt, int yTilt, qreal tangentialPressure,
                            qreal rotation, int z, Qt::KeyboardModifiers keyState, qint64 uniqueID)
-    : QInputEvent(type, keyState),
-      mPos(pos),
-      mGPos(globalPos),
-      mHiResGlobalPos(hiResGlobalPos),
-      mDev(device),
-      mPointerType(pointerType),
-      mXT(xTilt),
-      mYT(yTilt),
-      mZ(z),
-      mPress(pressure),
-      mTangential(tangentialPressure),
-      mRot(rotation),
-      mUnique(uniqueID),
-      mExtra(0)
+   : QInputEvent(type, keyState),
+     mPos(pos),
+     mGPos(globalPos),
+     mHiResGlobalPos(hiResGlobalPos),
+     mDev(device),
+     mPointerType(pointerType),
+     mXT(xTilt),
+     mYT(yTilt),
+     mZ(z),
+     mPress(pressure),
+     mTangential(tangentialPressure),
+     mRot(rotation),
+     mUnique(uniqueID),
+     mExtra(0)
 {
 }
 
@@ -2046,10 +2055,10 @@ QTabletEvent::~QTabletEvent()
     \warning Do not attempt to create a QDragMoveEvent yourself.
     These objects rely on Qt's internal state.
 */
-QDragMoveEvent::QDragMoveEvent(const QPoint& pos, Qt::DropActions actions, const QMimeData *data,
+QDragMoveEvent::QDragMoveEvent(const QPoint &pos, Qt::DropActions actions, const QMimeData *data,
                                Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type)
-    : QDropEvent(pos, actions, data, buttons, modifiers, type)
-    , rect(pos, QSize(1, 1))
+   : QDropEvent(pos, actions, data, buttons, modifiers, type)
+   , rect(pos, QSize(1, 1))
 {}
 
 /*!
@@ -2163,15 +2172,15 @@ QDragMoveEvent::~QDragMoveEvent()
     The states of the mouse buttons and keyboard modifiers at the time of
     the drop are specified by \a buttons and \a modifiers.
 */ // ### pos is in which coordinate system?
-QDropEvent::QDropEvent(const QPoint& pos, Qt::DropActions actions, const QMimeData *data,
+QDropEvent::QDropEvent(const QPoint &pos, Qt::DropActions actions, const QMimeData *data,
                        Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type)
-    : QEvent(type), p(pos), mouseState(buttons),
-      modState(modifiers), act(actions),
-      mdata(data)
+   : QEvent(type), p(pos), mouseState(buttons),
+     modState(modifiers), act(actions),
+     mdata(data)
 {
-    default_action = QDragManager::self()->defaultAction(act, modifiers);
-    drop_action = default_action;
-    ignore();
+   default_action = QDragManager::self()->defaultAction(act, modifiers);
+   drop_action = default_action;
+   ignore();
 }
 
 /*! \internal */
@@ -2190,18 +2199,19 @@ QDropEvent::~QDropEvent()
 
     \sa QDrag::QDrag()
 */
-QWidget* QDropEvent::source() const
+QWidget *QDropEvent::source() const
 {
-    QDragManager *manager = QDragManager::self();
-    return manager ? manager->source() : 0;
+   QDragManager *manager = QDragManager::self();
+   return manager ? manager->source() : 0;
 }
 
 
 void QDropEvent::setDropAction(Qt::DropAction action)
 {
-    if (!(action & act) && action != Qt::IgnoreAction)
-        action = default_action;
-    drop_action = action;
+   if (!(action & act) && action != Qt::IgnoreAction) {
+      action = default_action;
+   }
+   drop_action = action;
 }
 
 /*!
@@ -2359,9 +2369,9 @@ void QDropEvent::setDropAction(Qt::DropAction action)
     \warning Do not create a QDragEnterEvent yourself since these
     objects rely on Qt's internal state.
 */
-QDragEnterEvent::QDragEnterEvent(const QPoint& point, Qt::DropActions actions, const QMimeData *data,
+QDragEnterEvent::QDragEnterEvent(const QPoint &point, Qt::DropActions actions, const QMimeData *data,
                                  Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
-    : QDragMoveEvent(point, actions, data, buttons, modifiers, DragEnter)
+   : QDragMoveEvent(point, actions, data, buttons, modifiers, DragEnter)
 {}
 
 /*! \internal
@@ -2376,7 +2386,7 @@ QDragEnterEvent::~QDragEnterEvent()
     recipient.
 */
 QDragResponseEvent::QDragResponseEvent(bool accepted)
-    : QEvent(DragResponse), a(accepted)
+   : QEvent(DragResponse), a(accepted)
 {}
 
 /*! \internal
@@ -2433,7 +2443,7 @@ QDragResponseEvent::~QDragResponseEvent()
     objects rely on Qt's internal state.
 */
 QDragLeaveEvent::QDragLeaveEvent()
-    : QEvent(DragLeave)
+   : QEvent(DragLeave)
 {}
 
 /*! \internal
@@ -2468,7 +2478,7 @@ QDragLeaveEvent::~QDragLeaveEvent()
     \sa pos(), globalPos()
 */
 QHelpEvent::QHelpEvent(Type type, const QPoint &pos, const QPoint &globalPos)
-    : QEvent(type), p(pos), gp(globalPos)
+   : QEvent(type), p(pos), gp(globalPos)
 {}
 
 /*!
@@ -2576,7 +2586,7 @@ QHelpEvent::~QHelpEvent()
     \sa tip()
 */
 QStatusTipEvent::QStatusTipEvent(const QString &tip)
-    : QEvent(StatusTip), s(tip)
+   : QEvent(StatusTip), s(tip)
 {}
 
 /*! \internal
@@ -2615,7 +2625,7 @@ QStatusTipEvent::~QStatusTipEvent()
     \sa href()
 */
 QWhatsThisClickedEvent::QWhatsThisClickedEvent(const QString &href)
-    : QEvent(WhatsThisClicked), s(href)
+   : QEvent(WhatsThisClicked), s(href)
 {}
 
 /*! \internal
@@ -2660,7 +2670,7 @@ QWhatsThisClickedEvent::~QWhatsThisClickedEvent()
     action \a before. If \a before is 0, the action is appended.
 */
 QActionEvent::QActionEvent(int type, QAction *action, QAction *before)
-    : QEvent(static_cast<QEvent::Type>(type)), act(action), bef(before)
+   : QEvent(static_cast<QEvent::Type>(type)), act(action), bef(before)
 {}
 
 /*! \internal
@@ -2713,7 +2723,7 @@ QActionEvent::~QActionEvent()
     Constructs a QHideEvent.
 */
 QHideEvent::QHideEvent()
-    : QEvent(Hide)
+   : QEvent(Hide)
 {}
 
 /*! \internal
@@ -2742,7 +2752,7 @@ QHideEvent::~QHideEvent()
     Constructs a QShowEvent.
 */
 QShowEvent::QShowEvent()
-    : QEvent(Show)
+   : QEvent(Show)
 {}
 
 /*! \internal
@@ -2781,9 +2791,9 @@ QFileOpenEventPrivate::~QFileOpenEventPrivate()
     Constructs a file open event for the given \a file.
 */
 QFileOpenEvent::QFileOpenEvent(const QString &file)
-    : QEvent(FileOpen), f(file)
+   : QEvent(FileOpen), f(file)
 {
-    d = reinterpret_cast<QEventPrivate *>(new QFileOpenEventPrivate(QUrl::fromLocalFile(file)));
+   d = reinterpret_cast<QEventPrivate *>(new QFileOpenEventPrivate(QUrl::fromLocalFile(file)));
 }
 
 /*!
@@ -2792,10 +2802,10 @@ QFileOpenEvent::QFileOpenEvent(const QString &file)
     Constructs a file open event for the given \a url.
 */
 QFileOpenEvent::QFileOpenEvent(const QUrl &url)
-    : QEvent(FileOpen)
+   : QEvent(FileOpen)
 {
-    d = reinterpret_cast<QEventPrivate *>(new QFileOpenEventPrivate(url));
-    f = url.toLocalFile();
+   d = reinterpret_cast<QEventPrivate *>(new QFileOpenEventPrivate(url));
+   f = url.toLocalFile();
 }
 
 /*! \internal
@@ -2803,7 +2813,7 @@ QFileOpenEvent::QFileOpenEvent(const QUrl &url)
 
 QFileOpenEvent::~QFileOpenEvent()
 {
-    delete reinterpret_cast<QFileOpenEventPrivate *>(d);
+   delete reinterpret_cast<QFileOpenEventPrivate *>(d);
 }
 
 /*!
@@ -2821,7 +2831,7 @@ QFileOpenEvent::~QFileOpenEvent()
 */
 QUrl QFileOpenEvent::url() const
 {
-    return reinterpret_cast<const QFileOpenEventPrivate *>(d)->url;
+   return reinterpret_cast<const QFileOpenEventPrivate *>(d)->url;
 }
 
 /*!
@@ -2839,8 +2849,8 @@ QUrl QFileOpenEvent::url() const
 */
 bool QFileOpenEvent::openFile(QFile &file, QIODevice::OpenMode flags) const
 {
-    file.setFileName(f);
-    return file.open(flags);
+   file.setFileName(f);
+   return file.open(flags);
 }
 
 #ifndef QT_NO_TOOLBAR
@@ -2864,7 +2874,7 @@ bool QFileOpenEvent::openFile(QFile &file, QIODevice::OpenMode flags) const
     Construct a QToolBarChangeEvent given the current button state in \a state.
 */
 QToolBarChangeEvent::QToolBarChangeEvent(bool t)
-    : QEvent(ToolBarChange), tog(t)
+   : QEvent(ToolBarChange), tog(t)
 {}
 
 /*! \internal
@@ -2900,7 +2910,7 @@ QToolBarChangeEvent::~QToolBarChangeEvent()
     for the same key sequence.
 */
 QShortcutEvent::QShortcutEvent(const QKeySequence &key, int id, bool ambiguous)
-    : QEvent(Shortcut), sequence(key), ambig(ambiguous), sid(id)
+   : QEvent(Shortcut), sequence(key), ambig(ambiguous), sid(id)
 {
 }
 
@@ -2913,288 +2923,291 @@ QShortcutEvent::~QShortcutEvent()
 
 #endif // QT_NO_SHORTCUT
 
-QDebug operator<<(QDebug dbg, const QEvent *e) {
-    // More useful event output could be added here
-    if (!e)
-        return dbg << "QEvent(this = 0x0)";
-    const char *n = 0;
-    switch (e->type()) {
-    case QEvent::Timer:
-        n = "Timer";
-        break;
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseMove:
-    case QEvent::MouseButtonRelease:
-    case QEvent::MouseButtonDblClick:
-    {
-        const QMouseEvent *me = static_cast<const QMouseEvent*>(e);
-        switch(me->type()) {
-        case QEvent::MouseButtonPress:
-            n = "MouseButtonPress";
-            break;
-        case QEvent::MouseMove:
-            n = "MouseMove";
-            break;
-        case QEvent::MouseButtonRelease:
-            n = "MouseButtonRelease";
-            break;
-        case QEvent::MouseButtonDblClick:
-        default:
-            n = "MouseButtonDblClick";
-            break;
-        }
-        dbg.nospace() << "QMouseEvent("  << n
-                      << ", " << me->button()
-                      << ", " << hex << (int)me->buttons()
-                      << ", " << hex << (int)me->modifiers()
-                      << ')';
-    }
-    return dbg.space();
+QDebug operator<<(QDebug dbg, const QEvent *e)
+{
+   // More useful event output could be added here
+   if (!e) {
+      return dbg << "QEvent(this = 0x0)";
+   }
+   const char *n = 0;
+   switch (e->type()) {
+      case QEvent::Timer:
+         n = "Timer";
+         break;
+      case QEvent::MouseButtonPress:
+      case QEvent::MouseMove:
+      case QEvent::MouseButtonRelease:
+      case QEvent::MouseButtonDblClick: {
+         const QMouseEvent *me = static_cast<const QMouseEvent *>(e);
+         switch (me->type()) {
+            case QEvent::MouseButtonPress:
+               n = "MouseButtonPress";
+               break;
+            case QEvent::MouseMove:
+               n = "MouseMove";
+               break;
+            case QEvent::MouseButtonRelease:
+               n = "MouseButtonRelease";
+               break;
+            case QEvent::MouseButtonDblClick:
+            default:
+               n = "MouseButtonDblClick";
+               break;
+         }
+         dbg.nospace() << "QMouseEvent("  << n
+                       << ", " << me->button()
+                       << ", " << hex << (int)me->buttons()
+                       << ", " << hex << (int)me->modifiers()
+                       << ')';
+      }
+      return dbg.space();
 
 #ifndef QT_NO_TOOLTIP
-    case QEvent::ToolTip:
-        n = "ToolTip";
-        break;
+      case QEvent::ToolTip:
+         n = "ToolTip";
+         break;
 #endif
-    case QEvent::WindowActivate:
-        n = "WindowActivate";
-        break;
-    case QEvent::WindowDeactivate:
-        n = "WindowDeactivate";
-        break;
-    case QEvent::ActivationChange:
-        n = "ActivationChange";
-        break;
+      case QEvent::WindowActivate:
+         n = "WindowActivate";
+         break;
+      case QEvent::WindowDeactivate:
+         n = "WindowDeactivate";
+         break;
+      case QEvent::ActivationChange:
+         n = "ActivationChange";
+         break;
 #ifndef QT_NO_WHEELEVENT
-    case QEvent::Wheel:
-        dbg.nospace() << "QWheelEvent("  << static_cast<const QWheelEvent *>(e)->delta()
-                      << ')';
-        return dbg.space();
+      case QEvent::Wheel:
+         dbg.nospace() << "QWheelEvent("  << static_cast<const QWheelEvent *>(e)->delta()
+                       << ')';
+         return dbg.space();
 #endif
-    case QEvent::KeyPress:
-    case QEvent::KeyRelease:
-    case QEvent::ShortcutOverride:
-        {
-            const QKeyEvent *ke = static_cast<const QKeyEvent*>(e);
-            switch(ke->type()) {
+      case QEvent::KeyPress:
+      case QEvent::KeyRelease:
+      case QEvent::ShortcutOverride: {
+         const QKeyEvent *ke = static_cast<const QKeyEvent *>(e);
+         switch (ke->type()) {
             case QEvent::ShortcutOverride:
-                n = "ShortcutOverride";
-                break;
+               n = "ShortcutOverride";
+               break;
             case QEvent::KeyRelease:
-                n = "KeyRelease";
-                break;
+               n = "KeyRelease";
+               break;
             case QEvent::KeyPress:
             default:
-                n = "KeyPress";
-                break;
-            }
-            dbg.nospace() << "QKeyEvent("  << n
-                          << ", " << hex << ke->key()
-                          << ", " << hex << (int)ke->modifiers()
-                          << ", \"" << ke->text()
-                          << "\", " << ke->isAutoRepeat()
-                          << ", " << ke->count()
-                          << ')';
-        }
-        return dbg.space();
-    case QEvent::FocusIn:
-        n = "FocusIn";
-        break;
-    case QEvent::FocusOut:
-        n = "FocusOut";
-        break;
-    case QEvent::Enter:
-        n = "Enter";
-        break;
-    case QEvent::Leave:
-        n = "Leave";
-        break;
-    case QEvent::PaletteChange:
-        n = "PaletteChange";
-        break;
-    case QEvent::PolishRequest:
-        n = "PolishRequest";
-        break;
-    case QEvent::Polish:
-        n = "Polish";
-        break;
-    case QEvent::UpdateRequest:
-        n = "UpdateRequest";
-        break;
-    case QEvent::Paint:
-        n = "Paint";
-        break;
-    case QEvent::Move:
-        n = "Move";
-        break;
-    case QEvent::Resize:
-        n = "Resize";
-        break;
-    case QEvent::Create:
-        n = "Create";
-        break;
-    case QEvent::Destroy:
-        n = "Destroy";
-        break;
-    case QEvent::Close:
-        n = "Close";
-        break;
-    case QEvent::Quit:
-        n = "Quit";
-        break;
-    case QEvent::FileOpen:
-        n = "FileOpen";
-        break;
-    case QEvent::Show:
-        n = "Show";
-        break;
-    case QEvent::ShowToParent:
-        n = "ShowToParent";
-        break;
-    case QEvent::Hide:
-        n = "Hide";
-        break;
-    case QEvent::HideToParent:
-        n = "HideToParent";
-        break;
-    case QEvent::None:
-        n = "None";
-        break;
-    case QEvent::ParentChange:
-        n = "ParentChange";
-        break;
-    case QEvent::ParentAboutToChange:
-        n = "ParentAboutToChange";
-        break;
-    case QEvent::HoverEnter:
-        n = "HoverEnter";
-        break;
-    case QEvent::HoverMove:
-        n = "HoverMove";
-        break;
-    case QEvent::HoverLeave:
-        n = "HoverLeave";
-        break;
-    case QEvent::ZOrderChange:
-        n = "ZOrderChange";
-        break;
-    case QEvent::StyleChange:
-        n = "StyleChange";
-        break;
-    case QEvent::DragEnter:
-        n = "DragEnter";
-        break;
-    case QEvent::DragMove:
-        n = "DragMove";
-        break;
-    case QEvent::DragLeave:
-        n = "DragLeave";
-        break;
-    case QEvent::Drop:
-        n = "Drop";
-        break;
-    case QEvent::GraphicsSceneMouseMove:
-        n = "GraphicsSceneMouseMove";
-        break;
-    case QEvent::GraphicsSceneMousePress:
-        n = "GraphicsSceneMousePress";
-        break;
-    case QEvent::GraphicsSceneMouseRelease:
-        n = "GraphicsSceneMouseRelease";
-        break;
-    case QEvent::GraphicsSceneMouseDoubleClick:
-        n = "GraphicsSceneMouseDoubleClick";
-        break;
-    case QEvent::GraphicsSceneContextMenu:
-        n = "GraphicsSceneContextMenu";
-        break;
-    case QEvent::GraphicsSceneHoverEnter:
-        n = "GraphicsSceneHoverEnter";
-        break;
-    case QEvent::GraphicsSceneHoverMove:
-        n = "GraphicsSceneHoverMove";
-        break;
-    case QEvent::GraphicsSceneHoverLeave:
-        n = "GraphicsSceneHoverLeave";
-        break;
-    case QEvent::GraphicsSceneHelp:
-        n = "GraphicsSceneHelp";
-        break;
-    case QEvent::GraphicsSceneDragEnter:
-        n = "GraphicsSceneDragEnter";
-        break;
-    case QEvent::GraphicsSceneDragMove:
-        n = "GraphicsSceneDragMove";
-        break;
-    case QEvent::GraphicsSceneDragLeave:
-        n = "GraphicsSceneDragLeave";
-        break;
-    case QEvent::GraphicsSceneDrop:
-        n = "GraphicsSceneDrop";
-        break;
-    case QEvent::GraphicsSceneWheel:
-        n = "GraphicsSceneWheel";
-        break;
-    case QEvent::GraphicsSceneResize:
-        n = "GraphicsSceneResize";
-        break;
-    case QEvent::GraphicsSceneMove:
-        n = "GraphicsSceneMove";
-        break;
-    case QEvent::CursorChange:
-        n = "CursorChange";
-        break;
-    case QEvent::ToolTipChange:
-        n = "ToolTipChange";
-        break;
-    case QEvent::StatusTip:
-        n = "StatusTip";
-        break;
-    case QEvent::WhatsThis:
-        n = "WhatsThis";
-        break;
-    case QEvent::FontChange:
-        n = "FontChange";
-        break;
-    case QEvent::Style:
-        n = "Style";
-        break;
-    case QEvent::KeyboardLayoutChange:
-        n = "KeyboardLayoutChange";
-        break;
-    case QEvent::DynamicPropertyChange:
-        n = "DynamicPropertyChange";
-        break;
-    case QEvent::GrabMouse:
-        n = "GrabMouse";
-        break;
-    case QEvent::UngrabMouse:
-        n = "UngrabMouse";
-        break;
-    case QEvent::GrabKeyboard:
-        n = "GrabKeyboard";
-        break;
-    case QEvent::UngrabKeyboard:
-        n = "UngrabKeyboard";
-        break;
+               n = "KeyPress";
+               break;
+         }
+         dbg.nospace() << "QKeyEvent("  << n
+                       << ", " << hex << ke->key()
+                       << ", " << hex << (int)ke->modifiers()
+                       << ", \"" << ke->text()
+                       << "\", " << ke->isAutoRepeat()
+                       << ", " << ke->count()
+                       << ')';
+      }
+      return dbg.space();
+      case QEvent::FocusIn:
+         n = "FocusIn";
+         break;
+      case QEvent::FocusOut:
+         n = "FocusOut";
+         break;
+      case QEvent::Enter:
+         n = "Enter";
+         break;
+      case QEvent::Leave:
+         n = "Leave";
+         break;
+      case QEvent::PaletteChange:
+         n = "PaletteChange";
+         break;
+      case QEvent::PolishRequest:
+         n = "PolishRequest";
+         break;
+      case QEvent::Polish:
+         n = "Polish";
+         break;
+      case QEvent::UpdateRequest:
+         n = "UpdateRequest";
+         break;
+      case QEvent::Paint:
+         n = "Paint";
+         break;
+      case QEvent::Move:
+         n = "Move";
+         break;
+      case QEvent::Resize:
+         n = "Resize";
+         break;
+      case QEvent::Create:
+         n = "Create";
+         break;
+      case QEvent::Destroy:
+         n = "Destroy";
+         break;
+      case QEvent::Close:
+         n = "Close";
+         break;
+      case QEvent::Quit:
+         n = "Quit";
+         break;
+      case QEvent::FileOpen:
+         n = "FileOpen";
+         break;
+      case QEvent::Show:
+         n = "Show";
+         break;
+      case QEvent::ShowToParent:
+         n = "ShowToParent";
+         break;
+      case QEvent::Hide:
+         n = "Hide";
+         break;
+      case QEvent::HideToParent:
+         n = "HideToParent";
+         break;
+      case QEvent::None:
+         n = "None";
+         break;
+      case QEvent::ParentChange:
+         n = "ParentChange";
+         break;
+      case QEvent::ParentAboutToChange:
+         n = "ParentAboutToChange";
+         break;
+      case QEvent::HoverEnter:
+         n = "HoverEnter";
+         break;
+      case QEvent::HoverMove:
+         n = "HoverMove";
+         break;
+      case QEvent::HoverLeave:
+         n = "HoverLeave";
+         break;
+      case QEvent::ZOrderChange:
+         n = "ZOrderChange";
+         break;
+      case QEvent::StyleChange:
+         n = "StyleChange";
+         break;
+      case QEvent::DragEnter:
+         n = "DragEnter";
+         break;
+      case QEvent::DragMove:
+         n = "DragMove";
+         break;
+      case QEvent::DragLeave:
+         n = "DragLeave";
+         break;
+      case QEvent::Drop:
+         n = "Drop";
+         break;
+      case QEvent::GraphicsSceneMouseMove:
+         n = "GraphicsSceneMouseMove";
+         break;
+      case QEvent::GraphicsSceneMousePress:
+         n = "GraphicsSceneMousePress";
+         break;
+      case QEvent::GraphicsSceneMouseRelease:
+         n = "GraphicsSceneMouseRelease";
+         break;
+      case QEvent::GraphicsSceneMouseDoubleClick:
+         n = "GraphicsSceneMouseDoubleClick";
+         break;
+      case QEvent::GraphicsSceneContextMenu:
+         n = "GraphicsSceneContextMenu";
+         break;
+      case QEvent::GraphicsSceneHoverEnter:
+         n = "GraphicsSceneHoverEnter";
+         break;
+      case QEvent::GraphicsSceneHoverMove:
+         n = "GraphicsSceneHoverMove";
+         break;
+      case QEvent::GraphicsSceneHoverLeave:
+         n = "GraphicsSceneHoverLeave";
+         break;
+      case QEvent::GraphicsSceneHelp:
+         n = "GraphicsSceneHelp";
+         break;
+      case QEvent::GraphicsSceneDragEnter:
+         n = "GraphicsSceneDragEnter";
+         break;
+      case QEvent::GraphicsSceneDragMove:
+         n = "GraphicsSceneDragMove";
+         break;
+      case QEvent::GraphicsSceneDragLeave:
+         n = "GraphicsSceneDragLeave";
+         break;
+      case QEvent::GraphicsSceneDrop:
+         n = "GraphicsSceneDrop";
+         break;
+      case QEvent::GraphicsSceneWheel:
+         n = "GraphicsSceneWheel";
+         break;
+      case QEvent::GraphicsSceneResize:
+         n = "GraphicsSceneResize";
+         break;
+      case QEvent::GraphicsSceneMove:
+         n = "GraphicsSceneMove";
+         break;
+      case QEvent::CursorChange:
+         n = "CursorChange";
+         break;
+      case QEvent::ToolTipChange:
+         n = "ToolTipChange";
+         break;
+      case QEvent::StatusTip:
+         n = "StatusTip";
+         break;
+      case QEvent::WhatsThis:
+         n = "WhatsThis";
+         break;
+      case QEvent::FontChange:
+         n = "FontChange";
+         break;
+      case QEvent::Style:
+         n = "Style";
+         break;
+      case QEvent::KeyboardLayoutChange:
+         n = "KeyboardLayoutChange";
+         break;
+      case QEvent::DynamicPropertyChange:
+         n = "DynamicPropertyChange";
+         break;
+      case QEvent::GrabMouse:
+         n = "GrabMouse";
+         break;
+      case QEvent::UngrabMouse:
+         n = "UngrabMouse";
+         break;
+      case QEvent::GrabKeyboard:
+         n = "GrabKeyboard";
+         break;
+      case QEvent::UngrabKeyboard:
+         n = "UngrabKeyboard";
+         break;
 
-    case QEvent::ChildAdded: n = n ? n : "ChildAdded";
-    case QEvent::ChildPolished: n = n ? n : "ChildPolished";
-    case QEvent::ChildRemoved: n = n ? n : "ChildRemoved";
-        dbg.nospace() << "QChildEvent(" << n << ", " << (static_cast<const QChildEvent*>(e))->child();
-        return dbg.space();
+      case QEvent::ChildAdded:
+         n = n ? n : "ChildAdded";
+      case QEvent::ChildPolished:
+         n = n ? n : "ChildPolished";
+      case QEvent::ChildRemoved:
+         n = n ? n : "ChildRemoved";
+         dbg.nospace() << "QChildEvent(" << n << ", " << (static_cast<const QChildEvent *>(e))->child();
+         return dbg.space();
 #ifndef QT_NO_GESTURES
-    case QEvent::Gesture:
-        n = "Gesture";
-        break;
+      case QEvent::Gesture:
+         n = "Gesture";
+         break;
 #endif
-    default:
-        dbg.nospace() << "QEvent(" << (const void *)e << ", type = " << e->type() << ')';
-        return dbg.space();
-    }
+      default:
+         dbg.nospace() << "QEvent(" << (const void *)e << ", type = " << e->type() << ')';
+         return dbg.space();
+   }
 
-    dbg.nospace() << 'Q' << n << "Event(" << (const void *)e << ')';
-    return dbg.space();
+   dbg.nospace() << 'Q' << n << "Event(" << (const void *)e << ')';
+   return dbg.space();
 }
 
 
@@ -3213,9 +3226,9 @@ QDebug operator<<(QDebug dbg, const QEvent *e) {
 */
 
 QClipboardEvent::QClipboardEvent(QEventPrivate *data)
-    : QEvent(QEvent::Clipboard)
+   : QEvent(QEvent::Clipboard)
 {
-    d = data;
+   d = data;
 }
 
 QClipboardEvent::~QClipboardEvent()
@@ -3298,24 +3311,25 @@ QClipboardEvent::~QClipboardEvent()
 /*! \internal
  */
 QWindowStateChangeEvent::QWindowStateChangeEvent(Qt::WindowStates s)
-    : QEvent(WindowStateChange), ostate(s)
+   : QEvent(WindowStateChange), ostate(s)
 {
 }
 
 /*! \internal
  */
 QWindowStateChangeEvent::QWindowStateChangeEvent(Qt::WindowStates s, bool isOverride)
-    : QEvent(WindowStateChange), ostate(s)
+   : QEvent(WindowStateChange), ostate(s)
 {
-    if (isOverride)
-        d = (QEventPrivate*)(this);
+   if (isOverride) {
+      d = (QEventPrivate *)(this);
+   }
 }
 
 /*! \internal
  */
 bool QWindowStateChangeEvent::isOverride() const
 {
-    return (d != 0);
+   return (d != 0);
 }
 
 /*! \internal
@@ -3484,11 +3498,11 @@ QTouchEvent::QTouchEvent(QEvent::Type eventType,
                          Qt::KeyboardModifiers modifiers,
                          Qt::TouchPointStates touchPointStates,
                          const QList<QTouchEvent::TouchPoint> &touchPoints)
-    : QInputEvent(eventType, modifiers),
-      _widget(0),
-      _deviceType(deviceType),
-      _touchPointStates(touchPointStates),
-      _touchPoints(touchPoints)
+   : QInputEvent(eventType, modifiers),
+     _widget(0),
+     _deviceType(deviceType),
+     _touchPointStates(touchPointStates),
+     _touchPoints(touchPoints)
 { }
 
 /*!
@@ -3557,7 +3571,7 @@ QTouchEvent::~QTouchEvent()
     Constructs a QTouchEvent::TouchPoint for use in a QTouchEvent.
 */
 QTouchEvent::TouchPoint::TouchPoint(int id)
-    : d(new QTouchEventTouchPointPrivate(id))
+   : d(new QTouchEventTouchPointPrivate(id))
 { }
 
 /*! \internal
@@ -3565,9 +3579,9 @@ QTouchEvent::TouchPoint::TouchPoint(int id)
     Constructs a copy of \a other.
 */
 QTouchEvent::TouchPoint::TouchPoint(const QTouchEvent::TouchPoint &other)
-    : d(other.d)
+   : d(other.d)
 {
-    d->ref.ref();
+   d->ref.ref();
 }
 
 /*! \internal
@@ -3576,8 +3590,9 @@ QTouchEvent::TouchPoint::TouchPoint(const QTouchEvent::TouchPoint &other)
 */
 QTouchEvent::TouchPoint::~TouchPoint()
 {
-    if (!d->ref.deref())
-        delete d;
+   if (!d->ref.deref()) {
+      delete d;
+   }
 }
 
 /*!
@@ -3589,7 +3604,7 @@ QTouchEvent::TouchPoint::~TouchPoint()
 */
 int QTouchEvent::TouchPoint::id() const
 {
-    return d->id;
+   return d->id;
 }
 
 /*!
@@ -3597,7 +3612,7 @@ int QTouchEvent::TouchPoint::id() const
 */
 Qt::TouchPointState QTouchEvent::TouchPoint::state() const
 {
-    return Qt::TouchPointState(int(d->state) & Qt::TouchPointStateMask);
+   return Qt::TouchPointState(int(d->state) & Qt::TouchPointStateMask);
 }
 
 /*!
@@ -3606,7 +3621,7 @@ Qt::TouchPointState QTouchEvent::TouchPoint::state() const
 */
 bool QTouchEvent::TouchPoint::isPrimary() const
 {
-    return (d->state & Qt::TouchPointPrimary) != 0;
+   return (d->state & Qt::TouchPointPrimary) != 0;
 }
 
 /*!
@@ -3617,7 +3632,7 @@ bool QTouchEvent::TouchPoint::isPrimary() const
 */
 QPointF QTouchEvent::TouchPoint::pos() const
 {
-    return d->rect.center();
+   return d->rect.center();
 }
 
 /*!
@@ -3632,7 +3647,7 @@ QPointF QTouchEvent::TouchPoint::pos() const
 */
 QPointF QTouchEvent::TouchPoint::scenePos() const
 {
-    return d->sceneRect.center();
+   return d->sceneRect.center();
 }
 
 /*!
@@ -3642,7 +3657,7 @@ QPointF QTouchEvent::TouchPoint::scenePos() const
 */
 QPointF QTouchEvent::TouchPoint::screenPos() const
 {
-    return d->screenRect.center();
+   return d->screenRect.center();
 }
 
 /*!
@@ -3655,7 +3670,7 @@ QPointF QTouchEvent::TouchPoint::screenPos() const
 */
 QPointF QTouchEvent::TouchPoint::normalizedPos() const
 {
-    return d->normalizedPos;
+   return d->normalizedPos;
 }
 
 /*!
@@ -3666,7 +3681,7 @@ QPointF QTouchEvent::TouchPoint::normalizedPos() const
 */
 QPointF QTouchEvent::TouchPoint::startPos() const
 {
-    return d->startPos;
+   return d->startPos;
 }
 
 /*!
@@ -3681,7 +3696,7 @@ QPointF QTouchEvent::TouchPoint::startPos() const
 */
 QPointF QTouchEvent::TouchPoint::startScenePos() const
 {
-    return d->startScenePos;
+   return d->startScenePos;
 }
 
 /*!
@@ -3691,7 +3706,7 @@ QPointF QTouchEvent::TouchPoint::startScenePos() const
 */
 QPointF QTouchEvent::TouchPoint::startScreenPos() const
 {
-    return d->startScreenPos;
+   return d->startScreenPos;
 }
 
 /*!
@@ -3704,7 +3719,7 @@ QPointF QTouchEvent::TouchPoint::startScreenPos() const
 */
 QPointF QTouchEvent::TouchPoint::startNormalizedPos() const
 {
-    return d->startNormalizedPos;
+   return d->startNormalizedPos;
 }
 
 /*!
@@ -3715,7 +3730,7 @@ QPointF QTouchEvent::TouchPoint::startNormalizedPos() const
 */
 QPointF QTouchEvent::TouchPoint::lastPos() const
 {
-    return d->lastPos;
+   return d->lastPos;
 }
 
 /*!
@@ -3731,7 +3746,7 @@ QPointF QTouchEvent::TouchPoint::lastPos() const
 */
 QPointF QTouchEvent::TouchPoint::lastScenePos() const
 {
-    return d->lastScenePos;
+   return d->lastScenePos;
 }
 
 /*!
@@ -3742,7 +3757,7 @@ QPointF QTouchEvent::TouchPoint::lastScenePos() const
 */
 QPointF QTouchEvent::TouchPoint::lastScreenPos() const
 {
-    return d->lastScreenPos;
+   return d->lastScreenPos;
 }
 
 /*!
@@ -3756,7 +3771,7 @@ QPointF QTouchEvent::TouchPoint::lastScreenPos() const
 */
 QPointF QTouchEvent::TouchPoint::lastNormalizedPos() const
 {
-    return d->lastNormalizedPos;
+   return d->lastNormalizedPos;
 }
 
 /*!
@@ -3768,7 +3783,7 @@ QPointF QTouchEvent::TouchPoint::lastNormalizedPos() const
 */
 QRectF QTouchEvent::TouchPoint::rect() const
 {
-    return d->rect;
+   return d->rect;
 }
 
 /*!
@@ -3780,7 +3795,7 @@ QRectF QTouchEvent::TouchPoint::rect() const
 */
 QRectF QTouchEvent::TouchPoint::sceneRect() const
 {
-    return d->sceneRect;
+   return d->sceneRect;
 }
 
 /*!
@@ -3792,7 +3807,7 @@ QRectF QTouchEvent::TouchPoint::sceneRect() const
 */
 QRectF QTouchEvent::TouchPoint::screenRect() const
 {
-    return d->screenRect;
+   return d->screenRect;
 }
 
 /*!
@@ -3801,161 +3816,180 @@ QRectF QTouchEvent::TouchPoint::screenRect() const
 */
 qreal QTouchEvent::TouchPoint::pressure() const
 {
-    return d->pressure;
+   return d->pressure;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setId(int id)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->id = id;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->id = id;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setState(Qt::TouchPointStates state)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->state = state;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->state = state;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setPos(const QPointF &pos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->rect.moveCenter(pos);
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->rect.moveCenter(pos);
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setScenePos(const QPointF &scenePos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->sceneRect.moveCenter(scenePos);
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->sceneRect.moveCenter(scenePos);
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setScreenPos(const QPointF &screenPos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->screenRect.moveCenter(screenPos);
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->screenRect.moveCenter(screenPos);
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setNormalizedPos(const QPointF &normalizedPos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->normalizedPos = normalizedPos;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->normalizedPos = normalizedPos;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setStartPos(const QPointF &startPos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->startPos = startPos;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->startPos = startPos;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setStartScenePos(const QPointF &startScenePos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->startScenePos = startScenePos;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->startScenePos = startScenePos;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setStartScreenPos(const QPointF &startScreenPos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->startScreenPos = startScreenPos;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->startScreenPos = startScreenPos;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setStartNormalizedPos(const QPointF &startNormalizedPos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->startNormalizedPos = startNormalizedPos;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->startNormalizedPos = startNormalizedPos;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setLastPos(const QPointF &lastPos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->lastPos = lastPos;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->lastPos = lastPos;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setLastScenePos(const QPointF &lastScenePos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->lastScenePos = lastScenePos;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->lastScenePos = lastScenePos;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setLastScreenPos(const QPointF &lastScreenPos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->lastScreenPos = lastScreenPos;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->lastScreenPos = lastScreenPos;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setLastNormalizedPos(const QPointF &lastNormalizedPos)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->lastNormalizedPos = lastNormalizedPos;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->lastNormalizedPos = lastNormalizedPos;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setRect(const QRectF &rect)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->rect = rect;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->rect = rect;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setSceneRect(const QRectF &sceneRect)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->sceneRect = sceneRect;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->sceneRect = sceneRect;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setScreenRect(const QRectF &screenRect)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->screenRect = screenRect;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->screenRect = screenRect;
 }
 
 /*! \internal */
 void QTouchEvent::TouchPoint::setPressure(qreal pressure)
 {
-    if (d->ref.load() != 1)
-        d = d->detach();
-    d->pressure = pressure;
+   if (d->ref.load() != 1) {
+      d = d->detach();
+   }
+   d->pressure = pressure;
 }
 
 /*! \internal */
 QTouchEvent::TouchPoint &QTouchEvent::TouchPoint::operator=(const QTouchEvent::TouchPoint &other)
 {
-    other.d->ref.ref();
-    if (!d->ref.deref())
-        delete d;
-    d = other.d;
-    return *this;
+   other.d->ref.ref();
+   if (!d->ref.deref()) {
+      delete d;
+   }
+   d = other.d;
+   return *this;
 }
 
 #ifndef QT_NO_GESTURES
@@ -3996,9 +4030,9 @@ QTouchEvent::TouchPoint &QTouchEvent::TouchPoint::operator=(const QTouchEvent::T
     Creates new QGestureEvent containing a list of \a gestures.
 */
 QGestureEvent::QGestureEvent(const QList<QGesture *> &gestures)
-    : QEvent(QEvent::Gesture)
+   : QEvent(QEvent::Gesture)
 {
-    d = reinterpret_cast<QEventPrivate *>(new QGestureEventPrivate(gestures));
+   d = reinterpret_cast<QEventPrivate *>(new QGestureEventPrivate(gestures));
 }
 
 /*!
@@ -4006,7 +4040,7 @@ QGestureEvent::QGestureEvent(const QList<QGesture *> &gestures)
 */
 QGestureEvent::~QGestureEvent()
 {
-    delete reinterpret_cast<QGestureEventPrivate *>(d);
+   delete reinterpret_cast<QGestureEventPrivate *>(d);
 }
 
 /*!
@@ -4014,7 +4048,7 @@ QGestureEvent::~QGestureEvent()
 */
 QList<QGesture *> QGestureEvent::gestures() const
 {
-    return d_func()->gestures;
+   return d_func()->gestures;
 }
 
 /*!
@@ -4022,11 +4056,12 @@ QList<QGesture *> QGestureEvent::gestures() const
 */
 QGesture *QGestureEvent::gesture(Qt::GestureType type) const
 {
-    const QGestureEventPrivate *d = d_func();
-    for(int i = 0; i < d->gestures.size(); ++i)
-        if (d->gestures.at(i)->gestureType() == type)
-            return d->gestures.at(i);
-    return 0;
+   const QGestureEventPrivate *d = d_func();
+   for (int i = 0; i < d->gestures.size(); ++i)
+      if (d->gestures.at(i)->gestureType() == type) {
+         return d->gestures.at(i);
+      }
+   return 0;
 }
 
 /*!
@@ -4034,12 +4069,13 @@ QGesture *QGestureEvent::gesture(Qt::GestureType type) const
 */
 QList<QGesture *> QGestureEvent::activeGestures() const
 {
-    QList<QGesture *> gestures;
-    foreach (QGesture *gesture, d_func()->gestures) {
-        if (gesture->state() != Qt::GestureCanceled)
-            gestures.append(gesture);
-    }
-    return gestures;
+   QList<QGesture *> gestures;
+   foreach (QGesture * gesture, d_func()->gestures) {
+      if (gesture->state() != Qt::GestureCanceled) {
+         gestures.append(gesture);
+      }
+   }
+   return gestures;
 }
 
 /*!
@@ -4047,12 +4083,13 @@ QList<QGesture *> QGestureEvent::activeGestures() const
 */
 QList<QGesture *> QGestureEvent::canceledGestures() const
 {
-    QList<QGesture *> gestures;
-    foreach (QGesture *gesture, d_func()->gestures) {
-        if (gesture->state() == Qt::GestureCanceled)
-            gestures.append(gesture);
-    }
-    return gestures;
+   QList<QGesture *> gestures;
+   foreach (QGesture * gesture, d_func()->gestures) {
+      if (gesture->state() == Qt::GestureCanceled) {
+         gestures.append(gesture);
+      }
+   }
+   return gestures;
 }
 
 /*!
@@ -4070,8 +4107,9 @@ QList<QGesture *> QGestureEvent::canceledGestures() const
 */
 void QGestureEvent::setAccepted(QGesture *gesture, bool value)
 {
-    if (gesture)
-        setAccepted(gesture->gestureType(), value);
+   if (gesture) {
+      setAccepted(gesture->gestureType(), value);
+   }
 }
 
 /*!
@@ -4085,8 +4123,9 @@ void QGestureEvent::setAccepted(QGesture *gesture, bool value)
 */
 void QGestureEvent::accept(QGesture *gesture)
 {
-    if (gesture)
-        setAccepted(gesture->gestureType(), true);
+   if (gesture) {
+      setAccepted(gesture->gestureType(), true);
+   }
 }
 
 /*!
@@ -4100,8 +4139,9 @@ void QGestureEvent::accept(QGesture *gesture)
 */
 void QGestureEvent::ignore(QGesture *gesture)
 {
-    if (gesture)
-        setAccepted(gesture->gestureType(), false);
+   if (gesture) {
+      setAccepted(gesture->gestureType(), false);
+   }
 }
 
 /*!
@@ -4109,7 +4149,7 @@ void QGestureEvent::ignore(QGesture *gesture)
 */
 bool QGestureEvent::isAccepted(QGesture *gesture) const
 {
-    return gesture ? isAccepted(gesture->gestureType()) : false;
+   return gesture ? isAccepted(gesture->gestureType()) : false;
 }
 
 /*!
@@ -4129,8 +4169,8 @@ bool QGestureEvent::isAccepted(QGesture *gesture) const
 */
 void QGestureEvent::setAccepted(Qt::GestureType gestureType, bool value)
 {
-    setAccepted(false);
-    d_func()->accepted[gestureType] = value;
+   setAccepted(false);
+   d_func()->accepted[gestureType] = value;
 }
 
 /*!
@@ -4144,7 +4184,7 @@ void QGestureEvent::setAccepted(Qt::GestureType gestureType, bool value)
 */
 void QGestureEvent::accept(Qt::GestureType gestureType)
 {
-    setAccepted(gestureType, true);
+   setAccepted(gestureType, true);
 }
 
 /*!
@@ -4158,7 +4198,7 @@ void QGestureEvent::accept(Qt::GestureType gestureType)
 */
 void QGestureEvent::ignore(Qt::GestureType gestureType)
 {
-    setAccepted(gestureType, false);
+   setAccepted(gestureType, false);
 }
 
 /*!
@@ -4167,7 +4207,7 @@ void QGestureEvent::ignore(Qt::GestureType gestureType)
 */
 bool QGestureEvent::isAccepted(Qt::GestureType gestureType) const
 {
-    return d_func()->accepted.value(gestureType, true);
+   return d_func()->accepted.value(gestureType, true);
 }
 
 /*!
@@ -4177,7 +4217,7 @@ bool QGestureEvent::isAccepted(Qt::GestureType gestureType) const
 */
 void QGestureEvent::setWidget(QWidget *widget)
 {
-    d_func()->widget = widget;
+   d_func()->widget = widget;
 }
 
 /*!
@@ -4185,7 +4225,7 @@ void QGestureEvent::setWidget(QWidget *widget)
 */
 QWidget *QGestureEvent::widget() const
 {
-    return d_func()->widget;
+   return d_func()->widget;
 }
 
 #ifndef QT_NO_GRAPHICSVIEW
@@ -4201,14 +4241,15 @@ QWidget *QGestureEvent::widget() const
 */
 QPointF QGestureEvent::mapToGraphicsScene(const QPointF &gesturePoint) const
 {
-    QWidget *w = widget();
-    if (w) // we get the viewport as widget, not the graphics view
-        w = w->parentWidget();
-    QGraphicsView *view = qobject_cast<QGraphicsView*>(w);
-    if (view) {
-        return view->mapToScene(view->mapFromGlobal(gesturePoint.toPoint()));
-    }
-    return QPointF();
+   QWidget *w = widget();
+   if (w) { // we get the viewport as widget, not the graphics view
+      w = w->parentWidget();
+   }
+   QGraphicsView *view = qobject_cast<QGraphicsView *>(w);
+   if (view) {
+      return view->mapToScene(view->mapFromGlobal(gesturePoint.toPoint()));
+   }
+   return QPointF();
 }
 #endif //QT_NO_GRAPHICSVIEW
 
@@ -4217,7 +4258,7 @@ QPointF QGestureEvent::mapToGraphicsScene(const QPointF &gesturePoint) const
 */
 QGestureEventPrivate *QGestureEvent::d_func()
 {
-    return reinterpret_cast<QGestureEventPrivate *>(d);
+   return reinterpret_cast<QGestureEventPrivate *>(d);
 }
 
 /*!
@@ -4225,7 +4266,7 @@ QGestureEventPrivate *QGestureEvent::d_func()
 */
 const QGestureEventPrivate *QGestureEvent::d_func() const
 {
-    return reinterpret_cast<const QGestureEventPrivate *>(d);
+   return reinterpret_cast<const QGestureEventPrivate *>(d);
 }
 
 #endif // QT_NO_GESTURES

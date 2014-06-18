@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,31 +42,31 @@ QX11MenuBar::~QX11MenuBar()
 
 void QX11MenuBar::init(QMenuBar *_menuBar)
 {
-    nativeMenuBar = -1;
-    menuBar = _menuBar;
+   nativeMenuBar = -1;
+   menuBar = _menuBar;
 }
 
 void QX11MenuBar::setVisible(bool visible)
 {
-    menuBar->QWidget::setVisible(visible);
+   menuBar->QWidget::setVisible(visible);
 }
 
 void QX11MenuBar::actionEvent(QActionEvent *e)
 {
-    Q_UNUSED(e);
+   Q_UNUSED(e);
 }
 
 void QX11MenuBar::handleReparent(QWidget *oldParent, QWidget *newParent, QWidget *oldWindow, QWidget *newWindow)
 {
-    Q_UNUSED(oldParent)
-    Q_UNUSED(newParent)
-    Q_UNUSED(oldWindow)
-    Q_UNUSED(newWindow)
+   Q_UNUSED(oldParent)
+   Q_UNUSED(newParent)
+   Q_UNUSED(oldWindow)
+   Q_UNUSED(newWindow)
 }
 
 bool QX11MenuBar::allowCornerWidgets() const
 {
-    return true;
+   return true;
 }
 
 void QX11MenuBar::popupAction(QAction *)
@@ -75,46 +75,49 @@ void QX11MenuBar::popupAction(QAction *)
 
 void QX11MenuBar::setNativeMenuBar(bool value)
 {
-    if (nativeMenuBar == -1 || (value != bool(nativeMenuBar))) {
-        nativeMenuBar = value;
-    }
+   if (nativeMenuBar == -1 || (value != bool(nativeMenuBar))) {
+      nativeMenuBar = value;
+   }
 }
 
 bool QX11MenuBar::isNativeMenuBar() const
 {
-    return false;
+   return false;
 }
 
 bool QX11MenuBar::shortcutsHandledByNativeMenuBar() const
 {
-    return false;
+   return false;
 }
 
 bool QX11MenuBar::menuBarEventFilter(QObject *, QEvent *)
 {
-    return false;
+   return false;
 }
 
-struct QX11MenuBarFactory : public QPlatformMenuBarFactoryInterface
-{
-    QAbstractPlatformMenuBar *create() { return new QX11MenuBar; }
-    virtual QStringList keys() const { return QStringList(); }
+struct QX11MenuBarFactory : public QPlatformMenuBarFactoryInterface {
+   QAbstractPlatformMenuBar *create() {
+      return new QX11MenuBar;
+   }
+   virtual QStringList keys() const {
+      return QStringList();
+   }
 };
 
 QPlatformMenuBarFactoryInterface *qt_guiPlatformMenuBarFactory()
 {
-    static QPlatformMenuBarFactoryInterface *factory = 0;
-    if (!factory) {
+   static QPlatformMenuBarFactoryInterface *factory = 0;
+   if (!factory) {
 
-        QFactoryLoader loader(QPlatformMenuBarFactoryInterface_iid, QLatin1String("/menubar"));
-        factory = qobject_cast<QPlatformMenuBarFactoryInterface *>(loader.instance(QLatin1String("default")));
+      QFactoryLoader loader(QPlatformMenuBarFactoryInterface_iid, QLatin1String("/menubar"));
+      factory = qobject_cast<QPlatformMenuBarFactoryInterface *>(loader.instance(QLatin1String("default")));
 
-        if(!factory) {
-            static QX11MenuBarFactory def;
-            factory = &def;
-        }
-    }
-    return factory;
+      if (!factory) {
+         static QX11MenuBarFactory def;
+         factory = &def;
+      }
+   }
+   return factory;
 }
 
 QT_END_NAMESPACE

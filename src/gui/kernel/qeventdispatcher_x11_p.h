@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,24 +34,24 @@ class QEventDispatcherX11Private;
 
 class QEventDispatcherX11 : public QEventDispatcherUNIX
 {
-    CS_OBJECT(QEventDispatcherX11)
-    Q_DECLARE_PRIVATE(QEventDispatcherX11)
+   CS_OBJECT(QEventDispatcherX11)
+   Q_DECLARE_PRIVATE(QEventDispatcherX11)
 
-public:
-    explicit QEventDispatcherX11(QObject *parent = 0);
-    ~QEventDispatcherX11();
+ public:
+   explicit QEventDispatcherX11(QObject *parent = 0);
+   ~QEventDispatcherX11();
 
-    bool processEvents(QEventLoop::ProcessEventsFlags flags);
-    bool hasPendingEvents();
+   bool processEvents(QEventLoop::ProcessEventsFlags flags);
+   bool hasPendingEvents();
 
-    void flush();
+   void flush();
 
-    void startingUp();
-    void closingDown();
+   void startingUp();
+   void closingDown();
 
-protected:
-    int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
-               timeval *timeout);
+ protected:
+   int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
+              timeval *timeout);
 };
 
 QT_END_NAMESPACE

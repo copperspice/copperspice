@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,47 +41,47 @@ class QDragManager;
 
 class Q_GUI_EXPORT QDrag : public QObject
 {
-    CS_OBJECT(QDrag)
-    Q_DECLARE_PRIVATE(QDrag)
+   CS_OBJECT(QDrag)
+   Q_DECLARE_PRIVATE(QDrag)
 
-public:
-    explicit QDrag(QWidget *dragSource);
-    ~QDrag();
+ public:
+   explicit QDrag(QWidget *dragSource);
+   ~QDrag();
 
-    void setMimeData(QMimeData *data);
-    QMimeData *mimeData() const;
+   void setMimeData(QMimeData *data);
+   QMimeData *mimeData() const;
 
-    void setPixmap(const QPixmap &);
-    QPixmap pixmap() const;
+   void setPixmap(const QPixmap &);
+   QPixmap pixmap() const;
 
-    void setHotSpot(const QPoint &hotspot);
-    QPoint hotSpot() const;
+   void setHotSpot(const QPoint &hotspot);
+   QPoint hotSpot() const;
 
-    QWidget *source() const;
-    QWidget *target() const;
+   QWidget *source() const;
+   QWidget *target() const;
 
-    Qt::DropAction start(Qt::DropActions supportedActions = Qt::CopyAction);
-    Qt::DropAction exec(Qt::DropActions supportedActions = Qt::MoveAction);
-    Qt::DropAction exec(Qt::DropActions supportedActions, Qt::DropAction defaultAction);
+   Qt::DropAction start(Qt::DropActions supportedActions = Qt::CopyAction);
+   Qt::DropAction exec(Qt::DropActions supportedActions = Qt::MoveAction);
+   Qt::DropAction exec(Qt::DropActions supportedActions, Qt::DropAction defaultAction);
 
-    void setDragCursor(const QPixmap &cursor, Qt::DropAction action);
+   void setDragCursor(const QPixmap &cursor, Qt::DropAction action);
 
-    GUI_CS_SIGNAL_1(Public, void actionChanged(Qt::DropAction action))
-    GUI_CS_SIGNAL_2(actionChanged,action) 
-    GUI_CS_SIGNAL_1(Public, void targetChanged(QWidget * newTarget))
-    GUI_CS_SIGNAL_2(targetChanged,newTarget) 
+   GUI_CS_SIGNAL_1(Public, void actionChanged(Qt::DropAction action))
+   GUI_CS_SIGNAL_2(actionChanged, action)
+   GUI_CS_SIGNAL_1(Public, void targetChanged(QWidget *newTarget))
+   GUI_CS_SIGNAL_2(targetChanged, newTarget)
 
-protected:
-	 QScopedPointer<QDragPrivate> d_ptr;
+ protected:
+   QScopedPointer<QDragPrivate> d_ptr;
 
-private:
+ private:
 
 #ifdef Q_OS_MAC
-    friend class QWidgetPrivate;
+   friend class QWidgetPrivate;
 #endif
 
-    friend class QDragManager;
-    Q_DISABLE_COPY(QDrag)
+   friend class QDragManager;
+   Q_DISABLE_COPY(QDrag)
 
 };
 

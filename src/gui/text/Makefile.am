@@ -146,7 +146,6 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/text/qtextformat.cpp \
 	src/gui/text/qtextobject.cpp \
 	src/gui/text/qtextoption.cpp \
-	src/gui/text/qfragmentmap.cpp \
 	src/gui/text/qtextdocument.cpp \
 	src/gui/text/qtextdocument_p.cpp \
 	src/gui/text/qtexthtmlparser.cpp \

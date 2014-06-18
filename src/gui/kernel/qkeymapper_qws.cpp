@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,13 +34,13 @@ QT_USE_NAMESPACE
 
 QKeyMapperPrivate::QKeyMapperPrivate()
 {
-    keyboardInputLocale = QLocale::system();
-    keyboardInputDirection = keyboardInputLocale.textDirection();
+   keyboardInputLocale = QLocale::system();
+   keyboardInputDirection = keyboardInputLocale.textDirection();
 }
 
 QKeyMapperPrivate::~QKeyMapperPrivate()
 {
-    // clearMappings();
+   // clearMappings();
 }
 
 void QKeyMapperPrivate::clearMappings()
@@ -49,12 +49,13 @@ void QKeyMapperPrivate::clearMappings()
 
 QList<int> QKeyMapperPrivate::possibleKeys(QKeyEvent *e)
 {
-    QList<int> result;
-    if (e->key() && (e->key() != Qt::Key_unknown))
-        result << int(e->key() + e->modifiers());
-    else if (!e->text().isEmpty())
-        result << int(e->text().at(0).unicode() + e->modifiers());
-    return result;
+   QList<int> result;
+   if (e->key() && (e->key() != Qt::Key_unknown)) {
+      result << int(e->key() + e->modifiers());
+   } else if (!e->text().isEmpty()) {
+      result << int(e->text().at(0).unicode() + e->modifiers());
+   }
+   return result;
 }
 
 QT_END_NAMESPACE

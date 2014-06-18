@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,25 +35,25 @@ class QStyleOptionButton;
 
 class Q_GUI_EXPORT QRadioButton : public QAbstractButton
 {
-    CS_OBJECT(QRadioButton)
+   CS_OBJECT(QRadioButton)
 
-public:
-    explicit QRadioButton(QWidget *parent=0);
-    explicit QRadioButton(const QString &text, QWidget *parent=0);
+ public:
+   explicit QRadioButton(QWidget *parent = 0);
+   explicit QRadioButton(const QString &text, QWidget *parent = 0);
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+   QSize sizeHint() const;
+   QSize minimumSizeHint() const;
 
-protected:
-    bool event(QEvent *e);
-    bool hitButton(const QPoint &) const;
-    void paintEvent(QPaintEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void initStyleOption(QStyleOptionButton *button) const;
+ protected:
+   bool event(QEvent *e);
+   bool hitButton(const QPoint &) const;
+   void paintEvent(QPaintEvent *);
+   void mouseMoveEvent(QMouseEvent *);
+   void initStyleOption(QStyleOptionButton *button) const;
 
-private:
-    Q_DECLARE_PRIVATE(QRadioButton)
-    Q_DISABLE_COPY(QRadioButton)
+ private:
+   Q_DECLARE_PRIVATE(QRadioButton)
+   Q_DISABLE_COPY(QRadioButton)
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,82 +39,82 @@ class QBasicTimer;
 class QGraphicsObject;
 class QGestureManager : public QObject
 {
-    CS_OBJECT(QGestureManager)
-public:
-    QGestureManager(QObject *parent);
-    ~QGestureManager();
+   CS_OBJECT(QGestureManager)
+ public:
+   QGestureManager(QObject *parent);
+   ~QGestureManager();
 
-    Qt::GestureType registerGestureRecognizer(QGestureRecognizer *recognizer);
-    void unregisterGestureRecognizer(Qt::GestureType type);
+   Qt::GestureType registerGestureRecognizer(QGestureRecognizer *recognizer);
+   void unregisterGestureRecognizer(Qt::GestureType type);
 
-    bool filterEvent(QWidget *receiver, QEvent *event);
-    bool filterEvent(QObject *receiver, QEvent *event);
+   bool filterEvent(QWidget *receiver, QEvent *event);
+   bool filterEvent(QObject *receiver, QEvent *event);
 #ifndef QT_NO_GRAPHICSVIEW
-    bool filterEvent(QGraphicsObject *receiver, QEvent *event);
+   bool filterEvent(QGraphicsObject *receiver, QEvent *event);
 #endif //QT_NO_GRAPHICSVIEW
 
-    static QGestureManager* instance(); // declared in qapplication.cpp
+   static QGestureManager *instance(); // declared in qapplication.cpp
 
-    void cleanupCachedGestures(QObject *target, Qt::GestureType type);
+   void cleanupCachedGestures(QObject *target, Qt::GestureType type);
 
-    void recycle(QGesture *gesture);
+   void recycle(QGesture *gesture);
 
-protected:
-    bool filterEventThroughContexts(const QMultiMap<QObject *, Qt::GestureType> &contexts,
-                                    QEvent *event);
+ protected:
+   bool filterEventThroughContexts(const QMultiMap<QObject *, Qt::GestureType> &contexts,
+                                   QEvent *event);
 
-private:
-    QMultiMap<Qt::GestureType, QGestureRecognizer *> m_recognizers;
+ private:
+   QMultiMap<Qt::GestureType, QGestureRecognizer *> m_recognizers;
 
-    QSet<QGesture *> m_activeGestures;
-    QSet<QGesture *> m_maybeGestures;
+   QSet<QGesture *> m_activeGestures;
+   QSet<QGesture *> m_maybeGestures;
 
-    enum State {
-        Gesture,
-        NotGesture,
-        MaybeGesture // this means timers are up and waiting for some
-                     // more events, and input events are handled by
-                     // gesture recognizer explicitly
-    } state;
+   enum State {
+      Gesture,
+      NotGesture,
+      MaybeGesture // this means timers are up and waiting for some
+      // more events, and input events are handled by
+      // gesture recognizer explicitly
+   } state;
 
-    struct ObjectGesture
-    {
-        QObject* object;
-        Qt::GestureType gesture;
+   struct ObjectGesture {
+      QObject *object;
+      Qt::GestureType gesture;
 
-        ObjectGesture(QObject *o, const Qt::GestureType &g) : object(o), gesture(g) { }
-        inline bool operator<(const ObjectGesture &rhs) const
-        {
-            if (object < rhs.object)
-                return true;
-            if (object == rhs.object)
-                return gesture < rhs.gesture;
-            return false;
-        }
-    };
+      ObjectGesture(QObject *o, const Qt::GestureType &g) : object(o), gesture(g) { }
+      inline bool operator<(const ObjectGesture &rhs) const {
+         if (object < rhs.object) {
+            return true;
+         }
+         if (object == rhs.object) {
+            return gesture < rhs.gesture;
+         }
+         return false;
+      }
+   };
 
-    QMap<ObjectGesture, QList<QGesture *> > m_objectGestures;
-    QHash<QGesture *, QGestureRecognizer *> m_gestureToRecognizer;
-    QHash<QGesture *, QObject *> m_gestureOwners;
+   QMap<ObjectGesture, QList<QGesture *> > m_objectGestures;
+   QHash<QGesture *, QGestureRecognizer *> m_gestureToRecognizer;
+   QHash<QGesture *, QObject *> m_gestureOwners;
 
-    QHash<QGesture *, QWidget *> m_gestureTargets;
+   QHash<QGesture *, QWidget *> m_gestureTargets;
 
-    int m_lastCustomGestureId;
+   int m_lastCustomGestureId;
 
-    QHash<QGestureRecognizer *, QSet<QGesture *> > m_obsoleteGestures;
-    QHash<QGesture *, QGestureRecognizer *> m_deletedRecognizers;
-    QSet<QGesture *> m_gesturesToDelete;
-    void cleanupGesturesForRemovedRecognizer(QGesture *gesture);
+   QHash<QGestureRecognizer *, QSet<QGesture *> > m_obsoleteGestures;
+   QHash<QGesture *, QGestureRecognizer *> m_deletedRecognizers;
+   QSet<QGesture *> m_gesturesToDelete;
+   void cleanupGesturesForRemovedRecognizer(QGesture *gesture);
 
-    QGesture *getState(QObject *widget, QGestureRecognizer *recognizer,
-                       Qt::GestureType gesture);
-    void deliverEvents(const QSet<QGesture *> &gestures,
-                       QSet<QGesture *> *undeliveredGestures);
-    void getGestureTargets(const QSet<QGesture*> &gestures,
-                           QMap<QWidget *, QList<QGesture *> > *conflicts,
-                           QMap<QWidget *, QList<QGesture *> > *normal);
+   QGesture *getState(QObject *widget, QGestureRecognizer *recognizer,
+                      Qt::GestureType gesture);
+   void deliverEvents(const QSet<QGesture *> &gestures,
+                      QSet<QGesture *> *undeliveredGestures);
+   void getGestureTargets(const QSet<QGesture *> &gestures,
+                          QMap<QWidget *, QList<QGesture *> > *conflicts,
+                          QMap<QWidget *, QList<QGesture *> > *normal);
 
-    void cancelGesturesForChildren(QGesture *originatingGesture);
+   void cancelGesturesForChildren(QGesture *originatingGesture);
 };
 
 QT_END_NAMESPACE

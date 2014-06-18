@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,64 +30,64 @@ QT_BEGIN_NAMESPACE
 
 class QBlittablePrivate
 {
-public:
-    QBlittablePrivate(const QSize &size, QBlittable::Capabilities caps)
-        : caps(caps), m_size(size), locked(false), cachedImg(0)
-    {}
-    QBlittable::Capabilities caps;
-    QSize m_size;
-    bool locked;
-    QImage *cachedImg;
+ public:
+   QBlittablePrivate(const QSize &size, QBlittable::Capabilities caps)
+      : caps(caps), m_size(size), locked(false), cachedImg(0) {
+   }
+   QBlittable::Capabilities caps;
+   QSize m_size;
+   bool locked;
+   QImage *cachedImg;
 };
 
 
 QBlittable::QBlittable(const QSize &size, Capabilities caps)
-    : d_ptr(new QBlittablePrivate(size,caps))
+   : d_ptr(new QBlittablePrivate(size, caps))
 {
 }
 
 QBlittable::~QBlittable()
 {
-    delete d_ptr;
+   delete d_ptr;
 }
 
 
 QBlittable::Capabilities QBlittable::capabilities() const
 {
-    Q_D(const QBlittable);
-    return d->caps;
+   Q_D(const QBlittable);
+   return d->caps;
 }
 
 QSize QBlittable::size() const
 {
-    Q_D(const QBlittable);
-    return d->m_size;
+   Q_D(const QBlittable);
+   return d->m_size;
 }
 
 bool QBlittable::isLocked() const
 {
-    Q_D(const QBlittable);
-    return d->locked;
+   Q_D(const QBlittable);
+   return d->locked;
 }
 
 QImage *QBlittable::lock()
 {
-    Q_D(QBlittable);
-    if (!d->locked) {
-        d->cachedImg = doLock();
-        d->locked = true;
-    }
+   Q_D(QBlittable);
+   if (!d->locked) {
+      d->cachedImg = doLock();
+      d->locked = true;
+   }
 
-    return d->cachedImg;
+   return d->cachedImg;
 }
 
 void QBlittable::unlock()
 {
-    Q_D(QBlittable);
-    if (d->locked) {
-        doUnlock();
-        d->locked = false;
-    }
+   Q_D(QBlittable);
+   if (d->locked) {
+      doUnlock();
+      d->locked = false;
+   }
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,27 +34,27 @@ QT_BEGIN_NAMESPACE
 class QSessionManagerPrivate
 {
 
-public:
-    QSessionManagerPrivate(QSessionManager *m, const QString &id,const QString &key);
-    virtual ~QSessionManagerPrivate() {};
+ public:
+   QSessionManagerPrivate(QSessionManager *m, const QString &id, const QString &key);
+   virtual ~QSessionManagerPrivate() {};
 
-    QStringList restartCommand;
-    QStringList discardCommand;
-    const QString sessionId;
-    const QString sessionKey;
-    QSessionManager::RestartHint restartHint;
+   QStringList restartCommand;
+   QStringList discardCommand;
+   const QString sessionId;
+   const QString sessionKey;
+   QSessionManager::RestartHint restartHint;
 };
 
-QSessionManagerPrivate::QSessionManagerPrivate(QSessionManager*,const QString &id, const QString &key)
-    : sessionId(id), sessionKey(key)
+QSessionManagerPrivate::QSessionManagerPrivate(QSessionManager *, const QString &id, const QString &key)
+   : sessionId(id), sessionKey(key)
 {
 }
 
 QSessionManager::QSessionManager(QApplication *app, QString &id, QString &key)
-    : QObject(*new QSessionManagerPrivate(this, id, key), app)
+   : QObject(*new QSessionManagerPrivate(this, id, key), app)
 {
-    Q_D(QSessionManager);
-    d->restartHint = RestartIfRunning;
+   Q_D(QSessionManager);
+   d->restartHint = RestartIfRunning;
 }
 
 QSessionManager::~QSessionManager()
@@ -63,25 +63,25 @@ QSessionManager::~QSessionManager()
 
 QString QSessionManager::sessionId() const
 {
-    Q_D(const QSessionManager);
-    return d->sessionId;
+   Q_D(const QSessionManager);
+   return d->sessionId;
 }
 
 QString QSessionManager::sessionKey() const
 {
-    Q_D(const QSessionManager);
-    return d->sessionKey;
+   Q_D(const QSessionManager);
+   return d->sessionKey;
 }
 
 
 bool QSessionManager::allowsInteraction()
 {
-    return false;
+   return false;
 }
 
 bool QSessionManager::allowsErrorInteraction()
 {
-    return false;
+   return false;
 }
 
 void QSessionManager::release()
@@ -94,57 +94,57 @@ void QSessionManager::cancel()
 
 void QSessionManager::setRestartHint(QSessionManager::RestartHint hint)
 {
-    Q_D(QSessionManager);
-    d->restartHint = hint;
+   Q_D(QSessionManager);
+   d->restartHint = hint;
 }
 
 QSessionManager::RestartHint QSessionManager::restartHint() const
 {
-    Q_D(const QSessionManager);
-    return d->restartHint;
+   Q_D(const QSessionManager);
+   return d->restartHint;
 }
 
 void QSessionManager::setRestartCommand(const QStringList &command)
 {
-    Q_D(QSessionManager);
-    d->restartCommand = command;
+   Q_D(QSessionManager);
+   d->restartCommand = command;
 }
 
 QStringList QSessionManager::restartCommand() const
 {
-    Q_D(const QSessionManager);
-    return d->restartCommand;
+   Q_D(const QSessionManager);
+   return d->restartCommand;
 }
 
 void QSessionManager::setDiscardCommand(const QStringList &command)
 {
-    Q_D(QSessionManager);
-    d->discardCommand = command;
+   Q_D(QSessionManager);
+   d->discardCommand = command;
 }
 
 QStringList QSessionManager::discardCommand() const
 {
-    Q_D(const QSessionManager);
-    return d->discardCommand;
+   Q_D(const QSessionManager);
+   return d->discardCommand;
 }
 
 void QSessionManager::setManagerProperty(const QString &name,
-                                         const QString &value)
+      const QString &value)
 {
-    Q_UNUSED(name);
-    Q_UNUSED(value);
+   Q_UNUSED(name);
+   Q_UNUSED(value);
 }
 
 void QSessionManager::setManagerProperty(const QString &name,
-                                         const QStringList &value)
+      const QStringList &value)
 {
-    Q_UNUSED(name);
-    Q_UNUSED(value);
+   Q_UNUSED(name);
+   Q_UNUSED(value);
 }
 
 bool QSessionManager::isPhase2() const
 {
-    return false;
+   return false;
 }
 
 void QSessionManager::requestPhase2()

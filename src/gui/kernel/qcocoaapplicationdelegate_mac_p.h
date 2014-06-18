@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,22 +38,23 @@ QT_FORWARD_DECLARE_CLASS(QApplicationPrivate);
 
 @class QT_MANGLE_NAMESPACE(QCocoaMenuLoader);
 
-@interface QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) : NSObject <NSApplicationDelegate> {
-    bool startedQuit;
-    QApplicationPrivate *qtPrivate;
-    NSMenu *dockMenu;
-    QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *qtMenuLoader;
-    NSObject <NSApplicationDelegate> *reflectionDelegate;
-    bool inLaunch;
+@interface QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) : NSObject <NSApplicationDelegate>
+{
+   bool startedQuit;
+   QApplicationPrivate *qtPrivate;
+   NSMenu *dockMenu;
+   QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *qtMenuLoader;
+   NSObject <NSApplicationDelegate> *reflectionDelegate;
+   bool inLaunch;
 }
-+ (QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate)*)sharedDelegate;
-- (void)setDockMenu:(NSMenu *)newMenu;
-- (void)setQtPrivate:(QApplicationPrivate *)value;
++ (QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) *)sharedDelegate;
+- (void)setDockMenu: (NSMenu *)newMenu;
+- (void)setQtPrivate: (QApplicationPrivate *)value;
 - (QApplicationPrivate *)qAppPrivate;
-- (void)setMenuLoader:(QT_MANGLE_NAMESPACE(QCocoaMenuLoader)*)menuLoader;
+- (void)setMenuLoader: (QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *)menuLoader;
 - (QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *)menuLoader;
-- (void)setReflectionDelegate:(NSObject <NSApplicationDelegate> *)oldDelegate;
-- (void)getUrl:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
+- (void)setReflectionDelegate: (NSObject <NSApplicationDelegate> *)oldDelegate;
+- (void)getUrl: (NSAppleEventDescriptor *)event withReplyEvent: (NSAppleEventDescriptor *)replyEvent;
 @end
 
 #endif

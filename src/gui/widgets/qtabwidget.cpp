@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -169,33 +169,33 @@ QT_BEGIN_NAMESPACE
 
 class QTabWidgetPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QTabWidget)
+   Q_DECLARE_PUBLIC(QTabWidget)
 
-public:
-    QTabWidgetPrivate();
-    ~QTabWidgetPrivate();
-    void updateTabBarPosition();
-    void _q_showTab(int);
-    void _q_removeTab(int);
-    void _q_tabMoved(int from, int to);
-    void init();
-    bool hasHeightForWidth() const;
+ public:
+   QTabWidgetPrivate();
+   ~QTabWidgetPrivate();
+   void updateTabBarPosition();
+   void _q_showTab(int);
+   void _q_removeTab(int);
+   void _q_tabMoved(int from, int to);
+   void init();
+   bool hasHeightForWidth() const;
 
-    QTabBar *tabs;
-    QStackedWidget *stack;
-    QRect panelRect;
-    bool dirty;
-    QTabWidget::TabPosition pos;
-    QTabWidget::TabShape shape;
-    int alignment;
-    QWidget *leftCornerWidget;
-    QWidget *rightCornerWidget;
+   QTabBar *tabs;
+   QStackedWidget *stack;
+   QRect panelRect;
+   bool dirty;
+   QTabWidget::TabPosition pos;
+   QTabWidget::TabShape shape;
+   int alignment;
+   QWidget *leftCornerWidget;
+   QWidget *rightCornerWidget;
 };
 
 QTabWidgetPrivate::QTabWidgetPrivate()
-    : tabs(0), stack(0), dirty(true),
-      pos(QTabWidget::North), shape(QTabWidget::Rounded),
-      leftCornerWidget(0), rightCornerWidget(0)
+   : tabs(0), stack(0), dirty(true),
+     pos(QTabWidget::North), shape(QTabWidget::Rounded),
+     leftCornerWidget(0), rightCornerWidget(0)
 {}
 
 QTabWidgetPrivate::~QTabWidgetPrivate()
@@ -203,40 +203,41 @@ QTabWidgetPrivate::~QTabWidgetPrivate()
 
 void QTabWidgetPrivate::init()
 {
-    Q_Q(QTabWidget);
+   Q_Q(QTabWidget);
 
-    stack = new QStackedWidget(q);
-    stack->setObjectName(QLatin1String("qt_tabwidget_stackedwidget"));
-    stack->setLineWidth(0);
-    // hack so that QMacStyle::layoutSpacing() can detect tab widget pages
-    stack->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, QSizePolicy::TabWidget));
+   stack = new QStackedWidget(q);
+   stack->setObjectName(QLatin1String("qt_tabwidget_stackedwidget"));
+   stack->setLineWidth(0);
+   // hack so that QMacStyle::layoutSpacing() can detect tab widget pages
+   stack->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, QSizePolicy::TabWidget));
 
-    QObject::connect(stack, SIGNAL(widgetRemoved(int)), q, SLOT(_q_removeTab(int)));
-    QTabBar *tabBar = new QTabBar(q);
-    tabBar->setObjectName(QLatin1String("qt_tabwidget_tabbar"));
-    tabBar->setDrawBase(false);
-    q->setTabBar(tabBar);
+   QObject::connect(stack, SIGNAL(widgetRemoved(int)), q, SLOT(_q_removeTab(int)));
+   QTabBar *tabBar = new QTabBar(q);
+   tabBar->setObjectName(QLatin1String("qt_tabwidget_tabbar"));
+   tabBar->setDrawBase(false);
+   q->setTabBar(tabBar);
 
-    q->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding,
-                                 QSizePolicy::TabWidget));
+   q->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding,
+                                QSizePolicy::TabWidget));
 #ifdef QT_KEYPAD_NAVIGATION
-    if (QApplication::keypadNavigationEnabled())
-        q->setFocusPolicy(Qt::NoFocus);
-    else
+   if (QApplication::keypadNavigationEnabled()) {
+      q->setFocusPolicy(Qt::NoFocus);
+   } else
 #endif
-    q->setFocusPolicy(Qt::TabFocus);
-    q->setFocusProxy(tabs);
-    q->setTabPosition(static_cast<QTabWidget::TabPosition> (q->style()->styleHint(
-                      QStyle::SH_TabWidget_DefaultTabPosition, 0, q )));
+      q->setFocusPolicy(Qt::TabFocus);
+   q->setFocusProxy(tabs);
+   q->setTabPosition(static_cast<QTabWidget::TabPosition> (q->style()->styleHint(
+                        QStyle::SH_TabWidget_DefaultTabPosition, 0, q )));
 
 }
 
 bool QTabWidgetPrivate::hasHeightForWidth() const
 {
-    bool has = size_policy.hasHeightForWidth();
-    if (!has && stack)
-        has = qt_widget_private(stack)->hasHeightForWidth();
-    return has;
+   bool has = size_policy.hasHeightForWidth();
+   if (!has && stack) {
+      has = qt_widget_private(stack)->hasHeightForWidth();
+   }
+   return has;
 }
 
 
@@ -249,84 +250,86 @@ bool QTabWidgetPrivate::hasHeightForWidth() const
 */
 void QTabWidget::initStyleOption(QStyleOptionTabWidgetFrame *option) const
 {
-    if (!option)
-        return;
+   if (!option) {
+      return;
+   }
 
-    Q_D(const QTabWidget);
-    option->initFrom(this);
+   Q_D(const QTabWidget);
+   option->initFrom(this);
 
-    if (documentMode())
-        option->lineWidth = 0;
-    else
-        option->lineWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, this);
+   if (documentMode()) {
+      option->lineWidth = 0;
+   } else {
+      option->lineWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, this);
+   }
 
-    int exth = style()->pixelMetric(QStyle::PM_TabBarBaseHeight, 0, this);
-    QSize t(0, d->stack->frameWidth());
-    if (d->tabs->isVisibleTo(const_cast<QTabWidget *>(this))) {
-        t = d->tabs->sizeHint();
-        if (documentMode()) {
-            if (tabPosition() == East || tabPosition() == West) {
-                t.setHeight(height());
-            } else {
-                t.setWidth(width());
-            }
-        }
-    }
+   int exth = style()->pixelMetric(QStyle::PM_TabBarBaseHeight, 0, this);
+   QSize t(0, d->stack->frameWidth());
+   if (d->tabs->isVisibleTo(const_cast<QTabWidget *>(this))) {
+      t = d->tabs->sizeHint();
+      if (documentMode()) {
+         if (tabPosition() == East || tabPosition() == West) {
+            t.setHeight(height());
+         } else {
+            t.setWidth(width());
+         }
+      }
+   }
 
-    if (d->rightCornerWidget) {
-        const QSize rightCornerSizeHint = d->rightCornerWidget->sizeHint();
-        const QSize bounds(rightCornerSizeHint.width(), t.height() - exth);
-        option->rightCornerWidgetSize = rightCornerSizeHint.boundedTo(bounds);
-    } else {
-        option->rightCornerWidgetSize = QSize(0, 0);
-    }
+   if (d->rightCornerWidget) {
+      const QSize rightCornerSizeHint = d->rightCornerWidget->sizeHint();
+      const QSize bounds(rightCornerSizeHint.width(), t.height() - exth);
+      option->rightCornerWidgetSize = rightCornerSizeHint.boundedTo(bounds);
+   } else {
+      option->rightCornerWidgetSize = QSize(0, 0);
+   }
 
-    if (d->leftCornerWidget) {
-        const QSize leftCornerSizeHint = d->leftCornerWidget->sizeHint();
-        const QSize bounds(leftCornerSizeHint.width(), t.height() - exth);
-        option->leftCornerWidgetSize = leftCornerSizeHint.boundedTo(bounds);
-    } else {
-        option->leftCornerWidgetSize = QSize(0, 0);
-    }
+   if (d->leftCornerWidget) {
+      const QSize leftCornerSizeHint = d->leftCornerWidget->sizeHint();
+      const QSize bounds(leftCornerSizeHint.width(), t.height() - exth);
+      option->leftCornerWidgetSize = leftCornerSizeHint.boundedTo(bounds);
+   } else {
+      option->leftCornerWidgetSize = QSize(0, 0);
+   }
 
-    switch (d->pos) {
-    case QTabWidget::North:
-        option->shape = d->shape == QTabWidget::Rounded ? QTabBar::RoundedNorth
-                                                        : QTabBar::TriangularNorth;
-        break;
-    case QTabWidget::South:
-        option->shape = d->shape == QTabWidget::Rounded ? QTabBar::RoundedSouth
-                                                        : QTabBar::TriangularSouth;
-        break;
-    case QTabWidget::West:
-        option->shape = d->shape == QTabWidget::Rounded ? QTabBar::RoundedWest
-                                                        : QTabBar::TriangularWest;
-        break;
-    case QTabWidget::East:
-        option->shape = d->shape == QTabWidget::Rounded ? QTabBar::RoundedEast
-                                                        : QTabBar::TriangularEast;
-        break;
-    }
+   switch (d->pos) {
+      case QTabWidget::North:
+         option->shape = d->shape == QTabWidget::Rounded ? QTabBar::RoundedNorth
+                         : QTabBar::TriangularNorth;
+         break;
+      case QTabWidget::South:
+         option->shape = d->shape == QTabWidget::Rounded ? QTabBar::RoundedSouth
+                         : QTabBar::TriangularSouth;
+         break;
+      case QTabWidget::West:
+         option->shape = d->shape == QTabWidget::Rounded ? QTabBar::RoundedWest
+                         : QTabBar::TriangularWest;
+         break;
+      case QTabWidget::East:
+         option->shape = d->shape == QTabWidget::Rounded ? QTabBar::RoundedEast
+                         : QTabBar::TriangularEast;
+         break;
+   }
 
-    option->tabBarSize = t;
+   option->tabBarSize = t;
 
-    if (QStyleOptionTabWidgetFrameV2 *tabframe = qstyleoption_cast<QStyleOptionTabWidgetFrameV2*>(option)) {
-        QRect tbRect = tabBar()->geometry();
-        QRect selectedTabRect = tabBar()->tabRect(tabBar()->currentIndex());
-        tabframe->tabBarRect = tbRect;
-        selectedTabRect.moveTopLeft(selectedTabRect.topLeft() + tbRect.topLeft());
-        tabframe->selectedTabRect = selectedTabRect;
-    }
+   if (QStyleOptionTabWidgetFrameV2 *tabframe = qstyleoption_cast<QStyleOptionTabWidgetFrameV2 *>(option)) {
+      QRect tbRect = tabBar()->geometry();
+      QRect selectedTabRect = tabBar()->tabRect(tabBar()->currentIndex());
+      tabframe->tabBarRect = tbRect;
+      selectedTabRect.moveTopLeft(selectedTabRect.topLeft() + tbRect.topLeft());
+      tabframe->selectedTabRect = selectedTabRect;
+   }
 }
 
 /*!
     Constructs a tabbed widget with parent \a parent.
 */
 QTabWidget::QTabWidget(QWidget *parent)
-    : QWidget(*new QTabWidgetPrivate, parent, 0)
+   : QWidget(*new QTabWidgetPrivate, parent, 0)
 {
-    Q_D(QTabWidget);
-    d->init();
+   Q_D(QTabWidget);
+   d->init();
 }
 
 /*!
@@ -358,7 +361,7 @@ QTabWidget::~QTabWidget()
 */
 int QTabWidget::addTab(QWidget *child, const QString &label)
 {
-    return insertTab(-1, child, label);
+   return insertTab(-1, child, label);
 }
 
 
@@ -372,9 +375,9 @@ int QTabWidget::addTab(QWidget *child, const QString &label)
     This function is the same as addTab(), but with an additional \a
     icon.
 */
-int QTabWidget::addTab(QWidget *child, const QIcon& icon, const QString &label)
+int QTabWidget::addTab(QWidget *child, const QIcon &icon, const QString &label)
 {
-    return insertTab(-1, child, icon, label);
+   return insertTab(-1, child, icon, label);
 }
 
 
@@ -412,7 +415,7 @@ int QTabWidget::addTab(QWidget *child, const QIcon& icon, const QString &label)
 */
 int QTabWidget::insertTab(int index, QWidget *w, const QString &label)
 {
-    return insertTab(index, w, QIcon(), label);
+   return insertTab(index, w, QIcon(), label);
 }
 
 
@@ -427,17 +430,18 @@ int QTabWidget::insertTab(int index, QWidget *w, const QString &label)
     This function is the same as insertTab(), but with an additional
     \a icon.
 */
-int QTabWidget::insertTab(int index, QWidget *w, const QIcon& icon, const QString &label)
+int QTabWidget::insertTab(int index, QWidget *w, const QIcon &icon, const QString &label)
 {
-    Q_D(QTabWidget);
-    if(!w)
-        return -1;
-    index = d->stack->insertWidget(index, w);
-    d->tabs->insertTab(index, icon, label);
-    setUpLayout();
-    tabInserted(index);
+   Q_D(QTabWidget);
+   if (!w) {
+      return -1;
+   }
+   index = d->stack->insertWidget(index, w);
+   d->tabs->insertTab(index, icon, label);
+   setUpLayout();
+   tabInserted(index);
 
-    return index;
+   return index;
 }
 
 
@@ -455,9 +459,9 @@ int QTabWidget::insertTab(int index, QWidget *w, const QIcon& icon, const QStrin
 */
 void QTabWidget::setTabText(int index, const QString &label)
 {
-    Q_D(QTabWidget);
-    d->tabs->setTabText(index, label);
-    setUpLayout();
+   Q_D(QTabWidget);
+   d->tabs->setTabText(index, label);
+   setUpLayout();
 }
 
 /*!
@@ -466,8 +470,8 @@ void QTabWidget::setTabText(int index, const QString &label)
 
 QString QTabWidget::tabText(int index) const
 {
-    Q_D(const QTabWidget);
-    return d->tabs->tabText(index);
+   Q_D(const QTabWidget);
+   return d->tabs->tabText(index);
 }
 
 /*!
@@ -477,9 +481,9 @@ QString QTabWidget::tabText(int index) const
 */
 void QTabWidget::setTabIcon(int index, const QIcon &icon)
 {
-    Q_D(QTabWidget);
-    d->tabs->setTabIcon(index, icon);
-    setUpLayout();
+   Q_D(QTabWidget);
+   d->tabs->setTabIcon(index, icon);
+   setUpLayout();
 }
 
 /*!
@@ -488,8 +492,8 @@ void QTabWidget::setTabIcon(int index, const QIcon &icon)
 
 QIcon QTabWidget::tabIcon(int index) const
 {
-    Q_D(const QTabWidget);
-    return d->tabs->tabIcon(index);
+   Q_D(const QTabWidget);
+   return d->tabs->tabIcon(index);
 }
 
 /*!
@@ -500,8 +504,8 @@ QIcon QTabWidget::tabIcon(int index) const
 
 bool QTabWidget::isTabEnabled(int index) const
 {
-    Q_D(const QTabWidget);
-    return d->tabs->isTabEnabled(index);
+   Q_D(const QTabWidget);
+   return d->tabs->isTabEnabled(index);
 }
 
 /*!
@@ -520,10 +524,11 @@ bool QTabWidget::isTabEnabled(int index) const
 
 void QTabWidget::setTabEnabled(int index, bool enable)
 {
-    Q_D(QTabWidget);
-    d->tabs->setTabEnabled(index, enable);
-    if (QWidget *widget = d->stack->widget(index))
-        widget->setEnabled(enable);
+   Q_D(QTabWidget);
+   d->tabs->setTabEnabled(index, enable);
+   if (QWidget *widget = d->stack->widget(index)) {
+      widget->setEnabled(enable);
+   }
 }
 
 /*!
@@ -548,33 +553,37 @@ void QTabWidget::setTabEnabled(int index, bool enable)
 
   \sa cornerWidget(), setTabPosition()
 */
-void QTabWidget::setCornerWidget(QWidget * widget, Qt::Corner corner)
+void QTabWidget::setCornerWidget(QWidget *widget, Qt::Corner corner)
 {
-    Q_D(QTabWidget);
-    if (widget && widget->parentWidget() != this)
-        widget->setParent(this);
+   Q_D(QTabWidget);
+   if (widget && widget->parentWidget() != this) {
+      widget->setParent(this);
+   }
 
-    if (corner & Qt::TopRightCorner) {
-        if (d->rightCornerWidget)
-            d->rightCornerWidget->hide();
-        d->rightCornerWidget = widget;
-    } else {
-        if (d->leftCornerWidget)
-            d->leftCornerWidget->hide();
-        d->leftCornerWidget = widget;
-    }
-    setUpLayout();
+   if (corner & Qt::TopRightCorner) {
+      if (d->rightCornerWidget) {
+         d->rightCornerWidget->hide();
+      }
+      d->rightCornerWidget = widget;
+   } else {
+      if (d->leftCornerWidget) {
+         d->leftCornerWidget->hide();
+      }
+      d->leftCornerWidget = widget;
+   }
+   setUpLayout();
 }
 
 /*!
     Returns the widget shown in the \a corner of the tab widget or 0.
 */
-QWidget * QTabWidget::cornerWidget(Qt::Corner corner) const
+QWidget *QTabWidget::cornerWidget(Qt::Corner corner) const
 {
-    Q_D(const QTabWidget);
-    if (corner & Qt::TopRightCorner)
-        return d->rightCornerWidget;
-    return d->leftCornerWidget;
+   Q_D(const QTabWidget);
+   if (corner & Qt::TopRightCorner) {
+      return d->rightCornerWidget;
+   }
+   return d->leftCornerWidget;
 }
 
 /*!
@@ -585,9 +594,10 @@ QWidget * QTabWidget::cornerWidget(Qt::Corner corner) const
 */
 void QTabWidget::removeTab(int index)
 {
-    Q_D(QTabWidget);
-    if (QWidget *w = d->stack->widget(index))
-        d->stack->removeWidget(w);
+   Q_D(QTabWidget);
+   if (QWidget *w = d->stack->widget(index)) {
+      d->stack->removeWidget(w);
+   }
 }
 
 /*!
@@ -598,10 +608,10 @@ void QTabWidget::removeTab(int index)
     \sa currentIndex(), setCurrentWidget()
 */
 
-QWidget * QTabWidget::currentWidget() const
+QWidget *QTabWidget::currentWidget() const
 {
-    Q_D(const QTabWidget);
-    return d->stack->currentWidget();
+   Q_D(const QTabWidget);
+   return d->stack->currentWidget();
 }
 
 /*!
@@ -612,8 +622,8 @@ QWidget * QTabWidget::currentWidget() const
  */
 void QTabWidget::setCurrentWidget(QWidget *widget)
 {
-    Q_D(const QTabWidget);
-    d->tabs->setCurrentIndex(indexOf(widget));
+   Q_D(const QTabWidget);
+   d->tabs->setCurrentIndex(indexOf(widget));
 }
 
 
@@ -629,14 +639,14 @@ void QTabWidget::setCurrentWidget(QWidget *widget)
 
 int QTabWidget::currentIndex() const
 {
-    Q_D(const QTabWidget);
-    return d->tabs->currentIndex();
+   Q_D(const QTabWidget);
+   return d->tabs->currentIndex();
 }
 
 void QTabWidget::setCurrentIndex(int index)
 {
-    Q_D(QTabWidget);
-    d->tabs->setCurrentIndex(index);
+   Q_D(QTabWidget);
+   d->tabs->setCurrentIndex(index);
 }
 
 
@@ -644,10 +654,10 @@ void QTabWidget::setCurrentIndex(int index)
     Returns the index position of the page occupied by the widget \a
     w, or -1 if the widget cannot be found.
 */
-int QTabWidget::indexOf(QWidget* w) const
+int QTabWidget::indexOf(QWidget *w) const
 {
-    Q_D(const QTabWidget);
-    return d->stack->indexOf(w);
+   Q_D(const QTabWidget);
+   return d->stack->indexOf(w);
 }
 
 
@@ -656,8 +666,8 @@ int QTabWidget::indexOf(QWidget* w) const
 */
 void QTabWidget::resizeEvent(QResizeEvent *e)
 {
-    QWidget::resizeEvent(e);
-    setUpLayout();
+   QWidget::resizeEvent(e);
+   setUpLayout();
 }
 
 /*!
@@ -667,27 +677,28 @@ void QTabWidget::resizeEvent(QResizeEvent *e)
 
     \sa tabBar()
 */
-void QTabWidget::setTabBar(QTabBar* tb)
+void QTabWidget::setTabBar(QTabBar *tb)
 {
-    Q_D(QTabWidget);
-    Q_ASSERT(tb);
+   Q_D(QTabWidget);
+   Q_ASSERT(tb);
 
-    if (tb->parentWidget() != this) {
-        tb->setParent(this);
-        tb->show();
-    }
-    delete d->tabs;
-    d->tabs = tb;
-    setFocusProxy(d->tabs);
+   if (tb->parentWidget() != this) {
+      tb->setParent(this);
+      tb->show();
+   }
+   delete d->tabs;
+   d->tabs = tb;
+   setFocusProxy(d->tabs);
 
-    connect(d->tabs, SIGNAL(currentChanged(int)),   this, SLOT(_q_showTab(int)));
-    connect(d->tabs, SIGNAL(tabMoved(int,int)),     this, SLOT(_q_tabMoved(int,int)));
+   connect(d->tabs, SIGNAL(currentChanged(int)),   this, SLOT(_q_showTab(int)));
+   connect(d->tabs, SIGNAL(tabMoved(int, int)),     this, SLOT(_q_tabMoved(int, int)));
 
-    if (d->tabs->tabsClosable())
-        connect(d->tabs, SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
+   if (d->tabs->tabsClosable()) {
+      connect(d->tabs, SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
+   }
 
-    tb->setExpanding(!documentMode());
-    setUpLayout();
+   tb->setExpanding(!documentMode());
+   setUpLayout();
 }
 
 
@@ -696,10 +707,10 @@ void QTabWidget::setTabBar(QTabBar* tb)
 
     \sa setTabBar()
 */
-QTabBar* QTabWidget::tabBar() const
+QTabBar *QTabWidget::tabBar() const
 {
-    Q_D(const QTabWidget);
-    return d->tabs;
+   Q_D(const QTabWidget);
+   return d->tabs;
 }
 
 /*!
@@ -709,27 +720,28 @@ QTabBar* QTabWidget::tabBar() const
 
 void QTabWidgetPrivate::_q_showTab(int index)
 {
-    Q_Q(QTabWidget);
-    if (index < stack->count() && index >= 0)
-        stack->setCurrentIndex(index);
-    emit q->currentChanged(index);
+   Q_Q(QTabWidget);
+   if (index < stack->count() && index >= 0) {
+      stack->setCurrentIndex(index);
+   }
+   emit q->currentChanged(index);
 }
 
 void QTabWidgetPrivate::_q_removeTab(int index)
 {
-    Q_Q(QTabWidget);
-    tabs->removeTab(index);
-    q->setUpLayout();
-    q->tabRemoved(index);
+   Q_Q(QTabWidget);
+   tabs->removeTab(index);
+   q->setUpLayout();
+   q->tabRemoved(index);
 }
 
 void QTabWidgetPrivate::_q_tabMoved(int from, int to)
 {
-    stack->blockSignals(true);
-    QWidget *w = stack->widget(from);
-    stack->removeWidget(w);
-    stack->insertWidget(to, w);
-    stack->blockSignals(false);
+   stack->blockSignals(true);
+   QWidget *w = stack->widget(from);
+   stack->removeWidget(w);
+   stack->insertWidget(to, w);
+   stack->blockSignals(false);
 }
 
 /*
@@ -739,50 +751,54 @@ void QTabWidgetPrivate::_q_tabMoved(int from, int to)
 */
 void QTabWidget::setUpLayout(bool onlyCheck)
 {
-    Q_D(QTabWidget);
-    if (onlyCheck && !d->dirty)
-        return; // nothing to do
+   Q_D(QTabWidget);
+   if (onlyCheck && !d->dirty) {
+      return;   // nothing to do
+   }
 
-    QStyleOptionTabWidgetFrameV2 option;
-    initStyleOption(&option);
+   QStyleOptionTabWidgetFrameV2 option;
+   initStyleOption(&option);
 
-    // this must be done immediately, because QWidgetItem relies on it (even if !isVisible())
-    d->setLayoutItemMargins(QStyle::SE_TabWidgetLayoutItem, &option);
+   // this must be done immediately, because QWidgetItem relies on it (even if !isVisible())
+   d->setLayoutItemMargins(QStyle::SE_TabWidgetLayoutItem, &option);
 
-    if (!isVisible()) {
-        d->dirty = true;
-        return; // we'll do it later
-    }
+   if (!isVisible()) {
+      d->dirty = true;
+      return; // we'll do it later
+   }
 
-    QRect tabRect = style()->subElementRect(QStyle::SE_TabWidgetTabBar, &option, this);
-    d->panelRect = style()->subElementRect(QStyle::SE_TabWidgetTabPane, &option, this);
-    QRect contentsRect = style()->subElementRect(QStyle::SE_TabWidgetTabContents, &option, this);
-    QRect leftCornerRect = style()->subElementRect(QStyle::SE_TabWidgetLeftCorner, &option, this);
-    QRect rightCornerRect = style()->subElementRect(QStyle::SE_TabWidgetRightCorner, &option, this);
+   QRect tabRect = style()->subElementRect(QStyle::SE_TabWidgetTabBar, &option, this);
+   d->panelRect = style()->subElementRect(QStyle::SE_TabWidgetTabPane, &option, this);
+   QRect contentsRect = style()->subElementRect(QStyle::SE_TabWidgetTabContents, &option, this);
+   QRect leftCornerRect = style()->subElementRect(QStyle::SE_TabWidgetLeftCorner, &option, this);
+   QRect rightCornerRect = style()->subElementRect(QStyle::SE_TabWidgetRightCorner, &option, this);
 
-    d->tabs->setGeometry(tabRect);
-    d->stack->setGeometry(contentsRect);
-    if (d->leftCornerWidget)
-        d->leftCornerWidget->setGeometry(leftCornerRect);
-    if (d->rightCornerWidget)
-        d->rightCornerWidget->setGeometry(rightCornerRect);
+   d->tabs->setGeometry(tabRect);
+   d->stack->setGeometry(contentsRect);
+   if (d->leftCornerWidget) {
+      d->leftCornerWidget->setGeometry(leftCornerRect);
+   }
+   if (d->rightCornerWidget) {
+      d->rightCornerWidget->setGeometry(rightCornerRect);
+   }
 
-    if (!onlyCheck)
-        update();
-    updateGeometry();
+   if (!onlyCheck) {
+      update();
+   }
+   updateGeometry();
 }
 
 /*!
     \internal
 */
 static inline QSize basicSize(
-    bool horizontal, const QSize &lc, const QSize &rc, const QSize &s, const QSize &t)
+   bool horizontal, const QSize &lc, const QSize &rc, const QSize &s, const QSize &t)
 {
-    return horizontal
-        ? QSize(qMax(s.width(), t.width() + rc.width() + lc.width()),
-                s.height() + (qMax(rc.height(), qMax(lc.height(), t.height()))))
-        : QSize(s.width() + (qMax(rc.width(), qMax(lc.width(), t.width()))),
-                qMax(s.height(), t.height() + rc.height() + lc.height()));
+   return horizontal
+          ? QSize(qMax(s.width(), t.width() + rc.width() + lc.width()),
+                  s.height() + (qMax(rc.height(), qMax(lc.height(), t.height()))))
+          : QSize(s.width() + (qMax(rc.width(), qMax(lc.width(), t.width()))),
+                  qMax(s.height(), t.height() + rc.height() + lc.height()));
 }
 
 /*!
@@ -790,31 +806,34 @@ static inline QSize basicSize(
 */
 QSize QTabWidget::sizeHint() const
 {
-    Q_D(const QTabWidget);
-    QSize lc(0, 0), rc(0, 0);
-    QStyleOptionTabWidgetFrameV2 opt;
-    initStyleOption(&opt);
-    opt.state = QStyle::State_None;
+   Q_D(const QTabWidget);
+   QSize lc(0, 0), rc(0, 0);
+   QStyleOptionTabWidgetFrameV2 opt;
+   initStyleOption(&opt);
+   opt.state = QStyle::State_None;
 
-    if (d->leftCornerWidget)
-        lc = d->leftCornerWidget->sizeHint();
-    if(d->rightCornerWidget)
-        rc = d->rightCornerWidget->sizeHint();
-    if (!d->dirty) {
-        QTabWidget *that = (QTabWidget*)this;
-        that->setUpLayout(true);
-    }
-    QSize s(d->stack->sizeHint());
-    QSize t(d->tabs->sizeHint());
-    if(usesScrollButtons())
-        t = t.boundedTo(QSize(200,200));
-    else
-        t = t.boundedTo(QApplication::desktop()->size());
+   if (d->leftCornerWidget) {
+      lc = d->leftCornerWidget->sizeHint();
+   }
+   if (d->rightCornerWidget) {
+      rc = d->rightCornerWidget->sizeHint();
+   }
+   if (!d->dirty) {
+      QTabWidget *that = (QTabWidget *)this;
+      that->setUpLayout(true);
+   }
+   QSize s(d->stack->sizeHint());
+   QSize t(d->tabs->sizeHint());
+   if (usesScrollButtons()) {
+      t = t.boundedTo(QSize(200, 200));
+   } else {
+      t = t.boundedTo(QApplication::desktop()->size());
+   }
 
-    QSize sz = basicSize(d->pos == North || d->pos == South, lc, rc, s, t);
+   QSize sz = basicSize(d->pos == North || d->pos == South, lc, rc, s, t);
 
-    return style()->sizeFromContents(QStyle::CT_TabWidget, &opt, sz, this)
-                    .expandedTo(QApplication::globalStrut());
+   return style()->sizeFromContents(QStyle::CT_TabWidget, &opt, sz, this)
+          .expandedTo(QApplication::globalStrut());
 }
 
 
@@ -825,28 +844,30 @@ QSize QTabWidget::sizeHint() const
 */
 QSize QTabWidget::minimumSizeHint() const
 {
-    Q_D(const QTabWidget);
-    QSize lc(0, 0), rc(0, 0);
+   Q_D(const QTabWidget);
+   QSize lc(0, 0), rc(0, 0);
 
-    if(d->leftCornerWidget)
-        lc = d->leftCornerWidget->minimumSizeHint();
-    if(d->rightCornerWidget)
-        rc = d->rightCornerWidget->minimumSizeHint();
-    if (!d->dirty) {
-        QTabWidget *that = (QTabWidget*)this;
-        that->setUpLayout(true);
-    }
-    QSize s(d->stack->minimumSizeHint());
-    QSize t(d->tabs->minimumSizeHint());
+   if (d->leftCornerWidget) {
+      lc = d->leftCornerWidget->minimumSizeHint();
+   }
+   if (d->rightCornerWidget) {
+      rc = d->rightCornerWidget->minimumSizeHint();
+   }
+   if (!d->dirty) {
+      QTabWidget *that = (QTabWidget *)this;
+      that->setUpLayout(true);
+   }
+   QSize s(d->stack->minimumSizeHint());
+   QSize t(d->tabs->minimumSizeHint());
 
-    QSize sz = basicSize(d->pos == North || d->pos == South, lc, rc, s, t);
+   QSize sz = basicSize(d->pos == North || d->pos == South, lc, rc, s, t);
 
-    QStyleOptionTabWidgetFrameV2 opt;
-    initStyleOption(&opt);
-    opt.palette = palette();
-    opt.state = QStyle::State_None;
-    return style()->sizeFromContents(QStyle::CT_TabWidget, &opt, sz, this)
-                    .expandedTo(QApplication::globalStrut());
+   QStyleOptionTabWidgetFrameV2 opt;
+   initStyleOption(&opt);
+   opt.palette = palette();
+   opt.state = QStyle::State_None;
+   return style()->sizeFromContents(QStyle::CT_TabWidget, &opt, sz, this)
+          .expandedTo(QApplication::globalStrut());
 }
 
 /*!
@@ -855,48 +876,52 @@ QSize QTabWidget::minimumSizeHint() const
 */
 int QTabWidget::heightForWidth(int width) const
 {
-    Q_D(const QTabWidget);
+   Q_D(const QTabWidget);
 
-    QStyleOptionTabWidgetFrameV2 opt;
-    initStyleOption(&opt);
-    opt.state = QStyle::State_None;
+   QStyleOptionTabWidgetFrameV2 opt;
+   initStyleOption(&opt);
+   opt.state = QStyle::State_None;
 
-    QSize zero(0,0);
-    const QSize padding = style()->sizeFromContents(QStyle::CT_TabWidget, &opt, 
-                  zero, this).expandedTo(QApplication::globalStrut());
+   QSize zero(0, 0);
+   const QSize padding = style()->sizeFromContents(QStyle::CT_TabWidget, &opt,
+                         zero, this).expandedTo(QApplication::globalStrut());
 
-    QSize lc(0, 0), rc(0, 0);
+   QSize lc(0, 0), rc(0, 0);
 
-    if (d->leftCornerWidget)
-        lc = d->leftCornerWidget->sizeHint();
+   if (d->leftCornerWidget) {
+      lc = d->leftCornerWidget->sizeHint();
+   }
 
-    if(d->rightCornerWidget)
-        rc = d->rightCornerWidget->sizeHint();
+   if (d->rightCornerWidget) {
+      rc = d->rightCornerWidget->sizeHint();
+   }
 
-    if (!d->dirty) {
-        QTabWidget *that = (QTabWidget*)this;
-        that->setUpLayout(true);
-    }
+   if (!d->dirty) {
+      QTabWidget *that = (QTabWidget *)this;
+      that->setUpLayout(true);
+   }
 
-    QSize t(d->tabs->sizeHint());
+   QSize t(d->tabs->sizeHint());
 
-    if(usesScrollButtons())
-        t = t.boundedTo(QSize(200,200));
-    else
-        t = t.boundedTo(QApplication::desktop()->size());
+   if (usesScrollButtons()) {
+      t = t.boundedTo(QSize(200, 200));
+   } else {
+      t = t.boundedTo(QApplication::desktop()->size());
+   }
 
-    const bool tabIsHorizontal = (d->pos == North || d->pos == South);
-    const int contentsWidth = width - padding.width();
-    int stackWidth = contentsWidth;
+   const bool tabIsHorizontal = (d->pos == North || d->pos == South);
+   const int contentsWidth = width - padding.width();
+   int stackWidth = contentsWidth;
 
-    if (!tabIsHorizontal)
-        stackWidth -= qMax(t.width(), qMax(lc.width(), rc.width()));
+   if (!tabIsHorizontal) {
+      stackWidth -= qMax(t.width(), qMax(lc.width(), rc.width()));
+   }
 
-    int stackHeight = d->stack->heightForWidth(stackWidth);
-    QSize s(stackWidth, stackHeight);
+   int stackHeight = d->stack->heightForWidth(stackWidth);
+   QSize s(stackWidth, stackHeight);
 
-    QSize contentSize = basicSize(tabIsHorizontal, lc, rc, s, t);
-    return (contentSize + padding).expandedTo(QApplication::globalStrut()).height();
+   QSize contentSize = basicSize(tabIsHorizontal, lc, rc, s, t);
+   return (contentSize + padding).expandedTo(QApplication::globalStrut()).height();
 }
 
 
@@ -905,31 +930,31 @@ int QTabWidget::heightForWidth(int width) const
  */
 void QTabWidget::showEvent(QShowEvent *)
 {
-    setUpLayout();
+   setUpLayout();
 }
 
 void QTabWidgetPrivate::updateTabBarPosition()
 {
-    Q_Q(QTabWidget);
-    switch (pos) {
-    case QTabWidget::North:
-        tabs->setShape(shape == QTabWidget::Rounded ? QTabBar::RoundedNorth
-                                                    : QTabBar::TriangularNorth);
-        break;
-    case QTabWidget::South:
-        tabs->setShape(shape == QTabWidget::Rounded ? QTabBar::RoundedSouth
-                                                    : QTabBar::TriangularSouth);
-        break;
-    case QTabWidget::West:
-        tabs->setShape(shape == QTabWidget::Rounded ? QTabBar::RoundedWest
-                                                    : QTabBar::TriangularWest);
-        break;
-    case QTabWidget::East:
-        tabs->setShape(shape == QTabWidget::Rounded ? QTabBar::RoundedEast
-                                                    : QTabBar::TriangularEast);
-        break;
-    }
-    q->setUpLayout();
+   Q_Q(QTabWidget);
+   switch (pos) {
+      case QTabWidget::North:
+         tabs->setShape(shape == QTabWidget::Rounded ? QTabBar::RoundedNorth
+                        : QTabBar::TriangularNorth);
+         break;
+      case QTabWidget::South:
+         tabs->setShape(shape == QTabWidget::Rounded ? QTabBar::RoundedSouth
+                        : QTabBar::TriangularSouth);
+         break;
+      case QTabWidget::West:
+         tabs->setShape(shape == QTabWidget::Rounded ? QTabBar::RoundedWest
+                        : QTabBar::TriangularWest);
+         break;
+      case QTabWidget::East:
+         tabs->setShape(shape == QTabWidget::Rounded ? QTabBar::RoundedEast
+                        : QTabBar::TriangularEast);
+         break;
+   }
+   q->setUpLayout();
 }
 
 /*!
@@ -945,17 +970,18 @@ void QTabWidgetPrivate::updateTabBarPosition()
 */
 QTabWidget::TabPosition QTabWidget::tabPosition() const
 {
-    Q_D(const QTabWidget);
-    return d->pos;
+   Q_D(const QTabWidget);
+   return d->pos;
 }
 
 void QTabWidget::setTabPosition(TabPosition pos)
 {
-    Q_D(QTabWidget);
-    if (d->pos == pos)
-        return;
-    d->pos = pos;
-    d->updateTabBarPosition();
+   Q_D(QTabWidget);
+   if (d->pos == pos) {
+      return;
+   }
+   d->pos = pos;
+   d->updateTabBarPosition();
 }
 
 /*!
@@ -968,20 +994,22 @@ void QTabWidget::setTabPosition(TabPosition pos)
 */
 bool QTabWidget::tabsClosable() const
 {
-    return tabBar()->tabsClosable();
+   return tabBar()->tabsClosable();
 }
 
 void QTabWidget::setTabsClosable(bool closeable)
 {
-    if (tabsClosable() == closeable)
-        return;
+   if (tabsClosable() == closeable) {
+      return;
+   }
 
-    tabBar()->setTabsClosable(closeable);
-    if (closeable)
-        connect(tabBar(), SIGNAL(tabCloseRequested(int)),this, SLOT(tabCloseRequested(int)));
-    else
-        disconnect(tabBar(), SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
-    setUpLayout();
+   tabBar()->setTabsClosable(closeable);
+   if (closeable) {
+      connect(tabBar(), SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
+   } else {
+      disconnect(tabBar(), SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
+   }
+   setUpLayout();
 }
 
 /*!
@@ -996,12 +1024,12 @@ void QTabWidget::setTabsClosable(bool closeable)
 
 bool QTabWidget::isMovable() const
 {
-    return tabBar()->isMovable();
+   return tabBar()->isMovable();
 }
 
 void QTabWidget::setMovable(bool movable)
 {
-    tabBar()->setMovable(movable);
+   tabBar()->setMovable(movable);
 }
 
 /*!
@@ -1016,17 +1044,18 @@ void QTabWidget::setMovable(bool movable)
 
 QTabWidget::TabShape QTabWidget::tabShape() const
 {
-    Q_D(const QTabWidget);
-    return d->shape;
+   Q_D(const QTabWidget);
+   return d->shape;
 }
 
 void QTabWidget::setTabShape(TabShape s)
 {
-    Q_D(QTabWidget);
-    if (d->shape == s)
-        return;
-    d->shape = s;
-    d->updateTabBarPosition();
+   Q_D(QTabWidget);
+   if (d->shape == s) {
+      return;
+   }
+   d->shape = s;
+   d->updateTabBarPosition();
 }
 
 /*!
@@ -1034,9 +1063,10 @@ void QTabWidget::setTabShape(TabShape s)
  */
 bool QTabWidget::event(QEvent *ev)
 {
-    if (ev->type() == QEvent::LayoutRequest)
-        setUpLayout();
-    return QWidget::event(ev);
+   if (ev->type() == QEvent::LayoutRequest) {
+      setUpLayout();
+   }
+   return QWidget::event(ev);
 }
 
 /*!
@@ -1044,13 +1074,14 @@ bool QTabWidget::event(QEvent *ev)
  */
 void QTabWidget::changeEvent(QEvent *ev)
 {
-    if (ev->type() == QEvent::StyleChange
+   if (ev->type() == QEvent::StyleChange
 #ifdef Q_OS_MAC
-            || ev->type() == QEvent::MacSizeChange
+         || ev->type() == QEvent::MacSizeChange
 #endif
-            )
-        setUpLayout();
-    QWidget::changeEvent(ev);
+      ) {
+      setUpLayout();
+   }
+   QWidget::changeEvent(ev);
 }
 
 
@@ -1059,45 +1090,47 @@ void QTabWidget::changeEvent(QEvent *ev)
  */
 void QTabWidget::keyPressEvent(QKeyEvent *e)
 {
-    Q_D(QTabWidget);
-    if (((e->key() == Qt::Key_Tab || e->key() == Qt::Key_Backtab) &&
-          count() > 1 && e->modifiers() & Qt::ControlModifier)
+   Q_D(QTabWidget);
+   if (((e->key() == Qt::Key_Tab || e->key() == Qt::Key_Backtab) &&
+         count() > 1 && e->modifiers() & Qt::ControlModifier)
 #ifdef QT_KEYPAD_NAVIGATION
-          || QApplication::keypadNavigationEnabled() && (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right) && count() > 1
+         || QApplication::keypadNavigationEnabled() && (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right) && count() > 1
 #endif
-       ) {
-        int pageCount = d->tabs->count();
-        int page = currentIndex();
-        int dx = (e->key() == Qt::Key_Backtab || e->modifiers() & Qt::ShiftModifier) ? -1 : 1;
+      ) {
+      int pageCount = d->tabs->count();
+      int page = currentIndex();
+      int dx = (e->key() == Qt::Key_Backtab || e->modifiers() & Qt::ShiftModifier) ? -1 : 1;
 #ifdef QT_KEYPAD_NAVIGATION
-        if (QApplication::keypadNavigationEnabled() && (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right))
-            dx = e->key() == (isRightToLeft() ? Qt::Key_Right : Qt::Key_Left) ? -1 : 1;
+      if (QApplication::keypadNavigationEnabled() && (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right)) {
+         dx = e->key() == (isRightToLeft() ? Qt::Key_Right : Qt::Key_Left) ? -1 : 1;
+      }
 #endif
-        for (int pass = 0; pass < pageCount; ++pass) {
-            page+=dx;
-            if (page < 0
+      for (int pass = 0; pass < pageCount; ++pass) {
+         page += dx;
+         if (page < 0
 #ifdef QT_KEYPAD_NAVIGATION
-                && !e->isAutoRepeat()
+               && !e->isAutoRepeat()
 #endif
-               ) {
-                page = count() - 1;
-            } else if (page >= pageCount
+            ) {
+            page = count() - 1;
+         } else if (page >= pageCount
 #ifdef QT_KEYPAD_NAVIGATION
-                       && !e->isAutoRepeat()
+                    && !e->isAutoRepeat()
 #endif
-                      ) {
-                page = 0;
-            }
-            if (d->tabs->isTabEnabled(page)) {
-                setCurrentIndex(page);
-                break;
-            }
-        }
-        if (!QApplication::focusWidget())
-            d->tabs->setFocus();
-    } else {
-        e->ignore();
-    }
+                   ) {
+            page = 0;
+         }
+         if (d->tabs->isTabEnabled(page)) {
+            setCurrentIndex(page);
+            break;
+         }
+      }
+      if (!QApplication::focusWidget()) {
+         d->tabs->setFocus();
+      }
+   } else {
+      e->ignore();
+   }
 }
 
 /*!
@@ -1106,8 +1139,8 @@ void QTabWidget::keyPressEvent(QKeyEvent *e)
 */
 QWidget *QTabWidget::widget(int index) const
 {
-    Q_D(const QTabWidget);
-    return d->stack->widget(index);
+   Q_D(const QTabWidget);
+   return d->stack->widget(index);
 }
 
 /*!
@@ -1118,8 +1151,8 @@ QWidget *QTabWidget::widget(int index) const
 */
 int QTabWidget::count() const
 {
-    Q_D(const QTabWidget);
-    return d->tabs->count();
+   Q_D(const QTabWidget);
+   return d->tabs->count();
 }
 
 #ifndef QT_NO_TOOLTIP
@@ -1128,10 +1161,10 @@ int QTabWidget::count() const
 
     \sa  tabToolTip()
 */
-void QTabWidget::setTabToolTip(int index, const QString & tip)
+void QTabWidget::setTabToolTip(int index, const QString &tip)
 {
-    Q_D(QTabWidget);
-    d->tabs->setTabToolTip(index, tip);
+   Q_D(QTabWidget);
+   d->tabs->setTabToolTip(index, tip);
 }
 
 /*!
@@ -1142,8 +1175,8 @@ void QTabWidget::setTabToolTip(int index, const QString & tip)
 */
 QString QTabWidget::tabToolTip(int index) const
 {
-    Q_D(const QTabWidget);
-    return d->tabs->tabToolTip(index);
+   Q_D(const QTabWidget);
+   return d->tabs->tabToolTip(index);
 }
 #endif // QT_NO_TOOLTIP
 
@@ -1156,8 +1189,8 @@ QString QTabWidget::tabToolTip(int index) const
 */
 void QTabWidget::setTabWhatsThis(int index, const QString &text)
 {
-    Q_D(QTabWidget);
-    d->tabs->setTabWhatsThis(index, text);
+   Q_D(QTabWidget);
+   d->tabs->setTabWhatsThis(index, text);
 }
 
 /*!
@@ -1168,8 +1201,8 @@ void QTabWidget::setTabWhatsThis(int index, const QString &text)
 */
 QString QTabWidget::tabWhatsThis(int index) const
 {
-    Q_D(const QTabWidget);
-    return d->tabs->tabWhatsThis(index);
+   Q_D(const QTabWidget);
+   return d->tabs->tabWhatsThis(index);
 }
 #endif // QT_NO_WHATSTHIS
 
@@ -1181,7 +1214,7 @@ QString QTabWidget::tabWhatsThis(int index) const
  */
 void QTabWidget::tabInserted(int index)
 {
-    Q_UNUSED(index)
+   Q_UNUSED(index)
 }
 
 /*!
@@ -1192,7 +1225,7 @@ void QTabWidget::tabInserted(int index)
  */
 void QTabWidget::tabRemoved(int index)
 {
-    Q_UNUSED(index)
+   Q_UNUSED(index)
 }
 
 /*!
@@ -1202,31 +1235,31 @@ void QTabWidget::tabRemoved(int index)
 */
 void QTabWidget::paintEvent(QPaintEvent *)
 {
-    Q_D(QTabWidget);
-    if (documentMode()) {
-        QStylePainter p(this, tabBar());
-        if (QWidget *w = cornerWidget(Qt::TopLeftCorner)) {
-            QStyleOptionTabBarBaseV2 opt;
-            QTabBarPrivate::initStyleBaseOption(&opt, tabBar(), w->size());
-            opt.rect.moveLeft(w->x() + opt.rect.x());
-            opt.rect.moveTop(w->y() + opt.rect.y());
-            p.drawPrimitive(QStyle::PE_FrameTabBarBase, opt);
-        }
-        if (QWidget *w = cornerWidget(Qt::TopRightCorner)) {
-            QStyleOptionTabBarBaseV2 opt;
-            QTabBarPrivate::initStyleBaseOption(&opt, tabBar(), w->size());
-            opt.rect.moveLeft(w->x() + opt.rect.x());
-            opt.rect.moveTop(w->y() + opt.rect.y());
-            p.drawPrimitive(QStyle::PE_FrameTabBarBase, opt);
-        }
-        return;
-    }
-    QStylePainter p(this);
+   Q_D(QTabWidget);
+   if (documentMode()) {
+      QStylePainter p(this, tabBar());
+      if (QWidget *w = cornerWidget(Qt::TopLeftCorner)) {
+         QStyleOptionTabBarBaseV2 opt;
+         QTabBarPrivate::initStyleBaseOption(&opt, tabBar(), w->size());
+         opt.rect.moveLeft(w->x() + opt.rect.x());
+         opt.rect.moveTop(w->y() + opt.rect.y());
+         p.drawPrimitive(QStyle::PE_FrameTabBarBase, opt);
+      }
+      if (QWidget *w = cornerWidget(Qt::TopRightCorner)) {
+         QStyleOptionTabBarBaseV2 opt;
+         QTabBarPrivate::initStyleBaseOption(&opt, tabBar(), w->size());
+         opt.rect.moveLeft(w->x() + opt.rect.x());
+         opt.rect.moveTop(w->y() + opt.rect.y());
+         p.drawPrimitive(QStyle::PE_FrameTabBarBase, opt);
+      }
+      return;
+   }
+   QStylePainter p(this);
 
-    QStyleOptionTabWidgetFrameV2 opt;
-    initStyleOption(&opt);
-    opt.rect = d->panelRect;
-    p.drawPrimitive(QStyle::PE_FrameTabWidget, opt);
+   QStyleOptionTabWidgetFrameV2 opt;
+   initStyleOption(&opt);
+   opt.rect = d->panelRect;
+   p.drawPrimitive(QStyle::PE_FrameTabWidget, opt);
 }
 
 /*!
@@ -1242,12 +1275,12 @@ void QTabWidget::paintEvent(QPaintEvent *)
 */
 QSize QTabWidget::iconSize() const
 {
-    return d_func()->tabs->iconSize();
+   return d_func()->tabs->iconSize();
 }
 
 void QTabWidget::setIconSize(const QSize &size)
 {
-    d_func()->tabs->setIconSize(size);
+   d_func()->tabs->setIconSize(size);
 }
 
 /*!
@@ -1264,12 +1297,12 @@ void QTabWidget::setIconSize(const QSize &size)
 */
 Qt::TextElideMode QTabWidget::elideMode() const
 {
-    return d_func()->tabs->elideMode();
+   return d_func()->tabs->elideMode();
 }
 
 void QTabWidget::setElideMode(Qt::TextElideMode mode)
 {
-    d_func()->tabs->setElideMode(mode);
+   d_func()->tabs->setElideMode(mode);
 }
 
 /*!
@@ -1287,12 +1320,12 @@ void QTabWidget::setElideMode(Qt::TextElideMode mode)
 */
 bool QTabWidget::usesScrollButtons() const
 {
-    return d_func()->tabs->usesScrollButtons();
+   return d_func()->tabs->usesScrollButtons();
 }
 
 void QTabWidget::setUsesScrollButtons(bool useButtons)
 {
-    d_func()->tabs->setUsesScrollButtons(useButtons);
+   d_func()->tabs->setUsesScrollButtons(useButtons);
 }
 
 /*!
@@ -1309,17 +1342,17 @@ void QTabWidget::setUsesScrollButtons(bool useButtons)
 */
 bool QTabWidget::documentMode() const
 {
-    Q_D(const QTabWidget);
-    return d->tabs->documentMode();
+   Q_D(const QTabWidget);
+   return d->tabs->documentMode();
 }
 
 void QTabWidget::setDocumentMode(bool enabled)
 {
-    Q_D(QTabWidget);
-    d->tabs->setDocumentMode(enabled);
-    d->tabs->setExpanding(!enabled);
-    d->tabs->setDrawBase(enabled);
-    setUpLayout();
+   Q_D(QTabWidget);
+   d->tabs->setDocumentMode(enabled);
+   d->tabs->setExpanding(!enabled);
+   d->tabs->setDrawBase(enabled);
+   setUpLayout();
 }
 
 /*!
@@ -1328,9 +1361,10 @@ void QTabWidget::setDocumentMode(bool enabled)
 */
 void QTabWidget::clear()
 {
-    // ### optimize by introduce QStackedLayout::clear()
-    while (count())
-        removeTab(0);
+   // ### optimize by introduce QStackedLayout::clear()
+   while (count()) {
+      removeTab(0);
+   }
 }
 
 /*!
@@ -1482,20 +1516,20 @@ void QTabWidget::clear()
 
 void QTabWidget::_q_showTab(int un_named_arg1)
 {
-	Q_D(QTabWidget);
-	d->_q_showTab(un_named_arg1);
+   Q_D(QTabWidget);
+   d->_q_showTab(un_named_arg1);
 }
 
 void QTabWidget::_q_removeTab(int un_named_arg1)
 {
-	Q_D(QTabWidget);
-	d->_q_removeTab(un_named_arg1);
+   Q_D(QTabWidget);
+   d->_q_removeTab(un_named_arg1);
 }
 
-void QTabWidget::_q_tabMoved(int un_named_arg1,int un_named_arg2)
+void QTabWidget::_q_tabMoved(int un_named_arg1, int un_named_arg2)
 {
-	Q_D(QTabWidget);
-	d->_q_tabMoved(un_named_arg1, un_named_arg2);
+   Q_D(QTabWidget);
+   d->_q_tabMoved(un_named_arg1, un_named_arg2);
 }
 
 QT_END_NAMESPACE

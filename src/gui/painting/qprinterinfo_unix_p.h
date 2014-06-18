@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,15 +49,15 @@ QT_BEGIN_NAMESPACE
 #ifndef QT_NO_PRINTER
 
 struct QPrinterDescription {
-    QPrinterDescription(const QString &n, const QString &h, const QString &c, const QStringList &a)
-    : name(n), host(h), comment(c), aliases(a) {}
-    QString name;
-    QString host;
-    QString comment;
-    QStringList aliases;
-    bool samePrinter(const QString& printer) const {
-        return name == printer || aliases.contains(printer);
-    }
+   QPrinterDescription(const QString &n, const QString &h, const QString &c, const QStringList &a)
+      : name(n), host(h), comment(c), aliases(a) {}
+   QString name;
+   QString host;
+   QString comment;
+   QStringList aliases;
+   bool samePrinter(const QString &printer) const {
+      return name == printer || aliases.contains(printer);
+   }
 };
 
 enum { Success = 's', Unavail = 'u', NotFound = 'n', TryAgain = 't' };
@@ -68,7 +68,7 @@ void qt_perhapsAddPrinter(QList<QPrinterDescription> *printers, const QString &n
                           QStringList aliases = QStringList());
 void qt_parsePrinterDesc(QString printerDesc, QList<QPrinterDescription> *printers);
 
-int qt_parsePrintcap(QList<QPrinterDescription> *printers, const QString& fileName);
+int qt_parsePrintcap(QList<QPrinterDescription> *printers, const QString &fileName);
 QString qt_getDefaultFromHomePrinters();
 void qt_parseEtcLpPrinters(QList<QPrinterDescription> *printers);
 char *qt_parsePrintersConf(QList<QPrinterDescription> *printers, bool *found = 0);
@@ -77,8 +77,8 @@ char *qt_parsePrintersConf(QList<QPrinterDescription> *printers, bool *found = 0
 #if defined(Q_C_CALLBACKS)
 extern "C" {
 #endif
-int qt_pd_foreach(int /*status */, char * /*key */, int /*keyLen */,
-                  char *val, int valLen, char *data);
+   int qt_pd_foreach(int /*status */, char * /*key */, int /*keyLen */,
+                     char *val, int valLen, char *data);
 
 #if defined(Q_C_CALLBACKS)
 }
@@ -90,7 +90,7 @@ char *qt_parseNsswitchConf(QList<QPrinterDescription> *printers);
 void qt_parseEtcLpMember(QList<QPrinterDescription> *printers);
 void qt_parseSpoolInterface(QList<QPrinterDescription> *printers);
 void qt_parseQconfig(QList<QPrinterDescription> *printers);
-int qt_getLprPrinters(QList<QPrinterDescription>& printers);
+int qt_getLprPrinters(QList<QPrinterDescription> &printers);
 
 #endif // QT_NO_PRINTER
 

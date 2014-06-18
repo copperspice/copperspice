@@ -26,19 +26,7 @@
 #ifndef QDECLARATIVEVMEMETAOBJECT_P_H
 #define QDECLARATIVEVMEMETAOBJECT_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include "qdeclarative.h"
-
 #include <QtCore/QMetaObject>
 #include <QtCore/QBitArray>
 #include <QtCore/QPair>
@@ -46,10 +34,9 @@
 #include <QtCore/QDate>
 #include <QtCore/qlist.h>
 #include <QtCore/qdebug.h>
-
-#include "private/qdeclarativeguard_p.h"
-#include "private/qdeclarativecompiler_p.h"
-#include "private/qdeclarativecontext_p.h"
+#include "qdeclarativeguard_p.h"
+#include "qdeclarativecompiler_p.h"
+#include "qdeclarativecontext_p.h"
 
 QT_BEGIN_NAMESPACE
 

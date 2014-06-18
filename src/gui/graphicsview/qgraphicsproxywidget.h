@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,89 +36,89 @@ class QGraphicsProxyWidgetPrivate;
 
 class Q_GUI_EXPORT QGraphicsProxyWidget : public QGraphicsWidget
 {
-    CS_OBJECT(QGraphicsProxyWidget)
+   CS_OBJECT(QGraphicsProxyWidget)
 
-public:
-    QGraphicsProxyWidget(QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
-    ~QGraphicsProxyWidget();
+ public:
+   QGraphicsProxyWidget(QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
+   ~QGraphicsProxyWidget();
 
-    void setWidget(QWidget *widget);
-    QWidget *widget() const;
+   void setWidget(QWidget *widget);
+   QWidget *widget() const;
 
-    QRectF subWidgetRect(const QWidget *widget) const;
+   QRectF subWidgetRect(const QWidget *widget) const;
 
-    void setGeometry(const QRectF &rect);
+   void setGeometry(const QRectF &rect);
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-    enum {
-        Type = 12
-    };
-    int type() const;
+   enum {
+      Type = 12
+   };
+   int type() const;
 
-    QGraphicsProxyWidget *createProxyForChildWidget(QWidget *child);
+   QGraphicsProxyWidget *createProxyForChildWidget(QWidget *child);
 
-protected:
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+ protected:
+   QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
-    bool event(QEvent *event);
-    bool eventFilter(QObject *object, QEvent *event);
+   bool event(QEvent *event);
+   bool eventFilter(QObject *object, QEvent *event);
 
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
+   void showEvent(QShowEvent *event);
+   void hideEvent(QHideEvent *event);
 
 #ifndef QT_NO_CONTEXTMENU
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+   void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 #endif
 
 #ifndef QT_NO_DRAGANDDROP
-    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
-    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
-    void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
-    void dropEvent(QGraphicsSceneDragDropEvent *event);
+   void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+   void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+   void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
+   void dropEvent(QGraphicsSceneDragDropEvent *event);
 #endif
 
-    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
-    void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
-    void grabMouseEvent(QEvent *event);
-    void ungrabMouseEvent(QEvent *event);
+   void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+   void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+   void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
+   void grabMouseEvent(QEvent *event);
+   void ungrabMouseEvent(QEvent *event);
 
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+   void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+   void mousePressEvent(QGraphicsSceneMouseEvent *event);
+   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+   void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
 #ifndef QT_NO_WHEELEVENT
-    void wheelEvent(QGraphicsSceneWheelEvent *event);
+   void wheelEvent(QGraphicsSceneWheelEvent *event);
 #endif
 
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+   void keyPressEvent(QKeyEvent *event);
+   void keyReleaseEvent(QKeyEvent *event);
 
-    void focusInEvent(QFocusEvent *event);
-    void focusOutEvent(QFocusEvent *event);
-    bool focusNextPrevChild(bool next);
-    // ### Qt 4.5:
-    // QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
-    // void inputMethodEvent(QInputMethodEvent *event);
+   void focusInEvent(QFocusEvent *event);
+   void focusOutEvent(QFocusEvent *event);
+   bool focusNextPrevChild(bool next);
+   // ### Qt 4.5:
+   // QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+   // void inputMethodEvent(QInputMethodEvent *event);
 
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
-    void resizeEvent(QGraphicsSceneResizeEvent *event);
+   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+   void resizeEvent(QGraphicsSceneResizeEvent *event);
 
-    GUI_CS_SLOT_1(Protected, QGraphicsProxyWidget* newProxyWidget(const QWidget * un_named_arg1))
-    GUI_CS_SLOT_2(newProxyWidget) 
+   GUI_CS_SLOT_1(Protected, QGraphicsProxyWidget *newProxyWidget(const QWidget *un_named_arg1))
+   GUI_CS_SLOT_2(newProxyWidget)
 
-private:
-    Q_DISABLE_COPY(QGraphicsProxyWidget)
-    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QGraphicsProxyWidget)
+ private:
+   Q_DISABLE_COPY(QGraphicsProxyWidget)
+   Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QGraphicsProxyWidget)
 
-    GUI_CS_SLOT_1(Private, void _q_removeWidgetSlot())
-    GUI_CS_SLOT_2(_q_removeWidgetSlot)
+   GUI_CS_SLOT_1(Private, void _q_removeWidgetSlot())
+   GUI_CS_SLOT_2(_q_removeWidgetSlot)
 
-    friend class QWidget;
-    friend class QWidgetPrivate;
-    friend class QGraphicsItem;
+   friend class QWidget;
+   friend class QWidgetPrivate;
+   friend class QGraphicsItem;
 };
 
 #endif

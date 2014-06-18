@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,33 +37,37 @@ class QPaintDevice;
 
 class Q_GUI_EXPORT QEglProperties
 {
-public:
-    QEglProperties();
-    QEglProperties(EGLConfig);
-    QEglProperties(const QEglProperties& other) : props(other.props) {}
-    ~QEglProperties() {}
+ public:
+   QEglProperties();
+   QEglProperties(EGLConfig);
+   QEglProperties(const QEglProperties &other) : props(other.props) {}
+   ~QEglProperties() {}
 
-    int value(int name) const;
-    void setValue(int name, int value);
-    bool removeValue(int name);
-    bool isEmpty() const { return props[0] == EGL_NONE; }
+   int value(int name) const;
+   void setValue(int name, int value);
+   bool removeValue(int name);
+   bool isEmpty() const {
+      return props[0] == EGL_NONE;
+   }
 
-    const EGLint *properties() const { return props.constData(); }
+   const EGLint *properties() const {
+      return props.constData();
+   }
 
-    void setPixelFormat(QImage::Format pixelFormat);
+   void setPixelFormat(QImage::Format pixelFormat);
 #ifdef Q_WS_X11
-    void setVisualFormat(const QX11Info *xinfo);
+   void setVisualFormat(const QX11Info *xinfo);
 #endif
-    void setDeviceType(int devType);
-    void setPaintDeviceFormat(QPaintDevice *dev);
-    void setRenderableType(QEgl::API api);
+   void setDeviceType(int devType);
+   void setPaintDeviceFormat(QPaintDevice *dev);
+   void setRenderableType(QEgl::API api);
 
-    bool reduceConfiguration();
+   bool reduceConfiguration();
 
-    QString toString() const;
+   QString toString() const;
 
-private:
-    QVarLengthArray<EGLint> props;
+ private:
+   QVarLengthArray<EGLint> props;
 };
 
 QT_END_NAMESPACE

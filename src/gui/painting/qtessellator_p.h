@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,34 +40,35 @@ typedef int Q27Dot5;
 #define Q27Dot5ToXFixed(i) ((i) << 11)
 #define Q27Dot5Factor 32
 
-class Q_GUI_EXPORT QTessellator {
-public:
-    QTessellator();
-    virtual ~QTessellator();
+class Q_GUI_EXPORT QTessellator
+{
+ public:
+   QTessellator();
+   virtual ~QTessellator();
 
-    QRectF tessellate(const QPointF *points, int nPoints);
-    void tessellateConvex(const QPointF *points, int nPoints);
-    void tessellateRect(const QPointF &a, const QPointF &b, qreal width);
+   QRectF tessellate(const QPointF *points, int nPoints);
+   void tessellateConvex(const QPointF *points, int nPoints);
+   void tessellateRect(const QPointF &a, const QPointF &b, qreal width);
 
-    void setWinding(bool w);
+   void setWinding(bool w);
 
-    struct Vertex {
-        Q27Dot5 x;
-        Q27Dot5 y;
-    };
-    struct Trapezoid {
-        Q27Dot5 top;
-        Q27Dot5 bottom;
-        const Vertex *topLeft;
-        const Vertex *bottomLeft;
-        const Vertex *topRight;
-        const Vertex *bottomRight;
-    };
-    virtual void addTrap(const Trapezoid &trap) = 0;
+   struct Vertex {
+      Q27Dot5 x;
+      Q27Dot5 y;
+   };
+   struct Trapezoid {
+      Q27Dot5 top;
+      Q27Dot5 bottom;
+      const Vertex *topLeft;
+      const Vertex *bottomLeft;
+      const Vertex *topRight;
+      const Vertex *bottomRight;
+   };
+   virtual void addTrap(const Trapezoid &trap) = 0;
 
-private:
-    friend class QTessellatorPrivate;
-    QTessellatorPrivate *d;
+ private:
+   friend class QTessellatorPrivate;
+   QTessellatorPrivate *d;
 };
 
 QT_END_NAMESPACE

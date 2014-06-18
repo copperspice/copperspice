@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,15 +37,15 @@ class QWSPcMouseHandlerPrivate;
 class QWSPcMouseHandler : public QWSMouseHandler
 {
 
-public:
-    explicit QWSPcMouseHandler(const QString & = QString(),const QString & = QString());
-    ~QWSPcMouseHandler();
+ public:
+   explicit QWSPcMouseHandler(const QString & = QString(), const QString & = QString());
+   ~QWSPcMouseHandler();
 
-    void suspend();
-    void resume();
+   void suspend();
+   void resume();
 
-protected:
-    QWSPcMouseHandlerPrivate *d;
+ protected:
+   QWSPcMouseHandlerPrivate *d;
 };
 
 #endif // QT_NO_QWS_MOUSE_PC

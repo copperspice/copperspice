@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,10 +42,10 @@ QT_BEGIN_NAMESPACE
 /*!
     Constructs a new key mapper.
 */
-QKeyMapper::QKeyMapper()    
-	: QObject(0), d_ptr(new QKeyMapperPrivate)
+QKeyMapper::QKeyMapper()
+   : QObject(0), d_ptr(new QKeyMapperPrivate)
 {
-   d_ptr->q_ptr = this;	
+   d_ptr->q_ptr = this;
 }
 
 /*!
@@ -57,31 +57,32 @@ QKeyMapper::~QKeyMapper()
 
 QList<int> QKeyMapper::possibleKeys(QKeyEvent *e)
 {
-    QList<int> result;
+   QList<int> result;
 
-    if (!e->nativeScanCode()) {
-        if (e->key() && (e->key() != Qt::Key_unknown))
-            result << int(e->key() + e->modifiers());
-        else if (!e->text().isEmpty())
-            result << int(e->text().at(0).unicode() + e->modifiers());
-        return result;
-    }
+   if (!e->nativeScanCode()) {
+      if (e->key() && (e->key() != Qt::Key_unknown)) {
+         result << int(e->key() + e->modifiers());
+      } else if (!e->text().isEmpty()) {
+         result << int(e->text().at(0).unicode() + e->modifiers());
+      }
+      return result;
+   }
 
-    return instance()->d_func()->possibleKeys(e);
+   return instance()->d_func()->possibleKeys(e);
 }
 
 extern bool qt_sendSpontaneousEvent(QObject *receiver, QEvent *event); // in qapplication_*.cpp
 void QKeyMapper::changeKeyboard()
 {
-    instance()->d_func()->clearMappings();
+   instance()->d_func()->clearMappings();
 
-    // inform all toplevel widgets of the change
-    QEvent e(QEvent::KeyboardLayoutChange);
-    QWidgetList list = QApplication::topLevelWidgets();
-    for (int i = 0; i < list.size(); ++i) {
-        QWidget *w = list.at(i);
-        qt_sendSpontaneousEvent(w, &e);
-    }
+   // inform all toplevel widgets of the change
+   QEvent e(QEvent::KeyboardLayoutChange);
+   QWidgetList list = QApplication::topLevelWidgets();
+   for (int i = 0; i < list.size(); ++i) {
+      QWidget *w = list.at(i);
+      qt_sendSpontaneousEvent(w, &e);
+   }
 }
 
 Q_GLOBAL_STATIC(QKeyMapper, keymapper)
@@ -91,12 +92,12 @@ Q_GLOBAL_STATIC(QKeyMapper, keymapper)
 */
 QKeyMapper *QKeyMapper::instance()
 {
-    return keymapper();
+   return keymapper();
 }
 
 QKeyMapperPrivate *qt_keymapper_private()
 {
-    return QKeyMapper::instance()->d_func();
+   return QKeyMapper::instance()->d_func();
 }
 
 QT_END_NAMESPACE

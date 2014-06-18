@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,45 +40,45 @@ class QIcon;
 
 class Q_GUI_EXPORT QUndoView : public QListView
 {
-    CS_OBJECT(QUndoView)
-    Q_DECLARE_PRIVATE(QUndoView)
+   CS_OBJECT(QUndoView)
+   Q_DECLARE_PRIVATE(QUndoView)
 
-    GUI_CS_PROPERTY_READ(emptyLabel, emptyLabel)
-    GUI_CS_PROPERTY_WRITE(emptyLabel, setEmptyLabel)
-    GUI_CS_PROPERTY_READ(cleanIcon, cleanIcon)
-    GUI_CS_PROPERTY_WRITE(cleanIcon, setCleanIcon)
+   GUI_CS_PROPERTY_READ(emptyLabel, emptyLabel)
+   GUI_CS_PROPERTY_WRITE(emptyLabel, setEmptyLabel)
+   GUI_CS_PROPERTY_READ(cleanIcon, cleanIcon)
+   GUI_CS_PROPERTY_WRITE(cleanIcon, setCleanIcon)
 
-public:
-    explicit QUndoView(QWidget *parent = 0);
-    explicit QUndoView(QUndoStack *stack, QWidget *parent = 0);
-
-#ifndef QT_NO_UNDOGROUP
-    explicit QUndoView(QUndoGroup *group, QWidget *parent = 0);
-#endif
-
-    ~QUndoView();
-    QUndoStack *stack() const;
+ public:
+   explicit QUndoView(QWidget *parent = 0);
+   explicit QUndoView(QUndoStack *stack, QWidget *parent = 0);
 
 #ifndef QT_NO_UNDOGROUP
-    QUndoGroup *group() const;
+   explicit QUndoView(QUndoGroup *group, QWidget *parent = 0);
 #endif
 
-    void setEmptyLabel(const QString &label);
-    QString emptyLabel() const;
-
-    void setCleanIcon(const QIcon &icon);
-    QIcon cleanIcon() const;
-
-    GUI_CS_SLOT_1(Public, void setStack(QUndoStack * stack))
-    GUI_CS_SLOT_2(setStack) 
+   ~QUndoView();
+   QUndoStack *stack() const;
 
 #ifndef QT_NO_UNDOGROUP
-    GUI_CS_SLOT_1(Public, void setGroup(QUndoGroup * group))
-    GUI_CS_SLOT_2(setGroup) 
+   QUndoGroup *group() const;
 #endif
 
-private:
-    Q_DISABLE_COPY(QUndoView)
+   void setEmptyLabel(const QString &label);
+   QString emptyLabel() const;
+
+   void setCleanIcon(const QIcon &icon);
+   QIcon cleanIcon() const;
+
+   GUI_CS_SLOT_1(Public, void setStack(QUndoStack *stack))
+   GUI_CS_SLOT_2(setStack)
+
+#ifndef QT_NO_UNDOGROUP
+   GUI_CS_SLOT_1(Public, void setGroup(QUndoGroup *group))
+   GUI_CS_SLOT_2(setGroup)
+#endif
+
+ private:
+   Q_DISABLE_COPY(QUndoView)
 };
 
 QT_END_NAMESPACE

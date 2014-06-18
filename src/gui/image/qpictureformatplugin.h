@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,12 +38,11 @@ class QImage;
 class QString;
 class QStringList;
 
-struct Q_GUI_EXPORT QPictureFormatInterface : public QFactoryInterface
-{
-    virtual bool loadPicture(const QString &format, const QString &filename, QPicture *) = 0;
-    virtual bool savePicture(const QString &format, const QString &filename, const QPicture &) = 0;
+struct Q_GUI_EXPORT QPictureFormatInterface : public QFactoryInterface {
+   virtual bool loadPicture(const QString &format, const QString &filename, QPicture *) = 0;
+   virtual bool savePicture(const QString &format, const QString &filename, const QPicture &) = 0;
 
-    virtual bool installIOHandler(const QString &) = 0;
+   virtual bool installIOHandler(const QString &) = 0;
 };
 
 #define QPictureFormatInterface_iid "com.copperspice.QPictureFormatInterface"
@@ -52,17 +51,17 @@ CS_DECLARE_INTERFACE(QPictureFormatInterface, QPictureFormatInterface_iid)
 
 class Q_GUI_EXPORT QPictureFormatPlugin : public QObject, public QPictureFormatInterface
 {
-    CS_OBJECT(QPictureFormatPlugin)
-    CS_INTERFACES(QPictureFormatInterface, QFactoryInterface)
+   CS_OBJECT(QPictureFormatPlugin)
+   CS_INTERFACES(QPictureFormatInterface, QFactoryInterface)
 
-   public:
-       explicit QPictureFormatPlugin(QObject *parent = 0);
-       ~QPictureFormatPlugin();
+ public:
+   explicit QPictureFormatPlugin(QObject *parent = 0);
+   ~QPictureFormatPlugin();
 
-       virtual QStringList keys() const = 0;
-       virtual bool loadPicture(const QString &format, const QString &filename, QPicture *pic);
-       virtual bool savePicture(const QString &format, const QString &filename, const QPicture &pic);
-       virtual bool installIOHandler(const QString &format) = 0;
+   virtual QStringList keys() const = 0;
+   virtual bool loadPicture(const QString &format, const QString &filename, QPicture *pic);
+   virtual bool savePicture(const QString &format, const QString &filename, const QPicture &pic);
+   virtual bool installIOHandler(const QString &format) = 0;
 
 };
 

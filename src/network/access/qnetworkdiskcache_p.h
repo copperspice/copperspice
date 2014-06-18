@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,59 +39,58 @@ class QFile;
 
 class QCacheItem
 {
-public:
-    QCacheItem() : file(0)
-    {
-    }
-    ~QCacheItem()
-    {
-        reset();
-    }
+ public:
+   QCacheItem() : file(0) {
+   }
+   ~QCacheItem() {
+      reset();
+   }
 
-    QNetworkCacheMetaData metaData;
-    QBuffer data;
-    QTemporaryFile *file;
-    inline qint64 size() const
-        { return file ? file->size() : data.size(); }
+   QNetworkCacheMetaData metaData;
+   QBuffer data;
+   QTemporaryFile *file;
+   inline qint64 size() const {
+      return file ? file->size() : data.size();
+   }
 
-    inline void reset() {
-        metaData = QNetworkCacheMetaData();
-        data.close();
-        delete file;
-        file = 0;
-    }
-    void writeHeader(QFile *device) const;
-    void writeCompressedData(QFile *device) const;
-    bool read(QFile *device, bool readData);
+   inline void reset() {
+      metaData = QNetworkCacheMetaData();
+      data.close();
+      delete file;
+      file = 0;
+   }
+   void writeHeader(QFile *device) const;
+   void writeCompressedData(QFile *device) const;
+   bool read(QFile *device, bool readData);
 
-    bool canCompress() const;
+   bool canCompress() const;
 };
 
 class QNetworkDiskCachePrivate : public QAbstractNetworkCachePrivate
 {
-public:
-    QNetworkDiskCachePrivate()
-        : QAbstractNetworkCachePrivate()
-        , maximumCacheSize(1024 * 1024 * 50)
-        , currentCacheSize(-1)
-        {}
+ public:
+   QNetworkDiskCachePrivate()
+      : QAbstractNetworkCachePrivate()
+      , maximumCacheSize(1024 * 1024 * 50)
+      , currentCacheSize(-1) {
+   }
 
-    static QString uniqueFileName(const QUrl &url);
-    QString cacheFileName(const QUrl &url) const;
-    QString tmpCacheFileName() const;
-    bool removeFile(const QString &file);
-    void storeItem(QCacheItem *item);
-    void prepareLayout();
-    static quint32 crc32(const char *data, uint len);
+   static QString uniqueFileName(const QUrl &url);
+   QString cacheFileName(const QUrl &url) const;
+   QString tmpCacheFileName() const;
+   bool removeFile(const QString &file);
+   void storeItem(QCacheItem *item);
+   void prepareLayout();
+   static quint32 crc32(const char *data, uint len);
 
-    mutable QCacheItem lastItem;
-    QString cacheDirectory;
-    QString dataDirectory;
-    qint64 maximumCacheSize;
-    qint64 currentCacheSize;
+   mutable QCacheItem lastItem;
+   QString cacheDirectory;
+   QString dataDirectory;
+   qint64 maximumCacheSize;
+   qint64 currentCacheSize;
 
-    QHash<QIODevice*, QCacheItem*> inserting;
-    Q_DECLARE_PUBLIC(QNetworkDiskCache)
+   QHash<QIODevice *, QCacheItem *> inserting;
+   Q_DECLARE_PUBLIC(QNetworkDiskCache)
 };
 
 QT_END_NAMESPACE

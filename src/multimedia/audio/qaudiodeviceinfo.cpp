@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,41 +33,37 @@ QT_BEGIN_NAMESPACE
 
 class QAudioDeviceInfoPrivate : public QSharedData
 {
-public:
-    QAudioDeviceInfoPrivate():info(0) {}
-    QAudioDeviceInfoPrivate(const QString &r, const QByteArray &h, QAudio::Mode m):
-        realm(r), handle(h), mode(m)
-    {
-        info = QAudioDeviceFactory::audioDeviceInfo(realm, handle, mode);
-    }
+ public:
+   QAudioDeviceInfoPrivate(): info(0) {}
+   QAudioDeviceInfoPrivate(const QString &r, const QByteArray &h, QAudio::Mode m):
+      realm(r), handle(h), mode(m) {
+      info = QAudioDeviceFactory::audioDeviceInfo(realm, handle, mode);
+   }
 
-    QAudioDeviceInfoPrivate(const QAudioDeviceInfoPrivate &other):
-        QSharedData(other),
-        realm(other.realm), handle(other.handle), mode(other.mode)
-    {
-        info = QAudioDeviceFactory::audioDeviceInfo(realm, handle, mode);
-    }
+   QAudioDeviceInfoPrivate(const QAudioDeviceInfoPrivate &other):
+      QSharedData(other),
+      realm(other.realm), handle(other.handle), mode(other.mode) {
+      info = QAudioDeviceFactory::audioDeviceInfo(realm, handle, mode);
+   }
 
-    QAudioDeviceInfoPrivate& operator=(const QAudioDeviceInfoPrivate &other)
-    {
-        delete info;
+   QAudioDeviceInfoPrivate &operator=(const QAudioDeviceInfoPrivate &other) {
+      delete info;
 
-        realm = other.realm;
-        handle = other.handle;
-        mode = other.mode;
-        info = QAudioDeviceFactory::audioDeviceInfo(realm, handle, mode);
-        return *this;
-    }
+      realm = other.realm;
+      handle = other.handle;
+      mode = other.mode;
+      info = QAudioDeviceFactory::audioDeviceInfo(realm, handle, mode);
+      return *this;
+   }
 
-    ~QAudioDeviceInfoPrivate()
-    {
-        delete info;
-    }
+   ~QAudioDeviceInfoPrivate() {
+      delete info;
+   }
 
-    QString     realm;
-    QByteArray  handle;
-    QAudio::Mode mode;
-    QAbstractAudioDeviceInfo*   info;
+   QString     realm;
+   QByteArray  handle;
+   QAudio::Mode mode;
+   QAbstractAudioDeviceInfo   *info;
 };
 
 
@@ -130,7 +126,7 @@ public:
 */
 
 QAudioDeviceInfo::QAudioDeviceInfo():
-    d(new QAudioDeviceInfoPrivate)
+   d(new QAudioDeviceInfoPrivate)
 {
 }
 
@@ -138,8 +134,8 @@ QAudioDeviceInfo::QAudioDeviceInfo():
     Constructs a copy of \a other.
 */
 
-QAudioDeviceInfo::QAudioDeviceInfo(const QAudioDeviceInfo& other):
-    d(other.d)
+QAudioDeviceInfo::QAudioDeviceInfo(const QAudioDeviceInfo &other):
+   d(other.d)
 {
 }
 
@@ -155,10 +151,10 @@ QAudioDeviceInfo::~QAudioDeviceInfo()
     Sets the QAudioDeviceInfo object to be equal to \a other.
 */
 
-QAudioDeviceInfo& QAudioDeviceInfo::operator=(const QAudioDeviceInfo &other)
+QAudioDeviceInfo &QAudioDeviceInfo::operator=(const QAudioDeviceInfo &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -167,7 +163,7 @@ QAudioDeviceInfo& QAudioDeviceInfo::operator=(const QAudioDeviceInfo &other)
 
 bool QAudioDeviceInfo::isNull() const
 {
-    return d->info == 0;
+   return d->info == 0;
 }
 
 /*!
@@ -182,7 +178,7 @@ bool QAudioDeviceInfo::isNull() const
 
 QString QAudioDeviceInfo::deviceName() const
 {
-    return isNull() ? QString() : d->info->deviceName();
+   return isNull() ? QString() : d->info->deviceName();
 }
 
 /*!
@@ -191,7 +187,7 @@ QString QAudioDeviceInfo::deviceName() const
 
 bool QAudioDeviceInfo::isFormatSupported(const QAudioFormat &settings) const
 {
-    return isNull() ? false : d->info->isFormatSupported(settings);
+   return isNull() ? false : d->info->isFormatSupported(settings);
 }
 
 /*!
@@ -210,7 +206,7 @@ bool QAudioDeviceInfo::isFormatSupported(const QAudioFormat &settings) const
 
 QAudioFormat QAudioDeviceInfo::preferredFormat() const
 {
-    return isNull() ? QAudioFormat() : d->info->preferredFormat();
+   return isNull() ? QAudioFormat() : d->info->preferredFormat();
 }
 
 /*!
@@ -223,66 +219,70 @@ QAudioFormat QAudioDeviceInfo::preferredFormat() const
 
 QAudioFormat QAudioDeviceInfo::nearestFormat(const QAudioFormat &settings) const
 {
-    if (isFormatSupported(settings))
-        return settings;
+   if (isFormatSupported(settings)) {
+      return settings;
+   }
 
-    QAudioFormat nearest = settings;
+   QAudioFormat nearest = settings;
 
-    nearest.setCodec(QLatin1String("audio/pcm"));
+   nearest.setCodec(QLatin1String("audio/pcm"));
 
-    if (nearest.sampleType() == QAudioFormat::Unknown) {
-        QAudioFormat preferred = preferredFormat();
-        nearest.setSampleType(preferred.sampleType());
-    }
+   if (nearest.sampleType() == QAudioFormat::Unknown) {
+      QAudioFormat preferred = preferredFormat();
+      nearest.setSampleType(preferred.sampleType());
+   }
 
-    QMap<int,int> testFrequencies;
-    QList<int> frequenciesAvailable = supportedFrequencies();
-    QMap<int,int> testSampleSizes;
-    QList<int> sampleSizesAvailable = supportedSampleSizes();
+   QMap<int, int> testFrequencies;
+   QList<int> frequenciesAvailable = supportedFrequencies();
+   QMap<int, int> testSampleSizes;
+   QList<int> sampleSizesAvailable = supportedSampleSizes();
 
-    // Get sorted sampleSizes (equal to and ascending values only)
-    if (sampleSizesAvailable.contains(settings.sampleSize()))
-        testSampleSizes.insert(0,settings.sampleSize());
-    sampleSizesAvailable.removeAll(settings.sampleSize());
-    foreach (int size, sampleSizesAvailable) {
-        int larger  = (size > settings.sampleSize()) ? size : settings.sampleSize();
-        int smaller = (size > settings.sampleSize()) ? settings.sampleSize() : size;
-        if (size >= settings.sampleSize()) {
-            int diff = larger - smaller;
-            testSampleSizes.insert(diff, size);
-        }
-    }
+   // Get sorted sampleSizes (equal to and ascending values only)
+   if (sampleSizesAvailable.contains(settings.sampleSize())) {
+      testSampleSizes.insert(0, settings.sampleSize());
+   }
+   sampleSizesAvailable.removeAll(settings.sampleSize());
+   foreach (int size, sampleSizesAvailable) {
+      int larger  = (size > settings.sampleSize()) ? size : settings.sampleSize();
+      int smaller = (size > settings.sampleSize()) ? settings.sampleSize() : size;
+      if (size >= settings.sampleSize()) {
+         int diff = larger - smaller;
+         testSampleSizes.insert(diff, size);
+      }
+   }
 
-    // Get sorted frequencies (equal to and ascending values only)
-    if (frequenciesAvailable.contains(settings.frequency()))
-        testFrequencies.insert(0,settings.frequency());
-    frequenciesAvailable.removeAll(settings.frequency());
-    foreach (int frequency, frequenciesAvailable) {
-        int larger  = (frequency > settings.frequency()) ? frequency : settings.frequency();
-        int smaller = (frequency > settings.frequency()) ? settings.frequency() : frequency;
-        if (frequency >= settings.frequency()) {
-            int diff = larger - smaller;
-            testFrequencies.insert(diff, frequency);
-        }
-    }
+   // Get sorted frequencies (equal to and ascending values only)
+   if (frequenciesAvailable.contains(settings.frequency())) {
+      testFrequencies.insert(0, settings.frequency());
+   }
+   frequenciesAvailable.removeAll(settings.frequency());
+   foreach (int frequency, frequenciesAvailable) {
+      int larger  = (frequency > settings.frequency()) ? frequency : settings.frequency();
+      int smaller = (frequency > settings.frequency()) ? settings.frequency() : frequency;
+      if (frequency >= settings.frequency()) {
+         int diff = larger - smaller;
+         testFrequencies.insert(diff, frequency);
+      }
+   }
 
-    // Try to find nearest
-    // Check ascending frequencies, ascending sampleSizes
-    QMapIterator<int, int> sz(testSampleSizes);
-    while (sz.hasNext()) {
-        sz.next();
-        nearest.setSampleSize(sz.value());
-        QMapIterator<int, int> i(testFrequencies);
-        while (i.hasNext()) {
-            i.next();
-            nearest.setFrequency(i.value());
-            if (isFormatSupported(nearest))
-                return nearest;
-        }
-    }
+   // Try to find nearest
+   // Check ascending frequencies, ascending sampleSizes
+   QMapIterator<int, int> sz(testSampleSizes);
+   while (sz.hasNext()) {
+      sz.next();
+      nearest.setSampleSize(sz.value());
+      QMapIterator<int, int> i(testFrequencies);
+      while (i.hasNext()) {
+         i.next();
+         nearest.setFrequency(i.value());
+         if (isFormatSupported(nearest)) {
+            return nearest;
+         }
+      }
+   }
 
-    //Fallback
-    return preferredFormat();
+   //Fallback
+   return preferredFormat();
 }
 
 /*!
@@ -299,7 +299,7 @@ QAudioFormat QAudioDeviceInfo::nearestFormat(const QAudioFormat &settings) const
 
 QStringList QAudioDeviceInfo::supportedCodecs() const
 {
-    return isNull() ? QStringList() : d->info->codecList();
+   return isNull() ? QStringList() : d->info->codecList();
 }
 
 /*!
@@ -310,7 +310,7 @@ QStringList QAudioDeviceInfo::supportedCodecs() const
 
 QList<int> QAudioDeviceInfo::supportedSampleRates() const
 {
-    return supportedFrequencies();
+   return supportedFrequencies();
 }
 
 /*!
@@ -321,7 +321,7 @@ QList<int> QAudioDeviceInfo::supportedSampleRates() const
 
 QList<int> QAudioDeviceInfo::supportedFrequencies() const
 {
-    return isNull() ? QList<int>() : d->info->frequencyList();
+   return isNull() ? QList<int>() : d->info->frequencyList();
 }
 
 /*!
@@ -332,7 +332,7 @@ QList<int> QAudioDeviceInfo::supportedFrequencies() const
 
 QList<int> QAudioDeviceInfo::supportedChannelCounts() const
 {
-    return supportedChannels();
+   return supportedChannels();
 }
 
 /*!
@@ -343,7 +343,7 @@ QList<int> QAudioDeviceInfo::supportedChannelCounts() const
 
 QList<int> QAudioDeviceInfo::supportedChannels() const
 {
-    return isNull() ? QList<int>() : d->info->channelsList();
+   return isNull() ? QList<int>() : d->info->channelsList();
 }
 
 /*!
@@ -352,7 +352,7 @@ QList<int> QAudioDeviceInfo::supportedChannels() const
 
 QList<int> QAudioDeviceInfo::supportedSampleSizes() const
 {
-    return isNull() ? QList<int>() : d->info->sampleSizeList();
+   return isNull() ? QList<int>() : d->info->sampleSizeList();
 }
 
 /*!
@@ -361,7 +361,7 @@ QList<int> QAudioDeviceInfo::supportedSampleSizes() const
 
 QList<QAudioFormat::Endian> QAudioDeviceInfo::supportedByteOrders() const
 {
-    return isNull() ? QList<QAudioFormat::Endian>() : d->info->byteOrderList();
+   return isNull() ? QList<QAudioFormat::Endian>() : d->info->byteOrderList();
 }
 
 /*!
@@ -370,7 +370,7 @@ QList<QAudioFormat::Endian> QAudioDeviceInfo::supportedByteOrders() const
 
 QList<QAudioFormat::SampleType> QAudioDeviceInfo::supportedSampleTypes() const
 {
-    return isNull() ? QList<QAudioFormat::SampleType>() : d->info->sampleTypeList();
+   return isNull() ? QList<QAudioFormat::SampleType>() : d->info->sampleTypeList();
 }
 
 /*!
@@ -380,7 +380,7 @@ QList<QAudioFormat::SampleType> QAudioDeviceInfo::supportedSampleTypes() const
 
 QAudioDeviceInfo QAudioDeviceInfo::defaultInputDevice()
 {
-    return QAudioDeviceFactory::defaultInputDevice();
+   return QAudioDeviceFactory::defaultInputDevice();
 }
 
 /*!
@@ -390,7 +390,7 @@ QAudioDeviceInfo QAudioDeviceInfo::defaultInputDevice()
 
 QAudioDeviceInfo QAudioDeviceInfo::defaultOutputDevice()
 {
-    return QAudioDeviceFactory::defaultOutputDevice();
+   return QAudioDeviceFactory::defaultOutputDevice();
 }
 
 /*!
@@ -399,7 +399,7 @@ QAudioDeviceInfo QAudioDeviceInfo::defaultOutputDevice()
 
 QList<QAudioDeviceInfo> QAudioDeviceInfo::availableDevices(QAudio::Mode mode)
 {
-    return QAudioDeviceFactory::availableDevices(mode);
+   return QAudioDeviceFactory::availableDevices(mode);
 }
 
 
@@ -408,7 +408,7 @@ QList<QAudioDeviceInfo> QAudioDeviceInfo::availableDevices(QAudio::Mode mode)
 */
 
 QAudioDeviceInfo::QAudioDeviceInfo(const QString &realm, const QByteArray &handle, QAudio::Mode mode):
-    d(new QAudioDeviceInfoPrivate(realm, handle, mode))
+   d(new QAudioDeviceInfoPrivate(realm, handle, mode))
 {
 }
 
@@ -418,7 +418,7 @@ QAudioDeviceInfo::QAudioDeviceInfo(const QString &realm, const QByteArray &handl
 
 QString QAudioDeviceInfo::realm() const
 {
-    return d->realm;
+   return d->realm;
 }
 
 /*!
@@ -427,7 +427,7 @@ QString QAudioDeviceInfo::realm() const
 
 QByteArray QAudioDeviceInfo::handle() const
 {
-    return d->handle;
+   return d->handle;
 }
 
 
@@ -437,7 +437,7 @@ QByteArray QAudioDeviceInfo::handle() const
 
 QAudio::Mode QAudioDeviceInfo::mode() const
 {
-    return d->mode;
+   return d->mode;
 }
 
 QT_END_NAMESPACE

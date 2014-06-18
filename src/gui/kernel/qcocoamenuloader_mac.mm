@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,9 +38,9 @@ QT_FORWARD_DECLARE_CLASS(QCFString)
 QT_FORWARD_DECLARE_CLASS(QString)
 
 #ifndef QT_NO_TRANSLATION
-    QT_BEGIN_NAMESPACE
-    extern QString qt_mac_applicationmenu_string(int type);
-    QT_END_NAMESPACE
+QT_BEGIN_NAMESPACE
+extern QString qt_mac_applicationmenu_string(int type);
+QT_END_NAMESPACE
 #endif
 
 QT_USE_NAMESPACE
@@ -49,228 +49,232 @@ QT_USE_NAMESPACE
 
 - (void)awakeFromNib
 {
-    servicesItem = [[appMenu itemWithTitle:@"Services"] retain];
-    hideAllOthersItem = [[appMenu itemWithTitle:@"Hide Others"] retain];
-    showAllItem = [[appMenu itemWithTitle:@"Show All"] retain];
+   servicesItem = [[appMenu itemWithTitle: @"Services"] retain];
+   hideAllOthersItem = [[appMenu itemWithTitle: @"Hide Others"] retain];
+   showAllItem = [[appMenu itemWithTitle: @"Show All"] retain];
 
-    // Get the names in the nib to match the app name set by Qt.
-    const NSString *appName = reinterpret_cast<const NSString*>(QCFString::toCFStringRef(qAppName()));
-    [quitItem setTitle:[[quitItem title] stringByReplacingOccurrencesOfString:@"NewApplication"
-                                                                   withString:const_cast<NSString *>(appName)]];
-    [hideItem setTitle:[[hideItem title] stringByReplacingOccurrencesOfString:@"NewApplication"
-                                                                   withString:const_cast<NSString *>(appName)]];
-    [aboutItem setTitle:[[aboutItem title] stringByReplacingOccurrencesOfString:@"NewApplication"
-                                                                   withString:const_cast<NSString *>(appName)]];
-    [appName release];
-    // Disable the items that don't do anything. If someone associates a QAction with them
-    // They should get synced back in.
-    [preferencesItem setEnabled:NO];
-    [preferencesItem setHidden:YES];
-    [aboutItem setEnabled:NO];
-    [aboutItem setHidden:YES];
+   // Get the names in the nib to match the app name set by Qt.
+   const NSString *appName = reinterpret_cast<const NSString *>(QCFString::toCFStringRef(qAppName()));
+   [quitItem setTitle: [[quitItem title] stringByReplacingOccurrencesOfString: @"NewApplication"
+                        withString: const_cast<NSString *>(appName)]];
+   [hideItem setTitle: [[hideItem title] stringByReplacingOccurrencesOfString: @"NewApplication"
+                        withString: const_cast<NSString *>(appName)]];
+   [aboutItem setTitle: [[aboutItem title] stringByReplacingOccurrencesOfString: @"NewApplication"
+                         withString: const_cast<NSString *>(appName)]];
+   [appName release];
+   // Disable the items that don't do anything. If someone associates a QAction with them
+   // They should get synced back in.
+   [preferencesItem setEnabled: NO];
+   [preferencesItem setHidden: YES];
+   [aboutItem setEnabled: NO];
+   [aboutItem setHidden: YES];
 }
 
-- (void)ensureAppMenuInMenu:(NSMenu *)menu
+- (void)ensureAppMenuInMenu: (NSMenu *)menu
 {
-    // The application menu is the menu in the menu bar that contains the
-    // 'Quit' item. When changing menu bar (e.g when switching between
-    // windows with different menu bars), we never recreate this menu, but
-    // instead pull it out the current menu bar and place into the new one:
-    NSMenu *mainMenu = [[NSApplication sharedApplication] mainMenu];
-    if (mainMenu == menu)
-        return; // nothing to do (menu is the current menu bar)!
+   // The application menu is the menu in the menu bar that contains the
+   // 'Quit' item. When changing menu bar (e.g when switching between
+   // windows with different menu bars), we never recreate this menu, but
+   // instead pull it out the current menu bar and place into the new one:
+   NSMenu *mainMenu = [[NSApplication sharedApplication] mainMenu];
+   if (mainMenu == menu) {
+      return;   // nothing to do (menu is the current menu bar)!
+   }
 
-    if (!mainMenu)
-        return;
+   if (!mainMenu) {
+      return;
+   }
 
-    // Grab the app menu out of the current menu.
-    int numItems = [mainMenu numberOfItems];
-    NSMenuItem *oldAppMenuItem = 0;
-    for (int i = 0; i < numItems; ++i) {
-        NSMenuItem *item = [mainMenu itemAtIndex:i];
-        if ([item submenu] == appMenu) {
-            oldAppMenuItem = item;
-            [oldAppMenuItem retain];
-            [mainMenu removeItemAtIndex:i];
-            break;
-        }
-    }
+   // Grab the app menu out of the current menu.
+   int numItems = [mainMenu numberOfItems];
+   NSMenuItem *oldAppMenuItem = 0;
+   for (int i = 0; i < numItems; ++i) {
+      NSMenuItem *item = [mainMenu itemAtIndex: i];
+      if ([item submenu] == appMenu) {
+         oldAppMenuItem = item;
+         [oldAppMenuItem retain];
+         [mainMenu removeItemAtIndex: i];
+         break;
+      }
+   }
 
-    if (oldAppMenuItem) {
-        [oldAppMenuItem setSubmenu:nil];
-        [oldAppMenuItem release];
-        NSMenuItem *appMenuItem = [[NSMenuItem alloc] initWithTitle:@"Apple"
-            action:nil keyEquivalent:@""];
-        [appMenuItem setSubmenu:appMenu];
-        [menu insertItem:appMenuItem atIndex:0];
-    }
+   if (oldAppMenuItem) {
+      [oldAppMenuItem setSubmenu: nil];
+      [oldAppMenuItem release];
+      NSMenuItem *appMenuItem = [[NSMenuItem alloc] initWithTitle: @"Apple"
+                                 action: nil keyEquivalent: @""];
+      [appMenuItem setSubmenu: appMenu];
+      [menu insertItem: appMenuItem atIndex: 0];
+   }
 }
 
 - (void)removeActionsFromAppMenu
 {
-    for (NSMenuItem *item in [appMenu itemArray])
-        [item setTag:nil];
+   for (NSMenuItem * item in [appMenu itemArray]) {
+      [item setTag: nil];
+   }
 }
 
 - (void)dealloc
 {
-    [servicesItem release];
-    [hideAllOthersItem release];
-    [showAllItem release];
+   [servicesItem release];
+   [hideAllOthersItem release];
+   [showAllItem release];
 
-    [lastAppSpecificItem release];
-    [theMenu release];
-    [appMenu release];
-    [super dealloc];
+   [lastAppSpecificItem release];
+   [theMenu release];
+   [appMenu release];
+   [super dealloc];
 }
 
 - (NSMenu *)menu
 {
-    return [[theMenu retain] autorelease];
+   return [[theMenu retain] autorelease];
 }
 
 - (NSMenu *)applicationMenu
 {
-    return [[appMenu retain] autorelease];
+   return [[appMenu retain] autorelease];
 }
 
 - (NSMenuItem *)quitMenuItem
 {
-    return [[quitItem retain] autorelease];
+   return [[quitItem retain] autorelease];
 }
 
 - (NSMenuItem *)preferencesMenuItem
 {
-    return [[preferencesItem retain] autorelease];
+   return [[preferencesItem retain] autorelease];
 }
 
 - (NSMenuItem *)aboutMenuItem
 {
-    return [[aboutItem retain] autorelease];
+   return [[aboutItem retain] autorelease];
 }
 
 - (NSMenuItem *)aboutQtMenuItem
 {
-    return [[aboutQtItem retain] autorelease];
+   return [[aboutQtItem retain] autorelease];
 }
 
 - (NSMenuItem *)hideMenuItem
 {
-    return [[hideItem retain] autorelease];
+   return [[hideItem retain] autorelease];
 }
 
-- (NSMenuItem *)appSpecificMenuItem:(NSInteger)tag
+- (NSMenuItem *)appSpecificMenuItem: (NSInteger)tag
 {
-    NSMenuItem *item = [appMenu itemWithTag:tag];
+   NSMenuItem *item = [appMenu itemWithTag: tag];
 
-    // No reason to create the item if it already exists. See QTBUG-27202.
-    if (item)
-        return [[item retain] autorelease];
+   // No reason to create the item if it already exists. See QTBUG-27202.
+   if (item) {
+      return [[item retain] autorelease];
+   }
 
-    // Create an App-Specific menu item, insert it into the menu and return
-    // it as an autorelease item.
-    item = [[NSMenuItem alloc] init];
+   // Create an App-Specific menu item, insert it into the menu and return
+   // it as an autorelease item.
+   item = [[NSMenuItem alloc] init];
 
-    NSInteger location;
-    if (lastAppSpecificItem == nil) {
-        location = [appMenu indexOfItem:aboutQtItem];
-    } else {
-        location = [appMenu indexOfItem:lastAppSpecificItem];
-        [lastAppSpecificItem release];
-    }
-    lastAppSpecificItem = item;  // Keep track of this for later (i.e., don't release it)
-    [appMenu insertItem:item atIndex:location + 1];
+   NSInteger location;
+   if (lastAppSpecificItem == nil) {
+      location = [appMenu indexOfItem: aboutQtItem];
+   } else {
+      location = [appMenu indexOfItem: lastAppSpecificItem];
+      [lastAppSpecificItem release];
+   }
+   lastAppSpecificItem = item;  // Keep track of this for later (i.e., don't release it)
+   [appMenu insertItem: item atIndex: location + 1];
 
-    return [[item retain] autorelease];
+   return [[item retain] autorelease];
 }
 
 - (BOOL) acceptsFirstResponder
 {
-    return YES;
+   return YES;
 }
 
-- (void)terminate:(id)sender
+- (void)terminate: (id)sender
 {
-    [NSApp terminate:sender];
+   [NSApp terminate: sender];
 }
 
-- (void)orderFrontStandardAboutPanel:(id)sender
+- (void)orderFrontStandardAboutPanel: (id)sender
 {
-    [NSApp orderFrontStandardAboutPanel:sender];
+   [NSApp orderFrontStandardAboutPanel: sender];
 }
 
-- (void)hideOtherApplications:(id)sender
+- (void)hideOtherApplications: (id)sender
 {
-    [NSApp hideOtherApplications:sender];
+   [NSApp hideOtherApplications: sender];
 }
 
-- (void)unhideAllApplications:(id)sender
+- (void)unhideAllApplications: (id)sender
 {
-    [NSApp unhideAllApplications:sender];
+   [NSApp unhideAllApplications: sender];
 }
 
-- (void)hide:(id)sender
+- (void)hide: (id)sender
 {
-    [NSApp hide:sender];
+   [NSApp hide: sender];
 }
 
 - (void)qtUpdateMenubar
 {
-    QMenuBarPrivate::macUpdateMenuBarImmediatly();
+   QMenuBarPrivate::macUpdateMenuBarImmediatly();
 }
 
 - (void)qtTranslateApplicationMenu
 {
 #ifndef QT_NO_TRANSLATION
-    [servicesItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(0))];
-    [hideItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(1).arg(qAppName()))];
-    [hideAllOthersItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(2))];
-    [showAllItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(3))];
-    [preferencesItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(4))];
-    [quitItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(5).arg(qAppName()))];
-    [aboutItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(6).arg(qAppName()))];
+   [servicesItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(0))];
+   [hideItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(1).arg(qAppName()))];
+   [hideAllOthersItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(2))];
+   [showAllItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(3))];
+   [preferencesItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(4))];
+   [quitItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(5).arg(qAppName()))];
+   [aboutItem setTitle: qt_mac_QStringToNSString(qt_mac_applicationmenu_string(6).arg(qAppName()))];
 #endif
 }
 
-- (IBAction)qtDispatcherToQAction:(id)sender
+- (IBAction)qtDispatcherToQAction: (id)sender
 {
-    // CopperSpice
-    QThreadData *threadData = internal_get_ThreadData(QApplication::instance());
-    QScopedLoopLevelCounter loopLevelCounter(threadData);
+   // CopperSpice
+   QThreadData *threadData = internal_get_ThreadData(QApplication::instance());
+   QScopedLoopLevelCounter loopLevelCounter(threadData);
 
-    NSMenuItem *item = static_cast<NSMenuItem *>(sender);
+   NSMenuItem *item = static_cast<NSMenuItem *>(sender);
 
-    if (QAction *action = reinterpret_cast<QAction *>([item tag])) {
-        action->trigger();
+   if (QAction *action = reinterpret_cast<QAction *>([item tag])) {
+      action->trigger();
 
-    } else if (item == quitItem) {
-        // We got here because someone was once the quitItem, but it has been
-        // abandoned (e.g., the menubar was deleted). In the meantime, just do
-        // normal QApplication::quit().
-        qApp->quit();
-    }
+   } else if (item == quitItem) {
+      // We got here because someone was once the quitItem, but it has been
+      // abandoned (e.g., the menubar was deleted). In the meantime, just do
+      // normal QApplication::quit().
+      qApp->quit();
+   }
 }
 
-QThreadData * internal_get_ThreadData(QObject *object)
+QThreadData *internal_get_ThreadData(QObject *object)
 {
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(object);
    return threadData;
 }
 
-- (void)orderFrontCharacterPalette:(id)sender
- {
-     [NSApp orderFrontCharacterPalette:sender];
- }
-
-- (BOOL)validateMenuItem:(NSMenuItem*)menuItem
+- (void)orderFrontCharacterPalette: (id)sender
 {
-    if ([menuItem action] == @selector(hide:)
-        || [menuItem action] == @selector(hideOtherApplications:)
-        || [menuItem action] == @selector(unhideAllApplications:)) {
-        return [NSApp validateMenuItem:menuItem];
-    } else {
-        return [menuItem isEnabled];
-    }
+   [NSApp orderFrontCharacterPalette: sender];
+}
+
+- (BOOL)validateMenuItem: (NSMenuItem *)menuItem
+{
+   if ([menuItem action] == @selector(hide:)
+         || [menuItem action] == @selector(hideOtherApplications:)
+         || [menuItem action] == @selector(unhideAllApplications:)) {
+      return [NSApp validateMenuItem: menuItem];
+   } else {
+      return [menuItem isEnabled];
+   }
 }
 
 @end

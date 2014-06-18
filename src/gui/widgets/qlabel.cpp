@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -139,8 +139,8 @@ QT_BEGIN_NAMESPACE
 
 const QPicture *QLabel::picture() const
 {
-    Q_D(const QLabel);
-    return d->picture;
+   Q_D(const QLabel);
+   return d->picture;
 }
 #endif
 
@@ -154,10 +154,10 @@ const QPicture *QLabel::picture() const
     \sa setAlignment(), setFrameStyle(), setIndent()
 */
 QLabel::QLabel(QWidget *parent, Qt::WindowFlags f)
-    : QFrame(*new QLabelPrivate(), parent, f)
+   : QFrame(*new QLabelPrivate(), parent, f)
 {
-    Q_D(QLabel);
-    d->init();
+   Q_D(QLabel);
+   d->init();
 }
 
 /*!
@@ -169,11 +169,11 @@ QLabel::QLabel(QWidget *parent, Qt::WindowFlags f)
     \sa setText(), setAlignment(), setFrameStyle(), setIndent()
 */
 QLabel::QLabel(const QString &text, QWidget *parent, Qt::WindowFlags f)
-        : QFrame(*new QLabelPrivate(), parent, f)
+   : QFrame(*new QLabelPrivate(), parent, f)
 {
-    Q_D(QLabel);
-    d->init();
-    setText(text);
+   Q_D(QLabel);
+   d->init();
+   setText(text);
 }
 
 
@@ -183,55 +183,55 @@ QLabel::QLabel(const QString &text, QWidget *parent, Qt::WindowFlags f)
 
 QLabel::~QLabel()
 {
-    Q_D(QLabel);
-    d->clearContents();
+   Q_D(QLabel);
+   d->clearContents();
 }
 
 void QLabelPrivate::init()
 {
-    Q_Q(QLabel);
+   Q_Q(QLabel);
 
-    valid_hints = false;
-    margin = 0;
+   valid_hints = false;
+   margin = 0;
 
 #ifndef QT_NO_MOVIE
-    movie = 0;
+   movie = 0;
 #endif
 
 #ifndef QT_NO_SHORTCUT
-    shortcutId = 0;
+   shortcutId = 0;
 #endif
 
-    pixmap = 0;
-    scaledpixmap = 0;
-    cachedimage = 0;
+   pixmap = 0;
+   scaledpixmap = 0;
+   cachedimage = 0;
 
-#ifndef QT_NO_PICTURE    
-    picture = 0;
+#ifndef QT_NO_PICTURE
+   picture = 0;
 #endif
 
-    align = Qt::AlignLeft | Qt::AlignVCenter | Qt::TextExpandTabs;
-    indent = -1;
-    scaledcontents = false;
-    textLayoutDirty = false;
-    textDirty = false;
-    textformat = Qt::AutoText;
-    control = 0;
-    textInteractionFlags = Qt::LinksAccessibleByMouse;
-    isRichText = false;
-    isTextLabel = false;
+   align = Qt::AlignLeft | Qt::AlignVCenter | Qt::TextExpandTabs;
+   indent = -1;
+   scaledcontents = false;
+   textLayoutDirty = false;
+   textDirty = false;
+   textformat = Qt::AutoText;
+   control = 0;
+   textInteractionFlags = Qt::LinksAccessibleByMouse;
+   isRichText = false;
+   isTextLabel = false;
 
-    q->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred,
-                                 QSizePolicy::Label));
+   q->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred,
+                                QSizePolicy::Label));
 
 #ifndef QT_NO_CURSOR
-    validCursor = false;
-    onAnchor = false;
+   validCursor = false;
+   onAnchor = false;
 #endif
 
-    openExternalLinks = false;
+   openExternalLinks = false;
 
-    setLayoutItemMargins(QStyle::SE_LabelLayoutItem);
+   setLayoutItemMargins(QStyle::SE_LabelLayoutItem);
 }
 
 
@@ -265,52 +265,55 @@ void QLabelPrivate::init()
 
 void QLabel::setText(const QString &text)
 {
-    Q_D(QLabel);
-    if (d->text == text)
-        return;
+   Q_D(QLabel);
+   if (d->text == text) {
+      return;
+   }
 
-    QTextControl *oldControl = d->control;
-    d->control = 0;
+   QTextControl *oldControl = d->control;
+   d->control = 0;
 
-    d->clearContents();
-    d->text = text;
-    d->isTextLabel = true;
-    d->textDirty = true;
-    d->isRichText = d->textformat == Qt::RichText
-                    || (d->textformat == Qt::AutoText && Qt::mightBeRichText(d->text));
+   d->clearContents();
+   d->text = text;
+   d->isTextLabel = true;
+   d->textDirty = true;
+   d->isRichText = d->textformat == Qt::RichText
+                   || (d->textformat == Qt::AutoText && Qt::mightBeRichText(d->text));
 
-    d->control = oldControl;
+   d->control = oldControl;
 
-    if (d->needTextControl()) {
-        d->ensureTextControl();
-    } else {
-        delete d->control;
-        d->control = 0;
-    }
+   if (d->needTextControl()) {
+      d->ensureTextControl();
+   } else {
+      delete d->control;
+      d->control = 0;
+   }
 
-    if (d->isRichText) {
-        setMouseTracking(true);
-    } else {
-        // Note: mouse tracking not disabled intentionally
-    }
+   if (d->isRichText) {
+      setMouseTracking(true);
+   } else {
+      // Note: mouse tracking not disabled intentionally
+   }
 
 #ifndef QT_NO_SHORTCUT
-    if (d->buddy)
-        d->updateShortcut();
+   if (d->buddy) {
+      d->updateShortcut();
+   }
 #endif
 
-    d->updateLabel();
+   d->updateLabel();
 
 #ifndef QT_NO_ACCESSIBILITY
-    if (accessibleName().isEmpty())
-        QAccessible::updateAccessibility(this, 0, QAccessible::NameChanged);
+   if (accessibleName().isEmpty()) {
+      QAccessible::updateAccessibility(this, 0, QAccessible::NameChanged);
+   }
 #endif
 }
 
 QString QLabel::text() const
 {
-    Q_D(const QLabel);
-    return d->text;
+   Q_D(const QLabel);
+   return d->text;
 }
 
 /*!
@@ -319,9 +322,9 @@ QString QLabel::text() const
 
 void QLabel::clear()
 {
-    Q_D(QLabel);
-    d->clearContents();
-    d->updateLabel();
+   Q_D(QLabel);
+   d->clearContents();
+   d->updateLabel();
 }
 
 /*!
@@ -335,22 +338,23 @@ void QLabel::clear()
 */
 void QLabel::setPixmap(const QPixmap &pixmap)
 {
-    Q_D(QLabel);
-    if (!d->pixmap || d->pixmap->cacheKey() != pixmap.cacheKey()) {
-        d->clearContents();
-        d->pixmap = new QPixmap(pixmap);
-    }
+   Q_D(QLabel);
+   if (!d->pixmap || d->pixmap->cacheKey() != pixmap.cacheKey()) {
+      d->clearContents();
+      d->pixmap = new QPixmap(pixmap);
+   }
 
-    if (d->pixmap->depth() == 1 && !d->pixmap->mask())
-        d->pixmap->setMask(*((QBitmap *)d->pixmap));
+   if (d->pixmap->depth() == 1 && !d->pixmap->mask()) {
+      d->pixmap->setMask(*((QBitmap *)d->pixmap));
+   }
 
-    d->updateLabel();
+   d->updateLabel();
 }
 
 const QPixmap *QLabel::pixmap() const
 {
-    Q_D(const QLabel);
-    return d->pixmap;
+   Q_D(const QLabel);
+   return d->pixmap;
 }
 
 #ifndef QT_NO_PICTURE
@@ -365,11 +369,11 @@ const QPixmap *QLabel::pixmap() const
 
 void QLabel::setPicture(const QPicture &picture)
 {
-    Q_D(QLabel);
-    d->clearContents();
-    d->picture = new QPicture(picture);
+   Q_D(QLabel);
+   d->clearContents();
+   d->picture = new QPicture(picture);
 
-    d->updateLabel();
+   d->updateLabel();
 }
 #endif // QT_NO_PICTURE
 
@@ -386,9 +390,9 @@ void QLabel::setPicture(const QPicture &picture)
 
 void QLabel::setNum(int num)
 {
-    QString str;
-    str.setNum(num);
-    setText(str);
+   QString str;
+   str.setNum(num);
+   setText(str);
 }
 
 /*!
@@ -406,9 +410,9 @@ void QLabel::setNum(int num)
 
 void QLabel::setNum(double num)
 {
-    QString str;
-    str.setNum(num);
-    setText(str);
+   QString str;
+   str.setNum(num);
+   setText(str);
 }
 
 /*!
@@ -422,20 +426,21 @@ void QLabel::setNum(double num)
 
 void QLabel::setAlignment(Qt::Alignment alignment)
 {
-    Q_D(QLabel);
-    if (alignment == (d->align & (Qt::AlignVertical_Mask|Qt::AlignHorizontal_Mask)))
-        return;
-    d->align = (d->align & ~(Qt::AlignVertical_Mask|Qt::AlignHorizontal_Mask))
-               | (alignment & (Qt::AlignVertical_Mask|Qt::AlignHorizontal_Mask));
+   Q_D(QLabel);
+   if (alignment == (d->align & (Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask))) {
+      return;
+   }
+   d->align = (d->align & ~(Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask))
+              | (alignment & (Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask));
 
-    d->updateLabel();
+   d->updateLabel();
 }
 
 
 Qt::Alignment QLabel::alignment() const
 {
-    Q_D(const QLabel);
-    return QFlag(d->align & (Qt::AlignVertical_Mask|Qt::AlignHorizontal_Mask));
+   Q_D(const QLabel);
+   return QFlag(d->align & (Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask));
 }
 
 
@@ -452,19 +457,20 @@ Qt::Alignment QLabel::alignment() const
 */
 void QLabel::setWordWrap(bool on)
 {
-    Q_D(QLabel);
-    if (on)
-        d->align |= Qt::TextWordWrap;
-    else
-        d->align &= ~Qt::TextWordWrap;
+   Q_D(QLabel);
+   if (on) {
+      d->align |= Qt::TextWordWrap;
+   } else {
+      d->align &= ~Qt::TextWordWrap;
+   }
 
-    d->updateLabel();
+   d->updateLabel();
 }
 
 bool QLabel::wordWrap() const
 {
-    Q_D(const QLabel);
-    return d->align & Qt::TextWordWrap;
+   Q_D(const QLabel);
+   return d->align & Qt::TextWordWrap;
 }
 
 /*!
@@ -490,15 +496,15 @@ bool QLabel::wordWrap() const
 
 void QLabel::setIndent(int indent)
 {
-    Q_D(QLabel);
-    d->indent = indent;
-    d->updateLabel();
+   Q_D(QLabel);
+   d->indent = indent;
+   d->updateLabel();
 }
 
 int QLabel::indent() const
 {
-    Q_D(const QLabel);
-    return d->indent;
+   Q_D(const QLabel);
+   return d->indent;
 }
 
 
@@ -515,17 +521,18 @@ int QLabel::indent() const
 */
 int QLabel::margin() const
 {
-    Q_D(const QLabel);
-    return d->margin;
+   Q_D(const QLabel);
+   return d->margin;
 }
 
 void QLabel::setMargin(int margin)
 {
-    Q_D(QLabel);
-    if (d->margin == margin)
-        return;
-    d->margin = margin;
-    d->updateLabel();
+   Q_D(QLabel);
+   if (d->margin == margin) {
+      return;
+   }
+   d->margin = margin;
+   d->updateLabel();
 }
 
 /*!
@@ -534,94 +541,106 @@ void QLabel::setMargin(int margin)
 */
 QSize QLabelPrivate::sizeForWidth(int w) const
 {
-    Q_Q(const QLabel);
-    if(q->minimumWidth() > 0)
-        w = qMax(w, q->minimumWidth());
-    QSize contentsMargin(leftmargin + rightmargin, topmargin + bottommargin);
+   Q_Q(const QLabel);
+   if (q->minimumWidth() > 0) {
+      w = qMax(w, q->minimumWidth());
+   }
+   QSize contentsMargin(leftmargin + rightmargin, topmargin + bottommargin);
 
-    QRect br;
+   QRect br;
 
-    int hextra = 2 * margin;
-    int vextra = hextra;
-    QFontMetrics fm = q->fontMetrics();
+   int hextra = 2 * margin;
+   int vextra = hextra;
+   QFontMetrics fm = q->fontMetrics();
 
-    if (pixmap && !pixmap->isNull())
-        br = pixmap->rect();
+   if (pixmap && !pixmap->isNull()) {
+      br = pixmap->rect();
+   }
 #ifndef QT_NO_PICTURE
-    else if (picture && !picture->isNull())
-        br = picture->boundingRect();
+   else if (picture && !picture->isNull()) {
+      br = picture->boundingRect();
+   }
 #endif
 #ifndef QT_NO_MOVIE
-    else if (movie && !movie->currentPixmap().isNull())
-        br = movie->currentPixmap().rect();
+   else if (movie && !movie->currentPixmap().isNull()) {
+      br = movie->currentPixmap().rect();
+   }
 #endif
-    else if (isTextLabel) {
-        int align = QStyle::visualAlignment(textDirection(), QFlag(this->align));
-        // Add indentation
-        int m = indent;
+   else if (isTextLabel) {
+      int align = QStyle::visualAlignment(textDirection(), QFlag(this->align));
+      // Add indentation
+      int m = indent;
 
-        if (m < 0 && q->frameWidth()) // no indent, but we do have a frame
-            m = fm.width(QLatin1Char('x')) - margin*2;
-        if (m > 0) {
-            if ((align & Qt::AlignLeft) || (align & Qt::AlignRight))
-                hextra += m;
-            if ((align & Qt::AlignTop) || (align & Qt::AlignBottom))
-                vextra += m;
-        }
+      if (m < 0 && q->frameWidth()) { // no indent, but we do have a frame
+         m = fm.width(QLatin1Char('x')) - margin * 2;
+      }
+      if (m > 0) {
+         if ((align & Qt::AlignLeft) || (align & Qt::AlignRight)) {
+            hextra += m;
+         }
+         if ((align & Qt::AlignTop) || (align & Qt::AlignBottom)) {
+            vextra += m;
+         }
+      }
 
-        if (control) {
-            ensureTextLayouted();
-            const qreal oldTextWidth = control->textWidth();
-            // Calculate the length of document if w is the width
-            if (align & Qt::TextWordWrap) {
-                if (w >= 0) {
-                    w = qMax(w-hextra-contentsMargin.width(), 0); // strip margin and indent
-                    control->setTextWidth(w);
-                } else {
-                    control->adjustSize();
-                }
+      if (control) {
+         ensureTextLayouted();
+         const qreal oldTextWidth = control->textWidth();
+         // Calculate the length of document if w is the width
+         if (align & Qt::TextWordWrap) {
+            if (w >= 0) {
+               w = qMax(w - hextra - contentsMargin.width(), 0); // strip margin and indent
+               control->setTextWidth(w);
             } else {
-                control->setTextWidth(-1);
+               control->adjustSize();
             }
+         } else {
+            control->setTextWidth(-1);
+         }
 
-            QSizeF controlSize = control->size();
-            br = QRect(QPoint(0, 0), QSize(qCeil(controlSize.width()), qCeil(controlSize.height())));
+         QSizeF controlSize = control->size();
+         br = QRect(QPoint(0, 0), QSize(qCeil(controlSize.width()), qCeil(controlSize.height())));
 
-            // restore state
-            control->setTextWidth(oldTextWidth);
-        } else {
-            // Turn off center alignment in order to avoid rounding errors for centering,
-            // since centering involves a division by 2. At the end, all we want is the size.
-            int flags = align & ~(Qt::AlignVCenter | Qt::AlignHCenter);
-            if (hasShortcut) {
-                flags |= Qt::TextShowMnemonic;
-                QStyleOption opt;
-                opt.initFrom(q);
-                if (!q->style()->styleHint(QStyle::SH_UnderlineShortcut, &opt, q))
-                    flags |= Qt::TextHideMnemonic;
+         // restore state
+         control->setTextWidth(oldTextWidth);
+      } else {
+         // Turn off center alignment in order to avoid rounding errors for centering,
+         // since centering involves a division by 2. At the end, all we want is the size.
+         int flags = align & ~(Qt::AlignVCenter | Qt::AlignHCenter);
+         if (hasShortcut) {
+            flags |= Qt::TextShowMnemonic;
+            QStyleOption opt;
+            opt.initFrom(q);
+            if (!q->style()->styleHint(QStyle::SH_UnderlineShortcut, &opt, q)) {
+               flags |= Qt::TextHideMnemonic;
             }
+         }
 
-            bool tryWidth = (w < 0) && (align & Qt::TextWordWrap);
+         bool tryWidth = (w < 0) && (align & Qt::TextWordWrap);
 
-            if (tryWidth)
-                w = qMin(fm.averageCharWidth() * 80, q->maximumSize().width());
+         if (tryWidth) {
+            w = qMin(fm.averageCharWidth() * 80, q->maximumSize().width());
+         }
 
-            else if (w < 0)
-                w = 2000;
+         else if (w < 0) {
+            w = 2000;
+         }
 
-            w -= (hextra + contentsMargin.width());
-            br = fm.boundingRect(0, 0, w ,2000, flags, text);
-            if (tryWidth && br.height() < 4*fm.lineSpacing() && br.width() > w/2)
-                br = fm.boundingRect(0, 0, w/2, 2000, flags, text);
-            if (tryWidth && br.height() < 2*fm.lineSpacing() && br.width() > w/4)
-                br = fm.boundingRect(0, 0, w/4, 2000, flags, text);
-        }
-    } else {
-        br = QRect(QPoint(0, 0), QSize(fm.averageCharWidth(), fm.lineSpacing()));
-    }
+         w -= (hextra + contentsMargin.width());
+         br = fm.boundingRect(0, 0, w , 2000, flags, text);
+         if (tryWidth && br.height() < 4 * fm.lineSpacing() && br.width() > w / 2) {
+            br = fm.boundingRect(0, 0, w / 2, 2000, flags, text);
+         }
+         if (tryWidth && br.height() < 2 * fm.lineSpacing() && br.width() > w / 4) {
+            br = fm.boundingRect(0, 0, w / 4, 2000, flags, text);
+         }
+      }
+   } else {
+      br = QRect(QPoint(0, 0), QSize(fm.averageCharWidth(), fm.lineSpacing()));
+   }
 
-    const QSize contentsSize(br.width() + hextra, br.height() + vextra);
-    return (contentsSize + contentsMargin).expandedTo(q->minimumSize());
+   const QSize contentsSize(br.width() + hextra, br.height() + vextra);
+   return (contentsSize + contentsMargin).expandedTo(q->minimumSize());
 }
 
 
@@ -631,10 +650,11 @@ QSize QLabelPrivate::sizeForWidth(int w) const
 
 int QLabel::heightForWidth(int w) const
 {
-    Q_D(const QLabel);
-    if (d->isTextLabel)
-        return d->sizeForWidth(w).height();
-    return QWidget::heightForWidth(w);
+   Q_D(const QLabel);
+   if (d->isTextLabel) {
+      return d->sizeForWidth(w).height();
+   }
+   return QWidget::heightForWidth(w);
 }
 
 /*!
@@ -654,16 +674,17 @@ int QLabel::heightForWidth(int w) const
 */
 bool QLabel::openExternalLinks() const
 {
-    Q_D(const QLabel);
-    return d->openExternalLinks;
+   Q_D(const QLabel);
+   return d->openExternalLinks;
 }
 
 void QLabel::setOpenExternalLinks(bool open)
 {
-    Q_D(QLabel);
-    d->openExternalLinks = open;
-    if (d->control)
-        d->control->setOpenExternalLinks(open);
+   Q_D(QLabel);
+   d->openExternalLinks = open;
+   if (d->control) {
+      d->control->setOpenExternalLinks(open);
+   }
 }
 
 /*!
@@ -680,32 +701,35 @@ void QLabel::setOpenExternalLinks(bool open)
 */
 void QLabel::setTextInteractionFlags(Qt::TextInteractionFlags flags)
 {
-    Q_D(QLabel);
-    if (d->textInteractionFlags == flags)
-        return;
-    d->textInteractionFlags = flags;
-    if (flags & Qt::LinksAccessibleByKeyboard)
-        setFocusPolicy(Qt::StrongFocus);
-    else if (flags & (Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse))
-        setFocusPolicy(Qt::ClickFocus);
-    else
-        setFocusPolicy(Qt::NoFocus);
+   Q_D(QLabel);
+   if (d->textInteractionFlags == flags) {
+      return;
+   }
+   d->textInteractionFlags = flags;
+   if (flags & Qt::LinksAccessibleByKeyboard) {
+      setFocusPolicy(Qt::StrongFocus);
+   } else if (flags & (Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse)) {
+      setFocusPolicy(Qt::ClickFocus);
+   } else {
+      setFocusPolicy(Qt::NoFocus);
+   }
 
-    if (d->needTextControl()) {
-        d->ensureTextControl();
-    } else {
-        delete d->control;
-        d->control = 0;
-    }
+   if (d->needTextControl()) {
+      d->ensureTextControl();
+   } else {
+      delete d->control;
+      d->control = 0;
+   }
 
-    if (d->control)
-        d->control->setTextInteractionFlags(d->textInteractionFlags);
+   if (d->control) {
+      d->control->setTextInteractionFlags(d->textInteractionFlags);
+   }
 }
 
 Qt::TextInteractionFlags QLabel::textInteractionFlags() const
 {
-    Q_D(const QLabel);
-    return d->textInteractionFlags;
+   Q_D(const QLabel);
+   return d->textInteractionFlags;
 }
 
 /*!
@@ -720,14 +744,14 @@ Qt::TextInteractionFlags QLabel::textInteractionFlags() const
 */
 void QLabel::setSelection(int start, int length)
 {
-    Q_D(QLabel);
-    if (d->control) {
-        d->ensureTextPopulated();
-        QTextCursor cursor = d->control->textCursor();
-        cursor.setPosition(start);
-        cursor.setPosition(start + length, QTextCursor::KeepAnchor);
-        d->control->setTextCursor(cursor);
-    }
+   Q_D(QLabel);
+   if (d->control) {
+      d->ensureTextPopulated();
+      QTextCursor cursor = d->control->textCursor();
+      cursor.setPosition(start);
+      cursor.setPosition(start + length, QTextCursor::KeepAnchor);
+      d->control->setTextCursor(cursor);
+   }
 }
 
 /*!
@@ -748,10 +772,11 @@ void QLabel::setSelection(int start, int length)
 */
 bool QLabel::hasSelectedText() const
 {
-    Q_D(const QLabel);
-    if (d->control)
-        return d->control->textCursor().hasSelection();
-    return false;
+   Q_D(const QLabel);
+   if (d->control) {
+      return d->control->textCursor().hasSelection();
+   }
+   return false;
 }
 
 /*!
@@ -772,10 +797,11 @@ bool QLabel::hasSelectedText() const
 */
 QString QLabel::selectedText() const
 {
-    Q_D(const QLabel);
-    if (d->control)
-        return d->control->textCursor().selectedText();
-    return QString();
+   Q_D(const QLabel);
+   if (d->control) {
+      return d->control->textCursor().selectedText();
+   }
+   return QString();
 }
 
 /*!
@@ -791,20 +817,22 @@ QString QLabel::selectedText() const
 */
 int QLabel::selectionStart() const
 {
-    Q_D(const QLabel);
-    if (d->control && d->control->textCursor().hasSelection())
-        return d->control->textCursor().selectionStart();
-    return -1;
+   Q_D(const QLabel);
+   if (d->control && d->control->textCursor().hasSelection()) {
+      return d->control->textCursor().selectionStart();
+   }
+   return -1;
 }
 
 /*!\reimp
 */
 QSize QLabel::sizeHint() const
 {
-    Q_D(const QLabel);
-    if (!d->valid_hints)
-        (void) QLabel::minimumSizeHint();
-    return d->sh;
+   Q_D(const QLabel);
+   if (!d->valid_hints) {
+      (void) QLabel::minimumSizeHint();
+   }
+   return d->sh;
 }
 
 /*!
@@ -812,52 +840,54 @@ QSize QLabel::sizeHint() const
 */
 QSize QLabel::minimumSizeHint() const
 {
-    Q_D(const QLabel);
-    if (d->valid_hints) {
-        if (d->sizePolicy == sizePolicy())
-            return d->msh;
-    }
+   Q_D(const QLabel);
+   if (d->valid_hints) {
+      if (d->sizePolicy == sizePolicy()) {
+         return d->msh;
+      }
+   }
 
-    ensurePolished();
-    d->valid_hints = true;
-    d->sh = d->sizeForWidth(-1); // wrap ? golden ratio : min doc size
-    QSize msh(-1, -1);
+   ensurePolished();
+   d->valid_hints = true;
+   d->sh = d->sizeForWidth(-1); // wrap ? golden ratio : min doc size
+   QSize msh(-1, -1);
 
-    if (!d->isTextLabel) {
-        msh = d->sh;
-    } else {
-        msh.rheight() = d->sizeForWidth(QWIDGETSIZE_MAX).height(); // height for one line
-        msh.rwidth() = d->sizeForWidth(0).width(); // wrap ? size of biggest word : min doc size
-        if (d->sh.height() < msh.height())
-            msh.rheight() = d->sh.height();
-    }
-    d->msh = msh;
-    d->sizePolicy = sizePolicy();
-    return msh;
+   if (!d->isTextLabel) {
+      msh = d->sh;
+   } else {
+      msh.rheight() = d->sizeForWidth(QWIDGETSIZE_MAX).height(); // height for one line
+      msh.rwidth() = d->sizeForWidth(0).width(); // wrap ? size of biggest word : min doc size
+      if (d->sh.height() < msh.height()) {
+         msh.rheight() = d->sh.height();
+      }
+   }
+   d->msh = msh;
+   d->sizePolicy = sizePolicy();
+   return msh;
 }
 
 /*!\reimp
 */
 void QLabel::mousePressEvent(QMouseEvent *ev)
 {
-    Q_D(QLabel);
-    d->sendControlEvent(ev);
+   Q_D(QLabel);
+   d->sendControlEvent(ev);
 }
 
 /*!\reimp
 */
 void QLabel::mouseMoveEvent(QMouseEvent *ev)
 {
-    Q_D(QLabel);
-    d->sendControlEvent(ev);
+   Q_D(QLabel);
+   d->sendControlEvent(ev);
 }
 
 /*!\reimp
 */
 void QLabel::mouseReleaseEvent(QMouseEvent *ev)
 {
-    Q_D(QLabel);
-    d->sendControlEvent(ev);
+   Q_D(QLabel);
+   d->sendControlEvent(ev);
 }
 
 /*!\reimp
@@ -865,21 +895,21 @@ void QLabel::mouseReleaseEvent(QMouseEvent *ev)
 void QLabel::contextMenuEvent(QContextMenuEvent *ev)
 {
 #ifdef QT_NO_CONTEXTMENU
-    Q_UNUSED(ev);
+   Q_UNUSED(ev);
 #else
-    Q_D(QLabel);
-    if (!d->isTextLabel) {
-        ev->ignore();
-        return;
-    }
-    QMenu *menu = d->createStandardContextMenu(ev->pos());
-    if (!menu) {
-        ev->ignore();
-        return;
-    }
-    ev->accept();
-    menu->setAttribute(Qt::WA_DeleteOnClose);
-    menu->popup(ev->globalPos());
+   Q_D(QLabel);
+   if (!d->isTextLabel) {
+      ev->ignore();
+      return;
+   }
+   QMenu *menu = d->createStandardContextMenu(ev->pos());
+   if (!menu) {
+      ev->ignore();
+      return;
+   }
+   ev->accept();
+   menu->setAttribute(Qt::WA_DeleteOnClose);
+   menu->popup(ev->globalPos());
 #endif
 }
 
@@ -888,12 +918,12 @@ void QLabel::contextMenuEvent(QContextMenuEvent *ev)
 */
 void QLabel::focusInEvent(QFocusEvent *ev)
 {
-    Q_D(QLabel);
-    if (d->isTextLabel) {
-        d->ensureTextControl();
-        d->sendControlEvent(ev);
-    }
-    QFrame::focusInEvent(ev);
+   Q_D(QLabel);
+   if (d->isTextLabel) {
+      d->ensureTextControl();
+      d->sendControlEvent(ev);
+   }
+   QFrame::focusInEvent(ev);
 }
 
 /*!
@@ -901,141 +931,146 @@ void QLabel::focusInEvent(QFocusEvent *ev)
 */
 void QLabel::focusOutEvent(QFocusEvent *ev)
 {
-    Q_D(QLabel);
-    if (d->control) {
-        d->sendControlEvent(ev);
-        QTextCursor cursor = d->control->textCursor();
-        Qt::FocusReason reason = ev->reason();
-        if (reason != Qt::ActiveWindowFocusReason
+   Q_D(QLabel);
+   if (d->control) {
+      d->sendControlEvent(ev);
+      QTextCursor cursor = d->control->textCursor();
+      Qt::FocusReason reason = ev->reason();
+      if (reason != Qt::ActiveWindowFocusReason
             && reason != Qt::PopupFocusReason
             && cursor.hasSelection()) {
-            cursor.clearSelection();
-            d->control->setTextCursor(cursor);
-        }
-    }
+         cursor.clearSelection();
+         d->control->setTextCursor(cursor);
+      }
+   }
 
-    QFrame::focusOutEvent(ev);
+   QFrame::focusOutEvent(ev);
 }
 
 /*!\reimp
 */
 bool QLabel::focusNextPrevChild(bool next)
 {
-    Q_D(QLabel);
-    if (d->control && d->control->setFocusToNextOrPreviousAnchor(next))
-        return true;
-    return QFrame::focusNextPrevChild(next);
+   Q_D(QLabel);
+   if (d->control && d->control->setFocusToNextOrPreviousAnchor(next)) {
+      return true;
+   }
+   return QFrame::focusNextPrevChild(next);
 }
 
 /*!\reimp
 */
 void QLabel::keyPressEvent(QKeyEvent *ev)
 {
-    Q_D(QLabel);
-    d->sendControlEvent(ev);
+   Q_D(QLabel);
+   d->sendControlEvent(ev);
 }
 
 /*!\reimp
 */
 bool QLabel::event(QEvent *e)
 {
-    Q_D(QLabel);
-    QEvent::Type type = e->type();
+   Q_D(QLabel);
+   QEvent::Type type = e->type();
 
 #ifndef QT_NO_SHORTCUT
-    if (type == QEvent::Shortcut) {
-        QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
-        if (se->shortcutId() == d->shortcutId) {
-            QWidget * w = d->buddy;
-            QAbstractButton *button = qobject_cast<QAbstractButton *>(w);
-            if (w->focusPolicy() != Qt::NoFocus)
-                w->setFocus(Qt::ShortcutFocusReason);
-            if (button && !se->isAmbiguous())
-                button->animateClick();
-            else
-                window()->setAttribute(Qt::WA_KeyboardFocusChange);
-            return true;
-        }
-    } else
+   if (type == QEvent::Shortcut) {
+      QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
+      if (se->shortcutId() == d->shortcutId) {
+         QWidget *w = d->buddy;
+         QAbstractButton *button = qobject_cast<QAbstractButton *>(w);
+         if (w->focusPolicy() != Qt::NoFocus) {
+            w->setFocus(Qt::ShortcutFocusReason);
+         }
+         if (button && !se->isAmbiguous()) {
+            button->animateClick();
+         } else {
+            window()->setAttribute(Qt::WA_KeyboardFocusChange);
+         }
+         return true;
+      }
+   } else
 #endif
-    if (type == QEvent::Resize) {
-        if (d->control)
+      if (type == QEvent::Resize) {
+         if (d->control) {
             d->textLayoutDirty = true;
-    } else if (e->type() == QEvent::StyleChange
+         }
+      } else if (e->type() == QEvent::StyleChange
 #ifdef Q_OS_MAC
-               || e->type() == QEvent::MacSizeChange
+                 || e->type() == QEvent::MacSizeChange
 #endif
-               ) {
-        d->setLayoutItemMargins(QStyle::SE_LabelLayoutItem);
-        d->updateLabel();
-    }
+                ) {
+         d->setLayoutItemMargins(QStyle::SE_LabelLayoutItem);
+         d->updateLabel();
+      }
 
-    return QFrame::event(e);
+   return QFrame::event(e);
 }
 
 /*!\reimp
 */
 void QLabel::paintEvent(QPaintEvent *)
 {
-    Q_D(QLabel);
-    QStyle *style = QWidget::style();
-    QPainter painter(this);
-    drawFrame(&painter);
-    QRect cr = contentsRect();
-    cr.adjust(d->margin, d->margin, -d->margin, -d->margin);
-    int align = QStyle::visualAlignment(d->isTextLabel ? d->textDirection()
-                                                       : layoutDirection(), QFlag(d->align));
+   Q_D(QLabel);
+   QStyle *style = QWidget::style();
+   QPainter painter(this);
+   drawFrame(&painter);
+   QRect cr = contentsRect();
+   cr.adjust(d->margin, d->margin, -d->margin, -d->margin);
+   int align = QStyle::visualAlignment(d->isTextLabel ? d->textDirection()
+                                       : layoutDirection(), QFlag(d->align));
 
 #ifndef QT_NO_MOVIE
-    if (d->movie) {
-        if (d->scaledcontents)
-            style->drawItemPixmap(&painter, cr, align, d->movie->currentPixmap().scaled(cr.size()));
-        else
-            style->drawItemPixmap(&painter, cr, align, d->movie->currentPixmap());
-    }
-    else
+   if (d->movie) {
+      if (d->scaledcontents) {
+         style->drawItemPixmap(&painter, cr, align, d->movie->currentPixmap().scaled(cr.size()));
+      } else {
+         style->drawItemPixmap(&painter, cr, align, d->movie->currentPixmap());
+      }
+   } else
 #endif
-    if (d->isTextLabel) {
-        QRectF lr = d->layoutRect().toAlignedRect();
-        QStyleOption opt;
-        opt.initFrom(this);
+      if (d->isTextLabel) {
+         QRectF lr = d->layoutRect().toAlignedRect();
+         QStyleOption opt;
+         opt.initFrom(this);
 #ifndef QT_NO_STYLE_STYLESHEET
-        if (QStyleSheetStyle* cssStyle = qobject_cast<QStyleSheetStyle*>(style)) {
+         if (QStyleSheetStyle *cssStyle = qobject_cast<QStyleSheetStyle *>(style)) {
             cssStyle->styleSheetPalette(this, &opt, &opt.palette);
-        }
+         }
 #endif
-        if (d->control) {
+         if (d->control) {
 #ifndef QT_NO_SHORTCUT
             const bool underline = (bool)style->styleHint(QStyle::SH_UnderlineShortcut, 0, this, 0);
             if (d->shortcutId != 0
-                && underline != d->shortcutCursor.charFormat().fontUnderline()) {
-                QTextCharFormat fmt;
-                fmt.setFontUnderline(underline);
-                d->shortcutCursor.mergeCharFormat(fmt);
+                  && underline != d->shortcutCursor.charFormat().fontUnderline()) {
+               QTextCharFormat fmt;
+               fmt.setFontUnderline(underline);
+               d->shortcutCursor.mergeCharFormat(fmt);
             }
 #endif
             d->ensureTextLayouted();
 
             QAbstractTextDocumentLayout::PaintContext context;
             if (!isEnabled() && !d->control &&
-                // We cannot support etched for rich text controls because custom
-                // colors and links will override the light palette
-                style->styleHint(QStyle::SH_EtchDisabledText, &opt, this)) {
-                context.palette = opt.palette;
-                context.palette.setColor(QPalette::Text, context.palette.light().color());
-                painter.save();
-                painter.translate(lr.x() + 1, lr.y() + 1);
-                painter.setClipRect(lr.translated(-lr.x() - 1, -lr.y() - 1));
-                QAbstractTextDocumentLayout *layout = d->control->document()->documentLayout();
-                layout->draw(&painter, context);
-                painter.restore();
+                  // We cannot support etched for rich text controls because custom
+                  // colors and links will override the light palette
+                  style->styleHint(QStyle::SH_EtchDisabledText, &opt, this)) {
+               context.palette = opt.palette;
+               context.palette.setColor(QPalette::Text, context.palette.light().color());
+               painter.save();
+               painter.translate(lr.x() + 1, lr.y() + 1);
+               painter.setClipRect(lr.translated(-lr.x() - 1, -lr.y() - 1));
+               QAbstractTextDocumentLayout *layout = d->control->document()->documentLayout();
+               layout->draw(&painter, context);
+               painter.restore();
             }
 
             // Adjust the palette
             context.palette = opt.palette;
 
-            if (foregroundRole() != QPalette::Text && isEnabled())
-                context.palette.setColor(QPalette::Text, context.palette.color(foregroundRole()));
+            if (foregroundRole() != QPalette::Text && isEnabled()) {
+               context.palette.setColor(QPalette::Text, context.palette.color(foregroundRole()));
+            }
 
             painter.save();
             painter.translate(lr.topLeft());
@@ -1043,61 +1078,68 @@ void QLabel::paintEvent(QPaintEvent *)
             d->control->setPalette(context.palette);
             d->control->drawContents(&painter, QRectF(), this);
             painter.restore();
-        } else {
+         } else {
             int flags = align | (d->textDirection() == Qt::LeftToRight ? Qt::TextForceLeftToRight
-                                                                       : Qt::TextForceRightToLeft);
+                                 : Qt::TextForceRightToLeft);
             if (d->hasShortcut) {
-                flags |= Qt::TextShowMnemonic;
-                if (!style->styleHint(QStyle::SH_UnderlineShortcut, &opt, this))
-                    flags |= Qt::TextHideMnemonic;
+               flags |= Qt::TextShowMnemonic;
+               if (!style->styleHint(QStyle::SH_UnderlineShortcut, &opt, this)) {
+                  flags |= Qt::TextHideMnemonic;
+               }
             }
             style->drawItemText(&painter, lr.toRect(), flags, opt.palette, isEnabled(), d->text, foregroundRole());
-        }
-    } else
+         }
+      } else
 #ifndef QT_NO_PICTURE
-    if (d->picture) {
-        QRect br = d->picture->boundingRect();
-        int rw = br.width();
-        int rh = br.height();
-        if (d->scaledcontents) {
-            painter.save();
-            painter.translate(cr.x(), cr.y());
-            painter.scale((double)cr.width()/rw, (double)cr.height()/rh);
-            painter.drawPicture(-br.x(), -br.y(), *d->picture);
-            painter.restore();
-        } else {
-            int xo = 0;
-            int yo = 0;
-            if (align & Qt::AlignVCenter)
-                yo = (cr.height()-rh)/2;
-            else if (align & Qt::AlignBottom)
-                yo = cr.height()-rh;
-            if (align & Qt::AlignRight)
-                xo = cr.width()-rw;
-            else if (align & Qt::AlignHCenter)
-                xo = (cr.width()-rw)/2;
-            painter.drawPicture(cr.x()+xo-br.x(), cr.y()+yo-br.y(), *d->picture);
-        }
-    } else
-#endif
-    if (d->pixmap && !d->pixmap->isNull()) {
-        QPixmap pix;
-        if (d->scaledcontents) {
-            if (!d->scaledpixmap || d->scaledpixmap->size() != cr.size()) {
-                if (!d->cachedimage)
-                    d->cachedimage = new QImage(d->pixmap->toImage());
-                delete d->scaledpixmap;
-                d->scaledpixmap = new QPixmap(QPixmap::fromImage(d->cachedimage->scaled(cr.size(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation)));
+         if (d->picture) {
+            QRect br = d->picture->boundingRect();
+            int rw = br.width();
+            int rh = br.height();
+            if (d->scaledcontents) {
+               painter.save();
+               painter.translate(cr.x(), cr.y());
+               painter.scale((double)cr.width() / rw, (double)cr.height() / rh);
+               painter.drawPicture(-br.x(), -br.y(), *d->picture);
+               painter.restore();
+            } else {
+               int xo = 0;
+               int yo = 0;
+               if (align & Qt::AlignVCenter) {
+                  yo = (cr.height() - rh) / 2;
+               } else if (align & Qt::AlignBottom) {
+                  yo = cr.height() - rh;
+               }
+               if (align & Qt::AlignRight) {
+                  xo = cr.width() - rw;
+               } else if (align & Qt::AlignHCenter) {
+                  xo = (cr.width() - rw) / 2;
+               }
+               painter.drawPicture(cr.x() + xo - br.x(), cr.y() + yo - br.y(), *d->picture);
             }
-            pix = *d->scaledpixmap;
-        } else
-            pix = *d->pixmap;
-        QStyleOption opt;
-        opt.initFrom(this);
-        if (!isEnabled())
-            pix = style->generatedIconPixmap(QIcon::Disabled, pix, &opt);
-        style->drawItemPixmap(&painter, cr, align, pix);
-    }
+         } else
+#endif
+            if (d->pixmap && !d->pixmap->isNull()) {
+               QPixmap pix;
+               if (d->scaledcontents) {
+                  if (!d->scaledpixmap || d->scaledpixmap->size() != cr.size()) {
+                     if (!d->cachedimage) {
+                        d->cachedimage = new QImage(d->pixmap->toImage());
+                     }
+                     delete d->scaledpixmap;
+                     d->scaledpixmap = new QPixmap(QPixmap::fromImage(d->cachedimage->scaled(cr.size(), Qt::IgnoreAspectRatio,
+                                                   Qt::SmoothTransformation)));
+                  }
+                  pix = *d->scaledpixmap;
+               } else {
+                  pix = *d->pixmap;
+               }
+               QStyleOption opt;
+               opt.initFrom(this);
+               if (!isEnabled()) {
+                  pix = style->generatedIconPixmap(QIcon::Disabled, pix, &opt);
+               }
+               style->drawItemPixmap(&painter, cr, align, pix);
+            }
 }
 
 
@@ -1107,19 +1149,20 @@ void QLabel::paintEvent(QPaintEvent *)
 
 void QLabelPrivate::updateLabel()
 {
-    Q_Q(QLabel);
-    valid_hints = false;
+   Q_Q(QLabel);
+   valid_hints = false;
 
-    if (isTextLabel) {
-        QSizePolicy policy = q->sizePolicy();
-        const bool wrap = align & Qt::TextWordWrap;
-        policy.setHeightForWidth(wrap);
-        if (policy != q->sizePolicy())  // ### should be replaced by WA_WState_OwnSizePolicy idiom
-            q->setSizePolicy(policy);
-        textLayoutDirty = true;
-    }
-    q->updateGeometry();
-    q->update(q->contentsRect());
+   if (isTextLabel) {
+      QSizePolicy policy = q->sizePolicy();
+      const bool wrap = align & Qt::TextWordWrap;
+      policy.setHeightForWidth(wrap);
+      if (policy != q->sizePolicy()) { // ### should be replaced by WA_WState_OwnSizePolicy idiom
+         q->setSizePolicy(policy);
+      }
+      textLayoutDirty = true;
+   }
+   q->updateGeometry();
+   q->update(q->contentsRect());
 }
 
 #ifndef QT_NO_SHORTCUT
@@ -1152,17 +1195,19 @@ void QLabelPrivate::updateLabel()
 
 void QLabel::setBuddy(QWidget *buddy)
 {
-    Q_D(QLabel);
-    d->buddy = buddy;
-    if (d->isTextLabel) {
-        if (d->shortcutId)
-            releaseShortcut(d->shortcutId);
-        d->shortcutId = 0;
-        d->textDirty = true;
-        if (buddy)
-            d->updateShortcut(); // grab new shortcut
-        d->updateLabel();
-    }
+   Q_D(QLabel);
+   d->buddy = buddy;
+   if (d->isTextLabel) {
+      if (d->shortcutId) {
+         releaseShortcut(d->shortcutId);
+      }
+      d->shortcutId = 0;
+      d->textDirty = true;
+      if (buddy) {
+         d->updateShortcut();   // grab new shortcut
+      }
+      d->updateLabel();
+   }
 }
 
 
@@ -1172,61 +1217,63 @@ void QLabel::setBuddy(QWidget *buddy)
     \sa setBuddy()
 */
 
-QWidget * QLabel::buddy() const
+QWidget *QLabel::buddy() const
 {
-    Q_D(const QLabel);
-    return d->buddy;
+   Q_D(const QLabel);
+   return d->buddy;
 }
 
 void QLabelPrivate::updateShortcut()
 {
-    Q_Q(QLabel);
-    Q_ASSERT(shortcutId == 0);
-    // Introduce an extra boolean to indicate the presence of a shortcut in the
-    // text. We cannot use the shortcutId itself because on the mac mnemonics are
-    // off by default, so QKeySequence::mnemonic always returns an empty sequence.
-    // But then we do want to hide the ampersands, so we can't use shortcutId.
-    hasShortcut = false;
+   Q_Q(QLabel);
+   Q_ASSERT(shortcutId == 0);
+   // Introduce an extra boolean to indicate the presence of a shortcut in the
+   // text. We cannot use the shortcutId itself because on the mac mnemonics are
+   // off by default, so QKeySequence::mnemonic always returns an empty sequence.
+   // But then we do want to hide the ampersands, so we can't use shortcutId.
+   hasShortcut = false;
 
-    if (!text.contains(QLatin1Char('&')))
-        return;
-    hasShortcut = true;
-    shortcutId = q->grabShortcut(QKeySequence::mnemonic(text));
+   if (!text.contains(QLatin1Char('&'))) {
+      return;
+   }
+   hasShortcut = true;
+   shortcutId = q->grabShortcut(QKeySequence::mnemonic(text));
 }
 
 #endif // QT_NO_SHORTCUT
 
 #ifndef QT_NO_MOVIE
-void QLabelPrivate::_q_movieUpdated(const QRect& rect)
+void QLabelPrivate::_q_movieUpdated(const QRect &rect)
 {
-    Q_Q(QLabel);
-    if (movie && movie->isValid()) {
-        QRect r;
-        if (scaledcontents) {
-            QRect cr = q->contentsRect();
-            QRect pixmapRect(cr.topLeft(), movie->currentPixmap().size());
-            if (pixmapRect.isEmpty())
-                return;
-            r.setRect(cr.left(), cr.top(),
-                      (rect.width() * cr.width()) / pixmapRect.width(),
-                      (rect.height() * cr.height()) / pixmapRect.height());
-        } else {
-            r = q->style()->itemPixmapRect(q->contentsRect(), align, movie->currentPixmap());
-            r.translate(rect.x(), rect.y());
-            r.setWidth(qMin(r.width(), rect.width()));
-            r.setHeight(qMin(r.height(), rect.height()));
-        }
-        q->update(r);
-    }
+   Q_Q(QLabel);
+   if (movie && movie->isValid()) {
+      QRect r;
+      if (scaledcontents) {
+         QRect cr = q->contentsRect();
+         QRect pixmapRect(cr.topLeft(), movie->currentPixmap().size());
+         if (pixmapRect.isEmpty()) {
+            return;
+         }
+         r.setRect(cr.left(), cr.top(),
+                   (rect.width() * cr.width()) / pixmapRect.width(),
+                   (rect.height() * cr.height()) / pixmapRect.height());
+      } else {
+         r = q->style()->itemPixmapRect(q->contentsRect(), align, movie->currentPixmap());
+         r.translate(rect.x(), rect.y());
+         r.setWidth(qMin(r.width(), rect.width()));
+         r.setHeight(qMin(r.height(), rect.height()));
+      }
+      q->update(r);
+   }
 }
 
-void QLabelPrivate::_q_movieResized(const QSize& size)
+void QLabelPrivate::_q_movieResized(const QSize &size)
 {
-    Q_Q(QLabel);
-    q->update(); //we need to refresh the whole background in case the new size is smaler
-    valid_hints = false;
-    _q_movieUpdated(QRect(QPoint(0,0), size));
-    q->updateGeometry();
+   Q_Q(QLabel);
+   q->update(); //we need to refresh the whole background in case the new size is smaler
+   valid_hints = false;
+   _q_movieUpdated(QRect(QPoint(0, 0), size));
+   q->updateGeometry();
 }
 
 /*!
@@ -1240,20 +1287,22 @@ void QLabelPrivate::_q_movieResized(const QSize& size)
 
 void QLabel::setMovie(QMovie *movie)
 {
-    Q_D(QLabel);
-    d->clearContents();
+   Q_D(QLabel);
+   d->clearContents();
 
-    if (!movie)
-        return;
+   if (!movie) {
+      return;
+   }
 
-    d->movie = movie;
-    connect(movie, SIGNAL(resized(const QSize &)), this, SLOT(_q_movieResized(const QSize &)));
-    connect(movie, SIGNAL(updated(const QRect &)), this, SLOT(_q_movieUpdated(const QRect &)));
+   d->movie = movie;
+   connect(movie, SIGNAL(resized(const QSize &)), this, SLOT(_q_movieResized(const QSize &)));
+   connect(movie, SIGNAL(updated(const QRect &)), this, SLOT(_q_movieUpdated(const QRect &)));
 
-    // Assume that if the movie is running,
-    // resize/update signals will come soon enough
-    if (movie->state() != QMovie::Running)
-        d->updateLabel();
+   // Assume that if the movie is running,
+   // resize/update signals will come soon enough
+   if (movie->state() != QMovie::Running) {
+      d->updateLabel();
+   }
 }
 
 #endif // QT_NO_MOVIE
@@ -1266,45 +1315,47 @@ void QLabel::setMovie(QMovie *movie)
 
 void QLabelPrivate::clearContents()
 {
-    delete control;
-    control = 0;
-    isTextLabel = false;
-    hasShortcut = false;
+   delete control;
+   control = 0;
+   isTextLabel = false;
+   hasShortcut = false;
 
 #ifndef QT_NO_PICTURE
-    delete picture;
-    picture = 0;
+   delete picture;
+   picture = 0;
 #endif
-    delete scaledpixmap;
-    scaledpixmap = 0;
-    delete cachedimage;
-    cachedimage = 0;
-    delete pixmap;
-    pixmap = 0;
+   delete scaledpixmap;
+   scaledpixmap = 0;
+   delete cachedimage;
+   cachedimage = 0;
+   delete pixmap;
+   pixmap = 0;
 
-    text.clear();
-    Q_Q(QLabel);
+   text.clear();
+   Q_Q(QLabel);
 #ifndef QT_NO_SHORTCUT
-    if (shortcutId)
-        q->releaseShortcut(shortcutId);
-    shortcutId = 0;
+   if (shortcutId) {
+      q->releaseShortcut(shortcutId);
+   }
+   shortcutId = 0;
 #endif
 #ifndef QT_NO_MOVIE
-    if (movie) {
-        QObject::disconnect(movie, SIGNAL(resized(const QSize &)), q, SLOT(_q_movieResized(const QSize &)));
-        QObject::disconnect(movie, SIGNAL(updated(const QRect &)), q, SLOT(_q_movieUpdated(const QRect &)));
-    }
-    movie = 0;
+   if (movie) {
+      QObject::disconnect(movie, SIGNAL(resized(const QSize &)), q, SLOT(_q_movieResized(const QSize &)));
+      QObject::disconnect(movie, SIGNAL(updated(const QRect &)), q, SLOT(_q_movieUpdated(const QRect &)));
+   }
+   movie = 0;
 #endif
 #ifndef QT_NO_CURSOR
-    if (onAnchor) {
-        if (validCursor)
-            q->setCursor(cursor);
-        else
-            q->unsetCursor();
-    }
-    validCursor = false;
-    onAnchor = false;
+   if (onAnchor) {
+      if (validCursor) {
+         q->setCursor(cursor);
+      } else {
+         q->unsetCursor();
+      }
+   }
+   validCursor = false;
+   onAnchor = false;
 #endif
 }
 
@@ -1320,8 +1371,8 @@ void QLabelPrivate::clearContents()
 
 QMovie *QLabel::movie() const
 {
-    Q_D(const QLabel);
-    return d->movie;
+   Q_D(const QLabel);
+   return d->movie;
 }
 
 #endif  // QT_NO_MOVIE
@@ -1340,21 +1391,21 @@ QMovie *QLabel::movie() const
 
 Qt::TextFormat QLabel::textFormat() const
 {
-    Q_D(const QLabel);
-    return d->textformat;
+   Q_D(const QLabel);
+   return d->textformat;
 }
 
 void QLabel::setTextFormat(Qt::TextFormat format)
 {
-    Q_D(QLabel);
-    if (format != d->textformat) {
-        d->textformat = format;
-        QString t = d->text;
-        if (!t.isNull()) {
-            d->text.clear();
-            setText(t);
-        }
-    }
+   Q_D(QLabel);
+   if (format != d->textformat) {
+      d->textformat = format;
+      QString t = d->text;
+      if (!t.isNull()) {
+         d->text.clear();
+         setText(t);
+      }
+   }
 }
 
 /*!
@@ -1362,19 +1413,20 @@ void QLabel::setTextFormat(Qt::TextFormat format)
 */
 void QLabel::changeEvent(QEvent *ev)
 {
-    Q_D(QLabel);
-    if(ev->type() == QEvent::FontChange || ev->type() == QEvent::ApplicationFontChange) {
-        if (d->isTextLabel) {
-            if (d->control)
-                d->control->document()->setDefaultFont(font());
-            d->updateLabel();
-        }
-    } else if (ev->type() == QEvent::PaletteChange && d->control) {
-        d->control->setPalette(palette());
-    } else if (ev->type() == QEvent::ContentsRectChange) {
-        d->updateLabel();
-    }
-    QFrame::changeEvent(ev);
+   Q_D(QLabel);
+   if (ev->type() == QEvent::FontChange || ev->type() == QEvent::ApplicationFontChange) {
+      if (d->isTextLabel) {
+         if (d->control) {
+            d->control->document()->setDefaultFont(font());
+         }
+         d->updateLabel();
+      }
+   } else if (ev->type() == QEvent::PaletteChange && d->control) {
+      d->control->setPalette(palette());
+   } else if (ev->type() == QEvent::ContentsRectChange) {
+      d->updateLabel();
+   }
+   QFrame::changeEvent(ev);
 }
 
 /*!
@@ -1389,33 +1441,34 @@ void QLabel::changeEvent(QEvent *ev)
 */
 bool QLabel::hasScaledContents() const
 {
-    Q_D(const QLabel);
-    return d->scaledcontents;
+   Q_D(const QLabel);
+   return d->scaledcontents;
 }
 
 void QLabel::setScaledContents(bool enable)
 {
-    Q_D(QLabel);
-    if ((bool)d->scaledcontents == enable)
-        return;
-    d->scaledcontents = enable;
-    if (!enable) {
-        delete d->scaledpixmap;
-        d->scaledpixmap = 0;
-        delete d->cachedimage;
-        d->cachedimage = 0;
-    }
-    update(contentsRect());
+   Q_D(QLabel);
+   if ((bool)d->scaledcontents == enable) {
+      return;
+   }
+   d->scaledcontents = enable;
+   if (!enable) {
+      delete d->scaledpixmap;
+      d->scaledpixmap = 0;
+      delete d->cachedimage;
+      d->cachedimage = 0;
+   }
+   update(contentsRect());
 }
 
 Qt::LayoutDirection QLabelPrivate::textDirection() const
 {
-    if (control) {
-        QTextOption opt = control->document()->defaultTextOption();
-        return opt.textDirection();
-    }
+   if (control) {
+      QTextOption opt = control->document()->defaultTextOption();
+      return opt.textDirection();
+   }
 
-    return text.isRightToLeft() ? Qt::RightToLeft : Qt::LeftToRight;
+   return text.isRightToLeft() ? Qt::RightToLeft : Qt::LeftToRight;
 }
 
 /*!
@@ -1427,146 +1480,157 @@ Qt::LayoutDirection QLabelPrivate::textDirection() const
 // Returns the rect that is available for us to draw the document
 QRect QLabelPrivate::documentRect() const
 {
-    Q_Q(const QLabel);
-    Q_ASSERT_X(isTextLabel, "documentRect", "document rect called for label that is not a text label!");
-    QRect cr = q->contentsRect();
-    cr.adjust(margin, margin, -margin, -margin);
-    const int align = QStyle::visualAlignment(isTextLabel ? textDirection()
-                                                          : q->layoutDirection(), QFlag(this->align));
-    int m = indent;
-    if (m < 0 && q->frameWidth()) // no indent, but we do have a frame
-        m = q->fontMetrics().width(QLatin1Char('x')) / 2 - margin;
-    if (m > 0) {
-        if (align & Qt::AlignLeft)
-            cr.setLeft(cr.left() + m);
-        if (align & Qt::AlignRight)
-            cr.setRight(cr.right() - m);
-        if (align & Qt::AlignTop)
-            cr.setTop(cr.top() + m);
-        if (align & Qt::AlignBottom)
-            cr.setBottom(cr.bottom() - m);
-    }
-    return cr;
+   Q_Q(const QLabel);
+   Q_ASSERT_X(isTextLabel, "documentRect", "document rect called for label that is not a text label!");
+   QRect cr = q->contentsRect();
+   cr.adjust(margin, margin, -margin, -margin);
+   const int align = QStyle::visualAlignment(isTextLabel ? textDirection()
+                     : q->layoutDirection(), QFlag(this->align));
+   int m = indent;
+   if (m < 0 && q->frameWidth()) { // no indent, but we do have a frame
+      m = q->fontMetrics().width(QLatin1Char('x')) / 2 - margin;
+   }
+   if (m > 0) {
+      if (align & Qt::AlignLeft) {
+         cr.setLeft(cr.left() + m);
+      }
+      if (align & Qt::AlignRight) {
+         cr.setRight(cr.right() - m);
+      }
+      if (align & Qt::AlignTop) {
+         cr.setTop(cr.top() + m);
+      }
+      if (align & Qt::AlignBottom) {
+         cr.setBottom(cr.bottom() - m);
+      }
+   }
+   return cr;
 }
 
 void QLabelPrivate::ensureTextPopulated() const
 {
-    if (!textDirty)
-        return;
-    if (control) {
-        QTextDocument *doc = control->document();
-        if (textDirty) {
+   if (!textDirty) {
+      return;
+   }
+   if (control) {
+      QTextDocument *doc = control->document();
+      if (textDirty) {
 #ifndef QT_NO_TEXTHTMLPARSER
-            if (isRichText)
-                doc->setHtml(text);
-            else
-                doc->setPlainText(text);
-#else
+         if (isRichText) {
+            doc->setHtml(text);
+         } else {
             doc->setPlainText(text);
+         }
+#else
+         doc->setPlainText(text);
 #endif
-            doc->setUndoRedoEnabled(false);
+         doc->setUndoRedoEnabled(false);
 
 #ifndef QT_NO_SHORTCUT
-            if (hasShortcut) {
-                // Underline the first character that follows an ampersand (and remove the others ampersands)
-                int from = 0;
-                bool found = false;
-                QTextCursor cursor;
-                while (!(cursor = control->document()->find((QLatin1String("&")), from)).isNull()) {
-                    cursor.deleteChar(); // remove the ampersand
-                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                    from = cursor.position();
-                    if (!found && cursor.selectedText() != QLatin1String("&")) { //not a second &
-                        found = true;
-                        shortcutCursor = cursor;
-                    }
-                }
+         if (hasShortcut) {
+            // Underline the first character that follows an ampersand (and remove the others ampersands)
+            int from = 0;
+            bool found = false;
+            QTextCursor cursor;
+            while (!(cursor = control->document()->find((QLatin1String("&")), from)).isNull()) {
+               cursor.deleteChar(); // remove the ampersand
+               cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+               from = cursor.position();
+               if (!found && cursor.selectedText() != QLatin1String("&")) { //not a second &
+                  found = true;
+                  shortcutCursor = cursor;
+               }
             }
+         }
 #endif
-        }
-    }
-    textDirty = false;
+      }
+   }
+   textDirty = false;
 }
 
 void QLabelPrivate::ensureTextLayouted() const
 {
-    if (!textLayoutDirty)
-        return;
-    ensureTextPopulated();
-    if (control) {
-        QTextDocument *doc = control->document();
-        QTextOption opt = doc->defaultTextOption();
+   if (!textLayoutDirty) {
+      return;
+   }
+   ensureTextPopulated();
+   if (control) {
+      QTextDocument *doc = control->document();
+      QTextOption opt = doc->defaultTextOption();
 
-        opt.setAlignment(QFlag(this->align));
+      opt.setAlignment(QFlag(this->align));
 
-        if (this->align & Qt::TextWordWrap)
-            opt.setWrapMode(QTextOption::WordWrap);
-        else
-            opt.setWrapMode(QTextOption::ManualWrap);
+      if (this->align & Qt::TextWordWrap) {
+         opt.setWrapMode(QTextOption::WordWrap);
+      } else {
+         opt.setWrapMode(QTextOption::ManualWrap);
+      }
 
-        doc->setDefaultTextOption(opt);
+      doc->setDefaultTextOption(opt);
 
-        QTextFrameFormat fmt = doc->rootFrame()->frameFormat();
-        fmt.setMargin(0);
-        doc->rootFrame()->setFrameFormat(fmt);
-        doc->setTextWidth(documentRect().width());
-    }
-    textLayoutDirty = false;
+      QTextFrameFormat fmt = doc->rootFrame()->frameFormat();
+      fmt.setMargin(0);
+      doc->rootFrame()->setFrameFormat(fmt);
+      doc->setTextWidth(documentRect().width());
+   }
+   textLayoutDirty = false;
 }
 
 void QLabelPrivate::ensureTextControl() const
 {
-    Q_Q(const QLabel);
-    if (!isTextLabel)
-        return;
-    if (!control) {
-        control = new QTextControl(const_cast<QLabel *>(q));
-        control->document()->setUndoRedoEnabled(false);
-        control->document()->setDefaultFont(q->font());
-        control->setTextInteractionFlags(textInteractionFlags);
-        control->setOpenExternalLinks(openExternalLinks);
-        control->setPalette(q->palette());
-        control->setFocus(q->hasFocus());
+   Q_Q(const QLabel);
+   if (!isTextLabel) {
+      return;
+   }
+   if (!control) {
+      control = new QTextControl(const_cast<QLabel *>(q));
+      control->document()->setUndoRedoEnabled(false);
+      control->document()->setDefaultFont(q->font());
+      control->setTextInteractionFlags(textInteractionFlags);
+      control->setOpenExternalLinks(openExternalLinks);
+      control->setPalette(q->palette());
+      control->setFocus(q->hasFocus());
 
-        QObject::connect(control, SIGNAL(updateRequest(const QRectF &)),   q, SLOT(update()));
-        QObject::connect(control, SIGNAL(linkHovered(const QString &)),    q, SLOT(_q_linkHovered(const QString &)));
-        QObject::connect(control, SIGNAL(linkActivated(const QString &)),  q, SLOT(linkActivated(const QString &)));
+      QObject::connect(control, SIGNAL(updateRequest(const QRectF &)),   q, SLOT(update()));
+      QObject::connect(control, SIGNAL(linkHovered(const QString &)),    q, SLOT(_q_linkHovered(const QString &)));
+      QObject::connect(control, SIGNAL(linkActivated(const QString &)),  q, SLOT(linkActivated(const QString &)));
 
-        textLayoutDirty = true;
-        textDirty = true;
-    }
+      textLayoutDirty = true;
+      textDirty = true;
+   }
 }
 
 void QLabelPrivate::sendControlEvent(QEvent *e)
 {
-    Q_Q(QLabel);
-    if (!isTextLabel || !control || textInteractionFlags == Qt::NoTextInteraction) {
-        e->ignore();
-        return;
-    }
-    control->processEvent(e, -layoutRect().topLeft(), q);
+   Q_Q(QLabel);
+   if (!isTextLabel || !control || textInteractionFlags == Qt::NoTextInteraction) {
+      e->ignore();
+      return;
+   }
+   control->processEvent(e, -layoutRect().topLeft(), q);
 }
 
 void QLabelPrivate::_q_linkHovered(const QString &anchor)
 {
-    Q_Q(QLabel);
+   Q_Q(QLabel);
 #ifndef QT_NO_CURSOR
-    if (anchor.isEmpty()) { // restore cursor
-        if (validCursor)
-            q->setCursor(cursor);
-        else
-            q->unsetCursor();
-        onAnchor = false;
-    } else if (!onAnchor) {
-        validCursor = q->testAttribute(Qt::WA_SetCursor);
-        if (validCursor) {
-            cursor = q->cursor();
-        }
-        q->setCursor(Qt::PointingHandCursor);
-        onAnchor = true;
-    }
+   if (anchor.isEmpty()) { // restore cursor
+      if (validCursor) {
+         q->setCursor(cursor);
+      } else {
+         q->unsetCursor();
+      }
+      onAnchor = false;
+   } else if (!onAnchor) {
+      validCursor = q->testAttribute(Qt::WA_SetCursor);
+      if (validCursor) {
+         cursor = q->cursor();
+      }
+      q->setCursor(Qt::PointingHandCursor);
+      onAnchor = true;
+   }
 #endif
-    emit q->linkHovered(anchor);
+   emit q->linkHovered(anchor);
 }
 
 // Return the layout rect - this is the rect that is given to the layout painting code
@@ -1574,61 +1638,64 @@ void QLabelPrivate::_q_linkHovered(const QString &anchor)
 // done by the text layout code
 QRectF QLabelPrivate::layoutRect() const
 {
-    QRectF cr = documentRect();
-    if (!control)
-        return cr;
-    ensureTextLayouted();
-    // Caculate y position manually
-    qreal rh = control->document()->documentLayout()->documentSize().height();
-    qreal yo = 0;
-    if (align & Qt::AlignVCenter)
-        yo = qMax((cr.height()-rh)/2, qreal(0));
-    else if (align & Qt::AlignBottom)
-        yo = qMax(cr.height()-rh, qreal(0));
-    return QRectF(cr.x(), yo + cr.y(), cr.width(), cr.height());
+   QRectF cr = documentRect();
+   if (!control) {
+      return cr;
+   }
+   ensureTextLayouted();
+   // Caculate y position manually
+   qreal rh = control->document()->documentLayout()->documentSize().height();
+   qreal yo = 0;
+   if (align & Qt::AlignVCenter) {
+      yo = qMax((cr.height() - rh) / 2, qreal(0));
+   } else if (align & Qt::AlignBottom) {
+      yo = qMax(cr.height() - rh, qreal(0));
+   }
+   return QRectF(cr.x(), yo + cr.y(), cr.width(), cr.height());
 }
 
 // Returns the point in the document rect adjusted with p
-QPoint QLabelPrivate::layoutPoint(const QPoint& p) const
+QPoint QLabelPrivate::layoutPoint(const QPoint &p) const
 {
-    QRect lr = layoutRect().toRect();
-    return p - lr.topLeft();
+   QRect lr = layoutRect().toRect();
+   return p - lr.topLeft();
 }
 
 #ifndef QT_NO_CONTEXTMENU
 QMenu *QLabelPrivate::createStandardContextMenu(const QPoint &pos)
 {
-    QString linkToCopy;
-    QPoint p;
-    if (control && isRichText) {
-        p = layoutPoint(pos);
-        linkToCopy = control->document()->documentLayout()->anchorAt(p);
-    }
+   QString linkToCopy;
+   QPoint p;
+   if (control && isRichText) {
+      p = layoutPoint(pos);
+      linkToCopy = control->document()->documentLayout()->anchorAt(p);
+   }
 
-    if (linkToCopy.isEmpty() && !control)
-        return 0;
+   if (linkToCopy.isEmpty() && !control) {
+      return 0;
+   }
 
-    return control->createStandardContextMenu(p, q_func());
+   return control->createStandardContextMenu(p, q_func());
 }
 #endif
 
 #ifndef QT_NO_MOVIE
-void QLabel::_q_movieUpdated(const QRect & un_named_arg1)
+void QLabel::_q_movieUpdated(const QRect &un_named_arg1)
 {
-	Q_D(QLabel);
-	d->_q_movieUpdated(un_named_arg1);
+   Q_D(QLabel);
+   d->_q_movieUpdated(un_named_arg1);
 }
-void QLabel::_q_movieResized(const QSize & un_named_arg1)
+void QLabel::_q_movieResized(const QSize &un_named_arg1)
 {
-	Q_D(QLabel);
-	d->_q_movieResized(un_named_arg1);
+   Q_D(QLabel);
+   d->_q_movieResized(un_named_arg1);
 }
 #endif
 
-void QLabel::_q_linkHovered(const QString & un_named_arg1)
+void QLabel::_q_linkHovered(const QString &un_named_arg1)
 {
-	Q_D(QLabel);
-	d->_q_linkHovered(un_named_arg1);
+   Q_D(QLabel);
+   d->_q_linkHovered(un_named_arg1);
 }
 
 QT_END_NAMESPACE

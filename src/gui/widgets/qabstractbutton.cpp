@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,44 +45,44 @@ QT_BEGIN_NAMESPACE
 Q_GUI_EXPORT extern bool qt_tab_all_widgets;
 
 QAbstractButtonPrivate::QAbstractButtonPrivate(QSizePolicy::ControlType type)
-    :
+   :
 #ifndef QT_NO_SHORTCUT
-    shortcutId(0),
+   shortcutId(0),
 #endif
-    checkable(false), checked(false), autoRepeat(false), autoExclusive(false),
-    down(false), blockRefresh(false), pressed(false),
+   checkable(false), checked(false), autoRepeat(false), autoExclusive(false),
+   down(false), blockRefresh(false), pressed(false),
 #ifndef QT_NO_BUTTONGROUP
-    group(0),
+   group(0),
 #endif
-    autoRepeatDelay(AUTO_REPEAT_DELAY),
-    autoRepeatInterval(AUTO_REPEAT_INTERVAL),
-    controlType(type)
+   autoRepeatDelay(AUTO_REPEAT_DELAY),
+   autoRepeatInterval(AUTO_REPEAT_INTERVAL),
+   controlType(type)
 {}
 
 #ifndef QT_NO_BUTTONGROUP
 
 class QButtonGroupPrivate
 {
-    Q_DECLARE_PUBLIC(QButtonGroup)
+   Q_DECLARE_PUBLIC(QButtonGroup)
 
-public:
-    QButtonGroupPrivate():exclusive(true){}
-    virtual ~QButtonGroupPrivate() {}
+ public:
+   QButtonGroupPrivate(): exclusive(true) {}
+   virtual ~QButtonGroupPrivate() {}
 
-    QList<QAbstractButton *> buttonList;
-    QPointer<QAbstractButton> checkedButton;
-    void detectCheckedButton();
-    void notifyChecked(QAbstractButton *button);
-    bool exclusive;
+   QList<QAbstractButton *> buttonList;
+   QPointer<QAbstractButton> checkedButton;
+   void detectCheckedButton();
+   void notifyChecked(QAbstractButton *button);
+   bool exclusive;
 
-    QMap<QAbstractButton*, int> mapping;
+   QMap<QAbstractButton *, int> mapping;
 
-protected:
-	 QButtonGroup *q_ptr;
+ protected:
+   QButtonGroup *q_ptr;
 
 };
 
-QButtonGroup::QButtonGroup(QObject *parent)   
+QButtonGroup::QButtonGroup(QObject *parent)
    : QObject(parent), d_ptr(new QButtonGroupPrivate)
 {
    d_ptr->q_ptr = this;
@@ -90,117 +90,122 @@ QButtonGroup::QButtonGroup(QObject *parent)
 
 QButtonGroup::~QButtonGroup()
 {
-    Q_D(QButtonGroup);
-    for (int i = 0; i < d->buttonList.count(); ++i)
-        d->buttonList.at(i)->d_func()->group = 0;
+   Q_D(QButtonGroup);
+   for (int i = 0; i < d->buttonList.count(); ++i) {
+      d->buttonList.at(i)->d_func()->group = 0;
+   }
 }
 
 
 bool QButtonGroup::exclusive() const
 {
-    Q_D(const QButtonGroup);
-    return d->exclusive;
+   Q_D(const QButtonGroup);
+   return d->exclusive;
 }
 
 void QButtonGroup::setExclusive(bool exclusive)
 {
-    Q_D(QButtonGroup);
-    d->exclusive = exclusive;
+   Q_D(QButtonGroup);
+   d->exclusive = exclusive;
 }
 
 
 // TODO: Qt 5: Merge with addButton(QAbstractButton *button, int id)
 void QButtonGroup::addButton(QAbstractButton *button)
 {
-    addButton(button, -1);
+   addButton(button, -1);
 }
 
 void QButtonGroup::addButton(QAbstractButton *button, int id)
 {
-    Q_D(QButtonGroup);
-    if (QButtonGroup *previous = button->d_func()->group)
-        previous->removeButton(button);
-    button->d_func()->group = this;
-    d->buttonList.append(button);
-    if (id == -1) {
-        QList<int> ids = d->mapping.values();
-        if (ids.isEmpty())
-           d->mapping[button] = -2;
-        else {
-            qSort(ids);
-            d->mapping[button] = ids.first()-1;
-        }
-    } else {
-        d->mapping[button] = id;
-    }
+   Q_D(QButtonGroup);
+   if (QButtonGroup *previous = button->d_func()->group) {
+      previous->removeButton(button);
+   }
+   button->d_func()->group = this;
+   d->buttonList.append(button);
+   if (id == -1) {
+      QList<int> ids = d->mapping.values();
+      if (ids.isEmpty()) {
+         d->mapping[button] = -2;
+      } else {
+         qSort(ids);
+         d->mapping[button] = ids.first() - 1;
+      }
+   } else {
+      d->mapping[button] = id;
+   }
 
-    if (d->exclusive && button->isChecked())
-        button->d_func()->notifyChecked();
+   if (d->exclusive && button->isChecked()) {
+      button->d_func()->notifyChecked();
+   }
 }
 
 void QButtonGroup::removeButton(QAbstractButton *button)
 {
-    Q_D(QButtonGroup);
-    if (d->checkedButton == button) {
-        d->detectCheckedButton();
-    }
-    if (button->d_func()->group == this) {
-        button->d_func()->group = 0;
-        d->buttonList.removeAll(button);
-        d->mapping.remove(button);
-    }
+   Q_D(QButtonGroup);
+   if (d->checkedButton == button) {
+      d->detectCheckedButton();
+   }
+   if (button->d_func()->group == this) {
+      button->d_func()->group = 0;
+      d->buttonList.removeAll(button);
+      d->mapping.remove(button);
+   }
 }
 
-QList<QAbstractButton*> QButtonGroup::buttons() const
+QList<QAbstractButton *> QButtonGroup::buttons() const
 {
-    Q_D(const QButtonGroup);
-    return d->buttonList;
+   Q_D(const QButtonGroup);
+   return d->buttonList;
 }
 
 QAbstractButton *QButtonGroup::checkedButton() const
 {
-    Q_D(const QButtonGroup);
-    return d->checkedButton;
+   Q_D(const QButtonGroup);
+   return d->checkedButton;
 }
 
 QAbstractButton *QButtonGroup::button(int id) const
 {
-    Q_D(const QButtonGroup);
-    return d->mapping.key(id);
+   Q_D(const QButtonGroup);
+   return d->mapping.key(id);
 }
 
 void QButtonGroup::setId(QAbstractButton *button, int id)
 {
-    Q_D(QButtonGroup);
-    if (button && id != -1)
-        d->mapping[button] = id;
+   Q_D(QButtonGroup);
+   if (button && id != -1) {
+      d->mapping[button] = id;
+   }
 }
 
 int QButtonGroup::id(QAbstractButton *button) const
 {
-    Q_D(const QButtonGroup);
-    return d->mapping.value(button, -1);
+   Q_D(const QButtonGroup);
+   return d->mapping.value(button, -1);
 }
 
 int QButtonGroup::checkedId() const
 {
-    Q_D(const QButtonGroup);
-    return d->mapping.value(d->checkedButton, -1);
+   Q_D(const QButtonGroup);
+   return d->mapping.value(d->checkedButton, -1);
 }
 
 // detect a checked button other than the current one
 void QButtonGroupPrivate::detectCheckedButton()
 {
-    QAbstractButton *previous = checkedButton;
-    checkedButton = 0;
-    if (exclusive)
-        return;
-    for (int i = 0; i < buttonList.count(); i++) {
-        if (buttonList.at(i) != previous && buttonList.at(i)->isChecked()) {
-            checkedButton = buttonList.at(i);
-            return;
-        }
-    }
+   QAbstractButton *previous = checkedButton;
+   checkedButton = 0;
+   if (exclusive) {
+      return;
+   }
+   for (int i = 0; i < buttonList.count(); i++) {
+      if (buttonList.at(i) != previous && buttonList.at(i)->isChecked()) {
+         checkedButton = buttonList.at(i);
+         return;
+      }
+   }
 }
 
 #endif // QT_NO_BUTTONGROUP
@@ -210,270 +215,289 @@ QList<QAbstractButton *>QAbstractButtonPrivate::queryButtonList() const
    Q_Q(const QAbstractButton);
 
 #ifndef QT_NO_BUTTONGROUP
-    if (group)
-        return group->d_func()->buttonList;
+   if (group) {
+      return group->d_func()->buttonList;
+   }
 #endif
 
-    QList<QAbstractButton*>candidates = q->parent()->findChildren<QAbstractButton *>();
+   QList<QAbstractButton *>candidates = q->parent()->findChildren<QAbstractButton *>();
 
-    if (autoExclusive) {
-        for (int i = candidates.count() - 1; i >= 0; --i) {
-            QAbstractButton *candidate = candidates.at(i);
-            if (!candidate->autoExclusive()
+   if (autoExclusive) {
+      for (int i = candidates.count() - 1; i >= 0; --i) {
+         QAbstractButton *candidate = candidates.at(i);
+         if (!candidate->autoExclusive()
 #ifndef QT_NO_BUTTONGROUP
-                || candidate->group()
+               || candidate->group()
 #endif
-                )
-                candidates.removeAt(i);
-        }
-    }
-    return candidates;
+            ) {
+            candidates.removeAt(i);
+         }
+      }
+   }
+   return candidates;
 }
 
 QAbstractButton *QAbstractButtonPrivate::queryCheckedButton() const
 {
 #ifndef QT_NO_BUTTONGROUP
-    if (group)
-        return group->d_func()->checkedButton;
+   if (group) {
+      return group->d_func()->checkedButton;
+   }
 #endif
 
-    Q_Q(const QAbstractButton);
-    QList<QAbstractButton *> buttonList = queryButtonList();
-    if (!autoExclusive || buttonList.count() == 1) // no group
-        return 0;
+   Q_Q(const QAbstractButton);
+   QList<QAbstractButton *> buttonList = queryButtonList();
+   if (!autoExclusive || buttonList.count() == 1) { // no group
+      return 0;
+   }
 
-    for (int i = 0; i < buttonList.count(); ++i) {
-        QAbstractButton *b = buttonList.at(i);
-        if (b->d_func()->checked && b != q)
-            return b;
-    }
-    return checked  ? const_cast<QAbstractButton *>(q) : 0;
+   for (int i = 0; i < buttonList.count(); ++i) {
+      QAbstractButton *b = buttonList.at(i);
+      if (b->d_func()->checked && b != q) {
+         return b;
+      }
+   }
+   return checked  ? const_cast<QAbstractButton *>(q) : 0;
 }
 
 void QAbstractButtonPrivate::notifyChecked()
 {
 #ifndef QT_NO_BUTTONGROUP
-    Q_Q(QAbstractButton);
-    if (group) {
-        QAbstractButton *previous = group->d_func()->checkedButton;
-        group->d_func()->checkedButton = q;
-        if (group->d_func()->exclusive && previous && previous != q)
-            previous->nextCheckState();
-    } else
+   Q_Q(QAbstractButton);
+   if (group) {
+      QAbstractButton *previous = group->d_func()->checkedButton;
+      group->d_func()->checkedButton = q;
+      if (group->d_func()->exclusive && previous && previous != q) {
+         previous->nextCheckState();
+      }
+   } else
 #endif
-    if (autoExclusive) {
-        if (QAbstractButton *b = queryCheckedButton())
+      if (autoExclusive) {
+         if (QAbstractButton *b = queryCheckedButton()) {
             b->setChecked(false);
-    }
+         }
+      }
 }
 
 void QAbstractButtonPrivate::moveFocus(int key)
 {
-    QList<QAbstractButton *> buttonList = queryButtonList();;
+   QList<QAbstractButton *> buttonList = queryButtonList();;
 #ifndef QT_NO_BUTTONGROUP
-    bool exclusive = group ? group->d_func()->exclusive : autoExclusive;
+   bool exclusive = group ? group->d_func()->exclusive : autoExclusive;
 #else
-    bool exclusive = autoExclusive;
+   bool exclusive = autoExclusive;
 #endif
-    QWidget *f = QApplication::focusWidget();
-    QAbstractButton *fb = qobject_cast<QAbstractButton *>(f);
-    if (!fb || !buttonList.contains(fb))
-        return;
-    
-    QAbstractButton *candidate = 0;
-    int bestScore = -1;
-    QRect target = f->rect().translated(f->mapToGlobal(QPoint(0,0)));
-    QPoint goal = target.center();
-    uint focus_flag = qt_tab_all_widgets ? Qt::TabFocus : Qt::StrongFocus;
+   QWidget *f = QApplication::focusWidget();
+   QAbstractButton *fb = qobject_cast<QAbstractButton *>(f);
+   if (!fb || !buttonList.contains(fb)) {
+      return;
+   }
 
-    for (int i = 0; i < buttonList.count(); ++i) {
-        QAbstractButton *button = buttonList.at(i);
-        if (button != f && button->window() == f->window() && button->isEnabled() && !button->isHidden() &&
+   QAbstractButton *candidate = 0;
+   int bestScore = -1;
+   QRect target = f->rect().translated(f->mapToGlobal(QPoint(0, 0)));
+   QPoint goal = target.center();
+   uint focus_flag = qt_tab_all_widgets ? Qt::TabFocus : Qt::StrongFocus;
+
+   for (int i = 0; i < buttonList.count(); ++i) {
+      QAbstractButton *button = buttonList.at(i);
+      if (button != f && button->window() == f->window() && button->isEnabled() && !button->isHidden() &&
             (autoExclusive || (button->focusPolicy() & focus_flag) == focus_flag)) {
-            QRect buttonRect = button->rect().translated(button->mapToGlobal(QPoint(0,0)));
-            QPoint p = buttonRect.center();
+         QRect buttonRect = button->rect().translated(button->mapToGlobal(QPoint(0, 0)));
+         QPoint p = buttonRect.center();
 
-            //Priority to widgets that overlap on the same coordinate.
-            //In that case, the distance in the direction will be used as significant score,
-            //take also in account orthogonal distance in case two widget are in the same distance.
-            int score;
-            if ((buttonRect.x() < target.right() && target.x() < buttonRect.right())
-                  && (key == Qt::Key_Up || key == Qt::Key_Down)) {
-                //one item's is at the vertical of the other
-                score = (qAbs(p.y() - goal.y()) << 16) + qAbs(p.x() - goal.x());
-            } else if ((buttonRect.y() < target.bottom() && target.y() < buttonRect.bottom())
-                        && (key == Qt::Key_Left || key == Qt::Key_Right) ) {
-                //one item's is at the horizontal of the other
-                score = (qAbs(p.x() - goal.x()) << 16) + qAbs(p.y() - goal.y());
-            } else {
-                score = (1 << 30) + (p.y() - goal.y()) * (p.y() - goal.y()) + (p.x() - goal.x()) * (p.x() - goal.x());
-            }
+         //Priority to widgets that overlap on the same coordinate.
+         //In that case, the distance in the direction will be used as significant score,
+         //take also in account orthogonal distance in case two widget are in the same distance.
+         int score;
+         if ((buttonRect.x() < target.right() && target.x() < buttonRect.right())
+               && (key == Qt::Key_Up || key == Qt::Key_Down)) {
+            //one item's is at the vertical of the other
+            score = (qAbs(p.y() - goal.y()) << 16) + qAbs(p.x() - goal.x());
+         } else if ((buttonRect.y() < target.bottom() && target.y() < buttonRect.bottom())
+                    && (key == Qt::Key_Left || key == Qt::Key_Right) ) {
+            //one item's is at the horizontal of the other
+            score = (qAbs(p.x() - goal.x()) << 16) + qAbs(p.y() - goal.y());
+         } else {
+            score = (1 << 30) + (p.y() - goal.y()) * (p.y() - goal.y()) + (p.x() - goal.x()) * (p.x() - goal.x());
+         }
 
-            if (score > bestScore && candidate)
-                continue;
+         if (score > bestScore && candidate) {
+            continue;
+         }
 
-            switch(key) {
+         switch (key) {
             case Qt::Key_Up:
-                if (p.y() < goal.y()) {
-                    candidate = button;
-                    bestScore = score;
-                }
-                break;
+               if (p.y() < goal.y()) {
+                  candidate = button;
+                  bestScore = score;
+               }
+               break;
             case Qt::Key_Down:
-                if (p.y() > goal.y()) {
-                    candidate = button;
-                    bestScore = score;
-                }
-                break;
+               if (p.y() > goal.y()) {
+                  candidate = button;
+                  bestScore = score;
+               }
+               break;
             case Qt::Key_Left:
-                if (p.x() < goal.x()) {
-                    candidate = button;
-                    bestScore = score;
-                }
-                break;
+               if (p.x() < goal.x()) {
+                  candidate = button;
+                  bestScore = score;
+               }
+               break;
             case Qt::Key_Right:
-                if (p.x() > goal.x()) {
-                    candidate = button;
-                    bestScore = score;
-                }
-                break;
-            }
-        }
-    }
+               if (p.x() > goal.x()) {
+                  candidate = button;
+                  bestScore = score;
+               }
+               break;
+         }
+      }
+   }
 
-    if (exclusive
+   if (exclusive
 #ifdef QT_KEYPAD_NAVIGATION
-        && !QApplication::keypadNavigationEnabled()
+         && !QApplication::keypadNavigationEnabled()
 #endif
-        && candidate
-        && fb->d_func()->checked
-        && candidate->d_func()->checkable)
-        candidate->click();
+         && candidate
+         && fb->d_func()->checked
+         && candidate->d_func()->checkable) {
+      candidate->click();
+   }
 
-    if (candidate) {
-        if (key == Qt::Key_Up || key == Qt::Key_Left)
-            candidate->setFocus(Qt::BacktabFocusReason);
-        else
-            candidate->setFocus(Qt::TabFocusReason);
-    }
+   if (candidate) {
+      if (key == Qt::Key_Up || key == Qt::Key_Left) {
+         candidate->setFocus(Qt::BacktabFocusReason);
+      } else {
+         candidate->setFocus(Qt::TabFocusReason);
+      }
+   }
 }
 
 void QAbstractButtonPrivate::fixFocusPolicy()
 {
-    Q_Q(QAbstractButton);
+   Q_Q(QAbstractButton);
 #ifndef QT_NO_BUTTONGROUP
-    if (!group && !autoExclusive)
+   if (!group && !autoExclusive)
 #else
-    if (!autoExclusive)
+   if (!autoExclusive)
 #endif
-        return;
+      return;
 
-    QList<QAbstractButton *> buttonList = queryButtonList();
-    for (int i = 0; i < buttonList.count(); ++i) {
-        QAbstractButton *b = buttonList.at(i);
-        if (!b->isCheckable())
-            continue;
-        b->setFocusPolicy((Qt::FocusPolicy) ((b == q || !q->isCheckable())
-                                         ? (b->focusPolicy() | Qt::TabFocus)
-                                         :  (b->focusPolicy() & ~Qt::TabFocus)));
-    }
+   QList<QAbstractButton *> buttonList = queryButtonList();
+   for (int i = 0; i < buttonList.count(); ++i) {
+      QAbstractButton *b = buttonList.at(i);
+      if (!b->isCheckable()) {
+         continue;
+      }
+      b->setFocusPolicy((Qt::FocusPolicy) ((b == q || !q->isCheckable())
+                                           ? (b->focusPolicy() | Qt::TabFocus)
+                                           :  (b->focusPolicy() & ~Qt::TabFocus)));
+   }
 }
 
 void QAbstractButtonPrivate::init()
 {
-    Q_Q(QAbstractButton);
+   Q_Q(QAbstractButton);
 
-    q->setFocusPolicy(Qt::FocusPolicy(q->style()->styleHint(QStyle::SH_Button_FocusPolicy)));
-    q->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed, controlType));
-    q->setAttribute(Qt::WA_WState_OwnSizePolicy, false);
-    q->setForegroundRole(QPalette::ButtonText);
-    q->setBackgroundRole(QPalette::Button);
+   q->setFocusPolicy(Qt::FocusPolicy(q->style()->styleHint(QStyle::SH_Button_FocusPolicy)));
+   q->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed, controlType));
+   q->setAttribute(Qt::WA_WState_OwnSizePolicy, false);
+   q->setForegroundRole(QPalette::ButtonText);
+   q->setBackgroundRole(QPalette::Button);
 }
 
 void QAbstractButtonPrivate::refresh()
 {
-    Q_Q(QAbstractButton);
+   Q_Q(QAbstractButton);
 
-    if (blockRefresh)
-        return;
-    q->update();
+   if (blockRefresh) {
+      return;
+   }
+   q->update();
 #ifndef QT_NO_ACCESSIBILITY
-    QAccessible::updateAccessibility(q, 0, QAccessible::StateChanged);
+   QAccessible::updateAccessibility(q, 0, QAccessible::StateChanged);
 #endif
 }
 
 void QAbstractButtonPrivate::click()
 {
-    Q_Q(QAbstractButton);
+   Q_Q(QAbstractButton);
 
-    down = false;
-    blockRefresh = true;
-    bool changeState = true;
-    if (checked && queryCheckedButton() == q) {
-        // the checked button of an exclusive or autoexclusive group cannot be unchecked
+   down = false;
+   blockRefresh = true;
+   bool changeState = true;
+   if (checked && queryCheckedButton() == q) {
+      // the checked button of an exclusive or autoexclusive group cannot be unchecked
 #ifndef QT_NO_BUTTONGROUP
-        if (group ? group->d_func()->exclusive : autoExclusive)
+      if (group ? group->d_func()->exclusive : autoExclusive)
 #else
-        if (autoExclusive)
+      if (autoExclusive)
 #endif
-            changeState = false;
-    }
+         changeState = false;
+   }
 
-    QPointer<QAbstractButton> guard(q);
-    if (changeState) {
-        q->nextCheckState();
-        if (!guard)
-            return;
-    }
-    blockRefresh = false;
-    refresh();
-    q->repaint(); //flush paint event before invoking potentially expensive operation
-    QApplication::flush();
-    if (guard)
-        emitReleased();
-    if (guard)
-        emitClicked();
+   QPointer<QAbstractButton> guard(q);
+   if (changeState) {
+      q->nextCheckState();
+      if (!guard) {
+         return;
+      }
+   }
+   blockRefresh = false;
+   refresh();
+   q->repaint(); //flush paint event before invoking potentially expensive operation
+   QApplication::flush();
+   if (guard) {
+      emitReleased();
+   }
+   if (guard) {
+      emitClicked();
+   }
 }
 
 void QAbstractButtonPrivate::emitClicked()
 {
-    Q_Q(QAbstractButton);
-    QPointer<QAbstractButton> guard(q);
-    emit q->clicked(checked);
+   Q_Q(QAbstractButton);
+   QPointer<QAbstractButton> guard(q);
+   emit q->clicked(checked);
 #ifndef QT_NO_BUTTONGROUP
-    if (guard && group) {
-        emit group->buttonClicked(group->id(q));
-        if (guard && group)
-            emit group->buttonClicked(q);
-    }
+   if (guard && group) {
+      emit group->buttonClicked(group->id(q));
+      if (guard && group) {
+         emit group->buttonClicked(q);
+      }
+   }
 #endif
 }
 
 void QAbstractButtonPrivate::emitPressed()
 {
-    Q_Q(QAbstractButton);
-    QPointer<QAbstractButton> guard(q);
-    emit q->pressed();
+   Q_Q(QAbstractButton);
+   QPointer<QAbstractButton> guard(q);
+   emit q->pressed();
 #ifndef QT_NO_BUTTONGROUP
-    if (guard && group) {
-        emit group->buttonPressed(group->id(q));
-        if (guard && group)
-            emit group->buttonPressed(q);
-    }
+   if (guard && group) {
+      emit group->buttonPressed(group->id(q));
+      if (guard && group) {
+         emit group->buttonPressed(q);
+      }
+   }
 #endif
 }
 
 void QAbstractButtonPrivate::emitReleased()
 {
-    Q_Q(QAbstractButton);
-    QPointer<QAbstractButton> guard(q);
-    emit q->released();
+   Q_Q(QAbstractButton);
+   QPointer<QAbstractButton> guard(q);
+   emit q->released();
 #ifndef QT_NO_BUTTONGROUP
-    if (guard && group) {
-        emit group->buttonReleased(group->id(q));
-        if (guard && group)
-            emit group->buttonReleased(q);
-    }
+   if (guard && group) {
+      emit group->buttonReleased(group->id(q));
+      if (guard && group) {
+         emit group->buttonReleased(q);
+      }
+   }
 #endif
 }
 
@@ -481,21 +505,22 @@ void QAbstractButtonPrivate::emitReleased()
     Constructs an abstract button with a \a parent.
 */
 QAbstractButton::QAbstractButton(QWidget *parent)
-    : QWidget(*new QAbstractButtonPrivate, parent, 0)
+   : QWidget(*new QAbstractButtonPrivate, parent, 0)
 {
-    Q_D(QAbstractButton);
-    d->init();
+   Q_D(QAbstractButton);
+   d->init();
 }
 
 /*!
     Destroys the button.
  */
- QAbstractButton::~QAbstractButton()
+QAbstractButton::~QAbstractButton()
 {
 #ifndef QT_NO_BUTTONGROUP
-    Q_D(QAbstractButton);
-    if (d->group)
-        d->group->removeButton(this);
+   Q_D(QAbstractButton);
+   if (d->group) {
+      d->group->removeButton(this);
+   }
 #endif
 }
 
@@ -503,10 +528,10 @@ QAbstractButton::QAbstractButton(QWidget *parent)
 /*! \internal
  */
 QAbstractButton::QAbstractButton(QAbstractButtonPrivate &dd, QWidget *parent)
-    : QWidget(dd, parent, 0)
+   : QWidget(dd, parent, 0)
 {
-    Q_D(QAbstractButton);
-    d->init();
+   Q_D(QAbstractButton);
+   d->init();
 }
 
 /*!
@@ -528,26 +553,27 @@ There is no default text.
 
 void QAbstractButton::setText(const QString &text)
 {
-    Q_D(QAbstractButton);
-    if (d->text == text)
-        return;
-    d->text = text;
+   Q_D(QAbstractButton);
+   if (d->text == text) {
+      return;
+   }
+   d->text = text;
 #ifndef QT_NO_SHORTCUT
-    QKeySequence newMnemonic = QKeySequence::mnemonic(text);
-    setShortcut(newMnemonic);
+   QKeySequence newMnemonic = QKeySequence::mnemonic(text);
+   setShortcut(newMnemonic);
 #endif
-    d->sizeHint = QSize();
-    update();
-    updateGeometry();
+   d->sizeHint = QSize();
+   update();
+   updateGeometry();
 #ifndef QT_NO_ACCESSIBILITY
-    QAccessible::updateAccessibility(this, 0, QAccessible::NameChanged);
+   QAccessible::updateAccessibility(this, 0, QAccessible::NameChanged);
 #endif
 }
 
 QString QAbstractButton::text() const
 {
-    Q_D(const QAbstractButton);
-    return d->text;
+   Q_D(const QAbstractButton);
+   return d->text;
 }
 
 
@@ -560,17 +586,17 @@ QString QAbstractButton::text() const
 */
 void QAbstractButton::setIcon(const QIcon &icon)
 {
-    Q_D(QAbstractButton);
-    d->icon = icon;
-    d->sizeHint = QSize();
-    update();
-    updateGeometry();
+   Q_D(QAbstractButton);
+   d->icon = icon;
+   d->sizeHint = QSize();
+   update();
+   updateGeometry();
 }
 
 QIcon QAbstractButton::icon() const
 {
-    Q_D(const QAbstractButton);
-    return d->icon;
+   Q_D(const QAbstractButton);
+   return d->icon;
 }
 
 #ifndef QT_NO_SHORTCUT
@@ -581,17 +607,18 @@ QIcon QAbstractButton::icon() const
 
 void QAbstractButton::setShortcut(const QKeySequence &key)
 {
-    Q_D(QAbstractButton);
-    if (d->shortcutId != 0)
-        releaseShortcut(d->shortcutId);
-    d->shortcut = key;
-    d->shortcutId = grabShortcut(key);
+   Q_D(QAbstractButton);
+   if (d->shortcutId != 0) {
+      releaseShortcut(d->shortcutId);
+   }
+   d->shortcut = key;
+   d->shortcutId = grabShortcut(key);
 }
 
 QKeySequence QAbstractButton::shortcut() const
 {
-    Q_D(const QAbstractButton);
-    return d->shortcut;
+   Q_D(const QAbstractButton);
+   return d->shortcut;
 }
 #endif // QT_NO_SHORTCUT
 
@@ -605,18 +632,19 @@ By default, the button is not checkable.
 */
 void QAbstractButton::setCheckable(bool checkable)
 {
-    Q_D(QAbstractButton);
-    if (d->checkable == checkable)
-        return;
+   Q_D(QAbstractButton);
+   if (d->checkable == checkable) {
+      return;
+   }
 
-    d->checkable = checkable;
-    d->checked = false;
+   d->checkable = checkable;
+   d->checked = false;
 }
 
 bool QAbstractButton::isCheckable() const
 {
-    Q_D(const QAbstractButton);
-    return d->checkable;
+   Q_D(const QAbstractButton);
+   return d->checkable;
 }
 
 /*!
@@ -629,43 +657,50 @@ Only checkable buttons can be checked. By default, the button is unchecked.
 */
 void QAbstractButton::setChecked(bool checked)
 {
-    Q_D(QAbstractButton);
-    if (!d->checkable || d->checked == checked) {
-        if (!d->blockRefresh)
-            checkStateSet();
-        return;
-    }
+   Q_D(QAbstractButton);
+   if (!d->checkable || d->checked == checked) {
+      if (!d->blockRefresh) {
+         checkStateSet();
+      }
+      return;
+   }
 
-    if (!checked && d->queryCheckedButton() == this) {
-        // the checked button of an exclusive or autoexclusive group cannot be  unchecked
+   if (!checked && d->queryCheckedButton() == this) {
+      // the checked button of an exclusive or autoexclusive group cannot be  unchecked
 #ifndef QT_NO_BUTTONGROUP
-        if (d->group ? d->group->d_func()->exclusive : d->autoExclusive)
-            return;
-        if (d->group)
-            d->group->d_func()->detectCheckedButton();
+      if (d->group ? d->group->d_func()->exclusive : d->autoExclusive) {
+         return;
+      }
+      if (d->group) {
+         d->group->d_func()->detectCheckedButton();
+      }
 #else
-        if (d->autoExclusive)
-            return;
+      if (d->autoExclusive) {
+         return;
+      }
 #endif
-    }
+   }
 
-    QPointer<QAbstractButton> guard(this);
+   QPointer<QAbstractButton> guard(this);
 
-    d->checked = checked;
-    if (!d->blockRefresh)
-        checkStateSet();
-    d->refresh();
+   d->checked = checked;
+   if (!d->blockRefresh) {
+      checkStateSet();
+   }
+   d->refresh();
 
-    if (guard && checked)
-        d->notifyChecked();
-    if (guard)
-        emit toggled(checked);
+   if (guard && checked) {
+      d->notifyChecked();
+   }
+   if (guard) {
+      emit toggled(checked);
+   }
 }
 
 bool QAbstractButton::isChecked() const
 {
-    Q_D(const QAbstractButton);
-    return d->checked;
+   Q_D(const QAbstractButton);
+   return d->checked;
 }
 
 /*!
@@ -679,21 +714,23 @@ bool QAbstractButton::isChecked() const
 
 void QAbstractButton::setDown(bool down)
 {
-    Q_D(QAbstractButton);
-    if (d->down == down)
-        return;
-    d->down = down;
-    d->refresh();
-    if (d->autoRepeat && d->down)
-        d->repeatTimer.start(d->autoRepeatDelay, this);
-    else
-        d->repeatTimer.stop();
+   Q_D(QAbstractButton);
+   if (d->down == down) {
+      return;
+   }
+   d->down = down;
+   d->refresh();
+   if (d->autoRepeat && d->down) {
+      d->repeatTimer.start(d->autoRepeatDelay, this);
+   } else {
+      d->repeatTimer.stop();
+   }
 }
 
 bool QAbstractButton::isDown() const
 {
-    Q_D(const QAbstractButton);
-    return d->down;
+   Q_D(const QAbstractButton);
+   return d->down;
 }
 
 /*!
@@ -712,20 +749,22 @@ like in the normal case.
 
 void QAbstractButton::setAutoRepeat(bool autoRepeat)
 {
-    Q_D(QAbstractButton);
-    if (d->autoRepeat == autoRepeat)
-        return;
-    d->autoRepeat = autoRepeat;
-    if (d->autoRepeat && d->down)
-        d->repeatTimer.start(d->autoRepeatDelay, this);
-    else
-        d->repeatTimer.stop();
+   Q_D(QAbstractButton);
+   if (d->autoRepeat == autoRepeat) {
+      return;
+   }
+   d->autoRepeat = autoRepeat;
+   if (d->autoRepeat && d->down) {
+      d->repeatTimer.start(d->autoRepeatDelay, this);
+   } else {
+      d->repeatTimer.stop();
+   }
 }
 
 bool QAbstractButton::autoRepeat() const
 {
-    Q_D(const QAbstractButton);
-    return d->autoRepeat;
+   Q_D(const QAbstractButton);
+   return d->autoRepeat;
 }
 
 /*!
@@ -741,14 +780,14 @@ bool QAbstractButton::autoRepeat() const
 
 void QAbstractButton::setAutoRepeatDelay(int autoRepeatDelay)
 {
-    Q_D(QAbstractButton);
-    d->autoRepeatDelay = autoRepeatDelay;
+   Q_D(QAbstractButton);
+   d->autoRepeatDelay = autoRepeatDelay;
 }
 
 int QAbstractButton::autoRepeatDelay() const
 {
-    Q_D(const QAbstractButton);
-    return d->autoRepeatDelay;
+   Q_D(const QAbstractButton);
+   return d->autoRepeatDelay;
 }
 
 /*!
@@ -764,14 +803,14 @@ int QAbstractButton::autoRepeatDelay() const
 
 void QAbstractButton::setAutoRepeatInterval(int autoRepeatInterval)
 {
-    Q_D(QAbstractButton);
-    d->autoRepeatInterval = autoRepeatInterval;
+   Q_D(QAbstractButton);
+   d->autoRepeatInterval = autoRepeatInterval;
 }
 
 int QAbstractButton::autoRepeatInterval() const
 {
-    Q_D(const QAbstractButton);
-    return d->autoRepeatInterval;
+   Q_D(const QAbstractButton);
+   return d->autoRepeatInterval;
 }
 
 
@@ -795,14 +834,14 @@ autoExclusive is off by default, except for radio buttons.
 */
 void QAbstractButton::setAutoExclusive(bool autoExclusive)
 {
-    Q_D(QAbstractButton);
-    d->autoExclusive = autoExclusive;
+   Q_D(QAbstractButton);
+   d->autoExclusive = autoExclusive;
 }
 
 bool QAbstractButton::autoExclusive() const
 {
-    Q_D(const QAbstractButton);
-    return d->autoExclusive;
+   Q_D(const QAbstractButton);
+   return d->autoExclusive;
 }
 
 #ifndef QT_NO_BUTTONGROUP
@@ -816,8 +855,8 @@ bool QAbstractButton::autoExclusive() const
 */
 QButtonGroup *QAbstractButton::group() const
 {
-    Q_D(const QAbstractButton);
-    return d->group;
+   Q_D(const QAbstractButton);
+   return d->group;
 }
 #endif // QT_NO_BUTTONGROUP
 
@@ -837,17 +876,20 @@ disabled. \endlink
 */
 void QAbstractButton::animateClick(int msec)
 {
-    if (!isEnabled())
-        return;
-    Q_D(QAbstractButton);
-    if (d->checkable && focusPolicy() & Qt::ClickFocus)
-        setFocus();
-    setDown(true);
-    repaint(); //flush paint event before invoking potentially expensive operation
-    QApplication::flush();
-    if (!d->animateTimer.isActive())
-        d->emitPressed();
-    d->animateTimer.start(msec, this);
+   if (!isEnabled()) {
+      return;
+   }
+   Q_D(QAbstractButton);
+   if (d->checkable && focusPolicy() & Qt::ClickFocus) {
+      setFocus();
+   }
+   setDown(true);
+   repaint(); //flush paint event before invoking potentially expensive operation
+   QApplication::flush();
+   if (!d->animateTimer.isActive()) {
+      d->emitPressed();
+   }
+   d->animateTimer.start(msec, this);
 }
 
 /*!
@@ -864,20 +906,23 @@ disabled. \endlink
  */
 void QAbstractButton::click()
 {
-    if (!isEnabled())
-        return;
-    Q_D(QAbstractButton);
-    QPointer<QAbstractButton> guard(this);
-    d->down = true;
-    d->emitPressed();
-    if (guard) {
-        d->down = false;
-        nextCheckState();
-        if (guard)
-            d->emitReleased();
-        if (guard)
-            d->emitClicked();
-    }
+   if (!isEnabled()) {
+      return;
+   }
+   Q_D(QAbstractButton);
+   QPointer<QAbstractButton> guard(this);
+   d->down = true;
+   d->emitPressed();
+   if (guard) {
+      d->down = false;
+      nextCheckState();
+      if (guard) {
+         d->emitReleased();
+      }
+      if (guard) {
+         d->emitClicked();
+      }
+   }
 }
 
 /*! \fn void QAbstractButton::toggle()
@@ -888,8 +933,8 @@ void QAbstractButton::click()
 */
 void QAbstractButton::toggle()
 {
-    Q_D(QAbstractButton);
-    setChecked(!d->checked);
+   Q_D(QAbstractButton);
+   setChecked(!d->checked);
 }
 
 
@@ -912,8 +957,9 @@ states.
 */
 void QAbstractButton::nextCheckState()
 {
-    if (isCheckable())
-        setChecked(!isChecked());
+   if (isCheckable()) {
+      setChecked(!isChecked());
+   }
 }
 
 /*!
@@ -926,269 +972,281 @@ areas of different shapes and sizes.
 */
 bool QAbstractButton::hitButton(const QPoint &pos) const
 {
-    return rect().contains(pos);
+   return rect().contains(pos);
 }
 
 /*! \reimp */
 bool QAbstractButton::event(QEvent *e)
 {
-    // as opposed to other widgets, disabled buttons accept mouse
-    // events. This avoids surprising click-through scenarios
-    if (!isEnabled()) {
-        switch(e->type()) {
-        case QEvent::TabletPress:
-        case QEvent::TabletRelease:
-        case QEvent::TabletMove:
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::MouseButtonDblClick:
-        case QEvent::MouseMove:
-        case QEvent::HoverMove:
-        case QEvent::HoverEnter:
-        case QEvent::HoverLeave:
-        case QEvent::ContextMenu:
+   // as opposed to other widgets, disabled buttons accept mouse
+   // events. This avoids surprising click-through scenarios
+   if (!isEnabled()) {
+      switch (e->type()) {
+         case QEvent::TabletPress:
+         case QEvent::TabletRelease:
+         case QEvent::TabletMove:
+         case QEvent::MouseButtonPress:
+         case QEvent::MouseButtonRelease:
+         case QEvent::MouseButtonDblClick:
+         case QEvent::MouseMove:
+         case QEvent::HoverMove:
+         case QEvent::HoverEnter:
+         case QEvent::HoverLeave:
+         case QEvent::ContextMenu:
 #ifndef QT_NO_WHEELEVENT
-        case QEvent::Wheel:
+         case QEvent::Wheel:
 #endif
             return true;
-        default:
+         default:
             break;
-        }
-    }
+      }
+   }
 
 #ifndef QT_NO_SHORTCUT
-    if (e->type() == QEvent::Shortcut) {
-        Q_D(QAbstractButton);
-        QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
-        if (d->shortcutId != se->shortcutId())
-            return false;
-        if (!se->isAmbiguous()) {
-            if (!d->animateTimer.isActive())
-                animateClick();
-        } else {
-            if (focusPolicy() != Qt::NoFocus)
-                setFocus(Qt::ShortcutFocusReason);
-            window()->setAttribute(Qt::WA_KeyboardFocusChange);
-        }
-        return true;
-    }
+   if (e->type() == QEvent::Shortcut) {
+      Q_D(QAbstractButton);
+      QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
+      if (d->shortcutId != se->shortcutId()) {
+         return false;
+      }
+      if (!se->isAmbiguous()) {
+         if (!d->animateTimer.isActive()) {
+            animateClick();
+         }
+      } else {
+         if (focusPolicy() != Qt::NoFocus) {
+            setFocus(Qt::ShortcutFocusReason);
+         }
+         window()->setAttribute(Qt::WA_KeyboardFocusChange);
+      }
+      return true;
+   }
 #endif
-    return QWidget::event(e);
+   return QWidget::event(e);
 }
 
 /*! \reimp */
 void QAbstractButton::mousePressEvent(QMouseEvent *e)
 {
-    Q_D(QAbstractButton);
-    if (e->button() != Qt::LeftButton) {
-        e->ignore();
-        return;
-    }
-    if (hitButton(e->pos())) {
-        setDown(true);
-        d->pressed = true;
-        repaint(); //flush paint event before invoking potentially expensive operation
-        QApplication::flush();
-        d->emitPressed();
-        e->accept();
-    } else {
-        e->ignore();
-    }
+   Q_D(QAbstractButton);
+   if (e->button() != Qt::LeftButton) {
+      e->ignore();
+      return;
+   }
+   if (hitButton(e->pos())) {
+      setDown(true);
+      d->pressed = true;
+      repaint(); //flush paint event before invoking potentially expensive operation
+      QApplication::flush();
+      d->emitPressed();
+      e->accept();
+   } else {
+      e->ignore();
+   }
 }
 
 /*! \reimp */
 void QAbstractButton::mouseReleaseEvent(QMouseEvent *e)
 {
-    Q_D(QAbstractButton);
-    d->pressed = false;
+   Q_D(QAbstractButton);
+   d->pressed = false;
 
-    if (e->button() != Qt::LeftButton) {
-        e->ignore();
-        return;
-    }
+   if (e->button() != Qt::LeftButton) {
+      e->ignore();
+      return;
+   }
 
-    if (!d->down) {
-        e->ignore();
-        return;
-    }
+   if (!d->down) {
+      e->ignore();
+      return;
+   }
 
-    if (hitButton(e->pos())) {
-        d->repeatTimer.stop();
-        d->click();
-        e->accept();
-    } else {
-        setDown(false);
-        e->ignore();
-    }
+   if (hitButton(e->pos())) {
+      d->repeatTimer.stop();
+      d->click();
+      e->accept();
+   } else {
+      setDown(false);
+      e->ignore();
+   }
 }
 
 /*! \reimp */
 void QAbstractButton::mouseMoveEvent(QMouseEvent *e)
 {
-    Q_D(QAbstractButton);
-    if (!(e->buttons() & Qt::LeftButton) || !d->pressed) {
-        e->ignore();
-        return;
-    }
+   Q_D(QAbstractButton);
+   if (!(e->buttons() & Qt::LeftButton) || !d->pressed) {
+      e->ignore();
+      return;
+   }
 
-    if (hitButton(e->pos()) != d->down) {
-        setDown(!d->down);
-        repaint(); //flush paint event before invoking potentially expensive operation
-        QApplication::flush();
-        if (d->down)
-            d->emitPressed();
-        else
-            d->emitReleased();
-        e->accept();
-    } else if (!hitButton(e->pos())) {
-        e->ignore();
-    }
+   if (hitButton(e->pos()) != d->down) {
+      setDown(!d->down);
+      repaint(); //flush paint event before invoking potentially expensive operation
+      QApplication::flush();
+      if (d->down) {
+         d->emitPressed();
+      } else {
+         d->emitReleased();
+      }
+      e->accept();
+   } else if (!hitButton(e->pos())) {
+      e->ignore();
+   }
 }
 
 /*! \reimp */
 void QAbstractButton::keyPressEvent(QKeyEvent *e)
 {
-    Q_D(QAbstractButton);
-    bool next = true;
-    switch (e->key()) {
-    case Qt::Key_Enter:
-    case Qt::Key_Return:
-        e->ignore();
-        break;
-    case Qt::Key_Select:
-    case Qt::Key_Space:
-        if (!e->isAutoRepeat()) {
+   Q_D(QAbstractButton);
+   bool next = true;
+   switch (e->key()) {
+      case Qt::Key_Enter:
+      case Qt::Key_Return:
+         e->ignore();
+         break;
+      case Qt::Key_Select:
+      case Qt::Key_Space:
+         if (!e->isAutoRepeat()) {
             setDown(true);
             repaint(); //flush paint event before invoking potentially expensive operation
             QApplication::flush();
             d->emitPressed();
-        }
-        break;
-    case Qt::Key_Up:
-    case Qt::Key_Left:
-        next = false;
-        // fall through
-    case Qt::Key_Right:
-    case Qt::Key_Down:
+         }
+         break;
+      case Qt::Key_Up:
+      case Qt::Key_Left:
+         next = false;
+      // fall through
+      case Qt::Key_Right:
+      case Qt::Key_Down:
 #ifdef QT_KEYPAD_NAVIGATION
-        if ((QApplication::keypadNavigationEnabled()
-                && (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right))
-                || (!QApplication::navigationMode() == Qt::NavigationModeKeypadDirectional
-                || (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down))) {
+         if ((QApplication::keypadNavigationEnabled()
+               && (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right))
+               || (!QApplication::navigationMode() == Qt::NavigationModeKeypadDirectional
+                   || (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down))) {
             e->ignore();
             return;
-        }
+         }
 #endif
-        QWidget *pw;
-        if (d->autoExclusive
+         QWidget *pw;
+         if (d->autoExclusive
 #ifndef QT_NO_BUTTONGROUP
-        || d->group
+               || d->group
 #endif
 #ifndef QT_NO_ITEMVIEWS
-        || ((pw = parentWidget()) && qobject_cast<QAbstractItemView *>(pw->parentWidget()))
+               || ((pw = parentWidget()) && qobject_cast<QAbstractItemView *>(pw->parentWidget()))
 #endif
-        ) {
+            ) {
             // ### Using qobject_cast to check if the parent is a viewport of
             // QAbstractItemView is a crude hack, and should be revisited and
             // cleaned up when fixing task 194373. It's here to ensure that we
             // keep compatibility outside QAbstractItemView.
             d->moveFocus(e->key());
-            if (hasFocus()) // nothing happend, propagate
-                e->ignore();
-        } else {
+            if (hasFocus()) { // nothing happend, propagate
+               e->ignore();
+            }
+         } else {
             focusNextPrevChild(next);
-        }
-        break;
-    case Qt::Key_Escape:
-        if (d->down) {
+         }
+         break;
+      case Qt::Key_Escape:
+         if (d->down) {
             setDown(false);
             repaint(); //flush paint event before invoking potentially expensive operation
             QApplication::flush();
             d->emitReleased();
             break;
-        }
-        // fall through
-    default:
-        e->ignore();
-    }
+         }
+      // fall through
+      default:
+         e->ignore();
+   }
 }
 
 /*! \reimp */
 void QAbstractButton::keyReleaseEvent(QKeyEvent *e)
 {
-    Q_D(QAbstractButton);
+   Q_D(QAbstractButton);
 
-    if (!e->isAutoRepeat())
-        d->repeatTimer.stop();
+   if (!e->isAutoRepeat()) {
+      d->repeatTimer.stop();
+   }
 
-    switch (e->key()) {
-    case Qt::Key_Select:
-    case Qt::Key_Space:
-        if (!e->isAutoRepeat() && d->down)
+   switch (e->key()) {
+      case Qt::Key_Select:
+      case Qt::Key_Space:
+         if (!e->isAutoRepeat() && d->down) {
             d->click();
-        break;
-    default:
-        e->ignore();
-    }
+         }
+         break;
+      default:
+         e->ignore();
+   }
 }
 
 /*!\reimp
  */
 void QAbstractButton::timerEvent(QTimerEvent *e)
 {
-    Q_D(QAbstractButton);
-    if (e->timerId() == d->repeatTimer.timerId()) {
-        d->repeatTimer.start(d->autoRepeatInterval, this);
-        if (d->down) {
-            QPointer<QAbstractButton> guard(this);
-            nextCheckState();
-            if (guard)
-                d->emitReleased();
-            if (guard)
-                d->emitClicked();
-            if (guard)
-                d->emitPressed();
-        }
-    } else if (e->timerId() == d->animateTimer.timerId()) {
-        d->animateTimer.stop();
-        d->click();
-    }
+   Q_D(QAbstractButton);
+   if (e->timerId() == d->repeatTimer.timerId()) {
+      d->repeatTimer.start(d->autoRepeatInterval, this);
+      if (d->down) {
+         QPointer<QAbstractButton> guard(this);
+         nextCheckState();
+         if (guard) {
+            d->emitReleased();
+         }
+         if (guard) {
+            d->emitClicked();
+         }
+         if (guard) {
+            d->emitPressed();
+         }
+      }
+   } else if (e->timerId() == d->animateTimer.timerId()) {
+      d->animateTimer.stop();
+      d->click();
+   }
 }
 
 /*! \reimp */
 void QAbstractButton::focusInEvent(QFocusEvent *e)
 {
-    Q_D(QAbstractButton);
+   Q_D(QAbstractButton);
 #ifdef QT_KEYPAD_NAVIGATION
-    if (!QApplication::keypadNavigationEnabled())
+   if (!QApplication::keypadNavigationEnabled())
 #endif
-    d->fixFocusPolicy();
-    QWidget::focusInEvent(e);
+      d->fixFocusPolicy();
+   QWidget::focusInEvent(e);
 }
 
 /*! \reimp */
 void QAbstractButton::focusOutEvent(QFocusEvent *e)
 {
-    Q_D(QAbstractButton);
-    if (e->reason() != Qt::PopupFocusReason)
-        d->down = false;
-    QWidget::focusOutEvent(e);
+   Q_D(QAbstractButton);
+   if (e->reason() != Qt::PopupFocusReason) {
+      d->down = false;
+   }
+   QWidget::focusOutEvent(e);
 }
 
 /*! \reimp */
 void QAbstractButton::changeEvent(QEvent *e)
 {
-    Q_D(QAbstractButton);
-    switch (e->type()) {
-    case QEvent::EnabledChange:
-        if (!isEnabled())
+   Q_D(QAbstractButton);
+   switch (e->type()) {
+      case QEvent::EnabledChange:
+         if (!isEnabled()) {
             setDown(false);
-        break;
-    default:
-        d->sizeHint = QSize();
-        break;
-    }
-    QWidget::changeEvent(e);
+         }
+         break;
+      default:
+         d->sizeHint = QSize();
+         break;
+   }
+   QWidget::changeEvent(e);
 }
 
 /*!
@@ -1265,25 +1323,27 @@ updates to the button states monitored with the
 
 QSize QAbstractButton::iconSize() const
 {
-    Q_D(const QAbstractButton);
-    if (d->iconSize.isValid())
-        return d->iconSize;
-    int e = style()->pixelMetric(QStyle::PM_ButtonIconSize, 0, this);
-    return QSize(e, e);
+   Q_D(const QAbstractButton);
+   if (d->iconSize.isValid()) {
+      return d->iconSize;
+   }
+   int e = style()->pixelMetric(QStyle::PM_ButtonIconSize, 0, this);
+   return QSize(e, e);
 }
 
 void QAbstractButton::setIconSize(const QSize &size)
 {
-    Q_D(QAbstractButton);
-    if (d->iconSize == size)
-        return;
+   Q_D(QAbstractButton);
+   if (d->iconSize == size) {
+      return;
+   }
 
-    d->iconSize = size;
-    d->sizeHint = QSize();
-    updateGeometry();
-    if (isVisible()) {
-        update();
-    }
+   d->iconSize = size;
+   d->sizeHint = QSize();
+   updateGeometry();
+   if (isVisible()) {
+      update();
+   }
 }
 
 QT_END_NAMESPACE

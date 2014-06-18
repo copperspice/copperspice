@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -90,7 +90,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \enum QNetworkRequest::Attribute
     \since 4.7
-    
+
     Attribute codes for the QNetworkRequest and QNetworkReply.
 
     Attributes are extra meta-data that are used to control the
@@ -258,47 +258,47 @@ QT_BEGIN_NAMESPACE
 
 class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
 {
-public:
-    inline QNetworkRequestPrivate()
-        : priority(QNetworkRequest::NormalPriority)
+ public:
+   inline QNetworkRequestPrivate()
+      : priority(QNetworkRequest::NormalPriority)
 #ifndef QT_NO_OPENSSL
-        , sslConfiguration(0)
+      , sslConfiguration(0)
 #endif
-    { qRegisterMetaType<QNetworkRequest>(); }
-    ~QNetworkRequestPrivate()
-    {
+   {
+      qRegisterMetaType<QNetworkRequest>();
+   }
+   ~QNetworkRequestPrivate() {
 #ifndef QT_NO_OPENSSL
-        delete sslConfiguration;
+      delete sslConfiguration;
 #endif
-    }
+   }
 
 
-    QNetworkRequestPrivate(const QNetworkRequestPrivate &other)
-        : QSharedData(other), QNetworkHeadersPrivate(other)
-    {
-        url = other.url;
-        priority = other.priority;
+   QNetworkRequestPrivate(const QNetworkRequestPrivate &other)
+      : QSharedData(other), QNetworkHeadersPrivate(other) {
+      url = other.url;
+      priority = other.priority;
 
 #ifndef QT_NO_OPENSSL
-        sslConfiguration = 0;
-        if (other.sslConfiguration)
-            sslConfiguration = new QSslConfiguration(*other.sslConfiguration);
+      sslConfiguration = 0;
+      if (other.sslConfiguration) {
+         sslConfiguration = new QSslConfiguration(*other.sslConfiguration);
+      }
 #endif
-    }
+   }
 
-    inline bool operator==(const QNetworkRequestPrivate &other) const
-    {
-        return url == other.url &&
-            priority == other.priority &&
-            rawHeaders == other.rawHeaders &&
-            attributes == other.attributes;
-        // don't compare cookedHeaders
-    }
+   inline bool operator==(const QNetworkRequestPrivate &other) const {
+      return url == other.url &&
+             priority == other.priority &&
+             rawHeaders == other.rawHeaders &&
+             attributes == other.attributes;
+      // don't compare cookedHeaders
+   }
 
-    QUrl url;
-    QNetworkRequest::Priority priority;
+   QUrl url;
+   QNetworkRequest::Priority priority;
 #ifndef QT_NO_OPENSSL
-    mutable QSslConfiguration *sslConfiguration;
+   mutable QSslConfiguration *sslConfiguration;
 #endif
 };
 
@@ -309,16 +309,16 @@ public:
     \sa url(), setUrl()
 */
 QNetworkRequest::QNetworkRequest(const QUrl &url)
-    : d(new QNetworkRequestPrivate)
+   : d(new QNetworkRequestPrivate)
 {
-    d->url = url;
+   d->url = url;
 }
 
 /*!
     Creates a copy of \a other.
 */
 QNetworkRequest::QNetworkRequest(const QNetworkRequest &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -327,8 +327,8 @@ QNetworkRequest::QNetworkRequest(const QNetworkRequest &other)
 */
 QNetworkRequest::~QNetworkRequest()
 {
-    // QSharedDataPointer auto deletes
-    d = 0;
+   // QSharedDataPointer auto deletes
+   d = 0;
 }
 
 /*!
@@ -339,7 +339,7 @@ QNetworkRequest::~QNetworkRequest()
 */
 bool QNetworkRequest::operator==(const QNetworkRequest &other) const
 {
-    return d == other.d || *d == *other.d;
+   return d == other.d || *d == *other.d;
 }
 
 /*!
@@ -355,8 +355,8 @@ bool QNetworkRequest::operator==(const QNetworkRequest &other) const
 */
 QNetworkRequest &QNetworkRequest::operator=(const QNetworkRequest &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -366,7 +366,7 @@ QNetworkRequest &QNetworkRequest::operator=(const QNetworkRequest &other)
 */
 QUrl QNetworkRequest::url() const
 {
-    return d->url;
+   return d->url;
 }
 
 /*!
@@ -376,47 +376,48 @@ QUrl QNetworkRequest::url() const
 */
 void QNetworkRequest::setUrl(const QUrl &url)
 {
-    d->url = url;
+   d->url = url;
 }
 
 QVariant QNetworkRequest::header(KnownHeaders header) const
 {
-    return d->cookedHeaders.value(header);
+   return d->cookedHeaders.value(header);
 }
 
 void QNetworkRequest::setHeader(KnownHeaders header, const QVariant &value)
 {
-    d->setCookedHeader(header, value);
+   d->setCookedHeader(header, value);
 }
 
 bool QNetworkRequest::hasRawHeader(const QByteArray &headerName) const
 {
-    return d->findRawHeader(headerName) != d->rawHeaders.constEnd();
+   return d->findRawHeader(headerName) != d->rawHeaders.constEnd();
 }
 
 QByteArray QNetworkRequest::rawHeader(const QByteArray &headerName) const
 {
-    QNetworkHeadersPrivate::RawHeadersList::ConstIterator it = d->findRawHeader(headerName);
+   QNetworkHeadersPrivate::RawHeadersList::ConstIterator it = d->findRawHeader(headerName);
 
-    if (it != d->rawHeaders.constEnd())
-        return it->second;
+   if (it != d->rawHeaders.constEnd()) {
+      return it->second;
+   }
 
-    return QByteArray();
+   return QByteArray();
 }
 
 QList<QByteArray> QNetworkRequest::rawHeaderList() const
 {
-    return d->rawHeadersKeys();
+   return d->rawHeadersKeys();
 }
 
 void QNetworkRequest::setRawHeader(const QByteArray &headerName, const QByteArray &headerValue)
 {
-    d->setRawHeader(headerName, headerValue);
+   d->setRawHeader(headerName, headerValue);
 }
 
 QVariant QNetworkRequest::attribute(Attribute code, const QVariant &defaultValue) const
 {
-    return d->attributes.value(code, defaultValue);
+   return d->attributes.value(code, defaultValue);
 }
 
 /*!
@@ -429,10 +430,11 @@ QVariant QNetworkRequest::attribute(Attribute code, const QVariant &defaultValue
 */
 void QNetworkRequest::setAttribute(Attribute code, const QVariant &value)
 {
-    if (value.isValid())
-        d->attributes.insert(code, value);
-    else
-        d->attributes.remove(code);
+   if (value.isValid()) {
+      d->attributes.insert(code, value);
+   } else {
+      d->attributes.remove(code);
+   }
 }
 
 #ifndef QT_NO_OPENSSL
@@ -444,9 +446,10 @@ void QNetworkRequest::setAttribute(Attribute code, const QVariant &value)
 */
 QSslConfiguration QNetworkRequest::sslConfiguration() const
 {
-    if (!d->sslConfiguration)
-        d->sslConfiguration = new QSslConfiguration(QSslConfiguration::defaultConfiguration());
-    return *d->sslConfiguration;
+   if (!d->sslConfiguration) {
+      d->sslConfiguration = new QSslConfiguration(QSslConfiguration::defaultConfiguration());
+   }
+   return *d->sslConfiguration;
 }
 
 /*!
@@ -463,10 +466,11 @@ QSslConfiguration QNetworkRequest::sslConfiguration() const
 */
 void QNetworkRequest::setSslConfiguration(const QSslConfiguration &config)
 {
-    if (!d->sslConfiguration)
-        d->sslConfiguration = new QSslConfiguration(config);
-    else
-        *d->sslConfiguration = config;
+   if (!d->sslConfiguration) {
+      d->sslConfiguration = new QSslConfiguration(config);
+   } else {
+      *d->sslConfiguration = config;
+   }
 }
 #endif
 
@@ -483,7 +487,7 @@ void QNetworkRequest::setSslConfiguration(const QSslConfiguration &config)
 */
 void QNetworkRequest::setOriginatingObject(QObject *object)
 {
-    d->originatingObject = object;
+   d->originatingObject = object;
 }
 
 /*!
@@ -497,7 +501,7 @@ void QNetworkRequest::setOriginatingObject(QObject *object)
 */
 QObject *QNetworkRequest::originatingObject() const
 {
-    return d->originatingObject.data();
+   return d->originatingObject.data();
 }
 
 /*!
@@ -509,13 +513,13 @@ QObject *QNetworkRequest::originatingObject() const
 */
 QNetworkRequest::Priority QNetworkRequest::priority() const
 {
-    return d->priority;
+   return d->priority;
 }
 
 /*! \enum QNetworkRequest::Priority
 
   \since 4.7
-  
+
   This enum lists the possible network request priorities.
 
   \value HighPriority   High priority
@@ -536,239 +540,256 @@ QNetworkRequest::Priority QNetworkRequest::priority() const
 */
 void QNetworkRequest::setPriority(Priority priority)
 {
-    d->priority = priority;
+   d->priority = priority;
 }
 
 static QByteArray headerName(QNetworkRequest::KnownHeaders header)
 {
-    switch (header) {
-    case QNetworkRequest::ContentTypeHeader:
-        return "Content-Type";
+   switch (header) {
+      case QNetworkRequest::ContentTypeHeader:
+         return "Content-Type";
 
-    case QNetworkRequest::ContentLengthHeader:
-        return "Content-Length";
+      case QNetworkRequest::ContentLengthHeader:
+         return "Content-Length";
 
-    case QNetworkRequest::LocationHeader:
-        return "Location";
+      case QNetworkRequest::LocationHeader:
+         return "Location";
 
-    case QNetworkRequest::LastModifiedHeader:
-        return "Last-Modified";
+      case QNetworkRequest::LastModifiedHeader:
+         return "Last-Modified";
 
-    case QNetworkRequest::CookieHeader:
-        return "Cookie";
+      case QNetworkRequest::CookieHeader:
+         return "Cookie";
 
-    case QNetworkRequest::SetCookieHeader:
-        return "Set-Cookie";
+      case QNetworkRequest::SetCookieHeader:
+         return "Set-Cookie";
 
-    case QNetworkRequest::ContentDispositionHeader:
-        return "Content-Disposition";
+      case QNetworkRequest::ContentDispositionHeader:
+         return "Content-Disposition";
 
-    // no default:
-    // if new values are added, this will generate a compiler warning
-    }
+         // no default:
+         // if new values are added, this will generate a compiler warning
+   }
 
-    return QByteArray();
+   return QByteArray();
 }
 
 static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVariant &value)
 {
-    switch (header) {
-    case QNetworkRequest::ContentTypeHeader:
-    case QNetworkRequest::ContentLengthHeader:
-    case QNetworkRequest::ContentDispositionHeader:
-        return value.toByteArray();
+   switch (header) {
+      case QNetworkRequest::ContentTypeHeader:
+      case QNetworkRequest::ContentLengthHeader:
+      case QNetworkRequest::ContentDispositionHeader:
+         return value.toByteArray();
 
-    case QNetworkRequest::LocationHeader:
-        switch (value.type()) {
-        case QVariant::Url:
-            return value.toUrl().toEncoded();
+      case QNetworkRequest::LocationHeader:
+         switch (value.type()) {
+            case QVariant::Url:
+               return value.toUrl().toEncoded();
 
-        default:
-            return value.toByteArray();
-        }
+            default:
+               return value.toByteArray();
+         }
 
-    case QNetworkRequest::LastModifiedHeader:
-        switch (value.type()) {
-        case QVariant::Date:
-        case QVariant::DateTime:
-            // generate RFC 1123/822 dates:
-            return QNetworkHeadersPrivate::toHttpDate(value.toDateTime());
+      case QNetworkRequest::LastModifiedHeader:
+         switch (value.type()) {
+            case QVariant::Date:
+            case QVariant::DateTime:
+               // generate RFC 1123/822 dates:
+               return QNetworkHeadersPrivate::toHttpDate(value.toDateTime());
 
-        default:
-            return value.toByteArray();
-        }
+            default:
+               return value.toByteArray();
+         }
 
-    case QNetworkRequest::CookieHeader: {
-        QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie> >(value);
-        if (cookies.isEmpty() && value.userType() == qMetaTypeId<QNetworkCookie>())
+      case QNetworkRequest::CookieHeader: {
+         QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie> >(value);
+         if (cookies.isEmpty() && value.userType() == qMetaTypeId<QNetworkCookie>()) {
             cookies << qvariant_cast<QNetworkCookie>(value);
+         }
 
-        QByteArray result;
-        bool first = true;
-        foreach (const QNetworkCookie &cookie, cookies) {
-            if (!first)
-                result += "; ";
+         QByteArray result;
+         bool first = true;
+         foreach (const QNetworkCookie & cookie, cookies) {
+            if (!first) {
+               result += "; ";
+            }
             first = false;
             result += cookie.toRawForm(QNetworkCookie::NameAndValueOnly);
-        }
-        return result;
-    }
+         }
+         return result;
+      }
 
-    case QNetworkRequest::SetCookieHeader: {
-        QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie> >(value);
-        if (cookies.isEmpty() && value.userType() == qMetaTypeId<QNetworkCookie>())
+      case QNetworkRequest::SetCookieHeader: {
+         QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie> >(value);
+         if (cookies.isEmpty() && value.userType() == qMetaTypeId<QNetworkCookie>()) {
             cookies << qvariant_cast<QNetworkCookie>(value);
+         }
 
-        QByteArray result;
-        bool first = true;
-        foreach (const QNetworkCookie &cookie, cookies) {
-            if (!first)
-                result += ", ";
+         QByteArray result;
+         bool first = true;
+         foreach (const QNetworkCookie & cookie, cookies) {
+            if (!first) {
+               result += ", ";
+            }
             first = false;
             result += cookie.toRawForm(QNetworkCookie::Full);
-        }
-        return result;
-    }
-    }
+         }
+         return result;
+      }
+   }
 
-    return QByteArray();
+   return QByteArray();
 }
 
 static QNetworkRequest::KnownHeaders parseHeaderName(const QByteArray &headerName)
 {
-    if (headerName.isEmpty())
-        return QNetworkRequest::KnownHeaders(-1);
+   if (headerName.isEmpty()) {
+      return QNetworkRequest::KnownHeaders(-1);
+   }
 
-    switch (tolower(headerName.at(0))) {
-    case 'c':
-        if (qstricmp(headerName.constData(), "content-type") == 0)
+   switch (tolower(headerName.at(0))) {
+      case 'c':
+         if (qstricmp(headerName.constData(), "content-type") == 0) {
             return QNetworkRequest::ContentTypeHeader;
+         }
 
-        else if (qstricmp(headerName.constData(), "content-length") == 0)
+         else if (qstricmp(headerName.constData(), "content-length") == 0) {
             return QNetworkRequest::ContentLengthHeader;
+         }
 
-        else if (qstricmp(headerName.constData(), "cookie") == 0)
+         else if (qstricmp(headerName.constData(), "cookie") == 0) {
             return QNetworkRequest::CookieHeader;
+         }
 
-        break;
+         break;
 
-    case 'l':
-        if (qstricmp(headerName.constData(), "location") == 0)
+      case 'l':
+         if (qstricmp(headerName.constData(), "location") == 0) {
             return QNetworkRequest::LocationHeader;
+         }
 
-        else if (qstricmp(headerName.constData(), "last-modified") == 0)
+         else if (qstricmp(headerName.constData(), "last-modified") == 0) {
             return QNetworkRequest::LastModifiedHeader;
+         }
 
-        break;
+         break;
 
-    case 's':
-        if (qstricmp(headerName.constData(), "set-cookie") == 0)
+      case 's':
+         if (qstricmp(headerName.constData(), "set-cookie") == 0) {
             return QNetworkRequest::SetCookieHeader;
-        break;
-    }
+         }
+         break;
+   }
 
-    return QNetworkRequest::KnownHeaders(-1); // nothing found
+   return QNetworkRequest::KnownHeaders(-1); // nothing found
 }
 
 static QVariant parseHttpDate(const QByteArray &raw)
 {
-    QDateTime dt = QNetworkHeadersPrivate::fromHttpDate(raw);
-    if (dt.isValid())
-        return dt;
+   QDateTime dt = QNetworkHeadersPrivate::fromHttpDate(raw);
+   if (dt.isValid()) {
+      return dt;
+   }
 
-    return QVariant();          // transform an invalid QDateTime into a null QVariant
+   return QVariant();          // transform an invalid QDateTime into a null QVariant
 }
 
 static QVariant parseCookieHeader(const QByteArray &raw)
 {
-    QList<QNetworkCookie> result;
-    QList<QByteArray> cookieList = raw.split(';');
-    foreach (const QByteArray &cookie, cookieList) {
-        QList<QNetworkCookie> parsed = QNetworkCookie::parseCookies(cookie.trimmed());
-        if (parsed.count() != 1)
-            return QVariant();  // invalid Cookie: header
+   QList<QNetworkCookie> result;
+   QList<QByteArray> cookieList = raw.split(';');
+   foreach (const QByteArray & cookie, cookieList) {
+      QList<QNetworkCookie> parsed = QNetworkCookie::parseCookies(cookie.trimmed());
+      if (parsed.count() != 1) {
+         return QVariant();   // invalid Cookie: header
+      }
 
-        result += parsed;
-    }
+      result += parsed;
+   }
 
-    return QVariant::fromValue(result);
+   return QVariant::fromValue(result);
 }
 
 static QVariant parseHeaderValue(QNetworkRequest::KnownHeaders header, const QByteArray &value)
 {
-    // header is always a valid value
-    switch (header) {
-    case QNetworkRequest::ContentTypeHeader:
-        // copy exactly, convert to QString
-        return QString::fromLatin1(value);
+   // header is always a valid value
+   switch (header) {
+      case QNetworkRequest::ContentTypeHeader:
+         // copy exactly, convert to QString
+         return QString::fromLatin1(value);
 
-    case QNetworkRequest::ContentLengthHeader: {
-        bool ok;
-        qint64 result = value.trimmed().toLongLong(&ok);
-        if (ok)
+      case QNetworkRequest::ContentLengthHeader: {
+         bool ok;
+         qint64 result = value.trimmed().toLongLong(&ok);
+         if (ok) {
             return result;
-        return QVariant();
-    }
+         }
+         return QVariant();
+      }
 
-    case QNetworkRequest::LocationHeader: {
-        QUrl result = QUrl::fromEncoded(value, QUrl::StrictMode);
-        if (result.isValid() && !result.scheme().isEmpty())
+      case QNetworkRequest::LocationHeader: {
+         QUrl result = QUrl::fromEncoded(value, QUrl::StrictMode);
+         if (result.isValid() && !result.scheme().isEmpty()) {
             return result;
-        return QVariant();
-    }
+         }
+         return QVariant();
+      }
 
-    case QNetworkRequest::LastModifiedHeader:
-        return parseHttpDate(value);
+      case QNetworkRequest::LastModifiedHeader:
+         return parseHttpDate(value);
 
-    case QNetworkRequest::CookieHeader:
-        return parseCookieHeader(value);
+      case QNetworkRequest::CookieHeader:
+         return parseCookieHeader(value);
 
-    case QNetworkRequest::SetCookieHeader:
-        return QVariant::fromValue(QNetworkCookie::parseCookies(value));
+      case QNetworkRequest::SetCookieHeader:
+         return QVariant::fromValue(QNetworkCookie::parseCookies(value));
 
-    default:
-        Q_ASSERT(0);
-    }
-    return QVariant();
+      default:
+         Q_ASSERT(0);
+   }
+   return QVariant();
 }
 
 QNetworkHeadersPrivate::RawHeadersList::ConstIterator
 QNetworkHeadersPrivate::findRawHeader(const QByteArray &key) const
 {
-    RawHeadersList::ConstIterator it = rawHeaders.constBegin();
-    RawHeadersList::ConstIterator end = rawHeaders.constEnd();
-    for ( ; it != end; ++it)
-        if (qstricmp(it->first.constData(), key.constData()) == 0)
-            return it;
+   RawHeadersList::ConstIterator it = rawHeaders.constBegin();
+   RawHeadersList::ConstIterator end = rawHeaders.constEnd();
+   for ( ; it != end; ++it)
+      if (qstricmp(it->first.constData(), key.constData()) == 0) {
+         return it;
+      }
 
-    return end;                 // not found
+   return end;                 // not found
 }
 
 QNetworkHeadersPrivate::RawHeadersList QNetworkHeadersPrivate::allRawHeaders() const
 {
-    return rawHeaders;
+   return rawHeaders;
 }
 
 QList<QByteArray> QNetworkHeadersPrivate::rawHeadersKeys() const
 {
-    QList<QByteArray> result;
-    RawHeadersList::ConstIterator it = rawHeaders.constBegin(),
+   QList<QByteArray> result;
+   RawHeadersList::ConstIterator it = rawHeaders.constBegin(),
                                  end = rawHeaders.constEnd();
-    for ( ; it != end; ++it)
-        result << it->first;
+   for ( ; it != end; ++it) {
+      result << it->first;
+   }
 
-    return result;
+   return result;
 }
 
 void QNetworkHeadersPrivate::setRawHeader(const QByteArray &key, const QByteArray &value)
 {
-    if (key.isEmpty()) {
-        // refuse to accept an empty raw header
-        return;
-    }
+   if (key.isEmpty()) {
+      // refuse to accept an empty raw header
+      return;
+   }
 
-    setRawHeaderInternal(key, value);
-    parseAndSetHeader(key, value);
+   setRawHeaderInternal(key, value);
+   parseAndSetHeader(key, value);
 }
 
 /*!
@@ -781,190 +802,196 @@ void QNetworkHeadersPrivate::setRawHeader(const QByteArray &key, const QByteArra
 */
 void QNetworkHeadersPrivate::setAllRawHeaders(const RawHeadersList &list)
 {
-    cookedHeaders.clear();
-    rawHeaders = list;
+   cookedHeaders.clear();
+   rawHeaders = list;
 
-    RawHeadersList::ConstIterator it = rawHeaders.constBegin();
-    RawHeadersList::ConstIterator end = rawHeaders.constEnd();
-    for ( ; it != end; ++it)
-        parseAndSetHeader(it->first, it->second);
+   RawHeadersList::ConstIterator it = rawHeaders.constBegin();
+   RawHeadersList::ConstIterator end = rawHeaders.constEnd();
+   for ( ; it != end; ++it) {
+      parseAndSetHeader(it->first, it->second);
+   }
 }
 
 void QNetworkHeadersPrivate::setCookedHeader(QNetworkRequest::KnownHeaders header, const QVariant &value)
 {
-    QByteArray name = headerName(header);
+   QByteArray name = headerName(header);
 
-    if (name.isEmpty()) {
-        // headerName verifies that a header is a known value
-        qWarning("QNetworkRequest::setHeader  Invalid header value KnownHeader(%d) received", header);
-        return;
-    }
+   if (name.isEmpty()) {
+      // headerName verifies that a header is a known value
+      qWarning("QNetworkRequest::setHeader  Invalid header value KnownHeader(%d) received", header);
+      return;
+   }
 
-    if (value.isNull()) {
-        setRawHeaderInternal(name, QByteArray());
-        cookedHeaders.remove(header);
+   if (value.isNull()) {
+      setRawHeaderInternal(name, QByteArray());
+      cookedHeaders.remove(header);
 
-    } else {
+   } else {
 
-        QByteArray rawValue = headerValue(header, value);
+      QByteArray rawValue = headerValue(header, value);
 
-        if (rawValue.isEmpty()) {
-            qWarning("QNetworkRequest::setHeader: QVariant of type %s can not be used with header %s", value.typeName(), name.constData());
-            return;
-        }
+      if (rawValue.isEmpty()) {
+         qWarning("QNetworkRequest::setHeader: QVariant of type %s can not be used with header %s", value.typeName(),
+                  name.constData());
+         return;
+      }
 
-        setRawHeaderInternal(name, rawValue);
-        cookedHeaders.insert(header, value);
-    }
+      setRawHeaderInternal(name, rawValue);
+      cookedHeaders.insert(header, value);
+   }
 }
 
 void QNetworkHeadersPrivate::setRawHeaderInternal(const QByteArray &key, const QByteArray &value)
 {
-    RawHeadersList::Iterator it = rawHeaders.begin();
+   RawHeadersList::Iterator it = rawHeaders.begin();
 
-    while (it != rawHeaders.end()) {
-        if (qstricmp(it->first.constData(), key.constData()) == 0)
-            it = rawHeaders.erase(it);
-        else
-            ++it;
-    }
+   while (it != rawHeaders.end()) {
+      if (qstricmp(it->first.constData(), key.constData()) == 0) {
+         it = rawHeaders.erase(it);
+      } else {
+         ++it;
+      }
+   }
 
-    if (value.isNull()) {
-        return;                 // only wanted to erase key
-    }
+   if (value.isNull()) {
+      return;                 // only wanted to erase key
+   }
 
-    RawHeaderPair pair;
-    pair.first = key;
-    pair.second = value;
+   RawHeaderPair pair;
+   pair.first = key;
+   pair.second = value;
 
-    rawHeaders.append(pair);
+   rawHeaders.append(pair);
 }
 
 void QNetworkHeadersPrivate::parseAndSetHeader(const QByteArray &key, const QByteArray &value)
 {
-    // is it a known header?
-    QNetworkRequest::KnownHeaders parsedKey = parseHeaderName(key);
+   // is it a known header?
+   QNetworkRequest::KnownHeaders parsedKey = parseHeaderName(key);
 
-    if (parsedKey != QNetworkRequest::KnownHeaders(-1)) {
+   if (parsedKey != QNetworkRequest::KnownHeaders(-1)) {
 
-        if (value.isNull()) {
-            cookedHeaders.remove(parsedKey);
+      if (value.isNull()) {
+         cookedHeaders.remove(parsedKey);
 
-        } else if (parsedKey == QNetworkRequest::ContentLengthHeader
+      } else if (parsedKey == QNetworkRequest::ContentLengthHeader
                  && cookedHeaders.contains(QNetworkRequest::ContentLengthHeader)) {
-            // Only set the cooked header "Content-Length" once.
-            // See bug QTBUG-15311
+         // Only set the cooked header "Content-Length" once.
+         // See bug QTBUG-15311
 
-        } else {
-            cookedHeaders.insert(parsedKey, parseHeaderValue(parsedKey, value));
+      } else {
+         cookedHeaders.insert(parsedKey, parseHeaderValue(parsedKey, value));
 
-        }
-    }
+      }
+   }
 }
 
 // Fast month string to int conversion. This code
 // assumes that the Month name is correct and that
 // the string is at least three chars long.
-static int name_to_month(const char* month_str)
+static int name_to_month(const char *month_str)
 {
-    switch (month_str[0]) {
-    case 'J':
-        switch (month_str[1]) {
-        case 'a':
-            return 1;
-            break;
-        case 'u':
-            switch (month_str[2] ) {
-            case 'n':
-                return 6;
-                break;
-            case 'l':
-                return 7;
-                break;
-            }
-        }
-        break;
-    case 'F':
-        return 2;
-        break;
-    case 'M':
-        switch (month_str[2] ) {
-        case 'r':
-            return 3;
-            break;
-        case 'y':
-            return 5;
-            break;
-        }
-        break;
-    case 'A':
-        switch (month_str[1]) {
-        case 'p':
-            return 4;
-            break;
-        case 'u':
-            return 8;
-            break;
-        }
-        break;
-    case 'O':
-        return 10;
-        break;
-    case 'S':
-        return 9;
-        break;
-    case 'N':
-        return 11;
-        break;
-    case 'D':
-        return 12;
-        break;
-    }
+   switch (month_str[0]) {
+      case 'J':
+         switch (month_str[1]) {
+            case 'a':
+               return 1;
+               break;
+            case 'u':
+               switch (month_str[2] ) {
+                  case 'n':
+                     return 6;
+                     break;
+                  case 'l':
+                     return 7;
+                     break;
+               }
+         }
+         break;
+      case 'F':
+         return 2;
+         break;
+      case 'M':
+         switch (month_str[2] ) {
+            case 'r':
+               return 3;
+               break;
+            case 'y':
+               return 5;
+               break;
+         }
+         break;
+      case 'A':
+         switch (month_str[1]) {
+            case 'p':
+               return 4;
+               break;
+            case 'u':
+               return 8;
+               break;
+         }
+         break;
+      case 'O':
+         return 10;
+         break;
+      case 'S':
+         return 9;
+         break;
+      case 'N':
+         return 11;
+         break;
+      case 'D':
+         return 12;
+         break;
+   }
 
-    return 0;
+   return 0;
 }
 
 QDateTime QNetworkHeadersPrivate::fromHttpDate(const QByteArray &value)
 {
-    // HTTP dates have three possible formats:
-    //  RFC 1123/822      -   ddd, dd MMM yyyy hh:mm:ss "GMT"
-    //  RFC 850           -   dddd, dd-MMM-yy hh:mm:ss "GMT"
-    //  ANSI C's asctime  -   ddd MMM d hh:mm:ss yyyy
-    // We only handle them exactly. If they deviate, we bail out.
+   // HTTP dates have three possible formats:
+   //  RFC 1123/822      -   ddd, dd MMM yyyy hh:mm:ss "GMT"
+   //  RFC 850           -   dddd, dd-MMM-yy hh:mm:ss "GMT"
+   //  ANSI C's asctime  -   ddd MMM d hh:mm:ss yyyy
+   // We only handle them exactly. If they deviate, we bail out.
 
-    int pos = value.indexOf(',');
-    QDateTime dt;
+   int pos = value.indexOf(',');
+   QDateTime dt;
 #ifndef QT_NO_DATESTRING
-    if (pos == -1) {
-        // no comma -> asctime(3) format
-        dt = QDateTime::fromString(QString::fromLatin1(value), Qt::TextDate);
-    } else {
-        // Use sscanf over QLocal/QDateTimeParser for speed reasons. See the
-        // QtWebKit performance benchmarks to get an idea.
-        if (pos == 3) {
-            char month_name[4];
-            int day, year, hour, minute, second;
-            if (sscanf(value.constData(), "%*3s, %d %3s %d %d:%d:%d 'GMT'", &day, month_name, &year, &hour, &minute, &second) == 6)
-                dt = QDateTime(QDate(year, name_to_month(month_name), day), QTime(hour, minute, second));
-        } else {
-            QLocale c = QLocale::c();
-            // eat the weekday, the comma and the space following it
-            QString sansWeekday = QString::fromLatin1(value.constData() + pos + 2);
-            // must be RFC 850 date
-            dt = c.toDateTime(sansWeekday, QLatin1String("dd-MMM-yy hh:mm:ss 'GMT'"));
-        }
-    }
+   if (pos == -1) {
+      // no comma -> asctime(3) format
+      dt = QDateTime::fromString(QString::fromLatin1(value), Qt::TextDate);
+   } else {
+      // Use sscanf over QLocal/QDateTimeParser for speed reasons. See the
+      // QtWebKit performance benchmarks to get an idea.
+      if (pos == 3) {
+         char month_name[4];
+         int day, year, hour, minute, second;
+         if (sscanf(value.constData(), "%*3s, %d %3s %d %d:%d:%d 'GMT'", &day, month_name, &year, &hour, &minute,
+                    &second) == 6) {
+            dt = QDateTime(QDate(year, name_to_month(month_name), day), QTime(hour, minute, second));
+         }
+      } else {
+         QLocale c = QLocale::c();
+         // eat the weekday, the comma and the space following it
+         QString sansWeekday = QString::fromLatin1(value.constData() + pos + 2);
+         // must be RFC 850 date
+         dt = c.toDateTime(sansWeekday, QLatin1String("dd-MMM-yy hh:mm:ss 'GMT'"));
+      }
+   }
 #endif // QT_NO_DATESTRING
 
-    if (dt.isValid())
-        dt.setTimeSpec(Qt::UTC);
-    return dt;
+   if (dt.isValid()) {
+      dt.setTimeSpec(Qt::UTC);
+   }
+   return dt;
 }
 
 QByteArray QNetworkHeadersPrivate::toHttpDate(const QDateTime &dt)
 {
-    return QLocale::c().toString(dt, QLatin1String("ddd, dd MMM yyyy hh:mm:ss 'GMT'"))
-        .toLatin1();
+   return QLocale::c().toString(dt, QLatin1String("ddd, dd MMM yyyy hh:mm:ss 'GMT'"))
+          .toLatin1();
 }
 
 QT_END_NAMESPACE

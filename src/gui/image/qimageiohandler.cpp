@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -212,21 +212,21 @@ class QIODevice;
 
 class QImageIOHandlerPrivate
 {
-    Q_DECLARE_PUBLIC(QImageIOHandler)
-public:
-    QImageIOHandlerPrivate(QImageIOHandler *q);
-    virtual ~QImageIOHandlerPrivate();
+   Q_DECLARE_PUBLIC(QImageIOHandler)
+ public:
+   QImageIOHandlerPrivate(QImageIOHandler *q);
+   virtual ~QImageIOHandlerPrivate();
 
-    QIODevice *device;
-    mutable QByteArray format;
+   QIODevice *device;
+   mutable QByteArray format;
 
-    QImageIOHandler *q_ptr;
+   QImageIOHandler *q_ptr;
 };
 
 QImageIOHandlerPrivate::QImageIOHandlerPrivate(QImageIOHandler *q)
 {
-    device = 0;
-    q_ptr = q;
+   device = 0;
+   q_ptr = q;
 }
 
 QImageIOHandlerPrivate::~QImageIOHandlerPrivate()
@@ -237,7 +237,7 @@ QImageIOHandlerPrivate::~QImageIOHandlerPrivate()
     Constructs a QImageIOHandler object.
 */
 QImageIOHandler::QImageIOHandler()
-    : d_ptr(new QImageIOHandlerPrivate(this))
+   : d_ptr(new QImageIOHandlerPrivate(this))
 {
 }
 
@@ -247,7 +247,7 @@ QImageIOHandler::QImageIOHandler()
     dd.
 */
 QImageIOHandler::QImageIOHandler(QImageIOHandlerPrivate &dd)
-    : d_ptr(&dd)
+   : d_ptr(&dd)
 {
 }
 
@@ -271,8 +271,8 @@ QImageIOHandler::~QImageIOHandler()
 */
 void QImageIOHandler::setDevice(QIODevice *device)
 {
-    Q_D(QImageIOHandler);
-    d->device = device;
+   Q_D(QImageIOHandler);
+   d->device = device;
 }
 
 /*!
@@ -281,8 +281,8 @@ void QImageIOHandler::setDevice(QIODevice *device)
 */
 QIODevice *QImageIOHandler::device() const
 {
-    Q_D(const QImageIOHandler);
-    return d->device;
+   Q_D(const QImageIOHandler);
+   return d->device;
 }
 
 /*!
@@ -293,8 +293,8 @@ QIODevice *QImageIOHandler::device() const
 */
 void QImageIOHandler::setFormat(const QByteArray &format)
 {
-    Q_D(QImageIOHandler);
-    d->format = format;
+   Q_D(QImageIOHandler);
+   d->format = format;
 }
 
 /*!
@@ -307,8 +307,8 @@ void QImageIOHandler::setFormat(const QByteArray &format)
 */
 void QImageIOHandler::setFormat(const QByteArray &format) const
 {
-    Q_D(const QImageIOHandler);
-    d->format = format;
+   Q_D(const QImageIOHandler);
+   d->format = format;
 }
 
 /*!
@@ -320,8 +320,8 @@ void QImageIOHandler::setFormat(const QByteArray &format) const
 */
 QByteArray QImageIOHandler::format() const
 {
-    Q_D(const QImageIOHandler);
-    return d->format;
+   Q_D(const QImageIOHandler);
+   return d->format;
 }
 
 /*!
@@ -361,7 +361,7 @@ QByteArray QImageIOHandler::format() const
 
 QByteArray QImageIOHandler::name() const
 {
-    return format();
+   return format();
 }
 
 /*!
@@ -372,8 +372,8 @@ QByteArray QImageIOHandler::name() const
 */
 bool QImageIOHandler::write(const QImage &image)
 {
-    Q_UNUSED(image);
-    return false;
+   Q_UNUSED(image);
+   return false;
 }
 
 /*!
@@ -383,8 +383,8 @@ bool QImageIOHandler::write(const QImage &image)
 */
 void QImageIOHandler::setOption(ImageOption option, const QVariant &value)
 {
-    Q_UNUSED(option);
-    Q_UNUSED(value);
+   Q_UNUSED(option);
+   Q_UNUSED(value);
 }
 
 /*!
@@ -396,8 +396,8 @@ void QImageIOHandler::setOption(ImageOption option, const QVariant &value)
 */
 QVariant QImageIOHandler::option(ImageOption option) const
 {
-    Q_UNUSED(option);
-    return QVariant();
+   Q_UNUSED(option);
+   return QVariant();
 }
 
 /*!
@@ -410,8 +410,8 @@ QVariant QImageIOHandler::option(ImageOption option) const
 */
 bool QImageIOHandler::supportsOption(ImageOption option) const
 {
-    Q_UNUSED(option);
-    return false;
+   Q_UNUSED(option);
+   return false;
 }
 
 /*!
@@ -419,14 +419,14 @@ bool QImageIOHandler::supportsOption(ImageOption option) const
     the sequence number of the current image in the animation. If
     this function is called before any image is read(), -1 is
     returned. The number of the first image in the sequence is 0.
-    
+
     If the image format does not support animation, 0 is returned.
 
     \sa read()
 */
 int QImageIOHandler::currentImageNumber() const
 {
-    return 0;
+   return 0;
 }
 
 /*!
@@ -438,7 +438,7 @@ int QImageIOHandler::currentImageNumber() const
 */
 QRect QImageIOHandler::currentImageRect() const
 {
-    return QRect();
+   return QRect();
 }
 
 /*!
@@ -452,7 +452,7 @@ QRect QImageIOHandler::currentImageRect() const
 */
 int QImageIOHandler::imageCount() const
 {
-    return canRead() ? 1 : 0;
+   return canRead() ? 1 : 0;
 }
 
 /*!
@@ -463,7 +463,7 @@ int QImageIOHandler::imageCount() const
 */
 bool QImageIOHandler::jumpToNextImage()
 {
-    return false;
+   return false;
 }
 
 /*!
@@ -475,8 +475,8 @@ bool QImageIOHandler::jumpToNextImage()
 */
 bool QImageIOHandler::jumpToImage(int imageNumber)
 {
-    Q_UNUSED(imageNumber);
-    return false;
+   Q_UNUSED(imageNumber);
+   return false;
 }
 
 /*!
@@ -486,7 +486,7 @@ bool QImageIOHandler::jumpToImage(int imageNumber)
 */
 int QImageIOHandler::loopCount() const
 {
-    return 0;
+   return 0;
 }
 
 /*!
@@ -497,7 +497,7 @@ int QImageIOHandler::loopCount() const
 */
 int QImageIOHandler::nextImageDelay() const
 {
-    return 0;
+   return 0;
 }
 
 /*!
@@ -505,7 +505,7 @@ int QImageIOHandler::nextImageDelay() const
     invoked automatically by the Q_EXPORT_PLUGIN2() macro.
 */
 QImageIOPlugin::QImageIOPlugin(QObject *parent)
-    : QObject(parent)
+   : QObject(parent)
 {
 }
 

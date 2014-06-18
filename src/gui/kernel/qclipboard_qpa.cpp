@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,46 +37,51 @@ QT_USE_NAMESPACE
 
 void QClipboard::clear(Mode mode)
 {
-    setMimeData(0,mode);
+   setMimeData(0, mode);
 }
 
 
 bool QClipboard::event(QEvent *e)
 {
-    return QObject::event(e);
+   return QObject::event(e);
 }
 
-const QMimeData* QClipboard::mimeData(Mode mode) const
+const QMimeData *QClipboard::mimeData(Mode mode) const
 {
-    QPlatformClipboard *clipboard = QApplicationPrivate::platformIntegration()->clipboard();
-    if (!clipboard->supportsMode(mode)) return 0;
-    return clipboard->mimeData(mode);
+   QPlatformClipboard *clipboard = QApplicationPrivate::platformIntegration()->clipboard();
+   if (!clipboard->supportsMode(mode)) {
+      return 0;
+   }
+   return clipboard->mimeData(mode);
 }
 
-void QClipboard::setMimeData(QMimeData* src, Mode mode)
+void QClipboard::setMimeData(QMimeData *src, Mode mode)
 {
-    QPlatformClipboard *clipboard = QApplicationPrivate::platformIntegration()->clipboard();
-    if (!clipboard->supportsMode(mode)) return;
+   QPlatformClipboard *clipboard = QApplicationPrivate::platformIntegration()->clipboard();
+   if (!clipboard->supportsMode(mode)) {
+      return;
+   }
 
-    clipboard->setMimeData(src,mode);
+   clipboard->setMimeData(src, mode);
 
-    emitChanged(mode);
+   emitChanged(mode);
 }
 
 bool QClipboard::supportsMode(Mode mode) const
 {
-    QPlatformClipboard *clipboard = QApplicationPrivate::platformIntegration()->clipboard();
-    return clipboard->supportsMode(mode);
+   QPlatformClipboard *clipboard = QApplicationPrivate::platformIntegration()->clipboard();
+   return clipboard->supportsMode(mode);
 }
 
 bool QClipboard::ownsMode(Mode mode) const
 {
-    if (mode == Clipboard)
-        qWarning("QClipboard::ownsClipboard: UNIMPLEMENTED!");
-    return false;
+   if (mode == Clipboard) {
+      qWarning("QClipboard::ownsClipboard: UNIMPLEMENTED!");
+   }
+   return false;
 }
 
-void QClipboard::connectNotify( const char * )
+void QClipboard::connectNotify( const char *)
 {
 }
 

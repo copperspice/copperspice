@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,21 +34,22 @@ QT_FORWARD_DECLARE_CLASS(QStringList);
 QT_FORWARD_DECLARE_CLASS(QCocoaDropData);
 
 @interface NSPanel (QtIntegration)
-- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender;
-- (NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender;
-- (void)draggingExited:(id <NSDraggingInfo>)sender;
-- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender;
+- (NSDragOperation)draggingEntered: (id <NSDraggingInfo>)sender;
+- (NSDragOperation)draggingUpdated: (id <NSDraggingInfo>)sender;
+- (void)draggingExited: (id <NSDraggingInfo>)sender;
+- (BOOL)performDragOperation: (id <NSDraggingInfo>)sender;
 @end
 
-@interface QT_MANGLE_NAMESPACE(QCocoaPanel) : NSPanel {
-    QStringList *currentCustomDragTypes;
-    QCocoaDropData *dropData;
-    NSInteger dragEnterSequence;
+@interface QT_MANGLE_NAMESPACE(QCocoaPanel) : NSPanel
+{
+   QStringList *currentCustomDragTypes;
+   QCocoaDropData *dropData;
+   NSInteger dragEnterSequence;
 }
 
-+ (Class)frameViewClassForStyleMask:(NSUInteger)styleMask;
++ (Class)frameViewClassForStyleMask: (NSUInteger)styleMask;
 - (void)registerDragTypes;
-- (void)drawRectOriginal:(NSRect)rect;
+- (void)drawRectOriginal: (NSRect)rect;
 
 @end
 #endif

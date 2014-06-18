@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,11 +18,11 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-  
+
 #include <QtCore/qglobal.h>
 
 #if !defined(QT_OPENGL_ES_1)
@@ -46,62 +46,63 @@ extern void qgl_cleanup_glyph_cache(QGLContext *);
 void qgl_cleanup_glyph_cache(QGLContext *) {}
 #endif
 
-extern QImage qt_gl_read_framebuffer(const QSize&, bool, bool);
+extern QImage qt_gl_read_framebuffer(const QSize &, bool, bool);
 
 
-QGLContext* QGLPBufferGLPaintDevice::context() const
+QGLContext *QGLPBufferGLPaintDevice::context() const
 {
-    return pbuf->d_func()->qctx;
+   return pbuf->d_func()->qctx;
 }
 
-void QGLPBufferGLPaintDevice::endPaint() {
-    glFlush();
-    QGLPaintDevice::endPaint();
+void QGLPBufferGLPaintDevice::endPaint()
+{
+   glFlush();
+   QGLPaintDevice::endPaint();
 }
 
-void QGLPBufferGLPaintDevice::setPBuffer(QGLPixelBuffer* pb)
+void QGLPBufferGLPaintDevice::setPBuffer(QGLPixelBuffer *pb)
 {
-    pbuf = pb;
+   pbuf = pb;
 }
 
 void QGLPixelBufferPrivate::common_init(const QSize &size, const QGLFormat &format, QGLWidget *shareWidget)
 {
-    Q_Q(QGLPixelBuffer);
-    if(init(size, format, shareWidget)) {
-        req_size = size;
-        req_format = format;
-        req_shareWidget = shareWidget;
-        invalid = false;
-        qctx = new QGLContext(format);
-        qctx->d_func()->sharing = (shareWidget != 0);
-        if (shareWidget != 0 && shareWidget->d_func()->glcx) {
-            QGLContextGroup::addShare(qctx, shareWidget->d_func()->glcx);
-            shareWidget->d_func()->glcx->d_func()->sharing = true;
-        }
+   Q_Q(QGLPixelBuffer);
+   if (init(size, format, shareWidget)) {
+      req_size = size;
+      req_format = format;
+      req_shareWidget = shareWidget;
+      invalid = false;
+      qctx = new QGLContext(format);
+      qctx->d_func()->sharing = (shareWidget != 0);
+      if (shareWidget != 0 && shareWidget->d_func()->glcx) {
+         QGLContextGroup::addShare(qctx, shareWidget->d_func()->glcx);
+         shareWidget->d_func()->glcx->d_func()->sharing = true;
+      }
 
-        glDevice.setPBuffer(q);
-        qctx->d_func()->paintDevice = q;
-        qctx->d_func()->valid = true;
+      glDevice.setPBuffer(q);
+      qctx->d_func()->paintDevice = q;
+      qctx->d_func()->valid = true;
 
 #if defined(Q_OS_WIN) && !defined(QT_OPENGL_ES)
-        qctx->d_func()->dc = dc;
-        qctx->d_func()->rc = ctx;
+      qctx->d_func()->dc = dc;
+      qctx->d_func()->rc = ctx;
 
 #elif (defined(Q_WS_X11) && defined(QT_NO_EGL))
-        qctx->d_func()->cx = ctx;
-        qctx->d_func()->pbuf = (void *) pbuf;
-        qctx->d_func()->vi = 0;
+      qctx->d_func()->cx = ctx;
+      qctx->d_func()->pbuf = (void *) pbuf;
+      qctx->d_func()->vi = 0;
 
 #elif defined(Q_OS_MAC)
-        qctx->d_func()->cx = ctx;
-        qctx->d_func()->vi = 0;
+      qctx->d_func()->cx = ctx;
+      qctx->d_func()->vi = 0;
 
 #elif !defined(QT_NO_EGL)
-        qctx->d_func()->eglContext = ctx;
-        qctx->d_func()->eglSurface = pbuf;
+      qctx->d_func()->eglContext = ctx;
+      qctx->d_func()->eglSurface = pbuf;
 #endif
 
-    }
+   }
 }
 
 /*!
@@ -118,10 +119,10 @@ void QGLPixelBufferPrivate::common_init(const QSize &size, const QGLFormat &form
     \sa size(), format()
 */
 QGLPixelBuffer::QGLPixelBuffer(const QSize &size, const QGLFormat &format, QGLWidget *shareWidget)
-    : d_ptr(new QGLPixelBufferPrivate(this))
+   : d_ptr(new QGLPixelBufferPrivate(this))
 {
-    Q_D(QGLPixelBuffer);
-    d->common_init(size, format, shareWidget);
+   Q_D(QGLPixelBuffer);
+   d->common_init(size, format, shareWidget);
 }
 
 
@@ -140,10 +141,10 @@ QGLPixelBuffer::QGLPixelBuffer(const QSize &size, const QGLFormat &format, QGLWi
     \sa size(), format()
 */
 QGLPixelBuffer::QGLPixelBuffer(int width, int height, const QGLFormat &format, QGLWidget *shareWidget)
-    : d_ptr(new QGLPixelBufferPrivate(this))
+   : d_ptr(new QGLPixelBufferPrivate(this))
 {
-    Q_D(QGLPixelBuffer);
-    d->common_init(QSize(width, height), format, shareWidget);
+   Q_D(QGLPixelBuffer);
+   d->common_init(QSize(width, height), format, shareWidget);
 }
 
 
@@ -153,17 +154,19 @@ QGLPixelBuffer::QGLPixelBuffer(int width, int height, const QGLFormat &format, Q
 */
 QGLPixelBuffer::~QGLPixelBuffer()
 {
-    Q_D(QGLPixelBuffer);
+   Q_D(QGLPixelBuffer);
 
-    // defined in qpaintengine_opengl.cpp
-    QGLContext *current = const_cast<QGLContext *>(QGLContext::currentContext());
-    if (current != d->qctx)
-        makeCurrent();
-    qgl_cleanup_glyph_cache(d->qctx);
-    d->cleanup();
-    delete d->qctx;
-    if (current && current != d->qctx)
-        current->makeCurrent();
+   // defined in qpaintengine_opengl.cpp
+   QGLContext *current = const_cast<QGLContext *>(QGLContext::currentContext());
+   if (current != d->qctx) {
+      makeCurrent();
+   }
+   qgl_cleanup_glyph_cache(d->qctx);
+   d->cleanup();
+   delete d->qctx;
+   if (current && current != d->qctx) {
+      current->makeCurrent();
+   }
 }
 
 /*! \fn bool QGLPixelBuffer::makeCurrent()
@@ -176,11 +179,12 @@ QGLPixelBuffer::~QGLPixelBuffer()
 
 bool QGLPixelBuffer::makeCurrent()
 {
-    Q_D(QGLPixelBuffer);
-    if (d->invalid)
-        return false;
-    d->qctx->makeCurrent();
-    return true;
+   Q_D(QGLPixelBuffer);
+   if (d->invalid) {
+      return false;
+   }
+   d->qctx->makeCurrent();
+   return true;
 }
 
 /*! \fn bool QGLPixelBuffer::doneCurrent()
@@ -191,11 +195,12 @@ bool QGLPixelBuffer::makeCurrent()
 
 bool QGLPixelBuffer::doneCurrent()
 {
-    Q_D(QGLPixelBuffer);
-    if (d->invalid)
-        return false;
-    d->qctx->doneCurrent();
-    return true;
+   Q_D(QGLPixelBuffer);
+   if (d->invalid) {
+      return false;
+   }
+   d->qctx->doneCurrent();
+   return true;
 }
 
 /*!
@@ -210,14 +215,14 @@ bool QGLPixelBuffer::doneCurrent()
 #if (defined(Q_WS_X11) || defined(Q_OS_WIN)) && defined(QT_NO_EGL)
 GLuint QGLPixelBuffer::generateDynamicTexture() const
 {
-    Q_D(const QGLPixelBuffer);
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, d->req_size.width(), d->req_size.height(), 0, GL_RGBA, GL_FLOAT, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    return texture;
+   Q_D(const QGLPixelBuffer);
+   GLuint texture;
+   glGenTextures(1, &texture);
+   glBindTexture(GL_TEXTURE_2D, texture);
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, d->req_size.width(), d->req_size.height(), 0, GL_RGBA, GL_FLOAT, 0);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   return texture;
 }
 #endif
 
@@ -280,21 +285,22 @@ GLuint QGLPixelBuffer::generateDynamicTexture() const
 */
 void QGLPixelBuffer::updateDynamicTexture(GLuint texture_id) const
 {
-    Q_D(const QGLPixelBuffer);
-    if (d->invalid)
-        return;
-    glBindTexture(GL_TEXTURE_2D, texture_id);
+   Q_D(const QGLPixelBuffer);
+   if (d->invalid) {
+      return;
+   }
+   glBindTexture(GL_TEXTURE_2D, texture_id);
 #ifndef QT_OPENGL_ES
-    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 0, 0, d->req_size.width(), d->req_size.height(), 0);
+   glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 0, 0, d->req_size.width(), d->req_size.height(), 0);
 #else
-    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, d->req_size.width(), d->req_size.height(), 0);
+   glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, d->req_size.width(), d->req_size.height(), 0);
 #endif
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
 void QGLPixelBuffer::updateDynamicTexture(QMacCompatGLuint texture_id) const
 {
-    updateDynamicTexture(GLuint(texture_id));
+   updateDynamicTexture(GLuint(texture_id));
 }
 #endif
 
@@ -303,8 +309,8 @@ void QGLPixelBuffer::updateDynamicTexture(QMacCompatGLuint texture_id) const
 */
 QSize QGLPixelBuffer::size() const
 {
-    Q_D(const QGLPixelBuffer);
-    return d->req_size;
+   Q_D(const QGLPixelBuffer);
+   return d->req_size;
 }
 
 /*!
@@ -312,12 +318,13 @@ QSize QGLPixelBuffer::size() const
 */
 QImage QGLPixelBuffer::toImage() const
 {
-    Q_D(const QGLPixelBuffer);
-    if (d->invalid)
-        return QImage();
+   Q_D(const QGLPixelBuffer);
+   if (d->invalid) {
+      return QImage();
+   }
 
-    const_cast<QGLPixelBuffer *>(this)->makeCurrent();
-    return qt_gl_read_framebuffer(d->req_size, d->format.alpha(), true);
+   const_cast<QGLPixelBuffer *>(this)->makeCurrent();
+   return qt_gl_read_framebuffer(d->req_size, d->format.alpha(), true);
 }
 
 /*!
@@ -325,10 +332,11 @@ QImage QGLPixelBuffer::toImage() const
 */
 Qt::HANDLE QGLPixelBuffer::handle() const
 {
-    Q_D(const QGLPixelBuffer);
-    if (d->invalid)
-        return 0;
-    return (Qt::HANDLE) d->pbuf;
+   Q_D(const QGLPixelBuffer);
+   if (d->invalid) {
+      return 0;
+   }
+   return (Qt::HANDLE) d->pbuf;
 }
 
 /*!
@@ -336,8 +344,8 @@ Qt::HANDLE QGLPixelBuffer::handle() const
 */
 bool QGLPixelBuffer::isValid() const
 {
-    Q_D(const QGLPixelBuffer);
-    return !d->invalid;
+   Q_D(const QGLPixelBuffer);
+   return !d->invalid;
 }
 
 #if !defined(QT_OPENGL_ES_1)
@@ -352,62 +360,63 @@ Q_GLOBAL_STATIC(QGLEngineThreadStorage<QOpenGLPaintEngine>, qt_buffer_engine)
 QPaintEngine *QGLPixelBuffer::paintEngine() const
 {
 #if defined(QT_OPENGL_ES_1)
-    return qt_buffer_engine()->engine();
+   return qt_buffer_engine()->engine();
 #elif defined(QT_OPENGL_ES_2)
-    return qt_buffer_2_engine()->engine();
+   return qt_buffer_2_engine()->engine();
 #else
-    if (qt_gl_preferGL2Engine())
-        return qt_buffer_2_engine()->engine();
-    else
-        return qt_buffer_engine()->engine();
+   if (qt_gl_preferGL2Engine()) {
+      return qt_buffer_2_engine()->engine();
+   } else {
+      return qt_buffer_engine()->engine();
+   }
 #endif
 }
 
 /*! \reimp */
 int QGLPixelBuffer::metric(PaintDeviceMetric metric) const
 {
-    Q_D(const QGLPixelBuffer);
+   Q_D(const QGLPixelBuffer);
 
-    float dpmx = qt_defaultDpiX()*100./2.54;
-    float dpmy = qt_defaultDpiY()*100./2.54;
-    int w = d->req_size.width();
-    int h = d->req_size.height();
-    switch (metric) {
-    case PdmWidth:
-        return w;
+   float dpmx = qt_defaultDpiX() * 100. / 2.54;
+   float dpmy = qt_defaultDpiY() * 100. / 2.54;
+   int w = d->req_size.width();
+   int h = d->req_size.height();
+   switch (metric) {
+      case PdmWidth:
+         return w;
 
-    case PdmHeight:
-        return h;
+      case PdmHeight:
+         return h;
 
-    case PdmWidthMM:
-        return qRound(w * 1000 / dpmx);
+      case PdmWidthMM:
+         return qRound(w * 1000 / dpmx);
 
-    case PdmHeightMM:
-        return qRound(h * 1000 / dpmy);
+      case PdmHeightMM:
+         return qRound(h * 1000 / dpmy);
 
-    case PdmNumColors:
-        return 0;
+      case PdmNumColors:
+         return 0;
 
-    case PdmDepth:
-        return 32;//d->depth;
+      case PdmDepth:
+         return 32;//d->depth;
 
-    case PdmDpiX:
-        return qRound(dpmx * 0.0254);
+      case PdmDpiX:
+         return qRound(dpmx * 0.0254);
 
-    case PdmDpiY:
-        return qRound(dpmy * 0.0254);
+      case PdmDpiY:
+         return qRound(dpmy * 0.0254);
 
-    case PdmPhysicalDpiX:
-        return qRound(dpmx * 0.0254);
+      case PdmPhysicalDpiX:
+         return qRound(dpmx * 0.0254);
 
-    case PdmPhysicalDpiY:
-        return qRound(dpmy * 0.0254);
+      case PdmPhysicalDpiY:
+         return qRound(dpmy * 0.0254);
 
-    default:
-        qWarning("QGLPixelBuffer::metric(), Unhandled metric type: %d\n", metric);
-        break;
-    }
-    return 0;
+      default:
+         qWarning("QGLPixelBuffer::metric(), Unhandled metric type: %d\n", metric);
+         break;
+   }
+   return 0;
 }
 
 /*!
@@ -423,11 +432,11 @@ int QGLPixelBuffer::metric(PaintDeviceMetric metric) const
 */
 GLuint QGLPixelBuffer::bindTexture(const QImage &image, GLenum target)
 {
-    Q_D(QGLPixelBuffer);
+   Q_D(QGLPixelBuffer);
 #ifndef QT_OPENGL_ES
-    return d->qctx->bindTexture(image, target, GLint(GL_RGBA8));
+   return d->qctx->bindTexture(image, target, GLint(GL_RGBA8));
 #else
-    return d->qctx->bindTexture(image, target, GL_RGBA);
+   return d->qctx->bindTexture(image, target, GL_RGBA);
 #endif
 }
 
@@ -435,8 +444,8 @@ GLuint QGLPixelBuffer::bindTexture(const QImage &image, GLenum target)
 /*! \internal */
 GLuint QGLPixelBuffer::bindTexture(const QImage &image, QMacCompatGLenum target)
 {
-    Q_D(QGLPixelBuffer);
-    return d->qctx->bindTexture(image, target, QMacCompatGLint(GL_RGBA8));
+   Q_D(QGLPixelBuffer);
+   return d->qctx->bindTexture(image, target, QMacCompatGLint(GL_RGBA8));
 }
 #endif
 
@@ -450,11 +459,11 @@ GLuint QGLPixelBuffer::bindTexture(const QImage &image, QMacCompatGLenum target)
 */
 GLuint QGLPixelBuffer::bindTexture(const QPixmap &pixmap, GLenum target)
 {
-    Q_D(QGLPixelBuffer);
+   Q_D(QGLPixelBuffer);
 #ifndef QT_OPENGL_ES
-    return d->qctx->bindTexture(pixmap, target, GLint(GL_RGBA8));
+   return d->qctx->bindTexture(pixmap, target, GLint(GL_RGBA8));
 #else
-    return d->qctx->bindTexture(pixmap, target, GL_RGBA);
+   return d->qctx->bindTexture(pixmap, target, GL_RGBA);
 #endif
 }
 
@@ -462,8 +471,8 @@ GLuint QGLPixelBuffer::bindTexture(const QPixmap &pixmap, GLenum target)
 /*! \internal */
 GLuint QGLPixelBuffer::bindTexture(const QPixmap &pixmap, QMacCompatGLenum target)
 {
-    Q_D(QGLPixelBuffer);
-    return d->qctx->bindTexture(pixmap, target, QMacCompatGLint(GL_RGBA8));
+   Q_D(QGLPixelBuffer);
+   return d->qctx->bindTexture(pixmap, target, QMacCompatGLint(GL_RGBA8));
 }
 #endif
 
@@ -478,8 +487,8 @@ GLuint QGLPixelBuffer::bindTexture(const QPixmap &pixmap, QMacCompatGLenum targe
 */
 GLuint QGLPixelBuffer::bindTexture(const QString &fileName)
 {
-    Q_D(QGLPixelBuffer);
-    return d->qctx->bindTexture(fileName);
+   Q_D(QGLPixelBuffer);
+   return d->qctx->bindTexture(fileName);
 }
 
 /*!
@@ -489,16 +498,16 @@ GLuint QGLPixelBuffer::bindTexture(const QString &fileName)
  */
 void QGLPixelBuffer::deleteTexture(GLuint texture_id)
 {
-    Q_D(QGLPixelBuffer);
-    d->qctx->deleteTexture(texture_id);
+   Q_D(QGLPixelBuffer);
+   d->qctx->deleteTexture(texture_id);
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
 /*! \internal */
 void QGLPixelBuffer::deleteTexture(QMacCompatGLuint texture_id)
 {
-    Q_D(QGLPixelBuffer);
-    d->qctx->deleteTexture(texture_id);
+   Q_D(QGLPixelBuffer);
+   d->qctx->deleteTexture(texture_id);
 }
 #endif
 
@@ -513,16 +522,16 @@ void QGLPixelBuffer::deleteTexture(QMacCompatGLuint texture_id)
 */
 void QGLPixelBuffer::drawTexture(const QRectF &target, GLuint textureId, GLenum textureTarget)
 {
-    Q_D(QGLPixelBuffer);
-    d->qctx->drawTexture(target, textureId, textureTarget);
+   Q_D(QGLPixelBuffer);
+   d->qctx->drawTexture(target, textureId, textureTarget);
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
 /*! \internal */
 void QGLPixelBuffer::drawTexture(const QRectF &target, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget)
 {
-    Q_D(QGLPixelBuffer);
-    d->qctx->drawTexture(target, textureId, textureTarget);
+   Q_D(QGLPixelBuffer);
+   d->qctx->drawTexture(target, textureId, textureTarget);
 }
 #endif
 
@@ -536,16 +545,16 @@ void QGLPixelBuffer::drawTexture(const QRectF &target, QMacCompatGLuint textureI
 */
 void QGLPixelBuffer::drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget)
 {
-    Q_D(QGLPixelBuffer);
-    d->qctx->drawTexture(point, textureId, textureTarget);
+   Q_D(QGLPixelBuffer);
+   d->qctx->drawTexture(point, textureId, textureTarget);
 }
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS
 /*! \internal */
 void QGLPixelBuffer::drawTexture(const QPointF &point, QMacCompatGLuint textureId, QMacCompatGLenum textureTarget)
 {
-    Q_D(QGLPixelBuffer);
-    d->qctx->drawTexture(point, textureId, textureTarget);
+   Q_D(QGLPixelBuffer);
+   d->qctx->drawTexture(point, textureId, textureTarget);
 }
 #endif
 
@@ -555,8 +564,8 @@ void QGLPixelBuffer::drawTexture(const QPointF &point, QMacCompatGLuint textureI
 */
 QGLFormat QGLPixelBuffer::format() const
 {
-    Q_D(const QGLPixelBuffer);
-    return d->format;
+   Q_D(const QGLPixelBuffer);
+   return d->format;
 }
 
 /*! \fn int QGLPixelBuffer::devType() const

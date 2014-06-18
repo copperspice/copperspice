@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -58,154 +58,155 @@ const int QT_RASTER_COORD_LIMIT = 32767;
  */
 class QOutlineMapper
 {
-public:
-    QOutlineMapper() :
-        m_element_types(0),
-        m_elements(0),
-        m_elements_dev(0),
-        m_points(0),
-        m_tags(0),
-        m_contours(0),
-        m_polygon_dev(0),
-        m_in_clip_elements(false)
-    {
-    }
+ public:
+   QOutlineMapper() :
+      m_element_types(0),
+      m_elements(0),
+      m_elements_dev(0),
+      m_points(0),
+      m_tags(0),
+      m_contours(0),
+      m_polygon_dev(0),
+      m_in_clip_elements(false) {
+   }
 
-    /*!
-      Sets up the matrix to be used for conversion. This also
-      sets up the qt_path_iterator function that is used as a callback
-      to get points.
-    */
-    void setMatrix(const QTransform &m)
-    {
-        m_m11 = m.m11();
-        m_m12 = m.m12();
-        m_m13 = m.m13();
-        m_m21 = m.m21();
-        m_m22 = m.m22();
-        m_m23 = m.m23();
-        m_m33 = m.m33();
-        m_dx = m.dx();
-        m_dy = m.dy();
-        m_txop = m.type();
-    }
+   /*!
+     Sets up the matrix to be used for conversion. This also
+     sets up the qt_path_iterator function that is used as a callback
+     to get points.
+   */
+   void setMatrix(const QTransform &m) {
+      m_m11 = m.m11();
+      m_m12 = m.m12();
+      m_m13 = m.m13();
+      m_m21 = m.m21();
+      m_m22 = m.m22();
+      m_m23 = m.m23();
+      m_m33 = m.m33();
+      m_dx = m.dx();
+      m_dy = m.dy();
+      m_txop = m.type();
+   }
 
-    void beginOutline(Qt::FillRule fillRule)
-    {
+   void beginOutline(Qt::FillRule fillRule) {
 #ifdef QT_DEBUG_CONVERT
-        printf("QOutlineMapper::beginOutline rule=%d\n", fillRule);
+      printf("QOutlineMapper::beginOutline rule=%d\n", fillRule);
 #endif
-        m_valid = true;
-        m_elements.reset();
-        m_elements_dev.reset();
-        m_element_types.reset();
-        m_points.reset();
-        m_tags.reset();
-        m_contours.reset();
-        m_outline.flags = fillRule == Qt::WindingFill
-                          ? QT_FT_OUTLINE_NONE
-                          : QT_FT_OUTLINE_EVEN_ODD_FILL;
-        m_subpath_start = 0;
-    }
+      m_valid = true;
+      m_elements.reset();
+      m_elements_dev.reset();
+      m_element_types.reset();
+      m_points.reset();
+      m_tags.reset();
+      m_contours.reset();
+      m_outline.flags = fillRule == Qt::WindingFill
+                        ? QT_FT_OUTLINE_NONE
+                        : QT_FT_OUTLINE_EVEN_ODD_FILL;
+      m_subpath_start = 0;
+   }
 
-    void endOutline();
+   void endOutline();
 
-    void clipElements(const QPointF *points, const QPainterPath::ElementType *types, int count);
+   void clipElements(const QPointF *points, const QPainterPath::ElementType *types, int count);
 
-    void convertElements(const QPointF *points, const QPainterPath::ElementType *types, int count);
+   void convertElements(const QPointF *points, const QPainterPath::ElementType *types, int count);
 
-    inline void moveTo(const QPointF &pt) {
+   inline void moveTo(const QPointF &pt) {
 #ifdef QT_DEBUG_CONVERT
-        printf("QOutlineMapper::moveTo() (%f, %f)\n", pt.x(), pt.y());
+      printf("QOutlineMapper::moveTo() (%f, %f)\n", pt.x(), pt.y());
 #endif
-        closeSubpath();
-        m_subpath_start = m_elements.size();
-        m_elements << pt;
-        m_element_types << QPainterPath::MoveToElement;
-    }
+      closeSubpath();
+      m_subpath_start = m_elements.size();
+      m_elements << pt;
+      m_element_types << QPainterPath::MoveToElement;
+   }
 
-    inline void lineTo(const QPointF &pt) {
+   inline void lineTo(const QPointF &pt) {
 #ifdef QT_DEBUG_CONVERT
-        printf("QOutlineMapper::lineTo() (%f, %f)\n", pt.x(), pt.y());
+      printf("QOutlineMapper::lineTo() (%f, %f)\n", pt.x(), pt.y());
 #endif
-        m_elements.add(pt);
-        m_element_types << QPainterPath::LineToElement;
-    }
+      m_elements.add(pt);
+      m_element_types << QPainterPath::LineToElement;
+   }
 
-    inline void curveTo(const QPointF &cp1, const QPointF &cp2, const QPointF &ep) {
+   inline void curveTo(const QPointF &cp1, const QPointF &cp2, const QPointF &ep) {
 #ifdef QT_DEBUG_CONVERT
-        printf("QOutlineMapper::curveTo() (%f, %f)\n", ep.x(), ep.y());
+      printf("QOutlineMapper::curveTo() (%f, %f)\n", ep.x(), ep.y());
 #endif
-        m_elements << cp1 << cp2 << ep;
-        m_element_types << QPainterPath::CurveToElement
-                        << QPainterPath::CurveToDataElement
-                        << QPainterPath::CurveToDataElement;
-    }
+      m_elements << cp1 << cp2 << ep;
+      m_element_types << QPainterPath::CurveToElement
+                      << QPainterPath::CurveToDataElement
+                      << QPainterPath::CurveToDataElement;
+   }
 
-    inline void closeSubpath() {
-        int element_count = m_elements.size();
-        if (element_count > 0) {
-            if (m_elements.at(element_count-1) != m_elements.at(m_subpath_start)) {
+   inline void closeSubpath() {
+      int element_count = m_elements.size();
+      if (element_count > 0) {
+         if (m_elements.at(element_count - 1) != m_elements.at(m_subpath_start)) {
 #ifdef QT_DEBUG_CONVERT
-                printf(" - implicitly closing\n");
+            printf(" - implicitly closing\n");
 #endif
-                // Put the object on the stack to avoid the odd case where
-                // lineTo reallocs the databuffer and the QPointF & will
-                // be invalidated.
-                QPointF pt = m_elements.at(m_subpath_start);
+            // Put the object on the stack to avoid the odd case where
+            // lineTo reallocs the databuffer and the QPointF & will
+            // be invalidated.
+            QPointF pt = m_elements.at(m_subpath_start);
 
-                // only do lineTo if we have element_type array...
-                if (m_element_types.size())
-                    lineTo(pt);
-                else
-                    m_elements << pt;
-
+            // only do lineTo if we have element_type array...
+            if (m_element_types.size()) {
+               lineTo(pt);
+            } else {
+               m_elements << pt;
             }
-        }
-    }
 
-    QT_FT_Outline *outline() {
-        if (m_valid)
-            return &m_outline;
-        return 0;
-    }
+         }
+      }
+   }
 
-    QT_FT_Outline *convertPath(const QPainterPath &path);
-    QT_FT_Outline *convertPath(const QVectorPath &path);
+   QT_FT_Outline *outline() {
+      if (m_valid) {
+         return &m_outline;
+      }
+      return 0;
+   }
 
-    inline QPainterPath::ElementType *elementTypes() const { return m_element_types.size() == 0 ? 0 : m_element_types.data(); }
+   QT_FT_Outline *convertPath(const QPainterPath &path);
+   QT_FT_Outline *convertPath(const QVectorPath &path);
 
-public:
-    QDataBuffer<QPainterPath::ElementType> m_element_types;
-    QDataBuffer<QPointF> m_elements;
-    QDataBuffer<QPointF> m_elements_dev;
-    QDataBuffer<QT_FT_Vector> m_points;
-    QDataBuffer<char> m_tags;
-    QDataBuffer<int> m_contours;
+   inline QPainterPath::ElementType *elementTypes() const {
+      return m_element_types.size() == 0 ? 0 : m_element_types.data();
+   }
 
-    QRect m_clip_rect;
-    QDataBuffer<QPointF> m_polygon_dev;
+ public:
+   QDataBuffer<QPainterPath::ElementType> m_element_types;
+   QDataBuffer<QPointF> m_elements;
+   QDataBuffer<QPointF> m_elements_dev;
+   QDataBuffer<QT_FT_Vector> m_points;
+   QDataBuffer<char> m_tags;
+   QDataBuffer<int> m_contours;
 
-    QRectF controlPointRect; // only valid after endOutline()
+   QRect m_clip_rect;
+   QDataBuffer<QPointF> m_polygon_dev;
 
-    QT_FT_Outline m_outline;
-    uint m_txop;
+   QRectF controlPointRect; // only valid after endOutline()
 
-    int m_subpath_start;
+   QT_FT_Outline m_outline;
+   uint m_txop;
 
-    // Matrix
-    qreal m_m11;
-    qreal m_m12;
-    qreal m_m13;
-    qreal m_m21;
-    qreal m_m22;
-    qreal m_m23;
-    qreal m_m33;
-    qreal m_dx;
-    qreal m_dy;
+   int m_subpath_start;
 
-    bool m_valid;
-    bool m_in_clip_elements;
+   // Matrix
+   qreal m_m11;
+   qreal m_m12;
+   qreal m_m13;
+   qreal m_m21;
+   qreal m_m22;
+   qreal m_m23;
+   qreal m_m33;
+   qreal m_dx;
+   qreal m_dy;
+
+   bool m_valid;
+   bool m_in_clip_elements;
 };
 
 QT_END_NAMESPACE

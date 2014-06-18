@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,51 +46,51 @@ class QTextEdit;
 
 class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
 {
-    CS_OBJECT(QSyntaxHighlighter)
-    Q_DECLARE_PRIVATE(QSyntaxHighlighter)
+   CS_OBJECT(QSyntaxHighlighter)
+   Q_DECLARE_PRIVATE(QSyntaxHighlighter)
 
-public:
-    QSyntaxHighlighter(QObject *parent);
-    QSyntaxHighlighter(QTextDocument *parent);
-    QSyntaxHighlighter(QTextEdit *parent);
-    virtual ~QSyntaxHighlighter();
+ public:
+   QSyntaxHighlighter(QObject *parent);
+   QSyntaxHighlighter(QTextDocument *parent);
+   QSyntaxHighlighter(QTextEdit *parent);
+   virtual ~QSyntaxHighlighter();
 
-    void setDocument(QTextDocument *doc);
-    QTextDocument *document() const;
+   void setDocument(QTextDocument *doc);
+   QTextDocument *document() const;
 
-    GUI_CS_SLOT_1(Public, void rehighlight())
-    GUI_CS_SLOT_2(rehighlight) 
-    GUI_CS_SLOT_1(Public, void rehighlightBlock(const QTextBlock & block))
-    GUI_CS_SLOT_2(rehighlightBlock) 
+   GUI_CS_SLOT_1(Public, void rehighlight())
+   GUI_CS_SLOT_2(rehighlight)
+   GUI_CS_SLOT_1(Public, void rehighlightBlock(const QTextBlock &block))
+   GUI_CS_SLOT_2(rehighlightBlock)
 
-protected:
-    virtual void highlightBlock(const QString &text) = 0;
+ protected:
+   virtual void highlightBlock(const QString &text) = 0;
 
-    void setFormat(int start, int count, const QTextCharFormat &format);
-    void setFormat(int start, int count, const QColor &color);
-    void setFormat(int start, int count, const QFont &font);
-    QTextCharFormat format(int pos) const;
+   void setFormat(int start, int count, const QTextCharFormat &format);
+   void setFormat(int start, int count, const QColor &color);
+   void setFormat(int start, int count, const QFont &font);
+   QTextCharFormat format(int pos) const;
 
-    int previousBlockState() const;
-    int currentBlockState() const;
-    void setCurrentBlockState(int newState);
+   int previousBlockState() const;
+   int currentBlockState() const;
+   void setCurrentBlockState(int newState);
 
-    void setCurrentBlockUserData(QTextBlockUserData *data);
-    QTextBlockUserData *currentBlockUserData() const;
+   void setCurrentBlockUserData(QTextBlockUserData *data);
+   QTextBlockUserData *currentBlockUserData() const;
 
-    QTextBlock currentBlock() const;
+   QTextBlock currentBlock() const;
 
-private:
-    Q_DISABLE_COPY(QSyntaxHighlighter)
+ private:
+   Q_DISABLE_COPY(QSyntaxHighlighter)
 
-    GUI_CS_SLOT_1(Private, void _q_reformatBlocks(int from,int charsRemoved,int charsAdded))
-    GUI_CS_SLOT_2(_q_reformatBlocks)
+   GUI_CS_SLOT_1(Private, void _q_reformatBlocks(int from, int charsRemoved, int charsAdded))
+   GUI_CS_SLOT_2(_q_reformatBlocks)
 
-    GUI_CS_SLOT_1(Private, void _q_delayedRehighlight())
-    GUI_CS_SLOT_2(_q_delayedRehighlight)
+   GUI_CS_SLOT_1(Private, void _q_delayedRehighlight())
+   GUI_CS_SLOT_2(_q_delayedRehighlight)
 
-protected:
-	 QScopedPointer<QSyntaxHighlighterPrivate> d_ptr;
+ protected:
+   QScopedPointer<QSyntaxHighlighterPrivate> d_ptr;
 
 };
 

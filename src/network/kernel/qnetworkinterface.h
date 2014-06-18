@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,66 +42,67 @@ class QNetworkAddressEntryPrivate;
 class Q_NETWORK_EXPORT QNetworkAddressEntry
 {
 
-public:
-    QNetworkAddressEntry();
-    QNetworkAddressEntry(const QNetworkAddressEntry &other);
-    QNetworkAddressEntry &operator=(const QNetworkAddressEntry &other);
-    ~QNetworkAddressEntry();
-    bool operator==(const QNetworkAddressEntry &other) const;
-    inline bool operator!=(const QNetworkAddressEntry &other) const
-    { return !(*this == other); }
+ public:
+   QNetworkAddressEntry();
+   QNetworkAddressEntry(const QNetworkAddressEntry &other);
+   QNetworkAddressEntry &operator=(const QNetworkAddressEntry &other);
+   ~QNetworkAddressEntry();
+   bool operator==(const QNetworkAddressEntry &other) const;
+   inline bool operator!=(const QNetworkAddressEntry &other) const {
+      return !(*this == other);
+   }
 
-    QHostAddress ip() const;
-    void setIp(const QHostAddress &newIp);
+   QHostAddress ip() const;
+   void setIp(const QHostAddress &newIp);
 
-    QHostAddress netmask() const;
-    void setNetmask(const QHostAddress &newNetmask);
-    int prefixLength() const;
-    void setPrefixLength(int length);
+   QHostAddress netmask() const;
+   void setNetmask(const QHostAddress &newNetmask);
+   int prefixLength() const;
+   void setPrefixLength(int length);
 
-    QHostAddress broadcast() const;
-    void setBroadcast(const QHostAddress &newBroadcast);
+   QHostAddress broadcast() const;
+   void setBroadcast(const QHostAddress &newBroadcast);
 
-private:
-    QScopedPointer<QNetworkAddressEntryPrivate> d;
+ private:
+   QScopedPointer<QNetworkAddressEntryPrivate> d;
 };
 
 
 class Q_NETWORK_EXPORT QNetworkInterface
 {
-public:
-    enum InterfaceFlag {
-        IsUp = 0x1,
-        IsRunning = 0x2,
-        CanBroadcast = 0x4,
-        IsLoopBack = 0x8,
-        IsPointToPoint = 0x10,
-        CanMulticast = 0x20
-    };
-    using InterfaceFlags = QFlags<InterfaceFlag>;
-    
-    QNetworkInterface();
-    QNetworkInterface(const QNetworkInterface &other);
-    QNetworkInterface &operator=(const QNetworkInterface &other);
-    ~QNetworkInterface();
+ public:
+   enum InterfaceFlag {
+      IsUp = 0x1,
+      IsRunning = 0x2,
+      CanBroadcast = 0x4,
+      IsLoopBack = 0x8,
+      IsPointToPoint = 0x10,
+      CanMulticast = 0x20
+   };
+   using InterfaceFlags = QFlags<InterfaceFlag>;
 
-    bool isValid() const;
+   QNetworkInterface();
+   QNetworkInterface(const QNetworkInterface &other);
+   QNetworkInterface &operator=(const QNetworkInterface &other);
+   ~QNetworkInterface();
 
-    int index() const;
-    QString name() const;
-    QString humanReadableName() const;
-    InterfaceFlags flags() const;
-    QString hardwareAddress() const;
-    QList<QNetworkAddressEntry> addressEntries() const;
+   bool isValid() const;
 
-    static QNetworkInterface interfaceFromName(const QString &name);
-    static QNetworkInterface interfaceFromIndex(int index);
-    static QList<QNetworkInterface> allInterfaces();
-    static QList<QHostAddress> allAddresses();
+   int index() const;
+   QString name() const;
+   QString humanReadableName() const;
+   InterfaceFlags flags() const;
+   QString hardwareAddress() const;
+   QList<QNetworkAddressEntry> addressEntries() const;
 
-private:
-    friend class QNetworkInterfacePrivate;
-    QSharedDataPointer<QNetworkInterfacePrivate> d;
+   static QNetworkInterface interfaceFromName(const QString &name);
+   static QNetworkInterface interfaceFromIndex(int index);
+   static QList<QNetworkInterface> allInterfaces();
+   static QList<QHostAddress> allAddresses();
+
+ private:
+   friend class QNetworkInterfacePrivate;
+   QSharedDataPointer<QNetworkInterfacePrivate> d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QNetworkInterface::InterfaceFlags)

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,19 +38,19 @@ class QPrinter;
 // ### Qt5/Remove this class
 class Q_GUI_EXPORT QAbstractPageSetupDialog : public QDialog
 {
-    CS_OBJECT(QAbstractPageSetupDialog)
-    Q_DECLARE_PRIVATE(QAbstractPageSetupDialog)    
+   CS_OBJECT(QAbstractPageSetupDialog)
+   Q_DECLARE_PRIVATE(QAbstractPageSetupDialog)
 
-public:
-    explicit QAbstractPageSetupDialog(QPrinter *printer, QWidget *parent = 0);
-    QAbstractPageSetupDialog(QAbstractPageSetupDialogPrivate &ptr,
-                             QPrinter *printer, QWidget *parent = 0);
-    ~QAbstractPageSetupDialog();
+ public:
+   explicit QAbstractPageSetupDialog(QPrinter *printer, QWidget *parent = 0);
+   QAbstractPageSetupDialog(QAbstractPageSetupDialogPrivate &ptr,
+                            QPrinter *printer, QWidget *parent = 0);
+   ~QAbstractPageSetupDialog();
 
-    virtual int exec() = 0;
-    void done(int result);
+   virtual int exec() = 0;
+   void done(int result);
 
-    QPrinter *printer();
+   QPrinter *printer();
 };
 
 #endif // QT_NO_PRINTDIALOG

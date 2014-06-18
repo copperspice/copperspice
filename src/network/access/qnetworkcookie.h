@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,48 +41,49 @@ class QNetworkCookiePrivate;
 
 class Q_NETWORK_EXPORT QNetworkCookie
 {
-public:
-    enum RawForm {
-        NameAndValueOnly,
-        Full
-    };
+ public:
+   enum RawForm {
+      NameAndValueOnly,
+      Full
+   };
 
-    QNetworkCookie(const QByteArray &name = QByteArray(), const QByteArray &value = QByteArray());
-    QNetworkCookie(const QNetworkCookie &other);
-    ~QNetworkCookie();
-    QNetworkCookie &operator=(const QNetworkCookie &other);
-    bool operator==(const QNetworkCookie &other) const;
-    inline bool operator!=(const QNetworkCookie &other) const
-    { return !(*this == other); }
+   QNetworkCookie(const QByteArray &name = QByteArray(), const QByteArray &value = QByteArray());
+   QNetworkCookie(const QNetworkCookie &other);
+   ~QNetworkCookie();
+   QNetworkCookie &operator=(const QNetworkCookie &other);
+   bool operator==(const QNetworkCookie &other) const;
+   inline bool operator!=(const QNetworkCookie &other) const {
+      return !(*this == other);
+   }
 
-    bool isSecure() const;
-    void setSecure(bool enable);
-    bool isHttpOnly() const;
-    void setHttpOnly(bool enable);
+   bool isSecure() const;
+   void setSecure(bool enable);
+   bool isHttpOnly() const;
+   void setHttpOnly(bool enable);
 
-    bool isSessionCookie() const;
-    QDateTime expirationDate() const;
-    void setExpirationDate(const QDateTime &date);
+   bool isSessionCookie() const;
+   QDateTime expirationDate() const;
+   void setExpirationDate(const QDateTime &date);
 
-    QString domain() const;
-    void setDomain(const QString &domain);
+   QString domain() const;
+   void setDomain(const QString &domain);
 
-    QString path() const;
-    void setPath(const QString &path);
+   QString path() const;
+   void setPath(const QString &path);
 
-    QByteArray name() const;
-    void setName(const QByteArray &cookieName);
+   QByteArray name() const;
+   void setName(const QByteArray &cookieName);
 
-    QByteArray value() const;
-    void setValue(const QByteArray &value);
+   QByteArray value() const;
+   void setValue(const QByteArray &value);
 
-    QByteArray toRawForm(RawForm form = Full) const;
+   QByteArray toRawForm(RawForm form = Full) const;
 
-    static QList<QNetworkCookie> parseCookies(const QByteArray &cookieString);
+   static QList<QNetworkCookie> parseCookies(const QByteArray &cookieString);
 
-private:
-    QSharedDataPointer<QNetworkCookiePrivate> d;
-    friend class QNetworkCookiePrivate;
+ private:
+   QSharedDataPointer<QNetworkCookiePrivate> d;
+   friend class QNetworkCookiePrivate;
 };
 Q_DECLARE_TYPEINFO(QNetworkCookie, Q_MOVABLE_TYPE);
 

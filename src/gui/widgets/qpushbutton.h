@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,61 +36,61 @@ class QStyleOptionButton;
 
 class Q_GUI_EXPORT QPushButton : public QAbstractButton
 {
-    CS_OBJECT(QPushButton)
+   CS_OBJECT(QPushButton)
 
-    GUI_CS_PROPERTY_READ(autoDefault, autoDefault)
-    GUI_CS_PROPERTY_WRITE(autoDefault, setAutoDefault)
-    GUI_CS_PROPERTY_READ(default, isDefault)
-    GUI_CS_PROPERTY_WRITE(default, setDefault)
-    GUI_CS_PROPERTY_READ(flat, isFlat)
-    GUI_CS_PROPERTY_WRITE(flat, setFlat)
+   GUI_CS_PROPERTY_READ(autoDefault, autoDefault)
+   GUI_CS_PROPERTY_WRITE(autoDefault, setAutoDefault)
+   GUI_CS_PROPERTY_READ(default, isDefault)
+   GUI_CS_PROPERTY_WRITE(default, setDefault)
+   GUI_CS_PROPERTY_READ(flat, isFlat)
+   GUI_CS_PROPERTY_WRITE(flat, setFlat)
 
-public:
-    explicit QPushButton(QWidget *parent=0);
-    explicit QPushButton(const QString &text, QWidget *parent=0);
-    QPushButton(const QIcon& icon, const QString &text, QWidget *parent=0);
-    ~QPushButton();
+ public:
+   explicit QPushButton(QWidget *parent = 0);
+   explicit QPushButton(const QString &text, QWidget *parent = 0);
+   QPushButton(const QIcon &icon, const QString &text, QWidget *parent = 0);
+   ~QPushButton();
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+   QSize sizeHint() const;
+   QSize minimumSizeHint() const;
 
-    bool autoDefault() const;
-    void setAutoDefault(bool);
-    bool isDefault() const;
-    void setDefault(bool);
+   bool autoDefault() const;
+   void setAutoDefault(bool);
+   bool isDefault() const;
+   void setDefault(bool);
 
-     void setFlat(bool);
-    bool isFlat() const;
+   void setFlat(bool);
+   bool isFlat() const;
 
 #ifndef QT_NO_MENU
-    void setMenu(QMenu* menu);
-    QMenu* menu() const;
+   void setMenu(QMenu *menu);
+   QMenu *menu() const;
 
-    GUI_CS_SLOT_1(Public, void showMenu())
-    GUI_CS_SLOT_2(showMenu) 
+   GUI_CS_SLOT_1(Public, void showMenu())
+   GUI_CS_SLOT_2(showMenu)
 #endif
 
-protected:
-    bool event(QEvent *e);
+ protected:
+   bool event(QEvent *e);
 
 #ifdef Q_OS_MAC
-    bool hitButton(const QPoint &pos) const;
+   bool hitButton(const QPoint &pos) const;
 #endif
 
-    void paintEvent(QPaintEvent *);
-    void keyPressEvent(QKeyEvent *);
-    void focusInEvent(QFocusEvent *);
-    void focusOutEvent(QFocusEvent *);
-    void initStyleOption(QStyleOptionButton *option) const;
-    QPushButton(QPushButtonPrivate &dd, QWidget* parent = 0);
+   void paintEvent(QPaintEvent *);
+   void keyPressEvent(QKeyEvent *);
+   void focusInEvent(QFocusEvent *);
+   void focusOutEvent(QFocusEvent *);
+   void initStyleOption(QStyleOptionButton *option) const;
+   QPushButton(QPushButtonPrivate &dd, QWidget *parent = 0);
 
-private:
-    Q_DISABLE_COPY(QPushButton)
-    Q_DECLARE_PRIVATE(QPushButton)
+ private:
+   Q_DISABLE_COPY(QPushButton)
+   Q_DECLARE_PRIVATE(QPushButton)
 
 #ifndef QT_NO_MENU
-    GUI_CS_SLOT_1(Private, void _q_popupPressed())
-    GUI_CS_SLOT_2(_q_popupPressed)
+   GUI_CS_SLOT_1(Private, void _q_popupPressed())
+   GUI_CS_SLOT_2(_q_popupPressed)
 #endif
 
 };

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -29,81 +29,81 @@ QT_BEGIN_NAMESPACE
 
 QWSEvent *QWSEvent::factory(int type)
 {
-    QWSEvent *event = 0;
-    switch (type) {
-    case QWSEvent::Connected:
-        event = new QWSConnectedEvent;
-        break;
-    case QWSEvent::MaxWindowRect:
-        event = new QWSMaxWindowRectEvent;
-        break;
-    case QWSEvent::Mouse:
-        event = new QWSMouseEvent;
-        break;
-    case QWSEvent::Focus:
-        event = new QWSFocusEvent;
-        break;
-    case QWSEvent::Key:
-        event = new QWSKeyEvent;
-        break;
-    case QWSEvent::Region:
-        event = new QWSRegionEvent;
-        break;
-    case QWSEvent::Creation:
-        event = new QWSCreationEvent;
-        break;
+   QWSEvent *event = 0;
+   switch (type) {
+      case QWSEvent::Connected:
+         event = new QWSConnectedEvent;
+         break;
+      case QWSEvent::MaxWindowRect:
+         event = new QWSMaxWindowRectEvent;
+         break;
+      case QWSEvent::Mouse:
+         event = new QWSMouseEvent;
+         break;
+      case QWSEvent::Focus:
+         event = new QWSFocusEvent;
+         break;
+      case QWSEvent::Key:
+         event = new QWSKeyEvent;
+         break;
+      case QWSEvent::Region:
+         event = new QWSRegionEvent;
+         break;
+      case QWSEvent::Creation:
+         event = new QWSCreationEvent;
+         break;
 #ifndef QT_NO_QWS_PROPERTIES
-    case QWSEvent::PropertyNotify:
-        event = new QWSPropertyNotifyEvent;
-        break;
-    case QWSEvent::PropertyReply:
-        event = new QWSPropertyReplyEvent;
-        break;
+      case QWSEvent::PropertyNotify:
+         event = new QWSPropertyNotifyEvent;
+         break;
+      case QWSEvent::PropertyReply:
+         event = new QWSPropertyReplyEvent;
+         break;
 #endif // QT_NO_QWS_PROPERTIES
-    case QWSEvent::SelectionClear:
-        event = new QWSSelectionClearEvent;
-        break;
-    case QWSEvent::SelectionRequest:
-        event = new QWSSelectionRequestEvent;
-        break;
-    case QWSEvent::SelectionNotify:
-        event = new QWSSelectionNotifyEvent;
-        break;
+      case QWSEvent::SelectionClear:
+         event = new QWSSelectionClearEvent;
+         break;
+      case QWSEvent::SelectionRequest:
+         event = new QWSSelectionRequestEvent;
+         break;
+      case QWSEvent::SelectionNotify:
+         event = new QWSSelectionNotifyEvent;
+         break;
 #ifndef QT_NO_COP
-    case QWSEvent::QCopMessage:
-        event = new QWSQCopMessageEvent;
-        break;
+      case QWSEvent::QCopMessage:
+         event = new QWSQCopMessageEvent;
+         break;
 #endif
-    case QWSEvent::WindowOperation:
-        event = new QWSWindowOperationEvent;
-        break;
+      case QWSEvent::WindowOperation:
+         event = new QWSWindowOperationEvent;
+         break;
 
 #ifndef QT_NO_QWS_INPUTMETHODS
-    case QWSEvent::IMEvent:
-        event = new QWSIMEvent;
-        break;
-    case QWSEvent::IMQuery:
-        event = new QWSIMQueryEvent;
-        break;
-    case QWSEvent::IMInit:
-        event = new QWSIMInitEvent;
-        break;
+      case QWSEvent::IMEvent:
+         event = new QWSIMEvent;
+         break;
+      case QWSEvent::IMQuery:
+         event = new QWSIMQueryEvent;
+         break;
+      case QWSEvent::IMInit:
+         event = new QWSIMInitEvent;
+         break;
 #endif
 #ifndef QT_NO_QWSEMBEDWIDGET
-    case QWSEvent::Embed:
-        event = new QWSEmbedEvent;
-        break;
+      case QWSEvent::Embed:
+         event = new QWSEmbedEvent;
+         break;
 #endif
-    case QWSEvent::Font:
-        event = new QWSFontEvent;
-        break;
-    case QWSEvent::ScreenTransformation:
-        event = new QWSScreenTransformationEvent;
-        break;
-    default:
-        qCritical("QWSEvent::factory() : Unknown event type %08x!", type);
-    }
-    return event;
+      case QWSEvent::Font:
+         event = new QWSFontEvent;
+         break;
+      case QWSEvent::ScreenTransformation:
+         event = new QWSScreenTransformationEvent;
+         break;
+      default:
+         qCritical("QWSEvent::factory() : Unknown event type %08x!", type);
+   }
+   return event;
 }
 
 /*!

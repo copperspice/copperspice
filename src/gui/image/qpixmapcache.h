@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,42 +37,43 @@ QT_BEGIN_NAMESPACE
 class Q_GUI_EXPORT QPixmapCache
 {
 
-public:
-    class KeyData;
-    class Q_GUI_EXPORT Key
-    {
+ public:
+   class KeyData;
+   class Q_GUI_EXPORT Key
+   {
     public:
-        Key();
-        Key(const Key &other);
-        ~Key();
-        bool operator ==(const Key &key) const;
-        inline bool operator !=(const Key &key) const
-        { return !operator==(key); }
-        Key &operator =(const Key &other);
+      Key();
+      Key(const Key &other);
+      ~Key();
+      bool operator ==(const Key &key) const;
+      inline bool operator !=(const Key &key) const {
+         return !operator==(key);
+      }
+      Key &operator =(const Key &other);
 
     private:
-        KeyData *d;
-        friend class QPMCache;
-        friend class QPixmapCache;
-    };
+      KeyData *d;
+      friend class QPMCache;
+      friend class QPixmapCache;
+   };
 
-    static int cacheLimit();
-    static void setCacheLimit(int);
-    static QPixmap *find(const QString &key);
-    static bool find(const QString &key, QPixmap &pixmap);
-    static bool find(const QString &key, QPixmap *pixmap);
-    static bool find(const Key &key, QPixmap *pixmap);
-    static bool insert(const QString &key, const QPixmap &pixmap);
-    static Key insert(const QPixmap &pixmap);
-    static bool replace(const Key &key, const QPixmap &pixmap);
-    static void remove(const QString &key);
-    static void remove(const Key &key);
-    static void clear();
+   static int cacheLimit();
+   static void setCacheLimit(int);
+   static QPixmap *find(const QString &key);
+   static bool find(const QString &key, QPixmap &pixmap);
+   static bool find(const QString &key, QPixmap *pixmap);
+   static bool find(const Key &key, QPixmap *pixmap);
+   static bool insert(const QString &key, const QPixmap &pixmap);
+   static Key insert(const QPixmap &pixmap);
+   static bool replace(const Key &key, const QPixmap &pixmap);
+   static void remove(const QString &key);
+   static void remove(const Key &key);
+   static void clear();
 
 #ifdef Q_TEST_QPIXMAPCACHE
-    static void flushDetachedPixmaps();
-    static int totalUsed();
-    static QList< QPair<QString,QPixmap> > allPixmaps();
+   static void flushDetachedPixmaps();
+   static int totalUsed();
+   static QList< QPair<QString, QPixmap> > allPixmaps();
 #endif
 };
 

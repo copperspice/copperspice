@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,12 +49,12 @@ QT_BEGIN_NAMESPACE
 
 class QRubberBandPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QRubberBand)
-public:
-    QRect rect;
-    QRubberBand::Shape shape;
-    QRegion clipping;
-    void updateMask();
+   Q_DECLARE_PUBLIC(QRubberBand)
+ public:
+   QRect rect;
+   QRubberBand::Shape shape;
+   QRegion clipping;
+   void updateMask();
 };
 
 /*!
@@ -66,14 +66,15 @@ public:
 */
 void QRubberBand::initStyleOption(QStyleOptionRubberBand *option) const
 {
-    if (!option)
-        return;
-    option->initFrom(this);
-    option->shape = d_func()->shape;
+   if (!option) {
+      return;
+   }
+   option->initFrom(this);
+   option->shape = d_func()->shape;
 #ifndef Q_OS_MAC
-    option->opaque = true;
+   option->opaque = true;
 #else
-    option->opaque = windowFlags() & RUBBERBAND_WINDOW_TYPE;
+   option->opaque = windowFlags() & RUBBERBAND_WINDOW_TYPE;
 #endif
 }
 
@@ -121,22 +122,22 @@ void QRubberBand::initStyleOption(QStyleOptionRubberBand *option) const
     semi-transparent filled selection rectangle.
 */
 QRubberBand::QRubberBand(Shape s, QWidget *p)
-    : QWidget(*new QRubberBandPrivate, p, (p && p->windowType() != Qt::Desktop) ? Qt::Widget : RUBBERBAND_WINDOW_TYPE)
+   : QWidget(*new QRubberBandPrivate, p, (p  &&p->windowType() != Qt::Desktop) ? Qt::Widget : RUBBERBAND_WINDOW_TYPE)
 {
-    Q_D(QRubberBand);
-    d->shape = s;
-    setAttribute(Qt::WA_TransparentForMouseEvents);
+   Q_D(QRubberBand);
+   d->shape = s;
+   setAttribute(Qt::WA_TransparentForMouseEvents);
 #ifndef Q_OS_WIN
-    setAttribute(Qt::WA_NoSystemBackground);
+   setAttribute(Qt::WA_NoSystemBackground);
 #endif
-    setAttribute(Qt::WA_WState_ExplicitShowHide);
-    setVisible(false);
+   setAttribute(Qt::WA_WState_ExplicitShowHide);
+   setVisible(false);
 #ifdef Q_OS_MAC
-    if (isWindow()) {
-        createWinId();
-        extern OSWindowRef qt_mac_window_for(const QWidget *); //qwidget_mac.cpp
-        macWindowSetHasShadow(qt_mac_window_for(this), false);
-    }
+   if (isWindow()) {
+      createWinId();
+      extern OSWindowRef qt_mac_window_for(const QWidget *); //qwidget_mac.cpp
+      macWindowSetHasShadow(qt_mac_window_for(this), false);
+   }
 #endif
 }
 
@@ -170,8 +171,8 @@ QRubberBand::~QRubberBand()
 */
 QRubberBand::Shape QRubberBand::shape() const
 {
-    Q_D(const QRubberBand);
-    return d->shape;
+   Q_D(const QRubberBand);
+   return d->shape;
 }
 
 /*!
@@ -179,15 +180,15 @@ QRubberBand::Shape QRubberBand::shape() const
 */
 void QRubberBandPrivate::updateMask()
 {
-    Q_Q(QRubberBand);
-    QStyleHintReturnMask mask;
-    QStyleOptionRubberBand opt;
-    q->initStyleOption(&opt);
-    if (q->style()->styleHint(QStyle::SH_RubberBand_Mask, &opt, q, &mask)) {
-        q->setMask(mask.region);
-    } else {
-        q->clearMask();
-    }
+   Q_Q(QRubberBand);
+   QStyleHintReturnMask mask;
+   QStyleOptionRubberBand opt;
+   q->initStyleOption(&opt);
+   if (q->style()->styleHint(QStyle::SH_RubberBand_Mask, &opt, q, &mask)) {
+      q->setMask(mask.region);
+   } else {
+      q->clearMask();
+   }
 }
 
 /*!
@@ -195,10 +196,10 @@ void QRubberBandPrivate::updateMask()
 */
 void QRubberBand::paintEvent(QPaintEvent *)
 {
-    QStylePainter painter(this);
-    QStyleOptionRubberBand option;
-    initStyleOption(&option);
-    painter.drawControl(QStyle::CE_RubberBand, option);
+   QStylePainter painter(this);
+   QStyleOptionRubberBand option;
+   initStyleOption(&option);
+   painter.drawControl(QStyle::CE_RubberBand, option);
 }
 
 /*!
@@ -206,21 +207,22 @@ void QRubberBand::paintEvent(QPaintEvent *)
 */
 void QRubberBand::changeEvent(QEvent *e)
 {
-    QWidget::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::ParentChange:
-        if (parent()) {
+   QWidget::changeEvent(e);
+   switch (e->type()) {
+      case QEvent::ParentChange:
+         if (parent()) {
             setWindowFlags(windowFlags() & ~RUBBERBAND_WINDOW_TYPE);
-        } else {
+         } else {
             setWindowFlags(windowFlags() | RUBBERBAND_WINDOW_TYPE);
-        }
-        break;
-    default:
-        break;
-    }
+         }
+         break;
+      default:
+         break;
+   }
 
-    if (e->type() == QEvent::ZOrderChange)
-        raise();
+   if (e->type() == QEvent::ZOrderChange) {
+      raise();
+   }
 }
 
 /*!
@@ -228,8 +230,8 @@ void QRubberBand::changeEvent(QEvent *e)
 */
 void QRubberBand::showEvent(QShowEvent *e)
 {
-    raise();
-    e->ignore();
+   raise();
+   e->ignore();
 }
 
 /*!
@@ -237,8 +239,8 @@ void QRubberBand::showEvent(QShowEvent *e)
 */
 void QRubberBand::resizeEvent(QResizeEvent *)
 {
-    Q_D(QRubberBand);
-    d->updateMask();
+   Q_D(QRubberBand);
+   d->updateMask();
 }
 
 /*!
@@ -246,8 +248,8 @@ void QRubberBand::resizeEvent(QResizeEvent *)
 */
 void QRubberBand::moveEvent(QMoveEvent *)
 {
-    Q_D(QRubberBand);
-    d->updateMask();
+   Q_D(QRubberBand);
+   d->updateMask();
 }
 
 /*!
@@ -297,7 +299,7 @@ void QRubberBand::moveEvent(QMoveEvent *)
 */
 void QRubberBand::setGeometry(const QRect &geom)
 {
-    QWidget::setGeometry(geom);
+   QWidget::setGeometry(geom);
 }
 
 /*!
@@ -312,7 +314,7 @@ void QRubberBand::setGeometry(const QRect &geom)
 /*! \reimp */
 bool QRubberBand::event(QEvent *e)
 {
-    return QWidget::event(e);
+   return QWidget::event(e);
 }
 
 QT_END_NAMESPACE

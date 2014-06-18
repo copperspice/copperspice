@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -106,11 +106,11 @@ QT_BEGIN_NAMESPACE
 */
 
 QAudioOutput::QAudioOutput(const QAudioFormat &format, QObject *parent):
-    QObject(parent)
+   QObject(parent)
 {
-    d = QAudioDeviceFactory::createDefaultOutputDevice(format);
-    connect(d, SIGNAL(notify()), SIGNAL(notify()));
-    connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
+   d = QAudioDeviceFactory::createDefaultOutputDevice(format);
+   connect(d, SIGNAL(notify()), SIGNAL(notify()));
+   connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
 }
 
 /*!
@@ -120,11 +120,11 @@ QAudioOutput::QAudioOutput(const QAudioFormat &format, QObject *parent):
 */
 
 QAudioOutput::QAudioOutput(const QAudioDeviceInfo &audioDevice, const QAudioFormat &format, QObject *parent):
-    QObject(parent)
+   QObject(parent)
 {
-    d = QAudioDeviceFactory::createOutputDevice(audioDevice, format);
-    connect(d, SIGNAL(notify()), SIGNAL(notify()));
-    connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
+   d = QAudioDeviceFactory::createOutputDevice(audioDevice, format);
+   connect(d, SIGNAL(notify()), SIGNAL(notify()));
+   connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
 }
 
 /*!
@@ -133,7 +133,7 @@ QAudioOutput::QAudioOutput(const QAudioDeviceInfo &audioDevice, const QAudioForm
 
 QAudioOutput::~QAudioOutput()
 {
-    delete d;
+   delete d;
 }
 
 /*!
@@ -143,7 +143,7 @@ QAudioOutput::~QAudioOutput()
 
 QAudioFormat QAudioOutput::format() const
 {
-    return d->format();
+   return d->format();
 }
 
 /*!
@@ -165,9 +165,9 @@ QAudioFormat QAudioOutput::format() const
     \sa QIODevice
 */
 
-void QAudioOutput::start(QIODevice* device)
+void QAudioOutput::start(QIODevice *device)
 {
-    d->start(device);
+   d->start(device);
 }
 
 /*!
@@ -188,9 +188,9 @@ void QAudioOutput::start(QIODevice* device)
     \sa QIODevice
 */
 
-QIODevice* QAudioOutput::start()
+QIODevice *QAudioOutput::start()
 {
-    return d->start(0);
+   return d->start(0);
 }
 
 /*!
@@ -202,7 +202,7 @@ QIODevice* QAudioOutput::start()
 
 void QAudioOutput::stop()
 {
-    d->stop();
+   d->stop();
 }
 
 /*!
@@ -211,7 +211,7 @@ void QAudioOutput::stop()
 
 void QAudioOutput::reset()
 {
-    d->reset();
+   d->reset();
 }
 
 /*!
@@ -223,7 +223,7 @@ void QAudioOutput::reset()
 
 void QAudioOutput::suspend()
 {
-    d->suspend();
+   d->suspend();
 }
 
 /*!
@@ -239,7 +239,7 @@ void QAudioOutput::suspend()
 
 void QAudioOutput::resume()
 {
-     d->resume();
+   d->resume();
 }
 
 /*!
@@ -251,7 +251,7 @@ void QAudioOutput::resume()
 
 int QAudioOutput::bytesFree() const
 {
-    return d->bytesFree();
+   return d->bytesFree();
 }
 
 /*!
@@ -262,7 +262,7 @@ int QAudioOutput::bytesFree() const
 
 int QAudioOutput::periodSize() const
 {
-    return d->periodSize();
+   return d->periodSize();
 }
 
 /*!
@@ -276,7 +276,7 @@ int QAudioOutput::periodSize() const
 
 void QAudioOutput::setBufferSize(int value)
 {
-    d->setBufferSize(value);
+   d->setBufferSize(value);
 }
 
 /*!
@@ -291,7 +291,7 @@ void QAudioOutput::setBufferSize(int value)
 
 int QAudioOutput::bufferSize() const
 {
-    return d->bufferSize();
+   return d->bufferSize();
 }
 
 /*!
@@ -305,7 +305,7 @@ int QAudioOutput::bufferSize() const
 
 void QAudioOutput::setNotifyInterval(int ms)
 {
-    d->setNotifyInterval(ms);
+   d->setNotifyInterval(ms);
 }
 
 /*!
@@ -314,7 +314,7 @@ void QAudioOutput::setNotifyInterval(int ms)
 
 int QAudioOutput::notifyInterval() const
 {
-    return d->notifyInterval();
+   return d->notifyInterval();
 }
 
 /*!
@@ -333,7 +333,7 @@ int QAudioOutput::notifyInterval() const
 
 qint64 QAudioOutput::processedUSecs() const
 {
-    return d->processedUSecs();
+   return d->processedUSecs();
 }
 
 /*!
@@ -343,7 +343,7 @@ qint64 QAudioOutput::processedUSecs() const
 
 qint64 QAudioOutput::elapsedUSecs() const
 {
-    return d->elapsedUSecs();
+   return d->elapsedUSecs();
 }
 
 /*!
@@ -352,7 +352,7 @@ qint64 QAudioOutput::elapsedUSecs() const
 
 QAudio::Error QAudioOutput::error() const
 {
-    return d->error();
+   return d->error();
 }
 
 /*!
@@ -361,7 +361,7 @@ QAudio::Error QAudioOutput::error() const
 
 QAudio::State QAudioOutput::state() const
 {
-    return d->state();
+   return d->state();
 }
 
 /*!

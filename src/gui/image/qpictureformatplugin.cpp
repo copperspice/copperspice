@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -73,7 +73,7 @@ QT_BEGIN_NAMESPACE
     This is invoked automatically by the Q_EXPORT_PLUGIN2() macro.
 */
 QPictureFormatPlugin::QPictureFormatPlugin(QObject *parent)
-    : QObject(parent)
+   : QObject(parent)
 {
 }
 
@@ -97,10 +97,10 @@ QPictureFormatPlugin::~QPictureFormatPlugin()
 */
 bool QPictureFormatPlugin::loadPicture(const QString &format, const QString &fileName, QPicture *picture)
 {
-    Q_UNUSED(format)
-    Q_UNUSED(fileName)
-    Q_UNUSED(picture)
-    return false;
+   Q_UNUSED(format)
+   Q_UNUSED(fileName)
+   Q_UNUSED(picture)
+   return false;
 }
 
 /*!
@@ -112,10 +112,10 @@ bool QPictureFormatPlugin::loadPicture(const QString &format, const QString &fil
 */
 bool QPictureFormatPlugin::savePicture(const QString &format, const QString &fileName, const QPicture &picture)
 {
-    Q_UNUSED(format)
-    Q_UNUSED(fileName)
-    Q_UNUSED(picture)
-    return false;
+   Q_UNUSED(format)
+   Q_UNUSED(fileName)
+   Q_UNUSED(picture)
+   return false;
 }
 
 #endif // QT_NO_PICTURE

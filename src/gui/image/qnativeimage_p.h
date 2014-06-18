@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,37 +45,43 @@ class QWidget;
 
 class QNativeImage
 {
-public:
-    QNativeImage(int width, int height, QImage::Format format, bool isTextBuffer = false, QWidget *widget = 0);
-    ~QNativeImage();
+ public:
+   QNativeImage(int width, int height, QImage::Format format, bool isTextBuffer = false, QWidget *widget = 0);
+   ~QNativeImage();
 
-    inline int width() const;
-    inline int height() const;
+   inline int width() const;
+   inline int height() const;
 
-    QImage image;
+   QImage image;
 
-    static QImage::Format systemFormat();
+   static QImage::Format systemFormat();
 
 #ifdef Q_OS_WIN
-    HDC hdc;
-    HBITMAP bitmap;
-    HBITMAP null_bitmap;
+   HDC hdc;
+   HBITMAP bitmap;
+   HBITMAP null_bitmap;
 
 #elif defined(Q_WS_X11) && !defined(QT_NO_MITSHM)
-    XImage *xshmimg;
-    Pixmap xshmpm;
-    XShmSegmentInfo xshminfo;
+   XImage *xshmimg;
+   Pixmap xshmpm;
+   XShmSegmentInfo xshminfo;
 
 #elif defined(Q_OS_MAC)
-    CGContextRef cg;
+   CGContextRef cg;
 #endif
 
-private:
-    Q_DISABLE_COPY(QNativeImage)
+ private:
+   Q_DISABLE_COPY(QNativeImage)
 };
 
-inline int QNativeImage::width() const { return image.width(); }
-inline int QNativeImage::height() const { return image.height(); }
+inline int QNativeImage::width() const
+{
+   return image.width();
+}
+inline int QNativeImage::height() const
+{
+   return image.height();
+}
 
 QT_END_NAMESPACE
 

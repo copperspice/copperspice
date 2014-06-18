@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -84,10 +84,10 @@ QT_BEGIN_NAMESPACE
 
     \sa toVector3D()
 */
-QVector2D::QVector2D(const QVector3D& vector)
+QVector2D::QVector2D(const QVector3D &vector)
 {
-    xp = vector.xp;
-    yp = vector.yp;
+   xp = vector.xp;
+   yp = vector.yp;
 }
 
 #endif
@@ -100,10 +100,10 @@ QVector2D::QVector2D(const QVector3D& vector)
 
     \sa toVector4D()
 */
-QVector2D::QVector2D(const QVector4D& vector)
+QVector2D::QVector2D(const QVector4D &vector)
 {
-    xp = vector.xp;
-    yp = vector.yp;
+   xp = vector.xp;
+   yp = vector.yp;
 }
 
 #endif
@@ -154,7 +154,7 @@ QVector2D::QVector2D(const QVector4D& vector)
 */
 qreal QVector2D::length() const
 {
-    return qSqrt(xp * xp + yp * yp);
+   return qSqrt(xp * xp + yp * yp);
 }
 
 /*!
@@ -165,7 +165,7 @@ qreal QVector2D::length() const
 */
 qreal QVector2D::lengthSquared() const
 {
-    return xp * xp + yp * yp;
+   return xp * xp + yp * yp;
 }
 
 /*!
@@ -179,15 +179,16 @@ qreal QVector2D::lengthSquared() const
 */
 QVector2D QVector2D::normalized() const
 {
-    // Need some extra precision if the length is very small.
-    double len = double(xp) * double(xp) +
-                 double(yp) * double(yp);
-    if (qFuzzyIsNull(len - 1.0f))
-        return *this;
-    else if (!qFuzzyIsNull(len))
-        return *this / qSqrt(len);
-    else
-        return QVector2D();
+   // Need some extra precision if the length is very small.
+   double len = double(xp) * double(xp) +
+                double(yp) * double(yp);
+   if (qFuzzyIsNull(len - 1.0f)) {
+      return *this;
+   } else if (!qFuzzyIsNull(len)) {
+      return *this / qSqrt(len);
+   } else {
+      return QVector2D();
+   }
 }
 
 /*!
@@ -198,16 +199,17 @@ QVector2D QVector2D::normalized() const
 */
 void QVector2D::normalize()
 {
-    // Need some extra precision if the length is very small.
-    double len = double(xp) * double(xp) +
-                 double(yp) * double(yp);
-    if (qFuzzyIsNull(len - 1.0f) || qFuzzyIsNull(len))
-        return;
+   // Need some extra precision if the length is very small.
+   double len = double(xp) * double(xp) +
+                double(yp) * double(yp);
+   if (qFuzzyIsNull(len - 1.0f) || qFuzzyIsNull(len)) {
+      return;
+   }
 
-    len = qSqrt(len);
+   len = qSqrt(len);
 
-    xp /= len;
-    yp /= len;
+   xp /= len;
+   yp /= len;
 }
 
 /*!
@@ -256,9 +258,9 @@ void QVector2D::normalize()
 /*!
     Returns the dot product of \a v1 and \a v2.
 */
-qreal QVector2D::dotProduct(const QVector2D& v1, const QVector2D& v2)
+qreal QVector2D::dotProduct(const QVector2D &v1, const QVector2D &v2)
 {
-    return v1.xp * v2.xp + v1.yp * v2.yp;
+   return v1.xp * v2.xp + v1.yp * v2.yp;
 }
 
 /*!
@@ -361,7 +363,7 @@ qreal QVector2D::dotProduct(const QVector2D& v1, const QVector2D& v2)
 */
 QVector3D QVector2D::toVector3D() const
 {
-    return QVector3D(xp, yp, 0.0f, 1);
+   return QVector3D(xp, yp, 0.0f, 1);
 }
 
 #endif
@@ -375,7 +377,7 @@ QVector3D QVector2D::toVector3D() const
 */
 QVector4D QVector2D::toVector4D() const
 {
-    return QVector4D(xp, yp, 0.0f, 0.0f, 1);
+   return QVector4D(xp, yp, 0.0f, 0.0f, 1);
 }
 
 #endif
@@ -401,21 +403,21 @@ QVector4D QVector2D::toVector4D() const
 */
 QVector2D::operator QVariant() const
 {
-    return QVariant(QVariant::Vector2D, this);
+   return QVariant(QVariant::Vector2D, this);
 }
 
 QDebug operator<<(QDebug dbg, const QVector2D &vector)
 {
-    dbg.nospace() << "QVector2D(" << vector.x() << ", " << vector.y() << ')';
-    return dbg.space();
+   dbg.nospace() << "QVector2D(" << vector.x() << ", " << vector.y() << ')';
+   return dbg.space();
 }
 
 #ifndef QT_NO_DATASTREAM
 
 QDataStream &operator<<(QDataStream &stream, const QVector2D &vector)
 {
-    stream << double(vector.x()) << double(vector.y());
-    return stream;
+   stream << double(vector.x()) << double(vector.y());
+   return stream;
 }
 
 /*!
@@ -430,12 +432,12 @@ QDataStream &operator<<(QDataStream &stream, const QVector2D &vector)
 
 QDataStream &operator>>(QDataStream &stream, QVector2D &vector)
 {
-    double x, y;
-    stream >> x;
-    stream >> y;
-    vector.setX(qreal(x));
-    vector.setY(qreal(y));
-    return stream;
+   double x, y;
+   stream >> x;
+   stream >> y;
+   vector.setX(qreal(x));
+   vector.setY(qreal(y));
+   return stream;
 }
 
 #endif // QT_NO_DATASTREAM

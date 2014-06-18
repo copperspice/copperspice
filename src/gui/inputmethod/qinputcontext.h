@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,56 +46,56 @@ class QInputContextPrivate;
 
 class Q_GUI_EXPORT QInputContext : public QObject
 {
-    CS_OBJECT(QInputContext)
-    Q_DECLARE_PRIVATE(QInputContext)
+   CS_OBJECT(QInputContext)
+   Q_DECLARE_PRIVATE(QInputContext)
 
-public:
-    explicit QInputContext(QObject* parent = 0);
-    virtual ~QInputContext();
+ public:
+   explicit QInputContext(QObject *parent = 0);
+   virtual ~QInputContext();
 
-    virtual QString identifierName() = 0;
-    virtual QString language() = 0;
+   virtual QString identifierName() = 0;
+   virtual QString language() = 0;
 
-    virtual void reset() = 0;
-    virtual void update();
+   virtual void reset() = 0;
+   virtual void update();
 
-    virtual void mouseHandler( int x, QMouseEvent *event);
-    virtual QFont font() const;
-    virtual bool isComposing() const = 0;
+   virtual void mouseHandler( int x, QMouseEvent *event);
+   virtual QFont font() const;
+   virtual bool isComposing() const = 0;
 
-    QWidget *focusWidget() const;
-    virtual void setFocusWidget( QWidget *w );
+   QWidget *focusWidget() const;
+   virtual void setFocusWidget( QWidget *w );
 
-    virtual void widgetDestroyed(QWidget *w);
+   virtual void widgetDestroyed(QWidget *w);
 
-    virtual QList<QAction *> actions();
+   virtual QList<QAction *> actions();
 
 #if defined(Q_WS_X11)
-    virtual bool x11FilterEvent( QWidget *keywidget, XEvent *event );
+   virtual bool x11FilterEvent( QWidget *keywidget, XEvent *event );
 #endif
 
-    virtual bool filterEvent( const QEvent *event );
+   virtual bool filterEvent( const QEvent *event );
 
-    void sendEvent(const QInputMethodEvent &event);
+   void sendEvent(const QInputMethodEvent &event);
 
-    enum StandardFormat {
-        PreeditFormat,
-        SelectionFormat
-    };
-    QTextFormat standardFormat(StandardFormat s) const;
+   enum StandardFormat {
+      PreeditFormat,
+      SelectionFormat
+   };
+   QTextFormat standardFormat(StandardFormat s) const;
 
-protected:
-	 QScopedPointer<QInputContextPrivate> d_ptr;
+ protected:
+   QScopedPointer<QInputContextPrivate> d_ptr;
 
-private:
-    friend class QWidget;
-    friend class QWidgetPrivate;
-    friend class QInputContextFactory;
-    friend class QApplication;
-  
-    // Disabled copy constructor and operator=
-    QInputContext( const QInputContext & );
-    QInputContext &operator=( const QInputContext & );
+ private:
+   friend class QWidget;
+   friend class QWidgetPrivate;
+   friend class QInputContextFactory;
+   friend class QApplication;
+
+   // Disabled copy constructor and operator=
+   QInputContext( const QInputContext &);
+   QInputContext &operator=( const QInputContext &);
 
 };
 

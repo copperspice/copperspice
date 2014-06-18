@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,138 +39,139 @@ class QStyleOptionSpinBox;
 
 class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
 {
-    CS_OBJECT(QAbstractSpinBox)
+   CS_OBJECT(QAbstractSpinBox)
 
-    GUI_CS_ENUM(ButtonSymbols)
-    GUI_CS_ENUM(CorrectionMode)
+   GUI_CS_ENUM(ButtonSymbols)
+   GUI_CS_ENUM(CorrectionMode)
 
-    GUI_CS_PROPERTY_READ(wrapping, wrapping)
-    GUI_CS_PROPERTY_WRITE(wrapping, setWrapping)
-    GUI_CS_PROPERTY_READ(frame, hasFrame)
-    GUI_CS_PROPERTY_WRITE(frame, setFrame)
-    GUI_CS_PROPERTY_READ(alignment, alignment)
-    GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
-    GUI_CS_PROPERTY_READ(readOnly, isReadOnly)
-    GUI_CS_PROPERTY_WRITE(readOnly, setReadOnly)
-    GUI_CS_PROPERTY_READ(buttonSymbols, buttonSymbols)
-    GUI_CS_PROPERTY_WRITE(buttonSymbols, setButtonSymbols)
-    GUI_CS_PROPERTY_READ(specialValueText, specialValueText)
-    GUI_CS_PROPERTY_WRITE(specialValueText, setSpecialValueText)
-    GUI_CS_PROPERTY_READ(text, text)
-    GUI_CS_PROPERTY_READ(accelerated, isAccelerated)
-    GUI_CS_PROPERTY_WRITE(accelerated, setAccelerated)
-    GUI_CS_PROPERTY_READ(correctionMode, correctionMode)
-    GUI_CS_PROPERTY_WRITE(correctionMode, setCorrectionMode)
-    GUI_CS_PROPERTY_READ(acceptableInput, hasAcceptableInput)
-    GUI_CS_PROPERTY_READ(keyboardTracking, keyboardTracking)
-    GUI_CS_PROPERTY_WRITE(keyboardTracking, setKeyboardTracking)
+   GUI_CS_PROPERTY_READ(wrapping, wrapping)
+   GUI_CS_PROPERTY_WRITE(wrapping, setWrapping)
+   GUI_CS_PROPERTY_READ(frame, hasFrame)
+   GUI_CS_PROPERTY_WRITE(frame, setFrame)
+   GUI_CS_PROPERTY_READ(alignment, alignment)
+   GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
+   GUI_CS_PROPERTY_READ(readOnly, isReadOnly)
+   GUI_CS_PROPERTY_WRITE(readOnly, setReadOnly)
+   GUI_CS_PROPERTY_READ(buttonSymbols, buttonSymbols)
+   GUI_CS_PROPERTY_WRITE(buttonSymbols, setButtonSymbols)
+   GUI_CS_PROPERTY_READ(specialValueText, specialValueText)
+   GUI_CS_PROPERTY_WRITE(specialValueText, setSpecialValueText)
+   GUI_CS_PROPERTY_READ(text, text)
+   GUI_CS_PROPERTY_READ(accelerated, isAccelerated)
+   GUI_CS_PROPERTY_WRITE(accelerated, setAccelerated)
+   GUI_CS_PROPERTY_READ(correctionMode, correctionMode)
+   GUI_CS_PROPERTY_WRITE(correctionMode, setCorrectionMode)
+   GUI_CS_PROPERTY_READ(acceptableInput, hasAcceptableInput)
+   GUI_CS_PROPERTY_READ(keyboardTracking, keyboardTracking)
+   GUI_CS_PROPERTY_WRITE(keyboardTracking, setKeyboardTracking)
 
-public:
-    explicit QAbstractSpinBox(QWidget *parent = 0);
-    ~QAbstractSpinBox();
+ public:
+   explicit QAbstractSpinBox(QWidget *parent = 0);
+   ~QAbstractSpinBox();
 
-    enum StepEnabledFlag { StepNone = 0x00, StepUpEnabled = 0x01,
-                           StepDownEnabled = 0x02 };
-    using StepEnabled = QFlags<StepEnabledFlag>;
+   enum StepEnabledFlag { StepNone = 0x00, StepUpEnabled = 0x01,
+                          StepDownEnabled = 0x02
+                        };
+   using StepEnabled = QFlags<StepEnabledFlag>;
 
-    enum ButtonSymbols { UpDownArrows, PlusMinus, NoButtons };
+   enum ButtonSymbols { UpDownArrows, PlusMinus, NoButtons };
 
-    ButtonSymbols buttonSymbols() const;
-    void setButtonSymbols(ButtonSymbols bs);
+   ButtonSymbols buttonSymbols() const;
+   void setButtonSymbols(ButtonSymbols bs);
 
-    enum CorrectionMode  { CorrectToPreviousValue, CorrectToNearestValue };
+   enum CorrectionMode  { CorrectToPreviousValue, CorrectToNearestValue };
 
-    void setCorrectionMode(CorrectionMode cm);
-    CorrectionMode correctionMode() const;
+   void setCorrectionMode(CorrectionMode cm);
+   CorrectionMode correctionMode() const;
 
-    bool hasAcceptableInput() const;
-    QString text() const;
+   bool hasAcceptableInput() const;
+   QString text() const;
 
-    QString specialValueText() const;
-    void setSpecialValueText(const QString &txt);
+   QString specialValueText() const;
+   void setSpecialValueText(const QString &txt);
 
-    bool wrapping() const;
-    void setWrapping(bool w);
+   bool wrapping() const;
+   void setWrapping(bool w);
 
-    void setReadOnly(bool r);
-    bool isReadOnly() const;
+   void setReadOnly(bool r);
+   bool isReadOnly() const;
 
-    void setKeyboardTracking(bool kt);
-    bool keyboardTracking() const;
+   void setKeyboardTracking(bool kt);
+   bool keyboardTracking() const;
 
-    void setAlignment(Qt::Alignment flag);
-    Qt::Alignment alignment() const;
+   void setAlignment(Qt::Alignment flag);
+   Qt::Alignment alignment() const;
 
-    void setFrame(bool);
-    bool hasFrame() const;
+   void setFrame(bool);
+   bool hasFrame() const;
 
-    void setAccelerated(bool on);
-    bool isAccelerated() const;
+   void setAccelerated(bool on);
+   bool isAccelerated() const;
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
-    void interpretText();
-    bool event(QEvent *event);
+   QSize sizeHint() const;
+   QSize minimumSizeHint() const;
+   void interpretText();
+   bool event(QEvent *event);
 
-    QVariant inputMethodQuery(Qt::InputMethodQuery) const;
+   QVariant inputMethodQuery(Qt::InputMethodQuery) const;
 
-    virtual QValidator::State validate(QString &input, int &pos) const;
-    virtual void fixup(QString &input) const;
+   virtual QValidator::State validate(QString &input, int &pos) const;
+   virtual void fixup(QString &input) const;
 
-    virtual void stepBy(int steps);
+   virtual void stepBy(int steps);
 
-    GUI_CS_SLOT_1(Public, void stepUp())
-    GUI_CS_SLOT_2(stepUp) 
-    GUI_CS_SLOT_1(Public, void stepDown())
-    GUI_CS_SLOT_2(stepDown) 
-    GUI_CS_SLOT_1(Public, void selectAll())
-    GUI_CS_SLOT_2(selectAll) 
-    GUI_CS_SLOT_1(Public, virtual void clear())
-    GUI_CS_SLOT_2(clear) 
+   GUI_CS_SLOT_1(Public, void stepUp())
+   GUI_CS_SLOT_2(stepUp)
+   GUI_CS_SLOT_1(Public, void stepDown())
+   GUI_CS_SLOT_2(stepDown)
+   GUI_CS_SLOT_1(Public, void selectAll())
+   GUI_CS_SLOT_2(selectAll)
+   GUI_CS_SLOT_1(Public, virtual void clear())
+   GUI_CS_SLOT_2(clear)
 
-    GUI_CS_SIGNAL_1(Public, void editingFinished())
-    GUI_CS_SIGNAL_2(editingFinished) 
+   GUI_CS_SIGNAL_1(Public, void editingFinished())
+   GUI_CS_SIGNAL_2(editingFinished)
 
-protected:
-    void resizeEvent(QResizeEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+ protected:
+   void resizeEvent(QResizeEvent *event);
+   void keyPressEvent(QKeyEvent *event);
+   void keyReleaseEvent(QKeyEvent *event);
 
 #ifndef QT_NO_WHEELEVENT
-    void wheelEvent(QWheelEvent *event);
+   void wheelEvent(QWheelEvent *event);
 #endif
 
-    void focusInEvent(QFocusEvent *event);
-    void focusOutEvent(QFocusEvent *event);
-    void contextMenuEvent(QContextMenuEvent *event);
-    void changeEvent(QEvent *event);
-    void closeEvent(QCloseEvent *event);
-    void hideEvent(QHideEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void timerEvent(QTimerEvent *event);
-    void paintEvent(QPaintEvent *event);
-    void showEvent(QShowEvent *event);
-    void initStyleOption(QStyleOptionSpinBox *option) const;
+   void focusInEvent(QFocusEvent *event);
+   void focusOutEvent(QFocusEvent *event);
+   void contextMenuEvent(QContextMenuEvent *event);
+   void changeEvent(QEvent *event);
+   void closeEvent(QCloseEvent *event);
+   void hideEvent(QHideEvent *event);
+   void mousePressEvent(QMouseEvent *event);
+   void mouseReleaseEvent(QMouseEvent *event);
+   void mouseMoveEvent(QMouseEvent *event);
+   void timerEvent(QTimerEvent *event);
+   void paintEvent(QPaintEvent *event);
+   void showEvent(QShowEvent *event);
+   void initStyleOption(QStyleOptionSpinBox *option) const;
 
-    QLineEdit *lineEdit() const;
-    void setLineEdit(QLineEdit *edit);
+   QLineEdit *lineEdit() const;
+   void setLineEdit(QLineEdit *edit);
 
-    virtual StepEnabled stepEnabled() const;
-  
-    QAbstractSpinBox(QAbstractSpinBoxPrivate &dd, QWidget *parent = 0);
+   virtual StepEnabled stepEnabled() const;
 
-private:
-    Q_DECLARE_PRIVATE(QAbstractSpinBox)
-    Q_DISABLE_COPY(QAbstractSpinBox)
+   QAbstractSpinBox(QAbstractSpinBoxPrivate &dd, QWidget *parent = 0);
 
-    GUI_CS_SLOT_1(Private, void _q_editorTextChanged(const QString & un_named_arg1))
-    GUI_CS_SLOT_2(_q_editorTextChanged)
+ private:
+   Q_DECLARE_PRIVATE(QAbstractSpinBox)
+   Q_DISABLE_COPY(QAbstractSpinBox)
 
-    GUI_CS_SLOT_1(Private, void _q_editorCursorPositionChanged(int un_named_arg1,int un_named_arg2))
-    GUI_CS_SLOT_2(_q_editorCursorPositionChanged)
-   
+   GUI_CS_SLOT_1(Private, void _q_editorTextChanged(const QString &un_named_arg1))
+   GUI_CS_SLOT_2(_q_editorTextChanged)
+
+   GUI_CS_SLOT_1(Private, void _q_editorCursorPositionChanged(int un_named_arg1, int un_named_arg2))
+   GUI_CS_SLOT_2(_q_editorCursorPositionChanged)
+
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractSpinBox::StepEnabled)
 

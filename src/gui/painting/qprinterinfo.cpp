@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,7 +38,7 @@ QPrinterInfoPrivate QPrinterInfoPrivate::shared_null;
 
     \brief The QPrinterInfo class gives access to information about
     existing printers.
-    
+
     \ingroup printing
 
     Use the static functions to generate a list of QPrinterInfo
@@ -72,7 +72,7 @@ QPrinterInfoPrivate QPrinterInfoPrivate::shared_null;
     \sa isNull()
 */
 QPrinterInfo::QPrinterInfo()
-    : d_ptr(&QPrinterInfoPrivate::shared_null)
+   : d_ptr(&QPrinterInfoPrivate::shared_null)
 {
 }
 
@@ -82,7 +82,7 @@ QPrinterInfo::QPrinterInfo()
     Constructs a copy of \a other.
 */
 QPrinterInfo::QPrinterInfo(const QPrinterInfo &other)
-    : d_ptr(new QPrinterInfoPrivate(*other.d_ptr))
+   : d_ptr(new QPrinterInfoPrivate(*other.d_ptr))
 {
 }
 
@@ -90,21 +90,21 @@ QPrinterInfo::QPrinterInfo(const QPrinterInfo &other)
     Constructs a QPrinterInfo object from \a printer.
 */
 QPrinterInfo::QPrinterInfo(const QPrinter &printer)
-    : d_ptr(&QPrinterInfoPrivate::shared_null)
+   : d_ptr(&QPrinterInfoPrivate::shared_null)
 {
-    foreach (const QPrinterInfo &printerInfo, availablePrinters()) {
-        if (printerInfo.printerName() == printer.printerName()) {
-            d_ptr.reset(new QPrinterInfoPrivate(*printerInfo.d_ptr));
-            break;
-        }
-    }
+   foreach (const QPrinterInfo & printerInfo, availablePrinters()) {
+      if (printerInfo.printerName() == printer.printerName()) {
+         d_ptr.reset(new QPrinterInfoPrivate(*printerInfo.d_ptr));
+         break;
+      }
+   }
 }
 
 /*!
     \internal
 */
 QPrinterInfo::QPrinterInfo(const QString &name)
-    : d_ptr(new QPrinterInfoPrivate(name))
+   : d_ptr(new QPrinterInfoPrivate(name))
 {
 }
 
@@ -123,9 +123,9 @@ QPrinterInfo::~QPrinterInfo()
 */
 QPrinterInfo &QPrinterInfo::operator=(const QPrinterInfo &other)
 {
-    Q_ASSERT(d_ptr);
-    d_ptr.reset(new QPrinterInfoPrivate(*other.d_ptr));
-    return *this;
+   Q_ASSERT(d_ptr);
+   d_ptr.reset(new QPrinterInfoPrivate(*other.d_ptr));
+   return *this;
 }
 
 /*!
@@ -135,8 +135,8 @@ QPrinterInfo &QPrinterInfo::operator=(const QPrinterInfo &other)
 */
 QString QPrinterInfo::printerName() const
 {
-    const Q_D(QPrinterInfo);
-    return d->name;
+   const Q_D(QPrinterInfo);
+   return d->name;
 }
 
 /*!
@@ -147,8 +147,8 @@ QString QPrinterInfo::printerName() const
 */
 bool QPrinterInfo::isNull() const
 {
-    const Q_D(QPrinterInfo);
-    return d == &QPrinterInfoPrivate::shared_null;
+   const Q_D(QPrinterInfo);
+   return d == &QPrinterInfoPrivate::shared_null;
 }
 
 /*!
@@ -156,8 +156,8 @@ bool QPrinterInfo::isNull() const
 */
 bool QPrinterInfo::isDefault() const
 {
-    const Q_D(QPrinterInfo);
-    return d->isDefault;
+   const Q_D(QPrinterInfo);
+   return d->isDefault;
 }
 
 /*!

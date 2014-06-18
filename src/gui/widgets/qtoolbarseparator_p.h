@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,21 +37,21 @@ class QToolBar;
 
 class QToolBarSeparator : public QWidget
 {
-    CS_OBJECT(QToolBarSeparator)
-    Qt::Orientation orient;
+   CS_OBJECT(QToolBarSeparator)
+   Qt::Orientation orient;
 
-public:
-    explicit QToolBarSeparator(QToolBar *parent);
+ public:
+   explicit QToolBarSeparator(QToolBar *parent);
 
-    Qt::Orientation orientation() const;
+   Qt::Orientation orientation() const;
 
-    QSize sizeHint() const;
+   QSize sizeHint() const;
 
-    void paintEvent(QPaintEvent *);
-    void initStyleOption(QStyleOption *option) const;
+   void paintEvent(QPaintEvent *);
+   void initStyleOption(QStyleOption *option) const;
 
-    GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation orientation))
-    GUI_CS_SLOT_2(setOrientation) 
+   GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation orientation))
+   GUI_CS_SLOT_2(setOrientation)
 };
 
 #endif // QT_NO_TOOLBAR

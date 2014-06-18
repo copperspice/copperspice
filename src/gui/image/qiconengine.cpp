@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -67,7 +67,7 @@ QT_BEGIN_NAMESPACE
  */
 QSize QIconEngine::actualSize(const QSize &size, QIcon::Mode /*mode*/, QIcon::State /*state*/)
 {
-    return size;
+   return size;
 }
 
 
@@ -86,12 +86,12 @@ QIconEngine::~QIconEngine()
 */
 QPixmap QIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state)
 {
-    QPixmap pm(size);
-    {
-        QPainter p(&pm);
-        paint(&p, QRect(QPoint(0,0),size), mode, state);
-    }
-    return pm;
+   QPixmap pm(size);
+   {
+      QPainter p(&pm);
+      paint(&p, QRect(QPoint(0, 0), size), mode, state);
+   }
+   return pm;
 }
 
 /*!
@@ -114,7 +114,8 @@ void QIconEngine::addPixmap(const QPixmap &/*pixmap*/, QIcon::Mode /*mode*/, QIc
   engines that implement scalable vector formats are free to ignores
   any extra files.
  */
-void QIconEngine::addFile(const QString &/*fileName*/, const QSize &/*size*/, QIcon::Mode /*mode*/, QIcon::State /*state*/)
+void QIconEngine::addFile(const QString &/*fileName*/, const QSize &/*size*/, QIcon::Mode /*mode*/,
+                          QIcon::State /*state*/)
 {
 }
 
@@ -213,7 +214,7 @@ void QIconEngine::addFile(const QString &/*fileName*/, const QSize &/*size*/, QI
  */
 QString QIconEngineV2::key() const
 {
-    return QString();
+   return QString();
 }
 
 /*!
@@ -221,7 +222,7 @@ QString QIconEngineV2::key() const
  */
 QIconEngineV2 *QIconEngineV2::clone() const
 {
-    return 0;
+   return 0;
 }
 
 /*!
@@ -232,7 +233,7 @@ QIconEngineV2 *QIconEngineV2::clone() const
  */
 bool QIconEngineV2::read(QDataStream &)
 {
-    return false;
+   return false;
 }
 
 /*!
@@ -243,7 +244,7 @@ bool QIconEngineV2::read(QDataStream &)
  */
 bool QIconEngineV2::write(QDataStream &) const
 {
-    return false;
+   return false;
 }
 
 /*!
@@ -258,16 +259,16 @@ bool QIconEngineV2::write(QDataStream &) const
 */
 void QIconEngineV2::virtual_hook(int id, void *data)
 {
-    switch (id) {
-    case QIconEngineV2::AvailableSizesHook: {
-        QIconEngineV2::AvailableSizesArgument &arg =
-            *reinterpret_cast<QIconEngineV2::AvailableSizesArgument*>(data);
-        arg.sizes.clear();
-        break;
-    }
-    default:
-        break;
-    }
+   switch (id) {
+      case QIconEngineV2::AvailableSizesHook: {
+         QIconEngineV2::AvailableSizesArgument &arg =
+            *reinterpret_cast<QIconEngineV2::AvailableSizesArgument *>(data);
+         arg.sizes.clear();
+         break;
+      }
+      default:
+         break;
+   }
 }
 
 /*!
@@ -282,11 +283,11 @@ void QIconEngineV2::virtual_hook(int id, void *data)
  */
 QList<QSize> QIconEngineV2::availableSizes(QIcon::Mode mode, QIcon::State state)
 {
-    AvailableSizesArgument arg;
-    arg.mode = mode;
-    arg.state = state;
-    virtual_hook(QIconEngineV2::AvailableSizesHook, reinterpret_cast<void*>(&arg));
-    return arg.sizes;
+   AvailableSizesArgument arg;
+   arg.mode = mode;
+   arg.state = state;
+   virtual_hook(QIconEngineV2::AvailableSizesHook, reinterpret_cast<void *>(&arg));
+   return arg.sizes;
 }
 
 /*!
@@ -300,9 +301,9 @@ QList<QSize> QIconEngineV2::availableSizes(QIcon::Mode mode, QIcon::State state)
  */
 QString QIconEngineV2::iconName()
 {
-    QString name;
-    virtual_hook(QIconEngineV2::IconNameHook, reinterpret_cast<void*>(&name));
-    return name;
+   QString name;
+   virtual_hook(QIconEngineV2::IconNameHook, reinterpret_cast<void *>(&name));
+   return name;
 }
 
 QT_END_NAMESPACE

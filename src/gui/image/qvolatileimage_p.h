@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,40 +35,40 @@ class QVolatileImageData;
 
 class Q_GUI_EXPORT QVolatileImage
 {
-public:
-    QVolatileImage();
-    QVolatileImage(int w, int h, QImage::Format format);
-    explicit QVolatileImage(const QImage &sourceImage);
-    explicit QVolatileImage(void *nativeImage, void *nativeMask = 0);
-    QVolatileImage(const QVolatileImage &other);
-    ~QVolatileImage();
-    QVolatileImage &operator=(const QVolatileImage &rhs);
+ public:
+   QVolatileImage();
+   QVolatileImage(int w, int h, QImage::Format format);
+   explicit QVolatileImage(const QImage &sourceImage);
+   explicit QVolatileImage(void *nativeImage, void *nativeMask = 0);
+   QVolatileImage(const QVolatileImage &other);
+   ~QVolatileImage();
+   QVolatileImage &operator=(const QVolatileImage &rhs);
 
-    bool paintingActive() const;
-    bool isNull() const;
-    QImage::Format format() const;
-    int width() const;
-    int height() const;
-    int bytesPerLine() const;
-    int byteCount() const;
-    int depth() const;
-    bool hasAlphaChannel() const;
-    void beginDataAccess() const;
-    void endDataAccess(bool readOnly = false) const;
-    uchar *bits();
-    const uchar *constBits() const;
-    bool ensureFormat(QImage::Format format);
-    QImage toImage() const;
-    QImage &imageRef();
-    const QImage &constImageRef() const;
-    QPaintEngine *paintEngine();
-    void setAlphaChannel(const QPixmap &alphaChannel);
-    void fill(uint pixelValue);
-    void *duplicateNativeImage() const;
-    void copyFrom(QVolatileImage *source, const QRect &rect);
+   bool paintingActive() const;
+   bool isNull() const;
+   QImage::Format format() const;
+   int width() const;
+   int height() const;
+   int bytesPerLine() const;
+   int byteCount() const;
+   int depth() const;
+   bool hasAlphaChannel() const;
+   void beginDataAccess() const;
+   void endDataAccess(bool readOnly = false) const;
+   uchar *bits();
+   const uchar *constBits() const;
+   bool ensureFormat(QImage::Format format);
+   QImage toImage() const;
+   QImage &imageRef();
+   const QImage &constImageRef() const;
+   QPaintEngine *paintEngine();
+   void setAlphaChannel(const QPixmap &alphaChannel);
+   void fill(uint pixelValue);
+   void *duplicateNativeImage() const;
+   void copyFrom(QVolatileImage *source, const QRect &rect);
 
-private:
-    QSharedDataPointer<QVolatileImageData> d;
+ private:
+   QSharedDataPointer<QVolatileImageData> d;
 };
 
 QT_END_NAMESPACE

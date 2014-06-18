@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,38 +41,40 @@ class QNetworkCookieJar;
 
 class QNetworkAuthenticationCredential
 {
-public:
-    QString domain;
-    QString user;
-    QString password;
-    bool isNull() {
-        return domain.isNull() && user.isNull() && password.isNull();
-    }
+ public:
+   QString domain;
+   QString user;
+   QString password;
+   bool isNull() {
+      return domain.isNull() && user.isNull() && password.isNull();
+   }
 };
 Q_DECLARE_TYPEINFO(QNetworkAuthenticationCredential, Q_MOVABLE_TYPE);
 inline bool operator<(const QNetworkAuthenticationCredential &t1, const QString &t2)
-{ return t1.domain < t2; }
+{
+   return t1.domain < t2;
+}
 
 class QNetworkAccessAuthenticationManager
 {
-public:
-    QNetworkAccessAuthenticationManager() { };
+ public:
+   QNetworkAccessAuthenticationManager() { };
 
-    void cacheCredentials(const QUrl &url, const QAuthenticator *auth);
-    QNetworkAuthenticationCredential fetchCachedCredentials(const QUrl &url,
-                                                             const QAuthenticator *auth = 0);
+   void cacheCredentials(const QUrl &url, const QAuthenticator *auth);
+   QNetworkAuthenticationCredential fetchCachedCredentials(const QUrl &url,
+         const QAuthenticator *auth = 0);
 
 #ifndef QT_NO_NETWORKPROXY
-    void cacheProxyCredentials(const QNetworkProxy &proxy, const QAuthenticator *auth);
-    QNetworkAuthenticationCredential fetchCachedProxyCredentials(const QNetworkProxy &proxy,
-                                                             const QAuthenticator *auth = 0);
+   void cacheProxyCredentials(const QNetworkProxy &proxy, const QAuthenticator *auth);
+   QNetworkAuthenticationCredential fetchCachedProxyCredentials(const QNetworkProxy &proxy,
+         const QAuthenticator *auth = 0);
 #endif
 
-    void clearCache();
+   void clearCache();
 
-protected:
-    QNetworkAccessCache authenticationCache;
-    QMutex mutex;
+ protected:
+   QNetworkAccessCache authenticationCache;
+   QMutex mutex;
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,9 +34,8 @@ QT_BEGIN_NAMESPACE
 class QIconEngine;
 class QIconEngineV2;
 
-struct Q_GUI_EXPORT QIconEngineFactoryInterface : public QFactoryInterface
-{
-    virtual QIconEngine *create(const QString &filename) = 0;
+struct Q_GUI_EXPORT QIconEngineFactoryInterface : public QFactoryInterface {
+   virtual QIconEngine *create(const QString &filename) = 0;
 };
 
 #define QIconEngineFactoryInterface_iid "com.copperspice.QIconEngineFactoryInterface"
@@ -44,21 +43,20 @@ CS_DECLARE_INTERFACE(QIconEngineFactoryInterface, QIconEngineFactoryInterface_ii
 
 class Q_GUI_EXPORT QIconEnginePlugin : public QObject, public QIconEngineFactoryInterface
 {
-    CS_OBJECT_MULTIPLE(QIconEnginePlugin, QObject)
-    CS_INTERFACES(QIconEngineFactoryInterface, QFactoryInterface)
+   CS_OBJECT_MULTIPLE(QIconEnginePlugin, QObject)
+   CS_INTERFACES(QIconEngineFactoryInterface, QFactoryInterface)
 
-   public:
-       QIconEnginePlugin(QObject *parent = 0);
-       ~QIconEnginePlugin();
-   
-       virtual QStringList keys() const = 0;
-       virtual QIconEngine *create(const QString &filename) = 0;
+ public:
+   QIconEnginePlugin(QObject *parent = 0);
+   ~QIconEnginePlugin();
+
+   virtual QStringList keys() const = 0;
+   virtual QIconEngine *create(const QString &filename) = 0;
 };
 
 // ### Qt5/remove version 2
-struct Q_GUI_EXPORT QIconEngineFactoryInterfaceV2 : public QFactoryInterface
-{
-    virtual QIconEngineV2 *create(const QString &filename = QString()) = 0;
+struct Q_GUI_EXPORT QIconEngineFactoryInterfaceV2 : public QFactoryInterface {
+   virtual QIconEngineV2 *create(const QString &filename = QString()) = 0;
 };
 
 #define QIconEngineFactoryInterfaceV2_iid "com.copperspice.QIconEngineFactoryInterfaceV2"
@@ -69,12 +67,12 @@ class Q_GUI_EXPORT QIconEnginePluginV2 : public QObject, public QIconEngineFacto
    CS_OBJECT_MULTIPLE(QIconEnginePluginV2, QObject)
    CS_INTERFACES(QIconEngineFactoryInterfaceV2, QFactoryInterface)
 
-   public:
-       QIconEnginePluginV2(QObject *parent = 0);
-       ~QIconEnginePluginV2();
+ public:
+   QIconEnginePluginV2(QObject *parent = 0);
+   ~QIconEnginePluginV2();
 
-       virtual QStringList keys() const = 0;
-       virtual QIconEngineV2 *create(const QString &filename = QString()) = 0;
+   virtual QStringList keys() const = 0;
+   virtual QIconEngineV2 *create(const QString &filename = QString()) = 0;
 };
 
 QT_END_NAMESPACE

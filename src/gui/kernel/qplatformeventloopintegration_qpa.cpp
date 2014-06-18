@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,18 +31,18 @@
 
 class QPlatformEventLoopIntegrationPrivate
 {
-public:
-    QPlatformEventLoopIntegrationPrivate();
-    qint64 nextTimerEvent;
+ public:
+   QPlatformEventLoopIntegrationPrivate();
+   qint64 nextTimerEvent;
 };
 
 QPlatformEventLoopIntegrationPrivate::QPlatformEventLoopIntegrationPrivate()
-    : nextTimerEvent(0)
+   : nextTimerEvent(0)
 {
 }
 
 QPlatformEventLoopIntegration::QPlatformEventLoopIntegration()
-    : d_ptr(new QPlatformEventLoopIntegrationPrivate)
+   : d_ptr(new QPlatformEventLoopIntegrationPrivate)
 
 {
 }
@@ -53,18 +53,18 @@ QPlatformEventLoopIntegration::~QPlatformEventLoopIntegration()
 
 qint64 QPlatformEventLoopIntegration::nextTimerEvent() const
 {
-    Q_D(const QPlatformEventLoopIntegration);
-    return d->nextTimerEvent;
+   Q_D(const QPlatformEventLoopIntegration);
+   return d->nextTimerEvent;
 }
 
 
 void QPlatformEventLoopIntegration::setNextTimerEvent(qint64 nextTimerEvent)
 {
-    Q_D(QPlatformEventLoopIntegration);
-    d->nextTimerEvent = nextTimerEvent;
+   Q_D(QPlatformEventLoopIntegration);
+   d->nextTimerEvent = nextTimerEvent;
 }
 
 void QPlatformEventLoopIntegration::processEvents()
 {
-    QCoreApplication::processEvents(QEventLoop::WaitForMoreEvents);
+   QCoreApplication::processEvents(QEventLoop::WaitForMoreEvents);
 }

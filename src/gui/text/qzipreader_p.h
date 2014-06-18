@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,57 +38,56 @@ class QZipReaderPrivate;
 
 class Q_GUI_EXPORT QZipReader
 {
-public:
-    QZipReader(const QString &fileName, QIODevice::OpenMode mode = QIODevice::ReadOnly );
+ public:
+   QZipReader(const QString &fileName, QIODevice::OpenMode mode = QIODevice::ReadOnly );
 
-    explicit QZipReader(QIODevice *device);
-    ~QZipReader();
+   explicit QZipReader(QIODevice *device);
+   ~QZipReader();
 
-    QIODevice* device() const;
+   QIODevice *device() const;
 
-    bool isReadable() const;
-    bool exists() const;
+   bool isReadable() const;
+   bool exists() const;
 
-    struct Q_GUI_EXPORT FileInfo
-    {
-        FileInfo();
-        FileInfo(const FileInfo &other);
-        ~FileInfo();
-        FileInfo &operator=(const FileInfo &other);
-        bool isValid() const;
-        QString filePath;
-        uint isDir : 1;
-        uint isFile : 1;
-        uint isSymLink : 1;
-        QFile::Permissions permissions;
-        uint crc32;
-        qint64 size;
-        QDateTime lastModified;
-        void *d;
-    };
+   struct Q_GUI_EXPORT FileInfo {
+      FileInfo();
+      FileInfo(const FileInfo &other);
+      ~FileInfo();
+      FileInfo &operator=(const FileInfo &other);
+      bool isValid() const;
+      QString filePath;
+      uint isDir : 1;
+      uint isFile : 1;
+      uint isSymLink : 1;
+      QFile::Permissions permissions;
+      uint crc32;
+      qint64 size;
+      QDateTime lastModified;
+      void *d;
+   };
 
-    QList<FileInfo> fileInfoList() const;
-    int count() const;
+   QList<FileInfo> fileInfoList() const;
+   int count() const;
 
-    FileInfo entryInfoAt(int index) const;
-    QByteArray fileData(const QString &fileName) const;
-    bool extractAll(const QString &destinationDir) const;
+   FileInfo entryInfoAt(int index) const;
+   QByteArray fileData(const QString &fileName) const;
+   bool extractAll(const QString &destinationDir) const;
 
-    enum Status {
-        NoError,
-        FileReadError,
-        FileOpenError,
-        FilePermissionsError,
-        FileError
-    };
+   enum Status {
+      NoError,
+      FileReadError,
+      FileOpenError,
+      FilePermissionsError,
+      FileError
+   };
 
-    Status status() const;
+   Status status() const;
 
-    void close();
+   void close();
 
-private:
-    QZipReaderPrivate *d;
-    Q_DISABLE_COPY(QZipReader)
+ private:
+   QZipReaderPrivate *d;
+   Q_DISABLE_COPY(QZipReader)
 };
 
 QT_END_NAMESPACE

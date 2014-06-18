@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -54,80 +54,83 @@ class QNetworkConfigurationPrivate;
 class QNetworkConfigurationExport QNetworkConfiguration
 {
 
-public:
-    QNetworkConfiguration();
-    QNetworkConfiguration(const QNetworkConfiguration& other);
-    QNetworkConfiguration &operator=(const QNetworkConfiguration &other);
-    ~QNetworkConfiguration();
+ public:
+   QNetworkConfiguration();
+   QNetworkConfiguration(const QNetworkConfiguration &other);
+   QNetworkConfiguration &operator=(const QNetworkConfiguration &other);
+   ~QNetworkConfiguration();
 
-    bool operator==(const QNetworkConfiguration &other) const;
-    inline bool operator!=(const QNetworkConfiguration &other) const
-    { return !operator==(other); }
+   bool operator==(const QNetworkConfiguration &other) const;
+   inline bool operator!=(const QNetworkConfiguration &other) const {
+      return !operator==(other);
+   }
 
-    enum Type {
-        InternetAccessPoint = 0,
-        ServiceNetwork,
-        UserChoice,
-        Invalid
-    };
+   enum Type {
+      InternetAccessPoint = 0,
+      ServiceNetwork,
+      UserChoice,
+      Invalid
+   };
 
-    enum Purpose {
-        UnknownPurpose = 0,
-        PublicPurpose,
-        PrivatePurpose,
-        ServiceSpecificPurpose
-    };
+   enum Purpose {
+      UnknownPurpose = 0,
+      PublicPurpose,
+      PrivatePurpose,
+      ServiceSpecificPurpose
+   };
 
-    enum StateFlag {
-        Undefined        = 0x0000001,
-        Defined          = 0x0000002,
-        Discovered       = 0x0000006,
-        Active           = 0x000000e
-    };
-    using StateFlags = QFlags<StateFlag>;
+   enum StateFlag {
+      Undefined        = 0x0000001,
+      Defined          = 0x0000002,
+      Discovered       = 0x0000006,
+      Active           = 0x000000e
+   };
+   using StateFlags = QFlags<StateFlag>;
 
 #ifndef QT_MOBILITY_BEARER
-    enum BearerType {
-        BearerUnknown,
-        BearerEthernet,
-        BearerWLAN,
-        Bearer2G,
-        BearerCDMA2000,
-        BearerWCDMA,
-        BearerHSPA,
-        BearerBluetooth,
-        BearerWiMAX
-    };
+   enum BearerType {
+      BearerUnknown,
+      BearerEthernet,
+      BearerWLAN,
+      Bearer2G,
+      BearerCDMA2000,
+      BearerWCDMA,
+      BearerHSPA,
+      BearerBluetooth,
+      BearerWiMAX
+   };
 #endif
 
-    StateFlags state() const;
-    Type type() const;
-    Purpose purpose() const;
+   StateFlags state() const;
+   Type type() const;
+   Purpose purpose() const;
 
 #ifndef QT_MOBILITY_BEARER
 #ifdef QT_DEPRECATED
-    // Required to maintain source compatibility with Qt Mobility.
-    QT_DEPRECATED inline QString bearerName() const { return bearerTypeName(); }
+   // Required to maintain source compatibility with Qt Mobility.
+   QT_DEPRECATED inline QString bearerName() const {
+      return bearerTypeName();
+   }
 #endif
-    BearerType bearerType() const;
-    QString bearerTypeName() const;
+   BearerType bearerType() const;
+   QString bearerTypeName() const;
 #else
-    QString bearerName() const;
+   QString bearerName() const;
 #endif
 
-    QString identifier() const;
-    bool isRoamingAvailable() const;
-    QList<QNetworkConfiguration> children() const;
+   QString identifier() const;
+   bool isRoamingAvailable() const;
+   QList<QNetworkConfiguration> children() const;
 
-    QString name() const;
-    bool isValid() const;
+   QString name() const;
+   bool isValid() const;
 
-private:
-    friend class QNetworkConfigurationPrivate;
-    friend class QNetworkConfigurationManager;
-    friend class QNetworkConfigurationManagerPrivate;
-    friend class QNetworkSessionPrivate;
-    QExplicitlySharedDataPointer<QNetworkConfigurationPrivate> d;
+ private:
+   friend class QNetworkConfigurationPrivate;
+   friend class QNetworkConfigurationManager;
+   friend class QNetworkConfigurationManagerPrivate;
+   friend class QNetworkSessionPrivate;
+   QExplicitlySharedDataPointer<QNetworkConfigurationPrivate> d;
 };
 
 #ifndef QT_MOBILITY_BEARER

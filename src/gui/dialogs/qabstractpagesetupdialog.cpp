@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,30 +46,31 @@ QT_BEGIN_NAMESPACE
     \a parent as parent widget.
 */
 QAbstractPageSetupDialog::QAbstractPageSetupDialog(QPrinter *printer, QWidget *parent)
-    : QDialog(*(new QAbstractPageSetupDialogPrivate), parent)
+   : QDialog(*(new QAbstractPageSetupDialogPrivate), parent)
 {
-    Q_D(QAbstractPageSetupDialog);
-    setWindowTitle(QCoreApplication::translate("QPrintPreviewDialog", "Page Setup"));
-    d->setPrinter(printer);
+   Q_D(QAbstractPageSetupDialog);
+   setWindowTitle(QCoreApplication::translate("QPrintPreviewDialog", "Page Setup"));
+   d->setPrinter(printer);
 }
 
 /*!
     \internal
 */
 QAbstractPageSetupDialog::QAbstractPageSetupDialog(QAbstractPageSetupDialogPrivate &ptr,
-                                                   QPrinter *printer, QWidget *parent)
-    : QDialog(ptr, parent)
+      QPrinter *printer, QWidget *parent)
+   : QDialog(ptr, parent)
 {
-    Q_D(QAbstractPageSetupDialog);
-    setWindowTitle(QCoreApplication::translate("QPrintPreviewDialog", "Page Setup"));
-    d->setPrinter(printer);
+   Q_D(QAbstractPageSetupDialog);
+   setWindowTitle(QCoreApplication::translate("QPrintPreviewDialog", "Page Setup"));
+   d->setPrinter(printer);
 }
 
 QAbstractPageSetupDialog::~QAbstractPageSetupDialog()
 {
-    Q_D(QAbstractPageSetupDialog);
-    if (d->opts & QPageSetupDialog::OwnsPrinter)
-        delete d->printer;
+   Q_D(QAbstractPageSetupDialog);
+   if (d->opts & QPageSetupDialog::OwnsPrinter) {
+      delete d->printer;
+   }
 }
 
 /*!
@@ -77,21 +78,22 @@ QAbstractPageSetupDialog::~QAbstractPageSetupDialog()
 */
 QPrinter *QAbstractPageSetupDialog::printer()
 {
-    Q_D(QAbstractPageSetupDialog);
-    return d->printer;
+   Q_D(QAbstractPageSetupDialog);
+   return d->printer;
 }
 
 void QAbstractPageSetupDialogPrivate::setPrinter(QPrinter *newPrinter)
 {
-    if (newPrinter) {
-        printer = newPrinter;
-    } else {
-        printer = new QPrinter;
-        opts |= QPageSetupDialog::OwnsPrinter;
-    }
+   if (newPrinter) {
+      printer = newPrinter;
+   } else {
+      printer = new QPrinter;
+      opts |= QPageSetupDialog::OwnsPrinter;
+   }
 #ifndef Q_WS_X11
-    if (printer->outputFormat() != QPrinter::NativeFormat)
-        qWarning("QPageSetupDialog: Cannot be used on non-native printers");
+   if (printer->outputFormat() != QPrinter::NativeFormat) {
+      qWarning("QPageSetupDialog: Cannot be used on non-native printers");
+   }
 #endif
 }
 
@@ -107,14 +109,14 @@ void QAbstractPageSetupDialogPrivate::setPrinter(QPrinter *newPrinter)
 */
 void QAbstractPageSetupDialog::done(int result)
 {
-    Q_D(QAbstractPageSetupDialog);
-    QDialog::done(result);
+   Q_D(QAbstractPageSetupDialog);
+   QDialog::done(result);
 
-    if (d->receiverToDisconnectOnClose) {
-        disconnect(this, SIGNAL(accepted()),d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
-        d->receiverToDisconnectOnClose = 0;
-    }
-    d->memberToDisconnectOnClose.clear();
+   if (d->receiverToDisconnectOnClose) {
+      disconnect(this, SIGNAL(accepted()), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+      d->receiverToDisconnectOnClose = 0;
+   }
+   d->memberToDisconnectOnClose.clear();
 
 }
 

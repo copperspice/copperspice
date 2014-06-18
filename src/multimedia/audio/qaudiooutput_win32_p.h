@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,86 +45,86 @@ QT_BEGIN_NAMESPACE
 
 class QAudioOutputPrivate : public QAbstractAudioOutput
 {
-    CS_OBJECT(QAudioOutputPrivate)
-public:
-    QAudioOutputPrivate(const QByteArray &device, const QAudioFormat& audioFormat);
-    ~QAudioOutputPrivate();
+   CS_OBJECT(QAudioOutputPrivate)
+ public:
+   QAudioOutputPrivate(const QByteArray &device, const QAudioFormat &audioFormat);
+   ~QAudioOutputPrivate();
 
-    qint64 write( const char *data, qint64 len );
+   qint64 write( const char *data, qint64 len );
 
-    QAudioFormat format() const;
-    QIODevice* start(QIODevice* device = 0);
-    void stop();
-    void reset();
-    void suspend();
-    void resume();
-    int bytesFree() const;
-    int periodSize() const;
-    void setBufferSize(int value);
-    int bufferSize() const;
-    void setNotifyInterval(int milliSeconds);
-    int notifyInterval() const;
-    qint64 processedUSecs() const;
-    qint64 elapsedUSecs() const;
-    QAudio::Error error() const;
-    QAudio::State state() const;
+   QAudioFormat format() const;
+   QIODevice *start(QIODevice *device = 0);
+   void stop();
+   void reset();
+   void suspend();
+   void resume();
+   int bytesFree() const;
+   int periodSize() const;
+   void setBufferSize(int value);
+   int bufferSize() const;
+   void setNotifyInterval(int milliSeconds);
+   int notifyInterval() const;
+   qint64 processedUSecs() const;
+   qint64 elapsedUSecs() const;
+   QAudio::Error error() const;
+   QAudio::State state() const;
 
-    QIODevice* audioSource;
-    QAudioFormat settings;
-    QAudio::Error errorState;
-    QAudio::State deviceState;
+   QIODevice *audioSource;
+   QAudioFormat settings;
+   QAudio::Error errorState;
+   QAudio::State deviceState;
 
-private :
-    MULTI_CS_SLOT_1(Private, void feedback())
-    MULTI_CS_SLOT_2(feedback) 
-    MULTI_CS_SLOT_1(Private, bool deviceReady())
-    MULTI_CS_SLOT_2(deviceReady) 
+ private :
+   MULTI_CS_SLOT_1(Private, void feedback())
+   MULTI_CS_SLOT_2(feedback)
+   MULTI_CS_SLOT_1(Private, bool deviceReady())
+   MULTI_CS_SLOT_2(deviceReady)
 
-private:
-    QByteArray m_device;
-    bool resuming;
-    int bytesAvailable;
-    QTime timeStamp;
-    qint64 elapsedTimeOffset;
-    QTime timeStampOpened;
-    qint32 buffer_size;
-    qint32 period_size;
-    qint64 totalTimeValue;
-    bool pullMode;
-    int intervalTime;
-    static void QT_WIN_CALLBACK waveOutProc( HWAVEOUT hWaveOut, UINT uMsg,
-            DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2 );
+ private:
+   QByteArray m_device;
+   bool resuming;
+   int bytesAvailable;
+   QTime timeStamp;
+   qint64 elapsedTimeOffset;
+   QTime timeStampOpened;
+   qint32 buffer_size;
+   qint32 period_size;
+   qint64 totalTimeValue;
+   bool pullMode;
+   int intervalTime;
+   static void QT_WIN_CALLBACK waveOutProc( HWAVEOUT hWaveOut, UINT uMsg,
+         DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2 );
 
-    QMutex mutex;
+   QMutex mutex;
 
-    WAVEHDR* allocateBlocks(int size, int count);
-    void freeBlocks(WAVEHDR* blockArray);
-    bool open();
-    void close();
+   WAVEHDR *allocateBlocks(int size, int count);
+   void freeBlocks(WAVEHDR *blockArray);
+   bool open();
+   void close();
 
-    WAVEFORMATEX wfx;
-    HWAVEOUT hWaveOut;
-    MMRESULT result;
-    WAVEHDR header;
-    WAVEHDR* waveBlocks;
-    volatile bool finished;
-    volatile int waveFreeBlockCount;
-    int waveCurrentBlock;
-    char* audioBuffer;
+   WAVEFORMATEX wfx;
+   HWAVEOUT hWaveOut;
+   MMRESULT result;
+   WAVEHDR header;
+   WAVEHDR *waveBlocks;
+   volatile bool finished;
+   volatile int waveFreeBlockCount;
+   int waveCurrentBlock;
+   char *audioBuffer;
 };
 
 class OutputPrivate : public QIODevice
 {
-    CS_OBJECT(OutputPrivate)
-public:
-    OutputPrivate(QAudioOutputPrivate* audio);
-    ~OutputPrivate();
+   CS_OBJECT(OutputPrivate)
+ public:
+   OutputPrivate(QAudioOutputPrivate *audio);
+   ~OutputPrivate();
 
-    qint64 readData( char* data, qint64 len);
-    qint64 writeData(const char* data, qint64 len);
+   qint64 readData( char *data, qint64 len);
+   qint64 writeData(const char *data, qint64 len);
 
-private:
-    QAudioOutputPrivate *audioDevice;
+ private:
+   QAudioOutputPrivate *audioDevice;
 };
 
 QT_END_NAMESPACE

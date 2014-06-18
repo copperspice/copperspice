@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,39 +38,40 @@ uint qHash(const QPixmapCache::Key &k);
 
 class QPixmapCache::KeyData
 {
-public:
-    KeyData() : isValid(true), key(0), ref(1) {}
-    KeyData(const KeyData &other)
-     : isValid(other.isValid), key(other.key), ref(1) {}
-    ~KeyData() {}
+ public:
+   KeyData() : isValid(true), key(0), ref(1) {}
+   KeyData(const KeyData &other)
+      : isValid(other.isValid), key(other.key), ref(1) {}
+   ~KeyData() {}
 
-    bool isValid;
-    int key;
-    int ref;
+   bool isValid;
+   int key;
+   int ref;
 };
 
 // XXX: hw: is this a general concept we need to abstract?
 class QPixmapCacheEntry : public QPixmap
 {
-public:
-    QPixmapCacheEntry(const QPixmapCache::Key &key, const QPixmap &pix) : QPixmap(pix), key(key)
-    {
-        QPixmapData *pd = pixmapData();
-        if (pd && pd->classId() == QPixmapData::RasterClass) {
-            QRasterPixmapData *d = static_cast<QRasterPixmapData*>(pd);
-            if (!d->image.isNull() && d->image.d->paintEngine
-                && !d->image.d->paintEngine->isActive())
-            {
-                delete d->image.d->paintEngine;
-                d->image.d->paintEngine = 0;
-            }
-        }
-    }
-    ~QPixmapCacheEntry();
-    QPixmapCache::Key key;
+ public:
+   QPixmapCacheEntry(const QPixmapCache::Key &key, const QPixmap &pix) : QPixmap(pix), key(key) {
+      QPixmapData *pd = pixmapData();
+      if (pd && pd->classId() == QPixmapData::RasterClass) {
+         QRasterPixmapData *d = static_cast<QRasterPixmapData *>(pd);
+         if (!d->image.isNull() && d->image.d->paintEngine
+               && !d->image.d->paintEngine->isActive()) {
+            delete d->image.d->paintEngine;
+            d->image.d->paintEngine = 0;
+         }
+      }
+   }
+   ~QPixmapCacheEntry();
+   QPixmapCache::Key key;
 };
 
-inline bool qIsDetached(QPixmapCacheEntry &t) { return t.isDetached(); }
+inline bool qIsDetached(QPixmapCacheEntry &t)
+{
+   return t.isDetached();
+}
 
 QT_END_NAMESPACE
 

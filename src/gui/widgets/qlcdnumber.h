@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,114 +37,114 @@ class QLCDNumberPrivate;
 
 class Q_GUI_EXPORT QLCDNumber : public QFrame // LCD number widget
 {
-    CS_OBJECT(QLCDNumber)
+   CS_OBJECT(QLCDNumber)
 
-    GUI_CS_ENUM(Mode)
-    GUI_CS_ENUM(SegmentStyle)
+   GUI_CS_ENUM(Mode)
+   GUI_CS_ENUM(SegmentStyle)
 
-    GUI_CS_PROPERTY_READ(smallDecimalPoint, smallDecimalPoint)
-    GUI_CS_PROPERTY_WRITE(smallDecimalPoint, setSmallDecimalPoint)
+   GUI_CS_PROPERTY_READ(smallDecimalPoint, smallDecimalPoint)
+   GUI_CS_PROPERTY_WRITE(smallDecimalPoint, setSmallDecimalPoint)
 
-    GUI_CS_PROPERTY_READ(numDigits, numDigits)
-    GUI_CS_PROPERTY_WRITE(numDigits, setNumDigits)
+   GUI_CS_PROPERTY_READ(numDigits, numDigits)
+   GUI_CS_PROPERTY_WRITE(numDigits, setNumDigits)
 
-    GUI_CS_PROPERTY_READ(digitCount, digitCount)
-    GUI_CS_PROPERTY_WRITE(digitCount, setDigitCount)
+   GUI_CS_PROPERTY_READ(digitCount, digitCount)
+   GUI_CS_PROPERTY_WRITE(digitCount, setDigitCount)
 
-    GUI_CS_PROPERTY_READ(mode, mode)
-    GUI_CS_PROPERTY_WRITE(mode, setMode)
+   GUI_CS_PROPERTY_READ(mode, mode)
+   GUI_CS_PROPERTY_WRITE(mode, setMode)
 
-    GUI_CS_PROPERTY_READ(segmentStyle, segmentStyle)
-    GUI_CS_PROPERTY_WRITE(segmentStyle, setSegmentStyle)
+   GUI_CS_PROPERTY_READ(segmentStyle, segmentStyle)
+   GUI_CS_PROPERTY_WRITE(segmentStyle, setSegmentStyle)
 
-    GUI_CS_PROPERTY_READ(value, value)
-    GUI_CS_PROPERTY_WRITE(value, cs_displayD)
+   GUI_CS_PROPERTY_READ(value, value)
+   GUI_CS_PROPERTY_WRITE(value, cs_displayD)
 
-    GUI_CS_PROPERTY_READ(intValue, intValue)
-    GUI_CS_PROPERTY_WRITE(intValue, cs_displayI)
+   GUI_CS_PROPERTY_READ(intValue, intValue)
+   GUI_CS_PROPERTY_WRITE(intValue, cs_displayI)
 
-public:
-    explicit QLCDNumber(QWidget* parent = 0);
-    explicit QLCDNumber(uint numDigits, QWidget* parent = 0);
-    ~QLCDNumber();
+ public:
+   explicit QLCDNumber(QWidget *parent = 0);
+   explicit QLCDNumber(uint numDigits, QWidget *parent = 0);
+   ~QLCDNumber();
 
-    enum Mode { Hex, Dec, Oct, Bin };
+   enum Mode { Hex, Dec, Oct, Bin };
 
-    enum SegmentStyle { Outline, Filled, Flat  };
+   enum SegmentStyle { Outline, Filled, Flat  };
 
-    bool smallDecimalPoint() const;
+   bool smallDecimalPoint() const;
 
 #ifdef QT_DEPRECATED
-    QT_DEPRECATED int numDigits() const;
-    QT_DEPRECATED void setNumDigits(int nDigits);
+   QT_DEPRECATED int numDigits() const;
+   QT_DEPRECATED void setNumDigits(int nDigits);
 #endif
 
-    int digitCount() const;
-    void setDigitCount(int nDigits);
+   int digitCount() const;
+   void setDigitCount(int nDigits);
 
-    bool checkOverflow(double num) const;
-    bool checkOverflow(int num) const;
+   bool checkOverflow(double num) const;
+   bool checkOverflow(int num) const;
 
-    Mode mode() const;
-    void setMode(Mode);
+   Mode mode() const;
+   void setMode(Mode);
 
-    SegmentStyle segmentStyle() const;
-    void setSegmentStyle(SegmentStyle);
+   SegmentStyle segmentStyle() const;
+   void setSegmentStyle(SegmentStyle);
 
-    double value() const;
-    int intValue() const;
+   double value() const;
+   int intValue() const;
 
-    QSize sizeHint() const;
+   QSize sizeHint() const;
 
-    // wrapper for overloaded method
-    inline void cs_displayD(double num);
-     
-    // wrapper for overloaded method
-    inline void cs_displayI(int num);
-    
-    GUI_CS_SLOT_1(Public, void display(const QString & str))
-    GUI_CS_SLOT_OVERLOAD(display,(const QString &))
+   // wrapper for overloaded method
+   inline void cs_displayD(double num);
 
-    GUI_CS_SLOT_1(Public, void display(int num))
-    GUI_CS_SLOT_OVERLOAD(display,(int))
+   // wrapper for overloaded method
+   inline void cs_displayI(int num);
 
-    GUI_CS_SLOT_1(Public, void display(double num))
-    GUI_CS_SLOT_OVERLOAD(display,(double)) 
+   GUI_CS_SLOT_1(Public, void display(const QString &str))
+   GUI_CS_SLOT_OVERLOAD(display, (const QString &))
 
-    GUI_CS_SLOT_1(Public, void setHexMode())
-    GUI_CS_SLOT_2(setHexMode) 
+   GUI_CS_SLOT_1(Public, void display(int num))
+   GUI_CS_SLOT_OVERLOAD(display, (int))
 
-    GUI_CS_SLOT_1(Public, void setDecMode())
-    GUI_CS_SLOT_2(setDecMode) 
+   GUI_CS_SLOT_1(Public, void display(double num))
+   GUI_CS_SLOT_OVERLOAD(display, (double))
 
-    GUI_CS_SLOT_1(Public, void setOctMode())
-    GUI_CS_SLOT_2(setOctMode) 
+   GUI_CS_SLOT_1(Public, void setHexMode())
+   GUI_CS_SLOT_2(setHexMode)
 
-    GUI_CS_SLOT_1(Public, void setBinMode())
-    GUI_CS_SLOT_2(setBinMode) 
+   GUI_CS_SLOT_1(Public, void setDecMode())
+   GUI_CS_SLOT_2(setDecMode)
 
-    GUI_CS_SLOT_1(Public, void setSmallDecimalPoint(bool un_named_arg1))
-    GUI_CS_SLOT_2(setSmallDecimalPoint) 
+   GUI_CS_SLOT_1(Public, void setOctMode())
+   GUI_CS_SLOT_2(setOctMode)
 
-    GUI_CS_SIGNAL_1(Public, void overflow())
-    GUI_CS_SIGNAL_2(overflow) 
+   GUI_CS_SLOT_1(Public, void setBinMode())
+   GUI_CS_SLOT_2(setBinMode)
 
-protected:
-    bool event(QEvent *e);
-    void paintEvent(QPaintEvent *);
+   GUI_CS_SLOT_1(Public, void setSmallDecimalPoint(bool un_named_arg1))
+   GUI_CS_SLOT_2(setSmallDecimalPoint)
 
-private:
-    Q_DISABLE_COPY(QLCDNumber)
-    Q_DECLARE_PRIVATE(QLCDNumber)
+   GUI_CS_SIGNAL_1(Public, void overflow())
+   GUI_CS_SIGNAL_2(overflow)
+
+ protected:
+   bool event(QEvent *e);
+   void paintEvent(QPaintEvent *);
+
+ private:
+   Q_DISABLE_COPY(QLCDNumber)
+   Q_DECLARE_PRIVATE(QLCDNumber)
 };
 
 void QLCDNumber::cs_displayD(double num)
-{ 
+{
    display(num);
 }
 
 void QLCDNumber::cs_displayI(int num)
-{ 
+{
    display(num);
 }
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -64,37 +64,37 @@ QT_BEGIN_NAMESPACE
 
 class QSslSocketBackendPrivate : public QSslSocketPrivate
 {
-    Q_DECLARE_PUBLIC(QSslSocket)
-public:
-    QSslSocketBackendPrivate();
-    virtual ~QSslSocketBackendPrivate();
+   Q_DECLARE_PUBLIC(QSslSocket)
+ public:
+   QSslSocketBackendPrivate();
+   virtual ~QSslSocketBackendPrivate();
 
-    // SSL context
-    bool initSslContext();
-    void destroySslContext();
-    SSL *ssl;
-    SSL_CTX *ctx;
-    EVP_PKEY *pkey;
-    BIO *readBio;
-    BIO *writeBio;
-    SSL_SESSION *session;
-    X509_STORE *certificateStore;
-    X509_STORE_CTX *certificateStoreCtx;
-    QList<QPair<int, int> > errorList;
+   // SSL context
+   bool initSslContext();
+   void destroySslContext();
+   SSL *ssl;
+   SSL_CTX *ctx;
+   EVP_PKEY *pkey;
+   BIO *readBio;
+   BIO *writeBio;
+   SSL_SESSION *session;
+   X509_STORE *certificateStore;
+   X509_STORE_CTX *certificateStoreCtx;
+   QList<QPair<int, int> > errorList;
 
-    // Platform specific functions
-    void startClientEncryption();
-    void startServerEncryption();
-    void transmit();
-    bool startHandshake();
-    void disconnectFromHost();
-    void disconnected();
-    QSslCipher sessionCipher() const;
+   // Platform specific functions
+   void startClientEncryption();
+   void startServerEncryption();
+   void transmit();
+   bool startHandshake();
+   void disconnectFromHost();
+   void disconnected();
+   QSslCipher sessionCipher() const;
 
-    static QSslCipher QSslCipher_from_SSL_CIPHER(SSL_CIPHER *cipher);
-    static QList<QSslCertificate> STACKOFX509_to_QSslCertificates(STACK_OF(X509) *x509);
-    static bool isMatchingHostname(const QString &cn, const QString &hostname);
-    static QString getErrorsFromOpenSsl();
+   static QSslCipher QSslCipher_from_SSL_CIPHER(SSL_CIPHER *cipher);
+   static QList<QSslCertificate> STACKOFX509_to_QSslCertificates(STACK_OF(X509) *x509);
+   static bool isMatchingHostname(const QString &cn, const QString &hostname);
+   static QString getErrorsFromOpenSsl();
 };
 
 QT_END_NAMESPACE

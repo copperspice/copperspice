@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -205,34 +205,34 @@ QT_BEGIN_NAMESPACE
 */
 int QDecoration::regionAt(const QWidget *w, const QPoint &point)
 {
-    int regions[] = {
-        TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight, // Borders first
-        Menu, Title, Help, Minimize, Normalize, Maximize, Close,                         // then buttons
-        None
-    };
+   int regions[] = {
+      TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight, // Borders first
+      Menu, Title, Help, Minimize, Normalize, Maximize, Close,                         // then buttons
+      None
+   };
 
-//     char *regions_str[] = {
-//         "TopLeft", "Top", "TopRight", "Left", "Right", "BottomLeft", "Bottom", "BottomRight",
-//         "Menu", "Title", "Help", "Minimize", "Normalize", "Maximize", "Close",
-//         "None"
-//     };
+   //     char *regions_str[] = {
+   //         "TopLeft", "Top", "TopRight", "Left", "Right", "BottomLeft", "Bottom", "BottomRight",
+   //         "Menu", "Title", "Help", "Minimize", "Normalize", "Maximize", "Close",
+   //         "None"
+   //     };
 
-    // First check to see if within all regions at all
-    QRegion reg = region(w, w->geometry(), All);
-    if (!reg.contains(point)) {
-        return None;
-    }
+   // First check to see if within all regions at all
+   QRegion reg = region(w, w->geometry(), All);
+   if (!reg.contains(point)) {
+      return None;
+   }
 
-    int i = 0;
-    while (regions[i]) {
-        reg = region(w, w->geometry(), regions[i]);
-        if (reg.contains(point)) {
-//            qDebug("In region %s", regions_str[i]);
-            return regions[i];
-        }
-        ++i;
-    }
-    return None;
+   int i = 0;
+   while (regions[i]) {
+      reg = region(w, w->geometry(), regions[i]);
+      if (reg.contains(point)) {
+         //            qDebug("In region %s", regions_str[i]);
+         return regions[i];
+      }
+      ++i;
+   }
+   return None;
 }
 
 #ifndef QT_NO_MENU
@@ -245,21 +245,21 @@ int QDecoration::regionAt(const QWidget *w, const QPoint &point)
 */
 void QDecoration::buildSysMenu(QWidget *widget, QMenu *menu)
 {
-    QDecorationAction *act = new QDecorationAction(QLatin1String("Restore"),
-                                                   menu, Maximize);
-    act->setEnabled(widget->windowState() & Qt::WindowMaximized);
-    menu->addAction(act);
-    act = new QDecorationAction(QLatin1String("Move"), menu, Move);
-    act->setEnabled(!(widget->windowState() & Qt::WindowMaximized));
-    menu->addAction(act);
-    menu->addAction(new QDecorationAction(QLatin1String("Size"), menu, Resize));
-    act = new QDecorationAction(QLatin1String("Minimize"), menu, Minimize);
-    menu->addAction(act);
-    act = new QDecorationAction(QLatin1String("Maximize"), menu, Maximize);
-    act->setDisabled(widget->windowState() & Qt::WindowMaximized);
-    menu->addAction(act);
-    menu->addSeparator();
-    menu->addAction(new QDecorationAction(QLatin1String("Close"), menu, Close));
+   QDecorationAction *act = new QDecorationAction(QLatin1String("Restore"),
+         menu, Maximize);
+   act->setEnabled(widget->windowState() & Qt::WindowMaximized);
+   menu->addAction(act);
+   act = new QDecorationAction(QLatin1String("Move"), menu, Move);
+   act->setEnabled(!(widget->windowState() & Qt::WindowMaximized));
+   menu->addAction(act);
+   menu->addAction(new QDecorationAction(QLatin1String("Size"), menu, Resize));
+   act = new QDecorationAction(QLatin1String("Minimize"), menu, Minimize);
+   menu->addAction(act);
+   act = new QDecorationAction(QLatin1String("Maximize"), menu, Maximize);
+   act->setDisabled(widget->windowState() & Qt::WindowMaximized);
+   menu->addAction(act);
+   menu->addSeparator();
+   menu->addAction(new QDecorationAction(QLatin1String("Close"), menu, Close));
 }
 
 /*!
@@ -271,8 +271,8 @@ void QDecoration::buildSysMenu(QWidget *widget, QMenu *menu)
 */
 void QDecoration::menuTriggered(QWidget *widget, QAction *action)
 {
-    QDecorationAction *decAction = static_cast<QDecorationAction *>(action);
-    regionClicked(widget, decAction->reg);
+   QDecorationAction *decAction = static_cast<QDecorationAction *>(action);
+   regionClicked(widget, decAction->reg);
 }
 #endif // QT_NO_MENU
 
@@ -291,34 +291,36 @@ void QDecoration::menuTriggered(QWidget *widget, QAction *action)
 */
 void QDecoration::regionClicked(QWidget *widget, int reg)
 {
-    switch(reg) {
-    case Move:
-        startMove(widget);
-        break;
-    case Resize:
-        startResize(widget);
-        break;
-    case Help:
+   switch (reg) {
+      case Move:
+         startMove(widget);
+         break;
+      case Resize:
+         startResize(widget);
+         break;
+      case Help:
 #ifndef QT_NO_WHATSTHIS
-        if (QWhatsThis::inWhatsThisMode())
+         if (QWhatsThis::inWhatsThisMode()) {
             QWhatsThis::leaveWhatsThisMode();
-        else
+         } else {
             QWhatsThis::enterWhatsThisMode();
+         }
 #endif
-        break;
-    case Close:
-        widget->close();
-        break;
-    case Normalize:
-        widget->showNormal();
-        break;
-    case Maximize:
-        if (widget->windowState() & Qt::WindowMaximized)
+         break;
+      case Close:
+         widget->close();
+         break;
+      case Normalize:
+         widget->showNormal();
+         break;
+      case Maximize:
+         if (widget->windowState() & Qt::WindowMaximized) {
             widget->showNormal();
-        else
+         } else {
             widget->showMaximized();
-        break;
-    }
+         }
+         break;
+   }
 }
 
 /*!
@@ -337,16 +339,16 @@ void QDecoration::regionClicked(QWidget *widget, int reg)
 */
 void QDecoration::regionDoubleClicked(QWidget *widget, int reg)
 {
-    switch(reg)
-    {
-        case Title: {
-            if (widget->windowState() & Qt::WindowMaximized)
-                widget->showNormal();
-            else
-                widget->showMaximized();
-            break;
-        }
-    }
+   switch (reg) {
+      case Title: {
+         if (widget->windowState() & Qt::WindowMaximized) {
+            widget->showNormal();
+         } else {
+            widget->showMaximized();
+         }
+         break;
+      }
+   }
 }
 
 /*!
@@ -358,11 +360,12 @@ void QDecoration::regionDoubleClicked(QWidget *widget, int reg)
 void QDecoration::startMove(QWidget *widget)
 {
 #ifdef QT_NO_QWS_MANAGER
-    Q_UNUSED(widget);
+   Q_UNUSED(widget);
 #else
-    QWSManager *manager = widget->d_func()->topData()->qwsManager;
-    if (manager)
-        manager->startMove();
+   QWSManager *manager = widget->d_func()->topData()->qwsManager;
+   if (manager) {
+      manager->startMove();
+   }
 #endif
 }
 
@@ -375,11 +378,12 @@ void QDecoration::startMove(QWidget *widget)
 void QDecoration::startResize(QWidget *widget)
 {
 #ifdef QT_NO_QWS_MANAGER
-    Q_UNUSED(widget);
+   Q_UNUSED(widget);
 #else
-    QWSManager *manager = widget->d_func()->topData()->qwsManager;
-    if (manager)
-        manager->startResize();
+   QWSManager *manager = widget->d_func()->topData()->qwsManager;
+   if (manager) {
+      manager->startResize();
+   }
 #endif
 }
 

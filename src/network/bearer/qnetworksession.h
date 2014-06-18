@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -54,96 +54,96 @@ class QNetworkSessionPrivate;
 
 class QNetworkSessionExport QNetworkSession : public QObject
 {
-    CS_OBJECT(QNetworkSession)
+   CS_OBJECT(QNetworkSession)
 
-public:
-    enum State {
-        Invalid = 0,
-        NotAvailable,
-        Connecting,
-        Connected,
-        Closing,
-        Disconnected,
-        Roaming
-    };
+ public:
+   enum State {
+      Invalid = 0,
+      NotAvailable,
+      Connecting,
+      Connected,
+      Closing,
+      Disconnected,
+      Roaming
+   };
 
-    enum SessionError {
-        UnknownSessionError = 0,
-        SessionAbortedError,
-        RoamingError,
-        OperationNotSupportedError,
-        InvalidConfigurationError
-    };
+   enum SessionError {
+      UnknownSessionError = 0,
+      SessionAbortedError,
+      RoamingError,
+      OperationNotSupportedError,
+      InvalidConfigurationError
+   };
 
-    explicit QNetworkSession(const QNetworkConfiguration &connConfig, QObject *parent = 0);
-    virtual ~QNetworkSession();
+   explicit QNetworkSession(const QNetworkConfiguration &connConfig, QObject *parent = 0);
+   virtual ~QNetworkSession();
 
-    bool isOpen() const;
-    QNetworkConfiguration configuration() const;
+   bool isOpen() const;
+   QNetworkConfiguration configuration() const;
 
 #ifndef QT_NO_NETWORKINTERFACE
-    QNetworkInterface interface() const;
+   QNetworkInterface interface() const;
 #endif
 
-    State state() const;
-    SessionError error() const;
-    QString errorString() const;
-    QVariant sessionProperty(const QString &key) const;
-    void setSessionProperty(const QString &key, const QVariant &value);
+   State state() const;
+   SessionError error() const;
+   QString errorString() const;
+   QVariant sessionProperty(const QString &key) const;
+   void setSessionProperty(const QString &key, const QVariant &value);
 
-    quint64 bytesWritten() const;
-    quint64 bytesReceived() const;
-    quint64 activeTime() const;
-    
-    bool waitForOpened(int msecs = 30000);
+   quint64 bytesWritten() const;
+   quint64 bytesReceived() const;
+   quint64 activeTime() const;
 
-    NET_CS_SLOT_1(Public, void open())
-    NET_CS_SLOT_2(open) 
+   bool waitForOpened(int msecs = 30000);
 
-    NET_CS_SLOT_1(Public, void close())
-    NET_CS_SLOT_2(close) 
+   NET_CS_SLOT_1(Public, void open())
+   NET_CS_SLOT_2(open)
 
-    NET_CS_SLOT_1(Public, void stop())
-    NET_CS_SLOT_2(stop) 
+   NET_CS_SLOT_1(Public, void close())
+   NET_CS_SLOT_2(close)
 
-    //roaming related slots
-    NET_CS_SLOT_1(Public, void migrate())
-    NET_CS_SLOT_2(migrate) 
+   NET_CS_SLOT_1(Public, void stop())
+   NET_CS_SLOT_2(stop)
 
-    NET_CS_SLOT_1(Public, void ignore())
-    NET_CS_SLOT_2(ignore) 
+   //roaming related slots
+   NET_CS_SLOT_1(Public, void migrate())
+   NET_CS_SLOT_2(migrate)
 
-    NET_CS_SLOT_1(Public, void accept())
-    NET_CS_SLOT_2(accept) 
+   NET_CS_SLOT_1(Public, void ignore())
+   NET_CS_SLOT_2(ignore)
 
-    NET_CS_SLOT_1(Public, void reject())
-    NET_CS_SLOT_2(reject) 
+   NET_CS_SLOT_1(Public, void accept())
+   NET_CS_SLOT_2(accept)
 
-    NET_CS_SIGNAL_1(Public, void stateChanged(QNetworkSession::State un_named_arg1))
-    NET_CS_SIGNAL_2(stateChanged,un_named_arg1) 
+   NET_CS_SLOT_1(Public, void reject())
+   NET_CS_SLOT_2(reject)
 
-    NET_CS_SIGNAL_1(Public, void opened())
-    NET_CS_SIGNAL_2(opened) 
+   NET_CS_SIGNAL_1(Public, void stateChanged(QNetworkSession::State un_named_arg1))
+   NET_CS_SIGNAL_2(stateChanged, un_named_arg1)
 
-    NET_CS_SIGNAL_1(Public, void closed())
-    NET_CS_SIGNAL_2(closed) 
+   NET_CS_SIGNAL_1(Public, void opened())
+   NET_CS_SIGNAL_2(opened)
 
-    NET_CS_SIGNAL_1(Public, void error(QNetworkSession::SessionError un_named_arg1))
-    NET_CS_SIGNAL_OVERLOAD(error,(QNetworkSession::SessionError),un_named_arg1) 
+   NET_CS_SIGNAL_1(Public, void closed())
+   NET_CS_SIGNAL_2(closed)
 
-    NET_CS_SIGNAL_1(Public, void preferredConfigurationChanged(const QNetworkConfiguration & config,bool isSeamless))
-    NET_CS_SIGNAL_2(preferredConfigurationChanged,config,isSeamless) 
+   NET_CS_SIGNAL_1(Public, void error(QNetworkSession::SessionError un_named_arg1))
+   NET_CS_SIGNAL_OVERLOAD(error, (QNetworkSession::SessionError), un_named_arg1)
 
-    NET_CS_SIGNAL_1(Public, void newConfigurationActivated())
-    NET_CS_SIGNAL_2(newConfigurationActivated) 
+   NET_CS_SIGNAL_1(Public, void preferredConfigurationChanged(const QNetworkConfiguration &config, bool isSeamless))
+   NET_CS_SIGNAL_2(preferredConfigurationChanged, config, isSeamless)
 
-protected:
-    virtual void connectNotify(const char *signal);
-    virtual void disconnectNotify(const char *signal);
+   NET_CS_SIGNAL_1(Public, void newConfigurationActivated())
+   NET_CS_SIGNAL_2(newConfigurationActivated)
 
-private:
-    friend class QNetworkSessionPrivate;
-    QNetworkSessionPrivate *d;
+ protected:
+   virtual void connectNotify(const char *signal);
+   virtual void disconnectNotify(const char *signal);
+
+ private:
+   friend class QNetworkSessionPrivate;
+   QNetworkSessionPrivate *d;
 };
 
 #ifndef QT_MOBILITY_BEARER

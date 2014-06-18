@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,20 +34,19 @@ QT_BEGIN_NAMESPACE
 
 class QWidget;
 
-struct QEffects
-{
-    enum Direction {
-        LeftScroll  = 0x0001,
-        RightScroll = 0x0002,
-        UpScroll    = 0x0004,
-        DownScroll  = 0x0008
-    };
+struct QEffects {
+   enum Direction {
+      LeftScroll  = 0x0001,
+      RightScroll = 0x0002,
+      UpScroll    = 0x0004,
+      DownScroll  = 0x0008
+   };
 
-    typedef uint DirFlags;
+   typedef uint DirFlags;
 };
 
-extern void Q_GUI_EXPORT qScrollEffect(QWidget*, QEffects::DirFlags dir = QEffects::DownScroll, int time = -1);
-extern void Q_GUI_EXPORT qFadeEffect(QWidget*, int time = -1);
+extern void Q_GUI_EXPORT qScrollEffect(QWidget *, QEffects::DirFlags dir = QEffects::DownScroll, int time = -1);
+extern void Q_GUI_EXPORT qFadeEffect(QWidget *, int time = -1);
 
 QT_END_NAMESPACE
 

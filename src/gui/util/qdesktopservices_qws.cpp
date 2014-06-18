@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,53 +30,57 @@ QT_BEGIN_NAMESPACE
 
 static bool launchWebBrowser(const QUrl &url)
 {
-    Q_UNUSED(url);
-    qWarning("QDesktopServices::launchWebBrowser not implemented");
-    return false;
+   Q_UNUSED(url);
+   qWarning("QDesktopServices::launchWebBrowser not implemented");
+   return false;
 }
 
 static bool openDocument(const QUrl &file)
 {
-    Q_UNUSED(file);
-    qWarning("QDesktopServices::openDocument not implemented");
-    return false;
+   Q_UNUSED(file);
+   qWarning("QDesktopServices::openDocument not implemented");
+   return false;
 }
 
 
 QString QDesktopServices::storageLocation(StandardLocation type)
 {
-    if (type == QDesktopServices::HomeLocation)
-        return QDir::homePath();
-    if (type == QDesktopServices::TempLocation)
-        return QDir::tempPath();
+   if (type == QDesktopServices::HomeLocation) {
+      return QDir::homePath();
+   }
+   if (type == QDesktopServices::TempLocation) {
+      return QDir::tempPath();
+   }
 
-    if (type == DataLocation) {
-        QString qwsDataHome = QLatin1String(qgetenv("QWS_DATA_HOME"));
-        if (qwsDataHome.isEmpty())
-            qwsDataHome = QDir::homePath() + QLatin1String("/.qws/share");
-        qwsDataHome += QLatin1String("/data/")
-                    + QCoreApplication::organizationName() + QLatin1Char('/')
-                    + QCoreApplication::applicationName();
-        return qwsDataHome;
-    }
-    if (type == QDesktopServices::CacheLocation) {
-        QString qwsCacheHome = QLatin1String(qgetenv("QWS_CACHE_HOME"));
-        if (qwsCacheHome.isEmpty())
-            qwsCacheHome = QDir::homePath() + QLatin1String("/.qws/cache/");
-        qwsCacheHome += QCoreApplication::organizationName() +  QLatin1Char('/')
-                    + QCoreApplication::applicationName();
-        return qwsCacheHome;
-    }
+   if (type == DataLocation) {
+      QString qwsDataHome = QLatin1String(qgetenv("QWS_DATA_HOME"));
+      if (qwsDataHome.isEmpty()) {
+         qwsDataHome = QDir::homePath() + QLatin1String("/.qws/share");
+      }
+      qwsDataHome += QLatin1String("/data/")
+                     + QCoreApplication::organizationName() + QLatin1Char('/')
+                     + QCoreApplication::applicationName();
+      return qwsDataHome;
+   }
+   if (type == QDesktopServices::CacheLocation) {
+      QString qwsCacheHome = QLatin1String(qgetenv("QWS_CACHE_HOME"));
+      if (qwsCacheHome.isEmpty()) {
+         qwsCacheHome = QDir::homePath() + QLatin1String("/.qws/cache/");
+      }
+      qwsCacheHome += QCoreApplication::organizationName() +  QLatin1Char('/')
+                      + QCoreApplication::applicationName();
+      return qwsCacheHome;
+   }
 
-    qWarning("QDesktopServices::storageLocation %d not implemented", type);
-    return QString();
+   qWarning("QDesktopServices::storageLocation %d not implemented", type);
+   return QString();
 }
 
 QString QDesktopServices::displayName(StandardLocation type)
 {
-    Q_UNUSED(type);
-    qWarning("QDesktopServices::displayName not implemented");
-    return QString();
+   Q_UNUSED(type);
+   qWarning("QDesktopServices::displayName not implemented");
+   return QString();
 }
 
 QT_END_NAMESPACE

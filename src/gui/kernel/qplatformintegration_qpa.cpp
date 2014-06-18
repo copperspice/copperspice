@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,12 +32,12 @@ QT_BEGIN_NAMESPACE
 
 QPixmap QPlatformIntegration::grabWindow(WId window, int x, int y, int width, int height) const
 {
-    Q_UNUSED(window);
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-    Q_UNUSED(width);
-    Q_UNUSED(height);
-    return QPixmap();
+   Q_UNUSED(window);
+   Q_UNUSED(x);
+   Q_UNUSED(y);
+   Q_UNUSED(width);
+   Q_UNUSED(height);
+   return QPixmap();
 }
 
 /*!
@@ -49,7 +49,7 @@ QPixmap QPlatformIntegration::grabWindow(WId window, int x, int y, int width, in
 */
 QPlatformEventLoopIntegration *QPlatformIntegration::createEventLoopIntegration() const
 {
-    return 0;
+   return 0;
 }
 
 /*!
@@ -61,11 +61,11 @@ QPlatformEventLoopIntegration *QPlatformIntegration::createEventLoopIntegration(
 */
 QPlatformFontDatabase *QPlatformIntegration::fontDatabase() const
 {
-    static QPlatformFontDatabase *db = 0;
-    if (!db) {
-        db = new QPlatformFontDatabase;
-    }
-    return db;
+   static QPlatformFontDatabase *db = 0;
+   if (!db) {
+      db = new QPlatformFontDatabase;
+   }
+   return db;
 }
 
 /*!
@@ -81,18 +81,18 @@ QPlatformFontDatabase *QPlatformIntegration::fontDatabase() const
 
 QPlatformClipboard *QPlatformIntegration::clipboard() const
 {
-    static QPlatformClipboard *clipboard = 0;
-    if (!clipboard) {
-        clipboard = new QPlatformClipboard;
-    }
-    return clipboard;
+   static QPlatformClipboard *clipboard = 0;
+   if (!clipboard) {
+      clipboard = new QPlatformClipboard;
+   }
+   return clipboard;
 }
 
 #endif
 
-QPlatformNativeInterface * QPlatformIntegration::nativeInterface() const
+QPlatformNativeInterface *QPlatformIntegration::nativeInterface() const
 {
-    return 0;
+   return 0;
 }
 
 /*!
@@ -198,8 +198,8 @@ QPlatformNativeInterface * QPlatformIntegration::nativeInterface() const
 
 bool QPlatformIntegration::hasCapability(Capability cap) const
 {
-    Q_UNUSED(cap);
-    return false;
+   Q_UNUSED(cap);
+   return false;
 }
 
 

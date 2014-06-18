@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,32 +36,32 @@ class QKeyEventTransitionPrivate;
 
 class Q_GUI_EXPORT QKeyEventTransition : public QEventTransition
 {
-    CS_OBJECT(QKeyEventTransition)
+   CS_OBJECT(QKeyEventTransition)
 
-    GUI_CS_PROPERTY_READ(key, key)
-    GUI_CS_PROPERTY_WRITE(key, setKey)
-    GUI_CS_PROPERTY_READ(modifierMask, modifierMask)
-    GUI_CS_PROPERTY_WRITE(modifierMask, setModifierMask)
+   GUI_CS_PROPERTY_READ(key, key)
+   GUI_CS_PROPERTY_WRITE(key, setKey)
+   GUI_CS_PROPERTY_READ(modifierMask, modifierMask)
+   GUI_CS_PROPERTY_WRITE(modifierMask, setModifierMask)
 
-public:
-    QKeyEventTransition(QState *sourceState = 0);
-    QKeyEventTransition(QObject *object, QEvent::Type type, int key,
-                        QState *sourceState = 0);
-    ~QKeyEventTransition();
+ public:
+   QKeyEventTransition(QState *sourceState = 0);
+   QKeyEventTransition(QObject *object, QEvent::Type type, int key,
+                       QState *sourceState = 0);
+   ~QKeyEventTransition();
 
-    int key() const;
-    void setKey(int key);
+   int key() const;
+   void setKey(int key);
 
-    Qt::KeyboardModifiers modifierMask() const;
-    void setModifierMask(Qt::KeyboardModifiers modifiers);
+   Qt::KeyboardModifiers modifierMask() const;
+   void setModifierMask(Qt::KeyboardModifiers modifiers);
 
-protected:
-    void onTransition(QEvent *event);
-    bool eventTest(QEvent *event);
+ protected:
+   void onTransition(QEvent *event);
+   bool eventTest(QEvent *event);
 
-private:
-    Q_DISABLE_COPY(QKeyEventTransition)
-    Q_DECLARE_PRIVATE(QKeyEventTransition)
+ private:
+   Q_DISABLE_COPY(QKeyEventTransition)
+   Q_DECLARE_PRIVATE(QKeyEventTransition)
 };
 
 #endif //QT_NO_STATEMACHINE

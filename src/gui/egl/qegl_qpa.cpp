@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,18 +38,18 @@ QT_BEGIN_NAMESPACE
 
 EGLNativeDisplayType QEgl::nativeDisplay()
 {
-    return EGLNativeDisplayType(EGL_DEFAULT_DISPLAY);
+   return EGLNativeDisplayType(EGL_DEFAULT_DISPLAY);
 }
 
-EGLNativeWindowType QEgl::nativeWindow(QWidget* widget)
+EGLNativeWindowType QEgl::nativeWindow(QWidget *widget)
 {
-    return (EGLNativeWindowType)(widget->winId());
+   return (EGLNativeWindowType)(widget->winId());
 }
 
-EGLNativePixmapType QEgl::nativePixmap(QPixmap* pixmap)
+EGLNativePixmapType QEgl::nativePixmap(QPixmap *pixmap)
 {
-    Q_UNUSED(pixmap);
-    return 0;
+   Q_UNUSED(pixmap);
+   return 0;
 }
 
 //EGLDisplay QEglContext::display()
@@ -59,35 +59,40 @@ EGLNativePixmapType QEgl::nativePixmap(QPixmap* pixmap)
 
 static QPlatformScreen *screenForDevice(QPaintDevice *device)
 {
-    QPlatformIntegration *pi = QApplicationPrivate::platformIntegration();
+   QPlatformIntegration *pi = QApplicationPrivate::platformIntegration();
 
-    QList<QPlatformScreen *> screens = pi->screens();
+   QList<QPlatformScreen *> screens = pi->screens();
 
-    int screenNumber;
-    if (device && device->devType() == QInternal::Widget)
-        screenNumber = qApp->desktop()->screenNumber(static_cast<QWidget *>(device));
-    else
-        screenNumber = 0;
-    if (screenNumber < 0 || screenNumber >= screens.size())
-        return 0;
-    return screens[screenNumber];
+   int screenNumber;
+   if (device && device->devType() == QInternal::Widget) {
+      screenNumber = qApp->desktop()->screenNumber(static_cast<QWidget *>(device));
+   } else {
+      screenNumber = 0;
+   }
+   if (screenNumber < 0 || screenNumber >= screens.size()) {
+      return 0;
+   }
+   return screens[screenNumber];
 }
 
 // Set pixel format and other properties based on a paint device.
 void QEglProperties::setPaintDeviceFormat(QPaintDevice *dev)
 {
-    if (!dev)
-        return;
+   if (!dev) {
+      return;
+   }
 
-    // Find the QGLScreen for this paint device.
-    QPlatformScreen *screen = screenForDevice(dev);
-    if (!screen)
-        return;
-    int devType = dev->devType();
-    if (devType == QInternal::Image)
-        setPixelFormat(static_cast<QImage *>(dev)->format());
-    else
-        setPixelFormat(screen->format());
+   // Find the QGLScreen for this paint device.
+   QPlatformScreen *screen = screenForDevice(dev);
+   if (!screen) {
+      return;
+   }
+   int devType = dev->devType();
+   if (devType == QInternal::Image) {
+      setPixelFormat(static_cast<QImage *>(dev)->format());
+   } else {
+      setPixelFormat(screen->format());
+   }
 }
 
 QT_END_NAMESPACE

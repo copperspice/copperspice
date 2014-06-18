@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,49 +41,49 @@ class QItemEditorFactory;
 
 class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
 {
-    CS_OBJECT(QStyledItemDelegate)
+   CS_OBJECT(QStyledItemDelegate)
 
-public:
-    explicit QStyledItemDelegate(QObject *parent = 0);
-    ~QStyledItemDelegate();
+ public:
+   explicit QStyledItemDelegate(QObject *parent = 0);
+   ~QStyledItemDelegate();
 
-    // painting
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   // painting
+   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    // editing
-    QWidget *createEditor(QWidget *parent,const QStyleOptionViewItem &option,const QModelIndex &index) const;
+   // editing
+   QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    void setModelData(QWidget *editor,
-                      QAbstractItemModel *model,
-                      const QModelIndex &index) const;
+   void setEditorData(QWidget *editor, const QModelIndex &index) const;
+   void setModelData(QWidget *editor,
+                     QAbstractItemModel *model,
+                     const QModelIndex &index) const;
 
-    void updateEditorGeometry(QWidget *editor,const QStyleOptionViewItem &option,const QModelIndex &index) const;
+   void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    // editor factory
-    QItemEditorFactory *itemEditorFactory() const;
-    void setItemEditorFactory(QItemEditorFactory *factory);
+   // editor factory
+   QItemEditorFactory *itemEditorFactory() const;
+   void setItemEditorFactory(QItemEditorFactory *factory);
 
-    virtual QString displayText(const QVariant &value, const QLocale &locale) const;
+   virtual QString displayText(const QVariant &value, const QLocale &locale) const;
 
-protected:
-    virtual void initStyleOption(QStyleOptionViewItem *option,
+ protected:
+   virtual void initStyleOption(QStyleOptionViewItem *option,
                                 const QModelIndex &index) const;
 
-    bool eventFilter(QObject *object, QEvent *event);
-    bool editorEvent(QEvent *event, QAbstractItemModel *model,
-                     const QStyleOptionViewItem &option, const QModelIndex &index);
+   bool eventFilter(QObject *object, QEvent *event);
+   bool editorEvent(QEvent *event, QAbstractItemModel *model,
+                    const QStyleOptionViewItem &option, const QModelIndex &index);
 
-private:
-    Q_DECLARE_PRIVATE(QStyledItemDelegate)
-    Q_DISABLE_COPY(QStyledItemDelegate)
+ private:
+   Q_DECLARE_PRIVATE(QStyledItemDelegate)
+   Q_DISABLE_COPY(QStyledItemDelegate)
 
-    GUI_CS_SLOT_1(Private, void _q_commitDataAndCloseEditor(QWidget * un_named_arg1))
-    GUI_CS_SLOT_2(_q_commitDataAndCloseEditor)
+   GUI_CS_SLOT_1(Private, void _q_commitDataAndCloseEditor(QWidget *un_named_arg1))
+   GUI_CS_SLOT_2(_q_commitDataAndCloseEditor)
 
-protected:
-	 QScopedPointer<QStyledItemDelegatePrivate> d_ptr;
+ protected:
+   QScopedPointer<QStyledItemDelegatePrivate> d_ptr;
 
 };
 

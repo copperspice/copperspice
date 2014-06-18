@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -48,11 +48,10 @@ extern "C" {
 
 #ifdef QT_LINUXBASE
 // LSB doesn't declare ucred
-struct ucred
-{
-    pid_t pid;                    /* PID of sending process.  */
-    uid_t uid;                    /* UID of sending process.  */
-    gid_t gid;                    /* GID of sending process.  */
+struct ucred {
+   pid_t pid;                    /* PID of sending process.  */
+   uid_t uid;                    /* UID of sending process.  */
+   gid_t gid;                    /* GID of sending process.  */
 };
 
 // LSB doesn't define the ones below
@@ -110,22 +109,21 @@ QT_BEGIN_NAMESPACE
 
   \sa QUnixSocket
  */
-struct QUnixSocketRightsPrivate : public QSharedData
-{
-    virtual ~QUnixSocketRightsPrivate() {
+struct QUnixSocketRightsPrivate : public QSharedData {
+   virtual ~QUnixSocketRightsPrivate() {
 #ifdef QUNIXSOCKET_DEBUG
-        int closerv =
+      int closerv =
 #endif
-            QT_CLOSE(fd);
+         QT_CLOSE(fd);
 #ifdef QUNIXSOCKET_DEBUG
-        if(0 != closerv) {
-            qDebug() << "QUnixSocketRightsPrivate: Unable to close managed"
-                        " file descriptor (" << ::strerror(errno) << ')';
-        }
+      if (0 != closerv) {
+         qDebug() << "QUnixSocketRightsPrivate: Unable to close managed"
+                  " file descriptor (" << ::strerror(errno) << ')';
+      }
 #endif
-    }
+   }
 
-    int fd;
+   int fd;
 };
 
 /*!
@@ -143,18 +141,18 @@ struct QUnixSocketRightsPrivate : public QSharedData
   */
 QUnixSocketRights::QUnixSocketRights(int fd)
 {
-    d = new QUnixSocketRightsPrivate();
-    if(-1 == fd) {
-        d->fd = -1;
-    } else {
-        d->fd = qt_safe_dup(fd);
+   d = new QUnixSocketRightsPrivate();
+   if (-1 == fd) {
+      d->fd = -1;
+   } else {
+      d->fd = qt_safe_dup(fd);
 #ifdef QUNIXSOCKET_DEBUG
-        if(-1 == d->fd) {
-            qDebug() << "QUnixSocketRights: Unable to duplicate fd "
-                     << fd << " (" << ::strerror(errno) << ')';
-        }
+      if (-1 == d->fd) {
+         qDebug() << "QUnixSocketRights: Unable to duplicate fd "
+                  << fd << " (" << ::strerror(errno) << ')';
+      }
 #endif
-    }
+   }
 }
 
 /*!
@@ -163,11 +161,11 @@ QUnixSocketRights::QUnixSocketRights(int fd)
   Construct a QUnixSocketRights instance on \a fd without dup(2)'ing the file
   descriptor.
   */
-QUnixSocketRights::QUnixSocketRights(int fd,int)
+QUnixSocketRights::QUnixSocketRights(int fd, int)
 {
-    Q_ASSERT(-1 != fd);
-    d = new QUnixSocketRightsPrivate();
-    d->fd = fd;
+   Q_ASSERT(-1 != fd);
+   d = new QUnixSocketRightsPrivate();
+   d->fd = fd;
 }
 
 /*!
@@ -181,17 +179,17 @@ QUnixSocketRights::~QUnixSocketRights()
   Create a copy of \a other.
   */
 QUnixSocketRights &
-QUnixSocketRights::operator=(const QUnixSocketRights & other)
+QUnixSocketRights::operator=(const QUnixSocketRights &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
   Create a copy of \a other.
   */
-QUnixSocketRights::QUnixSocketRights(const QUnixSocketRights & other)
-: d(other.d)
+QUnixSocketRights::QUnixSocketRights(const QUnixSocketRights &other)
+   : d(other.d)
 {
 }
 
@@ -203,7 +201,7 @@ QUnixSocketRights::QUnixSocketRights(const QUnixSocketRights & other)
   */
 bool QUnixSocketRights::isValid() const
 {
-    return d->fd != -1;
+   return d->fd != -1;
 }
 
 /*!
@@ -215,17 +213,19 @@ bool QUnixSocketRights::isValid() const
   */
 int QUnixSocketRights::dupFd() const
 {
-    if(-1 == d->fd) return -1;
+   if (-1 == d->fd) {
+      return -1;
+   }
 
-    int rv = qt_safe_dup(d->fd);
+   int rv = qt_safe_dup(d->fd);
 
 #ifdef QUNIXSOCKET_DEBUG
-    if(-1 == rv)
-        qDebug() << "QUnixSocketRights: Unable to duplicate managed file "
-                    "descriptor (" << ::strerror(errno) << ')';
+   if (-1 == rv)
+      qDebug() << "QUnixSocketRights: Unable to duplicate managed file "
+               "descriptor (" << ::strerror(errno) << ')';
 #endif
 
-    return rv;
+   return rv;
 }
 
 /*!
@@ -243,42 +243,43 @@ int QUnixSocketRights::dupFd() const
   */
 int QUnixSocketRights::peekFd() const
 {
-    return d->fd;
+   return d->fd;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // class QUnixSocketMessage
 ///////////////////////////////////////////////////////////////////////////////
-struct QUnixSocketMessagePrivate : public QSharedData
-{
-    QUnixSocketMessagePrivate()
-    : state(Default), vec(0), iovecLen(0), dataSize(0) {}
-    QUnixSocketMessagePrivate(const QByteArray & b)
-    : bytes(b), state(Default), vec(0), iovecLen(0), dataSize(0) {}
-    QUnixSocketMessagePrivate(const QByteArray & b,
-                              const QList<QUnixSocketRights> & r)
-    : bytes(b), rights(r), state(Default), vec(0), iovecLen(0), dataSize(0) {}
+struct QUnixSocketMessagePrivate : public QSharedData {
+   QUnixSocketMessagePrivate()
+      : state(Default), vec(0), iovecLen(0), dataSize(0) {}
+   QUnixSocketMessagePrivate(const QByteArray &b)
+      : bytes(b), state(Default), vec(0), iovecLen(0), dataSize(0) {}
+   QUnixSocketMessagePrivate(const QByteArray &b,
+                             const QList<QUnixSocketRights> &r)
+      : bytes(b), rights(r), state(Default), vec(0), iovecLen(0), dataSize(0) {}
 
-    int size() const { return vec ? dataSize : bytes.size(); }
-    void removeBytes( unsigned int );
+   int size() const {
+      return vec ? dataSize : bytes.size();
+   }
+   void removeBytes( unsigned int );
 
-    QByteArray bytes;
-    QList<QUnixSocketRights> rights;
+   QByteArray bytes;
+   QList<QUnixSocketRights> rights;
 
-    enum AncillaryDataState {
-        Default = 0x00,
-        Truncated = 0x01,
-        Credential = 0x02
-    };
-    AncillaryDataState state;
+   enum AncillaryDataState {
+      Default = 0x00,
+      Truncated = 0x01,
+      Credential = 0x02
+   };
+   AncillaryDataState state;
 
-    pid_t pid;
-    gid_t gid;
-    uid_t uid;
+   pid_t pid;
+   gid_t gid;
+   uid_t uid;
 
-    ::iovec *vec;
-    int iovecLen;  // number of vectors in array
-    int dataSize;  // total size of vectors = payload
+   ::iovec *vec;
+   int iovecLen;  // number of vectors in array
+   int dataSize;  // total size of vectors = payload
 };
 
 /*!
@@ -287,38 +288,35 @@ struct QUnixSocketMessagePrivate : public QSharedData
 */
 void QUnixSocketMessagePrivate::removeBytes( unsigned int bytesToDequeue )
 {
-    if ( vec )
-    {
-        ::iovec *vecPtr = vec;
-        if ( bytesToDequeue > (unsigned int)dataSize ) bytesToDequeue = dataSize;
-        while ( bytesToDequeue > 0 && iovecLen > 0 )
-        {
-            if ( vecPtr->iov_len > bytesToDequeue )
-            {
-                // dequeue the bytes by taking them off the front of the
-                // current vector.  since we don't own the iovec, its okay
-                // to "leak" this away by pointing past it
-                char **base = reinterpret_cast<char**>(&(vecPtr->iov_base));
-                *base += bytesToDequeue;
-                vecPtr->iov_len -= bytesToDequeue;
-                bytesToDequeue = 0;
-            }
-            else
-            {
-                // dequeue bytes by skipping a whole vector.  again, its ok
-                // to lose the pointers to this data
-                bytesToDequeue -= vecPtr->iov_len;
-                iovecLen--;
-                vecPtr++;
-            }
-        }
-        dataSize -= bytesToDequeue;
-        if ( iovecLen == 0 ) vec = 0;
-    }
-    else
-    {
-        bytes.remove(0, bytesToDequeue );
-    }
+   if ( vec ) {
+      ::iovec *vecPtr = vec;
+      if ( bytesToDequeue > (unsigned int)dataSize ) {
+         bytesToDequeue = dataSize;
+      }
+      while ( bytesToDequeue > 0 && iovecLen > 0 ) {
+         if ( vecPtr->iov_len > bytesToDequeue ) {
+            // dequeue the bytes by taking them off the front of the
+            // current vector.  since we don't own the iovec, its okay
+            // to "leak" this away by pointing past it
+            char **base = reinterpret_cast<char **>(&(vecPtr->iov_base));
+            *base += bytesToDequeue;
+            vecPtr->iov_len -= bytesToDequeue;
+            bytesToDequeue = 0;
+         } else {
+            // dequeue bytes by skipping a whole vector.  again, its ok
+            // to lose the pointers to this data
+            bytesToDequeue -= vecPtr->iov_len;
+            iovecLen--;
+            vecPtr++;
+         }
+      }
+      dataSize -= bytesToDequeue;
+      if ( iovecLen == 0 ) {
+         vec = 0;
+      }
+   } else {
+      bytes.remove(0, bytesToDequeue );
+   }
 }
 
 
@@ -379,7 +377,7 @@ void QUnixSocketMessagePrivate::removeBytes( unsigned int bytesToDequeue )
   application's default credentials.
   */
 QUnixSocketMessage::QUnixSocketMessage()
-: d(new QUnixSocketMessagePrivate())
+   : d(new QUnixSocketMessagePrivate())
 {
 }
 
@@ -387,8 +385,8 @@ QUnixSocketMessage::QUnixSocketMessage()
   Construct a QUnixSocketMessage with an initial data payload of \a bytes.  The
   message's credentials will be set to the application's default credentials.
   */
-QUnixSocketMessage::QUnixSocketMessage(const QByteArray & bytes)
-: d(new QUnixSocketMessagePrivate(bytes))
+QUnixSocketMessage::QUnixSocketMessage(const QByteArray &bytes)
+   : d(new QUnixSocketMessagePrivate(bytes))
 {
 }
 
@@ -400,17 +398,17 @@ QUnixSocketMessage::QUnixSocketMessage(const QByteArray & bytes)
   A message with rights data but an empty data payload cannot be transmitted
   by the system.
   */
-QUnixSocketMessage::QUnixSocketMessage(const QByteArray & bytes,
-                                       const QList<QUnixSocketRights> & rights)
-: d(new QUnixSocketMessagePrivate(bytes, rights))
+QUnixSocketMessage::QUnixSocketMessage(const QByteArray &bytes,
+                                       const QList<QUnixSocketRights> &rights)
+   : d(new QUnixSocketMessagePrivate(bytes, rights))
 {
 }
 
 /*!
   Create a copy of \a other.
   */
-QUnixSocketMessage::QUnixSocketMessage(const QUnixSocketMessage & other)
-: d(other.d)
+QUnixSocketMessage::QUnixSocketMessage(const QUnixSocketMessage &other)
+   : d(other.d)
 {
 }
 
@@ -430,22 +428,23 @@ QUnixSocketMessage::QUnixSocketMessage(const QUnixSocketMessage & other)
   Caller must ensure the iovec * \a data remains valid until the message
   is flushed.  Caller retains ownership of the iovec structs.
   */
-QUnixSocketMessage::QUnixSocketMessage(const ::iovec* data, int vecLen )
-: d(new QUnixSocketMessagePrivate())
+QUnixSocketMessage::QUnixSocketMessage(const ::iovec *data, int vecLen )
+   : d(new QUnixSocketMessagePrivate())
 {
-    for ( int v = 0; v < vecLen; v++ )
-        d->dataSize += data[v].iov_len;
-    d->vec = const_cast<iovec*>(data);
-    d->iovecLen = vecLen;
+   for ( int v = 0; v < vecLen; v++ ) {
+      d->dataSize += data[v].iov_len;
+   }
+   d->vec = const_cast<iovec *>(data);
+   d->iovecLen = vecLen;
 }
 
 /*!
   Assign the contents of \a other to this object.
   */
-QUnixSocketMessage & QUnixSocketMessage::operator=(const QUnixSocketMessage & other)
+QUnixSocketMessage &QUnixSocketMessage::operator=(const QUnixSocketMessage &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -460,10 +459,10 @@ QUnixSocketMessage::~QUnixSocketMessage()
 
   \sa QUnixSocketMessage::bytes()
   */
-void QUnixSocketMessage::setBytes(const QByteArray & bytes)
+void QUnixSocketMessage::setBytes(const QByteArray &bytes)
 {
-    d.detach();
-    d->bytes = bytes;
+   d.detach();
+   d->bytes = bytes;
 }
 
 /*!
@@ -474,10 +473,10 @@ void QUnixSocketMessage::setBytes(const QByteArray & bytes)
 
   \sa QUnixSocketMessage::rights()
   */
-void QUnixSocketMessage::setRights(const QList<QUnixSocketRights> & rights)
+void QUnixSocketMessage::setRights(const QList<QUnixSocketRights> &rights)
 {
-    d.detach();
-    d->rights = rights;
+   d.detach();
+   d->rights = rights;
 }
 
 /*!
@@ -485,9 +484,9 @@ void QUnixSocketMessage::setRights(const QList<QUnixSocketRights> & rights)
 
   \sa QUnixSocketMessage::setRights()
   */
-const QList<QUnixSocketRights> & QUnixSocketMessage::rights() const
+const QList<QUnixSocketRights> &QUnixSocketMessage::rights() const
 {
-    return d->rights;
+   return d->rights;
 }
 
 /*!
@@ -501,7 +500,7 @@ const QList<QUnixSocketRights> & QUnixSocketMessage::rights() const
   */
 bool QUnixSocketMessage::rightsWereTruncated() const
 {
-    return d->state & QUnixSocketMessagePrivate::Truncated;
+   return d->state & QUnixSocketMessagePrivate::Truncated;
 }
 
 /*!
@@ -509,9 +508,9 @@ bool QUnixSocketMessage::rightsWereTruncated() const
 
   \sa QUnixSocketMessage::setBytes()
   */
-const QByteArray & QUnixSocketMessage::bytes() const
+const QByteArray &QUnixSocketMessage::bytes() const
 {
-    return d->bytes;
+   return d->bytes;
 }
 
 /*!
@@ -521,10 +520,11 @@ const QByteArray & QUnixSocketMessage::bytes() const
   */
 pid_t QUnixSocketMessage::processId() const
 {
-    if(QUnixSocketMessagePrivate::Credential & d->state)
-        return d->pid;
-    else
-        return ::getpid();
+   if (QUnixSocketMessagePrivate::Credential & d->state) {
+      return d->pid;
+   } else {
+      return ::getpid();
+   }
 }
 
 /*!
@@ -534,10 +534,11 @@ pid_t QUnixSocketMessage::processId() const
   */
 uid_t QUnixSocketMessage::userId() const
 {
-    if(QUnixSocketMessagePrivate::Credential & d->state)
-        return d->uid;
-    else
-        return ::geteuid();
+   if (QUnixSocketMessagePrivate::Credential & d->state) {
+      return d->uid;
+   } else {
+      return ::geteuid();
+   }
 }
 
 /*!
@@ -547,10 +548,11 @@ uid_t QUnixSocketMessage::userId() const
   */
 gid_t QUnixSocketMessage::groupId() const
 {
-    if(QUnixSocketMessagePrivate::Credential & d->state)
-        return d->gid;
-    else
-        return ::getegid();
+   if (QUnixSocketMessagePrivate::Credential & d->state) {
+      return d->gid;
+   } else {
+      return ::getegid();
+   }
 }
 
 /*!
@@ -562,12 +564,12 @@ gid_t QUnixSocketMessage::groupId() const
  */
 void QUnixSocketMessage::setProcessId(pid_t pid)
 {
-    if(!(d->state & QUnixSocketMessagePrivate::Credential)) {
-        d->state = (QUnixSocketMessagePrivate::AncillaryDataState)( d->state | QUnixSocketMessagePrivate::Credential );
-        d->uid = ::geteuid();
-        d->gid = ::getegid();
-    }
-    d->pid = pid;
+   if (!(d->state & QUnixSocketMessagePrivate::Credential)) {
+      d->state = (QUnixSocketMessagePrivate::AncillaryDataState)( d->state | QUnixSocketMessagePrivate::Credential );
+      d->uid = ::geteuid();
+      d->gid = ::getegid();
+   }
+   d->pid = pid;
 }
 
 /*!
@@ -579,12 +581,12 @@ void QUnixSocketMessage::setProcessId(pid_t pid)
  */
 void QUnixSocketMessage::setUserId(uid_t uid)
 {
-    if(!(d->state & QUnixSocketMessagePrivate::Credential)) {
-        d->state = (QUnixSocketMessagePrivate::AncillaryDataState)( d->state | QUnixSocketMessagePrivate::Credential );
-        d->pid = ::getpid();
-        d->gid = ::getegid();
-    }
-    d->uid = uid;
+   if (!(d->state & QUnixSocketMessagePrivate::Credential)) {
+      d->state = (QUnixSocketMessagePrivate::AncillaryDataState)( d->state | QUnixSocketMessagePrivate::Credential );
+      d->pid = ::getpid();
+      d->gid = ::getegid();
+   }
+   d->uid = uid;
 }
 
 /*!
@@ -596,12 +598,12 @@ void QUnixSocketMessage::setUserId(uid_t uid)
  */
 void QUnixSocketMessage::setGroupId(gid_t gid)
 {
-    if(!(d->state & QUnixSocketMessagePrivate::Credential)) {
-        d->state = (QUnixSocketMessagePrivate::AncillaryDataState)( d->state | QUnixSocketMessagePrivate::Credential );
-        d->pid = ::getpid();
-        d->uid = ::geteuid();
-    }
-    d->gid = gid;
+   if (!(d->state & QUnixSocketMessagePrivate::Credential)) {
+      d->state = (QUnixSocketMessagePrivate::AncillaryDataState)( d->state | QUnixSocketMessagePrivate::Credential );
+      d->pid = ::getpid();
+      d->uid = ::geteuid();
+   }
+   d->gid = gid;
 }
 
 /*!
@@ -611,7 +613,7 @@ void QUnixSocketMessage::setGroupId(gid_t gid)
   */
 bool QUnixSocketMessage::isValid() const
 {
-    return d->rights.isEmpty() || !d->bytes.isEmpty();
+   return d->rights.isEmpty() || !d->bytes.isEmpty();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -761,99 +763,101 @@ bool QUnixSocketMessage::isValid() const
   \a socketState will be set to the socket's new state.
 */
 
-class QUnixSocketPrivate : public QObject {
+class QUnixSocketPrivate : public QObject
+{
    CS_OBJECT(QUnixSocketPrivate)
 
-public:
-    QUnixSocketPrivate(QUnixSocket * _me)
-    : me(_me), fd(-1), readNotifier(0), writeNotifier(0),
-      state(QUnixSocket::UnconnectedState), error(QUnixSocket::NoError),
-      writeQueueBytes(0), messageValid(false), dataBuffer(0),
-      dataBufferLength(0), dataBufferCapacity(0), ancillaryBuffer(0),
-      ancillaryBufferCount(0), closingTimer(0) {
-          QObject::connect(this, SIGNAL(readyRead()), me, SLOT(readyRead()));
-          QObject::connect(this, SIGNAL(bytesWritten(qint64)), me, SLOT(bytesWritten(qint64)));
+ public:
+   QUnixSocketPrivate(QUnixSocket *_me)
+      : me(_me), fd(-1), readNotifier(0), writeNotifier(0),
+        state(QUnixSocket::UnconnectedState), error(QUnixSocket::NoError),
+        writeQueueBytes(0), messageValid(false), dataBuffer(0),
+        dataBufferLength(0), dataBufferCapacity(0), ancillaryBuffer(0),
+        ancillaryBufferCount(0), closingTimer(0) {
+      QObject::connect(this, SIGNAL(readyRead()), me, SLOT(readyRead()));
+      QObject::connect(this, SIGNAL(bytesWritten(qint64)), me, SLOT(bytesWritten(qint64)));
+   }
+
+   ~QUnixSocketPrivate() {
+      if (dataBuffer) {
+         delete [] dataBuffer;
+      }
+      if (ancillaryBuffer) {
+         delete [] ancillaryBuffer;
+      }
+   }
+
+   enum { CausedAbort = 0x70000000 };
+
+   QUnixSocket *me;
+
+   int fd;
+
+   QSocketNotifier *readNotifier;
+   QSocketNotifier *writeNotifier;
+
+   QUnixSocket::SocketState state;
+   QUnixSocket::SocketError error;
+
+   QQueue<QUnixSocketMessage> writeQueue;
+   unsigned int writeQueueBytes;
+
+   bool messageValid;
+   ::msghdr message;
+   inline void flushAncillary() {
+      if (!messageValid) {
+         return;
+      }
+      ::cmsghdr *h = (::cmsghdr *)CMSG_FIRSTHDR(&(message));
+      while (h) {
+
+         if (SCM_RIGHTS == h->cmsg_type) {
+            int *fds = (int *)CMSG_DATA(h);
+            int numFds = (h->cmsg_len - CMSG_LEN(0)) / sizeof(int);
+
+            for (int ii = 0; ii < numFds; ++ii) {
+               QT_CLOSE(fds[ii]);
+            }
+         }
+
+         h = (::cmsghdr *)CMSG_NXTHDR(&(message), h);
       }
 
-    ~QUnixSocketPrivate()
-    {
-        if(dataBuffer)
-            delete [] dataBuffer;
-        if(ancillaryBuffer)
-            delete [] ancillaryBuffer;
-    }
-
-    enum { CausedAbort = 0x70000000 };
-
-    QUnixSocket * me;
-
-    int fd;
-
-    QSocketNotifier * readNotifier;
-    QSocketNotifier * writeNotifier;
-
-    QUnixSocket::SocketState state;
-    QUnixSocket::SocketError error;
-
-    QQueue<QUnixSocketMessage> writeQueue;
-    unsigned int writeQueueBytes;
-
-    bool messageValid;
-    ::msghdr message;
-    inline void flushAncillary()
-    {
-        if(!messageValid) return;
-        ::cmsghdr * h = (::cmsghdr *)CMSG_FIRSTHDR(&(message));
-        while(h) {
-
-            if(SCM_RIGHTS == h->cmsg_type) {
-                int * fds = (int *)CMSG_DATA(h);
-                int numFds = (h->cmsg_len - CMSG_LEN(0)) / sizeof(int);
-
-                for(int ii = 0; ii < numFds; ++ii)
-                    QT_CLOSE(fds[ii]);
-            }
-
-            h = (::cmsghdr *)CMSG_NXTHDR(&(message), h);
-        }
-
-        messageValid = false;
-    }
+      messageValid = false;
+   }
 
 
-    char * dataBuffer;
-    unsigned int dataBufferLength;
-    unsigned int dataBufferCapacity;
+   char *dataBuffer;
+   unsigned int dataBufferLength;
+   unsigned int dataBufferCapacity;
 
-    char * ancillaryBuffer;
-    inline unsigned int ancillaryBufferCapacity()
-    {
-        return CMSG_SPACE(sizeof(::ucred)) + CMSG_SPACE(sizeof(int) * ancillaryBufferCount);
-    }
-    unsigned int ancillaryBufferCount;
+   char *ancillaryBuffer;
+   inline unsigned int ancillaryBufferCapacity() {
+      return CMSG_SPACE(sizeof(::ucred)) + CMSG_SPACE(sizeof(int) * ancillaryBufferCount);
+   }
+   unsigned int ancillaryBufferCount;
 
-    QByteArray address;
+   QByteArray address;
 
-    int closingTimer;
+   int closingTimer;
 
-    virtual void timerEvent(QTimerEvent *)
-    {
-        me->abort();
-        killTimer(closingTimer);
-        closingTimer = 0;
-    }
+   virtual void timerEvent(QTimerEvent *) {
+      me->abort();
+      killTimer(closingTimer);
+      closingTimer = 0;
+   }
 
-    GUI_CS_SIGNAL_1(Public,void readyRead())
-    GUI_CS_SIGNAL_2(readyRead)
+   GUI_CS_SIGNAL_1(Public, void readyRead())
+   GUI_CS_SIGNAL_2(readyRead)
 
-    GUI_CS_SIGNAL_1(Public,void bytesWritten(qint64 un_named_arg1))
-    GUI_CS_SIGNAL_2(bytesWritten, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void bytesWritten(qint64 un_named_arg1))
+   GUI_CS_SIGNAL_2(bytesWritten, un_named_arg1)
 
-    GUI_CS_SLOT_1(Public,void readActivated())
-    GUI_CS_SLOT_2(readActivated)
+   GUI_CS_SLOT_1(Public, void readActivated())
+   GUI_CS_SLOT_2(readActivated)
 
-    GUI_CS_SLOT_1(Public,qint64 writeActivated())
-    GUI_CS_SLOT_2(writeActivated)
+   GUI_CS_SLOT_1(Public, qint64 writeActivated())
+   GUI_CS_SLOT_2(writeActivated)
 };
 
 /*!
@@ -864,12 +868,12 @@ public:
 
   \sa QUnixSocket::readBufferSize() QUnixSocket::rightsBufferSize()
   */
-QUnixSocket::QUnixSocket(QObject * parent)
-: QIODevice(parent), d(new QUnixSocketPrivate(this))
+QUnixSocket::QUnixSocket(QObject *parent)
+   : QIODevice(parent), d(new QUnixSocketPrivate(this))
 {
-    setOpenMode(QIODevice::NotOpen);
-    setReadBufferSize(QUNIXSOCKET_DEFAULT_READBUFFER);
-    setRightsBufferSize(QUNIXSOCKET_DEFAULT_ANCILLARYBUFFER);
+   setOpenMode(QIODevice::NotOpen);
+   setReadBufferSize(QUNIXSOCKET_DEFAULT_READBUFFER);
+   setRightsBufferSize(QUNIXSOCKET_DEFAULT_ANCILLARYBUFFER);
 }
 
 /*!
@@ -881,14 +885,14 @@ QUnixSocket::QUnixSocket(QObject * parent)
   \sa QUnixSocket::readBufferSize() QUnixSocket::rightsBufferSize()
   */
 QUnixSocket::QUnixSocket(qint64 readBufferSize, qint64 rightsBufferSize,
-                         QObject * parent)
-: QIODevice(parent), d(new QUnixSocketPrivate(this))
+                         QObject *parent)
+   : QIODevice(parent), d(new QUnixSocketPrivate(this))
 {
-    Q_ASSERT(readBufferSize > 0 && rightsBufferSize >= 0);
+   Q_ASSERT(readBufferSize > 0 && rightsBufferSize >= 0);
 
-    setOpenMode(QIODevice::NotOpen);
-    setReadBufferSize(readBufferSize);
-    setRightsBufferSize(rightsBufferSize);
+   setOpenMode(QIODevice::NotOpen);
+   setReadBufferSize(readBufferSize);
+   setRightsBufferSize(rightsBufferSize);
 }
 
 /*!
@@ -896,8 +900,8 @@ QUnixSocket::QUnixSocket(qint64 readBufferSize, qint64 rightsBufferSize,
   */
 QUnixSocket::~QUnixSocket()
 {
-    abort();
-    delete d;
+   abort();
+   delete d;
 }
 
 /*!
@@ -912,112 +916,116 @@ QUnixSocket::~QUnixSocket()
 
   \sa QUnixSocket::close() QUnixSocket::abort() QUnixSocket::error()
   */
-bool QUnixSocket::connect(const QByteArray & path)
+bool QUnixSocket::connect(const QByteArray &path)
 {
-    int _true;
-    int crv;
+   int _true;
+   int crv;
 #ifdef QUNIXSOCKET_DEBUG
-    qDebug() << "QUnixSocket: Connect requested to '"
-             << path << '\'';
+   qDebug() << "QUnixSocket: Connect requested to '"
+            << path << '\'';
 #endif
 
-    abort(); // Reset any existing connection
+   abort(); // Reset any existing connection
 
-    if(UnconnectedState != d->state) // abort() caused a signal and someone messed
-                                 // with us.  We'll assume they know what
-                                 // they're doing and bail.  Alternative is to
-                                 // have a special "Connecting" state
-        return false;
+   if (UnconnectedState != d->state) // abort() caused a signal and someone messed
+      // with us.  We'll assume they know what
+      // they're doing and bail.  Alternative is to
+      // have a special "Connecting" state
+   {
+      return false;
+   }
 
 
-    if(path.isEmpty() || path.size() > UNIX_PATH_MAX) {
-        d->error = InvalidPath;
-        return false;
-    }
+   if (path.isEmpty() || path.size() > UNIX_PATH_MAX) {
+      d->error = InvalidPath;
+      return false;
+   }
 
-    // Create the socket
-    d->fd = ::socket(PF_UNIX, SOCK_STREAM, 0);
-    if(-1 == d->fd) {
+   // Create the socket
+   d->fd = ::socket(PF_UNIX, SOCK_STREAM, 0);
+   if (-1 == d->fd) {
 #ifdef QUNIXSOCKET_DEBUG
-        qDebug() << "QUnixSocket: Unable to create socket ("
-                 << strerror(errno) << ')';
+      qDebug() << "QUnixSocket: Unable to create socket ("
+               << strerror(errno) << ')';
 #endif
-        d->error = ResourceError;
-        goto connect_error;
-    }
+      d->error = ResourceError;
+      goto connect_error;
+   }
 
-    // Set socket options
-    _true = 1;
-    crv = ::setsockopt(d->fd, SOL_SOCKET, SO_PASSCRED, (void *)&_true,
-                       sizeof(int));
-    if(-1 == crv) {
+   // Set socket options
+   _true = 1;
+   crv = ::setsockopt(d->fd, SOL_SOCKET, SO_PASSCRED, (void *)&_true,
+                      sizeof(int));
+   if (-1 == crv) {
 #ifdef QUNIXSOCKET_DEBUG
-        qDebug() << "QUnixSocket: Unable to configure socket ("
-                 << ::strerror(errno) << ')';
+      qDebug() << "QUnixSocket: Unable to configure socket ("
+               << ::strerror(errno) << ')';
 #endif
-        d->error = ResourceError;
+      d->error = ResourceError;
 
-        goto connect_error;
-    }
+      goto connect_error;
+   }
 
-    // Construct our unix address
-    struct ::sockaddr_un addr;
-    addr.sun_family = AF_UNIX;
-    ::memcpy(addr.sun_path, path.data(), path.size());
-    if(path.size() < UNIX_PATH_MAX)
-        addr.sun_path[path.size()] = '\0';
+   // Construct our unix address
+   struct ::sockaddr_un addr;
+   addr.sun_family = AF_UNIX;
+   ::memcpy(addr.sun_path, path.data(), path.size());
+   if (path.size() < UNIX_PATH_MAX) {
+      addr.sun_path[path.size()] = '\0';
+   }
 
-    // Attempt the connect
-    crv = ::connect(d->fd, (sockaddr *)&addr, sizeof(sockaddr_un));
-    if(-1 == crv) {
+   // Attempt the connect
+   crv = ::connect(d->fd, (sockaddr *)&addr, sizeof(sockaddr_un));
+   if (-1 == crv) {
 #ifdef QUNIXSOCKET_DEBUG
-        qDebug() << "QUnixSocket: Unable to connect ("
-                 << ::strerror(errno) << ')';
+      qDebug() << "QUnixSocket: Unable to connect ("
+               << ::strerror(errno) << ')';
 #endif
-        if(ECONNREFUSED == errno)
-            d->error = ConnectionRefused;
-        else if(ENOENT == errno)
-            d->error = NonexistentPath;
-        else
-            d->error = UnknownError;
+      if (ECONNREFUSED == errno) {
+         d->error = ConnectionRefused;
+      } else if (ENOENT == errno) {
+         d->error = NonexistentPath;
+      } else {
+         d->error = UnknownError;
+      }
 
-        goto connect_error;
-    }
+      goto connect_error;
+   }
 
-    // We're connected!
-    d->address = path;
-    d->state = ConnectedState;
-    d->readNotifier = new QSocketNotifier(d->fd, QSocketNotifier::Read, d);
-    d->writeNotifier = new QSocketNotifier(d->fd, QSocketNotifier::Write, d);
-    QObject::connect(d->readNotifier, SIGNAL(activated(int)),
-                     d, SLOT(readActivated()));
-    QObject::connect(d->writeNotifier, SIGNAL(activated(int)),
-                     d, SLOT(writeActivated()));
-    d->readNotifier->setEnabled(true);
-    d->writeNotifier->setEnabled(false);
-    setOpenMode(QIODevice::ReadWrite);
-    emit stateChanged(ConnectedState);
+   // We're connected!
+   d->address = path;
+   d->state = ConnectedState;
+   d->readNotifier = new QSocketNotifier(d->fd, QSocketNotifier::Read, d);
+   d->writeNotifier = new QSocketNotifier(d->fd, QSocketNotifier::Write, d);
+   QObject::connect(d->readNotifier, SIGNAL(activated(int)),
+                    d, SLOT(readActivated()));
+   QObject::connect(d->writeNotifier, SIGNAL(activated(int)),
+                    d, SLOT(writeActivated()));
+   d->readNotifier->setEnabled(true);
+   d->writeNotifier->setEnabled(false);
+   setOpenMode(QIODevice::ReadWrite);
+   emit stateChanged(ConnectedState);
 
 #ifdef QUNIXSOCKET_DEBUG
-    qDebug() << "QUnixSocket: Connected to " << path;
+   qDebug() << "QUnixSocket: Connected to " << path;
 #endif
-    return true;
+   return true;
 
 connect_error: // Cleanup failed connection
-    if(-1 != d->fd) {
+   if (-1 != d->fd) {
 #ifdef QUNIXSOCKET_DEBUG
-        int closerv =
+      int closerv =
 #endif
-            QT_CLOSE(d->fd);
+         QT_CLOSE(d->fd);
 #ifdef QUNIXSOCKET_DEBUG
-        if(0 != closerv) {
-            qDebug() << "QUnixSocket: Unable to close file descriptor after "
-                        "failed connect (" << ::strerror(errno) << ')';
-        }
+      if (0 != closerv) {
+         qDebug() << "QUnixSocket: Unable to close file descriptor after "
+                  "failed connect (" << ::strerror(errno) << ')';
+      }
 #endif
-    }
-    d->fd = -1;
-    return false;
+   }
+   d->fd = -1;
+   return false;
 }
 
 /*!
@@ -1035,49 +1043,50 @@ connect_error: // Cleanup failed connection
 */
 bool QUnixSocket::setSocketDescriptor(int socketDescriptor)
 {
-    abort();
+   abort();
 
-    if(UnconnectedState != state()) // See QUnixSocket::connect()
-        return false;
+   if (UnconnectedState != state()) { // See QUnixSocket::connect()
+      return false;
+   }
 
-    // Attempt to set the socket options
-    if(-1 == socketDescriptor) {
+   // Attempt to set the socket options
+   if (-1 == socketDescriptor) {
 #ifdef QUNIXSOCKET_DEBUG
-        qDebug() << "QUnixSocket: User provided socket is invalid";
+      qDebug() << "QUnixSocket: User provided socket is invalid";
 #endif
-        d->error = ResourceError;
-        return false;
-    }
+      d->error = ResourceError;
+      return false;
+   }
 
-    // Set socket options
-    int _true = 1;
-    int crv = ::setsockopt(socketDescriptor, SOL_SOCKET,
-                           SO_PASSCRED, (void *)&_true, sizeof(int));
-    if(-1 == crv) {
+   // Set socket options
+   int _true = 1;
+   int crv = ::setsockopt(socketDescriptor, SOL_SOCKET,
+                          SO_PASSCRED, (void *)&_true, sizeof(int));
+   if (-1 == crv) {
 #ifdef QUNIXSOCKET_DEBUG
-        qDebug() << "QUnixSocket: Unable to configure client provided socket ("
-                 << ::strerror(errno) << ')';
+      qDebug() << "QUnixSocket: Unable to configure client provided socket ("
+               << ::strerror(errno) << ')';
 #endif
-        d->error = ResourceError;
+      d->error = ResourceError;
 
-        return false;
-    }
+      return false;
+   }
 
-    d->fd = socketDescriptor;
-    d->state = ConnectedState;
-    d->address = QByteArray();
-    setOpenMode(QIODevice::ReadWrite);
-    d->readNotifier = new QSocketNotifier(d->fd, QSocketNotifier::Read, d);
-    d->writeNotifier = new QSocketNotifier(d->fd, QSocketNotifier::Write, d);
-    QObject::connect(d->readNotifier, SIGNAL(activated(int)),
-                     d, SLOT(readActivated()));
-    QObject::connect(d->writeNotifier, SIGNAL(activated(int)),
-                     d, SLOT(writeActivated()));
-    d->readNotifier->setEnabled(true);
-    d->writeNotifier->setEnabled(false);
-    emit stateChanged(d->state);
+   d->fd = socketDescriptor;
+   d->state = ConnectedState;
+   d->address = QByteArray();
+   setOpenMode(QIODevice::ReadWrite);
+   d->readNotifier = new QSocketNotifier(d->fd, QSocketNotifier::Read, d);
+   d->writeNotifier = new QSocketNotifier(d->fd, QSocketNotifier::Write, d);
+   QObject::connect(d->readNotifier, SIGNAL(activated(int)),
+                    d, SLOT(readActivated()));
+   QObject::connect(d->writeNotifier, SIGNAL(activated(int)),
+                    d, SLOT(writeActivated()));
+   d->readNotifier->setEnabled(true);
+   d->writeNotifier->setEnabled(false);
+   emit stateChanged(d->state);
 
-    return true;
+   return true;
 }
 
 /*!
@@ -1088,7 +1097,7 @@ bool QUnixSocket::setSocketDescriptor(int socketDescriptor)
   */
 int QUnixSocket::socketDescriptor() const
 {
-    return d->fd;
+   return d->fd;
 }
 
 /*!
@@ -1101,59 +1110,62 @@ int QUnixSocket::socketDescriptor() const
 */
 void QUnixSocket::abort()
 {
-    setOpenMode(QIODevice::NotOpen);
+   setOpenMode(QIODevice::NotOpen);
 
-    // We want to be able to use QUnixSocket::abort() to cleanup our state but
-    // also preserve the error message that caused the abort.  It is not
-    // possible to reorder code to do this:
-    //        abort();
-    //        d->error = SomeError
-    // as QUnixSocket::abort() might emit a signal and we need the error to be
-    // set within that signal.  So, if we want an error message to be preserved
-    // across a *single* call to abort(), we set the
-    // QUnixSocketPrivate::CausedAbort flag in the error.
-    if(d->error & QUnixSocketPrivate::CausedAbort)
-        d->error = (QUnixSocket::SocketError)(d->error &
-                                              ~QUnixSocketPrivate::CausedAbort);
-    else
-        d->error = NoError;
+   // We want to be able to use QUnixSocket::abort() to cleanup our state but
+   // also preserve the error message that caused the abort.  It is not
+   // possible to reorder code to do this:
+   //        abort();
+   //        d->error = SomeError
+   // as QUnixSocket::abort() might emit a signal and we need the error to be
+   // set within that signal.  So, if we want an error message to be preserved
+   // across a *single* call to abort(), we set the
+   // QUnixSocketPrivate::CausedAbort flag in the error.
+   if (d->error & QUnixSocketPrivate::CausedAbort)
+      d->error = (QUnixSocket::SocketError)(d->error &
+                                            ~QUnixSocketPrivate::CausedAbort);
+   else {
+      d->error = NoError;
+   }
 
-    if( UnconnectedState == d->state) return;
+   if ( UnconnectedState == d->state) {
+      return;
+   }
 
 #ifdef QUNIXSOCKET_DEBUG
-    int closerv =
+   int closerv =
 #endif
-        ::close(d->fd);
+      ::close(d->fd);
 #ifdef QUNIXSOCKET_DEBUG
-    if(0 != closerv) {
-        qDebug() << "QUnixSocket: Unable to close socket during abort ("
-                 << strerror(errno) << ')';
-    }
+   if (0 != closerv) {
+      qDebug() << "QUnixSocket: Unable to close socket during abort ("
+               << strerror(errno) << ')';
+   }
 #endif
 
-    // Reset variables
-    d->fd = -1;
-    d->state = UnconnectedState;
-    d->dataBufferLength = 0;
-    d->flushAncillary();
-    d->address = QByteArray();
-    if(d->readNotifier) {
-        d->readNotifier->setEnabled(false);
-        d->readNotifier->deleteLater();
-    }
-    if(d->writeNotifier) {
-        d->writeNotifier->setEnabled(false);
-        d->writeNotifier->deleteLater();
-    }
-    d->readNotifier = 0;
-    d->writeNotifier = 0;
-    d->writeQueue.clear();
-    d->writeQueueBytes = 0;
-    if(d->closingTimer) {
-        d->killTimer(d->closingTimer);
-    }
-    d->closingTimer = 0;
-    emit stateChanged(d->state);
+   // Reset variables
+   d->fd = -1;
+   d->state = UnconnectedState;
+   d->dataBufferLength = 0;
+   d->flushAncillary();
+   d->address = QByteArray();
+   if (d->readNotifier) {
+      d->readNotifier->setEnabled(false);
+      d->readNotifier->deleteLater();
+   }
+   if (d->writeNotifier) {
+      d->writeNotifier->setEnabled(false);
+      d->writeNotifier->deleteLater();
+   }
+   d->readNotifier = 0;
+   d->writeNotifier = 0;
+   d->writeQueue.clear();
+   d->writeQueueBytes = 0;
+   if (d->closingTimer) {
+      d->killTimer(d->closingTimer);
+   }
+   d->closingTimer = 0;
+   emit stateChanged(d->state);
 }
 
 /*!
@@ -1169,14 +1181,16 @@ void QUnixSocket::abort()
   */
 void QUnixSocket::close()
 {
-    if(ConnectedState != state()) return;
+   if (ConnectedState != state()) {
+      return;
+   }
 
-    d->state = ClosingState;
-    if(d->writeQueue.isEmpty()) {
-        d->closingTimer = d->startTimer(0); // Start a timer to "fake"
-                                            // completing writes
-    }
-    emit stateChanged(d->state);
+   d->state = ClosingState;
+   if (d->writeQueue.isEmpty()) {
+      d->closingTimer = d->startTimer(0); // Start a timer to "fake"
+      // completing writes
+   }
+   emit stateChanged(d->state);
 }
 
 /*!
@@ -1187,13 +1201,14 @@ void QUnixSocket::close()
 // Note! docs partially copied from QAbstractSocket::flush()
 bool QUnixSocket::flush()
 {
-    // This needs to have the same semantics as QAbstractSocket, if it is to
-    // be used interchangeably with that class.
-    if (d->writeQueue.isEmpty())
-        return false;
+   // This needs to have the same semantics as QAbstractSocket, if it is to
+   // be used interchangeably with that class.
+   if (d->writeQueue.isEmpty()) {
+      return false;
+   }
 
-    d->writeActivated();
-    return true;
+   d->writeActivated();
+   return true;
 }
 
 /*!
@@ -1204,8 +1219,8 @@ bool QUnixSocket::flush()
   */
 QUnixSocket::SocketError QUnixSocket::error() const
 {
-    return (QUnixSocket::SocketError)
-        (d->error & ~QUnixSocketPrivate::CausedAbort);
+   return (QUnixSocket::SocketError)
+          (d->error & ~QUnixSocketPrivate::CausedAbort);
 }
 
 /*!
@@ -1213,7 +1228,7 @@ QUnixSocket::SocketError QUnixSocket::error() const
   */
 QUnixSocket::SocketState QUnixSocket::state() const
 {
-    return d->state;
+   return d->state;
 }
 
 /*!
@@ -1226,7 +1241,7 @@ QUnixSocket::SocketState QUnixSocket::state() const
   */
 QByteArray QUnixSocket::address() const
 {
-    return d->address;
+   return d->address;
 }
 
 /*!
@@ -1235,7 +1250,7 @@ QByteArray QUnixSocket::address() const
   */
 qint64 QUnixSocket::bytesAvailable() const
 {
-    return QIODevice::bytesAvailable() + d->dataBufferLength;
+   return QIODevice::bytesAvailable() + d->dataBufferLength;
 }
 
 /*!
@@ -1243,7 +1258,7 @@ qint64 QUnixSocket::bytesAvailable() const
   */
 qint64 QUnixSocket::bytesToWrite() const
 {
-    return d->writeQueueBytes;
+   return d->writeQueueBytes;
 }
 
 /*!
@@ -1260,7 +1275,7 @@ qint64 QUnixSocket::bytesToWrite() const
   */
 qint64 QUnixSocket::readBufferSize() const
 {
-    return d->dataBufferCapacity;
+   return d->dataBufferCapacity;
 }
 
 /*!
@@ -1276,11 +1291,15 @@ qint64 QUnixSocket::readBufferSize() const
   */
 void QUnixSocket::setReadBufferSize(qint64 size)
 {
-    Q_ASSERT(size > 0);
-    if(size == d->dataBufferCapacity || d->dataBufferLength) return;
-    if(d->dataBuffer) delete [] d->dataBuffer;
-    d->dataBuffer = new char[size];
-    d->dataBufferCapacity = size;
+   Q_ASSERT(size > 0);
+   if (size == d->dataBufferCapacity || d->dataBufferLength) {
+      return;
+   }
+   if (d->dataBuffer) {
+      delete [] d->dataBuffer;
+   }
+   d->dataBuffer = new char[size];
+   d->dataBufferCapacity = size;
 }
 
 /*!
@@ -1302,7 +1321,7 @@ void QUnixSocket::setReadBufferSize(qint64 size)
   */
 qint64 QUnixSocket::rightsBufferSize() const
 {
-    return d->ancillaryBufferCount;
+   return d->ancillaryBufferCount;
 }
 
 /*!
@@ -1318,18 +1337,21 @@ qint64 QUnixSocket::rightsBufferSize() const
   */
 void QUnixSocket::setRightsBufferSize(qint64 size)
 {
-    Q_ASSERT(size >= 0);
+   Q_ASSERT(size >= 0);
 
-    if((size == d->ancillaryBufferCount || d->dataBufferLength) &&
-            d->ancillaryBuffer)
-        return;
+   if ((size == d->ancillaryBufferCount || d->dataBufferLength) &&
+         d->ancillaryBuffer) {
+      return;
+   }
 
-    qint64 byteSize = CMSG_SPACE(sizeof(::ucred)) +
-                      CMSG_SPACE(size * sizeof(int));
+   qint64 byteSize = CMSG_SPACE(sizeof(::ucred)) +
+                     CMSG_SPACE(size * sizeof(int));
 
-    if(d->ancillaryBuffer) delete [] d->ancillaryBuffer;
-    d->ancillaryBuffer = new char[byteSize];
-    d->ancillaryBufferCount = size;
+   if (d->ancillaryBuffer) {
+      delete [] d->ancillaryBuffer;
+   }
+   d->ancillaryBuffer = new char[byteSize];
+   d->ancillaryBufferCount = size;
 }
 
 /*!
@@ -1351,16 +1373,20 @@ void QUnixSocket::setRightsBufferSize(qint64 size)
 
   \sa QUnixSocketMessage
   */
-qint64 QUnixSocket::write(const QUnixSocketMessage & socketdata)
+qint64 QUnixSocket::write(const QUnixSocketMessage &socketdata)
 {
-    if(ConnectedState != state() || !socketdata.isValid()) return -1;
-    if(socketdata.d->size() == 0) return 0;
+   if (ConnectedState != state() || !socketdata.isValid()) {
+      return -1;
+   }
+   if (socketdata.d->size() == 0) {
+      return 0;
+   }
 
-    d->writeQueue.enqueue(socketdata);
-    d->writeQueueBytes += socketdata.d->size();
-    d->writeNotifier->setEnabled(true);
+   d->writeQueue.enqueue(socketdata);
+   d->writeQueueBytes += socketdata.d->size();
+   d->writeNotifier->setEnabled(true);
 
-    return socketdata.d->size();
+   return socketdata.d->size();
 }
 
 /*!
@@ -1374,415 +1400,424 @@ qint64 QUnixSocket::write(const QUnixSocketMessage & socketdata)
   */
 QUnixSocketMessage QUnixSocket::read()
 {
-    QUnixSocketMessage data;
-    if(!d->dataBufferLength)
-        return data;
+   QUnixSocketMessage data;
+   if (!d->dataBufferLength) {
+      return data;
+   }
 
-    data.d->state = QUnixSocketMessagePrivate::Credential;
+   data.d->state = QUnixSocketMessagePrivate::Credential;
 
-    // Bytes are easy
-    data.setBytes(QByteArray(d->dataBuffer, d->dataBufferLength));
+   // Bytes are easy
+   data.setBytes(QByteArray(d->dataBuffer, d->dataBufferLength));
 
-    // Extract ancillary data
-    QList<QUnixSocketRights> a;
+   // Extract ancillary data
+   QList<QUnixSocketRights> a;
 
-    ::cmsghdr * h = (::cmsghdr *)CMSG_FIRSTHDR(&(d->message));
-    while(h) {
+   ::cmsghdr *h = (::cmsghdr *)CMSG_FIRSTHDR(&(d->message));
+   while (h) {
 
-        if(SCM_CREDENTIALS == h->cmsg_type) {
-            ::ucred * cred = (::ucred *)CMSG_DATA(h);
+      if (SCM_CREDENTIALS == h->cmsg_type) {
+         ::ucred *cred = (::ucred *)CMSG_DATA(h);
 #ifdef QUNIXSOCKET_DEBUG
-            qDebug( "Credentials recd: pid %lu - gid %lu - uid %lu",
-                    cred->pid, cred->gid, cred->uid );
+         qDebug( "Credentials recd: pid %lu - gid %lu - uid %lu",
+                 cred->pid, cred->gid, cred->uid );
 #endif
-            data.d->pid = cred->pid;
-            data.d->gid = cred->gid;
-            data.d->uid = cred->uid;
+         data.d->pid = cred->pid;
+         data.d->gid = cred->gid;
+         data.d->uid = cred->uid;
 
-        } else if(SCM_RIGHTS == h->cmsg_type) {
+      } else if (SCM_RIGHTS == h->cmsg_type) {
 
-            int * fds = (int *)CMSG_DATA(h);
-            int numFds = (h->cmsg_len - CMSG_LEN(0)) / sizeof(int);
+         int *fds = (int *)CMSG_DATA(h);
+         int numFds = (h->cmsg_len - CMSG_LEN(0)) / sizeof(int);
 
-            for(int ii = 0; ii < numFds; ++ii) {
-                QUnixSocketRights qusr(fds[ii], 0);
-                a.append(qusr);
-            }
+         for (int ii = 0; ii < numFds; ++ii) {
+            QUnixSocketRights qusr(fds[ii], 0);
+            a.append(qusr);
+         }
 
-        } else {
+      } else {
 
 #ifdef QUNIXSOCKET_DEBUG
-            qFatal("QUnixSocket: Unknown ancillary data type (%d) received.",
-                   h->cmsg_type);
+         qFatal("QUnixSocket: Unknown ancillary data type (%d) received.",
+                h->cmsg_type);
 #endif
 
-        }
+      }
 
-        h = (::cmsghdr *)CMSG_NXTHDR(&(d->message), h);
-    }
+      h = (::cmsghdr *)CMSG_NXTHDR(&(d->message), h);
+   }
 
-    if(d->message.msg_flags & MSG_CTRUNC) {
-        data.d->state = (QUnixSocketMessagePrivate::AncillaryDataState)(QUnixSocketMessagePrivate::Truncated |
-                               QUnixSocketMessagePrivate::Credential );
-    }
+   if (d->message.msg_flags & MSG_CTRUNC) {
+      data.d->state = (QUnixSocketMessagePrivate::AncillaryDataState)(QUnixSocketMessagePrivate::Truncated |
+                      QUnixSocketMessagePrivate::Credential );
+   }
 
-    if(!a.isEmpty())
-        data.d->rights = a;
+   if (!a.isEmpty()) {
+      data.d->rights = a;
+   }
 
-    d->dataBufferLength = 0;
-    d->messageValid = false;
-    d->readNotifier->setEnabled(true);
+   d->dataBufferLength = 0;
+   d->messageValid = false;
+   d->readNotifier->setEnabled(true);
 
-    return data;
+   return data;
 }
 
 /*! \internal */
 bool QUnixSocket::isSequential() const
 {
-    return true;
+   return true;
 }
 
 /*! \internal */
 bool QUnixSocket::waitForReadyRead(int msecs)
 {
-    if(UnconnectedState == d->state)
-        return false;
+   if (UnconnectedState == d->state) {
+      return false;
+   }
 
-    if(d->messageValid) {
-        return true;
-    }
+   if (d->messageValid) {
+      return true;
+   }
 
-    Q_ASSERT(-1 != d->fd);
+   Q_ASSERT(-1 != d->fd);
 
-    int     timeout = msecs;
-    struct  timeval tv;
-    struct  timeval *ptrTv = 0;
-    QTime   stopWatch;
+   int     timeout = msecs;
+   struct  timeval tv;
+   struct  timeval *ptrTv = 0;
+   QTime   stopWatch;
 
-    stopWatch.start();
+   stopWatch.start();
 
-    do
-    {
-        fd_set readset;
+   do {
+      fd_set readset;
 
-        FD_ZERO(&readset);
-        FD_SET(d->fd, &readset);
+      FD_ZERO(&readset);
+      FD_SET(d->fd, &readset);
 
-        if(-1 != msecs) {
-            tv.tv_sec = timeout / 1000;
-            tv.tv_usec = (timeout % 1000) * 1000;
-            ptrTv = &tv;
-        }
+      if (-1 != msecs) {
+         tv.tv_sec = timeout / 1000;
+         tv.tv_usec = (timeout % 1000) * 1000;
+         ptrTv = &tv;
+      }
 
-        int rv = ::select(d->fd + 1, &readset, 0, 0, ptrTv);
-        switch(rv) {
-            case 0:
-                // timeout
-                return false;
-            case 1:
-                // ok
-                d->readActivated();
-                return true;
-            default:
-                if (errno != EINTR)
-                    abort();    // error
-                break;
-        }
+      int rv = ::select(d->fd + 1, &readset, 0, 0, ptrTv);
+      switch (rv) {
+         case 0:
+            // timeout
+            return false;
+         case 1:
+            // ok
+            d->readActivated();
+            return true;
+         default:
+            if (errno != EINTR) {
+               abort();   // error
+            }
+            break;
+      }
 
-        timeout = msecs - stopWatch.elapsed();
-    }
-    while (timeout > 0);
+      timeout = msecs - stopWatch.elapsed();
+   } while (timeout > 0);
 
-    return false;
+   return false;
 }
 
 bool QUnixSocket::waitForBytesWritten(int msecs)
 {
-    if(UnconnectedState == d->state)
-        return false;
+   if (UnconnectedState == d->state) {
+      return false;
+   }
 
-    Q_ASSERT(-1 != d->fd);
+   Q_ASSERT(-1 != d->fd);
 
-    if ( d->writeQueue.isEmpty() )
-        return true;
+   if ( d->writeQueue.isEmpty() ) {
+      return true;
+   }
 
-    QTime stopWatch;
-    stopWatch.start();
+   QTime stopWatch;
+   stopWatch.start();
 
-    while ( true )
-    {
-        fd_set fdwrite;
-        FD_ZERO(&fdwrite);
-        FD_SET(d->fd, &fdwrite);
-        int timeout = msecs < 0 ? 0 : msecs - stopWatch.elapsed();
-        struct timeval tv;
-        struct timeval *ptrTv = 0;
-        if ( -1 != msecs )
-        {
-            tv.tv_sec = timeout / 1000;
-            tv.tv_usec = (timeout % 1000) * 1000;
-            ptrTv = &tv;
-        }
+   while ( true ) {
+      fd_set fdwrite;
+      FD_ZERO(&fdwrite);
+      FD_SET(d->fd, &fdwrite);
+      int timeout = msecs < 0 ? 0 : msecs - stopWatch.elapsed();
+      struct timeval tv;
+      struct timeval *ptrTv = 0;
+      if ( -1 != msecs ) {
+         tv.tv_sec = timeout / 1000;
+         tv.tv_usec = (timeout % 1000) * 1000;
+         ptrTv = &tv;
+      }
 
-        int rv = ::select(d->fd + 1, 0, &fdwrite, 0, ptrTv);
-        switch ( rv )
-        {
-            case 0:
-                // timeout
-                return false;
-            case 1:
-            {
-                // ok to write
-                qint64 bytesWritten = d->writeActivated();
-                if (bytesWritten == 0) {
-                    // We need to retry
-                    int delay = 1;
-                    do {
-                        if (-1 != msecs) {
-                            timeout = msecs - stopWatch.elapsed();
-                            if (timeout <= 0) {
-                                // We have exceeded our allotted time
-                                return false;
-                            } else {
-                                if (delay > timeout)
-                                    delay = timeout;
-                            }
+      int rv = ::select(d->fd + 1, 0, &fdwrite, 0, ptrTv);
+      switch ( rv ) {
+         case 0:
+            // timeout
+            return false;
+         case 1: {
+            // ok to write
+            qint64 bytesWritten = d->writeActivated();
+            if (bytesWritten == 0) {
+               // We need to retry
+               int delay = 1;
+               do {
+                  if (-1 != msecs) {
+                     timeout = msecs - stopWatch.elapsed();
+                     if (timeout <= 0) {
+                        // We have exceeded our allotted time
+                        return false;
+                     } else {
+                        if (delay > timeout) {
+                           delay = timeout;
                         }
+                     }
+                  }
 
-                        // Pause before we make another attempt to send
-                        ::usleep(delay * 1000);
-                        if (delay < 1024)
-                            delay *= 2;
+                  // Pause before we make another attempt to send
+                  ::usleep(delay * 1000);
+                  if (delay < 1024) {
+                     delay *= 2;
+                  }
 
-                        bytesWritten = d->writeActivated();
-                    } while (bytesWritten == 0);
-                }
-                return (bytesWritten != -1);
+                  bytesWritten = d->writeActivated();
+               } while (bytesWritten == 0);
             }
-            default:
-                // error - or an uncaught signal!!!!!!!!!
-                if ( rv == EINTR )
-                    continue;
-                abort();
-                return false;
-        }
-    }
-    return false; // fix warnings
+            return (bytesWritten != -1);
+         }
+         default:
+            // error - or an uncaught signal!!!!!!!!!
+            if ( rv == EINTR ) {
+               continue;
+            }
+            abort();
+            return false;
+      }
+   }
+   return false; // fix warnings
 }
 
 /*! \internal */
 bool QUnixSocket::canReadLine() const
 {
-    for(unsigned int ii = 0; ii < d->dataBufferLength; ++ii)
-        if(d->dataBuffer[ii] == '\n') return true;
-    return false;
+   for (unsigned int ii = 0; ii < d->dataBufferLength; ++ii)
+      if (d->dataBuffer[ii] == '\n') {
+         return true;
+      }
+   return false;
 }
 
 /*! \internal */
-qint64 QUnixSocket::readData(char * data, qint64 maxSize)
+qint64 QUnixSocket::readData(char *data, qint64 maxSize)
 {
-    Q_ASSERT(data);
-    if(0 >= maxSize) return 0;
-    if(!d->dataBufferLength) return 0;
+   Q_ASSERT(data);
+   if (0 >= maxSize) {
+      return 0;
+   }
+   if (!d->dataBufferLength) {
+      return 0;
+   }
 
-    // Read data
-    unsigned int size = d->dataBufferLength>maxSize?maxSize:d->dataBufferLength;
-    memcpy(data, d->dataBuffer, size);
-    if(size == d->dataBufferLength) {
-        d->dataBufferLength = 0;
-    } else {
-        memmove(d->dataBuffer, d->dataBuffer + size, d->dataBufferLength - size);
-        d->dataBufferLength -= size;
-    }
+   // Read data
+   unsigned int size = d->dataBufferLength > maxSize ? maxSize : d->dataBufferLength;
+   memcpy(data, d->dataBuffer, size);
+   if (size == d->dataBufferLength) {
+      d->dataBufferLength = 0;
+   } else {
+      memmove(d->dataBuffer, d->dataBuffer + size, d->dataBufferLength - size);
+      d->dataBufferLength -= size;
+   }
 
 
-    // Flush ancillary
-    d->flushAncillary();
+   // Flush ancillary
+   d->flushAncillary();
 
-    if(0 == d->dataBufferLength)
-        d->readNotifier->setEnabled(true);
+   if (0 == d->dataBufferLength) {
+      d->readNotifier->setEnabled(true);
+   }
 
-    return size;
+   return size;
 }
 
 /*! \internal */
-qint64 QUnixSocket::writeData (const char * data, qint64 maxSize)
+qint64 QUnixSocket::writeData (const char *data, qint64 maxSize)
 {
-    return write(QUnixSocketMessage(QByteArray(data, maxSize)));
+   return write(QUnixSocketMessage(QByteArray(data, maxSize)));
 }
 
 qint64 QUnixSocketPrivate::writeActivated()
 {
-    writeNotifier->setEnabled(false);
+   writeNotifier->setEnabled(false);
 
-    QUnixSocketMessage & m = writeQueue.head();
-    const QList<QUnixSocketRights> & a = m.rights();
+   QUnixSocketMessage &m = writeQueue.head();
+   const QList<QUnixSocketRights> &a = m.rights();
 
-    //
-    // Construct the message
-    //
-    ::iovec vec;
-    if ( !m.d->vec ) // message does not already have an iovec
-    {
-        vec.iov_base = (void *)m.bytes().constData();
-        vec.iov_len = m.bytes().size();
-    }
+   //
+   // Construct the message
+   //
+   ::iovec vec;
+   if ( !m.d->vec ) { // message does not already have an iovec
+      vec.iov_base = (void *)m.bytes().constData();
+      vec.iov_len = m.bytes().size();
+   }
 
-    // Allocate the control buffer
-    ::msghdr sendmessage;
-    ::bzero(&sendmessage, sizeof(::msghdr));
-    if ( m.d->vec )
-    {
-        sendmessage.msg_iov = m.d->vec;
-        sendmessage.msg_iovlen = m.d->iovecLen;
-    }
-    else
-    {
-        sendmessage.msg_iov = &vec;
-        sendmessage.msg_iovlen = 1;
-    }
-    unsigned int required = CMSG_SPACE(sizeof(::ucred)) +
-                            a.size() * CMSG_SPACE(sizeof(int));
-    sendmessage.msg_control = new char[required];
-    ::bzero(sendmessage.msg_control, required);
-    sendmessage.msg_controllen = required;
+   // Allocate the control buffer
+   ::msghdr sendmessage;
+   ::bzero(&sendmessage, sizeof(::msghdr));
+   if ( m.d->vec ) {
+      sendmessage.msg_iov = m.d->vec;
+      sendmessage.msg_iovlen = m.d->iovecLen;
+   } else {
+      sendmessage.msg_iov = &vec;
+      sendmessage.msg_iovlen = 1;
+   }
+   unsigned int required = CMSG_SPACE(sizeof(::ucred)) +
+                           a.size() * CMSG_SPACE(sizeof(int));
+   sendmessage.msg_control = new char[required];
+   ::bzero(sendmessage.msg_control, required);
+   sendmessage.msg_controllen = required;
 
-    // Create ancillary buffer
-    ::cmsghdr * h = CMSG_FIRSTHDR(&sendmessage);
+   // Create ancillary buffer
+   ::cmsghdr *h = CMSG_FIRSTHDR(&sendmessage);
 
-    if(m.d->state & QUnixSocketMessagePrivate::Credential) {
-        h->cmsg_len = CMSG_LEN(sizeof(::ucred));
-        h->cmsg_level = SOL_SOCKET;
-        h->cmsg_type = SCM_CREDENTIALS;
-        ((::ucred *)CMSG_DATA(h))->pid = m.d->pid;
-        ((::ucred *)CMSG_DATA(h))->gid = m.d->gid;
-        ((::ucred *)CMSG_DATA(h))->uid = m.d->uid;
-        h = CMSG_NXTHDR(&sendmessage, h);
-    } else {
-        sendmessage.msg_controllen -= CMSG_SPACE(sizeof(::ucred));
-    }
+   if (m.d->state & QUnixSocketMessagePrivate::Credential) {
+      h->cmsg_len = CMSG_LEN(sizeof(::ucred));
+      h->cmsg_level = SOL_SOCKET;
+      h->cmsg_type = SCM_CREDENTIALS;
+      ((::ucred *)CMSG_DATA(h))->pid = m.d->pid;
+      ((::ucred *)CMSG_DATA(h))->gid = m.d->gid;
+      ((::ucred *)CMSG_DATA(h))->uid = m.d->uid;
+      h = CMSG_NXTHDR(&sendmessage, h);
+   } else {
+      sendmessage.msg_controllen -= CMSG_SPACE(sizeof(::ucred));
+   }
 
-    for(int ii = 0; ii < a.count(); ++ii) {
-        const QUnixSocketRights & r = a.at(ii);
+   for (int ii = 0; ii < a.count(); ++ii) {
+      const QUnixSocketRights &r = a.at(ii);
 
-        if(r.isValid()) {
-            h->cmsg_len = CMSG_LEN(sizeof(int));
-            h->cmsg_level = SOL_SOCKET;
-            h->cmsg_type = SCM_RIGHTS;
-            *((int *)CMSG_DATA(h)) = r.peekFd();
-            h = CMSG_NXTHDR(&sendmessage, h);
-        } else {
-            sendmessage.msg_controllen -= CMSG_SPACE(sizeof(int));
-        }
-    }
+      if (r.isValid()) {
+         h->cmsg_len = CMSG_LEN(sizeof(int));
+         h->cmsg_level = SOL_SOCKET;
+         h->cmsg_type = SCM_RIGHTS;
+         *((int *)CMSG_DATA(h)) = r.peekFd();
+         h = CMSG_NXTHDR(&sendmessage, h);
+      } else {
+         sendmessage.msg_controllen -= CMSG_SPACE(sizeof(int));
+      }
+   }
 
 #ifdef QUNIXSOCKET_DEBUG
-    qDebug() << "QUnixSocket: Transmitting message (length" << m.d->size() << ')';
+   qDebug() << "QUnixSocket: Transmitting message (length" << m.d->size() << ')';
 #endif
-    ::ssize_t s = ::sendmsg(fd, &sendmessage, MSG_DONTWAIT | MSG_NOSIGNAL);
+   ::ssize_t s = ::sendmsg(fd, &sendmessage, MSG_DONTWAIT | MSG_NOSIGNAL);
 #ifdef QUNIXSOCKET_DEBUG
-    qDebug() << "QUnixSocket: Transmitted message (" << s << ')';
+   qDebug() << "QUnixSocket: Transmitted message (" << s << ')';
 #endif
 
-    if(-1 == s) {
-        if(EAGAIN == errno || EWOULDBLOCK == errno || EINTR == errno) {
-            writeNotifier->setEnabled(true);
-        } else if(EPIPE == errno) {
+   if (-1 == s) {
+      if (EAGAIN == errno || EWOULDBLOCK == errno || EINTR == errno) {
+         writeNotifier->setEnabled(true);
+      } else if (EPIPE == errno) {
 #ifdef QUNIXSOCKET_DEBUG
-            qDebug() << "QUnixSocket: Remote side disconnected during transmit "
-                        "(" << ::strerror(errno) << ')';
+         qDebug() << "QUnixSocket: Remote side disconnected during transmit "
+                  "(" << ::strerror(errno) << ')';
 #endif
-            me->abort();
-        } else {
+         me->abort();
+      } else {
 #ifdef QUNIXSOCKET_DEBUG
-            qDebug() << "QUnixSocket: Unable to transmit data ("
-                     << ::strerror(errno) << ')';
+         qDebug() << "QUnixSocket: Unable to transmit data ("
+                  << ::strerror(errno) << ')';
 #endif
-            error = (QUnixSocket::SocketError)(QUnixSocket::WriteFailure |
-                    CausedAbort);
-            me->abort();
-        }
-    } else if(s != m.d->size()) {
+         error = (QUnixSocket::SocketError)(QUnixSocket::WriteFailure |
+                                            CausedAbort);
+         me->abort();
+      }
+   } else if (s != m.d->size()) {
 
-        // A partial transmission
-        writeNotifier->setEnabled(true);
-        delete [] (char *)sendmessage.msg_control;
-        m.d->rights = QList<QUnixSocketRights>();
-        m.d->removeBytes( s );
-        writeQueueBytes -= s;
-        emit bytesWritten(s);
-        return s;
+      // A partial transmission
+      writeNotifier->setEnabled(true);
+      delete [] (char *)sendmessage.msg_control;
+      m.d->rights = QList<QUnixSocketRights>();
+      m.d->removeBytes( s );
+      writeQueueBytes -= s;
+      emit bytesWritten(s);
+      return s;
 
-    } else {
+   } else {
 
-        // Success!
-        writeQueue.dequeue();
-        Q_ASSERT(writeQueueBytes >= (unsigned)s);
-        writeQueueBytes -= s;
-        emit bytesWritten(s);
+      // Success!
+      writeQueue.dequeue();
+      Q_ASSERT(writeQueueBytes >= (unsigned)s);
+      writeQueueBytes -= s;
+      emit bytesWritten(s);
 
-    }
+   }
 
-    delete [] (char *)sendmessage.msg_control;
-    if(-1 != s && !writeQueue.isEmpty())
-        return writeActivated();
-    else if(QUnixSocket::ClosingState == me->state() && writeQueue.isEmpty())
-        me->abort();
+   delete [] (char *)sendmessage.msg_control;
+   if (-1 != s && !writeQueue.isEmpty()) {
+      return writeActivated();
+   } else if (QUnixSocket::ClosingState == me->state() && writeQueue.isEmpty()) {
+      me->abort();
+   }
 
-    if((-1 == s) && (EAGAIN == errno || EWOULDBLOCK == errno || EINTR == errno))
-        // Return zero bytes written to indicate retry may be required
-        return 0;
-    else
-        return s;
+   if ((-1 == s) && (EAGAIN == errno || EWOULDBLOCK == errno || EINTR == errno))
+      // Return zero bytes written to indicate retry may be required
+   {
+      return 0;
+   } else {
+      return s;
+   }
 }
 
 void QUnixSocketPrivate::readActivated()
 {
 #ifdef QUNIXSOCKET_DEBUG
-    qDebug() << "QUnixSocket: readActivated";
+   qDebug() << "QUnixSocket: readActivated";
 #endif
-    readNotifier->setEnabled(false);
+   readNotifier->setEnabled(false);
 
-    ::iovec vec;
-    vec.iov_base = dataBuffer;
-    vec.iov_len = dataBufferCapacity;
+   ::iovec vec;
+   vec.iov_base = dataBuffer;
+   vec.iov_len = dataBufferCapacity;
 
-    bzero(&message, sizeof(::msghdr));
-    message.msg_iov = &vec;
-    message.msg_iovlen = 1;
-    message.msg_controllen = ancillaryBufferCapacity();
-    message.msg_control = ancillaryBuffer;
+   bzero(&message, sizeof(::msghdr));
+   message.msg_iov = &vec;
+   message.msg_iovlen = 1;
+   message.msg_controllen = ancillaryBufferCapacity();
+   message.msg_control = ancillaryBuffer;
 
-    int flags = 0;
+   int flags = 0;
 #ifdef MSG_CMSG_CLOEXEC
-    flags = MSG_CMSG_CLOEXEC;
+   flags = MSG_CMSG_CLOEXEC;
 #endif
 
-    int recvrv = ::recvmsg(fd, &message, flags);
+   int recvrv = ::recvmsg(fd, &message, flags);
 #ifdef QUNIXSOCKET_DEBUG
-    qDebug() << "QUnixSocket: Received message (" << recvrv << ')';
+   qDebug() << "QUnixSocket: Received message (" << recvrv << ')';
 #endif
-    if(-1 == recvrv) {
+   if (-1 == recvrv) {
 #ifdef QUNIXSOCKET_DEBUG
-        qDebug() << "QUnixSocket: Unable to receive data ("
-                 << ::strerror(errno) << ')';
+      qDebug() << "QUnixSocket: Unable to receive data ("
+               << ::strerror(errno) << ')';
 #endif
-        error = (QUnixSocket::SocketError)(QUnixSocket::ReadFailure |
-                                           CausedAbort);
-        me->abort();
-    } else if(0 == recvrv) {
-        me->abort();
-    } else {
-        Q_ASSERT(recvrv);
-        Q_ASSERT((unsigned)recvrv <= dataBufferCapacity);
-        dataBufferLength = recvrv;
-        messageValid = true;
+      error = (QUnixSocket::SocketError)(QUnixSocket::ReadFailure |
+                                         CausedAbort);
+      me->abort();
+   } else if (0 == recvrv) {
+      me->abort();
+   } else {
+      Q_ASSERT(recvrv);
+      Q_ASSERT((unsigned)recvrv <= dataBufferCapacity);
+      dataBufferLength = recvrv;
+      messageValid = true;
 
 #ifdef QUNIXSOCKET_DEBUG
-        qDebug() << "QUnixSocket: readyRead() " << dataBufferLength;
+      qDebug() << "QUnixSocket: readyRead() " << dataBufferLength;
 #endif
-        emit readyRead();
-    }
+      emit readyRead();
+   }
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,21 +32,20 @@ QT_BEGIN_NAMESPACE
 
 class QSystemConfigurationProxyFactory : public QNetworkProxyFactory
 {
-public:
-    QSystemConfigurationProxyFactory() : QNetworkProxyFactory() {}
+ public:
+   QSystemConfigurationProxyFactory() : QNetworkProxyFactory() {}
 
-    virtual QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery& query)
-    {
-        QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
+   virtual QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery &query) {
+      QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
 
-        // Make sure NoProxy is in the list, so that QTcpServer can work:
-        // it searches for the first proxy that can has the ListeningCapability capability
-        // if none have (as is the case with HTTP proxies), it fails to bind.
-        // NoProxy allows it to fallback to the 'no proxy' case and bind.
-        proxies.append(QNetworkProxy::NoProxy);
+      // Make sure NoProxy is in the list, so that QTcpServer can work:
+      // it searches for the first proxy that can has the ListeningCapability capability
+      // if none have (as is the case with HTTP proxies), it fails to bind.
+      // NoProxy allows it to fallback to the 'no proxy' case and bind.
+      proxies.append(QNetworkProxy::NoProxy);
 
-        return proxies;
-    }
+      return proxies;
+   }
 };
 
 QT_END_NAMESPACE

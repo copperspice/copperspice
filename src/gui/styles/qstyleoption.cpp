@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -83,8 +83,8 @@ QT_BEGIN_NAMESPACE
 
 
 QStyleOption::QStyleOption(int version, int type)
-    : version(version), type(type), state(QStyle::State_None),
-      direction(QApplication::layoutDirection()), fontMetrics(QFont())
+   : version(version), type(type), state(QStyle::State_None),
+     direction(QApplication::layoutDirection()), fontMetrics(QFont())
 {
 }
 
@@ -117,55 +117,63 @@ QStyleOption::~QStyleOption()
 */
 void QStyleOption::init(const QWidget *widget)
 {
-    QWidget *window = widget->window();
-    state = QStyle::State_None;
-    if (widget->isEnabled())
-        state |= QStyle::State_Enabled;
-    if (widget->hasFocus())
-        state |= QStyle::State_HasFocus;
-    if (window->testAttribute(Qt::WA_KeyboardFocusChange))
-        state |= QStyle::State_KeyboardFocusChange;
-    if (widget->underMouse())
-        state |= QStyle::State_MouseOver;
-    if (window->isActiveWindow())
-        state |= QStyle::State_Active;
-    if (widget->isWindow())
-        state |= QStyle::State_Window;
+   QWidget *window = widget->window();
+   state = QStyle::State_None;
+   if (widget->isEnabled()) {
+      state |= QStyle::State_Enabled;
+   }
+   if (widget->hasFocus()) {
+      state |= QStyle::State_HasFocus;
+   }
+   if (window->testAttribute(Qt::WA_KeyboardFocusChange)) {
+      state |= QStyle::State_KeyboardFocusChange;
+   }
+   if (widget->underMouse()) {
+      state |= QStyle::State_MouseOver;
+   }
+   if (window->isActiveWindow()) {
+      state |= QStyle::State_Active;
+   }
+   if (widget->isWindow()) {
+      state |= QStyle::State_Window;
+   }
 
 #ifdef Q_OS_MAC
-    extern bool qt_mac_can_clickThrough(const QWidget *w); //qwidget_mac.cpp
-    if (!(state & QStyle::State_Active) && !qt_mac_can_clickThrough(widget))
-        state &= ~QStyle::State_Enabled;
+   extern bool qt_mac_can_clickThrough(const QWidget * w); //qwidget_mac.cpp
+   if (!(state & QStyle::State_Active) && !qt_mac_can_clickThrough(widget)) {
+      state &= ~QStyle::State_Enabled;
+   }
 
-    switch (QMacStyle::widgetSizePolicy(widget)) {
-    case QMacStyle::SizeSmall:
-        state |= QStyle::State_Small;
-        break;
-    case QMacStyle::SizeMini:
-        state |= QStyle::State_Mini;
-        break;
-    default:
-        ;
-    }
+   switch (QMacStyle::widgetSizePolicy(widget)) {
+      case QMacStyle::SizeSmall:
+         state |= QStyle::State_Small;
+         break;
+      case QMacStyle::SizeMini:
+         state |= QStyle::State_Mini;
+         break;
+      default:
+         ;
+   }
 #endif
 #ifdef QT_KEYPAD_NAVIGATION
-    if (widget->hasEditFocus())
-        state |= QStyle::State_HasEditFocus;
+   if (widget->hasEditFocus()) {
+      state |= QStyle::State_HasEditFocus;
+   }
 #endif
 
-    direction = widget->layoutDirection();
-    rect = widget->rect();
-    palette = widget->palette();
-    fontMetrics = widget->fontMetrics();
+   direction = widget->layoutDirection();
+   rect = widget->rect();
+   palette = widget->palette();
+   fontMetrics = widget->fontMetrics();
 }
 
 /*!
    Constructs a copy of \a other.
 */
 QStyleOption::QStyleOption(const QStyleOption &other)
-    : version(Version), type(Type), state(other.state),
-      direction(other.direction), rect(other.rect), fontMetrics(other.fontMetrics),
-      palette(other.palette)
+   : version(Version), type(Type), state(other.state),
+     direction(other.direction), rect(other.rect), fontMetrics(other.fontMetrics),
+     palette(other.palette)
 {
 }
 
@@ -174,12 +182,12 @@ QStyleOption::QStyleOption(const QStyleOption &other)
 */
 QStyleOption &QStyleOption::operator=(const QStyleOption &other)
 {
-    state = other.state;
-    direction = other.direction;
-    rect = other.rect;
-    fontMetrics = other.fontMetrics;
-    palette = other.palette;
-    return *this;
+   state = other.state;
+   direction = other.direction;
+   rect = other.rect;
+   fontMetrics = other.fontMetrics;
+   palette = other.palette;
+   return *this;
 }
 
 /*!
@@ -309,18 +317,18 @@ QStyleOption &QStyleOption::operator=(const QStyleOption &other)
 */
 
 QStyleOptionFocusRect::QStyleOptionFocusRect()
-    : QStyleOption(Version, SO_FocusRect)
+   : QStyleOption(Version, SO_FocusRect)
 {
-    state |= QStyle::State_KeyboardFocusChange; // assume we had one, will be corrected in initFrom()
+   state |= QStyle::State_KeyboardFocusChange; // assume we had one, will be corrected in initFrom()
 }
 
 /*!
     \internal
 */
 QStyleOptionFocusRect::QStyleOptionFocusRect(int version)
-    : QStyleOption(version, SO_FocusRect)
+   : QStyleOption(version, SO_FocusRect)
 {
-    state |= QStyle::State_KeyboardFocusChange;  // assume we had one, will be corrected in initFrom()
+   state |= QStyle::State_KeyboardFocusChange;  // assume we had one, will be corrected in initFrom()
 }
 
 /*!
@@ -406,7 +414,7 @@ QStyleOptionFocusRect::QStyleOptionFocusRect(int version)
 */
 
 QStyleOptionFrame::QStyleOptionFrame()
-    : QStyleOption(Version, SO_Frame), lineWidth(0), midLineWidth(0)
+   : QStyleOption(Version, SO_Frame), lineWidth(0), midLineWidth(0)
 {
 }
 
@@ -414,7 +422,7 @@ QStyleOptionFrame::QStyleOptionFrame()
     \internal
 */
 QStyleOptionFrame::QStyleOptionFrame(int version)
-    : QStyleOption(version, SO_Frame), lineWidth(0), midLineWidth(0)
+   : QStyleOption(version, SO_Frame), lineWidth(0), midLineWidth(0)
 {
 }
 
@@ -518,7 +526,7 @@ QStyleOptionFrame::QStyleOptionFrame(int version)
     Constructs a QStyleOptionFrameV2 object.
 */
 QStyleOptionFrameV2::QStyleOptionFrameV2()
-    : QStyleOptionFrame(Version), features(None)
+   : QStyleOptionFrame(Version), features(None)
 {
 }
 
@@ -532,7 +540,7 @@ QStyleOptionFrameV2::QStyleOptionFrameV2()
     \internal
 */
 QStyleOptionFrameV2::QStyleOptionFrameV2(int version)
-    : QStyleOptionFrame(version), features(None)
+   : QStyleOptionFrame(version), features(None)
 {
 }
 
@@ -550,11 +558,11 @@ QStyleOptionFrameV2::QStyleOptionFrameV2(int version)
 */
 QStyleOptionFrameV2::QStyleOptionFrameV2(const QStyleOptionFrame &other)
 {
-    QStyleOptionFrame::operator=(other);
+   QStyleOptionFrame::operator=(other);
 
-    const QStyleOptionFrameV2 *f2 = qstyleoption_cast<const QStyleOptionFrameV2 *>(&other);
-    features = f2 ? f2->features : FrameFeatures(QStyleOptionFrameV2::None);
-    version = Version;
+   const QStyleOptionFrameV2 *f2 = qstyleoption_cast<const QStyleOptionFrameV2 *>(&other);
+   features = f2 ? f2->features : FrameFeatures(QStyleOptionFrameV2::None);
+   version = Version;
 }
 
 /*!
@@ -569,12 +577,12 @@ QStyleOptionFrameV2::QStyleOptionFrameV2(const QStyleOptionFrame &other)
 */
 QStyleOptionFrameV2 &QStyleOptionFrameV2::operator=(const QStyleOptionFrame &other)
 {
-    QStyleOptionFrame::operator=(other);
+   QStyleOptionFrame::operator=(other);
 
-    const QStyleOptionFrameV2 *f2 = qstyleoption_cast<const QStyleOptionFrameV2 *>(&other);
-    features = f2 ? f2->features : FrameFeatures(QStyleOptionFrameV2::None);
-    version = Version;
-    return *this;
+   const QStyleOptionFrameV2 *f2 = qstyleoption_cast<const QStyleOptionFrameV2 *>(&other);
+   features = f2 ? f2->features : FrameFeatures(QStyleOptionFrameV2::None);
+   version = Version;
+   return *this;
 }
 
 /*!
@@ -635,7 +643,7 @@ QStyleOptionFrameV2 &QStyleOptionFrameV2::operator=(const QStyleOptionFrame &oth
     Constructs a QStyleOptionFrameV3 object.
 */
 QStyleOptionFrameV3::QStyleOptionFrameV3()
-    : QStyleOptionFrameV2(Version), frameShape(QFrame::NoFrame), unused(0)
+   : QStyleOptionFrameV2(Version), frameShape(QFrame::NoFrame), unused(0)
 {
 }
 
@@ -649,7 +657,7 @@ QStyleOptionFrameV3::QStyleOptionFrameV3()
     \internal
 */
 QStyleOptionFrameV3::QStyleOptionFrameV3(int version)
-    : QStyleOptionFrameV2(version), frameShape(QFrame::NoFrame), unused(0)
+   : QStyleOptionFrameV2(version), frameShape(QFrame::NoFrame), unused(0)
 {
 }
 
@@ -667,7 +675,7 @@ QStyleOptionFrameV3::QStyleOptionFrameV3(int version)
 */
 QStyleOptionFrameV3::QStyleOptionFrameV3(const QStyleOptionFrame &other)
 {
-    operator=(other);
+   operator=(other);
 }
 
 /*!
@@ -682,12 +690,12 @@ QStyleOptionFrameV3::QStyleOptionFrameV3(const QStyleOptionFrame &other)
 */
 QStyleOptionFrameV3 &QStyleOptionFrameV3::operator=(const QStyleOptionFrame &other)
 {
-    QStyleOptionFrameV2::operator=(other);
+   QStyleOptionFrameV2::operator=(other);
 
-    const QStyleOptionFrameV3 *f3 = qstyleoption_cast<const QStyleOptionFrameV3 *>(&other);
-    frameShape = f3 ? f3->frameShape : QFrame::NoFrame;
-    version = Version;
-    return *this;
+   const QStyleOptionFrameV3 *f3 = qstyleoption_cast<const QStyleOptionFrameV3 *>(&other);
+   frameShape = f3 ? f3->frameShape : QFrame::NoFrame;
+   version = Version;
+   return *this;
 }
 
 
@@ -764,7 +772,7 @@ QStyleOptionFrameV3 &QStyleOptionFrameV3::operator=(const QStyleOptionFrame &oth
     Constructs a QStyleOptionViewItemV2 object.
 */
 QStyleOptionViewItemV2::QStyleOptionViewItemV2()
-    : QStyleOptionViewItem(Version), features(None)
+   : QStyleOptionViewItem(Version), features(None)
 {
 }
 
@@ -787,16 +795,16 @@ QStyleOptionViewItemV2::QStyleOptionViewItemV2()
     \sa version
 */
 QStyleOptionViewItemV2::QStyleOptionViewItemV2(const QStyleOptionViewItem &other)
-    : QStyleOptionViewItem(Version)
+   : QStyleOptionViewItem(Version)
 {
-    (void)QStyleOptionViewItemV2::operator=(other);
+   (void)QStyleOptionViewItemV2::operator=(other);
 }
 
 /*!
     \internal
 */
 QStyleOptionViewItemV2::QStyleOptionViewItemV2(int version)
-    : QStyleOptionViewItem(version)
+   : QStyleOptionViewItem(version)
 {
 
 }
@@ -813,10 +821,10 @@ QStyleOptionViewItemV2::QStyleOptionViewItemV2(int version)
 */
 QStyleOptionViewItemV2 &QStyleOptionViewItemV2::operator=(const QStyleOptionViewItem &other)
 {
-    QStyleOptionViewItem::operator=(other);
-    const QStyleOptionViewItemV2 *v2 = qstyleoption_cast<const QStyleOptionViewItemV2 *>(&other);
-    features = v2 ? v2->features : ViewItemFeatures(QStyleOptionViewItemV2::None);
-    return *this;
+   QStyleOptionViewItem::operator=(other);
+   const QStyleOptionViewItemV2 *v2 = qstyleoption_cast<const QStyleOptionViewItemV2 *>(&other);
+   features = v2 ? v2->features : ViewItemFeatures(QStyleOptionViewItemV2::None);
+   return *this;
 }
 
 /*!
@@ -877,7 +885,7 @@ QStyleOptionViewItemV2 &QStyleOptionViewItemV2::operator=(const QStyleOptionView
     Constructs a QStyleOptionViewItemV3 object.
 */
 QStyleOptionViewItemV3::QStyleOptionViewItemV3()
-    : QStyleOptionViewItemV2(Version), widget(0)
+   : QStyleOptionViewItemV2(Version), widget(0)
 {
 }
 
@@ -885,9 +893,9 @@ QStyleOptionViewItemV3::QStyleOptionViewItemV3()
     Constructs a copy of \a other.
 */
 QStyleOptionViewItemV3::QStyleOptionViewItemV3(const QStyleOptionViewItem &other)
-    : QStyleOptionViewItemV2(Version), widget(0)
+   : QStyleOptionViewItemV2(Version), widget(0)
 {
-    (void)QStyleOptionViewItemV3::operator=(other);
+   (void)QStyleOptionViewItemV3::operator=(other);
 }
 
 /*!
@@ -903,18 +911,18 @@ QStyleOptionViewItemV3::QStyleOptionViewItemV3(const QStyleOptionViewItem &other
 */
 QStyleOptionViewItemV3 &QStyleOptionViewItemV3::operator = (const QStyleOptionViewItem &other)
 {
-    QStyleOptionViewItemV2::operator=(other);
-    const QStyleOptionViewItemV3 *v3 = qstyleoption_cast<const QStyleOptionViewItemV3*>(&other);
-    locale = v3 ? v3->locale : QLocale();
-    widget = v3 ? v3->widget : 0;
-    return *this;
+   QStyleOptionViewItemV2::operator=(other);
+   const QStyleOptionViewItemV3 *v3 = qstyleoption_cast<const QStyleOptionViewItemV3 *>(&other);
+   locale = v3 ? v3->locale : QLocale();
+   widget = v3 ? v3->widget : 0;
+   return *this;
 }
 
 /*!
     \internal
 */
 QStyleOptionViewItemV3::QStyleOptionViewItemV3(int version)
-    : QStyleOptionViewItemV2(version), widget(0)
+   : QStyleOptionViewItemV2(version), widget(0)
 {
 }
 
@@ -1025,7 +1033,7 @@ QStyleOptionViewItemV3::QStyleOptionViewItemV3(int version)
     Constructs a QStyleOptionViewItemV4 object.
 */
 QStyleOptionViewItemV4::QStyleOptionViewItemV4()
-: QStyleOptionViewItemV3(Version), checkState(Qt::Unchecked), viewItemPosition(QStyleOptionViewItemV4::Invalid)
+   : QStyleOptionViewItemV3(Version), checkState(Qt::Unchecked), viewItemPosition(QStyleOptionViewItemV4::Invalid)
 {
 }
 
@@ -1043,9 +1051,9 @@ QStyleOptionViewItemV4::QStyleOptionViewItemV4()
     \sa version
 */
 QStyleOptionViewItemV4::QStyleOptionViewItemV4(const QStyleOptionViewItem &other)
-    : QStyleOptionViewItemV3(Version)
+   : QStyleOptionViewItemV3(Version)
 {
-    (void)QStyleOptionViewItemV4::operator=(other);
+   (void)QStyleOptionViewItemV4::operator=(other);
 }
 
 /*!
@@ -1055,26 +1063,26 @@ QStyleOptionViewItemV4::QStyleOptionViewItemV4(const QStyleOptionViewItem &other
 */
 QStyleOptionViewItemV4 &QStyleOptionViewItemV4::operator = (const QStyleOptionViewItem &other)
 {
-    QStyleOptionViewItemV3::operator=(other);
-    if (const QStyleOptionViewItemV4 *v4 = qstyleoption_cast<const QStyleOptionViewItemV4*>(&other)) {
-        index = v4->index;
-        checkState = v4->checkState;
-        text = v4->text;
-        viewItemPosition = v4->viewItemPosition;
-        backgroundBrush = v4->backgroundBrush;
-        icon = v4->icon;
-    } else {
-        viewItemPosition = QStyleOptionViewItemV4::Invalid;
-        checkState = Qt::Unchecked;
-    }
-    return *this;
+   QStyleOptionViewItemV3::operator=(other);
+   if (const QStyleOptionViewItemV4 *v4 = qstyleoption_cast<const QStyleOptionViewItemV4 *>(&other)) {
+      index = v4->index;
+      checkState = v4->checkState;
+      text = v4->text;
+      viewItemPosition = v4->viewItemPosition;
+      backgroundBrush = v4->backgroundBrush;
+      icon = v4->icon;
+   } else {
+      viewItemPosition = QStyleOptionViewItemV4::Invalid;
+      checkState = Qt::Unchecked;
+   }
+   return *this;
 }
 
 /*!
     \internal
 */
 QStyleOptionViewItemV4::QStyleOptionViewItemV4(int version)
-    : QStyleOptionViewItemV3(version)
+   : QStyleOptionViewItemV3(version)
 {
 }
 #endif // QT_NO_ITEMVIEWS
@@ -1195,8 +1203,8 @@ QStyleOptionViewItemV4::QStyleOptionViewItemV4(int version)
     variables to their default values.
 */
 QStyleOptionGroupBox::QStyleOptionGroupBox()
-    : QStyleOptionComplex(Version, Type), features(QStyleOptionFrameV2::None),
-      textAlignment(Qt::AlignLeft), lineWidth(0), midLineWidth(0)
+   : QStyleOptionComplex(Version, Type), features(QStyleOptionFrameV2::None),
+     textAlignment(Qt::AlignLeft), lineWidth(0), midLineWidth(0)
 {
 }
 
@@ -1210,8 +1218,8 @@ QStyleOptionGroupBox::QStyleOptionGroupBox()
     \internal
 */
 QStyleOptionGroupBox::QStyleOptionGroupBox(int version)
-    : QStyleOptionComplex(version, Type), features(QStyleOptionFrameV2::None),
-      textAlignment(Qt::AlignLeft), lineWidth(0), midLineWidth(0)
+   : QStyleOptionComplex(version, Type), features(QStyleOptionFrameV2::None),
+     textAlignment(Qt::AlignLeft), lineWidth(0), midLineWidth(0)
 {
 }
 
@@ -1241,11 +1249,11 @@ QStyleOptionGroupBox::QStyleOptionGroupBox(int version)
 */
 
 QStyleOptionHeader::QStyleOptionHeader()
-    : QStyleOption(QStyleOptionHeader::Version, SO_Header),
-      section(0), textAlignment(Qt::AlignLeft), iconAlignment(Qt::AlignLeft),
-      position(QStyleOptionHeader::Beginning),
-      selectedPosition(QStyleOptionHeader::NotAdjacent), sortIndicator(None),
-      orientation(Qt::Horizontal)
+   : QStyleOption(QStyleOptionHeader::Version, SO_Header),
+     section(0), textAlignment(Qt::AlignLeft), iconAlignment(Qt::AlignLeft),
+     position(QStyleOptionHeader::Beginning),
+     selectedPosition(QStyleOptionHeader::NotAdjacent), sortIndicator(None),
+     orientation(Qt::Horizontal)
 {
 }
 
@@ -1253,11 +1261,11 @@ QStyleOptionHeader::QStyleOptionHeader()
     \internal
 */
 QStyleOptionHeader::QStyleOptionHeader(int version)
-    : QStyleOption(version, SO_Header),
-      section(0), textAlignment(Qt::AlignLeft), iconAlignment(Qt::AlignLeft),
-      position(QStyleOptionHeader::Beginning),
-      selectedPosition(QStyleOptionHeader::NotAdjacent), sortIndicator(None),
-      orientation(Qt::Horizontal)
+   : QStyleOption(version, SO_Header),
+     section(0), textAlignment(Qt::AlignLeft), iconAlignment(Qt::AlignLeft),
+     position(QStyleOptionHeader::Beginning),
+     selectedPosition(QStyleOptionHeader::NotAdjacent), sortIndicator(None),
+     orientation(Qt::Horizontal)
 {
 }
 
@@ -1441,7 +1449,7 @@ QStyleOptionHeader::QStyleOptionHeader(int version)
 */
 
 QStyleOptionButton::QStyleOptionButton()
-    : QStyleOption(QStyleOptionButton::Version, SO_Button), features(None)
+   : QStyleOption(QStyleOptionButton::Version, SO_Button), features(None)
 {
 }
 
@@ -1449,7 +1457,7 @@ QStyleOptionButton::QStyleOptionButton()
     \internal
 */
 QStyleOptionButton::QStyleOptionButton(int version)
-    : QStyleOption(version, SO_Button), features(None)
+   : QStyleOption(version, SO_Button), features(None)
 {
 }
 
@@ -1563,8 +1571,8 @@ QStyleOptionButton::QStyleOptionButton(int version)
 */
 
 QStyleOptionToolBar::QStyleOptionToolBar()
-    : QStyleOption(Version, SO_ToolBar), positionOfLine(OnlyOne), positionWithinLine(OnlyOne),
-      toolBarArea(Qt::TopToolBarArea), features(None), lineWidth(0), midLineWidth(0)
+   : QStyleOption(Version, SO_ToolBar), positionOfLine(OnlyOne), positionWithinLine(OnlyOne),
+     toolBarArea(Qt::TopToolBarArea), features(None), lineWidth(0), midLineWidth(0)
 {
 }
 
@@ -1578,8 +1586,8 @@ QStyleOptionToolBar::QStyleOptionToolBar()
     \internal
 */
 QStyleOptionToolBar::QStyleOptionToolBar(int version)
-: QStyleOption(version, SO_ToolBar), positionOfLine(OnlyOne), positionWithinLine(OnlyOne),
-  toolBarArea(Qt::TopToolBarArea), features(None), lineWidth(0), midLineWidth(0)
+   : QStyleOption(version, SO_ToolBar), positionOfLine(OnlyOne), positionWithinLine(OnlyOne),
+     toolBarArea(Qt::TopToolBarArea), features(None), lineWidth(0), midLineWidth(0)
 {
 
 }
@@ -1745,11 +1753,11 @@ QStyleOptionToolBar::QStyleOptionToolBar(int version)
 */
 
 QStyleOptionTab::QStyleOptionTab()
-    : QStyleOption(QStyleOptionTab::Version, SO_Tab),
-      shape(QTabBar::RoundedNorth),
-      row(0),
-      position(Beginning),
-      selectedPosition(NotAdjacent), cornerWidgets(QStyleOptionTab::NoCornerWidgets)
+   : QStyleOption(QStyleOptionTab::Version, SO_Tab),
+     shape(QTabBar::RoundedNorth),
+     row(0),
+     position(Beginning),
+     selectedPosition(NotAdjacent), cornerWidgets(QStyleOptionTab::NoCornerWidgets)
 {
 }
 
@@ -1757,11 +1765,11 @@ QStyleOptionTab::QStyleOptionTab()
     \internal
 */
 QStyleOptionTab::QStyleOptionTab(int version)
-    : QStyleOption(version, SO_Tab),
-      shape(QTabBar::RoundedNorth),
-      row(0),
-      position(Beginning),
-      selectedPosition(NotAdjacent), cornerWidgets(QStyleOptionTab::NoCornerWidgets)
+   : QStyleOption(version, SO_Tab),
+     shape(QTabBar::RoundedNorth),
+     row(0),
+     position(Beginning),
+     selectedPosition(NotAdjacent), cornerWidgets(QStyleOptionTab::NoCornerWidgets)
 {
 }
 
@@ -1962,7 +1970,7 @@ QStyleOptionTab::QStyleOptionTab(int version)
     Constructs a QStyleOptionTabV2.
 */
 QStyleOptionTabV2::QStyleOptionTabV2()
-    : QStyleOptionTab(Version)
+   : QStyleOptionTab(Version)
 {
 }
 
@@ -1970,7 +1978,7 @@ QStyleOptionTabV2::QStyleOptionTabV2()
     \internal
 */
 QStyleOptionTabV2::QStyleOptionTabV2(int version)
-    : QStyleOptionTab(version)
+   : QStyleOptionTab(version)
 {
 }
 
@@ -1990,14 +1998,14 @@ QStyleOptionTabV2::QStyleOptionTabV2(int version)
     \c iconSize value is simply copied to the new style option.
 */
 QStyleOptionTabV2::QStyleOptionTabV2(const QStyleOptionTab &other)
-    : QStyleOptionTab(Version)
+   : QStyleOptionTab(Version)
 {
-    if (const QStyleOptionTabV2 *tab = qstyleoption_cast<const QStyleOptionTabV2 *>(&other)) {
-        *this = *tab;
-    } else {
-        *((QStyleOptionTab *)this) = other;
-        version = Version;
-    }
+   if (const QStyleOptionTabV2 *tab = qstyleoption_cast<const QStyleOptionTabV2 *>(&other)) {
+      *this = *tab;
+   } else {
+      *((QStyleOptionTab *)this) = other;
+      version = Version;
+   }
 }
 
 /*!
@@ -2011,13 +2019,14 @@ QStyleOptionTabV2::QStyleOptionTabV2(const QStyleOptionTab &other)
 */
 QStyleOptionTabV2 &QStyleOptionTabV2::operator=(const QStyleOptionTab &other)
 {
-    QStyleOptionTab::operator=(other);
+   QStyleOptionTab::operator=(other);
 
-    if (const QStyleOptionTabV2 *tab = qstyleoption_cast<const QStyleOptionTabV2 *>(&other))
-        iconSize = tab->iconSize;
-    else
-        iconSize = QSize();
-    return *this;
+   if (const QStyleOptionTabV2 *tab = qstyleoption_cast<const QStyleOptionTabV2 *>(&other)) {
+      iconSize = tab->iconSize;
+   } else {
+      iconSize = QSize();
+   }
+   return *this;
 }
 
 /*!
@@ -2097,8 +2106,8 @@ QStyleOptionTabV2 &QStyleOptionTabV2::operator=(const QStyleOptionTab &other)
 */
 
 QStyleOptionTabV3::QStyleOptionTabV3()
-    : QStyleOptionTabV2(Version)
-    , documentMode(false)
+   : QStyleOptionTabV2(Version)
+   , documentMode(false)
 {
 }
 
@@ -2106,7 +2115,7 @@ QStyleOptionTabV3::QStyleOptionTabV3()
     \internal
 */
 QStyleOptionTabV3::QStyleOptionTabV3(int version)
-    : QStyleOptionTabV2(version)
+   : QStyleOptionTabV2(version)
 {
 }
 
@@ -2133,14 +2142,14 @@ QStyleOptionTabV3::QStyleOptionTabV3(int version)
     are simply copied to the new style option.
 */
 QStyleOptionTabV3::QStyleOptionTabV3(const QStyleOptionTab &other)
-    : QStyleOptionTabV2(Version)
+   : QStyleOptionTabV2(Version)
 {
-    if (const QStyleOptionTabV3 *tab = qstyleoption_cast<const QStyleOptionTabV3 *>(&other)) {
-        *this = *tab;
-    } else {
-        *((QStyleOptionTabV2 *)this) = other;
-        version = Version;
-    }
+   if (const QStyleOptionTabV3 *tab = qstyleoption_cast<const QStyleOptionTabV3 *>(&other)) {
+      *this = *tab;
+   } else {
+      *((QStyleOptionTabV2 *)this) = other;
+      version = Version;
+   }
 }
 
 /*!
@@ -2155,17 +2164,17 @@ QStyleOptionTabV3::QStyleOptionTabV3(const QStyleOptionTab &other)
 */
 QStyleOptionTabV3 &QStyleOptionTabV3::operator=(const QStyleOptionTab &other)
 {
-    QStyleOptionTabV2::operator=(other);
+   QStyleOptionTabV2::operator=(other);
 
-    if (const QStyleOptionTabV3 *tab = qstyleoption_cast<const QStyleOptionTabV3 *>(&other)) {
-        leftButtonSize = tab->leftButtonSize;
-        rightButtonSize = tab->rightButtonSize;
-    } else {
-        leftButtonSize = QSize();
-        rightButtonSize = QSize();
-        documentMode = false;
-    }
-    return *this;
+   if (const QStyleOptionTabV3 *tab = qstyleoption_cast<const QStyleOptionTabV3 *>(&other)) {
+      leftButtonSize = tab->leftButtonSize;
+      rightButtonSize = tab->rightButtonSize;
+   } else {
+      leftButtonSize = QSize();
+      rightButtonSize = QSize();
+      documentMode = false;
+   }
+   return *this;
 }
 
 #endif // QT_NO_TABBAR
@@ -2204,8 +2213,8 @@ QStyleOptionTabV3 &QStyleOptionTabV3::operator=(const QStyleOptionTab &other)
 */
 
 QStyleOptionProgressBar::QStyleOptionProgressBar()
-    : QStyleOption(QStyleOptionProgressBar::Version, SO_ProgressBar),
-      minimum(0), maximum(0), progress(0), textAlignment(Qt::AlignLeft), textVisible(false)
+   : QStyleOption(QStyleOptionProgressBar::Version, SO_ProgressBar),
+     minimum(0), maximum(0), progress(0), textAlignment(Qt::AlignLeft), textVisible(false)
 {
 }
 
@@ -2213,8 +2222,8 @@ QStyleOptionProgressBar::QStyleOptionProgressBar()
     \internal
 */
 QStyleOptionProgressBar::QStyleOptionProgressBar(int version)
-    : QStyleOption(version, SO_ProgressBar),
-      minimum(0), maximum(0), progress(0), textAlignment(Qt::AlignLeft), textVisible(false)
+   : QStyleOption(version, SO_ProgressBar),
+     minimum(0), maximum(0), progress(0), textAlignment(Qt::AlignLeft), textVisible(false)
 {
 }
 
@@ -2359,8 +2368,8 @@ QStyleOptionProgressBar::QStyleOptionProgressBar(int version)
 */
 
 QStyleOptionProgressBarV2::QStyleOptionProgressBarV2()
-    : QStyleOptionProgressBar(2),
-      orientation(Qt::Horizontal), invertedAppearance(false), bottomToTop(false)
+   : QStyleOptionProgressBar(2),
+     orientation(Qt::Horizontal), invertedAppearance(false), bottomToTop(false)
 {
 }
 
@@ -2368,8 +2377,8 @@ QStyleOptionProgressBarV2::QStyleOptionProgressBarV2()
     \internal
 */
 QStyleOptionProgressBarV2::QStyleOptionProgressBarV2(int version)
-    : QStyleOptionProgressBar(version),
-      orientation(Qt::Horizontal), invertedAppearance(false), bottomToTop(false)
+   : QStyleOptionProgressBar(version),
+     orientation(Qt::Horizontal), invertedAppearance(false), bottomToTop(false)
 {
 }
 
@@ -2386,22 +2395,23 @@ QStyleOptionProgressBarV2::QStyleOptionProgressBarV2(int version)
     \sa version
 */
 QStyleOptionProgressBarV2::QStyleOptionProgressBarV2(const QStyleOptionProgressBar &other)
-    : QStyleOptionProgressBar(2), orientation(Qt::Horizontal), invertedAppearance(false), bottomToTop(false)
+   : QStyleOptionProgressBar(2), orientation(Qt::Horizontal), invertedAppearance(false), bottomToTop(false)
 {
-    const QStyleOptionProgressBarV2 *pb2 = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(&other);
-    if (pb2)
-        *this = *pb2;
-    else
-        *((QStyleOptionProgressBar *)this) = other;
+   const QStyleOptionProgressBarV2 *pb2 = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(&other);
+   if (pb2) {
+      *this = *pb2;
+   } else {
+      *((QStyleOptionProgressBar *)this) = other;
+   }
 }
 
 /*!
     Constructs a copy of the \a other style option.
 */
 QStyleOptionProgressBarV2::QStyleOptionProgressBarV2(const QStyleOptionProgressBarV2 &other)
-    : QStyleOptionProgressBar(2), orientation(Qt::Horizontal), invertedAppearance(false), bottomToTop(false)
+   : QStyleOptionProgressBar(2), orientation(Qt::Horizontal), invertedAppearance(false), bottomToTop(false)
 {
-    *this = other;
+   *this = other;
 }
 
 /*!
@@ -2417,13 +2427,13 @@ QStyleOptionProgressBarV2::QStyleOptionProgressBarV2(const QStyleOptionProgressB
 */
 QStyleOptionProgressBarV2 &QStyleOptionProgressBarV2::operator=(const QStyleOptionProgressBar &other)
 {
-    QStyleOptionProgressBar::operator=(other);
+   QStyleOptionProgressBar::operator=(other);
 
-    const QStyleOptionProgressBarV2 *pb2 = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(&other);
-    orientation = pb2 ? pb2->orientation : Qt::Horizontal;
-    invertedAppearance = pb2 ? pb2->invertedAppearance : false;
-    bottomToTop = pb2 ? pb2->bottomToTop : false;
-    return *this;
+   const QStyleOptionProgressBarV2 *pb2 = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(&other);
+   orientation = pb2 ? pb2->orientation : Qt::Horizontal;
+   invertedAppearance = pb2 ? pb2->invertedAppearance : false;
+   bottomToTop = pb2 ? pb2->bottomToTop : false;
+   return *this;
 }
 
 /*!
@@ -2511,8 +2521,8 @@ QStyleOptionProgressBarV2 &QStyleOptionProgressBarV2::operator=(const QStyleOpti
 */
 
 QStyleOptionMenuItem::QStyleOptionMenuItem()
-    : QStyleOption(QStyleOptionMenuItem::Version, SO_MenuItem), menuItemType(Normal),
-      checkType(NotCheckable), checked(false), menuHasCheckableItems(true), maxIconWidth(0), tabWidth(0)
+   : QStyleOption(QStyleOptionMenuItem::Version, SO_MenuItem), menuItemType(Normal),
+     checkType(NotCheckable), checked(false), menuHasCheckableItems(true), maxIconWidth(0), tabWidth(0)
 {
 }
 
@@ -2520,8 +2530,8 @@ QStyleOptionMenuItem::QStyleOptionMenuItem()
     \internal
 */
 QStyleOptionMenuItem::QStyleOptionMenuItem(int version)
-    : QStyleOption(version, SO_MenuItem), menuItemType(Normal),
-      checkType(NotCheckable), checked(false), menuHasCheckableItems(true), maxIconWidth(0), tabWidth(0)
+   : QStyleOption(version, SO_MenuItem), menuItemType(Normal),
+     checkType(NotCheckable), checked(false), menuHasCheckableItems(true), maxIconWidth(0), tabWidth(0)
 {
 }
 
@@ -2708,7 +2718,7 @@ QStyleOptionMenuItem::QStyleOptionMenuItem(int version)
 */
 
 QStyleOptionComplex::QStyleOptionComplex(int version, int type)
-    : QStyleOption(version, type), subControls(QStyle::SC_All), activeSubControls(QStyle::SC_None)
+   : QStyleOption(version, type), subControls(QStyle::SC_All), activeSubControls(QStyle::SC_None)
 {
 }
 
@@ -2797,10 +2807,10 @@ QStyleOptionComplex::QStyleOptionComplex(int version, int type)
 */
 
 QStyleOptionSlider::QStyleOptionSlider()
-    : QStyleOptionComplex(Version, SO_Slider), orientation(Qt::Horizontal), minimum(0), maximum(0),
-      tickPosition(QSlider::NoTicks), tickInterval(0), upsideDown(false),
-      sliderPosition(0), sliderValue(0), singleStep(0), pageStep(0), notchTarget(0.0),
-      dialWrapping(false)
+   : QStyleOptionComplex(Version, SO_Slider), orientation(Qt::Horizontal), minimum(0), maximum(0),
+     tickPosition(QSlider::NoTicks), tickInterval(0), upsideDown(false),
+     sliderPosition(0), sliderValue(0), singleStep(0), pageStep(0), notchTarget(0.0),
+     dialWrapping(false)
 {
 }
 
@@ -2808,10 +2818,10 @@ QStyleOptionSlider::QStyleOptionSlider()
     \internal
 */
 QStyleOptionSlider::QStyleOptionSlider(int version)
-    : QStyleOptionComplex(version, SO_Slider), orientation(Qt::Horizontal), minimum(0), maximum(0),
-      tickPosition(QSlider::NoTicks), tickInterval(0), upsideDown(false),
-      sliderPosition(0), sliderValue(0), singleStep(0), pageStep(0), notchTarget(0.0),
-      dialWrapping(false)
+   : QStyleOptionComplex(version, SO_Slider), orientation(Qt::Horizontal), minimum(0), maximum(0),
+     tickPosition(QSlider::NoTicks), tickInterval(0), upsideDown(false),
+     sliderPosition(0), sliderValue(0), singleStep(0), pageStep(0), notchTarget(0.0),
+     dialWrapping(false)
 {
 }
 
@@ -2994,8 +3004,8 @@ QStyleOptionSlider::QStyleOptionSlider(int version)
 */
 
 QStyleOptionSpinBox::QStyleOptionSpinBox()
-    : QStyleOptionComplex(Version, SO_SpinBox), buttonSymbols(QAbstractSpinBox::UpDownArrows),
-      stepEnabled(QAbstractSpinBox::StepNone), frame(false)
+   : QStyleOptionComplex(Version, SO_SpinBox), buttonSymbols(QAbstractSpinBox::UpDownArrows),
+     stepEnabled(QAbstractSpinBox::StepNone), frame(false)
 {
 }
 
@@ -3003,16 +3013,16 @@ QStyleOptionSpinBox::QStyleOptionSpinBox()
     \internal
 */
 QStyleOptionSpinBox::QStyleOptionSpinBox(int version)
-    : QStyleOptionComplex(version, SO_SpinBox), buttonSymbols(QAbstractSpinBox::UpDownArrows),
-      stepEnabled(QAbstractSpinBox::StepNone), frame(false)
+   : QStyleOptionComplex(version, SO_SpinBox), buttonSymbols(QAbstractSpinBox::UpDownArrows),
+     stepEnabled(QAbstractSpinBox::StepNone), frame(false)
 {
 }
 
 #endif // QT_NO_SPINBOX
 
 QStyleOptionDockWidget::QStyleOptionDockWidget()
-    : QStyleOption(Version, SO_DockWidget), closable(false),
-      movable(false), floatable(false)
+   : QStyleOption(Version, SO_DockWidget), closable(false),
+     movable(false), floatable(false)
 {
 }
 
@@ -3020,35 +3030,35 @@ QStyleOptionDockWidget::QStyleOptionDockWidget()
     \internal
 */
 QStyleOptionDockWidget::QStyleOptionDockWidget(int version)
-    : QStyleOption(version, SO_DockWidget), closable(false),
-      movable(false), floatable(false)
+   : QStyleOption(version, SO_DockWidget), closable(false),
+     movable(false), floatable(false)
 {
 }
 
 QStyleOptionDockWidgetV2::QStyleOptionDockWidgetV2()
-    : QStyleOptionDockWidget(Version), verticalTitleBar(false)
+   : QStyleOptionDockWidget(Version), verticalTitleBar(false)
 {
 }
 
 QStyleOptionDockWidgetV2::QStyleOptionDockWidgetV2(
-                                    const QStyleOptionDockWidget &other)
-    : QStyleOptionDockWidget(Version)
+   const QStyleOptionDockWidget &other)
+   : QStyleOptionDockWidget(Version)
 {
-    (void)QStyleOptionDockWidgetV2::operator=(other);
+   (void)QStyleOptionDockWidgetV2::operator=(other);
 }
 
 QStyleOptionDockWidgetV2 &QStyleOptionDockWidgetV2::operator = (
-                                    const QStyleOptionDockWidget &other)
+   const QStyleOptionDockWidget &other)
 {
-    QStyleOptionDockWidget::operator=(other);
-    const QStyleOptionDockWidgetV2 *v2
-        = qstyleoption_cast<const QStyleOptionDockWidgetV2*>(&other);
-    verticalTitleBar = v2 ? v2->verticalTitleBar : false;
-    return *this;
+   QStyleOptionDockWidget::operator=(other);
+   const QStyleOptionDockWidgetV2 *v2
+      = qstyleoption_cast<const QStyleOptionDockWidgetV2 *>(&other);
+   verticalTitleBar = v2 ? v2->verticalTitleBar : false;
+   return *this;
 }
 
 QStyleOptionDockWidgetV2::QStyleOptionDockWidgetV2(int version)
-    : QStyleOptionDockWidget(version), verticalTitleBar(false)
+   : QStyleOptionDockWidget(version), verticalTitleBar(false)
 {
 }
 
@@ -3157,8 +3167,8 @@ QStyleOptionDockWidgetV2::QStyleOptionDockWidgetV2(int version)
 */
 
 QStyleOptionToolButton::QStyleOptionToolButton()
-    : QStyleOptionComplex(Version, SO_ToolButton), features(None), arrowType(Qt::DownArrow)
-    , toolButtonStyle(Qt::ToolButtonIconOnly)
+   : QStyleOptionComplex(Version, SO_ToolButton), features(None), arrowType(Qt::DownArrow)
+   , toolButtonStyle(Qt::ToolButtonIconOnly)
 {
 }
 
@@ -3166,8 +3176,8 @@ QStyleOptionToolButton::QStyleOptionToolButton()
     \internal
 */
 QStyleOptionToolButton::QStyleOptionToolButton(int version)
-    : QStyleOptionComplex(version, SO_ToolButton), features(None), arrowType(Qt::DownArrow)
-    , toolButtonStyle(Qt::ToolButtonIconOnly)
+   : QStyleOptionComplex(version, SO_ToolButton), features(None), arrowType(Qt::DownArrow)
+   , toolButtonStyle(Qt::ToolButtonIconOnly)
 
 {
 }
@@ -3304,7 +3314,7 @@ QStyleOptionToolButton::QStyleOptionToolButton(int version)
 */
 
 QStyleOptionComboBox::QStyleOptionComboBox()
-    : QStyleOptionComplex(Version, SO_ComboBox), editable(false), frame(true)
+   : QStyleOptionComplex(Version, SO_ComboBox), editable(false), frame(true)
 {
 }
 
@@ -3312,7 +3322,7 @@ QStyleOptionComboBox::QStyleOptionComboBox()
     \internal
 */
 QStyleOptionComboBox::QStyleOptionComboBox(int version)
-    : QStyleOptionComplex(version, SO_ComboBox), editable(false), frame(true)
+   : QStyleOptionComplex(version, SO_ComboBox), editable(false), frame(true)
 {
 }
 
@@ -3430,7 +3440,7 @@ QStyleOptionComboBox::QStyleOptionComboBox(int version)
 */
 
 QStyleOptionToolBox::QStyleOptionToolBox()
-    : QStyleOption(Version, SO_ToolBox)
+   : QStyleOption(Version, SO_ToolBox)
 {
 }
 
@@ -3438,7 +3448,7 @@ QStyleOptionToolBox::QStyleOptionToolBox()
     \internal
 */
 QStyleOptionToolBox::QStyleOptionToolBox(int version)
-    : QStyleOption(version, SO_ToolBox)
+   : QStyleOption(version, SO_ToolBox)
 {
 }
 
@@ -3523,7 +3533,7 @@ QStyleOptionToolBox::QStyleOptionToolBox(int version)
     Contsructs a QStyleOptionToolBoxV2 object.
 */
 QStyleOptionToolBoxV2::QStyleOptionToolBoxV2()
-    : QStyleOptionToolBox(Version), position(Beginning), selectedPosition(NotAdjacent)
+   : QStyleOptionToolBox(Version), position(Beginning), selectedPosition(NotAdjacent)
 {
 }
 
@@ -3537,7 +3547,7 @@ QStyleOptionToolBoxV2::QStyleOptionToolBoxV2()
     \internal
 */
 QStyleOptionToolBoxV2::QStyleOptionToolBoxV2(int version)
-    : QStyleOptionToolBox(version), position(Beginning), selectedPosition(NotAdjacent)
+   : QStyleOptionToolBox(version), position(Beginning), selectedPosition(NotAdjacent)
 {
 }
 
@@ -3557,12 +3567,12 @@ QStyleOptionToolBoxV2::QStyleOptionToolBoxV2(int version)
 */
 QStyleOptionToolBoxV2::QStyleOptionToolBoxV2(const QStyleOptionToolBox &other)
 {
-    QStyleOptionToolBox::operator=(other);
+   QStyleOptionToolBox::operator=(other);
 
-    const QStyleOptionToolBoxV2 *f2 = qstyleoption_cast<const QStyleOptionToolBoxV2 *>(&other);
-    position = f2 ? f2->position : Beginning;
-    selectedPosition = f2 ? f2->selectedPosition : NotAdjacent;
-    version = Version;
+   const QStyleOptionToolBoxV2 *f2 = qstyleoption_cast<const QStyleOptionToolBoxV2 *>(&other);
+   position = f2 ? f2->position : Beginning;
+   selectedPosition = f2 ? f2->selectedPosition : NotAdjacent;
+   version = Version;
 }
 
 /*!
@@ -3579,13 +3589,13 @@ QStyleOptionToolBoxV2::QStyleOptionToolBoxV2(const QStyleOptionToolBox &other)
 */
 QStyleOptionToolBoxV2 &QStyleOptionToolBoxV2::operator=(const QStyleOptionToolBox &other)
 {
-    QStyleOptionToolBox::operator=(other);
+   QStyleOptionToolBox::operator=(other);
 
-    const QStyleOptionToolBoxV2 *f2 = qstyleoption_cast<const QStyleOptionToolBoxV2 *>(&other);
-    position = f2 ? f2->position : Beginning;
-    selectedPosition = f2 ? f2->selectedPosition : NotAdjacent;
-    version = Version;
-    return *this;
+   const QStyleOptionToolBoxV2 *f2 = qstyleoption_cast<const QStyleOptionToolBoxV2 *>(&other);
+   position = f2 ? f2->position : Beginning;
+   selectedPosition = f2 ? f2->selectedPosition : NotAdjacent;
+   version = Version;
+   return *this;
 }
 
 
@@ -3657,7 +3667,7 @@ QStyleOptionToolBoxV2 &QStyleOptionToolBoxV2::operator=(const QStyleOptionToolBo
 */
 
 QStyleOptionRubberBand::QStyleOptionRubberBand()
-    : QStyleOption(Version, SO_RubberBand), shape(QRubberBand::Line), opaque(false)
+   : QStyleOption(Version, SO_RubberBand), shape(QRubberBand::Line), opaque(false)
 {
 }
 
@@ -3665,7 +3675,7 @@ QStyleOptionRubberBand::QStyleOptionRubberBand()
     \internal
 */
 QStyleOptionRubberBand::QStyleOptionRubberBand(int version)
-    : QStyleOption(version, SO_RubberBand), shape(QRubberBand::Line), opaque(false)
+   : QStyleOption(version, SO_RubberBand), shape(QRubberBand::Line), opaque(false)
 {
 }
 
@@ -3746,7 +3756,7 @@ QStyleOptionRubberBand::QStyleOptionRubberBand(int version)
 */
 
 QStyleOptionTitleBar::QStyleOptionTitleBar()
-    : QStyleOptionComplex(Version, SO_TitleBar), titleBarState(0), titleBarFlags(0)
+   : QStyleOptionComplex(Version, SO_TitleBar), titleBarState(0), titleBarFlags(0)
 {
 }
 
@@ -3791,7 +3801,7 @@ QStyleOptionTitleBar::QStyleOptionTitleBar()
     \internal
 */
 QStyleOptionTitleBar::QStyleOptionTitleBar(int version)
-    : QStyleOptionComplex(version, SO_TitleBar), titleBarState(0), titleBarFlags(0)
+   : QStyleOptionComplex(version, SO_TitleBar), titleBarState(0), titleBarFlags(0)
 {
 }
 
@@ -3892,10 +3902,10 @@ QStyleOptionTitleBar::QStyleOptionTitleBar(int version)
 */
 
 QStyleOptionViewItem::QStyleOptionViewItem()
-    : QStyleOption(Version, SO_ViewItem),
-      displayAlignment(Qt::AlignLeft), decorationAlignment(Qt::AlignLeft),
-      textElideMode(Qt::ElideMiddle), decorationPosition(Left),
-      showDecorationSelected(false)
+   : QStyleOption(Version, SO_ViewItem),
+     displayAlignment(Qt::AlignLeft), decorationAlignment(Qt::AlignLeft),
+     textElideMode(Qt::ElideMiddle), decorationPosition(Left),
+     showDecorationSelected(false)
 {
 }
 
@@ -3903,10 +3913,10 @@ QStyleOptionViewItem::QStyleOptionViewItem()
     \internal
 */
 QStyleOptionViewItem::QStyleOptionViewItem(int version)
-    : QStyleOption(version, SO_ViewItem),
-      displayAlignment(Qt::AlignLeft), decorationAlignment(Qt::AlignLeft),
-      textElideMode(Qt::ElideMiddle), decorationPosition(Left),
-      showDecorationSelected(false)
+   : QStyleOption(version, SO_ViewItem),
+     displayAlignment(Qt::AlignLeft), decorationAlignment(Qt::AlignLeft),
+     textElideMode(Qt::ElideMiddle), decorationPosition(Left),
+     showDecorationSelected(false)
 {
 }
 
@@ -4035,8 +4045,8 @@ QStyleOptionViewItem::QStyleOptionViewItem(int version)
     variables to their default values.
 */
 QStyleOptionTabWidgetFrame::QStyleOptionTabWidgetFrame()
-    : QStyleOption(Version, SO_TabWidgetFrame), lineWidth(0), midLineWidth(0),
-      shape(QTabBar::RoundedNorth)
+   : QStyleOption(Version, SO_TabWidgetFrame), lineWidth(0), midLineWidth(0),
+     shape(QTabBar::RoundedNorth)
 {
 }
 
@@ -4048,8 +4058,8 @@ QStyleOptionTabWidgetFrame::QStyleOptionTabWidgetFrame()
 
 /*! \internal */
 QStyleOptionTabWidgetFrame::QStyleOptionTabWidgetFrame(int version)
-    : QStyleOption(version, SO_TabWidgetFrame), lineWidth(0), midLineWidth(0),
-      shape(QTabBar::RoundedNorth)
+   : QStyleOption(version, SO_TabWidgetFrame), lineWidth(0), midLineWidth(0),
+     shape(QTabBar::RoundedNorth)
 {
 }
 
@@ -4172,14 +4182,14 @@ QStyleOptionTabWidgetFrame::QStyleOptionTabWidgetFrame(int version)
 */
 
 QStyleOptionTabWidgetFrameV2::QStyleOptionTabWidgetFrameV2()
-    : QStyleOptionTabWidgetFrame(Version)
+   : QStyleOptionTabWidgetFrame(Version)
 {
 }
 
 
 /*! \internal */
 QStyleOptionTabWidgetFrameV2::QStyleOptionTabWidgetFrameV2(int version)
-    : QStyleOptionTabWidgetFrame(version)
+   : QStyleOptionTabWidgetFrame(version)
 {
 }
 
@@ -4203,7 +4213,7 @@ QStyleOptionTabWidgetFrameV2::QStyleOptionTabWidgetFrameV2(int version)
 */
 QStyleOptionTabWidgetFrameV2::QStyleOptionTabWidgetFrameV2(const QStyleOptionTabWidgetFrame &other)
 {
-    QStyleOptionTabWidgetFrameV2::operator=(other);
+   QStyleOptionTabWidgetFrameV2::operator=(other);
 
 }
 
@@ -4221,12 +4231,12 @@ QStyleOptionTabWidgetFrameV2::QStyleOptionTabWidgetFrameV2(const QStyleOptionTab
 */
 QStyleOptionTabWidgetFrameV2 &QStyleOptionTabWidgetFrameV2::operator=(const QStyleOptionTabWidgetFrame &other)
 {
-    QStyleOptionTabWidgetFrame::operator=(other);
-    if (const QStyleOptionTabWidgetFrameV2 *f2 = qstyleoption_cast<const QStyleOptionTabWidgetFrameV2 *>(&other)) {
-        selectedTabRect = f2->selectedTabRect;
-        tabBarRect = f2->tabBarRect;
-    }
-    return *this;
+   QStyleOptionTabWidgetFrame::operator=(other);
+   if (const QStyleOptionTabWidgetFrameV2 *f2 = qstyleoption_cast<const QStyleOptionTabWidgetFrameV2 *>(&other)) {
+      selectedTabRect = f2->selectedTabRect;
+      tabBarRect = f2->tabBarRect;
+   }
+   return *this;
 }
 
 
@@ -4277,13 +4287,13 @@ QStyleOptionTabWidgetFrameV2 &QStyleOptionTabWidgetFrameV2::operator=(const QSty
     vaiables to their default values.
 */
 QStyleOptionTabBarBase::QStyleOptionTabBarBase()
-    : QStyleOption(Version, SO_TabBarBase), shape(QTabBar::RoundedNorth)
+   : QStyleOption(Version, SO_TabBarBase), shape(QTabBar::RoundedNorth)
 {
 }
 
 /*! \internal */
 QStyleOptionTabBarBase::QStyleOptionTabBarBase(int version)
-    : QStyleOption(version, SO_TabBarBase), shape(QTabBar::RoundedNorth)
+   : QStyleOption(version, SO_TabBarBase), shape(QTabBar::RoundedNorth)
 {
 }
 
@@ -4397,8 +4407,8 @@ QStyleOptionTabBarBase::QStyleOptionTabBarBase(int version)
     vaiables to their default values.
 */
 QStyleOptionTabBarBaseV2::QStyleOptionTabBarBaseV2()
-    : QStyleOptionTabBarBase(Version)
-    , documentMode(false)
+   : QStyleOptionTabBarBase(Version)
+   , documentMode(false)
 {
 }
 
@@ -4412,9 +4422,9 @@ QStyleOptionTabBarBaseV2::QStyleOptionTabBarBaseV2()
     Constructs a copy of \a other.
 */
 QStyleOptionTabBarBaseV2::QStyleOptionTabBarBaseV2(const QStyleOptionTabBarBase &other)
-    : QStyleOptionTabBarBase(Version)
+   : QStyleOptionTabBarBase(Version)
 {
-    (void)QStyleOptionTabBarBaseV2::operator=(other);
+   (void)QStyleOptionTabBarBaseV2::operator=(other);
 }
 
 /*!
@@ -4427,15 +4437,15 @@ QStyleOptionTabBarBaseV2::QStyleOptionTabBarBaseV2(const QStyleOptionTabBarBase 
 */
 QStyleOptionTabBarBaseV2 &QStyleOptionTabBarBaseV2::operator = (const QStyleOptionTabBarBase &other)
 {
-    QStyleOptionTabBarBase::operator=(other);
-    const QStyleOptionTabBarBaseV2 *v2 = qstyleoption_cast<const QStyleOptionTabBarBaseV2*>(&other);
-    documentMode = v2 ? v2->documentMode : false;
-    return *this;
+   QStyleOptionTabBarBase::operator=(other);
+   const QStyleOptionTabBarBaseV2 *v2 = qstyleoption_cast<const QStyleOptionTabBarBaseV2 *>(&other);
+   documentMode = v2 ? v2->documentMode : false;
+   return *this;
 }
 
 /*! \internal */
 QStyleOptionTabBarBaseV2::QStyleOptionTabBarBaseV2(int version)
-    : QStyleOptionTabBarBase(version), documentMode(false)
+   : QStyleOptionTabBarBase(version), documentMode(false)
 {
 }
 
@@ -4466,7 +4476,7 @@ QStyleOptionTabBarBaseV2::QStyleOptionTabBarBaseV2(int version)
     Constructs a QStyleOptionSizeGrip.
 */
 QStyleOptionSizeGrip::QStyleOptionSizeGrip()
-    : QStyleOptionComplex(Version, Type), corner(Qt::BottomRightCorner)
+   : QStyleOptionComplex(Version, Type), corner(Qt::BottomRightCorner)
 {
 }
 
@@ -4480,7 +4490,7 @@ QStyleOptionSizeGrip::QStyleOptionSizeGrip()
     \internal
 */
 QStyleOptionSizeGrip::QStyleOptionSizeGrip(int version)
-    : QStyleOptionComplex(version, Type), corner(Qt::BottomRightCorner)
+   : QStyleOptionComplex(version, Type), corner(Qt::BottomRightCorner)
 {
 }
 
@@ -4575,7 +4585,7 @@ QStyleOptionSizeGrip::QStyleOptionSizeGrip(int version)
     Constructs a QStyleOptionGraphicsItem.
 */
 QStyleOptionGraphicsItem::QStyleOptionGraphicsItem()
-    : QStyleOption(Version, Type), levelOfDetail(1)
+   : QStyleOption(Version, Type), levelOfDetail(1)
 {
 }
 
@@ -4583,7 +4593,7 @@ QStyleOptionGraphicsItem::QStyleOptionGraphicsItem()
     \internal
 */
 QStyleOptionGraphicsItem::QStyleOptionGraphicsItem(int version)
-    : QStyleOption(version, Type), levelOfDetail(1)
+   : QStyleOption(version, Type), levelOfDetail(1)
 {
 }
 
@@ -4600,14 +4610,15 @@ QStyleOptionGraphicsItem::QStyleOptionGraphicsItem(int version)
 */
 qreal QStyleOptionGraphicsItem::levelOfDetailFromTransform(const QTransform &worldTransform)
 {
-    if (worldTransform.type() <= QTransform::TxTranslate)
-        return 1; // Translation only? The LOD is 1.
+   if (worldTransform.type() <= QTransform::TxTranslate) {
+      return 1;   // Translation only? The LOD is 1.
+   }
 
-    // Two unit vectors.
-    QLineF v1(0, 0, 1, 0);
-    QLineF v2(0, 0, 0, 1);
-    // LOD is the transformed area of a 1x1 rectangle.
-    return qSqrt(worldTransform.map(v1).length() * worldTransform.map(v2).length());
+   // Two unit vectors.
+   QLineF v1(0, 0, 1, 0);
+   QLineF v2(0, 0, 0, 1);
+   // LOD is the transformed area of a 1x1 rectangle.
+   return qSqrt(worldTransform.map(v1).length() * worldTransform.map(v2).length());
 }
 
 /*!
@@ -4745,7 +4756,7 @@ qreal QStyleOptionGraphicsItem::levelOfDetailFromTransform(const QTransform &wor
 */
 
 QStyleHintReturn::QStyleHintReturn(int version, int type)
-    : version(version), type(type)
+   : version(version), type(type)
 {
 }
 
@@ -4891,80 +4902,106 @@ QStyleHintReturnVariant::QStyleHintReturnVariant() : QStyleHintReturn(Version, T
 QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType)
 {
 #if !defined(QT_NO_DEBUG)
-    switch (optionType) {
-    case QStyleOption::SO_Default:
-        debug << "SO_Default"; break;
-    case QStyleOption::SO_FocusRect:
-        debug << "SO_FocusRect"; break;
-    case QStyleOption::SO_Button:
-        debug << "SO_Button"; break;
-    case QStyleOption::SO_Tab:
-        debug << "SO_Tab"; break;
-    case QStyleOption::SO_MenuItem:
-        debug << "SO_MenuItem"; break;
-    case QStyleOption::SO_Frame:
-        debug << "SO_Frame"; break;
-    case QStyleOption::SO_ProgressBar:
-        debug << "SO_ProgressBar"; break;
-    case QStyleOption::SO_ToolBox:
-        debug << "SO_ToolBox"; break;
-    case QStyleOption::SO_Header:
-        debug << "SO_Header"; break;
-   
-    case QStyleOption::SO_DockWidget:
-        debug << "SO_DockWidget"; break;
-  
-    case QStyleOption::SO_ViewItem:
-        debug << "SO_ViewItem"; break;
-    case QStyleOption::SO_TabWidgetFrame:
-        debug << "SO_TabWidgetFrame"; break;
-    case QStyleOption::SO_TabBarBase:
-        debug << "SO_TabBarBase"; break;
-    case QStyleOption::SO_RubberBand:
-        debug << "SO_RubberBand"; break;
-    case QStyleOption::SO_Complex:
-        debug << "SO_Complex"; break;
-    case QStyleOption::SO_Slider:
-        debug << "SO_Slider"; break;
-    case QStyleOption::SO_SpinBox:
-        debug << "SO_SpinBox"; break;
-    case QStyleOption::SO_ToolButton:
-        debug << "SO_ToolButton"; break;
-    case QStyleOption::SO_ComboBox:
-        debug << "SO_ComboBox"; break;
-  
-    case QStyleOption::SO_TitleBar:
-        debug << "SO_TitleBar"; break;
-    case QStyleOption::SO_CustomBase:
-        debug << "SO_CustomBase"; break;
-    case QStyleOption::SO_GroupBox:
-        debug << "SO_GroupBox"; break;
-    case QStyleOption::SO_ToolBar:
-        debug << "SO_ToolBar"; break;
-    case QStyleOption::SO_ComplexCustomBase:
-        debug << "SO_ComplexCustomBase"; break;
-    case QStyleOption::SO_SizeGrip:
-        debug << "SO_SizeGrip"; break;
-    case QStyleOption::SO_GraphicsItem:
-        debug << "SO_GraphicsItem"; break;
-    }
+   switch (optionType) {
+      case QStyleOption::SO_Default:
+         debug << "SO_Default";
+         break;
+      case QStyleOption::SO_FocusRect:
+         debug << "SO_FocusRect";
+         break;
+      case QStyleOption::SO_Button:
+         debug << "SO_Button";
+         break;
+      case QStyleOption::SO_Tab:
+         debug << "SO_Tab";
+         break;
+      case QStyleOption::SO_MenuItem:
+         debug << "SO_MenuItem";
+         break;
+      case QStyleOption::SO_Frame:
+         debug << "SO_Frame";
+         break;
+      case QStyleOption::SO_ProgressBar:
+         debug << "SO_ProgressBar";
+         break;
+      case QStyleOption::SO_ToolBox:
+         debug << "SO_ToolBox";
+         break;
+      case QStyleOption::SO_Header:
+         debug << "SO_Header";
+         break;
 
-    return debug;
+      case QStyleOption::SO_DockWidget:
+         debug << "SO_DockWidget";
+         break;
+
+      case QStyleOption::SO_ViewItem:
+         debug << "SO_ViewItem";
+         break;
+      case QStyleOption::SO_TabWidgetFrame:
+         debug << "SO_TabWidgetFrame";
+         break;
+      case QStyleOption::SO_TabBarBase:
+         debug << "SO_TabBarBase";
+         break;
+      case QStyleOption::SO_RubberBand:
+         debug << "SO_RubberBand";
+         break;
+      case QStyleOption::SO_Complex:
+         debug << "SO_Complex";
+         break;
+      case QStyleOption::SO_Slider:
+         debug << "SO_Slider";
+         break;
+      case QStyleOption::SO_SpinBox:
+         debug << "SO_SpinBox";
+         break;
+      case QStyleOption::SO_ToolButton:
+         debug << "SO_ToolButton";
+         break;
+      case QStyleOption::SO_ComboBox:
+         debug << "SO_ComboBox";
+         break;
+
+      case QStyleOption::SO_TitleBar:
+         debug << "SO_TitleBar";
+         break;
+      case QStyleOption::SO_CustomBase:
+         debug << "SO_CustomBase";
+         break;
+      case QStyleOption::SO_GroupBox:
+         debug << "SO_GroupBox";
+         break;
+      case QStyleOption::SO_ToolBar:
+         debug << "SO_ToolBar";
+         break;
+      case QStyleOption::SO_ComplexCustomBase:
+         debug << "SO_ComplexCustomBase";
+         break;
+      case QStyleOption::SO_SizeGrip:
+         debug << "SO_SizeGrip";
+         break;
+      case QStyleOption::SO_GraphicsItem:
+         debug << "SO_GraphicsItem";
+         break;
+   }
+
+   return debug;
 }
 
 QDebug operator<<(QDebug debug, const QStyleOption &option)
 {
 #if !defined(QT_NO_DEBUG)
-    debug << "QStyleOption(";
-    debug << QStyleOption::OptionType(option.type);
-    debug << ',' << (option.direction == Qt::RightToLeft ? "RightToLeft" : "LeftToRight");
-    debug << ',' << option.state;
-    debug << ',' << option.rect;
-    debug << ')';
+   debug << "QStyleOption(";
+   debug << QStyleOption::OptionType(option.type);
+   debug << ',' << (option.direction == Qt::RightToLeft ? "RightToLeft" : "LeftToRight");
+   debug << ',' << option.state;
+   debug << ',' << option.rect;
+   debug << ')';
 #else
-    Q_UNUSED(option);
+   Q_UNUSED(option);
 #endif
-    return debug;
+   return debug;
 }
 #endif
 

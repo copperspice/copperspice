@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,9 +33,8 @@ QT_BEGIN_NAMESPACE
 
 class QDecoration;
 
-struct Q_GUI_EXPORT QDecorationFactoryInterface : public QFactoryInterface
-{
-    virtual QDecoration *create(const QString &key) = 0;
+struct Q_GUI_EXPORT QDecorationFactoryInterface : public QFactoryInterface {
+   virtual QDecoration *create(const QString &key) = 0;
 };
 
 #define QDecorationFactoryInterface_iid "com.copperspice.QDecorationFactoryInterface"
@@ -43,15 +42,15 @@ CS_DECLARE_INTERFACE(QDecorationFactoryInterface, QDecorationFactoryInterface_ii
 
 class Q_GUI_EXPORT QDecorationPlugin : public QObject, public QDecorationFactoryInterface
 {
-    CS_OBJECT(QDecorationPlugin)
-    CS_INTERFACES(QDecorationFactoryInterface, QFactoryInterface)
+   CS_OBJECT(QDecorationPlugin)
+   CS_INTERFACES(QDecorationFactoryInterface, QFactoryInterface)
 
-    public:
-       explicit QDecorationPlugin(QObject *parent = 0);
-       ~QDecorationPlugin();
+ public:
+   explicit QDecorationPlugin(QObject *parent = 0);
+   ~QDecorationPlugin();
 
-       virtual QStringList keys() const = 0;
-       virtual QDecoration *create(const QString &key) = 0;
+   virtual QStringList keys() const = 0;
+   virtual QDecoration *create(const QString &key) = 0;
 };
 
 QT_END_NAMESPACE

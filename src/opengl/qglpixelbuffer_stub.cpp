@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,21 +33,21 @@ QT_BEGIN_NAMESPACE
 
 bool QGLPixelBufferPrivate::init(const QSize &size, const QGLFormat &f, QGLWidget *shareWidget)
 {
-    Q_UNUSED(size);
-    Q_UNUSED(f);
-    Q_UNUSED(shareWidget);
-    return false;
+   Q_UNUSED(size);
+   Q_UNUSED(f);
+   Q_UNUSED(shareWidget);
+   return false;
 }
 
 bool QGLPixelBufferPrivate::cleanup()
 {
-    return false;
+   return false;
 }
 
 bool QGLPixelBuffer::bindToDynamicTexture(GLuint texture_id)
 {
-    Q_UNUSED(texture_id);
-    return false;
+   Q_UNUSED(texture_id);
+   return false;
 }
 
 void QGLPixelBuffer::releaseFromDynamicTexture()
@@ -56,12 +56,12 @@ void QGLPixelBuffer::releaseFromDynamicTexture()
 
 GLuint QGLPixelBuffer::generateDynamicTexture() const
 {
-    return 0;
+   return 0;
 }
 
 bool QGLPixelBuffer::hasOpenGLPbuffers()
 {
-    return false;
+   return false;
 }
 
 QT_END_NAMESPACE

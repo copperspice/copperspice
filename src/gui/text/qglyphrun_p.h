@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,19 +36,18 @@ QT_BEGIN_NAMESPACE
 
 class QGlyphRunPrivate: public QSharedData
 {
-public:
-    QGlyphRunPrivate()
-        : overline(false)
-        , underline(false)
-        , strikeOut(false)
-        , glyphIndexData(glyphIndexes.constData())
-        , glyphIndexDataSize(0)
-        , glyphPositionData(glyphPositions.constData())
-        , glyphPositionDataSize(0)
-    {
-    }
+ public:
+   QGlyphRunPrivate()
+      : overline(false)
+      , underline(false)
+      , strikeOut(false)
+      , glyphIndexData(glyphIndexes.constData())
+      , glyphIndexDataSize(0)
+      , glyphPositionData(glyphPositions.constData())
+      , glyphPositionDataSize(0) {
+   }
 
-    QGlyphRunPrivate(const QGlyphRunPrivate &other)
+   QGlyphRunPrivate(const QGlyphRunPrivate &other)
       : QSharedData(other)
       , glyphIndexes(other.glyphIndexes)
       , glyphPositions(other.glyphPositions)
@@ -59,28 +58,26 @@ public:
       , glyphIndexData(other.glyphIndexData)
       , glyphIndexDataSize(other.glyphIndexDataSize)
       , glyphPositionData(other.glyphPositionData)
-      , glyphPositionDataSize(other.glyphPositionDataSize)
-    {
-    }
+      , glyphPositionDataSize(other.glyphPositionDataSize) {
+   }
 
-    QVector<quint32> glyphIndexes;
-    QVector<QPointF> glyphPositions;
-    QRawFont rawFont;
+   QVector<quint32> glyphIndexes;
+   QVector<QPointF> glyphPositions;
+   QRawFont rawFont;
 
-    uint overline  : 1;
-    uint underline : 1;
-    uint strikeOut : 1;
+   uint overline  : 1;
+   uint underline : 1;
+   uint strikeOut : 1;
 
-    const quint32 *glyphIndexData;
-    int glyphIndexDataSize;
+   const quint32 *glyphIndexData;
+   int glyphIndexDataSize;
 
-    const QPointF *glyphPositionData;
-    int glyphPositionDataSize;
+   const QPointF *glyphPositionData;
+   int glyphPositionDataSize;
 
-    static QGlyphRunPrivate *get(const QGlyphRun &glyphRun)
-    {
-        return glyphRun.d.data();
-    }
+   static QGlyphRunPrivate *get(const QGlyphRun &glyphRun) {
+      return glyphRun.d.data();
+   }
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,16 +34,16 @@ QT_BEGIN_NAMESPACE
 
 class QToolBarExtension : public QToolButton
 {
-    CS_OBJECT(QToolBarExtension)
-    Qt::Orientation orientation;
+   CS_OBJECT(QToolBarExtension)
+   Qt::Orientation orientation;
 
-public:
-    explicit QToolBarExtension(QWidget *parent);
-    void paintEvent(QPaintEvent *);
-    QSize sizeHint() const;
+ public:
+   explicit QToolBarExtension(QWidget *parent);
+   void paintEvent(QPaintEvent *);
+   QSize sizeHint() const;
 
-    GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation o))
-    GUI_CS_SLOT_2(setOrientation) 
+   GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation o))
+   GUI_CS_SLOT_2(setOrientation)
 };
 
 #endif // QT_NO_TOOLBUTTON

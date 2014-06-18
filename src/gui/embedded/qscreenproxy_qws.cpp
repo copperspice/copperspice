@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
     Constructs a proxy screen cursor.
 */
 QProxyScreenCursor::QProxyScreenCursor()
-    : QScreenCursor(), realCursor(0), d_ptr(0)
+   : QScreenCursor(), realCursor(0), d_ptr(0)
 {
 }
 
@@ -63,8 +63,8 @@ QProxyScreenCursor::~QProxyScreenCursor()
 */
 void QProxyScreenCursor::setScreenCursor(QScreenCursor *cursor)
 {
-    realCursor = cursor;
-    configure();
+   realCursor = cursor;
+   configure();
 }
 
 /*!
@@ -72,9 +72,9 @@ void QProxyScreenCursor::setScreenCursor(QScreenCursor *cursor)
 
     \sa setScreenCursor()
 */
-QScreenCursor* QProxyScreenCursor::screenCursor() const
+QScreenCursor *QProxyScreenCursor::screenCursor() const
 {
-    return realCursor;
+   return realCursor;
 }
 
 /*!
@@ -82,14 +82,14 @@ QScreenCursor* QProxyScreenCursor::screenCursor() const
 */
 void QProxyScreenCursor::set(const QImage &image, int hotx, int hoty)
 {
-    if (realCursor) {
-        hotspot = QPoint(hotx, hoty);
-        cursor = image;
-        size = image.size();
-        realCursor->set(image, hotx, hoty);
-    } else {
-        QScreenCursor::set(image, hotx, hoty);
-    }
+   if (realCursor) {
+      hotspot = QPoint(hotx, hoty);
+      cursor = image;
+      size = image.size();
+      realCursor->set(image, hotx, hoty);
+   } else {
+      QScreenCursor::set(image, hotx, hoty);
+   }
 }
 
 /*!
@@ -97,12 +97,12 @@ void QProxyScreenCursor::set(const QImage &image, int hotx, int hoty)
 */
 void QProxyScreenCursor::move(int x, int y)
 {
-    if (realCursor) {
-        pos = QPoint(x, y);
-        realCursor->move(x, y);
-    } else {
-        QScreenCursor::move(x, y);
-    }
+   if (realCursor) {
+      pos = QPoint(x, y);
+      realCursor->move(x, y);
+   } else {
+      QScreenCursor::move(x, y);
+   }
 }
 
 /*!
@@ -110,12 +110,12 @@ void QProxyScreenCursor::move(int x, int y)
 */
 void QProxyScreenCursor::show()
 {
-    if (realCursor) {
-        realCursor->show();
-        enable = true;
-    } else {
-        QScreenCursor::show();
-    }
+   if (realCursor) {
+      realCursor->show();
+      enable = true;
+   } else {
+      QScreenCursor::show();
+   }
 }
 
 /*!
@@ -123,12 +123,12 @@ void QProxyScreenCursor::show()
 */
 void QProxyScreenCursor::hide()
 {
-    if (realCursor) {
-        realCursor->hide();
-        enable = false;
-    } else {
-        QScreenCursor::hide();
-    }
+   if (realCursor) {
+      realCursor->hide();
+      enable = false;
+   } else {
+      QScreenCursor::hide();
+   }
 }
 
 /*!
@@ -136,16 +136,17 @@ void QProxyScreenCursor::hide()
 */
 void QProxyScreenCursor::configure()
 {
-    if (!realCursor)
-        return;
+   if (!realCursor) {
+      return;
+   }
 
-    cursor = realCursor->cursor;
-    size = realCursor->size;
-    pos = realCursor->pos;
-    hotspot = realCursor->hotspot;
-    enable = realCursor->enable;
-    hwaccel = realCursor->hwaccel;
-    supportsAlpha = realCursor->supportsAlpha;
+   cursor = realCursor->cursor;
+   size = realCursor->size;
+   pos = realCursor->pos;
+   hotspot = realCursor->hotspot;
+   enable = realCursor->enable;
+   hwaccel = realCursor->hwaccel;
+   supportsAlpha = realCursor->supportsAlpha;
 }
 
 #endif // QT_NO_QWS_CURSOR
@@ -162,7 +163,7 @@ void QProxyScreenCursor::configure()
     Constructs a proxy screen with the given \a displayId and \a classId.
 */
 QProxyScreen::QProxyScreen(int displayId, QScreen::ClassId classId)
-    : QScreen(displayId, classId), realScreen(0), d_ptr(0)
+   : QScreen(displayId, classId), realScreen(0), d_ptr(0)
 {
 }
 
@@ -180,8 +181,8 @@ QProxyScreen::~QProxyScreen()
 */
 void QProxyScreen::setScreen(QScreen *screen)
 {
-    realScreen = screen;
-    configure();
+   realScreen = screen;
+   configure();
 }
 
 /*!
@@ -189,9 +190,9 @@ void QProxyScreen::setScreen(QScreen *screen)
 
     \sa setScreen()
 */
-QScreen* QProxyScreen::screen() const
+QScreen *QProxyScreen::screen() const
 {
-    return realScreen;
+   return realScreen;
 }
 
 
@@ -200,30 +201,31 @@ QScreen* QProxyScreen::screen() const
 */
 void QProxyScreen::configure()
 {
-    if (!realScreen)
-        return;
+   if (!realScreen) {
+      return;
+   }
 
-    d = realScreen->depth();
-    w = realScreen->width();
-    h = realScreen->height();
-    dw = realScreen->deviceWidth();
-    dh = realScreen->deviceHeight();
-    lstep = realScreen->linestep();
-    data = realScreen->base();
-    lstep = realScreen->linestep();
-    size = realScreen->screenSize();
-    physWidth = realScreen->physicalWidth();
-    physHeight = realScreen->physicalHeight();
-    pixeltype = realScreen->pixelType();
+   d = realScreen->depth();
+   w = realScreen->width();
+   h = realScreen->height();
+   dw = realScreen->deviceWidth();
+   dh = realScreen->deviceHeight();
+   lstep = realScreen->linestep();
+   data = realScreen->base();
+   lstep = realScreen->linestep();
+   size = realScreen->screenSize();
+   physWidth = realScreen->physicalWidth();
+   physHeight = realScreen->physicalHeight();
+   pixeltype = realScreen->pixelType();
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
-    setFrameBufferLittleEndian(realScreen->frameBufferLittleEndian());
+   setFrameBufferLittleEndian(realScreen->frameBufferLittleEndian());
 #endif
 
-    setOffset(realScreen->offset());
-    setPixelFormat(realScreen->pixelFormat());
+   setOffset(realScreen->offset());
+   setPixelFormat(realScreen->pixelFormat());
 
 #ifdef QT_QWS_CLIENTBLIT
-    setSupportsBlitInClients(realScreen->supportsBlitInClients());
+   setSupportsBlitInClients(realScreen->supportsBlitInClients());
 #endif
 }
 
@@ -233,12 +235,12 @@ void QProxyScreen::configure()
 */
 static int getDisplayId(const QString &spec)
 {
-    QRegExp regexp(QLatin1String(":(\\d+)\\b"));
-    if (regexp.lastIndexIn(spec) != -1) {
-        const QString capture = regexp.cap(1);
-        return capture.toInt();
-    }
-    return 0;
+   QRegExp regexp(QLatin1String(":(\\d+)\\b"));
+   if (regexp.lastIndexIn(spec) != -1) {
+      const QString capture = regexp.cap(1);
+      return capture.toInt();
+   }
+   return 0;
 }
 
 /*!
@@ -246,11 +248,11 @@ static int getDisplayId(const QString &spec)
 */
 bool QProxyScreen::connect(const QString &displaySpec)
 {
-    const int id = getDisplayId(displaySpec);
-    realScreen = qt_get_screen(id, displaySpec.toLatin1().constData());
-    configure();
+   const int id = getDisplayId(displaySpec);
+   realScreen = qt_get_screen(id, displaySpec.toLatin1().constData());
+   configure();
 
-    return true;
+   return true;
 }
 
 /*!
@@ -258,17 +260,18 @@ bool QProxyScreen::connect(const QString &displaySpec)
 */
 void QProxyScreen::exposeRegion(QRegion r, int changing)
 {
-    if (!realScreen) {
-        QScreen::exposeRegion(r, changing);
-        return;
-    }
+   if (!realScreen) {
+      QScreen::exposeRegion(r, changing);
+      return;
+   }
 
-    realScreen->exposeRegion(r, changing);
-    r &= realScreen->region();
+   realScreen->exposeRegion(r, changing);
+   r &= realScreen->region();
 
-    const QVector<QRect> rects = r.rects();
-    for (int i = 0; i < rects.size(); ++i)
-        setDirty(rects.at(i));
+   const QVector<QRect> rects = r.rects();
+   for (int i = 0; i < rects.size(); ++i) {
+      setDirty(rects.at(i));
+   }
 }
 
 /*!
@@ -277,12 +280,12 @@ void QProxyScreen::exposeRegion(QRegion r, int changing)
 void QProxyScreen::blit(const QImage &image, const QPoint &topLeft,
                         const QRegion &region)
 {
-    if (!realScreen) {
-        QScreen::blit(image, topLeft, region);
-        return;
-    }
+   if (!realScreen) {
+      QScreen::blit(image, topLeft, region);
+      return;
+   }
 
-    realScreen->blit(image, topLeft, region);
+   realScreen->blit(image, topLeft, region);
 }
 
 /*!
@@ -290,11 +293,11 @@ void QProxyScreen::blit(const QImage &image, const QPoint &topLeft,
 */
 void QProxyScreen::solidFill(const QColor &color, const QRegion &region)
 {
-    if (!realScreen) {
-        QScreen::solidFill(color, region);
-        return;
-    }
-    realScreen->solidFill(color, region);
+   if (!realScreen) {
+      QScreen::solidFill(color, region);
+      return;
+   }
+   realScreen->solidFill(color, region);
 }
 
 /*!
@@ -302,10 +305,11 @@ void QProxyScreen::solidFill(const QColor &color, const QRegion &region)
 */
 QSize QProxyScreen::mapToDevice(const QSize &s) const
 {
-    if (!realScreen)
-        return QScreen::mapToDevice(s);
+   if (!realScreen) {
+      return QScreen::mapToDevice(s);
+   }
 
-    return realScreen->mapToDevice(s);
+   return realScreen->mapToDevice(s);
 }
 
 /*!
@@ -313,10 +317,11 @@ QSize QProxyScreen::mapToDevice(const QSize &s) const
 */
 QSize QProxyScreen::mapFromDevice(const QSize &s) const
 {
-    if (!realScreen)
-        return QScreen::mapFromDevice(s);
+   if (!realScreen) {
+      return QScreen::mapFromDevice(s);
+   }
 
-    return realScreen->mapFromDevice(s);
+   return realScreen->mapFromDevice(s);
 }
 
 /*!
@@ -324,10 +329,11 @@ QSize QProxyScreen::mapFromDevice(const QSize &s) const
 */
 QPoint QProxyScreen::mapToDevice(const QPoint &p, const QSize &s) const
 {
-    if (!realScreen)
-        return QScreen::mapToDevice(p, s);
+   if (!realScreen) {
+      return QScreen::mapToDevice(p, s);
+   }
 
-    return realScreen->mapToDevice(p, s);
+   return realScreen->mapToDevice(p, s);
 }
 
 /*!
@@ -335,10 +341,11 @@ QPoint QProxyScreen::mapToDevice(const QPoint &p, const QSize &s) const
 */
 QPoint QProxyScreen::mapFromDevice(const QPoint &p, const QSize &s) const
 {
-    if (!realScreen)
-        return QScreen::mapFromDevice(p, s);
+   if (!realScreen) {
+      return QScreen::mapFromDevice(p, s);
+   }
 
-    return realScreen->mapFromDevice(p, s);
+   return realScreen->mapFromDevice(p, s);
 }
 
 /*!
@@ -346,10 +353,11 @@ QPoint QProxyScreen::mapFromDevice(const QPoint &p, const QSize &s) const
 */
 QRect QProxyScreen::mapToDevice(const QRect &r, const QSize &s) const
 {
-    if (!realScreen)
-        return QScreen::mapToDevice(r, s);
+   if (!realScreen) {
+      return QScreen::mapToDevice(r, s);
+   }
 
-    return realScreen->mapToDevice(r, s);
+   return realScreen->mapToDevice(r, s);
 }
 
 /*!
@@ -357,10 +365,11 @@ QRect QProxyScreen::mapToDevice(const QRect &r, const QSize &s) const
 */
 QRect QProxyScreen::mapFromDevice(const QRect &r, const QSize &s) const
 {
-    if (!realScreen)
-        return QScreen::mapFromDevice(r, s);
+   if (!realScreen) {
+      return QScreen::mapFromDevice(r, s);
+   }
 
-    return realScreen->mapFromDevice(r, s);
+   return realScreen->mapFromDevice(r, s);
 }
 
 /*!
@@ -368,10 +377,11 @@ QRect QProxyScreen::mapFromDevice(const QRect &r, const QSize &s) const
 */
 QRegion QProxyScreen::mapToDevice(const QRegion &r, const QSize &s) const
 {
-    if (!realScreen)
-        return QScreen::mapToDevice(r, s);
+   if (!realScreen) {
+      return QScreen::mapToDevice(r, s);
+   }
 
-    return realScreen->mapToDevice(r, s);
+   return realScreen->mapToDevice(r, s);
 }
 
 /*!
@@ -379,10 +389,11 @@ QRegion QProxyScreen::mapToDevice(const QRegion &r, const QSize &s) const
 */
 QRegion QProxyScreen::mapFromDevice(const QRegion &r, const QSize &s) const
 {
-    if (!realScreen)
-        return QScreen::mapFromDevice(r, s);
+   if (!realScreen) {
+      return QScreen::mapFromDevice(r, s);
+   }
 
-    return realScreen->mapFromDevice(r, s);
+   return realScreen->mapFromDevice(r, s);
 }
 
 /*!
@@ -390,21 +401,22 @@ QRegion QProxyScreen::mapFromDevice(const QRegion &r, const QSize &s) const
 */
 void QProxyScreen::disconnect()
 {
-    if (realScreen) {
-        realScreen->disconnect();
-        delete realScreen;
-        realScreen = 0;
-    }
+   if (realScreen) {
+      realScreen->disconnect();
+      delete realScreen;
+      realScreen = 0;
+   }
 }
 
 /*!
 */
 bool QProxyScreen::initDevice()
 {
-    if (realScreen)
-        return realScreen->initDevice();
+   if (realScreen) {
+      return realScreen->initDevice();
+   }
 
-    return false;
+   return false;
 }
 
 /*!
@@ -412,24 +424,25 @@ bool QProxyScreen::initDevice()
 */
 void QProxyScreen::shutdownDevice()
 {
-    if (realScreen)
-        realScreen->shutdownDevice();
+   if (realScreen) {
+      realScreen->shutdownDevice();
+   }
 }
 
 /*!
     \reimp
 */
-void QProxyScreen::setMode(int w,int h, int d)
+void QProxyScreen::setMode(int w, int h, int d)
 {
-    if (realScreen) {
-        realScreen->setMode(w, h, d);
-    } else {
-        QScreen::dw = QScreen::w = w;
-        QScreen::dh = QScreen::h = h;
-        QScreen::d = d;
-    }
-    configure();
-    exposeRegion(region(), 0);
+   if (realScreen) {
+      realScreen->setMode(w, h, d);
+   } else {
+      QScreen::dw = QScreen::w = w;
+      QScreen::dh = QScreen::h = h;
+      QScreen::d = d;
+   }
+   configure();
+   exposeRegion(region(), 0);
 }
 
 /*!
@@ -437,9 +450,10 @@ void QProxyScreen::setMode(int w,int h, int d)
 */
 bool QProxyScreen::supportsDepth(int depth) const
 {
-    if (realScreen)
-        return realScreen->supportsDepth(depth);
-    return false;
+   if (realScreen) {
+      return realScreen->supportsDepth(depth);
+   }
+   return false;
 }
 
 /*!
@@ -447,9 +461,10 @@ bool QProxyScreen::supportsDepth(int depth) const
 */
 void QProxyScreen::save()
 {
-    if (realScreen)
-        realScreen->save();
-    QScreen::save();
+   if (realScreen) {
+      realScreen->save();
+   }
+   QScreen::save();
 }
 
 /*!
@@ -457,9 +472,10 @@ void QProxyScreen::save()
 */
 void QProxyScreen::restore()
 {
-    if (realScreen)
-        realScreen->restore();
-    QScreen::restore();
+   if (realScreen) {
+      realScreen->restore();
+   }
+   QScreen::restore();
 }
 
 /*!
@@ -467,8 +483,9 @@ void QProxyScreen::restore()
 */
 void QProxyScreen::blank(bool on)
 {
-    if (realScreen)
-        realScreen->blank(on);
+   if (realScreen) {
+      realScreen->blank(on);
+   }
 }
 
 /*!
@@ -476,9 +493,10 @@ void QProxyScreen::blank(bool on)
 */
 bool QProxyScreen::onCard(const unsigned char *ptr) const
 {
-    if (realScreen)
-        return realScreen->onCard(ptr);
-    return false;
+   if (realScreen) {
+      return realScreen->onCard(ptr);
+   }
+   return false;
 }
 
 /*!
@@ -486,9 +504,10 @@ bool QProxyScreen::onCard(const unsigned char *ptr) const
 */
 bool QProxyScreen::onCard(const unsigned char *ptr, ulong &offset) const
 {
-    if (realScreen)
-        return realScreen->onCard(ptr, offset);
-    return false;
+   if (realScreen) {
+      return realScreen->onCard(ptr, offset);
+   }
+   return false;
 }
 
 /*!
@@ -496,9 +515,10 @@ bool QProxyScreen::onCard(const unsigned char *ptr, ulong &offset) const
 */
 bool QProxyScreen::isInterlaced() const
 {
-    if (realScreen)
-        return realScreen->isInterlaced();
-    return false;
+   if (realScreen) {
+      return realScreen->isInterlaced();
+   }
+   return false;
 }
 
 /*!
@@ -506,9 +526,10 @@ bool QProxyScreen::isInterlaced() const
 */
 bool QProxyScreen::isTransformed() const
 {
-    if (realScreen)
-        return realScreen->isTransformed();
-    return QScreen::isTransformed();
+   if (realScreen) {
+      return realScreen->isTransformed();
+   }
+   return QScreen::isTransformed();
 }
 
 /*!
@@ -516,9 +537,10 @@ bool QProxyScreen::isTransformed() const
 */
 int QProxyScreen::transformOrientation() const
 {
-    if (realScreen)
-        return realScreen->transformOrientation();
-    return QScreen::transformOrientation();
+   if (realScreen) {
+      return realScreen->transformOrientation();
+   }
+   return QScreen::transformOrientation();
 }
 
 /*!
@@ -526,10 +548,11 @@ int QProxyScreen::transformOrientation() const
 */
 int QProxyScreen::memoryNeeded(const QString &str)
 {
-    if (realScreen)
-        return realScreen->memoryNeeded(str);
-    else
-        return QScreen::memoryNeeded(str);
+   if (realScreen) {
+      return realScreen->memoryNeeded(str);
+   } else {
+      return QScreen::memoryNeeded(str);
+   }
 }
 
 /*!
@@ -537,10 +560,11 @@ int QProxyScreen::memoryNeeded(const QString &str)
 */
 int QProxyScreen::sharedRamSize(void *ptr)
 {
-    if (realScreen)
-        return realScreen->sharedRamSize(ptr);
-    else
-        return QScreen::sharedRamSize(ptr);
+   if (realScreen) {
+      return realScreen->sharedRamSize(ptr);
+   } else {
+      return QScreen::sharedRamSize(ptr);
+   }
 }
 
 /*!
@@ -548,8 +572,9 @@ int QProxyScreen::sharedRamSize(void *ptr)
 */
 void QProxyScreen::haltUpdates()
 {
-    if (realScreen)
-        realScreen->haltUpdates();
+   if (realScreen) {
+      realScreen->haltUpdates();
+   }
 }
 
 /*!
@@ -557,8 +582,9 @@ void QProxyScreen::haltUpdates()
 */
 void QProxyScreen::resumeUpdates()
 {
-    if (realScreen)
-        realScreen->resumeUpdates();
+   if (realScreen) {
+      realScreen->resumeUpdates();
+   }
 }
 
 /*!
@@ -566,41 +592,45 @@ void QProxyScreen::resumeUpdates()
 */
 void QProxyScreen::setDirty(const QRect &rect)
 {
-    if (realScreen)
-        realScreen->setDirty(rect);
+   if (realScreen) {
+      realScreen->setDirty(rect);
+   }
 }
 
 /*!
     \reimp
 */
-QWSWindowSurface* QProxyScreen::createSurface(QWidget *widget) const
+QWSWindowSurface *QProxyScreen::createSurface(QWidget *widget) const
 {
-    if (realScreen)
-        return realScreen->createSurface(widget);
+   if (realScreen) {
+      return realScreen->createSurface(widget);
+   }
 
-    return QScreen::createSurface(widget);
+   return QScreen::createSurface(widget);
 }
 
 /*!
     \reimp
 */
-QWSWindowSurface* QProxyScreen::createSurface(const QString &key) const
+QWSWindowSurface *QProxyScreen::createSurface(const QString &key) const
 {
-    if (realScreen)
-        return realScreen->createSurface(key);
+   if (realScreen) {
+      return realScreen->createSurface(key);
+   }
 
-    return QScreen::createSurface(key);
+   return QScreen::createSurface(key);
 }
 
 /*!
     \reimp
 */
-QList<QScreen*> QProxyScreen::subScreens() const
+QList<QScreen *> QProxyScreen::subScreens() const
 {
-    if (realScreen)
-        return realScreen->subScreens();
+   if (realScreen) {
+      return realScreen->subScreens();
+   }
 
-    return QScreen::subScreens();
+   return QScreen::subScreens();
 }
 
 /*!
@@ -608,10 +638,11 @@ QList<QScreen*> QProxyScreen::subScreens() const
 */
 QRegion QProxyScreen::region() const
 {
-    if (realScreen)
-        return realScreen->region();
-    else
-        return QScreen::region();
+   if (realScreen) {
+      return realScreen->region();
+   } else {
+      return QScreen::region();
+   }
 }
 
 QT_END_NAMESPACE

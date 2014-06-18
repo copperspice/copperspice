@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,50 +35,46 @@ QT_BEGIN_NAMESPACE
 
 class QVideoSurfaceFormatPrivate : public QSharedData
 {
-public:
-    QVideoSurfaceFormatPrivate()
-        : pixelFormat(QVideoFrame::Format_Invalid)
-        , handleType(QAbstractVideoBuffer::NoHandle)
-        , scanLineDirection(QVideoSurfaceFormat::TopToBottom)
-        , pixelAspectRatio(1, 1)
-        , ycbcrColorSpace(QVideoSurfaceFormat::YCbCr_Undefined)
-        , frameRate(0.0)
-    {
-    }
+ public:
+   QVideoSurfaceFormatPrivate()
+      : pixelFormat(QVideoFrame::Format_Invalid)
+      , handleType(QAbstractVideoBuffer::NoHandle)
+      , scanLineDirection(QVideoSurfaceFormat::TopToBottom)
+      , pixelAspectRatio(1, 1)
+      , ycbcrColorSpace(QVideoSurfaceFormat::YCbCr_Undefined)
+      , frameRate(0.0) {
+   }
 
-    QVideoSurfaceFormatPrivate(
-            const QSize &size,
-            QVideoFrame::PixelFormat format,
-            QAbstractVideoBuffer::HandleType type)
-        : pixelFormat(format)
-        , handleType(type)
-        , scanLineDirection(QVideoSurfaceFormat::TopToBottom)
-        , frameSize(size)
-        , pixelAspectRatio(1, 1)
-        , ycbcrColorSpace(QVideoSurfaceFormat::YCbCr_Undefined)
-        , viewport(QPoint(0, 0), size)
-        , frameRate(0.0)
-    {
-    }
+   QVideoSurfaceFormatPrivate(
+      const QSize &size,
+      QVideoFrame::PixelFormat format,
+      QAbstractVideoBuffer::HandleType type)
+      : pixelFormat(format)
+      , handleType(type)
+      , scanLineDirection(QVideoSurfaceFormat::TopToBottom)
+      , frameSize(size)
+      , pixelAspectRatio(1, 1)
+      , ycbcrColorSpace(QVideoSurfaceFormat::YCbCr_Undefined)
+      , viewport(QPoint(0, 0), size)
+      , frameRate(0.0) {
+   }
 
-    QVideoSurfaceFormatPrivate(const QVideoSurfaceFormatPrivate &other)
-        : QSharedData(other)
-        , pixelFormat(other.pixelFormat)
-        , handleType(other.handleType)
-        , scanLineDirection(other.scanLineDirection)
-        , frameSize(other.frameSize)
-        , pixelAspectRatio(other.pixelAspectRatio)
-        , ycbcrColorSpace(other.ycbcrColorSpace)
-        , viewport(other.viewport)
-        , frameRate(other.frameRate)
-        , propertyNames(other.propertyNames)
-        , propertyValues(other.propertyValues)
-    {
-    }
+   QVideoSurfaceFormatPrivate(const QVideoSurfaceFormatPrivate &other)
+      : QSharedData(other)
+      , pixelFormat(other.pixelFormat)
+      , handleType(other.handleType)
+      , scanLineDirection(other.scanLineDirection)
+      , frameSize(other.frameSize)
+      , pixelAspectRatio(other.pixelAspectRatio)
+      , ycbcrColorSpace(other.ycbcrColorSpace)
+      , viewport(other.viewport)
+      , frameRate(other.frameRate)
+      , propertyNames(other.propertyNames)
+      , propertyValues(other.propertyValues) {
+   }
 
-    bool operator ==(const QVideoSurfaceFormatPrivate &other) const
-    {
-        if (pixelFormat == other.pixelFormat
+   bool operator ==(const QVideoSurfaceFormatPrivate &other) const {
+      if (pixelFormat == other.pixelFormat
             && handleType == other.handleType
             && scanLineDirection == other.scanLineDirection
             && frameSize == other.frameSize
@@ -87,33 +83,33 @@ public:
             && frameRatesEqual(frameRate, other.frameRate)
             && ycbcrColorSpace == other.ycbcrColorSpace
             && propertyNames.count() == other.propertyNames.count()) {
-            for (int i = 0; i < propertyNames.count(); ++i) {
-                int j = other.propertyNames.indexOf(propertyNames.at(i));
+         for (int i = 0; i < propertyNames.count(); ++i) {
+            int j = other.propertyNames.indexOf(propertyNames.at(i));
 
-                if (j == -1 || propertyValues.at(i) != other.propertyValues.at(j))
-                    return false;
+            if (j == -1 || propertyValues.at(i) != other.propertyValues.at(j)) {
+               return false;
             }
-            return true;
-        } else {
-            return false;
-        }
-    }
+         }
+         return true;
+      } else {
+         return false;
+      }
+   }
 
-    inline static bool frameRatesEqual(qreal r1, qreal r2)
-    {
-        return qAbs(r1 - r2) <= 0.00001 * qMin(qAbs(r1), qAbs(r2));
-    }
+   inline static bool frameRatesEqual(qreal r1, qreal r2) {
+      return qAbs(r1 - r2) <= 0.00001 * qMin(qAbs(r1), qAbs(r2));
+   }
 
-    QVideoFrame::PixelFormat pixelFormat;
-    QAbstractVideoBuffer::HandleType handleType;
-    QVideoSurfaceFormat::Direction scanLineDirection;
-    QSize frameSize;
-    QSize pixelAspectRatio;
-    QVideoSurfaceFormat::YCbCrColorSpace ycbcrColorSpace;
-    QRect viewport;
-    qreal frameRate;
-    QList<QByteArray> propertyNames;
-    QList<QVariant> propertyValues;
+   QVideoFrame::PixelFormat pixelFormat;
+   QAbstractVideoBuffer::HandleType handleType;
+   QVideoSurfaceFormat::Direction scanLineDirection;
+   QSize frameSize;
+   QSize pixelAspectRatio;
+   QVideoSurfaceFormat::YCbCrColorSpace ycbcrColorSpace;
+   QRect viewport;
+   qreal frameRate;
+   QList<QByteArray> propertyNames;
+   QList<QVariant> propertyValues;
 };
 
 /*!
@@ -151,11 +147,11 @@ public:
     \value BottomToTop Scan lines are arranged from the bottom of the frame to the top.
 */
 
-/*! 
+/*!
     \enum QVideoSurfaceFormat::YCbCrColorSpace
- 
+
     Enumerates the Y'CbCr color space of video frames.
- 
+
     \value YCbCr_Undefined
     No color space is specified.
 
@@ -163,19 +159,19 @@ public:
     A Y'CbCr color space defined by ITU-R recommendation BT.601
     with Y value range from 16 to 235, and Cb/Cr range from 16 to 240.
     Used in standard definition video.
- 
+
     \value YCbCr_BT709
     A Y'CbCr color space defined by ITU-R BT.709 with the same values range as YCbCr_BT601.  Used
     for HDTV.
- 
+
     \value YCbCr_xvYCC601
     The BT.601 color space with the value range extended to 0 to 255.
     It is backward compatibile with BT.601 and uses values outside BT.601 range to represent
     wider colors range.
- 
+
     \value YCbCr_xvYCC709
     The BT.709 color space with the value range extended to 0 to 255.
- 
+
     \value YCbCr_JPEG
     The full range Y'CbCr color space used in JPEG files.
 */
@@ -185,7 +181,7 @@ public:
 */
 
 QVideoSurfaceFormat::QVideoSurfaceFormat()
-    : d(new QVideoSurfaceFormatPrivate)
+   : d(new QVideoSurfaceFormatPrivate)
 {
 }
 
@@ -195,8 +191,8 @@ QVideoSurfaceFormat::QVideoSurfaceFormat()
 */
 
 QVideoSurfaceFormat::QVideoSurfaceFormat(
-        const QSize& size, QVideoFrame::PixelFormat format, QAbstractVideoBuffer::HandleType type)
-    : d(new QVideoSurfaceFormatPrivate(size, format, type))
+   const QSize &size, QVideoFrame::PixelFormat format, QAbstractVideoBuffer::HandleType type)
+   : d(new QVideoSurfaceFormatPrivate(size, format, type))
 {
 }
 
@@ -205,7 +201,7 @@ QVideoSurfaceFormat::QVideoSurfaceFormat(
 */
 
 QVideoSurfaceFormat::QVideoSurfaceFormat(const QVideoSurfaceFormat &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -215,9 +211,9 @@ QVideoSurfaceFormat::QVideoSurfaceFormat(const QVideoSurfaceFormat &other)
 
 QVideoSurfaceFormat &QVideoSurfaceFormat::operator =(const QVideoSurfaceFormat &other)
 {
-    d = other.d;
+   d = other.d;
 
-    return *this;
+   return *this;
 }
 
 /*!
@@ -236,7 +232,7 @@ QVideoSurfaceFormat::~QVideoSurfaceFormat()
 
 bool QVideoSurfaceFormat::isValid() const
 {
-    return d->pixelFormat != QVideoFrame::Format_Invalid && d->frameSize.isValid();
+   return d->pixelFormat != QVideoFrame::Format_Invalid && d->frameSize.isValid();
 }
 
 /*!
@@ -245,7 +241,7 @@ bool QVideoSurfaceFormat::isValid() const
 
 bool QVideoSurfaceFormat::operator ==(const QVideoSurfaceFormat &other) const
 {
-    return d == other.d || *d == *other.d;
+   return d == other.d || *d == *other.d;
 }
 
 /*!
@@ -254,7 +250,7 @@ bool QVideoSurfaceFormat::operator ==(const QVideoSurfaceFormat &other) const
 
 bool QVideoSurfaceFormat::operator !=(const QVideoSurfaceFormat &other) const
 {
-    return d != other.d && !(*d == *other.d);
+   return d != other.d && !(*d == *other.d);
 }
 
 /*!
@@ -263,7 +259,7 @@ bool QVideoSurfaceFormat::operator !=(const QVideoSurfaceFormat &other) const
 
 QVideoFrame::PixelFormat QVideoSurfaceFormat::pixelFormat() const
 {
-    return d->pixelFormat;
+   return d->pixelFormat;
 }
 
 /*!
@@ -277,7 +273,7 @@ QVideoFrame::PixelFormat QVideoSurfaceFormat::pixelFormat() const
 
 QAbstractVideoBuffer::HandleType QVideoSurfaceFormat::handleType() const
 {
-    return d->handleType;
+   return d->handleType;
 }
 
 /*!
@@ -288,7 +284,7 @@ QAbstractVideoBuffer::HandleType QVideoSurfaceFormat::handleType() const
 
 QSize QVideoSurfaceFormat::frameSize() const
 {
-    return d->frameSize;
+   return d->frameSize;
 }
 
 /*!
@@ -299,7 +295,7 @@ QSize QVideoSurfaceFormat::frameSize() const
 
 int QVideoSurfaceFormat::frameWidth() const
 {
-    return d->frameSize.width();
+   return d->frameSize.width();
 }
 
 /*!
@@ -308,7 +304,7 @@ int QVideoSurfaceFormat::frameWidth() const
 
 int QVideoSurfaceFormat::frameHeight() const
 {
-    return d->frameSize.height();
+   return d->frameSize.height();
 }
 
 /*!
@@ -319,8 +315,8 @@ int QVideoSurfaceFormat::frameHeight() const
 
 void QVideoSurfaceFormat::setFrameSize(const QSize &size)
 {
-    d->frameSize = size;
-    d->viewport = QRect(QPoint(0, 0), size);
+   d->frameSize = size;
+   d->viewport = QRect(QPoint(0, 0), size);
 }
 
 /*!
@@ -333,8 +329,8 @@ void QVideoSurfaceFormat::setFrameSize(const QSize &size)
 
 void QVideoSurfaceFormat::setFrameSize(int width, int height)
 {
-    d->frameSize = QSize(width, height);
-    d->viewport = QRect(0, 0, width, height);
+   d->frameSize = QSize(width, height);
+   d->viewport = QRect(0, 0, width, height);
 }
 
 /*!
@@ -347,7 +343,7 @@ void QVideoSurfaceFormat::setFrameSize(int width, int height)
 
 QRect QVideoSurfaceFormat::viewport() const
 {
-    return d->viewport;
+   return d->viewport;
 }
 
 /*!
@@ -356,7 +352,7 @@ QRect QVideoSurfaceFormat::viewport() const
 
 void QVideoSurfaceFormat::setViewport(const QRect &viewport)
 {
-    d->viewport = viewport;
+   d->viewport = viewport;
 }
 
 /*!
@@ -365,7 +361,7 @@ void QVideoSurfaceFormat::setViewport(const QRect &viewport)
 
 QVideoSurfaceFormat::Direction QVideoSurfaceFormat::scanLineDirection() const
 {
-    return d->scanLineDirection;
+   return d->scanLineDirection;
 }
 
 /*!
@@ -374,7 +370,7 @@ QVideoSurfaceFormat::Direction QVideoSurfaceFormat::scanLineDirection() const
 
 void QVideoSurfaceFormat::setScanLineDirection(Direction direction)
 {
-    d->scanLineDirection = direction;
+   d->scanLineDirection = direction;
 }
 
 /*!
@@ -383,7 +379,7 @@ void QVideoSurfaceFormat::setScanLineDirection(Direction direction)
 
 qreal QVideoSurfaceFormat::frameRate() const
 {
-    return d->frameRate;
+   return d->frameRate;
 }
 
 /*!
@@ -392,7 +388,7 @@ qreal QVideoSurfaceFormat::frameRate() const
 
 void QVideoSurfaceFormat::setFrameRate(qreal rate)
 {
-    d->frameRate = rate;
+   d->frameRate = rate;
 }
 
 /*!
@@ -401,7 +397,7 @@ void QVideoSurfaceFormat::setFrameRate(qreal rate)
 
 QSize QVideoSurfaceFormat::pixelAspectRatio() const
 {
-    return d->pixelAspectRatio;
+   return d->pixelAspectRatio;
 }
 
 /*!
@@ -410,7 +406,7 @@ QSize QVideoSurfaceFormat::pixelAspectRatio() const
 
 void QVideoSurfaceFormat::setPixelAspectRatio(const QSize &ratio)
 {
-    d->pixelAspectRatio = ratio;
+   d->pixelAspectRatio = ratio;
 }
 
 /*!
@@ -421,7 +417,7 @@ void QVideoSurfaceFormat::setPixelAspectRatio(const QSize &ratio)
 
 void QVideoSurfaceFormat::setPixelAspectRatio(int horizontal, int vertical)
 {
-    d->pixelAspectRatio = QSize(horizontal, vertical);
+   d->pixelAspectRatio = QSize(horizontal, vertical);
 }
 
 /*!
@@ -430,7 +426,7 @@ void QVideoSurfaceFormat::setPixelAspectRatio(int horizontal, int vertical)
 
 QVideoSurfaceFormat::YCbCrColorSpace QVideoSurfaceFormat::yCbCrColorSpace() const
 {
-    return d->ycbcrColorSpace;
+   return d->ycbcrColorSpace;
 }
 
 /*!
@@ -440,7 +436,7 @@ QVideoSurfaceFormat::YCbCrColorSpace QVideoSurfaceFormat::yCbCrColorSpace() cons
 
 void QVideoSurfaceFormat::setYCbCrColorSpace(QVideoSurfaceFormat::YCbCrColorSpace space)
 {
-    d->ycbcrColorSpace = space;
+   d->ycbcrColorSpace = space;
 }
 
 /*!
@@ -451,12 +447,13 @@ void QVideoSurfaceFormat::setYCbCrColorSpace(QVideoSurfaceFormat::YCbCrColorSpac
 
 QSize QVideoSurfaceFormat::sizeHint() const
 {
-    QSize size = d->viewport.size();
+   QSize size = d->viewport.size();
 
-    if (d->pixelAspectRatio.height() != 0)
-        size.setWidth(size.width() * d->pixelAspectRatio.width() / d->pixelAspectRatio.height());
+   if (d->pixelAspectRatio.height() != 0) {
+      size.setWidth(size.width() * d->pixelAspectRatio.width() / d->pixelAspectRatio.height());
+   }
 
-    return size;
+   return size;
 }
 
 /*!
@@ -465,18 +462,18 @@ QSize QVideoSurfaceFormat::sizeHint() const
 
 QList<QByteArray> QVideoSurfaceFormat::propertyNames() const
 {
-    return (QList<QByteArray>()
-            << "handleType"
-            << "pixelFormat"
-            << "frameSize"
-            << "frameWidth"
-            << "viewport"
-            << "scanLineDirection"
-            << "frameRate"
-            << "pixelAspectRatio"
-            << "sizeHint"
-            << "yCbCrColorSpace")
-            + d->propertyNames;
+   return (QList<QByteArray>()
+           << "handleType"
+           << "pixelFormat"
+           << "frameSize"
+           << "frameWidth"
+           << "viewport"
+           << "scanLineDirection"
+           << "frameRate"
+           << "pixelAspectRatio"
+           << "sizeHint"
+           << "yCbCrColorSpace")
+          + d->propertyNames;
 }
 
 /*!
@@ -485,38 +482,38 @@ QList<QByteArray> QVideoSurfaceFormat::propertyNames() const
 
 QVariant QVideoSurfaceFormat::property(const char *name) const
 {
-    if (qstrcmp(name, "handleType") == 0) {
-        return QVariant::fromValue(d->handleType);
-    } else if (qstrcmp(name, "pixelFormat") == 0) {
-        return QVariant::fromValue(d->pixelFormat);
-    } else if (qstrcmp(name, "handleType") == 0) {
-        return QVariant::fromValue(d->handleType);
-    } else if (qstrcmp(name, "frameSize") == 0) {
-        return d->frameSize;
-    } else if (qstrcmp(name, "frameWidth") == 0) {
-        return d->frameSize.width();
-    } else if (qstrcmp(name, "frameHeight") == 0) {
-        return d->frameSize.height();
-    } else if (qstrcmp(name, "viewport") == 0) {
-        return d->viewport;
-    } else if (qstrcmp(name, "scanLineDirection") == 0) {
-        return QVariant::fromValue(d->scanLineDirection);
-    } else if (qstrcmp(name, "frameRate") == 0) {
-        return QVariant::fromValue(d->frameRate);
-    } else if (qstrcmp(name, "pixelAspectRatio") == 0) {
-        return QVariant::fromValue(d->pixelAspectRatio);
-    } else if (qstrcmp(name, "sizeHint") == 0) {
-        return sizeHint();
-    } else if (qstrcmp(name, "yCbCrColorSpace") == 0) {
-        return QVariant::fromValue(d->ycbcrColorSpace);
-    } else {
-        int id = 0;
-        for (; id < d->propertyNames.count() && d->propertyNames.at(id) != name; ++id) {}
+   if (qstrcmp(name, "handleType") == 0) {
+      return QVariant::fromValue(d->handleType);
+   } else if (qstrcmp(name, "pixelFormat") == 0) {
+      return QVariant::fromValue(d->pixelFormat);
+   } else if (qstrcmp(name, "handleType") == 0) {
+      return QVariant::fromValue(d->handleType);
+   } else if (qstrcmp(name, "frameSize") == 0) {
+      return d->frameSize;
+   } else if (qstrcmp(name, "frameWidth") == 0) {
+      return d->frameSize.width();
+   } else if (qstrcmp(name, "frameHeight") == 0) {
+      return d->frameSize.height();
+   } else if (qstrcmp(name, "viewport") == 0) {
+      return d->viewport;
+   } else if (qstrcmp(name, "scanLineDirection") == 0) {
+      return QVariant::fromValue(d->scanLineDirection);
+   } else if (qstrcmp(name, "frameRate") == 0) {
+      return QVariant::fromValue(d->frameRate);
+   } else if (qstrcmp(name, "pixelAspectRatio") == 0) {
+      return QVariant::fromValue(d->pixelAspectRatio);
+   } else if (qstrcmp(name, "sizeHint") == 0) {
+      return sizeHint();
+   } else if (qstrcmp(name, "yCbCrColorSpace") == 0) {
+      return QVariant::fromValue(d->ycbcrColorSpace);
+   } else {
+      int id = 0;
+      for (; id < d->propertyNames.count() && d->propertyNames.at(id) != name; ++id) {}
 
-        return id < d->propertyValues.count()
-                ? d->propertyValues.at(id)
-                : QVariant();
-    }
+      return id < d->propertyValues.count()
+             ? d->propertyValues.at(id)
+             : QVariant();
+   }
 }
 
 /*!
@@ -525,161 +522,166 @@ QVariant QVideoSurfaceFormat::property(const char *name) const
 
 void QVideoSurfaceFormat::setProperty(const char *name, const QVariant &value)
 {
-    if (qstrcmp(name, "handleType") == 0) {
-        // read only.
-    } else if (qstrcmp(name, "pixelFormat") == 0) {
-        // read only.
-    } else if (qstrcmp(name, "frameSize") == 0) {
-        if (value.canConvert<QSize>()) {
-            d->frameSize = qvariant_cast<QSize>(value);
-            d->viewport = QRect(QPoint(0, 0), d->frameSize);
-        }
-    } else if (qstrcmp(name, "frameWidth") == 0) {
-        // read only.
-    } else if (qstrcmp(name, "frameHeight") == 0) {
-        // read only.
-    } else if (qstrcmp(name, "viewport") == 0) {
-        if (value.canConvert<QRect>())
-            d->viewport = qvariant_cast<QRect>(value);
-    } else if (qstrcmp(name, "scanLineDirection") == 0) {
-        if (value.canConvert<Direction>())
-            d->scanLineDirection = qvariant_cast<Direction>(value);
-    } else if (qstrcmp(name, "frameRate") == 0) {
-        if (value.canConvert<qreal>())
-            d->frameRate = qvariant_cast<qreal>(value);
-    } else if (qstrcmp(name, "pixelAspectRatio") == 0) {
-        if (value.canConvert<QSize>())
-            d->pixelAspectRatio = qvariant_cast<QSize>(value);
-    } else if (qstrcmp(name, "sizeHint") == 0) {
-        // read only.
-    } else if (qstrcmp(name, "yCbCrColorSpace") == 0) {
-          if (value.canConvert<YCbCrColorSpace>())
-              d->ycbcrColorSpace = qvariant_cast<YCbCrColorSpace>(value);
-    } else {
-        int id = 0;
-        for (; id < d->propertyNames.count() && d->propertyNames.at(id) != name; ++id) {}
+   if (qstrcmp(name, "handleType") == 0) {
+      // read only.
+   } else if (qstrcmp(name, "pixelFormat") == 0) {
+      // read only.
+   } else if (qstrcmp(name, "frameSize") == 0) {
+      if (value.canConvert<QSize>()) {
+         d->frameSize = qvariant_cast<QSize>(value);
+         d->viewport = QRect(QPoint(0, 0), d->frameSize);
+      }
+   } else if (qstrcmp(name, "frameWidth") == 0) {
+      // read only.
+   } else if (qstrcmp(name, "frameHeight") == 0) {
+      // read only.
+   } else if (qstrcmp(name, "viewport") == 0) {
+      if (value.canConvert<QRect>()) {
+         d->viewport = qvariant_cast<QRect>(value);
+      }
+   } else if (qstrcmp(name, "scanLineDirection") == 0) {
+      if (value.canConvert<Direction>()) {
+         d->scanLineDirection = qvariant_cast<Direction>(value);
+      }
+   } else if (qstrcmp(name, "frameRate") == 0) {
+      if (value.canConvert<qreal>()) {
+         d->frameRate = qvariant_cast<qreal>(value);
+      }
+   } else if (qstrcmp(name, "pixelAspectRatio") == 0) {
+      if (value.canConvert<QSize>()) {
+         d->pixelAspectRatio = qvariant_cast<QSize>(value);
+      }
+   } else if (qstrcmp(name, "sizeHint") == 0) {
+      // read only.
+   } else if (qstrcmp(name, "yCbCrColorSpace") == 0) {
+      if (value.canConvert<YCbCrColorSpace>()) {
+         d->ycbcrColorSpace = qvariant_cast<YCbCrColorSpace>(value);
+      }
+   } else {
+      int id = 0;
+      for (; id < d->propertyNames.count() && d->propertyNames.at(id) != name; ++id) {}
 
-        if (id < d->propertyValues.count()) {
-            if (value.isNull()) {
-                d->propertyNames.removeAt(id);
-                d->propertyValues.removeAt(id);
-            } else {
-                d->propertyValues[id] = value;
-            }
-        } else if (!value.isNull()) {
-            d->propertyNames.append(QByteArray(name));
-            d->propertyValues.append(value);
-        }
-    }
+      if (id < d->propertyValues.count()) {
+         if (value.isNull()) {
+            d->propertyNames.removeAt(id);
+            d->propertyValues.removeAt(id);
+         } else {
+            d->propertyValues[id] = value;
+         }
+      } else if (!value.isNull()) {
+         d->propertyNames.append(QByteArray(name));
+         d->propertyValues.append(value);
+      }
+   }
 }
 
 QDebug operator<<(QDebug dbg, const QVideoSurfaceFormat &f)
 {
-    QString typeName;
-    switch (f.pixelFormat()) {
-    case QVideoFrame::Format_Invalid:
-        typeName = QLatin1String("Format_Invalid");
-        break;
-    case QVideoFrame::Format_ARGB32:
-        typeName = QLatin1String("Format_ARGB32");
-        break;
-    case QVideoFrame::Format_ARGB32_Premultiplied:
-        typeName = QLatin1String("Format_ARGB32_Premultiplied");
-        break;
-    case QVideoFrame::Format_RGB32:
-        typeName = QLatin1String("Format_RGB32");
-        break;
-    case QVideoFrame::Format_RGB24:
-        typeName = QLatin1String("Format_RGB24");
-        break;
-    case QVideoFrame::Format_RGB565:
-        typeName = QLatin1String("Format_RGB565");
-        break;
-    case QVideoFrame::Format_RGB555:
-        typeName = QLatin1String("Format_RGB555");
-        break;
-    case QVideoFrame::Format_ARGB8565_Premultiplied:
-        typeName = QLatin1String("Format_ARGB8565_Premultiplied");
-        break;
-    case QVideoFrame::Format_BGRA32:
-        typeName = QLatin1String("Format_BGRA32");
-        break;
-    case QVideoFrame::Format_BGRA32_Premultiplied:
-        typeName = QLatin1String("Format_BGRA32_Premultiplied");
-        break;
-    case QVideoFrame::Format_BGR32:
-        typeName = QLatin1String("Format_BGR32");
-        break;
-    case QVideoFrame::Format_BGR24:
-        typeName = QLatin1String("Format_BGR24");
-        break;
-    case QVideoFrame::Format_BGR565:
-        typeName = QLatin1String("Format_BGR565");
-        break;
-    case QVideoFrame::Format_BGR555:
-        typeName = QLatin1String("Format_BGR555");
-        break;
-    case QVideoFrame::Format_BGRA5658_Premultiplied:
-        typeName = QLatin1String("Format_BGRA5658_Premultiplied");
-        break;
-    case QVideoFrame::Format_AYUV444:
-        typeName = QLatin1String("Format_AYUV444");
-        break;
-    case QVideoFrame::Format_AYUV444_Premultiplied:
-        typeName = QLatin1String("Format_AYUV444_Premultiplied");
-        break;
-    case QVideoFrame::Format_YUV444:
-        typeName = QLatin1String("Format_YUV444");
-        break;
-    case QVideoFrame::Format_YUV420P:
-        typeName = QLatin1String("Format_YUV420P");
-        break;
-    case QVideoFrame::Format_YV12:
-        typeName = QLatin1String("Format_YV12");
-        break;
-    case QVideoFrame::Format_UYVY:
-        typeName = QLatin1String("Format_UYVY");
-        break;
-    case QVideoFrame::Format_YUYV:
-        typeName = QLatin1String("Format_YUYV");
-        break;
-    case QVideoFrame::Format_NV12:
-        typeName = QLatin1String("Format_NV12");
-        break;
-    case QVideoFrame::Format_NV21:
-        typeName = QLatin1String("Format_NV21");
-        break;
-    case QVideoFrame::Format_IMC1:
-        typeName = QLatin1String("Format_IMC1");
-        break;
-    case QVideoFrame::Format_IMC2:
-        typeName = QLatin1String("Format_IMC2");
-        break;
-    case QVideoFrame::Format_IMC3:
-        typeName = QLatin1String("Format_IMC3");
-        break;
-    case QVideoFrame::Format_IMC4:
-        typeName = QLatin1String("Format_IMC4");
-        break;
-    case QVideoFrame::Format_Y8:
-        typeName = QLatin1String("Format_Y8");
-        break;
-    case QVideoFrame::Format_Y16:
-        typeName = QLatin1String("Format_Y16");
-    default:
-        typeName = QString(QLatin1String("UserType(%1)" )).arg(int(f.pixelFormat()));
-    }
+   QString typeName;
+   switch (f.pixelFormat()) {
+      case QVideoFrame::Format_Invalid:
+         typeName = QLatin1String("Format_Invalid");
+         break;
+      case QVideoFrame::Format_ARGB32:
+         typeName = QLatin1String("Format_ARGB32");
+         break;
+      case QVideoFrame::Format_ARGB32_Premultiplied:
+         typeName = QLatin1String("Format_ARGB32_Premultiplied");
+         break;
+      case QVideoFrame::Format_RGB32:
+         typeName = QLatin1String("Format_RGB32");
+         break;
+      case QVideoFrame::Format_RGB24:
+         typeName = QLatin1String("Format_RGB24");
+         break;
+      case QVideoFrame::Format_RGB565:
+         typeName = QLatin1String("Format_RGB565");
+         break;
+      case QVideoFrame::Format_RGB555:
+         typeName = QLatin1String("Format_RGB555");
+         break;
+      case QVideoFrame::Format_ARGB8565_Premultiplied:
+         typeName = QLatin1String("Format_ARGB8565_Premultiplied");
+         break;
+      case QVideoFrame::Format_BGRA32:
+         typeName = QLatin1String("Format_BGRA32");
+         break;
+      case QVideoFrame::Format_BGRA32_Premultiplied:
+         typeName = QLatin1String("Format_BGRA32_Premultiplied");
+         break;
+      case QVideoFrame::Format_BGR32:
+         typeName = QLatin1String("Format_BGR32");
+         break;
+      case QVideoFrame::Format_BGR24:
+         typeName = QLatin1String("Format_BGR24");
+         break;
+      case QVideoFrame::Format_BGR565:
+         typeName = QLatin1String("Format_BGR565");
+         break;
+      case QVideoFrame::Format_BGR555:
+         typeName = QLatin1String("Format_BGR555");
+         break;
+      case QVideoFrame::Format_BGRA5658_Premultiplied:
+         typeName = QLatin1String("Format_BGRA5658_Premultiplied");
+         break;
+      case QVideoFrame::Format_AYUV444:
+         typeName = QLatin1String("Format_AYUV444");
+         break;
+      case QVideoFrame::Format_AYUV444_Premultiplied:
+         typeName = QLatin1String("Format_AYUV444_Premultiplied");
+         break;
+      case QVideoFrame::Format_YUV444:
+         typeName = QLatin1String("Format_YUV444");
+         break;
+      case QVideoFrame::Format_YUV420P:
+         typeName = QLatin1String("Format_YUV420P");
+         break;
+      case QVideoFrame::Format_YV12:
+         typeName = QLatin1String("Format_YV12");
+         break;
+      case QVideoFrame::Format_UYVY:
+         typeName = QLatin1String("Format_UYVY");
+         break;
+      case QVideoFrame::Format_YUYV:
+         typeName = QLatin1String("Format_YUYV");
+         break;
+      case QVideoFrame::Format_NV12:
+         typeName = QLatin1String("Format_NV12");
+         break;
+      case QVideoFrame::Format_NV21:
+         typeName = QLatin1String("Format_NV21");
+         break;
+      case QVideoFrame::Format_IMC1:
+         typeName = QLatin1String("Format_IMC1");
+         break;
+      case QVideoFrame::Format_IMC2:
+         typeName = QLatin1String("Format_IMC2");
+         break;
+      case QVideoFrame::Format_IMC3:
+         typeName = QLatin1String("Format_IMC3");
+         break;
+      case QVideoFrame::Format_IMC4:
+         typeName = QLatin1String("Format_IMC4");
+         break;
+      case QVideoFrame::Format_Y8:
+         typeName = QLatin1String("Format_Y8");
+         break;
+      case QVideoFrame::Format_Y16:
+         typeName = QLatin1String("Format_Y16");
+      default:
+         typeName = QString(QLatin1String("UserType(%1)" )).arg(int(f.pixelFormat()));
+   }
 
-    dbg.nospace() << "QVideoSurfaceFormat(" << typeName;
-    dbg.nospace() << ", " << f.frameSize();
-    dbg.nospace() << ", viewport=" << f.viewport();
-    dbg.nospace() << ", pixelAspectRatio=" << f.pixelAspectRatio();
-    dbg.nospace() << ")";
+   dbg.nospace() << "QVideoSurfaceFormat(" << typeName;
+   dbg.nospace() << ", " << f.frameSize();
+   dbg.nospace() << ", viewport=" << f.viewport();
+   dbg.nospace() << ", pixelAspectRatio=" << f.pixelAspectRatio();
+   dbg.nospace() << ")";
 
-    foreach(const QByteArray& propertyName, f.propertyNames())
-        dbg << "\n    " << propertyName.data() << " = " << f.property(propertyName.data());
+   foreach(const QByteArray & propertyName, f.propertyNames())
+   dbg << "\n    " << propertyName.data() << " = " << f.property(propertyName.data());
 
-    return dbg.space();
+   return dbg.space();
 }
 
 QT_END_NAMESPACE

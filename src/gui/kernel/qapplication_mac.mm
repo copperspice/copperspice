@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -119,18 +119,18 @@ QT_BEGIN_NAMESPACE
 
 //for qt_mac.h
 QPaintDevice *qt_mac_safe_pdev = 0;
-QList<QMacWindowChangeEvent*> *QMacWindowChangeEvent::change_events = 0;
+QList<QMacWindowChangeEvent *> *QMacWindowChangeEvent::change_events = 0;
 QPointer<QWidget> topLevelAt_cache = 0;
 
 /*****************************************************************************
   Internal variables and functions
  *****************************************************************************/
 static struct {
-    bool use_qt_time_limit;
-    QPointer<QWidget> last_widget;
-    int last_x, last_y;
-    int last_modifiers, last_button;
-    EventTime last_time;
+   bool use_qt_time_limit;
+   QPointer<QWidget> last_widget;
+   int last_x, last_y;
+   int last_modifiers, last_button;
+   EventTime last_time;
 } qt_mac_dblclick = { false, 0, -1, -1, 0, 0, -2 };
 
 static bool app_do_modal = false;          // modal mode
@@ -141,7 +141,7 @@ bool qt_scrollbar_jump_to_pos = false;
 static bool qt_mac_collapse_on_dblclick = true;
 
 extern int qt_antialiasing_threshold;      // from qapplication.cpp
-QWidget * qt_button_down;                  // widget got last button-down
+QWidget *qt_button_down;                   // widget got last button-down
 QPointer<QWidget> qt_last_mouse_receiver;
 
 #if defined(QT_DEBUG)
@@ -162,7 +162,7 @@ extern void qt_mac_beep(); //qsound_mac.mm
 extern Qt::KeyboardModifiers qt_mac_get_modifiers(int keys); //qkeymapper_mac.cpp
 extern bool qt_mac_can_clickThrough(const QWidget *); //qwidget_mac.cpp
 extern bool qt_mac_is_macdrawer(const QWidget *); //qwidget_mac.cpp
-extern OSWindowRef qt_mac_window_for(const QWidget*); //qwidget_mac.cpp
+extern OSWindowRef qt_mac_window_for(const QWidget *); //qwidget_mac.cpp
 extern QWidget *qt_mac_find_window(OSWindowRef); //qwidget_mac.cpp
 extern void qt_mac_set_cursor(const QCursor *); //qcursor_mac.cpp
 extern bool qt_mac_is_macsheet(const QWidget *); //qwidget_mac.cpp
@@ -171,169 +171,181 @@ extern bool qt_sendSpontaneousEvent(QObject *obj, QEvent *event); // qapplicatio
 extern void qt_mac_update_cursor(); // qcursor_mac.mm
 
 // Forward Decls
-void onApplicationWindowChangedActivation( QWidget*widget, bool activated );
+void onApplicationWindowChangedActivation( QWidget *widget, bool activated );
 void onApplicationChangedActivation( bool activated );
 
 void qt_mac_loadMenuNib(QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *qtMenuLoader)
 {
-    // Create qt_menu.nib dir in temp.
-    QDir temp = QDir::temp();
-    temp.mkdir("qt_menu.nib");
-    QString nibDir = temp.canonicalPath() + QLatin1String("/") + QLatin1String("qt_menu.nib/");
-    if (!QDir(nibDir).exists()) {
-        qWarning("qt_mac_loadMenuNib() Could not create nib directory in temp");
-        return;
-    }
+   // Create qt_menu.nib dir in temp.
+   QDir temp = QDir::temp();
+   temp.mkdir("qt_menu.nib");
+   QString nibDir = temp.canonicalPath() + QLatin1String("/") + QLatin1String("qt_menu.nib/");
+   if (!QDir(nibDir).exists()) {
+      qWarning("qt_mac_loadMenuNib() Could not create nib directory in temp");
+      return;
+   }
 
-    // Copy nib files from resources to temp.
-    QDir nibResource(":/copperspice/mac/qt_menu.nib/");
-    if (!nibResource.exists()) {
-        qWarning("qt_mac_loadMenuNib() Could not load nib from resources");
-        return;
-    }
-    foreach (const QFileInfo &file, nibResource.entryInfoList())
-        QFile::copy(file.absoluteFilePath(), nibDir + QLatin1String("/") + file.fileName());
+   // Copy nib files from resources to temp.
+   QDir nibResource(":/copperspice/mac/qt_menu.nib/");
+   if (!nibResource.exists()) {
+      qWarning("qt_mac_loadMenuNib() Could not load nib from resources");
+      return;
+   }
+   foreach (const QFileInfo & file, nibResource.entryInfoList())
+   QFile::copy(file.absoluteFilePath(), nibDir + QLatin1String("/") + file.fileName());
 
-    // Load and instantiate nib file from temp
-    NSURL *nibUrl = [NSURL fileURLWithPath : const_cast<NSString *>(reinterpret_cast<const NSString *>(QCFString::toCFStringRef(nibDir)))];
-    NSNib *nib = [[NSNib alloc] initWithContentsOfURL : nibUrl];
-    [nib autorelease];
-    if (!nib) {
-        qWarning("qt_mac_loadMenuNib() Could not load nib from temp");
-        return;
-    }
-    bool ok = [nib instantiateNibWithOwner : qtMenuLoader topLevelObjects : nil];
-    if (!ok)
-        qWarning("qt_mac_loadMenuNib() Could not instantiate nib");
+   // Load and instantiate nib file from temp
+   NSURL *nibUrl = [NSURL fileURLWithPath: const_cast<NSString *>(reinterpret_cast<const NSString *>
+                    (QCFString::toCFStringRef(nibDir)))];
+   NSNib *nib = [[NSNib alloc] initWithContentsOfURL: nibUrl];
+   [nib autorelease];
+   if (!nib) {
+      qWarning("qt_mac_loadMenuNib() Could not load nib from temp");
+      return;
+   }
+   bool ok = [nib instantiateNibWithOwner: qtMenuLoader topLevelObjects: nil];
+   if (!ok) {
+      qWarning("qt_mac_loadMenuNib() Could not instantiate nib");
+   }
 }
 
 
 static void qt_mac_read_fontsmoothing_settings()
 {
-    qt_applefontsmoothing_enabled = true;
-    int w = 10, h = 10;
-    QImage image(w, h, QImage::Format_RGB32);
-    image.fill(0xffffffff);
-    QPainter p(&image);
-    p.drawText(0, h, "X\\");
-    p.end();
+   qt_applefontsmoothing_enabled = true;
+   int w = 10, h = 10;
+   QImage image(w, h, QImage::Format_RGB32);
+   image.fill(0xffffffff);
+   QPainter p(&image);
+   p.drawText(0, h, "X\\");
+   p.end();
 
-    const int *bits = (const int *) ((const QImage &) image).bits();
-    int bpl = image.bytesPerLine() / 4;
-    for (int y=0; y<w; ++y) {
-        for (int x=0; x<h; ++x) {
-            int r = qRed(bits[x]);
-            int g = qGreen(bits[x]);
-            int b = qBlue(bits[x]);
-            if (r != g || r != b) {
-                qt_applefontsmoothing_enabled = true;
-                return;
-            }
-        }
-        bits += bpl;
-    }
-    qt_applefontsmoothing_enabled = false;
+   const int *bits = (const int *) ((const QImage &) image).bits();
+   int bpl = image.bytesPerLine() / 4;
+   for (int y = 0; y < w; ++y) {
+      for (int x = 0; x < h; ++x) {
+         int r = qRed(bits[x]);
+         int g = qGreen(bits[x]);
+         int b = qBlue(bits[x]);
+         if (r != g || r != b) {
+            qt_applefontsmoothing_enabled = true;
+            return;
+         }
+      }
+      bits += bpl;
+   }
+   qt_applefontsmoothing_enabled = false;
 }
 
 Q_GUI_EXPORT bool qt_mac_execute_apple_script(const char *script, long script_len, AEDesc *ret)
 {
-    OSStatus err;
-    AEDesc scriptTextDesc;
-    ComponentInstance theComponent = 0;
+   OSStatus err;
+   AEDesc scriptTextDesc;
+   ComponentInstance theComponent = 0;
 
-    OSAID scriptID = kOSANullScript;
-    OSAID resultID = kOSANullScript;
+   OSAID scriptID = kOSANullScript;
+   OSAID resultID = kOSANullScript;
 
-    // set up locals to a known state
-    AECreateDesc(typeNull, 0, 0, &scriptTextDesc);
-    scriptID = kOSANullScript;
-    resultID = kOSANullScript;
+   // set up locals to a known state
+   AECreateDesc(typeNull, 0, 0, &scriptTextDesc);
+   scriptID = kOSANullScript;
+   resultID = kOSANullScript;
 
-    // open the scripting component
-    theComponent = OpenDefaultComponent(kOSAComponentType, typeAppleScript);
-    if (!theComponent) {
-        err = paramErr;
-        goto bail;
-    }
+   // open the scripting component
+   theComponent = OpenDefaultComponent(kOSAComponentType, typeAppleScript);
+   if (!theComponent) {
+      err = paramErr;
+      goto bail;
+   }
 
-    // put the script text into an aedesc
-    err = AECreateDesc(typeUTF8Text, script, script_len, &scriptTextDesc);
-    if (err != noErr)
-        goto bail;
+   // put the script text into an aedesc
+   err = AECreateDesc(typeUTF8Text, script, script_len, &scriptTextDesc);
+   if (err != noErr) {
+      goto bail;
+   }
 
-    // compile the script
-    err = CS_OSACompile(theComponent, &scriptTextDesc, kOSAModeNull, &scriptID);
-    if (err != noErr)
-        goto bail;
+   // compile the script
+   err = CS_OSACompile(theComponent, &scriptTextDesc, kOSAModeNull, &scriptID);
+   if (err != noErr) {
+      goto bail;
+   }
 
-    // run the script
-    err = CS_OSAExecute(theComponent, scriptID, kOSANullScript, kOSAModeNull, &resultID);
+   // run the script
+   err = CS_OSAExecute(theComponent, scriptID, kOSANullScript, kOSAModeNull, &resultID);
 
-    // collect the results - if any
-    if (ret) {
-        AECreateDesc(typeNull, 0, 0, ret);
-        if (err == errOSAScriptError)
-            CS_OSAScriptError(theComponent, kOSAErrorMessage, typeChar, ret);
+   // collect the results - if any
+   if (ret) {
+      AECreateDesc(typeNull, 0, 0, ret);
+      if (err == errOSAScriptError) {
+         CS_OSAScriptError(theComponent, kOSAErrorMessage, typeChar, ret);
+      }
 
-        else if (err == noErr && resultID != kOSANullScript)
-            CS_OSADisplay(theComponent, resultID, typeChar, kOSAModeNull, ret);
-    }
+      else if (err == noErr && resultID != kOSANullScript) {
+         CS_OSADisplay(theComponent, resultID, typeChar, kOSAModeNull, ret);
+      }
+   }
 bail:
-    AEDisposeDesc(&scriptTextDesc);
-    if (scriptID != kOSANullScript)
-        CS_OSADispose(theComponent, scriptID);
+   AEDisposeDesc(&scriptTextDesc);
+   if (scriptID != kOSANullScript) {
+      CS_OSADispose(theComponent, scriptID);
+   }
 
-    if (resultID != kOSANullScript)
-        CS_OSADispose(theComponent, resultID);
+   if (resultID != kOSANullScript) {
+      CS_OSADispose(theComponent, resultID);
+   }
 
-    if (theComponent)
-        CloseComponent(theComponent);
+   if (theComponent) {
+      CloseComponent(theComponent);
+   }
 
-    return err == noErr;
+   return err == noErr;
 }
 
 Q_GUI_EXPORT bool qt_mac_execute_apple_script(const char *script, AEDesc *ret)
 {
-    return qt_mac_execute_apple_script(script, qstrlen(script), ret);
+   return qt_mac_execute_apple_script(script, qstrlen(script), ret);
 }
 
 Q_GUI_EXPORT bool qt_mac_execute_apple_script(const QString &script, AEDesc *ret)
 {
-    const QByteArray l = script.toUtf8(); return qt_mac_execute_apple_script(l.constData(), l.size(), ret);
+   const QByteArray l = script.toUtf8();
+   return qt_mac_execute_apple_script(l.constData(), l.size(), ret);
 }
 
 /* Resolution change magic */
 void qt_mac_display_change_callbk(CGDirectDisplayID, CGDisplayChangeSummaryFlags flags, void *)
 {
-    const bool resized = flags & kCGDisplayDesktopShapeChangedFlag;
+   const bool resized = flags & kCGDisplayDesktopShapeChangedFlag;
 
-    if (resized && qApp) {
-        if (QDesktopWidget *dw = qApp->desktop()) {
-            QResizeEvent *re = new QResizeEvent(dw->size(), dw->size());
-            QApplication::postEvent(dw, re);
-            QCoreGraphicsPaintEngine::cleanUpMacColorSpaces();
-        }
-    }
+   if (resized && qApp) {
+      if (QDesktopWidget *dw = qApp->desktop()) {
+         QResizeEvent *re = new QResizeEvent(dw->size(), dw->size());
+         QApplication::postEvent(dw, re);
+         QCoreGraphicsPaintEngine::cleanUpMacColorSpaces();
+      }
+   }
 }
 
 #ifdef DEBUG_PLATFORM_SETTINGS
 static void qt_mac_debug_palette(const QPalette &pal, const QPalette &pal2, const QString &where)
 {
-    const char *const groups[] = {"Active", "Disabled", "Inactive" };
-    const char *const roles[] = { "WindowText", "Button", "Light", "Midlight", "Dark", "Mid",
-                            "Text", "BrightText", "ButtonText", "Base", "Window", "Shadow",
-                            "Highlight", "HighlightedText", "Link", "LinkVisited" };
-    if (!where.isNull())
-        qDebug("qt-internal: %s", where.toLatin1().constData());
-    for(int grp = 0; grp < QPalette::NColorGroups; grp++) {
-        for(int role = 0; role < QPalette::NColorRoles; role++) {
-            QBrush b = pal.brush((QPalette::ColorGroup)grp, (QPalette::ColorRole)role);
-            QPixmap pm = b.texture();
-            qDebug("  %s::%s %d::%d::%d [%p]%s", groups[grp], roles[role], b.color().red(),
-                   b.color().green(), b.color().blue(), pm.isNull() ? 0 : &pm,
-                   pal2.brush((QPalette::ColorGroup)grp, (QPalette::ColorRole)role) != b ? " (*)" : "");
-        }
-    }
+   const char *const groups[] = {"Active", "Disabled", "Inactive" };
+   const char *const roles[] = { "WindowText", "Button", "Light", "Midlight", "Dark", "Mid",
+                                 "Text", "BrightText", "ButtonText", "Base", "Window", "Shadow",
+                                 "Highlight", "HighlightedText", "Link", "LinkVisited"
+                               };
+   if (!where.isNull()) {
+      qDebug("qt-internal: %s", where.toLatin1().constData());
+   }
+   for (int grp = 0; grp < QPalette::NColorGroups; grp++) {
+      for (int role = 0; role < QPalette::NColorRoles; role++) {
+         QBrush b = pal.brush((QPalette::ColorGroup)grp, (QPalette::ColorRole)role);
+         QPixmap pm = b.texture();
+         qDebug("  %s::%s %d::%d::%d [%p]%s", groups[grp], roles[role], b.color().red(),
+                b.color().green(), b.color().blue(), pm.isNull() ? 0 : &pm,
+                pal2.brush((QPalette::ColorGroup)grp, (QPalette::ColorRole)role) != b ? " (*)" : "");
+      }
+   }
 
 }
 #else
@@ -343,308 +355,318 @@ static void qt_mac_debug_palette(const QPalette &pal, const QPalette &pal2, cons
 //raise a notification
 void qt_mac_send_notification()
 {
-    QMacCocoaAutoReleasePool pool;
-    [[NSApplication sharedApplication] requestUserAttention:NSInformationalRequest];
+   QMacCocoaAutoReleasePool pool;
+   [[NSApplication sharedApplication] requestUserAttention: NSInformationalRequest];
 
 }
 
 void qt_mac_cancel_notification()
 {
-    QMacCocoaAutoReleasePool pool;
-    [[NSApplication sharedApplication] cancelUserAttentionRequest:NSInformationalRequest];
+   QMacCocoaAutoReleasePool pool;
+   [[NSApplication sharedApplication] cancelUserAttentionRequest: NSInformationalRequest];
 }
 
 
 void qt_mac_set_app_icon(const QPixmap &pixmap)
 {
-    QMacCocoaAutoReleasePool pool;
-    NSImage *image = NULL;
-    if (pixmap.isNull()) {
-        // Get Application icon from bundle
-        image = [[NSImage imageNamed:@"NSApplicationIcon"] retain]; // released below
-    } else {
-        image = static_cast<NSImage *>(qt_mac_create_nsimage(pixmap));
-    }
+   QMacCocoaAutoReleasePool pool;
+   NSImage *image = NULL;
+   if (pixmap.isNull()) {
+      // Get Application icon from bundle
+      image = [[NSImage imageNamed: @"NSApplicationIcon"] retain]; // released below
+   } else {
+      image = static_cast<NSImage *>(qt_mac_create_nsimage(pixmap));
+   }
 
-    [NSApp setApplicationIconImage:image];
-    [image release];
+   [NSApp setApplicationIconImage: image];
+   [image release];
 }
 
 Q_GUI_EXPORT void qt_mac_set_press_and_hold_context(bool b)
 {
-    Q_UNUSED(b);
-    qWarning("qt_mac_set_press_and_hold_context() This functionality is no longer available");
+   Q_UNUSED(b);
+   qWarning("qt_mac_set_press_and_hold_context() This functionality is no longer available");
 }
 
 bool qt_nograb()                                // application no-grab option
 {
 #if defined(QT_DEBUG)
-    return appNoGrab;
+   return appNoGrab;
 #else
-    return false;
+   return false;
 #endif
 }
 
 void qt_mac_update_os_settings()
 {
-    if (!qApp)
-        return;
-    if (!QApplication::startingUp()) {
-        static bool needToPolish = true;
-        if (needToPolish) {
-            QApplication::style()->polish(qApp);
-            needToPolish = false;
-        }
-    }
-    //focus mode
-    /* First worked as of 10.2.3 */
-    QSettings appleSettings(QLatin1String("apple.com"));
-    QVariant appleValue = appleSettings.value(QLatin1String("AppleKeyboardUIMode"), 0);
-    qt_tab_all_widgets = (appleValue.toInt() & 0x2);
-    //paging mode
-    /* First worked as of 10.2.3 */
-    appleValue = appleSettings.value(QLatin1String("AppleScrollerPagingBehavior"), false);
-    qt_scrollbar_jump_to_pos = appleValue.toBool();
-    //collapse
-    /* First worked as of 10.3.3 */
-    appleValue = appleSettings.value(QLatin1String("AppleMiniaturizeOnDoubleClick"), true);
-    qt_mac_collapse_on_dblclick = appleValue.toBool();
+   if (!qApp) {
+      return;
+   }
+   if (!QApplication::startingUp()) {
+      static bool needToPolish = true;
+      if (needToPolish) {
+         QApplication::style()->polish(qApp);
+         needToPolish = false;
+      }
+   }
+   //focus mode
+   /* First worked as of 10.2.3 */
+   QSettings appleSettings(QLatin1String("apple.com"));
+   QVariant appleValue = appleSettings.value(QLatin1String("AppleKeyboardUIMode"), 0);
+   qt_tab_all_widgets = (appleValue.toInt() & 0x2);
+   //paging mode
+   /* First worked as of 10.2.3 */
+   appleValue = appleSettings.value(QLatin1String("AppleScrollerPagingBehavior"), false);
+   qt_scrollbar_jump_to_pos = appleValue.toBool();
+   //collapse
+   /* First worked as of 10.3.3 */
+   appleValue = appleSettings.value(QLatin1String("AppleMiniaturizeOnDoubleClick"), true);
+   qt_mac_collapse_on_dblclick = appleValue.toBool();
 
-    // Anti-aliasing threshold
-    appleValue = appleSettings.value(QLatin1String("AppleAntiAliasingThreshold"));
-    if (appleValue.isValid())
-        qt_antialiasing_threshold = appleValue.toInt();
-
-#ifdef DEBUG_PLATFORM_SETTINGS
-    qDebug("qt_mac_update_os_settings *********************************************************************");
-#endif
-
-    { // setup the global palette
-        QColor qc;
-        (void) QApplication::style();  // trigger creation of application style and system palettes
-        QPalette pal = *QApplicationPrivate::sys_pal;
-
-        pal.setBrush( QPalette::Active, QPalette::Highlight, qt_mac_colorForTheme(kThemeBrushPrimaryHighlightColor) );
-        pal.setBrush( QPalette::Inactive, QPalette::Highlight, qt_mac_colorForTheme(kThemeBrushSecondaryHighlightColor) );
-
-        pal.setBrush( QPalette::Disabled, QPalette::Highlight, qt_mac_colorForTheme(kThemeBrushSecondaryHighlightColor) );
-        pal.setBrush( QPalette::Active, QPalette::Shadow, qt_mac_colorForTheme(kThemeBrushButtonActiveDarkShadow) );
-
-        pal.setBrush( QPalette::Inactive, QPalette::Shadow, qt_mac_colorForTheme(kThemeBrushButtonInactiveDarkShadow) );
-        pal.setBrush( QPalette::Disabled, QPalette::Shadow, qt_mac_colorForTheme(kThemeBrushButtonInactiveDarkShadow) );
-
-        qc = qt_mac_colorForThemeTextColor(kThemeTextColorDialogActive);
-        pal.setColor(QPalette::Active, QPalette::Text, qc);
-        pal.setColor(QPalette::Active, QPalette::WindowText, qc);
-        pal.setColor(QPalette::Active, QPalette::HighlightedText, qc);
-
-        qc = qt_mac_colorForThemeTextColor(kThemeTextColorDialogInactive);
-        pal.setColor(QPalette::Inactive, QPalette::Text, qc);
-        pal.setColor(QPalette::Inactive, QPalette::WindowText, qc);
-        pal.setColor(QPalette::Inactive, QPalette::HighlightedText, qc);
-        pal.setColor(QPalette::Disabled, QPalette::Text, qc);
-        pal.setColor(QPalette::Disabled, QPalette::WindowText, qc);
-        pal.setColor(QPalette::Disabled, QPalette::HighlightedText, qc);
-        pal.setBrush(QPalette::ToolTipBase, QColor(255, 255, 199));
-
-        if (!QApplicationPrivate::sys_pal || *QApplicationPrivate::sys_pal != pal) {
-            QApplicationPrivate::setSystemPalette(pal);
-            QApplication::setPalette(pal);
-        }
-#ifdef DEBUG_PLATFORM_SETTINGS
-        qt_mac_debug_palette(pal, QApplication::palette(), "Global Palette");
-#endif
-    }
-
-    QFont fnt = qt_mac_fontForThemeFont(kThemeApplicationFont);
+   // Anti-aliasing threshold
+   appleValue = appleSettings.value(QLatin1String("AppleAntiAliasingThreshold"));
+   if (appleValue.isValid()) {
+      qt_antialiasing_threshold = appleValue.toInt();
+   }
 
 #ifdef DEBUG_PLATFORM_SETTINGS
-    qDebug("qt-internal: Font for Application [%s::%d::%d::%d]",
-           fnt.family().toLatin1().constData(), fnt.pointSize(), fnt.bold(), fnt.italic());
+   qDebug("qt_mac_update_os_settings *********************************************************************");
 #endif
 
-    if (!QApplicationPrivate::sys_font || *QApplicationPrivate::sys_font != fnt)
-        QApplicationPrivate::setSystemFont(fnt);
+   {
+      // setup the global palette
+      QColor qc;
+      (void) QApplication::style();  // trigger creation of application style and system palettes
+      QPalette pal = *QApplicationPrivate::sys_pal;
 
-    { //setup the fonts
-        struct FontMap {
-            FontMap(const char *qc, short fk) : qt_class(qc), font_key(fk) { }
-            const char *const qt_class;
-            short font_key;
+      pal.setBrush( QPalette::Active, QPalette::Highlight, qt_mac_colorForTheme(kThemeBrushPrimaryHighlightColor) );
+      pal.setBrush( QPalette::Inactive, QPalette::Highlight, qt_mac_colorForTheme(kThemeBrushSecondaryHighlightColor) );
 
-        } mac_widget_fonts[] = {
-            FontMap("QPushButton",    kThemePushButtonFont),
-            FontMap("QListView",      kThemeViewsFont),
-            FontMap("QListBox",       kThemeViewsFont),
-            FontMap("QTitleBar",      kThemeWindowTitleFont),
-            FontMap("QMenuBar",       kThemeMenuTitleFont),
-            FontMap("QMenu",          kThemeMenuItemFont),
-            FontMap("QComboMenuItem", kThemeSystemFont),
-            FontMap("QHeaderView",    kThemeSmallSystemFont),
-            FontMap("Q3Header",       kThemeSmallSystemFont),
-            FontMap("QTipLabel",      kThemeSmallSystemFont),
-            FontMap("QLabel",         kThemeSystemFont),
-            FontMap("QToolButton",    kThemeSmallSystemFont),
-            FontMap("QMenuItem",      kThemeMenuItemFont),       // It doesn't exist, but its unique.
-            FontMap("QComboLineEdit", kThemeViewsFont),          // It doesn't exist, but its unique.
-            FontMap("QSmallFont",     kThemeSmallSystemFont),    // It doesn't exist, but its unique.
-            FontMap("QMiniFont",      kThemeMiniSystemFont),     // It doesn't exist, but its unique.
-            FontMap(0, 0) };
+      pal.setBrush( QPalette::Disabled, QPalette::Highlight, qt_mac_colorForTheme(kThemeBrushSecondaryHighlightColor) );
+      pal.setBrush( QPalette::Active, QPalette::Shadow, qt_mac_colorForTheme(kThemeBrushButtonActiveDarkShadow) );
 
-        for (int i = 0; mac_widget_fonts[i].qt_class; i++) {
-            QFont fnt = qt_mac_fontForThemeFont(mac_widget_fonts[i].font_key);
-            bool set_font = true;
-            FontHash *hash = qt_app_fonts_hash();
+      pal.setBrush( QPalette::Inactive, QPalette::Shadow, qt_mac_colorForTheme(kThemeBrushButtonInactiveDarkShadow) );
+      pal.setBrush( QPalette::Disabled, QPalette::Shadow, qt_mac_colorForTheme(kThemeBrushButtonInactiveDarkShadow) );
 
-            if (!hash->isEmpty()) {
-                FontHash::const_iterator it
-                                        = hash->constFind(mac_widget_fonts[i].qt_class);
-                if (it != hash->constEnd())
-                    set_font = (fnt != *it);
+      qc = qt_mac_colorForThemeTextColor(kThemeTextColorDialogActive);
+      pal.setColor(QPalette::Active, QPalette::Text, qc);
+      pal.setColor(QPalette::Active, QPalette::WindowText, qc);
+      pal.setColor(QPalette::Active, QPalette::HighlightedText, qc);
+
+      qc = qt_mac_colorForThemeTextColor(kThemeTextColorDialogInactive);
+      pal.setColor(QPalette::Inactive, QPalette::Text, qc);
+      pal.setColor(QPalette::Inactive, QPalette::WindowText, qc);
+      pal.setColor(QPalette::Inactive, QPalette::HighlightedText, qc);
+      pal.setColor(QPalette::Disabled, QPalette::Text, qc);
+      pal.setColor(QPalette::Disabled, QPalette::WindowText, qc);
+      pal.setColor(QPalette::Disabled, QPalette::HighlightedText, qc);
+      pal.setBrush(QPalette::ToolTipBase, QColor(255, 255, 199));
+
+      if (!QApplicationPrivate::sys_pal || *QApplicationPrivate::sys_pal != pal) {
+         QApplicationPrivate::setSystemPalette(pal);
+         QApplication::setPalette(pal);
+      }
+#ifdef DEBUG_PLATFORM_SETTINGS
+      qt_mac_debug_palette(pal, QApplication::palette(), "Global Palette");
+#endif
+   }
+
+   QFont fnt = qt_mac_fontForThemeFont(kThemeApplicationFont);
+
+#ifdef DEBUG_PLATFORM_SETTINGS
+   qDebug("qt-internal: Font for Application [%s::%d::%d::%d]",
+          fnt.family().toLatin1().constData(), fnt.pointSize(), fnt.bold(), fnt.italic());
+#endif
+
+   if (!QApplicationPrivate::sys_font || *QApplicationPrivate::sys_font != fnt) {
+      QApplicationPrivate::setSystemFont(fnt);
+   }
+
+   {
+      //setup the fonts
+      struct FontMap {
+         FontMap(const char *qc, short fk) : qt_class(qc), font_key(fk) { }
+         const char *const qt_class;
+         short font_key;
+
+      } mac_widget_fonts[] = {
+         FontMap("QPushButton",    kThemePushButtonFont),
+         FontMap("QListView",      kThemeViewsFont),
+         FontMap("QListBox",       kThemeViewsFont),
+         FontMap("QTitleBar",      kThemeWindowTitleFont),
+         FontMap("QMenuBar",       kThemeMenuTitleFont),
+         FontMap("QMenu",          kThemeMenuItemFont),
+         FontMap("QComboMenuItem", kThemeSystemFont),
+         FontMap("QHeaderView",    kThemeSmallSystemFont),
+         FontMap("Q3Header",       kThemeSmallSystemFont),
+         FontMap("QTipLabel",      kThemeSmallSystemFont),
+         FontMap("QLabel",         kThemeSystemFont),
+         FontMap("QToolButton",    kThemeSmallSystemFont),
+         FontMap("QMenuItem",      kThemeMenuItemFont),       // It doesn't exist, but its unique.
+         FontMap("QComboLineEdit", kThemeViewsFont),          // It doesn't exist, but its unique.
+         FontMap("QSmallFont",     kThemeSmallSystemFont),    // It doesn't exist, but its unique.
+         FontMap("QMiniFont",      kThemeMiniSystemFont),     // It doesn't exist, but its unique.
+         FontMap(0, 0)
+      };
+
+      for (int i = 0; mac_widget_fonts[i].qt_class; i++) {
+         QFont fnt = qt_mac_fontForThemeFont(mac_widget_fonts[i].font_key);
+         bool set_font = true;
+         FontHash *hash = qt_app_fonts_hash();
+
+         if (!hash->isEmpty()) {
+            FontHash::const_iterator it
+               = hash->constFind(mac_widget_fonts[i].qt_class);
+            if (it != hash->constEnd()) {
+               set_font = (fnt != *it);
             }
-            if (set_font) {
-                QApplication::setFont(fnt, mac_widget_fonts[i].qt_class);
+         }
+         if (set_font) {
+            QApplication::setFont(fnt, mac_widget_fonts[i].qt_class);
 
 #ifdef DEBUG_PLATFORM_SETTINGS
-                qDebug("qt-internal: Font for %s [%s::%d::%d::%d]", mac_widget_fonts[i].qt_class,
-                       fnt.family().toLatin1().constData(), fnt.pointSize(), fnt.bold(), fnt.italic());
+            qDebug("qt-internal: Font for %s [%s::%d::%d::%d]", mac_widget_fonts[i].qt_class,
+                   fnt.family().toLatin1().constData(), fnt.pointSize(), fnt.bold(), fnt.italic());
 #endif
-            }
-        }
-    }
-    QApplicationPrivate::initializeWidgetPaletteHash();
+         }
+      }
+   }
+   QApplicationPrivate::initializeWidgetPaletteHash();
 
 #ifdef DEBUG_PLATFORM_SETTINGS
-    qDebug("qt_mac_update_os_settings");
+   qDebug("qt_mac_update_os_settings");
 #endif
 }
 
 void QApplicationPrivate::initializeWidgetPaletteHash()
 {
-    { //setup the palette
-        struct PaletteMap {
-            inline PaletteMap(const char *qc, ThemeBrush a, ThemeBrush i) : qt_class(qc), active(a), inactive(i) { }
-            const char *const qt_class;
-            ThemeBrush active, inactive;
+   {
+      //setup the palette
+      struct PaletteMap {
+         inline PaletteMap(const char *qc, ThemeBrush a, ThemeBrush i) : qt_class(qc), active(a), inactive(i) { }
+         const char *const qt_class;
+         ThemeBrush active, inactive;
 
-        } mac_widget_colors[] = {
-            PaletteMap("QToolButton", kThemeTextColorBevelButtonActive, kThemeTextColorBevelButtonInactive),
-            PaletteMap("QAbstractButton", kThemeTextColorPushButtonActive, kThemeTextColorPushButtonInactive),
-            PaletteMap("QHeaderView", kThemeTextColorPushButtonActive, kThemeTextColorPushButtonInactive),
-            PaletteMap("Q3Header", kThemeTextColorPushButtonActive, kThemeTextColorPushButtonInactive),
-            PaletteMap("QComboBox", kThemeTextColorPopupButtonActive, kThemeTextColorPopupButtonInactive),
-            PaletteMap("QAbstractItemView", kThemeTextColorListView, kThemeTextColorDialogInactive),
-            PaletteMap("QMessageBoxLabel", kThemeTextColorAlertActive, kThemeTextColorAlertInactive),
-            PaletteMap("QTabBar", kThemeTextColorTabFrontActive, kThemeTextColorTabFrontInactive),
-            PaletteMap("QLabel", kThemeTextColorPlacardActive, kThemeTextColorPlacardInactive),
-            PaletteMap("QGroupBox", kThemeTextColorPlacardActive, kThemeTextColorPlacardInactive),
-            PaletteMap("QMenu", kThemeTextColorPopupLabelActive, kThemeTextColorPopupLabelInactive),
-            PaletteMap("QTextEdit", 0, 0),
-            PaletteMap("QTextControl", 0, 0),
-            PaletteMap("QLineEdit", 0, 0),
-            PaletteMap(0, 0, 0) };
+      } mac_widget_colors[] = {
+         PaletteMap("QToolButton", kThemeTextColorBevelButtonActive, kThemeTextColorBevelButtonInactive),
+         PaletteMap("QAbstractButton", kThemeTextColorPushButtonActive, kThemeTextColorPushButtonInactive),
+         PaletteMap("QHeaderView", kThemeTextColorPushButtonActive, kThemeTextColorPushButtonInactive),
+         PaletteMap("Q3Header", kThemeTextColorPushButtonActive, kThemeTextColorPushButtonInactive),
+         PaletteMap("QComboBox", kThemeTextColorPopupButtonActive, kThemeTextColorPopupButtonInactive),
+         PaletteMap("QAbstractItemView", kThemeTextColorListView, kThemeTextColorDialogInactive),
+         PaletteMap("QMessageBoxLabel", kThemeTextColorAlertActive, kThemeTextColorAlertInactive),
+         PaletteMap("QTabBar", kThemeTextColorTabFrontActive, kThemeTextColorTabFrontInactive),
+         PaletteMap("QLabel", kThemeTextColorPlacardActive, kThemeTextColorPlacardInactive),
+         PaletteMap("QGroupBox", kThemeTextColorPlacardActive, kThemeTextColorPlacardInactive),
+         PaletteMap("QMenu", kThemeTextColorPopupLabelActive, kThemeTextColorPopupLabelInactive),
+         PaletteMap("QTextEdit", 0, 0),
+         PaletteMap("QTextControl", 0, 0),
+         PaletteMap("QLineEdit", 0, 0),
+         PaletteMap(0, 0, 0)
+      };
 
-        QColor qc;
-        for(int i = 0; mac_widget_colors[i].qt_class; i++) {
-            QPalette pal;
-            if (mac_widget_colors[i].active != 0) {
-                qc = qt_mac_colorForThemeTextColor(mac_widget_colors[i].active);
-                pal.setColor(QPalette::Active, QPalette::Text, qc);
-                pal.setColor(QPalette::Active, QPalette::WindowText, qc);
-                pal.setColor(QPalette::Active, QPalette::HighlightedText, qc);
+      QColor qc;
+      for (int i = 0; mac_widget_colors[i].qt_class; i++) {
+         QPalette pal;
+         if (mac_widget_colors[i].active != 0) {
+            qc = qt_mac_colorForThemeTextColor(mac_widget_colors[i].active);
+            pal.setColor(QPalette::Active, QPalette::Text, qc);
+            pal.setColor(QPalette::Active, QPalette::WindowText, qc);
+            pal.setColor(QPalette::Active, QPalette::HighlightedText, qc);
 
-                qc = qt_mac_colorForThemeTextColor(mac_widget_colors[i].inactive);
-                pal.setColor(QPalette::Inactive, QPalette::Text, qc);
-                pal.setColor(QPalette::Disabled, QPalette::Text, qc);
-                pal.setColor(QPalette::Inactive, QPalette::WindowText, qc);
-                pal.setColor(QPalette::Disabled, QPalette::WindowText, qc);
-                pal.setColor(QPalette::Inactive, QPalette::HighlightedText, qc);
-                pal.setColor(QPalette::Disabled, QPalette::HighlightedText, qc);
+            qc = qt_mac_colorForThemeTextColor(mac_widget_colors[i].inactive);
+            pal.setColor(QPalette::Inactive, QPalette::Text, qc);
+            pal.setColor(QPalette::Disabled, QPalette::Text, qc);
+            pal.setColor(QPalette::Inactive, QPalette::WindowText, qc);
+            pal.setColor(QPalette::Disabled, QPalette::WindowText, qc);
+            pal.setColor(QPalette::Inactive, QPalette::HighlightedText, qc);
+            pal.setColor(QPalette::Disabled, QPalette::HighlightedText, qc);
+         }
+
+         if (!strcmp(mac_widget_colors[i].qt_class, "QMenu")) {
+            qc = qt_mac_colorForThemeTextColor(kThemeTextColorMenuItemActive);
+            pal.setBrush(QPalette::ButtonText, qc);
+            qc = qt_mac_colorForThemeTextColor(kThemeTextColorMenuItemSelected);
+            pal.setBrush(QPalette::HighlightedText, qc);
+            qc = qt_mac_colorForThemeTextColor(kThemeTextColorMenuItemDisabled);
+            pal.setBrush(QPalette::Disabled, QPalette::Text, qc);
+
+         } else if (!strcmp(mac_widget_colors[i].qt_class, "QAbstractButton")
+                    || !strcmp(mac_widget_colors[i].qt_class, "QHeaderView")
+                    || !strcmp(mac_widget_colors[i].qt_class, "Q3Header")) { //special
+            pal.setColor(QPalette::Disabled, QPalette::ButtonText,
+                         pal.color(QPalette::Disabled, QPalette::Text));
+            pal.setColor(QPalette::Inactive, QPalette::ButtonText,
+                         pal.color(QPalette::Inactive, QPalette::Text));
+            pal.setColor(QPalette::Active, QPalette::ButtonText,
+                         pal.color(QPalette::Active, QPalette::Text));
+
+         } else if (!strcmp(mac_widget_colors[i].qt_class, "QAbstractItemView")) {
+            pal.setBrush(QPalette::Active, QPalette::Highlight,
+                         qt_mac_colorForTheme(kThemeBrushAlternatePrimaryHighlightColor));
+            qc = qt_mac_colorForThemeTextColor(kThemeTextColorMenuItemSelected);
+            pal.setBrush(QPalette::Active, QPalette::HighlightedText, qc);
+
+            pal.setBrush(QPalette::Inactive, QPalette::Text,
+                         pal.brush(QPalette::Active, QPalette::Text));
+            pal.setBrush(QPalette::Inactive, QPalette::HighlightedText,
+                         pal.brush(QPalette::Active, QPalette::Text));
+
+         } else if (!strcmp(mac_widget_colors[i].qt_class, "QTextEdit")
+                    || !strcmp(mac_widget_colors[i].qt_class, "QTextControl")) {
+            pal.setBrush(QPalette::Inactive, QPalette::Text,
+                         pal.brush(QPalette::Active, QPalette::Text));
+            pal.setBrush(QPalette::Inactive, QPalette::HighlightedText,
+                         pal.brush(QPalette::Active, QPalette::Text));
+
+         } else if (!strcmp(mac_widget_colors[i].qt_class, "QLineEdit")) {
+            pal.setBrush(QPalette::Disabled, QPalette::Base,
+                         pal.brush(QPalette::Active, QPalette::Base));
+         }
+
+         bool set_palette = true;
+         PaletteHash *phash = qt_app_palettes_hash();
+         if (!phash->isEmpty()) {
+            PaletteHash::const_iterator it
+               = phash->constFind(mac_widget_colors[i].qt_class);
+            if (it != phash->constEnd()) {
+               set_palette = (pal != *it);
             }
-
-            if (!strcmp(mac_widget_colors[i].qt_class, "QMenu")) {
-                qc = qt_mac_colorForThemeTextColor(kThemeTextColorMenuItemActive);
-                pal.setBrush(QPalette::ButtonText, qc);
-                qc = qt_mac_colorForThemeTextColor(kThemeTextColorMenuItemSelected);
-                pal.setBrush(QPalette::HighlightedText, qc);
-                qc = qt_mac_colorForThemeTextColor(kThemeTextColorMenuItemDisabled);
-                pal.setBrush(QPalette::Disabled, QPalette::Text, qc);
-
-            } else if (!strcmp(mac_widget_colors[i].qt_class, "QAbstractButton")
-                      || !strcmp(mac_widget_colors[i].qt_class, "QHeaderView")
-                      || !strcmp(mac_widget_colors[i].qt_class, "Q3Header")) { //special
-                pal.setColor(QPalette::Disabled, QPalette::ButtonText,
-                             pal.color(QPalette::Disabled, QPalette::Text));
-                pal.setColor(QPalette::Inactive, QPalette::ButtonText,
-                             pal.color(QPalette::Inactive, QPalette::Text));
-                pal.setColor(QPalette::Active, QPalette::ButtonText,
-                             pal.color(QPalette::Active, QPalette::Text));
-
-            } else if (!strcmp(mac_widget_colors[i].qt_class, "QAbstractItemView")) {
-                pal.setBrush(QPalette::Active, QPalette::Highlight,
-                             qt_mac_colorForTheme(kThemeBrushAlternatePrimaryHighlightColor));
-                qc = qt_mac_colorForThemeTextColor(kThemeTextColorMenuItemSelected);
-                pal.setBrush(QPalette::Active, QPalette::HighlightedText, qc);
-
-                pal.setBrush(QPalette::Inactive, QPalette::Text,
-                              pal.brush(QPalette::Active, QPalette::Text));
-                pal.setBrush(QPalette::Inactive, QPalette::HighlightedText,
-                              pal.brush(QPalette::Active, QPalette::Text));
-
-            } else if (!strcmp(mac_widget_colors[i].qt_class, "QTextEdit")
-                       || !strcmp(mac_widget_colors[i].qt_class, "QTextControl")) {
-                pal.setBrush(QPalette::Inactive, QPalette::Text,
-                              pal.brush(QPalette::Active, QPalette::Text));
-                pal.setBrush(QPalette::Inactive, QPalette::HighlightedText,
-                              pal.brush(QPalette::Active, QPalette::Text));
-
-            } else if (!strcmp(mac_widget_colors[i].qt_class, "QLineEdit")) {
-                pal.setBrush(QPalette::Disabled, QPalette::Base,
-                             pal.brush(QPalette::Active, QPalette::Base));
-            }
-
-            bool set_palette = true;
-            PaletteHash *phash = qt_app_palettes_hash();
-            if (!phash->isEmpty()) {
-                PaletteHash::const_iterator it
-                                    = phash->constFind(mac_widget_colors[i].qt_class);
-                if (it != phash->constEnd())
-                    set_palette = (pal != *it);
-            }
-            if (set_palette) {
-                QApplication::setPalette(pal, mac_widget_colors[i].qt_class);
+         }
+         if (set_palette) {
+            QApplication::setPalette(pal, mac_widget_colors[i].qt_class);
 
 #ifdef DEBUG_PLATFORM_SETTINGS
-                qt_mac_debug_palette(pal, QApplication::palette(), QLatin1String("Palette for ") + 
-                        QString::fromLatin1(mac_widget_colors[i].qt_class));
+            qt_mac_debug_palette(pal, QApplication::palette(), QLatin1String("Palette for ") +
+                                 QString::fromLatin1(mac_widget_colors[i].qt_class));
 #endif
-            }
-        }
-    }
+         }
+      }
+   }
 }
 
 static void qt_mac_event_release(EventRef &event)
 {
-    CS_ReleaseEvent(event);
-    event = 0;
+   CS_ReleaseEvent(event);
+   event = 0;
 }
 
 /* sheets */
 void qt_event_request_showsheet(QWidget *w)
 {
-    Q_ASSERT(qt_mac_is_macsheet(w));
+   Q_ASSERT(qt_mac_is_macsheet(w));
 
-    w->repaint();
-    [NSApp beginSheet:qt_mac_window_for(w) modalForWindow:qt_mac_window_for(w->parentWidget())
-        modalDelegate:nil didEndSelector:nil contextInfo:0];
+   w->repaint();
+   [NSApp beginSheet: qt_mac_window_for(w) modalForWindow: qt_mac_window_for(w->parentWidget())
+    modalDelegate: nil didEndSelector: nil contextInfo: 0];
 
 }
 
 static void qt_post_window_change_event(QWidget *widget)
 {
-    qt_widget_private(widget)->needWindowChange = true;
-    QEvent *glWindowChangeEvent = new QEvent(QEvent::MacGLWindowChange);
-    QApplication::postEvent(widget, glWindowChangeEvent);
+   qt_widget_private(widget)->needWindowChange = true;
+   QEvent *glWindowChangeEvent = new QEvent(QEvent::MacGLWindowChange);
+   QApplication::postEvent(widget, glWindowChangeEvent);
 }
 
 /*
@@ -652,14 +674,14 @@ static void qt_post_window_change_event(QWidget *widget)
 */
 static void qt_mac_update_child_gl_widgets(QWidget *widget)
 {
-    // Update all OpenGL child widgets for the given widget.
-    QList<QWidgetPrivate::GlWidgetInfo> &glWidgets = qt_widget_private(widget)->glWidgets;
-    QList<QWidgetPrivate::GlWidgetInfo>::iterator end = glWidgets.end();
-    QList<QWidgetPrivate::GlWidgetInfo>::iterator it = glWidgets.begin();
+   // Update all OpenGL child widgets for the given widget.
+   QList<QWidgetPrivate::GlWidgetInfo> &glWidgets = qt_widget_private(widget)->glWidgets;
+   QList<QWidgetPrivate::GlWidgetInfo>::iterator end = glWidgets.end();
+   QList<QWidgetPrivate::GlWidgetInfo>::iterator it = glWidgets.begin();
 
-    for (;it != end; ++it) {
-        qt_post_window_change_event(it->widget);
-    }
+   for (; it != end; ++it) {
+      qt_post_window_change_event(it->widget);
+   }
 }
 
 /*
@@ -667,17 +689,17 @@ static void qt_mac_update_child_gl_widgets(QWidget *widget)
 */
 void qt_mac_send_posted_gl_updates(QWidget *widget)
 {
-    QList<QWidgetPrivate::GlWidgetInfo> &glWidgets = qt_widget_private(widget)->glWidgets;
-    QList<QWidgetPrivate::GlWidgetInfo>::iterator end = glWidgets.end();
-    QList<QWidgetPrivate::GlWidgetInfo>::iterator it = glWidgets.begin();
+   QList<QWidgetPrivate::GlWidgetInfo> &glWidgets = qt_widget_private(widget)->glWidgets;
+   QList<QWidgetPrivate::GlWidgetInfo>::iterator end = glWidgets.end();
+   QList<QWidgetPrivate::GlWidgetInfo>::iterator it = glWidgets.begin();
 
-    for (;it != end; ++it) {
-        QWidget *glWidget = it->widget;
-        if (qt_widget_private(glWidget)->needWindowChange) {
-            QEvent glChangeEvent(QEvent::MacGLWindowChange);
-            QApplication::sendEvent(glWidget, &glChangeEvent);
-        }
-    }
+   for (; it != end; ++it) {
+      QWidget *glWidget = it->widget;
+      if (qt_widget_private(glWidget)->needWindowChange) {
+         QEvent glChangeEvent(QEvent::MacGLWindowChange);
+         QApplication::sendEvent(glWidget, &glChangeEvent);
+      }
+   }
 }
 
 /*
@@ -685,7 +707,7 @@ void qt_mac_send_posted_gl_updates(QWidget *widget)
 */
 static void qt_mac_update_intersected_gl_widgets(QWidget *widget)
 {
-    Q_UNUSED(widget);
+   Q_UNUSED(widget);
 }
 
 /*
@@ -694,105 +716,112 @@ static void qt_mac_update_intersected_gl_widgets(QWidget *widget)
 static EventRef request_window_change_pending = 0;
 Q_GUI_EXPORT void qt_event_request_window_change()
 {
-    if(request_window_change_pending)
-        return;
+   if (request_window_change_pending) {
+      return;
+   }
 
-    CS_CreateEvent(0, kEventClassQt, kEventQtRequestWindowChange, CS_GetCurrentEventTime(),
-                kEventAttributeUserEvent, &request_window_change_pending);
+   CS_CreateEvent(0, kEventClassQt, kEventQtRequestWindowChange, CS_GetCurrentEventTime(),
+                  kEventAttributeUserEvent, &request_window_change_pending);
 
-    CS_PostEventToQueue(CS_GetMainEventQueue(), request_window_change_pending, kEventPriorityHigh);
+   CS_PostEventToQueue(CS_GetMainEventQueue(), request_window_change_pending, kEventPriorityHigh);
 }
 
 /* window changing. This is a hack around Apple's missing functionality, pending the toolbox team fix */
 Q_GUI_EXPORT void qt_event_request_window_change(QWidget *widget)
 {
-    if (!widget)
-        return;
+   if (!widget) {
+      return;
+   }
 
-    // Post a kEventQtRequestWindowChange event. This event is semi-public,
-    // don't remove this line!
-    qt_event_request_window_change();
+   // Post a kEventQtRequestWindowChange event. This event is semi-public,
+   // don't remove this line!
+   qt_event_request_window_change();
 
-    // Post update request on gl widgets unconditionally.
-    if (qt_widget_private(widget)->isGLWidget == true) {
-        qt_post_window_change_event(widget);
-        return;
-    }
+   // Post update request on gl widgets unconditionally.
+   if (qt_widget_private(widget)->isGLWidget == true) {
+      qt_post_window_change_event(widget);
+      return;
+   }
 
-    qt_mac_update_child_gl_widgets(widget);
-    qt_mac_update_intersected_gl_widgets(widget);
+   qt_mac_update_child_gl_widgets(widget);
+   qt_mac_update_intersected_gl_widgets(widget);
 }
 
 /* activation */
 static struct {
-    QPointer<QWidget> widget;
-    EventRef event;
-    EventLoopTimerRef timer;
-    EventLoopTimerUPP timerUPP;
+   QPointer<QWidget> widget;
+   EventRef event;
+   EventLoopTimerRef timer;
+   EventLoopTimerUPP timerUPP;
 } request_activate_pending = { 0, 0, 0, 0 };
 
 bool qt_event_remove_activate()
 {
-    if (request_activate_pending.timer) {
-        CS_RemoveEventLoopTimer(request_activate_pending.timer);
-        request_activate_pending.timer = 0;
-    }
-    if (request_activate_pending.event)
-        qt_mac_event_release(request_activate_pending.event);
+   if (request_activate_pending.timer) {
+      CS_RemoveEventLoopTimer(request_activate_pending.timer);
+      request_activate_pending.timer = 0;
+   }
+   if (request_activate_pending.event) {
+      qt_mac_event_release(request_activate_pending.event);
+   }
 
-    return true;
+   return true;
 }
 
 void qt_event_activate_timer_callbk(EventLoopTimerRef r, void *)
 {
-    EventLoopTimerRef otc = request_activate_pending.timer;
-    qt_event_remove_activate();
+   EventLoopTimerRef otc = request_activate_pending.timer;
+   qt_event_remove_activate();
 
-    if (r == otc && !request_activate_pending.widget.isNull()) {
-        const QWidget *tlw = request_activate_pending.widget->window();
-        Qt::WindowType wt = tlw->windowType();
+   if (r == otc && !request_activate_pending.widget.isNull()) {
+      const QWidget *tlw = request_activate_pending.widget->window();
+      Qt::WindowType wt = tlw->windowType();
 
-        if (tlw->isVisible()
-               && ((wt != Qt::Desktop && wt != Qt::Popup && wt != Qt::Tool) || tlw->isModal())) {
+      if (tlw->isVisible()
+            && ((wt != Qt::Desktop && wt != Qt::Popup && wt != Qt::Tool) || tlw->isModal())) {
 
-            CS_CreateEvent(0, kEventClassQt, kEventQtRequestActivate, CS_GetCurrentEventTime(),
+         CS_CreateEvent(0, kEventClassQt, kEventQtRequestActivate, CS_GetCurrentEventTime(),
                         kEventAttributeUserEvent, &request_activate_pending.event);
 
-            CS_PostEventToQueue(CS_GetMainEventQueue(), request_activate_pending.event, kEventPriorityHigh);
-        }
-    }
+         CS_PostEventToQueue(CS_GetMainEventQueue(), request_activate_pending.event, kEventPriorityHigh);
+      }
+   }
 }
 
 void qt_event_request_activate(QWidget *w)
 {
-    if (w == request_activate_pending.widget)
-        return;
+   if (w == request_activate_pending.widget) {
+      return;
+   }
 
-    /* We put these into a timer because due to order of events being sent we need to be sure this
-       comes from inside of the event loop */
-    qt_event_remove_activate();
-    if (!request_activate_pending.timerUPP)
-        request_activate_pending.timerUPP = CS_NewEventLoopTimerUPP(qt_event_activate_timer_callbk);
+   /* We put these into a timer because due to order of events being sent we need to be sure this
+      comes from inside of the event loop */
+   qt_event_remove_activate();
+   if (!request_activate_pending.timerUPP) {
+      request_activate_pending.timerUPP = CS_NewEventLoopTimerUPP(qt_event_activate_timer_callbk);
+   }
 
-    request_activate_pending.widget = w;
-    CS_InstallEventLoopTimer(CS_GetMainEventLoop(), 0, 0, request_activate_pending.timerUPP, 0, &request_activate_pending.timer);
+   request_activate_pending.widget = w;
+   CS_InstallEventLoopTimer(CS_GetMainEventLoop(), 0, 0, request_activate_pending.timerUPP, 0,
+                            &request_activate_pending.timer);
 }
 
 
 /* menubars */
 void qt_event_request_menubarupdate()
 {
-    // the request has the benefit that we don't call this multiple times, we can optimize this
-    QMenuBar::macUpdateMenuBar();
+   // the request has the benefit that we don't call this multiple times, we can optimize this
+   QMenuBar::macUpdateMenuBar();
 }
 
 void QApplicationPrivate::createEventDispatcher()
 {
-    Q_Q(QApplication);
-    if (q->type() != QApplication::Tty)
-        eventDispatcher = new QEventDispatcherMac(q);
-    else
-        eventDispatcher = new QEventDispatcherUNIX(q);
+   Q_Q(QApplication);
+   if (q->type() != QApplication::Tty) {
+      eventDispatcher = new QEventDispatcherMac(q);
+   } else {
+      eventDispatcher = new QEventDispatcherUNIX(q);
+   }
 }
 
 /* clipboard */
@@ -804,58 +833,58 @@ void qt_event_send_clipboard_changed()
 static QMenu *qt_mac_dock_menu = 0;
 Q_GUI_EXPORT void qt_mac_set_dock_menu(QMenu *menu)
 {
-    qt_mac_dock_menu = menu;
-    [NSApp setDockMenu:menu->macMenu()];
+   qt_mac_dock_menu = menu;
+   [NSApp setDockMenu: menu->macMenu()];
 
 }
 
 /* events that hold pointers to widgets, must be cleaned up like this */
 void qt_mac_event_release(QWidget *w)
 {
-    if (w) {
+   if (w) {
 
-        if (w == qt_mac_dock_menu) {
-            qt_mac_dock_menu = 0;
-            [NSApp setDockMenu:0];
-        }
-    }
+      if (w == qt_mac_dock_menu) {
+         qt_mac_dock_menu = 0;
+         [NSApp setDockMenu: 0];
+      }
+   }
 }
 
 struct QMacAppleEventTypeSpec {
-    AEEventClass mac_class;
-    AEEventID mac_id;
+   AEEventClass mac_class;
+   AEEventID mac_id;
 } app_apple_events[] = {
-    { kCoreEventClass, kAEQuitApplication },
-    { kCoreEventClass, kAEOpenDocuments },
-    { kInternetEventClass, kAEGetURL },
+   { kCoreEventClass, kAEQuitApplication },
+   { kCoreEventClass, kAEOpenDocuments },
+   { kInternetEventClass, kAEGetURL },
 };
 
 static void qt_init_tablet_proximity_handler()
 {
-    EventTypeSpec tabletProximityEvent = { kEventClassTablet, kEventTabletProximity };
+   EventTypeSpec tabletProximityEvent = { kEventClassTablet, kEventTabletProximity };
 
-    CS_InstallEventHandler(CS_GetEventMonitorTarget(), tablet_proximity_UPP, 1, &tabletProximityEvent, 
-            qApp, &tablet_proximity_handler);
+   CS_InstallEventHandler(CS_GetEventMonitorTarget(), tablet_proximity_UPP, 1, &tabletProximityEvent,
+                          qApp, &tablet_proximity_handler);
 }
 
 static void qt_release_tablet_proximity_handler()
 {
-    CS_RemoveEventHandler(tablet_proximity_handler);
+   CS_RemoveEventHandler(tablet_proximity_handler);
 }
 
 QString QApplicationPrivate::appName() const
 {
-    static QString applName;
-    if (applName.isEmpty()) {
-        applName = QCoreApplicationPrivate::macMenuBarName();
-        ProcessSerialNumber psn;
-        if (applName.isEmpty() && qt_is_gui_used && GetCurrentProcess(&psn) == noErr) {
-            QCFString cfstr;
-            CopyProcessName(&psn, &cfstr);
-            applName = cfstr;
-        }
-    }
-    return applName;
+   static QString applName;
+   if (applName.isEmpty()) {
+      applName = QCoreApplicationPrivate::macMenuBarName();
+      ProcessSerialNumber psn;
+      if (applName.isEmpty() && qt_is_gui_used && GetCurrentProcess(&psn) == noErr) {
+         QCFString cfstr;
+         CopyProcessName(&psn, &cfstr);
+         applName = cfstr;
+      }
+   }
+   return applName;
 }
 
 void qt_release_app_proc_handler()
@@ -864,203 +893,207 @@ void qt_release_app_proc_handler()
 
 void qt_color_profile_changed(CFNotificationCenterRef, void *, CFStringRef, const void *, CFDictionaryRef)
 {
-    QCoreGraphicsPaintEngine::cleanUpMacColorSpaces();
+   QCoreGraphicsPaintEngine::cleanUpMacColorSpaces();
 }
 
 /* platform specific implementations */
 void qt_init(QApplicationPrivate *priv, int)
 {
-    if (qt_is_gui_used) {
-        CGDisplayRegisterReconfigurationCallback(qt_mac_display_change_callbk, 0);
-        CFNotificationCenterRef center = CFNotificationCenterGetDistributedCenter();
+   if (qt_is_gui_used) {
+      CGDisplayRegisterReconfigurationCallback(qt_mac_display_change_callbk, 0);
+      CFNotificationCenterRef center = CFNotificationCenterGetDistributedCenter();
 
-        CFNotificationCenterAddObserver(center, qApp, qt_color_profile_changed,
-                                        kCMDeviceUnregisteredNotification, 0,
-                                        CFNotificationSuspensionBehaviorDeliverImmediately);
-        CFNotificationCenterAddObserver(center, qApp, qt_color_profile_changed,
-                                        kCMDefaultDeviceNotification, 0,
-                                        CFNotificationSuspensionBehaviorDeliverImmediately);
-        CFNotificationCenterAddObserver(center, qApp, qt_color_profile_changed,
-                                        kCMDeviceProfilesNotification, 0,
-                                        CFNotificationSuspensionBehaviorDeliverImmediately);
-        CFNotificationCenterAddObserver(center, qApp, qt_color_profile_changed,
-                                        kCMDefaultDeviceProfileNotification, 0,
-                                        CFNotificationSuspensionBehaviorDeliverImmediately);
+      CFNotificationCenterAddObserver(center, qApp, qt_color_profile_changed,
+                                      kCMDeviceUnregisteredNotification, 0,
+                                      CFNotificationSuspensionBehaviorDeliverImmediately);
+      CFNotificationCenterAddObserver(center, qApp, qt_color_profile_changed,
+                                      kCMDefaultDeviceNotification, 0,
+                                      CFNotificationSuspensionBehaviorDeliverImmediately);
+      CFNotificationCenterAddObserver(center, qApp, qt_color_profile_changed,
+                                      kCMDeviceProfilesNotification, 0,
+                                      CFNotificationSuspensionBehaviorDeliverImmediately);
+      CFNotificationCenterAddObserver(center, qApp, qt_color_profile_changed,
+                                      kCMDefaultDeviceProfileNotification, 0,
+                                      CFNotificationSuspensionBehaviorDeliverImmediately);
 
-        ProcessSerialNumber psn;
-        if (GetCurrentProcess(&psn) == noErr) {
-            // Jambi needs to transform itself since most people aren't "used"
-            // to putting things in bundles, but other people may actually not
-            // want to tranform the process (running as a helper or something)
-            // so don't do that for them. This means checking both LSUIElement
-            // and LSBackgroundOnly. If you set them both... well, you
-            // shouldn't do that.
+      ProcessSerialNumber psn;
+      if (GetCurrentProcess(&psn) == noErr) {
+         // Jambi needs to transform itself since most people aren't "used"
+         // to putting things in bundles, but other people may actually not
+         // want to tranform the process (running as a helper or something)
+         // so don't do that for them. This means checking both LSUIElement
+         // and LSBackgroundOnly. If you set them both... well, you
+         // shouldn't do that.
 
-            bool forceTransform = true;
-            CFTypeRef value = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
-                                                                   CFSTR("LSUIElement"));
+         bool forceTransform = true;
+         CFTypeRef value = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
+                           CFSTR("LSUIElement"));
+         if (value) {
+            CFTypeID valueType = CFGetTypeID(value);
+            // Officially it's supposed to be a string, a boolean makes sense, so we'll check.
+            // A number less so, but OK.
+            if (valueType == CFStringGetTypeID()) {
+               forceTransform = !(QCFString::toQString(static_cast<CFStringRef>(value)).toInt());
+            } else if (valueType == CFBooleanGetTypeID()) {
+               forceTransform = !CFBooleanGetValue(static_cast<CFBooleanRef>(value));
+            } else if (valueType == CFNumberGetTypeID()) {
+               int valueAsInt;
+               CFNumberGetValue(static_cast<CFNumberRef>(value), kCFNumberIntType, &valueAsInt);
+               forceTransform = !valueAsInt;
+            }
+         }
+
+         if (forceTransform) {
+            value = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
+                    CFSTR("LSBackgroundOnly"));
             if (value) {
-                CFTypeID valueType = CFGetTypeID(value);
-                // Officially it's supposed to be a string, a boolean makes sense, so we'll check.
-                // A number less so, but OK.
-                if (valueType == CFStringGetTypeID())
-                    forceTransform = !(QCFString::toQString(static_cast<CFStringRef>(value)).toInt());
-                else if (valueType == CFBooleanGetTypeID())
-                    forceTransform = !CFBooleanGetValue(static_cast<CFBooleanRef>(value));
-                else if (valueType == CFNumberGetTypeID()) {
-                    int valueAsInt;
-                    CFNumberGetValue(static_cast<CFNumberRef>(value), kCFNumberIntType, &valueAsInt);
-                    forceTransform = !valueAsInt;
-                }
+               CFTypeID valueType = CFGetTypeID(value);
+               if (valueType == CFBooleanGetTypeID()) {
+                  forceTransform = !CFBooleanGetValue(static_cast<CFBooleanRef>(value));
+               } else if (valueType == CFStringGetTypeID()) {
+                  forceTransform = !(QCFString::toQString(static_cast<CFStringRef>(value)).toInt());
+               } else if (valueType == CFNumberGetTypeID()) {
+                  int valueAsInt;
+                  CFNumberGetValue(static_cast<CFNumberRef>(value), kCFNumberIntType, &valueAsInt);
+                  forceTransform = !valueAsInt;
+               }
             }
-
-            if (forceTransform) {
-                value = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
-                                                             CFSTR("LSBackgroundOnly"));
-                if (value) {
-                    CFTypeID valueType = CFGetTypeID(value);
-                    if (valueType == CFBooleanGetTypeID())
-                        forceTransform = !CFBooleanGetValue(static_cast<CFBooleanRef>(value));
-                    else if (valueType == CFStringGetTypeID())
-                        forceTransform = !(QCFString::toQString(static_cast<CFStringRef>(value)).toInt());
-                    else if (valueType == CFNumberGetTypeID()) {
-                        int valueAsInt;
-                        CFNumberGetValue(static_cast<CFNumberRef>(value), kCFNumberIntType, &valueAsInt);
-                        forceTransform = !valueAsInt;
-                    }
-                }
-            }
+         }
 
 
-            if (forceTransform) {
-                TransformProcessType(&psn, kProcessTransformToForegroundApplication);
-            }
-        }
-    }
-
-    char **argv = priv->argv;
-
-    // Get command line params
-    if (int argc = priv->argc) {
-        int i, j = 1;
-        QString passed_psn;
-        for(i=1; i < argc; i++) {
-            if (argv[i] && *argv[i] != '-') {
-                argv[j++] = argv[i];
-                continue;
-            }
-            QByteArray arg(argv[i]);
-#if defined(QT_DEBUG)
-            if (arg == "-nograb")
-                appNoGrab = !appNoGrab;
-            else
-#endif 
-                if (arg.left(5) == "-psn_") {
-                    passed_psn = QString::fromLatin1(arg.mid(6));
-                } else {
-                    argv[j++] = argv[i];
-                }
-        }
-        if (j < priv->argc) {
-            priv->argv[j] = 0;
-            priv->argc = j;
-        }
-
-        //special hack to change working directory (for an app bundle) when running from finder
-        if (!passed_psn.isNull() && QDir::currentPath() == QLatin1String("/")) {
-            QCFType<CFURLRef> bundleURL(CFBundleCopyBundleURL(CFBundleGetMainBundle()));
-            QString qbundlePath = QCFString(CFURLCopyFileSystemPath(bundleURL,
-                                            kCFURLPOSIXPathStyle));
-            if (qbundlePath.endsWith(QLatin1String(".app")))
-                QDir::setCurrent(qbundlePath.section(QLatin1Char('/'), 0, -2));
-        }
+         if (forceTransform) {
+            TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+         }
+      }
    }
 
-    QMacPasteboardMime::initialize();
+   char **argv = priv->argv;
 
-    qApp->setObjectName(priv->appName());
-    if (qt_is_gui_used) {
-        QColormap::initialize();
-        QFont::initialize();
-        QCursorData::initialize();
-        QCoreGraphicsPaintEngine::initialize();
+   // Get command line params
+   if (int argc = priv->argc) {
+      int i, j = 1;
+      QString passed_psn;
+      for (i = 1; i < argc; i++) {
+         if (argv[i] && *argv[i] != '-') {
+            argv[j++] = argv[i];
+            continue;
+         }
+         QByteArray arg(argv[i]);
+#if defined(QT_DEBUG)
+         if (arg == "-nograb") {
+            appNoGrab = !appNoGrab;
+         } else
+#endif
+            if (arg.left(5) == "-psn_") {
+               passed_psn = QString::fromLatin1(arg.mid(6));
+            } else {
+               argv[j++] = argv[i];
+            }
+      }
+      if (j < priv->argc) {
+         priv->argv[j] = 0;
+         priv->argc = j;
+      }
+
+      //special hack to change working directory (for an app bundle) when running from finder
+      if (!passed_psn.isNull() && QDir::currentPath() == QLatin1String("/")) {
+         QCFType<CFURLRef> bundleURL(CFBundleCopyBundleURL(CFBundleGetMainBundle()));
+         QString qbundlePath = QCFString(CFURLCopyFileSystemPath(bundleURL,
+                                         kCFURLPOSIXPathStyle));
+         if (qbundlePath.endsWith(QLatin1String(".app"))) {
+            QDir::setCurrent(qbundlePath.section(QLatin1Char('/'), 0, -2));
+         }
+      }
+   }
+
+   QMacPasteboardMime::initialize();
+
+   qApp->setObjectName(priv->appName());
+   if (qt_is_gui_used) {
+      QColormap::initialize();
+      QFont::initialize();
+      QCursorData::initialize();
+      QCoreGraphicsPaintEngine::initialize();
 
 #ifndef QT_NO_ACCESSIBILITY
-        QAccessible::initialize();
+      QAccessible::initialize();
 #endif
 
 #ifndef QT_NO_IM
-        QMacInputContext::initialize();
-        QApplicationPrivate::inputContext = new QMacInputContext;
+      QMacInputContext::initialize();
+      QApplicationPrivate::inputContext = new QMacInputContext;
 #endif
 
-        if (QApplication::desktopSettingsAware())
-            qt_mac_update_os_settings();
+      if (QApplication::desktopSettingsAware()) {
+         qt_mac_update_os_settings();
+      }
 
-        if (!app_proc_ae_handlerUPP && !QApplication::testAttribute(Qt::AA_MacPluginApplication)) {
-            app_proc_ae_handlerUPP = AEEventHandlerUPP(QApplicationPrivate::globalAppleEventProcessor);
-            for(uint i = 0; i < sizeof(app_apple_events) / sizeof(QMacAppleEventTypeSpec); ++i) {
-                // Install apple event handler, but avoid overwriting an already
-                // existing handler (it means a 3rd party application has installed one):
-                SRefCon refCon = 0;
-                AEEventHandlerUPP current_handler = NULL;
-                AEGetEventHandler(app_apple_events[i].mac_class, app_apple_events[i].mac_id, &current_handler, &refCon, false);
-                if (!current_handler)
-                    AEInstallEventHandler(app_apple_events[i].mac_class, app_apple_events[i].mac_id,
-                            app_proc_ae_handlerUPP, SRefCon(qApp), false);
-            }
-        }
+      if (!app_proc_ae_handlerUPP && !QApplication::testAttribute(Qt::AA_MacPluginApplication)) {
+         app_proc_ae_handlerUPP = AEEventHandlerUPP(QApplicationPrivate::globalAppleEventProcessor);
+         for (uint i = 0; i < sizeof(app_apple_events) / sizeof(QMacAppleEventTypeSpec); ++i) {
+            // Install apple event handler, but avoid overwriting an already
+            // existing handler (it means a 3rd party application has installed one):
+            SRefCon refCon = 0;
+            AEEventHandlerUPP current_handler = NULL;
+            AEGetEventHandler(app_apple_events[i].mac_class, app_apple_events[i].mac_id, &current_handler, &refCon, false);
+            if (!current_handler)
+               AEInstallEventHandler(app_apple_events[i].mac_class, app_apple_events[i].mac_id,
+                                     app_proc_ae_handlerUPP, SRefCon(qApp), false);
+         }
+      }
 
-        if (QApplicationPrivate::app_style) {
-            QEvent ev(QEvent::Style);
-            qt_sendSpontaneousEvent(QApplicationPrivate::app_style, &ev);
-        }
-    }
-    if (QApplication::desktopSettingsAware())
-        QApplicationPrivate::qt_mac_apply_settings();
+      if (QApplicationPrivate::app_style) {
+         QEvent ev(QEvent::Style);
+         qt_sendSpontaneousEvent(QApplicationPrivate::app_style, &ev);
+      }
+   }
+   if (QApplication::desktopSettingsAware()) {
+      QApplicationPrivate::qt_mac_apply_settings();
+   }
 
-    // application delegate
-    NSApplication *cocoaApp = [QT_MANGLE_NAMESPACE(QNSApplication) sharedApplication];
-    qt_redirectNSApplicationSendEvent();
+   // application delegate
+   NSApplication *cocoaApp = [QT_MANGLE_NAMESPACE(QNSApplication) sharedApplication];
+   qt_redirectNSApplicationSendEvent();
 
-    QMacCocoaAutoReleasePool pool;
-    id oldDelegate = [cocoaApp delegate];
-    QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) *newDelegate = [QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) sharedDelegate];
-    Q_ASSERT(newDelegate);
-    [newDelegate setQtPrivate:priv];
-    // Only do things that make sense to do once, otherwise we crash.
-    if (oldDelegate != newDelegate && !QApplication::testAttribute(Qt::AA_MacPluginApplication)) {
-        [newDelegate setReflectionDelegate:oldDelegate];
-        [cocoaApp setDelegate:newDelegate];
+   QMacCocoaAutoReleasePool pool;
+   id oldDelegate = [cocoaApp delegate];
+   QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) *newDelegate = [QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate)
+         sharedDelegate];
+   Q_ASSERT(newDelegate);
+   [newDelegate setQtPrivate: priv];
+   // Only do things that make sense to do once, otherwise we crash.
+   if (oldDelegate != newDelegate && !QApplication::testAttribute(Qt::AA_MacPluginApplication)) {
+      [newDelegate setReflectionDelegate: oldDelegate];
+      [cocoaApp setDelegate: newDelegate];
 
-        QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *qtMenuLoader = [[QT_MANGLE_NAMESPACE(QCocoaMenuLoader) alloc] init];
-        qt_mac_loadMenuNib(qtMenuLoader);
+      QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *qtMenuLoader = [[QT_MANGLE_NAMESPACE(QCocoaMenuLoader) alloc] init];
+      qt_mac_loadMenuNib(qtMenuLoader);
 
-        [cocoaApp setMenu:[qtMenuLoader menu]];
-        [newDelegate setMenuLoader:qtMenuLoader];
-    }
+      [cocoaApp setMenu: [qtMenuLoader menu]];
+      [newDelegate setMenuLoader: qtMenuLoader];
+   }
 
-    // Register for Carbon tablet proximity events on the event monitor target.
-    // This means that we should receive proximity events even when we aren't the active application.
-    if (! tablet_proximity_handler) {
-        tablet_proximity_UPP = CS_NewEventHandlerUPP(QApplicationPrivate::tabletProximityCallback);
-        qt_init_tablet_proximity_handler();
-    }
+   // Register for Carbon tablet proximity events on the event monitor target.
+   // This means that we should receive proximity events even when we aren't the active application.
+   if (! tablet_proximity_handler) {
+      tablet_proximity_UPP = CS_NewEventHandlerUPP(QApplicationPrivate::tabletProximityCallback);
+      qt_init_tablet_proximity_handler();
+   }
 
-    priv->native_modal_dialog_active = false;
+   priv->native_modal_dialog_active = false;
 
    qt_mac_read_fontsmoothing_settings();
 }
 
 void qt_release_apple_event_handler()
 {
-    if(app_proc_ae_handlerUPP) {
-        for(uint i = 0; i < sizeof(app_apple_events) / sizeof(QMacAppleEventTypeSpec); ++i)
-            AERemoveEventHandler(app_apple_events[i].mac_class, app_apple_events[i].mac_id,
-                    app_proc_ae_handlerUPP, true);
-        DisposeAEEventHandlerUPP(app_proc_ae_handlerUPP);
-        app_proc_ae_handlerUPP = 0;
-    }
+   if (app_proc_ae_handlerUPP) {
+      for (uint i = 0; i < sizeof(app_apple_events) / sizeof(QMacAppleEventTypeSpec); ++i)
+         AERemoveEventHandler(app_apple_events[i].mac_class, app_apple_events[i].mac_id,
+                              app_proc_ae_handlerUPP, true);
+      DisposeAEEventHandlerUPP(app_proc_ae_handlerUPP);
+      app_proc_ae_handlerUPP = 0;
+   }
 }
 
 /*****************************************************************************
@@ -1069,41 +1102,42 @@ void qt_release_apple_event_handler()
 
 void qt_cleanup()
 {
-    CGDisplayRemoveReconfigurationCallback(qt_mac_display_change_callbk, 0);
-    CFNotificationCenterRef center = CFNotificationCenterGetDistributedCenter();
-    CFNotificationCenterRemoveObserver(center, qApp, kCMDeviceUnregisteredNotification, 0);
-    CFNotificationCenterRemoveObserver(center, qApp, kCMDefaultDeviceNotification, 0);
-    CFNotificationCenterRemoveObserver(center, qApp, kCMDeviceProfilesNotification, 0);
-    CFNotificationCenterRemoveObserver(center, qApp, kCMDefaultDeviceProfileNotification, 0);
+   CGDisplayRemoveReconfigurationCallback(qt_mac_display_change_callbk, 0);
+   CFNotificationCenterRef center = CFNotificationCenterGetDistributedCenter();
+   CFNotificationCenterRemoveObserver(center, qApp, kCMDeviceUnregisteredNotification, 0);
+   CFNotificationCenterRemoveObserver(center, qApp, kCMDefaultDeviceNotification, 0);
+   CFNotificationCenterRemoveObserver(center, qApp, kCMDeviceProfilesNotification, 0);
+   CFNotificationCenterRemoveObserver(center, qApp, kCMDefaultDeviceProfileNotification, 0);
 
-    qt_release_apple_event_handler();
-    qt_resetNSApplicationSendEvent();
+   qt_release_apple_event_handler();
+   qt_resetNSApplicationSendEvent();
 
-    qt_release_tablet_proximity_handler();
-    if (tablet_proximity_UPP)
-        CS_DisposeEventHandlerUPP(tablet_proximity_UPP);
+   qt_release_tablet_proximity_handler();
+   if (tablet_proximity_UPP) {
+      CS_DisposeEventHandlerUPP(tablet_proximity_UPP);
+   }
 
-    QPixmapCache::clear();
-    if (qt_is_gui_used) {
+   QPixmapCache::clear();
+   if (qt_is_gui_used) {
 
 #ifndef QT_NO_ACCESSIBILITY
-        QAccessible::cleanup();
+      QAccessible::cleanup();
 #endif
 
 #ifndef QT_NO_IM
-        QMacInputContext::cleanup();
+      QMacInputContext::cleanup();
 #endif
 
-        QCursorData::cleanup();
-        QFont::cleanup();
-        QColormap::cleanup();
-        if (qt_mac_safe_pdev) {
-            delete qt_mac_safe_pdev;
-            qt_mac_safe_pdev = 0;
-        }
-        extern void qt_mac_unregister_widget(); // qapplication_mac.cpp
-        qt_mac_unregister_widget();
-    }
+      QCursorData::cleanup();
+      QFont::cleanup();
+      QColormap::cleanup();
+      if (qt_mac_safe_pdev) {
+         delete qt_mac_safe_pdev;
+         qt_mac_safe_pdev = 0;
+      }
+      extern void qt_mac_unregister_widget(); // qapplication_mac.cpp
+      qt_mac_unregister_widget();
+   }
 }
 
 /*****************************************************************************
@@ -1115,88 +1149,93 @@ void qt_updated_rootinfo()
 
 bool qt_wstate_iconified(WId)
 {
-    return false;
+   return false;
 }
 
 /*****************************************************************************
   Platform specific QApplication members
  *****************************************************************************/
-extern QWidget * mac_mouse_grabber;
-extern QWidget * mac_keyboard_grabber;
+extern QWidget *mac_mouse_grabber;
+extern QWidget *mac_keyboard_grabber;
 
 #ifndef QT_NO_CURSOR
 void QApplication::setOverrideCursor(const QCursor &cursor)
 {
-    qApp->d_func()->cursor_list.prepend(cursor);
+   qApp->d_func()->cursor_list.prepend(cursor);
 
-    qt_mac_update_cursor();
+   qt_mac_update_cursor();
 }
 
 void QApplication::restoreOverrideCursor()
 {
-    if (qApp->d_func()->cursor_list.isEmpty())
-        return;
-    qApp->d_func()->cursor_list.removeFirst();
-    qt_mac_update_cursor();
+   if (qApp->d_func()->cursor_list.isEmpty()) {
+      return;
+   }
+   qApp->d_func()->cursor_list.removeFirst();
+   qt_mac_update_cursor();
 }
 
-#endif 
+#endif
 
 Qt::KeyboardModifiers QApplication::queryKeyboardModifiers()
 {
-    return qt_mac_get_modifiers(CS_GetCurrentEventKeyModifiers());
+   return qt_mac_get_modifiers(CS_GetCurrentEventKeyModifiers());
 }
 
 QWidget *QApplication::topLevelAt(const QPoint &p)
 {
-    // Use a cache to avoid iterate through the whole list of windows for all
-    // calls to to topLevelAt. We e.g. do this for each and every mouse
-    // move since we need to find the widget under mouse:
-    if (topLevelAt_cache && topLevelAt_cache->frameGeometry().contains(p))
-        return topLevelAt_cache;
+   // Use a cache to avoid iterate through the whole list of windows for all
+   // calls to to topLevelAt. We e.g. do this for each and every mouse
+   // move since we need to find the widget under mouse:
+   if (topLevelAt_cache && topLevelAt_cache->frameGeometry().contains(p)) {
+      return topLevelAt_cache;
+   }
 
-    // INVARIANT: Cache miss. Go through the list if windows instead:
-    QMacCocoaAutoReleasePool pool;
-    NSPoint cocoaPoint = flipPoint(p);
-    NSInteger windowCount;
-    NSCountWindows(&windowCount);
-    if (windowCount <= 0)
-        return 0;  // There's no window to find!
+   // INVARIANT: Cache miss. Go through the list if windows instead:
+   QMacCocoaAutoReleasePool pool;
+   NSPoint cocoaPoint = flipPoint(p);
+   NSInteger windowCount;
+   NSCountWindows(&windowCount);
+   if (windowCount <= 0) {
+      return 0;   // There's no window to find!
+   }
 
-    QVarLengthArray<NSInteger> windowList(windowCount);
-    NSWindowList(windowCount, windowList.data());
-    int firstQtWindowFound = -1;
-    for (int i = 0; i < windowCount; ++i) {
-        NSWindow *window = [NSApp windowWithWindowNumber:windowList[i]];
-        if (window) {
-            QWidget *candidateWindow = [window QT_MANGLE_NAMESPACE(qt_qwidget)];
-            if (candidateWindow && firstQtWindowFound == -1)
-                firstQtWindowFound = i;
+   QVarLengthArray<NSInteger> windowList(windowCount);
+   NSWindowList(windowCount, windowList.data());
+   int firstQtWindowFound = -1;
+   for (int i = 0; i < windowCount; ++i) {
+      NSWindow *window = [NSApp windowWithWindowNumber: windowList[i]];
+      if (window) {
+         QWidget *candidateWindow = [window QT_MANGLE_NAMESPACE(qt_qwidget)];
+         if (candidateWindow && firstQtWindowFound == -1) {
+            firstQtWindowFound = i;
+         }
 
-            if (NSPointInRect(cocoaPoint, [window frame])) {
-                // Check to see if there's a hole in the window where the mask is.
-                // If there is, we should just continue to see if there is a window below.
-                if (candidateWindow && !candidateWindow->mask().isEmpty()) {
-                    QPoint localPoint = candidateWindow->mapFromGlobal(p);
-                    if (!candidateWindow->mask().contains(localPoint))
-                        continue;
-                    else
-                        return candidateWindow;
-                } else {
-                    if (i == firstQtWindowFound) {
-                        // The cache will only work when the window under mouse is
-                        // top most (that is, not partially obscured by other windows.
-                        // And we only set it if no mask is present to optimize for the common case:
-                        topLevelAt_cache = candidateWindow;
-                    }
-                    return candidateWindow;
-                }
+         if (NSPointInRect(cocoaPoint, [window frame])) {
+            // Check to see if there's a hole in the window where the mask is.
+            // If there is, we should just continue to see if there is a window below.
+            if (candidateWindow && !candidateWindow->mask().isEmpty()) {
+               QPoint localPoint = candidateWindow->mapFromGlobal(p);
+               if (!candidateWindow->mask().contains(localPoint)) {
+                  continue;
+               } else {
+                  return candidateWindow;
+               }
+            } else {
+               if (i == firstQtWindowFound) {
+                  // The cache will only work when the window under mouse is
+                  // top most (that is, not partially obscured by other windows.
+                  // And we only set it if no mask is present to optimize for the common case:
+                  topLevelAt_cache = candidateWindow;
+               }
+               return candidateWindow;
             }
-        }
-    }
+         }
+      }
+   }
 
-    topLevelAt_cache = 0;
-    return 0;
+   topLevelAt_cache = 0;
+   return 0;
 }
 
 /*****************************************************************************
@@ -1205,68 +1244,76 @@ QWidget *QApplication::topLevelAt(const QPoint &p)
 
 bool QApplicationPrivate::modalState()
 {
-    return app_do_modal;
+   return app_do_modal;
 }
 
 void QApplicationPrivate::enterModal_sys(QWidget *widget)
 {
 
 #ifdef DEBUG_MODAL_EVENTS
-    Q_ASSERT(widget);
-    qDebug("Entering modal state with %s::%s::%p (%d)", widget->metaObject()->className(), widget->objectName().toLocal8Bit().constData(),
-            widget, qt_modal_stack ? (int)qt_modal_stack->count() : -1);
+   Q_ASSERT(widget);
+   qDebug("Entering modal state with %s::%s::%p (%d)", widget->metaObject()->className(),
+          widget->objectName().toLocal8Bit().constData(),
+          widget, qt_modal_stack ? (int)qt_modal_stack->count() : -1);
 #endif
 
-    if (!qt_modal_stack)
-        qt_modal_stack = new QWidgetList;
+   if (!qt_modal_stack) {
+      qt_modal_stack = new QWidgetList;
+   }
 
-    dispatchEnterLeave(0, qt_last_mouse_receiver);
-    qt_last_mouse_receiver = 0;
+   dispatchEnterLeave(0, qt_last_mouse_receiver);
+   qt_last_mouse_receiver = 0;
 
-    qt_modal_stack->insert(0, widget);
-    if (!app_do_modal)
-        qt_event_request_menubarupdate();
-    app_do_modal = true;
-    qt_button_down = 0;
+   qt_modal_stack->insert(0, widget);
+   if (!app_do_modal) {
+      qt_event_request_menubarupdate();
+   }
+   app_do_modal = true;
+   qt_button_down = 0;
 
-    if (!qt_mac_is_macsheet(widget))
-        QEventDispatcherMacPrivate::beginModalSession(widget);
+   if (!qt_mac_is_macsheet(widget)) {
+      QEventDispatcherMacPrivate::beginModalSession(widget);
+   }
 }
 
 void QApplicationPrivate::leaveModal_sys(QWidget *widget)
 {
-    if (qt_modal_stack && qt_modal_stack->removeAll(widget)) {
+   if (qt_modal_stack && qt_modal_stack->removeAll(widget)) {
 #ifdef DEBUG_MODAL_EVENTS
-        qDebug("Leaving modal state with %s::%s::%p (%d)", widget->metaObject()->className(), widget->objectName().toLocal8Bit().constData(),
-               widget, qt_modal_stack->count());
+      qDebug("Leaving modal state with %s::%s::%p (%d)", widget->metaObject()->className(),
+             widget->objectName().toLocal8Bit().constData(),
+             widget, qt_modal_stack->count());
 #endif
-        if (qt_modal_stack->isEmpty()) {
-            delete qt_modal_stack;
-            qt_modal_stack = 0;
-            QPoint p(QCursor::pos());
-            app_do_modal = false;
-            QWidget* w = 0;
-            if (QWidget *grabber = QWidget::mouseGrabber())
-                w = grabber;
-            else
-                w = QApplication::widgetAt(p.x(), p.y());
-            dispatchEnterLeave(w, qt_last_mouse_receiver); // send synthetic enter event
-            qt_last_mouse_receiver = w;
-        }
+      if (qt_modal_stack->isEmpty()) {
+         delete qt_modal_stack;
+         qt_modal_stack = 0;
+         QPoint p(QCursor::pos());
+         app_do_modal = false;
+         QWidget *w = 0;
+         if (QWidget *grabber = QWidget::mouseGrabber()) {
+            w = grabber;
+         } else {
+            w = QApplication::widgetAt(p.x(), p.y());
+         }
+         dispatchEnterLeave(w, qt_last_mouse_receiver); // send synthetic enter event
+         qt_last_mouse_receiver = w;
+      }
 
-        if (!qt_mac_is_macsheet(widget))
-            QEventDispatcherMacPrivate::endModalSession(widget);
+      if (!qt_mac_is_macsheet(widget)) {
+         QEventDispatcherMacPrivate::endModalSession(widget);
+      }
 
-    }
+   }
 
 #ifdef DEBUG_MODAL_EVENTS
-    else qDebug("Failure to remove %s::%s::%p -- %p", widget->metaObject()->className(), 
-            widget->objectName().toLocal8Bit().constData(), widget, qt_modal_stack);
+   else qDebug("Failure to remove %s::%s::%p -- %p", widget->metaObject()->className(),
+                  widget->objectName().toLocal8Bit().constData(), widget, qt_modal_stack);
 #endif
 
-    app_do_modal = (qt_modal_stack != 0);
-    if (!app_do_modal)
-        qt_event_request_menubarupdate();
+   app_do_modal = (qt_modal_stack != 0);
+   if (!app_do_modal) {
+      qt_event_request_menubarupdate();
+   }
 }
 
 QWidget *QApplicationPrivate::tryModalHelper_sys(QWidget *top)
@@ -1276,46 +1323,49 @@ QWidget *QApplicationPrivate::tryModalHelper_sys(QWidget *top)
 
 OSStatus QApplicationPrivate::tabletProximityCallback(EventHandlerCallRef, EventRef carbonEvent, void *)
 {
-    OSType eventClass = CS_GetEventClass(carbonEvent);
-    UInt32 eventKind  = CS_GetEventKind(carbonEvent);
+   OSType eventClass = CS_GetEventClass(carbonEvent);
+   UInt32 eventKind  = CS_GetEventKind(carbonEvent);
 
-    if (eventClass != kEventClassTablet || eventKind != kEventTabletProximity)
-        return eventNotHandledErr;
+   if (eventClass != kEventClassTablet || eventKind != kEventTabletProximity) {
+      return eventNotHandledErr;
+   }
 
-    // Get the current point of the device and its unique ID.
-    ::TabletProximityRec proxRec;
-    CS_GetEventParameter(carbonEvent, kEventParamTabletProximityRec, typeTabletProximityRec, 0,
-                      sizeof(proxRec), 0, &proxRec);
+   // Get the current point of the device and its unique ID.
+   ::TabletProximityRec proxRec;
+   CS_GetEventParameter(carbonEvent, kEventParamTabletProximityRec, typeTabletProximityRec, 0,
+                        sizeof(proxRec), 0, &proxRec);
 
-    qt_dispatchTabletProximityEvent(proxRec);
-    return noErr;
+   qt_dispatchTabletProximityEvent(proxRec);
+   return noErr;
 }
 
 void QApplicationPrivate::qt_initAfterNSAppStarted()
 {
-    setupAppleEvents();
-    qt_mac_update_cursor();
+   setupAppleEvents();
+   qt_mac_update_cursor();
 }
 
 void QApplicationPrivate::setupAppleEvents()
 {
-    // This function is called from the event dispatcher when NSApplication has
-    // finished initialization, which appears to be just after [NSApplication run] has
-    // started to execute. By setting up our apple events handlers this late, we override
-    // the ones set up by NSApplication.
+   // This function is called from the event dispatcher when NSApplication has
+   // finished initialization, which appears to be just after [NSApplication run] has
+   // started to execute. By setting up our apple events handlers this late, we override
+   // the ones set up by NSApplication.
 
-    // If Qt is used as a plugin, we let the 3rd party application handle events
-    // like quit and open file events. Otherwise, if we install our own handlers, we
-    // easily end up breaking functionallity the 3rd party application depend on:
-    if (QApplication::testAttribute(Qt::AA_MacPluginApplication))
-        return;
+   // If Qt is used as a plugin, we let the 3rd party application handle events
+   // like quit and open file events. Otherwise, if we install our own handlers, we
+   // easily end up breaking functionallity the 3rd party application depend on:
+   if (QApplication::testAttribute(Qt::AA_MacPluginApplication)) {
+      return;
+   }
 
-    QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) *newDelegate = [QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) sharedDelegate];
-    NSAppleEventManager *eventManager = [NSAppleEventManager sharedAppleEventManager];
-    [eventManager setEventHandler:newDelegate andSelector:@selector(appleEventQuit:withReplyEvent:)
-     forEventClass:kCoreEventClass andEventID:kAEQuitApplication];
-    [eventManager setEventHandler:newDelegate andSelector:@selector(getUrl:withReplyEvent:)
-      forEventClass:kInternetEventClass andEventID:kAEGetURL];
+   QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) *newDelegate = [QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate)
+         sharedDelegate];
+   NSAppleEventManager *eventManager = [NSAppleEventManager sharedAppleEventManager];
+   [eventManager setEventHandler: newDelegate andSelector: @selector(appleEventQuit: withReplyEvent:)
+    forEventClass: kCoreEventClass andEventID: kAEQuitApplication];
+   [eventManager setEventHandler: newDelegate andSelector: @selector(getUrl: withReplyEvent:)
+    forEventClass: kInternetEventClass andEventID: kAEGetURL];
 }
 
 // In Carbon this is your one stop for apple events.
@@ -1326,308 +1376,323 @@ void QApplicationPrivate::setupAppleEvents()
 // want to check out QCocoaApplicationDelegate instead.
 OSStatus QApplicationPrivate::globalAppleEventProcessor(const AppleEvent *ae, AppleEvent *, long handlerRefcon)
 {
-    QApplication *app = (QApplication *)handlerRefcon;
-    bool handled_event=false;
-    OSType aeID=typeWildCard, aeClass=typeWildCard;
+   QApplication *app = (QApplication *)handlerRefcon;
+   bool handled_event = false;
+   OSType aeID = typeWildCard, aeClass = typeWildCard;
 
-    AEGetAttributePtr(ae, keyEventClassAttr, typeType, 0, &aeClass, sizeof(aeClass), 0);
-    AEGetAttributePtr(ae, keyEventIDAttr, typeType, 0, &aeID, sizeof(aeID), 0);
+   AEGetAttributePtr(ae, keyEventClassAttr, typeType, 0, &aeClass, sizeof(aeClass), 0);
+   AEGetAttributePtr(ae, keyEventIDAttr, typeType, 0, &aeID, sizeof(aeID), 0);
 
-    if(aeClass == kCoreEventClass) {
-        switch(aeID) {
-        case kAEQuitApplication: {
+   if (aeClass == kCoreEventClass) {
+      switch (aeID) {
+         case kAEQuitApplication: {
             extern bool qt_mac_quit_menu_item_enabled; // qmenu_mac.cpp
             if (qt_mac_quit_menu_item_enabled) {
-                QCloseEvent ev;
-                QApplication::sendSpontaneousEvent(app, &ev);
-                if(ev.isAccepted()) {
-                    handled_event = true;
-                    app->quit();
-                }
+               QCloseEvent ev;
+               QApplication::sendSpontaneousEvent(app, &ev);
+               if (ev.isAccepted()) {
+                  handled_event = true;
+                  app->quit();
+               }
             } else {
-                QApplication::beep();  // Sorry, you can't quit right now.
+               QApplication::beep();  // Sorry, you can't quit right now.
             }
-            break; }
-
-        case kAEOpenDocuments: {
-            AEDescList docs;
-            if(AEGetParamDesc(ae, keyDirectObject, typeAEList, &docs) == noErr) {
-                long cnt = 0;
-                AECountItems(&docs, &cnt);
-                UInt8 *str_buffer = NULL;
-                for(int i = 0; i < cnt; i++) {
-                    FSRef ref;
-                    if(AEGetNthPtr(&docs, i+1, typeFSRef, 0, 0, &ref, sizeof(ref), 0) != noErr)
-                        continue;
-                    if(!str_buffer)
-                        str_buffer = (UInt8 *)malloc(1024);
-                    FSRefMakePath(&ref, str_buffer, 1024);
-                    QFileOpenEvent ev(QString::fromUtf8((const char *)str_buffer));
-                    QApplication::sendSpontaneousEvent(app, &ev);
-                }
-                if(str_buffer)
-                    free(str_buffer);
-            }
-            break; }
-        default:
             break;
-        }
-    } else if (aeClass == kInternetEventClass) {
-        switch (aeID) {
-        case kAEGetURL: {
+         }
+
+         case kAEOpenDocuments: {
+            AEDescList docs;
+            if (AEGetParamDesc(ae, keyDirectObject, typeAEList, &docs) == noErr) {
+               long cnt = 0;
+               AECountItems(&docs, &cnt);
+               UInt8 *str_buffer = NULL;
+               for (int i = 0; i < cnt; i++) {
+                  FSRef ref;
+                  if (AEGetNthPtr(&docs, i + 1, typeFSRef, 0, 0, &ref, sizeof(ref), 0) != noErr) {
+                     continue;
+                  }
+                  if (!str_buffer) {
+                     str_buffer = (UInt8 *)malloc(1024);
+                  }
+                  FSRefMakePath(&ref, str_buffer, 1024);
+                  QFileOpenEvent ev(QString::fromUtf8((const char *)str_buffer));
+                  QApplication::sendSpontaneousEvent(app, &ev);
+               }
+               if (str_buffer) {
+                  free(str_buffer);
+               }
+            }
+            break;
+         }
+         default:
+            break;
+      }
+   } else if (aeClass == kInternetEventClass) {
+      switch (aeID) {
+         case kAEGetURL: {
             char urlData[1024];
             Size actualSize;
             if (AEGetParamPtr(ae, keyDirectObject, typeChar, 0, urlData,
-                    sizeof(urlData) - 1, &actualSize) == noErr) {
-                urlData[actualSize] = 0;
-                QFileOpenEvent ev(QUrl(QString::fromUtf8(urlData)));
-                QApplication::sendSpontaneousEvent(app, &ev);
+                              sizeof(urlData) - 1, &actualSize) == noErr) {
+               urlData[actualSize] = 0;
+               QFileOpenEvent ev(QUrl(QString::fromUtf8(urlData)));
+               QApplication::sendSpontaneousEvent(app, &ev);
             }
             break;
-        }
-        default:
+         }
+         default:
             break;
-        }
-    }
+      }
+   }
 #ifdef DEBUG_EVENTS
-    qDebug("Qt: internal: %s handled Apple event! %c%c%c%c %c%c%c%c", handled_event ? "(*)" : "",
-           char(aeID >> 24), char((aeID >> 16) & 255), char((aeID >> 8) & 255),char(aeID & 255),
-           char(aeClass >> 24), char((aeClass >> 16) & 255), char((aeClass >> 8) & 255),char(aeClass & 255));
+   qDebug("Qt: internal: %s handled Apple event! %c%c%c%c %c%c%c%c", handled_event ? "(*)" : "",
+          char(aeID >> 24), char((aeID >> 16) & 255), char((aeID >> 8) & 255), char(aeID & 255),
+          char(aeClass >> 24), char((aeClass >> 16) & 255), char((aeClass >> 8) & 255), char(aeClass & 255));
 #else
-    if(!handled_event) //let the event go through
-        return eventNotHandledErr;
-    return noErr; //we eat the event
+   if (!handled_event) { //let the event go through
+      return eventNotHandledErr;
+   }
+   return noErr; //we eat the event
 #endif
 }
 
 bool QApplication::macEventFilter(EventHandlerCallRef, EventRef)
 {
-    return false;
+   return false;
 }
 
 void QApplicationPrivate::openPopup(QWidget *popup)
 {
-    if (!QApplicationPrivate::popupWidgets)                        // create list
-        QApplicationPrivate::popupWidgets = new QWidgetList;
-    QApplicationPrivate::popupWidgets->append(popup);                // add to end of list
+   if (!QApplicationPrivate::popupWidgets) {                      // create list
+      QApplicationPrivate::popupWidgets = new QWidgetList;
+   }
+   QApplicationPrivate::popupWidgets->append(popup);                // add to end of list
 
-    // popups are not focus-handled by the window system (the first
-    // popup grabbed the keyboard), so we have to do that manually: A
-    // new popup gets the focus
+   // popups are not focus-handled by the window system (the first
+   // popup grabbed the keyboard), so we have to do that manually: A
+   // new popup gets the focus
 
-    if (popup->focusWidget()) {
-        popup->focusWidget()->setFocus(Qt::PopupFocusReason);
-    } else if (QApplicationPrivate::popupWidgets->count() == 1) { // this was the first popup
-        popup->setFocus(Qt::PopupFocusReason);
-    }
+   if (popup->focusWidget()) {
+      popup->focusWidget()->setFocus(Qt::PopupFocusReason);
+   } else if (QApplicationPrivate::popupWidgets->count() == 1) { // this was the first popup
+      popup->setFocus(Qt::PopupFocusReason);
+   }
 }
 
 void QApplicationPrivate::closePopup(QWidget *popup)
 {
-    Q_Q(QApplication);
+   Q_Q(QApplication);
 
-    if (!QApplicationPrivate::popupWidgets)
-        return;
+   if (!QApplicationPrivate::popupWidgets) {
+      return;
+   }
 
-    QApplicationPrivate::popupWidgets->removeAll(popup);
-    if (popup == qt_button_down)
-        qt_button_down = 0;
-    if (QApplicationPrivate::popupWidgets->isEmpty()) {  // this was the last popup
-        delete QApplicationPrivate::popupWidgets;
-        QApplicationPrivate::popupWidgets = 0;
+   QApplicationPrivate::popupWidgets->removeAll(popup);
+   if (popup == qt_button_down) {
+      qt_button_down = 0;
+   }
+   if (QApplicationPrivate::popupWidgets->isEmpty()) {  // this was the last popup
+      delete QApplicationPrivate::popupWidgets;
+      QApplicationPrivate::popupWidgets = 0;
 
-        // Special case for Tool windows: since they are activated and deactived together
-        // with a normal window they never become the QApplicationPrivate::active_window.
-        QWidget *appFocusWidget = QApplication::focusWidget();
-        if (appFocusWidget && appFocusWidget->window()->windowType() == Qt::Tool) {
-            appFocusWidget->setFocus(Qt::PopupFocusReason);
-        } else if (QApplicationPrivate::active_window) {
-            if (QWidget *fw = QApplicationPrivate::active_window->focusWidget()) {
-                if (fw != QApplication::focusWidget()) {
-                    fw->setFocus(Qt::PopupFocusReason);
-                } else {
-                    QFocusEvent e(QEvent::FocusIn, Qt::PopupFocusReason);
-                    q->sendEvent(fw, &e);
-                }
+      // Special case for Tool windows: since they are activated and deactived together
+      // with a normal window they never become the QApplicationPrivate::active_window.
+      QWidget *appFocusWidget = QApplication::focusWidget();
+      if (appFocusWidget && appFocusWidget->window()->windowType() == Qt::Tool) {
+         appFocusWidget->setFocus(Qt::PopupFocusReason);
+      } else if (QApplicationPrivate::active_window) {
+         if (QWidget *fw = QApplicationPrivate::active_window->focusWidget()) {
+            if (fw != QApplication::focusWidget()) {
+               fw->setFocus(Qt::PopupFocusReason);
+            } else {
+               QFocusEvent e(QEvent::FocusIn, Qt::PopupFocusReason);
+               q->sendEvent(fw, &e);
             }
-        }
-    } else {
-        // popups are not focus-handled by the window system (the
-        // first popup grabbed the keyboard), so we have to do that
-        // manually: A popup was closed, so the previous popup gets
-        // the focus.
-        QWidget* aw = QApplicationPrivate::popupWidgets->last();
-        if (QWidget *fw = aw->focusWidget())
-            fw->setFocus(Qt::PopupFocusReason);
-    }
+         }
+      }
+   } else {
+      // popups are not focus-handled by the window system (the
+      // first popup grabbed the keyboard), so we have to do that
+      // manually: A popup was closed, so the previous popup gets
+      // the focus.
+      QWidget *aw = QApplicationPrivate::popupWidgets->last();
+      if (QWidget *fw = aw->focusWidget()) {
+         fw->setFocus(Qt::PopupFocusReason);
+      }
+   }
 }
 
 void QApplication::beep()
 {
-    qt_mac_beep();
+   qt_mac_beep();
 }
 
 void QApplication::alert(QWidget *widget, int duration)
 {
-    if (!QApplicationPrivate::checkInstance("alert"))
-        return;
+   if (!QApplicationPrivate::checkInstance("alert")) {
+      return;
+   }
 
-    QWidgetList windowsToMark;
-    if (!widget)
-        windowsToMark += topLevelWidgets();
-    else
-        windowsToMark.append(widget->window());
+   QWidgetList windowsToMark;
+   if (!widget) {
+      windowsToMark += topLevelWidgets();
+   } else {
+      windowsToMark.append(widget->window());
+   }
 
-    bool needNotification = false;
-    for (int i = 0; i < windowsToMark.size(); ++i) {
-        QWidget *window = windowsToMark.at(i);
+   bool needNotification = false;
+   for (int i = 0; i < windowsToMark.size(); ++i) {
+      QWidget *window = windowsToMark.at(i);
 
-        if (!window->isActiveWindow() && window->isVisible()) {
-            needNotification = true; // yeah, we may set it multiple times, but that's OK.
+      if (!window->isActiveWindow() && window->isVisible()) {
+         needNotification = true; // yeah, we may set it multiple times, but that's OK.
 
-            if (duration != 0) {
-               QTimer *timer = new QTimer(qApp);
-               timer->setSingleShot(true);
-               connect(timer, SIGNAL(timeout()), qApp, SLOT(_q_alertTimeOut()));
+         if (duration != 0) {
+            QTimer *timer = new QTimer(qApp);
+            timer->setSingleShot(true);
+            connect(timer, SIGNAL(timeout()), qApp, SLOT(_q_alertTimeOut()));
 
-               if (QTimer *oldTimer = qApp->d_func()->alertTimerHash.value(widget)) {
-                   qApp->d_func()->alertTimerHash.remove(widget);
-                   delete oldTimer;
-               }
-               qApp->d_func()->alertTimerHash.insert(widget, timer);
-               timer->start(duration);
+            if (QTimer *oldTimer = qApp->d_func()->alertTimerHash.value(widget)) {
+               qApp->d_func()->alertTimerHash.remove(widget);
+               delete oldTimer;
             }
-        }
-    }
-    if (needNotification)
-        qt_mac_send_notification();
+            qApp->d_func()->alertTimerHash.insert(widget, timer);
+            timer->start(duration);
+         }
+      }
+   }
+   if (needNotification) {
+      qt_mac_send_notification();
+   }
 }
 
 void QApplicationPrivate::_q_alertTimeOut()
 {
-    if (QTimer *timer = qobject_cast<QTimer *>(q_func()->sender())) {
-        QHash<QWidget *, QTimer *>::iterator it = alertTimerHash.begin();
-        while (it != alertTimerHash.end()) {
-            if (it.value() == timer) {
-                alertTimerHash.erase(it);
-                timer->deleteLater();
-                break;
-            }
-            ++it;
-        }
-        if (alertTimerHash.isEmpty()) {
-            qt_mac_cancel_notification();
-        }
-    }
+   if (QTimer *timer = qobject_cast<QTimer *>(q_func()->sender())) {
+      QHash<QWidget *, QTimer *>::iterator it = alertTimerHash.begin();
+      while (it != alertTimerHash.end()) {
+         if (it.value() == timer) {
+            alertTimerHash.erase(it);
+            timer->deleteLater();
+            break;
+         }
+         ++it;
+      }
+      if (alertTimerHash.isEmpty()) {
+         qt_mac_cancel_notification();
+      }
+   }
 }
 
 void  QApplication::setCursorFlashTime(int msecs)
 {
-    QApplicationPrivate::cursor_flash_time = msecs;
+   QApplicationPrivate::cursor_flash_time = msecs;
 }
 
 int QApplication::cursorFlashTime()
 {
-    return QApplicationPrivate::cursor_flash_time;
+   return QApplicationPrivate::cursor_flash_time;
 }
 
 void QApplication::setDoubleClickInterval(int ms)
 {
-    qt_mac_dblclick.use_qt_time_limit = true;
-    QApplicationPrivate::mouse_double_click_time = ms;
+   qt_mac_dblclick.use_qt_time_limit = true;
+   QApplicationPrivate::mouse_double_click_time = ms;
 }
 
 int QApplication::doubleClickInterval()
 {
-    if (!qt_mac_dblclick.use_qt_time_limit) { 
-        //get it from the system
-        QSettings appleSettings(QLatin1String("apple.com"));
+   if (!qt_mac_dblclick.use_qt_time_limit) {
+      //get it from the system
+      QSettings appleSettings(QLatin1String("apple.com"));
 
-        /* First worked as of 10.3.3 */
-        double dci = appleSettings.value(QLatin1String("com/apple/mouse/doubleClickThreshold"), 0.5).toDouble();
-        return int(dci * 1000);
-    }
-    return QApplicationPrivate::mouse_double_click_time;
+      /* First worked as of 10.3.3 */
+      double dci = appleSettings.value(QLatin1String("com/apple/mouse/doubleClickThreshold"), 0.5).toDouble();
+      return int(dci * 1000);
+   }
+   return QApplicationPrivate::mouse_double_click_time;
 }
 
 void QApplication::setKeyboardInputInterval(int ms)
 {
-    QApplicationPrivate::keyboard_input_time = ms;
+   QApplicationPrivate::keyboard_input_time = ms;
 }
 
 int QApplication::keyboardInputInterval()
 {
-    // FIXME: get from the system
-    return QApplicationPrivate::keyboard_input_time;
+   // FIXME: get from the system
+   return QApplicationPrivate::keyboard_input_time;
 }
 
 #ifndef QT_NO_WHEELEVENT
 void QApplication::setWheelScrollLines(int n)
 {
-    QApplicationPrivate::wheel_scroll_lines = n;
+   QApplicationPrivate::wheel_scroll_lines = n;
 }
 
 int QApplication::wheelScrollLines()
 {
-    return QApplicationPrivate::wheel_scroll_lines;
+   return QApplicationPrivate::wheel_scroll_lines;
 }
 #endif
 
 void QApplication::setEffectEnabled(Qt::UIEffect effect, bool enable)
 {
-    switch (effect) {
-    case Qt::UI_FadeMenu:
-        QApplicationPrivate::fade_menu = enable;
-        break;
-    case Qt::UI_AnimateMenu:
-        QApplicationPrivate::animate_menu = enable;
-        break;
-    case Qt::UI_FadeTooltip:
-        QApplicationPrivate::fade_tooltip = enable;
-        break;
-    case Qt::UI_AnimateTooltip:
-        QApplicationPrivate::animate_tooltip = enable;
-        break;
-    case Qt::UI_AnimateCombo:
-        QApplicationPrivate::animate_combo = enable;
-        break;
-    case Qt::UI_AnimateToolBox:
-        QApplicationPrivate::animate_toolbox = enable;
-        break;
-    case Qt::UI_General:
-        QApplicationPrivate::fade_tooltip = true;
-        break;
-    default:
-        QApplicationPrivate::animate_ui = enable;
-        break;
-    }
+   switch (effect) {
+      case Qt::UI_FadeMenu:
+         QApplicationPrivate::fade_menu = enable;
+         break;
+      case Qt::UI_AnimateMenu:
+         QApplicationPrivate::animate_menu = enable;
+         break;
+      case Qt::UI_FadeTooltip:
+         QApplicationPrivate::fade_tooltip = enable;
+         break;
+      case Qt::UI_AnimateTooltip:
+         QApplicationPrivate::animate_tooltip = enable;
+         break;
+      case Qt::UI_AnimateCombo:
+         QApplicationPrivate::animate_combo = enable;
+         break;
+      case Qt::UI_AnimateToolBox:
+         QApplicationPrivate::animate_toolbox = enable;
+         break;
+      case Qt::UI_General:
+         QApplicationPrivate::fade_tooltip = true;
+         break;
+      default:
+         QApplicationPrivate::animate_ui = enable;
+         break;
+   }
 
-    if (enable)
-        QApplicationPrivate::animate_ui = true;
+   if (enable) {
+      QApplicationPrivate::animate_ui = true;
+   }
 }
 
 bool QApplication::isEffectEnabled(Qt::UIEffect effect)
 {
-    if (QColormap::instance().depth() < 16 || !QApplicationPrivate::animate_ui)
-        return false;
+   if (QColormap::instance().depth() < 16 || !QApplicationPrivate::animate_ui) {
+      return false;
+   }
 
-    switch(effect) {
-    case Qt::UI_AnimateMenu:
-        return QApplicationPrivate::animate_menu;
-    case Qt::UI_FadeMenu:
-        return QApplicationPrivate::fade_menu;
-    case Qt::UI_AnimateCombo:
-        return QApplicationPrivate::animate_combo;
-    case Qt::UI_AnimateTooltip:
-        return QApplicationPrivate::animate_tooltip;
-    case Qt::UI_FadeTooltip:
-        return QApplicationPrivate::fade_tooltip;
-    case Qt::UI_AnimateToolBox:
-        return QApplicationPrivate::animate_toolbox;
-    default:
-        break;
-    }
-    return QApplicationPrivate::animate_ui;
+   switch (effect) {
+      case Qt::UI_AnimateMenu:
+         return QApplicationPrivate::animate_menu;
+      case Qt::UI_FadeMenu:
+         return QApplicationPrivate::fade_menu;
+      case Qt::UI_AnimateCombo:
+         return QApplicationPrivate::animate_combo;
+      case Qt::UI_AnimateTooltip:
+         return QApplicationPrivate::animate_tooltip;
+      case Qt::UI_FadeTooltip:
+         return QApplicationPrivate::fade_tooltip;
+      case Qt::UI_AnimateToolBox:
+         return QApplicationPrivate::animate_toolbox;
+      default:
+         break;
+   }
+   return QApplicationPrivate::animate_ui;
 }
 
 /*!
@@ -1635,255 +1700,276 @@ bool QApplication::isEffectEnabled(Qt::UIEffect effect)
 */
 bool QApplicationPrivate::qt_mac_apply_settings()
 {
-    QSettings settings(QSettings::UserScope, QLatin1String("CopperSpice"));
-    settings.beginGroup(QLatin1String("CS"));
+   QSettings settings(QSettings::UserScope, QLatin1String("CopperSpice"));
+   settings.beginGroup(QLatin1String("CS"));
 
-    /*
-      Qt settings.  This is how they are written into the datastream.
-      Palette/ *             - QPalette
-      font                   - QFont
-      libraryPath            - QStringList
-      style                  - QString
-      doubleClickInterval    - int
-      cursorFlashTime        - int
-      wheelScrollLines       - int
-      colorSpec              - QString
-      defaultCodec           - QString
-      globalStrut/width      - int
-      globalStrut/height     - int
-      GUIEffects             - QStringList
-      Font Substitutions/ *  - QStringList
-      Font Substitutions/... - QStringList
-    */
+   /*
+     Qt settings.  This is how they are written into the datastream.
+     Palette/ *             - QPalette
+     font                   - QFont
+     libraryPath            - QStringList
+     style                  - QString
+     doubleClickInterval    - int
+     cursorFlashTime        - int
+     wheelScrollLines       - int
+     colorSpec              - QString
+     defaultCodec           - QString
+     globalStrut/width      - int
+     globalStrut/height     - int
+     GUIEffects             - QStringList
+     Font Substitutions/ *  - QStringList
+     Font Substitutions/... - QStringList
+   */
 
-    // read library (ie. plugin) path list
-    QString libpathkey = QString::fromLatin1("%1.%2/libraryPath").arg(CS_VERSION >> 16).arg((CS_VERSION & 0xff00) >> 8);
+   // read library (ie. plugin) path list
+   QString libpathkey = QString::fromLatin1("%1.%2/libraryPath").arg(CS_VERSION >> 16).arg((CS_VERSION & 0xff00) >> 8);
 
-    QStringList pathlist = settings.value(libpathkey).toString().split(QLatin1Char(':'));
+   QStringList pathlist = settings.value(libpathkey).toString().split(QLatin1Char(':'));
 
-    if (!pathlist.isEmpty()) {
-        QStringList::ConstIterator it = pathlist.begin();
-        while(it != pathlist.end())
-            QApplication::addLibraryPath(*it++);
-    }
+   if (!pathlist.isEmpty()) {
+      QStringList::ConstIterator it = pathlist.begin();
+      while (it != pathlist.end()) {
+         QApplication::addLibraryPath(*it++);
+      }
+   }
 
-    QString defaultcodec = settings.value(QLatin1String("defaultCodec"), QVariant(QLatin1String("none"))).toString();
-    if (defaultcodec != QLatin1String("none")) {
-        QTextCodec *codec = QTextCodec::codecForName(defaultcodec.toLatin1().constData());
-        if (codec)
-            QTextCodec::setCodecForTr(codec);
-    }
+   QString defaultcodec = settings.value(QLatin1String("defaultCodec"), QVariant(QLatin1String("none"))).toString();
+   if (defaultcodec != QLatin1String("none")) {
+      QTextCodec *codec = QTextCodec::codecForName(defaultcodec.toLatin1().constData());
+      if (codec) {
+         QTextCodec::setCodecForTr(codec);
+      }
+   }
 
-    if (qt_is_gui_used) {
-        QString str;
-        QStringList strlist;
-        int num;
+   if (qt_is_gui_used) {
+      QString str;
+      QStringList strlist;
+      int num;
 
-        // read new palette
-        int i;
-        QPalette pal(QApplication::palette());
-        strlist = settings.value(QLatin1String("Palette/active")).toStringList();
-        if (strlist.count() == QPalette::NColorRoles) {
-            for (i = 0; i < QPalette::NColorRoles; i++)
-                pal.setColor(QPalette::Active, (QPalette::ColorRole) i,
-                            QColor(strlist[i]));
-        }
-        strlist = settings.value(QLatin1String("Palette/inactive")).toStringList();
-        if (strlist.count() == QPalette::NColorRoles) {
-            for (i = 0; i < QPalette::NColorRoles; i++)
-                pal.setColor(QPalette::Inactive, (QPalette::ColorRole) i,
-                            QColor(strlist[i]));
-        }
-        strlist = settings.value(QLatin1String("Palette/disabled")).toStringList();
-        if (strlist.count() == QPalette::NColorRoles) {
-            for (i = 0; i < QPalette::NColorRoles; i++)
-                pal.setColor(QPalette::Disabled, (QPalette::ColorRole) i,
-                            QColor(strlist[i]));
-        }
+      // read new palette
+      int i;
+      QPalette pal(QApplication::palette());
+      strlist = settings.value(QLatin1String("Palette/active")).toStringList();
+      if (strlist.count() == QPalette::NColorRoles) {
+         for (i = 0; i < QPalette::NColorRoles; i++)
+            pal.setColor(QPalette::Active, (QPalette::ColorRole) i,
+                         QColor(strlist[i]));
+      }
+      strlist = settings.value(QLatin1String("Palette/inactive")).toStringList();
+      if (strlist.count() == QPalette::NColorRoles) {
+         for (i = 0; i < QPalette::NColorRoles; i++)
+            pal.setColor(QPalette::Inactive, (QPalette::ColorRole) i,
+                         QColor(strlist[i]));
+      }
+      strlist = settings.value(QLatin1String("Palette/disabled")).toStringList();
+      if (strlist.count() == QPalette::NColorRoles) {
+         for (i = 0; i < QPalette::NColorRoles; i++)
+            pal.setColor(QPalette::Disabled, (QPalette::ColorRole) i,
+                         QColor(strlist[i]));
+      }
 
-        if (pal != QApplication::palette())
-            QApplication::setPalette(pal);
+      if (pal != QApplication::palette()) {
+         QApplication::setPalette(pal);
+      }
 
-        // read new font
-        QFont font(QApplication::font());
-        str = settings.value(QLatin1String("font")).toString();
-        if (!str.isEmpty()) {
-            font.fromString(str);
-            if (font != QApplication::font())
-                QApplication::setFont(font);
-        }
+      // read new font
+      QFont font(QApplication::font());
+      str = settings.value(QLatin1String("font")).toString();
+      if (!str.isEmpty()) {
+         font.fromString(str);
+         if (font != QApplication::font()) {
+            QApplication::setFont(font);
+         }
+      }
 
-        // read new QStyle
-        QString stylename = settings.value(QLatin1String("style")).toString();
-        if (! stylename.isNull() && ! stylename.isEmpty()) {
-            QStyle *style = QStyleFactory::create(stylename);
-            if (style)
-                QApplication::setStyle(style);
-            else
-                stylename = QLatin1String("default");
-        } else {
+      // read new QStyle
+      QString stylename = settings.value(QLatin1String("style")).toString();
+      if (! stylename.isNull() && ! stylename.isEmpty()) {
+         QStyle *style = QStyleFactory::create(stylename);
+         if (style) {
+            QApplication::setStyle(style);
+         } else {
             stylename = QLatin1String("default");
-        }
+         }
+      } else {
+         stylename = QLatin1String("default");
+      }
 
-        num = settings.value(QLatin1String("doubleClickInterval"),
-                            QApplication::doubleClickInterval()).toInt();
-        QApplication::setDoubleClickInterval(num);
+      num = settings.value(QLatin1String("doubleClickInterval"),
+                           QApplication::doubleClickInterval()).toInt();
+      QApplication::setDoubleClickInterval(num);
 
-        num = settings.value(QLatin1String("cursorFlashTime"),
-                            QApplication::cursorFlashTime()).toInt();
-        QApplication::setCursorFlashTime(num);
+      num = settings.value(QLatin1String("cursorFlashTime"),
+                           QApplication::cursorFlashTime()).toInt();
+      QApplication::setCursorFlashTime(num);
 
 #ifndef QT_NO_WHEELEVENT
-        num = settings.value(QLatin1String("wheelScrollLines"),
-                            QApplication::wheelScrollLines()).toInt();
-        QApplication::setWheelScrollLines(num);
+      num = settings.value(QLatin1String("wheelScrollLines"),
+                           QApplication::wheelScrollLines()).toInt();
+      QApplication::setWheelScrollLines(num);
 #endif
 
-        QString colorspec = settings.value(QLatin1String("colorSpec"),
-                                            QVariant(QLatin1String("default"))).toString();
-        if (colorspec == QLatin1String("normal"))
-            QApplication::setColorSpec(QApplication::NormalColor);
-        else if (colorspec == QLatin1String("custom"))
-            QApplication::setColorSpec(QApplication::CustomColor);
-        else if (colorspec == QLatin1String("many"))
-            QApplication::setColorSpec(QApplication::ManyColor);
-        else if (colorspec != QLatin1String("default"))
-            colorspec = QLatin1String("default");
+      QString colorspec = settings.value(QLatin1String("colorSpec"),
+                                         QVariant(QLatin1String("default"))).toString();
+      if (colorspec == QLatin1String("normal")) {
+         QApplication::setColorSpec(QApplication::NormalColor);
+      } else if (colorspec == QLatin1String("custom")) {
+         QApplication::setColorSpec(QApplication::CustomColor);
+      } else if (colorspec == QLatin1String("many")) {
+         QApplication::setColorSpec(QApplication::ManyColor);
+      } else if (colorspec != QLatin1String("default")) {
+         colorspec = QLatin1String("default");
+      }
 
-        int w = settings.value(QLatin1String("globalStrut/width")).toInt();
-        int h = settings.value(QLatin1String("globalStrut/height")).toInt();
-        QSize strut(w, h);
-        if (strut.isValid())
-            QApplication::setGlobalStrut(strut);
+      int w = settings.value(QLatin1String("globalStrut/width")).toInt();
+      int h = settings.value(QLatin1String("globalStrut/height")).toInt();
+      QSize strut(w, h);
+      if (strut.isValid()) {
+         QApplication::setGlobalStrut(strut);
+      }
 
-        QStringList effects = settings.value(QLatin1String("GUIEffects")).toStringList();
-        if (!effects.isEmpty()) {
-            if (effects.contains(QLatin1String("none")))
-                QApplication::setEffectEnabled(Qt::UI_General, false);
-            if (effects.contains(QLatin1String("general")))
-                QApplication::setEffectEnabled(Qt::UI_General, true);
-            if (effects.contains(QLatin1String("animatemenu")))
-                QApplication::setEffectEnabled(Qt::UI_AnimateMenu, true);
-            if (effects.contains(QLatin1String("fademenu")))
-                QApplication::setEffectEnabled(Qt::UI_FadeMenu, true);
-            if (effects.contains(QLatin1String("animatecombo")))
-                QApplication::setEffectEnabled(Qt::UI_AnimateCombo, true);
-            if (effects.contains(QLatin1String("animatetooltip")))
-                QApplication::setEffectEnabled(Qt::UI_AnimateTooltip, true);
-            if (effects.contains(QLatin1String("fadetooltip")))
-                QApplication::setEffectEnabled(Qt::UI_FadeTooltip, true);
-            if (effects.contains(QLatin1String("animatetoolbox")))
-                QApplication::setEffectEnabled(Qt::UI_AnimateToolBox, true);
-        } else {
+      QStringList effects = settings.value(QLatin1String("GUIEffects")).toStringList();
+      if (!effects.isEmpty()) {
+         if (effects.contains(QLatin1String("none"))) {
+            QApplication::setEffectEnabled(Qt::UI_General, false);
+         }
+         if (effects.contains(QLatin1String("general"))) {
             QApplication::setEffectEnabled(Qt::UI_General, true);
-        }
+         }
+         if (effects.contains(QLatin1String("animatemenu"))) {
+            QApplication::setEffectEnabled(Qt::UI_AnimateMenu, true);
+         }
+         if (effects.contains(QLatin1String("fademenu"))) {
+            QApplication::setEffectEnabled(Qt::UI_FadeMenu, true);
+         }
+         if (effects.contains(QLatin1String("animatecombo"))) {
+            QApplication::setEffectEnabled(Qt::UI_AnimateCombo, true);
+         }
+         if (effects.contains(QLatin1String("animatetooltip"))) {
+            QApplication::setEffectEnabled(Qt::UI_AnimateTooltip, true);
+         }
+         if (effects.contains(QLatin1String("fadetooltip"))) {
+            QApplication::setEffectEnabled(Qt::UI_FadeTooltip, true);
+         }
+         if (effects.contains(QLatin1String("animatetoolbox"))) {
+            QApplication::setEffectEnabled(Qt::UI_AnimateToolBox, true);
+         }
+      } else {
+         QApplication::setEffectEnabled(Qt::UI_General, true);
+      }
 
-        settings.beginGroup(QLatin1String("Font Substitutions"));
-        QStringList fontsubs = settings.childKeys();
-        if (!fontsubs.isEmpty()) {
-            QStringList::Iterator it = fontsubs.begin();
-            for (; it != fontsubs.end(); ++it) {
-                QString fam = QString::fromLatin1((*it).toLatin1().constData());
-                QStringList subs = settings.value(fam).toStringList();
-                QFont::insertSubstitutions(fam, subs);
-            }
-        }
-        settings.endGroup();
-    }
+      settings.beginGroup(QLatin1String("Font Substitutions"));
+      QStringList fontsubs = settings.childKeys();
+      if (!fontsubs.isEmpty()) {
+         QStringList::Iterator it = fontsubs.begin();
+         for (; it != fontsubs.end(); ++it) {
+            QString fam = QString::fromLatin1((*it).toLatin1().constData());
+            QStringList subs = settings.value(fam).toStringList();
+            QFont::insertSubstitutions(fam, subs);
+         }
+      }
+      settings.endGroup();
+   }
 
-    settings.endGroup();
-    return true;
+   settings.endGroup();
+   return true;
 }
 
 // DRSWAT
 
 bool QApplicationPrivate::canQuit()
 {
-    Q_Q(QApplication);
+   Q_Q(QApplication);
 
-    [[NSApp mainMenu] cancelTracking];
+   [[NSApp mainMenu] cancelTracking];
 
-    bool handle_quit = true;
-    if (QApplicationPrivate::modalState() && [[[[QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) sharedDelegate]
-                                                   menuLoader] quitMenuItem] isEnabled]) {
-        int visible = 0;
-        const QWidgetList tlws = QApplication::topLevelWidgets();
-        for(int i = 0; i < tlws.size(); ++i) {
-            if (tlws.at(i)->isVisible())
-                ++visible;
-        }
-        handle_quit = (visible <= 1);
-    }
-    if (handle_quit) {
-        QCloseEvent ev;
-        QApplication::sendSpontaneousEvent(q, &ev);
-        if (ev.isAccepted()) {
-            return true;
-        }
-    }
+   bool handle_quit = true;
+   if (QApplicationPrivate::modalState() && [[[[QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) sharedDelegate]
+         menuLoader] quitMenuItem] isEnabled]) {
+      int visible = 0;
+      const QWidgetList tlws = QApplication::topLevelWidgets();
+      for (int i = 0; i < tlws.size(); ++i) {
+         if (tlws.at(i)->isVisible()) {
+            ++visible;
+         }
+      }
+      handle_quit = (visible <= 1);
+   }
+   if (handle_quit) {
+      QCloseEvent ev;
+      QApplication::sendSpontaneousEvent(q, &ev);
+      if (ev.isAccepted()) {
+         return true;
+      }
+   }
 
-    return false;
+   return false;
 }
 
 void onApplicationWindowChangedActivation(QWidget *widget, bool activated)
 {
-    if (!widget)
-        return;
+   if (!widget) {
+      return;
+   }
 
-    if (activated) {
-        if (QApplicationPrivate::app_style) {
-            QEvent ev(QEvent::Style);
-            qt_sendSpontaneousEvent(QApplicationPrivate::app_style, &ev);
-        }
-        qApp->setActiveWindow(widget);
-    } else { // deactivated
-        if (QApplicationPrivate::active_window == widget)
-            qApp->setActiveWindow(0);
-    }
+   if (activated) {
+      if (QApplicationPrivate::app_style) {
+         QEvent ev(QEvent::Style);
+         qt_sendSpontaneousEvent(QApplicationPrivate::app_style, &ev);
+      }
+      qApp->setActiveWindow(widget);
+   } else { // deactivated
+      if (QApplicationPrivate::active_window == widget) {
+         qApp->setActiveWindow(0);
+      }
+   }
 
-    QMenuBar::macUpdateMenuBar();
-    qt_mac_update_cursor();
+   QMenuBar::macUpdateMenuBar();
+   qt_mac_update_cursor();
 }
 
 
 void onApplicationChangedActivation( bool activated )
 {
-    QApplication *app   = qApp;
+   QApplication *app   = qApp;
 
-    //NSLog(@"App Changed Activation\n");
+   //NSLog(@"App Changed Activation\n");
 
-    if ( activated ) {
-        if (QApplication::desktopSettingsAware())
-            qt_mac_update_os_settings();
+   if ( activated ) {
+      if (QApplication::desktopSettingsAware()) {
+         qt_mac_update_os_settings();
+      }
 
-        if (qt_clipboard) { //manufacture an event so the clipboard can see if it has changed
-            QEvent ev(QEvent::Clipboard);
-            qt_sendSpontaneousEvent(qt_clipboard, &ev);
-        }
+      if (qt_clipboard) { //manufacture an event so the clipboard can see if it has changed
+         QEvent ev(QEvent::Clipboard);
+         qt_sendSpontaneousEvent(qt_clipboard, &ev);
+      }
 
-        if (app) {
-            QEvent ev(QEvent::ApplicationActivate);
-            qt_sendSpontaneousEvent(app, &ev);
-        }
+      if (app) {
+         QEvent ev(QEvent::ApplicationActivate);
+         qt_sendSpontaneousEvent(app, &ev);
+      }
 
-        if (!app->activeWindow()) {
-            OSWindowRef wp = [NSApp keyWindow];
-            if (QWidget *tmp_w = qt_mac_find_window(wp))
-                app->setActiveWindow(tmp_w);
-        }
-        QMenuBar::macUpdateMenuBar();
-        qt_mac_update_cursor();
+      if (!app->activeWindow()) {
+         OSWindowRef wp = [NSApp keyWindow];
+         if (QWidget *tmp_w = qt_mac_find_window(wp)) {
+            app->setActiveWindow(tmp_w);
+         }
+      }
+      QMenuBar::macUpdateMenuBar();
+      qt_mac_update_cursor();
 
-    } else { // de-activated
-        QApplicationPrivate *priv = [[QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) sharedDelegate] qAppPrivate];
-        if (priv->inPopupMode())
-            app->activePopupWidget()->close();
-        if (app) {
-            QEvent ev(QEvent::ApplicationDeactivate);
-            qt_sendSpontaneousEvent(app, &ev);
-        }
-        app->setActiveWindow(0);
-    }
+   } else { // de-activated
+      QApplicationPrivate *priv = [[QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) sharedDelegate] qAppPrivate];
+      if (priv->inPopupMode()) {
+         app->activePopupWidget()->close();
+      }
+      if (app) {
+         QEvent ev(QEvent::ApplicationDeactivate);
+         qt_sendSpontaneousEvent(app, &ev);
+      }
+      app->setActiveWindow(0);
+   }
 
 }
 

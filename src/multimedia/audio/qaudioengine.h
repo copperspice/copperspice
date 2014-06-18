@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,77 +35,77 @@ QT_BEGIN_NAMESPACE
 
 class Q_MULTIMEDIA_EXPORT QAbstractAudioDeviceInfo : public QObject
 {
-    CS_OBJECT(QAbstractAudioDeviceInfo)
+   CS_OBJECT(QAbstractAudioDeviceInfo)
 
-public:
-    virtual QAudioFormat preferredFormat() const = 0;
-    virtual bool isFormatSupported(const QAudioFormat &format) const = 0;
-    virtual QAudioFormat nearestFormat(const QAudioFormat &format) const = 0;
-    virtual QString deviceName() const = 0;
-    virtual QStringList codecList() = 0;
-    virtual QList<int> frequencyList() = 0;
-    virtual QList<int> channelsList() = 0;
-    virtual QList<int> sampleSizeList() = 0;
-    virtual QList<QAudioFormat::Endian> byteOrderList() = 0;
-    virtual QList<QAudioFormat::SampleType> sampleTypeList() = 0;
+ public:
+   virtual QAudioFormat preferredFormat() const = 0;
+   virtual bool isFormatSupported(const QAudioFormat &format) const = 0;
+   virtual QAudioFormat nearestFormat(const QAudioFormat &format) const = 0;
+   virtual QString deviceName() const = 0;
+   virtual QStringList codecList() = 0;
+   virtual QList<int> frequencyList() = 0;
+   virtual QList<int> channelsList() = 0;
+   virtual QList<int> sampleSizeList() = 0;
+   virtual QList<QAudioFormat::Endian> byteOrderList() = 0;
+   virtual QList<QAudioFormat::SampleType> sampleTypeList() = 0;
 };
 
 class Q_MULTIMEDIA_EXPORT QAbstractAudioOutput : public QObject
 {
-    CS_OBJECT(QAbstractAudioOutput)
+   CS_OBJECT(QAbstractAudioOutput)
 
-public:
-    virtual QIODevice* start(QIODevice* device) = 0;
-    virtual void stop() = 0;
-    virtual void reset() = 0;
-    virtual void suspend() = 0;
-    virtual void resume() = 0;
-    virtual int bytesFree() const = 0;
-    virtual int periodSize() const = 0;
-    virtual void setBufferSize(int value) = 0;
-    virtual int bufferSize() const = 0;
-    virtual void setNotifyInterval(int milliSeconds) = 0;
-    virtual int notifyInterval() const = 0;
-    virtual qint64 processedUSecs() const = 0;
-    virtual qint64 elapsedUSecs() const = 0;
-    virtual QAudio::Error error() const = 0;
-    virtual QAudio::State state() const = 0;
-    virtual QAudioFormat format() const = 0;
+ public:
+   virtual QIODevice *start(QIODevice *device) = 0;
+   virtual void stop() = 0;
+   virtual void reset() = 0;
+   virtual void suspend() = 0;
+   virtual void resume() = 0;
+   virtual int bytesFree() const = 0;
+   virtual int periodSize() const = 0;
+   virtual void setBufferSize(int value) = 0;
+   virtual int bufferSize() const = 0;
+   virtual void setNotifyInterval(int milliSeconds) = 0;
+   virtual int notifyInterval() const = 0;
+   virtual qint64 processedUSecs() const = 0;
+   virtual qint64 elapsedUSecs() const = 0;
+   virtual QAudio::Error error() const = 0;
+   virtual QAudio::State state() const = 0;
+   virtual QAudioFormat format() const = 0;
 
-public:
-    MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State un_named_arg1))
-    MULTI_CS_SIGNAL_2(stateChanged,un_named_arg1) 
-    MULTI_CS_SIGNAL_1(Public, void notify())
-    MULTI_CS_SIGNAL_2(notify) 
+ public:
+   MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State un_named_arg1))
+   MULTI_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void notify())
+   MULTI_CS_SIGNAL_2(notify)
 };
 
 class Q_MULTIMEDIA_EXPORT QAbstractAudioInput : public QObject
 {
-    CS_OBJECT(QAbstractAudioInput)
+   CS_OBJECT(QAbstractAudioInput)
 
-public:
-    virtual QIODevice* start(QIODevice* device) = 0;
-    virtual void stop() = 0;
-    virtual void reset() = 0;
-    virtual void suspend()  = 0;
-    virtual void resume() = 0;
-    virtual int bytesReady() const = 0;
-    virtual int periodSize() const = 0;
-    virtual void setBufferSize(int value) = 0;
-    virtual int bufferSize() const = 0;
-    virtual void setNotifyInterval(int milliSeconds) = 0;
-    virtual int notifyInterval() const = 0;
-    virtual qint64 processedUSecs() const = 0;
-    virtual qint64 elapsedUSecs() const = 0;
-    virtual QAudio::Error error() const = 0;
-    virtual QAudio::State state() const = 0;
-    virtual QAudioFormat format() const = 0;
+ public:
+   virtual QIODevice *start(QIODevice *device) = 0;
+   virtual void stop() = 0;
+   virtual void reset() = 0;
+   virtual void suspend()  = 0;
+   virtual void resume() = 0;
+   virtual int bytesReady() const = 0;
+   virtual int periodSize() const = 0;
+   virtual void setBufferSize(int value) = 0;
+   virtual int bufferSize() const = 0;
+   virtual void setNotifyInterval(int milliSeconds) = 0;
+   virtual int notifyInterval() const = 0;
+   virtual qint64 processedUSecs() const = 0;
+   virtual qint64 elapsedUSecs() const = 0;
+   virtual QAudio::Error error() const = 0;
+   virtual QAudio::State state() const = 0;
+   virtual QAudioFormat format() const = 0;
 
-public:
-    MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State un_named_arg1))
-    MULTI_CS_SIGNAL_2(stateChanged,un_named_arg1) 
-    MULTI_CS_SIGNAL_1(Public, void notify())
-    MULTI_CS_SIGNAL_2(notify) 
+ public:
+   MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State un_named_arg1))
+   MULTI_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void notify())
+   MULTI_CS_SIGNAL_2(notify)
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,67 +35,71 @@ extern QPrinter::PaperSize qSizeFTopaperSize(const QSizeF &size);
 
 QList<QPrinterInfo> QPrinterInfo::availablePrinters()
 {
-    QList<QPrinterInfo> printers;
+   QList<QPrinterInfo> printers;
 
-    QCFType<CFArrayRef> array;
-    if (PMServerCreatePrinterList(kPMServerLocal, &array) == noErr) {
-        CFIndex count = CFArrayGetCount(array);
-        for (int i = 0; i < count; ++i) {
-            PMPrinter printer = static_cast<PMPrinter>(const_cast<void *>(CFArrayGetValueAtIndex(array, i)));
-            QString printerName = QCFString::toQString(PMPrinterGetName(printer));
+   QCFType<CFArrayRef> array;
+   if (PMServerCreatePrinterList(kPMServerLocal, &array) == noErr) {
+      CFIndex count = CFArrayGetCount(array);
+      for (int i = 0; i < count; ++i) {
+         PMPrinter printer = static_cast<PMPrinter>(const_cast<void *>(CFArrayGetValueAtIndex(array, i)));
+         QString printerName = QCFString::toQString(PMPrinterGetName(printer));
 
-            QPrinterInfo printerInfo(printerName);
-            if (PMPrinterIsDefault(printer))
-                printerInfo.d_ptr->isDefault = true;
-            printers.append(printerInfo);
-        }
-    }
+         QPrinterInfo printerInfo(printerName);
+         if (PMPrinterIsDefault(printer)) {
+            printerInfo.d_ptr->isDefault = true;
+         }
+         printers.append(printerInfo);
+      }
+   }
 
-    return printers;
+   return printers;
 }
 
 QPrinterInfo QPrinterInfo::defaultPrinter()
 {
-    QList<QPrinterInfo> printers = availablePrinters();
-    foreach (const QPrinterInfo &printerInfo, printers) {
-        if (printerInfo.isDefault())
-            return printerInfo;
-    }
+   QList<QPrinterInfo> printers = availablePrinters();
+   foreach (const QPrinterInfo & printerInfo, printers) {
+      if (printerInfo.isDefault()) {
+         return printerInfo;
+      }
+   }
 
-    return printers.value(0);
+   return printers.value(0);
 }
 
 QList<QPrinter::PaperSize> QPrinterInfo::supportedPaperSizes() const
 {
-    const Q_D(QPrinterInfo);
+   const Q_D(QPrinterInfo);
 
-    QList<QPrinter::PaperSize> paperSizes;
-    if (isNull())
-        return paperSizes;
+   QList<QPrinter::PaperSize> paperSizes;
+   if (isNull()) {
+      return paperSizes;
+   }
 
-    PMPrinter cfPrn = PMPrinterCreateFromPrinterID(QCFString::toCFStringRef(d->name));
-    if (!cfPrn)
-        return paperSizes;
+   PMPrinter cfPrn = PMPrinterCreateFromPrinterID(QCFString::toCFStringRef(d->name));
+   if (!cfPrn) {
+      return paperSizes;
+   }
 
-    CFArrayRef array;
-    if (PMPrinterGetPaperList(cfPrn, &array) != noErr) {
-        PMRelease(cfPrn);
-        return paperSizes;
-    }
+   CFArrayRef array;
+   if (PMPrinterGetPaperList(cfPrn, &array) != noErr) {
+      PMRelease(cfPrn);
+      return paperSizes;
+   }
 
-    int count = CFArrayGetCount(array);
-    for (int i = 0; i < count; ++i) {
-        PMPaper paper = static_cast<PMPaper>(const_cast<void *>(CFArrayGetValueAtIndex(array, i)));
-        double width, height;
-        if (PMPaperGetWidth(paper, &width) == noErr && PMPaperGetHeight(paper, &height) == noErr) {
-            QSizeF size(width * 0.3527, height * 0.3527);
-            paperSizes.append(qSizeFTopaperSize(size));
-        }
-    }
+   int count = CFArrayGetCount(array);
+   for (int i = 0; i < count; ++i) {
+      PMPaper paper = static_cast<PMPaper>(const_cast<void *>(CFArrayGetValueAtIndex(array, i)));
+      double width, height;
+      if (PMPaperGetWidth(paper, &width) == noErr && PMPaperGetHeight(paper, &height) == noErr) {
+         QSizeF size(width * 0.3527, height * 0.3527);
+         paperSizes.append(qSizeFTopaperSize(size));
+      }
+   }
 
-    PMRelease(cfPrn);
+   PMRelease(cfPrn);
 
-    return paperSizes;
+   return paperSizes;
 }
 
 #endif // QT_NO_PRINTER

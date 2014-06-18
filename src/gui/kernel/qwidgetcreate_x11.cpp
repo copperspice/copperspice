@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,29 +35,30 @@
 QT_BEGIN_NAMESPACE
 
 Window qt_XCreateWindow(const QWidget *, Display *display, Window parent,
-                         int x, int y, uint w, uint h,
-                         int borderwidth, int depth,
-                         uint windowclass, Visual *visual,
-                         ulong valuemask, XSetWindowAttributes *attributes)
+                        int x, int y, uint w, uint h,
+                        int borderwidth, int depth,
+                        uint windowclass, Visual *visual,
+                        ulong valuemask, XSetWindowAttributes *attributes)
 {
-    return XCreateWindow(display, parent, x, y, w, h, borderwidth, depth,
-                          windowclass, visual, valuemask, attributes);
+   return XCreateWindow(display, parent, x, y, w, h, borderwidth, depth,
+                        windowclass, visual, valuemask, attributes);
 }
 
 
 Window qt_XCreateSimpleWindow(const QWidget *, Display *display, Window parent,
-                               int x, int y, uint w, uint h, int borderwidth,
-                               ulong border, ulong background)
+                              int x, int y, uint w, uint h, int borderwidth,
+                              ulong border, ulong background)
 {
-    return XCreateSimpleWindow(display, parent, x, y, w, h, borderwidth,
-                                border, background);
+   return XCreateSimpleWindow(display, parent, x, y, w, h, borderwidth,
+                              border, background);
 }
 
 
 void qt_XDestroyWindow(const QWidget *, Display *display, Window window)
 {
-    if (window)
-        XDestroyWindow(display, window);
+   if (window) {
+      XDestroyWindow(display, window);
+   }
 }
 
 QT_END_NAMESPACE

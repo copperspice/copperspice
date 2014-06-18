@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -54,41 +54,37 @@ const int magicInt = 0xBAD4D4BA;
   Header in above format, less the magic bytes.
   Useful for reading off the socket
 */
-struct AuthHeader
-{
-    unsigned char len;
-    unsigned char pad;
-    unsigned char digest[QSXE_KEY_LEN];
-    unsigned char id;
-    unsigned char seq;
+struct AuthHeader {
+   unsigned char len;
+   unsigned char pad;
+   unsigned char digest[QSXE_KEY_LEN];
+   unsigned char id;
+   unsigned char seq;
 };
 
 /*
   Header in a form suitable for authentication routines
 */
-struct AuthMessage
-{
-    AuthMessage()
-    {
-        ::memset( authData, 0, sizeof(authData) );
-        ::memcpy( pad_magic, magic, QSXE_MAGIC_BYTES );
-    }
-    unsigned char pad_magic[QSXE_MAGIC_BYTES];
-    union {
-        AuthHeader hdr;
-        char authData[sizeof(AuthHeader)];
-    };
-    char payLoad[AMOUNT_TO_AUTHENTICATE];
+struct AuthMessage {
+   AuthMessage() {
+      ::memset( authData, 0, sizeof(authData) );
+      ::memcpy( pad_magic, magic, QSXE_MAGIC_BYTES );
+   }
+   unsigned char pad_magic[QSXE_MAGIC_BYTES];
+   union {
+      AuthHeader hdr;
+      char authData[sizeof(AuthHeader)];
+   };
+   char payLoad[AMOUNT_TO_AUTHENTICATE];
 };
 
 /**
   Auth data as stored in _key
 */
-struct AuthCookie
-{
-    unsigned char key[QSXE_KEY_LEN];
-    unsigned char pad;
-    unsigned char progId;
+struct AuthCookie {
+   unsigned char key[QSXE_KEY_LEN];
+   unsigned char pad;
+   unsigned char progId;
 };
 
 /*
@@ -97,13 +93,12 @@ struct AuthCookie
   This is still used internally for some functions, ie the socket
   related calls.
 */
-struct AuthRecord
-{
-    union {
-        AuthCookie auth;
-        char data[sizeof(struct AuthCookie)];
-    };
-    time_t change_time;
+struct AuthRecord {
+   union {
+      AuthCookie auth;
+      char data[sizeof(struct AuthCookie)];
+   };
+   time_t change_time;
 };
 
 /*!
@@ -122,11 +117,10 @@ struct AuthRecord
 
   (See the "installs" file for path to inode/device mapping)
 */
-struct usr_key_entry
-{
-    char key[QSXE_KEY_LEN];
-    ino_t ino;
-    dev_t dev;
+struct usr_key_entry {
+   char key[QSXE_KEY_LEN];
+   ino_t ino;
+   dev_t dev;
 };
 
 
@@ -135,15 +129,14 @@ struct usr_key_entry
   \brief Data record for the manifest file.
   The manifest file maps program id's to files
 */
-struct IdBlock
-{
-    quint64 inode;
-    quint64 device;
-    unsigned char pad;
-    unsigned char progId;
-    unsigned short installId;
-    unsigned int keyOffset;
-    qint64 install_time;
+struct IdBlock {
+   quint64 inode;
+   quint64 device;
+   unsigned char pad;
+   unsigned char progId;
+   unsigned short installId;
+   unsigned int keyOffset;
+   qint64 install_time;
 };
 
 QT_END_NAMESPACE

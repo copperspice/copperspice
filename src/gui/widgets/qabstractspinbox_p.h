@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,94 +46,94 @@ QVariant operator*(const QVariant &arg1, double multiplier);
 double operator/(const QVariant &arg1, const QVariant &arg2);
 
 enum EmitPolicy {
-    EmitIfChanged,
-    AlwaysEmit,
-    NeverEmit
+   EmitIfChanged,
+   AlwaysEmit,
+   NeverEmit
 };
 
 enum Button {
-    None = 0x000,
-    Keyboard = 0x001,
-    Mouse = 0x002,
-    Wheel = 0x004,
-    ButtonMask = 0x008,
-    Up = 0x010,
-    Down = 0x020,
-    DirectionMask = 0x040
+   None = 0x000,
+   Keyboard = 0x001,
+   Mouse = 0x002,
+   Wheel = 0x004,
+   ButtonMask = 0x008,
+   Up = 0x010,
+   Down = 0x020,
+   DirectionMask = 0x040
 };
 class QSpinBoxValidator;
 class QAbstractSpinBoxPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QAbstractSpinBox)
-public:
-    QAbstractSpinBoxPrivate();
-    ~QAbstractSpinBoxPrivate();
+   Q_DECLARE_PUBLIC(QAbstractSpinBox)
+ public:
+   QAbstractSpinBoxPrivate();
+   ~QAbstractSpinBoxPrivate();
 
-    void init();
-    void reset();
-    void updateState(bool up, bool fromKeyboard = false);
-    QString stripped(const QString &text, int *pos = 0) const;
-    bool specialValue() const;
-    virtual QVariant getZeroVariant() const;
-    virtual void setRange(const QVariant &min, const QVariant &max);
-    void setValue(const QVariant &val, EmitPolicy ep, bool updateEdit = true);
-    virtual QVariant bound(const QVariant &val, const QVariant &old = QVariant(), int steps = 0) const;
-    virtual void updateEdit();
+   void init();
+   void reset();
+   void updateState(bool up, bool fromKeyboard = false);
+   QString stripped(const QString &text, int *pos = 0) const;
+   bool specialValue() const;
+   virtual QVariant getZeroVariant() const;
+   virtual void setRange(const QVariant &min, const QVariant &max);
+   void setValue(const QVariant &val, EmitPolicy ep, bool updateEdit = true);
+   virtual QVariant bound(const QVariant &val, const QVariant &old = QVariant(), int steps = 0) const;
+   virtual void updateEdit();
 
-    virtual void emitSignals(EmitPolicy ep, const QVariant &old);
-    virtual void interpret(EmitPolicy ep);
-    virtual QString textFromValue(const QVariant &n) const;
-    virtual QVariant valueFromText(const QString &input) const;
+   virtual void emitSignals(EmitPolicy ep, const QVariant &old);
+   virtual void interpret(EmitPolicy ep);
+   virtual QString textFromValue(const QVariant &n) const;
+   virtual QVariant valueFromText(const QString &input) const;
 
-    void _q_editorTextChanged(const QString &);
-    virtual void _q_editorCursorPositionChanged(int oldpos, int newpos);
+   void _q_editorTextChanged(const QString &);
+   virtual void _q_editorCursorPositionChanged(int oldpos, int newpos);
 
-    virtual QStyle::SubControl newHoverControl(const QPoint &pos);
-    bool updateHoverControl(const QPoint &pos);
+   virtual QStyle::SubControl newHoverControl(const QPoint &pos);
+   bool updateHoverControl(const QPoint &pos);
 
-    virtual void clearCache() const;
-    virtual void updateEditFieldGeometry();
+   virtual void clearCache() const;
+   virtual void updateEditFieldGeometry();
 
-    static int variantCompare(const QVariant &arg1, const QVariant &arg2);
-    static QVariant variantBound(const QVariant &min, const QVariant &value, const QVariant &max);
+   static int variantCompare(const QVariant &arg1, const QVariant &arg2);
+   static QVariant variantBound(const QVariant &min, const QVariant &value, const QVariant &max);
 
-    QLineEdit *edit;
-    QString prefix, suffix, specialValueText;
-    QVariant value, minimum, maximum, singleStep;
-    QVariant::Type type;
-    int spinClickTimerId, spinClickTimerInterval, spinClickThresholdTimerId, spinClickThresholdTimerInterval;
-    int effectiveSpinRepeatRate;
-    uint buttonState;
-    mutable QString cachedText;
-    mutable QVariant cachedValue;
-    mutable QValidator::State cachedState;
-    mutable QSize cachedSizeHint, cachedMinimumSizeHint;
-    uint pendingEmit : 1;
-    uint readOnly : 1;
-    uint wrapping : 1;
-    uint ignoreCursorPositionChanged : 1;
-    uint frame : 1;
-    uint accelerate : 1;
-    uint keyboardTracking : 1;
-    uint cleared : 1;
-    uint ignoreUpdateEdit : 1;
-    QAbstractSpinBox::CorrectionMode correctionMode;
-    int acceleration;
-    QStyle::SubControl hoverControl;
-    QRect hoverRect;
-    QAbstractSpinBox::ButtonSymbols buttonSymbols;
-    QSpinBoxValidator *validator;
+   QLineEdit *edit;
+   QString prefix, suffix, specialValueText;
+   QVariant value, minimum, maximum, singleStep;
+   QVariant::Type type;
+   int spinClickTimerId, spinClickTimerInterval, spinClickThresholdTimerId, spinClickThresholdTimerInterval;
+   int effectiveSpinRepeatRate;
+   uint buttonState;
+   mutable QString cachedText;
+   mutable QVariant cachedValue;
+   mutable QValidator::State cachedState;
+   mutable QSize cachedSizeHint, cachedMinimumSizeHint;
+   uint pendingEmit : 1;
+   uint readOnly : 1;
+   uint wrapping : 1;
+   uint ignoreCursorPositionChanged : 1;
+   uint frame : 1;
+   uint accelerate : 1;
+   uint keyboardTracking : 1;
+   uint cleared : 1;
+   uint ignoreUpdateEdit : 1;
+   QAbstractSpinBox::CorrectionMode correctionMode;
+   int acceleration;
+   QStyle::SubControl hoverControl;
+   QRect hoverRect;
+   QAbstractSpinBox::ButtonSymbols buttonSymbols;
+   QSpinBoxValidator *validator;
 };
 
 class QSpinBoxValidator : public QValidator
 {
-public:
-    QSpinBoxValidator(QAbstractSpinBox *qptr, QAbstractSpinBoxPrivate *dptr);
-    QValidator::State validate(QString &input, int &) const;
-    void fixup(QString &) const;
-private:
-    QAbstractSpinBox *qptr;
-    QAbstractSpinBoxPrivate *dptr;
+ public:
+   QSpinBoxValidator(QAbstractSpinBox *qptr, QAbstractSpinBoxPrivate *dptr);
+   QValidator::State validate(QString &input, int &) const;
+   void fixup(QString &) const;
+ private:
+   QAbstractSpinBox *qptr;
+   QAbstractSpinBoxPrivate *dptr;
 };
 
 QT_END_NAMESPACE

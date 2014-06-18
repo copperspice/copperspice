@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -50,168 +50,168 @@ class QTextBlock;
 class Q_GUI_EXPORT QTextCursor
 {
 
-public:
-    QTextCursor();
-    explicit QTextCursor(QTextDocument *document);
-    QTextCursor(QTextDocumentPrivate *p, int pos);
-    explicit QTextCursor(QTextFrame *frame);
-    explicit QTextCursor(const QTextBlock &block);
-    explicit QTextCursor(QTextCursorPrivate *d);
-    QTextCursor(const QTextCursor &cursor);
-    QTextCursor &operator=(const QTextCursor &other);
-    ~QTextCursor();
+ public:
+   QTextCursor();
+   explicit QTextCursor(QTextDocument *document);
+   QTextCursor(QTextDocumentPrivate *p, int pos);
+   explicit QTextCursor(QTextFrame *frame);
+   explicit QTextCursor(const QTextBlock &block);
+   explicit QTextCursor(QTextCursorPrivate *d);
+   QTextCursor(const QTextCursor &cursor);
+   QTextCursor &operator=(const QTextCursor &other);
+   ~QTextCursor();
 
-    bool isNull() const;
+   bool isNull() const;
 
-    enum MoveMode {
-        MoveAnchor,
-        KeepAnchor
-    };
+   enum MoveMode {
+      MoveAnchor,
+      KeepAnchor
+   };
 
-    void setPosition(int pos, MoveMode mode = MoveAnchor);
-    int position() const;
-    int positionInBlock() const;
+   void setPosition(int pos, MoveMode mode = MoveAnchor);
+   int position() const;
+   int positionInBlock() const;
 
-    int anchor() const;
+   int anchor() const;
 
-    void insertText(const QString &text);
-    void insertText(const QString &text, const QTextCharFormat &format);
+   void insertText(const QString &text);
+   void insertText(const QString &text, const QTextCharFormat &format);
 
-    enum MoveOperation {
-        NoMove,
+   enum MoveOperation {
+      NoMove,
 
-        Start,
-        Up,
-        StartOfLine,
-        StartOfBlock,
-        StartOfWord,
-        PreviousBlock,
-        PreviousCharacter,
-        PreviousWord,
-        Left,
-        WordLeft,
+      Start,
+      Up,
+      StartOfLine,
+      StartOfBlock,
+      StartOfWord,
+      PreviousBlock,
+      PreviousCharacter,
+      PreviousWord,
+      Left,
+      WordLeft,
 
-        End,
-        Down,
-        EndOfLine,
-        EndOfWord,
-        EndOfBlock,
-        NextBlock,
-        NextCharacter,
-        NextWord,
-        Right,
-        WordRight,
+      End,
+      Down,
+      EndOfLine,
+      EndOfWord,
+      EndOfBlock,
+      NextBlock,
+      NextCharacter,
+      NextWord,
+      Right,
+      WordRight,
 
-        NextCell,
-        PreviousCell,
-        NextRow,
-        PreviousRow
-    };
+      NextCell,
+      PreviousCell,
+      NextRow,
+      PreviousRow
+   };
 
-    bool movePosition(MoveOperation op, MoveMode = MoveAnchor, int n = 1);
+   bool movePosition(MoveOperation op, MoveMode = MoveAnchor, int n = 1);
 
-    bool visualNavigation() const;
-    void setVisualNavigation(bool b);
+   bool visualNavigation() const;
+   void setVisualNavigation(bool b);
 
-    void setVerticalMovementX(int x);
-    int verticalMovementX() const;
+   void setVerticalMovementX(int x);
+   int verticalMovementX() const;
 
-    void setKeepPositionOnInsert(bool b);
-    bool keepPositionOnInsert() const;
+   void setKeepPositionOnInsert(bool b);
+   bool keepPositionOnInsert() const;
 
-    void deleteChar();
-    void deletePreviousChar();
+   void deleteChar();
+   void deletePreviousChar();
 
-    enum SelectionType {
-        WordUnderCursor,
-        LineUnderCursor,
-        BlockUnderCursor,
-        Document
-    };
-    void select(SelectionType selection);
+   enum SelectionType {
+      WordUnderCursor,
+      LineUnderCursor,
+      BlockUnderCursor,
+      Document
+   };
+   void select(SelectionType selection);
 
-    bool hasSelection() const;
-    bool hasComplexSelection() const;
-    void removeSelectedText();
-    void clearSelection();
-    int selectionStart() const;
-    int selectionEnd() const;
+   bool hasSelection() const;
+   bool hasComplexSelection() const;
+   void removeSelectedText();
+   void clearSelection();
+   int selectionStart() const;
+   int selectionEnd() const;
 
-    QString selectedText() const;
-    QTextDocumentFragment selection() const;
-    void selectedTableCells(int *firstRow, int *numRows, int *firstColumn, int *numColumns) const;
+   QString selectedText() const;
+   QTextDocumentFragment selection() const;
+   void selectedTableCells(int *firstRow, int *numRows, int *firstColumn, int *numColumns) const;
 
-    QTextBlock block() const;
+   QTextBlock block() const;
 
-    QTextCharFormat charFormat() const;
-    void setCharFormat(const QTextCharFormat &format);
-    void mergeCharFormat(const QTextCharFormat &modifier);
+   QTextCharFormat charFormat() const;
+   void setCharFormat(const QTextCharFormat &format);
+   void mergeCharFormat(const QTextCharFormat &modifier);
 
-    QTextBlockFormat blockFormat() const;
-    void setBlockFormat(const QTextBlockFormat &format);
-    void mergeBlockFormat(const QTextBlockFormat &modifier);
+   QTextBlockFormat blockFormat() const;
+   void setBlockFormat(const QTextBlockFormat &format);
+   void mergeBlockFormat(const QTextBlockFormat &modifier);
 
-    QTextCharFormat blockCharFormat() const;
-    void setBlockCharFormat(const QTextCharFormat &format);
-    void mergeBlockCharFormat(const QTextCharFormat &modifier);
+   QTextCharFormat blockCharFormat() const;
+   void setBlockCharFormat(const QTextCharFormat &format);
+   void mergeBlockCharFormat(const QTextCharFormat &modifier);
 
-    bool atBlockStart() const;
-    bool atBlockEnd() const;
-    bool atStart() const;
-    bool atEnd() const;
+   bool atBlockStart() const;
+   bool atBlockEnd() const;
+   bool atStart() const;
+   bool atEnd() const;
 
-    void insertBlock();
-    void insertBlock(const QTextBlockFormat &format);
-    void insertBlock(const QTextBlockFormat &format, const QTextCharFormat &charFormat);
+   void insertBlock();
+   void insertBlock(const QTextBlockFormat &format);
+   void insertBlock(const QTextBlockFormat &format, const QTextCharFormat &charFormat);
 
-    QTextList *insertList(const QTextListFormat &format);
-    QTextList *insertList(QTextListFormat::Style style);
+   QTextList *insertList(const QTextListFormat &format);
+   QTextList *insertList(QTextListFormat::Style style);
 
-    QTextList *createList(const QTextListFormat &format);
-    QTextList *createList(QTextListFormat::Style style);
-    QTextList *currentList() const;
+   QTextList *createList(const QTextListFormat &format);
+   QTextList *createList(QTextListFormat::Style style);
+   QTextList *currentList() const;
 
-    QTextTable *insertTable(int rows, int cols, const QTextTableFormat &format);
-    QTextTable *insertTable(int rows, int cols);
-    QTextTable *currentTable() const;
+   QTextTable *insertTable(int rows, int cols, const QTextTableFormat &format);
+   QTextTable *insertTable(int rows, int cols);
+   QTextTable *currentTable() const;
 
-    QTextFrame *insertFrame(const QTextFrameFormat &format);
-    QTextFrame *currentFrame() const;
+   QTextFrame *insertFrame(const QTextFrameFormat &format);
+   QTextFrame *currentFrame() const;
 
-    void insertFragment(const QTextDocumentFragment &fragment);
+   void insertFragment(const QTextDocumentFragment &fragment);
 
 #ifndef QT_NO_TEXTHTMLPARSER
-    void insertHtml(const QString &html);
-#endif 
+   void insertHtml(const QString &html);
+#endif
 
-    void insertImage(const QTextImageFormat &format, QTextFrameFormat::Position alignment);
-    void insertImage(const QTextImageFormat &format);
-    void insertImage(const QString &name);
-    void insertImage(const QImage &image, const QString &name = QString());
+   void insertImage(const QTextImageFormat &format, QTextFrameFormat::Position alignment);
+   void insertImage(const QTextImageFormat &format);
+   void insertImage(const QString &name);
+   void insertImage(const QImage &image, const QString &name = QString());
 
-    void beginEditBlock();
-    void joinPreviousEditBlock();
-    void endEditBlock();
+   void beginEditBlock();
+   void joinPreviousEditBlock();
+   void endEditBlock();
 
-    bool operator!=(const QTextCursor &rhs) const;
-    bool operator<(const QTextCursor &rhs) const;
-    bool operator<=(const QTextCursor &rhs) const;
-    bool operator==(const QTextCursor &rhs) const;
-    bool operator>=(const QTextCursor &rhs) const;
-    bool operator>(const QTextCursor &rhs) const;
+   bool operator!=(const QTextCursor &rhs) const;
+   bool operator<(const QTextCursor &rhs) const;
+   bool operator<=(const QTextCursor &rhs) const;
+   bool operator==(const QTextCursor &rhs) const;
+   bool operator>=(const QTextCursor &rhs) const;
+   bool operator>(const QTextCursor &rhs) const;
 
-    bool isCopyOf(const QTextCursor &other) const;
+   bool isCopyOf(const QTextCursor &other) const;
 
-    int blockNumber() const;
-    int columnNumber() const;
+   int blockNumber() const;
+   int columnNumber() const;
 
-    QTextDocument *document() const;
+   QTextDocument *document() const;
 
-private:
-    QSharedDataPointer<QTextCursorPrivate> d;
-    friend class QTextDocumentFragmentPrivate;
-    friend class QTextCopyHelper;
-    friend class QTextControlPrivate;
+ private:
+   QSharedDataPointer<QTextCursorPrivate> d;
+   friend class QTextDocumentFragmentPrivate;
+   friend class QTextCopyHelper;
+   friend class QTextControlPrivate;
 };
 
 QT_END_NAMESPACE

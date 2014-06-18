@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,63 +44,63 @@ QT_BEGIN_NAMESPACE
 
 class QWSSocket : public QWS_SOCK_BASE
 {
-    CS_OBJECT(QWSSocket)
+   CS_OBJECT(QWSSocket)
 
-public:
-    explicit QWSSocket(QObject *parent=0);
-    ~QWSSocket();
+ public:
+   explicit QWSSocket(QObject *parent = 0);
+   ~QWSSocket();
 
-    bool connectToLocalFile(const QString &file);
+   bool connectToLocalFile(const QString &file);
 
 #ifndef QT_NO_SXE
-public:
-    QString errorString();
+ public:
+   QString errorString();
 
-    GUI_CS_SIGNAL_1(Public, void connected())
-    GUI_CS_SIGNAL_2(connected) 
-    GUI_CS_SIGNAL_1(Public, void disconnected())
-    GUI_CS_SIGNAL_2(disconnected) 
-    GUI_CS_SIGNAL_1(Public, void error(QAbstractSocket::SocketError un_named_arg1))
-    GUI_CS_SIGNAL_2(error,un_named_arg1) 
+   GUI_CS_SIGNAL_1(Public, void connected())
+   GUI_CS_SIGNAL_2(connected)
+   GUI_CS_SIGNAL_1(Public, void disconnected())
+   GUI_CS_SIGNAL_2(disconnected)
+   GUI_CS_SIGNAL_1(Public, void error(QAbstractSocket::SocketError un_named_arg1))
+   GUI_CS_SIGNAL_2(error, un_named_arg1)
 
-private :
-    GUI_CS_SLOT_1(Private, void forwardStateChange(SocketState un_named_arg1))
-    GUI_CS_SLOT_2(forwardStateChange) 
+ private :
+   GUI_CS_SLOT_1(Private, void forwardStateChange(SocketState un_named_arg1))
+   GUI_CS_SLOT_2(forwardStateChange)
 
 #endif
 
-private:
-    Q_DISABLE_COPY(QWSSocket)
+ private:
+   Q_DISABLE_COPY(QWSSocket)
 };
 
 
 class QWSServerSocket : public QWS_SOCK_SERVER_BASE
 {
-    CS_OBJECT(QWSServerSocket)
+   CS_OBJECT(QWSServerSocket)
 
-public:
-    QWSServerSocket(const QString& file, QObject *parent=0);
-    ~QWSServerSocket();
+ public:
+   QWSServerSocket(const QString &file, QObject *parent = 0);
+   ~QWSServerSocket();
 
 #ifndef QT_NO_SXE
-    QWSSocket *nextPendingConnection();
+   QWSSocket *nextPendingConnection();
 
-   public:
-       GUI_CS_SIGNAL_1(Public, void newConnection())
-       GUI_CS_SIGNAL_2(newConnection) 
-   
-   protected:
-       void incomingConnection(int socketDescriptor);
-   
-   private:
-       QMutex ssmx;
-       QList<int> inboundConnections;
+ public:
+   GUI_CS_SIGNAL_1(Public, void newConnection())
+   GUI_CS_SIGNAL_2(newConnection)
+
+ protected:
+   void incomingConnection(int socketDescriptor);
+
+ private:
+   QMutex ssmx;
+   QList<int> inboundConnections;
 #endif
 
-private:
-    Q_DISABLE_COPY(QWSServerSocket)
+ private:
+   Q_DISABLE_COPY(QWSServerSocket)
 
-    void init(const QString &file);
+   void init(const QString &file);
 };
 
 QT_END_NAMESPACE

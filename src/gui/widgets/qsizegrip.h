@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,36 +35,36 @@ class QSizeGripPrivate;
 
 class Q_GUI_EXPORT QSizeGrip : public QWidget
 {
-    CS_OBJECT(QSizeGrip)
+   CS_OBJECT(QSizeGrip)
 
-   public:
-       explicit QSizeGrip(QWidget *parent);
-       ~QSizeGrip();
-   
-       QSize sizeHint() const;
-       void setVisible(bool);
-   
-   protected:
-       void paintEvent(QPaintEvent *);
-       void mousePressEvent(QMouseEvent *);
-       void mouseMoveEvent(QMouseEvent *);
-       void mouseReleaseEvent(QMouseEvent *mouseEvent);
-       void moveEvent(QMoveEvent *moveEvent);
-       void showEvent(QShowEvent *showEvent);
-       void hideEvent(QHideEvent *hideEvent);
-       bool eventFilter(QObject *, QEvent *);
-       bool event(QEvent *);
-   
-   #ifdef Q_OS_WIN
-       bool winEvent(MSG *m, long *result);
-   #endif
-   
-   private:
-       Q_DECLARE_PRIVATE(QSizeGrip)
-       Q_DISABLE_COPY(QSizeGrip)
-   
-       GUI_CS_SLOT_1(Private, void _q_showIfNotHidden())
-       GUI_CS_SLOT_2(_q_showIfNotHidden)
+ public:
+   explicit QSizeGrip(QWidget *parent);
+   ~QSizeGrip();
+
+   QSize sizeHint() const;
+   void setVisible(bool);
+
+ protected:
+   void paintEvent(QPaintEvent *);
+   void mousePressEvent(QMouseEvent *);
+   void mouseMoveEvent(QMouseEvent *);
+   void mouseReleaseEvent(QMouseEvent *mouseEvent);
+   void moveEvent(QMoveEvent *moveEvent);
+   void showEvent(QShowEvent *showEvent);
+   void hideEvent(QHideEvent *hideEvent);
+   bool eventFilter(QObject *, QEvent *);
+   bool event(QEvent *);
+
+#ifdef Q_OS_WIN
+   bool winEvent(MSG *m, long *result);
+#endif
+
+ private:
+   Q_DECLARE_PRIVATE(QSizeGrip)
+   Q_DISABLE_COPY(QSizeGrip)
+
+   GUI_CS_SLOT_1(Private, void _q_showIfNotHidden())
+   GUI_CS_SLOT_2(_q_showIfNotHidden)
 };
 #endif // QT_NO_SIZEGRIP
 

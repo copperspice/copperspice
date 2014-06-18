@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,40 +33,39 @@ QT_BEGIN_NAMESPACE
 
 template <typename T> class QVector;
 
-struct QLayoutStruct
-{
-    inline void init(int stretchFactor = 0, int minSize = 0) {
-        stretch = stretchFactor;
-        minimumSize = sizeHint = minSize;
-        maximumSize = QLAYOUTSIZE_MAX;
-        expansive = false;
-        empty = true;
-        spacing = 0;
-    }
+struct QLayoutStruct {
+   inline void init(int stretchFactor = 0, int minSize = 0) {
+      stretch = stretchFactor;
+      minimumSize = sizeHint = minSize;
+      maximumSize = QLAYOUTSIZE_MAX;
+      expansive = false;
+      empty = true;
+      spacing = 0;
+   }
 
-    int smartSizeHint() {
-        return (stretch > 0) ? minimumSize : sizeHint;
-    }
-    int effectiveSpacer(int uniformSpacer) const {
-        Q_ASSERT(uniformSpacer >= 0 || spacing >= 0);
-        return (uniformSpacer >= 0) ? uniformSpacer : spacing;
-    }
+   int smartSizeHint() {
+      return (stretch > 0) ? minimumSize : sizeHint;
+   }
+   int effectiveSpacer(int uniformSpacer) const {
+      Q_ASSERT(uniformSpacer >= 0 || spacing >= 0);
+      return (uniformSpacer >= 0) ? uniformSpacer : spacing;
+   }
 
-    // parameters
-    int stretch;
-    int sizeHint;
-    int maximumSize;
-    int minimumSize;
-    bool expansive;
-    bool empty;
-    int spacing;
+   // parameters
+   int stretch;
+   int sizeHint;
+   int maximumSize;
+   int minimumSize;
+   bool expansive;
+   bool empty;
+   int spacing;
 
-    // temporary storage
-    bool done;
+   // temporary storage
+   bool done;
 
-    // result
-    int pos;
-    int size;
+   // result
+   int pos;
+   int size;
 };
 
 
@@ -92,20 +91,22 @@ Q_GUI_EXPORT int qSmartSpacing(const QLayout *layout, QStyle::PixelMetric pm);
   Expansive boxes win over non-expansive boxes.
   Non-empty boxes win over empty boxes.
 */
-static inline void qMaxExpCalc(int & max, bool &exp, bool &empty,
+static inline void qMaxExpCalc(int &max, bool &exp, bool &empty,
                                int boxmax, bool boxexp, bool boxempty)
 {
-    if (exp) {
-        if (boxexp)
-            max = qMax(max, boxmax);
-    } else {
-        if (boxexp || (empty && (!boxempty || max == 0)))
-            max = boxmax;
-        else if (empty == boxempty)
-            max = qMin(max, boxmax);
-    }
-    exp = exp || boxexp;
-    empty = empty && boxempty;
+   if (exp) {
+      if (boxexp) {
+         max = qMax(max, boxmax);
+      }
+   } else {
+      if (boxexp || (empty && (!boxempty || max == 0))) {
+         max = boxmax;
+      } else if (empty == boxempty) {
+         max = qMin(max, boxmax);
+      }
+   }
+   exp = exp || boxexp;
+   empty = empty && boxempty;
 }
 
 QT_END_NAMESPACE

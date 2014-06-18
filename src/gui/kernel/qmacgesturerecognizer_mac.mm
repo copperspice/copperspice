@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,34 +41,35 @@ QMacSwipeGestureRecognizer::QMacSwipeGestureRecognizer()
 
 QGesture *QMacSwipeGestureRecognizer::create(QObject * /*target*/)
 {
-    return new QSwipeGesture;
+   return new QSwipeGesture;
 }
 
 QGestureRecognizer::Result
 QMacSwipeGestureRecognizer::recognize(QGesture *gesture, QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::NativeGesture && obj->isWidgetType()) {
-        QNativeGestureEvent *ev = static_cast<QNativeGestureEvent*>(event);
-        switch (ev->gestureType) {
-            case QNativeGestureEvent::Swipe: {
-                QSwipeGesture *g = static_cast<QSwipeGesture *>(gesture);
-                g->setSwipeAngle(ev->angle);
-                g->setHotSpot(ev->position);
-                return QGestureRecognizer::FinishGesture | QGestureRecognizer::ConsumeEventHint;
-                break; }
-            default:
-                break;
-        }
-    }
+   if (event->type() == QEvent::NativeGesture && obj->isWidgetType()) {
+      QNativeGestureEvent *ev = static_cast<QNativeGestureEvent *>(event);
+      switch (ev->gestureType) {
+         case QNativeGestureEvent::Swipe: {
+            QSwipeGesture *g = static_cast<QSwipeGesture *>(gesture);
+            g->setSwipeAngle(ev->angle);
+            g->setHotSpot(ev->position);
+            return QGestureRecognizer::FinishGesture | QGestureRecognizer::ConsumeEventHint;
+            break;
+         }
+         default:
+            break;
+      }
+   }
 
-    return QGestureRecognizer::Ignore;
+   return QGestureRecognizer::Ignore;
 }
 
 void QMacSwipeGestureRecognizer::reset(QGesture *gesture)
 {
-    QSwipeGesture *g = static_cast<QSwipeGesture *>(gesture);
-    g->setSwipeAngle(0);
-    QGestureRecognizer::reset(gesture);
+   QSwipeGesture *g = static_cast<QSwipeGesture *>(gesture);
+   g->setSwipeAngle(0);
+   QGestureRecognizer::reset(gesture);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -79,25 +80,25 @@ QMacPinchGestureRecognizer::QMacPinchGestureRecognizer()
 
 QGesture *QMacPinchGestureRecognizer::create(QObject * /*target*/)
 {
-    return new QPinchGesture;
+   return new QPinchGesture;
 }
 
 QGestureRecognizer::Result
 QMacPinchGestureRecognizer::recognize(QGesture *gesture, QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::NativeGesture && obj->isWidgetType()) {
-        QPinchGesture *g = static_cast<QPinchGesture *>(gesture);
-        QNativeGestureEvent *ev = static_cast<QNativeGestureEvent*>(event);
-        switch(ev->gestureType) {
-        case QNativeGestureEvent::GestureBegin:
+   if (event->type() == QEvent::NativeGesture && obj->isWidgetType()) {
+      QPinchGesture *g = static_cast<QPinchGesture *>(gesture);
+      QNativeGestureEvent *ev = static_cast<QNativeGestureEvent *>(event);
+      switch (ev->gestureType) {
+         case QNativeGestureEvent::GestureBegin:
             reset(gesture);
-            g->setStartCenterPoint(static_cast<QWidget*>(obj)->mapFromGlobal(ev->position));
+            g->setStartCenterPoint(static_cast<QWidget *>(obj)->mapFromGlobal(ev->position));
             g->setCenterPoint(g->startCenterPoint());
             g->setChangeFlags(QPinchGesture::CenterPointChanged);
             g->setTotalChangeFlags(g->totalChangeFlags() | g->changeFlags());
             g->setHotSpot(ev->position);
             return QGestureRecognizer::MayBeGesture | QGestureRecognizer::ConsumeEventHint;
-        case QNativeGestureEvent::Rotate: {
+         case QNativeGestureEvent::Rotate: {
             g->setLastScaleFactor(g->scaleFactor());
             g->setLastRotationAngle(g->rotationAngle());
             g->setRotationAngle(g->rotationAngle() + ev->percentage);
@@ -105,8 +106,8 @@ QMacPinchGestureRecognizer::recognize(QGesture *gesture, QObject *obj, QEvent *e
             g->setTotalChangeFlags(g->totalChangeFlags() | g->changeFlags());
             g->setHotSpot(ev->position);
             return QGestureRecognizer::TriggerGesture | QGestureRecognizer::ConsumeEventHint;
-        }
-        case QNativeGestureEvent::Zoom:
+         }
+         case QNativeGestureEvent::Zoom:
             g->setLastScaleFactor(g->scaleFactor());
             g->setLastRotationAngle(g->rotationAngle());
             g->setScaleFactor(g->scaleFactor() * (1 + ev->percentage));
@@ -114,31 +115,31 @@ QMacPinchGestureRecognizer::recognize(QGesture *gesture, QObject *obj, QEvent *e
             g->setTotalChangeFlags(g->totalChangeFlags() | g->changeFlags());
             g->setHotSpot(ev->position);
             return QGestureRecognizer::TriggerGesture | QGestureRecognizer::ConsumeEventHint;
-        case QNativeGestureEvent::GestureEnd:
+         case QNativeGestureEvent::GestureEnd:
             return QGestureRecognizer::FinishGesture | QGestureRecognizer::ConsumeEventHint;
-        default:
+         default:
             break;
-        }
-    }
+      }
+   }
 
-    return QGestureRecognizer::Ignore;
+   return QGestureRecognizer::Ignore;
 }
 
 void QMacPinchGestureRecognizer::reset(QGesture *gesture)
 {
-    QPinchGesture *g = static_cast<QPinchGesture *>(gesture);
-    g->setChangeFlags(0);
-    g->setTotalChangeFlags(0);
-    g->setScaleFactor(1.0f);
-    g->setTotalScaleFactor(1.0f);
-    g->setLastScaleFactor(1.0f);
-    g->setRotationAngle(0.0f);
-    g->setTotalRotationAngle(0.0f);
-    g->setLastRotationAngle(0.0f);
-    g->setCenterPoint(QPointF());
-    g->setStartCenterPoint(QPointF());
-    g->setLastCenterPoint(QPointF());
-    QGestureRecognizer::reset(gesture);
+   QPinchGesture *g = static_cast<QPinchGesture *>(gesture);
+   g->setChangeFlags(0);
+   g->setTotalChangeFlags(0);
+   g->setScaleFactor(1.0f);
+   g->setTotalScaleFactor(1.0f);
+   g->setLastScaleFactor(1.0f);
+   g->setRotationAngle(0.0f);
+   g->setTotalRotationAngle(0.0f);
+   g->setLastRotationAngle(0.0f);
+   g->setCenterPoint(QPointF());
+   g->setStartCenterPoint(QPointF());
+   g->setLastCenterPoint(QPointF());
+   QGestureRecognizer::reset(gesture);
 }
 
 QMacPanGestureRecognizer::QMacPanGestureRecognizer() : _panCanceled(true)
@@ -147,103 +148,112 @@ QMacPanGestureRecognizer::QMacPanGestureRecognizer() : _panCanceled(true)
 
 QGesture *QMacPanGestureRecognizer::create(QObject *target)
 {
-    if (!target)
-        return new QPanGesture;
+   if (!target) {
+      return new QPanGesture;
+   }
 
-    if (QWidget *w = qobject_cast<QWidget *>(target)) {
-        w->setAttribute(Qt::WA_AcceptTouchEvents);
-        w->setAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents);
-        return new QPanGesture;
-    }
-    return 0;
+   if (QWidget *w = qobject_cast<QWidget *>(target)) {
+      w->setAttribute(Qt::WA_AcceptTouchEvents);
+      w->setAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents);
+      return new QPanGesture;
+   }
+   return 0;
 }
 
 QGestureRecognizer::Result
 QMacPanGestureRecognizer::recognize(QGesture *gesture, QObject *target, QEvent *event)
 {
-    const int panBeginDelay = 300;
-    const int panBeginRadius = 3;
+   const int panBeginDelay = 300;
+   const int panBeginRadius = 3;
 
-    QPanGesture *g = static_cast<QPanGesture *>(gesture);
+   QPanGesture *g = static_cast<QPanGesture *>(gesture);
 
-    switch (event->type()) {
-    case QEvent::TouchBegin: {
-        const QTouchEvent *ev = static_cast<const QTouchEvent*>(event);
-        if (ev->touchPoints().size() == 1) {
+   switch (event->type()) {
+      case QEvent::TouchBegin: {
+         const QTouchEvent *ev = static_cast<const QTouchEvent *>(event);
+         if (ev->touchPoints().size() == 1) {
             reset(gesture);
             _startPos = QCursor::pos();
             _panTimer.start(panBeginDelay, target);
             _panCanceled = false;
             return QGestureRecognizer::MayBeGesture;
-        }
-        break;}
-    case QEvent::TouchEnd: {
-        if (_panCanceled)
+         }
+         break;
+      }
+      case QEvent::TouchEnd: {
+         if (_panCanceled) {
             break;
+         }
 
-        const QTouchEvent *ev = static_cast<const QTouchEvent*>(event);
-        if (ev->touchPoints().size() == 1)
+         const QTouchEvent *ev = static_cast<const QTouchEvent *>(event);
+         if (ev->touchPoints().size() == 1) {
             return QGestureRecognizer::FinishGesture;
-        break;}
-    case QEvent::TouchUpdate: {
-        if (_panCanceled)
+         }
+         break;
+      }
+      case QEvent::TouchUpdate: {
+         if (_panCanceled) {
             break;
+         }
 
-        const QTouchEvent *ev = static_cast<const QTouchEvent*>(event);
-        if (ev->touchPoints().size() == 1) {
+         const QTouchEvent *ev = static_cast<const QTouchEvent *>(event);
+         if (ev->touchPoints().size() == 1) {
             if (_panTimer.isActive()) {
-                // INVARIANT: Still in maybeGesture. Check if the user
-                // moved his finger so much that it makes sense to cancel the pan:
-                const QPointF p = QCursor::pos();
-                if ((p - _startPos).manhattanLength() > panBeginRadius) {
-                    _panCanceled = true;
-                    _panTimer.stop();
-                    return QGestureRecognizer::CancelGesture;
-                }
+               // INVARIANT: Still in maybeGesture. Check if the user
+               // moved his finger so much that it makes sense to cancel the pan:
+               const QPointF p = QCursor::pos();
+               if ((p - _startPos).manhattanLength() > panBeginRadius) {
+                  _panCanceled = true;
+                  _panTimer.stop();
+                  return QGestureRecognizer::CancelGesture;
+               }
             } else {
-                const QPointF p = QCursor::pos();
-                const QPointF posOffset = p - _startPos;
-                g->setLastOffset(g->offset());
-                g->setOffset(QPointF(posOffset.x(), posOffset.y()));
-                g->setHotSpot(_startPos);
-                return QGestureRecognizer::TriggerGesture;
+               const QPointF p = QCursor::pos();
+               const QPointF posOffset = p - _startPos;
+               g->setLastOffset(g->offset());
+               g->setOffset(QPointF(posOffset.x(), posOffset.y()));
+               g->setHotSpot(_startPos);
+               return QGestureRecognizer::TriggerGesture;
             }
-        } else if (_panTimer.isActive()) {
+         } else if (_panTimer.isActive()) {
             // I only want to cancel the pan if the user is pressing
             // more than one finger, and the pan hasn't started yet:
             _panCanceled = true;
             _panTimer.stop();
             return QGestureRecognizer::CancelGesture;
-        }
-        break;}
-    case QEvent::Timer: {
-        QTimerEvent *ev = static_cast<QTimerEvent *>(event);
-        if (ev->timerId() == _panTimer.timerId()) {
+         }
+         break;
+      }
+      case QEvent::Timer: {
+         QTimerEvent *ev = static_cast<QTimerEvent *>(event);
+         if (ev->timerId() == _panTimer.timerId()) {
             _panTimer.stop();
-            if (_panCanceled)
-                break;
+            if (_panCanceled) {
+               break;
+            }
             // Begin new pan session!
             _startPos = QCursor::pos();
             g->setHotSpot(_startPos);
             return QGestureRecognizer::TriggerGesture | QGestureRecognizer::ConsumeEventHint;
-        }
-        break; }
-    default:
-        break;
-    }
+         }
+         break;
+      }
+      default:
+         break;
+   }
 
-    return QGestureRecognizer::Ignore;
+   return QGestureRecognizer::Ignore;
 }
 
 void QMacPanGestureRecognizer::reset(QGesture *gesture)
 {
-    QPanGesture *g = static_cast<QPanGesture *>(gesture);
-    _startPos = QPointF();
-    _panCanceled = true;
-    g->setOffset(QPointF(0, 0));
-    g->setLastOffset(QPointF(0, 0));
-    g->setAcceleration(qreal(1));
-    QGestureRecognizer::reset(gesture);
+   QPanGesture *g = static_cast<QPanGesture *>(gesture);
+   _startPos = QPointF();
+   _panCanceled = true;
+   g->setOffset(QPointF(0, 0));
+   g->setLastOffset(QPointF(0, 0));
+   g->setAcceleration(qreal(1));
+   QGestureRecognizer::reset(gesture);
 }
 
 QT_END_NAMESPACE

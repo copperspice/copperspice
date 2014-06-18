@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -71,12 +71,12 @@ QT_BEGIN_NAMESPACE
     \sa listen()
  */
 QLocalServer::QLocalServer(QObject *parent)
-   : QObject(parent), d_ptr(new QLocalServerPrivate)       
+   : QObject(parent), d_ptr(new QLocalServerPrivate)
 {
-    d_ptr->q_ptr = this;
-    Q_D(QLocalServer);
+   d_ptr->q_ptr = this;
+   Q_D(QLocalServer);
 
-    d->init();
+   d->init();
 }
 
 /*!
@@ -90,8 +90,9 @@ QLocalServer::QLocalServer(QObject *parent)
  */
 QLocalServer::~QLocalServer()
 {
-    if (isListening())
+   if (isListening()) {
       close();
+   }
 }
 
 /*!
@@ -102,16 +103,17 @@ QLocalServer::~QLocalServer()
  */
 void QLocalServer::close()
 {
-    Q_D(QLocalServer);
-    if (!isListening())
-        return;
-    qDeleteAll(d->pendingConnections);
-    d->pendingConnections.clear();
-    d->closeServer();
-    d->serverName.clear();
-    d->fullServerName.clear();
-    d->errorString.clear();
-    d->error = QAbstractSocket::UnknownSocketError;
+   Q_D(QLocalServer);
+   if (!isListening()) {
+      return;
+   }
+   qDeleteAll(d->pendingConnections);
+   d->pendingConnections.clear();
+   d->closeServer();
+   d->serverName.clear();
+   d->fullServerName.clear();
+   d->errorString.clear();
+   d->error = QAbstractSocket::UnknownSocketError;
 }
 
 /*!
@@ -123,8 +125,8 @@ void QLocalServer::close()
  */
 QString QLocalServer::errorString() const
 {
-    Q_D(const QLocalServer);
-    return d->errorString;
+   Q_D(const QLocalServer);
+   return d->errorString;
 }
 
 /*!
@@ -135,8 +137,8 @@ QString QLocalServer::errorString() const
  */
 bool QLocalServer::hasPendingConnections() const
 {
-    Q_D(const QLocalServer);
-    return !(d->pendingConnections.isEmpty());
+   Q_D(const QLocalServer);
+   return !(d->pendingConnections.isEmpty());
 }
 
 /*!
@@ -156,11 +158,11 @@ bool QLocalServer::hasPendingConnections() const
  */
 void QLocalServer::incomingConnection(quintptr socketDescriptor)
 {
-    Q_D(QLocalServer);
-    QLocalSocket *socket = new QLocalSocket(this);
-    socket->setSocketDescriptor(socketDescriptor);
-    d->pendingConnections.enqueue(socket);
-    emit newConnection();
+   Q_D(QLocalServer);
+   QLocalSocket *socket = new QLocalSocket(this);
+   socket->setSocketDescriptor(socketDescriptor);
+   d->pendingConnections.enqueue(socket);
+   emit newConnection();
 }
 
 /*!
@@ -171,8 +173,8 @@ void QLocalServer::incomingConnection(quintptr socketDescriptor)
  */
 bool QLocalServer::isListening() const
 {
-    Q_D(const QLocalServer);
-    return !(d->serverName.isEmpty());
+   Q_D(const QLocalServer);
+   return !(d->serverName.isEmpty());
 }
 
 /*!
@@ -198,27 +200,27 @@ bool QLocalServer::isListening() const
  */
 bool QLocalServer::listen(const QString &name)
 {
-    Q_D(QLocalServer);
-    if (isListening()) {
-        qWarning("QLocalServer::listen() called when already listening");
-        return false;
-    }
+   Q_D(QLocalServer);
+   if (isListening()) {
+      qWarning("QLocalServer::listen() called when already listening");
+      return false;
+   }
 
-    if (name.isEmpty()) {
-        d->error = QAbstractSocket::HostNotFoundError;
-        QString function = QLatin1String("QLocalServer::listen");
-        d->errorString = tr("%1: Name error").arg(function);
-        return false;
-    }
+   if (name.isEmpty()) {
+      d->error = QAbstractSocket::HostNotFoundError;
+      QString function = QLatin1String("QLocalServer::listen");
+      d->errorString = tr("%1: Name error").arg(function);
+      return false;
+   }
 
-    if (!d->listen(name)) {
-        d->serverName.clear();
-        d->fullServerName.clear();
-        return false;
-    }
+   if (!d->listen(name)) {
+      d->serverName.clear();
+      d->fullServerName.clear();
+      return false;
+   }
 
-    d->serverName = name;
-    return true;
+   d->serverName = name;
+   return true;
 }
 
 /*!
@@ -229,8 +231,8 @@ bool QLocalServer::listen(const QString &name)
  */
 int QLocalServer::maxPendingConnections() const
 {
-    Q_D(const QLocalServer);
-    return d->maxPendingConnections;
+   Q_D(const QLocalServer);
+   return d->maxPendingConnections;
 }
 
 /*!
@@ -256,22 +258,23 @@ int QLocalServer::maxPendingConnections() const
  */
 QLocalSocket *QLocalServer::nextPendingConnection()
 {
-    Q_D(QLocalServer);
-    if (d->pendingConnections.isEmpty())
-        return 0;
-    QLocalSocket *nextSocket = d->pendingConnections.dequeue();
+   Q_D(QLocalServer);
+   if (d->pendingConnections.isEmpty()) {
+      return 0;
+   }
+   QLocalSocket *nextSocket = d->pendingConnections.dequeue();
 
 #ifndef QT_LOCALSOCKET_TCP
 
-    if (d->pendingConnections.size() <= d->maxPendingConnections)
+   if (d->pendingConnections.size() <= d->maxPendingConnections)
 #ifndef Q_OS_WIN
-        d->socketNotifier->setEnabled(true);
+      d->socketNotifier->setEnabled(true);
 #else
-        d->connectionEventNotifier->setEnabled(true);
+      d->connectionEventNotifier->setEnabled(true);
 #endif
 #endif
 
-    return nextSocket;
+   return nextSocket;
 }
 
 /*!
@@ -289,7 +292,7 @@ QLocalSocket *QLocalServer::nextPendingConnection()
 */
 bool QLocalServer::removeServer(const QString &name)
 {
-    return QLocalServerPrivate::removeServer(name);
+   return QLocalServerPrivate::removeServer(name);
 }
 
 /*!
@@ -300,8 +303,8 @@ bool QLocalServer::removeServer(const QString &name)
  */
 QString QLocalServer::serverName() const
 {
-    Q_D(const QLocalServer);
-    return d->serverName;
+   Q_D(const QLocalServer);
+   return d->serverName;
 }
 
 /*!
@@ -313,8 +316,8 @@ QString QLocalServer::serverName() const
  */
 QString QLocalServer::fullServerName() const
 {
-    Q_D(const QLocalServer);
-    return d->fullServerName;
+   Q_D(const QLocalServer);
+   return d->fullServerName;
 }
 
 /*!
@@ -324,8 +327,8 @@ QString QLocalServer::fullServerName() const
  */
 QAbstractSocket::SocketError QLocalServer::serverError() const
 {
-    Q_D(const QLocalServer);
-    return d->error;
+   Q_D(const QLocalServer);
+   return d->error;
 }
 
 /*!
@@ -343,8 +346,8 @@ QAbstractSocket::SocketError QLocalServer::serverError() const
  */
 void QLocalServer::setMaxPendingConnections(int numConnections)
 {
-    Q_D(QLocalServer);
-    d->maxPendingConnections = numConnections;
+   Q_D(QLocalServer);
+   d->maxPendingConnections = numConnections;
 }
 
 /*!
@@ -366,22 +369,24 @@ void QLocalServer::setMaxPendingConnections(int numConnections)
  */
 bool QLocalServer::waitForNewConnection(int msec, bool *timedOut)
 {
-    Q_D(QLocalServer);
-    if (timedOut)
-        *timedOut = false;
+   Q_D(QLocalServer);
+   if (timedOut) {
+      *timedOut = false;
+   }
 
-    if (!isListening())
-        return false;
+   if (!isListening()) {
+      return false;
+   }
 
-    d->waitForNewConnection(msec, timedOut);
+   d->waitForNewConnection(msec, timedOut);
 
-    return !d->pendingConnections.isEmpty();
+   return !d->pendingConnections.isEmpty();
 }
 
 void QLocalServer::_q_onNewConnection()
 {
-	Q_D(QLocalServer);
-	d->_q_onNewConnection();
+   Q_D(QLocalServer);
+   d->_q_onNewConnection();
 }
 
 #endif

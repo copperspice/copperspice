@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,92 +39,92 @@ class QWorkspacePrivate;
 
 class Q_GUI_EXPORT QWorkspace : public QWidget
 {
-    CS_OBJECT(QWorkspace)
+   CS_OBJECT(QWorkspace)
 
-    GUI_CS_PROPERTY_READ(scrollBarsEnabled, scrollBarsEnabled)
-    GUI_CS_PROPERTY_WRITE(scrollBarsEnabled, setScrollBarsEnabled)
-    GUI_CS_PROPERTY_READ(background, background)
-    GUI_CS_PROPERTY_WRITE(background, setBackground)
+   GUI_CS_PROPERTY_READ(scrollBarsEnabled, scrollBarsEnabled)
+   GUI_CS_PROPERTY_WRITE(scrollBarsEnabled, setScrollBarsEnabled)
+   GUI_CS_PROPERTY_READ(background, background)
+   GUI_CS_PROPERTY_WRITE(background, setBackground)
 
-public:
-    explicit QWorkspace(QWidget* parent=0);
-    ~QWorkspace();
+ public:
+   explicit QWorkspace(QWidget *parent = 0);
+   ~QWorkspace();
 
-    enum WindowOrder { CreationOrder, StackingOrder };
+   enum WindowOrder { CreationOrder, StackingOrder };
 
-    QWidget* activeWindow() const;
-    QWidgetList windowList(WindowOrder order = CreationOrder) const;
+   QWidget *activeWindow() const;
+   QWidgetList windowList(WindowOrder order = CreationOrder) const;
 
-    QWidget * addWindow(QWidget *w, Qt::WindowFlags flags = 0);
+   QWidget *addWindow(QWidget *w, Qt::WindowFlags flags = 0);
 
-    QSize sizeHint() const;
+   QSize sizeHint() const;
 
-    bool scrollBarsEnabled() const;
-    void setScrollBarsEnabled(bool enable);
+   bool scrollBarsEnabled() const;
+   void setScrollBarsEnabled(bool enable);
 
-    void setBackground(const QBrush &background);
-    QBrush background() const;
+   void setBackground(const QBrush &background);
+   QBrush background() const;
 
-    GUI_CS_SIGNAL_1(Public, void windowActivated(QWidget * w))
-    GUI_CS_SIGNAL_2(windowActivated,w) 
+   GUI_CS_SIGNAL_1(Public, void windowActivated(QWidget *w))
+   GUI_CS_SIGNAL_2(windowActivated, w)
 
-    GUI_CS_SLOT_1(Public, void setActiveWindow(QWidget * w))
-    GUI_CS_SLOT_2(setActiveWindow) 
-    GUI_CS_SLOT_1(Public, void cascade())
-    GUI_CS_SLOT_2(cascade) 
-    GUI_CS_SLOT_1(Public, void tile())
-    GUI_CS_SLOT_2(tile) 
-    GUI_CS_SLOT_1(Public, void arrangeIcons())
-    GUI_CS_SLOT_2(arrangeIcons) 
-    GUI_CS_SLOT_1(Public, void closeActiveWindow())
-    GUI_CS_SLOT_2(closeActiveWindow) 
-    GUI_CS_SLOT_1(Public, void closeAllWindows())
-    GUI_CS_SLOT_2(closeAllWindows) 
-    GUI_CS_SLOT_1(Public, void activateNextWindow())
-    GUI_CS_SLOT_2(activateNextWindow) 
-    GUI_CS_SLOT_1(Public, void activatePreviousWindow())
-    GUI_CS_SLOT_2(activatePreviousWindow) 
+   GUI_CS_SLOT_1(Public, void setActiveWindow(QWidget *w))
+   GUI_CS_SLOT_2(setActiveWindow)
+   GUI_CS_SLOT_1(Public, void cascade())
+   GUI_CS_SLOT_2(cascade)
+   GUI_CS_SLOT_1(Public, void tile())
+   GUI_CS_SLOT_2(tile)
+   GUI_CS_SLOT_1(Public, void arrangeIcons())
+   GUI_CS_SLOT_2(arrangeIcons)
+   GUI_CS_SLOT_1(Public, void closeActiveWindow())
+   GUI_CS_SLOT_2(closeActiveWindow)
+   GUI_CS_SLOT_1(Public, void closeAllWindows())
+   GUI_CS_SLOT_2(closeAllWindows)
+   GUI_CS_SLOT_1(Public, void activateNextWindow())
+   GUI_CS_SLOT_2(activateNextWindow)
+   GUI_CS_SLOT_1(Public, void activatePreviousWindow())
+   GUI_CS_SLOT_2(activatePreviousWindow)
 
-protected:
-    bool event(QEvent *e);
-    void paintEvent(QPaintEvent *e);
-    void changeEvent(QEvent *);
-    void childEvent(QChildEvent *);
-    void resizeEvent(QResizeEvent *);
-    bool eventFilter(QObject *, QEvent *);
-    void showEvent(QShowEvent *e);
-    void hideEvent(QHideEvent *e);
+ protected:
+   bool event(QEvent *e);
+   void paintEvent(QPaintEvent *e);
+   void changeEvent(QEvent *);
+   void childEvent(QChildEvent *);
+   void resizeEvent(QResizeEvent *);
+   bool eventFilter(QObject *, QEvent *);
+   void showEvent(QShowEvent *e);
+   void hideEvent(QHideEvent *e);
 
 #ifndef QT_NO_WHEELEVENT
-    void wheelEvent(QWheelEvent *e);
+   void wheelEvent(QWheelEvent *e);
 #endif
 
-private:
-    Q_DECLARE_PRIVATE(QWorkspace)
-    Q_DISABLE_COPY(QWorkspace)
+ private:
+   Q_DECLARE_PRIVATE(QWorkspace)
+   Q_DISABLE_COPY(QWorkspace)
 
-    GUI_CS_SLOT_1(Private, void _q_normalizeActiveWindow())
-    GUI_CS_SLOT_2(_q_normalizeActiveWindow)
+   GUI_CS_SLOT_1(Private, void _q_normalizeActiveWindow())
+   GUI_CS_SLOT_2(_q_normalizeActiveWindow)
 
-    GUI_CS_SLOT_1(Private, void _q_minimizeActiveWindow())
-    GUI_CS_SLOT_2(_q_minimizeActiveWindow)
+   GUI_CS_SLOT_1(Private, void _q_minimizeActiveWindow())
+   GUI_CS_SLOT_2(_q_minimizeActiveWindow)
 
-    GUI_CS_SLOT_1(Private, void _q_showOperationMenu())
-    GUI_CS_SLOT_2(_q_showOperationMenu)
+   GUI_CS_SLOT_1(Private, void _q_showOperationMenu())
+   GUI_CS_SLOT_2(_q_showOperationMenu)
 
-    GUI_CS_SLOT_1(Private, void _q_popupOperationMenu(const QPoint & un_named_arg1))
-    GUI_CS_SLOT_2(_q_popupOperationMenu)
+   GUI_CS_SLOT_1(Private, void _q_popupOperationMenu(const QPoint &un_named_arg1))
+   GUI_CS_SLOT_2(_q_popupOperationMenu)
 
-    GUI_CS_SLOT_1(Private, void _q_operationMenuActivated(QAction * un_named_arg1))
-    GUI_CS_SLOT_2(_q_operationMenuActivated)
+   GUI_CS_SLOT_1(Private, void _q_operationMenuActivated(QAction *un_named_arg1))
+   GUI_CS_SLOT_2(_q_operationMenuActivated)
 
-    GUI_CS_SLOT_1(Private, void _q_updateActions())
-    GUI_CS_SLOT_2(_q_updateActions)
+   GUI_CS_SLOT_1(Private, void _q_updateActions())
+   GUI_CS_SLOT_2(_q_updateActions)
 
-    GUI_CS_SLOT_1(Private, void _q_scrollBarChanged())
-    GUI_CS_SLOT_2(_q_scrollBarChanged)
+   GUI_CS_SLOT_1(Private, void _q_scrollBarChanged())
+   GUI_CS_SLOT_2(_q_scrollBarChanged)
 
-    friend class QWorkspaceChild;
+   friend class QWorkspaceChild;
 };
 
 #endif // QT_NO_WORKSPACE

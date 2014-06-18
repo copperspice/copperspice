@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,58 +44,59 @@ class QGraphicsSceneFindItemBspTreeVisitor;
 
 class QGraphicsSceneBspTree
 {
-public:
-    struct Node
-    {
-        enum Type { Horizontal, Vertical, Leaf };
-        union {
-            qreal offset;
-            int leafIndex;
-        };
-        Type type;
-    };
+ public:
+   struct Node {
+      enum Type { Horizontal, Vertical, Leaf };
+      union {
+         qreal offset;
+         int leafIndex;
+      };
+      Type type;
+   };
 
-    QGraphicsSceneBspTree();
-    ~QGraphicsSceneBspTree();
+   QGraphicsSceneBspTree();
+   ~QGraphicsSceneBspTree();
 
-    void initialize(const QRectF &rect, int depth);
-    void clear();
+   void initialize(const QRectF &rect, int depth);
+   void clear();
 
-    void insertItem(QGraphicsItem *item, const QRectF &rect);
-    void removeItem(QGraphicsItem *item, const QRectF &rect);
-    void removeItems(const QSet<QGraphicsItem *> &items);
+   void insertItem(QGraphicsItem *item, const QRectF &rect);
+   void removeItem(QGraphicsItem *item, const QRectF &rect);
+   void removeItems(const QSet<QGraphicsItem *> &items);
 
-    QList<QGraphicsItem *> items(const QRectF &rect, bool onlyTopLevelItems = false) const;
-    int leafCount() const;
+   QList<QGraphicsItem *> items(const QRectF &rect, bool onlyTopLevelItems = false) const;
+   int leafCount() const;
 
-    inline int firstChildIndex(int index) const
-    { return index * 2 + 1; }
+   inline int firstChildIndex(int index) const {
+      return index * 2 + 1;
+   }
 
-    inline int parentIndex(int index) const
-    { return index > 0 ? ((index & 1) ? ((index - 1) / 2) : ((index - 2) / 2)) : -1; }
+   inline int parentIndex(int index) const {
+      return index > 0 ? ((index & 1) ? ((index - 1) / 2) : ((index - 2) / 2)) : -1;
+   }
 
-    QString debug(int index) const;
+   QString debug(int index) const;
 
-private:
-    void initialize(const QRectF &rect, int depth, int index);
-    void climbTree(QGraphicsSceneBspTreeVisitor *visitor, const QRectF &rect, int index = 0) const;
-    QRectF rectForIndex(int index) const;
+ private:
+   void initialize(const QRectF &rect, int depth, int index);
+   void climbTree(QGraphicsSceneBspTreeVisitor *visitor, const QRectF &rect, int index = 0) const;
+   QRectF rectForIndex(int index) const;
 
-    QVector<Node> nodes;
-    QVector<QList<QGraphicsItem *> > leaves;
-    int leafCnt;
-    QRectF rect;
+   QVector<Node> nodes;
+   QVector<QList<QGraphicsItem *> > leaves;
+   int leafCnt;
+   QRectF rect;
 
-    QGraphicsSceneInsertItemBspTreeVisitor *insertVisitor;
-    QGraphicsSceneRemoveItemBspTreeVisitor *removeVisitor;
-    QGraphicsSceneFindItemBspTreeVisitor *findVisitor;
+   QGraphicsSceneInsertItemBspTreeVisitor *insertVisitor;
+   QGraphicsSceneRemoveItemBspTreeVisitor *removeVisitor;
+   QGraphicsSceneFindItemBspTreeVisitor *findVisitor;
 };
 
 class QGraphicsSceneBspTreeVisitor
 {
-public:
-    virtual ~QGraphicsSceneBspTreeVisitor() { }
-    virtual void visit(QList<QGraphicsItem *> *items) = 0;
+ public:
+   virtual ~QGraphicsSceneBspTreeVisitor() { }
+   virtual void visit(QList<QGraphicsItem *> *items) = 0;
 };
 
 QT_END_NAMESPACE

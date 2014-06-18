@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,9 +33,8 @@ QT_BEGIN_NAMESPACE
 
 class QWSMouseHandler;
 
-struct Q_GUI_EXPORT QWSMouseHandlerFactoryInterface : public QFactoryInterface
-{
-    virtual QWSMouseHandler* create(const QString &name, const QString &device) = 0;
+struct Q_GUI_EXPORT QWSMouseHandlerFactoryInterface : public QFactoryInterface {
+   virtual QWSMouseHandler *create(const QString &name, const QString &device) = 0;
 };
 
 #define QWSMouseHandlerFactoryInterface_iid "com.copperspice.QWSMouseHandlerFactoryInterface"
@@ -43,15 +42,15 @@ CS_DECLARE_INTERFACE(QWSMouseHandlerFactoryInterface, QWSMouseHandlerFactoryInte
 
 class Q_GUI_EXPORT QMouseDriverPlugin : public QObject, public QWSMouseHandlerFactoryInterface
 {
-    CS_OBJECT_MULTIPLE(QMouseDriverPlugin, QObject)
-    CS_INTERFACES(QWSMouseHandlerFactoryInterface, QFactoryInterface)
+   CS_OBJECT_MULTIPLE(QMouseDriverPlugin, QObject)
+   CS_INTERFACES(QWSMouseHandlerFactoryInterface, QFactoryInterface)
 
-   public:
-       explicit QMouseDriverPlugin(QObject *parent = 0);
-       ~QMouseDriverPlugin();
+ public:
+   explicit QMouseDriverPlugin(QObject *parent = 0);
+   ~QMouseDriverPlugin();
 
-       virtual QStringList keys() const = 0;
-       virtual QWSMouseHandler* create(const QString& driver, const QString &device) = 0;
+   virtual QStringList keys() const = 0;
+   virtual QWSMouseHandler *create(const QString &driver, const QString &device) = 0;
 };
 
 QT_END_NAMESPACE

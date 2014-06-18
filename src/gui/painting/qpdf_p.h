@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -51,103 +51,107 @@ const char *qt_int_to_string(int val, char *buf);
 
 namespace QPdf {
 
-    class ByteStream
-    {
-    public:
-        // fileBacking means that ByteStream will buffer the contents on disk
-        // if the size exceeds a certain threshold. In this case, if a byte
-        // array was passed in, its contents may no longer correspond to the
-        // ByteStream contents.
-        explicit ByteStream(bool fileBacking = false);
-        explicit ByteStream(QByteArray *ba, bool fileBacking = false);
-        ~ByteStream();
-        ByteStream &operator <<(char chr);
-        ByteStream &operator <<(const char *str);
-        ByteStream &operator <<(const QByteArray &str);
-        ByteStream &operator <<(const ByteStream &src);
-        ByteStream &operator <<(qreal val);
-        ByteStream &operator <<(int val);
-        ByteStream &operator <<(const QPointF &p);
-        // Note that the stream may be invalidated by calls that insert data.
-        QIODevice *stream();
-        void clear();
+class ByteStream
+{
+ public:
+   // fileBacking means that ByteStream will buffer the contents on disk
+   // if the size exceeds a certain threshold. In this case, if a byte
+   // array was passed in, its contents may no longer correspond to the
+   // ByteStream contents.
+   explicit ByteStream(bool fileBacking = false);
+   explicit ByteStream(QByteArray *ba, bool fileBacking = false);
+   ~ByteStream();
+   ByteStream &operator <<(char chr);
+   ByteStream &operator <<(const char *str);
+   ByteStream &operator <<(const QByteArray &str);
+   ByteStream &operator <<(const ByteStream &src);
+   ByteStream &operator <<(qreal val);
+   ByteStream &operator <<(int val);
+   ByteStream &operator <<(const QPointF &p);
+   // Note that the stream may be invalidated by calls that insert data.
+   QIODevice *stream();
+   void clear();
 
-        static inline int maxMemorySize() { return 100000000; }
-        static inline int chunkSize()     { return 10000000; }
+   static inline int maxMemorySize() {
+      return 100000000;
+   }
+   static inline int chunkSize()     {
+      return 10000000;
+   }
 
-    protected:
-        void constructor_helper(QIODevice *dev);
-        void constructor_helper(QByteArray *ba);
+ protected:
+   void constructor_helper(QIODevice *dev);
+   void constructor_helper(QByteArray *ba);
 
-    private:
-        void prepareBuffer();
+ private:
+   void prepareBuffer();
 
-    private:
-        QIODevice *dev;
-        QByteArray ba;
-        bool fileBackingEnabled;
-        bool fileBackingActive;
-        bool handleDirty;
-    };
+ private:
+   QIODevice *dev;
+   QByteArray ba;
+   bool fileBackingEnabled;
+   bool fileBackingActive;
+   bool handleDirty;
+};
 
-    enum PathFlags {
-        ClipPath,
-        FillPath,
-        StrokePath,
-        FillAndStrokePath
-    };
-    QByteArray generatePath(const QPainterPath &path, const QTransform &matrix, PathFlags flags);
-    QByteArray generateMatrix(const QTransform &matrix);
-    QByteArray generateDashes(const QPen &pen);
-    QByteArray patternForBrush(const QBrush &b);
+enum PathFlags {
+   ClipPath,
+   FillPath,
+   StrokePath,
+   FillAndStrokePath
+};
+QByteArray generatePath(const QPainterPath &path, const QTransform &matrix, PathFlags flags);
+QByteArray generateMatrix(const QTransform &matrix);
+QByteArray generateDashes(const QPen &pen);
+QByteArray patternForBrush(const QBrush &b);
 #ifdef USE_NATIVE_GRADIENTS
-    QByteArray generateLinearGradientShader(const QLinearGradient *lg, const QPointF *page_rect, bool alpha = false);
+QByteArray generateLinearGradientShader(const QLinearGradient *lg, const QPointF *page_rect, bool alpha = false);
 #endif
 
-    struct Stroker {
-        Stroker();
-        void setPen(const QPen &pen);
-        void strokePath(const QPainterPath &path);
-        ByteStream *stream;
-        bool first;
-        QTransform matrix;
-        bool cosmeticPen;
-    private:
-        QStroker basicStroker;
-        QDashStroker dashStroker;
-        QStrokerOps *stroker;
-    };
+struct Stroker {
+   Stroker();
+   void setPen(const QPen &pen);
+   void strokePath(const QPainterPath &path);
+   ByteStream *stream;
+   bool first;
+   QTransform matrix;
+   bool cosmeticPen;
+ private:
+   QStroker basicStroker;
+   QDashStroker dashStroker;
+   QStrokerOps *stroker;
+};
 
-    QByteArray ascii85Encode(const QByteArray &input);
+QByteArray ascii85Encode(const QByteArray &input);
 
-    const char *toHex(ushort u, char *buffer);
-    const char *toHex(uchar u, char *buffer);
+const char *toHex(ushort u, char *buffer);
+const char *toHex(uchar u, char *buffer);
 
 
-    struct PaperSize {
-        int width, height; // in postscript points
-    };
-    PaperSize paperSize(QPrinter::PaperSize paperSize);
-    const char *paperSizeToString(QPrinter::PaperSize paperSize);
+struct PaperSize {
+   int width, height; // in postscript points
+};
+PaperSize paperSize(QPrinter::PaperSize paperSize);
+const char *paperSizeToString(QPrinter::PaperSize paperSize);
 
 }
 
 
 class QPdfPage : public QPdf::ByteStream
 {
-public:
-    QPdfPage();
+ public:
+   QPdfPage();
 
-    QVector<uint> images;
-    QVector<uint> graphicStates;
-    QVector<uint> patterns;
-    QVector<uint> fonts;
-    QVector<uint> annotations;
+   QVector<uint> images;
+   QVector<uint> graphicStates;
+   QVector<uint> patterns;
+   QVector<uint> fonts;
+   QVector<uint> annotations;
 
-    void streamImage(int w, int h, int object);
+   void streamImage(int w, int h, int object);
 
-    QSize pageSize;
-private:
+   QSize pageSize;
+ private:
 };
 
 
@@ -155,113 +159,115 @@ class QPdfBaseEnginePrivate;
 
 class QPdfBaseEngine : public QAlphaPaintEngine, public QPrintEngine
 {
-    Q_DECLARE_PRIVATE(QPdfBaseEngine)
-public:
-    QPdfBaseEngine(QPdfBaseEnginePrivate &d, PaintEngineFeatures f);
-    ~QPdfBaseEngine() {}
+   Q_DECLARE_PRIVATE(QPdfBaseEngine)
+ public:
+   QPdfBaseEngine(QPdfBaseEnginePrivate &d, PaintEngineFeatures f);
+   ~QPdfBaseEngine() {}
 
-    // reimplementations QPaintEngine
-    bool begin(QPaintDevice *pdev);
-    bool end();
+   // reimplementations QPaintEngine
+   bool begin(QPaintDevice *pdev);
+   bool end();
 
-    void drawPoints(const QPointF *points, int pointCount);
-    void drawLines(const QLineF *lines, int lineCount);
-    void drawRects(const QRectF *rects, int rectCount);
-    void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
-    void drawPath (const QPainterPath & path);
+   void drawPoints(const QPointF *points, int pointCount);
+   void drawLines(const QLineF *lines, int lineCount);
+   void drawRects(const QRectF *rects, int rectCount);
+   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
+   void drawPath (const QPainterPath &path);
 
-    void drawTextItem(const QPointF &p, const QTextItem &textItem);
+   void drawTextItem(const QPointF &p, const QTextItem &textItem);
 
-    void updateState(const QPaintEngineState &state);
+   void updateState(const QPaintEngineState &state);
 
-    int metric(QPaintDevice::PaintDeviceMetric metricType) const;
-    // end reimplementations QPaintEngine
+   int metric(QPaintDevice::PaintDeviceMetric metricType) const;
+   // end reimplementations QPaintEngine
 
-    // Printer stuff...
-    bool newPage();
-    void setProperty(PrintEnginePropertyKey key, const QVariant &value);
-    QVariant property(PrintEnginePropertyKey key) const;
+   // Printer stuff...
+   bool newPage();
+   void setProperty(PrintEnginePropertyKey key, const QVariant &value);
+   QVariant property(PrintEnginePropertyKey key) const;
 
-    void setPen();
-    virtual void setBrush() = 0;
-    void setupGraphicsState(QPaintEngine::DirtyFlags flags);
+   void setPen();
+   virtual void setBrush() = 0;
+   void setupGraphicsState(QPaintEngine::DirtyFlags flags);
 
-private:
-    void updateClipPath(const QPainterPath & path, Qt::ClipOperation op);
+ private:
+   void updateClipPath(const QPainterPath &path, Qt::ClipOperation op);
 };
 
 class QPdfBaseEnginePrivate : public QAlphaPaintEnginePrivate
 {
-    Q_DECLARE_PUBLIC(QPdfBaseEngine)
-public:
-    QPdfBaseEnginePrivate(QPrinter::PrinterMode m);
-    ~QPdfBaseEnginePrivate();
+   Q_DECLARE_PUBLIC(QPdfBaseEngine)
+ public:
+   QPdfBaseEnginePrivate(QPrinter::PrinterMode m);
+   ~QPdfBaseEnginePrivate();
 
-    bool openPrintDevice();
-    void closePrintDevice();
+   bool openPrintDevice();
+   void closePrintDevice();
 
 
-    virtual void drawTextItem(const QPointF &p, const QTextItemInt &ti);
-    inline uint requestObject() { return currentObject++; }
+   virtual void drawTextItem(const QPointF &p, const QTextItemInt &ti);
+   inline uint requestObject() {
+      return currentObject++;
+   }
 
-    QRect paperRect() const;
-    QRect pageRect() const;
+   QRect paperRect() const;
+   QRect pageRect() const;
 
-    bool postscript;
-    int currentObject;
+   bool postscript;
+   int currentObject;
 
-    QPdfPage* currentPage;
-    QPdf::Stroker stroker;
+   QPdfPage *currentPage;
+   QPdf::Stroker stroker;
 
-    QPointF brushOrigin;
-    QBrush brush;
-    QPen pen;
-    QList<QPainterPath> clips;
-    bool clipEnabled;
-    bool allClipped;
-    bool hasPen;
-    bool hasBrush;
-    bool simplePen;
-    qreal opacity;
-    bool useAlphaEngine;
+   QPointF brushOrigin;
+   QBrush brush;
+   QPen pen;
+   QList<QPainterPath> clips;
+   bool clipEnabled;
+   bool allClipped;
+   bool hasPen;
+   bool hasBrush;
+   bool simplePen;
+   qreal opacity;
+   bool useAlphaEngine;
 
-    QHash<QFontEngine::FaceId, QFontSubset *> fonts;
+   QHash<QFontEngine::FaceId, QFontSubset *> fonts;
 
-    QPaintDevice *pdev;
+   QPaintDevice *pdev;
 
-    // the device the output is in the end streamed to.
-    QIODevice *outDevice;
-    int fd;
+   // the device the output is in the end streamed to.
+   QIODevice *outDevice;
+   int fd;
 
-    // printer options
-    QString outputFileName;
-    QString printerName;
-    QString printProgram;
-    QString selectionOption;
-    QString title;
-    QString creator;
-    QPrinter::DuplexMode duplex;
-    bool collate;
-    bool fullPage;
-    bool embedFonts;
-    int copies;
-    int resolution;
-    QPrinter::PageOrder pageOrder;
-    QPrinter::Orientation orientation;
-    QPrinter::PaperSize paperSize;
-    QPrinter::ColorMode colorMode;
-    QPrinter::PaperSource paperSource;
+   // printer options
+   QString outputFileName;
+   QString printerName;
+   QString printProgram;
+   QString selectionOption;
+   QString title;
+   QString creator;
+   QPrinter::DuplexMode duplex;
+   bool collate;
+   bool fullPage;
+   bool embedFonts;
+   int copies;
+   int resolution;
+   QPrinter::PageOrder pageOrder;
+   QPrinter::Orientation orientation;
+   QPrinter::PaperSize paperSize;
+   QPrinter::ColorMode colorMode;
+   QPrinter::PaperSource paperSource;
 
-    QStringList cupsOptions;
-    QRect cupsPaperRect;
-    QRect cupsPageRect;
-    QString cupsStringPageSize;
-    QSizeF customPaperSize; // in postscript points
-    bool hasCustomPageMargins;
-    qreal leftMargin, topMargin, rightMargin, bottomMargin;
+   QStringList cupsOptions;
+   QRect cupsPaperRect;
+   QRect cupsPageRect;
+   QString cupsStringPageSize;
+   QSizeF customPaperSize; // in postscript points
+   bool hasCustomPageMargins;
+   qreal leftMargin, topMargin, rightMargin, bottomMargin;
 
 #if !defined(QT_NO_CUPS)
-    QString cupsTempFile;
+   QString cupsTempFile;
 #endif
 };
 

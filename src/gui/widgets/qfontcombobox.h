@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,60 +37,60 @@ class QFontComboBoxPrivate;
 
 class Q_GUI_EXPORT QFontComboBox : public QComboBox
 {
-    CS_OBJECT(QFontComboBox)
+   CS_OBJECT(QFontComboBox)
 
-    GUI_CS_FLAG(FontFilter, FontFilters)
+   GUI_CS_FLAG(FontFilter, FontFilters)
 
-    GUI_CS_PROPERTY_READ(writingSystem, writingSystem)
-    GUI_CS_PROPERTY_WRITE(writingSystem, setWritingSystem)
+   GUI_CS_PROPERTY_READ(writingSystem, writingSystem)
+   GUI_CS_PROPERTY_WRITE(writingSystem, setWritingSystem)
 
-    GUI_CS_PROPERTY_READ(fontFilters, fontFilters)
-    GUI_CS_PROPERTY_WRITE(fontFilters, setFontFilters)
+   GUI_CS_PROPERTY_READ(fontFilters, fontFilters)
+   GUI_CS_PROPERTY_WRITE(fontFilters, setFontFilters)
 
-    GUI_CS_PROPERTY_READ(currentFont, currentFont)
-    GUI_CS_PROPERTY_WRITE(currentFont, setCurrentFont)
-    GUI_CS_PROPERTY_NOTIFY(currentFont, currentFontChanged)
-  
-public:
-    explicit QFontComboBox(QWidget *parent = 0);
-    ~QFontComboBox();
+   GUI_CS_PROPERTY_READ(currentFont, currentFont)
+   GUI_CS_PROPERTY_WRITE(currentFont, setCurrentFont)
+   GUI_CS_PROPERTY_NOTIFY(currentFont, currentFontChanged)
 
-    void setWritingSystem(QFontDatabase::WritingSystem);
-    QFontDatabase::WritingSystem writingSystem() const;
+ public:
+   explicit QFontComboBox(QWidget *parent = 0);
+   ~QFontComboBox();
 
-    enum FontFilter {
-        AllFonts = 0,
-        ScalableFonts = 0x1,
-        NonScalableFonts = 0x2,
-        MonospacedFonts = 0x4,
-        ProportionalFonts = 0x8
-    };
-    using FontFilters = QFlags<FontFilter>;
+   void setWritingSystem(QFontDatabase::WritingSystem);
+   QFontDatabase::WritingSystem writingSystem() const;
 
-    void setFontFilters(FontFilters filters);
-    FontFilters fontFilters() const;
+   enum FontFilter {
+      AllFonts = 0,
+      ScalableFonts = 0x1,
+      NonScalableFonts = 0x2,
+      MonospacedFonts = 0x4,
+      ProportionalFonts = 0x8
+   };
+   using FontFilters = QFlags<FontFilter>;
 
-    QFont currentFont() const;
-    QSize sizeHint() const;
+   void setFontFilters(FontFilters filters);
+   FontFilters fontFilters() const;
 
-    GUI_CS_SLOT_1(Public, void setCurrentFont(const QFont & f))
-    GUI_CS_SLOT_2(setCurrentFont) 
+   QFont currentFont() const;
+   QSize sizeHint() const;
 
-    GUI_CS_SIGNAL_1(Public, void currentFontChanged(const QFont & f))
-    GUI_CS_SIGNAL_2(currentFontChanged,f) 
+   GUI_CS_SLOT_1(Public, void setCurrentFont(const QFont &f))
+   GUI_CS_SLOT_2(setCurrentFont)
 
-protected:
-    bool event(QEvent *e);
+   GUI_CS_SIGNAL_1(Public, void currentFontChanged(const QFont &f))
+   GUI_CS_SIGNAL_2(currentFontChanged, f)
 
-private:
-    Q_DISABLE_COPY(QFontComboBox)
-    Q_DECLARE_PRIVATE(QFontComboBox)
+ protected:
+   bool event(QEvent *e);
 
-    GUI_CS_SLOT_1(Private, void _q_currentChanged(const QString & un_named_arg1))
-    GUI_CS_SLOT_2(_q_currentChanged)
+ private:
+   Q_DISABLE_COPY(QFontComboBox)
+   Q_DECLARE_PRIVATE(QFontComboBox)
 
-    GUI_CS_SLOT_1(Private, void _q_updateModel())
-    GUI_CS_SLOT_2(_q_updateModel)
+   GUI_CS_SLOT_1(Private, void _q_currentChanged(const QString &un_named_arg1))
+   GUI_CS_SLOT_2(_q_currentChanged)
+
+   GUI_CS_SLOT_1(Private, void _q_updateModel())
+   GUI_CS_SLOT_2(_q_updateModel)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QFontComboBox::FontFilters)

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,33 +34,37 @@ QT_BEGIN_NAMESPACE
 
 #if !defined(QT_NO_SETTINGS)
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QPlatformIntegrationFactoryInterface_iid, QLatin1String("/platforms"), Qt::CaseInsensitive))
+                          (QPlatformIntegrationFactoryInterface_iid, QLatin1String("/platforms"), Qt::CaseInsensitive))
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader,
                           (QPlatformIntegrationFactoryInterface_iid, QLatin1String(""), Qt::CaseInsensitive))
 #endif
 
-QPlatformIntegration *QPlatformIntegrationFactory::create(const QString& key, const QString &platformPluginPath)
+QPlatformIntegration *QPlatformIntegrationFactory::create(const QString &key, const QString &platformPluginPath)
 {
-    QPlatformIntegration *ret = 0;
-    QStringList paramList = key.split(QLatin1Char(':'));
-    QString platform = paramList.takeFirst().toLower();
+   QPlatformIntegration *ret = 0;
+   QStringList paramList = key.split(QLatin1Char(':'));
+   QString platform = paramList.takeFirst().toLower();
 
 #if !defined(QT_NO_SETTINGS)
-    // Try loading the plugin from platformPluginPath first:
-    if (!platformPluginPath.isEmpty()) {
-        QCoreApplication::addLibraryPath(platformPluginPath);
-        if (QPlatformIntegrationFactoryInterface *factory =
-            qobject_cast<QPlatformIntegrationFactoryInterface*>(directLoader()->instance(platform)))
-            ret = factory->create(key, paramList);
+   // Try loading the plugin from platformPluginPath first:
+   if (!platformPluginPath.isEmpty()) {
+      QCoreApplication::addLibraryPath(platformPluginPath);
+      if (QPlatformIntegrationFactoryInterface *factory =
+               qobject_cast<QPlatformIntegrationFactoryInterface *>(directLoader()->instance(platform))) {
+         ret = factory->create(key, paramList);
+      }
 
-        if (ret)
-            return ret;
-    }
-    if (QPlatformIntegrationFactoryInterface *factory = qobject_cast<QPlatformIntegrationFactoryInterface*>(loader()->instance(platform)))
-        ret = factory->create(platform, paramList);
+      if (ret) {
+         return ret;
+      }
+   }
+   if (QPlatformIntegrationFactoryInterface *factory = qobject_cast<QPlatformIntegrationFactoryInterface *>
+         (loader()->instance(platform))) {
+      ret = factory->create(platform, paramList);
+   }
 #endif
 
-    return ret;
+   return ret;
 }
 
 /*!
@@ -72,20 +76,20 @@ QPlatformIntegration *QPlatformIntegrationFactory::create(const QString& key, co
 QStringList QPlatformIntegrationFactory::keys(const QString &platformPluginPath)
 {
 #if !defined(QT_NO_SETTINGS)
-    QStringList list;
+   QStringList list;
 
-    if (!platformPluginPath.isEmpty()) {
-        QCoreApplication::addLibraryPath(platformPluginPath);
-        foreach (const QString &key, directLoader()->keys()) {
-            list += key + QString(QLatin1String(" (from %1)")).arg(platformPluginPath);
-        }
-    }
+   if (!platformPluginPath.isEmpty()) {
+      QCoreApplication::addLibraryPath(platformPluginPath);
+      foreach (const QString & key, directLoader()->keys()) {
+         list += key + QString(QLatin1String(" (from %1)")).arg(platformPluginPath);
+      }
+   }
 
-    list += loader()->keys();
+   list += loader()->keys();
 #else
-    QStringList list;
+   QStringList list;
 #endif
-    return list;
+   return list;
 }
 
 QT_END_NAMESPACE

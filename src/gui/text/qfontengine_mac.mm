@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,7 +41,7 @@
 #include <qmath.h>
 #include <qimage_p.h>
 
-// OS X framework 
+// OS X framework
 #include <ApplicationServices/ApplicationServices.h>
 #include <AppKit/AppKit.h>
 
@@ -61,49 +61,54 @@ extern int qt_antialiasing_threshold; // QApplication.cpp
 
 class QMacFontPath
 {
-    float x, y;
-    QPainterPath *path;
-public:
-    inline QMacFontPath(float _x, float _y, QPainterPath *_path) : x(_x), y(_y), path(_path) { }
-    inline void setPosition(float _x, float _y) { x = _x; y = _y; }
-    inline void advance(float _x) { x += _x; }
-    static OSStatus lineTo(const Float32Point *, void *);
-    static OSStatus cubicTo(const Float32Point *, const Float32Point *,
-                            const Float32Point *, void *);
-    static OSStatus moveTo(const Float32Point *, void *);
-    static OSStatus closePath(void *);
+   float x, y;
+   QPainterPath *path;
+ public:
+   inline QMacFontPath(float _x, float _y, QPainterPath *_path) : x(_x), y(_y), path(_path) { }
+   inline void setPosition(float _x, float _y) {
+      x = _x;
+      y = _y;
+   }
+   inline void advance(float _x) {
+      x += _x;
+   }
+   static OSStatus lineTo(const Float32Point *, void *);
+   static OSStatus cubicTo(const Float32Point *, const Float32Point *,
+                           const Float32Point *, void *);
+   static OSStatus moveTo(const Float32Point *, void *);
+   static OSStatus closePath(void *);
 };
 
 OSStatus QMacFontPath::lineTo(const Float32Point *pt, void *data)
 
 {
-    QMacFontPath *p = static_cast<QMacFontPath*>(data);
-    p->path->lineTo(p->x + pt->x, p->y + pt->y);
-    return noErr;
+   QMacFontPath *p = static_cast<QMacFontPath *>(data);
+   p->path->lineTo(p->x + pt->x, p->y + pt->y);
+   return noErr;
 }
 
 OSStatus QMacFontPath::cubicTo(const Float32Point *cp1, const Float32Point *cp2,
                                const Float32Point *ep, void *data)
 
 {
-    QMacFontPath *p = static_cast<QMacFontPath*>(data);
-    p->path->cubicTo(p->x + cp1->x, p->y + cp1->y,
-                     p->x + cp2->x, p->y + cp2->y,
-                     p->x + ep->x, p->y + ep->y);
-    return noErr;
+   QMacFontPath *p = static_cast<QMacFontPath *>(data);
+   p->path->cubicTo(p->x + cp1->x, p->y + cp1->y,
+                    p->x + cp2->x, p->y + cp2->y,
+                    p->x + ep->x, p->y + ep->y);
+   return noErr;
 }
 
 OSStatus QMacFontPath::moveTo(const Float32Point *pt, void *data)
 {
-    QMacFontPath *p = static_cast<QMacFontPath*>(data);
-    p->path->moveTo(p->x + pt->x, p->y + pt->y);
-    return noErr;
+   QMacFontPath *p = static_cast<QMacFontPath *>(data);
+   p->path->moveTo(p->x + pt->x, p->y + pt->y);
+   return noErr;
 }
 
 OSStatus QMacFontPath::closePath(void *data)
 {
-    static_cast<QMacFontPath*>(data)->path->closeSubpath();
-    return noErr;
+   static_cast<QMacFontPath *>(data)->path->closeSubpath();
+   return noErr;
 }
 
 QT_END_NAMESPACE

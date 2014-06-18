@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,24 +36,24 @@ class QGraphicsShaderEffectPrivate;
 
 class Q_OPENGL_EXPORT QGraphicsShaderEffect : public QGraphicsEffect
 {
-    CS_OBJECT(QGraphicsShaderEffect)
-public:
-    QGraphicsShaderEffect(QObject *parent = 0);
-    virtual ~QGraphicsShaderEffect();
+   CS_OBJECT(QGraphicsShaderEffect)
+ public:
+   QGraphicsShaderEffect(QObject *parent = 0);
+   virtual ~QGraphicsShaderEffect();
 
-    QByteArray pixelShaderFragment() const;
-    void setPixelShaderFragment(const QByteArray& code);
+   QByteArray pixelShaderFragment() const;
+   void setPixelShaderFragment(const QByteArray &code);
 
-protected:
-    void draw(QPainter *painter);
-    void setUniformsDirty();
-    virtual void setUniforms(QGLShaderProgram *program);
+ protected:
+   void draw(QPainter *painter);
+   void setUniformsDirty();
+   virtual void setUniforms(QGLShaderProgram *program);
 
-private:
-    Q_DECLARE_PRIVATE(QGraphicsShaderEffect)
-    Q_DISABLE_COPY(QGraphicsShaderEffect)
+ private:
+   Q_DECLARE_PRIVATE(QGraphicsShaderEffect)
+   Q_DISABLE_COPY(QGraphicsShaderEffect)
 
-    friend class QGLCustomShaderEffectStage;
+   friend class QGLCustomShaderEffectStage;
 };
 
 QT_END_NAMESPACE

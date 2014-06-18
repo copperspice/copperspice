@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,134 +38,140 @@ QT_BEGIN_NAMESPACE
 
 class QGesturePrivate
 {
-    Q_DECLARE_PUBLIC(QGesture)
+   Q_DECLARE_PUBLIC(QGesture)
 
-public:
-    QGesturePrivate()
-        : gestureType(Qt::CustomGesture), state(Qt::NoGesture),
-          isHotSpotSet(false), gestureCancelPolicy(0)
-    {
-    }
+ public:
+   QGesturePrivate()
+      : gestureType(Qt::CustomGesture), state(Qt::NoGesture),
+        isHotSpotSet(false), gestureCancelPolicy(0) {
+   }
 
-    virtual ~QGesturePrivate() {}
+   virtual ~QGesturePrivate() {}
 
-    Qt::GestureType gestureType;
-    Qt::GestureState state;
-    QPointF hotSpot;
-    QPointF sceneHotSpot;
-    uint isHotSpotSet : 1;
-    uint gestureCancelPolicy : 2;
+   Qt::GestureType gestureType;
+   Qt::GestureState state;
+   QPointF hotSpot;
+   QPointF sceneHotSpot;
+   uint isHotSpotSet : 1;
+   uint gestureCancelPolicy : 2;
 
-protected:
-	 QGesture *q_ptr;
+ protected:
+   QGesture *q_ptr;
 };
 
 class QPanGesturePrivate : public QGesturePrivate
 {
-    Q_DECLARE_PUBLIC(QPanGesture)
+   Q_DECLARE_PUBLIC(QPanGesture)
 
-public:
-    QPanGesturePrivate()
-        : acceleration(0), xVelocity(0), yVelocity(0)
-    {
-    }
+ public:
+   QPanGesturePrivate()
+      : acceleration(0), xVelocity(0), yVelocity(0) {
+   }
 
-    qreal horizontalVelocity() const { return xVelocity; }
-    void setHorizontalVelocity(qreal value) { xVelocity = value; }
-    qreal verticalVelocity() const { return yVelocity; }
-    void setVerticalVelocity(qreal value) { yVelocity = value; }
+   qreal horizontalVelocity() const {
+      return xVelocity;
+   }
+   void setHorizontalVelocity(qreal value) {
+      xVelocity = value;
+   }
+   qreal verticalVelocity() const {
+      return yVelocity;
+   }
+   void setVerticalVelocity(qreal value) {
+      yVelocity = value;
+   }
 
-    QPointF lastOffset;
-    QPointF offset;
-    QPoint startPosition;
-    qreal acceleration;
-    qreal xVelocity;
-    qreal yVelocity;
+   QPointF lastOffset;
+   QPointF offset;
+   QPoint startPosition;
+   qreal acceleration;
+   qreal xVelocity;
+   qreal yVelocity;
 };
 
 class QPinchGesturePrivate : public QGesturePrivate
 {
-    Q_DECLARE_PUBLIC(QPinchGesture)
+   Q_DECLARE_PUBLIC(QPinchGesture)
 
-public:
-    QPinchGesturePrivate()
-        : totalChangeFlags(0), changeFlags(0),
-          totalScaleFactor(1), lastScaleFactor(1), scaleFactor(1),
-          totalRotationAngle(0), lastRotationAngle(0), rotationAngle(0),
-          isNewSequence(true)
-    {
-    }
+ public:
+   QPinchGesturePrivate()
+      : totalChangeFlags(0), changeFlags(0),
+        totalScaleFactor(1), lastScaleFactor(1), scaleFactor(1),
+        totalRotationAngle(0), lastRotationAngle(0), rotationAngle(0),
+        isNewSequence(true) {
+   }
 
-    QPinchGesture::ChangeFlags totalChangeFlags;
-    QPinchGesture::ChangeFlags changeFlags;
+   QPinchGesture::ChangeFlags totalChangeFlags;
+   QPinchGesture::ChangeFlags changeFlags;
 
-    QPointF startCenterPoint;
-    QPointF lastCenterPoint;
-    QPointF centerPoint;
+   QPointF startCenterPoint;
+   QPointF lastCenterPoint;
+   QPointF centerPoint;
 
-    qreal totalScaleFactor;
-    qreal lastScaleFactor;
-    qreal scaleFactor;
+   qreal totalScaleFactor;
+   qreal lastScaleFactor;
+   qreal scaleFactor;
 
-    qreal totalRotationAngle;
-    qreal lastRotationAngle;
-    qreal rotationAngle;
+   qreal totalRotationAngle;
+   qreal lastRotationAngle;
+   qreal rotationAngle;
 
-    bool isNewSequence;
-    QPointF startPosition[2];
+   bool isNewSequence;
+   QPointF startPosition[2];
 };
 
 class QSwipeGesturePrivate : public QGesturePrivate
 {
-    Q_DECLARE_PUBLIC(QSwipeGesture)
+   Q_DECLARE_PUBLIC(QSwipeGesture)
 
-public:
-    QSwipeGesturePrivate()
-        : horizontalDirection(QSwipeGesture::NoDirection),
-          verticalDirection(QSwipeGesture::NoDirection),
-          swipeAngle(0),
-          started(false), velocityValue(0)
-    {
-    }
+ public:
+   QSwipeGesturePrivate()
+      : horizontalDirection(QSwipeGesture::NoDirection),
+        verticalDirection(QSwipeGesture::NoDirection),
+        swipeAngle(0),
+        started(false), velocityValue(0) {
+   }
 
-    qreal velocity() const { return velocityValue; }
-    void setVelocity(qreal value) { velocityValue = value; }
+   qreal velocity() const {
+      return velocityValue;
+   }
+   void setVelocity(qreal value) {
+      velocityValue = value;
+   }
 
-    QSwipeGesture::SwipeDirection horizontalDirection;
-    QSwipeGesture::SwipeDirection verticalDirection;
-    qreal swipeAngle;
+   QSwipeGesture::SwipeDirection horizontalDirection;
+   QSwipeGesture::SwipeDirection verticalDirection;
+   qreal swipeAngle;
 
-    QPoint lastPositions[3];
-    bool started;
-    qreal velocityValue;
-    QElapsedTimer time;
+   QPoint lastPositions[3];
+   bool started;
+   qreal velocityValue;
+   QElapsedTimer time;
 };
 
 class QTapGesturePrivate : public QGesturePrivate
 {
-    Q_DECLARE_PUBLIC(QTapGesture)
+   Q_DECLARE_PUBLIC(QTapGesture)
 
-public:
-    QTapGesturePrivate()
-    {
-    }
+ public:
+   QTapGesturePrivate() {
+   }
 
-    QPointF position;
+   QPointF position;
 };
 
 class QTapAndHoldGesturePrivate : public QGesturePrivate
 {
-    Q_DECLARE_PUBLIC(QTapAndHoldGesture)
+   Q_DECLARE_PUBLIC(QTapAndHoldGesture)
 
-public:
-    QTapAndHoldGesturePrivate()
-        : timerId(0)
-    {
-    }
+ public:
+   QTapAndHoldGesturePrivate()
+      : timerId(0) {
+   }
 
-    QPointF position;
-    int timerId;
-    static int Timeout;
+   QPointF position;
+   int timerId;
+   static int Timeout;
 };
 
 QT_END_NAMESPACE

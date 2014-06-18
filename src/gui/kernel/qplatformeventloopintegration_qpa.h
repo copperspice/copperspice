@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,26 +35,26 @@ class QPlatformEventLoopIntegrationPrivate;
 
 class Q_GUI_EXPORT QPlatformEventLoopIntegration
 {
-    Q_DECLARE_PRIVATE(QPlatformEventLoopIntegration);
-public:
-    QPlatformEventLoopIntegration();
-    virtual ~QPlatformEventLoopIntegration();
+   Q_DECLARE_PRIVATE(QPlatformEventLoopIntegration);
+ public:
+   QPlatformEventLoopIntegration();
+   virtual ~QPlatformEventLoopIntegration();
 
-    virtual void startEventLoop() = 0;
-    virtual void quitEventLoop() = 0;
-    virtual void qtNeedsToProcessEvents() = 0;
+   virtual void startEventLoop() = 0;
+   virtual void quitEventLoop() = 0;
+   virtual void qtNeedsToProcessEvents() = 0;
 
-    qint64 nextTimerEvent() const;
-    void setNextTimerEvent(qint64 nextTimerEvent);
+   qint64 nextTimerEvent() const;
+   void setNextTimerEvent(qint64 nextTimerEvent);
 
-    static void processEvents();
+   static void processEvents();
 
-protected:
-    QScopedPointer<QPlatformEventLoopIntegrationPrivate> d_ptr;
+ protected:
+   QScopedPointer<QPlatformEventLoopIntegrationPrivate> d_ptr;
 
-private:
-    Q_DISABLE_COPY(QPlatformEventLoopIntegration);
-    friend class QEventDispatcherQPA;
+ private:
+   Q_DISABLE_COPY(QPlatformEventLoopIntegration);
+   friend class QEventDispatcherQPA;
 };
 
 QT_END_NAMESPACE

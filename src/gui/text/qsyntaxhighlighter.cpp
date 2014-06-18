@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,188 +40,198 @@ QT_BEGIN_NAMESPACE
 
 class QSyntaxHighlighterPrivate
 {
-    Q_DECLARE_PUBLIC(QSyntaxHighlighter)
+   Q_DECLARE_PUBLIC(QSyntaxHighlighter)
 
-public:
-    inline QSyntaxHighlighterPrivate()
-        : rehighlightPending(false), inReformatBlocks(false)
-    {}
+ public:
+   inline QSyntaxHighlighterPrivate()
+      : rehighlightPending(false), inReformatBlocks(false) {
+   }
 
-    virtual ~QSyntaxHighlighterPrivate() {}
+   virtual ~QSyntaxHighlighterPrivate() {}
 
-    QPointer<QTextDocument> doc;
+   QPointer<QTextDocument> doc;
 
-    void _q_reformatBlocks(int from, int charsRemoved, int charsAdded);
-    void reformatBlocks(int from, int charsRemoved, int charsAdded);
-    void reformatBlock(const QTextBlock &block);
+   void _q_reformatBlocks(int from, int charsRemoved, int charsAdded);
+   void reformatBlocks(int from, int charsRemoved, int charsAdded);
+   void reformatBlock(const QTextBlock &block);
 
-    inline void rehighlight(QTextCursor &cursor, QTextCursor::MoveOperation operation) {
-        inReformatBlocks = true;
-        cursor.beginEditBlock();
-        int from = cursor.position();
-        cursor.movePosition(operation);
-        reformatBlocks(from, 0, cursor.position() - from);
-        cursor.endEditBlock();
-        inReformatBlocks = false;
-    }
+   inline void rehighlight(QTextCursor &cursor, QTextCursor::MoveOperation operation) {
+      inReformatBlocks = true;
+      cursor.beginEditBlock();
+      int from = cursor.position();
+      cursor.movePosition(operation);
+      reformatBlocks(from, 0, cursor.position() - from);
+      cursor.endEditBlock();
+      inReformatBlocks = false;
+   }
 
-    inline void _q_delayedRehighlight() {
-        if (!rehighlightPending)
-            return;
-        rehighlightPending = false;
-        q_func()->rehighlight();
-    }
+   inline void _q_delayedRehighlight() {
+      if (!rehighlightPending) {
+         return;
+      }
+      rehighlightPending = false;
+      q_func()->rehighlight();
+   }
 
-    void applyFormatChanges();
-    QVector<QTextCharFormat> formatChanges;
-    QTextBlock currentBlock;
-    bool rehighlightPending;
-    bool inReformatBlocks;
+   void applyFormatChanges();
+   QVector<QTextCharFormat> formatChanges;
+   QTextBlock currentBlock;
+   bool rehighlightPending;
+   bool inReformatBlocks;
 
-protected:
-	 QSyntaxHighlighter *q_ptr;
+ protected:
+   QSyntaxHighlighter *q_ptr;
 };
 
 void QSyntaxHighlighterPrivate::applyFormatChanges()
 {
-    bool formatsChanged = false;
+   bool formatsChanged = false;
 
-    QTextLayout *layout = currentBlock.layout();
+   QTextLayout *layout = currentBlock.layout();
 
-    QList<QTextLayout::FormatRange> ranges = layout->additionalFormats();
+   QList<QTextLayout::FormatRange> ranges = layout->additionalFormats();
 
-    const int preeditAreaStart = layout->preeditAreaPosition();
-    const int preeditAreaLength = layout->preeditAreaText().length();
+   const int preeditAreaStart = layout->preeditAreaPosition();
+   const int preeditAreaLength = layout->preeditAreaText().length();
 
-    if (preeditAreaLength != 0) {
-        QList<QTextLayout::FormatRange>::Iterator it = ranges.begin();
-        while (it != ranges.end()) {
-            if (it->start >= preeditAreaStart
-                && it->start + it->length <= preeditAreaStart + preeditAreaLength) {
-                ++it;
-            } else {
-                it = ranges.erase(it);
-                formatsChanged = true;
-            }
-        }
-    } else if (!ranges.isEmpty()) {
-        ranges.clear();
-        formatsChanged = true;
-    }
+   if (preeditAreaLength != 0) {
+      QList<QTextLayout::FormatRange>::Iterator it = ranges.begin();
+      while (it != ranges.end()) {
+         if (it->start >= preeditAreaStart
+               && it->start + it->length <= preeditAreaStart + preeditAreaLength) {
+            ++it;
+         } else {
+            it = ranges.erase(it);
+            formatsChanged = true;
+         }
+      }
+   } else if (!ranges.isEmpty()) {
+      ranges.clear();
+      formatsChanged = true;
+   }
 
-    QTextCharFormat emptyFormat;
+   QTextCharFormat emptyFormat;
 
-    QTextLayout::FormatRange r;
-    r.start = -1;
+   QTextLayout::FormatRange r;
+   r.start = -1;
 
-    int i = 0;
-    while (i < formatChanges.count()) {
+   int i = 0;
+   while (i < formatChanges.count()) {
 
-        while (i < formatChanges.count() && formatChanges.at(i) == emptyFormat)
-            ++i;
+      while (i < formatChanges.count() && formatChanges.at(i) == emptyFormat) {
+         ++i;
+      }
 
-        if (i >= formatChanges.count())
-            break;
+      if (i >= formatChanges.count()) {
+         break;
+      }
 
-        r.start = i;
-        r.format = formatChanges.at(i);
+      r.start = i;
+      r.format = formatChanges.at(i);
 
-        while (i < formatChanges.count() && formatChanges.at(i) == r.format)
-            ++i;
+      while (i < formatChanges.count() && formatChanges.at(i) == r.format) {
+         ++i;
+      }
 
-        if (i >= formatChanges.count())
-            break;
+      if (i >= formatChanges.count()) {
+         break;
+      }
 
-        r.length = i - r.start;
+      r.length = i - r.start;
 
-        if (preeditAreaLength != 0) {
-            if (r.start >= preeditAreaStart)
-                r.start += preeditAreaLength;
-            else if (r.start + r.length >= preeditAreaStart)
-                r.length += preeditAreaLength;
-        }
+      if (preeditAreaLength != 0) {
+         if (r.start >= preeditAreaStart) {
+            r.start += preeditAreaLength;
+         } else if (r.start + r.length >= preeditAreaStart) {
+            r.length += preeditAreaLength;
+         }
+      }
 
-        ranges << r;
-        formatsChanged = true;
-        r.start = -1;
-    }
+      ranges << r;
+      formatsChanged = true;
+      r.start = -1;
+   }
 
-    if (r.start != -1) {
-        r.length = formatChanges.count() - r.start;
+   if (r.start != -1) {
+      r.length = formatChanges.count() - r.start;
 
-        if (preeditAreaLength != 0) {
-            if (r.start >= preeditAreaStart)
-                r.start += preeditAreaLength;
-            else if (r.start + r.length >= preeditAreaStart)
-                r.length += preeditAreaLength;
-        }
+      if (preeditAreaLength != 0) {
+         if (r.start >= preeditAreaStart) {
+            r.start += preeditAreaLength;
+         } else if (r.start + r.length >= preeditAreaStart) {
+            r.length += preeditAreaLength;
+         }
+      }
 
-        ranges << r;
-        formatsChanged = true;
-    }
+      ranges << r;
+      formatsChanged = true;
+   }
 
-    if (formatsChanged) {
-        layout->setAdditionalFormats(ranges);
-        doc->markContentsDirty(currentBlock.position(), currentBlock.length());
-    }
+   if (formatsChanged) {
+      layout->setAdditionalFormats(ranges);
+      doc->markContentsDirty(currentBlock.position(), currentBlock.length());
+   }
 }
 
 void QSyntaxHighlighterPrivate::_q_reformatBlocks(int from, int charsRemoved, int charsAdded)
 {
-    if (!inReformatBlocks)
-        reformatBlocks(from, charsRemoved, charsAdded);
+   if (!inReformatBlocks) {
+      reformatBlocks(from, charsRemoved, charsAdded);
+   }
 }
 
 void QSyntaxHighlighterPrivate::reformatBlocks(int from, int charsRemoved, int charsAdded)
 {
-    rehighlightPending = false;
+   rehighlightPending = false;
 
-    QTextBlock block = doc->findBlock(from);
-    if (!block.isValid())
-        return;
+   QTextBlock block = doc->findBlock(from);
+   if (!block.isValid()) {
+      return;
+   }
 
-    int endPosition;
-    QTextBlock lastBlock = doc->findBlock(from + charsAdded + (charsRemoved > 0 ? 1 : 0));
-    if (lastBlock.isValid())
-        endPosition = lastBlock.position() + lastBlock.length();
-    else
-        endPosition = doc->docHandle()->length();
+   int endPosition;
+   QTextBlock lastBlock = doc->findBlock(from + charsAdded + (charsRemoved > 0 ? 1 : 0));
+   if (lastBlock.isValid()) {
+      endPosition = lastBlock.position() + lastBlock.length();
+   } else {
+      endPosition = doc->docHandle()->length();
+   }
 
-    bool forceHighlightOfNextBlock = false;
+   bool forceHighlightOfNextBlock = false;
 
-    while (block.isValid() && (block.position() < endPosition || forceHighlightOfNextBlock)) {
-        const int stateBeforeHighlight = block.userState();
+   while (block.isValid() && (block.position() < endPosition || forceHighlightOfNextBlock)) {
+      const int stateBeforeHighlight = block.userState();
 
-        reformatBlock(block);
+      reformatBlock(block);
 
-        forceHighlightOfNextBlock = (block.userState() != stateBeforeHighlight);
+      forceHighlightOfNextBlock = (block.userState() != stateBeforeHighlight);
 
-        block = block.next();
-    }
+      block = block.next();
+   }
 
-    formatChanges.clear();
+   formatChanges.clear();
 }
 
 void QSyntaxHighlighterPrivate::reformatBlock(const QTextBlock &block)
 {
-    Q_Q(QSyntaxHighlighter);
+   Q_Q(QSyntaxHighlighter);
 
-    Q_ASSERT_X(!currentBlock.isValid(), "QSyntaxHighlighter::reformatBlock()", "reFormatBlock() called recursively");
+   Q_ASSERT_X(!currentBlock.isValid(), "QSyntaxHighlighter::reformatBlock()", "reFormatBlock() called recursively");
 
-    currentBlock = block;
+   currentBlock = block;
 
-    formatChanges.fill(QTextCharFormat(), block.length() - 1);
-    q->highlightBlock(block.text());
-    applyFormatChanges();
+   formatChanges.fill(QTextCharFormat(), block.length() - 1);
+   q->highlightBlock(block.text());
+   applyFormatChanges();
 
-    currentBlock = QTextBlock();
+   currentBlock = QTextBlock();
 }
 
 /*!
     Constructs a QSyntaxHighlighter with the given \a parent.
 */
 QSyntaxHighlighter::QSyntaxHighlighter(QObject *parent)
-   : QObject(parent), d_ptr(new QSyntaxHighlighterPrivate)  
+   : QObject(parent), d_ptr(new QSyntaxHighlighterPrivate)
 {
    d_ptr->q_ptr = this;
 }
@@ -232,10 +242,10 @@ QSyntaxHighlighter::QSyntaxHighlighter(QObject *parent)
     QSyntaxHighlighter.
 */
 QSyntaxHighlighter::QSyntaxHighlighter(QTextDocument *parent)
-  : QObject(parent), d_ptr(new QSyntaxHighlighterPrivate)  
+   : QObject(parent), d_ptr(new QSyntaxHighlighterPrivate)
 {
-    d_ptr->q_ptr = this;
-    setDocument(parent);
+   d_ptr->q_ptr = this;
+   setDocument(parent);
 }
 
 /*!
@@ -244,10 +254,10 @@ QSyntaxHighlighter::QSyntaxHighlighter(QTextDocument *parent)
     the QSyntaxHighlighter.
 */
 QSyntaxHighlighter::QSyntaxHighlighter(QTextEdit *parent)
-   : QObject(parent), d_ptr(new QSyntaxHighlighterPrivate)   
+   : QObject(parent), d_ptr(new QSyntaxHighlighterPrivate)
 {
-    d_ptr->q_ptr = this;
-    setDocument(parent->document());
+   d_ptr->q_ptr = this;
+   setDocument(parent->document());
 }
 
 /*!
@@ -255,7 +265,7 @@ QSyntaxHighlighter::QSyntaxHighlighter(QTextEdit *parent)
 */
 QSyntaxHighlighter::~QSyntaxHighlighter()
 {
-    setDocument(0);
+   setDocument(0);
 }
 
 /*!
@@ -264,23 +274,24 @@ QSyntaxHighlighter::~QSyntaxHighlighter()
 */
 void QSyntaxHighlighter::setDocument(QTextDocument *doc)
 {
-    Q_D(QSyntaxHighlighter);
-    if (d->doc) {
-        disconnect(d->doc, SIGNAL(contentsChange(int,int,int)),this, SLOT(_q_reformatBlocks(int,int,int)));
+   Q_D(QSyntaxHighlighter);
+   if (d->doc) {
+      disconnect(d->doc, SIGNAL(contentsChange(int, int, int)), this, SLOT(_q_reformatBlocks(int, int, int)));
 
-        QTextCursor cursor(d->doc);
-        cursor.beginEditBlock();
-        for (QTextBlock blk = d->doc->begin(); blk.isValid(); blk = blk.next())
-            blk.layout()->clearAdditionalFormats();
-        cursor.endEditBlock();
-    }
-    d->doc = doc;
-    if (d->doc) {
-        connect(d->doc, SIGNAL(contentsChange(int,int,int)),
-                this, SLOT(_q_reformatBlocks(int,int,int)));
-        d->rehighlightPending = true;
-        QTimer::singleShot(0, this, SLOT(_q_delayedRehighlight()));
-    }
+      QTextCursor cursor(d->doc);
+      cursor.beginEditBlock();
+      for (QTextBlock blk = d->doc->begin(); blk.isValid(); blk = blk.next()) {
+         blk.layout()->clearAdditionalFormats();
+      }
+      cursor.endEditBlock();
+   }
+   d->doc = doc;
+   if (d->doc) {
+      connect(d->doc, SIGNAL(contentsChange(int, int, int)),
+              this, SLOT(_q_reformatBlocks(int, int, int)));
+      d->rehighlightPending = true;
+      QTimer::singleShot(0, this, SLOT(_q_delayedRehighlight()));
+   }
 }
 
 /*!
@@ -289,8 +300,8 @@ void QSyntaxHighlighter::setDocument(QTextDocument *doc)
 */
 QTextDocument *QSyntaxHighlighter::document() const
 {
-    Q_D(const QSyntaxHighlighter);
-    return d->doc;
+   Q_D(const QSyntaxHighlighter);
+   return d->doc;
 }
 
 /*!
@@ -302,34 +313,37 @@ QTextDocument *QSyntaxHighlighter::document() const
 */
 void QSyntaxHighlighter::rehighlight()
 {
-    Q_D(QSyntaxHighlighter);
-    if (!d->doc)
-        return;
+   Q_D(QSyntaxHighlighter);
+   if (!d->doc) {
+      return;
+   }
 
-    QTextCursor cursor(d->doc);
-    d->rehighlight(cursor, QTextCursor::End);
+   QTextCursor cursor(d->doc);
+   d->rehighlight(cursor, QTextCursor::End);
 }
 
 /*!
     \since 4.6
 
     Reapplies the highlighting to the given QTextBlock \a block.
-    
+
     \sa rehighlight()
 */
 void QSyntaxHighlighter::rehighlightBlock(const QTextBlock &block)
 {
-    Q_D(QSyntaxHighlighter);
-    if (!d->doc || !block.isValid() || block.document() != d->doc)
-        return;
+   Q_D(QSyntaxHighlighter);
+   if (!d->doc || !block.isValid() || block.document() != d->doc) {
+      return;
+   }
 
-    const bool rehighlightPending = d->rehighlightPending;
+   const bool rehighlightPending = d->rehighlightPending;
 
-    QTextCursor cursor(block);
-    d->rehighlight(cursor, QTextCursor::EndOfBlock);
+   QTextCursor cursor(block);
+   d->rehighlight(cursor, QTextCursor::EndOfBlock);
 
-    if (rehighlightPending)
-        d->rehighlightPending = rehighlightPending;
+   if (rehighlightPending) {
+      d->rehighlightPending = rehighlightPending;
+   }
 }
 
 /*!
@@ -393,13 +407,15 @@ void QSyntaxHighlighter::rehighlightBlock(const QTextBlock &block)
 */
 void QSyntaxHighlighter::setFormat(int start, int count, const QTextCharFormat &format)
 {
-    Q_D(QSyntaxHighlighter);
-    if (start < 0 || start >= d->formatChanges.count())
-        return;
+   Q_D(QSyntaxHighlighter);
+   if (start < 0 || start >= d->formatChanges.count()) {
+      return;
+   }
 
-    const int end = qMin(start + count, d->formatChanges.count());
-    for (int i = start; i < end; ++i)
-        d->formatChanges[i] = format;
+   const int end = qMin(start + count, d->formatChanges.count());
+   for (int i = start; i < end; ++i) {
+      d->formatChanges[i] = format;
+   }
 }
 
 /*!
@@ -415,9 +431,9 @@ void QSyntaxHighlighter::setFormat(int start, int count, const QTextCharFormat &
 */
 void QSyntaxHighlighter::setFormat(int start, int count, const QColor &color)
 {
-    QTextCharFormat format;
-    format.setForeground(color);
-    setFormat(start, count, format);
+   QTextCharFormat format;
+   format.setForeground(color);
+   setFormat(start, count, format);
 }
 
 /*!
@@ -433,9 +449,9 @@ void QSyntaxHighlighter::setFormat(int start, int count, const QColor &color)
 */
 void QSyntaxHighlighter::setFormat(int start, int count, const QFont &font)
 {
-    QTextCharFormat format;
-    format.setFont(font);
-    setFormat(start, count, format);
+   QTextCharFormat format;
+   format.setFont(font);
+   setFormat(start, count, format);
 }
 
 /*!
@@ -446,10 +462,11 @@ void QSyntaxHighlighter::setFormat(int start, int count, const QFont &font)
 */
 QTextCharFormat QSyntaxHighlighter::format(int pos) const
 {
-    Q_D(const QSyntaxHighlighter);
-    if (pos < 0 || pos >= d->formatChanges.count())
-        return QTextCharFormat();
-    return d->formatChanges.at(pos);
+   Q_D(const QSyntaxHighlighter);
+   if (pos < 0 || pos >= d->formatChanges.count()) {
+      return QTextCharFormat();
+   }
+   return d->formatChanges.at(pos);
 }
 
 /*!
@@ -461,15 +478,17 @@ QTextCharFormat QSyntaxHighlighter::format(int pos) const
 */
 int QSyntaxHighlighter::previousBlockState() const
 {
-    Q_D(const QSyntaxHighlighter);
-    if (!d->currentBlock.isValid())
-        return -1;
+   Q_D(const QSyntaxHighlighter);
+   if (!d->currentBlock.isValid()) {
+      return -1;
+   }
 
-    const QTextBlock previous = d->currentBlock.previous();
-    if (!previous.isValid())
-        return -1;
+   const QTextBlock previous = d->currentBlock.previous();
+   if (!previous.isValid()) {
+      return -1;
+   }
 
-    return previous.userState();
+   return previous.userState();
 }
 
 /*!
@@ -478,11 +497,12 @@ int QSyntaxHighlighter::previousBlockState() const
 */
 int QSyntaxHighlighter::currentBlockState() const
 {
-    Q_D(const QSyntaxHighlighter);
-    if (!d->currentBlock.isValid())
-        return -1;
+   Q_D(const QSyntaxHighlighter);
+   if (!d->currentBlock.isValid()) {
+      return -1;
+   }
 
-    return d->currentBlock.userState();
+   return d->currentBlock.userState();
 }
 
 /*!
@@ -492,11 +512,12 @@ int QSyntaxHighlighter::currentBlockState() const
 */
 void QSyntaxHighlighter::setCurrentBlockState(int newState)
 {
-    Q_D(QSyntaxHighlighter);
-    if (!d->currentBlock.isValid())
-        return;
+   Q_D(QSyntaxHighlighter);
+   if (!d->currentBlock.isValid()) {
+      return;
+   }
 
-    d->currentBlock.setUserState(newState);
+   d->currentBlock.setUserState(newState);
 }
 
 /*!
@@ -535,11 +556,12 @@ void QSyntaxHighlighter::setCurrentBlockState(int newState)
 */
 void QSyntaxHighlighter::setCurrentBlockUserData(QTextBlockUserData *data)
 {
-    Q_D(QSyntaxHighlighter);
-    if (!d->currentBlock.isValid())
-        return;
+   Q_D(QSyntaxHighlighter);
+   if (!d->currentBlock.isValid()) {
+      return;
+   }
 
-    d->currentBlock.setUserData(data);
+   d->currentBlock.setUserData(data);
 }
 
 /*!
@@ -550,11 +572,12 @@ void QSyntaxHighlighter::setCurrentBlockUserData(QTextBlockUserData *data)
 */
 QTextBlockUserData *QSyntaxHighlighter::currentBlockUserData() const
 {
-    Q_D(const QSyntaxHighlighter);
-    if (!d->currentBlock.isValid())
-        return 0;
+   Q_D(const QSyntaxHighlighter);
+   if (!d->currentBlock.isValid()) {
+      return 0;
+   }
 
-    return d->currentBlock.userData();
+   return d->currentBlock.userData();
 }
 
 /*!
@@ -564,20 +587,20 @@ QTextBlockUserData *QSyntaxHighlighter::currentBlockUserData() const
 */
 QTextBlock QSyntaxHighlighter::currentBlock() const
 {
-    Q_D(const QSyntaxHighlighter);
-    return d->currentBlock;
+   Q_D(const QSyntaxHighlighter);
+   return d->currentBlock;
 }
 
-void QSyntaxHighlighter::_q_reformatBlocks(int from,int charsRemoved,int charsAdded)
+void QSyntaxHighlighter::_q_reformatBlocks(int from, int charsRemoved, int charsAdded)
 {
-	Q_D(QSyntaxHighlighter);
-	d->_q_reformatBlocks(from, charsRemoved, charsAdded);
+   Q_D(QSyntaxHighlighter);
+   d->_q_reformatBlocks(from, charsRemoved, charsAdded);
 }
 
 void QSyntaxHighlighter::_q_delayedRehighlight()
 {
-	Q_D(QSyntaxHighlighter);
-	d->_q_delayedRehighlight();
+   Q_D(QSyntaxHighlighter);
+   d->_q_delayedRehighlight();
 }
 
 QT_END_NAMESPACE
