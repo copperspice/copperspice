@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "private/qstroker_p.h"
-#include "private/qbezier_p.h"
-#include "private/qmath_p.h"
-#include "qline.h"
-#include "qtransform.h"
+#include <qstroker_p.h>
+#include <qbezier_p.h>
+#include <qmath_p.h>
+#include <qline.h>
+#include <qtransform.h>
 #include <qmath.h>
 
 QT_BEGIN_NAMESPACE

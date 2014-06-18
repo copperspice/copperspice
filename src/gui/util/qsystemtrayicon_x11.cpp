@@ -23,19 +23,19 @@
 *
 ***********************************************************************/
 
-#include "private/qt_x11_p.h"
-#include "qlabel.h"
-#include "qx11info_x11.h"
-#include "qpainter.h"
-#include "qpixmap.h"
-#include "qbitmap.h"
-#include "qevent.h"
-#include "qapplication.h"
-#include "qlist.h"
-#include "qmenu.h"
-#include "qtimer.h"
-#include "qsystemtrayicon_p.h"
-#include "qpaintengine.h"
+#include <qt_x11_p.h>
+#include <qlabel.h>
+#include <qx11info_x11.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qbitmap.h>
+#include <qevent.h>
+#include <qapplication.h>
+#include <qlist.h>
+#include <qmenu.h>
+#include <qtimer.h>
+#include <qsystemtrayicon_p.h>
+#include <qpaintengine.h>
 
 #ifndef QT_NO_SYSTEMTRAYICON
 QT_BEGIN_NAMESPACE

@@ -23,20 +23,20 @@
 *
 ***********************************************************************/
 
-#include "qevent.h"
-#include "qcursor.h"
-#include "qapplication.h"
-#include "private/qapplication_p.h"
-#include "private/qevent_p.h"
-#include "private/qkeysequence_p.h"
-#include "qwidget.h"
-#include "qgraphicsview.h"
-#include "qdebug.h"
-#include "qmime.h"
-#include "qdnd_p.h"
-#include "qevent_p.h"
-#include "qgesture.h"
-#include "qgesture_p.h"
+#include <qevent.h>
+#include <qcursor.h>
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qevent_p.h>
+#include <qkeysequence_p.h>
+#include <qwidget.h>
+#include <qgraphicsview.h>
+#include <qdebug.h>
+#include <qmime.h>
+#include <qdnd_p.h>
+#include <qevent_p.h>
+#include <qgesture.h>
+#include <qgesture_p.h>
 
 QT_BEGIN_NAMESPACE
 

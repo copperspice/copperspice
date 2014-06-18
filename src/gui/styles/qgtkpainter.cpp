@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qgtkpainter_p.h"
-
+#include <qgtkpainter_p.h>
 #include <QtCore/qglobal.h>
+
 #if !defined(QT_NO_STYLE_GTK)
 
 // This class is primarily a wrapper around the gtk painter functions
 // and takes care of converting all such calls into cached Qt pixmaps.
 
-#include <private/qstylehelper_p.h>
+#include <qstylehelper_p.h>
 #include <QtGui/QWidget>
 #include <QtGui/QStyleOption>
 #include <QtGui/QPixmapCache>

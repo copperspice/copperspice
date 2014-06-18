@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "private/qppmhandler_p.h"
+#include <qppmhandler_p.h>
 
 #ifndef QT_NO_IMAGEFORMAT_PPM
 
@@ -41,7 +41,7 @@ QT_BEGIN_NAMESPACE
 static int read_pbm_int(QIODevice *d)
 {
     char c;
-    int          val = -1;
+    int  val = -1;
     bool  digit;
     const int buflen = 100;
     char  buf[buflen];

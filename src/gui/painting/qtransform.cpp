@@ -22,18 +22,17 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qtransform.h"
 
-#include "qdatastream.h"
-#include "qdebug.h"
-#include "qmatrix.h"
-#include "qregion.h"
-#include "qpainterpath.h"
-#include "qvariant.h"
+#include <qtransform.h>
+#include <qdatastream.h>
+#include <qdebug.h>
+#include <qmatrix.h>
+#include <qregion.h>
+#include <qpainterpath.h>
+#include <qvariant.h>
 #include <qmath.h>
 #include <qnumeric.h>
-
-#include <private/qbezier_p.h>
+#include <qbezier_p.h>
 
 QT_BEGIN_NAMESPACE
 

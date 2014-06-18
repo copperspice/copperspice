@@ -27,8 +27,8 @@
 
 #ifndef QT_NO_STYLE_STYLESHEET
 
-#include "qstylesheetstyle_p.h"
-#include "private/qcssutil_p.h"
+#include <qstylesheetstyle_p.h>
+#include <qcssutil_p.h>
 #include <qdebug.h>
 #include <qapplication.h>
 #include <qmenu.h>
@@ -40,10 +40,10 @@
 #include <qcombobox.h>
 #include <qwindowsstyle.h>
 #include <qplastiquestyle.h>
-#include "private/qcssparser_p.h"
-#include "private/qmath_p.h"
+#include <qcssparser_p.h>
+#include <qmath_p.h>
 #include <qabstractscrollarea.h>
-#include "private/qabstractscrollarea_p.h"
+#include <qabstractscrollarea_p.h>
 #include <qtooltip.h>
 #include <qshareddata.h>
 #include <qradiobutton.h>
@@ -55,18 +55,17 @@
 #include <qstatusbar.h>
 #include <qheaderview.h>
 #include <qprogressbar.h>
-#include <private/qwindowsstyle_p.h>
+#include <qwindowsstyle_p.h>
 #include <qtabbar.h>
 #include <QMetaProperty>
 #include <qmainwindow.h>
 #include <qdockwidget.h>
 #include <qmdisubwindow.h>
 #include <qdialog.h>
-#include <private/qwidget_p.h>
+#include <qwidget_p.h>
 #include <QAbstractSpinBox>
 #include <QLabel>
-#include "qdrawutil.h"
-
+#include <qdrawutil.h>
 #include <limits.h>
 #include <QtGui/qtoolbar.h>
 

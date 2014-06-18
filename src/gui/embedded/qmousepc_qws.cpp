@@ -23,23 +23,23 @@
 *
 ***********************************************************************/
 
-#include "qmousepc_qws.h"
+#include <qmousepc_qws.h>
 
 #ifndef QT_NO_QWS_MOUSE_PC
 
-#include "qwindowsystem_qws.h"
-#include "qsocketnotifier.h"
-#include "qwsevent_qws.h"
-#include "qwscommand_qws_p.h"
-#include "qwsutils_qws.h"
+#include <qwindowsystem_qws.h>
+#include <qsocketnotifier.h>
+#include <qwsevent_qws.h>
+#include <qwscommand_qws_p.h>
+#include <qwsutils_qws.h>
 
-#include "qapplication.h"
-#include "qpolygon.h"
-#include "qtimer.h"
-#include "qfile.h"
-#include "qtextstream.h"
-#include "qstringlist.h"
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
+#include <qapplication.h>
+#include <qpolygon.h>
+#include <qtimer.h>
+#include <qfile.h>
+#include <qtextstream.h>
+#include <qstringlist.h>
+#include <qcore_unix_p.h> // overrides QT_OPEN
 
 #include <unistd.h>
 #include <stdlib.h>

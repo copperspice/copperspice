@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qunixsocket_p.h"
+#include <qunixsocket_p.h>
 
 // #define QUNIXSOCKET_DEBUG 1
 
 #include <QtCore/qsocketnotifier.h>
 #include <QtCore/qqueue.h>
 #include <QtCore/qdatetime.h>
-#include "private/qcore_unix_p.h" // overrides QT_OPEN
+#include <qcore_unix_p.h>          // overrides QT_OPEN
 
 #ifdef QUNIXSOCKET_DEBUG
 #include <QtCore/qdebug.h>

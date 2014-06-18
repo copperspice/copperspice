@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtableview.h"
+#include <qtableview.h>
 
 #ifndef QT_NO_TABLEVIEW
 #include <qheaderview.h>
@@ -36,7 +36,7 @@
 #include <qbitarray.h>
 #include <qscrollbar.h>
 #include <qabstractbutton.h>
-#include <private/qtableview_p.h>
+#include <qtableview_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>

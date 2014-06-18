@@ -23,12 +23,11 @@
 *
 ***********************************************************************/
 
-#include <private/qabstractpagesetupdialog_p.h>
+#include <qabstractpagesetupdialog_p.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
 QT_BEGIN_NAMESPACE
-
 
 // hack
 class QPageSetupDialogPrivate : public QAbstractPageSetupDialogPrivate

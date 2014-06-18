@@ -23,10 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qdrawhelper_arm_simd_p.h"
-
-#include <private/qpaintengine_raster_p.h>
-#include <private/qblendfunctions_p.h>
+#include <qdrawhelper_arm_simd_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qblendfunctions_p.h>
 
 #ifdef QT_HAVE_ARM_SIMD
 

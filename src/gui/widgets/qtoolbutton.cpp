@@ -24,6 +24,7 @@
 ***********************************************************************/
 
 #include "qtoolbutton.h"
+
 #ifndef QT_NO_TOOLBUTTON
 
 #include <qapplication.h>
@@ -41,23 +42,26 @@
 #include <qtoolbar.h>
 #include <qvariant.h>
 #include <qstylepainter.h>
-#include <private/qabstractbutton_p.h>
-#include <private/qaction_p.h>
-#include <private/qmenu_p.h>
+#include <qabstractbutton_p.h>
+#include <qaction_p.h>
+#include <qmenu_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QToolButtonPrivate : public QAbstractButtonPrivate
 {
     Q_DECLARE_PUBLIC(QToolButton)
+
 public:
     void init();
+
 #ifndef QT_NO_MENU
     void _q_buttonPressed();
     void popupTimerDone();
     void _q_updateButtonDown();
     void _q_menuTriggered(QAction *);
 #endif
+
     bool updateHoverControl(const QPoint &pos);
     void _q_actionTriggered();
     QStyle::SubControl newHoverControl(const QPoint &pos);

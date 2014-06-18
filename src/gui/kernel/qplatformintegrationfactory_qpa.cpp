@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qplatformintegrationfactory_qpa_p.h"
+#include <qplatformintegrationfactory_qpa_p.h>
 #include <QPlatformIntegrationPlugin>
-#include "private/qfactoryloader_p.h"
-#include "qmutex.h"
-
-#include "qapplication.h"
-#include "qdebug.h"
+#include <qfactoryloader_p.h>
+#include <qmutex.h>
+#include <qapplication.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

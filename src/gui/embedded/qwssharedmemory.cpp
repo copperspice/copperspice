@@ -23,22 +23,23 @@
 *
 ***********************************************************************/
 
-#include "qwssharedmemory_p.h"
+#include <qwssharedmemory_p.h>
 
 #if !defined(QT_NO_QWS_MULTIPROCESS)
 
 #include <sys/types.h>
 #include <sys/ipc.h>
+
 #ifndef QT_POSIX_IPC
 #include <sys/shm.h>
 #else
 #include <sys/mman.h>
 #include <sys/stat.h>
 #endif
+
 #include <fcntl.h>
 #include <unistd.h>
-
-#include <private/qcore_unix_p.h>
+#include <qcore_unix_p.h>
 
 //#define QT_SHM_DEBUG
 

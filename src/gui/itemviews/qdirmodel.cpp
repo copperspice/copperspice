@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qdirmodel.h"
+#include <qdirmodel.h>
 
 #ifndef QT_NO_DIRMODEL
 #include <qstack.h>
@@ -38,7 +38,7 @@
 #include <qlocale.h>
 #include <qstyle.h>
 #include <qapplication.h>
-#include <private/qabstractitemmodel_p.h>
+#include <qabstractitemmodel_p.h>
 #include <qdebug.h>
 
 /*!

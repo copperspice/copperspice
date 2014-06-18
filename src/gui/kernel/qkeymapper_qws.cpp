@@ -23,15 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qkeymapper_p.h"
+#include <qkeymapper_p.h>
 #include <qdebug.h>
-#include <private/qevent_p.h>
-#include <private/qlocale_p.h>
+#include <qevent_p.h>
+#include <qlocale_p.h>
 
 QT_BEGIN_NAMESPACE
 
 QT_USE_NAMESPACE
-
 
 QKeyMapperPrivate::QKeyMapperPrivate()
 {

@@ -39,7 +39,7 @@
 #include <qwindowsystem_qws.h>
 #include <qsocketnotifier.h>
 #include <qapplication.h>
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
+#include <qcore_unix_p.h> // overrides QT_OPEN
 
 QT_BEGIN_NAMESPACE
 

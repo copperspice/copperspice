@@ -37,26 +37,26 @@
 #include "qt_windows.h"
 #include "qwidget.h"
 #include "qwidget_p.h"
-#include "private/qbackingstore_p.h"
-#include "private/qwindowsurface_raster_p.h"
-
+#include "qbackingstore_p.h"
+#include "qwindowsurface_raster_p.h"
 #include "qscrollbar.h"
 #include "qabstractscrollarea.h"
-#include <private/qabstractscrollarea_p.h>
+#include <qabstractscrollarea_p.h>
 
 #include <qdebug.h>
 
-#include <private/qapplication_p.h>
-#include <private/qwininputcontext_p.h>
-#include <private/qpaintengine_raster_p.h>
-#include <private/qsystemlibrary_p.h>
+#include <qapplication_p.h>
+#include <qwininputcontext_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qsystemlibrary_p.h>
 
 typedef BOOL    (WINAPI *PtrSetLayeredWindowAttributes)(HWND hwnd, COLORREF crKey, BYTE bAlpha, DWORD dwFlags);
 static PtrSetLayeredWindowAttributes ptrSetLayeredWindowAttributes = 0;
 
 #ifndef QT_NO_DIRECTDRAW
 #include <ddraw.h>
-#include <private/qimage_p.h>
+#include <qimage_p.h>
+
 static IDirectDraw *qt_ddraw_object;
 static IDirectDrawSurface *qt_ddraw_primary;
 #endif

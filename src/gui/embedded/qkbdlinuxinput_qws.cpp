@@ -23,19 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qkbdlinuxinput_qws.h"
+#include <qkbdlinuxinput_qws.h>
 
 #ifndef QT_NO_QWS_KEYBOARD
 
 #include <QSocketNotifier>
 #include <QStringList>
-
 #include <qplatformdefs.h>
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
+#include <qcore_unix_p.h> // overrides QT_OPEN
 
 #include <errno.h>
 #include <termios.h>
-
 #include <linux/kd.h>
 #include <linux/input.h>
 

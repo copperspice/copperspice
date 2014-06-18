@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qtextbrowser.h"
-#include "qtextedit_p.h"
+#include <qtextbrowser.h>
+#include <qtextedit_p.h>
 
 #ifndef QT_NO_TEXTBROWSER
 
@@ -34,7 +34,7 @@
 #include <qdesktopwidget.h>
 #include <qdebug.h>
 #include <qabstracttextdocumentlayout.h>
-#include "private/qtextdocumentlayout_p.h"
+#include <qtextdocumentlayout_p.h>
 #include <qtextcodec.h>
 #include <qpainter.h>
 #include <qdir.h>

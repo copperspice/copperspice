@@ -23,175 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qitemselectionmodel.h"
-#include <private/qitemselectionmodel_p.h>
+#include <qitemselectionmodel.h>
+#include <qitemselectionmodel_p.h>
 #include <qdebug.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QItemSelectionRange
-
-    \brief The QItemSelectionRange class manages information about a
-    range of selected items in a model.
-
-    \ingroup model-view
-
-    A QItemSelectionRange contains information about a range of
-    selected items in a model. A range of items is a contiguous array
-    of model items, extending to cover a number of adjacent rows and
-    columns with a common parent item; this can be visualized as a
-    two-dimensional block of cells in a table. A selection range has a
-    top(), left() a bottom(), right() and a parent().
-
-    The QItemSelectionRange class is one of the \l{Model/View Classes}
-    and is part of Qt's \l{Model/View Programming}{model/view framework}.
-
-    The model items contained in the selection range can be obtained
-    using the indexes() function. Use QItemSelectionModel::selectedIndexes()
-    to get a list of all selected items for a view.
-
-    You can determine whether a given model item lies within a
-    particular range by using the contains() function. Ranges can also
-    be compared using the overloaded operators for equality and
-    inequality, and the intersects() function allows you to determine
-    whether two ranges overlap.
-
-    \sa {Model/View Programming}, QAbstractItemModel, QItemSelection,
-        QItemSelectionModel
-*/
-
-/*!
-    \fn QItemSelectionRange::QItemSelectionRange()
-
-    Constructs an empty selection range.
-*/
-
-/*!
-    \fn QItemSelectionRange::QItemSelectionRange(const QItemSelectionRange &other)
-
-    Copy constructor. Constructs a new selection range with the same contents
-    as the \a other range given.
-
-*/
-
-/*!
-    \fn QItemSelectionRange::QItemSelectionRange(const QModelIndex &topLeft, const QModelIndex &bottomRight)
-
-    Constructs a new selection range containing only the index specified
-    by the \a topLeft and the index \a bottomRight.
-
-*/
-
-/*!
-    \fn QItemSelectionRange::QItemSelectionRange(const QModelIndex &index)
-
-    Constructs a new selection range containing only the model item specified
-    by the model index \a index.
-*/
-
-/*!
-    \fn int QItemSelectionRange::top() const
-
-    Returns the row index corresponding to the uppermost selected row in the
-    selection range.
-
-*/
-
-/*!
-    \fn int QItemSelectionRange::left() const
-
-    Returns the column index corresponding to the leftmost selected column in the
-    selection range.
-*/
-
-/*!
-    \fn int QItemSelectionRange::bottom() const
-
-    Returns the row index corresponding to the lowermost selected row in the
-    selection range.
-
-*/
-
-/*!
-    \fn int QItemSelectionRange::right() const
-
-    Returns the column index corresponding to the rightmost selected column in
-    the selection range.
-
-*/
-
-/*!
-    \fn int QItemSelectionRange::width() const
-
-    Returns the number of selected columns in the selection range.
-
-*/
-
-/*!
-    \fn int QItemSelectionRange::height() const
-
-    Returns the number of selected rows in the selection range.
-
-*/
-
-/*!
-    \fn const QAbstractItemModel *QItemSelectionRange::model() const
-
-    Returns the model that the items in the selection range belong to.
-*/
-
-/*!
-    \fn QModelIndex QItemSelectionRange::topLeft() const
-
-    Returns the index for the item located at the top-left corner of
-    the selection range.
-
-    \sa top(), left(), bottomRight()
-*/
-
-/*!
-    \fn QModelIndex QItemSelectionRange::bottomRight() const
-
-    Returns the index for the item located at the bottom-right corner
-    of the selection range.
-
-    \sa bottom(), right(), topLeft()
-*/
-
-/*!
-    \fn QModelIndex QItemSelectionRange::parent() const
-
-    Returns the parent model item index of the items in the selection range.
-
-*/
-
-/*!
-    \fn bool QItemSelectionRange::contains(const QModelIndex &index) const
-
-    Returns true if the model item specified by the \a index lies within the
-    range of selected items; otherwise returns false.
-*/
-
-/*!
-    \fn bool QItemSelectionRange::contains(int row, int column,
-                                           const QModelIndex &parentIndex) const
-    \overload
-
-    Returns true if the model item specified by (\a row, \a column)
-    and with \a parentIndex as the parent item lies within the range
-    of selected items; otherwise returns false.
-*/
-
-/*!
-    \fn bool QItemSelectionRange::intersects(const QItemSelectionRange &other) const
-
-    Returns true if this selection range intersects (overlaps with) the \a other
-    range given; otherwise returns false.
-
-*/
 bool QItemSelectionRange::intersects(const QItemSelectionRange &other) const
 {
     return (isValid() && other.isValid()
@@ -202,21 +41,6 @@ bool QItemSelectionRange::intersects(const QItemSelectionRange &other) const
             && ((left() <= other.left() && right() >= other.left())
                 || (left() >= other.left() && left() <= other.right())));
 }
-
-/*!
-    \fn QItemSelectionRange QItemSelectionRange::intersect(const QItemSelectionRange &other) const
-    \obsolete
-
-    Use intersected(\a other) instead.
-*/
-
-/*!
-    \fn QItemSelectionRange QItemSelectionRange::intersected(const QItemSelectionRange &other) const
-    \since 4.2
-
-    Returns a new selection range containing only the items that are found in
-    both the selection range and the \a other selection range.
-*/
 
 QItemSelectionRange QItemSelectionRange::intersect(const QItemSelectionRange &other) const
 {
@@ -231,29 +55,6 @@ QItemSelectionRange QItemSelectionRange::intersect(const QItemSelectionRange &ot
     }
     return QItemSelectionRange();
 }
-
-/*!
-    \fn bool QItemSelectionRange::operator==(const QItemSelectionRange &other) const
-
-    Returns true if the selection range is exactly the same as the \a other
-    range given; otherwise returns false.
-
-*/
-
-/*!
-    \fn bool QItemSelectionRange::operator!=(const QItemSelectionRange &other) const
-
-    Returns true if the selection range differs from the \a other range given;
-    otherwise returns false.
-
-*/
-
-/*!
-    \fn bool QItemSelectionRange::isValid() const
-
-    Returns true if the selection range is valid; otherwise returns false.
-
-*/
 
 /*
   \internal

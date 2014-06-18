@@ -29,15 +29,13 @@
 #include <QtGui/qlayout.h>
 #include <QtGui/qdialog.h>
 #include <QtGui/qapplication.h>
-#include <QtGui/private/qwidget_p.h>
+#include <qwidget_p.h>
 #include <QtGui/qaction.h>
-
-#include "qdialogbuttonbox.h"
+#include <qdialogbuttonbox.h>
 
 #ifdef QT_SOFTKEYS_ENABLED
 #include <QtGui/qaction.h>
 #endif
-
 
 QT_BEGIN_NAMESPACE
 

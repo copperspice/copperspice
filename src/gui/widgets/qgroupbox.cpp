@@ -23,23 +23,25 @@
 *
 ***********************************************************************/
 
-#include "qgroupbox.h"
-#ifndef QT_NO_GROUPBOX
-#include "qapplication.h"
-#include "qbitmap.h"
-#include "qdrawutil.h"
-#include "qevent.h"
-#include "qlayout.h"
-#include "qradiobutton.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qstylepainter.h"
-#ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
-#endif
-#include <private/qwidget_p.h>
+#include <qgroupbox.h>
 
-#include "qdebug.h"
+#ifndef QT_NO_GROUPBOX
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qdrawutil.h>
+#include <qevent.h>
+#include <qlayout.h>
+#include <qradiobutton.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qstylepainter.h>
+
+#ifndef QT_NO_ACCESSIBILITY
+#include <qaccessible.h>
+#endif
+
+#include <qwidget_p.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

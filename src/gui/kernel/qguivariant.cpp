@@ -23,33 +23,32 @@
 *
 ***********************************************************************/
 
-#include "qvariant.h"
-#include "qbitmap.h"
-#include "qbrush.h"
-#include "qcolor.h"
-#include "qcursor.h"
-#include "qdatastream.h"
-#include "qdebug.h"
-#include "qfont.h"
-#include "qicon.h"
-#include "qimage.h"
-#include "qkeysequence.h"
-#include "qtransform.h"
-#include "qmatrix.h"
-#include "qpalette.h"
-#include "qpen.h"
-#include "qpixmap.h"
-#include "qpolygon.h"
-#include "qregion.h"
-#include "qsizepolicy.h"
-#include "qtextformat.h"
-#include "qmatrix4x4.h"
-#include "qvector2d.h"
-#include "qvector3d.h"
-#include "qvector4d.h"
-#include "qquaternion.h"
-
-#include "private/qvariant_p.h"
+#include <qvariant.h>
+#include <qbitmap.h>
+#include <qbrush.h>
+#include <qcolor.h>
+#include <qcursor.h>
+#include <qdatastream.h>
+#include <qdebug.h>
+#include <qfont.h>
+#include <qicon.h>
+#include <qimage.h>
+#include <qkeysequence.h>
+#include <qtransform.h>
+#include <qmatrix.h>
+#include <qpalette.h>
+#include <qpen.h>
+#include <qpixmap.h>
+#include <qpolygon.h>
+#include <qregion.h>
+#include <qsizepolicy.h>
+#include <qtextformat.h>
+#include <qmatrix4x4.h>
+#include <qvector2d.h>
+#include <qvector3d.h>
+#include <qvector4d.h>
+#include <qquaternion.h>
+#include <qvariant_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -24,6 +24,7 @@
 ***********************************************************************/
 
 #include "qworkspace.h"
+
 #ifndef QT_NO_WORKSPACE
 #include "qapplication.h"
 #include "qbitmap.h"
@@ -45,9 +46,9 @@
 #include "qelapsedtimer.h"
 #include "qtooltip.h"
 #include "qdebug.h"
-#include <private/qwidget_p.h>
-#include <private/qwidgetresizehandler_p.h>
-#include <private/qlayoutengine_p.h>
+#include <qwidget_p.h>
+#include <qwidgetresizehandler_p.h>
+#include <qlayoutengine_p.h>
 
 QT_BEGIN_NAMESPACE
 

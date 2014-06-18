@@ -23,17 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qdecoration_qws.h"
+#include <qdecoration_qws.h>
+#include <qapplication.h>
+#include <qdrawutil.h>
+#include <qpainter.h>
+#include <qregion.h>
+#include <qwhatsthis.h>
 
-#include "qapplication.h"
-#include "qdrawutil.h"
-#include "qpainter.h"
-#include "qregion.h"
-#include "qwhatsthis.h"
-
-#include "qmenu.h"
-#include "private/qwidget_p.h"
-#include "qwsmanager_qws.h"
+#include <qmenu.h>
+#include <qwidget_p.h>
+#include <qwsmanager_qws.h>
 
 QT_BEGIN_NAMESPACE
 

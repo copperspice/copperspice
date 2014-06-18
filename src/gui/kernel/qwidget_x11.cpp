@@ -40,14 +40,14 @@
 #include "qcolormap.h"
 #include "qdebug.h"
 #include "qmenu.h"
-#include "private/qmenu_p.h"
-#include "private/qbackingstore_p.h"
-#include "private/qwindowsurface_x11_p.h"
+#include "qmenu_p.h"
+#include "qbackingstore_p.h"
+#include "qwindowsurface_x11_p.h"
 
 //extern bool qt_sendSpontaneousEvent(QObject *, QEvent *); //qapplication_x11.cpp
 
-#include <private/qpixmap_x11_p.h>
-#include <private/qpaintengine_x11_p.h>
+#include <qpixmap_x11_p.h>
+#include <qpaintengine_x11_p.h>
 #include "qt_x11_p.h"
 #include "qx11info_x11.h"
 
@@ -56,9 +56,8 @@
 //#define ALIEN_DEBUG
 
 // defined in qapplication_x11.cpp
-//bool qt_wstate_iconified(WId);
-//void qt_updated_rootinfo();
-
+// bool qt_wstate_iconified(WId);
+// void qt_updated_rootinfo();
 
 #if !defined(QT_NO_IM)
 #include "qinputcontext.h"

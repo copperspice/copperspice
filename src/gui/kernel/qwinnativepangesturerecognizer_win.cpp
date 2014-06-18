@@ -23,16 +23,15 @@
 *
 ***********************************************************************/
 
-#include "private/qwinnativepangesturerecognizer_win_p.h"
+#include "qwinnativepangesturerecognizer_win_p.h"
 
 #include "qevent.h"
 #include "qgraphicsitem.h"
 #include "qgesture.h"
-
-#include "private/qgesture_p.h"
-#include "private/qevent_p.h"
-#include "private/qapplication_p.h"
-#include "private/qwidget_p.h"
+#include "qgesture_p.h"
+#include "qevent_p.h"
+#include "qapplication_p.h"
+#include "qwidget_p.h"
 
 #ifndef QT_NO_GESTURES
 

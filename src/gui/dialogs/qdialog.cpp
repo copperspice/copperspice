@@ -24,7 +24,6 @@
 ***********************************************************************/
 
 #include "qdialog.h"
-
 #include "qevent.h"
 #include "qdesktopwidget.h"
 #include "qpushbutton.h"
@@ -34,200 +33,24 @@
 #include "qwhatsthis.h"
 #include "qmenu.h"
 #include "qcursor.h"
-#include "private/qdialog_p.h"
+#include "qdialog_p.h"
 
 #ifndef QT_NO_ACCESSIBILITY
 #include "qaccessible.h"
 #endif
 
 #if defined(Q_WS_X11)
-#  include "../kernel/qt_x11_p.h"
+#include <qt_x11_p.h>
 #endif
 
 #ifndef SPI_GETSNAPTODEFBUTTON
-#   define SPI_GETSNAPTODEFBUTTON  95
+#define SPI_GETSNAPTODEFBUTTON  95
 #endif
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QDialog
-    \brief The QDialog class is the base class of dialog windows.
-
-    \ingroup dialog-classes
-    \ingroup abstractwidgets
-
-
-    A dialog window is a top-level window mostly used for short-term
-    tasks and brief communications with the user. QDialogs may be
-    modal or modeless. QDialogs can
-    provide a \link #return return
-    value\endlink, and they can have \link #default default
-    buttons\endlink. QDialogs can also have a QSizeGrip in their
-    lower-right corner, using setSizeGripEnabled().
-
-    Note that QDialog (an any other widget that has type Qt::Dialog) uses
-    the parent widget slightly differently from other classes in Qt. A
-    dialog is always a top-level widget, but if it has a parent, its
-    default location is centered on top of the parent's top-level widget
-    (if it is not top-level itself). It will also share the parent's
-    taskbar entry.
-
-    Use the overload of the QWidget::setParent() function to change
-    the ownership of a QDialog widget. This function allows you to
-    explicitly set the window flags of the reparented widget; using
-    the overloaded function will clear the window flags specifying the
-    window-system properties for the widget (in particular it will
-    reset the Qt::Dialog flag).
-
-    \section1 Modal Dialogs
-
-    A \bold{modal} dialog is a dialog that blocks input to other
-    visible windows in the same application. Dialogs that are used to
-    request a file name from the user or that are used to set
-    application preferences are usually modal. Dialogs can be
-    \l{Qt::ApplicationModal}{application modal} (the default) or
-    \l{Qt::WindowModal}{window modal}.
-
-    When an application modal dialog is opened, the user must finish
-    interacting with the dialog and close it before they can access
-    any other window in the application. Window modal dialogs only
-    block access to the window associated with the dialog, allowing
-    the user to continue to use other windows in an application.
-
-    The most common way to display a modal dialog is to call its
-    exec() function. When the user closes the dialog, exec() will
-    provide a useful \link #return return value\endlink. Typically,
-    to get the dialog to close and return the appropriate value, we
-    connect a default button, e.g. \gui OK, to the accept() slot and a
-    \gui Cancel button to the reject() slot.
-    Alternatively you can call the done() slot with \c Accepted or
-    \c Rejected.
-
-    An alternative is to call setModal(true) or setWindowModality(),
-    then show(). Unlike exec(), show() returns control to the caller
-    immediately. Calling setModal(true) is especially useful for
-    progress dialogs, where the user must have the ability to interact
-    with the dialog, e.g.  to cancel a long running operation. If you
-    use show() and setModal(true) together to perform a long operation,
-    you must call QApplication::processEvents() periodically during
-    processing to enable the user to interact with the dialog. (See
-    QProgressDialog.)
-
-    \section1 Modeless Dialogs
-
-    A \bold{modeless} dialog is a dialog that operates
-    independently of other windows in the same application. Find and
-    replace dialogs in word-processors are often modeless to allow the
-    user to interact with both the application's main window and with
-    the dialog.
-
-    Modeless dialogs are displayed using show(), which returns control
-    to the caller immediately.
-
-    If you invoke the \l{QWidget::show()}{show()} function after hiding
-    a dialog, the dialog will be displayed in its original position. This is
-    because the window manager decides the position for windows that
-    have not been explicitly placed by the programmer. To preserve the
-    position of a dialog that has been moved by the user, save its position
-    in your \l{QWidget::closeEvent()}{closeEvent()}  handler and then
-    move the dialog to that position, before showing it again.
-
-    \target default
-    \section1 Default Button
-
-    A dialog's \e default button is the button that's pressed when the
-    user presses Enter (Return). This button is used to signify that
-    the user accepts the dialog's settings and wants to close the
-    dialog. Use QPushButton::setDefault(), QPushButton::isDefault()
-    and QPushButton::autoDefault() to set and control the dialog's
-    default button.
-
-    \target escapekey
-    \section1 Escape Key
-
-    If the user presses the Esc key in a dialog, QDialog::reject()
-    will be called. This will cause the window to close: The \link
-    QCloseEvent close event \endlink cannot be \link
-    QCloseEvent::ignore() ignored \endlink.
-
-    \section1 Extensibility
-
-    Extensibility is the ability to show the dialog in two ways: a
-    partial dialog that shows the most commonly used options, and a
-    full dialog that shows all the options. Typically an extensible
-    dialog will initially appear as a partial dialog, but with a
-    \gui More toggle button. If the user presses the \gui More button down,
-    the dialog is expanded. The \l{Extension Example} shows how to achieve
-    extensible dialogs using Qt.
-
-    \target return
-    \section1 Return Value (Modal Dialogs)
-
-    Modal dialogs are often used in situations where a return value is
-    required, e.g. to indicate whether the user pressed \gui OK or
-    \gui Cancel. A dialog can be closed by calling the accept() or the
-    reject() slots, and exec() will return \c Accepted or \c Rejected
-    as appropriate. The exec() call returns the result of the dialog.
-    The result is also available from result() if the dialog has not
-    been destroyed.
-
-    In order to modify your dialog's close behavior, you can reimplement
-    the functions accept(), reject() or done(). The
-    \l{QWidget::closeEvent()}{closeEvent()} function should only be
-    reimplemented to preserve the dialog's position or to override the
-    standard close or reject behavior.
-
-    \target examples
-    \section1 Code Examples
-
-    A modal dialog:
-
-    \snippet doc/src/snippets/dialogs/dialogs.cpp 1
-
-    A modeless dialog:
-
-    \snippet doc/src/snippets/dialogs/dialogs.cpp 0
-
-    \sa QDialogButtonBox, QTabWidget, QWidget, QProgressDialog,
-        {fowler}{GUI Design Handbook: Dialogs, Standard}, {Extension Example},
-        {Standard Dialogs Example}
-*/
-
-/*! \enum QDialog::DialogCode
-
-    The value returned by a modal dialog.
-
-    \value Accepted
-    \value Rejected
-*/
-
-/*!
-  \property QDialog::sizeGripEnabled
-  \brief whether the size grip is enabled
-
-  A QSizeGrip is placed in the bottom-right corner of the dialog when this
-  property is enabled. By default, the size grip is disabled.
-*/
-
-
-/*!
-  Constructs a dialog with parent \a parent.
-
-  A dialog is always a top-level widget, but if it has a parent, its
-  default location is centered on top of the parent. It will also
-  share the parent's taskbar entry.
-
-  The widget flags \a f are passed on to the QWidget constructor.
-  If, for example, you don't want a What's This button in the title bar
-  of the dialog, pass Qt::WindowTitleHint | Qt::WindowSystemMenuHint in \a f.
-
-  \sa QWidget::setWindowFlags()
-*/
-
 QDialog::QDialog(QWidget *parent, Qt::WindowFlags f)
-    : QWidget(*new QDialogPrivate, parent,
-              f | ((f & Qt::WindowType_Mask) == 0 ? Qt::Dialog : Qt::WindowType(0)))
+    : QWidget(*new QDialogPrivate, parent, f | ((f & Qt::WindowType_Mask) == 0 ? Qt::Dialog : Qt::WindowType(0)))
 {
 }
 

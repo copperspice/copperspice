@@ -23,29 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qbasicmouseeventtransition_p.h"
+#include <qbasicmouseeventtransition_p.h>
 
 #ifndef QT_NO_STATEMACHINE
 
 #include <QtGui/qevent.h>
 #include <QtGui/qpainterpath.h>
 #include <qdebug.h>
-#include <private/qabstracttransition_p.h>
+#include <qabstracttransition_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-  \internal
-  \class QBasicMouseEventTransition
-  \since 4.6
-  \ingroup statemachine
-
-  \brief The QBasicMouseEventTransition class provides a transition for Qt mouse events.
-*/
 
 class QBasicMouseEventTransitionPrivate : public QAbstractTransitionPrivate
 {
     Q_DECLARE_PUBLIC(QBasicMouseEventTransition)
+
 public:
     QBasicMouseEventTransitionPrivate();
 

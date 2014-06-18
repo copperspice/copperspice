@@ -28,11 +28,11 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QWidget>
 
-#include "private/qt_x11_p.h"
-#include "private/qpixmap_x11_p.h"
-#include "private/qwidget_p.h"
-#include "qx11info_x11.h"
-#include "qwindowsurface_x11_p.h"
+#include <qt_x11_p.h>
+#include <qpixmap_x11_p.h>
+#include <qwidget_p.h>
+#include <qx11info_x11.h>
+#include <qwindowsurface_x11_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -42,6 +42,7 @@ struct QX11WindowSurfacePrivate
 {
     QWidget *widget;
     QPixmap device;
+
 #ifndef QT_NO_XRENDER
     bool translucentBackground;
 #endif

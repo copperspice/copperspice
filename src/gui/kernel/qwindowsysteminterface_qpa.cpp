@@ -22,21 +22,18 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qwindowsysteminterface_qpa.h"
-#include "qwindowsysteminterface_qpa_p.h"
-#include "qapplication_p.h"
+
+#include <qwindowsysteminterface_qpa.h>
+#include <qwindowsysteminterface_qpa_p.h>
+#include <qapplication_p.h>
 #include <QAbstractEventDispatcher>
-#include <private/qlocale_p.h>
+#include <qlocale_p.h>
 
 QT_BEGIN_NAMESPACE
 
-
 QTime QWindowSystemInterfacePrivate::eventTime;
 
-//------------------------------------------------------------
-//
 // Callback functions for plugins:
-//
 
 QList<QWindowSystemInterfacePrivate::WindowSystemEvent *> QWindowSystemInterfacePrivate::windowSystemEventQueue;
 QMutex QWindowSystemInterfacePrivate::queueMutex;

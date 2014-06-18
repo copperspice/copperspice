@@ -38,35 +38,34 @@
 #  define VDEBUG if (false) qDebug
 #endif
 
-#include "qplatformdefs.h"
-
-#include "qclipboard.h"
-#include "qclipboard_p.h"
+#include <qplatformdefs.h>
+#include <qclipboard.h>
+#include <qclipboard_p.h>
 
 #ifndef QT_NO_CLIPBOARD
 
-#include "qabstracteventdispatcher.h"
-#include "qapplication.h"
-#include "qdesktopwidget.h"
-#include "qbitmap.h"
-#include "qiodevice.h"
-#include "qbuffer.h"
-#include "qtextcodec.h"
-#include "qlist.h"
-#include "qmap.h"
-#include "qapplication_p.h"
-#include "qevent.h"
-#include "qt_x11_p.h"
-#include "qx11info_x11.h"
-#include "qimagewriter.h"
-#include "qelapsedtimer.h"
-#include "qvariant.h"
-#include "qdnd_p.h"
-#include <private/qwidget_p.h>
+#include <qabstracteventdispatcher.h>
+#include <qapplication.h>
+#include <qdesktopwidget.h>
+#include <qbitmap.h>
+#include <qiodevice.h>
+#include <qbuffer.h>
+#include <qtextcodec.h>
+#include <qlist.h>
+#include <qmap.h>
+#include <qapplication_p.h>
+#include <qevent.h>
+#include <qt_x11_p.h>
+#include <qx11info_x11.h>
+#include <qimagewriter.h>
+#include <qelapsedtimer.h>
+#include <qvariant.h>
+#include <qdnd_p.h>
+#include <qwidget_p.h>
 
 #ifndef QT_NO_XFIXES
 #include <X11/extensions/Xfixes.h>
-#endif // QT_NO_XFIXES
+#endif
 
 QT_BEGIN_NAMESPACE
 

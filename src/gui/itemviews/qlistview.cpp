@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qlistview.h"
+#include <qlistview.h>
 
 #ifndef QT_NO_LISTVIEW
 #include <qabstractitemdelegate.h>
@@ -35,126 +35,14 @@
 #include <qevent.h>
 #include <qscrollbar.h>
 #include <qrubberband.h>
-#include <private/qlistview_p.h>
+#include <qlistview_p.h>
 #include <qdebug.h>
+
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QListView
-
-    \brief The QListView class provides a list or icon view onto a model.
-
-    \ingroup model-view
-    \ingroup advanced
-
-
-    A QListView presents items stored in a model, either as a simple
-    non-hierarchical list, or as a collection of icons. This class is used
-    to provide lists and icon views that were previously provided by the
-    \c QListBox and \c QIconView classes, but using the more flexible
-    approach provided by Qt's model/view architecture.
-
-    The QListView class is one of the \l{Model/View Classes}
-    and is part of Qt's \l{Model/View Programming}{model/view framework}.
-
-    This view does not display horizontal or vertical headers; to display
-    a list of items with a horizontal header, use QTreeView instead.
-
-    QListView implements the interfaces defined by the
-    QAbstractItemView class to allow it to display data provided by
-    models derived from the QAbstractItemModel class.
-
-    Items in a list view can be displayed using one of two view modes:
-    In \l ListMode, the items are displayed in the form of a simple list;
-    in \l IconMode, the list view takes the form of an \e{icon view} in
-    which the items are displayed with icons like files in a file manager.
-    By default, the list view is in \l ListMode. To change the view mode,
-    use the setViewMode() function, and to determine the current view mode,
-    use viewMode().
-
-    Items in these views are laid out in the direction specified by the
-    flow() of the list view. The items may be fixed in place, or allowed
-    to move, depending on the view's movement() state.
-
-    If the items in the model cannot be completely laid out in the
-    direction of flow, they can be wrapped at the boundary of the view
-    widget; this depends on isWrapping(). This property is useful when the
-    items are being represented by an icon view.
-
-    The resizeMode() and layoutMode() govern how and when the items are
-    laid out. Items are spaced according to their spacing(), and can exist
-    within a notional grid of size specified by gridSize(). The items can
-    be rendered as large or small icons depending on their iconSize().
-
-    \table 100%
-    \row \o \inlineimage windowsxp-listview.png Screenshot of a Windows XP style list view
-         \o \inlineimage macintosh-listview.png Screenshot of a Macintosh style table view
-         \o \inlineimage plastique-listview.png Screenshot of a Plastique style table view
-    \row \o A \l{Windows XP Style Widget Gallery}{Windows XP style} list view.
-         \o A \l{Macintosh Style Widget Gallery}{Macintosh style} list view.
-         \o A \l{Plastique Style Widget Gallery}{Plastique style} list view.
-    \endtable
-
-    \section1 Improving Performance
-
-    It is possible to give the view hints about the data it is handling in order
-    to improve its performance when displaying large numbers of items. One approach
-    that can be taken for views that are intended to display items with equal sizes
-    is to set the \l uniformItemSizes property to true.
-
-    \sa {View Classes}, QTreeView, QTableView, QListWidget
-*/
-
-/*!
-    \enum QListView::ViewMode
-
-    \value ListMode The items are laid out using TopToBottom flow, with Small size and Static movement
-    \value IconMode The items are laid out using LeftToRight flow, with Large size and Free movement
-*/
-
-/*!
-  \enum QListView::Movement
-
-  \value Static The items cannot be moved by the user.
-  \value Free The items can be moved freely by the user.
-  \value Snap The items snap to the specified grid when moved; see
-  setGridSize().
-*/
-
-/*!
-  \enum QListView::Flow
-
-  \value LeftToRight The items are laid out in the view from the left
-  to the right.
-  \value TopToBottom The items are laid out in the view from the top
-  to the bottom.
-*/
-
-/*!
-  \enum QListView::ResizeMode
-
-  \value Fixed The items will only be laid out the first time the view is shown.
-  \value Adjust The items will be laid out every time the view is resized.
-*/
-
-/*!
-  \enum QListView::LayoutMode
-
-  \value SinglePass The items are laid out all at once.
-  \value Batched The items are laid out in batches of \l batchSize items.
-  \sa batchSize
-*/
-
-/*!
-  \since 4.2
-  \fn void QListView::indexesMoved(const QModelIndexList &indexes)
-
-  This signal is emitted when the specified \a indexes are moved in the view.
-*/
 
 /*!
     Creates a new QListView with the given \a parent to view a model.

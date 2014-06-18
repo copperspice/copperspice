@@ -31,8 +31,7 @@
 #include "qstyle.h"
 #include "qstyleoption.h"
 #include "qevent.h"
-
-#include "private/qabstractbutton_p.h"
+#include "qabstractbutton_p.h"
 
 QT_BEGIN_NAMESPACE
 

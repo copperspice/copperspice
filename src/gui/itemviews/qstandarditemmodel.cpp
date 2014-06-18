@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qstandarditemmodel.h"
+#include <qstandarditemmodel.h>
 
 #ifndef QT_NO_STANDARDITEMMODEL
 
@@ -36,8 +36,7 @@
 #include <QtCore/qstringlist.h>
 #include <QtCore/qbitarray.h>
 #include <QtCore/qmimedata.h>
-
-#include <private/qstandarditemmodel_p.h>
+#include <qstandarditemmodel_p.h>
 #include <qdebug.h>
 
 QT_BEGIN_NAMESPACE

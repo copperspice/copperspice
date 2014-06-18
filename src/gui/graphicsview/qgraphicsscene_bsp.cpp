@@ -28,7 +28,7 @@
 #ifndef QT_NO_GRAPHICSVIEW
 
 #include <QtCore/qstring.h>
-#include <private/qgraphicsitem_p.h>
+#include <qgraphicsitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

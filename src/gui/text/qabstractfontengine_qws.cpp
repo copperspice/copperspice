@@ -23,11 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qabstractfontengine_qws.h"
-#include "qabstractfontengine_p.h"
-
-#include <private/qtextengine_p.h>
-#include <private/qpaintengine_raster_p.h>
+#include <qabstractfontengine_qws.h>
+#include <qabstractfontengine_p.h>
+#include <qtextengine_p.h>
+#include <qpaintengine_raster_p.h>
 
 #include <qmath.h>
 

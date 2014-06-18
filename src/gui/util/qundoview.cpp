@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qundostack.h"
-#include "qundoview.h"
+#include <qundostack.h>
+#include <qundoview.h>
 
 #ifndef QT_NO_UNDOVIEW
 
-#include "qundogroup.h"
+#include <qundogroup.h>
 #include <QtCore/qabstractitemmodel.h>
 #include <QtCore/qpointer.h>
 #include <QtGui/qicon.h>
-#include <private/qlistview_p.h>
+#include <qlistview_p.h>
 
 QT_BEGIN_NAMESPACE
 

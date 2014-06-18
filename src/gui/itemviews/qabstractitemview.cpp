@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qabstractitemview.h"
+#include <qabstractitemview.h>
 
 #ifndef QT_NO_ITEMVIEWS
 #include <qpointer.h>
@@ -40,15 +40,15 @@
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qstyleditemdelegate.h>
-#include <private/qabstractitemview_p.h>
-#include <private/qabstractitemmodel_p.h>
+#include <qabstractitemview_p.h>
+#include <qabstractitemmodel_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #include <qaccessible2.h>
 #endif
 
-#include <private/qsoftkeymanager_p.h>
+#include <qsoftkeymanager_p.h>
 
 QT_BEGIN_NAMESPACE
 

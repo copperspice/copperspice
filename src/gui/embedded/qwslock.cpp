@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qwslock_p.h"
+#include <qwslock_p.h>
 
 #ifndef QT_NO_QWS_MULTIPROCESS
 
-#include "qwssignalhandler_p.h"
+#include <qwssignalhandler_p.h>
 
 #include <stdint.h>
 #include <stdio.h>
@@ -35,17 +35,20 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
+
 #ifndef QT_POSIX_IPC
 #include <sys/sem.h>
 #endif
+
 #include <sys/time.h>
 #include <time.h>
+
 #ifdef Q_OS_LINUX
 #include <linux/version.h>
 #endif
-#include <unistd.h>
 
-#include <private/qcore_unix_p.h>
+#include <unistd.h>
+#include <qcore_unix_p.h>
 
 QT_BEGIN_NAMESPACE
 

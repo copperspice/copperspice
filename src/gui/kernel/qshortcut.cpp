@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qshortcut.h"
-#include "private/qwidget_p.h"
+#include <qshortcut.h>
+#include <qwidget_p.h>
 
 #ifndef QT_NO_SHORTCUT
 #include <qevent.h>
 #include <qwhatsthis.h>
 #include <qmenu.h>
 #include <qapplication.h>
-#include <private/qapplication_p.h>
-#include <private/qshortcutmap_p.h>
+#include <qapplication_p.h>
+#include <qshortcutmap_p.h>
 
 QT_BEGIN_NAMESPACE
 

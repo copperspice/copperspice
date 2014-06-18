@@ -29,9 +29,9 @@
 
 #include "qgraphicslayout.h"
 #include "qgraphicsproxywidget.h"
-#include "private/qgraphicsproxywidget_p.h"
-#include "private/qwidget_p.h"
-#include "private/qapplication_p.h"
+#include "qgraphicsproxywidget_p.h"
+#include "qwidget_p.h"
+#include "qapplication_p.h"
 
 #include <QtCore/qdebug.h>
 #include <QtGui/qevent.h>

@@ -23,20 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qapplication.h"
-#include "qeventdispatcher_qpa_p.h"
-#include "private/qeventdispatcher_unix_p.h"
-#include "qapplication_p.h"
-#include "qplatformeventloopintegration_qpa.h"
-
+#include <qplatformdefs.h>
+#include <qapplication.h>
+#include <qeventdispatcher_qpa_p.h>
+#include <qeventdispatcher_unix_p.h>
+#include <qapplication_p.h>
+#include <qplatformeventloopintegration_qpa.h>
 #include <QWindowSystemInterface>
 #include <QtCore/QElapsedTimer>
 #include <QtCore/QAtomicInt>
 #include <QtCore/QSemaphore>
-
 #include <QtCore/QDebug>
-
 #include <errno.h>
 #include <limits.h>
 

@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qlock_p.h"
+#include <qlock_p.h>
 
 #ifdef QT_NO_QWS_MULTIPROCESS
 
@@ -69,11 +69,12 @@ QT_END_NAMESPACE
 #  define QT_NO_SEMAPHORE
 #endif
 
-#include "qwssignalhandler_p.h"
+#include <qwssignalhandler_p.h>
 
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
+
 #if defined(QT_NO_SEMAPHORE)
 #  include <sys/stat.h>
 #  include <sys/file.h>
@@ -82,10 +83,11 @@ QT_END_NAMESPACE
 #else
 #  include <semaphore.h>
 #endif
+
 #include <string.h>
 #include <errno.h>
 
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
+#include <qcore_unix_p.h> // overrides QT_OPEN
 
 QT_BEGIN_NAMESPACE
 

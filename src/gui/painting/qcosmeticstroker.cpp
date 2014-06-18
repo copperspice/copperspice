@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qcosmeticstroker_p.h"
-#include "private/qpainterpath_p.h"
+#include <qcosmeticstroker_p.h>
+#include <qpainterpath_p.h>
 #include <qdebug.h>
 #include <math.h>
 

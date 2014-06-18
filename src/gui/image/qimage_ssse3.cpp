@@ -24,8 +24,8 @@
 ***********************************************************************/
 
 #include <qimage.h>
-#include <private/qimage_p.h>
-#include <private/qsimd_p.h>
+#include <qimage_p.h>
+#include <qsimd_p.h>
 
 #ifdef QT_HAVE_SSSE3
 

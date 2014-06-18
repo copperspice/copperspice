@@ -24,9 +24,9 @@
 ***********************************************************************/
 
 #include <qplatformdefs.h>
-#include <private/qabstractspinbox_p.h>
-#include <private/qdatetime_p.h>
-#include <private/qlineedit_p.h>
+#include <qabstractspinbox_p.h>
+#include <qdatetime_p.h>
+#include <qlineedit_p.h>
 #include <qabstractspinbox.h>
 
 #ifndef QT_NO_SPINBOX
@@ -41,6 +41,7 @@
 #include <qpalette.h>
 #include <qstylepainter.h>
 #include <qdebug.h>
+
 #ifndef QT_NO_ACCESSIBILITY
 # include <qaccessible.h>
 #endif

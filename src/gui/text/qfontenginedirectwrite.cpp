@@ -25,12 +25,10 @@
 
 #ifndef QT_NO_DIRECTWRITE
 
-#include "qfontenginedirectwrite_p.h"
-
+#include <qfontenginedirectwrite_p.h>
 #include <qendian.h>
 #include <dwrite.h>
-#include <private/qnativeimage_p.h>
-
+#include <qnativeimage_p.h>
 #include <d2d1.h>
 
 QT_BEGIN_NAMESPACE

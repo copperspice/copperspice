@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qwindowsurface_qws_p.h"
+#include <qwindowsurface_qws_p.h>
 #include <qwidget.h>
 #include <qscreen_qws.h>
 #include <qwsmanager_qws.h>
@@ -32,12 +32,12 @@
 #include <qrgb.h>
 #include <qpaintengine.h>
 #include <qdesktopwidget.h>
-#include <private/qapplication_p.h>
-#include <private/qwsdisplay_qws_p.h>
-#include <private/qwidget_p.h>
-#include <private/qwsmanager_p.h>
-#include <private/qwslock_p.h>
-#include <private/qbackingstore_p.h>
+#include <qapplication_p.h>
+#include <qwsdisplay_qws_p.h>
+#include <qwidget_p.h>
+#include <qwsmanager_p.h>
+#include <qwslock_p.h>
+#include <qbackingstore_p.h>
 #include <stdio.h>
 
 QT_BEGIN_NAMESPACE

@@ -25,9 +25,8 @@
 
 #include "qdecorationfactory_qws.h"
 #include "qdecorationplugin_qws.h"
-#include "private/qfactoryloader_p.h"
+#include "qfactoryloader_p.h"
 #include "qmutex.h"
-
 #include "qapplication.h"
 #include "qdecorationdefault_qws.h"
 #include "qdecorationwindows_qws.h"
@@ -36,8 +35,7 @@
 QT_BEGIN_NAMESPACE
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QDecorationFactoryInterface_iid,
-     QLatin1String("/decorations"), Qt::CaseInsensitive))
+    (QDecorationFactoryInterface_iid, QLatin1String("/decorations"), Qt::CaseInsensitive))
 
 /*!
     \class QDecorationFactory

@@ -23,45 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qmouseeventtransition.h"
+#include <qmouseeventtransition.h>
 
 #ifndef QT_NO_STATEMACHINE
 
-#include "qbasicmouseeventtransition_p.h"
+#include <qbasicmouseeventtransition_p.h>
 #include <QtCore/qstatemachine.h>
 #include <QtGui/qpainterpath.h>
-#include <private/qeventtransition_p.h>
+#include <qeventtransition_p.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-  \class QMouseEventTransition
-
-  \brief The QMouseEventTransition class provides a transition for mouse events.
-
-  \since 4.6
-  \ingroup statemachine
-
-  QMouseEventTransition is part of \l{The State Machine Framework}.
-
-  \sa QState::addTransition()
-*/
-
-/*!
-    \property QMouseEventTransition::button
-
-    \brief the button that this mouse event transition is associated with
-*/
-
-/*!
-    \property QMouseEventTransition::modifierMask
-
-    \brief the keyboard modifier mask that this mouse event transition checks for
-*/
 
 class QMouseEventTransitionPrivate : public QEventTransitionPrivate
 {
     Q_DECLARE_PUBLIC(QMouseEventTransition)
+
 public:
     QMouseEventTransitionPrivate();
 

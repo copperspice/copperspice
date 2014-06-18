@@ -22,19 +22,20 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qplatformdefs.h"
+
+#include <qplatformdefs.h>
 #include <qdebug.h>
-#include "qpdf_p.h"
+#include <qpdf_p.h>
 #include <qfile.h>
 #include <qtemporaryfile.h>
-#include <private/qmath_p.h>
-#include "private/qcups_p.h"
-#include "qprinterinfo.h"
+#include <qmath_p.h>
+#include <qcups_p.h>
+#include <qprinterinfo.h>
 #include <qnumeric.h>
-#include "private/qfont_p.h"
+#include <qfont_p.h>
 
 #ifdef Q_OS_UNIX
-#include "private/qcore_unix_p.h" // overrides QT_OPEN
+#include <qcore_unix_p.h>       // overrides QT_OPE
 #endif
 
 QT_BEGIN_NAMESPACE

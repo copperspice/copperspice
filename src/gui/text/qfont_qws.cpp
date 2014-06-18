@@ -23,21 +23,24 @@
 *
 ***********************************************************************/
 
-#include "qwidget.h"
-#include "qpainter.h"
-#include "qfont_p.h"
-#include <private/qunicodetables_p.h>
-#include "qfontdatabase.h"
-#include "qtextcodec.h"
-#include "qapplication.h"
-#include "qfile.h"
-#include "qtextstream.h"
-#include "qmap.h"
-//#include "qmemorymanager_qws.h"
-#include "qtextengine_p.h"
-#include "qfontengine_p.h"
+#include <qwidget.h>
+#include <qpainter.h>
+#include <qfont_p.h>
+#include <qunicodetables_p.h>
+#include <qfontdatabase.h>
+#include <qtextcodec.h>
+#include <qapplication.h>
+#include <qfile.h>
+#include <qtextstream.h>
+#include <qmap.h>
+
+// #include <qmemorymanager_qws.h>
+
+#include <qtextengine_p.h>
+#include <qfontengine_p.h>
+
 #if !defined(QT_NO_FREETYPE)
-#include "qfontengine_ft_p.h"
+#include <qfontengine_ft_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE

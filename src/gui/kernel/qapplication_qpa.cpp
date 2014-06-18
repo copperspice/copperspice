@@ -26,16 +26,19 @@
 #include "qapplication_p.h"
 #include "qcolormap.h"
 #include "qpixmapcache.h"
+
 #if !defined(QT_NO_GLIB)
 #include "qeventdispatcher_glib_qpa_p.h"
 #endif
+
 #include "qeventdispatcher_qpa_p.h"
+
 #ifndef QT_NO_CURSOR
-#include "private/qcursor_p.h"
+#include "qcursor_p.h"
 #endif
 
-#include "private/qwidget_p.h"
-#include "private/qevent_p.h"
+#include "qwidget_p.h"
+#include "qevent_p.h"
 
 #include "qgenericpluginfactory_qpa.h"
 #include "qplatformintegrationfactory_qpa_p.h"
@@ -47,7 +50,6 @@
 #include <QWindowSystemInterface>
 #include "qwindowsysteminterface_qpa_p.h"
 #include <QPlatformIntegration>
-
 #include "qdesktopwidget_qpa_p.h"
 
 QT_BEGIN_NAMESPACE

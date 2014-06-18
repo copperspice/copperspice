@@ -24,20 +24,20 @@
 ***********************************************************************/
 
 #include <qdir.h>
-#include "qfontdatabase.h"
-#include "qdebug.h"
-#include "qalgorithms.h"
-#include "qapplication.h"
-#include "qvarlengtharray.h" // here or earlier - workaround for VC++6
-#include "qthread.h"
-#include "qmutex.h"
-#include "private/qunicodetables_p.h"
-#include "qfontengine_p.h"
+#include <qfontdatabase.h>
+#include <qdebug.h>
+#include <qalgorithms.h>
+#include <qapplication.h>
+#include <qvarlengtharray.h>       // here or earlier - workaround for VC++6
+#include <qthread.h>
+#include <qmutex.h>
+#include <qunicodetables_p.h>
+#include <qfontengine_p.h>
 
 #ifdef Q_WS_QPA
-#include <QtGui/private/qapplication_p.h>
+#include <qapplication_p.h>
 #include <QtGui/qplatformfontdatabase_qpa.h>
-#include "qabstractfileengine.h"
+#include <qabstractfileengine.h>
 #endif
 
 #ifdef Q_WS_X11

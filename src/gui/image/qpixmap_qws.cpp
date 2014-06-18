@@ -29,9 +29,8 @@
 #include <qdesktopwidget.h>
 #include <qscreen_qws.h>
 #include <qwsdisplay_qws.h>
-#include <private/qdrawhelper_p.h>
-#include <private/qpixmap_raster_p.h>
-
+#include <qdrawhelper_p.h>
+#include <qpixmap_raster_p.h>
 
 QT_BEGIN_NAMESPACE
 

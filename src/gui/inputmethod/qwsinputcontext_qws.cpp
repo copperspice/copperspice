@@ -23,17 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qwsinputcontext_p.h"
-#include "qinputcontext_p.h"
-#include "qwsdisplay_qws.h"
-#include "qwsevent_qws.h"
-#include "private/qwscommand_qws_p.h"
-#include "qwindowsystem_qws.h"
-#include "qevent.h"
-#include "qtextformat.h"
-
+#include <qwsinputcontext_p.h>
+#include <qinputcontext_p.h>
+#include <qwsdisplay_qws.h>
+#include <qwsevent_qws.h>
+#include <qwscommand_qws_p.h>
+#include <qwindowsystem_qws.h>
+#include <qevent.h>
+#include <qtextformat.h>
 #include <qbuffer.h>
-
 #include <qdebug.h>
 
 #ifndef QT_NO_QWS_INPUTMETHODS

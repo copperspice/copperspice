@@ -25,20 +25,19 @@
 
 #ifndef QT_NO_PRINTER
 
-#include "qprinter_p.h"
-#include "qprintengine_win_p.h"
+#include <qprinter_p.h>
+#include <qprintengine_win_p.h>
 
 #include <limits.h>
 
-#include <private/qfont_p.h>
-#include <private/qfontengine_p.h>
-#include <private/qpainter_p.h>
-
+#include <qfont_p.h>
+#include <qfontengine_p.h>
+#include <qpainter_p.h>
 #include <qbitmap.h>
 #include <qdebug.h>
 #include <qvector.h>
 #include <qpicture.h>
-#include <private/qpicture_p.h>
+#include <qpicture_p.h>
 
 QT_BEGIN_NAMESPACE
 

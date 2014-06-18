@@ -49,15 +49,14 @@
 #include <qimage_p.h>
 #include <qstatictext_p.h>
 #include <qcosmeticstroker_p.h>
-#include "qmemrotate_p.h"
-
-#include "qpaintengine_raster_p.h"
-#include "qoutlinemapper_p.h"
+#include <qmemrotate_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qoutlinemapper_p.h>
 
 #if defined(Q_OS_WIN)
 #  include <qt_windows.h>
 #  include <qvarlengtharray.h>
-#  include <private/qfontengine_p.h>
+#  include <qfontengine_p.h>
 
 #elif defined(Q_OS_MAC)
 #  include <qt_mac_p.h>

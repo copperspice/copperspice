@@ -23,10 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qprinterinfo.h"
-#include "qprinterinfo_p.h"
-
-#include "private/qt_mac_p.h"
+#include <qprinterinfo.h>
+#include <qprinterinfo_p.h>
+#include <qt_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 

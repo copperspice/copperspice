@@ -24,7 +24,7 @@
 ***********************************************************************/
 
 #include "qscrollarea.h"
-#include "private/qscrollarea_p.h"
+#include "qscrollarea_p.h"
 
 #ifndef QT_NO_SCROLLAREA
 
@@ -34,99 +34,10 @@
 #include "qapplication.h"
 #include "qvariant.h"
 #include "qdebug.h"
-#include "private/qlayoutengine_p.h"
+#include "qlayoutengine_p.h"
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QScrollArea
-
-    \brief The QScrollArea class provides a scrolling view onto
-    another widget.
-
-    \ingroup basicwidgets
-
-
-    A scroll area is used to display the contents of a child widget
-    within a frame. If the widget exceeds the size of the frame, the
-    view can provide scroll bars so that the entire area of the child
-    widget can be viewed. The child widget must be specified with
-    setWidget(). For example:
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qscrollarea.cpp 0
-
-    The code above creates a scroll area (shown in the images below)
-    containing an image label. When scaling the image, the scroll area
-    can provide the necessary scroll bars:
-
-    \table
-    \row
-    \o \inlineimage qscrollarea-noscrollbars.png
-    \o \inlineimage qscrollarea-onescrollbar.png
-    \o \inlineimage qscrollarea-twoscrollbars.png
-    \endtable
-
-    The scroll bars appearance depends on the currently set \l
-    {Qt::ScrollBarPolicy}{scroll bar policies}. You can control the
-    appearance of the scroll bars using the inherited functionality
-    from QAbstractScrollArea.
-
-    For example, you can set the
-    QAbstractScrollArea::horizontalScrollBarPolicy and
-    QAbstractScrollArea::verticalScrollBarPolicy properties. Or if you
-    want the scroll bars to adjust dynamically when the contents of
-    the scroll area changes, you can use the \l
-    {QAbstractScrollArea::horizontalScrollBar()}{horizontalScrollBar()}
-    and \l
-    {QAbstractScrollArea::verticalScrollBar()}{verticalScrollBar()}
-    functions (which enable you to access the scroll bars) and set the
-    scroll bars' values whenever the scroll area's contents change,
-    using the QScrollBar::setValue() function.
-
-    You can retrieve the child widget using the widget() function. The
-    view can be made to be resizable with the setWidgetResizable()
-    function. The alignment of the widget can be specified with
-    setAlignment().
-
-    Two convenience functions ensureVisible() and
-    ensureWidgetVisible() ensure a certain region of the contents is
-    visible inside the viewport, by scrolling the contents if
-    necessary.
-
-    \section1 Size Hints and Layouts
-
-    When using a scroll area to display the contents of a custom
-    widget, it is important to ensure that the
-    \l{QWidget::sizeHint}{size hint} of the child widget is set to a
-    suitable value. If a standard QWidget is used for the child
-    widget, it may be necessary to call QWidget::setMinimumSize() to
-    ensure that the contents of the widget are shown correctly within
-    the scroll area.
-
-    If a scroll area is used to display the contents of a widget that
-    contains child widgets arranged in a layout, it is important to
-    realize that the size policy of the layout will also determine the
-    size of the widget. This is especially useful to know if you intend
-    to dynamically change the contents of the layout. In such cases,
-    setting the layout's \l{QLayout::sizeConstraint}{size constraint}
-    property to one which provides constraints on the minimum and/or
-    maximum size of the layout (e.g., QLayout::SetMinAndMaxSize) will
-    cause the size of the scroll area to be updated whenever the
-    contents of the layout changes.
-
-    For a complete example using the QScrollArea class, see the \l
-    {widgets/imageviewer}{Image Viewer} example. The example shows how
-    to combine QLabel and QScrollArea to display an image.
-
-    \sa QAbstractScrollArea, QScrollBar, {Image Viewer Example}
-*/
-
-
-/*!
-    Constructs an empty scroll area with the given \a parent.
-
-    \sa setWidget()
-*/
 QScrollArea::QScrollArea(QWidget *parent)
     : QAbstractScrollArea(*new QScrollAreaPrivate,parent)
 {

@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qplatformfontdatabase_qpa.h"
-#include <QtGui/private/qfontengine_p.h>
-#include <QtGui/private/qfontengine_qpa_p.h>
+#include <qplatformfontdatabase_qpa.h>
+#include <qfontengine_p.h>
+#include <qfontengine_qpa_p.h>
 #include <QtCore/QLibraryInfo>
 #include <QtCore/QDir>
 

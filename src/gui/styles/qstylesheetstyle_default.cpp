@@ -33,8 +33,8 @@
    avoid parsing overhead.
 */
 
-#include "private/qcssparser_p.h"
-#include "qstylesheetstyle_p.h"
+#include <qcssparser_p.h>
+#include <qstylesheetstyle_p.h>
 
 #ifndef QT_NO_STYLE_STYLESHEET
 

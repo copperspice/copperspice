@@ -23,18 +23,17 @@
 *
 ***********************************************************************/
 
-#include "QtGui/qwidget.h"
-#include "QtGui/qevent.h"
-#include "QtGui/qapplication.h"
-#include "QtGui/private/qbackingstore_p.h"
-#include "QtGui/private/qwidget_p.h"
-#include "QtGui/private/qgraphicssystem_p.h"
-#include "QtGui/private/qapplication_p.h"
-#include "QtGui/qdesktopwidget.h"
-#include "QtGui/qplatformwindow_qpa.h"
-#include "QtGui/qplatformglcontext_qpa.h"
-
-#include <QtGui/QPlatformCursor>
+#include "qwidget.h"
+#include "qevent.h"
+#include "qapplication.h"
+#include "qbackingstore_p.h"
+#include "qwidget_p.h"
+#include "qgraphicssystem_p.h"
+#include "qapplication_p.h"
+#include "qdesktopwidget.h"
+#include "qplatformwindow_qpa.h"
+#include "qplatformglcontext_qpa.h"
+#include <QPlatformCursor>
 
 QT_BEGIN_NAMESPACE
 

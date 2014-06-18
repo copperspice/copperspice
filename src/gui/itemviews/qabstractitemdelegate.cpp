@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qabstractitemdelegate.h"
+#include <qabstractitemdelegate.h>
 
 #ifndef QT_NO_ITEMVIEWS
 #include <qabstractitemmodel.h>
@@ -34,7 +34,7 @@
 #include <qevent.h>
 #include <qstring.h>
 #include <qdebug.h>
-#include <private/qtextengine_p.h>
+#include <qtextengine_p.h>
 
 QT_BEGIN_NAMESPACE
 

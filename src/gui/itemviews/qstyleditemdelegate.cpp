@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qstyleditemdelegate.h"
+#include <qstyleditemdelegate.h>
 
 #ifndef QT_NO_ITEMVIEWS
 #include <qabstractitemmodel.h>
@@ -45,17 +45,16 @@
 #include <qbitmap.h>
 #include <qpixmapcache.h>
 #include <qitemeditorfactory.h>
-#include <private/qitemeditorfactory_p.h>
+#include <qitemeditorfactory_p.h>
 #include <qmetaobject.h>
 #include <qtextlayout.h>
-#include <private/qdnd_p.h>
-#include <private/qtextengine_p.h>
-#include <private/qlayoutengine_p.h>
+#include <qdnd_p.h>
+#include <qtextengine_p.h>
+#include <qlayoutengine_p.h>
 #include <qdebug.h>
 #include <qlocale.h>
 #include <qdialog.h>
 #include <qtableview.h>
-
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE

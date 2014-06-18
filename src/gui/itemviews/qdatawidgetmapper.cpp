@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qdatawidgetmapper.h"
+#include <qdatawidgetmapper.h>
 
 #ifndef QT_NO_DATAWIDGETMAPPER
 
-#include "qabstractitemmodel.h"
-#include "qitemdelegate.h"
-#include "qmetaobject.h"
-#include "qwidget.h"
-#include "private/qabstractitemmodel_p.h"
+#include <qabstractitemmodel.h>
+#include <qitemdelegate.h>
+#include <qmetaobject.h>
+#include <qwidget.h>
+#include <qabstractitemmodel_p.h>
 
 QT_BEGIN_NAMESPACE
 

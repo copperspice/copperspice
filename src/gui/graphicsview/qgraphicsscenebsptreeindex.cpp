@@ -23,49 +23,13 @@
 *
 ***********************************************************************/
 
-/*!
-    \class QGraphicsSceneBspTreeIndex
-    \brief The QGraphicsSceneBspTreeIndex class provides an implementation of
-    a BSP indexing algorithm for discovering items in QGraphicsScene.
-    \since 4.6
-    \ingroup graphicsview-api
-
-    \internal
-
-    QGraphicsSceneBspTreeIndex index use a BSP(Binary Space Partitioning)
-    implementation to discover items quickly. This implementation is
-    very efficient for static scenes. It has a depth that you can set.
-    The depth directly affects performance and memory usage; the latter
-    growing exponentially with the depth of the tree. With an optimal tree
-    depth, the index can instantly determine the locality of items, even
-    for scenes with thousands or millions of items. This also greatly improves
-    rendering performance.
-
-    By default, the depth value is 0, in which case Qt will guess a reasonable
-    default depth based on the size, location and number of items in the
-    scene. If these parameters change frequently, however, you may experience
-    slowdowns as the index retunes the depth internally. You can avoid
-    potential slowdowns by fixating the tree depth through setting this
-    property.
-
-    The depth of the tree and the size of the scene rectangle decide the
-    granularity of the scene's partitioning. The size of each scene segment is
-    determined by the following algorithm:
-
-    The BSP tree has an optimal size when each segment contains between 0 and
-    10 items.
-
-    \sa QGraphicsScene, QGraphicsView, QGraphicsSceneIndex
-*/
-
 #include <QtCore/qglobal.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include <private/qgraphicsscene_p.h>
-#include <private/qgraphicsscenebsptreeindex_p.h>
-#include <private/qgraphicssceneindex_p.h>
-
+#include <qgraphicsscene_p.h>
+#include <qgraphicsscenebsptreeindex_p.h>
+#include <qgraphicssceneindex_p.h>
 #include <QtCore/qmath.h>
 #include <QtCore/qdebug.h>
 

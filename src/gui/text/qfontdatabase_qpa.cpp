@@ -23,15 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qlibraryinfo.h"
+#include <qlibraryinfo.h>
 #include <QtCore/qsettings.h>
-
-#include "qfontengine_qpa_p.h"
-#include "qplatformdefs.h"
-
-#include <QtGui/private/qapplication_p.h>
+#include <qfontengine_qpa_p.h>
+#include <qplatformdefs.h>
+#include <qapplication_p.h>
 #include <QtGui/qplatformfontdatabase_qpa.h>
-
 #include <QtCore/qmath.h>
 
 QT_BEGIN_NAMESPACE

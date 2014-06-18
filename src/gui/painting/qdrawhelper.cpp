@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include <private/qdrawhelper_p.h>
-#include <private/qpaintengine_raster_p.h>
-#include <private/qpainter_p.h>
-#include <private/qdrawhelper_x86_p.h>
-#include <private/qdrawhelper_neon_p.h>
-#include <private/qmath_p.h>
+#include <qdrawhelper_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qpainter_p.h>
+#include <qdrawhelper_x86_p.h>
+#include <qdrawhelper_neon_p.h>
+#include <qmath_p.h>
 #include <qmath.h>
 
 QT_BEGIN_NAMESPACE

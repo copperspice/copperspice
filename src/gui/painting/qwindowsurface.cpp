@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include <private/qwindowsurface_p.h>
+#include <qwindowsurface_p.h>
 #include <qwidget.h>
-#include <private/qwidget_p.h>
-#include <private/qbackingstore_p.h>
-#include <private/qapplication_p.h>
+#include <qwidget_p.h>
+#include <qbackingstore_p.h>
+#include <qapplication_p.h>
 
 QT_BEGIN_NAMESPACE
 

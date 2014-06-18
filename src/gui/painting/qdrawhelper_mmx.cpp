@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include <private/qdrawhelper_p.h>
+#include <qdrawhelper_p.h>
 
 #if defined(QT_HAVE_MMX)
 
-#include <private/qdrawhelper_mmx_p.h>
+#include <qdrawhelper_mmx_p.h>
 
 QT_BEGIN_NAMESPACE
 

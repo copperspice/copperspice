@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qstackedwidget.h"
+#include <qstackedwidget.h>
 
 #ifndef QT_NO_STACKEDWIDGET
 
 #include <qstackedlayout.h>
 #include <qevent.h>
-#include <private/qframe_p.h>
+#include <qframe_p.h>
 
 QT_BEGIN_NAMESPACE
 

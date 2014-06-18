@@ -27,7 +27,7 @@
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <private/qstatemachine_p.h>
+#include <qstatemachine_p.h>
 #include <QtGui/qevent.h>
 #include <QtGui/qgraphicssceneevent.h>
 

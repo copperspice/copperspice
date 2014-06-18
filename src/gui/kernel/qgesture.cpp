@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qgesture.h"
-#include "private/qgesture_p.h"
-#include "private/qstandardgestures_p.h"
+#include <qgesture.h>
+#include <qgesture_p.h>
+#include <qstandardgestures_p.h>
 
 #ifndef QT_NO_GESTURES
 

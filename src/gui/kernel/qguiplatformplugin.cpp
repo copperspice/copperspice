@@ -23,21 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qguiplatformplugin_p.h"
+#include <qguiplatformplugin_p.h>
 #include <qdebug.h>
 #include <qfile.h>
 #include <qdir.h>
 #include <qsettings.h>
-#include "private/qfactoryloader_p.h"
-#include "qstylefactory.h"
-#include "qapplication.h"
-#include "qplatformdefs.h"
-#include "qicon.h"
+#include <qfactoryloader_p.h>
+#include <qstylefactory.h>
+#include <qapplication.h>
+#include <qplatformdefs.h>
+#include <qicon.h>
 
 #if defined(Q_WS_X11)
-#include <private/qkde_p.h>
-#include <private/qgtkstyle_p.h>
-#include <private/qt_x11_p.h>
+#include <qkde_p.h>
+#include <qgtkstyle_p.h>
+#include <qt_x11_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE

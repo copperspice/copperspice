@@ -23,39 +23,39 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-
-#include <private/qprintengine_ps_p.h>
-#include <private/qpainter_p.h>
-#include <private/qfontengine_p.h>
-#include <private/qpaintengine_p.h>
-#include <private/qpdf_p.h>
+#include <qplatformdefs.h>
+#include <qprintengine_ps_p.h>
+#include <qpainter_p.h>
+#include <qfontengine_p.h>
+#include <qpaintengine_p.h>
+#include <qpdf_p.h>
 
 #ifndef QT_NO_PRINTER
 
-#include "qprinter.h"
-#include "qpainter.h"
-#include "qapplication.h"
-#include "qpixmap.h"
-#include "qimage.h"
-#include "qdatetime.h"
-#include "qstring.h"
-#include "qbytearray.h"
-#include "qhash.h"
-#include "qbuffer.h"
-#include "qsettings.h"
-#include "qmap.h"
-#include "qbitmap.h"
-#include "qregion.h"
-#include "qimagewriter.h"
-#include <private/qpainterpath_p.h>
+#include <qprinter.h>
+#include <qpainter.h>
+#include <qapplication.h>
+#include <qpixmap.h>
+#include <qimage.h>
+#include <qdatetime.h>
+#include <qstring.h>
+#include <qbytearray.h>
+#include <qhash.h>
+#include <qbuffer.h>
+#include <qsettings.h>
+#include <qmap.h>
+#include <qbitmap.h>
+#include <qregion.h>
+#include <qimagewriter.h>
+#include <qpainterpath_p.h>
 #include <qdebug.h>
-#include <private/qdrawhelper_p.h>
-#include <private/qmutexpool_p.h>
+#include <qdrawhelper_p.h>
+#include <qmutexpool_p.h>
 
 #ifndef Q_OS_WIN
 #include <unistd.h>
 #endif
+
 #include <stdlib.h>
 #include <limits.h>
 

@@ -23,44 +23,42 @@
 *
 ***********************************************************************/
 
-// QtCore
 #include <qdebug.h>
 #include <qmath.h>
 #include <qmutex.h>
 
-// QtGui
-#include "qbitmap.h"
-#include "qimage.h"
-#include "qpaintdevice.h"
-#include "qpaintengine.h"
-#include "qpainter.h"
-#include "qpainter_p.h"
-#include "qpainterpath.h"
-#include "qpicture.h"
-#include "qpixmapcache.h"
-#include "qpolygon.h"
-#include "qtextlayout.h"
-#include "qwidget.h"
-#include "qapplication.h"
-#include "qstyle.h"
-#include "qthread.h"
-#include "qvarlengtharray.h"
-#include "qstatictext.h"
-#include "qglyphrun.h"
+#include <qbitmap.h>
+#include <qimage.h>
+#include <qpaintdevice.h>
+#include <qpaintengine.h>
+#include <qpainter.h>
+#include <qpainter_p.h>
+#include <qpainterpath.h>
+#include <qpicture.h>
+#include <qpixmapcache.h>
+#include <qpolygon.h>
+#include <qtextlayout.h>
+#include <qwidget.h>
+#include <qapplication.h>
+#include <qstyle.h>
+#include <qthread.h>
+#include <qvarlengtharray.h>
+#include <qstatictext.h>
+#include <qglyphrun.h>
 
-#include <private/qfontengine_p.h>
-#include <private/qpaintengine_p.h>
-#include <private/qemulationpaintengine_p.h>
-#include <private/qpainterpath_p.h>
-#include <private/qtextengine_p.h>
-#include <private/qwidget_p.h>
-#include <private/qpaintengine_raster_p.h>
-#include <private/qmath_p.h>
-#include <private/qstatictext_p.h>
-#include <private/qglyphrun_p.h>
-#include <private/qstylehelper_p.h>
-#include <private/qhexstring_p.h>
-#include <private/qrawfont_p.h>
+#include <qfontengine_p.h>
+#include <qpaintengine_p.h>
+#include <qemulationpaintengine_p.h>
+#include <qpainterpath_p.h>
+#include <qtextengine_p.h>
+#include <qwidget_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qmath_p.h>
+#include <qstatictext_p.h>
+#include <qglyphrun_p.h>
+#include <qstylehelper_p.h>
+#include <qhexstring_p.h>
+#include <qrawfont_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -22,16 +22,19 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
+
 #include <qmath.h>
-#include <private/qpainterpath_p.h>
-#include <private/qpaintbuffer_p.h>
-//#include <private/qtextengine_p.h>
-#include <private/qfontengine_p.h>
-#include <private/qemulationpaintengine_p.h>
-#include <private/qimage_p.h>
+#include <qpainterpath_p.h>
+#include <qpaintbuffer_p.h>
+
+//#include <qtextengine_p.h>
+
+#include <qfontengine_p.h>
+#include <qemulationpaintengine_p.h>
+#include <qimage_p.h>
 #include <qstatictext.h>
-#include <private/qstatictext_p.h>
-#include <private/qrawfont_p.h>
+#include <qstatictext_p.h>
+#include <qrawfont_p.h>
 
 #include <QDebug>
 

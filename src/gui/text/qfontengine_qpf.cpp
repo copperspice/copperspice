@@ -23,19 +23,20 @@
 *
 ***********************************************************************/
 
-#include "qfontengine_qpf_p.h"
-
-#include "private/qpaintengine_raster_p.h"
+#include <qfontengine_qpf_p.h>
+#include <qpaintengine_raster_p.h>
 #include <QtCore/qlibraryinfo.h>
 #include <QtCore/qfileinfo.h>
 
 #include <QtCore/qfile.h>
 #include <QtCore/qdir.h>
 #include <QtCore/qbuffer.h>
+
 #if !defined(QT_NO_FREETYPE)
-#include "private/qfontengine_ft_p.h"
+#include <qfontengine_ft_p.h>
 #endif
-#include "private/qcore_unix_p.h" // overrides QT_OPEN
+
+#include <qcore_unix_p.h" // overrides QT_OPE>
 
 // for mmap
 #include <stdlib.h>
@@ -50,16 +51,17 @@ QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_QWS_QPF2
 
-#include "qpfutil.cpp"
+#include <qpfutil.cpp>
 
 QT_BEGIN_INCLUDE_NAMESPACE
 
 #if defined(Q_WS_QWS)
-#   include "private/qwscommand_qws_p.h"
-#   include "qwsdisplay_qws.h"
-#   include "qabstractfontengine_p.h"
+#include <qwscommand_qws_p.h>
+#include <qwsdisplay_qws.h>
+#include <qabstractfontengine_p.h>
 #endif
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
+
 QT_END_INCLUDE_NAMESPACE
 
 //#define DEBUG_HEADER

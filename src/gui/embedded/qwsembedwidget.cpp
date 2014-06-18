@@ -28,9 +28,9 @@
 #ifndef QT_NO_QWSEMBEDWIDGET
 
 #include <qwsdisplay_qws.h>
-#include <private/qwidget_p.h>
-#include <private/qwsdisplay_qws_p.h>
-#include <private/qwscommand_qws_p.h>
+#include <qwidget_p.h>
+#include <qwsdisplay_qws_p.h>
+#include <qwscommand_qws_p.h>
 
 QT_BEGIN_NAMESPACE
 

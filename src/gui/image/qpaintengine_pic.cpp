@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "private/qpaintengine_p.h"
-#include "private/qpainter_p.h"
-#include "private/qpicture_p.h"
-#include "private/qfont_p.h"
+#include "qpaintengine_p.h"
+#include "qpainter_p.h"
+#include "qpicture_p.h"
+#include "qfont_p.h"
 
 #ifndef QT_NO_PICTURE
 
@@ -38,11 +38,10 @@
 #include "qpicture.h"
 #include "qpolygon.h"
 #include "qrect.h"
-#include <private/qtextengine_p.h>
+#include <qtextengine_p.h>
 
 //#define QT_PICTURE_DEBUG
 #include <qdebug.h>
-
 
 QT_BEGIN_NAMESPACE
 

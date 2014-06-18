@@ -23,29 +23,31 @@
 *
 ***********************************************************************/
 
-#include "qdir.h"
+#include <qdir.h>
+
 #if defined(Q_WS_QWS)
-#include "qscreen_qws.h" //so we can check for rotation
-#include "qwindowsystem_qws.h"
+#include <qscreen_qws.h>             // so we can check for rotation
+#include <qwindowsystem_qws.h>
 #endif
-#include "qlibraryinfo.h"
-#include "qabstractfileengine.h"
+
+#include <qlibraryinfo.h>
+#include <qabstractfileengine.h>
 #include <QtCore/qsettings.h>
 
 #if !defined(QT_NO_FREETYPE)
-#include "qfontengine_ft_p.h"
+#include <qfontengine_ft_p.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
 #endif
-#include "qfontengine_qpf_p.h"
-#include "private/qfactoryloader_p.h"
-#include "private/qcore_unix_p.h" // overrides QT_OPEN
-#include "qabstractfontengine_qws.h"
-#include "qabstractfontengine_p.h"
+#include <qfontengine_qpf_p.h>
+#include <qfactoryloader_p.h>
+#include <qcore_unix_p.h>             // overrides QT_OPEN
+#include <qabstractfontengine_qws.h>
+#include <qabstractfontengine_p.h>
 #include <qdatetime.h>
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 
 // for mmap
 #include <stdlib.h>

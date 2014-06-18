@@ -23,8 +23,5 @@
 *
 ***********************************************************************/
 
-#include <private/qtools_p.h>
-
-#include "qfragmentmap_p.h"
-
-
+#include <qtools_p.h>
+#include <qfragmentmap_p.h>

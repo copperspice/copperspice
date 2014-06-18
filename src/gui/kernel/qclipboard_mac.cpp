@@ -23,18 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qclipboard.h"
-#include "qapplication.h"
-#include "qbitmap.h"
-#include "qdatetime.h"
-#include "qdebug.h"
-#include "qapplication_p.h"
-#include <private/qt_mac_p.h>
-#include "qevent.h"
-#include "qurl.h"
+#include <qclipboard.h>
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qapplication_p.h>
+#include <qt_mac_p.h>
+#include <qevent.h>
+#include <qurl.h>
 #include <stdlib.h>
 #include <string.h>
-#include "qt_cocoa_helpers_mac_p.h"
+#include <qt_cocoa_helpers_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 

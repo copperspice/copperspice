@@ -23,47 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qproxymodel.h"
+#include <qproxymodel.h>
 
 #ifndef QT_NO_PROXYMODEL
-#include <private/qproxymodel_p.h>
+#include <qproxymodel_p.h>
 #include <qsize.h>
 #include <qstringlist.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QProxyModel
-    \obsolete
-    \brief The QProxyModel class provides support for processing data
-    passed between another model and a view.
-
-    \ingroup model-view
-
-    If you want to do filtering and sorting, see QSortFilterProxyModel.
-
-    Proxy models provide a standard model interface that can be used to
-    manipulate the data retrieved through an underlying model. They can be used to
-    perform operations such as sorting and filtering on the data obtained without
-    changing the contents of the model.
-
-    Just as with subclasses of QAbstractItemView, QProxyModel provides the setModel()
-    function that is used to specify the model to be acted on by the proxy.
-    Views can be connected to either the underlying model or the proxy model with
-    \l QAbstractItemView::setModel().
-
-    Since views rely on the information provided in model indexes to identify
-    items of data from models, and to position these items in some visual
-    representation, proxy models must create their own model indexes instead of
-    supplying model indexes from their underlying models.
-
-    \sa \link model-view-programming.html Model/View Programming\endlink QAbstractItemModel
-
-*/
-
-/*!
-    Constructs a proxy model with the given \a parent.
-*/
 
 QProxyModel::QProxyModel(QObject *parent)
     : QAbstractItemModel(*new QProxyModelPrivate, parent)

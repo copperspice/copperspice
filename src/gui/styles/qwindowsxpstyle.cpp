@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qwindowsxpstyle.h"
-#include "qwindowsxpstyle_p.h"
+#include <qwindowsxpstyle.h>
+#include <qwindowsxpstyle_p.h>
 
 #if !defined(QT_NO_STYLE_WINDOWSXP) || defined(QT_PLUGIN)
 
-#include <private/qpaintengine_raster_p.h>
-#include <private/qapplication_p.h>
-#include <private/qstylehelper_p.h>
-#include <private/qwidget_p.h>
-#include <private/qsystemlibrary_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qapplication_p.h>
+#include <qstylehelper_p.h>
+#include <qwidget_p.h>
+#include <qsystemlibrary_p.h>
 #include <qpainter.h>
 #include <qpaintengine.h>
 #include <qwidget.h>

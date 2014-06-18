@@ -23,10 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qgraphicssystem_mac_p.h"
-
-#include <private/qpixmap_mac_p.h>
-#include <private/qwindowsurface_mac_p.h>
+#include <qgraphicssystem_mac_p.h>
+#include <qpixmap_mac_p.h>
+#include <qwindowsurface_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 

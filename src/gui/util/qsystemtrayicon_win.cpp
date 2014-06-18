@@ -23,7 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qsystemtrayicon_p.h"
+#include <qsystemtrayicon_p.h>
+
 #ifndef QT_NO_SYSTEMTRAYICON
 
 #ifndef _WIN32_WINNT
@@ -37,8 +38,7 @@
 #include <qt_windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
-
-#include <private/qsystemlibrary_p.h>
+#include <qsystemlibrary_p.h>
 #include <QApplication>
 #include <QSettings>
 

@@ -23,21 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qclipboard.h"
+#include <qclipboard.h>
 
 #ifndef QT_NO_CLIPBOARD
 
-#include "qapplication.h"
-#include "qapplication_p.h"
-#include "qeventloop.h"
-#include "qwidget.h"
-#include "qevent.h"
-#include "qmime.h"
-#include "qt_windows.h"
-#include "qdnd_p.h"
-#include <private/qwidget_p.h>
-#include <private/qsystemlibrary_p.h>
-#include "qclipboard_p.h"
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qeventloop.h>
+#include <qwidget.h>
+#include <qevent.h>
+#include <qmime.h>
+#include <qt_windows.h>
+#include <qdnd_p.h>
+#include <qwidget_p.h>
+#include <qsystemlibrary_p.h>
+#include <qclipboard_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,81 +23,20 @@
 *
 ***********************************************************************/
 
-#include "qbitmap.h"
-#include "qpixmapdata_p.h"
-#include "qimage.h"
-#include "qvariant.h"
+#include <qbitmap.h>
+#include <qpixmapdata_p.h>
+#include <qimage.h>
+#include <qvariant.h>
 #include <qpainter.h>
-#include <private/qgraphicssystem_p.h>
-#include <private/qapplication_p.h>
+#include <qgraphicssystem_p.h>
+#include <qapplication_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QBitmap
-    \brief The QBitmap class provides monochrome (1-bit depth) pixmaps.
-
-    \ingroup painting
-    \ingroup shared
-
-    The QBitmap class is a monochrome off-screen paint device used
-    mainly for creating custom QCursor and QBrush objects,
-    constructing QRegion objects, and for setting masks for pixmaps
-    and widgets.
-
-    QBitmap is a QPixmap subclass ensuring a depth of 1, except for
-    null objects which have a depth of 0. If a pixmap with a depth
-    greater than 1 is assigned to a bitmap, the bitmap will be
-    dithered automatically.
-
-    Use the QColor objects Qt::color0 and Qt::color1 when drawing on a
-    QBitmap object (or a QPixmap object with depth 1).
-
-    Painting with Qt::color0 sets the bitmap bits to 0, and painting
-    with Qt::color1 sets the bits to 1. For a bitmap, 0-bits indicate
-    background (or transparent pixels) and 1-bits indicate foreground
-    (or opaque pixels). Use the clear() function to set all the bits
-    to Qt::color0. Note that using the Qt::black and Qt::white colors
-    make no sense because the QColor::pixel() value is not necessarily
-    0 for black and 1 for white.
-
-    The QBitmap class provides the transformed() function returning a
-    transformed copy of the bitmap; use the QTransform argument to
-    translate, scale, shear, and rotate the bitmap. In addition,
-    QBitmap provides the static fromData() function which returns a
-    bitmap constructed from the given \c uchar data, and the static
-    fromImage() function returning a converted copy of a QImage
-    object.
-
-    Just like the QPixmap class, QBitmap is optimized by the use of
-    implicit data sharing. For more information, see the \l {Implicit
-    Data Sharing} documentation.
-
-    \sa  QPixmap, QImage, QImageReader, QImageWriter
-*/
-
-/*! \typedef QBitmap::DataPtr
-  \internal
- */
-
-/*!
-    Constructs a null bitmap.
-
-    \sa QPixmap::isNull()
-*/
 QBitmap::QBitmap()
     : QPixmap(QSize(0, 0), QPixmapData::BitmapType)
 {
 }
-
-/*!
-    \fn QBitmap::QBitmap(int width, int height)
-
-    Constructs a bitmap with the given \a width and \a height. The pixels
-    inside are uninitialized.
-
-    \sa clear()
-*/
 
 QBitmap::QBitmap(int w, int h)
     : QPixmap(QSize(w, h), QPixmapData::BitmapType)

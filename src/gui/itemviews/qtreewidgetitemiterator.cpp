@@ -23,39 +23,14 @@
 *
 ***********************************************************************/
 
-#include <private/qtreewidgetitemiterator_p.h>
-#include "qtreewidget.h"
-#include "qtreewidget_p.h"
-#include "qwidgetitemdata_p.h"
+#include <qtreewidgetitemiterator_p.h>
+#include <qtreewidget.h>
+#include <qtreewidget_p.h>
+#include <qwidgetitemdata_p.h>
 
 #ifndef QT_NO_TREEWIDGET
 
 QT_BEGIN_NAMESPACE
-
-/*!
-  \class QTreeWidgetItemIterator
-  \ingroup model-view
-  \brief The QTreeWidgetItemIterator class provides a way to iterate over the
-  items in a QTreeWidget instance.
-
-  The iterator will walk the items in a pre-order traversal order, thus visiting the
-  parent node \e before it continues to the child nodes.
-
-  For example, the following code examples each item in a tree, checking the
-  text in the first column against a user-specified search string:
-
-  \snippet doc/src/snippets/qtreewidgetitemiterator-using/mainwindow.cpp 0
-
-  It is also possible to filter out certain types of node by passing certain
-  \l{IteratorFlag}{flags} to the constructor of QTreeWidgetItemIterator.
-
-  \sa QTreeWidget, {Model/View Programming}, QTreeWidgetItem
-*/
-
-/*!
-    Constructs an iterator for the same QTreeWidget as \a it. The
-    current iterator item is set to point on the current item of \a it.
-*/
 
 QTreeWidgetItemIterator::QTreeWidgetItemIterator(const QTreeWidgetItemIterator &it)
     :  d_ptr(new QTreeWidgetItemIteratorPrivate(*(it.d_ptr))),

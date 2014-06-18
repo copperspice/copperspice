@@ -27,7 +27,7 @@
 #include "qcoreapplication.h"
 #include "qprintdialog.h"
 #include "qprinter.h"
-#include "private/qprinter_p.h"
+#include "qprinter_p.h"
 
 #ifndef QT_NO_PRINTDIALOG
 
@@ -50,9 +50,7 @@ QAbstractPrintDialog::QAbstractPrintDialog(QPrinter *printer, QWidget *parent)
 /*!
      \internal
 */
-QAbstractPrintDialog::QAbstractPrintDialog(QAbstractPrintDialogPrivate &ptr,
-                                           QPrinter *printer,
-                                           QWidget *parent)
+QAbstractPrintDialog::QAbstractPrintDialog(QAbstractPrintDialogPrivate &ptr, QPrinter *printer, QWidget *parent)
     : QDialog(ptr, parent)
 {
     Q_D(QAbstractPrintDialog);
@@ -95,19 +93,6 @@ bool QPrintDialog::testOption(PrintDialogOption option) const
     return (d->options & option) != 0;
 }
 
-/*!
-    \property QPrintDialog::options
-    \brief the various options that affect the look and feel of the dialog
-    \since 4.5
-
-    By default, all options are disabled.
-
-    Options should be set before showing the dialog. Setting them while the
-    dialog is visible is not guaranteed to have an immediate effect on the
-    dialog (depending on the option and on the platform).
-
-    \sa setOption(), testOption()
-*/
 void QPrintDialog::setOptions(PrintDialogOptions options)
 {
     Q_D(QPrintDialog);

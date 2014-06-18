@@ -26,12 +26,12 @@
 #include <qglobal.h>
 
 #ifndef QT_NO_PRINTER
-#include <qdebug.h>
-#include "private/qpaintengine_alpha_p.h"
 
-#include "private/qpicture_p.h"
-#include "private/qfont_p.h"
-#include "QtGui/qpicture.h"
+#include <qdebug.h>
+#include <qpaintengine_alpha_p.h>
+#include <qpicture_p.h>
+#include <qfont_p.h>
+#include <QtGui/qpicture.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qpaintdevice.h"
-#include "qpainter.h"
-#include "qwidget.h"
-#include "qbitmap.h"
-#include "qapplication.h"
-#include <private/qapplication_p.h>
-#include "qt_windows.h"
-#include "qprinter.h"
+#include <qpaintdevice.h>
+#include <qpainter.h>
+#include <qwidget.h>
+#include <qbitmap.h>
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qt_windows.h>
+#include <qprinter.h>
 
 QT_BEGIN_NAMESPACE
 

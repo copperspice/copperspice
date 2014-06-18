@@ -24,8 +24,8 @@
 ***********************************************************************/
 
 #include <qpixmap.h>
-#include <private/qgraphicssystem_p.h>
-#include <private/qapplication_p.h>
+#include <qgraphicssystem_p.h>
+#include <qapplication_p.h>
 
 QPixmap QPixmap::grabWindow(WId window, int x, int y, int w, int h)
 {

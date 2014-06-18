@@ -23,8 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtexthtmlparser_p.h"
-
+#include <qtexthtmlparser_p.h>
 #include <qbytearray.h>
 #include <qtextcodec.h>
 #include <qapplication.h>
@@ -32,12 +31,12 @@
 #include <qdebug.h>
 #include <qthread.h>
 
-#include "qtextdocument.h"
-#include "qtextformat_p.h"
-#include "qtextdocument_p.h"
-#include "qtextcursor.h"
-#include "qfont_p.h"
-#include "private/qfunctions_p.h"
+#include <qtextdocument.h>
+#include <qtextformat_p.h>
+#include <qtextdocument_p.h>
+#include <qtextcursor.h>
+#include <qfont_p.h>
+#include <qfunctions_p.h>
 
 #ifndef QT_NO_TEXTHTMLPARSER
 

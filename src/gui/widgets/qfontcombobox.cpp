@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qfontcombobox.h"
+#include <qfontcombobox.h>
 
 #ifndef QT_NO_FONTCOMBOBOX
 
@@ -33,7 +33,7 @@
 #include <qpainter.h>
 #include <qevent.h>
 #include <qapplication.h>
-#include <private/qcombobox_p.h>
+#include <qcombobox_p.h>
 #include <qdebug.h>
 
 QT_BEGIN_NAMESPACE

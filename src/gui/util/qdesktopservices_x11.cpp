@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qdesktopservices.h"
+#include <qdesktopservices.h>
 
 #ifndef QT_NO_DESKTOPSERVICES
 
@@ -32,7 +32,7 @@
 #include <qdir.h>
 #include <qfile.h>
 #include <qtextstream.h>
-#include <private/qt_x11_p.h>
+#include <qt_x11_p.h>
 #include <qcoreapplication.h>
 #include <stdlib.h>
 

@@ -25,8 +25,8 @@
 
 #include "qstatictext.h"
 #include "qstatictext_p.h"
-#include <private/qtextengine_p.h>
-#include <private/qfontengine_p.h>
+#include <qtextengine_p.h>
+#include <qfontengine_p.h>
 #include <qabstracttextdocumentlayout.h>
 
 #include <QtGui/qapplication.h>

@@ -22,7 +22,8 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qtreeview.h"
+
+#include <qtreeview.h>
 
 #ifndef QT_NO_TREEVIEW
 #include <qheaderview.h>
@@ -43,7 +44,7 @@
 #include <qaccessible2.h>
 #endif
 
-#include <private/qtreeview_p.h>
+#include <qtreeview_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -25,7 +25,7 @@
 
 #include "qplatformdefs.h"
 
-#include <private/qabstractprintdialog_p.h>
+#include <qabstractprintdialog_p.h>
 #include "qprintdialog.h"
 
 #ifndef QT_NO_PRINTDIALOG
@@ -42,7 +42,6 @@
 #include "qinputdialog.h"
 #include "qlayout.h"
 #include "qlabel.h"
-
 #include "qlibrary.h"
 
 #ifndef QT_NO_NIS
@@ -54,7 +53,7 @@
 #include <rpcsvc/ypclnt.h>
 #include <rpcsvc/yp_prot.h>
 
-#endif //QT_NO_NIS
+#endif
 
 #include <ctype.h>
 #include <stdlib.h>

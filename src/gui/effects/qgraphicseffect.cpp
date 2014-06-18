@@ -24,14 +24,14 @@
 ***********************************************************************/
 
 #include "qgraphicseffect_p.h"
-#include "private/qgraphicsitem_p.h"
+#include "qgraphicsitem_p.h"
 #include <QtGui/qgraphicsitem.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qpainter.h>
 #include <QtGui/qpaintengine.h>
 #include <QtCore/qrect.h>
 #include <QtCore/qdebug.h>
-#include <private/qdrawhelper_p.h>
+#include <qdrawhelper_p.h>
 
 #ifndef QT_NO_GRAPHICSEFFECT
 

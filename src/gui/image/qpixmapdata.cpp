@@ -27,14 +27,13 @@
 #include <QtCore/qbuffer.h>
 #include <QtGui/qbitmap.h>
 #include <QtGui/qimagereader.h>
-#include <private/qgraphicssystem_p.h>
-#include <private/qapplication_p.h>
-#include <private/qimagepixmapcleanuphooks_p.h>
+#include <qgraphicssystem_p.h>
+#include <qapplication_p.h>
+#include <qimagepixmapcleanuphooks_p.h>
 
 QT_BEGIN_NAMESPACE
 
-const uchar qt_pixmap_bit_mask[] = { 0x01, 0x02, 0x04, 0x08,
-                                     0x10, 0x20, 0x40, 0x80 };
+const uchar qt_pixmap_bit_mask[] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
 
 QPixmapData *QPixmapData::create(int w, int h, PixelType type)
 {

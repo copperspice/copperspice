@@ -22,11 +22,12 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qplatformclipboard_qpa.h"
+
+#include <qplatformclipboard_qpa.h>
 
 #ifndef QT_NO_CLIPBOARD
 
-#include <QtGui/private/qapplication_p.h>
+#include <qapplication_p.h>
 
 QT_BEGIN_NAMESPACE
 

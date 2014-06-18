@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include <private/qdrawhelper_p.h>
+#include <qdrawhelper_p.h>
 
 #ifdef QT_HAVE_SSE
 
-#include <private/qdrawhelper_sse_p.h>
+#include <qdrawhelper_sse_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,40 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qkeyeventtransition.h"
+#include <qkeyeventtransition.h>
 
 #ifndef QT_NO_STATEMACHINE
 
-#include "qbasickeyeventtransition_p.h"
+#include <qbasickeyeventtransition_p.h>
 #include <QtCore/qstatemachine.h>
-#include <private/qeventtransition_p.h>
+#include <qeventtransition_p.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-  \class QKeyEventTransition
-
-  \brief The QKeyEventTransition class provides a transition for key events.
-
-  \since 4.6
-  \ingroup statemachine
-
-  QKeyEventTransition is part of \l{The State Machine Framework}.
-
-  \sa QState::addTransition()
-*/
-
-/*!
-    \property QKeyEventTransition::key
-
-    \brief the key that this key event transition is associated with
-*/
-
-/*!
-    \property QKeyEventTransition::modifierMask
-
-    \brief the keyboard modifier mask that this key event transition checks for
-*/
 
 class QKeyEventTransitionPrivate : public QEventTransitionPrivate
 {

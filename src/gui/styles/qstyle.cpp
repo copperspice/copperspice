@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qstyle.h"
-#include "qapplication.h"
-#include "qpainter.h"
-#include "qwidget.h"
-#include "qbitmap.h"
-#include "qpixmapcache.h"
-#include "qstyleoption.h"
-#include "private/qstyle_p.h"
+#include <qstyle.h>
+#include <qapplication.h>
+#include <qpainter.h>
+#include <qwidget.h>
+#include <qbitmap.h>
+#include <qpixmapcache.h>
+#include <qstyleoption.h>
+#include <qstyle_p.h>
 
 #ifndef QT_NO_DEBUG
-#include "qdebug.h"
+#include <qdebug.h>
 #endif
 
 #ifdef Q_WS_X11

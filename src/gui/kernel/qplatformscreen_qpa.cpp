@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qplatformscreen_qpa.h"
+#include <qplatformscreen_qpa.h>
 #include <QtGui/qapplication.h>
-#include <QtGui/private/qapplication_p.h>
+#include <qapplication_p.h>
 #include <QtGui/qdesktopwidget.h>
 #include <QtGui/qplatformintegration_qpa.h>
 #include <QtGui/qwidget.h>
-#include <QtGui/private/qwidget_p.h>
+#include <qwidget_p.h>
 
 /*!
     Return the given top level widget for a given position.

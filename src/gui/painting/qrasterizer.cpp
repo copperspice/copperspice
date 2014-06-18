@@ -23,14 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qrasterizer_p.h"
-
+#include <qrasterizer_p.h>
 #include <QPoint>
 #include <QRect>
-
-#include <private/qmath_p.h>
-#include <private/qdatabuffer_p.h>
-#include <private/qdrawhelper_p.h>
+#include <qmath_p.h>
+#include <qdatabuffer_p.h>
+#include <qdrawhelper_p.h>
 
 QT_BEGIN_NAMESPACE
 

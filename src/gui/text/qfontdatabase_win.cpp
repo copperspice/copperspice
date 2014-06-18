@@ -23,19 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qt_windows.h"
+#include <qt_windows.h>
 #include <qmath.h>
-#include <private/qapplication_p.h>
-#include "qfont_p.h"
-#include "qfontengine_p.h"
-#include "qpaintdevice.h"
-#include <private/qsystemlibrary_p.h>
-#include "qabstractfileengine.h"
-#include "qendian.h"
+#include <qapplication_p.h>
+#include <qfont_p.h>
+#include <qfontengine_p.h>
+#include <qpaintdevice.h>
+#include <qsystemlibrary_p.h>
+#include <qabstractfileengine.h>
+#include <qendian.h>
 
 #if !defined(QT_NO_DIRECTWRITE)
-#  include "qsettings.h"
-#  include "qfontenginedirectwrite_p.h"
+#  include <qsettings.h>
+#  include <qfontenginedirectwrite_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -45,6 +45,7 @@ extern HDC   shared_dc();                // common dc for all fonts
 #ifdef MAKE_TAG
 #undef MAKE_TAG
 #endif
+
 // GetFontData expects the tags in little endian ;(
 #define MAKE_TAG(ch1, ch2, ch3, ch4) (\
     (((quint32)(ch4)) << 24) | \

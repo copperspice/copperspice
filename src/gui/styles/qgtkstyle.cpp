@@ -22,11 +22,12 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qgtkstyle.h"
+
+#include <qgtkstyle.h>
 
 #if !defined(QT_NO_STYLE_GTK)
 
-#include <private/qapplication_p.h>
+#include <qapplication_p.h>
 #include <QtCore/QLibrary>
 #include <QtCore/QSettings>
 #include <QtGui/QDialogButtonBox>
@@ -53,12 +54,13 @@
 #include <QtGui/QTreeView>
 #include <QtGui/QStyledItemDelegate>
 #include <qpixmapcache.h>
-#undef signals // Collides with GTK stymbols
-#include <private/qgtkpainter_p.h>
-#include <private/qstylehelper_p.h>
-#include <private/qgtkstyle_p.h>
-#include <private/qcleanlooksstyle_p.h>
 
+#undef signals // Collides with GTK stymbols
+
+#include <qgtkpainter_p.h>
+#include <qstylehelper_p.h>
+#include <qgtkstyle_p.h>
+#include <qcleanlooksstyle_p.h>
 
 QT_BEGIN_NAMESPACE
 

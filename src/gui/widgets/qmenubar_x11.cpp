@@ -32,8 +32,7 @@
 #include "qevent.h"
 #include "qmenu.h"
 #include "qmenubar.h"
-
-#include <private/qfactoryloader_p.h>
+#include <qfactoryloader_p.h>
 
 QT_BEGIN_NAMESPACE
 

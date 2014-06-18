@@ -27,7 +27,7 @@
 
 #ifndef QT_NO_SYNTAXHIGHLIGHTER
 #include <qtextdocument.h>
-#include <private/qtextdocument_p.h>
+#include <qtextdocument_p.h>
 #include <qtextlayout.h>
 #include <qpointer.h>
 #include <qtextobject.h>

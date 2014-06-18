@@ -23,15 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qgraphicssystemfactory_p.h"
-#include "qgraphicssystemplugin_p.h"
-#include "private/qfactoryloader_p.h"
-#include "qmutex.h"
-
-#include "qapplication.h"
-#include "qgraphicssystem_raster_p.h"
-#include "qgraphicssystem_runtime_p.h"
-#include "qdebug.h"
+#include <qgraphicssystemfactory_p.h>
+#include <qgraphicssystemplugin_p.h>
+#include <qfactoryloader_p.h>
+#include <qmutex.h>
+#include <qapplication.h>
+#include <qgraphicssystem_raster_p.h>
+#include <qgraphicssystem_runtime_p.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

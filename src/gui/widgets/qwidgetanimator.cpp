@@ -25,7 +25,7 @@
 
 #include <QtCore/qpropertyanimation.h>
 #include <QtGui/qwidget.h>
-#include <QtGui/private/qmainwindowlayout_p.h>
+#include <qmainwindowlayout_p.h>
 
 #include "qwidgetanimator_p.h"
 

@@ -23,11 +23,10 @@
 *
 ***********************************************************************/
 
-#include <private/qpaintengine_preview_p.h>
-#include <private/qpainter_p.h>
-#include <private/qpaintengine_p.h>
-#include <private/qpicture_p.h>
-
+#include <qpaintengine_preview_p.h>
+#include <qpainter_p.h>
+#include <qpaintengine_p.h>
+#include <qpicture_p.h>
 #include <QtGui/qprintengine.h>
 #include <QtGui/qpainter.h>
 #include <QtGui/qpicture.h>

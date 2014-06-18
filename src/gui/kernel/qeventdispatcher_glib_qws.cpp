@@ -23,17 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qeventdispatcher_glib_qws_p.h"
-
-#include "qapplication.h"
-
-#include "qplatformdefs.h"
-#include "qapplication.h"
-#include "private/qwscommand_qws_p.h"
-#include "qwsdisplay_qws.h"
-#include "qwsevent_qws.h"
-#include "qwindowsystem_qws.h"
-
+#include <qeventdispatcher_glib_qws_p.h>
+#include <qapplication.h>
+#include <qplatformdefs.h>
+#include <qapplication.h>
+#include <qwscommand_qws_p.h>
+#include <qwsdisplay_qws.h>
+#include <qwsevent_qws.h>
+#include <qwindowsystem_qws.h>
 #include <glib.h>
 
 QT_BEGIN_NAMESPACE

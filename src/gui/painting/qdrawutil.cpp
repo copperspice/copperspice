@@ -23,68 +23,27 @@
 *
 ***********************************************************************/
 
-#include "qdrawutil.h"
-#include "qbitmap.h"
-#include "qpixmapcache.h"
-#include "qapplication.h"
-#include "qpainter.h"
-#include "qpalette.h"
-#include <private/qpaintengineex_p.h>
+#include <qdrawutil.h>
+#include <qbitmap.h>
+#include <qpixmapcache.h>
+#include <qapplication.h>
+#include <qpainter.h>
+#include <qpalette.h>
+#include <qpaintengineex_p.h>
 #include <qvarlengtharray.h>
 #include <qmath.h>
-#include <private/qhexstring_p.h>
+#include <qhexstring_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \headerfile <qdrawutil.h>
-    \title Drawing Utility Functions
-
-    \sa QPainter
-*/
-
-/*!
-    \fn void qDrawShadeLine(QPainter *painter, int x1, int y1, int x2, int y2,
-                     const QPalette &palette, bool sunken,
-                     int lineWidth, int midLineWidth)
-    \relates <qdrawutil.h>
-
-    Draws a horizontal (\a y1 == \a y2) or vertical (\a x1 == \a x2)
-    shaded line using the given \a painter.  Note that nothing is
-    drawn if \a y1 != \a y2 and \a x1 != \a x2 (i.e. the line is
-    neither horizontal nor vertical).
-
-    The provided \a palette specifies the shading colors (\l
-    {QPalette::light()}{light}, \l {QPalette::dark()}{dark} and \l
-    {QPalette::mid()}{middle} colors).  The given \a lineWidth
-    specifies the line width for each of the lines; it is not the
-    total line width. The given \a midLineWidth specifies the width of
-    a middle line drawn in the QPalette::mid() color.
-
-    The line appears sunken if \a sunken is true, otherwise raised.
-
-    \warning This function does not look at QWidget::style() or
-    QApplication::style().  Use the drawing functions in QStyle to
-    make widgets that follow the current GUI style.
-
-
-    Alternatively you can use a QFrame widget and apply the
-    QFrame::setFrameStyle() function to display a shaded line:
-
-    \snippet doc/src/snippets/code/src_gui_painting_qdrawutil.cpp 0
-
-    \sa qDrawShadeRect(), qDrawShadePanel(), QStyle
-*/
-
-void qDrawShadeLine(QPainter *p, int x1, int y1, int x2, int y2,
-                     const QPalette &pal, bool sunken,
-                     int lineWidth, int midLineWidth)
+void qDrawShadeLine(QPainter *p, int x1, int y1, int x2, int y2, const QPalette &pal, 
+         bool sunken, int lineWidth, int midLineWidth)
 {
     if (!(p && lineWidth >= 0 && midLineWidth >= 0))        {
         qWarning("qDrawShadeLine: Invalid parameters");
         return;
     }
-    int tlw = lineWidth*2 + midLineWidth;        // total line width
+    int tlw = lineWidth*2 + midLineWidth;          // total line width
     QPen oldPen = p->pen();                        // save pen
     if (sunken)
         p->setPen(pal.color(QPalette::Dark));
@@ -94,7 +53,7 @@ void qDrawShadeLine(QPainter *p, int x1, int y1, int x2, int y2,
     int i;
     if (y1 == y2) {                                // horizontal line
         int y = y1 - tlw/2;
-        if (x1 > x2) {                        // swap x1 and x2
+        if (x1 > x2) {                             // swap x1 and x2
             int t = x1;
             x1 = x2;
             x2 = t;

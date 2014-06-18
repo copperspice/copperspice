@@ -33,8 +33,8 @@
 #include <qdatetime.h>
 #include <qpair.h>
 #include <qstringlist.h>
-#include <private/qabstractitemmodel_p.h>
-#include <private/qabstractproxymodel_p.h>
+#include <qabstractitemmodel_p.h>
+#include <qabstractproxymodel_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qcommonstyle.h"
-#include "qcommonstyle_p.h"
+#include <qcommonstyle.h>
+#include <qcommonstyle_p.h>
 
 #include <qfile.h>
 #include <qapplication.h>
@@ -62,7 +62,7 @@
 #include <limits.h>
 
 #ifndef QT_NO_ITEMVIEWS
-#   include "private/qtextengine_p.h"
+#   include "qtextengine_p.h"
 #endif
 
 #ifdef Q_WS_X11

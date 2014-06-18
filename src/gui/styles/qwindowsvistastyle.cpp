@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qwindowsvistastyle.h"
-#include "qwindowsvistastyle_p.h"
-#include <private/qstylehelper_p.h>
-#include <private/qsystemlibrary_p.h>
+#include <qwindowsvistastyle.h>
+#include <qwindowsvistastyle_p.h>
+#include <qstylehelper_p.h>
+#include <qsystemlibrary_p.h>
 
 #if !defined(QT_NO_STYLE_WINDOWSVISTA) || defined(QT_PLUGIN)
 
@@ -41,9 +41,11 @@ static const int windowsRightBorder      = 15; // right border on windows
 #ifndef TMT_CONTENTMARGINS
 #  define TMT_CONTENTMARGINS 3602
 #endif
+
 #ifndef TMT_SIZINGMARGINS
 #  define TMT_SIZINGMARGINS 3601
 #endif
+
 #ifndef LISS_NORMAL
 #  define LISS_NORMAL 1
 #  define LISS_HOT 2
@@ -52,6 +54,7 @@ static const int windowsRightBorder      = 15; // right border on windows
 #  define LISS_SELECTEDNOTFOCUS 5
 #  define LISS_HOTSELECTED 6
 #endif
+
 #ifndef BP_COMMANDLINK
 #  define BP_COMMANDLINK 6
 #  define BP_COMMANDLINKGLYPH 7

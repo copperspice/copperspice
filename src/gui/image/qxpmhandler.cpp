@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "private/qxpmhandler_p.h"
+#include "qxpmhandler_p.h"
 
 #ifndef QT_NO_IMAGEFORMAT_XPM
 
-#include <private/qcolor_p.h>
+#include <qcolor_p.h>
 #include <qimage.h>
 #include <qmap.h>
 #include <qtextstream.h>

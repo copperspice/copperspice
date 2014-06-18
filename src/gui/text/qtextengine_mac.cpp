@@ -23,10 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qtextengine_p.h"
-
-#include <private/qfontengine_coretext_p.h>
-#include <private/qfontengine_mac_p.h>
+#include <qtextengine_p.h>
+#include <qfontengine_coretext_p.h>
+#include <qfontengine_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 

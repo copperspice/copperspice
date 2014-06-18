@@ -23,17 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qlcdnumber.h"
+#include <qlcdnumber.h>
+
 #ifndef QT_NO_LCDNUMBER
-#include "qbitarray.h"
-#include "qpainter.h"
-#include "private/qframe_p.h"
+#include <qbitarray.h>
+#include <qpainter.h>
+#include <qframe_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QLCDNumberPrivate : public QFramePrivate
 {
     Q_DECLARE_PUBLIC(QLCDNumber)
+
 public:
     void init();
     void internalSetString(const QString& s);

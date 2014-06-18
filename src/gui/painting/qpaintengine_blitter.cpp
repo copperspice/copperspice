@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#include "private/qpaintengine_blitter_p.h"
-
-#include "private/qblittable_p.h"
-#include "private/qpaintengine_raster_p.h"
-#include "private/qpainter_p.h"
-#include "private/qapplication_p.h"
-#include "private/qpixmap_blitter_p.h"
+#include <qpaintengine_blitter_p.h>
+#include <qblittable_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qpainter_p.h>
+#include <qapplication_p.h>
+#include <qpixmap_blitter_p.h>
 
 #ifndef QT_NO_BLITTABLE
 QT_BEGIN_NAMESPACE

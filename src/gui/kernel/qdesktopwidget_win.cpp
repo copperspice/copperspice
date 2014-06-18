@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qdesktopwidget.h"
-#include "qt_windows.h"
-#include "qapplication_p.h"
-#include "qwidget_p.h"
-#include "qdebug.h"
-
-#include <private/qsystemlibrary_p.h>
+#include <qdesktopwidget.h>
+#include <qt_windows.h>
+#include <qapplication_p.h>
+#include <qwidget_p.h>
+#include <qdebug.h>
+#include <qsystemlibrary_p.h>
 #include <qvector.h>
 #include <limits.h>
 

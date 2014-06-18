@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include <private/qdrawhelper_x86_p.h>
+#include <qdrawhelper_x86_p.h>
 
 #ifdef QT_HAVE_SSE2
 
-#include <private/qdrawingprimitive_sse2_p.h>
-#include <private/qpaintengine_raster_p.h>
+#include <qdrawingprimitive_sse2_p.h>
+#include <qpaintengine_raster_p.h>
 
 QT_BEGIN_NAMESPACE
 

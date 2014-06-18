@@ -23,19 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qeventdispatcher_x11_p.h"
-
-#include "qapplication.h"
-#include "qx11info_x11.h"
-
-#include "qt_x11_p.h"
-#include <private/qeventdispatcher_unix_p.h>
+#include <qeventdispatcher_x11_p.h>
+#include <qapplication.h>
+#include <qx11info_x11.h>
+#include <qt_x11_p.h>
+#include <qeventdispatcher_unix_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QEventDispatcherX11Private : public QEventDispatcherUNIXPrivate
 {
     Q_DECLARE_PUBLIC(QEventDispatcherX11)
+
 public:
     inline QEventDispatcherX11Private()
         : xfd(-1)

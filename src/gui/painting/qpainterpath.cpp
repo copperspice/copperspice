@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qpainterpath.h"
-#include "qpainterpath_p.h"
+#include <qpainterpath.h>
+#include <qpainterpath_p.h>
 
 #include <qbitmap.h>
 #include <qdebug.h>
@@ -37,13 +37,12 @@
 #include <qvarlengtharray.h>
 #include <qmath.h>
 
-#include <private/qbezier_p.h>
-#include <private/qfontengine_p.h>
-#include <private/qnumeric_p.h>
-#include <private/qpathclipper_p.h>
-#include <private/qstroker_p.h>
-#include <private/qtextengine_p.h>
-
+#include <qbezier_p.h>
+#include <qfontengine_p.h>
+#include <qnumeric_p.h>
+#include <qpathclipper_p.h>
+#include <qstroker_p.h>
+#include <qtextengine_p.h>
 #include <limits.h>
 
 #define PM_INIT

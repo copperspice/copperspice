@@ -23,17 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qmouselinuxinput_qws.h"
-
+#include <qmouselinuxinput_qws.h>
 #include <QScreen>
 #include <QSocketNotifier>
 #include <QStringList>
-
 #include <qplatformdefs.h>
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
-
+#include <qcore_unix_p.h> // overrides QT_OPEN
 #include <errno.h>
-
 #include <linux/input.h>
 
 QT_BEGIN_NAMESPACE

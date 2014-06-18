@@ -25,13 +25,12 @@
 
 #include <qsettings.h>
 #include <qdir.h>
-#include <private/qsystemlibrary_p.h>
+#include <qsystemlibrary_p.h>
 #include <qurl.h>
 #include <qstringlist.h>
 #include <qprocess.h>
 #include <qtemporaryfile.h>
 #include <qcoreapplication.h>
-
 #include <qt_windows.h>
 #include <shlobj.h>
 #include <intshcut.h>

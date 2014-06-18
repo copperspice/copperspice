@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "private/qpnghandler_p.h"
+#include "qpnghandler_p.h"
 
 #ifndef QT_NO_IMAGEFORMAT_PNG
 #include <qcoreapplication.h>

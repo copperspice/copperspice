@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qprinterinfo.h"
-#include "qprinterinfo_p.h"
+#include <qprinterinfo.h>
+#include <qprinterinfo_p.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -34,12 +34,12 @@
 #include <qcoreapplication.h>
 
 #if !defined(QT_NO_CUPS)
-#  include <private/qcups_p.h>
+#  include <qcups_p.h>
 #  include <cups/cups.h>
-#  include <private/qpdf_p.h>
+#  include <qpdf_p.h>
 #endif
 
-#include <private/qprinterinfo_unix_p.h>
+#include <qprinterinfo_unix_p.h>
 
 QT_BEGIN_NAMESPACE
 

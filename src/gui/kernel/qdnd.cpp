@@ -23,28 +23,26 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-
-#include "qbitmap.h"
-#include "qdrag.h"
-#include "qpixmap.h"
-#include "qevent.h"
-#include "qfile.h"
-#include "qtextcodec.h"
-#include "qapplication.h"
-#include "qpoint.h"
-#include "qwidget.h"
-#include "qbuffer.h"
-#include "qimage.h"
-#include "qregexp.h"
-#include "qdir.h"
-#include "qdnd_p.h"
-#include "qimagereader.h"
-#include "qimagewriter.h"
-#include "qdebug.h"
+#include <qplatformdefs.h>
+#include <qbitmap.h>
+#include <qdrag.h>
+#include <qpixmap.h>
+#include <qevent.h>
+#include <qfile.h>
+#include <qtextcodec.h>
+#include <qapplication.h>
+#include <qpoint.h>
+#include <qwidget.h>
+#include <qbuffer.h>
+#include <qimage.h>
+#include <qregexp.h>
+#include <qdir.h>
+#include <qdnd_p.h>
+#include <qimagereader.h>
+#include <qimagewriter.h>
+#include <qdebug.h>
 #include <ctype.h>
-
-#include <private/qapplication_p.h>
+#include <qapplication_p.h>
 
 #ifndef QT_NO_DRAGANDDROP
 

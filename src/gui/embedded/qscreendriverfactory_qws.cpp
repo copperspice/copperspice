@@ -23,36 +23,34 @@
 *
 ***********************************************************************/
 
-#include "qscreendriverfactory_qws.h"
-
-#include "qscreen_qws.h"
-#include "qapplication.h"
-#include "qscreenlinuxfb_qws.h"
-#include "qscreentransformed_qws.h"
-#include "qscreenvfb_qws.h"
-#include "qscreenmulti_qws_p.h"
-#include "qscreenqnx_qws.h"
-#include "qscreenintegrityfb_qws.h"
+#include <qscreendriverfactory_qws.h>
+#include <qscreen_qws.h>
+#include <qapplication.h>
+#include <qscreenlinuxfb_qws.h>
+#include <qscreentransformed_qws.h>
+#include <qscreenvfb_qws.h>
+#include <qscreenmulti_qws_p.h>
+#include <qscreenqnx_qws.h>
+#include <qscreenintegrityfb_qws.h>
 #include <stdlib.h>
-#include "private/qfactoryloader_p.h"
-#include "qscreendriverplugin_qws.h"
+#include <qfactoryloader_p.h>
+#include <qscreendriverplugin_qws.h>
 
 #ifndef QT_NO_QWS_DIRECTFB
-#include "qdirectfbscreen.h"
+#include <qdirectfbscreen.h>
 #endif
 
 #ifndef QT_NO_QWS_VNC
-#include "qscreenvnc_qws.h"
+#include <qscreenvnc_qws.h>
 #endif
 
 QT_BEGIN_NAMESPACE
 
-#if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
+#if ! defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-    (QScreenDriverFactoryInterface_iid,
-     QLatin1String("/gfxdrivers"), Qt::CaseInsensitive))
+    (QScreenDriverFactoryInterface_iid, QLatin1String("/gfxdrivers"), Qt::CaseInsensitive))
 
-#endif //QT_MAKEDLL
+#endif
 
 /*!
     \class QScreenDriverFactory

@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include <private/qprintengine_qws_p.h>
+#include <qprintengine_qws_p.h>
 
 #ifndef QT_NO_PRINTER
 
-#include <private/qpaintengine_raster_p.h>
+#include <qpaintengine_raster_p.h>
 #include <qimage.h>
 #include <qfile.h>
 #include <qdebug.h>

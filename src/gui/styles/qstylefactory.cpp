@@ -23,37 +23,40 @@
 *
 ***********************************************************************/
 
-#include "qstylefactory.h"
-#include "qstyleplugin.h"
-#include "private/qfactoryloader_p.h"
-#include "qmutex.h"
-
-#include "qapplication.h"
-#include "qwindowsstyle.h"
-#include "qmotifstyle.h"
-#include "qcdestyle.h"
+#include <qstylefactory.h>
+#include <qstyleplugin.h>
+#include <qfactoryloader_p.h>
+#include <qmutex.h>
+#include <qapplication.h>
+#include <qwindowsstyle.h>
+#include <qmotifstyle.h>
+#include <qcdestyle.h>
 
 #ifndef QT_NO_STYLE_PLASTIQUE
-#include "qplastiquestyle.h"
+#include <qplastiquestyle.h>
 #endif
+
 #ifndef QT_NO_STYLE_CLEANLOOKS
-#include "qcleanlooksstyle.h"
+#include <qcleanlooksstyle.h>
 #endif
+
 #ifndef QT_NO_STYLE_GTK
-#include "qgtkstyle.h"
+#include <qgtkstyle.h>
 #endif
+
 #ifndef QT_NO_STYLE_WINDOWSXP
-#include "qwindowsxpstyle.h"
+#include <qwindowsxpstyle.h>
 #endif
+
 #ifndef QT_NO_STYLE_WINDOWSVISTA
-#include "qwindowsvistastyle.h"
+#include <qwindowsvistastyle.h>
 #endif
 
 QT_BEGIN_NAMESPACE
 
 #if !defined(QT_NO_STYLE_MAC) && defined(Q_OS_MAC)
 QT_BEGIN_INCLUDE_NAMESPACE
-#  include "qmacstyle_mac.h"
+#  include <qmacstyle_mac.h>
 QT_END_INCLUDE_NAMESPACE
 #endif
 

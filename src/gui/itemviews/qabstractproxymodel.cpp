@@ -23,47 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qabstractproxymodel.h"
+#include <qabstractproxymodel.h>
 
 #ifndef QT_NO_PROXYMODEL
 
-#include "qitemselectionmodel.h"
-#include <private/qabstractproxymodel_p.h>
+#include <qitemselectionmodel.h>
+#include <qabstractproxymodel_p.h>
 #include <QtCore/QSize>
 #include <QtCore/QStringList>
 
-
 QT_BEGIN_NAMESPACE
-
-/*!
-    \since 4.1
-    \class QAbstractProxyModel
-    \brief The QAbstractProxyModel class provides a base class for proxy item
-    models that can do sorting, filtering or other data processing tasks.
-    \ingroup model-view
-
-    This class defines the standard interface that proxy models must use to be
-    able to interoperate correctly with other model/view components. It is not
-    supposed to be instantiated directly.
-
-    All standard proxy models are derived from the QAbstractProxyModel class.
-    If you need to create a new proxy model class, it is usually better to
-    subclass an existing class that provides the closest behavior to the one
-    you want to provide.
-
-    Proxy models that filter or sort items of data from a source model should
-    be created by using or subclassing QSortFilterProxyModel.
-
-    To subclass QAbstractProxyModel, you need to implement mapFromSource() and
-    mapToSource(). The mapSelectionFromSource() and mapSelectionToSource()
-    functions only need to be reimplemented if you need a behavior different
-    from the default behavior.
-
-    \note If the source model is deleted or no source model is specified, the
-    proxy model operates on a empty placeholder model.
-
-    \sa QSortFilterProxyModel, QAbstractItemModel, {Model/View Programming}
-*/
 
 //detects the deletion of the source model
 void QAbstractProxyModelPrivate::_q_sourceModelDestroyed()

@@ -24,15 +24,14 @@
 ***********************************************************************/
 
 #include <qdebug.h>
-#include <private/qfontengine_p.h>
-
-#include "qbitmap.h"
-#include "qpainter.h"
-#include "qpainterpath.h"
-#include "qvarlengtharray.h"
+#include <qfontengine_p.h>
+#include <qbitmap.h>
+#include <qpainter.h>
+#include <qpainterpath.h>
+#include <qvarlengtharray.h>
 #include <qmath.h>
 #include <qendian.h>
-#include <private/qharfbuzz_p.h>
+#include <qharfbuzz_p.h>
 
 QT_BEGIN_NAMESPACE
 

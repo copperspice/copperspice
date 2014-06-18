@@ -31,14 +31,13 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <stdio.h>
-
 #include <qvfbhdr.h>
 #include <qmousevfb_qws.h>
 #include <qwindowsystem_qws.h>
 #include <qsocketnotifier.h>
 #include <qapplication.h>
 #include <qtimer.h>
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
+#include <qcore_unix_p.h>       // overrides QT_OPEN
 
 QT_BEGIN_NAMESPACE
 

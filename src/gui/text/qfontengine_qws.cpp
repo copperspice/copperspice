@@ -26,11 +26,11 @@
 #include "qfontengine_p.h"
 #include <qwsdisplay_qws.h>
 #include <qvarlengtharray.h>
-#include <private/qpainter_p.h>
-#include <private/qpaintengine_raster_p.h>
-#include <private/qpdf_p.h>
+#include <qpainter_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qpdf_p.h>
 #include "qtextengine_p.h"
-#include "private/qcore_unix_p.h" // overrides QT_OPEN
+#include "qcore_unix_p.h" // overrides QT_OPEN
 
 #include <qdebug.h>
 

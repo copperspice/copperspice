@@ -23,9 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qbackingstore_p.h"
-
+#include <qplatformdefs.h>
+#include <qbackingstore_p.h>
 #include <QtCore/qglobal.h>
 #include <QtCore/qdebug.h>
 #include <QtCore/qvarlengtharray.h>
@@ -34,17 +33,16 @@
 #include <QtGui/qpaintengine.h>
 #include <QtGui/qgraphicsproxywidget.h>
 
-#include <private/qwidget_p.h>
-#include <private/qwindowsurface_raster_p.h>
-#include <private/qapplication_p.h>
-#include <private/qpaintengine_raster_p.h>
-#include <private/qgraphicseffect_p.h>
-
-#include "qgraphicssystem_p.h"
+#include <qwidget_p.h>
+#include <qwindowsurface_raster_p.h>
+#include <qapplication_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qgraphicseffect_p.h>
+#include <qgraphicssystem_p.h>
 
 #ifdef Q_WS_QWS
 #include <QtGui/qwsmanager_qws.h>
-#include <private/qwsmanager_p.h>
+#include <qwsmanager_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE

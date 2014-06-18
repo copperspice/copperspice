@@ -31,7 +31,7 @@
 #  include <xmmintrin.h>
 #endif
 
-#include <private/qdrawhelper_sse_p.h>
+#include <qdrawhelper_sse_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,10 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qgraphicssystem_raster_p.h"
-
-#include "private/qpixmap_raster_p.h"
-#include "private/qwindowsurface_raster_p.h"
+#include <qgraphicssystem_raster_p.h>
+#include <qpixmap_raster_p.h>
+#include <qwindowsurface_raster_p.h>
 
 QT_BEGIN_NAMESPACE
 

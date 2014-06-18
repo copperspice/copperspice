@@ -23,16 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qcolormap.h"
-#include "qcolor.h"
-#include "qpaintdevice.h"
-#include "private/qapplication_p.h"
-#include "private/qgraphicssystem_p.h"
+#include <qcolormap.h>
+#include <qcolor.h>
+#include <qpaintdevice.h>
+#include <qapplication_p.h>
+#include <qgraphicssystem_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QColormapPrivate
 {
+
 public:
     inline QColormapPrivate()
         : ref(1), mode(QColormap::Direct), depth(0), numcolors(0)

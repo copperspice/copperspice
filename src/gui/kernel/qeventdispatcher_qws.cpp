@@ -23,16 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qapplication.h"
-#include "private/qwscommand_qws_p.h"
-#include "qwsdisplay_qws.h"
-#include "qwsevent_qws.h"
-#include "qwindowsystem_qws.h"
-#include "qeventdispatcher_qws_p.h"
-#include "private/qeventdispatcher_unix_p.h"
-#include "qmutex.h"
-
+#include <qplatformdefs.h>
+#include <qapplication.h>
+#include <qwscommand_qws_p.h>
+#include <qwsdisplay_qws.h>
+#include <qwsevent_qws.h>
+#include <qwindowsystem_qws.h>
+#include <qeventdispatcher_qws_p.h>
+#include <qeventdispatcher_unix_p.h>
+#include <qmutex.h>
 #include <errno.h>
 
 QT_BEGIN_NAMESPACE
@@ -42,6 +41,7 @@ QT_USE_NAMESPACE
 class QEventDispatcherQWSPrivate : public QEventDispatcherUNIXPrivate
 {
     Q_DECLARE_PUBLIC(QEventDispatcherQWS)
+
 public:
     inline QEventDispatcherQWSPrivate()
     { }

@@ -28,8 +28,8 @@
 #ifndef QT_NO_PRINTDIALOG
 #include <qapplication.h>
 
-#include <private/qprintengine_win_p.h>
-#include <private/qabstractpagesetupdialog_p.h>
+#include <qprintengine_win_p.h>
+#include <qabstractpagesetupdialog_p.h>
 
 QT_BEGIN_NAMESPACE
 

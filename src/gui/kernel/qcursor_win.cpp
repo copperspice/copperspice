@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include <private/qcursor_p.h>
+#include <qcursor_p.h>
 #include <qbitmap.h>
 #include <qcursor.h>
 
@@ -31,7 +31,7 @@
 
 #include <qimage.h>
 #include <qt_windows.h>
-#include <private/qapplication_p.h>
+#include <qapplication_p.h>
 
 QT_BEGIN_NAMESPACE
 

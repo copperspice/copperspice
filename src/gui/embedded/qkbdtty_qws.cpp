@@ -29,9 +29,8 @@
 
 #include <QSocketNotifier>
 #include <QStringList>
-
 #include <qplatformdefs.h>
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
+#include <qcore_unix_p.h>       // overrides QT_OPEN
 
 #include <errno.h>
 #include <termios.h>
@@ -43,8 +42,8 @@
 #  include "qscreen_qws.h"
 #  include "qwindowsystem_qws.h"
 #  include "qapplication.h"
-#  include "private/qwindowsurface_qws_p.h"
-#  include "private/qwssignalhandler_p.h"
+#  include "qwindowsurface_qws_p.h"
+#  include "qwssignalhandler_p.h"
 
 #  define VTACQSIG SIGUSR1
 #  define VTRELSIG SIGUSR2

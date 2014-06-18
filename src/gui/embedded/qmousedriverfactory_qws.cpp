@@ -23,20 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qmousedriverfactory_qws.h"
-
-#include "qapplication.h"
-#include "qmousepc_qws.h"
-#include "qmouselinuxtp_qws.h"
-#include "qmouselinuxinput_qws.h"
-#include "qmousevfb_qws.h"
-#include "qmousetslib_qws.h"
-#include "qmouseqnx_qws.h"
-#include "qmouseintegrity_qws.h"
+#include <qmousedriverfactory_qws.h>
+#include <qapplication.h>
+#include <qmousepc_qws.h>
+#include <qmouselinuxtp_qws.h>
+#include <qmouselinuxinput_qws.h>
+#include <qmousevfb_qws.h>
+#include <qmousetslib_qws.h>
+#include <qmouseqnx_qws.h>
+#include <qmouseintegrity_qws.h>
 #include <stdlib.h>
-#include "private/qfactoryloader_p.h"
-#include "qmousedriverplugin_qws.h"
-#include "qdebug.h"
+#include <qfactoryloader_p.h>
+#include <qmousedriverplugin_qws.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

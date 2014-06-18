@@ -24,27 +24,23 @@
 ***********************************************************************/
 
 #include "qpixmap.h"
-
-#include <private/qfont_p.h>
-
+#include <qfont_p.h>
 #include "qpixmap_raster_p.h"
 #include "qnativeimage_p.h"
 #include "qimage_p.h"
 #include "qpaintengine.h"
-
 #include "qbitmap.h"
 #include "qimage.h"
 #include <QBuffer>
 #include <QImageReader>
-#include <private/qimage_p.h>
-#include <private/qsimd_p.h>
-#include <private/qwidget_p.h>
-#include <private/qdrawhelper_p.h>
+#include <qimage_p.h>
+#include <qsimd_p.h>
+#include <qwidget_p.h>
+#include <qdrawhelper_p.h>
 
 QT_BEGIN_NAMESPACE
 
-const uchar qt_pixmap_bit_mask[] = { 0x01, 0x02, 0x04, 0x08,
-                                     0x10, 0x20, 0x40, 0x80 };
+const uchar qt_pixmap_bit_mask[] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
 
 QPixmap qt_toRasterPixmap(const QImage &image)
 {

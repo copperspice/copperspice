@@ -23,15 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qcolormap.h"
-
-#include "qapplication.h"
-#include "qdebug.h"
-#include "qdesktopwidget.h"
-#include "qvarlengtharray.h"
-
-#include "qx11info_x11.h"
-#include <private/qt_x11_p.h>
+#include <qcolormap.h>
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qdesktopwidget.h>
+#include <qvarlengtharray.h>
+#include <qx11info_x11.h>
+#include <qt_x11_p.h>
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE

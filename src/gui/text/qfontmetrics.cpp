@@ -23,18 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qfont.h"
-#include "qpaintdevice.h"
-#include "qfontmetrics.h"
-
-#include "qfont_p.h"
-#include "qfontengine_p.h"
-#include <private/qunicodetables_p.h>
-
+#include <qfont.h>
+#include <qpaintdevice.h>
+#include <qfontmetrics.h>
+#include <qfont_p.h>
+#include <qfontengine_p.h>
+#include <qunicodetables_p.h>
 #include <math.h>
 
 #ifdef Q_WS_X11
-#include "qx11info_x11.h"
+#include <qx11info_x11.h>
 #endif
 
 QT_BEGIN_NAMESPACE

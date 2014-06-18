@@ -38,7 +38,7 @@
 #endif
 
 #include "qdebug.h"
-#include "private/qlayoutengine_p.h"
+#include "qlayoutengine_p.h"
 
 QT_BEGIN_NAMESPACE
 

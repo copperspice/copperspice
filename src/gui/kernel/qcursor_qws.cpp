@@ -24,7 +24,7 @@
 ***********************************************************************/
 
 #include <qcursor.h>
-#include <private/qcursor_p.h>
+#include <qcursor_p.h>
 #include <qbitmap.h>
 #include <qwsdisplay_qws.h>
 

@@ -23,124 +23,7 @@
 *
 ***********************************************************************/
 
-/*!
-    \class QMdiArea
-    \brief The QMdiArea widget provides an area in which MDI windows are displayed.
-    \since 4.3
-    \ingroup mainwindow-classes
-
-
-    QMdiArea functions, essentially, like a window manager for MDI
-    windows. For instance, it draws the windows it manages on itself
-    and arranges them in a cascading or tile pattern. QMdiArea is
-    commonly used as the center widget in a QMainWindow to create MDI
-    applications, but can also be placed in any layout. The following
-    code adds an area to a main window:
-
-    \snippet doc/src/snippets/mdiareasnippets.cpp 0
-
-    Unlike the window managers for top-level windows, all window flags
-    (Qt::WindowFlags) are supported by QMdiArea as long as the flags
-    are supported by the current widget style. If a specific flag is
-    not supported by the style (e.g., the
-    \l{Qt::}{WindowShadeButtonHint}), you can still shade the window
-    with showShaded().
-
-    Subwindows in QMdiArea are instances of QMdiSubWindow. They
-    are added to an MDI area with addSubWindow(). It is common to pass
-    a QWidget, which is set as the internal widget, to this function,
-    but it is also possible to pass a QMdiSubWindow directly.The class
-    inherits QWidget, and you can use the same API as with a normal
-    top-level window when programming. QMdiSubWindow also has behavior
-    that is specific to MDI windows. See the QMdiSubWindow class
-    description for more details.
-
-    A subwindow becomes active when it gets the keyboard focus, or
-    when setFocus() is called. The user activates a window by moving
-    focus in the usual ways. The MDI area emits the
-    subWindowActivated() signal when the active window changes, and
-    the activeSubWindow() function returns the active subwindow.
-
-    The convenience function subWindowList() returns a list of all
-    subwindows. This information could be used in a popup menu
-    containing a list of windows, for example.
-
-    The subwindows are sorted by the current
-    \l{QMdiArea::}{WindowOrder}. This is used for the subWindowList()
-    and for activateNextSubWindow() and acivatePreviousSubWindow().
-    Also, it is used when cascading or tiling the windows with
-    cascadeSubWindows() and tileSubWindows().
-
-    QMdiArea provides two built-in layout strategies for
-    subwindows: cascadeSubWindows() and tileSubWindows(). Both are
-    slots and are easily connected to menu entries.
-
-    \table
-    \row \o \inlineimage mdi-cascade.png
-         \o \inlineimage mdi-tile.png
-    \endtable
-
-    \note The default scroll bar property for QMdiArea is Qt::ScrollBarAlwaysOff.
-
-    \sa QMdiSubWindow
-*/
-
-/*!
-    \fn QMdiArea::subWindowActivated(QMdiSubWindow *window)
-
-    QMdiArea emits this signal after \a window has been activated. When \a
-    window is 0, QMdiArea has just deactivated its last active window, and
-    there are no active windows on the workspace.
-
-    \sa QMdiArea::activeSubWindow()
-*/
-
-/*!
-    \enum QMdiArea::AreaOption
-
-    This enum describes options that customize the behavior of the
-    QMdiArea.
-
-    \value DontMaximizeSubWindowOnActivation When the active subwindow
-    is maximized, the default behavior is to maximize the next
-    subwindow that is activated. Set this option if you do not want
-    this behavior.
-*/
-
-/*!
-    \enum QMdiArea::WindowOrder
-
-    Specifies the criteria to use for ordering the list of child windows
-    returned by subWindowList(). The functions cascadeSubWindows() and
-    tileSubWindows() follow this order when arranging the windows.
-
-    \value CreationOrder The windows are returned in the order of
-    their creation.
-
-    \value StackingOrder The windows are returned in the order in
-    which they are stacked, with the top-most window being last in
-    the list.
-
-    \value ActivationHistoryOrder The windows are returned in the order in
-    which they were activated.
-
-    \sa subWindowList()
-*/
-
-/*!
-    \enum QMdiArea::ViewMode
-    \since 4.4
-
-    This enum describes the view mode of the area; i.e. how sub-windows
-    will be displayed.
-
-    \value SubWindowView Display sub-windows with window frames (default).
-    \value TabbedView Display sub-windows with tabs in a tab bar.
-
-    \sa setViewMode()
-*/
-
-#include "qmdiarea_p.h"
+#include <qmdiarea_p.h>
 
 #ifndef QT_NO_MDIAREA
 
@@ -162,7 +45,7 @@
 #include <QDesktopWidget>
 #include <QDebug>
 #include <qmath.h>
-#include <private/qlayoutengine_p.h>
+#include <qlayoutengine_p.h>
 
 QT_BEGIN_NAMESPACE
 

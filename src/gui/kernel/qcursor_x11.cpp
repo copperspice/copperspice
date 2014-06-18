@@ -25,28 +25,27 @@
 
 #include <qdebug.h>
 #include <qdatastream.h>
-#include <private/qcursor_p.h>
-#include <private/qt_x11_p.h>
-#include <private/qapplication_p.h>
+#include <qcursor_p.h>
+#include <qt_x11_p.h>
+#include <qapplication_p.h>
 #include <qbitmap.h>
 #include <qcursor.h>
 #include <X11/cursorfont.h>
-
 #include <qlibrary.h>
 
 #ifndef QT_NO_XCURSOR
 #  include <X11/Xcursor/Xcursor.h>
-#endif // QT_NO_XCURSOR
+#endif
 
 #ifndef QT_NO_XFIXES
 #ifndef Status
 #define Status int
 #endif
 #  include <X11/extensions/Xfixes.h>
-#endif // QT_NO_XFIXES
+#endif
 
 #include "qx11info_x11.h"
-#include <private/qpixmap_x11_p.h>
+#include <qpixmap_x11_p.h>
 
 QT_BEGIN_NAMESPACE
 

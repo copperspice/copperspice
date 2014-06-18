@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include <private/qt_mac_p.h>
-#include "qfontengine_p.h"
+#include <qt_mac_p.h>
+#include <qfontengine_p.h>
 #include <qfile.h>
 #include <qabstractfileengine.h>
 #include <stdlib.h>

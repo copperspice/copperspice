@@ -23,83 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qtexttable.h"
-#include "qtextcursor.h"
-#include "qtextformat.h"
+#include <qtexttable.h>
+#include <qtextcursor.h>
+#include <qtextformat.h>
 #include <qdebug.h>
-#include "qtexttable_p.h"
-#include "qvarlengtharray.h"
-#include "private/qfunctions_p.h"
-
+#include <qtexttable_p.h>
+#include <qvarlengtharray.h>
+#include <qfunctions_p.h>
 #include <stdlib.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QTextTableCell
-    \reentrant
-
-    \brief The QTextTableCell class represents the properties of a
-    cell in a QTextTable.
-
-    \ingroup richtext-processing
-
-    Table cells are pieces of document structure that belong to a table.
-    The table orders cells into particular rows and columns; cells can
-    also span multiple columns and rows.
-
-    Cells are usually created when a table is inserted into a document with
-    QTextCursor::insertTable(), but they are also created and destroyed when
-    a table is resized.
-
-    Cells contain information about their location in a table; you can
-    obtain the row() and column() numbers of a cell, and its rowSpan()
-    and columnSpan().
-
-    The format() of a cell describes the default character format of its
-    contents. The firstCursorPosition() and lastCursorPosition() functions
-    are used to obtain the extent of the cell in the document.
-
-    \sa QTextTable QTextTableFormat
-*/
-
-/*!
-    \fn QTextTableCell::QTextTableCell()
-
-    Constructs an invalid table cell.
-
-    \sa isValid()
-*/
-
-/*!
-    \fn QTextTableCell::QTextTableCell(const QTextTableCell &other)
-
-    Copy constructor. Creates a new QTextTableCell object based on the
-    \a other cell.
-*/
-
-/*!
-    \fn QTextTableCell& QTextTableCell::operator=(const QTextTableCell &other)
-
-    Assigns the \a other table cell to this table cell.
-*/
-
-/*!
-    \since 4.2
-
-    Sets the cell's character format to \a format. This can for example be used to change
-    the background color of the entire cell:
-
-    QTextTableCell cell = table->cellAt(2, 3);
-    QTextCharFormat format = cell.format();
-    format.setBackground(Qt::blue);
-    cell.setFormat(format);
-
-    Note that the cell's row or column span cannot be changed through this function. You have
-    to use QTextTable::mergeCells and QTextTable::splitCell instead.
-
-    \sa format()
-*/
 void QTextTableCell::setFormat(const QTextCharFormat &format)
 {
     QTextCharFormat fmt = format;

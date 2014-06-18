@@ -23,18 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qsplashscreen.h"
+#include <qsplashscreen.h>
 
 #ifndef QT_NO_SPLASHSCREEN
 
-#include "qapplication.h"
-#include "qdesktopwidget.h"
-#include "qpainter.h"
-#include "qpixmap.h"
-#include "qtextdocument.h"
-#include "qtextcursor.h"
+#include <qapplication.h>
+#include <qdesktopwidget.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qtextdocument.h>
+#include <qtextcursor.h>
 #include <QtCore/qdebug.h>
-#include <private/qwidget_p.h>
+#include <qwidget_p.h>
 
 QT_BEGIN_NAMESPACE
 

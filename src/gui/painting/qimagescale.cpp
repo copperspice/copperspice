@@ -22,11 +22,11 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include <private/qimagescale_p.h>
-#include <private/qdrawhelper_p.h>
 
-#include "qimage.h"
-#include "qcolor.h"
+#include <qimagescale_p.h>
+#include <qdrawhelper_p.h>
+#include <qimage.h>
+#include <qcolor.h>
 
 QT_BEGIN_NAMESPACE
 

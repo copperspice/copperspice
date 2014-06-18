@@ -24,9 +24,9 @@
 ***********************************************************************/
 
 #include <qscreen_qws.h>
-#include "qgraphicssystem_qws_p.h"
-#include <private/qpixmap_raster_p.h>
-#include <private/qwindowsurface_qws_p.h>
+#include <qgraphicssystem_qws_p.h>
+#include <qpixmap_raster_p.h>
+#include <qwindowsurface_qws_p.h>
 
 QT_BEGIN_NAMESPACE
 

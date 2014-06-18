@@ -23,15 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qlayout.h"
-#include "private/qlayoutengine_p.h"
-
-#include "qvector.h"
-#include "qwidget.h"
-
+#include <qlayout.h>
+#include <qlayoutengine_p.h>
+#include <qvector.h>
+#include <qwidget.h>
 #include <qlist.h>
 #include <qalgorithms.h>
-
 #include <qdebug.h>
 
 QT_BEGIN_NAMESPACE

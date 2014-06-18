@@ -23,13 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qkbdqnx_qws.h"
-
-#include "qplatformdefs.h"
-#include "qsocketnotifier.h"
-#include "private/qcore_unix_p.h"
-#include "QtCore/qdebug.h"
-
+#include <qkbdqnx_qws.h>
+#include <qplatformdefs.h>
+#include <qsocketnotifier.h>
+#include <qcore_unix_p.h>
+#include <QtCore/qdebug.h>
 #include <sys/dcmd_input.h>
 #include <sys/keycodes.h>
 #include <errno.h>

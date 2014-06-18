@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qapplication.h"
-#include "qevent.h"
-#include "qbitmap.h"
-#include "private/qsoftkeymanager_p.h"
-#include "private/qaction_p.h"
-#include "private/qsoftkeymanager_common_p.h"
+#include <qapplication.h>
+#include <qevent.h>
+#include <qbitmap.h>
+#include <qsoftkeymanager_p.h>
+#include <qaction_p.h>
+#include <qsoftkeymanager_common_p.h>
 
 #ifndef QT_NO_SOFTKEYMANAGER
 QT_BEGIN_NAMESPACE

@@ -45,11 +45,11 @@
 #include <qapplication.h>
 #include "qtextcontrol_p.h"
 #include "qfont_p.h"
-#include "private/qtextedit_p.h"
-#include "private/qdataurl_p.h"
+#include "qtextedit_p.h"
+#include "qdataurl_p.h"
 #include "qtextdocument_p.h"
-#include <private/qprinter_p.h>
-#include <private/qabstracttextdocumentlayout_p.h>
+#include <qprinter_p.h>
+#include <qabstracttextdocumentlayout_p.h>
 
 #include <limits.h>
 

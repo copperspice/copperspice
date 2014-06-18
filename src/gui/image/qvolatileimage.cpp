@@ -25,8 +25,8 @@
 
 #include "qvolatileimage_p.h"
 #include "qvolatileimagedata_p.h"
-#include <QtGui/private/qpaintengine_raster_p.h>
-#include <QtGui/private/qpixmapdata_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qpixmapdata_p.h>
 
 QT_BEGIN_NAMESPACE
 

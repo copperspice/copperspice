@@ -23,20 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qfont.h"
-#include "qfont_p.h"
-#include "qfontengine_p.h"
-#include "qtextengine_p.h"
-#include "qfontmetrics.h"
-#include "qfontinfo.h"
-
-#include "qwidget.h"
-#include "qpainter.h"
+#include <qfont.h>
+#include <qfont_p.h>
+#include <qfontengine_p.h>
+#include <qtextengine_p.h>
+#include <qfontmetrics.h>
+#include <qfontinfo.h>
+#include <qwidget.h>
+#include <qpainter.h>
 #include <limits.h>
-#include "qt_windows.h"
-#include <private/qapplication_p.h>
-#include "qapplication.h"
-#include <private/qunicodetables_p.h>
+#include <qt_windows.h>
+#include <qapplication_p.h>
+#include <qapplication.h>
+#include <qunicodetables_p.h>
 #include <qfontdatabase.h>
 
 QT_BEGIN_NAMESPACE

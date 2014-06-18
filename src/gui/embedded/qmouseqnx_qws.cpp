@@ -23,58 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qmouseqnx_qws.h"
-
-#include "qplatformdefs.h"
-#include "qsocketnotifier.h"
-#include "private/qcore_unix_p.h"
-
+#include <qmouseqnx_qws.h>
+#include <qplatformdefs.h>
+#include <qsocketnotifier.h>
+#include <qcore_unix_p.h>
 #include <sys/dcmd_input.h>
 #include <errno.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QQnxMouseHandler
-    \preliminary
-    \ingroup qws
-    \internal
-    \since 4.6
-
-    \brief The QQnxMouseHandler class implements a mouse driver
-    for the QNX \c{devi-hid} input manager.
-
-    To be able to compile this mouse handler, \l{Qt for Embedded Linux}
-    must be configured with the \c -qt-mouse-qnx option, see the
-    \l{Qt for Embedded Linux Pointer Handling}{Pointer Handling} documentation for details.
-
-    In order to use this mouse handler, the \c{devi-hid} input manager
-    must be set up and run with the resource manager interface (option \c{-r}).
-    Also, Photon must not be running.
-
-    Example invocation from command line: \c{/usr/photon/bin/devi-hid -Pr kbd mouse}
-    Note that after running \c{devi-hid}, you will not be able to use the local
-    shell anymore. It is suggested to run the command in a shell scrip, that launches
-    a Qt application after invocation of \c{devi-hid}.
-
-    To make \l{Qt for Embedded Linux} explicitly choose the qnx mouse
-    handler, set the QWS_MOUSE_PROTO environment variable to \c{qnx}. By default,
-    the first mouse device (\c{/dev/devi/mouse0}) is used. To override, pass a device
-    name as the first and only parameter, for example
-    \c{QWS_MOUSE_PROTO=qnx:/dev/devi/mouse1; export QWS_MOUSE_PROTO}.
-
-    \sa {Qt for Embedded Linux Pointer Handling}{Pointer Handling}, {Qt for Embedded Linux}
-*/
-
-/*!
-    Constructs a mouse handler for the specified \a device, defaulting to \c{/dev/devi/mouse0}.
-    The \a driver parameter must be \c{"qnx"}.
-
-    Note that you should never instanciate this class, instead let QMouseDriverFactory
-    handle the mouse handlers.
-
-    \sa QMouseDriverFactory
- */
 QQnxMouseHandler::QQnxMouseHandler(const QString & driver, const QString &device)
     : QObject(), QWSMouseHandler(driver, device), mouseButtons(Qt::NoButton)
 {

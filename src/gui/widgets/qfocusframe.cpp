@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qfocusframe.h"
-#include "qstyle.h"
-#include "qbitmap.h"
-#include "qstylepainter.h"
-#include "qstyleoption.h"
-#include "qdebug.h"
-#include <private/qwidget_p.h>
+#include <qfocusframe.h>
+#include <qstyle.h>
+#include <qbitmap.h>
+#include <qstylepainter.h>
+#include <qstyleoption.h>
+#include <qdebug.h>
+#include <qwidget_p.h>
 
 QT_BEGIN_NAMESPACE
 

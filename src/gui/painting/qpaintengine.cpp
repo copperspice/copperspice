@@ -22,49 +22,22 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qpaintengine.h"
-#include "qpaintengine_p.h"
-#include "qpainter_p.h"
-#include "qpolygon.h"
-#include "qbitmap.h"
-#include "qapplication.h"
+
+#include <qpaintengine.h>
+#include <qpaintengine_p.h>
+#include <qpainter_p.h>
+#include <qpolygon.h>
+#include <qbitmap.h>
+#include <qapplication.h>
 #include <qdebug.h>
 #include <qmath.h>
-#include <private/qtextengine_p.h>
+#include <qtextengine_p.h>
 #include <qvarlengtharray.h>
-#include <private/qfontengine_p.h>
-#include <private/qpaintengineex_p.h>
-
+#include <qfontengine_p.h>
+#include <qpaintengineex_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QTextItem
-
-    \brief The QTextItem class provides all the information required to draw
-    text in a custom paint engine.
-
-    When you reimplement your own paint engine, you must reimplement
-    QPaintEngine::drawTextItem(), a function that takes a QTextItem as
-    one of its arguments.
-*/
-
-/*!
-  \enum QTextItem::RenderFlag
-
-  \value  RightToLeft Render the text from right to left.
-  \value  Overline    Paint a line above the text.
-  \value  Underline   Paint a line under the text.
-  \value  StrikeOut   Paint a line through the text.
-  \omitvalue Dummy
-*/
-
-
-/*!
-    \fn qreal QTextItem::descent() const
-
-    Corresponds to the \l{QFontMetrics::descent()}{descent} of the piece of text that is drawn.
-*/
 qreal QTextItem::descent() const
 {
     const QTextItemInt *ti = static_cast<const QTextItemInt *>(this);

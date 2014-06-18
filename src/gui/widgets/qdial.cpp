@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qdial.h"
+#include <qdial.h>
 
 #ifndef QT_NO_DIAL
 
@@ -38,11 +38,13 @@
 #include <qstylepainter.h>
 #include <qstyleoption.h>
 #include <qslider.h>
-#include <private/qabstractslider_p.h>
-#include <private/qmath_p.h>
+#include <qabstractslider_p.h>
+#include <qmath_p.h>
+
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
+
 #include <qmath.h>
 
 QT_BEGIN_NAMESPACE

@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qgtkstyle_p.h"
+#include <qgtkstyle_p.h>
 
 // This file is responsible for resolving all GTK functions we use
 // dynamically. This is done to avoid link-time dependancy on GTK
@@ -35,6 +35,7 @@
 // state flags
 
 #include <QtCore/qglobal.h>
+
 #if !defined(QT_NO_STYLE_GTK)
 
 #include <QtCore/QEvent>
@@ -46,8 +47,8 @@
 #include <QtCore/QLibrary>
 #include <QtCore/QDebug>
 
-#include <private/qapplication_p.h>
-#include <private/qiconloader_p.h>
+#include <qapplication_p.h>
+#include <qiconloader_p.h>
 
 #include <QtGui/QMenu>
 #include <QtGui/QStyle>
@@ -58,8 +59,7 @@
 #include <QtGui/QToolBar>
 #include <QtGui/QToolButton>
 #include <QtGui/QX11Info>
-
-#include <private/qt_x11_p.h>
+#include <qt_x11_p.h>
 
 QT_BEGIN_NAMESPACE
 

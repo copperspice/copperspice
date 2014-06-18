@@ -24,28 +24,23 @@
 ***********************************************************************/
 
 #include <qplatformdefs.h>
-
 #include <qdebug.h>
 #include <qpaintdevice.h>
 #include <qelapsedtimer.h>
-
-#include <private/qt_x11_p.h>
-#include "qx11info_x11.h"
+#include <qt_x11_p.h>
+#include <qx11info_x11.h>
 #include <qdebug.h>
 #include <qfile.h>
 #include <qtemporaryfile.h>
 #include <qabstractfileengine.h>
 #include <qmath.h>
-
 #include <ctype.h>
 #include <stdlib.h>
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/mman.h>
-
-#include <private/qfontengine_x11_p.h>
+#include <qfontengine_x11_p.h>
 
 #ifndef QT_NO_FONTCONFIG
 #include <ft2build.h>

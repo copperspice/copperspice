@@ -23,12 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qgenericpluginfactory_qpa.h"
-
-#include "qapplication.h"
-#include "private/qfactoryloader_p.h"
-#include "qgenericplugin_qpa.h"
-#include "qdebug.h"
+#include <qgenericpluginfactory_qpa.h>
+#include <qapplication.h>
+#include <qfactoryloader_p.h>
+#include <qgenericplugin_qpa.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -38,7 +37,7 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
     (QGenericPluginFactoryInterface_iid,
      QLatin1String("/generic"), Qt::CaseInsensitive))
 
-#endif //QT_MAKEDLL
+#endif
 
 /*!
     \class QGenericPluginFactory

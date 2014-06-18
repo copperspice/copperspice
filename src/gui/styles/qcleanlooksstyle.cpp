@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qcleanlooksstyle.h"
-#include "qcleanlooksstyle_p.h"
+#include <qcleanlooksstyle.h>
+#include <qcleanlooksstyle_p.h>
 
 #if !defined(QT_NO_STYLE_CLEANLOOKS) || defined(QT_PLUGIN)
 
-#include "qwindowsstyle_p.h"
+#include <qwindowsstyle_p.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qpainter.h>
@@ -50,7 +50,7 @@
 #include <qtoolbar.h>
 #include <qwizard.h>
 #include <qlibrary.h>
-#include <private/qstylehelper_p.h>
+#include <qstylehelper_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qlistwidget.h"
+#include <qlistwidget.h>
 
 #ifndef QT_NO_LISTWIDGET
 #include <qitemdelegate.h>
-#include <private/qlistview_p.h>
-#include <private/qwidgetitemdata_p.h>
-#include <private/qlistwidget_p.h>
+#include <qlistview_p.h>
+#include <qwidgetitemdata_p.h>
+#include <qlistwidget_p.h>
 
 QT_BEGIN_NAMESPACE
 

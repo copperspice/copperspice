@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qx11embed_x11.h"
+#include <qplatformdefs.h>
+#include <qx11embed_x11.h>
 #include <qapplication.h>
 #include <qevent.h>
 #include <qpainter.h>
@@ -35,11 +35,12 @@
 #include <qpointer.h>
 #include <qdebug.h>
 #include <qx11info_x11.h>
-#include <private/qt_x11_p.h>
-#include <private/qwidget_p.h>
+#include <qt_x11_p.h>
+#include <qwidget_p.h>
 
 #define XK_MISCELLANY
 #define XK_LATIN1
+
 #define None 0
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>

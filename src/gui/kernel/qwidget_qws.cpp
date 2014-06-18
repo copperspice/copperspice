@@ -37,17 +37,15 @@
 #include "qdesktopwidget.h"
 
 #include "qwsdisplay_qws.h"
-#include "private/qwsdisplay_qws_p.h"
+#include "qwsdisplay_qws_p.h"
 #include "qscreen_qws.h"
 #include "qwsmanager_qws.h"
-#include <private/qwsmanager_p.h>
-#include <private/qbackingstore_p.h>
-#include <private/qwindowsurface_qws_p.h>
-#include <private/qwslock_p.h>
+#include <qwsmanager_p.h>
+#include <qbackingstore_p.h>
+#include <qwindowsurface_qws_p.h>
+#include <qwslock_p.h>
 #include "qpaintengine.h"
-
 #include "qdebug.h"
-
 #include "qwidget_p.h"
 
 QT_BEGIN_NAMESPACE

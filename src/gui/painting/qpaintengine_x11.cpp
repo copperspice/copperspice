@@ -23,47 +23,44 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-
-#include "private/qpixmap_x11_p.h"
-
-#include "qapplication.h"
-#include "qdebug.h"
-#include "qfont.h"
-#include "qwidget.h"
-#include "qbitmap.h"
-#include "qpixmapcache.h"
-#include "qtextcodec.h"
-#include "qcoreevent.h"
-#include "qiodevice.h"
+#include <qplatformdefs.h>
+#include <qpixmap_x11_p.h>
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qfont.h>
+#include <qwidget.h>
+#include <qbitmap.h>
+#include <qpixmapcache.h>
+#include <qtextcodec.h>
+#include <qcoreevent.h>
+#include <qiodevice.h>
 #include <qmath.h>
 
-#include "qpainter_p.h"
+#include <qpainter_p.h>
 #include <qtextlayout.h>
 #include <qvarlengtharray.h>
-#include <private/qfont_p.h>
-#include <private/qtextengine_p.h>
-#include <private/qpaintengine_x11_p.h>
-#include <private/qfontengine_x11_p.h>
-#include <private/qwidget_p.h>
-#include <private/qpainterpath_p.h>
+#include <qfont_p.h>
+#include <qtextengine_p.h>
+#include <qpaintengine_x11_p.h>
+#include <qfontengine_x11_p.h>
+#include <qwidget_p.h>
+#include <qpainterpath_p.h>
 
-#include "qpen.h"
-#include "qcolor.h"
-#include "qcolormap.h"
+#include <qpen.h>
+#include <qcolor.h>
+#include <qcolormap.h>
 
-#include <private/qpaintengine_p.h>
-#include "qpaintengine_x11_p.h"
-
-#include <private/qt_x11_p.h>
-#include <private/qnumeric_p.h>
+#include <qpaintengine_p.h>
+#include <qpaintengine_x11_p.h>
+#include <qt_x11_p.h>
+#include <qnumeric_p.h>
 #include <limits.h>
 
 #ifndef QT_NO_XRENDER
-#include <private/qtessellator_p.h>
+#include <qtessellator_p.h>
 #endif
 
-#include <private/qhexstring_p.h>
+#include <qhexstring_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qrawfont_p.h"
+#include <qrawfont_p.h>
 
 #if !defined(QT_NO_RAWFONT)
 
-#include <private/qsystemlibrary_p.h>
+#include <qsystemlibrary_p.h>
 
 #if !defined(QT_NO_DIRECTWRITE)
-#  include "qfontenginedirectwrite_p.h"
+#  include <qfontenginedirectwrite_p.h>
 #  include <dwrite.h>
 #endif
 

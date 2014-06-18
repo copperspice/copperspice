@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qbasickeyeventtransition_p.h"
+#include <qbasickeyeventtransition_p.h>
 
 #ifndef QT_NO_STATEMACHINE
 
 #include <QtGui/qevent.h>
 #include <qdebug.h>
-#include <private/qabstracttransition_p.h>
+#include <qabstracttransition_p.h>
 
 QT_BEGIN_NAMESPACE
 

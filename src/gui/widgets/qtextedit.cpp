@@ -38,11 +38,11 @@
 #include <qmenu.h>
 #include <qstyle.h>
 #include <qtimer.h>
-#include "private/qtextdocumentlayout_p.h"
+#include "qtextdocumentlayout_p.h"
 #include "qtextdocument.h"
-#include "private/qtextdocument_p.h"
+#include "qtextdocument_p.h"
 #include "qtextlist.h"
-#include "private/qtextcontrol_p.h"
+#include "qtextcontrol_p.h"
 
 #include <qtextformat.h>
 #include <qdatetime.h>
@@ -50,12 +50,10 @@
 #include <limits.h>
 #include <qtexttable.h>
 #include <qvariant.h>
-
 #include <qinputcontext.h>
 #endif
 
 QT_BEGIN_NAMESPACE
-
 
 #ifndef QT_NO_TEXTEDIT
 static inline bool shouldEnableInputMethod(QTextEdit *textedit)

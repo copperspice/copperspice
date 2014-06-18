@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qprinter_p.h"
-#include "qprinter.h"
-#include "qprintengine.h"
-#include "qprinterinfo.h"
-#include "qlist.h"
+#include <qprinter_p.h>
+#include <qprinter.h>
+#include <qprintengine.h>
+#include <qprinterinfo.h>
+#include <qlist.h>
 #include <qcoreapplication.h>
 #include <qfileinfo.h>
 
 #if !defined(QT_NO_CUPS)
-#include "private/qcups_p.h"
+#include <qcups_p.h>
 #endif
 
 #ifndef QT_NO_PRINTER
@@ -51,7 +51,7 @@
 #endif
 
 #ifndef QT_NO_PDF
-#include "qprintengine_pdf_p.h"
+#include <qprintengine_pdf_p.h>
 #endif
 
 #include <qpicture.h>

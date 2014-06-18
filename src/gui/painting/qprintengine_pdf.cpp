@@ -24,7 +24,6 @@
 ***********************************************************************/
 
 #include <QtGui/qprintengine.h>
-
 #include <qiodevice.h>
 #include <qpainter.h>
 #include <qbitmap.h>
@@ -43,8 +42,8 @@
 #include <zlib.h>
 #endif
 
-#include "qprintengine_pdf_p.h"
-#include "private/qdrawhelper_p.h"
+#include <qprintengine_pdf_p.h>
+#include <qdrawhelper_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -46,11 +46,9 @@
 #include "qmime.h"
 #include "qspinbox.h"
 #include "qdialogbuttonbox.h"
-#include "private/qguiplatformplugin_p.h"
+#include "/qguiplatformplugin_p.h"
 
 QT_BEGIN_NAMESPACE
-
-//////////// QWellArray BEGIN
 
 struct QWellArrayData;
 

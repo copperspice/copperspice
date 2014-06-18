@@ -114,7 +114,6 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/graphicsview/qgraphicsscenebsptreeindex.cpp \
 	src/gui/graphicsview/qgraphicssceneevent.cpp \
 	src/gui/graphicsview/qgraphicssceneindex.cpp \
-	src/gui/graphicsview/qgraphicsscenelinearindex.cpp \
 	src/gui/graphicsview/qgraphicstransform.cpp \
 	src/gui/graphicsview/qgraphicsview.cpp \
 	src/gui/graphicsview/qgraphicswidget.cpp \

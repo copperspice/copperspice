@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include <private/qemulationpaintengine_p.h>
-#include <private/qpainter_p.h>
-#include <private/qtextengine_p.h>
+#include <qemulationpaintengine_p.h>
+#include <qpainter_p.h>
+#include <qtextengine_p.h>
 #include <qdebug.h>
 
 QT_BEGIN_NAMESPACE

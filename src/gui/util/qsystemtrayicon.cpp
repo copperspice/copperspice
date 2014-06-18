@@ -23,25 +23,25 @@
 *
 ***********************************************************************/
 
-#include "qsystemtrayicon.h"
-#include "qsystemtrayicon_p.h"
+#include <qsystemtrayicon.h>
+#include <qsystemtrayicon_p.h>
 
 #ifndef QT_NO_SYSTEMTRAYICON
 
-#include "qmenu.h"
-#include "qevent.h"
-#include "qpoint.h"
-#include "qlabel.h"
-#include "qpushbutton.h"
-#include "qpainterpath.h"
-#include "qpainter.h"
-#include "qstyle.h"
-#include "qgridlayout.h"
-#include "qapplication.h"
-#include "qdesktopwidget.h"
-#include "qbitmap.h"
-#include "private/qlabel_p.h"
-#include "qapplication.h"
+#include <qmenu.h>
+#include <qevent.h>
+#include <qpoint.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qpainterpath.h>
+#include <qpainter.h>
+#include <qstyle.h>
+#include <qgridlayout.h>
+#include <qapplication.h>
+#include <qdesktopwidget.h>
+#include <qbitmap.h>
+#include <qlabel_p.h>
+#include <qapplication.h>
 
 QT_BEGIN_NAMESPACE
 

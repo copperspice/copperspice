@@ -41,14 +41,15 @@
 #include "qaccessible.h"
 #endif
 
-#include <private/qlayoutengine_p.h>
-#include <private/qwidget_p.h>
+#include <qlayoutengine_p.h>
+#include <qwidget_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QStatusBarPrivate : public QWidgetPrivate
 {
     Q_DECLARE_PUBLIC(QStatusBar)
+
 public:
     QStatusBarPrivate() {}
 

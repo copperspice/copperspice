@@ -24,16 +24,19 @@
 ***********************************************************************/
 
 #include "qslider.h"
+
 #ifndef QT_NO_SLIDER
+
 #ifndef QT_NO_ACCESSIBILITY
 #include "qaccessible.h"
 #endif
+
 #include "qapplication.h"
 #include "qevent.h"
 #include "qpainter.h"
 #include "qstyle.h"
 #include "qstyleoption.h"
-#include "private/qabstractslider_p.h"
+#include "qabstractslider_p.h"
 #include "qdebug.h"
 
 QT_BEGIN_NAMESPACE
@@ -41,6 +44,7 @@ QT_BEGIN_NAMESPACE
 class QSliderPrivate : public QAbstractSliderPrivate
 {
     Q_DECLARE_PUBLIC(QSlider)
+
 public:
     QStyle::SubControl pressedControl;
     int tickInterval;
@@ -493,17 +497,6 @@ QSize QSlider::minimumSizeHint() const
     return s;
 }
 
-/*!
-    \property QSlider::tickPosition
-    \brief the tickmark position for this slider
-
-    The valid values are described by the QSlider::TickPosition enum.
-
-    The default value is \l QSlider::NoTicks.
-
-    \sa tickInterval
-*/
-
 void QSlider::setTickPosition(TickPosition position)
 {
     Q_D(QSlider);
@@ -518,32 +511,6 @@ QSlider::TickPosition QSlider::tickPosition() const
     return d_func()->tickPosition;
 }
 
-/*!
-    \fn TickPosition QSlider::tickmarks() const
-    \compat
-
-    Use tickPosition() instead.
-*/
-
-/*!
-    \fn QSlider::setTickmarks(TickPosition position)
-    \compat
-
-    Use setTickPosition() instead.
-*/
-
-/*!
-    \property QSlider::tickInterval
-    \brief the interval between tickmarks
-
-    This is a value interval, not a pixel interval. If it is 0, the
-    slider will choose between singleStep() and pageStep().
-
-    The default value is 0.
-
-    \sa tickPosition, lineStep(), pageStep()
-*/
-
 void QSlider::setTickInterval(int ts)
 {
     d_func()->tickInterval = qMax(0, ts);
@@ -555,21 +522,6 @@ int QSlider::tickInterval() const
     return d_func()->tickInterval;
 }
 
-/*!
-    \fn void QSlider::addStep()
-
-    Use setValue() instead.
-*/
-
-/*!
-    \fn void QSlider::subtractStep()
-
-    Use setValue() instead.
-*/
-
-/*! \internal
-    Returns the style option for slider.
-*/
 Q_GUI_EXPORT QStyleOptionSlider qt_qsliderStyleOption(QSlider *slider)
 {
     QStyleOptionSlider sliderOption;

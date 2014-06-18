@@ -23,8 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qcssparser_p.h"
-
+#include <qcssparser_p.h>
 #include <qdebug.h>
 #include <qcolor.h>
 #include <qfont.h>
@@ -32,13 +31,13 @@
 #include <qfontmetrics.h>
 #include <qbrush.h>
 #include <qimagereader.h>
-#include "private/qfunctions_p.h"
+#include <qfunctions_p.h>
 
 #ifndef QT_NO_CSSPARSER
 
 QT_BEGIN_NAMESPACE
 
-#include "qcssscanner.cpp"
+#include <qcssscanner.cpp>
 
 using namespace QCss;
 

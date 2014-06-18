@@ -23,30 +23,32 @@
 *
 ***********************************************************************/
 
-#include "qdebug.h"
-#include "qtextformat.h"
-#include "qtextformat_p.h"
-#include "qtextengine_p.h"
-#include "qabstracttextdocumentlayout.h"
-#include "qtextlayout.h"
-#include "qtextboundaryfinder.h"
-#include "qvarlengtharray.h"
-#include "qfont.h"
-#include "qfont_p.h"
-#include "qfontengine_p.h"
-#include "qstring.h"
-#include <private/qunicodetables_p.h>
-#include "qtextdocument_p.h"
+#include <qdebug.h>
+#include <qtextformat.h>
+#include <qtextformat_p.h>
+#include <qtextengine_p.h>
+#include <qabstracttextdocumentlayout.h>
+#include <qtextlayout.h>
+#include <qtextboundaryfinder.h>
+#include <qvarlengtharray.h>
+#include <qfont.h>
+#include <qfont_p.h>
+#include <qfontengine_p.h>
+#include <qstring.h>
+#include <qunicodetables_p.h>
+#include <qtextdocument_p.h>
 #include <qapplication.h>
 #include <stdlib.h>
-
 
 QT_BEGIN_NAMESPACE
 
 namespace {
+
 // Helper class used in QTextEngine::itemize
 // keep it out here to allow us to keep supporting various compilers.
-class Itemizer {
+
+class Itemizer
+{
 public:
     Itemizer(const QString &string, const QScriptAnalysis *analysis, QScriptItemArray &items)
         : m_string(string),
@@ -822,7 +824,7 @@ QT_BEGIN_INCLUDE_NAMESPACE
 # include "qtextengine_mac.cpp"
 #endif
 
-#include <private/qharfbuzz_p.h>
+#include <qharfbuzz_p.h>
 
 QT_END_INCLUDE_NAMESPACE
 

@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qsoundqss_qws.h"
+#include <qsoundqss_qws.h>
 
 #ifndef QT_NO_SOUND
 #include <qbytearray.h>
@@ -37,7 +37,7 @@
 #include <qtimer.h>
 #include <qpointer.h>
 #include <qendian.h>
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
+#include <qcore_unix_p.h> // overrides QT_OPEN
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -48,9 +48,7 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <sys/soundcard.h>
-
 #include <qdebug.h>
-
 #include <qvfbhdr.h>
 
 extern int errno;

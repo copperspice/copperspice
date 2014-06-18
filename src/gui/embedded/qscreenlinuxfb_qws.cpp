@@ -23,14 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qscreenlinuxfb_qws.h"
+#include <qscreenlinuxfb_qws.h>
 
 #ifndef QT_NO_QWS_LINUXFB
-//#include "qmemorymanager_qws.h"
-#include "qwsdisplay_qws.h"
-#include "qpixmap.h"
-#include <private/qwssignalhandler_p.h>
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
+
+//#include <qmemorymanager_qws.h>
+
+#include <qwsdisplay_qws.h>
+#include <qpixmap.h>
+#include <qwssignalhandler_p.h>
+#include <qcore_unix_p.h>          // overrides QT_OPEN
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -44,8 +46,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <signal.h>
-
-#include "qwindowsystem_qws.h"
+#include <qwindowsystem_qws.h>
 
 #if !defined(Q_OS_DARWIN) && !defined(Q_OS_FREEBSD)
 #include <linux/fb.h>

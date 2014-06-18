@@ -26,13 +26,13 @@
 #include "qdirectpainter_qws.h"
 
 #include "qscreen_qws.h"
-#include "private/qapplication_p.h"
+#include "qapplication_p.h"
 #include "qwsdisplay_qws.h"
 #include "qwidget.h"
 #include "qimage.h"
 #include <qwsevent_qws.h>
-#include <private/qwindowsurface_qws_p.h>
-#include <private/qwsdisplay_qws_p.h>
+#include <qwindowsurface_qws_p.h>
+#include <qwsdisplay_qws_p.h>
 
 QT_BEGIN_NAMESPACE
 

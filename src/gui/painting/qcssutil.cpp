@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qcssutil_p.h"
-#include "private/qcssparser_p.h"
-#include "qpainter.h"
+#include <qcssutil_p.h>
+#include <qcssparser_p.h>
+#include <qpainter.h>
 #include <qmath.h>
 
 #ifndef QT_NO_CSSPARSER

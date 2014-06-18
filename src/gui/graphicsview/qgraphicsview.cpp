@@ -265,12 +265,13 @@ static const int QGRAPHICSVIEW_PREALLOC_STYLE_OPTIONS = 503; // largest prime < 
 #include <QtGui/qscrollbar.h>
 #include <QtGui/qstyleoption.h>
 #include <QtGui/qinputcontext.h>
+
 #ifdef Q_WS_X11
 #include <QtGui/qpaintengine.h>
-#include <private/qt_x11_p.h>
+#include <qt_x11_p.h>
 #endif
 
-#include <private/qevent_p.h>
+#include <qevent_p.h>
 
 QT_BEGIN_NAMESPACE
 

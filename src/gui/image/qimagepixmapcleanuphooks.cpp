@@ -24,9 +24,8 @@
 ***********************************************************************/
 
 #include "qimagepixmapcleanuphooks_p.h"
-#include "private/qpixmapdata_p.h"
-#include "private/qimage_p.h"
-
+#include "qpixmapdata_p.h"
+#include "qimage_p.h"
 
 QT_BEGIN_NAMESPACE
 

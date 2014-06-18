@@ -23,20 +23,20 @@
 *
 ***********************************************************************/
 
-#include "qkbddriverfactory_qws.h"
+#include <qkbddriverfactory_qws.h>
 
 #ifndef QT_NO_QWS_KEYBOARD
 
-#include "qapplication.h"
-#include "qkbdtty_qws.h"
-#include "qkbdlinuxinput_qws.h"
-#include "qkbdum_qws.h"
-#include "qkbdvfb_qws.h"
-#include "qkbdqnx_qws.h"
-#include "qkbdintegrity_qws.h"
+#include <qapplication.h>
+#include <qkbdtty_qws.h>
+#include <qkbdlinuxinput_qws.h>
+#include <qkbdum_qws.h>
+#include <qkbdvfb_qws.h>
+#include <qkbdqnx_qws.h>
+#include <qkbdintegrity_qws.h>
 #include <stdlib.h>
-#include "private/qfactoryloader_p.h"
-#include "qkbddriverplugin_qws.h"
+#include <qfactoryloader_p.h>
+#include <qkbddriverplugin_qws.h>
 
 QT_BEGIN_NAMESPACE
 

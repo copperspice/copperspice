@@ -23,18 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qcolor.h"
-#include "qcolor_p.h"
-#include "qnamespace.h"
-#include "qcolormap.h"
-#include "qdatastream.h"
-#include "qvariant.h"
-#include "qdebug.h"
+#include <qcolor.h>
+#include <qcolor_p.h>
+#include <qnamespace.h>
+#include <qcolormap.h>
+#include <qdatastream.h>
+#include <qvariant.h>
+#include <qdebug.h>
 
 #ifdef Q_WS_X11
-#  include "qapplication.h"
-#  include "qx11info_x11.h"
-#  include "private/qt_x11_p.h"
+#  include <qapplication.h>
+#  include <qx11info_x11.h>
+#  include <qt_x11_p.h>
 
 static bool allowX11ColorNames = false;
 

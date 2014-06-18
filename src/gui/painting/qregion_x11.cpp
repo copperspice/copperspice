@@ -23,8 +23,7 @@
 *
 ***********************************************************************/
 
-#include <private/qt_x11_p.h>
-
+#include <qt_x11_p.h>
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE

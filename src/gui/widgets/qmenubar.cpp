@@ -29,9 +29,11 @@
 #include <qlayout.h>
 #include <qapplication.h>
 #include <qdesktopwidget.h>
+
 #ifndef QT_NO_ACCESSIBILITY
 # include <qaccessible.h>
 #endif
+
 #include <qpainter.h>
 #include <qstylepainter.h>
 #include <qevent.h>
@@ -46,16 +48,16 @@
 
 #ifndef QT_NO_MENUBAR
 
-#include "qmenu_p.h"
-#include "qmenubar_p.h"
-#include "qdebug.h"
+#include <qmenu_p.h>
+#include <qmenubar_p.h>
+#include <qdebug.h>
 
 #ifdef Q_WS_X11
-#include "qmenubar_x11_p.h"
+#include <qmenubar_x11_p.h>
 #endif
 
 #ifdef QT_SOFTKEYS_ENABLED
-#include <private/qsoftkeymanager_p.h>
+#include <qsoftkeymanager_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE

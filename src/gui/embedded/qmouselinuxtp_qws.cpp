@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qmouselinuxtp_qws.h"
+#include <qmouselinuxtp_qws.h>
 
 #ifndef QT_NO_QWS_MOUSE_LINUXTP
-#include "qwindowsystem_qws.h"
-#include "qsocketnotifier.h"
-#include "qtimer.h"
-#include "qapplication.h"
-#include "qscreen_qws.h"
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
 
+#include <qwindowsystem_qws.h>
+#include <qsocketnotifier.h>
+#include <qtimer.h>
+#include <qapplication.h>
+#include <qscreen_qws.h>
+#include <qcore_unix_p.h>       // overrides QT_OPEN
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>

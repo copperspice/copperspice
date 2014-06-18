@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include <private/qgraphicssystem_runtime_p.h>
-#include <private/qgraphicssystem_raster_p.h>
-#include <private/qgraphicssystemfactory_p.h>
-#include <private/qapplication_p.h>
-#include <private/qwidget_p.h>
+#include <qgraphicssystem_runtime_p.h>
+#include <qgraphicssystem_raster_p.h>
+#include <qgraphicssystemfactory_p.h>
+#include <qapplication_p.h>
+#include <qwidget_p.h>
 #include <QtCore/QDebug>
 #include <QtCore/QTimer>
 #include <QtGui/QBitmap>

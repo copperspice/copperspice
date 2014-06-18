@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include <private/qdrawhelper_x86_p.h>
+#include <qdrawhelper_x86_p.h>
 
 #if defined(QT_HAVE_3DNOW) && defined(QT_HAVE_SSE)
 
-#include <private/qdrawhelper_sse_p.h>
+#include <qdrawhelper_sse_p.h>
 #include <mm3dnow.h>
 
 QT_BEGIN_NAMESPACE
