@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -117,14 +117,14 @@ QT_BEGIN_NAMESPACE
 
 class QScriptClassPrivate
 {
-    Q_DECLARE_PUBLIC(QScriptClass)
-public:
-    QScriptClassPrivate() {}
-    virtual ~QScriptClassPrivate() {}
+   Q_DECLARE_PUBLIC(QScriptClass)
+ public:
+   QScriptClassPrivate() {}
+   virtual ~QScriptClassPrivate() {}
 
-    QScriptEngine *engine;
+   QScriptEngine *engine;
 
-    QScriptClass *q_ptr;
+   QScriptClass *q_ptr;
 };
 
 /*!
@@ -133,20 +133,20 @@ public:
   The engine does not take ownership of the QScriptClass object.
 */
 QScriptClass::QScriptClass(QScriptEngine *engine)
-    : d_ptr(new QScriptClassPrivate)
+   : d_ptr(new QScriptClassPrivate)
 {
-    d_ptr->q_ptr = this;
-    d_ptr->engine = engine;
+   d_ptr->q_ptr = this;
+   d_ptr->engine = engine;
 }
 
 /*!
   \internal
 */
 QScriptClass::QScriptClass(QScriptEngine *engine, QScriptClassPrivate &dd)
-    : d_ptr(&dd)
+   : d_ptr(&dd)
 {
-    d_ptr->q_ptr = this;
-    d_ptr->engine = engine;
+   d_ptr->q_ptr = this;
+   d_ptr->engine = engine;
 }
 
 /*!
@@ -165,8 +165,8 @@ QScriptClass::~QScriptClass()
 */
 QScriptEngine *QScriptClass::engine() const
 {
-    Q_D(const QScriptClass);
-    return d->engine;
+   Q_D(const QScriptClass);
+   return d->engine;
 }
 
 /*!
@@ -186,7 +186,7 @@ QScriptEngine *QScriptClass::engine() const
 */
 QScriptValue QScriptClass::prototype() const
 {
-    return QScriptValue();
+   return QScriptValue();
 }
 
 /*!
@@ -199,7 +199,7 @@ QScriptValue QScriptClass::prototype() const
 */
 QString QScriptClass::name() const
 {
-    return QString();
+   return QString();
 }
 
 /*!
@@ -232,14 +232,14 @@ QString QScriptClass::name() const
   \sa property()
 */
 QScriptClass::QueryFlags QScriptClass::queryProperty(
-    const QScriptValue &object, const QScriptString &name,
-    QueryFlags flags, uint *id)
+   const QScriptValue &object, const QScriptString &name,
+   QueryFlags flags, uint *id)
 {
-    Q_UNUSED(object);
-    Q_UNUSED(name);
-    Q_UNUSED(flags);
-    Q_UNUSED(id);
-    return 0;
+   Q_UNUSED(object);
+   Q_UNUSED(name);
+   Q_UNUSED(flags);
+   Q_UNUSED(id);
+   return 0;
 }
 
 /*!
@@ -256,10 +256,10 @@ QScriptClass::QueryFlags QScriptClass::queryProperty(
 QScriptValue QScriptClass::property(const QScriptValue &object,
                                     const QScriptString &name, uint id)
 {
-    Q_UNUSED(object);
-    Q_UNUSED(name);
-    Q_UNUSED(id);
-    return QScriptValue();
+   Q_UNUSED(object);
+   Q_UNUSED(name);
+   Q_UNUSED(id);
+   return QScriptValue();
 }
 
 /*!
@@ -274,12 +274,12 @@ QScriptValue QScriptClass::property(const QScriptValue &object,
   \sa property()
 */
 QScriptValue::PropertyFlags QScriptClass::propertyFlags(
-    const QScriptValue &object, const QScriptString &name, uint id)
+   const QScriptValue &object, const QScriptString &name, uint id)
 {
-    Q_UNUSED(object);
-    Q_UNUSED(name);
-    Q_UNUSED(id);
-    return 0;
+   Q_UNUSED(object);
+   Q_UNUSED(name);
+   Q_UNUSED(id);
+   return 0;
 }
 
 /*!
@@ -298,10 +298,10 @@ QScriptValue::PropertyFlags QScriptClass::propertyFlags(
 void QScriptClass::setProperty(QScriptValue &object, const QScriptString &name,
                                uint id, const QScriptValue &value)
 {
-    Q_UNUSED(object);
-    Q_UNUSED(name);
-    Q_UNUSED(id);
-    Q_UNUSED(value);
+   Q_UNUSED(object);
+   Q_UNUSED(name);
+   Q_UNUSED(id);
+   Q_UNUSED(value);
 }
 
 /*!
@@ -322,8 +322,8 @@ void QScriptClass::setProperty(QScriptValue &object, const QScriptString &name,
 */
 QScriptClassPropertyIterator *QScriptClass::newIterator(const QScriptValue &object)
 {
-    Q_UNUSED(object);
-    return 0;
+   Q_UNUSED(object);
+   return 0;
 }
 
 /*!
@@ -338,8 +338,8 @@ QScriptClassPropertyIterator *QScriptClass::newIterator(const QScriptValue &obje
 */
 bool QScriptClass::supportsExtension(Extension extension) const
 {
-    Q_UNUSED(extension);
-    return false;
+   Q_UNUSED(extension);
+   return false;
 }
 
 /*!
@@ -373,9 +373,9 @@ bool QScriptClass::supportsExtension(Extension extension) const
 */
 QVariant QScriptClass::extension(Extension extension, const QVariant &argument)
 {
-    Q_UNUSED(extension);
-    Q_UNUSED(argument);
-    return QVariant();
+   Q_UNUSED(extension);
+   Q_UNUSED(argument);
+   return QVariant();
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,45 +34,46 @@
 QT_BEGIN_NAMESPACE
 
 FindDialog::FindDialog(QWidget *parent)
-    : QDialog(parent)
+   : QDialog(parent)
 {
-    setupUi(this);
+   setupUi(this);
 
-    findNxt->setEnabled(false);
+   findNxt->setEnabled(false);
 
-    connect(findNxt, SIGNAL(clicked()), this, SLOT(emitFindNext()));
-    connect(led, SIGNAL(textChanged(QString)), this, SLOT(verifyText(QString)));
+   connect(findNxt, SIGNAL(clicked()), this, SLOT(emitFindNext()));
+   connect(led, SIGNAL(textChanged(QString)), this, SLOT(verifyText(QString)));
 
-    led->setFocus();
+   led->setFocus();
 }
 
 void FindDialog::verifyText(const QString &text)
 {
-    findNxt->setEnabled(!text.isEmpty());
+   findNxt->setEnabled(!text.isEmpty());
 }
 
 void FindDialog::emitFindNext()
 {
-    DataModel::FindLocation where;
-    if (sourceText != 0)
-        where =
-            DataModel::FindLocation(
-                (sourceText->isChecked() ? DataModel::SourceText : 0) |
-                (translations->isChecked() ? DataModel::Translations : 0) |
-                (comments->isChecked() ? DataModel::Comments : 0));
-    else
-        where = DataModel::Translations;
-    emit findNext(led->text(), where, matchCase->isChecked(), ignoreAccelerators->isChecked());
-    led->selectAll();
+   DataModel::FindLocation where;
+   if (sourceText != 0)
+      where =
+         DataModel::FindLocation(
+            (sourceText->isChecked() ? DataModel::SourceText : 0) |
+            (translations->isChecked() ? DataModel::Translations : 0) |
+            (comments->isChecked() ? DataModel::Comments : 0));
+   else {
+      where = DataModel::Translations;
+   }
+   emit findNext(led->text(), where, matchCase->isChecked(), ignoreAccelerators->isChecked());
+   led->selectAll();
 }
 
 void FindDialog::find()
 {
-    led->setFocus();
+   led->setFocus();
 
-    show();
-    activateWindow();
-    raise();
+   show();
+   activateWindow();
+   raise();
 }
 
 QT_END_NAMESPACE

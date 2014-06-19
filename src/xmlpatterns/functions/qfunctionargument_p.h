@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,24 +34,23 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class FunctionArgument : public QSharedData
 {
-    class FunctionArgument : public QSharedData
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<FunctionArgument> Ptr;
-        typedef QList<FunctionArgument::Ptr> List;
+ public:
+   typedef QExplicitlySharedDataPointer<FunctionArgument> Ptr;
+   typedef QList<FunctionArgument::Ptr> List;
 
-        FunctionArgument(const QXmlName name,const SequenceType::Ptr &type);
+   FunctionArgument(const QXmlName name, const SequenceType::Ptr &type);
 
-        QXmlName name() const;
-        SequenceType::Ptr type() const;
+   QXmlName name() const;
+   SequenceType::Ptr type() const;
 
-    private:
-        Q_DISABLE_COPY(FunctionArgument)
-        const QXmlName m_name;
-        const SequenceType::Ptr m_type;
-    };
+ private:
+   Q_DISABLE_COPY(FunctionArgument)
+   const QXmlName m_name;
+   const SequenceType::Ptr m_type;
+};
 }
 
 QT_END_NAMESPACE

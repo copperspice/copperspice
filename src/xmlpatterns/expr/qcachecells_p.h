@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,51 +32,46 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class ItemCacheCell
 {
-    class ItemCacheCell
-    {
-    public:
-        typedef QList<ItemCacheCell> List;
-        typedef QVector<ItemCacheCell> Vector;
-        enum CacheState
-        {
-            Full,
-            Empty
-        };
+ public:
+   typedef QList<ItemCacheCell> List;
+   typedef QVector<ItemCacheCell> Vector;
+   enum CacheState {
+      Full,
+      Empty
+   };
 
-        inline ItemCacheCell() : cacheState(Empty)
-        {
-        }
+   inline ItemCacheCell() : cacheState(Empty) {
+   }
 
-        Item        cachedItem;
-        CacheState  cacheState;
-    };
+   Item        cachedItem;
+   CacheState  cacheState;
+};
 
-    class ItemSequenceCacheCell
-    {
-    public:
-        typedef QList<ItemSequenceCacheCell> List;
-        typedef QVector<ItemSequenceCacheCell> Vector;
+class ItemSequenceCacheCell
+{
+ public:
+   typedef QList<ItemSequenceCacheCell> List;
+   typedef QVector<ItemSequenceCacheCell> Vector;
 
-        enum CacheState
-        {
-            Full,
-            Empty,
-            PartiallyPopulated
-        };
+   enum CacheState {
+      Full,
+      Empty,
+      PartiallyPopulated
+   };
 
-        inline ItemSequenceCacheCell() : cacheState(Empty)
-                                       , inUse(false)
-        {
-        }
+   inline ItemSequenceCacheCell() : cacheState(Empty)
+      , inUse(false) {
+   }
 
-        Item::List          cachedItems;
-        Item::Iterator::Ptr sourceIterator;
-        CacheState          cacheState;
- 
-        bool                inUse;
-    };
+   Item::List          cachedItems;
+   Item::Iterator::Ptr sourceIterator;
+   CacheState          cacheState;
+
+   bool                inUse;
+};
 }
 
 Q_DECLARE_TYPEINFO(QPatternist::ItemCacheCell, Q_MOVABLE_TYPE);

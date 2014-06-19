@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -84,9 +84,9 @@ QT_BEGIN_NAMESPACE
   \internal
 */
 QScriptable::QScriptable()
-    : d_ptr(new QScriptablePrivate())
+   : d_ptr(new QScriptablePrivate())
 {
-    d_ptr->q_ptr = this;
+   d_ptr->q_ptr = this;
 }
 
 /*!
@@ -103,8 +103,8 @@ QScriptable::~QScriptable()
 */
 QScriptEngine *QScriptable::engine() const
 {
-    Q_D(const QScriptable);
-    return d->engine;
+   Q_D(const QScriptable);
+   return d->engine;
 }
 
 /*!
@@ -114,10 +114,11 @@ QScriptEngine *QScriptable::engine() const
 */
 QScriptContext *QScriptable::context() const
 {
-    if (QScriptEngine *e = engine())
-        return e->currentContext();
+   if (QScriptEngine *e = engine()) {
+      return e->currentContext();
+   }
 
-    return 0;
+   return 0;
 }
 
 /*!
@@ -128,10 +129,11 @@ QScriptContext *QScriptable::context() const
 
 QScriptValue QScriptable::thisObject() const
 {
-    if (QScriptContext *c = context())
-        return c->thisObject();
+   if (QScriptContext *c = context()) {
+      return c->thisObject();
+   }
 
-    return QScriptValue();
+   return QScriptValue();
 }
 
 /*!
@@ -143,10 +145,11 @@ QScriptValue QScriptable::thisObject() const
 */
 int QScriptable::argumentCount() const
 {
-    if (QScriptContext *c = context())
-        return c->argumentCount();
+   if (QScriptContext *c = context()) {
+      return c->argumentCount();
+   }
 
-    return -1;
+   return -1;
 }
 
 /*!
@@ -157,10 +160,11 @@ int QScriptable::argumentCount() const
 */
 QScriptValue QScriptable::argument(int index) const
 {
-    if (QScriptContext *c = context())
-        return c->argument(index);
+   if (QScriptContext *c = context()) {
+      return c->argument(index);
+   }
 
-    return QScriptValue();
+   return QScriptValue();
 }
 
 QT_END_NAMESPACE

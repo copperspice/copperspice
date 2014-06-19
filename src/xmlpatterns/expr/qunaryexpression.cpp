@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,28 +36,29 @@ using namespace QPatternist;
 
 UnaryExpression::UnaryExpression(const AtomicMathematician::Operator op,
                                  const Expression::Ptr &operand,
-                                 const StaticContext::Ptr &context) : ArithmeticExpression(wrapLiteral(CommonValues::IntegerZero, context, operand.data()),
-                                                                                           op,
-                                                                                           operand)
+                                 const StaticContext::Ptr &context) : ArithmeticExpression(wrapLiteral(CommonValues::IntegerZero, context,
+                                          operand.data()),
+                                          op,
+                                          operand)
 {
-    Q_ASSERT(op == AtomicMathematician::Substract ||
-             op == AtomicMathematician::Add);
-    Q_ASSERT(context);
+   Q_ASSERT(op == AtomicMathematician::Substract ||
+            op == AtomicMathematician::Add);
+   Q_ASSERT(context);
 }
 
 Item UnaryExpression::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    if(operatorID() == AtomicMathematician::Substract)
-    {
-        const Item item(m_operand2->evaluateSingleton(context));
+   if (operatorID() == AtomicMathematician::Substract) {
+      const Item item(m_operand2->evaluateSingleton(context));
 
-        if(item)
-            return item.as<Numeric>()->toNegated();
-        else
-            return Item();
-    }
-    else
-        return m_operand2->evaluateSingleton(context);
+      if (item) {
+         return item.as<Numeric>()->toNegated();
+      } else {
+         return Item();
+      }
+   } else {
+      return m_operand2->evaluateSingleton(context);
+   }
 }
 
 QT_END_NAMESPACE

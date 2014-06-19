@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,33 +39,33 @@ class QSortFilterProxyModel;
 
 class PhraseBookBox : public QDialog, public Ui::PhraseBookBox
 {
-    Q_OBJECT
-public:
-    PhraseBookBox(PhraseBook *phraseBook, QWidget *parent = 0);
+   Q_OBJECT
+ public:
+   PhraseBookBox(PhraseBook *phraseBook, QWidget *parent = 0);
 
-protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+ protected:
+   bool eventFilter(QObject *obj, QEvent *event);
 
-private slots:
-    void newPhrase();
-    void removePhrase();
-    void settings();
-    void save();
-    void sourceChanged(const QString &source);
-    void targetChanged(const QString &target);
-    void definitionChanged(const QString &definition);
-    void selectionChanged();
+ private slots:
+   void newPhrase();
+   void removePhrase();
+   void settings();
+   void save();
+   void sourceChanged(const QString &source);
+   void targetChanged(const QString &target);
+   void definitionChanged(const QString &definition);
+   void selectionChanged();
 
-private:
-    void selectItem(const QModelIndex &index);
-    void enableDisable();
-    QModelIndex currentPhraseIndex() const;
+ private:
+   void selectItem(const QModelIndex &index);
+   void enableDisable();
+   QModelIndex currentPhraseIndex() const;
 
-    QString fn;
-    PhraseBook *m_phraseBook;
-    PhraseModel *phrMdl;
-    QSortFilterProxyModel *m_sortedPhraseModel;
-    TranslationSettingsDialog *m_translationSettingsDialog;
+   QString fn;
+   PhraseBook *m_phraseBook;
+   PhraseModel *phrMdl;
+   QSortFilterProxyModel *m_sortedPhraseModel;
+   TranslationSettingsDialog *m_translationSettingsDialog;
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,87 +37,82 @@ using namespace QPatternist;
 
 bool XPathHelper::isReservedNamespace(const QXmlName::NamespaceCode ns)
 {
-    /* The order is because of that XFN and WXS are the most common. */
-    return ns == StandardNamespaces::fn     ||
-           ns == StandardNamespaces::xs     ||
-           ns == StandardNamespaces::xml    ||
-           ns == StandardNamespaces::xsi;
+   /* The order is because of that XFN and WXS are the most common. */
+   return ns == StandardNamespaces::fn     ||
+          ns == StandardNamespaces::xs     ||
+          ns == StandardNamespaces::xml    ||
+          ns == StandardNamespaces::xsi;
 }
 
 bool XPathHelper::isQName(const QString &qName)
 {
-    const QStringList result(qName.split(QLatin1Char(':')));
-    const int c = result.count();
+   const QStringList result(qName.split(QLatin1Char(':')));
+   const int c = result.count();
 
-    if(c == 2)
-    {
-        return QXmlUtils::isNCName(result.first()) &&
-               QXmlUtils::isNCName(result.last());
-    }
-    else if(c == 1)
-        return QXmlUtils::isNCName(result.first());
-    else
-        return false;
+   if (c == 2) {
+      return QXmlUtils::isNCName(result.first()) &&
+             QXmlUtils::isNCName(result.last());
+   } else if (c == 1) {
+      return QXmlUtils::isNCName(result.first());
+   } else {
+      return false;
+   }
 }
 
 void XPathHelper::splitQName(const QString &qName, QString &prefix, QString &ncName)
 {
-    Q_ASSERT_X(isQName(qName), Q_FUNC_INFO,
-               "qName must be a valid QName.");
+   Q_ASSERT_X(isQName(qName), Q_FUNC_INFO,
+              "qName must be a valid QName.");
 
-    const QStringList result(qName.split(QLatin1Char(':')));
+   const QStringList result(qName.split(QLatin1Char(':')));
 
-    if(result.count() == 1)
-    {
-        Q_ASSERT(QXmlUtils::isNCName(result.first()));
-        ncName = result.first();
-    }
-    else
-    {
-        Q_ASSERT(result.count() == 2);
-        Q_ASSERT(QXmlUtils::isNCName(result.first()));
-        Q_ASSERT(QXmlUtils::isNCName(result.last()));
+   if (result.count() == 1) {
+      Q_ASSERT(QXmlUtils::isNCName(result.first()));
+      ncName = result.first();
+   } else {
+      Q_ASSERT(result.count() == 2);
+      Q_ASSERT(QXmlUtils::isNCName(result.first()));
+      Q_ASSERT(QXmlUtils::isNCName(result.last()));
 
-        prefix = result.first();
-        ncName = result.last();
-    }
+      prefix = result.first();
+      ncName = result.last();
+   }
 }
 
 ItemType::Ptr XPathHelper::typeFromKind(const QXmlNodeModelIndex::NodeKind nodeKind)
 {
-    switch(nodeKind)
-    {
-        case QXmlNodeModelIndex::Element:
-            return BuiltinTypes::element;
-        case QXmlNodeModelIndex::Attribute:
-            return BuiltinTypes::attribute;
-        case QXmlNodeModelIndex::Text:
-            return BuiltinTypes::text;
-        case QXmlNodeModelIndex::ProcessingInstruction:
-            return BuiltinTypes::pi;
-        case QXmlNodeModelIndex::Comment:
-            return BuiltinTypes::comment;
-        case QXmlNodeModelIndex::Document:
-            return BuiltinTypes::document;
-        default:
-        {
-            Q_ASSERT_X(false, Q_FUNC_INFO,
-                       "A node type that doesn't exist in the XPath Data Model was encountered.");
-            return ItemType::Ptr(); /* Dummy, silence compiler warning. */
-        }
-    }
+   switch (nodeKind) {
+      case QXmlNodeModelIndex::Element:
+         return BuiltinTypes::element;
+      case QXmlNodeModelIndex::Attribute:
+         return BuiltinTypes::attribute;
+      case QXmlNodeModelIndex::Text:
+         return BuiltinTypes::text;
+      case QXmlNodeModelIndex::ProcessingInstruction:
+         return BuiltinTypes::pi;
+      case QXmlNodeModelIndex::Comment:
+         return BuiltinTypes::comment;
+      case QXmlNodeModelIndex::Document:
+         return BuiltinTypes::document;
+      default: {
+         Q_ASSERT_X(false, Q_FUNC_INFO,
+                    "A node type that doesn't exist in the XPath Data Model was encountered.");
+         return ItemType::Ptr(); /* Dummy, silence compiler warning. */
+      }
+   }
 }
 
 QUrl XPathHelper::normalizeQueryURI(const QUrl &uri)
 {
-    Q_ASSERT_X(uri.isEmpty() || uri.isValid(), Q_FUNC_INFO,
-               "The URI passed to QXmlQuery::setQuery() must be valid or empty.");
-    if(uri.isEmpty())
-        return QUrl::fromLocalFile(QCoreApplication::applicationFilePath());
-    else if(uri.isRelative())
-        return QUrl::fromLocalFile(QCoreApplication::applicationFilePath()).resolved(uri);
-    else
-        return uri;
+   Q_ASSERT_X(uri.isEmpty() || uri.isValid(), Q_FUNC_INFO,
+              "The URI passed to QXmlQuery::setQuery() must be valid or empty.");
+   if (uri.isEmpty()) {
+      return QUrl::fromLocalFile(QCoreApplication::applicationFilePath());
+   } else if (uri.isRelative()) {
+      return QUrl::fromLocalFile(QCoreApplication::applicationFilePath()).resolved(uri);
+   } else {
+      return uri;
+   }
 }
 
 QT_END_NAMESPACE

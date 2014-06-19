@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,33 +30,33 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 XsdModelGroup::XsdModelGroup()
-    : m_compositor(SequenceCompositor)
+   : m_compositor(SequenceCompositor)
 {
 }
 
 bool XsdModelGroup::isModelGroup() const
 {
-    return true;
+   return true;
 }
 
 void XsdModelGroup::setCompositor(ModelCompositor compositor)
 {
-    m_compositor = compositor;
+   m_compositor = compositor;
 }
 
 XsdModelGroup::ModelCompositor XsdModelGroup::compositor() const
 {
-    return m_compositor;
+   return m_compositor;
 }
 
 void XsdModelGroup::setParticles(const XsdParticle::List &particles)
 {
-    m_particles = particles;
+   m_particles = particles;
 }
 
 XsdParticle::List XsdModelGroup::particles() const
 {
-    return m_particles;
+   return m_particles;
 }
 
 QT_END_NAMESPACE

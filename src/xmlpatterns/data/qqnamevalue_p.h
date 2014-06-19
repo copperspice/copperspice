@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,33 +31,31 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{   
-    class QNameValue : public AtomicValue
-    {
-    public:
-        friend class CommonValues;
-        friend class QNameComparator;
+namespace QPatternist {
+class QNameValue : public AtomicValue
+{
+ public:
+   friend class CommonValues;
+   friend class QNameComparator;
 
-        typedef QExplicitlySharedDataPointer<QNameValue> Ptr;
- 
-        static QNameValue::Ptr fromValue(const NamePool::Ptr &np, const QXmlName name);
+   typedef QExplicitlySharedDataPointer<QNameValue> Ptr;
 
-        virtual QString stringValue() const;
+   static QNameValue::Ptr fromValue(const NamePool::Ptr &np, const QXmlName name);
 
-        virtual ItemType::Ptr type() const;
+   virtual QString stringValue() const;
 
-        inline QXmlName qName() const
-        {
-            return m_qName;
-        }
+   virtual ItemType::Ptr type() const;
 
-    private:
-        QNameValue(const NamePool::Ptr &np, const QXmlName name);
+   inline QXmlName qName() const {
+      return m_qName;
+   }
 
-        const QXmlName m_qName;
-        const NamePool::Ptr m_namePool;
-    };
+ private:
+   QNameValue(const NamePool::Ptr &np, const QXmlName name);
+
+   const QXmlName m_qName;
+   const NamePool::Ptr m_namePool;
+};
 }
 
 QT_END_NAMESPACE

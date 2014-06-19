@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -48,129 +48,125 @@ IdFN::IdFN() : m_hasCreatedSorter(false)
 Item IdFN::mapToItem(const QString &id,
                      const IDContext &context) const
 {
-    return context.second->elementById(context.first->namePool()->allocateQName(QString(), id));
+   return context.second->elementById(context.first->namePool()->allocateQName(QString(), id));
 }
 
 class StringSplitter : public QAbstractXmlForwardIterator<QString>
 {
-public:
-    StringSplitter(const Item::Iterator::Ptr &source);
-    virtual QString next();
-    virtual QString current() const;
-    virtual qint64 position() const;
-private:
-    QString loadNext();
-    const Item::Iterator::Ptr   m_source;
-    QStack<QString>             m_buffer;
-    QString                     m_current;
-    qint64                      m_position;
-    bool                        m_sourceAtEnd;
+ public:
+   StringSplitter(const Item::Iterator::Ptr &source);
+   virtual QString next();
+   virtual QString current() const;
+   virtual qint64 position() const;
+ private:
+   QString loadNext();
+   const Item::Iterator::Ptr   m_source;
+   QStack<QString>             m_buffer;
+   QString                     m_current;
+   qint64                      m_position;
+   bool                        m_sourceAtEnd;
 };
 
 StringSplitter::StringSplitter(const Item::Iterator::Ptr &source) : m_source(source)
-                                                                  , m_position(0)
-                                                                  , m_sourceAtEnd(false)
+   , m_position(0)
+   , m_sourceAtEnd(false)
 {
-    Q_ASSERT(m_source);
-    m_buffer.push(loadNext());
+   Q_ASSERT(m_source);
+   m_buffer.push(loadNext());
 }
 
 QString StringSplitter::next()
 {
-    /* We also check m_position, we want to load on our first run. */
-    if(!m_buffer.isEmpty())
-    {
-        ++m_position;
-        m_current = m_buffer.pop();
-        return m_current;
-    }
-    else if(m_sourceAtEnd)
-    {
-        m_current.clear();
-        m_position = -1;
-        return QString();
-    }
+   /* We also check m_position, we want to load on our first run. */
+   if (!m_buffer.isEmpty()) {
+      ++m_position;
+      m_current = m_buffer.pop();
+      return m_current;
+   } else if (m_sourceAtEnd) {
+      m_current.clear();
+      m_position = -1;
+      return QString();
+   }
 
-    return loadNext();
+   return loadNext();
 }
 
 QString StringSplitter::loadNext()
 {
-    const Item sourceNext(m_source->next());
+   const Item sourceNext(m_source->next());
 
-    if(sourceNext.isNull())
-    {
-        m_sourceAtEnd = true;
-        /* We might have strings in m_buffer, let's empty it. */
-        return next();
-    }
+   if (sourceNext.isNull()) {
+      m_sourceAtEnd = true;
+      /* We might have strings in m_buffer, let's empty it. */
+      return next();
+   }
 
-    const QStringList candidates(sourceNext.stringValue().simplified().split(QLatin1Char(' ')));
-    const int count = candidates.length();
+   const QStringList candidates(sourceNext.stringValue().simplified().split(QLatin1Char(' ')));
+   const int count = candidates.length();
 
-    for(int i = 0; i < count; ++i)
-    {
-        const QString &at = candidates.at(i);
+   for (int i = 0; i < count; ++i) {
+      const QString &at = candidates.at(i);
 
-        if(QXmlUtils::isNCName(at))
-            m_buffer.push(at);
-    }
+      if (QXmlUtils::isNCName(at)) {
+         m_buffer.push(at);
+      }
+   }
 
-    /* So, now we have populated m_buffer, let's start from the beginning. */
-    return next();
+   /* So, now we have populated m_buffer, let's start from the beginning. */
+   return next();
 }
 
 QString StringSplitter::current() const
 {
-    return m_current;
+   return m_current;
 }
 
 qint64 StringSplitter::position() const
 {
-    return m_position;
+   return m_position;
 }
 
 Item::Iterator::Ptr IdFN::evaluateSequence(const DynamicContext::Ptr &context) const
 {
-    const Item::Iterator::Ptr idrefs(m_operands.first()->evaluateSequence(context));
-    const Item node(m_operands.last()->evaluateSingleton(context));
+   const Item::Iterator::Ptr idrefs(m_operands.first()->evaluateSequence(context));
+   const Item node(m_operands.last()->evaluateSingleton(context));
 
-    checkTargetNode(node.asNode(), context, ReportContext::FODC0001);
+   checkTargetNode(node.asNode(), context, ReportContext::FODC0001);
 
-    return makeItemMappingIterator<Item,
-                                   QString,
-                                   IdFN::ConstPtr,
-                                   IDContext>(ConstPtr(this),
-                                              StringSplitter::Ptr(new StringSplitter(idrefs)),
-                                              qMakePair(context, node.asNode().model()));
+   return makeItemMappingIterator<Item,
+          QString,
+          IdFN::ConstPtr,
+          IDContext>(ConstPtr(this),
+                     StringSplitter::Ptr(new StringSplitter(idrefs)),
+                     qMakePair(context, node.asNode().model()));
 }
 
 Expression::Ptr IdFN::typeCheck(const StaticContext::Ptr &context,
                                 const SequenceType::Ptr &reqType)
 {
-    if(m_hasCreatedSorter)
-        return FunctionCall::typeCheck(context, reqType);
-    else
-    {
-        const Expression::Ptr newMe(new NodeSortExpression(Expression::Ptr(this)));
-        context->wrapExpressionWith(this, newMe);
-        m_hasCreatedSorter = true;
-        return newMe->typeCheck(context, reqType);
-    }
+   if (m_hasCreatedSorter) {
+      return FunctionCall::typeCheck(context, reqType);
+   } else {
+      const Expression::Ptr newMe(new NodeSortExpression(Expression::Ptr(this)));
+      context->wrapExpressionWith(this, newMe);
+      m_hasCreatedSorter = true;
+      return newMe->typeCheck(context, reqType);
+   }
 }
 
 Item::Iterator::Ptr IdrefFN::evaluateSequence(const DynamicContext::Ptr &context) const
 {
-    const Item::Iterator::Ptr ids(m_operands.first()->evaluateSequence(context));
+   const Item::Iterator::Ptr ids(m_operands.first()->evaluateSequence(context));
 
-    Item mId(ids->next());
-    if(!mId)
-        return CommonValues::emptyIterator;
+   Item mId(ids->next());
+   if (!mId) {
+      return CommonValues::emptyIterator;
+   }
 
-    const Item node(m_operands.last()->evaluateSingleton(context));
-    checkTargetNode(node.asNode(), context, ReportContext::FODC0001);
+   const Item node(m_operands.last()->evaluateSingleton(context));
+   checkTargetNode(node.asNode(), context, ReportContext::FODC0001);
 
-    return CommonValues::emptyIterator; /* TODO Haven't implemented further. */
+   return CommonValues::emptyIterator; /* TODO Haven't implemented further. */
 }
 
 /*!
@@ -178,95 +174,93 @@ Item::Iterator::Ptr IdrefFN::evaluateSequence(const DynamicContext::Ptr &context
  */
 static QUrl resolveScheme(const QUrl &url)
 {
-    // On Windows and Symbian the drive letter is detected as the scheme.
-    if (url.scheme().isEmpty() || (url.scheme().length() == 1)) {
-        QString filename = url.toString();
-        QFileInfo file(filename);
-        if (file.exists())
-            return QUrl::fromLocalFile(filename);
-    }
-    return url;
+   // On Windows and Symbian the drive letter is detected as the scheme.
+   if (url.scheme().isEmpty() || (url.scheme().length() == 1)) {
+      QString filename = url.toString();
+      QFileInfo file(filename);
+      if (file.exists()) {
+         return QUrl::fromLocalFile(filename);
+      }
+   }
+   return url;
 }
 
 Item DocFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    const Item itemURI(m_operands.first()->evaluateSingleton(context));
+   const Item itemURI(m_operands.first()->evaluateSingleton(context));
 
-    if(!itemURI)
-        return Item();
+   if (!itemURI) {
+      return Item();
+   }
 
-    /* These two lines were previously in a separate function but are now duplicated
-     * in DocAvailableFN::evaluateEBV() and DocFN::typeCheck(),
-     * as part of a workaround for solaris-cc-64. DocFN::typeCheck() is in qsequencefns.cpp
-     * as part of that workaround. */
-    const QUrl mayRela(AnyURI::toQUrl<ReportContext::FODC0005>(itemURI.stringValue(), context, this));
-    const QUrl uri(resolveScheme(context->resolveURI(mayRela, staticBaseURI())));
+   /* These two lines were previously in a separate function but are now duplicated
+    * in DocAvailableFN::evaluateEBV() and DocFN::typeCheck(),
+    * as part of a workaround for solaris-cc-64. DocFN::typeCheck() is in qsequencefns.cpp
+    * as part of that workaround. */
+   const QUrl mayRela(AnyURI::toQUrl<ReportContext::FODC0005>(itemURI.stringValue(), context, this));
+   const QUrl uri(resolveScheme(context->resolveURI(mayRela, staticBaseURI())));
 
-    Q_ASSERT(uri.isValid());
-    Q_ASSERT(!uri.isRelative());
+   Q_ASSERT(uri.isValid());
+   Q_ASSERT(!uri.isRelative());
 
-    const Item doc(context->resourceLoader()->openDocument(uri, context));
+   const Item doc(context->resourceLoader()->openDocument(uri, context));
 
-    return doc;
+   return doc;
 }
 
 SequenceType::Ptr DocFN::staticType() const
 {
-    if(m_type)
-        return m_type;
-    else
-        return CommonSequenceTypes::ZeroOrOneDocumentNode;
+   if (m_type) {
+      return m_type;
+   } else {
+      return CommonSequenceTypes::ZeroOrOneDocumentNode;
+   }
 }
 
 bool DocAvailableFN::evaluateEBV(const DynamicContext::Ptr &context) const
 {
-    const Item itemURI(m_operands.first()->evaluateSingleton(context));
+   const Item itemURI(m_operands.first()->evaluateSingleton(context));
 
-    /* 15.5.4 fn:doc reads: "If $uri is the empty sequence, the result is an empty sequence."
-     * Hence, we return false for the empty sequence, because this doesn't hold true:
-     * "If this function returns true, then calling fn:doc($uri) within
-     * the same execution scope must return a document node."(15.5.5 fn:doc-available) */
-    if(!itemURI)
-        return false;
+   /* 15.5.4 fn:doc reads: "If $uri is the empty sequence, the result is an empty sequence."
+    * Hence, we return false for the empty sequence, because this doesn't hold true:
+    * "If this function returns true, then calling fn:doc($uri) within
+    * the same execution scope must return a document node."(15.5.5 fn:doc-available) */
+   if (!itemURI) {
+      return false;
+   }
 
-    /* These two lines are duplicated in DocFN::evaluateSingleton(), as part
-     * of a workaround for solaris-cc-64. */
-    const QUrl mayRela(AnyURI::toQUrl<ReportContext::FODC0005>(itemURI.stringValue(), context, this));
-    const QUrl uri(resolveScheme(context->resolveURI(mayRela, staticBaseURI())));
+   /* These two lines are duplicated in DocFN::evaluateSingleton(), as part
+    * of a workaround for solaris-cc-64. */
+   const QUrl mayRela(AnyURI::toQUrl<ReportContext::FODC0005>(itemURI.stringValue(), context, this));
+   const QUrl uri(resolveScheme(context->resolveURI(mayRela, staticBaseURI())));
 
-    Q_ASSERT(!uri.isRelative());
-    return context->resourceLoader()->isDocumentAvailable(uri);
+   Q_ASSERT(!uri.isRelative());
+   return context->resourceLoader()->isDocumentAvailable(uri);
 }
 
 Item::Iterator::Ptr CollectionFN::evaluateSequence(const DynamicContext::Ptr &context) const
 {
-    // TODO resolve with URI resolve
-    if(m_operands.isEmpty())
-    {
-        // TODO check default collection
-        context->error(QtXmlPatterns::tr("The default collection is undefined"),
-                       ReportContext::FODC0002, this);
-        return CommonValues::emptyIterator;
-    }
-    else
-    {
-        const Item itemURI(m_operands.first()->evaluateSingleton(context));
+   // TODO resolve with URI resolve
+   if (m_operands.isEmpty()) {
+      // TODO check default collection
+      context->error(QtXmlPatterns::tr("The default collection is undefined"),
+                     ReportContext::FODC0002, this);
+      return CommonValues::emptyIterator;
+   } else {
+      const Item itemURI(m_operands.first()->evaluateSingleton(context));
 
-        if(itemURI)
-        {
-            const QUrl uri(AnyURI::toQUrl<ReportContext::FODC0004>(itemURI.stringValue(), context, this));
+      if (itemURI) {
+         const QUrl uri(AnyURI::toQUrl<ReportContext::FODC0004>(itemURI.stringValue(), context, this));
 
-            // TODO 2. Resolve against static context base URI(store base URI at compile time)
-            context->error(QtXmlPatterns::tr("%1 cannot be retrieved").arg(formatResourcePath(uri)),
-                           ReportContext::FODC0004, this);
-            return CommonValues::emptyIterator;
-        }
-        else
-        {
-            /* This is out default collection currently, */
-            return CommonValues::emptyIterator;
-        }
-    }
+         // TODO 2. Resolve against static context base URI(store base URI at compile time)
+         context->error(QtXmlPatterns::tr("%1 cannot be retrieved").arg(formatResourcePath(uri)),
+                        ReportContext::FODC0004, this);
+         return CommonValues::emptyIterator;
+      } else {
+         /* This is out default collection currently, */
+         return CommonValues::emptyIterator;
+      }
+   }
 }
 
 QT_END_NAMESPACE

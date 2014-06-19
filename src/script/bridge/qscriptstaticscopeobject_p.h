@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,60 +32,68 @@ QT_BEGIN_NAMESPACE
 
 class QScriptStaticScopeObject : public JSC::JSVariableObject
 {
-public:
-    struct PropertyInfo {
-        PropertyInfo(const JSC::Identifier& i, JSC::JSValue v, unsigned a)
-            : identifier(i), value(v), attributes(a)
-            { }
-        PropertyInfo() {}
+ public:
+   struct PropertyInfo {
+      PropertyInfo(const JSC::Identifier &i, JSC::JSValue v, unsigned a)
+         : identifier(i), value(v), attributes(a) {
+      }
+      PropertyInfo() {}
 
-        JSC::Identifier identifier;
-        JSC::JSValue value;
-        unsigned attributes;
-    };
+      JSC::Identifier identifier;
+      JSC::JSValue value;
+      unsigned attributes;
+   };
 
-    QScriptStaticScopeObject(WTF::NonNullPassRefPtr<JSC::Structure> structure,
-                            int propertyCount, const PropertyInfo*);
-    QScriptStaticScopeObject(WTF::NonNullPassRefPtr<JSC::Structure> structure);
-    virtual ~QScriptStaticScopeObject();
+   QScriptStaticScopeObject(WTF::NonNullPassRefPtr<JSC::Structure> structure,
+                            int propertyCount, const PropertyInfo *);
+   QScriptStaticScopeObject(WTF::NonNullPassRefPtr<JSC::Structure> structure);
+   virtual ~QScriptStaticScopeObject();
 
-    virtual bool isDynamicScope() const { return false; }
+   virtual bool isDynamicScope() const {
+      return false;
+   }
 
-    virtual bool getOwnPropertySlot(JSC::ExecState*, const JSC::Identifier& propertyName, JSC::PropertySlot&);
-    virtual bool getOwnPropertyDescriptor(JSC::ExecState*, const JSC::Identifier& propertyName, JSC::PropertyDescriptor&);
+   virtual bool getOwnPropertySlot(JSC::ExecState *, const JSC::Identifier &propertyName, JSC::PropertySlot &);
+   virtual bool getOwnPropertyDescriptor(JSC::ExecState *, const JSC::Identifier &propertyName, JSC::PropertyDescriptor &);
 
-    virtual void putWithAttributes(JSC::ExecState *exec, const JSC::Identifier &propertyName, JSC::JSValue value, unsigned attributes);
-    virtual void put(JSC::ExecState*, const JSC::Identifier& propertyName, JSC::JSValue value, JSC::PutPropertySlot&);
+   virtual void putWithAttributes(JSC::ExecState *exec, const JSC::Identifier &propertyName, JSC::JSValue value,
+                                  unsigned attributes);
+   virtual void put(JSC::ExecState *, const JSC::Identifier &propertyName, JSC::JSValue value, JSC::PutPropertySlot &);
 
-    virtual bool deleteProperty(JSC::ExecState*, const JSC::Identifier& propertyName);
+   virtual bool deleteProperty(JSC::ExecState *, const JSC::Identifier &propertyName);
 
-    virtual void markChildren(JSC::MarkStack&);
+   virtual void markChildren(JSC::MarkStack &);
 
-    virtual const JSC::ClassInfo* classInfo() const { return &info; }
-    static const JSC::ClassInfo info;
+   virtual const JSC::ClassInfo *classInfo() const {
+      return &info;
+   }
+   static const JSC::ClassInfo info;
 
-    static WTF::PassRefPtr<JSC::Structure> createStructure(JSC::JSValue proto) {
-        return JSC::Structure::create(proto, JSC::TypeInfo(JSC::ObjectType, StructureFlags));
-    }
+   static WTF::PassRefPtr<JSC::Structure> createStructure(JSC::JSValue proto) {
+      return JSC::Structure::create(proto, JSC::TypeInfo(JSC::ObjectType, StructureFlags));
+   }
 
-protected:
-    static const unsigned StructureFlags = JSC::OverridesGetOwnPropertySlot | JSC::NeedsThisConversion | JSC::OverridesMarkChildren | JSC::OverridesGetPropertyNames | JSC::JSVariableObject::StructureFlags;
+ protected:
+   static const unsigned StructureFlags = JSC::OverridesGetOwnPropertySlot | JSC::NeedsThisConversion |
+                                          JSC::OverridesMarkChildren | JSC::OverridesGetPropertyNames | JSC::JSVariableObject::StructureFlags;
 
-    struct Data : public JSVariableObjectData {
-        Data(bool canGrow_)
-            : JSVariableObjectData(&symbolTable, /*registers=*/0),
-            canGrow(canGrow_), registerArraySize(0)
-        { }
-        bool canGrow;
-        int registerArraySize;
-        JSC::SymbolTable symbolTable;
-    };
+   struct Data : public JSVariableObjectData {
+      Data(bool canGrow_)
+         : JSVariableObjectData(&symbolTable, /*registers=*/0),
+           canGrow(canGrow_), registerArraySize(0) {
+      }
+      bool canGrow;
+      int registerArraySize;
+      JSC::SymbolTable symbolTable;
+   };
 
-    Data* d_ptr() const { return static_cast<Data*>(JSVariableObject::d); }
+   Data *d_ptr() const {
+      return static_cast<Data *>(JSVariableObject::d);
+   }
 
-private:
-    void addSymbolTableProperty(const JSC::Identifier&, JSC::JSValue, unsigned attributes);
-    int growRegisterArray(int);
+ private:
+   void addSymbolTableProperty(const JSC::Identifier &, JSC::JSValue, unsigned attributes);
+   int growRegisterArray(int);
 };
 
 QT_END_NAMESPACE

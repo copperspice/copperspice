@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,28 +32,27 @@ QT_BEGIN_NAMESPACE
 
 template<typename T> class QList;
 
-namespace QPatternist
+namespace QPatternist {
+class VariableReference : public EmptyContainer
 {
-    class VariableReference : public EmptyContainer
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<VariableReference> Ptr;
-        typedef QList<VariableReference::Ptr> List;
+ public:
+   typedef QExplicitlySharedDataPointer<VariableReference> Ptr;
+   typedef QList<VariableReference::Ptr> List;
 
-        VariableReference(const VariableSlotID slot);
+   VariableReference(const VariableSlotID slot);
 
-        inline VariableSlotID slot() const;
+   inline VariableSlotID slot() const;
 
-        virtual Properties properties() const;
+   virtual Properties properties() const;
 
-    private:
-        const VariableSlotID m_varSlot;
-    };
+ private:
+   const VariableSlotID m_varSlot;
+};
 
-    inline VariableSlotID VariableReference::slot() const
-    {
-        return m_varSlot;
-    }
+inline VariableSlotID VariableReference::slot() const
+{
+   return m_varSlot;
+}
 
 }
 

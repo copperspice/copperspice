@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,44 +37,45 @@ GenericNamespaceResolver::GenericNamespaceResolver(const Bindings &list) : m_bin
 
 void GenericNamespaceResolver::addBinding(const QXmlName nb)
 {
-    if(nb.namespaceURI() == StandardNamespaces::UndeclarePrefix)
-        m_bindings.remove(nb.prefix());
-    else
-        m_bindings.insert(nb.prefix(), nb.namespaceURI());
+   if (nb.namespaceURI() == StandardNamespaces::UndeclarePrefix) {
+      m_bindings.remove(nb.prefix());
+   } else {
+      m_bindings.insert(nb.prefix(), nb.namespaceURI());
+   }
 }
 
 QXmlName::NamespaceCode GenericNamespaceResolver::lookupNamespaceURI(const QXmlName::PrefixCode prefix) const
 {
-    return m_bindings.value(prefix, NoBinding);
+   return m_bindings.value(prefix, NoBinding);
 }
 
 NamespaceResolver::Ptr GenericNamespaceResolver::defaultXQueryBindings()
 {
-    Bindings list;
+   Bindings list;
 
-    list.insert(StandardPrefixes::xml,    StandardNamespaces::xml);
-    list.insert(StandardPrefixes::xs,     StandardNamespaces::xs);
-    list.insert(StandardPrefixes::xsi,    StandardNamespaces::xsi);
-    list.insert(StandardPrefixes::fn,     StandardNamespaces::fn);
-    list.insert(StandardPrefixes::local,  StandardNamespaces::local);
-    list.insert(StandardPrefixes::empty,  StandardNamespaces::empty);
+   list.insert(StandardPrefixes::xml,    StandardNamespaces::xml);
+   list.insert(StandardPrefixes::xs,     StandardNamespaces::xs);
+   list.insert(StandardPrefixes::xsi,    StandardNamespaces::xsi);
+   list.insert(StandardPrefixes::fn,     StandardNamespaces::fn);
+   list.insert(StandardPrefixes::local,  StandardNamespaces::local);
+   list.insert(StandardPrefixes::empty,  StandardNamespaces::empty);
 
-    return NamespaceResolver::Ptr(new GenericNamespaceResolver(list));
+   return NamespaceResolver::Ptr(new GenericNamespaceResolver(list));
 }
 
 NamespaceResolver::Ptr GenericNamespaceResolver::defaultXSLTBindings()
 {
-    Bindings list;
+   Bindings list;
 
-    list.insert(StandardPrefixes::xml,    StandardNamespaces::xml);
-    list.insert(StandardPrefixes::empty,  StandardNamespaces::empty);
+   list.insert(StandardPrefixes::xml,    StandardNamespaces::xml);
+   list.insert(StandardPrefixes::empty,  StandardNamespaces::empty);
 
-    return NamespaceResolver::Ptr(new GenericNamespaceResolver(list));
+   return NamespaceResolver::Ptr(new GenericNamespaceResolver(list));
 }
 
 NamespaceResolver::Bindings GenericNamespaceResolver::bindings() const
 {
-    return m_bindings;
+   return m_bindings;
 }
 
 QT_END_NAMESPACE

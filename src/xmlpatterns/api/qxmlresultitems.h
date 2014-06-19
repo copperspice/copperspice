@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,19 +37,19 @@ class QXmlResultItemsPrivate;
 
 class Q_XMLPATTERNS_EXPORT QXmlResultItems
 {
-public:
-    QXmlResultItems();
-    virtual ~QXmlResultItems();
+ public:
+   QXmlResultItems();
+   virtual ~QXmlResultItems();
 
-    bool hasError() const;
-    QXmlItem next();
-    QXmlItem current() const;
+   bool hasError() const;
+   QXmlItem next();
+   QXmlItem current() const;
 
-private:
-    friend class QXmlQuery;
-    Q_DECLARE_PRIVATE(QXmlResultItems)
-    QScopedPointer<QXmlResultItemsPrivate> d_ptr;
-    Q_DISABLE_COPY(QXmlResultItems)
+ private:
+   friend class QXmlQuery;
+   Q_DECLARE_PRIVATE(QXmlResultItems)
+   QScopedPointer<QXmlResultItemsPrivate> d_ptr;
+   Q_DISABLE_COPY(QXmlResultItems)
 };
 
 QT_END_NAMESPACE

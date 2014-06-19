@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,52 +37,52 @@ NoneType::NoneType()
 
 bool NoneType::itemMatches(const Item &) const
 {
-    return false;
+   return false;
 }
 
 bool NoneType::xdtTypeMatches(const ItemType::Ptr &t) const
 {
-    return *this == *t;
+   return *this == *t;
 }
 
 const ItemType &NoneType::operator|(const ItemType &other) const
 {
-    return other;
+   return other;
 }
 
 QString NoneType::displayName(const NamePool::Ptr &) const
 {
-    return QLatin1String("none");
+   return QLatin1String("none");
 }
 
 Cardinality NoneType::cardinality() const
 {
-    return Cardinality::zeroOrMore();
+   return Cardinality::zeroOrMore();
 }
 
 ItemType::Ptr NoneType::itemType() const
 {
-    return ItemType::Ptr(const_cast<NoneType *>(this));
+   return ItemType::Ptr(const_cast<NoneType *>(this));
 }
 
 bool NoneType::isAtomicType() const
 {
-    return false;
+   return false;
 }
 
 bool NoneType::isNodeType() const
 {
-    return false;
+   return false;
 }
 
 ItemType::Ptr NoneType::atomizedType() const
 {
-    return BuiltinTypes::xsAnyAtomicType;
+   return BuiltinTypes::xsAnyAtomicType;
 }
 
 ItemType::Ptr NoneType::xdtSuperType() const
 {
-    return BuiltinTypes::item;
+   return BuiltinTypes::item;
 }
 
 QT_END_NAMESPACE

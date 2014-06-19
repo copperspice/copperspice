@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,73 +38,75 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 XsdSchemaTypesFactory::XsdSchemaTypesFactory(const NamePool::Ptr &namePool)
-    : m_namePool(namePool)
+   : m_namePool(namePool)
 {
-    m_types.reserve(3);
+   m_types.reserve(3);
 
-    const XsdFacet::Ptr whiteSpaceFacet(new XsdFacet());
-    whiteSpaceFacet->setType(XsdFacet::WhiteSpace);
-    whiteSpaceFacet->setFixed(true);
-    whiteSpaceFacet->setValue(DerivedString<TypeString>::fromLexical(m_namePool, XsdSchemaToken::toString(XsdSchemaToken::Collapse)));
+   const XsdFacet::Ptr whiteSpaceFacet(new XsdFacet());
+   whiteSpaceFacet->setType(XsdFacet::WhiteSpace);
+   whiteSpaceFacet->setFixed(true);
+   whiteSpaceFacet->setValue(DerivedString<TypeString>::fromLexical(m_namePool,
+                             XsdSchemaToken::toString(XsdSchemaToken::Collapse)));
 
-    const XsdFacet::Ptr minLengthFacet(new XsdFacet());
-    minLengthFacet->setType(XsdFacet::MinimumLength);
-    minLengthFacet->setValue(DerivedInteger<TypeNonNegativeInteger>::fromLexical(namePool, QLatin1String("1")));
+   const XsdFacet::Ptr minLengthFacet(new XsdFacet());
+   minLengthFacet->setType(XsdFacet::MinimumLength);
+   minLengthFacet->setValue(DerivedInteger<TypeNonNegativeInteger>::fromLexical(namePool, QLatin1String("1")));
 
-    XsdFacet::Hash facets;
-    facets.insert(whiteSpaceFacet->type(), whiteSpaceFacet);
-    facets.insert(minLengthFacet->type(), minLengthFacet);
+   XsdFacet::Hash facets;
+   facets.insert(whiteSpaceFacet->type(), whiteSpaceFacet);
+   facets.insert(minLengthFacet->type(), minLengthFacet);
 
-    {
-        const QXmlName typeName = m_namePool->allocateQName(CommonNamespaces::WXS, QLatin1String("NMTOKENS"));
-        const XsdSimpleType::Ptr type(new XsdSimpleType());
-        type->setName(typeName);
-        type->setWxsSuperType(BuiltinTypes::xsAnySimpleType);
-        type->setCategory(XsdSimpleType::SimpleTypeList);
-        type->setItemType(BuiltinTypes::xsNMTOKEN);
-        type->setDerivationMethod(XsdSimpleType::DerivationRestriction);
-        type->setFacets(facets);
-        m_types.insert(typeName, type);
-    }
-    {
-        const QXmlName typeName = m_namePool->allocateQName(CommonNamespaces::WXS, QLatin1String("IDREFS"));
-        const XsdSimpleType::Ptr type(new XsdSimpleType());
-        type->setName(typeName);
-        type->setWxsSuperType(BuiltinTypes::xsAnySimpleType);
-        type->setCategory(XsdSimpleType::SimpleTypeList);
-        type->setItemType(BuiltinTypes::xsIDREF);
-        type->setDerivationMethod(XsdSimpleType::DerivationRestriction);
-        type->setFacets(facets);
-        m_types.insert(typeName, type);
-    }
-    {
-        const QXmlName typeName = m_namePool->allocateQName(CommonNamespaces::WXS, QLatin1String("ENTITIES"));
-        const XsdSimpleType::Ptr type(new XsdSimpleType());
-        type->setName(typeName);
-        type->setWxsSuperType(BuiltinTypes::xsAnySimpleType);
-        type->setCategory(XsdSimpleType::SimpleTypeList);
-        type->setItemType(BuiltinTypes::xsENTITY);
-        type->setDerivationMethod(XsdSimpleType::DerivationRestriction);
-        type->setFacets(facets);
-        m_types.insert(typeName, type);
-    }
+   {
+      const QXmlName typeName = m_namePool->allocateQName(CommonNamespaces::WXS, QLatin1String("NMTOKENS"));
+      const XsdSimpleType::Ptr type(new XsdSimpleType());
+      type->setName(typeName);
+      type->setWxsSuperType(BuiltinTypes::xsAnySimpleType);
+      type->setCategory(XsdSimpleType::SimpleTypeList);
+      type->setItemType(BuiltinTypes::xsNMTOKEN);
+      type->setDerivationMethod(XsdSimpleType::DerivationRestriction);
+      type->setFacets(facets);
+      m_types.insert(typeName, type);
+   }
+   {
+      const QXmlName typeName = m_namePool->allocateQName(CommonNamespaces::WXS, QLatin1String("IDREFS"));
+      const XsdSimpleType::Ptr type(new XsdSimpleType());
+      type->setName(typeName);
+      type->setWxsSuperType(BuiltinTypes::xsAnySimpleType);
+      type->setCategory(XsdSimpleType::SimpleTypeList);
+      type->setItemType(BuiltinTypes::xsIDREF);
+      type->setDerivationMethod(XsdSimpleType::DerivationRestriction);
+      type->setFacets(facets);
+      m_types.insert(typeName, type);
+   }
+   {
+      const QXmlName typeName = m_namePool->allocateQName(CommonNamespaces::WXS, QLatin1String("ENTITIES"));
+      const XsdSimpleType::Ptr type(new XsdSimpleType());
+      type->setName(typeName);
+      type->setWxsSuperType(BuiltinTypes::xsAnySimpleType);
+      type->setCategory(XsdSimpleType::SimpleTypeList);
+      type->setItemType(BuiltinTypes::xsENTITY);
+      type->setDerivationMethod(XsdSimpleType::DerivationRestriction);
+      type->setFacets(facets);
+      m_types.insert(typeName, type);
+   }
 }
 
 SchemaType::Ptr XsdSchemaTypesFactory::createSchemaType(const QXmlName name) const
 {
-    if (m_types.contains(name)) {
-        return m_types.value(name);
-    } else {
-        if (!m_basicTypesFactory)
-            m_basicTypesFactory = BasicTypesFactory::self(m_namePool);
+   if (m_types.contains(name)) {
+      return m_types.value(name);
+   } else {
+      if (!m_basicTypesFactory) {
+         m_basicTypesFactory = BasicTypesFactory::self(m_namePool);
+      }
 
-        return m_basicTypesFactory->createSchemaType(name);
-    }
+      return m_basicTypesFactory->createSchemaType(name);
+   }
 }
 
 SchemaType::Hash XsdSchemaTypesFactory::types() const
 {
-    return m_types;
+   return m_types;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,20 +32,19 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class ValueFactory
 {
+ public:
+   static AtomicValue::Ptr fromLexical(const QString &lexicalValue,
+                                       const SchemaType::Ptr &type,
+                                       const ReportContext::Ptr &context,
+                                       const SourceLocationReflection *const sourceLocationReflection);
 
-    class ValueFactory
-    {
-       public:
-           static AtomicValue::Ptr fromLexical(const QString &lexicalValue,
-                                            const SchemaType::Ptr &type,
-                                            const ReportContext::Ptr &context,
-                                            const SourceLocationReflection *const sourceLocationReflection);
-
-    private:
-        Q_DISABLE_COPY(ValueFactory)
-    };
+ private:
+   Q_DISABLE_COPY(ValueFactory)
+};
 }
 
 QT_END_NAMESPACE

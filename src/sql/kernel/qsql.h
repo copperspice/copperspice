@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,39 +30,34 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QSql
-{
-    enum Location
-    {
-        BeforeFirstRow = -1,
-        AfterLastRow = -2
-    };
+namespace QSql {
+enum Location {
+   BeforeFirstRow = -1,
+   AfterLastRow = -2
+};
 
-    enum ParamTypeFlag
-    {
-        In = 0x00000001,
-        Out = 0x00000002,
-        InOut = In | Out,
-        Binary = 0x00000004
-    };
-    using ParamType = QFlags<ParamTypeFlag>;
+enum ParamTypeFlag {
+   In = 0x00000001,
+   Out = 0x00000002,
+   InOut = In | Out,
+   Binary = 0x00000004
+};
+using ParamType = QFlags<ParamTypeFlag>;
 
-    enum TableType
-    {
-        Tables = 0x01,
-        SystemTables = 0x02,
-        Views = 0x04,
-        AllTables = 0xff
-    };
+enum TableType {
+   Tables = 0x01,
+   SystemTables = 0x02,
+   Views = 0x04,
+   AllTables = 0xff
+};
 
-    enum NumericalPrecisionPolicy
-    {
-        LowPrecisionInt32    = 0x01,
-        LowPrecisionInt64    = 0x02,
-        LowPrecisionDouble   = 0x04,
+enum NumericalPrecisionPolicy {
+   LowPrecisionInt32    = 0x01,
+   LowPrecisionInt64    = 0x02,
+   LowPrecisionDouble   = 0x04,
 
-        HighPrecision        = 0
-    };
+   HighPrecision        = 0
+};
 
 }
 

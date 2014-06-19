@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,32 +39,32 @@ XsdDocumentation::~XsdDocumentation()
 
 void XsdDocumentation::setSource(const AnyURI::Ptr &source)
 {
-    m_source = source;
+   m_source = source;
 }
 
 AnyURI::Ptr XsdDocumentation::source() const
 {
-    return m_source;
+   return m_source;
 }
 
 void XsdDocumentation::setLanguage(const DerivedString<TypeLanguage>::Ptr &language)
 {
-    m_language = language;
+   m_language = language;
 }
 
 DerivedString<TypeLanguage>::Ptr XsdDocumentation::language() const
 {
-    return m_language;
+   return m_language;
 }
 
 void XsdDocumentation::setContent(const QString &content)
 {
-    m_content = content;
+   m_content = content;
 }
 
 QString XsdDocumentation::content() const
 {
-    return m_content;
+   return m_content;
 }
 
 QT_END_NAMESPACE

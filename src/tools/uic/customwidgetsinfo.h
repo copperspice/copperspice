@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,36 +37,39 @@ class DomScript;
 
 class CustomWidgetsInfo : public TreeWalker
 {
-public:
-    CustomWidgetsInfo();
+ public:
+   CustomWidgetsInfo();
 
-    void acceptUI(DomUI *node);
+   void acceptUI(DomUI *node);
 
-    void acceptCustomWidgets(DomCustomWidgets *node);
-    void acceptCustomWidget(DomCustomWidget *node);
+   void acceptCustomWidgets(DomCustomWidgets *node);
+   void acceptCustomWidget(DomCustomWidget *node);
 
-    inline QStringList customWidgets() const
-    { return m_customWidgets.keys(); }
+   inline QStringList customWidgets() const {
+      return m_customWidgets.keys();
+   }
 
-    inline bool hasCustomWidget(const QString &name) const
-    { return m_customWidgets.contains(name); }
+   inline bool hasCustomWidget(const QString &name) const {
+      return m_customWidgets.contains(name);
+   }
 
-    inline DomCustomWidget *customWidget(const QString &name) const
-    { return m_customWidgets.value(name); }
+   inline DomCustomWidget *customWidget(const QString &name) const {
+      return m_customWidgets.value(name);
+   }
 
-    DomScript *customWidgetScript(const QString &name) const;
+   DomScript *customWidgetScript(const QString &name) const;
 
-    QString customWidgetAddPageMethod(const QString &name) const;
+   QString customWidgetAddPageMethod(const QString &name) const;
 
-    QString realClassName(const QString &className) const;
+   QString realClassName(const QString &className) const;
 
-    bool extends(const QString &className, const QLatin1String &baseClassName) const;
+   bool extends(const QString &className, const QLatin1String &baseClassName) const;
 
-    bool isCustomWidgetContainer(const QString &className) const;
+   bool isCustomWidgetContainer(const QString &className) const;
 
-private:
-    typedef QMap<QString, DomCustomWidget*> NameCustomWidgetMap;
-    NameCustomWidgetMap m_customWidgets;
+ private:
+   typedef QMap<QString, DomCustomWidget *> NameCustomWidgetMap;
+   NameCustomWidgetMap m_customWidgets;
 };
 
 QT_END_NAMESPACE

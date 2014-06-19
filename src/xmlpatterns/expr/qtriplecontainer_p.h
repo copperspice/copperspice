@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,26 +30,25 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class TripleContainer : public Expression
 {
- 
-    class TripleContainer : public Expression
-    {
-    public:
-        virtual Expression::List operands() const;
-        virtual void setOperands(const Expression::List &operands);
+ public:
+   virtual Expression::List operands() const;
+   virtual void setOperands(const Expression::List &operands);
 
-        virtual bool compressOperands(const StaticContext::Ptr &);
+   virtual bool compressOperands(const StaticContext::Ptr &);
 
-    protected:
-        TripleContainer(const Expression::Ptr &operand1,
-                        const Expression::Ptr &operand2,
-                        const Expression::Ptr &operand3);
+ protected:
+   TripleContainer(const Expression::Ptr &operand1,
+                   const Expression::Ptr &operand2,
+                   const Expression::Ptr &operand3);
 
-        Expression::Ptr m_operand1;
-        Expression::Ptr m_operand2;
-        Expression::Ptr m_operand3;
-    };
+   Expression::Ptr m_operand1;
+   Expression::Ptr m_operand2;
+   Expression::Ptr m_operand3;
+};
 }
 
 QT_END_NAMESPACE

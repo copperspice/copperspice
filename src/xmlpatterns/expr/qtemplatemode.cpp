@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,14 +32,14 @@ using namespace QPatternist;
 bool TemplateMode::lessThanByPriority(const TemplatePattern::Ptr &t1,
                                       const TemplatePattern::Ptr &t2)
 {
-    return t1->priority() > t2->priority();
+   return t1->priority() > t2->priority();
 }
 
 void TemplateMode::finalize()
 {
-    qSort(templatePatterns.begin(), templatePatterns.end(), lessThanByPriority);
+   qSort(templatePatterns.begin(), templatePatterns.end(), lessThanByPriority);
 
-    /* Now we have a list of patterns sorted by priority. */
+   /* Now we have a list of patterns sorted by priority. */
 }
 
 QT_END_NAMESPACE

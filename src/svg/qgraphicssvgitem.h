@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,43 +37,43 @@ class QGraphicsSvgItemPrivate;
 
 class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
 {
-    CS_OBJECT(QGraphicsSvgItem)
-    CS_INTERFACES(QGraphicsItem)
+   CS_OBJECT(QGraphicsSvgItem)
+   CS_INTERFACES(QGraphicsItem)
 
-    SVG_CS_PROPERTY_READ(elementId, elementId)
-    SVG_CS_PROPERTY_WRITE(elementId, setElementId)
-    SVG_CS_PROPERTY_READ(maximumCacheSize, maximumCacheSize)
-    SVG_CS_PROPERTY_WRITE(maximumCacheSize, setMaximumCacheSize)
+   SVG_CS_PROPERTY_READ(elementId, elementId)
+   SVG_CS_PROPERTY_WRITE(elementId, setElementId)
+   SVG_CS_PROPERTY_READ(maximumCacheSize, maximumCacheSize)
+   SVG_CS_PROPERTY_WRITE(maximumCacheSize, setMaximumCacheSize)
 
-public:
-    QGraphicsSvgItem(QGraphicsItem *parentItem=0);
-    QGraphicsSvgItem(const QString &fileName, QGraphicsItem *parentItem=0);
+ public:
+   QGraphicsSvgItem(QGraphicsItem *parentItem = 0);
+   QGraphicsSvgItem(const QString &fileName, QGraphicsItem *parentItem = 0);
 
-    void setSharedRenderer(QSvgRenderer *renderer);
-    QSvgRenderer *renderer() const;
+   void setSharedRenderer(QSvgRenderer *renderer);
+   QSvgRenderer *renderer() const;
 
-    void setElementId(const QString &id);
-    QString elementId() const;
+   void setElementId(const QString &id);
+   QString elementId() const;
 
-    void setCachingEnabled(bool);
-    bool isCachingEnabled() const;
+   void setCachingEnabled(bool);
+   bool isCachingEnabled() const;
 
-    void setMaximumCacheSize(const QSize &size);
-    QSize maximumCacheSize() const;
+   void setMaximumCacheSize(const QSize &size);
+   QSize maximumCacheSize() const;
 
-    virtual QRectF boundingRect() const;
+   virtual QRectF boundingRect() const;
 
-    virtual void paint(QPainter *painter,const QStyleOptionGraphicsItem *option, QWidget *widget=0);
+   virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-    enum { Type = 13 };
-    virtual int type() const;
+   enum { Type = 13 };
+   virtual int type() const;
 
-private:
-    Q_DISABLE_COPY(QGraphicsSvgItem)
-    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QGraphicsSvgItem)
+ private:
+   Q_DISABLE_COPY(QGraphicsSvgItem)
+   Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QGraphicsSvgItem)
 
-    SVG_CS_SLOT_1(Private, void _q_repaintItem())
-    SVG_CS_SLOT_2(_q_repaintItem)
+   SVG_CS_SLOT_1(Private, void _q_repaintItem())
+   SVG_CS_SLOT_2(_q_repaintItem)
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,32 +36,31 @@ using namespace QPatternist;
 URILoader::URILoader(QObject *const parent,
                      const NamePool::Ptr &np,
                      const VariableLoader::Ptr &l) : QNetworkAccessManager(parent)
-                                                   , m_variableNS(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:"))
-                                                   , m_namePool(np)
-                                                   , m_variableLoader(l)
+   , m_variableNS(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:"))
+   , m_namePool(np)
+   , m_variableLoader(l)
 {
-    Q_ASSERT(m_variableLoader);
+   Q_ASSERT(m_variableLoader);
 }
 
 QNetworkReply *URILoader::createRequest(Operation op, const QNetworkRequest &req, QIODevice *outgoingData)
 {
-    const QString requestedUrl(req.url().toString());
+   const QString requestedUrl(req.url().toString());
 
-    /* We got a QIODevice variable. */
-    const QString name(requestedUrl.right(requestedUrl.length() - m_variableNS.length()));
+   /* We got a QIODevice variable. */
+   const QString name(requestedUrl.right(requestedUrl.length() - m_variableNS.length()));
 
-    const QVariant variant(m_variableLoader->valueFor(m_namePool->allocateQName(QString(), name, QString())));
+   const QVariant variant(m_variableLoader->valueFor(m_namePool->allocateQName(QString(), name, QString())));
 
-    if(!variant.isNull() && variant.userType() == qMetaTypeId<QIODevice *>())
-        return new QIODeviceDelegate(qvariant_cast<QIODevice *>(variant));
-    else
-    {
-        /* If we're entering this code path, the variable URI identified a variable
-         * which we don't have, which means we either have a bug, or the user had
-         * crafted an invalid URI manually. */
+   if (!variant.isNull() && variant.userType() == qMetaTypeId<QIODevice *>()) {
+      return new QIODeviceDelegate(qvariant_cast<QIODevice *>(variant));
+   } else {
+      /* If we're entering this code path, the variable URI identified a variable
+       * which we don't have, which means we either have a bug, or the user had
+       * crafted an invalid URI manually. */
 
-        return QNetworkAccessManager::createRequest(op, req, outgoingData);
-    }
+      return QNetworkAccessManager::createRequest(op, req, outgoingData);
+   }
 }
 
 QT_END_NAMESPACE

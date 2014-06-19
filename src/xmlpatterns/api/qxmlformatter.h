@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,34 +36,34 @@ class QXmlFormatterPrivate;
 
 class Q_XMLPATTERNS_EXPORT QXmlFormatter : public QXmlSerializer
 {
-public:
-    QXmlFormatter(const QXmlQuery &query, QIODevice *outputDevice);
+ public:
+   QXmlFormatter(const QXmlQuery &query, QIODevice *outputDevice);
 
-    virtual void characters(const QStringRef &value);
-    virtual void comment(const QString &value);
-    virtual void startElement(const QXmlName &name);
-    virtual void endElement();
+   virtual void characters(const QStringRef &value);
+   virtual void comment(const QString &value);
+   virtual void startElement(const QXmlName &name);
+   virtual void endElement();
 
-    virtual void attribute(const QXmlName &name,
-                           const QStringRef &value);
-    virtual void processingInstruction(const QXmlName &name,
-                                       const QString &value);
-    virtual void atomicValue(const QVariant &value);
-    virtual void startDocument();
-    virtual void endDocument();
-    virtual void startOfSequence();
-    virtual void endOfSequence();
+   virtual void attribute(const QXmlName &name,
+                          const QStringRef &value);
+   virtual void processingInstruction(const QXmlName &name,
+                                      const QString &value);
+   virtual void atomicValue(const QVariant &value);
+   virtual void startDocument();
+   virtual void endDocument();
+   virtual void startOfSequence();
+   virtual void endOfSequence();
 
-    int indentationDepth() const;
-    void setIndentationDepth(int depth);
+   int indentationDepth() const;
+   void setIndentationDepth(int depth);
 
-    /* The members below are internal, not part of the public API, and
-     * unsupported. Using them leads to undefined behavior. */
-    virtual void item(const QPatternist::Item &item);
+   /* The members below are internal, not part of the public API, and
+    * unsupported. Using them leads to undefined behavior. */
+   virtual void item(const QPatternist::Item &item);
 
-private:
-    inline void startFormattingContent();
-    Q_DECLARE_PRIVATE(QXmlFormatter)
+ private:
+   inline void startFormattingContent();
+   Q_DECLARE_PRIVATE(QXmlFormatter)
 };
 
 QT_END_NAMESPACE

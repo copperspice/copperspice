@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,12 +40,11 @@ using namespace QPatternist;
 
 class QSimpleXmlNodeModelPrivate : public QAbstractXmlNodeModelPrivate
 {
-public:
-    QSimpleXmlNodeModelPrivate(const QXmlNamePool &np) : namePool(np)
-    {
-    }
+ public:
+   QSimpleXmlNodeModelPrivate(const QXmlNamePool &np) : namePool(np) {
+   }
 
-    mutable QXmlNamePool namePool;
+   mutable QXmlNamePool namePool;
 };
 
 /*!
@@ -68,7 +67,7 @@ public:
   \a namePool.
  */
 QSimpleXmlNodeModel::QSimpleXmlNodeModel(const QXmlNamePool &namePool)
-  : QAbstractXmlNodeModel(new QSimpleXmlNodeModelPrivate(namePool))
+   : QAbstractXmlNodeModel(new QSimpleXmlNodeModelPrivate(namePool))
 {
 }
 
@@ -93,17 +92,17 @@ QSimpleXmlNodeModel::~QSimpleXmlNodeModel()
  */
 QString QSimpleXmlNodeModel::stringValue(const QXmlNodeModelIndex &node) const
 {
-    const QXmlNodeModelIndex::NodeKind k= kind(node);
-    if(k == QXmlNodeModelIndex::Element || k == QXmlNodeModelIndex::Attribute)
-    {
-        const QVariant &candidate = typedValue(node);
-        if(candidate.isNull())
-            return QString();
-        else
-            return AtomicValue::toXDM(candidate).stringValue();
-    }
-    else
-        return QString();
+   const QXmlNodeModelIndex::NodeKind k = kind(node);
+   if (k == QXmlNodeModelIndex::Element || k == QXmlNodeModelIndex::Attribute) {
+      const QVariant &candidate = typedValue(node);
+      if (candidate.isNull()) {
+         return QString();
+      } else {
+         return AtomicValue::toXDM(candidate).stringValue();
+      }
+   } else {
+      return QString();
+   }
 }
 
 /*!
@@ -114,7 +113,7 @@ QString QSimpleXmlNodeModel::stringValue(const QXmlNodeModelIndex &node) const
  */
 QUrl QSimpleXmlNodeModel::baseUri(const QXmlNodeModelIndex &node) const
 {
-    return documentUri(node);
+   return documentUri(node);
 }
 
 /*!
@@ -124,9 +123,9 @@ QUrl QSimpleXmlNodeModel::baseUri(const QXmlNodeModelIndex &node) const
  */
 QXmlNamePool &QSimpleXmlNodeModel::namePool() const
 {
-    Q_D(const QSimpleXmlNodeModel);
+   Q_D(const QSimpleXmlNodeModel);
 
-    return d->namePool;
+   return d->namePool;
 }
 
 /*!
@@ -135,8 +134,8 @@ QXmlNamePool &QSimpleXmlNodeModel::namePool() const
  */
 QVector<QXmlName> QSimpleXmlNodeModel::namespaceBindings(const QXmlNodeModelIndex &node) const
 {
-    Q_UNUSED(node);
-    return QVector<QXmlName>();
+   Q_UNUSED(node);
+   return QVector<QXmlName>();
 }
 
 /*!
@@ -147,8 +146,8 @@ QVector<QXmlName> QSimpleXmlNodeModel::namespaceBindings(const QXmlNodeModelInde
  */
 QXmlNodeModelIndex QSimpleXmlNodeModel::elementById(const QXmlName &id) const
 {
-    Q_UNUSED(id);
-    return QXmlNodeModelIndex();
+   Q_UNUSED(id);
+   return QXmlNodeModelIndex();
 }
 
 /*!
@@ -159,8 +158,8 @@ QXmlNodeModelIndex QSimpleXmlNodeModel::elementById(const QXmlName &id) const
  */
 QVector<QXmlNodeModelIndex> QSimpleXmlNodeModel::nodesByIdref(const QXmlName &idref) const
 {
-    Q_UNUSED(idref);
-    return QVector<QXmlNodeModelIndex>();
+   Q_UNUSED(idref);
+   return QVector<QXmlNodeModelIndex>();
 }
 
 QT_END_NAMESPACE

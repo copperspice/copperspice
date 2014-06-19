@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,41 +31,40 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class InsertionIterator : public Item::Iterator
 {
-     class InsertionIterator : public Item::Iterator
-    {
-    public:
+ public:
 
-        /**
-         * Creates an InsertionIterator whose result is a merge of the
-         * iterator @p insertIterator into the iterator @p target at position @p
-         * position.
-         *
-         * @param target the iterator containing the items that the
-         * item in @p insertIterator will be inserted into.
-         * @param position the insertion position. Must be 1 or larger
-         * @param insertIterator the iterator containing the items to insert
-         * at position @p position
-         */
-        InsertionIterator(const Item::Iterator::Ptr &target,
-                          const xsInteger position,
-                          const Item::Iterator::Ptr &insertIterator);
+   /**
+    * Creates an InsertionIterator whose result is a merge of the
+    * iterator @p insertIterator into the iterator @p target at position @p
+    * position.
+    *
+    * @param target the iterator containing the items that the
+    * item in @p insertIterator will be inserted into.
+    * @param position the insertion position. Must be 1 or larger
+    * @param insertIterator the iterator containing the items to insert
+    * at position @p position
+    */
+   InsertionIterator(const Item::Iterator::Ptr &target,
+                     const xsInteger position,
+                     const Item::Iterator::Ptr &insertIterator);
 
-        virtual Item next();
-        virtual Item current() const;
-        virtual xsInteger position() const;
-        virtual xsInteger count();
-        virtual Item::Iterator::Ptr copy() const;
+   virtual Item next();
+   virtual Item current() const;
+   virtual xsInteger position() const;
+   virtual xsInteger count();
+   virtual Item::Iterator::Ptr copy() const;
 
-    private:
-        const Item::Iterator::Ptr m_target;
-        const xsInteger m_insertPos;
-        const Item::Iterator::Ptr m_inserts;
-        Item m_current;
-        xsInteger m_position;
-        bool m_isInserting;
-    };
+ private:
+   const Item::Iterator::Ptr m_target;
+   const xsInteger m_insertPos;
+   const Item::Iterator::Ptr m_inserts;
+   Item m_current;
+   xsInteger m_position;
+   bool m_isInserting;
+};
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,51 +37,51 @@ GYearMonth::GYearMonth(const QDateTime &dateTime) : AbstractDateTime(dateTime)
 
 GYearMonth::Ptr GYearMonth::fromLexical(const QString &lexical)
 {
-    static const CaptureTable captureTable( // STATIC DATA
-        /* The extra paranthesis is a build fix for GCC 3.3. */
-        (QRegExp(QLatin1String(
-                "^\\s*"                             /* Any preceding whitespace. */
-                "(-?)"                              /* Any preceding minus. */
-                "(\\d{4,})"                         /* The year part. */
-                "-"                                 /* Delimiter. */
-                "(\\d{2})"                          /* The month part. */
-                "(?:(\\+|-)(\\d{2}):(\\d{2})|(Z))?" /* The zone offset, "+08:24". */
-                "\\s*$"                             /* Any terminating whitespace. */))),
-        /*zoneOffsetSignP*/         4,
-        /*zoneOffsetHourP*/         5,
-        /*zoneOffsetMinuteP*/       6,
-        /*zoneOffsetUTCSymbolP*/    7,
-        /*yearP*/                   2,
-        /*monthP*/                  3,
-        /*dayP*/                    -1,
-        /*hourP*/                   -1,
-        /*minutesP*/                -1,
-        /*secondsP*/                -1,
-        /*msecondsP*/               -1,
-        /*yearSign*/                1);
+   static const CaptureTable captureTable( // STATIC DATA
+      /* The extra paranthesis is a build fix for GCC 3.3. */
+      (QRegExp(QLatin1String(
+                  "^\\s*"                             /* Any preceding whitespace. */
+                  "(-?)"                              /* Any preceding minus. */
+                  "(\\d{4,})"                         /* The year part. */
+                  "-"                                 /* Delimiter. */
+                  "(\\d{2})"                          /* The month part. */
+                  "(?:(\\+|-)(\\d{2}):(\\d{2})|(Z))?" /* The zone offset, "+08:24". */
+                  "\\s*$"                             /* Any terminating whitespace. */))),
+      /*zoneOffsetSignP*/         4,
+      /*zoneOffsetHourP*/         5,
+      /*zoneOffsetMinuteP*/       6,
+      /*zoneOffsetUTCSymbolP*/    7,
+      /*yearP*/                   2,
+      /*monthP*/                  3,
+      /*dayP*/                    -1,
+      /*hourP*/                   -1,
+      /*minutesP*/                -1,
+      /*secondsP*/                -1,
+      /*msecondsP*/               -1,
+      /*yearSign*/                1);
 
-    AtomicValue::Ptr err;
-    const QDateTime retval(create(err, lexical, captureTable));
+   AtomicValue::Ptr err;
+   const QDateTime retval(create(err, lexical, captureTable));
 
-    return err ? err : GYearMonth::Ptr(new GYearMonth(retval));
+   return err ? err : GYearMonth::Ptr(new GYearMonth(retval));
 }
 
 GYearMonth::Ptr GYearMonth::fromDateTime(const QDateTime &dt)
 {
-    QDateTime result(QDate(dt.date().year(), dt.date().month(), DefaultDay));
-    copyTimeSpec(dt, result);
+   QDateTime result(QDate(dt.date().year(), dt.date().month(), DefaultDay));
+   copyTimeSpec(dt, result);
 
-    return GYearMonth::Ptr(new GYearMonth(result));
+   return GYearMonth::Ptr(new GYearMonth(result));
 }
 
 QString GYearMonth::stringValue() const
 {
-    return m_dateTime.toString(QLatin1String("yyyy-MM")) + zoneOffsetToString();
+   return m_dateTime.toString(QLatin1String("yyyy-MM")) + zoneOffsetToString();
 }
 
 ItemType::Ptr GYearMonth::type() const
 {
-    return BuiltinTypes::xsGYearMonth;
+   return BuiltinTypes::xsGYearMonth;
 }
 
 QT_END_NAMESPACE

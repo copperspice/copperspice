@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,17 +33,17 @@ QT_BEGIN_NAMESPACE
 
 class Statistics : public QDialog, public Ui::Statistics
 {
-    Q_OBJECT
+   Q_OBJECT
 
-public:
-    Statistics(QWidget *parent = 0, Qt::WindowFlags fl = 0);
-    ~Statistics() {}
+ public:
+   Statistics(QWidget *parent = 0, Qt::WindowFlags fl = 0);
+   ~Statistics() {}
 
-public slots:
-    virtual void updateStats(int w1, int c1, int cs1, int w2, int c2, int cs2);
+ public slots:
+   virtual void updateStats(int w1, int c1, int cs1, int w2, int c2, int cs2);
 
-protected slots:
-    virtual void languageChange();
+ protected slots:
+   virtual void languageChange();
 };
 
 QT_END_NAMESPACE

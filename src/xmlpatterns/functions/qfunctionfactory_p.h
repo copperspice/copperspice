@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,68 +36,66 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class FunctionFactory : public QSharedData
 {
-    class FunctionFactory : public QSharedData
-    {
-    public:
+ public:
 
-        typedef QExplicitlySharedDataPointer<FunctionFactory> Ptr;
-        typedef QList<FunctionFactory::Ptr> List;
+   typedef QExplicitlySharedDataPointer<FunctionFactory> Ptr;
+   typedef QList<FunctionFactory::Ptr> List;
 
-        virtual ~FunctionFactory();
+   virtual ~FunctionFactory();
 
-        virtual Expression::Ptr createFunctionCall(const QXmlName name,
-                                                   const Expression::List &arguments,
-                                                   const StaticContext::Ptr &context,
-                                                   const SourceLocationReflection *const r) = 0;
+   virtual Expression::Ptr createFunctionCall(const QXmlName name,
+         const Expression::List &arguments,
+         const StaticContext::Ptr &context,
+         const SourceLocationReflection *const r) = 0;
 
-        /**
-         * Determines whether a function with the name @p name and arity @p arity
-         * is available. The implementation operates on the result of
-         * retrieveFunctionSignature() to determine the result.
-         *
-         * @param np the NamePool.
-         * @param name the name of the function. For example fn:string-join.
-         * @param arity the number of arguments the function must have.
-         */
-        virtual bool isAvailable(const NamePool::Ptr &np,
-                                 const QXmlName name,
-                                 const xsInteger arity);
+   /**
+    * Determines whether a function with the name @p name and arity @p arity
+    * is available. The implementation operates on the result of
+    * retrieveFunctionSignature() to determine the result.
+    *
+    * @param np the NamePool.
+    * @param name the name of the function. For example fn:string-join.
+    * @param arity the number of arguments the function must have.
+    */
+   virtual bool isAvailable(const NamePool::Ptr &np,
+                            const QXmlName name,
+                            const xsInteger arity);
 
-        virtual FunctionSignature::Hash functionSignatures() const = 0;
+   virtual FunctionSignature::Hash functionSignatures() const = 0;
 
-        /**
-         * Determines whether this FunctionFactory contains the function signature
-         * @p signature.
-         *
-         * The implementation uses functionSignatures().
-         */
-        bool hasSignature(const FunctionSignature::Ptr &signature) const;
+   /**
+    * Determines whether this FunctionFactory contains the function signature
+    * @p signature.
+    *
+    * The implementation uses functionSignatures().
+    */
+   bool hasSignature(const FunctionSignature::Ptr &signature) const;
 
-    protected:
-        /**
-         * @short This constructor cannot be removed, because it can't be synthesized, for
-         * some reason.
-         */
-        inline FunctionFactory()
-        {
-        }
+ protected:
+   /**
+    * @short This constructor cannot be removed, because it can't be synthesized, for
+    * some reason.
+    */
+   inline FunctionFactory() {
+   }
 
-        /**
-         * This is a convenience function for sub-classes. It retrieves the
-         * function signature for function with name @p name.
-         *
-         * According to the specifications are function signatures identified by their
-         * name and arity, but currently is the arity not part of the signature.
-         *
-         * If no function could be found for the given name, @c null is returned.
-         */
-        virtual FunctionSignature::Ptr retrieveFunctionSignature(const NamePool::Ptr &np, const QXmlName name) = 0;
+   /**
+    * This is a convenience function for sub-classes. It retrieves the
+    * function signature for function with name @p name.
+    *
+    * According to the specifications are function signatures identified by their
+    * name and arity, but currently is the arity not part of the signature.
+    *
+    * If no function could be found for the given name, @c null is returned.
+    */
+   virtual FunctionSignature::Ptr retrieveFunctionSignature(const NamePool::Ptr &np, const QXmlName name) = 0;
 
-    private:
-        Q_DISABLE_COPY(FunctionFactory)
-    };
+ private:
+   Q_DISABLE_COPY(FunctionFactory)
+};
 }
 
 QT_END_NAMESPACE

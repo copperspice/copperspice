@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,18 +35,18 @@ using namespace QPatternist;
 
 DynamicContext::Ptr DynamicContext::createFocus()
 {
-    return Ptr(new Focus(Ptr(this)));
+   return Ptr(new Focus(Ptr(this)));
 }
 
 DynamicContext::Ptr DynamicContext::createStack()
 {
-    return Ptr(new StackContext(Ptr(this)));
+   return Ptr(new StackContext(Ptr(this)));
 }
 
 DynamicContext::Ptr DynamicContext::createReceiverContext(QAbstractXmlReceiver *const receiver)
 {
-    Q_ASSERT(receiver);
-    return Ptr(new ReceiverDynamicContext(Ptr(this), receiver));
+   Q_ASSERT(receiver);
+   return Ptr(new ReceiverDynamicContext(Ptr(this), receiver));
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,54 +30,52 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class EmptySequence : public EmptyContainer
 {
-    class EmptySequence : public EmptyContainer
-    {
-    public:
+ public:
 
-        static Expression::Ptr create(const Expression *const replacementFor, const StaticContext::Ptr &context);
-  
-        inline EmptySequence()
-        {
-        }
+   static Expression::Ptr create(const Expression *const replacementFor, const StaticContext::Ptr &context);
 
-        virtual QString stringValue() const;
+   inline EmptySequence() {
+   }
 
-        /**
-         * @returns always an empty iterator, an instance of EmptyIterator.
-         */
-        virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const;
+   virtual QString stringValue() const;
 
-        /**
-         * @returns always @c null.
-         */
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
+   /**
+    * @returns always an empty iterator, an instance of EmptyIterator.
+    */
+   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const;
 
-        /**
-         * Does nothing.
-         */
-        virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &) const;
+   /**
+    * @returns always @c null.
+    */
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
 
-        /**
-         * @returns always @c false.
-         */
-        virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+   /**
+    * Does nothing.
+    */
+   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &) const;
 
-        /**
-         * @returns always CommonSequenceTypes::Empty
-         */
-        virtual ItemType::Ptr type() const;
+   /**
+    * @returns always @c false.
+    */
+   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
 
-        /**
-         * @returns always CommonSequenceTypes::Empty
-         */
-        virtual SequenceType::Ptr staticType() const;
+   /**
+    * @returns always CommonSequenceTypes::Empty
+    */
+   virtual ItemType::Ptr type() const;
 
-        virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-        virtual ID id() const;
-        virtual Properties properties() const;
-    };
+   /**
+    * @returns always CommonSequenceTypes::Empty
+    */
+   virtual SequenceType::Ptr staticType() const;
+
+   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   virtual ID id() const;
+   virtual Properties properties() const;
+};
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,62 +36,60 @@ using namespace QPatternist;
 
 Item ErrorFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    QString msg;
+   QString msg;
 
-    switch(m_operands.count())
-    {
-        case 0: /* No args. */
-        {
-            context->error(QtXmlPatterns::tr("%1 was called.").arg(formatFunction(context->namePool(), signature())),
-                            ReportContext::FOER0000, this);
-            return Item();
-        }
-        case 3:
-        /* Fallthrough, we don't use the 'error object' param. */
-        case 2:
-            msg = m_operands.at(1)->evaluateSingleton(context).stringValue();
-        /* Fall through. */
-        case 1:
-        {
-            const QNameValue::Ptr qName(m_operands.first()->evaluateSingleton(context).as<QNameValue>());
+   switch (m_operands.count()) {
+      case 0: { /* No args. */
+         context->error(QtXmlPatterns::tr("%1 was called.").arg(formatFunction(context->namePool(), signature())),
+                        ReportContext::FOER0000, this);
+         return Item();
+      }
+      case 3:
+      /* Fallthrough, we don't use the 'error object' param. */
+      case 2:
+         msg = m_operands.at(1)->evaluateSingleton(context).stringValue();
+      /* Fall through. */
+      case 1: {
+         const QNameValue::Ptr qName(m_operands.first()->evaluateSingleton(context).as<QNameValue>());
 
-            if(qName)
-                context->error(msg, qName->qName(), this);
-            else
-                context->error(msg, ReportContext::FOER0000, this);
+         if (qName) {
+            context->error(msg, qName->qName(), this);
+         } else {
+            context->error(msg, ReportContext::FOER0000, this);
+         }
 
-            return Item();
-        }
-        default:
-        {
-            Q_ASSERT_X(false, Q_FUNC_INFO,
-                       "Invalid number of arguments passed to fn:error.");
-            return Item();
-        }
-    }
+         return Item();
+      }
+      default: {
+         Q_ASSERT_X(false, Q_FUNC_INFO,
+                    "Invalid number of arguments passed to fn:error.");
+         return Item();
+      }
+   }
 }
 
 FunctionSignature::Ptr ErrorFN::signature() const
 {
-    const FunctionSignature::Ptr e(FunctionCall::signature());
+   const FunctionSignature::Ptr e(FunctionCall::signature());
 
-    if(m_operands.count() != 1)
-        return e;
+   if (m_operands.count() != 1) {
+      return e;
+   }
 
-    FunctionSignature::Ptr nev(FunctionSignature::Ptr(new FunctionSignature(e->name(),
-                                                      e->minimumArguments(),
-                                                      e->maximumArguments(),
-                                                      e->returnType(),
-                                                      e->properties())));
-    const FunctionArgument::List args(e->arguments());
-    FunctionArgument::List nargs;
-    const QXmlName argName(StandardNamespaces::empty, StandardLocalNames::error);
-    nargs.append(FunctionArgument::Ptr(new FunctionArgument(argName, CommonSequenceTypes::ExactlyOneQName)));
-    nargs.append(args[1]);
-    nargs.append(args[2]);
-    nev->setArguments(nargs);
+   FunctionSignature::Ptr nev(FunctionSignature::Ptr(new FunctionSignature(e->name(),
+                              e->minimumArguments(),
+                              e->maximumArguments(),
+                              e->returnType(),
+                              e->properties())));
+   const FunctionArgument::List args(e->arguments());
+   FunctionArgument::List nargs;
+   const QXmlName argName(StandardNamespaces::empty, StandardLocalNames::error);
+   nargs.append(FunctionArgument::Ptr(new FunctionArgument(argName, CommonSequenceTypes::ExactlyOneQName)));
+   nargs.append(args[1]);
+   nargs.append(args[2]);
+   nev->setArguments(nargs);
 
-    return nev;
+   return nev;
 }
 
 QT_END_NAMESPACE

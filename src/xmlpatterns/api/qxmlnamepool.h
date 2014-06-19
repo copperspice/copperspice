@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,16 +31,14 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{
-    class NamePool;
-    class XsdSchemaParser;
-    class XsdValidatingInstanceReader;
+namespace QPatternist {
+class NamePool;
+class XsdSchemaParser;
+class XsdValidatingInstanceReader;
 }
 
-namespace QPatternistSDK
-{
-    class Global;
+namespace QPatternistSDK {
+class Global;
 }
 
 class QXmlQueryPrivate;
@@ -48,24 +46,24 @@ class QXmlName;
 
 class Q_XMLPATTERNS_EXPORT QXmlNamePool
 {
-public:
-    QXmlNamePool();
-    QXmlNamePool(const QXmlNamePool &other);
-    ~QXmlNamePool();
-    QXmlNamePool &operator=(const QXmlNamePool &other);
+ public:
+   QXmlNamePool();
+   QXmlNamePool(const QXmlNamePool &other);
+   ~QXmlNamePool();
+   QXmlNamePool &operator=(const QXmlNamePool &other);
 
-private:
-    QXmlNamePool(QPatternist::NamePool *namePool);
-    friend class QXmlQueryPrivate;
-    friend class QXmlQuery;
-    friend class QXmlSchemaPrivate;
-    friend class QXmlSchemaValidatorPrivate;
-    friend class QXmlSerializerPrivate;
-    friend class QXmlName;
-    friend class QPatternist::XsdSchemaParser;
-    friend class QPatternist::XsdValidatingInstanceReader;
-    friend class QPatternistSDK::Global;
-    QExplicitlySharedDataPointer<QPatternist::NamePool> d;
+ private:
+   QXmlNamePool(QPatternist::NamePool *namePool);
+   friend class QXmlQueryPrivate;
+   friend class QXmlQuery;
+   friend class QXmlSchemaPrivate;
+   friend class QXmlSchemaValidatorPrivate;
+   friend class QXmlSerializerPrivate;
+   friend class QXmlName;
+   friend class QPatternist::XsdSchemaParser;
+   friend class QPatternist::XsdValidatingInstanceReader;
+   friend class QPatternistSDK::Global;
+   QExplicitlySharedDataPointer<QPatternist::NamePool> d;
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,64 +36,63 @@ IndexOfIterator::IndexOfIterator(const Item::Iterator::Ptr &seq,
                                  const AtomicComparator::Ptr &comp,
                                  const DynamicContext::Ptr &context,
                                  const Expression::ConstPtr &expr)
-                                : m_seq(seq)
-                                , m_searchParam(searchParam)
-                                , m_context(context)
-                                , m_expr(expr)
-                                , m_position(0)
-                                , m_seqPos(0)
+   : m_seq(seq)
+   , m_searchParam(searchParam)
+   , m_context(context)
+   , m_expr(expr)
+   , m_position(0)
+   , m_seqPos(0)
 {
-    Q_ASSERT(seq);
-    Q_ASSERT(searchParam);
-    prepareComparison(comp);
+   Q_ASSERT(seq);
+   Q_ASSERT(searchParam);
+   prepareComparison(comp);
 }
 
 Item IndexOfIterator::next()
 {
-    if(m_position == -1)
-        return Item();
+   if (m_position == -1) {
+      return Item();
+   }
 
-    const Item item(m_seq->next());
-    ++m_seqPos;
+   const Item item(m_seq->next());
+   ++m_seqPos;
 
-    if(!item)
-    {
-        m_current.reset();
-        m_position = -1;
-        return Item();
-    }
+   if (!item) {
+      m_current.reset();
+      m_position = -1;
+      return Item();
+   }
 
-    if(flexibleCompare(item, m_searchParam, m_context))
-    {
-        ++m_position;
-        return Integer::fromValue(m_seqPos);
-    }
+   if (flexibleCompare(item, m_searchParam, m_context)) {
+      ++m_position;
+      return Integer::fromValue(m_seqPos);
+   }
 
-    return next();
+   return next();
 }
 
 Item IndexOfIterator::current() const
 {
-    return m_current;
+   return m_current;
 }
 
 xsInteger IndexOfIterator::position() const
 {
-    return m_position;
+   return m_position;
 }
 
 Item::Iterator::Ptr IndexOfIterator::copy() const
 {
-    return Item::Iterator::Ptr(new IndexOfIterator(m_seq->copy(),
-                                                   m_searchParam,
-                                                   comparator(),
-                                                   m_context,
-                                                   m_expr));
+   return Item::Iterator::Ptr(new IndexOfIterator(m_seq->copy(),
+                              m_searchParam,
+                              comparator(),
+                              m_context,
+                              m_expr));
 }
 
 const SourceLocationReflection *IndexOfIterator::actualReflection() const
 {
-    return m_expr.data();
+   return m_expr.data();
 }
 
 QT_END_NAMESPACE

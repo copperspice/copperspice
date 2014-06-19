@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,70 +33,69 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class XsdXPathExpression : public NamedSchemaComponent, public XsdAnnotated
 {
+ public:
+   typedef QExplicitlySharedDataPointer<XsdXPathExpression> Ptr;
+   typedef QList<XsdXPathExpression::Ptr> List;
 
-    class XsdXPathExpression : public NamedSchemaComponent, public XsdAnnotated
-    {
-        public:
-            typedef QExplicitlySharedDataPointer<XsdXPathExpression> Ptr;
-            typedef QList<XsdXPathExpression::Ptr> List;
+   /**
+    * Sets the list of namespace @p bindings of the XPath expression.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#x-namespace_bindings">Namespace Bindings Definition</a>
+    *
+    * @note We can't use a QSet<QXmlName> here, as the hash method does not take the prefix
+    *       in account, so we loose entries.
+    */
+   void setNamespaceBindings(const QList<QXmlName> &bindings);
 
-            /**
-             * Sets the list of namespace @p bindings of the XPath expression.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#x-namespace_bindings">Namespace Bindings Definition</a>
-             *
-             * @note We can't use a QSet<QXmlName> here, as the hash method does not take the prefix
-             *       in account, so we loose entries.
-             */
-            void setNamespaceBindings(const QList<QXmlName> &bindings);
+   /**
+    * Returns the list of namespace bindings of the XPath expression.
+    */
+   QList<QXmlName> namespaceBindings() const;
 
-            /**
-             * Returns the list of namespace bindings of the XPath expression.
-             */
-            QList<QXmlName> namespaceBindings() const;
+   /**
+    * Sets the default namespace of the XPath expression.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#x-default_namespace">Default Namespace Definition</a>
+    */
+   void setDefaultNamespace(const AnyURI::Ptr &defaultNamespace);
 
-            /**
-             * Sets the default namespace of the XPath expression.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#x-default_namespace">Default Namespace Definition</a>
-             */
-            void setDefaultNamespace(const AnyURI::Ptr &defaultNamespace);
+   /**
+    * Returns the default namespace of the XPath expression.
+    */
+   AnyURI::Ptr defaultNamespace() const;
 
-            /**
-             * Returns the default namespace of the XPath expression.
-             */
-            AnyURI::Ptr defaultNamespace() const;
+   /**
+    * Sets the base @p uri of the XPath expression.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#x-base_URI">Base URI Definition</a>
+    */
+   void setBaseURI(const AnyURI::Ptr &uri);
 
-            /**
-             * Sets the base @p uri of the XPath expression.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#x-base_URI">Base URI Definition</a>
-             */
-            void setBaseURI(const AnyURI::Ptr &uri);
+   /**
+    * Returns the base uri of the XPath expression.
+    */
+   AnyURI::Ptr baseURI() const;
 
-            /**
-             * Returns the base uri of the XPath expression.
-             */
-            AnyURI::Ptr baseURI() const;
-
-            /**
-             * Sets the @p expression string of the XPath expression.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#x-expression">Expression Definition</a>
-             */
-            void setExpression(const QString &expression);
+   /**
+    * Sets the @p expression string of the XPath expression.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#x-expression">Expression Definition</a>
+    */
+   void setExpression(const QString &expression);
 
 
-            QString expression() const;
+   QString expression() const;
 
-        private:
-            QList<QXmlName> m_namespaceBindings;
-            AnyURI::Ptr     m_defaultNamespace;
-            AnyURI::Ptr     m_baseURI;
-            QString         m_expression;
-    };
+ private:
+   QList<QXmlName> m_namespaceBindings;
+   AnyURI::Ptr     m_defaultNamespace;
+   AnyURI::Ptr     m_baseURI;
+   QString         m_expression;
+};
 }
 
 QT_END_NAMESPACE

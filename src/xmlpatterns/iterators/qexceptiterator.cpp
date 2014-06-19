@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,74 +33,71 @@ using namespace QPatternist;
 
 ExceptIterator::ExceptIterator(const Item::Iterator::Ptr &it1,
                                const Item::Iterator::Ptr &it2) : m_it1(it1)
-                                                               , m_it2(it2)
-                                                               , m_position(0)
-                                                               , m_node1(m_it1->next())
-                                                               , m_node2(m_it2->next())
+   , m_it2(it2)
+   , m_position(0)
+   , m_node1(m_it1->next())
+   , m_node2(m_it2->next())
 {
-    Q_ASSERT(m_it1);
-    Q_ASSERT(m_it2);
+   Q_ASSERT(m_it1);
+   Q_ASSERT(m_it2);
 }
 
 Item ExceptIterator::fromFirstOperand()
 {
-    ++m_position;
-    m_current = m_node1;
-    m_node1 = m_it1->next();
+   ++m_position;
+   m_current = m_node1;
+   m_node1 = m_it1->next();
 
-    return m_current;
+   return m_current;
 }
 
 Item ExceptIterator::next()
 {
-    while(true)
-    {
-        if(!m_node1)
-        {
-            m_position = -1;
-            m_current = Item();
-            return Item();
-        }
-        else if(!m_node2)
-            return fromFirstOperand();
+   while (true) {
+      if (!m_node1) {
+         m_position = -1;
+         m_current = Item();
+         return Item();
+      } else if (!m_node2) {
+         return fromFirstOperand();
+      }
 
-        if(m_node1.asNode().model() != m_node2.asNode().model())
-            return fromFirstOperand();
+      if (m_node1.asNode().model() != m_node2.asNode().model()) {
+         return fromFirstOperand();
+      }
 
-        switch(m_node1.asNode().compareOrder(m_node2.asNode()))
-        {
-            case QXmlNodeModelIndex::Precedes:
-                return fromFirstOperand();
-            case QXmlNodeModelIndex::Follows:
-            {
-                m_node2 = m_it2->next();
-                if(m_node2)
-                    continue;
-                else
-                    return fromFirstOperand();
+      switch (m_node1.asNode().compareOrder(m_node2.asNode())) {
+         case QXmlNodeModelIndex::Precedes:
+            return fromFirstOperand();
+         case QXmlNodeModelIndex::Follows: {
+            m_node2 = m_it2->next();
+            if (m_node2) {
+               continue;
+            } else {
+               return fromFirstOperand();
             }
-            default:
-            {
-                m_node1 = m_it1->next();
-                m_node2 = m_it2->next();
-            }
-        }
-    }
+         }
+         default: {
+            m_node1 = m_it1->next();
+            m_node2 = m_it2->next();
+         }
+      }
+   }
 }
 
 Item ExceptIterator::current() const
 {
-    return m_current;
+   return m_current;
 }
 
 xsInteger ExceptIterator::position() const
 {
-    return m_position;
+   return m_position;
 }
 
 Item::Iterator::Ptr ExceptIterator::copy() const
 {
-    return Item::Iterator::Ptr(new ExceptIterator(m_it1->copy(), m_it2->copy()));
+   return Item::Iterator::Ptr(new ExceptIterator(m_it1->copy(), m_it2->copy()));
 }
 
 QT_END_NAMESPACE

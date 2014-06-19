@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,208 +38,208 @@ using namespace QPatternist;
 
 DelegatingStaticContext::DelegatingStaticContext(const StaticContext::Ptr &context) : m_context(context)
 {
-    Q_ASSERT(context);
+   Q_ASSERT(context);
 }
 
 NamespaceResolver::Ptr DelegatingStaticContext::namespaceBindings() const
 {
-    return m_context->namespaceBindings();
+   return m_context->namespaceBindings();
 }
 
 FunctionFactory::Ptr DelegatingStaticContext::functionSignatures() const
 {
-    return m_context->functionSignatures();
+   return m_context->functionSignatures();
 }
 
 DynamicContext::Ptr DelegatingStaticContext::dynamicContext() const
 {
-    return m_context->dynamicContext();
+   return m_context->dynamicContext();
 }
 
 SchemaTypeFactory::Ptr DelegatingStaticContext::schemaDefinitions() const
 {
-    return m_context->schemaDefinitions();
+   return m_context->schemaDefinitions();
 }
 
 QUrl DelegatingStaticContext::baseURI() const
 {
-    return m_context->baseURI();
+   return m_context->baseURI();
 }
 
 void DelegatingStaticContext::setBaseURI(const QUrl &uri)
 {
-    m_context->setBaseURI(uri);
+   m_context->setBaseURI(uri);
 }
 
 bool DelegatingStaticContext::compatModeEnabled() const
 {
-    return m_context->compatModeEnabled();
+   return m_context->compatModeEnabled();
 }
 
 QUrl DelegatingStaticContext::defaultCollation() const
 {
-    return m_context->defaultCollation();
+   return m_context->defaultCollation();
 }
 
-QAbstractMessageHandler * DelegatingStaticContext::messageHandler() const
+QAbstractMessageHandler *DelegatingStaticContext::messageHandler() const
 {
-    return m_context->messageHandler();
+   return m_context->messageHandler();
 }
 
 void DelegatingStaticContext::setDefaultCollation(const QUrl &uri)
 {
-    m_context->setDefaultCollation(uri);
+   m_context->setDefaultCollation(uri);
 }
 
 void DelegatingStaticContext::setNamespaceBindings(const NamespaceResolver::Ptr &resolver)
 {
-    m_context->setNamespaceBindings(resolver);
+   m_context->setNamespaceBindings(resolver);
 }
 
 StaticContext::BoundarySpacePolicy DelegatingStaticContext::boundarySpacePolicy() const
 {
-    return m_context->boundarySpacePolicy();
+   return m_context->boundarySpacePolicy();
 }
 
 void DelegatingStaticContext::setBoundarySpacePolicy(const BoundarySpacePolicy policy)
 {
-    m_context->setBoundarySpacePolicy(policy);
+   m_context->setBoundarySpacePolicy(policy);
 }
 
 StaticContext::ConstructionMode DelegatingStaticContext::constructionMode() const
 {
-    return m_context->constructionMode();
+   return m_context->constructionMode();
 }
 
 void DelegatingStaticContext::setConstructionMode(const ConstructionMode mode)
 {
-    m_context->setConstructionMode(mode);
+   m_context->setConstructionMode(mode);
 }
 
 StaticContext::OrderingMode DelegatingStaticContext::orderingMode() const
 {
-    return m_context->orderingMode();
+   return m_context->orderingMode();
 }
 
 void DelegatingStaticContext::setOrderingMode(const OrderingMode mode)
 {
-    m_context->setOrderingMode(mode);
+   m_context->setOrderingMode(mode);
 }
 
 StaticContext::OrderingEmptySequence DelegatingStaticContext::orderingEmptySequence() const
 {
-    return m_context->orderingEmptySequence();
+   return m_context->orderingEmptySequence();
 }
 
 void DelegatingStaticContext::setOrderingEmptySequence(const OrderingEmptySequence ordering)
 {
-    m_context->setOrderingEmptySequence(ordering);
+   m_context->setOrderingEmptySequence(ordering);
 }
 
 QString DelegatingStaticContext::defaultFunctionNamespace() const
 {
-    return m_context->defaultFunctionNamespace();
+   return m_context->defaultFunctionNamespace();
 }
 
 void DelegatingStaticContext::setDefaultFunctionNamespace(const QString &ns)
 {
-    m_context->setDefaultFunctionNamespace(ns);
+   m_context->setDefaultFunctionNamespace(ns);
 }
 
 QString DelegatingStaticContext::defaultElementNamespace() const
 {
-    return m_context->defaultElementNamespace();
+   return m_context->defaultElementNamespace();
 }
 
 void DelegatingStaticContext::setDefaultElementNamespace(const QString &ns)
 {
-    m_context->setDefaultElementNamespace(ns);
+   m_context->setDefaultElementNamespace(ns);
 }
 
 StaticContext::InheritMode DelegatingStaticContext::inheritMode() const
 {
-    return m_context->inheritMode();
+   return m_context->inheritMode();
 }
 
 void DelegatingStaticContext::setInheritMode(const InheritMode mode)
 {
-    m_context->setInheritMode(mode);
+   m_context->setInheritMode(mode);
 }
 
 StaticContext::PreserveMode DelegatingStaticContext::preserveMode() const
 {
-    return m_context->preserveMode();
+   return m_context->preserveMode();
 }
 
 void DelegatingStaticContext::setPreserveMode(const PreserveMode mode)
 {
-    m_context->setPreserveMode(mode);
+   m_context->setPreserveMode(mode);
 }
 
 ItemType::Ptr DelegatingStaticContext::contextItemType() const
 {
-    return m_context->contextItemType();
+   return m_context->contextItemType();
 }
 
 ItemType::Ptr DelegatingStaticContext::currentItemType() const
 {
-    return m_context->currentItemType();
+   return m_context->currentItemType();
 }
 
 ExternalVariableLoader::Ptr DelegatingStaticContext::externalVariableLoader() const
 {
-    return m_context->externalVariableLoader();
+   return m_context->externalVariableLoader();
 }
 
 StaticContext::Ptr DelegatingStaticContext::copy() const
 {
-    return StaticContext::Ptr(new DelegatingStaticContext(m_context->copy()));
+   return StaticContext::Ptr(new DelegatingStaticContext(m_context->copy()));
 }
 
 ResourceLoader::Ptr DelegatingStaticContext::resourceLoader() const
 {
-    return m_context->resourceLoader();
+   return m_context->resourceLoader();
 }
 
 NamePool::Ptr DelegatingStaticContext::namePool() const
 {
-    return m_context->namePool();
+   return m_context->namePool();
 }
 
 void DelegatingStaticContext::addLocation(const SourceLocationReflection *const reflection,
-                                     const QSourceLocation &location)
+      const QSourceLocation &location)
 {
-    m_context->addLocation(reflection, location);
+   m_context->addLocation(reflection, location);
 }
 
 StaticContext::LocationHash DelegatingStaticContext::sourceLocations() const
 {
-    return m_context->sourceLocations();
+   return m_context->sourceLocations();
 }
 
 QSourceLocation DelegatingStaticContext::locationFor(const SourceLocationReflection *const reflection) const
 {
-    return m_context->locationFor(reflection);
+   return m_context->locationFor(reflection);
 }
 
 const QAbstractUriResolver *DelegatingStaticContext::uriResolver() const
 {
-    return m_context->uriResolver();
+   return m_context->uriResolver();
 }
 
 VariableSlotID DelegatingStaticContext::currentRangeSlot() const
 {
-    return m_context->currentRangeSlot();
+   return m_context->currentRangeSlot();
 }
 
 VariableSlotID DelegatingStaticContext::allocateRangeSlot()
 {
-    return m_context->allocateRangeSlot();
+   return m_context->allocateRangeSlot();
 }
 
 void DelegatingStaticContext::setCompatModeEnabled(const bool newVal)
 {
-    m_context->setCompatModeEnabled(newVal);
+   m_context->setCompatModeEnabled(newVal);
 }
 
 QT_END_NAMESPACE

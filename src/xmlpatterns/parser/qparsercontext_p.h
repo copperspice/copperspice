@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,350 +43,330 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class Tokenizer;
+
+class ParserContext : public QSharedData
 {
-    class Tokenizer;
- 
-    class ParserContext : public QSharedData
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<ParserContext> Ptr;
+ public:
+   typedef QExplicitlySharedDataPointer<ParserContext> Ptr;
 
-        enum PrologDeclaration
-        {
-            BoundarySpaceDecl               = 1,
-            DefaultCollationDecl            = 2,
-            BaseURIDecl                     = 4,
-            ConstructionDecl                = 8,
-            OrderingModeDecl                = 16,
-            EmptyOrderDecl                  = 32,
-            CopyNamespacesDecl              = 64,
-            DeclareDefaultElementNamespace  = 128,
-            DeclareDefaultFunctionNamespace = 256
-        };
+   enum PrologDeclaration {
+      BoundarySpaceDecl               = 1,
+      DefaultCollationDecl            = 2,
+      BaseURIDecl                     = 4,
+      ConstructionDecl                = 8,
+      OrderingModeDecl                = 16,
+      EmptyOrderDecl                  = 32,
+      CopyNamespacesDecl              = 64,
+      DeclareDefaultElementNamespace  = 128,
+      DeclareDefaultFunctionNamespace = 256
+   };
 
-        typedef QFlags<PrologDeclaration> PrologDeclarations;
+   typedef QFlags<PrologDeclaration> PrologDeclarations;
 
-        /**
-         * Constructs a ParserContext instance.
-         *
-         * @param context the static context as defined in XPath. This contain
-         * namespace bindings, error handler, and other information necessary
-         * for creating an XPath expression.
-         * @param lang the particular XPath language sub-set that should be parsed
-         * @param tokenizer the Tokenizer to use.
-         * @see ExpressionFactory::LanguageAccent
-         */
-        ParserContext(const StaticContext::Ptr &context,
-                      const QXmlQuery::QueryLanguage lang,
-                      Tokenizer *const tokenizer);
+   /**
+    * Constructs a ParserContext instance.
+    *
+    * @param context the static context as defined in XPath. This contain
+    * namespace bindings, error handler, and other information necessary
+    * for creating an XPath expression.
+    * @param lang the particular XPath language sub-set that should be parsed
+    * @param tokenizer the Tokenizer to use.
+    * @see ExpressionFactory::LanguageAccent
+    */
+   ParserContext(const StaticContext::Ptr &context,
+                 const QXmlQuery::QueryLanguage lang,
+                 Tokenizer *const tokenizer);
 
-        /**
-         * @short Removes the recently pushed variables from
-         * scope. The amount of removed variables is @p amount.
-         *
-         * finalizePushedVariable() can be seen as popping the variable.
-         *
-         */
-        void finalizePushedVariable(const int amount = 1,
-                                    const bool shouldPop = true);
+   /**
+    * @short Removes the recently pushed variables from
+    * scope. The amount of removed variables is @p amount.
+    *
+    * finalizePushedVariable() can be seen as popping the variable.
+    *
+    */
+   void finalizePushedVariable(const int amount = 1,
+                               const bool shouldPop = true);
 
-        inline VariableSlotID allocatePositionalSlot()
-        {
-            ++m_positionSlot;
-            return m_positionSlot;
-        }
+   inline VariableSlotID allocatePositionalSlot() {
+      ++m_positionSlot;
+      return m_positionSlot;
+   }
 
-        inline VariableSlotID allocateExpressionSlot()
-        {
-            const VariableSlotID retval = m_expressionSlot;
-            ++m_expressionSlot;
-            return retval;
-        }
+   inline VariableSlotID allocateExpressionSlot() {
+      const VariableSlotID retval = m_expressionSlot;
+      ++m_expressionSlot;
+      return retval;
+   }
 
-        inline VariableSlotID allocateGlobalVariableSlot()
-        {
-            ++m_globalVariableSlot;
-            return m_globalVariableSlot;
-        }
+   inline VariableSlotID allocateGlobalVariableSlot() {
+      ++m_globalVariableSlot;
+      return m_globalVariableSlot;
+   }
 
-        inline bool hasDeclaration(const PrologDeclaration decl) const
-        {
-            return m_prologDeclarations.testFlag(decl);
-        }
+   inline bool hasDeclaration(const PrologDeclaration decl) const {
+      return m_prologDeclarations.testFlag(decl);
+   }
 
-        inline void registerDeclaration(const PrologDeclaration decl)
-        {
-            m_prologDeclarations |= decl;
-        }
+   inline void registerDeclaration(const PrologDeclaration decl) {
+      m_prologDeclarations |= decl;
+   }
 
-        /**
-         * The namespaces declared with <tt>declare namespace</tt>.
-         */
-        QStringList declaredPrefixes;
+   /**
+    * The namespaces declared with <tt>declare namespace</tt>.
+    */
+   QStringList declaredPrefixes;
 
-        /**
-         * This is a temporary stack, used for keeping variables in scope,
-         * such as for function arguments & let clauses.
-         */
-        VariableDeclaration::Stack variables;
+   /**
+    * This is a temporary stack, used for keeping variables in scope,
+    * such as for function arguments & let clauses.
+    */
+   VariableDeclaration::Stack variables;
 
-        inline bool isXSLT() const
-        {
-            return languageAccent == QXmlQuery::XSLT20;
-        }
+   inline bool isXSLT() const {
+      return languageAccent == QXmlQuery::XSLT20;
+   }
 
-        const StaticContext::Ptr staticContext;
-        /**
-         * We don't store a Tokenizer::Ptr here, because then we would get a
-         * circular referencing between ParserContext and XSLTTokenizer, and
-         * hence they would never destruct.
-         */
-        Tokenizer *const tokenizer;
-        const QXmlQuery::QueryLanguage languageAccent;
+   const StaticContext::Ptr staticContext;
+   /**
+    * We don't store a Tokenizer::Ptr here, because then we would get a
+    * circular referencing between ParserContext and XSLTTokenizer, and
+    * hence they would never destruct.
+    */
+   Tokenizer *const tokenizer;
+   const QXmlQuery::QueryLanguage languageAccent;
 
-        /**
-         * Only used in the case of XSL-T. Is the name of the initial template
-         * to call. If null, no name was provided, and regular template
-         * matching should be done.
-         */
-        QXmlName initialTemplateName;
+   /**
+    * Only used in the case of XSL-T. Is the name of the initial template
+    * to call. If null, no name was provided, and regular template
+    * matching should be done.
+    */
+   QXmlName initialTemplateName;
 
-        /**
-         * Used when parsing direct element constructors. It is used
-         * for ensuring tags are well-balanced.
-         */
-        QStack<QXmlName> tagStack;
+   /**
+    * Used when parsing direct element constructors. It is used
+    * for ensuring tags are well-balanced.
+    */
+   QStack<QXmlName> tagStack;
 
-        /**
-         * The actual expression, the Query. This member may be @c null,
-         * such as in the case of an XQuery library module.
-         */
-        Expression::Ptr queryBody;
+   /**
+    * The actual expression, the Query. This member may be @c null,
+    * such as in the case of an XQuery library module.
+    */
+   Expression::Ptr queryBody;
 
-        /**
-         * The user functions declared in the prolog.
-         */
-        UserFunction::List userFunctions;
+   /**
+    * The user functions declared in the prolog.
+    */
+   UserFunction::List userFunctions;
 
-        /**
-         * Contains all calls to user defined functions.
-         */
-        UserFunctionCallsite::List userFunctionCallsites;
+   /**
+    * Contains all calls to user defined functions.
+    */
+   UserFunctionCallsite::List userFunctionCallsites;
 
-        /**
-         * All variables declared with <tt>declare variable</tt>.
-         */
-        VariableDeclaration::List declaredVariables;
+   /**
+    * All variables declared with <tt>declare variable</tt>.
+    */
+   VariableDeclaration::List declaredVariables;
 
-        inline VariableSlotID currentPositionSlot() const
-        {
-            return m_positionSlot;
-        }
+   inline VariableSlotID currentPositionSlot() const {
+      return m_positionSlot;
+   }
 
-        inline VariableSlotID currentExpressionSlot() const
-        {
-            return m_expressionSlot;
-        }
+   inline VariableSlotID currentExpressionSlot() const {
+      return m_expressionSlot;
+   }
 
-        inline void restoreNodeTestSource()
-        {
-            nodeTestSource = BuiltinTypes::element;
-        }
+   inline void restoreNodeTestSource() {
+      nodeTestSource = BuiltinTypes::element;
+   }
 
-        inline VariableSlotID allocateCacheSlot()
-        {
-            return ++m_evaluationCacheSlot;
-        }
+   inline VariableSlotID allocateCacheSlot() {
+      return ++m_evaluationCacheSlot;
+   }
 
-        inline VariableSlotID allocateCacheSlots(const int count)
-        {
-            const VariableSlotID retval = m_evaluationCacheSlot + 1;
-            m_evaluationCacheSlot += count + 1;
-            return retval;
-        }
+   inline VariableSlotID allocateCacheSlots(const int count) {
+      const VariableSlotID retval = m_evaluationCacheSlot + 1;
+      m_evaluationCacheSlot += count + 1;
+      return retval;
+   }
 
-        ItemType::Ptr nodeTestSource;
+   ItemType::Ptr nodeTestSource;
 
-        QStack<Expression::Ptr> typeswitchSource;
+   QStack<Expression::Ptr> typeswitchSource;
 
-        /**
-         * The library module namespace set with <tt>declare module</tt>.
-         */
-        QXmlName::NamespaceCode moduleNamespace;
+   /**
+    * The library module namespace set with <tt>declare module</tt>.
+    */
+   QXmlName::NamespaceCode moduleNamespace;
 
-        /**
-         * When a direct element constructor is processed, resolvers are
-         * created in order to carry the namespace declarations. In such case,
-         * the old resolver is pushed here.
-         */
-        QStack<NamespaceResolver::Ptr> resolvers;
+   /**
+    * When a direct element constructor is processed, resolvers are
+    * created in order to carry the namespace declarations. In such case,
+    * the old resolver is pushed here.
+    */
+   QStack<NamespaceResolver::Ptr> resolvers;
 
-        /**
-         * This is used for handling the following obscene case:
-         *
-         * - <tt>\<e\>{1}{1}\<\/e\></tt> produce <tt>\<e\>11\</e\></tt>
-         * - <tt>\<e\>{1, 1}\<\/e\></tt> produce <tt>\<e\>1 1\</e\></tt>
-         *
-         * This boolean tracks whether the previous reduction inside element
-         * content was done with an enclosed expression.
-         */
-        bool isPreviousEnclosedExpr;
+   /**
+    * This is used for handling the following obscene case:
+    *
+    * - <tt>\<e\>{1}{1}\<\/e\></tt> produce <tt>\<e\>11\</e\></tt>
+    * - <tt>\<e\>{1, 1}\<\/e\></tt> produce <tt>\<e\>1 1\</e\></tt>
+    *
+    * This boolean tracks whether the previous reduction inside element
+    * content was done with an enclosed expression.
+    */
+   bool isPreviousEnclosedExpr;
 
-        int elementConstructorDepth;
+   int elementConstructorDepth;
 
-        QStack<bool> scanOnlyStack;
+   QStack<bool> scanOnlyStack;
 
-        QStack<OrderBy::Stability> orderStability;
+   QStack<OrderBy::Stability> orderStability;
 
-        /**
-         * Whether any prolog declaration that must occur after the first
-         * group has been encountered.
-         */
-        bool hasSecondPrologPart;
+   /**
+    * Whether any prolog declaration that must occur after the first
+    * group has been encountered.
+    */
+   bool hasSecondPrologPart;
 
-        bool preserveNamespacesMode;
-        bool inheritNamespacesMode;
+   bool preserveNamespacesMode;
+   bool inheritNamespacesMode;
 
-        /**
-         * Contains all named templates. Since named templates
-         * can also have rules, each body may also be in templateRules.
-         */
-        QHash<QXmlName, Template::Ptr>  namedTemplates;
+   /**
+    * Contains all named templates. Since named templates
+    * can also have rules, each body may also be in templateRules.
+    */
+   QHash<QXmlName, Template::Ptr>  namedTemplates;
 
-        /**
-         * All the @c xsl:call-template instructions that we have encountered.
-         */
-        QVector<Expression::Ptr>         templateCalls;
+   /**
+    * All the @c xsl:call-template instructions that we have encountered.
+    */
+   QVector<Expression::Ptr>         templateCalls;
 
-        /**
-         * If we're in XSL-T, and a variable reference is encountered
-         * which isn't in-scope, it's added to this hash since a global
-         * variable declaration may appear later on.
-         *
-         * We use a multi hash, since we can encounter several references to
-         * the same variable before it's declared.
-         */
-        QMultiHash<QXmlName, Expression::Ptr> unresolvedVariableReferences;
+   /**
+    * If we're in XSL-T, and a variable reference is encountered
+    * which isn't in-scope, it's added to this hash since a global
+    * variable declaration may appear later on.
+    *
+    * We use a multi hash, since we can encounter several references to
+    * the same variable before it's declared.
+    */
+   QMultiHash<QXmlName, Expression::Ptr> unresolvedVariableReferences;
 
-        /**
-         *
-         * Contains the encountered template rules, as opposed
-         * to named templates.
-         *
-         * The key is the name of the template mode. If it's a default
-         * constructed value, it's the default mode.
-         *
-         * Since templates rules may also be named, each body may also be in
-         * namedTemplates.
-         *
-         * To be specific, the values are not the templates, the values are
-         * modes, and the TemplateMode contains the patterns and bodies.
-         */
-        QHash<QXmlName, TemplateMode::Ptr>  templateRules;
+   /**
+    *
+    * Contains the encountered template rules, as opposed
+    * to named templates.
+    *
+    * The key is the name of the template mode. If it's a default
+    * constructed value, it's the default mode.
+    *
+    * Since templates rules may also be named, each body may also be in
+    * namedTemplates.
+    *
+    * To be specific, the values are not the templates, the values are
+    * modes, and the TemplateMode contains the patterns and bodies.
+    */
+   QHash<QXmlName, TemplateMode::Ptr>  templateRules;
 
-        /**
-         * @short Returns the TemplateMode for @p modeName or @c null if the
-         * mode being asked for is @c #current.
-         */
-        TemplateMode::Ptr modeFor(const QXmlName &modeName)
-        {
-            /* #current is not a mode, so it cannot contain templates. #current
-             * specifies how to look up templates wrt. mode. This check helps
-             * code that calls us, asking for the mode it needs to lookup in.
-             */
-            if(modeName == QXmlName(StandardNamespaces::InternalXSLT, StandardLocalNames::current))
-                return TemplateMode::Ptr();
+   /**
+    * @short Returns the TemplateMode for @p modeName or @c null if the
+    * mode being asked for is @c #current.
+    */
+   TemplateMode::Ptr modeFor(const QXmlName &modeName) {
+      /* #current is not a mode, so it cannot contain templates. #current
+       * specifies how to look up templates wrt. mode. This check helps
+       * code that calls us, asking for the mode it needs to lookup in.
+       */
+      if (modeName == QXmlName(StandardNamespaces::InternalXSLT, StandardLocalNames::current)) {
+         return TemplateMode::Ptr();
+      }
 
-            TemplateMode::Ptr &mode = templateRules[modeName];
+      TemplateMode::Ptr &mode = templateRules[modeName];
 
-            if(!mode)
-                mode = TemplateMode::Ptr(new TemplateMode(modeName));
+      if (!mode) {
+         mode = TemplateMode::Ptr(new TemplateMode(modeName));
+      }
 
-            Q_ASSERT(templateRules[modeName]);
-            return mode;
-        }
+      Q_ASSERT(templateRules[modeName]);
+      return mode;
+   }
 
-        inline TemplatePattern::ID allocateTemplateID()
-        {
-            ++m_currentTemplateID;
-            return m_currentTemplateID;
-        }
+   inline TemplatePattern::ID allocateTemplateID() {
+      ++m_currentTemplateID;
+      return m_currentTemplateID;
+   }
 
-        /**
-         * The @c xsl:param appearing inside template.
-         */
-        VariableDeclaration::List templateParameters;
+   /**
+    * The @c xsl:param appearing inside template.
+    */
+   VariableDeclaration::List templateParameters;
 
-        /**
-         * The @c xsl:with-param appearing in template calling instruction.
-         */
-        WithParam::Hash templateWithParams;
+   /**
+    * The @c xsl:with-param appearing in template calling instruction.
+    */
+   WithParam::Hash templateWithParams;
 
-        inline void templateParametersHandled()
-        {
-            finalizePushedVariable(templateParameters.count());
-            templateParameters.clear();
-        }
+   inline void templateParametersHandled() {
+      finalizePushedVariable(templateParameters.count());
+      templateParameters.clear();
+   }
 
-        inline void templateWithParametersHandled()
-        {
-            templateWithParams.clear();
-        }
+   inline void templateWithParametersHandled() {
+      templateWithParams.clear();
+   }
 
-        inline bool isParsingWithParam() const
-        {
-            return m_isParsingWithParam.top();
-        }
+   inline bool isParsingWithParam() const {
+      return m_isParsingWithParam.top();
+   }
 
-        void startParsingWithParam()
-        {
-            m_isParsingWithParam.push(true);
-        }
+   void startParsingWithParam() {
+      m_isParsingWithParam.push(true);
+   }
 
-        void endParsingWithParam()
-        {
-            m_isParsingWithParam.pop();
-        }
+   void endParsingWithParam() {
+      m_isParsingWithParam.pop();
+   }
 
-        /**
-         * This is used to deal with XSL-T's exception to the @c node() type,
-         * which doesn't match document nodes.
-         */
-        bool                                isParsingPattern;
+   /**
+    * This is used to deal with XSL-T's exception to the @c node() type,
+    * which doesn't match document nodes.
+    */
+   bool                                isParsingPattern;
 
-        ImportPrecedence                    currentImportPrecedence;
+   ImportPrecedence                    currentImportPrecedence;
 
-        bool isFirstTemplate() const
-        {
-            return m_currentTemplateID == InitialTemplateID;
-        }
+   bool isFirstTemplate() const {
+      return m_currentTemplateID == InitialTemplateID;
+   }
 
-        /**
-         * Whether we're processing XSL-T 1.0 code.
-         */
-        QStack<bool> isBackwardsCompat;
+   /**
+    * Whether we're processing XSL-T 1.0 code.
+    */
+   QStack<bool> isBackwardsCompat;
 
-    private:
-        enum
-        {
-            InitialTemplateID = -1
-        };
+ private:
+   enum {
+      InitialTemplateID = -1
+   };
 
-        VariableSlotID                      m_evaluationCacheSlot;
-        VariableSlotID                      m_expressionSlot;
-        VariableSlotID                      m_positionSlot;
-        PrologDeclarations                  m_prologDeclarations;
-        VariableSlotID                      m_globalVariableSlot;
-        TemplatePattern::ID                 m_currentTemplateID;
+   VariableSlotID                      m_evaluationCacheSlot;
+   VariableSlotID                      m_expressionSlot;
+   VariableSlotID                      m_positionSlot;
+   PrologDeclarations                  m_prologDeclarations;
+   VariableSlotID                      m_globalVariableSlot;
+   TemplatePattern::ID                 m_currentTemplateID;
 
-        /**
-         * The default is @c false. If we're not parsing @c xsl:with-param,
-         * hence parsing @c xsl:param, the value has changed.
-         */
-        QStack<bool>                        m_isParsingWithParam;
-        Q_DISABLE_COPY(ParserContext)
-    };
+   /**
+    * The default is @c false. If we're not parsing @c xsl:with-param,
+    * hence parsing @c xsl:param, the value has changed.
+    */
+   QStack<bool>                        m_isParsingWithParam;
+   Q_DISABLE_COPY(ParserContext)
+};
 }
 
 QT_END_NAMESPACE

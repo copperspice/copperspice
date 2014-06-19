@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,47 +31,48 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 ExpressionVariableReference::ExpressionVariableReference(const VariableSlotID slotP,
-                                                         const VariableDeclaration *varDecl) : VariableReference(slotP)
-                                                                                                  , m_varDecl(varDecl)
+      const VariableDeclaration *varDecl) : VariableReference(slotP)
+   , m_varDecl(varDecl)
 {
 }
 
 bool ExpressionVariableReference::evaluateEBV(const DynamicContext::Ptr &context) const
 {
-    return context->expressionVariable(slot())->evaluateEBV(context);
+   return context->expressionVariable(slot())->evaluateEBV(context);
 }
 
 Item ExpressionVariableReference::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    return context->expressionVariable(slot())->evaluateSingleton(context);
+   return context->expressionVariable(slot())->evaluateSingleton(context);
 }
 
 Item::Iterator::Ptr ExpressionVariableReference::evaluateSequence(const DynamicContext::Ptr &context) const
 {
-    return context->expressionVariable(slot())->evaluateSequence(context);
+   return context->expressionVariable(slot())->evaluateSequence(context);
 }
 Expression::Ptr ExpressionVariableReference::typeCheck(const StaticContext::Ptr &context,
-                                                       const SequenceType::Ptr &reqType)
+      const SequenceType::Ptr &reqType)
 {
-    if(m_varDecl->canSourceRewrite)
-        return m_varDecl->expression()->typeCheck(context, reqType);
-    else
-        return VariableReference::typeCheck(context, reqType);
+   if (m_varDecl->canSourceRewrite) {
+      return m_varDecl->expression()->typeCheck(context, reqType);
+   } else {
+      return VariableReference::typeCheck(context, reqType);
+   }
 }
 
 Expression::ID ExpressionVariableReference::id() const
 {
-    return IDExpressionVariableReference;
+   return IDExpressionVariableReference;
 }
 
 ExpressionVisitorResult::Ptr ExpressionVariableReference::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 SequenceType::Ptr ExpressionVariableReference::staticType() const
 {
-    return m_varDecl->expression()->staticType();
+   return m_varDecl->expression()->staticType();
 }
 
 QT_END_NAMESPACE

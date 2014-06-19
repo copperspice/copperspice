@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,96 +37,95 @@ class QXmlSerializerPrivate;
 
 class Q_XMLPATTERNS_EXPORT QXmlSerializer : public QAbstractXmlReceiver
 {
-public:
-    QXmlSerializer(const QXmlQuery &query,QIODevice *outputDevice);
+ public:
+   QXmlSerializer(const QXmlQuery &query, QIODevice *outputDevice);
 
-    virtual void namespaceBinding(const QXmlName &nb);
+   virtual void namespaceBinding(const QXmlName &nb);
 
-    virtual void characters(const QStringRef &value);
-    virtual void comment(const QString &value);
+   virtual void characters(const QStringRef &value);
+   virtual void comment(const QString &value);
 
-    virtual void startElement(const QXmlName &name);
+   virtual void startElement(const QXmlName &name);
 
-    virtual void endElement();
+   virtual void endElement();
 
-    virtual void attribute(const QXmlName &name,const QStringRef &value);
+   virtual void attribute(const QXmlName &name, const QStringRef &value);
 
-    virtual void processingInstruction(const QXmlName &name,const QString &value);
+   virtual void processingInstruction(const QXmlName &name, const QString &value);
 
-    virtual void atomicValue(const QVariant &value);
+   virtual void atomicValue(const QVariant &value);
 
-    virtual void startDocument();
-    virtual void endDocument();
-    virtual void startOfSequence();
-    virtual void endOfSequence();
+   virtual void startDocument();
+   virtual void endDocument();
+   virtual void startOfSequence();
+   virtual void endOfSequence();
 
-    QIODevice *outputDevice() const;
+   QIODevice *outputDevice() const;
 
-    void setCodec(const QTextCodec *codec);
-    const QTextCodec *codec() const;
+   void setCodec(const QTextCodec *codec);
+   const QTextCodec *codec() const;
 
-    /* The members below are internal, not part of the public API, and
-     * unsupported. Using them leads to undefined behavior. */
-    virtual void item(const QPatternist::Item &item);
+   /* The members below are internal, not part of the public API, and
+    * unsupported. Using them leads to undefined behavior. */
+   virtual void item(const QPatternist::Item &item);
 
-protected:
-    QXmlSerializer(QAbstractXmlReceiverPrivate *d);
+ protected:
+   QXmlSerializer(QAbstractXmlReceiverPrivate *d);
 
-private:
-    inline bool isBindingInScope(const QXmlName nb) const;
+ private:
+   inline bool isBindingInScope(const QXmlName nb) const;
 
-    /**
-     * Where in the document the QXmlSerializer is currently working.
-     */
-    enum State
-    {
-        /**
-         * Before the document element. This is the XML prolog where the
-         * XML declaration, and possibly comments and processing
-         * instructions are found.
-         */
-        BeforeDocumentElement,
+   /**
+    * Where in the document the QXmlSerializer is currently working.
+    */
+   enum State {
+      /**
+       * Before the document element. This is the XML prolog where the
+       * XML declaration, and possibly comments and processing
+       * instructions are found.
+       */
+      BeforeDocumentElement,
 
-        /**
-         * This is inside the document element, at any level.
-         */
-        InsideDocumentElement
-    };
+      /**
+       * This is inside the document element, at any level.
+       */
+      InsideDocumentElement
+   };
 
-    /**
-     * If the current state is neither BeforeDocumentElement or
-     * AfterDocumentElement.
-     */
-    inline bool atDocumentRoot() const;
+   /**
+    * If the current state is neither BeforeDocumentElement or
+    * AfterDocumentElement.
+    */
+   inline bool atDocumentRoot() const;
 
-    /**
-     * Closes any open element start tag. Must be called before outputting
-     * any element content.
-     */
-    inline void startContent();
+   /**
+    * Closes any open element start tag. Must be called before outputting
+    * any element content.
+    */
+   inline void startContent();
 
-    /**
-     * Escapes content intended as text nodes for elements.
-     */
-    void writeEscaped(const QString &toEscape);
+   /**
+    * Escapes content intended as text nodes for elements.
+    */
+   void writeEscaped(const QString &toEscape);
 
-    /**
-     * Identical to writeEscaped(), but also escapes quotes.
-     */
-    inline void writeEscapedAttribute(const QString &toEscape);
+   /**
+    * Identical to writeEscaped(), but also escapes quotes.
+    */
+   inline void writeEscapedAttribute(const QString &toEscape);
 
-    /**
-     * Writes out @p name.
-     */
-    inline void write(const QXmlName &name);
+   /**
+    * Writes out @p name.
+    */
+   inline void write(const QXmlName &name);
 
-    inline void write(const char *const chars);
-    /**
-     * Encodes and writes out @p content.
-     */
-    inline void write(const QString &content);
+   inline void write(const char *const chars);
+   /**
+    * Encodes and writes out @p content.
+    */
+   inline void write(const QString &content);
 
-    Q_DECLARE_PRIVATE(QXmlSerializer)
+   Q_DECLARE_PRIVATE(QXmlSerializer)
 };
 
 QT_END_NAMESPACE

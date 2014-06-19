@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,25 +31,24 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class DelegatingNamespaceResolver : public NamespaceResolver
 {
+ public:
+   DelegatingNamespaceResolver(const NamespaceResolver::Ptr &ns);
+   DelegatingNamespaceResolver(const NamespaceResolver::Ptr &ns,
+                               const Bindings &overrides);
 
-    class DelegatingNamespaceResolver : public NamespaceResolver
-    {
-    public:
-        DelegatingNamespaceResolver(const NamespaceResolver::Ptr &ns);
-        DelegatingNamespaceResolver(const NamespaceResolver::Ptr &ns,
-                                    const Bindings &overrides);
+   virtual void addBinding(const QXmlName nb);
 
-        virtual void addBinding(const QXmlName nb);
+   virtual QXmlName::NamespaceCode lookupNamespaceURI(const QXmlName::PrefixCode prefix) const;
+   virtual Bindings bindings() const;
 
-        virtual QXmlName::NamespaceCode lookupNamespaceURI(const QXmlName::PrefixCode prefix) const;
-        virtual Bindings bindings() const;
-
-    private:
-        const NamespaceResolver::Ptr    m_nsResolver;
-        Bindings m_bindings;
-    };
+ private:
+   const NamespaceResolver::Ptr    m_nsResolver;
+   Bindings m_bindings;
+};
 }
 
 QT_END_NAMESPACE

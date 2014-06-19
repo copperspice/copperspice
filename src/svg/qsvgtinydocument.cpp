@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,12 +45,12 @@
 QT_BEGIN_NAMESPACE
 
 QSvgTinyDocument::QSvgTinyDocument()
-    : QSvgStructureNode(0)
-    , m_widthPercent(false)
-    , m_heightPercent(false)
-    , m_animated(false)
-    , m_animationDuration(0)
-    , m_fps(30)
+   : QSvgStructureNode(0)
+   , m_widthPercent(false)
+   , m_heightPercent(false)
+   , m_animated(false)
+   , m_animationDuration(0)
+   , m_fps(30)
 {
 }
 
@@ -67,408 +67,421 @@ static QByteArray qt_inflateGZipDataFrom(QIODevice *device);
 
 QByteArray qt_inflateGZipDataFrom(QIODevice *device)
 {
-    if (!device)
-        return QByteArray();
+   if (!device) {
+      return QByteArray();
+   }
 
-    if (!device->isOpen())
-        device->open(QIODevice::ReadOnly);
+   if (!device->isOpen()) {
+      device->open(QIODevice::ReadOnly);
+   }
 
-    Q_ASSERT(device->isOpen() && device->isReadable());
+   Q_ASSERT(device->isOpen() && device->isReadable());
 
-    static const int CHUNK_SIZE = 4096;
-    int zlibResult = Z_OK;
+   static const int CHUNK_SIZE = 4096;
+   int zlibResult = Z_OK;
 
-    QByteArray source;
-    QByteArray destination;
+   QByteArray source;
+   QByteArray destination;
 
-    // Initialize zlib stream struct
-    z_stream zlibStream;
-    zlibStream.next_in = Z_NULL;
-    zlibStream.avail_in = 0;
-    zlibStream.avail_out = 0;
-    zlibStream.zalloc = Z_NULL;
-    zlibStream.zfree = Z_NULL;
-    zlibStream.opaque = Z_NULL;
+   // Initialize zlib stream struct
+   z_stream zlibStream;
+   zlibStream.next_in = Z_NULL;
+   zlibStream.avail_in = 0;
+   zlibStream.avail_out = 0;
+   zlibStream.zalloc = Z_NULL;
+   zlibStream.zfree = Z_NULL;
+   zlibStream.opaque = Z_NULL;
 
-    // Adding 16 to the window size gives us gzip decoding
-    if (inflateInit2(&zlibStream, MAX_WBITS + 16) != Z_OK) {
-        qWarning("Cannot initialize zlib, because: %s",
-                (zlibStream.msg != NULL ? zlibStream.msg : "Unknown error"));
-        return QByteArray();
-    }
+   // Adding 16 to the window size gives us gzip decoding
+   if (inflateInit2(&zlibStream, MAX_WBITS + 16) != Z_OK) {
+      qWarning("Cannot initialize zlib, because: %s",
+               (zlibStream.msg != NULL ? zlibStream.msg : "Unknown error"));
+      return QByteArray();
+   }
 
-    bool stillMoreWorkToDo = true;
-    while (stillMoreWorkToDo) {
+   bool stillMoreWorkToDo = true;
+   while (stillMoreWorkToDo) {
 
-        if (!zlibStream.avail_in) {
-            source = device->read(CHUNK_SIZE);
+      if (!zlibStream.avail_in) {
+         source = device->read(CHUNK_SIZE);
 
-            if (source.isEmpty())
-                break;
+         if (source.isEmpty()) {
+            break;
+         }
 
-            zlibStream.avail_in = source.size();
-            zlibStream.next_in = reinterpret_cast<Bytef*>(source.data());
-        }
+         zlibStream.avail_in = source.size();
+         zlibStream.next_in = reinterpret_cast<Bytef *>(source.data());
+      }
 
-        do {
-            // Prepare the destination buffer
-            int oldSize = destination.size();
-            destination.resize(oldSize + CHUNK_SIZE);
-            zlibStream.next_out = reinterpret_cast<Bytef*>(
-                    destination.data() + oldSize - zlibStream.avail_out);
-            zlibStream.avail_out += CHUNK_SIZE;
+      do {
+         // Prepare the destination buffer
+         int oldSize = destination.size();
+         destination.resize(oldSize + CHUNK_SIZE);
+         zlibStream.next_out = reinterpret_cast<Bytef *>(
+                                  destination.data() + oldSize - zlibStream.avail_out);
+         zlibStream.avail_out += CHUNK_SIZE;
 
-            zlibResult = inflate(&zlibStream, Z_NO_FLUSH);
-            switch (zlibResult) {
-                case Z_NEED_DICT:
-                case Z_DATA_ERROR:
-                case Z_STREAM_ERROR:
-                case Z_MEM_ERROR: {
-                    inflateEnd(&zlibStream);
-                    qWarning("Error while inflating gzip file: %s",
-                            (zlibStream.msg != NULL ? zlibStream.msg : "Unknown error"));
-                    destination.chop(zlibStream.avail_out);
-                    return destination;
-                }
+         zlibResult = inflate(&zlibStream, Z_NO_FLUSH);
+         switch (zlibResult) {
+            case Z_NEED_DICT:
+            case Z_DATA_ERROR:
+            case Z_STREAM_ERROR:
+            case Z_MEM_ERROR: {
+               inflateEnd(&zlibStream);
+               qWarning("Error while inflating gzip file: %s",
+                        (zlibStream.msg != NULL ? zlibStream.msg : "Unknown error"));
+               destination.chop(zlibStream.avail_out);
+               return destination;
             }
+         }
 
-        // If the output buffer still has more room after calling inflate
-        // it means we have to provide more data, so exit the loop here
-        } while (!zlibStream.avail_out);
+         // If the output buffer still has more room after calling inflate
+         // it means we have to provide more data, so exit the loop here
+      } while (!zlibStream.avail_out);
 
-        if (zlibResult == Z_STREAM_END) {
-            // Make sure there are no more members to process before exiting
-            if (!(zlibStream.avail_in && inflateReset(&zlibStream) == Z_OK))
-                stillMoreWorkToDo = false;
-        }
-    }
+      if (zlibResult == Z_STREAM_END) {
+         // Make sure there are no more members to process before exiting
+         if (!(zlibStream.avail_in && inflateReset(&zlibStream) == Z_OK)) {
+            stillMoreWorkToDo = false;
+         }
+      }
+   }
 
-    // Chop off trailing space in the buffer
-    destination.chop(zlibStream.avail_out);
+   // Chop off trailing space in the buffer
+   destination.chop(zlibStream.avail_out);
 
-    inflateEnd(&zlibStream);
-    return destination;
+   inflateEnd(&zlibStream);
+   return destination;
 }
 #endif
 
-QSvgTinyDocument * QSvgTinyDocument::load(const QString &fileName)
+QSvgTinyDocument *QSvgTinyDocument::load(const QString &fileName)
 {
-    QFile file(fileName);
-    if (!file.open(QFile::ReadOnly)) {
-        qWarning("Cannot open file '%s', because: %s",
-                 qPrintable(fileName), qPrintable(file.errorString()));
-        return 0;
-    }
+   QFile file(fileName);
+   if (!file.open(QFile::ReadOnly)) {
+      qWarning("Cannot open file '%s', because: %s",
+               qPrintable(fileName), qPrintable(file.errorString()));
+      return 0;
+   }
 
 #ifndef QT_NO_COMPRESS
-    if (fileName.endsWith(QLatin1String(".svgz"), Qt::CaseInsensitive)
-            || fileName.endsWith(QLatin1String(".svg.gz"), Qt::CaseInsensitive)) {
-        return load(qt_inflateGZipDataFrom(&file));
-    }
+   if (fileName.endsWith(QLatin1String(".svgz"), Qt::CaseInsensitive)
+         || fileName.endsWith(QLatin1String(".svg.gz"), Qt::CaseInsensitive)) {
+      return load(qt_inflateGZipDataFrom(&file));
+   }
 #endif
 
-    QSvgTinyDocument *doc = 0;
-    QSvgHandler handler(&file);
-    if (handler.ok()) {
-        doc = handler.document();
-        doc->m_animationDuration = handler.animationDuration();
-    } else {
-        qWarning("Cannot read file '%s', because: %s (line %d)",
-                 qPrintable(fileName), qPrintable(handler.errorString()), handler.lineNumber());
-    }
-    return doc;
+   QSvgTinyDocument *doc = 0;
+   QSvgHandler handler(&file);
+   if (handler.ok()) {
+      doc = handler.document();
+      doc->m_animationDuration = handler.animationDuration();
+   } else {
+      qWarning("Cannot read file '%s', because: %s (line %d)",
+               qPrintable(fileName), qPrintable(handler.errorString()), handler.lineNumber());
+   }
+   return doc;
 }
 
-QSvgTinyDocument * QSvgTinyDocument::load(const QByteArray &contents)
+QSvgTinyDocument *QSvgTinyDocument::load(const QByteArray &contents)
 {
 #ifndef QT_NO_COMPRESS
-    // Check for gzip magic number and inflate if appropriate
-    if (contents.startsWith("\x1f\x8b")) {
-        QBuffer buffer(const_cast<QByteArray *>(&contents));
-        return load(qt_inflateGZipDataFrom(&buffer));
-    }
+   // Check for gzip magic number and inflate if appropriate
+   if (contents.startsWith("\x1f\x8b")) {
+      QBuffer buffer(const_cast<QByteArray *>(&contents));
+      return load(qt_inflateGZipDataFrom(&buffer));
+   }
 #endif
 
-    QSvgHandler handler(contents);
+   QSvgHandler handler(contents);
 
-    QSvgTinyDocument *doc = 0;
-    if (handler.ok()) {
-        doc = handler.document();
-        doc->m_animationDuration = handler.animationDuration();
-    }
-    return doc;
+   QSvgTinyDocument *doc = 0;
+   if (handler.ok()) {
+      doc = handler.document();
+      doc->m_animationDuration = handler.animationDuration();
+   }
+   return doc;
 }
 
-QSvgTinyDocument * QSvgTinyDocument::load(QXmlStreamReader *contents)
+QSvgTinyDocument *QSvgTinyDocument::load(QXmlStreamReader *contents)
 {
-    QSvgHandler handler(contents);
+   QSvgHandler handler(contents);
 
-    QSvgTinyDocument *doc = 0;
-    if (handler.ok()) {
-        doc = handler.document();
-        doc->m_animationDuration = handler.animationDuration();
-    }
-    return doc;
+   QSvgTinyDocument *doc = 0;
+   if (handler.ok()) {
+      doc = handler.document();
+      doc->m_animationDuration = handler.animationDuration();
+   }
+   return doc;
 }
 
 void QSvgTinyDocument::draw(QPainter *p, const QRectF &bounds)
 {
-    if (m_time.isNull()) {
-        m_time.start();
-    }
+   if (m_time.isNull()) {
+      m_time.start();
+   }
 
-    if (displayMode() == QSvgNode::NoneMode)
-        return;
+   if (displayMode() == QSvgNode::NoneMode) {
+      return;
+   }
 
-    p->save();
-    //sets default style on the painter
-    //### not the most optimal way
-    mapSourceToTarget(p, bounds);
-    QPen pen(Qt::NoBrush, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin);
-    pen.setMiterLimit(4);
-    p->setPen(pen);
-    p->setBrush(Qt::black);
-    p->setRenderHint(QPainter::Antialiasing);
-    p->setRenderHint(QPainter::SmoothPixmapTransform);
-    QList<QSvgNode*>::iterator itr = m_renderers.begin();
-    applyStyle(p, m_states);
-    while (itr != m_renderers.end()) {
-        QSvgNode *node = *itr;
-        if ((node->isVisible()) && (node->displayMode() != QSvgNode::NoneMode))
-            node->draw(p, m_states);
-        ++itr;
-    }
-    revertStyle(p, m_states);
-    p->restore();
+   p->save();
+   //sets default style on the painter
+   //### not the most optimal way
+   mapSourceToTarget(p, bounds);
+   QPen pen(Qt::NoBrush, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin);
+   pen.setMiterLimit(4);
+   p->setPen(pen);
+   p->setBrush(Qt::black);
+   p->setRenderHint(QPainter::Antialiasing);
+   p->setRenderHint(QPainter::SmoothPixmapTransform);
+   QList<QSvgNode *>::iterator itr = m_renderers.begin();
+   applyStyle(p, m_states);
+   while (itr != m_renderers.end()) {
+      QSvgNode *node = *itr;
+      if ((node->isVisible()) && (node->displayMode() != QSvgNode::NoneMode)) {
+         node->draw(p, m_states);
+      }
+      ++itr;
+   }
+   revertStyle(p, m_states);
+   p->restore();
 }
 
 
 void QSvgTinyDocument::draw(QPainter *p, const QString &id,
                             const QRectF &bounds)
 {
-    QSvgNode *node = scopeNode(id);
+   QSvgNode *node = scopeNode(id);
 
-    if (!node) {
-        qDebug("Couldn't find node %s. Skipping rendering.", qPrintable(id));
-        return;
-    }
-    if (m_time.isNull()) {
-        m_time.start();
-    }
+   if (!node) {
+      qDebug("Couldn't find node %s. Skipping rendering.", qPrintable(id));
+      return;
+   }
+   if (m_time.isNull()) {
+      m_time.start();
+   }
 
-    if (node->displayMode() == QSvgNode::NoneMode)
-        return;
+   if (node->displayMode() == QSvgNode::NoneMode) {
+      return;
+   }
 
-    p->save();
+   p->save();
 
-    const QRectF elementBounds = node->transformedBounds();
+   const QRectF elementBounds = node->transformedBounds();
 
-    mapSourceToTarget(p, bounds, elementBounds);
-    QTransform originalTransform = p->worldTransform();
+   mapSourceToTarget(p, bounds, elementBounds);
+   QTransform originalTransform = p->worldTransform();
 
-    //XXX set default style on the painter
-    QPen pen(Qt::NoBrush, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin);
-    pen.setMiterLimit(4);
-    p->setPen(pen);
-    p->setBrush(Qt::black);
-    p->setRenderHint(QPainter::Antialiasing);
-    p->setRenderHint(QPainter::SmoothPixmapTransform);
+   //XXX set default style on the painter
+   QPen pen(Qt::NoBrush, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin);
+   pen.setMiterLimit(4);
+   p->setPen(pen);
+   p->setBrush(Qt::black);
+   p->setRenderHint(QPainter::Antialiasing);
+   p->setRenderHint(QPainter::SmoothPixmapTransform);
 
-    QStack<QSvgNode*> parentApplyStack;
-    QSvgNode *parent = node->parent();
-    while (parent) {
-        parentApplyStack.push(parent);
-        parent = parent->parent();
-    }
+   QStack<QSvgNode *> parentApplyStack;
+   QSvgNode *parent = node->parent();
+   while (parent) {
+      parentApplyStack.push(parent);
+      parent = parent->parent();
+   }
 
-    for (int i = parentApplyStack.size() - 1; i >= 0; --i)
-        parentApplyStack[i]->applyStyle(p, m_states);
+   for (int i = parentApplyStack.size() - 1; i >= 0; --i) {
+      parentApplyStack[i]->applyStyle(p, m_states);
+   }
 
-    // Reset the world transform so that our parents don't affect
-    // the position
-    QTransform currentTransform = p->worldTransform();
-    p->setWorldTransform(originalTransform);
+   // Reset the world transform so that our parents don't affect
+   // the position
+   QTransform currentTransform = p->worldTransform();
+   p->setWorldTransform(originalTransform);
 
-    node->draw(p, m_states);
+   node->draw(p, m_states);
 
-    p->setWorldTransform(currentTransform);
+   p->setWorldTransform(currentTransform);
 
-    for (int i = 0; i < parentApplyStack.size(); ++i)
-        parentApplyStack[i]->revertStyle(p, m_states);
+   for (int i = 0; i < parentApplyStack.size(); ++i) {
+      parentApplyStack[i]->revertStyle(p, m_states);
+   }
 
-    //p->fillRect(bounds.adjusted(-5, -5, 5, 5), QColor(0, 0, 255, 100));
+   //p->fillRect(bounds.adjusted(-5, -5, 5, 5), QColor(0, 0, 255, 100));
 
-    p->restore();
+   p->restore();
 }
 
 
 QSvgNode::Type QSvgTinyDocument::type() const
 {
-    return DOC;
+   return DOC;
 }
 
 void QSvgTinyDocument::setWidth(int len, bool percent)
 {
-    m_size.setWidth(len);
-    m_widthPercent = percent;
+   m_size.setWidth(len);
+   m_widthPercent = percent;
 }
 
 void QSvgTinyDocument::setHeight(int len, bool percent)
 {
-    m_size.setHeight(len);
-    m_heightPercent = percent;
+   m_size.setHeight(len);
+   m_heightPercent = percent;
 }
 
 void QSvgTinyDocument::setViewBox(const QRectF &rect)
 {
-    m_viewBox = rect;
+   m_viewBox = rect;
 }
 
 void QSvgTinyDocument::addSvgFont(QSvgFont *font)
 {
-    m_fonts.insert(font->familyName(), font);
+   m_fonts.insert(font->familyName(), font);
 }
 
-QSvgFont * QSvgTinyDocument::svgFont(const QString &family) const
+QSvgFont *QSvgTinyDocument::svgFont(const QString &family) const
 {
-    return m_fonts[family];
+   return m_fonts[family];
 }
 
 void QSvgTinyDocument::addNamedNode(const QString &id, QSvgNode *node)
 {
-    m_namedNodes.insert(id, node);
+   m_namedNodes.insert(id, node);
 }
 
 QSvgNode *QSvgTinyDocument::namedNode(const QString &id) const
 {
-    return m_namedNodes.value(id);
+   return m_namedNodes.value(id);
 }
 
 void QSvgTinyDocument::addNamedStyle(const QString &id, QSvgFillStyleProperty *style)
 {
-    m_namedStyles.insert(id, style);
+   m_namedStyles.insert(id, style);
 }
 
 QSvgFillStyleProperty *QSvgTinyDocument::namedStyle(const QString &id) const
 {
-    return m_namedStyles.value(id);
+   return m_namedStyles.value(id);
 }
 
 void QSvgTinyDocument::restartAnimation()
 {
-    m_time.restart();
+   m_time.restart();
 }
 
 bool QSvgTinyDocument::animated() const
 {
-    return m_animated;
+   return m_animated;
 }
 
 void QSvgTinyDocument::setAnimated(bool a)
 {
-    m_animated = a;
+   m_animated = a;
 }
 
 void QSvgTinyDocument::draw(QPainter *p)
 {
-    draw(p, QRectF());
+   draw(p, QRectF());
 }
 
 void QSvgTinyDocument::draw(QPainter *p, QSvgExtraStates &)
 {
-    draw(p);
+   draw(p);
 }
 
 void QSvgTinyDocument::mapSourceToTarget(QPainter *p, const QRectF &targetRect, const QRectF &sourceRect)
 {
-    QRectF target = targetRect;
-    if (target.isNull()) {
-        QPaintDevice *dev = p->device();
-        QRectF deviceRect(0, 0, dev->width(), dev->height());
-        if (deviceRect.isNull()) {
-            if (sourceRect.isNull())
-                target = QRectF(QPointF(0, 0), size());
-            else
-                target = QRectF(QPointF(0, 0), sourceRect.size());
-        } else {
-            target = deviceRect;
-        }
-    }
+   QRectF target = targetRect;
+   if (target.isNull()) {
+      QPaintDevice *dev = p->device();
+      QRectF deviceRect(0, 0, dev->width(), dev->height());
+      if (deviceRect.isNull()) {
+         if (sourceRect.isNull()) {
+            target = QRectF(QPointF(0, 0), size());
+         } else {
+            target = QRectF(QPointF(0, 0), sourceRect.size());
+         }
+      } else {
+         target = deviceRect;
+      }
+   }
 
-    QRectF source = sourceRect;
-    if (source.isNull())
-        source = viewBox();
+   QRectF source = sourceRect;
+   if (source.isNull()) {
+      source = viewBox();
+   }
 
-    if (source != target && !source.isNull()) {
-        QTransform transform;
-        transform.scale(target.width() / source.width(),
-                  target.height() / source.height());
-        QRectF c2 = transform.mapRect(source);
-        p->translate(target.x() - c2.x(),
-                     target.y() - c2.y());
-        p->scale(target.width() / source.width(),
-                 target.height() / source.height());
-    }
+   if (source != target && !source.isNull()) {
+      QTransform transform;
+      transform.scale(target.width() / source.width(),
+                      target.height() / source.height());
+      QRectF c2 = transform.mapRect(source);
+      p->translate(target.x() - c2.x(),
+                   target.y() - c2.y());
+      p->scale(target.width() / source.width(),
+               target.height() / source.height());
+   }
 }
 
 QRectF QSvgTinyDocument::boundsOnElement(const QString &id) const
 {
-    const QSvgNode *node = scopeNode(id);
-    if (!node)
-        node = this;
-    return node->transformedBounds();
+   const QSvgNode *node = scopeNode(id);
+   if (!node) {
+      node = this;
+   }
+   return node->transformedBounds();
 }
 
 bool QSvgTinyDocument::elementExists(const QString &id) const
 {
-    QSvgNode *node = scopeNode(id);
+   QSvgNode *node = scopeNode(id);
 
-    return (node!=0);
+   return (node != 0);
 }
 
 QMatrix QSvgTinyDocument::matrixForElement(const QString &id) const
 {
-    QSvgNode *node = scopeNode(id);
+   QSvgNode *node = scopeNode(id);
 
-    if (!node) {
-        qDebug("Couldn't find node %s. Skipping rendering.", qPrintable(id));
-        return QMatrix();
-    }
+   if (!node) {
+      qDebug("Couldn't find node %s. Skipping rendering.", qPrintable(id));
+      return QMatrix();
+   }
 
-    QTransform t;
+   QTransform t;
 
-    node = node->parent();
-    while (node) {
-        if (node->m_style.transform)
-            t *= node->m_style.transform->qtransform();
-        node = node->parent();
-    }
-    
-    return t.toAffine();
+   node = node->parent();
+   while (node) {
+      if (node->m_style.transform) {
+         t *= node->m_style.transform->qtransform();
+      }
+      node = node->parent();
+   }
+
+   return t.toAffine();
 }
 
 int QSvgTinyDocument::currentFrame() const
 {
-    double runningPercentage = qMin(m_time.elapsed()/double(m_animationDuration), 1.);
+   double runningPercentage = qMin(m_time.elapsed() / double(m_animationDuration), 1.);
 
-    int totalFrames = m_fps * m_animationDuration;
+   int totalFrames = m_fps * m_animationDuration;
 
-    return int(runningPercentage * totalFrames);
+   return int(runningPercentage * totalFrames);
 }
 
 void QSvgTinyDocument::setCurrentFrame(int frame)
 {
-    int totalFrames = m_fps * m_animationDuration;
-    double framePercentage = frame/double(totalFrames);
-    double timeForFrame = m_animationDuration * framePercentage; //in S
-    timeForFrame *= 1000; //in ms
-    int timeToAdd = int(timeForFrame - m_time.elapsed());
-    m_time = m_time.addMSecs(timeToAdd);
+   int totalFrames = m_fps * m_animationDuration;
+   double framePercentage = frame / double(totalFrames);
+   double timeForFrame = m_animationDuration * framePercentage; //in S
+   timeForFrame *= 1000; //in ms
+   int timeToAdd = int(timeForFrame - m_time.elapsed());
+   m_time = m_time.addMSecs(timeToAdd);
 }
 
 void QSvgTinyDocument::setFramesPerSecond(int num)
 {
-    m_fps = num;
+   m_fps = num;
 }
 
 QT_END_NAMESPACE

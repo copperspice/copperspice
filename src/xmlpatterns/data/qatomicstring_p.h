@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,49 +31,47 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class AtomicString : public AtomicValue
 {
-   
-    class AtomicString : public AtomicValue
-    {
-    public:
-        friend class CommonValues;
+ public:
+   friend class CommonValues;
 
-        typedef AtomicValue::Ptr Ptr;
+   typedef AtomicValue::Ptr Ptr;
 
-        /**
-         * Creates an instance representing @p value.
-         *
-         * @note This function does not remove the string literal escaping allowed in XPath 2.0
-         */
-        static AtomicString::Ptr fromValue(const QString &value);
+   /**
+    * Creates an instance representing @p value.
+    *
+    * @note This function does not remove the string literal escaping allowed in XPath 2.0
+    */
+   static AtomicString::Ptr fromValue(const QString &value);
 
-        static inline AtomicString::Ptr fromValue(const QUrl &value)
-        {
-            return fromValue(value.toString());
-        }
+   static inline AtomicString::Ptr fromValue(const QUrl &value) {
+      return fromValue(value.toString());
+   }
 
-        /**
-         * Get the Effective %Boolean Value of this string. A zero-length
-         * string has an effective boolean value of @c false, in all other cases @c true.
-         *
-         * @returns @c false if the contained string has a zero-length, otherwise @c true.
-         */
-        virtual bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const;
+   /**
+    * Get the Effective %Boolean Value of this string. A zero-length
+    * string has an effective boolean value of @c false, in all other cases @c true.
+    *
+    * @returns @c false if the contained string has a zero-length, otherwise @c true.
+    */
+   virtual bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const;
 
-        /**
-         * The string value of a AtomicString instance is the value space.
-         */
-        virtual QString stringValue() const;
+   /**
+    * The string value of a AtomicString instance is the value space.
+    */
+   virtual QString stringValue() const;
 
-        virtual ItemType::Ptr type() const;
+   virtual ItemType::Ptr type() const;
 
-    protected:
-        friend class StringComparator;
-        friend class CompareFN;
-        AtomicString(const QString &value);
-        const QString m_value;
-    };
+ protected:
+   friend class StringComparator;
+   friend class CompareFN;
+   AtomicString(const QString &value);
+   const QString m_value;
+};
 }
 
 QT_END_NAMESPACE

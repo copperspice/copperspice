@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,42 +31,42 @@ using namespace QPatternist;
 
 bool XsdAttributeReference::isAttributeUse() const
 {
-    return false;
+   return false;
 }
 
 bool XsdAttributeReference::isReference() const
 {
-    return true;
+   return true;
 }
 
 void XsdAttributeReference::setType(Type type)
 {
-    m_type = type;
+   m_type = type;
 }
 
 XsdAttributeReference::Type XsdAttributeReference::type() const
 {
-    return m_type;
+   return m_type;
 }
 
 void XsdAttributeReference::setReferenceName(const QXmlName &referenceName)
 {
-    m_referenceName = referenceName;
+   m_referenceName = referenceName;
 }
 
 QXmlName XsdAttributeReference::referenceName() const
 {
-    return m_referenceName;
+   return m_referenceName;
 }
 
 void XsdAttributeReference::setSourceLocation(const QSourceLocation &location)
 {
-    m_sourceLocation = location;
+   m_sourceLocation = location;
 }
 
 QSourceLocation XsdAttributeReference::sourceLocation() const
 {
-    return m_sourceLocation;
+   return m_sourceLocation;
 }
 
 QT_END_NAMESPACE

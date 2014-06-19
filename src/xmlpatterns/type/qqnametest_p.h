@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,34 +32,33 @@ template<typename Key, typename Value> class QHash;
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{   
-    class QNameTest : public AbstractNodeTest
-    {
-    public:
-        typedef QHash<QString, QNameTest::Ptr> Hash;
+namespace QPatternist {
+class QNameTest : public AbstractNodeTest
+{
+ public:
+   typedef QHash<QString, QNameTest::Ptr> Hash;
 
-        static ItemType::Ptr create(const ItemType::Ptr &primaryType, const QXmlName qName);
+   static ItemType::Ptr create(const ItemType::Ptr &primaryType, const QXmlName qName);
 
-        /**
-         * @note This function assumes that @p item is a QXmlNodeModelIndex.
-         */
-        virtual bool itemMatches(const Item &item) const;
+   /**
+    * @note This function assumes that @p item is a QXmlNodeModelIndex.
+    */
+   virtual bool itemMatches(const Item &item) const;
 
-        virtual QString displayName(const NamePool::Ptr &np) const;
+   virtual QString displayName(const NamePool::Ptr &np) const;
 
-        virtual bool operator==(const ItemType &other) const;
+   virtual bool operator==(const ItemType &other) const;
 
-        virtual PatternPriority patternPriority() const;
+   virtual PatternPriority patternPriority() const;
 
-    protected:
-        virtual InstanceOf instanceOf() const;
+ protected:
+   virtual InstanceOf instanceOf() const;
 
-    private:
-        QNameTest(const ItemType::Ptr &primaryType, const QXmlName qName);
+ private:
+   QNameTest(const ItemType::Ptr &primaryType, const QXmlName qName);
 
-        const QXmlName m_qName;
-    };
+   const QXmlName m_qName;
+};
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,33 +35,32 @@ class QSourceLocationPrivate;
 
 class Q_XMLPATTERNS_EXPORT QSourceLocation
 {
-public:
-    QSourceLocation();
-    QSourceLocation(const QSourceLocation &other);
-    QSourceLocation(const QUrl &uri, int line = -1, int column = -1);
-    ~QSourceLocation();
-    QSourceLocation &operator=(const QSourceLocation &other);
-    bool operator==(const QSourceLocation &other) const;
-    bool operator!=(const QSourceLocation &other) const;
+ public:
+   QSourceLocation();
+   QSourceLocation(const QSourceLocation &other);
+   QSourceLocation(const QUrl &uri, int line = -1, int column = -1);
+   ~QSourceLocation();
+   QSourceLocation &operator=(const QSourceLocation &other);
+   bool operator==(const QSourceLocation &other) const;
+   bool operator!=(const QSourceLocation &other) const;
 
-    qint64 column() const;
-    void setColumn(qint64 newColumn);
+   qint64 column() const;
+   void setColumn(qint64 newColumn);
 
-    qint64 line() const;
-    void setLine(qint64 newLine);
+   qint64 line() const;
+   void setLine(qint64 newLine);
 
-    QUrl uri() const;
-    void setUri(const QUrl &newUri);
-    bool isNull() const;
+   QUrl uri() const;
+   void setUri(const QUrl &newUri);
+   bool isNull() const;
 
-private:
-    union
-    {
-        qint64 m_line;
-        QSourceLocationPrivate *m_ptr;
-    };
-    qint64 m_column;
-    QUrl m_uri;
+ private:
+   union {
+      qint64 m_line;
+      QSourceLocationPrivate *m_ptr;
+   };
+   qint64 m_column;
+   QUrl m_uri;
 };
 
 Q_XMLPATTERNS_EXPORT uint qHash(const QSourceLocation &location);

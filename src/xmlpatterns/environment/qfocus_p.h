@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,31 +30,30 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class Focus : public DelegatingDynamicContext
 {
-   
-    class Focus : public DelegatingDynamicContext
-    {
-    public:
-        Focus(const DynamicContext::Ptr &prevContext);
+ public:
+   Focus(const DynamicContext::Ptr &prevContext);
 
-        virtual xsInteger contextPosition() const;
-        virtual Item contextItem() const;
-        virtual xsInteger contextSize();
+   virtual xsInteger contextPosition() const;
+   virtual Item contextItem() const;
+   virtual xsInteger contextSize();
 
-        virtual void setFocusIterator(const Item::Iterator::Ptr &it);
-        virtual Item::Iterator::Ptr focusIterator() const;
+   virtual void setFocusIterator(const Item::Iterator::Ptr &it);
+   virtual Item::Iterator::Ptr focusIterator() const;
 
-        /**
-         * If there is no top level expression that sets the current item,
-         * the focus should be used. This implementation ensures that.
-         */
-        virtual Item currentItem() const;
+   /**
+    * If there is no top level expression that sets the current item,
+    * the focus should be used. This implementation ensures that.
+    */
+   virtual Item currentItem() const;
 
-    private:
-        Item::Iterator::Ptr m_focusIterator;
-        xsInteger           m_contextSizeCached;
-    };
+ private:
+   Item::Iterator::Ptr m_focusIterator;
+   xsInteger           m_contextSizeCached;
+};
 }
 
 QT_END_NAMESPACE

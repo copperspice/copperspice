@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -168,12 +168,12 @@ QXmlName::QXmlName(QXmlNamePool &namePool,
                    const QString &namespaceURI,
                    const QString &prefix)
 {
-    Q_ASSERT_X(prefix.isEmpty() || QXmlUtils::isNCName(prefix), Q_FUNC_INFO,
-               "The prefix is invalid, maybe the arguments were mixed up?");
-    Q_ASSERT_X(QXmlUtils::isNCName(localName), Q_FUNC_INFO,
-               "The local name is invalid, maybe the arguments were mixed up?");
+   Q_ASSERT_X(prefix.isEmpty() || QXmlUtils::isNCName(prefix), Q_FUNC_INFO,
+              "The prefix is invalid, maybe the arguments were mixed up?");
+   Q_ASSERT_X(QXmlUtils::isNCName(localName), Q_FUNC_INFO,
+              "The local name is invalid, maybe the arguments were mixed up?");
 
-    m_qNameCode = namePool.d->allocateQName(namespaceURI, localName, prefix).code();
+   m_qNameCode = namePool.d->allocateQName(namespaceURI, localName, prefix).code();
 }
 
 /*!
@@ -198,7 +198,7 @@ QXmlName::QXmlName(QXmlNamePool &namePool,
  */
 bool QXmlName::isNull() const
 {
-    return m_qNameCode == InvalidCode;
+   return m_qNameCode == InvalidCode;
 }
 
 /*!
@@ -262,7 +262,7 @@ QXmlName::QXmlName() : m_qNameCode(InvalidCode)
  */
 bool QXmlName::operator==(const QXmlName &other) const
 {
-    return (m_qNameCode & ExpandedNameMask) == (other.m_qNameCode & ExpandedNameMask);
+   return (m_qNameCode & ExpandedNameMask) == (other.m_qNameCode & ExpandedNameMask);
 }
 
 /*!
@@ -280,7 +280,7 @@ bool QXmlName::operator==(const QXmlName &other) const
  */
 bool QXmlName::operator!=(const QXmlName &other) const
 {
-    return !operator==(other);
+   return !operator==(other);
 }
 
 /*!
@@ -302,7 +302,7 @@ bool QXmlName::operator!=(const QXmlName &other) const
  */
 uint qHash(const QXmlName &name)
 {
-    return name.m_qNameCode & QXmlName::ExpandedNameMask;
+   return name.m_qNameCode & QXmlName::ExpandedNameMask;
 }
 
 /*!
@@ -316,10 +316,11 @@ uint qHash(const QXmlName &name)
  */
 QString QXmlName::namespaceUri(const QXmlNamePool &namePool) const
 {
-    if(isNull())
-        return QString();
-    else
-        return namePool.d->stringForNamespace(namespaceURI());
+   if (isNull()) {
+      return QString();
+   } else {
+      return namePool.d->stringForNamespace(namespaceURI());
+   }
 }
 
 /*!
@@ -332,10 +333,11 @@ QString QXmlName::namespaceUri(const QXmlNamePool &namePool) const
  */
 QString QXmlName::prefix(const QXmlNamePool &namePool) const
 {
-    if(isNull())
-        return QString();
-    else
-        return namePool.d->stringForPrefix(prefix());
+   if (isNull()) {
+      return QString();
+   } else {
+      return namePool.d->stringForPrefix(prefix());
+   }
 }
 
 /*!
@@ -349,10 +351,11 @@ QString QXmlName::prefix(const QXmlNamePool &namePool) const
  */
 QString QXmlName::localName(const QXmlNamePool &namePool) const
 {
-    if(isNull())
-        return QString();
-    else
-        return namePool.d->stringForLocalName(localName());
+   if (isNull()) {
+      return QString();
+   } else {
+      return namePool.d->stringForLocalName(localName());
+   }
 }
 
 /*!
@@ -385,7 +388,7 @@ QString QXmlName::localName(const QXmlNamePool &namePool) const
  */
 QString QXmlName::toClarkName(const QXmlNamePool &namePool) const
 {
-    return namePool.d->toClarkName(*this);
+   return namePool.d->toClarkName(*this);
 }
 
 /*!
@@ -393,8 +396,8 @@ QString QXmlName::toClarkName(const QXmlNamePool &namePool) const
  */
 QXmlName &QXmlName::operator=(const QXmlName &other)
 {
-    m_qNameCode = other.m_qNameCode;
-    return *this;
+   m_qNameCode = other.m_qNameCode;
+   return *this;
 }
 
 /*!
@@ -407,7 +410,7 @@ QXmlName &QXmlName::operator=(const QXmlName &other)
  */
 bool QXmlName::isNCName(const QString &candidate)
 {
-    return QXmlUtils::isNCName(candidate);
+   return QXmlUtils::isNCName(candidate);
 }
 
 /*!
@@ -444,7 +447,7 @@ bool QXmlName::isNCName(const QString &candidate)
 QXmlName QXmlName::fromClarkName(const QString &clarkName,
                                  const QXmlNamePool &namePool)
 {
-    return namePool.d->fromClarkName(clarkName);
+   return namePool.d->fromClarkName(clarkName);
 }
 
 /*!

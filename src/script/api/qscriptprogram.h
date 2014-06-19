@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,28 +36,28 @@ class QScriptProgramPrivate;
 
 class Q_SCRIPT_EXPORT QScriptProgram
 {
-public:
-    QScriptProgram();
-    QScriptProgram(const QString &sourceCode,
-                   const QString fileName = QString(),
-                   int firstLineNumber = 1);
-    QScriptProgram(const QScriptProgram &other);
-    ~QScriptProgram();
+ public:
+   QScriptProgram();
+   QScriptProgram(const QString &sourceCode,
+                  const QString fileName = QString(),
+                  int firstLineNumber = 1);
+   QScriptProgram(const QScriptProgram &other);
+   ~QScriptProgram();
 
-    QScriptProgram &operator=(const QScriptProgram &other);
+   QScriptProgram &operator=(const QScriptProgram &other);
 
-    bool isNull() const;
+   bool isNull() const;
 
-    QString sourceCode() const;
-    QString fileName() const;
-    int firstLineNumber() const;
+   QString sourceCode() const;
+   QString fileName() const;
+   int firstLineNumber() const;
 
-    bool operator==(const QScriptProgram &other) const;
-    bool operator!=(const QScriptProgram &other) const;
+   bool operator==(const QScriptProgram &other) const;
+   bool operator!=(const QScriptProgram &other) const;
 
-private:
-    QExplicitlySharedDataPointer<QScriptProgramPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(QScriptProgram)
+ private:
+   QExplicitlySharedDataPointer<QScriptProgramPrivate> d_ptr;
+   Q_DECLARE_PRIVATE(QScriptProgram)
 };
 
 QT_END_NAMESPACE

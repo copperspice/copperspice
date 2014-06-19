@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,69 +32,65 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class AbstractFunctionFactory : public FunctionFactory
 {
-  class AbstractFunctionFactory : public FunctionFactory
-    {
-    public:
-        virtual Expression::Ptr createFunctionCall(const QXmlName name,
-                                                   const Expression::List &arguments,
-                                                   const StaticContext::Ptr &context,
-                                                   const SourceLocationReflection *const r);
+ public:
+   virtual Expression::Ptr createFunctionCall(const QXmlName name,
+         const Expression::List &arguments,
+         const StaticContext::Ptr &context,
+         const SourceLocationReflection *const r);
 
-        virtual FunctionSignature::Hash functionSignatures() const;
+   virtual FunctionSignature::Hash functionSignatures() const;
 
-    protected:
+ protected:
 
-        virtual Expression::Ptr retrieveExpression(const QXmlName name,
-                                                   const Expression::List &args,
-                                                   const FunctionSignature::Ptr &sign) const = 0;
+   virtual Expression::Ptr retrieveExpression(const QXmlName name,
+         const Expression::List &args,
+         const FunctionSignature::Ptr &sign) const = 0;
 
-        inline
-        FunctionSignature::Ptr addFunction(const QXmlName::LocalNameCode localName,
-                                           const FunctionSignature::Arity minArgs,
-                                           const FunctionSignature::Arity maxArgs,
-                                           const SequenceType::Ptr &returnType,
-                                           const Expression::Properties props)
-        {
-            return addFunction(localName,
-                               minArgs,
-                               maxArgs,
-                               returnType,
-                               Expression::IDIgnorableExpression,
-                               props);
-        }
+   inline
+   FunctionSignature::Ptr addFunction(const QXmlName::LocalNameCode localName,
+                                      const FunctionSignature::Arity minArgs,
+                                      const FunctionSignature::Arity maxArgs,
+                                      const SequenceType::Ptr &returnType,
+                                      const Expression::Properties props) {
+      return addFunction(localName,
+                         minArgs,
+                         maxArgs,
+                         returnType,
+                         Expression::IDIgnorableExpression,
+                         props);
+   }
 
-        FunctionSignature::Ptr addFunction(const QXmlName::LocalNameCode &localName,
-                                           const FunctionSignature::Arity minArgs,
-                                           const FunctionSignature::Arity maxArgs,
-                                           const SequenceType::Ptr &returnType,
-                                           const Expression::ID id = Expression::IDIgnorableExpression,
-                                           const Expression::Properties props = Expression::Properties(),
-                                           const StandardNamespaces::ID ns = StandardNamespaces::fn)
-        {
-            const QXmlName name(ns, localName);
+   FunctionSignature::Ptr addFunction(const QXmlName::LocalNameCode &localName,
+                                      const FunctionSignature::Arity minArgs,
+                                      const FunctionSignature::Arity maxArgs,
+                                      const SequenceType::Ptr &returnType,
+                                      const Expression::ID id = Expression::IDIgnorableExpression,
+                                      const Expression::Properties props = Expression::Properties(),
+                                      const StandardNamespaces::ID ns = StandardNamespaces::fn) {
+      const QXmlName name(ns, localName);
 
-            const FunctionSignature::Ptr s(new FunctionSignature(name, minArgs, maxArgs,returnType, props, id));
+      const FunctionSignature::Ptr s(new FunctionSignature(name, minArgs, maxArgs, returnType, props, id));
 
-            m_signatures.insert(name, s);
-            return s;
-        }
+      m_signatures.insert(name, s);
+      return s;
+   }
 
-        static inline QXmlName::LocalNameCode argument(const NamePool::Ptr &np, const char *const name)
-        {
-            return np->allocateLocalName(QLatin1String(name));
-        }
+   static inline QXmlName::LocalNameCode argument(const NamePool::Ptr &np, const char *const name) {
+      return np->allocateLocalName(QLatin1String(name));
+   }
 
-        FunctionSignature::Hash m_signatures;
+   FunctionSignature::Hash m_signatures;
 
-    private:
-        void verifyArity(const FunctionSignature::Ptr &sign,
-                         const StaticContext::Ptr &context,
-                         const xsInteger arity,
-                         const SourceLocationReflection *const r) const;
+ private:
+   void verifyArity(const FunctionSignature::Ptr &sign,
+                    const StaticContext::Ptr &context,
+                    const xsInteger arity,
+                    const SourceLocationReflection *const r) const;
 
-    };
+};
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,26 +36,29 @@ class Driver;
 
 class DatabaseInfo : public TreeWalker
 {
-public:
-    DatabaseInfo(Driver *driver);
+ public:
+   DatabaseInfo(Driver *driver);
 
-    void acceptUI(DomUI *node);
-    void acceptWidget(DomWidget *node);
+   void acceptUI(DomUI *node);
+   void acceptWidget(DomWidget *node);
 
-    inline QStringList connections() const
-    { return m_connections; }
+   inline QStringList connections() const {
+      return m_connections;
+   }
 
-    inline QStringList cursors(const QString &connection) const
-    { return m_cursors.value(connection); }
+   inline QStringList cursors(const QString &connection) const {
+      return m_cursors.value(connection);
+   }
 
-    inline QStringList fields(const QString &connection) const
-    { return m_fields.value(connection); }
+   inline QStringList fields(const QString &connection) const {
+      return m_fields.value(connection);
+   }
 
-private:
-    Driver *driver;
-    QStringList m_connections;
-    QMap<QString, QStringList> m_cursors;
-    QMap<QString, QStringList> m_fields;
+ private:
+   Driver *driver;
+   QStringList m_connections;
+   QMap<QString, QStringList> m_cursors;
+   QMap<QString, QStringList> m_fields;
 };
 
 QT_END_NAMESPACE

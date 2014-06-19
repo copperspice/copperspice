@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,84 +35,83 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class Item;
+class SourceLocationReflection;
+
+class AtomicType : public ItemType, public AnySimpleType
 {
-    class Item;
-    class SourceLocationReflection;
-   
-    class AtomicType : public ItemType, public AnySimpleType
-    {
-    public:
+ public:
 
-        typedef QExplicitlySharedDataPointer<AtomicType> Ptr;
+   typedef QExplicitlySharedDataPointer<AtomicType> Ptr;
 
-        virtual ~AtomicType();
+   virtual ~AtomicType();
 
-        /**
-         * Implements a generic algorithm which relies on wxsTypeMatches().
-         *
-         * @returns @c true depending on if @p item is an atomic type, and that
-         * AtomicValue::itemType()'s SequenceType::itemType() matches this type.
-         */
-        virtual bool itemMatches(const Item &item) const;
+   /**
+    * Implements a generic algorithm which relies on wxsTypeMatches().
+    *
+    * @returns @c true depending on if @p item is an atomic type, and that
+    * AtomicValue::itemType()'s SequenceType::itemType() matches this type.
+    */
+   virtual bool itemMatches(const Item &item) const;
 
-        /**
-         * @returns the result of SharedQXmlName::displayName(), of the SharedQName
-         * object returned from the name() function.
-         */
-        virtual QString displayName(const NamePool::Ptr &np) const;
+   /**
+    * @returns the result of SharedQXmlName::displayName(), of the SharedQName
+    * object returned from the name() function.
+    */
+   virtual QString displayName(const NamePool::Ptr &np) const;
 
-        /**
-         * returns always @c false
-         */
-        virtual bool isNodeType() const;
+   /**
+    * returns always @c false
+    */
+   virtual bool isNodeType() const;
 
-        /**
-         * returns always @c true
-         */
-        virtual bool isAtomicType() const;
+   /**
+    * returns always @c true
+    */
+   virtual bool isAtomicType() const;
 
-        /**
-         * Determines whether @p other is equal to this type, or is a
-         * sub-type of this type.
-         *
-         * The implementation is generic, relying on operator==()
-         * and xdtSuperType().
-         */
-        virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
+   /**
+    * Determines whether @p other is equal to this type, or is a
+    * sub-type of this type.
+    *
+    * The implementation is generic, relying on operator==()
+    * and xdtSuperType().
+    */
+   virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
 
-        /**
-         * @returns always 'this'
-         */
-        virtual ItemType::Ptr atomizedType() const;
+   /**
+    * @returns always 'this'
+    */
+   virtual ItemType::Ptr atomizedType() const;
 
-        /**
-         * @returns always SchemaType::SimpleTypeAtomic
-         */
-        virtual TypeCategory category() const;
+   /**
+    * @returns always SchemaType::SimpleTypeAtomic
+    */
+   virtual TypeCategory category() const;
 
-        /**
-         * @returns DerivationRestriction
-         */
-        virtual DerivationMethod derivationMethod() const;
+   /**
+    * @returns DerivationRestriction
+    */
+   virtual DerivationMethod derivationMethod() const;
 
-        virtual AtomicTypeVisitorResult::Ptr
-        accept(const QExplicitlySharedDataPointer<AtomicTypeVisitor> &visitor,
-               const SourceLocationReflection *const) const = 0;
+   virtual AtomicTypeVisitorResult::Ptr
+   accept(const QExplicitlySharedDataPointer<AtomicTypeVisitor> &visitor,
+          const SourceLocationReflection *const) const = 0;
 
-        virtual AtomicTypeVisitorResult::Ptr
-        accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-               const qint16 param,
-               const SourceLocationReflection *const) const = 0;
+   virtual AtomicTypeVisitorResult::Ptr
+   accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+          const qint16 param,
+          const SourceLocationReflection *const) const = 0;
 
-        virtual AtomicComparatorLocator::Ptr comparatorLocator() const = 0;
-        virtual AtomicMathematicianLocator::Ptr mathematicianLocator() const = 0;
-        virtual AtomicCasterLocator::Ptr casterLocator() const = 0;
+   virtual AtomicComparatorLocator::Ptr comparatorLocator() const = 0;
+   virtual AtomicMathematicianLocator::Ptr mathematicianLocator() const = 0;
+   virtual AtomicCasterLocator::Ptr casterLocator() const = 0;
 
-    protected:
-        AtomicType();
+ protected:
+   AtomicType();
 
-    };
+};
 }
 
 QT_END_NAMESPACE

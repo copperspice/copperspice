@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,18 +30,17 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class ElementAvailableFN : public StaticNamespacesContainer
 {
-    class ElementAvailableFN : public StaticNamespacesContainer
-    {
-    public:
-        ElementAvailableFN();
-        virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+ public:
+   ElementAvailableFN();
+   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
 
-    private:
-        static QSet<QString> allXSLTInstructions();
-        const QSet<QString> m_xsltInstructions;
-    };
+ private:
+   static QSet<QString> allXSLTInstructions();
+   const QSet<QString> m_xsltInstructions;
+};
 }
 
 QT_END_NAMESPACE

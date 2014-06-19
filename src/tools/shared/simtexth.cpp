@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -68,29 +68,29 @@ typedef QList<TranslatorMessage> TML;
   laziness.
 */
 static const int indexOf[256] = {
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-//      !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
-    0,  2,  6,  7,  10, 12, 15, 19, 2,  6,  7,  10, 12, 15, 19, 0,
-//  0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
-    1,  3,  4,  5,  8,  9,  11, 13, 14, 16, 2,  6,  7,  10, 12, 15,
-//  @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
-    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  6,  10, 11, 12, 13, 14,
-//  P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
-    15, 12, 16, 17, 18, 19, 2,  10, 15, 7,  19, 2,  6,  7,  10, 0,
-//  `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
-    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  6,  10, 11, 12, 13, 14,
-//  p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
-    15, 12, 16, 17, 18, 19, 2,  10, 15, 7,  19, 2,  6,  7,  10, 0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   //      !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
+   0,  2,  6,  7,  10, 12, 15, 19, 2,  6,  7,  10, 12, 15, 19, 0,
+   //  0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   ?
+   1,  3,  4,  5,  8,  9,  11, 13, 14, 16, 2,  6,  7,  10, 12, 15,
+   //  @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+   0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  6,  10, 11, 12, 13, 14,
+   //  P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
+   15, 12, 16, 17, 18, 19, 2,  10, 15, 7,  19, 2,  6,  7,  10, 0,
+   //  `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
+   0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  6,  10, 11, 12, 13, 14,
+   //  p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~
+   15, 12, 16, 17, 18, 19, 2,  10, 15, 7,  19, 2,  6,  7,  10, 0,
 
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-    0,  2,  6,  7,  10, 12, 15, 19, 2,  6,  7,  10, 12, 15, 19, 0,
-    1,  3,  4,  5,  8,  9,  11, 13, 14, 16, 2,  6,  7,  10, 12, 15,
-    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  6,  10, 11, 12, 13, 14,
-    15, 12, 16, 17, 18, 19, 2,  10, 15, 7,  19, 2,  6,  7,  10, 0,
-    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  6,  10, 11, 12, 13, 14,
-    15, 12, 16, 17, 18, 19, 2,  10, 15, 7,  19, 2,  6,  7,  10, 0
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  2,  6,  7,  10, 12, 15, 19, 2,  6,  7,  10, 12, 15, 19, 0,
+   1,  3,  4,  5,  8,  9,  11, 13, 14, 16, 2,  6,  7,  10, 12, 15,
+   0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  6,  10, 11, 12, 13, 14,
+   15, 12, 16, 17, 18, 19, 2,  10, 15, 7,  19, 2,  6,  7,  10, 0,
+   0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  6,  10, 11, 12, 13, 14,
+   15, 12, 16, 17, 18, 19, 2,  10, 15, 7,  19, 2,  6,  7,  10, 0
 };
 
 /*
@@ -98,103 +98,106 @@ static const int indexOf[256] = {
   represent i in binary.
 */
 static const int bitCount[256] = {
-    0,  1,  1,  2,  1,  2,  2,  3,  1,  2,  2,  3,  2,  3,  3,  4,
-    1,  2,  2,  3,  2,  3,  3,  4,  2,  3,  3,  4,  3,  4,  4,  5,
-    1,  2,  2,  3,  2,  3,  3,  4,  2,  3,  3,  4,  3,  4,  4,  5,
-    2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
-    1,  2,  2,  3,  2,  3,  3,  4,  2,  3,  3,  4,  3,  4,  4,  5,
-    2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
-    2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
-    3,  4,  4,  5,  4,  5,  5,  6,  4,  5,  5,  6,  5,  6,  6,  7,
-    1,  2,  2,  3,  2,  3,  3,  4,  2,  3,  3,  4,  3,  4,  4,  5,
-    2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
-    2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
-    3,  4,  4,  5,  4,  5,  5,  6,  4,  5,  5,  6,  5,  6,  6,  7,
-    2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
-    3,  4,  4,  5,  4,  5,  5,  6,  4,  5,  5,  6,  5,  6,  6,  7,
-    3,  4,  4,  5,  4,  5,  5,  6,  4,  5,  5,  6,  5,  6,  6,  7,
-    4,  5,  5,  6,  5,  6,  6,  7,  5,  6,  6,  7,  6,  7,  7,  8
+   0,  1,  1,  2,  1,  2,  2,  3,  1,  2,  2,  3,  2,  3,  3,  4,
+   1,  2,  2,  3,  2,  3,  3,  4,  2,  3,  3,  4,  3,  4,  4,  5,
+   1,  2,  2,  3,  2,  3,  3,  4,  2,  3,  3,  4,  3,  4,  4,  5,
+   2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
+   1,  2,  2,  3,  2,  3,  3,  4,  2,  3,  3,  4,  3,  4,  4,  5,
+   2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
+   2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
+   3,  4,  4,  5,  4,  5,  5,  6,  4,  5,  5,  6,  5,  6,  6,  7,
+   1,  2,  2,  3,  2,  3,  3,  4,  2,  3,  3,  4,  3,  4,  4,  5,
+   2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
+   2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
+   3,  4,  4,  5,  4,  5,  5,  6,  4,  5,  5,  6,  5,  6,  6,  7,
+   2,  3,  3,  4,  3,  4,  4,  5,  3,  4,  4,  5,  4,  5,  5,  6,
+   3,  4,  4,  5,  4,  5,  5,  6,  4,  5,  5,  6,  5,  6,  6,  7,
+   3,  4,  4,  5,  4,  5,  5,  6,  4,  5,  5,  6,  5,  6,  6,  7,
+   4,  5,  5,  6,  5,  6,  6,  7,  5,  6,  6,  7,  6,  7,  7,  8
 };
 
-struct CoMatrix
-{
-    /*
-      The matrix has 20 * 20 = 400 entries.  This requires 50 bytes, or 13
-      words.  Some operations are performed on words for more efficiency.
-    */
-    union {
-        quint8 b[52];
-        quint32 w[13];
-    };
+struct CoMatrix {
+   /*
+     The matrix has 20 * 20 = 400 entries.  This requires 50 bytes, or 13
+     words.  Some operations are performed on words for more efficiency.
+   */
+   union {
+      quint8 b[52];
+      quint32 w[13];
+   };
 
-    CoMatrix() { memset( b, 0, 52 ); }
+   CoMatrix() {
+      memset( b, 0, 52 );
+   }
 
-    CoMatrix(const QString &str)
-    {
-        QByteArray ba = str.toUtf8();
-        const char *text = ba.constData();
-        char c = '\0', d;
-        memset( b, 0, 52 );
-        /*
-          The Knuth books are not in the office only for show; they help make
-          loops 30% faster and 20% as readable.
-        */
-        while ( (d = *text) != '\0' ) {
-            setCoOccurence( c, d );
-            if ( (c = *++text) != '\0' ) {
-                setCoOccurence( d, c );
-                text++;
-            }
-        }
-    }
+   CoMatrix(const QString &str) {
+      QByteArray ba = str.toUtf8();
+      const char *text = ba.constData();
+      char c = '\0', d;
+      memset( b, 0, 52 );
+      /*
+        The Knuth books are not in the office only for show; they help make
+        loops 30% faster and 20% as readable.
+      */
+      while ( (d = *text) != '\0' ) {
+         setCoOccurence( c, d );
+         if ( (c = *++text) != '\0' ) {
+            setCoOccurence( d, c );
+            text++;
+         }
+      }
+   }
 
-    void setCoOccurence( char c, char d ) {
-        int k = indexOf[(uchar) c] + 20 * indexOf[(uchar) d];
-        b[k >> 3] |= (1 << (k & 0x7));
-    }
+   void setCoOccurence( char c, char d ) {
+      int k = indexOf[(uchar) c] + 20 * indexOf[(uchar) d];
+      b[k >> 3] |= (1 << (k & 0x7));
+   }
 
-    int worth() const {
-        int w = 0;
-        for ( int i = 0; i < 50; i++ )
-            w += bitCount[b[i]];
-        return w;
-    }
+   int worth() const {
+      int w = 0;
+      for ( int i = 0; i < 50; i++ ) {
+         w += bitCount[b[i]];
+      }
+      return w;
+   }
 };
 
 static inline CoMatrix reunion(const CoMatrix &m, const CoMatrix &n)
 {
-    CoMatrix p;
-    for (int i = 0; i < 13; ++i)
-        p.w[i] = m.w[i] | n.w[i];
-    return p;
+   CoMatrix p;
+   for (int i = 0; i < 13; ++i) {
+      p.w[i] = m.w[i] | n.w[i];
+   }
+   return p;
 }
 
 static inline CoMatrix intersection(const CoMatrix &m, const CoMatrix &n)
 {
-    CoMatrix p;
-    for (int i = 0; i < 13; ++i)
-        p.w[i] = m.w[i] & n.w[i];
-    return p;
+   CoMatrix p;
+   for (int i = 0; i < 13; ++i) {
+      p.w[i] = m.w[i] & n.w[i];
+   }
+   return p;
 }
 
 StringSimilarityMatcher::StringSimilarityMatcher(const QString &stringToMatch)
 {
-    m_cm = new CoMatrix(stringToMatch);
-    m_length = stringToMatch.length();
+   m_cm = new CoMatrix(stringToMatch);
+   m_length = stringToMatch.length();
 }
 
 int StringSimilarityMatcher::getSimilarityScore(const QString &strCandidate)
 {
-    CoMatrix cmTarget(strCandidate);
-    int delta = qAbs(m_length - strCandidate.size());
-    int score = ( (intersection(*m_cm, cmTarget).worth() + 1) << 10 ) /
-        ( reunion(*m_cm, cmTarget).worth() + (delta << 1) + 1 );
-    return score;
+   CoMatrix cmTarget(strCandidate);
+   int delta = qAbs(m_length - strCandidate.size());
+   int score = ( (intersection(*m_cm, cmTarget).worth() + 1) << 10 ) /
+               ( reunion(*m_cm, cmTarget).worth() + (delta << 1) + 1 );
+   return score;
 }
 
 StringSimilarityMatcher::~StringSimilarityMatcher()
 {
-    delete m_cm;
+   delete m_cm;
 }
 
 /**
@@ -206,54 +209,57 @@ StringSimilarityMatcher::~StringSimilarityMatcher()
  */
 int getSimilarityScore(const QString &str1, const QString &str2)
 {
-    CoMatrix cmTarget(str2);
-    CoMatrix cm(str1);
-    int delta = qAbs(str1.size() - str2.size());
+   CoMatrix cmTarget(str2);
+   CoMatrix cm(str1);
+   int delta = qAbs(str1.size() - str2.size());
 
-    int score = ( (intersection(cm, cmTarget).worth() + 1) << 10 )
-        / ( reunion(cm, cmTarget).worth() + (delta << 1) + 1 );
+   int score = ( (intersection(cm, cmTarget).worth() + 1) << 10 )
+               / ( reunion(cm, cmTarget).worth() + (delta << 1) + 1 );
 
-    return score;
+   return score;
 }
 
 CandidateList similarTextHeuristicCandidates(const Translator *tor,
-    const QString &text, int maxCandidates)
+      const QString &text, int maxCandidates)
 {
-    QList<int> scores;
-    CandidateList candidates;
+   QList<int> scores;
+   CandidateList candidates;
 
-    foreach (const TranslatorMessage &mtm, tor->messages()) {
-        if (mtm.type() == TranslatorMessage::Unfinished
-            || mtm.translation().isEmpty())
-            continue;
+   foreach (const TranslatorMessage & mtm, tor->messages()) {
+      if (mtm.type() == TranslatorMessage::Unfinished
+            || mtm.translation().isEmpty()) {
+         continue;
+      }
 
-        QString s = mtm.sourceText();
-        int score = getSimilarityScore(s, text);
+      QString s = mtm.sourceText();
+      int score = getSimilarityScore(s, text);
 
-        if (candidates.size() == maxCandidates && score > scores[maxCandidates - 1] )
-            candidates.removeLast();
+      if (candidates.size() == maxCandidates && score > scores[maxCandidates - 1] ) {
+         candidates.removeLast();
+      }
 
-        if (candidates.size() < maxCandidates && score >= textSimilarityThreshold) {
-            Candidate cand( s, mtm.translation() );
+      if (candidates.size() < maxCandidates && score >= textSimilarityThreshold) {
+         Candidate cand( s, mtm.translation() );
 
-            int i;
-            for (i = 0; i < candidates.size(); i++) {
-                if (score >= scores.at(i)) {
-                    if (score == scores.at(i)) {
-                        if (candidates.at(i) == cand)
-                            goto continue_outer_loop;
-                    } else {
-                        break;
-                    }
-                }
+         int i;
+         for (i = 0; i < candidates.size(); i++) {
+            if (score >= scores.at(i)) {
+               if (score == scores.at(i)) {
+                  if (candidates.at(i) == cand) {
+                     goto continue_outer_loop;
+                  }
+               } else {
+                  break;
+               }
             }
-            scores.insert(i, score);
-            candidates.insert(i, cand);
-        }
-        continue_outer_loop:
-        ;
-    }
-    return candidates;
+         }
+         scores.insert(i, score);
+         candidates.insert(i, cand);
+      }
+   continue_outer_loop:
+      ;
+   }
+   return candidates;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,59 +33,60 @@ QT_BEGIN_NAMESPACE
 
 class QSqlTableModelPrivate: public QSqlQueryModelPrivate
 {
-    Q_DECLARE_PUBLIC(QSqlTableModel)
+   Q_DECLARE_PUBLIC(QSqlTableModel)
 
-public:
-    QSqlTableModelPrivate()
-        : editIndex(-1), insertIndex(-1), sortColumn(-1),
-          sortOrder(Qt::AscendingOrder),
-          strategy(QSqlTableModel::OnRowChange)
-    {}
-    void clear();
-    QSqlRecord primaryValues(int index);
-    virtual void clearEditBuffer();
-    virtual void clearCache();
-    static void clearGenerated(QSqlRecord &rec);
-    static void setGeneratedValue(QSqlRecord &rec, int c, QVariant v);
-    QSqlRecord record(const QVector<QVariant> &values) const;
+ public:
+   QSqlTableModelPrivate()
+      : editIndex(-1), insertIndex(-1), sortColumn(-1),
+        sortOrder(Qt::AscendingOrder),
+        strategy(QSqlTableModel::OnRowChange) {
+   }
+   void clear();
+   QSqlRecord primaryValues(int index);
+   virtual void clearEditBuffer();
+   virtual void clearCache();
+   static void clearGenerated(QSqlRecord &rec);
+   static void setGeneratedValue(QSqlRecord &rec, int c, QVariant v);
+   QSqlRecord record(const QVector<QVariant> &values) const;
 
-    bool exec(const QString &stmt, bool prepStatement,
-              const QSqlRecord &rec, const QSqlRecord &whereValues);
-    virtual void revertCachedRow(int row);
-    void revertInsertedRow();
-    bool setRecord(int row, const QSqlRecord &record);
-    virtual int nameToIndex(const QString &name) const;
-    void initRecordAndPrimaryIndex();
+   bool exec(const QString &stmt, bool prepStatement,
+             const QSqlRecord &rec, const QSqlRecord &whereValues);
+   virtual void revertCachedRow(int row);
+   void revertInsertedRow();
+   bool setRecord(int row, const QSqlRecord &record);
+   virtual int nameToIndex(const QString &name) const;
+   void initRecordAndPrimaryIndex();
 
-    QSqlDatabase db;
-    int editIndex;
-    int insertIndex;
+   QSqlDatabase db;
+   int editIndex;
+   int insertIndex;
 
-    int sortColumn;
-    Qt::SortOrder sortOrder;
+   int sortColumn;
+   Qt::SortOrder sortOrder;
 
-    QSqlTableModel::EditStrategy strategy;
+   QSqlTableModel::EditStrategy strategy;
 
-    QSqlQuery editQuery;
-    QSqlIndex primaryIndex;
-    QString tableName;
-    QString filter;
+   QSqlQuery editQuery;
+   QSqlIndex primaryIndex;
+   QString tableName;
+   QString filter;
 
-    enum Op { None, Insert, Update, Delete };
+   enum Op { None, Insert, Update, Delete };
 
-    struct ModifiedRow
-    {
-        ModifiedRow(Op o = None, const QSqlRecord &r = QSqlRecord()): op(o), rec(r) { clearGenerated(rec);}
-        ModifiedRow(const ModifiedRow &other): op(other.op), rec(other.rec), primaryValues(other.primaryValues) {}
-        Op op;
-        QSqlRecord rec;
-		QSqlRecord primaryValues;
-    };
+   struct ModifiedRow {
+      ModifiedRow(Op o = None, const QSqlRecord &r = QSqlRecord()): op(o), rec(r) {
+         clearGenerated(rec);
+      }
+      ModifiedRow(const ModifiedRow &other): op(other.op), rec(other.rec), primaryValues(other.primaryValues) {}
+      Op op;
+      QSqlRecord rec;
+      QSqlRecord primaryValues;
+   };
 
-    QSqlRecord editBuffer;
+   QSqlRecord editBuffer;
 
-    typedef QMap<int, ModifiedRow> CacheMap;
-    CacheMap cache;
+   typedef QMap<int, ModifiedRow> CacheMap;
+   CacheMap cache;
 };
 
 QT_END_NAMESPACE

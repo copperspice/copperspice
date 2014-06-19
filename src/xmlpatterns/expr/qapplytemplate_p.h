@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,50 +30,49 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class ApplyTemplate : public TemplateInvoker
 {
+ public:
+   typedef QExplicitlySharedDataPointer<ApplyTemplate> Ptr;
 
-    class ApplyTemplate : public TemplateInvoker
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<ApplyTemplate> Ptr;
+   ApplyTemplate(const TemplateMode::Ptr &mode, const WithParam::Hash &withParams, const TemplateMode::Ptr &defaultMode);
 
-        ApplyTemplate(const TemplateMode::Ptr &mode, const WithParam::Hash &withParams, const TemplateMode::Ptr &defaultMode);
+   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
 
-        virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-
-        virtual SequenceType::Ptr staticType() const;
-        virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-        virtual Properties properties() const;
+   virtual SequenceType::Ptr staticType() const;
+   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   virtual Properties properties() const;
 
 
-        inline Item mapToItem(const QXmlNodeModelIndex &node, const DynamicContext::Ptr &context) const;
-        inline Item::Iterator::Ptr mapToSequence(const Item &item, const DynamicContext::Ptr &context) const;
+   inline Item mapToItem(const QXmlNodeModelIndex &node, const DynamicContext::Ptr &context) const;
+   inline Item::Iterator::Ptr mapToSequence(const Item &item, const DynamicContext::Ptr &context) const;
 
-        inline TemplateMode::Ptr mode() const;
+   inline TemplateMode::Ptr mode() const;
 
-        virtual bool configureRecursion(const CallTargetDescription::Ptr &sign);
-        virtual Expression::Ptr body() const;
-        virtual CallTargetDescription::Ptr callTargetDescription() const;
+   virtual bool configureRecursion(const CallTargetDescription::Ptr &sign);
+   virtual Expression::Ptr body() const;
+   virtual CallTargetDescription::Ptr callTargetDescription() const;
 
-        Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context);
 
-    private:
-        typedef QExplicitlySharedDataPointer<const ApplyTemplate> ConstPtr;
+ private:
+   typedef QExplicitlySharedDataPointer<const ApplyTemplate> ConstPtr;
 
-        Template::Ptr findTemplate(const DynamicContext::Ptr &context, const TemplateMode::Ptr &templateMode) const;
-      
-        const TemplateMode::Ptr m_mode;
+   Template::Ptr findTemplate(const DynamicContext::Ptr &context, const TemplateMode::Ptr &templateMode) const;
 
-        TemplateMode::Ptr m_defaultMode;
+   const TemplateMode::Ptr m_mode;
 
-        inline TemplateMode::Ptr effectiveMode(const DynamicContext::Ptr &context) const;
-    };
+   TemplateMode::Ptr m_defaultMode;
 
-    TemplateMode::Ptr ApplyTemplate::mode() const
-    {
-        return m_mode;
-    }
+   inline TemplateMode::Ptr effectiveMode(const DynamicContext::Ptr &context) const;
+};
+
+TemplateMode::Ptr ApplyTemplate::mode() const
+{
+   return m_mode;
+}
 }
 
 QT_END_NAMESPACE

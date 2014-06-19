@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,55 +34,53 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class IndexOfIterator : public Item::Iterator
+   , public ComparisonPlatform<IndexOfIterator, false>
+   , public SourceLocationReflection
 {
-    class IndexOfIterator : public Item::Iterator
-                          , public ComparisonPlatform<IndexOfIterator, false>
-                          , public SourceLocationReflection
-    {
-    public:
+ public:
 
-        /**
-         * Creates an IndexOfIterator, whose next() function returns integers being
-         * the index positions of where @p searchParam was found in @p inputSequence.
-         *
-         * @param comp the AtomicComparator to be used for comparing values. This may be @c null,
-         * meaning the IndexOfIterator iterator will dynamically determine what comparator to use
-         * on an item per item basis, which is slower.
-         * @param searchParam the item which should be compared to the items in @p inputSequence.
-         * @param inputSequence the input sequence which indexes of the @p searchParam should
-         * be returned for.
-         * @param context the usual DynamicContext
-         * @param expr the Expression that this IndexOfIterator is evaluating
-         * for. It is used for error reporting, via actualReflection().
-         */
-        IndexOfIterator(const Item::Iterator::Ptr &inputSequence,
-                        const Item &searchParam,
-                        const AtomicComparator::Ptr &comp,
-                        const DynamicContext::Ptr &context,
-                        const Expression::ConstPtr &expr);
+   /**
+    * Creates an IndexOfIterator, whose next() function returns integers being
+    * the index positions of where @p searchParam was found in @p inputSequence.
+    *
+    * @param comp the AtomicComparator to be used for comparing values. This may be @c null,
+    * meaning the IndexOfIterator iterator will dynamically determine what comparator to use
+    * on an item per item basis, which is slower.
+    * @param searchParam the item which should be compared to the items in @p inputSequence.
+    * @param inputSequence the input sequence which indexes of the @p searchParam should
+    * be returned for.
+    * @param context the usual DynamicContext
+    * @param expr the Expression that this IndexOfIterator is evaluating
+    * for. It is used for error reporting, via actualReflection().
+    */
+   IndexOfIterator(const Item::Iterator::Ptr &inputSequence,
+                   const Item &searchParam,
+                   const AtomicComparator::Ptr &comp,
+                   const DynamicContext::Ptr &context,
+                   const Expression::ConstPtr &expr);
 
-        virtual Item next();
-        virtual Item current() const;
-        virtual xsInteger position() const;
-        virtual Item::Iterator::Ptr copy() const;
+   virtual Item next();
+   virtual Item current() const;
+   virtual xsInteger position() const;
+   virtual Item::Iterator::Ptr copy() const;
 
-        inline AtomicComparator::Operator operatorID() const
-        {
-            return AtomicComparator::OperatorEqual;
-        }
+   inline AtomicComparator::Operator operatorID() const {
+      return AtomicComparator::OperatorEqual;
+   }
 
-        virtual const SourceLocationReflection *actualReflection() const;
+   virtual const SourceLocationReflection *actualReflection() const;
 
-    private:
-        const Item::Iterator::Ptr   m_seq;
-        const Item                  m_searchParam;
-        const DynamicContext::Ptr   m_context;
-        const Expression::ConstPtr  m_expr;
-        Item                        m_current;
-        xsInteger                   m_position;
-        xsInteger                   m_seqPos;
-    };
+ private:
+   const Item::Iterator::Ptr   m_seq;
+   const Item                  m_searchParam;
+   const DynamicContext::Ptr   m_context;
+   const Expression::ConstPtr  m_expr;
+   Item                        m_current;
+   xsInteger                   m_position;
+   xsInteger                   m_seqPos;
+};
 }
 
 QT_END_NAMESPACE

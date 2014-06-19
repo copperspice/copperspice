@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,86 +41,82 @@ QT_BEGIN_NAMESPACE
 
 template<typename T> class QQueue;
 
-namespace QPatternist
+namespace QPatternist {
+/**
+ * @short A union of all the enums the parser uses.
+ */
+union EnumUnion {
+   AtomicComparator::Operator              valueOperator;
+   AtomicMathematician::Operator           mathOperator;
+   CombineNodes::Operator                  combinedNodeOp;
+   QXmlNodeModelIndex::Axis                axis;
+   QXmlNodeModelIndex::DocumentOrder       nodeOperator;
+   StaticContext::BoundarySpacePolicy      boundarySpacePolicy;
+   StaticContext::ConstructionMode         constructionMode;
+   StaticContext::OrderingEmptySequence    orderingEmptySequence;
+   StaticContext::OrderingMode             orderingMode;
+   OrderBy::OrderSpec::Direction           sortDirection;
+   Validate::Mode                          validationMode;
+   VariableSlotID                          slot;
+   int                                     tokenizerPosition;
+   qint16                                  zeroer;
+   bool                                    Bool;
+   xsDouble                                Double;
+   Path::Kind                              pathKind;
+};
+
+class TokenSource : public QSharedData
 {
-    /**
-     * @short A union of all the enums the parser uses.
-     */
-    union EnumUnion
-    {
-        AtomicComparator::Operator              valueOperator;
-        AtomicMathematician::Operator           mathOperator;
-        CombineNodes::Operator                  combinedNodeOp;
-        QXmlNodeModelIndex::Axis                axis;
-        QXmlNodeModelIndex::DocumentOrder       nodeOperator;
-        StaticContext::BoundarySpacePolicy      boundarySpacePolicy;
-        StaticContext::ConstructionMode         constructionMode;
-        StaticContext::OrderingEmptySequence    orderingEmptySequence;
-        StaticContext::OrderingMode             orderingMode;
-        OrderBy::OrderSpec::Direction           sortDirection;
-        Validate::Mode                          validationMode;
-        VariableSlotID                          slot;
-        int                                     tokenizerPosition;
-        qint16                                  zeroer;
-        bool                                    Bool;
-        xsDouble                                Double;
-        Path::Kind                              pathKind;
-    };
+ public:
+   /**
+    * typedef for the enum Bison generates that contains
+    * the token symbols.
+    */
+   typedef yytokentype TokenType;
 
-     class TokenSource : public QSharedData
-    {
+   /**
+    * Represents a token by carrying its name and value.
+    */
+   class Token
+   {
     public:
-        /**
-         * typedef for the enum Bison generates that contains
-         * the token symbols.
-         */
-        typedef yytokentype TokenType;
+      /**
+       * Constructs an invalid Token. This default constructor
+       * is need in Qt's container classes.
+       */
+      inline Token() {}
+      inline Token(const TokenType t) : type(t) {}
+      inline Token(const TokenType t, const QString &val) : type(t), value(val) {}
 
-        /**
-         * Represents a token by carrying its name and value.
-         */
-        class Token
-        {
-        public:
-            /**
-             * Constructs an invalid Token. This default constructor
-             * is need in Qt's container classes.
-             */
-            inline Token() {}
-            inline Token(const TokenType t) : type(t) {}
-            inline Token(const TokenType t, const QString &val) : type(t), value(val) {}
+      bool hasError() const {
+         return type == ERROR;
+      }
 
-            bool hasError() const
-            {
-                return type == ERROR;
-            }
+      TokenType type;
+      QString value;
+   };
 
-            TokenType type;
-            QString value;
-        };
+   typedef QExplicitlySharedDataPointer<TokenSource> Ptr;
+   typedef QQueue<Ptr> Queue;
 
-        typedef QExplicitlySharedDataPointer<TokenSource> Ptr;
-        typedef QQueue<Ptr> Queue;
+   /**
+    * The C++ compiler cannot synthesize it when we use the
+    * Q_DISABLE_COPY() macro.
+    */
+   inline TokenSource() {
+   }
 
-        /**
-         * The C++ compiler cannot synthesize it when we use the
-         * Q_DISABLE_COPY() macro.
-         */
-        inline TokenSource()
-        {
-        }
+   virtual ~TokenSource();
 
-        virtual ~TokenSource();
+   /**
+    * @returns the next token.
+    */
 
-        /**
-         * @returns the next token.
-         */
+   virtual Token nextToken(YYLTYPE *const sourceLocator) = 0;
 
-            virtual Token nextToken(YYLTYPE *const sourceLocator) = 0;
-
-    private:
-        Q_DISABLE_COPY(TokenSource)
-    };
+ private:
+   Q_DISABLE_COPY(TokenSource)
+};
 }
 
 QT_END_NAMESPACE

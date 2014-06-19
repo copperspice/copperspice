@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,26 +38,27 @@ FunctionFactory::~FunctionFactory()
 bool FunctionFactory::isAvailable(const NamePool::Ptr &np,
                                   const QXmlName name, const xsInteger arity)
 {
-    const FunctionSignature::Ptr sign(retrieveFunctionSignature(np, name));
+   const FunctionSignature::Ptr sign(retrieveFunctionSignature(np, name));
 
-    if(sign)
-        return arity == FunctionSignature::UnlimitedArity || sign->isArityValid(arity);
-    else
-        return false;
+   if (sign) {
+      return arity == FunctionSignature::UnlimitedArity || sign->isArityValid(arity);
+   } else {
+      return false;
+   }
 }
 
 bool FunctionFactory::hasSignature(const FunctionSignature::Ptr &signature) const
 {
-    const FunctionSignature::Hash signs(functionSignatures());
-    const FunctionSignature::Hash::const_iterator end(signs.constEnd());
-    FunctionSignature::Hash::const_iterator it(signs.constBegin());
+   const FunctionSignature::Hash signs(functionSignatures());
+   const FunctionSignature::Hash::const_iterator end(signs.constEnd());
+   FunctionSignature::Hash::const_iterator it(signs.constBegin());
 
-    for(; it != end; ++it)
-    {
-        if(*(*it) == *signature)
-            return true;
-    }
+   for (; it != end; ++it) {
+      if (*(*it) == *signature) {
+         return true;
+      }
+   }
 
-    return false;
+   return false;
 }
 QT_END_NAMESPACE

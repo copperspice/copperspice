@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,32 +34,37 @@ QT_BEGIN_NAMESPACE
 
 class RecentFiles : public QObject
 {
-    Q_OBJECT
+   Q_OBJECT
 
-public:
-    explicit RecentFiles(const int maxEntries);
+ public:
+   explicit RecentFiles(const int maxEntries);
 
-    bool isEmpty() { return m_strLists.isEmpty(); }
-    void addFiles(const QStringList &names);
-    QString lastOpenedFile() const {
-        if (m_strLists.isEmpty() || m_strLists.first().isEmpty())
-            return QString::null;
-        return m_strLists.at(0).at(0);
-    }
-    const QList<QStringList>& filesLists() const { return m_strLists; }
+   bool isEmpty() {
+      return m_strLists.isEmpty();
+   }
+   void addFiles(const QStringList &names);
+   QString lastOpenedFile() const {
+      if (m_strLists.isEmpty() || m_strLists.first().isEmpty()) {
+         return QString::null;
+      }
+      return m_strLists.at(0).at(0);
+   }
+   const QList<QStringList> &filesLists() const {
+      return m_strLists;
+   }
 
-    void readConfig();
-    void writeConfig() const;
+   void readConfig();
+   void writeConfig() const;
 
-public slots:
-    void closeGroup();
+ public slots:
+   void closeGroup();
 
-private:
-    bool m_groupOpen;
-    bool m_clone1st;
-    int m_maxEntries;
-    QList<QStringList> m_strLists;
-    QTimer m_timer;
+ private:
+   bool m_groupOpen;
+   bool m_clone1st;
+   int m_maxEntries;
+   QList<QStringList> m_strLists;
+   QTimer m_timer;
 };
 
 QT_END_NAMESPACE

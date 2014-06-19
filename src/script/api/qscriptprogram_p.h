@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -28,10 +28,9 @@
 
 #include "RefPtr.h"
 
-namespace JSC
-{
-    class EvalExecutable;
-    class ExecState;
+namespace JSC {
+class EvalExecutable;
+class ExecState;
 }
 
 QT_BEGIN_NAMESPACE
@@ -40,28 +39,28 @@ class QScriptEnginePrivate;
 
 class QScriptProgramPrivate
 {
-public:
-    QScriptProgramPrivate(const QString &sourceCode,
-                          const QString &fileName,
-                          int firstLineNumber);
-    ~QScriptProgramPrivate();
+ public:
+   QScriptProgramPrivate(const QString &sourceCode,
+                         const QString &fileName,
+                         int firstLineNumber);
+   ~QScriptProgramPrivate();
 
-    static QScriptProgramPrivate *get(const QScriptProgram &q);
+   static QScriptProgramPrivate *get(const QScriptProgram &q);
 
-    JSC::EvalExecutable *executable(JSC::ExecState *exec,
-                                    QScriptEnginePrivate *engine);
-    void detachFromEngine();
+   JSC::EvalExecutable *executable(JSC::ExecState *exec,
+                                   QScriptEnginePrivate *engine);
+   void detachFromEngine();
 
-    QBasicAtomicInt ref;
+   QBasicAtomicInt ref;
 
-    QString sourceCode;
-    QString fileName;
-    int firstLineNumber;
+   QString sourceCode;
+   QString fileName;
+   int firstLineNumber;
 
-    QScriptEnginePrivate *engine;
-    WTF::RefPtr<JSC::EvalExecutable> _executable;
-    intptr_t sourceId;
-    bool isCompiled;
+   QScriptEnginePrivate *engine;
+   WTF::RefPtr<JSC::EvalExecutable> _executable;
+   intptr_t sourceId;
+   bool isCompiled;
 };
 
 QT_END_NAMESPACE

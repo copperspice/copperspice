@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,49 +38,51 @@ using namespace QPatternist;
 
 Item CodepointEqualFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    const Item op1(m_operands.first()->evaluateSingleton(context));
-    if(!op1)
-        return Item();
+   const Item op1(m_operands.first()->evaluateSingleton(context));
+   if (!op1) {
+      return Item();
+   }
 
-    const Item op2(m_operands.last()->evaluateSingleton(context));
-    if(!op2)
-        return Item();
+   const Item op2(m_operands.last()->evaluateSingleton(context));
+   if (!op2) {
+      return Item();
+   }
 
-    if(caseSensitivity() == Qt::CaseSensitive)
-        return Boolean::fromValue(op1.stringValue() == op2.stringValue());
-    else
-    {
-        const QString s1(op1.stringValue());
-        const QString s2(op2.stringValue());
+   if (caseSensitivity() == Qt::CaseSensitive) {
+      return Boolean::fromValue(op1.stringValue() == op2.stringValue());
+   } else {
+      const QString s1(op1.stringValue());
+      const QString s2(op2.stringValue());
 
-        return Boolean::fromValue(s1.length() == s2.length() &&
-                                  s1.startsWith(s2, Qt::CaseInsensitive));
-    }
+      return Boolean::fromValue(s1.length() == s2.length() &&
+                                s1.startsWith(s2, Qt::CaseInsensitive));
+   }
 }
 
 Item CompareFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    const Item op1(m_operands.first()->evaluateSingleton(context));
-    if(!op1)
-        return Item();
+   const Item op1(m_operands.first()->evaluateSingleton(context));
+   if (!op1) {
+      return Item();
+   }
 
-    const Item op2(m_operands.at(1)->evaluateSingleton(context));
-    if(!op2)
-        return Item();
+   const Item op2(m_operands.at(1)->evaluateSingleton(context));
+   if (!op2) {
+      return Item();
+   }
 
-    const int retval = caseSensitivity() == Qt::CaseSensitive
-                       ? op1.stringValue().compare(op2.stringValue())
-                       : op1.stringValue().toLower().compare(op2.stringValue().toLower());
+   const int retval = caseSensitivity() == Qt::CaseSensitive
+                      ? op1.stringValue().compare(op2.stringValue())
+                      : op1.stringValue().toLower().compare(op2.stringValue().toLower());
 
-    if(retval > 0)
-        return CommonValues::IntegerOne;
-    else if(retval < 0)
-        return CommonValues::IntegerOneNegative;
-    else
-    {
-        Q_ASSERT(retval == 0);
-        return CommonValues::IntegerZero;
-    }
+   if (retval > 0) {
+      return CommonValues::IntegerOne;
+   } else if (retval < 0) {
+      return CommonValues::IntegerOneNegative;
+   } else {
+      Q_ASSERT(retval == 0);
+      return CommonValues::IntegerZero;
+   }
 }
 
 QT_END_NAMESPACE

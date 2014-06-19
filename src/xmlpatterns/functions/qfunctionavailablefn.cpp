@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,40 +36,41 @@ using namespace QPatternist;
 
 Item FunctionAvailableFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    const QString lexQName(m_operands.first()->evaluateSingleton(context).stringValue());
+   const QString lexQName(m_operands.first()->evaluateSingleton(context).stringValue());
 
-    NamespaceResolver::Bindings override;
-    override.insert(StandardPrefixes::empty, m_defFuncNS);
+   NamespaceResolver::Bindings override;
+   override.insert(StandardPrefixes::empty, m_defFuncNS);
 
-    const NamespaceResolver::Ptr resolver(new DelegatingNamespaceResolver(staticNamespaces(), override));
+   const NamespaceResolver::Ptr resolver(new DelegatingNamespaceResolver(staticNamespaces(), override));
 
-    const QXmlName name
-        (QNameConstructor::expandQName<DynamicContext::Ptr,
-                                       ReportContext::XTDE1400,
-                                       ReportContext::XTDE1400>(lexQName,
-                                                                context,
-                                                                resolver,
-                                                                this));
+   const QXmlName name
+   (QNameConstructor::expandQName<DynamicContext::Ptr,
+    ReportContext::XTDE1400,
+    ReportContext::XTDE1400>(lexQName,
+                             context,
+                             resolver,
+                             this));
 
-    xsInteger arity;
+   xsInteger arity;
 
-    if(m_operands.count() == 2)
-        arity = m_operands.at(1)->evaluateSingleton(context).as<Numeric>()->toInteger();
-    else
-        arity = FunctionSignature::UnlimitedArity;
+   if (m_operands.count() == 2) {
+      arity = m_operands.at(1)->evaluateSingleton(context).as<Numeric>()->toInteger();
+   } else {
+      arity = FunctionSignature::UnlimitedArity;
+   }
 
-    return Boolean::fromValue(m_functionFactory->isAvailable(context->namePool(), name, arity));
+   return Boolean::fromValue(m_functionFactory->isAvailable(context->namePool(), name, arity));
 }
 
 Expression::Ptr FunctionAvailableFN::typeCheck(const StaticContext::Ptr &context,
-                                               const SequenceType::Ptr &reqType)
+      const SequenceType::Ptr &reqType)
 {
-    m_functionFactory = context->functionSignatures();
-    Q_ASSERT(m_functionFactory);
-    m_defFuncNS = context->namePool()->allocateNamespace(context->defaultFunctionNamespace());
-    /* m_defFuncNS can be empty/null or an actual value. */
+   m_functionFactory = context->functionSignatures();
+   Q_ASSERT(m_functionFactory);
+   m_defFuncNS = context->namePool()->allocateNamespace(context->defaultFunctionNamespace());
+   /* m_defFuncNS can be empty/null or an actual value. */
 
-    return StaticNamespacesContainer::typeCheck(context, reqType);
+   return StaticNamespacesContainer::typeCheck(context, reqType);
 }
 
 QT_END_NAMESPACE

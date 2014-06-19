@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,42 +35,43 @@ using namespace QPatternist;
 
 LiteralSequence::LiteralSequence(const Item::List &list) : m_list(list)
 {
-    Q_ASSERT(list.size() >= 2);
+   Q_ASSERT(list.size() >= 2);
 }
 
 Item::Iterator::Ptr LiteralSequence::evaluateSequence(const DynamicContext::Ptr &) const
 {
-    return makeListIterator(m_list);
+   return makeListIterator(m_list);
 }
 
 SequenceType::Ptr LiteralSequence::staticType() const
 {
-    const Item::List::const_iterator end(m_list.constEnd());
-    Item::List::const_iterator it(m_list.constBegin());
+   const Item::List::const_iterator end(m_list.constEnd());
+   Item::List::const_iterator it(m_list.constBegin());
 
-    /* Load the first item. */
-    ItemType::Ptr t((*it).type());
-    ++it;
+   /* Load the first item. */
+   ItemType::Ptr t((*it).type());
+   ++it;
 
-    for(; end != it; ++it)
-        t |= (*it).type();
+   for (; end != it; ++it) {
+      t |= (*it).type();
+   }
 
-    return makeGenericSequenceType(t, Cardinality::fromCount(m_list.size()));
+   return makeGenericSequenceType(t, Cardinality::fromCount(m_list.size()));
 }
 
 ExpressionVisitorResult::Ptr LiteralSequence::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 Expression::ID LiteralSequence::id() const
 {
-    return IDExpressionSequence;
+   return IDExpressionSequence;
 }
 
 Expression::Properties LiteralSequence::properties() const
 {
-    return IsEvaluated;
+   return IsEvaluated;
 }
 
 QT_END_NAMESPACE

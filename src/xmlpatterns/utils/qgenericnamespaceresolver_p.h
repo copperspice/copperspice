@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,44 +31,43 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{    
-    class GenericNamespaceResolver : public NamespaceResolver
-    {
-    public:
-        GenericNamespaceResolver(const Bindings &list);
-        virtual void addBinding(const QXmlName nb);
+namespace QPatternist {
+class GenericNamespaceResolver : public NamespaceResolver
+{
+ public:
+   GenericNamespaceResolver(const Bindings &list);
+   virtual void addBinding(const QXmlName nb);
 
-        virtual QXmlName::NamespaceCode lookupNamespaceURI(const QXmlName::PrefixCode prefix) const;
+   virtual QXmlName::NamespaceCode lookupNamespaceURI(const QXmlName::PrefixCode prefix) const;
 
-        /**
-         * Returns a GenericNamespaceResolver containing the following bindings:
-         *
-         * - <tt>xml</tt> = <tt>http://www.w3.org/XML/1998/namespace</tt>
-         * - <tt>xs</tt> = <tt>http://www.w3.org/2001/XMLSchema</tt>
-         * - <tt>xsi</tt> = <tt>http://www.w3.org/2001/XMLSchema-instance</tt>
-         * - <tt>fn</tt> = <tt>http://www.w3.org/2005/xpath-functions</tt>
-         * - <tt>xdt</tt> = <tt>http://www.w3.org/2005/xpath-datatypes</tt>
-         * - no prefix = empty namespace
-         */
-        static NamespaceResolver::Ptr defaultXQueryBindings();
+   /**
+    * Returns a GenericNamespaceResolver containing the following bindings:
+    *
+    * - <tt>xml</tt> = <tt>http://www.w3.org/XML/1998/namespace</tt>
+    * - <tt>xs</tt> = <tt>http://www.w3.org/2001/XMLSchema</tt>
+    * - <tt>xsi</tt> = <tt>http://www.w3.org/2001/XMLSchema-instance</tt>
+    * - <tt>fn</tt> = <tt>http://www.w3.org/2005/xpath-functions</tt>
+    * - <tt>xdt</tt> = <tt>http://www.w3.org/2005/xpath-datatypes</tt>
+    * - no prefix = empty namespace
+    */
+   static NamespaceResolver::Ptr defaultXQueryBindings();
 
-        /**
-         * Returns a GenericNamespaceResolver containing the following bindings:
-         *
-         * - <tt>xml</tt> = <tt>http://www.w3.org/XML/1998/namespace</tt>
-         * - no prefix = empty namespace
-         */
-        static NamespaceResolver::Ptr defaultXSLTBindings();
+   /**
+    * Returns a GenericNamespaceResolver containing the following bindings:
+    *
+    * - <tt>xml</tt> = <tt>http://www.w3.org/XML/1998/namespace</tt>
+    * - no prefix = empty namespace
+    */
+   static NamespaceResolver::Ptr defaultXSLTBindings();
 
-        virtual Bindings bindings() const;
+   virtual Bindings bindings() const;
 
-    private:
-        /**
-         * The key is the prefix, the value the namespace URI.
-         */
-        Bindings m_bindings;
-    };
+ private:
+   /**
+    * The key is the prefix, the value the namespace URI.
+    */
+   Bindings m_bindings;
+};
 }
 
 QT_END_NAMESPACE

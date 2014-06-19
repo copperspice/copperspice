@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,19 +35,19 @@ template<typename T> class QExplicitlySharedDataPointer;
 class QSimpleXmlNodeModelPrivate;
 class Q_XMLPATTERNS_EXPORT QSimpleXmlNodeModel : public QAbstractXmlNodeModel
 {
-public:
-    QSimpleXmlNodeModel(const QXmlNamePool &namePool);
-    virtual ~QSimpleXmlNodeModel();
+ public:
+   QSimpleXmlNodeModel(const QXmlNamePool &namePool);
+   virtual ~QSimpleXmlNodeModel();
 
-    virtual QUrl baseUri(const QXmlNodeModelIndex &node) const;
-    QXmlNamePool &namePool() const;
-    virtual QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex&) const;
-    virtual QString stringValue(const QXmlNodeModelIndex &node) const;
-    virtual QXmlNodeModelIndex elementById(const QXmlName &id) const;
-    virtual QVector<QXmlNodeModelIndex> nodesByIdref(const QXmlName &idref) const;
+   virtual QUrl baseUri(const QXmlNodeModelIndex &node) const;
+   QXmlNamePool &namePool() const;
+   virtual QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &) const;
+   virtual QString stringValue(const QXmlNodeModelIndex &node) const;
+   virtual QXmlNodeModelIndex elementById(const QXmlName &id) const;
+   virtual QVector<QXmlNodeModelIndex> nodesByIdref(const QXmlName &idref) const;
 
-private:
-    Q_DECLARE_PRIVATE(QSimpleXmlNodeModel)
+ private:
+   Q_DECLARE_PRIVATE(QSimpleXmlNodeModel)
 };
 
 QT_END_NAMESPACE

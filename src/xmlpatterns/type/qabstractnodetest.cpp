@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,32 +31,32 @@ using namespace QPatternist;
 
 AbstractNodeTest::AbstractNodeTest(const ItemType::Ptr &primaryType) : m_primaryType(primaryType)
 {
-    Q_ASSERT(m_primaryType);
+   Q_ASSERT(m_primaryType);
 }
 
 bool AbstractNodeTest::xdtTypeMatches(const ItemType::Ptr &other) const
 {
-    Q_ASSERT(other);
+   Q_ASSERT(other);
 
-    if(other->isNodeType())
-    {
-        if(*other == *this)
-            return true;
-        else
-            return xdtTypeMatches(other->xdtSuperType());
-    }
-    else
-        return false;
+   if (other->isNodeType()) {
+      if (*other == *this) {
+         return true;
+      } else {
+         return xdtTypeMatches(other->xdtSuperType());
+      }
+   } else {
+      return false;
+   }
 }
 
 ItemType::Ptr AbstractNodeTest::atomizedType() const
 {
-    return m_primaryType->atomizedType();
+   return m_primaryType->atomizedType();
 }
 
 ItemType::Ptr AbstractNodeTest::xdtSuperType() const
 {
-    return m_primaryType;
+   return m_primaryType;
 }
 
 QT_END_NAMESPACE

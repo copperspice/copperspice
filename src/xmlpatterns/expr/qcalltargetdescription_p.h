@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,44 +34,43 @@ template<typename T> class QList;
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class CallSite;
+
+
+class CallTargetDescription : public QSharedData
 {
-    class CallSite;
+ public:
+   typedef QExplicitlySharedDataPointer<CallTargetDescription> Ptr;
+   typedef QList<Ptr> List;
 
+   CallTargetDescription(const QXmlName &name);
 
-    class CallTargetDescription : public QSharedData
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<CallTargetDescription> Ptr;
-        typedef QList<Ptr> List;
+   /**
+    * The function's name. For example, the name of the signature
+    * <tt>fn:string() as xs:string</tt> is <tt>fn:string</tt>.
+    */
+   QXmlName name() const;
 
-        CallTargetDescription(const QXmlName &name);
+   /**
+    * Flags callsites to be aware of their recursion by calling
+    * UserFunctionCallsite::configureRecursion(), if that is the case.
+    *
+    * @note We pass @p expr by value here intentionally.
+    */
+   static void checkCallsiteCircularity(CallTargetDescription::List &signList,
+                                        const Expression::Ptr expr);
+ private:
+   /**
+    * Helper function for checkCallsiteCircularity(). If C++ allowed it,
+    * it would have been local to it.
+    */
+   static void checkArgumentsCircularity(CallTargetDescription::List &signList,
+                                         const Expression::Ptr callsite);
 
-        /**
-         * The function's name. For example, the name of the signature
-         * <tt>fn:string() as xs:string</tt> is <tt>fn:string</tt>.
-         */
-        QXmlName name() const;
-
-        /**
-         * Flags callsites to be aware of their recursion by calling
-         * UserFunctionCallsite::configureRecursion(), if that is the case.
-         *
-         * @note We pass @p expr by value here intentionally.
-         */
-        static void checkCallsiteCircularity(CallTargetDescription::List &signList,
-                                             const Expression::Ptr expr);
-    private:
-        /**
-         * Helper function for checkCallsiteCircularity(). If C++ allowed it,
-         * it would have been local to it.
-         */
-        static void checkArgumentsCircularity(CallTargetDescription::List &signList,
-                                              const Expression::Ptr callsite);
-
-        Q_DISABLE_COPY(CallTargetDescription)
-        const QXmlName m_name;
-    };
+   Q_DISABLE_COPY(CallTargetDescription)
+   const QXmlName m_name;
+};
 }
 
 QT_END_NAMESPACE

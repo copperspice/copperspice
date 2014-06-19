@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,29 +38,29 @@ class QSvgRenderer;
 
 class Q_SVG_EXPORT QSvgWidget : public QWidget
 {
-    CS_OBJECT(QSvgWidget)
+   CS_OBJECT(QSvgWidget)
 
-public:
-    QSvgWidget(QWidget *parent=0);
-    QSvgWidget(const QString &file, QWidget *parent=0);
-    ~QSvgWidget();
+ public:
+   QSvgWidget(QWidget *parent = 0);
+   QSvgWidget(const QString &file, QWidget *parent = 0);
+   ~QSvgWidget();
 
-    QSvgRenderer *renderer() const;
+   QSvgRenderer *renderer() const;
 
-    QSize sizeHint() const;
+   QSize sizeHint() const;
 
-    SVG_CS_SLOT_1(Public, void load(const QString & file))
-    SVG_CS_SLOT_OVERLOAD(load,(const QString &)) 
+   SVG_CS_SLOT_1(Public, void load(const QString &file))
+   SVG_CS_SLOT_OVERLOAD(load, (const QString &))
 
-    SVG_CS_SLOT_1(Public, void load(const QByteArray & contents))
-    SVG_CS_SLOT_OVERLOAD(load,(const QByteArray &)) 
+   SVG_CS_SLOT_1(Public, void load(const QByteArray &contents))
+   SVG_CS_SLOT_OVERLOAD(load, (const QByteArray &))
 
-protected:
-    void paintEvent(QPaintEvent *event);
+ protected:
+   void paintEvent(QPaintEvent *event);
 
-private:
-    Q_DISABLE_COPY(QSvgWidget)
-    Q_DECLARE_PRIVATE(QSvgWidget)
+ private:
+   Q_DISABLE_COPY(QSvgWidget)
+   Q_DECLARE_PRIVATE(QSvgWidget)
 };
 
 QT_END_NAMESPACE

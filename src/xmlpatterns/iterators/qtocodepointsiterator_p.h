@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,31 +30,30 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{
- 
-    class ToCodepointsIterator : public Item::Iterator
-    {
-    public:
-        /**
-         * Constructs a ToCodepointsIterator.
-         *
-         * @param string the string to retrieve Unicode codepoints from. Can not be
-         * empty.
-         */
-        ToCodepointsIterator(const QString &string);
-        virtual Item next();
-        virtual Item current() const;
-        virtual xsInteger position() const;
-        virtual xsInteger count();
-        virtual Item::Iterator::Ptr copy() const;
+namespace QPatternist {
 
-    private:
-        const QString m_string;
-        const int m_len;
-        Item m_current;
-        xsInteger m_position;
-    };
+class ToCodepointsIterator : public Item::Iterator
+{
+ public:
+   /**
+    * Constructs a ToCodepointsIterator.
+    *
+    * @param string the string to retrieve Unicode codepoints from. Can not be
+    * empty.
+    */
+   ToCodepointsIterator(const QString &string);
+   virtual Item next();
+   virtual Item current() const;
+   virtual xsInteger position() const;
+   virtual xsInteger count();
+   virtual Item::Iterator::Ptr copy() const;
+
+ private:
+   const QString m_string;
+   const int m_len;
+   Item m_current;
+   xsInteger m_position;
+};
 }
 
 QT_END_NAMESPACE

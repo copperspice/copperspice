@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,43 +31,42 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{   
-    class BasicTypesFactory : public SchemaTypeFactory
-    {
-    public:
+namespace QPatternist {
+class BasicTypesFactory : public SchemaTypeFactory
+{
+ public:
 
-        /**
-         * Creates a primitive type for @p name. If @p name is not supported,
-         * @c null is returned.
-         * The intened supported types are the builtin primitive and derived types.
-         * That is, the 19 W3C XML Schema types, and the additional 5 in the XPath Data MOdel.
-         *
-         * @note This does not handle user defined types, only builtin types.
-         * @todo Update documentation, proportionally with progress.
-         */
-        virtual SchemaType::Ptr createSchemaType(const QXmlName ) const;
+   /**
+    * Creates a primitive type for @p name. If @p name is not supported,
+    * @c null is returned.
+    * The intened supported types are the builtin primitive and derived types.
+    * That is, the 19 W3C XML Schema types, and the additional 5 in the XPath Data MOdel.
+    *
+    * @note This does not handle user defined types, only builtin types.
+    * @todo Update documentation, proportionally with progress.
+    */
+   virtual SchemaType::Ptr createSchemaType(const QXmlName ) const;
 
-        virtual SchemaType::Hash types() const;
+   virtual SchemaType::Hash types() const;
 
-        /**
-         * @returns the singleton instance of BasicTypesFactory.
-         */
-        static SchemaTypeFactory::Ptr self(const NamePool::Ptr &np);
+   /**
+    * @returns the singleton instance of BasicTypesFactory.
+    */
+   static SchemaTypeFactory::Ptr self(const NamePool::Ptr &np);
 
-    protected:
-        /**
-         * This constructor is protected. Use the static self() function
-         * to retrieve a singleton instance.
-         */
-        BasicTypesFactory(const NamePool::Ptr &np);
+ protected:
+   /**
+    * This constructor is protected. Use the static self() function
+    * to retrieve a singleton instance.
+    */
+   BasicTypesFactory(const NamePool::Ptr &np);
 
-    private:
-        /**
-         * A dictonary of builtin primitive and derived primitives.
-         */
-        SchemaType::Hash m_types;
-    };
+ private:
+   /**
+    * A dictonary of builtin primitive and derived primitives.
+    */
+   SchemaType::Hash m_types;
+};
 }
 
 QT_END_NAMESPACE

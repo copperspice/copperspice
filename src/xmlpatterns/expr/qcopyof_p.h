@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,49 +30,48 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class CopyOf : public SingleContainer
 {
- 
-    class CopyOf : public SingleContainer
-    {
-    public:
-        /**
-         * Creats a CopyOf where it is checked that the expression @p operand conforms
-         * to the type @p reqType.
-         */
-        CopyOf(const Expression::Ptr &operand,
-               const bool inheritNSS,
-               const bool preserveNSS);
+ public:
+   /**
+    * Creats a CopyOf where it is checked that the expression @p operand conforms
+    * to the type @p reqType.
+    */
+   CopyOf(const Expression::Ptr &operand,
+          const bool inheritNSS,
+          const bool preserveNSS);
 
-        virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
+   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
 
-        /**
-         * @returns always the SequenceType passed in the constructor to this class. That is, the
-         * SequenceType that the operand must conform to.
-         */
-        virtual SequenceType::Ptr staticType() const;
+   /**
+    * @returns always the SequenceType passed in the constructor to this class. That is, the
+    * SequenceType that the operand must conform to.
+    */
+   virtual SequenceType::Ptr staticType() const;
 
-        /**
-         * @returns a list containing one CommonSequenceTypes::ZeroOrMoreItems
-         */
-        virtual SequenceType::List expectedOperandTypes() const;
+   /**
+    * @returns a list containing one CommonSequenceTypes::ZeroOrMoreItems
+    */
+   virtual SequenceType::List expectedOperandTypes() const;
 
-        virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
 
-        inline Item mapToItem(const Item &source,
-                              const DynamicContext::Ptr &context) const;
+   inline Item mapToItem(const Item &source,
+                         const DynamicContext::Ptr &context) const;
 
-        virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
 
-        virtual Properties properties() const;
-        virtual ItemType::Ptr expectedContextItemType() const;
+   virtual Properties properties() const;
+   virtual ItemType::Ptr expectedContextItemType() const;
 
-    private:
-        typedef QExplicitlySharedDataPointer<const CopyOf> ConstPtr;
-        const bool                                      m_inheritNamespaces;
-        const bool                                      m_preserveNamespaces;
-        const QAbstractXmlNodeModel::NodeCopySettings   m_settings;
-    };
+ private:
+   typedef QExplicitlySharedDataPointer<const CopyOf> ConstPtr;
+   const bool                                      m_inheritNamespaces;
+   const bool                                      m_preserveNamespaces;
+   const QAbstractXmlNodeModel::NodeCopySettings   m_settings;
+};
 }
 
 QT_END_NAMESPACE

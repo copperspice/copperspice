@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,42 +40,44 @@ QT_BEGIN_NAMESPACE
 
 class QSqlQueryPrivate
 {
-public:
-    QSqlQueryPrivate(QSqlResult* result);
-    ~QSqlQueryPrivate();
-    QAtomicInt ref;
-    QSqlResult* sqlResult;
+ public:
+   QSqlQueryPrivate(QSqlResult *result);
+   ~QSqlQueryPrivate();
+   QAtomicInt ref;
+   QSqlResult *sqlResult;
 
-    static QSqlQueryPrivate* shared_null();
+   static QSqlQueryPrivate *shared_null();
 };
 
 Q_GLOBAL_STATIC_WITH_ARGS(QSqlQueryPrivate, nullQueryPrivate, (0))
 Q_GLOBAL_STATIC(QSqlNullDriver, nullDriver)
 Q_GLOBAL_STATIC_WITH_ARGS(QSqlNullResult, nullResult, (nullDriver()))
 
-QSqlQueryPrivate* QSqlQueryPrivate::shared_null()
+QSqlQueryPrivate *QSqlQueryPrivate::shared_null()
 {
-    QSqlQueryPrivate *null = nullQueryPrivate();
-    null->ref.ref();
-    return null;
+   QSqlQueryPrivate *null = nullQueryPrivate();
+   null->ref.ref();
+   return null;
 }
 
 /*!
 \internal
 */
-QSqlQueryPrivate::QSqlQueryPrivate(QSqlResult* result)
-    : ref(1), sqlResult(result)
+QSqlQueryPrivate::QSqlQueryPrivate(QSqlResult *result)
+   : ref(1), sqlResult(result)
 {
-    if (!sqlResult)
-        sqlResult = nullResult();
+   if (!sqlResult) {
+      sqlResult = nullResult();
+   }
 }
 
 QSqlQueryPrivate::~QSqlQueryPrivate()
 {
-    QSqlResult *nr = nullResult();
-    if (!nr || sqlResult == nr)
-        return;
-    delete sqlResult;
+   QSqlResult *nr = nullResult();
+   if (!nr || sqlResult == nr) {
+      return;
+   }
+   delete sqlResult;
 }
 
 /*!
@@ -216,7 +218,7 @@ QSqlQueryPrivate::~QSqlQueryPrivate()
 
 QSqlQuery::QSqlQuery(QSqlResult *result)
 {
-    d = new QSqlQueryPrivate(result);
+   d = new QSqlQueryPrivate(result);
 }
 
 /*!
@@ -225,33 +227,36 @@ QSqlQuery::QSqlQuery(QSqlResult *result)
 
 QSqlQuery::~QSqlQuery()
 {
-    if (!d->ref.deref())
-        delete d;
+   if (!d->ref.deref()) {
+      delete d;
+   }
 }
 
 /*!
     Constructs a copy of \a other.
 */
 
-QSqlQuery::QSqlQuery(const QSqlQuery& other)
+QSqlQuery::QSqlQuery(const QSqlQuery &other)
 {
-    d = other.d;
-    d->ref.ref();
+   d = other.d;
+   d->ref.ref();
 }
 
 /*!
     \internal
 */
-static void qInit(QSqlQuery *q, const QString& query, QSqlDatabase db)
+static void qInit(QSqlQuery *q, const QString &query, QSqlDatabase db)
 {
-    QSqlDatabase database = db;
-    if (!database.isValid())
-        database = QSqlDatabase::database(QLatin1String(QSqlDatabase::defaultConnection), false);
-    if (database.isValid()) {
-        *q = QSqlQuery(database.driver()->createResult());
-    }
-    if (!query.isEmpty())
-        q->exec(query);
+   QSqlDatabase database = db;
+   if (!database.isValid()) {
+      database = QSqlDatabase::database(QLatin1String(QSqlDatabase::defaultConnection), false);
+   }
+   if (database.isValid()) {
+      *q = QSqlQuery(database.driver()->createResult());
+   }
+   if (!query.isEmpty()) {
+      q->exec(query);
+   }
 }
 
 /*!
@@ -262,10 +267,10 @@ static void qInit(QSqlQuery *q, const QString& query, QSqlDatabase db)
 
     \sa QSqlDatabase
 */
-QSqlQuery::QSqlQuery(const QString& query, QSqlDatabase db)
+QSqlQuery::QSqlQuery(const QString &query, QSqlDatabase db)
 {
-    d = QSqlQueryPrivate::shared_null();
-    qInit(this, query, db);
+   d = QSqlQueryPrivate::shared_null();
+   qInit(this, query, db);
 }
 
 /*!
@@ -277,8 +282,8 @@ QSqlQuery::QSqlQuery(const QString& query, QSqlDatabase db)
 
 QSqlQuery::QSqlQuery(QSqlDatabase db)
 {
-    d = QSqlQueryPrivate::shared_null();
-    qInit(this, QString(), db);
+   d = QSqlQueryPrivate::shared_null();
+   qInit(this, QString(), db);
 }
 
 
@@ -286,10 +291,10 @@ QSqlQuery::QSqlQuery(QSqlDatabase db)
     Assigns \a other to this object.
 */
 
-QSqlQuery& QSqlQuery::operator=(const QSqlQuery& other)
+QSqlQuery &QSqlQuery::operator=(const QSqlQuery &other)
 {
-    qAtomicAssign(d, other.d);
-    return *this;
+   qAtomicAssign(d, other.d);
+   return *this;
 }
 
 /*!
@@ -303,13 +308,14 @@ QSqlQuery& QSqlQuery::operator=(const QSqlQuery& other)
 
 bool QSqlQuery::isNull(int field) const
 {
-    if (d->sqlResult->isActive() && d->sqlResult->isValid())
-        return d->sqlResult->isNull(field);
-    return true;
+   if (d->sqlResult->isActive() && d->sqlResult->isValid()) {
+      return d->sqlResult->isNull(field);
+   }
+   return true;
 }
 
 /*!
-  
+
   Executes the SQL in \a query. Returns true and sets the query state
   to \l{isActive()}{active} if the query was successful; otherwise
   returns false. The \a query string must use syntax appropriate for
@@ -333,33 +339,33 @@ bool QSqlQuery::isNull(int field) const
   seek()
 */
 
-bool QSqlQuery::exec(const QString& query)
+bool QSqlQuery::exec(const QString &query)
 {
-    if (d->ref.load() != 1) {
-        bool fo = isForwardOnly();
-        *this = QSqlQuery(driver()->createResult());
-        d->sqlResult->setNumericalPrecisionPolicy(d->sqlResult->numericalPrecisionPolicy());
-        setForwardOnly(fo);
-    } else {
-        d->sqlResult->clear();
-        d->sqlResult->setActive(false);
-        d->sqlResult->setLastError(QSqlError());
-        d->sqlResult->setAt(QSql::BeforeFirstRow);
-        d->sqlResult->setNumericalPrecisionPolicy(d->sqlResult->numericalPrecisionPolicy());
-    }
-    d->sqlResult->setQuery(query.trimmed());
-    if (!driver()->isOpen() || driver()->isOpenError()) {
-        qWarning("QSqlQuery::exec: database not open");
-        return false;
-    }
-    if (query.isEmpty()) {
-        qWarning("QSqlQuery::exec: empty query");
-        return false;
-    }
+   if (d->ref.load() != 1) {
+      bool fo = isForwardOnly();
+      *this = QSqlQuery(driver()->createResult());
+      d->sqlResult->setNumericalPrecisionPolicy(d->sqlResult->numericalPrecisionPolicy());
+      setForwardOnly(fo);
+   } else {
+      d->sqlResult->clear();
+      d->sqlResult->setActive(false);
+      d->sqlResult->setLastError(QSqlError());
+      d->sqlResult->setAt(QSql::BeforeFirstRow);
+      d->sqlResult->setNumericalPrecisionPolicy(d->sqlResult->numericalPrecisionPolicy());
+   }
+   d->sqlResult->setQuery(query.trimmed());
+   if (!driver()->isOpen() || driver()->isOpenError()) {
+      qWarning("QSqlQuery::exec: database not open");
+      return false;
+   }
+   if (query.isEmpty()) {
+      qWarning("QSqlQuery::exec: empty query");
+      return false;
+   }
 #ifdef QT_DEBUG_SQL
-    qDebug("\n QSqlQuery: %s", query.toLocal8Bit().constData());
+   qDebug("\n QSqlQuery: %s", query.toLocal8Bit().constData());
 #endif
-    return d->sqlResult->reset(query);
+   return d->sqlResult->reset(query);
 }
 
 /*!
@@ -383,10 +389,11 @@ bool QSqlQuery::exec(const QString& query)
 
 QVariant QSqlQuery::value(int index) const
 {
-    if (isActive() && isValid() && (index > QSql::BeforeFirstRow))
-        return d->sqlResult->data(index);
-    qWarning("QSqlQuery::value: not positioned on a valid record");
-    return QVariant();
+   if (isActive() && isValid() && (index > QSql::BeforeFirstRow)) {
+      return d->sqlResult->data(index);
+   }
+   qWarning("QSqlQuery::value: not positioned on a valid record");
+   return QVariant();
 }
 
 /*!
@@ -400,7 +407,7 @@ QVariant QSqlQuery::value(int index) const
 
 int QSqlQuery::at() const
 {
-    return d->sqlResult->at();
+   return d->sqlResult->at();
 }
 
 /*!
@@ -412,7 +419,7 @@ int QSqlQuery::at() const
 
 QString QSqlQuery::lastQuery() const
 {
-    return d->sqlResult->lastQuery();
+   return d->sqlResult->lastQuery();
 }
 
 /*!
@@ -421,16 +428,16 @@ QString QSqlQuery::lastQuery() const
 
 const QSqlDriver *QSqlQuery::driver() const
 {
-    return d->sqlResult->driver();
+   return d->sqlResult->driver();
 }
 
 /*!
     Returns the result associated with the query.
 */
 
-const QSqlResult* QSqlQuery::result() const
+const QSqlResult *QSqlQuery::result() const
 {
-    return d->sqlResult;
+   return d->sqlResult;
 }
 
 /*!
@@ -483,69 +490,70 @@ const QSqlResult* QSqlQuery::result() const
 */
 bool QSqlQuery::seek(int index, bool relative)
 {
-    if (!isSelect() || !isActive())
-        return false;
-    int actualIdx;
-    if (!relative) { // arbitrary seek
-        if (index < 0) {
-            d->sqlResult->setAt(QSql::BeforeFirstRow);
-            return false;
-        }
-        actualIdx = index;
-    } else {
-        switch (at()) { // relative seek
-        case QSql::BeforeFirstRow:
-            if (index > 0)
-                actualIdx = index;
-            else {
-                return false;
-            }
-            break;
-        case QSql::AfterLastRow:
-            if (index < 0) {
-                d->sqlResult->fetchLast();
-                actualIdx = at() + index;
+   if (!isSelect() || !isActive()) {
+      return false;
+   }
+   int actualIdx;
+   if (!relative) { // arbitrary seek
+      if (index < 0) {
+         d->sqlResult->setAt(QSql::BeforeFirstRow);
+         return false;
+      }
+      actualIdx = index;
+   } else {
+      switch (at()) { // relative seek
+         case QSql::BeforeFirstRow:
+            if (index > 0) {
+               actualIdx = index;
             } else {
-                return false;
+               return false;
             }
             break;
-        default:
+         case QSql::AfterLastRow:
+            if (index < 0) {
+               d->sqlResult->fetchLast();
+               actualIdx = at() + index;
+            } else {
+               return false;
+            }
+            break;
+         default:
             if ((at() + index) < 0) {
-                d->sqlResult->setAt(QSql::BeforeFirstRow);
-                return false;
+               d->sqlResult->setAt(QSql::BeforeFirstRow);
+               return false;
             }
             actualIdx = at() + index;
             break;
-        }
-    }
-    // let drivers optimize
-    if (isForwardOnly() && actualIdx < at()) {
-        qWarning("QSqlQuery::seek: cannot seek backwards in a forward only query");
-        return false;
-    }
-    if (actualIdx == (at() + 1) && at() != QSql::BeforeFirstRow) {
-        if (!d->sqlResult->fetchNext()) {
-            d->sqlResult->setAt(QSql::AfterLastRow);
-            return false;
-        }
-        return true;
-    }
-    if (actualIdx == (at() - 1)) {
-        if (!d->sqlResult->fetchPrevious()) {
-            d->sqlResult->setAt(QSql::BeforeFirstRow);
-            return false;
-        }
-        return true;
-    }
-    if (!d->sqlResult->fetch(actualIdx)) {
-        d->sqlResult->setAt(QSql::AfterLastRow);
-        return false;
-    }
-    return true;
+      }
+   }
+   // let drivers optimize
+   if (isForwardOnly() && actualIdx < at()) {
+      qWarning("QSqlQuery::seek: cannot seek backwards in a forward only query");
+      return false;
+   }
+   if (actualIdx == (at() + 1) && at() != QSql::BeforeFirstRow) {
+      if (!d->sqlResult->fetchNext()) {
+         d->sqlResult->setAt(QSql::AfterLastRow);
+         return false;
+      }
+      return true;
+   }
+   if (actualIdx == (at() - 1)) {
+      if (!d->sqlResult->fetchPrevious()) {
+         d->sqlResult->setAt(QSql::BeforeFirstRow);
+         return false;
+      }
+      return true;
+   }
+   if (!d->sqlResult->fetch(actualIdx)) {
+      d->sqlResult->setAt(QSql::AfterLastRow);
+      return false;
+   }
+   return true;
 }
 
 /*!
-  
+
   Retrieves the next record in the result, if available, and positions
   the query on the retrieved record. Note that the result must be in
   the \l{isActive()}{active} state and isSelect() must return true
@@ -575,22 +583,23 @@ bool QSqlQuery::seek(int index, bool relative)
 */
 bool QSqlQuery::next()
 {
-    if (!isSelect() || !isActive())
-        return false;
-    bool b = false;
-    switch (at()) {
-    case QSql::BeforeFirstRow:
-        b = d->sqlResult->fetchFirst();
-        return b;
-    case QSql::AfterLastRow:
-        return false;
-    default:
-        if (!d->sqlResult->fetchNext()) {
+   if (!isSelect() || !isActive()) {
+      return false;
+   }
+   bool b = false;
+   switch (at()) {
+      case QSql::BeforeFirstRow:
+         b = d->sqlResult->fetchFirst();
+         return b;
+      case QSql::AfterLastRow:
+         return false;
+      default:
+         if (!d->sqlResult->fetchNext()) {
             d->sqlResult->setAt(QSql::AfterLastRow);
             return false;
-        }
-        return true;
-    }
+         }
+         return true;
+   }
 }
 
 /*!
@@ -624,27 +633,28 @@ bool QSqlQuery::next()
 */
 bool QSqlQuery::previous()
 {
-    if (!isSelect() || !isActive())
-        return false;
-    if (isForwardOnly()) {
-        qWarning("QSqlQuery::seek: cannot seek backwards in a forward only query");
-        return false;
-    }
+   if (!isSelect() || !isActive()) {
+      return false;
+   }
+   if (isForwardOnly()) {
+      qWarning("QSqlQuery::seek: cannot seek backwards in a forward only query");
+      return false;
+   }
 
-    bool b = false;
-    switch (at()) {
-    case QSql::BeforeFirstRow:
-        return false;
-    case QSql::AfterLastRow:
-        b = d->sqlResult->fetchLast();
-        return b;
-    default:
-        if (!d->sqlResult->fetchPrevious()) {
+   bool b = false;
+   switch (at()) {
+      case QSql::BeforeFirstRow:
+         return false;
+      case QSql::AfterLastRow:
+         b = d->sqlResult->fetchLast();
+         return b;
+      default:
+         if (!d->sqlResult->fetchPrevious()) {
             d->sqlResult->setAt(QSql::BeforeFirstRow);
             return false;
-        }
-        return true;
-    }
+         }
+         return true;
+   }
 }
 
 /*!
@@ -659,15 +669,16 @@ bool QSqlQuery::previous()
  */
 bool QSqlQuery::first()
 {
-    if (!isSelect() || !isActive())
-        return false;
-    if (isForwardOnly() && at() > QSql::BeforeFirstRow) {
-        qWarning("QSqlQuery::seek: cannot seek backwards in a forward only query");
-        return false;
-    }
-    bool b = false;
-    b = d->sqlResult->fetchFirst();
-    return b;
+   if (!isSelect() || !isActive()) {
+      return false;
+   }
+   if (isForwardOnly() && at() > QSql::BeforeFirstRow) {
+      qWarning("QSqlQuery::seek: cannot seek backwards in a forward only query");
+      return false;
+   }
+   bool b = false;
+   b = d->sqlResult->fetchFirst();
+   return b;
 }
 
 /*!
@@ -684,11 +695,12 @@ bool QSqlQuery::first()
 
 bool QSqlQuery::last()
 {
-    if (!isSelect() || !isActive())
-        return false;
-    bool b = false;
-    b = d->sqlResult->fetchLast();
-    return b;
+   if (!isSelect() || !isActive()) {
+      return false;
+   }
+   bool b = false;
+   b = d->sqlResult->fetchLast();
+   return b;
 }
 
 /*!
@@ -705,9 +717,10 @@ bool QSqlQuery::last()
 */
 int QSqlQuery::size() const
 {
-    if (isActive() && d->sqlResult->driver()->hasFeature(QSqlDriver::QuerySize))
-        return d->sqlResult->size();
-    return -1;
+   if (isActive() && d->sqlResult->driver()->hasFeature(QSqlDriver::QuerySize)) {
+      return d->sqlResult->size();
+   }
+   return -1;
 }
 
 /*!
@@ -721,9 +734,10 @@ int QSqlQuery::size() const
 
 int QSqlQuery::numRowsAffected() const
 {
-    if (isActive())
-        return d->sqlResult->numRowsAffected();
-    return -1;
+   if (isActive()) {
+      return d->sqlResult->numRowsAffected();
+   }
+   return -1;
 }
 
 /*!
@@ -735,7 +749,7 @@ int QSqlQuery::numRowsAffected() const
 
 QSqlError QSqlQuery::lastError() const
 {
-    return d->sqlResult->lastError();
+   return d->sqlResult->lastError();
 }
 
 /*!
@@ -745,11 +759,11 @@ QSqlError QSqlQuery::lastError() const
 
 bool QSqlQuery::isValid() const
 {
-    return d->sqlResult->isValid();
+   return d->sqlResult->isValid();
 }
 
 /*!
-  
+
   Returns true if the query is \e{active}. An active QSqlQuery is one
   that has been \l{QSqlQuery::exec()} {exec()'d} successfully but not
   yet finished with.  When you are finished with an active query, you
@@ -767,7 +781,7 @@ bool QSqlQuery::isValid() const
  */
 bool QSqlQuery::isActive() const
 {
-    return d->sqlResult->isActive();
+   return d->sqlResult->isActive();
 }
 
 /*!
@@ -777,7 +791,7 @@ bool QSqlQuery::isActive() const
 
 bool QSqlQuery::isSelect() const
 {
-    return d->sqlResult->isSelect();
+   return d->sqlResult->isSelect();
 }
 
 /*!
@@ -788,7 +802,7 @@ bool QSqlQuery::isSelect() const
 */
 bool QSqlQuery::isForwardOnly() const
 {
-    return d->sqlResult->isForwardOnly();
+   return d->sqlResult->isForwardOnly();
 }
 
 /*!
@@ -817,7 +831,7 @@ bool QSqlQuery::isForwardOnly() const
 */
 void QSqlQuery::setForwardOnly(bool forward)
 {
-    d->sqlResult->setForwardOnly(forward);
+   d->sqlResult->setForwardOnly(forward);
 }
 
 /*!
@@ -840,13 +854,14 @@ void QSqlQuery::setForwardOnly(bool forward)
 */
 QSqlRecord QSqlQuery::record() const
 {
-    QSqlRecord rec = d->sqlResult->record();
+   QSqlRecord rec = d->sqlResult->record();
 
-    if (isValid()) {
-        for (int i = 0; i < rec.count(); ++i)
-            rec.setValue(i, value(i));
-    }
-    return rec;
+   if (isValid()) {
+      for (int i = 0; i < rec.count(); ++i) {
+         rec.setValue(i, value(i));
+      }
+   }
+   return rec;
 }
 
 /*!
@@ -856,7 +871,7 @@ QSqlRecord QSqlQuery::record() const
 */
 void QSqlQuery::clear()
 {
-    *this = QSqlQuery(driver()->createResult());
+   *this = QSqlQuery(driver()->createResult());
 }
 
 /*!
@@ -883,35 +898,35 @@ void QSqlQuery::clear()
 
   \sa exec(), bindValue(), addBindValue()
 */
-bool QSqlQuery::prepare(const QString& query)
+bool QSqlQuery::prepare(const QString &query)
 {
-    if (d->ref.load() != 1) {
-        bool fo = isForwardOnly();
-        *this = QSqlQuery(driver()->createResult());
-        setForwardOnly(fo);
-        d->sqlResult->setNumericalPrecisionPolicy(d->sqlResult->numericalPrecisionPolicy());
-    } else {
-        d->sqlResult->setActive(false);
-        d->sqlResult->setLastError(QSqlError());
-        d->sqlResult->setAt(QSql::BeforeFirstRow);
-        d->sqlResult->setNumericalPrecisionPolicy(d->sqlResult->numericalPrecisionPolicy());
-    }
-    if (!driver()) {
-        qWarning("QSqlQuery::prepare: no driver");
-        return false;
-    }
-    if (!driver()->isOpen() || driver()->isOpenError()) {
-        qWarning("QSqlQuery::prepare: database not open");
-        return false;
-    }
-    if (query.isEmpty()) {
-        qWarning("QSqlQuery::prepare: empty query");
-        return false;
-    }
+   if (d->ref.load() != 1) {
+      bool fo = isForwardOnly();
+      *this = QSqlQuery(driver()->createResult());
+      setForwardOnly(fo);
+      d->sqlResult->setNumericalPrecisionPolicy(d->sqlResult->numericalPrecisionPolicy());
+   } else {
+      d->sqlResult->setActive(false);
+      d->sqlResult->setLastError(QSqlError());
+      d->sqlResult->setAt(QSql::BeforeFirstRow);
+      d->sqlResult->setNumericalPrecisionPolicy(d->sqlResult->numericalPrecisionPolicy());
+   }
+   if (!driver()) {
+      qWarning("QSqlQuery::prepare: no driver");
+      return false;
+   }
+   if (!driver()->isOpen() || driver()->isOpenError()) {
+      qWarning("QSqlQuery::prepare: database not open");
+      return false;
+   }
+   if (query.isEmpty()) {
+      qWarning("QSqlQuery::prepare: empty query");
+      return false;
+   }
 #ifdef QT_DEBUG_SQL
-    qDebug("\n QSqlQuery::prepare: %s", query.toLocal8Bit().constData());
+   qDebug("\n QSqlQuery::prepare: %s", query.toLocal8Bit().constData());
 #endif
-    return d->sqlResult->savePrepare(query);
+   return d->sqlResult->savePrepare(query);
 }
 
 /*!
@@ -925,12 +940,13 @@ bool QSqlQuery::prepare(const QString& query)
 */
 bool QSqlQuery::exec()
 {
-    d->sqlResult->resetBindCount();
+   d->sqlResult->resetBindCount();
 
-    if (d->sqlResult->lastError().isValid())
-        d->sqlResult->setLastError(QSqlError());
+   if (d->sqlResult->lastError().isValid()) {
+      d->sqlResult->setLastError(QSqlError());
+   }
 
-    return d->sqlResult->exec();
+   return d->sqlResult->exec();
 }
 
 /*! \enum QSqlQuery::BatchExecutionMode
@@ -984,7 +1000,7 @@ bool QSqlQuery::exec()
 */
 bool QSqlQuery::execBatch(BatchExecutionMode mode)
 {
-    return d->sqlResult->execBatch(mode == ValuesAsColumns);
+   return d->sqlResult->execBatch(mode == ValuesAsColumns);
 }
 
 /*!
@@ -1007,11 +1023,11 @@ bool QSqlQuery::execBatch(BatchExecutionMode mode)
 
   \sa addBindValue(), prepare(), exec(), boundValue() boundValues()
 */
-void QSqlQuery::bindValue(const QString& placeholder, const QVariant& val,
+void QSqlQuery::bindValue(const QString &placeholder, const QVariant &val,
                           QSql::ParamType paramType
-)
+                         )
 {
-    d->sqlResult->bindValue(placeholder, val, paramType);
+   d->sqlResult->bindValue(placeholder, val, paramType);
 }
 
 /*!
@@ -1020,9 +1036,9 @@ void QSqlQuery::bindValue(const QString& placeholder, const QVariant& val,
   paramType is QSql::Out or QSql::InOut, the placeholder will be
   overwritten with data from the database after the exec() call.
 */
-void QSqlQuery::bindValue(int pos, const QVariant& val, QSql::ParamType paramType)
+void QSqlQuery::bindValue(int pos, const QVariant &val, QSql::ParamType paramType)
 {
-    d->sqlResult->bindValue(pos, val, paramType);
+   d->sqlResult->bindValue(pos, val, paramType);
 }
 
 /*!
@@ -1037,9 +1053,9 @@ void QSqlQuery::bindValue(int pos, const QVariant& val, QSql::ParamType paramTyp
 
   \sa bindValue(), prepare(), exec(), boundValue() boundValues()
 */
-void QSqlQuery::addBindValue(const QVariant& val, QSql::ParamType paramType)
+void QSqlQuery::addBindValue(const QVariant &val, QSql::ParamType paramType)
 {
-    d->sqlResult->addBindValue(val, paramType);
+   d->sqlResult->addBindValue(val, paramType);
 }
 
 /*!
@@ -1047,9 +1063,9 @@ void QSqlQuery::addBindValue(const QVariant& val, QSql::ParamType paramType)
 
   \sa boundValues() bindValue() addBindValue()
 */
-QVariant QSqlQuery::boundValue(const QString& placeholder) const
+QVariant QSqlQuery::boundValue(const QString &placeholder) const
 {
-    return d->sqlResult->boundValue(placeholder);
+   return d->sqlResult->boundValue(placeholder);
 }
 
 /*!
@@ -1057,7 +1073,7 @@ QVariant QSqlQuery::boundValue(const QString& placeholder) const
 */
 QVariant QSqlQuery::boundValue(int pos) const
 {
-    return d->sqlResult->boundValue(pos);
+   return d->sqlResult->boundValue(pos);
 }
 
 /*!
@@ -1074,14 +1090,15 @@ QVariant QSqlQuery::boundValue(int pos) const
 
   \sa boundValue() bindValue() addBindValue()
 */
-QMap<QString,QVariant> QSqlQuery::boundValues() const
+QMap<QString, QVariant> QSqlQuery::boundValues() const
 {
-    QMap<QString,QVariant> map;
+   QMap<QString, QVariant> map;
 
-    const QVector<QVariant> values(d->sqlResult->boundValues());
-    for (int i = 0; i < values.count(); ++i)
-        map[d->sqlResult->boundValueName(i)] = values.at(i);
-    return map;
+   const QVector<QVariant> values(d->sqlResult->boundValues());
+   for (int i = 0; i < values.count(); ++i) {
+      map[d->sqlResult->boundValueName(i)] = values.at(i);
+   }
+   return map;
 }
 
 /*!
@@ -1098,7 +1115,7 @@ QMap<QString,QVariant> QSqlQuery::boundValues() const
 */
 QString QSqlQuery::executedQuery() const
 {
-    return d->sqlResult->executedQuery();
+   return d->sqlResult->executedQuery();
 }
 
 /*!
@@ -1115,7 +1132,7 @@ QString QSqlQuery::executedQuery() const
   behavior is undefined.
 
   For MySQL databases the row's auto-increment field will be returned.
-    
+
   \note For this function to work in PSQL, the table table must
   contain OIDs, which may not have been created by default.  Check the
   \c default_with_oids configuration variable to be sure.
@@ -1124,7 +1141,7 @@ QString QSqlQuery::executedQuery() const
 */
 QVariant QSqlQuery::lastInsertId() const
 {
-    return d->sqlResult->lastInsertId();
+   return d->sqlResult->lastInsertId();
 }
 
 /*!
@@ -1150,7 +1167,7 @@ QVariant QSqlQuery::lastInsertId() const
 */
 void QSqlQuery::setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy precisionPolicy)
 {
-    d->sqlResult->setNumericalPrecisionPolicy(precisionPolicy);
+   d->sqlResult->setNumericalPrecisionPolicy(precisionPolicy);
 }
 
 /*!
@@ -1160,7 +1177,7 @@ void QSqlQuery::setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy preci
 */
 QSql::NumericalPrecisionPolicy QSqlQuery::numericalPrecisionPolicy() const
 {
-    return d->sqlResult->numericalPrecisionPolicy();
+   return d->sqlResult->numericalPrecisionPolicy();
 }
 
 /*!
@@ -1171,24 +1188,24 @@ QSql::NumericalPrecisionPolicy QSqlQuery::numericalPrecisionPolicy() const
   call this function, but it may be helpful in order to free resources
   such as locks or cursors if you intend to re-use the query at a
   later time.
-    
+
   Sets the query to inactive. Bound values retain their values.
 
   \sa prepare() exec() isActive()
 */
 void QSqlQuery::finish()
 {
-    if (isActive()) {
-        d->sqlResult->setLastError(QSqlError());
-        d->sqlResult->setAt(QSql::BeforeFirstRow);
-        d->sqlResult->detachFromResultSet();
-        d->sqlResult->setActive(false);
-    }
+   if (isActive()) {
+      d->sqlResult->setLastError(QSqlError());
+      d->sqlResult->setAt(QSql::BeforeFirstRow);
+      d->sqlResult->detachFromResultSet();
+      d->sqlResult->setActive(false);
+   }
 }
 
 /*!
   \since 4.4
- 
+
   Discards the current result set and navigates to the next if available.
 
   Some databases are capable of returning multiple result sets for
@@ -1196,7 +1213,7 @@ void QSqlQuery::finish()
   multiple statements). If multiple result sets are available after
   executing a query this function can be used to navigate to the next
   result set(s).
-    
+
   If a new result set is available this function will return true.
   The query will be repositioned on an \e invalid record in the new
   result set and must be navigated to a valid record before data
@@ -1218,9 +1235,10 @@ void QSqlQuery::finish()
 */
 bool QSqlQuery::nextResult()
 {
-    if (isActive())
-        return d->sqlResult->nextResult();
-    return false;
+   if (isActive()) {
+      return d->sqlResult->nextResult();
+   }
+   return false;
 }
 
 QT_END_NAMESPACE

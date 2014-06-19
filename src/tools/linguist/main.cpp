@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,123 +41,122 @@
 #ifdef Q_OS_MAC
 #include <QtCore/QUrl>
 #include <QtGui/QFileOpenEvent>
-#endif 
+#endif
 
 QT_USE_NAMESPACE
 
 #ifdef Q_OS_MAC
 class ApplicationEventFilter : public QObject
 {
-    Q_OBJECT
+   Q_OBJECT
 
-public:
-    ApplicationEventFilter()
-        : m_mainWindow(0)
-    {
-    }
+ public:
+   ApplicationEventFilter()
+      : m_mainWindow(0) {
+   }
 
-    void setMainWindow(MainWindow *mw)
-    {
-        m_mainWindow = mw;
-        if (!m_filesToOpen.isEmpty() && m_mainWindow) {
-            m_mainWindow->openFiles(m_filesToOpen);
-            m_filesToOpen.clear();
-        }
-    }
+   void setMainWindow(MainWindow *mw) {
+      m_mainWindow = mw;
+      if (!m_filesToOpen.isEmpty() && m_mainWindow) {
+         m_mainWindow->openFiles(m_filesToOpen);
+         m_filesToOpen.clear();
+      }
+   }
 
-protected:
-    bool eventFilter(QObject *object, QEvent *event)
-    {
-        if (object == qApp && event->type() == QEvent::FileOpen) {
-            QFileOpenEvent *e = static_cast<QFileOpenEvent*>(event);
-            QString file = e->url().toLocalFile();
-            if (!m_mainWindow)
-                m_filesToOpen << file;
-            else
-                m_mainWindow->openFiles(QStringList() << file);
-            return true;
-        }
-        return QObject::eventFilter(object, event);
-    }
+ protected:
+   bool eventFilter(QObject *object, QEvent *event) {
+      if (object == qApp && event->type() == QEvent::FileOpen) {
+         QFileOpenEvent *e = static_cast<QFileOpenEvent *>(event);
+         QString file = e->url().toLocalFile();
+         if (!m_mainWindow) {
+            m_filesToOpen << file;
+         } else {
+            m_mainWindow->openFiles(QStringList() << file);
+         }
+         return true;
+      }
+      return QObject::eventFilter(object, event);
+   }
 
-private:
-    MainWindow *m_mainWindow;
-    QStringList m_filesToOpen;
+ private:
+   MainWindow *m_mainWindow;
+   QStringList m_filesToOpen;
 };
 #endif
 
 int main(int argc, char **argv)
 {
-    Q_INIT_RESOURCE(linguist);
+   Q_INIT_RESOURCE(linguist);
 
-    QApplication app(argc, argv);
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
-#ifdef Q_OS_MAC
-    ApplicationEventFilter eventFilter;
-    app.installEventFilter(&eventFilter);
-#endif
-
-    QStringList files;
-    QString resourceDir = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-    QStringList args = app.arguments();
-
-    for (int i = 1; i < args.count(); ++i) {
-        QString argument = args.at(i);
-        if (argument == QLatin1String("-resourcedir")) {
-            if (i + 1 < args.count()) {
-                resourceDir = QFile::decodeName(args.at(++i).toLocal8Bit());
-            } else {
-                // issue a warning
-            }
-        } else if (!files.contains(argument)) {
-            files.append(argument);
-        }
-    }
-
-    QTranslator translator;
-    QTranslator qtTranslator;
-    QString sysLocale = QLocale::system().name();
-
-    if (translator.load(QLatin1String("linguist_") + sysLocale, resourceDir)) {
-        app.installTranslator(&translator);
-        if (qtTranslator.load(QLatin1String("qt_") + sysLocale, resourceDir))
-            app.installTranslator(&qtTranslator);
-        else
-            app.removeTranslator(&translator);
-    }
-
-    app.setOrganizationName(QLatin1String("Trolltech"));
-    app.setApplicationName(QLatin1String("Linguist"));
-
-    QSettings config;
-
-    QWidget tmp;
-    tmp.restoreGeometry(config.value(settingPath("Geometry/WindowGeometry")).toByteArray());
-
-    QSplashScreen *splash = 0;
-    int screenId = QApplication::desktop()->screenNumber(tmp.geometry().center());
-    splash = new QSplashScreen(QApplication::desktop()->screen(screenId),
-        QPixmap(QLatin1String(":/images/splash.png")));
-
-    if (QApplication::desktop()->isVirtualDesktop()) {
-        QRect srect(0, 0, splash->width(), splash->height());
-        splash->move(QApplication::desktop()->availableGeometry(screenId).center() - srect.center());
-    }
-    splash->setAttribute(Qt::WA_DeleteOnClose);
-    splash->show();
-
-    MainWindow mw;
+   QApplication app(argc, argv);
+   QApplication::setOverrideCursor(Qt::WaitCursor);
 
 #ifdef Q_OS_MAC
-    eventFilter.setMainWindow(&mw);
+   ApplicationEventFilter eventFilter;
+   app.installEventFilter(&eventFilter);
 #endif
 
-    mw.show();
-    splash->finish(&mw);
-    QApplication::restoreOverrideCursor();
+   QStringList files;
+   QString resourceDir = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+   QStringList args = app.arguments();
 
-    mw.openFiles(files, true);
+   for (int i = 1; i < args.count(); ++i) {
+      QString argument = args.at(i);
+      if (argument == QLatin1String("-resourcedir")) {
+         if (i + 1 < args.count()) {
+            resourceDir = QFile::decodeName(args.at(++i).toLocal8Bit());
+         } else {
+            // issue a warning
+         }
+      } else if (!files.contains(argument)) {
+         files.append(argument);
+      }
+   }
 
-    return app.exec();
+   QTranslator translator;
+   QTranslator qtTranslator;
+   QString sysLocale = QLocale::system().name();
+
+   if (translator.load(QLatin1String("linguist_") + sysLocale, resourceDir)) {
+      app.installTranslator(&translator);
+      if (qtTranslator.load(QLatin1String("qt_") + sysLocale, resourceDir)) {
+         app.installTranslator(&qtTranslator);
+      } else {
+         app.removeTranslator(&translator);
+      }
+   }
+
+   app.setOrganizationName(QLatin1String("Trolltech"));
+   app.setApplicationName(QLatin1String("Linguist"));
+
+   QSettings config;
+
+   QWidget tmp;
+   tmp.restoreGeometry(config.value(settingPath("Geometry/WindowGeometry")).toByteArray());
+
+   QSplashScreen *splash = 0;
+   int screenId = QApplication::desktop()->screenNumber(tmp.geometry().center());
+   splash = new QSplashScreen(QApplication::desktop()->screen(screenId),
+                              QPixmap(QLatin1String(":/images/splash.png")));
+
+   if (QApplication::desktop()->isVirtualDesktop()) {
+      QRect srect(0, 0, splash->width(), splash->height());
+      splash->move(QApplication::desktop()->availableGeometry(screenId).center() - srect.center());
+   }
+   splash->setAttribute(Qt::WA_DeleteOnClose);
+   splash->show();
+
+   MainWindow mw;
+
+#ifdef Q_OS_MAC
+   eventFilter.setMainWindow(&mw);
+#endif
+
+   mw.show();
+   splash->finish(&mw);
+   QApplication::restoreOverrideCursor();
+
+   mw.openFiles(files, true);
+
+   return app.exec();
 }

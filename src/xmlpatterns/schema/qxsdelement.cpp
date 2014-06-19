@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,198 +31,198 @@ using namespace QPatternist;
 
 void XsdElement::Scope::setVariety(Variety variety)
 {
-    m_variety = variety;
+   m_variety = variety;
 }
 
 XsdElement::Scope::Variety XsdElement::Scope::variety() const
 {
-    return m_variety;
+   return m_variety;
 }
 
 void XsdElement::Scope::setParent(const NamedSchemaComponent::Ptr &parent)
 {
-    m_parent = parent.data();
+   m_parent = parent.data();
 }
 
 NamedSchemaComponent::Ptr XsdElement::Scope::parent() const
 {
-    return NamedSchemaComponent::Ptr(m_parent);
+   return NamedSchemaComponent::Ptr(m_parent);
 }
 
 void XsdElement::ValueConstraint::setVariety(Variety variety)
 {
-    m_variety = variety;
+   m_variety = variety;
 }
 
 XsdElement::ValueConstraint::Variety XsdElement::ValueConstraint::variety() const
 {
-    return m_variety;
+   return m_variety;
 }
 
 void XsdElement::ValueConstraint::setValue(const QString &value)
 {
-    m_value = value;
+   m_value = value;
 }
 
 QString XsdElement::ValueConstraint::value() const
 {
-    return m_value;
+   return m_value;
 }
 
 void XsdElement::ValueConstraint::setLexicalForm(const QString &form)
 {
-    m_lexicalForm = form;
+   m_lexicalForm = form;
 }
 
 QString XsdElement::ValueConstraint::lexicalForm() const
 {
-    return m_lexicalForm;
+   return m_lexicalForm;
 }
 
 void XsdElement::TypeTable::addAlternative(const XsdAlternative::Ptr &alternative)
 {
-    m_alternatives.append(alternative);
+   m_alternatives.append(alternative);
 }
 
 XsdAlternative::List XsdElement::TypeTable::alternatives() const
 {
-    return m_alternatives;
+   return m_alternatives;
 }
 
 void XsdElement::TypeTable::setDefaultTypeDefinition(const XsdAlternative::Ptr &type)
 {
-    m_defaultTypeDefinition = type;
+   m_defaultTypeDefinition = type;
 }
 
 XsdAlternative::Ptr XsdElement::TypeTable::defaultTypeDefinition() const
 {
-    return m_defaultTypeDefinition;
+   return m_defaultTypeDefinition;
 }
 
 
 XsdElement::XsdElement()
-    : m_isAbstract(false)
+   : m_isAbstract(false)
 {
 }
 
 bool XsdElement::isElement() const
 {
-    return true;
+   return true;
 }
 
 void XsdElement::setType(const SchemaType::Ptr &type)
 {
-    m_type = type.data();
+   m_type = type.data();
 }
 
 SchemaType::Ptr XsdElement::type() const
 {
-    return SchemaType::Ptr(m_type);
+   return SchemaType::Ptr(m_type);
 }
 
 void XsdElement::setScope(const Scope::Ptr &scope)
 {
-    m_scope = scope;
+   m_scope = scope;
 }
 
 XsdElement::Scope::Ptr XsdElement::scope() const
 {
-    return m_scope;
+   return m_scope;
 }
 
 void XsdElement::setValueConstraint(const ValueConstraint::Ptr &constraint)
 {
-    m_valueConstraint = constraint;
+   m_valueConstraint = constraint;
 }
 
 XsdElement::ValueConstraint::Ptr XsdElement::valueConstraint() const
 {
-    return m_valueConstraint;
+   return m_valueConstraint;
 }
 
 void XsdElement::setTypeTable(const TypeTable::Ptr &table)
 {
-    m_typeTable = table;
+   m_typeTable = table;
 }
 
 XsdElement::TypeTable::Ptr XsdElement::typeTable() const
 {
-    return m_typeTable;
+   return m_typeTable;
 }
 
 void XsdElement::setIsAbstract(bool abstract)
 {
-    m_isAbstract = abstract;
+   m_isAbstract = abstract;
 }
 
 bool XsdElement::isAbstract() const
 {
-    return m_isAbstract;
+   return m_isAbstract;
 }
 
 void XsdElement::setIsNillable(bool nillable)
 {
-    m_isNillable = nillable;
+   m_isNillable = nillable;
 }
 
 bool XsdElement::isNillable() const
 {
-    return m_isNillable;
+   return m_isNillable;
 }
 
 void XsdElement::setDisallowedSubstitutions(const BlockingConstraints &substitutions)
 {
-    m_disallowedSubstitutions = substitutions;
+   m_disallowedSubstitutions = substitutions;
 }
 
 XsdElement::BlockingConstraints XsdElement::disallowedSubstitutions() const
 {
-    return m_disallowedSubstitutions;
+   return m_disallowedSubstitutions;
 }
 
 void XsdElement::setSubstitutionGroupExclusions(const SchemaType::DerivationConstraints &exclusions)
 {
-    m_substitutionGroupExclusions = exclusions;
+   m_substitutionGroupExclusions = exclusions;
 }
 
 SchemaType::DerivationConstraints XsdElement::substitutionGroupExclusions() const
 {
-    return m_substitutionGroupExclusions;
+   return m_substitutionGroupExclusions;
 }
 
 void XsdElement::setIdentityConstraints(const XsdIdentityConstraint::List &constraints)
 {
-    m_identityConstraints = constraints;
+   m_identityConstraints = constraints;
 }
 
 void XsdElement::addIdentityConstraint(const XsdIdentityConstraint::Ptr &constraint)
 {
-    m_identityConstraints.append(constraint);
+   m_identityConstraints.append(constraint);
 }
 
 XsdIdentityConstraint::List XsdElement::identityConstraints() const
 {
-    return m_identityConstraints;
+   return m_identityConstraints;
 }
 
 void XsdElement::setSubstitutionGroupAffiliations(const XsdElement::List &affiliations)
 {
-    m_substitutionGroupAffiliations = affiliations;
+   m_substitutionGroupAffiliations = affiliations;
 }
 
 XsdElement::List XsdElement::substitutionGroupAffiliations() const
 {
-    return m_substitutionGroupAffiliations;
+   return m_substitutionGroupAffiliations;
 }
 
 void XsdElement::addSubstitutionGroup(const XsdElement::Ptr &element)
 {
-    m_substitutionGroups.insert(element.data());
+   m_substitutionGroups.insert(element.data());
 }
 
 XsdElement::WeakList XsdElement::substitutionGroups() const
 {
-    return m_substitutionGroups.toList();
+   return m_substitutionGroups.toList();
 }
 
 QT_END_NAMESPACE

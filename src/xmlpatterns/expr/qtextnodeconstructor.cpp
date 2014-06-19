@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,60 +40,61 @@ TextNodeConstructor::TextNodeConstructor(const Expression::Ptr &op) : SingleCont
 
 Item TextNodeConstructor::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    const Item chars(m_operand->evaluateSingleton(context));
+   const Item chars(m_operand->evaluateSingleton(context));
 
-    if(!chars)
-        return Item();
+   if (!chars) {
+      return Item();
+   }
 
-    const NodeBuilder::Ptr nodeBuilder(context->nodeBuilder(QUrl()));
-    const QString &v = chars.stringValue();
-    nodeBuilder->characters(QStringRef(&v));
+   const NodeBuilder::Ptr nodeBuilder(context->nodeBuilder(QUrl()));
+   const QString &v = chars.stringValue();
+   nodeBuilder->characters(QStringRef(&v));
 
-    const QAbstractXmlNodeModel::Ptr nm(nodeBuilder->builtDocument());
-    context->addNodeModel(nm);
+   const QAbstractXmlNodeModel::Ptr nm(nodeBuilder->builtDocument());
+   context->addNodeModel(nm);
 
-    return nm->root(QXmlNodeModelIndex());
+   return nm->root(QXmlNodeModelIndex());
 }
 
 void TextNodeConstructor::evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const
 {
-    const Item item(m_operand->evaluateSingleton(context));
+   const Item item(m_operand->evaluateSingleton(context));
 
-    QAbstractXmlReceiver *const receiver = context->outputReceiver();
+   QAbstractXmlReceiver *const receiver = context->outputReceiver();
 
-    if(item)
-    {
-        const QString &v = item.stringValue();
-        receiver->characters(QStringRef(&v));
-    }
-    else
-        receiver->characters(QStringRef());
+   if (item) {
+      const QString &v = item.stringValue();
+      receiver->characters(QStringRef(&v));
+   } else {
+      receiver->characters(QStringRef());
+   }
 }
 
 SequenceType::Ptr TextNodeConstructor::staticType() const
 {
-    if(m_operand->staticType()->cardinality().allowsEmpty())
-        return CommonSequenceTypes::ZeroOrOneTextNode;
-    else
-        return CommonSequenceTypes::ExactlyOneTextNode;
+   if (m_operand->staticType()->cardinality().allowsEmpty()) {
+      return CommonSequenceTypes::ZeroOrOneTextNode;
+   } else {
+      return CommonSequenceTypes::ExactlyOneTextNode;
+   }
 }
 
 SequenceType::List TextNodeConstructor::expectedOperandTypes() const
 {
-    SequenceType::List result;
-    result.append(CommonSequenceTypes::ZeroOrOneString);
-    return result;
+   SequenceType::List result;
+   result.append(CommonSequenceTypes::ZeroOrOneString);
+   return result;
 }
 
 Expression::Properties TextNodeConstructor::properties() const
 {
-    return DisableElimination | IsNodeConstructor;
+   return DisableElimination | IsNodeConstructor;
 }
 
 ExpressionVisitorResult::Ptr
 TextNodeConstructor::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 QT_END_NAMESPACE

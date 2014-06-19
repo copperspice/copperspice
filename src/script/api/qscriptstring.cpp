@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -62,7 +62,7 @@ QT_BEGIN_NAMESPACE
   Constructs an invalid QScriptString.
 */
 QScriptString::QScriptString()
-    : d_ptr(0)
+   : d_ptr(0)
 {
 }
 
@@ -70,15 +70,15 @@ QScriptString::QScriptString()
   Constructs a new QScriptString that is a copy of \a other.
 */
 QScriptString::QScriptString(const QScriptString &other)
-    : d_ptr(other.d_ptr)
+   : d_ptr(other.d_ptr)
 {
-    if (d_func() && (d_func()->type == QScriptStringPrivate::StackAllocated)) {
-        Q_ASSERT(d_func()->ref.load() != 1);
-        d_ptr.detach();
-        d_func()->ref.store(1);
-        d_func()->type = QScriptStringPrivate::HeapAllocated;
-        d_func()->engine->registerScriptString(d_func());
-    }
+   if (d_func() && (d_func()->type == QScriptStringPrivate::StackAllocated)) {
+      Q_ASSERT(d_func()->ref.load() != 1);
+      d_ptr.detach();
+      d_func()->ref.store(1);
+      d_func()->type = QScriptStringPrivate::HeapAllocated;
+      d_func()->engine->registerScriptString(d_func());
+   }
 }
 
 /*!
@@ -86,23 +86,23 @@ QScriptString::QScriptString(const QScriptString &other)
 */
 QScriptString::~QScriptString()
 {
-    Q_D(QScriptString);
-    if (d) {
-        switch (d->type) {
-        case QScriptStringPrivate::StackAllocated:
+   Q_D(QScriptString);
+   if (d) {
+      switch (d->type) {
+         case QScriptStringPrivate::StackAllocated:
             Q_ASSERT(d->ref.load() == 1);
             d->ref.ref(); // avoid deletion
             break;
-        case QScriptStringPrivate::HeapAllocated:
+         case QScriptStringPrivate::HeapAllocated:
             if (d->engine && (d->ref.load() == 1)) {
-                // Make sure the identifier is removed from the correct engine.
-                QScript::APIShim shim(d->engine);
-                d->identifier = JSC::Identifier();
-                d->engine->unregisterScriptString(d);
+               // Make sure the identifier is removed from the correct engine.
+               QScript::APIShim shim(d->engine);
+               d->identifier = JSC::Identifier();
+               d->engine->unregisterScriptString(d);
             }
             break;
-        }
-    }
+      }
+   }
 }
 
 /*!
@@ -110,19 +110,20 @@ QScriptString::~QScriptString()
 */
 QScriptString &QScriptString::operator=(const QScriptString &other)
 {
-    if (d_func() && d_func()->engine && (d_func()->ref.load() == 1) && (d_func()->type == QScriptStringPrivate::HeapAllocated)) {
-        // current d_ptr will be deleted at the assignment below, so unregister it first
-        d_func()->engine->unregisterScriptString(d_func());
-    }
-    d_ptr = other.d_ptr;
-    if (d_func() && (d_func()->type == QScriptStringPrivate::StackAllocated)) {
-        Q_ASSERT(d_func()->ref.load() != 1);
-        d_ptr.detach();
-        d_func()->ref.store(1);
-        d_func()->type = QScriptStringPrivate::HeapAllocated;
-        d_func()->engine->registerScriptString(d_func());
-    }
-    return *this;
+   if (d_func() && d_func()->engine && (d_func()->ref.load() == 1) &&
+         (d_func()->type == QScriptStringPrivate::HeapAllocated)) {
+      // current d_ptr will be deleted at the assignment below, so unregister it first
+      d_func()->engine->unregisterScriptString(d_func());
+   }
+   d_ptr = other.d_ptr;
+   if (d_func() && (d_func()->type == QScriptStringPrivate::StackAllocated)) {
+      Q_ASSERT(d_func()->ref.load() != 1);
+      d_ptr.detach();
+      d_func()->ref.store(1);
+      d_func()->type = QScriptStringPrivate::HeapAllocated;
+      d_func()->engine->registerScriptString(d_func());
+   }
+   return *this;
 }
 
 /*!
@@ -131,7 +132,7 @@ QScriptString &QScriptString::operator=(const QScriptString &other)
 */
 bool QScriptString::isValid() const
 {
-    return QScriptStringPrivate::isValid(*this);
+   return QScriptStringPrivate::isValid(*this);
 }
 
 /*!
@@ -140,10 +141,11 @@ bool QScriptString::isValid() const
 */
 bool QScriptString::operator==(const QScriptString &other) const
 {
-    Q_D(const QScriptString);
-    if (!d || !other.d_func())
-        return d == other.d_func();
-    return d->identifier == other.d_func()->identifier;
+   Q_D(const QScriptString);
+   if (!d || !other.d_func()) {
+      return d == other.d_func();
+   }
+   return d->identifier == other.d_func()->identifier;
 }
 
 /*!
@@ -152,7 +154,7 @@ bool QScriptString::operator==(const QScriptString &other) const
 */
 bool QScriptString::operator!=(const QScriptString &other) const
 {
-    return !operator==(other);
+   return !operator==(other);
 }
 
 /*!
@@ -166,18 +168,20 @@ bool QScriptString::operator!=(const QScriptString &other) const
 */
 quint32 QScriptString::toArrayIndex(bool *ok) const
 {
-    Q_D(const QScriptString);
-    if (!d) {
-        if (ok)
-            *ok = false;
-        return -1;
-    }
-    bool tmp;
-    bool *okok = ok ? ok : &tmp;
-    quint32 result = d->identifier.toArrayIndex(okok);
-    if (!*okok)
-        result = -1;
-    return result;
+   Q_D(const QScriptString);
+   if (!d) {
+      if (ok) {
+         *ok = false;
+      }
+      return -1;
+   }
+   bool tmp;
+   bool *okok = ok ? ok : &tmp;
+   quint32 result = d->identifier.toArrayIndex(okok);
+   if (!*okok) {
+      result = -1;
+   }
+   return result;
 }
 
 /*!
@@ -188,10 +192,11 @@ quint32 QScriptString::toArrayIndex(bool *ok) const
 */
 QString QScriptString::toString() const
 {
-    Q_D(const QScriptString);
-    if (!d || !d->engine)
-        return QString();
-    return d->identifier.ustring();
+   Q_D(const QScriptString);
+   if (!d || !d->engine) {
+      return QString();
+   }
+   return d->identifier.ustring();
 }
 
 /*!
@@ -202,15 +207,16 @@ QString QScriptString::toString() const
 */
 QScriptString::operator QString() const
 {
-    return toString();
+   return toString();
 }
 
 uint qHash(const QScriptString &key)
 {
-    QScriptStringPrivate *d = QScriptStringPrivate::get(key);
-    if (!d)
-        return 0;
-    return qHash(d->identifier.ustring().rep());
+   QScriptStringPrivate *d = QScriptStringPrivate::get(key);
+   if (!d) {
+      return 0;
+   }
+   return qHash(d->identifier.ustring().rep());
 }
 
 QT_END_NAMESPACE

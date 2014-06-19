@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,209 +39,200 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class VariantListIterator : public ListIteratorPlatform<QVariant, Item, VariantListIterator>
 {
+ public:
+   inline VariantListIterator(const QVariantList &list) : ListIteratorPlatform<QVariant, Item, VariantListIterator>(list) {
+   }
 
-    class VariantListIterator : public ListIteratorPlatform<QVariant, Item, VariantListIterator>
-    {
-    public:
-        inline VariantListIterator(const QVariantList &list) : ListIteratorPlatform<QVariant, Item, VariantListIterator>(list)
-        {
-        }
+ private:
+   friend class ListIteratorPlatform<QVariant, Item, VariantListIterator>;
 
-    private:
-        friend class ListIteratorPlatform<QVariant, Item, VariantListIterator>;
+   inline Item inputToOutputItem(const QVariant &inputType) const {
+      return AtomicValue::toXDM(inputType);
+   }
+};
 
-        inline Item inputToOutputItem(const QVariant &inputType) const
-        {
-            return AtomicValue::toXDM(inputType);
-        }
-    };
+class StringListIterator : public ListIteratorPlatform<QString, Item, StringListIterator>
+{
+ public:
+   inline StringListIterator(const QStringList &list) : ListIteratorPlatform<QString, Item, StringListIterator>(list) {
+   }
 
-    class StringListIterator : public ListIteratorPlatform<QString, Item, StringListIterator>
-    {
-    public:
-        inline StringListIterator(const QStringList &list) : ListIteratorPlatform<QString, Item, StringListIterator>(list)
-        {
-        }
+ private:
+   friend class ListIteratorPlatform<QString, Item, StringListIterator>;
 
-    private:
-        friend class ListIteratorPlatform<QString, Item, StringListIterator>;
+   static inline Item inputToOutputItem(const QString &inputType) {
+      return AtomicString::fromValue(inputType);
+   }
+};
 
-        static inline Item inputToOutputItem(const QString &inputType)
-        {
-            return AtomicString::fromValue(inputType);
-        }
-    };
+/**
+ * Takes two DynamicContext instances, and redirects the storage of temporary trees
+ * to one of them.
+ *
+ * @since 4.5
+ */
+class TemporaryTreesRedirectingContext : public DelegatingDynamicContext
+{
+ public:
+   TemporaryTreesRedirectingContext(const DynamicContext::Ptr &other,
+                                    const DynamicContext::Ptr &modelStorage) : DelegatingDynamicContext(other)
+      , m_modelStorage(modelStorage) {
+      Q_ASSERT(m_modelStorage);
+   }
 
-    /**
-     * Takes two DynamicContext instances, and redirects the storage of temporary trees
-     * to one of them.
-     *
-     * @since 4.5
-     */
-    class TemporaryTreesRedirectingContext : public DelegatingDynamicContext
-    {
-    public:
-        TemporaryTreesRedirectingContext(const DynamicContext::Ptr &other,
-                                         const DynamicContext::Ptr &modelStorage) : DelegatingDynamicContext(other)
-                                                                                  , m_modelStorage(modelStorage)
-        {
-            Q_ASSERT(m_modelStorage);
-        }
+   virtual void addNodeModel(const QAbstractXmlNodeModel::Ptr &nodeModel) {
+      m_modelStorage->addNodeModel(nodeModel);
+   }
 
-        virtual void addNodeModel(const QAbstractXmlNodeModel::Ptr &nodeModel)
-        {
-            m_modelStorage->addNodeModel(nodeModel);
-        }
-
-    private:
-        const DynamicContext::Ptr m_modelStorage;
-    };
+ private:
+   const DynamicContext::Ptr m_modelStorage;
+};
 }
 
 using namespace QPatternist;
 
 SequenceType::Ptr VariableLoader::announceExternalVariable(const QXmlName name,
-                                                           const SequenceType::Ptr &declaredType)
+      const SequenceType::Ptr &declaredType)
 {
-    Q_UNUSED(declaredType);
-    const QVariant &variant = m_bindingHash.value(name);
+   Q_UNUSED(declaredType);
+   const QVariant &variant = m_bindingHash.value(name);
 
 
-    if(variant.isNull())
-        return SequenceType::Ptr();
-    else if(variant.userType() == qMetaTypeId<QIODevice *>())
-        return CommonSequenceTypes::ExactlyOneAnyURI;
-    else if(variant.userType() == qMetaTypeId<QXmlQuery>())
-    {
-        const QXmlQuery variableQuery(qvariant_cast<QXmlQuery>(variant));
-        return variableQuery.d->expression()->staticType();
-    }
-    else
-    {
-        return makeGenericSequenceType(AtomicValue::qtToXDMType(qvariant_cast<QXmlItem>(variant)),
-                                       Cardinality::exactlyOne());
-    }
+   if (variant.isNull()) {
+      return SequenceType::Ptr();
+   } else if (variant.userType() == qMetaTypeId<QIODevice *>()) {
+      return CommonSequenceTypes::ExactlyOneAnyURI;
+   } else if (variant.userType() == qMetaTypeId<QXmlQuery>()) {
+      const QXmlQuery variableQuery(qvariant_cast<QXmlQuery>(variant));
+      return variableQuery.d->expression()->staticType();
+   } else {
+      return makeGenericSequenceType(AtomicValue::qtToXDMType(qvariant_cast<QXmlItem>(variant)),
+                                     Cardinality::exactlyOne());
+   }
 }
 
 Item::Iterator::Ptr VariableLoader::evaluateSequence(const QXmlName name,
-                                                     const DynamicContext::Ptr &context)
+      const DynamicContext::Ptr &context)
 {
 
-    const QVariant &variant = m_bindingHash.value(name);
-    Q_ASSERT_X(!variant.isNull(), Q_FUNC_INFO,
-               "We assume that we have a binding.");
+   const QVariant &variant = m_bindingHash.value(name);
+   Q_ASSERT_X(!variant.isNull(), Q_FUNC_INFO,
+              "We assume that we have a binding.");
 
-    /* Same code as in the default clause below. */
-    if(variant.userType() == qMetaTypeId<QIODevice *>())
-        return makeSingletonIterator(itemForName(name));
-    else if(variant.userType() == qMetaTypeId<QXmlQuery>())
-    {
-        const QXmlQuery variableQuery(qvariant_cast<QXmlQuery>(variant));
+   /* Same code as in the default clause below. */
+   if (variant.userType() == qMetaTypeId<QIODevice *>()) {
+      return makeSingletonIterator(itemForName(name));
+   } else if (variant.userType() == qMetaTypeId<QXmlQuery>()) {
+      const QXmlQuery variableQuery(qvariant_cast<QXmlQuery>(variant));
 
-        return variableQuery.d->expression()->evaluateSequence(DynamicContext::Ptr(new TemporaryTreesRedirectingContext(variableQuery.d->dynamicContext(), context)));
-    }
+      return variableQuery.d->expression()->evaluateSequence(DynamicContext::Ptr(new TemporaryTreesRedirectingContext(
+                variableQuery.d->dynamicContext(), context)));
+   }
 
-    const QVariant v(qvariant_cast<QXmlItem>(variant).toAtomicValue());
+   const QVariant v(qvariant_cast<QXmlItem>(variant).toAtomicValue());
 
-    switch(v.type())
-    {
-        case QVariant::StringList:
-            return Item::Iterator::Ptr(new StringListIterator(v.toStringList()));
-        case QVariant::List:
-            return Item::Iterator::Ptr(new VariantListIterator(v.toList()));
-        default:
-            return makeSingletonIterator(itemForName(name));
-    }
+   switch (v.type()) {
+      case QVariant::StringList:
+         return Item::Iterator::Ptr(new StringListIterator(v.toStringList()));
+      case QVariant::List:
+         return Item::Iterator::Ptr(new VariantListIterator(v.toList()));
+      default:
+         return makeSingletonIterator(itemForName(name));
+   }
 }
 
 Item VariableLoader::itemForName(const QXmlName &name) const
 {
-    const QVariant &variant = m_bindingHash.value(name);
+   const QVariant &variant = m_bindingHash.value(name);
 
-    if(variant.userType() == qMetaTypeId<QIODevice *>())
-        return Item(AnyURI::fromValue(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:") + m_namePool->stringForLocalName(name.localName())));
+   if (variant.userType() == qMetaTypeId<QIODevice *>()) {
+      return Item(AnyURI::fromValue(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:") +
+                                    m_namePool->stringForLocalName(name.localName())));
+   }
 
-    const QXmlItem item(qvariant_cast<QXmlItem>(variant));
+   const QXmlItem item(qvariant_cast<QXmlItem>(variant));
 
-    if(item.isNode())
-        return Item::fromPublic(item);
-    else
-    {
-        const QVariant atomicValue(item.toAtomicValue());
-        /* If the atomicValue is null it means it doesn't exist in m_bindingHash, and therefore it must
-         * be a QIODevice, since Patternist guarantees to only ask for variables that announceExternalVariable()
-         * has accepted. */
-        if(atomicValue.isNull())
-            return Item(AnyURI::fromValue(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:") + m_namePool->stringForLocalName(name.localName())));
-        else
-            return AtomicValue::toXDM(atomicValue);
-    }
+   if (item.isNode()) {
+      return Item::fromPublic(item);
+   } else {
+      const QVariant atomicValue(item.toAtomicValue());
+      /* If the atomicValue is null it means it doesn't exist in m_bindingHash, and therefore it must
+       * be a QIODevice, since Patternist guarantees to only ask for variables that announceExternalVariable()
+       * has accepted. */
+      if (atomicValue.isNull()) {
+         return Item(AnyURI::fromValue(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:") +
+                                       m_namePool->stringForLocalName(name.localName())));
+      } else {
+         return AtomicValue::toXDM(atomicValue);
+      }
+   }
 }
 
 Item VariableLoader::evaluateSingleton(const QXmlName name,
                                        const DynamicContext::Ptr &)
 {
-    return itemForName(name);
+   return itemForName(name);
 }
 
 bool VariableLoader::isSameType(const QVariant &v1,
                                 const QVariant &v2) const
 {
-    /* Are both of type QIODevice *? */
-    if(v1.userType() == qMetaTypeId<QIODevice *>() && v1.userType() == v2.userType())
-        return true;
+   /* Are both of type QIODevice *? */
+   if (v1.userType() == qMetaTypeId<QIODevice *>() && v1.userType() == v2.userType()) {
+      return true;
+   }
 
-    /* Ok, we have two QXmlItems. */
-    const QXmlItem i1(qvariant_cast<QXmlItem>(v1));
-    const QXmlItem i2(qvariant_cast<QXmlItem>(v2));
+   /* Ok, we have two QXmlItems. */
+   const QXmlItem i1(qvariant_cast<QXmlItem>(v1));
+   const QXmlItem i2(qvariant_cast<QXmlItem>(v2));
 
-    if(i1.isNode())
-    {
-        Q_ASSERT(false);
-        return false;
-    }
-    else if(i2.isAtomicValue())
-        return i1.toAtomicValue().type() == i2.toAtomicValue().type();
-    else
-    {
-        /* One is an atomic, the other is a node or they are null. */
-        return false;
-    }
+   if (i1.isNode()) {
+      Q_ASSERT(false);
+      return false;
+   } else if (i2.isAtomicValue()) {
+      return i1.toAtomicValue().type() == i2.toAtomicValue().type();
+   } else {
+      /* One is an atomic, the other is a node or they are null. */
+      return false;
+   }
 }
 
 void VariableLoader::removeBinding(const QXmlName &name)
 {
-    m_bindingHash.remove(name);
+   m_bindingHash.remove(name);
 }
 
 bool VariableLoader::hasBinding(const QXmlName &name) const
 {
-    return m_bindingHash.contains(name)
-        || (m_previousLoader && m_previousLoader->hasBinding(name));
+   return m_bindingHash.contains(name)
+          || (m_previousLoader && m_previousLoader->hasBinding(name));
 }
 
 QVariant VariableLoader::valueFor(const QXmlName &name) const
 {
-    if(m_bindingHash.contains(name))
-        return m_bindingHash.value(name);
-    else if(m_previousLoader)
-        return m_previousLoader->valueFor(name);
-    else
-        return QVariant();
+   if (m_bindingHash.contains(name)) {
+      return m_bindingHash.value(name);
+   } else if (m_previousLoader) {
+      return m_previousLoader->valueFor(name);
+   } else {
+      return QVariant();
+   }
 }
 
 void VariableLoader::addBinding(const QXmlName &name,
                                 const QVariant &value)
 {
-    m_bindingHash.insert(name, value);
+   m_bindingHash.insert(name, value);
 }
 
 bool VariableLoader::invalidationRequired(const QXmlName &name,
-                                          const QVariant &variant) const
+      const QVariant &variant) const
 {
-    return hasBinding(name) && !isSameType(valueFor(name), variant);
+   return hasBinding(name) && !isSameType(valueFor(name), variant);
 }
 
 QT_END_NAMESPACE

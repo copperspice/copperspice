@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,35 +30,34 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{   
-    class HexBinary : public Base64Binary
-    {
-    public:
-        friend class CommonValues;
+namespace QPatternist {
+class HexBinary : public Base64Binary
+{
+ public:
+   friend class CommonValues;
 
-        typedef AtomicValue::Ptr Ptr;
+   typedef AtomicValue::Ptr Ptr;
 
-        virtual QString stringValue() const;
-        virtual ItemType::Ptr type() const;
+   virtual QString stringValue() const;
+   virtual ItemType::Ptr type() const;
 
-        /**
-         * Creates a @c xs:hexBinary from the lexical representation @p value.
-         */
-        static AtomicValue::Ptr fromLexical(const NamePool::Ptr &np, const QString &value);
+   /**
+    * Creates a @c xs:hexBinary from the lexical representation @p value.
+    */
+   static AtomicValue::Ptr fromLexical(const NamePool::Ptr &np, const QString &value);
 
-        /**
-         * Creates an instance representing @p value.
-         */
-        static HexBinary::Ptr fromValue(const QByteArray &data);
+   /**
+    * Creates an instance representing @p value.
+    */
+   static HexBinary::Ptr fromValue(const QByteArray &data);
 
-    protected:
-        HexBinary(const QByteArray &val);
+ protected:
+   HexBinary(const QByteArray &val);
 
-    private:
- 
-        static inline qint8 fromHex(const QChar &c);
-    };
+ private:
+
+   static inline qint8 fromHex(const QChar &c);
+};
 }
 
 QT_END_NAMESPACE

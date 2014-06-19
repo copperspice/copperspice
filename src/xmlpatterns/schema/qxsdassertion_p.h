@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,29 +33,28 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class XsdAssertion : public NamedSchemaComponent, public XsdAnnotated
 {
-    class XsdAssertion : public NamedSchemaComponent, public XsdAnnotated
-    {
-        public:
-            typedef QExplicitlySharedDataPointer<XsdAssertion> Ptr;
-            typedef QList<XsdAssertion::Ptr> List;
+ public:
+   typedef QExplicitlySharedDataPointer<XsdAssertion> Ptr;
+   typedef QList<XsdAssertion::Ptr> List;
 
-            /**
-             * Sets the @p test of the assertion.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#as-test">Test Definition</a>
-             */
-            void setTest(const XsdXPathExpression::Ptr &test);
+   /**
+    * Sets the @p test of the assertion.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#as-test">Test Definition</a>
+    */
+   void setTest(const XsdXPathExpression::Ptr &test);
 
-            /**
-             * Returns the test of the assertion.
-             */
-            XsdXPathExpression::Ptr test() const;
+   /**
+    * Returns the test of the assertion.
+    */
+   XsdXPathExpression::Ptr test() const;
 
-        private:
-            XsdXPathExpression::Ptr m_test;
-    };
+ private:
+   XsdXPathExpression::Ptr m_test;
+};
 }
 
 QT_END_NAMESPACE

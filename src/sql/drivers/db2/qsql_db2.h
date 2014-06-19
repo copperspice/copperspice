@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,61 +45,61 @@ class QSqlRecord;
 class QDB2Result : public QSqlResult
 {
 
-public:
-    QDB2Result(const QDB2Driver* dr, const QDB2DriverPrivate* dp);
-    ~QDB2Result();
-    bool prepare(const QString& query);
-    bool exec();
-    QVariant handle() const;
+ public:
+   QDB2Result(const QDB2Driver *dr, const QDB2DriverPrivate *dp);
+   ~QDB2Result();
+   bool prepare(const QString &query);
+   bool exec();
+   QVariant handle() const;
 
-protected:
-    QVariant data(int field);
-    bool reset (const QString& query);
-    bool fetch(int i);
-    bool fetchNext();
-    bool fetchFirst();
-    bool fetchLast();
-    bool isNull(int i);
-    int size();
-    int numRowsAffected();
-    QSqlRecord record() const;
-    void virtual_hook(int id, void *data);
-    bool nextResult();
+ protected:
+   QVariant data(int field);
+   bool reset (const QString &query);
+   bool fetch(int i);
+   bool fetchNext();
+   bool fetchFirst();
+   bool fetchLast();
+   bool isNull(int i);
+   int size();
+   int numRowsAffected();
+   QSqlRecord record() const;
+   void virtual_hook(int id, void *data);
+   bool nextResult();
 
-private:
-    QDB2ResultPrivate* d;
+ private:
+   QDB2ResultPrivate *d;
 };
 
 class Q_EXPORT_SQLDRIVER_DB2 QDB2Driver : public QSqlDriver
 {
-    CS_OBJECT(QDB2Driver)
+   CS_OBJECT(QDB2Driver)
 
-public:
-    explicit QDB2Driver(QObject* parent = 0);
-    QDB2Driver(Qt::HANDLE env, Qt::HANDLE con, QObject* parent = 0);
-    ~QDB2Driver();
-    bool hasFeature(DriverFeature) const;
-    void close();
-    QSqlRecord record(const QString& tableName) const;
-    QStringList tables(QSql::TableType type) const;
-    QSqlResult *createResult() const;
-    QSqlIndex primaryIndex(const QString& tablename) const;
-    bool beginTransaction();
-    bool commitTransaction();
-    bool rollbackTransaction();
-    QString formatValue(const QSqlField &field, bool trimStrings) const;
-    QVariant handle() const;
-    bool open(const QString& db,
-               const QString& user,
-               const QString& password,
-               const QString& host,
-               int port,
-               const QString& connOpts);
-    QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
+ public:
+   explicit QDB2Driver(QObject *parent = 0);
+   QDB2Driver(Qt::HANDLE env, Qt::HANDLE con, QObject *parent = 0);
+   ~QDB2Driver();
+   bool hasFeature(DriverFeature) const;
+   void close();
+   QSqlRecord record(const QString &tableName) const;
+   QStringList tables(QSql::TableType type) const;
+   QSqlResult *createResult() const;
+   QSqlIndex primaryIndex(const QString &tablename) const;
+   bool beginTransaction();
+   bool commitTransaction();
+   bool rollbackTransaction();
+   QString formatValue(const QSqlField &field, bool trimStrings) const;
+   QVariant handle() const;
+   bool open(const QString &db,
+             const QString &user,
+             const QString &password,
+             const QString &host,
+             int port,
+             const QString &connOpts);
+   QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
 
-private:
-    bool setAutoCommit(bool autoCommit);
-    QDB2DriverPrivate* d;
+ private:
+   bool setAutoCommit(bool autoCommit);
+   QDB2DriverPrivate *d;
 };
 
 QT_END_NAMESPACE

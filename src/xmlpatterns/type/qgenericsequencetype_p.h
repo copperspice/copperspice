@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,47 +31,47 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{    
-    class GenericSequenceType : public SequenceType
-    {
-    public:
-        GenericSequenceType(const ItemType::Ptr &itemType, const Cardinality &card);
+namespace QPatternist {
+class GenericSequenceType : public SequenceType
+{
+ public:
+   GenericSequenceType(const ItemType::Ptr &itemType, const Cardinality &card);
 
-        /**
-         * Generates a name for the sequence type for display purposes. The
-         * prefix used for the QName identifying the schema type is conventional.
-         * An example of a display name for a GenericSequenceType is "xs:integer?".
-         */
-        virtual QString displayName(const NamePool::Ptr &np) const;
+   /**
+    * Generates a name for the sequence type for display purposes. The
+    * prefix used for the QName identifying the schema type is conventional.
+    * An example of a display name for a GenericSequenceType is "xs:integer?".
+    */
+   virtual QString displayName(const NamePool::Ptr &np) const;
 
-        virtual Cardinality cardinality() const;
+   virtual Cardinality cardinality() const;
 
-        virtual ItemType::Ptr itemType() const;
+   virtual ItemType::Ptr itemType() const;
 
-    private:
-        const ItemType::Ptr m_itemType;
-        const Cardinality m_cardinality;
-    };
+ private:
+   const ItemType::Ptr m_itemType;
+   const Cardinality m_cardinality;
+};
 
-    /**
-     * @short An object generator for GenericSequenceType.
-     *
-     * makeGenericSequenceType() is a convenience function for avoiding invoking
-     * the @c new operator, and wrapping the result in GenericSequenceType::Ptr.
-     *
-     * @returns a smart pointer to to a GenericSequenceType instaniated from @p itemType and @p cardinality.
-     * @relates GenericSequenceType
-     */
-    static inline SequenceType::Ptr
-    makeGenericSequenceType(const ItemType::Ptr &itemType, const Cardinality &cardinality)
-    {
-        /* An empty sequence of say integers, is the empty-sequence(). */
-        if(cardinality.isEmpty())
-            return CommonSequenceTypes::Empty;
-        else
-            return SequenceType::Ptr(new GenericSequenceType(itemType, cardinality));
-    }
+/**
+ * @short An object generator for GenericSequenceType.
+ *
+ * makeGenericSequenceType() is a convenience function for avoiding invoking
+ * the @c new operator, and wrapping the result in GenericSequenceType::Ptr.
+ *
+ * @returns a smart pointer to to a GenericSequenceType instaniated from @p itemType and @p cardinality.
+ * @relates GenericSequenceType
+ */
+static inline SequenceType::Ptr
+makeGenericSequenceType(const ItemType::Ptr &itemType, const Cardinality &cardinality)
+{
+   /* An empty sequence of say integers, is the empty-sequence(). */
+   if (cardinality.isEmpty()) {
+      return CommonSequenceTypes::Empty;
+   } else {
+      return SequenceType::Ptr(new GenericSequenceType(itemType, cardinality));
+   }
+}
 }
 
 QT_END_NAMESPACE

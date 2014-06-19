@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,63 +34,63 @@ class QScriptContextPrivate;
 
 class Q_SCRIPT_EXPORT QScriptContext
 {
-public:
-    enum ExecutionState {
-        NormalState,
-        ExceptionState
-    };
+ public:
+   enum ExecutionState {
+      NormalState,
+      ExceptionState
+   };
 
-    enum Error {
-        UnknownError,
-        ReferenceError,
-        SyntaxError,
-        TypeError,
-        RangeError,
-        URIError
-    };
+   enum Error {
+      UnknownError,
+      ReferenceError,
+      SyntaxError,
+      TypeError,
+      RangeError,
+      URIError
+   };
 
-    ~QScriptContext();
+   ~QScriptContext();
 
-    QScriptContext *parentContext() const;
-    QScriptEngine *engine() const;
+   QScriptContext *parentContext() const;
+   QScriptEngine *engine() const;
 
-    ExecutionState state() const;
-    QScriptValue callee() const;
+   ExecutionState state() const;
+   QScriptValue callee() const;
 
-    int argumentCount() const;
-    QScriptValue argument(int index) const;
-    QScriptValue argumentsObject() const;
+   int argumentCount() const;
+   QScriptValue argument(int index) const;
+   QScriptValue argumentsObject() const;
 
-    QScriptValueList scopeChain() const;
-    void pushScope(const QScriptValue &object);
-    QScriptValue popScope();
+   QScriptValueList scopeChain() const;
+   void pushScope(const QScriptValue &object);
+   QScriptValue popScope();
 
-    QScriptValue returnValue() const;
-    void setReturnValue(const QScriptValue &result);
+   QScriptValue returnValue() const;
+   void setReturnValue(const QScriptValue &result);
 
-    QScriptValue activationObject() const;
-    void setActivationObject(const QScriptValue &activation);
+   QScriptValue activationObject() const;
+   void setActivationObject(const QScriptValue &activation);
 
-    QScriptValue thisObject() const;
-    void setThisObject(const QScriptValue &thisObject);
+   QScriptValue thisObject() const;
+   void setThisObject(const QScriptValue &thisObject);
 
-    bool isCalledAsConstructor() const;
+   bool isCalledAsConstructor() const;
 
-    QScriptValue throwValue(const QScriptValue &value);
-    QScriptValue throwError(Error error, const QString &text);
-    QScriptValue throwError(const QString &text);
+   QScriptValue throwValue(const QScriptValue &value);
+   QScriptValue throwError(Error error, const QString &text);
+   QScriptValue throwError(const QString &text);
 
-    QStringList backtrace() const;
+   QStringList backtrace() const;
 
-    QString toString() const;
+   QString toString() const;
 
-private:
-    QScriptContext();
+ private:
+   QScriptContext();
 
-    QScriptContextPrivate *d_ptr;
+   QScriptContextPrivate *d_ptr;
 
-    Q_DECLARE_PRIVATE(QScriptContext)
-    Q_DISABLE_COPY(QScriptContext)
+   Q_DECLARE_PRIVATE(QScriptContext)
+   Q_DISABLE_COPY(QScriptContext)
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,22 +36,22 @@ using namespace QPatternist;
 Expression::Ptr EmptySequence::create(const Expression *const replacementFor,
                                       const StaticContext::Ptr &context)
 {
-    Q_ASSERT(replacementFor);
-    Q_ASSERT(context);
+   Q_ASSERT(replacementFor);
+   Q_ASSERT(context);
 
-    const Expression::Ptr retval(new EmptySequence());
-    context->wrapExpressionWith(replacementFor, retval);
-    return retval;
+   const Expression::Ptr retval(new EmptySequence());
+   context->wrapExpressionWith(replacementFor, retval);
+   return retval;
 }
 
 Item::Iterator::Ptr EmptySequence::evaluateSequence(const DynamicContext::Ptr &) const
 {
-    return CommonValues::emptyIterator;
+   return CommonValues::emptyIterator;
 }
 
 Item EmptySequence::evaluateSingleton(const DynamicContext::Ptr &) const
 {
-    return Item();
+   return Item();
 }
 
 void EmptySequence::evaluateToSequenceReceiver(const DynamicContext::Ptr &) const
@@ -60,37 +60,37 @@ void EmptySequence::evaluateToSequenceReceiver(const DynamicContext::Ptr &) cons
 
 ItemType::Ptr EmptySequence::type() const
 {
-    return CommonSequenceTypes::Empty;
+   return CommonSequenceTypes::Empty;
 }
 
 SequenceType::Ptr EmptySequence::staticType() const
 {
-    return CommonSequenceTypes::Empty;
+   return CommonSequenceTypes::Empty;
 }
 
 bool EmptySequence::evaluateEBV(const DynamicContext::Ptr &) const
 {
-    return false;
+   return false;
 }
 
 QString EmptySequence::stringValue() const
 {
-    return QString();
+   return QString();
 }
 
 ExpressionVisitorResult::Ptr EmptySequence::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 Expression::ID EmptySequence::id() const
 {
-    return IDEmptySequence;
+   return IDEmptySequence;
 }
 
 Expression::Properties EmptySequence::properties() const
 {
-    return IsEvaluated;
+   return IsEvaluated;
 }
 
 QT_END_NAMESPACE

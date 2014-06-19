@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,17 +39,17 @@ NamedSchemaComponent::~NamedSchemaComponent()
 
 void NamedSchemaComponent::setName(const QXmlName &name)
 {
-    m_name = name;
+   m_name = name;
 }
 
-QXmlName NamedSchemaComponent::name(const NamePool::Ptr&) const
+QXmlName NamedSchemaComponent::name(const NamePool::Ptr &) const
 {
-    return m_name;
+   return m_name;
 }
 
 QString NamedSchemaComponent::displayName(const NamePool::Ptr &np) const
 {
-    return np->displayName(m_name);
+   return np->displayName(m_name);
 }
 
 QT_END_NAMESPACE

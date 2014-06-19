@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,24 +39,24 @@ class Translator;
 class TranslatorMessage;
 
 enum UpdateOption {
-    Verbose = 1,
-    NoObsolete = 2,
-    PluralOnly = 4,
-    NoSort = 8,
-    HeuristicSameText = 16,
-    HeuristicSimilarText = 32,
-    HeuristicNumber = 64,
-    AbsoluteLocations = 256,
-    RelativeLocations = 512,
-    NoLocations = 1024,
-    NoUiLines = 2048
+   Verbose = 1,
+   NoObsolete = 2,
+   PluralOnly = 4,
+   NoSort = 8,
+   HeuristicSameText = 16,
+   HeuristicSimilarText = 32,
+   HeuristicNumber = 64,
+   AbsoluteLocations = 256,
+   RelativeLocations = 512,
+   NoLocations = 1024,
+   NoUiLines = 2048
 };
 
 Q_DECLARE_FLAGS(UpdateOptions, UpdateOption)
 Q_DECLARE_OPERATORS_FOR_FLAGS(UpdateOptions)
 
 Translator merge(const Translator &tor, const Translator &virginTor,
-    UpdateOptions options, QString &err);
+                 UpdateOptions options, QString &err);
 
 void fetchtrInlinedCpp(const QString &in, Translator &translator, const QString &context);
 void loadCPP(Translator &translator, const QStringList &filenames, ConversionData &cd);

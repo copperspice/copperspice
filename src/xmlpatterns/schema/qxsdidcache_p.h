@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,28 +34,27 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class XsdIdCache : public QSharedData
 {
- 
-    class XsdIdCache : public QSharedData
-    {
-        public:
-            typedef QExplicitlySharedDataPointer<XsdIdCache> Ptr;
+ public:
+   typedef QExplicitlySharedDataPointer<XsdIdCache> Ptr;
 
-            /**
-             * Adds an @p id to the id cache.
-             */
-            void addId(const QString &id);
+   /**
+    * Adds an @p id to the id cache.
+    */
+   void addId(const QString &id);
 
-            /**
-             * Returns whether the id cache contains the given @p id already.
-             */
-            bool hasId(const QString &id) const;
+   /**
+    * Returns whether the id cache contains the given @p id already.
+    */
+   bool hasId(const QString &id) const;
 
-        private:
-            QSet<QString>          m_ids;
-            mutable QReadWriteLock m_lock;
-    };
+ private:
+   QSet<QString>          m_ids;
+   mutable QReadWriteLock m_lock;
+};
 }
 
 QT_END_NAMESPACE

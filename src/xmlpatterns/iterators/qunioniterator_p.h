@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,36 +30,34 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class UnionIterator : public Item::Iterator
 {
+ public:
 
-    class UnionIterator : public Item::Iterator
-    {
-    public:
+   UnionIterator(const Item::Iterator::Ptr &it1, const Item::Iterator::Ptr &it2);
 
-        UnionIterator(const Item::Iterator::Ptr &it1, const Item::Iterator::Ptr &it2);
+   virtual Item next();
+   virtual Item current() const;
+   virtual xsInteger position() const;
+   virtual Item::Iterator::Ptr copy() const;
 
-        virtual Item next();
-        virtual Item current() const;
-        virtual xsInteger position() const;
-        virtual Item::Iterator::Ptr copy() const;
+ private:
+   inline Item nextFromFirstOperand() {
+      ++m_position;
+      m_current = m_node1;
+      m_node1 = m_it1->next();
+      return m_current;
+   }
 
-    private:
-        inline Item nextFromFirstOperand()
-        {
-            ++m_position;
-            m_current = m_node1;
-            m_node1 = m_it1->next();
-            return m_current;
-        }
-
-        const Item::Iterator::Ptr   m_it1;
-        const Item::Iterator::Ptr   m_it2;
-        Item m_current;
-        xsInteger m_position;
-        Item m_node1;
-        Item m_node2;
-    };
+   const Item::Iterator::Ptr   m_it1;
+   const Item::Iterator::Ptr   m_it2;
+   Item m_current;
+   xsInteger m_position;
+   Item m_node1;
+   Item m_node2;
+};
 }
 
 QT_END_NAMESPACE

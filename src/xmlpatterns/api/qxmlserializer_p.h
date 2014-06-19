@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,61 +39,60 @@ QT_BEGIN_NAMESPACE
 
 class QXmlSerializerPrivate : public QAbstractXmlReceiverPrivate
 {
-public:
-    QXmlSerializerPrivate(const QXmlQuery &q,
-                          QIODevice *outputDevice);
+ public:
+   QXmlSerializerPrivate(const QXmlQuery &q,
+                         QIODevice *outputDevice);
 
-    QStack<QPair<QXmlName, bool> >      hasClosedElement;
-    bool                                isPreviousAtomic;
-    QXmlSerializer::State               state;
-    const QPatternist::NamePool::Ptr    np;
+   QStack<QPair<QXmlName, bool> >      hasClosedElement;
+   bool                                isPreviousAtomic;
+   QXmlSerializer::State               state;
+   const QPatternist::NamePool::Ptr    np;
 
-    /**
-     * This member worries me a bit. We never use it but nevertheless
-     * it is pushed and pops linear to startElement() and endElement().
-     * An optimization would be to at least merge it with hasClosedElement,
-     * but even better to push it on demand. That is, namespaceBinding()
-     * pushes it up to the tree depth first when it is needed.
-     */
-    QStack<QVector<QXmlName> >          namespaces;
+   /**
+    * This member worries me a bit. We never use it but nevertheless
+    * it is pushed and pops linear to startElement() and endElement().
+    * An optimization would be to at least merge it with hasClosedElement,
+    * but even better to push it on demand. That is, namespaceBinding()
+    * pushes it up to the tree depth first when it is needed.
+    */
+   QStack<QVector<QXmlName> >          namespaces;
 
-    QIODevice *                         device;
-    const QTextCodec *                  codec;
-    QTextCodec::ConverterState          converterState;
-    /**
-     * Name cache. Since encoding QStrings are rather expensive
-     * operations to do, and we on top of that would have to do
-     * it each time a name appears, we here map names to their
-     * encoded equivalents.
-     *
-     * This means that when writing out large documents, the serialization
-     * of names after a while is reduced to a hash lookup and passing an
-     * existing byte array.
-     *
-     * We use QXmlName::Code as key as opposed to merely QName, because the
-     * prefix is of significance.
-     */
-    QHash<QXmlName::Code, QByteArray>   nameCache;
-    const QXmlQuery                     query;
+   QIODevice                          *device;
+   const QTextCodec                   *codec;
+   QTextCodec::ConverterState          converterState;
+   /**
+    * Name cache. Since encoding QStrings are rather expensive
+    * operations to do, and we on top of that would have to do
+    * it each time a name appears, we here map names to their
+    * encoded equivalents.
+    *
+    * This means that when writing out large documents, the serialization
+    * of names after a while is reduced to a hash lookup and passing an
+    * existing byte array.
+    *
+    * We use QXmlName::Code as key as opposed to merely QName, because the
+    * prefix is of significance.
+    */
+   QHash<QXmlName::Code, QByteArray>   nameCache;
+   const QXmlQuery                     query;
 
-    inline void write(const char c);
+   inline void write(const char c);
 
-private:
-    enum Constants
-    {
-        EstimatedTreeDepth = 10,
+ private:
+   enum Constants {
+      EstimatedTreeDepth = 10,
 
-        /**
-         * We use a high count to avoid rehashing. We can afford it since we
-         * only allocate one hash for this.
-         */
-        EstimatedNameCount = 60
-    };
+      /**
+       * We use a high count to avoid rehashing. We can afford it since we
+       * only allocate one hash for this.
+       */
+      EstimatedNameCount = 60
+   };
 };
 
 void QXmlSerializerPrivate::write(const char c)
 {
-    device->putChar(c);
+   device->putChar(c);
 }
 QT_END_NAMESPACE
 

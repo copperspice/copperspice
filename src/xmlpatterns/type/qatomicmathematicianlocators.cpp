@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -70,61 +70,74 @@ ownerClass##MathematicianLocator::visit(const visitor *, const qint16 op,       
 }
 
 static const AtomicMathematician::Operators AllMathOperators(AtomicMathematician::Add       |
-                                                             AtomicMathematician::Div       |
-                                                             AtomicMathematician::IDiv      |
-                                                             AtomicMathematician::Mod       |
-                                                             AtomicMathematician::Multiply  |
-                                                             AtomicMathematician::Substract);
+      AtomicMathematician::Div       |
+      AtomicMathematician::IDiv      |
+      AtomicMathematician::Mod       |
+      AtomicMathematician::Multiply  |
+      AtomicMathematician::Substract);
 
 static const AtomicMathematician::Operators DivMultiply(AtomicMathematician::Multiply       |
-                                                        AtomicMathematician::Div);
+      AtomicMathematician::Div);
 
 static const AtomicMathematician::Operators DurationOps(AtomicMathematician::Div            |
-                                                        AtomicMathematician::Substract      |
-                                                        AtomicMathematician::Add);
+      AtomicMathematician::Substract      |
+      AtomicMathematician::Add);
 
 static const AtomicMathematician::Operators DTOps(AtomicMathematician::Substract            |
-                                                  AtomicMathematician::Add);
+      AtomicMathematician::Add);
 
 implReportingMathVisit(Double,           DecimalType,            DoubleMathematician,    AllMathOperators)
 implReportingMathVisit(Double,           DoubleType,             DoubleMathematician,    AllMathOperators)
 implReportingMathVisit(Double,           FloatType,              DoubleMathematician,    AllMathOperators)
 implReportingMathVisit(Double,           IntegerType,            DoubleMathematician,    AllMathOperators)
-implRevReportingMathVisit(Double,           YearMonthDurationType,  DurationNumericMathematician,  AtomicMathematician::Multiply)
-implRevReportingMathVisit(Double,           DayTimeDurationType,    DurationNumericMathematician,  AtomicMathematician::Multiply)
+implRevReportingMathVisit(Double,           YearMonthDurationType,  DurationNumericMathematician,
+                          AtomicMathematician::Multiply)
+implRevReportingMathVisit(Double,           DayTimeDurationType,    DurationNumericMathematician,
+                          AtomicMathematician::Multiply)
 
 implReportingMathVisit(Float,            DecimalType,            FloatMathematician,     AllMathOperators)
 implReportingMathVisit(Float,            DoubleType,    DoubleMathematician,    AllMathOperators)
 implReportingMathVisit(Float,            FloatType,              FloatMathematician,     AllMathOperators)
 implReportingMathVisit(Float,            IntegerType,            FloatMathematician,     AllMathOperators)
-implRevReportingMathVisit(Float,            YearMonthDurationType,  DurationNumericMathematician,  AtomicMathematician::Multiply)
-implRevReportingMathVisit(Float,            DayTimeDurationType,    DurationNumericMathematician,  AtomicMathematician::Multiply)
+implRevReportingMathVisit(Float,            YearMonthDurationType,  DurationNumericMathematician,
+                          AtomicMathematician::Multiply)
+implRevReportingMathVisit(Float,            DayTimeDurationType,    DurationNumericMathematician,
+                          AtomicMathematician::Multiply)
 
 implReportingMathVisit(Decimal, DecimalType,            DecimalMathematician,   AllMathOperators)
 implReportingMathVisit(Decimal,          DoubleType,    DoubleMathematician,    AllMathOperators)
 implReportingMathVisit(Decimal,          FloatType,              FloatMathematician,     AllMathOperators)
 implReportingMathVisit(Decimal, IntegerType,            DecimalMathematician,   AllMathOperators)
-implRevReportingMathVisit(Decimal,          YearMonthDurationType,  DurationNumericMathematician,  AtomicMathematician::Multiply)
-implRevReportingMathVisit(Decimal,          DayTimeDurationType,    DurationNumericMathematician,  AtomicMathematician::Multiply)
+implRevReportingMathVisit(Decimal,          YearMonthDurationType,  DurationNumericMathematician,
+                          AtomicMathematician::Multiply)
+implRevReportingMathVisit(Decimal,          DayTimeDurationType,    DurationNumericMathematician,
+                          AtomicMathematician::Multiply)
 
 implReportingMathVisit(Integer, DecimalType,            DecimalMathematician,   AllMathOperators)
 implReportingMathVisit(Integer,          DoubleType,    DoubleMathematician,    AllMathOperators)
 implReportingMathVisit(Integer,          FloatType,              FloatMathematician,     AllMathOperators)
 implReportingMathVisit(Integer, IntegerType,            IntegerMathematician,   AllMathOperators)
-implRevReportingMathVisit(Integer,          YearMonthDurationType,  DurationNumericMathematician,  AtomicMathematician::Multiply)
-implRevReportingMathVisit(Integer,          DayTimeDurationType,    DurationNumericMathematician,  AtomicMathematician::Multiply)
+implRevReportingMathVisit(Integer,          YearMonthDurationType,  DurationNumericMathematician,
+                          AtomicMathematician::Multiply)
+implRevReportingMathVisit(Integer,          DayTimeDurationType,    DurationNumericMathematician,
+                          AtomicMathematician::Multiply)
 
-implRevReportingMathVisit(DayTimeDuration,  DateTimeType,           DateTimeDurationMathematician,       AtomicMathematician::Add)
-implRevReportingMathVisit(DayTimeDuration,  DateType,               DateTimeDurationMathematician,       AtomicMathematician::Add)
+implRevReportingMathVisit(DayTimeDuration,  DateTimeType,           DateTimeDurationMathematician,
+                          AtomicMathematician::Add)
+implRevReportingMathVisit(DayTimeDuration,  DateType,               DateTimeDurationMathematician,
+                          AtomicMathematician::Add)
 implMathVisit(DayTimeDuration,  DayTimeDurationType,    DurationDurationMathematician, DurationOps)
 implReportingMathVisit(DayTimeDuration,  DecimalType,   DurationNumericMathematician,  DivMultiply)
 implReportingMathVisit(DayTimeDuration,  DoubleType,    DurationNumericMathematician,  DivMultiply)
 implReportingMathVisit(DayTimeDuration,  FloatType,     DurationNumericMathematician,  DivMultiply)
 implReportingMathVisit(DayTimeDuration,  IntegerType,   DurationNumericMathematician,  DivMultiply)
-implRevReportingMathVisit(DayTimeDuration,  SchemaTimeType,               DateTimeDurationMathematician,       AtomicMathematician::Add)
+implRevReportingMathVisit(DayTimeDuration,  SchemaTimeType,               DateTimeDurationMathematician,
+                          AtomicMathematician::Add)
 
-implRevReportingMathVisit(YearMonthDuration, DateTimeType,          DateTimeDurationMathematician,       AtomicMathematician::Add)
-implRevReportingMathVisit(YearMonthDuration, DateType,              DateTimeDurationMathematician,       AtomicMathematician::Add)
+implRevReportingMathVisit(YearMonthDuration, DateTimeType,          DateTimeDurationMathematician,
+                          AtomicMathematician::Add)
+implRevReportingMathVisit(YearMonthDuration, DateType,              DateTimeDurationMathematician,
+                          AtomicMathematician::Add)
 implReportingMathVisit(YearMonthDuration, DecimalType,  DurationNumericMathematician,  DivMultiply)
 implReportingMathVisit(YearMonthDuration, DoubleType,   DurationNumericMathematician,  DivMultiply)
 implReportingMathVisit(YearMonthDuration, FloatType,    DurationNumericMathematician,  DivMultiply)

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,56 +32,55 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{    
-    class IdFN : public ContextNodeChecker
-    {
-    public:
-        IdFN();
-        typedef QPair<DynamicContext::Ptr, const QAbstractXmlNodeModel *> IDContext;
+namespace QPatternist {
+class IdFN : public ContextNodeChecker
+{
+ public:
+   IdFN();
+   typedef QPair<DynamicContext::Ptr, const QAbstractXmlNodeModel *> IDContext;
 
-        virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
 
-        inline Item mapToItem(const QString &id,
-                              const IDContext &context) const;
+   inline Item mapToItem(const QString &id,
+                         const IDContext &context) const;
 
-        virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                          const SequenceType::Ptr &reqType);
+   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
+                                     const SequenceType::Ptr &reqType);
 
-    private:
-        typedef QExplicitlySharedDataPointer<const IdFN> ConstPtr;
-        bool m_hasCreatedSorter;
-    };
-   
-    class IdrefFN : public ContextNodeChecker
-    {
-    public:
-        virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-    };
+ private:
+   typedef QExplicitlySharedDataPointer<const IdFN> ConstPtr;
+   bool m_hasCreatedSorter;
+};
 
-    class DocFN : public StaticBaseUriContainer
-    {
-    public:
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;      
-        virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,const SequenceType::Ptr &reqType);
-        virtual SequenceType::Ptr staticType() const;
+class IdrefFN : public ContextNodeChecker
+{
+ public:
+   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+};
 
-    private:
-        SequenceType::Ptr m_type;
-    };
- 
-    class DocAvailableFN : public StaticBaseUriContainer
-    {
-    public:
-        virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-    };
+class DocFN : public StaticBaseUriContainer
+{
+ public:
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+   virtual SequenceType::Ptr staticType() const;
 
-   
-    class CollectionFN : public FunctionCall
-    {
-    public:
-        virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-    };
+ private:
+   SequenceType::Ptr m_type;
+};
+
+class DocAvailableFN : public StaticBaseUriContainer
+{
+ public:
+   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+};
+
+
+class CollectionFN : public FunctionCall
+{
+ public:
+   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+};
 }
 
 QT_END_NAMESPACE

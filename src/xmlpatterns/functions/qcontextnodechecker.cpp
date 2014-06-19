@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,18 +30,17 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 void ContextNodeChecker::checkTargetNode(const QXmlNodeModelIndex &node,
-                                         const DynamicContext::Ptr &context,
-                                         const ReportContext::ErrorCode code) const
+      const DynamicContext::Ptr &context,
+      const ReportContext::ErrorCode code) const
 {
-    if(node.root().kind() != QXmlNodeModelIndex::Document)
-    {
-        context->error(QtXmlPatterns::tr("The root node of the second argument "
-                                         "to function %1 must be a document "
-                                         "node. %2 is not a document node.")
-                       .arg(formatFunction(context->namePool(), signature()),
-                            formatData(node)),
-                       code, this);
-    }
+   if (node.root().kind() != QXmlNodeModelIndex::Document) {
+      context->error(QtXmlPatterns::tr("The root node of the second argument "
+                                       "to function %1 must be a document "
+                                       "node. %2 is not a document node.")
+                     .arg(formatFunction(context->namePool(), signature()),
+                          formatData(node)),
+                     code, this);
+   }
 }
 
 QT_END_NAMESPACE

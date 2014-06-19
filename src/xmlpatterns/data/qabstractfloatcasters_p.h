@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,41 +32,40 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{
- 
-    template <const bool isDouble>
-    class NumericToAbstractFloatCaster : public AtomicCaster
-    {
-    public:
-        virtual Item castFrom(const Item &from,
-                              const QExplicitlySharedDataPointer<DynamicContext> &context) const;
-    };
-  
-    template <const bool isDouble>
-    class StringToAbstractFloatCaster : public AtomicCaster
-    {
-    public:
-        virtual Item castFrom(const Item &from,
-                              const QExplicitlySharedDataPointer<DynamicContext> &context) const;
-    };
+namespace QPatternist {
 
-    template <const bool isDouble>
-    class BooleanToAbstractFloatCaster : public AtomicCaster
-    {
-        public:
-            virtual Item castFrom(const Item &from,
-                                  const QExplicitlySharedDataPointer<DynamicContext> &context) const;
-    };
+template <const bool isDouble>
+class NumericToAbstractFloatCaster : public AtomicCaster
+{
+ public:
+   virtual Item castFrom(const Item &from,
+                         const QExplicitlySharedDataPointer<DynamicContext> &context) const;
+};
+
+template <const bool isDouble>
+class StringToAbstractFloatCaster : public AtomicCaster
+{
+ public:
+   virtual Item castFrom(const Item &from,
+                         const QExplicitlySharedDataPointer<DynamicContext> &context) const;
+};
+
+template <const bool isDouble>
+class BooleanToAbstractFloatCaster : public AtomicCaster
+{
+ public:
+   virtual Item castFrom(const Item &from,
+                         const QExplicitlySharedDataPointer<DynamicContext> &context) const;
+};
 
 #include "qabstractfloatcasters.cpp"
- 
-    typedef NumericToAbstractFloatCaster<true> NumericToDoubleCaster;
-    typedef NumericToAbstractFloatCaster<false> NumericToFloatCaster;
-    typedef StringToAbstractFloatCaster<true> StringToDoubleCaster;
-    typedef StringToAbstractFloatCaster<false> StringToFloatCaster;
-    typedef BooleanToAbstractFloatCaster<true> BooleanToDoubleCaster;
-    typedef BooleanToAbstractFloatCaster<false> BooleanToFloatCaster;
+
+typedef NumericToAbstractFloatCaster<true> NumericToDoubleCaster;
+typedef NumericToAbstractFloatCaster<false> NumericToFloatCaster;
+typedef StringToAbstractFloatCaster<true> StringToDoubleCaster;
+typedef StringToAbstractFloatCaster<false> StringToFloatCaster;
+typedef BooleanToAbstractFloatCaster<true> BooleanToDoubleCaster;
+typedef BooleanToAbstractFloatCaster<false> BooleanToFloatCaster;
 }
 
 QT_END_NAMESPACE

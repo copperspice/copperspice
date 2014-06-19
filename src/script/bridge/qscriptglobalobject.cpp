@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -29,8 +29,7 @@
 #include "../api/qscriptengine.h"
 #include "../api/qscriptengine_p.h"
 
-namespace JSC
-{
+namespace JSC {
 QT_USE_NAMESPACE
 
 ASSERT_CLASS_FITS_IN_CELL(QScript::GlobalObject);
@@ -40,11 +39,10 @@ ASSERT_CLASS_FITS_IN_CELL(QScript::OriginalGlobalObjectProxy);
 
 QT_BEGIN_NAMESPACE
 
-namespace QScript
-{
+namespace QScript {
 
 GlobalObject::GlobalObject()
-    : JSC::JSGlobalObject(), customGlobalObject(0)
+   : JSC::JSGlobalObject(), customGlobalObject(0)
 {
 }
 
@@ -52,107 +50,120 @@ GlobalObject::~GlobalObject()
 {
 }
 
-void GlobalObject::markChildren(JSC::MarkStack& markStack)
+void GlobalObject::markChildren(JSC::MarkStack &markStack)
 {
-    JSC::JSGlobalObject::markChildren(markStack);
-    if (customGlobalObject)
-        markStack.append(customGlobalObject);
+   JSC::JSGlobalObject::markChildren(markStack);
+   if (customGlobalObject) {
+      markStack.append(customGlobalObject);
+   }
 }
 
-bool GlobalObject::getOwnPropertySlot(JSC::ExecState* exec,
-                                      const JSC::Identifier& propertyName,
-                                      JSC::PropertySlot& slot)
+bool GlobalObject::getOwnPropertySlot(JSC::ExecState *exec,
+                                      const JSC::Identifier &propertyName,
+                                      JSC::PropertySlot &slot)
 {
-    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
-    if (propertyName == exec->propertyNames().arguments && engine->currentFrame->argumentCount() > 0) {
-        JSC::JSValue args = engine->scriptValueToJSCValue(engine->contextForFrame(engine->currentFrame)->argumentsObject());
-        slot.setValue(args);
-        return true;
-    }
-    if (customGlobalObject)
-        return customGlobalObject->getOwnPropertySlot(exec, propertyName, slot);
-    return JSC::JSGlobalObject::getOwnPropertySlot(exec, propertyName, slot);
+   QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
+   if (propertyName == exec->propertyNames().arguments && engine->currentFrame->argumentCount() > 0) {
+      JSC::JSValue args = engine->scriptValueToJSCValue(engine->contextForFrame(engine->currentFrame)->argumentsObject());
+      slot.setValue(args);
+      return true;
+   }
+   if (customGlobalObject) {
+      return customGlobalObject->getOwnPropertySlot(exec, propertyName, slot);
+   }
+   return JSC::JSGlobalObject::getOwnPropertySlot(exec, propertyName, slot);
 }
 
-bool GlobalObject::getOwnPropertyDescriptor(JSC::ExecState* exec,
-                                            const JSC::Identifier& propertyName,
-                                            JSC::PropertyDescriptor& descriptor)
+bool GlobalObject::getOwnPropertyDescriptor(JSC::ExecState *exec,
+      const JSC::Identifier &propertyName,
+      JSC::PropertyDescriptor &descriptor)
 {
-    // Must match the logic of getOwnPropertySlot().
-    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
-    if (propertyName == exec->propertyNames().arguments && engine->currentFrame->argumentCount() > 0) {
-        // ### Can we get rid of this special handling of the arguments property?
-        JSC::JSValue args = engine->scriptValueToJSCValue(engine->contextForFrame(engine->currentFrame)->argumentsObject());
-        descriptor.setValue(args);
-        return true;
-    }
-    if (customGlobalObject)
-        return customGlobalObject->getOwnPropertyDescriptor(exec, propertyName, descriptor);
-    return JSC::JSGlobalObject::getOwnPropertyDescriptor(exec, propertyName, descriptor);
+   // Must match the logic of getOwnPropertySlot().
+   QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
+   if (propertyName == exec->propertyNames().arguments && engine->currentFrame->argumentCount() > 0) {
+      // ### Can we get rid of this special handling of the arguments property?
+      JSC::JSValue args = engine->scriptValueToJSCValue(engine->contextForFrame(engine->currentFrame)->argumentsObject());
+      descriptor.setValue(args);
+      return true;
+   }
+   if (customGlobalObject) {
+      return customGlobalObject->getOwnPropertyDescriptor(exec, propertyName, descriptor);
+   }
+   return JSC::JSGlobalObject::getOwnPropertyDescriptor(exec, propertyName, descriptor);
 }
 
-void GlobalObject::put(JSC::ExecState* exec, const JSC::Identifier& propertyName,
-                       JSC::JSValue value, JSC::PutPropertySlot& slot)
+void GlobalObject::put(JSC::ExecState *exec, const JSC::Identifier &propertyName,
+                       JSC::JSValue value, JSC::PutPropertySlot &slot)
 {
-    if (customGlobalObject)
-        customGlobalObject->put(exec, propertyName, value, slot);
-    else
-        JSC::JSGlobalObject::put(exec, propertyName, value, slot);
+   if (customGlobalObject) {
+      customGlobalObject->put(exec, propertyName, value, slot);
+   } else {
+      JSC::JSGlobalObject::put(exec, propertyName, value, slot);
+   }
 }
 
-void GlobalObject::putWithAttributes(JSC::ExecState* exec, const JSC::Identifier& propertyName,
+void GlobalObject::putWithAttributes(JSC::ExecState *exec, const JSC::Identifier &propertyName,
                                      JSC::JSValue value, unsigned attributes)
 {
-    if (customGlobalObject)
-        customGlobalObject->putWithAttributes(exec, propertyName, value, attributes);
-    else
-        JSC::JSGlobalObject::putWithAttributes(exec, propertyName, value, attributes);
+   if (customGlobalObject) {
+      customGlobalObject->putWithAttributes(exec, propertyName, value, attributes);
+   } else {
+      JSC::JSGlobalObject::putWithAttributes(exec, propertyName, value, attributes);
+   }
 }
 
-bool GlobalObject::deleteProperty(JSC::ExecState* exec, const JSC::Identifier& propertyName)
+bool GlobalObject::deleteProperty(JSC::ExecState *exec, const JSC::Identifier &propertyName)
 {
-    if (customGlobalObject)
-        return customGlobalObject->deleteProperty(exec, propertyName);
-    return JSC::JSGlobalObject::deleteProperty(exec, propertyName);
+   if (customGlobalObject) {
+      return customGlobalObject->deleteProperty(exec, propertyName);
+   }
+   return JSC::JSGlobalObject::deleteProperty(exec, propertyName);
 }
 
-void GlobalObject::getOwnPropertyNames(JSC::ExecState* exec, JSC::PropertyNameArray& propertyNames,
+void GlobalObject::getOwnPropertyNames(JSC::ExecState *exec, JSC::PropertyNameArray &propertyNames,
                                        JSC::EnumerationMode mode)
 {
-    if (customGlobalObject)
-        customGlobalObject->getOwnPropertyNames(exec, propertyNames, mode);
-    else
-        JSC::JSGlobalObject::getOwnPropertyNames(exec, propertyNames, mode);
+   if (customGlobalObject) {
+      customGlobalObject->getOwnPropertyNames(exec, propertyNames, mode);
+   } else {
+      JSC::JSGlobalObject::getOwnPropertyNames(exec, propertyNames, mode);
+   }
 }
 
-void GlobalObject::defineGetter(JSC::ExecState* exec, const JSC::Identifier& propertyName, JSC::JSObject* getterFunction, unsigned attributes)
+void GlobalObject::defineGetter(JSC::ExecState *exec, const JSC::Identifier &propertyName,
+                                JSC::JSObject *getterFunction, unsigned attributes)
 {
-    if (customGlobalObject)
-        customGlobalObject->defineGetter(exec, propertyName, getterFunction, attributes);
-    else
-        JSC::JSGlobalObject::defineGetter(exec, propertyName, getterFunction, attributes);
+   if (customGlobalObject) {
+      customGlobalObject->defineGetter(exec, propertyName, getterFunction, attributes);
+   } else {
+      JSC::JSGlobalObject::defineGetter(exec, propertyName, getterFunction, attributes);
+   }
 }
 
-void GlobalObject::defineSetter(JSC::ExecState* exec, const JSC::Identifier& propertyName, JSC::JSObject* setterFunction, unsigned attributes)
+void GlobalObject::defineSetter(JSC::ExecState *exec, const JSC::Identifier &propertyName,
+                                JSC::JSObject *setterFunction, unsigned attributes)
 {
-    if (customGlobalObject)
-        customGlobalObject->defineSetter(exec, propertyName, setterFunction, attributes);
-    else
-        JSC::JSGlobalObject::defineSetter(exec, propertyName, setterFunction, attributes);
+   if (customGlobalObject) {
+      customGlobalObject->defineSetter(exec, propertyName, setterFunction, attributes);
+   } else {
+      JSC::JSGlobalObject::defineSetter(exec, propertyName, setterFunction, attributes);
+   }
 }
 
-JSC::JSValue GlobalObject::lookupGetter(JSC::ExecState* exec, const JSC::Identifier& propertyName)
+JSC::JSValue GlobalObject::lookupGetter(JSC::ExecState *exec, const JSC::Identifier &propertyName)
 {
-    if (customGlobalObject)
-        return customGlobalObject->lookupGetter(exec, propertyName);
-    return JSC::JSGlobalObject::lookupGetter(exec, propertyName);
+   if (customGlobalObject) {
+      return customGlobalObject->lookupGetter(exec, propertyName);
+   }
+   return JSC::JSGlobalObject::lookupGetter(exec, propertyName);
 }
 
-JSC::JSValue GlobalObject::lookupSetter(JSC::ExecState* exec, const JSC::Identifier& propertyName)
+JSC::JSValue GlobalObject::lookupSetter(JSC::ExecState *exec, const JSC::Identifier &propertyName)
 {
-    if (customGlobalObject)
-        return customGlobalObject->lookupSetter(exec, propertyName);
-    return JSC::JSGlobalObject::lookupSetter(exec, propertyName);
+   if (customGlobalObject) {
+      return customGlobalObject->lookupSetter(exec, propertyName);
+   }
+   return JSC::JSGlobalObject::lookupSetter(exec, propertyName);
 }
 
 } // namespace QScript

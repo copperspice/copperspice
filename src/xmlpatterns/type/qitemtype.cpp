@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,49 +39,48 @@ ItemType::~ItemType()
 
 const ItemType &ItemType::operator|(const ItemType &other) const
 {
-    const ItemType *ca = this;
+   const ItemType *ca = this;
 
-    if(other == *CommonSequenceTypes::None)
-        return *ca;
+   if (other == *CommonSequenceTypes::None) {
+      return *ca;
+   }
 
-    if(*ca == *CommonSequenceTypes::Empty)
-        return other;
-    else if(other == *CommonSequenceTypes::Empty)
-        return *ca;
+   if (*ca == *CommonSequenceTypes::Empty) {
+      return other;
+   } else if (other == *CommonSequenceTypes::Empty) {
+      return *ca;
+   }
 
-    do
-    {
-        const ItemType *cb = &other;
-        do
-        {
-            if(*ca == *cb)
-                return *ca;
+   do {
+      const ItemType *cb = &other;
+      do {
+         if (*ca == *cb) {
+            return *ca;
+         }
 
-            cb = cb->xdtSuperType().data();
-        }
-        while(cb);
+         cb = cb->xdtSuperType().data();
+      } while (cb);
 
-        ca = ca->xdtSuperType().data();
-    }
-    while(ca);
+      ca = ca->xdtSuperType().data();
+   } while (ca);
 
-    Q_ASSERT_X(false, Q_FUNC_INFO, "We should never reach this line.");
-    return *this;
+   Q_ASSERT_X(false, Q_FUNC_INFO, "We should never reach this line.");
+   return *this;
 }
 
 ItemType::Category ItemType::itemTypeCategory() const
 {
-    return Other;
+   return Other;
 }
 
 bool ItemType::operator==(const ItemType &other) const
 {
-    return this == &other;
+   return this == &other;
 }
 
 ItemType::InstanceOf ItemType::instanceOf() const
 {
-    return ClassOther;
+   return ClassOther;
 }
 
 QT_END_NAMESPACE

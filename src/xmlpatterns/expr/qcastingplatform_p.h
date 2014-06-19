@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,60 +40,57 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+template<typename TSubClass, const bool issueError>
+class CastingPlatform
 {
+ protected:
 
-    template<typename TSubClass, const bool issueError>
-    class CastingPlatform
-    {
-    protected:
+   inline CastingPlatform(const ReportContext::ErrorCode code = ReportContext::FORG0001) : m_errorCode(code) {
+   }
 
-        inline CastingPlatform(const ReportContext::ErrorCode code = ReportContext::FORG0001) : m_errorCode(code)
-        {
-        }
-   
-        Item cast(const Item &sourceValue, const ReportContext::Ptr &context) const;
+   Item cast(const Item &sourceValue, const ReportContext::Ptr &context) const;
 
-        bool prepareCasting(const ReportContext::Ptr &context,const ItemType::Ptr &sourceType);
-  
-        void checkTargetType(const ReportContext::Ptr &context) const;
+   bool prepareCasting(const ReportContext::Ptr &context, const ItemType::Ptr &sourceType);
 
-    private:
-        inline Item castWithCaster(const Item &sourceValue,
-                                   const AtomicCaster::Ptr &caster,
-                                   const ReportContext::Ptr &context) const;
+   void checkTargetType(const ReportContext::Ptr &context) const;
 
-        /**
-         * Locates the caster for casting values of type @p sourceType to targetType(), if
-         * possible.
-         *
-         * @p castImpossible is not initialized. Initialize it to @c false.
-         */
-        static AtomicCaster::Ptr locateCaster(const ItemType::Ptr &sourceType,
-                                              const ReportContext::Ptr &context,
-                                              bool &castImpossible,
-                                              const SourceLocationReflection *const location,
-                                              const ItemType::Ptr &targetType);
-    private:
-        inline Item castWithCaster(const Item &sourceValue,
-                                   const AtomicCaster::Ptr &caster,
-                                   const DynamicContext::Ptr &context) const;
+ private:
+   inline Item castWithCaster(const Item &sourceValue,
+                              const AtomicCaster::Ptr &caster,
+                              const ReportContext::Ptr &context) const;
+
+   /**
+    * Locates the caster for casting values of type @p sourceType to targetType(), if
+    * possible.
+    *
+    * @p castImpossible is not initialized. Initialize it to @c false.
+    */
+   static AtomicCaster::Ptr locateCaster(const ItemType::Ptr &sourceType,
+                                         const ReportContext::Ptr &context,
+                                         bool &castImpossible,
+                                         const SourceLocationReflection *const location,
+                                         const ItemType::Ptr &targetType);
+ private:
+   inline Item castWithCaster(const Item &sourceValue,
+                              const AtomicCaster::Ptr &caster,
+                              const DynamicContext::Ptr &context) const;
 
 
-        inline ItemType::Ptr targetType() const
-        {
-            Q_ASSERT(static_cast<const TSubClass *>(this)->targetType());
-            return static_cast<const TSubClass *>(this)->targetType();
-        }
+   inline ItemType::Ptr targetType() const {
+      Q_ASSERT(static_cast<const TSubClass *>(this)->targetType());
+      return static_cast<const TSubClass *>(this)->targetType();
+   }
 
-        void issueCastError(const Item &validationError,
-                            const Item &sourceValue,
-                            const ReportContext::Ptr &context) const;
+   void issueCastError(const Item &validationError,
+                       const Item &sourceValue,
+                       const ReportContext::Ptr &context) const;
 
-        Q_DISABLE_COPY(CastingPlatform)
-        AtomicCaster::Ptr m_caster;
-        const ReportContext::ErrorCode m_errorCode;
-    };
+   Q_DISABLE_COPY(CastingPlatform)
+   AtomicCaster::Ptr m_caster;
+   const ReportContext::ErrorCode m_errorCode;
+};
 
 #include "qcastingplatform.cpp"
 

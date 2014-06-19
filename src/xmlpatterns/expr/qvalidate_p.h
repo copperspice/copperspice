@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,34 +30,32 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class Validate
 {
+ public:
 
-    class Validate
-    {
-    public:
+   /**
+    * Represents the validation mode.
+    */
+   enum Mode {
+      Lax = 1,
+      Strict
+   };
 
-        /**
-         * Represents the validation mode.
-         */
-        enum Mode
-        {
-            Lax = 1,
-            Strict
-        };
-
-        /**
-         * Creates the necessary Expression instances
-         * that validates the operand node @p operandNode in mode @p validationMode,
-         * and returns it.
-         */
-        static Expression::Ptr create(const Expression::Ptr &operandNode,
-                                      const Mode validationMode,
-                                      const StaticContext::Ptr &context);
-    private:
-        Validate();
-        Q_DISABLE_COPY(Validate)
-    };
+   /**
+    * Creates the necessary Expression instances
+    * that validates the operand node @p operandNode in mode @p validationMode,
+    * and returns it.
+    */
+   static Expression::Ptr create(const Expression::Ptr &operandNode,
+                                 const Mode validationMode,
+                                 const StaticContext::Ptr &context);
+ private:
+   Validate();
+   Q_DISABLE_COPY(Validate)
+};
 }
 
 QT_END_NAMESPACE

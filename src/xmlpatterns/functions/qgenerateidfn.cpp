@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,15 +33,16 @@ using namespace QPatternist;
 
 Item GenerateIDFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    const QXmlNodeModelIndex &node = m_operands.first()->evaluateSingleton(context).asNode();
+   const QXmlNodeModelIndex &node = m_operands.first()->evaluateSingleton(context).asNode();
 
-    if(node.isNull())
-        return AtomicString::fromValue(QString());
+   if (node.isNull()) {
+      return AtomicString::fromValue(QString());
+   }
 
-    return AtomicString::fromValue(QLatin1Char('T')
-                                   + QString::number(qptrdiff(node.model()))
-                                   + QString::number(qptrdiff(node.internalPointer()))
-                                   + QString::number(node.additionalData()));
+   return AtomicString::fromValue(QLatin1Char('T')
+                                  + QString::number(qptrdiff(node.model()))
+                                  + QString::number(qptrdiff(node.internalPointer()))
+                                  + QString::number(node.additionalData()));
 }
 
 QT_END_NAMESPACE

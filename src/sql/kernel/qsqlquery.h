@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,62 +44,62 @@ template <class Key, class T> class QMap;
 class Q_SQL_EXPORT QSqlQuery
 {
 
-public:
-    QSqlQuery(QSqlResult *r);
-    QSqlQuery(const QString& query = QString(), QSqlDatabase db = QSqlDatabase());
-    explicit QSqlQuery(QSqlDatabase db);
-    QSqlQuery(const QSqlQuery& other);
-    QSqlQuery& operator=(const QSqlQuery& other);
-    ~QSqlQuery();
+ public:
+   QSqlQuery(QSqlResult *r);
+   QSqlQuery(const QString &query = QString(), QSqlDatabase db = QSqlDatabase());
+   explicit QSqlQuery(QSqlDatabase db);
+   QSqlQuery(const QSqlQuery &other);
+   QSqlQuery &operator=(const QSqlQuery &other);
+   ~QSqlQuery();
 
-    bool isValid() const;
-    bool isActive() const;
-    bool isNull(int field) const;
-    int at() const;
-    QString lastQuery() const;
-    int numRowsAffected() const;
-    QSqlError lastError() const;
-    bool isSelect() const;
-    int size() const;
-    const QSqlDriver* driver() const;
-    const QSqlResult* result() const;
-    bool isForwardOnly() const;
-    QSqlRecord record() const;
+   bool isValid() const;
+   bool isActive() const;
+   bool isNull(int field) const;
+   int at() const;
+   QString lastQuery() const;
+   int numRowsAffected() const;
+   QSqlError lastError() const;
+   bool isSelect() const;
+   int size() const;
+   const QSqlDriver *driver() const;
+   const QSqlResult *result() const;
+   bool isForwardOnly() const;
+   QSqlRecord record() const;
 
-    void setForwardOnly(bool forward);
-    bool exec(const QString& query);
-    QVariant value(int i) const;
+   void setForwardOnly(bool forward);
+   bool exec(const QString &query);
+   QVariant value(int i) const;
 
-    void setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy precisionPolicy);
-    QSql::NumericalPrecisionPolicy numericalPrecisionPolicy() const;
+   void setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy precisionPolicy);
+   QSql::NumericalPrecisionPolicy numericalPrecisionPolicy() const;
 
-    bool seek(int i, bool relative = false);
-    bool next();
-    bool previous();
-    bool first();
-    bool last();
+   bool seek(int i, bool relative = false);
+   bool next();
+   bool previous();
+   bool first();
+   bool last();
 
-    void clear();
+   void clear();
 
-    // prepared query support
-    bool exec();
-    enum BatchExecutionMode { ValuesAsRows, ValuesAsColumns };
-    bool execBatch(BatchExecutionMode mode = ValuesAsRows);
-    bool prepare(const QString& query);
-    void bindValue(const QString& placeholder, const QVariant& val,
-                   QSql::ParamType type = QSql::In);
-    void bindValue(int pos, const QVariant& val, QSql::ParamType type = QSql::In);
-    void addBindValue(const QVariant& val, QSql::ParamType type = QSql::In);
-    QVariant boundValue(const QString& placeholder) const;
-    QVariant boundValue(int pos) const;
-    QMap<QString, QVariant> boundValues() const;
-    QString executedQuery() const;
-    QVariant lastInsertId() const;
-    void finish();
-    bool nextResult();
+   // prepared query support
+   bool exec();
+   enum BatchExecutionMode { ValuesAsRows, ValuesAsColumns };
+   bool execBatch(BatchExecutionMode mode = ValuesAsRows);
+   bool prepare(const QString &query);
+   void bindValue(const QString &placeholder, const QVariant &val,
+                  QSql::ParamType type = QSql::In);
+   void bindValue(int pos, const QVariant &val, QSql::ParamType type = QSql::In);
+   void addBindValue(const QVariant &val, QSql::ParamType type = QSql::In);
+   QVariant boundValue(const QString &placeholder) const;
+   QVariant boundValue(int pos) const;
+   QMap<QString, QVariant> boundValues() const;
+   QString executedQuery() const;
+   QVariant lastInsertId() const;
+   void finish();
+   bool nextResult();
 
-private:
-    QSqlQueryPrivate* d;
+ private:
+   QSqlQueryPrivate *d;
 };
 
 QT_END_NAMESPACE

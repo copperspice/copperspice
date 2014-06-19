@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,281 +43,288 @@ QT_BEGIN_NAMESPACE
 static void translate_color(const QColor &color, QString *color_string,
                             QString *opacity_string)
 {
-    Q_ASSERT(color_string);
-    Q_ASSERT(opacity_string);
+   Q_ASSERT(color_string);
+   Q_ASSERT(opacity_string);
 
-    *color_string =
-        QString::fromLatin1("#%1%2%3")
-        .arg(color.red(), 2, 16, QLatin1Char('0'))
-        .arg(color.green(), 2, 16, QLatin1Char('0'))
-        .arg(color.blue(), 2, 16, QLatin1Char('0'));
-    *opacity_string = QString::number(color.alphaF());
+   *color_string =
+      QString::fromLatin1("#%1%2%3")
+      .arg(color.red(), 2, 16, QLatin1Char('0'))
+      .arg(color.green(), 2, 16, QLatin1Char('0'))
+      .arg(color.blue(), 2, 16, QLatin1Char('0'));
+   *opacity_string = QString::number(color.alphaF());
 }
 
-static void translate_dashPattern(QVector<qreal> pattern, const qreal& width, QString *pattern_string)
+static void translate_dashPattern(QVector<qreal> pattern, const qreal &width, QString *pattern_string)
 {
-    Q_ASSERT(pattern_string);
+   Q_ASSERT(pattern_string);
 
-    // Note that SVG operates in absolute lengths, whereas Qt uses a length/width ratio.
-    foreach (qreal entry, pattern)
-        *pattern_string += QString::fromLatin1("%1,").arg(entry * width);
+   // Note that SVG operates in absolute lengths, whereas Qt uses a length/width ratio.
+   foreach (qreal entry, pattern)
+   *pattern_string += QString::fromLatin1("%1,").arg(entry * width);
 
-    pattern_string->chop(1);
+   pattern_string->chop(1);
 }
 
 class QSvgPaintEnginePrivate : public QPaintEnginePrivate
 {
-public:
-    QSvgPaintEnginePrivate()
-    {
-        size = QSize();
-        viewBox = QRectF();
-        outputDevice = 0;
-        resolution = 72;
+ public:
+   QSvgPaintEnginePrivate() {
+      size = QSize();
+      viewBox = QRectF();
+      outputDevice = 0;
+      resolution = 72;
 
-        attributes.document_title = QLatin1String("Qt Svg Document");
-        attributes.document_description = QLatin1String("Generated with Qt");
-        attributes.font_family = QLatin1String("serif");
-        attributes.font_size = QLatin1String("10pt");
-        attributes.font_style = QLatin1String("normal");
-        attributes.font_weight = QLatin1String("normal");
+      attributes.document_title = QLatin1String("Qt Svg Document");
+      attributes.document_description = QLatin1String("Generated with Qt");
+      attributes.font_family = QLatin1String("serif");
+      attributes.font_size = QLatin1String("10pt");
+      attributes.font_style = QLatin1String("normal");
+      attributes.font_weight = QLatin1String("normal");
 
-        afterFirstUpdate = false;
-        numGradients = 0;
-    }
+      afterFirstUpdate = false;
+      numGradients = 0;
+   }
 
-    QSize size;
-    QRectF viewBox;
-    QIODevice *outputDevice;
-    QTextStream *stream;
-    int resolution;
+   QSize size;
+   QRectF viewBox;
+   QIODevice *outputDevice;
+   QTextStream *stream;
+   int resolution;
 
-    QString header;
-    QString defs;
-    QString body;
-    bool    afterFirstUpdate;
+   QString header;
+   QString defs;
+   QString body;
+   bool    afterFirstUpdate;
 
-    QBrush brush;
-    QPen pen;
-    QMatrix matrix;
-    QFont font;
+   QBrush brush;
+   QPen pen;
+   QMatrix matrix;
+   QFont font;
 
-    QString generateGradientName() {
-        ++numGradients;
-        currentGradientName = QString::fromLatin1("gradient%1").arg(numGradients);
-        return currentGradientName;
-    }
+   QString generateGradientName() {
+      ++numGradients;
+      currentGradientName = QString::fromLatin1("gradient%1").arg(numGradients);
+      return currentGradientName;
+   }
 
-    QString currentGradientName;
-    int numGradients;
+   QString currentGradientName;
+   int numGradients;
 
-    struct _attributes {
-        QString document_title;
-        QString document_description;
-        QString font_weight;
-        QString font_size;
-        QString font_family;
-        QString font_style;
-        QString stroke, strokeOpacity;
-        QString dashPattern, dashOffset;
-        QString fill, fillOpacity;
-    } attributes;
+   struct _attributes {
+      QString document_title;
+      QString document_description;
+      QString font_weight;
+      QString font_size;
+      QString font_family;
+      QString font_style;
+      QString stroke, strokeOpacity;
+      QString dashPattern, dashOffset;
+      QString fill, fillOpacity;
+   } attributes;
 };
 
 static inline QPaintEngine::PaintEngineFeatures svgEngineFeatures()
 {
-    return QPaintEngine::PaintEngineFeatures(
-        QPaintEngine::AllFeatures
-        & ~QPaintEngine::PatternBrush
-        & ~QPaintEngine::PerspectiveTransform
-        & ~QPaintEngine::ConicalGradientFill
-        & ~QPaintEngine::PorterDuff);
+   return QPaintEngine::PaintEngineFeatures(
+             QPaintEngine::AllFeatures
+             & ~QPaintEngine::PatternBrush
+             & ~QPaintEngine::PerspectiveTransform
+             & ~QPaintEngine::ConicalGradientFill
+             & ~QPaintEngine::PorterDuff);
 }
 
 class QSvgPaintEngine : public QPaintEngine
 {
-    Q_DECLARE_PRIVATE(QSvgPaintEngine)
-public:
+   Q_DECLARE_PRIVATE(QSvgPaintEngine)
+ public:
 
-    QSvgPaintEngine()
-        : QPaintEngine(*new QSvgPaintEnginePrivate,
-                       svgEngineFeatures())
-    {
-    }
+   QSvgPaintEngine()
+      : QPaintEngine(*new QSvgPaintEnginePrivate,
+                     svgEngineFeatures()) {
+   }
 
-    bool begin(QPaintDevice *device);
-    bool end();
+   bool begin(QPaintDevice *device);
+   bool end();
 
-    void updateState(const QPaintEngineState &state);
-    void popGroup();
+   void updateState(const QPaintEngineState &state);
+   void popGroup();
 
-    void drawPath(const QPainterPath &path);
-    void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
-    void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
-    void drawTextItem(const QPointF &pt, const QTextItem &item);
-    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                   Qt::ImageConversionFlag = Qt::AutoColor);
+   void drawPath(const QPainterPath &path);
+   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
+   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
+   void drawTextItem(const QPointF &pt, const QTextItem &item);
+   void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
+                  Qt::ImageConversionFlag = Qt::AutoColor);
 
-    QPaintEngine::Type type() const { return QPaintEngine::SVG; }
+   QPaintEngine::Type type() const {
+      return QPaintEngine::SVG;
+   }
 
-    QSize size() const { return d_func()->size; }
-    void setSize(const QSize &size) {
-        Q_ASSERT(!isActive());
-        d_func()->size = size;
-    }
+   QSize size() const {
+      return d_func()->size;
+   }
+   void setSize(const QSize &size) {
+      Q_ASSERT(!isActive());
+      d_func()->size = size;
+   }
 
-    QRectF viewBox() const { return d_func()->viewBox; }
-    void setViewBox(const QRectF &viewBox) {
-        Q_ASSERT(!isActive());
-        d_func()->viewBox = viewBox;
-    }
+   QRectF viewBox() const {
+      return d_func()->viewBox;
+   }
+   void setViewBox(const QRectF &viewBox) {
+      Q_ASSERT(!isActive());
+      d_func()->viewBox = viewBox;
+   }
 
-    QString documentTitle() const { return d_func()->attributes.document_title; }
-    void setDocumentTitle(const QString &title) {
-        d_func()->attributes.document_title = title;
-    }
+   QString documentTitle() const {
+      return d_func()->attributes.document_title;
+   }
+   void setDocumentTitle(const QString &title) {
+      d_func()->attributes.document_title = title;
+   }
 
-    QString documentDescription() const { return d_func()->attributes.document_description; }
-    void setDocumentDescription(const QString &description) {
-        d_func()->attributes.document_description = description;
-    }
+   QString documentDescription() const {
+      return d_func()->attributes.document_description;
+   }
+   void setDocumentDescription(const QString &description) {
+      d_func()->attributes.document_description = description;
+   }
 
-    QIODevice *outputDevice() const { return d_func()->outputDevice; }
-    void setOutputDevice(QIODevice *device) {
-        Q_ASSERT(!isActive());
-        d_func()->outputDevice = device;
-    }
+   QIODevice *outputDevice() const {
+      return d_func()->outputDevice;
+   }
+   void setOutputDevice(QIODevice *device) {
+      Q_ASSERT(!isActive());
+      d_func()->outputDevice = device;
+   }
 
-    int resolution() { return d_func()->resolution; }
-    void setResolution(int resolution) {
-        Q_ASSERT(!isActive());
-        d_func()->resolution = resolution;
-    }
-    void saveLinearGradientBrush(const QGradient *g)
-    {
-        QTextStream str(&d_func()->defs, QIODevice::Append);
-        const QLinearGradient *grad = static_cast<const QLinearGradient*>(g);
-        str << QLatin1String("<linearGradient ");
-        saveGradientUnits(str, g);
-        if (grad) {
-            str << QLatin1String("x1=\"") <<grad->start().x()<< QLatin1String("\" ")
-                << QLatin1String("y1=\"") <<grad->start().y()<< QLatin1String("\" ")
-                << QLatin1String("x2=\"") <<grad->finalStop().x() << QLatin1String("\" ")
-                << QLatin1String("y2=\"") <<grad->finalStop().y() << QLatin1String("\" ");
-        }
+   int resolution() {
+      return d_func()->resolution;
+   }
+   void setResolution(int resolution) {
+      Q_ASSERT(!isActive());
+      d_func()->resolution = resolution;
+   }
+   void saveLinearGradientBrush(const QGradient *g) {
+      QTextStream str(&d_func()->defs, QIODevice::Append);
+      const QLinearGradient *grad = static_cast<const QLinearGradient *>(g);
+      str << QLatin1String("<linearGradient ");
+      saveGradientUnits(str, g);
+      if (grad) {
+         str << QLatin1String("x1=\"") << grad->start().x() << QLatin1String("\" ")
+             << QLatin1String("y1=\"") << grad->start().y() << QLatin1String("\" ")
+             << QLatin1String("x2=\"") << grad->finalStop().x() << QLatin1String("\" ")
+             << QLatin1String("y2=\"") << grad->finalStop().y() << QLatin1String("\" ");
+      }
 
-        str << QLatin1String("id=\"") << d_func()->generateGradientName() << QLatin1String("\">\n");
-        saveGradientStops(str, g);
-        str << QLatin1String("</linearGradient>") <<endl;
-    }
-    void saveRadialGradientBrush(const QGradient *g)
-    {
-        QTextStream str(&d_func()->defs, QIODevice::Append);
-        const QRadialGradient *grad = static_cast<const QRadialGradient*>(g);
-        str << QLatin1String("<radialGradient ");
-        saveGradientUnits(str, g);
-        if (grad) {
-            str << QLatin1String("cx=\"") <<grad->center().x()<< QLatin1String("\" ")
-                << QLatin1String("cy=\"") <<grad->center().y()<< QLatin1String("\" ")
-                << QLatin1String("r=\"") <<grad->radius() << QLatin1String("\" ")
-                << QLatin1String("fx=\"") <<grad->focalPoint().x() << QLatin1String("\" ")
-                << QLatin1String("fy=\"") <<grad->focalPoint().y() << QLatin1String("\" ");
-        }
-        str << QLatin1String("xml:id=\"") <<d_func()->generateGradientName()<< QLatin1String("\">\n");
-        saveGradientStops(str, g);
-        str << QLatin1String("</radialGradient>") << endl;
-    }
-    void saveConicalGradientBrush(const QGradient *)
-    {
-        qWarning("svg's don't support conical gradients!");
-    }
+      str << QLatin1String("id=\"") << d_func()->generateGradientName() << QLatin1String("\">\n");
+      saveGradientStops(str, g);
+      str << QLatin1String("</linearGradient>") << endl;
+   }
+   void saveRadialGradientBrush(const QGradient *g) {
+      QTextStream str(&d_func()->defs, QIODevice::Append);
+      const QRadialGradient *grad = static_cast<const QRadialGradient *>(g);
+      str << QLatin1String("<radialGradient ");
+      saveGradientUnits(str, g);
+      if (grad) {
+         str << QLatin1String("cx=\"") << grad->center().x() << QLatin1String("\" ")
+             << QLatin1String("cy=\"") << grad->center().y() << QLatin1String("\" ")
+             << QLatin1String("r=\"") << grad->radius() << QLatin1String("\" ")
+             << QLatin1String("fx=\"") << grad->focalPoint().x() << QLatin1String("\" ")
+             << QLatin1String("fy=\"") << grad->focalPoint().y() << QLatin1String("\" ");
+      }
+      str << QLatin1String("xml:id=\"") << d_func()->generateGradientName() << QLatin1String("\">\n");
+      saveGradientStops(str, g);
+      str << QLatin1String("</radialGradient>") << endl;
+   }
+   void saveConicalGradientBrush(const QGradient *) {
+      qWarning("svg's don't support conical gradients!");
+   }
 
-    void saveGradientStops(QTextStream &str, const QGradient *g) {
-        QGradientStops stops = g->stops();
+   void saveGradientStops(QTextStream &str, const QGradient *g) {
+      QGradientStops stops = g->stops();
 
-        if (g->interpolationMode() == QGradient::ColorInterpolation) {
-            bool constantAlpha = true;
-            int alpha = stops.at(0).second.alpha();
-            for (int i = 1; i < stops.size(); ++i)
-                constantAlpha &= (stops.at(i).second.alpha() == alpha);
+      if (g->interpolationMode() == QGradient::ColorInterpolation) {
+         bool constantAlpha = true;
+         int alpha = stops.at(0).second.alpha();
+         for (int i = 1; i < stops.size(); ++i) {
+            constantAlpha &= (stops.at(i).second.alpha() == alpha);
+         }
 
-            if (!constantAlpha) {
-                const qreal spacing = qreal(0.02);
-                QGradientStops newStops;
-                QRgb fromColor = PREMUL(stops.at(0).second.rgba());
-                QRgb toColor;
-                for (int i = 0; i + 1 < stops.size(); ++i) {
-                    int parts = qCeil((stops.at(i + 1).first - stops.at(i).first) / spacing);
-                    newStops.append(stops.at(i));
-                    toColor = PREMUL(stops.at(i + 1).second.rgba());
+         if (!constantAlpha) {
+            const qreal spacing = qreal(0.02);
+            QGradientStops newStops;
+            QRgb fromColor = PREMUL(stops.at(0).second.rgba());
+            QRgb toColor;
+            for (int i = 0; i + 1 < stops.size(); ++i) {
+               int parts = qCeil((stops.at(i + 1).first - stops.at(i).first) / spacing);
+               newStops.append(stops.at(i));
+               toColor = PREMUL(stops.at(i + 1).second.rgba());
 
-                    if (parts > 1) {
-                        qreal step = (stops.at(i + 1).first - stops.at(i).first) / parts;
-                        for (int j = 1; j < parts; ++j) {
-                            QRgb color = INV_PREMUL(INTERPOLATE_PIXEL_256(fromColor, 256 - 256 * j / parts, toColor, 256 * j / parts));
-                            newStops.append(QGradientStop(stops.at(i).first + j * step, QColor::fromRgba(color)));
-                        }
-                    }
-                    fromColor = toColor;
-                }
-                newStops.append(stops.back());
-                stops = newStops;
+               if (parts > 1) {
+                  qreal step = (stops.at(i + 1).first - stops.at(i).first) / parts;
+                  for (int j = 1; j < parts; ++j) {
+                     QRgb color = INV_PREMUL(INTERPOLATE_PIXEL_256(fromColor, 256 - 256 * j / parts, toColor, 256 * j / parts));
+                     newStops.append(QGradientStop(stops.at(i).first + j * step, QColor::fromRgba(color)));
+                  }
+               }
+               fromColor = toColor;
             }
-        }
+            newStops.append(stops.back());
+            stops = newStops;
+         }
+      }
 
-        foreach(QGradientStop stop, stops) {
-            QString color =
-                QString::fromLatin1("#%1%2%3")
-                .arg(stop.second.red(), 2, 16, QLatin1Char('0'))
-                .arg(stop.second.green(), 2, 16, QLatin1Char('0'))
-                .arg(stop.second.blue(), 2, 16, QLatin1Char('0'));
-            str << QLatin1String("    <stop offset=\"")<< stop.first << QLatin1String("\" ")
-                << QLatin1String("stop-color=\"") << color << QLatin1String("\" ")
-                << QLatin1String("stop-opacity=\"") << stop.second.alphaF() <<QLatin1String("\" />\n");
-        }
-    }
+      foreach(QGradientStop stop, stops) {
+         QString color =
+            QString::fromLatin1("#%1%2%3")
+            .arg(stop.second.red(), 2, 16, QLatin1Char('0'))
+            .arg(stop.second.green(), 2, 16, QLatin1Char('0'))
+            .arg(stop.second.blue(), 2, 16, QLatin1Char('0'));
+         str << QLatin1String("    <stop offset=\"") << stop.first << QLatin1String("\" ")
+             << QLatin1String("stop-color=\"") << color << QLatin1String("\" ")
+             << QLatin1String("stop-opacity=\"") << stop.second.alphaF() << QLatin1String("\" />\n");
+      }
+   }
 
-    void saveGradientUnits(QTextStream &str, const QGradient *gradient)
-    {
-        str << QLatin1String("gradientUnits=\"");
-        if (gradient && gradient->coordinateMode() == QGradient::ObjectBoundingMode)
-            str << QLatin1String("objectBoundingBox");
-        else
-            str << QLatin1String("userSpaceOnUse");
-        str << QLatin1String("\" ");
-    }
+   void saveGradientUnits(QTextStream &str, const QGradient *gradient) {
+      str << QLatin1String("gradientUnits=\"");
+      if (gradient && gradient->coordinateMode() == QGradient::ObjectBoundingMode) {
+         str << QLatin1String("objectBoundingBox");
+      } else {
+         str << QLatin1String("userSpaceOnUse");
+      }
+      str << QLatin1String("\" ");
+   }
 
-    void generateQtDefaults()
-    {
-        *d_func()->stream << QLatin1String("fill=\"none\" ");
-        *d_func()->stream << QLatin1String("stroke=\"black\" ");
-        *d_func()->stream << QLatin1String("stroke-width=\"1\" ");
-        *d_func()->stream << QLatin1String("fill-rule=\"evenodd\" ");
-        *d_func()->stream << QLatin1String("stroke-linecap=\"square\" ");
-        *d_func()->stream << QLatin1String("stroke-linejoin=\"bevel\" ");
-        *d_func()->stream << QLatin1String(">\n");
-    }
-    inline QTextStream &stream()
-    {
-        return *d_func()->stream;
-    }
+   void generateQtDefaults() {
+      *d_func()->stream << QLatin1String("fill=\"none\" ");
+      *d_func()->stream << QLatin1String("stroke=\"black\" ");
+      *d_func()->stream << QLatin1String("stroke-width=\"1\" ");
+      *d_func()->stream << QLatin1String("fill-rule=\"evenodd\" ");
+      *d_func()->stream << QLatin1String("stroke-linecap=\"square\" ");
+      *d_func()->stream << QLatin1String("stroke-linejoin=\"bevel\" ");
+      *d_func()->stream << QLatin1String(">\n");
+   }
+   inline QTextStream &stream() {
+      return *d_func()->stream;
+   }
 
 
-    void qpenToSvg(const QPen &spen)
-    {
-        QString width;
+   void qpenToSvg(const QPen &spen) {
+      QString width;
 
-        d_func()->pen = spen;
+      d_func()->pen = spen;
 
-        switch (spen.style()) {
-        case Qt::NoPen:
+      switch (spen.style()) {
+         case Qt::NoPen:
             stream() << QLatin1String("stroke=\"none\" ");
 
             d_func()->attributes.stroke = QLatin1String("none");
             d_func()->attributes.strokeOpacity = QString();
             return;
             break;
-        case Qt::SolidLine: {
+         case Qt::SolidLine: {
             QString color, colorOpacity;
 
             translate_color(spen.color(), &color,
@@ -325,15 +332,15 @@ public:
             d_func()->attributes.stroke = color;
             d_func()->attributes.strokeOpacity = colorOpacity;
 
-            stream() << QLatin1String("stroke=\"")<<color<< QLatin1String("\" ");
-            stream() << QLatin1String("stroke-opacity=\"")<<colorOpacity<< QLatin1String("\" ");
-        }
-            break;
-        case Qt::DashLine:
-        case Qt::DotLine:
-        case Qt::DashDotLine:
-        case Qt::DashDotDotLine:
-        case Qt::CustomDashLine: {
+            stream() << QLatin1String("stroke=\"") << color << QLatin1String("\" ");
+            stream() << QLatin1String("stroke-opacity=\"") << colorOpacity << QLatin1String("\" ");
+         }
+         break;
+         case Qt::DashLine:
+         case Qt::DotLine:
+         case Qt::DashDotLine:
+         case Qt::DashDotDotLine:
+         case Qt::CustomDashLine: {
             QString color, colorOpacity, dashPattern, dashOffset;
 
             qreal penWidth = spen.width() == 0 ? qreal(1) : spen.widthF();
@@ -349,141 +356,141 @@ public:
             d_func()->attributes.dashPattern = dashPattern;
             d_func()->attributes.dashOffset = dashOffset;
 
-            stream() << QLatin1String("stroke=\"")<<color<< QLatin1String("\" ");
-            stream() << QLatin1String("stroke-opacity=\"")<<colorOpacity<< QLatin1String("\" ");
-            stream() << QLatin1String("stroke-dasharray=\"")<<dashPattern<< QLatin1String("\" ");
-            stream() << QLatin1String("stroke-dashoffset=\"")<<dashOffset<< QLatin1String("\" ");
+            stream() << QLatin1String("stroke=\"") << color << QLatin1String("\" ");
+            stream() << QLatin1String("stroke-opacity=\"") << colorOpacity << QLatin1String("\" ");
+            stream() << QLatin1String("stroke-dasharray=\"") << dashPattern << QLatin1String("\" ");
+            stream() << QLatin1String("stroke-dashoffset=\"") << dashOffset << QLatin1String("\" ");
             break;
-        }
-        default:
+         }
+         default:
             qWarning("Unsupported pen style");
             break;
-        }
+      }
 
-        if (spen.widthF() == 0)
-            stream() <<"stroke-width=\"1\" ";
-        else
-            stream() <<"stroke-width=\"" << spen.widthF() << "\" ";
+      if (spen.widthF() == 0) {
+         stream() << "stroke-width=\"1\" ";
+      } else {
+         stream() << "stroke-width=\"" << spen.widthF() << "\" ";
+      }
 
-        switch (spen.capStyle()) {
-        case Qt::FlatCap:
+      switch (spen.capStyle()) {
+         case Qt::FlatCap:
             stream() << "stroke-linecap=\"butt\" ";
             break;
-        case Qt::SquareCap:
+         case Qt::SquareCap:
             stream() << "stroke-linecap=\"square\" ";
             break;
-        case Qt::RoundCap:
+         case Qt::RoundCap:
             stream() << "stroke-linecap=\"round\" ";
             break;
-        default:
+         default:
             qWarning("Unhandled cap style");
-        }
-        switch (spen.joinStyle()) {
-        case Qt::MiterJoin:
+      }
+      switch (spen.joinStyle()) {
+         case Qt::MiterJoin:
             stream() << "stroke-linejoin=\"miter\" "
-                        "stroke-miterlimit=\""<<spen.miterLimit()<<"\" ";
+                     "stroke-miterlimit=\"" << spen.miterLimit() << "\" ";
             break;
-        case Qt::BevelJoin:
+         case Qt::BevelJoin:
             stream() << "stroke-linejoin=\"bevel\" ";
             break;
-        case Qt::RoundJoin:
+         case Qt::RoundJoin:
             stream() << "stroke-linejoin=\"round\" ";
             break;
-        case Qt::SvgMiterJoin:
+         case Qt::SvgMiterJoin:
             stream() << "stroke-linejoin=\"miter\" "
-                        "stroke-miterlimit=\""<<spen.miterLimit()<<"\" ";
+                     "stroke-miterlimit=\"" << spen.miterLimit() << "\" ";
             break;
-        default:
+         default:
             qWarning("Unhandled join style");
-        }
-    }
-    void qbrushToSvg(const QBrush &sbrush)
-    {
-        d_func()->brush = sbrush;
-        switch (sbrush.style()) {
-        case Qt::SolidPattern: {
+      }
+   }
+   void qbrushToSvg(const QBrush &sbrush) {
+      d_func()->brush = sbrush;
+      switch (sbrush.style()) {
+         case Qt::SolidPattern: {
             QString color, colorOpacity;
             translate_color(sbrush.color(), &color, &colorOpacity);
             stream() << "fill=\"" << color << "\" "
-                        "fill-opacity=\""
+                     "fill-opacity=\""
                      << colorOpacity << "\" ";
             d_func()->attributes.fill = color;
             d_func()->attributes.fillOpacity = colorOpacity;
-        }
-            break;
-        case Qt::LinearGradientPattern:
+         }
+         break;
+         case Qt::LinearGradientPattern:
             saveLinearGradientBrush(sbrush.gradient());
             d_func()->attributes.fill = QString::fromLatin1("url(#%1)").arg(d_func()->currentGradientName);
             d_func()->attributes.fillOpacity = QString();
             stream() << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
             break;
-        case Qt::RadialGradientPattern:
+         case Qt::RadialGradientPattern:
             saveRadialGradientBrush(sbrush.gradient());
             d_func()->attributes.fill = QString::fromLatin1("url(#%1)").arg(d_func()->currentGradientName);
             d_func()->attributes.fillOpacity = QString();
             stream() << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
             break;
-        case Qt::ConicalGradientPattern:
+         case Qt::ConicalGradientPattern:
             saveConicalGradientBrush(sbrush.gradient());
             d_func()->attributes.fill = QString::fromLatin1("url(#%1)").arg(d_func()->currentGradientName);
             d_func()->attributes.fillOpacity = QString();
             stream() << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
             break;
-        case Qt::NoBrush:
+         case Qt::NoBrush:
             stream() << QLatin1String("fill=\"none\" ");
             d_func()->attributes.fill = QLatin1String("none");
             d_func()->attributes.fillOpacity = QString();
             return;
             break;
-        default:
-           break;
-        }
-    }
-    void qfontToSvg(const QFont &sfont)
-    {
-        Q_D(QSvgPaintEngine);
+         default:
+            break;
+      }
+   }
+   void qfontToSvg(const QFont &sfont) {
+      Q_D(QSvgPaintEngine);
 
-        d->font = sfont;
+      d->font = sfont;
 
-        if (d->font.pixelSize() == -1)
-            d->attributes.font_size = QString::number(d->font.pointSizeF() * d->resolution / 72);
-        else
-            d->attributes.font_size = QString::number(d->font.pixelSize());
+      if (d->font.pixelSize() == -1) {
+         d->attributes.font_size = QString::number(d->font.pointSizeF() * d->resolution / 72);
+      } else {
+         d->attributes.font_size = QString::number(d->font.pixelSize());
+      }
 
-        int svgWeight = d->font.weight();
-        switch (svgWeight) {
-        case QFont::Light:
+      int svgWeight = d->font.weight();
+      switch (svgWeight) {
+         case QFont::Light:
             svgWeight = 100;
             break;
-        case QFont::Normal:
+         case QFont::Normal:
             svgWeight = 400;
             break;
-        case QFont::Bold:
+         case QFont::Bold:
             svgWeight = 700;
             break;
-        default:
+         default:
             svgWeight *= 10;
-        }
+      }
 
-        d->attributes.font_weight = QString::number(svgWeight);
-        d->attributes.font_family = d->font.family();
-        d->attributes.font_style = d->font.italic() ? QLatin1String("italic") : QLatin1String("normal");
+      d->attributes.font_weight = QString::number(svgWeight);
+      d->attributes.font_family = d->font.family();
+      d->attributes.font_style = d->font.italic() ? QLatin1String("italic") : QLatin1String("normal");
 
-        *d->stream << "font-family=\"" << d->attributes.font_family << "\" "
-                      "font-size=\"" << d->attributes.font_size << "\" "
-                      "font-weight=\"" << d->attributes.font_weight << "\" "
-                      "font-style=\"" << d->attributes.font_style << "\" "
-                   << endl;
-    }
+      *d->stream << "font-family=\"" << d->attributes.font_family << "\" "
+                 "font-size=\"" << d->attributes.font_size << "\" "
+                 "font-weight=\"" << d->attributes.font_weight << "\" "
+                 "font-style=\"" << d->attributes.font_style << "\" "
+                 << endl;
+   }
 };
 
 class QSvgGeneratorPrivate
 {
-public:
-    QSvgPaintEngine *engine;
+ public:
+   QSvgPaintEngine *engine;
 
-    uint owns_iodevice : 1;
-    QString fileName;
+   uint owns_iodevice : 1;
+   QString fileName;
 };
 
 /*!
@@ -527,12 +534,12 @@ public:
     Constructs a new generator.
 */
 QSvgGenerator::QSvgGenerator()
-    : d_ptr(new QSvgGeneratorPrivate)
+   : d_ptr(new QSvgGeneratorPrivate)
 {
-    Q_D(QSvgGenerator);
+   Q_D(QSvgGenerator);
 
-    d->engine = new QSvgPaintEngine;
-    d->owns_iodevice = false;
+   d->engine = new QSvgPaintEngine;
+   d->owns_iodevice = false;
 }
 
 /*!
@@ -540,10 +547,11 @@ QSvgGenerator::QSvgGenerator()
 */
 QSvgGenerator::~QSvgGenerator()
 {
-    Q_D(QSvgGenerator);
-    if (d->owns_iodevice)
-        delete d->engine->outputDevice();
-    delete d->engine;
+   Q_D(QSvgGenerator);
+   if (d->owns_iodevice) {
+      delete d->engine->outputDevice();
+   }
+   delete d->engine;
 }
 
 /*!
@@ -554,16 +562,16 @@ QSvgGenerator::~QSvgGenerator()
 */
 QString QSvgGenerator::title() const
 {
-    Q_D(const QSvgGenerator);
+   Q_D(const QSvgGenerator);
 
-    return d->engine->documentTitle();
+   return d->engine->documentTitle();
 }
 
 void QSvgGenerator::setTitle(const QString &title)
 {
-    Q_D(QSvgGenerator);
+   Q_D(QSvgGenerator);
 
-    d->engine->setDocumentTitle(title);
+   d->engine->setDocumentTitle(title);
 }
 
 /*!
@@ -574,16 +582,16 @@ void QSvgGenerator::setTitle(const QString &title)
 */
 QString QSvgGenerator::description() const
 {
-    Q_D(const QSvgGenerator);
+   Q_D(const QSvgGenerator);
 
-    return d->engine->documentDescription();
+   return d->engine->documentDescription();
 }
 
 void QSvgGenerator::setDescription(const QString &description)
 {
-    Q_D(QSvgGenerator);
+   Q_D(QSvgGenerator);
 
-    d->engine->setDocumentDescription(description);
+   d->engine->setDocumentDescription(description);
 }
 
 /*!
@@ -602,18 +610,18 @@ void QSvgGenerator::setDescription(const QString &description)
 */
 QSize QSvgGenerator::size() const
 {
-    Q_D(const QSvgGenerator);
-    return d->engine->size();
+   Q_D(const QSvgGenerator);
+   return d->engine->size();
 }
 
 void QSvgGenerator::setSize(const QSize &size)
 {
-    Q_D(QSvgGenerator);
-    if (d->engine->isActive()) {
-        qWarning("QSvgGenerator::setSize(), cannot set size while SVG is being generated");
-        return;
-    }
-    d->engine->setSize(size);
+   Q_D(QSvgGenerator);
+   if (d->engine->isActive()) {
+      qWarning("QSvgGenerator::setSize(), cannot set size while SVG is being generated");
+      return;
+   }
+   d->engine->setSize(size);
 }
 
 /*!
@@ -632,8 +640,8 @@ void QSvgGenerator::setSize(const QSize &size)
 */
 QRectF QSvgGenerator::viewBoxF() const
 {
-    Q_D(const QSvgGenerator);
-    return d->engine->viewBox();
+   Q_D(const QSvgGenerator);
+   return d->engine->viewBox();
 }
 
 /*!
@@ -645,23 +653,23 @@ QRectF QSvgGenerator::viewBoxF() const
 */
 QRect QSvgGenerator::viewBox() const
 {
-    Q_D(const QSvgGenerator);
-    return d->engine->viewBox().toRect();
+   Q_D(const QSvgGenerator);
+   return d->engine->viewBox().toRect();
 }
 
 void QSvgGenerator::setViewBox(const QRectF &viewBox)
 {
-    Q_D(QSvgGenerator);
-    if (d->engine->isActive()) {
-        qWarning("QSvgGenerator::setViewBox(), cannot set viewBox while SVG is being generated");
-        return;
-    }
-    d->engine->setViewBox(viewBox);
+   Q_D(QSvgGenerator);
+   if (d->engine->isActive()) {
+      qWarning("QSvgGenerator::setViewBox(), cannot set viewBox while SVG is being generated");
+      return;
+   }
+   d->engine->setViewBox(viewBox);
 }
 
 void QSvgGenerator::setViewBox(const QRect &viewBox)
 {
-    setViewBox(QRectF(viewBox));
+   setViewBox(QRectF(viewBox));
 }
 
 /*!
@@ -673,26 +681,27 @@ void QSvgGenerator::setViewBox(const QRect &viewBox)
 */
 QString QSvgGenerator::fileName() const
 {
-    Q_D(const QSvgGenerator);
-    return d->fileName;
+   Q_D(const QSvgGenerator);
+   return d->fileName;
 }
 
 void QSvgGenerator::setFileName(const QString &fileName)
 {
-    Q_D(QSvgGenerator);
-    if (d->engine->isActive()) {
-        qWarning("QSvgGenerator::setFileName(), cannot set file name while SVG is being generated");
-        return;
-    }
+   Q_D(QSvgGenerator);
+   if (d->engine->isActive()) {
+      qWarning("QSvgGenerator::setFileName(), cannot set file name while SVG is being generated");
+      return;
+   }
 
-    if (d->owns_iodevice)
-        delete d->engine->outputDevice();
+   if (d->owns_iodevice) {
+      delete d->engine->outputDevice();
+   }
 
-    d->owns_iodevice = true;
+   d->owns_iodevice = true;
 
-    d->fileName = fileName;
-    QFile *file = new QFile(fileName);
-    d->engine->setOutputDevice(file);
+   d->fileName = fileName;
+   QFile *file = new QFile(fileName);
+   d->engine->setOutputDevice(file);
 }
 
 /*!
@@ -707,20 +716,20 @@ void QSvgGenerator::setFileName(const QString &fileName)
 */
 QIODevice *QSvgGenerator::outputDevice() const
 {
-    Q_D(const QSvgGenerator);
-    return d->engine->outputDevice();
+   Q_D(const QSvgGenerator);
+   return d->engine->outputDevice();
 }
 
 void QSvgGenerator::setOutputDevice(QIODevice *outputDevice)
 {
-    Q_D(QSvgGenerator);
-    if (d->engine->isActive()) {
-        qWarning("QSvgGenerator::setOutputDevice(), cannot set output device while SVG is being generated");
-        return;
-    }
-    d->owns_iodevice = false;
-    d->engine->setOutputDevice(outputDevice);
-    d->fileName = QString();
+   Q_D(QSvgGenerator);
+   if (d->engine->isActive()) {
+      qWarning("QSvgGenerator::setOutputDevice(), cannot set output device while SVG is being generated");
+      return;
+   }
+   d->owns_iodevice = false;
+   d->engine->setOutputDevice(outputDevice);
+   d->fileName = QString();
 }
 
 /*!
@@ -735,14 +744,14 @@ void QSvgGenerator::setOutputDevice(QIODevice *outputDevice)
 */
 int QSvgGenerator::resolution() const
 {
-    Q_D(const QSvgGenerator);
-    return d->engine->resolution();
+   Q_D(const QSvgGenerator);
+   return d->engine->resolution();
 }
 
 void QSvgGenerator::setResolution(int dpi)
 {
-    Q_D(QSvgGenerator);
-    d->engine->setResolution(dpi);
+   Q_D(QSvgGenerator);
+   d->engine->setResolution(dpi);
 }
 
 /*!
@@ -751,8 +760,8 @@ void QSvgGenerator::setResolution(int dpi)
 */
 QPaintEngine *QSvgGenerator::paintEngine() const
 {
-    Q_D(const QSvgGenerator);
-    return d->engine;
+   Q_D(const QSvgGenerator);
+   return d->engine;
 }
 
 /*!
@@ -760,33 +769,33 @@ QPaintEngine *QSvgGenerator::paintEngine() const
 */
 int QSvgGenerator::metric(QPaintDevice::PaintDeviceMetric metric) const
 {
-    Q_D(const QSvgGenerator);
-    switch (metric) {
-    case QPaintDevice::PdmDepth:
-        return 32;
-    case QPaintDevice::PdmWidth:
-        return d->engine->size().width();
-    case QPaintDevice::PdmHeight:
-        return d->engine->size().height();
-    case QPaintDevice::PdmDpiX:
-        return d->engine->resolution();
-    case QPaintDevice::PdmDpiY:
-        return d->engine->resolution();
-    case QPaintDevice::PdmHeightMM:
-        return qRound(d->engine->size().height() * 25.4 / d->engine->resolution());
-    case QPaintDevice::PdmWidthMM:
-        return qRound(d->engine->size().width() * 25.4 / d->engine->resolution());
-    case QPaintDevice::PdmNumColors:
-        return 0xffffffff;
-    case QPaintDevice::PdmPhysicalDpiX:
-        return d->engine->resolution();
-    case QPaintDevice::PdmPhysicalDpiY:
-        return d->engine->resolution();
-    default:
-        qWarning("QSvgGenerator::metric(), unhandled metric %d\n", metric);
-        break;
-    }
-    return 0;
+   Q_D(const QSvgGenerator);
+   switch (metric) {
+      case QPaintDevice::PdmDepth:
+         return 32;
+      case QPaintDevice::PdmWidth:
+         return d->engine->size().width();
+      case QPaintDevice::PdmHeight:
+         return d->engine->size().height();
+      case QPaintDevice::PdmDpiX:
+         return d->engine->resolution();
+      case QPaintDevice::PdmDpiY:
+         return d->engine->resolution();
+      case QPaintDevice::PdmHeightMM:
+         return qRound(d->engine->size().height() * 25.4 / d->engine->resolution());
+      case QPaintDevice::PdmWidthMM:
+         return qRound(d->engine->size().width() * 25.4 / d->engine->resolution());
+      case QPaintDevice::PdmNumColors:
+         return 0xffffffff;
+      case QPaintDevice::PdmPhysicalDpiX:
+         return d->engine->resolution();
+      case QPaintDevice::PdmPhysicalDpiY:
+         return d->engine->resolution();
+      default:
+         qWarning("QSvgGenerator::metric(), unhandled metric %d\n", metric);
+         break;
+   }
+   return 0;
 }
 
 /*****************************************************************************
@@ -795,257 +804,263 @@ int QSvgGenerator::metric(QPaintDevice::PaintDeviceMetric metric) const
 
 bool QSvgPaintEngine::begin(QPaintDevice *)
 {
-    Q_D(QSvgPaintEngine);
-    if (!d->outputDevice) {
-        qWarning("QSvgPaintEngine::begin(), no output device");
-        return false;
-    }
+   Q_D(QSvgPaintEngine);
+   if (!d->outputDevice) {
+      qWarning("QSvgPaintEngine::begin(), no output device");
+      return false;
+   }
 
-    if (!d->outputDevice->isOpen()) {
-        if (!d->outputDevice->open(QIODevice::WriteOnly | QIODevice::Text)) {
-            qWarning("QSvgPaintEngine::begin(), could not open output device: '%s'",
-                     qPrintable(d->outputDevice->errorString()));
-            return false;
-        }
-    } else if (!d->outputDevice->isWritable()) {
-        qWarning("QSvgPaintEngine::begin(), could not write to read-only output device: '%s'",
-                 qPrintable(d->outputDevice->errorString()));
-        return false;
-    }
+   if (!d->outputDevice->isOpen()) {
+      if (!d->outputDevice->open(QIODevice::WriteOnly | QIODevice::Text)) {
+         qWarning("QSvgPaintEngine::begin(), could not open output device: '%s'",
+                  qPrintable(d->outputDevice->errorString()));
+         return false;
+      }
+   } else if (!d->outputDevice->isWritable()) {
+      qWarning("QSvgPaintEngine::begin(), could not write to read-only output device: '%s'",
+               qPrintable(d->outputDevice->errorString()));
+      return false;
+   }
 
-    d->stream = new QTextStream(&d->header);
+   d->stream = new QTextStream(&d->header);
 
-    // stream out the header...
-    *d->stream << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" << endl << "<svg";
+   // stream out the header...
+   *d->stream << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" << endl << "<svg";
 
-    if (d->size.isValid()) {
-        qreal wmm = d->size.width() * 25.4 / d->resolution;
-        qreal hmm = d->size.height() * 25.4 / d->resolution;
-        *d->stream << " width=\"" << wmm << "mm\" height=\"" << hmm << "mm\"" << endl;
-    }
+   if (d->size.isValid()) {
+      qreal wmm = d->size.width() * 25.4 / d->resolution;
+      qreal hmm = d->size.height() * 25.4 / d->resolution;
+      *d->stream << " width=\"" << wmm << "mm\" height=\"" << hmm << "mm\"" << endl;
+   }
 
-    if (d->viewBox.isValid()) {
-        *d->stream << " viewBox=\"" << d->viewBox.left() << ' ' << d->viewBox.top();
-        *d->stream << ' ' << d->viewBox.width() << ' ' << d->viewBox.height() << '\"' << endl;
-    }
+   if (d->viewBox.isValid()) {
+      *d->stream << " viewBox=\"" << d->viewBox.left() << ' ' << d->viewBox.top();
+      *d->stream << ' ' << d->viewBox.width() << ' ' << d->viewBox.height() << '\"' << endl;
+   }
 
-    *d->stream << " xmlns=\"http://www.w3.org/2000/svg\""
-                  " xmlns:xlink=\"http://www.w3.org/1999/xlink\" "
-                  " version=\"1.2\" baseProfile=\"tiny\">" << endl;
+   *d->stream << " xmlns=\"http://www.w3.org/2000/svg\""
+              " xmlns:xlink=\"http://www.w3.org/1999/xlink\" "
+              " version=\"1.2\" baseProfile=\"tiny\">" << endl;
 
-    if (!d->attributes.document_title.isEmpty()) {
-        *d->stream << "<title>" << d->attributes.document_title << "</title>" << endl;
-    }
+   if (!d->attributes.document_title.isEmpty()) {
+      *d->stream << "<title>" << d->attributes.document_title << "</title>" << endl;
+   }
 
-    if (!d->attributes.document_description.isEmpty()) {
-        *d->stream << "<desc>" << d->attributes.document_description << "</desc>" << endl;
-    }
+   if (!d->attributes.document_description.isEmpty()) {
+      *d->stream << "<desc>" << d->attributes.document_description << "</desc>" << endl;
+   }
 
-    d->stream->setString(&d->defs);
-    *d->stream << "<defs>\n";
+   d->stream->setString(&d->defs);
+   *d->stream << "<defs>\n";
 
-    d->stream->setString(&d->body);
-    // Start the initial graphics state...
-    *d->stream << "<g ";
-    generateQtDefaults();
-    *d->stream << endl;
+   d->stream->setString(&d->body);
+   // Start the initial graphics state...
+   *d->stream << "<g ";
+   generateQtDefaults();
+   *d->stream << endl;
 
-    return true;
+   return true;
 }
 
 bool QSvgPaintEngine::end()
 {
-    Q_D(QSvgPaintEngine);
+   Q_D(QSvgPaintEngine);
 
-    d->stream->setString(&d->defs);
-    *d->stream << "</defs>\n";
+   d->stream->setString(&d->defs);
+   *d->stream << "</defs>\n";
 
-    d->stream->setDevice(d->outputDevice);
+   d->stream->setDevice(d->outputDevice);
 #ifndef QT_NO_TEXTCODEC
-    d->stream->setCodec(QTextCodec::codecForName("UTF-8"));
+   d->stream->setCodec(QTextCodec::codecForName("UTF-8"));
 #endif
 
-    *d->stream << d->header;
-    *d->stream << d->defs;
-    *d->stream << d->body;
-    if (d->afterFirstUpdate)
-        *d->stream << "</g>" << endl; // close the updateState
+   *d->stream << d->header;
+   *d->stream << d->defs;
+   *d->stream << d->body;
+   if (d->afterFirstUpdate) {
+      *d->stream << "</g>" << endl;   // close the updateState
+   }
 
-    *d->stream << "</g>" << endl // close the Qt defaults
-               << "</svg>" << endl;
+   *d->stream << "</g>" << endl // close the Qt defaults
+              << "</svg>" << endl;
 
-    delete d->stream;
+   delete d->stream;
 
-    return true;
+   return true;
 }
 
 void QSvgPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pm,
                                  const QRectF &sr)
 {
-    drawImage(r, pm.toImage(), sr);
+   drawImage(r, pm.toImage(), sr);
 }
 
 void QSvgPaintEngine::drawImage(const QRectF &r, const QImage &image,
                                 const QRectF &sr,
                                 Qt::ImageConversionFlag flags)
 {
-    //Q_D(QSvgPaintEngine);
+   //Q_D(QSvgPaintEngine);
 
-    Q_UNUSED(sr);
-    Q_UNUSED(flags);
-    stream() << "<image ";
-    stream() << "x=\""<<r.x()<<"\" "
-                "y=\""<<r.y()<<"\" "
-                "width=\""<<r.width()<<"\" "
-                "height=\""<<r.height()<<"\" "
-                "preserveAspectRatio=\"none\" ";
+   Q_UNUSED(sr);
+   Q_UNUSED(flags);
+   stream() << "<image ";
+   stream() << "x=\"" << r.x() << "\" "
+            "y=\"" << r.y() << "\" "
+            "width=\"" << r.width() << "\" "
+            "height=\"" << r.height() << "\" "
+            "preserveAspectRatio=\"none\" ";
 
-    QByteArray data;
-    QBuffer buffer(&data);
-    buffer.open(QBuffer::ReadWrite);
-    image.save(&buffer, "PNG");
-    buffer.close();
-    stream() << "xlink:href=\"data:image/png;base64,"
-             << data.toBase64()
-             <<"\" />\n";
+   QByteArray data;
+   QBuffer buffer(&data);
+   buffer.open(QBuffer::ReadWrite);
+   image.save(&buffer, "PNG");
+   buffer.close();
+   stream() << "xlink:href=\"data:image/png;base64,"
+            << data.toBase64()
+            << "\" />\n";
 }
 
 void QSvgPaintEngine::updateState(const QPaintEngineState &state)
 {
-    Q_D(QSvgPaintEngine);
-    QPaintEngine::DirtyFlags flags = state.state();
+   Q_D(QSvgPaintEngine);
+   QPaintEngine::DirtyFlags flags = state.state();
 
-    // always stream full gstate, which is not required, but...
-    flags |= QPaintEngine::AllDirty;
+   // always stream full gstate, which is not required, but...
+   flags |= QPaintEngine::AllDirty;
 
-    // close old state and start a new one...
-    if (d->afterFirstUpdate)
-        *d->stream << "</g>\n\n";
+   // close old state and start a new one...
+   if (d->afterFirstUpdate) {
+      *d->stream << "</g>\n\n";
+   }
 
-    *d->stream << "<g ";
+   *d->stream << "<g ";
 
-    if (flags & QPaintEngine::DirtyBrush) {
-        qbrushToSvg(state.brush());
-    }
+   if (flags & QPaintEngine::DirtyBrush) {
+      qbrushToSvg(state.brush());
+   }
 
-    if (flags & QPaintEngine::DirtyPen) {
-        qpenToSvg(state.pen());
-    }
+   if (flags & QPaintEngine::DirtyPen) {
+      qpenToSvg(state.pen());
+   }
 
-    if (flags & QPaintEngine::DirtyTransform) {
-        d->matrix = state.matrix();
-        *d->stream << "transform=\"matrix(" << d->matrix.m11() << ','
-                   << d->matrix.m12() << ','
-                   << d->matrix.m21() << ',' << d->matrix.m22() << ','
-                   << d->matrix.dx() << ',' << d->matrix.dy()
-                   << ")\""
-                   << endl;
-    }
+   if (flags & QPaintEngine::DirtyTransform) {
+      d->matrix = state.matrix();
+      *d->stream << "transform=\"matrix(" << d->matrix.m11() << ','
+                 << d->matrix.m12() << ','
+                 << d->matrix.m21() << ',' << d->matrix.m22() << ','
+                 << d->matrix.dx() << ',' << d->matrix.dy()
+                 << ")\""
+                 << endl;
+   }
 
-    if (flags & QPaintEngine::DirtyFont) {
-        qfontToSvg(state.font());
-    }
+   if (flags & QPaintEngine::DirtyFont) {
+      qfontToSvg(state.font());
+   }
 
-    if (flags & QPaintEngine::DirtyOpacity) {
-        if (!qFuzzyIsNull(state.opacity() - 1))
-            stream() << "opacity=\""<<state.opacity()<<"\" ";
-    }
+   if (flags & QPaintEngine::DirtyOpacity) {
+      if (!qFuzzyIsNull(state.opacity() - 1)) {
+         stream() << "opacity=\"" << state.opacity() << "\" ";
+      }
+   }
 
-    *d->stream << '>' << endl;
+   *d->stream << '>' << endl;
 
-    d->afterFirstUpdate = true;
+   d->afterFirstUpdate = true;
 }
 
 void QSvgPaintEngine::drawPath(const QPainterPath &p)
 {
-    Q_D(QSvgPaintEngine);
+   Q_D(QSvgPaintEngine);
 
-    *d->stream << "<path vector-effect=\""
-               << (state->pen().isCosmetic() ? "non-scaling-stroke" : "none")
-               << "\" fill-rule=\""
-               << (p.fillRule() == Qt::OddEvenFill ? "evenodd" : "nonzero")
-               << "\" d=\"";
+   *d->stream << "<path vector-effect=\""
+              << (state->pen().isCosmetic() ? "non-scaling-stroke" : "none")
+              << "\" fill-rule=\""
+              << (p.fillRule() == Qt::OddEvenFill ? "evenodd" : "nonzero")
+              << "\" d=\"";
 
-    for (int i=0; i<p.elementCount(); ++i) {
-        const QPainterPath::Element &e = p.elementAt(i);
-        switch (e.type) {
-        case QPainterPath::MoveToElement:
+   for (int i = 0; i < p.elementCount(); ++i) {
+      const QPainterPath::Element &e = p.elementAt(i);
+      switch (e.type) {
+         case QPainterPath::MoveToElement:
             *d->stream << 'M' << e.x << ',' << e.y;
             break;
-        case QPainterPath::LineToElement:
+         case QPainterPath::LineToElement:
             *d->stream << 'L' << e.x << ',' << e.y;
             break;
-        case QPainterPath::CurveToElement:
+         case QPainterPath::CurveToElement:
             *d->stream << 'C' << e.x << ',' << e.y;
             ++i;
             while (i < p.elementCount()) {
-                const QPainterPath::Element &e = p.elementAt(i);
-                if (e.type != QPainterPath::CurveToDataElement) {
-                    --i;
-                    break;
-                } else
-                    *d->stream << ' ';
-                *d->stream << e.x << ',' << e.y;
-                ++i;
+               const QPainterPath::Element &e = p.elementAt(i);
+               if (e.type != QPainterPath::CurveToDataElement) {
+                  --i;
+                  break;
+               } else {
+                  *d->stream << ' ';
+               }
+               *d->stream << e.x << ',' << e.y;
+               ++i;
             }
             break;
-        default:
+         default:
             break;
-        }
-        if (i != p.elementCount() - 1) {
-            *d->stream << ' ';
-        }
-    }
+      }
+      if (i != p.elementCount() - 1) {
+         *d->stream << ' ';
+      }
+   }
 
-    *d->stream << "\"/>" << endl;
+   *d->stream << "\"/>" << endl;
 }
 
 void QSvgPaintEngine::drawPolygon(const QPointF *points, int pointCount,
                                   PolygonDrawMode mode)
 {
-    Q_ASSERT(pointCount >= 2);
+   Q_ASSERT(pointCount >= 2);
 
-    //Q_D(QSvgPaintEngine);
+   //Q_D(QSvgPaintEngine);
 
-    QPainterPath path(points[0]);
-    for (int i=1; i<pointCount; ++i)
-        path.lineTo(points[i]);
+   QPainterPath path(points[0]);
+   for (int i = 1; i < pointCount; ++i) {
+      path.lineTo(points[i]);
+   }
 
-    if (mode == PolylineMode) {
-        stream() << "<polyline fill=\"none\" vector-effect=\""
-                 << (state->pen().isCosmetic() ? "non-scaling-stroke" : "none")
-                 << "\" points=\"";
-        for (int i = 0; i < pointCount; ++i) {
-            const QPointF &pt = points[i];
-            stream() << pt.x() << ',' << pt.y() << ' ';
-        }
-        stream() << "\" />" <<endl;
-    } else {
-        path.closeSubpath();
-        drawPath(path);
-    }
+   if (mode == PolylineMode) {
+      stream() << "<polyline fill=\"none\" vector-effect=\""
+               << (state->pen().isCosmetic() ? "non-scaling-stroke" : "none")
+               << "\" points=\"";
+      for (int i = 0; i < pointCount; ++i) {
+         const QPointF &pt = points[i];
+         stream() << pt.x() << ',' << pt.y() << ' ';
+      }
+      stream() << "\" />" << endl;
+   } else {
+      path.closeSubpath();
+      drawPath(path);
+   }
 }
 
 void QSvgPaintEngine::drawTextItem(const QPointF &pt, const QTextItem &textItem)
 {
-    Q_D(QSvgPaintEngine);
-    if (d->pen.style() == Qt::NoPen)
-        return;
+   Q_D(QSvgPaintEngine);
+   if (d->pen.style() == Qt::NoPen) {
+      return;
+   }
 
-    const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
-    QString s = QString::fromRawData(ti.chars, ti.num_chars);
+   const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
+   QString s = QString::fromRawData(ti.chars, ti.num_chars);
 
-    *d->stream << "<text "
-                  "fill=\"" << d->attributes.stroke << "\" "
-                  "fill-opacity=\"" << d->attributes.strokeOpacity << "\" "
-                  "stroke=\"none\" "
-                  "xml:space=\"preserve\" "
-                  "x=\"" << pt.x() << "\" y=\"" << pt.y() << "\" ";
-    qfontToSvg(textItem.font());
-    *d->stream << " >"
-               << Qt::escape(s)
-               << "</text>"
-               << endl;
+   *d->stream << "<text "
+              "fill=\"" << d->attributes.stroke << "\" "
+              "fill-opacity=\"" << d->attributes.strokeOpacity << "\" "
+              "stroke=\"none\" "
+              "xml:space=\"preserve\" "
+              "x=\"" << pt.x() << "\" y=\"" << pt.y() << "\" ";
+   qfontToSvg(textItem.font());
+   *d->stream << " >"
+              << Qt::escape(s)
+              << "</text>"
+              << endl;
 }
 
 QT_END_NAMESPACE

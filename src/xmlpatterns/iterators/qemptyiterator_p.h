@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,71 +31,64 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+template<typename T> class EmptyIterator : public QAbstractXmlForwardIterator<T>
 {
+ public:
+   /**
+    * @returns always a default constructed value, T().
+    */
+   virtual T next() {
+      return T();
+   }
 
-    template<typename T> class EmptyIterator : public QAbstractXmlForwardIterator<T>
-    {
-    public:
-        /**
-         * @returns always a default constructed value, T().
-         */
-        virtual T next()
-        {
-            return T();
-        }
+   /**
+    * @returns always a default constructed value, T().
+    */
+   virtual T current() const {
+      return T();
+   }
 
-        /**
-         * @returns always a default constructed value, T().
-         */
-        virtual T current() const
-        {
-            return T();
-        }
+   /**
+    * @returns always 0.
+    */
+   virtual xsInteger position() const {
+      return 0;
+   }
 
-        /**
-         * @returns always 0.
-         */
-        virtual xsInteger position() const
-        {
-            return 0;
-        }
+   /**
+    * @returns always @c this, the reverse of <tt>()</tt> is <tt>()</tt>.
+    */
+   virtual typename QAbstractXmlForwardIterator<T>::Ptr toReversed() {
+      return typename QAbstractXmlForwardIterator<T>::Ptr(const_cast<EmptyIterator<T> *>(this));
+   }
 
-        /**
-         * @returns always @c this, the reverse of <tt>()</tt> is <tt>()</tt>.
-         */
-        virtual typename QAbstractXmlForwardIterator<T>::Ptr toReversed()
-        {
-            return typename QAbstractXmlForwardIterator<T>::Ptr(const_cast<EmptyIterator<T> *>(this));
-        }
+   /**
+    * @returns always 0
+    */
+   virtual xsInteger count() {
+      return 0;
+   }
 
-        /**
-         * @returns always 0
-         */
-        virtual xsInteger count()
-        {
-            return 0;
-        }
+   /**
+    * @returns @c this
+    */
+   virtual typename QAbstractXmlForwardIterator<T>::Ptr copy() const {
+      return typename QAbstractXmlForwardIterator<T>::Ptr(const_cast<EmptyIterator *>(this));
+   }
 
-        /**
-         * @returns @c this
-         */
-        virtual typename QAbstractXmlForwardIterator<T>::Ptr copy() const
-        {
-            return typename QAbstractXmlForwardIterator<T>::Ptr(const_cast<EmptyIterator *>(this));
-        }
+ protected:
+   friend class CommonValues;
+};
 
-    protected:
-        friend class CommonValues;
-    };
-
-    template<typename T>
-    static inline
-    typename QAbstractXmlForwardIterator<T>::Ptr
-    makeEmptyIterator()
-    {
-        return typename QAbstractXmlForwardIterator<T>::Ptr(new EmptyIterator<T>());
-    }
+template<typename T>
+static inline
+typename QAbstractXmlForwardIterator<T>::Ptr
+makeEmptyIterator()
+{
+   return typename QAbstractXmlForwardIterator<T>::Ptr(new EmptyIterator<T>());
+}
 
 }
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,73 +32,77 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QScript
-{
+namespace QScript {
 
 class FunctionWrapper : public JSC::PrototypeFunction // ### subclass InternalFunction instead
 {
-public:
-    // work around CELL_SIZE limitation
-    struct Data
-    {
-        QScriptEngine::FunctionSignature function;
-    };
+ public:
+   // work around CELL_SIZE limitation
+   struct Data {
+      QScriptEngine::FunctionSignature function;
+   };
 
-    FunctionWrapper(JSC::ExecState*, int length, const JSC::Identifier&,
-                    QScriptEngine::FunctionSignature);
-    ~FunctionWrapper();
+   FunctionWrapper(JSC::ExecState *, int length, const JSC::Identifier &,
+                   QScriptEngine::FunctionSignature);
+   ~FunctionWrapper();
 
-    virtual const JSC::ClassInfo* classInfo() const { return &info; }
-    static const JSC::ClassInfo info;
+   virtual const JSC::ClassInfo *classInfo() const {
+      return &info;
+   }
+   static const JSC::ClassInfo info;
 
-    QScriptEngine::FunctionSignature function() const
-    { return data->function; }
+   QScriptEngine::FunctionSignature function() const {
+      return data->function;
+   }
 
-private:
-    virtual JSC::ConstructType getConstructData(JSC::ConstructData&);
+ private:
+   virtual JSC::ConstructType getConstructData(JSC::ConstructData &);
 
-    static JSC::JSValue JSC_HOST_CALL proxyCall(JSC::ExecState *, JSC::JSObject *,
-                                                JSC::JSValue, const JSC::ArgList &);
-    static JSC::JSObject* proxyConstruct(JSC::ExecState *, JSC::JSObject *,
-                                         const JSC::ArgList &);
+   static JSC::JSValue JSC_HOST_CALL proxyCall(JSC::ExecState *, JSC::JSObject *,
+         JSC::JSValue, const JSC::ArgList &);
+   static JSC::JSObject *proxyConstruct(JSC::ExecState *, JSC::JSObject *,
+                                        const JSC::ArgList &);
 
-private:
-    Data *data;
+ private:
+   Data *data;
 };
 
 class FunctionWithArgWrapper : public JSC::PrototypeFunction
 {
-public:
-    // work around CELL_SIZE limitation
-    struct Data
-    {
-        QScriptEngine::FunctionWithArgSignature function;
-        void *arg;
-    };
+ public:
+   // work around CELL_SIZE limitation
+   struct Data {
+      QScriptEngine::FunctionWithArgSignature function;
+      void *arg;
+   };
 
-    FunctionWithArgWrapper(JSC::ExecState*, int length, const JSC::Identifier&,
-                           QScriptEngine::FunctionWithArgSignature, void *);
-    ~FunctionWithArgWrapper();
+   FunctionWithArgWrapper(JSC::ExecState *, int length, const JSC::Identifier &,
+                          QScriptEngine::FunctionWithArgSignature, void *);
+   ~FunctionWithArgWrapper();
 
-    virtual const JSC::ClassInfo* classInfo() const { return &info; }
-    static const JSC::ClassInfo info;
+   virtual const JSC::ClassInfo *classInfo() const {
+      return &info;
+   }
+   static const JSC::ClassInfo info;
 
-    QScriptEngine::FunctionWithArgSignature function() const
-    { return data->function; }
+   QScriptEngine::FunctionWithArgSignature function() const {
+      return data->function;
+   }
 
-    void *arg() const
-    { return data->arg; }
+   void *arg() const {
+      return data->arg;
+   }
 
-private:
-    virtual JSC::ConstructType getConstructData(JSC::ConstructData&);
+ private:
+   virtual JSC::ConstructType getConstructData(JSC::ConstructData &);
 
-    static JSC::JSValue JSC_HOST_CALL proxyCall(JSC::ExecState *, JSC::JSObject *,
-                                                JSC::JSValue , const JSC::ArgList &);
-    static JSC::JSObject* proxyConstruct(JSC::ExecState *, JSC::JSObject *,
-                                         const JSC::ArgList &);
+   static JSC::JSValue JSC_HOST_CALL proxyCall(JSC::ExecState *, JSC::JSObject *,
+         JSC::JSValue , const JSC::ArgList &);
+   static JSC::JSObject *proxyConstruct(JSC::ExecState *, JSC::JSObject *,
+                                        const JSC::ArgList &);
 
-private:
-    Data *data;
+ private:
+   Data *data;
 };
 
 } // namespace QScript

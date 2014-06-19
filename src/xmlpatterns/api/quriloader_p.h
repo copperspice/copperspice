@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,25 +33,24 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class URILoader : public QNetworkAccessManager
 {
-    class URILoader : public QNetworkAccessManager
-    {
-    public:
-        URILoader(QObject *const parent,
-                  const NamePool::Ptr &np,
-                  const VariableLoader::Ptr &variableLoader);
+ public:
+   URILoader(QObject *const parent,
+             const NamePool::Ptr &np,
+             const VariableLoader::Ptr &variableLoader);
 
-        virtual QNetworkReply *createRequest(Operation op,
-                                             const QNetworkRequest & req,
-                                             QIODevice *outgoingData = 0);
+   virtual QNetworkReply *createRequest(Operation op,
+                                        const QNetworkRequest &req,
+                                        QIODevice *outgoingData = 0);
 
-    private:
-        const QString               m_variableNS;
-        const NamePool::Ptr         m_namePool;
-        const VariableLoader::Ptr   m_variableLoader;
+ private:
+   const QString               m_variableNS;
+   const NamePool::Ptr         m_namePool;
+   const VariableLoader::Ptr   m_variableLoader;
 
-    };
+};
 }
 
 QT_END_NAMESPACE

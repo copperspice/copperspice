@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,46 +36,44 @@ class QString;
 class QVariant;
 template<typename Key, typename Value> class QHash;
 
-namespace QPatternist
+namespace QPatternist {
+class AbstractXmlPullProviderPrivate;
+
+class AbstractXmlPullProvider
 {
-    class AbstractXmlPullProviderPrivate;
+ public:
+   AbstractXmlPullProvider();
+   virtual ~AbstractXmlPullProvider();
 
-    class AbstractXmlPullProvider
-    {
-    public:
-        AbstractXmlPullProvider();
-        virtual ~AbstractXmlPullProvider();
+   enum Event {
+      StartOfInput            = 1,
+      AtomicValue             = 1 << 1,
+      StartDocument           = 1 << 2,
+      EndDocument             = 1 << 3,
+      StartElement            = 1 << 4,
+      EndElement              = 1 << 5,
+      Text                    = 1 << 6,
+      ProcessingInstruction   = 1 << 7,
+      Comment                 = 1 << 8,
+      Attribute               = 1 << 9,
+      Namespace               = 1 << 10,
+      EndOfInput              = 1 << 11
+   };
 
-        enum Event
-        {
-            StartOfInput            = 1,
-            AtomicValue             = 1 << 1,
-            StartDocument           = 1 << 2,
-            EndDocument             = 1 << 3,
-            StartElement            = 1 << 4,
-            EndElement              = 1 << 5,
-            Text                    = 1 << 6,
-            ProcessingInstruction   = 1 << 7,
-            Comment                 = 1 << 8,
-            Attribute               = 1 << 9,
-            Namespace               = 1 << 10,
-            EndOfInput              = 1 << 11
-        };
+   virtual Event next() = 0;
+   virtual Event current() const = 0;
+   virtual QXmlName name() const = 0;
+   virtual QVariant atomicValue() const = 0;
+   virtual QString stringValue() const = 0;
 
-        virtual Event next() = 0;
-        virtual Event current() const = 0;
-        virtual QXmlName name() const = 0;
-        virtual QVariant atomicValue() const = 0;
-        virtual QString stringValue() const = 0;
+   virtual QHash<QXmlName, QString> attributes() = 0;
+   virtual QHash<QXmlName, QXmlItem> attributeItems() = 0;
 
-        virtual QHash<QXmlName, QString> attributes() = 0;
-        virtual QHash<QXmlName, QXmlItem> attributeItems() = 0;
-
-        /* *** The functions below are internal. */
-    private:
-        Q_DISABLE_COPY(AbstractXmlPullProvider)
-        AbstractXmlPullProviderPrivate *d;
-    };
+   /* *** The functions below are internal. */
+ private:
+   Q_DISABLE_COPY(AbstractXmlPullProvider)
+   AbstractXmlPullProviderPrivate *d;
+};
 }
 
 QT_END_NAMESPACE

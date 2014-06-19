@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,28 +36,28 @@ class QAbstractMessageHandlerPrivate;
 
 class Q_XMLPATTERNS_EXPORT QAbstractMessageHandler : public QObject
 {
-    CS_OBJECT(QAbstractMessageHandler)
+   CS_OBJECT(QAbstractMessageHandler)
 
-public:
-    QAbstractMessageHandler(QObject *parent = 0);
-    virtual ~QAbstractMessageHandler();
+ public:
+   QAbstractMessageHandler(QObject *parent = 0);
+   virtual ~QAbstractMessageHandler();
 
-    void message(QtMsgType type,
-                 const QString &description,
-                 const QUrl &identifier = QUrl(),
-                 const QSourceLocation &sourceLocation = QSourceLocation());
+   void message(QtMsgType type,
+                const QString &description,
+                const QUrl &identifier = QUrl(),
+                const QSourceLocation &sourceLocation = QSourceLocation());
 
-protected:
-    virtual void handleMessage(QtMsgType type,
-                               const QString &description,
-                               const QUrl &identifier,
-                               const QSourceLocation &sourceLocation) = 0;
-    QScopedPointer<QAbstractMessageHandlerPrivate> d_ptr;
+ protected:
+   virtual void handleMessage(QtMsgType type,
+                              const QString &description,
+                              const QUrl &identifier,
+                              const QSourceLocation &sourceLocation) = 0;
+   QScopedPointer<QAbstractMessageHandlerPrivate> d_ptr;
 
-private:
-    Q_DECLARE_PRIVATE(QAbstractMessageHandler)
-    Q_DISABLE_COPY(QAbstractMessageHandler)
-	
+ private:
+   Q_DECLARE_PRIVATE(QAbstractMessageHandler)
+   Q_DISABLE_COPY(QAbstractMessageHandler)
+
 
 };
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,43 +34,43 @@ using namespace QPatternist;
 
 TreatAs::TreatAs(const Expression::Ptr &operand,
                  const SequenceType::Ptr &reqType) : SingleContainer(operand),
-                                                     m_reqType(reqType)
+   m_reqType(reqType)
 {
-    Q_ASSERT(reqType);
+   Q_ASSERT(reqType);
 }
 
 Expression::Ptr TreatAs::typeCheck(const StaticContext::Ptr &context,
                                    const SequenceType::Ptr &reqType)
 {
-    Q_ASSERT(context);
-    Q_ASSERT(reqType);
+   Q_ASSERT(context);
+   Q_ASSERT(reqType);
 
-    /* Apply function conversion with the special error code XPDY0050. After that, we
-     * let the regular typeCheck() function be invoked on the operand before we rewrite
-     * to it. Hence is applyFunctionConversion() called twice, which doesn't break anything,
-     * but indeed is redundant. */
-    const Expression::Ptr treated(TypeChecker::applyFunctionConversion(m_operand,
-                                                                       m_reqType,
-                                                                       context,
-                                                                       ReportContext::XPDY0050));
-    return treated->typeCheck(context, reqType);
+   /* Apply function conversion with the special error code XPDY0050. After that, we
+    * let the regular typeCheck() function be invoked on the operand before we rewrite
+    * to it. Hence is applyFunctionConversion() called twice, which doesn't break anything,
+    * but indeed is redundant. */
+   const Expression::Ptr treated(TypeChecker::applyFunctionConversion(m_operand,
+                                 m_reqType,
+                                 context,
+                                 ReportContext::XPDY0050));
+   return treated->typeCheck(context, reqType);
 }
 
 ExpressionVisitorResult::Ptr TreatAs::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 SequenceType::Ptr TreatAs::staticType() const
 {
-    return m_reqType;
+   return m_reqType;
 }
 
 SequenceType::List TreatAs::expectedOperandTypes() const
 {
-    SequenceType::List result;
-    result.append(CommonSequenceTypes::ZeroOrMoreItems);
-    return result;
+   SequenceType::List result;
+   result.append(CommonSequenceTypes::ZeroOrMoreItems);
+   return result;
 }
 
 QT_END_NAMESPACE

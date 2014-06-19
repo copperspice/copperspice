@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,145 +32,142 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{  
-    class XsdAttributeUse : public XsdAttributeTerm
-    {
-        public:
-            typedef QExplicitlySharedDataPointer<XsdAttributeUse> Ptr;
-            typedef QList<XsdAttributeUse::Ptr> List;
+namespace QPatternist {
+class XsdAttributeUse : public XsdAttributeTerm
+{
+ public:
+   typedef QExplicitlySharedDataPointer<XsdAttributeUse> Ptr;
+   typedef QList<XsdAttributeUse::Ptr> List;
 
-            /**
-             * Describes the value constraint of an attribute use.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#vc_au">Value Constraint Definition</a>
-             */
-            class ValueConstraint : public QSharedData
-            {
-                public:
-                    typedef QExplicitlySharedDataPointer<ValueConstraint> Ptr;
+   /**
+    * Describes the value constraint of an attribute use.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#vc_au">Value Constraint Definition</a>
+    */
+   class ValueConstraint : public QSharedData
+   {
+    public:
+      typedef QExplicitlySharedDataPointer<ValueConstraint> Ptr;
 
-                    /**
-                     * Describes the <a href="http://www.w3.org/TR/xmlschema11-1/#au-value_constraint">value constraint</a> of an attribute use.
-                     */
-                    enum Variety
-                    {
-                        Default,  ///< The attribute use has a default value set.
-                        Fixed     ///< The attribute use has a fixed value set.
-                    };
+      /**
+       * Describes the <a href="http://www.w3.org/TR/xmlschema11-1/#au-value_constraint">value constraint</a> of an attribute use.
+       */
+      enum Variety {
+         Default,  ///< The attribute use has a default value set.
+         Fixed     ///< The attribute use has a fixed value set.
+      };
 
-                    /**
-                     * Sets the @p variety of the attribute use value constraint.
-                     */
-                    void setVariety(Variety variety);
+      /**
+       * Sets the @p variety of the attribute use value constraint.
+       */
+      void setVariety(Variety variety);
 
-                    /**
-                     * Returns the variety of the attribute use value constraint.
-                     */
-                    Variety variety() const;
+      /**
+       * Returns the variety of the attribute use value constraint.
+       */
+      Variety variety() const;
 
-                    /**
-                     * Sets the @p value of the constraint.
-                     */
-                    void setValue(const QString &value);
+      /**
+       * Sets the @p value of the constraint.
+       */
+      void setValue(const QString &value);
 
-                    /**
-                     * Returns the value of the constraint.
-                     */
-                    QString value() const;
+      /**
+       * Returns the value of the constraint.
+       */
+      QString value() const;
 
-                    /**
-                     * Sets the lexical @p form of the constraint.
-                     */
-                    void setLexicalForm(const QString &form);
+      /**
+       * Sets the lexical @p form of the constraint.
+       */
+      void setLexicalForm(const QString &form);
 
-                    /**
-                     * Returns the lexical form of the constraint.
-                     */
-                    QString lexicalForm() const;
+      /**
+       * Returns the lexical form of the constraint.
+       */
+      QString lexicalForm() const;
 
-                    /**
-                     * Creates a new value constraint from a XsdAttribute::ValueConstraint.
-                     */
-                    static ValueConstraint::Ptr fromAttributeValueConstraint(const XsdAttribute::ValueConstraint::Ptr &constraint);
+      /**
+       * Creates a new value constraint from a XsdAttribute::ValueConstraint.
+       */
+      static ValueConstraint::Ptr fromAttributeValueConstraint(const XsdAttribute::ValueConstraint::Ptr &constraint);
 
-                private:
-                    Variety m_variety;
-                    QString m_value;
-                    QString m_lexicalForm;
-            };
+    private:
+      Variety m_variety;
+      QString m_value;
+      QString m_lexicalForm;
+   };
 
-            /**
-             * Describes the use type of the attribute use.
-             */
-            enum UseType
-            {
-                OptionalUse,        ///< The attribute can be there but doesn't need to.
-                RequiredUse,        ///< The attribute must be there.
-                ProhibitedUse       ///< The attribute is not allowed to be there.
-            };
+   /**
+    * Describes the use type of the attribute use.
+    */
+   enum UseType {
+      OptionalUse,        ///< The attribute can be there but doesn't need to.
+      RequiredUse,        ///< The attribute must be there.
+      ProhibitedUse       ///< The attribute is not allowed to be there.
+   };
 
-            /**
-             * Creates a new attribute use object.
-             */
-            XsdAttributeUse();
+   /**
+    * Creates a new attribute use object.
+    */
+   XsdAttributeUse();
 
-            /**
-             * Always returns true, used to avoid dynamic casts.
-             */
-            virtual bool isAttributeUse() const;
+   /**
+    * Always returns true, used to avoid dynamic casts.
+    */
+   virtual bool isAttributeUse() const;
 
-            /**
-             * Sets the use @p type of the attribute use.
-             *
-             * @see UseType
-             */
-            void setUseType(UseType type);
+   /**
+    * Sets the use @p type of the attribute use.
+    *
+    * @see UseType
+    */
+   void setUseType(UseType type);
 
-            /**
-             * Returns the use type of the attribute use.
-             */
-            UseType useType() const;
+   /**
+    * Returns the use type of the attribute use.
+    */
+   UseType useType() const;
 
-            /**
-             * Returns whether the attribute use is required.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#au-required">Required Definition</a>
-             */
-            bool isRequired() const;
+   /**
+    * Returns whether the attribute use is required.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#au-required">Required Definition</a>
+    */
+   bool isRequired() const;
 
-            /**
-             * Sets the @p attribute the attribute use is referring to.
-             * That is either a local definition as child of a complexType
-             * or attributeGroup object, or a reference defined by the
-             * 'ref' attribute.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#au-attribute_declaration">Attribute Declaration</a>
-             */
-            void setAttribute(const XsdAttribute::Ptr &attribute);
+   /**
+    * Sets the @p attribute the attribute use is referring to.
+    * That is either a local definition as child of a complexType
+    * or attributeGroup object, or a reference defined by the
+    * 'ref' attribute.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#au-attribute_declaration">Attribute Declaration</a>
+    */
+   void setAttribute(const XsdAttribute::Ptr &attribute);
 
-            /**
-             * Returns the attribute the attribute use is referring to.
-             */
-            XsdAttribute::Ptr attribute() const;
+   /**
+    * Returns the attribute the attribute use is referring to.
+    */
+   XsdAttribute::Ptr attribute() const;
 
-            /**
-             * Sets the value @p constraint of the attribute use.
-             *
-             * @see http://www.w3.org/TR/xmlschema11-1/#vc_au
-             */
-            void setValueConstraint(const ValueConstraint::Ptr &constraint);
+   /**
+    * Sets the value @p constraint of the attribute use.
+    *
+    * @see http://www.w3.org/TR/xmlschema11-1/#vc_au
+    */
+   void setValueConstraint(const ValueConstraint::Ptr &constraint);
 
-            /**
-             * Returns the value constraint of the attribute use.
-             */
-            ValueConstraint::Ptr valueConstraint() const;
+   /**
+    * Returns the value constraint of the attribute use.
+    */
+   ValueConstraint::Ptr valueConstraint() const;
 
-        private:
-            UseType              m_useType;
-            XsdAttribute::Ptr    m_attribute;
-            ValueConstraint::Ptr m_valueConstraint;
-    };
+ private:
+   UseType              m_useType;
+   XsdAttribute::Ptr    m_attribute;
+   ValueConstraint::Ptr m_valueConstraint;
+};
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,90 +35,90 @@ DocumentContentValidator::
 DocumentContentValidator(QAbstractXmlReceiver *const receiver,
                          const DynamicContext::Ptr &context,
                          const Expression::ConstPtr &expr) : m_receiver(receiver)
-                                                           , m_context(context)
-                                                           , m_expr(expr)
-                                                           , m_elementDepth(0)
+   , m_context(context)
+   , m_expr(expr)
+   , m_elementDepth(0)
 {
-    Q_ASSERT(receiver);
-    Q_ASSERT(m_expr);
-    Q_ASSERT(context);
+   Q_ASSERT(receiver);
+   Q_ASSERT(m_expr);
+   Q_ASSERT(context);
 }
 
 void DocumentContentValidator::namespaceBinding(const QXmlName &nb)
 {
-    m_receiver->namespaceBinding(nb);
+   m_receiver->namespaceBinding(nb);
 }
 
 void DocumentContentValidator::startElement(const QXmlName &name)
 {
-    ++m_elementDepth;
-    m_receiver->startElement(name);
+   ++m_elementDepth;
+   m_receiver->startElement(name);
 }
 
 void DocumentContentValidator::endElement()
 {
-    Q_ASSERT(m_elementDepth > 0);
-    --m_elementDepth;
-    m_receiver->endElement();
+   Q_ASSERT(m_elementDepth > 0);
+   --m_elementDepth;
+   m_receiver->endElement();
 }
 
 void DocumentContentValidator::attribute(const QXmlName &name,
-                                         const QStringRef &value)
+      const QStringRef &value)
 {
-    if(m_elementDepth == 0)
-    {
-        m_context->error(QtXmlPatterns::tr("An attribute node cannot be a "
-                                           "child of a document node. "
-                                           "Therefore, the attribute %1 "
-                                           "is out of place.")
-                         .arg(formatKeyword(m_context->namePool(), name)),
-                         ReportContext::XPTY0004, m_expr.data());
-    }
-    else
-        m_receiver->attribute(name, value);
+   if (m_elementDepth == 0) {
+      m_context->error(QtXmlPatterns::tr("An attribute node cannot be a "
+                                         "child of a document node. "
+                                         "Therefore, the attribute %1 "
+                                         "is out of place.")
+                       .arg(formatKeyword(m_context->namePool(), name)),
+                       ReportContext::XPTY0004, m_expr.data());
+   } else {
+      m_receiver->attribute(name, value);
+   }
 }
 
 void DocumentContentValidator::comment(const QString &value)
 {
-    m_receiver->comment(value);
+   m_receiver->comment(value);
 }
 
 void DocumentContentValidator::characters(const QStringRef &value)
 {
-    m_receiver->characters(value);
+   m_receiver->characters(value);
 }
 
 void DocumentContentValidator::processingInstruction(const QXmlName &name,
-                                                     const QString &value)
+      const QString &value)
 {
-    m_receiver->processingInstruction(name, value);
+   m_receiver->processingInstruction(name, value);
 }
 
 void DocumentContentValidator::item(const Item &outputItem)
 {
-    /* We can't send outputItem directly to m_receiver since its item() function
-     * won't dispatch to this DocumentContentValidator, but to itself. We're not sub-classing here,
-     * we're delegating. */
+   /* We can't send outputItem directly to m_receiver since its item() function
+    * won't dispatch to this DocumentContentValidator, but to itself. We're not sub-classing here,
+    * we're delegating. */
 
-    if(outputItem.isNode())
-        sendAsNode(outputItem);
-    else
-        m_receiver->item(outputItem);
+   if (outputItem.isNode()) {
+      sendAsNode(outputItem);
+   } else {
+      m_receiver->item(outputItem);
+   }
 }
 
 void DocumentContentValidator::startDocument()
 {
-    m_receiver->startDocument();
+   m_receiver->startDocument();
 }
 
 void DocumentContentValidator::endDocument()
 {
-    m_receiver->endDocument();
+   m_receiver->endDocument();
 }
 
 void DocumentContentValidator::atomicValue(const QVariant &value)
 {
-    Q_UNUSED(value);
+   Q_UNUSED(value);
 }
 
 void DocumentContentValidator::startOfSequence()

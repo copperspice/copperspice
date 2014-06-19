@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,82 +33,82 @@ using namespace QPatternist;
 
 void XsdAttribute::Scope::setVariety(Variety variety)
 {
-    m_variety = variety;
+   m_variety = variety;
 }
 
 XsdAttribute::Scope::Variety XsdAttribute::Scope::variety() const
 {
-    return m_variety;
+   return m_variety;
 }
 
 void XsdAttribute::Scope::setParent(const NamedSchemaComponent::Ptr &parent)
 {
-    m_parent = parent.data();
+   m_parent = parent.data();
 }
 
 NamedSchemaComponent::Ptr XsdAttribute::Scope::parent() const
 {
-    return NamedSchemaComponent::Ptr(m_parent);
+   return NamedSchemaComponent::Ptr(m_parent);
 }
 
 void XsdAttribute::ValueConstraint::setVariety(Variety variety)
 {
-    m_variety = variety;
+   m_variety = variety;
 }
 
 XsdAttribute::ValueConstraint::Variety XsdAttribute::ValueConstraint::variety() const
 {
-    return m_variety;
+   return m_variety;
 }
 
 void XsdAttribute::ValueConstraint::setValue(const QString &value)
 {
-    m_value = value;
+   m_value = value;
 }
 
 QString XsdAttribute::ValueConstraint::value() const
 {
-    return m_value;
+   return m_value;
 }
 
 void XsdAttribute::ValueConstraint::setLexicalForm(const QString &form)
 {
-    m_lexicalForm = form;
+   m_lexicalForm = form;
 }
 
 QString XsdAttribute::ValueConstraint::lexicalForm() const
 {
-    return m_lexicalForm;
+   return m_lexicalForm;
 }
 
 void XsdAttribute::setType(const AnySimpleType::Ptr &type)
 {
-    m_type = type;
+   m_type = type;
 }
 
 AnySimpleType::Ptr XsdAttribute::type() const
 {
-    return m_type;
+   return m_type;
 }
 
 void XsdAttribute::setScope(const Scope::Ptr &scope)
 {
-    m_scope = scope;
+   m_scope = scope;
 }
 
 XsdAttribute::Scope::Ptr XsdAttribute::scope() const
 {
-    return m_scope;
+   return m_scope;
 }
 
 void XsdAttribute::setValueConstraint(const ValueConstraint::Ptr &constraint)
 {
-    m_valueConstraint = constraint;
+   m_valueConstraint = constraint;
 }
 
 XsdAttribute::ValueConstraint::Ptr XsdAttribute::valueConstraint() const
 {
-    return m_valueConstraint;
+   return m_valueConstraint;
 }
 
 QT_END_NAMESPACE

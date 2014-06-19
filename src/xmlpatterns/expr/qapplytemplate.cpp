@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,154 +41,147 @@ using namespace QPatternist;
 ApplyTemplate::ApplyTemplate(const TemplateMode::Ptr &mode,
                              const WithParam::Hash &withParams,
                              const TemplateMode::Ptr &defaultMode) : TemplateInvoker(withParams)
-                                                                   , m_mode(mode)
-                                                                   , m_defaultMode(defaultMode)
+   , m_mode(mode)
+   , m_defaultMode(defaultMode)
 {
-    Q_ASSERT_X(m_mode || m_defaultMode, Q_FUNC_INFO,
-               "Either a mode, or the default mode must be supplied.");
+   Q_ASSERT_X(m_mode || m_defaultMode, Q_FUNC_INFO,
+              "Either a mode, or the default mode must be supplied.");
 }
 
 Item ApplyTemplate::mapToItem(const QXmlNodeModelIndex &node,
                               const DynamicContext::Ptr &) const
 {
-    return Item(node);
+   return Item(node);
 }
 
 Item::Iterator::Ptr ApplyTemplate::mapToSequence(const Item &item,
-                                                 const DynamicContext::Ptr &context) const
+      const DynamicContext::Ptr &context) const
 {
-    Q_UNUSED(item);
-    return evaluateSequence(context);
+   Q_UNUSED(item);
+   return evaluateSequence(context);
 }
 
 TemplateMode::Ptr ApplyTemplate::effectiveMode(const DynamicContext::Ptr &context) const
 {
-    if(m_mode)
-        return m_mode;
-    else
-    {
-        const TemplateMode::Ptr currentMode(context->currentTemplateMode());
+   if (m_mode) {
+      return m_mode;
+   } else {
+      const TemplateMode::Ptr currentMode(context->currentTemplateMode());
 
-        if(currentMode)
-            return currentMode;
-        else
-            return m_defaultMode;
-    }
+      if (currentMode) {
+         return currentMode;
+      } else {
+         return m_defaultMode;
+      }
+   }
 }
 
 Template::Ptr ApplyTemplate::findTemplate(const DynamicContext::Ptr &context,
-                                          const TemplateMode::Ptr &templateMode) const
+      const TemplateMode::Ptr &templateMode) const
 {
-    const int count = templateMode->templatePatterns.count();
-    Template::Ptr result;
-    /* It's redundant to initialize these values, but it suppresses false
-     * positives with GCC. */
-    PatternPriority priority = 0;
-    TemplatePattern::ID id = -1;
+   const int count = templateMode->templatePatterns.count();
+   Template::Ptr result;
+   /* It's redundant to initialize these values, but it suppresses false
+    * positives with GCC. */
+   PatternPriority priority = 0;
+   TemplatePattern::ID id = -1;
 
-    /* Possible optimization: detecting ambiguous rule matches could be forked off to a
-     * low prioirity thread. */
-    for(int i = 0; i < count; ++i)
-    {
-        const TemplatePattern::Ptr &candidate = templateMode->templatePatterns.at(i);
-        if(candidate->matchPattern()->evaluateEBV(context))
-        {
-            if(result)
-            {
-                if(   candidate->id() != id
+   /* Possible optimization: detecting ambiguous rule matches could be forked off to a
+    * low prioirity thread. */
+   for (int i = 0; i < count; ++i) {
+      const TemplatePattern::Ptr &candidate = templateMode->templatePatterns.at(i);
+      if (candidate->matchPattern()->evaluateEBV(context)) {
+         if (result) {
+            if (   candidate->id() != id
                    && candidate->priority() == priority
                    && candidate->templateTarget()->importPrecedence ==
-                                                        result->importPrecedence)
-                {
-                    context->error(QtXmlPatterns::tr("Ambiguous rule match."),
-                                   ReportContext::XTRE0540, this);
-                }
-                else
-                    break;
+                   result->importPrecedence) {
+               context->error(QtXmlPatterns::tr("Ambiguous rule match."),
+                              ReportContext::XTRE0540, this);
+            } else {
+               break;
             }
-            else
-            {
-                result = candidate->templateTarget();
-                priority = candidate->priority();
-                id = candidate->id();
-            }
-        }
-    }
+         } else {
+            result = candidate->templateTarget();
+            priority = candidate->priority();
+            id = candidate->id();
+         }
+      }
+   }
 
-    return result;
+   return result;
 }
 
 Item::Iterator::Ptr ApplyTemplate::evaluateSequence(const DynamicContext::Ptr &context) const
 {
-    const TemplateMode::Ptr templateMode(effectiveMode(context));
-    const Template::Ptr &templateMatch = findTemplate(context, templateMode);
+   const TemplateMode::Ptr templateMode(effectiveMode(context));
+   const Template::Ptr &templateMatch = findTemplate(context, templateMode);
 
-    if(templateMatch)
-        return templateMatch->body->evaluateSequence(templateMatch->createContext(this, context, false));
-    else
-    {
-        /* None of our templates matched. Proceed with a built-in. */
-        const Item current(context->contextItem());
-        // TODO it can be an atomic value?
-        const QXmlNodeModelIndex::NodeKind kind(current.asNode().kind());
+   if (templateMatch) {
+      return templateMatch->body->evaluateSequence(templateMatch->createContext(this, context, false));
+   } else {
+      /* None of our templates matched. Proceed with a built-in. */
+      const Item current(context->contextItem());
+      // TODO it can be an atomic value?
+      const QXmlNodeModelIndex::NodeKind kind(current.asNode().kind());
 
-        if(kind == QXmlNodeModelIndex::Element || kind == QXmlNodeModelIndex::Document)
-        {
-            pDebug() << "No template match, using builtin template for element() | document-node()";
+      if (kind == QXmlNodeModelIndex::Element || kind == QXmlNodeModelIndex::Document) {
+         pDebug() << "No template match, using builtin template for element() | document-node()";
 
-            const Item::Iterator::Ptr focusIterator(makeItemMappingIterator<Item>(ConstPtr(this),
-                                                                                  current.asNode().iterate(QXmlNodeModelIndex::AxisChild),
-                                                                                  context));
+         const Item::Iterator::Ptr focusIterator(makeItemMappingIterator<Item>(ConstPtr(this),
+                                                 current.asNode().iterate(QXmlNodeModelIndex::AxisChild),
+                                                 context));
 
-            const DynamicContext::Ptr focus(context->createFocus());
-            focus->setFocusIterator(focusIterator);
-            return makeSequenceMappingIterator<Item>(ConstPtr(this), focusIterator, focus);
-        }
-        return CommonValues::emptyIterator;
-    }
+         const DynamicContext::Ptr focus(context->createFocus());
+         focus->setFocusIterator(focusIterator);
+         return makeSequenceMappingIterator<Item>(ConstPtr(this), focusIterator, focus);
+      }
+      return CommonValues::emptyIterator;
+   }
 }
 
 Expression::Ptr ApplyTemplate::compress(const StaticContext::Ptr &context)
 {
-    /* If we have a mode, we will never need the default mode. */
-    if(m_mode)
-        m_defaultMode.reset();
+   /* If we have a mode, we will never need the default mode. */
+   if (m_mode) {
+      m_defaultMode.reset();
+   }
 
-    return TemplateInvoker::compress(context);
+   return TemplateInvoker::compress(context);
 }
 
 SequenceType::Ptr ApplyTemplate::staticType() const
 {
-    return CommonSequenceTypes::ZeroOrMoreItems;
+   return CommonSequenceTypes::ZeroOrMoreItems;
 }
 
 ExpressionVisitorResult::Ptr ApplyTemplate::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 Expression::Properties ApplyTemplate::properties() const
 {
-    return RequiresFocus | DisableElimination;
+   return RequiresFocus | DisableElimination;
 }
 
 bool ApplyTemplate::configureRecursion(const CallTargetDescription::Ptr &sign)
 {
-    Q_ASSERT_X(false, Q_FUNC_INFO, "We're not expected to be called.");
-    Q_UNUSED(sign);
-    return false;
+   Q_ASSERT_X(false, Q_FUNC_INFO, "We're not expected to be called.");
+   Q_UNUSED(sign);
+   return false;
 }
 
 Expression::Ptr ApplyTemplate::body() const
 {
-    Q_ASSERT_X(false, Q_FUNC_INFO, "We're not expected to be called.");
-    return Expression::Ptr();
+   Q_ASSERT_X(false, Q_FUNC_INFO, "We're not expected to be called.");
+   return Expression::Ptr();
 }
 
 CallTargetDescription::Ptr ApplyTemplate::callTargetDescription() const
 {
-    Q_ASSERT_X(false, Q_FUNC_INFO, "We're not expected to be called.");
-    return CallTargetDescription::Ptr();
+   Q_ASSERT_X(false, Q_FUNC_INFO, "We're not expected to be called.");
+   return CallTargetDescription::Ptr();
 }
 
 QT_END_NAMESPACE

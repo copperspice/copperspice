@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,17 +34,17 @@ using namespace QPatternist;
 
 void XsdIdCache::addId(const QString &id)
 {
-    const QWriteLocker locker(&m_lock);
-    Q_ASSERT(!m_ids.contains(id));
+   const QWriteLocker locker(&m_lock);
+   Q_ASSERT(!m_ids.contains(id));
 
-    m_ids.insert(id);
+   m_ids.insert(id);
 }
 
 bool XsdIdCache::hasId(const QString &id) const
 {
-    const QReadLocker locker(&m_lock);
+   const QReadLocker locker(&m_lock);
 
-    return m_ids.contains(id);
+   return m_ids.contains(id);
 }
 
 QT_END_NAMESPACE

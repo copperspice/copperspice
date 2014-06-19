@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,36 +37,36 @@ class QScriptValueIteratorPrivate;
 
 class Q_SCRIPT_EXPORT QScriptValueIterator
 {
-public:
-    QScriptValueIterator(const QScriptValue &value);
-    ~QScriptValueIterator();
+ public:
+   QScriptValueIterator(const QScriptValue &value);
+   ~QScriptValueIterator();
 
-    bool hasNext() const;
-    void next();
+   bool hasNext() const;
+   void next();
 
-    bool hasPrevious() const;
-    void previous();
+   bool hasPrevious() const;
+   void previous();
 
-    QString name() const;
-    QScriptString scriptName() const;
+   QString name() const;
+   QScriptString scriptName() const;
 
-    QScriptValue value() const;
-    void setValue(const QScriptValue &value);
+   QScriptValue value() const;
+   void setValue(const QScriptValue &value);
 
-    QScriptValue::PropertyFlags flags() const;
+   QScriptValue::PropertyFlags flags() const;
 
-    void remove();
+   void remove();
 
-    void toFront();
-    void toBack();
+   void toFront();
+   void toBack();
 
-    QScriptValueIterator& operator=(QScriptValue &value);
+   QScriptValueIterator &operator=(QScriptValue &value);
 
-private:
-    QScopedPointer<QScriptValueIteratorPrivate> d_ptr;
+ private:
+   QScopedPointer<QScriptValueIteratorPrivate> d_ptr;
 
-    Q_DECLARE_PRIVATE(QScriptValueIterator)
-    Q_DISABLE_COPY(QScriptValueIterator)
+   Q_DECLARE_PRIVATE(QScriptValueIterator)
+   Q_DISABLE_COPY(QScriptValueIterator)
 };
 
 QT_END_NAMESPACE

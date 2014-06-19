@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,69 +31,69 @@ using namespace QPatternist;
 
 QString XsdWildcard::absentNamespace()
 {
-    return QLatin1String("__ns_absent");
+   return QLatin1String("__ns_absent");
 }
 
 void XsdWildcard::NamespaceConstraint::setVariety(Variety variety)
 {
-    m_variety = variety;
+   m_variety = variety;
 }
 
 XsdWildcard::NamespaceConstraint::Variety XsdWildcard::NamespaceConstraint::variety() const
 {
-    return m_variety;
+   return m_variety;
 }
 
 void XsdWildcard::NamespaceConstraint::setNamespaces(const QSet<QString> &namespaces)
 {
-    m_namespaces = namespaces;
+   m_namespaces = namespaces;
 }
 
 QSet<QString> XsdWildcard::NamespaceConstraint::namespaces() const
 {
-    return m_namespaces;
+   return m_namespaces;
 }
 
 void XsdWildcard::NamespaceConstraint::setDisallowedNames(const QSet<QString> &names)
 {
-    m_disallowedNames = names;
+   m_disallowedNames = names;
 }
 
 QSet<QString> XsdWildcard::NamespaceConstraint::disallowedNames() const
 {
-    return m_disallowedNames;
+   return m_disallowedNames;
 }
 
 XsdWildcard::XsdWildcard()
-    : m_namespaceConstraint(new NamespaceConstraint())
-    , m_processContents(Strict)
+   : m_namespaceConstraint(new NamespaceConstraint())
+   , m_processContents(Strict)
 {
-    m_namespaceConstraint->setVariety(NamespaceConstraint::Any);
+   m_namespaceConstraint->setVariety(NamespaceConstraint::Any);
 }
 
 bool XsdWildcard::isWildcard() const
 {
-    return true;
+   return true;
 }
 
 void XsdWildcard::setNamespaceConstraint(const NamespaceConstraint::Ptr &namespaceConstraint)
 {
-    m_namespaceConstraint = namespaceConstraint;
+   m_namespaceConstraint = namespaceConstraint;
 }
 
 XsdWildcard::NamespaceConstraint::Ptr XsdWildcard::namespaceConstraint() const
 {
-    return m_namespaceConstraint;
+   return m_namespaceConstraint;
 }
 
 void XsdWildcard::setProcessContents(ProcessContents contents)
 {
-    m_processContents = contents;
+   m_processContents = contents;
 }
 
 XsdWildcard::ProcessContents XsdWildcard::processContents() const
 {
-    return m_processContents;
+   return m_processContents;
 }
 
 QT_END_NAMESPACE

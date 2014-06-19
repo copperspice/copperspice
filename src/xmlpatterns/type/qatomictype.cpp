@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,58 +45,57 @@ AtomicType::~AtomicType()
 
 bool AtomicType::xdtTypeMatches(const ItemType::Ptr &other) const
 {
-    if(other->isAtomicType())
-    {
-        if(*other == *this)
-            return true;
-        else
-            return xdtTypeMatches(other->xdtSuperType());
-    }
-    else
-        return false;
+   if (other->isAtomicType()) {
+      if (*other == *this) {
+         return true;
+      } else {
+         return xdtTypeMatches(other->xdtSuperType());
+      }
+   } else {
+      return false;
+   }
 }
 
 bool AtomicType::itemMatches(const Item &item) const
 {
-    Q_ASSERT(item);
-    if(item.isNode())
-        return false;
-    else
-    {
-        const SchemaType::Ptr t(static_cast<AtomicType *>(item.type().data()));
-        return wxsTypeMatches(t);
-    }
+   Q_ASSERT(item);
+   if (item.isNode()) {
+      return false;
+   } else {
+      const SchemaType::Ptr t(static_cast<AtomicType *>(item.type().data()));
+      return wxsTypeMatches(t);
+   }
 }
 
 ItemType::Ptr AtomicType::atomizedType() const
 {
-    return AtomicType::Ptr(const_cast<AtomicType *>(this));
+   return AtomicType::Ptr(const_cast<AtomicType *>(this));
 }
 
 QString AtomicType::displayName(const NamePool::Ptr &) const
 {
-    /* A bit faster than calling name()->displayName() */
-    return QLatin1String("xs:anyAtomicType");
+   /* A bit faster than calling name()->displayName() */
+   return QLatin1String("xs:anyAtomicType");
 }
 
 bool AtomicType::isNodeType() const
 {
-    return false;
+   return false;
 }
 
 bool AtomicType::isAtomicType() const
 {
-    return true;
+   return true;
 }
 
 SchemaType::TypeCategory AtomicType::category() const
 {
-    return SimpleTypeAtomic;
+   return SimpleTypeAtomic;
 }
 
 SchemaType::DerivationMethod AtomicType::derivationMethod() const
 {
-    return DerivationRestriction;
+   return DerivationRestriction;
 }
 
 QT_END_NAMESPACE

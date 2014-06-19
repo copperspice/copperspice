@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,65 +31,61 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class ReturnOrderBy : public UnlimitedContainer
 {
-    class ReturnOrderBy : public UnlimitedContainer
-    {
-    public:
-        /**
-         * In @p operands the first item is the return expression, and the
-         * rest, which is at least one, are the sort keys.
-         */
-        ReturnOrderBy(const OrderBy::Stability stability,
-                      const OrderBy::OrderSpec::Vector &oSpecs,
-                      const Expression::List &operands);
+ public:
+   /**
+    * In @p operands the first item is the return expression, and the
+    * rest, which is at least one, are the sort keys.
+    */
+   ReturnOrderBy(const OrderBy::Stability stability,
+                 const OrderBy::OrderSpec::Vector &oSpecs,
+                 const Expression::List &operands);
 
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-        virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-        virtual SequenceType::Ptr staticType() const;
-        virtual SequenceType::List expectedOperandTypes() const;
-        virtual Expression::Ptr compress(const StaticContext::Ptr &context);
-        virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-        virtual ID id() const;
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+   virtual SequenceType::Ptr staticType() const;
+   virtual SequenceType::List expectedOperandTypes() const;
+   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   virtual ID id() const;
 
-        inline OrderBy::OrderSpec::Vector orderSpecs() const
-        {
-            return m_orderSpecs;
-        }
+   inline OrderBy::OrderSpec::Vector orderSpecs() const {
+      return m_orderSpecs;
+   }
 
-        inline OrderBy::Stability stability() const
-        {
-            return m_stability;
-        }
+   inline OrderBy::Stability stability() const {
+      return m_stability;
+   }
 
-        /**
-         * In the case of that we don't have a for-expression beloning us, but
-         * only a let clause, this ReturnOrderBy breaks if it stays in the AST.
-         * So, by default we assume that we should write ourselves away, unless
-         * this function is called. The associated ForClause will call it
-         * during typeCheck(), if it exists.
-         */
-        inline void setStay(const bool a)
-        {
-            m_flyAway = !a;
-        }
+   /**
+    * In the case of that we don't have a for-expression beloning us, but
+    * only a let clause, this ReturnOrderBy breaks if it stays in the AST.
+    * So, by default we assume that we should write ourselves away, unless
+    * this function is called. The associated ForClause will call it
+    * during typeCheck(), if it exists.
+    */
+   inline void setStay(const bool a) {
+      m_flyAway = !a;
+   }
 
-        virtual Properties properties() const;
-    private:
-        /**
-         * This variable is unfortunately only used at compile time. However,
-         * it's tricky to get rid of it due to how QueryTransformParser would
-         * have to be adapted.
-         */
-        const OrderBy::Stability    m_stability;
+   virtual Properties properties() const;
+ private:
+   /**
+    * This variable is unfortunately only used at compile time. However,
+    * it's tricky to get rid of it due to how QueryTransformParser would
+    * have to be adapted.
+    */
+   const OrderBy::Stability    m_stability;
 
-        OrderBy::OrderSpec::Vector  m_orderSpecs;
+   OrderBy::OrderSpec::Vector  m_orderSpecs;
 
-        /**
-         * @see stay()
-         */
-        bool                        m_flyAway;
-    };
+   /**
+    * @see stay()
+    */
+   bool                        m_flyAway;
+};
 }
 
 QT_END_NAMESPACE

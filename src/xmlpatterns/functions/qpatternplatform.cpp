@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,243 +32,233 @@ QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
-namespace QPatternist
+namespace QPatternist {
+
+class PatternFlag
 {
-   
-    class PatternFlag
-    {
-    public:
-        typedef QHash<QChar, PatternFlag> Hash;
+ public:
+   typedef QHash<QChar, PatternFlag> Hash;
 
-        inline PatternFlag() : flag(PatternPlatform::NoFlags)
-        {
-        }
+   inline PatternFlag() : flag(PatternPlatform::NoFlags) {
+   }
 
-        inline PatternFlag(const PatternPlatform::Flag opt,
-                           const QString &descr) : flag(opt),
-                                                   description(descr)
-        {
-        }
+   inline PatternFlag(const PatternPlatform::Flag opt,
+                      const QString &descr) : flag(opt),
+      description(descr) {
+   }
 
-        PatternPlatform::Flag   flag;
-        QString                 description;
+   PatternPlatform::Flag   flag;
+   QString                 description;
 
-        static inline Hash flagDescriptions();
-    };
+   static inline Hash flagDescriptions();
+};
 }
 
 static inline PatternFlag::Hash flagDescriptions()
 {
-    PatternFlag::Hash retval;
+   PatternFlag::Hash retval;
 
-    retval.insert(QChar(QLatin1Char('s')),
-                  PatternFlag(PatternPlatform::DotAllMode,
-                              QtXmlPatterns::tr("%1 matches newline characters").arg(formatKeyword(QLatin1Char('.')))));
+   retval.insert(QChar(QLatin1Char('s')),
+                 PatternFlag(PatternPlatform::DotAllMode,
+                             QtXmlPatterns::tr("%1 matches newline characters").arg(formatKeyword(QLatin1Char('.')))));
 
-    retval.insert(QChar(QLatin1Char('m')),
-                  PatternFlag(PatternPlatform::MultiLineMode,
-                              QtXmlPatterns::tr("%1 and %2 match the start and end of a line.")
-                                   .arg(formatKeyword(QLatin1Char('^')))
-                                   .arg(formatKeyword(QLatin1Char('$')))));
+   retval.insert(QChar(QLatin1Char('m')),
+                 PatternFlag(PatternPlatform::MultiLineMode,
+                             QtXmlPatterns::tr("%1 and %2 match the start and end of a line.")
+                             .arg(formatKeyword(QLatin1Char('^')))
+                             .arg(formatKeyword(QLatin1Char('$')))));
 
-    retval.insert(QChar(QLatin1Char('i')),
-                  PatternFlag(PatternPlatform::CaseInsensitive,
-                              QtXmlPatterns::tr("Matches are case insensitive")));
+   retval.insert(QChar(QLatin1Char('i')),
+                 PatternFlag(PatternPlatform::CaseInsensitive,
+                             QtXmlPatterns::tr("Matches are case insensitive")));
 
-    retval.insert(QChar(QLatin1Char('x')),
-                  PatternFlag(PatternPlatform::SimplifyWhitespace,
-                              QtXmlPatterns::tr("Whitespace characters are removed, except when they appear "
-                                 "in character classes")));
+   retval.insert(QChar(QLatin1Char('x')),
+                 PatternFlag(PatternPlatform::SimplifyWhitespace,
+                             QtXmlPatterns::tr("Whitespace characters are removed, except when they appear "
+                                   "in character classes")));
 
-    return retval;
+   return retval;
 }
 
 PatternPlatform::PatternPlatform(const qint8 flagsPosition) : m_compiledParts(NoPart),
-                                                              m_flags(NoFlags),
-                                                              m_flagsPosition(flagsPosition)
+   m_flags(NoFlags),
+   m_flagsPosition(flagsPosition)
 {
 }
 
 const QRegExp PatternPlatform::pattern(const DynamicContext::Ptr &context) const
 {
-    if(m_compiledParts == FlagsAndPattern) /* This is the most common case. */
-    {
-        Q_ASSERT(m_pattern.isValid());
-        return m_pattern;
-    }
+   if (m_compiledParts == FlagsAndPattern) { /* This is the most common case. */
+      Q_ASSERT(m_pattern.isValid());
+      return m_pattern;
+   }
 
-    QRegExp retvalPattern;
-    Flags flags;
+   QRegExp retvalPattern;
+   Flags flags;
 
-    /* Compile the flags, if necessary. */
-    if(m_compiledParts.testFlag(FlagsPrecompiled))
-        flags = m_flags;
-    else
-    {
-        const Expression::Ptr flagsOp(m_operands.value(m_flagsPosition));
+   /* Compile the flags, if necessary. */
+   if (m_compiledParts.testFlag(FlagsPrecompiled)) {
+      flags = m_flags;
+   } else {
+      const Expression::Ptr flagsOp(m_operands.value(m_flagsPosition));
 
-        if(flagsOp)
-            flags = parseFlags(flagsOp->evaluateSingleton(context).stringValue(), context);
-        else
-            flags = NoFlags;
-    }
+      if (flagsOp) {
+         flags = parseFlags(flagsOp->evaluateSingleton(context).stringValue(), context);
+      } else {
+         flags = NoFlags;
+      }
+   }
 
-    /* Compile the pattern, if necessary. */
-    if(m_compiledParts.testFlag(PatternPrecompiled))
-        retvalPattern = m_pattern;
-    else
-    {
-        retvalPattern = parsePattern(m_operands.at(1)->evaluateSingleton(context).stringValue(),context);
+   /* Compile the pattern, if necessary. */
+   if (m_compiledParts.testFlag(PatternPrecompiled)) {
+      retvalPattern = m_pattern;
+   } else {
+      retvalPattern = parsePattern(m_operands.at(1)->evaluateSingleton(context).stringValue(), context);
 
-    }
+   }
 
-    applyFlags(flags, retvalPattern);
+   applyFlags(flags, retvalPattern);
 
-    Q_ASSERT(m_pattern.isValid());
-    return retvalPattern;
+   Q_ASSERT(m_pattern.isValid());
+   return retvalPattern;
 }
 
 void PatternPlatform::applyFlags(const Flags flags, QRegExp &patternP)
 {
-    Q_ASSERT(patternP.isValid());
-    if(flags == NoFlags)
-        return;
+   Q_ASSERT(patternP.isValid());
+   if (flags == NoFlags) {
+      return;
+   }
 
-    if(flags & CaseInsensitive)
-    {
-        patternP.setCaseSensitivity(Qt::CaseInsensitive);
-    }
-    // TODO Apply the other flags, like 'x'.
+   if (flags & CaseInsensitive) {
+      patternP.setCaseSensitivity(Qt::CaseInsensitive);
+   }
+   // TODO Apply the other flags, like 'x'.
 }
 
 QRegExp PatternPlatform::parsePattern(const QString &pattern,
                                       const ReportContext::Ptr &context) const
 {
-    return parsePattern(pattern, context, this);
+   return parsePattern(pattern, context, this);
 }
 
 QRegExp PatternPlatform::parsePattern(const QString &patternP,
                                       const ReportContext::Ptr &context,
                                       const SourceLocationReflection *const location)
 {
-    if(patternP == QLatin1String("(.)\\3") ||
-       patternP == QLatin1String("\\3")    ||
-       patternP == QLatin1String("(.)\\2"))
-    {
-        context->error(QLatin1String("We don't want to hang infinitely on K2-MatchesFunc-9, "
-                                     "10 and 11."),
-                       ReportContext::FOER0000, location);
-        return QRegExp();
-    }
+   if (patternP == QLatin1String("(.)\\3") ||
+         patternP == QLatin1String("\\3")    ||
+         patternP == QLatin1String("(.)\\2")) {
+      context->error(QLatin1String("We don't want to hang infinitely on K2-MatchesFunc-9, "
+                                   "10 and 11."),
+                     ReportContext::FOER0000, location);
+      return QRegExp();
+   }
 
-    QString rewrittenPattern(patternP);
+   QString rewrittenPattern(patternP);
 
-    /* We rewrite some well known patterns to QRegExp style here. Note that
-     * these character classes only works in the ASCII range, and fail for
-     * others. This support needs to be in QRegExp, since it's about checking
-     * QChar::category(). */
-    rewrittenPattern.replace(QLatin1String("[\\i-[:]]"), QLatin1String("[a-zA-Z_]"));
-    rewrittenPattern.replace(QLatin1String("[\\c-[:]]"), QLatin1String("[a-zA-Z0-9_\\-\\.]"));
+   /* We rewrite some well known patterns to QRegExp style here. Note that
+    * these character classes only works in the ASCII range, and fail for
+    * others. This support needs to be in QRegExp, since it's about checking
+    * QChar::category(). */
+   rewrittenPattern.replace(QLatin1String("[\\i-[:]]"), QLatin1String("[a-zA-Z_]"));
+   rewrittenPattern.replace(QLatin1String("[\\c-[:]]"), QLatin1String("[a-zA-Z0-9_\\-\\.]"));
 
-    QRegExp retval(rewrittenPattern, Qt::CaseSensitive, QRegExp::W3CXmlSchema11);
+   QRegExp retval(rewrittenPattern, Qt::CaseSensitive, QRegExp::W3CXmlSchema11);
 
-    if(retval.isValid())
-        return retval;
-    else
-    {
-        context->error(QtXmlPatterns::tr("%1 is an invalid regular expression pattern: %2")
-                                        .arg(formatExpression(patternP), retval.errorString()),
-                                   ReportContext::FORX0002, location);
-        return QRegExp();
-    }
+   if (retval.isValid()) {
+      return retval;
+   } else {
+      context->error(QtXmlPatterns::tr("%1 is an invalid regular expression pattern: %2")
+                     .arg(formatExpression(patternP), retval.errorString()),
+                     ReportContext::FORX0002, location);
+      return QRegExp();
+   }
 }
 
 PatternPlatform::Flags PatternPlatform::parseFlags(const QString &flags,
-                                                   const DynamicContext::Ptr &context) const
+      const DynamicContext::Ptr &context) const
 {
 
-    if(flags.isEmpty())
-        return NoFlags;
+   if (flags.isEmpty()) {
+      return NoFlags;
+   }
 
-    const PatternFlag::Hash flagDescrs(flagDescriptions());
-    const int len = flags.length();
-    Flags retval = NoFlags;
+   const PatternFlag::Hash flagDescrs(flagDescriptions());
+   const int len = flags.length();
+   Flags retval = NoFlags;
 
-    for(int i = 0; i < len; ++i)
-    {
-        const QChar flag(flags.at(i));
-        const Flag specified = flagDescrs.value(flag).flag;
+   for (int i = 0; i < len; ++i) {
+      const QChar flag(flags.at(i));
+      const Flag specified = flagDescrs.value(flag).flag;
 
-        if(specified != NoFlags)
-        {
-            retval |= specified;
-            continue;
-        }
+      if (specified != NoFlags) {
+         retval |= specified;
+         continue;
+      }
 
-        /* Generate a nice error message. */
-        QString message(QtXmlPatterns::tr("%1 is an invalid flag for regular expressions. Valid flags are:")
-                             .arg(formatKeyword(flag)));
+      /* Generate a nice error message. */
+      QString message(QtXmlPatterns::tr("%1 is an invalid flag for regular expressions. Valid flags are:")
+                      .arg(formatKeyword(flag)));
 
-        /* This is formatting, so don't bother translators with it. */
-        message.append(QLatin1Char('\n'));
+      /* This is formatting, so don't bother translators with it. */
+      message.append(QLatin1Char('\n'));
 
-        const PatternFlag::Hash::const_iterator end(flagDescrs.constEnd());
-        PatternFlag::Hash::const_iterator it(flagDescrs.constBegin());
+      const PatternFlag::Hash::const_iterator end(flagDescrs.constEnd());
+      PatternFlag::Hash::const_iterator it(flagDescrs.constBegin());
 
-        for(; it != end;)
-        {
-            // TODO handle bidi correctly
-            // TODO format this with rich text(list/table)
-            message.append(formatKeyword(it.key()));
-            message.append(QLatin1String(" - "));
-            message.append(it.value().description);
+      for (; it != end;) {
+         // TODO handle bidi correctly
+         // TODO format this with rich text(list/table)
+         message.append(formatKeyword(it.key()));
+         message.append(QLatin1String(" - "));
+         message.append(it.value().description);
 
-            ++it;
-            if(it != end)
-                message.append(QLatin1Char('\n'));
-        }
+         ++it;
+         if (it != end) {
+            message.append(QLatin1Char('\n'));
+         }
+      }
 
-        context->error(message, ReportContext::FORX0001, this);
-        return NoFlags;
-    }
+      context->error(message, ReportContext::FORX0001, this);
+      return NoFlags;
+   }
 
-    return retval;
+   return retval;
 }
 
 Expression::Ptr PatternPlatform::compress(const StaticContext::Ptr &context)
 {
-    const Expression::Ptr me(FunctionCall::compress(context));
-    if(me != this)
-        return me;
+   const Expression::Ptr me(FunctionCall::compress(context));
+   if (me != this) {
+      return me;
+   }
 
-    if(m_operands.at(1)->is(IDStringValue))
-    {
-        const DynamicContext::Ptr dynContext(context->dynamicContext());
+   if (m_operands.at(1)->is(IDStringValue)) {
+      const DynamicContext::Ptr dynContext(context->dynamicContext());
 
-        m_pattern = parsePattern(m_operands.at(1)->evaluateSingleton(dynContext).stringValue(),
-                                 dynContext);
-        m_compiledParts |= PatternPrecompiled;
-    }
+      m_pattern = parsePattern(m_operands.at(1)->evaluateSingleton(dynContext).stringValue(),
+                               dynContext);
+      m_compiledParts |= PatternPrecompiled;
+   }
 
-    const Expression::Ptr flagOperand(m_operands.value(m_flagsPosition));
+   const Expression::Ptr flagOperand(m_operands.value(m_flagsPosition));
 
-    if(!flagOperand)
-    {
-        m_flags = NoFlags;
-        m_compiledParts |= FlagsPrecompiled;
-    }
-    else if(flagOperand->is(IDStringValue))
-    {
-        const DynamicContext::Ptr dynContext(context->dynamicContext());
-        m_flags = parseFlags(flagOperand->evaluateSingleton(dynContext).stringValue(),
-                             dynContext);
-        m_compiledParts |= FlagsPrecompiled;
-    }
+   if (!flagOperand) {
+      m_flags = NoFlags;
+      m_compiledParts |= FlagsPrecompiled;
+   } else if (flagOperand->is(IDStringValue)) {
+      const DynamicContext::Ptr dynContext(context->dynamicContext());
+      m_flags = parseFlags(flagOperand->evaluateSingleton(dynContext).stringValue(),
+                           dynContext);
+      m_compiledParts |= FlagsPrecompiled;
+   }
 
-    if(m_compiledParts == FlagsAndPattern)
-        applyFlags(m_flags, m_pattern);
+   if (m_compiledParts == FlagsAndPattern) {
+      applyFlags(m_flags, m_pattern);
+   }
 
-    return me;
+   return me;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,27 +34,25 @@ QT_BEGIN_NAMESPACE
 
 class QXmlResultItemsPrivate
 {
-   public:
-       inline QXmlResultItemsPrivate() : iterator(QPatternist::CommonValues::emptyIterator)
-                                       , hasError(false)
-       {
-       }
-   
-       void setDynamicContext(const QPatternist::DynamicContext::Ptr &context)
-       {
-           m_context = context;
-       }
-   
-       QPatternist::Item::Iterator::Ptr iterator;
-       QXmlItem current;
-       bool hasError;
+ public:
+   inline QXmlResultItemsPrivate() : iterator(QPatternist::CommonValues::emptyIterator)
+      , hasError(false) {
+   }
 
-   private:
-       /**
-        * We never use it. We only keep a ref to it such that it doesn't get
-        * de-allocated.
-        */
-       QPatternist::DynamicContext::Ptr    m_context;
+   void setDynamicContext(const QPatternist::DynamicContext::Ptr &context) {
+      m_context = context;
+   }
+
+   QPatternist::Item::Iterator::Ptr iterator;
+   QXmlItem current;
+   bool hasError;
+
+ private:
+   /**
+    * We never use it. We only keep a ref to it such that it doesn't get
+    * de-allocated.
+    */
+   QPatternist::DynamicContext::Ptr    m_context;
 };
 
 QT_END_NAMESPACE

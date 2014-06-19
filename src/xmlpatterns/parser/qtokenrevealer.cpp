@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,66 +30,62 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 TokenRevealer::TokenRevealer(const QUrl &uri,
-                              const Tokenizer::Ptr &other) : Tokenizer(uri)
-                                                           , m_tokenizer(other)
+                             const Tokenizer::Ptr &other) : Tokenizer(uri)
+   , m_tokenizer(other)
 {
-    Q_ASSERT(other);
+   Q_ASSERT(other);
 }
 
 TokenRevealer::~TokenRevealer()
 {
-    qDebug() << "Tokens Revealed:" << m_result;
+   qDebug() << "Tokens Revealed:" << m_result;
 }
 
 void TokenRevealer::setParserContext(const ParserContext::Ptr &parseInfo)
 {
-    m_tokenizer->setParserContext(parseInfo);
+   m_tokenizer->setParserContext(parseInfo);
 }
 
 Tokenizer::Token TokenRevealer::nextToken(YYLTYPE *const sourceLocator)
 {
-    const Token token(m_tokenizer->nextToken(sourceLocator));
-    const QString asString(tokenToString(token));
-    const TokenType type = token.type;
+   const Token token(m_tokenizer->nextToken(sourceLocator));
+   const QString asString(tokenToString(token));
+   const TokenType type = token.type;
 
-    /* Indent. */
-    switch(type)
-    {
-        case CURLY_LBRACE:
-        {
-            m_result += QLatin1Char('\n') + m_indentationString + asString + QLatin1Char('\n');
-            m_indentationString.append(QLatin1String("    "));
-            m_result += m_indentationString;
-            break;
-        }
-        case CURLY_RBRACE:
-        {
-            m_indentationString.chop(4);
-            m_result += QLatin1Char('\n') + m_indentationString + asString;
-            break;
-        }
-        case SEMI_COLON:
-        /* Fallthrough. */
-        case COMMA:
-        {
-            m_result += asString + QLatin1Char('\n') + m_indentationString;
-            break;
-        }
-        default:
-            m_result += asString + QLatin1Char(' ');
-    }
+   /* Indent. */
+   switch (type) {
+      case CURLY_LBRACE: {
+         m_result += QLatin1Char('\n') + m_indentationString + asString + QLatin1Char('\n');
+         m_indentationString.append(QLatin1String("    "));
+         m_result += m_indentationString;
+         break;
+      }
+      case CURLY_RBRACE: {
+         m_indentationString.chop(4);
+         m_result += QLatin1Char('\n') + m_indentationString + asString;
+         break;
+      }
+      case SEMI_COLON:
+      /* Fallthrough. */
+      case COMMA: {
+         m_result += asString + QLatin1Char('\n') + m_indentationString;
+         break;
+      }
+      default:
+         m_result += asString + QLatin1Char(' ');
+   }
 
-    return token;
+   return token;
 }
 
 int TokenRevealer::commenceScanOnly()
 {
-    return m_tokenizer->commenceScanOnly();
+   return m_tokenizer->commenceScanOnly();
 }
 
 void TokenRevealer::resumeTokenizationFrom(const int position)
 {
-    m_tokenizer->resumeTokenizationFrom(position);
+   m_tokenizer->resumeTokenizationFrom(position);
 }
 
 QT_END_NAMESPACE

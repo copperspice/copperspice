@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,40 +34,40 @@ using namespace QPatternist;
 
 bool SortTuple::isAtomicValue() const
 {
-    Q_ASSERT_X(false, Q_FUNC_INFO,
-               "It makes no sense to call this function.");
-    return false;
+   Q_ASSERT_X(false, Q_FUNC_INFO,
+              "It makes no sense to call this function.");
+   return false;
 }
 
 QString SortTuple::stringValue() const
 {
-    return QLatin1String("SortTuple");
+   return QLatin1String("SortTuple");
 }
 
 bool SortTuple::isNode() const
 {
-    Q_ASSERT_X(false, Q_FUNC_INFO,
-               "It makes no sense to call this function.");
-    return false;
+   Q_ASSERT_X(false, Q_FUNC_INFO,
+              "It makes no sense to call this function.");
+   return false;
 }
 
 bool SortTuple::hasError() const
 {
-    Q_ASSERT_X(false, Q_FUNC_INFO,
-               "It makes no sense to call this function.");
-    return false;
+   Q_ASSERT_X(false, Q_FUNC_INFO,
+              "It makes no sense to call this function.");
+   return false;
 }
 
 Item::Iterator::Ptr SortTuple::typedValue() const
 {
-    Q_ASSERT_X(false, Q_FUNC_INFO,
-               "It makes no sense to call this function.");
-    return Item::Iterator::Ptr();
+   Q_ASSERT_X(false, Q_FUNC_INFO,
+              "It makes no sense to call this function.");
+   return Item::Iterator::Ptr();
 }
 
 ItemType::Ptr SortTuple::type() const
 {
-    return BuiltinTypes::xsAnyAtomicType;
+   return BuiltinTypes::xsAnyAtomicType;
 }
 
 QT_END_NAMESPACE

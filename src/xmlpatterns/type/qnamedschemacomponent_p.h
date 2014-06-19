@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,58 +32,56 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class NamedSchemaComponent : public SchemaComponent
 {
-    class NamedSchemaComponent : public SchemaComponent
-    {
-        public:
-            typedef QExplicitlySharedDataPointer<NamedSchemaComponent> Ptr;
+ public:
+   typedef QExplicitlySharedDataPointer<NamedSchemaComponent> Ptr;
 
-            /**
-             * Describes the blocking constraints that are given by the 'block' attributes.
-             */
-            enum BlockingConstraint
-            {
-                RestrictionConstraint = 1,
-                ExtensionConstraint = 2,
-                SubstitutionConstraint = 4
-            };
-            using BlockingConstraints = QFlags<BlockingConstraint>;
+   /**
+    * Describes the blocking constraints that are given by the 'block' attributes.
+    */
+   enum BlockingConstraint {
+      RestrictionConstraint = 1,
+      ExtensionConstraint = 2,
+      SubstitutionConstraint = 4
+   };
+   using BlockingConstraints = QFlags<BlockingConstraint>;
 
-            /**
-             * Creates a new named schema component.
-             */
-            NamedSchemaComponent();
+   /**
+    * Creates a new named schema component.
+    */
+   NamedSchemaComponent();
 
-            /**
-             * Destroys the named schema component.
-             */
-            virtual ~NamedSchemaComponent();
+   /**
+    * Destroys the named schema component.
+    */
+   virtual ~NamedSchemaComponent();
 
-            /**
-             * Sets the @p name of the schema component.
-             */
-            void setName(const QXmlName &name);
+   /**
+    * Sets the @p name of the schema component.
+    */
+   void setName(const QXmlName &name);
 
-            /**
-             * Returns the name of the schema component.
-             *
-             * @param namePool The name pool the name belongs to.
-             */
-            virtual QXmlName name(const NamePool::Ptr &namePool) const;
+   /**
+    * Returns the name of the schema component.
+    *
+    * @param namePool The name pool the name belongs to.
+    */
+   virtual QXmlName name(const NamePool::Ptr &namePool) const;
 
-            /**
-             * Returns the display name of the schema component.
-             *
-             * @param namePool The name pool the name belongs to.
-             */
-            virtual QString displayName(const NamePool::Ptr &namePool) const;
+   /**
+    * Returns the display name of the schema component.
+    *
+    * @param namePool The name pool the name belongs to.
+    */
+   virtual QString displayName(const NamePool::Ptr &namePool) const;
 
-        private:
-            QXmlName m_name;
-    };
+ private:
+   QXmlName m_name;
+};
 
-    Q_DECLARE_OPERATORS_FOR_FLAGS(NamedSchemaComponent::BlockingConstraints)
+Q_DECLARE_OPERATORS_FOR_FLAGS(NamedSchemaComponent::BlockingConstraints)
 }
 
 QT_END_NAMESPACE

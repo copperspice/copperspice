@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,32 +38,32 @@ class MultiDataModel;
 
 class CheckableListModel : public QStandardItemModel
 {
-public:
-    CheckableListModel(QObject *parent = 0);
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+ public:
+   CheckableListModel(QObject *parent = 0);
+   virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 };
 
 class BatchTranslationDialog : public QDialog
 {
-    Q_OBJECT
-public:
-    BatchTranslationDialog(MultiDataModel *model, QWidget *w = 0);
-    void setPhraseBooks(const QList<PhraseBook *> &phrasebooks, int modelIndex);
+   Q_OBJECT
+ public:
+   BatchTranslationDialog(MultiDataModel *model, QWidget *w = 0);
+   void setPhraseBooks(const QList<PhraseBook *> &phrasebooks, int modelIndex);
 
-signals:
-    void finished();
+ signals:
+   void finished();
 
-private slots:
-    void startTranslation();
-    void movePhraseBookUp();
-    void movePhraseBookDown();
+ private slots:
+   void startTranslation();
+   void movePhraseBookUp();
+   void movePhraseBookDown();
 
-private:
-    Ui::BatchTranslationDialog m_ui;
-    CheckableListModel m_model;
-    MultiDataModel *m_dataModel;
-    QList<PhraseBook *> m_phrasebooks;
-    int m_modelIndex;
+ private:
+   Ui::BatchTranslationDialog m_ui;
+   CheckableListModel m_model;
+   MultiDataModel *m_dataModel;
+   QList<PhraseBook *> m_phrasebooks;
+   int m_modelIndex;
 };
 
 QT_END_NAMESPACE

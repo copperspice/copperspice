@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,42 +31,42 @@ using namespace QPatternist;
 
 void XsdXPathExpression::setNamespaceBindings(const QList<QXmlName> &set)
 {
-    m_namespaceBindings = set;
+   m_namespaceBindings = set;
 }
 
 QList<QXmlName> XsdXPathExpression::namespaceBindings() const
 {
-    return m_namespaceBindings;
+   return m_namespaceBindings;
 }
 
 void XsdXPathExpression::setDefaultNamespace(const AnyURI::Ptr &defaultNs)
 {
-    m_defaultNamespace = defaultNs;
+   m_defaultNamespace = defaultNs;
 }
 
 AnyURI::Ptr XsdXPathExpression::defaultNamespace() const
 {
-    return m_defaultNamespace;
+   return m_defaultNamespace;
 }
 
 void XsdXPathExpression::setBaseURI(const AnyURI::Ptr &uri)
 {
-    m_baseURI = uri;
+   m_baseURI = uri;
 }
 
 AnyURI::Ptr XsdXPathExpression::baseURI() const
 {
-    return m_baseURI;
+   return m_baseURI;
 }
 
 void XsdXPathExpression::setExpression(const QString &expression)
 {
-    m_expression = expression;
+   m_expression = expression;
 }
 
 QString XsdXPathExpression::expression() const
 {
-    return m_expression;
+   return m_expression;
 }
 
 QT_END_NAMESPACE

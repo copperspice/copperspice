@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,62 +49,62 @@ class QTableWidgetItem;
 class QTreeWidgetItem;
 
 enum TranslatableEntryType {
-    TranslatableProperty,
-    TranslatableToolItemText,
-    TranslatableToolItemToolTip,
-    TranslatableTabPageText,
-    TranslatableTabPageToolTip,
-    TranslatableTabPageWhatsThis,
-    TranslatableListWidgetItem,
-    TranslatableTableWidgetItem,
-    TranslatableTreeWidgetItem,
-    TranslatableComboBoxItem
+   TranslatableProperty,
+   TranslatableToolItemText,
+   TranslatableToolItemToolTip,
+   TranslatableTabPageText,
+   TranslatableTabPageToolTip,
+   TranslatableTabPageWhatsThis,
+   TranslatableListWidgetItem,
+   TranslatableTableWidgetItem,
+   TranslatableTreeWidgetItem,
+   TranslatableComboBoxItem
 };
 
 struct TranslatableEntry {
-    TranslatableEntryType type;
-    union {
-        QObject *object;
-        QComboBox *comboBox;
-        QTabWidget *tabWidget;
-        QToolBox *toolBox;
-        QListWidgetItem *listWidgetItem;
-        QTableWidgetItem *tableWidgetItem;
-        QTreeWidgetItem *treeWidgetItem;
-    } target;
-    union {
-        char *name;
-        int index;
-        struct {
-            short index; // Known to be below 1000
-            short column;
-        } treeIndex;
-    } prop;
+   TranslatableEntryType type;
+   union {
+      QObject *object;
+      QComboBox *comboBox;
+      QTabWidget *tabWidget;
+      QToolBox *toolBox;
+      QListWidgetItem *listWidgetItem;
+      QTableWidgetItem *tableWidgetItem;
+      QTreeWidgetItem *treeWidgetItem;
+   } target;
+   union {
+      char *name;
+      int index;
+      struct {
+         short index; // Known to be below 1000
+         short column;
+      } treeIndex;
+   } prop;
 };
 
 typedef QHash<QUiTranslatableStringValue, QList<TranslatableEntry> > TargetsHash;
 
 class FormPreviewView : public QMainWindow
 {
-    Q_OBJECT
-public:
-    FormPreviewView(QWidget *parent, MultiDataModel *dataModel);
+   Q_OBJECT
+ public:
+   FormPreviewView(QWidget *parent, MultiDataModel *dataModel);
 
-    void setSourceContext(int model, MessageItem *messageItem);
+   void setSourceContext(int model, MessageItem *messageItem);
 
-private:
-    bool m_isActive;
-    QString m_currentFileName;
-    QMdiArea *m_mdiArea;
-    QMdiSubWindow *m_mdiSubWindow;
-    QWidget *m_form;
-    TargetsHash m_targets;
-    QList<TranslatableEntry> m_highlights;
-    MultiDataModel *m_dataModel;
+ private:
+   bool m_isActive;
+   QString m_currentFileName;
+   QMdiArea *m_mdiArea;
+   QMdiSubWindow *m_mdiSubWindow;
+   QWidget *m_form;
+   TargetsHash m_targets;
+   QList<TranslatableEntry> m_highlights;
+   MultiDataModel *m_dataModel;
 
-    QString m_lastFormName;
-    QString m_lastClassName;
-    int m_lastModel;
+   QString m_lastFormName;
+   QString m_lastClassName;
+   int m_lastModel;
 };
 
 QT_END_NAMESPACE

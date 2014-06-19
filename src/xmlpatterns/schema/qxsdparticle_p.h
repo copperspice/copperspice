@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,78 +32,77 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class XsdParticle : public NamedSchemaComponent
 {
-  
-    class XsdParticle : public NamedSchemaComponent
-    {
-        public:
-            typedef QExplicitlySharedDataPointer<XsdParticle> Ptr;
-            typedef QList<XsdParticle::Ptr> List;
+ public:
+   typedef QExplicitlySharedDataPointer<XsdParticle> Ptr;
+   typedef QList<XsdParticle::Ptr> List;
 
-            /**
-             * Creates a new particle object.
-             */
-            XsdParticle();
+   /**
+    * Creates a new particle object.
+    */
+   XsdParticle();
 
-            /**
-             * Sets the minimum @p occurrence of the particle.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-min_occurs">Minimum Occurrence Definition</a>
-             */
-            void setMinimumOccurs(unsigned int occurrence);
+   /**
+    * Sets the minimum @p occurrence of the particle.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-min_occurs">Minimum Occurrence Definition</a>
+    */
+   void setMinimumOccurs(unsigned int occurrence);
 
-            /**
-             * Returns the minimum occurrence of the particle.
-             */
-            unsigned int minimumOccurs() const;
+   /**
+    * Returns the minimum occurrence of the particle.
+    */
+   unsigned int minimumOccurs() const;
 
-            /**
-             * Sets the maximum @p occurrence of the particle.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-max_occurs">Maximum Occurrence Definition</a>
-             */
-            void setMaximumOccurs(unsigned int occurrence);
+   /**
+    * Sets the maximum @p occurrence of the particle.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-max_occurs">Maximum Occurrence Definition</a>
+    */
+   void setMaximumOccurs(unsigned int occurrence);
 
-            /**
-             * Returns the maximum occurrence of the particle.
-             *
-             * @note This value has only a meaning if maximumOccursUnbounded is @c false.
-             */
-            unsigned int maximumOccurs() const;
+   /**
+    * Returns the maximum occurrence of the particle.
+    *
+    * @note This value has only a meaning if maximumOccursUnbounded is @c false.
+    */
+   unsigned int maximumOccurs() const;
 
-            /**
-             * Sets whether the maximum occurrence of the particle is unbounded.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-max_occurs">Maximum Occurrence Definition</a>
-             */
-            void setMaximumOccursUnbounded(bool unbounded);
+   /**
+    * Sets whether the maximum occurrence of the particle is unbounded.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-max_occurs">Maximum Occurrence Definition</a>
+    */
+   void setMaximumOccursUnbounded(bool unbounded);
 
-            /**
-             * Returns whether the maximum occurrence of the particle is unbounded.
-             */
-            bool maximumOccursUnbounded() const;
+   /**
+    * Returns whether the maximum occurrence of the particle is unbounded.
+    */
+   bool maximumOccursUnbounded() const;
 
-            /**
-             * Sets the @p term of the particle.
-             *
-             * The term can be an element, a model group or an element wildcard.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-term">Term Definition</a>
-             */
-            void setTerm(const XsdTerm::Ptr &term);
+   /**
+    * Sets the @p term of the particle.
+    *
+    * The term can be an element, a model group or an element wildcard.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-term">Term Definition</a>
+    */
+   void setTerm(const XsdTerm::Ptr &term);
 
-            /**
-             * Returns the term of the particle.
-             */
-            XsdTerm::Ptr term() const;
+   /**
+    * Returns the term of the particle.
+    */
+   XsdTerm::Ptr term() const;
 
-        private:
-            unsigned int m_minimumOccurs;
-            unsigned int m_maximumOccurs;
-            bool         m_maximumOccursUnbounded;
-            XsdTerm::Ptr m_term;
-    };
+ private:
+   unsigned int m_minimumOccurs;
+   unsigned int m_maximumOccurs;
+   bool         m_maximumOccursUnbounded;
+   XsdTerm::Ptr m_term;
+};
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,48 +38,48 @@ EmptySequenceType::EmptySequenceType()
 
 bool EmptySequenceType::xdtTypeMatches(const ItemType::Ptr &other) const
 {
-    return *other == *this ||
-           CommonSequenceTypes::None->xdtTypeMatches(other);
+   return *other == *this ||
+          CommonSequenceTypes::None->xdtTypeMatches(other);
 }
 
 bool EmptySequenceType::itemMatches(const Item &) const
 {
-    return false;
+   return false;
 }
 
 QString EmptySequenceType::displayName(const NamePool::Ptr &) const
 {
-    return QLatin1String("empty-sequence()");
+   return QLatin1String("empty-sequence()");
 }
 
 ItemType::Ptr EmptySequenceType::xdtSuperType() const
 {
-    return BuiltinTypes::item;
+   return BuiltinTypes::item;
 }
 
 Cardinality EmptySequenceType::cardinality() const
 {
-    return Cardinality::empty();
+   return Cardinality::empty();
 }
 
 ItemType::Ptr EmptySequenceType::itemType() const
 {
-    return ItemType::Ptr(const_cast<EmptySequenceType *>(this));
+   return ItemType::Ptr(const_cast<EmptySequenceType *>(this));
 }
 
 bool EmptySequenceType::isNodeType() const
 {
-    return false;
+   return false;
 }
 
 bool EmptySequenceType::isAtomicType() const
 {
-    return false;
+   return false;
 }
 
 ItemType::Ptr EmptySequenceType::atomizedType() const
 {
-    return BuiltinTypes::xsAnyAtomicType;
+   return BuiltinTypes::xsAnyAtomicType;
 }
 
 QT_END_NAMESPACE

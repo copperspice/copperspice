@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -86,21 +86,19 @@ QXmlResultItems::~QXmlResultItems()
  */
 QXmlItem QXmlResultItems::next()
 {
-    Q_D(QXmlResultItems);
-    if(d->hasError)
-        return QXmlItem();
+   Q_D(QXmlResultItems);
+   if (d->hasError) {
+      return QXmlItem();
+   }
 
-    try
-    {
-        d->current = QPatternist::Item::toPublic(d->iterator->next());
-        return d->current;
-    }
-    catch(const QPatternist::Exception)
-    {
-        d->current = QXmlItem();
-        d->hasError = true;
-        return QXmlItem();
-    }
+   try {
+      d->current = QPatternist::Item::toPublic(d->iterator->next());
+      return d->current;
+   } catch (const QPatternist::Exception) {
+      d->current = QXmlItem();
+      d->hasError = true;
+      return QXmlItem();
+   }
 }
 
 /*!
@@ -111,12 +109,13 @@ QXmlItem QXmlResultItems::next()
  */
 QXmlItem QXmlResultItems::current() const
 {
-    Q_D(const QXmlResultItems);
+   Q_D(const QXmlResultItems);
 
-    if(d->hasError)
-        return QXmlItem();
-    else
-        return d->current;
+   if (d->hasError) {
+      return QXmlItem();
+   } else {
+      return d->current;
+   }
 }
 
 /*!
@@ -128,8 +127,8 @@ QXmlItem QXmlResultItems::current() const
  */
 bool QXmlResultItems::hasError() const
 {
-    Q_D(const QXmlResultItems);
-    return d->hasError;
+   Q_D(const QXmlResultItems);
+   return d->hasError;
 }
 
 QT_END_NAMESPACE

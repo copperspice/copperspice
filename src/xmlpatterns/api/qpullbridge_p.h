@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,37 +35,35 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class PullBridge : public AbstractXmlPullProvider
 {
-    class PullBridge : public AbstractXmlPullProvider
-    {
-    public:
-        inline PullBridge(const QXmlNodeModelIndex::Iterator::Ptr &it) : m_current(StartOfInput)
-        {
-            Q_ASSERT(it);
-            m_iterators.push(qMakePair(StartOfInput, it));
-        }
+ public:
+   inline PullBridge(const QXmlNodeModelIndex::Iterator::Ptr &it) : m_current(StartOfInput) {
+      Q_ASSERT(it);
+      m_iterators.push(qMakePair(StartOfInput, it));
+   }
 
-        virtual Event next();
-        virtual Event current() const;
-        virtual QXmlName name() const;
-        /**
-         * Returns always an empty QVariant.
-         */
-        virtual QVariant atomicValue() const;
-        virtual QString stringValue() const;
-        virtual QHash<QXmlName, QString> attributes();
-        virtual QHash<QXmlName, QXmlItem> attributeItems();
+   virtual Event next();
+   virtual Event current() const;
+   virtual QXmlName name() const;
+   /**
+    * Returns always an empty QVariant.
+    */
+   virtual QVariant atomicValue() const;
+   virtual QString stringValue() const;
+   virtual QHash<QXmlName, QString> attributes();
+   virtual QHash<QXmlName, QXmlItem> attributeItems();
 
-        QXmlNodeModelIndex index() const;
-        QSourceLocation sourceLocation() const;
+   QXmlNodeModelIndex index() const;
+   QSourceLocation sourceLocation() const;
 
-    private:
-        typedef QStack<QPair<Event, QXmlNodeModelIndex::Iterator::Ptr> > IteratorStack;
-        IteratorStack      m_iterators;
-        QXmlNodeModelIndex m_index;
-        Event              m_current;
-    };
+ private:
+   typedef QStack<QPair<Event, QXmlNodeModelIndex::Iterator::Ptr> > IteratorStack;
+   IteratorStack      m_iterators;
+   QXmlNodeModelIndex m_index;
+   Event              m_current;
+};
 }
 
 QT_END_NAMESPACE

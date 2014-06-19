@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,22 +31,22 @@ using namespace QPatternist;
 
 void XsdApplicationInformation::setSource(const AnyURI::Ptr &source)
 {
-    m_source = source;
+   m_source = source;
 }
 
 AnyURI::Ptr XsdApplicationInformation::source() const
 {
-    return m_source;
+   return m_source;
 }
 
 void XsdApplicationInformation::setContent(const QString &content)
 {
-    m_content = content;
+   m_content = content;
 }
 
 QString XsdApplicationInformation::content() const
 {
-    return m_content;
+   return m_content;
 }
 
 QT_END_NAMESPACE

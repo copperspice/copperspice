@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,31 +31,30 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QScript
-{
+namespace QScript {
 
 class QVariantDelegate : public QScriptObjectDelegate
 {
-public:
-    QVariantDelegate(const QVariant &value);
-    ~QVariantDelegate();
+ public:
+   QVariantDelegate(const QVariant &value);
+   ~QVariantDelegate();
 
-    virtual bool compareToObject(QScriptObject*, JSC::ExecState*, JSC::JSObject*);
+   virtual bool compareToObject(QScriptObject *, JSC::ExecState *, JSC::JSObject *);
 
-    QVariant &value();
-    void setValue(const QVariant &value);
+   QVariant &value();
+   void setValue(const QVariant &value);
 
-    Type type() const;
+   Type type() const;
 
-private:
-    QVariant m_value;
+ private:
+   QVariant m_value;
 };
 
 class QVariantPrototype : public QScriptObject
 {
-public:
-    QVariantPrototype(JSC::ExecState*, WTF::PassRefPtr<JSC::Structure>,
-                      JSC::Structure* prototypeFunctionStructure);
+ public:
+   QVariantPrototype(JSC::ExecState *, WTF::PassRefPtr<JSC::Structure>,
+                     JSC::Structure *prototypeFunctionStructure);
 };
 
 } // namespace QScript

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,152 +38,156 @@
 QT_BEGIN_NAMESPACE
 
 struct QHolder {
-    QHolder(const QString& hldr = QString(), int index = -1): holderName(hldr), holderPos(index) {}
-    bool operator==(const QHolder& h) const { return h.holderPos == holderPos && h.holderName == holderName; }
-    bool operator!=(const QHolder& h) const { return h.holderPos != holderPos || h.holderName != holderName; }
-    QString holderName;
-    int holderPos;
+   QHolder(const QString &hldr = QString(), int index = -1): holderName(hldr), holderPos(index) {}
+   bool operator==(const QHolder &h) const {
+      return h.holderPos == holderPos && h.holderName == holderName;
+   }
+   bool operator!=(const QHolder &h) const {
+      return h.holderPos != holderPos || h.holderName != holderName;
+   }
+   QString holderName;
+   int holderPos;
 };
 
 class QSqlResultPrivate
 {
-public:
-    QSqlResultPrivate(QSqlResult* d)
-    : q(d), idx(QSql::BeforeFirstRow), active(false),
-      isSel(false), forwardOnly(false), precisionPolicy(QSql::LowPrecisionDouble), bindCount(0), binds(QSqlResult::PositionalBinding)
-    {}
+ public:
+   QSqlResultPrivate(QSqlResult *d)
+      : q(d), idx(QSql::BeforeFirstRow), active(false),
+        isSel(false), forwardOnly(false), precisionPolicy(QSql::LowPrecisionDouble), bindCount(0),
+        binds(QSqlResult::PositionalBinding) {
+   }
 
-    void clearValues()
-    {
-        values.clear();
-        bindCount = 0;
-    }
+   void clearValues() {
+      values.clear();
+      bindCount = 0;
+   }
 
-    void resetBindCount()
-    {
-        bindCount = 0;
-    }
+   void resetBindCount() {
+      bindCount = 0;
+   }
 
-    void clearIndex()
-    {
-        indexes.clear();
-        holders.clear();
-        types.clear();
-    }
+   void clearIndex() {
+      indexes.clear();
+      holders.clear();
+      types.clear();
+   }
 
-    void clear()
-    {
-        clearValues();
-        clearIndex();;
-    }
+   void clear() {
+      clearValues();
+      clearIndex();;
+   }
 
-    QString positionalToNamedBinding();
-    QString namedToPositionalBinding();
-    QString holderAt(int index) const;
+   QString positionalToNamedBinding();
+   QString namedToPositionalBinding();
+   QString holderAt(int index) const;
 
-public:
-    QSqlResult* q;
-    QPointer<QSqlDriver> sqldriver;
-    int idx;
-    QString sql;
-    bool active;
-    bool isSel;
-    QSqlError error;
-    bool forwardOnly;
-    QSql::NumericalPrecisionPolicy precisionPolicy;
+ public:
+   QSqlResult *q;
+   QPointer<QSqlDriver> sqldriver;
+   int idx;
+   QString sql;
+   bool active;
+   bool isSel;
+   QSqlError error;
+   bool forwardOnly;
+   QSql::NumericalPrecisionPolicy precisionPolicy;
 
-    int bindCount;
-    QSqlResult::BindingSyntax binds;
+   int bindCount;
+   QSqlResult::BindingSyntax binds;
 
-    QString executedQuery;
-    QHash<int, QSql::ParamType> types;
-    QVector<QVariant> values;
-    typedef QHash<QString, int> IndexMap;
-    IndexMap indexes;
+   QString executedQuery;
+   QHash<int, QSql::ParamType> types;
+   QVector<QVariant> values;
+   typedef QHash<QString, int> IndexMap;
+   IndexMap indexes;
 
-    typedef QVector<QHolder> QHolderVector;
-    QHolderVector holders;
+   typedef QVector<QHolder> QHolderVector;
+   QHolderVector holders;
 };
 
 QString QSqlResultPrivate::holderAt(int index) const
 {
-    return indexes.key(index);
+   return indexes.key(index);
 }
 
 // return a unique id for bound names
 static QString qFieldSerial(int i)
 {
-    ushort arr[] = { ':', 'f', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    ushort *ptr = &arr[1];
+   ushort arr[] = { ':', 'f', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+   ushort *ptr = &arr[1];
 
-    while (i > 0) {
-        *(++ptr) = 'a' + i % 16;
-        i >>= 4;
-    }
+   while (i > 0) {
+      *(++ptr) = 'a' + i % 16;
+      i >>= 4;
+   }
 
-    return QString(reinterpret_cast<const QChar *>(arr), int(ptr - arr) + 1);
+   return QString(reinterpret_cast<const QChar *>(arr), int(ptr - arr) + 1);
 }
 
 static bool qIsAlnum(QChar ch)
 {
-    uint u = uint(ch.unicode());
-    // matches [a-zA-Z0-9_]
-    return u - 'a' < 26 || u - 'A' < 26 || u - '0' < 10 || u == '_';
+   uint u = uint(ch.unicode());
+   // matches [a-zA-Z0-9_]
+   return u - 'a' < 26 || u - 'A' < 26 || u - '0' < 10 || u == '_';
 }
 
 QString QSqlResultPrivate::positionalToNamedBinding()
 {
-    int n = sql.size();
+   int n = sql.size();
 
-    QString result;
-    result.reserve(n * 5 / 4);
-    bool inQuote = false;
-    int count = 0;
+   QString result;
+   result.reserve(n * 5 / 4);
+   bool inQuote = false;
+   int count = 0;
 
-    for (int i = 0; i < n; ++i) {
-        QChar ch = sql.at(i);
-        if (ch == QLatin1Char('?') && !inQuote) {
-            result += qFieldSerial(count++);
-        } else {
-            if (ch == QLatin1Char('\''))
-                inQuote = !inQuote;
-            result += ch;
-        }
-    }
-    result.squeeze();
-    return result;
+   for (int i = 0; i < n; ++i) {
+      QChar ch = sql.at(i);
+      if (ch == QLatin1Char('?') && !inQuote) {
+         result += qFieldSerial(count++);
+      } else {
+         if (ch == QLatin1Char('\'')) {
+            inQuote = !inQuote;
+         }
+         result += ch;
+      }
+   }
+   result.squeeze();
+   return result;
 }
 
 QString QSqlResultPrivate::namedToPositionalBinding()
 {
-    int n = sql.size();
+   int n = sql.size();
 
-    QString result;
-    result.reserve(n);
-    bool inQuote = false;
-    int count = 0;
-    int i = 0;
+   QString result;
+   result.reserve(n);
+   bool inQuote = false;
+   int count = 0;
+   int i = 0;
 
-    while (i < n) {
-        QChar ch = sql.at(i);
-        if (ch == QLatin1Char(':') && !inQuote
-                && (i == 0 || sql.at(i - 1) != QLatin1Char(':'))
-                && (i + 1 < n && qIsAlnum(sql.at(i + 1)))) {
-            int pos = i + 2;
-            while (pos < n && qIsAlnum(sql.at(pos)))
-                ++pos;
-            indexes[sql.mid(i, pos - i)] = count++;
-            result += QLatin1Char('?');
-            i = pos;
-        } else {
-            if (ch == QLatin1Char('\''))
-                inQuote = !inQuote;
-            result += ch;
-            ++i;
-        }
-    }
-    result.squeeze();
-    return result;
+   while (i < n) {
+      QChar ch = sql.at(i);
+      if (ch == QLatin1Char(':') && !inQuote
+            && (i == 0 || sql.at(i - 1) != QLatin1Char(':'))
+            && (i + 1 < n && qIsAlnum(sql.at(i + 1)))) {
+         int pos = i + 2;
+         while (pos < n && qIsAlnum(sql.at(pos))) {
+            ++pos;
+         }
+         indexes[sql.mid(i, pos - i)] = count++;
+         result += QLatin1Char('?');
+         i = pos;
+      } else {
+         if (ch == QLatin1Char('\'')) {
+            inQuote = !inQuote;
+         }
+         result += ch;
+         ++i;
+      }
+   }
+   result.squeeze();
+   return result;
 }
 
 /*!
@@ -234,11 +238,11 @@ QString QSqlResultPrivate::namedToPositionalBinding()
 
 QSqlResult::QSqlResult(const QSqlDriver *db)
 {
-    d = new QSqlResultPrivate(this);
-    d->sqldriver = const_cast<QSqlDriver *>(db);
-    if(db) {
-        setNumericalPrecisionPolicy(db->numericalPrecisionPolicy());
-    }
+   d = new QSqlResultPrivate(this);
+   d->sqldriver = const_cast<QSqlDriver *>(db);
+   if (db) {
+      setNumericalPrecisionPolicy(db->numericalPrecisionPolicy());
+   }
 }
 
 /*!
@@ -247,7 +251,7 @@ QSqlResult::QSqlResult(const QSqlDriver *db)
 
 QSqlResult::~QSqlResult()
 {
-    delete d;
+   delete d;
 }
 
 /*!
@@ -257,9 +261,9 @@ QSqlResult::~QSqlResult()
     \sa reset(), lastQuery()
 */
 
-void QSqlResult::setQuery(const QString& query)
+void QSqlResult::setQuery(const QString &query)
 {
-    d->sql = query;
+   d->sql = query;
 }
 
 /*!
@@ -271,7 +275,7 @@ void QSqlResult::setQuery(const QString& query)
 
 QString QSqlResult::lastQuery() const
 {
-    return d->sql;
+   return d->sql;
 }
 
 /*!
@@ -283,7 +287,7 @@ QString QSqlResult::lastQuery() const
 */
 int QSqlResult::at() const
 {
-    return d->idx;
+   return d->idx;
 }
 
 
@@ -297,7 +301,7 @@ int QSqlResult::at() const
 
 bool QSqlResult::isValid() const
 {
-    return d->idx != QSql::BeforeFirstRow && d->idx != QSql::AfterLastRow;
+   return d->idx != QSql::BeforeFirstRow && d->idx != QSql::AfterLastRow;
 }
 
 /*!
@@ -314,7 +318,7 @@ bool QSqlResult::isValid() const
 
 bool QSqlResult::isActive() const
 {
-    return d->active;
+   return d->active;
 }
 
 /*!
@@ -326,7 +330,7 @@ bool QSqlResult::isActive() const
 
 void QSqlResult::setAt(int index)
 {
-    d->idx = index;
+   d->idx = index;
 }
 
 
@@ -341,7 +345,7 @@ void QSqlResult::setAt(int index)
 
 void QSqlResult::setSelect(bool select)
 {
-    d->isSel = select;
+   d->isSel = select;
 }
 
 /*!
@@ -353,7 +357,7 @@ void QSqlResult::setSelect(bool select)
 
 bool QSqlResult::isSelect() const
 {
-    return d->isSel;
+   return d->isSel;
 }
 
 /*!
@@ -363,7 +367,7 @@ bool QSqlResult::isSelect() const
 
 const QSqlDriver *QSqlResult::driver() const
 {
-    return d->sqldriver;
+   return d->sqldriver;
 }
 
 
@@ -376,10 +380,11 @@ const QSqlDriver *QSqlResult::driver() const
 
 void QSqlResult::setActive(bool active)
 {
-    if (active && d->executedQuery.isEmpty())
-        d->executedQuery = d->sql;
+   if (active && d->executedQuery.isEmpty()) {
+      d->executedQuery = d->sql;
+   }
 
-    d->active = active;
+   d->active = active;
 }
 
 /*!
@@ -391,7 +396,7 @@ void QSqlResult::setActive(bool active)
 
 void QSqlResult::setLastError(const QSqlError &error)
 {
-    d->error = error;
+   d->error = error;
 }
 
 
@@ -401,7 +406,7 @@ void QSqlResult::setLastError(const QSqlError &error)
 
 QSqlError QSqlResult::lastError() const
 {
-    return d->error;
+   return d->error;
 }
 
 /*!
@@ -508,7 +513,7 @@ QSqlError QSqlResult::lastError() const
 
 bool QSqlResult::fetchNext()
 {
-    return fetch(at() + 1);
+   return fetch(at() + 1);
 }
 
 /*!
@@ -524,7 +529,7 @@ bool QSqlResult::fetchNext()
 
 bool QSqlResult::fetchPrevious()
 {
-    return fetch(at() - 1);
+   return fetch(at() - 1);
 }
 
 /*!
@@ -535,7 +540,7 @@ bool QSqlResult::fetchPrevious()
 */
 bool QSqlResult::isForwardOnly() const
 {
-    return d->forwardOnly;
+   return d->forwardOnly;
 }
 
 /*!
@@ -556,7 +561,7 @@ bool QSqlResult::isForwardOnly() const
 */
 void QSqlResult::setForwardOnly(bool forward)
 {
-    d->forwardOnly = forward;
+   d->forwardOnly = forward;
 }
 
 /*!
@@ -566,23 +571,25 @@ void QSqlResult::setForwardOnly(bool forward)
 
     \sa prepare()
 */
-bool QSqlResult::savePrepare(const QString& query)
+bool QSqlResult::savePrepare(const QString &query)
 {
-    if (!driver())
-        return false;
-    d->clear();
-    d->sql = query;
-    if (!driver()->hasFeature(QSqlDriver::PreparedQueries))
-        return prepare(query);
+   if (!driver()) {
+      return false;
+   }
+   d->clear();
+   d->sql = query;
+   if (!driver()->hasFeature(QSqlDriver::PreparedQueries)) {
+      return prepare(query);
+   }
 
-    if (driver()->hasFeature(QSqlDriver::NamedPlaceholders)) {
-        // parse the query to memorize parameter location
-        d->namedToPositionalBinding();
-        d->executedQuery = d->positionalToNamedBinding();
-    } else {
-        d->executedQuery = d->namedToPositionalBinding();
-    }
-    return prepare(d->executedQuery);
+   if (driver()->hasFeature(QSqlDriver::NamedPlaceholders)) {
+      // parse the query to memorize parameter location
+      d->namedToPositionalBinding();
+      d->executedQuery = d->positionalToNamedBinding();
+   } else {
+      d->executedQuery = d->namedToPositionalBinding();
+   }
+   return prepare(d->executedQuery);
 }
 
 /*!
@@ -592,32 +599,34 @@ bool QSqlResult::savePrepare(const QString& query)
 
     \sa exec()
 */
-bool QSqlResult::prepare(const QString& query)
+bool QSqlResult::prepare(const QString &query)
 {
-    int n = query.size();
+   int n = query.size();
 
-    bool inQuote = false;
-    int i = 0;
+   bool inQuote = false;
+   int i = 0;
 
-    while (i < n) {
-        QChar ch = query.at(i);
-        if (ch == QLatin1Char(':') && !inQuote
-                && (i == 0 || query.at(i - 1) != QLatin1Char(':'))
-                && (i + 1 < n && qIsAlnum(query.at(i + 1)))) {
-            int pos = i + 2;
-            while (pos < n && qIsAlnum(query.at(pos)))
-                ++pos;
+   while (i < n) {
+      QChar ch = query.at(i);
+      if (ch == QLatin1Char(':') && !inQuote
+            && (i == 0 || query.at(i - 1) != QLatin1Char(':'))
+            && (i + 1 < n && qIsAlnum(query.at(i + 1)))) {
+         int pos = i + 2;
+         while (pos < n && qIsAlnum(query.at(pos))) {
+            ++pos;
+         }
 
-            d->holders.append(QHolder(query.mid(i, pos - i), i));
-            i = pos;
-        } else {
-            if (ch == QLatin1Char('\''))
-                inQuote = !inQuote;
-            ++i;
-        }
-    }
-    d->sql = query;
-    return true; // fake prepares should always succeed
+         d->holders.append(QHolder(query.mid(i, pos - i), i));
+         i = pos;
+      } else {
+         if (ch == QLatin1Char('\'')) {
+            inQuote = !inQuote;
+         }
+         ++i;
+      }
+   }
+   d->sql = query;
+   return true; // fake prepares should always succeed
 }
 
 /*!
@@ -628,48 +637,50 @@ bool QSqlResult::prepare(const QString& query)
 */
 bool QSqlResult::exec()
 {
-    bool ret;
-    // fake preparation - just replace the placeholders..
-    QString query = lastQuery();
-    if (d->binds == NamedBinding) {
-        int i;
-        QVariant val;
-        QString holder;
-        for (i = d->holders.count() - 1; i >= 0; --i) {
-            holder = d->holders.at(i).holderName;
-            val = d->values.value(d->indexes.value(holder));
-            QSqlField f(QLatin1String(""), val.type());
-            f.setValue(val);
-            query = query.replace(d->holders.at(i).holderPos,
-                                   holder.length(), driver()->formatValue(f));
-        }
-    } else {
-        QString val;
-        int i = 0;
-        int idx = 0;
-        for (idx = 0; idx < d->values.count(); ++idx) {
-            i = query.indexOf(QLatin1Char('?'), i);
-            if (i == -1)
-                continue;
-            QVariant var = d->values.value(idx);
-            QSqlField f(QLatin1String(""), var.type());
-            if (var.isNull())
-                f.clear();
-            else
-                f.setValue(var);
-            val = driver()->formatValue(f);
-            query = query.replace(i, 1, driver()->formatValue(f));
-            i += val.length();
-        }
-    }
+   bool ret;
+   // fake preparation - just replace the placeholders..
+   QString query = lastQuery();
+   if (d->binds == NamedBinding) {
+      int i;
+      QVariant val;
+      QString holder;
+      for (i = d->holders.count() - 1; i >= 0; --i) {
+         holder = d->holders.at(i).holderName;
+         val = d->values.value(d->indexes.value(holder));
+         QSqlField f(QLatin1String(""), val.type());
+         f.setValue(val);
+         query = query.replace(d->holders.at(i).holderPos,
+                               holder.length(), driver()->formatValue(f));
+      }
+   } else {
+      QString val;
+      int i = 0;
+      int idx = 0;
+      for (idx = 0; idx < d->values.count(); ++idx) {
+         i = query.indexOf(QLatin1Char('?'), i);
+         if (i == -1) {
+            continue;
+         }
+         QVariant var = d->values.value(idx);
+         QSqlField f(QLatin1String(""), var.type());
+         if (var.isNull()) {
+            f.clear();
+         } else {
+            f.setValue(var);
+         }
+         val = driver()->formatValue(f);
+         query = query.replace(i, 1, driver()->formatValue(f));
+         i += val.length();
+      }
+   }
 
-    // have to retain the original query with placeholders
-    QString orig = lastQuery();
-    ret = reset(query);
-    d->executedQuery = query;
-    setQuery(orig);
-    d->resetBindCount();
-    return ret;
+   // have to retain the original query with placeholders
+   QString orig = lastQuery();
+   ret = reset(query);
+   d->executedQuery = query;
+   setQuery(orig);
+   d->resetBindCount();
+   return ret;
 }
 
 /*!
@@ -678,15 +689,17 @@ bool QSqlResult::exec()
 
     \sa addBindValue()
 */
-void QSqlResult::bindValue(int index, const QVariant& val, QSql::ParamType paramType)
+void QSqlResult::bindValue(int index, const QVariant &val, QSql::ParamType paramType)
 {
-    d->binds = PositionalBinding;
-    d->indexes[qFieldSerial(index)] = index;
-    if (d->values.count() <= index)
-        d->values.resize(index + 1);
-    d->values[index] = val;
-    if (paramType != QSql::In || !d->types.isEmpty())
-        d->types[index] = paramType;
+   d->binds = PositionalBinding;
+   d->indexes[qFieldSerial(index)] = index;
+   if (d->values.count() <= index) {
+      d->values.resize(index + 1);
+   }
+   d->values[index] = val;
+   if (paramType != QSql::In || !d->types.isEmpty()) {
+      d->types[index] = paramType;
+   }
 }
 
 /*!
@@ -705,25 +718,27 @@ void QSqlResult::bindValue(int index, const QVariant& val, QSql::ParamType param
 
     \sa QSqlQuery::bindValue()
 */
-void QSqlResult::bindValue(const QString& placeholder, const QVariant& val,
+void QSqlResult::bindValue(const QString &placeholder, const QVariant &val,
                            QSql::ParamType paramType)
 {
-    d->binds = NamedBinding;
-    // if the index has already been set when doing emulated named
-    // bindings - don't reset it
-    int idx = d->indexes.value(placeholder, -1);
-    if (idx >= 0) {
-        if (d->values.count() <= idx)
-            d->values.resize(idx + 1);
-        d->values[idx] = val;
-    } else {
-        d->values.append(val);
-        idx = d->values.count() - 1;
-        d->indexes[placeholder] = idx;
-    }
+   d->binds = NamedBinding;
+   // if the index has already been set when doing emulated named
+   // bindings - don't reset it
+   int idx = d->indexes.value(placeholder, -1);
+   if (idx >= 0) {
+      if (d->values.count() <= idx) {
+         d->values.resize(idx + 1);
+      }
+      d->values[idx] = val;
+   } else {
+      d->values.append(val);
+      idx = d->values.count() - 1;
+      d->indexes[placeholder] = idx;
+   }
 
-    if (paramType != QSql::In || !d->types.isEmpty())
-        d->types[idx] = paramType;
+   if (paramType != QSql::In || !d->types.isEmpty()) {
+      d->types[idx] = paramType;
+   }
 }
 
 /*!
@@ -732,11 +747,11 @@ void QSqlResult::bindValue(const QString& placeholder, const QVariant& val,
 
     \sa bindValue()
 */
-void QSqlResult::addBindValue(const QVariant& val, QSql::ParamType paramType)
+void QSqlResult::addBindValue(const QVariant &val, QSql::ParamType paramType)
 {
-    d->binds = PositionalBinding;
-    bindValue(d->bindCount, val, paramType);
-    ++d->bindCount;
+   d->binds = PositionalBinding;
+   bindValue(d->bindCount, val, paramType);
+   ++d->bindCount;
 }
 
 /*!
@@ -747,7 +762,7 @@ void QSqlResult::addBindValue(const QVariant& val, QSql::ParamType paramType)
 */
 QVariant QSqlResult::boundValue(int index) const
 {
-    return d->values.value(index);
+   return d->values.value(index);
 }
 
 /*!
@@ -758,10 +773,10 @@ QVariant QSqlResult::boundValue(int index) const
 
     \sa bindValueType()
 */
-QVariant QSqlResult::boundValue(const QString& placeholder) const
+QVariant QSqlResult::boundValue(const QString &placeholder) const
 {
-    int idx = d->indexes.value(placeholder, -1);
-    return d->values.value(idx);
+   int idx = d->indexes.value(placeholder, -1);
+   return d->values.value(idx);
 }
 
 /*!
@@ -771,7 +786,7 @@ QVariant QSqlResult::boundValue(const QString& placeholder) const
 */
 QSql::ParamType QSqlResult::bindValueType(int index) const
 {
-    return d->types.value(index, QSql::In);
+   return d->types.value(index, QSql::In);
 }
 
 /*!
@@ -780,9 +795,9 @@ QSql::ParamType QSqlResult::bindValueType(int index) const
     Returns the parameter type for the value bound with the given \a
     placeholder name.
 */
-QSql::ParamType QSqlResult::bindValueType(const QString& placeholder) const
+QSql::ParamType QSqlResult::bindValueType(const QString &placeholder) const
 {
-    return d->types.value(d->indexes.value(placeholder, -1), QSql::In);
+   return d->types.value(d->indexes.value(placeholder, -1), QSql::In);
 }
 
 /*!
@@ -792,7 +807,7 @@ QSql::ParamType QSqlResult::bindValueType(const QString& placeholder) const
 */
 int QSqlResult::boundValueCount() const
 {
-    return d->values.count();
+   return d->values.count();
 }
 
 /*!
@@ -801,9 +816,9 @@ int QSqlResult::boundValueCount() const
 
     \sa boundValueCount()
 */
-QVector<QVariant>& QSqlResult::boundValues() const
+QVector<QVariant> &QSqlResult::boundValues() const
 {
-    return d->values;
+   return d->values;
 }
 
 /*!
@@ -811,7 +826,7 @@ QVector<QVariant>& QSqlResult::boundValues() const
 */
 QSqlResult::BindingSyntax QSqlResult::bindingSyntax() const
 {
-    return d->binds;
+   return d->binds;
 }
 
 /*!
@@ -820,7 +835,7 @@ QSqlResult::BindingSyntax QSqlResult::bindingSyntax() const
 */
 void QSqlResult::clear()
 {
-    d->clear();
+   d->clear();
 }
 
 /*!
@@ -833,12 +848,12 @@ void QSqlResult::clear()
 */
 QString QSqlResult::executedQuery() const
 {
-    return d->executedQuery;
+   return d->executedQuery;
 }
 
 void QSqlResult::resetBindCount()
 {
-    d->resetBindCount();
+   d->resetBindCount();
 }
 
 /*!
@@ -849,7 +864,7 @@ void QSqlResult::resetBindCount()
 */
 QString QSqlResult::boundValueName(int index) const
 {
-    return d->holderAt(index);
+   return d->holderAt(index);
 }
 
 /*!
@@ -860,14 +875,16 @@ QString QSqlResult::boundValueName(int index) const
 */
 bool QSqlResult::hasOutValues() const
 {
-    if (d->types.isEmpty())
-        return false;
-    QHash<int, QSql::ParamType>::ConstIterator it;
-    for (it = d->types.constBegin(); it != d->types.constEnd(); ++it) {
-        if (it.value() != QSql::In)
-            return true;
-    }
-    return false;
+   if (d->types.isEmpty()) {
+      return false;
+   }
+   QHash<int, QSql::ParamType>::ConstIterator it;
+   for (it = d->types.constBegin(); it != d->types.constEnd(); ++it) {
+      if (it.value() != QSql::In) {
+         return true;
+      }
+   }
+   return false;
 }
 
 /*!
@@ -880,7 +897,7 @@ bool QSqlResult::hasOutValues() const
 */
 QSqlRecord QSqlResult::record() const
 {
-    return QSqlRecord();
+   return QSqlRecord();
 }
 
 /*!
@@ -899,7 +916,7 @@ QSqlRecord QSqlResult::record() const
 */
 QVariant QSqlResult::lastInsertId() const
 {
-    return QVariant();
+   return QVariant();
 }
 
 /*! \internal
@@ -938,59 +955,63 @@ void QSqlResult::virtual_hook(int, void *)
 */
 bool QSqlResult::execBatch(bool arrayBind)
 {
-    if (driver()->hasFeature(QSqlDriver::BatchOperations)) {
-        virtual_hook(BatchOperation, &arrayBind);
-        d->resetBindCount();
-        return d->error.type() == QSqlError::NoError;
-    } else {
-        QVector<QVariant> values = d->values;
-        if (values.count() == 0)
+   if (driver()->hasFeature(QSqlDriver::BatchOperations)) {
+      virtual_hook(BatchOperation, &arrayBind);
+      d->resetBindCount();
+      return d->error.type() == QSqlError::NoError;
+   } else {
+      QVector<QVariant> values = d->values;
+      if (values.count() == 0) {
+         return false;
+      }
+      for (int i = 0; i < values.at(0).toList().count(); ++i) {
+         for (int j = 0; j < values.count(); ++j) {
+            bindValue(j, values.at(j).toList().at(i), QSql::In);
+         }
+         if (!exec()) {
             return false;
-        for (int i = 0; i < values.at(0).toList().count(); ++i) {
-            for (int j = 0; j < values.count(); ++j)
-                bindValue(j, values.at(j).toList().at(i), QSql::In);
-            if (!exec())
-                return false;
-        }
-        return true;
-    }
-    return false;
+         }
+      }
+      return true;
+   }
+   return false;
 }
 
 /*! \internal
  */
 void QSqlResult::detachFromResultSet()
 {
-    if (driver()->hasFeature(QSqlDriver::FinishQuery) 
-            || driver()->hasFeature(QSqlDriver::SimpleLocking))
-        virtual_hook(DetachFromResultSet, 0);
+   if (driver()->hasFeature(QSqlDriver::FinishQuery)
+         || driver()->hasFeature(QSqlDriver::SimpleLocking)) {
+      virtual_hook(DetachFromResultSet, 0);
+   }
 }
 
 /*! \internal
  */
 void QSqlResult::setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy policy)
 {
-    d->precisionPolicy = policy;
-    virtual_hook(SetNumericalPrecision, &policy);
+   d->precisionPolicy = policy;
+   virtual_hook(SetNumericalPrecision, &policy);
 }
 
 /*! \internal
  */
 QSql::NumericalPrecisionPolicy QSqlResult::numericalPrecisionPolicy() const
 {
-    return d->precisionPolicy;
+   return d->precisionPolicy;
 }
 
 /*! \internal
 */
 bool QSqlResult::nextResult()
 {
-    if (driver()->hasFeature(QSqlDriver::MultipleResultSets)) {
-        bool result = false;
-        virtual_hook(NextResult, &result);
-        return result;
-    }
-    return false;
+   if (driver()->hasFeature(QSqlDriver::MultipleResultSets)) {
+      bool result = false;
+      virtual_hook(NextResult, &result);
+      return result;
+   }
+   return false;
 }
 
 /*!
@@ -1019,7 +1040,7 @@ bool QSqlResult::nextResult()
 */
 QVariant QSqlResult::handle() const
 {
-    return QVariant();
+   return QVariant();
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,30 +34,30 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 NetworkAccessDelegator::NetworkAccessDelegator(QNetworkAccessManager *const genericManager,
-                                               QNetworkAccessManager *const variableURIManager) : m_genericManager(genericManager)
-                                                                                                , m_variableURIManager(variableURIManager)
+      QNetworkAccessManager *const variableURIManager) : m_genericManager(genericManager)
+   , m_variableURIManager(variableURIManager)
 {
 }
 
 QNetworkAccessManager *NetworkAccessDelegator::managerFor(const QUrl &uri)
 {
-    /* Unfortunately we have to do it this way, QUrl::isParentOf() doesn't
-     * understand URI schemes like this one. */
-    const QString requestedUrl(uri.toString());
+   /* Unfortunately we have to do it this way, QUrl::isParentOf() doesn't
+    * understand URI schemes like this one. */
+   const QString requestedUrl(uri.toString());
 
-    /* On the topic of timeouts:
-     *
-     * Currently the schemes QNetworkAccessManager handles should/will do
-     * timeouts for 4.4, but we need to do timeouts for our own. */
-    if(requestedUrl.startsWith(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:")))
-        return m_variableURIManager;
-    else
-    {
-        if(!m_genericManager)
-            m_genericManager = new QNetworkAccessManager(this);
+   /* On the topic of timeouts:
+    *
+    * Currently the schemes QNetworkAccessManager handles should/will do
+    * timeouts for 4.4, but we need to do timeouts for our own. */
+   if (requestedUrl.startsWith(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:"))) {
+      return m_variableURIManager;
+   } else {
+      if (!m_genericManager) {
+         m_genericManager = new QNetworkAccessManager(this);
+      }
 
-        return m_genericManager;
-    }
+      return m_genericManager;
+   }
 }
 
 QT_END_NAMESPACE

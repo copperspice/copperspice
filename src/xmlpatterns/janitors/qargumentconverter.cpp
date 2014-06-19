@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,50 +39,50 @@ ArgumentConverter::ArgumentConverter(const Expression::Ptr &operand,
 
 ExpressionVisitorResult::Ptr ArgumentConverter::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 Item::Iterator::Ptr ArgumentConverter::mapToSequence(const Item &item,
-                                                     const DynamicContext::Ptr &context) const
+      const DynamicContext::Ptr &context) const
 {
-    if(item.isAtomicValue() && !BuiltinTypes::xsUntypedAtomic->xdtTypeMatches(item.type()))
-        return makeSingletonIterator(item);
-    else
-    {
-        /* We're using UntypedAtomicConverter::mapToItem(). */
-        return makeItemMappingIterator<Item>(ConstPtr(this),
-                                             item.sequencedTypedValue(),
-                                             context);
-    }
+   if (item.isAtomicValue() && !BuiltinTypes::xsUntypedAtomic->xdtTypeMatches(item.type())) {
+      return makeSingletonIterator(item);
+   } else {
+      /* We're using UntypedAtomicConverter::mapToItem(). */
+      return makeItemMappingIterator<Item>(ConstPtr(this),
+                                           item.sequencedTypedValue(),
+                                           context);
+   }
 }
 
 Item::Iterator::Ptr ArgumentConverter::evaluateSequence(const DynamicContext::Ptr &context) const
 {
-    return makeSequenceMappingIterator<Item>(ConstPtr(this),
-                                             m_operand->evaluateSequence(context),
-                                             context);
+   return makeSequenceMappingIterator<Item>(ConstPtr(this),
+          m_operand->evaluateSequence(context),
+          context);
 }
 
 Item ArgumentConverter::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    const Item item(m_operand->evaluateSingleton(context));
+   const Item item(m_operand->evaluateSingleton(context));
 
-    if(item)
-        return mapToItem(item, context);
-    else /* Empty is allowed. ArgumentConverter doesn't care about cardinality. */
-        return Item();
+   if (item) {
+      return mapToItem(item, context);
+   } else { /* Empty is allowed. ArgumentConverter doesn't care about cardinality. */
+      return Item();
+   }
 }
 
 SequenceType::List ArgumentConverter::expectedOperandTypes() const
 {
-    SequenceType::List result;
-    result.append(CommonSequenceTypes::ZeroOrMoreItems);
-    return result;
+   SequenceType::List result;
+   result.append(CommonSequenceTypes::ZeroOrMoreItems);
+   return result;
 }
 
 SequenceType::Ptr ArgumentConverter::staticType() const
 {
-    return CommonSequenceTypes::ZeroOrMoreAtomicTypes;
+   return CommonSequenceTypes::ZeroOrMoreAtomicTypes;
 }
 
 QT_END_NAMESPACE

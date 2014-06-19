@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,59 +31,55 @@ using namespace QPatternist;
 
 TemplateInvoker::TemplateInvoker(const WithParam::Hash &withParams,
                                  const QXmlName &name) : CallSite(name)
-                                                       , m_withParams(withParams)
+   , m_withParams(withParams)
 {
-    const WithParam::Hash::const_iterator end(m_withParams.constEnd());
+   const WithParam::Hash::const_iterator end(m_withParams.constEnd());
 
-    for(WithParam::Hash::const_iterator it(m_withParams.constBegin()); it != end; ++it)
-    {
-        /* In the case of for instance:
-         *  <xsl:with-param name="empty_seq" as="item()"/>
-         *
-         * we have no default expression. */
-        Q_ASSERT(it.value()->sourceExpression());
-        m_operands.append(it.value()->sourceExpression());
-    }
+   for (WithParam::Hash::const_iterator it(m_withParams.constBegin()); it != end; ++it) {
+      /* In the case of for instance:
+       *  <xsl:with-param name="empty_seq" as="item()"/>
+       *
+       * we have no default expression. */
+      Q_ASSERT(it.value()->sourceExpression());
+      m_operands.append(it.value()->sourceExpression());
+   }
 }
 
 Expression::Ptr TemplateInvoker::compress(const StaticContext::Ptr &context)
 {
-    /* CallSite::compress() may have changed our children, so update
-     * our m_withParams. */
-    const Expression::Ptr me(CallSite::compress(context));
-    const WithParam::Hash::const_iterator end(m_withParams.constEnd());
-    int exprIndex = -1;
+   /* CallSite::compress() may have changed our children, so update
+    * our m_withParams. */
+   const Expression::Ptr me(CallSite::compress(context));
+   const WithParam::Hash::const_iterator end(m_withParams.constEnd());
+   int exprIndex = -1;
 
-    for(WithParam::Hash::const_iterator it(m_withParams.constBegin()); it != end; ++it)
-    {
-        if(it.value()->sourceExpression())
-        {
-            ++exprIndex;
-            it.value()->setSourceExpression(m_operands.at(exprIndex));
-        }
-    }
+   for (WithParam::Hash::const_iterator it(m_withParams.constBegin()); it != end; ++it) {
+      if (it.value()->sourceExpression()) {
+         ++exprIndex;
+         it.value()->setSourceExpression(m_operands.at(exprIndex));
+      }
+   }
 
-    return me;
+   return me;
 }
 
 SequenceType::List TemplateInvoker::expectedOperandTypes() const
 {
-    SequenceType::List result;
+   SequenceType::List result;
 
-    /* We don't return the type of the m_template->templateParameters(), we
-     * return the type of the @c xsl:with-param first. @em After that, we
-     * manually apply the parameter types in typeCheck(). */
-    const WithParam::Hash::const_iterator end(m_withParams.constEnd());
+   /* We don't return the type of the m_template->templateParameters(), we
+    * return the type of the @c xsl:with-param first. @em After that, we
+    * manually apply the parameter types in typeCheck(). */
+   const WithParam::Hash::const_iterator end(m_withParams.constEnd());
 
-    for(WithParam::Hash::const_iterator it(m_withParams.constBegin()); it != end; ++it)
-    {
-        /* We're not guaranteed to have a with-param, we may be using the
-         * default value of the xsl:param. Tunnel parameters may also play
-         * in. */
-        result.append(it.value()->type());
-    }
+   for (WithParam::Hash::const_iterator it(m_withParams.constBegin()); it != end; ++it) {
+      /* We're not guaranteed to have a with-param, we may be using the
+       * default value of the xsl:param. Tunnel parameters may also play
+       * in. */
+      result.append(it.value()->type());
+   }
 
-    return result;
+   return result;
 }
 
 QT_END_NAMESPACE

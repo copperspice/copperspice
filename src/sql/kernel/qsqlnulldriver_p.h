@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,55 +36,82 @@ QT_BEGIN_NAMESPACE
 class QSqlNullResult : public QSqlResult
 {
 
-public:
-    inline explicit QSqlNullResult(const QSqlDriver* d): QSqlResult(d)
-       { QSqlResult::setLastError(QSqlError(QLatin1String("Driver not loaded"), 
-            QLatin1String("Driver not loaded"), QSqlError::ConnectionError)); 
-        }
+ public:
+   inline explicit QSqlNullResult(const QSqlDriver *d): QSqlResult(d) {
+      QSqlResult::setLastError(QSqlError(QLatin1String("Driver not loaded"),
+                                         QLatin1String("Driver not loaded"), QSqlError::ConnectionError));
+   }
 
-protected:
-    inline QVariant data(int) { return QVariant(); }
-    inline bool reset (const QString&) { return false; }
-    inline bool fetch(int) { return false; }
-    inline bool fetchFirst() { return false; }
-    inline bool fetchLast() { return false; }
-    inline bool isNull(int) { return false; }
-    inline int size()  { return -1; }
-    inline int numRowsAffected() { return 0; }
+ protected:
+   inline QVariant data(int) {
+      return QVariant();
+   }
+   inline bool reset (const QString &) {
+      return false;
+   }
+   inline bool fetch(int) {
+      return false;
+   }
+   inline bool fetchFirst() {
+      return false;
+   }
+   inline bool fetchLast() {
+      return false;
+   }
+   inline bool isNull(int) {
+      return false;
+   }
+   inline int size()  {
+      return -1;
+   }
+   inline int numRowsAffected() {
+      return 0;
+   }
 
-    inline void setAt(int) {}
-    inline void setActive(bool) {}
-    inline void setLastError(const QSqlError&) {}
-    inline void setQuery(const QString&) {}
-    inline void setSelect(bool) {}
-    inline void setForwardOnly(bool) {}
+   inline void setAt(int) {}
+   inline void setActive(bool) {}
+   inline void setLastError(const QSqlError &) {}
+   inline void setQuery(const QString &) {}
+   inline void setSelect(bool) {}
+   inline void setForwardOnly(bool) {}
 
-    inline bool exec() { return false; }
-    inline bool prepare(const QString&) { return false; }
-    inline bool savePrepare(const QString&) { return false; }
-    inline void bindValue(int, const QVariant&, QSql::ParamType) {}
-    inline void bindValue(const QString&, const QVariant&, QSql::ParamType) {}
+   inline bool exec() {
+      return false;
+   }
+   inline bool prepare(const QString &) {
+      return false;
+   }
+   inline bool savePrepare(const QString &) {
+      return false;
+   }
+   inline void bindValue(int, const QVariant &, QSql::ParamType) {}
+   inline void bindValue(const QString &, const QVariant &, QSql::ParamType) {}
 };
 
 class QSqlNullDriver : public QSqlDriver
 {
-public:
-    inline QSqlNullDriver(): QSqlDriver()
-       { QSqlDriver::setLastError(QSqlError(QLatin1String("Driver not loaded"), 
-            QLatin1String("Driver not loaded"), QSqlError::ConnectionError)); 
-       }
+ public:
+   inline QSqlNullDriver(): QSqlDriver() {
+      QSqlDriver::setLastError(QSqlError(QLatin1String("Driver not loaded"),
+                                         QLatin1String("Driver not loaded"), QSqlError::ConnectionError));
+   }
 
-    inline bool hasFeature(DriverFeature) const { return false; }
-    inline bool open(const QString &, const QString & , const QString & ,const QString &, int, const QString&)
-          { return false; }
+   inline bool hasFeature(DriverFeature) const {
+      return false;
+   }
+   inline bool open(const QString &, const QString &, const QString &, const QString &, int, const QString &) {
+      return false;
+   }
 
-    inline void close() {}
-    inline QSqlResult *createResult() const { return new QSqlNullResult(this); }
+   inline void close() {}
+   inline QSqlResult *createResult() const {
+      return new QSqlNullResult(this);
+   }
 
-protected:
-    inline void setOpen(bool) {}
-    inline void setOpenError(bool) {}
-    inline void setLastError(const QSqlError&) {}
+ protected:
+   inline void setOpen(bool) {}
+   inline void setOpenError(bool) {}
+   inline void setLastError(const QSqlError &) {}
 };
 
 QT_END_NAMESPACE

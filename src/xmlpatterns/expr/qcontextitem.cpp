@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,64 +35,66 @@ using namespace QPatternist;
 
 Item ContextItem::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    return context->contextItem();
+   return context->contextItem();
 }
 
 Expression::Ptr ContextItem::compress(const StaticContext::Ptr &context)
 {
-    m_itemType = context->contextItemType();
-    return EmptyContainer::compress(context);
+   m_itemType = context->contextItemType();
+   return EmptyContainer::compress(context);
 }
 
 Expression::Ptr ContextItem::typeCheck(const StaticContext::Ptr &context,
                                        const SequenceType::Ptr &reqType)
 {
-    m_itemType = context->contextItemType();
-    return EmptyContainer::typeCheck(context, reqType);
+   m_itemType = context->contextItemType();
+   return EmptyContainer::typeCheck(context, reqType);
 }
 
 SequenceType::Ptr ContextItem::staticType() const
 {
-    /* We test m_itemType here because Patternist View calls staticType() before the typeCheck()
-     * stage. */
-    if(m_itemType)
-        return makeGenericSequenceType(m_itemType, Cardinality::exactlyOne());
-    else
-        return CommonSequenceTypes::ExactlyOneItem;
+   /* We test m_itemType here because Patternist View calls staticType() before the typeCheck()
+    * stage. */
+   if (m_itemType) {
+      return makeGenericSequenceType(m_itemType, Cardinality::exactlyOne());
+   } else {
+      return CommonSequenceTypes::ExactlyOneItem;
+   }
 }
 
 Expression::Properties ContextItem::properties() const
 {
-    return DisableElimination | RequiresContextItem | EvaluationCacheRedundant;
+   return DisableElimination | RequiresContextItem | EvaluationCacheRedundant;
 }
 
 ExpressionVisitorResult::Ptr ContextItem::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 Expression::ID ContextItem::id() const
 {
-    return IDContextItem;
+   return IDContextItem;
 }
 
 ItemType::Ptr ContextItem::expectedContextItemType() const
 {
-    return BuiltinTypes::item;
+   return BuiltinTypes::item;
 }
 
 const SourceLocationReflection *ContextItem::actualReflection() const
 {
-    if(m_expr)
-        return m_expr.data();
-    else
-        return this;
+   if (m_expr) {
+      return m_expr.data();
+   } else {
+      return this;
+   }
 }
 
 void ContextItem::announceFocusType(const ItemType::Ptr &type)
 {
-    Q_ASSERT(type);
-    m_itemType = type;
+   Q_ASSERT(type);
+   m_itemType = type;
 }
 
 QT_END_NAMESPACE

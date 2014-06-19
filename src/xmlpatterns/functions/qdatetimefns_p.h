@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,120 +36,119 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+template<typename TSubClass>
+class ExtractFromDurationFN : public FunctionCall
 {
-    
-    template<typename TSubClass>
-    class ExtractFromDurationFN : public FunctionCall
-    {
-    public:
-        /**
-         * Takes care of the argument handling, and, if applicable,
-         * calls extract() with the value of the operand.
-         */
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-    };
+ public:
+   /**
+    * Takes care of the argument handling, and, if applicable,
+    * calls extract() with the value of the operand.
+    */
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+};
 
-   
-    class YearsFromDurationFN : public ExtractFromDurationFN<YearsFromDurationFN>
-    {
-    public:
-        inline Item extract(const AbstractDuration *const duration) const;
-    };
 
-    class MonthsFromDurationFN : public ExtractFromDurationFN<MonthsFromDurationFN>
-    {
-    public:
-        inline Item extract(const AbstractDuration *const duration) const;
-    };
+class YearsFromDurationFN : public ExtractFromDurationFN<YearsFromDurationFN>
+{
+ public:
+   inline Item extract(const AbstractDuration *const duration) const;
+};
 
-   
-    class DaysFromDurationFN : public ExtractFromDurationFN<DaysFromDurationFN>
-    {
-    public:
-        inline Item extract(const AbstractDuration *const duration) const;
-    };
+class MonthsFromDurationFN : public ExtractFromDurationFN<MonthsFromDurationFN>
+{
+ public:
+   inline Item extract(const AbstractDuration *const duration) const;
+};
 
-  
-    class HoursFromDurationFN : public ExtractFromDurationFN<HoursFromDurationFN>
-    {
-    public:
-        inline Item extract(const AbstractDuration *const duration) const;
-    };
 
-   
-    class MinutesFromDurationFN : public ExtractFromDurationFN<MinutesFromDurationFN>
-    {
-    public:
-        inline Item extract(const AbstractDuration *const duration) const;
-    };
+class DaysFromDurationFN : public ExtractFromDurationFN<DaysFromDurationFN>
+{
+ public:
+   inline Item extract(const AbstractDuration *const duration) const;
+};
 
-  
-    class SecondsFromDurationFN : public ExtractFromDurationFN<SecondsFromDurationFN>
-    {
-    public:
-        inline Item extract(const AbstractDuration *const duration) const;
-    };
 
-   
-    template<typename TSubClass>
-    class ExtractFromDateTimeFN : public FunctionCall
-    {
-    public:
-        /**
-         * Takes care of the argument handling, and, if applicable,
-         * calls extract() with the value of the operand.
-         */
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-    };
+class HoursFromDurationFN : public ExtractFromDurationFN<HoursFromDurationFN>
+{
+ public:
+   inline Item extract(const AbstractDuration *const duration) const;
+};
 
-   
-    class YearFromAbstractDateTimeFN : public ExtractFromDateTimeFN<YearFromAbstractDateTimeFN>
-    {
-    public:
-        inline Item extract(const QDateTime &dt) const;
-    };
 
-  
-    class DayFromAbstractDateTimeFN : public ExtractFromDateTimeFN<DayFromAbstractDateTimeFN>
-    {
-    public:
-        inline Item extract(const QDateTime &dt) const;
-    };
+class MinutesFromDurationFN : public ExtractFromDurationFN<MinutesFromDurationFN>
+{
+ public:
+   inline Item extract(const AbstractDuration *const duration) const;
+};
 
-    
-    class HoursFromAbstractDateTimeFN : public ExtractFromDateTimeFN<HoursFromAbstractDateTimeFN>
-    {
-    public:
-        inline Item extract(const QDateTime &dt) const;
-    };
 
-    class MinutesFromAbstractDateTimeFN : public ExtractFromDateTimeFN<MinutesFromAbstractDateTimeFN>
-    {
-    public:
-        inline Item extract(const QDateTime &dt) const;
-    };
+class SecondsFromDurationFN : public ExtractFromDurationFN<SecondsFromDurationFN>
+{
+ public:
+   inline Item extract(const AbstractDuration *const duration) const;
+};
 
-   
-    class SecondsFromAbstractDateTimeFN : public ExtractFromDateTimeFN<SecondsFromAbstractDateTimeFN>
-    {
-    public:
-        inline Item extract(const QDateTime &dt) const;
-    };
 
-    
-    class TimezoneFromAbstractDateTimeFN : public ExtractFromDateTimeFN<TimezoneFromAbstractDateTimeFN>
-    {
-    public:
-        inline Item extract(const QDateTime &dt) const;
-    };
+template<typename TSubClass>
+class ExtractFromDateTimeFN : public FunctionCall
+{
+ public:
+   /**
+    * Takes care of the argument handling, and, if applicable,
+    * calls extract() with the value of the operand.
+    */
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+};
 
-  
-    class MonthFromAbstractDateTimeFN : public ExtractFromDateTimeFN<MonthFromAbstractDateTimeFN>
-    {
-    public:
-        inline Item extract(const QDateTime &dt) const;
-    };
+
+class YearFromAbstractDateTimeFN : public ExtractFromDateTimeFN<YearFromAbstractDateTimeFN>
+{
+ public:
+   inline Item extract(const QDateTime &dt) const;
+};
+
+
+class DayFromAbstractDateTimeFN : public ExtractFromDateTimeFN<DayFromAbstractDateTimeFN>
+{
+ public:
+   inline Item extract(const QDateTime &dt) const;
+};
+
+
+class HoursFromAbstractDateTimeFN : public ExtractFromDateTimeFN<HoursFromAbstractDateTimeFN>
+{
+ public:
+   inline Item extract(const QDateTime &dt) const;
+};
+
+class MinutesFromAbstractDateTimeFN : public ExtractFromDateTimeFN<MinutesFromAbstractDateTimeFN>
+{
+ public:
+   inline Item extract(const QDateTime &dt) const;
+};
+
+
+class SecondsFromAbstractDateTimeFN : public ExtractFromDateTimeFN<SecondsFromAbstractDateTimeFN>
+{
+ public:
+   inline Item extract(const QDateTime &dt) const;
+};
+
+
+class TimezoneFromAbstractDateTimeFN : public ExtractFromDateTimeFN<TimezoneFromAbstractDateTimeFN>
+{
+ public:
+   inline Item extract(const QDateTime &dt) const;
+};
+
+
+class MonthFromAbstractDateTimeFN : public ExtractFromDateTimeFN<MonthFromAbstractDateTimeFN>
+{
+ public:
+   inline Item extract(const QDateTime &dt) const;
+};
 
 #include "qdatetimefns.cpp"
 

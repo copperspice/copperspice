@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -60,58 +60,58 @@ class QTDSDriver;
 
 class QTDSResult : public QSqlCachedResult
 {
-public:
-    explicit QTDSResult(const QTDSDriver* db);
-    ~QTDSResult();
-    QVariant handle() const;
+ public:
+   explicit QTDSResult(const QTDSDriver *db);
+   ~QTDSResult();
+   QVariant handle() const;
 
-protected:
-    void cleanup();
-    bool reset (const QString& query);
-    int size();
-    int numRowsAffected();
-    bool gotoNext(QSqlCachedResult::ValueCache &values, int index);
-    QSqlRecord record() const;
+ protected:
+   void cleanup();
+   bool reset (const QString &query);
+   int size();
+   int numRowsAffected();
+   bool gotoNext(QSqlCachedResult::ValueCache &values, int index);
+   QSqlRecord record() const;
 
-private:
-    QTDSResultPrivate* d;
+ private:
+   QTDSResultPrivate *d;
 };
 
 class Q_EXPORT_SQLDRIVER_TDS QTDSDriver : public QSqlDriver
 {
-    CS_OBJECT(QTDSDriver)
-    friend class QTDSResult;
+   CS_OBJECT(QTDSDriver)
+   friend class QTDSResult;
 
-public:
-    explicit QTDSDriver(QObject* parent = 0);
-    QTDSDriver(LOGINREC* rec, const QString& host, const QString &db, QObject* parent = 0);
-    ~QTDSDriver();
-    bool hasFeature(DriverFeature f) const;
-    bool open(const QString & db,
-               const QString & user,
-               const QString & password,
-               const QString & host,
-               int port,
-               const QString& connOpts);
-    void close();
-    QStringList tables(QSql::TableType) const;
-    QSqlResult *createResult() const;
-    QSqlRecord record(const QString& tablename) const;
-    QSqlIndex primaryIndex(const QString& tablename) const;
+ public:
+   explicit QTDSDriver(QObject *parent = 0);
+   QTDSDriver(LOGINREC *rec, const QString &host, const QString &db, QObject *parent = 0);
+   ~QTDSDriver();
+   bool hasFeature(DriverFeature f) const;
+   bool open(const QString &db,
+             const QString &user,
+             const QString &password,
+             const QString &host,
+             int port,
+             const QString &connOpts);
+   void close();
+   QStringList tables(QSql::TableType) const;
+   QSqlResult *createResult() const;
+   QSqlRecord record(const QString &tablename) const;
+   QSqlIndex primaryIndex(const QString &tablename) const;
 
-    QString formatValue(const QSqlField &field,
-                         bool trimStrings) const;
-    QVariant handle() const;
+   QString formatValue(const QSqlField &field,
+                       bool trimStrings) const;
+   QVariant handle() const;
 
-    QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
+   QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
 
-protected:
-    bool beginTransaction();
-    bool commitTransaction();
-    bool rollbackTransaction();
-private:
-    void init();
-    QTDSDriverPrivate *d;
+ protected:
+   bool beginTransaction();
+   bool commitTransaction();
+   bool rollbackTransaction();
+ private:
+   void init();
+   QTDSDriverPrivate *d;
 };
 
 QT_END_NAMESPACE

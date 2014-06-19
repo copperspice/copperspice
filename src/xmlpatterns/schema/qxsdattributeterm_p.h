@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,26 +31,25 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class XsdAttributeTerm : public NamedSchemaComponent, public XsdAnnotated
 {
- 
-    class XsdAttributeTerm : public NamedSchemaComponent, public XsdAnnotated
-    {
-        public:
-            typedef QExplicitlySharedDataPointer<XsdAttributeTerm> Ptr;
+ public:
+   typedef QExplicitlySharedDataPointer<XsdAttributeTerm> Ptr;
 
-            /**
-             * Returns @c true if the term is an attribute use, @c false otherwise.
-             */
-            virtual bool isAttributeUse() const;
+   /**
+    * Returns @c true if the term is an attribute use, @c false otherwise.
+    */
+   virtual bool isAttributeUse() const;
 
-            /**
-             * Returns @c true if the term is an attribute use reference, @c false otherwise.
-             *
-             * @note The reference term is only used internally as helper during type resolving.
-             */
-            virtual bool isReference() const;
-    };
+   /**
+    * Returns @c true if the term is an attribute use reference, @c false otherwise.
+    *
+    * @note The reference term is only used internally as helper during type resolving.
+    */
+   virtual bool isReference() const;
+};
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,415 +42,399 @@ template<typename T> class QAbstractXmlForwardIterator;
 class QSourceLocation;
 class QAbstractXmlReceiver;
 
-namespace QPatternist
+namespace QPatternist {
+class DynamicContext;
+class Item;
+class ItemType;
+class QObjectNodeModel;
+template<typename T> class EmptyIterator;
+template<typename T, typename ListType> class ListIterator;
+
+class AtomicValue : public QSharedData
+   , public CppCastingHelper<AtomicValue>
 {
-    class DynamicContext;
-    class Item;
-    class ItemType;
-    class QObjectNodeModel;
-    template<typename T> class EmptyIterator;
-    template<typename T, typename ListType> class ListIterator;
-   
-    class AtomicValue : public QSharedData
-                      , public CppCastingHelper<AtomicValue>
-    {
-    public:
-        virtual ~AtomicValue();
+ public:
+   virtual ~AtomicValue();
 
-        /**
-         * A smart pointer wrapping AtomicValue instances.
-         */
-        typedef QExplicitlySharedDataPointer<AtomicValue> Ptr;
+   /**
+    * A smart pointer wrapping AtomicValue instances.
+    */
+   typedef QExplicitlySharedDataPointer<AtomicValue> Ptr;
 
-        /**
-         * A list if smart pointers wrapping AtomicValue instances.
-         */
-        typedef QList<AtomicValue::Ptr> List;
+   /**
+    * A list if smart pointers wrapping AtomicValue instances.
+    */
+   typedef QList<AtomicValue::Ptr> List;
 
-        /**
-         * Determines whether this atomic value has an error. This is used
-         * for implementing casting.
-         *
-         * @returns always @c false
-         */
-        virtual bool hasError() const;
+   /**
+    * Determines whether this atomic value has an error. This is used
+    * for implementing casting.
+    *
+    * @returns always @c false
+    */
+   virtual bool hasError() const;
 
-        /**
-         * Always fails by issuing the type error ReportContext::FORG0006. Sub-classes
-         * whose represented type do allow EBV to be extracted from, must thus
-         * re-implement this function.
-         */
-        virtual bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &context) const;
+   /**
+    * Always fails by issuing the type error ReportContext::FORG0006. Sub-classes
+    * whose represented type do allow EBV to be extracted from, must thus
+    * re-implement this function.
+    */
+   virtual bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &context) const;
 
-        virtual QString stringValue() const = 0;
-        virtual ItemType::Ptr type() const = 0;
+   virtual QString stringValue() const = 0;
+   virtual ItemType::Ptr type() const = 0;
 
-        /**
-         * Converts @p value to a QVariant.
-         */
-        static QVariant toQt(const AtomicValue *const value);
+   /**
+    * Converts @p value to a QVariant.
+    */
+   static QVariant toQt(const AtomicValue *const value);
 
-        static inline QVariant toQt(const AtomicValue::Ptr &value)
-        {
-            return toQt(value.data());
-        }
+   static inline QVariant toQt(const AtomicValue::Ptr &value) {
+      return toQt(value.data());
+   }
 
-        static Item toXDM(const QVariant &value);
+   static Item toXDM(const QVariant &value);
 
-        static ItemType::Ptr qtToXDMType(const QXmlItem &item);
-    protected:
-        inline AtomicValue()
-        {
-        }
-    };
-  
-    class Item
-    {
-        friend class QT_PREPEND_NAMESPACE(QXmlItem);
+   static ItemType::Ptr qtToXDMType(const QXmlItem &item);
+ protected:
+   inline AtomicValue() {
+   }
+};
 
-    public:
-        /**
-         * A smart pointer wrapping an Item instance.
-         */
-        typedef QAbstractXmlForwardIterator<Item> Iterator;
+class Item
+{
+   friend class QT_PREPEND_NAMESPACE(QXmlItem);
 
-        /**
-         * A list of Item instances, each wrapped in a smart pointer.
-         */
-        typedef QList<Item> List;
+ public:
+   /**
+    * A smart pointer wrapping an Item instance.
+    */
+   typedef QAbstractXmlForwardIterator<Item> Iterator;
 
-        /**
-         * A vector of Item instances, each wrapped in a smart pointer.
-         */
-        typedef QVector<Item> Vector;
+   /**
+    * A list of Item instances, each wrapped in a smart pointer.
+    */
+   typedef QList<Item> List;
 
-        typedef QPatternist::SingletonIterator<Item> SingletonIterator;
-        typedef QPatternist::EmptyIterator<Item> EmptyIterator;
+   /**
+    * A vector of Item instances, each wrapped in a smart pointer.
+    */
+   typedef QVector<Item> Vector;
 
-        /**
-         * Default constructor.
-         */
-        inline Item()
-        {
-            node.reset();
-        }
+   typedef QPatternist::SingletonIterator<Item> SingletonIterator;
+   typedef QPatternist::EmptyIterator<Item> EmptyIterator;
 
-        inline Item(const QXmlNodeModelIndex &n) : node(n.m_storage)
-        {
-        }
+   /**
+    * Default constructor.
+    */
+   inline Item() {
+      node.reset();
+   }
 
-        inline Item(const Item &other) : node(other.node)
-        {
-            Q_ASSERT_X(sizeof(QXmlNodeModelIndex) >= sizeof(AtomicValue), Q_FUNC_INFO,
-                       "Since we're only copying the node member, it must be the largest.");
-            if(isAtomicValue())
-                atomicValue->ref.ref();
-        }
+   inline Item(const QXmlNodeModelIndex &n) : node(n.m_storage) {
+   }
 
-        inline Item(const AtomicValue::Ptr &a)
-        {
-            node.reset();
-            if(a)
-            {
-                atomicValue = a.data();
-                atomicValue->ref.ref();
+   inline Item(const Item &other) : node(other.node) {
+      Q_ASSERT_X(sizeof(QXmlNodeModelIndex) >= sizeof(AtomicValue), Q_FUNC_INFO,
+                 "Since we're only copying the node member, it must be the largest.");
+      if (isAtomicValue()) {
+         atomicValue->ref.ref();
+      }
+   }
 
-                /* Signal that we're housing an atomic value. */
-                node.model = reinterpret_cast<const QAbstractXmlNodeModel *>(~0);
-            }
-        }
+   inline Item(const AtomicValue::Ptr &a) {
+      node.reset();
+      if (a) {
+         atomicValue = a.data();
+         atomicValue->ref.ref();
 
-        inline Item(const AtomicValue *const a)
-        {
-            /* Note, the implementation is a copy of the constructor above. */
-            node.reset();
-            if(a)
-            {
-                atomicValue = a;
-                atomicValue->ref.ref();
+         /* Signal that we're housing an atomic value. */
+         node.model = reinterpret_cast<const QAbstractXmlNodeModel *>(~0);
+      }
+   }
 
-                /* Signal that we're housing an atomic value. */
-                node.model = reinterpret_cast<const QAbstractXmlNodeModel *>(~0);
-            }
-        }
+   inline Item(const AtomicValue *const a) {
+      /* Note, the implementation is a copy of the constructor above. */
+      node.reset();
+      if (a) {
+         atomicValue = a;
+         atomicValue->ref.ref();
 
-        inline ~Item()
-        {
-            if(isAtomicValue() && !atomicValue->ref.deref())
-                delete atomicValue;
-        }
+         /* Signal that we're housing an atomic value. */
+         node.model = reinterpret_cast<const QAbstractXmlNodeModel *>(~0);
+      }
+   }
 
-        inline Item &operator=(const Item &other)
-        {
-            Q_ASSERT_X(sizeof(QXmlNodeModelIndex) >= sizeof(AtomicValue *), Q_FUNC_INFO,
-                       "If this doesn't hold, we won't copy all data.");
+   inline ~Item() {
+      if (isAtomicValue() && !atomicValue->ref.deref()) {
+         delete atomicValue;
+      }
+   }
 
-            if(other.isAtomicValue())
-                other.atomicValue->ref.ref();
+   inline Item &operator=(const Item &other) {
+      Q_ASSERT_X(sizeof(QXmlNodeModelIndex) >= sizeof(AtomicValue *), Q_FUNC_INFO,
+                 "If this doesn't hold, we won't copy all data.");
 
-            if(isAtomicValue())
-            {
-                if(!atomicValue->ref.deref())
-                    delete atomicValue;
-            }
+      if (other.isAtomicValue()) {
+         other.atomicValue->ref.ref();
+      }
 
-            node = other.node;
+      if (isAtomicValue()) {
+         if (!atomicValue->ref.deref()) {
+            delete atomicValue;
+         }
+      }
 
-            return *this;
-        }
+      node = other.node;
 
-        template<typename TCastTarget>
-        inline TCastTarget *as() const
-        {
+      return *this;
+   }
+
+   template<typename TCastTarget>
+   inline TCastTarget *as() const {
 #if defined(Patternist_DEBUG) && !defined(Q_CC_XLC)
-/* At least on aix-xlc-64, the compiler cries when it sees dynamic_cast. */
-            Q_ASSERT_X(atomicValue == 0 || dynamic_cast<const TCastTarget *>(atomicValue),
-                       Q_FUNC_INFO,
-                       "The cast is invalid. This class does not inherit the cast target.");
+      /* At least on aix-xlc-64, the compiler cries when it sees dynamic_cast. */
+      Q_ASSERT_X(atomicValue == 0 || dynamic_cast<const TCastTarget *>(atomicValue),
+                 Q_FUNC_INFO,
+                 "The cast is invalid. This class does not inherit the cast target.");
 #endif
-            return const_cast<TCastTarget *>(static_cast<const TCastTarget *>(atomicValue));
-        }
+      return const_cast<TCastTarget *>(static_cast<const TCastTarget *>(atomicValue));
+   }
 
-        /**
-         * @short Returns the string value of this Item.
-         *
-         * In the case of a node, it is the node value corresponding to
-         * the particular node type. For atomic values, it is equivalent
-         * to the value cast as <tt>xs:string</tt>.
-         *
-         * Conceptually, this functions corresponds to the <tt>dm:string-value</tt> accessor.
-         *
-         * @see <a href="http://www.w3.org/TR/xpath-datamodel/#dm-string-value">XQuery 1.0 and
-         * XPath 2.0 Data Model, 5.13 string-value Accessor</a>
-         * @returns the string value.
-         */
-        inline QString stringValue() const
-        {
-            if(isAtomicValue())
-                return atomicValue->stringValue();
-            else
-                return asNode().stringValue();
-        }
+   /**
+    * @short Returns the string value of this Item.
+    *
+    * In the case of a node, it is the node value corresponding to
+    * the particular node type. For atomic values, it is equivalent
+    * to the value cast as <tt>xs:string</tt>.
+    *
+    * Conceptually, this functions corresponds to the <tt>dm:string-value</tt> accessor.
+    *
+    * @see <a href="http://www.w3.org/TR/xpath-datamodel/#dm-string-value">XQuery 1.0 and
+    * XPath 2.0 Data Model, 5.13 string-value Accessor</a>
+    * @returns the string value.
+    */
+   inline QString stringValue() const {
+      if (isAtomicValue()) {
+         return atomicValue->stringValue();
+      } else {
+         return asNode().stringValue();
+      }
+   }
 
-        /**
-         * @short Returns the typed value of this item.
-         *
-         * Conceptually, this functions corresponds to the <tt>dm:typed-value</tt> accessor. Here are
-         * examples of what the typed value of an Item is:
-         *
-         * - The typed value of an atomic value is always the atomic value itself.
-         * - A comment node has always a typed value of type @c xs:string
-         * - For attribute and element nodes, the typed value can be arbitrary. For example, an
-         *   element can have a sequence of @c xs:dateTime instances.
-         *
-         * @returns the typed value of this item
-         * @see <a href="http://www.w3.org/TR/xpath-datamodel/#dm-typed-value">XQuery 1.0 and
-         * XPath 2.0 Data Model, 5.15 typed-value Accessor</a>
-         */
-        Item::Iterator::Ptr sequencedTypedValue() const;
+   /**
+    * @short Returns the typed value of this item.
+    *
+    * Conceptually, this functions corresponds to the <tt>dm:typed-value</tt> accessor. Here are
+    * examples of what the typed value of an Item is:
+    *
+    * - The typed value of an atomic value is always the atomic value itself.
+    * - A comment node has always a typed value of type @c xs:string
+    * - For attribute and element nodes, the typed value can be arbitrary. For example, an
+    *   element can have a sequence of @c xs:dateTime instances.
+    *
+    * @returns the typed value of this item
+    * @see <a href="http://www.w3.org/TR/xpath-datamodel/#dm-typed-value">XQuery 1.0 and
+    * XPath 2.0 Data Model, 5.15 typed-value Accessor</a>
+    */
+   Item::Iterator::Ptr sequencedTypedValue() const;
 
-        /**
-         * @short Determines whether this item is an atomic value, or a node.
-         *
-         * If this Item is @c null, @c false is returned.
-         *
-         * @see isNode()
-         * @returns @c true if it is an atomic value, otherwise @c false.
-         */
-        inline bool isAtomicValue() const
-        {
-            /* Setting node.model to ~0, signals that it's an atomic value. */
-            return node.model == reinterpret_cast<QAbstractXmlNodeModel *>(~0);
-        }
+   /**
+    * @short Determines whether this item is an atomic value, or a node.
+    *
+    * If this Item is @c null, @c false is returned.
+    *
+    * @see isNode()
+    * @returns @c true if it is an atomic value, otherwise @c false.
+    */
+   inline bool isAtomicValue() const {
+      /* Setting node.model to ~0, signals that it's an atomic value. */
+      return node.model == reinterpret_cast<QAbstractXmlNodeModel *>(~0);
+   }
 
-        /**
-         * @short Determines whether this item is an atomic value, or a node.
-         *
-         * If this Item is @c null, false is returned.
-         *
-         * @see isAtomicValue()
-         * @returns @c true if this item is a node, otherwise @c false.
-         */
-        inline bool isNode() const
-        {
-            //return !isAtomicValue();
-            return node.model && node.model != reinterpret_cast<QAbstractXmlNodeModel *>(~0);
-        }
+   /**
+    * @short Determines whether this item is an atomic value, or a node.
+    *
+    * If this Item is @c null, false is returned.
+    *
+    * @see isAtomicValue()
+    * @returns @c true if this item is a node, otherwise @c false.
+    */
+   inline bool isNode() const {
+      //return !isAtomicValue();
+      return node.model && node.model != reinterpret_cast<QAbstractXmlNodeModel *>(~0);
+   }
 
-        /**
-         * @short Returns the ItemType this Item is of.
-         *
-         * For example, if this Item is an XML node, more specifically a text node,
-         * <tt>text()</tt> is returned. That is, BuiltinTypes::text. However, if this
-         * Item is an atomic value of type <tt>xs:long</tt> that is what's returned,
-         * BuiltinTypes::xsLong.
-         *
-         * @returns the type of this Item.
-         */
-        inline QExplicitlySharedDataPointer<ItemType> type() const
-        {
-            if(isAtomicValue())
-                return atomicValue->type();
-            else
-                return asNode().type();
-        }
+   /**
+    * @short Returns the ItemType this Item is of.
+    *
+    * For example, if this Item is an XML node, more specifically a text node,
+    * <tt>text()</tt> is returned. That is, BuiltinTypes::text. However, if this
+    * Item is an atomic value of type <tt>xs:long</tt> that is what's returned,
+    * BuiltinTypes::xsLong.
+    *
+    * @returns the type of this Item.
+    */
+   inline QExplicitlySharedDataPointer<ItemType> type() const {
+      if (isAtomicValue()) {
+         return atomicValue->type();
+      } else {
+         return asNode().type();
+      }
+   }
 
-        inline const AtomicValue *asAtomicValue() const
-        {
-            Q_ASSERT(isAtomicValue());
-            return atomicValue;
-        }
+   inline const AtomicValue *asAtomicValue() const {
+      Q_ASSERT(isAtomicValue());
+      return atomicValue;
+   }
 
-        inline const QXmlNodeModelIndex &asNode() const
-        {
-            Q_ASSERT_X(isNode() || isNull(), Q_FUNC_INFO,
-                       "This item isn't a valid QXmlNodeModelIndex.");
-            Q_ASSERT_X(sizeof(QXmlNodeModelIndex) == sizeof(QPatternist::NodeIndexStorage), Q_FUNC_INFO,
-                       "If this doesn't hold, something is wrong.");
+   inline const QXmlNodeModelIndex &asNode() const {
+      Q_ASSERT_X(isNode() || isNull(), Q_FUNC_INFO,
+                 "This item isn't a valid QXmlNodeModelIndex.");
+      Q_ASSERT_X(sizeof(QXmlNodeModelIndex) == sizeof(QPatternist::NodeIndexStorage), Q_FUNC_INFO,
+                 "If this doesn't hold, something is wrong.");
 
-            return reinterpret_cast<const QXmlNodeModelIndex &>(node);
-        }
+      return reinterpret_cast<const QXmlNodeModelIndex &>(node);
+   }
 
-        inline operator bool() const
-        {
-            return node.model;
-        }
+   inline operator bool() const {
+      return node.model;
+   }
 
-        inline bool isNull() const
-        {
-            return !node.model;
-        }
+   inline bool isNull() const {
+      return !node.model;
+   }
 
-        inline void reset()
-        {
-            /* Delete the atomicValue if necessary*/
-            if(isAtomicValue() && !atomicValue->ref.deref())
-                delete atomicValue;
+   inline void reset() {
+      /* Delete the atomicValue if necessary*/
+      if (isAtomicValue() && !atomicValue->ref.deref()) {
+         delete atomicValue;
+      }
 
-            node.reset();
-        }
+      node.reset();
+   }
 
-        static inline Item fromPublic(const QXmlItem &i)
-        {
-            const Item it(i.m_node);
-            if(it.isAtomicValue())
-                it.asAtomicValue()->ref.ref();
+   static inline Item fromPublic(const QXmlItem &i) {
+      const Item it(i.m_node);
+      if (it.isAtomicValue()) {
+         it.asAtomicValue()->ref.ref();
+      }
 
-            return it;
-        }
+      return it;
+   }
 
-        static inline QXmlItem toPublic(const Item &i)
-        {
-            return QXmlItem(i);
-        }
+   static inline QXmlItem toPublic(const Item &i) {
+      return QXmlItem(i);
+   }
 
-    private:
-        union
-        {
-            NodeIndexStorage node;
-            const AtomicValue *atomicValue;
-        };
-    };
+ private:
+   union {
+      NodeIndexStorage node;
+      const AtomicValue *atomicValue;
+   };
+};
 
-    template<typename T>
-    inline Item toItem(const QExplicitlySharedDataPointer<T> atomicValue)
-    {
-        return Item(atomicValue.data());
-    }
-
-    /**
-     * This is an overload, provided for convenience.
-     * @relates QXmlNodeModelIndex
-     */
-    static inline QString formatData(const QXmlNodeModelIndex node)
-    {
-        return node.stringValue(); // This can be improved a lot.
-    }
+template<typename T>
+inline Item toItem(const QExplicitlySharedDataPointer<T> atomicValue)
+{
+   return Item(atomicValue.data());
 }
 
-    inline QXmlName QXmlNodeModelIndex::name() const
-    {
-        return m_storage.model->name(*this);
-    }
+/**
+ * This is an overload, provided for convenience.
+ * @relates QXmlNodeModelIndex
+ */
+static inline QString formatData(const QXmlNodeModelIndex node)
+{
+   return node.stringValue(); // This can be improved a lot.
+}
+}
 
-    inline QXmlNodeModelIndex QXmlNodeModelIndex::root() const
-    {
-        return m_storage.model->root(*this);
-    }
+inline QXmlName QXmlNodeModelIndex::name() const
+{
+   return m_storage.model->name(*this);
+}
 
-    inline QXmlNodeModelIndex::Iterator::Ptr QXmlNodeModelIndex::iterate(const QXmlNodeModelIndex::Axis axis) const
-    {
-        return m_storage.model->iterate(*this, axis);
-    }
+inline QXmlNodeModelIndex QXmlNodeModelIndex::root() const
+{
+   return m_storage.model->root(*this);
+}
 
-    inline QUrl QXmlNodeModelIndex::documentUri() const
-    {
-        return m_storage.model->documentUri(*this);
-    }
+inline QXmlNodeModelIndex::Iterator::Ptr QXmlNodeModelIndex::iterate(const QXmlNodeModelIndex::Axis axis) const
+{
+   return m_storage.model->iterate(*this, axis);
+}
 
-    inline QUrl QXmlNodeModelIndex::baseUri() const
-    {
-        return m_storage.model->baseUri(*this);
-    }
+inline QUrl QXmlNodeModelIndex::documentUri() const
+{
+   return m_storage.model->documentUri(*this);
+}
 
-    inline QXmlNodeModelIndex::NodeKind QXmlNodeModelIndex::kind() const
-    {
-        return m_storage.model->kind(*this);
-    }
+inline QUrl QXmlNodeModelIndex::baseUri() const
+{
+   return m_storage.model->baseUri(*this);
+}
 
-    inline bool QXmlNodeModelIndex::isDeepEqual(const QXmlNodeModelIndex &other) const
-    {
-        return m_storage.model->isDeepEqual(*this, other);
-    }
+inline QXmlNodeModelIndex::NodeKind QXmlNodeModelIndex::kind() const
+{
+   return m_storage.model->kind(*this);
+}
 
-    inline QXmlNodeModelIndex::DocumentOrder QXmlNodeModelIndex::compareOrder(const QXmlNodeModelIndex &other) const
-    {
-        Q_ASSERT_X(model() == other.model(), Q_FUNC_INFO, "The API docs guarantees the two nodes are from the same model");
-        return m_storage.model->compareOrder(*this, other);
-    }
+inline bool QXmlNodeModelIndex::isDeepEqual(const QXmlNodeModelIndex &other) const
+{
+   return m_storage.model->isDeepEqual(*this, other);
+}
 
-    inline bool QXmlNodeModelIndex::is(const QXmlNodeModelIndex &other) const
-    {
-        return m_storage.model == other.m_storage.model &&
-               m_storage.data == other.m_storage.data &&
-               m_storage.additionalData == other.m_storage.additionalData;
-    }
+inline QXmlNodeModelIndex::DocumentOrder QXmlNodeModelIndex::compareOrder(const QXmlNodeModelIndex &other) const
+{
+   Q_ASSERT_X(model() == other.model(), Q_FUNC_INFO, "The API docs guarantees the two nodes are from the same model");
+   return m_storage.model->compareOrder(*this, other);
+}
 
-    inline void QXmlNodeModelIndex::sendNamespaces(QAbstractXmlReceiver *const receiver) const
-    {
-        m_storage.model->sendNamespaces(*this, receiver);
-    }
+inline bool QXmlNodeModelIndex::is(const QXmlNodeModelIndex &other) const
+{
+   return m_storage.model == other.m_storage.model &&
+          m_storage.data == other.m_storage.data &&
+          m_storage.additionalData == other.m_storage.additionalData;
+}
 
-    inline QVector<QXmlName> QXmlNodeModelIndex::namespaceBindings() const
-    {
-        return m_storage.model->namespaceBindings(*this);
-    }
+inline void QXmlNodeModelIndex::sendNamespaces(QAbstractXmlReceiver *const receiver) const
+{
+   m_storage.model->sendNamespaces(*this, receiver);
+}
 
-    inline QXmlName::NamespaceCode QXmlNodeModelIndex::namespaceForPrefix(const QXmlName::PrefixCode prefix) const
-    {
-        return m_storage.model->namespaceForPrefix(*this, prefix);
-    }
+inline QVector<QXmlName> QXmlNodeModelIndex::namespaceBindings() const
+{
+   return m_storage.model->namespaceBindings(*this);
+}
 
-    inline QString QXmlNodeModelIndex::stringValue() const
-    {
-        return m_storage.model->stringValue(*this);
-    }
+inline QXmlName::NamespaceCode QXmlNodeModelIndex::namespaceForPrefix(const QXmlName::PrefixCode prefix) const
+{
+   return m_storage.model->namespaceForPrefix(*this, prefix);
+}
 
-    inline QPatternist::ItemType::Ptr QXmlNodeModelIndex::type() const
-    {
-        return m_storage.model->type(*this);
-    }
+inline QString QXmlNodeModelIndex::stringValue() const
+{
+   return m_storage.model->stringValue(*this);
+}
 
-    inline QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QPatternist::Item> > QXmlNodeModelIndex::sequencedTypedValue() const
-    {
-        return m_storage.model->sequencedTypedValue(*this);
-    }
+inline QPatternist::ItemType::Ptr QXmlNodeModelIndex::type() const
+{
+   return m_storage.model->type(*this);
+}
 
-    inline QXmlItem::QXmlItem(const QPatternist::Item &i) : m_node(i.node)
-    {
-        if(isAtomicValue())
-            m_atomicValue->ref.ref();
-    }
+inline QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QPatternist::Item> >
+QXmlNodeModelIndex::sequencedTypedValue() const
+{
+   return m_storage.model->sequencedTypedValue(*this);
+}
+
+inline QXmlItem::QXmlItem(const QPatternist::Item &i) : m_node(i.node)
+{
+   if (isAtomicValue()) {
+      m_atomicValue->ref.ref();
+   }
+}
 
 Q_DECLARE_TYPEINFO(QPatternist::Item::Iterator::Ptr, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(QPatternist::AtomicValue, Q_MOVABLE_TYPE);

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,56 +32,55 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class XsdAnnotation : public NamedSchemaComponent
 {
- 
-    class XsdAnnotation : public NamedSchemaComponent
-    {
-        public:
-            typedef QExplicitlySharedDataPointer<XsdAnnotation> Ptr;
-            typedef QList<XsdAnnotation::Ptr> List;
+ public:
+   typedef QExplicitlySharedDataPointer<XsdAnnotation> Ptr;
+   typedef QList<XsdAnnotation::Ptr> List;
 
-            /**
-             * Sets the @p id of the annotation.
-             */
-            void setId(const DerivedString<TypeID>::Ptr &id);
+   /**
+    * Sets the @p id of the annotation.
+    */
+   void setId(const DerivedString<TypeID>::Ptr &id);
 
-            /**
-             * Returns the @p id of the annotation.
-             */
-            DerivedString<TypeID>::Ptr id() const;
+   /**
+    * Returns the @p id of the annotation.
+    */
+   DerivedString<TypeID>::Ptr id() const;
 
-            /**
-             * Adds an application @p information to the annotation.
-             *
-             * The application information is meant to be interpreted by
-             * a software system, e.g. other parts of the XML processor pipeline.
-             */
-            void addApplicationInformation(const XsdApplicationInformation::Ptr &information);
+   /**
+    * Adds an application @p information to the annotation.
+    *
+    * The application information is meant to be interpreted by
+    * a software system, e.g. other parts of the XML processor pipeline.
+    */
+   void addApplicationInformation(const XsdApplicationInformation::Ptr &information);
 
-            /**
-             * Returns the list of all application information of the annotation.
-             */
-            XsdApplicationInformation::List applicationInformation() const;
+   /**
+    * Returns the list of all application information of the annotation.
+    */
+   XsdApplicationInformation::List applicationInformation() const;
 
-            /**
-             * Adds a @p documentation to the annotation.
-             *
-             * The documentation is meant to be read by human being, e.g. additional
-             * constraints or information about schema components.
-             */
-            void addDocumentation(const XsdDocumentation::Ptr &documentation);
+   /**
+    * Adds a @p documentation to the annotation.
+    *
+    * The documentation is meant to be read by human being, e.g. additional
+    * constraints or information about schema components.
+    */
+   void addDocumentation(const XsdDocumentation::Ptr &documentation);
 
-            /**
-             * Returns the list of all documentations of the annotation.
-             */
-            XsdDocumentation::List documentation() const;
+   /**
+    * Returns the list of all documentations of the annotation.
+    */
+   XsdDocumentation::List documentation() const;
 
-        private:
-            DerivedString<TypeID>::Ptr      m_id;
-            XsdApplicationInformation::List m_applicationInformation;
-            XsdDocumentation::List          m_documentations;
-    };
+ private:
+   DerivedString<TypeID>::Ptr      m_id;
+   XsdApplicationInformation::List m_applicationInformation;
+   XsdDocumentation::List          m_documentations;
+};
 }
 
 QT_END_NAMESPACE

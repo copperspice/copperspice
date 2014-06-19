@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,27 +37,27 @@ Untyped::Untyped()
 
 SchemaType::Ptr Untyped::wxsSuperType() const
 {
-    return BuiltinTypes::xsAnyType;
+   return BuiltinTypes::xsAnyType;
 }
 
 QXmlName Untyped::name(const NamePool::Ptr &np) const
 {
-    return np->allocateQName(StandardNamespaces::xs, QLatin1String("untyped"));
+   return np->allocateQName(StandardNamespaces::xs, QLatin1String("untyped"));
 }
 
 ItemType::Ptr Untyped::atomizedType() const
 {
-    return BuiltinTypes::xsUntypedAtomic;
+   return BuiltinTypes::xsUntypedAtomic;
 }
 
 SchemaType::TypeCategory Untyped::category() const
 {
-    return SchemaType::ComplexType;
+   return SchemaType::ComplexType;
 }
 
 SchemaType::DerivationMethod Untyped::derivationMethod() const
 {
-    return NoDerivation;
+   return NoDerivation;
 }
 
 QT_END_NAMESPACE

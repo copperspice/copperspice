@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,48 +31,47 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{    
-    class ValidationError : public AtomicValue
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<ValidationError> Ptr;
+namespace QPatternist {
+class ValidationError : public AtomicValue
+{
+ public:
+   typedef QExplicitlySharedDataPointer<ValidationError> Ptr;
 
-          static AtomicValue::Ptr createError(const QString &description = QString(),
-                                            const ReportContext::ErrorCode = ReportContext::FORG0001);
+   static AtomicValue::Ptr createError(const QString &description = QString(),
+                                       const ReportContext::ErrorCode = ReportContext::FORG0001);
 
-        /**
-         * A human readable, translated message describing the error.
-         */
-        QString message() const;
+   /**
+    * A human readable, translated message describing the error.
+    */
+   QString message() const;
 
-        /**
-         * @returns always @c true
-         */
-        virtual bool hasError() const;
+   /**
+    * @returns always @c true
+    */
+   virtual bool hasError() const;
 
-        /**
-         * Always results in an assert crash.
-         */
-        virtual ItemType::Ptr type() const;
+   /**
+    * Always results in an assert crash.
+    */
+   virtual ItemType::Ptr type() const;
 
-        /**
-         * Always results in an assert crash.
-         */
-        virtual QString stringValue() const;
+   /**
+    * Always results in an assert crash.
+    */
+   virtual QString stringValue() const;
 
-        /**
-         * @returns the error code this ValidationError represents. Typically, this
-         * is ReportContext::FORG0001.
-         */
-        ReportContext::ErrorCode errorCode() const;
+   /**
+    * @returns the error code this ValidationError represents. Typically, this
+    * is ReportContext::FORG0001.
+    */
+   ReportContext::ErrorCode errorCode() const;
 
-    protected:
-        ValidationError(const QString &msg, const ReportContext::ErrorCode code);
+ protected:
+   ValidationError(const QString &msg, const ReportContext::ErrorCode code);
 
-        const QString m_message;
-        const ReportContext::ErrorCode  m_code;
-    };
+   const QString m_message;
+   const ReportContext::ErrorCode  m_code;
+};
 }
 
 QT_END_NAMESPACE

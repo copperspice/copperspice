@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,17 +30,17 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 StaticBaseURIContext::StaticBaseURIContext(const QUrl &bURI,
-                                           const StaticContext::Ptr &prevContext) : DelegatingStaticContext(prevContext)
-                                                                                   , m_baseURI(bURI)
+      const StaticContext::Ptr &prevContext) : DelegatingStaticContext(prevContext)
+   , m_baseURI(bURI)
 {
-    Q_ASSERT(m_baseURI.isValid());
-    Q_ASSERT(!m_baseURI.isRelative());
-    Q_ASSERT(prevContext);
+   Q_ASSERT(m_baseURI.isValid());
+   Q_ASSERT(!m_baseURI.isRelative());
+   Q_ASSERT(prevContext);
 }
 
 QUrl StaticBaseURIContext::baseURI() const
 {
-    return m_baseURI;
+   return m_baseURI;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,68 +32,67 @@ QT_BEGIN_NAMESPACE
 
 Q_CORE_EXPORT char *qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp);
 
-namespace QPatternist
+namespace QPatternist {
+
+class Decimal : public Numeric
 {
+ public:
 
-    class Decimal : public Numeric
-    {
-    public:
+   static Decimal::Ptr fromValue(const xsDecimal num);
 
-        static Decimal::Ptr fromValue(const xsDecimal num);
+   static AtomicValue::Ptr fromLexical(const QString &strNumeric);
 
-        static AtomicValue::Ptr fromLexical(const QString &strNumeric);
- 
-        bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const;
+   bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const;
 
-        virtual QString stringValue() const;
+   virtual QString stringValue() const;
 
-        /**
-         * @returns always BuiltinTypes::xsDecimal
-         */
-        virtual ItemType::Ptr type() const;
+   /**
+    * @returns always BuiltinTypes::xsDecimal
+    */
+   virtual ItemType::Ptr type() const;
 
-        virtual xsDouble toDouble() const;
-        virtual xsInteger toInteger() const;
-        virtual xsFloat toFloat() const;
-        virtual xsDecimal toDecimal() const;
-        virtual qulonglong toUnsignedInteger() const;
+   virtual xsDouble toDouble() const;
+   virtual xsInteger toInteger() const;
+   virtual xsFloat toFloat() const;
+   virtual xsDecimal toDecimal() const;
+   virtual qulonglong toUnsignedInteger() const;
 
-        virtual Numeric::Ptr round() const;
-        virtual Numeric::Ptr roundHalfToEven(const xsInteger scale) const;
-        virtual Numeric::Ptr floor() const;
-        virtual Numeric::Ptr ceiling() const;
-        virtual Numeric::Ptr abs() const;
+   virtual Numeric::Ptr round() const;
+   virtual Numeric::Ptr roundHalfToEven(const xsInteger scale) const;
+   virtual Numeric::Ptr floor() const;
+   virtual Numeric::Ptr ceiling() const;
+   virtual Numeric::Ptr abs() const;
 
-        /**
-         * @returns always @c false, xs:decimal doesn't have
-         * not-a-number in its value space.
-         */
-        virtual bool isNaN() const;
+   /**
+    * @returns always @c false, xs:decimal doesn't have
+    * not-a-number in its value space.
+    */
+   virtual bool isNaN() const;
 
-        /**
-         * @returns always @c false, xs:decimal doesn't have
-         * infinity in its value space.
-         */
-        virtual bool isInf() const;
+   /**
+    * @returns always @c false, xs:decimal doesn't have
+    * infinity in its value space.
+    */
+   virtual bool isInf() const;
 
-        virtual Item toNegated() const;
+   virtual Item toNegated() const;
 
-        /**
-         * Converts @p value into a canonical string representation for @c xs:decimal. This
-         * function is used internally by various classes. Users probably wants to call
-         * stringValue() which in turn calls this function.
-         */
-        static QString toString(const xsDecimal value);
+   /**
+    * Converts @p value into a canonical string representation for @c xs:decimal. This
+    * function is used internally by various classes. Users probably wants to call
+    * stringValue() which in turn calls this function.
+    */
+   static QString toString(const xsDecimal value);
 
-        virtual bool isSigned() const;
+   virtual bool isSigned() const;
 
-    protected:
+ protected:
 
-        Decimal(const xsDecimal num);
+   Decimal(const xsDecimal num);
 
-    private:
-        const xsDecimal m_value;
-    };
+ private:
+   const xsDecimal m_value;
+};
 }
 
 QT_END_NAMESPACE

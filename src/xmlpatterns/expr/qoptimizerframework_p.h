@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,80 +31,76 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class ExpressionCreator : public QSharedData
 {
-     class ExpressionCreator : public QSharedData
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<ExpressionCreator> Ptr;
+ public:
+   typedef QExplicitlySharedDataPointer<ExpressionCreator> Ptr;
 
-        /**
-         * For some reason this constructor cannot be synthesized.
-         */
-        inline ExpressionCreator()
-        {
-        }
+   /**
+    * For some reason this constructor cannot be synthesized.
+    */
+   inline ExpressionCreator() {
+   }
 
-        virtual ~ExpressionCreator();
+   virtual ~ExpressionCreator();
 
-        virtual Expression::Ptr create(const Expression::List &operands,
-                                       const StaticContext::Ptr &context,
-                                       const SourceLocationReflection *const) const = 0;
+   virtual Expression::Ptr create(const Expression::List &operands,
+                                  const StaticContext::Ptr &context,
+                                  const SourceLocationReflection *const) const = 0;
 
-    private:
-        Q_DISABLE_COPY(ExpressionCreator)
-    };
+ private:
+   Q_DISABLE_COPY(ExpressionCreator)
+};
 
-    class ExpressionIdentifier : public QSharedData
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<ExpressionIdentifier> Ptr;
-        typedef QList<ExpressionIdentifier::Ptr> List;
+class ExpressionIdentifier : public QSharedData
+{
+ public:
+   typedef QExplicitlySharedDataPointer<ExpressionIdentifier> Ptr;
+   typedef QList<ExpressionIdentifier::Ptr> List;
 
-        /**
-         * For some reason this constructor cannot be synthesized.
-         */
-        inline ExpressionIdentifier()
-        {
-        }
+   /**
+    * For some reason this constructor cannot be synthesized.
+    */
+   inline ExpressionIdentifier() {
+   }
 
-        virtual ~ExpressionIdentifier();
-        virtual bool matches(const Expression::Ptr &expr) const = 0;
+   virtual ~ExpressionIdentifier();
+   virtual bool matches(const Expression::Ptr &expr) const = 0;
 
-    private:
-        Q_DISABLE_COPY(ExpressionIdentifier)
-    };
- 
-    class OptimizationPass : public QSharedData
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<OptimizationPass> Ptr;
-        typedef QList<OptimizationPass::Ptr> List;
+ private:
+   Q_DISABLE_COPY(ExpressionIdentifier)
+};
 
-        enum OperandsMatchMethod
-        {
-            Sequential = 1,
-            AnyOrder
-        };
+class OptimizationPass : public QSharedData
+{
+ public:
+   typedef QExplicitlySharedDataPointer<OptimizationPass> Ptr;
+   typedef QList<OptimizationPass::Ptr> List;
+
+   enum OperandsMatchMethod {
+      Sequential = 1,
+      AnyOrder
+   };
 
 
-        typedef QList<qint8> ExpressionMarker;
- 
-        OptimizationPass(const ExpressionIdentifier::Ptr &startID,
-                         const ExpressionIdentifier::List &operandIDs,
-                         const ExpressionMarker &sourceExpr,
-                         const ExpressionCreator::Ptr &resultCtor = ExpressionCreator::Ptr(),
-                         const OperandsMatchMethod matchMethod = Sequential);
+   typedef QList<qint8> ExpressionMarker;
 
-        const ExpressionIdentifier::Ptr startIdentifier;
-        const ExpressionIdentifier::List operandIdentifiers;
-        const ExpressionMarker sourceExpression;
+   OptimizationPass(const ExpressionIdentifier::Ptr &startID,
+                    const ExpressionIdentifier::List &operandIDs,
+                    const ExpressionMarker &sourceExpr,
+                    const ExpressionCreator::Ptr &resultCtor = ExpressionCreator::Ptr(),
+                    const OperandsMatchMethod matchMethod = Sequential);
 
-        const ExpressionCreator::Ptr resultCreator;
-        const OperandsMatchMethod operandsMatchMethod;
-    private:
-        Q_DISABLE_COPY(OptimizationPass)
-    };
+   const ExpressionIdentifier::Ptr startIdentifier;
+   const ExpressionIdentifier::List operandIdentifiers;
+   const ExpressionMarker sourceExpression;
+
+   const ExpressionCreator::Ptr resultCreator;
+   const OperandsMatchMethod operandsMatchMethod;
+ private:
+   Q_DISABLE_COPY(OptimizationPass)
+};
 }
 
 QT_END_NAMESPACE

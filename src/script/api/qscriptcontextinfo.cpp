@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -85,29 +85,29 @@ QT_BEGIN_NAMESPACE
 
 class QScriptContextInfoPrivate
 {
-    Q_DECLARE_PUBLIC(QScriptContextInfo)
-public:
-    QScriptContextInfoPrivate();
-    QScriptContextInfoPrivate(const QScriptContext *context);
-    ~QScriptContextInfoPrivate();
+   Q_DECLARE_PUBLIC(QScriptContextInfo)
+ public:
+   QScriptContextInfoPrivate();
+   QScriptContextInfoPrivate(const QScriptContext *context);
+   ~QScriptContextInfoPrivate();
 
-    qint64 scriptId;
-    int lineNumber;
-    int columnNumber;
-    QString fileName;
+   qint64 scriptId;
+   int lineNumber;
+   int columnNumber;
+   QString fileName;
 
-    QString functionName;
-    QScriptContextInfo::FunctionType functionType;
+   QString functionName;
+   QScriptContextInfo::FunctionType functionType;
 
-    int functionStartLineNumber;
-    int functionEndLineNumber;
-    int functionMetaIndex;
+   int functionStartLineNumber;
+   int functionEndLineNumber;
+   int functionMetaIndex;
 
-    QStringList parameterNames;
+   QStringList parameterNames;
 
-    QBasicAtomicInt ref;
+   QBasicAtomicInt ref;
 
-    QScriptContextInfo *q_ptr;
+   QScriptContextInfo *q_ptr;
 };
 
 /*!
@@ -115,14 +115,14 @@ public:
 */
 QScriptContextInfoPrivate::QScriptContextInfoPrivate()
 {
-    ref.store(0);
-    functionType = QScriptContextInfo::NativeFunction;
-    functionMetaIndex = -1;
-    functionStartLineNumber = -1;
-    functionEndLineNumber = -1;
-    scriptId = -1;
-    lineNumber = -1;
-    columnNumber = -1;
+   ref.store(0);
+   functionType = QScriptContextInfo::NativeFunction;
+   functionMetaIndex = -1;
+   functionStartLineNumber = -1;
+   functionEndLineNumber = -1;
+   scriptId = -1;
+   lineNumber = -1;
+   columnNumber = -1;
 }
 
 /*!
@@ -130,92 +130,102 @@ QScriptContextInfoPrivate::QScriptContextInfoPrivate()
 */
 QScriptContextInfoPrivate::QScriptContextInfoPrivate(const QScriptContext *context)
 {
-    Q_ASSERT(context);
-    ref.store(0);
-    functionType = QScriptContextInfo::NativeFunction;
-    functionMetaIndex = -1;
-    functionStartLineNumber = -1;
-    functionEndLineNumber = -1;
-    scriptId = -1;
-    lineNumber = -1;
-    columnNumber = -1;
+   Q_ASSERT(context);
+   ref.store(0);
+   functionType = QScriptContextInfo::NativeFunction;
+   functionMetaIndex = -1;
+   functionStartLineNumber = -1;
+   functionEndLineNumber = -1;
+   scriptId = -1;
+   lineNumber = -1;
+   columnNumber = -1;
 
-    JSC::CallFrame *frame = const_cast<JSC::CallFrame *>(QScriptEnginePrivate::frameForContext(context));
+   JSC::CallFrame *frame = const_cast<JSC::CallFrame *>(QScriptEnginePrivate::frameForContext(context));
 
-    // Get the line number:
+   // Get the line number:
 
-    //We need to know the context directly up in the backtrace, in order to get the line number, and adjust the global context
-    JSC::CallFrame *rewindContext = QScriptEnginePrivate::get(context->engine())->currentFrame;
-    if (QScriptEnginePrivate::contextForFrame(rewindContext) == context) {  //top context
-        frame = rewindContext; //for retreiving the global context's "fake" frame
-        // An agent might have provided the line number.
-        lineNumber = QScript::scriptEngineFromExec(frame)->agentLineNumber;
-    } else {
-        // rewind the stack from the top in order to find the frame from the caller where the returnPC is stored
-        while (rewindContext && QScriptEnginePrivate::contextForFrame(rewindContext->callerFrame()->removeHostCallFrameFlag()) != context)
-            rewindContext = rewindContext->callerFrame()->removeHostCallFrameFlag();
-        if (rewindContext) {
-            frame = rewindContext->callerFrame()->removeHostCallFrameFlag(); //for retreiving the global context's "fake" frame
+   //We need to know the context directly up in the backtrace, in order to get the line number, and adjust the global context
+   JSC::CallFrame *rewindContext = QScriptEnginePrivate::get(context->engine())->currentFrame;
+   if (QScriptEnginePrivate::contextForFrame(rewindContext) == context) {  //top context
+      frame = rewindContext; //for retreiving the global context's "fake" frame
+      // An agent might have provided the line number.
+      lineNumber = QScript::scriptEngineFromExec(frame)->agentLineNumber;
+   } else {
+      // rewind the stack from the top in order to find the frame from the caller where the returnPC is stored
+      while (rewindContext &&
+             QScriptEnginePrivate::contextForFrame(rewindContext->callerFrame()->removeHostCallFrameFlag()) != context) {
+         rewindContext = rewindContext->callerFrame()->removeHostCallFrameFlag();
+      }
+      if (rewindContext) {
+         frame = rewindContext->callerFrame()->removeHostCallFrameFlag(); //for retreiving the global context's "fake" frame
 
-            JSC::Instruction *returnPC = rewindContext->returnPC();
-            JSC::CodeBlock *codeBlock = frame->codeBlock();
-            if (returnPC && codeBlock && QScriptEnginePrivate::hasValidCodeBlockRegister(frame)) {
+         JSC::Instruction *returnPC = rewindContext->returnPC();
+         JSC::CodeBlock *codeBlock = frame->codeBlock();
+         if (returnPC && codeBlock && QScriptEnginePrivate::hasValidCodeBlockRegister(frame)) {
 #if ENABLE(JIT)
-                JSC::JITCode code = codeBlock->getJITCode();
-                uintptr_t jitOffset = reinterpret_cast<uintptr_t>(JSC::ReturnAddressPtr(returnPC).value()) - reinterpret_cast<uintptr_t>(code.addressForCall().executableAddress());
-                // We can only use the JIT code offset if it's smaller than the JIT size;
-                // otherwise calling getBytecodeIndex() is meaningless.
-                if (jitOffset < code.size()) {
-                    unsigned bytecodeOffset = codeBlock->getBytecodeIndex(frame, JSC::ReturnAddressPtr(returnPC));
+            JSC::JITCode code = codeBlock->getJITCode();
+            uintptr_t jitOffset = reinterpret_cast<uintptr_t>(JSC::ReturnAddressPtr(returnPC).value()) -
+                                  reinterpret_cast<uintptr_t>(code.addressForCall().executableAddress());
+            // We can only use the JIT code offset if it's smaller than the JIT size;
+            // otherwise calling getBytecodeIndex() is meaningless.
+            if (jitOffset < code.size()) {
+               unsigned bytecodeOffset = codeBlock->getBytecodeIndex(frame, JSC::ReturnAddressPtr(returnPC));
 #else
-                unsigned bytecodeOffset = returnPC - codeBlock->instructions().begin();
+            unsigned bytecodeOffset = returnPC - codeBlock->instructions().begin();
 #endif
-                bytecodeOffset--; //because returnPC is on the next instruction. We want the current one
-                lineNumber = codeBlock->lineNumberForBytecodeOffset(const_cast<JSC::ExecState *>(frame), bytecodeOffset);
+               bytecodeOffset--; //because returnPC is on the next instruction. We want the current one
+               lineNumber = codeBlock->lineNumberForBytecodeOffset(const_cast<JSC::ExecState *>(frame), bytecodeOffset);
 #if ENABLE(JIT)
-                }
-#endif
             }
-        }
-    }
+#endif
+         }
+      }
+   }
 
-    // Get the filename and the scriptId:
-    JSC::CodeBlock *codeBlock = frame->codeBlock();
-    if (codeBlock && QScriptEnginePrivate::hasValidCodeBlockRegister(frame)) {
-           JSC::SourceProvider *source = codeBlock->source();
-           scriptId = source->asID();
-           fileName = source->url();
-    }
+   // Get the filename and the scriptId:
+   JSC::CodeBlock *codeBlock = frame->codeBlock();
+   if (codeBlock && QScriptEnginePrivate::hasValidCodeBlockRegister(frame))
+   {
+      JSC::SourceProvider *source = codeBlock->source();
+      scriptId = source->asID();
+      fileName = source->url();
+   }
 
-    // Get the others information:
-    JSC::JSObject *callee = frame->callee();
-    if (callee && callee->inherits(&JSC::InternalFunction::info))
-        functionName = JSC::asInternalFunction(callee)->name(frame);
-    if (callee && callee->inherits(&JSC::JSFunction::info)
-        && !JSC::asFunction(callee)->isHostFunction()) {
-        functionType = QScriptContextInfo::ScriptFunction;
-        JSC::FunctionExecutable *body = JSC::asFunction(callee)->jsExecutable();
-        functionStartLineNumber = body->lineNo();
-        functionEndLineNumber = body->lastLine();
-        for (size_t i = 0; i < body->parameterCount(); ++i)
-            parameterNames.append(body->parameterName(i));
-        // ### get the function name from the AST
-    } else if (callee && callee->inherits(&QScript::QtFunction::info)) {
-        functionType = QScriptContextInfo::QtFunction;
-        // ### the slot can be overloaded -- need to get the particular overload from the context
-        functionMetaIndex = static_cast<QScript::QtFunction*>(callee)->initialIndex();
-        const QMetaObject *meta = static_cast<QScript::QtFunction*>(callee)->metaObject();
-        if (meta != 0) {
-            QMetaMethod method = meta->method(functionMetaIndex);
-            QList<QByteArray> formals = method.parameterNames();
-            for (int i = 0; i < formals.count(); ++i)
-                parameterNames.append(QLatin1String(formals.at(i)));
-        }
-    }
-    else if (callee && callee->inherits(&QScript::QtPropertyFunction::info)) {
-        functionType = QScriptContextInfo::QtPropertyFunction;
-        functionMetaIndex = static_cast<QScript::QtPropertyFunction*>(callee)->propertyIndex();
-    }
+   // Get the others information:
+   JSC::JSObject *callee = frame->callee();
+   if (callee && callee->inherits(&JSC::InternalFunction::info))
+   {
+      functionName = JSC::asInternalFunction(callee)->name(frame);
+   }
+   if (callee && callee->inherits(&JSC::JSFunction::info)
+         && !JSC::asFunction(callee)->isHostFunction())
+   {
+      functionType = QScriptContextInfo::ScriptFunction;
+      JSC::FunctionExecutable *body = JSC::asFunction(callee)->jsExecutable();
+      functionStartLineNumber = body->lineNo();
+      functionEndLineNumber = body->lastLine();
+      for (size_t i = 0; i < body->parameterCount(); ++i) {
+         parameterNames.append(body->parameterName(i));
+      }
+      // ### get the function name from the AST
+   } else if (callee && callee->inherits(&QScript::QtFunction::info))
+   {
+      functionType = QScriptContextInfo::QtFunction;
+      // ### the slot can be overloaded -- need to get the particular overload from the context
+      functionMetaIndex = static_cast<QScript::QtFunction *>(callee)->initialIndex();
+      const QMetaObject *meta = static_cast<QScript::QtFunction *>(callee)->metaObject();
+      if (meta != 0) {
+         QMetaMethod method = meta->method(functionMetaIndex);
+         QList<QByteArray> formals = method.parameterNames();
+         for (int i = 0; i < formals.count(); ++i) {
+            parameterNames.append(QLatin1String(formals.at(i)));
+         }
+      }
+   } else if (callee && callee->inherits(&QScript::QtPropertyFunction::info))
+   {
+      functionType = QScriptContextInfo::QtPropertyFunction;
+      functionMetaIndex = static_cast<QScript::QtPropertyFunction *>(callee)->propertyIndex();
+   }
 }
 
 /*!
@@ -234,19 +244,19 @@ QScriptContextInfoPrivate::~QScriptContextInfoPrivate()
   previously created QScriptContextInfo.
 */
 QScriptContextInfo::QScriptContextInfo(const QScriptContext *context)
-    : d_ptr(0)
+   : d_ptr(0)
 {
-    if (context) {
-        d_ptr = new QScriptContextInfoPrivate(context);
-        d_ptr->q_ptr = this;
-    }
+   if (context) {
+      d_ptr = new QScriptContextInfoPrivate(context);
+      d_ptr->q_ptr = this;
+   }
 }
 
 /*!
   Constructs a new QScriptContextInfo from the \a other info.
 */
 QScriptContextInfo::QScriptContextInfo(const QScriptContextInfo &other)
-    : d_ptr(other.d_ptr)
+   : d_ptr(other.d_ptr)
 {
 }
 
@@ -256,7 +266,7 @@ QScriptContextInfo::QScriptContextInfo(const QScriptContextInfo &other)
   \sa isNull()
 */
 QScriptContextInfo::QScriptContextInfo()
-    : d_ptr(0)
+   : d_ptr(0)
 {
 }
 
@@ -273,8 +283,8 @@ QScriptContextInfo::~QScriptContextInfo()
 */
 QScriptContextInfo &QScriptContextInfo::operator=(const QScriptContextInfo &other)
 {
-    d_ptr = other.d_ptr;
-    return *this;
+   d_ptr = other.d_ptr;
+   return *this;
 }
 
 /*!
@@ -286,10 +296,11 @@ QScriptContextInfo &QScriptContextInfo::operator=(const QScriptContextInfo &othe
 */
 qint64 QScriptContextInfo::scriptId() const
 {
-    Q_D(const QScriptContextInfo);
-    if (!d)
-        return -1;
-    return d->scriptId;
+   Q_D(const QScriptContextInfo);
+   if (!d) {
+      return -1;
+   }
+   return d->scriptId;
 }
 
 /*!
@@ -303,10 +314,11 @@ qint64 QScriptContextInfo::scriptId() const
 */
 QString QScriptContextInfo::fileName() const
 {
-    Q_D(const QScriptContextInfo);
-    if (!d)
-        return QString();
-    return d->fileName;
+   Q_D(const QScriptContextInfo);
+   if (!d) {
+      return QString();
+   }
+   return d->fileName;
 }
 
 /*!
@@ -320,10 +332,11 @@ QString QScriptContextInfo::fileName() const
 */
 int QScriptContextInfo::lineNumber() const
 {
-    Q_D(const QScriptContextInfo);
-    if (!d)
-        return -1;
-    return d->lineNumber;
+   Q_D(const QScriptContextInfo);
+   if (!d) {
+      return -1;
+   }
+   return d->lineNumber;
 }
 
 /*!
@@ -331,10 +344,11 @@ int QScriptContextInfo::lineNumber() const
 */
 int QScriptContextInfo::columnNumber() const
 {
-    Q_D(const QScriptContextInfo);
-    if (!d)
-        return -1;
-    return d->columnNumber;
+   Q_D(const QScriptContextInfo);
+   if (!d) {
+      return -1;
+   }
+   return d->columnNumber;
 }
 
 /*!
@@ -350,10 +364,11 @@ int QScriptContextInfo::columnNumber() const
 */
 QString QScriptContextInfo::functionName() const
 {
-    Q_D(const QScriptContextInfo);
-    if (!d)
-        return QString();
-    return d->functionName;
+   Q_D(const QScriptContextInfo);
+   if (!d) {
+      return QString();
+   }
+   return d->functionName;
 }
 
 /*!
@@ -363,10 +378,11 @@ QString QScriptContextInfo::functionName() const
 */
 QScriptContextInfo::FunctionType QScriptContextInfo::functionType() const
 {
-    Q_D(const QScriptContextInfo);
-    if (!d)
-        return NativeFunction;
-    return d->functionType;
+   Q_D(const QScriptContextInfo);
+   if (!d) {
+      return NativeFunction;
+   }
+   return d->functionType;
 }
 
 /*!
@@ -380,10 +396,11 @@ QScriptContextInfo::FunctionType QScriptContextInfo::functionType() const
 */
 int QScriptContextInfo::functionStartLineNumber() const
 {
-    Q_D(const QScriptContextInfo);
-    if (!d)
-        return -1;
-    return d->functionStartLineNumber;
+   Q_D(const QScriptContextInfo);
+   if (!d) {
+      return -1;
+   }
+   return d->functionStartLineNumber;
 }
 
 /*!
@@ -397,10 +414,11 @@ int QScriptContextInfo::functionStartLineNumber() const
 */
 int QScriptContextInfo::functionEndLineNumber() const
 {
-    Q_D(const QScriptContextInfo);
-    if (!d)
-        return -1;
-    return d->functionEndLineNumber;
+   Q_D(const QScriptContextInfo);
+   if (!d) {
+      return -1;
+   }
+   return d->functionEndLineNumber;
 }
 
 /*!
@@ -411,10 +429,11 @@ int QScriptContextInfo::functionEndLineNumber() const
 */
 QStringList QScriptContextInfo::functionParameterNames() const
 {
-    Q_D(const QScriptContextInfo);
-    if (!d)
-        return QStringList();
-    return d->parameterNames;
+   Q_D(const QScriptContextInfo);
+   if (!d) {
+      return QStringList();
+   }
+   return d->parameterNames;
 }
 
 /*!
@@ -432,10 +451,11 @@ QStringList QScriptContextInfo::functionParameterNames() const
 */
 int QScriptContextInfo::functionMetaIndex() const
 {
-    Q_D(const QScriptContextInfo);
-    if (!d)
-        return -1;
-    return d->functionMetaIndex;
+   Q_D(const QScriptContextInfo);
+   if (!d) {
+      return -1;
+   }
+   return d->functionMetaIndex;
 }
 
 /*!
@@ -444,8 +464,8 @@ int QScriptContextInfo::functionMetaIndex() const
 */
 bool QScriptContextInfo::isNull() const
 {
-    Q_D(const QScriptContextInfo);
-    return (d == 0);
+   Q_D(const QScriptContextInfo);
+   return (d == 0);
 }
 
 /*!
@@ -454,22 +474,24 @@ bool QScriptContextInfo::isNull() const
 */
 bool QScriptContextInfo::operator==(const QScriptContextInfo &other) const
 {
-    Q_D(const QScriptContextInfo);
-    const QScriptContextInfoPrivate *od = other.d_func();
-    if (d == od)
-        return true;
-    if (!d || !od)
-        return false;
-    return ((d->scriptId == od->scriptId)
-            && (d->lineNumber == od->lineNumber)
-            && (d->columnNumber == od->columnNumber)
-            && (d->fileName == od->fileName)
-            && (d->functionName == od->functionName)
-            && (d->functionType == od->functionType)
-            && (d->functionStartLineNumber == od->functionStartLineNumber)
-            && (d->functionEndLineNumber == od->functionEndLineNumber)
-            && (d->functionMetaIndex == od->functionMetaIndex)
-            && (d->parameterNames == od->parameterNames));
+   Q_D(const QScriptContextInfo);
+   const QScriptContextInfoPrivate *od = other.d_func();
+   if (d == od) {
+      return true;
+   }
+   if (!d || !od) {
+      return false;
+   }
+   return ((d->scriptId == od->scriptId)
+           && (d->lineNumber == od->lineNumber)
+           && (d->columnNumber == od->columnNumber)
+           && (d->fileName == od->fileName)
+           && (d->functionName == od->functionName)
+           && (d->functionType == od->functionType)
+           && (d->functionStartLineNumber == od->functionStartLineNumber)
+           && (d->functionEndLineNumber == od->functionEndLineNumber)
+           && (d->functionMetaIndex == od->functionMetaIndex)
+           && (d->parameterNames == od->parameterNames));
 }
 
 /*!
@@ -478,7 +500,7 @@ bool QScriptContextInfo::operator==(const QScriptContextInfo &other) const
 */
 bool QScriptContextInfo::operator!=(const QScriptContextInfo &other) const
 {
-    return !(*this == other);
+   return !(*this == other);
 }
 
 #ifndef QT_NO_DATASTREAM
@@ -491,20 +513,20 @@ bool QScriptContextInfo::operator!=(const QScriptContextInfo &other) const
 */
 QDataStream &operator<<(QDataStream &out, const QScriptContextInfo &info)
 {
-    out << info.scriptId();
-    out << (qint32)info.lineNumber();
-    out << (qint32)info.columnNumber();
+   out << info.scriptId();
+   out << (qint32)info.lineNumber();
+   out << (qint32)info.columnNumber();
 
-    out << (quint32)info.functionType();
-    out << (qint32)info.functionStartLineNumber();
-    out << (qint32)info.functionEndLineNumber();
-    out << (qint32)info.functionMetaIndex();
+   out << (quint32)info.functionType();
+   out << (qint32)info.functionStartLineNumber();
+   out << (qint32)info.functionEndLineNumber();
+   out << (qint32)info.functionMetaIndex();
 
-    out << info.fileName();
-    out << info.functionName();
-    out << info.functionParameterNames();
+   out << info.fileName();
+   out << info.functionName();
+   out << info.functionParameterNames();
 
-    return out;
+   return out;
 }
 
 /*!
@@ -517,41 +539,41 @@ QDataStream &operator<<(QDataStream &out, const QScriptContextInfo &info)
 */
 Q_SCRIPT_EXPORT QDataStream &operator>>(QDataStream &in, QScriptContextInfo &info)
 {
-    if (!info.d_ptr) {
-        info.d_ptr = new QScriptContextInfoPrivate();
-    }
+   if (!info.d_ptr) {
+      info.d_ptr = new QScriptContextInfoPrivate();
+   }
 
-    in >> info.d_ptr->scriptId;
+   in >> info.d_ptr->scriptId;
 
-    qint32 line;
-    in >> line;
-    info.d_ptr->lineNumber = line;
+   qint32 line;
+   in >> line;
+   info.d_ptr->lineNumber = line;
 
-    qint32 column;
-    in >> column;
-    info.d_ptr->columnNumber = column;
+   qint32 column;
+   in >> column;
+   info.d_ptr->columnNumber = column;
 
-    quint32 ftype;
-    in >> ftype;
-    info.d_ptr->functionType = QScriptContextInfo::FunctionType(ftype);
+   quint32 ftype;
+   in >> ftype;
+   info.d_ptr->functionType = QScriptContextInfo::FunctionType(ftype);
 
-    qint32 startLine;
-    in >> startLine;
-    info.d_ptr->functionStartLineNumber = startLine;
+   qint32 startLine;
+   in >> startLine;
+   info.d_ptr->functionStartLineNumber = startLine;
 
-    qint32 endLine;
-    in >> endLine;
-    info.d_ptr->functionEndLineNumber = endLine;
+   qint32 endLine;
+   in >> endLine;
+   info.d_ptr->functionEndLineNumber = endLine;
 
-    qint32 metaIndex;
-    in >> metaIndex;
-    info.d_ptr->functionMetaIndex = metaIndex;
+   qint32 metaIndex;
+   in >> metaIndex;
+   info.d_ptr->functionMetaIndex = metaIndex;
 
-    in >> info.d_ptr->fileName;
-    in >> info.d_ptr->functionName;
-    in >> info.d_ptr->parameterNames;
+   in >> info.d_ptr->fileName;
+   in >> info.d_ptr->functionName;
+   in >> info.d_ptr->parameterNames;
 
-    return in;
+   return in;
 }
 #endif
 

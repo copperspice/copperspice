@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,114 +45,117 @@ class QColor;
 class QSvgStyleSelector;
 class QXmlStreamReader;
 
-struct QSvgCssAttribute
-{
-    QXmlStreamStringRef name;
-    QXmlStreamStringRef value;
+struct QSvgCssAttribute {
+   QXmlStreamStringRef name;
+   QXmlStreamStringRef value;
 };
 
 class QSvgHandler
 {
-public:
-    enum LengthType {
-        LT_PERCENT,
-        LT_PX,
-        LT_PC,
-        LT_PT,
-        LT_MM,
-        LT_CM,
-        LT_IN,
-        LT_OTHER
-    };
+ public:
+   enum LengthType {
+      LT_PERCENT,
+      LT_PX,
+      LT_PC,
+      LT_PT,
+      LT_MM,
+      LT_CM,
+      LT_IN,
+      LT_OTHER
+   };
 
-public:
-    QSvgHandler(QIODevice *device);
-    QSvgHandler(const QByteArray &data);
-    QSvgHandler(QXmlStreamReader *const data);
-    ~QSvgHandler();
+ public:
+   QSvgHandler(QIODevice *device);
+   QSvgHandler(const QByteArray &data);
+   QSvgHandler(QXmlStreamReader *const data);
+   ~QSvgHandler();
 
-    QSvgTinyDocument *document() const;
+   QSvgTinyDocument *document() const;
 
-    inline bool ok() const {
-        return document() != 0 && !xml->hasError();
-    }
+   inline bool ok() const {
+      return document() != 0 && !xml->hasError();
+   }
 
-    inline QString errorString() const { return xml->errorString(); }
-    inline int lineNumber() const { return xml->lineNumber(); }
+   inline QString errorString() const {
+      return xml->errorString();
+   }
+   inline int lineNumber() const {
+      return xml->lineNumber();
+   }
 
-    void setDefaultCoordinateSystem(LengthType type);
-    LengthType defaultCoordinateSystem() const;
+   void setDefaultCoordinateSystem(LengthType type);
+   LengthType defaultCoordinateSystem() const;
 
-    void pushColor(const QColor &color);
-    void pushColorCopy();
-    void popColor();
-    QColor currentColor() const;
+   void pushColor(const QColor &color);
+   void pushColorCopy();
+   void popColor();
+   QColor currentColor() const;
 
-    void setInStyle(bool b);
-    bool inStyle() const;
+   void setInStyle(bool b);
+   bool inStyle() const;
 
-    QSvgStyleSelector *selector() const;
+   QSvgStyleSelector *selector() const;
 
-    void setAnimPeriod(int start, int end);
-    int animationDuration() const;
+   void setAnimPeriod(int start, int end);
+   int animationDuration() const;
 
-    void parseCSStoXMLAttrs(QString css, QVector<QSvgCssAttribute> *attributes);
+   void parseCSStoXMLAttrs(QString css, QVector<QSvgCssAttribute> *attributes);
 
-    inline QPen defaultPen() const
-    { return m_defaultPen; }
+   inline QPen defaultPen() const {
+      return m_defaultPen;
+   }
 
-public:
-    bool startElement(const QString &localName, const QXmlStreamAttributes &attributes);
-    bool endElement(const QStringRef &localName);
-    bool characters(const QStringRef &str);
-    bool processingInstruction(const QString &target, const QString &data);
+ public:
+   bool startElement(const QString &localName, const QXmlStreamAttributes &attributes);
+   bool endElement(const QStringRef &localName);
+   bool characters(const QStringRef &str);
+   bool processingInstruction(const QString &target, const QString &data);
 
-private:
-    void init();
+ private:
+   void init();
 
-    QSvgTinyDocument *m_doc;
-    QStack<QSvgNode*> m_nodes;
+   QSvgTinyDocument *m_doc;
+   QStack<QSvgNode *> m_nodes;
 
-    QList<QSvgNode*>  m_resolveNodes;
+   QList<QSvgNode *>  m_resolveNodes;
 
-    enum CurrentNode
-    {
-        Unknown,
-        Graphics,
-        Style
-    };
-    QStack<CurrentNode> m_skipNodes;
+   enum CurrentNode {
+      Unknown,
+      Graphics,
+      Style
+   };
+   QStack<CurrentNode> m_skipNodes;
 
-    /*!
-        Follows the depths of elements. The top is current xml:space
-        value that applies for a given element.
-     */
-    QStack<QSvgText::WhitespaceMode> m_whitespaceMode;
+   /*!
+       Follows the depths of elements. The top is current xml:space
+       value that applies for a given element.
+    */
+   QStack<QSvgText::WhitespaceMode> m_whitespaceMode;
 
-    QSvgRefCounter<QSvgStyleProperty> m_style;
+   QSvgRefCounter<QSvgStyleProperty> m_style;
 
-    LengthType m_defaultCoords;
+   LengthType m_defaultCoords;
 
-    QStack<QColor> m_colorStack;
-    QStack<int>    m_colorTagCount;
+   QStack<QColor> m_colorStack;
+   QStack<int>    m_colorTagCount;
 
-    bool m_inStyle;
+   bool m_inStyle;
 
-    QSvgStyleSelector *m_selector;
+   QSvgStyleSelector *m_selector;
 
-    int m_animEnd;
+   int m_animEnd;
 
-    QXmlStreamReader *const xml;
-    QCss::Parser m_cssParser;
-    void parse();
-    void resolveGradients(QSvgNode *node);
+   QXmlStreamReader *const xml;
+   QCss::Parser m_cssParser;
+   void parse();
+   void resolveGradients(QSvgNode *node);
 
-    QPen m_defaultPen;
-    /**
-     * Whether we own the variable xml, and hence whether
-     * we need to delete it.
-     */
-    const bool m_ownsReader;
+   QPen m_defaultPen;
+   /**
+    * Whether we own the variable xml, and hence whether
+    * we need to delete it.
+    */
+   const bool m_ownsReader;
 };
 
 QT_END_NAMESPACE

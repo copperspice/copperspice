@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,19 +33,19 @@ QT_BEGIN_NAMESPACE
 
 class QScriptValue;
 
-class Q_SCRIPT_EXPORT QScriptExtensionPlugin : public QObject,public QScriptExtensionInterface
+class Q_SCRIPT_EXPORT QScriptExtensionPlugin : public QObject, public QScriptExtensionInterface
 {
-    CS_OBJECT_MULTIPLE(QScriptExtensionPlugin, QObject)
-    CS_INTERFACES(QScriptExtensionInterface, QFactoryInterface)
+   CS_OBJECT_MULTIPLE(QScriptExtensionPlugin, QObject)
+   CS_INTERFACES(QScriptExtensionInterface, QFactoryInterface)
 
-public:
-    explicit QScriptExtensionPlugin(QObject *parent = 0);
-    ~QScriptExtensionPlugin();
+ public:
+   explicit QScriptExtensionPlugin(QObject *parent = 0);
+   ~QScriptExtensionPlugin();
 
-    virtual QStringList keys() const = 0;
-    virtual void initialize(const QString &key, QScriptEngine *engine) = 0;
+   virtual QStringList keys() const = 0;
+   virtual void initialize(const QString &key, QScriptEngine *engine) = 0;
 
-    QScriptValue setupPackage(const QString &key, QScriptEngine *engine) const;
+   QScriptValue setupPackage(const QString &key, QScriptEngine *engine) const;
 };
 
 QT_END_NAMESPACE

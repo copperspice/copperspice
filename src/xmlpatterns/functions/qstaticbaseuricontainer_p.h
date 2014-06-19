@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,40 +31,35 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class StaticBaseUriContainer : public FunctionCall
 {
-    class StaticBaseUriContainer : public FunctionCall
-    {
-    protected:
-        inline StaticBaseUriContainer()
-        {
-        }
+ protected:
+   inline StaticBaseUriContainer() {
+   }
 
-        inline void prepareStaticBaseURI(const StaticContext::Ptr &context)
-        {
-            m_staticBaseURI = context->baseURI();
-        }
+   inline void prepareStaticBaseURI(const StaticContext::Ptr &context) {
+      m_staticBaseURI = context->baseURI();
+   }
 
-        inline const QUrl &staticBaseURI() const
-        {
-            return m_staticBaseURI;
-        }
+   inline const QUrl &staticBaseURI() const {
+      return m_staticBaseURI;
+   }
 
-        /**
-         * Calls prepareStaticBaseURI(), and return the return value of
-         * FunctionCall::typeCheck(), forwarding the arguments.
-         */
-        virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                          const SequenceType::Ptr &reqType)
-        {
-            prepareStaticBaseURI(context);
-            return FunctionCall::typeCheck(context, reqType);
-        }
+   /**
+    * Calls prepareStaticBaseURI(), and return the return value of
+    * FunctionCall::typeCheck(), forwarding the arguments.
+    */
+   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
+                                     const SequenceType::Ptr &reqType) {
+      prepareStaticBaseURI(context);
+      return FunctionCall::typeCheck(context, reqType);
+   }
 
-    private:
-        Q_DISABLE_COPY(StaticBaseUriContainer)
-        QUrl m_staticBaseURI;
-    };
+ private:
+   Q_DISABLE_COPY(StaticBaseUriContainer)
+   QUrl m_staticBaseURI;
+};
 }
 
 QT_END_NAMESPACE

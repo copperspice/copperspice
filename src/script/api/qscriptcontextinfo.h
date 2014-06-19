@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,53 +42,53 @@ class QScriptContextInfoPrivate;
 class Q_SCRIPT_EXPORT QScriptContextInfo
 {
 
-public:
+ public:
 #ifndef QT_NO_DATASTREAM
-    friend Q_SCRIPT_EXPORT QDataStream &operator<<(QDataStream &, const QScriptContextInfo &);
-    friend Q_SCRIPT_EXPORT QDataStream &operator>>(QDataStream &, QScriptContextInfo &);
+   friend Q_SCRIPT_EXPORT QDataStream &operator<<(QDataStream &, const QScriptContextInfo &);
+   friend Q_SCRIPT_EXPORT QDataStream &operator>>(QDataStream &, QScriptContextInfo &);
 #endif
 
-    enum FunctionType {
-        ScriptFunction,
-        QtFunction,
-        QtPropertyFunction,
-        NativeFunction
-    };
+   enum FunctionType {
+      ScriptFunction,
+      QtFunction,
+      QtPropertyFunction,
+      NativeFunction
+   };
 
-    QScriptContextInfo(const QScriptContext *context);
-    QScriptContextInfo(const QScriptContextInfo &other);
-    QScriptContextInfo();
-    ~QScriptContextInfo();
+   QScriptContextInfo(const QScriptContext *context);
+   QScriptContextInfo(const QScriptContextInfo &other);
+   QScriptContextInfo();
+   ~QScriptContextInfo();
 
-    QScriptContextInfo &operator=(const QScriptContextInfo &other);
+   QScriptContextInfo &operator=(const QScriptContextInfo &other);
 
-    bool isNull() const;
+   bool isNull() const;
 
-    qint64 scriptId() const;
-    QString fileName() const;
-    int lineNumber() const;
+   qint64 scriptId() const;
+   QString fileName() const;
+   int lineNumber() const;
 
 #ifdef QT_DEPRECATED
-    QT_DEPRECATED int columnNumber() const;
+   QT_DEPRECATED int columnNumber() const;
 #endif
 
-    QString functionName() const;
-    FunctionType functionType() const;
+   QString functionName() const;
+   FunctionType functionType() const;
 
-    QStringList functionParameterNames() const;
+   QStringList functionParameterNames() const;
 
-    int functionStartLineNumber() const;
-    int functionEndLineNumber() const;
+   int functionStartLineNumber() const;
+   int functionEndLineNumber() const;
 
-    int functionMetaIndex() const;
+   int functionMetaIndex() const;
 
-    bool operator==(const QScriptContextInfo &other) const;
-    bool operator!=(const QScriptContextInfo &other) const;
+   bool operator==(const QScriptContextInfo &other) const;
+   bool operator!=(const QScriptContextInfo &other) const;
 
-private:
-    QExplicitlySharedDataPointer<QScriptContextInfoPrivate> d_ptr;
+ private:
+   QExplicitlySharedDataPointer<QScriptContextInfoPrivate> d_ptr;
 
-    Q_DECLARE_PRIVATE(QScriptContextInfo)
+   Q_DECLARE_PRIVATE(QScriptContextInfo)
 };
 
 typedef QList<QScriptContextInfo> QScriptContextInfoList;

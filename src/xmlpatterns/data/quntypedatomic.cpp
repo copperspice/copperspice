@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,12 +37,12 @@ UntypedAtomic::UntypedAtomic(const QString &s) : AtomicString(s)
 
 UntypedAtomic::Ptr UntypedAtomic::fromValue(const QString &value)
 {
-    return UntypedAtomic::Ptr(new UntypedAtomic(value));
+   return UntypedAtomic::Ptr(new UntypedAtomic(value));
 }
 
 ItemType::Ptr UntypedAtomic::type() const
 {
-    return BuiltinTypes::xsUntypedAtomic;
+   return BuiltinTypes::xsUntypedAtomic;
 }
 
 QT_END_NAMESPACE

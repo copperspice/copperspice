@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,21 +30,20 @@ QT_BEGIN_NAMESPACE
 
 #include "qarithmeticexpression_p.h"
 
-namespace QPatternist
+namespace QPatternist {
+
+class UnaryExpression : public ArithmeticExpression
 {
-  
-    class UnaryExpression : public ArithmeticExpression
-    {
-    public:
-        UnaryExpression(const AtomicMathematician::Operator op,
-                        const Expression::Ptr &operand,
-                        const StaticContext::Ptr &context);
+ public:
+   UnaryExpression(const AtomicMathematician::Operator op,
+                   const Expression::Ptr &operand,
+                   const StaticContext::Ptr &context);
 
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
 
-    private:
-        Q_DISABLE_COPY(UnaryExpression)
-    };
+ private:
+   Q_DISABLE_COPY(UnaryExpression)
+};
 }
 
 QT_END_NAMESPACE

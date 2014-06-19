@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,50 +30,45 @@ QT_BEGIN_NAMESPACE
 
 class QString;
 
-namespace QPatternist
+namespace QPatternist {
+class SourceLocationReflection
 {
-     class SourceLocationReflection
-    {
-    public:
-        inline SourceLocationReflection()
-        {
-        }
+ public:
+   inline SourceLocationReflection() {
+   }
 
-        virtual ~SourceLocationReflection()
-        {
-        }
+   virtual ~SourceLocationReflection() {
+   }
 
-        virtual const SourceLocationReflection *actualReflection() const = 0;
+   virtual const SourceLocationReflection *actualReflection() const = 0;
 
-        /**
-         * A description of what represents the source code location, for
-         * human consumption. Must be translated, as appropriate.
-         */
-        virtual QString description() const
-        {
-            return QString();
-        }
+   /**
+    * A description of what represents the source code location, for
+    * human consumption. Must be translated, as appropriate.
+    */
+   virtual QString description() const {
+      return QString();
+   }
 
-        virtual QSourceLocation sourceLocation() const;
+   virtual QSourceLocation sourceLocation() const;
 
-    private:
-        Q_DISABLE_COPY(SourceLocationReflection)
-    };
+ private:
+   Q_DISABLE_COPY(SourceLocationReflection)
+};
 
-    class DelegatingSourceLocationReflection : public SourceLocationReflection
-    {
-    public:
-        inline DelegatingSourceLocationReflection(const SourceLocationReflection *const r) : m_r(r)
-        {
-            Q_ASSERT(r);
-        }
+class DelegatingSourceLocationReflection : public SourceLocationReflection
+{
+ public:
+   inline DelegatingSourceLocationReflection(const SourceLocationReflection *const r) : m_r(r) {
+      Q_ASSERT(r);
+   }
 
-        virtual const SourceLocationReflection *actualReflection() const;
-        virtual QString description() const;
+   virtual const SourceLocationReflection *actualReflection() const;
+   virtual QString description() const;
 
-    private:
-        const SourceLocationReflection *const m_r;
-    };
+ private:
+   const SourceLocationReflection *const m_r;
+};
 
 }
 

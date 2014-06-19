@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,37 +38,37 @@ AnyItemType::AnyItemType()
 
 bool AnyItemType::itemMatches(const Item &) const
 {
-    return true;
+   return true;
 }
 
 bool AnyItemType::xdtTypeMatches(const ItemType::Ptr &) const
 {
-    return true;
+   return true;
 }
 
 QString AnyItemType::displayName(const NamePool::Ptr &) const
 {
-    return QLatin1String("item()");
+   return QLatin1String("item()");
 }
 
 ItemType::Ptr AnyItemType::xdtSuperType() const
 {
-    return ItemType::Ptr();
+   return ItemType::Ptr();
 }
 
 bool AnyItemType::isNodeType() const
 {
-    return false;
+   return false;
 }
 
 bool AnyItemType::isAtomicType() const
 {
-    return false;
+   return false;
 }
 
 ItemType::Ptr AnyItemType::atomizedType() const
 {
-    return BuiltinTypes::xsAnyAtomicType;
+   return BuiltinTypes::xsAnyAtomicType;
 }
 
 QT_END_NAMESPACE

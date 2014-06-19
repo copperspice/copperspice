@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,29 +30,28 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class Date : public AbstractDateTime
 {
-   
-    class Date : public AbstractDateTime
-    {
-    public:
-        typedef AtomicValue::Ptr Ptr;
+ public:
+   typedef AtomicValue::Ptr Ptr;
 
-        /**
-         * Creates an instance from the lexical representation @p string.
-         */
-        static Date::Ptr fromLexical(const QString &string);
-        static Date::Ptr fromDateTime(const QDateTime &date);
+   /**
+    * Creates an instance from the lexical representation @p string.
+    */
+   static Date::Ptr fromLexical(const QString &string);
+   static Date::Ptr fromDateTime(const QDateTime &date);
 
-        virtual ItemType::Ptr type() const;
-        virtual QString stringValue() const;
-        virtual Item fromValue(const QDateTime &dt) const;
+   virtual ItemType::Ptr type() const;
+   virtual QString stringValue() const;
+   virtual Item fromValue(const QDateTime &dt) const;
 
-    protected:
-        friend class CommonValues;
+ protected:
+   friend class CommonValues;
 
-        Date(const QDateTime &dateTime);
-    };
+   Date(const QDateTime &dateTime);
+};
 }
 
 QT_END_NAMESPACE

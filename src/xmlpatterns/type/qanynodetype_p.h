@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,44 +31,42 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class AnyNodeType : public ItemType
 {
-     class AnyNodeType : public ItemType
-    {
-    public:
+ public:
 
-        typedef QExplicitlySharedDataPointer<AnyNodeType> Ptr;
+   typedef QExplicitlySharedDataPointer<AnyNodeType> Ptr;
 
-        virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
-        virtual bool itemMatches(const Item &item) const;
-        virtual QString displayName(const NamePool::Ptr &np) const;
+   virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
+   virtual bool itemMatches(const Item &item) const;
+   virtual QString displayName(const NamePool::Ptr &np) const;
 
-        virtual ItemType::Ptr xdtSuperType() const;
+   virtual ItemType::Ptr xdtSuperType() const;
 
-        virtual bool isNodeType() const;
-        virtual bool isAtomicType() const;
+   virtual bool isNodeType() const;
+   virtual bool isAtomicType() const;
 
-        /**
-         * @see <a href="http://www.w3.org/TR/xpath-datamodel/#acc-summ-typed-value">XQuery 1.0
-         * and XPath 2.0 Data Model, G.15 dm:typed-value Accessor</a>
-         */
-        virtual ItemType::Ptr atomizedType() const;
+   /**
+    * @see <a href="http://www.w3.org/TR/xpath-datamodel/#acc-summ-typed-value">XQuery 1.0
+    * and XPath 2.0 Data Model, G.15 dm:typed-value Accessor</a>
+    */
+   virtual ItemType::Ptr atomizedType() const;
 
-        /**
-         * @returns the node kind this node ItemType tests for. If it matches any node, zero is returned.
-         */
-        virtual QXmlNodeModelIndex::NodeKind nodeKind() const;
+   /**
+    * @returns the node kind this node ItemType tests for. If it matches any node, zero is returned.
+    */
+   virtual QXmlNodeModelIndex::NodeKind nodeKind() const;
 
-        virtual PatternPriority patternPriority() const;
+   virtual PatternPriority patternPriority() const;
 
-    protected:
-        friend class BuiltinTypes;
+ protected:
+   friend class BuiltinTypes;
 
-        inline AnyNodeType()
-        {
-        }
+   inline AnyNodeType() {
+   }
 
-    };
+};
 }
 
 QT_END_NAMESPACE

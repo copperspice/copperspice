@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,9 +33,8 @@ QT_BEGIN_NAMESPACE
 
 class QSqlDriver;
 
-struct Q_SQL_EXPORT QSqlDriverFactoryInterface : public QFactoryInterface
-{
-    virtual QSqlDriver *create(const QString &name) = 0;
+struct Q_SQL_EXPORT QSqlDriverFactoryInterface : public QFactoryInterface {
+   virtual QSqlDriver *create(const QString &name) = 0;
 };
 
 #define QSqlDriverFactoryInterface_iid "com.copperspice.QSqlDriverFactoryInterface"
@@ -43,15 +42,15 @@ CS_DECLARE_INTERFACE(QSqlDriverFactoryInterface, QSqlDriverFactoryInterface_iid)
 
 class Q_SQL_EXPORT QSqlDriverPlugin : public QObject, public QSqlDriverFactoryInterface
 {
-    CS_OBJECT_MULTIPLE(QSqlDriverPlugin, QObject)
-    CS_INTERFACES(QSqlDriverFactoryInterface, QFactoryInterface) 
+   CS_OBJECT_MULTIPLE(QSqlDriverPlugin, QObject)
+   CS_INTERFACES(QSqlDriverFactoryInterface, QFactoryInterface)
 
-public:
-    explicit QSqlDriverPlugin(QObject *parent = 0);
-    ~QSqlDriverPlugin();
+ public:
+   explicit QSqlDriverPlugin(QObject *parent = 0);
+   ~QSqlDriverPlugin();
 
-    virtual QStringList keys() const = 0;
-    virtual QSqlDriver *create(const QString &key) = 0;
+   virtual QStringList keys() const = 0;
+   virtual QSqlDriver *create(const QString &key) = 0;
 };
 
 QT_END_NAMESPACE

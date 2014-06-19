@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,45 +33,43 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class TemplateMode : public QSharedData
 {
- 
-    class TemplateMode : public QSharedData
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<TemplateMode> Ptr;
+ public:
+   typedef QExplicitlySharedDataPointer<TemplateMode> Ptr;
 
-        inline TemplateMode(const QXmlName &modeName) : m_modeName(modeName)
-        {
-        }
+   inline TemplateMode(const QXmlName &modeName) : m_modeName(modeName) {
+   }
 
-        TemplatePattern::Vector templatePatterns;
-       
-        inline void addMode(const TemplateMode::Ptr &mode);
-        inline const QXmlName &name() const;
+   TemplatePattern::Vector templatePatterns;
 
-        void finalize();
+   inline void addMode(const TemplateMode::Ptr &mode);
+   inline const QXmlName &name() const;
 
-    private:
-        const QXmlName m_modeName;
-        Q_DISABLE_COPY(TemplateMode)
+   void finalize();
 
-        /**
-         * Operator for qSort().
-         */
-        static inline bool lessThanByPriority(const TemplatePattern::Ptr &t1,
-                                              const TemplatePattern::Ptr &t2);
-    };
+ private:
+   const QXmlName m_modeName;
+   Q_DISABLE_COPY(TemplateMode)
 
-    const QXmlName &TemplateMode::name() const
-    {
-        return m_modeName;
-    }
+   /**
+    * Operator for qSort().
+    */
+   static inline bool lessThanByPriority(const TemplatePattern::Ptr &t1,
+                                         const TemplatePattern::Ptr &t2);
+};
 
-    void TemplateMode::addMode(const TemplateMode::Ptr &mode)
-    {
-        templatePatterns += mode->templatePatterns;
-    }
+const QXmlName &TemplateMode::name() const
+{
+   return m_modeName;
+}
+
+void TemplateMode::addMode(const TemplateMode::Ptr &mode)
+{
+   templatePatterns += mode->templatePatterns;
+}
 
 }
 

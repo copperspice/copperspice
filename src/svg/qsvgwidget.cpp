@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,20 +35,20 @@ QT_BEGIN_NAMESPACE
 
 class QSvgWidgetPrivate : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QSvgWidget)
-public:
-    QSvgRenderer *renderer;
+   Q_DECLARE_PUBLIC(QSvgWidget)
+ public:
+   QSvgRenderer *renderer;
 };
 
 /*!
     Constructs a new SVG display widget with the given \a parent.
 */
 QSvgWidget::QSvgWidget(QWidget *parent)
-    : QWidget(*new QSvgWidgetPrivate, parent, 0)
+   : QWidget(*new QSvgWidgetPrivate, parent, 0)
 {
-    d_func()->renderer = new QSvgRenderer(this);
-    QObject::connect(d_func()->renderer, SIGNAL(repaintNeeded()),
-                     this, SLOT(update()));
+   d_func()->renderer = new QSvgRenderer(this);
+   QObject::connect(d_func()->renderer, SIGNAL(repaintNeeded()),
+                    this, SLOT(update()));
 }
 
 /*!
@@ -56,11 +56,11 @@ QSvgWidget::QSvgWidget(QWidget *parent)
     of the specified \a file.
 */
 QSvgWidget::QSvgWidget(const QString &file, QWidget *parent)
-    : QWidget(*new QSvgWidgetPrivate, parent, 0)
+   : QWidget(*new QSvgWidgetPrivate, parent, 0)
 {
-    d_func()->renderer = new QSvgRenderer(file, this);
-    QObject::connect(d_func()->renderer, SIGNAL(repaintNeeded()),
-                     this, SLOT(update()));
+   d_func()->renderer = new QSvgRenderer(file, this);
+   QObject::connect(d_func()->renderer, SIGNAL(repaintNeeded()),
+                    this, SLOT(update()));
 }
 
 /*!
@@ -74,10 +74,10 @@ QSvgWidget::~QSvgWidget()
 /*!
     Returns the renderer used to display the contents of the widget.
 */
-QSvgRenderer * QSvgWidget::renderer() const
+QSvgRenderer *QSvgWidget::renderer() const
 {
-    Q_D(const QSvgWidget);
-    return d->renderer;
+   Q_D(const QSvgWidget);
+   return d->renderer;
 }
 
 
@@ -86,11 +86,12 @@ QSvgRenderer * QSvgWidget::renderer() const
 */
 QSize QSvgWidget::sizeHint() const
 {
-    Q_D(const QSvgWidget);
-    if (d->renderer->isValid())
-        return d->renderer->defaultSize();
-    else
-        return QSize(128, 64);
+   Q_D(const QSvgWidget);
+   if (d->renderer->isValid()) {
+      return d->renderer->defaultSize();
+   } else {
+      return QSize(128, 64);
+   }
 }
 
 
@@ -99,9 +100,9 @@ QSize QSvgWidget::sizeHint() const
 */
 void QSvgWidget::paintEvent(QPaintEvent *)
 {
-    Q_D(QSvgWidget);
-    QPainter p(this);
-    d->renderer->render(&p);
+   Q_D(QSvgWidget);
+   QPainter p(this);
+   d->renderer->render(&p);
 }
 
 /*!
@@ -109,8 +110,8 @@ void QSvgWidget::paintEvent(QPaintEvent *)
 */
 void QSvgWidget::load(const QString &file)
 {
-    Q_D(const QSvgWidget);
-    d->renderer->load(file);
+   Q_D(const QSvgWidget);
+   d->renderer->load(file);
 }
 
 /*!
@@ -118,8 +119,8 @@ void QSvgWidget::load(const QString &file)
 */
 void QSvgWidget::load(const QByteArray &contents)
 {
-    Q_D(const QSvgWidget);
-    d->renderer->load(contents);
+   Q_D(const QSvgWidget);
+   d->renderer->load(contents);
 }
 
 QT_END_NAMESPACE

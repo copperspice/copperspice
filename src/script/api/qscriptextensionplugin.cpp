@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -77,7 +77,7 @@ QT_BEGIN_NAMESPACE
     explicitly.
 */
 QScriptExtensionPlugin::QScriptExtensionPlugin(QObject *parent)
-    : QObject(parent)
+   : QObject(parent)
 {
 }
 
@@ -93,19 +93,19 @@ QScriptExtensionPlugin::~QScriptExtensionPlugin()
 
 
 QScriptValue QScriptExtensionPlugin::setupPackage(
-    const QString &key, QScriptEngine *engine) const
+   const QString &key, QScriptEngine *engine) const
 {
-    QStringList components = key.split(QLatin1Char('.'));
-    QScriptValue o = engine->globalObject();
-    for (int i = 0; i < components.count(); ++i) {
-        QScriptValue oo = o.property(components.at(i));
-        if (!oo.isValid()) {
-            oo = engine->newObject();
-            o.setProperty(components.at(i), oo);
-        }
-        o = oo;
-    }
-    return o;
+   QStringList components = key.split(QLatin1Char('.'));
+   QScriptValue o = engine->globalObject();
+   for (int i = 0; i < components.count(); ++i) {
+      QScriptValue oo = o.property(components.at(i));
+      if (!oo.isValid()) {
+         oo = engine->newObject();
+         o.setProperty(components.at(i), oo);
+      }
+      o = oo;
+   }
+   return o;
 }
 
 QT_END_NAMESPACE

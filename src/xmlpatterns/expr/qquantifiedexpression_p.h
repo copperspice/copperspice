@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,45 +30,43 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class QuantifiedExpression : public PairContainer
 {
-    class QuantifiedExpression : public PairContainer
-    {
-    public:
-        enum Operator
-        {
-            Some    = 1,
-            Every
-        };
+ public:
+   enum Operator {
+      Some    = 1,
+      Every
+   };
 
-        QuantifiedExpression(const VariableSlotID varSlot,
-                             const Operator quantifier,
-                             const Expression::Ptr &inClause,
-                             const Expression::Ptr &testExpression);
+   QuantifiedExpression(const VariableSlotID varSlot,
+                        const Operator quantifier,
+                        const Expression::Ptr &inClause,
+                        const Expression::Ptr &testExpression);
 
-        virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-        virtual SequenceType::Ptr staticType() const;
-        virtual SequenceType::List expectedOperandTypes() const;
+   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+   virtual SequenceType::Ptr staticType() const;
+   virtual SequenceType::List expectedOperandTypes() const;
 
-        Operator operatorID() const;
+   Operator operatorID() const;
 
-        /**
-         * Determines the string representation for a quantification operator.
-         *
-         * @return "some" if @p quantifier is Some, or "every" if @p quantifier
-         * is Every
-         */
-        static QString displayName(const Operator quantifier);
+   /**
+    * Determines the string representation for a quantification operator.
+    *
+    * @return "some" if @p quantifier is Some, or "every" if @p quantifier
+    * is Every
+    */
+   static QString displayName(const Operator quantifier);
 
-        virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
 
-        inline Item mapToItem(const Item &item, const DynamicContext::Ptr &context) const;
+   inline Item mapToItem(const Item &item, const DynamicContext::Ptr &context) const;
 
-    private:
-        typedef QExplicitlySharedDataPointer<const QuantifiedExpression> ConstPtr;
-        const VariableSlotID m_varSlot;
-        const Operator m_quantifier;
-    };
+ private:
+   typedef QExplicitlySharedDataPointer<const QuantifiedExpression> ConstPtr;
+   const VariableSlotID m_varSlot;
+   const Operator m_quantifier;
+};
 }
 
 QT_END_NAMESPACE

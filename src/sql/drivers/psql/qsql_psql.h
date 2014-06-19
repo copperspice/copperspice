@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -47,92 +47,92 @@ class QSqlRecordInfo;
 
 class QPSQLResult : public QSqlResult
 {
-    friend class QPSQLResultPrivate;
+   friend class QPSQLResultPrivate;
 
-public:
-    QPSQLResult(const QPSQLDriver* db, const QPSQLDriverPrivate* p);
-    ~QPSQLResult();
+ public:
+   QPSQLResult(const QPSQLDriver *db, const QPSQLDriverPrivate *p);
+   ~QPSQLResult();
 
-    QVariant handle() const;
-    void virtual_hook(int id, void *data);
+   QVariant handle() const;
+   void virtual_hook(int id, void *data);
 
-protected:
-    void cleanup();
-    bool fetch(int i);
-    bool fetchFirst();
-    bool fetchLast();
-    QVariant data(int i);
-    bool isNull(int field);
-    bool reset (const QString& query);
-    int size();
-    int numRowsAffected();
-    QSqlRecord record() const;
-    QVariant lastInsertId() const;
-    bool prepare(const QString& query);
-    bool exec();
+ protected:
+   void cleanup();
+   bool fetch(int i);
+   bool fetchFirst();
+   bool fetchLast();
+   QVariant data(int i);
+   bool isNull(int field);
+   bool reset (const QString &query);
+   int size();
+   int numRowsAffected();
+   QSqlRecord record() const;
+   QVariant lastInsertId() const;
+   bool prepare(const QString &query);
+   bool exec();
 
-private:
-    QPSQLResultPrivate *d;
+ private:
+   QPSQLResultPrivate *d;
 };
 
 class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
 {
-    CS_OBJECT(QPSQLDriver)
+   CS_OBJECT(QPSQLDriver)
 
-public:
-    enum Protocol {
-        VersionUnknown = -1,
-        Version6 = 6,
-        Version7 = 7,
-        Version71 = 8,
-        Version73 = 9,
-        Version74 = 10,
-        Version8 = 11,
-        Version81 = 12,
-        Version82 = 13,
-        Version83 = 14,
-        Version84 = 15,
-        Version9 = 16,
-    };
+ public:
+   enum Protocol {
+      VersionUnknown = -1,
+      Version6 = 6,
+      Version7 = 7,
+      Version71 = 8,
+      Version73 = 9,
+      Version74 = 10,
+      Version8 = 11,
+      Version81 = 12,
+      Version82 = 13,
+      Version83 = 14,
+      Version84 = 15,
+      Version9 = 16,
+   };
 
-    explicit QPSQLDriver(QObject *parent=0);
-    explicit QPSQLDriver(PGconn *conn, QObject *parent=0);
-    ~QPSQLDriver();
-    bool hasFeature(DriverFeature f) const;
-    bool open(const QString & db,
-              const QString & user,
-              const QString & password,
-              const QString & host,
-              int port,
-              const QString& connOpts);
-    bool isOpen() const;
-    void close();
-    QSqlResult *createResult() const;
-    QStringList tables(QSql::TableType) const;
-    QSqlIndex primaryIndex(const QString& tablename) const;
-    QSqlRecord record(const QString& tablename) const;
+   explicit QPSQLDriver(QObject *parent = 0);
+   explicit QPSQLDriver(PGconn *conn, QObject *parent = 0);
+   ~QPSQLDriver();
+   bool hasFeature(DriverFeature f) const;
+   bool open(const QString &db,
+             const QString &user,
+             const QString &password,
+             const QString &host,
+             int port,
+             const QString &connOpts);
+   bool isOpen() const;
+   void close();
+   QSqlResult *createResult() const;
+   QStringList tables(QSql::TableType) const;
+   QSqlIndex primaryIndex(const QString &tablename) const;
+   QSqlRecord record(const QString &tablename) const;
 
-    Protocol protocol() const;
-    QVariant handle() const;
+   Protocol protocol() const;
+   QVariant handle() const;
 
-    QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
-    QString formatValue(const QSqlField &field, bool trimStrings) const;
+   QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
+   QString formatValue(const QSqlField &field, bool trimStrings) const;
 
-protected:
-    bool beginTransaction();
-    bool commitTransaction();
-    bool rollbackTransaction();
+ protected:
+   bool beginTransaction();
+   bool commitTransaction();
+   bool rollbackTransaction();
 
-    bool subscribeToNotificationImplementation(const QString & name);  
-    bool unsubscribeFromNotificationImplementation(const QString & name);    
-    QStringList subscribedToNotificationsImplementation() const;
-   
-private :
-    SQL_CS_SLOT_1(Private, void _q_handleNotification(int un_named_arg1))
-    SQL_CS_SLOT_2(_q_handleNotification) 
+   bool subscribeToNotificationImplementation(const QString &name);
+   bool unsubscribeFromNotificationImplementation(const QString &name);
+   QStringList subscribedToNotificationsImplementation() const;
 
-    void init();
-    QPSQLDriverPrivate *d;
+ private :
+   SQL_CS_SLOT_1(Private, void _q_handleNotification(int un_named_arg1))
+   SQL_CS_SLOT_2(_q_handleNotification)
+
+   void init();
+   QPSQLDriverPrivate *d;
 };
 
 QT_END_NAMESPACE

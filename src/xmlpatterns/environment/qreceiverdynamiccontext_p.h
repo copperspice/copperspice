@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,23 +30,22 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{  
-    class ReceiverDynamicContext : public DelegatingDynamicContext
-    {
-    public:
-        /**
-         * Construct a ReceiverDynamicContext and passes @p prevContext to its super class. This
-         * constructor is typically used when the super class is DelegatingDynamicContext.
-         */
-        ReceiverDynamicContext(const DynamicContext::Ptr &prevContext,
-                               QAbstractXmlReceiver *const receiver);
+namespace QPatternist {
+class ReceiverDynamicContext : public DelegatingDynamicContext
+{
+ public:
+   /**
+    * Construct a ReceiverDynamicContext and passes @p prevContext to its super class. This
+    * constructor is typically used when the super class is DelegatingDynamicContext.
+    */
+   ReceiverDynamicContext(const DynamicContext::Ptr &prevContext,
+                          QAbstractXmlReceiver *const receiver);
 
-        virtual QAbstractXmlReceiver *outputReceiver() const;
+   virtual QAbstractXmlReceiver *outputReceiver() const;
 
-    private:
-        QAbstractXmlReceiver *const m_receiver;
-    };
+ private:
+   QAbstractXmlReceiver *const m_receiver;
+};
 }
 
 QT_END_NAMESPACE

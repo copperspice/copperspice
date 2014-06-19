@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,59 +36,58 @@ template<typename T> class QList;
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class UserFunction : public QSharedData
 {
-    class UserFunction : public QSharedData
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<UserFunction> Ptr;
-        typedef QList<UserFunction::Ptr> List;
+ public:
+   typedef QExplicitlySharedDataPointer<UserFunction> Ptr;
+   typedef QList<UserFunction::Ptr> List;
 
-        /**
-         * If @p slotOffset is -1, it means this function has no arguments.
-         */
-        UserFunction(const FunctionSignature::Ptr &signature,
-                     const Expression::Ptr &body,
-                     const VariableSlotID slotOffset,
-                     const VariableDeclaration::List &varDecls);
+   /**
+    * If @p slotOffset is -1, it means this function has no arguments.
+    */
+   UserFunction(const FunctionSignature::Ptr &signature,
+                const Expression::Ptr &body,
+                const VariableSlotID slotOffset,
+                const VariableDeclaration::List &varDecls);
 
-        inline const Expression::Ptr &body() const;
-        inline void setBody(const Expression::Ptr &newBody);
-        inline FunctionSignature::Ptr signature() const;
-        inline VariableSlotID expressionSlotOffset() const;
-        inline VariableDeclaration::List argumentDeclarations() const;
+   inline const Expression::Ptr &body() const;
+   inline void setBody(const Expression::Ptr &newBody);
+   inline FunctionSignature::Ptr signature() const;
+   inline VariableSlotID expressionSlotOffset() const;
+   inline VariableDeclaration::List argumentDeclarations() const;
 
-    private:
-        const FunctionSignature::Ptr    m_signature;
-        Expression::Ptr                 m_body;
-        const VariableSlotID            m_slotOffset;
-        const VariableDeclaration::List m_argumentDeclarations;
-    };
+ private:
+   const FunctionSignature::Ptr    m_signature;
+   Expression::Ptr                 m_body;
+   const VariableSlotID            m_slotOffset;
+   const VariableDeclaration::List m_argumentDeclarations;
+};
 
-    inline const Expression::Ptr &UserFunction::body() const
-    {
-        return m_body;
-    }
+inline const Expression::Ptr &UserFunction::body() const
+{
+   return m_body;
+}
 
-    inline FunctionSignature::Ptr UserFunction::signature() const
-    {
-        return m_signature;
-    }
+inline FunctionSignature::Ptr UserFunction::signature() const
+{
+   return m_signature;
+}
 
-    inline VariableSlotID UserFunction::expressionSlotOffset() const
-    {
-        return m_slotOffset;
-    }
+inline VariableSlotID UserFunction::expressionSlotOffset() const
+{
+   return m_slotOffset;
+}
 
-    inline VariableDeclaration::List UserFunction::argumentDeclarations() const
-    {
-        return m_argumentDeclarations;
-    }
+inline VariableDeclaration::List UserFunction::argumentDeclarations() const
+{
+   return m_argumentDeclarations;
+}
 
-    void UserFunction::setBody(const Expression::Ptr &newBody)
-    {
-        m_body = newBody;
-    }
+void UserFunction::setBody(const Expression::Ptr &newBody)
+{
+   m_body = newBody;
+}
 
 }
 

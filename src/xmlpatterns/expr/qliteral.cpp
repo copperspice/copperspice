@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,63 +36,62 @@ using namespace QPatternist;
 
 Literal::Literal(const Item &i) : m_item(i)
 {
-    Q_ASSERT(m_item);
-    Q_ASSERT(m_item.isAtomicValue());
+   Q_ASSERT(m_item);
+   Q_ASSERT(m_item.isAtomicValue());
 }
 
 Item Literal::evaluateSingleton(const DynamicContext::Ptr &) const
 {
-    return m_item;
+   return m_item;
 }
 
 bool Literal::evaluateEBV(const DynamicContext::Ptr &context) const
 {
-    return Boolean::evaluateEBV(m_item, context);
+   return Boolean::evaluateEBV(m_item, context);
 }
 
 void Literal::evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const
 {
-    context->outputReceiver()->item(m_item);
+   context->outputReceiver()->item(m_item);
 }
 
 SequenceType::Ptr Literal::staticType() const
 {
-    return makeGenericSequenceType(m_item.type(), Cardinality::exactlyOne());
+   return makeGenericSequenceType(m_item.type(), Cardinality::exactlyOne());
 }
 
 ExpressionVisitorResult::Ptr Literal::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 Expression::ID Literal::id() const
 {
-    Q_ASSERT(m_item);
-    Q_ASSERT(m_item.isAtomicValue());
-    const ItemType::Ptr t(m_item.type());
+   Q_ASSERT(m_item);
+   Q_ASSERT(m_item.isAtomicValue());
+   const ItemType::Ptr t(m_item.type());
 
-    if(BuiltinTypes::xsBoolean->xdtTypeMatches(t))
-        return IDBooleanValue;
-    else if(BuiltinTypes::xsString->xdtTypeMatches(t) ||
-            BuiltinTypes::xsAnyURI->xdtTypeMatches(t) ||
-            BuiltinTypes::xsUntypedAtomic->xdtTypeMatches(t))
-    {
-        return IDStringValue;
-    }
-    else if(BuiltinTypes::xsInteger->xdtTypeMatches(t))
-        return IDIntegerValue;
-    else
-        return IDFloat;
+   if (BuiltinTypes::xsBoolean->xdtTypeMatches(t)) {
+      return IDBooleanValue;
+   } else if (BuiltinTypes::xsString->xdtTypeMatches(t) ||
+              BuiltinTypes::xsAnyURI->xdtTypeMatches(t) ||
+              BuiltinTypes::xsUntypedAtomic->xdtTypeMatches(t)) {
+      return IDStringValue;
+   } else if (BuiltinTypes::xsInteger->xdtTypeMatches(t)) {
+      return IDIntegerValue;
+   } else {
+      return IDFloat;
+   }
 }
 
 Expression::Properties Literal::properties() const
 {
-    return IsEvaluated;
+   return IsEvaluated;
 }
 
 QString Literal::description() const
 {
-    return m_item.stringValue();
+   return m_item.stringValue();
 }
 
 QT_END_NAMESPACE

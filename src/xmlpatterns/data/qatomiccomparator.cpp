@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,59 +44,56 @@ AtomicComparator::compare(const Item &,
                           const AtomicComparator::Operator,
                           const Item &) const
 {
-    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
-    return LessThan;
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
+   return LessThan;
 }
 
 QString AtomicComparator::displayName(const AtomicComparator::Operator op,
                                       const ComparisonType type)
 {
-    Q_ASSERT(type == AsGeneralComparison || type == AsValueComparison);
-    if(type == AsGeneralComparison)
-    {
-        switch(op)
-        {
-            case OperatorEqual:
-                return QLatin1String("=");
-            case OperatorGreaterOrEqual:
-                return QLatin1String("<=");
-            case OperatorGreaterThan:
-                return QLatin1String("<");
-            case OperatorLessOrEqual:
-                return QLatin1String(">=");
-            case OperatorLessThanNaNLeast:
-            /* Fallthrough. */
-            case OperatorLessThanNaNGreatest:
-            /* Fallthrough. */
-            case OperatorLessThan:
-                return QLatin1String(">");
-            case OperatorNotEqual:
-                return QLatin1String("!=");
-        }
-    }
+   Q_ASSERT(type == AsGeneralComparison || type == AsValueComparison);
+   if (type == AsGeneralComparison) {
+      switch (op) {
+         case OperatorEqual:
+            return QLatin1String("=");
+         case OperatorGreaterOrEqual:
+            return QLatin1String("<=");
+         case OperatorGreaterThan:
+            return QLatin1String("<");
+         case OperatorLessOrEqual:
+            return QLatin1String(">=");
+         case OperatorLessThanNaNLeast:
+         /* Fallthrough. */
+         case OperatorLessThanNaNGreatest:
+         /* Fallthrough. */
+         case OperatorLessThan:
+            return QLatin1String(">");
+         case OperatorNotEqual:
+            return QLatin1String("!=");
+      }
+   }
 
-    switch(op)
-    {
-        case OperatorEqual:
-            return QLatin1String("eq");
-        case OperatorGreaterOrEqual:
-            return QLatin1String("ge");
-        case OperatorGreaterThan:
-            return QLatin1String("gt");
-        case OperatorLessOrEqual:
-            return QLatin1String("le");
-        case OperatorLessThanNaNLeast:
-        /* Fallthrough. */
-        case OperatorLessThanNaNGreatest:
-        /* Fallthrough. */
-        case OperatorLessThan:
-            return QLatin1String("lt");
-        case OperatorNotEqual:
-            return QLatin1String("ne");
-    }
+   switch (op) {
+      case OperatorEqual:
+         return QLatin1String("eq");
+      case OperatorGreaterOrEqual:
+         return QLatin1String("ge");
+      case OperatorGreaterThan:
+         return QLatin1String("gt");
+      case OperatorLessOrEqual:
+         return QLatin1String("le");
+      case OperatorLessThanNaNLeast:
+      /* Fallthrough. */
+      case OperatorLessThanNaNGreatest:
+      /* Fallthrough. */
+      case OperatorLessThan:
+         return QLatin1String("lt");
+      case OperatorNotEqual:
+         return QLatin1String("ne");
+   }
 
-    Q_ASSERT(false);
-    return QString(); /* GCC unbarfer. */
+   Q_ASSERT(false);
+   return QString(); /* GCC unbarfer. */
 }
 
 QT_END_NAMESPACE

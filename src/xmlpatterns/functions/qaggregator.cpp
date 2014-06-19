@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,20 +34,19 @@ using namespace QPatternist;
 
 SequenceType::Ptr Aggregator::staticType() const
 {
-    const SequenceType::Ptr t(m_operands.first()->staticType());
-    ItemType::Ptr itemType(t->itemType());
+   const SequenceType::Ptr t(m_operands.first()->staticType());
+   ItemType::Ptr itemType(t->itemType());
 
-    /* Since we have types that are derived from xs:integer, this ensures that
-     * the static type is xs:integer even if the argument is for
-     * instance xs:unsignedShort. */
-    if(BuiltinTypes::xsInteger->xdtTypeMatches(itemType) &&
-       !itemType->xdtTypeMatches(BuiltinTypes::xsInteger))
-    {
-        itemType = BuiltinTypes::xsInteger;
-    }
+   /* Since we have types that are derived from xs:integer, this ensures that
+    * the static type is xs:integer even if the argument is for
+    * instance xs:unsignedShort. */
+   if (BuiltinTypes::xsInteger->xdtTypeMatches(itemType) &&
+         !itemType->xdtTypeMatches(BuiltinTypes::xsInteger)) {
+      itemType = BuiltinTypes::xsInteger;
+   }
 
-    return makeGenericSequenceType(itemType,
-                                   t->cardinality().toWithoutMany());
+   return makeGenericSequenceType(itemType,
+                                  t->cardinality().toWithoutMany());
 }
 
 QT_END_NAMESPACE

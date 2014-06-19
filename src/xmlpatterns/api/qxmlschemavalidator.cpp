@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -69,7 +69,7 @@ QT_BEGIN_NAMESPACE
   via the \c xsi:schemaLocation or \c xsi:noNamespaceSchemaLocation attribute.
  */
 QXmlSchemaValidator::QXmlSchemaValidator()
-    : d(new QXmlSchemaValidatorPrivate(QXmlSchema()))
+   : d(new QXmlSchemaValidatorPrivate(QXmlSchema()))
 {
 }
 
@@ -80,7 +80,7 @@ QXmlSchemaValidator::QXmlSchemaValidator()
   via the \c xsi:schemaLocation or \c xsi:noNamespaceSchemaLocation attribute.
  */
 QXmlSchemaValidator::QXmlSchemaValidator(const QXmlSchema &schema)
-    : d(new QXmlSchemaValidatorPrivate(schema))
+   : d(new QXmlSchemaValidatorPrivate(schema))
 {
 }
 
@@ -89,7 +89,7 @@ QXmlSchemaValidator::QXmlSchemaValidator(const QXmlSchema &schema)
  */
 QXmlSchemaValidator::~QXmlSchemaValidator()
 {
-    delete d;
+   delete d;
 }
 
 /*!
@@ -100,7 +100,7 @@ QXmlSchemaValidator::~QXmlSchemaValidator()
  */
 void QXmlSchemaValidator::setSchema(const QXmlSchema &schema)
 {
-    d->setSchema(schema);
+   d->setSchema(schema);
 }
 
 /*!
@@ -116,12 +116,12 @@ void QXmlSchemaValidator::setSchema(const QXmlSchema &schema)
  */
 bool QXmlSchemaValidator::validate(const QByteArray &data, const QUrl &documentUri) const
 {
-    QByteArray localData(data);
+   QByteArray localData(data);
 
-    QBuffer buffer(&localData);
-    buffer.open(QIODevice::ReadOnly);
+   QBuffer buffer(&localData);
+   buffer.open(QIODevice::ReadOnly);
 
-    return validate(&buffer, documentUri);
+   return validate(&buffer, documentUri);
 }
 
 /*!
@@ -136,16 +136,18 @@ bool QXmlSchemaValidator::validate(const QByteArray &data, const QUrl &documentU
  */
 bool QXmlSchemaValidator::validate(const QUrl &source) const
 {
-    d->m_context->setMessageHandler(messageHandler());
-    d->m_context->setUriResolver(uriResolver());
-    d->m_context->setNetworkAccessManager(networkAccessManager());
+   d->m_context->setMessageHandler(messageHandler());
+   d->m_context->setUriResolver(uriResolver());
+   d->m_context->setNetworkAccessManager(networkAccessManager());
 
-    const QPatternist::AutoPtr<QNetworkReply> reply(QPatternist::AccelTreeResourceLoader::load(source, d->m_context->networkAccessManager(),
-                                                                                               d->m_context, QPatternist::AccelTreeResourceLoader::ContinueOnError));
-    if (reply)
-        return validate(reply.data(), source);
-    else
-        return false;
+   const QPatternist::AutoPtr<QNetworkReply> reply(QPatternist::AccelTreeResourceLoader::load(source,
+         d->m_context->networkAccessManager(),
+         d->m_context, QPatternist::AccelTreeResourceLoader::ContinueOnError));
+   if (reply) {
+      return validate(reply.data(), source);
+   } else {
+      return false;
+   }
 }
 
 /*!
@@ -161,50 +163,53 @@ bool QXmlSchemaValidator::validate(const QUrl &source) const
  */
 bool QXmlSchemaValidator::validate(QIODevice *source, const QUrl &documentUri) const
 {
-    if (!source) {
-        qWarning("A null QIODevice pointer cannot be passed.");
-        return false;
-    }
+   if (!source) {
+      qWarning("A null QIODevice pointer cannot be passed.");
+      return false;
+   }
 
-    if (!source->isReadable()) {
-        qWarning("The device must be readable.");
-        return false;
-    }
+   if (!source->isReadable()) {
+      qWarning("The device must be readable.");
+      return false;
+   }
 
-    const QUrl normalizedUri = QPatternist::XPathHelper::normalizeQueryURI(documentUri);
+   const QUrl normalizedUri = QPatternist::XPathHelper::normalizeQueryURI(documentUri);
 
-    d->m_context->setMessageHandler(messageHandler());
-    d->m_context->setUriResolver(uriResolver());
-    d->m_context->setNetworkAccessManager(networkAccessManager());
+   d->m_context->setMessageHandler(messageHandler());
+   d->m_context->setUriResolver(uriResolver());
+   d->m_context->setNetworkAccessManager(networkAccessManager());
 
-    QPatternist::NetworkAccessDelegator::Ptr delegator(new QPatternist::NetworkAccessDelegator(d->m_context->networkAccessManager(),
-                                                                                               d->m_context->networkAccessManager()));
+   QPatternist::NetworkAccessDelegator::Ptr delegator(new QPatternist::NetworkAccessDelegator(
+            d->m_context->networkAccessManager(),
+            d->m_context->networkAccessManager()));
 
-    QPatternist::AccelTreeResourceLoader loader(d->m_context->namePool(), delegator, QPatternist::AccelTreeBuilder<true>::SourceLocationsFeature);
+   QPatternist::AccelTreeResourceLoader loader(d->m_context->namePool(), delegator,
+         QPatternist::AccelTreeBuilder<true>::SourceLocationsFeature);
 
-    QPatternist::Item item;
-    try {
-        item = loader.openDocument(source, normalizedUri, d->m_context);
-    } catch (QPatternist::Exception exception) {
-        Q_UNUSED(exception);
-        return false;
-    }
+   QPatternist::Item item;
+   try {
+      item = loader.openDocument(source, normalizedUri, d->m_context);
+   } catch (QPatternist::Exception exception) {
+      Q_UNUSED(exception);
+      return false;
+   }
 
-    const QAbstractXmlNodeModel *model = item.asNode().model();
+   const QAbstractXmlNodeModel *model = item.asNode().model();
 
-    QPatternist::XsdValidatedXmlNodeModel *validatedModel = new QPatternist::XsdValidatedXmlNodeModel(model);
+   QPatternist::XsdValidatedXmlNodeModel *validatedModel = new QPatternist::XsdValidatedXmlNodeModel(model);
 
-    QPatternist::XsdValidatingInstanceReader reader(validatedModel, normalizedUri, d->m_context);
-    if (d->m_schema)
-        reader.addSchema(d->m_schema, d->m_schemaDocumentUri);
-    try {
-        reader.read();
-    } catch (QPatternist::Exception exception) {
-        Q_UNUSED(exception);
-        return false;
-    }
+   QPatternist::XsdValidatingInstanceReader reader(validatedModel, normalizedUri, d->m_context);
+   if (d->m_schema) {
+      reader.addSchema(d->m_schema, d->m_schemaDocumentUri);
+   }
+   try {
+      reader.read();
+   } catch (QPatternist::Exception exception) {
+      Q_UNUSED(exception);
+      return false;
+   }
 
-    return true;
+   return true;
 }
 
 /*!
@@ -214,7 +219,7 @@ bool QXmlSchemaValidator::validate(QIODevice *source, const QUrl &documentUri) c
  */
 QXmlNamePool QXmlSchemaValidator::namePool() const
 {
-    return d->m_namePool;
+   return d->m_namePool;
 }
 
 /*!
@@ -222,7 +227,7 @@ QXmlNamePool QXmlSchemaValidator::namePool() const
  */
 QXmlSchema QXmlSchemaValidator::schema() const
 {
-    return d->m_originalSchema;
+   return d->m_originalSchema;
 }
 
 /*!
@@ -262,7 +267,7 @@ QXmlSchema QXmlSchemaValidator::schema() const
  */
 void QXmlSchemaValidator::setMessageHandler(QAbstractMessageHandler *handler)
 {
-    d->m_userMessageHandler = handler;
+   d->m_userMessageHandler = handler;
 }
 
 /*!
@@ -271,10 +276,11 @@ void QXmlSchemaValidator::setMessageHandler(QAbstractMessageHandler *handler)
  */
 QAbstractMessageHandler *QXmlSchemaValidator::messageHandler() const
 {
-    if (d->m_userMessageHandler)
-        return d->m_userMessageHandler;
+   if (d->m_userMessageHandler) {
+      return d->m_userMessageHandler;
+   }
 
-    return d->m_messageHandler.data()->value;
+   return d->m_messageHandler.data()->value;
 }
 
 /*!
@@ -285,7 +291,7 @@ QAbstractMessageHandler *QXmlSchemaValidator::messageHandler() const
  */
 void QXmlSchemaValidator::setUriResolver(const QAbstractUriResolver *resolver)
 {
-    d->m_uriResolver = resolver;
+   d->m_uriResolver = resolver;
 }
 
 /*!
@@ -304,7 +310,7 @@ void QXmlSchemaValidator::setUriResolver(const QAbstractUriResolver *resolver)
  */
 const QAbstractUriResolver *QXmlSchemaValidator::uriResolver() const
 {
-    return d->m_uriResolver;
+   return d->m_uriResolver;
 }
 
 /*!
@@ -315,7 +321,7 @@ const QAbstractUriResolver *QXmlSchemaValidator::uriResolver() const
  */
 void QXmlSchemaValidator::setNetworkAccessManager(QNetworkAccessManager *manager)
 {
-    d->m_userNetworkAccessManager = manager;
+   d->m_userNetworkAccessManager = manager;
 }
 
 /*!
@@ -325,10 +331,11 @@ void QXmlSchemaValidator::setNetworkAccessManager(QNetworkAccessManager *manager
  */
 QNetworkAccessManager *QXmlSchemaValidator::networkAccessManager() const
 {
-    if (d->m_userNetworkAccessManager)
-        return d->m_userNetworkAccessManager;
+   if (d->m_userNetworkAccessManager) {
+      return d->m_userNetworkAccessManager;
+   }
 
-    return d->m_networkAccessManager.data()->value;
+   return d->m_networkAccessManager.data()->value;
 }
 
 QT_END_NAMESPACE

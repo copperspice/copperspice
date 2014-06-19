@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,40 +39,41 @@ ExternalVariableLoader::~ExternalVariableLoader()
 
 
 SequenceType::Ptr ExternalVariableLoader::announceExternalVariable(const QXmlName name,
-                                                                   const SequenceType::Ptr &declaredType)
+      const SequenceType::Ptr &declaredType)
 {
-    Q_ASSERT(!name.isNull());
-    Q_ASSERT(declaredType);
-    Q_UNUSED(name); /* Needed when compiling in release mode. */
-    Q_UNUSED(declaredType); /* Needed when compiling in release mode. */
+   Q_ASSERT(!name.isNull());
+   Q_ASSERT(declaredType);
+   Q_UNUSED(name); /* Needed when compiling in release mode. */
+   Q_UNUSED(declaredType); /* Needed when compiling in release mode. */
 
-    return SequenceType::Ptr();
+   return SequenceType::Ptr();
 }
 
 Item::Iterator::Ptr ExternalVariableLoader::evaluateSequence(const QXmlName name,
-                                                             const DynamicContext::Ptr &context)
+      const DynamicContext::Ptr &context)
 {
-    Q_ASSERT(!name.isNull());
-    const Item item(evaluateSingleton(name, context));
+   Q_ASSERT(!name.isNull());
+   const Item item(evaluateSingleton(name, context));
 
-    if(item)
-        return makeSingletonIterator(item);
-    else
-        return CommonValues::emptyIterator;
+   if (item) {
+      return makeSingletonIterator(item);
+   } else {
+      return CommonValues::emptyIterator;
+   }
 }
 
 Item ExternalVariableLoader::evaluateSingleton(const QXmlName name,
-                                                    const DynamicContext::Ptr &context)
+      const DynamicContext::Ptr &context)
 {
-    Q_ASSERT(!name.isNull());
-    return Boolean::fromValue(evaluateEBV(name, context));
+   Q_ASSERT(!name.isNull());
+   return Boolean::fromValue(evaluateEBV(name, context));
 }
 
 bool ExternalVariableLoader::evaluateEBV(const QXmlName name,
-                                         const DynamicContext::Ptr &context)
+      const DynamicContext::Ptr &context)
 {
-    Q_ASSERT(!name.isNull());
-    return Boolean::evaluateEBV(evaluateSequence(name, context), context);
+   Q_ASSERT(!name.isNull());
+   return Boolean::evaluateEBV(evaluateSequence(name, context), context);
 }
 
 QT_END_NAMESPACE

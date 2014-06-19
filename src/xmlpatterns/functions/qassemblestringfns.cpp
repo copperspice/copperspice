@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,57 +43,58 @@ using namespace QPatternist;
  */
 static inline bool isValidXML10Char(const qint32 cp)
 {
-    /* [2]     Char     ::=     #x9 | #xA | #xD | [#x20-#xD7FF] |
-     *                          [#xE000-#xFFFD] | [#x10000-#x10FFFF]
-     */
-    return (cp == 0x9                       ||
-            cp == 0xA                       ||
-            cp == 0xD                       ||
-            (0x20 <= cp && cp <= 0xD7FF)    ||
-            (0xE000 <= cp && cp <= 0xFFFD)  ||
-            (0x10000 <= cp && cp <= 0x10FFFF));
+   /* [2]     Char     ::=     #x9 | #xA | #xD | [#x20-#xD7FF] |
+    *                          [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+    */
+   return (cp == 0x9                       ||
+           cp == 0xA                       ||
+           cp == 0xD                       ||
+           (0x20 <= cp && cp <= 0xD7FF)    ||
+           (0xE000 <= cp && cp <= 0xFFFD)  ||
+           (0x10000 <= cp && cp <= 0x10FFFF));
 }
 
 Item CodepointsToStringFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    const Item::Iterator::Ptr it(m_operands.first()->evaluateSequence(context));
+   const Item::Iterator::Ptr it(m_operands.first()->evaluateSequence(context));
 
-    if(!it)
-        return CommonValues::EmptyString;
+   if (!it) {
+      return CommonValues::EmptyString;
+   }
 
-    QString retval;
-    Item item(it->next());
-    while(item)
-    {
-        const qint32 cp = static_cast<qint32>(item.as<Numeric>()->toInteger());
+   QString retval;
+   Item item(it->next());
+   while (item) {
+      const qint32 cp = static_cast<qint32>(item.as<Numeric>()->toInteger());
 
-        if(!isValidXML10Char(cp))
-        {
-            context->error(QtXmlPatterns::tr("%1 is not a valid XML 1.0 character.")
-                                            .arg(formatData(QLatin1String("0x") +
-                                                          QString::number(cp, 16))),
-                                       ReportContext::FOCH0001, this);
+      if (!isValidXML10Char(cp)) {
+         context->error(QtXmlPatterns::tr("%1 is not a valid XML 1.0 character.")
+                        .arg(formatData(QLatin1String("0x") +
+                                        QString::number(cp, 16))),
+                        ReportContext::FOCH0001, this);
 
-            return CommonValues::EmptyString;
-        }
-        retval.append(QChar(cp));
-        item = it->next();
-    }
+         return CommonValues::EmptyString;
+      }
+      retval.append(QChar(cp));
+      item = it->next();
+   }
 
-    return AtomicString::fromValue(retval);
+   return AtomicString::fromValue(retval);
 }
 
 Item::Iterator::Ptr StringToCodepointsFN::evaluateSequence(const DynamicContext::Ptr &context) const
 {
-    const Item item(m_operands.first()->evaluateSingleton(context));
-    if(!item)
-        return CommonValues::emptyIterator;
+   const Item item(m_operands.first()->evaluateSingleton(context));
+   if (!item) {
+      return CommonValues::emptyIterator;
+   }
 
-    const QString str(item.stringValue());
-    if(str.isEmpty())
-        return CommonValues::emptyIterator;
-    else
-        return Item::Iterator::Ptr(new ToCodepointsIterator(str));
+   const QString str(item.stringValue());
+   if (str.isEmpty()) {
+      return CommonValues::emptyIterator;
+   } else {
+      return Item::Iterator::Ptr(new ToCodepointsIterator(str));
+   }
 }
 
 QT_END_NAMESPACE

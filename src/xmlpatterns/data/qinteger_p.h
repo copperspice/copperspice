@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,58 +30,57 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class Integer : public Numeric
 {
-      class Integer : public Numeric
-    {
-    public:
+ public:
 
-        typedef Numeric::Ptr Ptr;
+   typedef Numeric::Ptr Ptr;
 
-        static AtomicValue::Ptr fromLexical(const QString &strNumeric);
+   static AtomicValue::Ptr fromLexical(const QString &strNumeric);
 
-        static Item fromValue(const xsInteger num);
+   static Item fromValue(const xsInteger num);
 
-        bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const;
+   bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const;
 
-        virtual QString stringValue() const;
-        virtual ItemType::Ptr type() const;
+   virtual QString stringValue() const;
+   virtual ItemType::Ptr type() const;
 
-        virtual xsDouble toDouble() const;
-        virtual xsInteger toInteger() const;
-        virtual xsFloat toFloat() const;
-        virtual xsDecimal toDecimal() const;
+   virtual xsDouble toDouble() const;
+   virtual xsInteger toInteger() const;
+   virtual xsFloat toFloat() const;
+   virtual xsDecimal toDecimal() const;
 
-        virtual Numeric::Ptr round() const;
-        virtual Numeric::Ptr roundHalfToEven(const xsInteger scale) const;
-        virtual Numeric::Ptr floor() const;
-        virtual Numeric::Ptr ceiling() const;
-        virtual Numeric::Ptr abs() const;
-        virtual qulonglong toUnsignedInteger() const;
+   virtual Numeric::Ptr round() const;
+   virtual Numeric::Ptr roundHalfToEven(const xsInteger scale) const;
+   virtual Numeric::Ptr floor() const;
+   virtual Numeric::Ptr ceiling() const;
+   virtual Numeric::Ptr abs() const;
+   virtual qulonglong toUnsignedInteger() const;
 
-        /**
-         * @returns always @c false, @c xs:integer doesn't have
-         * not-a-number in its value space.
-         */
-        virtual bool isNaN() const;
+   /**
+    * @returns always @c false, @c xs:integer doesn't have
+    * not-a-number in its value space.
+    */
+   virtual bool isNaN() const;
 
-        /**
-         * @returns always @c false, @c xs:integer doesn't have
-         * infinity in its value space.
-         */
-        virtual bool isInf() const;
-        virtual Item toNegated() const;
+   /**
+    * @returns always @c false, @c xs:integer doesn't have
+    * infinity in its value space.
+    */
+   virtual bool isInf() const;
+   virtual Item toNegated() const;
 
-        /**
-         * @short Returns always @c true.
-         */
-        virtual bool isSigned() const;
-    protected:
-        Integer(const xsInteger num);
+   /**
+    * @short Returns always @c true.
+    */
+   virtual bool isSigned() const;
+ protected:
+   Integer(const xsInteger num);
 
-    private:
-        const xsInteger m_value;
-    };
+ private:
+   const xsInteger m_value;
+};
 }
 
 QT_END_NAMESPACE

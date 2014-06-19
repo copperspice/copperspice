@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -62,7 +62,7 @@ QT_BEGIN_NAMESPACE
   load() is called.
  */
 QXmlSchema::QXmlSchema()
-    : d(new QXmlSchemaPrivate(QXmlNamePool()))
+   : d(new QXmlSchemaPrivate(QXmlNamePool()))
 {
 }
 
@@ -72,7 +72,7 @@ QXmlSchema::QXmlSchema()
   to the extent possible.
  */
 QXmlSchema::QXmlSchema(const QXmlSchema &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -98,8 +98,8 @@ QXmlSchema::~QXmlSchema()
  */
 bool QXmlSchema::load(const QUrl &source)
 {
-    d->load(source, QString());
-    return d->isValid();
+   d->load(source, QString());
+   return d->isValid();
 }
 
 /*!
@@ -126,8 +126,8 @@ bool QXmlSchema::load(const QUrl &source)
  */
 bool QXmlSchema::load(QIODevice *source, const QUrl &documentUri)
 {
-    d->load(source, documentUri, QString());
-    return d->isValid();
+   d->load(source, documentUri, QString());
+   return d->isValid();
 }
 
 /*!
@@ -152,8 +152,8 @@ bool QXmlSchema::load(QIODevice *source, const QUrl &documentUri)
  */
 bool QXmlSchema::load(const QByteArray &data, const QUrl &documentUri)
 {
-    d->load(data, documentUri, QString());
-    return d->isValid();
+   d->load(data, documentUri, QString());
+   return d->isValid();
 }
 
 /*!
@@ -163,7 +163,7 @@ bool QXmlSchema::load(const QByteArray &data, const QUrl &documentUri)
  */
 bool QXmlSchema::isValid() const
 {
-    return d->isValid();
+   return d->isValid();
 }
 
 /*!
@@ -173,7 +173,7 @@ bool QXmlSchema::isValid() const
  */
 QXmlNamePool QXmlSchema::namePool() const
 {
-    return d->namePool();
+   return d->namePool();
 }
 
 /*!
@@ -182,7 +182,7 @@ QXmlNamePool QXmlSchema::namePool() const
  */
 QUrl QXmlSchema::documentUri() const
 {
-    return d->documentUri();
+   return d->documentUri();
 }
 
 /*!
@@ -222,7 +222,7 @@ QUrl QXmlSchema::documentUri() const
  */
 void QXmlSchema::setMessageHandler(QAbstractMessageHandler *handler)
 {
-    d->setMessageHandler(handler);
+   d->setMessageHandler(handler);
 }
 
 /*!
@@ -231,7 +231,7 @@ void QXmlSchema::setMessageHandler(QAbstractMessageHandler *handler)
  */
 QAbstractMessageHandler *QXmlSchema::messageHandler() const
 {
-    return d->messageHandler();
+   return d->messageHandler();
 }
 
 /*!
@@ -242,7 +242,7 @@ QAbstractMessageHandler *QXmlSchema::messageHandler() const
  */
 void QXmlSchema::setUriResolver(const QAbstractUriResolver *resolver)
 {
-    d->setUriResolver(resolver);
+   d->setUriResolver(resolver);
 }
 
 /*!
@@ -261,7 +261,7 @@ void QXmlSchema::setUriResolver(const QAbstractUriResolver *resolver)
  */
 const QAbstractUriResolver *QXmlSchema::uriResolver() const
 {
-    return d->uriResolver();
+   return d->uriResolver();
 }
 
 /*!
@@ -272,7 +272,7 @@ const QAbstractUriResolver *QXmlSchema::uriResolver() const
  */
 void QXmlSchema::setNetworkAccessManager(QNetworkAccessManager *manager)
 {
-    d->setNetworkAccessManager(manager);
+   d->setNetworkAccessManager(manager);
 }
 
 /*!
@@ -282,7 +282,7 @@ void QXmlSchema::setNetworkAccessManager(QNetworkAccessManager *manager)
  */
 QNetworkAccessManager *QXmlSchema::networkAccessManager() const
 {
-    return d->networkAccessManager();
+   return d->networkAccessManager();
 }
 
 QT_END_NAMESPACE

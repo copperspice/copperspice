@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,37 +32,36 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+template <const QXmlNodeModelIndex::NodeKind kind>
+class BuiltinNodeType : public AnyNodeType
 {
+ public:
+   virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
+   virtual bool itemMatches(const Item &item) const;
 
-    template <const QXmlNodeModelIndex::NodeKind kind>
-    class BuiltinNodeType : public AnyNodeType
-    {
-    public:
-        virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
-        virtual bool itemMatches(const Item &item) const;
+   /**
+    * @returns for example "text()", depending on what the constructor was passed
+    */
+   virtual QString displayName(const NamePool::Ptr &np) const;
 
-        /**
-         * @returns for example "text()", depending on what the constructor was passed
-         */
-        virtual QString displayName(const NamePool::Ptr &np) const;
+   virtual ItemType::Ptr xdtSuperType() const;
+   virtual ItemType::Ptr atomizedType() const;
 
-        virtual ItemType::Ptr xdtSuperType() const;
-        virtual ItemType::Ptr atomizedType() const;
+   QXmlNodeModelIndex::NodeKind nodeKind() const;
 
-        QXmlNodeModelIndex::NodeKind nodeKind() const;
+   PatternPriority patternPriority() const;
 
-        PatternPriority patternPriority() const;
+ protected:
+   friend class BuiltinTypes;
 
-    protected:
-        friend class BuiltinTypes;
-
-        /**
-         * This constructor does nothing, but exists in order to make it impossible to
-         * instantiate this class from anywhere but from BuiltinTypes.
-         */
-        BuiltinNodeType();
-    };
+   /**
+    * This constructor does nothing, but exists in order to make it impossible to
+    * instantiate this class from anywhere but from BuiltinTypes.
+    */
+   BuiltinNodeType();
+};
 
 #include "qbuiltinnodetype.cpp"
 

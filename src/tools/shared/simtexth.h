@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,22 +35,23 @@ QT_BEGIN_NAMESPACE
 
 class Translator;
 
-struct Candidate
-{
-    Candidate() {}
-    Candidate(const QString& source0, const QString &target0)
-	: source(source0), target(target0)
-    {}
+struct Candidate {
+   Candidate() {}
+   Candidate(const QString &source0, const QString &target0)
+      : source(source0), target(target0) {
+   }
 
-    QString source;
-    QString target;
+   QString source;
+   QString target;
 };
 
-inline bool operator==( const Candidate& c, const Candidate& d ) {
-    return c.target == d.target && c.source == d.source;
+inline bool operator==( const Candidate &c, const Candidate &d )
+{
+   return c.target == d.target && c.source == d.source;
 }
-inline bool operator!=( const Candidate& c, const Candidate& d ) {
-    return !operator==( c, d );
+inline bool operator!=( const Candidate &c, const Candidate &d )
+{
+   return !operator==( c, d );
 }
 
 typedef QList<Candidate> CandidateList;
@@ -62,22 +63,23 @@ struct CoMatrix;
  * after that we just call getSimilarityScore(strCandidate).
  * \sa getSimilarityScore
  */
-class StringSimilarityMatcher {
-public:
-    StringSimilarityMatcher(const QString &stringToMatch);
-    ~StringSimilarityMatcher();
-    int getSimilarityScore(const QString &strCandidate);
+class StringSimilarityMatcher
+{
+ public:
+   StringSimilarityMatcher(const QString &stringToMatch);
+   ~StringSimilarityMatcher();
+   int getSimilarityScore(const QString &strCandidate);
 
-private:
-    CoMatrix *m_cm;
-    int m_length;
+ private:
+   CoMatrix *m_cm;
+   int m_length;
 };
 
 int getSimilarityScore(const QString &str1, const QString &str2);
 
 CandidateList similarTextHeuristicCandidates( const Translator *tor,
-					      const QString &text,
-					      int maxCandidates );
+      const QString &text,
+      int maxCandidates );
 
 QT_END_NAMESPACE
 

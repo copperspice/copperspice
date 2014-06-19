@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,50 +31,54 @@
 QT_BEGIN_NAMESPACE
 
 DatabaseInfo::DatabaseInfo(Driver *drv)
-    : driver(drv)
+   : driver(drv)
 {
 }
 
 void DatabaseInfo::acceptUI(DomUI *node)
 {
-    m_connections.clear();
-    m_cursors.clear();
-    m_fields.clear();
+   m_connections.clear();
+   m_cursors.clear();
+   m_fields.clear();
 
-    TreeWalker::acceptUI(node);
+   TreeWalker::acceptUI(node);
 
-    m_connections = unique(m_connections);
+   m_connections = unique(m_connections);
 }
 
 void DatabaseInfo::acceptWidget(DomWidget *node)
 {
-    QHash<QString, DomProperty*> properties = propertyMap(node->elementProperty());
+   QHash<QString, DomProperty *> properties = propertyMap(node->elementProperty());
 
-    DomProperty *frameworkCode = properties.value(QLatin1String("frameworkCode"), 0);
-    if (frameworkCode && toBool(frameworkCode->elementBool()) == false)
-        return;
+   DomProperty *frameworkCode = properties.value(QLatin1String("frameworkCode"), 0);
+   if (frameworkCode && toBool(frameworkCode->elementBool()) == false) {
+      return;
+   }
 
-    DomProperty *db = properties.value(QLatin1String("database"), 0);
-    if (db && db->elementStringList()) {
-        QStringList info = db->elementStringList()->elementString();
+   DomProperty *db = properties.value(QLatin1String("database"), 0);
+   if (db && db->elementStringList()) {
+      QStringList info = db->elementStringList()->elementString();
 
-        QString connection = info.size() > 0 ? info.at(0) : QString();
-        if (connection.isEmpty())
-            return;
-        m_connections.append(connection);
+      QString connection = info.size() > 0 ? info.at(0) : QString();
+      if (connection.isEmpty()) {
+         return;
+      }
+      m_connections.append(connection);
 
-        QString table = info.size() > 1 ? info.at(1) : QString();
-        if (table.isEmpty())
-            return;
-        m_cursors[connection].append(table);
+      QString table = info.size() > 1 ? info.at(1) : QString();
+      if (table.isEmpty()) {
+         return;
+      }
+      m_cursors[connection].append(table);
 
-        QString field = info.size() > 2 ? info.at(2) : QString();
-        if (field.isEmpty())
-            return;
-        m_fields[connection].append(field);
-    }
+      QString field = info.size() > 2 ? info.at(2) : QString();
+      if (field.isEmpty()) {
+         return;
+      }
+      m_fields[connection].append(field);
+   }
 
-    TreeWalker::acceptWidget(node);
+   TreeWalker::acceptWidget(node);
 }
 
 QT_END_NAMESPACE

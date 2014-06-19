@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,37 +30,34 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{  
-    class StaticNamespacesContainer : public FunctionCall
-    {
-    public:
-        /**
-         * Reimplemented to store data from the @p context.
-         */
-        virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,const SequenceType::Ptr &reqType);
+namespace QPatternist {
+class StaticNamespacesContainer : public FunctionCall
+{
+ public:
+   /**
+    * Reimplemented to store data from the @p context.
+    */
+   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
 
-    protected:
-        /**
-         * Before typeCheck(), behavior of this function is undefined. After
-         * typeCheck(), this function guarantees to return a valid pointer.
-         */
-        inline const NamespaceResolver::Ptr &staticNamespaces() const
-        {
-            Q_ASSERT(m_resolver);
-            return m_resolver;
-        }
+ protected:
+   /**
+    * Before typeCheck(), behavior of this function is undefined. After
+    * typeCheck(), this function guarantees to return a valid pointer.
+    */
+   inline const NamespaceResolver::Ptr &staticNamespaces() const {
+      Q_ASSERT(m_resolver);
+      return m_resolver;
+   }
 
-        /**
-         * This constructor only exists to ensure this class is subclassed.
-         */
-        inline StaticNamespacesContainer()
-        {
-        }
+   /**
+    * This constructor only exists to ensure this class is subclassed.
+    */
+   inline StaticNamespacesContainer() {
+   }
 
-    private:
-        NamespaceResolver::Ptr m_resolver;
-    };
+ private:
+   NamespaceResolver::Ptr m_resolver;
+};
 }
 
 QT_END_NAMESPACE

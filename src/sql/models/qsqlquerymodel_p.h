@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,22 +38,22 @@ QT_BEGIN_NAMESPACE
 
 class QSqlQueryModelPrivate: public QAbstractItemModelPrivate
 {
-    Q_DECLARE_PUBLIC(QSqlQueryModel)
+   Q_DECLARE_PUBLIC(QSqlQueryModel)
 
-public:
-    QSqlQueryModelPrivate() : atEnd(false) {}
-    ~QSqlQueryModelPrivate();
-    
-    void prefetch(int);
-    void initColOffsets(int size);
+ public:
+   QSqlQueryModelPrivate() : atEnd(false) {}
+   ~QSqlQueryModelPrivate();
 
-    mutable QSqlQuery query;
-    mutable QSqlError error;
-    QModelIndex bottom;
-    QSqlRecord rec;
-    uint atEnd : 1;
-    QVector<QHash<int, QVariant> > headers;
-    QVarLengthArray<int, 56> colOffsets; // used to calculate indexInQuery of columns
+   void prefetch(int);
+   void initColOffsets(int size);
+
+   mutable QSqlQuery query;
+   mutable QSqlError error;
+   QModelIndex bottom;
+   QSqlRecord rec;
+   uint atEnd : 1;
+   QVector<QHash<int, QVariant> > headers;
+   QVarLengthArray<int, 56> colOffsets; // used to calculate indexInQuery of columns
 };
 
 QT_END_NAMESPACE

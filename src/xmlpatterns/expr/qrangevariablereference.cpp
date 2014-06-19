@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,44 +33,44 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 RangeVariableReference::RangeVariableReference(const Expression::Ptr &source,
-                                               const VariableSlotID slotP) : VariableReference(slotP),
-                                                                             m_sourceExpression(source)
+      const VariableSlotID slotP) : VariableReference(slotP),
+   m_sourceExpression(source)
 {
-    Q_ASSERT(source);
+   Q_ASSERT(source);
 }
 
 bool RangeVariableReference::evaluateEBV(const DynamicContext::Ptr &context) const
 {
-    Q_ASSERT_X(context->rangeVariable(slot()), Q_FUNC_INFO, "The range variable must be set.");
-    return Boolean::evaluateEBV(context->rangeVariable(slot()), context);
+   Q_ASSERT_X(context->rangeVariable(slot()), Q_FUNC_INFO, "The range variable must be set.");
+   return Boolean::evaluateEBV(context->rangeVariable(slot()), context);
 }
 
 Item RangeVariableReference::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    Q_ASSERT_X(context->rangeVariable(slot()), Q_FUNC_INFO, "The range variable must be set.");
-    return context->rangeVariable(slot());
+   Q_ASSERT_X(context->rangeVariable(slot()), Q_FUNC_INFO, "The range variable must be set.");
+   return context->rangeVariable(slot());
 }
 
 SequenceType::Ptr RangeVariableReference::staticType() const
 {
-    return makeGenericSequenceType(m_sourceExpression->staticType()->itemType(),
-                                   Cardinality::exactlyOne());
+   return makeGenericSequenceType(m_sourceExpression->staticType()->itemType(),
+                                  Cardinality::exactlyOne());
 }
 
 Expression::ID RangeVariableReference::id() const
 {
-    return IDRangeVariableReference;
+   return IDRangeVariableReference;
 }
 
 ExpressionVisitorResult::Ptr
 RangeVariableReference::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 Expression::Properties RangeVariableReference::properties() const
 {
-    return DependsOnLocalVariable;
+   return DependsOnLocalVariable;
 }
 
 QT_END_NAMESPACE

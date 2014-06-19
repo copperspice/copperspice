@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,53 +41,53 @@ class QScriptClassPropertyIterator;
 class QScriptClassPrivate;
 class Q_SCRIPT_EXPORT QScriptClass
 {
-public:
-    enum QueryFlag {
-        HandlesReadAccess = 0x01,
-        HandlesWriteAccess = 0x02
-    };
-    using QueryFlags = QFlags<QueryFlag>;
+ public:
+   enum QueryFlag {
+      HandlesReadAccess = 0x01,
+      HandlesWriteAccess = 0x02
+   };
+   using QueryFlags = QFlags<QueryFlag>;
 
-    enum Extension {
-        Callable,
-        HasInstance
-    };
+   enum Extension {
+      Callable,
+      HasInstance
+   };
 
-    QScriptClass(QScriptEngine *engine);
-    virtual ~QScriptClass();
+   QScriptClass(QScriptEngine *engine);
+   virtual ~QScriptClass();
 
-    QScriptEngine *engine() const;
+   QScriptEngine *engine() const;
 
-    virtual QueryFlags queryProperty(const QScriptValue &object,
-                                     const QScriptString &name,
-                                     QueryFlags flags, uint *id);
+   virtual QueryFlags queryProperty(const QScriptValue &object,
+                                    const QScriptString &name,
+                                    QueryFlags flags, uint *id);
 
-    virtual QScriptValue property(const QScriptValue &object,
-                                  const QScriptString &name, uint id);
+   virtual QScriptValue property(const QScriptValue &object,
+                                 const QScriptString &name, uint id);
 
-    virtual void setProperty(QScriptValue &object, const QScriptString &name,
-                             uint id, const QScriptValue &value);
+   virtual void setProperty(QScriptValue &object, const QScriptString &name,
+                            uint id, const QScriptValue &value);
 
-    virtual QScriptValue::PropertyFlags propertyFlags(
-        const QScriptValue &object, const QScriptString &name, uint id);
+   virtual QScriptValue::PropertyFlags propertyFlags(
+      const QScriptValue &object, const QScriptString &name, uint id);
 
-    virtual QScriptClassPropertyIterator *newIterator(const QScriptValue &object);
+   virtual QScriptClassPropertyIterator *newIterator(const QScriptValue &object);
 
-    virtual QScriptValue prototype() const;
+   virtual QScriptValue prototype() const;
 
-    virtual QString name() const;
+   virtual QString name() const;
 
-    virtual bool supportsExtension(Extension extension) const;
-    virtual QVariant extension(Extension extension,
-                               const QVariant &argument = QVariant());
+   virtual bool supportsExtension(Extension extension) const;
+   virtual QVariant extension(Extension extension,
+                              const QVariant &argument = QVariant());
 
-protected:
-    QScriptClass(QScriptEngine *engine, QScriptClassPrivate &dd);
-    QScopedPointer<QScriptClassPrivate> d_ptr;
+ protected:
+   QScriptClass(QScriptEngine *engine, QScriptClassPrivate &dd);
+   QScopedPointer<QScriptClassPrivate> d_ptr;
 
-private:
-    Q_DECLARE_PRIVATE(QScriptClass)
-    Q_DISABLE_COPY(QScriptClass)
+ private:
+   Q_DECLARE_PRIVATE(QScriptClass)
+   Q_DISABLE_COPY(QScriptClass)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QScriptClass::QueryFlags)

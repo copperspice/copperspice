@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,60 +38,62 @@ QT_BEGIN_NAMESPACE
 namespace CPP {
 
 WriteIconInitialization::WriteIconInitialization(Uic *uic)
-    : driver(uic->driver()), output(uic->output()), option(uic->option())
+   : driver(uic->driver()), output(uic->output()), option(uic->option())
 {
-    this->uic = uic;
+   this->uic = uic;
 }
 
 void WriteIconInitialization::acceptUI(DomUI *node)
 {
-    if (node->elementImages() == 0)
-        return;
+   if (node->elementImages() == 0) {
+      return;
+   }
 
-    QString className = node->elementClass() + option.postfix;
+   QString className = node->elementClass() + option.postfix;
 
-    output << option.indent << "static QPixmap " << iconFromDataFunction() << "(IconID id)\n"
-           << option.indent << "{\n";
+   output << option.indent << "static QPixmap " << iconFromDataFunction() << "(IconID id)\n"
+          << option.indent << "{\n";
 
-    WriteIconData(uic).acceptUI(node);
+   WriteIconData(uic).acceptUI(node);
 
-    output << option.indent << "switch (id) {\n";
+   output << option.indent << "switch (id) {\n";
 
-    TreeWalker::acceptUI(node);
+   TreeWalker::acceptUI(node);
 
-    output << option.indent << option.indent << "default: return QPixmap();\n";
+   output << option.indent << option.indent << "default: return QPixmap();\n";
 
-    output << option.indent << "} // switch\n"
-           << option.indent << "} // icon\n\n";
+   output << option.indent << "} // switch\n"
+          << option.indent << "} // icon\n\n";
 }
 
 QString WriteIconInitialization::iconFromDataFunction()
 {
-    return QLatin1String("qt_get_icon");
+   return QLatin1String("qt_get_icon");
 }
 
 void WriteIconInitialization::acceptImages(DomImages *images)
 {
-    TreeWalker::acceptImages(images);
+   TreeWalker::acceptImages(images);
 }
 
 void WriteIconInitialization::acceptImage(DomImage *image)
 {
-    QString img = image->attributeName() + QLatin1String("_data");
-    QString data = image->elementData()->text();
-    QString fmt = image->elementData()->attributeFormat();
+   QString img = image->attributeName() + QLatin1String("_data");
+   QString data = image->elementData()->text();
+   QString fmt = image->elementData()->attributeFormat();
 
-    QString imageId = image->attributeName() + QLatin1String("_ID");
-    QString imageData = image->attributeName() + QLatin1String("_data");
-    QString ind = option.indent + option.indent;
+   QString imageId = image->attributeName() + QLatin1String("_ID");
+   QString imageData = image->attributeName() + QLatin1String("_data");
+   QString ind = option.indent + option.indent;
 
-    output << ind << "case " << imageId << ": ";
+   output << ind << "case " << imageId << ": ";
 
-    if (fmt == QLatin1String("XPM.GZ")) {
-        output << "return " << "QPixmap((const char**)" << imageData << ");\n";
-    } else {
-        output << " { QImage img; img.loadFromData(" << imageData << ", sizeof(" << imageData << "), " << fixString(fmt, ind) << "); return QPixmap::fromImage(img); }\n";
-    }
+   if (fmt == QLatin1String("XPM.GZ")) {
+      output << "return " << "QPixmap((const char**)" << imageData << ");\n";
+   } else {
+      output << " { QImage img; img.loadFromData(" << imageData << ", sizeof(" << imageData << "), " << fixString(fmt,
+             ind) << "); return QPixmap::fromImage(img); }\n";
+   }
 }
 
 } // namespace CPP

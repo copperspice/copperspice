@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,49 +35,48 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class VariableLoader : public ExternalVariableLoader
 {
-    class VariableLoader : public ExternalVariableLoader
-    {
-    public:
-        typedef QHash<QXmlName, QVariant> BindingHash;
-        typedef QExplicitlySharedDataPointer<VariableLoader> Ptr;
+ public:
+   typedef QHash<QXmlName, QVariant> BindingHash;
+   typedef QExplicitlySharedDataPointer<VariableLoader> Ptr;
 
-        inline VariableLoader(const NamePool::Ptr &np,
-                              const VariableLoader::Ptr &previousLoader = VariableLoader::Ptr()) : m_namePool(np)
-                                                                                                 , m_previousLoader(previousLoader)
+   inline VariableLoader(const NamePool::Ptr &np,
+                         const VariableLoader::Ptr &previousLoader = VariableLoader::Ptr()) : m_namePool(np)
+      , m_previousLoader(previousLoader)
 
-        {
-        }
+   {
+   }
 
-        virtual QPatternist::SequenceType::Ptr announceExternalVariable(const QXmlName name,
-                                                                        const QPatternist::SequenceType::Ptr &declaredType);
-        virtual QPatternist::Item::Iterator::Ptr evaluateSequence(const QXmlName name,
-                                                                  const QPatternist::DynamicContext::Ptr &);
+   virtual QPatternist::SequenceType::Ptr announceExternalVariable(const QXmlName name,
+         const QPatternist::SequenceType::Ptr &declaredType);
+   virtual QPatternist::Item::Iterator::Ptr evaluateSequence(const QXmlName name,
+         const QPatternist::DynamicContext::Ptr &);
 
-        virtual QPatternist::Item evaluateSingleton(const QXmlName name,
-                                                    const QPatternist::DynamicContext::Ptr &);
+   virtual QPatternist::Item evaluateSingleton(const QXmlName name,
+         const QPatternist::DynamicContext::Ptr &);
 
-        void removeBinding(const QXmlName &name);
-        bool hasBinding(const QXmlName &name) const;
-        QVariant valueFor(const QXmlName &name) const;
-        void addBinding(const QXmlName &name,
-                        const QVariant &value);
+   void removeBinding(const QXmlName &name);
+   bool hasBinding(const QXmlName &name) const;
+   QVariant valueFor(const QXmlName &name) const;
+   void addBinding(const QXmlName &name,
+                   const QVariant &value);
 
-        bool isSameType(const QVariant &v1,
-                        const QVariant &v2) const;
+   bool isSameType(const QVariant &v1,
+                   const QVariant &v2) const;
 
-        bool invalidationRequired(const QXmlName &name,
-                                  const QVariant &variant) const;
+   bool invalidationRequired(const QXmlName &name,
+                             const QVariant &variant) const;
 
-    private:
+ private:
 
-        inline QPatternist::Item itemForName(const QXmlName &name) const;
+   inline QPatternist::Item itemForName(const QXmlName &name) const;
 
-        const NamePool::Ptr                 m_namePool;
-        VariableLoader::Ptr                 m_previousLoader;
-        BindingHash                         m_bindingHash;
-    };
+   const NamePool::Ptr                 m_namePool;
+   VariableLoader::Ptr                 m_previousLoader;
+   BindingHash                         m_bindingHash;
+};
 }
 
 QT_END_NAMESPACE

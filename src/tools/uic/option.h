@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,57 +31,55 @@
 
 QT_BEGIN_NAMESPACE
 
-struct Option
-{
-    enum Generator
-    {
-        CppGenerator,
-        JavaGenerator
-    };
+struct Option {
+   enum Generator {
+      CppGenerator,
+      JavaGenerator
+   };
 
-    unsigned int headerProtection : 1;
-    unsigned int copyrightHeader : 1;
-    unsigned int generateImplemetation : 1;
-    unsigned int generateNamespace : 1;
-    unsigned int autoConnection : 1;
-    unsigned int dependencies : 1;
-    unsigned int extractImages : 1;
-    unsigned int limitXPM_LineLength : 1;
-    unsigned int implicitIncludes: 1;
-    Generator generator;
+   unsigned int headerProtection : 1;
+   unsigned int copyrightHeader : 1;
+   unsigned int generateImplemetation : 1;
+   unsigned int generateNamespace : 1;
+   unsigned int autoConnection : 1;
+   unsigned int dependencies : 1;
+   unsigned int extractImages : 1;
+   unsigned int limitXPM_LineLength : 1;
+   unsigned int implicitIncludes: 1;
+   Generator generator;
 
-    QString inputFile;
-    QString outputFile;
-    QString qrcOutputFile;
-    QString indent;
-    QString prefix;
-    QString postfix;
-    QString translateFunction;
+   QString inputFile;
+   QString outputFile;
+   QString qrcOutputFile;
+   QString indent;
+   QString prefix;
+   QString postfix;
+   QString translateFunction;
 #ifdef QT_UIC_JAVA_GENERATOR
-    QString javaPackage;
-    QString javaOutputDirectory;
+   QString javaPackage;
+   QString javaOutputDirectory;
 #endif
 
-    Option()
-        : headerProtection(1),
-          copyrightHeader(1),
-          generateImplemetation(0),
-          generateNamespace(1),
-          autoConnection(1),
-          dependencies(0),
-          extractImages(0),
-          limitXPM_LineLength(0),
-          implicitIncludes(1),
-          generator(CppGenerator),
-          prefix(QLatin1String("Ui_"))
-    { indent.fill(QLatin1Char(' '), 4); }
+   Option()
+      : headerProtection(1),
+        copyrightHeader(1),
+        generateImplemetation(0),
+        generateNamespace(1),
+        autoConnection(1),
+        dependencies(0),
+        extractImages(0),
+        limitXPM_LineLength(0),
+        implicitIncludes(1),
+        generator(CppGenerator),
+        prefix(QLatin1String("Ui_")) {
+      indent.fill(QLatin1Char(' '), 4);
+   }
 
-    QString messagePrefix() const
-    {
-        return inputFile.isEmpty() ?
-               QString(QLatin1String("stdin")) :
-               QDir::toNativeSeparators(inputFile);
-    }
+   QString messagePrefix() const {
+      return inputFile.isEmpty() ?
+             QString(QLatin1String("stdin")) :
+             QDir::toNativeSeparators(inputFile);
+   }
 };
 
 QT_END_NAMESPACE

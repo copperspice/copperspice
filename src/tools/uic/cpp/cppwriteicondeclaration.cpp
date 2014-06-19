@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,28 +35,29 @@ QT_BEGIN_NAMESPACE
 namespace CPP {
 
 WriteIconDeclaration::WriteIconDeclaration(Uic *uic)
-    : driver(uic->driver()), output(uic->output()), option(uic->option())
+   : driver(uic->driver()), output(uic->output()), option(uic->option())
 {
 }
 
 void WriteIconDeclaration::acceptUI(DomUI *node)
 {
-    TreeWalker::acceptUI(node);
+   TreeWalker::acceptUI(node);
 }
 
 void WriteIconDeclaration::acceptImages(DomImages *images)
 {
-    TreeWalker::acceptImages(images);
+   TreeWalker::acceptImages(images);
 }
 
 void WriteIconDeclaration::acceptImage(DomImage *image)
 {
-    QString name = image->attributeName();
-    if (name.isEmpty())
-        return;
+   QString name = image->attributeName();
+   if (name.isEmpty()) {
+      return;
+   }
 
-    driver->insertPixmap(name);
-    output << option.indent << option.indent << name << "_ID,\n";
+   driver->insertPixmap(name);
+   output << option.indent << option.indent << name << "_ID,\n";
 }
 
 } // namespace CPP

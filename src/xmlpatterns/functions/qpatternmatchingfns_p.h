@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,50 +30,49 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{   
-    class MatchesFN : public PatternPlatform
-    {
-    public:
-        MatchesFN();
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-    };
- 
-    class ReplaceFN : public PatternPlatform
-    {
-    public:
-        ReplaceFN();
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-        /**
-         * Overridden to attempt to pre-compile the replacement string.
-         */
-        virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+namespace QPatternist {
+class MatchesFN : public PatternPlatform
+{
+ public:
+   MatchesFN();
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+};
 
-    private:
-        /**
-         * @short Centralizes the translation string.
-         */
-        static inline QString errorAtEnd(const char ch);
+class ReplaceFN : public PatternPlatform
+{
+ public:
+   ReplaceFN();
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   /**
+    * Overridden to attempt to pre-compile the replacement string.
+    */
+   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
 
-        /**
-         * Reads the string in the third argument and converts it to a a QRegExp compatible
-         * replacement string, containing sub-group references and so forth.
-         */
-        QString parseReplacement(const int captureCount,const DynamicContext::Ptr &context) const;
+ private:
+   /**
+    * @short Centralizes the translation string.
+    */
+   static inline QString errorAtEnd(const char ch);
 
-        QString m_replacementString;
-    };
+   /**
+    * Reads the string in the third argument and converts it to a a QRegExp compatible
+    * replacement string, containing sub-group references and so forth.
+    */
+   QString parseReplacement(const int captureCount, const DynamicContext::Ptr &context) const;
 
-    class TokenizeFN : public PatternPlatform
-    {
-    public:
-        TokenizeFN();
-        inline Item mapToItem(const QString &subject, const DynamicContext::Ptr &) const;
-        virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+   QString m_replacementString;
+};
 
-    private:
-        typedef QExplicitlySharedDataPointer<const TokenizeFN> ConstPtr;
-    };
+class TokenizeFN : public PatternPlatform
+{
+ public:
+   TokenizeFN();
+   inline Item mapToItem(const QString &subject, const DynamicContext::Ptr &) const;
+   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+
+ private:
+   typedef QExplicitlySharedDataPointer<const TokenizeFN> ConstPtr;
+};
 }
 
 QT_END_NAMESPACE

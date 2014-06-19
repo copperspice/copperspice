@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,104 +30,93 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class ProjectedExpression
 {
-    class ProjectedExpression
-    {
-    public:
-        typedef ProjectedExpression * Ptr;
-        typedef QVector<ProjectedExpression::Ptr> Vector;
-        virtual ~ProjectedExpression()
-        {
-        }
+ public:
+   typedef ProjectedExpression *Ptr;
+   typedef QVector<ProjectedExpression::Ptr> Vector;
+   virtual ~ProjectedExpression() {
+   }
 
-        enum Action
-        {
-            Move = 0,
-            Skip = 1,
-            Keep = 2,
-            KeepSubtree = 4 | Keep
-        };
+   enum Action {
+      Move = 0,
+      Skip = 1,
+      Keep = 2,
+      KeepSubtree = 4 | Keep
+   };
 
-        virtual Action actionForElement(const QXmlName name,
-                                        ProjectedExpression::Ptr &next) const
-        {
-            Q_UNUSED(name);
-            Q_UNUSED(next);
-            return Skip;
-        }
+   virtual Action actionForElement(const QXmlName name,
+                                   ProjectedExpression::Ptr &next) const {
+      Q_UNUSED(name);
+      Q_UNUSED(next);
+      return Skip;
+   }
 
-    };
+};
 
-    class ProjectedNodeTest
-    {
-    public:
-        typedef ProjectedNodeTest * Ptr;
-        virtual ~ProjectedNodeTest()
-        {
-        }
+class ProjectedNodeTest
+{
+ public:
+   typedef ProjectedNodeTest *Ptr;
+   virtual ~ProjectedNodeTest() {
+   }
 
-        virtual bool isMatch(const QXmlNodeModelIndex::NodeKind kind) const
-        {
-            Q_UNUSED(kind);
-            return false;
-        }
-    };
+   virtual bool isMatch(const QXmlNodeModelIndex::NodeKind kind) const {
+      Q_UNUSED(kind);
+      return false;
+   }
+};
 
-    class ProjectedStep : public ProjectedExpression
-    {
-    public:
-        ProjectedStep(const ProjectedNodeTest::Ptr test,
-                      const QXmlNodeModelIndex::Axis axis) : m_test(test),
-                                               m_axis(axis)
-        {
-            Q_ASSERT(m_test);
-        }
+class ProjectedStep : public ProjectedExpression
+{
+ public:
+   ProjectedStep(const ProjectedNodeTest::Ptr test,
+                 const QXmlNodeModelIndex::Axis axis) : m_test(test),
+      m_axis(axis) {
+      Q_ASSERT(m_test);
+   }
 
-        virtual Action actionForElement(const QXmlName name,
-                                        ProjectedExpression::Ptr &next) const
-        {
-            Q_UNUSED(name);
-            Q_UNUSED(next);
-            // TODO
-            return Skip;
-        }
+   virtual Action actionForElement(const QXmlName name,
+                                   ProjectedExpression::Ptr &next) const {
+      Q_UNUSED(name);
+      Q_UNUSED(next);
+      // TODO
+      return Skip;
+   }
 
-    private:
-        const ProjectedNodeTest::Ptr    m_test;
-        const QXmlNodeModelIndex::Axis                m_axis;
-    };
+ private:
+   const ProjectedNodeTest::Ptr    m_test;
+   const QXmlNodeModelIndex::Axis                m_axis;
+};
 
-    class ProjectedPath : public ProjectedExpression
-    {
-    public:
-        ProjectedPath(const ProjectedExpression::Ptr left,
-                      const ProjectedExpression::Ptr right) : m_left(left),
-                                                              m_right(right)
-        {
-            Q_ASSERT(m_left);
-            Q_ASSERT(m_right);
-        }
+class ProjectedPath : public ProjectedExpression
+{
+ public:
+   ProjectedPath(const ProjectedExpression::Ptr left,
+                 const ProjectedExpression::Ptr right) : m_left(left),
+      m_right(right) {
+      Q_ASSERT(m_left);
+      Q_ASSERT(m_right);
+   }
 
-        virtual Action actionForElement(const QXmlName name,
-                                        ProjectedExpression::Ptr &next) const
-        {
-            ProjectedExpression::Ptr &candidateNext = next;
-            const Action a = m_left->actionForElement(name, candidateNext);
+   virtual Action actionForElement(const QXmlName name,
+                                   ProjectedExpression::Ptr &next) const {
+      ProjectedExpression::Ptr &candidateNext = next;
+      const Action a = m_left->actionForElement(name, candidateNext);
 
-            if(a != Skip)
-            {
-                /* The test accepted it, so let's replace us with the new step. */
-                next = candidateNext;
-            }
+      if (a != Skip) {
+         /* The test accepted it, so let's replace us with the new step. */
+         next = candidateNext;
+      }
 
-            return a;
-        }
+      return a;
+   }
 
-    private:
-        const ProjectedExpression::Ptr  m_left;
-        const ProjectedExpression::Ptr  m_right;
-    };
+ private:
+   const ProjectedExpression::Ptr  m_left;
+   const ProjectedExpression::Ptr  m_right;
+};
 }
 
 QT_END_NAMESPACE

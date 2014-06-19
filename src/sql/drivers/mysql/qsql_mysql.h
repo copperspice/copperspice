@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -50,76 +50,76 @@ class QSqlRecordInfo;
 
 class QMYSQLResult : public QSqlResult
 {
-    friend class QMYSQLDriver;
-    friend class QMYSQLResultPrivate;
+   friend class QMYSQLDriver;
+   friend class QMYSQLResultPrivate;
 
-public:
-    explicit QMYSQLResult(const QMYSQLDriver* db);
-    ~QMYSQLResult();
+ public:
+   explicit QMYSQLResult(const QMYSQLDriver *db);
+   ~QMYSQLResult();
 
-    QVariant handle() const;
-protected:
-    void cleanup();
-    bool fetch(int i);
-    bool fetchNext();
-    bool fetchLast();
-    bool fetchFirst();
-    QVariant data(int field);
-    bool isNull(int field);
-    bool reset (const QString& query);
-    int size();
-    int numRowsAffected();
-    QVariant lastInsertId() const;
-    QSqlRecord record() const;
-    void virtual_hook(int id, void *data);
-    bool nextResult();
+   QVariant handle() const;
+ protected:
+   void cleanup();
+   bool fetch(int i);
+   bool fetchNext();
+   bool fetchLast();
+   bool fetchFirst();
+   QVariant data(int field);
+   bool isNull(int field);
+   bool reset (const QString &query);
+   int size();
+   int numRowsAffected();
+   QVariant lastInsertId() const;
+   QSqlRecord record() const;
+   void virtual_hook(int id, void *data);
+   bool nextResult();
 
 #if MYSQL_VERSION_ID >= 40108
-    bool prepare(const QString& stmt);
-    bool exec();
+   bool prepare(const QString &stmt);
+   bool exec();
 #endif
-private:
-    QMYSQLResultPrivate* d;
+ private:
+   QMYSQLResultPrivate *d;
 };
 
 class Q_EXPORT_SQLDRIVER_MYSQL QMYSQLDriver : public QSqlDriver
 {
-    CS_OBJECT(QMYSQLDriver)
-    friend class QMYSQLResult;
+   CS_OBJECT(QMYSQLDriver)
+   friend class QMYSQLResult;
 
-public:
-    explicit QMYSQLDriver(QObject *parent=0);
-    explicit QMYSQLDriver(MYSQL *con, QObject * parent=0);
-    ~QMYSQLDriver();
+ public:
+   explicit QMYSQLDriver(QObject *parent = 0);
+   explicit QMYSQLDriver(MYSQL *con, QObject *parent = 0);
+   ~QMYSQLDriver();
 
-    bool hasFeature(DriverFeature f) const;
-    bool open(const QString & db,
-               const QString & user,
-               const QString & password,
-               const QString & host,
-               int port,
-               const QString& connOpts);
-    void close();
+   bool hasFeature(DriverFeature f) const;
+   bool open(const QString &db,
+             const QString &user,
+             const QString &password,
+             const QString &host,
+             int port,
+             const QString &connOpts);
+   void close();
 
-    QSqlResult *createResult() const;
-    QStringList tables(QSql::TableType) const;
-    QSqlIndex primaryIndex(const QString& tablename) const;
-    QSqlRecord record(const QString& tablename) const;
-    QString formatValue(const QSqlField &field,
-                                     bool trimStrings) const;
-    QVariant handle() const;
-    QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
+   QSqlResult *createResult() const;
+   QStringList tables(QSql::TableType) const;
+   QSqlIndex primaryIndex(const QString &tablename) const;
+   QSqlRecord record(const QString &tablename) const;
+   QString formatValue(const QSqlField &field,
+                       bool trimStrings) const;
+   QVariant handle() const;
+   QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
 
-protected :
-    bool isIdentifierEscapedImplementation(const QString & identifier,IdentifierType type) const;
+ protected :
+   bool isIdentifierEscapedImplementation(const QString &identifier, IdentifierType type) const;
 
-    bool beginTransaction();
-    bool commitTransaction();
-    bool rollbackTransaction();
+   bool beginTransaction();
+   bool commitTransaction();
+   bool rollbackTransaction();
 
-private:
-    void init();
-    QMYSQLDriverPrivate* d;
+ private:
+   void init();
+   QMYSQLDriverPrivate *d;
 };
 
 QT_END_NAMESPACE

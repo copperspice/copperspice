@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,70 +40,70 @@ class QSvgGeneratorPrivate;
 
 class Q_SVG_EXPORT QSvgGenerator : public QPaintDevice
 {
-    CS_GADGET(QSvgGenerator)
-    Q_DECLARE_PRIVATE(QSvgGenerator)
+   CS_GADGET(QSvgGenerator)
+   Q_DECLARE_PRIVATE(QSvgGenerator)
 
-    SVG_CS_PROPERTY_READ(size, size)
-    SVG_CS_PROPERTY_WRITE(size, setSize)
+   SVG_CS_PROPERTY_READ(size, size)
+   SVG_CS_PROPERTY_WRITE(size, setSize)
 
-    SVG_CS_PROPERTY_READ(viewBox, viewBoxF)
-    SVG_CS_PROPERTY_WRITE(viewBox, cs_setViewBox)
+   SVG_CS_PROPERTY_READ(viewBox, viewBoxF)
+   SVG_CS_PROPERTY_WRITE(viewBox, cs_setViewBox)
 
-    SVG_CS_PROPERTY_READ(title, title)
-    SVG_CS_PROPERTY_WRITE(title, setTitle)
+   SVG_CS_PROPERTY_READ(title, title)
+   SVG_CS_PROPERTY_WRITE(title, setTitle)
 
-    SVG_CS_PROPERTY_READ(description, description)
-    SVG_CS_PROPERTY_WRITE(description, setDescription)
+   SVG_CS_PROPERTY_READ(description, description)
+   SVG_CS_PROPERTY_WRITE(description, setDescription)
 
-    SVG_CS_PROPERTY_READ(fileName, fileName)
-    SVG_CS_PROPERTY_WRITE(fileName, setFileName)
+   SVG_CS_PROPERTY_READ(fileName, fileName)
+   SVG_CS_PROPERTY_WRITE(fileName, setFileName)
 
-    SVG_CS_PROPERTY_READ(outputDevice, outputDevice)
-    SVG_CS_PROPERTY_WRITE(outputDevice, setOutputDevice)
+   SVG_CS_PROPERTY_READ(outputDevice, outputDevice)
+   SVG_CS_PROPERTY_WRITE(outputDevice, setOutputDevice)
 
-    SVG_CS_PROPERTY_READ(resolution, resolution)
-    SVG_CS_PROPERTY_WRITE(resolution, setResolution)
+   SVG_CS_PROPERTY_READ(resolution, resolution)
+   SVG_CS_PROPERTY_WRITE(resolution, setResolution)
 
-public:
-    QSvgGenerator();
-    ~QSvgGenerator();
+ public:
+   QSvgGenerator();
+   ~QSvgGenerator();
 
-    QString title() const;
-    void setTitle(const QString &title);
+   QString title() const;
+   void setTitle(const QString &title);
 
-    QString description() const;
-    void setDescription(const QString &description);
+   QString description() const;
+   void setDescription(const QString &description);
 
-    QSize size() const;
-    void setSize(const QSize &size);
+   QSize size() const;
+   void setSize(const QSize &size);
 
-    QRect viewBox() const;
-    QRectF viewBoxF() const;
-    void setViewBox(const QRect &viewBox);
-    void setViewBox(const QRectF &viewBox);
+   QRect viewBox() const;
+   QRectF viewBoxF() const;
+   void setViewBox(const QRect &viewBox);
+   void setViewBox(const QRectF &viewBox);
 
-    // wrapper for overloaded method
-    inline void cs_setViewBox(const QRectF &viewBox);
-     
-    QString fileName() const;
-    void setFileName(const QString &fileName);
+   // wrapper for overloaded method
+   inline void cs_setViewBox(const QRectF &viewBox);
 
-    QIODevice *outputDevice() const;
-    void setOutputDevice(QIODevice *outputDevice);
+   QString fileName() const;
+   void setFileName(const QString &fileName);
 
-    void setResolution(int dpi);
-    int resolution() const;
+   QIODevice *outputDevice() const;
+   void setOutputDevice(QIODevice *outputDevice);
 
-protected:
-    QPaintEngine *paintEngine() const;
-    int metric(QPaintDevice::PaintDeviceMetric metric) const;
+   void setResolution(int dpi);
+   int resolution() const;
 
-private:
-    QScopedPointer<QSvgGeneratorPrivate> d_ptr;
+ protected:
+   QPaintEngine *paintEngine() const;
+   int metric(QPaintDevice::PaintDeviceMetric metric) const;
+
+ private:
+   QScopedPointer<QSvgGeneratorPrivate> d_ptr;
 };
 
-void QSvgGenerator::cs_setViewBox(const QRectF &viewBox) 
-{ 
+void QSvgGenerator::cs_setViewBox(const QRectF &viewBox)
+{
    setViewBox(viewBox);
 }
 

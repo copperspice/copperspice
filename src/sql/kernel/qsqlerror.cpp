@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,24 +30,24 @@ QT_BEGIN_NAMESPACE
 
 QDebug operator<<(QDebug dbg, const QSqlError &s)
 {
-    dbg.nospace() << "QSqlError(" << s.number() << ", " << s.driverText() <<
-                     ", " << s.databaseText() << ')';
-    return dbg.space();
+   dbg.nospace() << "QSqlError(" << s.number() << ", " << s.driverText() <<
+                 ", " << s.databaseText() << ')';
+   return dbg.space();
 }
 
-QSqlError::QSqlError(const QString& driverText, const QString& databaseText, ErrorType type,
-                    int number)
-    : driverError(driverText), databaseError(databaseText), errorType(type), errorNumber(number)
+QSqlError::QSqlError(const QString &driverText, const QString &databaseText, ErrorType type,
+                     int number)
+   : driverError(driverText), databaseError(databaseText), errorType(type), errorNumber(number)
 {
 }
 
 /*!
     Creates a copy of \a other.
 */
-QSqlError::QSqlError(const QSqlError& other)
-    : driverError(other.driverError), databaseError(other.databaseError),
-      errorType(other.errorType),
-      errorNumber(other.errorNumber)
+QSqlError::QSqlError(const QSqlError &other)
+   : driverError(other.driverError), databaseError(other.databaseError),
+     errorType(other.errorType),
+     errorNumber(other.errorNumber)
 {
 }
 
@@ -55,22 +55,22 @@ QSqlError::QSqlError(const QSqlError& other)
     Assigns the \a other error's values to this error.
 */
 
-QSqlError& QSqlError::operator=(const QSqlError& other)
+QSqlError &QSqlError::operator=(const QSqlError &other)
 {
-    driverError = other.driverError;
-    databaseError = other.databaseError;
-    errorType = other.errorType;
-    errorNumber = other.errorNumber;
-    return *this;
+   driverError = other.driverError;
+   databaseError = other.databaseError;
+   errorType = other.errorType;
+   errorNumber = other.errorNumber;
+   return *this;
 }
 
 /*!
     Compare the \a other error's values to this error and returns true, if it equal.
 */
 
-bool QSqlError::operator==(const QSqlError& other)
+bool QSqlError::operator==(const QSqlError &other)
 {
-    return (errorType == other.errorType);
+   return (errorType == other.errorType);
 }
 
 
@@ -78,9 +78,9 @@ bool QSqlError::operator==(const QSqlError& other)
     Compare the \a other error's values to this error and returns true if it is not equal.
 */
 
-bool QSqlError::operator!=(const QSqlError& other)
+bool QSqlError::operator!=(const QSqlError &other)
 {
-    return (errorType != other.errorType);
+   return (errorType != other.errorType);
 }
 
 
@@ -100,7 +100,7 @@ QSqlError::~QSqlError()
 */
 QString QSqlError::driverText() const
 {
-    return driverError;
+   return driverError;
 }
 
 /*!
@@ -109,9 +109,9 @@ QString QSqlError::driverText() const
     \sa driverText() setDatabaseText() text()
 */
 
-void QSqlError::setDriverText(const QString& driverText)
+void QSqlError::setDriverText(const QString &driverText)
 {
-    driverError = driverText;
+   driverError = driverText;
 }
 
 /*!
@@ -123,7 +123,7 @@ void QSqlError::setDriverText(const QString& driverText)
 
 QString QSqlError::databaseText() const
 {
-    return databaseError;
+   return databaseError;
 }
 
 /*!
@@ -132,9 +132,9 @@ QString QSqlError::databaseText() const
     \sa databaseText() setDriverText() text()
 */
 
-void QSqlError::setDatabaseText(const QString& databaseText)
+void QSqlError::setDatabaseText(const QString &databaseText)
 {
-    databaseError = databaseText;
+   databaseError = databaseText;
 }
 
 /*!
@@ -145,7 +145,7 @@ void QSqlError::setDatabaseText(const QString& databaseText)
 
 QSqlError::ErrorType QSqlError::type() const
 {
-    return errorType;
+   return errorType;
 }
 
 /*!
@@ -156,7 +156,7 @@ QSqlError::ErrorType QSqlError::type() const
 
 void QSqlError::setType(ErrorType type)
 {
-    errorType = type;
+   errorType = type;
 }
 
 /*!
@@ -168,7 +168,7 @@ void QSqlError::setType(ErrorType type)
 
 int QSqlError::number() const
 {
-    return errorNumber;
+   return errorNumber;
 }
 
 /*!
@@ -179,7 +179,7 @@ int QSqlError::number() const
 
 void QSqlError::setNumber(int number)
 {
-    errorNumber = number;
+   errorNumber = number;
 }
 
 /*!
@@ -191,11 +191,12 @@ void QSqlError::setNumber(int number)
 
 QString QSqlError::text() const
 {
-    QString result = databaseError;
-    if (!databaseError.endsWith(QLatin1String("\n")))
-        result += QLatin1Char(' ');
-    result += driverError;
-    return result;
+   QString result = databaseError;
+   if (!databaseError.endsWith(QLatin1String("\n"))) {
+      result += QLatin1Char(' ');
+   }
+   result += driverError;
+   return result;
 }
 
 /*!
@@ -208,7 +209,7 @@ QString QSqlError::text() const
 */
 bool QSqlError::isValid() const
 {
-    return errorType != NoError;
+   return errorType != NoError;
 }
 
 QT_END_NAMESPACE

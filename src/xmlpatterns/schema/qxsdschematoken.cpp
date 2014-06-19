@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,2935 +31,2839 @@ QT_BEGIN_NAMESPACE
 
 XsdSchemaToken::NodeName XsdSchemaToken::classifier2(const QChar *data)
 
-        {
-            
-                            static const unsigned short string[] =
-                            {
-                                105, 100
-                            };
-                            if(memcmp(&data[0], &string, sizeof(QChar) * 2) == 0)
-                        
+{
 
-                return Id;
-            
+   static const unsigned short string[] = {
+      105, 100
+   };
+   if (memcmp(&data[0], &string, sizeof(QChar) * 2) == 0)
 
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier3(const QChar *data)
 
-        {
-            if (data[0] == 97)
+   {
+      return Id;
+   }
 
 
-                    {
-                    if (data[1] == 108)
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier3(const QChar *data)
 
+{
+   if (data[0] == 97)
 
-                    {
-                    
-                            if(data[2] == 108)
-                        
 
-                return All;
-            
-                    }
+   {
+      if (data[1] == 108)
 
-                else if (data[1] == 110)
 
+      {
 
-                    {
-                    
-                            if(data[2] == 121)
-                        
+         if (data[2] == 108)
 
-                return Any;
-            
-                    }
 
-                
-                    }
+         {
+            return All;
+         }
 
-                else if (data[0] == 107)
+      }
 
+      else if (data[1] == 110)
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 121
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 2) == 0)
-                        
 
-                return Key;
-            
-                    }
+      {
 
-                else if (data[0] == 114)
+         if (data[2] == 121)
 
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 102
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 2) == 0)
-                        
+         {
+            return Any;
+         }
 
-                return Ref;
-            
-                    }
+      }
 
-                else if (data[0] == 117)
 
+   }
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                115, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 2) == 0)
-                        
+   else if (data[0] == 107)
 
-                return Use;
-            
-                    }
 
-                
+   {
 
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier4(const QChar *data)
+      static const unsigned short string[] = {
+         101, 121
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 2) == 0)
 
-        {
-            if (data[0] == 98)
 
+      {
+         return Key;
+      }
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                97, 115, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
-                        
+   }
 
-                return Base;
-            
-                    }
+   else if (data[0] == 114)
 
-                else if (data[0] == 102)
 
+   {
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                111, 114, 109
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
-                        
+      static const unsigned short string[] = {
+         101, 102
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 2) == 0)
 
-                return Form;
-            
-                    }
 
-                else if (data[0] == 108)
+      {
+         return Ref;
+      }
 
+   }
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                105, 115, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
-                        
+   else if (data[0] == 117)
 
-                return List;
-            
-                    }
 
-                else if (data[0] == 109)
+   {
 
+      static const unsigned short string[] = {
+         115, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 2) == 0)
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                111, 100, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
-                        
 
-                return Mode;
-            
-                    }
+      {
+         return Use;
+      }
 
-                else if (data[0] == 110)
+   }
 
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                97, 109, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
-                        
 
-                return Name;
-            
-                    }
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier4(const QChar *data)
 
-                else if (data[0] == 116)
+{
+   if (data[0] == 98)
 
 
-                    {
-                    if (data[1] == 101)
+   {
 
+      static const unsigned short string[] = {
+         97, 115, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                115, 116
-                            };
-                            if(memcmp(&data[2], &string, sizeof(QChar) * 2) == 0)
-                        
 
-                return Test;
-            
-                    }
+      {
+         return Base;
+      }
 
-                else if (data[1] == 121)
+   }
 
+   else if (data[0] == 102)
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                112, 101
-                            };
-                            if(memcmp(&data[2], &string, sizeof(QChar) * 2) == 0)
-                        
 
-                return Type;
-            
-                    }
+   {
 
-                
-                    }
+      static const unsigned short string[] = {
+         111, 114, 109
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
 
-                
 
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier5(const QChar *data)
+      {
+         return Form;
+      }
 
-        {
-            if (data[0] == 98)
+   }
 
+   else if (data[0] == 108)
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                108, 111, 99, 107
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
-                        
 
-                return Block;
-            
-                    }
+   {
 
-                else if (data[0] == 102)
+      static const unsigned short string[] = {
+         105, 115, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
 
 
-                    {
-                    if (data[1] == 105)
+      {
+         return List;
+      }
 
+   }
 
-                    {
-                    if (data[2] == 101)
+   else if (data[0] == 109)
 
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                108, 100
-                            };
-                            if(memcmp(&data[3], &string, sizeof(QChar) * 2) == 0)
-                        
+   {
 
-                return Field;
-            
-                    }
+      static const unsigned short string[] = {
+         111, 100, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
 
-                else if (data[2] == 110)
 
+      {
+         return Mode;
+      }
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                97, 108
-                            };
-                            if(memcmp(&data[3], &string, sizeof(QChar) * 2) == 0)
-                        
+   }
 
-                return Final;
-            
-                    }
+   else if (data[0] == 110)
 
-                else if (data[2] == 120)
 
+   {
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 100
-                            };
-                            if(memcmp(&data[3], &string, sizeof(QChar) * 2) == 0)
-                        
+      static const unsigned short string[] = {
+         97, 109, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
 
-                return Fixed;
-            
-                    }
 
-                
-                    }
+      {
+         return Name;
+      }
 
-                
-                    }
+   }
 
-                else if (data[0] == 103)
+   else if (data[0] == 116)
 
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                114, 111, 117, 112
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
-                        
+   {
+      if (data[1] == 101)
 
-                return Group;
-            
-                    }
 
-                else if (data[0] == 109)
+      {
 
+         static const unsigned short string[] = {
+            115, 116
+         };
+         if (memcmp(&data[2], &string, sizeof(QChar) * 2) == 0)
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                105, 120, 101, 100
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
-                        
 
-                return Mixed;
-            
-                    }
+         {
+            return Test;
+         }
 
-                else if (data[0] == 114)
+      }
 
+      else if (data[1] == 121)
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 102, 101, 114
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
-                        
 
-                return Refer;
-            
-                    }
+      {
 
-                else if (data[0] == 117)
+         static const unsigned short string[] = {
+            112, 101
+         };
+         if (memcmp(&data[2], &string, sizeof(QChar) * 2) == 0)
 
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                110, 105, 111, 110
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
-                        
+         {
+            return Type;
+         }
 
-                return Union;
-            
-                    }
+      }
 
-                else if (data[0] == 118)
 
+   }
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                97, 108, 117, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
-                        
 
-                return Value;
-            
-                    }
 
-                else if (data[0] == 120)
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier5(const QChar *data)
 
+{
+   if (data[0] == 98)
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                112, 97, 116, 104
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
-                        
 
-                return Xpath;
-            
-                    }
+   {
 
-                
+      static const unsigned short string[] = {
+         108, 111, 99, 107
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
 
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier6(const QChar *data)
 
-        {
-            if (data[0] == 97)
+      {
+         return Block;
+      }
 
+   }
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                115, 115, 101, 114, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
-                        
+   else if (data[0] == 102)
 
-                return Assert;
-            
-                    }
 
-                else if (data[0] == 99)
+   {
+      if (data[1] == 105)
 
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                104, 111, 105, 99, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
-                        
+      {
+         if (data[2] == 101)
 
-                return Choice;
-            
-                    }
 
-                else if (data[0] == 105)
+         {
 
+            static const unsigned short string[] = {
+               108, 100
+            };
+            if (memcmp(&data[3], &string, sizeof(QChar) * 2) == 0)
 
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                109, 112, 111, 114, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
-                        
 
-                return Import;
-            
-                    }
-
-                else if (data[0] == 107)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 121, 114, 101, 102
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
-                        
-
-                return Keyref;
-            
-                    }
-
-                else if (data[0] == 108)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 110, 103, 116, 104
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
-                        
-
-                return Length;
-            
-                    }
-
-                else if (data[0] == 112)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                117, 98, 108, 105, 99
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
-                        
-
-                return Public;
-            
-                    }
-
-                else if (data[0] == 115)
-
-
-                    {
-                    if (data[1] == 99)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                104, 101, 109, 97
-                            };
-                            if(memcmp(&data[2], &string, sizeof(QChar) * 4) == 0)
-                        
-
-                return Schema;
-            
-                    }
-
-                else if (data[1] == 111)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                117, 114, 99, 101
-                            };
-                            if(memcmp(&data[2], &string, sizeof(QChar) * 4) == 0)
-                        
-
-                return Source;
-            
-                    }
-
-                else if (data[1] == 121)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                115, 116, 101, 109
-                            };
-                            if(memcmp(&data[2], &string, sizeof(QChar) * 4) == 0)
-                        
-
-                return System;
-            
-                    }
-
-                
-                    }
-
-                else if (data[0] == 117)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                110, 105, 113, 117, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
-                        
-
-                return Unique;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier7(const QChar *data)
-
-        {
-            if (data[0] == 97)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                112, 112, 105, 110, 102, 111
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
-                        
-
-                return Appinfo;
-            
-                    }
-
-                else if (data[0] == 100)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 102, 97, 117, 108, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
-                        
-
-                return Default;
-            
-                    }
-
-                else if (data[0] == 101)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                108, 101, 109, 101, 110, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
-                        
-
-                return Element;
-            
-                    }
-
-                else if (data[0] == 105)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                110, 99, 108, 117, 100, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
-                        
-
-                return Include;
-            
-                    }
-
-                else if (data[0] == 112)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                97, 116, 116, 101, 114, 110
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
-                        
-
-                return Pattern;
-            
-                    }
-
-                else if (data[0] == 114)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 112, 108, 97, 99, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
-                        
-
-                return Replace;
-            
-                    }
-
-                else if (data[0] == 118)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 114, 115, 105, 111, 110
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
-                        
-
-                return Version;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier8(const QChar *data)
-
-        {
-            if (data[0] == 97)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                98, 115, 116, 114, 97, 99, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-                        
-
-                return Abstract;
-            
-                    }
-
-                else if (data[0] == 99)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                111, 108, 108, 97, 112, 115, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-                        
-
-                return Collapse;
-            
-                    }
-
-                else if (data[0] == 105)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                116, 101, 109, 84, 121, 112, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-                        
-
-                return ItemType;
-            
-                    }
-
-                else if (data[0] == 110)
-
-
-                    {
-                    if (data[1] == 105)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                108, 108, 97, 98, 108, 101
-                            };
-                            if(memcmp(&data[2], &string, sizeof(QChar) * 6) == 0)
-                        
-
-                return Nillable;
-            
-                    }
-
-                else if (data[1] == 111)
-
-
-                    {
-                    if (data[2] == 116)
-
-
-                    {
-                    if (data[3] == 97)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                116, 105, 111, 110
-                            };
-                            if(memcmp(&data[4], &string, sizeof(QChar) * 4) == 0)
-                        
-
-                return Notation;
-            
-                    }
-
-                else if (data[3] == 81)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                78, 97, 109, 101
-                            };
-                            if(memcmp(&data[4], &string, sizeof(QChar) * 4) == 0)
-                        
-
-                return NotQName;
-            
-                    }
-
-                
-                    }
-
-                
-                    }
-
-                
-                    }
-
-                else if (data[0] == 111)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                118, 101, 114, 114, 105, 100, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-                        
-
-                return Override;
-            
-                    }
-
-                else if (data[0] == 112)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                114, 101, 115, 101, 114, 118, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-                        
-
-                return Preserve;
-            
-                    }
-
-                else if (data[0] == 114)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 100, 101, 102, 105, 110, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-                        
-
-                return Redefine;
-            
-                    }
-
-                else if (data[0] == 115)
-
-
-                    {
-                    if (data[1] == 101)
-
-
-                    {
-                    if (data[2] == 108)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 99, 116, 111, 114
-                            };
-                            if(memcmp(&data[3], &string, sizeof(QChar) * 5) == 0)
-                        
-
-                return Selector;
-            
-                    }
-
-                else if (data[2] == 113)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                117, 101, 110, 99, 101
-                            };
-                            if(memcmp(&data[3], &string, sizeof(QChar) * 5) == 0)
-                        
-
-                return Sequence;
-            
-                    }
-
-                
-                    }
-
-                
-                    }
-
-                else if (data[0] == 120)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                109, 108, 58, 108, 97, 110, 103
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-                        
-
-                return XmlLanguage;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier9(const QChar *data)
-
-        {
-            if (data[0] == 97)
-
-
-                    {
-                    if (data[1] == 115)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                115, 101, 114, 116, 105, 111, 110
-                            };
-                            if(memcmp(&data[2], &string, sizeof(QChar) * 7) == 0)
-                        
-
-                return Assertion;
-            
-                    }
-
-                else if (data[1] == 116)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                116, 114, 105, 98, 117, 116, 101
-                            };
-                            if(memcmp(&data[2], &string, sizeof(QChar) * 7) == 0)
-                        
-
-                return Attribute;
-            
-                    }
-
-                
-                    }
-
-                else if (data[0] == 101)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                120, 116, 101, 110, 115, 105, 111, 110
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 8) == 0)
-                        
-
-                return Extension;
-            
-                    }
-
-                else if (data[0] == 109)
-
-
-                    {
-                    if (data[1] == 97)
-
-
-                    {
-                    if (data[2] == 120)
-
-
-                    {
-                    if (data[3] == 76)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 110, 103, 116, 104
-                            };
-                            if(memcmp(&data[4], &string, sizeof(QChar) * 5) == 0)
-                        
-
-                return MaxLength;
-            
-                    }
-
-                else if (data[3] == 79)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                99, 99, 117, 114, 115
-                            };
-                            if(memcmp(&data[4], &string, sizeof(QChar) * 5) == 0)
-                        
-
-                return MaxOccurs;
-            
-                    }
-
-                
-                    }
-
-                
-                    }
-
-                else if (data[1] == 105)
-
-
-                    {
-                    if (data[2] == 110)
-
-
-                    {
-                    if (data[3] == 76)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 110, 103, 116, 104
-                            };
-                            if(memcmp(&data[4], &string, sizeof(QChar) * 5) == 0)
-                        
-
-                return MinLength;
-            
-                    }
-
-                else if (data[3] == 79)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                99, 99, 117, 114, 115
-                            };
-                            if(memcmp(&data[4], &string, sizeof(QChar) * 5) == 0)
-                        
-
-                return MinOccurs;
-            
-                    }
-
-                
-                    }
-
-                
-                    }
-
-                
-                    }
-
-                else if (data[0] == 110)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                97, 109, 101, 115, 112, 97, 99, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 8) == 0)
-                        
-
-                return Namespace;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier10(const QChar *data)
-
-        {
-            if (data[0] == 97)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                110, 110, 111, 116, 97, 116, 105, 111, 110
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 9) == 0)
-                        
-
-                return Annotation;
-            
-                    }
-
-                else if (data[0] == 115)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                105, 109, 112, 108, 101, 84, 121, 112, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 9) == 0)
-                        
-
-                return SimpleType;
-            
-                    }
-
-                else if (data[0] == 119)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                104, 105, 116, 101, 83, 112, 97, 99, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 9) == 0)
-                        
-
-                return WhiteSpace;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier11(const QChar *data)
-
-        {
-            if (data[0] == 97)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                108, 116, 101, 114, 110, 97, 116, 105, 118, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
-                        
-
-                return Alternative;
-            
-                    }
-
-                else if (data[0] == 99)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                111, 109, 112, 108, 101, 120, 84, 121, 112, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
-                        
-
-                return ComplexType;
-            
-                    }
-
-                else if (data[0] == 101)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                110, 117, 109, 101, 114, 97, 116, 105, 111, 110
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
-                        
-
-                return Enumeration;
-            
-                    }
-
-                else if (data[0] == 109)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 109, 98, 101, 114, 84, 121, 112, 101, 115
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
-                        
-
-                return MemberTypes;
-            
-                    }
-
-                else if (data[0] == 111)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                112, 101, 110, 67, 111, 110, 116, 101, 110, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
-                        
-
-                return OpenContent;
-            
-                    }
-
-                else if (data[0] == 114)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 115, 116, 114, 105, 99, 116, 105, 111, 110
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
-                        
-
-                return Restriction;
-            
-                    }
-
-                else if (data[0] == 116)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                111, 116, 97, 108, 68, 105, 103, 105, 116, 115
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
-                        
-
-                return TotalDigits;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier12(const QChar *data)
-
-        {
-            if (data[0] == 97)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                110, 121, 65, 116, 116, 114, 105, 98, 117, 116, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 11) == 0)
-                        
-
-                return AnyAttribute;
-            
-                    }
-
-                else if (data[0] == 98)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                108, 111, 99, 107, 68, 101, 102, 97, 117, 108, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 11) == 0)
-                        
-
-                return BlockDefault;
-            
-                    }
-
-                else if (data[0] == 102)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                105, 110, 97, 108, 68, 101, 102, 97, 117, 108, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 11) == 0)
-                        
-
-                return FinalDefault;
-            
-                    }
-
-                else if (data[0] == 109)
-
-
-                    {
-                    if (data[1] == 97)
-
-
-                    {
-                    if (data[2] == 120)
-
-
-                    {
-                    if (data[3] == 69)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                120, 99, 108, 117, 115, 105, 118, 101
-                            };
-                            if(memcmp(&data[4], &string, sizeof(QChar) * 8) == 0)
-                        
-
-                return MaxExclusive;
-            
-                    }
-
-                else if (data[3] == 73)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                110, 99, 108, 117, 115, 105, 118, 101
-                            };
-                            if(memcmp(&data[4], &string, sizeof(QChar) * 8) == 0)
-                        
-
-                return MaxInclusive;
-            
-                    }
-
-                
-                    }
-
-                
-                    }
-
-                else if (data[1] == 105)
-
-
-                    {
-                    if (data[2] == 110)
-
-
-                    {
-                    if (data[3] == 69)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                120, 99, 108, 117, 115, 105, 118, 101
-                            };
-                            if(memcmp(&data[4], &string, sizeof(QChar) * 8) == 0)
-                        
-
-                return MinExclusive;
-            
-                    }
-
-                else if (data[3] == 73)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                110, 99, 108, 117, 115, 105, 118, 101
-                            };
-                            if(memcmp(&data[4], &string, sizeof(QChar) * 8) == 0)
-                        
-
-                return MinInclusive;
-            
-                    }
-
-                
-                    }
-
-                
-                    }
-
-                
-                    }
-
-                else if (data[0] == 110)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                111, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 11) == 0)
-                        
-
-                return NotNamespace;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier13(const QChar *data)
-
-        {
-            if (data[0] == 100)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                111, 99, 117, 109, 101, 110, 116, 97, 116, 105, 111, 110
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 12) == 0)
-                        
-
-                return Documentation;
-            
-                    }
-
-                else if (data[0] == 115)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                105, 109, 112, 108, 101, 67, 111, 110, 116, 101, 110, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 12) == 0)
-                        
-
-                return SimpleContent;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier14(const QChar *data)
-
-        {
-            if (data[0] == 97)
-
-
-                    {
-                    if (data[1] == 112)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                112, 108, 105, 101, 115, 84, 111, 69, 109, 112, 116, 121
-                            };
-                            if(memcmp(&data[2], &string, sizeof(QChar) * 12) == 0)
-                        
-
-                return AppliesToEmpty;
-            
-                    }
-
-                else if (data[1] == 116)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                116, 114, 105, 98, 117, 116, 101, 71, 114, 111, 117, 112
-                            };
-                            if(memcmp(&data[2], &string, sizeof(QChar) * 12) == 0)
-                        
-
-                return AttributeGroup;
-            
-                    }
-
-                
-                    }
-
-                else if (data[0] == 99)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                111, 109, 112, 108, 101, 120, 67, 111, 110, 116, 101, 110, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 13) == 0)
-                        
-
-                return ComplexContent;
-            
-                    }
-
-                else if (data[0] == 102)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                114, 97, 99, 116, 105, 111, 110, 68, 105, 103, 105, 116, 115
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 13) == 0)
-                        
-
-                return FractionDigits;
-            
-                    }
-
-                else if (data[0] == 115)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                99, 104, 101, 109, 97, 76, 111, 99, 97, 116, 105, 111, 110
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 13) == 0)
-                        
-
-                return SchemaLocation;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier15(const QChar *data)
-
-        {
-            if (data[0] == 112)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                114, 111, 99, 101, 115, 115, 67, 111, 110, 116, 101, 110, 116, 115
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 14) == 0)
-                        
-
-                return ProcessContents;
-            
-                    }
-
-                else if (data[0] == 116)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                97, 114, 103, 101, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 14) == 0)
-                        
-
-                return TargetNamespace;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier17(const QChar *data)
-
-        {
-            if (data[0] == 100)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 102, 97, 117, 108, 116, 65, 116, 116, 114, 105, 98, 117, 116, 101, 115
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 16) == 0)
-                        
-
-                return DefaultAttributes;
-            
-                    }
-
-                else if (data[0] == 115)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                117, 98, 115, 116, 105, 116, 117, 116, 105, 111, 110, 71, 114, 111, 117, 112
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 16) == 0)
-                        
-
-                return SubstitutionGroup;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier18(const QChar *data)
-
-        {
-            if (data[0] == 100)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                101, 102, 97, 117, 108, 116, 79, 112, 101, 110, 67, 111, 110, 116, 101, 110, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 17) == 0)
-                        
-
-                return DefaultOpenContent;
-            
-                    }
-
-                else if (data[0] == 101)
-
-
-                    {
-                    
-                            static const unsigned short string[] =
-                            {
-                                108, 101, 109, 101, 110, 116, 70, 111, 114, 109, 68, 101, 102, 97, 117, 108, 116
-                            };
-                            if(memcmp(&data[1], &string, sizeof(QChar) * 17) == 0)
-                        
-
-                return ElementFormDefault;
-            
-                    }
-
-                
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier20(const QChar *data)
-
-        {
-            
-                            static const unsigned short string[] =
-                            {
-                                97, 116, 116, 114, 105, 98, 117, 116, 101, 70, 111, 114, 109, 68, 101, 102, 97, 117, 108, 116
-                            };
-                            if(memcmp(&data[0], &string, sizeof(QChar) * 20) == 0)
-                        
-
-                return AttributeFormDefault;
-            
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier21(const QChar *data)
-
-        {
-            
-                            static const unsigned short string[] =
-                            {
-                                120, 112, 97, 116, 104, 68, 101, 102, 97, 117, 108, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101
-                            };
-                            if(memcmp(&data[0], &string, sizeof(QChar) * 21) == 0)
-                        
-
-                return XPathDefaultNamespace;
-            
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier22(const QChar *data)
-
-        {
-            
-                            static const unsigned short string[] =
-                            {
-                                100, 101, 102, 97, 117, 108, 116, 65, 116, 116, 114, 105, 98, 117, 116, 101, 115, 65, 112, 112, 108, 121
-                            };
-                            if(memcmp(&data[0], &string, sizeof(QChar) * 22) == 0)
-                        
-
-                return DefaultAttributesApply;
-            
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::classifier32(const QChar *data)
-
-        {
-            
-                            static const unsigned short string[] =
-                            {
-                                104, 116, 116, 112, 58, 47, 47, 119, 119, 119, 46, 119, 51, 46, 111, 114, 103, 47, 50, 48, 48, 49, 47, 88, 77, 76, 83, 99, 104, 101, 109, 97
-                            };
-                            if(memcmp(&data[0], &string, sizeof(QChar) * 32) == 0)
-                        
-
-                return XML_NS_SCHEMA_URI;
-            
-
-            return NoKeyword;
-        }
-    XsdSchemaToken::NodeName XsdSchemaToken::toToken(const QChar *data, int length)
             {
-                switch(length)
-                {
-                    
-                        case 2:
-                            return classifier2(data);
-
-                    
-                        case 3:
-                            return classifier3(data);
-
-                    
-                        case 4:
-                            return classifier4(data);
-
-                    
-                        case 5:
-                            return classifier5(data);
-
-                    
-                        case 6:
-                            return classifier6(data);
-
-                    
-                        case 7:
-                            return classifier7(data);
-
-                    
-                        case 8:
-                            return classifier8(data);
-
-                    
-                        case 9:
-                            return classifier9(data);
-
-                    
-                        case 10:
-                            return classifier10(data);
-
-                    
-                        case 11:
-                            return classifier11(data);
-
-                    
-                        case 12:
-                            return classifier12(data);
-
-                    
-                        case 13:
-                            return classifier13(data);
-
-                    
-                        case 14:
-                            return classifier14(data);
-
-                    
-                        case 15:
-                            return classifier15(data);
-
-                    
-                        case 17:
-                            return classifier17(data);
-
-                    
-                        case 18:
-                            return classifier18(data);
-
-                    
-                        case 20:
-                            return classifier20(data);
-
-                    
-                        case 21:
-                            return classifier21(data);
-
-                    
-                        case 22:
-                            return classifier22(data);
-
-                    
-                        case 32:
-                            return classifier32(data);
-
-                    
-                        default:
-                            return NoKeyword;
-                }
+               return Field;
             }
 
-            
-                QString XsdSchemaToken::toString(NodeName token)
-                {
-                    const unsigned short *data = 0;
-                    int length = 0;
+         }
 
-                    switch(token)
-                    {
-                    
-                        case Abstract:
-                        {
-                            static const unsigned short staticallyStoredAbstract[] =
-                            {
-                            97, 98, 115, 116, 114, 97, 99, 116, 0
-                            };
-                            data = staticallyStoredAbstract;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case All:
-                        {
-                            static const unsigned short staticallyStoredAll[] =
-                            {
-                            97, 108, 108, 0
-                            };
-                            data = staticallyStoredAll;
-                            length = 3;
-                            break;
-                        }
-                    
-                        case Alternative:
-                        {
-                            static const unsigned short staticallyStoredAlternative[] =
-                            {
-                            97, 108, 116, 101, 114, 110, 97, 116, 105, 118, 101, 0
-                            };
-                            data = staticallyStoredAlternative;
-                            length = 11;
-                            break;
-                        }
-                    
-                        case Annotation:
-                        {
-                            static const unsigned short staticallyStoredAnnotation[] =
-                            {
-                            97, 110, 110, 111, 116, 97, 116, 105, 111, 110, 0
-                            };
-                            data = staticallyStoredAnnotation;
-                            length = 10;
-                            break;
-                        }
-                    
-                        case Any:
-                        {
-                            static const unsigned short staticallyStoredAny[] =
-                            {
-                            97, 110, 121, 0
-                            };
-                            data = staticallyStoredAny;
-                            length = 3;
-                            break;
-                        }
-                    
-                        case AnyAttribute:
-                        {
-                            static const unsigned short staticallyStoredAnyAttribute[] =
-                            {
-                            97, 110, 121, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0
-                            };
-                            data = staticallyStoredAnyAttribute;
-                            length = 12;
-                            break;
-                        }
-                    
-                        case Appinfo:
-                        {
-                            static const unsigned short staticallyStoredAppinfo[] =
-                            {
-                            97, 112, 112, 105, 110, 102, 111, 0
-                            };
-                            data = staticallyStoredAppinfo;
-                            length = 7;
-                            break;
-                        }
-                    
-                        case AppliesToEmpty:
-                        {
-                            static const unsigned short staticallyStoredAppliesToEmpty[] =
-                            {
-                            97, 112, 112, 108, 105, 101, 115, 84, 111, 69, 109, 112, 116, 121, 0
-                            };
-                            data = staticallyStoredAppliesToEmpty;
-                            length = 14;
-                            break;
-                        }
-                    
-                        case Assert:
-                        {
-                            static const unsigned short staticallyStoredAssert[] =
-                            {
-                            97, 115, 115, 101, 114, 116, 0
-                            };
-                            data = staticallyStoredAssert;
-                            length = 6;
-                            break;
-                        }
-                    
-                        case Assertion:
-                        {
-                            static const unsigned short staticallyStoredAssertion[] =
-                            {
-                            97, 115, 115, 101, 114, 116, 105, 111, 110, 0
-                            };
-                            data = staticallyStoredAssertion;
-                            length = 9;
-                            break;
-                        }
-                    
-                        case Attribute:
-                        {
-                            static const unsigned short staticallyStoredAttribute[] =
-                            {
-                            97, 116, 116, 114, 105, 98, 117, 116, 101, 0
-                            };
-                            data = staticallyStoredAttribute;
-                            length = 9;
-                            break;
-                        }
-                    
-                        case AttributeFormDefault:
-                        {
-                            static const unsigned short staticallyStoredAttributeFormDefault[] =
-                            {
-                            97, 116, 116, 114, 105, 98, 117, 116, 101, 70, 111, 114, 109, 68, 101, 102, 97, 117, 108, 116, 0
-                            };
-                            data = staticallyStoredAttributeFormDefault;
-                            length = 20;
-                            break;
-                        }
-                    
-                        case AttributeGroup:
-                        {
-                            static const unsigned short staticallyStoredAttributeGroup[] =
-                            {
-                            97, 116, 116, 114, 105, 98, 117, 116, 101, 71, 114, 111, 117, 112, 0
-                            };
-                            data = staticallyStoredAttributeGroup;
-                            length = 14;
-                            break;
-                        }
-                    
-                        case Base:
-                        {
-                            static const unsigned short staticallyStoredBase[] =
-                            {
-                            98, 97, 115, 101, 0
-                            };
-                            data = staticallyStoredBase;
-                            length = 4;
-                            break;
-                        }
-                    
-                        case Block:
-                        {
-                            static const unsigned short staticallyStoredBlock[] =
-                            {
-                            98, 108, 111, 99, 107, 0
-                            };
-                            data = staticallyStoredBlock;
-                            length = 5;
-                            break;
-                        }
-                    
-                        case BlockDefault:
-                        {
-                            static const unsigned short staticallyStoredBlockDefault[] =
-                            {
-                            98, 108, 111, 99, 107, 68, 101, 102, 97, 117, 108, 116, 0
-                            };
-                            data = staticallyStoredBlockDefault;
-                            length = 12;
-                            break;
-                        }
-                    
-                        case Choice:
-                        {
-                            static const unsigned short staticallyStoredChoice[] =
-                            {
-                            99, 104, 111, 105, 99, 101, 0
-                            };
-                            data = staticallyStoredChoice;
-                            length = 6;
-                            break;
-                        }
-                    
-                        case Collapse:
-                        {
-                            static const unsigned short staticallyStoredCollapse[] =
-                            {
-                            99, 111, 108, 108, 97, 112, 115, 101, 0
-                            };
-                            data = staticallyStoredCollapse;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case ComplexContent:
-                        {
-                            static const unsigned short staticallyStoredComplexContent[] =
-                            {
-                            99, 111, 109, 112, 108, 101, 120, 67, 111, 110, 116, 101, 110, 116, 0
-                            };
-                            data = staticallyStoredComplexContent;
-                            length = 14;
-                            break;
-                        }
-                    
-                        case ComplexType:
-                        {
-                            static const unsigned short staticallyStoredComplexType[] =
-                            {
-                            99, 111, 109, 112, 108, 101, 120, 84, 121, 112, 101, 0
-                            };
-                            data = staticallyStoredComplexType;
-                            length = 11;
-                            break;
-                        }
-                    
-                        case Default:
-                        {
-                            static const unsigned short staticallyStoredDefault[] =
-                            {
-                            100, 101, 102, 97, 117, 108, 116, 0
-                            };
-                            data = staticallyStoredDefault;
-                            length = 7;
-                            break;
-                        }
-                    
-                        case DefaultAttributes:
-                        {
-                            static const unsigned short staticallyStoredDefaultAttributes[] =
-                            {
-                            100, 101, 102, 97, 117, 108, 116, 65, 116, 116, 114, 105, 98, 117, 116, 101, 115, 0
-                            };
-                            data = staticallyStoredDefaultAttributes;
-                            length = 17;
-                            break;
-                        }
-                    
-                        case DefaultAttributesApply:
-                        {
-                            static const unsigned short staticallyStoredDefaultAttributesApply[] =
-                            {
-                            100, 101, 102, 97, 117, 108, 116, 65, 116, 116, 114, 105, 98, 117, 116, 101, 115, 65, 112, 112, 108, 121, 0
-                            };
-                            data = staticallyStoredDefaultAttributesApply;
-                            length = 22;
-                            break;
-                        }
-                    
-                        case DefaultOpenContent:
-                        {
-                            static const unsigned short staticallyStoredDefaultOpenContent[] =
-                            {
-                            100, 101, 102, 97, 117, 108, 116, 79, 112, 101, 110, 67, 111, 110, 116, 101, 110, 116, 0
-                            };
-                            data = staticallyStoredDefaultOpenContent;
-                            length = 18;
-                            break;
-                        }
-                    
-                        case Documentation:
-                        {
-                            static const unsigned short staticallyStoredDocumentation[] =
-                            {
-                            100, 111, 99, 117, 109, 101, 110, 116, 97, 116, 105, 111, 110, 0
-                            };
-                            data = staticallyStoredDocumentation;
-                            length = 13;
-                            break;
-                        }
-                    
-                        case Element:
-                        {
-                            static const unsigned short staticallyStoredElement[] =
-                            {
-                            101, 108, 101, 109, 101, 110, 116, 0
-                            };
-                            data = staticallyStoredElement;
-                            length = 7;
-                            break;
-                        }
-                    
-                        case ElementFormDefault:
-                        {
-                            static const unsigned short staticallyStoredElementFormDefault[] =
-                            {
-                            101, 108, 101, 109, 101, 110, 116, 70, 111, 114, 109, 68, 101, 102, 97, 117, 108, 116, 0
-                            };
-                            data = staticallyStoredElementFormDefault;
-                            length = 18;
-                            break;
-                        }
-                    
-                        case Enumeration:
-                        {
-                            static const unsigned short staticallyStoredEnumeration[] =
-                            {
-                            101, 110, 117, 109, 101, 114, 97, 116, 105, 111, 110, 0
-                            };
-                            data = staticallyStoredEnumeration;
-                            length = 11;
-                            break;
-                        }
-                    
-                        case Extension:
-                        {
-                            static const unsigned short staticallyStoredExtension[] =
-                            {
-                            101, 120, 116, 101, 110, 115, 105, 111, 110, 0
-                            };
-                            data = staticallyStoredExtension;
-                            length = 9;
-                            break;
-                        }
-                    
-                        case Field:
-                        {
-                            static const unsigned short staticallyStoredField[] =
-                            {
-                            102, 105, 101, 108, 100, 0
-                            };
-                            data = staticallyStoredField;
-                            length = 5;
-                            break;
-                        }
-                    
-                        case Final:
-                        {
-                            static const unsigned short staticallyStoredFinal[] =
-                            {
-                            102, 105, 110, 97, 108, 0
-                            };
-                            data = staticallyStoredFinal;
-                            length = 5;
-                            break;
-                        }
-                    
-                        case FinalDefault:
-                        {
-                            static const unsigned short staticallyStoredFinalDefault[] =
-                            {
-                            102, 105, 110, 97, 108, 68, 101, 102, 97, 117, 108, 116, 0
-                            };
-                            data = staticallyStoredFinalDefault;
-                            length = 12;
-                            break;
-                        }
-                    
-                        case Fixed:
-                        {
-                            static const unsigned short staticallyStoredFixed[] =
-                            {
-                            102, 105, 120, 101, 100, 0
-                            };
-                            data = staticallyStoredFixed;
-                            length = 5;
-                            break;
-                        }
-                    
-                        case Form:
-                        {
-                            static const unsigned short staticallyStoredForm[] =
-                            {
-                            102, 111, 114, 109, 0
-                            };
-                            data = staticallyStoredForm;
-                            length = 4;
-                            break;
-                        }
-                    
-                        case FractionDigits:
-                        {
-                            static const unsigned short staticallyStoredFractionDigits[] =
-                            {
-                            102, 114, 97, 99, 116, 105, 111, 110, 68, 105, 103, 105, 116, 115, 0
-                            };
-                            data = staticallyStoredFractionDigits;
-                            length = 14;
-                            break;
-                        }
-                    
-                        case Group:
-                        {
-                            static const unsigned short staticallyStoredGroup[] =
-                            {
-                            103, 114, 111, 117, 112, 0
-                            };
-                            data = staticallyStoredGroup;
-                            length = 5;
-                            break;
-                        }
-                    
-                        case Id:
-                        {
-                            static const unsigned short staticallyStoredId[] =
-                            {
-                            105, 100, 0
-                            };
-                            data = staticallyStoredId;
-                            length = 2;
-                            break;
-                        }
-                    
-                        case Import:
-                        {
-                            static const unsigned short staticallyStoredImport[] =
-                            {
-                            105, 109, 112, 111, 114, 116, 0
-                            };
-                            data = staticallyStoredImport;
-                            length = 6;
-                            break;
-                        }
-                    
-                        case Include:
-                        {
-                            static const unsigned short staticallyStoredInclude[] =
-                            {
-                            105, 110, 99, 108, 117, 100, 101, 0
-                            };
-                            data = staticallyStoredInclude;
-                            length = 7;
-                            break;
-                        }
-                    
-                        case ItemType:
-                        {
-                            static const unsigned short staticallyStoredItemType[] =
-                            {
-                            105, 116, 101, 109, 84, 121, 112, 101, 0
-                            };
-                            data = staticallyStoredItemType;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case Key:
-                        {
-                            static const unsigned short staticallyStoredKey[] =
-                            {
-                            107, 101, 121, 0
-                            };
-                            data = staticallyStoredKey;
-                            length = 3;
-                            break;
-                        }
-                    
-                        case Keyref:
-                        {
-                            static const unsigned short staticallyStoredKeyref[] =
-                            {
-                            107, 101, 121, 114, 101, 102, 0
-                            };
-                            data = staticallyStoredKeyref;
-                            length = 6;
-                            break;
-                        }
-                    
-                        case Length:
-                        {
-                            static const unsigned short staticallyStoredLength[] =
-                            {
-                            108, 101, 110, 103, 116, 104, 0
-                            };
-                            data = staticallyStoredLength;
-                            length = 6;
-                            break;
-                        }
-                    
-                        case List:
-                        {
-                            static const unsigned short staticallyStoredList[] =
-                            {
-                            108, 105, 115, 116, 0
-                            };
-                            data = staticallyStoredList;
-                            length = 4;
-                            break;
-                        }
-                    
-                        case MaxExclusive:
-                        {
-                            static const unsigned short staticallyStoredMaxExclusive[] =
-                            {
-                            109, 97, 120, 69, 120, 99, 108, 117, 115, 105, 118, 101, 0
-                            };
-                            data = staticallyStoredMaxExclusive;
-                            length = 12;
-                            break;
-                        }
-                    
-                        case MaxInclusive:
-                        {
-                            static const unsigned short staticallyStoredMaxInclusive[] =
-                            {
-                            109, 97, 120, 73, 110, 99, 108, 117, 115, 105, 118, 101, 0
-                            };
-                            data = staticallyStoredMaxInclusive;
-                            length = 12;
-                            break;
-                        }
-                    
-                        case MaxLength:
-                        {
-                            static const unsigned short staticallyStoredMaxLength[] =
-                            {
-                            109, 97, 120, 76, 101, 110, 103, 116, 104, 0
-                            };
-                            data = staticallyStoredMaxLength;
-                            length = 9;
-                            break;
-                        }
-                    
-                        case MaxOccurs:
-                        {
-                            static const unsigned short staticallyStoredMaxOccurs[] =
-                            {
-                            109, 97, 120, 79, 99, 99, 117, 114, 115, 0
-                            };
-                            data = staticallyStoredMaxOccurs;
-                            length = 9;
-                            break;
-                        }
-                    
-                        case MemberTypes:
-                        {
-                            static const unsigned short staticallyStoredMemberTypes[] =
-                            {
-                            109, 101, 109, 98, 101, 114, 84, 121, 112, 101, 115, 0
-                            };
-                            data = staticallyStoredMemberTypes;
-                            length = 11;
-                            break;
-                        }
-                    
-                        case MinExclusive:
-                        {
-                            static const unsigned short staticallyStoredMinExclusive[] =
-                            {
-                            109, 105, 110, 69, 120, 99, 108, 117, 115, 105, 118, 101, 0
-                            };
-                            data = staticallyStoredMinExclusive;
-                            length = 12;
-                            break;
-                        }
-                    
-                        case MinInclusive:
-                        {
-                            static const unsigned short staticallyStoredMinInclusive[] =
-                            {
-                            109, 105, 110, 73, 110, 99, 108, 117, 115, 105, 118, 101, 0
-                            };
-                            data = staticallyStoredMinInclusive;
-                            length = 12;
-                            break;
-                        }
-                    
-                        case MinLength:
-                        {
-                            static const unsigned short staticallyStoredMinLength[] =
-                            {
-                            109, 105, 110, 76, 101, 110, 103, 116, 104, 0
-                            };
-                            data = staticallyStoredMinLength;
-                            length = 9;
-                            break;
-                        }
-                    
-                        case MinOccurs:
-                        {
-                            static const unsigned short staticallyStoredMinOccurs[] =
-                            {
-                            109, 105, 110, 79, 99, 99, 117, 114, 115, 0
-                            };
-                            data = staticallyStoredMinOccurs;
-                            length = 9;
-                            break;
-                        }
-                    
-                        case Mixed:
-                        {
-                            static const unsigned short staticallyStoredMixed[] =
-                            {
-                            109, 105, 120, 101, 100, 0
-                            };
-                            data = staticallyStoredMixed;
-                            length = 5;
-                            break;
-                        }
-                    
-                        case Mode:
-                        {
-                            static const unsigned short staticallyStoredMode[] =
-                            {
-                            109, 111, 100, 101, 0
-                            };
-                            data = staticallyStoredMode;
-                            length = 4;
-                            break;
-                        }
-                    
-                        case Name:
-                        {
-                            static const unsigned short staticallyStoredName[] =
-                            {
-                            110, 97, 109, 101, 0
-                            };
-                            data = staticallyStoredName;
-                            length = 4;
-                            break;
-                        }
-                    
-                        case Namespace:
-                        {
-                            static const unsigned short staticallyStoredNamespace[] =
-                            {
-                            110, 97, 109, 101, 115, 112, 97, 99, 101, 0
-                            };
-                            data = staticallyStoredNamespace;
-                            length = 9;
-                            break;
-                        }
-                    
-                        case Nillable:
-                        {
-                            static const unsigned short staticallyStoredNillable[] =
-                            {
-                            110, 105, 108, 108, 97, 98, 108, 101, 0
-                            };
-                            data = staticallyStoredNillable;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case NotNamespace:
-                        {
-                            static const unsigned short staticallyStoredNotNamespace[] =
-                            {
-                            110, 111, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101, 0
-                            };
-                            data = staticallyStoredNotNamespace;
-                            length = 12;
-                            break;
-                        }
-                    
-                        case NotQName:
-                        {
-                            static const unsigned short staticallyStoredNotQName[] =
-                            {
-                            110, 111, 116, 81, 78, 97, 109, 101, 0
-                            };
-                            data = staticallyStoredNotQName;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case Notation:
-                        {
-                            static const unsigned short staticallyStoredNotation[] =
-                            {
-                            110, 111, 116, 97, 116, 105, 111, 110, 0
-                            };
-                            data = staticallyStoredNotation;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case OpenContent:
-                        {
-                            static const unsigned short staticallyStoredOpenContent[] =
-                            {
-                            111, 112, 101, 110, 67, 111, 110, 116, 101, 110, 116, 0
-                            };
-                            data = staticallyStoredOpenContent;
-                            length = 11;
-                            break;
-                        }
-                    
-                        case Override:
-                        {
-                            static const unsigned short staticallyStoredOverride[] =
-                            {
-                            111, 118, 101, 114, 114, 105, 100, 101, 0
-                            };
-                            data = staticallyStoredOverride;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case Pattern:
-                        {
-                            static const unsigned short staticallyStoredPattern[] =
-                            {
-                            112, 97, 116, 116, 101, 114, 110, 0
-                            };
-                            data = staticallyStoredPattern;
-                            length = 7;
-                            break;
-                        }
-                    
-                        case Preserve:
-                        {
-                            static const unsigned short staticallyStoredPreserve[] =
-                            {
-                            112, 114, 101, 115, 101, 114, 118, 101, 0
-                            };
-                            data = staticallyStoredPreserve;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case ProcessContents:
-                        {
-                            static const unsigned short staticallyStoredProcessContents[] =
-                            {
-                            112, 114, 111, 99, 101, 115, 115, 67, 111, 110, 116, 101, 110, 116, 115, 0
-                            };
-                            data = staticallyStoredProcessContents;
-                            length = 15;
-                            break;
-                        }
-                    
-                        case Public:
-                        {
-                            static const unsigned short staticallyStoredPublic[] =
-                            {
-                            112, 117, 98, 108, 105, 99, 0
-                            };
-                            data = staticallyStoredPublic;
-                            length = 6;
-                            break;
-                        }
-                    
-                        case Redefine:
-                        {
-                            static const unsigned short staticallyStoredRedefine[] =
-                            {
-                            114, 101, 100, 101, 102, 105, 110, 101, 0
-                            };
-                            data = staticallyStoredRedefine;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case Ref:
-                        {
-                            static const unsigned short staticallyStoredRef[] =
-                            {
-                            114, 101, 102, 0
-                            };
-                            data = staticallyStoredRef;
-                            length = 3;
-                            break;
-                        }
-                    
-                        case Refer:
-                        {
-                            static const unsigned short staticallyStoredRefer[] =
-                            {
-                            114, 101, 102, 101, 114, 0
-                            };
-                            data = staticallyStoredRefer;
-                            length = 5;
-                            break;
-                        }
-                    
-                        case Replace:
-                        {
-                            static const unsigned short staticallyStoredReplace[] =
-                            {
-                            114, 101, 112, 108, 97, 99, 101, 0
-                            };
-                            data = staticallyStoredReplace;
-                            length = 7;
-                            break;
-                        }
-                    
-                        case Restriction:
-                        {
-                            static const unsigned short staticallyStoredRestriction[] =
-                            {
-                            114, 101, 115, 116, 114, 105, 99, 116, 105, 111, 110, 0
-                            };
-                            data = staticallyStoredRestriction;
-                            length = 11;
-                            break;
-                        }
-                    
-                        case Schema:
-                        {
-                            static const unsigned short staticallyStoredSchema[] =
-                            {
-                            115, 99, 104, 101, 109, 97, 0
-                            };
-                            data = staticallyStoredSchema;
-                            length = 6;
-                            break;
-                        }
-                    
-                        case SchemaLocation:
-                        {
-                            static const unsigned short staticallyStoredSchemaLocation[] =
-                            {
-                            115, 99, 104, 101, 109, 97, 76, 111, 99, 97, 116, 105, 111, 110, 0
-                            };
-                            data = staticallyStoredSchemaLocation;
-                            length = 14;
-                            break;
-                        }
-                    
-                        case Selector:
-                        {
-                            static const unsigned short staticallyStoredSelector[] =
-                            {
-                            115, 101, 108, 101, 99, 116, 111, 114, 0
-                            };
-                            data = staticallyStoredSelector;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case Sequence:
-                        {
-                            static const unsigned short staticallyStoredSequence[] =
-                            {
-                            115, 101, 113, 117, 101, 110, 99, 101, 0
-                            };
-                            data = staticallyStoredSequence;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case SimpleContent:
-                        {
-                            static const unsigned short staticallyStoredSimpleContent[] =
-                            {
-                            115, 105, 109, 112, 108, 101, 67, 111, 110, 116, 101, 110, 116, 0
-                            };
-                            data = staticallyStoredSimpleContent;
-                            length = 13;
-                            break;
-                        }
-                    
-                        case SimpleType:
-                        {
-                            static const unsigned short staticallyStoredSimpleType[] =
-                            {
-                            115, 105, 109, 112, 108, 101, 84, 121, 112, 101, 0
-                            };
-                            data = staticallyStoredSimpleType;
-                            length = 10;
-                            break;
-                        }
-                    
-                        case Source:
-                        {
-                            static const unsigned short staticallyStoredSource[] =
-                            {
-                            115, 111, 117, 114, 99, 101, 0
-                            };
-                            data = staticallyStoredSource;
-                            length = 6;
-                            break;
-                        }
-                    
-                        case SubstitutionGroup:
-                        {
-                            static const unsigned short staticallyStoredSubstitutionGroup[] =
-                            {
-                            115, 117, 98, 115, 116, 105, 116, 117, 116, 105, 111, 110, 71, 114, 111, 117, 112, 0
-                            };
-                            data = staticallyStoredSubstitutionGroup;
-                            length = 17;
-                            break;
-                        }
-                    
-                        case System:
-                        {
-                            static const unsigned short staticallyStoredSystem[] =
-                            {
-                            115, 121, 115, 116, 101, 109, 0
-                            };
-                            data = staticallyStoredSystem;
-                            length = 6;
-                            break;
-                        }
-                    
-                        case TargetNamespace:
-                        {
-                            static const unsigned short staticallyStoredTargetNamespace[] =
-                            {
-                            116, 97, 114, 103, 101, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101, 0
-                            };
-                            data = staticallyStoredTargetNamespace;
-                            length = 15;
-                            break;
-                        }
-                    
-                        case Test:
-                        {
-                            static const unsigned short staticallyStoredTest[] =
-                            {
-                            116, 101, 115, 116, 0
-                            };
-                            data = staticallyStoredTest;
-                            length = 4;
-                            break;
-                        }
-                    
-                        case TotalDigits:
-                        {
-                            static const unsigned short staticallyStoredTotalDigits[] =
-                            {
-                            116, 111, 116, 97, 108, 68, 105, 103, 105, 116, 115, 0
-                            };
-                            data = staticallyStoredTotalDigits;
-                            length = 11;
-                            break;
-                        }
-                    
-                        case Type:
-                        {
-                            static const unsigned short staticallyStoredType[] =
-                            {
-                            116, 121, 112, 101, 0
-                            };
-                            data = staticallyStoredType;
-                            length = 4;
-                            break;
-                        }
-                    
-                        case Union:
-                        {
-                            static const unsigned short staticallyStoredUnion[] =
-                            {
-                            117, 110, 105, 111, 110, 0
-                            };
-                            data = staticallyStoredUnion;
-                            length = 5;
-                            break;
-                        }
-                    
-                        case Unique:
-                        {
-                            static const unsigned short staticallyStoredUnique[] =
-                            {
-                            117, 110, 105, 113, 117, 101, 0
-                            };
-                            data = staticallyStoredUnique;
-                            length = 6;
-                            break;
-                        }
-                    
-                        case Use:
-                        {
-                            static const unsigned short staticallyStoredUse[] =
-                            {
-                            117, 115, 101, 0
-                            };
-                            data = staticallyStoredUse;
-                            length = 3;
-                            break;
-                        }
-                    
-                        case Value:
-                        {
-                            static const unsigned short staticallyStoredValue[] =
-                            {
-                            118, 97, 108, 117, 101, 0
-                            };
-                            data = staticallyStoredValue;
-                            length = 5;
-                            break;
-                        }
-                    
-                        case Version:
-                        {
-                            static const unsigned short staticallyStoredVersion[] =
-                            {
-                            118, 101, 114, 115, 105, 111, 110, 0
-                            };
-                            data = staticallyStoredVersion;
-                            length = 7;
-                            break;
-                        }
-                    
-                        case WhiteSpace:
-                        {
-                            static const unsigned short staticallyStoredWhiteSpace[] =
-                            {
-                            119, 104, 105, 116, 101, 83, 112, 97, 99, 101, 0
-                            };
-                            data = staticallyStoredWhiteSpace;
-                            length = 10;
-                            break;
-                        }
-                    
-                        case XML_NS_SCHEMA_URI:
-                        {
-                            static const unsigned short staticallyStoredXML_NS_SCHEMA_URI[] =
-                            {
-                            104, 116, 116, 112, 58, 47, 47, 119, 119, 119, 46, 119, 51, 46, 111, 114, 103, 47, 50, 48, 48, 49, 47, 88, 77, 76, 83, 99, 104, 101, 109, 97, 0
-                            };
-                            data = staticallyStoredXML_NS_SCHEMA_URI;
-                            length = 32;
-                            break;
-                        }
-                    
-                        case XPathDefaultNamespace:
-                        {
-                            static const unsigned short staticallyStoredXPathDefaultNamespace[] =
-                            {
-                            120, 112, 97, 116, 104, 68, 101, 102, 97, 117, 108, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101, 0
-                            };
-                            data = staticallyStoredXPathDefaultNamespace;
-                            length = 21;
-                            break;
-                        }
-                    
-                        case XmlLanguage:
-                        {
-                            static const unsigned short staticallyStoredXmlLanguage[] =
-                            {
-                            120, 109, 108, 58, 108, 97, 110, 103, 0
-                            };
-                            data = staticallyStoredXmlLanguage;
-                            length = 8;
-                            break;
-                        }
-                    
-                        case Xpath:
-                        {
-                            static const unsigned short staticallyStoredXpath[] =
-                            {
-                            120, 112, 97, 116, 104, 0
-                            };
-                            data = staticallyStoredXpath;
-                            length = 5;
-                            break;
-                        }
-                    
-                        default:
-                            /* It's either the default token, or an undefined enum
-                             * value. We silence a compiler warning, and return the
-                             * empty string. */
-                            ;
-                    }
+         else if (data[2] == 110)
 
-                    union
-                    {
-                        const unsigned short *data;
-                        const QChar *asQChar;
-                    } converter;
-                    converter.data = data;
 
-                    return QString::fromRawData(converter.asQChar, length);
-                }
-            
+         {
+
+            static const unsigned short string[] = {
+               97, 108
+            };
+            if (memcmp(&data[3], &string, sizeof(QChar) * 2) == 0)
+
+
+            {
+               return Final;
+            }
+
+         }
+
+         else if (data[2] == 120)
+
+
+         {
+
+            static const unsigned short string[] = {
+               101, 100
+            };
+            if (memcmp(&data[3], &string, sizeof(QChar) * 2) == 0)
+
+
+            {
+               return Fixed;
+            }
+
+         }
+
+
+      }
+
+
+   }
+
+   else if (data[0] == 103)
+
+
+   {
+
+      static const unsigned short string[] = {
+         114, 111, 117, 112
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
+
+
+      {
+         return Group;
+      }
+
+   }
+
+   else if (data[0] == 109)
+
+
+   {
+
+      static const unsigned short string[] = {
+         105, 120, 101, 100
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
+
+
+      {
+         return Mixed;
+      }
+
+   }
+
+   else if (data[0] == 114)
+
+
+   {
+
+      static const unsigned short string[] = {
+         101, 102, 101, 114
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
+
+
+      {
+         return Refer;
+      }
+
+   }
+
+   else if (data[0] == 117)
+
+
+   {
+
+      static const unsigned short string[] = {
+         110, 105, 111, 110
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
+
+
+      {
+         return Union;
+      }
+
+   }
+
+   else if (data[0] == 118)
+
+
+   {
+
+      static const unsigned short string[] = {
+         97, 108, 117, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
+
+
+      {
+         return Value;
+      }
+
+   }
+
+   else if (data[0] == 120)
+
+
+   {
+
+      static const unsigned short string[] = {
+         112, 97, 116, 104
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
+
+
+      {
+         return Xpath;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier6(const QChar *data)
+
+{
+   if (data[0] == 97)
+
+
+   {
+
+      static const unsigned short string[] = {
+         115, 115, 101, 114, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
+
+
+      {
+         return Assert;
+      }
+
+   }
+
+   else if (data[0] == 99)
+
+
+   {
+
+      static const unsigned short string[] = {
+         104, 111, 105, 99, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
+
+
+      {
+         return Choice;
+      }
+
+   }
+
+   else if (data[0] == 105)
+
+
+   {
+
+      static const unsigned short string[] = {
+         109, 112, 111, 114, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
+
+
+      {
+         return Import;
+      }
+
+   }
+
+   else if (data[0] == 107)
+
+
+   {
+
+      static const unsigned short string[] = {
+         101, 121, 114, 101, 102
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
+
+
+      {
+         return Keyref;
+      }
+
+   }
+
+   else if (data[0] == 108)
+
+
+   {
+
+      static const unsigned short string[] = {
+         101, 110, 103, 116, 104
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
+
+
+      {
+         return Length;
+      }
+
+   }
+
+   else if (data[0] == 112)
+
+
+   {
+
+      static const unsigned short string[] = {
+         117, 98, 108, 105, 99
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
+
+
+      {
+         return Public;
+      }
+
+   }
+
+   else if (data[0] == 115)
+
+
+   {
+      if (data[1] == 99)
+
+
+      {
+
+         static const unsigned short string[] = {
+            104, 101, 109, 97
+         };
+         if (memcmp(&data[2], &string, sizeof(QChar) * 4) == 0)
+
+
+         {
+            return Schema;
+         }
+
+      }
+
+      else if (data[1] == 111)
+
+
+      {
+
+         static const unsigned short string[] = {
+            117, 114, 99, 101
+         };
+         if (memcmp(&data[2], &string, sizeof(QChar) * 4) == 0)
+
+
+         {
+            return Source;
+         }
+
+      }
+
+      else if (data[1] == 121)
+
+
+      {
+
+         static const unsigned short string[] = {
+            115, 116, 101, 109
+         };
+         if (memcmp(&data[2], &string, sizeof(QChar) * 4) == 0)
+
+
+         {
+            return System;
+         }
+
+      }
+
+
+   }
+
+   else if (data[0] == 117)
+
+
+   {
+
+      static const unsigned short string[] = {
+         110, 105, 113, 117, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
+
+
+      {
+         return Unique;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier7(const QChar *data)
+
+{
+   if (data[0] == 97)
+
+
+   {
+
+      static const unsigned short string[] = {
+         112, 112, 105, 110, 102, 111
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
+
+
+      {
+         return Appinfo;
+      }
+
+   }
+
+   else if (data[0] == 100)
+
+
+   {
+
+      static const unsigned short string[] = {
+         101, 102, 97, 117, 108, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
+
+
+      {
+         return Default;
+      }
+
+   }
+
+   else if (data[0] == 101)
+
+
+   {
+
+      static const unsigned short string[] = {
+         108, 101, 109, 101, 110, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
+
+
+      {
+         return Element;
+      }
+
+   }
+
+   else if (data[0] == 105)
+
+
+   {
+
+      static const unsigned short string[] = {
+         110, 99, 108, 117, 100, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
+
+
+      {
+         return Include;
+      }
+
+   }
+
+   else if (data[0] == 112)
+
+
+   {
+
+      static const unsigned short string[] = {
+         97, 116, 116, 101, 114, 110
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
+
+
+      {
+         return Pattern;
+      }
+
+   }
+
+   else if (data[0] == 114)
+
+
+   {
+
+      static const unsigned short string[] = {
+         101, 112, 108, 97, 99, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
+
+
+      {
+         return Replace;
+      }
+
+   }
+
+   else if (data[0] == 118)
+
+
+   {
+
+      static const unsigned short string[] = {
+         101, 114, 115, 105, 111, 110
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
+
+
+      {
+         return Version;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier8(const QChar *data)
+
+{
+   if (data[0] == 97)
+
+
+   {
+
+      static const unsigned short string[] = {
+         98, 115, 116, 114, 97, 99, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
+
+
+      {
+         return Abstract;
+      }
+
+   }
+
+   else if (data[0] == 99)
+
+
+   {
+
+      static const unsigned short string[] = {
+         111, 108, 108, 97, 112, 115, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
+
+
+      {
+         return Collapse;
+      }
+
+   }
+
+   else if (data[0] == 105)
+
+
+   {
+
+      static const unsigned short string[] = {
+         116, 101, 109, 84, 121, 112, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
+
+
+      {
+         return ItemType;
+      }
+
+   }
+
+   else if (data[0] == 110)
+
+
+   {
+      if (data[1] == 105)
+
+
+      {
+
+         static const unsigned short string[] = {
+            108, 108, 97, 98, 108, 101
+         };
+         if (memcmp(&data[2], &string, sizeof(QChar) * 6) == 0)
+
+
+         {
+            return Nillable;
+         }
+
+      }
+
+      else if (data[1] == 111)
+
+
+      {
+         if (data[2] == 116)
+
+
+         {
+            if (data[3] == 97)
+
+
+            {
+
+               static const unsigned short string[] = {
+                  116, 105, 111, 110
+               };
+               if (memcmp(&data[4], &string, sizeof(QChar) * 4) == 0)
+
+
+               {
+                  return Notation;
+               }
+
+            }
+
+            else if (data[3] == 81)
+
+
+            {
+
+               static const unsigned short string[] = {
+                  78, 97, 109, 101
+               };
+               if (memcmp(&data[4], &string, sizeof(QChar) * 4) == 0)
+
+
+               {
+                  return NotQName;
+               }
+
+            }
+
+
+         }
+
+
+      }
+
+
+   }
+
+   else if (data[0] == 111)
+
+
+   {
+
+      static const unsigned short string[] = {
+         118, 101, 114, 114, 105, 100, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
+
+
+      {
+         return Override;
+      }
+
+   }
+
+   else if (data[0] == 112)
+
+
+   {
+
+      static const unsigned short string[] = {
+         114, 101, 115, 101, 114, 118, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
+
+
+      {
+         return Preserve;
+      }
+
+   }
+
+   else if (data[0] == 114)
+
+
+   {
+
+      static const unsigned short string[] = {
+         101, 100, 101, 102, 105, 110, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
+
+
+      {
+         return Redefine;
+      }
+
+   }
+
+   else if (data[0] == 115)
+
+
+   {
+      if (data[1] == 101)
+
+
+      {
+         if (data[2] == 108)
+
+
+         {
+
+            static const unsigned short string[] = {
+               101, 99, 116, 111, 114
+            };
+            if (memcmp(&data[3], &string, sizeof(QChar) * 5) == 0)
+
+
+            {
+               return Selector;
+            }
+
+         }
+
+         else if (data[2] == 113)
+
+
+         {
+
+            static const unsigned short string[] = {
+               117, 101, 110, 99, 101
+            };
+            if (memcmp(&data[3], &string, sizeof(QChar) * 5) == 0)
+
+
+            {
+               return Sequence;
+            }
+
+         }
+
+
+      }
+
+
+   }
+
+   else if (data[0] == 120)
+
+
+   {
+
+      static const unsigned short string[] = {
+         109, 108, 58, 108, 97, 110, 103
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
+
+
+      {
+         return XmlLanguage;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier9(const QChar *data)
+
+{
+   if (data[0] == 97)
+
+
+   {
+      if (data[1] == 115)
+
+
+      {
+
+         static const unsigned short string[] = {
+            115, 101, 114, 116, 105, 111, 110
+         };
+         if (memcmp(&data[2], &string, sizeof(QChar) * 7) == 0)
+
+
+         {
+            return Assertion;
+         }
+
+      }
+
+      else if (data[1] == 116)
+
+
+      {
+
+         static const unsigned short string[] = {
+            116, 114, 105, 98, 117, 116, 101
+         };
+         if (memcmp(&data[2], &string, sizeof(QChar) * 7) == 0)
+
+
+         {
+            return Attribute;
+         }
+
+      }
+
+
+   }
+
+   else if (data[0] == 101)
+
+
+   {
+
+      static const unsigned short string[] = {
+         120, 116, 101, 110, 115, 105, 111, 110
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 8) == 0)
+
+
+      {
+         return Extension;
+      }
+
+   }
+
+   else if (data[0] == 109)
+
+
+   {
+      if (data[1] == 97)
+
+
+      {
+         if (data[2] == 120)
+
+
+         {
+            if (data[3] == 76)
+
+
+            {
+
+               static const unsigned short string[] = {
+                  101, 110, 103, 116, 104
+               };
+               if (memcmp(&data[4], &string, sizeof(QChar) * 5) == 0)
+
+
+               {
+                  return MaxLength;
+               }
+
+            }
+
+            else if (data[3] == 79)
+
+
+            {
+
+               static const unsigned short string[] = {
+                  99, 99, 117, 114, 115
+               };
+               if (memcmp(&data[4], &string, sizeof(QChar) * 5) == 0)
+
+
+               {
+                  return MaxOccurs;
+               }
+
+            }
+
+
+         }
+
+
+      }
+
+      else if (data[1] == 105)
+
+
+      {
+         if (data[2] == 110)
+
+
+         {
+            if (data[3] == 76)
+
+
+            {
+
+               static const unsigned short string[] = {
+                  101, 110, 103, 116, 104
+               };
+               if (memcmp(&data[4], &string, sizeof(QChar) * 5) == 0)
+
+
+               {
+                  return MinLength;
+               }
+
+            }
+
+            else if (data[3] == 79)
+
+
+            {
+
+               static const unsigned short string[] = {
+                  99, 99, 117, 114, 115
+               };
+               if (memcmp(&data[4], &string, sizeof(QChar) * 5) == 0)
+
+
+               {
+                  return MinOccurs;
+               }
+
+            }
+
+
+         }
+
+
+      }
+
+
+   }
+
+   else if (data[0] == 110)
+
+
+   {
+
+      static const unsigned short string[] = {
+         97, 109, 101, 115, 112, 97, 99, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 8) == 0)
+
+
+      {
+         return Namespace;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier10(const QChar *data)
+
+{
+   if (data[0] == 97)
+
+
+   {
+
+      static const unsigned short string[] = {
+         110, 110, 111, 116, 97, 116, 105, 111, 110
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 9) == 0)
+
+
+      {
+         return Annotation;
+      }
+
+   }
+
+   else if (data[0] == 115)
+
+
+   {
+
+      static const unsigned short string[] = {
+         105, 109, 112, 108, 101, 84, 121, 112, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 9) == 0)
+
+
+      {
+         return SimpleType;
+      }
+
+   }
+
+   else if (data[0] == 119)
+
+
+   {
+
+      static const unsigned short string[] = {
+         104, 105, 116, 101, 83, 112, 97, 99, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 9) == 0)
+
+
+      {
+         return WhiteSpace;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier11(const QChar *data)
+
+{
+   if (data[0] == 97)
+
+
+   {
+
+      static const unsigned short string[] = {
+         108, 116, 101, 114, 110, 97, 116, 105, 118, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
+
+
+      {
+         return Alternative;
+      }
+
+   }
+
+   else if (data[0] == 99)
+
+
+   {
+
+      static const unsigned short string[] = {
+         111, 109, 112, 108, 101, 120, 84, 121, 112, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
+
+
+      {
+         return ComplexType;
+      }
+
+   }
+
+   else if (data[0] == 101)
+
+
+   {
+
+      static const unsigned short string[] = {
+         110, 117, 109, 101, 114, 97, 116, 105, 111, 110
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
+
+
+      {
+         return Enumeration;
+      }
+
+   }
+
+   else if (data[0] == 109)
+
+
+   {
+
+      static const unsigned short string[] = {
+         101, 109, 98, 101, 114, 84, 121, 112, 101, 115
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
+
+
+      {
+         return MemberTypes;
+      }
+
+   }
+
+   else if (data[0] == 111)
+
+
+   {
+
+      static const unsigned short string[] = {
+         112, 101, 110, 67, 111, 110, 116, 101, 110, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
+
+
+      {
+         return OpenContent;
+      }
+
+   }
+
+   else if (data[0] == 114)
+
+
+   {
+
+      static const unsigned short string[] = {
+         101, 115, 116, 114, 105, 99, 116, 105, 111, 110
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
+
+
+      {
+         return Restriction;
+      }
+
+   }
+
+   else if (data[0] == 116)
+
+
+   {
+
+      static const unsigned short string[] = {
+         111, 116, 97, 108, 68, 105, 103, 105, 116, 115
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 10) == 0)
+
+
+      {
+         return TotalDigits;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier12(const QChar *data)
+
+{
+   if (data[0] == 97)
+
+
+   {
+
+      static const unsigned short string[] = {
+         110, 121, 65, 116, 116, 114, 105, 98, 117, 116, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 11) == 0)
+
+
+      {
+         return AnyAttribute;
+      }
+
+   }
+
+   else if (data[0] == 98)
+
+
+   {
+
+      static const unsigned short string[] = {
+         108, 111, 99, 107, 68, 101, 102, 97, 117, 108, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 11) == 0)
+
+
+      {
+         return BlockDefault;
+      }
+
+   }
+
+   else if (data[0] == 102)
+
+
+   {
+
+      static const unsigned short string[] = {
+         105, 110, 97, 108, 68, 101, 102, 97, 117, 108, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 11) == 0)
+
+
+      {
+         return FinalDefault;
+      }
+
+   }
+
+   else if (data[0] == 109)
+
+
+   {
+      if (data[1] == 97)
+
+
+      {
+         if (data[2] == 120)
+
+
+         {
+            if (data[3] == 69)
+
+
+            {
+
+               static const unsigned short string[] = {
+                  120, 99, 108, 117, 115, 105, 118, 101
+               };
+               if (memcmp(&data[4], &string, sizeof(QChar) * 8) == 0)
+
+
+               {
+                  return MaxExclusive;
+               }
+
+            }
+
+            else if (data[3] == 73)
+
+
+            {
+
+               static const unsigned short string[] = {
+                  110, 99, 108, 117, 115, 105, 118, 101
+               };
+               if (memcmp(&data[4], &string, sizeof(QChar) * 8) == 0)
+
+
+               {
+                  return MaxInclusive;
+               }
+
+            }
+
+
+         }
+
+
+      }
+
+      else if (data[1] == 105)
+
+
+      {
+         if (data[2] == 110)
+
+
+         {
+            if (data[3] == 69)
+
+
+            {
+
+               static const unsigned short string[] = {
+                  120, 99, 108, 117, 115, 105, 118, 101
+               };
+               if (memcmp(&data[4], &string, sizeof(QChar) * 8) == 0)
+
+
+               {
+                  return MinExclusive;
+               }
+
+            }
+
+            else if (data[3] == 73)
+
+
+            {
+
+               static const unsigned short string[] = {
+                  110, 99, 108, 117, 115, 105, 118, 101
+               };
+               if (memcmp(&data[4], &string, sizeof(QChar) * 8) == 0)
+
+
+               {
+                  return MinInclusive;
+               }
+
+            }
+
+
+         }
+
+
+      }
+
+
+   }
+
+   else if (data[0] == 110)
+
+
+   {
+
+      static const unsigned short string[] = {
+         111, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 11) == 0)
+
+
+      {
+         return NotNamespace;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier13(const QChar *data)
+
+{
+   if (data[0] == 100)
+
+
+   {
+
+      static const unsigned short string[] = {
+         111, 99, 117, 109, 101, 110, 116, 97, 116, 105, 111, 110
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 12) == 0)
+
+
+      {
+         return Documentation;
+      }
+
+   }
+
+   else if (data[0] == 115)
+
+
+   {
+
+      static const unsigned short string[] = {
+         105, 109, 112, 108, 101, 67, 111, 110, 116, 101, 110, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 12) == 0)
+
+
+      {
+         return SimpleContent;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier14(const QChar *data)
+
+{
+   if (data[0] == 97)
+
+
+   {
+      if (data[1] == 112)
+
+
+      {
+
+         static const unsigned short string[] = {
+            112, 108, 105, 101, 115, 84, 111, 69, 109, 112, 116, 121
+         };
+         if (memcmp(&data[2], &string, sizeof(QChar) * 12) == 0)
+
+
+         {
+            return AppliesToEmpty;
+         }
+
+      }
+
+      else if (data[1] == 116)
+
+
+      {
+
+         static const unsigned short string[] = {
+            116, 114, 105, 98, 117, 116, 101, 71, 114, 111, 117, 112
+         };
+         if (memcmp(&data[2], &string, sizeof(QChar) * 12) == 0)
+
+
+         {
+            return AttributeGroup;
+         }
+
+      }
+
+
+   }
+
+   else if (data[0] == 99)
+
+
+   {
+
+      static const unsigned short string[] = {
+         111, 109, 112, 108, 101, 120, 67, 111, 110, 116, 101, 110, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 13) == 0)
+
+
+      {
+         return ComplexContent;
+      }
+
+   }
+
+   else if (data[0] == 102)
+
+
+   {
+
+      static const unsigned short string[] = {
+         114, 97, 99, 116, 105, 111, 110, 68, 105, 103, 105, 116, 115
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 13) == 0)
+
+
+      {
+         return FractionDigits;
+      }
+
+   }
+
+   else if (data[0] == 115)
+
+
+   {
+
+      static const unsigned short string[] = {
+         99, 104, 101, 109, 97, 76, 111, 99, 97, 116, 105, 111, 110
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 13) == 0)
+
+
+      {
+         return SchemaLocation;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier15(const QChar *data)
+
+{
+   if (data[0] == 112)
+
+
+   {
+
+      static const unsigned short string[] = {
+         114, 111, 99, 101, 115, 115, 67, 111, 110, 116, 101, 110, 116, 115
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 14) == 0)
+
+
+      {
+         return ProcessContents;
+      }
+
+   }
+
+   else if (data[0] == 116)
+
+
+   {
+
+      static const unsigned short string[] = {
+         97, 114, 103, 101, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 14) == 0)
+
+
+      {
+         return TargetNamespace;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier17(const QChar *data)
+
+{
+   if (data[0] == 100)
+
+
+   {
+
+      static const unsigned short string[] = {
+         101, 102, 97, 117, 108, 116, 65, 116, 116, 114, 105, 98, 117, 116, 101, 115
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 16) == 0)
+
+
+      {
+         return DefaultAttributes;
+      }
+
+   }
+
+   else if (data[0] == 115)
+
+
+   {
+
+      static const unsigned short string[] = {
+         117, 98, 115, 116, 105, 116, 117, 116, 105, 111, 110, 71, 114, 111, 117, 112
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 16) == 0)
+
+
+      {
+         return SubstitutionGroup;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier18(const QChar *data)
+
+{
+   if (data[0] == 100)
+
+
+   {
+
+      static const unsigned short string[] = {
+         101, 102, 97, 117, 108, 116, 79, 112, 101, 110, 67, 111, 110, 116, 101, 110, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 17) == 0)
+
+
+      {
+         return DefaultOpenContent;
+      }
+
+   }
+
+   else if (data[0] == 101)
+
+
+   {
+
+      static const unsigned short string[] = {
+         108, 101, 109, 101, 110, 116, 70, 111, 114, 109, 68, 101, 102, 97, 117, 108, 116
+      };
+      if (memcmp(&data[1], &string, sizeof(QChar) * 17) == 0)
+
+
+      {
+         return ElementFormDefault;
+      }
+
+   }
+
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier20(const QChar *data)
+
+{
+
+   static const unsigned short string[] = {
+      97, 116, 116, 114, 105, 98, 117, 116, 101, 70, 111, 114, 109, 68, 101, 102, 97, 117, 108, 116
+   };
+   if (memcmp(&data[0], &string, sizeof(QChar) * 20) == 0)
+
+
+   {
+      return AttributeFormDefault;
+   }
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier21(const QChar *data)
+
+{
+
+   static const unsigned short string[] = {
+      120, 112, 97, 116, 104, 68, 101, 102, 97, 117, 108, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101
+   };
+   if (memcmp(&data[0], &string, sizeof(QChar) * 21) == 0)
+
+
+   {
+      return XPathDefaultNamespace;
+   }
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier22(const QChar *data)
+
+{
+
+   static const unsigned short string[] = {
+      100, 101, 102, 97, 117, 108, 116, 65, 116, 116, 114, 105, 98, 117, 116, 101, 115, 65, 112, 112, 108, 121
+   };
+   if (memcmp(&data[0], &string, sizeof(QChar) * 22) == 0)
+
+
+   {
+      return DefaultAttributesApply;
+   }
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::classifier32(const QChar *data)
+
+{
+
+   static const unsigned short string[] = {
+      104, 116, 116, 112, 58, 47, 47, 119, 119, 119, 46, 119, 51, 46, 111, 114, 103, 47, 50, 48, 48, 49, 47, 88, 77, 76, 83, 99, 104, 101, 109, 97
+   };
+   if (memcmp(&data[0], &string, sizeof(QChar) * 32) == 0)
+
+
+   {
+      return XML_NS_SCHEMA_URI;
+   }
+
+
+   return NoKeyword;
+}
+XsdSchemaToken::NodeName XsdSchemaToken::toToken(const QChar *data, int length)
+{
+   switch (length) {
+
+      case 2:
+         return classifier2(data);
+
+
+      case 3:
+         return classifier3(data);
+
+
+      case 4:
+         return classifier4(data);
+
+
+      case 5:
+         return classifier5(data);
+
+
+      case 6:
+         return classifier6(data);
+
+
+      case 7:
+         return classifier7(data);
+
+
+      case 8:
+         return classifier8(data);
+
+
+      case 9:
+         return classifier9(data);
+
+
+      case 10:
+         return classifier10(data);
+
+
+      case 11:
+         return classifier11(data);
+
+
+      case 12:
+         return classifier12(data);
+
+
+      case 13:
+         return classifier13(data);
+
+
+      case 14:
+         return classifier14(data);
+
+
+      case 15:
+         return classifier15(data);
+
+
+      case 17:
+         return classifier17(data);
+
+
+      case 18:
+         return classifier18(data);
+
+
+      case 20:
+         return classifier20(data);
+
+
+      case 21:
+         return classifier21(data);
+
+
+      case 22:
+         return classifier22(data);
+
+
+      case 32:
+         return classifier32(data);
+
+
+      default:
+         return NoKeyword;
+   }
+}
+
+
+QString XsdSchemaToken::toString(NodeName token)
+{
+   const unsigned short *data = 0;
+   int length = 0;
+
+   switch (token) {
+
+      case Abstract: {
+         static const unsigned short staticallyStoredAbstract[] = {
+            97, 98, 115, 116, 114, 97, 99, 116, 0
+         };
+         data = staticallyStoredAbstract;
+         length = 8;
+         break;
+      }
+
+      case All: {
+         static const unsigned short staticallyStoredAll[] = {
+            97, 108, 108, 0
+         };
+         data = staticallyStoredAll;
+         length = 3;
+         break;
+      }
+
+      case Alternative: {
+         static const unsigned short staticallyStoredAlternative[] = {
+            97, 108, 116, 101, 114, 110, 97, 116, 105, 118, 101, 0
+         };
+         data = staticallyStoredAlternative;
+         length = 11;
+         break;
+      }
+
+      case Annotation: {
+         static const unsigned short staticallyStoredAnnotation[] = {
+            97, 110, 110, 111, 116, 97, 116, 105, 111, 110, 0
+         };
+         data = staticallyStoredAnnotation;
+         length = 10;
+         break;
+      }
+
+      case Any: {
+         static const unsigned short staticallyStoredAny[] = {
+            97, 110, 121, 0
+         };
+         data = staticallyStoredAny;
+         length = 3;
+         break;
+      }
+
+      case AnyAttribute: {
+         static const unsigned short staticallyStoredAnyAttribute[] = {
+            97, 110, 121, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0
+         };
+         data = staticallyStoredAnyAttribute;
+         length = 12;
+         break;
+      }
+
+      case Appinfo: {
+         static const unsigned short staticallyStoredAppinfo[] = {
+            97, 112, 112, 105, 110, 102, 111, 0
+         };
+         data = staticallyStoredAppinfo;
+         length = 7;
+         break;
+      }
+
+      case AppliesToEmpty: {
+         static const unsigned short staticallyStoredAppliesToEmpty[] = {
+            97, 112, 112, 108, 105, 101, 115, 84, 111, 69, 109, 112, 116, 121, 0
+         };
+         data = staticallyStoredAppliesToEmpty;
+         length = 14;
+         break;
+      }
+
+      case Assert: {
+         static const unsigned short staticallyStoredAssert[] = {
+            97, 115, 115, 101, 114, 116, 0
+         };
+         data = staticallyStoredAssert;
+         length = 6;
+         break;
+      }
+
+      case Assertion: {
+         static const unsigned short staticallyStoredAssertion[] = {
+            97, 115, 115, 101, 114, 116, 105, 111, 110, 0
+         };
+         data = staticallyStoredAssertion;
+         length = 9;
+         break;
+      }
+
+      case Attribute: {
+         static const unsigned short staticallyStoredAttribute[] = {
+            97, 116, 116, 114, 105, 98, 117, 116, 101, 0
+         };
+         data = staticallyStoredAttribute;
+         length = 9;
+         break;
+      }
+
+      case AttributeFormDefault: {
+         static const unsigned short staticallyStoredAttributeFormDefault[] = {
+            97, 116, 116, 114, 105, 98, 117, 116, 101, 70, 111, 114, 109, 68, 101, 102, 97, 117, 108, 116, 0
+         };
+         data = staticallyStoredAttributeFormDefault;
+         length = 20;
+         break;
+      }
+
+      case AttributeGroup: {
+         static const unsigned short staticallyStoredAttributeGroup[] = {
+            97, 116, 116, 114, 105, 98, 117, 116, 101, 71, 114, 111, 117, 112, 0
+         };
+         data = staticallyStoredAttributeGroup;
+         length = 14;
+         break;
+      }
+
+      case Base: {
+         static const unsigned short staticallyStoredBase[] = {
+            98, 97, 115, 101, 0
+         };
+         data = staticallyStoredBase;
+         length = 4;
+         break;
+      }
+
+      case Block: {
+         static const unsigned short staticallyStoredBlock[] = {
+            98, 108, 111, 99, 107, 0
+         };
+         data = staticallyStoredBlock;
+         length = 5;
+         break;
+      }
+
+      case BlockDefault: {
+         static const unsigned short staticallyStoredBlockDefault[] = {
+            98, 108, 111, 99, 107, 68, 101, 102, 97, 117, 108, 116, 0
+         };
+         data = staticallyStoredBlockDefault;
+         length = 12;
+         break;
+      }
+
+      case Choice: {
+         static const unsigned short staticallyStoredChoice[] = {
+            99, 104, 111, 105, 99, 101, 0
+         };
+         data = staticallyStoredChoice;
+         length = 6;
+         break;
+      }
+
+      case Collapse: {
+         static const unsigned short staticallyStoredCollapse[] = {
+            99, 111, 108, 108, 97, 112, 115, 101, 0
+         };
+         data = staticallyStoredCollapse;
+         length = 8;
+         break;
+      }
+
+      case ComplexContent: {
+         static const unsigned short staticallyStoredComplexContent[] = {
+            99, 111, 109, 112, 108, 101, 120, 67, 111, 110, 116, 101, 110, 116, 0
+         };
+         data = staticallyStoredComplexContent;
+         length = 14;
+         break;
+      }
+
+      case ComplexType: {
+         static const unsigned short staticallyStoredComplexType[] = {
+            99, 111, 109, 112, 108, 101, 120, 84, 121, 112, 101, 0
+         };
+         data = staticallyStoredComplexType;
+         length = 11;
+         break;
+      }
+
+      case Default: {
+         static const unsigned short staticallyStoredDefault[] = {
+            100, 101, 102, 97, 117, 108, 116, 0
+         };
+         data = staticallyStoredDefault;
+         length = 7;
+         break;
+      }
+
+      case DefaultAttributes: {
+         static const unsigned short staticallyStoredDefaultAttributes[] = {
+            100, 101, 102, 97, 117, 108, 116, 65, 116, 116, 114, 105, 98, 117, 116, 101, 115, 0
+         };
+         data = staticallyStoredDefaultAttributes;
+         length = 17;
+         break;
+      }
+
+      case DefaultAttributesApply: {
+         static const unsigned short staticallyStoredDefaultAttributesApply[] = {
+            100, 101, 102, 97, 117, 108, 116, 65, 116, 116, 114, 105, 98, 117, 116, 101, 115, 65, 112, 112, 108, 121, 0
+         };
+         data = staticallyStoredDefaultAttributesApply;
+         length = 22;
+         break;
+      }
+
+      case DefaultOpenContent: {
+         static const unsigned short staticallyStoredDefaultOpenContent[] = {
+            100, 101, 102, 97, 117, 108, 116, 79, 112, 101, 110, 67, 111, 110, 116, 101, 110, 116, 0
+         };
+         data = staticallyStoredDefaultOpenContent;
+         length = 18;
+         break;
+      }
+
+      case Documentation: {
+         static const unsigned short staticallyStoredDocumentation[] = {
+            100, 111, 99, 117, 109, 101, 110, 116, 97, 116, 105, 111, 110, 0
+         };
+         data = staticallyStoredDocumentation;
+         length = 13;
+         break;
+      }
+
+      case Element: {
+         static const unsigned short staticallyStoredElement[] = {
+            101, 108, 101, 109, 101, 110, 116, 0
+         };
+         data = staticallyStoredElement;
+         length = 7;
+         break;
+      }
+
+      case ElementFormDefault: {
+         static const unsigned short staticallyStoredElementFormDefault[] = {
+            101, 108, 101, 109, 101, 110, 116, 70, 111, 114, 109, 68, 101, 102, 97, 117, 108, 116, 0
+         };
+         data = staticallyStoredElementFormDefault;
+         length = 18;
+         break;
+      }
+
+      case Enumeration: {
+         static const unsigned short staticallyStoredEnumeration[] = {
+            101, 110, 117, 109, 101, 114, 97, 116, 105, 111, 110, 0
+         };
+         data = staticallyStoredEnumeration;
+         length = 11;
+         break;
+      }
+
+      case Extension: {
+         static const unsigned short staticallyStoredExtension[] = {
+            101, 120, 116, 101, 110, 115, 105, 111, 110, 0
+         };
+         data = staticallyStoredExtension;
+         length = 9;
+         break;
+      }
+
+      case Field: {
+         static const unsigned short staticallyStoredField[] = {
+            102, 105, 101, 108, 100, 0
+         };
+         data = staticallyStoredField;
+         length = 5;
+         break;
+      }
+
+      case Final: {
+         static const unsigned short staticallyStoredFinal[] = {
+            102, 105, 110, 97, 108, 0
+         };
+         data = staticallyStoredFinal;
+         length = 5;
+         break;
+      }
+
+      case FinalDefault: {
+         static const unsigned short staticallyStoredFinalDefault[] = {
+            102, 105, 110, 97, 108, 68, 101, 102, 97, 117, 108, 116, 0
+         };
+         data = staticallyStoredFinalDefault;
+         length = 12;
+         break;
+      }
+
+      case Fixed: {
+         static const unsigned short staticallyStoredFixed[] = {
+            102, 105, 120, 101, 100, 0
+         };
+         data = staticallyStoredFixed;
+         length = 5;
+         break;
+      }
+
+      case Form: {
+         static const unsigned short staticallyStoredForm[] = {
+            102, 111, 114, 109, 0
+         };
+         data = staticallyStoredForm;
+         length = 4;
+         break;
+      }
+
+      case FractionDigits: {
+         static const unsigned short staticallyStoredFractionDigits[] = {
+            102, 114, 97, 99, 116, 105, 111, 110, 68, 105, 103, 105, 116, 115, 0
+         };
+         data = staticallyStoredFractionDigits;
+         length = 14;
+         break;
+      }
+
+      case Group: {
+         static const unsigned short staticallyStoredGroup[] = {
+            103, 114, 111, 117, 112, 0
+         };
+         data = staticallyStoredGroup;
+         length = 5;
+         break;
+      }
+
+      case Id: {
+         static const unsigned short staticallyStoredId[] = {
+            105, 100, 0
+         };
+         data = staticallyStoredId;
+         length = 2;
+         break;
+      }
+
+      case Import: {
+         static const unsigned short staticallyStoredImport[] = {
+            105, 109, 112, 111, 114, 116, 0
+         };
+         data = staticallyStoredImport;
+         length = 6;
+         break;
+      }
+
+      case Include: {
+         static const unsigned short staticallyStoredInclude[] = {
+            105, 110, 99, 108, 117, 100, 101, 0
+         };
+         data = staticallyStoredInclude;
+         length = 7;
+         break;
+      }
+
+      case ItemType: {
+         static const unsigned short staticallyStoredItemType[] = {
+            105, 116, 101, 109, 84, 121, 112, 101, 0
+         };
+         data = staticallyStoredItemType;
+         length = 8;
+         break;
+      }
+
+      case Key: {
+         static const unsigned short staticallyStoredKey[] = {
+            107, 101, 121, 0
+         };
+         data = staticallyStoredKey;
+         length = 3;
+         break;
+      }
+
+      case Keyref: {
+         static const unsigned short staticallyStoredKeyref[] = {
+            107, 101, 121, 114, 101, 102, 0
+         };
+         data = staticallyStoredKeyref;
+         length = 6;
+         break;
+      }
+
+      case Length: {
+         static const unsigned short staticallyStoredLength[] = {
+            108, 101, 110, 103, 116, 104, 0
+         };
+         data = staticallyStoredLength;
+         length = 6;
+         break;
+      }
+
+      case List: {
+         static const unsigned short staticallyStoredList[] = {
+            108, 105, 115, 116, 0
+         };
+         data = staticallyStoredList;
+         length = 4;
+         break;
+      }
+
+      case MaxExclusive: {
+         static const unsigned short staticallyStoredMaxExclusive[] = {
+            109, 97, 120, 69, 120, 99, 108, 117, 115, 105, 118, 101, 0
+         };
+         data = staticallyStoredMaxExclusive;
+         length = 12;
+         break;
+      }
+
+      case MaxInclusive: {
+         static const unsigned short staticallyStoredMaxInclusive[] = {
+            109, 97, 120, 73, 110, 99, 108, 117, 115, 105, 118, 101, 0
+         };
+         data = staticallyStoredMaxInclusive;
+         length = 12;
+         break;
+      }
+
+      case MaxLength: {
+         static const unsigned short staticallyStoredMaxLength[] = {
+            109, 97, 120, 76, 101, 110, 103, 116, 104, 0
+         };
+         data = staticallyStoredMaxLength;
+         length = 9;
+         break;
+      }
+
+      case MaxOccurs: {
+         static const unsigned short staticallyStoredMaxOccurs[] = {
+            109, 97, 120, 79, 99, 99, 117, 114, 115, 0
+         };
+         data = staticallyStoredMaxOccurs;
+         length = 9;
+         break;
+      }
+
+      case MemberTypes: {
+         static const unsigned short staticallyStoredMemberTypes[] = {
+            109, 101, 109, 98, 101, 114, 84, 121, 112, 101, 115, 0
+         };
+         data = staticallyStoredMemberTypes;
+         length = 11;
+         break;
+      }
+
+      case MinExclusive: {
+         static const unsigned short staticallyStoredMinExclusive[] = {
+            109, 105, 110, 69, 120, 99, 108, 117, 115, 105, 118, 101, 0
+         };
+         data = staticallyStoredMinExclusive;
+         length = 12;
+         break;
+      }
+
+      case MinInclusive: {
+         static const unsigned short staticallyStoredMinInclusive[] = {
+            109, 105, 110, 73, 110, 99, 108, 117, 115, 105, 118, 101, 0
+         };
+         data = staticallyStoredMinInclusive;
+         length = 12;
+         break;
+      }
+
+      case MinLength: {
+         static const unsigned short staticallyStoredMinLength[] = {
+            109, 105, 110, 76, 101, 110, 103, 116, 104, 0
+         };
+         data = staticallyStoredMinLength;
+         length = 9;
+         break;
+      }
+
+      case MinOccurs: {
+         static const unsigned short staticallyStoredMinOccurs[] = {
+            109, 105, 110, 79, 99, 99, 117, 114, 115, 0
+         };
+         data = staticallyStoredMinOccurs;
+         length = 9;
+         break;
+      }
+
+      case Mixed: {
+         static const unsigned short staticallyStoredMixed[] = {
+            109, 105, 120, 101, 100, 0
+         };
+         data = staticallyStoredMixed;
+         length = 5;
+         break;
+      }
+
+      case Mode: {
+         static const unsigned short staticallyStoredMode[] = {
+            109, 111, 100, 101, 0
+         };
+         data = staticallyStoredMode;
+         length = 4;
+         break;
+      }
+
+      case Name: {
+         static const unsigned short staticallyStoredName[] = {
+            110, 97, 109, 101, 0
+         };
+         data = staticallyStoredName;
+         length = 4;
+         break;
+      }
+
+      case Namespace: {
+         static const unsigned short staticallyStoredNamespace[] = {
+            110, 97, 109, 101, 115, 112, 97, 99, 101, 0
+         };
+         data = staticallyStoredNamespace;
+         length = 9;
+         break;
+      }
+
+      case Nillable: {
+         static const unsigned short staticallyStoredNillable[] = {
+            110, 105, 108, 108, 97, 98, 108, 101, 0
+         };
+         data = staticallyStoredNillable;
+         length = 8;
+         break;
+      }
+
+      case NotNamespace: {
+         static const unsigned short staticallyStoredNotNamespace[] = {
+            110, 111, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101, 0
+         };
+         data = staticallyStoredNotNamespace;
+         length = 12;
+         break;
+      }
+
+      case NotQName: {
+         static const unsigned short staticallyStoredNotQName[] = {
+            110, 111, 116, 81, 78, 97, 109, 101, 0
+         };
+         data = staticallyStoredNotQName;
+         length = 8;
+         break;
+      }
+
+      case Notation: {
+         static const unsigned short staticallyStoredNotation[] = {
+            110, 111, 116, 97, 116, 105, 111, 110, 0
+         };
+         data = staticallyStoredNotation;
+         length = 8;
+         break;
+      }
+
+      case OpenContent: {
+         static const unsigned short staticallyStoredOpenContent[] = {
+            111, 112, 101, 110, 67, 111, 110, 116, 101, 110, 116, 0
+         };
+         data = staticallyStoredOpenContent;
+         length = 11;
+         break;
+      }
+
+      case Override: {
+         static const unsigned short staticallyStoredOverride[] = {
+            111, 118, 101, 114, 114, 105, 100, 101, 0
+         };
+         data = staticallyStoredOverride;
+         length = 8;
+         break;
+      }
+
+      case Pattern: {
+         static const unsigned short staticallyStoredPattern[] = {
+            112, 97, 116, 116, 101, 114, 110, 0
+         };
+         data = staticallyStoredPattern;
+         length = 7;
+         break;
+      }
+
+      case Preserve: {
+         static const unsigned short staticallyStoredPreserve[] = {
+            112, 114, 101, 115, 101, 114, 118, 101, 0
+         };
+         data = staticallyStoredPreserve;
+         length = 8;
+         break;
+      }
+
+      case ProcessContents: {
+         static const unsigned short staticallyStoredProcessContents[] = {
+            112, 114, 111, 99, 101, 115, 115, 67, 111, 110, 116, 101, 110, 116, 115, 0
+         };
+         data = staticallyStoredProcessContents;
+         length = 15;
+         break;
+      }
+
+      case Public: {
+         static const unsigned short staticallyStoredPublic[] = {
+            112, 117, 98, 108, 105, 99, 0
+         };
+         data = staticallyStoredPublic;
+         length = 6;
+         break;
+      }
+
+      case Redefine: {
+         static const unsigned short staticallyStoredRedefine[] = {
+            114, 101, 100, 101, 102, 105, 110, 101, 0
+         };
+         data = staticallyStoredRedefine;
+         length = 8;
+         break;
+      }
+
+      case Ref: {
+         static const unsigned short staticallyStoredRef[] = {
+            114, 101, 102, 0
+         };
+         data = staticallyStoredRef;
+         length = 3;
+         break;
+      }
+
+      case Refer: {
+         static const unsigned short staticallyStoredRefer[] = {
+            114, 101, 102, 101, 114, 0
+         };
+         data = staticallyStoredRefer;
+         length = 5;
+         break;
+      }
+
+      case Replace: {
+         static const unsigned short staticallyStoredReplace[] = {
+            114, 101, 112, 108, 97, 99, 101, 0
+         };
+         data = staticallyStoredReplace;
+         length = 7;
+         break;
+      }
+
+      case Restriction: {
+         static const unsigned short staticallyStoredRestriction[] = {
+            114, 101, 115, 116, 114, 105, 99, 116, 105, 111, 110, 0
+         };
+         data = staticallyStoredRestriction;
+         length = 11;
+         break;
+      }
+
+      case Schema: {
+         static const unsigned short staticallyStoredSchema[] = {
+            115, 99, 104, 101, 109, 97, 0
+         };
+         data = staticallyStoredSchema;
+         length = 6;
+         break;
+      }
+
+      case SchemaLocation: {
+         static const unsigned short staticallyStoredSchemaLocation[] = {
+            115, 99, 104, 101, 109, 97, 76, 111, 99, 97, 116, 105, 111, 110, 0
+         };
+         data = staticallyStoredSchemaLocation;
+         length = 14;
+         break;
+      }
+
+      case Selector: {
+         static const unsigned short staticallyStoredSelector[] = {
+            115, 101, 108, 101, 99, 116, 111, 114, 0
+         };
+         data = staticallyStoredSelector;
+         length = 8;
+         break;
+      }
+
+      case Sequence: {
+         static const unsigned short staticallyStoredSequence[] = {
+            115, 101, 113, 117, 101, 110, 99, 101, 0
+         };
+         data = staticallyStoredSequence;
+         length = 8;
+         break;
+      }
+
+      case SimpleContent: {
+         static const unsigned short staticallyStoredSimpleContent[] = {
+            115, 105, 109, 112, 108, 101, 67, 111, 110, 116, 101, 110, 116, 0
+         };
+         data = staticallyStoredSimpleContent;
+         length = 13;
+         break;
+      }
+
+      case SimpleType: {
+         static const unsigned short staticallyStoredSimpleType[] = {
+            115, 105, 109, 112, 108, 101, 84, 121, 112, 101, 0
+         };
+         data = staticallyStoredSimpleType;
+         length = 10;
+         break;
+      }
+
+      case Source: {
+         static const unsigned short staticallyStoredSource[] = {
+            115, 111, 117, 114, 99, 101, 0
+         };
+         data = staticallyStoredSource;
+         length = 6;
+         break;
+      }
+
+      case SubstitutionGroup: {
+         static const unsigned short staticallyStoredSubstitutionGroup[] = {
+            115, 117, 98, 115, 116, 105, 116, 117, 116, 105, 111, 110, 71, 114, 111, 117, 112, 0
+         };
+         data = staticallyStoredSubstitutionGroup;
+         length = 17;
+         break;
+      }
+
+      case System: {
+         static const unsigned short staticallyStoredSystem[] = {
+            115, 121, 115, 116, 101, 109, 0
+         };
+         data = staticallyStoredSystem;
+         length = 6;
+         break;
+      }
+
+      case TargetNamespace: {
+         static const unsigned short staticallyStoredTargetNamespace[] = {
+            116, 97, 114, 103, 101, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101, 0
+         };
+         data = staticallyStoredTargetNamespace;
+         length = 15;
+         break;
+      }
+
+      case Test: {
+         static const unsigned short staticallyStoredTest[] = {
+            116, 101, 115, 116, 0
+         };
+         data = staticallyStoredTest;
+         length = 4;
+         break;
+      }
+
+      case TotalDigits: {
+         static const unsigned short staticallyStoredTotalDigits[] = {
+            116, 111, 116, 97, 108, 68, 105, 103, 105, 116, 115, 0
+         };
+         data = staticallyStoredTotalDigits;
+         length = 11;
+         break;
+      }
+
+      case Type: {
+         static const unsigned short staticallyStoredType[] = {
+            116, 121, 112, 101, 0
+         };
+         data = staticallyStoredType;
+         length = 4;
+         break;
+      }
+
+      case Union: {
+         static const unsigned short staticallyStoredUnion[] = {
+            117, 110, 105, 111, 110, 0
+         };
+         data = staticallyStoredUnion;
+         length = 5;
+         break;
+      }
+
+      case Unique: {
+         static const unsigned short staticallyStoredUnique[] = {
+            117, 110, 105, 113, 117, 101, 0
+         };
+         data = staticallyStoredUnique;
+         length = 6;
+         break;
+      }
+
+      case Use: {
+         static const unsigned short staticallyStoredUse[] = {
+            117, 115, 101, 0
+         };
+         data = staticallyStoredUse;
+         length = 3;
+         break;
+      }
+
+      case Value: {
+         static const unsigned short staticallyStoredValue[] = {
+            118, 97, 108, 117, 101, 0
+         };
+         data = staticallyStoredValue;
+         length = 5;
+         break;
+      }
+
+      case Version: {
+         static const unsigned short staticallyStoredVersion[] = {
+            118, 101, 114, 115, 105, 111, 110, 0
+         };
+         data = staticallyStoredVersion;
+         length = 7;
+         break;
+      }
+
+      case WhiteSpace: {
+         static const unsigned short staticallyStoredWhiteSpace[] = {
+            119, 104, 105, 116, 101, 83, 112, 97, 99, 101, 0
+         };
+         data = staticallyStoredWhiteSpace;
+         length = 10;
+         break;
+      }
+
+      case XML_NS_SCHEMA_URI: {
+         static const unsigned short staticallyStoredXML_NS_SCHEMA_URI[] = {
+            104, 116, 116, 112, 58, 47, 47, 119, 119, 119, 46, 119, 51, 46, 111, 114, 103, 47, 50, 48, 48, 49, 47, 88, 77, 76, 83, 99, 104, 101, 109, 97, 0
+         };
+         data = staticallyStoredXML_NS_SCHEMA_URI;
+         length = 32;
+         break;
+      }
+
+      case XPathDefaultNamespace: {
+         static const unsigned short staticallyStoredXPathDefaultNamespace[] = {
+            120, 112, 97, 116, 104, 68, 101, 102, 97, 117, 108, 116, 78, 97, 109, 101, 115, 112, 97, 99, 101, 0
+         };
+         data = staticallyStoredXPathDefaultNamespace;
+         length = 21;
+         break;
+      }
+
+      case XmlLanguage: {
+         static const unsigned short staticallyStoredXmlLanguage[] = {
+            120, 109, 108, 58, 108, 97, 110, 103, 0
+         };
+         data = staticallyStoredXmlLanguage;
+         length = 8;
+         break;
+      }
+
+      case Xpath: {
+         static const unsigned short staticallyStoredXpath[] = {
+            120, 112, 97, 116, 104, 0
+         };
+         data = staticallyStoredXpath;
+         length = 5;
+         break;
+      }
+
+      default:
+         /* It's either the default token, or an undefined enum
+          * value. We silence a compiler warning, and return the
+          * empty string. */
+         ;
+   }
+
+   union {
+      const unsigned short *data;
+      const QChar *asQChar;
+   } converter;
+   converter.data = data;
+
+   return QString::fromRawData(converter.asQChar, length);
+}
+
 QT_END_NAMESPACE
 

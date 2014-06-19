@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,85 +41,87 @@ IfThenClause::IfThenClause(const Expression::Ptr &test,
 
 Item::Iterator::Ptr IfThenClause::evaluateSequence(const DynamicContext::Ptr &context) const
 {
-    return m_operand1->evaluateEBV(context)
-            ? m_operand2->evaluateSequence(context)
-            : m_operand3->evaluateSequence(context);
+   return m_operand1->evaluateEBV(context)
+          ? m_operand2->evaluateSequence(context)
+          : m_operand3->evaluateSequence(context);
 }
 
 Item IfThenClause::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    return m_operand1->evaluateEBV(context)
-            ? m_operand2->evaluateSingleton(context)
-            : m_operand3->evaluateSingleton(context);
+   return m_operand1->evaluateEBV(context)
+          ? m_operand2->evaluateSingleton(context)
+          : m_operand3->evaluateSingleton(context);
 }
 
 bool IfThenClause::evaluateEBV(const DynamicContext::Ptr &context) const
 {
-    return m_operand1->evaluateEBV(context)
-            ? m_operand2->evaluateEBV(context)
-            : m_operand3->evaluateEBV(context);
+   return m_operand1->evaluateEBV(context)
+          ? m_operand2->evaluateEBV(context)
+          : m_operand3->evaluateEBV(context);
 }
 
 void IfThenClause::evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const
 {
-    if(m_operand1->evaluateEBV(context))
-        m_operand2->evaluateToSequenceReceiver(context);
-    else
-        m_operand3->evaluateToSequenceReceiver(context);
+   if (m_operand1->evaluateEBV(context)) {
+      m_operand2->evaluateToSequenceReceiver(context);
+   } else {
+      m_operand3->evaluateToSequenceReceiver(context);
+   }
 }
 
 Expression::Ptr IfThenClause::compress(const StaticContext::Ptr &context)
 {
-    const Expression::Ptr me(TripleContainer::compress(context));
+   const Expression::Ptr me(TripleContainer::compress(context));
 
-    if(me != this)
-        return me;
+   if (me != this) {
+      return me;
+   }
 
-    /* All operands mustn't be evaluated in order for const folding to
-     * be possible. Let's see how far we get. */
+   /* All operands mustn't be evaluated in order for const folding to
+    * be possible. Let's see how far we get. */
 
-    if(m_operand1->isEvaluated())
-    {
-        if(m_operand1->evaluateEBV(context->dynamicContext()))
-            return m_operand2;
-        else
-            return m_operand3;
-    }
-    else
-        return me;
+   if (m_operand1->isEvaluated()) {
+      if (m_operand1->evaluateEBV(context->dynamicContext())) {
+         return m_operand2;
+      } else {
+         return m_operand3;
+      }
+   } else {
+      return me;
+   }
 }
 
 QList<QExplicitlySharedDataPointer<OptimizationPass> > IfThenClause::optimizationPasses() const
 {
-    return OptimizationPasses::ifThenPasses;
+   return OptimizationPasses::ifThenPasses;
 }
 
 SequenceType::List IfThenClause::expectedOperandTypes() const
 {
-    SequenceType::List result;
-    result.append(CommonSequenceTypes::EBV);
-    result.append(CommonSequenceTypes::ZeroOrMoreItems);
-    result.append(CommonSequenceTypes::ZeroOrMoreItems);
-    return result;
+   SequenceType::List result;
+   result.append(CommonSequenceTypes::EBV);
+   result.append(CommonSequenceTypes::ZeroOrMoreItems);
+   result.append(CommonSequenceTypes::ZeroOrMoreItems);
+   return result;
 }
 
 SequenceType::Ptr IfThenClause::staticType() const
 {
-    const SequenceType::Ptr t1(m_operand2->staticType());
-    const SequenceType::Ptr t2(m_operand3->staticType());
+   const SequenceType::Ptr t1(m_operand2->staticType());
+   const SequenceType::Ptr t2(m_operand3->staticType());
 
-    return makeGenericSequenceType(t1->itemType() | t2->itemType(),
-                                   t1->cardinality() | t2->cardinality());
+   return makeGenericSequenceType(t1->itemType() | t2->itemType(),
+                                  t1->cardinality() | t2->cardinality());
 }
 
 ExpressionVisitorResult::Ptr IfThenClause::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 Expression::ID IfThenClause::id() const
 {
-    return IDIfThenClause;
+   return IDIfThenClause;
 }
 
 /*

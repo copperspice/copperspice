@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,42 +31,42 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 ExternalVariableReference::ExternalVariableReference(const QXmlName &name,
-                                                     const SequenceType::Ptr &type) : m_name(name),
-                                                                                      m_seqType(type)
+      const SequenceType::Ptr &type) : m_name(name),
+   m_seqType(type)
 {
-    Q_ASSERT(!m_name.isNull());
-    Q_ASSERT(m_seqType);
+   Q_ASSERT(!m_name.isNull());
+   Q_ASSERT(m_seqType);
 }
 
 Item::Iterator::Ptr ExternalVariableReference::evaluateSequence(const DynamicContext::Ptr &context) const
 {
-    Q_ASSERT(context->externalVariableLoader());
-    return context->externalVariableLoader()->evaluateSequence(m_name, context);
+   Q_ASSERT(context->externalVariableLoader());
+   return context->externalVariableLoader()->evaluateSequence(m_name, context);
 }
 
 Item ExternalVariableReference::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    return context->externalVariableLoader()->evaluateSingleton(m_name, context);
+   return context->externalVariableLoader()->evaluateSingleton(m_name, context);
 }
 
 bool ExternalVariableReference::evaluateEBV(const DynamicContext::Ptr &context) const
 {
-    return context->externalVariableLoader()->evaluateEBV(m_name, context);
+   return context->externalVariableLoader()->evaluateEBV(m_name, context);
 }
 
 SequenceType::Ptr ExternalVariableReference::staticType() const
 {
-    return m_seqType;
+   return m_seqType;
 }
 
 Expression::Properties ExternalVariableReference::properties() const
 {
-    return DisableElimination;
+   return DisableElimination;
 }
 
 ExpressionVisitorResult::Ptr ExternalVariableReference::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,33 +33,33 @@ QT_BEGIN_NAMESPACE
 /* Message highlighter based on HtmlSyntaxHighlighter from designer */
 class MessageHighlighter : public QSyntaxHighlighter
 {
-    Q_OBJECT
+   Q_OBJECT
 
-public:
-    MessageHighlighter(QTextEdit *textEdit);
+ public:
+   MessageHighlighter(QTextEdit *textEdit);
 
-protected:
-    void highlightBlock(const QString &text);
+ protected:
+   void highlightBlock(const QString &text);
 
-private:
-    enum Construct {
-        Entity,
-        Tag,
-        Comment,
-        Attribute,
-        Value,
-        Accelerator, // "Open &File"
-        Variable,    // "Opening %1"
-        LastConstruct = Variable
-    };
+ private:
+   enum Construct {
+      Entity,
+      Tag,
+      Comment,
+      Attribute,
+      Value,
+      Accelerator, // "Open &File"
+      Variable,    // "Opening %1"
+      LastConstruct = Variable
+   };
 
-    enum State {
-        NormalState = -1,
-        InComment,
-        InTag
-    };
+   enum State {
+      NormalState = -1,
+      InComment,
+      InTag
+   };
 
-    QTextCharFormat m_formats[LastConstruct + 1];
+   QTextCharFormat m_formats[LastConstruct + 1];
 };
 
 QT_END_NAMESPACE

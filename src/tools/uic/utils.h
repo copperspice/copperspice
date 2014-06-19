@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,77 +34,86 @@
 QT_BEGIN_NAMESPACE
 
 inline bool toBool(const QString &str)
-{ return str.toLower() == QLatin1String("true"); }
+{
+   return str.toLower() == QLatin1String("true");
+}
 
 inline QString toString(const DomString *str)
-{ return str ? str->text() : QString(); }
+{
+   return str ? str->text() : QString();
+}
 
 inline QString fixString(const QString &str, const QString &indent)
 {
-    QString cursegment;
-    QStringList result;
-    const QByteArray utf8 = str.toUtf8();
-    const int utf8Length = utf8.length();
+   QString cursegment;
+   QStringList result;
+   const QByteArray utf8 = str.toUtf8();
+   const int utf8Length = utf8.length();
 
-    for (int i = 0; i < utf8Length; ++i) {
-        const uchar cbyte = utf8.at(i);
-        if (cbyte >= 0x80) {
-            cursegment += QLatin1Char('\\');
-            cursegment += QString::number(cbyte, 8);
-        } else {
-            switch(cbyte) {
+   for (int i = 0; i < utf8Length; ++i) {
+      const uchar cbyte = utf8.at(i);
+      if (cbyte >= 0x80) {
+         cursegment += QLatin1Char('\\');
+         cursegment += QString::number(cbyte, 8);
+      } else {
+         switch (cbyte) {
             case '\\':
-                cursegment += QLatin1String("\\\\"); break;
+               cursegment += QLatin1String("\\\\");
+               break;
             case '\"':
-                cursegment += QLatin1String("\\\""); break;
+               cursegment += QLatin1String("\\\"");
+               break;
             case '\r':
-                break;
+               break;
             case '\n':
-                cursegment += QLatin1String("\\n\"\n\""); break;
+               cursegment += QLatin1String("\\n\"\n\"");
+               break;
             default:
-                cursegment += QLatin1Char(cbyte);
-            }
-        }
+               cursegment += QLatin1Char(cbyte);
+         }
+      }
 
-        if (cursegment.length() > 1024) {
-            result << cursegment;
-            cursegment.clear();
-        }
-    }
+      if (cursegment.length() > 1024) {
+         result << cursegment;
+         cursegment.clear();
+      }
+   }
 
-    if (!cursegment.isEmpty())
-        result << cursegment;
+   if (!cursegment.isEmpty()) {
+      result << cursegment;
+   }
 
 
-    QString joinstr = QLatin1String("\"\n");
-    joinstr += indent;
-    joinstr += indent;
-    joinstr += QLatin1Char('"');
+   QString joinstr = QLatin1String("\"\n");
+   joinstr += indent;
+   joinstr += indent;
+   joinstr += QLatin1Char('"');
 
-    QString rc(QLatin1Char('"'));
-    rc += result.join(joinstr);
-    rc += QLatin1Char('"');
-    return rc;
+   QString rc(QLatin1Char('"'));
+   rc += result.join(joinstr);
+   rc += QLatin1Char('"');
+   return rc;
 }
 
 inline QHash<QString, DomProperty *> propertyMap(const QList<DomProperty *> &properties)
 {
-    QHash<QString, DomProperty *> map;
+   QHash<QString, DomProperty *> map;
 
-    for (int i=0; i<properties.size(); ++i) {
-        DomProperty *p = properties.at(i);
-        map.insert(p->attributeName(), p);
-    }
+   for (int i = 0; i < properties.size(); ++i) {
+      DomProperty *p = properties.at(i);
+      map.insert(p->attributeName(), p);
+   }
 
-    return map;
+   return map;
 }
 
 inline QStringList unique(const QStringList &lst)
 {
-    QHash<QString, bool> h;
-    for (int i=0; i<lst.size(); ++i)
-        h.insert(lst.at(i), true);
-    return h.keys();
+   QHash<QString, bool> h;
+   for (int i = 0; i < lst.size(); ++i) {
+      h.insert(lst.at(i), true);
+   }
+   return h.keys();
 }
 
 QT_END_NAMESPACE

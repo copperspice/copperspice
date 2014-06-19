@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,65 +38,66 @@ class PhraseModel;
 
 class GuessShortcut : public QShortcut
 {
-    Q_OBJECT
-public:
-    GuessShortcut(int nkey, QWidget *parent, const char *member)
-        : QShortcut(parent), nrkey(nkey)
-    {
-        setKey(Qt::CTRL + (Qt::Key_1 + nrkey));
-        connect(this, SIGNAL(activated()), this, SLOT(keyActivated()));
-        connect(this, SIGNAL(activated(int)), parent, member);
-    }
+   Q_OBJECT
+ public:
+   GuessShortcut(int nkey, QWidget *parent, const char *member)
+      : QShortcut(parent), nrkey(nkey) {
+      setKey(Qt::CTRL + (Qt::Key_1 + nrkey));
+      connect(this, SIGNAL(activated()), this, SLOT(keyActivated()));
+      connect(this, SIGNAL(activated(int)), parent, member);
+   }
 
-private slots:
-    void keyActivated() { emit activated(nrkey); }
+ private slots:
+   void keyActivated() {
+      emit activated(nrkey);
+   }
 
-signals:
-    void activated(int nkey);
+ signals:
+   void activated(int nkey);
 
-private:
-    int nrkey;
+ private:
+   int nrkey;
 };
 
 class PhraseView : public QTreeView
 {
-    Q_OBJECT
+   Q_OBJECT
 
-public:
-    PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase *> > > *phraseDict, QWidget *parent = 0);
-    ~PhraseView();
-    void setSourceText(int model, const QString &sourceText);
+ public:
+   PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase *> > > *phraseDict, QWidget *parent = 0);
+   ~PhraseView();
+   void setSourceText(int model, const QString &sourceText);
 
-public slots:
-    void toggleGuessing();
-    void update();
+ public slots:
+   void toggleGuessing();
+   void update();
 
-signals:
-    void phraseSelected(int latestModel, const QString &phrase);
+ signals:
+   void phraseSelected(int latestModel, const QString &phrase);
 
-protected:
-    // QObject
-    virtual void contextMenuEvent(QContextMenuEvent *event);
-    // QAbstractItemView
-    virtual void mouseDoubleClickEvent(QMouseEvent *event);
+ protected:
+   // QObject
+   virtual void contextMenuEvent(QContextMenuEvent *event);
+   // QAbstractItemView
+   virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
-private slots:
-    void guessShortcut(int nkey);
-    void selectPhrase(const QModelIndex &index);
-    void selectPhrase();
-    void editPhrase();
+ private slots:
+   void guessShortcut(int nkey);
+   void selectPhrase(const QModelIndex &index);
+   void selectPhrase();
+   void editPhrase();
 
-private:
-    QList<Phrase *> getPhrases(int model, const QString &sourceText);
-    void deleteGuesses();
+ private:
+   QList<Phrase *> getPhrases(int model, const QString &sourceText);
+   void deleteGuesses();
 
-    MultiDataModel *m_dataModel;
-    QList<QHash<QString, QList<Phrase *> > > *m_phraseDict;
-    QList<Phrase *> m_guesses;
-    PhraseModel *m_phraseModel;
-    QString m_sourceText;
-    int m_modelIndex;
-    bool m_doGuesses;
+   MultiDataModel *m_dataModel;
+   QList<QHash<QString, QList<Phrase *> > > *m_phraseDict;
+   QList<Phrase *> m_guesses;
+   PhraseModel *m_phraseModel;
+   QString m_sourceText;
+   int m_modelIndex;
+   bool m_doGuesses;
 };
 
 QT_END_NAMESPACE

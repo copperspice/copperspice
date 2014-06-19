@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -48,8 +48,8 @@ QT_BEGIN_NAMESPACE
     index name \a name.
 */
 
-QSqlIndex::QSqlIndex(const QString& cursorname, const QString& name)
-    : cursor(cursorname), nm(name)
+QSqlIndex::QSqlIndex(const QString &cursorname, const QString &name)
+   : cursor(cursorname), nm(name)
 {
 }
 
@@ -57,8 +57,8 @@ QSqlIndex::QSqlIndex(const QString& cursorname, const QString& name)
     Constructs a copy of \a other.
 */
 
-QSqlIndex::QSqlIndex(const QSqlIndex& other)
-    : QSqlRecord(other), cursor(other.cursor), nm(other.nm), sorts(other.sorts)
+QSqlIndex::QSqlIndex(const QSqlIndex &other)
+   : QSqlRecord(other), cursor(other.cursor), nm(other.nm), sorts(other.sorts)
 {
 }
 
@@ -66,13 +66,13 @@ QSqlIndex::QSqlIndex(const QSqlIndex& other)
     Sets the index equal to \a other.
 */
 
-QSqlIndex& QSqlIndex::operator=(const QSqlIndex& other)
+QSqlIndex &QSqlIndex::operator=(const QSqlIndex &other)
 {
-    cursor = other.cursor;
-    nm = other.nm;
-    sorts = other.sorts;
-    QSqlRecord::operator=(other);
-    return *this;
+   cursor = other.cursor;
+   nm = other.nm;
+   sorts = other.sorts;
+   QSqlRecord::operator=(other);
+   return *this;
 }
 
 /*!
@@ -88,9 +88,9 @@ QSqlIndex::~QSqlIndex()
     Sets the name of the index to \a name.
 */
 
-void QSqlIndex::setName(const QString& name)
+void QSqlIndex::setName(const QString &name)
 {
-    nm = name;
+   nm = name;
 }
 
 /*!
@@ -104,9 +104,9 @@ void QSqlIndex::setName(const QString& name)
     field is appended with an ascending sort order.
 */
 
-void QSqlIndex::append(const QSqlField& field)
+void QSqlIndex::append(const QSqlField &field)
 {
-    append(field, false);
+   append(field, false);
 }
 
 /*!
@@ -117,10 +117,10 @@ void QSqlIndex::append(const QSqlField& field)
     true.
 */
 
-void QSqlIndex::append(const QSqlField& field, bool desc)
+void QSqlIndex::append(const QSqlField &field, bool desc)
 {
-    sorts.append(desc);
-    QSqlRecord::append(field);
+   sorts.append(desc);
+   QSqlRecord::append(field);
 }
 
 
@@ -131,9 +131,10 @@ void QSqlIndex::append(const QSqlField& field, bool desc)
 
 bool QSqlIndex::isDescending(int i) const
 {
-    if (i >= 0 && i < sorts.size())
-        return sorts[i];
-    return false;
+   if (i >= 0 && i < sorts.size()) {
+      return sorts[i];
+   }
+   return false;
 }
 
 /*!
@@ -144,8 +145,9 @@ bool QSqlIndex::isDescending(int i) const
 
 void QSqlIndex::setDescending(int i, bool desc)
 {
-    if (i >= 0 && i < sorts.size())
-        sorts[i] = desc;
+   if (i >= 0 && i < sorts.size()) {
+      sorts[i] = desc;
+   }
 }
 
 
@@ -156,16 +158,17 @@ void QSqlIndex::setDescending(int i, bool desc)
   description if the field is sorted in ASCending or DESCending order.
 */
 
-QString QSqlIndex::createField(int i, const QString& prefix, bool verbose) const
+QString QSqlIndex::createField(int i, const QString &prefix, bool verbose) const
 {
-    QString f;
-    if (!prefix.isEmpty())
-        f += prefix + QLatin1Char('.');
-    f += field(i).name();
-    if (verbose)
-        f += QLatin1Char(' ') + QString((isDescending(i)
-                    ? QLatin1String("DESC") : QLatin1String("ASC")));
-    return f;
+   QString f;
+   if (!prefix.isEmpty()) {
+      f += prefix + QLatin1Char('.');
+   }
+   f += field(i).name();
+   if (verbose)
+      f += QLatin1Char(' ') + QString((isDescending(i)
+                                       ? QLatin1String("DESC") : QLatin1String("ASC")));
+   return f;
 }
 
 /*!
@@ -179,9 +182,9 @@ QString QSqlIndex::createField(int i, const QString& prefix, bool verbose) const
     Sets the name of the cursor that the index is associated with to
     \a cursorName.
 */
-void QSqlIndex::setCursorName(const QString& cursorName)
+void QSqlIndex::setCursorName(const QString &cursorName)
 {
-    cursor = cursorName;
+   cursor = cursorName;
 }
 
 QT_END_NAMESPACE

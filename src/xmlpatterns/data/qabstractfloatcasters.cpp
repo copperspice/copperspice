@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,29 +30,30 @@
 
 template <const bool isDouble>
 Item NumericToAbstractFloatCaster<isDouble>::castFrom(const Item &from,
-                                                           const QExplicitlySharedDataPointer<DynamicContext> &) const
+      const QExplicitlySharedDataPointer<DynamicContext> &) const
 {
-    // toDouble() returns same thing than toFloat()
-    return toItem(AbstractFloat<isDouble>::fromValue(from.template as<Numeric>()->toDouble()));
+   // toDouble() returns same thing than toFloat()
+   return toItem(AbstractFloat<isDouble>::fromValue(from.template as<Numeric>()->toDouble()));
 }
 
 template <const bool isDouble>
 Item StringToAbstractFloatCaster<isDouble>::castFrom(const Item &from,
-                                                          const QExplicitlySharedDataPointer<DynamicContext> &) const
+      const QExplicitlySharedDataPointer<DynamicContext> &) const
 {
-    return toItem(AbstractFloat<isDouble>::fromLexical(from.stringValue()));
+   return toItem(AbstractFloat<isDouble>::fromLexical(from.stringValue()));
 }
 
 template <const bool isDouble>
 Item BooleanToAbstractFloatCaster<isDouble>::castFrom(const Item &from,
-                                                           const QExplicitlySharedDataPointer<DynamicContext> &context) const
+      const QExplicitlySharedDataPointer<DynamicContext> &context) const
 {
-    // RVCT doesn't like using template parameter in trinary operator when the trinary operator result is
-    // passed directly into another constructor. 
-    bool tempDouble = isDouble;
-    if(from.template as<AtomicValue>()->evaluateEBV(context))
-        return tempDouble ? toItem(CommonValues::DoubleOne) : toItem(CommonValues::FloatOne);
-    else
-        return tempDouble ? toItem(CommonValues::DoubleZero) : toItem(CommonValues::FloatZero);
+   // RVCT doesn't like using template parameter in trinary operator when the trinary operator result is
+   // passed directly into another constructor.
+   bool tempDouble = isDouble;
+   if (from.template as<AtomicValue>()->evaluateEBV(context)) {
+      return tempDouble ? toItem(CommonValues::DoubleOne) : toItem(CommonValues::FloatOne);
+   } else {
+      return tempDouble ? toItem(CommonValues::DoubleZero) : toItem(CommonValues::FloatZero);
+   }
 }
 

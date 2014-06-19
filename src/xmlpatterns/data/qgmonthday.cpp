@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,46 +37,46 @@ GMonthDay::GMonthDay(const QDateTime &dateTime) : AbstractDateTime(dateTime)
 
 GMonthDay::Ptr GMonthDay::fromLexical(const QString &lexical)
 {
-    static const CaptureTable captureTable( // STATIC DATA
-        /* The extra paranthesis is a build fix for GCC 3.3. */
-        (QRegExp(QLatin1String(
-                "^\\s*"                             /* Any preceding whitespace. */
-                "--"                                /* Delimiter. */
-                "(\\d{2})"                          /* The month part. */
-                "-"                                 /* Delimiter. */
-                "(\\d{2})"                          /* The day part. */
-                "(?:(\\+|-)(\\d{2}):(\\d{2})|(Z))?" /* The zone offset, "+08:24". */
-                "\\s*$"                             /* Any terminating whitespace. */))),
-        /*zoneOffsetSignP*/         3,
-        /*zoneOffsetHourP*/         4,
-        /*zoneOffsetMinuteP*/       5,
-        /*zoneOffsetUTCSymbolP*/    6,
-        /*yearP*/                   -1,
-        /*monthP*/                  1,
-        /*dayP*/                    2);
+   static const CaptureTable captureTable( // STATIC DATA
+      /* The extra paranthesis is a build fix for GCC 3.3. */
+      (QRegExp(QLatin1String(
+                  "^\\s*"                             /* Any preceding whitespace. */
+                  "--"                                /* Delimiter. */
+                  "(\\d{2})"                          /* The month part. */
+                  "-"                                 /* Delimiter. */
+                  "(\\d{2})"                          /* The day part. */
+                  "(?:(\\+|-)(\\d{2}):(\\d{2})|(Z))?" /* The zone offset, "+08:24". */
+                  "\\s*$"                             /* Any terminating whitespace. */))),
+      /*zoneOffsetSignP*/         3,
+      /*zoneOffsetHourP*/         4,
+      /*zoneOffsetMinuteP*/       5,
+      /*zoneOffsetUTCSymbolP*/    6,
+      /*yearP*/                   -1,
+      /*monthP*/                  1,
+      /*dayP*/                    2);
 
-    AtomicValue::Ptr err;
-    const QDateTime retval(create(err, lexical, captureTable));
+   AtomicValue::Ptr err;
+   const QDateTime retval(create(err, lexical, captureTable));
 
-    return err ? err : GMonthDay::Ptr(new GMonthDay(retval));
+   return err ? err : GMonthDay::Ptr(new GMonthDay(retval));
 }
 
 GMonthDay::Ptr GMonthDay::fromDateTime(const QDateTime &dt)
 {
-    QDateTime result(QDate(DefaultYear, dt.date().month(), dt.date().day()));
-    copyTimeSpec(dt, result);
+   QDateTime result(QDate(DefaultYear, dt.date().month(), dt.date().day()));
+   copyTimeSpec(dt, result);
 
-    return GMonthDay::Ptr(new GMonthDay(result));
+   return GMonthDay::Ptr(new GMonthDay(result));
 }
 
 QString GMonthDay::stringValue() const
 {
-    return m_dateTime.toString(QLatin1String("--MM-dd")) + zoneOffsetToString();
+   return m_dateTime.toString(QLatin1String("--MM-dd")) + zoneOffsetToString();
 }
 
 ItemType::Ptr GMonthDay::type() const
 {
-    return BuiltinTypes::xsGMonthDay;
+   return BuiltinTypes::xsGMonthDay;
 }
 
 QT_END_NAMESPACE

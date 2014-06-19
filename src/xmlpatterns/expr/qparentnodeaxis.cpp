@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,28 +34,28 @@ using namespace QPatternist;
 
 Item ParentNodeAxis::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    return context->contextItem().asNode().iterate(QXmlNodeModelIndex::AxisParent)->next();
+   return context->contextItem().asNode().iterate(QXmlNodeModelIndex::AxisParent)->next();
 }
 
 Expression::Properties ParentNodeAxis::properties() const
 {
-    return DisableElimination | RequiresContextItem;
+   return DisableElimination | RequiresContextItem;
 }
 
 ExpressionVisitorResult::Ptr ParentNodeAxis::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 ItemType::Ptr ParentNodeAxis::expectedContextItemType() const
 {
-    return BuiltinTypes::node;
+   return BuiltinTypes::node;
 }
 
 SequenceType::Ptr ParentNodeAxis::staticType() const
 {
-    // Parentless node exists.
-    return CommonSequenceTypes::ZeroOrOneNode;
+   // Parentless node exists.
+   return CommonSequenceTypes::ZeroOrOneNode;
 }
 
 QT_END_NAMESPACE

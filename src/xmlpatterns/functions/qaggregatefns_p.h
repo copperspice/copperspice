@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,45 +33,44 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class CountFN : public FunctionCall
 {
-    class CountFN : public FunctionCall
-    {
-    public:
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-        
-        virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);       
-        virtual Expression::Ptr compress(const StaticContext::Ptr &context);
-    };
-    
-    class AddingAggregate : public FunctionCall
-    {
-    public:
-        virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                          const SequenceType::Ptr &reqType);
-    protected:
-        AtomicMathematician::Ptr m_mather;
-    };
-  
-    class AvgFN : public AddingAggregate
-    {
-    public:
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-        virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,const SequenceType::Ptr &reqType);
+ public:
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
 
-        virtual SequenceType::Ptr staticType() const;
-    private:
-        AtomicMathematician::Ptr m_adder;
-        AtomicMathematician::Ptr m_divider;
-    };
+   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+};
 
-    class SumFN : public AddingAggregate
-    {
-    public:
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-        virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,const SequenceType::Ptr &reqType);
-        virtual SequenceType::Ptr staticType() const;
-    };
+class AddingAggregate : public FunctionCall
+{
+ public:
+   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
+                                     const SequenceType::Ptr &reqType);
+ protected:
+   AtomicMathematician::Ptr m_mather;
+};
+
+class AvgFN : public AddingAggregate
+{
+ public:
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+
+   virtual SequenceType::Ptr staticType() const;
+ private:
+   AtomicMathematician::Ptr m_adder;
+   AtomicMathematician::Ptr m_divider;
+};
+
+class SumFN : public AddingAggregate
+{
+ public:
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+   virtual SequenceType::Ptr staticType() const;
+};
 }
 
 QT_END_NAMESPACE

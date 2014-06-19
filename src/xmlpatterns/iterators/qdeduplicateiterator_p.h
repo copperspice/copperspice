@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,28 +36,27 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class DeduplicateIterator : public ListIterator<Item>
 {
- 
-    class DeduplicateIterator : public ListIterator<Item>
-    {
-    public:
-        DeduplicateIterator(const Item::List &source);
+ public:
+   DeduplicateIterator(const Item::List &source);
 
-        virtual Item next();
-        virtual Item::Iterator::Ptr copy() const;
-        virtual xsInteger count();
+   virtual Item next();
+   virtual Item::Iterator::Ptr copy() const;
+   virtual xsInteger count();
 
-    private:
-        /**
-         * m_position in ListIteratorPlatform is the position that we
-         * show to the outside through position) but do not correspond
-         * to the position in m_list, since we skip entries in that one.
-         *
-         * However, this guy, m_listPos, is the position into m_list.
-         */
-        int m_listPos;
-    };
+ private:
+   /**
+    * m_position in ListIteratorPlatform is the position that we
+    * show to the outside through position) but do not correspond
+    * to the position in m_list, since we skip entries in that one.
+    *
+    * However, this guy, m_listPos, is the position into m_list.
+    */
+   int m_listPos;
+};
 }
 
 QT_END_NAMESPACE

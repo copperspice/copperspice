@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,42 +30,41 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class RemovalIterator : public Item::Iterator
 {
- 
-    class RemovalIterator : public Item::Iterator
-    {
-    public:
+ public:
 
-        /**
-         * Creates an RemovalIterator.
-         *
-         * @param target the QAbstractXmlForwardIterator containing the sequence of items
-         * which the item at position @p position should be removed from.
-         * @param position the position of the item to remove. Must be
-         * 1 or larger.
-         */
-        RemovalIterator(const Item::Iterator::Ptr &target,
-                        const xsInteger position);
+   /**
+    * Creates an RemovalIterator.
+    *
+    * @param target the QAbstractXmlForwardIterator containing the sequence of items
+    * which the item at position @p position should be removed from.
+    * @param position the position of the item to remove. Must be
+    * 1 or larger.
+    */
+   RemovalIterator(const Item::Iterator::Ptr &target,
+                   const xsInteger position);
 
-        virtual Item next();
-        virtual Item current() const;
-        virtual xsInteger position() const;
+   virtual Item next();
+   virtual Item current() const;
+   virtual xsInteger position() const;
 
-        /**
-         * The QAbstractXmlForwardIterator's count is computed by subtracting one from the source
-         * QAbstractXmlForwardIterator's count.
-         */
-        virtual xsInteger count();
+   /**
+    * The QAbstractXmlForwardIterator's count is computed by subtracting one from the source
+    * QAbstractXmlForwardIterator's count.
+    */
+   virtual xsInteger count();
 
-        virtual Item::Iterator::Ptr copy() const;
+   virtual Item::Iterator::Ptr copy() const;
 
-    private:
-        const Item::Iterator::Ptr m_target;
-        const xsInteger m_removalPos;
-        Item m_current;
-        xsInteger m_position;
-    };
+ private:
+   const Item::Iterator::Ptr m_target;
+   const xsInteger m_removalPos;
+   Item m_current;
+   xsInteger m_position;
+};
 }
 
 QT_END_NAMESPACE

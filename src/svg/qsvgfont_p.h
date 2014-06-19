@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,36 +38,36 @@ QT_BEGIN_NAMESPACE
 
 class QSvgGlyph
 {
-public:
-    QSvgGlyph(QChar unicode, const QPainterPath &path, qreal horizAdvX);
-    QSvgGlyph() : m_unicode(0), m_horizAdvX(0) {}
+ public:
+   QSvgGlyph(QChar unicode, const QPainterPath &path, qreal horizAdvX);
+   QSvgGlyph() : m_unicode(0), m_horizAdvX(0) {}
 
-    QChar m_unicode;
-    QPainterPath m_path;
-    qreal m_horizAdvX;
+   QChar m_unicode;
+   QPainterPath m_path;
+   qreal m_horizAdvX;
 };
 
 
 class QSvgFont : public QSvgRefCounted
 {
-public:
-    QSvgFont(qreal horizAdvX);
+ public:
+   QSvgFont(qreal horizAdvX);
 
-    void setFamilyName(const QString &name);
-    QString familyName() const;
+   void setFamilyName(const QString &name);
+   QString familyName() const;
 
-    void setUnitsPerEm(qreal upem);
+   void setUnitsPerEm(qreal upem);
 
-    void addGlyph(QChar unicode, const QPainterPath &path, qreal horizAdvX = -1);
+   void addGlyph(QChar unicode, const QPainterPath &path, qreal horizAdvX = -1);
 
-    void draw(QPainter *p, const QPointF &point, const QString &str, qreal pixelSize, Qt::Alignment alignment) const;
-public:
-    QString m_familyName;
-    qreal m_unitsPerEm;
-    qreal m_ascent;
-    qreal m_descent;
-    qreal m_horizAdvX;
-    QHash<QChar, QSvgGlyph> m_glyphs;
+   void draw(QPainter *p, const QPointF &point, const QString &str, qreal pixelSize, Qt::Alignment alignment) const;
+ public:
+   QString m_familyName;
+   qreal m_unitsPerEm;
+   qreal m_ascent;
+   qreal m_descent;
+   qreal m_horizAdvX;
+   QHash<QChar, QSvgGlyph> m_glyphs;
 };
 
 QT_END_NAMESPACE

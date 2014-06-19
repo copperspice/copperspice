@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,153 +37,157 @@ QT_BEGIN_NAMESPACE
 
 class QPHReader : public QXmlStreamReader
 {
-public:
-    QPHReader(QIODevice &dev)
-      : QXmlStreamReader(&dev)
-    {}
+ public:
+   QPHReader(QIODevice &dev)
+      : QXmlStreamReader(&dev) {
+   }
 
-    // the "real thing"
-    bool read(Translator &translator);
+   // the "real thing"
+   bool read(Translator &translator);
 
-private:
-    bool isWhiteSpace() const
-    {
-        return isCharacters() && text().toString().trimmed().isEmpty();
-    }
+ private:
+   bool isWhiteSpace() const {
+      return isCharacters() && text().toString().trimmed().isEmpty();
+   }
 
-    enum DataField { NoField, SourceField, TargetField, DefinitionField };
-    DataField m_currentField;
-    QString m_currentSource;
-    QString m_currentTarget;
-    QString m_currentDefinition;
+   enum DataField { NoField, SourceField, TargetField, DefinitionField };
+   DataField m_currentField;
+   QString m_currentSource;
+   QString m_currentTarget;
+   QString m_currentDefinition;
 };
 
 bool QPHReader::read(Translator &translator)
 {
-    m_currentField = NoField;
-    QString result;
-    while (!atEnd()) {
-        readNext();
-        if (isStartElement()) {
-            if (name() == QLatin1String("source")) {
-                m_currentField = SourceField;
-            } else if (name() == QLatin1String("target")) {
-                m_currentField = TargetField;
-            } else if (name() == QLatin1String("definition")) {
-                m_currentField = DefinitionField;
-            } else {
-                m_currentField = NoField;
-                if (name() == QLatin1String("QPH")) {
-                    QXmlStreamAttributes atts = attributes();
-                    translator.setLanguageCode(atts.value(QLatin1String("language")).toString());
-                    translator.setSourceLanguageCode(atts.value(QLatin1String("sourcelanguage")).toString());
-                }
+   m_currentField = NoField;
+   QString result;
+   while (!atEnd()) {
+      readNext();
+      if (isStartElement()) {
+         if (name() == QLatin1String("source")) {
+            m_currentField = SourceField;
+         } else if (name() == QLatin1String("target")) {
+            m_currentField = TargetField;
+         } else if (name() == QLatin1String("definition")) {
+            m_currentField = DefinitionField;
+         } else {
+            m_currentField = NoField;
+            if (name() == QLatin1String("QPH")) {
+               QXmlStreamAttributes atts = attributes();
+               translator.setLanguageCode(atts.value(QLatin1String("language")).toString());
+               translator.setSourceLanguageCode(atts.value(QLatin1String("sourcelanguage")).toString());
             }
-        } else if (isWhiteSpace()) {
-            // ignore these
-        } else if (isCharacters()) {
-            if (m_currentField == SourceField)
-                m_currentSource += text();
-            else if (m_currentField == TargetField)
-                m_currentTarget += text();
-            else if (m_currentField == DefinitionField)
-                m_currentDefinition += text();
-        } else if (isEndElement() && name() == QLatin1String("phrase")) {
-            m_currentTarget.replace(QChar(Translator::TextVariantSeparator),
-                                    QChar(Translator::BinaryVariantSeparator));
-            TranslatorMessage msg;
-            msg.setSourceText(m_currentSource);
-            msg.setTranslation(m_currentTarget);
-            msg.setComment(m_currentDefinition);
-            translator.append(msg);
-            m_currentSource.clear();
-            m_currentTarget.clear();
-            m_currentDefinition.clear();
-        }
-    }
-    return true;
+         }
+      } else if (isWhiteSpace()) {
+         // ignore these
+      } else if (isCharacters()) {
+         if (m_currentField == SourceField) {
+            m_currentSource += text();
+         } else if (m_currentField == TargetField) {
+            m_currentTarget += text();
+         } else if (m_currentField == DefinitionField) {
+            m_currentDefinition += text();
+         }
+      } else if (isEndElement() && name() == QLatin1String("phrase")) {
+         m_currentTarget.replace(QChar(Translator::TextVariantSeparator),
+                                 QChar(Translator::BinaryVariantSeparator));
+         TranslatorMessage msg;
+         msg.setSourceText(m_currentSource);
+         msg.setTranslation(m_currentTarget);
+         msg.setComment(m_currentDefinition);
+         translator.append(msg);
+         m_currentSource.clear();
+         m_currentTarget.clear();
+         m_currentDefinition.clear();
+      }
+   }
+   return true;
 }
 
 static bool loadQPH(Translator &translator, QIODevice &dev, ConversionData &)
 {
-    translator.setLocationsType(Translator::NoLocations);
-    QPHReader reader(dev);
-    return reader.read(translator);
+   translator.setLocationsType(Translator::NoLocations);
+   QPHReader reader(dev);
+   return reader.read(translator);
 }
 
 static QString protect(const QString &str)
 {
-    QString result;
-    result.reserve(str.length() * 12 / 10);
-    for (int i = 0; i != str.size(); ++i) {
-        uint c = str.at(i).unicode();
-        switch (c) {
-        case '\"':
+   QString result;
+   result.reserve(str.length() * 12 / 10);
+   for (int i = 0; i != str.size(); ++i) {
+      uint c = str.at(i).unicode();
+      switch (c) {
+         case '\"':
             result += QLatin1String("&quot;");
             break;
-        case '&':
+         case '&':
             result += QLatin1String("&amp;");
             break;
-        case '>':
+         case '>':
             result += QLatin1String("&gt;");
             break;
-        case '<':
+         case '<':
             result += QLatin1String("&lt;");
             break;
-        case '\'':
+         case '\'':
             result += QLatin1String("&apos;");
             break;
-        default:
-            if (c < 0x20 && c != '\r' && c != '\n' && c != '\t')
-                result += QString(QLatin1String("&#%1;")).arg(c);
-            else // this also covers surrogates
-                result += QChar(c);
-        }
-    }
-    return result;
+         default:
+            if (c < 0x20 && c != '\r' && c != '\n' && c != '\t') {
+               result += QString(QLatin1String("&#%1;")).arg(c);
+            } else { // this also covers surrogates
+               result += QChar(c);
+            }
+      }
+   }
+   return result;
 }
 
 static bool saveQPH(const Translator &translator, QIODevice &dev, ConversionData &)
 {
-    QTextStream t(&dev);
-    t.setCodec(QTextCodec::codecForName("UTF-8"));
-    t << "<!DOCTYPE QPH>\n<QPH";
-    QString languageCode = translator.languageCode();
-    if (!languageCode.isEmpty() && languageCode != QLatin1String("C"))
-        t << " language=\"" << languageCode << "\"";
-    languageCode = translator.sourceLanguageCode();
-    if (!languageCode.isEmpty() && languageCode != QLatin1String("C"))
-        t << " sourcelanguage=\"" << languageCode << "\"";
-    t << ">\n";
-    foreach (const TranslatorMessage &msg, translator.messages()) {
-        t << "<phrase>\n";
-        t << "    <source>" << protect(msg.sourceText()) << "</source>\n";
-        QString str = msg.translations().join(QLatin1String("@"));
-        str.replace(QChar(Translator::BinaryVariantSeparator),
-                    QChar(Translator::TextVariantSeparator));
-        t << "    <target>" << protect(str)
-            << "</target>\n";
-        if (!msg.comment().isEmpty())
-            t << "    <definition>" << protect(msg.comment()) << "</definition>\n";
-        t << "</phrase>\n";
-    }
-    t << "</QPH>\n";
-    return true;
+   QTextStream t(&dev);
+   t.setCodec(QTextCodec::codecForName("UTF-8"));
+   t << "<!DOCTYPE QPH>\n<QPH";
+   QString languageCode = translator.languageCode();
+   if (!languageCode.isEmpty() && languageCode != QLatin1String("C")) {
+      t << " language=\"" << languageCode << "\"";
+   }
+   languageCode = translator.sourceLanguageCode();
+   if (!languageCode.isEmpty() && languageCode != QLatin1String("C")) {
+      t << " sourcelanguage=\"" << languageCode << "\"";
+   }
+   t << ">\n";
+   foreach (const TranslatorMessage & msg, translator.messages()) {
+      t << "<phrase>\n";
+      t << "    <source>" << protect(msg.sourceText()) << "</source>\n";
+      QString str = msg.translations().join(QLatin1String("@"));
+      str.replace(QChar(Translator::BinaryVariantSeparator),
+                  QChar(Translator::TextVariantSeparator));
+      t << "    <target>" << protect(str)
+        << "</target>\n";
+      if (!msg.comment().isEmpty()) {
+         t << "    <definition>" << protect(msg.comment()) << "</definition>\n";
+      }
+      t << "</phrase>\n";
+   }
+   t << "</QPH>\n";
+   return true;
 }
 
 int initQPH()
 {
-    Translator::FileFormat format;
+   Translator::FileFormat format;
 
-    format.extension = QLatin1String("qph");
-    format.description = QObject::tr("Qt Linguist 'Phrase Book'");
-    format.fileType = Translator::FileFormat::TranslationSource;
-    format.priority = 0;
-    format.loader = &loadQPH;
-    format.saver = &saveQPH;
-    Translator::registerFileFormat(format);
+   format.extension = QLatin1String("qph");
+   format.description = QObject::tr("Qt Linguist 'Phrase Book'");
+   format.fileType = Translator::FileFormat::TranslationSource;
+   format.priority = 0;
+   format.loader = &loadQPH;
+   format.saver = &saveQPH;
+   Translator::registerFileFormat(format);
 
-    return 1;
+   return 1;
 }
 
 Q_CONSTRUCTOR_FUNCTION(initQPH)

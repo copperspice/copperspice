@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,25 +38,25 @@ class PhraseBook;
 
 class TranslationSettingsDialog : public QDialog
 {
-    Q_OBJECT
+   Q_OBJECT
 
-public:
-    TranslationSettingsDialog(QWidget *parent = 0);
-    void setDataModel(DataModel *model);
-    void setPhraseBook(PhraseBook *phraseBook);
+ public:
+   TranslationSettingsDialog(QWidget *parent = 0);
+   void setDataModel(DataModel *model);
+   void setPhraseBook(PhraseBook *phraseBook);
 
-private:
-    virtual void showEvent(QShowEvent *e);
+ private:
+   virtual void showEvent(QShowEvent *e);
 
-private slots:
-    void on_buttonBox_accepted();
-    void on_srcCbLanguageList_currentIndexChanged(int idx);
-    void on_tgtCbLanguageList_currentIndexChanged(int idx);
+ private slots:
+   void on_buttonBox_accepted();
+   void on_srcCbLanguageList_currentIndexChanged(int idx);
+   void on_tgtCbLanguageList_currentIndexChanged(int idx);
 
-private:
-    Ui::TranslationSettingsDialog m_ui;
-    DataModel *m_dataModel;
-    PhraseBook *m_phraseBook;
+ private:
+   Ui::TranslationSettingsDialog m_ui;
+   DataModel *m_dataModel;
+   PhraseBook *m_phraseBook;
 
 };
 

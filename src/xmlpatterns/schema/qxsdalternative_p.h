@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,42 +34,41 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class XsdAlternative : public NamedSchemaComponent, public XsdAnnotated
 {
-    class XsdAlternative : public NamedSchemaComponent, public XsdAnnotated
-    {
-        public:
-            typedef QExplicitlySharedDataPointer<XsdAlternative> Ptr;
-            typedef QList<XsdAlternative::Ptr> List;
+ public:
+   typedef QExplicitlySharedDataPointer<XsdAlternative> Ptr;
+   typedef QList<XsdAlternative::Ptr> List;
 
-            /**
-             * Sets the xpath @p test of the alternative.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#tac-test">Test Definition</a>
-             */
-            void setTest(const XsdXPathExpression::Ptr &test);
+   /**
+    * Sets the xpath @p test of the alternative.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#tac-test">Test Definition</a>
+    */
+   void setTest(const XsdXPathExpression::Ptr &test);
 
-            /**
-             * Returns the xpath test of the alternative.
-             */
-            XsdXPathExpression::Ptr test() const;
+   /**
+    * Returns the xpath test of the alternative.
+    */
+   XsdXPathExpression::Ptr test() const;
 
-            /**
-             * Sets the @p type of the alternative.
-             *
-             * @see <a href="http://www.w3.org/TR/xmlschema11-1/#tac-type_definition">Type Definition</a>
-             */
-            void setType(const SchemaType::Ptr &type);
+   /**
+    * Sets the @p type of the alternative.
+    *
+    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#tac-type_definition">Type Definition</a>
+    */
+   void setType(const SchemaType::Ptr &type);
 
-            /**
-             * Returns the type of the alternative.
-             */
-            SchemaType::Ptr type() const;
+   /**
+    * Returns the type of the alternative.
+    */
+   SchemaType::Ptr type() const;
 
-        private:
-            XsdXPathExpression::Ptr m_test;
-            SchemaType::Ptr         m_type;
-    };
+ private:
+   XsdXPathExpression::Ptr m_test;
+   SchemaType::Ptr         m_type;
+};
 }
 
 QT_END_NAMESPACE

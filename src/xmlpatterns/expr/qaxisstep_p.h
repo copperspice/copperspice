@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,77 +31,74 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class AxisStep : public EmptyContainer
 {
-     class AxisStep : public EmptyContainer
-    {
-    public:
-        AxisStep(const QXmlNodeModelIndex::Axis axis, const ItemType::Ptr &nodeTest);
+ public:
+   AxisStep(const QXmlNodeModelIndex::Axis axis, const ItemType::Ptr &nodeTest);
 
-        virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const;
-        virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
+   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const;
+   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
 
-        /**
-         * Returns @p node if it matches the node test this step is using, otherwise @c null.
-         */
-        inline Item mapToItem(const QXmlNodeModelIndex &node,
-                              const DynamicContext::Ptr &context) const;
+   /**
+    * Returns @p node if it matches the node test this step is using, otherwise @c null.
+    */
+   inline Item mapToItem(const QXmlNodeModelIndex &node,
+                         const DynamicContext::Ptr &context) const;
 
-        virtual SequenceType::List expectedOperandTypes() const;
-        virtual SequenceType::Ptr staticType() const;
+   virtual SequenceType::List expectedOperandTypes() const;
+   virtual SequenceType::Ptr staticType() const;
 
-        /**
-         * Rewrites to ParentNodeAxis, if possible.
-         */
-        virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+   /**
+    * Rewrites to ParentNodeAxis, if possible.
+    */
+   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
 
-        /**
-         * @returns always BuiltinTypes::node;
-         */
-        virtual ItemType::Ptr expectedContextItemType() const;
+   /**
+    * @returns always BuiltinTypes::node;
+    */
+   virtual ItemType::Ptr expectedContextItemType() const;
 
-        virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
 
-        virtual Properties properties() const;
+   virtual Properties properties() const;
 
-        /**
-         * @returns the axis this step is using.
-         */
-        QXmlNodeModelIndex::Axis axis() const;
+   /**
+    * @returns the axis this step is using.
+    */
+   QXmlNodeModelIndex::Axis axis() const;
 
-        inline ItemType::Ptr nodeTest() const
-        {
-            return m_nodeTest;
-        }
+   inline ItemType::Ptr nodeTest() const {
+      return m_nodeTest;
+   }
 
-        void setNodeTest(const ItemType::Ptr &nev)
-        {
-            m_nodeTest = nev;
-        }
+   void setNodeTest(const ItemType::Ptr &nev) {
+      m_nodeTest = nev;
+   }
 
-        static QString axisName(const QXmlNodeModelIndex::Axis axis);
+   static QString axisName(const QXmlNodeModelIndex::Axis axis);
 
-        virtual ID id() const;
-        virtual PatternPriority patternPriority() const;
+   virtual ID id() const;
+   virtual PatternPriority patternPriority() const;
 
-        inline void setAxis(const QXmlNodeModelIndex::Axis newAxis);
+   inline void setAxis(const QXmlNodeModelIndex::Axis newAxis);
 
-    private:
-        typedef QExplicitlySharedDataPointer<const AxisStep> ConstPtr;
+ private:
+   typedef QExplicitlySharedDataPointer<const AxisStep> ConstPtr;
 
-        static const QXmlNodeModelIndex::NodeKind s_whenAxisNodeKindEmpty[];
+   static const QXmlNodeModelIndex::NodeKind s_whenAxisNodeKindEmpty[];
 
-        static bool isAlwaysEmpty(const QXmlNodeModelIndex::Axis axis, const QXmlNodeModelIndex::NodeKind nodeKind);
+   static bool isAlwaysEmpty(const QXmlNodeModelIndex::Axis axis, const QXmlNodeModelIndex::NodeKind nodeKind);
 
- 
-        QXmlNodeModelIndex::Axis m_axis;
-        ItemType::Ptr m_nodeTest;
-    };
 
-    void AxisStep::setAxis(const QXmlNodeModelIndex::Axis newAxis)
-    {
-        m_axis = newAxis;
-    }
+   QXmlNodeModelIndex::Axis m_axis;
+   ItemType::Ptr m_nodeTest;
+};
+
+void AxisStep::setAxis(const QXmlNodeModelIndex::Axis newAxis)
+{
+   m_axis = newAxis;
+}
 
 }
 

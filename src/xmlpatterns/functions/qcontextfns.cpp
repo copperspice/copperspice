@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,47 +40,48 @@ using namespace QPatternist;
 
 Item PositionFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    Q_ASSERT(context);
-    return Integer::fromValue(context->contextPosition());
+   Q_ASSERT(context);
+   return Integer::fromValue(context->contextPosition());
 }
 
 Item LastFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    Q_ASSERT(context);
-    return Integer::fromValue(context->contextSize());
+   Q_ASSERT(context);
+   return Integer::fromValue(context->contextSize());
 }
 
 Item ImplicitTimezoneFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    return toItem(context->implicitTimezone());
+   return toItem(context->implicitTimezone());
 }
 
 Item CurrentDateTimeFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    return toItem(DateTime::fromDateTime(context->currentDateTime()));
+   return toItem(DateTime::fromDateTime(context->currentDateTime()));
 }
 
 Item CurrentDateFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    return toItem(Date::fromDateTime(context->currentDateTime()));
+   return toItem(Date::fromDateTime(context->currentDateTime()));
 }
 
 Item CurrentTimeFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    return toItem(SchemaTime::fromDateTime(context->currentDateTime()));
+   return toItem(SchemaTime::fromDateTime(context->currentDateTime()));
 }
 
 Expression::Ptr StaticBaseURIFN::typeCheck(const StaticContext::Ptr &context,
-                                           const SequenceType::Ptr &reqType)
+      const SequenceType::Ptr &reqType)
 {
-    /* Our base URI can never be undefined. */
-    return wrapLiteral(toItem(AnyURI::fromValue(context->baseURI())), context, this)->typeCheck(context, reqType);
+   /* Our base URI can never be undefined. */
+   return wrapLiteral(toItem(AnyURI::fromValue(context->baseURI())), context, this)->typeCheck(context, reqType);
 }
 
 Expression::Ptr DefaultCollationFN::typeCheck(const StaticContext::Ptr &context,
-                                              const SequenceType::Ptr &reqType)
+      const SequenceType::Ptr &reqType)
 {
-    return wrapLiteral(AtomicString::fromValue(context->defaultCollation().toString()), context, this)->typeCheck(context, reqType);
+   return wrapLiteral(AtomicString::fromValue(context->defaultCollation().toString()), context, this)->typeCheck(context,
+          reqType);
 }
 
 QT_END_NAMESPACE

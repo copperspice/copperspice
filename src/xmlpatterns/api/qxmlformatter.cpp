@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,31 +35,31 @@ using namespace QPatternist;
 
 class QXmlFormatterPrivate : public QXmlSerializerPrivate
 {
-public:
-    inline QXmlFormatterPrivate(const QXmlQuery &q,
-                                QIODevice *const outputDevice);
+ public:
+   inline QXmlFormatterPrivate(const QXmlQuery &q,
+                               QIODevice *const outputDevice);
 
-    int             indentationDepth;
-    int             currentDepth;
-    QString         characterBuffer;
-    QString         indentString;
+   int             indentationDepth;
+   int             currentDepth;
+   QString         characterBuffer;
+   QString         indentString;
 
-    /**
-     * Whether we /have/ sent nodes like processing instructions and comments
-     * to QXmlSerializer.
-     */
-    QStack<bool>    canIndent;
+   /**
+    * Whether we /have/ sent nodes like processing instructions and comments
+    * to QXmlSerializer.
+    */
+   QStack<bool>    canIndent;
 };
 
 QXmlFormatterPrivate::QXmlFormatterPrivate(const QXmlQuery &query,
-                                           QIODevice *const outputDevice) : QXmlSerializerPrivate(query, outputDevice)
-                                                                          , indentationDepth(4)
-                                                                          , currentDepth(0)
+      QIODevice *const outputDevice) : QXmlSerializerPrivate(query, outputDevice)
+   , indentationDepth(4)
+   , currentDepth(0)
 {
-    indentString.reserve(30);
-    indentString.resize(1);
-    indentString[0] = QLatin1Char('\n');
-    canIndent.push(false);
+   indentString.reserve(30);
+   indentString.resize(1);
+   indentString[0] = QLatin1Char('\n');
+   canIndent.push(false);
 }
 
 /*!
@@ -134,20 +134,19 @@ QXmlFormatter::QXmlFormatter(const QXmlQuery &query,
  */
 void QXmlFormatter::startFormattingContent()
 {
-    Q_D(QXmlFormatter);
+   Q_D(QXmlFormatter);
 
-    if(QPatternist::XPathHelper::isWhitespaceOnly(d->characterBuffer))
-    {
-        if(d->canIndent.top())
-            QXmlSerializer::characters(QStringRef(&d->indentString));
-    }
-    else
-    {
-        if(!d->characterBuffer.isEmpty()) /* Significant data, we don't touch it. */
-            QXmlSerializer::characters(QStringRef(&d->characterBuffer));
-    }
+   if (QPatternist::XPathHelper::isWhitespaceOnly(d->characterBuffer)) {
+      if (d->canIndent.top()) {
+         QXmlSerializer::characters(QStringRef(&d->indentString));
+      }
+   } else {
+      if (!d->characterBuffer.isEmpty()) { /* Significant data, we don't touch it. */
+         QXmlSerializer::characters(QStringRef(&d->characterBuffer));
+      }
+   }
 
-    d->characterBuffer.clear();
+   d->characterBuffer.clear();
 }
 
 /*!
@@ -155,13 +154,13 @@ void QXmlFormatter::startFormattingContent()
  */
 void QXmlFormatter::startElement(const QXmlName &name)
 {
-    Q_D(QXmlFormatter);
-    startFormattingContent();
-    ++d->currentDepth;
-    d->indentString.append(QString(d->indentationDepth, QLatin1Char(' ')));
-    d->canIndent.push(true);
+   Q_D(QXmlFormatter);
+   startFormattingContent();
+   ++d->currentDepth;
+   d->indentString.append(QString(d->indentationDepth, QLatin1Char(' ')));
+   d->canIndent.push(true);
 
-    QXmlSerializer::startElement(name);
+   QXmlSerializer::startElement(name);
 }
 
 /*!
@@ -169,18 +168,19 @@ void QXmlFormatter::startElement(const QXmlName &name)
  */
 void QXmlFormatter::endElement()
 {
-    Q_D(QXmlFormatter);
-    --d->currentDepth;
-    d->indentString.chop(d->indentationDepth);
+   Q_D(QXmlFormatter);
+   --d->currentDepth;
+   d->indentString.chop(d->indentationDepth);
 
-    if(!d->hasClosedElement.top().second)
-        d->canIndent.top() = false;
+   if (!d->hasClosedElement.top().second) {
+      d->canIndent.top() = false;
+   }
 
-    startFormattingContent();
+   startFormattingContent();
 
-    d->canIndent.pop();
-    d->canIndent.top() = true;
-    QXmlSerializer::endElement();
+   d->canIndent.pop();
+   d->canIndent.top() = true;
+   QXmlSerializer::endElement();
 }
 
 /*!
@@ -189,7 +189,7 @@ void QXmlFormatter::endElement()
 void QXmlFormatter::attribute(const QXmlName &name,
                               const QStringRef &value)
 {
-    QXmlSerializer::attribute(name, value);
+   QXmlSerializer::attribute(name, value);
 }
 
 /*!
@@ -197,10 +197,10 @@ void QXmlFormatter::attribute(const QXmlName &name,
  */
 void QXmlFormatter::comment(const QString &value)
 {
-    Q_D(QXmlFormatter);
-    startFormattingContent();
-    QXmlSerializer::comment(value);
-    d->canIndent.top() = true;
+   Q_D(QXmlFormatter);
+   startFormattingContent();
+   QXmlSerializer::comment(value);
+   d->canIndent.top() = true;
 }
 
 /*!
@@ -208,21 +208,21 @@ void QXmlFormatter::comment(const QString &value)
  */
 void QXmlFormatter::characters(const QStringRef &value)
 {
-    Q_D(QXmlFormatter);
-    d->isPreviousAtomic = false;
-    d->characterBuffer += value.toString();
+   Q_D(QXmlFormatter);
+   d->isPreviousAtomic = false;
+   d->characterBuffer += value.toString();
 }
 
 /*!
  \reimp
  */
 void QXmlFormatter::processingInstruction(const QXmlName &name,
-                                          const QString &value)
+      const QString &value)
 {
-    Q_D(QXmlFormatter);
-    startFormattingContent();
-    QXmlSerializer::processingInstruction(name, value);
-    d->canIndent.top() = true;
+   Q_D(QXmlFormatter);
+   startFormattingContent();
+   QXmlSerializer::processingInstruction(name, value);
+   d->canIndent.top() = true;
 }
 
 /*!
@@ -230,9 +230,9 @@ void QXmlFormatter::processingInstruction(const QXmlName &name,
  */
 void QXmlFormatter::atomicValue(const QVariant &value)
 {
-    Q_D(QXmlFormatter);
-    d->canIndent.top() = false;
-    QXmlSerializer::atomicValue(value);
+   Q_D(QXmlFormatter);
+   d->canIndent.top() = false;
+   QXmlSerializer::atomicValue(value);
 }
 
 /*!
@@ -240,7 +240,7 @@ void QXmlFormatter::atomicValue(const QVariant &value)
  */
 void QXmlFormatter::startDocument()
 {
-    QXmlSerializer::startDocument();
+   QXmlSerializer::startDocument();
 }
 
 /*!
@@ -248,7 +248,7 @@ void QXmlFormatter::startDocument()
  */
 void QXmlFormatter::endDocument()
 {
-    QXmlSerializer::endDocument();
+   QXmlSerializer::endDocument();
 }
 
 /*!
@@ -256,7 +256,7 @@ void QXmlFormatter::endDocument()
  */
 void QXmlFormatter::startOfSequence()
 {
-    QXmlSerializer::startOfSequence();
+   QXmlSerializer::startOfSequence();
 }
 
 /*!
@@ -264,14 +264,15 @@ void QXmlFormatter::startOfSequence()
  */
 void QXmlFormatter::endOfSequence()
 {
-    Q_D(QXmlFormatter);
+   Q_D(QXmlFormatter);
 
-    /* Flush any buffered content. */
-    if(!d->characterBuffer.isEmpty())
-        QXmlSerializer::characters(QStringRef(&d->characterBuffer));
+   /* Flush any buffered content. */
+   if (!d->characterBuffer.isEmpty()) {
+      QXmlSerializer::characters(QStringRef(&d->characterBuffer));
+   }
 
-    d->write('\n');
-    QXmlSerializer::endOfSequence();
+   d->write('\n');
+   QXmlSerializer::endOfSequence();
 }
 
 /*!
@@ -279,20 +280,18 @@ void QXmlFormatter::endOfSequence()
  */
 void QXmlFormatter::item(const QPatternist::Item &item)
 {
-    Q_D(QXmlFormatter);
+   Q_D(QXmlFormatter);
 
-    if(item.isAtomicValue())
-    {
-        if(QPatternist::XPathHelper::isWhitespaceOnly(item.stringValue()))
-           return;
-        else
-        {
-            d->canIndent.top() = false;
-            startFormattingContent();
-        }
-    }
+   if (item.isAtomicValue()) {
+      if (QPatternist::XPathHelper::isWhitespaceOnly(item.stringValue())) {
+         return;
+      } else {
+         d->canIndent.top() = false;
+         startFormattingContent();
+      }
+   }
 
-    QXmlSerializer::item(item);
+   QXmlSerializer::item(item);
 }
 
 /*!
@@ -303,8 +302,8 @@ void QXmlFormatter::item(const QPatternist::Item &item)
  */
 int QXmlFormatter::indentationDepth() const
 {
-    Q_D(const QXmlFormatter);
-    return d->indentationDepth;
+   Q_D(const QXmlFormatter);
+   return d->indentationDepth;
 }
 
 /*!
@@ -315,8 +314,8 @@ int QXmlFormatter::indentationDepth() const
  */
 void QXmlFormatter::setIndentationDepth(int depth)
 {
-    Q_D(QXmlFormatter);
-    d->indentationDepth = depth;
+   Q_D(QXmlFormatter);
+   d->indentationDepth = depth;
 }
 
 QT_END_NAMESPACE

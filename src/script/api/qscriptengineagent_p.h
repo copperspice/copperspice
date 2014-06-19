@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,74 +40,72 @@ class QScriptEngineAgent;
 
 class Q_SCRIPT_EXPORT QScriptEngineAgentPrivate : public JSC::Debugger
 {
-    Q_DECLARE_PUBLIC(QScriptEngineAgent)
+   Q_DECLARE_PUBLIC(QScriptEngineAgent)
 
-public:
-    static QScriptEngineAgent* get(QScriptEngineAgentPrivate* p) {return p->q_func();}
-    static QScriptEngineAgentPrivate* get(QScriptEngineAgent* p) {return p->d_func();}
+ public:
+   static QScriptEngineAgent *get(QScriptEngineAgentPrivate *p) {
+      return p->q_func();
+   }
+   static QScriptEngineAgentPrivate *get(QScriptEngineAgent *p) {
+      return p->d_func();
+   }
 
-    QScriptEngineAgentPrivate(){}
-    virtual ~QScriptEngineAgentPrivate(){}
+   QScriptEngineAgentPrivate() {}
+   virtual ~QScriptEngineAgentPrivate() {}
 
-    void attach();
-    void detach();
+   void attach();
+   void detach();
 
-    //scripts
-    virtual void sourceParsed(JSC::ExecState*, const JSC::SourceCode&, int /*errorLine*/, const JSC::UString& /*errorMsg*/) {}
-    virtual void scriptUnload(qint64 id)
-    {
-        q_ptr->scriptUnload(id);
-    }
-    virtual void scriptLoad(qint64 id, const JSC::UString &program,
-                         const JSC::UString &fileName, int baseLineNumber)
-    {
-        q_ptr->scriptLoad(id,program, fileName, baseLineNumber);
-    }
+   //scripts
+   virtual void sourceParsed(JSC::ExecState *, const JSC::SourceCode &, int /*errorLine*/,
+                             const JSC::UString & /*errorMsg*/) {}
+   virtual void scriptUnload(qint64 id) {
+      q_ptr->scriptUnload(id);
+   }
+   virtual void scriptLoad(qint64 id, const JSC::UString &program,
+                           const JSC::UString &fileName, int baseLineNumber) {
+      q_ptr->scriptLoad(id, program, fileName, baseLineNumber);
+   }
 
-    //exceptions
-    virtual void exception(const JSC::DebuggerCallFrame& frame, intptr_t sourceID, int lineno, bool hasHandler)
-    {
-        Q_UNUSED(frame);
-        Q_UNUSED(sourceID);
-        Q_UNUSED(lineno);
-        Q_UNUSED(hasHandler);
-    }
-    virtual void exceptionThrow(const JSC::DebuggerCallFrame& frame, intptr_t sourceID, bool hasHandler);
-    virtual void exceptionCatch(const JSC::DebuggerCallFrame& frame, intptr_t sourceID);
+   //exceptions
+   virtual void exception(const JSC::DebuggerCallFrame &frame, intptr_t sourceID, int lineno, bool hasHandler) {
+      Q_UNUSED(frame);
+      Q_UNUSED(sourceID);
+      Q_UNUSED(lineno);
+      Q_UNUSED(hasHandler);
+   }
+   virtual void exceptionThrow(const JSC::DebuggerCallFrame &frame, intptr_t sourceID, bool hasHandler);
+   virtual void exceptionCatch(const JSC::DebuggerCallFrame &frame, intptr_t sourceID);
 
-    //statements
-    virtual void atStatement(const JSC::DebuggerCallFrame&, intptr_t sourceID, int lineno/*, int column*/);
-    virtual void callEvent(const JSC::DebuggerCallFrame&, intptr_t sourceID, int lineno)
-    {
-        Q_UNUSED(lineno);
-        q_ptr->contextPush();
-        q_ptr->functionEntry(sourceID);
-    }
-    virtual void returnEvent(const JSC::DebuggerCallFrame& frame, intptr_t sourceID, int lineno);
-    virtual void willExecuteProgram(const JSC::DebuggerCallFrame& frame, intptr_t sourceID, int lineno)
-    {
-        Q_UNUSED(frame);
-        Q_UNUSED(sourceID);
-        Q_UNUSED(lineno);
-    }
-    virtual void didExecuteProgram(const JSC::DebuggerCallFrame& frame, intptr_t sourceID, int lineno)
-    {
-        Q_UNUSED(frame);
-        Q_UNUSED(sourceID);
-        Q_UNUSED(lineno);
-    }
-    virtual void functionExit(const JSC::JSValue& returnValue, intptr_t sourceID);
-    //others
-    virtual void didReachBreakpoint(const JSC::DebuggerCallFrame& frame, intptr_t sourceID, int lineno/*, int column*/);
+   //statements
+   virtual void atStatement(const JSC::DebuggerCallFrame &, intptr_t sourceID, int lineno/*, int column*/);
+   virtual void callEvent(const JSC::DebuggerCallFrame &, intptr_t sourceID, int lineno) {
+      Q_UNUSED(lineno);
+      q_ptr->contextPush();
+      q_ptr->functionEntry(sourceID);
+   }
+   virtual void returnEvent(const JSC::DebuggerCallFrame &frame, intptr_t sourceID, int lineno);
+   virtual void willExecuteProgram(const JSC::DebuggerCallFrame &frame, intptr_t sourceID, int lineno) {
+      Q_UNUSED(frame);
+      Q_UNUSED(sourceID);
+      Q_UNUSED(lineno);
+   }
+   virtual void didExecuteProgram(const JSC::DebuggerCallFrame &frame, intptr_t sourceID, int lineno) {
+      Q_UNUSED(frame);
+      Q_UNUSED(sourceID);
+      Q_UNUSED(lineno);
+   }
+   virtual void functionExit(const JSC::JSValue &returnValue, intptr_t sourceID);
+   //others
+   virtual void didReachBreakpoint(const JSC::DebuggerCallFrame &frame, intptr_t sourceID, int lineno/*, int column*/);
 
-    virtual void evaluateStart(intptr_t sourceID)
-    {
-        q_ptr->functionEntry(sourceID);
-    }
-    virtual void evaluateStop(const JSC::JSValue& returnValue, intptr_t sourceID);
+   virtual void evaluateStart(intptr_t sourceID) {
+      q_ptr->functionEntry(sourceID);
+   }
+   virtual void evaluateStop(const JSC::JSValue &returnValue, intptr_t sourceID);
 
-    QScriptEnginePrivate *engine;
-    QScriptEngineAgent *q_ptr;
+   QScriptEnginePrivate *engine;
+   QScriptEngineAgent *q_ptr;
 };
 
 QT_END_NAMESPACE

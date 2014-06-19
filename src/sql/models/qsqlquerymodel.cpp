@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,37 +37,39 @@ QT_BEGIN_NAMESPACE
 
 void QSqlQueryModelPrivate::prefetch(int limit)
 {
-    Q_Q(QSqlQueryModel);
+   Q_Q(QSqlQueryModel);
 
-    if (atEnd || limit <= bottom.row() || bottom.column() == -1)
-        return;
+   if (atEnd || limit <= bottom.row() || bottom.column() == -1) {
+      return;
+   }
 
-    QModelIndex newBottom;
-    const int oldBottomRow = qMax(bottom.row(), 0);
+   QModelIndex newBottom;
+   const int oldBottomRow = qMax(bottom.row(), 0);
 
-    // try to seek directly
-    if (query.seek(limit)) {
-        newBottom = q->createIndex(limit, bottom.column());
-    } else {
-        // have to seek back to our old position for MS Access
-        int i = oldBottomRow;
-        if (query.seek(i)) {
-            while (query.next())
-                ++i;
-            newBottom = q->createIndex(i, bottom.column());
-        } else {
-            // empty or invalid query
-            newBottom = q->createIndex(-1, bottom.column());
-        }
-        atEnd = true; // this is the end.
-    }
-    if (newBottom.row() >= 0 && newBottom.row() > bottom.row()) {
-        q->beginInsertRows(QModelIndex(), bottom.row() + 1, newBottom.row());
-        bottom = newBottom;
-        q->endInsertRows();
-    } else {
-        bottom = newBottom;
-    }
+   // try to seek directly
+   if (query.seek(limit)) {
+      newBottom = q->createIndex(limit, bottom.column());
+   } else {
+      // have to seek back to our old position for MS Access
+      int i = oldBottomRow;
+      if (query.seek(i)) {
+         while (query.next()) {
+            ++i;
+         }
+         newBottom = q->createIndex(i, bottom.column());
+      } else {
+         // empty or invalid query
+         newBottom = q->createIndex(-1, bottom.column());
+      }
+      atEnd = true; // this is the end.
+   }
+   if (newBottom.row() >= 0 && newBottom.row() > bottom.row()) {
+      q->beginInsertRows(QModelIndex(), bottom.row() + 1, newBottom.row());
+      bottom = newBottom;
+      q->endInsertRows();
+   } else {
+      bottom = newBottom;
+   }
 }
 
 QSqlQueryModelPrivate::~QSqlQueryModelPrivate()
@@ -76,8 +78,8 @@ QSqlQueryModelPrivate::~QSqlQueryModelPrivate()
 
 void QSqlQueryModelPrivate::initColOffsets(int size)
 {
-    colOffsets.resize(size);
-    memset(colOffsets.data(), 0, colOffsets.size() * sizeof(int));
+   colOffsets.resize(size);
+   memset(colOffsets.data(), 0, colOffsets.size() * sizeof(int));
 }
 
 /*!
@@ -132,14 +134,14 @@ void QSqlQueryModelPrivate::initColOffsets(int size)
     Creates an empty QSqlQueryModel with the given \a parent.
  */
 QSqlQueryModel::QSqlQueryModel(QObject *parent)
-    : QAbstractTableModel(*new QSqlQueryModelPrivate, parent)
+   : QAbstractTableModel(*new QSqlQueryModelPrivate, parent)
 {
 }
 
 /*! \internal
  */
 QSqlQueryModel::QSqlQueryModel(QSqlQueryModelPrivate &dd, QObject *parent)
-    : QAbstractTableModel(dd, parent)
+   : QAbstractTableModel(dd, parent)
 {
 }
 
@@ -169,10 +171,11 @@ QSqlQueryModel::~QSqlQueryModel()
 */
 void QSqlQueryModel::fetchMore(const QModelIndex &parent)
 {
-    Q_D(QSqlQueryModel);
-    if (parent.isValid())
-        return;
-    d->prefetch(qMax(d->bottom.row(), 0) + QSQL_PREFETCH);
+   Q_D(QSqlQueryModel);
+   if (parent.isValid()) {
+      return;
+   }
+   d->prefetch(qMax(d->bottom.row(), 0) + QSQL_PREFETCH);
 }
 
 /*!
@@ -188,8 +191,8 @@ void QSqlQueryModel::fetchMore(const QModelIndex &parent)
  */
 bool QSqlQueryModel::canFetchMore(const QModelIndex &parent) const
 {
-    Q_D(const QSqlQueryModel);
-    return (!parent.isValid() && !d->atEnd);
+   Q_D(const QSqlQueryModel);
+   return (!parent.isValid() && !d->atEnd);
 }
 
 /*! \fn int QSqlQueryModel::rowCount(const QModelIndex &parent) const
@@ -206,16 +209,16 @@ bool QSqlQueryModel::canFetchMore(const QModelIndex &parent) const
  */
 int QSqlQueryModel::rowCount(const QModelIndex &index) const
 {
-    Q_D(const QSqlQueryModel);
-    return index.isValid() ? 0 : d->bottom.row() + 1;
+   Q_D(const QSqlQueryModel);
+   return index.isValid() ? 0 : d->bottom.row() + 1;
 }
 
 /*! \reimp
  */
 int QSqlQueryModel::columnCount(const QModelIndex &index) const
 {
-    Q_D(const QSqlQueryModel);
-    return index.isValid() ? 0 : d->rec.count();
+   Q_D(const QSqlQueryModel);
+   return index.isValid() ? 0 : d->rec.count();
 }
 
 /*!
@@ -228,26 +231,30 @@ int QSqlQueryModel::columnCount(const QModelIndex &index) const
 */
 QVariant QSqlQueryModel::data(const QModelIndex &item, int role) const
 {
-    Q_D(const QSqlQueryModel);
-    if (!item.isValid())
-        return QVariant();
+   Q_D(const QSqlQueryModel);
+   if (!item.isValid()) {
+      return QVariant();
+   }
 
-    QVariant v;
-    if (role & ~(Qt::DisplayRole | Qt::EditRole))
-        return v;
+   QVariant v;
+   if (role & ~(Qt::DisplayRole | Qt::EditRole)) {
+      return v;
+   }
 
-    if (!d->rec.isGenerated(item.column()))
-        return v;
-    QModelIndex dItem = indexInQuery(item);
-    if (dItem.row() > d->bottom.row())
-        const_cast<QSqlQueryModelPrivate *>(d)->prefetch(dItem.row());
+   if (!d->rec.isGenerated(item.column())) {
+      return v;
+   }
+   QModelIndex dItem = indexInQuery(item);
+   if (dItem.row() > d->bottom.row()) {
+      const_cast<QSqlQueryModelPrivate *>(d)->prefetch(dItem.row());
+   }
 
-    if (!d->query.seek(dItem.row())) {
-        d->error = d->query.lastError();
-        return v;
-    }
+   if (!d->query.seek(dItem.row())) {
+      d->error = d->query.lastError();
+      return v;
+   }
 
-    return d->query.value(dItem.column());
+   return d->query.value(dItem.column());
 }
 
 /*!
@@ -256,21 +263,24 @@ QVariant QSqlQueryModel::data(const QModelIndex &item, int role) const
 */
 QVariant QSqlQueryModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    Q_D(const QSqlQueryModel);
-    if (orientation == Qt::Horizontal) {
-        QVariant val = d->headers.value(section).value(role);
-        if (role == Qt::DisplayRole && !val.isValid())
-            val = d->headers.value(section).value(Qt::EditRole);
-        if (val.isValid())
-            return val;
+   Q_D(const QSqlQueryModel);
+   if (orientation == Qt::Horizontal) {
+      QVariant val = d->headers.value(section).value(role);
+      if (role == Qt::DisplayRole && !val.isValid()) {
+         val = d->headers.value(section).value(Qt::EditRole);
+      }
+      if (val.isValid()) {
+         return val;
+      }
 
-        // See if it's an inserted column (iiq.column() != -1)
-        QModelIndex dItem = indexInQuery(createIndex(0, section));
+      // See if it's an inserted column (iiq.column() != -1)
+      QModelIndex dItem = indexInQuery(createIndex(0, section));
 
-        if (role == Qt::DisplayRole && d->rec.count() > section && dItem.column() != -1)
-            return d->rec.fieldName(section);
-    }
-    return QAbstractItemModel::headerData(section, orientation, role);
+      if (role == Qt::DisplayRole && d->rec.count() > section && dItem.column() != -1) {
+         return d->rec.fieldName(section);
+      }
+   }
+   return QAbstractItemModel::headerData(section, orientation, role);
 }
 
 /*!
@@ -283,7 +293,7 @@ QVariant QSqlQueryModel::headerData(int section, Qt::Orientation orientation, in
  */
 void QSqlQueryModel::queryChange()
 {
-    // do nothing
+   // do nothing
 }
 
 /*!
@@ -300,61 +310,65 @@ void QSqlQueryModel::queryChange()
 */
 void QSqlQueryModel::setQuery(const QSqlQuery &query)
 {
-    Q_D(QSqlQueryModel);
-    QSqlRecord newRec = query.record();
-    bool columnsChanged = (newRec != d->rec);
-    bool hasQuerySize = query.driver()->hasFeature(QSqlDriver::QuerySize);
-    bool hasNewData = (newRec != QSqlRecord()) || !query.lastError().isValid();
+   Q_D(QSqlQueryModel);
+   QSqlRecord newRec = query.record();
+   bool columnsChanged = (newRec != d->rec);
+   bool hasQuerySize = query.driver()->hasFeature(QSqlDriver::QuerySize);
+   bool hasNewData = (newRec != QSqlRecord()) || !query.lastError().isValid();
 
-    if (d->colOffsets.size() != newRec.count() || columnsChanged)
-        d->initColOffsets(newRec.count());
+   if (d->colOffsets.size() != newRec.count() || columnsChanged) {
+      d->initColOffsets(newRec.count());
+   }
 
-    bool mustClearModel = d->bottom.isValid();
-    if (mustClearModel) {
-        d->atEnd = true;
-        beginRemoveRows(QModelIndex(), 0, qMax(d->bottom.row(), 0));
-        d->bottom = QModelIndex();
-    }
+   bool mustClearModel = d->bottom.isValid();
+   if (mustClearModel) {
+      d->atEnd = true;
+      beginRemoveRows(QModelIndex(), 0, qMax(d->bottom.row(), 0));
+      d->bottom = QModelIndex();
+   }
 
-    d->error = QSqlError();
-    d->query = query;
-    d->rec = newRec;
+   d->error = QSqlError();
+   d->query = query;
+   d->rec = newRec;
 
-    if (mustClearModel)
-        endRemoveRows();
+   if (mustClearModel) {
+      endRemoveRows();
+   }
 
-    d->atEnd = false;
+   d->atEnd = false;
 
-    if (columnsChanged && hasNewData)
-        reset();
+   if (columnsChanged && hasNewData) {
+      reset();
+   }
 
-    if (!query.isActive() || query.isForwardOnly()) {
-        d->atEnd = true;
-        d->bottom = QModelIndex();
-        if (query.isForwardOnly())
-            d->error = QSqlError(QLatin1String("Forward-only queries "
-                                               "cannot be used in a data model"),
-                                 QString(), QSqlError::ConnectionError);
-        else
-            d->error = query.lastError();
-        return;
-    }
-    QModelIndex newBottom;
-    if (hasQuerySize && d->query.size() > 0) {
-        newBottom = createIndex(d->query.size() - 1, d->rec.count() - 1);
-        beginInsertRows(QModelIndex(), 0, qMax(0, newBottom.row()));
-        d->bottom = createIndex(d->query.size() - 1, columnsChanged ? 0 : d->rec.count() - 1);
-        d->atEnd = true;
-        endInsertRows();
-    } else {
-        newBottom = createIndex(-1, d->rec.count() - 1);
-    }
-    d->bottom = newBottom;
+   if (!query.isActive() || query.isForwardOnly()) {
+      d->atEnd = true;
+      d->bottom = QModelIndex();
+      if (query.isForwardOnly())
+         d->error = QSqlError(QLatin1String("Forward-only queries "
+                                            "cannot be used in a data model"),
+                              QString(), QSqlError::ConnectionError);
+      else {
+         d->error = query.lastError();
+      }
+      return;
+   }
+   QModelIndex newBottom;
+   if (hasQuerySize && d->query.size() > 0) {
+      newBottom = createIndex(d->query.size() - 1, d->rec.count() - 1);
+      beginInsertRows(QModelIndex(), 0, qMax(0, newBottom.row()));
+      d->bottom = createIndex(d->query.size() - 1, columnsChanged ? 0 : d->rec.count() - 1);
+      d->atEnd = true;
+      endInsertRows();
+   } else {
+      newBottom = createIndex(-1, d->rec.count() - 1);
+   }
+   d->bottom = newBottom;
 
-    queryChange();
+   queryChange();
 
-    // fetchMore does the rowsInserted stuff for incremental models
-    fetchMore();
+   // fetchMore does the rowsInserted stuff for incremental models
+   fetchMore();
 }
 
 /*! \overload
@@ -373,7 +387,7 @@ void QSqlQueryModel::setQuery(const QSqlQuery &query)
 */
 void QSqlQueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
-    setQuery(QSqlQuery(query, db));
+   setQuery(QSqlQuery(query, db));
 }
 
 /*!
@@ -381,14 +395,14 @@ void QSqlQueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 */
 void QSqlQueryModel::clear()
 {
-    Q_D(QSqlQueryModel);
-    d->error = QSqlError();
-    d->atEnd = true;
-    d->query.clear();
-    d->rec.clear();
-    d->colOffsets.clear();
-    d->bottom = QModelIndex();
-    d->headers.clear();
+   Q_D(QSqlQueryModel);
+   d->error = QSqlError();
+   d->atEnd = true;
+   d->query.clear();
+   d->rec.clear();
+   d->colOffsets.clear();
+   d->bottom = QModelIndex();
+   d->headers.clear();
 }
 
 /*!
@@ -408,15 +422,17 @@ void QSqlQueryModel::clear()
 bool QSqlQueryModel::setHeaderData(int section, Qt::Orientation orientation,
                                    const QVariant &value, int role)
 {
-    Q_D(QSqlQueryModel);
-    if (orientation != Qt::Horizontal || section < 0 || columnCount() <= section)
-        return false;
+   Q_D(QSqlQueryModel);
+   if (orientation != Qt::Horizontal || section < 0 || columnCount() <= section) {
+      return false;
+   }
 
-    if (d->headers.size() <= section)
-        d->headers.resize(qMax(section + 1, 16));
-    d->headers[section][role] = value;
-    emit headerDataChanged(orientation, section, section);
-    return true;
+   if (d->headers.size() <= section) {
+      d->headers.resize(qMax(section + 1, 16));
+   }
+   d->headers[section][role] = value;
+   emit headerDataChanged(orientation, section, section);
+   return true;
 }
 
 /*!
@@ -426,8 +442,8 @@ bool QSqlQueryModel::setHeaderData(int section, Qt::Orientation orientation,
 */
 QSqlQuery QSqlQueryModel::query() const
 {
-    Q_D(const QSqlQueryModel);
-    return d->query;
+   Q_D(const QSqlQueryModel);
+   return d->query;
 }
 
 /*!
@@ -438,8 +454,8 @@ QSqlQuery QSqlQueryModel::query() const
 */
 QSqlError QSqlQueryModel::lastError() const
 {
-    Q_D(const QSqlQueryModel);
-    return d->error;
+   Q_D(const QSqlQueryModel);
+   return d->error;
 }
 
 /*!
@@ -450,8 +466,8 @@ QSqlError QSqlQueryModel::lastError() const
 */
 void QSqlQueryModel::setLastError(const QSqlError &error)
 {
-    Q_D(QSqlQueryModel);
-    d->error = error;
+   Q_D(QSqlQueryModel);
+   d->error = error;
 }
 
 /*!
@@ -466,14 +482,16 @@ void QSqlQueryModel::setLastError(const QSqlError &error)
 */
 QSqlRecord QSqlQueryModel::record(int row) const
 {
-    Q_D(const QSqlQueryModel);
-    if (row < 0)
-        return d->rec;
+   Q_D(const QSqlQueryModel);
+   if (row < 0) {
+      return d->rec;
+   }
 
-    QSqlRecord rec = d->rec;
-    for (int i = 0; i < rec.count(); ++i)
-        rec.setValue(i, data(createIndex(row, i), Qt::EditRole));
-    return rec;
+   QSqlRecord rec = d->rec;
+   for (int i = 0; i < rec.count(); ++i) {
+      rec.setValue(i, data(createIndex(row, i), Qt::EditRole));
+   }
+   return rec;
 }
 
 /*! \overload
@@ -488,8 +506,8 @@ QSqlRecord QSqlQueryModel::record(int row) const
  */
 QSqlRecord QSqlQueryModel::record() const
 {
-    Q_D(const QSqlQueryModel);
-    return d->rec;
+   Q_D(const QSqlQueryModel);
+   return d->rec;
 }
 
 /*!
@@ -508,26 +526,28 @@ QSqlRecord QSqlQueryModel::record() const
 */
 bool QSqlQueryModel::insertColumns(int column, int count, const QModelIndex &parent)
 {
-    Q_D(QSqlQueryModel);
-    if (count <= 0 || parent.isValid() || column < 0 || column > d->rec.count())
-        return false;
+   Q_D(QSqlQueryModel);
+   if (count <= 0 || parent.isValid() || column < 0 || column > d->rec.count()) {
+      return false;
+   }
 
-    beginInsertColumns(parent, column, column + count - 1);
-    for (int c = 0; c < count; ++c) {
-        QSqlField field;
-        field.setReadOnly(true);
-        field.setGenerated(false);
-        d->rec.insert(column, field);
-        if (d->colOffsets.size() < d->rec.count()) {
-            int nVal = d->colOffsets.isEmpty() ? 0 : d->colOffsets[d->colOffsets.size() - 1];
-            d->colOffsets.append(nVal);
-            Q_ASSERT(d->colOffsets.size() >= d->rec.count());
-        }
-        for (int i = column + 1; i < d->colOffsets.count(); ++i)
-            ++d->colOffsets[i];
-    }
-    endInsertColumns();
-    return true;
+   beginInsertColumns(parent, column, column + count - 1);
+   for (int c = 0; c < count; ++c) {
+      QSqlField field;
+      field.setReadOnly(true);
+      field.setGenerated(false);
+      d->rec.insert(column, field);
+      if (d->colOffsets.size() < d->rec.count()) {
+         int nVal = d->colOffsets.isEmpty() ? 0 : d->colOffsets[d->colOffsets.size() - 1];
+         d->colOffsets.append(nVal);
+         Q_ASSERT(d->colOffsets.size() >= d->rec.count());
+      }
+      for (int i = column + 1; i < d->colOffsets.count(); ++i) {
+         ++d->colOffsets[i];
+      }
+   }
+   endInsertColumns();
+   return true;
 }
 
 /*!
@@ -543,20 +563,23 @@ bool QSqlQueryModel::insertColumns(int column, int count, const QModelIndex &par
  */
 bool QSqlQueryModel::removeColumns(int column, int count, const QModelIndex &parent)
 {
-    Q_D(QSqlQueryModel);
-    if (count <= 0 || parent.isValid() || column < 0 || column >= d->rec.count())
-        return false;
+   Q_D(QSqlQueryModel);
+   if (count <= 0 || parent.isValid() || column < 0 || column >= d->rec.count()) {
+      return false;
+   }
 
-    beginRemoveColumns(parent, column, column + count - 1);
+   beginRemoveColumns(parent, column, column + count - 1);
 
-    int i;
-    for (i = 0; i < count; ++i)
-        d->rec.remove(column);
-    for (i = column; i < d->colOffsets.count(); ++i)
-        d->colOffsets[i] -= count;
+   int i;
+   for (i = 0; i < count; ++i) {
+      d->rec.remove(column);
+   }
+   for (i = column; i < d->colOffsets.count(); ++i) {
+      d->colOffsets[i] -= count;
+   }
 
-    endRemoveColumns();
-    return true;
+   endRemoveColumns();
+   return true;
 }
 
 /*!
@@ -573,13 +596,14 @@ bool QSqlQueryModel::removeColumns(int column, int count, const QModelIndex &par
 */
 QModelIndex QSqlQueryModel::indexInQuery(const QModelIndex &item) const
 {
-    Q_D(const QSqlQueryModel);
-    if (item.column() < 0 || item.column() >= d->rec.count()
-        || !d->rec.isGenerated(item.column())
-        || item.column() >= d->colOffsets.size())
-        return QModelIndex();
-    return createIndex(item.row(), item.column() - d->colOffsets[item.column()],
-                       item.internalPointer());
+   Q_D(const QSqlQueryModel);
+   if (item.column() < 0 || item.column() >= d->rec.count()
+         || !d->rec.isGenerated(item.column())
+         || item.column() >= d->colOffsets.size()) {
+      return QModelIndex();
+   }
+   return createIndex(item.row(), item.column() - d->colOffsets[item.column()],
+                      item.internalPointer());
 }
 
 QT_END_NAMESPACE

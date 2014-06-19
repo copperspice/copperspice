@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,65 +37,63 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class Template : public QSharedData, public SourceLocationReflection
+
 {
- 
-    class Template : public QSharedData, public SourceLocationReflection
+ public:
+   typedef QExplicitlySharedDataPointer<Template> Ptr;
+   typedef QVector<Template::Ptr> Vector;
 
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<Template> Ptr;
-        typedef QVector<Template::Ptr> Vector;
+   inline Template(const ImportPrecedence ip,
+                   const SequenceType::Ptr &reqType) : importPrecedence(ip)
+      , m_reqType(reqType) {
+   }
 
-        inline Template(const ImportPrecedence ip,
-                        const SequenceType::Ptr &reqType) : importPrecedence(ip)
-                                                          , m_reqType(reqType)
-        {
-        }
+   Expression::Ptr body;
 
-        Expression::Ptr body;
+   /**
+    * Returns @c this.
+    */
+   virtual const SourceLocationReflection *actualReflection() const;
 
-        /**
-         * Returns @c this.
-         */
-        virtual const SourceLocationReflection* actualReflection() const;
+   const ImportPrecedence importPrecedence;
 
-        const ImportPrecedence importPrecedence;
+   VariableDeclaration::List templateParameters;
 
-        VariableDeclaration::List templateParameters;
+   /**
+    * If @p isCallTemplate, the caller is @c xsl:call-template, as opposed
+    * to for instance @c xsl:apply-templates. This affects error
+    * reporting.
+    */
+   DynamicContext::Ptr createContext(const TemplateInvoker *const invoker,
+                                     const DynamicContext::Ptr &context,
+                                     const bool isCallTemplate) const;
 
-        /**
-         * If @p isCallTemplate, the caller is @c xsl:call-template, as opposed
-         * to for instance @c xsl:apply-templates. This affects error
-         * reporting.
-         */
-        DynamicContext::Ptr createContext(const TemplateInvoker *const invoker,
-                                         const DynamicContext::Ptr &context,
-                                         const bool isCallTemplate) const;
+   /**
+    * Since we have our template parameters in templateParameters, we need
+    * this separate step to do the regular phases:
+    * Expression::typeCheck(), and Expression::compress().
+    */
+   void compileParameters(const StaticContext::Ptr &context);
 
-        /**
-         * Since we have our template parameters in templateParameters, we need
-         * this separate step to do the regular phases:
-         * Expression::typeCheck(), and Expression::compress().
-         */
-        void compileParameters(const StaticContext::Ptr &context);
+   /**
+    * A value which takes into account the body and its template
+    * parameters.
+    */
+   Expression::Properties properties() const;
 
-        /**
-         * A value which takes into account the body and its template
-         * parameters.
-         */
-        Expression::Properties properties() const;
+   Expression::Properties dependencies() const;
 
-        Expression::Properties dependencies() const;
+   static void raiseXTSE0680(const ReportContext::Ptr &context,
+                             const QXmlName &name,
+                             const SourceLocationReflection *const reflection);
 
-        static void raiseXTSE0680(const ReportContext::Ptr &context,
-                                  const QXmlName &name,
-                                  const SourceLocationReflection *const reflection);
-
-    private:
-        DynamicContext::TemplateParameterHash parametersAsHash() const;
-        const SequenceType::Ptr m_reqType;
-    };
+ private:
+   DynamicContext::TemplateParameterHash parametersAsHash() const;
+   const SequenceType::Ptr m_reqType;
+};
 }
 
 QT_END_NAMESPACE

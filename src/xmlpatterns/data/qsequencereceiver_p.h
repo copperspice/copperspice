@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,123 +31,121 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class QAbstractXmlReceiver : public QSharedData
 {
-    
-    class QAbstractXmlReceiver : public QSharedData
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<QAbstractXmlReceiver> Ptr;
+ public:
+   typedef QExplicitlySharedDataPointer<QAbstractXmlReceiver> Ptr;
 
-        inline QAbstractXmlReceiver()
-        {
-        }
+   inline QAbstractXmlReceiver() {
+   }
 
-        virtual ~QAbstractXmlReceiver();
+   virtual ~QAbstractXmlReceiver();
 
-        /**
-         * @short Signals the start of an element by name @p name.
-         */
-        virtual void startElement(const QXmlName name) = 0;
+   /**
+    * @short Signals the start of an element by name @p name.
+    */
+   virtual void startElement(const QXmlName name) = 0;
 
-        /**
-         * @short Signals the presence of the namespace declaration @p nb.
-         *
-         * This event is received @c after startElement(), as opposed to
-         * SAX, and before any attribute() events.
-         */
-        virtual void namespaceBinding(const QXmlName &nb) = 0;
+   /**
+    * @short Signals the presence of the namespace declaration @p nb.
+    *
+    * This event is received @c after startElement(), as opposed to
+    * SAX, and before any attribute() events.
+    */
+   virtual void namespaceBinding(const QXmlName &nb) = 0;
 
-        /**
-         * @short Signals the end of the current element.
-         */
-        virtual void endElement() = 0;
+   /**
+    * @short Signals the end of the current element.
+    */
+   virtual void endElement() = 0;
 
-        /**
-         * @short Signals the presence of an attribute node.
-         *
-         * This function is guaranteed by the caller to always be
-         * called after a call to startElement() or attribute().
-         *
-         * @param name the name of the attribute. Guaranteed to always be
-         * non-null.
-         * @param value the value of the attribute. Guaranteed to always be
-         * non-null.
-         */
-        virtual void attribute(const QXmlName name,
-                               const QString &value) = 0;
+   /**
+    * @short Signals the presence of an attribute node.
+    *
+    * This function is guaranteed by the caller to always be
+    * called after a call to startElement() or attribute().
+    *
+    * @param name the name of the attribute. Guaranteed to always be
+    * non-null.
+    * @param value the value of the attribute. Guaranteed to always be
+    * non-null.
+    */
+   virtual void attribute(const QXmlName name,
+                          const QString &value) = 0;
 
-        virtual void processingInstruction(const QXmlName name,
-                                           const QString &value) = 0;
-        virtual void comment(const QString &value) = 0;
+   virtual void processingInstruction(const QXmlName name,
+                                      const QString &value) = 0;
+   virtual void comment(const QString &value) = 0;
 
-        /**
-         * @short Sends an Item to this QAbstractXmlReceiver that may be a QXmlNodeModelIndex or an
-         * AtomicValue.
-         */
-        virtual void item(const Item &item) = 0;
+   /**
+    * @short Sends an Item to this QAbstractXmlReceiver that may be a QXmlNodeModelIndex or an
+    * AtomicValue.
+    */
+   virtual void item(const Item &item) = 0;
 
-        /**
-         * Sends a text node with value @p value. Adjascent text nodes
-         * may be sent. There's no restrictions on @p value, beyond that it
-         * must be valid XML characters. For instance, @p value may contain
-         * only whitespace.
-         *
-         * @see whitespaceOnly()
-         */
-        virtual void characters(const QString &value) = 0;
+   /**
+    * Sends a text node with value @p value. Adjascent text nodes
+    * may be sent. There's no restrictions on @p value, beyond that it
+    * must be valid XML characters. For instance, @p value may contain
+    * only whitespace.
+    *
+    * @see whitespaceOnly()
+    */
+   virtual void characters(const QString &value) = 0;
 
-        /**
-         * This function may be called instead of characters() if, and only if,
-         * @p value consists only of whitespace.
-         *
-         * The caller gurantees that @p value, is not empty.
-         *
-         * By whitespace is meant a sequence of characters that are either
-         * spaces, tabs, or the two new line characters, in any order. In
-         * other words, the whole of Unicode's whitespace category is not
-         * considered whitespace.
-         *
-         * However, there's no guarantee or requirement that whitespaceOnly()
-         * is called for text nodes containing whitespace only, characters()
-         * may be called just as well. This is why the default implementation
-         * for whitespaceOnly() calls characters().
-         *
-         * @see characters()
-         */
-        virtual void whitespaceOnly(const QStringRef &value);
+   /**
+    * This function may be called instead of characters() if, and only if,
+    * @p value consists only of whitespace.
+    *
+    * The caller gurantees that @p value, is not empty.
+    *
+    * By whitespace is meant a sequence of characters that are either
+    * spaces, tabs, or the two new line characters, in any order. In
+    * other words, the whole of Unicode's whitespace category is not
+    * considered whitespace.
+    *
+    * However, there's no guarantee or requirement that whitespaceOnly()
+    * is called for text nodes containing whitespace only, characters()
+    * may be called just as well. This is why the default implementation
+    * for whitespaceOnly() calls characters().
+    *
+    * @see characters()
+    */
+   virtual void whitespaceOnly(const QStringRef &value);
 
-        /**
-         * Start of a document node.
-         */
-        virtual void startDocument() = 0;
+   /**
+    * Start of a document node.
+    */
+   virtual void startDocument() = 0;
 
-        /**
-         * End of a document node.
-         */
-        virtual void endDocument() = 0;
+   /**
+    * End of a document node.
+    */
+   virtual void endDocument() = 0;
 
-    protected:
-        /**
-         * Treats @p outputItem as an node and calls the appropriate function,
-         * such as attribute() or comment(), depending on its QXmlNodeModelIndex::NodeKind.
-         *
-         * This a helper function sub-classes can use to multi-plex Nodes received
-         * via item().
-         *
-         * @param outputItem must be a QXmlNodeModelIndex.
-         */
-        void sendAsNode(const Item &outputItem);
+ protected:
+   /**
+    * Treats @p outputItem as an node and calls the appropriate function,
+    * such as attribute() or comment(), depending on its QXmlNodeModelIndex::NodeKind.
+    *
+    * This a helper function sub-classes can use to multi-plex Nodes received
+    * via item().
+    *
+    * @param outputItem must be a QXmlNodeModelIndex.
+    */
+   void sendAsNode(const Item &outputItem);
 
-    private:
-        /**
-         * Call sendAsNode() for each child of @p node. As consistent with the
-         * XPath Data Model, this does not include attribute nodes.
-         */
-        template<const QXmlNodeModelIndex::Axis axis>
-        inline void sendFromAxis(const QXmlNodeModelIndex &node);
-        Q_DISABLE_COPY(QAbstractXmlReceiver)
-    };
+ private:
+   /**
+    * Call sendAsNode() for each child of @p node. As consistent with the
+    * XPath Data Model, this does not include attribute nodes.
+    */
+   template<const QXmlNodeModelIndex::Axis axis>
+   inline void sendFromAxis(const QXmlNodeModelIndex &node);
+   Q_DISABLE_COPY(QAbstractXmlReceiver)
+};
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,20 +30,19 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class OrExpression : public AndExpression
 {
-   
-    class OrExpression : public AndExpression
-    {
-    public:
-        OrExpression(const Expression::Ptr &operand1,
-                     const Expression::Ptr &operand2);
+ public:
+   OrExpression(const Expression::Ptr &operand1,
+                const Expression::Ptr &operand2);
 
-        virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
 
-        virtual Expression::Ptr compress(const StaticContext::Ptr &context);
-        virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-    };
+   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+};
 }
 
 QT_END_NAMESPACE

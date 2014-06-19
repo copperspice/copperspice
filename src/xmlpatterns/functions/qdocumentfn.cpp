@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,64 +36,64 @@ using namespace QPatternist;
 Expression::Ptr DocumentFN::typeCheck(const StaticContext::Ptr &context,
                                       const SequenceType::Ptr &reqType)
 {
-    /* See the class documentation for the rewrite that we're doing here. */
+   /* See the class documentation for the rewrite that we're doing here. */
 
-    /* Generate type checking code for our operands such that they match. */
-    typeCheckOperands(context);
+   /* Generate type checking code for our operands such that they match. */
+   typeCheckOperands(context);
 
-    const QSourceLocation myLocation(context->locationFor(this));
-    const FunctionFactory::Ptr functions(context->functionSignatures());
+   const QSourceLocation myLocation(context->locationFor(this));
+   const FunctionFactory::Ptr functions(context->functionSignatures());
 
-    Expression::Ptr uriSource;
+   Expression::Ptr uriSource;
 
-    {
-        Expression::List distinctValuesArgs;
-        distinctValuesArgs.append(m_operands.first());
+   {
+      Expression::List distinctValuesArgs;
+      distinctValuesArgs.append(m_operands.first());
 
-        uriSource = functions->createFunctionCall(QXmlName(StandardNamespaces::fn, StandardLocalNames::distinct_values),
-                                                  distinctValuesArgs,
-                                                  context,
-                                                  this);
-        context->addLocation(uriSource.data(), myLocation);
-    }
+      uriSource = functions->createFunctionCall(QXmlName(StandardNamespaces::fn, StandardLocalNames::distinct_values),
+                  distinctValuesArgs,
+                  context,
+                  this);
+      context->addLocation(uriSource.data(), myLocation);
+   }
 
-    const VariableSlotID rangeSlot = context->allocateRangeSlot();
-    const Expression::Ptr uriReference(new RangeVariableReference(uriSource, rangeSlot));
-    context->addLocation(uriReference.data(), myLocation);
+   const VariableSlotID rangeSlot = context->allocateRangeSlot();
+   const Expression::Ptr uriReference(new RangeVariableReference(uriSource, rangeSlot));
+   context->addLocation(uriReference.data(), myLocation);
 
-    Expression::List docArgs;
+   Expression::List docArgs;
 
-    if(m_operands.count() == 2)
-    {
-        Expression::List baseUriArgs;
-        baseUriArgs.append(uriReference);
-        baseUriArgs.append(m_operands.at(1));
+   if (m_operands.count() == 2) {
+      Expression::List baseUriArgs;
+      baseUriArgs.append(uriReference);
+      baseUriArgs.append(m_operands.at(1));
 
-        const Expression::Ptr fnBaseUri(functions->createFunctionCall(QXmlName(StandardNamespaces::fn, StandardLocalNames::resolve_uri),
-                                                                      baseUriArgs,
-                                                                      context,
-                                                                      this));
-        context->addLocation(fnBaseUri.data(), myLocation);
-        docArgs.append(fnBaseUri);
-    }
-    else
-        docArgs.append(uriReference);
+      const Expression::Ptr fnBaseUri(functions->createFunctionCall(QXmlName(StandardNamespaces::fn,
+                                      StandardLocalNames::resolve_uri),
+                                      baseUriArgs,
+                                      context,
+                                      this));
+      context->addLocation(fnBaseUri.data(), myLocation);
+      docArgs.append(fnBaseUri);
+   } else {
+      docArgs.append(uriReference);
+   }
 
-    const Expression::Ptr fnDoc(functions->createFunctionCall(QXmlName(StandardNamespaces::fn, StandardLocalNames::doc),
-                                                              docArgs,
-                                                              context,
-                                                              this));
-    context->addLocation(fnDoc.data(), myLocation);
+   const Expression::Ptr fnDoc(functions->createFunctionCall(QXmlName(StandardNamespaces::fn, StandardLocalNames::doc),
+                               docArgs,
+                               context,
+                               this));
+   context->addLocation(fnDoc.data(), myLocation);
 
 
-    Expression::Ptr newMe(new ForClause(rangeSlot,
-                                        uriSource,
-                                        fnDoc,
-                                        -1 /* We have no position variable. */));
+   Expression::Ptr newMe(new ForClause(rangeSlot,
+                                       uriSource,
+                                       fnDoc,
+                                       -1 /* We have no position variable. */));
 
-    Expression::Ptr oldMe(this);
-    rewrite(oldMe, newMe, context);
-    return newMe->typeCheck(context, reqType);
+   Expression::Ptr oldMe(this);
+   rewrite(oldMe, newMe, context);
+   return newMe->typeCheck(context, reqType);
 }
 
 QT_END_NAMESPACE

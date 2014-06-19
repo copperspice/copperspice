@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,27 +34,27 @@ using namespace QPatternist;
 
 SingleContainer::SingleContainer(const Expression::Ptr &operand) : m_operand(operand)
 {
-    Q_ASSERT(operand);
+   Q_ASSERT(operand);
 }
 
 Expression::List SingleContainer::operands() const
 {
-    Expression::List list;
-    list.append(m_operand);
-    return list;
+   Expression::List list;
+   list.append(m_operand);
+   return list;
 }
 
 void SingleContainer::setOperands(const Expression::List &ops)
 {
-    Q_ASSERT(ops.count() == 1);
-    m_operand = ops.first();
+   Q_ASSERT(ops.count() == 1);
+   m_operand = ops.first();
 }
 
 bool SingleContainer::compressOperands(const StaticContext::Ptr &context)
 {
-    rewrite(m_operand, m_operand->compress(context), context);
+   rewrite(m_operand, m_operand->compress(context), context);
 
-    return m_operand->isEvaluated();
+   return m_operand->isEvaluated();
 }
 
 QT_END_NAMESPACE

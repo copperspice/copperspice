@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,32 +32,31 @@ template<typename Key, typename Value> class QHash;
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
-{   
-    class NamespaceNameTest : public AbstractNodeTest
-    {
-    public:
-        typedef QHash<QString, ItemType::Ptr> Hash;
+namespace QPatternist {
+class NamespaceNameTest : public AbstractNodeTest
+{
+ public:
+   typedef QHash<QString, ItemType::Ptr> Hash;
 
-        static ItemType::Ptr create(const ItemType::Ptr &primaryType, const QXmlName::NamespaceCode namespaceURI);
+   static ItemType::Ptr create(const ItemType::Ptr &primaryType, const QXmlName::NamespaceCode namespaceURI);
 
-        /**
-         * @note This function assumes that @p item is a QXmlNodeModelIndex.
-         */
-        virtual bool itemMatches(const Item &item) const;
+   /**
+    * @note This function assumes that @p item is a QXmlNodeModelIndex.
+    */
+   virtual bool itemMatches(const Item &item) const;
 
-        virtual QString displayName(const NamePool::Ptr &np) const;
+   virtual QString displayName(const NamePool::Ptr &np) const;
 
-        virtual bool operator==(const ItemType &other) const;
-        PatternPriority patternPriority() const;
+   virtual bool operator==(const ItemType &other) const;
+   PatternPriority patternPriority() const;
 
-    protected:
-        virtual InstanceOf instanceOf() const;
+ protected:
+   virtual InstanceOf instanceOf() const;
 
-    private:
-        NamespaceNameTest(const ItemType::Ptr &primaryType, const QXmlName::NamespaceCode namespaceURI);
-        const QXmlName::NamespaceCode m_namespaceURI;
-    };
+ private:
+   NamespaceNameTest(const ItemType::Ptr &primaryType, const QXmlName::NamespaceCode namespaceURI);
+   const QXmlName::NamespaceCode m_namespaceURI;
+};
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,38 +33,45 @@ QT_BEGIN_NAMESPACE
 
 class TranslateDialog : public QDialog
 {
-    Q_OBJECT
+   Q_OBJECT
 
-public:
-    enum {
-        Skip,
-        Translate,
-        TranslateAll
-    };
+ public:
+   enum {
+      Skip,
+      Translate,
+      TranslateAll
+   };
 
-    TranslateDialog(QWidget *parent = 0);
+   TranslateDialog(QWidget *parent = 0);
 
-    bool markFinished() const { return m_ui.ckMarkFinished->isChecked(); }
-    Qt::CaseSensitivity caseSensitivity() const
-        { return m_ui.ckMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive; }
-    QString findText() const { return m_ui.ledFindWhat->text(); }
-    QString replaceText() const { return m_ui.ledTranslateTo->text(); }
+   bool markFinished() const {
+      return m_ui.ckMarkFinished->isChecked();
+   }
+   Qt::CaseSensitivity caseSensitivity() const {
+      return m_ui.ckMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+   }
+   QString findText() const {
+      return m_ui.ledFindWhat->text();
+   }
+   QString replaceText() const {
+      return m_ui.ledTranslateTo->text();
+   }
 
-signals:
-    void requestMatchUpdate(bool &hit);
-    void activated(int mode);
+ signals:
+   void requestMatchUpdate(bool &hit);
+   void activated(int mode);
 
-protected:
-    virtual void showEvent(QShowEvent *event);
+ protected:
+   virtual void showEvent(QShowEvent *event);
 
-private slots:
-    void emitFindNext();
-    void emitTranslateAndFindNext();
-    void emitTranslateAll();
-    void verifyText();
+ private slots:
+   void emitFindNext();
+   void emitTranslateAndFindNext();
+   void emitTranslateAll();
+   void verifyText();
 
-private:
-    Ui::TranslateDialog m_ui;
+ private:
+   Ui::TranslateDialog m_ui;
 };
 
 

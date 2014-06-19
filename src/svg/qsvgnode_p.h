@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,137 +40,136 @@ class QSvgTinyDocument;
 
 class QSvgNode
 {
-public:
-    enum Type
-    {
-        DOC,
-        G,
-        DEFS,
-        SWITCH,
-        ANIMATION,
-        ARC,
-        CIRCLE,
-        ELLIPSE,
-        IMAGE,
-        LINE,
-        PATH,
-        POLYGON,
-        POLYLINE,
-        RECT,
-        TEXT,
-        TEXTAREA,
-        TSPAN,
-        USE,
-        VIDEO
-    };
-    enum DisplayMode {
-        InlineMode,
-        BlockMode,
-        ListItemMode,
-        RunInMode,
-        CompactMode,
-        MarkerMode,
-        TableMode,
-        InlineTableMode,
-        TableRowGroupMode,
-        TableHeaderGroupMode,
-        TableFooterGroupMode,
-        TableRowMode,
-        TableColumnGroupMode,
-        TableColumnMode,
-        TableCellMode,
-        TableCaptionMode,
-        NoneMode,
-        InheritMode
-    };
-public:
-    QSvgNode(QSvgNode *parent=0);
-    virtual ~QSvgNode();
-    virtual void draw(QPainter *p, QSvgExtraStates &states) =0;
+ public:
+   enum Type {
+      DOC,
+      G,
+      DEFS,
+      SWITCH,
+      ANIMATION,
+      ARC,
+      CIRCLE,
+      ELLIPSE,
+      IMAGE,
+      LINE,
+      PATH,
+      POLYGON,
+      POLYLINE,
+      RECT,
+      TEXT,
+      TEXTAREA,
+      TSPAN,
+      USE,
+      VIDEO
+   };
+   enum DisplayMode {
+      InlineMode,
+      BlockMode,
+      ListItemMode,
+      RunInMode,
+      CompactMode,
+      MarkerMode,
+      TableMode,
+      InlineTableMode,
+      TableRowGroupMode,
+      TableHeaderGroupMode,
+      TableFooterGroupMode,
+      TableRowMode,
+      TableColumnGroupMode,
+      TableColumnMode,
+      TableCellMode,
+      TableCaptionMode,
+      NoneMode,
+      InheritMode
+   };
+ public:
+   QSvgNode(QSvgNode *parent = 0);
+   virtual ~QSvgNode();
+   virtual void draw(QPainter *p, QSvgExtraStates &states) = 0;
 
-    QSvgNode *parent() const;
+   QSvgNode *parent() const;
 
-    void appendStyleProperty(QSvgStyleProperty *prop, const QString &id);
-    void applyStyle(QPainter *p, QSvgExtraStates &states) const;
-    void revertStyle(QPainter *p, QSvgExtraStates &states) const;
-    QSvgStyleProperty *styleProperty(QSvgStyleProperty::Type type) const;
-    QSvgFillStyleProperty *styleProperty(const QString &id) const;
+   void appendStyleProperty(QSvgStyleProperty *prop, const QString &id);
+   void applyStyle(QPainter *p, QSvgExtraStates &states) const;
+   void revertStyle(QPainter *p, QSvgExtraStates &states) const;
+   QSvgStyleProperty *styleProperty(QSvgStyleProperty::Type type) const;
+   QSvgFillStyleProperty *styleProperty(const QString &id) const;
 
-    QSvgTinyDocument *document() const;
+   QSvgTinyDocument *document() const;
 
-    virtual Type type() const =0;
-    virtual QRectF bounds(QPainter *p, QSvgExtraStates &states) const;
-    virtual QRectF transformedBounds(QPainter *p, QSvgExtraStates &states) const;
-    QRectF transformedBounds() const;
+   virtual Type type() const = 0;
+   virtual QRectF bounds(QPainter *p, QSvgExtraStates &states) const;
+   virtual QRectF transformedBounds(QPainter *p, QSvgExtraStates &states) const;
+   QRectF transformedBounds() const;
 
-    void setRequiredFeatures(const QStringList &lst);
-    const QStringList & requiredFeatures() const;
+   void setRequiredFeatures(const QStringList &lst);
+   const QStringList &requiredFeatures() const;
 
-    void setRequiredExtensions(const QStringList &lst);
-    const QStringList & requiredExtensions() const;
+   void setRequiredExtensions(const QStringList &lst);
+   const QStringList &requiredExtensions() const;
 
-    void setRequiredLanguages(const QStringList &lst);
-    const QStringList & requiredLanguages() const;
+   void setRequiredLanguages(const QStringList &lst);
+   const QStringList &requiredLanguages() const;
 
-    void setRequiredFormats(const QStringList &lst);
-    const QStringList & requiredFormats() const;
+   void setRequiredFormats(const QStringList &lst);
+   const QStringList &requiredFormats() const;
 
-    void setRequiredFonts(const QStringList &lst);
-    const QStringList & requiredFonts() const;
+   void setRequiredFonts(const QStringList &lst);
+   const QStringList &requiredFonts() const;
 
-    void setVisible(bool visible);
-    bool isVisible() const;
+   void setVisible(bool visible);
+   bool isVisible() const;
 
-    void setDisplayMode(DisplayMode display);
-    DisplayMode displayMode() const;
+   void setDisplayMode(DisplayMode display);
+   DisplayMode displayMode() const;
 
-    QString nodeId() const;
-    void setNodeId(const QString &i);
+   QString nodeId() const;
+   void setNodeId(const QString &i);
 
-    QString xmlClass() const;
-    void setXmlClass(const QString &str);
-protected:
-    mutable QSvgStyle m_style;
+   QString xmlClass() const;
+   void setXmlClass(const QString &str);
+ protected:
+   mutable QSvgStyle m_style;
 
-    static qreal strokeWidth(QPainter *p);
-private:
-    QSvgNode   *m_parent;
+   static qreal strokeWidth(QPainter *p);
+ private:
+   QSvgNode   *m_parent;
 
-    QStringList m_requiredFeatures;
-    QStringList m_requiredExtensions;
-    QStringList m_requiredLanguages;
-    QStringList m_requiredFormats;
-    QStringList m_requiredFonts;
+   QStringList m_requiredFeatures;
+   QStringList m_requiredExtensions;
+   QStringList m_requiredLanguages;
+   QStringList m_requiredFormats;
+   QStringList m_requiredFonts;
 
-    bool        m_visible;
+   bool        m_visible;
 
-    QString m_id;
-    QString m_class;
+   QString m_id;
+   QString m_class;
 
-    DisplayMode m_displayMode;
-    mutable QRectF m_cachedBounds;
+   DisplayMode m_displayMode;
+   mutable QRectF m_cachedBounds;
 
-    friend class QSvgTinyDocument;
+   friend class QSvgTinyDocument;
 };
 
 inline QSvgNode *QSvgNode::parent() const
 {
-    return m_parent;
+   return m_parent;
 }
 
 inline bool QSvgNode::isVisible() const
 {
-    return m_visible;
+   return m_visible;
 }
 
 inline QString QSvgNode::nodeId() const
 {
-    return m_id;
+   return m_id;
 }
 
 inline QString QSvgNode::xmlClass() const
 {
-    return m_class;
+   return m_class;
 }
 
 QT_END_NAMESPACE

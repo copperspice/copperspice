@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -57,14 +57,14 @@ QT_BEGIN_NAMESPACE
 
 class QScriptClassPropertyIteratorPrivate
 {
-    Q_DECLARE_PUBLIC(QScriptClassPropertyIterator)
-public:
-    QScriptClassPropertyIteratorPrivate() {}
-    virtual ~QScriptClassPropertyIteratorPrivate() {}
+   Q_DECLARE_PUBLIC(QScriptClassPropertyIterator)
+ public:
+   QScriptClassPropertyIteratorPrivate() {}
+   virtual ~QScriptClassPropertyIteratorPrivate() {}
 
-    QScriptValue object;
+   QScriptValue object;
 
-    QScriptClassPropertyIterator *q_ptr;
+   QScriptClassPropertyIterator *q_ptr;
 };
 
 /*!
@@ -74,21 +74,21 @@ public:
   sequence of properties (before the first property).
 */
 QScriptClassPropertyIterator::QScriptClassPropertyIterator(const QScriptValue &object)
-    : d_ptr(new QScriptClassPropertyIteratorPrivate)
+   : d_ptr(new QScriptClassPropertyIteratorPrivate)
 {
-    d_ptr->q_ptr = this;
-    d_ptr->object = object;
+   d_ptr->q_ptr = this;
+   d_ptr->object = object;
 }
 
 /*!
   \internal
 */
 QScriptClassPropertyIterator::QScriptClassPropertyIterator(const QScriptValue &object,
-                                           QScriptClassPropertyIteratorPrivate &dd)
-    : d_ptr(&dd)
+      QScriptClassPropertyIteratorPrivate &dd)
+   : d_ptr(&dd)
 {
-    d_ptr->q_ptr = this;
-    d_ptr->object = object;
+   d_ptr->q_ptr = this;
+   d_ptr->object = object;
 }
 
 /*!
@@ -103,8 +103,8 @@ QScriptClassPropertyIterator::~QScriptClassPropertyIterator()
 */
 QScriptValue QScriptClassPropertyIterator::object() const
 {
-    Q_D(const QScriptClassPropertyIterator);
-    return d->object;
+   Q_D(const QScriptClassPropertyIterator);
+   return d->object;
 }
 
 /*!
@@ -188,7 +188,7 @@ QScriptValue QScriptClassPropertyIterator::object() const
 */
 uint QScriptClassPropertyIterator::id() const
 {
-    return 0;
+   return 0;
 }
 
 /*!
@@ -200,7 +200,7 @@ uint QScriptClassPropertyIterator::id() const
 */
 QScriptValue::PropertyFlags QScriptClassPropertyIterator::flags() const
 {
-    return object().propertyFlags(name());
+   return object().propertyFlags(name());
 }
 
 QT_END_NAMESPACE

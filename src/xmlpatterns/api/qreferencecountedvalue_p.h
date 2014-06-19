@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -28,31 +28,28 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+template<typename T>
+class ReferenceCountedValue : public QSharedData
 {
-    template<typename T>
-    class ReferenceCountedValue : public QSharedData
-    {
-    public:
-        typedef QExplicitlySharedDataPointer<ReferenceCountedValue<T> > Ptr;
+ public:
+   typedef QExplicitlySharedDataPointer<ReferenceCountedValue<T> > Ptr;
 
-        inline ReferenceCountedValue(T *const v) : value(v)
-        {
-        }
+   inline ReferenceCountedValue(T *const v) : value(v) {
+   }
 
-        inline ~ReferenceCountedValue()
-        {
-            delete value;
-        }
+   inline ~ReferenceCountedValue() {
+      delete value;
+   }
 
-        T *const value;
-    private:
-        /*!
-          Disabled, no implementation provided.
-         */
-        inline ReferenceCountedValue();
-        Q_DISABLE_COPY(ReferenceCountedValue)
-    };
+   T *const value;
+ private:
+   /*!
+     Disabled, no implementation provided.
+    */
+   inline ReferenceCountedValue();
+   Q_DISABLE_COPY(ReferenceCountedValue)
+};
 }
 
 QT_END_NAMESPACE

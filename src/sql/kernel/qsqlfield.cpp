@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,52 +31,50 @@ QT_BEGIN_NAMESPACE
 
 class QSqlFieldPrivate
 {
-public:
-    QSqlFieldPrivate(const QString &name,
-              QVariant::Type type) :
-        ref(1), nm(name), ro(false), type(type), req(QSqlField::Unknown),
-        len(-1), prec(-1), tp(-1), gen(true), autoval(false)
-    {
-    }
+ public:
+   QSqlFieldPrivate(const QString &name,
+                    QVariant::Type type) :
+      ref(1), nm(name), ro(false), type(type), req(QSqlField::Unknown),
+      len(-1), prec(-1), tp(-1), gen(true), autoval(false) {
+   }
 
-    QSqlFieldPrivate(const QSqlFieldPrivate &other)
-        : ref(1),
-          nm(other.nm),
-          ro(other.ro),
-          type(other.type),
-          req(other.req),
-          len(other.len),
-          prec(other.prec),
-          def(other.def),
-          tp(other.tp),
-          gen(other.gen),
-          autoval(other.autoval)
-    {}
+   QSqlFieldPrivate(const QSqlFieldPrivate &other)
+      : ref(1),
+        nm(other.nm),
+        ro(other.ro),
+        type(other.type),
+        req(other.req),
+        len(other.len),
+        prec(other.prec),
+        def(other.def),
+        tp(other.tp),
+        gen(other.gen),
+        autoval(other.autoval) {
+   }
 
-    bool operator==(const QSqlFieldPrivate& other) const
-    {
-        return (nm == other.nm
-                && ro == other.ro
-                && type == other.type
-                && req == other.req
-                && len == other.len
-                && prec == other.prec
-                && def == other.def
-                && gen == other.gen
-                && autoval == other.autoval);
-    }
+   bool operator==(const QSqlFieldPrivate &other) const {
+      return (nm == other.nm
+              && ro == other.ro
+              && type == other.type
+              && req == other.req
+              && len == other.len
+              && prec == other.prec
+              && def == other.def
+              && gen == other.gen
+              && autoval == other.autoval);
+   }
 
-    QAtomicInt ref;
-    QString nm;
-    uint ro: 1;
-    QVariant::Type type;
-    QSqlField::RequiredStatus req;
-    int len;
-    int prec;
-    QVariant def;
-    int tp;
-    uint gen: 1;
-    uint autoval: 1;
+   QAtomicInt ref;
+   QString nm;
+   uint ro: 1;
+   QVariant::Type type;
+   QSqlField::RequiredStatus req;
+   int len;
+   int prec;
+   QVariant def;
+   int tp;
+   uint gen: 1;
+   uint autoval: 1;
 };
 
 
@@ -143,32 +141,32 @@ public:
 
     \sa setRequiredStatus() setLength() setPrecision() setDefaultValue() setGenerated() setReadOnly()
 */
-QSqlField::QSqlField(const QString& fieldName, QVariant::Type type)
+QSqlField::QSqlField(const QString &fieldName, QVariant::Type type)
 {
-    d = new QSqlFieldPrivate(fieldName, type);
-    val = QVariant(type);
+   d = new QSqlFieldPrivate(fieldName, type);
+   val = QVariant(type);
 }
 
 /*!
     Constructs a copy of \a other.
 */
 
-QSqlField::QSqlField(const QSqlField& other)
+QSqlField::QSqlField(const QSqlField &other)
 {
-    d = other.d;
-    d->ref.ref();
-    val = other.val;
+   d = other.d;
+   d->ref.ref();
+   val = other.val;
 }
 
 /*!
     Sets the field equal to \a other.
 */
 
-QSqlField& QSqlField::operator=(const QSqlField& other)
+QSqlField &QSqlField::operator=(const QSqlField &other)
 {
-    qAtomicAssign(d, other.d);
-    val = other.val;
-    return *this;
+   qAtomicAssign(d, other.d);
+   val = other.val;
+   return *this;
 }
 
 
@@ -181,10 +179,10 @@ QSqlField& QSqlField::operator=(const QSqlField& other)
     Returns true if the field is equal to \a other; otherwise returns
     false.
 */
-bool QSqlField::operator==(const QSqlField& other) const
+bool QSqlField::operator==(const QSqlField &other) const
 {
-    return ((d == other.d || *d == *other.d)
-            && val == other.val);
+   return ((d == other.d || *d == *other.d)
+           && val == other.val);
 }
 
 /*!
@@ -193,8 +191,9 @@ bool QSqlField::operator==(const QSqlField& other) const
 
 QSqlField::~QSqlField()
 {
-    if (!d->ref.deref())
-        delete d;
+   if (!d->ref.deref()) {
+      delete d;
+   }
 }
 
 /*!
@@ -204,8 +203,8 @@ QSqlField::~QSqlField()
 */
 void QSqlField::setRequiredStatus(RequiredStatus required)
 {
-    detach();
-    d->req = required;
+   detach();
+   d->req = required;
 }
 
 /*! \fn void QSqlField::setRequired(bool required)
@@ -225,8 +224,8 @@ void QSqlField::setRequiredStatus(RequiredStatus required)
 */
 void QSqlField::setLength(int fieldLength)
 {
-    detach();
-    d->len = fieldLength;
+   detach();
+   d->len = fieldLength;
 }
 
 /*!
@@ -236,8 +235,8 @@ void QSqlField::setLength(int fieldLength)
 */
 void QSqlField::setPrecision(int precision)
 {
-    detach();
-    d->prec = precision;
+   detach();
+   d->prec = precision;
 }
 
 /*!
@@ -247,8 +246,8 @@ void QSqlField::setPrecision(int precision)
 */
 void QSqlField::setDefaultValue(const QVariant &value)
 {
-    detach();
-    d->def = value;
+   detach();
+   d->def = value;
 }
 
 /*!
@@ -256,8 +255,8 @@ void QSqlField::setDefaultValue(const QVariant &value)
 */
 void QSqlField::setSqlType(int type)
 {
-    detach();
-    d->tp = type;
+   detach();
+   d->tp = type;
 }
 
 /*!
@@ -270,8 +269,8 @@ void QSqlField::setSqlType(int type)
 */
 void QSqlField::setGenerated(bool gen)
 {
-    detach();
-    d->gen = gen;
+   detach();
+   d->gen = gen;
 }
 
 
@@ -289,11 +288,12 @@ void QSqlField::setGenerated(bool gen)
     \sa value() isReadOnly() defaultValue()
 */
 
-void QSqlField::setValue(const QVariant& value)
+void QSqlField::setValue(const QVariant &value)
 {
-    if (isReadOnly())
-        return;
-    val = value;
+   if (isReadOnly()) {
+      return;
+   }
+   val = value;
 }
 
 /*!
@@ -305,9 +305,10 @@ void QSqlField::setValue(const QVariant& value)
 
 void QSqlField::clear()
 {
-    if (isReadOnly())
-        return;
-    val = QVariant(type());
+   if (isReadOnly()) {
+      return;
+   }
+   val = QVariant(type());
 }
 
 /*!
@@ -316,10 +317,10 @@ void QSqlField::clear()
     \sa name()
 */
 
-void QSqlField::setName(const QString& name)
+void QSqlField::setName(const QString &name)
 {
-    detach();
-    d->nm = name;
+   detach();
+   d->nm = name;
 }
 
 /*!
@@ -329,8 +330,8 @@ void QSqlField::setName(const QString& name)
 */
 void QSqlField::setReadOnly(bool readOnly)
 {
-    detach();
-    d->ro = readOnly;
+   detach();
+   d->ro = readOnly;
 }
 
 /*!
@@ -348,7 +349,7 @@ void QSqlField::setReadOnly(bool readOnly)
 */
 QString QSqlField::name() const
 {
-    return d->nm;
+   return d->nm;
 }
 
 /*!
@@ -362,7 +363,7 @@ QString QSqlField::name() const
 */
 QVariant::Type QSqlField::type() const
 {
-    return d->type;
+   return d->type;
 }
 
 /*!
@@ -372,10 +373,11 @@ QVariant::Type QSqlField::type() const
 */
 void QSqlField::setType(QVariant::Type type)
 {
-    detach();
-    d->type = type;
-    if (!val.isValid())
-        val = QVariant(type);
+   detach();
+   d->type = type;
+   if (!val.isValid()) {
+      val = QVariant(type);
+   }
 }
 
 
@@ -386,7 +388,9 @@ void QSqlField::setType(QVariant::Type type)
     \sa setReadOnly() type() requiredStatus() length() precision() defaultValue() isGenerated()
 */
 bool QSqlField::isReadOnly() const
-{ return d->ro; }
+{
+   return d->ro;
+}
 
 /*!
     Returns true if the field's value is NULL; otherwise returns
@@ -395,13 +399,15 @@ bool QSqlField::isReadOnly() const
     \sa value()
 */
 bool QSqlField::isNull() const
-{ return val.isNull(); }
+{
+   return val.isNull();
+}
 
 /*! \internal
 */
 void QSqlField::detach()
 {
-    qAtomicDetach(d);
+   qAtomicDetach(d);
 }
 
 /*!
@@ -412,7 +418,7 @@ void QSqlField::detach()
 */
 QSqlField::RequiredStatus QSqlField::requiredStatus() const
 {
-    return d->req;
+   return d->req;
 }
 
 /*!
@@ -425,7 +431,7 @@ QSqlField::RequiredStatus QSqlField::requiredStatus() const
 */
 int QSqlField::length() const
 {
-    return d->len;
+   return d->len;
 }
 
 /*!
@@ -439,7 +445,7 @@ int QSqlField::length() const
 */
 int QSqlField::precision() const
 {
-    return d->prec;
+   return d->prec;
 }
 
 /*!
@@ -449,7 +455,7 @@ int QSqlField::precision() const
 */
 QVariant QSqlField::defaultValue() const
 {
-    return d->def;
+   return d->def;
 }
 
 /*!
@@ -462,7 +468,7 @@ QVariant QSqlField::defaultValue() const
 */
 int QSqlField::typeID() const
 {
-    return d->tp;
+   return d->tp;
 }
 
 /*!
@@ -473,7 +479,7 @@ int QSqlField::typeID() const
 */
 bool QSqlField::isGenerated() const
 {
-    return d->gen;
+   return d->gen;
 }
 
 /*!
@@ -482,40 +488,44 @@ bool QSqlField::isGenerated() const
 */
 bool QSqlField::isValid() const
 {
-    return d->type != QVariant::Invalid;
+   return d->type != QVariant::Invalid;
 }
 
 QDebug operator<<(QDebug dbg, const QSqlField &f)
 {
-    dbg.nospace() << "QSqlField(" << f.name() << ", " << QVariant::typeToName(f.type());
+   dbg.nospace() << "QSqlField(" << f.name() << ", " << QVariant::typeToName(f.type());
 
-    if (f.length() >= 0)
-        dbg.nospace() << ", length: " << f.length();
+   if (f.length() >= 0) {
+      dbg.nospace() << ", length: " << f.length();
+   }
 
-    if (f.precision() >= 0)
-        dbg.nospace() << ", precision: " << f.precision();
+   if (f.precision() >= 0) {
+      dbg.nospace() << ", precision: " << f.precision();
+   }
 
-    if (f.requiredStatus() != QSqlField::Unknown)
-        dbg.nospace() << ", required: "
-                      << (f.requiredStatus() == QSqlField::Required ? "yes" : "no");
+   if (f.requiredStatus() != QSqlField::Unknown)
+      dbg.nospace() << ", required: "
+                    << (f.requiredStatus() == QSqlField::Required ? "yes" : "no");
 
-    dbg.nospace() << ", generated: " << (f.isGenerated() ? "yes" : "no");
+   dbg.nospace() << ", generated: " << (f.isGenerated() ? "yes" : "no");
 
-    if (f.typeID() >= 0)
-        dbg.nospace() << ", typeID: " << f.typeID();
+   if (f.typeID() >= 0) {
+      dbg.nospace() << ", typeID: " << f.typeID();
+   }
 
-    if (!f.defaultValue().isNull())
-        dbg.nospace() << ", auto-value: \"" << f.defaultValue() << '\"';
+   if (!f.defaultValue().isNull()) {
+      dbg.nospace() << ", auto-value: \"" << f.defaultValue() << '\"';
+   }
 
-    dbg.nospace() << ')';
+   dbg.nospace() << ')';
 
-    return dbg.space();
+   return dbg.space();
 }
 
 
 bool QSqlField::isAutoValue() const
 {
-    return d->autoval;
+   return d->autoval;
 }
 
 /*!
@@ -526,8 +536,8 @@ bool QSqlField::isAutoValue() const
  */
 void QSqlField::setAutoValue(bool autoVal)
 {
-    detach();
-    d->autoval = autoVal;
+   detach();
+   d->autoval = autoVal;
 }
 
 QT_END_NAMESPACE

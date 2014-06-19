@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -27,25 +27,25 @@
 
 QT_BEGIN_NAMESPACE
 
-Statistics::Statistics(QWidget* parent, Qt::WindowFlags fl)
-  : QDialog(parent, fl)
+Statistics::Statistics(QWidget *parent, Qt::WindowFlags fl)
+   : QDialog(parent, fl)
 {
-    setupUi(this);
+   setupUi(this);
 }
 
 void Statistics::languageChange()
 {
-    retranslateUi(this);
+   retranslateUi(this);
 }
 
-void Statistics::updateStats(int sW,int sC,int sCS,int trW,int trC,int trCS)
+void Statistics::updateStats(int sW, int sC, int sCS, int trW, int trC, int trCS)
 {
-    untrWords->setText(QString::number(sW));
-    untrChars->setText(QString::number(sC));
-    untrCharsSpc->setText(QString::number(sCS));
-    trWords->setText(QString::number(trW));
-    trChars->setText(QString::number(trC));
-    trCharsSpc->setText(QString::number(trCS));
+   untrWords->setText(QString::number(sW));
+   untrChars->setText(QString::number(sC));
+   untrCharsSpc->setText(QString::number(sCS));
+   trWords->setText(QString::number(trW));
+   trChars->setText(QString::number(trC));
+   trCharsSpc->setText(QString::number(trCS));
 }
 
 QT_END_NAMESPACE

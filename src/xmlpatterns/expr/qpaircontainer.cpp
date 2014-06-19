@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,37 +33,37 @@ using namespace QPatternist;
 
 PairContainer::PairContainer(const Expression::Ptr &operand1,
                              const Expression::Ptr &operand2) : m_operand1(operand1),
-                                                                m_operand2(operand2)
+   m_operand2(operand2)
 {
-    Q_ASSERT(m_operand1);
-    Q_ASSERT(m_operand2);
+   Q_ASSERT(m_operand1);
+   Q_ASSERT(m_operand2);
 }
 
 Expression::List PairContainer::operands() const
 {
-    Expression::List list;
-    list.append(m_operand1);
-    list.append(m_operand2);
-    return list;
+   Expression::List list;
+   list.append(m_operand1);
+   list.append(m_operand2);
+   return list;
 }
 
 void PairContainer::setOperands(const Expression::List &ops)
 {
-    Q_ASSERT(ops.count() == 2);
-    m_operand1 = ops.first();
-    m_operand2 = ops.last();
-    Q_ASSERT(m_operand1);
-    Q_ASSERT(m_operand2);
+   Q_ASSERT(ops.count() == 2);
+   m_operand1 = ops.first();
+   m_operand2 = ops.last();
+   Q_ASSERT(m_operand1);
+   Q_ASSERT(m_operand2);
 }
 
 bool PairContainer::compressOperands(const StaticContext::Ptr &context)
 {
-    Q_ASSERT(m_operand1);
-    Q_ASSERT(m_operand2);
-    rewrite(m_operand1, m_operand1->compress(context), context);
-    rewrite(m_operand2, m_operand2->compress(context), context);
+   Q_ASSERT(m_operand1);
+   Q_ASSERT(m_operand2);
+   rewrite(m_operand1, m_operand1->compress(context), context);
+   rewrite(m_operand2, m_operand2->compress(context), context);
 
-    return m_operand1->isEvaluated() && m_operand2->isEvaluated();
+   return m_operand1->isEvaluated() && m_operand2->isEvaluated();
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,63 +40,64 @@
 QT_BEGIN_NAMESPACE
 
 ErrorsView::ErrorsView(MultiDataModel *dataModel, QWidget *parent) :
-    QListView(parent),
-    m_dataModel(dataModel)
+   QListView(parent),
+   m_dataModel(dataModel)
 {
-    m_list = new QStandardItemModel(this);
-    setModel(m_list);
+   m_list = new QStandardItemModel(this);
+   setModel(m_list);
 }
 
 void ErrorsView::clear()
 {
-    m_list->clear();
+   m_list->clear();
 }
 
 void ErrorsView::addError(int model, const ErrorType type, const QString &arg)
 {
-    QString error;
-    switch (type) {
+   QString error;
+   switch (type) {
       case SuperfluousAccelerator:
-        addError(model, tr("Accelerator possibly superfluous in translation."));
-        break;
+         addError(model, tr("Accelerator possibly superfluous in translation."));
+         break;
       case MissingAccelerator:
-        addError(model, tr("Accelerator possibly missing in translation."));
-        break;
+         addError(model, tr("Accelerator possibly missing in translation."));
+         break;
       case PunctuationDiffer:
-        addError(model, tr("Translation does not end with the same punctuation as the source text."));
-        break;
+         addError(model, tr("Translation does not end with the same punctuation as the source text."));
+         break;
       case IgnoredPhrasebook:
-        addError(model, tr("A phrase book suggestion for '%1' was ignored.").arg(arg));
-        break;
+         addError(model, tr("A phrase book suggestion for '%1' was ignored.").arg(arg));
+         break;
       case PlaceMarkersDiffer:
-        addError(model, tr("Translation does not refer to the same place markers as in the source text."));
-        break;
+         addError(model, tr("Translation does not refer to the same place markers as in the source text."));
+         break;
       case NumerusMarkerMissing:
-        addError(model, tr("Translation does not contain the necessary %n place marker."));
-        break;
+         addError(model, tr("Translation does not contain the necessary %n place marker."));
+         break;
       default:
-        addError(model, tr("Unknown error"));
-        break;
-    }
+         addError(model, tr("Unknown error"));
+         break;
+   }
 }
 
 QString ErrorsView::firstError()
 {
-    return (m_list->rowCount() == 0) ? QString() : m_list->item(0)->text();
+   return (m_list->rowCount() == 0) ? QString() : m_list->item(0)->text();
 }
 
 void ErrorsView::addError(int model, const QString &error)
 {
-    // NOTE: Three statics instead of one just for GCC 3.3.5
-    static QLatin1String imageLocation(":/images/s_check_danger.png");
-    static QPixmap image(imageLocation);
-    static QIcon pxDanger(image);
-    QString lang;
-    if (m_dataModel->modelCount() > 1)
-        lang = m_dataModel->model(model)->localizedLanguage() + QLatin1String(": ");
-    QStandardItem *item = new QStandardItem(pxDanger, lang + error);
-    item->setEditable(false);
-    m_list->appendRow(QList<QStandardItem*>() << item);
+   // NOTE: Three statics instead of one just for GCC 3.3.5
+   static QLatin1String imageLocation(":/images/s_check_danger.png");
+   static QPixmap image(imageLocation);
+   static QIcon pxDanger(image);
+   QString lang;
+   if (m_dataModel->modelCount() > 1) {
+      lang = m_dataModel->model(model)->localizedLanguage() + QLatin1String(": ");
+   }
+   QStandardItem *item = new QStandardItem(pxDanger, lang + error);
+   item->setEditable(false);
+   m_list->appendRow(QList<QStandardItem *>() << item);
 }
 
 QT_END_NAMESPACE

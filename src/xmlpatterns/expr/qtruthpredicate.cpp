@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,21 +35,21 @@ using namespace QPatternist;
 
 TruthPredicate::TruthPredicate(const Expression::Ptr &sourceExpression,
                                const Expression::Ptr &predicate) : GenericPredicate(sourceExpression,
-                                                                                    predicate)
+                                        predicate)
 {
 }
 
 SequenceType::List TruthPredicate::expectedOperandTypes() const
 {
-    SequenceType::List result;
-    result.append(CommonSequenceTypes::ZeroOrMoreItems);
-    result.append(CommonSequenceTypes::EBV);
-    return result;
+   SequenceType::List result;
+   result.append(CommonSequenceTypes::ZeroOrMoreItems);
+   result.append(CommonSequenceTypes::EBV);
+   return result;
 }
 
 ExpressionVisitorResult::Ptr TruthPredicate::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 QT_END_NAMESPACE

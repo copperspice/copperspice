@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,152 +32,151 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class XSLTTokenLookup
 {
-    class XSLTTokenLookup
-    {
-        public:
-            enum NodeName
+ public:
+   enum NodeName
 
-            {
-                NoKeyword,
-                AnalyzeString,
-                ApplyTemplates,
-                As,
-                Attribute,
-                AttributeSet,
-                ByteOrderMark,
-                CallTemplate,
-                CaseOrder,
-                CdataSectionElements,
-                Choose,
-                Collation,
-                Comment,
-                Copy,
-                CopyNamespaces,
-                CopyOf,
-                DataType,
-                DefaultCollation,
-                DefaultValidation,
-                DoctypePublic,
-                DoctypeSystem,
-                Document,
-                Element,
-                Elements,
-                Encoding,
-                EscapeUriAttributes,
-                ExcludeResultPrefixes,
-                ExtensionElementPrefixes,
-                Flags,
-                ForEach,
-                Format,
-                Function,
-                Href,
-                Id,
-                If,
-                Import,
-                ImportSchema,
-                Include,
-                IncludeContentType,
-                Indent,
-                InheritNamespaces,
-                InputTypeAnnotations,
-                Key,
-                Lang,
-                Match,
-                MatchingSubstring,
-                MediaType,
-                Message,
-                Method,
-                Mode,
-                Name,
-                Namespace,
-                NonMatchingSubstring,
-                NormalizationForm,
-                OmitXmlDeclaration,
-                Order,
-                Otherwise,
-                Output,
-                OutputVersion,
-                Override,
-                Param,
-                PerformSort,
-                PreserveSpace,
-                Priority,
-                ProcessingInstruction,
-                Regex,
-                Required,
-                ResultDocument,
-                SchemaLocation,
-                Select,
-                Separator,
-                Sequence,
-                Sort,
-                Stable,
-                Standalone,
-                StripSpace,
-                Stylesheet,
-                Template,
-                Terminate,
-                Test,
-                Text,
-                Transform,
-                Tunnel,
-                Type,
-                UndeclarePrefixes,
-                Use,
-                UseAttributeSets,
-                UseCharacterMaps,
-                UseWhen,
-                Validation,
-                ValueOf,
-                Variable,
-                Version,
-                When,
-                WithParam,
-                XpathDefaultNamespace
-            };
+   {
+      NoKeyword,
+      AnalyzeString,
+      ApplyTemplates,
+      As,
+      Attribute,
+      AttributeSet,
+      ByteOrderMark,
+      CallTemplate,
+      CaseOrder,
+      CdataSectionElements,
+      Choose,
+      Collation,
+      Comment,
+      Copy,
+      CopyNamespaces,
+      CopyOf,
+      DataType,
+      DefaultCollation,
+      DefaultValidation,
+      DoctypePublic,
+      DoctypeSystem,
+      Document,
+      Element,
+      Elements,
+      Encoding,
+      EscapeUriAttributes,
+      ExcludeResultPrefixes,
+      ExtensionElementPrefixes,
+      Flags,
+      ForEach,
+      Format,
+      Function,
+      Href,
+      Id,
+      If,
+      Import,
+      ImportSchema,
+      Include,
+      IncludeContentType,
+      Indent,
+      InheritNamespaces,
+      InputTypeAnnotations,
+      Key,
+      Lang,
+      Match,
+      MatchingSubstring,
+      MediaType,
+      Message,
+      Method,
+      Mode,
+      Name,
+      Namespace,
+      NonMatchingSubstring,
+      NormalizationForm,
+      OmitXmlDeclaration,
+      Order,
+      Otherwise,
+      Output,
+      OutputVersion,
+      Override,
+      Param,
+      PerformSort,
+      PreserveSpace,
+      Priority,
+      ProcessingInstruction,
+      Regex,
+      Required,
+      ResultDocument,
+      SchemaLocation,
+      Select,
+      Separator,
+      Sequence,
+      Sort,
+      Stable,
+      Standalone,
+      StripSpace,
+      Stylesheet,
+      Template,
+      Terminate,
+      Test,
+      Text,
+      Transform,
+      Tunnel,
+      Type,
+      UndeclarePrefixes,
+      Use,
+      UseAttributeSets,
+      UseCharacterMaps,
+      UseWhen,
+      Validation,
+      ValueOf,
+      Variable,
+      Version,
+      When,
+      WithParam,
+      XpathDefaultNamespace
+   };
 
-            static inline NodeName toToken(const QString &value);
-            static inline NodeName toToken(const QStringRef &value);
-            static NodeName toToken(const QChar *data, int length);
-            static QString toString(NodeName token);
+   static inline NodeName toToken(const QString &value);
+   static inline NodeName toToken(const QStringRef &value);
+   static NodeName toToken(const QChar *data, int length);
+   static QString toString(NodeName token);
 
 
-        private:
-            static inline NodeName classifier2(const QChar *data);
-            static inline NodeName classifier3(const QChar *data);
-            static inline NodeName classifier4(const QChar *data);
-            static inline NodeName classifier5(const QChar *data);
-            static inline NodeName classifier6(const QChar *data);
-            static inline NodeName classifier7(const QChar *data);
-            static inline NodeName classifier8(const QChar *data);
-            static inline NodeName classifier9(const QChar *data);
-            static inline NodeName classifier10(const QChar *data);
-            static inline NodeName classifier11(const QChar *data);
-            static inline NodeName classifier12(const QChar *data);
-            static inline NodeName classifier13(const QChar *data);
-            static inline NodeName classifier14(const QChar *data);
-            static inline NodeName classifier15(const QChar *data);
-            static inline NodeName classifier17(const QChar *data);
-            static inline NodeName classifier18(const QChar *data);
-            static inline NodeName classifier20(const QChar *data);
-            static inline NodeName classifier21(const QChar *data);
-            static inline NodeName classifier22(const QChar *data);
-            static inline NodeName classifier23(const QChar *data);
-            static inline NodeName classifier26(const QChar *data);
+ private:
+   static inline NodeName classifier2(const QChar *data);
+   static inline NodeName classifier3(const QChar *data);
+   static inline NodeName classifier4(const QChar *data);
+   static inline NodeName classifier5(const QChar *data);
+   static inline NodeName classifier6(const QChar *data);
+   static inline NodeName classifier7(const QChar *data);
+   static inline NodeName classifier8(const QChar *data);
+   static inline NodeName classifier9(const QChar *data);
+   static inline NodeName classifier10(const QChar *data);
+   static inline NodeName classifier11(const QChar *data);
+   static inline NodeName classifier12(const QChar *data);
+   static inline NodeName classifier13(const QChar *data);
+   static inline NodeName classifier14(const QChar *data);
+   static inline NodeName classifier15(const QChar *data);
+   static inline NodeName classifier17(const QChar *data);
+   static inline NodeName classifier18(const QChar *data);
+   static inline NodeName classifier20(const QChar *data);
+   static inline NodeName classifier21(const QChar *data);
+   static inline NodeName classifier22(const QChar *data);
+   static inline NodeName classifier23(const QChar *data);
+   static inline NodeName classifier26(const QChar *data);
 
-    };
+};
 
-    inline XSLTTokenLookup::NodeName XSLTTokenLookup::toToken(const QString &value)
-    {
-        return toToken(value.constData(), value.length());
-    }
+inline XSLTTokenLookup::NodeName XSLTTokenLookup::toToken(const QString &value)
+{
+   return toToken(value.constData(), value.length());
+}
 
-    inline XSLTTokenLookup::NodeName XSLTTokenLookup::toToken(const QStringRef &value)
-    {
-        return toToken(value.constData(), value.length());
-    }
+inline XSLTTokenLookup::NodeName XSLTTokenLookup::toToken(const QStringRef &value)
+{
+   return toToken(value.constData(), value.length());
+}
 
 }
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,29 +30,28 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class XsdSchemaMerger : public QSharedData
 {
- 
-    class XsdSchemaMerger : public QSharedData
-    {
-        public:
-            typedef QExplicitlySharedDataPointer<XsdSchemaMerger> Ptr;
+ public:
+   typedef QExplicitlySharedDataPointer<XsdSchemaMerger> Ptr;
 
-            /**
-             * Creates a new schema merger object that merges @p schema with @p otherSchema.
-             */
-            XsdSchemaMerger(const XsdSchema::Ptr &schema, const XsdSchema::Ptr &otherSchema);
+   /**
+    * Creates a new schema merger object that merges @p schema with @p otherSchema.
+    */
+   XsdSchemaMerger(const XsdSchema::Ptr &schema, const XsdSchema::Ptr &otherSchema);
 
-            /**
-             * Returns the merged schema.
-             */
-            XsdSchema::Ptr mergedSchema() const;
+   /**
+    * Returns the merged schema.
+    */
+   XsdSchema::Ptr mergedSchema() const;
 
-        private:
-            void merge(const XsdSchema::Ptr &schema, const XsdSchema::Ptr &otherSchema);
+ private:
+   void merge(const XsdSchema::Ptr &schema, const XsdSchema::Ptr &otherSchema);
 
-            XsdSchema::Ptr m_mergedSchema;
-    };
+   XsdSchema::Ptr m_mergedSchema;
+};
 }
 
 QT_END_NAMESPACE

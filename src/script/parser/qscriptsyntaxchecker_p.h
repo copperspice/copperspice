@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,46 +37,47 @@ class Lexer;
 
 class SyntaxChecker: protected QScriptGrammar
 {
-public:
-    enum State {
-        Error,
-        Intermediate,
-        Valid,
-    };
+ public:
+   enum State {
+      Error,
+      Intermediate,
+      Valid,
+   };
 
-    struct Result {
-        Result(State s, int ln, int col, const QString &msg)
-            : state(s), errorLineNumber(ln), errorColumnNumber(col),
-              errorMessage(msg) {}
-        State state;
-        int errorLineNumber;
-        int errorColumnNumber;
-        QString errorMessage;
-    };
+   struct Result {
+      Result(State s, int ln, int col, const QString &msg)
+         : state(s), errorLineNumber(ln), errorColumnNumber(col),
+           errorMessage(msg) {}
+      State state;
+      int errorLineNumber;
+      int errorColumnNumber;
+      QString errorMessage;
+   };
 
-    SyntaxChecker();
-    ~SyntaxChecker();
+   SyntaxChecker();
+   ~SyntaxChecker();
 
-    Result checkSyntax(const QString &code);
+   Result checkSyntax(const QString &code);
 
-protected:
-    bool automatic(QScript::Lexer *lexer, int token) const;
-    inline void reallocateStack();
+ protected:
+   bool automatic(QScript::Lexer *lexer, int token) const;
+   inline void reallocateStack();
 
-protected:
-    int tos;
-    int stack_size;
-    int *state_stack;
+ protected:
+   int tos;
+   int stack_size;
+   int *state_stack;
 };
 
 inline void SyntaxChecker::reallocateStack()
 {
-    if (! stack_size)
-        stack_size = 128;
-    else
-        stack_size <<= 1;
+   if (! stack_size) {
+      stack_size = 128;
+   } else {
+      stack_size <<= 1;
+   }
 
-    state_stack = reinterpret_cast<int*> (qRealloc(state_stack, stack_size * sizeof(int)));
+   state_stack = reinterpret_cast<int *> (qRealloc(state_stack, stack_size * sizeof(int)));
 }
 
 } // namespace QScript

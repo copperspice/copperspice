@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,33 +32,31 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+class ColoringMessageHandler : public QAbstractMessageHandler, private ColorOutput
 {
-    class ColoringMessageHandler : public QAbstractMessageHandler, private ColorOutput
-    {
-    public:
-        ColoringMessageHandler(QObject *parent = 0);
+ public:
+   ColoringMessageHandler(QObject *parent = 0);
 
-    protected:
-        virtual void handleMessage(QtMsgType type,
-                                   const QString &description,
-                                   const QUrl &identifier,
-                                   const QSourceLocation &sourceLocation);
+ protected:
+   virtual void handleMessage(QtMsgType type,
+                              const QString &description,
+                              const QUrl &identifier,
+                              const QSourceLocation &sourceLocation);
 
-    private:
-        QString colorifyDescription(const QString &in) const;
+ private:
+   QString colorifyDescription(const QString &in) const;
 
-        enum ColorType
-        {
-            RunningText,
-            Location,
-            ErrorCode,
-            Keyword,
-            Data
-        };
+   enum ColorType {
+      RunningText,
+      Location,
+      ErrorCode,
+      Keyword,
+      Data
+   };
 
-        QHash<QString, ColorType> m_classToColor;
-    };
+   QHash<QString, ColorType> m_classToColor;
+};
 }
 
 QT_END_NAMESPACE

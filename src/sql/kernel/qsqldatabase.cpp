@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -74,7 +74,7 @@
 #undef SQL_TYPE_DATE
 #undef SQL_DATE
 
-#define SCHAR IBASE_SCHAR  
+#define SCHAR IBASE_SCHAR
 #include "../drivers/ibase/qsql_ibase.h"
 #undef SCHAR
 #endif
@@ -98,180 +98,180 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QSqlDriverFactoryInterface_ii
 
 QT_STATIC_CONST_IMPL char *QSqlDatabase::defaultConnection = "qt_sql_default_connection";
 
-typedef QHash<QString, QSqlDriverCreatorBase*> DriverDict;
+typedef QHash<QString, QSqlDriverCreatorBase *> DriverDict;
 
 class QConnectionDict: public QHash<QString, QSqlDatabase>
 {
-public:
-    inline bool contains_ts(const QString &key)
-    {
-        QReadLocker locker(&lock);
-        return contains(key);
-    }
-    inline QStringList keys_ts() const
-    {
-        QReadLocker locker(&lock);
-        return keys();
-    }
+ public:
+   inline bool contains_ts(const QString &key) {
+      QReadLocker locker(&lock);
+      return contains(key);
+   }
+   inline QStringList keys_ts() const {
+      QReadLocker locker(&lock);
+      return keys();
+   }
 
-    mutable QReadWriteLock lock;
+   mutable QReadWriteLock lock;
 };
 Q_GLOBAL_STATIC(QConnectionDict, dbDict)
 
 class QSqlDatabasePrivate
 {
-public:
-    QSqlDatabasePrivate(QSqlDatabase *d, QSqlDriver *dr = 0):
-        q(d),
-        driver(dr),
-        port(-1)
-    {
-        ref = 1;
-        precisionPolicy= QSql::LowPrecisionDouble;
-    }
-    QSqlDatabasePrivate(const QSqlDatabasePrivate &other);
-    ~QSqlDatabasePrivate();
-    void init(const QString& type);
-    void copy(const QSqlDatabasePrivate *other);
-    void disable();
+ public:
+   QSqlDatabasePrivate(QSqlDatabase *d, QSqlDriver *dr = 0):
+      q(d),
+      driver(dr),
+      port(-1) {
+      ref = 1;
+      precisionPolicy = QSql::LowPrecisionDouble;
+   }
+   QSqlDatabasePrivate(const QSqlDatabasePrivate &other);
+   ~QSqlDatabasePrivate();
+   void init(const QString &type);
+   void copy(const QSqlDatabasePrivate *other);
+   void disable();
 
-    QAtomicInt ref;
-    QSqlDatabase *q;
-    QSqlDriver* driver;
-    QString dbname;
-    QString uname;
-    QString pword;
-    QString hname;
-    QString drvName;
-    int port;
-    QString connOptions;
-    QString connName;
-    QSql::NumericalPrecisionPolicy precisionPolicy;
+   QAtomicInt ref;
+   QSqlDatabase *q;
+   QSqlDriver *driver;
+   QString dbname;
+   QString uname;
+   QString pword;
+   QString hname;
+   QString drvName;
+   int port;
+   QString connOptions;
+   QString connName;
+   QSql::NumericalPrecisionPolicy precisionPolicy;
 
-    static QSqlDatabasePrivate *shared_null();
-    static QSqlDatabase database(const QString& name, bool open);
-    static void addDatabase(const QSqlDatabase &db, const QString & name);
-    static void removeDatabase(const QString& name);
-    static void invalidateDb(const QSqlDatabase &db, const QString &name, bool doWarn = true);
-    static DriverDict &driverDict();
-    static void cleanConnections();
+   static QSqlDatabasePrivate *shared_null();
+   static QSqlDatabase database(const QString &name, bool open);
+   static void addDatabase(const QSqlDatabase &db, const QString &name);
+   static void removeDatabase(const QString &name);
+   static void invalidateDb(const QSqlDatabase &db, const QString &name, bool doWarn = true);
+   static DriverDict &driverDict();
+   static void cleanConnections();
 };
 
 QSqlDatabasePrivate::QSqlDatabasePrivate(const QSqlDatabasePrivate &other)
 {
-    ref = 1;
-    q = other.q;
-    dbname = other.dbname;
-    uname = other.uname;
-    pword = other.pword;
-    hname = other.hname;
-    drvName = other.drvName;
-    port = other.port;
-    connOptions = other.connOptions;
-    driver = other.driver;
-    precisionPolicy = other.precisionPolicy;
+   ref = 1;
+   q = other.q;
+   dbname = other.dbname;
+   uname = other.uname;
+   pword = other.pword;
+   hname = other.hname;
+   drvName = other.drvName;
+   port = other.port;
+   connOptions = other.connOptions;
+   driver = other.driver;
+   precisionPolicy = other.precisionPolicy;
 }
 
 QSqlDatabasePrivate::~QSqlDatabasePrivate()
 {
-    if (driver != shared_null()->driver)
-        delete driver;
+   if (driver != shared_null()->driver) {
+      delete driver;
+   }
 }
 
 void QSqlDatabasePrivate::cleanConnections()
 {
-    QConnectionDict *dict = dbDict();
-    Q_ASSERT(dict);
-    QWriteLocker locker(&dict->lock);
+   QConnectionDict *dict = dbDict();
+   Q_ASSERT(dict);
+   QWriteLocker locker(&dict->lock);
 
-    QConnectionDict::iterator it = dict->begin();
-    while (it != dict->end()) {
-        invalidateDb(it.value(), it.key(), false);
-        ++it;
-    }
-    dict->clear();
+   QConnectionDict::iterator it = dict->begin();
+   while (it != dict->end()) {
+      invalidateDb(it.value(), it.key(), false);
+      ++it;
+   }
+   dict->clear();
 }
 
 static bool qDriverDictInit = false;
 static void cleanDriverDict()
 {
-    qDeleteAll(QSqlDatabasePrivate::driverDict());
-    QSqlDatabasePrivate::driverDict().clear();
-    QSqlDatabasePrivate::cleanConnections();
-    qDriverDictInit = false;
+   qDeleteAll(QSqlDatabasePrivate::driverDict());
+   QSqlDatabasePrivate::driverDict().clear();
+   QSqlDatabasePrivate::cleanConnections();
+   qDriverDictInit = false;
 }
 
 DriverDict &QSqlDatabasePrivate::driverDict()
 {
-    static DriverDict dict;
+   static DriverDict dict;
 
-    if (! qDriverDictInit) {
-        qDriverDictInit = true;
-        qAddPostRoutine(cleanDriverDict);
-    }
-    return dict;
+   if (! qDriverDictInit) {
+      qDriverDictInit = true;
+      qAddPostRoutine(cleanDriverDict);
+   }
+   return dict;
 }
 
 QSqlDatabasePrivate *QSqlDatabasePrivate::shared_null()
 {
-    static QSqlNullDriver dr;
-    static QSqlDatabasePrivate n(NULL, &dr);
-    return &n;
+   static QSqlNullDriver dr;
+   static QSqlDatabasePrivate n(NULL, &dr);
+   return &n;
 }
 
 void QSqlDatabasePrivate::invalidateDb(const QSqlDatabase &db, const QString &name, bool doWarn)
 {
-    if (db.d->ref.load() != 1 && doWarn) {
-        qWarning("QSqlDatabasePrivate::removeDatabase: connection '%s' is still in use, "
-                 "all queries will cease to work.", name.toLocal8Bit().constData());
-        db.d->disable();
-        db.d->connName.clear();
-    }
+   if (db.d->ref.load() != 1 && doWarn) {
+      qWarning("QSqlDatabasePrivate::removeDatabase: connection '%s' is still in use, "
+               "all queries will cease to work.", name.toLocal8Bit().constData());
+      db.d->disable();
+      db.d->connName.clear();
+   }
 }
 
 void QSqlDatabasePrivate::removeDatabase(const QString &name)
 {
-    QConnectionDict *dict = dbDict();
-    Q_ASSERT(dict);
-    QWriteLocker locker(&dict->lock);
+   QConnectionDict *dict = dbDict();
+   Q_ASSERT(dict);
+   QWriteLocker locker(&dict->lock);
 
-    if (!dict->contains(name))
-        return;
+   if (!dict->contains(name)) {
+      return;
+   }
 
-    invalidateDb(dict->take(name), name);
+   invalidateDb(dict->take(name), name);
 }
 
 void QSqlDatabasePrivate::addDatabase(const QSqlDatabase &db, const QString &name)
 {
-    QConnectionDict *dict = dbDict();
-    Q_ASSERT(dict);
-    QWriteLocker locker(&dict->lock);
+   QConnectionDict *dict = dbDict();
+   Q_ASSERT(dict);
+   QWriteLocker locker(&dict->lock);
 
-    if (dict->contains(name)) {
-        invalidateDb(dict->take(name), name);
-        qWarning("QSqlDatabasePrivate::addDatabase: duplicate connection name '%s', old "
-                 "connection removed.", name.toLocal8Bit().data());
-    }
-    dict->insert(name, db);
-    db.d->connName = name;
+   if (dict->contains(name)) {
+      invalidateDb(dict->take(name), name);
+      qWarning("QSqlDatabasePrivate::addDatabase: duplicate connection name '%s', old "
+               "connection removed.", name.toLocal8Bit().data());
+   }
+   dict->insert(name, db);
+   db.d->connName = name;
 }
 
 /*! \internal
 */
-QSqlDatabase QSqlDatabasePrivate::database(const QString& name, bool open)
+QSqlDatabase QSqlDatabasePrivate::database(const QString &name, bool open)
 {
-    const QConnectionDict *dict = dbDict();
-    Q_ASSERT(dict);
+   const QConnectionDict *dict = dbDict();
+   Q_ASSERT(dict);
 
-    dict->lock.lockForRead();
-    QSqlDatabase db = dict->value(name);
-    dict->lock.unlock();
-    if (db.isValid() && !db.isOpen() && open) {
-        if (!db.open())
-            qWarning() << "QSqlDatabasePrivate::database: unable to open database:" << db.lastError().text();
+   dict->lock.lockForRead();
+   QSqlDatabase db = dict->value(name);
+   dict->lock.unlock();
+   if (db.isValid() && !db.isOpen() && open) {
+      if (!db.open()) {
+         qWarning() << "QSqlDatabasePrivate::database: unable to open database:" << db.lastError().text();
+      }
 
-    }
-    return db;
+   }
+   return db;
 }
 
 
@@ -280,272 +280,284 @@ QSqlDatabase QSqlDatabasePrivate::database(const QString& name, bool open)
 */
 void QSqlDatabasePrivate::copy(const QSqlDatabasePrivate *other)
 {
-    q = other->q;
-    dbname = other->dbname;
-    uname = other->uname;
-    pword = other->pword;
-    hname = other->hname;
-    drvName = other->drvName;
-    port = other->port;
-    connOptions = other->connOptions;
-    precisionPolicy = other->precisionPolicy;
+   q = other->q;
+   dbname = other->dbname;
+   uname = other->uname;
+   pword = other->pword;
+   hname = other->hname;
+   drvName = other->drvName;
+   port = other->port;
+   connOptions = other->connOptions;
+   precisionPolicy = other->precisionPolicy;
 }
 
 void QSqlDatabasePrivate::disable()
 {
-    if (driver != shared_null()->driver) {
-        delete driver;
-        driver = shared_null()->driver;
-    }
+   if (driver != shared_null()->driver) {
+      delete driver;
+      driver = shared_null()->driver;
+   }
 }
 
 
 QSqlDatabase QSqlDatabase::addDatabase(const QString &type, const QString &connectionName)
 {
-    QSqlDatabase db(type);
-    QSqlDatabasePrivate::addDatabase(db, connectionName);
-    return db;
+   QSqlDatabase db(type);
+   QSqlDatabasePrivate::addDatabase(db, connectionName);
+   return db;
 }
 
-QSqlDatabase QSqlDatabase::database(const QString& connectionName, bool open)
+QSqlDatabase QSqlDatabase::database(const QString &connectionName, bool open)
 {
-    return QSqlDatabasePrivate::database(connectionName, open);
+   return QSqlDatabasePrivate::database(connectionName, open);
 }
 
-void QSqlDatabase::removeDatabase(const QString& connectionName)
+void QSqlDatabase::removeDatabase(const QString &connectionName)
 {
-    QSqlDatabasePrivate::removeDatabase(connectionName);
+   QSqlDatabasePrivate::removeDatabase(connectionName);
 }
 
 QStringList QSqlDatabase::drivers()
 {
-    QStringList list;
+   QStringList list;
 
-#ifdef QT_SQL_PSQL   
-    list << "QPSQL";
+#ifdef QT_SQL_PSQL
+   list << "QPSQL";
 #endif
 
-#ifdef QT_SQL_MYSQL 
-    list << "QMYSQL";
+#ifdef QT_SQL_MYSQL
+   list << "QMYSQL";
 #endif
 
 #ifdef QT_SQL_ODBC
-    list << "QODBC";
+   list << "QODBC";
 #endif
 
 #ifdef QT_SQL_OCI
-    list << "QOCI";
+   list << "QOCI";
 #endif
 
-#ifdef QT_SQL_TDS 
-    list << "QTDS";
+#ifdef QT_SQL_TDS
+   list << "QTDS";
 #endif
 
 #ifdef QT_SQL_DB2
-    list << "QDB2";
+   list << "QDB2";
 #endif
 
 #ifdef QT_SQL_SQLITE
-    list << "QSQLITE";
+   list << "QSQLITE";
 #endif
 
 #ifdef QT_SQL_SQLITE2
-    list << "QSQLITE2";
+   list << "QSQLITE2";
 #endif
 
 #ifdef QT_SQL_IBASE
-    list << "QIBASE";
+   list << "QIBASE";
 #endif
 
-    if (QFactoryLoader *fl = loader()) {
-        QStringList keys = fl->keys();
-        for (QStringList::const_iterator i = keys.constBegin(); i != keys.constEnd(); ++i) {
-            if (!list.contains(*i))
-                list << *i;
-        }
-    }
+   if (QFactoryLoader *fl = loader()) {
+      QStringList keys = fl->keys();
+      for (QStringList::const_iterator i = keys.constBegin(); i != keys.constEnd(); ++i) {
+         if (!list.contains(*i)) {
+            list << *i;
+         }
+      }
+   }
 
-    DriverDict dict = QSqlDatabasePrivate::driverDict();
-    for (DriverDict::const_iterator i = dict.constBegin(); i != dict.constEnd(); ++i) {
-        if (!list.contains(i.key()))
-            list << i.key();
-    }
+   DriverDict dict = QSqlDatabasePrivate::driverDict();
+   for (DriverDict::const_iterator i = dict.constBegin(); i != dict.constEnd(); ++i) {
+      if (!list.contains(i.key())) {
+         list << i.key();
+      }
+   }
 
-    return list;
+   return list;
 }
 
 
-void QSqlDatabase::registerSqlDriver(const QString& name, QSqlDriverCreatorBase *creator)
+void QSqlDatabase::registerSqlDriver(const QString &name, QSqlDriverCreatorBase *creator)
 {
-    delete QSqlDatabasePrivate::driverDict().take(name);
-    if (creator)
-        QSqlDatabasePrivate::driverDict().insert(name, creator);
+   delete QSqlDatabasePrivate::driverDict().take(name);
+   if (creator) {
+      QSqlDatabasePrivate::driverDict().insert(name, creator);
+   }
 }
 
-bool QSqlDatabase::contains(const QString& connectionName)
+bool QSqlDatabase::contains(const QString &connectionName)
 {
-    return dbDict()->contains_ts(connectionName);
+   return dbDict()->contains_ts(connectionName);
 }
 
 QStringList QSqlDatabase::connectionNames()
 {
-    return dbDict()->keys_ts();
+   return dbDict()->keys_ts();
 }
 
 QSqlDatabase::QSqlDatabase(const QString &type)
 {
-    d = new QSqlDatabasePrivate(this);
-    d->init(type);
+   d = new QSqlDatabasePrivate(this);
+   d->init(type);
 }
 
 QSqlDatabase::QSqlDatabase(QSqlDriver *driver)
 {
-    d = new QSqlDatabasePrivate(this, driver);
+   d = new QSqlDatabasePrivate(this, driver);
 }
 
 QSqlDatabase::QSqlDatabase()
 {
-    d = QSqlDatabasePrivate::shared_null();
-    d->ref.ref();
+   d = QSqlDatabasePrivate::shared_null();
+   d->ref.ref();
 }
 
 QSqlDatabase::QSqlDatabase(const QSqlDatabase &other)
 {
-    d = other.d;
-    d->ref.ref();
+   d = other.d;
+   d->ref.ref();
 }
 
 QSqlDatabase &QSqlDatabase::operator=(const QSqlDatabase &other)
 {
-    qAtomicAssign(d, other.d);
-    return *this;
+   qAtomicAssign(d, other.d);
+   return *this;
 }
 
 void QSqlDatabasePrivate::init(const QString &type)
 {
-    drvName = type;
+   drvName = type;
 
-    if (! driver) {
+   if (! driver) {
 
 #ifdef QT_SQL_PSQL
-        if (type == "QPSQL")
-            driver = new QPSQLDriver();
+      if (type == "QPSQL") {
+         driver = new QPSQLDriver();
+      }
 #endif
 
 #ifdef QT_SQL_MYSQL
-        if (type == "QMYSQL")
-            driver = new QMYSQLDriver();
+      if (type == "QMYSQL") {
+         driver = new QMYSQLDriver();
+      }
 #endif
 
 #ifdef QT_SQL_ODBC
-        if (type == "QODBC")
-            driver = new QODBCDriver();
+      if (type == "QODBC") {
+         driver = new QODBCDriver();
+      }
 #endif
 
 #ifdef QT_SQL_OCI
-        if (type == "QOCI")
-            driver = new QOCIDriver();
+      if (type == "QOCI") {
+         driver = new QOCIDriver();
+      }
 #endif
 
 #ifdef QT_SQL_TDS
-        if (type == "QTDS")
-            driver = new QTDSDriver();
+      if (type == "QTDS") {
+         driver = new QTDSDriver();
+      }
 #endif
 
 #ifdef QT_SQL_DB2
-        if (type == "QDB2")
-            driver = new QDB2Driver();
+      if (type == "QDB2") {
+         driver = new QDB2Driver();
+      }
 #endif
 
 #ifdef QT_SQL_SQLITE
-        if (type == "QSQLITE")
-            driver = new QSQLiteDriver();
+      if (type == "QSQLITE") {
+         driver = new QSQLiteDriver();
+      }
 #endif
 
 #ifdef QT_SQL_SQLITE2
-        if (type == "QSQLITE2")
-            driver = new QSQLite2Driver();
+      if (type == "QSQLITE2") {
+         driver = new QSQLite2Driver();
+      }
 #endif
 
 #ifdef QT_SQL_IBASE
-        if (type == "QIBASE")
-            driver = new QIBaseDriver();
+      if (type == "QIBASE") {
+         driver = new QIBaseDriver();
+      }
 #endif
 
-    }
+   }
 
-    if (! driver) {
-        DriverDict dict = QSqlDatabasePrivate::driverDict();
+   if (! driver) {
+      DriverDict dict = QSqlDatabasePrivate::driverDict();
 
-        for (DriverDict::const_iterator it = dict.constBegin(); it != dict.constEnd() && ! driver; ++it) {
+      for (DriverDict::const_iterator it = dict.constBegin(); it != dict.constEnd() && ! driver; ++it) {
 
-            if (type == it.key()) {
-                driver = ((QSqlDriverCreatorBase*)(*it))->createObject();
-            }
-        }
-    }
+         if (type == it.key()) {
+            driver = ((QSqlDriverCreatorBase *)(*it))->createObject();
+         }
+      }
+   }
 
-    if (! driver && loader()) {
-    
-        if (QSqlDriverFactoryInterface *factory = qobject_cast<QSqlDriverFactoryInterface*>(loader()->instance(type))) {
-            driver = factory->create(type);
-        } 
-    }
+   if (! driver && loader()) {
 
-    if (! driver) {
-        qWarning("QSqlDatabase: %s driver not loaded", type.toLatin1().data());
-        qWarning("QSqlDatabase: available drivers: %s", QSqlDatabase::drivers().join(" ").toLatin1().data());
+      if (QSqlDriverFactoryInterface *factory = qobject_cast<QSqlDriverFactoryInterface *>(loader()->instance(type))) {
+         driver = factory->create(type);
+      }
+   }
 
-        if (QCoreApplication::instance() == 0) {
-            qWarning("QSqlDatabase: an instance of QCoreApplication is required for loading driver plugins");
-        } 
-        driver = shared_null()->driver;
-    }
+   if (! driver) {
+      qWarning("QSqlDatabase: %s driver not loaded", type.toLatin1().data());
+      qWarning("QSqlDatabase: available drivers: %s", QSqlDatabase::drivers().join(" ").toLatin1().data());
+
+      if (QCoreApplication::instance() == 0) {
+         qWarning("QSqlDatabase: an instance of QCoreApplication is required for loading driver plugins");
+      }
+      driver = shared_null()->driver;
+   }
 }
 
 QSqlDatabase::~QSqlDatabase()
 {
-    if (!d->ref.deref()) {
-        close();
-        delete d;
-    }
+   if (!d->ref.deref()) {
+      close();
+      delete d;
+   }
 }
 
-QSqlQuery QSqlDatabase::exec(const QString & query) const
+QSqlQuery QSqlDatabase::exec(const QString &query) const
 {
-    QSqlQuery r(d->driver->createResult());
-    if (!query.isEmpty()) {
-        r.exec(query);
-        d->driver->setLastError(r.lastError());
-    }
-    return r;
+   QSqlQuery r(d->driver->createResult());
+   if (!query.isEmpty()) {
+      r.exec(query);
+      d->driver->setLastError(r.lastError());
+   }
+   return r;
 }
 
 bool QSqlDatabase::open()
 {
-    return d->driver->open(d->dbname, d->uname, d->pword, d->hname,d->port, d->connOptions);
+   return d->driver->open(d->dbname, d->uname, d->pword, d->hname, d->port, d->connOptions);
 }
 
-bool QSqlDatabase::open(const QString& user, const QString& password)
+bool QSqlDatabase::open(const QString &user, const QString &password)
 {
-    setUserName(user);
-    return d->driver->open(d->dbname, user, password, d->hname,d->port, d->connOptions);
+   setUserName(user);
+   return d->driver->open(d->dbname, user, password, d->hname, d->port, d->connOptions);
 }
 
 void QSqlDatabase::close()
 {
-    d->driver->close();
+   d->driver->close();
 }
 
 bool QSqlDatabase::isOpen() const
 {
-    return d->driver->isOpen();
+   return d->driver->isOpen();
 }
 
 
 bool QSqlDatabase::isOpenError() const
 {
-    return d->driver->isOpenError();
+   return d->driver->isOpenError();
 }
 
 /*!
@@ -557,9 +569,10 @@ bool QSqlDatabase::isOpenError() const
 */
 bool QSqlDatabase::transaction()
 {
-    if (!d->driver->hasFeature(QSqlDriver::Transactions))
-        return false;
-    return d->driver->beginTransaction();
+   if (!d->driver->hasFeature(QSqlDriver::Transactions)) {
+      return false;
+   }
+   return d->driver->beginTransaction();
 }
 
 /*!
@@ -578,9 +591,10 @@ bool QSqlDatabase::transaction()
 */
 bool QSqlDatabase::commit()
 {
-    if (!d->driver->hasFeature(QSqlDriver::Transactions))
-        return false;
-    return d->driver->commitTransaction();
+   if (!d->driver->hasFeature(QSqlDriver::Transactions)) {
+      return false;
+   }
+   return d->driver->commitTransaction();
 }
 
 /*!
@@ -599,9 +613,10 @@ bool QSqlDatabase::commit()
 */
 bool QSqlDatabase::rollback()
 {
-    if (!d->driver->hasFeature(QSqlDriver::Transactions))
-        return false;
-    return d->driver->rollbackTransaction();
+   if (!d->driver->hasFeature(QSqlDriver::Transactions)) {
+      return false;
+   }
+   return d->driver->rollbackTransaction();
 }
 
 /*!
@@ -632,10 +647,11 @@ bool QSqlDatabase::rollback()
     \sa setPort() setConnectOptions() open()
 */
 
-void QSqlDatabase::setDatabaseName(const QString& name)
+void QSqlDatabase::setDatabaseName(const QString &name)
 {
-    if (isValid())
-        d->dbname = name;
+   if (isValid()) {
+      d->dbname = name;
+   }
 }
 
 /*!
@@ -650,10 +666,11 @@ void QSqlDatabase::setDatabaseName(const QString& name)
     \sa setPort() setConnectOptions() open()
 */
 
-void QSqlDatabase::setUserName(const QString& name)
+void QSqlDatabase::setUserName(const QString &name)
 {
-    if (isValid())
-        d->uname = name;
+   if (isValid()) {
+      d->uname = name;
+   }
 }
 
 /*!
@@ -672,10 +689,11 @@ void QSqlDatabase::setUserName(const QString& name)
     \sa setPort() setConnectOptions() open()
 */
 
-void QSqlDatabase::setPassword(const QString& password)
+void QSqlDatabase::setPassword(const QString &password)
 {
-    if (isValid())
-        d->pword = password;
+   if (isValid()) {
+      d->pword = password;
+   }
 }
 
 /*!
@@ -690,10 +708,11 @@ void QSqlDatabase::setPassword(const QString& password)
     \sa setPort() setConnectOptions() open()
 */
 
-void QSqlDatabase::setHostName(const QString& host)
+void QSqlDatabase::setHostName(const QString &host)
 {
-    if (isValid())
-        d->hname = host;
+   if (isValid()) {
+      d->hname = host;
+   }
 }
 
 /*!
@@ -710,8 +729,9 @@ void QSqlDatabase::setHostName(const QString& host)
 
 void QSqlDatabase::setPort(int port)
 {
-    if (isValid())
-        d->port = port;
+   if (isValid()) {
+      d->port = port;
+   }
 }
 
 /*!
@@ -722,7 +742,7 @@ void QSqlDatabase::setPort(int port)
 */
 QString QSqlDatabase::databaseName() const
 {
-    return d->dbname;
+   return d->dbname;
 }
 
 /*!
@@ -732,7 +752,7 @@ QString QSqlDatabase::databaseName() const
 */
 QString QSqlDatabase::userName() const
 {
-    return d->uname;
+   return d->uname;
 }
 
 /*!
@@ -742,7 +762,7 @@ QString QSqlDatabase::userName() const
 */
 QString QSqlDatabase::password() const
 {
-    return d->pword;
+   return d->pword;
 }
 
 /*!
@@ -752,7 +772,7 @@ QString QSqlDatabase::password() const
 */
 QString QSqlDatabase::hostName() const
 {
-    return d->hname;
+   return d->hname;
 }
 
 /*!
@@ -762,7 +782,7 @@ QString QSqlDatabase::hostName() const
 */
 QString QSqlDatabase::driverName() const
 {
-    return d->drvName;
+   return d->drvName;
 }
 
 /*!
@@ -773,7 +793,7 @@ QString QSqlDatabase::driverName() const
 */
 int QSqlDatabase::port() const
 {
-    return d->port;
+   return d->port;
 }
 
 /*!
@@ -783,9 +803,9 @@ int QSqlDatabase::port() const
     \sa addDatabase() drivers()
 */
 
-QSqlDriver* QSqlDatabase::driver() const
+QSqlDriver *QSqlDatabase::driver() const
 {
-    return d->driver;
+   return d->driver;
 }
 
 /*!
@@ -800,7 +820,7 @@ QSqlDriver* QSqlDatabase::driver() const
 
 QSqlError QSqlDatabase::lastError() const
 {
-    return d->driver->lastError();
+   return d->driver->lastError();
 }
 
 
@@ -813,7 +833,7 @@ QSqlError QSqlDatabase::lastError() const
 
 QStringList QSqlDatabase::tables(QSql::TableType type) const
 {
-    return d->driver->tables(type);
+   return d->driver->tables(type);
 }
 
 /*!
@@ -823,9 +843,9 @@ QStringList QSqlDatabase::tables(QSql::TableType type) const
     \sa tables(), record()
 */
 
-QSqlIndex QSqlDatabase::primaryIndex(const QString& tablename) const
+QSqlIndex QSqlDatabase::primaryIndex(const QString &tablename) const
 {
-    return d->driver->primaryIndex(tablename);
+   return d->driver->primaryIndex(tablename);
 }
 
 
@@ -836,9 +856,9 @@ QSqlIndex QSqlDatabase::primaryIndex(const QString& tablename) const
     view) exists, an empty record is returned.
 */
 
-QSqlRecord QSqlDatabase::record(const QString& tablename) const
+QSqlRecord QSqlDatabase::record(const QString &tablename) const
 {
-    return d->driver->record(tablename);
+   return d->driver->record(tablename);
 }
 
 
@@ -938,8 +958,9 @@ QSqlRecord QSqlDatabase::record(const QString& tablename) const
 
 void QSqlDatabase::setConnectOptions(const QString &options)
 {
-    if (isValid())
-        d->connOptions = options;
+   if (isValid()) {
+      d->connOptions = options;
+   }
 }
 
 /*!
@@ -950,7 +971,7 @@ void QSqlDatabase::setConnectOptions(const QString &options)
  */
 QString QSqlDatabase::connectOptions() const
 {
-    return d->connOptions;
+   return d->connOptions;
 }
 
 /*!
@@ -960,9 +981,9 @@ QString QSqlDatabase::connectOptions() const
     \sa drivers()
 */
 
-bool QSqlDatabase::isDriverAvailable(const QString& name)
+bool QSqlDatabase::isDriverAvailable(const QString &name)
 {
-    return drivers().contains(name);
+   return drivers().contains(name);
 }
 
 /*! \fn QSqlDatabase QSqlDatabase::addDatabase(QSqlDriver* driver, const QString& connectionName)
@@ -1062,11 +1083,11 @@ bool QSqlDatabase::isDriverAvailable(const QString& name)
 
     \sa drivers()
 */
-QSqlDatabase QSqlDatabase::addDatabase(QSqlDriver* driver, const QString& connectionName)
+QSqlDatabase QSqlDatabase::addDatabase(QSqlDriver *driver, const QString &connectionName)
 {
-    QSqlDatabase db(driver);
-    QSqlDatabasePrivate::addDatabase(db, connectionName);
-    return db;
+   QSqlDatabase db(driver);
+   QSqlDatabasePrivate::addDatabase(db, connectionName);
+   return db;
 }
 
 /*!
@@ -1077,7 +1098,7 @@ QSqlDatabase QSqlDatabase::addDatabase(QSqlDriver* driver, const QString& connec
 */
 bool QSqlDatabase::isValid() const
 {
-    return d->driver && d->driver != d->shared_null()->driver;
+   return d->driver && d->driver != d->shared_null()->driver;
 }
 
 /*!
@@ -1092,13 +1113,14 @@ bool QSqlDatabase::isValid() const
 */
 QSqlDatabase QSqlDatabase::cloneDatabase(const QSqlDatabase &other, const QString &connectionName)
 {
-    if (!other.isValid())
-        return QSqlDatabase();
+   if (!other.isValid()) {
+      return QSqlDatabase();
+   }
 
-    QSqlDatabase db(other.driverName());
-    db.d->copy(other.d);
-    QSqlDatabasePrivate::addDatabase(db, connectionName);
-    return db;
+   QSqlDatabase db(other.driverName());
+   db.d->copy(other.d);
+   QSqlDatabasePrivate::addDatabase(db, connectionName);
+   return db;
 }
 
 /*!
@@ -1111,7 +1133,7 @@ QSqlDatabase QSqlDatabase::cloneDatabase(const QSqlDatabase &other, const QStrin
 */
 QString QSqlDatabase::connectionName() const
 {
-    return d->connName;
+   return d->connName;
 }
 
 /*!
@@ -1133,9 +1155,10 @@ QString QSqlDatabase::connectionName() const
 */
 void QSqlDatabase::setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy precisionPolicy)
 {
-    if(driver())
-        driver()->setNumericalPrecisionPolicy(precisionPolicy);
-    d->precisionPolicy = precisionPolicy;
+   if (driver()) {
+      driver()->setNumericalPrecisionPolicy(precisionPolicy);
+   }
+   d->precisionPolicy = precisionPolicy;
 }
 
 /*!
@@ -1143,28 +1166,29 @@ void QSqlDatabase::setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy pr
 
     Returns the current default precision policy for the database connection.
 
-    \sa QSql::NumericalPrecisionPolicy, setNumericalPrecisionPolicy(), 
+    \sa QSql::NumericalPrecisionPolicy, setNumericalPrecisionPolicy(),
     QSqlQuery::numericalPrecisionPolicy(), QSqlQuery::setNumericalPrecisionPolicy()
 */
 QSql::NumericalPrecisionPolicy QSqlDatabase::numericalPrecisionPolicy() const
 {
-    if(driver())
-        return driver()->numericalPrecisionPolicy();
-    else
-        return d->precisionPolicy;
+   if (driver()) {
+      return driver()->numericalPrecisionPolicy();
+   } else {
+      return d->precisionPolicy;
+   }
 }
 
 QDebug operator<<(QDebug dbg, const QSqlDatabase &d)
 {
-    if (!d.isValid()) {
-        dbg.nospace() << "QSqlDatabase(invalid)";
-        return dbg.space();
-    }
+   if (!d.isValid()) {
+      dbg.nospace() << "QSqlDatabase(invalid)";
+      return dbg.space();
+   }
 
-    dbg.nospace() << "QSqlDatabase(driver=\"" << d.driverName() << "\", database=\""
-                  << d.databaseName() << "\", host=\"" << d.hostName() << "\", port=" << d.port()
-                  << ", user=\"" << d.userName() << "\", open=" << d.isOpen() << ")";
-    return dbg.space();
+   dbg.nospace() << "QSqlDatabase(driver=\"" << d.driverName() << "\", database=\""
+                 << d.databaseName() << "\", host=\"" << d.hostName() << "\", port=" << d.port()
+                 << ", user=\"" << d.userName() << "\", open=" << d.isOpen() << ")";
+   return dbg.space();
 }
 
 QT_END_NAMESPACE

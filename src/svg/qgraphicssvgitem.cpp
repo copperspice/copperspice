@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,48 +37,44 @@ QT_BEGIN_NAMESPACE
 
 class QGraphicsSvgItemPrivate : public QGraphicsItemPrivate
 {
-public:
-    Q_DECLARE_PUBLIC(QGraphicsSvgItem)
+ public:
+   Q_DECLARE_PUBLIC(QGraphicsSvgItem)
 
-    QGraphicsSvgItemPrivate()
-        : renderer(0), shared(false)
-    {
-    }
+   QGraphicsSvgItemPrivate()
+      : renderer(0), shared(false) {
+   }
 
-    void init(QGraphicsItem *parent)
-    {
-        Q_Q(QGraphicsSvgItem);
-        q->setParentItem(parent);
-        renderer = new QSvgRenderer(q);
-        QObject::connect(renderer, SIGNAL(repaintNeeded()),
-                         q, SLOT(_q_repaintItem()));
-        q->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-        q->setMaximumCacheSize(QSize(1024, 768));
-    }
+   void init(QGraphicsItem *parent) {
+      Q_Q(QGraphicsSvgItem);
+      q->setParentItem(parent);
+      renderer = new QSvgRenderer(q);
+      QObject::connect(renderer, SIGNAL(repaintNeeded()),
+                       q, SLOT(_q_repaintItem()));
+      q->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+      q->setMaximumCacheSize(QSize(1024, 768));
+   }
 
-    void _q_repaintItem()
-    {
-        q_func()->update();
-    }
+   void _q_repaintItem() {
+      q_func()->update();
+   }
 
-    inline void updateDefaultSize()
-    {
-        QRectF bounds;
-        if (elemId.isEmpty()) {
-            bounds = QRectF(QPointF(0, 0), renderer->defaultSize());
-        } else {
-            bounds = renderer->boundsOnElement(elemId);
-        }
-        if (boundingRect.size() != bounds.size()) {
-            q_func()->prepareGeometryChange();
-            boundingRect.setSize(bounds.size());
-        }
-    }
+   inline void updateDefaultSize() {
+      QRectF bounds;
+      if (elemId.isEmpty()) {
+         bounds = QRectF(QPointF(0, 0), renderer->defaultSize());
+      } else {
+         bounds = renderer->boundsOnElement(elemId);
+      }
+      if (boundingRect.size() != bounds.size()) {
+         q_func()->prepareGeometryChange();
+         boundingRect.setSize(bounds.size());
+      }
+   }
 
-    QSvgRenderer *renderer;
-    QRectF boundingRect;
-    bool shared;
-    QString elemId;
+   QSvgRenderer *renderer;
+   QRectF boundingRect;
+   bool shared;
+   QString elemId;
 };
 
 /*!
@@ -123,10 +119,10 @@ public:
     Constructs a new SVG item with the given \a parent.
 */
 QGraphicsSvgItem::QGraphicsSvgItem(QGraphicsItem *parent)
-    : QGraphicsObject(*new QGraphicsSvgItemPrivate(), 0, 0)
+   : QGraphicsObject(*new QGraphicsSvgItemPrivate(), 0, 0)
 {
-    Q_D(QGraphicsSvgItem);
-    d->init(parent);
+   Q_D(QGraphicsSvgItem);
+   d->init(parent);
 }
 
 /*!
@@ -134,12 +130,12 @@ QGraphicsSvgItem::QGraphicsSvgItem(QGraphicsItem *parent)
     SVG file with the specified \a fileName.
 */
 QGraphicsSvgItem::QGraphicsSvgItem(const QString &fileName, QGraphicsItem *parent)
-    : QGraphicsObject(*new QGraphicsSvgItemPrivate(), 0, 0)
+   : QGraphicsObject(*new QGraphicsSvgItemPrivate(), 0, 0)
 {
-    Q_D(QGraphicsSvgItem);
-    d->init(parent);
-    d->renderer->load(fileName);
-    d->updateDefaultSize();
+   Q_D(QGraphicsSvgItem);
+   d->init(parent);
+   d->renderer->load(fileName);
+   d->updateDefaultSize();
 }
 
 /*!
@@ -147,7 +143,7 @@ QGraphicsSvgItem::QGraphicsSvgItem(const QString &fileName, QGraphicsItem *paren
 */
 QSvgRenderer *QGraphicsSvgItem::renderer() const
 {
-    return d_func()->renderer;
+   return d_func()->renderer;
 }
 
 
@@ -156,8 +152,8 @@ QSvgRenderer *QGraphicsSvgItem::renderer() const
 */
 QRectF QGraphicsSvgItem::boundingRect() const
 {
-    Q_D(const QGraphicsSvgItem);
-    return d->boundingRect;
+   Q_D(const QGraphicsSvgItem);
+   return d->boundingRect;
 }
 
 /*!
@@ -168,56 +164,58 @@ QRectF QGraphicsSvgItem::boundingRect() const
     NOTE: This function is a duplicate of qt_graphicsItem_highlightSelected() in qgraphicsitem.cpp!
 */
 static void qt_graphicsItem_highlightSelected(
-    QGraphicsItem *item, QPainter *painter, const QStyleOptionGraphicsItem *option)
+   QGraphicsItem *item, QPainter *painter, const QStyleOptionGraphicsItem *option)
 {
-    const QRectF murect = painter->transform().mapRect(QRectF(0, 0, 1, 1));
-    if (qFuzzyIsNull(qMax(murect.width(), murect.height())))
-        return;
+   const QRectF murect = painter->transform().mapRect(QRectF(0, 0, 1, 1));
+   if (qFuzzyIsNull(qMax(murect.width(), murect.height()))) {
+      return;
+   }
 
-    const QRectF mbrect = painter->transform().mapRect(item->boundingRect());
-    if (qMin(mbrect.width(), mbrect.height()) < qreal(1.0))
-        return;
+   const QRectF mbrect = painter->transform().mapRect(item->boundingRect());
+   if (qMin(mbrect.width(), mbrect.height()) < qreal(1.0)) {
+      return;
+   }
 
-    qreal itemPenWidth;
-    switch (item->type()) {
-        case QGraphicsEllipseItem::Type:
-            itemPenWidth = static_cast<QGraphicsEllipseItem *>(item)->pen().widthF();
-            break;
-        case QGraphicsPathItem::Type:
-            itemPenWidth = static_cast<QGraphicsPathItem *>(item)->pen().widthF();
-            break;
-        case QGraphicsPolygonItem::Type:
-            itemPenWidth = static_cast<QGraphicsPolygonItem *>(item)->pen().widthF();
-            break;
-        case QGraphicsRectItem::Type:
-            itemPenWidth = static_cast<QGraphicsRectItem *>(item)->pen().widthF();
-            break;
-        case QGraphicsSimpleTextItem::Type:
-            itemPenWidth = static_cast<QGraphicsSimpleTextItem *>(item)->pen().widthF();
-            break;
-        case QGraphicsLineItem::Type:
-            itemPenWidth = static_cast<QGraphicsLineItem *>(item)->pen().widthF();
-            break;
-        default:
-            itemPenWidth = 1.0;
-    }
-    const qreal pad = itemPenWidth / 2;
+   qreal itemPenWidth;
+   switch (item->type()) {
+      case QGraphicsEllipseItem::Type:
+         itemPenWidth = static_cast<QGraphicsEllipseItem *>(item)->pen().widthF();
+         break;
+      case QGraphicsPathItem::Type:
+         itemPenWidth = static_cast<QGraphicsPathItem *>(item)->pen().widthF();
+         break;
+      case QGraphicsPolygonItem::Type:
+         itemPenWidth = static_cast<QGraphicsPolygonItem *>(item)->pen().widthF();
+         break;
+      case QGraphicsRectItem::Type:
+         itemPenWidth = static_cast<QGraphicsRectItem *>(item)->pen().widthF();
+         break;
+      case QGraphicsSimpleTextItem::Type:
+         itemPenWidth = static_cast<QGraphicsSimpleTextItem *>(item)->pen().widthF();
+         break;
+      case QGraphicsLineItem::Type:
+         itemPenWidth = static_cast<QGraphicsLineItem *>(item)->pen().widthF();
+         break;
+      default:
+         itemPenWidth = 1.0;
+   }
+   const qreal pad = itemPenWidth / 2;
 
-    const qreal penWidth = 0; // cosmetic pen
+   const qreal penWidth = 0; // cosmetic pen
 
-    const QColor fgcolor = option->palette.windowText().color();
-    const QColor bgcolor( // ensure good contrast against fgcolor
-        fgcolor.red()   > 127 ? 0 : 255,
-        fgcolor.green() > 127 ? 0 : 255,
-        fgcolor.blue()  > 127 ? 0 : 255);
+   const QColor fgcolor = option->palette.windowText().color();
+   const QColor bgcolor( // ensure good contrast against fgcolor
+      fgcolor.red()   > 127 ? 0 : 255,
+      fgcolor.green() > 127 ? 0 : 255,
+      fgcolor.blue()  > 127 ? 0 : 255);
 
-    painter->setPen(QPen(bgcolor, penWidth, Qt::SolidLine));
-    painter->setBrush(Qt::NoBrush);
-    painter->drawRect(item->boundingRect().adjusted(pad, pad, -pad, -pad));
+   painter->setPen(QPen(bgcolor, penWidth, Qt::SolidLine));
+   painter->setBrush(Qt::NoBrush);
+   painter->drawRect(item->boundingRect().adjusted(pad, pad, -pad, -pad));
 
-    painter->setPen(QPen(option->palette.windowText(), 0, Qt::DashLine));
-    painter->setBrush(Qt::NoBrush);
-    painter->drawRect(item->boundingRect().adjusted(pad, pad, -pad, -pad));
+   painter->setPen(QPen(option->palette.windowText(), 0, Qt::DashLine));
+   painter->setBrush(Qt::NoBrush);
+   painter->drawRect(item->boundingRect().adjusted(pad, pad, -pad, -pad));
 }
 
 /*!
@@ -226,20 +224,23 @@ static void qt_graphicsItem_highlightSelected(
 void QGraphicsSvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                              QWidget *widget)
 {
-//    Q_UNUSED(option);
-    Q_UNUSED(widget);
+   //    Q_UNUSED(option);
+   Q_UNUSED(widget);
 
-    Q_D(QGraphicsSvgItem);
-    if (!d->renderer->isValid())
-        return;
+   Q_D(QGraphicsSvgItem);
+   if (!d->renderer->isValid()) {
+      return;
+   }
 
-    if (d->elemId.isEmpty())
-        d->renderer->render(painter, d->boundingRect);
-    else
-        d->renderer->render(painter, d->elemId, d->boundingRect);
+   if (d->elemId.isEmpty()) {
+      d->renderer->render(painter, d->boundingRect);
+   } else {
+      d->renderer->render(painter, d->elemId, d->boundingRect);
+   }
 
-    if (option->state & QStyle::State_Selected)
-        qt_graphicsItem_highlightSelected(this, painter, option);
+   if (option->state & QStyle::State_Selected) {
+      qt_graphicsItem_highlightSelected(this, painter, option);
+   }
 }
 
 /*!
@@ -247,7 +248,7 @@ void QGraphicsSvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 */
 int QGraphicsSvgItem::type() const
 {
-    return Type;
+   return Type;
 }
 
 /*!
@@ -274,8 +275,8 @@ int QGraphicsSvgItem::type() const
 */
 void QGraphicsSvgItem::setMaximumCacheSize(const QSize &size)
 {
-    QGraphicsItem::d_ptr->setExtra(QGraphicsItemPrivate::ExtraMaxDeviceCoordCacheSize, size);
-    update();
+   QGraphicsItem::d_ptr->setExtra(QGraphicsItemPrivate::ExtraMaxDeviceCoordCacheSize, size);
+   update();
 }
 
 /*!
@@ -293,13 +294,13 @@ void QGraphicsSvgItem::setMaximumCacheSize(const QSize &size)
 */
 QSize QGraphicsSvgItem::maximumCacheSize() const
 {
-    return QGraphicsItem::d_ptr->extra(QGraphicsItemPrivate::ExtraMaxDeviceCoordCacheSize).toSize();
+   return QGraphicsItem::d_ptr->extra(QGraphicsItemPrivate::ExtraMaxDeviceCoordCacheSize).toSize();
 }
 
 /*!
   \property QGraphicsSvgItem::elementId
   \since 4.6
-  
+
   This property holds the element's XML ID.
  */
 
@@ -308,10 +309,10 @@ QSize QGraphicsSvgItem::maximumCacheSize() const
 */
 void QGraphicsSvgItem::setElementId(const QString &id)
 {
-    Q_D(QGraphicsSvgItem);
-    d->elemId = id;
-    d->updateDefaultSize();
-    update();
+   Q_D(QGraphicsSvgItem);
+   d->elemId = id;
+   d->updateDefaultSize();
+   update();
 }
 
 /*!
@@ -321,8 +322,8 @@ void QGraphicsSvgItem::setElementId(const QString &id)
 */
 QString QGraphicsSvgItem::elementId() const
 {
-    Q_D(const QGraphicsSvgItem);
-    return d->elemId;
+   Q_D(const QGraphicsSvgItem);
+   return d->elemId;
 }
 
 /*!
@@ -334,16 +335,17 @@ QString QGraphicsSvgItem::elementId() const
 */
 void QGraphicsSvgItem::setSharedRenderer(QSvgRenderer *renderer)
 {
-    Q_D(QGraphicsSvgItem);
-    if (!d->shared)
-        delete d->renderer;
+   Q_D(QGraphicsSvgItem);
+   if (!d->shared) {
+      delete d->renderer;
+   }
 
-    d->renderer = renderer;
-    d->shared = true;
+   d->renderer = renderer;
+   d->shared = true;
 
-    d->updateDefaultSize();
+   d->updateDefaultSize();
 
-    update();
+   update();
 }
 
 /*!
@@ -354,7 +356,7 @@ void QGraphicsSvgItem::setSharedRenderer(QSvgRenderer *renderer)
 */
 void QGraphicsSvgItem::setCachingEnabled(bool caching)
 {
-    setCacheMode(caching ? QGraphicsItem::DeviceCoordinateCache : QGraphicsItem::NoCache);
+   setCacheMode(caching ? QGraphicsItem::DeviceCoordinateCache : QGraphicsItem::NoCache);
 }
 
 /*!
@@ -364,14 +366,14 @@ void QGraphicsSvgItem::setCachingEnabled(bool caching)
 */
 bool QGraphicsSvgItem::isCachingEnabled() const
 {
-    return cacheMode() != QGraphicsItem::NoCache;
+   return cacheMode() != QGraphicsItem::NoCache;
 }
 
 
 void QGraphicsSvgItem::_q_repaintItem()
 {
-	Q_D(QGraphicsSvgItem);
-	d->_q_repaintItem();
+   Q_D(QGraphicsSvgItem);
+   d->_q_repaintItem();
 }
 
 QT_END_NAMESPACE

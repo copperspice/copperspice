@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,78 +36,81 @@ using namespace QPatternist;
 
 InstanceOf::InstanceOf(const Expression::Ptr &operand,
                        const SequenceType::Ptr &tType) : SingleContainer(operand)
-                                                       , m_targetType(tType)
+   , m_targetType(tType)
 {
-    Q_ASSERT(m_targetType);
+   Q_ASSERT(m_targetType);
 }
 
 bool InstanceOf::evaluateEBV(const DynamicContext::Ptr &context) const
 {
-    const Item::Iterator::Ptr it(m_operand->evaluateSequence(context));
-    Item item(it->next());
-    unsigned int count = 1;
+   const Item::Iterator::Ptr it(m_operand->evaluateSequence(context));
+   Item item(it->next());
+   unsigned int count = 1;
 
-    if(!item)
-        return m_targetType->cardinality().allowsEmpty();
+   if (!item) {
+      return m_targetType->cardinality().allowsEmpty();
+   }
 
-    do
-    {
-        if(!m_targetType->itemType()->itemMatches(item))
-            return false;
+   do {
+      if (!m_targetType->itemType()->itemMatches(item)) {
+         return false;
+      }
 
-        if(count == 2 && !m_targetType->cardinality().allowsMany())
-            return false;
+      if (count == 2 && !m_targetType->cardinality().allowsMany()) {
+         return false;
+      }
 
-        item = it->next();
-        ++count;
-    } while(item);
+      item = it->next();
+      ++count;
+   } while (item);
 
-    return true;
+   return true;
 }
 
 Expression::Ptr InstanceOf::compress(const StaticContext::Ptr &context)
 {
-    const Expression::Ptr me(SingleContainer::compress(context));
+   const Expression::Ptr me(SingleContainer::compress(context));
 
-    if(me != this || m_operand->has(DisableTypingDeduction))
-        return me;
+   if (me != this || m_operand->has(DisableTypingDeduction)) {
+      return me;
+   }
 
-    const SequenceType::Ptr opType(m_operand->staticType());
-    const ItemType::Ptr targetType(m_targetType->itemType());
-    const ItemType::Ptr operandType(opType->itemType());
+   const SequenceType::Ptr opType(m_operand->staticType());
+   const ItemType::Ptr targetType(m_targetType->itemType());
+   const ItemType::Ptr operandType(opType->itemType());
 
-    if(m_targetType->cardinality().isMatch(opType->cardinality()))
-    {
-        if(*operandType == *CommonSequenceTypes::Empty || targetType->xdtTypeMatches(operandType))
-            return wrapLiteral(CommonValues::BooleanTrue, context, this);
-        else if(!operandType->xdtTypeMatches(targetType))
-            return wrapLiteral(CommonValues::BooleanFalse, context, this);
-    }
-    /* Optimization: rule out the case where instance of will always fail. */
+   if (m_targetType->cardinality().isMatch(opType->cardinality())) {
+      if (*operandType == *CommonSequenceTypes::Empty || targetType->xdtTypeMatches(operandType)) {
+         return wrapLiteral(CommonValues::BooleanTrue, context, this);
+      } else if (!operandType->xdtTypeMatches(targetType)) {
+         return wrapLiteral(CommonValues::BooleanFalse, context, this);
+      }
+   }
+   /* Optimization: rule out the case where instance of will always fail. */
 
-    return me;
+   return me;
 }
 
 SequenceType::Ptr InstanceOf::targetType() const
 {
-    return m_targetType;
+   return m_targetType;
 }
 
 SequenceType::Ptr InstanceOf::staticType() const
 {
-    return CommonSequenceTypes::ExactlyOneBoolean;
+   return CommonSequenceTypes::ExactlyOneBoolean;
 }
 
 SequenceType::List InstanceOf::expectedOperandTypes() const
 {
-    SequenceType::List result;
-    result.append(CommonSequenceTypes::ZeroOrMoreItems);
-    return result;
+   SequenceType::List result;
+   result.append(CommonSequenceTypes::ZeroOrMoreItems);
+   return result;
 }
 
 ExpressionVisitorResult::Ptr InstanceOf::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 QT_END_NAMESPACE

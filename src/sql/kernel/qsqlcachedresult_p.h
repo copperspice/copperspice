@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,35 +37,35 @@ class QSqlCachedResultPrivate;
 
 class Q_SQL_EXPORT QSqlCachedResult: public QSqlResult
 {
-public:
-    virtual ~QSqlCachedResult();
+ public:
+   virtual ~QSqlCachedResult();
 
-    typedef QVector<QVariant> ValueCache;
+   typedef QVector<QVariant> ValueCache;
 
-protected:
-    QSqlCachedResult(const QSqlDriver * db);
+ protected:
+   QSqlCachedResult(const QSqlDriver *db);
 
-    void init(int colCount);
-    void cleanup();
-    void clearValues();
+   void init(int colCount);
+   void cleanup();
+   void clearValues();
 
-    virtual bool gotoNext(ValueCache &values, int index) = 0;
+   virtual bool gotoNext(ValueCache &values, int index) = 0;
 
-    QVariant data(int i);
-    bool isNull(int i);
-    bool fetch(int i);
-    bool fetchNext();
-    bool fetchPrevious();
-    bool fetchFirst();
-    bool fetchLast();
+   QVariant data(int i);
+   bool isNull(int i);
+   bool fetch(int i);
+   bool fetchNext();
+   bool fetchPrevious();
+   bool fetchFirst();
+   bool fetchLast();
 
-    int colCount() const;
-    ValueCache &cache();
+   int colCount() const;
+   ValueCache &cache();
 
-    void virtual_hook(int id, void *data);
-private:
-    bool cacheNext();
-    QSqlCachedResultPrivate *d;
+   void virtual_hook(int id, void *data);
+ private:
+   bool cacheNext();
+   QSqlCachedResultPrivate *d;
 };
 
 QT_END_NAMESPACE

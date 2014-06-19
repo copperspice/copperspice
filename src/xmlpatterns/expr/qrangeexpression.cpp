@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -44,111 +44,101 @@ RangeExpression::RangeExpression(const Expression::Ptr &operand1,
 
 Item::Iterator::Ptr RangeExpression::evaluateSequence(const DynamicContext::Ptr &context) const
 {
-    const Item s(m_operand1->evaluateSingleton(context));
+   const Item s(m_operand1->evaluateSingleton(context));
 
-    if(!s)
-        return CommonValues::emptyIterator;
+   if (!s) {
+      return CommonValues::emptyIterator;
+   }
 
-    const Item e(m_operand2->evaluateSingleton(context));
-    if(!e)
-        return CommonValues::emptyIterator;
+   const Item e(m_operand2->evaluateSingleton(context));
+   if (!e) {
+      return CommonValues::emptyIterator;
+   }
 
-    const xsInteger start = s.as<Numeric>()->toInteger();
-    const xsInteger end = e.as<Numeric>()->toInteger();
+   const xsInteger start = s.as<Numeric>()->toInteger();
+   const xsInteger end = e.as<Numeric>()->toInteger();
 
-    if(start > end)
-        return CommonValues::emptyIterator;
-    else if(start == end)
-        return makeSingletonIterator(s);
-    else
-        return Item::Iterator::Ptr(new RangeIterator(start, RangeIterator::Forward, end));
+   if (start > end) {
+      return CommonValues::emptyIterator;
+   } else if (start == end) {
+      return makeSingletonIterator(s);
+   } else {
+      return Item::Iterator::Ptr(new RangeIterator(start, RangeIterator::Forward, end));
+   }
 }
 
 Item RangeExpression::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-    return m_operand1->evaluateSingleton(context);
+   return m_operand1->evaluateSingleton(context);
 }
 
 SequenceType::List RangeExpression::expectedOperandTypes() const
 {
-    SequenceType::List result;
-    result.append(CommonSequenceTypes::ZeroOrOneInteger);
-    result.append(CommonSequenceTypes::ZeroOrOneInteger);
-    return result;
+   SequenceType::List result;
+   result.append(CommonSequenceTypes::ZeroOrOneInteger);
+   result.append(CommonSequenceTypes::ZeroOrOneInteger);
+   return result;
 }
 
 SequenceType::Ptr RangeExpression::staticType() const
 {
-    /* This logic makes the Cardinality more specific. */
-    Cardinality::Count from;
-    bool hasFrom;
+   /* This logic makes the Cardinality more specific. */
+   Cardinality::Count from;
+   bool hasFrom;
 
-    if(m_operand1->is(IDIntegerValue))
-    {
-        from = m_operand1->as<Literal>()->item().as<Integer>()->toInteger();
-        hasFrom = true;
-    }
-    else
-    {
-        hasFrom = false;
-        from = 0;
-    }
+   if (m_operand1->is(IDIntegerValue)) {
+      from = m_operand1->as<Literal>()->item().as<Integer>()->toInteger();
+      hasFrom = true;
+   } else {
+      hasFrom = false;
+      from = 0;
+   }
 
-    /* We can't check whether to is -1 since maybe the user wrote -1. Hence
-     * hasTo is required. */
-    bool hasTo;
-    Cardinality::Count to;
+   /* We can't check whether to is -1 since maybe the user wrote -1. Hence
+    * hasTo is required. */
+   bool hasTo;
+   Cardinality::Count to;
 
-    if(m_operand2->is(IDIntegerValue))
-    {
-        const xsInteger asInt = m_operand2->as<Literal>()->item().as<Integer>()->toInteger();
-        to = asInt;
+   if (m_operand2->is(IDIntegerValue)) {
+      const xsInteger asInt = m_operand2->as<Literal>()->item().as<Integer>()->toInteger();
+      to = asInt;
 
-        if(to == asInt)
-            hasTo = true;
-        else
-        {
-            /* Cardinality::Count is not the same as type xsInteger. We had overflow. */
-            to = -1;
-            hasTo = false;
-        }
-    }
-    else
-    {
-        to = -1;
-        hasTo = false;
-    }
+      if (to == asInt) {
+         hasTo = true;
+      } else {
+         /* Cardinality::Count is not the same as type xsInteger. We had overflow. */
+         to = -1;
+         hasTo = false;
+      }
+   } else {
+      to = -1;
+      hasTo = false;
+   }
 
-    if(hasTo && hasFrom)
-    {
-        if(from > to)
-        {
-            /* The query is incorrectly written, we'll evaluate to the empty sequence.
-             * Just return what's correct. */
-            return CommonSequenceTypes::ZeroOrMoreIntegers;
-        }
-        else
-        {
-            Cardinality::Count count = (to - from) + 1; /* + 1, since it's inclusive. */
-            return makeGenericSequenceType(BuiltinTypes::xsInteger, Cardinality::fromExact(count));
-        }
-    }
-    else
-    {
-        /* We can't do fromExact(from, -1) since the latter can evaluate to a value that actually is
-         * lower than from, although that unfortunately is very unlikely. */
-        return CommonSequenceTypes::ZeroOrMoreIntegers;
-    }
+   if (hasTo && hasFrom) {
+      if (from > to) {
+         /* The query is incorrectly written, we'll evaluate to the empty sequence.
+          * Just return what's correct. */
+         return CommonSequenceTypes::ZeroOrMoreIntegers;
+      } else {
+         Cardinality::Count count = (to - from) + 1; /* + 1, since it's inclusive. */
+         return makeGenericSequenceType(BuiltinTypes::xsInteger, Cardinality::fromExact(count));
+      }
+   } else {
+      /* We can't do fromExact(from, -1) since the latter can evaluate to a value that actually is
+       * lower than from, although that unfortunately is very unlikely. */
+      return CommonSequenceTypes::ZeroOrMoreIntegers;
+   }
 }
 
 Expression::Properties RangeExpression::properties() const
 {
-    return Expression::DisableElimination;
+   return Expression::DisableElimination;
 }
 
 ExpressionVisitorResult::Ptr RangeExpression::accept(const ExpressionVisitor::Ptr &visitor) const
 {
-    return visitor->visit(this);
+   return visitor->visit(this);
 }
 
 QT_END_NAMESPACE

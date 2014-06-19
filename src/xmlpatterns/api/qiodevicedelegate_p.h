@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,52 +31,50 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+/**
+ * This is read-only currently.
+ */
+class QIODeviceDelegate : public QNetworkReply
 {
-    /**
-     * This is read-only currently.
-     */
-    class QIODeviceDelegate : public QNetworkReply
-    {
-        CS_OBJECT(QIODeviceDelegate)
-    public:
-        QIODeviceDelegate(QIODevice *const source);
+   CS_OBJECT(QIODeviceDelegate)
+ public:
+   QIODeviceDelegate(QIODevice *const source);
 
-        virtual void abort();
+   virtual void abort();
 
-        virtual bool atEnd() const;
-        virtual qint64 bytesAvailable() const;
-        virtual qint64 bytesToWrite() const;
-        virtual bool canReadLine() const;
-        virtual void close();
-        virtual bool isSequential() const;
-        virtual bool open(OpenMode mode);
-        virtual qint64 pos() const;
-        virtual bool reset();
-        virtual bool seek(qint64 pos);
-        virtual qint64 size() const;
-        virtual bool waitForBytesWritten(int msecs);
-        virtual bool waitForReadyRead(int msecs);
+   virtual bool atEnd() const;
+   virtual qint64 bytesAvailable() const;
+   virtual qint64 bytesToWrite() const;
+   virtual bool canReadLine() const;
+   virtual void close();
+   virtual bool isSequential() const;
+   virtual bool open(OpenMode mode);
+   virtual qint64 pos() const;
+   virtual bool reset();
+   virtual bool seek(qint64 pos);
+   virtual qint64 size() const;
+   virtual bool waitForBytesWritten(int msecs);
+   virtual bool waitForReadyRead(int msecs);
 
-    protected:
-        virtual qint64 readData(char *data, qint64 maxSize);
+ protected:
+   virtual qint64 readData(char *data, qint64 maxSize);
 
-    private :
-        XMLP_CS_SLOT_1(Private, void networkTimeout())
-        XMLP_CS_SLOT_2(networkTimeout) 
+ private :
+   XMLP_CS_SLOT_1(Private, void networkTimeout())
+   XMLP_CS_SLOT_2(networkTimeout)
 
-    private:
-        enum
-        {
-            /**
-             * 20 seconds expressed in milliseconds.
-             */
-            Timeout = 20000
-        };
+ private:
+   enum {
+      /**
+       * 20 seconds expressed in milliseconds.
+       */
+      Timeout = 20000
+   };
 
-        QIODevice *const m_source;
-        QTimer m_timeout;
-    };
+   QIODevice *const m_source;
+   QTimer m_timeout;
+};
 }
 
 QT_END_NAMESPACE

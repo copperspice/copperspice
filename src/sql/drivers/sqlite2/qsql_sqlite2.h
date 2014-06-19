@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,61 +46,63 @@ class QSQLite2Driver;
 
 class QSQLite2Result : public QSqlCachedResult
 {
-    friend class QSQLite2Driver;
-    friend class QSQLite2ResultPrivate;
+   friend class QSQLite2Driver;
+   friend class QSQLite2ResultPrivate;
 
-public:
-    explicit QSQLite2Result(const QSQLite2Driver* db);
-    ~QSQLite2Result();
-    QVariant handle() const;
+ public:
+   explicit QSQLite2Result(const QSQLite2Driver *db);
+   ~QSQLite2Result();
+   QVariant handle() const;
 
-protected:
-    bool gotoNext(QSqlCachedResult::ValueCache& row, int idx);
-    bool reset (const QString& query);
-    int size();
-    int numRowsAffected();
-    QSqlRecord record() const;
-    void virtual_hook(int id, void *data);
+ protected:
+   bool gotoNext(QSqlCachedResult::ValueCache &row, int idx);
+   bool reset (const QString &query);
+   int size();
+   int numRowsAffected();
+   QSqlRecord record() const;
+   void virtual_hook(int id, void *data);
 
-private:
-    QSQLite2ResultPrivate* d;
+ private:
+   QSQLite2ResultPrivate *d;
 };
 
 class QSQLite2Driver : public QSqlDriver
 {
-    CS_OBJECT(QSQLite2Driver)
-    friend class QSQLite2Result;
+   CS_OBJECT(QSQLite2Driver)
+   friend class QSQLite2Result;
 
-public:
-    explicit QSQLite2Driver(QObject *parent = 0);
-    explicit QSQLite2Driver(sqlite *connection, QObject *parent = 0);
-    ~QSQLite2Driver();
-    bool hasFeature(DriverFeature f) const;
-    bool open(const QString & db,
-                   const QString & user,
-                   const QString & password,
-                   const QString & host,
-                   int port,
-                   const QString & connOpts);
-    bool open(const QString & db,
-            const QString & user,
-            const QString & password,
-            const QString & host,
-            int port) { return open (db, user, password, host, port, QString()); }
-    void close();
-    QSqlResult *createResult() const;
-    bool beginTransaction();
-    bool commitTransaction();
-    bool rollbackTransaction();
-    QStringList tables(QSql::TableType) const;
+ public:
+   explicit QSQLite2Driver(QObject *parent = 0);
+   explicit QSQLite2Driver(sqlite *connection, QObject *parent = 0);
+   ~QSQLite2Driver();
+   bool hasFeature(DriverFeature f) const;
+   bool open(const QString &db,
+             const QString &user,
+             const QString &password,
+             const QString &host,
+             int port,
+             const QString &connOpts);
+   bool open(const QString &db,
+             const QString &user,
+             const QString &password,
+             const QString &host,
+             int port) {
+      return open (db, user, password, host, port, QString());
+   }
+   void close();
+   QSqlResult *createResult() const;
+   bool beginTransaction();
+   bool commitTransaction();
+   bool rollbackTransaction();
+   QStringList tables(QSql::TableType) const;
 
-    QSqlRecord record(const QString& tablename) const;
-    QSqlIndex primaryIndex(const QString &table) const;
-    QVariant handle() const;
-    QString escapeIdentifier(const QString &identifier, IdentifierType) const;
+   QSqlRecord record(const QString &tablename) const;
+   QSqlIndex primaryIndex(const QString &table) const;
+   QVariant handle() const;
+   QString escapeIdentifier(const QString &identifier, IdentifierType) const;
 
-private:
-    QSQLite2DriverPrivate* d;
+ private:
+   QSQLite2DriverPrivate *d;
 };
 
 QT_END_NAMESPACE

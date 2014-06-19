@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,67 +41,67 @@ using namespace QPatternist;
 
 // STATIC DATA
 const AtomicString::Ptr               CommonValues::EmptyString
-                                    (new AtomicString(QLatin1String("")));
+(new AtomicString(QLatin1String("")));
 const AtomicString::Ptr               CommonValues::TrueString
-                                    (new AtomicString(QLatin1String("true")));
+(new AtomicString(QLatin1String("true")));
 const AtomicString::Ptr               CommonValues::FalseString
-                                    (new AtomicString(QLatin1String("false")));
+(new AtomicString(QLatin1String("false")));
 
 const UntypedAtomic::Ptr        CommonValues::UntypedAtomicTrue
-                                    (new UntypedAtomic(QLatin1String("true")));
+(new UntypedAtomic(QLatin1String("true")));
 const UntypedAtomic::Ptr        CommonValues::UntypedAtomicFalse
-                                    (new UntypedAtomic(QLatin1String("false")));
+(new UntypedAtomic(QLatin1String("false")));
 
 const AtomicValue::Ptr              CommonValues::BooleanTrue
-                                    (new Boolean(true));
+(new Boolean(true));
 const AtomicValue::Ptr              CommonValues::BooleanFalse(new Boolean(false));
 
 const AtomicValue::Ptr               CommonValues::DoubleNaN
-                                    (Double::fromValue(std::numeric_limits<xsDouble>::quiet_NaN()));
+(Double::fromValue(std::numeric_limits<xsDouble>::quiet_NaN()));
 
 const AtomicValue::Ptr                CommonValues::FloatNaN
-                                    (Float::fromValue(std::numeric_limits<xsFloat>::quiet_NaN()));
+(Float::fromValue(std::numeric_limits<xsFloat>::quiet_NaN()));
 
 const Item                          CommonValues::IntegerZero
-                                    (Integer::fromValue(0));
+(Integer::fromValue(0));
 
 const AtomicValue::Ptr               CommonValues::EmptyAnyURI
-                                    (AnyURI::fromValue(QLatin1String("")));
+(AnyURI::fromValue(QLatin1String("")));
 
 const AtomicValue::Ptr               CommonValues::DoubleOne
-                                    (Double::fromValue(1));
+(Double::fromValue(1));
 const AtomicValue::Ptr                CommonValues::FloatOne
-                                    (Float::fromValue(1));
+(Float::fromValue(1));
 const AtomicValue::Ptr              CommonValues::DecimalOne
-                                    (Decimal::fromValue(1));
+(Decimal::fromValue(1));
 const Item                          CommonValues::IntegerOne
-                                    (Integer::fromValue(1));
+(Integer::fromValue(1));
 const Item                          CommonValues::IntegerOneNegative
-                                    (Integer::fromValue(-1));
+(Integer::fromValue(-1));
 
 const AtomicValue::Ptr               CommonValues::DoubleZero
-                                    (Double::fromValue(0));
+(Double::fromValue(0));
 const AtomicValue::Ptr                CommonValues::FloatZero
-                                    (Float::fromValue(0));
+(Float::fromValue(0));
 const AtomicValue::Ptr              CommonValues::DecimalZero
-                                    (Decimal::fromValue(0));
+(Decimal::fromValue(0));
 
 const Item::EmptyIterator::Ptr  CommonValues::emptyIterator
-                                    (new Item::EmptyIterator());
+(new Item::EmptyIterator());
 
 const AtomicValue::Ptr               CommonValues::NegativeInfDouble
-                                    (Double::fromValue(-std::numeric_limits<xsDouble>::infinity()));
+(Double::fromValue(-std::numeric_limits<xsDouble>::infinity()));
 const AtomicValue::Ptr               CommonValues::InfDouble
-                                    (Double::fromValue(std::numeric_limits<xsDouble>::infinity()));
+(Double::fromValue(std::numeric_limits<xsDouble>::infinity()));
 const AtomicValue::Ptr                CommonValues::NegativeInfFloat
-                                    (Float::fromValue(-std::numeric_limits<xsFloat>::infinity()));
+(Float::fromValue(-std::numeric_limits<xsFloat>::infinity()));
 const AtomicValue::Ptr                CommonValues::InfFloat
-                                    (Float::fromValue(std::numeric_limits<xsFloat>::infinity()));
+(Float::fromValue(std::numeric_limits<xsFloat>::infinity()));
 
 const DayTimeDuration::Ptr      CommonValues::DayTimeDurationZero
-                                    (DayTimeDuration::fromSeconds(0));
+(DayTimeDuration::fromSeconds(0));
 const DayTimeDuration::Ptr      CommonValues::YearMonthDurationZero
-                                    (YearMonthDuration::fromComponents(true, 0, 0));
+(YearMonthDuration::fromComponents(true, 0, 0));
 
 
 QT_END_NAMESPACE

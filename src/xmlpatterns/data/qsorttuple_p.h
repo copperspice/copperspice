@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,70 +32,66 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QPatternist
+namespace QPatternist {
+
+class SortTuple : public AtomicValue
 {
-    
-    class SortTuple : public AtomicValue
-    {
-    public:
-        /**
-         * @p aSortKeys may be empty.
-         */
-        inline SortTuple(const Item::Iterator::Ptr &aValue,
-                         const Item::Vector &aSortKeys) : m_sortKeys(aSortKeys),
-                                                          m_value(aValue)
-        {
-            Q_ASSERT(m_value);
-            Q_ASSERT(!m_sortKeys.isEmpty());
-        }
+ public:
+   /**
+    * @p aSortKeys may be empty.
+    */
+   inline SortTuple(const Item::Iterator::Ptr &aValue,
+                    const Item::Vector &aSortKeys) : m_sortKeys(aSortKeys),
+      m_value(aValue) {
+      Q_ASSERT(m_value);
+      Q_ASSERT(!m_sortKeys.isEmpty());
+   }
 
-        /**
-         * A smart pointer wrapping SortTuple instances.
-         */
-        typedef QExplicitlySharedDataPointer<SortTuple> Ptr;
+   /**
+    * A smart pointer wrapping SortTuple instances.
+    */
+   typedef QExplicitlySharedDataPointer<SortTuple> Ptr;
 
-        /**
-         * This function is sometimes called by Literal::description().
-         * This function simply returns "SortTuple".
-         */
-        virtual QString stringValue() const;
+   /**
+    * This function is sometimes called by Literal::description().
+    * This function simply returns "SortTuple".
+    */
+   virtual QString stringValue() const;
 
-        /**
-         * @short Always asserts.
-         */
-        virtual Item::Iterator::Ptr typedValue() const;
+   /**
+    * @short Always asserts.
+    */
+   virtual Item::Iterator::Ptr typedValue() const;
 
-        /**
-         * @short Always asserts.
-         */
-        virtual bool isAtomicValue() const;
+   /**
+    * @short Always asserts.
+    */
+   virtual bool isAtomicValue() const;
 
-        /**
-         * @short Always asserts.
-         */
-        virtual bool isNode() const;
+   /**
+    * @short Always asserts.
+    */
+   virtual bool isNode() const;
 
-        /**
-         * @short Always asserts.
-         */
-        virtual bool hasError() const;
+   /**
+    * @short Always asserts.
+    */
+   virtual bool hasError() const;
 
-        virtual ItemType::Ptr type() const;
+   virtual ItemType::Ptr type() const;
 
-        inline const Item::Vector &sortKeys() const
-        {
-            return m_sortKeys;
-        }
+   inline const Item::Vector &sortKeys() const {
+      return m_sortKeys;
+   }
 
-        inline const Item::Iterator::Ptr &value() const
-        {
-            return m_value;
-        }
+   inline const Item::Iterator::Ptr &value() const {
+      return m_value;
+   }
 
-    private:
-        const Item::Vector          m_sortKeys;
-        const Item::Iterator::Ptr   m_value;
-    };
+ private:
+   const Item::Vector          m_sortKeys;
+   const Item::Iterator::Ptr   m_value;
+};
 }
 
 QT_END_NAMESPACE

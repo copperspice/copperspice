@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -59,371 +59,355 @@ namespace QPatternist {
 extern int XPathparse(QPatternist::ParserContext *const info);
 
 Expression::Ptr ExpressionFactory::createExpression(const QString &expr,
-                                                    const StaticContext::Ptr &context,
-                                                    const QXmlQuery::QueryLanguage lang,
-                                                    const SequenceType::Ptr &requiredType,
-                                                    const QUrl &queryURI,
-                                                    const QXmlName &initialTemplateName)
+      const StaticContext::Ptr &context,
+      const QXmlQuery::QueryLanguage lang,
+      const SequenceType::Ptr &requiredType,
+      const QUrl &queryURI,
+      const QXmlName &initialTemplateName)
 {
-    if(lang == QXmlQuery::XSLT20)
-    {
-        QByteArray query(expr.toUtf8());
-        QBuffer buffer(&query);
-        buffer.open(QIODevice::ReadOnly);
+   if (lang == QXmlQuery::XSLT20) {
+      QByteArray query(expr.toUtf8());
+      QBuffer buffer(&query);
+      buffer.open(QIODevice::ReadOnly);
 
-        return createExpression(&buffer,
-                                context,
-                                lang,
-                                requiredType,
-                                queryURI,
-                                initialTemplateName);
-    }
-    else
-    {
-        return createExpression(Tokenizer::Ptr(new XQueryTokenizer(expr, queryURI)),
-                                context,
-                                lang,
-                                requiredType,
-                                queryURI,
-                                initialTemplateName);
-    }
+      return createExpression(&buffer,
+                              context,
+                              lang,
+                              requiredType,
+                              queryURI,
+                              initialTemplateName);
+   } else {
+      return createExpression(Tokenizer::Ptr(new XQueryTokenizer(expr, queryURI)),
+                              context,
+                              lang,
+                              requiredType,
+                              queryURI,
+                              initialTemplateName);
+   }
 }
 
 Expression::Ptr ExpressionFactory::createExpression(QIODevice *const device,
-                                                    const StaticContext::Ptr &context,
-                                                    const QXmlQuery::QueryLanguage lang,
-                                                    const SequenceType::Ptr &requiredType,
-                                                    const QUrl &queryURI,
-                                                    const QXmlName &initialTemplateName)
+      const StaticContext::Ptr &context,
+      const QXmlQuery::QueryLanguage lang,
+      const SequenceType::Ptr &requiredType,
+      const QUrl &queryURI,
+      const QXmlName &initialTemplateName)
 {
-    Q_ASSERT(device);
-    Q_ASSERT(device->isReadable());
+   Q_ASSERT(device);
+   Q_ASSERT(device->isReadable());
 
-    Tokenizer::Ptr tokenizer;
+   Tokenizer::Ptr tokenizer;
 
-    if(lang == QXmlQuery::XSLT20)
-        tokenizer = Tokenizer::Ptr(new XSLTTokenizer(device, queryURI, context, context->namePool()));
-    else
-        tokenizer = Tokenizer::Ptr(new XQueryTokenizer(QString::fromUtf8(device->readAll()), queryURI));
+   if (lang == QXmlQuery::XSLT20) {
+      tokenizer = Tokenizer::Ptr(new XSLTTokenizer(device, queryURI, context, context->namePool()));
+   } else {
+      tokenizer = Tokenizer::Ptr(new XQueryTokenizer(QString::fromUtf8(device->readAll()), queryURI));
+   }
 
-    return createExpression(tokenizer, context, lang, requiredType, queryURI, initialTemplateName);
+   return createExpression(tokenizer, context, lang, requiredType, queryURI, initialTemplateName);
 }
 
 Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokenizer,
-                                                    const StaticContext::Ptr &context,
-                                                    const QXmlQuery::QueryLanguage lang,
-                                                    const SequenceType::Ptr &requiredType,
-                                                    const QUrl &queryURI,
-                                                    const QXmlName &initialTemplateName)
+      const StaticContext::Ptr &context,
+      const QXmlQuery::QueryLanguage lang,
+      const SequenceType::Ptr &requiredType,
+      const QUrl &queryURI,
+      const QXmlName &initialTemplateName)
 {
-    Q_ASSERT(context);
-    Q_ASSERT(requiredType);
-    Q_ASSERT(queryURI.isValid());
+   Q_ASSERT(context);
+   Q_ASSERT(requiredType);
+   Q_ASSERT(queryURI.isValid());
 
-    Tokenizer::Ptr effectiveTokenizer(tokenizer);
+   Tokenizer::Ptr effectiveTokenizer(tokenizer);
 #ifdef Patternist_DEBUG
-    effectiveTokenizer = Tokenizer::Ptr(new TokenRevealer(queryURI, tokenizer));
+   effectiveTokenizer = Tokenizer::Ptr(new TokenRevealer(queryURI, tokenizer));
 #endif
 
-    OptimizationPasses::Coordinator::init();
+   OptimizationPasses::Coordinator::init();
 
-    const ParserContext::Ptr info(new ParserContext(context, lang, effectiveTokenizer.data()));
-    info->initialTemplateName = initialTemplateName;
+   const ParserContext::Ptr info(new ParserContext(context, lang, effectiveTokenizer.data()));
+   info->initialTemplateName = initialTemplateName;
 
-    effectiveTokenizer->setParserContext(info);
+   effectiveTokenizer->setParserContext(info);
 
-    const int bisonRetval = XPathparse(info.data());
+   const int bisonRetval = XPathparse(info.data());
 
-    Q_ASSERT_X(bisonRetval == 0, Q_FUNC_INFO,
-               "We shouldn't be able to get an error, because we throw exceptions.");
-    Q_UNUSED(bisonRetval); /* Needed when not compiled in debug mode, since bisonRetval won't
+   Q_ASSERT_X(bisonRetval == 0, Q_FUNC_INFO,
+              "We shouldn't be able to get an error, because we throw exceptions.");
+   Q_UNUSED(bisonRetval); /* Needed when not compiled in debug mode, since bisonRetval won't
                             * be used in the Q_ASSERT_X above. */
 
-    Expression::Ptr result(info->queryBody);
+   Expression::Ptr result(info->queryBody);
 
-    if(!result)
-    {
-        context->error(QtXmlPatterns::tr("A library module cannot be evaluated "
-                                         "directly. It must be imported from a "
-                                         "main module."),
-                       ReportContext::XPST0003,
-                       QSourceLocation(queryURI, 1, 1));
-    }
+   if (!result) {
+      context->error(QtXmlPatterns::tr("A library module cannot be evaluated "
+                                       "directly. It must be imported from a "
+                                       "main module."),
+                     ReportContext::XPST0003,
+                     QSourceLocation(queryURI, 1, 1));
+   }
 
-    /* Optimization: I think many things are done in the wrong order below. We
-     * probably want everything typechecked before compressing, since we can
-     * have references all over the place(variable references, template
-     * invocations, function callsites). This could even be a source to bugs.
-     */
+   /* Optimization: I think many things are done in the wrong order below. We
+    * probably want everything typechecked before compressing, since we can
+    * have references all over the place(variable references, template
+    * invocations, function callsites). This could even be a source to bugs.
+    */
 
-    /* Here, we type check user declared functions and global variables. This
-     * means that variables and functions that are not used are type
-     * checked(which they otherwise wouldn't have been), and those which are
-     * used, are type-checked twice, unfortunately. */
+   /* Here, we type check user declared functions and global variables. This
+    * means that variables and functions that are not used are type
+    * checked(which they otherwise wouldn't have been), and those which are
+    * used, are type-checked twice, unfortunately. */
 
-    const bool hasExternalFocus = context->contextItemType();
+   const bool hasExternalFocus = context->contextItemType();
 
-    if(lang == QXmlQuery::XSLT20)
-    {
-        /* Bind xsl:call-template instructions to their template bodies.
-         *
-         * We do this before type checking and compressing them, because a
-         * CallTemplate obviously needs its template before being compressed.
-         *
-         * Also, we do this before type checking and compressing user
-         * functions, since they can contain template call sites.
-         */
-        for(int i = 0; i < info->templateCalls.count(); ++i)
-        {
-            CallTemplate *const site = info->templateCalls.at(i)->as<CallTemplate>();
-            const QXmlName targetName(site->name());
-            const Template::Ptr t(info->namedTemplates.value(targetName));
+   if (lang == QXmlQuery::XSLT20) {
+      /* Bind xsl:call-template instructions to their template bodies.
+       *
+       * We do this before type checking and compressing them, because a
+       * CallTemplate obviously needs its template before being compressed.
+       *
+       * Also, we do this before type checking and compressing user
+       * functions, since they can contain template call sites.
+       */
+      for (int i = 0; i < info->templateCalls.count(); ++i) {
+         CallTemplate *const site = info->templateCalls.at(i)->as<CallTemplate>();
+         const QXmlName targetName(site->name());
+         const Template::Ptr t(info->namedTemplates.value(targetName));
 
-            if(t)
-                site->setTemplate(t);
-            else
-            {
-                context->error(QtXmlPatterns::tr("No template by name %1 exists.").arg(formatKeyword(context->namePool(), targetName)),
-                               ReportContext::XTSE0650,
-                               site);
-            }
-        }
-    }
+         if (t) {
+            site->setTemplate(t);
+         } else {
+            context->error(QtXmlPatterns::tr("No template by name %1 exists.").arg(formatKeyword(context->namePool(), targetName)),
+                           ReportContext::XTSE0650,
+                           site);
+         }
+      }
+   }
 
-    /* Type check and compress user functions. */
-    {
-        const UserFunction::List::const_iterator end(info->userFunctions.constEnd());
-        UserFunction::List::const_iterator it(info->userFunctions.constBegin());
+   /* Type check and compress user functions. */
+   {
+      const UserFunction::List::const_iterator end(info->userFunctions.constEnd());
+      UserFunction::List::const_iterator it(info->userFunctions.constBegin());
 
-        /* If the query has a focus(which is common, in the case of a
-         * stylesheet), we must ensure that the focus isn't visible in the
-         * function body. */
-        StaticContext::Ptr effectiveContext;
+      /* If the query has a focus(which is common, in the case of a
+       * stylesheet), we must ensure that the focus isn't visible in the
+       * function body. */
+      StaticContext::Ptr effectiveContext;
 
-        if(hasExternalFocus)
-        {
-            effectiveContext = StaticContext::Ptr(new StaticFocusContext(ItemType::Ptr(),
-                                                                         context));
-        }
-        else
-            effectiveContext = context;
+      if (hasExternalFocus) {
+         effectiveContext = StaticContext::Ptr(new StaticFocusContext(ItemType::Ptr(),
+                                               context));
+      } else {
+         effectiveContext = context;
+      }
 
-        for(; it != end; ++it)
-        {
-            pDebug() << "-----      User Function Typecheck      -----";
-            registerLastPath((*it)->body());
+      for (; it != end; ++it) {
+         pDebug() << "-----      User Function Typecheck      -----";
+         registerLastPath((*it)->body());
 
-            /* We will most likely call body()->typeCheck() again, once for
-             * each callsite. That is, it will be called from
-             * UserFunctionCallsite::typeCheck(), which will be called
-             * indirectly when we check the query body. */
-            const Expression::Ptr typeCheck((*it)->body()->typeCheck(effectiveContext,
-                                                                     (*it)->signature()->returnType()));
-            /* We don't have to call (*it)->setBody(typeCheck) here since it's
-             * only used directly below. */
-            processTreePass(typeCheck, UserFunctionTypeCheck);
-            pDebug() << "------------------------------";
+         /* We will most likely call body()->typeCheck() again, once for
+          * each callsite. That is, it will be called from
+          * UserFunctionCallsite::typeCheck(), which will be called
+          * indirectly when we check the query body. */
+         const Expression::Ptr typeCheck((*it)->body()->typeCheck(effectiveContext,
+                                         (*it)->signature()->returnType()));
+         /* We don't have to call (*it)->setBody(typeCheck) here since it's
+          * only used directly below. */
+         processTreePass(typeCheck, UserFunctionTypeCheck);
+         pDebug() << "------------------------------";
 
-            pDebug() << "-----      User Function Compress      -----";
-            const Expression::Ptr comp(typeCheck->compress(effectiveContext));
-            (*it)->setBody(comp);
-            processTreePass(comp, UserFunctionCompression);
-            pDebug() << "------------------------------";
-        }
-    }
+         pDebug() << "-----      User Function Compress      -----";
+         const Expression::Ptr comp(typeCheck->compress(effectiveContext));
+         (*it)->setBody(comp);
+         processTreePass(comp, UserFunctionCompression);
+         pDebug() << "------------------------------";
+      }
+   }
 
-    /* Type check and compress global variables. */
-    {
-        const VariableDeclaration::Stack::const_iterator vend(info->variables.constEnd());
-        VariableDeclaration::Stack::const_iterator vit(info->variables.constBegin());
-        for(; vit != vend; ++vit)
-        {
-            Q_ASSERT(*vit);
-            /* This is a bit murky, the global variable will have it
-             * Expression::typeCheck() function called from all its references,
-             * but we also want to check it here globally, so we do
-             * typechecking using a proper focus. */
-            if((*vit)->type == VariableDeclaration::ExternalVariable)
-                continue;
+   /* Type check and compress global variables. */
+   {
+      const VariableDeclaration::Stack::const_iterator vend(info->variables.constEnd());
+      VariableDeclaration::Stack::const_iterator vit(info->variables.constBegin());
+      for (; vit != vend; ++vit) {
+         Q_ASSERT(*vit);
+         /* This is a bit murky, the global variable will have it
+          * Expression::typeCheck() function called from all its references,
+          * but we also want to check it here globally, so we do
+          * typechecking using a proper focus. */
+         if ((*vit)->type == VariableDeclaration::ExternalVariable) {
+            continue;
+         }
 
-            pDebug() << "-----      Global Variable Typecheck      -----";
-            Q_ASSERT((*vit)->expression());
-            /* We supply ZeroOrMoreItems, meaning the variable can evaluate to anything. */
-            // FIXME which is a source to bugs
-            // TODO What about compressing variables?
-            const Expression::Ptr
-            nev((*vit)->expression()->typeCheck(context, CommonSequenceTypes::ZeroOrMoreItems));
-            processTreePass(nev, GlobalVariableTypeCheck);
-            pDebug() << "------------------------------";
-        }
-    }
+         pDebug() << "-----      Global Variable Typecheck      -----";
+         Q_ASSERT((*vit)->expression());
+         /* We supply ZeroOrMoreItems, meaning the variable can evaluate to anything. */
+         // FIXME which is a source to bugs
+         // TODO What about compressing variables?
+         const Expression::Ptr
+         nev((*vit)->expression()->typeCheck(context, CommonSequenceTypes::ZeroOrMoreItems));
+         processTreePass(nev, GlobalVariableTypeCheck);
+         pDebug() << "------------------------------";
+      }
+   }
 
-    /* Do all tests specific to XSL-T. */
-    if(lang == QXmlQuery::XSLT20)
-    {
-        /* Type check and compress named templates. */
-        {
-            pDebug() << "Have " << info->namedTemplates.count() << "named templates";
+   /* Do all tests specific to XSL-T. */
+   if (lang == QXmlQuery::XSLT20) {
+      /* Type check and compress named templates. */
+      {
+         pDebug() << "Have " << info->namedTemplates.count() << "named templates";
 
-            QMutableHashIterator<QXmlName, Template::Ptr> it(info->namedTemplates);
+         QMutableHashIterator<QXmlName, Template::Ptr> it(info->namedTemplates);
 
-            while(it.hasNext())
-            {
-                it.next();
-                processNamedTemplate(it.key(), it.value()->body, TemplateInitial);
+         while (it.hasNext()) {
+            it.next();
+            processNamedTemplate(it.key(), it.value()->body, TemplateInitial);
 
-                it.value()->body = it.value()->body->typeCheck(context, CommonSequenceTypes::ZeroOrMoreItems);
-                processNamedTemplate(it.key(), it.value()->body, TemplateTypeCheck);
+            it.value()->body = it.value()->body->typeCheck(context, CommonSequenceTypes::ZeroOrMoreItems);
+            processNamedTemplate(it.key(), it.value()->body, TemplateTypeCheck);
 
-                it.value()->body = it.value()->body->compress(context);
-                processNamedTemplate(it.key(), it.value()->body, TemplateCompress);
+            it.value()->body = it.value()->body->compress(context);
+            processNamedTemplate(it.key(), it.value()->body, TemplateCompress);
 
-                it.value()->compileParameters(context);
-            }
-        }
+            it.value()->compileParameters(context);
+         }
+      }
 
-        /* Type check and compress template rules. */
-        {
-            QHashIterator<QXmlName, TemplateMode::Ptr> it(info->templateRules);
+      /* Type check and compress template rules. */
+      {
+         QHashIterator<QXmlName, TemplateMode::Ptr> it(info->templateRules);
 
-            /* Since a pattern can exist of AxisStep, its typeCheck() stage
-             * requires a focus. In the case that we're invoked with a name but
-             * no focus, this will yield a compile error, unless we declare a
-             * focus manually. This only needs to be done for the pattern
-             * expression, since the static type of the pattern is used as the
-             * static type for the focus of the template body. */
-            StaticContext::Ptr patternContext;
-            if(hasExternalFocus)
-                patternContext = context;
-            else
-                patternContext = StaticContext::Ptr(new StaticFocusContext(BuiltinTypes::node, context));
+         /* Since a pattern can exist of AxisStep, its typeCheck() stage
+          * requires a focus. In the case that we're invoked with a name but
+          * no focus, this will yield a compile error, unless we declare a
+          * focus manually. This only needs to be done for the pattern
+          * expression, since the static type of the pattern is used as the
+          * static type for the focus of the template body. */
+         StaticContext::Ptr patternContext;
+         if (hasExternalFocus) {
+            patternContext = context;
+         } else {
+            patternContext = StaticContext::Ptr(new StaticFocusContext(BuiltinTypes::node, context));
+         }
+
+         /* For each template pattern. */
+         while (it.hasNext()) {
+            it.next();
+            const TemplateMode::Ptr &mode = it.value();
+            const int len = mode->templatePatterns.count();
+            TemplatePattern::ID currentTemplateID = -1;
+            bool hasDoneItOnce = false;
 
             /* For each template pattern. */
-            while(it.hasNext())
-            {
-                it.next();
-                const TemplateMode::Ptr &mode = it.value();
-                const int len = mode->templatePatterns.count();
-                TemplatePattern::ID currentTemplateID = -1;
-                bool hasDoneItOnce = false;
+            for (int i = 0; i < len; ++i) {
+               /* We can't use references for these two members, since we
+                * assign to them. */
+               const TemplatePattern::Ptr &pattern = mode->templatePatterns.at(i);
+               Expression::Ptr matchPattern(pattern->matchPattern());
 
-                /* For each template pattern. */
-                for(int i = 0; i < len; ++i)
-                {
-                    /* We can't use references for these two members, since we
-                     * assign to them. */
-                    const TemplatePattern::Ptr &pattern = mode->templatePatterns.at(i);
-                    Expression::Ptr matchPattern(pattern->matchPattern());
+               processTemplateRule(pattern->templateTarget()->body,
+                                   pattern, mode->name(), TemplateInitial);
 
-                    processTemplateRule(pattern->templateTarget()->body,
-                                        pattern, mode->name(), TemplateInitial);
+               matchPattern = matchPattern->typeCheck(patternContext, CommonSequenceTypes::ZeroOrMoreItems);
+               matchPattern = matchPattern->compress(patternContext);
+               pattern->setMatchPattern(matchPattern);
 
-                    matchPattern = matchPattern->typeCheck(patternContext, CommonSequenceTypes::ZeroOrMoreItems);
-                    matchPattern = matchPattern->compress(patternContext);
-                    pattern->setMatchPattern(matchPattern);
+               if (currentTemplateID == -1 && hasDoneItOnce) {
+                  currentTemplateID = pattern->id();
+                  continue;
+               } else if (currentTemplateID == pattern->id() && hasDoneItOnce) {
+                  hasDoneItOnce = false;
+                  continue;
+               }
 
-                    if(currentTemplateID == -1 && hasDoneItOnce)
-                    {
-                        currentTemplateID = pattern->id();
-                        continue;
-                    }
-                    else if(currentTemplateID == pattern->id() && hasDoneItOnce)
-                    {
-                        hasDoneItOnce = false;
-                        continue;
-                    }
+               hasDoneItOnce = true;
+               currentTemplateID = pattern->id();
+               Expression::Ptr body(pattern->templateTarget()->body);
 
-                    hasDoneItOnce = true;
-                    currentTemplateID = pattern->id();
-                    Expression::Ptr body(pattern->templateTarget()->body);
+               /* Patterns for a new template has started, we must
+                * deal with the body & parameters. */
+               {
+                  /* TODO type is wrong, it has to be the union of all
+                   * patterns. */
+                  const StaticContext::Ptr focusContext(new StaticFocusContext(matchPattern->staticType()->itemType(),
+                                                        context));
+                  body = body->typeCheck(focusContext, CommonSequenceTypes::ZeroOrMoreItems);
 
-                    /* Patterns for a new template has started, we must
-                     * deal with the body & parameters. */
-                    {
-                        /* TODO type is wrong, it has to be the union of all
-                         * patterns. */
-                        const StaticContext::Ptr focusContext(new StaticFocusContext(matchPattern->staticType()->itemType(),
-                                                                                     context));
-                        body = body->typeCheck(focusContext, CommonSequenceTypes::ZeroOrMoreItems);
+                  pattern->templateTarget()->compileParameters(focusContext);
+               }
 
-                        pattern->templateTarget()->compileParameters(focusContext);
-                    }
+               processTemplateRule(body, pattern, mode->name(), TemplateTypeCheck);
 
-                    processTemplateRule(body, pattern, mode->name(), TemplateTypeCheck);
+               body = body->compress(context);
 
-                    body = body->compress(context);
-
-                    pattern->templateTarget()->body = body;
-                    processTemplateRule(body, pattern, mode->name(), TemplateCompress);
-                }
-
-                mode->finalize();
+               pattern->templateTarget()->body = body;
+               processTemplateRule(body, pattern, mode->name(), TemplateCompress);
             }
-        }
 
-        /* Add templates in mode #all to all other modes.
-         *
-         * We do this after the templates has been typechecked and compressed,
-         * since otherwise it will be done N times for the built-in templates,
-         * where N is the count of different templates, instead of once. */
-        {
-            const QXmlName nameModeAll(QXmlName(StandardNamespaces::InternalXSLT,
-                                                StandardLocalNames::all));
-            const TemplateMode::Ptr &modeAll = info->templateRules[nameModeAll];
+            mode->finalize();
+         }
+      }
 
-            Q_ASSERT_X(modeAll, Q_FUNC_INFO,
-                       "We should at least have the builtin templates.");
-            QHashIterator<QXmlName, TemplateMode::Ptr> it(info->templateRules);
+      /* Add templates in mode #all to all other modes.
+       *
+       * We do this after the templates has been typechecked and compressed,
+       * since otherwise it will be done N times for the built-in templates,
+       * where N is the count of different templates, instead of once. */
+      {
+         const QXmlName nameModeAll(QXmlName(StandardNamespaces::InternalXSLT,
+                                             StandardLocalNames::all));
+         const TemplateMode::Ptr &modeAll = info->templateRules[nameModeAll];
 
-            while(it.hasNext())
-            {
-                it.next();
+         Q_ASSERT_X(modeAll, Q_FUNC_INFO,
+                    "We should at least have the builtin templates.");
+         QHashIterator<QXmlName, TemplateMode::Ptr> it(info->templateRules);
 
-                /* Don't add mode #all to mode #all. */
-                if(it.key()  == nameModeAll)
-                    continue;
+         while (it.hasNext()) {
+            it.next();
 
-                it.value()->addMode(modeAll);
+            /* Don't add mode #all to mode #all. */
+            if (it.key()  == nameModeAll) {
+               continue;
             }
-        }
-    }
 
-    /* Type check and compress the query body. */
-    {
-        pDebug() << "----- Initial AST build. -----";
-        processTreePass(result, QueryBodyInitial);
-        pDebug() << "------------------------------";
+            it.value()->addMode(modeAll);
+         }
+      }
+   }
 
-        pDebug() << "-----     Type Check     -----";
-        registerLastPath(result);
-        result->rewrite(result, result->typeCheck(context, requiredType), context);
-        processTreePass(result, QueryBodyTypeCheck);
-        pDebug() << "------------------------------";
+   /* Type check and compress the query body. */
+   {
+      pDebug() << "----- Initial AST build. -----";
+      processTreePass(result, QueryBodyInitial);
+      pDebug() << "------------------------------";
 
-        pDebug() << "-----      Compress      -----";
-        result->rewrite(result, result->compress(context), context);
-        processTreePass(result, QueryBodyCompression);
-        pDebug() << "------------------------------";
-    }
+      pDebug() << "-----     Type Check     -----";
+      registerLastPath(result);
+      result->rewrite(result, result->typeCheck(context, requiredType), context);
+      processTreePass(result, QueryBodyTypeCheck);
+      pDebug() << "------------------------------";
 
-    return result;
+      pDebug() << "-----      Compress      -----";
+      result->rewrite(result, result->compress(context), context);
+      processTreePass(result, QueryBodyCompression);
+      pDebug() << "------------------------------";
+   }
+
+   return result;
 }
 
 void ExpressionFactory::registerLastPath(const Expression::Ptr &operand)
 {
-    OperandsIterator it(operand, OperandsIterator::IncludeParent);
-    Expression::Ptr next(it.next());
+   OperandsIterator it(operand, OperandsIterator::IncludeParent);
+   Expression::Ptr next(it.next());
 
-    while(next)
-    {
-        if(next->is(Expression::IDPath))
-        {
-            next->as<Path>()->setLast();
-            next = it.skipOperands();
-        }
-        else
-            next = it.next();
-    }
+   while (next) {
+      if (next->is(Expression::IDPath)) {
+         next->as<Path>()->setLast();
+         next = it.skipOperands();
+      } else {
+         next = it.next();
+      }
+   }
 }
 
 void ExpressionFactory::processTreePass(const Expression::Ptr &,
@@ -432,23 +416,23 @@ void ExpressionFactory::processTreePass(const Expression::Ptr &,
 }
 
 void ExpressionFactory::processTemplateRule(const Expression::Ptr &body,
-                                            const TemplatePattern::Ptr &pattern,
-                                            const QXmlName &mode,
-                                            const TemplateCompilationStage stage)
+      const TemplatePattern::Ptr &pattern,
+      const QXmlName &mode,
+      const TemplateCompilationStage stage)
 {
-    Q_UNUSED(body);
-    Q_UNUSED(pattern);
-    Q_UNUSED(mode);
-    Q_UNUSED(stage);
+   Q_UNUSED(body);
+   Q_UNUSED(pattern);
+   Q_UNUSED(mode);
+   Q_UNUSED(stage);
 }
 
 void ExpressionFactory::processNamedTemplate(const QXmlName &name,
-                                             const Expression::Ptr &tree,
-                                             const TemplateCompilationStage stage)
+      const Expression::Ptr &tree,
+      const TemplateCompilationStage stage)
 {
-    Q_UNUSED(name);
-    Q_UNUSED(tree);
-    Q_UNUSED(stage);
+   Q_UNUSED(name);
+   Q_UNUSED(tree);
+   Q_UNUSED(stage);
 }
 
 } // namespace QPatternist

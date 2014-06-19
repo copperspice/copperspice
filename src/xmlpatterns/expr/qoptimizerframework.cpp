@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,14 +42,14 @@ OptimizationPass::OptimizationPass(const ExpressionIdentifier::Ptr &startID,
                                    const ExpressionMarker &sourceExpr,
                                    const ExpressionCreator::Ptr &resultCtor,
                                    const OperandsMatchMethod mMethod) : startIdentifier(startID),
-                                                                        operandIdentifiers(opIDs),
-                                                                        sourceExpression(sourceExpr),
-                                                                        resultCreator(resultCtor),
-                                                                        operandsMatchMethod(mMethod)
+   operandIdentifiers(opIDs),
+   sourceExpression(sourceExpr),
+   resultCreator(resultCtor),
+   operandsMatchMethod(mMethod)
 {
-    Q_ASSERT_X(resultCtor || !sourceExpr.isEmpty(), Q_FUNC_INFO,
-               "Either resultCreator or sourceExpression must be set, otherwise there's "
-               "nothing to rewrite to.");
+   Q_ASSERT_X(resultCtor || !sourceExpr.isEmpty(), Q_FUNC_INFO,
+              "Either resultCreator or sourceExpression must be set, otherwise there's "
+              "nothing to rewrite to.");
 }
 
 QT_END_NAMESPACE

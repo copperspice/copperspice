@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,8 +39,8 @@ class QScriptNameIdImpl;
 
 class QScriptParser: protected QScriptGrammar
 {
-public:
-    union Value {
+ public:
+   union Value {
       int ival;
       double dval;
       QScriptNameIdImpl *sval;
@@ -66,58 +66,64 @@ public:
       QScript::AST::StatementList *StatementList;
       QScript::AST::VariableDeclaration *VariableDeclaration;
       QScript::AST::VariableDeclarationList *VariableDeclarationList;
-    };
+   };
 
-    struct Location {
+   struct Location {
       int startLine;
       int startColumn;
       int endLine;
       int endColumn;
-    };
+   };
 
-public:
-    QScriptParser();
-    ~QScriptParser();
+ public:
+   QScriptParser();
+   ~QScriptParser();
 
-    bool parse(QScriptEnginePrivate *driver);
+   bool parse(QScriptEnginePrivate *driver);
 
-    inline QString errorMessage() const
-    { return error_message; }
-    inline int errorLineNumber() const
-    { return error_lineno; }
-    inline int errorColumnNumber() const
-    { return error_column; }
+   inline QString errorMessage() const {
+      return error_message;
+   }
+   inline int errorLineNumber() const {
+      return error_lineno;
+   }
+   inline int errorColumnNumber() const {
+      return error_column;
+   }
 
-protected:
-    inline void reallocateStack();
+ protected:
+   inline void reallocateStack();
 
-    inline Value &sym(int index)
-    { return sym_stack [tos + index - 1]; }
+   inline Value &sym(int index) {
+      return sym_stack [tos + index - 1];
+   }
 
-    inline Location &loc(int index)
-    { return location_stack [tos + index - 2]; }
+   inline Location &loc(int index) {
+      return location_stack [tos + index - 2];
+   }
 
-protected:
-    int tos;
-    int stack_size;
-    Value *sym_stack;
-    int *state_stack;
-    Location *location_stack;
-    QString error_message;
-    int error_lineno;
-    int error_column;
+ protected:
+   int tos;
+   int stack_size;
+   Value *sym_stack;
+   int *state_stack;
+   Location *location_stack;
+   QString error_message;
+   int error_lineno;
+   int error_column;
 };
 
 inline void QScriptParser::reallocateStack()
 {
-    if (! stack_size)
-        stack_size = 128;
-    else
-        stack_size <<= 1;
+   if (! stack_size) {
+      stack_size = 128;
+   } else {
+      stack_size <<= 1;
+   }
 
-    sym_stack = reinterpret_cast<Value*> (qRealloc(sym_stack, stack_size * sizeof(Value)));
-    state_stack = reinterpret_cast<int*> (qRealloc(state_stack, stack_size * sizeof(int)));
-    location_stack = reinterpret_cast<Location*> (qRealloc(location_stack, stack_size * sizeof(Location)));
+   sym_stack = reinterpret_cast<Value *> (qRealloc(sym_stack, stack_size * sizeof(Value)));
+   state_stack = reinterpret_cast<int *> (qRealloc(state_stack, stack_size * sizeof(int)));
+   location_stack = reinterpret_cast<Location *> (qRealloc(location_stack, stack_size * sizeof(Location)));
 }
 
 
