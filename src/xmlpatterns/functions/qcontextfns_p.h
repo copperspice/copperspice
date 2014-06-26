@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ContextFNs_P_H
-#define Patternist_ContextFNs_P_H
+#ifndef QContextFNs_P_H
+#define QContextFNs_P_H
 
-#include "qfunctioncall_p.h"
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

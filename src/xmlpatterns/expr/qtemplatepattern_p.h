@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_TemplatePattern_P_H
-#define Patternist_TemplatePattern_P_H
+#ifndef QTemplatePattern_P_H
+#define QTemplatePattern_P_H
 
-#include "qtemplate_p.h"
+#include <qtemplate_p.h>
 
 QT_BEGIN_NAMESPACE
 

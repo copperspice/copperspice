@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdStateMachine_H
-#define Patternist_XsdStateMachine_H
+#ifndef QXsdStateMachine_P_H
+#define QXsdStateMachine_P_H
 
-#include "qnamepool_p.h"
+#include <qnamepool_p.h>
 #include <QtCore/QHash>
 #include <QtCore/QSet>
 #include <QtCore/QTextStream>

@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_OptimizerBlocks_P_H
-#define Patternist_OptimizerBlocks_P_H
+#ifndef QOptimizerBlocks_P_H
+#define QOptimizerBlocks_P_H
 
 #include "qatomiccomparator_p.h"
 #include "qexpression_p.h"

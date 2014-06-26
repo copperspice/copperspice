@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdIdentityConstraint_H
-#define Patternist_XsdIdentityConstraint_H
+#ifndef QXsdIdentityConstraint_P_H
+#define QXsdIdentityConstraint_P_H
 
-#include "qnamedschemacomponent_p.h"
-#include "qxsdannotated_p.h"
-#include "qxsdxpathexpression_p.h"
+#include <qnamedschemacomponent_p.h>
+#include <qxsdannotated_p.h>
+#include <qxsdxpathexpression_p.h>
 #include <QtCore/QStringList>
 
 QT_BEGIN_NAMESPACE

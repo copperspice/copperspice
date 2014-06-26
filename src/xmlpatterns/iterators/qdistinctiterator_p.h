@@ -23,20 +23,19 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_DistinctIterator_P_H
-#define Patternist_DistinctIterator_P_H
+#ifndef QDistinctIterator_P_H
+#define QDistinctIterator_P_H
 
 #include <QList>
-#include "qexpression_p.h"
-#include "qitem_p.h"
-#include "qatomiccomparator_p.h"
-#include "qcomparisonplatform_p.h"
-#include "qsourcelocationreflection_p.h"
+#include <qexpression_p.h>
+#include <qitem_p.h>
+#include <qatomiccomparator_p.h>
+#include <qcomparisonplatform_p.h>
+#include <qsourcelocationreflection_p.h>
 
 QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
-
 
 class DistinctIterator : public Item::Iterator
    , public ComparisonPlatform<DistinctIterator, false>

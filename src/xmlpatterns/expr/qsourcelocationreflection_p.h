@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SourceLocationReflection_H
-#define Patternist_SourceLocationReflection_H
+#ifndef QSourceLocationReflection_P_H
+#define QSourceLocationReflection_P_H
 
 QT_BEGIN_NAMESPACE
 

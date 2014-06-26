@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_MaintainingReader_P_H
-#define Patternist_MaintainingReader_P_H
+#ifndef QMaintainingReader_P_H
+#define QMaintainingReader_P_H
 
 #include <QSet>
 #include <QSourceLocation>
@@ -32,8 +32,8 @@
 #include <QStringList>
 #include <QXmlStreamReader>
 
-#include "qxpathhelper_p.h"
-#include "qxslttokenlookup_p.h"
+#include <qxpathhelper_p.h>
+#include <qxslttokenlookup_p.h>
 
 class QUrl;
 

@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdSchemaContext_H
-#define Patternist_XsdSchemaContext_H
+#ifndef QXsdSchemaContext_P_H
+#define QXsdSchemaContext_P_H
 
-#include "qnamedschemacomponent_p.h"
-#include "qreportcontext_p.h"
-#include "qschematypefactory_p.h"
-#include "qxsdschematoken_p.h"
-#include "qxsdschema_p.h"
-#include "qxsdschemachecker_p.h"
-#include "qxsdschemaresolver_p.h"
+#include <qnamedschemacomponent_p.h>
+#include <qreportcontext_p.h>
+#include <qschematypefactory_p.h>
+#include <qxsdschematoken_p.h>
+#include <qxsdschema_p.h>
+#include <qxsdschemachecker_p.h>
+#include <qxsdschemaresolver_p.h>
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtXmlPatterns/QAbstractMessageHandler>

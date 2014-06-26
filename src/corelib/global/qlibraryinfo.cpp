@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qdir.h"
-#include "qfile.h"
-#include "qconfig.h"
-#include "qsettings.h"
-#include "qlibraryinfo.h"
-#include "qscopedpointer.h"
-# include "qcoreapplication.h"
+#include <qdir.h>
+#include <qfile.h>
+#include <qconfig.h>
+#include <qlibraryinfo.h>
+#include <qscopedpointer.h>
+#include <qcoreapplication.h>
 
 #ifdef Q_OS_MAC
 #  include "qcore_mac_p.h"
@@ -37,46 +36,26 @@
 
 QT_BEGIN_NAMESPACE
 
-extern void qDumpCPUFeatures(); // in qsimd.cpp
-
 #ifndef QT_NO_SETTINGS
 
-struct QLibrarySettings {
-   QLibrarySettings();
-   QScopedPointer<QSettings> settings;
-};
-Q_GLOBAL_STATIC(QLibrarySettings, qt_library_settings)
-
-class QLibraryInfoPrivate
+QLibraryInfo::QLibraryInfo()
 {
- public:
-   static QSettings *findConfiguration();
-   static void cleanup() {
-      QLibrarySettings *ls = qt_library_settings();
-      if (ls) {
-         ls->settings.reset(0);
-      }
-   }
-   static QSettings *configuration() {
-      QLibrarySettings *ls = qt_library_settings();
-      return ls ? ls->settings.data() : 0;
-   }
-};
-
-QLibrarySettings::QLibrarySettings()
-   : settings(QLibraryInfoPrivate::findConfiguration())
-{
-   qAddPostRoutine(QLibraryInfoPrivate::cleanup);
 }
 
-QSettings *QLibraryInfoPrivate::findConfiguration()
+QSettings *QLibraryInfo::configuration()
+{
+   return qt_library_settings();      
+}
+
+QSettings *QLibraryInfo::findConfiguration()
 {
    QString qtconfig = QLatin1String(":/cs/etc/cs.conf");
 
-   if (!QFile::exists(qtconfig) && QCoreApplication::instance()) {
+   if (! QFile::exists(qtconfig) && QCoreApplication::instance()) {
 
 #ifdef Q_OS_MAC
       CFBundleRef bundleRef = CFBundleGetMainBundle();
+
       if (bundleRef) {
          QCFType<CFURLRef> urlRef = CFBundleCopyResourceURL(bundleRef, QCFString(QLatin1String("cs.conf")), 0, 0);
 
@@ -97,23 +76,8 @@ QSettings *QLibraryInfoPrivate::findConfiguration()
    if (QFile::exists(qtconfig)) {
       return new QSettings(qtconfig, QSettings::IniFormat);
    }
-   return 0;     //no luck
-}
 
-
-QLibraryInfo::QLibraryInfo()
-{ }
-
-QString QLibraryInfo::licensee()
-{
-   const char *str = "Open Source";
-   return QString::fromLocal8Bit(str);
-}
-
-QString QLibraryInfo::licensedProducts()
-{
-   const char *str = "OpenSource";
-   return QString::fromLatin1(str);
+   return 0;     // no luck
 }
 
 QString QLibraryInfo::buildKey()
@@ -128,100 +92,30 @@ QDate QLibraryInfo::buildDate()
 }
 #endif
 
+QString QLibraryInfo::licensee()
+{
+   const char *str = "Open Source";
+   return QString::fromLocal8Bit(str);
+}
+
+QString QLibraryInfo::licensedProducts()
+{
+   const char *str = "Open Source";
+   return QString::fromLatin1(str);
+}
+
 QString QLibraryInfo::location(LibraryLocation loc)
 {
-   QString ret;
+   QString retval;
 
-   if (! QLibraryInfoPrivate::configuration()) {
-      const char *path = 0;
+   QSettings *config = QLibraryInfo::configuration();
 
-      switch (loc) {
-
-#ifdef QT_CONFIGURE_PREFIX_PATH
-         // root dir for CopperSpice install
-         case PrefixPath:
-            path = QT_CONFIGURE_PREFIX_PATH;
-            break;
-#endif
-
-#ifdef QT_CONFIGURE_HEADERS_PATH
-         // CS header files
-         case HeadersPath:
-            path = QT_CONFIGURE_HEADERS_PATH;
-            break;
-#endif
-
-#ifdef QT_CONFIGURE_LIBRARIES_PATH
-         // CS shared libraries
-         case LibrariesPath:
-            path = QT_CONFIGURE_LIBRARIES_PATH;
-            break;
-#endif
-
-#ifdef QT_CONFIGURE_BINARIES_PATH
-         // uic, rcc
-         case BinariesPath:
-            path = QT_CONFIGURE_BINARIES_PATH;
-            break;
-#endif
-
-#ifdef QT_CONFIGURE_PLUGINS_PATH
-         case PluginsPath:
-            path = QT_CONFIGURE_PLUGINS_PATH;
-            break;
-#endif
-
-#ifdef QT_CONFIGURE_IMPORTS_PATH
-         case ImportsPath:
-            path = QT_CONFIGURE_IMPORTS_PATH;
-            break;
-#endif
-
-#ifdef QT_CONFIGURE_TRANSLATIONS_PATH
-         case TranslationsPath:
-            path = QT_CONFIGURE_TRANSLATIONS_PATH;
-            break;
-#endif
-
-#ifdef QT_CONFIGURE_SETTINGS_PATH
-         // cs.conf file
-         case SettingsPath:
-            path = QT_CONFIGURE_SETTINGS_PATH;
-            break;
-#endif
-
-         default:
-            break;
-      }
-
-      if (path) {
-         ret = QString::fromLocal8Bit(path);
-      }
-
-   } else {
+   if (config) {
+      
       QString key;
       QString defaultValue;
 
-      switch (loc) {
-
-         case PrefixPath:
-            key = QLatin1String("Prefix");
-            break;
-
-         case HeadersPath:
-            key = QLatin1String("Headers");
-            defaultValue = QLatin1String("include");
-            break;
-
-         case LibrariesPath:
-            key = QLatin1String("Libraries");
-            defaultValue = QLatin1String("lib");
-            break;
-
-         case BinariesPath:
-            key = QLatin1String("Binaries");
-            defaultValue = QLatin1String("bin");
-            break;
+      switch (loc) {                      
 
          case PluginsPath:
             key = QLatin1String("Plugins");
@@ -231,6 +125,11 @@ QString QLibraryInfo::location(LibraryLocation loc)
          case ImportsPath:
             key = QLatin1String("Imports");
             defaultValue = QLatin1String("imports");
+            break;
+
+         case Qml2ImportsPath:
+            QLatin1String("Qml2Imports");
+            defaultValue = QLatin1String("qml");
             break;
 
          case TranslationsPath:
@@ -246,72 +145,82 @@ QString QLibraryInfo::location(LibraryLocation loc)
             break;
       }
 
-      if (! key.isNull()) {
-         QSettings *config = QLibraryInfoPrivate::configuration();
+      if (! key.isNull()) {         
          config->beginGroup(QLatin1String("Paths"));
 
-         ret = config->value(key, defaultValue).toString();
+         retval = config->value(key, defaultValue).toString();
 
          // expand environment variables in the form $(ENVVAR)
          int rep;
          QRegExp reg_var(QLatin1String("\\$\\(.*\\)"));
          reg_var.setMinimal(true);
 
-         while ((rep = reg_var.indexIn(ret)) != -1) {
-            ret.replace(rep, reg_var.matchedLength(),
-                        QString::fromLocal8Bit(qgetenv(ret.mid(rep + 2,
-                                               reg_var.matchedLength() - 3).toLatin1().constData()).constData()));
+         while ((rep = reg_var.indexIn(retval)) != -1) {
+            retval.replace(rep, reg_var.matchedLength(),QString::fromLocal8Bit(qgetenv(retval.mid(rep + 2,
+                  reg_var.matchedLength() - 3).toLatin1().constData()).constData()));
          }
 
-#ifdef QLIBRARYINFO_EPOCROOT
-         // $${EPOCROOT} is a special case, resolve it similarly to qmake.
-         QRegExp epocrootMatcher(QLatin1String("\\$\\$\\{EPOCROOT\\}"));
-         if ((rep = epocrootMatcher.indexIn(ret)) != -1) {
-            ret.replace(rep, epocrootMatcher.matchedLength(), qt_epocRoot());
-         }
-#endif
          config->endGroup();
       }
-   }
 
-   if (QDir::isRelativePath(ret)) {
-      QString baseDir;
-      if (loc == PrefixPath) {
-         // we make the prefix path absolute to the executable's directory
+   }  else {
+      // no configuration file, use defaults
 
-         if (QCoreApplication::instance()) {
-#ifdef Q_OS_MAC
-            CFBundleRef bundleRef = CFBundleGetMainBundle();
-            if (bundleRef) {
-               QCFType<CFURLRef> urlRef = CFBundleCopyBundleURL(bundleRef);
-               if (urlRef) {
-                  QCFString path = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
-                  return QDir::cleanPath(QString(path) + QLatin1String("/Contents/") + ret);
-               }
-            }
-#endif
-            baseDir = QCoreApplication::applicationDirPath();
-         } else {
-            baseDir = QDir::currentPath();
-         }
+      switch (loc) {                      
 
-      } else {
-         // we make any other path absolute to the prefix directory
-         baseDir = location(PrefixPath);
+         case PluginsPath:           
+            retval = QLatin1String("plugins");
+            break;
+
+         case ImportsPath:        
+            retval = QLatin1String("imports");
+            break;
+
+         case Qml2ImportsPath:           
+            retval = QLatin1String("qml");
+            break;
+
+         case TranslationsPath:          
+            retval = QLatin1String("translations");
+            break;
+
+         case SettingsPath:
+            // key = QLatin1String("Settings");
+            break;
+
+         default:
+            break;
       }
-      ret = QDir::cleanPath(baseDir + QLatin1Char('/') + ret);
-   }
-   return ret;
+   }   
+ 
+   return retval;
+}
+
+QSettings *QLibraryInfo::qt_library_settings() 
+{
+   static QScopedPointer<QSettings> settings(QLibraryInfo::findConfiguration());
+   return settings.data();
 }
 
 #endif // QT_NO_SETTINGS
 
-QT_END_NAMESPACE
 
-#if defined(Q_CC_GNU) && defined(ELF_INTERPRETER)
-#  include <stdio.h>
-#  include <stdlib.h>
-
-extern const char qt_core_interpreter[] __attribute__((section(".interp"))) = ELF_INTERPRETER;
-
+#ifdef CS_BUILD_INFO
+void cs_print_build_info()
+{
+   printf("CopperSpice Build Information \n" 
+          "\n"
+          "Version:        %s\n"
+          "Build Date:     %s\n"	
+          "Install Prefix: %s\n"	
+          "Debug Sstatus:  %s\n"	
+          "Built For:      %s\n",	
+   CS_BUILD_INFO::version, 
+   CS_BUILD_INFO::build_date,
+   CS_BUILD_INFO::install_prefix,
+   CS_BUILD_INFO::debug,
+   CS_BUILD_INFO::built_for);	   
+}
 #endif
+
+QT_END_NAMESPACE

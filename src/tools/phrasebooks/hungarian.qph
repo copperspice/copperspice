@@ -410,10 +410,6 @@
     <target>Mappa átnevezése</target>
 </phrase>
 <phrase>
-    <source>You need a commercial Qt license for development of proprietary (closed source) applications. Please see &lt;a href=&quot;http://www.trolltech.com/company/model.html&quot;&gt;www.trolltech.com/company/model.html&lt;/a&gt; for an overview of Qt licensing.</source>
-    <target>Amennyiben zárt forrású alkalmazás fejlesztéséhez kívánja a Qt-t felhasználni, szüksége lesz a Qt kereskedelmi verziójára. Kérem tekintse meg az &lt;tt&gt;http://www.trolltech.com/company/model.html&lt;/tt&gt; oldalt a Qt licenszelésének áttekintéséhez.</target>
-</phrase>
-<phrase>
     <source>New Tab</source>
     <target>Új fül</target>
 </phrase>

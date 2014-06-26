@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SchemaComponent_P_H
-#define Patternist_SchemaComponent_P_H
+#ifndef QSchemaComponent_P_H
+#define QSchemaComponent_P_H
 
 #include <QSharedData>
 #include <QtGlobal>

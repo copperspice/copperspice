@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AtomicType_P_H
-#define Patternist_AtomicType_P_H
+#ifndef QAtomicType_P_H
+#define QAtomicType_P_H
 
-#include "qanysimpletype_p.h"
-#include "qatomiccasterlocator_p.h"
-#include "qatomiccomparatorlocator_p.h"
-#include "qatomicmathematicianlocator_p.h"
-#include "qatomictypedispatch_p.h"
-#include "qitemtype_p.h"
+#include <qanysimpletype_p.h>
+#include <qatomiccasterlocator_p.h>
+#include <qatomiccomparatorlocator_p.h>
+#include <qatomicmathematicianlocator_p.h>
+#include <qatomictypedispatch_p.h>
+#include <qitemtype_p.h>
 
 QT_BEGIN_NAMESPACE
 

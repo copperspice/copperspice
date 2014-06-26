@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ComparisonPlatform_H
-#define Patternist_ComparisonPlatform_H
+#ifndef QComparisonPlatform_P_H
+#define QComparisonPlatform_P_H
 
-#include "qatomiccomparators_p.h"
-#include "qitem_p.h"
-#include "qcommonsequencetypes_p.h"
-#include "qdynamiccontext_p.h"
-#include "qbuiltintypes_p.h"
-#include "qitemtype_p.h"
-#include "qpatternistlocale_p.h"
+#include <qatomiccomparators_p.h>
+#include <qitem_p.h>
+#include <qcommonsequencetypes_p.h>
+#include <qdynamiccontext_p.h>
+#include <qbuiltintypes_p.h>
+#include <qitemtype_p.h>
+#include <qpatternistlocale_p.h>
 
 QT_BEGIN_NAMESPACE
 

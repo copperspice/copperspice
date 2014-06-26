@@ -23,11 +23,10 @@
 *
 ***********************************************************************/
 
+#ifndef QGenericPredicate_P_H
+#define QGenericPredicate_P_H
 
-#ifndef Patternist_GenericPredicate_H
-#define Patternist_GenericPredicate_H
-
-#include "qpaircontainer_p.h"
+#include <qpaircontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

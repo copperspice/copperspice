@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_OutputValidator_P_H
-#define Patternist_OutputValidator_P_SH
+#ifndef QOutputValidator_P_H
+#define QOutputValidator_P_H
 
 #include <QSet>
-#include "qdynamiccontext_p.h"
-#include "qabstractxmlreceiver.h"
-#include "qsourcelocationreflection_p.h"
+#include <qdynamiccontext_p.h>
+#include <qabstractxmlreceiver.h>
+#include <qsourcelocationreflection_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Numeric_H
-#define Patternist_Numeric_H
+#ifndef QSchemaNumeric_P_H
+#define QSchemaNumeric_P_H
 
-#include "qitem_p.h"
-#include "qprimitives_p.h"
+#include <qitem_p.h>
+#include <qprimitives_p.h>
 
 QT_BEGIN_NAMESPACE
 

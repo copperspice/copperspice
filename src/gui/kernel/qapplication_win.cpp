@@ -314,17 +314,6 @@ extern HRGN qt_tryCreateRegion(QRegion::RegionType type, int left, int top, int 
 #define APPCOMMAND_MEDIA_REWIND           50
 #define APPCOMMAND_MEDIA_CHANNEL_UP       51
 #define APPCOMMAND_MEDIA_CHANNEL_DOWN     52
-#endif // APPCOMMAND_MICROPHONE_VOLUME_MUTE
-
-#if (_WIN32_WINNT < 0x0400)
-// This struct is defined in winuser.h if the _WIN32_WINNT >= 0x0400 -- in the
-// other cases we have to define it on our own.
-typedef struct tagTRACKMOUSEEVENT {
-   DWORD cbSize;
-   DWORD dwFlags;
-   HWND  hwndTrack;
-   DWORD dwHoverTime;
-} TRACKMOUSEEVENT, *LPTRACKMOUSEEVENT;
 #endif
 
 #ifndef WM_MOUSELEAVE
@@ -3280,7 +3269,7 @@ bool QETWidget::translateWheelEvent(const MSG &msg)
    }
 
    Qt::Orientation orient = (msg.message == WM_MOUSEHWHEEL || state & Qt::AltModifier) ? Qt::Horizontal : Qt::Vertical;
-   
+
    // according to the MSDN documentation on WM_MOUSEHWHEEL:
    // a positive value indicates that the wheel was rotated to the right;
    // a negative value indicates that the wheel was rotated to the left.

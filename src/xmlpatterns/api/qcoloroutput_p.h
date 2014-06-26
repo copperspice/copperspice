@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ColorOutput_h
-#define Patternist_ColorOutput_h
+#ifndef QColorOutput_P_H
+#define QColorOutput_P_H
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QHash>

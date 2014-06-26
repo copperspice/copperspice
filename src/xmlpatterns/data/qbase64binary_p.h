@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Base64Binary_P_H
-#define Patternist_Base64Binary_P_H
+#ifndef QBase64Binary_P_H
+#define QBase64Binary_P_H
 
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

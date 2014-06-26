@@ -65,6 +65,11 @@
  * int foo(IN char* name, OUT char* path);
  *
  * Hence this un-break fix. Note that this file was auto generated. */
+
+
+#ifndef QQueryTransformparser_P_H
+#define QQueryTransformparser_P_H
+
 #ifdef IN
 #  undef IN
 #endif
@@ -316,5 +321,5 @@ typedef struct YYLTYPE {
 # define YYLTYPE_IS_TRIVIAL 1
 #endif
 
-
+#endif
 

@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AggregateFNs_P_H
-#define Patternist_AggregateFNs_P_H
+#ifndef QAggregateFNs_P_H
+#define QAggregateFNs_P_H
 
-#include "qaggregator_p.h"
-#include "qatomiccomparator_p.h"
-#include "qatomicmathematician_p.h"
-#include "qcomparisonplatform_p.h"
+#include <qaggregator_p.h>
+#include <qatomiccomparator_p.h>
+#include <qatomicmathematician_p.h>
+#include <qcomparisonplatform_p.h>
 
 QT_BEGIN_NAMESPACE
 

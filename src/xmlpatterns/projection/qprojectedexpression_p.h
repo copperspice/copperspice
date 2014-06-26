@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ProjectedExpression_H
-#define Patternist_ProjectedExpression_H
+#ifndef QProjectedExpression_P_H
+#define QProjectedExpression_P_H
 
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

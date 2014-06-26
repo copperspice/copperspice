@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AccessorFNs_P_H
-#define Patternist_AccessorFNs_P_H
+#ifndef QAccessorFNs_P_H
+#define QAccessorFNs_P_H
 
-#include "qfunctioncall_p.h"
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

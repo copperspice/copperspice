@@ -26,7 +26,7 @@
 #ifndef QInteger_P_H
 #define QInteger_P_H
 
-#include "qschemanumeric_p.h"
+#include <qschemanumeric_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CallTemplate_H
-#define Patternist_CallTemplate_H
+#ifndef QCallTemplate_P_H
+#define QCallTemplate_P_H
 
-#include "qcallsite_p.h"
-#include "qtemplateinvoker_p.h"
-#include "qtemplate_p.h"
+#include <qcallsite_p.h>
+#include <qtemplateinvoker_p.h>
+#include <qtemplate_p.h>
 
 QT_BEGIN_NAMESPACE
 

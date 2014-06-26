@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef QPatternist_AutoPtr_p_h
-#define QPatternist_AutoPtr_p_h
+#ifndef QAutoPtr_P_H
+#define QAutoPtr_P_H
 
 #include <QtGlobal>
 

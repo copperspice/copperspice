@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ConstructorFunctionsFactory_P_H
-#define Patternist_ConstructorFunctionsFactory_P_H
+#ifndef QConstructorFunctionsFactory_P_H
+#define QConstructorFunctionsFactory_P_H
 
-#include "qabstractfunctionfactory_p.h"
-#include "qschematypefactory_p.h"
+#include <qabstractfunctionfactory_p.h>
+#include <qschematypefactory_p.h>
 
 QT_BEGIN_NAMESPACE
 

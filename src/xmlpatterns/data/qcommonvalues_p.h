@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CommonValues_P_H
-#define Patternist_CommonValues_P_H
+#ifndef QCommonValues_P_H
+#define QCommonValues_P_H
 
-#include "qdaytimeduration_p.h"
-#include "qyearmonthduration_p.h"
-#include "qemptyiterator_p.h"
+#include <qdaytimeduration_p.h>
+#include <qyearmonthduration_p.h>
+#include <qemptyiterator_p.h>
 
 QT_BEGIN_NAMESPACE
 

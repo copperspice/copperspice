@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_UnparsedTextFN_P_H
-#define Patternist_UnparsedTextFN_P_H
+#ifndef QUnparsedTextFN_P_H
+#define QUnparsedTextFN_P_H
 
-#include "qstaticbaseuricontainer_p.h"
+#include <qstaticbaseuricontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Date_P_H
-#define Patternist_Date_P_H
+#ifndef QDate_P_H
+#define QDate_P_H
 
-#include "qabstractdatetime_p.h"
+#include <qabstractdatetime_p.h>
 
 QT_BEGIN_NAMESPACE
 

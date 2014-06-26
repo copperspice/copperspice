@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_BuiltinTypesFactory_P_H
-#define Patternist_BuiltinTypesFactory_P_H
+#ifndef QBasicTypesFactory_P_H
+#define QBasicTypesFactory_P_H
 
 #include <QHash>
-#include "qschematypefactory_p.h"
+#include <qschematypefactory_p.h>
 
 QT_BEGIN_NAMESPACE
 

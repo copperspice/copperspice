@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ValueComparison_P_H
-#define Patternist_ValueComparison_P_H
+#ifndef QValueComparison_P_H
+#define QValueComparison_P_H
 
-#include "qatomiccomparator_p.h"
-#include "qpaircontainer_p.h"
-#include "qcomparisonplatform_p.h"
+#include <qatomiccomparator_p.h>
+#include <qpaircontainer_p.h>
+#include <qcomparisonplatform_p.h>
 
 QT_BEGIN_NAMESPACE
 

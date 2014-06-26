@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_QuantifiedExpression_H
-#define Patternist_QuantifiedExpression_H
+#ifndef QQuantifiedExpression_P_H
+#define QQuantifiedExpression_P_H
 
-#include "qpaircontainer_p.h"
+#include <qpaircontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

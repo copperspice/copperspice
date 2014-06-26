@@ -26,31 +26,31 @@
 #ifndef QAPPLICATION_P_H
 #define QAPPLICATION_P_H
 
-#include "QtGui/qapplication.h"
-#include "QtGui/qevent.h"
-#include "QtGui/qfont.h"
-#include "QtGui/qcursor.h"
-#include "QtGui/qregion.h"
-#include "QtCore/qmutex.h"
-#include "QtCore/qtranslator.h"
-#include "QtCore/qbasictimer.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qpointer.h"
-#include "qcoreapplication_p.h"
-#include "qshortcutmap_p.h"
+#include <QtGui/qapplication.h>
+#include <QtGui/qevent.h>
+#include <QtGui/qfont.h>
+#include <QtGui/qcursor.h>
+#include <QtGui/qregion.h>
+#include <QtCore/qmutex.h>
+#include <QtCore/qtranslator.h>
+#include <QtCore/qbasictimer.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qpointer.h>
+#include <qcoreapplication_p.h>
+#include <qshortcutmap_p.h>
 #include <qthread_p.h>
-#include "QtCore/qpoint.h"
+#include <QtCore/qpoint.h>
 #include <QTime>
 
 #ifdef Q_WS_QWS
-#include "QtGui/qscreen_qws.h"
+#include <QtGui/qscreen_qws.h>
 #include <qgraphicssystem_qws_p.h>
 #endif
 
 #ifdef Q_WS_QPA
 #include <QWindowSystemInterface>
-#include "qwindowsysteminterface_qpa_p.h"
-#include "QtGui/qplatformintegration_qpa.h"
+#include <qwindowsysteminterface_qpa_p.h>
+#include <QtGui/qplatformintegration_qpa.h>
 #endif
 
 QT_BEGIN_NAMESPACE

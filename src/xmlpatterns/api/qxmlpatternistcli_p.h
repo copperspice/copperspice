@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Cli_h
-#define Patternist_Cli_h
+#ifndef QXmlPatternIstcli_P_H
+#define QXmlPatternIstcli_P_H
 
 #include <QCoreApplication>
 

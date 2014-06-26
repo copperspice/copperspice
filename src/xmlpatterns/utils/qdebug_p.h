@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Debug_H
-#define Patternist_Debug_H
+#ifndef QDebug_P_H
+#define QDebug_P_H
 
 #include <QtDebug>
 

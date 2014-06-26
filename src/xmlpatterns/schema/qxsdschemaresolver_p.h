@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdSchemaResolver_H
-#define Patternist_XsdSchemaResolver_H
+#ifndef QXsdSchemaResolver_P_H
+#define QXsdSchemaResolver_P_H
 
-#include "qnamespacesupport_p.h"
-#include "qschematype_p.h"
-#include "qschematypefactory_p.h"
-#include "qxsdalternative_p.h"
-#include "qxsdattribute_p.h"
-#include "qxsdattributegroup_p.h"
-#include "qxsdelement_p.h"
-#include "qxsdmodelgroup_p.h"
-#include "qxsdnotation_p.h"
-#include "qxsdreference_p.h"
-#include "qxsdschema_p.h"
-#include "qxsdschemachecker_p.h"
-#include "qxsdsimpletype_p.h"
+#include <qnamespacesupport_p.h>
+#include <qschematype_p.h>
+#include <qschematypefactory_p.h>
+#include <qxsdalternative_p.h>
+#include <qxsdattribute_p.h>
+#include <qxsdattributegroup_p.h>
+#include <qxsdelement_p.h>
+#include <qxsdmodelgroup_p.h>
+#include <qxsdnotation_p.h>
+#include <qxsdreference_p.h>
+#include <qxsdschema_p.h>
+#include <qxsdschemachecker_p.h>
+#include <qxsdsimpletype_p.h>
 #include <QtCore/QExplicitlySharedDataPointer>
 
 QT_BEGIN_NAMESPACE

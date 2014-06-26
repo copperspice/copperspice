@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XSLTTokenizer_P_H
-#define Patternist_XSLTTokenizer_P_H
+#ifndef QXSLTTokenizer_P_H
+#define QXSLTTokenizer_P_H
 
 #include <QQueue>
 #include <QStack>
 #include <QUrl>
 
-#include "qmaintainingreader_p.h"
-#include "qreportcontext_p.h"
-#include "qtokenizer_p.h"
-#include "qxslttokenlookup_p.h"
+#include <qmaintainingreader_p.h>
+#include <qreportcontext_p.h>
+#include <qtokenizer_p.h>
+#include <qxslttokenlookup_p.h>
 
 QT_BEGIN_NAMESPACE
 

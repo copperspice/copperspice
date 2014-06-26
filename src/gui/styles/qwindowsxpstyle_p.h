@@ -26,21 +26,21 @@
 #ifndef QWINDOWSXPSTYLE_P_H
 #define QWINDOWSXPSTYLE_P_H
 
-#include "qwindowsxpstyle.h"
-#include "qwindowsstyle_p.h"
+#include <qwindowsxpstyle.h>
+#include <qwindowsstyle_p.h>
 #include <qmap.h>
 #include <qt_windows.h>
 
-// Note, these tests are duplicated in qwizard_win.cpp.
+// test is duplicated in qwizard_win.cpp and qwindowsxpstyle_p.h
 #ifdef Q_CC_GNU
-#  include <w32api.h>
-#  if (__W32API_MAJOR_VERSION >= 3 || (__W32API_MAJOR_VERSION == 2 && __W32API_MINOR_VERSION >= 5))
-#    ifdef _WIN32_WINNT
-#      undef _WIN32_WINNT
-#    endif
-#    define _WIN32_WINNT 0x0501
-#    include <commctrl.h>
-#  endif
+
+#ifdef _WIN32_WINNT
+# undef _WIN32_WINNT
+#endif
+
+#define _WIN32_WINNT 0x0501       // Windows XP
+#include <commctrl.h>
+
 #endif
 
 #include <uxtheme.h>
@@ -259,6 +259,7 @@ struct ThemeMapData {
 class QWindowsXPStylePrivate : public QWindowsStylePrivate
 {
    Q_DECLARE_PUBLIC(QWindowsXPStyle)
+
  public:
    QWindowsXPStylePrivate()
       : QWindowsStylePrivate(), hasInitColors(false), bufferDC(0), bufferBitmap(0), nullBitmap(0),
@@ -310,6 +311,7 @@ class QWindowsXPStylePrivate : public QWindowsStylePrivate
    QIcon dockFloat, dockClose;
 
  private:
+
 #ifdef DEBUG_XP_STYLE
    void dumpNativeDIB(int w, int h);
    void showProperties(XPThemeData &themeData);

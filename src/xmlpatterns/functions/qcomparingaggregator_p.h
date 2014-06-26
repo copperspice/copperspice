@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ComparingAggregator_P_H
-#define Patternist_ComparingAggregator_P_H
+#ifndef QComparingAggregator_P_H
+#define QComparingAggregator_P_H
 
-#include "qabstractfloat_p.h"
-#include "qdecimal_p.h"
-#include "qcastingplatform_p.h"
-#include "qcomparisonplatform_p.h"
-#include "qliteral_p.h"
-#include "qaggregator_p.h"
-#include "quntypedatomicconverter_p.h"
-#include "qpatternistlocale_p.h"
+#include <qabstractfloat_p.h>
+#include <qdecimal_p.h>
+#include <qcastingplatform_p.h>
+#include <qcomparisonplatform_p.h>
+#include <qliteral_p.h>
+#include <qaggregator_p.h>
+#include <quntypedatomicconverter_p.h>
+#include <qpatternistlocale_p.h>
 
 QT_BEGIN_NAMESPACE
 

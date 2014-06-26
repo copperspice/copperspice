@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_IfThenClause_H
-#define Patternist_IfThenClause_H
+#ifndef QIfThenClause_P_H
+#define QIfThenClause_P_H
 
-#include "qtriplecontainer_p.h"
+#include <qtriplecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

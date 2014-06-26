@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef OrderBy_P_H
-#define OrderBy_P_H
+#ifndef QOrderBy_P_H
+#define QOrderBy_P_H
 
-#include "qatomiccomparator_p.h"
-#include "qcomparisonplatform_p.h"
-#include "qsinglecontainer_p.h"
+#include <qatomiccomparator_p.h>
+#include <qcomparisonplatform_p.h>
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

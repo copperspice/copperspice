@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CardinalityVerifier_P_H
-#define Patternist_CardinalityVerifier_P_H
+#ifndef QCardinalityVerifier_P_H
+#define QCardinalityVerifier_P_H
 
 #include "qsinglecontainer_p.h"
 

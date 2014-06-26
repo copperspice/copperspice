@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_QNameConstructor_H
-#define Patternist_QNameConstructor_H
+#ifndef QQNameConstructor_P_H
+#define QQNameConstructor_P_H
 
-#include "qsinglecontainer_p.h"
-#include "qbuiltintypes_p.h"
-#include "qpatternistlocale_p.h"
-#include "qxpathhelper_p.h"
+#include <qsinglecontainer_p.h>
+#include <qbuiltintypes_p.h>
+#include <qpatternistlocale_p.h>
+#include <qxpathhelper_p.h>
 
 QT_BEGIN_NAMESPACE
 

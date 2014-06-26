@@ -26,7 +26,7 @@
 #ifndef QDuration_P_H
 #define QDuration_P_H
 
-#include "qabstractduration_p.h"
+#include <qabstractduration_p.h>
 
 QT_BEGIN_NAMESPACE
 

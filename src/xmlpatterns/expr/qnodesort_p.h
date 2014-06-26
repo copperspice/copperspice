@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_NodeSortExpression_H
-#define Patternist_NodeSortExpression_H
+#ifndef QNodeSort_P_H
+#define QNodeSort_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

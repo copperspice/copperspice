@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_PatternMatchingFNs_P_H
-#define Patternist_PatternMatchingFNs_P_H
+#ifndef QPatternMatchingFNs_P_H
+#define QPatternMatchingFNs_P_H
 
-#include "qpatternplatform_p.h"
+#include <qpatternplatform_p.h>
 
 QT_BEGIN_NAMESPACE
 

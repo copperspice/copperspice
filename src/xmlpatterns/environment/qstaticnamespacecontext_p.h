@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_StaticNamespaceContext_P_H
-#define Patternist_StaticNamespaceContext_P_H
+#ifndef QStaticNamespaceContext_P_H
+#define QStaticNamespaceContext_P_H
 
-#include "qdelegatingstaticcontext_p.h"
+#include <qdelegatingstaticcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

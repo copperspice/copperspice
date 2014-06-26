@@ -23,14 +23,15 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SequenceType_P_H
-#define Patternist_SequenceType_P_H
+#ifndef QSequenceType_P_H
+#define QSequenceType_P_H
 
-template<typename T> class QList;
+template<typename T>
+class QList;
 
 #include <QSharedData>
-#include "qcardinality_p.h"
-#include "qitemtype_p.h"
+#include <qcardinality_p.h>
+#include <qitemtype_p.h>
 
 QT_BEGIN_NAMESPACE
 

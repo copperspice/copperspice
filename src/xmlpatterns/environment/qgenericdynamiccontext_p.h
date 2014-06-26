@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_GenericDynamicContext_P_H
-#define Patternist_GenericDynamicContext_P_H
+#ifndef QGenericDynamicContext_P_H
+#define QGenericDynamicContext_P_H
 
 #include <QDateTime>
 #include <QVector>
 
-#include "qdaytimeduration_p.h"
-#include "qstackcontextbase_p.h"
-#include "qexpression_p.h"
+#include <qdaytimeduration_p.h>
+#include <qstackcontextbase_p.h>
+#include <qexpression_p.h>
 
 QT_BEGIN_NAMESPACE
 

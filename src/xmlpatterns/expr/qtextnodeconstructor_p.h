@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_TextNodeConstructor_P_H
-#define Patternist_TextNodeConstructor_P_H
+#ifndef QTextNodeConstructor_P_H
+#define QTextNodeConstructor_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

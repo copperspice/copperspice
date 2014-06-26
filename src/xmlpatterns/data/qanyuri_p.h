@@ -23,16 +23,15 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AnyURI_P_H
-#define Patternist_AnyURI_P_H
+#ifndef QAnyURI_P_H
+#define QAnyURI_P_H
 
 #include <QUrl>
 #include <QtDebug>
-
-#include "qatomicstring_p.h"
-#include "qbuiltintypes_p.h"
-#include "qpatternistlocale_p.h"
-#include "qreportcontext_p.h"
+#include <qatomicstring_p.h>
+#include <qbuiltintypes_p.h>
+#include <qpatternistlocale_p.h>
+#include <qreportcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

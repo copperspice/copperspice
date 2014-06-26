@@ -90,7 +90,7 @@ void QObject::dumpObjectInfo()
 
       const QMetaMethod signal = metaObject()->method(*temp.signalMethod);
 
-      qDebug("        signal: %s", signal.signature());
+      qDebug("        signal: %s", signal.methodSignature().constData());
 
       if (! temp.receiver) {
          qDebug("          <Null receiver>");
@@ -103,7 +103,7 @@ void QObject::dumpObjectInfo()
       qDebug("          --> %s::%s %s",
              receiverMetaObject->className(),
              temp.receiver->objectName().isEmpty() ? "unnamed" : qPrintable(temp.receiver->objectName()),
-             method.signature());
+             method.methodSignature().constData());
    }
 
    // look for connections where this object is the receiver
@@ -117,7 +117,7 @@ void QObject::dumpObjectInfo()
       qDebug("          <-- %s::%s  %s",
              temp.sender->metaObject()->className(),
              temp.sender->objectName().isEmpty() ? "unnamed" : qPrintable(temp.sender->objectName()),
-             slot.signature());
+             slot.methodSignature().constData());
    }
 
    qDebug("--\n");

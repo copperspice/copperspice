@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_IntersectIterator_H
-#define Patternist_IntersectIterator_H
+#ifndef QIntersectIterator_P_H
+#define QIntersectIterator_P_H
 
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

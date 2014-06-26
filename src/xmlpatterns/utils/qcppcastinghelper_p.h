@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CppCastingHelper_P_H
-#define Patternist_CppCastingHelper_P_H
+#ifndef QCppCastingHelper_P_H
+#define QCppCastingHelper_P_H
 
 #include <QtCore/QtGlobal>
 

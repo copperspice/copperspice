@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_TemplateMode_P_H
-#define Patternist_TemplateMode_P_H
+#ifndef QTemplateMode_P_H
+#define QTemplateMode_P_H
 
 #include <QtCore/QSharedData>
 #include <QXmlName>
-
-#include "qtemplatepattern_p.h"
+#include <qtemplatepattern_p.h>
 
 QT_BEGIN_NAMESPACE
 

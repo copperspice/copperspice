@@ -23,11 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_DateTimeFN_P_H
-#define Patternist_DateTimeFN_P_H
+#ifndef QDateTimeFN_P_H
+#define QDateTimeFN_P_H
 
 #include "qfunctioncall_p.h"
-
 
 QT_BEGIN_NAMESPACE
 

@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_StaticContext_P_H
-#define Patternist_StaticContext_P_H
+#ifndef QStaticContext_P_H
+#define QStaticContext_P_H
 
-#include "qexternalvariableloader_p.h"
-#include "qitemtype_p.h"
-#include "qnamepool_p.h"
-#include "qnamespaceresolver_p.h"
-#include "qreportcontext_p.h"
-#include "qresourceloader_p.h"
+#include <qexternalvariableloader_p.h>
+#include <qitemtype_p.h>
+#include <qnamepool_p.h>
+#include <qnamespaceresolver_p.h>
+#include <qreportcontext_p.h>
+#include <qresourceloader_p.h>
 
 QT_BEGIN_NAMESPACE
 

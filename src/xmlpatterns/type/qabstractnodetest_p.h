@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AbstractNodeTest_P_H
-#define Patternist_AbstractNodeTest_P_H
+#ifndef QAbstractNodeTest_P_H
+#define QAbstractNodeTest_P_H
 
-#include "qanynodetype_p.h"
+#include <qanynodetype_p.h>
 
 QT_BEGIN_NAMESPACE
 

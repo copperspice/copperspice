@@ -100,7 +100,10 @@ JSValue QtClass::fallbackObject(ExecState* exec, Instance* inst, const Identifie
             continue;
 
         int iter = 0;
-        const char* signature = m.signature();
+
+        QByteArray tempSignature = m.methodSignature();
+        const char *signature    = tempSignature.constData(); 
+
         while (signature[iter] && signature[iter] != '(')
             ++iter;
 

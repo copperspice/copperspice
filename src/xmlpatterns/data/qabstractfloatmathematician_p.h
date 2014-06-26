@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AbstractFloatMathematician_H
-#define Patternist_AbstractFloatMathematician_H
+#ifndef QAbstractFloatMathematician_P_H
+#define QAbstractFloatMathematician_P_H
 
-#include "qabstractfloat_p.h"
-#include "qatomicmathematician_p.h"
-#include "qinteger_p.h"
-#include "qschemanumeric_p.h"
-#include "qpatternistlocale_p.h"
-#include "qsourcelocationreflection_p.h"
+#include <qabstractfloat_p.h>
+#include <qatomicmathematician_p.h>
+#include <qinteger_p.h>
+#include <qschemanumeric_p.h>
+#include <qpatternistlocale_p.h>
+#include <qsourcelocationreflection_p.h>
 
 QT_BEGIN_NAMESPACE
 

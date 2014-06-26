@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CopyOf_H
-#define Patternist_CopyOf_H
+#ifndef QCopyOf_P_H
+#define QCopyOf_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ExpressionDispatch_P_H
-#define Patternist_ExpressionDispatch_P_H
+#ifndef QExpressionDispatch_P_H
+#define QExpressionDispatch_P_H
 
 #include <QSharedData>
 

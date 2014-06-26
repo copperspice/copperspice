@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CurrentItemContext_P_H
-#define Patternist_CurrentItemContext_P_H
+#ifndef QCurrentItemContext_P_H
+#define QCurrentItemContext_P_H
 
-#include "qdelegatingdynamiccontext_p.h"
+#include <qdelegatingdynamiccontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,15 +23,10 @@
 *
 ***********************************************************************/
 
-#if _WIN32_WINNT < 0x0500
-#undef _WIN32_WINNT
-#define _WIN32_WINNT 0x0500
-#endif
-
-#include "qfontengine_p.h"
-#include "qtextengine_p.h"
+#include <qfontengine_p.h>
+#include <qtextengine_p.h>
 #include <qglobal.h>
-#include "qt_windows.h"
+#include <qt_windows.h>
 #include <qapplication_p.h>
 
 #include <qsystemlibrary_p.h>
@@ -47,8 +42,8 @@
 #include <qbitmap.h>
 
 #include <qpainter_p.h>
-#include "qpaintengine.h"
-#include "qvarlengtharray.h"
+#include <qpaintengine.h>
+#include <qvarlengtharray.h>
 #include <qpaintengine_raster_p.h>
 #include <qnativeimage_p.h>
 

@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_OptimizationBlocks_P_H
-#define Patternist_OptimizationBlocks_P_H
+#ifndef QOptimizationPasses_P_H
+#define QOptimizationPasses_P_H
 
-#include "qatomiccomparator_p.h"
-#include "qexpression_p.h"
-#include "qoptimizerframework_p.h"
+#include <qatomiccomparator_p.h>
+#include <qexpression_p.h>
+#include <qoptimizerframework_p.h>
 
 QT_BEGIN_NAMESPACE
 

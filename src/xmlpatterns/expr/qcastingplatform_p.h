@@ -23,20 +23,20 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CastingPlatform_H
-#define Patternist_CastingPlatform_H
+#ifndef QCastingPlatform_P_H
+#define QCastingPlatform_P_H
 
-#include "qatomiccasterlocator_p.h"
-#include "qatomiccaster_p.h"
-#include "qatomicstring_p.h"
-#include "qatomictype_p.h"
-#include "qbuiltintypes_p.h"
-#include "qcommonsequencetypes_p.h"
-#include "qpatternistlocale_p.h"
-#include "qqnamevalue_p.h"
-#include "qschematypefactory_p.h"
-#include "qstaticcontext_p.h"
-#include "qvalidationerror_p.h"
+#include <qatomiccasterlocator_p.h>
+#include <qatomiccaster_p.h>
+#include <qatomicstring_p.h>
+#include <qatomictype_p.h>
+#include <qbuiltintypes_p.h>
+#include <qcommonsequencetypes_p.h>
+#include <qpatternistlocale_p.h>
+#include <qqnamevalue_p.h>
+#include <qschematypefactory_p.h>
+#include <qstaticcontext_p.h>
+#include <qvalidationerror_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdAttribute_H
-#define Patternist_XsdAttribute_H
+#ifndef QXsdAttribute_P_H
+#define QXsdAttribute_P_H
 
-#include "qanysimpletype_p.h"
-#include "qnamedschemacomponent_p.h"
-#include "qxsdannotated_p.h"
+#include <qanysimpletype_p.h>
+#include <qnamedschemacomponent_p.h>
+#include <qxsdannotated_p.h>
 #include <QtCore/QList>
 
 QT_BEGIN_NAMESPACE

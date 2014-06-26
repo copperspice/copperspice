@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_UntypedAtomicConverter_P_H
-#define Patternist_UntypedAtomicConverter_P_H
+#ifndef QUntypedAtomicConverter_P_H
+#define QUntypedAtomicConverter_P_H
 
-#include "qitem_p.h"
-#include "qsinglecontainer_p.h"
-#include "qcastingplatform_p.h"
+#include <qitem_p.h>
+#include <qsinglecontainer_p.h>
+#include <qcastingplatform_p.h>
 
 QT_BEGIN_NAMESPACE
 

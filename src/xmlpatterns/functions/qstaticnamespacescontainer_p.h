@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_StaticNamespacesContainer_P_H
-#define Patternist_StaticNamespacesContainer_P_H
+#ifndef QStaticNamespacesContainer_P_H
+#define QStaticNamespacesContainer_P_H
 
-#include "qfunctioncall_p.h"
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

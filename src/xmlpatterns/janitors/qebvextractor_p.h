@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_EBVExtractor_P_H
-#define Patternist_EBVExtractor_P_H
+#ifndef QEBVExtractor_P_H
+#define QEBVExtractor_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

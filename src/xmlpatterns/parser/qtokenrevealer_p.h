@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_TokenRevealer_h
-#define Patternist_TokenRevealer_h
+#ifndef QTokenRevealer_P_H
+#define QTokenRevealer_P_H
 
 #include <QSet>
-#include "qtokenizer_p.h"
+#include <qtokenizer_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CacheCells_H
-#define Patternist_CacheCells_H
+#ifndef QCacheCells_P_H
+#define QCacheCells_P_H
 
 #include <QList>
 #include <QVector>
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

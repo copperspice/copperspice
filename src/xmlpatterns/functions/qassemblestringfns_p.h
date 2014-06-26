@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AssembleStringFNs_P_H
-#define Patternist_AssembleStringFNs_P_H
+#ifndef QAssembleStringFNs_P_H
+#define QAssembleStringFNs_P_H
 
-#include "qfunctioncall_p.h"
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

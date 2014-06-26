@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SchemaTypeFactory_P_H
-#define Patternist_SchemaTypeFactory_P_H
+#ifndef QSchemaTypeFactory_P_H
+#define QSchemaTypeFactory_P_H
 
 #include <QSharedData>
-#include "qreportcontext_p.h"
-#include "qitemtype_p.h"
-#include "qschematype_p.h"
+#include <qreportcontext_p.h>
+#include <qitemtype_p.h>
+#include <qschematype_p.h>
 
 QT_BEGIN_NAMESPACE
 

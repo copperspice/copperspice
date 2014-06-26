@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ArgumentConverter_P_H
-#define Patternist_ArgumentConverter_P_H
+#ifndef QArgumentConverter_P_H
+#define QArgumentConverter_P_H
 
 #include "quntypedatomicconverter_p.h"
 

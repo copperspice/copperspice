@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_UnionIterator_H
-#define Patternist_UnionIterator_H
+#ifndef QUnionIterator_P_H
+#define QUnionIterator_P_H
 
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

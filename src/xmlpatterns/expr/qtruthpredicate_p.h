@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_TruthPredicate_P_H
-#define Patternist_TruthPredicate_P_H
+#ifndef QTruthPredicate_P_H
+#define QTruthPredicate_P_H
 
-#include "qgenericpredicate_p.h"
+#include <qgenericpredicate_p.h>
 
 QT_BEGIN_NAMESPACE
 

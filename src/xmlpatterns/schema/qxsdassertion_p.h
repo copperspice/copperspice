@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdAssertion_H
-#define Patternist_XsdAssertion_H
+#ifndef QXsdAssertion_P_H
+#define QXsdAssertion_P_H
 
-#include "qnamedschemacomponent_p.h"
-#include "qxsdannotated_p.h"
-#include "qxsdxpathexpression_p.h"
+#include <qnamedschemacomponent_p.h>
+#include <qxsdannotated_p.h>
+#include <qxsdxpathexpression_p.h>
 #include <QtCore/QList>
 
 QT_BEGIN_NAMESPACE

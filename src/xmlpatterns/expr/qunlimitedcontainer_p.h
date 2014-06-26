@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_UnlimitedContainer_P_H
-#define Patternist_UnlimitedContainer_P_H
+#ifndef QUnlimitedContainer_P_H
+#define QUnlimitedContainer_P_H
 
 #include <QList>
-#include "qexpression_p.h"
-#include "qgenericsequencetype_p.h"
+#include <qexpression_p.h>
+#include <qgenericsequencetype_p.h>
 
 QT_BEGIN_NAMESPACE
 

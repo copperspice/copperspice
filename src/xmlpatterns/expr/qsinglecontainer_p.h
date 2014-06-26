@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SingleContainer_H
-#define Patternist_SingleContainer_H
+#ifndef QSingleContainer_P_H
+#define QSingleContainer_P_H
 
-#include "qexpression_p.h"
+#include <qexpression_p.h>
 
 QT_BEGIN_NAMESPACE
 

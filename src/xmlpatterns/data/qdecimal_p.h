@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Decimal_P_H
-#define Patternist_Decimal_P_H
+#ifndef QDecimal_P_H
+#define QDecimal_P_H
 
-#include "qschemanumeric_p.h"
+#include <qschemanumeric_p.h>
 
 QT_BEGIN_NAMESPACE
 

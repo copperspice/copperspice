@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef QPatternist_DeviceResourceLoader_p_H
-#define QPatternist_DeviceResourceLoader_p_H
+#ifndef QDeviceResourceLoader_P_H
+#define QDeviceResourceLoader_P_H
 
 template<typename T> class QSet;
 class QUrl;
 
-#include "qresourceloader_p.h"
+#include <qresourceloader_p.h>
 
 QT_BEGIN_NAMESPACE
 

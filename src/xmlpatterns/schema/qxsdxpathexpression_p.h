@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdXPathExpression_H
-#define Patternist_XsdXPathExpression_H
+#ifndef QXsdXPathExpression_P_H
+#define QXsdXPathExpression_P_H
 
-#include "qanyuri_p.h"
-#include "qnamedschemacomponent_p.h"
-#include "qxsdannotated_p.h"
+#include <qanyuri_p.h>
+#include <qnamedschemacomponent_p.h>
+#include <qxsdannotated_p.h>
 #include <QtCore/QList>
 
 QT_BEGIN_NAMESPACE

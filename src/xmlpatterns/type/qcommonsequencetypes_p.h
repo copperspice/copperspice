@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CommonSequenceTypes_P_H
-#define Patternist_CommonSequenceTypes_P_H
+#ifndef QCommonSequenceTypes_P_H
+#define QCommonSequenceTypes_P_H
 
-#include "qemptysequencetype_p.h"
-#include "qnonetype_p.h"
+#include <qemptysequencetype_p.h>
+#include <qnonetype_p.h>
 
 QT_BEGIN_NAMESPACE
 

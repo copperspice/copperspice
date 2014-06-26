@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SubsequenceIterator_P_H
-#define Patternist_SubsequenceIterator_P_H
+#ifndef QSubsequenceIterator_P_H
+#define QSubsequenceIterator_P_H
 
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

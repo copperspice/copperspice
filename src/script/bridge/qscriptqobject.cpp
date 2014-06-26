@@ -30,9 +30,9 @@
 #include <QtCore/qvarlengtharray.h>
 #include <QtCore/qdebug.h>
 #include <QtScript/qscriptable.h>
-#include "../api/qscriptengine_p.h"
-#include "../api/qscriptable_p.h"
-#include "../api/qscriptcontext_p.h"
+#include "qscriptengine_p.h"
+#include "qscriptable_p.h"
+#include "qscriptcontext_p.h"
 #include "qscriptfunction_p.h"
 
 #include "Error.h"
@@ -180,8 +180,12 @@ static bool isEnumerableMetaProperty(const QMetaProperty &prop,
 */
 static inline int methodNameLength(const QMetaMethod &method)
 {
-   const char *signature = method.signature();
+
+   QByteArray tempSignature = method.methodSignature();
+   const char *signature    = tempSignature.constData(); 
+
    const char *s = signature;
+
    while (*s && (*s != '(')) {
       ++s;
    }
@@ -203,12 +207,12 @@ static inline QByteArray methodName(const char *signature, int nameLength)
   specified by the (signature, nameLength) pair, otherwise returns
   false.
 */
-static inline bool methodNameEquals(const QMetaMethod &method,
-                                    const char *signature, int nameLength)
+static inline bool methodNameEquals(const QMetaMethod &method, const char *signature, int nameLength)
 {
-   const char *otherSignature = method.signature();
-   return !qstrncmp(otherSignature, signature, nameLength)
-          && (otherSignature[nameLength] == '(');
+   QByteArray tempSignature   = method.methodSignature();
+   const char *otherSignature = tempSignature.constData(); 
+
+   return ! qstrncmp(otherSignature, signature, nameLength) && (otherSignature[nameLength] == '(');
 }
 
 static QVariant variantFromValue(JSC::ExecState *exec, int targetType, JSC::JSValue value)
@@ -359,15 +363,18 @@ int QtFunction::mostGeneralMethod(QMetaMethod *out) const
 
 QList<int> QScript::QtFunction::overloadedIndexes() const
 {
-   if (!maybeOverloaded()) {
+   if (! maybeOverloaded()) {
       return QList<int>();
    }
+
    QList<int> result;
    const QMetaObject *meta = metaObject();
    QMetaMethod method = meta->method(initialIndex());
+
    int nameLength = methodNameLength(method);
+
    for (int index = mostGeneralMethod() - 1; index >= 0; --index) {
-      if (methodNameEquals(meta->method(index), method.signature(), nameLength)) {
+      if (methodNameEquals(meta->method(index), method.methodSignature().constData(), nameLength)) {
          result.append(index);
       }
    }
@@ -558,11 +565,11 @@ static QMetaMethod metaMethod(const QMetaObject *meta,
 
 static JSC::JSValue callQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType callType,
                                  QObject *thisQObject, const JSC::ArgList &scriptArgs,
-                                 const QMetaObject *meta, int initialIndex,
-                                 bool maybeOverloaded)
+                                 const QMetaObject *meta, int initialIndex, bool maybeOverloaded)
 {
    QScriptMetaMethod chosenMethod;
    int chosenIndex = -1;
+
    QVarLengthArray<QVariant, 9> args;
    QVector<QScriptMetaArguments> candidates;
    QVector<QScriptMetaArguments> unresolved;
@@ -570,17 +577,25 @@ static JSC::JSValue callQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType c
    QVector<int> conversionFailed;
    int index;
    int nameLength = 0;
-   const char *initialMethodSignature = 0;
+
    exec->clearException();
    QScriptEnginePrivate *engine = QScript::scriptEngineFromExec(exec);
+
+   QByteArray tempSignature;
+   const char *initialMethodSignature = 0;
+  
    for (index = initialIndex; index >= 0; --index) {
       QMetaMethod method = metaMethod(meta, callType, index);
 
       if (index == initialIndex) {
-         initialMethodSignature = method.signature();
+
+         tempSignature          = method.methodSignature();
+         initialMethodSignature = tempSignature.constData(); 
+
          nameLength = methodNameLength(method);
+
       } else {
-         if (!methodNameEquals(method, initialMethodSignature, nameLength)) {
+         if (! methodNameEquals(method, initialMethodSignature, nameLength)) {
             continue;
          }
       }
@@ -913,65 +928,77 @@ static JSC::JSValue callQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType c
       //#ifndef Q_SCRIPT_NO_EVENT_NOTIFY
       //        engine->notifyFunctionEntry(context);
       //#endif
+
       QString funName = QString::fromLatin1(methodName(initialMethodSignature, nameLength));
       if (!conversionFailed.isEmpty()) {
          QString message = QString::fromLatin1("incompatible type of argument(s) in call to %0(); candidates were\n")
                            .arg(funName);
+
          for (int i = 0; i < conversionFailed.size(); ++i) {
             if (i > 0) {
                message += QLatin1String("\n");
             }
             QMetaMethod mtd = metaMethod(meta, callType, conversionFailed.at(i));
-            message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.signature()));
+            message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.methodSignature().constData()));
          }
          result = JSC::throwError(exec, JSC::TypeError, message);
+
       } else if (!unresolved.isEmpty()) {
          QScriptMetaArguments argsInstance = unresolved.first();
          int unresolvedIndex = argsInstance.method.firstUnresolvedIndex();
          Q_ASSERT(unresolvedIndex != -1);
+
          QScriptMetaType unresolvedType = argsInstance.method.type(unresolvedIndex);
          QString unresolvedTypeName = QString::fromLatin1(unresolvedType.name());
-         QString message = QString::fromLatin1("cannot call %0(): ")
-                           .arg(funName);
+         QString message = QString::fromLatin1("cannot call %0(): ").arg(funName);
+
          if (unresolvedIndex > 0) {
             message.append(QString::fromLatin1("argument %0 has unknown type `%1'").
                            arg(unresolvedIndex).arg(unresolvedTypeName));
+
          } else {
             message.append(QString::fromLatin1("unknown return type `%0'")
                            .arg(unresolvedTypeName));
+
          }
          message.append(QString::fromLatin1(" (register the type with qScriptRegisterMetaType())"));
          result = JSC::throwError(exec, JSC::TypeError, message);
+
       } else {
-         QString message = QString::fromLatin1("too few arguments in call to %0(); candidates are\n")
-                           .arg(funName);
+         QString message = QString::fromLatin1("too few arguments in call to %0(); candidates are\n").arg(funName);
+
          for (int i = 0; i < tooFewArgs.size(); ++i) {
             if (i > 0) {
                message += QLatin1String("\n");
             }
             QMetaMethod mtd = metaMethod(meta, callType, tooFewArgs.at(i));
-            message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.signature()));
+            message += QString::fromLatin1("    %0").arg(mtd.methodSignature().constData() );
          }
          result = JSC::throwError(exec, JSC::SyntaxError, message);
       }
+
    } else {
       if (chosenIndex == -1) {
          QScriptMetaArguments metaArgs = candidates.at(0);
-         if ((candidates.size() > 1)
-               && (metaArgs.args.count() == candidates.at(1).args.count())
+         if ((candidates.size() > 1) && (metaArgs.args.count() == candidates.at(1).args.count())
                && (metaArgs.matchDistance == candidates.at(1).matchDistance)) {
+
             // ambiguous call
             QByteArray funName = methodName(initialMethodSignature, nameLength);
-            QString message = QString::fromLatin1("ambiguous call of overloaded function %0(); candidates were\n")
-                              .arg(QLatin1String(funName));
+            QString message = QString::fromLatin1("Ambiguous call of overloaded function %0(); candidates were\n")
+                              .arg(QString::fromLatin1(funName));
+
             for (int i = 0; i < candidates.size(); ++i) {
                if (i > 0) {
                   message += QLatin1String("\n");
                }
+
                QMetaMethod mtd = metaMethod(meta, callType, candidates.at(i).index);
-               message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.signature()));
+               message += QString::fromLatin1("    %0").arg( mtd.methodSignature().constData() );
             }
+
             result = JSC::throwError(exec, JSC::TypeError, message);
+
          } else {
             chosenMethod = metaArgs.method;
             chosenIndex = metaArgs.index;
@@ -981,7 +1008,7 @@ static JSC::JSValue callQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType c
 
       if (chosenIndex != -1) {
          // call it
-         //            context->calleeMetaIndex = chosenIndex;
+         // context->calleeMetaIndex = chosenIndex;
 
          QVarLengthArray<void *, 9> array(args.count());
          void **params = array.data();
@@ -1701,8 +1728,8 @@ void QObjectDelegate::getOwnPropertyNames(QScriptObject *object, JSC::ExecState 
    const QScriptEngine::QObjectWrapOptions &opt = data->options;
    const QMetaObject *meta = qobject->metaObject();
    {
-      int i = (opt & QScriptEngine::ExcludeSuperClassProperties)
-              ? meta->propertyOffset() : 0;
+      int i = (opt & QScriptEngine::ExcludeSuperClassProperties) ? meta->propertyOffset() : 0;
+
       for ( ; i < meta->propertyCount(); ++i) {
          QMetaProperty prop = meta->property(i);
          if (isEnumerableMetaProperty(prop, meta, i)) {
@@ -1721,13 +1748,15 @@ void QObjectDelegate::getOwnPropertyNames(QScriptObject *object, JSC::ExecState 
    }
 
    if (!(opt & QScriptEngine::SkipMethodsInEnumeration)) {
-      int i = (opt & QScriptEngine::ExcludeSuperClassMethods)
-              ? meta->methodOffset() : 0;
+      int i = (opt & QScriptEngine::ExcludeSuperClassMethods) ? meta->methodOffset() : 0;
+
       for ( ; i < meta->methodCount(); ++i) {
          QMetaMethod method = meta->method(i);
+
          if (hasMethodAccess(method, i, opt)) {
             QMetaMethod method = meta->method(i);
-            QString sig = QString::fromLatin1(method.signature());
+
+            QString sig = QString::fromLatin1(method.methodSignature().constData());
             propertyNames.add(JSC::Identifier(exec, sig));
          }
       }
@@ -2259,16 +2288,21 @@ void QObjectConnectionManager::execute(int slotIndex, void **argv)
       void *arg = argv[i + 1];
       QByteArray typeName = parameterTypes.at(i);
       int argType = QMetaType::type(parameterTypes.at(i));
+
       if (!argType) {
          qWarning("QScriptEngine: Unable to handle unregistered datatype '%s' "
-                  "when invoking handler of signal %s::%s",
-                  typeName.constData(), meta->className(), method.signature());
+                  "when invoking handler of signal %s::%s", 
+                  typeName.constData(), meta->className(), method.methodSignature().constData());
+
          actual = JSC::jsUndefined();
+
       } else if (argType == QMetaType::QVariant) {
          actual = QScriptEnginePrivate::jscValueFromVariant(exec, *reinterpret_cast<QVariant *>(arg));
+
       } else {
          actual = QScriptEnginePrivate::create(exec, argType, arg);
       }
+
       argsVector[i] = actual;
    }
    JSC::ArgList jscArgs(argsVector.data(), argsVector.size());
@@ -2326,10 +2360,8 @@ void QObjectConnectionManager::mark(JSC::MarkStack &markStack)
    }
 }
 
-bool QObjectConnectionManager::addSignalHandler(
-   QObject *sender, int signalIndex, JSC::JSValue receiver,
-   JSC::JSValue function, JSC::JSValue senderWrapper,
-   Qt::ConnectionType type)
+bool QObjectConnectionManager::addSignalHandler(QObject *sender, int signalIndex, JSC::JSValue receiver,
+               JSC::JSValue function, JSC::JSValue senderWrapper,Qt::ConnectionType type)
 {
    if (connections.size() <= signalIndex) {
       connections.resize(signalIndex + 1);
@@ -2349,16 +2381,20 @@ bool QObjectConnectionManager::addSignalHandler(
    if (ok) {
       cs.append(QObjectConnection(slotCounter++, receiver, function, senderWrapper));
       QMetaMethod signal = sender->metaObject()->method(signalIndex);
-      QByteArray signalString;
-      signalString.append('2'); // signal code
-      signalString.append(signal.signature());
-      static_cast<QObjectNotifyCaller *>(sender)->callConnectNotify(signalString);
+
+      // BROOM (script)
+
+//    QByteArray signalString;
+//    signalString.append('2'); // signal code
+//    signalString.append(signal.signature());
+
+//    static_cast<QObjectNotifyCaller *>(sender)->callConnectNotify(signalString);
    }
+
    return ok;
 }
 
-bool QObjectConnectionManager::removeSignalHandler(
-   QObject *sender, int signalIndex, JSC::JSValue receiver, JSC::JSValue slot)
+bool QObjectConnectionManager::removeSignalHandler(QObject *sender, int signalIndex, JSC::JSValue receiver, JSC::JSValue slot)
 {
    if (connections.size() <= signalIndex) {
       return false;
@@ -2382,11 +2418,15 @@ bool QObjectConnectionManager::removeSignalHandler(
          if (ok) {
             cs.remove(i);
             QMetaMethod signal = sender->metaObject()->method(signalIndex);
-            QByteArray signalString;
-            signalString.append('2'); // signal code
-            signalString.append(signal.signature());
-            static_cast<QScript::QObjectNotifyCaller *>(sender)->callDisconnectNotify(signalString);
+
+            // BROOM (script)
+
+//          QByteArray signalString;
+//          signalString.append('2'); // signal code
+//          signalString.append(signal.signature());
+//          static_cast<QScript::QObjectNotifyCaller *>(sender)->callDisconnectNotify(signalString);
          }
+
          return ok;
       }
    }

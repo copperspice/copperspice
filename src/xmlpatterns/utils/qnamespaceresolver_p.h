@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_NamespaceResolver_P_H
-#define Patternist_NamespaceResolver_P_H
+#ifndef QNamespaceResolver_P_H
+#define QNamespaceResolver_P_H
 
 #include <QSharedData>
 #include <QXmlName>

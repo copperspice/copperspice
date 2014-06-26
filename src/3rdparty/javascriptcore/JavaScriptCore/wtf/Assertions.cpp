@@ -26,28 +26,12 @@
 
 #include "config.h"
 #include "Assertions.h"
-
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
 
 #if PLATFORM(MAC)
 #include <CoreFoundation/CFString.h>
-#endif
-
-#if COMPILER(MSVC) && !OS(WINCE)
-#ifndef WINVER
-#define WINVER 0x0500
-#endif
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0500
-#endif
-#include <windows.h>
-#include <crtdbg.h>
-#endif
-
-#if OS(WINCE)
-#include <winbase.h>
 #endif
 
 extern "C" {
@@ -71,7 +55,8 @@ static void vprintf_stderr_common(const char* format, va_list args)
         CFRelease(str);
         CFRelease(cfFormat);
     } else
-#elif COMPILER(MSVC) && !defined(WINCEBASIC)
+
+#elif COMPILER(MSVC) && ! defined(WINCEBASIC)
 # if !defined(_WIN32_WCE) || (_WIN32_WCE >= 0x600)
     if (IsDebuggerPresent())
 # endif

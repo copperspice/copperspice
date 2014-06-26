@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_NumericFNs_P_H
-#define Patternist_NumericFNs_P_H
+#ifndef QNumericFNs_P_H
+#define QNumericFNs_P_H
 
-#include "qaggregator_p.h"
+#include <qaggregator_p.h>
 
 QT_BEGIN_NAMESPACE
 

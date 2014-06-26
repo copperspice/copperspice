@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_EmptyIterator_P_H
-#define Patternist_EmptyIterator_P_H
+#ifndef QEmptyIterator_P_H
+#define QEmptyIterator_P_H
 
-#include "qabstractxmlforwarditerator_p.h"
-#include "qprimitives_p.h"
+#include <qabstractxmlforwarditerator_p.h>
+#include <qprimitives_p.h>
 
 QT_BEGIN_NAMESPACE
 

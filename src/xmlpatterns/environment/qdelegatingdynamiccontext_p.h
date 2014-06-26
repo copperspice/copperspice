@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_DelegatingDynamicContext_H
-#define Patternist_DelegatingDynamicContext_H
+#ifndef QDelegatingDynamicContext_P_H
+#define QDelegatingDynamicContext_P_H
 
-#include "qdynamiccontext_p.h"
-#include "qexpression_p.h"
+#include <qdynamiccontext_p.h>
+#include <qexpression_p.h>
 
 QT_BEGIN_NAMESPACE
 

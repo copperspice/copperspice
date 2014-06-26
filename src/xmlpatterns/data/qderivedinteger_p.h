@@ -26,10 +26,10 @@
 #ifndef QDerivedInteger_P_H
 #define QDerivedInteger_P_H
 
-#include "qbuiltintypes_p.h"
-#include "qinteger_p.h"
-#include "qpatternistlocale_p.h"
-#include "qvalidationerror_p.h"
+#include <qbuiltintypes_p.h>
+#include <qinteger_p.h>
+#include <qpatternistlocale_p.h>
+#include <qvalidationerror_p.h>
 
 QT_BEGIN_NAMESPACE
 

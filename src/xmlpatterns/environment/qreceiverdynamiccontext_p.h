@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ReceiverDynamicContext_H
-#define Patternist_ReceiverDynamicContext_H
+#ifndef QReceiverDynamicContext_P_H
+#define QReceiverDynamicContext_P_H
 
-#include "qdelegatingdynamiccontext_p.h"
+#include <qdelegatingdynamiccontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

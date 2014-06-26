@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ElementAvailableFN_P_H
-#define Patternist_ElementAvailableFN_P_H
+#ifndef QElementAvailableFN_P_H
+#define QElementAvailableFN_P_H
 
-#include "qstaticnamespacescontainer_p.h"
+#include <qstaticnamespacescontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

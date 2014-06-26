@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SequenceMappingIterator_P_H
-#define Patternist_SequenceMappingIterator_P_H
+#ifndef QSequenceMappingIterator_P_H
+#define QSequenceMappingIterator_P_H
 
-#include "qabstractxmlforwarditerator_p.h"
-#include "qdynamiccontext_p.h"
+#include <qabstractxmlforwarditerator_p.h>
+#include <qdynamiccontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

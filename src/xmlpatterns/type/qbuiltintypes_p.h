@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_BuiltinTypes_P_H
-#define Patternist_BuiltinTypes_P_H
+#ifndef QBuiltinTypes_P_H
+#define QBuiltinTypes_P_H
 
-#include "qanynodetype_p.h"
-#include "qanysimpletype_p.h"
-#include "qanytype_p.h"
-#include "qbuiltinatomictype_p.h"
-#include "qitemtype_p.h"
-#include "qnumerictype_p.h"
-#include "quntyped_p.h"
+#include <qanynodetype_p.h>
+#include <qanysimpletype_p.h>
+#include <qanytype_p.h>
+#include <qbuiltinatomictype_p.h>
+#include <qitemtype_p.h>
+#include <qnumerictype_p.h>
+#include <quntyped_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -29,33 +29,33 @@
 #if !defined(QT_NO_STYLE_WINDOWS) || defined(QT_PLUGIN)
 
 #include <qsystemlibrary_p.h>
-#include "qapplication.h"
-#include "qbitmap.h"
-#include "qdrawutil.h" // for now
-#include "qevent.h"
-#include "qmenu.h"
-#include "qmenubar.h"
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qdrawutil.h>    // for now
+#include <qevent.h>
+#include <qmenu.h>
+#include <qmenubar.h>
 #include <qmenubar_p.h>
-#include "qpaintengine.h"
-#include "qpainter.h"
-#include "qprogressbar.h"
-#include "qrubberband.h"
-#include "qstyleoption.h"
-#include "qtabbar.h"
-#include "qwidget.h"
-#include "qdebug.h"
-#include "qmainwindow.h"
-#include "qfile.h"
-#include "qtextstream.h"
-#include "qpixmapcache.h"
-#include "qwizard.h"
-#include "qlistview.h"
+#include <qpaintengine.h>
+#include <qpainter.h>
+#include <qprogressbar.h>
+#include <qrubberband.h>
+#include <qstyleoption.h>
+#include <qtabbar.h>
+#include <qwidget.h>
+#include <qdebug.h>
+#include <qmainwindow.h>
+#include <qfile.h>
+#include <qtextstream.h>
+#include <qpixmapcache.h>
+#include <qwizard.h>
+#include <qlistview.h>
 #include <qmath_p.h>
 #include <qmath.h>
 
 #ifdef Q_WS_X11
-#include "qfileinfo.h"
-#include "qdir.h"
+#include <qfileinfo.h>
+#include <qdir.h>
 #include <qt_x11_p.h>
 #endif
 

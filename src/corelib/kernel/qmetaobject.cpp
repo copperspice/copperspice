@@ -122,7 +122,8 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
 
    for (int slotIndex = 0; slotIndex < metaObj->methodCount(); ++slotIndex) {
 
-      const char *slotName = metaObj->method(slotIndex).signature();
+      QByteArray temp = metaObj->method(slotIndex).methodSignature();
+      const char *slotName = temp.constData();
 
       if (slotName[0] != 'o' || slotName[1] != 'n' || slotName[2] != '_') {
          continue;
@@ -158,7 +159,8 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
             }
 
             // get signal name for the widget/element
-            const char *testSignal = signalMethod.signature();
+            QByteArray temp = signalMethod.methodSignature();
+            const char *testSignal = temp.constData();
 
             if (qstrncmp(desiredSignal, testSignal, desiredLen) == 0)  {
                // found a matching signal for our slot
@@ -235,7 +237,7 @@ int QMetaObject::indexOfConstructor(const char *constructor) const
    for (int index = 0; index < this->constructorCount(); ++index) {
       QMetaMethod testMethod = this->constructor(index);
 
-      if (qstrcmp(testMethod.signature(), tValue.constData()) == 0)  {
+      if (qstrcmp(testMethod.methodSignature().constData(), tValue.constData()) == 0)  {
 
          if (testMethod.methodType() == QMetaMethod::Constructor) {
             retval = index;
@@ -274,7 +276,7 @@ int QMetaObject::indexOfMethod(const char *method) const
    for (int index = 0; index < this->methodCount(); ++index) {
       QMetaMethod testMethod = this->method(index);
 
-      if (qstrcmp(testMethod.signature(), tValue.constData()) == 0)  {
+      if (qstrcmp(testMethod.methodSignature().constData(), tValue.constData()) == 0)  {
          retval = index;
          break;
       }
@@ -330,7 +332,7 @@ int QMetaObject::indexOfSignal(const char *signal) const
 
       // NOTE: will match a method with the same or less arguments than signal  02/27/2014
 
-      if (qstrncmp(testMethod.signature(), tValue.constData(), tValue.length() - 1) == 0)  {
+      if (qstrncmp(testMethod.methodSignature().constData(), tValue.constData(), tValue.length() - 1) == 0)  {
 
          if (testMethod.methodType() == QMetaMethod::Signal) {
             retval = index;
@@ -353,7 +355,7 @@ int QMetaObject::indexOfSlot(const char *slot) const
    for (int index = 0; index < this->methodCount(); ++index) {
       QMetaMethod testMethod = this->method(index);
 
-      if (qstrcmp(testMethod.signature(), tValue.constData()) == 0)  {
+      if (qstrcmp(testMethod.methodSignature().constData(), tValue.constData()) == 0)  {
 
          if (testMethod.methodType() == QMetaMethod::Slot) {
             retval = index;
@@ -1878,7 +1880,7 @@ void QMetaObject_X::register_method(const char *name, QMetaMethod::Access access
       QString tokenValue = signatures[k];
       tokenValue.remove(QChar(32));
 
-      const char *tokenData = strdup(csPrintable(tokenValue));
+      QByteArray tokenData = tokenValue.toLatin1();
 
       // save the key/value into the master map
       QMetaMethod data(typeReturn, tokenData, tempNames, access, kind, attr, this);

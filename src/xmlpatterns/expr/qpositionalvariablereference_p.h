@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_PositionVariableReference_H
-#define Patternist_PositionVariableReference_H
+#ifndef QPositionalVariableReference_P_H
+#define QPositionalVariableReference_P_H
 
-#include "qvariablereference_p.h"
+#include <qvariablereference_p.h>
 
 QT_BEGIN_NAMESPACE
 

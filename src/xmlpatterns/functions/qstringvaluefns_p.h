@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_StringValueFNs_P_H
-#define Patternist_StringValueFNs_P_H
+#ifndef QStringValueFNs_P_H
+#define QStringValueFNs_P_H
 
 #include <QByteArray>
-#include "qfunctioncall_p.h"
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

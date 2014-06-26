@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Atomizer_P_H
-#define Patternist_Atomizer_P_H
+#ifndef QAtomizer_P_H
+#define QAtomizer_P_H
 
 #include "qitem_p.h"
 #include "qsinglecontainer_p.h"

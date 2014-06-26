@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_DelegatingNamespaceResolver_P_H
-#define Patternist_DelegatingNamespaceResolver_P_H
+#ifndef QDelegatingNamespaceResolver_P_H
+#define QDelegatingNamespaceResolver_P_H
 
 #include <QHash>
 #include "qnamespaceresolver_p.h"

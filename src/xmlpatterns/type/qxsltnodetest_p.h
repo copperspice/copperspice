@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XSLTNodeTest_H
-#define Patternist_XSLTNodeTest_H
+#ifndef QXSLTNodeTest_P_H
+#define QXSLTNodeTest_P_H
 
-#include "qanynodetype_p.h"
+#include <qanynodetype_p.h>
 
 QT_BEGIN_NAMESPACE
 

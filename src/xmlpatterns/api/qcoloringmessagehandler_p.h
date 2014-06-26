@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ColoringMessageHandler_h
-#define Patternist_ColoringMessageHandler_h
+#ifndef QColoringMessageHandler_P_H
+#define QColoringMessageHandler_P_H
 
 #include <QHash>
-#include "qcoloroutput_p.h"
-#include "qabstractmessagehandler.h"
+#include <qcoloroutput_p.h>
+#include <qabstractmessagehandler.h>
 
 QT_BEGIN_NAMESPACE
 

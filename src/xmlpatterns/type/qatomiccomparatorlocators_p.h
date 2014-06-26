@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AtomicComparatorLocators_P_H
-#define Patternist_AtomicComparatorLocators_P_H
+#ifndef QAtomicComparatorLocators_P_H
+#define QAtomicComparatorLocators_P_H
 
-#include "qatomiccomparatorlocator_p.h"
+#include <qatomiccomparatorlocator_p.h>
 
 QT_BEGIN_NAMESPACE
 

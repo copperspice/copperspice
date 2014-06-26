@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_UnresolvedVariableReference_P_H
-#define Patternist_UnresolvedVariableReference_P_H
+#ifndef QUnresolvedVariableReference_P_H
+#define QUnresolvedVariableReference_P_H
 
-#include "qemptycontainer_p.h"
+#include <qemptycontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

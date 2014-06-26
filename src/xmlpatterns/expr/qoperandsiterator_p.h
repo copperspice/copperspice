@@ -22,12 +22,13 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#ifndef Patternist_OperandsIterator_H
-#define Patternist_OperandsIterator_H
+
+#ifndef QOperandsIterator_P_H
+#define QOperandsIterator_P_H
 
 #include <QPair>
 #include <QStack>
-#include "qexpression_p.h"
+#include <qexpression_p.h>
 
 QT_BEGIN_NAMESPACE
 

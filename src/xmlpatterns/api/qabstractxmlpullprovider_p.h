@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef QABSTRACTXMLPULLPROVIDER_H
-#define QABSTRACTXMLPULLPROVIDER_H
+#ifndef QABSTRACTXMLPULLPROVIDER_P_H
+#define QABSTRACTXMLPULLPROVIDER_P_H
 
 #include <QtCore/QtGlobal>
 

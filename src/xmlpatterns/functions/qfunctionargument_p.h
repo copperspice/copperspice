@@ -23,14 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_FunctionArgument_P_H
-#define Patternist_FunctionArgument_P_H
+#ifndef QFunctionArgument_P_H
+#define QFunctionArgument_P_H
 
 #include <QList>
 #include <QSharedData>
-
-#include "qxmlname.h"
-#include "qsequencetype_p.h"
+#include <qxmlname.h>
+#include <qsequencetype_p.h>
 
 QT_BEGIN_NAMESPACE
 

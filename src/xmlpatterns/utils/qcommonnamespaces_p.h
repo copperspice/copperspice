@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CommonNamespaces_P_H
-#define Patternist_CommonNamespaces_P_H
+#ifndef QCommonNamespaces_P_H
+#define QCommonNamespaces_P_H
 
 #include <QLatin1String>
 

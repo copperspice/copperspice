@@ -97,7 +97,7 @@ class Q_CORE_EXPORT QMetaMethod
    enum MethodType { Method, Signal, Slot, Constructor };
    enum Attributes { Compatibility = 0x1, Cloned = 0x2, Scriptable = 0x4 };   // internal
 
-   QMetaMethod(const char *typeName, const char *signature, QList<QByteArray> paramNames,
+   QMetaMethod(const char *typeName, const QByteArray &signature, QList<QByteArray> paramNames,
                Access access, MethodType methodType, Attributes attributes, QMetaObject *obj);
 
    QMetaMethod();
@@ -109,13 +109,18 @@ class Q_CORE_EXPORT QMetaMethod
    const BentoAbstract *getBentoBox() const;
    const QMetaObject *getMetaObject() const;
 
+   QByteArray name() const;
+
    int methodIndex() const;
    MethodType methodType() const;
 
    QList<QByteArray> parameterNames() const;
    QList<QByteArray> parameterTypes() const;
-
-   const char *signature() const;
+   
+   int parameterCount() const;
+   int parameterType(int index) const;
+  
+   QByteArray methodSignature() const;
    const char *typeName() const;
 
    int revision() const;
@@ -139,7 +144,7 @@ class Q_CORE_EXPORT QMetaMethod
 
  private:
    const char *m_typeName;
-   const char *m_signature;
+   QByteArray m_signature;
    QList<QByteArray> m_paramNames;
    Access m_access;
    MethodType m_methodType;

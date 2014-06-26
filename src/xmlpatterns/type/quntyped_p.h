@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Untyped_P_H
-#define Patternist_Untyped_P_H
+#ifndef QUntyped_P_H
+#define QUntyped_P_H
 
-#include "qanytype_p.h"
+#include <qanytype_p.h>
 
 QT_BEGIN_NAMESPACE
 

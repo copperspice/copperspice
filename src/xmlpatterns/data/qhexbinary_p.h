@@ -26,7 +26,7 @@
 #ifndef QHexBinary_P_H
 #define QHexBinary_P_H
 
-#include "qbase64binary_p.h"
+#include <qbase64binary_p.h>
 
 QT_BEGIN_NAMESPACE
 

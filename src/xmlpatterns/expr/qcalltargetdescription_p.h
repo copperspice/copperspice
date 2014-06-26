@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CallTargetDescription_H
-#define Patternist_CallTargetDescription_H
+#ifndef QCallTargetDescription_P_H
+#define QCallTargetDescription_P_H
 
 template<typename Key, typename Value> class QHash;
 template<typename T> class QList;
 
 #include <QSharedData>
-#include "qexpression_p.h"
+#include <qexpression_p.h>
 
 QT_BEGIN_NAMESPACE
 

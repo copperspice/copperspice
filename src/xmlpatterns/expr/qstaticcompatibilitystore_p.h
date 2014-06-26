@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_StaticCompatibilityStore_H
-#define Patternist_StaticCompatibilityStore_H
+#ifndef QStaticCompatibilityStore_P_H
+#define QStaticCompatibilityStore_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

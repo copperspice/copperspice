@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_StaticCurrentContext_P_H
-#define Patternist_StaticCurrentContext_P_H
+#ifndef QStaticCurrentContext_P_H
+#define QStaticCurrentContext_P_H
 
-#include "qdelegatingstaticcontext_p.h"
+#include <qdelegatingstaticcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

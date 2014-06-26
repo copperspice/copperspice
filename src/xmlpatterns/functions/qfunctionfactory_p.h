@@ -23,16 +23,15 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_FunctionFactory_P_H
-#define Patternist_FunctionFactory_P_H
+#ifndef QFunctionFactory_P_H
+#define QFunctionFactory_P_H
 
 #include <QHash>
 #include <QSharedData>
-
-#include "qexpression_p.h"
-#include "qfunctionsignature_p.h"
-#include "qprimitives_p.h"
-#include "qxmlname.h"
+#include <qexpression_p.h>
+#include <qfunctionsignature_p.h>
+#include <qprimitives_p.h>
+#include <qxmlname.h>
 
 QT_BEGIN_NAMESPACE
 

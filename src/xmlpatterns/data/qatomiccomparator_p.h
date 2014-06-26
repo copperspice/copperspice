@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AtomicComparator_P_H
-#define Patternist_AtomicComparator_P_H
+#ifndef QAtomicComparator_P_H
+#define QAtomicComparator_P_H
 
 #include <QFlags>
-
-#include "qitem_p.h"
-#include "qatomictypedispatch_p.h"
+#include <qitem_p.h>
+#include <qatomictypedispatch_p.h>
 
 QT_BEGIN_NAMESPACE
 

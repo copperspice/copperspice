@@ -26,10 +26,10 @@
 #ifndef QSequenceFNs_P_H
 #define QSequenceFNs_P_H
 
-#include "qatomiccomparator_p.h"
-#include "qcomparisonplatform_p.h"
-#include "qliteral_p.h"
-#include "qfunctioncall_p.h"
+#include <qatomiccomparator_p.h>
+#include <qcomparisonplatform_p.h>
+#include <qliteral_p.h>
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

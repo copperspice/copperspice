@@ -23,12 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AbstractDuration_P_H
-#define Patternist_AbstractDuration_P_H
+#ifndef QAbstractDuration_P_H
+#define QAbstractDuration_P_H
 
 #include <QRegExp>
-
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ArithmeticExpression_H
-#define Patternist_ArithmeticExpression_H
+#ifndef QArithmeticExpression_P_H
+#define QArithmeticExpression_P_H
 
-#include "qatomicmathematician_p.h"
-#include "qpaircontainer_p.h"
+#include <qatomicmathematician_p.h>
+#include <qpaircontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdIdCache_H
-#define Patternist_XsdIdCache_H
+#ifndef QXsdIdCache_P_H
+#define QXsdIdCache_P_H
 
-#include "qschemacomponent_p.h"
+#include <qschemacomponent_p.h>
 #include <QtCore/QExplicitlySharedDataPointer>
 #include <QtCore/QReadWriteLock>
 #include <QtCore/QSet>

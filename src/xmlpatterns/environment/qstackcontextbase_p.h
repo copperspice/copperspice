@@ -23,14 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_StackContextBase_P_H
-#define Patternist_StackContextBase_P_H
+#ifndef QStackContextBase_P_H
+#define QStackContextBase_P_H
 
 #include <QVector>
-
-#include "qdaytimeduration_p.h"
-#include "qdelegatingdynamiccontext_p.h"
-#include "qexpression_p.h"
+#include <qdaytimeduration_p.h>
+#include <qdelegatingdynamiccontext_p.h>
+#include <qexpression_p.h>
 
 QT_BEGIN_NAMESPACE
 

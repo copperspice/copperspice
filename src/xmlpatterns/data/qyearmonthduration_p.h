@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_YearMonthDuration_H
-#define Patternist_YearMonthDuration_H
+#ifndef QYearMonthDuration_P_H
+#define QYearMonthDuration_P_H
 
-#include "qabstractduration_p.h"
+#include <qabstractduration_p.h>
 
 QT_BEGIN_NAMESPACE
 

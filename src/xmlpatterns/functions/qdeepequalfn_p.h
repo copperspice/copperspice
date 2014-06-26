@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_DeepEqualFN_P_H
-#define Patternist_DeepEqualFN_P_H
+#ifndef QDeepEqualFN_P_H
+#define QDeepEqualFN_P_H
 
-#include "qatomiccomparator_p.h"
-#include "qcomparisonplatform_p.h"
-#include "qfunctioncall_p.h"
+#include <qatomiccomparator_p.h>
+#include <qcomparisonplatform_p.h>
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

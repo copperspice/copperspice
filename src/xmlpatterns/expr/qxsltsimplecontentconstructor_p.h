@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XSLTSimpleContentConstructor_P_H
-#define Patternist_XSLTSimpleContentConstructor_P_H
+#ifndef QXSLTSimpleContentConstructor_P_H
+#define QXSLTSimpleContentConstructor_P_H
 
-#include "qsimplecontentconstructor_p.h"
+#include <qsimplecontentconstructor_p.h>
 
 QT_BEGIN_NAMESPACE
 

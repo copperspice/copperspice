@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdSimpleType_H
-#define Patternist_XsdSimpleType_H
+#ifndef QXsdSimpleType_P_H
+#define QXsdSimpleType_P_H
 
-#include "qanysimpletype_p.h"
-#include "qxsdfacet_p.h"
-#include "qxsduserschematype_p.h"
+#include <qanysimpletype_p.h>
+#include <qxsdfacet_p.h>
+#include <qxsduserschematype_p.h>
 #include <QtCore/QSet>
 
 QT_BEGIN_NAMESPACE

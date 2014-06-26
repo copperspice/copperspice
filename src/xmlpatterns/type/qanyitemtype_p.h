@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AnyItemType_P_H
-#define Patternist_AnyItemType_P_H
+#ifndef QAnyItemType_P_H
+#define QAnyItemType_P_H
 
-#include "qatomictype_p.h"
+#include <qatomictype_p.h>
 
 QT_BEGIN_NAMESPACE
 

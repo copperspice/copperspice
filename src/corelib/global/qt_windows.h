@@ -27,10 +27,13 @@
 #define QT_WINDOWS_H
 
 #if defined(Q_CC_MINGW)
-// mingw's windows.h does not set _WIN32_WINNT, resulting breaking compilation
+// mingw windows.h file does not set this value properly, only place in CopperSpice WINVER is defined
+// this define must come before including windows.h
+
 #ifndef WINVER
-#define WINVER 0x500
+#define WINVER 0x500         // Windows 2000
 #endif
+
 #endif
 
 #include <windows.h>

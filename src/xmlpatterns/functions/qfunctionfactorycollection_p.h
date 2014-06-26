@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_FunctionFactoryCollection_P_H
-#define Patternist_FunctionFactoryCollection_P_H
+#ifndef QFunctionFactoryCollection_P_H
+#define QFunctionFactoryCollection_P_H
 
-#include "qfunctionfactory_p.h"
+#include <qfunctionfactory_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CallSite_H
-#define Patternist_CallSite_H
+#ifndef QCallSite_P_H
+#define QCallSite_P_H
 
-#include "qunlimitedcontainer_p.h"
-#include "qcalltargetdescription_p.h"
-#include "qxmlname.h"
+#include <qunlimitedcontainer_p.h>
+#include <qcalltargetdescription_p.h>
+#include <qxmlname.h>
 
 QT_BEGIN_NAMESPACE
 

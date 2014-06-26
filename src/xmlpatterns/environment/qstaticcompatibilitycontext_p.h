@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_StaticCompatibilityContext_P_H
-#define Patternist_StaticCompatibilityContext_P_H
+#ifndef QStaticCompatibilityContext_P_H
+#define QStaticCompatibilityContext_P_H
 
-#include "qdelegatingstaticcontext_p.h"
+#include <qdelegatingstaticcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

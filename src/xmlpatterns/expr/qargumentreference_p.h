@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ArgumentReference_H
-#define Patternist_ArgumentReference_H
+#ifndef QArgumentReference_P_H
+#define QArgumentReference_P_H
 
-#include "qvariablereference_p.h"
+#include <qvariablereference_p.h>
 
 QT_BEGIN_NAMESPACE
 

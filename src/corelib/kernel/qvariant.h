@@ -314,7 +314,7 @@ class Q_CORE_EXPORT QVariant
    template<typename T>
    static inline QVariant fromValue(const T &value) {
       return qVariantFromValue(value);
-   }
+   }       
 
    template<typename T>
    bool canConvert() const {
@@ -445,6 +445,13 @@ inline QVariant qVariantFromValue(const QVariant &t)
    return t;
 }
 
+// CopperSpice - new
+template<typename T>
+inline QVariant convertToQVariant(const T &value) {
+   return qVariantFromValue(value);
+}
+
+//
 template <typename T>
 inline void qVariantSetValue(QVariant &v, const T &t)
 {
@@ -469,7 +476,6 @@ inline void qVariantSetValue<QVariant>(QVariant &v, const QVariant &t)
 {
    v = t;
 }
-
 
 inline QVariant::QVariant() {}
 inline bool QVariant::isValid() const
@@ -496,9 +502,7 @@ inline bool QVariant::isDetached() const
 }
 
 
-/* Helper class to add one more level of indirection to prevent
-   implicit casts.
-*/
+// Helper class to add one more level of indirection to prevent implicit casts
 class QVariantComparisonHelper
 {
  public:
@@ -522,15 +526,18 @@ inline bool operator!=(const QVariant &v1, const QVariantComparisonHelper &v2)
 template<typename T> inline T qvariant_cast(const QVariant &v)
 {
    const int vid = qMetaTypeId<T>(static_cast<T *>(0));
+
    if (vid == v.userType()) {
       return *reinterpret_cast<const T *>(v.constData());
    }
+
    if (vid < int(QMetaType::User)) {
       T t;
       if (qvariant_cast_helper(v, QVariant::Type(vid), &t)) {
          return t;
       }
    }
+
    return T();
 }
 

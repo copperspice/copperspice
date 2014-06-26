@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_TemplateParam_P_H
-#define Patternist_TemplateParam_P_H
+#ifndef QWithParam_P_H
+#define QWithParam_P_H
 
-#include "qfunctionargument_p.h"
+#include <qfunctionargument_p.h>
 
 QT_BEGIN_NAMESPACE
 

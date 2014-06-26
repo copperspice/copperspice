@@ -23,12 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_QNameTest_P_H
-#define Patternist_QNameTest_P_H
+#ifndef QQNameTest_P_H
+#define QQNameTest_P_H
 
-#include "qabstractnodetest_p.h"
+#include <qabstractnodetest_p.h>
 
-template<typename Key, typename Value> class QHash;
+template<typename Key, typename Value>
+class QHash;
 
 QT_BEGIN_NAMESPACE
 

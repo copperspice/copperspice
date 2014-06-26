@@ -23,14 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AtomicMathematician_P_H
-#define Patternist_AtomicMathematician_P_H
+#ifndef QAtomicMathematician_P_H
+#define QAtomicMathematician_P_H
 
 #include <QFlags>
-
-#include "qdynamiccontext_p.h"
-#include "qitem_p.h"
-#include "qatomictypedispatch_p.h"
+#include <qdynamiccontext_p.h>
+#include <qitem_p.h>
+#include <qatomictypedispatch_p.h>
 
 QT_BEGIN_NAMESPACE
 

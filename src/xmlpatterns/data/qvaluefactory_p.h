@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ValueFactory_H
-#define Patternist_ValueFactory_H
+#ifndef QValueFactory_P_H
+#define QValueFactory_P_H
 
-#include "qitem_p.h"
-#include "qreportcontext_p.h"
-#include "qschematype_p.h"
+#include <qitem_p.h>
+#include <qreportcontext_p.h>
+#include <qschematype_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_GenericNamespaceResolver_P_H
-#define Patternist_GenericNamespaceResolver_P_H
+#ifndef QGenericNamespaceResolver_P_H
+#define QGenericNamespaceResolver_P_H
 
 #include <QHash>
-#include "qnamespaceresolver_p.h"
+#include <qnamespaceresolver_p.h>
 
 QT_BEGIN_NAMESPACE
 

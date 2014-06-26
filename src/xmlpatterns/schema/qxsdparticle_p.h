@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdParticle_H
-#define Patternist_XsdParticle_H
+#ifndef QXsdParticle_P_H
+#define QXsdParticle_P_H
 
-#include "qnamedschemacomponent_p.h"
-#include "qxsdterm_p.h"
+#include <qnamedschemacomponent_p.h>
+#include <qxsdterm_p.h>
 #include <QtCore/QList>
 
 QT_BEGIN_NAMESPACE

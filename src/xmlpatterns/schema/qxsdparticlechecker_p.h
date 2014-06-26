@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdParticleChecker_H
-#define Patternist_XsdParticleChecker_H
+#ifndef QXsdParticleChecker_P_H
+#define QXsdParticleChecker_P_H
 
-#include "qxsdelement_p.h"
-#include "qxsdparticle_p.h"
-#include "qxsdschemacontext_p.h"
-#include "qxsdwildcard_p.h"
+#include <qxsdelement_p.h>
+#include <qxsdparticle_p.h>
+#include <qxsdschemacontext_p.h>
+#include <qxsdwildcard_p.h>
 
 QT_BEGIN_NAMESPACE
 

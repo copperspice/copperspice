@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_OptimizerFramework_P_H
-#define Patternist_OptimizerFramework_P_H
+#ifndef QOptimizerFramework_P_H
+#define QOptimizerFramework_P_H
 
 #include <QSharedData>
-#include "qexpression_p.h"
+#include <qexpression_p.h>
 
 QT_BEGIN_NAMESPACE
 

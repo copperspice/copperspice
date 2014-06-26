@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CastableAs_H
-#define Patternist_CastableAs_H
+#ifndef QCastableAs_P_H
+#define QCastableAs_P_H
 
-#include "qsinglecontainer_p.h"
-#include "qcastingplatform_p.h"
+#include <qsinglecontainer_p.h>
+#include <qcastingplatform_p.h>
 
 QT_BEGIN_NAMESPACE
 

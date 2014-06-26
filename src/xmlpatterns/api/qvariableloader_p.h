@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#ifndef PATTERNIST_VARIABLELOADER_P_H
-#define PATTERNIST_VARIABLELOADER_P_H
+#ifndef QVARIABLELOADER_P_H
+#define QVARIABLELOADER_P_H
 
 #include <QtCore/QSet>
 #include <QtXmlPatterns/QXmlQuery>
 #include <QtDebug>
 
-#include "qdynamiccontext_p.h"
-#include "qexternalvariableloader_p.h"
+#include <qdynamiccontext_p.h>
+#include <qexternalvariableloader_p.h>
 
 QT_BEGIN_NAMESPACE
 

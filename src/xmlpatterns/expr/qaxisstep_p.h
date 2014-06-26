@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AxisStep_H
-#define Patternist_AxisStep_H
+#ifndef QAxisStep_P_H
+#define QAxisStep_P_H
 
-#include "qemptycontainer_p.h"
-#include "qitem_p.h"
+#include <qemptycontainer_p.h>
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

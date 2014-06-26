@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_InstanceOf_H
-#define Patternist_InstanceOf_H
+#ifndef QInstanceOf_P_H
+#define QInstanceOf_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

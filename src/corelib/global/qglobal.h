@@ -45,6 +45,12 @@
 #ifdef __cplusplus
 #include <algorithm>
 
+class QByteArray;
+class QDataStream;
+class QDebug;
+class QNoDebug;
+class QString;
+
 #ifndef QT_NAMESPACE
 
 # define QT_PREPEND_NAMESPACE(name) ::name
@@ -86,7 +92,7 @@ namespace QT_NAMESPACE {}
 QT_USE_NAMESPACE
 # endif
 
-#endif      // QT_NAMESPACE
+#endif
 
 #else
 
@@ -251,6 +257,11 @@ QT_USE_NAMESPACE
 #  if !defined(MAC_OS_X_VERSION_10_9)
 #       define MAC_OS_X_VERSION_10_9 MAC_OS_X_VERSION_10_8 + 1
 #  endif
+
+#  if !defined(MAC_OS_X_VERSION_10_10)
+#       define MAC_OS_X_VERSION_10_10 MAC_OS_X_VERSION_10_9 + 1
+#  endif
+
 #endif
 
 #ifdef __LSB_VERSION__
@@ -270,6 +281,7 @@ QT_USE_NAMESPACE
 // the following are necessary because the GHS C++ name mangling relies on __
 # define Q_CONSTRUCTOR_FUNCTION0(AFUNC) \
     static const int AFUNC ## _init_variable_ = AFUNC();
+
 # define Q_CONSTRUCTOR_FUNCTION(AFUNC) Q_CONSTRUCTOR_FUNCTION0(AFUNC)
 # define Q_DESTRUCTOR_FUNCTION0(AFUNC) \
     class AFUNC ## _dest_class_ { \
@@ -450,7 +462,7 @@ QT_USE_NAMESPACE
 #    define Q_NO_TEMPLATE_FRIENDS
 #    if defined(_COMPILER_VERSION) && (_COMPILER_VERSION >= 740)
 #      define Q_OUTOFLINE_TEMPLATE inline
-#      pragma set woff 3624,3625,3649 /* turn off some harmless warnings */
+#      pragma set woff 3624,3625,3649          // turn off some harmless warnings
 #    endif
 #  endif
 
@@ -549,6 +561,7 @@ QT_USE_NAMESPACE
 #ifndef Q_LIKELY
 #  define Q_LIKELY(x) (x)
 #endif
+
 #ifndef Q_UNLIKELY
 #  define Q_UNLIKELY(x) (x)
 #endif
@@ -583,7 +596,7 @@ QT_USE_NAMESPACE
 
 #elif defined(Q_OS_UNIX)
 #  if defined(Q_OS_MAC) && ! defined(__USE_WS_X11__) && ! defined(Q_WS_QWS) && ! defined(Q_WS_QPA)
-#    define Q_OS_MAC            // BROOM - verify this one
+#    define Q_OS_MAC
 
 #  elif !defined(Q_WS_QWS) && !defined(Q_WS_QPA)
 #    define Q_WS_X11
@@ -702,6 +715,7 @@ QT_END_INCLUDE_NAMESPACE
 #  undef QT_DEPRECATED
 #  undef QT_DEPRECATED_VARIABLE
 #  undef QT_DEPRECATED_CONSTRUCTOR
+
 #elif defined(QT_DEPRECATED_WARNINGS)
 #  undef QT_DEPRECATED
 #  define QT_DEPRECATED Q_DECL_DEPRECATED
@@ -709,6 +723,7 @@ QT_END_INCLUDE_NAMESPACE
 #  define QT_DEPRECATED_VARIABLE Q_DECL_VARIABLE_DEPRECATED
 #  undef QT_DEPRECATED_CONSTRUCTOR
 #  define QT_DEPRECATED_CONSTRUCTOR explicit Q_DECL_CONSTRUCTOR_DEPRECATED
+
 #else
 #  undef QT_DEPRECATED
 #  define QT_DEPRECATED
@@ -720,15 +735,12 @@ QT_END_INCLUDE_NAMESPACE
 
 #ifdef QT_ASCII_CAST_WARNINGS
 #  define QT_ASCII_CAST_WARN Q_DECL_DEPRECATED
-#  if defined(Q_CC_GNU) && __GNUC__ < 4
-/* gcc < 4 doesn't like Q_DECL_DEPRECATED in front of constructors */
-#    define QT_ASCII_CAST_WARN_CONSTRUCTOR
-#  else
-#    define QT_ASCII_CAST_WARN_CONSTRUCTOR Q_DECL_CONSTRUCTOR_DEPRECATED
-#  endif
+#  define QT_ASCII_CAST_WARN_CONSTRUCTOR Q_DECL_CONSTRUCTOR_DEPRECATED
+
 #else
 #  define QT_ASCII_CAST_WARN
 #  define QT_ASCII_CAST_WARN_CONSTRUCTOR
+
 #endif
 
 #if defined(__i386__) || defined(_WIN32)
@@ -739,6 +751,7 @@ QT_END_INCLUDE_NAMESPACE
 #    else
 #       define QT_FASTCALL
 #    endif
+
 #  else
 #     define QT_FASTCALL
 #  endif
@@ -794,7 +807,7 @@ typedef double qreal;
 #endif
 
 
-//   Utility macros and inline functions
+// utility macros and inline functions
 template <typename T>
 Q_DECL_CONSTEXPR inline T qAbs(const T &t)
 {
@@ -833,11 +846,6 @@ Q_DECL_CONSTEXPR inline const T &qBound(const T &min, const T &val, const T &max
 {
    return qMax(min, qMin(max, val));
 }
-
-
-
-// Data stream functions are provided by many classes (defined in qdatastream.h)
-class QDataStream;
 
 #ifndef QT_BUILD_KEY
 #define QT_BUILD_KEY "(copperspice)"
@@ -887,7 +895,7 @@ class QDataStream;
 #    undef QT_MAKEDLL
 #    undef QT_DLL
 
-#  elif defined(QT_MAKEDLL)        /* create a DLL library */
+#  elif defined(QT_MAKEDLL)        // create a DLL library
 #    if defined(QT_DLL)
 #      undef QT_DLL
 #    endif
@@ -978,7 +986,7 @@ class QDataStream;
 
 #    define Q_TEMPLATEDLL
 
-#  elif defined(QT_DLL) /* use a DLL library */
+#  elif defined(QT_DLL)           // use a DLL library
 #    define Q_CORE_EXPORT Q_DECL_IMPORT
 #    define Q_GUI_EXPORT Q_DECL_IMPORT
 #    define Q_SQL_EXPORT Q_DECL_IMPORT
@@ -998,7 +1006,7 @@ class QDataStream;
 
 #  define Q_NO_DECLARED_NOT_DEFINED
 #else
-#  undef QT_MAKEDLL /* ignore these for other platforms */
+#  undef QT_MAKEDLL    // ignore these for other platforms
 #  undef QT_DLL
 #endif
 
@@ -1042,8 +1050,6 @@ inline void qt_noop(void) {}
 #define QT_RETHROW   throw
 
 // System information
-class QString;
-
 class Q_CORE_EXPORT QSysInfo
 {
  public:
@@ -1054,73 +1060,77 @@ class Q_CORE_EXPORT QSysInfo
 #if defined(Q_BYTE_ORDER)
    enum Endian {
       BigEndian,
-      LittleEndian
+      LittleEndian,
 
 #  if Q_BYTE_ORDER == Q_BIG_ENDIAN
-      , ByteOrder = BigEndian
+      ByteOrder = BigEndian
+
 #  elif Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-      , ByteOrder = LittleEndian
+      ByteOrder = LittleEndian
+
 #  endif
    };
 #endif
 
 #if defined(Q_OS_WIN)
    enum WinVersion {
-      WV_32s      = 0x0001,
-      WV_95       = 0x0002,
-      WV_98       = 0x0003,
-      WV_Me       = 0x0004,
+      WV_32s       = 0x0001,
+      WV_95        = 0x0002,
+      WV_98        = 0x0003,
+      WV_Me        = 0x0004,
       WV_DOS_based = 0x000f,
 
-      WV_NT       = 0x0010,
-      WV_2000     = 0x0020,
-      WV_XP       = 0x0030,
-      WV_2003     = 0x0040,
-      WV_VISTA    = 0x0080,
-      WV_WINDOWS7 = 0x0090,
-      WV_WINDOWS8 = 0x00a0,
+      WV_NT         = 0x0010,
+      WV_2000       = 0x0020,
+      WV_XP         = 0x0030,
+      WV_2003       = 0x0040,
+      WV_VISTA      = 0x0080,
+      WV_WINDOWS7   = 0x0090,
+      WV_WINDOWS8   = 0x00a0,
       WV_WINDOWS8_1 = 0x00b0,
-      WV_NT_based = 0x00f0,
+      WV_NT_based   = 0x00f0,
 
-      WV_4_0      = WV_NT,
-      WV_5_0      = WV_2000,
-      WV_5_1      = WV_XP,
-      WV_5_2      = WV_2003,
-      WV_6_0      = WV_VISTA,
-      WV_6_1      = WV_WINDOWS7,
-      WV_6_2      = WV_WINDOWS8,
-      WV_6_3      = WV_WINDOWS8_1
+      WV_4_0        = WV_NT,
+      WV_5_0        = WV_2000,
+      WV_5_1        = WV_XP,
+      WV_5_2        = WV_2003,
+      WV_6_0        = WV_VISTA,
+      WV_6_1        = WV_WINDOWS7,
+      WV_6_2        = WV_WINDOWS8,
+      WV_6_3        = WV_WINDOWS8_1
    };
    static const WinVersion WindowsVersion;
    static WinVersion windowsVersion();
-
 #endif
+
 #ifdef Q_OS_MAC
    enum MacVersion {
       MV_Unknown = 0x0000,
 
-      MV_9 = 0x0001,
-      MV_10_0 = 0x0002,
-      MV_10_1 = 0x0003,
-      MV_10_2 = 0x0004,
-      MV_10_3 = 0x0005,
-      MV_10_4 = 0x0006,
-      MV_10_5 = 0x0007,
-      MV_10_6 = 0x0008,
-      MV_10_7 = 0x0009,
-      MV_10_8 = 0x000A,
-      MV_10_9 = 0x000B,
+      MV_9     = 0x0001,
+      MV_10_0  = 0x0002,
+      MV_10_1  = 0x0003,
+      MV_10_2  = 0x0004,
+      MV_10_3  = 0x0005,
+      MV_10_4  = 0x0006,
+      MV_10_5  = 0x0007,
+      MV_10_6  = 0x0008,
+      MV_10_7  = 0x0009,
+      MV_10_8  = 0x000A,
+      MV_10_9  = 0x000B,
+      MV_10_10 = 0x000C,
 
-      MV_CHEETAH = MV_10_0,
-      MV_PUMA = MV_10_1,
-      MV_JAGUAR = MV_10_2,
-      MV_PANTHER = MV_10_3,
-      MV_TIGER = MV_10_4,
-      MV_LEOPARD = MV_10_5,
-      MV_SNOWLEOPARD = MV_10_6,
-      MV_LION = MV_10_7,
+      MV_CHEETAH      = MV_10_0,
+      MV_PUMA         = MV_10_1,
+      MV_JAGUAR       = MV_10_2,
+      MV_PANTHER      = MV_10_3,
+      MV_TIGER        = MV_10_4,
+      MV_LEOPARD      = MV_10_5,
+      MV_SNOWLEOPARD  = MV_10_6,
+      MV_LION         = MV_10_7,
       MV_MOUNTAINLION = MV_10_8,
-      MV_MAVERICKS = MV_10_9
+      MV_MAVERICKS    = MV_10_9,
+      MV_YOSEMITE     = MV_10_10
    };
    static const MacVersion MacintoshVersion;
 #endif
@@ -1139,6 +1149,7 @@ inline int qMacVersion()
 #ifndef Q_OUTOFLINE_TEMPLATE
 #  define Q_OUTOFLINE_TEMPLATE
 #endif
+
 #ifndef Q_INLINE_TEMPLATE
 #  define Q_INLINE_TEMPLATE inline
 #endif
@@ -1170,40 +1181,33 @@ inline void qUnused(T &x)
 #  define qPrintable(string) QString(string).toLocal8Bit().constData()
 #endif
 
-Q_CORE_EXPORT void qDebug(const char *, ...) /* print debug message */
-#if defined(Q_CC_GNU) && !defined(__INSURE__)
-__attribute__ ((format (printf, 1, 2)))
-#endif
-;
-
-Q_CORE_EXPORT void qWarning(const char *, ...) /* print warning message */
-#if defined(Q_CC_GNU) && !defined(__INSURE__)
-__attribute__ ((format (printf, 1, 2)))
-#endif
-;
-
-class QString;
-
 Q_CORE_EXPORT QString qt_error_string(int errorCode = -1);
+Q_CORE_EXPORT void    qErrnoWarning(int code, const char *msg, ...);
+Q_CORE_EXPORT void    qErrnoWarning(const char *msg, ...);
 
-Q_CORE_EXPORT void qCritical(const char *, ...) /* print critical message */
-#if defined(Q_CC_GNU) && !defined(__INSURE__)
+Q_CORE_EXPORT void qDebug(const char *, ...)
+#if defined(Q_CC_GNU) && ! defined(__INSURE__)
 __attribute__ ((format (printf, 1, 2)))
 #endif
 ;
 
-Q_CORE_EXPORT void qFatal(const char *, ...) /* print fatal message and exit */
-#if defined(Q_CC_GNU) && !defined(__INSURE__)
+Q_CORE_EXPORT void qWarning(const char *, ...)
+#if defined(Q_CC_GNU) && ! defined(__INSURE__)
 __attribute__ ((format (printf, 1, 2)))
 #endif
 ;
 
-Q_CORE_EXPORT void qErrnoWarning(int code, const char *msg, ...);
-Q_CORE_EXPORT void qErrnoWarning(const char *msg, ...);
+Q_CORE_EXPORT void qCritical(const char *, ...)
+#if defined(Q_CC_GNU) && ! defined(__INSURE__)
+__attribute__ ((format (printf, 1, 2)))
+#endif
+;
 
-//
-class QDebug;
-class QNoDebug;
+Q_CORE_EXPORT void qFatal(const char *, ...)
+#if defined(Q_CC_GNU) && ! defined(__INSURE__)
+__attribute__ ((format (printf, 1, 2)))
+#endif
+;
 
 inline QDebug qDebug();
 inline QDebug qWarning();
@@ -1223,7 +1227,7 @@ inline QNoDebug qWarning();
 #  define qWarning QT_NO_QWARNING_MACRO
 #endif
 
-
+//
 Q_CORE_EXPORT void qt_assert(const char *assertion, const char *file, int line);
 
 #if !defined(Q_ASSERT)
@@ -1516,11 +1520,11 @@ class QTypeInfo<T *>
    logically-OR'ed combination of the flags below.
 */
 enum { /* TYPEINFO flags */
-   Q_COMPLEX_TYPE = 0,
+   Q_COMPLEX_TYPE   = 0,
    Q_PRIMITIVE_TYPE = 0x1,
-   Q_STATIC_TYPE = 0,
-   Q_MOVABLE_TYPE = 0x2,
-   Q_DUMMY_TYPE = 0x4
+   Q_STATIC_TYPE    = 0,
+   Q_MOVABLE_TYPE   = 0x2,
+   Q_DUMMY_TYPE     = 0x4
 };
 
 #define Q_DECLARE_TYPEINFO_BODY(TYPE, FLAGS) \
@@ -1882,17 +1886,15 @@ Q_CORE_EXPORT QString qtTrId(const char *id, int n = -1);
 
 
 /*
-   Some classes do not permit copies to be made of an object. These
-   classes contains a private copy constructor and assignment
-   operator to disable copying (the compiler gives an error message).
+   Some classes do not permit copies to be made of an object. These classes contain a private
+   copy constructor and assignment operator to disable copying (the compiler gives an error message)
 */
 #define Q_DISABLE_COPY(Class) \
     Class(const Class &) Q_DECL_EQ_DELETE;\
     Class &operator=(const Class &) Q_DECL_EQ_DELETE;
 
-class QByteArray;
 Q_CORE_EXPORT QByteArray qgetenv(const char *varName);
-Q_CORE_EXPORT bool qputenv(const char *varName, const QByteArray &value);
+Q_CORE_EXPORT bool       qputenv(const char *varName, const QByteArray &value);
 
 inline int qIntCast(double f)
 {

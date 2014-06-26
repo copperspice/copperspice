@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdInstanceReader_H
-#define Patternist_XsdInstanceReader_H
+#ifndef QXsdInstanceReader_P_H
+#define QXsdInstanceReader_P_H
 
-#include "qabstractxmlnodemodel.h"
-#include "qpullbridge_p.h"
-#include "qxsdschemacontext_p.h"
+#include <qabstractxmlnodemodel.h>
+#include <qpullbridge_p.h>
+#include <qxsdschemacontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

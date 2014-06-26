@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CollationChecker_H
-#define Patternist_CollationChecker_H
+#ifndef QCollationChecker_P_H
+#define QCollationChecker_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

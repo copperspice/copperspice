@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ExceptIterator_H
-#define Patternist_ExceptIterator_H
+#ifndef QExceptIterator_P_H
+#define QExceptIterator_P_H
 
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_LiteralSequence_H
-#define Patternist_LiteralSequence_H
+#ifndef QLiteralSequence_P_H
+#define QLiteralSequence_P_H
 
-#include "qemptycontainer_p.h"
+#include <qemptycontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

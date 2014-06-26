@@ -23,19 +23,19 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_FunctionSignature_P_H
-#define Patternist_FunctionSignature_P_H
+#ifndef QFunctionSignature_P_H
+#define QFunctionSignature_P_H
 
 template<typename Key, typename Value> class QHash;
 template<typename T> class QList;
 
 #include <QSharedData>
 
-#include "qcalltargetdescription_p.h"
-#include "qexpression_p.h"
-#include "qfunctionargument_p.h"
-#include "qpatternistlocale_p.h"
-#include "qprimitives_p.h"
+#include <qcalltargetdescription_p.h>
+#include <qexpression_p.h>
+#include <qfunctionargument_p.h>
+#include <qpatternistlocale_p.h>
+#include <qprimitives_p.h>
 
 QT_BEGIN_NAMESPACE
 

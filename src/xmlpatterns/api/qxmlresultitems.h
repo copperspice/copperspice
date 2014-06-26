@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef QXMLRESULTITEMS
-#define QXMLRESULTITEMS
+#ifndef QXMLRESULTITEMS_H
+#define QXMLRESULTITEMS_H
 
 #include <QtCore/QString>
 #include <QtCore/QScopedPointer>

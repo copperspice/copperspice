@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AtomicTypeDispatch_P_H
-#define Patternist_AtomicTypeDispatch_P_H
+#ifndef QAtomicTypeDispatch_P_H
+#define QAtomicTypeDispatch_P_H
 
 #include <QSharedData>
 

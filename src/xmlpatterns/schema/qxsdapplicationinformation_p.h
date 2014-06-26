@@ -22,12 +22,13 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#ifndef Patternist_XsdApplicationInformation_H
-#define Patternist_XsdApplicationInformation_H
 
-#include "qanytype_p.h"
-#include "qanyuri_p.h"
-#include "qnamedschemacomponent_p.h"
+#ifndef QXsdApplicationInformation_P_H
+#define QXsdApplicationInformation_P_H
+
+#include <qanytype_p.h>
+#include <qanyuri_p.h>
+#include <qnamedschemacomponent_p.h>
 
 QT_BEGIN_NAMESPACE
 

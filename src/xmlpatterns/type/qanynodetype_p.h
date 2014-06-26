@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AnyNodeType_H
-#define Patternist_AnyNodeType_H
+#ifndef QAnyNodeType_P_H
+#define QAnyNodeType_P_H
 
-#include "qatomictype_p.h"
-#include "qitem_p.h"
+#include <qatomictype_p.h>
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

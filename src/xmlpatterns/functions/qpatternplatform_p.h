@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_PatternPlatform_P_H
-#define Patternist_PatternPlatform_P_H
+#ifndef QPatternPlatform_P_H
+#define QPatternPlatform_P_H
 
 #include <QFlags>
 #include <QRegExp>
-
-#include "qfunctioncall_p.h"
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdUserSchemaType_H
-#define Patternist_XsdUserSchemaType_H
+#ifndef QXsdUserSchemaType_P_H
+#define QXsdUserSchemaType_P_H
 
-#include "qnamedschemacomponent_p.h"
-#include "qschematype_p.h"
-#include "qxsdannotated_p.h"
+#include <qnamedschemacomponent_p.h>
+#include <qschematype_p.h>
+#include <qxsdannotated_p.h>
 
 template<typename N, typename M> class QHash;
 template<typename N> class QList;

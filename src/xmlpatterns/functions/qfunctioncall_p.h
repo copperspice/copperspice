@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_FunctionCall_P_H
-#define Patternist_FunctionCall_P_H
+#ifndef QFunctionCall_P_H
+#define QFunctionCall_P_H
 
-#include "qunlimitedcontainer_p.h"
-#include "qfunctionsignature_p.h"
-#include "qxpathhelper_p.h"
+#include <qunlimitedcontainer_p.h>
+#include <qfunctionsignature_p.h>
+#include <qxpathhelper_p.h>
 
 QT_BEGIN_NAMESPACE
 

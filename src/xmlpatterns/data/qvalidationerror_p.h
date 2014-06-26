@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ValidationError_H
-#define Patternist_ValidationError_H
+#ifndef QValidationError_P_H
+#define QValidationError_P_H
 
-#include "qitem_p.h"
-#include "qreportcontext_p.h"
+#include <qitem_p.h>
+#include <qreportcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

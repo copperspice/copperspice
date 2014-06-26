@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_RangeIterator_P_H
-#define Patternist_RangeIterator_P_H
+#ifndef QRangeIterator_P_H
+#define QRangeIterator_P_H
 
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

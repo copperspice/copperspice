@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdValidatedXmlNodeModel_H
-#define Patternist_XsdValidatedXmlNodeModel_H
+#ifndef QXsdValidatedXmlNodeModel_P_H
+#define QXsdValidatedXmlNodeModel_P_H
 
-#include "qabstractxmlnodemodel.h"
-#include "qabstractxmlforwarditerator_p.h"
-#include "qitem_p.h"
-#include "qschematype_p.h"
-#include "qxsdelement_p.h"
+#include <qabstractxmlnodemodel.h>
+#include <qabstractxmlforwarditerator_p.h>
+#include <qitem_p.h>
+#include <qschematype_p.h>
+#include <qxsdelement_p.h>
 
 QT_BEGIN_NAMESPACE
 

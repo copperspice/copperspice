@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_VariableReference_P_H
-#define Patternist_VariableReference_P_H
+#ifndef QVariableReference_P_H
+#define QVariableReference_P_H
 
-#include "qemptycontainer_p.h"
+#include <qemptycontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

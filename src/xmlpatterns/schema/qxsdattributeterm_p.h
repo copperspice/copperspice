@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdAttributeTerm_H
-#define Patternist_XsdAttributeTerm_H
+#ifndef QXsdAttributeTerm_P_H
+#define QXsdAttributeTerm_P_H
 
-#include "qnamedschemacomponent_p.h"
-#include "qxsdannotated_p.h"
+#include <qnamedschemacomponent_p.h>
+#include <qxsdannotated_p.h>
 
 QT_BEGIN_NAMESPACE
 

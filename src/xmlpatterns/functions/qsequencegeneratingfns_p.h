@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SequenceGeneratingFNs_P_H
-#define Patternist_SequenceGeneratingFNs_P_H
+#ifndef QSequenceGeneratingFNs_P_H
+#define QSequenceGeneratingFNs_P_H
 
-#include "qanyuri_p.h"
-#include "qcontextnodechecker_p.h"
-#include "qstaticbaseuricontainer_p.h"
+#include <qanyuri_p.h>
+#include <qcontextnodechecker_p.h>
+#include <qstaticbaseuricontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

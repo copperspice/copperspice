@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef QNameValue_P_H
-#define QNameValue_P_H
+#ifndef QQNameValue_P_H
+#define QQNameValue_P_H
 
 #include "qitem_p.h"
 #include "qxmlname.h"

@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef QPatternist_Item_P_H
-#define QPatternist_Item_P_H
+#ifndef QItem_P_H
+#define QItem_P_H
 
 #include <qcppcastinghelper_p.h>
 #include <qitemtype_p.h>

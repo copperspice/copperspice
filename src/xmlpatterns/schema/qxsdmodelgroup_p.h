@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdModelGroup_H
-#define Patternist_XsdModelGroup_H
+#ifndef QXsdModelGroup_P_H
+#define QXsdModelGroup_P_H
 
-#include "qxsdparticle_p.h"
-#include "qxsdterm_p.h"
+#include <qxsdparticle_p.h>
+#include <qxsdterm_p.h>
 
 QT_BEGIN_NAMESPACE
 

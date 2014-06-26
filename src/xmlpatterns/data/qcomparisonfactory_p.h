@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ComparisonFactory_P_H
-#define Patternist_ComparisonFactory_P_H
+#ifndef QComparisonFactory_P_H
+#define QComparisonFactory_P_H
 
-#include "qatomiccomparator_p.h"
-#include "qderivedstring_p.h"
-#include "qitem_p.h"
-#include "qreportcontext_p.h"
-#include "qschematype_p.h"
+#include <qatomiccomparator_p.h>
+#include <qderivedstring_p.h>
+#include <qitem_p.h>
+#include <qreportcontext_p.h>
+#include <qschematype_p.h>
 
 QT_BEGIN_NAMESPACE
 

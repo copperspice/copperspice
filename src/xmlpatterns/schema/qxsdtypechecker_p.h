@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdTypeChecker_H
-#define Patternist_XsdTypeChecker_H
+#ifndef QXsdTypeChecker_P_H
+#define QXsdTypeChecker_P_H
 
 #include <QtXmlPatterns/QSourceLocation>
-#include "qschematype_p.h"
-#include "qsourcelocationreflection_p.h"
-#include "qxsdschemacontext_p.h"
+#include <qschematype_p.h>
+#include <qsourcelocationreflection_p.h>
+#include <qxsdschemacontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

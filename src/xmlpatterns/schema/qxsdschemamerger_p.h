@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdSchemaMerger_H
-#define Patternist_XsdSchemaMerger_H
+#ifndef QXsdSchemaMerger_P_H
+#define QXsdSchemaMerger_P_H
 
-#include "qxsdschema_p.h"
+#include <qxsdschema_p.h>
 
 QT_BEGIN_NAMESPACE
 

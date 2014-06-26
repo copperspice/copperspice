@@ -23,19 +23,19 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_TokenSource_P_H
-#define Patternist_TokenSource_P_H
+#ifndef QTokenSource_P_H
+#define QTokenSource_P_H
 
-#include "qatomiccomparator_p.h"
-#include "qatomicmathematician_p.h"
-#include "qcombinenodes_p.h"
-#include "qfunctionargument_p.h"
-#include "qitem_p.h"
-#include "qitemtype_p.h"
-#include "qorderby_p.h"
-#include "qpath_p.h"
-#include "qquerytransformparser_p.h"
-#include "qvalidate_p.h"
+#include <qatomiccomparator_p.h>
+#include <qatomicmathematician_p.h>
+#include <qcombinenodes_p.h>
+#include <qfunctionargument_p.h>
+#include <qitem_p.h>
+#include <qitemtype_p.h>
+#include <qorderby_p.h>
+#include <qpath_p.h>
+#include <qquerytransformparser_p.h>
+#include <qvalidate_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_UnaryExpression_P_H
-#define Patternist_UnaryExpression_P_H
+#ifndef QUnaryExpression_P_H
+#define QUnaryExpression_P_H
 
 QT_BEGIN_NAMESPACE
 
-#include "qarithmeticexpression_p.h"
+#include <qarithmeticexpression_p.h>
 
 namespace QPatternist {
 

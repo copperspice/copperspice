@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_DynamicContextStore_H
-#define Patternist_DynamicContextStore_H
+#ifndef QDynamicContextStore_P_H
+#define QDynamicContextStore_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

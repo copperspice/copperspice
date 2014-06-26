@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdAttributeUse_H
-#define Patternist_XsdAttributeUse_H
+#ifndef QXsdAttributeUse_P_H
+#define QXsdAttributeUse_P_H
 
-#include "qxsdattribute_p.h"
-#include "qxsdattributeterm_p.h"
+#include <qxsdattribute_p.h>
+#include <qxsdattributeterm_p.h>
 #include <QtCore/QList>
 
 QT_BEGIN_NAMESPACE

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CombineNodes_H
-#define Patternist_CombineNodes_H
+#ifndef QCombineNodes_P_H
+#define QCombineNodes_P_H
 
-#include "qpaircontainer_p.h"
+#include <qpaircontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

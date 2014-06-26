@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_UntypedAtomic_H
-#define Patternist_UntypedAtomic_H
+#ifndef QUntypedAtomic_P_H
+#define QUntypedAtomic_P_H
 
-#include "qatomicstring_p.h"
+#include <qatomicstring_p.h>
 
 QT_BEGIN_NAMESPACE
 

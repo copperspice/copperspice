@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AbstractFunctionFactory_H
-#define Patternist_AbstractFunctionFactory_H
+#ifndef QAbstractFunctionFactory_P_H
+#define QAbstractFunctionFactory_P_H
 
-#include "qcommonnamespaces_p.h"
-#include "qfunctionfactory_p.h"
-#include "qfunctionsignature_p.h"
+#include <qcommonnamespaces_p.h>
+#include <qfunctionfactory_p.h>
+#include <qfunctionsignature_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -1163,8 +1163,8 @@ static int indexOfMetaEnum(const QMetaObject *meta, const QByteArray &str)
 // Helper function for resolving methods
 // Largely based on code in QtScript for compatibility reasons
 static int findMethodIndex(ExecState* exec,
-                           const QMetaObject* meta,
-                           const QByteArray& signature,
+                           const QMetaObject *meta,
+                           const QByteArray &signature,
                            bool allowPrivate,
                            QVarLengthArray<QVariant, 10> &vars,
                            void** vvars,
@@ -1172,7 +1172,7 @@ static int findMethodIndex(ExecState* exec,
 {
     QList<int> matchingIndices;
 
-    bool overloads = !signature.contains('(');
+    bool overloads = ! signature.contains('(');
 
     int count = meta->methodCount();
     for (int i = count - 1; i >= 0; --i) {
@@ -1183,11 +1183,13 @@ static int findMethodIndex(ExecState* exec,
             continue;
 
         // try and find all matching named methods
-        if (m.signature() == signature)
+        if (m.methodSignature() == signature)
             matchingIndices.append(i);
+
         else if (overloads) {
-            QByteArray rawsignature = m.signature();
+            QByteArray rawsignature = m.methodSignature();
             rawsignature.truncate(rawsignature.indexOf('('));
+
             if (rawsignature == signature)
                 matchingIndices.append(i);
         }
@@ -1260,16 +1262,16 @@ static int findMethodIndex(ExecState* exec,
 
         // If the native method requires more arguments than what was passed from JavaScript
         if (exec->argumentCount() + 1 < static_cast<unsigned>(types.count())) {
-            qMatchDebug() << "Match:too few args for" << method.signature();
+            qMatchDebug() << "Match:too few args for" << method.methodSignature().constData();
             tooFewArgs.append(index);
             continue;
         }
 
         if (unresolvedTypes) {
-            qMatchDebug() << "Match:unresolved arg types for" << method.signature();
+            qMatchDebug() << "Match:unresolved arg types for" << method.methodSignature().constData();
+
             // remember it so we can give an error message later, if necessary
-            unresolved.append(QtMethodMatchData(/*matchDistance=*/INT_MAX, index,
-                                                   types, QVarLengthArray<QVariant, 10>()));
+            unresolved.append(QtMethodMatchData(/*matchDistance=*/INT_MAX, index, types, QVarLengthArray<QVariant, 10>()));
             continue;
         }
 
@@ -1296,7 +1298,8 @@ static int findMethodIndex(ExecState* exec,
             }
         }
 
-        qMatchDebug() << "Match: " << method.signature() << (converted ? "converted":"failed to convert") << "distance " << matchDistance;
+        qMatchDebug() << "Match: " << method.methodSignature().constData() << (converted ? "converted":"failed to convert") 
+                  << "distance " << matchDistance;
 
         if (converted) {
             if ((exec->argumentCount() + 1 == static_cast<unsigned>(types.count()))
@@ -1336,9 +1339,11 @@ static int findMethodIndex(ExecState* exec,
                 if (i > 0)
                     message += QLatin1String("\n");
                 QMetaMethod mtd = meta->method(conversionFailed.at(i));
-                message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.signature()));
+                message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.methodSignature().constData()));
             }
+
             *pError = throwError(exec, createTypeError(exec, message.toLatin1().constData()));
+
         } else if (!unresolved.isEmpty()) {
             QtMethodMatchData argsInstance = unresolved.first();
             int unresolvedIndex = argsInstance.firstUnresolvedIndex();
@@ -1355,8 +1360,9 @@ static int findMethodIndex(ExecState* exec,
                 if (i > 0)
                     message += QLatin1String("\n");
                 QMetaMethod mtd = meta->method(tooFewArgs.at(i));
-                message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.signature()));
+                message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.methodSignature().constData()));
             }
+
             *pError = throwError(exec, createSyntaxError(exec, message.toLatin1().constData()));
         }
     }
@@ -1376,7 +1382,7 @@ static int findMethodIndex(ExecState* exec,
                     if (i > 0)
                         message += QLatin1String("\n");
                     QMetaMethod mtd = meta->method(candidates.at(i).index);
-                    message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.signature()));
+                    message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.methodSignature().constData()));
                 }
             }
             *pError = throwError(exec, createTypeError(exec, message.toLatin1().constData()));

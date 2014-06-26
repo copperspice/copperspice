@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdSchemaParserContext_H
-#define Patternist_XsdSchemaParserContext_H
+#ifndef QXsdSchemaParserContext_P_H
+#define QXsdSchemaParserContext_P_H
 
-#include "qmaintainingreader_p.h" // for definition of ElementDescription
-#include "qxsdschematoken_p.h"
-#include "qxsdschema_p.h"
-#include "qxsdschemachecker_p.h"
-#include "qxsdschemacontext_p.h"
-#include "qxsdschemaresolver_p.h"
+#include <qmaintainingreader_p.h>    // for definition of ElementDescription
+#include <qxsdschematoken_p.h>
+#include <qxsdschema_p.h>
+#include <qxsdschemachecker_p.h>
+#include <qxsdschemacontext_p.h>
+#include <qxsdschemaresolver_p.h>
 #include <QtCore/QSharedData>
 
 QT_BEGIN_NAMESPACE

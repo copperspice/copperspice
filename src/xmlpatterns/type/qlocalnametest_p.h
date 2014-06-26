@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_LocalNameTest_P_H
-#define Patternist_LocalNameTest_P_H
+#ifndef QLocalNameTest_P_H
+#define QLocalNameTest_P_H
 
-#include "qabstractnodetest_p.h"
+#include <qabstractnodetest_p.h>
 
 template<typename Key, typename Value> class QHash;
 

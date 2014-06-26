@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_StaticBaseURIContext_P_H
-#define Patternist_StaticBaseURIContext_P_H
+#ifndef QStaticBaseURIContext_P_H
+#define QStaticBaseURIContext_P_H
 
-#include "qdelegatingstaticcontext_p.h"
+#include <qdelegatingstaticcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

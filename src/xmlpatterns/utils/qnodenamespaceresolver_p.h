@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_NodeNamespaceResolver_P_H
-#define Patternist_NodeNamespaceResolver_P_H
+#ifndef QNodeNamespaceResolver_P_H
+#define QNodeNamespaceResolver_P_H
 
 #include <QHash>
-#include "qnamespaceresolver_p.h"
-#include "qitem_p.h"
+#include <qnamespaceresolver_p.h>
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

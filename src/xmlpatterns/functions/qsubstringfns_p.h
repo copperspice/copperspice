@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SubStringFNs_P_H
-#define Patternist_SubStringFNs_P_H
+#ifndef QSubStringFNs_P_H
+#define QSubStringFNs_P_H
 
-#include "qcomparescaseaware_p.h"
+#include <qcomparescaseaware_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ExternalVariableLoader_H
-#define Patternist_ExternalVariableLoader_H
+#ifndef QExternalVariableLoader_P_H
+#define QExternalVariableLoader_P_H
 
-#include "qitem_p.h"
-#include "qsequencetype_p.h"
-#include "qxmlname.h"
+#include <qitem_p.h>
+#include <qsequencetype_p.h>
+#include <qxmlname.h>
 
 QT_BEGIN_NAMESPACE
 

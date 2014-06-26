@@ -203,13 +203,14 @@ void QtInstance::end()
     // Do nothing.
 }
 
-void QtInstance::getPropertyNames(ExecState* exec, PropertyNameArray& array)
+void QtInstance::getPropertyNames(ExecState *exec, PropertyNameArray &array)
 {
     // This is the enumerable properties, so put:
     // properties
     // dynamic properties
     // slots
     QObject* obj = getObject();
+
     if (obj) {
         const QMetaObject* meta = obj->metaObject();
 
@@ -229,8 +230,9 @@ void QtInstance::getPropertyNames(ExecState* exec, PropertyNameArray& array)
         const int methodCount = meta->methodCount();
         for (i = 0; i < methodCount; i++) {
             QMetaMethod method = meta->method(i);
+
             if (method.access() != QMetaMethod::Private)
-                array.add(Identifier(exec, method.signature()));
+                array.add(Identifier(exec, method.methodSignature().constData() )); 
         }
     }
 }

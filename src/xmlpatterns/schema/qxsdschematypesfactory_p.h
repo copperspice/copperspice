@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdSchemaTypesFactory_H
-#define Patternist_XsdSchemaTypesFactory_H
+#ifndef QXsdSchemaTypesFactory_P_H
+#define QXsdSchemaTypesFactory_P_H
 
 #include <QtCore/QHash>
-#include "qschematypefactory_p.h"
+#include <qschematypefactory_p.h>
 
 QT_BEGIN_NAMESPACE
 

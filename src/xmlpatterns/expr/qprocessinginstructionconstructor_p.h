@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ProcessingInstructionConstructor_P_H
-#define Patternist_ProcessingInstructionConstructor_P_H
+#ifndef QProcessingInstructionConstructor_P_H
+#define QProcessingInstructionConstructor_P_H
 
-#include "qpaircontainer_p.h"
+#include <qpaircontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

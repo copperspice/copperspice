@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_NamedSchemaComponent_H
-#define Patternist_NamedSchemaComponent_H
+#ifndef QNamedSchemaComponent_P_H
+#define QNamedSchemaComponent_P_H
 
-#include "qnamepool_p.h"
-#include "qschemacomponent_p.h"
-#include "qxmlname.h"
+#include <qnamepool_p.h>
+#include <qschemacomponent_p.h>
+#include <qxmlname.h>
 
 QT_BEGIN_NAMESPACE
 

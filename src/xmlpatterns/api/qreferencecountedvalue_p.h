@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef QPatternist_ReferenceCountedValue_p_h
-#define QPatternist_ReferenceCountedValue_p_h
+#ifndef QReferenceCountedValue_P_H
+#define QReferenceCountedValue_P_H
 
 QT_BEGIN_NAMESPACE
 

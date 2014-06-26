@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AtomicComparators_P_H
-#define Patternist_AtomicComparators_P_H
+#ifndef QAtomicComparators_P_H
+#define QAtomicComparators_P_H
 
-#include "qabstractfloat_p.h"
-#include "qatomiccomparator_p.h"
-#include "qprimitives_p.h"
+#include <qabstractfloat_p.h>
+#include <qatomiccomparator_p.h>
+#include <qprimitives_p.h>
 
 QT_BEGIN_NAMESPACE
 

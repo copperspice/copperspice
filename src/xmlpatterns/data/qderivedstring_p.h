@@ -27,10 +27,10 @@
 #define QDerivedString_P_H
 
 #include <QRegExp>
-#include "qxmlutils_p.h"
-#include "qbuiltintypes_p.h"
-#include "qpatternistlocale_p.h"
-#include "qvalidationerror_p.h"
+#include <qxmlutils_p.h>
+#include <qbuiltintypes_p.h>
+#include <qpatternistlocale_p.h>
+#include <qvalidationerror_p.h>
 
 QT_BEGIN_NAMESPACE
 

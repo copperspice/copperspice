@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_NamespaceConstructor_H
-#define Patternist_NamespaceConstructor_H
+#ifndef QNamespaceConstructor_P_H
+#define QNamespaceConstructor_P_H
 
-#include "qemptycontainer_p.h"
+#include <qemptycontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ContextNodeChecker_P_H
-#define Patternist_ContextNodeChecker_P_H
+#ifndef QContextNodeChecker_P_H
+#define QContextNodeChecker_P_H
 
-#include "qfunctioncall_p.h"
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

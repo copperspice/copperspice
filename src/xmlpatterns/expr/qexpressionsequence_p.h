@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ExpressionSequence_H
-#define Patternist_ExpressionSequence_H
+#ifndef QExpressionSequence_P_H
+#define QExpressionSequence_P_H
 
-#include "qunlimitedcontainer_p.h"
+#include <qunlimitedcontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

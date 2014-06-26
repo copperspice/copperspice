@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_GenerateIDFN_P_H
-#define Patternist_GenerateIDFN_P_H
+#ifndef QGenerateIDFN_P_H
+#define QGenerateIDFN_P_H
 
-#include "qfunctioncall_p.h"
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

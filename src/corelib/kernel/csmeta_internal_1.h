@@ -187,10 +187,10 @@ struct cs_underlying_type<QFlags<T>>: public std::underlying_type<T> {
 };
 
 template < class T, class = void, class = typename std::enable_if < !std::is_constructible<QVariant, T>::value >::type >
-QVariant convertToQVariant(T data);
+QVariant cs_convertToQVariant(T data);
 
 template<class T, class = typename std::enable_if<std::is_constructible<QVariant, T>::value>::type>
-QVariant convertToQVariant(T data);
+QVariant cs_convertToQVariant(T data);
 
 template < class T, class = void, class = void, class = typename std::enable_if < (! is_enum_or_flag<T>::value) &&
            ! QMetaTypeId2<T>::Defined >::type >
@@ -274,7 +274,7 @@ QVariant SpiceJarRead<T, R>::runV(const QObject *obj) const
    QVariant retval;
 
    if (m_func)  {
-      retval = convertToQVariant( m_func() );
+      retval = cs_convertToQVariant( m_func() );
 
    } else {
       const T *testObj = dynamic_cast< const T *>(obj);
@@ -283,7 +283,7 @@ QVariant SpiceJarRead<T, R>::runV(const QObject *obj) const
          return QVariant();
       }
 
-      retval = convertToQVariant( ((testObj)->*(m_method))() );
+      retval = cs_convertToQVariant( ((testObj)->*(m_method))() );
    }
 
    return retval;
@@ -796,33 +796,6 @@ std::tuple<Ts...> TeaCup_Data<Ts...>::getData() const
 {
    return m_data;
 }
-
-/*
-template<size_t K, class ...Ts>
-QVariant cs_unpack_teacup_internal(const std::tuple<Ts...> &data)
-{
-   QVariant temp = QVariant::fromValue(std::get<K>(data));
-   return temp;
-}
-
-template<class ...Ts, size_t ...Ks>
-QList<QVariant> cs_unpack_teacup(const std::tuple<Ts...> &data, Index_Sequence<Ks...> dummy)
-{
-   std::initializer_list<QVariant> temp{cs_unpack_teacup_internal<Ks>(data)...};
-   QList<QVariant> retval{temp};
-
-   return retval;
-}
-
-template<class ...Ts>
-QList<QVariant> TeaCup_Data<Ts...>::toVariantList() const
-{
-   QList<QVariant> retval = cs_unpack_teacup(m_data, typename Index_Sequence_For<Ts...>::type{} );
-
-   return retval;
-}
-
-*/
 
 
 // ***********

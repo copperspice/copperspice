@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AtomicCaster_P_H
-#define Patternist_AtomicCaster_P_H
+#ifndef QAtomicCaster_P_H
+#define QAtomicCaster_P_H
 
-#include "qdynamiccontext_p.h"
-#include "qitem_p.h"
-#include "qatomictypedispatch_p.h"
+#include <qdynamiccontext_p.h>
+#include <qitem_p.h>
+#include <qatomictypedispatch_p.h>
 
 QT_BEGIN_NAMESPACE
 

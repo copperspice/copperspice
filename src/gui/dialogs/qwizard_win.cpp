@@ -26,24 +26,24 @@
 #ifndef QT_NO_WIZARD
 #ifndef QT_NO_STYLE_WINDOWSVISTA
 
-#include "qwizard_win_p.h"
+#include <qwizard_win_p.h>
 #include <qsystemlibrary_p.h>
-#include "qwizard.h"
-#include "qpaintengine.h"
-#include "qapplication.h"
+#include <qwizard.h>
+#include <qpaintengine.h>
+#include <qapplication.h>
 #include <QMouseEvent>
 #include <QDesktopWidget>
 
-// Note, these tests are duplicates in qwindowsxpstyle_p.h.
+// test is duplicated in qwizard_win.cpp and qwindowsxpstyle_p.h
 #ifdef Q_CC_GNU
-#  include <w32api.h>
-#  if (__W32API_MAJOR_VERSION >= 3 || (__W32API_MAJOR_VERSION == 2 && __W32API_MINOR_VERSION >= 5))
-#    ifdef _WIN32_WINNT
-#      undef _WIN32_WINNT
-#    endif
-#    define _WIN32_WINNT 0x0501
-#    include <commctrl.h>
-#  endif
+
+#ifdef _WIN32_WINNT
+# undef _WIN32_WINNT
+#endif
+
+#define _WIN32_WINNT 0x0501       // Windows XP
+#include <commctrl.h>
+
 #endif
 
 #include <uxtheme.h>

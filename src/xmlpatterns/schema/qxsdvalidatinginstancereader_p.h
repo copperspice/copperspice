@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdValidatingInstanceReader_H
-#define Patternist_XsdValidatingInstanceReader_H
+#ifndef QXsdValidatingInstanceReader_P_H
+#define QXsdValidatingInstanceReader_P_H
 
-#include "qxsdidchelper_p.h"
-#include "qxsdinstancereader_p.h"
-#include "qxsdstatemachine_p.h"
-#include "qxsdvalidatedxmlnodemodel_p.h"
+#include <qxsdidchelper_p.h>
+#include <qxsdinstancereader_p.h>
+#include <qxsdstatemachine_p.h>
+#include <qxsdvalidatedxmlnodemodel_p.h>
 #include <QtCore/QStack>
 
 QT_BEGIN_NAMESPACE

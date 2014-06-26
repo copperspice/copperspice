@@ -336,9 +336,11 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    const char *receiverClass = receiver->metaObject()->className();
 
    QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
-   const char *signalName = signalMetaMethod.signature();
 
-   if (! signalName)  {
+   QByteArray signature   = signalMetaMethod.methodSignature();
+   const char *signalName = signature.constData();
+
+   if (signature.isEmpty())  {
       qWarning("%s%s%s%s%s", "QObject::connect() ", senderClass, "::<Invalid Signal>",
                " Unable to connect to receiver in ", receiverClass);
       return false;
@@ -355,12 +357,13 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    }
 
    //
-   Bento<void (SignalClass::*)(SignalArgs...)> *signalMethod_Bento = new Bento<void (SignalClass::*)(SignalArgs...)>
-   (signalMethod);
+   Bento<void (SignalClass::*)(SignalArgs...)> *signalMethod_Bento = 
+         new Bento<void (SignalClass::*)(SignalArgs...)>(signalMethod);
+
    Bento<void (SlotClass::*)(SlotArgs...)> *slotMethod_Bento = new Bento<void (SlotClass::*)(SlotArgs...)>(slotMethod);
 
    std::unique_lock<std::mutex> senderLock {sender->m_mutex_ToReceiver};
-   std::unique_lock<std::mutex> receiverLokc {receiver->m_mutex_FromSender};
+   std::unique_lock<std::mutex> receiverLock {receiver->m_mutex_FromSender};
 
    if (type & Qt::UniqueConnection) {
       // user passed enum to ensure the connection is not added twice
@@ -561,9 +564,11 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    const char *receiverClass = receiver->metaObject()->className();
 
    QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
-   const char *signalName = signalMetaMethod.signature();
 
-   if (! signalName)  {
+   QByteArray signature   = signalMetaMethod.methodSignature();
+   const char *signalName = signature.constData();
+
+   if (signature.isEmpty())  {
       qWarning("%s%s%s%s%s", "QObject::connect() ", senderClass, "::<Invalid Signal> ",
                " Unable to connect to receiver in ", receiverClass);
       return false;
@@ -660,21 +665,21 @@ bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)
 
    // calling the const char * (Qt4 API version)
    const QMetaObject *senderMetaObject = sender->metaObject();
-   const char *signalName;
+   QByteArray signalName;
 
    if (senderMetaObject) {
       QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
-      signalName = signalMetaMethod.signature();
+      signalName = signalMetaMethod.methodSignature();
 
       // call the Qt5 API version
       const_cast<Sender *>(sender)->disconnectNotify(signalMetaMethod);
    }
 
-   if (signalName)  {
-      const_cast<Sender *>(sender)->disconnectNotify(signalName);
-
-   } else {
+   if (signalName.isEmpty())  {
       const_cast<Sender *>(sender)->disconnectNotify(0);
+      
+   } else {
+      const_cast<Sender *>(sender)->disconnectNotify(signalName.constData());
 
    }
 
@@ -780,12 +785,14 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
 
       // find registerd methods which match the name
       for (int index = 0; index < metaObject->methodCount(); ++index) {
-         QMetaMethod testMethod = metaObject->method(index);
-
+        
          int numOfChars = sig.indexOf('(') + 1;
 
-         if (strncmp(testMethod.signature(), sig.constData(), numOfChars) == 0)  {
-            msgList.append(testMethod.signature());
+         QMetaMethod testMethod   = metaObject->method(index);
+         QByteArray testSignature = testMethod.methodSignature();   
+
+         if (strncmp(testSignature.constData(), sig.constData(), numOfChars) == 0)  {
+            msgList.append(testSignature);
 
             // test if the related method matches
             if (testMethod.invoke(object, type, retval, std::forward<Ts>(Vs.getData())...)) {
@@ -831,12 +838,14 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
 
       // find registerd methods which match the name
       for (int index = 0; index < metaObject->methodCount(); ++index) {
-         QMetaMethod testMethod = metaObject->method(index);
-
+         
          int numOfChars = sig.indexOf('(') + 1;
 
-         if (strncmp(testMethod.signature(), sig.constData(), numOfChars) == 0)  {
-            msgList.append(testMethod.signature());
+         QMetaMethod testMethod   = metaObject->method(index);
+         QByteArray testSignature = testMethod.methodSignature();
+
+         if (strncmp(testSignature.constData(), sig.constData(), numOfChars) == 0)  {
+            msgList.append(testSignature);
 
             // test if the related method matches
             if (testMethod.invoke(object, type, std::forward<Ts>(Vs.getData())...)) {

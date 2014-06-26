@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_DayTimeDuration_P_H
-#define Patternist_DayTimeDuration_P_H
+#ifndef QDayTimeDuration_P_H
+#define QDayTimeDuration_P_H
 
-#include "qabstractduration_p.h"
-#include "qitem_p.h"
+#include <qabstractduration_p.h>
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

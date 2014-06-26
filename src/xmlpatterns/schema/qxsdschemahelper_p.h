@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdSchemaHelper_H
-#define Patternist_XsdSchemaHelper_H
+#ifndef QXsdSchemaHelper_P_H
+#define QXsdSchemaHelper_P_H
 
-#include "qcomparisonfactory_p.h"
-#include "qschematype_p.h"
-#include "qxsdattributegroup_p.h"
-#include "qxsdelement_p.h"
-#include "qxsdparticle_p.h"
-#include "qxsdschemacontext_p.h"
-#include "qxsdwildcard_p.h"
+#include <qcomparisonfactory_p.h>
+#include <qschematype_p.h>
+#include <qxsdattributegroup_p.h>
+#include <qxsdelement_p.h>
+#include <qxsdparticle_p.h>
+#include <qxsdschemacontext_p.h>
+#include <qxsdwildcard_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ParserContext_P_H
-#define Patternist_ParserContext_P_H
+#ifndef QParserContext_P_H
+#define QParserContext_P_H
 
 #include <QFlags>
 #include <QSharedData>
@@ -33,13 +33,13 @@
 #include <QtGlobal>
 #include <QXmlQuery>
 
-#include "qbuiltintypes_p.h"
-#include "qfunctionsignature_p.h"
-#include "qorderby_p.h"
-#include "qtemplatemode_p.h"
-#include "quserfunctioncallsite_p.h"
-#include "quserfunction_p.h"
-#include "qvariabledeclaration_p.h"
+#include <qbuiltintypes_p.h>
+#include <qfunctionsignature_p.h>
+#include <qorderby_p.h>
+#include <qtemplatemode_p.h>
+#include <quserfunctioncallsite_p.h>
+#include <quserfunction_p.h>
+#include <qvariabledeclaration_p.h>
 
 QT_BEGIN_NAMESPACE
 

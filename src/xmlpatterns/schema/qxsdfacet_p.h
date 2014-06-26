@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdFacet_H
-#define Patternist_XsdFacet_H
+#ifndef QXsdFacet_P_H
+#define QXsdFacet_P_H
 
-#include "qitem_p.h"
-#include "qnamedschemacomponent_p.h"
-#include "qxsdannotated_p.h"
-#include "qxsdassertion_p.h"
+#include <qitem_p.h>
+#include <qnamedschemacomponent_p.h>
+#include <qxsdannotated_p.h>
+#include <qxsdassertion_p.h>
 #include <QtCore/QList>
 
 QT_BEGIN_NAMESPACE

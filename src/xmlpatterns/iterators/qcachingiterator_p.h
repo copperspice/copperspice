@@ -23,14 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CachingIterator_P_H
-#define Patternist_CachingIterator_P_H
+#ifndef QCachingIterator_P_H
+#define QCachingIterator_P_H
 
 #include <QList>
 #include <QVector>
-
-#include "qdynamiccontext_p.h"
-#include "qitem_p.h"
+#include <qdynamiccontext_p.h>
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

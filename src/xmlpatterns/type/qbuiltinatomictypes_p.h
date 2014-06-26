@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_BuiltinAtomicTypes_P_H
-#define Patternist_BuiltinAtomicTypes_P_H
+#ifndef QBuiltinAtomicTypes_P_H
+#define QBuiltinAtomicTypes_P_H
 
-#include "qatomiccasterlocators_p.h"
-#include "qatomiccomparatorlocators_p.h"
-#include "qbuiltinatomictype_p.h"
+#include <qatomiccasterlocators_p.h>
+#include <qatomiccomparatorlocators_p.h>
+#include <qbuiltinatomictype_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -26,8 +26,8 @@
 #ifndef QInsertionIterator_P_H
 #define QInsertionIterator_P_H
 
-#include "qabstractxmlforwarditerator_p.h"
-#include "qitem_p.h"
+#include <qabstractxmlforwarditerator_p.h>
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XPathHelper_P_H
-#define Patternist_XPathHelper_P_H
+#ifndef QXPathHelper_P_H
+#define QXPathHelper_P_H
 
-#include "qcommonnamespaces_p.h"
-#include "qitem_p.h"
-#include "qpatternistlocale_p.h"
-#include "qreportcontext_p.h"
+#include <qcommonnamespaces_p.h>
+#include <qitem_p.h>
+#include <qpatternistlocale_p.h>
+#include <qreportcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

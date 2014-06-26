@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_DateTimeFNs_P_H
-#define Patternist_DateTimeFNs_P_H
+#ifndef QDateTimeFNs_P_H
+#define QDateTimeFNs_P_H
 
-#include "qatomiccomparator_p.h"
-#include "qcommonvalues_p.h"
-#include "qschemadatetime_p.h"
-#include "qdaytimeduration_p.h"
-#include "qdecimal_p.h"
-#include "qinteger_p.h"
-#include "qfunctioncall_p.h"
+#include <qatomiccomparator_p.h>
+#include <qcommonvalues_p.h>
+#include <qschemadatetime_p.h>
+#include <qdaytimeduration_p.h>
+#include <qdecimal_p.h>
+#include <qinteger_p.h>
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

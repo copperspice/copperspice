@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_NamespaceBinding_P_H
-#define Patternist_NamespaceBinding_P_H
+#ifndef QNamespaceBinding_P_H
+#define QNamespaceBinding_P_H
 
 template<typename T> class QVector;
 
-#include "qxmlname.h"
+#include <qxmlname.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef QPatternist_ResourceDelegator_p_H
-#define QPatternist_ResourceDelegator_p_H
+#ifndef QResourceDelegator_P_H
+#define QResourceDelegator_P_H
 
 #include <QSet>
 #include <QUrl>
-#include "qdeviceresourceloader_p.h"
+#include <qdeviceresourceloader_p.h>
 
 QT_BEGIN_NAMESPACE
 

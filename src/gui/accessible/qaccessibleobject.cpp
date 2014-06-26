@@ -47,7 +47,7 @@ QList<QByteArray> QAccessibleObjectPrivate::actionList() const
 {
    QList<QByteArray> actionList;
 
-   if (!object) {
+   if (! object) {
       return actionList;
    }
 
@@ -63,12 +63,14 @@ QList<QByteArray> QAccessibleObjectPrivate::actionList() const
          continue;
       }
 
-      if (!qstrcmp(member.tag(), "QACCESSIBLE_SLOT")) {
-         if (member.signature() == defaultAction) {
+      if (! qstrcmp(member.tag(), "QACCESSIBLE_SLOT")) {
+
+         if (member.methodSignature() == defaultAction) {
             actionList.prepend(defaultAction);
          } else {
-            actionList << member.signature();
+            actionList << member.methodSignature();
          }
+
       }
    }
 

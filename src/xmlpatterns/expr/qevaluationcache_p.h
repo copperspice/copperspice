@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_EvaluationCache_H
-#define Patternist_EvaluationCache_H
+#ifndef QEvaluationCache_P_H
+#define QEvaluationCache_P_H
 
-#include "qcachingiterator_p.h"
-#include "qcommonsequencetypes_p.h"
-#include "qnodebuilder_p.h"
-#include "qoperandsiterator_p.h"
-#include "qsinglecontainer_p.h"
-#include "qvariabledeclaration_p.h"
+#include <qcachingiterator_p.h>
+#include <qcommonsequencetypes_p.h>
+#include <qnodebuilder_p.h>
+#include <qoperandsiterator_p.h>
+#include <qsinglecontainer_p.h>
+#include <qvariabledeclaration_p.h>
 
 QT_BEGIN_NAMESPACE
 

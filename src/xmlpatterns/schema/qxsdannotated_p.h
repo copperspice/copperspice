@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdAnnotated_H
-#define Patternist_XsdAnnotated_H
+#ifndef QXsdAnnotated_P_H
+#define QXsdAnnotated_P_H
 
-#include "qxsdannotation_p.h"
+#include <qxsdannotation_p.h>
 
 QT_BEGIN_NAMESPACE
 

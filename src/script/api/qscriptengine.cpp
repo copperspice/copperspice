@@ -615,25 +615,27 @@ JSC::JSValue JSC_HOST_CALL functionDisconnect(JSC::ExecState *exec, JSC::JSObjec
 {
 
    if (args.size() == 0) {
-      return JSC::throwError(exec, JSC::GeneralError, "Function.prototype.disconnect: no arguments given");
+      return JSC::throwError(exec, JSC::GeneralError, "Function.prototype.disconnect() No arguments passed");
    }
 
-   if (!JSC::asObject(thisObject)->inherits(&QScript::QtFunction::info)) {
-      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.disconnect: this object is not a signal");
+   if (! JSC::asObject(thisObject)->inherits(&QScript::QtFunction::info)) {
+      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.disconnect() Object is not a signal");
    }
 
    QScript::QtFunction *qtSignal = static_cast<QScript::QtFunction *>(JSC::asObject(thisObject));
 
    const QMetaObject *meta = qtSignal->metaObject();
-   if (!meta) {
-      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.discconnect: cannot disconnect from deleted QObject");
+   if (! meta) {
+      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.discconnect() Can not disconnect from deleted QObject");
    }
 
    QMetaMethod sig = meta->method(qtSignal->initialIndex());
+
    if (sig.methodType() != QMetaMethod::Signal) {
-      QString message = QString::fromLatin1("Function.prototype.disconnect: %0::%1 is not a signal")
+      QString message = QString::fromLatin1("Function.prototype.disconnect() %0::%1 is not a signal")
                         .arg(QLatin1String(qtSignal->metaObject()->className()))
-                        .arg(QLatin1String(sig.signature()));
+                        .arg(QLatin1String(sig.methodSignature().constData()));
+
       return JSC::throwError(exec, JSC::TypeError, message);
    }
 
@@ -642,6 +644,7 @@ JSC::JSValue JSC_HOST_CALL functionDisconnect(JSC::ExecState *exec, JSC::JSObjec
    JSC::JSValue receiver;
    JSC::JSValue slot;
    JSC::JSValue arg0 = args.at(0);
+
    if (args.size() < 2) {
       slot = arg0;
    } else {
@@ -656,15 +659,16 @@ JSC::JSValue JSC_HOST_CALL functionDisconnect(JSC::ExecState *exec, JSC::JSObjec
       }
    }
 
-   if (!isFunction(slot)) {
-      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.disconnect: target is not a function");
+   if (! isFunction(slot)) {
+      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.disconnect() Target is not a function");
    }
 
    bool ok = engine->scriptDisconnect(thisObject, receiver, slot);
    if (!ok) {
-      QString message = QString::fromLatin1("Function.prototype.disconnect: failed to disconnect from %0::%1")
+      QString message = QString::fromLatin1("Function.prototype.disconnect() Failed to disconnect from %0::%1")
                         .arg(QLatin1String(qtSignal->metaObject()->className()))
-                        .arg(QLatin1String(sig.signature()));
+                        .arg(QLatin1String(sig.methodSignature().constData()));
+
       return JSC::throwError(exec, JSC::GeneralError, message);
    }
 
@@ -675,42 +679,49 @@ JSC::JSValue JSC_HOST_CALL functionConnect(JSC::ExecState *exec, JSC::JSObject *
       const JSC::ArgList &args)
 {
    if (args.size() == 0) {
-      return JSC::throwError(exec, JSC::GeneralError, "Function.prototype.connect: no arguments given");
+      return JSC::throwError(exec, JSC::GeneralError, "Function.prototype.connect() No arguments passed");
    }
 
    if (!JSC::asObject(thisObject)->inherits(&QScript::QtFunction::info)) {
-      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.connect: this object is not a signal");
+      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.connect() Object is not a signal");
    }
 
    QScript::QtFunction *qtSignal = static_cast<QScript::QtFunction *>(JSC::asObject(thisObject));
 
    const QMetaObject *meta = qtSignal->metaObject();
    if (!meta) {
-      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.connect: cannot connect to deleted QObject");
+      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.connect() Can not connect to deleted QObject");
    }
 
    QMetaMethod sig = meta->method(qtSignal->initialIndex());
    if (sig.methodType() != QMetaMethod::Signal) {
-      QString message = QString::fromLatin1("Function.prototype.connect: %0::%1 is not a signal")
+      QString message = QString::fromLatin1("Function.prototype.connect() %0::%1 is not a signal")
                         .arg(QLatin1String(qtSignal->metaObject()->className()))
-                        .arg(QLatin1String(sig.signature()));
+                        .arg(QLatin1String(sig.methodSignature().constData()));
+
       return JSC::throwError(exec, JSC::TypeError, message);
    }
 
    {
       QList<int> overloads = qtSignal->overloadedIndexes();
+
       if (!overloads.isEmpty()) {
          overloads.append(qtSignal->initialIndex());
-         QByteArray signature = sig.signature();
-         QString message = QString::fromLatin1("Function.prototype.connect: ambiguous connect to %0::%1(); candidates are\n")
+
+         QByteArray signature = sig.methodSignature();
+
+         QString message = QString::fromLatin1("Function.prototype.connect() Ambiguous connect to %0::%1(); candidates are\n")
                            .arg(QLatin1String(qtSignal->metaObject()->className()))
                            .arg(QLatin1String(signature.left(signature.indexOf('('))));
+
          for (int i = 0; i < overloads.size(); ++i) {
             QMetaMethod mtd = meta->method(overloads.at(i));
-            message.append(QString::fromLatin1("    %0\n").arg(QString::fromLatin1(mtd.signature())));
+            message.append(QString::fromLatin1("    %0\n").arg(QString::fromLatin1(mtd.methodSignature().constData())));
          }
+
          message.append(QString::fromLatin1("Use e.g. object['%0'].connect() to connect to a particular overload")
                         .arg(QLatin1String(signature)));
+
          return JSC::throwError(exec, JSC::GeneralError, message);
       }
    }
@@ -735,14 +746,15 @@ JSC::JSValue JSC_HOST_CALL functionConnect(JSC::ExecState *exec, JSC::JSObject *
    }
 
    if (!isFunction(slot)) {
-      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.connect: target is not a function");
+      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.connect() Target is not a function");
    }
 
    bool ok = engine->scriptConnect(thisObject, receiver, slot, Qt::AutoConnection);
    if (!ok) {
-      QString message = QString::fromLatin1("Function.prototype.connect: failed to connect to %0::%1")
+      QString message = QString::fromLatin1("Function.prototype.connect() Failed to connect to %0::%1")
                         .arg(QLatin1String(qtSignal->metaObject()->className()))
-                        .arg(QLatin1String(sig.signature()));
+                        .arg(QLatin1String(sig.methodSignature().constData()));
+
       return JSC::throwError(exec, JSC::GeneralError, message);
    }
 
@@ -1044,6 +1056,7 @@ QScriptEnginePrivate::QScriptEnginePrivate()
    // ### rather than extending Function.prototype, consider creating a QtSignal.prototype
    globalObject->functionPrototype()->putDirectFunction(exec, new (exec)JSC::NativeFunctionWrapper(exec,
          globalObject->prototypeFunctionStructure(), 1, JSC::Identifier(exec, "disconnect"), QScript::functionDisconnect));
+
    globalObject->functionPrototype()->putDirectFunction(exec, new (exec)JSC::NativeFunctionWrapper(exec,
          globalObject->prototypeFunctionStructure(), 1, JSC::Identifier(exec, "connect"), QScript::functionConnect));
 

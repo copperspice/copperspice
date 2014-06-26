@@ -26,9 +26,9 @@
 #ifndef QNodeBuilder_P_H
 #define QNodeBuilder_P_H
 
-#include "qitem_p.h"
-#include "qabstractxmlreceiver.h"
-#include "qautoptr_p.h"
+#include <qitem_p.h>
+#include <qabstractxmlreceiver.h>
+#include <qautoptr_p.h>
 
 QT_BEGIN_NAMESPACE
 

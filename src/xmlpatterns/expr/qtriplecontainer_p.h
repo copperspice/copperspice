@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_TripleContainer_P_H
-#define Patternist_TripleContainer_P_H
+#ifndef QTripleContainer_P_H
+#define QTripleContainer_P_H
 
-#include "qexpression_p.h"
+#include <qexpression_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ResolveURIFN_P_H
-#define Patternist_ResolveURIFN_P_H
+#ifndef QResolveURIFN_P_H
+#define QResolveURIFN_P_H
 
-#include "qfunctioncall_p.h"
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_BuiltinAtomicType_P_H
-#define Patternist_BuiltinAtomicType_P_H
+#ifndef QBuiltinAtomicType_P_H
+#define QBuiltinAtomicType_P_H
 
-#include "qatomictype_p.h"
+#include <qatomictype_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,11 +23,10 @@
 *
 ***********************************************************************/
 
+#ifndef QXsdWildcard_P_H
+#define QXsdWildcard_P_H
 
-#ifndef Patternist_XsdWildcard_H
-#define Patternist_XsdWildcard_H
-
-#include "qxsdterm_p.h"
+#include <qxsdterm_p.h>
 #include <QtCore/QSet>
 
 QT_BEGIN_NAMESPACE

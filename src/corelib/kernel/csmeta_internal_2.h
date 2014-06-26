@@ -31,14 +31,14 @@
 // **
 // template<class T, class=void, class=typename std::enable_if<!std::is_constructible<QVariant, T>::value>::type>
 template<class T, class unused_1, class unused_2>
-QVariant convertToQVariant(T data)
+QVariant cs_convertToQVariant(T data)
 {
    return QVariant();
 }
 
 // template<class T, class=typename std::enable_if<std::is_constructible<QVariant, T>::value>::type>
 template<class T, class unused_1>
-QVariant convertToQVariant(T data)
+QVariant cs_convertToQVariant(T data)
 {
    return QVariant(data);
 }

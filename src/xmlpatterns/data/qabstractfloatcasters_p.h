@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AbstractFloatCasters_P_H
-#define Patternist_AbstractFloatCasters_P_H
+#ifndef QAbstractFloatCasters_P_H
+#define QAbstractFloatCasters_P_H
 
-#include "qabstractfloat_p.h"
-#include "qatomiccaster_p.h"
-#include "qschemanumeric_p.h"
+#include <qabstractfloat_p.h>
+#include <qatomiccaster_p.h>
+#include <qschemanumeric_p.h>
 
 QT_BEGIN_NAMESPACE
 

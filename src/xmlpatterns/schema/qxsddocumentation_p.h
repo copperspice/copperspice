@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdDocumentation_H
-#define Patternist_XsdDocumentation_H
+#ifndef QXsdDocumentation_P_H
+#define QXsdDocumentation_P_H
 
-#include "qanytype_p.h"
-#include "qanyuri_p.h"
-#include "qderivedstring_p.h"
-#include "qnamedschemacomponent_p.h"
+#include <qanytype_p.h>
+#include <qanyuri_p.h>
+#include <qderivedstring_p.h>
+#include <qnamedschemacomponent_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdReference_H
-#define Patternist_XsdReference_H
+#ifndef QXsdReference_P_H
+#define QXsdReference_P_H
 
-#include "qxsdterm_p.h"
+#include <qxsdterm_p.h>
 #include <QtXmlPatterns/QSourceLocation>
 
 QT_BEGIN_NAMESPACE

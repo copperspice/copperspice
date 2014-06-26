@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_TemplateParameterReference_P_H
-#define Patternist_TemplateParameterReference_P_H
+#ifndef QTemplateParameterReference_P_H
+#define QTemplateParameterReference_P_H
 
-#include "qvariabledeclaration_p.h"
-#include "qemptycontainer_p.h"
+#include <qvariabledeclaration_p.h>
+#include <qemptycontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

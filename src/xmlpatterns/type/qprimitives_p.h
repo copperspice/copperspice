@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Primitives_H
-#define Patternist_Primitives_H
+#ifndef QPrimitives_P_H
+#define QPrimitives_P_H
 
 #include <QtGlobal>
 #include <QtCore/QHash>

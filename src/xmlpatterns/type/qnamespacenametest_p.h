@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_NamespaceNameTest_P_H
-#define Patternist_NamespaceNameTest_P_H
+#ifndef QNamespaceNameTest_P_H
+#define QNamespaceNameTest_P_H
 
-#include "qabstractnodetest_p.h"
+#include <qabstractnodetest_p.h>
 
 template<typename Key, typename Value> class QHash;
 

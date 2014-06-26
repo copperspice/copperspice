@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XQueryTokenizer_P_H
-#define Patternist_XQueryTokenizer_P_H
+#ifndef QXQueryTokenizer_P_H
+#define QXQueryTokenizer_P_H
 
 #include <QHash>
 #include <QSet>
@@ -32,7 +32,7 @@
 #include <QString>
 #include <QUrl>
 
-#include "qtokenizer_p.h"
+#include <qtokenizer_p.h>
 
 QT_BEGIN_NAMESPACE
 

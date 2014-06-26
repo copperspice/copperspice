@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Locale_H
-#define Patternist_Locale_H
+#ifndef QPatternistLocale_P_H
+#define QPatternistLocale_P_H
 
 #include <QCoreApplication>
 #include <QString>
 #include <QUrl>
 
-#include "qcardinality_p.h"
-#include "qnamepool_p.h"
-#include "qprimitives_p.h"
+#include <qcardinality_p.h>
+#include <qnamepool_p.h>
+#include <qprimitives_p.h>
 
 QT_BEGIN_NAMESPACE
 

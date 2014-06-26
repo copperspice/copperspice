@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_DocumentContentValidator_P_H
-#define Patternist_DocumentContentValidator_P_H
+#ifndef QDocumentContentValidator_P_H
+#define QDocumentContentValidator_P_H
 
-#include "qdynamiccontext_p.h"
-#include "qexpression_p.h"
-#include "qabstractxmlreceiver.h"
+#include <qdynamiccontext_p.h>
+#include <qexpression_p.h>
+#include <qabstractxmlreceiver.h>
 
 QT_BEGIN_NAMESPACE
 

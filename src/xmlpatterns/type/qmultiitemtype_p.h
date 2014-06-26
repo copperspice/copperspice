@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_MultiItemType_P_H
-#define Patternist_MultiItemType_P_H
+#ifndef QMultiItemType_P_H
+#define QMultiItemType_P_H
 
 #include <QList>
-#include "qitemtype_p.h"
+#include <qitemtype_p.h>
 
 QT_BEGIN_NAMESPACE
 

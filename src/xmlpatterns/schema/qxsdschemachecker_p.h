@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdSchemaChecker_H
-#define Patternist_XsdSchemaChecker_H
+#ifndef QXsdSchemaChecker_P_H
+#define QXsdSchemaChecker_P_H
 
-#include "qschematype_p.h"
-#include "qxsdattribute_p.h"
-#include "qxsdattributegroup_p.h"
-#include "qxsdelement_p.h"
-#include "qxsdmodelgroup_p.h"
-#include "qxsdnotation_p.h"
-#include "qxsdschema_p.h"
-#include "qxsdsimpletype_p.h"
+#include <qschematype_p.h>
+#include <qxsdattribute_p.h>
+#include <qxsdattributegroup_p.h>
+#include <qxsdelement_p.h>
+#include <qxsdmodelgroup_p.h>
+#include <qxsdnotation_p.h>
+#include <qxsdschema_p.h>
+#include <qxsdsimpletype_p.h>
 
 #include <QtCore/QExplicitlySharedDataPointer>
 

@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_NodeFNs_P_H
-#define Patternist_NodeFNs_P_H
+#ifndef QNodeFNs_P_H
+#define QNodeFNs_P_H
 
-#include "qfunctioncall_p.h"
-#include "qcastingplatform_p.h"
+#include <qfunctioncall_p.h>
+#include <qcastingplatform_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -28,7 +28,7 @@
 #include "qmetaobject.h"
 
 QMetaMethod::QMetaMethod(const char *typeName,
-                         const char *signature,
+                         const QByteArray &signature,
                          QList<QByteArray> paramNames,
                          QMetaMethod::Access access,
                          QMetaMethod::MethodType methodType,
@@ -46,12 +46,17 @@ QMetaMethod::QMetaMethod(const char *typeName,
    m_bento     = nullptr;
    m_tag       = "";
    m_revision  = 0;
+
+
+   // BROOM
+   name();
+
 }
 
 QMetaMethod::QMetaMethod()
 {
    m_typeName   = "";
-   m_signature  = nullptr;
+   // m_signature
    // m_paramNames
    m_access     = Private;
    m_methodType = Method;
@@ -101,12 +106,39 @@ int QMetaMethod::methodIndex() const
       return -1;
    }
 
-   return m_metaObject->indexOfMethod(m_signature);
+   const char *method = m_signature.constData();
+
+   return m_metaObject->indexOfMethod(method);
 }
 
 QMetaMethod::MethodType QMetaMethod::methodType() const
 {
    return m_methodType;
+}
+
+QByteArray QMetaMethod::name() const
+{
+   QByteArray retval = m_signature;
+
+   int pos = m_signature.indexOf("(");   
+   retval  = m_signature.left(pos);
+
+   return retval;
+}
+
+int QMetaMethod::parameterCount() const
+{
+   return m_paramNames.size();
+}
+
+int QMetaMethod::parameterType(int index) const
+{
+   QList<QByteArray> types = parameterTypes();
+   QByteArray typeName = types[index];     
+
+   int retval = QMetaType::type(typeName.constData());
+      
+   return retval;
 }
 
 QList<QByteArray> QMetaMethod::parameterNames() const
@@ -118,7 +150,7 @@ QList<QByteArray> QMetaMethod::parameterTypes() const
 {
    QList<QByteArray> retval;
 
-   const char *temp = m_signature;
+   const char *temp = m_signature.constData();
    char letter;
 
    while (*temp)  {
@@ -195,7 +227,7 @@ void QMetaMethod::setBentoBox(const BentoAbstract *method)
    m_bento = method;
 }
 
-const char *QMetaMethod::signature() const
+QByteArray QMetaMethod::methodSignature() const
 {
    return m_signature;
 }

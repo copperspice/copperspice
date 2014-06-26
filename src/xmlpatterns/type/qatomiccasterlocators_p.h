@@ -23,12 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AtomicCasterLocators_P_H
-#define Patternist_AtomicCasterLocators_P_H
+#ifndef QAtomicCasterLocators_P_H
+#define QAtomicCasterLocators_P_H
 
-#include "qatomiccasterlocator_p.h"
-#include "qatomiccasters_p.h"
-//#include "qderivedinteger_p.h"
+#include <qatomiccasterlocator_p.h>
+#include <qatomiccasters_p.h>
 
 QT_BEGIN_NAMESPACE
 

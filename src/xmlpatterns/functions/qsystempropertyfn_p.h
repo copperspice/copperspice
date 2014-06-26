@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SystemPropertyFN_P_H
-#define Patternist_SystemPropertyFN_P_H
+#ifndef QSystemPropertyFN_P_H
+#define QSystemPropertyFN_P_H
 
-#include "qstaticnamespacescontainer_p.h"
+#include <qstaticnamespacescontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

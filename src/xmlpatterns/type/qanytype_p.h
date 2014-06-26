@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AnyType_P_H
-#define Patternist_AnyType_P_H
+#ifndef QAnyType_P_H
+#define QAnyType_P_H
 
-#include "qschematype_p.h"
+#include <qschematype_p.h>
 
 QT_BEGIN_NAMESPACE
 

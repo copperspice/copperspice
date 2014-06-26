@@ -23,12 +23,11 @@
 *
 ***********************************************************************/
 
-
-#ifndef Patternist_ElementConstructor_H
-#define Patternist_ElementConstructor_H
+#ifndef QElementConstructor_P_H
+#define QElementConstructor_P_H
 
 #include <QUrl>
-#include "qpaircontainer_p.h"
+#include <qpaircontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Cardinality_P_H
-#define Patternist_Cardinality_P_H
+#ifndef QCardinality_P_H
+#define QCardinality_P_H
 
 #include <QtCore/QtGlobal>
 

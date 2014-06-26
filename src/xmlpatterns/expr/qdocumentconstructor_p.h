@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_DocumentConstructor_H
-#define Patternist_DocumentConstructor_H
+#ifndef QDocumentConstructor_P_H
+#define QDocumentConstructor_P_H
 
 #include <QUrl>
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

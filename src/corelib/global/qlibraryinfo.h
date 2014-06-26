@@ -28,6 +28,7 @@
 
 #include <QtCore/qstring.h>
 #include <QtCore/QDate>
+#include <qsettings.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -42,30 +43,27 @@ class Q_CORE_EXPORT QLibraryInfo
 
 #ifndef QT_NO_DATESTRING
    static QDate buildDate();
-#endif //QT_NO_DATESTRING
+#endif
 
-   enum LibraryLocation {
-      PrefixPath,
-      DocumentationPath,
-      HeadersPath,
-      LibrariesPath,
-      BinariesPath,
+   enum LibraryLocation {    
       PluginsPath,
-      DataPath,
+      ImportsPath,     
+      Qml2ImportsPath, 
       TranslationsPath,
-      SettingsPath,
-      DemosPath,
-      ExamplesPath,
-      ImportsPath
+      SettingsPath,          
    };
-   static QString location(LibraryLocation); // ### Qt5/consider renaming it to path()
+   static QString location(LibraryLocation); 
 
  private:
    QLibraryInfo();
+  
+   static QSettings *configuration();  
+   static QSettings *findConfiguration();    
+   static QSettings *qt_library_settings(); 
 };
 
 #endif /* QT_NO_SETTINGS */
 
 QT_END_NAMESPACE
 
-#endif // QLIBRARYINFO_H
+#endif

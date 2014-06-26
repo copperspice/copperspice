@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ExpressionVariableReference_H
-#define Patternist_ExpressionVariableReference_H
+#ifndef QExpressionVariableReference_P_H
+#define QExpressionVariableReference_P_H
 
-#include "qvariabledeclaration_p.h"
-#include "qvariablereference_p.h"
+#include <qvariabledeclaration_p.h>
+#include <qvariablereference_p.h>
 
 QT_BEGIN_NAMESPACE
 

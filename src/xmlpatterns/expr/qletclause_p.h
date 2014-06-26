@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_LetClause_H
-#define Patternist_LetClause_H
+#ifndef QLetClause_P_H
+#define QLetClause_P_H
 
-#include "qpaircontainer_p.h"
-#include "qvariabledeclaration_p.h"
+#include <qpaircontainer_p.h>
+#include <qvariabledeclaration_p.h>
 
 QT_BEGIN_NAMESPACE
 

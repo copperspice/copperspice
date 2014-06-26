@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Boolean_P_H
-#define Patternist_Boolean_P_H
+#ifndef QBoolean_P_H
+#define QBoolean_P_H
 
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

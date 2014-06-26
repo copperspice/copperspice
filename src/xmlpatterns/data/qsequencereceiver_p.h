@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SequenceReceiver_H
-#define Patternist_SequenceReceiver_H
+#ifndef QSequenceReceiver_P_H
+#define QSequenceReceiver_P_H
 
 #include <QSharedData>
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

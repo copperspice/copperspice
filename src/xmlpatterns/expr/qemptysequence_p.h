@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_EmptySequence_H
-#define Patternist_EmptySequence_H
+#ifndef QEmptySequence_P_H
+#define QEmptySequence_P_H
 
-#include "qemptycontainer_p.h"
+#include <qemptycontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

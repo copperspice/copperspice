@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_EBVType_P_H
-#define Patternist_EBVType_P_H
+#ifndef QEBVType_P_H
+#define QEBVType_P_H
 
-#include "qatomictype_p.h"
-#include "qsequencetype_p.h"
+#include <qatomictype_p.h>
+#include <qsequencetype_p.h>
 
 QT_BEGIN_NAMESPACE
 

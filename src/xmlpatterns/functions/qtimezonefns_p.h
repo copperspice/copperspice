@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_TimezoneFNs_P_H
-#define Patternist_TimezoneFNs_P_H
+#ifndef QTimezoneFNs_P_H
+#define QTimezoneFNs_P_H
 
-#include "qatomiccomparator_p.h"
-#include "qfunctioncall_p.h"
+#include <qatomiccomparator_p.h>
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

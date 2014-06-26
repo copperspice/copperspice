@@ -26,7 +26,7 @@
 #ifndef QGYear_P_H
 #define QGYear_P_H
 
-#include "qabstractdatetime_p.h"
+#include <qabstractdatetime_p.h>
 
 QT_BEGIN_NAMESPACE
 

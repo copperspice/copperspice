@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_DocumentProjector_P_H
-#define Patternist_DocumentProjector_P_H
+#ifndef QDocumentProjector_P_H
+#define QDocumentProjector_P_H
 
-#include "qprojectedexpression_p.h"
-#include "qabstractxmlreceiver.h"
+#include <qprojectedexpression_p.h>
+#include <qabstractxmlreceiver.h>
 
 QT_BEGIN_NAMESPACE
 

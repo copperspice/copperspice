@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_IndexOfIterator_P_H
-#define Patternist_IndexOfIterator_P_H
+#ifndef QIndexOfIterator_P_H
+#define QIndexOfIterator_P_H
 
-#include "qitem_p.h"
-#include "qatomiccomparator_p.h"
-#include "qcomparisonplatform_p.h"
-#include "qdynamiccontext_p.h"
-#include "qexpression_p.h"
+#include <qitem_p.h>
+#include <qatomiccomparator_p.h>
+#include <qcomparisonplatform_p.h>
+#include <qdynamiccontext_p.h>
+#include <qexpression_p.h>
 
 QT_BEGIN_NAMESPACE
 

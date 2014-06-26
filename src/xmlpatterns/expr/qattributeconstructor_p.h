@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AttributeConstructor_H
-#define Patternist_AttributeConstructor_H
+#ifndef QAttributeConstructor_P_H
+#define QAttributeConstructor_P_H
 
-#include "qpaircontainer_p.h"
+#include <qpaircontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

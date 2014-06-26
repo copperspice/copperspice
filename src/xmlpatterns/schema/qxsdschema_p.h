@@ -23,19 +23,19 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdSchema_H
-#define Patternist_XsdSchema_H
+#ifndef QXsdSchema_P_H
+#define QXsdSchema_P_H
 
-#include "qschematype_p.h"
-#include "qxsdannotated_p.h"
-#include "qxsdattribute_p.h"
-#include "qxsdattributegroup_p.h"
-#include "qxsdcomplextype_p.h"
-#include "qxsdelement_p.h"
-#include "qxsdidentityconstraint_p.h"
-#include "qxsdmodelgroup_p.h"
-#include "qxsdnotation_p.h"
-#include "qxsdsimpletype_p.h"
+#include <qschematype_p.h>
+#include <qxsdannotated_p.h>
+#include <qxsdattribute_p.h>
+#include <qxsdattributegroup_p.h>
+#include <qxsdcomplextype_p.h>
+#include <qxsdelement_p.h>
+#include <qxsdidentityconstraint_p.h>
+#include <qxsdmodelgroup_p.h>
+#include <qxsdnotation_p.h>
+#include <qxsdsimpletype_p.h>
 
 #include <QtCore/QHash>
 #include <QtCore/QReadWriteLock>

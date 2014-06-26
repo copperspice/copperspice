@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Focus_P_H
-#define Patternist_Focus_P_H
+#ifndef QFocus_P_H
+#define QFocus_P_H
 
-#include "qdelegatingdynamiccontext_p.h"
+#include <qdelegatingdynamiccontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

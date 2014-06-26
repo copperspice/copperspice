@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XPath10CoreFunctions_P_H
-#define Patternist_XPath10CoreFunctions_P_H
+#ifndef QXPath10CoreFunctions_P_H
+#define QXPath10CoreFunctions_P_H
 
-#include "qabstractfunctionfactory_p.h"
+#include <qabstractfunctionfactory_p.h>
 
 QT_BEGIN_NAMESPACE
 

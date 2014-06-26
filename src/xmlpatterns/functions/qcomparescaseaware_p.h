@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ComparesCaseAware_P_H
-#define Patternist_ComparesCaseAware_P_H
+#ifndef QComparesCaseAware_P_H
+#define QComparesCaseAware_P_H
 
-#include "qfunctioncall_p.h"
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

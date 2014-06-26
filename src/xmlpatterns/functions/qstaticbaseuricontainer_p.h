@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_StaticBaseUriContainer_P_H
-#define Patternist_StaticBaseUriContainer_P_H
+#ifndef QStaticBaseUriContainer_P_H
+#define QStaticBaseUriContainer_P_H
 
 #include <QUrl>
-#include "qfunctioncall_p.h"
+#include <qfunctioncall_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_UserFunctionCallsite_P_H
-#define Patternist_UserFunctionCallsite_P_H
+#ifndef QUserFunctionCallsite_P_H
+#define QUserFunctionCallsite_P_H
 
-#include "qcallsite_p.h"
-#include "qfunctionsignature_p.h"
-#include "qunlimitedcontainer_p.h"
-#include "quserfunction_p.h"
-#include "qvariabledeclaration_p.h"
+#include <qcallsite_p.h>
+#include <qfunctionsignature_p.h>
+#include <qunlimitedcontainer_p.h>
+#include <quserfunction_p.h>
+#include <qvariabledeclaration_p.h>
 
 QT_BEGIN_NAMESPACE
 

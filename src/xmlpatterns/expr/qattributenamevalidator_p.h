@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AttributeNameValidator_H
-#define Patternist_AttributeNameValidator_H
+#ifndef QAttributeNameValidator_P_H
+#define QAttributeNameValidator_P_H
 
 #include "qsinglecontainer_p.h"
 

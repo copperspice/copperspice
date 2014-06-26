@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdStateMachineBuilder_H
-#define Patternist_XsdStateMachineBuilder_H
+#ifndef QXsdStateMachineBuilder_P_H
+#define QXsdStateMachineBuilder_P_H
 
-#include "qxsdparticle_p.h"
-#include "qxsdstatemachine_p.h"
-#include "qxsdterm_p.h"
+#include <qxsdparticle_p.h>
+#include <qxsdstatemachine_p.h>
+#include <qxsdterm_p.h>
 #include <QtCore/QExplicitlySharedDataPointer>
 #include <QtCore/QList>
 

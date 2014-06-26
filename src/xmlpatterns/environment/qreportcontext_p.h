@@ -23,15 +23,14 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ReportContext_H
-#define Patternist_ReportContext_H
+#ifndef QReportContext_P_H
+#define QReportContext_P_H
 
 #include <QSharedData>
 #include <QAbstractUriResolver>
 #include <QSourceLocation>
-
-#include "qnamepool_p.h"
-#include "qxmlname.h"
+#include <qnamepool_p.h>
+#include <qxmlname.h>
 
 QT_BEGIN_NAMESPACE
 

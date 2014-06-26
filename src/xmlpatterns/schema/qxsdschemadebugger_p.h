@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdSchemaDebugger_H
-#define Patternist_XsdSchemaDebugger_H
+#ifndef QXsdSchemaDebugger_P_H
+#define QXsdSchemaDebugger_P_H
 
-#include "qxsdschema_p.h"
+#include <qxsdschema_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_UnparsedEntityURIFN_P_H
-#define Patternist_UnparsedEntityURIFN_P_H
+#ifndef QUnparsedEntityURIFN_P_H
+#define QUnparsedEntityURIFN_P_H
 
-#include "qcontextnodechecker_p.h"
+#include <qcontextnodechecker_p.h>
 
 QT_BEGIN_NAMESPACE
 

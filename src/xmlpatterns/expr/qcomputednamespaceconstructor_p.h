@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_ComputedNamespaceConstructor_P_H
-#define Patternist_ComputedNamespaceConstructor_P_H
+#ifndef QComputedNamespaceConstructor_P_H
+#define QComputedNamespaceConstructor_P_H
 
-#include "qpaircontainer_p.h"
+#include <qpaircontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

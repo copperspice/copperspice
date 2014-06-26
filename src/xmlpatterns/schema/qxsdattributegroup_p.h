@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdAttributeGroup_H
-#define Patternist_XsdAttributeGroup_H
+#ifndef QXsdAttributeGroup_P_H
+#define QXsdAttributeGroup_P_H
 
-#include "qxsdannotated_p.h"
-#include "qxsdattributeuse_p.h"
-#include "qxsdwildcard_p.h"
+#include <qxsdannotated_p.h>
+#include <qxsdattributeuse_p.h>
+#include <qxsdwildcard_p.h>
 #include <QtCore/QList>
 
 QT_BEGIN_NAMESPACE

@@ -23,12 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XsdIdcHelper_H
-#define Patternist_XsdIdcHelper_H
+#ifndef QXsdIdcHelper_P_H
+#define QXsdIdcHelper_P_H
 
-#include "qreportcontext_p.h"
-#include "qschematype_p.h"
-
+#include <qreportcontext_p.h>
+#include <qschematype_p.h>
 #include <QtXmlPatterns/QXmlItem>
 
 QT_BEGIN_NAMESPACE

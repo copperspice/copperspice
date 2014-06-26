@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CurrentItemStore_H
-#define Patternist_CurrentItemStore_H
+#ifndef QCurrentItemStore_P_H
+#define QCurrentItemStore_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

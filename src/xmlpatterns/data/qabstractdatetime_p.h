@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AbstractDateTime_P_H
-#define Patternist_AbstractDateTime_P_H
+#ifndef QAbstractDateTime_P_H
+#define QAbstractDateTime_P_H
 
 #include <QDateTime>
 #include <QRegExp>
-
-#include "qitem_p.h"
+#include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
 

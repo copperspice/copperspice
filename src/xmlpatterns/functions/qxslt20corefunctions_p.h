@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_XSLT20CoreFunctions_P_H
-#define Patternist_XSLT20CoreFunctions_P_H
+#ifndef QXSLT20CoreFunctions_P_H
+#define QXSLT20CoreFunctions_P_H
 
-#include "qabstractfunctionfactory_p.h"
+#include <qabstractfunctionfactory_p.h>
 
 QT_BEGIN_NAMESPACE
 

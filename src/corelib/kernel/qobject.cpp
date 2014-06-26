@@ -350,7 +350,7 @@ bool QObject::connect(const QObject *sender, const char *signalMethod, const QOb
       qDebug("");
       for (int k = 0; k < senderMetaObject->methodCount(); ++k) {
          qDebug("QObject:connect()  Class %s has method %s", senderMetaObject->className(),
-                senderMetaObject->method(k).signature() );
+                senderMetaObject->method(k).methodSignature().constData() );
       }
       qDebug("");
 #endif
@@ -377,8 +377,11 @@ bool QObject::connect(const QObject *sender, const QMetaMethod &signalMetaMethod
    const char *senderClass   = sender->metaObject()->className();
    const char *receiverClass = receiver->metaObject()->className();
 
-   const char *signalName = signalMetaMethod.signature();
-   const char *slotName   = slotMetaMethod.signature();
+   QByteArray signalTemp = signalMetaMethod.methodSignature();
+   QByteArray slotTemp   = slotMetaMethod.methodSignature();
+
+   const char *signalName = signalTemp.constData();
+   const char *slotName   = slotTemp.constData();
 
    if (! signalName || signalName[0] == 0)  {
       qWarning("%s%s%s%s%s", "QObject::connect() ", senderClass, "::<Invalid Signal> ",
@@ -726,7 +729,7 @@ bool QObject::disconnect(const QObject *sender,   const QMetaMethod &signalMetho
 
       if (signalMethod.methodType() != QMetaMethod::Signal) {
          qWarning("QObject::disconnect() Can not disconnect %s::%s, is not a signal",
-                  sender->metaObject()->className(), signalMethod.signature());
+                  sender->metaObject()->className(), signalMethod.methodSignature().constData());
          return false;
       }
    }
@@ -735,27 +738,27 @@ bool QObject::disconnect(const QObject *sender,   const QMetaMethod &signalMetho
 
       if (slotMethod.methodType() == QMetaMethod::Constructor) {
          qWarning("QObject::disconnect() Can not use constructor as an argument %s::%s",
-                  receiver->metaObject()->className(), slotMethod.signature());
+                  receiver->metaObject()->className(), slotMethod.methodSignature().constData());
          return false;
       }
    }
 
-   int signal_index = sender->metaObject()->indexOfSignal(signalMethod.signature());
+   int signal_index = sender->metaObject()->indexOfSignal(signalMethod.methodSignature().constData());
 
    // if signalMethod is not empty and signal_index is -1, then signal is not a member of sender
    if (signalMetaObject != 0 && signal_index == -1) {
       qWarning("QObject::disconnect() Signal %s was not found in class %s",
-               signalMethod.signature(), sender->metaObject()->className());
+               signalMethod.methodSignature().constData(), sender->metaObject()->className());
       return false;
    }
 
    // method is not a member of receiver
    if (receiver) {
-      int slot_index = receiver->metaObject()->indexOfMethod(slotMethod.signature());
+      int slot_index = receiver->metaObject()->indexOfMethod(slotMethod.methodSignature().constData());
 
       if (slotMetaObject && slot_index == -1) {
          qWarning("QObject::disconnect() Method %s was not found in class %s",
-                  slotMethod.signature(), receiver->metaObject()->className());
+                  slotMethod.methodSignature().constData(), receiver->metaObject()->className());
          return false;
       }
    }
@@ -769,7 +772,7 @@ bool QObject::disconnect(const QObject *sender,   const QMetaMethod &signalMetho
 
    // calling the const char * (Qt4 API version)
    if (signalMetaObject) {
-      const_cast<QObject *>(sender)->disconnectNotify(signalMethod.signature());
+      const_cast<QObject *>(sender)->disconnectNotify(signalMethod.methodSignature().constData());
 
    } else {
       const_cast<QObject *>(sender)->disconnectNotify(0);

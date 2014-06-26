@@ -23,17 +23,16 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AbstractFloat_H
-#define Patternist_AbstractFloat_H
+#ifndef QAbstractFloat_P_H
+#define QAbstractFloat_P_H
 
 #include <math.h>
 #include <qnumeric.h>
-
-#include "qcommonvalues_p.h"
-#include "qdecimal_p.h"
-#include "qschemanumeric_p.h"
-#include "qvalidationerror_p.h"
-#include "qbuiltintypes_p.h"
+#include <qcommonvalues_p.h>
+#include <qdecimal_p.h>
+#include <qschemanumeric_p.h>
+#include <qvalidationerror_p.h>
+#include <qbuiltintypes_p.h>
 
 QT_BEGIN_NAMESPACE
 

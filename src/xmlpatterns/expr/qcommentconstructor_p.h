@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_CommentConstructor_H
-#define Patternist_CommentConstructor_H
+#ifndef QCommentConstructor_P_H
+#define QCommentConstructor_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

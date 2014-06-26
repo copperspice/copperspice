@@ -23,14 +23,13 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_VariableDeclaration_P_H
-#define Patternist_VariableDeclaration_P_H
+#ifndef QVariableDeclaration_P_H
+#define QVariableDeclaration_P_H
 
 #include <QSharedData>
-
-#include "qexpression_p.h"
-#include "qpatternistlocale_p.h"
-#include "qvariablereference_p.h"
+#include <qexpression_p.h>
+#include <qpatternistlocale_p.h>
+#include <qvariablereference_p.h>
 
 QT_BEGIN_NAMESPACE
 

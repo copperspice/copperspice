@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_TypeAvailableFN_P_H
-#define Patternist_TypeAvailableFN_P_H
+#ifndef QTypeAvailableFN_P_H
+#define QTypeAvailableFN_P_H
 
-#include "qschematypefactory_p.h"
-#include "qstaticnamespacescontainer_p.h"
+#include <qschematypefactory_p.h>
+#include <qstaticnamespacescontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

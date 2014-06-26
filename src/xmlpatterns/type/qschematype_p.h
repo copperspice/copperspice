@@ -23,15 +23,18 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_SchemaType_P_H
-#define Patternist_SchemaType_P_H
+#ifndef QSchemaType_P_H
+#define QSchemaType_P_H
 
-#include "qnamepool_p.h"
-#include "qschemacomponent_p.h"
-#include "qxmlname.h"
+#include <qnamepool_p.h>
+#include <qschemacomponent_p.h>
+#include <qxmlname.h>
 
-template<typename N, typename M> class QHash;
-template<typename N> class QList;
+template<typename N, typename M>
+class QHash;
+
+template<typename N>
+class QList;
 
 QT_BEGIN_NAMESPACE
 

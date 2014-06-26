@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Tokenizer_P_H
-#define Patternist_Tokenizer_P_H
+#ifndef QTokenizer_P_H
+#define QTokenizer_P_H
 
 #include <QPair>
 #include <QSharedData>
 #include <QString>
 #include <QUrl>
 
-#include "qparsercontext_p.h"
-#include "qtokensource_p.h"
+#include <qparsercontext_p.h>
+#include <qtokensource_p.h>
 
 QT_BEGIN_NAMESPACE
 

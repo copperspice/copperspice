@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_FirstItemPredicate_H
-#define Patternist_FirstItemPredicate_H
+#ifndef QFirstItemPredicate_P_H
+#define QFirstItemPredicate_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_RangeVariableReference_H
-#define Patternist_RangeVariableReference_H
+#ifndef QRangeVariableReference_P_H
+#define QRangeVariableReference_P_H
 
-#include "qvariablereference_p.h"
+#include <qvariablereference_p.h>
 
 QT_BEGIN_NAMESPACE
 

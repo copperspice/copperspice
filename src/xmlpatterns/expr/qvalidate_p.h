@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_Validate_P_H
-#define Patternist_Validate_P_H
+#ifndef QValidate_P_H
+#define QValidate_P_H
 
-#include "qexpression_p.h"
+#include <qexpression_p.h>
 
 QT_BEGIN_NAMESPACE
 

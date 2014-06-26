@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_NamespaceSupport_H
-#define Patternist_NamespaceSupport_H
+#ifndef QNamespaceSupport_P_H
+#define QNamespaceSupport_P_H
 
-#include "qnamepool_p.h"
+#include <qnamepool_p.h>
 #include <QtCore/QExplicitlySharedDataPointer>
 #include <QtCore/QHash>
 #include <QtCore/QSet>

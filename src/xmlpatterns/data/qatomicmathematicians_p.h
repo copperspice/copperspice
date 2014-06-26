@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_AtomicMathematicians_P_H
-#define Patternist_AtomicMathematicians_P_H
+#ifndef QAtomicMathematicians_P_H
+#define QAtomicMathematicians_P_H
 
-#include "qatomicmathematician_p.h"
-#include "qsourcelocationreflection_p.h"
+#include <qatomicmathematician_p.h>
+#include <qsourcelocationreflection_p.h>
 
 QT_BEGIN_NAMESPACE
 

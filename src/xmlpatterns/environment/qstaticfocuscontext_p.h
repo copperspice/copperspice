@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#ifndef Patternist_StaticFocusContext_P_H
-#define Patternist_StaticFocusContext_P_H
+#ifndef QStaticFocusContext_P_H
+#define QStaticFocusContext_P_H
 
-#include "qdelegatingstaticcontext_p.h"
+#include <qdelegatingstaticcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 
