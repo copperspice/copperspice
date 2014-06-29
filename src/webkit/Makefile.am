@@ -31,9 +31,9 @@ ______lib_libCsWebKit1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 ______lib_libCsWebKit1_la_LIBADD = ../../lib/libCsCore1.la ../../lib/libCsGui1.la ../../lib/libCsNetwork1.la
 
 
-# BROOM (enable OpenSSL)
+if ! SSL
 ______lib_libCsWebKit1_la_CXXFLAGS += -DQT_NO_OPENSSL
-______lib_libCsWebKit1_la_LDFLAGS += -Wl,-s
+endif
 
 if OSTYPE_LINUX
 ______lib_libCsWebKit1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
@@ -42,6 +42,7 @@ endif
 if OSTYPE_WIN
 ______lib_libCsWebKit1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++ -DQT_MAKEDLL
 ______lib_libCsWebKit1_la_LDFLAGS += -lgdi32 -lwinmm -lshlwapi -lversion
+______lib_libCsWebKit1_la_LDFLAGS += -Wl,-s
 endif
 
 if OSTYPE_DARWIN

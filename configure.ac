@@ -22,18 +22,6 @@ AX_CXX_COMPILE_STDCXX_11([noext])
 
 AC_CONFIG_HEADERS(include/qt-acconfig.h)
 
-AC_SEARCH_LIBS(clock_gettime, rt)
-
-PKG_CHECK_MODULES(GTK, gtk+-2.0, GTK="yes", true)
-PKG_CHECK_MODULES(GLIB, glib-2.0, GLIB="yes", true)
-PKG_CHECK_MODULES(FREETYPE, freetype2, FREETYPE="yes", true)
-PKG_CHECK_MODULES(FONTCONFIG, fontconfig, FONTCONFIG="yes", true)
-PKG_CHECK_MODULES(ZLIB, zlib, ZLIB="yes", true)
-PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10, GSTREAMER="yes", true)
-PKG_CHECK_MODULES(GSTREAMER_AUDIO, gstreamer-audio-0.10, GSTREAMER_AUDIO="yes", true)
-
-AC_CHECK_HEADERS([cups/cups.h])
-
 case "$target" in
 *-*-mingw*)
 	OSTYPE=WIN ;;
@@ -56,6 +44,51 @@ esac
 
 AC_PROG_OBJCXX
 
+# verify packages are installed
+echo ""
+PKG_CHECK_MODULES(FONTCONFIG, fontconfig, FONTCONFIG="yes", missing="$missing FontConfig")
+PKG_CHECK_MODULES(FREETYPE, freetype2, FREETYPE="yes", missing="$missing FreeType")
+PKG_CHECK_MODULES(GLIB, glib-2.0, GLIB="yes", missing="$missing GLIB")
+PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10, GSTREAMER="yes", missing="$missing Gstreamer")
+PKG_CHECK_MODULES(GSTREAMER_AUDIO, gstreamer-audio-0.10, GSTREAMER_AUDIO="yes", missing="$missing Gstreamer-Plugins")
+
+# not required
+PKG_CHECK_MODULES(GTK, gtk+-2.0, GTK="yes", true)
+PKG_CHECK_MODULES(SSL, openssl, SSL="yes", true)
+PKG_CHECK_MODULES(ZLIB, zlib, ZLIB="yes", true)
+
+AC_CHECK_HEADERS([cups/cups.h])
+AC_SEARCH_LIBS(clock_gettime, rt)
+
+if test "$OSTYPE" == LINUX; then 
+# verify dependencies
+AC_SEARCH_LIBS([IceOpenConnection], [ICE], [], missing="$missing ICE")
+AC_SEARCH_LIBS([AuOpenServer], [audio], [], missing="$missing Audio")
+AC_SEARCH_LIBS([glClear], [GL], [], missing="$missing OpenGL")
+AC_SEARCH_LIBS([pthread_create], [pthread], [], missing="$missing pthread")
+AC_SEARCH_LIBS([SmcOpenConnection], [SM], [], missing="$missing SM")
+AC_SEARCH_LIBS([XcursorImageCreate], [Xcursor], [], missing="$missing Xcursor")
+AC_SEARCH_LIBS([XShmCreateImage], [Xext], [], missing="$missing Xext")
+AC_SEARCH_LIBS([XFixesQueryVersion], [Xfixes], [], missing="$missing Xfixes")
+AC_SEARCH_LIBS([XGetExtensionVersion], [Xi], [], missing="$missing Xi")
+AC_SEARCH_LIBS([XineramaQueryExtension], [Xinerama], [], missing="$missing Xinerama")
+AC_SEARCH_LIBS([XRRSetScreenConfigAndRate], [Xrandr], [], missing="$missing Xrandr")
+AC_SEARCH_LIBS([XRenderCreateCursor], [Xrender], [], missing="$missing Xrender")
+AC_SEARCH_LIBS([XCreateWindow], [X11], [], missing="$missing X11")   
+fi
+
+if test "x$missing" != "x"; then
+   echo "------------------------------------------------------------"      
+   echo "The following libraries are missing and must be installed to build CopperSpice"
+   echo "Refer to the CS documentation for package names or consult your platform package manager"
+   echo $missing      
+   echo "------------------------------------------------------------"
+
+   echo ""
+   echo "CopperSpice configuration aborted"   
+   exit 
+fi
+
 
 AM_CONDITIONAL(OSTYPE_WIN, test "$OSTYPE" == WIN)
 AM_CONDITIONAL(OSTYPE_LINUX, test "$OSTYPE" == LINUX)
@@ -65,22 +98,19 @@ AM_CONDITIONAL(X11, test "$OSTYPE" == LINUX)
 AM_CONDITIONAL(COCOA, test "$OSTYPE" == DARWIN)
 
 AM_CONDITIONAL(CUPS, test "x$ac_cv_header_cups_cups_h" = x""yes)
-
 AM_CONDITIONAL(QPA, false)
-
 
 AM_CONDITIONAL(GTK, test "x$GTK" = x""yes -a "$OSTYPE" != DARWIN)
 #AM_CONDITIONAL(GLIB, test "x$GLIB" = x""yes)
 #AM_CONDITIONAL(FREETYPE, test "x$FREETYPE" = x""yes)
 AM_CONDITIONAL(GLIB, test "x$OSTYPE" = x""LINUX)
 AM_CONDITIONAL(FREETYPE, test "x$OSTYPE" = x""LINUX)
-# This following line needs to change for cross compiling
+
+# turns zlib and alsa off always
 AM_CONDITIONAL(ZLIB, test "x" = x""yes)
 AM_CONDITIONAL(ALSA, test "x" = x""yes)
 
-AC_ARG_ENABLE([webkit],
-	AS_HELP_STRING([--disable-webkit], [Do not build WebKit]))
-
+AC_ARG_ENABLE([webkit],	AS_HELP_STRING([--disable-webkit], [Do not build WebKit]))
 AM_CONDITIONAL(WEBKIT, test "x$enable_webkit" != "xno")
 
 
@@ -117,7 +147,6 @@ else
    echo "MySQL client library not found, client drivers will not be built"
 fi
 
-PKG_CHECK_MODULES(SSL, openssl, [SSL="yes"] , [true])
 AM_CONDITIONAL(SSL, test "x$SSL" = x""yes)
 if test "x$SSL" = x""yes; then
    echo "Building with OpenSSL"
