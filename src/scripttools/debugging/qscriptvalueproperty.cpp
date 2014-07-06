@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,20 +32,20 @@ QT_BEGIN_NAMESPACE
 
 class QScriptValuePropertyPrivate
 {
-public:
-    QScriptValuePropertyPrivate();
-    ~QScriptValuePropertyPrivate();
+ public:
+   QScriptValuePropertyPrivate();
+   ~QScriptValuePropertyPrivate();
 
-    QString name;
-    QScriptValue value;
-    QScriptValue::PropertyFlags flags;
+   QString name;
+   QScriptValue value;
+   QScriptValue::PropertyFlags flags;
 
-    QBasicAtomicInt ref;
+   QBasicAtomicInt ref;
 };
 
 QScriptValuePropertyPrivate::QScriptValuePropertyPrivate()
 {
-    ref.store(0);
+   ref.store(0);
 }
 
 QScriptValuePropertyPrivate::~QScriptValuePropertyPrivate()
@@ -56,7 +56,7 @@ QScriptValuePropertyPrivate::~QScriptValuePropertyPrivate()
   Constructs an invalid QScriptValueProperty.
 */
 QScriptValueProperty::QScriptValueProperty()
-    : d_ptr(0)
+   : d_ptr(0)
 {
 }
 
@@ -65,24 +65,25 @@ QScriptValueProperty::QScriptValueProperty()
   \a value and \a flags.
 */
 QScriptValueProperty::QScriptValueProperty(const QString &name,
-                                           const QScriptValue &value,
-                                           QScriptValue::PropertyFlags flags)
-    : d_ptr(new QScriptValuePropertyPrivate)
+      const QScriptValue &value,
+      QScriptValue::PropertyFlags flags)
+   : d_ptr(new QScriptValuePropertyPrivate)
 {
-    d_ptr->name = name;
-    d_ptr->value = value;
-    d_ptr->flags = flags;
-    d_ptr->ref.ref();
+   d_ptr->name = name;
+   d_ptr->value = value;
+   d_ptr->flags = flags;
+   d_ptr->ref.ref();
 }
 
 /*!
   Constructs a QScriptValueProperty that is a copy of the \a other property.
 */
 QScriptValueProperty::QScriptValueProperty(const QScriptValueProperty &other)
-    : d_ptr(other.d_ptr.data())
+   : d_ptr(other.d_ptr.data())
 {
-    if (d_ptr)
-        d_ptr->ref.ref();
+   if (d_ptr) {
+      d_ptr->ref.ref();
+   }
 }
 
 /*!
@@ -97,8 +98,8 @@ QScriptValueProperty::~QScriptValueProperty()
 */
 QScriptValueProperty &QScriptValueProperty::operator=(const QScriptValueProperty &other)
 {
-    d_ptr.assign(other.d_ptr.data());
-    return *this;
+   d_ptr.assign(other.d_ptr.data());
+   return *this;
 }
 
 /*!
@@ -106,10 +107,11 @@ QScriptValueProperty &QScriptValueProperty::operator=(const QScriptValueProperty
 */
 QString QScriptValueProperty::name() const
 {
-    Q_D(const QScriptValueProperty);
-    if (!d)
-        return QString();
-    return d->name;
+   Q_D(const QScriptValueProperty);
+   if (!d) {
+      return QString();
+   }
+   return d->name;
 }
 
 /*!
@@ -117,10 +119,11 @@ QString QScriptValueProperty::name() const
 */
 QScriptValue QScriptValueProperty::value() const
 {
-    Q_D(const QScriptValueProperty);
-    if (!d)
-        return QScriptValue();
-    return d->value;
+   Q_D(const QScriptValueProperty);
+   if (!d) {
+      return QScriptValue();
+   }
+   return d->value;
 }
 
 /*!
@@ -128,10 +131,11 @@ QScriptValue QScriptValueProperty::value() const
 */
 QScriptValue::PropertyFlags QScriptValueProperty::flags() const
 {
-    Q_D(const QScriptValueProperty);
-    if (!d)
-        return 0;
-    return d->flags;
+   Q_D(const QScriptValueProperty);
+   if (!d) {
+      return 0;
+   }
+   return d->flags;
 }
 
 /*!
@@ -140,8 +144,8 @@ QScriptValue::PropertyFlags QScriptValueProperty::flags() const
 */
 bool QScriptValueProperty::isValid() const
 {
-    Q_D(const QScriptValueProperty);
-    return (d != 0);
+   Q_D(const QScriptValueProperty);
+   return (d != 0);
 }
 
 QT_END_NAMESPACE

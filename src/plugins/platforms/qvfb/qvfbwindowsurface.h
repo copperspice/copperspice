@@ -26,7 +26,7 @@
 #ifndef QWINDOWSURFACE_QVFB_H
 #define QWINDOWSURFACE_QVFB_H
 
-#include <QtGui/private/qwindowsurface_p.h>
+#include <qwindowsurface_p.h>
 #include <QPlatformWindow>
 
 QT_BEGIN_NAMESPACE

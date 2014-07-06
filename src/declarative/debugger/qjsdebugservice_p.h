@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,52 +35,51 @@ QT_BEGIN_NAMESPACE
 class QDeclarativeEngine;
 class QJSDebuggerAgent;
 
-struct JSAgentCoverageData
-{
-    QByteArray prefix;
-    qint64 time;
-    int messageType;
+struct JSAgentCoverageData {
+   QByteArray prefix;
+   qint64 time;
+   int messageType;
 
-    qint64 scriptId;
-    QString program;
-    QString fileName;
-    int baseLineNumber;
-    int lineNumber;
-    int columnNumber;
-    QString returnValue;
+   qint64 scriptId;
+   QString program;
+   QString fileName;
+   int baseLineNumber;
+   int lineNumber;
+   int columnNumber;
+   QString returnValue;
 
-    QByteArray toByteArray() const;
+   QByteArray toByteArray() const;
 };
 
 class QJSDebugService : public QDeclarativeDebugService
 {
-    CS_OBJECT(QJSDebugService)
+   CS_OBJECT(QJSDebugService)
 
-public:
-    QJSDebugService(QObject *parent = 0);
-    ~QJSDebugService();
+ public:
+   QJSDebugService(QObject *parent = 0);
+   ~QJSDebugService();
 
-    static QJSDebugService *instance();
+   static QJSDebugService *instance();
 
-    void addEngine(QDeclarativeEngine *);
-    void removeEngine(QDeclarativeEngine *);
-    void processMessage(const JSAgentCoverageData &message);
+   void addEngine(QDeclarativeEngine *);
+   void removeEngine(QDeclarativeEngine *);
+   void processMessage(const JSAgentCoverageData &message);
 
-    QElapsedTimer m_timer;
+   QElapsedTimer m_timer;
 
-protected:
-    void statusChanged(Status status);
-    void messageReceived(const QByteArray &);
+ protected:
+   void statusChanged(Status status);
+   void messageReceived(const QByteArray &);
 
-private :
-    CS_SLOT_1(Private, void executionStopped(bool becauseOfException,const QString & exception))
-    CS_SLOT_2(executionStopped) 
+ private :
+   CS_SLOT_1(Private, void executionStopped(bool becauseOfException, const QString &exception))
+   CS_SLOT_2(executionStopped)
 
-    void sendMessages();
-    QList<QDeclarativeEngine *> m_engines;
-    QPointer<QJSDebuggerAgent> m_agent;
-    bool m_deferredSend;
-    QList<JSAgentCoverageData> m_data;
+   void sendMessages();
+   QList<QDeclarativeEngine *> m_engines;
+   QPointer<QJSDebuggerAgent> m_agent;
+   bool m_deferredSend;
+   QList<JSAgentCoverageData> m_data;
 };
 
 QT_END_NAMESPACE

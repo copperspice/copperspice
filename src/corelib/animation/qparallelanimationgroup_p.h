@@ -26,8 +26,8 @@
 #ifndef QPARALLELANIMATIONGROUP_P_H
 #define QPARALLELANIMATIONGROUP_P_H
 
-#include "qparallelanimationgroup.h"
-#include "qanimationgroup_p.h"
+#include <qparallelanimationgroup.h>
+#include <qanimationgroup_p.h>
 #include <QtCore/qhash.h>
 
 #ifndef QT_NO_ANIMATION
@@ -55,7 +55,6 @@ class QParallelAnimationGroupPrivate : public QAnimationGroupPrivate
 
    void animationRemoved(int index, QAbstractAnimation *);
 
-   // private slot
    void _q_uncontrolledAnimationFinished();
 };
 

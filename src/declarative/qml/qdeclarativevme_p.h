@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,23 +43,23 @@ class QDeclarativeContextData;
 class QDeclarativeVMEObjectStack;
 class QDeclarativeVME
 {
-public:
-    QDeclarativeVME();
+ public:
+   QDeclarativeVME();
 
-    QObject *run(QDeclarativeContextData *, QDeclarativeCompiledData *, 
-                 int start = -1, int count = -1, 
-                 const QBitField & = QBitField());
-    void runDeferred(QObject *);
+   QObject *run(QDeclarativeContextData *, QDeclarativeCompiledData *,
+                int start = -1, int count = -1,
+                const QBitField & = QBitField());
+   void runDeferred(QObject *);
 
-    bool isError() const;
-    QList<QDeclarativeError> errors() const;
+   bool isError() const;
+   QList<QDeclarativeError> errors() const;
 
-private:
-    QObject *run(QDeclarativeVMEObjectStack &, 
-                 QDeclarativeContextData *, QDeclarativeCompiledData *, 
-                 int start, int count, 
-                 const QBitField &);
-    QList<QDeclarativeError> vmeErrors;
+ private:
+   QObject *run(QDeclarativeVMEObjectStack &,
+                QDeclarativeContextData *, QDeclarativeCompiledData *,
+                int start, int count,
+                const QBitField &);
+   QList<QDeclarativeError> vmeErrors;
 };
 
 QT_END_NAMESPACE

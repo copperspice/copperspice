@@ -23,8 +23,7 @@
 *
 ***********************************************************************/
 
-#include "rangecontrols.h"
-
+#include <rangecontrols.h>
 #include <qslider.h>
 #include <qdial.h>
 #include <qspinbox.h>
@@ -36,7 +35,7 @@
 #include <QDoubleSpinBox>
 #include <QDial>
 #include <qmath.h>
-#include <private/qmath_p.h>
+#include <qmath_p.h>
 
 QT_BEGIN_NAMESPACE
 

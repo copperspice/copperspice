@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,45 +18,44 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVELISTACCESSOR_H
-#define QDECLARATIVELISTACCESSOR_H
+#ifndef QDECLARATIVELISTACCESSOR_P_H
+#define QDECLARATIVELISTACCESSOR_P_H
 
 #include <QtCore/QVariant>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
 class QDeclarativeEngine;
+
 class QDeclarativeListAccessor
 {
-public:
-    QDeclarativeListAccessor();
-    ~QDeclarativeListAccessor();
+ public:
+   QDeclarativeListAccessor();
+   ~QDeclarativeListAccessor();
 
-    QVariant list() const;
-    void setList(const QVariant &, QDeclarativeEngine * = 0);
+   QVariant list() const;
+   void setList(const QVariant &, QDeclarativeEngine * = 0);
 
-    bool isValid() const;
+   bool isValid() const;
 
-    int count() const;
-    QVariant at(int) const;
+   int count() const;
+   QVariant at(int) const;
 
-    enum Type { Invalid, StringList, VariantList, ListProperty, Instance, Integer };
-    Type type() const { return m_type; }
+   enum Type { Invalid, StringList, VariantList, ListProperty, Instance, Integer };
+   Type type() const {
+      return m_type;
+   }
 
-private:
-    Type m_type;
-    QVariant d;
+ private:
+   Type m_type;
+   QVariant d;
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVELISTACCESSOR_H

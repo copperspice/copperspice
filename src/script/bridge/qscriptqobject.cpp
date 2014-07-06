@@ -182,7 +182,7 @@ static inline int methodNameLength(const QMetaMethod &method)
 {
 
    QByteArray tempSignature = method.methodSignature();
-   const char *signature    = tempSignature.constData(); 
+   const char *signature    = tempSignature.constData();
 
    const char *s = signature;
 
@@ -210,7 +210,7 @@ static inline QByteArray methodName(const char *signature, int nameLength)
 static inline bool methodNameEquals(const QMetaMethod &method, const char *signature, int nameLength)
 {
    QByteArray tempSignature   = method.methodSignature();
-   const char *otherSignature = tempSignature.constData(); 
+   const char *otherSignature = tempSignature.constData();
 
    return ! qstrncmp(otherSignature, signature, nameLength) && (otherSignature[nameLength] == '(');
 }
@@ -583,14 +583,14 @@ static JSC::JSValue callQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType c
 
    QByteArray tempSignature;
    const char *initialMethodSignature = 0;
-  
+
    for (index = initialIndex; index >= 0; --index) {
       QMetaMethod method = metaMethod(meta, callType, index);
 
       if (index == initialIndex) {
 
          tempSignature          = method.methodSignature();
-         initialMethodSignature = tempSignature.constData(); 
+         initialMethodSignature = tempSignature.constData();
 
          nameLength = methodNameLength(method);
 
@@ -2291,7 +2291,7 @@ void QObjectConnectionManager::execute(int slotIndex, void **argv)
 
       if (!argType) {
          qWarning("QScriptEngine: Unable to handle unregistered datatype '%s' "
-                  "when invoking handler of signal %s::%s", 
+                  "when invoking handler of signal %s::%s",
                   typeName.constData(), meta->className(), method.methodSignature().constData());
 
          actual = JSC::jsUndefined();
@@ -2361,7 +2361,7 @@ void QObjectConnectionManager::mark(JSC::MarkStack &markStack)
 }
 
 bool QObjectConnectionManager::addSignalHandler(QObject *sender, int signalIndex, JSC::JSValue receiver,
-               JSC::JSValue function, JSC::JSValue senderWrapper,Qt::ConnectionType type)
+      JSC::JSValue function, JSC::JSValue senderWrapper, Qt::ConnectionType type)
 {
    if (connections.size() <= signalIndex) {
       connections.resize(signalIndex + 1);
@@ -2384,17 +2384,18 @@ bool QObjectConnectionManager::addSignalHandler(QObject *sender, int signalIndex
 
       // BROOM (script)
 
-//    QByteArray signalString;
-//    signalString.append('2'); // signal code
-//    signalString.append(signal.signature());
+      //    QByteArray signalString;
+      //    signalString.append('2'); // signal code
+      //    signalString.append(signal.signature());
 
-//    static_cast<QObjectNotifyCaller *>(sender)->callConnectNotify(signalString);
+      //    static_cast<QObjectNotifyCaller *>(sender)->callConnectNotify(signalString);
    }
 
    return ok;
 }
 
-bool QObjectConnectionManager::removeSignalHandler(QObject *sender, int signalIndex, JSC::JSValue receiver, JSC::JSValue slot)
+bool QObjectConnectionManager::removeSignalHandler(QObject *sender, int signalIndex, JSC::JSValue receiver,
+      JSC::JSValue slot)
 {
    if (connections.size() <= signalIndex) {
       return false;
@@ -2421,10 +2422,10 @@ bool QObjectConnectionManager::removeSignalHandler(QObject *sender, int signalIn
 
             // BROOM (script)
 
-//          QByteArray signalString;
-//          signalString.append('2'); // signal code
-//          signalString.append(signal.signature());
-//          static_cast<QScript::QObjectNotifyCaller *>(sender)->callDisconnectNotify(signalString);
+            //          QByteArray signalString;
+            //          signalString.append('2'); // signal code
+            //          signalString.append(signal.signature());
+            //          static_cast<QScript::QObjectNotifyCaller *>(sender)->callDisconnectNotify(signalString);
          }
 
          return ok;

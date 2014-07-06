@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,8 +33,6 @@
 #include <QtDeclarative/qdeclarativeerror.h>
 #include <QtDeclarative/qdeclarativedebug.h>
 #include <QScopedPointer>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
@@ -53,71 +51,69 @@ class QDeclarativeNetworkAccessManagerFactory;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeEngine : public QObject
 {
-    CS_OBJECT(QDeclarativeEngine)
+   CS_OBJECT(QDeclarativeEngine)
 
-    CS_PROPERTY_READ(offlineStoragePath, offlineStoragePath)
-    CS_PROPERTY_WRITE(offlineStoragePath, setOfflineStoragePath)
-    
-public:
-    QDeclarativeEngine(QObject *p = 0);
-    virtual ~QDeclarativeEngine();
+   CS_PROPERTY_READ(offlineStoragePath, offlineStoragePath)
+   CS_PROPERTY_WRITE(offlineStoragePath, setOfflineStoragePath)
 
-    QDeclarativeContext *rootContext() const;
+ public:
+   QDeclarativeEngine(QObject *p = 0);
+   virtual ~QDeclarativeEngine();
 
-    void clearComponentCache();
+   QDeclarativeContext *rootContext() const;
 
-    QStringList importPathList() const;
-    void setImportPathList(const QStringList &paths);
-    void addImportPath(const QString& dir);
+   void clearComponentCache();
 
-    QStringList pluginPathList() const;
-    void setPluginPathList(const QStringList &paths);
-    void addPluginPath(const QString& dir);
+   QStringList importPathList() const;
+   void setImportPathList(const QStringList &paths);
+   void addImportPath(const QString &dir);
 
-    bool importPlugin(const QString &filePath, const QString &uri, QString *errorString);
+   QStringList pluginPathList() const;
+   void setPluginPathList(const QStringList &paths);
+   void addPluginPath(const QString &dir);
 
-    void setNetworkAccessManagerFactory(QDeclarativeNetworkAccessManagerFactory *);
-    QDeclarativeNetworkAccessManagerFactory *networkAccessManagerFactory() const;
+   bool importPlugin(const QString &filePath, const QString &uri, QString *errorString);
 
-    QNetworkAccessManager *networkAccessManager() const;
+   void setNetworkAccessManagerFactory(QDeclarativeNetworkAccessManagerFactory *);
+   QDeclarativeNetworkAccessManagerFactory *networkAccessManagerFactory() const;
 
-    void addImageProvider(const QString &id, QDeclarativeImageProvider *);
-    QDeclarativeImageProvider *imageProvider(const QString &id) const;
-    void removeImageProvider(const QString &id);
+   QNetworkAccessManager *networkAccessManager() const;
 
-    void setOfflineStoragePath(const QString& dir);
-    QString offlineStoragePath() const;
+   void addImageProvider(const QString &id, QDeclarativeImageProvider *);
+   QDeclarativeImageProvider *imageProvider(const QString &id) const;
+   void removeImageProvider(const QString &id);
 
-    QUrl baseUrl() const;
-    void setBaseUrl(const QUrl &);
+   void setOfflineStoragePath(const QString &dir);
+   QString offlineStoragePath() const;
 
-    bool outputWarningsToStandardError() const;
-    void setOutputWarningsToStandardError(bool);
+   QUrl baseUrl() const;
+   void setBaseUrl(const QUrl &);
 
-    static QDeclarativeContext *contextForObject(const QObject *);
-    static void setContextForObject(QObject *, QDeclarativeContext *);
+   bool outputWarningsToStandardError() const;
+   void setOutputWarningsToStandardError(bool);
 
-    enum ObjectOwnership { CppOwnership, JavaScriptOwnership };
-    static void setObjectOwnership(QObject *, ObjectOwnership);
-    static ObjectOwnership objectOwnership(QObject *);
+   static QDeclarativeContext *contextForObject(const QObject *);
+   static void setContextForObject(QObject *, QDeclarativeContext *);
 
-public:
-    CS_SIGNAL_1(Public, void quit())
-    CS_SIGNAL_2(quit) 
-    CS_SIGNAL_1(Public, void warnings(const QList <QDeclarativeError> & warnings))
-    CS_SIGNAL_2(warnings,warnings) 
+   enum ObjectOwnership { CppOwnership, JavaScriptOwnership };
+   static void setObjectOwnership(QObject *, ObjectOwnership);
+   static ObjectOwnership objectOwnership(QObject *);
 
-private:
-    Q_DISABLE_COPY(QDeclarativeEngine)
-    Q_DECLARE_PRIVATE(QDeclarativeEngine)
+ public:
+   CS_SIGNAL_1(Public, void quit())
+   CS_SIGNAL_2(quit)
+   CS_SIGNAL_1(Public, void warnings(const QList <QDeclarativeError> &warnings))
+   CS_SIGNAL_2(warnings, warnings)
 
-protected:
-	 QScopedPointer<QDeclarativeEnginePrivate> d_ptr;
+ private:
+   Q_DISABLE_COPY(QDeclarativeEngine)
+   Q_DECLARE_PRIVATE(QDeclarativeEngine)
+
+ protected:
+   QScopedPointer<QDeclarativeEnginePrivate> d_ptr;
 
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEENGINE_H

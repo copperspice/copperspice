@@ -26,8 +26,8 @@
 #ifndef QSEQUENTIALANIMATIONGROUP_P_H
 #define QSEQUENTIALANIMATIONGROUP_P_H
 
-#include "qsequentialanimationgroup.h"
-#include "qanimationgroup_p.h"
+#include <qsequentialanimationgroup.h>
+#include <qanimationgroup_p.h>
 
 #ifndef QT_NO_ANIMATION
 
@@ -76,7 +76,6 @@ class QSequentialAnimationGroupPrivate : public QAnimationGroupPrivate
    void rewindForwards(const AnimationIndex &newAnimationIndex);
    void advanceForwards(const AnimationIndex &newAnimationIndex);
 
-   // private slot
    void _q_uncontrolledAnimationFinished();
 };
 

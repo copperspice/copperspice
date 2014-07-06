@@ -82,7 +82,6 @@ class QFileSystemWatcherPrivate
    QFileSystemWatcherEngine *native, *poller, *forced;
    QStringList files, directories;
 
-   // private slots
    void _q_fileChanged(const QString &path, bool removed);
    void _q_directoryChanged(const QString &path, bool removed);
 

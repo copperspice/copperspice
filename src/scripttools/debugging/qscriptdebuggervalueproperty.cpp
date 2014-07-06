@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,21 +40,21 @@ QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerValuePropertyPrivate
 {
-public:
-    QScriptDebuggerValuePropertyPrivate();
-    ~QScriptDebuggerValuePropertyPrivate();
+ public:
+   QScriptDebuggerValuePropertyPrivate();
+   ~QScriptDebuggerValuePropertyPrivate();
 
-    QString name;
-    QScriptDebuggerValue value;
-    QString valueAsString;
-    QScriptValue::PropertyFlags flags;
+   QString name;
+   QScriptDebuggerValue value;
+   QString valueAsString;
+   QScriptValue::PropertyFlags flags;
 
-    QBasicAtomicInt ref;
+   QBasicAtomicInt ref;
 };
 
 QScriptDebuggerValuePropertyPrivate::QScriptDebuggerValuePropertyPrivate()
 {
-    ref.store(0);
+   ref.store(0);
 }
 
 QScriptDebuggerValuePropertyPrivate::~QScriptDebuggerValuePropertyPrivate()
@@ -65,7 +65,7 @@ QScriptDebuggerValuePropertyPrivate::~QScriptDebuggerValuePropertyPrivate()
   Constructs an invalid QScriptDebuggerValueProperty.
 */
 QScriptDebuggerValueProperty::QScriptDebuggerValueProperty()
-    : d_ptr(0)
+   : d_ptr(0)
 {
 }
 
@@ -74,26 +74,27 @@ QScriptDebuggerValueProperty::QScriptDebuggerValueProperty()
   \a value and \a flags.
 */
 QScriptDebuggerValueProperty::QScriptDebuggerValueProperty(const QString &name,
-                                                           const QScriptDebuggerValue &value,
-                                                           const QString &valueAsString,
-                                                           QScriptValue::PropertyFlags flags)
-    : d_ptr(new QScriptDebuggerValuePropertyPrivate)
+      const QScriptDebuggerValue &value,
+      const QString &valueAsString,
+      QScriptValue::PropertyFlags flags)
+   : d_ptr(new QScriptDebuggerValuePropertyPrivate)
 {
-    d_ptr->name = name;
-    d_ptr->value = value;
-    d_ptr->valueAsString = valueAsString;
-    d_ptr->flags = flags;
-    d_ptr->ref.ref();
+   d_ptr->name = name;
+   d_ptr->value = value;
+   d_ptr->valueAsString = valueAsString;
+   d_ptr->flags = flags;
+   d_ptr->ref.ref();
 }
 
 /*!
   Constructs a QScriptDebuggerValueProperty that is a copy of the \a other property.
 */
 QScriptDebuggerValueProperty::QScriptDebuggerValueProperty(const QScriptDebuggerValueProperty &other)
-    : d_ptr(other.d_ptr.data())
+   : d_ptr(other.d_ptr.data())
 {
-    if (d_ptr)
-        d_ptr->ref.ref();
+   if (d_ptr) {
+      d_ptr->ref.ref();
+   }
 }
 
 /*!
@@ -108,8 +109,8 @@ QScriptDebuggerValueProperty::~QScriptDebuggerValueProperty()
 */
 QScriptDebuggerValueProperty &QScriptDebuggerValueProperty::operator=(const QScriptDebuggerValueProperty &other)
 {
-    d_ptr.assign(other.d_ptr.data());
-    return *this;
+   d_ptr.assign(other.d_ptr.data());
+   return *this;
 }
 
 /*!
@@ -117,10 +118,11 @@ QScriptDebuggerValueProperty &QScriptDebuggerValueProperty::operator=(const QScr
 */
 QString QScriptDebuggerValueProperty::name() const
 {
-    Q_D(const QScriptDebuggerValueProperty);
-    if (!d)
-        return QString();
-    return d->name;
+   Q_D(const QScriptDebuggerValueProperty);
+   if (!d) {
+      return QString();
+   }
+   return d->name;
 }
 
 /*!
@@ -128,18 +130,20 @@ QString QScriptDebuggerValueProperty::name() const
 */
 QScriptDebuggerValue QScriptDebuggerValueProperty::value() const
 {
-    Q_D(const QScriptDebuggerValueProperty);
-    if (!d)
-        return QScriptDebuggerValue();
-    return d->value;
+   Q_D(const QScriptDebuggerValueProperty);
+   if (!d) {
+      return QScriptDebuggerValue();
+   }
+   return d->value;
 }
 
 QString QScriptDebuggerValueProperty::valueAsString() const
 {
-    Q_D(const QScriptDebuggerValueProperty);
-    if (!d)
-        return QString();
-    return d->valueAsString;
+   Q_D(const QScriptDebuggerValueProperty);
+   if (!d) {
+      return QString();
+   }
+   return d->valueAsString;
 }
 
 /*!
@@ -147,10 +151,11 @@ QString QScriptDebuggerValueProperty::valueAsString() const
 */
 QScriptValue::PropertyFlags QScriptDebuggerValueProperty::flags() const
 {
-    Q_D(const QScriptDebuggerValueProperty);
-    if (!d)
-        return 0;
-    return d->flags;
+   Q_D(const QScriptDebuggerValueProperty);
+   if (!d) {
+      return 0;
+   }
+   return d->flags;
 }
 
 /*!
@@ -159,8 +164,8 @@ QScriptValue::PropertyFlags QScriptDebuggerValueProperty::flags() const
 */
 bool QScriptDebuggerValueProperty::isValid() const
 {
-    Q_D(const QScriptDebuggerValueProperty);
-    return (d != 0);
+   Q_D(const QScriptDebuggerValueProperty);
+   return (d != 0);
 }
 
 /*!
@@ -171,11 +176,11 @@ bool QScriptDebuggerValueProperty::isValid() const
 */
 QDataStream &operator<<(QDataStream &out, const QScriptDebuggerValueProperty &property)
 {
-    out << property.name();
-    out << property.value();
-    out << property.valueAsString();
-    out << (quint32)property.flags();
-    return out;
+   out << property.name();
+   out << property.value();
+   out << property.valueAsString();
+   out << (quint32)property.flags();
+   return out;
 }
 
 /*!
@@ -187,33 +192,33 @@ QDataStream &operator<<(QDataStream &out, const QScriptDebuggerValueProperty &pr
 */
 QDataStream &operator>>(QDataStream &in, QScriptDebuggerValueProperty &property)
 {
-    QString name;
-    QScriptDebuggerValue value;
-    QString valueAsString;
-    quint32 flags;
-    in >> name;
-    in >> value;
-    in >> valueAsString;
-    in >> flags;
-    property = QScriptDebuggerValueProperty(
-        name, value, valueAsString, QScriptValue::PropertyFlags(flags));
-    return in;
+   QString name;
+   QScriptDebuggerValue value;
+   QString valueAsString;
+   quint32 flags;
+   in >> name;
+   in >> value;
+   in >> valueAsString;
+   in >> flags;
+   property = QScriptDebuggerValueProperty(
+                 name, value, valueAsString, QScriptValue::PropertyFlags(flags));
+   return in;
 }
 
 QDataStream &operator<<(QDataStream &out, const QScriptDebuggerObjectSnapshotDelta &delta)
 {
-    out << delta.removedProperties;
-    out << delta.changedProperties;
-    out << delta.addedProperties;
-    return out;
+   out << delta.removedProperties;
+   out << delta.changedProperties;
+   out << delta.addedProperties;
+   return out;
 }
 
 QDataStream &operator>>(QDataStream &in, QScriptDebuggerObjectSnapshotDelta &delta)
 {
-    in >> delta.removedProperties;
-    in >> delta.changedProperties;
-    in >> delta.addedProperties;
-    return in;
+   in >> delta.removedProperties;
+   in >> delta.changedProperties;
+   in >> delta.addedProperties;
+   return in;
 }
 
 QT_END_NAMESPACE

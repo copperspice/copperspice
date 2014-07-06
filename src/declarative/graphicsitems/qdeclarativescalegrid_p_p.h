@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,108 +18,113 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVESCALEGRID_H
-#define QDECLARATIVESCALEGRID_H
+#ifndef QDECLARATIVESCALEGRID_P_P_H
+#define QDECLARATIVESCALEGRID_P_P_H
 
 #include <qdeclarative.h>
-
 #include <QtCore/QString>
 #include <QtCore/QObject>
-
-#include <private/qdeclarativeborderimage_p.h>
-#include <private/qdeclarativepixmapcache_p.h>
-#include <private/qdeclarativeglobal_p.h>
-
-QT_BEGIN_HEADER
+#include <qdeclarativeborderimage_p.h>
+#include <qdeclarativepixmapcache_p.h>
+#include <qdeclarativeglobal_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeScaleGrid : public QObject
 {
-    CS_OBJECT(QDeclarativeScaleGrid)
-    CS_ENUM(TileRule)
+   CS_OBJECT(QDeclarativeScaleGrid)
+   CS_ENUM(TileRule)
 
-    CS_PROPERTY_READ(left, left)
-    CS_PROPERTY_WRITE(left, setLeft)
-    CS_PROPERTY_NOTIFY(left, borderChanged)
-    CS_PROPERTY_READ(top, top)
-    CS_PROPERTY_WRITE(top, setTop)
-    CS_PROPERTY_NOTIFY(top, borderChanged)
-    CS_PROPERTY_READ(right, right)
-    CS_PROPERTY_WRITE(right, setRight)
-    CS_PROPERTY_NOTIFY(right, borderChanged)
-    CS_PROPERTY_READ(bottom, bottom)
-    CS_PROPERTY_WRITE(bottom, setBottom)
-    CS_PROPERTY_NOTIFY(bottom, borderChanged)
+   CS_PROPERTY_READ(left, left)
+   CS_PROPERTY_WRITE(left, setLeft)
+   CS_PROPERTY_NOTIFY(left, borderChanged)
+   CS_PROPERTY_READ(top, top)
+   CS_PROPERTY_WRITE(top, setTop)
+   CS_PROPERTY_NOTIFY(top, borderChanged)
+   CS_PROPERTY_READ(right, right)
+   CS_PROPERTY_WRITE(right, setRight)
+   CS_PROPERTY_NOTIFY(right, borderChanged)
+   CS_PROPERTY_READ(bottom, bottom)
+   CS_PROPERTY_WRITE(bottom, setBottom)
+   CS_PROPERTY_NOTIFY(bottom, borderChanged)
 
-public:
-    QDeclarativeScaleGrid(QObject *parent=0);
-    ~QDeclarativeScaleGrid();
+ public:
+   QDeclarativeScaleGrid(QObject *parent = 0);
+   ~QDeclarativeScaleGrid();
 
-    bool isNull() const;
+   bool isNull() const;
 
-    int left() const { return _left; }
-    void setLeft(int);
+   int left() const {
+      return _left;
+   }
+   void setLeft(int);
 
-    int top() const { return _top; }
-    void setTop(int);
+   int top() const {
+      return _top;
+   }
+   void setTop(int);
 
-    int right() const { return _right; }
-    void setRight(int);
+   int right() const {
+      return _right;
+   }
+   void setRight(int);
 
-    int  bottom() const { return _bottom; }
-    void setBottom(int);
+   int  bottom() const {
+      return _bottom;
+   }
+   void setBottom(int);
 
-public:
-    CS_SIGNAL_1(Public, void borderChanged())
-    CS_SIGNAL_2(borderChanged) 
+ public:
+   CS_SIGNAL_1(Public, void borderChanged())
+   CS_SIGNAL_2(borderChanged)
 
-private:
-    int _left;
-    int _top;
-    int _right;
-    int _bottom;
+ private:
+   int _left;
+   int _top;
+   int _right;
+   int _bottom;
 };
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeGridScaledImage
 {
-public:
-    QDeclarativeGridScaledImage();
-    QDeclarativeGridScaledImage(const QDeclarativeGridScaledImage &);
-    QDeclarativeGridScaledImage(QIODevice*);
-    QDeclarativeGridScaledImage &operator=(const QDeclarativeGridScaledImage &);
-    bool isValid() const;
-    int gridLeft() const;
-    int gridRight() const;
-    int gridTop() const;
-    int gridBottom() const;
-    QDeclarativeBorderImage::TileMode horizontalTileRule() const { return _h; }
-    QDeclarativeBorderImage::TileMode verticalTileRule() const { return _v; }
+ public:
+   QDeclarativeGridScaledImage();
+   QDeclarativeGridScaledImage(const QDeclarativeGridScaledImage &);
+   QDeclarativeGridScaledImage(QIODevice *);
+   QDeclarativeGridScaledImage &operator=(const QDeclarativeGridScaledImage &);
+   bool isValid() const;
+   int gridLeft() const;
+   int gridRight() const;
+   int gridTop() const;
+   int gridBottom() const;
+   QDeclarativeBorderImage::TileMode horizontalTileRule() const {
+      return _h;
+   }
+   QDeclarativeBorderImage::TileMode verticalTileRule() const {
+      return _v;
+   }
 
-    QString pixmapUrl() const;
+   QString pixmapUrl() const;
 
-private:
-    static QDeclarativeBorderImage::TileMode stringToRule(const QString &);
+ private:
+   static QDeclarativeBorderImage::TileMode stringToRule(const QString &);
 
-private:
-    int _l;
-    int _r;
-    int _t;
-    int _b;
-    QDeclarativeBorderImage::TileMode _h;
-    QDeclarativeBorderImage::TileMode _v;
-    QString _pix;
+   int _l;
+   int _r;
+   int _t;
+   int _b;
+   QDeclarativeBorderImage::TileMode _h;
+   QDeclarativeBorderImage::TileMode _v;
+   QString _pix;
 };
 
 QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QDeclarativeScaleGrid)
-
-QT_END_HEADER
 
 #endif // QDECLARATIVESCALEGRID_H

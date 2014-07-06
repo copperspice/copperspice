@@ -23,19 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qpixmapdata_vg_p.h"
-#include "qpaintengine_vg_p.h"
-#include <QtGui/private/qdrawhelper_p.h>
+#include <qpixmapdata_vg_p.h>
+#include <qpaintengine_vg_p.h>
+#include <qdrawhelper_p.h>
+
 #if !defined(QT_NO_EGL)
-#include <QtGui/private/qegl_p.h>
+#include <qegl_p.h>
 #endif
-#include "qvg_p.h"
-#include "qvgimagepool_p.h"
+
+#include <qvg_p.h>
+#include <qvgimagepool_p.h>
 #include <QBuffer>
 #include <QImageReader>
-#include <QtGui/private/qimage_p.h>
-#include <QtGui/private/qnativeimagehandleprovider_p.h>
-#include <QtGui/private/qfont_p.h>
+#include <qimage_p.h>
+#include <qnativeimagehandleprovider_p.h>
+#include <qfont_p.h>
 
 QT_BEGIN_NAMESPACE
 

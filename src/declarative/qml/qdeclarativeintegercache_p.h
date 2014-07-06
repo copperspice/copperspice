@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,68 +26,56 @@
 #ifndef QDECLARATIVEINTEGERCACHE_P_H
 #define QDECLARATIVEINTEGERCACHE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "private/qdeclarativerefcount_p.h"
-#include "private/qdeclarativecleanup_p.h"
-
+#include <qdeclarativerefcount_p.h>
+#include <qdeclarativecleanup_p.h>
 #include <QtCore/qhash.h>
-
-#include <private/qscriptdeclarativeclass_p.h>
+#include <qscriptdeclarativeclass_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QDeclarativeType;
 class QDeclarativeEngine;
+
 class QDeclarativeIntegerCache : public QDeclarativeRefCount, public QDeclarativeCleanup
 {
-public:
-    QDeclarativeIntegerCache(QDeclarativeEngine *);
-    virtual ~QDeclarativeIntegerCache();
+ public:
+   QDeclarativeIntegerCache(QDeclarativeEngine *);
+   virtual ~QDeclarativeIntegerCache();
 
-    inline int count() const;
-    void add(const QString &, int);
-    int value(const QString &);
-    QString findId(int value) const;
-    inline int value(const QScriptDeclarativeClass::Identifier &id) const;
+   inline int count() const;
+   void add(const QString &, int);
+   int value(const QString &);
+   QString findId(int value) const;
+   inline int value(const QScriptDeclarativeClass::Identifier &id) const;
 
-protected:
-    virtual void clear();
+ protected:
+   virtual void clear();
 
-private:
-    struct Data : public QScriptDeclarativeClass::PersistentIdentifier {
-        Data(const QScriptDeclarativeClass::PersistentIdentifier &i, int v) 
-        : QScriptDeclarativeClass::PersistentIdentifier(i), value(v) {}
+ private:
+   struct Data : public QScriptDeclarativeClass::PersistentIdentifier {
+      Data(const QScriptDeclarativeClass::PersistentIdentifier &i, int v)
+         : QScriptDeclarativeClass::PersistentIdentifier(i), value(v) {}
 
-        int value;
-    };
+      int value;
+   };
 
-    typedef QHash<QString, Data *> StringCache;
-    typedef QHash<QScriptDeclarativeClass::Identifier, Data *> IdentifierCache;
+   typedef QHash<QString, Data *> StringCache;
+   typedef QHash<QScriptDeclarativeClass::Identifier, Data *> IdentifierCache;
 
-    StringCache stringCache;
-    IdentifierCache identifierCache;
-    QDeclarativeEngine *engine;
+   StringCache stringCache;
+   IdentifierCache identifierCache;
+   QDeclarativeEngine *engine;
 };
 
 int QDeclarativeIntegerCache::value(const QScriptDeclarativeClass::Identifier &id) const
 {
-    Data *d = identifierCache.value(id);
-    return d?d->value:-1;
+   Data *d = identifierCache.value(id);
+   return d ? d->value : -1;
 }
 
-int QDeclarativeIntegerCache::count() const 
+int QDeclarativeIntegerCache::count() const
 {
-    return stringCache.count();
+   return stringCache.count();
 }
 
 QT_END_NAMESPACE

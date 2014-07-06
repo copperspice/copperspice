@@ -26,10 +26,8 @@
 #ifndef QXCBWINDOWSURFACE_H
 #define QXCBWINDOWSURFACE_H
 
-#include <private/qwindowsurface_p.h>
-
+#include <qwindowsurface_p.h>
 #include <xcb/xcb.h>
-
 #include "qxcbobject.h"
 
 class QXcbShmImage;

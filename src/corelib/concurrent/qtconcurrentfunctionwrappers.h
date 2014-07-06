@@ -44,6 +44,7 @@ class FunctionWrapper0
    inline T operator()() {
       return functionPointer();
    }
+
  private:
    FunctionPointerType functionPointer;
 };
@@ -54,6 +55,7 @@ class FunctionWrapper1
  public:
    typedef T (*FunctionPointerType)(U u);
    typedef T result_type;
+
    inline FunctionWrapper1(FunctionPointerType _functionPointer)
       : functionPointer(_functionPointer) { }
 
@@ -93,6 +95,7 @@ class MemberFunctionWrapper
    inline T operator()(C &c) {
       return (c.*functionPointer)();
    }
+
  private:
    FunctionPointerType functionPointer;
 };
@@ -128,6 +131,7 @@ class ConstMemberFunctionWrapper
    inline T operator()(const C &c) const {
       return (c.*functionPointer)();
    }
+
  private:
    FunctionPointerType functionPointer;
 };
@@ -185,6 +189,7 @@ template <typename Functor, bool foo = HasResultType<Functor>::Value>
 struct LazyResultType {
    typedef typename Functor::result_type Type;
 };
+
 template <typename Functor>
 struct LazyResultType<Functor, false> {
    typedef void Type;

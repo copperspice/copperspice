@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#include "itemviews.h"
-
+#include <itemviews.h>
 #include <qheaderview.h>
 #include <qtableview.h>
 #include <qlistview.h>
 #include <qtreeview.h>
-#include <private/qtreewidget_p.h>
+#include <qtreewidget_p.h>
 #include <qaccessible2.h>
 #include <QDebug>
 

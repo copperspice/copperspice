@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -53,36 +53,36 @@ class QScriptDebuggerCommandSchedulerInterface;
 class QScriptDebuggerConsoleCommandPrivate;
 class QScriptDebuggerConsoleCommand
 {
-public:
-    QScriptDebuggerConsoleCommand();
-    virtual ~QScriptDebuggerConsoleCommand();
+ public:
+   QScriptDebuggerConsoleCommand();
+   virtual ~QScriptDebuggerConsoleCommand();
 
-    virtual QString name() const = 0;
-    virtual QString group() const = 0;
-    virtual QString shortDescription() const = 0;
-    virtual QString longDescription() const = 0;
-    virtual QStringList seeAlso() const;
-    virtual QStringList aliases() const;
+   virtual QString name() const = 0;
+   virtual QString group() const = 0;
+   virtual QString shortDescription() const = 0;
+   virtual QString longDescription() const = 0;
+   virtual QStringList seeAlso() const;
+   virtual QStringList aliases() const;
 
-    virtual QStringList argumentTypes() const;
+   virtual QStringList argumentTypes() const;
 
-    virtual QStringList subCommands() const;
-    virtual QScriptDebuggerConsoleCommandJob *createJob(
-        const QStringList &arguments,
-        QScriptDebuggerConsole *console,
-        QScriptMessageHandlerInterface *messageHandler,
-        QScriptDebuggerCommandSchedulerInterface *scheduler) = 0;
+   virtual QStringList subCommands() const;
+   virtual QScriptDebuggerConsoleCommandJob *createJob(
+      const QStringList &arguments,
+      QScriptDebuggerConsole *console,
+      QScriptMessageHandlerInterface *messageHandler,
+      QScriptDebuggerCommandSchedulerInterface *scheduler) = 0;
 
-protected:
-    QScriptDebuggerConsoleCommand(QScriptDebuggerConsoleCommandPrivate &dd);
-    QScopedPointer<QScriptDebuggerConsoleCommandPrivate> d_ptr;
+ protected:
+   QScriptDebuggerConsoleCommand(QScriptDebuggerConsoleCommandPrivate &dd);
+   QScopedPointer<QScriptDebuggerConsoleCommandPrivate> d_ptr;
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerConsoleCommand)
-    Q_DISABLE_COPY(QScriptDebuggerConsoleCommand)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerConsoleCommand)
+   Q_DISABLE_COPY(QScriptDebuggerConsoleCommand)
 };
 
-typedef QList<QScriptDebuggerConsoleCommand*> QScriptDebuggerConsoleCommandList;
+typedef QList<QScriptDebuggerConsoleCommand *> QScriptDebuggerConsoleCommandList;
 
 QT_END_NAMESPACE
 

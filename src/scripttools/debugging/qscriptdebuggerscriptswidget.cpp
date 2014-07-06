@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,23 +35,23 @@
 QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerScriptsWidgetPrivate
-    : public QScriptDebuggerScriptsWidgetInterfacePrivate
+   : public QScriptDebuggerScriptsWidgetInterfacePrivate
 {
-    Q_DECLARE_PUBLIC(QScriptDebuggerScriptsWidget)
-public:
-    QScriptDebuggerScriptsWidgetPrivate();
-    ~QScriptDebuggerScriptsWidgetPrivate();
+   Q_DECLARE_PUBLIC(QScriptDebuggerScriptsWidget)
+ public:
+   QScriptDebuggerScriptsWidgetPrivate();
+   ~QScriptDebuggerScriptsWidgetPrivate();
 
-    // private slots
-    void _q_onCurrentChanged(const QModelIndex &index);
+   // private slots
+   void _q_onCurrentChanged(const QModelIndex &index);
 
-    QTreeView *view;
-    qint64 currentScriptId;
+   QTreeView *view;
+   qint64 currentScriptId;
 };
 
 QScriptDebuggerScriptsWidgetPrivate::QScriptDebuggerScriptsWidgetPrivate()
 {
-    currentScriptId = -1;
+   currentScriptId = -1;
 }
 
 QScriptDebuggerScriptsWidgetPrivate::~QScriptDebuggerScriptsWidgetPrivate()
@@ -60,41 +60,42 @@ QScriptDebuggerScriptsWidgetPrivate::~QScriptDebuggerScriptsWidgetPrivate()
 
 void QScriptDebuggerScriptsWidgetPrivate::_q_onCurrentChanged(const QModelIndex &index)
 {
-    Q_Q(QScriptDebuggerScriptsWidget);
-    if (!index.isValid())
-        return;
-    qint64 sid = q->scriptsModel()->scriptIdFromIndex(index);
-    if (sid != -1) {
-        if (currentScriptId != sid) {
-            currentScriptId = sid;
-            emit q->currentScriptChanged(sid);
-        }
-    } else {
-        qint64 sid = q->scriptsModel()->scriptIdFromIndex(index.parent());
-        Q_ASSERT(sid != -1);
-        currentScriptId = sid;
-        emit q->currentScriptChanged(sid);
-        QPair<QString, int> info = q->scriptsModel()->scriptFunctionInfoFromIndex(index);
-        emit q->scriptLocationSelected(info.second);
-    }
+   Q_Q(QScriptDebuggerScriptsWidget);
+   if (!index.isValid()) {
+      return;
+   }
+   qint64 sid = q->scriptsModel()->scriptIdFromIndex(index);
+   if (sid != -1) {
+      if (currentScriptId != sid) {
+         currentScriptId = sid;
+         emit q->currentScriptChanged(sid);
+      }
+   } else {
+      qint64 sid = q->scriptsModel()->scriptIdFromIndex(index.parent());
+      Q_ASSERT(sid != -1);
+      currentScriptId = sid;
+      emit q->currentScriptChanged(sid);
+      QPair<QString, int> info = q->scriptsModel()->scriptFunctionInfoFromIndex(index);
+      emit q->scriptLocationSelected(info.second);
+   }
 }
 
 QScriptDebuggerScriptsWidget::QScriptDebuggerScriptsWidget(QWidget *parent)
-    : QScriptDebuggerScriptsWidgetInterface(*new QScriptDebuggerScriptsWidgetPrivate, parent, 0)
+   : QScriptDebuggerScriptsWidgetInterface(*new QScriptDebuggerScriptsWidgetPrivate, parent, 0)
 {
-    Q_D(QScriptDebuggerScriptsWidget);
-    d->view = new QTreeView();
-    d->view->setEditTriggers(QAbstractItemView::NoEditTriggers);
-//    d->view->setAlternatingRowColors(true);
-//    d->view->setRootIsDecorated(false);
-    d->view->setSelectionBehavior(QAbstractItemView::SelectRows);
-    d->view->header()->hide();
-//    d->view->header()->setDefaultAlignment(Qt::AlignLeft);
-//    d->view->header()->setResizeMode(QHeaderView::ResizeToContents);
+   Q_D(QScriptDebuggerScriptsWidget);
+   d->view = new QTreeView();
+   d->view->setEditTriggers(QAbstractItemView::NoEditTriggers);
+   //    d->view->setAlternatingRowColors(true);
+   //    d->view->setRootIsDecorated(false);
+   d->view->setSelectionBehavior(QAbstractItemView::SelectRows);
+   d->view->header()->hide();
+   //    d->view->header()->setDefaultAlignment(Qt::AlignLeft);
+   //    d->view->header()->setResizeMode(QHeaderView::ResizeToContents);
 
-    QVBoxLayout *vbox = new QVBoxLayout(this);
-    vbox->setMargin(0);
-    vbox->addWidget(d->view);
+   QVBoxLayout *vbox = new QVBoxLayout(this);
+   vbox->setMargin(0);
+   vbox->addWidget(d->view);
 }
 
 QScriptDebuggerScriptsWidget::~QScriptDebuggerScriptsWidget()
@@ -106,8 +107,8 @@ QScriptDebuggerScriptsWidget::~QScriptDebuggerScriptsWidget()
 */
 QScriptDebuggerScriptsModel *QScriptDebuggerScriptsWidget::scriptsModel() const
 {
-    Q_D(const QScriptDebuggerScriptsWidget);
-    return qobject_cast<QScriptDebuggerScriptsModel*>(d->view->model());
+   Q_D(const QScriptDebuggerScriptsWidget);
+   return qobject_cast<QScriptDebuggerScriptsModel *>(d->view->model());
 }
 
 /*!
@@ -115,22 +116,22 @@ QScriptDebuggerScriptsModel *QScriptDebuggerScriptsWidget::scriptsModel() const
 */
 void QScriptDebuggerScriptsWidget::setScriptsModel(QScriptDebuggerScriptsModel *model)
 {
-    Q_D(QScriptDebuggerScriptsWidget);
-    d->view->setModel(model);
-    QObject::connect(d->view->selectionModel(), SIGNAL(currentChanged(const QModelIndex &,const QModelIndex &)),
-                     this, SLOT(_q_onCurrentChanged(const QModelIndex &)));
+   Q_D(QScriptDebuggerScriptsWidget);
+   d->view->setModel(model);
+   QObject::connect(d->view->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
+                    this, SLOT(_q_onCurrentChanged(const QModelIndex &)));
 }
 
 qint64 QScriptDebuggerScriptsWidget::currentScriptId() const
 {
-    Q_D(const QScriptDebuggerScriptsWidget);
-    return scriptsModel()->scriptIdFromIndex(d->view->currentIndex());
+   Q_D(const QScriptDebuggerScriptsWidget);
+   return scriptsModel()->scriptIdFromIndex(d->view->currentIndex());
 }
 
 void QScriptDebuggerScriptsWidget::setCurrentScript(qint64 id)
 {
-    Q_D(QScriptDebuggerScriptsWidget);
-    d->view->setCurrentIndex(scriptsModel()->indexFromScriptId(id));
+   Q_D(QScriptDebuggerScriptsWidget);
+   d->view->setCurrentIndex(scriptsModel()->indexFromScriptId(id));
 }
 
 QT_END_NAMESPACE

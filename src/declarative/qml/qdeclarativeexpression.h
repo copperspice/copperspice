@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -27,11 +27,8 @@
 #define QDECLARATIVEEXPRESSION_H
 
 #include <QtDeclarative/qdeclarativeerror.h>
-
 #include <QtCore/qobject.h>
 #include <QtCore/qvariant.h>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
@@ -45,69 +42,59 @@ class QScriptValue;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeExpression : public QObject
 {
-    CS_OBJECT(QDeclarativeExpression)
+   CS_OBJECT(QDeclarativeExpression)
 
-public:
-    QDeclarativeExpression();
-    QDeclarativeExpression(QDeclarativeContext *, QObject *, const QString &, QObject * = 0);
-    virtual ~QDeclarativeExpression();
+ public:
+   QDeclarativeExpression();
+   QDeclarativeExpression(QDeclarativeContext *, QObject *, const QString &, QObject * = 0);
+   virtual ~QDeclarativeExpression();
 
-    QDeclarativeEngine *engine() const;
-    QDeclarativeContext *context() const;
+   QDeclarativeEngine *engine() const;
+   QDeclarativeContext *context() const;
 
-    QString expression() const;
-    void setExpression(const QString &);
+   QString expression() const;
+   void setExpression(const QString &);
 
-    bool notifyOnValueChanged() const;
-    void setNotifyOnValueChanged(bool);
+   bool notifyOnValueChanged() const;
+   void setNotifyOnValueChanged(bool);
 
-    QString sourceFile() const;
-    int lineNumber() const;
-    void setSourceLocation(const QString &fileName, int line);
+   QString sourceFile() const;
+   int lineNumber() const;
+   void setSourceLocation(const QString &fileName, int line);
 
-    QObject *scopeObject() const;
+   QObject *scopeObject() const;
 
-    bool hasError() const;
-    void clearError();
-    QDeclarativeError error() const;
+   bool hasError() const;
+   void clearError();
+   QDeclarativeError error() const;
 
-    QVariant evaluate(bool *valueIsUndefined = 0);
+   QVariant evaluate(bool *valueIsUndefined = 0);
 
-public:
-    CS_SIGNAL_1(Public, void valueChanged())
-    CS_SIGNAL_2(valueChanged) 
+   CS_SIGNAL_1(Public, void valueChanged())
+   CS_SIGNAL_2(valueChanged)
 
-protected:
-    QDeclarativeExpression(QDeclarativeContextData *, QObject *, const QString &,
-                           QDeclarativeExpressionPrivate &dd);
-    QDeclarativeExpression(QDeclarativeContextData *, QObject *, const QScriptValue &,
-                           QDeclarativeExpressionPrivate &dd);
-    QDeclarativeExpression(QDeclarativeContextData *, void *, QDeclarativeRefCount *rc, 
-                           QObject *me, const QString &, int, QDeclarativeExpressionPrivate &dd);
+ protected:
+   QDeclarativeExpression(QDeclarativeContextData *, QObject *, const QString &, QDeclarativeExpressionPrivate &dd);
+   QDeclarativeExpression(QDeclarativeContextData *, QObject *, const QScriptValue &, QDeclarativeExpressionPrivate &dd);
 
-private:
-    QDeclarativeExpression(QDeclarativeContextData *, QObject *, const QString &);
+   QDeclarativeExpression(QDeclarativeContextData *, void *, QDeclarativeRefCount *rc,
+                          QObject *me, const QString &, int, QDeclarativeExpressionPrivate &dd);
 
-    Q_DISABLE_COPY(QDeclarativeExpression)
-    Q_DECLARE_PRIVATE(QDeclarativeExpression)
-    CS_SLOT_1(Private, void _q_notify())
-    CS_SLOT_2(_q_notify)
+ private:
+   QDeclarativeExpression(QDeclarativeContextData *, QObject *, const QString &);
 
-/*  PRIVATE_SLOT
-void _q_notify()
-{
-	Q_D(QDeclarativeExpression);
-	d->_q_notify();
-}
-*/
-    friend class QDeclarativeDebugger;
-    friend class QDeclarativeContext;
-    friend class QDeclarativeVME;
+   Q_DISABLE_COPY(QDeclarativeExpression)
+   Q_DECLARE_PRIVATE(QDeclarativeExpression)
+
+   CS_SLOT_1(Private, void _q_notify())
+   CS_SLOT_2(_q_notify)
+
+   friend class QDeclarativeDebugger;
+   friend class QDeclarativeContext;
+   friend class QDeclarativeVME;
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEEXPRESSION_H
 

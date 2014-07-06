@@ -77,6 +77,7 @@ class Q_CORE_EXPORT ResultIteratorBase
    bool operator!=(const ResultIteratorBase &other) const;
    bool isVector() const;
    bool canIncrementVectorIndex() const;
+
  protected:
    QMap<int, ResultItem>::const_iterator mapIterator;
    int m_vectorIndex;

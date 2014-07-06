@@ -35,13 +35,13 @@ QT_BEGIN_NAMESPACE
 
 class QTextCodec;
 class QIODevice;
-
 class QTextDecoder;
 class QTextEncoder;
 
 class Q_CORE_EXPORT QTextCodec
 {
    Q_DISABLE_COPY(QTextCodec)
+
  public:
    static QTextCodec *codecForName(const QByteArray &name);
    static QTextCodec *codecForName(const char *name) {
@@ -70,6 +70,7 @@ class Q_CORE_EXPORT QTextCodec
    QString toUnicode(const QByteArray &) const;
    QString toUnicode(const char *chars) const;
    QByteArray fromUnicode(const QString &uc) const;
+
    enum ConversionFlag {
       DefaultConversion,
       ConvertInvalidToNull = 0x80000000,
@@ -128,6 +129,7 @@ inline QTextCodec *QTextCodec::codecForTr()
 {
    return validCodecs() ? cftr : 0;
 }
+
 inline void QTextCodec::setCodecForTr(QTextCodec *c)
 {
    cftr = c;
@@ -136,6 +138,7 @@ inline void QTextCodec::setCodecForTr(QTextCodec *c)
 class Q_CORE_EXPORT QTextEncoder
 {
    Q_DISABLE_COPY(QTextEncoder)
+
  public:
    explicit QTextEncoder(const QTextCodec *codec) : c(codec), state() {}
    QTextEncoder(const QTextCodec *codec, QTextCodec::ConversionFlags flags);
@@ -152,6 +155,7 @@ class Q_CORE_EXPORT QTextEncoder
 class Q_CORE_EXPORT QTextDecoder
 {
    Q_DISABLE_COPY(QTextDecoder)
+
  public:
    explicit QTextDecoder(const QTextCodec *codec) : c(codec), state() {}
    QTextDecoder(const QTextCodec *codec, QTextCodec::ConversionFlags flags);
@@ -160,6 +164,7 @@ class Q_CORE_EXPORT QTextDecoder
    QString toUnicode(const QByteArray &ba);
    void toUnicode(QString *target, const char *chars, int len);
    bool hasFailure() const;
+
  private:
    const QTextCodec *c;
    QTextCodec::ConverterState state;

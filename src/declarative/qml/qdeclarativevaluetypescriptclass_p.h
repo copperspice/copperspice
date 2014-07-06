@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -35,23 +35,23 @@ class QDeclarativeValueType;
 
 class QDeclarativeValueTypeScriptClass : public QScriptDeclarativeClass
 {
-public:
-    QDeclarativeValueTypeScriptClass(QDeclarativeEngine *);
-    ~QDeclarativeValueTypeScriptClass();
+ public:
+   QDeclarativeValueTypeScriptClass(QDeclarativeEngine *);
+   ~QDeclarativeValueTypeScriptClass();
 
-    QScriptValue newObject(QObject *object, int coreIndex, QDeclarativeValueType *);
-    QScriptValue newObject(const QVariant &, QDeclarativeValueType *);
+   QScriptValue newObject(QObject *object, int coreIndex, QDeclarativeValueType *);
+   QScriptValue newObject(const QVariant &, QDeclarativeValueType *);
 
-    virtual QScriptClass::QueryFlags queryProperty(Object *, const Identifier &, 
-                                                   QScriptClass::QueryFlags flags);
-    virtual Value property(Object *, const Identifier &);
-    virtual void setProperty(Object *, const Identifier &name, const QScriptValue &);
+   virtual QScriptClass::QueryFlags queryProperty(Object *, const Identifier &,
+         QScriptClass::QueryFlags flags);
+   virtual Value property(Object *, const Identifier &);
+   virtual void setProperty(Object *, const Identifier &name, const QScriptValue &);
 
-    virtual QVariant toVariant(Object *, bool *ok = 0);
-    QVariant toVariant(const QScriptValue &);
-private:
-    QDeclarativeEngine *engine;
-    int m_lastIndex;
+   virtual QVariant toVariant(Object *, bool *ok = 0);
+   QVariant toVariant(const QScriptValue &);
+ private:
+   QDeclarativeEngine *engine;
+   int m_lastIndex;
 };
 
 QT_END_NAMESPACE

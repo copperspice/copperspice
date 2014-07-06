@@ -26,8 +26,8 @@
 #ifndef QUTFCODEC_P_H
 #define QUTFCODEC_P_H
 
-#include "QtCore/qtextcodec.h"
-#include "qtextcodec_p.h"
+#include <QtCore/qtextcodec.h>
+#include <qtextcodec_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -71,7 +71,7 @@ class QUtf8Codec : public QTextCodec
 
 class QUtf16Codec : public QTextCodec
 {
- protected:
+
  public:
    QUtf16Codec() {
       e = DetectEndianness;
@@ -95,6 +95,7 @@ class QUtf16BECodec : public QUtf16Codec
    QUtf16BECodec() : QUtf16Codec() {
       e = BigEndianness;
    }
+
    QByteArray name() const;
    QList<QByteArray> aliases() const;
    int mibEnum() const;
@@ -106,6 +107,7 @@ class QUtf16LECodec : public QUtf16Codec
    QUtf16LECodec() : QUtf16Codec() {
       e = LittleEndianness;
    }
+
    QByteArray name() const;
    QList<QByteArray> aliases() const;
    int mibEnum() const;
@@ -117,6 +119,7 @@ class QUtf32Codec : public QTextCodec
    QUtf32Codec() {
       e = DetectEndianness;
    }
+
    ~QUtf32Codec();
 
    QByteArray name() const;
@@ -136,6 +139,7 @@ class QUtf32BECodec : public QUtf32Codec
    QUtf32BECodec() : QUtf32Codec() {
       e = BigEndianness;
    }
+
    QByteArray name() const;
    QList<QByteArray> aliases() const;
    int mibEnum() const;
@@ -147,6 +151,7 @@ class QUtf32LECodec : public QUtf32Codec
    QUtf32LECodec() : QUtf32Codec() {
       e = LittleEndianness;
    }
+
    QByteArray name() const;
    QList<QByteArray> aliases() const;
    int mibEnum() const;

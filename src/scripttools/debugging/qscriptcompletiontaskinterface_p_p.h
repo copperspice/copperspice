@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -47,17 +47,17 @@ class QScriptCompletionTaskInterface;
 class QScriptCompletionTaskInterfacePrivate
 
 {
-    Q_DECLARE_PUBLIC(QScriptCompletionTaskInterface)
+   Q_DECLARE_PUBLIC(QScriptCompletionTaskInterface)
 
-public:
-    QScriptCompletionTaskInterfacePrivate();
-    virtual ~QScriptCompletionTaskInterfacePrivate();
+ public:
+   QScriptCompletionTaskInterfacePrivate();
+   virtual ~QScriptCompletionTaskInterfacePrivate();
 
-    int type;
-    QStringList results;
-    int position;
-    int length;
-    QString appendix;
+   int type;
+   QStringList results;
+   int position;
+   int length;
+   QString appendix;
 };
 
 QT_END_NAMESPACE

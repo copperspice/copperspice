@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,29 +18,25 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVEITEMMODULE_H
-#define QDECLARATIVEITEMMODULE_H
+#ifndef QDECLARATIVEItemsModule_P_H
+#define QDECLARATIVEItemsModule_P_H
 
 #include <qdeclarative.h>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
 class QDeclarativeItemModule
 {
-public:
-    static void defineModule();
-    static void defineModuleCompat();
+ public:
+   static void defineModule();
+   static void defineModuleCompat();
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEITEMMODULE_H

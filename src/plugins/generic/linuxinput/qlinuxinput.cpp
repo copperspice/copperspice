@@ -23,31 +23,21 @@
 *
 ***********************************************************************/
 
-
-#include "qlinuxinput.h"
-
-
+#include <qlinuxinput.h>
 #include <QSocketNotifier>
 #include <QStringList>
 #include <QPoint>
 #include <QWindowSystemInterface>
-
 #include <qkbd_qws.h>
-
-
 #include <qplatformdefs.h>
-#include <private/qcore_unix_p.h> // overrides QT_OPEN
-
+#include <qcore_unix_p.h> // overrides QT_OPEN
 #include <errno.h>
 #include <termios.h>
-
 #include <linux/kd.h>
 #include <linux/input.h>
-
 #include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
-
 
 //#define QT_QPA_EXPERIMENTAL_TOUCHEVENT
 

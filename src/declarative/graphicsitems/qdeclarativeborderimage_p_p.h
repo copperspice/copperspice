@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,60 +18,59 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVEBORDERIMAGE_P_H
-#define QDECLARATIVEBORDERIMAGE_P_H
+#ifndef QDECLARATIVEBORDERIMAGE_P_P_H
+#define QDECLARATIVEBORDERIMAGE_P_P_H
 
-#include "qdeclarativeimagebase_p_p.h"
-#include "qdeclarativescalegrid_p_p.h"
+#include <qdeclarativeimagebase_p_p.h>
+#include <qdeclarativescalegrid_p_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QNetworkReply;
 class QDeclarativeBorderImagePrivate : public QDeclarativeImageBasePrivate
 {
-    Q_DECLARE_PUBLIC(QDeclarativeBorderImage)
+   Q_DECLARE_PUBLIC(QDeclarativeBorderImage)
 
-public:
-    QDeclarativeBorderImagePrivate()
+ public:
+   QDeclarativeBorderImagePrivate()
       : border(0), sciReply(0),
         horizontalTileMode(QDeclarativeBorderImage::Stretch),
         verticalTileMode(QDeclarativeBorderImage::Stretch),
-        redirectCount(0)
-    {
-    }
+        redirectCount(0) {
+   }
 
-    ~QDeclarativeBorderImagePrivate()
-    {
-    }
+   ~QDeclarativeBorderImagePrivate() {
+   }
 
 
-    QDeclarativeScaleGrid *getScaleGrid()
-    {
-        Q_Q(QDeclarativeBorderImage);
-        if (!border) {
-            border = new QDeclarativeScaleGrid(q);
-            static int borderChangedSignalIdx = -1;
-            static int doUpdateSlotIdx = -1;
-            if (borderChangedSignalIdx < 0)
-                borderChangedSignalIdx = QDeclarativeScaleGrid::staticMetaObject.indexOfSignal("borderChanged()");
-            if (doUpdateSlotIdx < 0)
-                doUpdateSlotIdx = QDeclarativeBorderImage::staticMetaObject.indexOfSlot("doUpdate()");
-            QMetaObject::connect(border, borderChangedSignalIdx, q, doUpdateSlotIdx);
-        }
-        return border;
-    }
+   QDeclarativeScaleGrid *getScaleGrid() {
+      Q_Q(QDeclarativeBorderImage);
+      if (!border) {
+         border = new QDeclarativeScaleGrid(q);
+         static int borderChangedSignalIdx = -1;
+         static int doUpdateSlotIdx = -1;
+         if (borderChangedSignalIdx < 0) {
+            borderChangedSignalIdx = QDeclarativeScaleGrid::staticMetaObject.indexOfSignal("borderChanged()");
+         }
+         if (doUpdateSlotIdx < 0) {
+            doUpdateSlotIdx = QDeclarativeBorderImage::staticMetaObject.indexOfSlot("doUpdate()");
+         }
+         QMetaObject::connect(border, borderChangedSignalIdx, q, doUpdateSlotIdx);
+      }
+      return border;
+   }
 
-    QDeclarativeScaleGrid *border;
-    QUrl sciurl;
-    QNetworkReply *sciReply;
-    QDeclarativeBorderImage::TileMode horizontalTileMode;
-    QDeclarativeBorderImage::TileMode verticalTileMode;
-    int redirectCount;
+   QDeclarativeScaleGrid *border;
+   QUrl sciurl;
+   QNetworkReply *sciReply;
+   QDeclarativeBorderImage::TileMode horizontalTileMode;
+   QDeclarativeBorderImage::TileMode verticalTileMode;
+   int redirectCount;
 };
 
 QT_END_NAMESPACE

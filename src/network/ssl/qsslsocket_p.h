@@ -101,12 +101,11 @@ class QSslSocketPrivate : public QTcpSocketPrivate
    static QList<QSslCertificate> defaultCaCertificates();
    static QList<QSslCertificate> systemCaCertificates();
    static void setDefaultCaCertificates(const QList<QSslCertificate> &certs);
-   static bool addDefaultCaCertificates(const QString &path, QSsl::EncodingFormat format,
-                                        QRegExp::PatternSyntax syntax);
+   static bool addDefaultCaCertificates(const QString &path, QSsl::EncodingFormat format, QRegExp::PatternSyntax syntax);
    static void addDefaultCaCertificate(const QSslCertificate &cert);
    static void addDefaultCaCertificates(const QList<QSslCertificate> &certs);
 
-#if defined(Q_OS_MAC) && !defined(Q_OS_IOS)
+#if defined(Q_OS_MAC) && ! defined(Q_OS_IOS)
    static PtrSecCertificateGetData ptrSecCertificateGetData;
    static PtrSecTrustSettingsCopyCertificates ptrSecTrustSettingsCopyCertificates;
    static PtrSecTrustCopyAnchorCertificates ptrSecTrustCopyAnchorCertificates;
@@ -116,7 +115,6 @@ class QSslSocketPrivate : public QTcpSocketPrivate
    static PtrCertCloseStore ptrCertCloseStore;
 #endif
 
-   // The socket itself, including private slots.
    QTcpSocket *plainSocket;
    void createPlainSocket(QIODevice::OpenMode openMode);
    static void pauseSocketNotifiers(QSslSocket *);

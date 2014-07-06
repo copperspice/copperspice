@@ -23,28 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qopenkodeintegration.h"
-#include "qopenkodewindow.h"
-#include "qopenkodeeventloopintegration.h"
-
-#include <QtOpenGL/private/qpixmapdata_gl_p.h>
-#include <QtOpenGL/private/qwindowsurface_gl_p.h>
-
-#include <QtGui/private/qpixmap_raster_p.h>
-
+#include <qopenkodeintegration.h>
+#include <qopenkodewindow.h>
+#include <qopenkodeeventloopintegration.h>
+#include <qpixmapdata_gl_p.h>
+#include <qwindowsurface_gl_p.h>
+#include <qpixmap_raster_p.h>
 #include <QtCore/qdebug.h>
 #include <QtCore/qthread.h>
 #include <QtCore/qfile.h>
-
-#include "qgenericunixfontdatabase.h"
+#include <qgenericunixfontdatabase.h>
 
 #include <KD/kd.h>
 #include <KD/NV_display.h>
 #include <KD/NV_initialize.h>
-
 #include <EGL/egl.h>
-
-#include "GLES2/gl2ext.h"
+#include <GLES2/gl2ext.h>
 
 QT_BEGIN_NAMESPACE
 

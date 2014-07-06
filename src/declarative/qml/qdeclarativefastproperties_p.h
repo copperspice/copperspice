@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -29,31 +29,30 @@
 #include <QtCore/qvector.h>
 #include <QtCore/qhash.h>
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
 
 class QObject;
 class QDeclarativeNotifierEndpoint;
+
 class QDeclarativeFastProperties
 {
-public:
-    typedef void (*Accessor)(QObject *object, void *output, QDeclarativeNotifierEndpoint *endpoint);
+ public:
+   typedef void (*Accessor)(QObject *object, void *output, QDeclarativeNotifierEndpoint *endpoint);
 
-    QDeclarativeFastProperties();
+   QDeclarativeFastProperties();
 
-    Accessor accessor(int index) const { return m_accessors.at(index); }
-    int accessorIndexForProperty(const QMetaObject *, int);
+   Accessor accessor(int index) const {
+      return m_accessors.at(index);
+   }
+   int accessorIndexForProperty(const QMetaObject *, int);
 
-private:
-    void add(const QMetaObject *, int, Accessor);
+ private:
+   void add(const QMetaObject *, int, Accessor);
 
-    QHash<QPair<const QMetaObject *, int>, int> m_index;
-    QVector<Accessor> m_accessors;
+   QHash<QPair<const QMetaObject *, int>, int> m_index;
+   QVector<Accessor> m_accessors;
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEFASTPROPERTIES_P_H

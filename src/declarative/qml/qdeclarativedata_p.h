@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,24 +18,13 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
 #ifndef QDECLARATIVEDATA_P_H
 #define QDECLARATIVEDATA_P_H
-
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
 
 #include <QtScript/qscriptvalue.h>
 
@@ -59,110 +48,114 @@ class QDeclarativeDataExtended;
 class QDeclarativeData : public CSAbstractDeclarativeData
 {
 
-public:
-    QDeclarativeData()
-        : ownMemory(true), ownContext(false), indestructible(true), explicitIndestructibleSet(false), 
-          context(0), outerContext(0), bindings(0), nextContextObject(0), prevContextObject(0), bindingBitsSize(0), 
-          bindingBits(0), lineNumber(0), columnNumber(0), deferredComponent(0), deferredIdx(0), 
-          scriptValue(0), objectDataRefCount(0), propertyCache(0), guards(0), extendedData(0) {
-          init(); 
+ public:
+   QDeclarativeData()
+      : ownMemory(true), ownContext(false), indestructible(true), explicitIndestructibleSet(false),
+        context(0), outerContext(0), bindings(0), nextContextObject(0), prevContextObject(0), bindingBitsSize(0),
+        bindingBits(0), lineNumber(0), columnNumber(0), deferredComponent(0), deferredIdx(0),
+        scriptValue(0), objectDataRefCount(0), propertyCache(0), guards(0), extendedData(0) {
+      init();
+   }
+
+   static inline void init() {
+      CSAbstractDeclarativeData::destroyed = destroyed;
+      CSAbstractDeclarativeData::parentChanged = parentChanged;
+
+      // BROOM (decalartive)
+      // CSAbstractDeclarativeData::signalEmitted = 0;
+      // CSAbstractDeclarativeData::receivers = 0;
+   }
+
+   static void destroyed(CSAbstractDeclarativeData *, QObject *);
+   static void parentChanged(CSAbstractDeclarativeData *, QObject *, QObject *);
+
+   // BROOM (decalartive)
+   //static void signalEmitted(CSAbstractDeclarativeData *, QObject *, int, void **);
+   //static int  receivers(CSAbstractDeclarativeData *, const QObject *, int);
+
+   void destroyed(QObject *);
+   void parentChanged(QObject *, QObject *);
+
+   // BROOM (decalartive)
+   //void signalEmitted(QObject *, int, void **);
+   //void receivers(QObject *, int);
+
+   void setImplicitDestructible() {
+      if (!explicitIndestructibleSet) {
+         indestructible = false;
       }
+   }
 
-    static inline void init() {
-        CSAbstractDeclarativeData::destroyed = destroyed;
-        CSAbstractDeclarativeData::parentChanged = parentChanged;
+   quint32 ownMemory: 1;
+   quint32 ownContext: 1;
+   quint32 indestructible: 1;
+   quint32 explicitIndestructibleSet: 1;
+   quint32 dummy: 28;
 
-        // BROOM (decalartive)
-        // CSAbstractDeclarativeData::signalEmitted = 0;
-        // CSAbstractDeclarativeData::receivers = 0;        
-    }
+   // The context that created the C++ object
+   QDeclarativeContextData *context;
 
-    static void destroyed(CSAbstractDeclarativeData *, QObject *);
-    static void parentChanged(CSAbstractDeclarativeData *, QObject *, QObject *);
+   // The outermost context in which this object lives
+   QDeclarativeContextData *outerContext;
 
-    // BROOM (decalartive) 
-    //static void signalEmitted(CSAbstractDeclarativeData *, QObject *, int, void **);
-    //static int  receivers(CSAbstractDeclarativeData *, const QObject *, int);
+   QDeclarativeAbstractBinding *bindings;
 
-    void destroyed(QObject *);
-    void parentChanged(QObject *, QObject *);    
+   // Linked list for QDeclarativeContext::contextObjects
+   QDeclarativeData *nextContextObject;
+   QDeclarativeData **prevContextObject;
 
-    // BROOM (decalartive) 
-    //void signalEmitted(QObject *, int, void **);
-    //void receivers(QObject *, int);
+   int bindingBitsSize;
+   quint32 *bindingBits;
+   bool hasBindingBit(int) const;
+   void clearBindingBit(int);
+   void setBindingBit(QObject *obj, int);
 
-    void setImplicitDestructible() {
-        if (!explicitIndestructibleSet) indestructible = false;
-    }
+   ushort lineNumber;
+   ushort columnNumber;
 
-    quint32 ownMemory:1;
-    quint32 ownContext:1;
-    quint32 indestructible:1;
-    quint32 explicitIndestructibleSet:1;
-    quint32 dummy:28;
+   QDeclarativeCompiledData *deferredComponent; // Can't this be found from the context?
+   unsigned int deferredIdx;
 
-    // The context that created the C++ object
-    QDeclarativeContextData *context; 
+   // ### Can we make this QScriptValuePrivate so we incur no additional allocation cost?
+   QScriptValue *scriptValue;
+   quint32 objectDataRefCount;
+   QDeclarativePropertyCache *propertyCache;
 
-    // The outermost context in which this object lives
-    QDeclarativeContextData *outerContext;
+   QDeclarativeGuardImpl *guards;
 
-    QDeclarativeAbstractBinding *bindings;
+   // BROOM (decalartive)
+   static QDeclarativeData *get(const QObject *object, bool create = false) {
+      QObjectPrivate *priv = QObjectPrivate::get(const_cast<QObject *>(object));
 
-    // Linked list for QDeclarativeContext::contextObjects
-    QDeclarativeData *nextContextObject;
-    QDeclarativeData**prevContextObject;
+      if (priv->wasDeleted) {
+         Q_ASSERT(!create);
+         return 0;
 
-    int bindingBitsSize;
-    quint32 *bindingBits; 
-    bool hasBindingBit(int) const;
-    void clearBindingBit(int);
-    void setBindingBit(QObject *obj, int);
+      } else if (priv->declarativeData) {
+         return static_cast<QDeclarativeData *>(priv->declarativeData);
 
-    ushort lineNumber;
-    ushort columnNumber;
+      } else if (create) {
+         priv->declarativeData = new QDeclarativeData;
+         return static_cast<QDeclarativeData *>(priv->declarativeData);
 
-    QDeclarativeCompiledData *deferredComponent; // Can't this be found from the context?
-    unsigned int deferredIdx;
+      } else {
+         return 0;
 
-    // ### Can we make this QScriptValuePrivate so we incur no additional allocation cost?
-    QScriptValue *scriptValue;
-    quint32 objectDataRefCount;
-    QDeclarativePropertyCache *propertyCache;
+      }
+   }
 
-    QDeclarativeGuardImpl *guards;
+   bool hasExtendedData() const {
+      return extendedData != 0;
+   }
+   QDeclarativeNotifier *objectNameNotifier() const;
+   QHash<int, QObject *> *attachedProperties() const;
+   void addBoundSignal(QDeclarativeAbstractBoundSignal *signal);
+   void removeBoundSignal(QDeclarativeAbstractBoundSignal *signal);
+   void disconnectNotifiers();
 
-    // BROOM (decalartive)
-    static QDeclarativeData *get(const QObject *object, bool create = false) {
-        QObjectPrivate *priv = QObjectPrivate::get(const_cast<QObject *>(object));
-
-        if (priv->wasDeleted) {
-            Q_ASSERT(!create);
-            return 0;
-
-        } else if (priv->declarativeData) {
-            return static_cast<QDeclarativeData *>(priv->declarativeData);
-
-        } else if (create) {
-            priv->declarativeData = new QDeclarativeData;
-            return static_cast<QDeclarativeData *>(priv->declarativeData);
-
-        } else {
-            return 0;
-
-        }
-    }
-
-    bool hasExtendedData() const { return extendedData != 0; }
-    QDeclarativeNotifier *objectNameNotifier() const;
-    QHash<int, QObject *> *attachedProperties() const;
-    void addBoundSignal(QDeclarativeAbstractBoundSignal *signal);
-    void removeBoundSignal(QDeclarativeAbstractBoundSignal *signal);
-    void disconnectNotifiers();
-
-private:
-    // For objectNameNotifier, attachedProperties and bound signal list
-    mutable QDeclarativeDataExtended *extendedData;
+ private:
+   // For objectNameNotifier, attachedProperties and bound signal list
+   mutable QDeclarativeDataExtended *extendedData;
 };
 
 QT_END_NAMESPACE

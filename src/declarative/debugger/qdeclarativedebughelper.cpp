@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,42 +18,40 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
 #include <QtScript/QScriptEngine>
-
-#include "private/qdeclarativedebughelper_p.h"
-
+#include <qdeclarativedebughelper_p.h>
 #include <QtCore/QAbstractAnimation>
 #include <QtScript/QScriptEngine>
-
-#include <private/qdeclarativeengine_p.h>
-#include <private/qabstractanimation_p.h>
-#include <private/qdeclarativeengine_p.h>
+#include <qdeclarativeengine_p.h>
+#include <qabstractanimation_p.h>
+#include <qdeclarativeengine_p.h>
 
 QT_BEGIN_NAMESPACE
 
 QScriptEngine *QDeclarativeDebugHelper::getScriptEngine(QDeclarativeEngine *engine)
 {
-    return QDeclarativeEnginePrivate::getScriptEngine(engine);
+   return QDeclarativeEnginePrivate::getScriptEngine(engine);
 }
 
 void QDeclarativeDebugHelper::setAnimationSlowDownFactor(qreal factor)
 {
-    QUnifiedTimer *timer = QUnifiedTimer::instance();
-    timer->setSlowModeEnabled(factor != 1.0);
-    timer->setSlowdownFactor(factor);
+   QUnifiedTimer *timer = QUnifiedTimer::instance();
+   timer->setSlowModeEnabled(factor != 1.0);
+   timer->setSlowdownFactor(factor);
 }
 
-void QDeclarativeDebugHelper::enableDebugging() {
+void QDeclarativeDebugHelper::enableDebugging()
+{
 #ifndef QDECLARATIVE_NO_DEBUG_PROTOCOL
-    if (!QDeclarativeEnginePrivate::qml_debugging_enabled) {
-        qWarning("Qml debugging is enabled. Only use this in a safe environment!");
-    }
-    QDeclarativeEnginePrivate::qml_debugging_enabled = true;
+   if (!QDeclarativeEnginePrivate::qml_debugging_enabled) {
+      qWarning("Qml debugging is enabled. Only use this in a safe environment!");
+   }
+   QDeclarativeEnginePrivate::qml_debugging_enabled = true;
 #endif
 }
 

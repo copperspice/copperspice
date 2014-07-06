@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,157 +38,153 @@ QT_BEGIN_NAMESPACE
 
 class QJSDebuggerAgentPrivate;
 
-enum JSDebuggerState
-{
-    NoState,
-    SteppingIntoState,
-    SteppingOverState,
-    SteppingOutState,
-    StoppedState
+enum JSDebuggerState {
+   NoState,
+   SteppingIntoState,
+   SteppingOverState,
+   SteppingOutState,
+   StoppedState
 };
 
 enum JSCoverageMessage {
-    CoverageLocation,
-    CoverageScriptLoad,
-    CoveragePosChange,
-    CoverageFuncEntry,
-    CoverageFuncExit,
-    CoverageComplete,
+   CoverageLocation,
+   CoverageScriptLoad,
+   CoveragePosChange,
+   CoverageFuncEntry,
+   CoverageFuncExit,
+   CoverageComplete,
 
-    CoverageMaximumMessage
+   CoverageMaximumMessage
 };
 
-struct JSAgentWatchData
-{
-    QByteArray exp;
-    QByteArray name;
-    QByteArray value;
-    QByteArray type;
-    bool hasChildren;
-    quint64 objectId;
+struct JSAgentWatchData {
+   QByteArray exp;
+   QByteArray name;
+   QByteArray value;
+   QByteArray type;
+   bool hasChildren;
+   quint64 objectId;
 };
 
 inline QDataStream &operator<<(QDataStream &s, const JSAgentWatchData &data)
 {
-    return s << data.exp << data.name << data.value
-             << data.type << data.hasChildren << data.objectId;
+   return s << data.exp << data.name << data.value
+          << data.type << data.hasChildren << data.objectId;
 }
 
 inline QDataStream &operator>>(QDataStream &s, JSAgentWatchData &data)
 {
-    return s >> data.exp >> data.name >> data.value
-             >> data.type >> data.hasChildren >> data.objectId;
+   return s >> data.exp >> data.name >> data.value
+          >> data.type >> data.hasChildren >> data.objectId;
 }
 
-struct JSAgentStackData
-{
-    QByteArray functionName;
-    QByteArray fileUrl;
-    qint32 lineNumber;
+struct JSAgentStackData {
+   QByteArray functionName;
+   QByteArray fileUrl;
+   qint32 lineNumber;
 };
 
 inline QDataStream &operator<<(QDataStream &s, const JSAgentStackData &data)
 {
-    return s << data.functionName << data.fileUrl << data.lineNumber;
+   return s << data.functionName << data.fileUrl << data.lineNumber;
 }
 
 inline QDataStream &operator>>(QDataStream &s, JSAgentStackData &data)
 {
-    return s >> data.functionName >> data.fileUrl >> data.lineNumber;
+   return s >> data.functionName >> data.fileUrl >> data.lineNumber;
 }
 
-struct JSAgentBreakpointData
-{
-    QByteArray functionName;
-    QByteArray fileUrl;
-    qint32 lineNumber;
+struct JSAgentBreakpointData {
+   QByteArray functionName;
+   QByteArray fileUrl;
+   qint32 lineNumber;
 };
 
 typedef QSet<JSAgentBreakpointData> JSAgentBreakpoints;
 
 inline QDataStream &operator<<(QDataStream &s, const JSAgentBreakpointData &data)
 {
-    return s << data.functionName << data.fileUrl << data.lineNumber;
+   return s << data.functionName << data.fileUrl << data.lineNumber;
 }
 
 inline QDataStream &operator>>(QDataStream &s, JSAgentBreakpointData &data)
 {
-    return s >> data.functionName >> data.fileUrl >> data.lineNumber;
+   return s >> data.functionName >> data.fileUrl >> data.lineNumber;
 }
 
 inline bool operator==(const JSAgentBreakpointData &b1, const JSAgentBreakpointData &b2)
 {
-    return b1.lineNumber == b2.lineNumber && b1.fileUrl == b2.fileUrl;
+   return b1.lineNumber == b2.lineNumber && b1.fileUrl == b2.fileUrl;
 }
 
 inline uint qHash(const JSAgentBreakpointData &b)
 {
-    return b.lineNumber ^ qHash(b.fileUrl);
+   return b.lineNumber ^ qHash(b.fileUrl);
 }
 
 
 class QJSDebuggerAgent : public QObject, public QScriptEngineAgent
 {
-    CS_OBJECT(QJSDebuggerAgent)
+   CS_OBJECT(QJSDebuggerAgent)
 
-public:
-    QJSDebuggerAgent(QScriptEngine *engine, QObject *parent = 0);
-    QJSDebuggerAgent(QDeclarativeEngine *engine, QObject *parent = 0);
-    ~QJSDebuggerAgent();
+ public:
+   QJSDebuggerAgent(QScriptEngine *engine, QObject *parent = 0);
+   QJSDebuggerAgent(QDeclarativeEngine *engine, QObject *parent = 0);
+   ~QJSDebuggerAgent();
 
-    bool isInitialized() const;
+   bool isInitialized() const;
 
-    void setBreakpoints(const JSAgentBreakpoints &);
-    void setWatchExpressions(const QStringList &);
+   void setBreakpoints(const JSAgentBreakpoints &);
+   void setWatchExpressions(const QStringList &);
 
-    void stepOver();
-    void stepInto();
-    void stepOut();
-    void continueExecution();
-    void setCoverageEnabled(bool enabled);
+   void stepOver();
+   void stepInto();
+   void stepOut();
+   void continueExecution();
+   void setCoverageEnabled(bool enabled);
 
-    JSAgentWatchData executeExpression(const QString &expr);
-    QList<JSAgentWatchData> expandObjectById(quint64 objectId);
-    QList<JSAgentWatchData> locals();
-    QList<JSAgentWatchData> localsAtFrame(int frameId);
-    QList<JSAgentStackData> backtrace();
-    QList<JSAgentWatchData> watches();
-    void setProperty(qint64 objectId,
-                     const QString &property,
-                     const QString &value);
+   JSAgentWatchData executeExpression(const QString &expr);
+   QList<JSAgentWatchData> expandObjectById(quint64 objectId);
+   QList<JSAgentWatchData> locals();
+   QList<JSAgentWatchData> localsAtFrame(int frameId);
+   QList<JSAgentStackData> backtrace();
+   QList<JSAgentWatchData> watches();
+   void setProperty(qint64 objectId,
+                    const QString &property,
+                    const QString &value);
 
-    // reimplemented
-    void scriptLoad(qint64 id, const QString &program,
-                    const QString &fileName, int baseLineNumber);
-    void scriptUnload(qint64 id);
+   // reimplemented
+   void scriptLoad(qint64 id, const QString &program,
+                   const QString &fileName, int baseLineNumber);
+   void scriptUnload(qint64 id);
 
-    void contextPush();
-    void contextPop();
+   void contextPush();
+   void contextPop();
 
-    void functionEntry(qint64 scriptId);
-    void functionExit(qint64 scriptId,
-                      const QScriptValue &returnValue);
+   void functionEntry(qint64 scriptId);
+   void functionExit(qint64 scriptId,
+                     const QScriptValue &returnValue);
 
-    void positionChange(qint64 scriptId,
-                        int lineNumber, int columnNumber);
+   void positionChange(qint64 scriptId,
+                       int lineNumber, int columnNumber);
 
-    void exceptionThrow(qint64 scriptId,
-                        const QScriptValue &exception,
-                        bool hasHandler);
-    void exceptionCatch(qint64 scriptId,
-                        const QScriptValue &exception);
+   void exceptionThrow(qint64 scriptId,
+                       const QScriptValue &exception,
+                       bool hasHandler);
+   void exceptionCatch(qint64 scriptId,
+                       const QScriptValue &exception);
 
-    bool supportsExtension(Extension extension) const;
-    QVariant extension(Extension extension,
-                       const QVariant &argument = QVariant());
+   bool supportsExtension(Extension extension) const;
+   QVariant extension(Extension extension,
+                      const QVariant &argument = QVariant());
 
-public:
-    CS_SIGNAL_1(Public, void stopped(bool becauseOfException,const QString & exception))
-    CS_SIGNAL_2(stopped,becauseOfException,exception) 
+ public:
+   CS_SIGNAL_1(Public, void stopped(bool becauseOfException, const QString &exception))
+   CS_SIGNAL_2(stopped, becauseOfException, exception)
 
-private:
-    friend class QJSDebuggerAgentPrivate;
-    QJSDebuggerAgentPrivate *d;
+ private:
+   friend class QJSDebuggerAgentPrivate;
+   QJSDebuggerAgentPrivate *d;
 };
 
 QT_END_NAMESPACE

@@ -23,16 +23,13 @@
 *
 ***********************************************************************/
 
-#include "abstractviewinspector.h"
-
-#include "abstracttool.h"
-#include "qdeclarativeinspectorprotocol.h"
-
+#include <abstractviewinspector.h>
+#include <abstracttool.h>
+#include <qdeclarativeinspectorprotocol.h>
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeComponent>
-#include <QtDeclarative/private/qdeclarativedebughelper_p.h>
-#include "QtDeclarative/private/qdeclarativeinspectorservice_p.h"
-
+#include <qdeclarativedebughelper_p.h>
+#include <qdeclarativeinspectorservice_p.h>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QWidget>

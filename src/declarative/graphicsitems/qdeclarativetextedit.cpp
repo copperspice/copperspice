@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,20 +18,17 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#include "private/qdeclarativetextedit_p.h"
-#include "private/qdeclarativetextedit_p_p.h"
-
-#include "private/qdeclarativeevents_p_p.h"
-#include <private/qdeclarativeglobal_p.h>
+#include <qdeclarativetextedit_p.h>
+#include <qdeclarativetextedit_p_p.h>
+#include <qdeclarativeevents_p_p.h>
+#include <qdeclarativeglobal_p.h>
 #include <qdeclarativeinfo.h>
-
 #include <QtCore/qmath.h>
-
 #include <private/qtextengine_p.h>
 #include <QTextLayout>
 #include <QTextLine>
@@ -40,8 +37,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <QPainter>
-
-#include <private/qtextcontrol_p.h>
+#include <qtextcontrol_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -98,22 +94,22 @@ TextEdit {
     \a link string provides access to the particular link.
 */
 QDeclarativeTextEdit::QDeclarativeTextEdit(QDeclarativeItem *parent)
-: QDeclarativeImplicitSizePaintedItem(*(new QDeclarativeTextEditPrivate), parent)
+   : QDeclarativeImplicitSizePaintedItem(*(new QDeclarativeTextEditPrivate), parent)
 {
-    Q_D(QDeclarativeTextEdit);
-    d->init();
+   Q_D(QDeclarativeTextEdit);
+   d->init();
 }
 
 QString QDeclarativeTextEdit::text() const
 {
-    Q_D(const QDeclarativeTextEdit);
+   Q_D(const QDeclarativeTextEdit);
 
 #ifndef QT_NO_TEXTHTMLPARSER
-    if (d->richText)
-        return d->document->toHtml();
-    else
+   if (d->richText) {
+      return d->document->toHtml();
+   } else
 #endif
-        return d->document->toPlainText();
+      return d->document->toPlainText();
 }
 
 /*!
@@ -231,21 +227,22 @@ QString QDeclarativeTextEdit::text() const
 */
 void QDeclarativeTextEdit::setText(const QString &text)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (QDeclarativeTextEdit::text() == text)
-        return;
+   Q_D(QDeclarativeTextEdit);
+   if (QDeclarativeTextEdit::text() == text) {
+      return;
+   }
 
-    d->richText = d->format == RichText || (d->format == AutoText && Qt::mightBeRichText(text));
-    if (d->richText) {
+   d->richText = d->format == RichText || (d->format == AutoText && Qt::mightBeRichText(text));
+   if (d->richText) {
 #ifndef QT_NO_TEXTHTMLPARSER
-        d->control->setHtml(text);
+      d->control->setHtml(text);
 #else
-        d->control->setPlainText(text);
+      d->control->setPlainText(text);
 #endif
-    } else {
-        d->control->setPlainText(text);
-    }
-    q_textChanged();
+   } else {
+      d->control->setPlainText(text);
+   }
+   q_textChanged();
 }
 
 /*!
@@ -289,66 +286,68 @@ Column {
 */
 QDeclarativeTextEdit::TextFormat QDeclarativeTextEdit::textFormat() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->format;
+   Q_D(const QDeclarativeTextEdit);
+   return d->format;
 }
 
 void QDeclarativeTextEdit::setTextFormat(TextFormat format)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (format == d->format)
-        return;
-    bool wasRich = d->richText;
-    d->richText = format == RichText || (format == AutoText && Qt::mightBeRichText(d->text));
+   Q_D(QDeclarativeTextEdit);
+   if (format == d->format) {
+      return;
+   }
+   bool wasRich = d->richText;
+   d->richText = format == RichText || (format == AutoText && Qt::mightBeRichText(d->text));
 
-    if (wasRich && !d->richText) {
-        d->control->setPlainText(d->text);
-        updateSize();
-    } else if (!wasRich && d->richText) {
+   if (wasRich && !d->richText) {
+      d->control->setPlainText(d->text);
+      updateSize();
+   } else if (!wasRich && d->richText) {
 #ifndef QT_NO_TEXTHTMLPARSER
-        d->control->setHtml(d->text);
+      d->control->setHtml(d->text);
 #else
-        d->control->setPlainText(d->text);
+      d->control->setPlainText(d->text);
 #endif
-        updateSize();
-    }
-    d->format = format;
-    d->control->setAcceptRichText(d->format != PlainText);
-    emit textFormatChanged(d->format);
+      updateSize();
+   }
+   d->format = format;
+   d->control->setAcceptRichText(d->format != PlainText);
+   emit textFormatChanged(d->format);
 }
 
 QFont QDeclarativeTextEdit::font() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->sourceFont;
+   Q_D(const QDeclarativeTextEdit);
+   return d->sourceFont;
 }
 
 void QDeclarativeTextEdit::setFont(const QFont &font)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (d->sourceFont == font)
-        return;
+   Q_D(QDeclarativeTextEdit);
+   if (d->sourceFont == font) {
+      return;
+   }
 
-    d->sourceFont = font;
-    QFont oldFont = d->font;
-    d->font = font;
-    if (d->font.pointSizeF() != -1) {
-        // 0.5pt resolution
-        qreal size = qRound(d->font.pointSizeF()*2.0);
-        d->font.setPointSizeF(size/2.0);
-    }
+   d->sourceFont = font;
+   QFont oldFont = d->font;
+   d->font = font;
+   if (d->font.pointSizeF() != -1) {
+      // 0.5pt resolution
+      qreal size = qRound(d->font.pointSizeF() * 2.0);
+      d->font.setPointSizeF(size / 2.0);
+   }
 
-    if (oldFont != d->font) {
-        clearCache();
-        d->document->setDefaultFont(d->font);
-        if(d->cursor){
-            d->cursor->setHeight(QFontMetrics(d->font).height());
-            moveCursorDelegate();
-        }
-        updateSize();
-        update();
-    }
-    emit fontChanged(d->sourceFont);
+   if (oldFont != d->font) {
+      clearCache();
+      d->document->setDefaultFont(d->font);
+      if (d->cursor) {
+         d->cursor->setHeight(QFontMetrics(d->font).height());
+         moveCursorDelegate();
+      }
+      updateSize();
+      update();
+   }
+   emit fontChanged(d->sourceFont);
 }
 
 /*!
@@ -368,23 +367,24 @@ void QDeclarativeTextEdit::setFont(const QFont &font)
 */
 QColor QDeclarativeTextEdit::color() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->color;
+   Q_D(const QDeclarativeTextEdit);
+   return d->color;
 }
 
 void QDeclarativeTextEdit::setColor(const QColor &color)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (d->color == color)
-        return;
+   Q_D(QDeclarativeTextEdit);
+   if (d->color == color) {
+      return;
+   }
 
-    clearCache();
-    d->color = color;
-    QPalette pal = d->control->palette();
-    pal.setColor(QPalette::Text, color);
-    d->control->setPalette(pal);
-    update();
-    emit colorChanged(d->color);
+   clearCache();
+   d->color = color;
+   QPalette pal = d->control->palette();
+   pal.setColor(QPalette::Text, color);
+   d->control->setPalette(pal);
+   update();
+   emit colorChanged(d->color);
 }
 
 /*!
@@ -394,23 +394,24 @@ void QDeclarativeTextEdit::setColor(const QColor &color)
 */
 QColor QDeclarativeTextEdit::selectionColor() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->selectionColor;
+   Q_D(const QDeclarativeTextEdit);
+   return d->selectionColor;
 }
 
 void QDeclarativeTextEdit::setSelectionColor(const QColor &color)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (d->selectionColor == color)
-        return;
+   Q_D(QDeclarativeTextEdit);
+   if (d->selectionColor == color) {
+      return;
+   }
 
-    clearCache();
-    d->selectionColor = color;
-    QPalette pal = d->control->palette();
-    pal.setColor(QPalette::Highlight, color);
-    d->control->setPalette(pal);
-    update();
-    emit selectionColorChanged(d->selectionColor);
+   clearCache();
+   d->selectionColor = color;
+   QPalette pal = d->control->palette();
+   pal.setColor(QPalette::Highlight, color);
+   d->control->setPalette(pal);
+   update();
+   emit selectionColorChanged(d->selectionColor);
 }
 
 /*!
@@ -420,23 +421,24 @@ void QDeclarativeTextEdit::setSelectionColor(const QColor &color)
 */
 QColor QDeclarativeTextEdit::selectedTextColor() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->selectedTextColor;
+   Q_D(const QDeclarativeTextEdit);
+   return d->selectedTextColor;
 }
 
 void QDeclarativeTextEdit::setSelectedTextColor(const QColor &color)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (d->selectedTextColor == color)
-        return;
+   Q_D(QDeclarativeTextEdit);
+   if (d->selectedTextColor == color) {
+      return;
+   }
 
-    clearCache();
-    d->selectedTextColor = color;
-    QPalette pal = d->control->palette();
-    pal.setColor(QPalette::HighlightedText, color);
-    d->control->setPalette(pal);
-    update();
-    emit selectedTextColorChanged(d->selectedTextColor);
+   clearCache();
+   d->selectedTextColor = color;
+   QPalette pal = d->control->palette();
+   pal.setColor(QPalette::HighlightedText, color);
+   d->control->setPalette(pal);
+   update();
+   emit selectedTextColorChanged(d->selectedTextColor);
 }
 
 /*!
@@ -451,11 +453,11 @@ void QDeclarativeTextEdit::setSelectedTextColor(const QColor &color)
     Valid values for \c horizontalAlignment are:
     \list
     \o TextEdit.AlignLeft (default)
-    \o TextEdit.AlignRight 
+    \o TextEdit.AlignRight
     \o TextEdit.AlignHCenter
     \o TextEdit.AlignJustify
     \endlist
-    
+
     Valid values for \c verticalAlignment are:
     \list
     \o TextEdit.AlignTop (default)
@@ -470,106 +472,107 @@ void QDeclarativeTextEdit::setSelectedTextColor(const QColor &color)
 */
 QDeclarativeTextEdit::HAlignment QDeclarativeTextEdit::hAlign() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->hAlign;
+   Q_D(const QDeclarativeTextEdit);
+   return d->hAlign;
 }
 
 void QDeclarativeTextEdit::setHAlign(HAlignment align)
 {
-    Q_D(QDeclarativeTextEdit);
-    bool forceAlign = d->hAlignImplicit && d->effectiveLayoutMirror;
-    d->hAlignImplicit = false;
-    if (d->setHAlign(align, forceAlign) && isComponentComplete()) {
-        d->updateDefaultTextOption();
-        updateSize();
-    }
+   Q_D(QDeclarativeTextEdit);
+   bool forceAlign = d->hAlignImplicit && d->effectiveLayoutMirror;
+   d->hAlignImplicit = false;
+   if (d->setHAlign(align, forceAlign) && isComponentComplete()) {
+      d->updateDefaultTextOption();
+      updateSize();
+   }
 }
 
 void QDeclarativeTextEdit::resetHAlign()
 {
-    Q_D(QDeclarativeTextEdit);
-    d->hAlignImplicit = true;
-    if (d->determineHorizontalAlignment() && isComponentComplete()) {
-        d->updateDefaultTextOption();
-        updateSize();
-    }
+   Q_D(QDeclarativeTextEdit);
+   d->hAlignImplicit = true;
+   if (d->determineHorizontalAlignment() && isComponentComplete()) {
+      d->updateDefaultTextOption();
+      updateSize();
+   }
 }
 
 QDeclarativeTextEdit::HAlignment QDeclarativeTextEdit::effectiveHAlign() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    QDeclarativeTextEdit::HAlignment effectiveAlignment = d->hAlign;
-    if (!d->hAlignImplicit && d->effectiveLayoutMirror) {
-        switch (d->hAlign) {
-        case QDeclarativeTextEdit::AlignLeft:
+   Q_D(const QDeclarativeTextEdit);
+   QDeclarativeTextEdit::HAlignment effectiveAlignment = d->hAlign;
+   if (!d->hAlignImplicit && d->effectiveLayoutMirror) {
+      switch (d->hAlign) {
+         case QDeclarativeTextEdit::AlignLeft:
             effectiveAlignment = QDeclarativeTextEdit::AlignRight;
             break;
-        case QDeclarativeTextEdit::AlignRight:
+         case QDeclarativeTextEdit::AlignRight:
             effectiveAlignment = QDeclarativeTextEdit::AlignLeft;
             break;
-        default:
+         default:
             break;
-        }
-    }
-    return effectiveAlignment;
+      }
+   }
+   return effectiveAlignment;
 }
 
 bool QDeclarativeTextEditPrivate::setHAlign(QDeclarativeTextEdit::HAlignment alignment, bool forceAlign)
 {
-    Q_Q(QDeclarativeTextEdit);
-    if (hAlign != alignment || forceAlign) {
-        hAlign = alignment;
-        emit q->horizontalAlignmentChanged(alignment);
-        return true;
-    }
-    return false;
+   Q_Q(QDeclarativeTextEdit);
+   if (hAlign != alignment || forceAlign) {
+      hAlign = alignment;
+      emit q->horizontalAlignmentChanged(alignment);
+      return true;
+   }
+   return false;
 }
 
 bool QDeclarativeTextEditPrivate::determineHorizontalAlignment()
 {
-    Q_Q(QDeclarativeTextEdit);
-    if (hAlignImplicit && q->isComponentComplete()) {
-        bool alignToRight;
-        if (text.isEmpty() && !control->textCursor().isNull()) {
-            const QString preeditText = control->textCursor().block().layout()->preeditAreaText();
-            alignToRight = preeditText.isEmpty()
-                    ? QApplication::keyboardInputDirection() == Qt::RightToLeft
-                    : preeditText.isRightToLeft();
-        } else {
-            alignToRight = rightToLeftText;
-        }
-        return setHAlign(alignToRight ? QDeclarativeTextEdit::AlignRight : QDeclarativeTextEdit::AlignLeft);
-    }
-    return false;
+   Q_Q(QDeclarativeTextEdit);
+   if (hAlignImplicit && q->isComponentComplete()) {
+      bool alignToRight;
+      if (text.isEmpty() && !control->textCursor().isNull()) {
+         const QString preeditText = control->textCursor().block().layout()->preeditAreaText();
+         alignToRight = preeditText.isEmpty()
+                        ? QApplication::keyboardInputDirection() == Qt::RightToLeft
+                        : preeditText.isRightToLeft();
+      } else {
+         alignToRight = rightToLeftText;
+      }
+      return setHAlign(alignToRight ? QDeclarativeTextEdit::AlignRight : QDeclarativeTextEdit::AlignLeft);
+   }
+   return false;
 }
 
 void QDeclarativeTextEditPrivate::mirrorChange()
 {
-    Q_Q(QDeclarativeTextEdit);
-    if (q->isComponentComplete()) {
-        if (!hAlignImplicit && (hAlign == QDeclarativeTextEdit::AlignRight || hAlign == QDeclarativeTextEdit::AlignLeft)) {
-            updateDefaultTextOption();
-            q->updateSize();
-        }
-    }
+   Q_Q(QDeclarativeTextEdit);
+   if (q->isComponentComplete()) {
+      if (!hAlignImplicit && (hAlign == QDeclarativeTextEdit::AlignRight || hAlign == QDeclarativeTextEdit::AlignLeft)) {
+         updateDefaultTextOption();
+         q->updateSize();
+      }
+   }
 }
 
 QDeclarativeTextEdit::VAlignment QDeclarativeTextEdit::vAlign() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->vAlign;
+   Q_D(const QDeclarativeTextEdit);
+   return d->vAlign;
 }
 
 void QDeclarativeTextEdit::setVAlign(QDeclarativeTextEdit::VAlignment alignment)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (alignment == d->vAlign)
-        return;
-    d->vAlign = alignment;
-    d->updateDefaultTextOption();
-    updateSize();
-    moveCursorDelegate();
-    emit verticalAlignmentChanged(d->vAlign);
+   Q_D(QDeclarativeTextEdit);
+   if (alignment == d->vAlign) {
+      return;
+   }
+   d->vAlign = alignment;
+   d->updateDefaultTextOption();
+   updateSize();
+   moveCursorDelegate();
+   emit verticalAlignmentChanged(d->vAlign);
 }
 
 /*!
@@ -589,19 +592,20 @@ void QDeclarativeTextEdit::setVAlign(QDeclarativeTextEdit::VAlignment alignment)
 */
 QDeclarativeTextEdit::WrapMode QDeclarativeTextEdit::wrapMode() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->wrapMode;
+   Q_D(const QDeclarativeTextEdit);
+   return d->wrapMode;
 }
 
 void QDeclarativeTextEdit::setWrapMode(WrapMode mode)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (mode == d->wrapMode)
-        return;
-    d->wrapMode = mode;
-    d->updateDefaultTextOption();
-    updateSize();
-    emit wrapModeChanged();
+   Q_D(QDeclarativeTextEdit);
+   if (mode == d->wrapMode) {
+      return;
+   }
+   d->wrapMode = mode;
+   d->updateDefaultTextOption();
+   updateSize();
+   emit wrapModeChanged();
 }
 
 /*!
@@ -612,8 +616,8 @@ void QDeclarativeTextEdit::setWrapMode(WrapMode mode)
 */
 int QDeclarativeTextEdit::lineCount() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->lineCount;
+   Q_D(const QDeclarativeTextEdit);
+   return d->lineCount;
 }
 
 /*!
@@ -624,8 +628,8 @@ int QDeclarativeTextEdit::lineCount() const
 */
 qreal QDeclarativeTextEdit::paintedWidth() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->paintedSize.width();
+   Q_D(const QDeclarativeTextEdit);
+   return d->paintedSize.width();
 }
 
 /*!
@@ -636,8 +640,8 @@ qreal QDeclarativeTextEdit::paintedWidth() const
 */
 qreal QDeclarativeTextEdit::paintedHeight() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->paintedSize.height();
+   Q_D(const QDeclarativeTextEdit);
+   return d->paintedSize.height();
 }
 
 /*!
@@ -649,10 +653,10 @@ qreal QDeclarativeTextEdit::paintedHeight() const
 */
 QRectF QDeclarativeTextEdit::positionToRectangle(int pos) const
 {
-    Q_D(const QDeclarativeTextEdit);
-    QTextCursor c(d->document);
-    c.setPosition(pos);
-    return d->control->cursorRect(c);
+   Q_D(const QDeclarativeTextEdit);
+   QTextCursor c(d->document);
+   c.setPosition(pos);
+   return d->control->cursorRect(c);
 
 }
 
@@ -666,36 +670,37 @@ QRectF QDeclarativeTextEdit::positionToRectangle(int pos) const
 */
 int QDeclarativeTextEdit::positionAt(int x, int y) const
 {
-    Q_D(const QDeclarativeTextEdit);
-    int r = d->document->documentLayout()->hitTest(QPoint(x,y-d->yoff), Qt::FuzzyHit);
-    QTextCursor cursor = d->control->textCursor();
-    if (r > cursor.position()) {
-        // The cursor position includes positions within the preedit text, but only positions in the
-        // same text block are offset so it is possible to get a position that is either part of the
-        // preedit or the next text block.
-        QTextLayout *layout = cursor.block().layout();
-        const int preeditLength = layout
-                ? layout->preeditAreaText().length()
-                : 0;
-        if (preeditLength > 0
-                && d->document->documentLayout()->blockBoundingRect(cursor.block()).contains(x,y-d->yoff)) {
-            r = r > cursor.position() + preeditLength
-                    ? r - preeditLength
-                    : cursor.position();
-        }
-    }
-    return r;
+   Q_D(const QDeclarativeTextEdit);
+   int r = d->document->documentLayout()->hitTest(QPoint(x, y - d->yoff), Qt::FuzzyHit);
+   QTextCursor cursor = d->control->textCursor();
+   if (r > cursor.position()) {
+      // The cursor position includes positions within the preedit text, but only positions in the
+      // same text block are offset so it is possible to get a position that is either part of the
+      // preedit or the next text block.
+      QTextLayout *layout = cursor.block().layout();
+      const int preeditLength = layout
+                                ? layout->preeditAreaText().length()
+                                : 0;
+      if (preeditLength > 0
+            && d->document->documentLayout()->blockBoundingRect(cursor.block()).contains(x, y - d->yoff)) {
+         r = r > cursor.position() + preeditLength
+             ? r - preeditLength
+             : cursor.position();
+      }
+   }
+   return r;
 }
 
 void QDeclarativeTextEdit::moveCursorSelection(int pos)
 {
-    //Note that this is the same as setCursorPosition but with the KeepAnchor flag set
-    Q_D(QDeclarativeTextEdit);
-    QTextCursor cursor = d->control->textCursor();
-    if (cursor.position() == pos)
-        return;
-    cursor.setPosition(pos, QTextCursor::KeepAnchor);
-    d->control->setTextCursor(cursor);
+   //Note that this is the same as setCursorPosition but with the KeepAnchor flag set
+   Q_D(QDeclarativeTextEdit);
+   QTextCursor cursor = d->control->textCursor();
+   if (cursor.position() == pos) {
+      return;
+   }
+   cursor.setPosition(pos, QTextCursor::KeepAnchor);
+   d->control->setTextCursor(cursor);
 }
 
 /*!
@@ -738,51 +743,54 @@ void QDeclarativeTextEdit::moveCursorSelection(int pos)
 */
 void QDeclarativeTextEdit::moveCursorSelection(int pos, SelectionMode mode)
 {
-    Q_D(QDeclarativeTextEdit);
-    QTextCursor cursor = d->control->textCursor();
-    if (cursor.position() == pos)
-        return;
-    if (mode == SelectCharacters) {
-        cursor.setPosition(pos, QTextCursor::KeepAnchor);
-    } else if (cursor.anchor() < pos || (cursor.anchor() == pos && cursor.position() < pos)) {
-        if (cursor.anchor() > cursor.position()) {
-            cursor.setPosition(cursor.anchor(), QTextCursor::MoveAnchor);
-            cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
-            if (cursor.position() == cursor.anchor())
-                cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
-            else
-                cursor.setPosition(cursor.position(), QTextCursor::MoveAnchor);
-        } else {
-            cursor.setPosition(cursor.anchor(), QTextCursor::MoveAnchor);
-            cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::MoveAnchor);
-        }
+   Q_D(QDeclarativeTextEdit);
+   QTextCursor cursor = d->control->textCursor();
+   if (cursor.position() == pos) {
+      return;
+   }
+   if (mode == SelectCharacters) {
+      cursor.setPosition(pos, QTextCursor::KeepAnchor);
+   } else if (cursor.anchor() < pos || (cursor.anchor() == pos && cursor.position() < pos)) {
+      if (cursor.anchor() > cursor.position()) {
+         cursor.setPosition(cursor.anchor(), QTextCursor::MoveAnchor);
+         cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
+         if (cursor.position() == cursor.anchor()) {
+            cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
+         } else {
+            cursor.setPosition(cursor.position(), QTextCursor::MoveAnchor);
+         }
+      } else {
+         cursor.setPosition(cursor.anchor(), QTextCursor::MoveAnchor);
+         cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::MoveAnchor);
+      }
 
-        cursor.setPosition(pos, QTextCursor::KeepAnchor);
-        cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
-        if (cursor.position() != pos)
-            cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
-    } else if (cursor.anchor() > pos || (cursor.anchor() == pos && cursor.position() > pos)) {
-        if (cursor.anchor() < cursor.position()) {
+      cursor.setPosition(pos, QTextCursor::KeepAnchor);
+      cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
+      if (cursor.position() != pos) {
+         cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+      }
+   } else if (cursor.anchor() > pos || (cursor.anchor() == pos && cursor.position() > pos)) {
+      if (cursor.anchor() < cursor.position()) {
+         cursor.setPosition(cursor.anchor(), QTextCursor::MoveAnchor);
+         cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
+      } else {
+         cursor.setPosition(cursor.anchor(), QTextCursor::MoveAnchor);
+         cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+         cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+         if (cursor.position() != cursor.anchor()) {
             cursor.setPosition(cursor.anchor(), QTextCursor::MoveAnchor);
             cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
-        } else {
-            cursor.setPosition(cursor.anchor(), QTextCursor::MoveAnchor);
-            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-            cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
-            if (cursor.position() != cursor.anchor()) {
-                cursor.setPosition(cursor.anchor(), QTextCursor::MoveAnchor);
-                cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
-            }
-        }
+         }
+      }
 
-        cursor.setPosition(pos, QTextCursor::KeepAnchor);
-        cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
-        if (cursor.position() != pos) {
-            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-            cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
-        }
-    }
-    d->control->setTextCursor(cursor);
+      cursor.setPosition(pos, QTextCursor::KeepAnchor);
+      cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+      if (cursor.position() != pos) {
+         cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+         cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
+      }
+   }
+   d->control->setTextCursor(cursor);
 }
 
 /*!
@@ -794,21 +802,23 @@ void QDeclarativeTextEdit::moveCursorSelection(int pos, SelectionMode mode)
 */
 bool QDeclarativeTextEdit::isCursorVisible() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->cursorVisible;
+   Q_D(const QDeclarativeTextEdit);
+   return d->cursorVisible;
 }
 
 void QDeclarativeTextEdit::setCursorVisible(bool on)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (d->cursorVisible == on)
-        return;
-    d->cursorVisible = on;
-    QFocusEvent focusEvent(on ? QEvent::FocusIn : QEvent::FocusOut);
-    if (!on && !d->persistentSelection)
-        d->control->setCursorIsFocusIndicator(true);
-    d->control->processEvent(&focusEvent, QPointF(0, -d->yoff));
-    emit cursorVisibleChanged(d->cursorVisible);
+   Q_D(QDeclarativeTextEdit);
+   if (d->cursorVisible == on) {
+      return;
+   }
+   d->cursorVisible = on;
+   QFocusEvent focusEvent(on ? QEvent::FocusIn : QEvent::FocusOut);
+   if (!on && !d->persistentSelection) {
+      d->control->setCursorIsFocusIndicator(true);
+   }
+   d->control->processEvent(&focusEvent, QPointF(0, -d->yoff));
+   emit cursorVisibleChanged(d->cursorVisible);
 }
 
 /*!
@@ -817,20 +827,22 @@ void QDeclarativeTextEdit::setCursorVisible(bool on)
 */
 int QDeclarativeTextEdit::cursorPosition() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->control->textCursor().position();
+   Q_D(const QDeclarativeTextEdit);
+   return d->control->textCursor().position();
 }
 
 void QDeclarativeTextEdit::setCursorPosition(int pos)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (pos < 0 || pos > d->text.length())
-        return;
-    QTextCursor cursor = d->control->textCursor();
-    if (cursor.position() == pos && cursor.anchor() == pos)
-        return;
-    cursor.setPosition(pos);
-    d->control->setTextCursor(cursor);
+   Q_D(QDeclarativeTextEdit);
+   if (pos < 0 || pos > d->text.length()) {
+      return;
+   }
+   QTextCursor cursor = d->control->textCursor();
+   if (cursor.position() == pos && cursor.anchor() == pos) {
+      return;
+   }
+   cursor.setPosition(pos);
+   d->control->setTextCursor(cursor);
 }
 
 /*!
@@ -846,51 +858,52 @@ void QDeclarativeTextEdit::setCursorPosition(int pos)
     Note that the root item of the delegate component must be a QDeclarativeItem or
     QDeclarativeItem derived item.
 */
-QDeclarativeComponent* QDeclarativeTextEdit::cursorDelegate() const
+QDeclarativeComponent *QDeclarativeTextEdit::cursorDelegate() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->cursorComponent;
+   Q_D(const QDeclarativeTextEdit);
+   return d->cursorComponent;
 }
 
-void QDeclarativeTextEdit::setCursorDelegate(QDeclarativeComponent* c)
+void QDeclarativeTextEdit::setCursorDelegate(QDeclarativeComponent *c)
 {
-    Q_D(QDeclarativeTextEdit);
-    if(d->cursorComponent){
-        if(d->cursor){
-            d->control->setCursorWidth(-1);
-            dirtyCache(cursorRectangle());
-            delete d->cursor;
-            d->cursor = 0;
-        }
-    }
-    d->cursorComponent = c;
-    if(c && c->isReady()){
-        loadCursorDelegate();
-    }else{
-        if(c)
-            connect(c, SIGNAL(statusChanged()),
-                    this, SLOT(loadCursorDelegate()));
-    }
+   Q_D(QDeclarativeTextEdit);
+   if (d->cursorComponent) {
+      if (d->cursor) {
+         d->control->setCursorWidth(-1);
+         dirtyCache(cursorRectangle());
+         delete d->cursor;
+         d->cursor = 0;
+      }
+   }
+   d->cursorComponent = c;
+   if (c && c->isReady()) {
+      loadCursorDelegate();
+   } else {
+      if (c)
+         connect(c, SIGNAL(statusChanged()),
+                 this, SLOT(loadCursorDelegate()));
+   }
 
-    emit cursorDelegateChanged();
+   emit cursorDelegateChanged();
 }
 
 void QDeclarativeTextEdit::loadCursorDelegate()
 {
-    Q_D(QDeclarativeTextEdit);
-    if(d->cursorComponent->isLoading())
-        return;
-    d->cursor = qobject_cast<QDeclarativeItem*>(d->cursorComponent->create(qmlContext(this)));
-    if(d->cursor){
-        d->control->setCursorWidth(0);
-        dirtyCache(cursorRectangle());
-        QDeclarative_setParent_noEvent(d->cursor, this);
-        d->cursor->setParentItem(this);
-        d->cursor->setHeight(QFontMetrics(d->font).height());
-        moveCursorDelegate();
-    }else{
-        qmlInfo(this) << "Error loading cursor delegate.";
-    }
+   Q_D(QDeclarativeTextEdit);
+   if (d->cursorComponent->isLoading()) {
+      return;
+   }
+   d->cursor = qobject_cast<QDeclarativeItem *>(d->cursorComponent->create(qmlContext(this)));
+   if (d->cursor) {
+      d->control->setCursorWidth(0);
+      dirtyCache(cursorRectangle());
+      QDeclarative_setParent_noEvent(d->cursor, this);
+      d->cursor->setParentItem(this);
+      d->cursor->setHeight(QFontMetrics(d->font).height());
+      moveCursorDelegate();
+   } else {
+      qmlInfo(this) << "Error loading cursor delegate.";
+   }
 }
 
 /*!
@@ -905,8 +918,8 @@ void QDeclarativeTextEdit::loadCursorDelegate()
 */
 int QDeclarativeTextEdit::selectionStart() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->control->textCursor().selectionStart();
+   Q_D(const QDeclarativeTextEdit);
+   return d->control->textCursor().selectionStart();
 }
 
 /*!
@@ -921,8 +934,8 @@ int QDeclarativeTextEdit::selectionStart() const
 */
 int QDeclarativeTextEdit::selectionEnd() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->control->textCursor().selectionEnd();
+   Q_D(const QDeclarativeTextEdit);
+   return d->control->textCursor().selectionEnd();
 }
 
 /*!
@@ -941,8 +954,8 @@ int QDeclarativeTextEdit::selectionEnd() const
 */
 QString QDeclarativeTextEdit::selectedText() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->control->textCursor().selectedText();
+   Q_D(const QDeclarativeTextEdit);
+   return d->control->textCursor().selectedText();
 }
 
 /*!
@@ -953,17 +966,18 @@ QString QDeclarativeTextEdit::selectedText() const
 */
 bool QDeclarativeTextEdit::focusOnPress() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->focusOnPress;
+   Q_D(const QDeclarativeTextEdit);
+   return d->focusOnPress;
 }
 
 void QDeclarativeTextEdit::setFocusOnPress(bool on)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (d->focusOnPress == on)
-        return;
-    d->focusOnPress = on;
-    emit activeFocusOnPressChanged(d->focusOnPress);
+   Q_D(QDeclarativeTextEdit);
+   if (d->focusOnPress == on) {
+      return;
+   }
+   d->focusOnPress = on;
+   emit activeFocusOnPressChanged(d->focusOnPress);
 }
 
 /*!
@@ -974,17 +988,18 @@ void QDeclarativeTextEdit::setFocusOnPress(bool on)
 */
 bool QDeclarativeTextEdit::persistentSelection() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->persistentSelection;
+   Q_D(const QDeclarativeTextEdit);
+   return d->persistentSelection;
 }
 
 void QDeclarativeTextEdit::setPersistentSelection(bool on)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (d->persistentSelection == on)
-        return;
-    d->persistentSelection = on;
-    emit persistentSelectionChanged(d->persistentSelection);
+   Q_D(QDeclarativeTextEdit);
+   if (d->persistentSelection == on) {
+      return;
+   }
+   d->persistentSelection = on;
+   emit persistentSelectionChanged(d->persistentSelection);
 }
 
 /*
@@ -994,26 +1009,28 @@ void QDeclarativeTextEdit::setPersistentSelection(bool on)
 */
 qreal QDeclarativeTextEdit::textMargin() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->textMargin;
+   Q_D(const QDeclarativeTextEdit);
+   return d->textMargin;
 }
 
 void QDeclarativeTextEdit::setTextMargin(qreal margin)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (d->textMargin == margin)
-        return;
-    d->textMargin = margin;
-    d->document->setDocumentMargin(d->textMargin);
-    emit textMarginChanged(d->textMargin);
+   Q_D(QDeclarativeTextEdit);
+   if (d->textMargin == margin) {
+      return;
+   }
+   d->textMargin = margin;
+   d->document->setDocumentMargin(d->textMargin);
+   emit textMarginChanged(d->textMargin);
 }
 
 void QDeclarativeTextEdit::geometryChanged(const QRectF &newGeometry,
-                                  const QRectF &oldGeometry)
+      const QRectF &oldGeometry)
 {
-    if (newGeometry.width() != oldGeometry.width())
-        updateSize();
-    QDeclarativePaintedItem::geometryChanged(newGeometry, oldGeometry);
+   if (newGeometry.width() != oldGeometry.width()) {
+      updateSize();
+   }
+   QDeclarativePaintedItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 /*!
@@ -1022,14 +1039,14 @@ void QDeclarativeTextEdit::geometryChanged(const QRectF &newGeometry,
 */
 void QDeclarativeTextEdit::componentComplete()
 {
-    Q_D(QDeclarativeTextEdit);
-    QDeclarativePaintedItem::componentComplete();
-    if (d->dirty) {
-        d->determineHorizontalAlignment();
-        d->updateDefaultTextOption();
-        updateSize();
-        d->dirty = false;
-    }
+   Q_D(QDeclarativeTextEdit);
+   QDeclarativePaintedItem::componentComplete();
+   if (d->dirty) {
+      d->determineHorizontalAlignment();
+      d->updateDefaultTextOption();
+      updateSize();
+      d->dirty = false;
+   }
 }
 
 /*!
@@ -1044,22 +1061,23 @@ void QDeclarativeTextEdit::componentComplete()
 */
 bool QDeclarativeTextEdit::selectByMouse() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->selectByMouse;
+   Q_D(const QDeclarativeTextEdit);
+   return d->selectByMouse;
 }
 
 void QDeclarativeTextEdit::setSelectByMouse(bool on)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (d->selectByMouse != on) {
-        d->selectByMouse = on;
-        setKeepMouseGrab(on);
-        if (on)
-            setTextInteractionFlags(d->control->textInteractionFlags() | Qt::TextSelectableByMouse);
-        else
-            setTextInteractionFlags(d->control->textInteractionFlags() & ~Qt::TextSelectableByMouse);
-        emit selectByMouseChanged(on);
-    }
+   Q_D(QDeclarativeTextEdit);
+   if (d->selectByMouse != on) {
+      d->selectByMouse = on;
+      setKeepMouseGrab(on);
+      if (on) {
+         setTextInteractionFlags(d->control->textInteractionFlags() | Qt::TextSelectableByMouse);
+      } else {
+         setTextInteractionFlags(d->control->textInteractionFlags() & ~Qt::TextSelectableByMouse);
+      }
+      emit selectByMouseChanged(on);
+   }
 }
 
 
@@ -1079,18 +1097,18 @@ void QDeclarativeTextEdit::setSelectByMouse(bool on)
 
 QDeclarativeTextEdit::SelectionMode QDeclarativeTextEdit::mouseSelectionMode() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->mouseSelectionMode;
+   Q_D(const QDeclarativeTextEdit);
+   return d->mouseSelectionMode;
 }
 
 void QDeclarativeTextEdit::setMouseSelectionMode(SelectionMode mode)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (d->mouseSelectionMode != mode) {
-        d->mouseSelectionMode = mode;
-        d->control->setWordSelectionEnabled(mode == SelectWords);
-        emit mouseSelectionModeChanged(mode);
-    }
+   Q_D(QDeclarativeTextEdit);
+   if (d->mouseSelectionMode != mode) {
+      d->mouseSelectionMode = mode;
+      d->control->setWordSelectionEnabled(mode == SelectWords);
+      emit mouseSelectionModeChanged(mode);
+   }
 }
 
 /*!
@@ -1103,28 +1121,32 @@ void QDeclarativeTextEdit::setMouseSelectionMode(SelectionMode mode)
 */
 void QDeclarativeTextEdit::setReadOnly(bool r)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (r == isReadOnly())
-        return;
+   Q_D(QDeclarativeTextEdit);
+   if (r == isReadOnly()) {
+      return;
+   }
 
-    setFlag(QGraphicsItem::ItemAcceptsInputMethod, !r);
+   setFlag(QGraphicsItem::ItemAcceptsInputMethod, !r);
 
-    Qt::TextInteractionFlags flags = Qt::LinksAccessibleByMouse;
-    if (d->selectByMouse)
-        flags = flags | Qt::TextSelectableByMouse;
-    if (!r)
-        flags = flags | Qt::TextSelectableByKeyboard | Qt::TextEditable;
-    d->control->setTextInteractionFlags(flags);
-    if (!r)
-        d->control->moveCursor(QTextCursor::End);
+   Qt::TextInteractionFlags flags = Qt::LinksAccessibleByMouse;
+   if (d->selectByMouse) {
+      flags = flags | Qt::TextSelectableByMouse;
+   }
+   if (!r) {
+      flags = flags | Qt::TextSelectableByKeyboard | Qt::TextEditable;
+   }
+   d->control->setTextInteractionFlags(flags);
+   if (!r) {
+      d->control->moveCursor(QTextCursor::End);
+   }
 
-    emit readOnlyChanged(r);
+   emit readOnlyChanged(r);
 }
 
 bool QDeclarativeTextEdit::isReadOnly() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return !(d->control->textInteractionFlags() & Qt::TextEditable);
+   Q_D(const QDeclarativeTextEdit);
+   return !(d->control->textInteractionFlags() & Qt::TextEditable);
 }
 
 /*!
@@ -1133,8 +1155,8 @@ bool QDeclarativeTextEdit::isReadOnly() const
 */
 void QDeclarativeTextEdit::setTextInteractionFlags(Qt::TextInteractionFlags flags)
 {
-    Q_D(QDeclarativeTextEdit);
-    d->control->setTextInteractionFlags(flags);
+   Q_D(QDeclarativeTextEdit);
+   d->control->setTextInteractionFlags(flags);
 }
 
 /*!
@@ -1143,8 +1165,8 @@ void QDeclarativeTextEdit::setTextInteractionFlags(Qt::TextInteractionFlags flag
 */
 Qt::TextInteractionFlags QDeclarativeTextEdit::textInteractionFlags() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->control->textInteractionFlags();
+   Q_D(const QDeclarativeTextEdit);
+   return d->control->textInteractionFlags();
 }
 
 /*!
@@ -1155,8 +1177,8 @@ Qt::TextInteractionFlags QDeclarativeTextEdit::textInteractionFlags() const
 */
 QRect QDeclarativeTextEdit::cursorRectangle() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->control->cursorRect().toRect().translated(0,d->yoff);
+   Q_D(const QDeclarativeTextEdit);
+   return d->control->cursorRect().toRect().translated(0, d->yoff);
 }
 
 
@@ -1166,12 +1188,12 @@ Handles the given \a event.
 */
 bool QDeclarativeTextEdit::event(QEvent *event)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (event->type() == QEvent::ShortcutOverride) {
-        d->control->processEvent(event, QPointF(0, -d->yoff));
-        return event->isAccepted();
-    }
-    return QDeclarativePaintedItem::event(event);
+   Q_D(QDeclarativeTextEdit);
+   if (event->type() == QEvent::ShortcutOverride) {
+      d->control->processEvent(event, QPointF(0, -d->yoff));
+      return event->isAccepted();
+   }
+   return QDeclarativePaintedItem::event(event);
 }
 
 /*!
@@ -1180,12 +1202,14 @@ Handles the given key \a event.
 */
 void QDeclarativeTextEdit::keyPressEvent(QKeyEvent *event)
 {
-    Q_D(QDeclarativeTextEdit);
-    keyPressPreHandler(event);
-    if (!event->isAccepted())
-        d->control->processEvent(event, QPointF(0, -d->yoff));
-    if (!event->isAccepted())
-        QDeclarativePaintedItem::keyPressEvent(event);
+   Q_D(QDeclarativeTextEdit);
+   keyPressPreHandler(event);
+   if (!event->isAccepted()) {
+      d->control->processEvent(event, QPointF(0, -d->yoff));
+   }
+   if (!event->isAccepted()) {
+      QDeclarativePaintedItem::keyPressEvent(event);
+   }
 }
 
 /*!
@@ -1194,19 +1218,21 @@ Handles the given key \a event.
 */
 void QDeclarativeTextEdit::keyReleaseEvent(QKeyEvent *event)
 {
-    Q_D(QDeclarativeTextEdit);
-    keyReleasePreHandler(event);
-    if (!event->isAccepted())
-        d->control->processEvent(event, QPointF(0, -d->yoff));
-    if (!event->isAccepted())
-        QDeclarativePaintedItem::keyReleaseEvent(event);
+   Q_D(QDeclarativeTextEdit);
+   keyReleasePreHandler(event);
+   if (!event->isAccepted()) {
+      d->control->processEvent(event, QPointF(0, -d->yoff));
+   }
+   if (!event->isAccepted()) {
+      QDeclarativePaintedItem::keyReleaseEvent(event);
+   }
 }
 
 void QDeclarativeTextEditPrivate::focusChanged(bool hasFocus)
 {
-    Q_Q(QDeclarativeTextEdit);
-    q->setCursorVisible(hasFocus && scene && scene->hasFocus());
-    QDeclarativeItemPrivate::focusChanged(hasFocus);
+   Q_Q(QDeclarativeTextEdit);
+   q->setCursorVisible(hasFocus && scene && scene->hasFocus());
+   QDeclarativeItemPrivate::focusChanged(hasFocus);
 }
 
 /*!
@@ -1217,10 +1243,10 @@ void QDeclarativeTextEditPrivate::focusChanged(bool hasFocus)
 */
 void QDeclarativeTextEdit::deselect()
 {
-    Q_D(QDeclarativeTextEdit);
-    QTextCursor c = d->control->textCursor();
-    c.clearSelection();
-    d->control->setTextCursor(c);
+   Q_D(QDeclarativeTextEdit);
+   QTextCursor c = d->control->textCursor();
+   c.clearSelection();
+   d->control->setTextCursor(c);
 }
 
 /*!
@@ -1230,8 +1256,8 @@ void QDeclarativeTextEdit::deselect()
 */
 void QDeclarativeTextEdit::selectAll()
 {
-    Q_D(QDeclarativeTextEdit);
-    d->control->selectAll();
+   Q_D(QDeclarativeTextEdit);
+   d->control->selectAll();
 }
 
 /*!
@@ -1241,10 +1267,10 @@ void QDeclarativeTextEdit::selectAll()
 */
 void QDeclarativeTextEdit::selectWord()
 {
-    Q_D(QDeclarativeTextEdit);
-    QTextCursor c = d->control->textCursor();
-    c.select(QTextCursor::WordUnderCursor);
-    d->control->setTextCursor(c);
+   Q_D(QDeclarativeTextEdit);
+   QTextCursor c = d->control->textCursor();
+   c.select(QTextCursor::WordUnderCursor);
+   d->control->setTextCursor(c);
 }
 
 /*!
@@ -1262,18 +1288,19 @@ void QDeclarativeTextEdit::selectWord()
 */
 void QDeclarativeTextEdit::select(int start, int end)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (start < 0 || end < 0 || start > d->text.length() || end > d->text.length())
-        return;
-    QTextCursor cursor = d->control->textCursor();
-    cursor.beginEditBlock();
-    cursor.setPosition(start, QTextCursor::MoveAnchor);
-    cursor.setPosition(end, QTextCursor::KeepAnchor);
-    cursor.endEditBlock();
-    d->control->setTextCursor(cursor);
+   Q_D(QDeclarativeTextEdit);
+   if (start < 0 || end < 0 || start > d->text.length() || end > d->text.length()) {
+      return;
+   }
+   QTextCursor cursor = d->control->textCursor();
+   cursor.beginEditBlock();
+   cursor.setPosition(start, QTextCursor::MoveAnchor);
+   cursor.setPosition(end, QTextCursor::KeepAnchor);
+   cursor.endEditBlock();
+   d->control->setTextCursor(cursor);
 
-    // QTBUG-11100
-    updateSelectionMarkers();
+   // QTBUG-11100
+   updateSelectionMarkers();
 }
 
 /*!
@@ -1284,13 +1311,13 @@ void QDeclarativeTextEdit::select(int start, int end)
 */
 bool QDeclarativeTextEdit::isRightToLeft(int start, int end)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (start > end) {
-        qmlInfo(this) << "isRightToLeft(start, end) called with the end property being smaller than the start.";
-        return false;
-    } else {
-        return d->text.mid(start, end - start).isRightToLeft();
-    }
+   Q_D(QDeclarativeTextEdit);
+   if (start > end) {
+      qmlInfo(this) << "isRightToLeft(start, end) called with the end property being smaller than the start.";
+      return false;
+   } else {
+      return d->text.mid(start, end - start).isRightToLeft();
+   }
 }
 
 #ifndef QT_NO_CLIPBOARD
@@ -1301,8 +1328,8 @@ bool QDeclarativeTextEdit::isRightToLeft(int start, int end)
 */
 void QDeclarativeTextEdit::cut()
 {
-    Q_D(QDeclarativeTextEdit);
-    d->control->cut();
+   Q_D(QDeclarativeTextEdit);
+   d->control->cut();
 }
 
 /*!
@@ -1312,8 +1339,8 @@ void QDeclarativeTextEdit::cut()
 */
 void QDeclarativeTextEdit::copy()
 {
-    Q_D(QDeclarativeTextEdit);
-    d->control->copy();
+   Q_D(QDeclarativeTextEdit);
+   d->control->copy();
 }
 
 /*!
@@ -1323,8 +1350,8 @@ void QDeclarativeTextEdit::copy()
 */
 void QDeclarativeTextEdit::paste()
 {
-    Q_D(QDeclarativeTextEdit);
-    d->control->paste();
+   Q_D(QDeclarativeTextEdit);
+   d->control->paste();
 }
 #endif // QT_NO_CLIPBOARD
 
@@ -1334,25 +1361,26 @@ Handles the given mouse \a event.
 */
 void QDeclarativeTextEdit::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_D(QDeclarativeTextEdit);
-    if (d->focusOnPress){
-        bool hadActiveFocus = hasActiveFocus();
-        forceActiveFocus();
-        if (d->showInputPanelOnFocus) {
-            if (hasActiveFocus() && hadActiveFocus && !isReadOnly()) {
-                // re-open input panel on press if already focused
-                openSoftwareInputPanel();
-            }
-        } else { // show input panel on click
-            if (hasActiveFocus() && !hadActiveFocus) {
-                d->clickCausedFocus = true;
-            }
-        }
-    }
+   Q_D(QDeclarativeTextEdit);
+   if (d->focusOnPress) {
+      bool hadActiveFocus = hasActiveFocus();
+      forceActiveFocus();
+      if (d->showInputPanelOnFocus) {
+         if (hasActiveFocus() && hadActiveFocus && !isReadOnly()) {
+            // re-open input panel on press if already focused
+            openSoftwareInputPanel();
+         }
+      } else { // show input panel on click
+         if (hasActiveFocus() && !hadActiveFocus) {
+            d->clickCausedFocus = true;
+         }
+      }
+   }
 
-    d->control->processEvent(event, QPointF(0, -d->yoff));
-    if (!event->isAccepted())
-        QDeclarativePaintedItem::mousePressEvent(event);
+   d->control->processEvent(event, QPointF(0, -d->yoff));
+   if (!event->isAccepted()) {
+      QDeclarativePaintedItem::mousePressEvent(event);
+   }
 }
 
 /*!
@@ -1361,21 +1389,22 @@ Handles the given mouse \a event.
 */
 void QDeclarativeTextEdit::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_D(QDeclarativeTextEdit);
-    d->control->processEvent(event, QPointF(0, -d->yoff));
-    if (!d->showInputPanelOnFocus) { // input panel on click
-        if (d->focusOnPress && !isReadOnly() && boundingRect().contains(event->pos())) {
-            if (QGraphicsView * view = qobject_cast<QGraphicsView*>(qApp->focusWidget())) {
-                if (view->scene() && view->scene() == scene()) {
-                    qt_widget_private(view)->handleSoftwareInputPanel(event->button(), d->clickCausedFocus);
-                }
+   Q_D(QDeclarativeTextEdit);
+   d->control->processEvent(event, QPointF(0, -d->yoff));
+   if (!d->showInputPanelOnFocus) { // input panel on click
+      if (d->focusOnPress && !isReadOnly() && boundingRect().contains(event->pos())) {
+         if (QGraphicsView *view = qobject_cast<QGraphicsView *>(qApp->focusWidget())) {
+            if (view->scene() && view->scene() == scene()) {
+               qt_widget_private(view)->handleSoftwareInputPanel(event->button(), d->clickCausedFocus);
             }
-        }
-    }
-    d->clickCausedFocus = false;
+         }
+      }
+   }
+   d->clickCausedFocus = false;
 
-    if (!event->isAccepted())
-        QDeclarativePaintedItem::mouseReleaseEvent(event);
+   if (!event->isAccepted()) {
+      QDeclarativePaintedItem::mouseReleaseEvent(event);
+   }
 }
 
 /*!
@@ -1384,11 +1413,12 @@ Handles the given mouse \a event.
 */
 void QDeclarativeTextEdit::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_D(QDeclarativeTextEdit);
+   Q_D(QDeclarativeTextEdit);
 
-    d->control->processEvent(event, QPointF(0, -d->yoff));
-    if (!event->isAccepted())
-        QDeclarativePaintedItem::mouseDoubleClickEvent(event);
+   d->control->processEvent(event, QPointF(0, -d->yoff));
+   if (!event->isAccepted()) {
+      QDeclarativePaintedItem::mouseDoubleClickEvent(event);
+   }
 
 }
 
@@ -1398,10 +1428,11 @@ Handles the given mouse \a event.
 */
 void QDeclarativeTextEdit::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_D(QDeclarativeTextEdit);
-    d->control->processEvent(event, QPointF(0, -d->yoff));
-    if (!event->isAccepted())
-        QDeclarativePaintedItem::mouseMoveEvent(event);
+   Q_D(QDeclarativeTextEdit);
+   d->control->processEvent(event, QPointF(0, -d->yoff));
+   if (!event->isAccepted()) {
+      QDeclarativePaintedItem::mouseMoveEvent(event);
+   }
 }
 
 /*!
@@ -1410,11 +1441,12 @@ Handles the given input method \a event.
 */
 void QDeclarativeTextEdit::inputMethodEvent(QInputMethodEvent *event)
 {
-    Q_D(QDeclarativeTextEdit);
-    const bool wasComposing = isInputMethodComposing();
-    d->control->processEvent(event, QPointF(0, -d->yoff));
-    if (wasComposing != isInputMethodComposing())
-        emit inputMethodComposingChanged();
+   Q_D(QDeclarativeTextEdit);
+   const bool wasComposing = isInputMethodComposing();
+   d->control->processEvent(event, QPointF(0, -d->yoff));
+   if (wasComposing != isInputMethodComposing()) {
+      emit inputMethodComposingChanged();
+   }
 }
 
 /*!
@@ -1423,8 +1455,8 @@ Returns the value of the given \a property.
 */
 QVariant QDeclarativeTextEdit::inputMethodQuery(Qt::InputMethodQuery property) const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->control->inputMethodQuery(property);
+   Q_D(const QDeclarativeTextEdit);
+   return d->control->inputMethodQuery(property);
 }
 
 /*!
@@ -1433,34 +1465,34 @@ the given \a bounds.
 */
 void QDeclarativeTextEdit::drawContents(QPainter *painter, const QRect &bounds)
 {
-    Q_D(QDeclarativeTextEdit);
+   Q_D(QDeclarativeTextEdit);
 
-    painter->setRenderHint(QPainter::TextAntialiasing, true);
-    painter->translate(0,d->yoff);
+   painter->setRenderHint(QPainter::TextAntialiasing, true);
+   painter->translate(0, d->yoff);
 
-    d->control->drawContents(painter, bounds.translated(0,-d->yoff));
+   d->control->drawContents(painter, bounds.translated(0, -d->yoff));
 
-    painter->translate(0,-d->yoff);
+   painter->translate(0, -d->yoff);
 }
 
 void QDeclarativeTextEdit::updateImgCache(const QRectF &rf)
 {
-    Q_D(const QDeclarativeTextEdit);
-    QRect r;
-    if (!rf.isValid()) {
-        r = QRect(0,0,INT_MAX,INT_MAX);
-    } else {
-        r = rf.toRect();
-        if (r.height() > INT_MAX/2) {
-            // Take care of overflow when translating "everything"
-            r.setTop(r.y() + d->yoff);
-            r.setBottom(INT_MAX/2);
-        } else {
-            r = r.translated(0,d->yoff);
-        }
-    }
-    dirtyCache(r);
-    emit update();
+   Q_D(const QDeclarativeTextEdit);
+   QRect r;
+   if (!rf.isValid()) {
+      r = QRect(0, 0, INT_MAX, INT_MAX);
+   } else {
+      r = rf.toRect();
+      if (r.height() > INT_MAX / 2) {
+         // Take care of overflow when translating "everything"
+         r.setTop(r.y() + d->yoff);
+         r.setBottom(INT_MAX / 2);
+      } else {
+         r = r.translated(0, d->yoff);
+      }
+   }
+   dirtyCache(r);
+   emit update();
 }
 
 /*!
@@ -1486,8 +1518,8 @@ void QDeclarativeTextEdit::updateImgCache(const QRectF &rf)
 */
 bool QDeclarativeTextEdit::canPaste() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    return d->canPaste;
+   Q_D(const QDeclarativeTextEdit);
+   return d->canPaste;
 }
 
 /*!
@@ -1505,251 +1537,266 @@ bool QDeclarativeTextEdit::canPaste() const
 */
 bool QDeclarativeTextEdit::isInputMethodComposing() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    if (QTextLayout *layout = d->control->textCursor().block().layout())
-        return layout->preeditAreaText().length() > 0;
-    return false;
+   Q_D(const QDeclarativeTextEdit);
+   if (QTextLayout *layout = d->control->textCursor().block().layout()) {
+      return layout->preeditAreaText().length() > 0;
+   }
+   return false;
 }
 
 void QDeclarativeTextEditPrivate::init()
 {
-    Q_Q(QDeclarativeTextEdit);
+   Q_Q(QDeclarativeTextEdit);
 
-    q->setSmooth(smooth);
-    q->setAcceptedMouseButtons(Qt::LeftButton);
-    q->setFlag(QGraphicsItem::ItemHasNoContents, false);
-    q->setFlag(QGraphicsItem::ItemAcceptsInputMethod);
+   q->setSmooth(smooth);
+   q->setAcceptedMouseButtons(Qt::LeftButton);
+   q->setFlag(QGraphicsItem::ItemHasNoContents, false);
+   q->setFlag(QGraphicsItem::ItemAcceptsInputMethod);
 
-    control = new QTextControl(q);
-    control->setIgnoreUnusedNavigationEvents(true);
-    control->setTextInteractionFlags(Qt::LinksAccessibleByMouse | Qt::TextSelectableByKeyboard | Qt::TextEditable);
-    control->setDragEnabled(false);
+   control = new QTextControl(q);
+   control->setIgnoreUnusedNavigationEvents(true);
+   control->setTextInteractionFlags(Qt::LinksAccessibleByMouse | Qt::TextSelectableByKeyboard | Qt::TextEditable);
+   control->setDragEnabled(false);
 
-    // QTextControl follows the default text color
-    // defined by the platform, declarative text
-    // should be black by default
-    QPalette pal = control->palette();
-    if (pal.color(QPalette::Text) != color) {
-        pal.setColor(QPalette::Text, color);
-        control->setPalette(pal);
-    }
+   // QTextControl follows the default text color
+   // defined by the platform, declarative text
+   // should be black by default
+   QPalette pal = control->palette();
+   if (pal.color(QPalette::Text) != color) {
+      pal.setColor(QPalette::Text, color);
+      control->setPalette(pal);
+   }
 
-    QObject::connect(control, SIGNAL(updateRequest(QRectF)), q, SLOT(updateImgCache(QRectF)));
+   QObject::connect(control, SIGNAL(updateRequest(QRectF)), q, SLOT(updateImgCache(QRectF)));
 
-    QObject::connect(control, SIGNAL(textChanged()), q, SLOT(q_textChanged()));
-    QObject::connect(control, SIGNAL(selectionChanged()), q, SIGNAL(selectionChanged()));
-    QObject::connect(control, SIGNAL(selectionChanged()), q, SLOT(updateSelectionMarkers()));
-    QObject::connect(control, SIGNAL(cursorPositionChanged()), q, SLOT(updateSelectionMarkers()));
-    QObject::connect(control, SIGNAL(cursorPositionChanged()), q, SIGNAL(cursorPositionChanged()));
-    QObject::connect(control, SIGNAL(microFocusChanged()), q, SLOT(moveCursorDelegate()));
-    QObject::connect(control, SIGNAL(linkActivated(QString)), q, SIGNAL(linkActivated(QString)));
+   QObject::connect(control, SIGNAL(textChanged()), q, SLOT(q_textChanged()));
+   QObject::connect(control, SIGNAL(selectionChanged()), q, SIGNAL(selectionChanged()));
+   QObject::connect(control, SIGNAL(selectionChanged()), q, SLOT(updateSelectionMarkers()));
+   QObject::connect(control, SIGNAL(cursorPositionChanged()), q, SLOT(updateSelectionMarkers()));
+   QObject::connect(control, SIGNAL(cursorPositionChanged()), q, SIGNAL(cursorPositionChanged()));
+   QObject::connect(control, SIGNAL(microFocusChanged()), q, SLOT(moveCursorDelegate()));
+   QObject::connect(control, SIGNAL(linkActivated(QString)), q, SIGNAL(linkActivated(QString)));
 #ifndef QT_NO_CLIPBOARD
-    QObject::connect(q, SIGNAL(readOnlyChanged(bool)), q, SLOT(q_canPasteChanged()));
-    QObject::connect(QApplication::clipboard(), SIGNAL(dataChanged()), q, SLOT(q_canPasteChanged()));
-    canPaste = control->canPaste();
+   QObject::connect(q, SIGNAL(readOnlyChanged(bool)), q, SLOT(q_canPasteChanged()));
+   QObject::connect(QApplication::clipboard(), SIGNAL(dataChanged()), q, SLOT(q_canPasteChanged()));
+   canPaste = control->canPaste();
 #endif
 
-    document = control->document();
-    document->setDefaultFont(font);
-    document->setDocumentMargin(textMargin);
-    document->setUndoRedoEnabled(false); // flush undo buffer.
-    document->setUndoRedoEnabled(true);
-    updateDefaultTextOption();
+   document = control->document();
+   document->setDefaultFont(font);
+   document->setDocumentMargin(textMargin);
+   document->setUndoRedoEnabled(false); // flush undo buffer.
+   document->setUndoRedoEnabled(true);
+   updateDefaultTextOption();
 }
 
 void QDeclarativeTextEdit::q_textChanged()
 {
-    Q_D(QDeclarativeTextEdit);
-    d->text = text();
-    d->rightToLeftText = d->document->begin().layout()->engine()->isRightToLeft();
-    d->determineHorizontalAlignment();
-    d->updateDefaultTextOption();
-    updateSize();
-    updateTotalLines();
-    emit textChanged(d->text);
+   Q_D(QDeclarativeTextEdit);
+   d->text = text();
+   d->rightToLeftText = d->document->begin().layout()->engine()->isRightToLeft();
+   d->determineHorizontalAlignment();
+   d->updateDefaultTextOption();
+   updateSize();
+   updateTotalLines();
+   emit textChanged(d->text);
 }
 
 void QDeclarativeTextEdit::moveCursorDelegate()
 {
-    Q_D(QDeclarativeTextEdit);
-    d->determineHorizontalAlignment();
-    updateMicroFocus();
-    emit cursorRectangleChanged();
-    if(!d->cursor)
-        return;
-    QRectF cursorRect = cursorRectangle();
-    d->cursor->setX(cursorRect.x());
-    d->cursor->setY(cursorRect.y());
+   Q_D(QDeclarativeTextEdit);
+   d->determineHorizontalAlignment();
+   updateMicroFocus();
+   emit cursorRectangleChanged();
+   if (!d->cursor) {
+      return;
+   }
+   QRectF cursorRect = cursorRectangle();
+   d->cursor->setX(cursorRect.x());
+   d->cursor->setY(cursorRect.y());
 }
 
 void QDeclarativeTextEditPrivate::updateSelection()
 {
-    Q_Q(QDeclarativeTextEdit);
-    QTextCursor cursor = control->textCursor();
-    bool startChange = (lastSelectionStart != cursor.selectionStart());
-    bool endChange = (lastSelectionEnd != cursor.selectionEnd());
-    cursor.beginEditBlock();
-    cursor.setPosition(lastSelectionStart, QTextCursor::MoveAnchor);
-    cursor.setPosition(lastSelectionEnd, QTextCursor::KeepAnchor);
-    cursor.endEditBlock();
-    control->setTextCursor(cursor);
-    if(startChange)
-        q->selectionStartChanged();
-    if(endChange)
-        q->selectionEndChanged();
+   Q_Q(QDeclarativeTextEdit);
+   QTextCursor cursor = control->textCursor();
+   bool startChange = (lastSelectionStart != cursor.selectionStart());
+   bool endChange = (lastSelectionEnd != cursor.selectionEnd());
+   cursor.beginEditBlock();
+   cursor.setPosition(lastSelectionStart, QTextCursor::MoveAnchor);
+   cursor.setPosition(lastSelectionEnd, QTextCursor::KeepAnchor);
+   cursor.endEditBlock();
+   control->setTextCursor(cursor);
+   if (startChange) {
+      q->selectionStartChanged();
+   }
+   if (endChange) {
+      q->selectionEndChanged();
+   }
 }
 
 void QDeclarativeTextEdit::updateSelectionMarkers()
 {
-    Q_D(QDeclarativeTextEdit);
-    if(d->lastSelectionStart != d->control->textCursor().selectionStart()){
-        d->lastSelectionStart = d->control->textCursor().selectionStart();
-        emit selectionStartChanged();
-    }
-    if(d->lastSelectionEnd != d->control->textCursor().selectionEnd()){
-        d->lastSelectionEnd = d->control->textCursor().selectionEnd();
-        emit selectionEndChanged();
-    }
+   Q_D(QDeclarativeTextEdit);
+   if (d->lastSelectionStart != d->control->textCursor().selectionStart()) {
+      d->lastSelectionStart = d->control->textCursor().selectionStart();
+      emit selectionStartChanged();
+   }
+   if (d->lastSelectionEnd != d->control->textCursor().selectionEnd()) {
+      d->lastSelectionEnd = d->control->textCursor().selectionEnd();
+      emit selectionEndChanged();
+   }
 }
 
 QRectF QDeclarativeTextEdit::boundingRect() const
 {
-    Q_D(const QDeclarativeTextEdit);
-    QRectF r = QDeclarativePaintedItem::boundingRect();
-    int cursorWidth = 1;
-    if(d->cursor)
-        cursorWidth = d->cursor->width();
-    if(!d->document->isEmpty())
-        cursorWidth += 3;// ### Need a better way of accounting for space between char and cursor
+   Q_D(const QDeclarativeTextEdit);
+   QRectF r = QDeclarativePaintedItem::boundingRect();
+   int cursorWidth = 1;
+   if (d->cursor) {
+      cursorWidth = d->cursor->width();
+   }
+   if (!d->document->isEmpty()) {
+      cursorWidth += 3;   // ### Need a better way of accounting for space between char and cursor
+   }
 
-    // Could include font max left/right bearings to either side of rectangle.
+   // Could include font max left/right bearings to either side of rectangle.
 
-    r.setRight(r.right() + cursorWidth);
-    return r.translated(0,d->yoff);
+   r.setRight(r.right() + cursorWidth);
+   return r.translated(0, d->yoff);
 }
 
 qreal QDeclarativeTextEditPrivate::implicitWidth() const
 {
-    Q_Q(const QDeclarativeTextEdit);
-    if (!requireImplicitWidth) {
-        // We don't calculate implicitWidth unless it is required.
-        // We need to force a size update now to ensure implicitWidth is calculated
-        const_cast<QDeclarativeTextEditPrivate*>(this)->requireImplicitWidth = true;
-        const_cast<QDeclarativeTextEdit*>(q)->updateSize();
-    }
-    return mImplicitWidth;
+   Q_Q(const QDeclarativeTextEdit);
+   if (!requireImplicitWidth) {
+      // We don't calculate implicitWidth unless it is required.
+      // We need to force a size update now to ensure implicitWidth is calculated
+      const_cast<QDeclarativeTextEditPrivate *>(this)->requireImplicitWidth = true;
+      const_cast<QDeclarativeTextEdit *>(q)->updateSize();
+   }
+   return mImplicitWidth;
 }
 
 //### we should perhaps be a bit smarter here -- depending on what has changed, we shouldn't
 //    need to do all the calculations each time
 void QDeclarativeTextEdit::updateSize()
 {
-    Q_D(QDeclarativeTextEdit);
-    if (isComponentComplete()) {
-        qreal naturalWidth = d->mImplicitWidth;
-        // ### assumes that if the width is set, the text will fill to edges
-        // ### (unless wrap is false, then clipping will occur)
-        if (widthValid()) {
-            if (!d->requireImplicitWidth) {
-                emit implicitWidthChanged();
-                // if the implicitWidth is used, then updateSize() has already been called (recursively)
-                if (d->requireImplicitWidth)
-                    return;
-            }
+   Q_D(QDeclarativeTextEdit);
+   if (isComponentComplete()) {
+      qreal naturalWidth = d->mImplicitWidth;
+      // ### assumes that if the width is set, the text will fill to edges
+      // ### (unless wrap is false, then clipping will occur)
+      if (widthValid()) {
+         if (!d->requireImplicitWidth) {
+            emit implicitWidthChanged();
+            // if the implicitWidth is used, then updateSize() has already been called (recursively)
             if (d->requireImplicitWidth) {
-                d->document->setTextWidth(-1);
-                naturalWidth = d->document->idealWidth();
+               return;
             }
-            if (d->document->textWidth() != width())
-                d->document->setTextWidth(width());
-        } else {
+         }
+         if (d->requireImplicitWidth) {
             d->document->setTextWidth(-1);
-        }
-        QFontMetrics fm = QFontMetrics(d->font);
-        int dy = height();
-        dy -= (int)d->document->size().height();
+            naturalWidth = d->document->idealWidth();
+         }
+         if (d->document->textWidth() != width()) {
+            d->document->setTextWidth(width());
+         }
+      } else {
+         d->document->setTextWidth(-1);
+      }
+      QFontMetrics fm = QFontMetrics(d->font);
+      int dy = height();
+      dy -= (int)d->document->size().height();
 
-        int nyoff;
-        if (heightValid()) {
-            if (d->vAlign == AlignBottom)
-                nyoff = dy;
-            else if (d->vAlign == AlignVCenter)
-                nyoff = dy/2;
-            else
-                nyoff = 0;
-        } else {
+      int nyoff;
+      if (heightValid()) {
+         if (d->vAlign == AlignBottom) {
+            nyoff = dy;
+         } else if (d->vAlign == AlignVCenter) {
+            nyoff = dy / 2;
+         } else {
             nyoff = 0;
-        }
-        if (nyoff != d->yoff) {
-            prepareGeometryChange();
-            d->yoff = nyoff;
-        }
-        setBaselineOffset(fm.ascent() + d->yoff + d->textMargin);
+         }
+      } else {
+         nyoff = 0;
+      }
+      if (nyoff != d->yoff) {
+         prepareGeometryChange();
+         d->yoff = nyoff;
+      }
+      setBaselineOffset(fm.ascent() + d->yoff + d->textMargin);
 
-        //### need to comfirm cost of always setting these
-        int newWidth = qCeil(d->document->idealWidth());
-        if (!widthValid() && d->document->textWidth() != newWidth)
-            d->document->setTextWidth(newWidth); // ### Text does not align if width is not set (QTextDoc bug)
-        // ### Setting the implicitWidth triggers another updateSize(), and unless there are bindings nothing has changed.
-        if (!widthValid())
-            setImplicitWidth(newWidth);
-        else if (d->requireImplicitWidth)
-            setImplicitWidth(naturalWidth);
-        qreal newHeight = d->document->size().height();
-        if (newHeight == 0)
-            newHeight = fm.height();
-        setImplicitHeight(newHeight);
+      //### need to comfirm cost of always setting these
+      int newWidth = qCeil(d->document->idealWidth());
+      if (!widthValid() && d->document->textWidth() != newWidth) {
+         d->document->setTextWidth(newWidth);   // ### Text does not align if width is not set (QTextDoc bug)
+      }
+      // ### Setting the implicitWidth triggers another updateSize(), and unless there are bindings nothing has changed.
+      if (!widthValid()) {
+         setImplicitWidth(newWidth);
+      } else if (d->requireImplicitWidth) {
+         setImplicitWidth(naturalWidth);
+      }
+      qreal newHeight = d->document->size().height();
+      if (newHeight == 0) {
+         newHeight = fm.height();
+      }
+      setImplicitHeight(newHeight);
 
-        d->paintedSize = QSize(newWidth, newHeight);
-        setContentsSize(d->paintedSize);
-        emit paintedSizeChanged();
-    } else {
-        d->dirty = true;
-    }
-    emit update();
+      d->paintedSize = QSize(newWidth, newHeight);
+      setContentsSize(d->paintedSize);
+      emit paintedSizeChanged();
+   } else {
+      d->dirty = true;
+   }
+   emit update();
 }
 
 void QDeclarativeTextEdit::updateTotalLines()
 {
-    Q_D(QDeclarativeTextEdit);
+   Q_D(QDeclarativeTextEdit);
 
-    int subLines = 0;
+   int subLines = 0;
 
-    for (QTextBlock it = d->document->begin(); it != d->document->end(); it = it.next()) {
-        QTextLayout *layout = it.layout();
-        if (!layout)
-            continue;
-        subLines += layout->lineCount()-1;
-    }
+   for (QTextBlock it = d->document->begin(); it != d->document->end(); it = it.next()) {
+      QTextLayout *layout = it.layout();
+      if (!layout) {
+         continue;
+      }
+      subLines += layout->lineCount() - 1;
+   }
 
-    int newTotalLines = d->document->lineCount() + subLines;
-    if (d->lineCount != newTotalLines) {
-        d->lineCount = newTotalLines;
-        emit lineCountChanged();
-    }
+   int newTotalLines = d->document->lineCount() + subLines;
+   if (d->lineCount != newTotalLines) {
+      d->lineCount = newTotalLines;
+      emit lineCountChanged();
+   }
 }
 
 void QDeclarativeTextEditPrivate::updateDefaultTextOption()
 {
-    Q_Q(QDeclarativeTextEdit);
-    QTextOption opt = document->defaultTextOption();
-    int oldAlignment = opt.alignment();
+   Q_Q(QDeclarativeTextEdit);
+   QTextOption opt = document->defaultTextOption();
+   int oldAlignment = opt.alignment();
 
-    QDeclarativeTextEdit::HAlignment horizontalAlignment = q->effectiveHAlign();
-    if (rightToLeftText) {
-        if (horizontalAlignment == QDeclarativeTextEdit::AlignLeft)
-            horizontalAlignment = QDeclarativeTextEdit::AlignRight;
-        else if (horizontalAlignment == QDeclarativeTextEdit::AlignRight)
-            horizontalAlignment = QDeclarativeTextEdit::AlignLeft;
-    }
-    opt.setAlignment((Qt::Alignment)(int)(horizontalAlignment | vAlign));
+   QDeclarativeTextEdit::HAlignment horizontalAlignment = q->effectiveHAlign();
+   if (rightToLeftText) {
+      if (horizontalAlignment == QDeclarativeTextEdit::AlignLeft) {
+         horizontalAlignment = QDeclarativeTextEdit::AlignRight;
+      } else if (horizontalAlignment == QDeclarativeTextEdit::AlignRight) {
+         horizontalAlignment = QDeclarativeTextEdit::AlignLeft;
+      }
+   }
+   opt.setAlignment((Qt::Alignment)(int)(horizontalAlignment | vAlign));
 
-    QTextOption::WrapMode oldWrapMode = opt.wrapMode();
-    opt.setWrapMode(QTextOption::WrapMode(wrapMode));
+   QTextOption::WrapMode oldWrapMode = opt.wrapMode();
+   opt.setWrapMode(QTextOption::WrapMode(wrapMode));
 
-    if (oldWrapMode == opt.wrapMode() && oldAlignment == opt.alignment())
-        return;
-    document->setDefaultTextOption(opt);
+   if (oldWrapMode == opt.wrapMode() && oldAlignment == opt.alignment()) {
+      return;
+   }
+   document->setDefaultTextOption(opt);
 }
 
 
@@ -1794,14 +1841,14 @@ void QDeclarativeTextEditPrivate::updateDefaultTextOption()
 */
 void QDeclarativeTextEdit::openSoftwareInputPanel()
 {
-    QEvent event(QEvent::RequestSoftwareInputPanel);
-    if (qApp) {
-        if (QGraphicsView * view = qobject_cast<QGraphicsView*>(qApp->focusWidget())) {
-            if (view->scene() && view->scene() == scene()) {
-                QApplication::sendEvent(view, &event);
-            }
-        }
-    }
+   QEvent event(QEvent::RequestSoftwareInputPanel);
+   if (qApp) {
+      if (QGraphicsView *view = qobject_cast<QGraphicsView *>(qApp->focusWidget())) {
+         if (view->scene() && view->scene() == scene()) {
+            QApplication::sendEvent(view, &event);
+         }
+      }
+   }
 }
 
 /*!
@@ -1845,34 +1892,35 @@ void QDeclarativeTextEdit::openSoftwareInputPanel()
 */
 void QDeclarativeTextEdit::closeSoftwareInputPanel()
 {
-    QEvent event(QEvent::CloseSoftwareInputPanel);
-    if (qApp) {
-        if (QGraphicsView * view = qobject_cast<QGraphicsView*>(qApp->focusWidget())) {
-            if (view->scene() && view->scene() == scene()) {
-                QApplication::sendEvent(view, &event);
-            }
-        }
-    }
+   QEvent event(QEvent::CloseSoftwareInputPanel);
+   if (qApp) {
+      if (QGraphicsView *view = qobject_cast<QGraphicsView *>(qApp->focusWidget())) {
+         if (view->scene() && view->scene() == scene()) {
+            QApplication::sendEvent(view, &event);
+         }
+      }
+   }
 }
 
 void QDeclarativeTextEdit::focusInEvent(QFocusEvent *event)
 {
-    Q_D(const QDeclarativeTextEdit);
-    if (d->showInputPanelOnFocus) {
-        if (d->focusOnPress && !isReadOnly()) {
-            openSoftwareInputPanel();
-        }
-    }
-    QDeclarativePaintedItem::focusInEvent(event);
+   Q_D(const QDeclarativeTextEdit);
+   if (d->showInputPanelOnFocus) {
+      if (d->focusOnPress && !isReadOnly()) {
+         openSoftwareInputPanel();
+      }
+   }
+   QDeclarativePaintedItem::focusInEvent(event);
 }
 
 void QDeclarativeTextEdit::q_canPasteChanged()
 {
-    Q_D(QDeclarativeTextEdit);
-    bool old = d->canPaste;
-    d->canPaste = d->control->canPaste();
-    if(old!=d->canPaste)
-        emit canPasteChanged();
+   Q_D(QDeclarativeTextEdit);
+   bool old = d->canPaste;
+   d->canPaste = d->control->canPaste();
+   if (old != d->canPaste) {
+      emit canPasteChanged();
+   }
 }
 
 QT_END_NAMESPACE

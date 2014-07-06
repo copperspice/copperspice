@@ -84,23 +84,16 @@ class ReduceKernel
    ResultsMap resultsMap;
 
    bool canReduce(int begin) const {
-      return (((reduceOptions & UnorderedReduce)
-               && progress == 0)
-              || ((reduceOptions & OrderedReduce)
-                  && progress == begin));
+      return (((reduceOptions & UnorderedReduce) && progress == 0) || ((reduceOptions & OrderedReduce) && progress == begin));
    }
 
-   void reduceResult(ReduceFunctor &reduce,
-                     ReduceResultType &r,
-                     const IntermediateResults<T> &result) {
+   void reduceResult(ReduceFunctor &reduce, ReduceResultType &r, const IntermediateResults<T> &result) {
       for (int i = 0; i < result.vector.size(); ++i) {
          reduce(r, result.vector.at(i));
       }
    }
 
-   void reduceResults(ReduceFunctor &reduce,
-                      ReduceResultType &r,
-                      ResultsMap &map) {
+   void reduceResults(ReduceFunctor &reduce, ReduceResultType &r, ResultsMap &map) {
       typename ResultsMap::iterator it = map.begin();
       while (it != map.end()) {
          reduceResult(reduce, r, it.value());
@@ -114,9 +107,7 @@ class ReduceKernel
         threadCount(QThreadPool::globalInstance()->maxThreadCount()) {
    }
 
-   void runReduce(ReduceFunctor &reduce,
-                  ReduceResultType &r,
-                  const IntermediateResults<T> &result) {
+   void runReduce(ReduceFunctor &reduce, ReduceResultType &r, const IntermediateResults<T> &result) {
       QMutexLocker locker(&mutex);
       if (!canReduce(result.begin)) {
          ++resultsMapSize;
@@ -189,12 +180,8 @@ class ReduceKernel
 
 template <typename Sequence, typename Base, typename Functor1, typename Functor2>
 struct SequenceHolder2 : public Base {
-   SequenceHolder2(const Sequence &_sequence,
-                   Functor1 functor1,
-                   Functor2 functor2,
-                   ReduceOptions reduceOptions)
-      : Base(_sequence.begin(), _sequence.end(), functor1, functor2, reduceOptions),
-        sequence(_sequence) {
+   SequenceHolder2(const Sequence &_sequence, Functor1 functor1, Functor2 functor2, ReduceOptions reduceOptions)
+      : Base(_sequence.begin(), _sequence.end(), functor1, functor2, reduceOptions), sequence(_sequence) {
    }
 
    Sequence sequence;

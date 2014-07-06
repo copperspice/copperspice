@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -30,72 +30,75 @@
 QT_BEGIN_NAMESPACE
 
 QDeclarativeTypeNameCache::QDeclarativeTypeNameCache(QDeclarativeEngine *e)
-: QDeclarativeCleanup(e), engine(e)
+   : QDeclarativeCleanup(e), engine(e)
 {
 }
 
 QDeclarativeTypeNameCache::~QDeclarativeTypeNameCache()
 {
-    clear();
+   clear();
 }
 
 void QDeclarativeTypeNameCache::clear()
 {
-    qDeleteAll(stringCache);
-    stringCache.clear();
-    identifierCache.clear();
-    engine = 0;
+   qDeleteAll(stringCache);
+   stringCache.clear();
+   identifierCache.clear();
+   engine = 0;
 }
 
 void QDeclarativeTypeNameCache::add(const QString &name, int importedScriptIndex)
 {
-    if (stringCache.contains(name))
-        return;
+   if (stringCache.contains(name)) {
+      return;
+   }
 
-    QDeclarativeEnginePrivate *ep = QDeclarativeEnginePrivate::get(engine);
+   QDeclarativeEnginePrivate *ep = QDeclarativeEnginePrivate::get(engine);
 
-    RData *data = new RData;
-    // ### Use typename class
-    data->identifier = ep->objectClass->createPersistentIdentifier(name);
-    data->importedScriptIndex = importedScriptIndex;
-    stringCache.insert(name, data);
-    identifierCache.insert(data->identifier.identifier, data);
+   RData *data = new RData;
+   // ### Use typename class
+   data->identifier = ep->objectClass->createPersistentIdentifier(name);
+   data->importedScriptIndex = importedScriptIndex;
+   stringCache.insert(name, data);
+   identifierCache.insert(data->identifier.identifier, data);
 }
 
 void QDeclarativeTypeNameCache::add(const QString &name, QDeclarativeType *type)
 {
-    if (stringCache.contains(name))
-        return;
+   if (stringCache.contains(name)) {
+      return;
+   }
 
-    QDeclarativeEnginePrivate *ep = QDeclarativeEnginePrivate::get(engine);
+   QDeclarativeEnginePrivate *ep = QDeclarativeEnginePrivate::get(engine);
 
-    RData *data = new RData;
-    // ### Use typename class
-    data->identifier = ep->objectClass->createPersistentIdentifier(name);
-    data->type = type;
-    stringCache.insert(name, data);
-    identifierCache.insert(data->identifier.identifier, data);
+   RData *data = new RData;
+   // ### Use typename class
+   data->identifier = ep->objectClass->createPersistentIdentifier(name);
+   data->type = type;
+   stringCache.insert(name, data);
+   identifierCache.insert(data->identifier.identifier, data);
 }
 
 void QDeclarativeTypeNameCache::add(const QString &name, QDeclarativeTypeNameCache *typeNamespace)
 {
-    if (stringCache.contains(name))
-        return;
+   if (stringCache.contains(name)) {
+      return;
+   }
 
-    QDeclarativeEnginePrivate *ep = QDeclarativeEnginePrivate::get(engine);
+   QDeclarativeEnginePrivate *ep = QDeclarativeEnginePrivate::get(engine);
 
-    RData *data = new RData;
-    // ### Use typename class
-    data->identifier = ep->objectClass->createPersistentIdentifier(name);
-    data->typeNamespace = typeNamespace;
-    stringCache.insert(name, data);
-    identifierCache.insert(data->identifier.identifier, data);
-    typeNamespace->addref();
+   RData *data = new RData;
+   // ### Use typename class
+   data->identifier = ep->objectClass->createPersistentIdentifier(name);
+   data->typeNamespace = typeNamespace;
+   stringCache.insert(name, data);
+   identifierCache.insert(data->identifier.identifier, data);
+   typeNamespace->addref();
 }
 
 QDeclarativeTypeNameCache::Data *QDeclarativeTypeNameCache::data(const QString &id) const
 {
-    return stringCache.value(id);
+   return stringCache.value(id);
 }
 
 QT_END_NAMESPACE

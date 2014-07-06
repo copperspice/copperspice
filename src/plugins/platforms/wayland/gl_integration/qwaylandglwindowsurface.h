@@ -26,9 +26,8 @@
 #ifndef QWAYLANDDRMSURFACE_H
 #define QWAYLANDDRMSURFACE_H
 
-#include "qwaylanddisplay.h"
-
-#include <QtGui/private/qwindowsurface_p.h>
+#include <qwaylanddisplay.h>
+#include <qwindowsurface_p.h>
 
 class QGLFramebufferObject;
 

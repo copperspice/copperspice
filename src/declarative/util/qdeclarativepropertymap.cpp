@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,48 +36,49 @@ QT_BEGIN_NAMESPACE
 //so we can emit the changed signal.
 class QDeclarativePropertyMapMetaObject : public QDeclarativeOpenMetaObject
 {
-public:
-    QDeclarativePropertyMapMetaObject(QDeclarativePropertyMap *obj, QDeclarativePropertyMapPrivate *objPriv);
+ public:
+   QDeclarativePropertyMapMetaObject(QDeclarativePropertyMap *obj, QDeclarativePropertyMapPrivate *objPriv);
 
-protected:
-    virtual void propertyWritten(int index);
-    virtual void propertyCreated(int, QMetaPropertyBuilder &);
+ protected:
+   virtual void propertyWritten(int index);
+   virtual void propertyCreated(int, QMetaPropertyBuilder &);
 
-private:
-    QDeclarativePropertyMap *map;
-    QDeclarativePropertyMapPrivate *priv;
+ private:
+   QDeclarativePropertyMap *map;
+   QDeclarativePropertyMapPrivate *priv;
 };
 
 class QDeclarativePropertyMapPrivate
 {
-    Q_DECLARE_PUBLIC(QDeclarativePropertyMap)
+   Q_DECLARE_PUBLIC(QDeclarativePropertyMap)
 
-public:
-    QDeclarativePropertyMapMetaObject *mo;
-    QStringList keys;
-    void emitChanged(const QString &key, const QVariant &value);
+ public:
+   QDeclarativePropertyMapMetaObject *mo;
+   QStringList keys;
+   void emitChanged(const QString &key, const QVariant &value);
 };
 
 void QDeclarativePropertyMapPrivate::emitChanged(const QString &key, const QVariant &value)
 {
-    Q_Q(QDeclarativePropertyMap);
-    emit q->valueChanged(key, value);
+   Q_Q(QDeclarativePropertyMap);
+   emit q->valueChanged(key, value);
 }
 
-QDeclarativePropertyMapMetaObject::QDeclarativePropertyMapMetaObject(QDeclarativePropertyMap *obj, QDeclarativePropertyMapPrivate *objPriv) : QDeclarativeOpenMetaObject(obj)
+QDeclarativePropertyMapMetaObject::QDeclarativePropertyMapMetaObject(QDeclarativePropertyMap *obj,
+      QDeclarativePropertyMapPrivate *objPriv) : QDeclarativeOpenMetaObject(obj)
 {
-    map = obj;
-    priv = objPriv;
+   map = obj;
+   priv = objPriv;
 }
 
 void QDeclarativePropertyMapMetaObject::propertyWritten(int index)
 {
-    priv->emitChanged(QString::fromUtf8(name(index)), operator[](index));
+   priv->emitChanged(QString::fromUtf8(name(index)), operator[](index));
 }
 
 void QDeclarativePropertyMapMetaObject::propertyCreated(int, QMetaPropertyBuilder &b)
 {
-    priv->keys.append(QString::fromUtf8(b.name()));
+   priv->keys.append(QString::fromUtf8(b.name()));
 }
 
 /*!
@@ -125,10 +126,10 @@ void QDeclarativePropertyMapMetaObject::propertyCreated(int, QMetaPropertyBuilde
     Constructs a bindable map with parent object \a parent.
 */
 QDeclarativePropertyMap::QDeclarativePropertyMap(QObject *parent)
-: QObject(*(new QDeclarativePropertyMapPrivate), parent)
+   : QObject(*(new QDeclarativePropertyMapPrivate), parent)
 {
-    Q_D(QDeclarativePropertyMap);
-    d->mo = new QDeclarativePropertyMapMetaObject(this, d);
+   Q_D(QDeclarativePropertyMap);
+   d->mo = new QDeclarativePropertyMapMetaObject(this, d);
 }
 
 /*!
@@ -143,8 +144,8 @@ QDeclarativePropertyMap::~QDeclarativePropertyMap()
 */
 void QDeclarativePropertyMap::clear(const QString &key)
 {
-    Q_D(QDeclarativePropertyMap);
-    d->mo->setValue(key.toUtf8(), QVariant());
+   Q_D(QDeclarativePropertyMap);
+   d->mo->setValue(key.toUtf8(), QVariant());
 }
 
 /*!
@@ -155,8 +156,8 @@ void QDeclarativePropertyMap::clear(const QString &key)
 */
 QVariant QDeclarativePropertyMap::value(const QString &key) const
 {
-    Q_D(const QDeclarativePropertyMap);
-    return d->mo->value(key.toUtf8());
+   Q_D(const QDeclarativePropertyMap);
+   return d->mo->value(key.toUtf8());
 }
 
 /*!
@@ -166,19 +167,19 @@ QVariant QDeclarativePropertyMap::value(const QString &key) const
 */
 void QDeclarativePropertyMap::insert(const QString &key, const QVariant &value)
 {
-    Q_D(QDeclarativePropertyMap);
-    //The following strings shouldn't be used as property names
-    if (key != QLatin1String("keys")
-     && key != QLatin1String("valueChanged")
-     && key != QLatin1String("QObject")
-     && key != QLatin1String("destroyed")
-     && key != QLatin1String("deleteLater")) {
-        d->mo->setValue(key.toUtf8(), value);
-    } else {
-        qWarning() << "Creating property with name"
-                   << key
-                   << "is not permitted, conflicts with internal symbols.";
-    }
+   Q_D(QDeclarativePropertyMap);
+   //The following strings shouldn't be used as property names
+   if (key != QLatin1String("keys")
+         && key != QLatin1String("valueChanged")
+         && key != QLatin1String("QObject")
+         && key != QLatin1String("destroyed")
+         && key != QLatin1String("deleteLater")) {
+      d->mo->setValue(key.toUtf8(), value);
+   } else {
+      qWarning() << "Creating property with name"
+                 << key
+                 << "is not permitted, conflicts with internal symbols.";
+   }
 }
 
 /*!
@@ -189,8 +190,8 @@ void QDeclarativePropertyMap::insert(const QString &key, const QVariant &value)
 */
 QStringList QDeclarativePropertyMap::keys() const
 {
-    Q_D(const QDeclarativePropertyMap);
-    return d->keys;
+   Q_D(const QDeclarativePropertyMap);
+   return d->keys;
 }
 
 /*!
@@ -200,8 +201,8 @@ QStringList QDeclarativePropertyMap::keys() const
 */
 int QDeclarativePropertyMap::count() const
 {
-    Q_D(const QDeclarativePropertyMap);
-    return d->keys.count();
+   Q_D(const QDeclarativePropertyMap);
+   return d->keys.count();
 }
 
 /*!
@@ -211,8 +212,8 @@ int QDeclarativePropertyMap::count() const
 */
 int QDeclarativePropertyMap::size() const
 {
-    Q_D(const QDeclarativePropertyMap);
-    return d->keys.size();
+   Q_D(const QDeclarativePropertyMap);
+   return d->keys.size();
 }
 
 /*!
@@ -223,8 +224,8 @@ int QDeclarativePropertyMap::size() const
 */
 bool QDeclarativePropertyMap::isEmpty() const
 {
-    Q_D(const QDeclarativePropertyMap);
-    return d->keys.isEmpty();
+   Q_D(const QDeclarativePropertyMap);
+   return d->keys.isEmpty();
 }
 
 /*!
@@ -234,8 +235,8 @@ bool QDeclarativePropertyMap::isEmpty() const
 */
 bool QDeclarativePropertyMap::contains(const QString &key) const
 {
-    Q_D(const QDeclarativePropertyMap);
-    return d->keys.contains(key);
+   Q_D(const QDeclarativePropertyMap);
+   return d->keys.contains(key);
 }
 
 /*!
@@ -250,13 +251,14 @@ bool QDeclarativePropertyMap::contains(const QString &key) const
 */
 QVariant &QDeclarativePropertyMap::operator[](const QString &key)
 {
-    //### optimize
-    Q_D(QDeclarativePropertyMap);
-    QByteArray utf8key = key.toUtf8();
-    if (!d->keys.contains(key))
-        insert(key, QVariant());//force creation -- needed below
+   //### optimize
+   Q_D(QDeclarativePropertyMap);
+   QByteArray utf8key = key.toUtf8();
+   if (!d->keys.contains(key)) {
+      insert(key, QVariant());   //force creation -- needed below
+   }
 
-    return (*(d->mo))[utf8key];
+   return (*(d->mo))[utf8key];
 }
 
 /*!
@@ -266,7 +268,7 @@ QVariant &QDeclarativePropertyMap::operator[](const QString &key)
 */
 QVariant QDeclarativePropertyMap::operator[](const QString &key) const
 {
-    return value(key);
+   return value(key);
 }
 
 /*!

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,47 +18,43 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVEFOCUSPANEL_H
-#define QDECLARATIVEFOCUSPANEL_H
+#ifndef QDECLARATIVEFOCUSPANEL_P_H
+#define QDECLARATIVEFOCUSPANEL_P_H
 
-#include "qdeclarativeitem.h"
-
-QT_BEGIN_HEADER
+#include <qdeclarativeitem.h>
 
 QT_BEGIN_NAMESPACE
 
 class QDeclarativeFocusPanel : public QDeclarativeItem
 {
-    CS_OBJECT(QDeclarativeFocusPanel)
+   CS_OBJECT(QDeclarativeFocusPanel)
 
-    CS_PROPERTY_READ(active, isActive)
-    CS_PROPERTY_WRITE(active, setActive)
-    CS_PROPERTY_NOTIFY(active, activeChanged)
+   CS_PROPERTY_READ(active, isActive)
+   CS_PROPERTY_WRITE(active, setActive)
+   CS_PROPERTY_NOTIFY(active, activeChanged)
 
-public:
-    QDeclarativeFocusPanel(QDeclarativeItem *parent=0);
-    virtual ~QDeclarativeFocusPanel();
+ public:
+   QDeclarativeFocusPanel(QDeclarativeItem *parent = 0);
+   virtual ~QDeclarativeFocusPanel();
 
-    CS_SIGNAL_1(Public, void activeChanged())
-    CS_SIGNAL_2(activeChanged) 
+   CS_SIGNAL_1(Public, void activeChanged())
+   CS_SIGNAL_2(activeChanged)
 
-protected:
-    bool sceneEvent(QEvent *event);
+ protected:
+   bool sceneEvent(QEvent *event);
 
-private:
-    Q_DISABLE_COPY(QDeclarativeFocusPanel)
-    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeItem)
+ private:
+   Q_DISABLE_COPY(QDeclarativeFocusPanel)
+   Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeItem)
 };
 
 QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QDeclarativeFocusPanel)
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEFOCUSPANEL_H

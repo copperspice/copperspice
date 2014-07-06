@@ -34,10 +34,7 @@ class QString;
 class QChar;
 class QXmlCharRange;
 
-
-//  internal
-//  This class contains helper functions related to XML, for validating character classes,
-//  productions in the XML specification
+//  This class contains helper functions related to XML for validating character classes, productions in the XML specification
 class Q_CORE_EXPORT QXmlUtils
 {
  public:

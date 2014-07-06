@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,163 +18,177 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVERECT_H
-#define QDECLARATIVERECT_H
+#ifndef QDeclarativeRectangle_P_H
+#define QDeclarativeRectangle_P_H
 
-#include "qdeclarativeitem.h"
-
+#include <qdeclarativeitem.h>
 #include <QtGui/qbrush.h>
-
-#include <private/qdeclarativeglobal_p.h>
-
-QT_BEGIN_HEADER
+#include <qdeclarativeglobal_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativePen : public QObject
 {
-    CS_OBJECT(QDeclarativePen)
+   CS_OBJECT(QDeclarativePen)
 
-    CS_PROPERTY_READ(width, width)
-    CS_PROPERTY_WRITE(width, setWidth)
-    CS_PROPERTY_NOTIFY(width, penChanged)
-    CS_PROPERTY_READ(color, color)
-    CS_PROPERTY_WRITE(color, setColor)
-    CS_PROPERTY_NOTIFY(color, penChanged)
+   CS_PROPERTY_READ(width, width)
+   CS_PROPERTY_WRITE(width, setWidth)
+   CS_PROPERTY_NOTIFY(width, penChanged)
+   CS_PROPERTY_READ(color, color)
+   CS_PROPERTY_WRITE(color, setColor)
+   CS_PROPERTY_NOTIFY(color, penChanged)
 
-public:
-    QDeclarativePen(QObject *parent=0)
-        : QObject(parent), _width(1), _color("#000000"), _valid(false)
-    {}
+ public:
+   QDeclarativePen(QObject *parent = 0)
+      : QObject(parent), _width(1), _color("#000000"), _valid(false) {
+   }
 
-    int width() const { return _width; }
-    void setWidth(int w);
+   int width() const {
+      return _width;
+   }
+   void setWidth(int w);
 
-    QColor color() const { return _color; }
-    void setColor(const QColor &c);
+   QColor color() const {
+      return _color;
+   }
+   void setColor(const QColor &c);
 
-    bool isValid() { return _valid; }
+   bool isValid() {
+      return _valid;
+   }
 
-public:
-    CS_SIGNAL_1(Public, void penChanged())
-    CS_SIGNAL_2(penChanged) 
+ public:
+   CS_SIGNAL_1(Public, void penChanged())
+   CS_SIGNAL_2(penChanged)
 
-private:
-    int _width;
-    QColor _color;
-    bool _valid;
+ private:
+   int _width;
+   QColor _color;
+   bool _valid;
 };
 
 class QDeclarativeGradientStop : public QObject
 {
-    CS_OBJECT(QDeclarativeGradientStop)
+   CS_OBJECT(QDeclarativeGradientStop)
 
-    CS_PROPERTY_READ(position, position)
-    CS_PROPERTY_WRITE(position, setPosition)
-    CS_PROPERTY_READ(color, color)
-    CS_PROPERTY_WRITE(color, setColor)
+   CS_PROPERTY_READ(position, position)
+   CS_PROPERTY_WRITE(position, setPosition)
+   CS_PROPERTY_READ(color, color)
+   CS_PROPERTY_WRITE(color, setColor)
 
-public:
-    QDeclarativeGradientStop(QObject *parent=0) : QObject(parent) {}
+ public:
+   QDeclarativeGradientStop(QObject *parent = 0) : QObject(parent) {}
 
-    qreal position() const { return m_position; }
-    void setPosition(qreal position) { m_position = position; updateGradient(); }
+   qreal position() const {
+      return m_position;
+   }
+   void setPosition(qreal position) {
+      m_position = position;
+      updateGradient();
+   }
 
-    QColor color() const { return m_color; }
-    void setColor(const QColor &color) { m_color = color; updateGradient(); }
+   QColor color() const {
+      return m_color;
+   }
+   void setColor(const QColor &color) {
+      m_color = color;
+      updateGradient();
+   }
 
-private:
-    void updateGradient();
+ private:
+   void updateGradient();
 
-private:
-    qreal m_position;
-    QColor m_color;
+ private:
+   qreal m_position;
+   QColor m_color;
 };
 
 class QDeclarativeGradient : public QObject
 {
-    CS_OBJECT(QDeclarativeGradient)
+   CS_OBJECT(QDeclarativeGradient)
 
-    CS_PROPERTY_READ(stops, stops)
-    CS_CLASSINFO("DefaultProperty", "stops")
+   CS_PROPERTY_READ(stops, stops)
+   CS_CLASSINFO("DefaultProperty", "stops")
 
-public:
-    QDeclarativeGradient(QObject *parent=0) : QObject(parent), m_gradient(0) {}
-    ~QDeclarativeGradient() { delete m_gradient; }
+ public:
+   QDeclarativeGradient(QObject *parent = 0) : QObject(parent), m_gradient(0) {}
+   ~QDeclarativeGradient() {
+      delete m_gradient;
+   }
 
-    QDeclarativeListProperty<QDeclarativeGradientStop> stops() { return QDeclarativeListProperty<QDeclarativeGradientStop>(this, m_stops); }
+   QDeclarativeListProperty<QDeclarativeGradientStop> stops() {
+      return QDeclarativeListProperty<QDeclarativeGradientStop>(this, m_stops);
+   }
 
-    const QGradient *gradient() const;
+   const QGradient *gradient() const;
 
-public:
-    CS_SIGNAL_1(Public, void updated())
-    CS_SIGNAL_2(updated) 
+ public:
+   CS_SIGNAL_1(Public, void updated())
+   CS_SIGNAL_2(updated)
 
-private:
-    void doUpdate();
+ private:
+   void doUpdate();
 
-private:
-    QList<QDeclarativeGradientStop *> m_stops;
-    mutable QGradient *m_gradient;
-    friend class QDeclarativeGradientStop;
+ private:
+   QList<QDeclarativeGradientStop *> m_stops;
+   mutable QGradient *m_gradient;
+   friend class QDeclarativeGradientStop;
 };
 
 class QDeclarativeRectanglePrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeRectangle : public QDeclarativeItem
 {
-    CS_OBJECT(QDeclarativeRectangle)
+   CS_OBJECT(QDeclarativeRectangle)
 
-    CS_PROPERTY_READ(color, color)
-    CS_PROPERTY_WRITE(color, setColor)
-    CS_PROPERTY_NOTIFY(color, colorChanged)
-    CS_PROPERTY_READ(*gradient, gradient)
-    CS_PROPERTY_WRITE(*gradient, setGradient)
-    CS_PROPERTY_READ(*, border)
-    CS_PROPERTY_CONSTANT(*)
-    CS_PROPERTY_READ(radius, radius)
-    CS_PROPERTY_WRITE(radius, setRadius)
-    CS_PROPERTY_NOTIFY(radius, radiusChanged)
-public:
-    QDeclarativeRectangle(QDeclarativeItem *parent=0);
+   CS_PROPERTY_READ(color, color)
+   CS_PROPERTY_WRITE(color, setColor)
+   CS_PROPERTY_NOTIFY(color, colorChanged)
+   CS_PROPERTY_READ(*gradient, gradient)
+   CS_PROPERTY_WRITE(*gradient, setGradient)
+   CS_PROPERTY_READ(*, border)
+   CS_PROPERTY_CONSTANT(*)
+   CS_PROPERTY_READ(radius, radius)
+   CS_PROPERTY_WRITE(radius, setRadius)
+   CS_PROPERTY_NOTIFY(radius, radiusChanged)
+ public:
+   QDeclarativeRectangle(QDeclarativeItem *parent = 0);
 
-    QColor color() const;
-    void setColor(const QColor &);
+   QColor color() const;
+   void setColor(const QColor &);
 
-    QDeclarativePen *border();
+   QDeclarativePen *border();
 
-    QDeclarativeGradient *gradient() const;
-    void setGradient(QDeclarativeGradient *gradient);
+   QDeclarativeGradient *gradient() const;
+   void setGradient(QDeclarativeGradient *gradient);
 
-    qreal radius() const;
-    void setRadius(qreal radius);
+   qreal radius() const;
+   void setRadius(qreal radius);
 
-    QRectF boundingRect() const;
+   QRectF boundingRect() const;
 
-    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
+   void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
-public:
-    CS_SIGNAL_1(Public, void colorChanged())
-    CS_SIGNAL_2(colorChanged) 
-    CS_SIGNAL_1(Public, void radiusChanged())
-    CS_SIGNAL_2(radiusChanged) 
+ public:
+   CS_SIGNAL_1(Public, void colorChanged())
+   CS_SIGNAL_2(colorChanged)
+   CS_SIGNAL_1(Public, void radiusChanged())
+   CS_SIGNAL_2(radiusChanged)
 
-private :
-    CS_SLOT_1(Private, void doUpdate())
-    CS_SLOT_2(doUpdate) 
+ private :
+   CS_SLOT_1(Private, void doUpdate())
+   CS_SLOT_2(doUpdate)
 
-private:
-    void generateRoundedRect();
-    void generateBorderedRect();
-    void drawRect(QPainter &painter);
+   void generateRoundedRect();
+   void generateBorderedRect();
+   void drawRect(QPainter &painter);
 
-private:
-    Q_DISABLE_COPY(QDeclarativeRectangle)
-    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeRectangle)
+   Q_DISABLE_COPY(QDeclarativeRectangle)
+   Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeRectangle)
 };
 
 QT_END_NAMESPACE
@@ -184,6 +198,5 @@ QML_DECLARE_TYPE(QDeclarativeGradientStop)
 QML_DECLARE_TYPE(QDeclarativeGradient)
 QML_DECLARE_TYPE(QDeclarativeRectangle)
 
-QT_END_HEADER
 
 #endif // QDECLARATIVERECT_H

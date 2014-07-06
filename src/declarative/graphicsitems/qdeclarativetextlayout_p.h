@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -28,31 +28,27 @@
 
 #include <QtGui/qtextlayout.h>
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
 
 class QDeclarativeTextLayoutPrivate;
 
 class QDeclarativeTextLayout : public QTextLayout
 {
-public:
-    QDeclarativeTextLayout();
-    QDeclarativeTextLayout(const QString &);
-    ~QDeclarativeTextLayout();
+ public:
+   QDeclarativeTextLayout();
+   QDeclarativeTextLayout(const QString &);
+   ~QDeclarativeTextLayout();
 
-    void beginLayout();
-    void clearLayout();
+   void beginLayout();
+   void clearLayout();
 
-    void prepare();
-    void draw(QPainter *, const QPointF & = QPointF());
+   void prepare();
+   void draw(QPainter *, const QPointF & = QPointF());
 
-private:
-    QDeclarativeTextLayoutPrivate *d;
+ private:
+   QDeclarativeTextLayoutPrivate *d;
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVETEXTLAYOUT_P_H

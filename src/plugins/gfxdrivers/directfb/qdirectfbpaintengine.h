@@ -27,7 +27,7 @@
 #define QPAINTENGINE_DIRECTFB_P_H
 
 #include <QtGui/qpaintengine.h>
-#include <private/qpaintengine_raster_p.h>
+#include <qpaintengine_raster_p.h>
 
 #ifndef QT_NO_QWS_DIRECTFB
 

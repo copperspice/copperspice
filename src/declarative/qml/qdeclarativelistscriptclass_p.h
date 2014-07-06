@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,43 +26,32 @@
 #ifndef QDECLARATIVELISTSCRIPTCLASS_P_H
 #define QDECLARATIVELISTSCRIPTCLASS_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include <private/qscriptdeclarativeclass_p.h>
-#include "qdeclarativelist.h"
+#include <qscriptdeclarativeclass_p.h>
+#include <qdeclarativelist.h>
 
 QT_BEGIN_NAMESPACE
 
 class QDeclarativeEngine;
 class QDeclarativeListScriptClass : public QScriptDeclarativeClass
 {
-public:
-    QDeclarativeListScriptClass(QDeclarativeEngine *);
-    ~QDeclarativeListScriptClass();
+ public:
+   QDeclarativeListScriptClass(QDeclarativeEngine *);
+   ~QDeclarativeListScriptClass();
 
-    QScriptValue newList(QObject *, int, int);
-    QScriptValue newList(const QDeclarativeListProperty<QObject> &, int);
+   QScriptValue newList(QObject *, int, int);
+   QScriptValue newList(const QDeclarativeListProperty<QObject> &, int);
 
-protected:
-    virtual QScriptClass::QueryFlags queryProperty(Object *, const Identifier &, 
-                                                   QScriptClass::QueryFlags flags);
-    virtual Value property(Object *, const Identifier &);
-    virtual QVariant toVariant(Object *, bool *ok);
+ protected:
+   virtual QScriptClass::QueryFlags queryProperty(Object *, const Identifier &,
+         QScriptClass::QueryFlags flags);
+   virtual Value property(Object *, const Identifier &);
+   virtual QVariant toVariant(Object *, bool *ok);
 
-private:
-    PersistentIdentifier m_lengthId;
-    QDeclarativeEngine *engine;
+ private:
+   PersistentIdentifier m_lengthId;
+   QDeclarativeEngine *engine;
 
-    quint32 lastIndex;
+   quint32 lastIndex;
 };
 
 QT_END_NAMESPACE

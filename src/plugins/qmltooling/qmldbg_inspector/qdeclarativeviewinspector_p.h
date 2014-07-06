@@ -26,12 +26,10 @@
 #ifndef QDECLARATIVEVIEWINSPECTOR_P_H
 #define QDECLARATIVEVIEWINSPECTOR_P_H
 
-#include "qdeclarativeviewinspector.h"
-
+#include <qdeclarativeviewinspector.h>
 #include <QtCore/QWeakPointer>
 #include <QtCore/QPointF>
-
-#include "QtDeclarative/private/qdeclarativeinspectorservice_p.h"
+#include <qdeclarativeinspectorservice_p.h>
 
 namespace QmlJSDebugger {
 

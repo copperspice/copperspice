@@ -26,10 +26,9 @@
 #ifndef QEGLWINDOWSURFACE_H
 #define QEGLWINDOWSURFACE_H
 
-#include "qeglfsintegration.h"
-#include "qeglfswindow.h"
-
-#include <QtGui/private/qwindowsurface_p.h>
+#include <qeglfsintegration.h>
+#include <qeglfswindow.h>
+#include <qwindowsurface_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,17 +39,17 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeConnectionsPrivate
 {
-public:
-    QDeclarativeConnectionsPrivate() : target(0), targetSet(false), ignoreUnknownSignals(false), componentcomplete(true) {}
+ public:
+   QDeclarativeConnectionsPrivate() : target(0), targetSet(false), ignoreUnknownSignals(false), componentcomplete(true) {}
 
-    QList<QDeclarativeBoundSignal*> boundsignals;
-    QObject *target;
+   QList<QDeclarativeBoundSignal *> boundsignals;
+   QObject *target;
 
-    bool targetSet;
-    bool ignoreUnknownSignals;
-    bool componentcomplete;
+   bool targetSet;
+   bool ignoreUnknownSignals;
+   bool componentcomplete;
 
-    QByteArray data;
+   QByteArray data;
 };
 
 /*!
@@ -69,7 +69,7 @@ public:
     }
     \endqml
 
-    However, it is not possible to connect to a signal in this way in some 
+    However, it is not possible to connect to a signal in this way in some
     cases, such as when:
 
     \list
@@ -110,7 +110,7 @@ public:
     \sa QtDeclarative
 */
 QDeclarativeConnections::QDeclarativeConnections(QObject *parent) :
-    QObject(*(new QDeclarativeConnectionsPrivate), parent)
+   QObject(*(new QDeclarativeConnectionsPrivate), parent)
 {
 }
 
@@ -129,28 +129,30 @@ QDeclarativeConnections::~QDeclarativeConnections()
 */
 QObject *QDeclarativeConnections::target() const
 {
-    Q_D(const QDeclarativeConnections);
-    return d->targetSet ? d->target : parent();
+   Q_D(const QDeclarativeConnections);
+   return d->targetSet ? d->target : parent();
 }
 
 void QDeclarativeConnections::setTarget(QObject *obj)
 {
-    Q_D(QDeclarativeConnections);
-    d->targetSet = true; // even if setting to 0, it is *set*
-    if (d->target == obj)
-        return;
-    foreach (QDeclarativeBoundSignal *s, d->boundsignals) {
-        // It is possible that target is being changed due to one of our signal
-        // handlers -> use deleteLater().
-        if (s->isEvaluating())
-            s->deleteLater();
-        else
-            delete s;
-    }
-    d->boundsignals.clear();
-    d->target = obj;
-    connectSignals();
-    emit targetChanged();
+   Q_D(QDeclarativeConnections);
+   d->targetSet = true; // even if setting to 0, it is *set*
+   if (d->target == obj) {
+      return;
+   }
+   foreach (QDeclarativeBoundSignal * s, d->boundsignals) {
+      // It is possible that target is being changed due to one of our signal
+      // handlers -> use deleteLater().
+      if (s->isEvaluating()) {
+         s->deleteLater();
+      } else {
+         delete s;
+      }
+   }
+   d->boundsignals.clear();
+   d->target = obj;
+   connectSignals();
+   emit targetChanged();
 }
 
 /*!
@@ -164,14 +166,14 @@ void QDeclarativeConnections::setTarget(QObject *obj)
 */
 bool QDeclarativeConnections::ignoreUnknownSignals() const
 {
-    Q_D(const QDeclarativeConnections);
-    return d->ignoreUnknownSignals;
+   Q_D(const QDeclarativeConnections);
+   return d->ignoreUnknownSignals;
 }
 
 void QDeclarativeConnections::setIgnoreUnknownSignals(bool ignore)
 {
-    Q_D(QDeclarativeConnections);
-    d->ignoreUnknownSignals = ignore;
+   Q_D(QDeclarativeConnections);
+   d->ignoreUnknownSignals = ignore;
 }
 
 
@@ -179,93 +181,95 @@ void QDeclarativeConnections::setIgnoreUnknownSignals(bool ignore)
 QByteArray
 QDeclarativeConnectionsParser::compile(const QList<QDeclarativeCustomParserProperty> &props)
 {
-    QByteArray rv;
-    QDataStream ds(&rv, QIODevice::WriteOnly);
+   QByteArray rv;
+   QDataStream ds(&rv, QIODevice::WriteOnly);
 
-    for(int ii = 0; ii < props.count(); ++ii)
-    {
-        QString propName = QString::fromUtf8(props.at(ii).name());
-        if (!propName.startsWith(QLatin1String("on")) || !propName.at(2).isUpper()) {
-            error(props.at(ii), QDeclarativeConnections::tr("Cannot assign to non-existent property \"%1\"").arg(propName));
+   for (int ii = 0; ii < props.count(); ++ii) {
+      QString propName = QString::fromUtf8(props.at(ii).name());
+      if (!propName.startsWith(QLatin1String("on")) || !propName.at(2).isUpper()) {
+         error(props.at(ii), QDeclarativeConnections::tr("Cannot assign to non-existent property \"%1\"").arg(propName));
+         return QByteArray();
+      }
+
+      QList<QVariant> values = props.at(ii).assignedValues();
+
+      for (int i = 0; i < values.count(); ++i) {
+         const QVariant &value = values.at(i);
+
+         if (value.userType() == qMetaTypeId<QDeclarativeCustomParserNode>()) {
+            error(props.at(ii), QDeclarativeConnections::tr("Connections: nested objects not allowed"));
             return QByteArray();
-        }
-
-        QList<QVariant> values = props.at(ii).assignedValues();
-
-        for (int i = 0; i < values.count(); ++i) {
-            const QVariant &value = values.at(i);
-
-            if (value.userType() == qMetaTypeId<QDeclarativeCustomParserNode>()) {
-                error(props.at(ii), QDeclarativeConnections::tr("Connections: nested objects not allowed"));
-                return QByteArray();
-            } else if (value.userType() == qMetaTypeId<QDeclarativeCustomParserProperty>()) {
-                error(props.at(ii), QDeclarativeConnections::tr("Connections: syntax error"));
-                return QByteArray();
+         } else if (value.userType() == qMetaTypeId<QDeclarativeCustomParserProperty>()) {
+            error(props.at(ii), QDeclarativeConnections::tr("Connections: syntax error"));
+            return QByteArray();
+         } else {
+            QDeclarativeParser::Variant v = qvariant_cast<QDeclarativeParser::Variant>(value);
+            if (v.isScript()) {
+               ds << propName;
+               ds << v.asScript();
             } else {
-                QDeclarativeParser::Variant v = qvariant_cast<QDeclarativeParser::Variant>(value);
-                if (v.isScript()) {
-                    ds << propName;
-                    ds << v.asScript();
-                } else {
-                    error(props.at(ii), QDeclarativeConnections::tr("Connections: script expected"));
-                    return QByteArray();
-                }
+               error(props.at(ii), QDeclarativeConnections::tr("Connections: script expected"));
+               return QByteArray();
             }
-        }
-    }
+         }
+      }
+   }
 
-    return rv;
+   return rv;
 }
 
 void QDeclarativeConnectionsParser::setCustomData(QObject *object,
-                                            const QByteArray &data)
+      const QByteArray &data)
 {
-    QDeclarativeConnectionsPrivate *p =
-        static_cast<QDeclarativeConnectionsPrivate *>(QObjectPrivate::get(object));
-    p->data = data;
+   QDeclarativeConnectionsPrivate *p =
+      static_cast<QDeclarativeConnectionsPrivate *>(QObjectPrivate::get(object));
+   p->data = data;
 }
 
 
 void QDeclarativeConnections::connectSignals()
 {
-    Q_D(QDeclarativeConnections);
-    if (!d->componentcomplete || (d->targetSet && !target()))
-        return;
+   Q_D(QDeclarativeConnections);
+   if (!d->componentcomplete || (d->targetSet && !target())) {
+      return;
+   }
 
-    QDataStream ds(d->data);
-    while (!ds.atEnd()) {
-        QString propName;
-        ds >> propName;
-        QString script;
-        ds >> script;
-        QDeclarativeProperty prop(target(), propName);
-        if (prop.isValid() && (prop.type() & QDeclarativeProperty::SignalProperty)) {
-            QDeclarativeBoundSignal *signal =
-                new QDeclarativeBoundSignal(target(), prop.method(), this);
-            QDeclarativeExpression *expression = new QDeclarativeExpression(qmlContext(this), 0, script);
-            QDeclarativeData *ddata = QDeclarativeData::get(this);
-            if (ddata && ddata->outerContext && !ddata->outerContext->url.isEmpty())
-                expression->setSourceLocation(ddata->outerContext->url.toString(), ddata->lineNumber);
-            signal->setExpression(expression);
-            d->boundsignals += signal;
-        } else {
-            if (!d->ignoreUnknownSignals)
-                qmlInfo(this) << tr("Cannot assign to non-existent property \"%1\"").arg(propName);
-        }
-    }
+   QDataStream ds(d->data);
+   while (!ds.atEnd()) {
+      QString propName;
+      ds >> propName;
+      QString script;
+      ds >> script;
+      QDeclarativeProperty prop(target(), propName);
+      if (prop.isValid() && (prop.type() & QDeclarativeProperty::SignalProperty)) {
+         QDeclarativeBoundSignal *signal =
+            new QDeclarativeBoundSignal(target(), prop.method(), this);
+         QDeclarativeExpression *expression = new QDeclarativeExpression(qmlContext(this), 0, script);
+         QDeclarativeData *ddata = QDeclarativeData::get(this);
+         if (ddata && ddata->outerContext && !ddata->outerContext->url.isEmpty()) {
+            expression->setSourceLocation(ddata->outerContext->url.toString(), ddata->lineNumber);
+         }
+         signal->setExpression(expression);
+         d->boundsignals += signal;
+      } else {
+         if (!d->ignoreUnknownSignals) {
+            qmlInfo(this) << tr("Cannot assign to non-existent property \"%1\"").arg(propName);
+         }
+      }
+   }
 }
 
 void QDeclarativeConnections::classBegin()
 {
-    Q_D(QDeclarativeConnections);
-    d->componentcomplete=false;
+   Q_D(QDeclarativeConnections);
+   d->componentcomplete = false;
 }
 
 void QDeclarativeConnections::componentComplete()
 {
-    Q_D(QDeclarativeConnections);
-    d->componentcomplete=true;
-    connectSignals();
+   Q_D(QDeclarativeConnections);
+   d->componentcomplete = true;
+   connectSignals();
 }
 
 QT_END_NAMESPACE

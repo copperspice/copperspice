@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,9 +32,9 @@ QT_BEGIN_NAMESPACE
 class QDeclarativeSystemPalettePrivate
 {
 
-public:
-    QPalette palette;
-    QPalette::ColorGroup group;
+ public:
+   QPalette palette;
+   QPalette::ColorGroup group;
 };
 
 
@@ -46,7 +46,7 @@ public:
     \brief The SystemPalette element provides access to the Qt palettes.
 
     The SystemPalette element provides access to the Qt application
-    palettes. This provides information about the standard colors used 
+    palettes. This provides information about the standard colors used
     for application windows, buttons and other features. These colors
     are grouped into three \e {color groups}: \c Active, \c Inactive,
     and \c Disabled.  See the QPalette documentation for details about
@@ -64,12 +64,12 @@ public:
     \sa QPalette
 */
 QDeclarativeSystemPalette::QDeclarativeSystemPalette(QObject *parent)
-    : QObject(*(new QDeclarativeSystemPalettePrivate), parent)
+   : QObject(*(new QDeclarativeSystemPalettePrivate), parent)
 {
-    Q_D(QDeclarativeSystemPalette);
-    d->palette = QApplication::palette();
-    d->group = QPalette::Active;
-    qApp->installEventFilter(this);
+   Q_D(QDeclarativeSystemPalette);
+   d->palette = QApplication::palette();
+   d->group = QPalette::Active;
+   qApp->installEventFilter(this);
 }
 
 QDeclarativeSystemPalette::~QDeclarativeSystemPalette()
@@ -84,8 +84,8 @@ QDeclarativeSystemPalette::~QDeclarativeSystemPalette()
 */
 QColor QDeclarativeSystemPalette::window() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::Window);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::Window);
 }
 
 /*!
@@ -96,8 +96,8 @@ QColor QDeclarativeSystemPalette::window() const
 */
 QColor QDeclarativeSystemPalette::windowText() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::WindowText);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::WindowText);
 }
 
 /*!
@@ -108,8 +108,8 @@ QColor QDeclarativeSystemPalette::windowText() const
 */
 QColor QDeclarativeSystemPalette::base() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::Base);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::Base);
 }
 
 /*!
@@ -120,8 +120,8 @@ QColor QDeclarativeSystemPalette::base() const
 */
 QColor QDeclarativeSystemPalette::text() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::Text);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::Text);
 }
 
 /*!
@@ -132,8 +132,8 @@ QColor QDeclarativeSystemPalette::text() const
 */
 QColor QDeclarativeSystemPalette::alternateBase() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::AlternateBase);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::AlternateBase);
 }
 
 /*!
@@ -144,8 +144,8 @@ QColor QDeclarativeSystemPalette::alternateBase() const
 */
 QColor QDeclarativeSystemPalette::button() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::Button);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::Button);
 }
 
 /*!
@@ -156,8 +156,8 @@ QColor QDeclarativeSystemPalette::button() const
 */
 QColor QDeclarativeSystemPalette::buttonText() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::ButtonText);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::ButtonText);
 }
 
 /*!
@@ -168,8 +168,8 @@ QColor QDeclarativeSystemPalette::buttonText() const
 */
 QColor QDeclarativeSystemPalette::light() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::Light);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::Light);
 }
 
 /*!
@@ -180,8 +180,8 @@ QColor QDeclarativeSystemPalette::light() const
 */
 QColor QDeclarativeSystemPalette::midlight() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::Midlight);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::Midlight);
 }
 
 /*!
@@ -192,8 +192,8 @@ QColor QDeclarativeSystemPalette::midlight() const
 */
 QColor QDeclarativeSystemPalette::dark() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::Dark);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::Dark);
 }
 
 /*!
@@ -204,8 +204,8 @@ QColor QDeclarativeSystemPalette::dark() const
 */
 QColor QDeclarativeSystemPalette::mid() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::Mid);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::Mid);
 }
 
 /*!
@@ -216,8 +216,8 @@ QColor QDeclarativeSystemPalette::mid() const
 */
 QColor QDeclarativeSystemPalette::shadow() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::Shadow);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::Shadow);
 }
 
 /*!
@@ -228,8 +228,8 @@ QColor QDeclarativeSystemPalette::shadow() const
 */
 QColor QDeclarativeSystemPalette::highlight() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::Highlight);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::Highlight);
 }
 
 /*!
@@ -240,8 +240,8 @@ QColor QDeclarativeSystemPalette::highlight() const
 */
 QColor QDeclarativeSystemPalette::highlightedText() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return d->palette.color(d->group, QPalette::HighlightedText);
+   Q_D(const QDeclarativeSystemPalette);
+   return d->palette.color(d->group, QPalette::HighlightedText);
 }
 
 /*!
@@ -259,37 +259,37 @@ QColor QDeclarativeSystemPalette::highlightedText() const
 */
 QDeclarativeSystemPalette::ColorGroup QDeclarativeSystemPalette::colorGroup() const
 {
-    Q_D(const QDeclarativeSystemPalette);
-    return (QDeclarativeSystemPalette::ColorGroup)d->group;
+   Q_D(const QDeclarativeSystemPalette);
+   return (QDeclarativeSystemPalette::ColorGroup)d->group;
 }
 
 void QDeclarativeSystemPalette::setColorGroup(QDeclarativeSystemPalette::ColorGroup colorGroup)
 {
-    Q_D(QDeclarativeSystemPalette);
-    d->group = (QPalette::ColorGroup)colorGroup;
-    emit paletteChanged();
+   Q_D(QDeclarativeSystemPalette);
+   d->group = (QPalette::ColorGroup)colorGroup;
+   emit paletteChanged();
 }
 
 bool QDeclarativeSystemPalette::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == qApp) {
-        if (event->type() == QEvent::ApplicationPaletteChange) {
-            QApplication::postEvent(this, new QEvent(QEvent::ApplicationPaletteChange));
-            return false;
-        }
-    }
-    return QObject::eventFilter(watched, event);
+   if (watched == qApp) {
+      if (event->type() == QEvent::ApplicationPaletteChange) {
+         QApplication::postEvent(this, new QEvent(QEvent::ApplicationPaletteChange));
+         return false;
+      }
+   }
+   return QObject::eventFilter(watched, event);
 }
 
 bool QDeclarativeSystemPalette::event(QEvent *event)
 {
-    Q_D(QDeclarativeSystemPalette);
-    if (event->type() == QEvent::ApplicationPaletteChange) {
-        d->palette = QApplication::palette();
-        emit paletteChanged();
-        return true;
-    }
-    return QObject::event(event);
+   Q_D(QDeclarativeSystemPalette);
+   if (event->type() == QEvent::ApplicationPaletteChange) {
+      d->palette = QApplication::palette();
+      emit paletteChanged();
+      return true;
+   }
+   return QObject::event(event);
 }
 
 QT_END_NAMESPACE

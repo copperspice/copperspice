@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,44 +26,39 @@
 #ifndef QDECLARATIVEJSAST_FWD_P_H
 #define QDECLARATIVEJSAST_FWD_P_H
 
-#include "private/qdeclarativejsglobal_p.h"
-
+#include <qdeclarativejsglobal_p.h>
 #include <QtCore/qglobal.h>
-
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
 
 QT_QML_BEGIN_NAMESPACE
 
-namespace QDeclarativeJS { namespace AST {
+namespace QDeclarativeJS {
+namespace AST {
 
 class SourceLocation
 {
-public:
-    SourceLocation(quint32 offset = 0, quint32 length = 0, quint32 line = 0, quint32 column = 0)
-        : offset(offset), length(length),
-          startLine(line), startColumn(column)
-    { }
+ public:
+   SourceLocation(quint32 offset = 0, quint32 length = 0, quint32 line = 0, quint32 column = 0)
+      : offset(offset), length(length),
+        startLine(line), startColumn(column) {
+   }
 
-    bool isValid() const { return length != 0; }
+   bool isValid() const {
+      return length != 0;
+   }
 
-    quint32 begin() const { return offset; }
-    quint32 end() const { return offset + length; }
+   quint32 begin() const {
+      return offset;
+   }
+   quint32 end() const {
+      return offset + length;
+   }
 
-// attributes
-    // ### encode
-    quint32 offset;
-    quint32 length;
-    quint32 startLine;
-    quint32 startColumn;
+   // attributes
+   // ### encode
+   quint32 offset;
+   quint32 length;
+   quint32 startLine;
+   quint32 startColumn;
 };
 
 class Visitor;
@@ -166,7 +161,8 @@ class UiFormalList;
 class UiFormal;
 class UiSignature;
 
-} } // namespace AST
+}
+} // namespace AST
 
 QT_QML_END_NAMESPACE
 

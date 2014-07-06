@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -67,30 +67,30 @@ QT_BEGIN_NAMESPACE
     The preferredSize property can be set to specify the preferred size of this LayoutItem
 */
 
-QDeclarativeLayoutItem::QDeclarativeLayoutItem(QDeclarativeItem* parent)
-    : QDeclarativeItem(parent), m_maximumSize(INT_MAX,INT_MAX), m_minimumSize(0,0), m_preferredSize(0,0)
+QDeclarativeLayoutItem::QDeclarativeLayoutItem(QDeclarativeItem *parent)
+   : QDeclarativeItem(parent), m_maximumSize(INT_MAX, INT_MAX), m_minimumSize(0, 0), m_preferredSize(0, 0)
 {
-    setGraphicsItem(this);
+   setGraphicsItem(this);
 }
 
-void QDeclarativeLayoutItem::setGeometry(const QRectF & rect)
+void QDeclarativeLayoutItem::setGeometry(const QRectF &rect)
 {
-    setX(rect.x());
-    setY(rect.y());
-    setWidth(rect.width());
-    setHeight(rect.height());
+   setX(rect.x());
+   setY(rect.y());
+   setWidth(rect.width());
+   setHeight(rect.height());
 }
 
 QSizeF QDeclarativeLayoutItem::sizeHint(Qt::SizeHint w, const QSizeF &constraint) const
 {
-    Q_UNUSED(constraint);
-    if(w == Qt::MinimumSize){
-        return m_minimumSize;
-    }else if(w == Qt::MaximumSize){
-        return m_maximumSize;
-    }else{
-        return m_preferredSize;
-    }
+   Q_UNUSED(constraint);
+   if (w == Qt::MinimumSize) {
+      return m_minimumSize;
+   } else if (w == Qt::MaximumSize) {
+      return m_maximumSize;
+   } else {
+      return m_preferredSize;
+   }
 }
 
 QT_END_NAMESPACE

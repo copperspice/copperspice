@@ -34,7 +34,6 @@
 #include <qstring.h>
 #include <qendian.h>
 #include <qnumeric.h>
-
 #include <limits.h>
 #include <algorithm>
 #include <limits>

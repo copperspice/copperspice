@@ -26,7 +26,7 @@
 #ifndef EGLNULLWSWINDOWSURFACE_H
 #define EGLNULLWSWINDOWSURFACE_H
 
-#include <private/qglwindowsurface_qws_p.h>
+#include <qglwindowsurface_qws_p.h>
 
 class EGLNullWSWindowSurface : public QWSGLWindowSurface
 {

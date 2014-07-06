@@ -23,12 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qdeclarativeinspectorplugin.h"
-
-#include "qdeclarativeviewinspector_p.h"
-
+#include <qdeclarativeinspectorplugin.h>
+#include <qdeclarativeviewinspector_p.h>
 #include <QtCore/qplugin.h>
-#include <QtDeclarative/private/qdeclarativeinspectorservice_p.h>
+#include <qdeclarativeinspectorservice_p.h>
 
 namespace QmlJSDebugger {
 

@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include <private/qgraphicssystemplugin_p.h>
-#include "qgraphicssystem_trace_p.h"
+#include <qgraphicssystemplugin_p.h>
+#include <qgraphicssystem_trace_p.h>
 
 QT_BEGIN_NAMESPACE
 

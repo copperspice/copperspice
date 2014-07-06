@@ -26,12 +26,10 @@
 #ifndef QTESTLITEMIME_H
 #define QTESTLITEMIME_H
 
-#include <private/qdnd_p.h>
-
+#include <qdnd_p.h>
 #include <QtGui/QClipboard>
-
-#include "qxlibintegration.h"
-#include "qxlibclipboard.h"
+#include <qxlibintegration.h>
+#include <qxlibclipboard.h>
 
 class QXlibMime : public QInternalMimeData {
     Q_OBJECT

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,27 +39,27 @@ QT_BEGIN_NAMESPACE
 
 class QScriptSyntaxHighlighter : public QSyntaxHighlighter
 {
-public:
-    QScriptSyntaxHighlighter(QTextDocument *document = 0);
-    ~QScriptSyntaxHighlighter();
+ public:
+   QScriptSyntaxHighlighter(QTextDocument *document = 0);
+   ~QScriptSyntaxHighlighter();
 
-protected:
-    void highlightBlock(const QString &text);
+ protected:
+   void highlightBlock(const QString &text);
 
-private:
-    void highlightWord(int currentPos, const QString &buffer);
+ private:
+   void highlightWord(int currentPos, const QString &buffer);
 
-    enum ScriptFormats {
-        ScriptTextFormat, ScriptNumberFormat,
-        ScriptStringFormat, ScriptTypeFormat,
-        ScriptKeywordFormat, ScriptPreprocessorFormat,
-        ScriptLabelFormat, ScriptCommentFormat,
-        NumScriptFormats
-    };
-    QTextCharFormat m_formats[NumScriptFormats];
+   enum ScriptFormats {
+      ScriptTextFormat, ScriptNumberFormat,
+      ScriptStringFormat, ScriptTypeFormat,
+      ScriptKeywordFormat, ScriptPreprocessorFormat,
+      ScriptLabelFormat, ScriptCommentFormat,
+      NumScriptFormats
+   };
+   QTextCharFormat m_formats[NumScriptFormats];
 
-private:
-    Q_DISABLE_COPY(QScriptSyntaxHighlighter)
+ private:
+   Q_DISABLE_COPY(QScriptSyntaxHighlighter)
 };
 
 QT_END_NAMESPACE

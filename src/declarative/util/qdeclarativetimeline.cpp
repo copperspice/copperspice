@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,13 +18,12 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#include "private/qdeclarativetimeline_p_p.h"
-
+#include <qdeclarativetimeline_p_p.h>
 #include <QDebug>
 #include <QMutex>
 #include <QThread>
@@ -37,203 +36,210 @@
 QT_BEGIN_NAMESPACE
 
 struct Update {
-    Update(QDeclarativeTimeLineValue *_g, qreal _v)
-        : g(_g), v(_v) {}
-    Update(const QDeclarativeTimeLineCallback &_e)
-        : g(0), v(0), e(_e) {}
+   Update(QDeclarativeTimeLineValue *_g, qreal _v)
+      : g(_g), v(_v) {}
+   Update(const QDeclarativeTimeLineCallback &_e)
+      : g(0), v(0), e(_e) {}
 
-    QDeclarativeTimeLineValue *g;
-    qreal v;
-    QDeclarativeTimeLineCallback e;
+   QDeclarativeTimeLineValue *g;
+   qreal v;
+   QDeclarativeTimeLineCallback e;
 };
 
-struct QDeclarativeTimeLinePrivate
-{
-    QDeclarativeTimeLinePrivate(QDeclarativeTimeLine *);
+struct QDeclarativeTimeLinePrivate {
+   QDeclarativeTimeLinePrivate(QDeclarativeTimeLine *);
 
-    struct Op {
-        enum Type {
-            Pause,
-            Set,
-            Move,
-            MoveBy,
-            Accel,
-            AccelDistance,
-            Execute
-        };
-        Op() {}
-        Op(Type t, int l, qreal v, qreal v2, int o, 
-           const QDeclarativeTimeLineCallback &ev = QDeclarativeTimeLineCallback(), const QEasingCurve &es = QEasingCurve())
-            : type(t), length(l), value(v), value2(v2), order(o), event(ev),
-              easing(es) {}
-        Op(const Op &o)
-            : type(o.type), length(o.length), value(o.value), value2(o.value2),
-              order(o.order), event(o.event), easing(o.easing) {}
-        Op &operator=(const Op &o) {
-            type = o.type; length = o.length; value = o.value; 
-            value2 = o.value2; order = o.order; event = o.event; 
-            easing = o.easing;
-            return *this;
-        }
+   struct Op {
+      enum Type {
+         Pause,
+         Set,
+         Move,
+         MoveBy,
+         Accel,
+         AccelDistance,
+         Execute
+      };
+      Op() {}
+      Op(Type t, int l, qreal v, qreal v2, int o,
+         const QDeclarativeTimeLineCallback &ev = QDeclarativeTimeLineCallback(), const QEasingCurve &es = QEasingCurve())
+         : type(t), length(l), value(v), value2(v2), order(o), event(ev),
+           easing(es) {}
+      Op(const Op &o)
+         : type(o.type), length(o.length), value(o.value), value2(o.value2),
+           order(o.order), event(o.event), easing(o.easing) {}
+      Op &operator=(const Op &o) {
+         type = o.type;
+         length = o.length;
+         value = o.value;
+         value2 = o.value2;
+         order = o.order;
+         event = o.event;
+         easing = o.easing;
+         return *this;
+      }
 
-        Type type;
-        int length;
-        qreal value;
-        qreal value2;
+      Type type;
+      int length;
+      qreal value;
+      qreal value2;
 
-        int order;
-        QDeclarativeTimeLineCallback event;
-        QEasingCurve easing;
-    };
-    struct TimeLine
-    {
-        TimeLine() : length(0), consumedOpLength(0), base(0.) {}
-        QList<Op> ops;
-        int length;
-        int consumedOpLength;
-        qreal base;
-    };
+      int order;
+      QDeclarativeTimeLineCallback event;
+      QEasingCurve easing;
+   };
+   struct TimeLine {
+      TimeLine() : length(0), consumedOpLength(0), base(0.) {}
+      QList<Op> ops;
+      int length;
+      int consumedOpLength;
+      qreal base;
+   };
 
-    int length;
-    int syncPoint;
-    typedef QHash<QDeclarativeTimeLineObject *, TimeLine> Ops;
-    Ops ops;
-    QDeclarativeTimeLine *q;
+   int length;
+   int syncPoint;
+   typedef QHash<QDeclarativeTimeLineObject *, TimeLine> Ops;
+   Ops ops;
+   QDeclarativeTimeLine *q;
 
-    void add(QDeclarativeTimeLineObject &, const Op &);
-    qreal value(const Op &op, int time, qreal base, bool *) const;
+   void add(QDeclarativeTimeLineObject &, const Op &);
+   qreal value(const Op &op, int time, qreal base, bool *) const;
 
-    int advance(int);
+   int advance(int);
 
-    bool clockRunning;
-    int prevTime;
+   bool clockRunning;
+   int prevTime;
 
-    int order;
+   int order;
 
-    QDeclarativeTimeLine::SyncMode syncMode;
-    int syncAdj;
-    QList<QPair<int, Update> > *updateQueue;
+   QDeclarativeTimeLine::SyncMode syncMode;
+   int syncAdj;
+   QList<QPair<int, Update> > *updateQueue;
 };
 
 QDeclarativeTimeLinePrivate::QDeclarativeTimeLinePrivate(QDeclarativeTimeLine *parent)
-: length(0), syncPoint(0), q(parent), clockRunning(false), prevTime(0), order(0), syncMode(QDeclarativeTimeLine::LocalSync), syncAdj(0), updateQueue(0)
+   : length(0), syncPoint(0), q(parent), clockRunning(false), prevTime(0), order(0),
+     syncMode(QDeclarativeTimeLine::LocalSync), syncAdj(0), updateQueue(0)
 {
 }
 
 void QDeclarativeTimeLinePrivate::add(QDeclarativeTimeLineObject &g, const Op &o)
 {
-    if (g._t && g._t != q) {
-        qWarning() << "QDeclarativeTimeLine: Cannot modify a QDeclarativeTimeLineValue owned by"
-                   << "another timeline.";
-        return;
-    }
-    g._t = q;
+   if (g._t && g._t != q) {
+      qWarning() << "QDeclarativeTimeLine: Cannot modify a QDeclarativeTimeLineValue owned by"
+                 << "another timeline.";
+      return;
+   }
+   g._t = q;
 
-    Ops::Iterator iter = ops.find(&g);
-    if (iter == ops.end()) {
-        iter = ops.insert(&g, TimeLine());
-        if (syncPoint > 0)
-            q->pause(g, syncPoint);
-    }
-    if (!iter->ops.isEmpty() &&
-       o.type == Op::Pause &&
-       iter->ops.last().type == Op::Pause) {
-        iter->ops.last().length += o.length;
-        iter->length += o.length;
-    } else {
-        iter->ops.append(o);
-        iter->length += o.length;
-    }
+   Ops::Iterator iter = ops.find(&g);
+   if (iter == ops.end()) {
+      iter = ops.insert(&g, TimeLine());
+      if (syncPoint > 0) {
+         q->pause(g, syncPoint);
+      }
+   }
+   if (!iter->ops.isEmpty() &&
+         o.type == Op::Pause &&
+         iter->ops.last().type == Op::Pause) {
+      iter->ops.last().length += o.length;
+      iter->length += o.length;
+   } else {
+      iter->ops.append(o);
+      iter->length += o.length;
+   }
 
-    if (iter->length > length)
-        length = iter->length;
+   if (iter->length > length) {
+      length = iter->length;
+   }
 
-    if (!clockRunning) {
-        q->stop();
-        prevTime = 0;
-        clockRunning = true;
+   if (!clockRunning) {
+      q->stop();
+      prevTime = 0;
+      clockRunning = true;
 
-        if (syncMode == QDeclarativeTimeLine::LocalSync)  {
-            syncAdj = -1;
-        } else {
-            syncAdj = 0;
-        }
-        q->start();
-/*        q->tick(0);
-        if (syncMode == QDeclarativeTimeLine::LocalSync)  {
-            syncAdj = -1;
-        } else {
-            syncAdj = 0;
-        }
-        */
-    }
+      if (syncMode == QDeclarativeTimeLine::LocalSync)  {
+         syncAdj = -1;
+      } else {
+         syncAdj = 0;
+      }
+      q->start();
+      /*        q->tick(0);
+              if (syncMode == QDeclarativeTimeLine::LocalSync)  {
+                  syncAdj = -1;
+              } else {
+                  syncAdj = 0;
+              }
+              */
+   }
 }
 
 qreal QDeclarativeTimeLinePrivate::value(const Op &op, int time, qreal base, bool *changed) const
 {
-    Q_ASSERT(time >= 0);
-    Q_ASSERT(time <= op.length);
-    *changed = true;
+   Q_ASSERT(time >= 0);
+   Q_ASSERT(time <= op.length);
+   *changed = true;
 
-    switch(op.type) {
-        case Op::Pause:
-            *changed = false;
+   switch (op.type) {
+      case Op::Pause:
+         *changed = false;
+         return base;
+      case Op::Set:
+         return op.value;
+      case Op::Move:
+         if (time == 0) {
             return base;
-        case Op::Set:
+         } else if (time == (op.length)) {
             return op.value;
-        case Op::Move:
-            if (time == 0) {
-                return base;
-            } else if (time == (op.length)) {
-                return op.value;
+         } else {
+            qreal delta = op.value - base;
+            qreal pTime = (qreal)(time) / (qreal)op.length;
+            if (op.easing.type() == QEasingCurve::Linear) {
+               return base + delta * pTime;
             } else {
-                qreal delta = op.value - base;
-                qreal pTime = (qreal)(time) / (qreal)op.length;
-                if (op.easing.type() == QEasingCurve::Linear)
-                    return base + delta * pTime;
-                else
-                    return base + delta * op.easing.valueForProgress(pTime);
+               return base + delta * op.easing.valueForProgress(pTime);
             }
-        case Op::MoveBy:
-            if (time == 0) {
-                return base;
-            } else if (time == (op.length)) {
-                return base + op.value;
+         }
+      case Op::MoveBy:
+         if (time == 0) {
+            return base;
+         } else if (time == (op.length)) {
+            return base + op.value;
+         } else {
+            qreal delta = op.value;
+            qreal pTime = (qreal)(time) / (qreal)op.length;
+            if (op.easing.type() == QEasingCurve::Linear) {
+               return base + delta * pTime;
             } else {
-                qreal delta = op.value;
-                qreal pTime = (qreal)(time) / (qreal)op.length;
-                if (op.easing.type() == QEasingCurve::Linear)
-                    return base + delta * pTime;
-                else
-                    return base + delta * op.easing.valueForProgress(pTime);
+               return base + delta * op.easing.valueForProgress(pTime);
             }
-        case Op::Accel:
-            if (time == 0) {
-                return base;
-            } else {
-                qreal t = (qreal)(time) / 1000.0f;
-                qreal delta = op.value * t + 0.5f * op.value2 * t * t;
-                return base + delta;
-            }
-        case Op::AccelDistance:
-            if (time == 0) {
-                return base;
-            } else if (time == (op.length)) {
-                return base + op.value2;
-            } else {
-                qreal t = (qreal)(time) / 1000.0f;
-                qreal accel = -1.0f * 1000.0f * op.value / (qreal)op.length;
-                qreal delta = op.value * t + 0.5f * accel * t * t;
-                return base + delta;
+         }
+      case Op::Accel:
+         if (time == 0) {
+            return base;
+         } else {
+            qreal t = (qreal)(time) / 1000.0f;
+            qreal delta = op.value * t + 0.5f * op.value2 * t * t;
+            return base + delta;
+         }
+      case Op::AccelDistance:
+         if (time == 0) {
+            return base;
+         } else if (time == (op.length)) {
+            return base + op.value2;
+         } else {
+            qreal t = (qreal)(time) / 1000.0f;
+            qreal accel = -1.0f * 1000.0f * op.value / (qreal)op.length;
+            qreal delta = op.value * t + 0.5f * accel * t * t;
+            return base + delta;
 
-            }
-        case Op::Execute:
-            op.event.d0(op.event.d1);
-            *changed = false;
-            return -1;
-    }
+         }
+      case Op::Execute:
+         op.event.d0(op.event.d1);
+         *changed = false;
+         return -1;
+   }
 
-    return base;
+   return base;
 }
 
 /*!
@@ -295,9 +301,9 @@ qreal QDeclarativeTimeLinePrivate::value(const Op &op, int time, qreal base, boo
     Construct a new QDeclarativeTimeLine with the specified \a parent.
 */
 QDeclarativeTimeLine::QDeclarativeTimeLine(QObject *parent)
-: QAbstractAnimation(parent)
+   : QAbstractAnimation(parent)
 {
-    d = new QDeclarativeTimeLinePrivate(this);
+   d = new QDeclarativeTimeLinePrivate(this);
 }
 
 /*!
@@ -306,12 +312,14 @@ QDeclarativeTimeLine::QDeclarativeTimeLine(QObject *parent)
 */
 QDeclarativeTimeLine::~QDeclarativeTimeLine()
 {
-    for (QDeclarativeTimeLinePrivate::Ops::Iterator iter = d->ops.begin();
-            iter != d->ops.end();
-            ++iter)
-        iter.key()->_t = 0;
+   for (QDeclarativeTimeLinePrivate::Ops::Iterator iter = d->ops.begin();
+         iter != d->ops.end();
+         ++iter) {
+      iter.key()->_t = 0;
+   }
 
-    delete d; d = 0;
+   delete d;
+   d = 0;
 }
 
 /*!
@@ -323,7 +331,7 @@ QDeclarativeTimeLine::~QDeclarativeTimeLine()
  */
 QDeclarativeTimeLine::SyncMode QDeclarativeTimeLine::syncMode() const
 {
-    return d->syncMode;
+   return d->syncMode;
 }
 
 /*!
@@ -331,7 +339,7 @@ QDeclarativeTimeLine::SyncMode QDeclarativeTimeLine::syncMode() const
  */
 void QDeclarativeTimeLine::setSyncMode(SyncMode syncMode)
 {
-    d->syncMode = syncMode;
+   d->syncMode = syncMode;
 }
 
 /*!
@@ -339,9 +347,11 @@ void QDeclarativeTimeLine::setSyncMode(SyncMode syncMode)
 */
 void QDeclarativeTimeLine::pause(QDeclarativeTimeLineObject &obj, int time)
 {
-    if (time <= 0) return;
-    QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Pause, time, 0., 0., d->order++);
-    d->add(obj, op);
+   if (time <= 0) {
+      return;
+   }
+   QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Pause, time, 0., 0., d->order++);
+   d->add(obj, op);
 }
 
 /*!
@@ -349,8 +359,8 @@ void QDeclarativeTimeLine::pause(QDeclarativeTimeLineObject &obj, int time)
  */
 void QDeclarativeTimeLine::callback(const QDeclarativeTimeLineCallback &callback)
 {
-    QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Execute, 0, 0, 0., d->order++, callback);
-    d->add(*callback.callbackObject(), op);
+   QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Execute, 0, 0, 0., d->order++, callback);
+   d->add(*callback.callbackObject(), op);
 }
 
 /*!
@@ -358,8 +368,8 @@ void QDeclarativeTimeLine::callback(const QDeclarativeTimeLineCallback &callback
 */
 void QDeclarativeTimeLine::set(QDeclarativeTimeLineValue &timeLineValue, qreal value)
 {
-    QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Set, 0, value, 0., d->order++);
-    d->add(timeLineValue, op);
+   QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Set, 0, value, 0., d->order++);
+   d->add(timeLineValue, op);
 }
 
 /*!
@@ -370,18 +380,20 @@ void QDeclarativeTimeLine::set(QDeclarativeTimeLineValue &timeLineValue, qreal v
 */
 int QDeclarativeTimeLine::accel(QDeclarativeTimeLineValue &timeLineValue, qreal velocity, qreal acceleration)
 {
-    if (acceleration == 0.0f)
-        return -1;
+   if (acceleration == 0.0f) {
+      return -1;
+   }
 
-    if ((velocity > 0.0f) == (acceleration > 0.0f))
-        acceleration = acceleration * -1.0f;
+   if ((velocity > 0.0f) == (acceleration > 0.0f)) {
+      acceleration = acceleration * -1.0f;
+   }
 
-    int time = static_cast<int>(-1000 * velocity / acceleration);
+   int time = static_cast<int>(-1000 * velocity / acceleration);
 
-    QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Accel, time, velocity, acceleration, d->order++);
-    d->add(timeLineValue, op);
+   QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Accel, time, velocity, acceleration, d->order++);
+   d->add(timeLineValue, op);
 
-    return time;
+   return time;
 }
 
 /*!
@@ -394,26 +406,30 @@ int QDeclarativeTimeLine::accel(QDeclarativeTimeLineValue &timeLineValue, qreal 
     entire operation does not require a move of more than \a maxDistance.
     \a maxDistance should always be positive.
 */
-int QDeclarativeTimeLine::accel(QDeclarativeTimeLineValue &timeLineValue, qreal velocity, qreal acceleration, qreal maxDistance)
+int QDeclarativeTimeLine::accel(QDeclarativeTimeLineValue &timeLineValue, qreal velocity, qreal acceleration,
+                                qreal maxDistance)
 {
-    if (maxDistance == 0.0f || acceleration == 0.0f)
-        return -1;
+   if (maxDistance == 0.0f || acceleration == 0.0f) {
+      return -1;
+   }
 
-    Q_ASSERT(acceleration > 0.0f && maxDistance > 0.0f);
+   Q_ASSERT(acceleration > 0.0f && maxDistance > 0.0f);
 
-    qreal maxAccel = (velocity * velocity) / (2.0f * maxDistance);
-    if (maxAccel > acceleration)
-        acceleration = maxAccel;
+   qreal maxAccel = (velocity * velocity) / (2.0f * maxDistance);
+   if (maxAccel > acceleration) {
+      acceleration = maxAccel;
+   }
 
-    if ((velocity > 0.0f) == (acceleration > 0.0f))
-        acceleration = acceleration * -1.0f;
+   if ((velocity > 0.0f) == (acceleration > 0.0f)) {
+      acceleration = acceleration * -1.0f;
+   }
 
-    int time = static_cast<int>(-1000 * velocity / acceleration);
+   int time = static_cast<int>(-1000 * velocity / acceleration);
 
-    QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Accel, time, velocity, acceleration, d->order++);
-    d->add(timeLineValue, op);
+   QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Accel, time, velocity, acceleration, d->order++);
+   d->add(timeLineValue, op);
 
-    return time;
+   return time;
 }
 
 /*!
@@ -425,17 +441,19 @@ int QDeclarativeTimeLine::accel(QDeclarativeTimeLineValue &timeLineValue, qreal 
 */
 int QDeclarativeTimeLine::accelDistance(QDeclarativeTimeLineValue &timeLineValue, qreal velocity, qreal distance)
 {
-    if (distance == 0.0f || velocity == 0.0f)
-        return -1;
+   if (distance == 0.0f || velocity == 0.0f) {
+      return -1;
+   }
 
-    Q_ASSERT((distance >= 0.0f) == (velocity >= 0.0f));
+   Q_ASSERT((distance >= 0.0f) == (velocity >= 0.0f));
 
-    int time = static_cast<int>(1000 * (2.0f * distance) / velocity);
+   int time = static_cast<int>(1000 * (2.0f * distance) / velocity);
 
-    QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::AccelDistance, time, velocity, distance, d->order++);
-    d->add(timeLineValue, op);
+   QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::AccelDistance, time, velocity, distance,
+                                      d->order++);
+   d->add(timeLineValue, op);
 
-    return time;
+   return time;
 }
 
 /*!
@@ -444,20 +462,26 @@ int QDeclarativeTimeLine::accelDistance(QDeclarativeTimeLineValue &timeLineValue
 */
 void QDeclarativeTimeLine::move(QDeclarativeTimeLineValue &timeLineValue, qreal destination, int time)
 {
-    if (time <= 0) return;
-    QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Move, time, destination, 0.0f, d->order++);
-    d->add(timeLineValue, op);
+   if (time <= 0) {
+      return;
+   }
+   QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Move, time, destination, 0.0f, d->order++);
+   d->add(timeLineValue, op);
 }
 
 /*!
     Change the \a timeLineValue from its current value to the given \a destination
     value over \a time milliseconds using the \a easing curve.
  */
-void QDeclarativeTimeLine::move(QDeclarativeTimeLineValue &timeLineValue, qreal destination, const QEasingCurve &easing, int time)
+void QDeclarativeTimeLine::move(QDeclarativeTimeLineValue &timeLineValue, qreal destination, const QEasingCurve &easing,
+                                int time)
 {
-    if (time <= 0) return;
-    QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Move, time, destination, 0.0f, d->order++, QDeclarativeTimeLineCallback(), easing);
-    d->add(timeLineValue, op);
+   if (time <= 0) {
+      return;
+   }
+   QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::Move, time, destination, 0.0f, d->order++,
+                                      QDeclarativeTimeLineCallback(), easing);
+   d->add(timeLineValue, op);
 }
 
 /*!
@@ -466,20 +490,26 @@ void QDeclarativeTimeLine::move(QDeclarativeTimeLineValue &timeLineValue, qreal 
 */
 void QDeclarativeTimeLine::moveBy(QDeclarativeTimeLineValue &timeLineValue, qreal change, int time)
 {
-    if (time <= 0) return;
-    QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::MoveBy, time, change, 0.0f, d->order++);
-    d->add(timeLineValue, op);
+   if (time <= 0) {
+      return;
+   }
+   QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::MoveBy, time, change, 0.0f, d->order++);
+   d->add(timeLineValue, op);
 }
 
 /*!
     Change the \a timeLineValue from its current value by the \a change amount over
     \a time milliseconds using the \a easing curve.
  */
-void QDeclarativeTimeLine::moveBy(QDeclarativeTimeLineValue &timeLineValue, qreal change, const QEasingCurve &easing, int time)
+void QDeclarativeTimeLine::moveBy(QDeclarativeTimeLineValue &timeLineValue, qreal change, const QEasingCurve &easing,
+                                  int time)
 {
-    if (time <= 0) return;
-    QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::MoveBy, time, change, 0.0f, d->order++, QDeclarativeTimeLineCallback(), easing);
-    d->add(timeLineValue, op);
+   if (time <= 0) {
+      return;
+   }
+   QDeclarativeTimeLinePrivate::Op op(QDeclarativeTimeLinePrivate::Op::MoveBy, time, change, 0.0f, d->order++,
+                                      QDeclarativeTimeLineCallback(), easing);
+   d->add(timeLineValue, op);
 }
 
 /*!
@@ -487,19 +517,20 @@ void QDeclarativeTimeLine::moveBy(QDeclarativeTimeLineValue &timeLineValue, qrea
 */
 void QDeclarativeTimeLine::reset(QDeclarativeTimeLineValue &timeLineValue)
 {
-    if (!timeLineValue._t)
-        return;
-    if (timeLineValue._t != this) {
-        qWarning() << "QDeclarativeTimeLine: Cannot reset a QDeclarativeTimeLineValue owned by another timeline.";
-        return;
-    }
-    remove(&timeLineValue);
-    timeLineValue._t = 0;
+   if (!timeLineValue._t) {
+      return;
+   }
+   if (timeLineValue._t != this) {
+      qWarning() << "QDeclarativeTimeLine: Cannot reset a QDeclarativeTimeLineValue owned by another timeline.";
+      return;
+   }
+   remove(&timeLineValue);
+   timeLineValue._t = 0;
 }
 
 int QDeclarativeTimeLine::duration() const
 {
-    return -1;
+   return -1;
 }
 
 /*!
@@ -515,18 +546,19 @@ int QDeclarativeTimeLine::duration() const
 */
 void QDeclarativeTimeLine::sync(QDeclarativeTimeLineValue &timeLineValue, QDeclarativeTimeLineValue &syncTo)
 {
-    QDeclarativeTimeLinePrivate::Ops::Iterator iter = d->ops.find(&syncTo);
-    if (iter == d->ops.end())
-        return;
-    int length = iter->length;
+   QDeclarativeTimeLinePrivate::Ops::Iterator iter = d->ops.find(&syncTo);
+   if (iter == d->ops.end()) {
+      return;
+   }
+   int length = iter->length;
 
-    iter = d->ops.find(&timeLineValue);
-    if (iter == d->ops.end()) {
-        pause(timeLineValue, length);
-    } else {
-        int glength = iter->length;
-        pause(timeLineValue, length - glength);
-    }
+   iter = d->ops.find(&timeLineValue);
+   if (iter == d->ops.end()) {
+      pause(timeLineValue, length);
+   } else {
+      int glength = iter->length;
+      pause(timeLineValue, length - glength);
+   }
 }
 
 /*!
@@ -540,12 +572,12 @@ void QDeclarativeTimeLine::sync(QDeclarativeTimeLineValue &timeLineValue, QDecla
 */
 void QDeclarativeTimeLine::sync(QDeclarativeTimeLineValue &timeLineValue)
 {
-    QDeclarativeTimeLinePrivate::Ops::Iterator iter = d->ops.find(&timeLineValue);
-    if (iter == d->ops.end()) {
-        pause(timeLineValue, d->length);
-    } else {
-        pause(timeLineValue, d->length - iter->length);
-    }
+   QDeclarativeTimeLinePrivate::Ops::Iterator iter = d->ops.find(&timeLineValue);
+   if (iter == d->ops.end()) {
+      pause(timeLineValue, d->length);
+   } else {
+      pause(timeLineValue, d->length - iter->length);
+   }
 }
 
 /*
@@ -585,24 +617,24 @@ void QDeclarativeTimeLine::sync(QDeclarativeTimeLineValue &timeLineValue)
     d->syncPoint = d->length;
 }*/
 
-/*! 
-    \internal 
+/*!
+    \internal
 
     Temporary hack.
  */
 void QDeclarativeTimeLine::setSyncPoint(int sp)
 {
-    d->syncPoint = sp;
+   d->syncPoint = sp;
 }
 
-/*! 
-    \internal 
- 
+/*!
+    \internal
+
     Temporary hack.
  */
 int QDeclarativeTimeLine::syncPoint() const
 {
-    return d->syncPoint;
+   return d->syncPoint;
 }
 
 /*!
@@ -611,7 +643,7 @@ int QDeclarativeTimeLine::syncPoint() const
 */
 bool QDeclarativeTimeLine::isActive() const
 {
-    return !d->ops.isEmpty();
+   return !d->ops.isEmpty();
 }
 
 /*!
@@ -628,7 +660,7 @@ bool QDeclarativeTimeLine::isActive() const
 */
 void QDeclarativeTimeLine::complete()
 {
-    d->advance(d->length);
+   d->advance(d->length);
 }
 
 /*!
@@ -645,17 +677,18 @@ void QDeclarativeTimeLine::complete()
 */
 void QDeclarativeTimeLine::clear()
 {
-    for (QDeclarativeTimeLinePrivate::Ops::ConstIterator iter = d->ops.begin(); iter != d->ops.end(); ++iter)
-        iter.key()->_t = 0;
-    d->ops.clear();
-    d->length = 0;
-    d->syncPoint = 0;
-    //XXX need stop here?
+   for (QDeclarativeTimeLinePrivate::Ops::ConstIterator iter = d->ops.begin(); iter != d->ops.end(); ++iter) {
+      iter.key()->_t = 0;
+   }
+   d->ops.clear();
+   d->length = 0;
+   d->syncPoint = 0;
+   //XXX need stop here?
 }
 
 int QDeclarativeTimeLine::time() const
 {
-    return d->prevTime;
+   return d->prevTime;
 }
 
 /*!
@@ -667,190 +700,199 @@ int QDeclarativeTimeLine::time() const
 
 void QDeclarativeTimeLine::updateCurrentTime(int v)
 {
-    if (d->syncAdj == -1)
-        d->syncAdj = v;
-    v -= d->syncAdj;
+   if (d->syncAdj == -1) {
+      d->syncAdj = v;
+   }
+   v -= d->syncAdj;
 
-    int timeChanged = v - d->prevTime;
+   int timeChanged = v - d->prevTime;
 #if 0
-    if (!timeChanged)
-        return;
+   if (!timeChanged) {
+      return;
+   }
 #endif
-    d->prevTime = v;
-    d->advance(timeChanged);
-    emit updated();
+   d->prevTime = v;
+   d->advance(timeChanged);
+   emit updated();
 
-    // Do we need to stop the clock?
-    if (d->ops.isEmpty()) {
-        stop();
-        d->prevTime = 0;
-        d->clockRunning = false;
-        emit completed();
-    } /*else if (pauseTime > 0) {
+   // Do we need to stop the clock?
+   if (d->ops.isEmpty()) {
+      stop();
+      d->prevTime = 0;
+      d->clockRunning = false;
+      emit completed();
+   } /*else if (pauseTime > 0) {
         GfxClock::cancelClock();
         d->prevTime = 0;
         GfxClock::pauseFor(pauseTime);
         d->syncAdj = 0;
         d->clockRunning = false;
     }*/ else if (/*!GfxClock::isActive()*/ state() != Running) {
-        stop();
-        d->prevTime = 0;
-        d->clockRunning = true;
-        d->syncAdj = 0;
-        start();
-    }
+      stop();
+      d->prevTime = 0;
+      d->clockRunning = true;
+      d->syncAdj = 0;
+      start();
+   }
 }
 
 bool operator<(const QPair<int, Update> &lhs,
                const QPair<int, Update> &rhs)
 {
-    return lhs.first < rhs.first;
+   return lhs.first < rhs.first;
 }
 
 int QDeclarativeTimeLinePrivate::advance(int t)
 {
-    int pauseTime = -1;
+   int pauseTime = -1;
 
-    // XXX - surely there is a more efficient way?
-    do {
-        pauseTime = -1;
-        // Minimal advance time
-        int advanceTime = t;
-        for (Ops::Iterator iter = ops.begin(); iter != ops.end(); ++iter) {
-            TimeLine &tl = *iter;
+   // XXX - surely there is a more efficient way?
+   do {
+      pauseTime = -1;
+      // Minimal advance time
+      int advanceTime = t;
+      for (Ops::Iterator iter = ops.begin(); iter != ops.end(); ++iter) {
+         TimeLine &tl = *iter;
+         Op &op = tl.ops.first();
+         int length = op.length - tl.consumedOpLength;
+
+         if (length < advanceTime) {
+            advanceTime = length;
+            if (advanceTime == 0) {
+               break;
+            }
+         }
+      }
+      t -= advanceTime;
+
+      // Process until then.  A zero length advance time will only process
+      // sets.
+      QList<QPair<int, Update> > updates;
+
+      for (Ops::Iterator iter = ops.begin(); iter != ops.end(); ) {
+         QDeclarativeTimeLineValue *v = static_cast<QDeclarativeTimeLineValue *>(iter.key());
+         TimeLine &tl = *iter;
+         Q_ASSERT(!tl.ops.isEmpty());
+
+         do {
             Op &op = tl.ops.first();
-            int length = op.length - tl.consumedOpLength;
-                
-            if (length < advanceTime) {
-                advanceTime = length;
-                if (advanceTime == 0)
-                    break;
+            if (advanceTime == 0 && op.length != 0) {
+               continue;
             }
-        }
-        t -= advanceTime;
 
-        // Process until then.  A zero length advance time will only process 
-        // sets.
-        QList<QPair<int, Update> > updates;
+            if (tl.consumedOpLength == 0 &&
+                  op.type != Op::Pause &&
+                  op.type != Op::Execute) {
+               tl.base = v->value();
+            }
 
-        for (Ops::Iterator iter = ops.begin(); iter != ops.end(); ) {
-            QDeclarativeTimeLineValue *v = static_cast<QDeclarativeTimeLineValue *>(iter.key());
-            TimeLine &tl = *iter;
-            Q_ASSERT(!tl.ops.isEmpty());
-
-            do {
-                Op &op = tl.ops.first();
-                if (advanceTime == 0 && op.length != 0)
-                    continue;
-
-                if (tl.consumedOpLength == 0 && 
-                   op.type != Op::Pause && 
-                   op.type != Op::Execute)
-                    tl.base = v->value();
-
-                if ((tl.consumedOpLength + advanceTime) == op.length) {
-                    if (op.type == Op::Execute) {
-                        updates << qMakePair(op.order, Update(op.event));
-                    } else {
-                        bool changed = false;
-                        qreal val = value(op, op.length, tl.base, &changed);
-                        if (changed)
-                            updates << qMakePair(op.order, Update(v, val));
-                    }
-                    tl.length -= qMin(advanceTime, tl.length);
-                    tl.consumedOpLength = 0;
-                    tl.ops.removeFirst();
-                } else {
-                    tl.consumedOpLength += advanceTime;
-                    bool changed = false;
-                    qreal val = value(op, tl.consumedOpLength, tl.base, &changed);
-                    if (changed)
-                        updates << qMakePair(op.order, Update(v, val));
-                    tl.length -= qMin(advanceTime, tl.length);
-                    break;
-                }
-
-            } while(!tl.ops.isEmpty() && advanceTime == 0 && tl.ops.first().length == 0);
-
-
-            if (tl.ops.isEmpty()) {
-                iter = ops.erase(iter);
-                v->_t = 0;
+            if ((tl.consumedOpLength + advanceTime) == op.length) {
+               if (op.type == Op::Execute) {
+                  updates << qMakePair(op.order, Update(op.event));
+               } else {
+                  bool changed = false;
+                  qreal val = value(op, op.length, tl.base, &changed);
+                  if (changed) {
+                     updates << qMakePair(op.order, Update(v, val));
+                  }
+               }
+               tl.length -= qMin(advanceTime, tl.length);
+               tl.consumedOpLength = 0;
+               tl.ops.removeFirst();
             } else {
-                if (tl.ops.first().type == Op::Pause && pauseTime != 0) {
-                    int opPauseTime = tl.ops.first().length - tl.consumedOpLength;
-                    if (pauseTime == -1 || opPauseTime < pauseTime)
-                        pauseTime = opPauseTime;
-                } else {
-                    pauseTime = 0;
-                }
-                ++iter;
+               tl.consumedOpLength += advanceTime;
+               bool changed = false;
+               qreal val = value(op, tl.consumedOpLength, tl.base, &changed);
+               if (changed) {
+                  updates << qMakePair(op.order, Update(v, val));
+               }
+               tl.length -= qMin(advanceTime, tl.length);
+               break;
             }
-        }
 
-        length -= qMin(length, advanceTime);
-        syncPoint -= advanceTime;
+         } while (!tl.ops.isEmpty() && advanceTime == 0 && tl.ops.first().length == 0);
 
-        qSort(updates.begin(), updates.end());
-        updateQueue = &updates;
-        for (int ii = 0; ii < updates.count(); ++ii) {
-            const Update &v = updates.at(ii).second;
-            if (v.g) {
-                v.g->setValue(v.v);
+
+         if (tl.ops.isEmpty()) {
+            iter = ops.erase(iter);
+            v->_t = 0;
+         } else {
+            if (tl.ops.first().type == Op::Pause && pauseTime != 0) {
+               int opPauseTime = tl.ops.first().length - tl.consumedOpLength;
+               if (pauseTime == -1 || opPauseTime < pauseTime) {
+                  pauseTime = opPauseTime;
+               }
             } else {
-                v.e.d0(v.e.d1);
+               pauseTime = 0;
             }
-        }
-        updateQueue = 0;
-    } while(t);
+            ++iter;
+         }
+      }
 
-    return pauseTime;
+      length -= qMin(length, advanceTime);
+      syncPoint -= advanceTime;
+
+      qSort(updates.begin(), updates.end());
+      updateQueue = &updates;
+      for (int ii = 0; ii < updates.count(); ++ii) {
+         const Update &v = updates.at(ii).second;
+         if (v.g) {
+            v.g->setValue(v.v);
+         } else {
+            v.e.d0(v.e.d1);
+         }
+      }
+      updateQueue = 0;
+   } while (t);
+
+   return pauseTime;
 }
 
 void QDeclarativeTimeLine::remove(QDeclarativeTimeLineObject *v)
 {
-    QDeclarativeTimeLinePrivate::Ops::Iterator iter = d->ops.find(v);
-    Q_ASSERT(iter != d->ops.end());
+   QDeclarativeTimeLinePrivate::Ops::Iterator iter = d->ops.find(v);
+   Q_ASSERT(iter != d->ops.end());
 
-    int len = iter->length;
-    d->ops.erase(iter);
-    if (len == d->length) {
-        // We need to recalculate the length
-        d->length = 0;
-        for (QDeclarativeTimeLinePrivate::Ops::Iterator iter = d->ops.begin();
-                iter != d->ops.end();
-                ++iter) {
+   int len = iter->length;
+   d->ops.erase(iter);
+   if (len == d->length) {
+      // We need to recalculate the length
+      d->length = 0;
+      for (QDeclarativeTimeLinePrivate::Ops::Iterator iter = d->ops.begin();
+            iter != d->ops.end();
+            ++iter) {
 
-            if (iter->length > d->length)
-                d->length = iter->length;
+         if (iter->length > d->length) {
+            d->length = iter->length;
+         }
 
-        }
-    }
-    if (d->ops.isEmpty()) {
-        stop();
-        d->clockRunning = false;
-    } else if (/*!GfxClock::isActive()*/ state() != Running) {
-        stop();
-        d->prevTime = 0;
-        d->clockRunning = true;
+      }
+   }
+   if (d->ops.isEmpty()) {
+      stop();
+      d->clockRunning = false;
+   } else if (/*!GfxClock::isActive()*/ state() != Running) {
+      stop();
+      d->prevTime = 0;
+      d->clockRunning = true;
 
-        if (d->syncMode == QDeclarativeTimeLine::LocalSync) {
-            d->syncAdj = -1;
-        } else {
-            d->syncAdj = 0;
-        }
-        start();
-    }
+      if (d->syncMode == QDeclarativeTimeLine::LocalSync) {
+         d->syncAdj = -1;
+      } else {
+         d->syncAdj = 0;
+      }
+      start();
+   }
 
-    if (d->updateQueue) {
-        for (int ii = 0; ii < d->updateQueue->count(); ++ii) {
-            if (d->updateQueue->at(ii).second.g == v ||
+   if (d->updateQueue) {
+      for (int ii = 0; ii < d->updateQueue->count(); ++ii) {
+         if (d->updateQueue->at(ii).second.g == v ||
                d->updateQueue->at(ii).second.e.callbackObject() == v) {
-                d->updateQueue->removeAt(ii);
-                --ii;
-            }
-        }
-    }
+            d->updateQueue->removeAt(ii);
+            --ii;
+         }
+      }
+   }
 
 
 }
@@ -888,44 +930,44 @@ void QDeclarativeTimeLine::remove(QDeclarativeTimeLineObject *v)
 
 
 QDeclarativeTimeLineObject::QDeclarativeTimeLineObject()
-: _t(0)
+   : _t(0)
 {
 }
 
 QDeclarativeTimeLineObject::~QDeclarativeTimeLineObject()
 {
-    if (_t) {
-        _t->remove(this);
-        _t = 0;
-    }
+   if (_t) {
+      _t->remove(this);
+      _t = 0;
+   }
 }
 
 QDeclarativeTimeLineCallback::QDeclarativeTimeLineCallback()
-: d0(0), d1(0), d2(0)
+   : d0(0), d1(0), d2(0)
 {
 }
 
 QDeclarativeTimeLineCallback::QDeclarativeTimeLineCallback(QDeclarativeTimeLineObject *b, Callback f, void *d)
-: d0(f), d1(d), d2(b)
+   : d0(f), d1(d), d2(b)
 {
 }
 
 QDeclarativeTimeLineCallback::QDeclarativeTimeLineCallback(const QDeclarativeTimeLineCallback &o)
-: d0(o.d0), d1(o.d1), d2(o.d2)
+   : d0(o.d0), d1(o.d1), d2(o.d2)
 {
 }
 
 QDeclarativeTimeLineCallback &QDeclarativeTimeLineCallback::operator=(const QDeclarativeTimeLineCallback &o)
 {
-    d0 = o.d0;
-    d1 = o.d1;
-    d2 = o.d2;
-    return *this;
+   d0 = o.d0;
+   d1 = o.d1;
+   d2 = o.d2;
+   return *this;
 }
 
 QDeclarativeTimeLineObject *QDeclarativeTimeLineCallback::callbackObject() const
 {
-    return d2;
+   return d2;
 }
 
 QT_END_NAMESPACE

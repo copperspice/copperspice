@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,9 +49,9 @@ QScriptDebuggerConsoleCommandPrivate::~QScriptDebuggerConsoleCommandPrivate()
 }
 
 QScriptDebuggerConsoleCommand::QScriptDebuggerConsoleCommand()
-    : d_ptr(new QScriptDebuggerConsoleCommandPrivate)
+   : d_ptr(new QScriptDebuggerConsoleCommandPrivate)
 {
-    d_ptr->q_ptr = this;
+   d_ptr->q_ptr = this;
 }
 
 QScriptDebuggerConsoleCommand::~QScriptDebuggerConsoleCommand()
@@ -59,9 +59,9 @@ QScriptDebuggerConsoleCommand::~QScriptDebuggerConsoleCommand()
 }
 
 QScriptDebuggerConsoleCommand::QScriptDebuggerConsoleCommand(QScriptDebuggerConsoleCommandPrivate &dd)
-    : d_ptr(&dd)
+   : d_ptr(&dd)
 {
-    d_ptr->q_ptr = this;
+   d_ptr->q_ptr = this;
 }
 
 /*!
@@ -107,7 +107,7 @@ QScriptDebuggerConsoleCommand::QScriptDebuggerConsoleCommand(QScriptDebuggerCons
 */
 QStringList QScriptDebuggerConsoleCommand::seeAlso() const
 {
-    return QStringList();
+   return QStringList();
 }
 
 /*!
@@ -115,17 +115,17 @@ QStringList QScriptDebuggerConsoleCommand::seeAlso() const
 */
 QStringList QScriptDebuggerConsoleCommand::aliases() const
 {
-    return QStringList();
+   return QStringList();
 }
 
 QStringList QScriptDebuggerConsoleCommand::argumentTypes() const
 {
-    return QStringList();
+   return QStringList();
 }
 
 QStringList QScriptDebuggerConsoleCommand::subCommands() const
 {
-    return QStringList();
+   return QStringList();
 }
 
 QT_END_NAMESPACE

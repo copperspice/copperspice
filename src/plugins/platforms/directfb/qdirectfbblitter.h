@@ -26,10 +26,8 @@
 #ifndef QDIRECTFBBLITTER_H
 #define QDIRECTFBBLITTER_H
 
-#include "qdirectfbconvenience.h"
-
-#include <private/qblittable_p.h>
-
+#include <qdirectfbconvenience.h>
+#include <qblittable_p.h>
 #include <directfb.h>
 
 QT_BEGIN_NAMESPACE

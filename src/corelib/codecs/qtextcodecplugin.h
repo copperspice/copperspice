@@ -48,7 +48,7 @@ CS_DECLARE_INTERFACE(QTextCodecFactoryInterface, QTextCodecFactoryInterface_iid)
 
 class Q_CORE_EXPORT QTextCodecPlugin : public QObject, public QTextCodecFactoryInterface
 {
-   CS_OBJECT(QTextCodecPlugin)
+   CS_OBJECT_MULTIPLE(QTextCodecPlugin, QObject)
    CS_INTERFACES(QTextCodecFactoryInterface, QFactoryInterface)
 
  public:

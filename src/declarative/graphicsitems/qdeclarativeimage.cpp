@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -88,12 +88,12 @@ QT_BEGIN_NAMESPACE
 */
 
 QDeclarativeImage::QDeclarativeImage(QDeclarativeItem *parent)
-    : QDeclarativeImageBase(*(new QDeclarativeImagePrivate), parent)
+   : QDeclarativeImageBase(*(new QDeclarativeImagePrivate), parent)
 {
 }
 
 QDeclarativeImage::QDeclarativeImage(QDeclarativeImagePrivate &dd, QDeclarativeItem *parent)
-    : QDeclarativeImageBase(dd, parent)
+   : QDeclarativeImageBase(dd, parent)
 {
 }
 
@@ -103,27 +103,28 @@ QDeclarativeImage::~QDeclarativeImage()
 
 QPixmap QDeclarativeImage::pixmap() const
 {
-    Q_D(const QDeclarativeImage);
-    return d->pix.pixmap();
+   Q_D(const QDeclarativeImage);
+   return d->pix.pixmap();
 }
 
 void QDeclarativeImage::setPixmap(const QPixmap &pix)
 {
-    Q_D(QDeclarativeImage);
-    if (!d->url.isEmpty())
-        return;
-    d->setPixmap(pix);
+   Q_D(QDeclarativeImage);
+   if (!d->url.isEmpty()) {
+      return;
+   }
+   d->setPixmap(pix);
 }
 
 void QDeclarativeImagePrivate::setPixmap(const QPixmap &pixmap)
 {
-    Q_Q(QDeclarativeImage);
-    pix.setPixmap(pixmap);
+   Q_Q(QDeclarativeImage);
+   pix.setPixmap(pixmap);
 
-    q->pixmapChange();
-    status = pix.isNull() ? QDeclarativeImageBase::Null : QDeclarativeImageBase::Ready;
+   q->pixmapChange();
+   status = pix.isNull() ? QDeclarativeImageBase::Null : QDeclarativeImageBase::Ready;
 
-    q->update();
+   q->update();
 }
 
 /*!
@@ -142,7 +143,7 @@ void QDeclarativeImagePrivate::setPixmap(const QPixmap &pixmap)
     \endlist
 
     \table
-    
+
     \row
     \o \image declarative-qtlogo-stretch.png
     \o Stretch (default)
@@ -223,19 +224,20 @@ void QDeclarativeImagePrivate::setPixmap(const QPixmap &pixmap)
 */
 QDeclarativeImage::FillMode QDeclarativeImage::fillMode() const
 {
-    Q_D(const QDeclarativeImage);
-    return d->fillMode;
+   Q_D(const QDeclarativeImage);
+   return d->fillMode;
 }
 
 void QDeclarativeImage::setFillMode(FillMode mode)
 {
-    Q_D(QDeclarativeImage);
-    if (d->fillMode == mode)
-        return;
-    d->fillMode = mode;
-    update();
-    updatePaintedGeometry();
-    emit fillModeChanged();
+   Q_D(QDeclarativeImage);
+   if (d->fillMode == mode) {
+      return;
+   }
+   d->fillMode = mode;
+   update();
+   updatePaintedGeometry();
+   emit fillModeChanged();
 }
 
 /*!
@@ -244,21 +246,21 @@ void QDeclarativeImage::setFillMode(FillMode mode)
     \qmlproperty real Image::paintedHeight
 
     These properties hold the size of the image that is actually painted.
-    In most cases it is the same as \c width and \c height, but when using a 
-    \c fillMode \c PreserveAspectFit or \c fillMode \c PreserveAspectCrop 
-    \c paintedWidth or \c paintedHeight can be smaller or larger than 
+    In most cases it is the same as \c width and \c height, but when using a
+    \c fillMode \c PreserveAspectFit or \c fillMode \c PreserveAspectCrop
+    \c paintedWidth or \c paintedHeight can be smaller or larger than
     \c width and \c height of the Image element.
 */
 qreal QDeclarativeImage::paintedWidth() const
 {
-    Q_D(const QDeclarativeImage);
-    return d->paintedWidth;
+   Q_D(const QDeclarativeImage);
+   return d->paintedWidth;
 }
 
 qreal QDeclarativeImage::paintedHeight() const
 {
-    Q_D(const QDeclarativeImage);
-    return d->paintedHeight;
+   Q_D(const QDeclarativeImage);
+   return d->paintedHeight;
 }
 
 /*!
@@ -329,7 +331,7 @@ qreal QDeclarativeImage::paintedHeight() const
     the painting of the image, this property sets the actual number of pixels
     stored for the loaded image so that large images do not use more
     memory than necessary. For example, this ensures the image in memory is no
-    larger than 1024x1024 pixels, regardless of the Image's \l {Item::}{width} and 
+    larger than 1024x1024 pixels, regardless of the Image's \l {Item::}{width} and
     \l {Item::}{height} values:
 
     \code
@@ -362,72 +364,73 @@ qreal QDeclarativeImage::paintedHeight() const
 
     Since QtQuick 1.1 the sourceSize can be cleared to the natural size of the image
     by setting sourceSize to \c undefined.
- 
+
     \note \e {Changing this property dynamically causes the image source to be reloaded,
     potentially even from the network, if it is not in the disk cache.}
 */
 
 void QDeclarativeImage::updatePaintedGeometry()
 {
-    Q_D(QDeclarativeImage);
+   Q_D(QDeclarativeImage);
 
-    if (d->fillMode == PreserveAspectFit) {
-        if (!d->pix.width() || !d->pix.height()) {
-            setImplicitWidth(0);
-            setImplicitHeight(0);
-            return;
-        }
-        qreal w = widthValid() ? width() : d->pix.width();
-        qreal widthScale = w / qreal(d->pix.width());
-        qreal h = heightValid() ? height() : d->pix.height();
-        qreal heightScale = h / qreal(d->pix.height());
-        if (widthScale <= heightScale) {
-            d->paintedWidth = w;
-            d->paintedHeight = widthScale * qreal(d->pix.height());
-        } else if(heightScale < widthScale) {
-            d->paintedWidth = heightScale * qreal(d->pix.width());
-            d->paintedHeight = h;
-        }
-        if (widthValid() && !heightValid()) {
-            setImplicitHeight(d->paintedHeight);
-        } else {
-            setImplicitHeight(d->pix.height());
-        }
-        if (heightValid() && !widthValid()) {
-            setImplicitWidth(d->paintedWidth);
-        } else {
-            setImplicitWidth(d->pix.width());
-        }
-    } else if (d->fillMode == PreserveAspectCrop) {
-        if (!d->pix.width() || !d->pix.height())
-            return;
-        qreal widthScale = width() / qreal(d->pix.width());
-        qreal heightScale = height() / qreal(d->pix.height());
-        if (widthScale < heightScale) {
-            widthScale = heightScale;
-        } else if(heightScale < widthScale) {
-            heightScale = widthScale;
-        }
+   if (d->fillMode == PreserveAspectFit) {
+      if (!d->pix.width() || !d->pix.height()) {
+         setImplicitWidth(0);
+         setImplicitHeight(0);
+         return;
+      }
+      qreal w = widthValid() ? width() : d->pix.width();
+      qreal widthScale = w / qreal(d->pix.width());
+      qreal h = heightValid() ? height() : d->pix.height();
+      qreal heightScale = h / qreal(d->pix.height());
+      if (widthScale <= heightScale) {
+         d->paintedWidth = w;
+         d->paintedHeight = widthScale * qreal(d->pix.height());
+      } else if (heightScale < widthScale) {
+         d->paintedWidth = heightScale * qreal(d->pix.width());
+         d->paintedHeight = h;
+      }
+      if (widthValid() && !heightValid()) {
+         setImplicitHeight(d->paintedHeight);
+      } else {
+         setImplicitHeight(d->pix.height());
+      }
+      if (heightValid() && !widthValid()) {
+         setImplicitWidth(d->paintedWidth);
+      } else {
+         setImplicitWidth(d->pix.width());
+      }
+   } else if (d->fillMode == PreserveAspectCrop) {
+      if (!d->pix.width() || !d->pix.height()) {
+         return;
+      }
+      qreal widthScale = width() / qreal(d->pix.width());
+      qreal heightScale = height() / qreal(d->pix.height());
+      if (widthScale < heightScale) {
+         widthScale = heightScale;
+      } else if (heightScale < widthScale) {
+         heightScale = widthScale;
+      }
 
-        d->paintedHeight = heightScale * qreal(d->pix.height());
-        d->paintedWidth = widthScale * qreal(d->pix.width());
-    } else {
-        d->paintedWidth = width();
-        d->paintedHeight = height();
-    }
-    emit paintedGeometryChanged();
+      d->paintedHeight = heightScale * qreal(d->pix.height());
+      d->paintedWidth = widthScale * qreal(d->pix.width());
+   } else {
+      d->paintedWidth = width();
+      d->paintedHeight = height();
+   }
+   emit paintedGeometryChanged();
 }
 
 void QDeclarativeImage::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    QDeclarativeImageBase::geometryChanged(newGeometry, oldGeometry);
-    updatePaintedGeometry();
+   QDeclarativeImageBase::geometryChanged(newGeometry, oldGeometry);
+   updatePaintedGeometry();
 }
 
 QRectF QDeclarativeImage::boundingRect() const
 {
-    Q_D(const QDeclarativeImage);
-    return QRectF(0, 0, qMax(d->mWidth, d->paintedWidth), qMax(d->mHeight, d->paintedHeight));
+   Q_D(const QDeclarativeImage);
+   return QRectF(0, 0, qMax(d->mWidth, d->paintedWidth), qMax(d->mHeight, d->paintedHeight));
 }
 
 /*!
@@ -477,92 +480,99 @@ QRectF QDeclarativeImage::boundingRect() const
 
 void QDeclarativeImage::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    Q_D(QDeclarativeImage);
-    if (d->pix.pixmap().isNull() )
-        return;
+   Q_D(QDeclarativeImage);
+   if (d->pix.pixmap().isNull() ) {
+      return;
+   }
 
-    int drawWidth = width();
-    int drawHeight = height();
-    bool doClip = false;
-    QTransform transform;
-    qreal widthScale = width() / qreal(d->pix.width());
-    qreal heightScale = height() / qreal(d->pix.height());
+   int drawWidth = width();
+   int drawHeight = height();
+   bool doClip = false;
+   QTransform transform;
+   qreal widthScale = width() / qreal(d->pix.width());
+   qreal heightScale = height() / qreal(d->pix.height());
 
-    if (width() != d->pix.width() || height() != d->pix.height()) {
-        if (d->fillMode >= Tile) {
-            if (d->fillMode == TileVertically) {
-                transform.scale(widthScale, 1.0);
-                drawWidth = d->pix.width();
-            } else if (d->fillMode == TileHorizontally) {
-                transform.scale(1.0, heightScale);
-                drawHeight = d->pix.height();
-            }
-        } else {
-            if (d->fillMode == PreserveAspectFit) {
-                if (widthScale <= heightScale) {
-                    heightScale = widthScale;
-                    transform.translate(0, (height() - heightScale * d->pix.height()) / 2);
-                } else if(heightScale < widthScale) {
-                    widthScale = heightScale;
-                    transform.translate((width() - widthScale * d->pix.width()) / 2, 0);
-                }
-            } else if (d->fillMode == PreserveAspectCrop) {
-                if (widthScale < heightScale) {
-                    widthScale = heightScale;
-                    transform.translate((width() - widthScale * d->pix.width()) / 2, 0);
-                } else if(heightScale < widthScale) {
-                    heightScale = widthScale;
-                    transform.translate(0, (height() - heightScale * d->pix.height()) / 2);
-                }
-            }
-            transform.scale(widthScale, heightScale);
+   if (width() != d->pix.width() || height() != d->pix.height()) {
+      if (d->fillMode >= Tile) {
+         if (d->fillMode == TileVertically) {
+            transform.scale(widthScale, 1.0);
             drawWidth = d->pix.width();
+         } else if (d->fillMode == TileHorizontally) {
+            transform.scale(1.0, heightScale);
             drawHeight = d->pix.height();
-            doClip = clip();
-        }
-    }
+         }
+      } else {
+         if (d->fillMode == PreserveAspectFit) {
+            if (widthScale <= heightScale) {
+               heightScale = widthScale;
+               transform.translate(0, (height() - heightScale * d->pix.height()) / 2);
+            } else if (heightScale < widthScale) {
+               widthScale = heightScale;
+               transform.translate((width() - widthScale * d->pix.width()) / 2, 0);
+            }
+         } else if (d->fillMode == PreserveAspectCrop) {
+            if (widthScale < heightScale) {
+               widthScale = heightScale;
+               transform.translate((width() - widthScale * d->pix.width()) / 2, 0);
+            } else if (heightScale < widthScale) {
+               heightScale = widthScale;
+               transform.translate(0, (height() - heightScale * d->pix.height()) / 2);
+            }
+         }
+         transform.scale(widthScale, heightScale);
+         drawWidth = d->pix.width();
+         drawHeight = d->pix.height();
+         doClip = clip();
+      }
+   }
 
-    QTransform oldTransform;
-    bool oldAA = p->testRenderHint(QPainter::Antialiasing);
-    bool oldSmooth = p->testRenderHint(QPainter::SmoothPixmapTransform);
-    if (d->smooth)
-        p->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, d->smooth);
-    if (doClip) {
-        p->save();
-        p->setClipRect(QRectF(0, 0, d->mWidth, d->mHeight), Qt::IntersectClip);
-    }
-    if (d->mirror)
-        transform.translate(drawWidth, 0).scale(-1.0, 1.0);
-    if (!transform.isIdentity()) {
-        oldTransform = p->transform();
-        p->setWorldTransform(transform * oldTransform);
-    }
+   QTransform oldTransform;
+   bool oldAA = p->testRenderHint(QPainter::Antialiasing);
+   bool oldSmooth = p->testRenderHint(QPainter::SmoothPixmapTransform);
+   if (d->smooth) {
+      p->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, d->smooth);
+   }
+   if (doClip) {
+      p->save();
+      p->setClipRect(QRectF(0, 0, d->mWidth, d->mHeight), Qt::IntersectClip);
+   }
+   if (d->mirror) {
+      transform.translate(drawWidth, 0).scale(-1.0, 1.0);
+   }
+   if (!transform.isIdentity()) {
+      oldTransform = p->transform();
+      p->setWorldTransform(transform * oldTransform);
+   }
 
-    if (d->fillMode >= Tile)
-        p->drawTiledPixmap(QRectF(0, 0, drawWidth, drawHeight), d->pix);
-    else
-        p->drawPixmap(QRectF(0, 0, drawWidth, drawHeight), d->pix, QRectF(0, 0, drawWidth, drawHeight));
+   if (d->fillMode >= Tile) {
+      p->drawTiledPixmap(QRectF(0, 0, drawWidth, drawHeight), d->pix);
+   } else {
+      p->drawPixmap(QRectF(0, 0, drawWidth, drawHeight), d->pix, QRectF(0, 0, drawWidth, drawHeight));
+   }
 
-    if (d->smooth) {
-        p->setRenderHint(QPainter::Antialiasing, oldAA);
-        p->setRenderHint(QPainter::SmoothPixmapTransform, oldSmooth);
-    }
-    if (doClip)
-        p->restore();
-    if (!transform.isIdentity())
-        p->setWorldTransform(oldTransform);
+   if (d->smooth) {
+      p->setRenderHint(QPainter::Antialiasing, oldAA);
+      p->setRenderHint(QPainter::SmoothPixmapTransform, oldSmooth);
+   }
+   if (doClip) {
+      p->restore();
+   }
+   if (!transform.isIdentity()) {
+      p->setWorldTransform(oldTransform);
+   }
 }
 
 void QDeclarativeImage::pixmapChange()
 {
-    Q_D(QDeclarativeImage);
-    // PreserveAspectFit calculates the implicit size differently so we
-    // don't call our superclass pixmapChange(), since that would
-    // result in the implicit size being set incorrectly, then updated
-    // in updatePaintedGeometry()
-    if (d->fillMode != PreserveAspectFit)
-        QDeclarativeImageBase::pixmapChange();
-    updatePaintedGeometry();
+   Q_D(QDeclarativeImage);
+   // PreserveAspectFit calculates the implicit size differently so we
+   // don't call our superclass pixmapChange(), since that would
+   // result in the implicit size being set incorrectly, then updated
+   // in updatePaintedGeometry()
+   if (d->fillMode != PreserveAspectFit) {
+      QDeclarativeImageBase::pixmapChange();
+   }
+   updatePaintedGeometry();
 }
 
 QT_END_NAMESPACE

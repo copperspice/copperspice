@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -37,7 +37,7 @@
 QT_BEGIN_NAMESPACE
 
 QScriptDebuggerStandardWidgetFactory::QScriptDebuggerStandardWidgetFactory(QObject *parent)
-    : QObject(parent)
+   : QObject(parent)
 {
 }
 
@@ -47,47 +47,47 @@ QScriptDebuggerStandardWidgetFactory::~QScriptDebuggerStandardWidgetFactory()
 
 QScriptDebugOutputWidgetInterface *QScriptDebuggerStandardWidgetFactory::createDebugOutputWidget()
 {
-    return new QScriptDebugOutputWidget();
+   return new QScriptDebugOutputWidget();
 }
 
 QScriptDebuggerConsoleWidgetInterface *QScriptDebuggerStandardWidgetFactory::createConsoleWidget()
 {
-    return new QScriptDebuggerConsoleWidget();
+   return new QScriptDebuggerConsoleWidget();
 }
 
 QScriptErrorLogWidgetInterface *QScriptDebuggerStandardWidgetFactory::createErrorLogWidget()
 {
-    return new QScriptErrorLogWidget();
+   return new QScriptErrorLogWidget();
 }
 
 QScriptDebuggerCodeFinderWidgetInterface *QScriptDebuggerStandardWidgetFactory::createCodeFinderWidget()
 {
-    return new QScriptDebuggerCodeFinderWidget();
+   return new QScriptDebuggerCodeFinderWidget();
 }
 
 QScriptDebuggerStackWidgetInterface *QScriptDebuggerStandardWidgetFactory::createStackWidget()
 {
-    return new QScriptDebuggerStackWidget();
+   return new QScriptDebuggerStackWidget();
 }
 
 QScriptDebuggerScriptsWidgetInterface *QScriptDebuggerStandardWidgetFactory::createScriptsWidget()
 {
-    return new QScriptDebuggerScriptsWidget();
+   return new QScriptDebuggerScriptsWidget();
 }
 
 QScriptDebuggerLocalsWidgetInterface *QScriptDebuggerStandardWidgetFactory::createLocalsWidget()
 {
-    return new QScriptDebuggerLocalsWidget();
+   return new QScriptDebuggerLocalsWidget();
 }
 
 QScriptDebuggerCodeWidgetInterface *QScriptDebuggerStandardWidgetFactory::createCodeWidget()
 {
-    return new QScriptDebuggerCodeWidget();
+   return new QScriptDebuggerCodeWidget();
 }
 
 QScriptBreakpointsWidgetInterface *QScriptDebuggerStandardWidgetFactory::createBreakpointsWidget()
 {
-    return new QScriptBreakpointsWidget();
+   return new QScriptBreakpointsWidget();
 }
 
 QT_END_NAMESPACE

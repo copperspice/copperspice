@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,21 +26,10 @@
 #ifndef QDECLARATIVEPROPERTY_P_H
 #define QDECLARATIVEPROPERTY_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "qdeclarativeproperty.h"
-#include <private/qdeclarativeglobal_p.h>
-#include <private/qdeclarativepropertycache_p.h>
-#include <private/qdeclarativeguard_p.h>
+#include <qdeclarativeproperty.h>
+#include <qdeclarativeglobal_p.h>
+#include <qdeclarativepropertycache_p.h>
+#include <qdeclarativeguard_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -50,77 +39,77 @@ class QDeclarativeExpression;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativePropertyPrivate : public QDeclarativeRefCount
 {
-public:
-    enum WriteFlag { BypassInterceptor = 0x01, DontRemoveBinding = 0x02, RemoveBindingOnAliasWrite = 0x04 };
-    using WriteFlags = QFlags<WriteFlag>;
+ public:
+   enum WriteFlag { BypassInterceptor = 0x01, DontRemoveBinding = 0x02, RemoveBindingOnAliasWrite = 0x04 };
+   using WriteFlags = QFlags<WriteFlag>;
 
-    QDeclarativePropertyPrivate()
-        : context(0), engine(0), object(0), isNameCached(false) {}
+   QDeclarativePropertyPrivate()
+      : context(0), engine(0), object(0), isNameCached(false) {}
 
-    QDeclarativeContextData *context;
-    QDeclarativeEngine *engine;
-    QDeclarativeGuard<QObject> object;
+   QDeclarativeContextData *context;
+   QDeclarativeEngine *engine;
+   QDeclarativeGuard<QObject> object;
 
-    bool isNameCached:1;
-    QDeclarativePropertyCache::Data core;
-    QString nameCache;
+   bool isNameCached: 1;
+   QDeclarativePropertyCache::Data core;
+   QString nameCache;
 
-    // Describes the "virtual" value-type sub-property.  
-    QDeclarativePropertyCache::ValueTypeData valueType;
+   // Describes the "virtual" value-type sub-property.
+   QDeclarativePropertyCache::ValueTypeData valueType;
 
-    void initProperty(QObject *obj, const QString &name);
-    void initDefault(QObject *obj);
+   void initProperty(QObject *obj, const QString &name);
+   void initDefault(QObject *obj);
 
-    bool isValueType() const;
-    int propertyType() const;
-    QDeclarativeProperty::Type type() const;
-    QDeclarativeProperty::PropertyTypeCategory propertyTypeCategory() const;
+   bool isValueType() const;
+   int propertyType() const;
+   QDeclarativeProperty::Type type() const;
+   QDeclarativeProperty::PropertyTypeCategory propertyTypeCategory() const;
 
-    QVariant readValueProperty();
-    bool writeValueProperty(const QVariant &, WriteFlags);
+   QVariant readValueProperty();
+   bool writeValueProperty(const QVariant &, WriteFlags);
 
-    static const QMetaObject *rawMetaObjectForType(QDeclarativeEnginePrivate *, int);
-    static bool writeEnumProperty(const QMetaProperty &prop, int idx, QObject *object, 
-                                  const QVariant &value, int flags);
-    static bool write(QObject *, const QDeclarativePropertyCache::Data &, const QVariant &, 
-                      QDeclarativeContextData *, WriteFlags flags = 0);
-    static void findAliasTarget(QObject *, int, QObject **, int *);
-    static QDeclarativeAbstractBinding *setBinding(QObject *, int coreIndex, int valueTypeIndex /* -1 */,
-                                                   QDeclarativeAbstractBinding *,
-                                                   WriteFlags flags = DontRemoveBinding);
-    static QDeclarativeAbstractBinding *setBindingNoEnable(QObject *, int coreIndex, int valueTypeIndex /* -1 */,
-                                                           QDeclarativeAbstractBinding *);
-    static QDeclarativeAbstractBinding *binding(QObject *, int coreIndex, int valueTypeIndex /* -1 */);
+   static const QMetaObject *rawMetaObjectForType(QDeclarativeEnginePrivate *, int);
+   static bool writeEnumProperty(const QMetaProperty &prop, int idx, QObject *object,
+                                 const QVariant &value, int flags);
+   static bool write(QObject *, const QDeclarativePropertyCache::Data &, const QVariant &,
+                     QDeclarativeContextData *, WriteFlags flags = 0);
+   static void findAliasTarget(QObject *, int, QObject **, int *);
+   static QDeclarativeAbstractBinding *setBinding(QObject *, int coreIndex, int valueTypeIndex /* -1 */,
+         QDeclarativeAbstractBinding *,
+         WriteFlags flags = DontRemoveBinding);
+   static QDeclarativeAbstractBinding *setBindingNoEnable(QObject *, int coreIndex, int valueTypeIndex /* -1 */,
+         QDeclarativeAbstractBinding *);
+   static QDeclarativeAbstractBinding *binding(QObject *, int coreIndex, int valueTypeIndex /* -1 */);
 
-    static QByteArray saveValueType(const QMetaObject *, int, 
-                                    const QMetaObject *, int);
-    static QByteArray saveProperty(const QMetaObject *, int);
+   static QByteArray saveValueType(const QMetaObject *, int,
+                                   const QMetaObject *, int);
+   static QByteArray saveProperty(const QMetaObject *, int);
 
-    static QDeclarativeProperty restore(const QByteArray &, QObject *, QDeclarativeContextData *);
-    static QDeclarativeProperty restore(const QDeclarativePropertyCache::Data &,
-                                        const QDeclarativePropertyCache::ValueTypeData &,
-                                        QObject *,
-                                        QDeclarativeContextData *);
+   static QDeclarativeProperty restore(const QByteArray &, QObject *, QDeclarativeContextData *);
+   static QDeclarativeProperty restore(const QDeclarativePropertyCache::Data &,
+                                       const QDeclarativePropertyCache::ValueTypeData &,
+                                       QObject *,
+                                       QDeclarativeContextData *);
 
-    static bool equal(const QMetaObject *, const QMetaObject *);
-    static bool canConvert(const QMetaObject *from, const QMetaObject *to);
+   static bool equal(const QMetaObject *, const QMetaObject *);
+   static bool canConvert(const QMetaObject *from, const QMetaObject *to);
 
-    // "Public" (to QML) methods
-    static QDeclarativeAbstractBinding *binding(const QDeclarativeProperty &that);
-    static QDeclarativeAbstractBinding *setBinding(const QDeclarativeProperty &that,
-                                                   QDeclarativeAbstractBinding *,
-                                                   WriteFlags flags = DontRemoveBinding);
-    static QDeclarativeExpression *signalExpression(const QDeclarativeProperty &that);
-    static QDeclarativeExpression *setSignalExpression(const QDeclarativeProperty &that, 
-                                                       QDeclarativeExpression *) ;
-    static bool write(const QDeclarativeProperty &that, const QVariant &, WriteFlags);
-    static int valueTypeCoreIndex(const QDeclarativeProperty &that);
-    static int bindingIndex(const QDeclarativeProperty &that);
-    static QMetaMethod findSignalByName(const QMetaObject *mo, const QByteArray &);
-    static bool connect(QObject *sender, int signal_index,
-                        const QObject *receiver, int method_index,
-                        int type = 0, int *types = 0);
-    static const QMetaObject *metaObjectForProperty(const QMetaObject *, int);
+   // "Public" (to QML) methods
+   static QDeclarativeAbstractBinding *binding(const QDeclarativeProperty &that);
+   static QDeclarativeAbstractBinding *setBinding(const QDeclarativeProperty &that,
+         QDeclarativeAbstractBinding *,
+         WriteFlags flags = DontRemoveBinding);
+   static QDeclarativeExpression *signalExpression(const QDeclarativeProperty &that);
+   static QDeclarativeExpression *setSignalExpression(const QDeclarativeProperty &that,
+         QDeclarativeExpression *) ;
+   static bool write(const QDeclarativeProperty &that, const QVariant &, WriteFlags);
+   static int valueTypeCoreIndex(const QDeclarativeProperty &that);
+   static int bindingIndex(const QDeclarativeProperty &that);
+   static QMetaMethod findSignalByName(const QMetaObject *mo, const QByteArray &);
+   static bool connect(QObject *sender, int signal_index,
+                       const QObject *receiver, int method_index,
+                       int type = 0, int *types = 0);
+   static const QMetaObject *metaObjectForProperty(const QMetaObject *, int);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDeclarativePropertyPrivate::WriteFlags)

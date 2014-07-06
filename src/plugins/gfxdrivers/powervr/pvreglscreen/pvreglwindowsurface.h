@@ -26,8 +26,8 @@
 #ifndef PVREGLWINDOWSURFACE_H
 #define PVREGLWINDOWSURFACE_H
 
-#include <private/qglwindowsurface_qws_p.h>
-#include "pvrqwsdrawable.h"
+#include <qglwindowsurface_qws_p.h>
+#include <pvrqwsdrawable.h>
 
 class PvrEglScreen;
 

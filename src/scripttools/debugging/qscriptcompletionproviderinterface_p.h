@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,16 +45,16 @@ class QScriptCompletionTaskInterface;
 
 class QScriptCompletionProviderInterface
 {
-public:
-    enum Option {
-        ConsoleCommandCompletion = 1
-    };
+ public:
+   enum Option {
+      ConsoleCommandCompletion = 1
+   };
 
-    virtual ~QScriptCompletionProviderInterface() {}
+   virtual ~QScriptCompletionProviderInterface() {}
 
-    virtual QScriptCompletionTaskInterface *createCompletionTask(
-        const QString &contents, int cursorPosition,
-        int frameIndex, int options) = 0;
+   virtual QScriptCompletionTaskInterface *createCompletionTask(
+      const QString &contents, int cursorPosition,
+      int frameIndex, int options) = 0;
 };
 
 QT_END_NAMESPACE

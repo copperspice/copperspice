@@ -26,11 +26,11 @@
 #ifndef QVariantAnimation_P_H
 #define QVariantAnimation_P_H
 
-#include "qvariantanimation.h"
+#include <qvariantanimation.h>
 #include <QtCore/qeasingcurve.h>
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qvector.h>
-#include "qabstractanimation_p.h"
+#include <qabstractanimation_p.h>
 
 #ifndef QT_NO_ANIMATION
 
@@ -41,7 +41,6 @@ class QVariantAnimationPrivate : public QAbstractAnimationPrivate
    Q_DECLARE_PUBLIC(QVariantAnimation)
 
  public:
-
    QVariantAnimationPrivate();
 
    static QVariantAnimationPrivate *get(QVariantAnimation *q) {
@@ -49,7 +48,6 @@ class QVariantAnimationPrivate : public QAbstractAnimationPrivate
    }
 
    void setDefaultStartEndValue(const QVariant &value);
-
 
    QVariant currentValue;
    QVariant defaultStartEndValue;
@@ -72,17 +70,19 @@ class QVariantAnimationPrivate : public QAbstractAnimationPrivate
 
    void updateInterpolator();
 
-   //XXX this is needed by dui
+   // XXX this is needed by dui
    static Q_CORE_EXPORT QVariantAnimation::Interpolator getInterpolator(int interpolationType);
 };
 
-//this should make the interpolation faster
-template<typename T> inline T _q_interpolate(const T &f, const T &t, qreal progress)
+// this should make the interpolation faster
+template<typename T>
+inline T _q_interpolate(const T &f, const T &t, qreal progress)
 {
    return T(f + (t - f) * progress);
 }
 
-template<typename T > inline QVariant _q_interpolateVariant(const T &from, const T &to, qreal progress)
+template<typename T>
+inline QVariant _q_interpolateVariant(const T &from, const T &to, qreal progress)
 {
    return _q_interpolate(from, to, progress);
 }

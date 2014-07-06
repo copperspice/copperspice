@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,72 +18,67 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVEFONTLOADER_H
-#define QDECLARATIVEFONTLOADER_H
+#ifndef QDECLARATIVEFONTLOADER_P_H
+#define QDECLARATIVEFONTLOADER_P_H
 
 #include <qdeclarative.h>
-
 #include <QtCore/qobject.h>
 #include <QtCore/qurl.h>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
 class QDeclarativeFontLoaderPrivate;
 class QDeclarativeFontLoader : public QObject
 {
-    CS_OBJECT(QDeclarativeFontLoader)
-    Q_DECLARE_PRIVATE(QDeclarativeFontLoader)
+   CS_OBJECT(QDeclarativeFontLoader)
+   Q_DECLARE_PRIVATE(QDeclarativeFontLoader)
 
-    CS_ENUM(Status)
+   CS_ENUM(Status)
 
-    CS_PROPERTY_READ(source, source)
-    CS_PROPERTY_WRITE(source, setSource)
-    CS_PROPERTY_NOTIFY(source, sourceChanged)
-    CS_PROPERTY_READ(name, name)
-    CS_PROPERTY_WRITE(name, setName)
-    CS_PROPERTY_NOTIFY(name, nameChanged)
-    CS_PROPERTY_READ(status, status)
-    CS_PROPERTY_NOTIFY(status, statusChanged)
+   CS_PROPERTY_READ(source, source)
+   CS_PROPERTY_WRITE(source, setSource)
+   CS_PROPERTY_NOTIFY(source, sourceChanged)
+   CS_PROPERTY_READ(name, name)
+   CS_PROPERTY_WRITE(name, setName)
+   CS_PROPERTY_NOTIFY(name, nameChanged)
+   CS_PROPERTY_READ(status, status)
+   CS_PROPERTY_NOTIFY(status, statusChanged)
 
-public:
-    enum Status { Null = 0, Ready, Loading, Error };
+ public:
+   enum Status { Null = 0, Ready, Loading, Error };
 
-    QDeclarativeFontLoader(QObject *parent = 0);
-    ~QDeclarativeFontLoader();
+   QDeclarativeFontLoader(QObject *parent = 0);
+   ~QDeclarativeFontLoader();
 
-    QUrl source() const;
-    void setSource(const QUrl &url);
+   QUrl source() const;
+   void setSource(const QUrl &url);
 
-    QString name() const;
-    void setName(const QString &name);
+   QString name() const;
+   void setName(const QString &name);
 
-    Status status() const;
+   Status status() const;
 
-private :
-    CS_SLOT_1(Private, void updateFontInfo(const QString & un_named_arg1,QDeclarativeFontLoader::Status un_named_arg2))
-    CS_SLOT_2(updateFontInfo) 
+ private :
+   CS_SLOT_1(Private, void updateFontInfo(const QString &un_named_arg1, QDeclarativeFontLoader::Status un_named_arg2))
+   CS_SLOT_2(updateFontInfo)
 
-public:
-    CS_SIGNAL_1(Public, void sourceChanged())
-    CS_SIGNAL_2(sourceChanged) 
-    CS_SIGNAL_1(Public, void nameChanged())
-    CS_SIGNAL_2(nameChanged) 
-    CS_SIGNAL_1(Public, void statusChanged())
-    CS_SIGNAL_2(statusChanged) 
+ public:
+   CS_SIGNAL_1(Public, void sourceChanged())
+   CS_SIGNAL_2(sourceChanged)
+   CS_SIGNAL_1(Public, void nameChanged())
+   CS_SIGNAL_2(nameChanged)
+   CS_SIGNAL_1(Public, void statusChanged())
+   CS_SIGNAL_2(statusChanged)
 };
 
 QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QDeclarativeFontLoader)
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEFONTLOADER_H
 

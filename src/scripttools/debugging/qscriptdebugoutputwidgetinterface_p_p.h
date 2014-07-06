@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,29 +26,18 @@
 #ifndef QSCRIPTDEBUGOUTPUTWIDGETINTERFACE_P_P_H
 #define QSCRIPTDEBUGOUTPUTWIDGETINTERFACE_P_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include <private/qwidget_p.h>
+#include <qwidget_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QScriptDebugOutputWidgetInterface;
 class QScriptDebugOutputWidgetInterfacePrivate
-    : public QWidgetPrivate
+   : public QWidgetPrivate
 {
-    Q_DECLARE_PUBLIC(QScriptDebugOutputWidgetInterface)
-public:
-    QScriptDebugOutputWidgetInterfacePrivate();
-    ~QScriptDebugOutputWidgetInterfacePrivate();
+   Q_DECLARE_PUBLIC(QScriptDebugOutputWidgetInterface)
+ public:
+   QScriptDebugOutputWidgetInterfacePrivate();
+   ~QScriptDebugOutputWidgetInterfacePrivate();
 };
 
 QT_END_NAMESPACE

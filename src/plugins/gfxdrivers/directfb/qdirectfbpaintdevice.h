@@ -26,8 +26,8 @@
 #ifndef QDIRECTFBPAINTDEVICE_H
 #define QDIRECTFBPAINTDEVICE_H
 
-#include <private/qpaintengine_raster_p.h>
-#include "qdirectfbscreen.h"
+#include <qpaintengine_raster_p.h>
+#include <qdirectfbscreen.h>
 
 #ifndef QT_NO_QWS_DIRECTFB
 

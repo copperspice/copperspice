@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,341 +26,335 @@
 #ifndef QDECLARATIVEPARSER_P_H
 #define QDECLARATIVEPARSER_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "qdeclarative.h"
-
+#include <qdeclarative.h>
 #include <QtCore/qbytearray.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qurl.h>
 #include <QtCore/qstring.h>
 #include <QtCore/qstringlist.h>
-
-#include <private/qdeclarativerefcount_p.h>
-#include <private/qdeclarativeglobal_p.h>
-
-QT_BEGIN_HEADER
+#include <qdeclarativerefcount_p.h>
+#include <qdeclarativeglobal_p.h>
 
 QT_BEGIN_NAMESPACE
 
-struct QAbstractDynamicMetaObject : public QMetaObject
-{
-    virtual ~QAbstractDynamicMetaObject() {}
+struct QAbstractDynamicMetaObject : public QMetaObject {
+   virtual ~QAbstractDynamicMetaObject() {}
 
-    // BROOM (decalartive)
-    //   virtual int metaCall(QMetaObject::Call, int _id, void **) { return _id; }
-    //   virtual int createProperty(const char *, const char *)    { return -1; }
+   // BROOM (decalartive)
+   //   virtual int metaCall(QMetaObject::Call, int _id, void **) { return _id; }
+   //   virtual int createProperty(const char *, const char *)    { return -1; }
 };
 
 
 class QDeclarativePropertyCache;
-namespace QDeclarativeJS { namespace AST { class Node; } }
+namespace QDeclarativeJS {
+namespace AST {
+class Node;
+}
+}
 
 /*
     XXX
 
-    These types are created (and owned) by the QDeclarativeXmlParser and consumed by the 
+    These types are created (and owned) by the QDeclarativeXmlParser and consumed by the
     QDeclarativeCompiler.  During the compilation phase the compiler will update some of
     the fields for both its own use and for the use of the upcoming QDeclarativeDom API.
 
-    The types are part of the generic sounding "QDeclarativeParser" namespace for legacy 
+    The types are part of the generic sounding "QDeclarativeParser" namespace for legacy
     reasons (there used to be more in this namespace) and will be cleaned up and
     migrated into a more appropriate location shortly.
 */
-namespace QDeclarativeParser
+namespace QDeclarativeParser {
+struct Location {
+   Location() : line(-1), column(-1) {}
+   int line;
+   int column;
+};
+
+struct LocationRange {
+   LocationRange() : offset(0), length(0) {}
+   quint32 offset;
+   quint32 length;
+};
+
+struct LocationSpan {
+   Location start;
+   Location end;
+   LocationRange range;
+
+   bool operator<(LocationSpan &o) const {
+      return (start.line < o.start.line) ||
+             (start.line == o.start.line && start.column < o.start.column);
+   }
+};
+
+class Property;
+class Object : public QDeclarativeRefCount
 {
-    struct Location 
-    {
-        Location() : line(-1), column(-1) {}
-        int line;
-        int column;
-    };
+ public:
+   Object();
+   virtual ~Object();
 
-    struct LocationRange
-    {
-        LocationRange() : offset(0), length(0) {}
-        quint32 offset;
-        quint32 length;
-    };
+   // Type of the object.  The integer is an index into the
+   // QDeclarativeCompiledData::types array, or -1 if the object is a property
+   // group.
+   int type;
+   // The url of this object if it is an external type.  Used by the DOM
+   QUrl url;
 
-    struct LocationSpan
-    {
-        Location start;
-        Location end;
-        LocationRange range;
+   // version information if type is defined in library or C++
+   int majorVersion;
+   int minorVersion;
 
-        bool operator<(LocationSpan &o) const {
-            return (start.line < o.start.line) ||
-                   (start.line == o.start.line && start.column < o.start.column);
-        }
-    };
+   // The fully-qualified name of this type
+   QByteArray typeName;
+   // The class name
+   QByteArray className;
+   // The id assigned to the object (if any).  Set by the QDeclarativeCompiler
+   QString id;
+   // The id index assigned to the object (if any).  Set by the QDeclarativeCompiler
+   int idIndex;
+   // Custom parsed data
+   QByteArray custom;
+   // Bit mask of the properties assigned bindings
+   QByteArray bindingBitmask;
+   void setBindingBit(int);
+   // Returns the metaobject for this type, or 0 if not available.
+   // Internally selectd between the metatype and extObject variables
+   const QMetaObject *metaObject() const;
 
-    class Property;
-    class Object : public QDeclarativeRefCount
-    {
-    public:
-        Object();
-        virtual ~Object(); 
+   // The compile time metaobject for this type
+   const QMetaObject *metatype;
 
-        // Type of the object.  The integer is an index into the 
-        // QDeclarativeCompiledData::types array, or -1 if the object is a property
-        // group.
-        int type;
-        // The url of this object if it is an external type.  Used by the DOM
-        QUrl url;
+   // The synthesized metaobject, if QML added signals or properties to
+   // this type.  Otherwise null
 
-        // version information if type is defined in library or C++
-        int majorVersion;
-        int minorVersion;
+   QAbstractDynamicMetaObject extObject;
+   QByteArray metadata; // Generated by compiler
+   QByteArray synthdata; // Generated by compiler
+   QDeclarativePropertyCache *synthCache; // Generated by compiler
 
-        // The fully-qualified name of this type
-        QByteArray typeName;
-        // The class name
-        QByteArray className;
-        // The id assigned to the object (if any).  Set by the QDeclarativeCompiler
-        QString id;
-        // The id index assigned to the object (if any).  Set by the QDeclarativeCompiler
-        int idIndex;
-        // Custom parsed data
-        QByteArray custom;
-        // Bit mask of the properties assigned bindings
-        QByteArray bindingBitmask; 
-        void setBindingBit(int);
-        // Returns the metaobject for this type, or 0 if not available.  
-        // Internally selectd between the metatype and extObject variables
-        const QMetaObject *metaObject() const;
+   Property *getDefaultProperty();
+   Property *getProperty(const QByteArray &name, bool create = true);
 
-        // The compile time metaobject for this type
-        const QMetaObject *metatype;
+   Property *defaultProperty;
+   QHash<QByteArray, Property *> properties;
 
-        // The synthesized metaobject, if QML added signals or properties to
-        // this type.  Otherwise null
+   // Output of the compilation phase (these properties continue to exist
+   // in either the defaultProperty or properties members too)
+   void addValueProperty(Property *);
+   void addSignalProperty(Property *);
+   void addAttachedProperty(Property *);
+   void addGroupedProperty(Property *);
+   void addValueTypeProperty(Property *);
+   void addScriptStringProperty(Property *, int = 0);
+   QList<Property *> valueProperties;
+   QList<Property *> signalProperties;
+   QList<Property *> attachedProperties;
+   QList<Property *> groupedProperties;
+   QList<Property *> valueTypeProperties;
+   QList<QPair<Property *, int> > scriptStringProperties;
 
-        QAbstractDynamicMetaObject extObject;
-        QByteArray metadata; // Generated by compiler
-        QByteArray synthdata; // Generated by compiler
-        QDeclarativePropertyCache *synthCache; // Generated by compiler
+   // Script blocks that were nested under this object
+   struct ScriptBlock {
+      enum Pragma {
+         None   = 0x00000000,
+         Shared = 0x00000001
+      };
+      using Pragmas = QFlags<Pragma>;
 
-        Property *getDefaultProperty();
-        Property *getProperty(const QByteArray &name, bool create=true);
+      QString code;
+      QString file;
+      Pragmas pragmas;
+   };
 
-        Property *defaultProperty;
-        QHash<QByteArray, Property *> properties;
+   // The bytes to cast instances by to get to the QDeclarativeParserStatus
+   // interface.  -1 indicates the type doesn't support this interface.
+   // Set by the QDeclarativeCompiler.
+   int parserStatusCast;
 
-        // Output of the compilation phase (these properties continue to exist
-        // in either the defaultProperty or properties members too)
-        void addValueProperty(Property *);
-        void addSignalProperty(Property *);
-        void addAttachedProperty(Property *);
-        void addGroupedProperty(Property *);
-        void addValueTypeProperty(Property *);
-        void addScriptStringProperty(Property *, int = 0);
-        QList<Property *> valueProperties;
-        QList<Property *> signalProperties;
-        QList<Property *> attachedProperties;
-        QList<Property *> groupedProperties;
-        QList<Property *> valueTypeProperties;
-        QList<QPair<Property *, int> > scriptStringProperties;
+   LocationSpan location;
 
-        // Script blocks that were nested under this object
-        struct ScriptBlock {
-            enum Pragma { 
-                None   = 0x00000000,
-                Shared = 0x00000001
-            };
-            using Pragmas = QFlags<Pragma>;
+   struct DynamicProperty {
+      DynamicProperty();
+      DynamicProperty(const DynamicProperty &);
 
-            QString code;
-            QString file;
-            Pragmas pragmas;
-        };
+      enum Type { Variant, Int, Bool, Real, String, Url, Color, Time, Date, DateTime, Alias, Custom, CustomList };
 
-        // The bytes to cast instances by to get to the QDeclarativeParserStatus 
-        // interface.  -1 indicates the type doesn't support this interface.
-        // Set by the QDeclarativeCompiler.
-        int parserStatusCast;
+      bool isDefaultProperty;
+      Type type;
+      QByteArray customType;
+      QByteArray name;
+      QDeclarativeParser::Property *defaultValue;
+      LocationSpan location;
+   };
+   struct DynamicSignal {
+      DynamicSignal();
+      DynamicSignal(const DynamicSignal &);
 
-        LocationSpan location;
+      QByteArray name;
+      QList<QByteArray> parameterTypes;
+      QList<QByteArray> parameterNames;
+   };
+   struct DynamicSlot {
+      DynamicSlot();
+      DynamicSlot(const DynamicSlot &);
 
-        struct DynamicProperty {
-            DynamicProperty();
-            DynamicProperty(const DynamicProperty &);
+      QByteArray name;
+      QString body;
+      QList<QByteArray> parameterNames;
+      LocationSpan location;
+   };
 
-            enum Type { Variant, Int, Bool, Real, String, Url, Color, Time, Date, DateTime, Alias, Custom, CustomList };
+   // The list of dynamic properties
+   QList<DynamicProperty> dynamicProperties;
+   // The list of dynamic signals
+   QList<DynamicSignal> dynamicSignals;
+   // The list of dynamic slots
+   QList<DynamicSlot> dynamicSlots;
+};
 
-            bool isDefaultProperty;
-            Type type;
-            QByteArray customType;
-            QByteArray name;
-            QDeclarativeParser::Property *defaultValue;
-            LocationSpan location;
-        };
-        struct DynamicSignal {
-            DynamicSignal();
-            DynamicSignal(const DynamicSignal &);
+class Q_DECLARATIVE_EXPORT Variant
+{
+ public:
+   enum Type {
+      Invalid,
+      Boolean,
+      Number,
+      String,
+      Script
+   };
 
-            QByteArray name;
-            QList<QByteArray> parameterTypes;
-            QList<QByteArray> parameterNames;
-        };
-        struct DynamicSlot {
-            DynamicSlot();
-            DynamicSlot(const DynamicSlot &);
+   Variant();
+   Variant(const Variant &);
+   Variant(bool);
+   Variant(double, const QString &asWritten = QString());
+   Variant(const QString &);
+   Variant(const QString &, QDeclarativeJS::AST::Node *);
+   Variant &operator=(const Variant &);
 
-            QByteArray name;
-            QString body;
-            QList<QByteArray> parameterNames;
-            LocationSpan location;
-        };
+   Type type() const;
 
-        // The list of dynamic properties
-        QList<DynamicProperty> dynamicProperties;
-        // The list of dynamic signals
-        QList<DynamicSignal> dynamicSignals;
-        // The list of dynamic slots
-        QList<DynamicSlot> dynamicSlots;
-    };
+   bool isBoolean() const {
+      return type() == Boolean;
+   }
+   bool isNumber() const {
+      return type() == Number;
+   }
+   bool isString() const {
+      return type() == String;
+   }
+   bool isScript() const {
+      return type() == Script;
+   }
+   bool isStringList() const;
 
-    class Q_DECLARATIVE_EXPORT Variant 
-    {
-    public:
-        enum Type {
-            Invalid,
-            Boolean,
-            Number,
-            String,
-            Script
-        };
+   bool asBoolean() const;
+   QString asString() const;
+   double asNumber() const;
+   QString asScript() const;
+   QDeclarativeJS::AST::Node *asAST() const;
+   QStringList asStringList() const;
 
-        Variant();
-        Variant(const Variant &);
-        Variant(bool);
-        Variant(double, const QString &asWritten=QString());
-        Variant(const QString &);
-        Variant(const QString &, QDeclarativeJS::AST::Node *);
-        Variant &operator=(const Variant &);
+ private:
+   Type t;
+   union {
+      bool b;
+      double d;
+      QDeclarativeJS::AST::Node *n;
+   };
+   QString s;
+};
 
-        Type type() const;
+class Value : public QDeclarativeRefCount
+{
+ public:
+   Value();
+   virtual ~Value();
 
-        bool isBoolean() const { return type() == Boolean; }
-        bool isNumber() const { return type() == Number; }
-        bool isString() const { return type() == String; }
-        bool isScript() const { return type() == Script; }
-        bool isStringList() const;
+   enum Type {
+      // The type of this value assignment is not yet known
+      Unknown,
+      // This is used as a literal property assignment
+      Literal,
+      // This is used as a property binding assignment
+      PropertyBinding,
+      // This is used as a QDeclarativePropertyValueSource assignment
+      ValueSource,
+      // This is used as a QDeclarativePropertyValueInterceptor assignment
+      ValueInterceptor,
+      // This is used as a property QObject assignment
+      CreatedObject,
+      // This is used as a signal object assignment
+      SignalObject,
+      // This is used as a signal expression assignment
+      SignalExpression,
+      // This is used as an id assignment only
+      Id
+   };
+   Type type;
 
-        bool asBoolean() const;
-        QString asString() const;
-        double asNumber() const;
-        QString asScript() const;
-        QDeclarativeJS::AST::Node *asAST() const;
-        QStringList asStringList() const;
+   // ### Temporary (for id only)
+   QString primitive() const {
+      return value.isString() ? value.asString() : value.asScript();
+   }
 
-    private:
-        Type t;
-        union {
-            bool b;
-            double d;
-            QDeclarativeJS::AST::Node *n;
-        };
-        QString s;
-    };
+   // Primitive value
+   Variant value;
+   // Object value
+   Object *object;
 
-    class Value : public QDeclarativeRefCount
-    {
-    public:
-        Value();
-        virtual ~Value();
+   LocationSpan location;
+};
 
-        enum Type {
-            // The type of this value assignment is not yet known
-            Unknown,
-            // This is used as a literal property assignment
-            Literal,
-            // This is used as a property binding assignment
-            PropertyBinding,
-            // This is used as a QDeclarativePropertyValueSource assignment
-            ValueSource,
-            // This is used as a QDeclarativePropertyValueInterceptor assignment
-            ValueInterceptor,
-            // This is used as a property QObject assignment
-            CreatedObject,
-            // This is used as a signal object assignment
-            SignalObject,
-            // This is used as a signal expression assignment
-            SignalExpression,
-            // This is used as an id assignment only
-            Id
-        };
-        Type type;
+class Property : public QDeclarativeRefCount
+{
+ public:
+   Property();
+   Property(const QByteArray &n);
+   virtual ~Property();
 
-        // ### Temporary (for id only)
-        QString primitive() const { return value.isString() ? value.asString() : value.asScript(); }
+   // The Object to which this property is attached
+   Object *parent;
 
-        // Primitive value
-        Variant value;
-        // Object value
-        Object *object;
+   Object *getValue(const LocationSpan &);
+   void addValue(Value *v);
+   void addOnValue(Value *v);
 
-        LocationSpan location;
-    };
+   // The QVariant::Type of the property, or 0 (QVariant::Invalid) if
+   // unknown.
+   int type;
+   // The metaobject index of this property, or -1 if unknown.
+   int index;
 
-    class Property : public QDeclarativeRefCount
-    {
-    public:
-        Property();
-        Property(const QByteArray &n);
-        virtual ~Property();
+   // Returns true if this is an empty property - both value and values
+   // are unset.
+   bool isEmpty() const;
+   // The list of values assigned to this property.  Content in values
+   // and value are mutually exclusive
+   QList<Value *> values;
+   // The list of values assigned to this property using the "on" syntax
+   QList<Value *> onValues;
+   // The accessed property.  This is used to represent dot properties.
+   // Content in value and values are mutually exclusive.
+   Object *value;
+   // The property name
+   QByteArray name;
+   // True if this property was accessed as the default property.
+   bool isDefault;
+   // True if the setting of this property will be deferred.  Set by the
+   // QDeclarativeCompiler
+   bool isDeferred;
+   // True if this property is a value-type pseudo-property
+   bool isValueTypeSubProperty;
+   // True if this property is a property alias.  Set by the
+   // QDeclarativeCompiler
+   bool isAlias;
 
-        // The Object to which this property is attached
-        Object *parent;
-
-        Object *getValue(const LocationSpan &);
-        void addValue(Value *v);
-        void addOnValue(Value *v);
-
-        // The QVariant::Type of the property, or 0 (QVariant::Invalid) if 
-        // unknown.
-        int type;
-        // The metaobject index of this property, or -1 if unknown.
-        int index;
-
-        // Returns true if this is an empty property - both value and values
-        // are unset.
-        bool isEmpty() const;
-        // The list of values assigned to this property.  Content in values
-        // and value are mutually exclusive
-        QList<Value *> values;
-        // The list of values assigned to this property using the "on" syntax
-        QList<Value *> onValues;
-        // The accessed property.  This is used to represent dot properties.
-        // Content in value and values are mutually exclusive.
-        Object *value;
-        // The property name
-        QByteArray name;
-        // True if this property was accessed as the default property.  
-        bool isDefault;
-        // True if the setting of this property will be deferred.  Set by the
-        // QDeclarativeCompiler
-        bool isDeferred;
-        // True if this property is a value-type pseudo-property
-        bool isValueTypeSubProperty;
-        // True if this property is a property alias.  Set by the 
-        // QDeclarativeCompiler
-        bool isAlias;
-
-        LocationSpan location;
-        LocationRange listValueRange;
-        QList<int> listCommaPositions;
-    };
+   LocationSpan location;
+   LocationRange listValueRange;
+   QList<int> listCommaPositions;
+};
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDeclarativeParser::Object::ScriptBlock::Pragmas);
@@ -368,7 +362,5 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QDeclarativeParser::Object::ScriptBlock::Pragmas);
 QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QDeclarativeParser::Variant)
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEPARSER_P_H

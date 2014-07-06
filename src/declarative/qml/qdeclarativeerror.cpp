@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -57,17 +57,17 @@ QT_BEGIN_NAMESPACE
 */
 class QDeclarativeErrorPrivate
 {
-public:
-    QDeclarativeErrorPrivate();
+ public:
+   QDeclarativeErrorPrivate();
 
-    QUrl url;
-    QString description;
-    int line;
-    int column;
+   QUrl url;
+   QString description;
+   int line;
+   int column;
 };
 
 QDeclarativeErrorPrivate::QDeclarativeErrorPrivate()
-: line(-1), column(-1)
+   : line(-1), column(-1)
 {
 }
 
@@ -75,7 +75,7 @@ QDeclarativeErrorPrivate::QDeclarativeErrorPrivate()
     Creates an empty error object.
 */
 QDeclarativeError::QDeclarativeError()
-: d(0)
+   : d(0)
 {
 }
 
@@ -83,9 +83,9 @@ QDeclarativeError::QDeclarativeError()
     Creates a copy of \a other.
 */
 QDeclarativeError::QDeclarativeError(const QDeclarativeError &other)
-: d(0)
+   : d(0)
 {
-    *this = other;
+   *this = other;
 }
 
 /*!
@@ -93,25 +93,28 @@ QDeclarativeError::QDeclarativeError(const QDeclarativeError &other)
 */
 QDeclarativeError &QDeclarativeError::operator=(const QDeclarativeError &other)
 {
-    if (!other.d) {
-        delete d;
-        d = 0;
-    } else {
-        if (!d) d = new QDeclarativeErrorPrivate;
-        d->url = other.d->url;
-        d->description = other.d->description;
-        d->line = other.d->line;
-        d->column = other.d->column;
-    }
-    return *this;
+   if (!other.d) {
+      delete d;
+      d = 0;
+   } else {
+      if (!d) {
+         d = new QDeclarativeErrorPrivate;
+      }
+      d->url = other.d->url;
+      d->description = other.d->description;
+      d->line = other.d->line;
+      d->column = other.d->column;
+   }
+   return *this;
 }
 
 /*!
-    \internal 
+    \internal
 */
 QDeclarativeError::~QDeclarativeError()
 {
-    delete d; d = 0;
+   delete d;
+   d = 0;
 }
 
 /*!
@@ -119,7 +122,7 @@ QDeclarativeError::~QDeclarativeError()
 */
 bool QDeclarativeError::isValid() const
 {
-    return d != 0;
+   return d != 0;
 }
 
 /*!
@@ -127,8 +130,11 @@ bool QDeclarativeError::isValid() const
 */
 QUrl QDeclarativeError::url() const
 {
-    if (d) return d->url;
-    else return QUrl();
+   if (d) {
+      return d->url;
+   } else {
+      return QUrl();
+   }
 }
 
 /*!
@@ -136,8 +142,10 @@ QUrl QDeclarativeError::url() const
 */
 void QDeclarativeError::setUrl(const QUrl &url)
 {
-    if (!d) d = new QDeclarativeErrorPrivate;
-    d->url = url;
+   if (!d) {
+      d = new QDeclarativeErrorPrivate;
+   }
+   d->url = url;
 }
 
 /*!
@@ -145,8 +153,11 @@ void QDeclarativeError::setUrl(const QUrl &url)
 */
 QString QDeclarativeError::description() const
 {
-    if (d) return d->description;
-    else return QString();
+   if (d) {
+      return d->description;
+   } else {
+      return QString();
+   }
 }
 
 /*!
@@ -154,8 +165,10 @@ QString QDeclarativeError::description() const
 */
 void QDeclarativeError::setDescription(const QString &description)
 {
-    if (!d) d = new QDeclarativeErrorPrivate;
-    d->description = description;
+   if (!d) {
+      d = new QDeclarativeErrorPrivate;
+   }
+   d->description = description;
 }
 
 /*!
@@ -163,8 +176,11 @@ void QDeclarativeError::setDescription(const QString &description)
 */
 int QDeclarativeError::line() const
 {
-    if (d) return d->line;
-    else return -1;
+   if (d) {
+      return d->line;
+   } else {
+      return -1;
+   }
 }
 
 /*!
@@ -172,8 +188,10 @@ int QDeclarativeError::line() const
 */
 void QDeclarativeError::setLine(int line)
 {
-    if (!d) d = new QDeclarativeErrorPrivate;
-    d->line = line;
+   if (!d) {
+      d = new QDeclarativeErrorPrivate;
+   }
+   d->line = line;
 }
 
 /*!
@@ -181,8 +199,11 @@ void QDeclarativeError::setLine(int line)
 */
 int QDeclarativeError::column() const
 {
-    if (d) return d->column;
-    else return -1;
+   if (d) {
+      return d->column;
+   } else {
+      return -1;
+   }
 }
 
 /*!
@@ -190,8 +211,10 @@ int QDeclarativeError::column() const
 */
 void QDeclarativeError::setColumn(int column)
 {
-    if (!d) d = new QDeclarativeErrorPrivate;
-    d->column = column;
+   if (!d) {
+      d = new QDeclarativeErrorPrivate;
+   }
+   d->column = column;
 }
 
 /*!
@@ -199,20 +222,21 @@ void QDeclarativeError::setColumn(int column)
 */
 QString QDeclarativeError::toString() const
 {
-    QString rv;
-    if (url().isEmpty()) {
-        rv = QLatin1String("<Unknown File>");
-    } else if (line() != -1) {
-        rv = url().toString() + QLatin1Char(':') + QString::number(line());
-        if(column() != -1) 
-            rv += QLatin1Char(':') + QString::number(column());
-    } else {
-        rv = url().toString();
-    }
+   QString rv;
+   if (url().isEmpty()) {
+      rv = QLatin1String("<Unknown File>");
+   } else if (line() != -1) {
+      rv = url().toString() + QLatin1Char(':') + QString::number(line());
+      if (column() != -1) {
+         rv += QLatin1Char(':') + QString::number(column());
+      }
+   } else {
+      rv = url().toString();
+   }
 
-    rv += QLatin1String(": ") + description();
+   rv += QLatin1String(": ") + description();
 
-    return rv;
+   return rv;
 }
 
 /*!
@@ -224,46 +248,47 @@ QString QDeclarativeError::toString() const
 
 QDebug operator<<(QDebug debug, const QDeclarativeError &error)
 {
-    debug << qPrintable(error.toString());
+   debug << qPrintable(error.toString());
 
-    QUrl url = error.url();
+   QUrl url = error.url();
 
-    if (error.line() > 0 && url.scheme() == QLatin1String("file")) {
-        QString file = url.toLocalFile();
-        QFile f(file);
-        if (f.open(QIODevice::ReadOnly)) {
-            QByteArray data = f.readAll();
-            QTextStream stream(data, QIODevice::ReadOnly);
+   if (error.line() > 0 && url.scheme() == QLatin1String("file")) {
+      QString file = url.toLocalFile();
+      QFile f(file);
+      if (f.open(QIODevice::ReadOnly)) {
+         QByteArray data = f.readAll();
+         QTextStream stream(data, QIODevice::ReadOnly);
 #ifndef QT_NO_TEXTCODEC
-            stream.setCodec("UTF-8");
+         stream.setCodec("UTF-8");
 #endif
-            const QString code = stream.readAll();
-            const QStringList lines = code.split(QLatin1Char('\n'));
+         const QString code = stream.readAll();
+         const QStringList lines = code.split(QLatin1Char('\n'));
 
-            if (lines.count() >= error.line()) {
-                const QString &line = lines.at(error.line() - 1);
-                debug << "\n    " << qPrintable(line);
+         if (lines.count() >= error.line()) {
+            const QString &line = lines.at(error.line() - 1);
+            debug << "\n    " << qPrintable(line);
 
-                if(error.column() > 0) {
-                    int column = qMax(0, error.column() - 1);
-                    column = qMin(column, line.length()); 
+            if (error.column() > 0) {
+               int column = qMax(0, error.column() - 1);
+               column = qMin(column, line.length());
 
-                    QByteArray ind;
-                    ind.reserve(column);
-                    for (int i = 0; i < column; ++i) {
-                        const QChar ch = line.at(i);
-                        if (ch.isSpace())
-                            ind.append(ch.unicode());
-                        else
-                            ind.append(' ');
-                    }
-                    ind.append('^');
-                    debug << "\n    " << ind.constData();
-                }
+               QByteArray ind;
+               ind.reserve(column);
+               for (int i = 0; i < column; ++i) {
+                  const QChar ch = line.at(i);
+                  if (ch.isSpace()) {
+                     ind.append(ch.unicode());
+                  } else {
+                     ind.append(' ');
+                  }
+               }
+               ind.append('^');
+               debug << "\n    " << ind.constData();
             }
-        }
-    }
-    return debug;
+         }
+      }
+   }
+   return debug;
 }
 
 QT_END_NAMESPACE

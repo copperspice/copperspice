@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,30 +46,30 @@ class QScriptDebuggerScriptsModel;
 
 class QScriptBreakpointsWidgetInterfacePrivate;
 class QScriptBreakpointsWidgetInterface:
-    public QWidget
+   public QWidget
 {
-    CS_OBJECT(QScriptBreakpointsWidgetInterface)
-public:
-    ~QScriptBreakpointsWidgetInterface();
+   CS_OBJECT(QScriptBreakpointsWidgetInterface)
+ public:
+   ~QScriptBreakpointsWidgetInterface();
 
-    virtual QScriptBreakpointsModel *breakpointsModel() const = 0;
-    virtual void setBreakpointsModel(QScriptBreakpointsModel *model) = 0;
+   virtual QScriptBreakpointsModel *breakpointsModel() const = 0;
+   virtual void setBreakpointsModel(QScriptBreakpointsModel *model) = 0;
 
-    virtual QScriptDebuggerScriptsModel *scriptsModel() const = 0;
-    virtual void setScriptsModel(QScriptDebuggerScriptsModel *model) = 0;
+   virtual QScriptDebuggerScriptsModel *scriptsModel() const = 0;
+   virtual void setScriptsModel(QScriptDebuggerScriptsModel *model) = 0;
 
-public:
-    CS_SIGNAL_1(Public, void currentScriptChanged(qint64 scriptId))
-    CS_SIGNAL_2(currentScriptChanged,scriptId) 
+ public:
+   CS_SIGNAL_1(Public, void currentScriptChanged(qint64 scriptId))
+   CS_SIGNAL_2(currentScriptChanged, scriptId)
 
-protected:
-    QScriptBreakpointsWidgetInterface(
-        QScriptBreakpointsWidgetInterfacePrivate &dd,
-        QWidget *parent, Qt::WindowFlags flags);
+ protected:
+   QScriptBreakpointsWidgetInterface(
+      QScriptBreakpointsWidgetInterfacePrivate &dd,
+      QWidget *parent, Qt::WindowFlags flags);
 
-private:
-    Q_DECLARE_PRIVATE(QScriptBreakpointsWidgetInterface)
-    Q_DISABLE_COPY(QScriptBreakpointsWidgetInterface)
+ private:
+   Q_DECLARE_PRIVATE(QScriptBreakpointsWidgetInterface)
+   Q_DISABLE_COPY(QScriptBreakpointsWidgetInterface)
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,42 +36,42 @@ class QScriptDebuggerCommandSchedulerInterface;
 
 class QScriptBreakpointsModelPrivate;
 class QScriptBreakpointsModel
-    : public QAbstractItemModel
+   : public QAbstractItemModel
 {
-    CS_OBJECT(QScriptBreakpointsModel)
-public:
-    QScriptBreakpointsModel(QScriptDebuggerJobSchedulerInterface *jobScheduler,
-                            QScriptDebuggerCommandSchedulerInterface *commandScheduler,
-                            QObject *parent = 0);
-    ~QScriptBreakpointsModel();
+   CS_OBJECT(QScriptBreakpointsModel)
+ public:
+   QScriptBreakpointsModel(QScriptDebuggerJobSchedulerInterface *jobScheduler,
+                           QScriptDebuggerCommandSchedulerInterface *commandScheduler,
+                           QObject *parent = 0);
+   ~QScriptBreakpointsModel();
 
-    void setBreakpoint(const QScriptBreakpointData &data);
-    void setBreakpointData(int id, const QScriptBreakpointData &data);
-    void deleteBreakpoint(int id);
+   void setBreakpoint(const QScriptBreakpointData &data);
+   void setBreakpointData(int id, const QScriptBreakpointData &data);
+   void deleteBreakpoint(int id);
 
-    void addBreakpoint(int id, const QScriptBreakpointData &data);
-    void modifyBreakpoint(int id, const QScriptBreakpointData &data);
-    void removeBreakpoint(int id);
+   void addBreakpoint(int id, const QScriptBreakpointData &data);
+   void modifyBreakpoint(int id, const QScriptBreakpointData &data);
+   void removeBreakpoint(int id);
 
-    int breakpointIdAt(int row) const;
-    QScriptBreakpointData breakpointDataAt(int row) const;
-    QScriptBreakpointData breakpointData(int id) const;
+   int breakpointIdAt(int row) const;
+   QScriptBreakpointData breakpointDataAt(int row) const;
+   QScriptBreakpointData breakpointData(int id) const;
 
-    int resolveBreakpoint(qint64 scriptId, int lineNumber) const;
-    int resolveBreakpoint(const QString &fileName, int lineNumber) const;
+   int resolveBreakpoint(qint64 scriptId, int lineNumber) const;
+   int resolveBreakpoint(const QString &fileName, int lineNumber) const;
 
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &child) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+   QModelIndex parent(const QModelIndex &child) const;
+   int columnCount(const QModelIndex &parent = QModelIndex()) const;
+   int rowCount(const QModelIndex &parent = QModelIndex()) const;
+   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+   QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const;
+   Qt::ItemFlags flags(const QModelIndex &index) const;
 
-private:
-    Q_DECLARE_PRIVATE(QScriptBreakpointsModel)
-    Q_DISABLE_COPY(QScriptBreakpointsModel)
+ private:
+   Q_DECLARE_PRIVATE(QScriptBreakpointsModel)
+   Q_DISABLE_COPY(QScriptBreakpointsModel)
 };
 
 QT_END_NAMESPACE

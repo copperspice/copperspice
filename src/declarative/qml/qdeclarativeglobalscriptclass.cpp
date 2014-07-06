@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,92 +39,93 @@ QT_BEGIN_NAMESPACE
     Used to prevent any writes to the global object.
 */
 QDeclarativeGlobalScriptClass::QDeclarativeGlobalScriptClass(QScriptEngine *engine)
-: QScriptClass(engine)
+   : QScriptClass(engine)
 {
-    QString eval = QLatin1String("eval");
-    QString version = QLatin1String("version");
+   QString eval = QLatin1String("eval");
+   QString version = QLatin1String("version");
 
-    QScriptValue originalGlobalObject = engine->globalObject();
+   QScriptValue originalGlobalObject = engine->globalObject();
 
-    QScriptValue newGlobalObject = engine->newObject();
+   QScriptValue newGlobalObject = engine->newObject();
 
-    {
-        QScriptValueIterator iter(originalGlobalObject);
-        QVector<QString> names;
-        QVector<QScriptValue> values;
-        QVector<QScriptValue::PropertyFlags> flags;
-        while (iter.hasNext()) {
-            iter.next();
+   {
+      QScriptValueIterator iter(originalGlobalObject);
+      QVector<QString> names;
+      QVector<QScriptValue> values;
+      QVector<QScriptValue::PropertyFlags> flags;
+      while (iter.hasNext()) {
+         iter.next();
 
-            QString name = iter.name();
+         QString name = iter.name();
 
-            if (name == version)
-                continue;
+         if (name == version) {
+            continue;
+         }
 
-            if (name != eval) {
-                names.append(name);
-                values.append(iter.value());
-                flags.append(iter.flags() | QScriptValue::Undeletable);
-            }
-            newGlobalObject.setProperty(iter.scriptName(), iter.value());
+         if (name != eval) {
+            names.append(name);
+            values.append(iter.value());
+            flags.append(iter.flags() | QScriptValue::Undeletable);
+         }
+         newGlobalObject.setProperty(iter.scriptName(), iter.value());
 
-            m_illegalNames.insert(name);
-        }
-        m_staticGlobalObject = QScriptDeclarativeClass::newStaticScopeObject(
-            engine, names.size(), names.constData(), values.constData(), flags.constData());
-    }
+         m_illegalNames.insert(name);
+      }
+      m_staticGlobalObject = QScriptDeclarativeClass::newStaticScopeObject(
+                                engine, names.size(), names.constData(), values.constData(), flags.constData());
+   }
 
-    newGlobalObject.setScriptClass(this);
-    engine->setGlobalObject(newGlobalObject);
+   newGlobalObject.setScriptClass(this);
+   engine->setGlobalObject(newGlobalObject);
 }
 
-QScriptClass::QueryFlags 
+QScriptClass::QueryFlags
 QDeclarativeGlobalScriptClass::queryProperty(const QScriptValue &object,
-                                    const QScriptString &name,
-                                    QueryFlags flags, uint *id)
+      const QScriptString &name,
+      QueryFlags flags, uint *id)
 {
-    Q_UNUSED(object);
-    Q_UNUSED(name);
-    Q_UNUSED(flags);
-    Q_UNUSED(id);
-    return HandlesWriteAccess;
+   Q_UNUSED(object);
+   Q_UNUSED(name);
+   Q_UNUSED(flags);
+   Q_UNUSED(id);
+   return HandlesWriteAccess;
 }
 
-void QDeclarativeGlobalScriptClass::setProperty(QScriptValue &object, 
-                                       const QScriptString &name,
-                                       uint id, const QScriptValue &value)
+void QDeclarativeGlobalScriptClass::setProperty(QScriptValue &object,
+      const QScriptString &name,
+      uint id, const QScriptValue &value)
 {
-    Q_UNUSED(object);
-    Q_UNUSED(id);
-    Q_UNUSED(value);
-    QString error = QLatin1String("Invalid write to global property \"") + 
-                    name.toString() + QLatin1Char('\"');
-    engine()->currentContext()->throwError(error);
+   Q_UNUSED(object);
+   Q_UNUSED(id);
+   Q_UNUSED(value);
+   QString error = QLatin1String("Invalid write to global property \"") +
+                   name.toString() + QLatin1Char('\"');
+   engine()->currentContext()->throwError(error);
 }
 
 /* This method is for the use of tst_qdeclarativeecmascript::callQtInvokables() only */
 void QDeclarativeGlobalScriptClass::explicitSetProperty(const QStringList &names, const QList<QScriptValue> &values)
 {
-    Q_ASSERT(names.count() == values.count());
-    QScriptValue globalObject = engine()->globalObject();
+   Q_ASSERT(names.count() == values.count());
+   QScriptValue globalObject = engine()->globalObject();
 
-    QScriptValue v = engine()->newObject();
+   QScriptValue v = engine()->newObject();
 
-    QScriptValueIterator iter(v);
-    while (iter.hasNext()) {
-        iter.next();
-        v.setProperty(iter.scriptName(), iter.value());
-    }
+   QScriptValueIterator iter(v);
+   while (iter.hasNext()) {
+      iter.next();
+      v.setProperty(iter.scriptName(), iter.value());
+   }
 
-    for (int ii = 0; ii < names.count(); ++ii) {
-        const QString &name = names.at(ii);
-        const QScriptValue &value = values.at(ii);
-        v.setProperty(name, value);
-    }
+   for (int ii = 0; ii < names.count(); ++ii) {
+      const QString &name = names.at(ii);
+      const QScriptValue &value = values.at(ii);
+      v.setProperty(name, value);
+   }
 
-    v.setScriptClass(this);
+   v.setScriptClass(this);
 
-    engine()->setGlobalObject(v);
+   engine()->setGlobalObject(v);
 }
 
 QT_END_NAMESPACE

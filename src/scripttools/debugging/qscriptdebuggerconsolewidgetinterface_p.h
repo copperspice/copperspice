@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -48,39 +48,39 @@ class QScriptCompletionProviderInterface;
 
 class QScriptDebuggerConsoleWidgetInterfacePrivate;
 class QScriptDebuggerConsoleWidgetInterface:
-    public QWidget,
-    public QScriptMessageHandlerInterface
+   public QWidget,
+   public QScriptMessageHandlerInterface
 {
-    CS_OBJECT(QScriptDebuggerConsoleWidgetInterface)
-public:
-    enum InputMode {
-        NormalInputMode,
-        PartialInputMode
-    };
+   CS_OBJECT(QScriptDebuggerConsoleWidgetInterface)
+ public:
+   enum InputMode {
+      NormalInputMode,
+      PartialInputMode
+   };
 
-    ~QScriptDebuggerConsoleWidgetInterface();
+   ~QScriptDebuggerConsoleWidgetInterface();
 
-    QScriptDebuggerConsoleHistorianInterface *commandHistorian() const;
-    void setCommandHistorian(QScriptDebuggerConsoleHistorianInterface *historian);
+   QScriptDebuggerConsoleHistorianInterface *commandHistorian() const;
+   void setCommandHistorian(QScriptDebuggerConsoleHistorianInterface *historian);
 
-    QScriptCompletionProviderInterface *completionProvider() const;
-    void setCompletionProvider(QScriptCompletionProviderInterface *completionProvider);
+   QScriptCompletionProviderInterface *completionProvider() const;
+   void setCompletionProvider(QScriptCompletionProviderInterface *completionProvider);
 
-    virtual void setLineContinuationMode(bool enabled) = 0;
+   virtual void setLineContinuationMode(bool enabled) = 0;
 
-    virtual void clear() = 0;
+   virtual void clear() = 0;
 
-public:
-    CS_SIGNAL_1(Public, void lineEntered(const QString & contents))
-    CS_SIGNAL_2(lineEntered,contents) 
+ public:
+   CS_SIGNAL_1(Public, void lineEntered(const QString &contents))
+   CS_SIGNAL_2(lineEntered, contents)
 
-protected:
-    QScriptDebuggerConsoleWidgetInterface(QScriptDebuggerConsoleWidgetInterfacePrivate &dd,
-                                          QWidget *parent, Qt::WindowFlags flags);
+ protected:
+   QScriptDebuggerConsoleWidgetInterface(QScriptDebuggerConsoleWidgetInterfacePrivate &dd,
+                                         QWidget *parent, Qt::WindowFlags flags);
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerConsoleWidgetInterface)
-    Q_DISABLE_COPY(QScriptDebuggerConsoleWidgetInterface)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerConsoleWidgetInterface)
+   Q_DISABLE_COPY(QScriptDebuggerConsoleWidgetInterface)
 };
 
 QT_END_NAMESPACE

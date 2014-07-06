@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -59,61 +59,61 @@ class QScriptDebuggerCommandExecutor;
 class QScriptDebuggerBackend;
 class QScriptDebuggerBackendPrivate
 {
-    Q_DECLARE_PUBLIC(QScriptDebuggerBackend)
-public:
-    QScriptDebuggerBackendPrivate();
-    virtual ~QScriptDebuggerBackendPrivate();
+   Q_DECLARE_PUBLIC(QScriptDebuggerBackend)
+ public:
+   QScriptDebuggerBackendPrivate();
+   virtual ~QScriptDebuggerBackendPrivate();
 
-    void postEvent(QEvent *e);
-    virtual bool event(QEvent *e);
+   void postEvent(QEvent *e);
+   virtual bool event(QEvent *e);
 
-    // events reported by agent
-    virtual void stepped(qint64 scriptId, int lineNumber, int columnNumber,
-                         const QScriptValue &result);
-    virtual void locationReached(qint64 scriptId, int lineNumber, int columnNumber);
-    virtual void interrupted(qint64 scriptId, int lineNumber, int columnNumber);
-    virtual void breakpoint(qint64 scriptId, int lineNumber, int columnNumber,
-                            int breakpointId);
-    virtual void exception(qint64 scriptId, const QScriptValue &exception,
-                           bool hasHandler);
-    virtual void debuggerInvocationRequest(qint64 scriptId, int lineNumber,
-                                           int columnNumber);
-    virtual void forcedReturn(qint64 scriptId, int lineNumber, int columnNumber,
-                              const QScriptValue &value);
+   // events reported by agent
+   virtual void stepped(qint64 scriptId, int lineNumber, int columnNumber,
+                        const QScriptValue &result);
+   virtual void locationReached(qint64 scriptId, int lineNumber, int columnNumber);
+   virtual void interrupted(qint64 scriptId, int lineNumber, int columnNumber);
+   virtual void breakpoint(qint64 scriptId, int lineNumber, int columnNumber,
+                           int breakpointId);
+   virtual void exception(qint64 scriptId, const QScriptValue &exception,
+                          bool hasHandler);
+   virtual void debuggerInvocationRequest(qint64 scriptId, int lineNumber,
+                                          int columnNumber);
+   virtual void forcedReturn(qint64 scriptId, int lineNumber, int columnNumber,
+                             const QScriptValue &value);
 
-    static QScriptValue trace(QScriptContext *context,
-                              QScriptEngine *engine);
-    static QScriptValue qsassert(QScriptContext *context,
-                                 QScriptEngine *engine);
-    static QScriptValue fileName(QScriptContext *context,
-                                 QScriptEngine *engine);
-    static QScriptValue lineNumber(QScriptContext *context,
-                                   QScriptEngine *engine);
+   static QScriptValue trace(QScriptContext *context,
+                             QScriptEngine *engine);
+   static QScriptValue qsassert(QScriptContext *context,
+                                QScriptEngine *engine);
+   static QScriptValue fileName(QScriptContext *context,
+                                QScriptEngine *engine);
+   static QScriptValue lineNumber(QScriptContext *context,
+                                  QScriptEngine *engine);
 
-    void agentDestroyed(QScriptDebuggerAgent *);
+   void agentDestroyed(QScriptDebuggerAgent *);
 
-    QScriptDebuggerAgent *agent;
-    QScriptDebuggerCommandExecutor *commandExecutor;
+   QScriptDebuggerAgent *agent;
+   QScriptDebuggerCommandExecutor *commandExecutor;
 
-    int pendingEvaluateContextIndex;
-    QString pendingEvaluateProgram;
-    QString pendingEvaluateFileName;
-    int pendingEvaluateLineNumber;
-    bool ignoreExceptions;
+   int pendingEvaluateContextIndex;
+   QString pendingEvaluateProgram;
+   QString pendingEvaluateFileName;
+   int pendingEvaluateLineNumber;
+   bool ignoreExceptions;
 
-    int nextScriptValueIteratorId;
-    QMap<int, QScriptValueIterator*> scriptValueIterators;
+   int nextScriptValueIteratorId;
+   QMap<int, QScriptValueIterator *> scriptValueIterators;
 
-    int nextScriptObjectSnapshotId;
-    QMap<int, QScriptObjectSnapshot*> scriptObjectSnapshots;
+   int nextScriptObjectSnapshotId;
+   QMap<int, QScriptObjectSnapshot *> scriptObjectSnapshots;
 
-    QObject *eventReceiver;
+   QObject *eventReceiver;
 
-    QScriptDebuggerBackend *q_ptr;
+   QScriptDebuggerBackend *q_ptr;
 
-    QScriptValue origTraceFunction;
-    QScriptValue origFileNameFunction;
-    QScriptValue origLineNumberFunction;
+   QScriptValue origTraceFunction;
+   QScriptValue origFileNameFunction;
+   QScriptValue origLineNumberFunction;
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,107 +26,105 @@
 #ifndef QDECLARATIVEDEBUGTRACE_P_H
 #define QDECLARATIVEDEBUGTRACE_P_H
 
-#include <private/qdeclarativedebugservice_p.h>
+#include <qdeclarativedebugservice_p.h>
 #include <qelapsedtimer.h>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
-struct QDeclarativeDebugData
-{
-    qint64 time;
-    int messageType;
-    int detailType;
+struct QDeclarativeDebugData {
+   qint64 time;
+   int messageType;
+   int detailType;
 
-    //###
-    QString detailData; //used by RangeData and RangeLocation
-    int line;           //used by RangeLocation
+   //###
+   QString detailData; //used by RangeData and RangeLocation
+   int line;           //used by RangeLocation
 
-    QByteArray toByteArray() const;
+   QByteArray toByteArray() const;
 };
 
 class QUrl;
 class Q_DECLARATIVE_EXPORT QDeclarativeDebugTrace : public QDeclarativeDebugService
 {
-public:
-    enum Message {
-        Event,
-        RangeStart,
-        RangeData,
-        RangeLocation,
-        RangeEnd,
-        Complete,
+ public:
+   enum Message {
+      Event,
+      RangeStart,
+      RangeData,
+      RangeLocation,
+      RangeEnd,
+      Complete,
 
-        MaximumMessage
-    };
+      MaximumMessage
+   };
 
-    enum EventType {
-        FramePaint,
-        Mouse,
-        Key,
+   enum EventType {
+      FramePaint,
+      Mouse,
+      Key,
 
-        MaximumEventType
-    };
+      MaximumEventType
+   };
 
-    enum RangeType {
-        Painting,
-        Compiling,
-        Creating,
-        Binding,            //running a binding
-        HandlingSignal,     //running a signal handler
+   enum RangeType {
+      Painting,
+      Compiling,
+      Creating,
+      Binding,            //running a binding
+      HandlingSignal,     //running a signal handler
 
-        MaximumRangeType
-    };
+      MaximumRangeType
+   };
 
-    static void addEvent(EventType);
+   static void addEvent(EventType);
 
-    static void startRange(RangeType);
-    static void rangeData(RangeType, const QString &);
-    static void rangeData(RangeType, const QUrl &);
-    static void rangeLocation(RangeType, const QString &, int);
-    static void rangeLocation(RangeType, const QUrl &, int);
-    static void endRange(RangeType);
+   static void startRange(RangeType);
+   static void rangeData(RangeType, const QString &);
+   static void rangeData(RangeType, const QUrl &);
+   static void rangeLocation(RangeType, const QString &, int);
+   static void rangeLocation(RangeType, const QUrl &, int);
+   static void endRange(RangeType);
 
-    QDeclarativeDebugTrace();
+   QDeclarativeDebugTrace();
+
 #ifdef CUSTOM_DECLARATIVE_DEBUG_TRACE_INSTANCE
-public:
-    static QDeclarativeDebugTrace* globalInstance();
-    static void setGlobalInstance(QDeclarativeDebugTrace *custom_instance);
-protected:
-    virtual void messageReceived(const QByteArray &);
-protected:
-    virtual void addEventImpl(EventType);
-    virtual void startRangeImpl(RangeType);
-    virtual void rangeDataImpl(RangeType, const QString &);
-    virtual void rangeDataImpl(RangeType, const QUrl &);
-    virtual void rangeLocationImpl(RangeType, const QString &, int);
-    virtual void rangeLocationImpl(RangeType, const QUrl &, int);
-    virtual void endRangeImpl(RangeType);
+
+ public:
+   static QDeclarativeDebugTrace *globalInstance();
+   static void setGlobalInstance(QDeclarativeDebugTrace *custom_instance);
+
+ protected:
+   virtual void messageReceived(const QByteArray &);
+   virtual void addEventImpl(EventType);
+   virtual void startRangeImpl(RangeType);
+   virtual void rangeDataImpl(RangeType, const QString &);
+   virtual void rangeDataImpl(RangeType, const QUrl &);
+   virtual void rangeLocationImpl(RangeType, const QString &, int);
+   virtual void rangeLocationImpl(RangeType, const QUrl &, int);
+   virtual void endRangeImpl(RangeType);
 #else
-protected:
-    virtual void messageReceived(const QByteArray &);
-private:
-    void addEventImpl(EventType);
-    void startRangeImpl(RangeType);
-    void rangeDataImpl(RangeType, const QString &);
-    void rangeDataImpl(RangeType, const QUrl &);
-    void rangeLocationImpl(RangeType, const QString &, int);
-    void rangeLocationImpl(RangeType, const QUrl &, int);
-    void endRangeImpl(RangeType);
+
+ protected:
+   virtual void messageReceived(const QByteArray &);
+ private:
+   void addEventImpl(EventType);
+   void startRangeImpl(RangeType);
+   void rangeDataImpl(RangeType, const QString &);
+   void rangeDataImpl(RangeType, const QUrl &);
+   void rangeLocationImpl(RangeType, const QString &, int);
+   void rangeLocationImpl(RangeType, const QUrl &, int);
+   void endRangeImpl(RangeType);
 #endif
-    void processMessage(const QDeclarativeDebugData &);
-    void sendMessages();
-    QElapsedTimer m_timer;
-    bool m_enabled;
-    bool m_deferredSend;
-    bool m_messageReceived;
-    QList<QDeclarativeDebugData> m_data;
+   void processMessage(const QDeclarativeDebugData &);
+   void sendMessages();
+   QElapsedTimer m_timer;
+   bool m_enabled;
+   bool m_deferredSend;
+   bool m_messageReceived;
+   QList<QDeclarativeDebugData> m_data;
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEDEBUGTRACE_P_H
 

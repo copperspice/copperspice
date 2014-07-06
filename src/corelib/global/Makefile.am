@@ -37,6 +37,7 @@ CORE_PUBLIC_INCLUDES += \
 	QtNamespace
 
 CORE_GLOBAL_INCLUDES = \
+	cs_build_info.h \
 	q_int16.h \
 	q_int32.h \
 	q_int64.h \

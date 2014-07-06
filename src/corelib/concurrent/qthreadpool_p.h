@@ -26,10 +26,10 @@
 #ifndef QTHREADPOOL_P_H
 #define QTHREADPOOL_P_H
 
-#include "QtCore/qmutex.h"
-#include "QtCore/qwaitcondition.h"
-#include "QtCore/qset.h"
-#include "QtCore/qqueue.h"
+#include <QtCore/qmutex.h>
+#include <QtCore/qwaitcondition.h>
+#include <QtCore/qset.h>
+#include <QtCore/qqueue.h>
 
 QT_BEGIN_NAMESPACE
 

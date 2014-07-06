@@ -168,7 +168,6 @@ class QHttpNetworkConnectionPrivate
 
    void copyCredentials(int fromChannel, QAuthenticator *auth, bool isProxy);
 
-   // private slots
    void _q_startNextRequest(); // send the next request from the queue
 
    void createAuthorization(QAbstractSocket *socket, QHttpNetworkRequest &request);

@@ -23,11 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qgraphicssystem_trace_p.h"
-#include <private/qpixmap_raster_p.h>
-#include <private/qpaintbuffer_p.h>
-#include <private/qwindowsurface_raster_p.h>
-
+#include <qgraphicssystem_trace_p.h>
+#include <qpixmap_raster_p.h>
+#include <qpaintbuffer_p.h>
+#include <qwindowsurface_raster_p.h>
 #include <QFile>
 #include <QPainter>
 #include <QtDebug>

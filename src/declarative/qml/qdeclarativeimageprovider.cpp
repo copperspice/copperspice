@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -29,8 +29,8 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeImageProviderPrivate
 {
-public:
-    QDeclarativeImageProvider::ImageType type;
+ public:
+   QDeclarativeImageProvider::ImageType type;
 };
 
 /*!
@@ -47,15 +47,15 @@ public:
     \endlist
 
     To specify that an image should be loaded by an image provider, use the
-    \bold {"image:"} scheme for the URL source of the image, followed by the 
+    \bold {"image:"} scheme for the URL source of the image, followed by the
     identifiers of the image provider and the requested image. For example:
 
     \qml
     Image { source: "image://myimageprovider/image.png" }
     \endqml
 
-    This specifies that the image should be loaded by the image provider named 
-    "myimageprovider", and the image to be loaded is named "image.png". The QML engine 
+    This specifies that the image should be loaded by the image provider named
+    "myimageprovider", and the image to be loaded is named "image.png". The QML engine
     invokes the appropriate image provider according to the providers that have
     been registered through QDeclarativeEngine::addImageProvider().
 
@@ -80,11 +80,11 @@ public:
 
     When these images are loaded by QML, it looks for a matching image provider
     and calls its requestImage() or requestPixmap() method (depending on its
-    imageType()) to load the image. The method is called with the \c id 
+    imageType()) to load the image. The method is called with the \c id
     parameter set to "yellow" for the first image, and "red" for the second.
 
-    Here is an image provider implementation that can load the images 
-    requested by the above QML. This implementation dynamically 
+    Here is an image provider implementation that can load the images
+    requested by the above QML. This implementation dynamically
     generates QPixmap images that are filled with the requested color:
 
     \snippet examples/declarative/cppextensions/imageprovider/imageprovider.cpp 0
@@ -95,7 +95,7 @@ public:
     with a "colors" identifier:
 
     \code
-    int main(int argc, char *argv[]) 
+    int main(int argc, char *argv[])
     {
         ...
 
@@ -110,7 +110,7 @@ public:
 
     \image imageprovider.png
 
-    A complete example is available in Qt's 
+    A complete example is available in Qt's
     \l {declarative/cppextensions/imageprovider}{examples/declarative/cppextensions/imageprovider}
     directory. Note the example registers the provider via a \l{QDeclarativeExtensionPlugin}{plugin}
     instead of registering it in the application \c main() function as shown above.
@@ -121,14 +121,14 @@ public:
     Image providers that support QImage loading automatically include support
     for asychronous loading of images. To enable asynchronous loading for an
     image source, set the \c asynchronous property to \c true for the relevant
-    \l Image, \l BorderImage or \l AnimatedImage object. When this is enabled, 
+    \l Image, \l BorderImage or \l AnimatedImage object. When this is enabled,
     the image request to the provider is run in a low priority thread,
     allowing image loading to be executed in the background, and reducing the
     performance impact on the user interface.
 
     Asynchronous loading is not supported for image providers that provide
     QPixmap rather than QImage values, as pixmaps can only be created in the
-    main thread. In this case, if \l {Image::}{asynchronous} is set to 
+    main thread. In this case, if \l {Image::}{asynchronous} is set to
     \c true, the value is ignored and the image is loaded
     synchronously.
 
@@ -151,9 +151,9 @@ public:
 
     Defines the type of image supported by this image provider.
 
-    \value Image The Image Provider provides QImage images. The 
+    \value Image The Image Provider provides QImage images. The
         requestImage() method will be called for all image requests.
-    \value Pixmap The Image Provider provides QPixmap images. The 
+    \value Pixmap The Image Provider provides QPixmap images. The
         requestPixmap() method will be called for all image requests.
 */
 
@@ -161,9 +161,9 @@ public:
     Creates an image provider that will provide images of the given \a type.
 */
 QDeclarativeImageProvider::QDeclarativeImageProvider(ImageType type)
-    : d(new QDeclarativeImageProviderPrivate)
+   : d(new QDeclarativeImageProviderPrivate)
 {
-    d->type = type;
+   d->type = type;
 }
 
 /*!
@@ -173,7 +173,7 @@ QDeclarativeImageProvider::QDeclarativeImageProvider(ImageType type)
 */
 QDeclarativeImageProvider::~QDeclarativeImageProvider()
 {
-    delete d;
+   delete d;
 }
 
 /*!
@@ -181,11 +181,11 @@ QDeclarativeImageProvider::~QDeclarativeImageProvider()
 */
 QDeclarativeImageProvider::ImageType QDeclarativeImageProvider::imageType() const
 {
-    return d->type;
+   return d->type;
 }
 
 /*!
-    Implement this method to return the image with \a id. The default 
+    Implement this method to return the image with \a id. The default
     implementation returns an empty image.
 
     The \a id is the requested image source, with the "image:" scheme and
@@ -203,14 +203,15 @@ QDeclarativeImageProvider::ImageType QDeclarativeImageProvider::imageType() cons
     \note this method may be called by multiple threads, so ensure the
     implementation of this method is reentrant.
 */
-QImage QDeclarativeImageProvider::requestImage(const QString &id, QSize *size, const QSize& requestedSize)
+QImage QDeclarativeImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
-    Q_UNUSED(id);
-    Q_UNUSED(size);
-    Q_UNUSED(requestedSize);
-    if (d->type == Image)
-        qWarning("ImageProvider supports Image type but has not implemented requestImage()");
-    return QImage();
+   Q_UNUSED(id);
+   Q_UNUSED(size);
+   Q_UNUSED(requestedSize);
+   if (d->type == Image) {
+      qWarning("ImageProvider supports Image type but has not implemented requestImage()");
+   }
+   return QImage();
 }
 
 /*!
@@ -229,14 +230,15 @@ QImage QDeclarativeImageProvider::requestImage(const QString &id, QSize *size, c
     is used to set the \l {Item::}{width} and \l {Item::}{height} of the
     relevant \l Image if these values have not been set explicitly.
 */
-QPixmap QDeclarativeImageProvider::requestPixmap(const QString &id, QSize *size, const QSize& requestedSize)
+QPixmap QDeclarativeImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
-    Q_UNUSED(id);
-    Q_UNUSED(size);
-    Q_UNUSED(requestedSize);
-    if (d->type == Pixmap)
-        qWarning("ImageProvider supports Pixmap type but has not implemented requestPixmap()");
-    return QPixmap();
+   Q_UNUSED(id);
+   Q_UNUSED(size);
+   Q_UNUSED(requestedSize);
+   if (d->type == Pixmap) {
+      qWarning("ImageProvider supports Pixmap type but has not implemented requestPixmap()");
+   }
+   return QPixmap();
 }
 
 QT_END_NAMESPACE

@@ -23,12 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-
-#include "qbytearray.h"
-#include "qstring.h"
-
-#include "string.h"
+#include <qplatformdefs.h>
+#include <qbytearray.h>
+#include <qstring.h>
+#include <string.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -33,7 +33,7 @@
 #include <QPlatformCursor>
 #include <QPlatformScreen>
 #include <QPlatformWindow>
-#include <QtGui/private/qwindowsurface_p.h>
+#include <qwindowsurface_p.h>
 
 class QMouseEvent;
 class QSize;

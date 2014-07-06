@@ -55,6 +55,7 @@ class ThreadEngineBarrier
    QAtomicInt count;
 
    QSemaphore semaphore;
+
  public:
    ThreadEngineBarrier();
    void acquire();
@@ -66,14 +67,14 @@ class ThreadEngineBarrier
 
 enum ThreadFunctionResult { ThrottleThread, ThreadFinished };
 
-// The ThreadEngine controls the threads used in the computation.
-// Can be run in three modes: single threaded, multi-threaded blocking
-// and multi-threaded asynchronous.
-// The code for the single threaded mode is
+// ThreadEngine controls the threads used in the computation.
+// Can be run in three modes: single threaded, multi-threaded blocking & multi-threaded asynchronous.
+// This is the code for the single threaded mode:
+
 class Q_CORE_EXPORT ThreadEngineBase: public QRunnable
 {
  public:
-   // Public API:
+
    ThreadEngineBase();
    virtual ~ThreadEngineBase();
    void startSingleThreaded();
@@ -86,7 +87,7 @@ class Q_CORE_EXPORT ThreadEngineBase: public QRunnable
    void setProgressRange(int minimum, int maximum);
    void acquireBarrierSemaphore();
 
- protected: // The user overrides these:
+ protected:
    virtual void start() {}
    virtual void finish() {}
    virtual ThreadFunctionResult threadFunction() {
@@ -98,6 +99,12 @@ class Q_CORE_EXPORT ThreadEngineBase: public QRunnable
    virtual bool shouldThrottleThread() {
       return futureInterface ? futureInterface->isPaused() : false;
    }
+
+   QFutureInterfaceBase *futureInterface;
+   QThreadPool *threadPool;
+   ThreadEngineBarrier barrier;
+   QtConcurrent::internal::ExceptionStore exceptionStore;
+
  private:
    bool startThreadInternal();
    void startThreads();
@@ -107,11 +114,6 @@ class Q_CORE_EXPORT ThreadEngineBase: public QRunnable
    virtual void asynchronousFinish() = 0;
    void handleException(const QtConcurrent::Exception &exception);
 
- protected:
-   QFutureInterfaceBase *futureInterface;
-   QThreadPool *threadPool;
-   ThreadEngineBarrier barrier;
-   QtConcurrent::internal::ExceptionStore exceptionStore;
 };
 
 
@@ -181,10 +183,8 @@ class ThreadEngine : public virtual ThreadEngineBase
    }
 };
 
-// The ThreadEngineStarter class ecapsulates the return type
-// from the thread engine.
-// Depending on how the it is used, it will run
-// the engine in either blocking mode or asynchronous mode.
+// The ThreadEngineStarter class ecapsulates the return type fom the thread engine.
+// Depending on how the it is used, it will run the engine in either blocking mode or asynchronous mode.
 template <typename T>
 class ThreadEngineStarterBase
 {
@@ -208,14 +208,14 @@ class ThreadEngineStarterBase
 };
 
 
-// We need to factor out the code that dereferences the T pointer,
-// with a specialization where T is void. (code that dereferences a void *
-// won't compile)
+// factor out the code that dereferences the T pointer, with a specialization where T is void.
+// (code that dereferences a void * will not compile)
 template <typename T>
 class ThreadEngineStarter : public ThreadEngineStarterBase<T>
 {
    typedef ThreadEngineStarterBase<T> Base;
    typedef ThreadEngine<T> TypedThreadEngine;
+
  public:
    ThreadEngineStarter(TypedThreadEngine *eng)
       : Base(eng) { }

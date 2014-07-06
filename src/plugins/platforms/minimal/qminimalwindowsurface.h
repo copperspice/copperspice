@@ -26,9 +26,8 @@
 #ifndef QWINDOWSURFACE_MINIMAL_H
 #define QWINDOWSURFACE_MINIMAL_H
 
-#include <QtGui/private/qwindowsurface_p.h>
-
-#include <QtGui/QPlatformWindow>
+#include <qwindowsurface_p.h>
+#include <QPlatformWindow>
 
 QT_BEGIN_NAMESPACE
 

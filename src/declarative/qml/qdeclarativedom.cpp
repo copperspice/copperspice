@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,13 +38,15 @@
 QT_BEGIN_NAMESPACE
 
 QDeclarativeDomDocumentPrivate::QDeclarativeDomDocumentPrivate()
-: root(0)
+   : root(0)
 {
 }
 
 QDeclarativeDomDocumentPrivate::~QDeclarativeDomDocumentPrivate()
 {
-    if (root) root->release();
+   if (root) {
+      root->release();
+   }
 }
 
 /*!
@@ -80,7 +82,7 @@ QDeclarativeDomDocumentPrivate::~QDeclarativeDomDocumentPrivate()
     Construct an empty QDeclarativeDomDocument.
 */
 QDeclarativeDomDocument::QDeclarativeDomDocument()
-: d(new QDeclarativeDomDocumentPrivate)
+   : d(new QDeclarativeDomDocumentPrivate)
 {
 }
 
@@ -88,7 +90,7 @@ QDeclarativeDomDocument::QDeclarativeDomDocument()
     Create a copy of \a other QDeclarativeDomDocument.
 */
 QDeclarativeDomDocument::QDeclarativeDomDocument(const QDeclarativeDomDocument &other)
-: d(other.d)
+   : d(other.d)
 {
 }
 
@@ -104,8 +106,8 @@ QDeclarativeDomDocument::~QDeclarativeDomDocument()
 */
 QDeclarativeDomDocument &QDeclarativeDomDocument::operator=(const QDeclarativeDomDocument &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -113,7 +115,7 @@ QDeclarativeDomDocument &QDeclarativeDomDocument::operator=(const QDeclarativeDo
 */
 QList<QDeclarativeDomImport> QDeclarativeDomDocument::imports() const
 {
-    return d->imports;
+   return d->imports;
 }
 
 /*!
@@ -125,41 +127,41 @@ QList<QDeclarativeDomImport> QDeclarativeDomDocument::imports() const
 */
 bool QDeclarativeDomDocument::load(QDeclarativeEngine *engine, const QByteArray &data, const QUrl &url)
 {
-    d->errors.clear();
-    d->imports.clear();
+   d->errors.clear();
+   d->imports.clear();
 
-    QDeclarativeEnginePrivate *ep = QDeclarativeEnginePrivate::get(engine);
-    QDeclarativeTypeData *td = ep->typeLoader.get(data, url, QDeclarativeTypeLoader::PreserveParser);
+   QDeclarativeEnginePrivate *ep = QDeclarativeEnginePrivate::get(engine);
+   QDeclarativeTypeData *td = ep->typeLoader.get(data, url, QDeclarativeTypeLoader::PreserveParser);
 
-    if(td->isError()) {
-        d->errors = td->errors();
-        td->release();
-        return false;
-    } else if(!td->isCompleteOrError()) {
-        QDeclarativeError error;
-        error.setDescription(QLatin1String("QDeclarativeDomDocument supports local types only"));
-        d->errors << error;
-        td->release();
-        return false;
-    }
+   if (td->isError()) {
+      d->errors = td->errors();
+      td->release();
+      return false;
+   } else if (!td->isCompleteOrError()) {
+      QDeclarativeError error;
+      error.setDescription(QLatin1String("QDeclarativeDomDocument supports local types only"));
+      d->errors << error;
+      td->release();
+      return false;
+   }
 
-    for (int i = 0; i < td->parser().imports().size(); ++i) {
-        QDeclarativeScriptParser::Import parserImport = td->parser().imports().at(i);
-        QDeclarativeDomImport domImport;
-        domImport.d->type = static_cast<QDeclarativeDomImportPrivate::Type>(parserImport.type);
-        domImport.d->uri = parserImport.uri;
-        domImport.d->qualifier = parserImport.qualifier;
-        domImport.d->version = parserImport.version;
-        d->imports += domImport;
-    }
+   for (int i = 0; i < td->parser().imports().size(); ++i) {
+      QDeclarativeScriptParser::Import parserImport = td->parser().imports().at(i);
+      QDeclarativeDomImport domImport;
+      domImport.d->type = static_cast<QDeclarativeDomImportPrivate::Type>(parserImport.type);
+      domImport.d->uri = parserImport.uri;
+      domImport.d->qualifier = parserImport.qualifier;
+      domImport.d->version = parserImport.version;
+      d->imports += domImport;
+   }
 
-    if (td->parser().tree()) {
-        d->root = td->parser().tree();
-        d->root->addref();
-    }
+   if (td->parser().tree()) {
+      d->root = td->parser().tree();
+      d->root->addref();
+   }
 
-    td->release();
-    return true;
+   td->release();
+   return true;
 }
 
 /*!
@@ -170,7 +172,7 @@ bool QDeclarativeDomDocument::load(QDeclarativeEngine *engine, const QByteArray 
 */
 QList<QDeclarativeError> QDeclarativeDomDocument::errors() const
 {
-    return d->errors;
+   return d->errors;
 }
 
 /*!
@@ -188,30 +190,36 @@ Item {
 */
 QDeclarativeDomObject QDeclarativeDomDocument::rootObject() const
 {
-    QDeclarativeDomObject rv;
-    rv.d->object = d->root;
-    if (rv.d->object) rv.d->object->addref();
-    return rv;
+   QDeclarativeDomObject rv;
+   rv.d->object = d->root;
+   if (rv.d->object) {
+      rv.d->object->addref();
+   }
+   return rv;
 }
 
 QDeclarativeDomPropertyPrivate::QDeclarativeDomPropertyPrivate()
-: property(0)
+   : property(0)
 {
 }
 
 QDeclarativeDomPropertyPrivate::~QDeclarativeDomPropertyPrivate()
 {
-    if (property) property->release();
+   if (property) {
+      property->release();
+   }
 }
 
 QDeclarativeDomDynamicPropertyPrivate::QDeclarativeDomDynamicPropertyPrivate():
-        valid(false)
+   valid(false)
 {
 }
 
 QDeclarativeDomDynamicPropertyPrivate::~QDeclarativeDomDynamicPropertyPrivate()
 {
-    if (valid && property.defaultValue) property.defaultValue->release();
+   if (valid && property.defaultValue) {
+      property.defaultValue->release();
+   }
 }
 
 /*!
@@ -229,7 +237,7 @@ QDeclarativeDomDynamicPropertyPrivate::~QDeclarativeDomDynamicPropertyPrivate()
     Construct an invalid QDeclarativeDomProperty.
 */
 QDeclarativeDomProperty::QDeclarativeDomProperty()
-: d(new QDeclarativeDomPropertyPrivate)
+   : d(new QDeclarativeDomPropertyPrivate)
 {
 }
 
@@ -237,7 +245,7 @@ QDeclarativeDomProperty::QDeclarativeDomProperty()
     Create a copy of \a other QDeclarativeDomProperty.
 */
 QDeclarativeDomProperty::QDeclarativeDomProperty(const QDeclarativeDomProperty &other)
-: d(other.d)
+   : d(other.d)
 {
 }
 
@@ -253,8 +261,8 @@ QDeclarativeDomProperty::~QDeclarativeDomProperty()
 */
 QDeclarativeDomProperty &QDeclarativeDomProperty::operator=(const QDeclarativeDomProperty &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -262,7 +270,7 @@ QDeclarativeDomProperty &QDeclarativeDomProperty::operator=(const QDeclarativeDo
 */
 bool QDeclarativeDomProperty::isValid() const
 {
-    return d->property != 0;
+   return d->property != 0;
 }
 
 
@@ -288,7 +296,7 @@ Text {
 */
 QByteArray QDeclarativeDomProperty::propertyName() const
 {
-    return d->propertyName;
+   return d->propertyName;
 }
 
 /*!
@@ -310,8 +318,11 @@ Text {
 */
 QList<QByteArray> QDeclarativeDomProperty::propertyNameParts() const
 {
-    if (d->propertyName.isEmpty()) return QList<QByteArray>();
-    else return d->propertyName.split('.');
+   if (d->propertyName.isEmpty()) {
+      return QList<QByteArray>();
+   } else {
+      return d->propertyName.split('.');
+   }
 }
 
 /*!
@@ -331,7 +342,7 @@ QList<QByteArray> QDeclarativeDomProperty::propertyNameParts() const
 */
 bool QDeclarativeDomProperty::isDefaultProperty() const
 {
-    return d->property && d->property->isDefault;
+   return d->property && d->property->isDefault;
 }
 
 /*!
@@ -340,17 +351,18 @@ bool QDeclarativeDomProperty::isDefaultProperty() const
 */
 QDeclarativeDomValue QDeclarativeDomProperty::value() const
 {
-    QDeclarativeDomValue rv;
-    if (d->property) {
-        rv.d->property = d->property;
-        if (d->property->values.count())
-            rv.d->value = d->property->values.at(0);
-        else
-            rv.d->value = d->property->onValues.at(0);
-        rv.d->property->addref();
-        rv.d->value->addref();
-    }
-    return rv;
+   QDeclarativeDomValue rv;
+   if (d->property) {
+      rv.d->property = d->property;
+      if (d->property->values.count()) {
+         rv.d->value = d->property->values.at(0);
+      } else {
+         rv.d->value = d->property->onValues.at(0);
+      }
+      rv.d->property->addref();
+      rv.d->value->addref();
+   }
+   return rv;
 }
 
 /*!
@@ -359,10 +371,11 @@ QDeclarativeDomValue QDeclarativeDomProperty::value() const
 */
 int QDeclarativeDomProperty::position() const
 {
-    if (d && d->property) {
-        return d->property->location.range.offset;
-    } else
-        return -1;
+   if (d && d->property) {
+      return d->property->location.range.offset;
+   } else {
+      return -1;
+   }
 }
 
 /*!
@@ -371,17 +384,18 @@ int QDeclarativeDomProperty::position() const
 */
 int QDeclarativeDomProperty::length() const
 {
-    if (d && d->property)
-        return d->property->location.range.length;
-    else
-        return -1;
+   if (d && d->property) {
+      return d->property->location.range.length;
+   } else {
+      return -1;
+   }
 }
 
 /*!
     Construct an invalid QDeclarativeDomDynamicProperty.
 */
 QDeclarativeDomDynamicProperty::QDeclarativeDomDynamicProperty():
-        d(new QDeclarativeDomDynamicPropertyPrivate)
+   d(new QDeclarativeDomDynamicPropertyPrivate)
 {
 }
 
@@ -389,7 +403,7 @@ QDeclarativeDomDynamicProperty::QDeclarativeDomDynamicProperty():
     Create a copy of \a other QDeclarativeDomDynamicProperty.
 */
 QDeclarativeDomDynamicProperty::QDeclarativeDomDynamicProperty(const QDeclarativeDomDynamicProperty &other):
-        d(other.d)
+   d(other.d)
 {
 }
 
@@ -405,13 +419,13 @@ QDeclarativeDomDynamicProperty::~QDeclarativeDomDynamicProperty()
 */
 QDeclarativeDomDynamicProperty &QDeclarativeDomDynamicProperty::operator=(const QDeclarativeDomDynamicProperty &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 bool QDeclarativeDomDynamicProperty::isValid() const
 {
-    return d && d->valid;
+   return d && d->valid;
 }
 
 /*!
@@ -428,10 +442,11 @@ Item {
 */
 QByteArray QDeclarativeDomDynamicProperty::propertyName() const
 {
-    if (isValid())
-        return d->property.name;
-    else
-        return QByteArray();
+   if (isValid()) {
+      return d->property.name;
+   } else {
+      return QByteArray();
+   }
 }
 
 /*!
@@ -441,52 +456,53 @@ QByteArray QDeclarativeDomDynamicProperty::propertyName() const
 */
 int QDeclarativeDomDynamicProperty::propertyType() const
 {
-    if (isValid()) {
-        switch (d->property.type) {
-            case QDeclarativeParser::Object::DynamicProperty::Bool:
-                return QMetaType::type("bool");
+   if (isValid()) {
+      switch (d->property.type) {
+         case QDeclarativeParser::Object::DynamicProperty::Bool:
+            return QMetaType::type("bool");
 
-            case QDeclarativeParser::Object::DynamicProperty::Color:
-                return QMetaType::type("QColor");
+         case QDeclarativeParser::Object::DynamicProperty::Color:
+            return QMetaType::type("QColor");
 
-            case QDeclarativeParser::Object::DynamicProperty::Time:
-                return QMetaType::type("QTime");
+         case QDeclarativeParser::Object::DynamicProperty::Time:
+            return QMetaType::type("QTime");
 
-            case QDeclarativeParser::Object::DynamicProperty::Date:
-                return QMetaType::type("QDate");
+         case QDeclarativeParser::Object::DynamicProperty::Date:
+            return QMetaType::type("QDate");
 
-            case QDeclarativeParser::Object::DynamicProperty::DateTime:
-                return QMetaType::type("QDateTime");
+         case QDeclarativeParser::Object::DynamicProperty::DateTime:
+            return QMetaType::type("QDateTime");
 
-            case QDeclarativeParser::Object::DynamicProperty::Int:
-                return QMetaType::type("int");
+         case QDeclarativeParser::Object::DynamicProperty::Int:
+            return QMetaType::type("int");
 
-            case QDeclarativeParser::Object::DynamicProperty::Real:
-                return sizeof(qreal) == sizeof(double) ? QMetaType::type("double") : QMetaType::type("float");
+         case QDeclarativeParser::Object::DynamicProperty::Real:
+            return sizeof(qreal) == sizeof(double) ? QMetaType::type("double") : QMetaType::type("float");
 
-            case QDeclarativeParser::Object::DynamicProperty::String:
-                return QMetaType::type("QString");
+         case QDeclarativeParser::Object::DynamicProperty::String:
+            return QMetaType::type("QString");
 
-            case QDeclarativeParser::Object::DynamicProperty::Url:
-                return QMetaType::type("QUrl");
+         case QDeclarativeParser::Object::DynamicProperty::Url:
+            return QMetaType::type("QUrl");
 
-            case QDeclarativeParser::Object::DynamicProperty::Variant:
-                return QMetaType::type("QVariant");
+         case QDeclarativeParser::Object::DynamicProperty::Variant:
+            return QMetaType::type("QVariant");
 
-            default:
-                break;
-        }
-    }
+         default:
+            break;
+      }
+   }
 
-    return -1;
+   return -1;
 }
 
 QByteArray QDeclarativeDomDynamicProperty::propertyTypeName() const
 {
-    if (isValid())
-        return d->property.customType;
+   if (isValid()) {
+      return d->property.customType;
+   }
 
-    return QByteArray();
+   return QByteArray();
 }
 
 /*!
@@ -506,10 +522,11 @@ QByteArray QDeclarativeDomDynamicProperty::propertyTypeName() const
 */
 bool QDeclarativeDomDynamicProperty::isDefaultProperty() const
 {
-    if (isValid())
-        return d->property.isDefaultProperty;
-    else
-        return false;
+   if (isValid()) {
+      return d->property.isDefaultProperty;
+   } else {
+      return false;
+   }
 }
 
 /*!
@@ -517,15 +534,15 @@ bool QDeclarativeDomDynamicProperty::isDefaultProperty() const
 */
 QDeclarativeDomProperty QDeclarativeDomDynamicProperty::defaultValue() const
 {
-    QDeclarativeDomProperty rp;
+   QDeclarativeDomProperty rp;
 
-    if (isValid() && d->property.defaultValue) {
-        rp.d->property = d->property.defaultValue;
-        rp.d->propertyName = propertyName();
-        rp.d->property->addref();
-    }
+   if (isValid() && d->property.defaultValue) {
+      rp.d->property = d->property.defaultValue;
+      rp.d->propertyName = propertyName();
+      rp.d->property->addref();
+   }
 
-    return rp;
+   return rp;
 }
 
 /*!
@@ -534,10 +551,11 @@ QDeclarativeDomProperty QDeclarativeDomDynamicProperty::defaultValue() const
 */
 bool QDeclarativeDomDynamicProperty::isAlias() const
 {
-    if (isValid())
-        return d->property.type == QDeclarativeParser::Object::DynamicProperty::Alias;
-    else
-        return false;
+   if (isValid()) {
+      return d->property.type == QDeclarativeParser::Object::DynamicProperty::Alias;
+   } else {
+      return false;
+   }
 }
 
 /*!
@@ -546,10 +564,11 @@ bool QDeclarativeDomDynamicProperty::isAlias() const
 */
 int QDeclarativeDomDynamicProperty::position() const
 {
-    if (isValid()) {
-        return d->property.location.range.offset;
-    } else
-        return -1;
+   if (isValid()) {
+      return d->property.location.range.offset;
+   } else {
+      return -1;
+   }
 }
 
 /*!
@@ -558,63 +577,67 @@ int QDeclarativeDomDynamicProperty::position() const
 */
 int QDeclarativeDomDynamicProperty::length() const
 {
-    if (isValid())
-        return d->property.location.range.length;
-    else
-        return -1;
+   if (isValid()) {
+      return d->property.location.range.length;
+   } else {
+      return -1;
+   }
 }
 
 QDeclarativeDomObjectPrivate::QDeclarativeDomObjectPrivate()
-: object(0)
+   : object(0)
 {
 }
 
 QDeclarativeDomObjectPrivate::~QDeclarativeDomObjectPrivate()
 {
-    if (object) object->release();
+   if (object) {
+      object->release();
+   }
 }
 
 QDeclarativeDomObjectPrivate::Properties
 QDeclarativeDomObjectPrivate::properties() const
 {
-    Properties rv;
+   Properties rv;
 
-    for (QHash<QByteArray, QDeclarativeParser::Property *>::ConstIterator iter =
+   for (QHash<QByteArray, QDeclarativeParser::Property *>::ConstIterator iter =
             object->properties.begin();
-            iter != object->properties.end();
-            ++iter) {
+         iter != object->properties.end();
+         ++iter) {
 
-        rv << properties(*iter);
+      rv << properties(*iter);
 
-    }
-    return rv;
+   }
+   return rv;
 }
 
 QDeclarativeDomObjectPrivate::Properties
 QDeclarativeDomObjectPrivate::properties(QDeclarativeParser::Property *property) const
 {
-    Properties rv;
+   Properties rv;
 
-    if (property->value) {
+   if (property->value) {
 
-        for (QHash<QByteArray, QDeclarativeParser::Property *>::ConstIterator iter =
-                property->value->properties.begin();
-                iter != property->value->properties.end();
-                ++iter) {
+      for (QHash<QByteArray, QDeclarativeParser::Property *>::ConstIterator iter =
+               property->value->properties.begin();
+            iter != property->value->properties.end();
+            ++iter) {
 
-            rv << properties(*iter);
+         rv << properties(*iter);
 
-        }
+      }
 
-        QByteArray name(property->name + '.');
-        for (Properties::Iterator iter = rv.begin(); iter != rv.end(); ++iter)
-            iter->second.prepend(name);
+      QByteArray name(property->name + '.');
+      for (Properties::Iterator iter = rv.begin(); iter != rv.end(); ++iter) {
+         iter->second.prepend(name);
+      }
 
-    } else {
-        rv << qMakePair(property, property->name);
-    }
+   } else {
+      rv << qMakePair(property, property->name);
+   }
 
-    return rv;
+   return rv;
 }
 
 /*!
@@ -647,7 +670,7 @@ QGraphicsWidget {
     Construct an invalid QDeclarativeDomObject.
 */
 QDeclarativeDomObject::QDeclarativeDomObject()
-: d(new QDeclarativeDomObjectPrivate)
+   : d(new QDeclarativeDomObjectPrivate)
 {
 }
 
@@ -655,7 +678,7 @@ QDeclarativeDomObject::QDeclarativeDomObject()
     Create a copy of \a other QDeclarativeDomObject.
 */
 QDeclarativeDomObject::QDeclarativeDomObject(const QDeclarativeDomObject &other)
-: d(other.d)
+   : d(other.d)
 {
 }
 
@@ -671,8 +694,8 @@ QDeclarativeDomObject::~QDeclarativeDomObject()
 */
 QDeclarativeDomObject &QDeclarativeDomObject::operator=(const QDeclarativeDomObject &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -680,7 +703,7 @@ QDeclarativeDomObject &QDeclarativeDomObject::operator=(const QDeclarativeDomObj
 */
 bool QDeclarativeDomObject::isValid() const
 {
-    return d->object != 0;
+   return d->object != 0;
 }
 
 /*!
@@ -693,8 +716,11 @@ Rectangle { }
 */
 QByteArray QDeclarativeDomObject::objectType() const
 {
-    if (d->object) return d->object->typeName;
-    else return QByteArray();
+   if (d->object) {
+      return d->object->typeName;
+   } else {
+      return QByteArray();
+   }
 }
 
 /*!
@@ -707,26 +733,29 @@ Rectangle { }
 */
 QByteArray QDeclarativeDomObject::objectClassName() const
 {
-    if (d->object)
-        return d->object->className;
-    else
-        return QByteArray();
+   if (d->object) {
+      return d->object->className;
+   } else {
+      return QByteArray();
+   }
 }
 
 int QDeclarativeDomObject::objectTypeMajorVersion() const
 {
-    if (d->object)
-        return d->object->majorVersion;
-    else
-        return -1;
+   if (d->object) {
+      return d->object->majorVersion;
+   } else {
+      return -1;
+   }
 }
 
 int QDeclarativeDomObject::objectTypeMinorVersion() const
 {
-    if (d->object)
-        return d->object->minorVersion;
-    else
-        return -1;
+   if (d->object) {
+      return d->object->minorVersion;
+   } else {
+      return -1;
+   }
 }
 
 /*!
@@ -740,11 +769,11 @@ Text { id: myText }
 */
 QString QDeclarativeDomObject::objectId() const
 {
-    if (d->object) {
-        return d->object->id;
-    } else {
-        return QString();
-    }
+   if (d->object) {
+      return d->object->id;
+   } else {
+      return QString();
+   }
 }
 
 /*!
@@ -760,31 +789,32 @@ Text {
 */
 QList<QDeclarativeDomProperty> QDeclarativeDomObject::properties() const
 {
-    QList<QDeclarativeDomProperty> rv;
+   QList<QDeclarativeDomProperty> rv;
 
-    if (!d->object || isComponent())
-        return rv;
+   if (!d->object || isComponent()) {
+      return rv;
+   }
 
-    QDeclarativeDomObjectPrivate::Properties properties = d->properties();
-    for (int ii = 0; ii < properties.count(); ++ii) {
+   QDeclarativeDomObjectPrivate::Properties properties = d->properties();
+   for (int ii = 0; ii < properties.count(); ++ii) {
 
-        QDeclarativeDomProperty domProperty;
-        domProperty.d->property = properties.at(ii).first;
-        domProperty.d->property->addref();
-        domProperty.d->propertyName = properties.at(ii).second;
-        rv << domProperty;
+      QDeclarativeDomProperty domProperty;
+      domProperty.d->property = properties.at(ii).first;
+      domProperty.d->property->addref();
+      domProperty.d->propertyName = properties.at(ii).second;
+      rv << domProperty;
 
-    }
+   }
 
-    if (d->object->defaultProperty) {
-        QDeclarativeDomProperty domProperty;
-        domProperty.d->property = d->object->defaultProperty;
-        domProperty.d->property->addref();
-        domProperty.d->propertyName = d->object->defaultProperty->name;
-        rv << domProperty;
-    }
+   if (d->object->defaultProperty) {
+      QDeclarativeDomProperty domProperty;
+      domProperty.d->property = d->object->defaultProperty;
+      domProperty.d->property->addref();
+      domProperty.d->propertyName = d->object->defaultProperty->name;
+      rv << domProperty;
+   }
 
-    return rv;
+   return rv;
 }
 
 /*!
@@ -800,49 +830,54 @@ Image { source: "sample.jpg" }
 */
 QDeclarativeDomProperty QDeclarativeDomObject::property(const QByteArray &name) const
 {
-    QList<QDeclarativeDomProperty> props = properties();
-    for (int ii = 0; ii < props.count(); ++ii)
-        if (props.at(ii).propertyName() == name)
-            return props.at(ii);
-    return QDeclarativeDomProperty();
+   QList<QDeclarativeDomProperty> props = properties();
+   for (int ii = 0; ii < props.count(); ++ii)
+      if (props.at(ii).propertyName() == name) {
+         return props.at(ii);
+      }
+   return QDeclarativeDomProperty();
 }
 
 QList<QDeclarativeDomDynamicProperty> QDeclarativeDomObject::dynamicProperties() const
 {
-    QList<QDeclarativeDomDynamicProperty> properties;
+   QList<QDeclarativeDomDynamicProperty> properties;
 
-    for (int i = 0; i < d->object->dynamicProperties.size(); ++i) {
-        QDeclarativeDomDynamicProperty p;
-        p.d = new QDeclarativeDomDynamicPropertyPrivate;
-        p.d->property = d->object->dynamicProperties.at(i);
-        p.d->valid = true;
+   for (int i = 0; i < d->object->dynamicProperties.size(); ++i) {
+      QDeclarativeDomDynamicProperty p;
+      p.d = new QDeclarativeDomDynamicPropertyPrivate;
+      p.d->property = d->object->dynamicProperties.at(i);
+      p.d->valid = true;
 
-        if (p.d->property.defaultValue)
-            p.d->property.defaultValue->addref();
+      if (p.d->property.defaultValue) {
+         p.d->property.defaultValue->addref();
+      }
 
-        properties.append(p);
-    }
+      properties.append(p);
+   }
 
-    return properties;
+   return properties;
 }
 
 QDeclarativeDomDynamicProperty QDeclarativeDomObject::dynamicProperty(const QByteArray &name) const
 {
-    QDeclarativeDomDynamicProperty p;
+   QDeclarativeDomDynamicProperty p;
 
-    if (!isValid())
-        return p;
+   if (!isValid()) {
+      return p;
+   }
 
-    for (int i = 0; i < d->object->dynamicProperties.size(); ++i) {
-        if (d->object->dynamicProperties.at(i).name == name) {
-            p.d = new QDeclarativeDomDynamicPropertyPrivate;
-            p.d->property = d->object->dynamicProperties.at(i);
-            if (p.d->property.defaultValue) p.d->property.defaultValue->addref();
-            p.d->valid = true;
-        }
-    }
+   for (int i = 0; i < d->object->dynamicProperties.size(); ++i) {
+      if (d->object->dynamicProperties.at(i).name == name) {
+         p.d = new QDeclarativeDomDynamicPropertyPrivate;
+         p.d->property = d->object->dynamicProperties.at(i);
+         if (p.d->property.defaultValue) {
+            p.d->property.defaultValue->addref();
+         }
+         p.d->valid = true;
+      }
+   }
 
-    return p;
+   return p;
 }
 
 /*!
@@ -857,7 +892,7 @@ QDeclarativeDomDynamicProperty QDeclarativeDomObject::dynamicProperty(const QByt
 */
 bool QDeclarativeDomObject::isCustomType() const
 {
-    return false;
+   return false;
 }
 
 /*!
@@ -868,7 +903,7 @@ bool QDeclarativeDomObject::isCustomType() const
 */
 QByteArray QDeclarativeDomObject::customTypeData() const
 {
-    return QByteArray();
+   return QByteArray();
 }
 
 /*!
@@ -880,7 +915,7 @@ QByteArray QDeclarativeDomObject::customTypeData() const
 */
 bool QDeclarativeDomObject::isComponent() const
 {
-    return (d->object && (d->object->typeName == "Qt/Component" || d->object->typeName == "QtQuick/Component"));
+   return (d->object && (d->object->typeName == "Qt/Component" || d->object->typeName == "QtQuick/Component"));
 }
 
 /*!
@@ -892,10 +927,11 @@ bool QDeclarativeDomObject::isComponent() const
 */
 QDeclarativeDomComponent QDeclarativeDomObject::toComponent() const
 {
-    QDeclarativeDomComponent rv;
-    if (isComponent())
-        rv.d = d;
-    return rv;
+   QDeclarativeDomComponent rv;
+   if (isComponent()) {
+      rv.d = d;
+   }
+   return rv;
 }
 
 /*!
@@ -904,10 +940,11 @@ QDeclarativeDomComponent QDeclarativeDomObject::toComponent() const
 */
 int QDeclarativeDomObject::position() const
 {
-    if (d && d->object)
-        return d->object->location.range.offset;
-    else
-        return -1;
+   if (d && d->object) {
+      return d->object->location.range.offset;
+   } else {
+      return -1;
+   }
 }
 
 /*!
@@ -916,30 +953,34 @@ ted upto the end of it, or -1 if the property is invalid.
 */
 int QDeclarativeDomObject::length() const
 {
-    if (d && d->object)
-        return d->object->location.range.length;
-    else
-        return -1;
+   if (d && d->object) {
+      return d->object->location.range.length;
+   } else {
+      return -1;
+   }
 }
 
 // Returns the URL of the type, if it is an external type, or an empty URL if
 // not
 QUrl QDeclarativeDomObject::url() const
 {
-    if (d && d->object)
-        return d->object->url;
-    else
-        return QUrl();
+   if (d && d->object) {
+      return d->object->url;
+   } else {
+      return QUrl();
+   }
 }
 
 QDeclarativeDomBasicValuePrivate::QDeclarativeDomBasicValuePrivate()
-: value(0)
+   : value(0)
 {
 }
 
 QDeclarativeDomBasicValuePrivate::~QDeclarativeDomBasicValuePrivate()
 {
-    if (value) value->release();
+   if (value) {
+      value->release();
+   }
 }
 
 /*!
@@ -964,7 +1005,7 @@ Rectangle {
     Construct an empty QDeclarativeDomValueLiteral.
 */
 QDeclarativeDomValueLiteral::QDeclarativeDomValueLiteral():
-    d(new QDeclarativeDomBasicValuePrivate)
+   d(new QDeclarativeDomBasicValuePrivate)
 {
 }
 
@@ -972,7 +1013,7 @@ QDeclarativeDomValueLiteral::QDeclarativeDomValueLiteral():
     Create a copy of \a other QDeclarativeDomValueLiteral.
 */
 QDeclarativeDomValueLiteral::QDeclarativeDomValueLiteral(const QDeclarativeDomValueLiteral &other)
-: d(other.d)
+   : d(other.d)
 {
 }
 
@@ -988,8 +1029,8 @@ QDeclarativeDomValueLiteral::~QDeclarativeDomValueLiteral()
 */
 QDeclarativeDomValueLiteral &QDeclarativeDomValueLiteral::operator=(const QDeclarativeDomValueLiteral &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -1002,8 +1043,11 @@ Rectangle { x: 10 }
 */
 QString QDeclarativeDomValueLiteral::literal() const
 {
-    if (d->value) return d->value->primitive();
-    else return QString();
+   if (d->value) {
+      return d->value->primitive();
+   } else {
+      return QString();
+   }
 }
 
 /*!
@@ -1023,7 +1067,7 @@ Rectangle { x: Other.x }
     Construct an empty QDeclarativeDomValueBinding.
 */
 QDeclarativeDomValueBinding::QDeclarativeDomValueBinding():
-        d(new QDeclarativeDomBasicValuePrivate)
+   d(new QDeclarativeDomBasicValuePrivate)
 {
 }
 
@@ -1031,7 +1075,7 @@ QDeclarativeDomValueBinding::QDeclarativeDomValueBinding():
     Create a copy of \a other QDeclarativeDomValueBinding.
 */
 QDeclarativeDomValueBinding::QDeclarativeDomValueBinding(const QDeclarativeDomValueBinding &other)
-: d(other.d)
+   : d(other.d)
 {
 }
 
@@ -1047,8 +1091,8 @@ QDeclarativeDomValueBinding::~QDeclarativeDomValueBinding()
 */
 QDeclarativeDomValueBinding &QDeclarativeDomValueBinding::operator=(const QDeclarativeDomValueBinding &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -1061,10 +1105,11 @@ Rectangle { x: Other.x }
 */
 QString QDeclarativeDomValueBinding::binding() const
 {
-    if (d->value)
-        return d->value->value.asScript();
-    else
-        return QString();
+   if (d->value) {
+      return d->value->value.asScript();
+   } else {
+      return QString();
+   }
 }
 
 /*!
@@ -1092,7 +1137,7 @@ Rectangle {
     Construct an empty QDeclarativeDomValueValueSource.
 */
 QDeclarativeDomValueValueSource::QDeclarativeDomValueValueSource():
-        d(new QDeclarativeDomBasicValuePrivate)
+   d(new QDeclarativeDomBasicValuePrivate)
 {
 }
 
@@ -1100,7 +1145,7 @@ QDeclarativeDomValueValueSource::QDeclarativeDomValueValueSource():
     Create a copy of \a other QDeclarativeDomValueValueSource.
 */
 QDeclarativeDomValueValueSource::QDeclarativeDomValueValueSource(const QDeclarativeDomValueValueSource &other)
-: d(other.d)
+   : d(other.d)
 {
 }
 
@@ -1114,10 +1159,11 @@ QDeclarativeDomValueValueSource::~QDeclarativeDomValueValueSource()
 /*!
     Assign \a other to this QDeclarativeDomValueValueSource.
 */
-QDeclarativeDomValueValueSource &QDeclarativeDomValueValueSource::operator=(const QDeclarativeDomValueValueSource &other)
+QDeclarativeDomValueValueSource &QDeclarativeDomValueValueSource::operator=(const QDeclarativeDomValueValueSource
+      &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -1137,12 +1183,12 @@ Rectangle {
 */
 QDeclarativeDomObject QDeclarativeDomValueValueSource::object() const
 {
-    QDeclarativeDomObject rv;
-    if (d->value) {
-        rv.d->object = d->value->object;
-        rv.d->object->addref();
-    }
-    return rv;
+   QDeclarativeDomObject rv;
+   if (d->value) {
+      rv.d->object = d->value->object;
+      rv.d->object->addref();
+   }
+   return rv;
 }
 
 /*!
@@ -1166,15 +1212,16 @@ Rectangle {
     Construct an empty QDeclarativeDomValueValueInterceptor.
 */
 QDeclarativeDomValueValueInterceptor::QDeclarativeDomValueValueInterceptor():
-        d(new QDeclarativeDomBasicValuePrivate)
+   d(new QDeclarativeDomBasicValuePrivate)
 {
 }
 
 /*!
     Create a copy of \a other QDeclarativeDomValueValueInterceptor.
 */
-QDeclarativeDomValueValueInterceptor::QDeclarativeDomValueValueInterceptor(const QDeclarativeDomValueValueInterceptor &other)
-: d(other.d)
+QDeclarativeDomValueValueInterceptor::QDeclarativeDomValueValueInterceptor(const QDeclarativeDomValueValueInterceptor
+      &other)
+   : d(other.d)
 {
 }
 
@@ -1188,10 +1235,11 @@ QDeclarativeDomValueValueInterceptor::~QDeclarativeDomValueValueInterceptor()
 /*!
     Assign \a other to this QDeclarativeDomValueValueInterceptor.
 */
-QDeclarativeDomValueValueInterceptor &QDeclarativeDomValueValueInterceptor::operator=(const QDeclarativeDomValueValueInterceptor &other)
+QDeclarativeDomValueValueInterceptor &QDeclarativeDomValueValueInterceptor::operator=
+(const QDeclarativeDomValueValueInterceptor &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -1207,23 +1255,27 @@ Rectangle {
 */
 QDeclarativeDomObject QDeclarativeDomValueValueInterceptor::object() const
 {
-    QDeclarativeDomObject rv;
-    if (d->value) {
-        rv.d->object = d->value->object;
-        rv.d->object->addref();
-    }
-    return rv;
+   QDeclarativeDomObject rv;
+   if (d->value) {
+      rv.d->object = d->value->object;
+      rv.d->object->addref();
+   }
+   return rv;
 }
 
 QDeclarativeDomValuePrivate::QDeclarativeDomValuePrivate()
-: property(0), value(0)
+   : property(0), value(0)
 {
 }
 
 QDeclarativeDomValuePrivate::~QDeclarativeDomValuePrivate()
 {
-    if (property) property->release();
-    if (value) value->release();
+   if (property) {
+      property->release();
+   }
+   if (value) {
+      value->release();
+   }
 }
 
 /*!
@@ -1273,7 +1325,7 @@ Text {
     Construct an invalid QDeclarativeDomValue.
 */
 QDeclarativeDomValue::QDeclarativeDomValue()
-: d(new QDeclarativeDomValuePrivate)
+   : d(new QDeclarativeDomValuePrivate)
 {
 }
 
@@ -1281,7 +1333,7 @@ QDeclarativeDomValue::QDeclarativeDomValue()
     Create a copy of \a other QDeclarativeDomValue.
 */
 QDeclarativeDomValue::QDeclarativeDomValue(const QDeclarativeDomValue &other)
-: d(other.d)
+   : d(other.d)
 {
 }
 
@@ -1297,8 +1349,8 @@ QDeclarativeDomValue::~QDeclarativeDomValue()
 */
 QDeclarativeDomValue &QDeclarativeDomValue::operator=(const QDeclarativeDomValue &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -1320,36 +1372,38 @@ QDeclarativeDomValue &QDeclarativeDomValue::operator=(const QDeclarativeDomValue
 */
 QDeclarativeDomValue::Type QDeclarativeDomValue::type() const
 {
-    if (d->property)
-        if (QDeclarativeMetaType::isList(d->property->type) ||
-           (d->property && (d->property->values.count() + d->property->onValues.count()) > 1))
-            return List;
+   if (d->property)
+      if (QDeclarativeMetaType::isList(d->property->type) ||
+            (d->property && (d->property->values.count() + d->property->onValues.count()) > 1)) {
+         return List;
+      }
 
-    QDeclarativeParser::Value *value = d->value;
-    if (!value && !d->property)
-        return Invalid;
+   QDeclarativeParser::Value *value = d->value;
+   if (!value && !d->property) {
+      return Invalid;
+   }
 
-    switch(value->type) {
-    case QDeclarativeParser::Value::Unknown:
-        return Invalid;
-    case QDeclarativeParser::Value::Literal:
-        return Literal;
-    case QDeclarativeParser::Value::PropertyBinding:
-        return PropertyBinding;
-    case QDeclarativeParser::Value::ValueSource:
-        return ValueSource;
-    case QDeclarativeParser::Value::ValueInterceptor:
-        return ValueInterceptor;
-    case QDeclarativeParser::Value::CreatedObject:
-        return Object;
-    case QDeclarativeParser::Value::SignalObject:
-        return Invalid;
-    case QDeclarativeParser::Value::SignalExpression:
-        return Literal;
-    case QDeclarativeParser::Value::Id:
-        return Literal;
-    }
-    return Invalid;
+   switch (value->type) {
+      case QDeclarativeParser::Value::Unknown:
+         return Invalid;
+      case QDeclarativeParser::Value::Literal:
+         return Literal;
+      case QDeclarativeParser::Value::PropertyBinding:
+         return PropertyBinding;
+      case QDeclarativeParser::Value::ValueSource:
+         return ValueSource;
+      case QDeclarativeParser::Value::ValueInterceptor:
+         return ValueInterceptor;
+      case QDeclarativeParser::Value::CreatedObject:
+         return Object;
+      case QDeclarativeParser::Value::SignalObject:
+         return Invalid;
+      case QDeclarativeParser::Value::SignalExpression:
+         return Literal;
+      case QDeclarativeParser::Value::Id:
+         return Literal;
+   }
+   return Invalid;
 }
 
 /*!
@@ -1357,7 +1411,7 @@ QDeclarativeDomValue::Type QDeclarativeDomValue::type() const
 */
 bool QDeclarativeDomValue::isInvalid() const
 {
-    return type() == Invalid;
+   return type() == Invalid;
 }
 
 /*!
@@ -1365,7 +1419,7 @@ bool QDeclarativeDomValue::isInvalid() const
 */
 bool QDeclarativeDomValue::isLiteral() const
 {
-    return type() == Literal;
+   return type() == Literal;
 }
 
 /*!
@@ -1373,7 +1427,7 @@ bool QDeclarativeDomValue::isLiteral() const
 */
 bool QDeclarativeDomValue::isBinding() const
 {
-    return type() == PropertyBinding;
+   return type() == PropertyBinding;
 }
 
 /*!
@@ -1381,7 +1435,7 @@ bool QDeclarativeDomValue::isBinding() const
 */
 bool QDeclarativeDomValue::isValueSource() const
 {
-    return type() == ValueSource;
+   return type() == ValueSource;
 }
 
 /*!
@@ -1389,7 +1443,7 @@ bool QDeclarativeDomValue::isValueSource() const
 */
 bool QDeclarativeDomValue::isValueInterceptor() const
 {
-    return type() == ValueInterceptor;
+   return type() == ValueInterceptor;
 }
 
 /*!
@@ -1397,7 +1451,7 @@ bool QDeclarativeDomValue::isValueInterceptor() const
 */
 bool QDeclarativeDomValue::isObject() const
 {
-    return type() == Object;
+   return type() == Object;
 }
 
 /*!
@@ -1405,7 +1459,7 @@ bool QDeclarativeDomValue::isObject() const
 */
 bool QDeclarativeDomValue::isList() const
 {
-    return type() == List;
+   return type() == List;
 }
 
 /*!
@@ -1416,12 +1470,12 @@ bool QDeclarativeDomValue::isList() const
 */
 QDeclarativeDomValueLiteral QDeclarativeDomValue::toLiteral() const
 {
-    QDeclarativeDomValueLiteral rv;
-    if (type() == Literal) {
-        rv.d->value = d->value;
-        rv.d->value->addref();
-    }
-    return rv;
+   QDeclarativeDomValueLiteral rv;
+   if (type() == Literal) {
+      rv.d->value = d->value;
+      rv.d->value->addref();
+   }
+   return rv;
 }
 
 /*!
@@ -1432,12 +1486,12 @@ QDeclarativeDomValueLiteral QDeclarativeDomValue::toLiteral() const
 */
 QDeclarativeDomValueBinding QDeclarativeDomValue::toBinding() const
 {
-    QDeclarativeDomValueBinding rv;
-    if (type() == PropertyBinding) {
-        rv.d->value = d->value;
-        rv.d->value->addref();
-    }
-    return rv;
+   QDeclarativeDomValueBinding rv;
+   if (type() == PropertyBinding) {
+      rv.d->value = d->value;
+      rv.d->value->addref();
+   }
+   return rv;
 }
 
 /*!
@@ -1448,12 +1502,12 @@ QDeclarativeDomValueBinding QDeclarativeDomValue::toBinding() const
 */
 QDeclarativeDomValueValueSource QDeclarativeDomValue::toValueSource() const
 {
-    QDeclarativeDomValueValueSource rv;
-    if (type() == ValueSource) {
-        rv.d->value = d->value;
-        rv.d->value->addref();
-    }
-    return rv;
+   QDeclarativeDomValueValueSource rv;
+   if (type() == ValueSource) {
+      rv.d->value = d->value;
+      rv.d->value->addref();
+   }
+   return rv;
 }
 
 /*!
@@ -1464,12 +1518,12 @@ QDeclarativeDomValueValueSource QDeclarativeDomValue::toValueSource() const
 */
 QDeclarativeDomValueValueInterceptor QDeclarativeDomValue::toValueInterceptor() const
 {
-    QDeclarativeDomValueValueInterceptor rv;
-    if (type() == ValueInterceptor) {
-        rv.d->value = d->value;
-        rv.d->value->addref();
-    }
-    return rv;
+   QDeclarativeDomValueValueInterceptor rv;
+   if (type() == ValueInterceptor) {
+      rv.d->value = d->value;
+      rv.d->value->addref();
+   }
+   return rv;
 }
 
 /*!
@@ -1480,12 +1534,12 @@ QDeclarativeDomValueValueInterceptor QDeclarativeDomValue::toValueInterceptor() 
 */
 QDeclarativeDomObject QDeclarativeDomValue::toObject() const
 {
-    QDeclarativeDomObject rv;
-    if (type() == Object) {
-        rv.d->object = d->value->object;
-        rv.d->object->addref();
-    }
-    return rv;
+   QDeclarativeDomObject rv;
+   if (type() == Object) {
+      rv.d->object = d->value->object;
+      rv.d->object->addref();
+   }
+   return rv;
 }
 
 /*!
@@ -1496,11 +1550,11 @@ QDeclarativeDomObject QDeclarativeDomValue::toObject() const
 */
 QDeclarativeDomList QDeclarativeDomValue::toList() const
 {
-    QDeclarativeDomList rv;
-    if (type() == List) {
-        rv.d = d;
-    }
-    return rv;
+   QDeclarativeDomList rv;
+   if (type() == List) {
+      rv.d = d;
+   }
+   return rv;
 }
 
 /*!
@@ -1509,10 +1563,11 @@ QDeclarativeDomList QDeclarativeDomValue::toList() const
 */
 int QDeclarativeDomValue::position() const
 {
-    if (type() == Invalid)
-        return -1;
-    else
-        return d->value->location.range.offset;
+   if (type() == Invalid) {
+      return -1;
+   } else {
+      return d->value->location.range.offset;
+   }
 }
 
 /*!
@@ -1521,10 +1576,11 @@ pto the end of it, or -1 if the value is invalid.
 */
 int QDeclarativeDomValue::length() const
 {
-    if (type() == Invalid)
-        return -1;
-    else
-        return d->value->location.range.length;
+   if (type() == Invalid) {
+      return -1;
+   } else {
+      return d->value->location.range.length;
+   }
 }
 
 /*!
@@ -1568,7 +1624,7 @@ QDeclarativeDomList::QDeclarativeDomList()
     Create a copy of \a other QDeclarativeDomList.
 */
 QDeclarativeDomList::QDeclarativeDomList(const QDeclarativeDomList &other)
-: d(other.d)
+   : d(other.d)
 {
 }
 
@@ -1584,8 +1640,8 @@ QDeclarativeDomList::~QDeclarativeDomList()
 */
 QDeclarativeDomList &QDeclarativeDomList::operator=(const QDeclarativeDomList &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -1593,25 +1649,26 @@ QDeclarativeDomList &QDeclarativeDomList::operator=(const QDeclarativeDomList &o
 */
 QList<QDeclarativeDomValue> QDeclarativeDomList::values() const
 {
-    QList<QDeclarativeDomValue> rv;
-    if (!d->property)
-        return rv;
+   QList<QDeclarativeDomValue> rv;
+   if (!d->property) {
+      return rv;
+   }
 
-    for (int ii = 0; ii < d->property->values.count(); ++ii) {
-        QDeclarativeDomValue v;
-        v.d->value = d->property->values.at(ii);
-        v.d->value->addref();
-        rv << v;
-    }
+   for (int ii = 0; ii < d->property->values.count(); ++ii) {
+      QDeclarativeDomValue v;
+      v.d->value = d->property->values.at(ii);
+      v.d->value->addref();
+      rv << v;
+   }
 
-    for (int ii = 0; ii < d->property->onValues.count(); ++ii) {
-        QDeclarativeDomValue v;
-        v.d->value = d->property->onValues.at(ii);
-        v.d->value->addref();
-        rv << v;
-    }
+   for (int ii = 0; ii < d->property->onValues.count(); ++ii) {
+      QDeclarativeDomValue v;
+      v.d->value = d->property->onValues.at(ii);
+      v.d->value->addref();
+      rv << v;
+   }
 
-    return rv;
+   return rv;
 }
 
 /*!
@@ -1620,10 +1677,11 @@ QList<QDeclarativeDomValue> QDeclarativeDomList::values() const
 */
 int QDeclarativeDomList::position() const
 {
-    if (d && d->property) {
-        return d->property->listValueRange.offset;
-    } else
-        return -1;
+   if (d && d->property) {
+      return d->property->listValueRange.offset;
+   } else {
+      return -1;
+   }
 }
 
 /*!
@@ -1632,10 +1690,11 @@ int QDeclarativeDomList::position() const
 */
 int QDeclarativeDomList::length() const
 {
-    if (d && d->property)
-        return d->property->listValueRange.length;
-    else
-        return -1;
+   if (d && d->property) {
+      return d->property->listValueRange.length;
+   } else {
+      return -1;
+   }
 }
 
 /*!
@@ -1643,10 +1702,11 @@ int QDeclarativeDomList::length() const
 */
 QList<int> QDeclarativeDomList:: commaPositions() const
 {
-    if (d && d->property)
-        return d->property->listCommaPositions;
-    else
-        return QList<int>();
+   if (d && d->property) {
+      return d->property->listCommaPositions;
+   } else {
+      return QList<int>();
+   }
 }
 
 /*!
@@ -1683,7 +1743,7 @@ QDeclarativeDomComponent::QDeclarativeDomComponent()
     Create a copy of \a other QDeclarativeDomComponent.
 */
 QDeclarativeDomComponent::QDeclarativeDomComponent(const QDeclarativeDomComponent &other)
-: QDeclarativeDomObject(other)
+   : QDeclarativeDomObject(other)
 {
 }
 
@@ -1699,8 +1759,8 @@ QDeclarativeDomComponent::~QDeclarativeDomComponent()
 */
 QDeclarativeDomComponent &QDeclarativeDomComponent::operator=(const QDeclarativeDomComponent &other)
 {
-    static_cast<QDeclarativeDomObject &>(*this) = other;
-    return *this;
+   static_cast<QDeclarativeDomObject &>(*this) = other;
+   return *this;
 }
 
 /*!
@@ -1720,25 +1780,26 @@ Item {
 */
 QDeclarativeDomObject QDeclarativeDomComponent::componentRoot() const
 {
-    QDeclarativeDomObject rv;
-    if (d->object) {
-        QDeclarativeParser::Object *obj = 0;
-        if (d->object->defaultProperty &&
-           d->object->defaultProperty->values.count() == 1 &&
-           d->object->defaultProperty->values.at(0)->object)
-            obj = d->object->defaultProperty->values.at(0)->object;
+   QDeclarativeDomObject rv;
+   if (d->object) {
+      QDeclarativeParser::Object *obj = 0;
+      if (d->object->defaultProperty &&
+            d->object->defaultProperty->values.count() == 1 &&
+            d->object->defaultProperty->values.at(0)->object) {
+         obj = d->object->defaultProperty->values.at(0)->object;
+      }
 
-        if (obj) {
-            rv.d->object = obj;
-            rv.d->object->addref();
-        }
-    }
+      if (obj) {
+         rv.d->object = obj;
+         rv.d->object->addref();
+      }
+   }
 
-    return rv;
+   return rv;
 }
 
 QDeclarativeDomImportPrivate::QDeclarativeDomImportPrivate()
-: type(File)
+   : type(File)
 {
 }
 
@@ -1756,7 +1817,7 @@ QDeclarativeDomImportPrivate::~QDeclarativeDomImportPrivate()
     Construct an empty QDeclarativeDomImport.
 */
 QDeclarativeDomImport::QDeclarativeDomImport()
-: d(new QDeclarativeDomImportPrivate)
+   : d(new QDeclarativeDomImportPrivate)
 {
 }
 
@@ -1764,7 +1825,7 @@ QDeclarativeDomImport::QDeclarativeDomImport()
     Create a copy of \a other QDeclarativeDomImport.
 */
 QDeclarativeDomImport::QDeclarativeDomImport(const QDeclarativeDomImport &other)
-: d(other.d)
+   : d(other.d)
 {
 }
 
@@ -1780,8 +1841,8 @@ QDeclarativeDomImport::~QDeclarativeDomImport()
 */
 QDeclarativeDomImport &QDeclarativeDomImport::operator=(const QDeclarativeDomImport &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -1789,12 +1850,12 @@ QDeclarativeDomImport &QDeclarativeDomImport::operator=(const QDeclarativeDomImp
   */
 QDeclarativeDomImport::Type QDeclarativeDomImport::type() const
 {
-    return static_cast<QDeclarativeDomImport::Type>(d->type);
+   return static_cast<QDeclarativeDomImport::Type>(d->type);
 }
 
 QString QDeclarativeDomImport::uri() const
 {
-    return d->uri;
+   return d->uri;
 }
 
 /*!
@@ -1802,7 +1863,7 @@ QString QDeclarativeDomImport::uri() const
   */
 QString QDeclarativeDomImport::version() const
 {
-    return d->version;
+   return d->version;
 }
 
 /*!
@@ -1810,7 +1871,7 @@ QString QDeclarativeDomImport::version() const
   */
 QString QDeclarativeDomImport::qualifier() const
 {
-    return d->qualifier;
+   return d->qualifier;
 }
 
 QT_END_NAMESPACE

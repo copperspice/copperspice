@@ -81,6 +81,7 @@ class Median
       }
       return currentMedian;
    }
+
  private:
    QVector<T> values;
    T currentMedian;

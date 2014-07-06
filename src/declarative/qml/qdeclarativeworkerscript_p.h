@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,13 +26,11 @@
 #ifndef QDECLARATIVEWORKERSCRIPT_P_H
 #define QDECLARATIVEWORKERSCRIPT_P_H
 
-#include "qdeclarative.h"
-#include "qdeclarativeparserstatus.h"
+#include <qdeclarative.h>
+#include <qdeclarativeparserstatus.h>
 #include <QtCore/qthread.h>
 #include <QtScript/qscriptvalue.h>
 #include <QtCore/qurl.h>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
@@ -43,64 +41,60 @@ class QDeclarativeWorkerScriptEngine : public QThread
 {
    CS_OBJECT(QDeclarativeWorkerScriptEngine)
 
-public:
-    QDeclarativeWorkerScriptEngine(QDeclarativeEngine *parent = 0);
-    virtual ~QDeclarativeWorkerScriptEngine();
+ public:
+   QDeclarativeWorkerScriptEngine(QDeclarativeEngine *parent = 0);
+   virtual ~QDeclarativeWorkerScriptEngine();
 
-    int registerWorkerScript(QDeclarativeWorkerScript *);
-    void removeWorkerScript(int);
-    void executeUrl(int, const QUrl &);
-    void sendMessage(int, const QVariant &);
+   int registerWorkerScript(QDeclarativeWorkerScript *);
+   void removeWorkerScript(int);
+   void executeUrl(int, const QUrl &);
+   void sendMessage(int, const QVariant &);
 
-protected:
-    virtual void run();
+ protected:
+   virtual void run();
 
-private:
-    QDeclarativeWorkerScriptEnginePrivate *d;
+ private:
+   QDeclarativeWorkerScriptEnginePrivate *d;
 };
 
 class QDeclarativeWorkerScript : public QObject, public QDeclarativeParserStatus
 {
-    CS_OBJECT(QDeclarativeWorkerScript)
-    CS_PROPERTY_READ(source, source)
-    CS_PROPERTY_WRITE(source, setSource)
-    CS_PROPERTY_NOTIFY(source, sourceChanged)
+   CS_OBJECT(QDeclarativeWorkerScript)
+   CS_PROPERTY_READ(source, source)
+   CS_PROPERTY_WRITE(source, setSource)
+   CS_PROPERTY_NOTIFY(source, sourceChanged)
 
-    CS_INTERFACES(QDeclarativeParserStatus)
-public:
-    QDeclarativeWorkerScript(QObject *parent = 0);
-    virtual ~QDeclarativeWorkerScript();
+   CS_INTERFACES(QDeclarativeParserStatus)
+ public:
+   QDeclarativeWorkerScript(QObject *parent = 0);
+   virtual ~QDeclarativeWorkerScript();
 
-    QUrl source() const;
-    void setSource(const QUrl &);
+   QUrl source() const;
+   void setSource(const QUrl &);
 
-public :
-    CS_SLOT_1(Public, void sendMessage(const QScriptValue & un_named_arg1))
-    CS_SLOT_2(sendMessage) 
+   CS_SLOT_1(Public, void sendMessage(const QScriptValue &un_named_arg1))
+   CS_SLOT_2(sendMessage)
 
-public:
-    CS_SIGNAL_1(Public, void sourceChanged())
-    CS_SIGNAL_2(sourceChanged) 
-    CS_SIGNAL_1(Public, void message(const QScriptValue & messageObject))
-    CS_SIGNAL_2(message,messageObject) 
+   CS_SIGNAL_1(Public, void sourceChanged())
+   CS_SIGNAL_2(sourceChanged)
+   CS_SIGNAL_1(Public, void message(const QScriptValue &messageObject))
+   CS_SIGNAL_2(message, messageObject)
 
-protected:
-    virtual void classBegin();
-    virtual void componentComplete();
-    virtual bool event(QEvent *);
+ protected:
+   virtual void classBegin();
+   virtual void componentComplete();
+   virtual bool event(QEvent *);
 
-private:
-    QDeclarativeWorkerScriptEngine *engine();
-    QDeclarativeWorkerScriptEngine *m_engine;
-    int m_scriptId;
-    QUrl m_source;
-    bool m_componentComplete;
+ private:
+   QDeclarativeWorkerScriptEngine *engine();
+   QDeclarativeWorkerScriptEngine *m_engine;
+   int m_scriptId;
+   QUrl m_source;
+   bool m_componentComplete;
 };
 
 QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QDeclarativeWorkerScript)
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEWORKERSCRIPT_P_H

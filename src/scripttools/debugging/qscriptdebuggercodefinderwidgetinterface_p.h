@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,32 +45,32 @@ QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerCodeFinderWidgetInterfacePrivate;
 class QScriptDebuggerCodeFinderWidgetInterface:
-    public QWidget
+   public QWidget
 {
-    CS_OBJECT(QScriptDebuggerCodeFinderWidgetInterface)
-public:
-    ~QScriptDebuggerCodeFinderWidgetInterface();
+   CS_OBJECT(QScriptDebuggerCodeFinderWidgetInterface)
+ public:
+   ~QScriptDebuggerCodeFinderWidgetInterface();
 
-    virtual int findOptions() const = 0;
+   virtual int findOptions() const = 0;
 
-    virtual QString text() const = 0;
-    virtual void setText(const QString &text) = 0;
+   virtual QString text() const = 0;
+   virtual void setText(const QString &text) = 0;
 
-    virtual void setOK(bool ok) = 0;
-    virtual void setWrapped(bool wrapped) = 0;
+   virtual void setOK(bool ok) = 0;
+   virtual void setWrapped(bool wrapped) = 0;
 
-public:
-    CS_SIGNAL_1(Public, void findRequest(const QString & exp,int options))
-    CS_SIGNAL_2(findRequest,exp,options) 
+ public:
+   CS_SIGNAL_1(Public, void findRequest(const QString &exp, int options))
+   CS_SIGNAL_2(findRequest, exp, options)
 
-protected:
-    QScriptDebuggerCodeFinderWidgetInterface(
-        QScriptDebuggerCodeFinderWidgetInterfacePrivate &dd,
-        QWidget *parent, Qt::WindowFlags flags);
+ protected:
+   QScriptDebuggerCodeFinderWidgetInterface(
+      QScriptDebuggerCodeFinderWidgetInterfacePrivate &dd,
+      QWidget *parent, Qt::WindowFlags flags);
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerCodeFinderWidgetInterface)
-    Q_DISABLE_COPY(QScriptDebuggerCodeFinderWidgetInterface)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerCodeFinderWidgetInterface)
+   Q_DISABLE_COPY(QScriptDebuggerCodeFinderWidgetInterface)
 };
 
 QT_END_NAMESPACE

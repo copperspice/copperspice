@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qaccessiblewidgets.h"
-#include "qabstracttextdocumentlayout.h"
-#include "qapplication.h"
-#include "qclipboard.h"
-#include "qtextedit.h"
-#include "private/qtextedit_p.h"
-#include "qtextdocument.h"
-#include "qtextobject.h"
-#include "qplaintextedit.h"
-#include "qscrollbar.h"
-#include "qdebug.h"
+#include <qaccessiblewidgets.h>
+#include <qabstracttextdocumentlayout.h>
+#include <qapplication.h>
+#include <qclipboard.h>
+#include <qtextedit.h>
+#include <qtextedit_p.h>
+#include <qtextdocument.h>
+#include <qtextobject.h>
+#include <qplaintextedit.h>
+#include <qscrollbar.h>
+#include <qdebug.h>
 #include <QApplication>
 #include <QStackedWidget>
 #include <QToolBox>
@@ -49,7 +49,7 @@
 #include <QDockWidget>
 #include <QMainWindow>
 #include <QAbstractButton>
-#include <private/qdockwidget_p.h>
+#include <qdockwidget_p.h>
 #include <QtGui/QFocusFrame>
 
 #ifndef QT_NO_ACCESSIBILITY

@@ -1,7 +1,7 @@
-#ifndef QT_QTSCRIPTTOOLS_MODULE_H
-#define QT_QTSCRIPTTOOLS_MODULE_H
+#ifndef QTSCRIPTTOOLS_H
+#define QTSCRIPTTOOLS_H
 #include <QtCore/QtCore>
 #include <QtGui/QtGui>
 #include <QtScript/QtScript>
-#include "qscriptenginedebugger.h"
+#include <qscriptenginedebugger.h>
 #endif

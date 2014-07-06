@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -62,9 +62,9 @@ QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerCommandExecutorPrivate
 {
-public:
-    QScriptDebuggerCommandExecutorPrivate();
-    ~QScriptDebuggerCommandExecutorPrivate();
+ public:
+   QScriptDebuggerCommandExecutorPrivate();
+   ~QScriptDebuggerCommandExecutorPrivate();
 };
 
 QScriptDebuggerCommandExecutorPrivate::QScriptDebuggerCommandExecutorPrivate()
@@ -76,7 +76,7 @@ QScriptDebuggerCommandExecutorPrivate::~QScriptDebuggerCommandExecutorPrivate()
 }
 
 QScriptDebuggerCommandExecutor::QScriptDebuggerCommandExecutor()
-    : d_ptr(new QScriptDebuggerCommandExecutorPrivate())
+   : d_ptr(new QScriptDebuggerCommandExecutorPrivate())
 {
 }
 
@@ -86,276 +86,312 @@ QScriptDebuggerCommandExecutor::~QScriptDebuggerCommandExecutor()
 
 static bool isPrefixOf(const QString &prefix, const QString &what)
 {
-    return ((what.length() > prefix.length())
-            && what.startsWith(prefix));
+   return ((what.length() > prefix.length())
+           && what.startsWith(prefix));
 }
 
 /*!
   Applies the given \a command to the given \a backend.
 */
 QScriptDebuggerResponse QScriptDebuggerCommandExecutor::execute(
-    QScriptDebuggerBackend *backend,
-    const QScriptDebuggerCommand &command)
+   QScriptDebuggerBackend *backend,
+   const QScriptDebuggerCommand &command)
 {
-    QScriptDebuggerResponse response;
-    switch (command.type()) {
-    case QScriptDebuggerCommand::None:
-        break;
+   QScriptDebuggerResponse response;
+   switch (command.type()) {
+      case QScriptDebuggerCommand::None:
+         break;
 
-    case QScriptDebuggerCommand::Interrupt:
-        backend->interruptEvaluation();
-        break;
+      case QScriptDebuggerCommand::Interrupt:
+         backend->interruptEvaluation();
+         break;
 
-    case QScriptDebuggerCommand::Continue:
-        if (backend->engine()->isEvaluating()) {
+      case QScriptDebuggerCommand::Continue:
+         if (backend->engine()->isEvaluating()) {
             backend->continueEvalution();
             response.setAsync(true);
-        }
-        break;
+         }
+         break;
 
-    case QScriptDebuggerCommand::StepInto: {
-        QVariant attr = command.attribute(QScriptDebuggerCommand::StepCount);
-        int count = attr.isValid() ? attr.toInt() : 1;
-        backend->stepInto(count);
-        response.setAsync(true);
-    }   break;
+      case QScriptDebuggerCommand::StepInto: {
+         QVariant attr = command.attribute(QScriptDebuggerCommand::StepCount);
+         int count = attr.isValid() ? attr.toInt() : 1;
+         backend->stepInto(count);
+         response.setAsync(true);
+      }
+      break;
 
-    case QScriptDebuggerCommand::StepOver: {
-        QVariant attr = command.attribute(QScriptDebuggerCommand::StepCount);
-        int count = attr.isValid() ? attr.toInt() : 1;
-        backend->stepOver(count);
-        response.setAsync(true);
-    }   break;
+      case QScriptDebuggerCommand::StepOver: {
+         QVariant attr = command.attribute(QScriptDebuggerCommand::StepCount);
+         int count = attr.isValid() ? attr.toInt() : 1;
+         backend->stepOver(count);
+         response.setAsync(true);
+      }
+      break;
 
-    case QScriptDebuggerCommand::StepOut:
-        backend->stepOut();
-        response.setAsync(true);
-        break;
+      case QScriptDebuggerCommand::StepOut:
+         backend->stepOut();
+         response.setAsync(true);
+         break;
 
-    case QScriptDebuggerCommand::RunToLocation:
-        backend->runToLocation(command.fileName(), command.lineNumber());
-        response.setAsync(true);
-        break;
+      case QScriptDebuggerCommand::RunToLocation:
+         backend->runToLocation(command.fileName(), command.lineNumber());
+         response.setAsync(true);
+         break;
 
-    case QScriptDebuggerCommand::RunToLocationByID:
-        backend->runToLocation(command.scriptId(), command.lineNumber());
-        response.setAsync(true);
-        break;
+      case QScriptDebuggerCommand::RunToLocationByID:
+         backend->runToLocation(command.scriptId(), command.lineNumber());
+         response.setAsync(true);
+         break;
 
-    case QScriptDebuggerCommand::ForceReturn: {
-        int contextIndex = command.contextIndex();
-        QScriptDebuggerValue value = command.scriptValue();
-        QScriptEngine *engine = backend->engine();
-        QScriptValue realValue = value.toScriptValue(engine);
-        backend->returnToCaller(contextIndex, realValue);
-        response.setAsync(true);
-    }   break;
+      case QScriptDebuggerCommand::ForceReturn: {
+         int contextIndex = command.contextIndex();
+         QScriptDebuggerValue value = command.scriptValue();
+         QScriptEngine *engine = backend->engine();
+         QScriptValue realValue = value.toScriptValue(engine);
+         backend->returnToCaller(contextIndex, realValue);
+         response.setAsync(true);
+      }
+      break;
 
-    case QScriptDebuggerCommand::Resume:
-        backend->resume();
-        response.setAsync(true);
-        break;
+      case QScriptDebuggerCommand::Resume:
+         backend->resume();
+         response.setAsync(true);
+         break;
 
-    case QScriptDebuggerCommand::SetBreakpoint: {
-        QScriptBreakpointData data = command.breakpointData();
-        if (!data.isValid())
+      case QScriptDebuggerCommand::SetBreakpoint: {
+         QScriptBreakpointData data = command.breakpointData();
+         if (!data.isValid()) {
             data = QScriptBreakpointData(command.fileName(), command.lineNumber());
-        int id = backend->setBreakpoint(data);
-        response.setResult(id);
-    }   break;
+         }
+         int id = backend->setBreakpoint(data);
+         response.setResult(id);
+      }
+      break;
 
-    case QScriptDebuggerCommand::DeleteBreakpoint: {
-        int id = command.breakpointId();
-        if (!backend->deleteBreakpoint(id))
+      case QScriptDebuggerCommand::DeleteBreakpoint: {
+         int id = command.breakpointId();
+         if (!backend->deleteBreakpoint(id)) {
             response.setError(QScriptDebuggerResponse::InvalidBreakpointID);
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::DeleteAllBreakpoints:
-        backend->deleteAllBreakpoints();
-        break;
+      case QScriptDebuggerCommand::DeleteAllBreakpoints:
+         backend->deleteAllBreakpoints();
+         break;
 
-    case QScriptDebuggerCommand::GetBreakpoints: {
-        QScriptBreakpointMap bps = backend->breakpoints();
-        if (!bps.isEmpty())
+      case QScriptDebuggerCommand::GetBreakpoints: {
+         QScriptBreakpointMap bps = backend->breakpoints();
+         if (!bps.isEmpty()) {
             response.setResult(bps);
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::GetBreakpointData: {
-        int id = command.breakpointId();
-        QScriptBreakpointData data = backend->breakpointData(id);
-        if (data.isValid())
+      case QScriptDebuggerCommand::GetBreakpointData: {
+         int id = command.breakpointId();
+         QScriptBreakpointData data = backend->breakpointData(id);
+         if (data.isValid()) {
             response.setResult(data);
-        else
+         } else {
             response.setError(QScriptDebuggerResponse::InvalidBreakpointID);
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::SetBreakpointData: {
-        int id = command.breakpointId();
-        QScriptBreakpointData data = command.breakpointData();
-        if (!backend->setBreakpointData(id, data))
+      case QScriptDebuggerCommand::SetBreakpointData: {
+         int id = command.breakpointId();
+         QScriptBreakpointData data = command.breakpointData();
+         if (!backend->setBreakpointData(id, data)) {
             response.setError(QScriptDebuggerResponse::InvalidBreakpointID);
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::GetScripts: {
-        QScriptScriptMap scripts = backend->scripts();
-        if (!scripts.isEmpty())
+      case QScriptDebuggerCommand::GetScripts: {
+         QScriptScriptMap scripts = backend->scripts();
+         if (!scripts.isEmpty()) {
             response.setResult(scripts);
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::GetScriptData: {
-        qint64 id = command.scriptId();
-        QScriptScriptData data = backend->scriptData(id);
-        if (data.isValid())
+      case QScriptDebuggerCommand::GetScriptData: {
+         qint64 id = command.scriptId();
+         QScriptScriptData data = backend->scriptData(id);
+         if (data.isValid()) {
             response.setResult(data);
-        else
+         } else {
             response.setError(QScriptDebuggerResponse::InvalidScriptID);
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::ScriptsCheckpoint:
-        backend->scriptsCheckpoint();
-        response.setResult(QVariant::fromValue(backend->scriptsDelta()));
-        break;
+      case QScriptDebuggerCommand::ScriptsCheckpoint:
+         backend->scriptsCheckpoint();
+         response.setResult(QVariant::fromValue(backend->scriptsDelta()));
+         break;
 
-    case QScriptDebuggerCommand::GetScriptsDelta:
-        response.setResult(QVariant::fromValue(backend->scriptsDelta()));
-        break;
+      case QScriptDebuggerCommand::GetScriptsDelta:
+         response.setResult(QVariant::fromValue(backend->scriptsDelta()));
+         break;
 
-    case QScriptDebuggerCommand::ResolveScript:
-        response.setResult(backend->resolveScript(command.fileName()));
-        break;
+      case QScriptDebuggerCommand::ResolveScript:
+         response.setResult(backend->resolveScript(command.fileName()));
+         break;
 
-    case QScriptDebuggerCommand::GetBacktrace:
-        response.setResult(backend->backtrace());
-        break;
+      case QScriptDebuggerCommand::GetBacktrace:
+         response.setResult(backend->backtrace());
+         break;
 
-    case QScriptDebuggerCommand::GetContextCount:
-        response.setResult(backend->contextCount());
-        break;
+      case QScriptDebuggerCommand::GetContextCount:
+         response.setResult(backend->contextCount());
+         break;
 
-    case QScriptDebuggerCommand::GetContextState: {
-        QScriptContext *ctx = backend->context(command.contextIndex());
-        if (ctx)
+      case QScriptDebuggerCommand::GetContextState: {
+         QScriptContext *ctx = backend->context(command.contextIndex());
+         if (ctx) {
             response.setResult(static_cast<int>(ctx->state()));
-        else
+         } else {
             response.setError(QScriptDebuggerResponse::InvalidContextIndex);
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::GetContextID: {
-        int idx = command.contextIndex();
-        if ((idx >= 0) && (idx < backend->contextCount()))
+      case QScriptDebuggerCommand::GetContextID: {
+         int idx = command.contextIndex();
+         if ((idx >= 0) && (idx < backend->contextCount())) {
             response.setResult(backend->contextIds()[idx]);
-        else
+         } else {
             response.setError(QScriptDebuggerResponse::InvalidContextIndex);
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::GetContextInfo: {
-        QScriptContext *ctx = backend->context(command.contextIndex());
-        if (ctx)
+      case QScriptDebuggerCommand::GetContextInfo: {
+         QScriptContext *ctx = backend->context(command.contextIndex());
+         if (ctx) {
             response.setResult(QScriptContextInfo(ctx));
-        else
+         } else {
             response.setError(QScriptDebuggerResponse::InvalidContextIndex);
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::GetThisObject: {
-        QScriptContext *ctx = backend->context(command.contextIndex());
-        if (ctx)
+      case QScriptDebuggerCommand::GetThisObject: {
+         QScriptContext *ctx = backend->context(command.contextIndex());
+         if (ctx) {
             response.setResult(ctx->thisObject());
-        else
+         } else {
             response.setError(QScriptDebuggerResponse::InvalidContextIndex);
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::GetActivationObject: {
-        QScriptContext *ctx = backend->context(command.contextIndex());
-        if (ctx)
+      case QScriptDebuggerCommand::GetActivationObject: {
+         QScriptContext *ctx = backend->context(command.contextIndex());
+         if (ctx) {
             response.setResult(ctx->activationObject());
-        else
+         } else {
             response.setError(QScriptDebuggerResponse::InvalidContextIndex);
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::GetScopeChain: {
-        QScriptContext *ctx = backend->context(command.contextIndex());
-        if (ctx) {
+      case QScriptDebuggerCommand::GetScopeChain: {
+         QScriptContext *ctx = backend->context(command.contextIndex());
+         if (ctx) {
             QScriptDebuggerValueList dest;
             QScriptValueList src = ctx->scopeChain();
-            for (int i = 0; i < src.size(); ++i)
-                dest.append(src.at(i));
+            for (int i = 0; i < src.size(); ++i) {
+               dest.append(src.at(i));
+            }
             response.setResult(dest);
-        } else {
+         } else {
             response.setError(QScriptDebuggerResponse::InvalidContextIndex);
-        }
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::ContextsCheckpoint: {
-        response.setResult(QVariant::fromValue(backend->contextsCheckpoint()));
-    }   break;
+      case QScriptDebuggerCommand::ContextsCheckpoint: {
+         response.setResult(QVariant::fromValue(backend->contextsCheckpoint()));
+      }
+      break;
 
-    case QScriptDebuggerCommand::GetPropertyExpressionValue: {
-        QScriptContext *ctx = backend->context(command.contextIndex());
-        int lineNumber = command.lineNumber();
-        QVariant attr = command.attribute(QScriptDebuggerCommand::UserAttribute);
-        QStringList path = attr.toStringList();
-        if (!ctx || path.isEmpty())
+      case QScriptDebuggerCommand::GetPropertyExpressionValue: {
+         QScriptContext *ctx = backend->context(command.contextIndex());
+         int lineNumber = command.lineNumber();
+         QVariant attr = command.attribute(QScriptDebuggerCommand::UserAttribute);
+         QStringList path = attr.toStringList();
+         if (!ctx || path.isEmpty()) {
             break;
-        QScriptContextInfo ctxInfo(ctx);
-        if (ctx->callee().isValid()
-            && ((lineNumber < ctxInfo.functionStartLineNumber())
-                || (lineNumber > ctxInfo.functionEndLineNumber()))) {
+         }
+         QScriptContextInfo ctxInfo(ctx);
+         if (ctx->callee().isValid()
+               && ((lineNumber < ctxInfo.functionStartLineNumber())
+                   || (lineNumber > ctxInfo.functionEndLineNumber()))) {
             break;
-        }
-        QScriptValueList objects;
-        int pathIndex = 0;
-        if (path.at(0) == QLatin1String("this")) {
+         }
+         QScriptValueList objects;
+         int pathIndex = 0;
+         if (path.at(0) == QLatin1String("this")) {
             objects.append(ctx->thisObject());
             ++pathIndex;
-        } else {
+         } else {
             objects << ctx->scopeChain();
-        }
-        for (int i = 0; i < objects.size(); ++i) {
+         }
+         for (int i = 0; i < objects.size(); ++i) {
             QScriptValue val = objects.at(i);
             for (int j = pathIndex; val.isValid() && (j < path.size()); ++j) {
-                val = val.property(path.at(j));
+               val = val.property(path.at(j));
             }
             if (val.isValid()) {
-                bool hadException = (ctx->state() == QScriptContext::ExceptionState);
-                QString str = val.toString();
-                if (!hadException && backend->engine()->hasUncaughtException())
-                    backend->engine()->clearExceptions();
-                response.setResult(str);
-                break;
+               bool hadException = (ctx->state() == QScriptContext::ExceptionState);
+               QString str = val.toString();
+               if (!hadException && backend->engine()->hasUncaughtException()) {
+                  backend->engine()->clearExceptions();
+               }
+               response.setResult(str);
+               break;
             }
-        }
-    }   break;
+         }
+      }
+      break;
 
-    case QScriptDebuggerCommand::GetCompletions: {
-        QScriptContext *ctx = backend->context(command.contextIndex());
-        QVariant attr = command.attribute(QScriptDebuggerCommand::UserAttribute);
-        QStringList path = attr.toStringList();
-        if (!ctx || path.isEmpty())
+      case QScriptDebuggerCommand::GetCompletions: {
+         QScriptContext *ctx = backend->context(command.contextIndex());
+         QVariant attr = command.attribute(QScriptDebuggerCommand::UserAttribute);
+         QStringList path = attr.toStringList();
+         if (!ctx || path.isEmpty()) {
             break;
-        QScriptValueList objects;
-        QString prefix = path.last();
-        QSet<QString> matches;
-        if (path.size() > 1) {
+         }
+         QScriptValueList objects;
+         QString prefix = path.last();
+         QSet<QString> matches;
+         if (path.size() > 1) {
             const QString &topLevelIdent = path.at(0);
             QScriptValue obj;
             if (topLevelIdent == QLatin1String("this")) {
-                obj = ctx->thisObject();
+               obj = ctx->thisObject();
             } else {
-                QScriptValueList scopeChain;
-                scopeChain = ctx->scopeChain();
-                for (int i = 0; i < scopeChain.size(); ++i) {
-                    QScriptValue oo = scopeChain.at(i).property(topLevelIdent);
-                    if (oo.isObject()) {
-                        obj = oo;
-                        break;
-                    }
-                }
+               QScriptValueList scopeChain;
+               scopeChain = ctx->scopeChain();
+               for (int i = 0; i < scopeChain.size(); ++i) {
+                  QScriptValue oo = scopeChain.at(i).property(topLevelIdent);
+                  if (oo.isObject()) {
+                     obj = oo;
+                     break;
+                  }
+               }
             }
-            for (int i = 1; obj.isObject() && (i < path.size()-1); ++i)
-                obj = obj.property(path.at(i));
-            if (obj.isValid())
-                objects.append(obj);
-        } else {
+            for (int i = 1; obj.isObject() && (i < path.size() - 1); ++i) {
+               obj = obj.property(path.at(i));
+            }
+            if (obj.isValid()) {
+               objects.append(obj);
+            }
+         } else {
             objects << ctx->scopeChain();
             QStringList keywords;
             keywords.append(QString::fromLatin1("this"));
@@ -363,93 +399,102 @@ QScriptDebuggerResponse QScriptDebuggerCommandExecutor::execute(
             keywords.append(QString::fromLatin1("false"));
             keywords.append(QString::fromLatin1("null"));
             for (int i = 0; i < keywords.size(); ++i) {
-                const QString &kwd = keywords.at(i);
-                if (isPrefixOf(prefix, kwd))
-                    matches.insert(kwd);
+               const QString &kwd = keywords.at(i);
+               if (isPrefixOf(prefix, kwd)) {
+                  matches.insert(kwd);
+               }
             }
-        }
+         }
 
-        for (int i = 0; i < objects.size(); ++i) {
+         for (int i = 0; i < objects.size(); ++i) {
             QScriptValue obj = objects.at(i);
             while (obj.isObject()) {
-                QScriptValueIterator it(obj);
-                while (it.hasNext()) {
-                    it.next();
-                    QString propertyName = it.name();
-                    if (isPrefixOf(prefix, propertyName))
-                        matches.insert(propertyName);
-                }
-                obj = obj.prototype();
+               QScriptValueIterator it(obj);
+               while (it.hasNext()) {
+                  it.next();
+                  QString propertyName = it.name();
+                  if (isPrefixOf(prefix, propertyName)) {
+                     matches.insert(propertyName);
+                  }
+               }
+               obj = obj.prototype();
             }
-        }
-        QStringList matchesList = matches.toList();
-        qStableSort(matchesList);
-        response.setResult(matchesList);
-    }   break;
+         }
+         QStringList matchesList = matches.toList();
+         qStableSort(matchesList);
+         response.setResult(matchesList);
+      }
+      break;
 
-    case QScriptDebuggerCommand::NewScriptObjectSnapshot: {
-        int id = backend->newScriptObjectSnapshot();
-        response.setResult(id);
-    }   break;
+      case QScriptDebuggerCommand::NewScriptObjectSnapshot: {
+         int id = backend->newScriptObjectSnapshot();
+         response.setResult(id);
+      }
+      break;
 
-    case QScriptDebuggerCommand::ScriptObjectSnapshotCapture: {
-        int id = command.snapshotId();
-        QScriptObjectSnapshot *snap = backend->scriptObjectSnapshot(id);
-        Q_ASSERT(snap != 0);
-        QScriptDebuggerValue object = command.scriptValue();
-        Q_ASSERT(object.type() == QScriptDebuggerValue::ObjectValue);
-        QScriptEngine *engine = backend->engine();
-        QScriptValue realObject = object.toScriptValue(engine);
-        Q_ASSERT(realObject.isObject());
-        QScriptObjectSnapshot::Delta delta = snap->capture(realObject);
-        QScriptDebuggerObjectSnapshotDelta result;
-        result.removedProperties = delta.removedProperties;
-        bool didIgnoreExceptions = backend->ignoreExceptions();
-        backend->setIgnoreExceptions(true);
-        for (int i = 0; i < delta.changedProperties.size(); ++i) {
+      case QScriptDebuggerCommand::ScriptObjectSnapshotCapture: {
+         int id = command.snapshotId();
+         QScriptObjectSnapshot *snap = backend->scriptObjectSnapshot(id);
+         Q_ASSERT(snap != 0);
+         QScriptDebuggerValue object = command.scriptValue();
+         Q_ASSERT(object.type() == QScriptDebuggerValue::ObjectValue);
+         QScriptEngine *engine = backend->engine();
+         QScriptValue realObject = object.toScriptValue(engine);
+         Q_ASSERT(realObject.isObject());
+         QScriptObjectSnapshot::Delta delta = snap->capture(realObject);
+         QScriptDebuggerObjectSnapshotDelta result;
+         result.removedProperties = delta.removedProperties;
+         bool didIgnoreExceptions = backend->ignoreExceptions();
+         backend->setIgnoreExceptions(true);
+         for (int i = 0; i < delta.changedProperties.size(); ++i) {
             const QScriptValueProperty &src = delta.changedProperties.at(i);
             bool hadException = engine->hasUncaughtException();
             QString str = src.value().toString();
-            if (!hadException && engine->hasUncaughtException())
-                engine->clearExceptions();
+            if (!hadException && engine->hasUncaughtException()) {
+               engine->clearExceptions();
+            }
             QScriptDebuggerValueProperty dest(src.name(), src.value(), str, src.flags());
             result.changedProperties.append(dest);
-        }
-        for (int j = 0; j < delta.addedProperties.size(); ++j) {
+         }
+         for (int j = 0; j < delta.addedProperties.size(); ++j) {
             const QScriptValueProperty &src = delta.addedProperties.at(j);
             bool hadException = engine->hasUncaughtException();
             QString str = src.value().toString();
-            if (!hadException && engine->hasUncaughtException())
-                engine->clearExceptions();
+            if (!hadException && engine->hasUncaughtException()) {
+               engine->clearExceptions();
+            }
             QScriptDebuggerValueProperty dest(src.name(), src.value(), str, src.flags());
             result.addedProperties.append(dest);
-        }
-        backend->setIgnoreExceptions(didIgnoreExceptions);
-        response.setResult(QVariant::fromValue(result));
-    }   break;
+         }
+         backend->setIgnoreExceptions(didIgnoreExceptions);
+         response.setResult(QVariant::fromValue(result));
+      }
+      break;
 
-    case QScriptDebuggerCommand::DeleteScriptObjectSnapshot: {
-        int id = command.snapshotId();
-        backend->deleteScriptObjectSnapshot(id);
-    }   break;
+      case QScriptDebuggerCommand::DeleteScriptObjectSnapshot: {
+         int id = command.snapshotId();
+         backend->deleteScriptObjectSnapshot(id);
+      }
+      break;
 
-    case QScriptDebuggerCommand::NewScriptValueIterator: {
-        QScriptDebuggerValue object = command.scriptValue();
-        Q_ASSERT(object.type() == QScriptDebuggerValue::ObjectValue);
-        QScriptEngine *engine = backend->engine();
-        QScriptValue realObject = object.toScriptValue(engine);
-        Q_ASSERT(realObject.isObject());
-        int id = backend->newScriptValueIterator(realObject);
-        response.setResult(id);
-    }   break;
+      case QScriptDebuggerCommand::NewScriptValueIterator: {
+         QScriptDebuggerValue object = command.scriptValue();
+         Q_ASSERT(object.type() == QScriptDebuggerValue::ObjectValue);
+         QScriptEngine *engine = backend->engine();
+         QScriptValue realObject = object.toScriptValue(engine);
+         Q_ASSERT(realObject.isObject());
+         int id = backend->newScriptValueIterator(realObject);
+         response.setResult(id);
+      }
+      break;
 
-    case QScriptDebuggerCommand::GetPropertiesByIterator: {
-        int id = command.iteratorId();
-        int count = 1000;
-        QScriptValueIterator *it = backend->scriptValueIterator(id);
-        Q_ASSERT(it != 0);
-        QScriptDebuggerValuePropertyList props;
-        for (int i = 0; (i < count) && it->hasNext(); ++i) {
+      case QScriptDebuggerCommand::GetPropertiesByIterator: {
+         int id = command.iteratorId();
+         int count = 1000;
+         QScriptValueIterator *it = backend->scriptValueIterator(id);
+         Q_ASSERT(it != 0);
+         QScriptDebuggerValuePropertyList props;
+         for (int i = 0; (i < count) && it->hasNext(); ++i) {
             it->next();
             QString name = it->name();
             QScriptValue value = it->value();
@@ -457,50 +502,55 @@ QScriptDebuggerResponse QScriptDebuggerCommandExecutor::execute(
             QScriptValue::PropertyFlags flags = it->flags();
             QScriptDebuggerValueProperty prp(name, value, valueAsString, flags);
             props.append(prp);
-        }
-        response.setResult(props);
-    }   break;
+         }
+         response.setResult(props);
+      }
+      break;
 
-    case QScriptDebuggerCommand::DeleteScriptValueIterator: {
-        int id = command.iteratorId();
-        backend->deleteScriptValueIterator(id);
-    }   break;
+      case QScriptDebuggerCommand::DeleteScriptValueIterator: {
+         int id = command.iteratorId();
+         backend->deleteScriptValueIterator(id);
+      }
+      break;
 
-    case QScriptDebuggerCommand::Evaluate: {
-        int contextIndex = command.contextIndex();
-        QString program = command.program();
-        QString fileName = command.fileName();
-        int lineNumber = command.lineNumber();
-        backend->evaluate(contextIndex, program, fileName, lineNumber);
-        response.setAsync(true);
-    }   break;
+      case QScriptDebuggerCommand::Evaluate: {
+         int contextIndex = command.contextIndex();
+         QString program = command.program();
+         QString fileName = command.fileName();
+         int lineNumber = command.lineNumber();
+         backend->evaluate(contextIndex, program, fileName, lineNumber);
+         response.setAsync(true);
+      }
+      break;
 
-    case QScriptDebuggerCommand::ScriptValueToString: {
-        QScriptDebuggerValue value = command.scriptValue();
-        QScriptEngine *engine = backend->engine();
-        QScriptValue realValue = value.toScriptValue(engine);
-        response.setResult(realValue.toString());
-    }   break;
+      case QScriptDebuggerCommand::ScriptValueToString: {
+         QScriptDebuggerValue value = command.scriptValue();
+         QScriptEngine *engine = backend->engine();
+         QScriptValue realValue = value.toScriptValue(engine);
+         response.setResult(realValue.toString());
+      }
+      break;
 
-    case QScriptDebuggerCommand::SetScriptValueProperty: {
-        QScriptDebuggerValue object = command.scriptValue();
-        QScriptEngine *engine = backend->engine();
-        QScriptValue realObject = object.toScriptValue(engine);
-        QScriptDebuggerValue value = command.subordinateScriptValue();
-        QScriptValue realValue = value.toScriptValue(engine);
-        QString name = command.name();
-        realObject.setProperty(name, realValue);
-    }   break;
+      case QScriptDebuggerCommand::SetScriptValueProperty: {
+         QScriptDebuggerValue object = command.scriptValue();
+         QScriptEngine *engine = backend->engine();
+         QScriptValue realObject = object.toScriptValue(engine);
+         QScriptDebuggerValue value = command.subordinateScriptValue();
+         QScriptValue realValue = value.toScriptValue(engine);
+         QString name = command.name();
+         realObject.setProperty(name, realValue);
+      }
+      break;
 
-    case QScriptDebuggerCommand::ClearExceptions:
-        backend->engine()->clearExceptions();
-        break;
+      case QScriptDebuggerCommand::ClearExceptions:
+         backend->engine()->clearExceptions();
+         break;
 
-    case QScriptDebuggerCommand::UserCommand:
-    case QScriptDebuggerCommand::MaxUserCommand:
-        break;
-    }
-    return response;
+      case QScriptDebuggerCommand::UserCommand:
+      case QScriptDebuggerCommand::MaxUserCommand:
+         break;
+   }
+   return response;
 }
 
 QT_END_NAMESPACE

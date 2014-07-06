@@ -116,10 +116,10 @@ class Q_CORE_EXPORT QMetaMethod
 
    QList<QByteArray> parameterNames() const;
    QList<QByteArray> parameterTypes() const;
-   
+
    int parameterCount() const;
    int parameterType(int index) const;
-  
+
    QByteArray methodSignature() const;
    const char *typeName() const;
 

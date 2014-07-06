@@ -26,14 +26,14 @@
 #ifndef QDIRECFBWINDOWSURFACE_H
 #define QDIRECFBWINDOWSURFACE_H
 
-#include "qdirectfbpaintengine.h"
-#include "qdirectfbpaintdevice.h"
-#include "qdirectfbscreen.h"
+#include <qdirectfbpaintengine.h>
+#include <qdirectfbpaintdevice.h>
+#include <qdirectfbscreen.h>
 
 #ifndef QT_NO_QWS_DIRECTFB
 
-#include <private/qpaintengine_raster_p.h>
-#include <private/qwindowsurface_qws_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qwindowsurface_qws_p.h>
 
 #ifdef QT_DIRECTFB_TIMING
 #include <qdatetime.h>

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,83 +42,83 @@ class QToolBar;
 class QScriptEngineDebuggerPrivate;
 class Q_SCRIPTTOOLS_EXPORT QScriptEngineDebugger : public QObject
 {
-    CS_OBJECT(QScriptEngineDebugger)
-public:
-    enum DebuggerWidget {
-        ConsoleWidget,
-        StackWidget,
-        ScriptsWidget,
-        LocalsWidget,
-        CodeWidget,
-        CodeFinderWidget,
-        BreakpointsWidget,
-        DebugOutputWidget,
-        ErrorLogWidget
-    };
+   CS_OBJECT(QScriptEngineDebugger)
+ public:
+   enum DebuggerWidget {
+      ConsoleWidget,
+      StackWidget,
+      ScriptsWidget,
+      LocalsWidget,
+      CodeWidget,
+      CodeFinderWidget,
+      BreakpointsWidget,
+      DebugOutputWidget,
+      ErrorLogWidget
+   };
 
-    enum DebuggerAction {
-        InterruptAction,
-        ContinueAction,
-        StepIntoAction,
-        StepOverAction,
-        StepOutAction,
-        RunToCursorAction,
-        RunToNewScriptAction,
-        ToggleBreakpointAction,
-        ClearDebugOutputAction,
-        ClearErrorLogAction,
-        ClearConsoleAction,
-        FindInScriptAction,
-        FindNextInScriptAction,
-        FindPreviousInScriptAction,
-        GoToLineAction
-    };
+   enum DebuggerAction {
+      InterruptAction,
+      ContinueAction,
+      StepIntoAction,
+      StepOverAction,
+      StepOutAction,
+      RunToCursorAction,
+      RunToNewScriptAction,
+      ToggleBreakpointAction,
+      ClearDebugOutputAction,
+      ClearErrorLogAction,
+      ClearConsoleAction,
+      FindInScriptAction,
+      FindNextInScriptAction,
+      FindPreviousInScriptAction,
+      GoToLineAction
+   };
 
-    enum DebuggerState {
-        RunningState,
-        SuspendedState
-    };
+   enum DebuggerState {
+      RunningState,
+      SuspendedState
+   };
 
-    QScriptEngineDebugger(QObject *parent = 0);
-    ~QScriptEngineDebugger();
+   QScriptEngineDebugger(QObject *parent = 0);
+   ~QScriptEngineDebugger();
 
-    void attachTo(QScriptEngine *engine);
-    void detach();
+   void attachTo(QScriptEngine *engine);
+   void detach();
 
-    bool autoShowStandardWindow() const;
-    void setAutoShowStandardWindow(bool autoShow);
+   bool autoShowStandardWindow() const;
+   void setAutoShowStandardWindow(bool autoShow);
 
 #ifndef QT_NO_MAINWINDOW
-    QMainWindow *standardWindow() const;
+   QMainWindow *standardWindow() const;
 #endif
-    QToolBar *createStandardToolBar(QWidget *parent = 0);
-    QMenu *createStandardMenu(QWidget *parent = 0);
+   QToolBar *createStandardToolBar(QWidget *parent = 0);
+   QMenu *createStandardMenu(QWidget *parent = 0);
 
-    QWidget *widget(DebuggerWidget widget) const;
-    QAction *action(DebuggerAction action) const;
+   QWidget *widget(DebuggerWidget widget) const;
+   QAction *action(DebuggerAction action) const;
 
-    DebuggerState state() const;
+   DebuggerState state() const;
 
-public:
-    CS_SIGNAL_1(Public, void evaluationSuspended())
-    CS_SIGNAL_2(evaluationSuspended) 
-    CS_SIGNAL_1(Public, void evaluationResumed())
-    CS_SIGNAL_2(evaluationResumed) 
+ public:
+   CS_SIGNAL_1(Public, void evaluationSuspended())
+   CS_SIGNAL_2(evaluationSuspended)
+   CS_SIGNAL_1(Public, void evaluationResumed())
+   CS_SIGNAL_2(evaluationResumed)
 
-private:
-    Q_DECLARE_PRIVATE(QScriptEngineDebugger)
-    Q_DISABLE_COPY(QScriptEngineDebugger)
+ private:
+   Q_DECLARE_PRIVATE(QScriptEngineDebugger)
+   Q_DISABLE_COPY(QScriptEngineDebugger)
 
-    CS_SLOT_1(Private, void _q_showStandardWindow())
-    CS_SLOT_2(_q_showStandardWindow)
+   CS_SLOT_1(Private, void _q_showStandardWindow())
+   CS_SLOT_2(_q_showStandardWindow)
 
-/*  PRIVATE_SLOT
-void _q_showStandardWindow()
-{
-	Q_D(QScriptEngineDebugger);
-	d->_q_showStandardWindow();
-}
-*/
+   /*  PRIVATE_SLOT
+   void _q_showStandardWindow()
+   {
+   	Q_D(QScriptEngineDebugger);
+   	d->_q_showStandardWindow();
+   }
+   */
 };
 
 QT_END_NAMESPACE

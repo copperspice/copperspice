@@ -26,7 +26,7 @@
 #ifndef QLATINCODEC_P_H
 #define QLATINCODEC_P_H
 
-#include "QtCore/qtextcodec.h"
+#include <QtCore/qtextcodec.h>
 
 QT_BEGIN_NAMESPACE
 

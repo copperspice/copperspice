@@ -23,20 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qfontconfigdatabase.h"
+#include <qfontconfigdatabase.h>
 
 #include <QtCore/QList>
-#include <QtGui/private/qfont_p.h>
-
+#include <qfont_p.h>
 #include <QtCore/QElapsedTimer>
-
-#include <QtGui/private/qapplication_p.h>
+#include <qapplication_p.h>
 #include <QtGui/QPlatformScreen>
-
-#include <QtGui/private/qfontengine_ft_p.h>
-#include <QtGui/private/qfontengine_p.h>
-
-
+#include <qfontengine_ft_p.h>
+#include <qfontengine_p.h>
 
 #include <ft2build.h>
 #include FT_TRUETYPE_TABLES_H

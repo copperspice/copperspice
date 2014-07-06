@@ -23,33 +23,32 @@
 *
 ***********************************************************************/
 
-#include "qxlibwindow.h"
-
-#include "qxlibintegration.h"
-#include "qxlibscreen.h"
-#include "qxlibkeyboard.h"
-#include "qxlibstatic.h"
-#include "qxlibdisplay.h"
+#include <qxlibwindow.h>
+#include <qxlibintegration.h>
+#include <qxlibscreen.h>
+#include <qxlibkeyboard.h>
+#include <qxlibstatic.h>
+#include <qxlibdisplay.h>
 
 #if !defined(QT_NO_OPENGL)
-#if !defined(QT_OPENGL_ES_2)
-#include "qglxintegration.h"
-#include "qglxconvenience.h"
-#else
-#include "../eglconvenience/qeglconvenience.h"
-#include "../eglconvenience/qeglplatformcontext.h"
-#include "../eglconvenience/qxlibeglintegration.h"
-#endif  //QT_OPENGL_ES_2
-#endif //QT_NO_OPENGL
 
+#if !defined(QT_OPENGL_ES_2)
+#include <qglxintegration.h>
+#include <qglxconvenience.h>
+#else
+#include <qeglconvenience.h>
+#include <qeglplatformcontext.h>
+#include <qxlibeglintegration.h>
+#endif
+
+#endif
 
 #include <QtGui/QWindowSystemInterface>
 #include <QSocketNotifier>
 #include <QApplication>
 #include <QDebug>
-
-#include <QtGui/private/qwindowsurface_p.h>
-#include <QtGui/private/qapplication_p.h>
+#include <qwindowsurface_p.h>
+#include <qapplication_p.h>
 
 //#define MYX11_DEBUG
 

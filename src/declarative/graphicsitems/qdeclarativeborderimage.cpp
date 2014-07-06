@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -148,15 +148,16 @@ QT_BEGIN_NAMESPACE
     are always loaded asynchonously.
 */
 QDeclarativeBorderImage::QDeclarativeBorderImage(QDeclarativeItem *parent)
-  : QDeclarativeImageBase(*(new QDeclarativeBorderImagePrivate), parent)
+   : QDeclarativeImageBase(*(new QDeclarativeBorderImagePrivate), parent)
 {
 }
 
 QDeclarativeBorderImage::~QDeclarativeBorderImage()
 {
-    Q_D(QDeclarativeBorderImage);
-    if (d->sciReply)
-        d->sciReply->deleteLater();
+   Q_D(QDeclarativeBorderImage);
+   if (d->sciReply) {
+      d->sciReply->deleteLater();
+   }
 }
 /*!
     \qmlproperty enumeration BorderImage::status
@@ -255,107 +256,111 @@ QDeclarativeBorderImage::~QDeclarativeBorderImage()
 */
 void QDeclarativeBorderImage::setSource(const QUrl &url)
 {
-    Q_D(QDeclarativeBorderImage);
-    //equality is fairly expensive, so we bypass for simple, common case
-    if ((d->url.isEmpty() == url.isEmpty()) && url == d->url)
-        return;
+   Q_D(QDeclarativeBorderImage);
+   //equality is fairly expensive, so we bypass for simple, common case
+   if ((d->url.isEmpty() == url.isEmpty()) && url == d->url) {
+      return;
+   }
 
-    if (d->sciReply) {
-        d->sciReply->deleteLater();
-        d->sciReply = 0;
-    }
+   if (d->sciReply) {
+      d->sciReply->deleteLater();
+      d->sciReply = 0;
+   }
 
-    d->url = url;
-    d->sciurl = QUrl();
-    emit sourceChanged(d->url);
+   d->url = url;
+   d->sciurl = QUrl();
+   emit sourceChanged(d->url);
 
-    if (isComponentComplete())
-        load();
+   if (isComponentComplete()) {
+      load();
+   }
 }
 
-void QDeclarativeBorderImage::setSourceSize(const QSize& size)
+void QDeclarativeBorderImage::setSourceSize(const QSize &size)
 {
-    Q_UNUSED(size);
-    qmlInfo(this) << "Setting sourceSize for borderImage not supported";
+   Q_UNUSED(size);
+   qmlInfo(this) << "Setting sourceSize for borderImage not supported";
 }
 
 void QDeclarativeBorderImage::load()
 {
-    Q_D(QDeclarativeBorderImage);
-    if (d->progress != 0.0) {
-        d->progress = 0.0;
-        emit progressChanged(d->progress);
-    }
+   Q_D(QDeclarativeBorderImage);
+   if (d->progress != 0.0) {
+      d->progress = 0.0;
+      emit progressChanged(d->progress);
+   }
 
-    if (d->url.isEmpty()) {
-        d->pix.clear(this);
-        d->status = Null;
-        setImplicitWidth(0);
-        setImplicitHeight(0);
-        emit statusChanged(d->status);
-        update();
-    } else {
-        d->status = Loading;
-        if (d->url.path().endsWith(QLatin1String("sci"))) {
+   if (d->url.isEmpty()) {
+      d->pix.clear(this);
+      d->status = Null;
+      setImplicitWidth(0);
+      setImplicitHeight(0);
+      emit statusChanged(d->status);
+      update();
+   } else {
+      d->status = Loading;
+      if (d->url.path().endsWith(QLatin1String("sci"))) {
 #ifndef QT_NO_LOCALFILE_OPTIMIZED_QML
-            QString lf = QDeclarativeEnginePrivate::urlToLocalFileOrQrc(d->url);
-            if (!lf.isEmpty()) {
-                QFile file(lf);
-                file.open(QIODevice::ReadOnly);
-                setGridScaledImage(QDeclarativeGridScaledImage(&file));
-            } else
+         QString lf = QDeclarativeEnginePrivate::urlToLocalFileOrQrc(d->url);
+         if (!lf.isEmpty()) {
+            QFile file(lf);
+            file.open(QIODevice::ReadOnly);
+            setGridScaledImage(QDeclarativeGridScaledImage(&file));
+         } else
 #endif
-            {
-                QNetworkRequest req(d->url);
-                d->sciReply = qmlEngine(this)->networkAccessManager()->get(req);
+         {
+            QNetworkRequest req(d->url);
+            d->sciReply = qmlEngine(this)->networkAccessManager()->get(req);
 
-                static int sciReplyFinished = -1;
-                static int thisSciRequestFinished = -1;
-                if (sciReplyFinished == -1) {
-                    sciReplyFinished =
-                        QNetworkReply::staticMetaObject.indexOfSignal("finished()");
-                    thisSciRequestFinished =
-                        QDeclarativeBorderImage::staticMetaObject.indexOfSlot("sciRequestFinished()");
-                }
-
-                QMetaObject::connect(d->sciReply, sciReplyFinished, this,
-                                     thisSciRequestFinished, Qt::DirectConnection);
+            static int sciReplyFinished = -1;
+            static int thisSciRequestFinished = -1;
+            if (sciReplyFinished == -1) {
+               sciReplyFinished =
+                  QNetworkReply::staticMetaObject.indexOfSignal("finished()");
+               thisSciRequestFinished =
+                  QDeclarativeBorderImage::staticMetaObject.indexOfSlot("sciRequestFinished()");
             }
-        } else {
 
-            QDeclarativePixmap::Options options;
-            if (d->async)
-                options |= QDeclarativePixmap::Asynchronous;
-            if (d->cache)
-                options |= QDeclarativePixmap::Cache;
-            d->pix.clear(this);
-            d->pix.load(qmlEngine(this), d->url, options);
+            QMetaObject::connect(d->sciReply, sciReplyFinished, this,
+                                 thisSciRequestFinished, Qt::DirectConnection);
+         }
+      } else {
 
-            if (d->pix.isLoading()) {
-                d->pix.connectFinished(this, SLOT(requestFinished()));
-                d->pix.connectDownloadProgress(this, SLOT(requestProgress(qint64,qint64)));
+         QDeclarativePixmap::Options options;
+         if (d->async) {
+            options |= QDeclarativePixmap::Asynchronous;
+         }
+         if (d->cache) {
+            options |= QDeclarativePixmap::Cache;
+         }
+         d->pix.clear(this);
+         d->pix.load(qmlEngine(this), d->url, options);
+
+         if (d->pix.isLoading()) {
+            d->pix.connectFinished(this, SLOT(requestFinished()));
+            d->pix.connectDownloadProgress(this, SLOT(requestProgress(qint64, qint64)));
+         } else {
+            QSize impsize = d->pix.implicitSize();
+            setImplicitWidth(impsize.width());
+            setImplicitHeight(impsize.height());
+
+            if (d->pix.isReady()) {
+               d->status = Ready;
             } else {
-                QSize impsize = d->pix.implicitSize();
-                setImplicitWidth(impsize.width());
-                setImplicitHeight(impsize.height());
-
-                if (d->pix.isReady()) {
-                    d->status = Ready;
-                } else {
-                    d->status = Error;
-                    qmlInfo(this) << d->pix.error();
-                }
-
-                d->progress = 1.0;
-                emit statusChanged(d->status);
-                emit progressChanged(d->progress);
-                requestFinished();
-                update();
+               d->status = Error;
+               qmlInfo(this) << d->pix.error();
             }
-        }
-    }
 
-    emit statusChanged(d->status);
+            d->progress = 1.0;
+            emit statusChanged(d->status);
+            emit progressChanged(d->progress);
+            requestFinished();
+            update();
+         }
+      }
+   }
+
+   emit statusChanged(d->status);
 }
 
 /*!
@@ -389,8 +394,8 @@ void QDeclarativeBorderImage::load()
 
 QDeclarativeScaleGrid *QDeclarativeBorderImage::border()
 {
-    Q_D(QDeclarativeBorderImage);
-    return d->getScaleGrid();
+   Q_D(QDeclarativeBorderImage);
+   return d->getScaleGrid();
 }
 
 /*!
@@ -409,199 +414,205 @@ QDeclarativeScaleGrid *QDeclarativeBorderImage::border()
 */
 QDeclarativeBorderImage::TileMode QDeclarativeBorderImage::horizontalTileMode() const
 {
-    Q_D(const QDeclarativeBorderImage);
-    return d->horizontalTileMode;
+   Q_D(const QDeclarativeBorderImage);
+   return d->horizontalTileMode;
 }
 
 void QDeclarativeBorderImage::setHorizontalTileMode(TileMode t)
 {
-    Q_D(QDeclarativeBorderImage);
-    if (t != d->horizontalTileMode) {
-        d->horizontalTileMode = t;
-        emit horizontalTileModeChanged();
-        update();
-    }
+   Q_D(QDeclarativeBorderImage);
+   if (t != d->horizontalTileMode) {
+      d->horizontalTileMode = t;
+      emit horizontalTileModeChanged();
+      update();
+   }
 }
 
 QDeclarativeBorderImage::TileMode QDeclarativeBorderImage::verticalTileMode() const
 {
-    Q_D(const QDeclarativeBorderImage);
-    return d->verticalTileMode;
+   Q_D(const QDeclarativeBorderImage);
+   return d->verticalTileMode;
 }
 
 void QDeclarativeBorderImage::setVerticalTileMode(TileMode t)
 {
-    Q_D(QDeclarativeBorderImage);
-    if (t != d->verticalTileMode) {
-        d->verticalTileMode = t;
-        emit verticalTileModeChanged();
-        update();
-    }
+   Q_D(QDeclarativeBorderImage);
+   if (t != d->verticalTileMode) {
+      d->verticalTileMode = t;
+      emit verticalTileModeChanged();
+      update();
+   }
 }
 
-void QDeclarativeBorderImage::setGridScaledImage(const QDeclarativeGridScaledImage& sci)
+void QDeclarativeBorderImage::setGridScaledImage(const QDeclarativeGridScaledImage &sci)
 {
-    Q_D(QDeclarativeBorderImage);
-    if (!sci.isValid()) {
-        d->status = Error;
-        emit statusChanged(d->status);
-    } else {
-        QDeclarativeScaleGrid *sg = border();
-        sg->setTop(sci.gridTop());
-        sg->setBottom(sci.gridBottom());
-        sg->setLeft(sci.gridLeft());
-        sg->setRight(sci.gridRight());
-        d->horizontalTileMode = sci.horizontalTileRule();
-        d->verticalTileMode = sci.verticalTileRule();
+   Q_D(QDeclarativeBorderImage);
+   if (!sci.isValid()) {
+      d->status = Error;
+      emit statusChanged(d->status);
+   } else {
+      QDeclarativeScaleGrid *sg = border();
+      sg->setTop(sci.gridTop());
+      sg->setBottom(sci.gridBottom());
+      sg->setLeft(sci.gridLeft());
+      sg->setRight(sci.gridRight());
+      d->horizontalTileMode = sci.horizontalTileRule();
+      d->verticalTileMode = sci.verticalTileRule();
 
-        d->sciurl = d->url.resolved(QUrl(sci.pixmapUrl()));
+      d->sciurl = d->url.resolved(QUrl(sci.pixmapUrl()));
 
-        QDeclarativePixmap::Options options;
-        if (d->async)
-            options |= QDeclarativePixmap::Asynchronous;
-        if (d->cache)
-            options |= QDeclarativePixmap::Cache;
-        d->pix.clear(this);
-        d->pix.load(qmlEngine(this), d->sciurl, options);
+      QDeclarativePixmap::Options options;
+      if (d->async) {
+         options |= QDeclarativePixmap::Asynchronous;
+      }
+      if (d->cache) {
+         options |= QDeclarativePixmap::Cache;
+      }
+      d->pix.clear(this);
+      d->pix.load(qmlEngine(this), d->sciurl, options);
 
-        if (d->pix.isLoading()) {
-            static int thisRequestProgress = -1;
-            static int thisRequestFinished = -1;
-            if (thisRequestProgress == -1) {
-                thisRequestProgress =
-                    QDeclarativeBorderImage::staticMetaObject.indexOfSlot("requestProgress(qint64,qint64)");
-                thisRequestFinished =
-                    QDeclarativeBorderImage::staticMetaObject.indexOfSlot("requestFinished()");
-            }
+      if (d->pix.isLoading()) {
+         static int thisRequestProgress = -1;
+         static int thisRequestFinished = -1;
+         if (thisRequestProgress == -1) {
+            thisRequestProgress =
+               QDeclarativeBorderImage::staticMetaObject.indexOfSlot("requestProgress(qint64,qint64)");
+            thisRequestFinished =
+               QDeclarativeBorderImage::staticMetaObject.indexOfSlot("requestFinished()");
+         }
 
-            d->pix.connectFinished(this, thisRequestFinished);
-            d->pix.connectDownloadProgress(this, thisRequestProgress);
+         d->pix.connectFinished(this, thisRequestFinished);
+         d->pix.connectDownloadProgress(this, thisRequestProgress);
 
-        } else {
+      } else {
 
-            QSize impsize = d->pix.implicitSize();
-            setImplicitWidth(impsize.width());
-            setImplicitHeight(impsize.height());
+         QSize impsize = d->pix.implicitSize();
+         setImplicitWidth(impsize.width());
+         setImplicitHeight(impsize.height());
 
-            if (d->pix.isReady()) {
-                d->status = Ready;
-            } else {
-                d->status = Error;
-                qmlInfo(this) << d->pix.error();
-            }
+         if (d->pix.isReady()) {
+            d->status = Ready;
+         } else {
+            d->status = Error;
+            qmlInfo(this) << d->pix.error();
+         }
 
-            d->progress = 1.0;
-            emit statusChanged(d->status);
-            emit progressChanged(1.0);
-            update();
+         d->progress = 1.0;
+         emit statusChanged(d->status);
+         emit progressChanged(1.0);
+         update();
 
-        }
-    }
+      }
+   }
 }
 
 void QDeclarativeBorderImage::requestFinished()
 {
-    Q_D(QDeclarativeBorderImage);
+   Q_D(QDeclarativeBorderImage);
 
-    QSize impsize = d->pix.implicitSize();
-    if (d->pix.isError()) {
-        d->status = Error;
-        qmlInfo(this) << d->pix.error();
-    } else {
-        d->status = Ready;
-    }
+   QSize impsize = d->pix.implicitSize();
+   if (d->pix.isError()) {
+      d->status = Error;
+      qmlInfo(this) << d->pix.error();
+   } else {
+      d->status = Ready;
+   }
 
-    setImplicitWidth(impsize.width());
-    setImplicitHeight(impsize.height());
+   setImplicitWidth(impsize.width());
+   setImplicitHeight(impsize.height());
 
-    if (d->sourcesize.width() != d->pix.width() || d->sourcesize.height() != d->pix.height())
-        emit sourceSizeChanged();
+   if (d->sourcesize.width() != d->pix.width() || d->sourcesize.height() != d->pix.height()) {
+      emit sourceSizeChanged();
+   }
 
-    d->progress = 1.0;
-    emit statusChanged(d->status);
-    emit progressChanged(1.0);
-    update();
+   d->progress = 1.0;
+   emit statusChanged(d->status);
+   emit progressChanged(1.0);
+   update();
 }
 
 #define BORDERIMAGE_MAX_REDIRECT 16
 
 void QDeclarativeBorderImage::sciRequestFinished()
 {
-    Q_D(QDeclarativeBorderImage);
+   Q_D(QDeclarativeBorderImage);
 
-    d->redirectCount++;
-    if (d->redirectCount < BORDERIMAGE_MAX_REDIRECT) {
-        QVariant redirect = d->sciReply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-        if (redirect.isValid()) {
-            QUrl url = d->sciReply->url().resolved(redirect.toUrl());
-            setSource(url);
-            return;
-        }
-    }
-    d->redirectCount=0;
+   d->redirectCount++;
+   if (d->redirectCount < BORDERIMAGE_MAX_REDIRECT) {
+      QVariant redirect = d->sciReply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+      if (redirect.isValid()) {
+         QUrl url = d->sciReply->url().resolved(redirect.toUrl());
+         setSource(url);
+         return;
+      }
+   }
+   d->redirectCount = 0;
 
-    if (d->sciReply->error() != QNetworkReply::NoError) {
-        d->status = Error;
-        d->sciReply->deleteLater();
-        d->sciReply = 0;
-        emit statusChanged(d->status);
-    } else {
-        QDeclarativeGridScaledImage sci(d->sciReply);
-        d->sciReply->deleteLater();
-        d->sciReply = 0;
-        setGridScaledImage(sci);
-    }
+   if (d->sciReply->error() != QNetworkReply::NoError) {
+      d->status = Error;
+      d->sciReply->deleteLater();
+      d->sciReply = 0;
+      emit statusChanged(d->status);
+   } else {
+      QDeclarativeGridScaledImage sci(d->sciReply);
+      d->sciReply->deleteLater();
+      d->sciReply = 0;
+      setGridScaledImage(sci);
+   }
 }
 
 void QDeclarativeBorderImage::doUpdate()
 {
-    update();
+   update();
 }
 
 void QDeclarativeBorderImage::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    Q_D(QDeclarativeBorderImage);
-    if (d->pix.isNull() || d->width() <= 0.0 || d->height() <= 0.0)
-        return;
+   Q_D(QDeclarativeBorderImage);
+   if (d->pix.isNull() || d->width() <= 0.0 || d->height() <= 0.0) {
+      return;
+   }
 
-    bool oldAA = p->testRenderHint(QPainter::Antialiasing);
-    bool oldSmooth = p->testRenderHint(QPainter::SmoothPixmapTransform);
-    QTransform oldTransform;
-    if (d->smooth)
-        p->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, d->smooth);
-    if (d->mirror) {
-        oldTransform = p->transform();
-        QTransform mirror;
-        mirror.translate(d->width(), 0).scale(-1, 1.0);
-        p->setWorldTransform(mirror * oldTransform);
-    }
+   bool oldAA = p->testRenderHint(QPainter::Antialiasing);
+   bool oldSmooth = p->testRenderHint(QPainter::SmoothPixmapTransform);
+   QTransform oldTransform;
+   if (d->smooth) {
+      p->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, d->smooth);
+   }
+   if (d->mirror) {
+      oldTransform = p->transform();
+      QTransform mirror;
+      mirror.translate(d->width(), 0).scale(-1, 1.0);
+      p->setWorldTransform(mirror * oldTransform);
+   }
 
-    const QDeclarativeScaleGrid *border = d->getScaleGrid();
-    int left = border->left();
-    int right = border->right();
-    qreal borderWidth = left + right;
-    if (borderWidth > 0.0 && d->width() < borderWidth) {
-        qreal diff = borderWidth - d->width() - 1;
-        left -= qRound(diff * qreal(left) / borderWidth);
-        right -= qRound(diff * qreal(right) / borderWidth);
-    }
-    int top = border->top();
-    int bottom = border->bottom();
-    qreal borderHeight = top + bottom;
-    if (borderHeight > 0.0 && d->height() < borderHeight) {
-        qreal diff = borderHeight - d->height() - 1;
-        top -= qRound(diff * qreal(top) / borderHeight);
-        bottom -= qRound(diff * qreal(bottom) / borderHeight);
-    }
-    QMargins margins(left, top, right, bottom);
-    QTileRules rules((Qt::TileRule)d->horizontalTileMode, (Qt::TileRule)d->verticalTileMode);
-    qDrawBorderPixmap(p, QRect(0, 0, (int)d->width(), (int)d->height()), margins, d->pix, d->pix.rect(), margins, rules);
-    if (d->smooth) {
-        p->setRenderHint(QPainter::Antialiasing, oldAA);
-        p->setRenderHint(QPainter::SmoothPixmapTransform, oldSmooth);
-    }
-    if (d->mirror)
-        p->setWorldTransform(oldTransform);
+   const QDeclarativeScaleGrid *border = d->getScaleGrid();
+   int left = border->left();
+   int right = border->right();
+   qreal borderWidth = left + right;
+   if (borderWidth > 0.0 && d->width() < borderWidth) {
+      qreal diff = borderWidth - d->width() - 1;
+      left -= qRound(diff * qreal(left) / borderWidth);
+      right -= qRound(diff * qreal(right) / borderWidth);
+   }
+   int top = border->top();
+   int bottom = border->bottom();
+   qreal borderHeight = top + bottom;
+   if (borderHeight > 0.0 && d->height() < borderHeight) {
+      qreal diff = borderHeight - d->height() - 1;
+      top -= qRound(diff * qreal(top) / borderHeight);
+      bottom -= qRound(diff * qreal(bottom) / borderHeight);
+   }
+   QMargins margins(left, top, right, bottom);
+   QTileRules rules((Qt::TileRule)d->horizontalTileMode, (Qt::TileRule)d->verticalTileMode);
+   qDrawBorderPixmap(p, QRect(0, 0, (int)d->width(), (int)d->height()), margins, d->pix, d->pix.rect(), margins, rules);
+   if (d->smooth) {
+      p->setRenderHint(QPainter::Antialiasing, oldAA);
+      p->setRenderHint(QPainter::SmoothPixmapTransform, oldSmooth);
+   }
+   if (d->mirror) {
+      p->setWorldTransform(oldTransform);
+   }
 }
 
 QT_END_NAMESPACE

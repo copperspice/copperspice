@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,22 +26,11 @@
 #ifndef QDECLARATIVEBINDING_P_H
 #define QDECLARATIVEBINDING_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "qdeclarative.h"
-#include "qdeclarativepropertyvaluesource.h"
-#include "qdeclarativeexpression.h"
-#include "qdeclarativeproperty.h"
-#include "private/qdeclarativeproperty_p.h"
+#include <qdeclarative.h>
+#include <qdeclarativepropertyvaluesource.h>
+#include <qdeclarativeexpression.h>
+#include <qdeclarativeproperty.h>
+#include <qdeclarativeproperty_p.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QMetaProperty>
@@ -50,161 +39,173 @@ QT_BEGIN_NAMESPACE
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeAbstractBinding
 {
-public:
-    typedef QWeakPointer<QDeclarativeAbstractBinding> Pointer;
+ public:
+   typedef QWeakPointer<QDeclarativeAbstractBinding> Pointer;
 
-    QDeclarativeAbstractBinding();
+   QDeclarativeAbstractBinding();
 
-    enum DestroyMode {
-        // The binding should disconnect itself upon destroy
-        DisconnectBinding,
+   enum DestroyMode {
+      // The binding should disconnect itself upon destroy
+      DisconnectBinding,
 
-        // The binding doesn't need to disconnect itself, but it can if it wants to.
-        //
-        // This is used in QDeclarativeData::destroyed() - at the point at which the bindings are
-        // destroyed, the notifiers are already disconnected, so no need to disconnect each
-        // binding again.
-        //
-        // Bindings can use this flag to speed up destruction, especially for compiled bindings
-        // disconnecting a single binding might be slow.
-        KeepBindingConnected
-    };
+      // The binding doesn't need to disconnect itself, but it can if it wants to.
+      //
+      // This is used in QDeclarativeData::destroyed() - at the point at which the bindings are
+      // destroyed, the notifiers are already disconnected, so no need to disconnect each
+      // binding again.
+      //
+      // Bindings can use this flag to speed up destruction, especially for compiled bindings
+      // disconnecting a single binding might be slow.
+      KeepBindingConnected
+   };
 
-    virtual void destroy(DestroyMode mode = DisconnectBinding);
+   virtual void destroy(DestroyMode mode = DisconnectBinding);
 
-    virtual QString expression() const;
+   virtual QString expression() const;
 
-    enum DisconnectMode {
+   enum DisconnectMode {
 
-        // Just this single binding is getting disconnected, other bindings remain connected and
-        // should not be changed.
-        DisconnectOne,
+      // Just this single binding is getting disconnected, other bindings remain connected and
+      // should not be changed.
+      DisconnectOne,
 
-        // All bindings of the same object are getting disconnected. As an optimization, it is
-        // therefore valid to disconnect all bindings in one go.
-        DisconnectAll
-    };
+      // All bindings of the same object are getting disconnected. As an optimization, it is
+      // therefore valid to disconnect all bindings in one go.
+      DisconnectAll
+   };
 
-    // disconnectMode can be ignored, it is just a hint for potential optimization
-    virtual void disconnect(DisconnectMode disconnectMode) = 0;
+   // disconnectMode can be ignored, it is just a hint for potential optimization
+   virtual void disconnect(DisconnectMode disconnectMode) = 0;
 
-    enum Type { PropertyBinding, ValueTypeProxy };
-    virtual Type bindingType() const { return PropertyBinding; }
+   enum Type { PropertyBinding, ValueTypeProxy };
+   virtual Type bindingType() const {
+      return PropertyBinding;
+   }
 
-    QObject *object() const;
-    int propertyIndex() const;
+   QObject *object() const;
+   int propertyIndex() const;
 
-    void setEnabled(bool e) { setEnabled(e, QDeclarativePropertyPrivate::DontRemoveBinding); }
-    virtual void setEnabled(bool, QDeclarativePropertyPrivate::WriteFlags) = 0;
+   void setEnabled(bool e) {
+      setEnabled(e, QDeclarativePropertyPrivate::DontRemoveBinding);
+   }
+   virtual void setEnabled(bool, QDeclarativePropertyPrivate::WriteFlags) = 0;
 
-    void update() { update(QDeclarativePropertyPrivate::DontRemoveBinding); }
-    virtual void update(QDeclarativePropertyPrivate::WriteFlags) = 0;
+   void update() {
+      update(QDeclarativePropertyPrivate::DontRemoveBinding);
+   }
+   virtual void update(QDeclarativePropertyPrivate::WriteFlags) = 0;
 
-    void addToObject(QObject *, int);
-    void removeFromObject();
+   void addToObject(QObject *, int);
+   void removeFromObject();
 
-    static Pointer getPointer(QDeclarativeAbstractBinding *p) { return p ? p->weakPointer() : Pointer(); }
+   static Pointer getPointer(QDeclarativeAbstractBinding *p) {
+      return p ? p->weakPointer() : Pointer();
+   }
 
-protected:
-    virtual ~QDeclarativeAbstractBinding();
-    void clear();
+ protected:
+   virtual ~QDeclarativeAbstractBinding();
+   void clear();
 
-private:
-    Pointer weakPointer();
+ private:
+   Pointer weakPointer();
 
-    friend class QDeclarativeData;
-    friend class QDeclarativeComponentPrivate;
-    friend class QDeclarativeValueTypeProxyBinding;
-    friend class QDeclarativePropertyPrivate;
-    friend class QDeclarativeVME;
-    friend class QtSharedPointer::ExternalRefCount<QDeclarativeAbstractBinding>;
+   friend class QDeclarativeData;
+   friend class QDeclarativeComponentPrivate;
+   friend class QDeclarativeValueTypeProxyBinding;
+   friend class QDeclarativePropertyPrivate;
+   friend class QDeclarativeVME;
+   friend class QtSharedPointer::ExternalRefCount<QDeclarativeAbstractBinding>;
 
-    QObject *m_object;
-    int m_propertyIndex;
-    QDeclarativeAbstractBinding **m_mePtr;
-    QDeclarativeAbstractBinding **m_prevBinding;
-    QDeclarativeAbstractBinding  *m_nextBinding;
-    QSharedPointer<QDeclarativeAbstractBinding> m_selfPointer;
+   QObject *m_object;
+   int m_propertyIndex;
+   QDeclarativeAbstractBinding **m_mePtr;
+   QDeclarativeAbstractBinding **m_prevBinding;
+   QDeclarativeAbstractBinding  *m_nextBinding;
+   QSharedPointer<QDeclarativeAbstractBinding> m_selfPointer;
 };
 
 class QDeclarativeValueTypeProxyBinding : public QDeclarativeAbstractBinding
 {
-public:
-    QDeclarativeValueTypeProxyBinding(QObject *o, int coreIndex);
+ public:
+   QDeclarativeValueTypeProxyBinding(QObject *o, int coreIndex);
 
-    virtual Type bindingType() const { return ValueTypeProxy; }
+   virtual Type bindingType() const {
+      return ValueTypeProxy;
+   }
 
-    virtual void setEnabled(bool, QDeclarativePropertyPrivate::WriteFlags);
-    virtual void update(QDeclarativePropertyPrivate::WriteFlags);
-    virtual void disconnect(DisconnectMode disconnectMode);
+   virtual void setEnabled(bool, QDeclarativePropertyPrivate::WriteFlags);
+   virtual void update(QDeclarativePropertyPrivate::WriteFlags);
+   virtual void disconnect(DisconnectMode disconnectMode);
 
-    QDeclarativeAbstractBinding *binding(int propertyIndex);
+   QDeclarativeAbstractBinding *binding(int propertyIndex);
 
-    void removeBindings(quint32 mask);
+   void removeBindings(quint32 mask);
 
-protected:
-    ~QDeclarativeValueTypeProxyBinding();
+ protected:
+   ~QDeclarativeValueTypeProxyBinding();
 
-private:
-    void recursiveEnable(QDeclarativeAbstractBinding *, QDeclarativePropertyPrivate::WriteFlags);
-    void recursiveDisable(QDeclarativeAbstractBinding *);
+ private:
+   void recursiveEnable(QDeclarativeAbstractBinding *, QDeclarativePropertyPrivate::WriteFlags);
+   void recursiveDisable(QDeclarativeAbstractBinding *);
 
-    friend class QDeclarativeAbstractBinding;
-    QObject *m_object;
-    int m_index;
-    QDeclarativeAbstractBinding *m_bindings;
+   friend class QDeclarativeAbstractBinding;
+   QObject *m_object;
+   int m_index;
+   QDeclarativeAbstractBinding *m_bindings;
 };
 
 class QDeclarativeContext;
 class QDeclarativeBindingPrivate;
-class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBinding : public QDeclarativeExpression, public QDeclarativeAbstractBinding
+class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBinding : public QDeclarativeExpression,
+   public QDeclarativeAbstractBinding
 {
    CS_OBJECT(QDeclarativeBinding)
 
-public:
-    enum EvaluateFlag { RequiresThisObject = 0x01 };
-    using EvaluateFlags = QFlags<EvaluateFlag>;
+ public:
+   enum EvaluateFlag { RequiresThisObject = 0x01 };
+   using EvaluateFlags = QFlags<EvaluateFlag>;
 
-    QDeclarativeBinding(const QString &, QObject *, QDeclarativeContext *, QObject *parent=0);
-    QDeclarativeBinding(const QString &, QObject *, QDeclarativeContextData *, QObject *parent=0);
-    QDeclarativeBinding(void *, QDeclarativeRefCount *, QObject *, QDeclarativeContextData *, 
-                        const QString &, int, QObject *parent);
-    QDeclarativeBinding(const QScriptValue &, QObject *, QDeclarativeContextData *, QObject *parent=0);
+   QDeclarativeBinding(const QString &, QObject *, QDeclarativeContext *, QObject *parent = 0);
+   QDeclarativeBinding(const QString &, QObject *, QDeclarativeContextData *, QObject *parent = 0);
+   QDeclarativeBinding(void *, QDeclarativeRefCount *, QObject *, QDeclarativeContextData *,
+                       const QString &, int, QObject *parent);
+   QDeclarativeBinding(const QScriptValue &, QObject *, QDeclarativeContextData *, QObject *parent = 0);
 
-    void setTarget(const QDeclarativeProperty &);
-    QDeclarativeProperty property() const;
+   void setTarget(const QDeclarativeProperty &);
+   QDeclarativeProperty property() const;
 
-    void setEvaluateFlags(EvaluateFlags flags);
-    EvaluateFlags evaluateFlags() const;
+   void setEvaluateFlags(EvaluateFlags flags);
+   EvaluateFlags evaluateFlags() const;
 
-    bool enabled() const;
+   bool enabled() const;
 
-    // Inherited from  QDeclarativeAbstractBinding
-    virtual void setEnabled(bool, QDeclarativePropertyPrivate::WriteFlags flags);
-    virtual void update(QDeclarativePropertyPrivate::WriteFlags flags);
-    virtual QString expression() const;
-    virtual void disconnect(DisconnectMode disconnectMode);
+   // Inherited from  QDeclarativeAbstractBinding
+   virtual void setEnabled(bool, QDeclarativePropertyPrivate::WriteFlags flags);
+   virtual void update(QDeclarativePropertyPrivate::WriteFlags flags);
+   virtual QString expression() const;
+   virtual void disconnect(DisconnectMode disconnectMode);
 
-    typedef int Identifier;
-    static Identifier Invalid;
-    static QDeclarativeBinding *createBinding(Identifier, QObject *, QDeclarativeContext *, const QString &, int, QObject *parent=0);
+   typedef int Identifier;
+   static Identifier Invalid;
+   static QDeclarativeBinding *createBinding(Identifier, QObject *, QDeclarativeContext *, const QString &, int,
+         QObject *parent = 0);
 
-public :
-    CS_SLOT_1(Public, void update())
-    CS_SLOT_OVERLOAD(update) 
+ public :
+   CS_SLOT_1(Public, void update())
+   CS_SLOT_OVERLOAD(update)
 
-protected:
-    ~QDeclarativeBinding();
-    void emitValueChanged();
+ protected:
+   ~QDeclarativeBinding();
+   void emitValueChanged();
 
-private:
-    Q_DECLARE_PRIVATE(QDeclarativeBinding)
+ private:
+   Q_DECLARE_PRIVATE(QDeclarativeBinding)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDeclarativeBinding::EvaluateFlags)
 
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(QDeclarativeBinding*)
+Q_DECLARE_METATYPE(QDeclarativeBinding *)
 
 #endif // QDECLARATIVEBINDING_P_H

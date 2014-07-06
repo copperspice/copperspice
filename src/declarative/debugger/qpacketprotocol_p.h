@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,18 +18,17 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QPACKETPROTOCOL_H
-#define QPACKETPROTOCOL_H
+#ifndef QPACKETPROTOCOL_P_H
+#define QPACKETPROTOCOL_P_H
 
 #include <QtCore/qobject.h>
 #include <QtCore/qdatastream.h>
-
-#include <private/qdeclarativeglobal_p.h>
+#include <qdeclarativeglobal_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -41,66 +40,66 @@ class QPacketProtocolPrivate;
 
 class Q_DECLARATIVE_EXPORT QPacketProtocol : public QObject
 {
-CS_OBJECT(QPacketProtocol)
-public:
-    explicit QPacketProtocol(QIODevice * dev, QObject * parent = 0);
-    virtual ~QPacketProtocol();
+   CS_OBJECT(QPacketProtocol)
+ public:
+   explicit QPacketProtocol(QIODevice *dev, QObject *parent = 0);
+   virtual ~QPacketProtocol();
 
-    qint32 maximumPacketSize() const;
-    qint32 setMaximumPacketSize(qint32);
+   qint32 maximumPacketSize() const;
+   qint32 setMaximumPacketSize(qint32);
 
-    QPacketAutoSend send();
-    void send(const QPacket &);
+   QPacketAutoSend send();
+   void send(const QPacket &);
 
-    qint64 packetsAvailable() const;
-    QPacket read();
+   qint64 packetsAvailable() const;
+   QPacket read();
 
-    bool waitForReadyRead(int msecs = 3000);
+   bool waitForReadyRead(int msecs = 3000);
 
-    void clear();
+   void clear();
 
-    QIODevice * device();
+   QIODevice *device();
 
-public:
-    CS_SIGNAL_1(Public, void readyRead())
-    CS_SIGNAL_2(readyRead) 
-    CS_SIGNAL_1(Public, void invalidPacket())
-    CS_SIGNAL_2(invalidPacket) 
-    CS_SIGNAL_1(Public, void packetWritten())
-    CS_SIGNAL_2(packetWritten) 
+ public:
+   CS_SIGNAL_1(Public, void readyRead())
+   CS_SIGNAL_2(readyRead)
+   CS_SIGNAL_1(Public, void invalidPacket())
+   CS_SIGNAL_2(invalidPacket)
+   CS_SIGNAL_1(Public, void packetWritten())
+   CS_SIGNAL_2(packetWritten)
 
-private:
-    QPacketProtocolPrivate * d;
+ private:
+   QPacketProtocolPrivate *d;
 };
 
 
 class Q_DECLARATIVE_EXPORT QPacket : public QDataStream
 {
-public:
-    QPacket();
-    QPacket(const QPacket &);
-    virtual ~QPacket();
+ public:
+   QPacket();
+   QPacket(const QPacket &);
+   virtual ~QPacket();
 
-    void clear();
-    bool isEmpty() const;
-    QByteArray data() const;
+   void clear();
+   bool isEmpty() const;
+   QByteArray data() const;
 
-protected:
-    friend class QPacketProtocol;
-    QPacket(const QByteArray & ba);
-    QByteArray b;
-    QBuffer * buf;
+ protected:
+   friend class QPacketProtocol;
+   QPacket(const QByteArray &ba);
+   QByteArray b;
+   QBuffer *buf;
 };
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QPacketAutoSend : public QPacket
 {
-public:
-    virtual ~QPacketAutoSend();
+ public:
+   virtual ~QPacketAutoSend();
 
-private:
-    friend class QPacketProtocol;
-    QPacketAutoSend(QPacketProtocol *);
-    QPacketProtocol * p;
+ private:
+   friend class QPacketProtocol;
+   QPacketAutoSend(QPacketProtocol *);
+   QPacketProtocol *p;
 };
 
 QT_END_NAMESPACE

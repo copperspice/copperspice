@@ -185,6 +185,7 @@ class Q_XMLSTREAM_EXPORT QXmlStreamNotationDeclaration
    void *reserved;
 
    friend class QXmlStreamReaderPrivate;
+
  public:
    QXmlStreamNotationDeclaration();
    ~QXmlStreamNotationDeclaration();
@@ -217,6 +218,7 @@ class Q_XMLSTREAM_EXPORT QXmlStreamEntityDeclaration
    void *reserved;
 
    friend class QXmlStreamReaderPrivate;
+
  public:
    QXmlStreamEntityDeclaration();
    ~QXmlStreamEntityDeclaration();
@@ -280,7 +282,6 @@ class Q_XMLSTREAM_EXPORT QXmlStreamReader
       EntityReference,
       ProcessingInstruction
    };
-
 
    QXmlStreamReader();
    QXmlStreamReader(QIODevice *device);

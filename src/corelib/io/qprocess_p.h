@@ -339,7 +339,6 @@ class QProcessPrivate : public QIODevicePrivate
    QProcessPrivate();
    virtual ~QProcessPrivate();
 
-   // private slots
    bool _q_canReadStandardOutput();
    bool _q_canReadStandardError();
    bool _q_canWrite();

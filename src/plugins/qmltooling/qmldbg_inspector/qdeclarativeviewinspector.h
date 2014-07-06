@@ -26,11 +26,9 @@
 #ifndef QDECLARATIVEVIEWINSPECTOR_H
 #define QDECLARATIVEVIEWINSPECTOR_H
 
-#include <private/qdeclarativeglobal_p.h>
-
-#include "qmlinspectorconstants.h"
-#include "abstractviewinspector.h"
-
+#include <qdeclarativeglobal_p.h>
+#include <qmlinspectorconstants.h>
+#include <abstractviewinspector.h>
 #include <QtCore/QScopedPointer>
 #include <QtDeclarative/QDeclarativeView>
 

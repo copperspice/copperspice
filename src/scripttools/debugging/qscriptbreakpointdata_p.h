@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,58 +38,58 @@ class QVariant;
 class QScriptBreakpointDataPrivate;
 class QScriptBreakpointData
 {
-public:
-    friend QDataStream &operator<<(QDataStream &, const QScriptBreakpointData &);
-    friend QDataStream &operator>>(QDataStream &, QScriptBreakpointData &);
+ public:
+   friend QDataStream &operator<<(QDataStream &, const QScriptBreakpointData &);
+   friend QDataStream &operator>>(QDataStream &, QScriptBreakpointData &);
 
-    QScriptBreakpointData();
-    QScriptBreakpointData(qint64 scriptId, int lineNumber);
-    QScriptBreakpointData(const QString &fileName, int lineNumber);
-    QScriptBreakpointData(const QScriptBreakpointData &other);
-    ~QScriptBreakpointData();
-    QScriptBreakpointData &operator=(const QScriptBreakpointData &other);
+   QScriptBreakpointData();
+   QScriptBreakpointData(qint64 scriptId, int lineNumber);
+   QScriptBreakpointData(const QString &fileName, int lineNumber);
+   QScriptBreakpointData(const QScriptBreakpointData &other);
+   ~QScriptBreakpointData();
+   QScriptBreakpointData &operator=(const QScriptBreakpointData &other);
 
-    bool isValid() const;
+   bool isValid() const;
 
-    // location
-    qint64 scriptId() const;
-    void setScriptId(qint64 id);
+   // location
+   qint64 scriptId() const;
+   void setScriptId(qint64 id);
 
-    QString fileName() const;
-    void setFileName(const QString &fileName);
+   QString fileName() const;
+   void setFileName(const QString &fileName);
 
-    int lineNumber() const;
-    void setLineNumber(int lineNumber);
+   int lineNumber() const;
+   void setLineNumber(int lineNumber);
 
-    // data
-    bool isEnabled() const;
-    void setEnabled(bool enabled);
+   // data
+   bool isEnabled() const;
+   void setEnabled(bool enabled);
 
-    bool isSingleShot() const;
-    void setSingleShot(bool singleShot);
+   bool isSingleShot() const;
+   void setSingleShot(bool singleShot);
 
-    int ignoreCount() const;
-    void setIgnoreCount(int count);
+   int ignoreCount() const;
+   void setIgnoreCount(int count);
 
-    QString condition() const;
-    void setCondition(const QString &condition);
+   QString condition() const;
+   void setCondition(const QString &condition);
 
-    QVariant data() const;
-    void setData(const QVariant &data);
+   QVariant data() const;
+   void setData(const QVariant &data);
 
-    bool hit();
+   bool hit();
 
-    // statistics
-    int hitCount() const;
+   // statistics
+   int hitCount() const;
 
 
-    bool operator==(const QScriptBreakpointData &other) const;
-    bool operator!=(const QScriptBreakpointData &other) const;
+   bool operator==(const QScriptBreakpointData &other) const;
+   bool operator!=(const QScriptBreakpointData &other) const;
 
-private:
-    QScopedPointer<QScriptBreakpointDataPrivate> d_ptr;
+ private:
+   QScopedPointer<QScriptBreakpointDataPrivate> d_ptr;
 
-    Q_DECLARE_PRIVATE(QScriptBreakpointData)
+   Q_DECLARE_PRIVATE(QScriptBreakpointData)
 };
 
 typedef QMap<int, QScriptBreakpointData> QScriptBreakpointMap;

@@ -28,15 +28,15 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "qcocoawindow.h"
-#include "qnsview.h"
-
-#include <QtGui/private/qwindowsurface_p.h>
+#include <qcocoawindow.h>
+#include <qnsview.h>
+#include <qwindowsurface_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QCocoaWindowSurface : public QWindowSurface
 {
+
 public:
     QCocoaWindowSurface(QWidget *window, WId wid);
     ~QCocoaWindowSurface();

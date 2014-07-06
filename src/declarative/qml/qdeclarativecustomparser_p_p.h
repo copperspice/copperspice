@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,54 +18,41 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVECUSTOMPARSER_P_H
-#define QDECLARATIVECUSTOMPARSER_P_H
+#ifndef QDECLARATIVECUSTOMPARSER_P_P_H
+#define QDECLARATIVECUSTOMPARSER_P_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "private/qdeclarativecustomparser_p.h"
-
-#include "private/qdeclarativeparser_p.h"
-
+#include <qdeclarativecustomparser_p.h>
+#include <qdeclarativeparser_p.h>
 #include <QtCore/qglobal.h>
 
 QT_BEGIN_NAMESPACE
 
 class QDeclarativeCustomParserNodePrivate
 {
-public:
-    QByteArray name;
-    QList<QDeclarativeCustomParserProperty> properties;
-    QDeclarativeParser::Location location;
+ public:
+   QByteArray name;
+   QList<QDeclarativeCustomParserProperty> properties;
+   QDeclarativeParser::Location location;
 
-    static QDeclarativeCustomParserNode fromObject(QDeclarativeParser::Object *);
-    static QDeclarativeCustomParserProperty fromProperty(QDeclarativeParser::Property *);
+   static QDeclarativeCustomParserNode fromObject(QDeclarativeParser::Object *);
+   static QDeclarativeCustomParserProperty fromProperty(QDeclarativeParser::Property *);
 };
 
 class QDeclarativeCustomParserPropertyPrivate
 {
-public:
-    QDeclarativeCustomParserPropertyPrivate()
-        : isList(false) {}
+ public:
+   QDeclarativeCustomParserPropertyPrivate()
+      : isList(false) {}
 
-    QByteArray name;
-    bool isList;
-    QDeclarativeParser::Location location;
-    QList<QVariant> values;
+   QByteArray name;
+   bool isList;
+   QDeclarativeParser::Location location;
+   QList<QVariant> values;
 };
 
 QT_END_NAMESPACE

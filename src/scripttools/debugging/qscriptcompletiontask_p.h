@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -50,23 +50,23 @@ class QScriptDebuggerConsole;
 
 class QScriptCompletionTaskPrivate;
 class QScriptCompletionTask
-    : public QScriptCompletionTaskInterface
+   : public QScriptCompletionTaskInterface
 {
-    CS_OBJECT(QScriptCompletionTask)
-public:
-    QScriptCompletionTask(
-        const QString &contents, int cursorPosition, int frameIndex,
-        QScriptDebuggerCommandSchedulerInterface *commandScheduler,
-        QScriptDebuggerJobSchedulerInterface *jobScheduler,
-        QScriptDebuggerConsole *console,
-        QObject *parent = 0);
-    ~QScriptCompletionTask();
+   CS_OBJECT(QScriptCompletionTask)
+ public:
+   QScriptCompletionTask(
+      const QString &contents, int cursorPosition, int frameIndex,
+      QScriptDebuggerCommandSchedulerInterface *commandScheduler,
+      QScriptDebuggerJobSchedulerInterface *jobScheduler,
+      QScriptDebuggerConsole *console,
+      QObject *parent = 0);
+   ~QScriptCompletionTask();
 
-    void start();
+   void start();
 
-private:
-    Q_DECLARE_PRIVATE(QScriptCompletionTask)
-    Q_DISABLE_COPY(QScriptCompletionTask)
+ private:
+   Q_DECLARE_PRIVATE(QScriptCompletionTask)
+   Q_DISABLE_COPY(QScriptCompletionTask)
 };
 
 QT_END_NAMESPACE

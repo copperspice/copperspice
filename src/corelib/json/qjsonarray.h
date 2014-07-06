@@ -33,6 +33,7 @@ QT_BEGIN_NAMESPACE
 
 class QDebug;
 class QStringList;
+
 template <typename T> class QList;
 typedef QList<QVariant> QVariantList;
 

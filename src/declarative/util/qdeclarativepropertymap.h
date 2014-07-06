@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,45 +31,41 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
 
 class QDeclarativePropertyMapPrivate;
 
 class Q_DECLARATIVE_EXPORT QDeclarativePropertyMap : public QObject
 {
-    CS_OBJECT(QDeclarativePropertyMap)
+   CS_OBJECT(QDeclarativePropertyMap)
 
-public:
-    QDeclarativePropertyMap(QObject *parent = 0);
-    virtual ~QDeclarativePropertyMap();
+ public:
+   QDeclarativePropertyMap(QObject *parent = 0);
+   virtual ~QDeclarativePropertyMap();
 
-    QVariant value(const QString &key) const;
-    void insert(const QString &key, const QVariant &value);
-    void clear(const QString &key);
+   QVariant value(const QString &key) const;
+   void insert(const QString &key, const QVariant &value);
+   void clear(const QString &key);
 
-    Q_INVOKABLE QStringList keys() const;
+   Q_INVOKABLE QStringList keys() const;
 
-    int count() const;
-    int size() const;
-    bool isEmpty() const;
-    bool contains(const QString &key) const;
+   int count() const;
+   int size() const;
+   bool isEmpty() const;
+   bool contains(const QString &key) const;
 
-    QVariant &operator[](const QString &key);
-    QVariant operator[](const QString &key) const;
+   QVariant &operator[](const QString &key);
+   QVariant operator[](const QString &key) const;
 
-public:
-    CS_SIGNAL_1(Public, void valueChanged(const QString & key,const QVariant & value))
-    CS_SIGNAL_2(valueChanged,key,value) 
+ public:
+   CS_SIGNAL_1(Public, void valueChanged(const QString &key, const QVariant &value))
+   CS_SIGNAL_2(valueChanged, key, value)
 
-private:
-    Q_DECLARE_PRIVATE(QDeclarativePropertyMap)
-    Q_DISABLE_COPY(QDeclarativePropertyMap)
+ private:
+   Q_DECLARE_PRIVATE(QDeclarativePropertyMap)
+   Q_DISABLE_COPY(QDeclarativePropertyMap)
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif

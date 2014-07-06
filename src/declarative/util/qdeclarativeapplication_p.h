@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -28,45 +28,41 @@
 
 #include <QtCore/QObject>
 #include <qdeclarative.h>
-#include <private/qdeclarativeglobal_p.h>
-
-QT_BEGIN_HEADER
+#include <qdeclarativeglobal_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QDeclarativeApplicationPrivate;
+
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeApplication : public QObject
 {
-    CS_OBJECT(QDeclarativeApplication)
-    CS_PROPERTY_READ(active, active)
-    CS_PROPERTY_NOTIFY(active, activeChanged)
-    CS_PROPERTY_READ(layoutDirection, layoutDirection)
-    CS_PROPERTY_NOTIFY(layoutDirection, layoutDirectionChanged)
+   CS_OBJECT(QDeclarativeApplication)
+   CS_PROPERTY_READ(active, active)
+   CS_PROPERTY_NOTIFY(active, activeChanged)
+   CS_PROPERTY_READ(layoutDirection, layoutDirection)
+   CS_PROPERTY_NOTIFY(layoutDirection, layoutDirectionChanged)
 
-public:
-    explicit QDeclarativeApplication(QObject *parent = 0);
-    virtual ~QDeclarativeApplication();
-    bool active() const;
-    Qt::LayoutDirection layoutDirection() const;
+ public:
+   explicit QDeclarativeApplication(QObject *parent = 0);
+   virtual ~QDeclarativeApplication();
+   bool active() const;
+   Qt::LayoutDirection layoutDirection() const;
 
-protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+   CS_SIGNAL_1(Public, void activeChanged())
+   CS_SIGNAL_2(activeChanged)
+   CS_SIGNAL_1(Public, void layoutDirectionChanged())
+   CS_SIGNAL_2(layoutDirectionChanged)
 
-public:
-    CS_SIGNAL_1(Public, void activeChanged())
-    CS_SIGNAL_2(activeChanged) 
-    CS_SIGNAL_1(Public, void layoutDirectionChanged())
-    CS_SIGNAL_2(layoutDirectionChanged) 
+ protected:
+   bool eventFilter(QObject *obj, QEvent *event);
 
-private:
-    Q_DISABLE_COPY(QDeclarativeApplication)
-    Q_DECLARE_PRIVATE(QDeclarativeApplication)
+ private:
+   Q_DISABLE_COPY(QDeclarativeApplication)
+   Q_DECLARE_PRIVATE(QDeclarativeApplication)
 };
 
 QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QDeclarativeApplication)
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEAPPLICATION_P_H

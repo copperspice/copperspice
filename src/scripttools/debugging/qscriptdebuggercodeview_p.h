@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,36 +43,36 @@ QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerCodeViewPrivate;
 class QScriptDebuggerCodeView:
-    public QScriptDebuggerCodeViewInterface
+   public QScriptDebuggerCodeViewInterface
 {
-    CS_OBJECT(QScriptDebuggerCodeView)
-public:
-    QScriptDebuggerCodeView(QWidget *parent = 0);
-    ~QScriptDebuggerCodeView();
+   CS_OBJECT(QScriptDebuggerCodeView)
+ public:
+   QScriptDebuggerCodeView(QWidget *parent = 0);
+   ~QScriptDebuggerCodeView();
 
-    QString text() const;
-    void setText(const QString &text);
+   QString text() const;
+   void setText(const QString &text);
 
-    int cursorLineNumber() const;
-    void gotoLine(int lineNumber);
+   int cursorLineNumber() const;
+   void gotoLine(int lineNumber);
 
-    int find(const QString &exp, int options = 0);
+   int find(const QString &exp, int options = 0);
 
-    void setExecutionLineNumber(int lineNumber, bool error);
-    void setExecutableLineNumbers(const QSet<int> &lineNumbers);
+   void setExecutionLineNumber(int lineNumber, bool error);
+   void setExecutableLineNumbers(const QSet<int> &lineNumbers);
 
-    int baseLineNumber() const;
-    void setBaseLineNumber(int lineNumber);
+   int baseLineNumber() const;
+   void setBaseLineNumber(int lineNumber);
 
-    void setBreakpoint(int lineNumber);
-    void deleteBreakpoint(int lineNumber);
-    void setBreakpointEnabled(int lineNumber, bool enable);
+   void setBreakpoint(int lineNumber);
+   void deleteBreakpoint(int lineNumber);
+   void setBreakpointEnabled(int lineNumber, bool enable);
 
-    bool event(QEvent *e);
+   bool event(QEvent *e);
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerCodeView)
-    Q_DISABLE_COPY(QScriptDebuggerCodeView)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerCodeView)
+   Q_DISABLE_COPY(QScriptDebuggerCodeView)
 };
 
 QT_END_NAMESPACE

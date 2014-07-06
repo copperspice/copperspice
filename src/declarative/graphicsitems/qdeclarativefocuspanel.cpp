@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -41,15 +41,15 @@ QT_BEGIN_NAMESPACE
    \inherits Item
 
     Focus panels assist in keyboard focus handling when building QML
-    applications.  All the details are covered in the 
+    applications.  All the details are covered in the
     \l {qmlfocus}{keyboard focus documentation}.
 */
 
 QDeclarativeFocusPanel::QDeclarativeFocusPanel(QDeclarativeItem *parent) :
-    QDeclarativeItem(parent)
+   QDeclarativeItem(parent)
 {
-    Q_D(QDeclarativeItem);
-    d->flags |= QGraphicsItem::ItemIsPanel;
+   Q_D(QDeclarativeItem);
+   d->flags |= QGraphicsItem::ItemIsPanel;
 }
 
 QDeclarativeFocusPanel::~QDeclarativeFocusPanel()
@@ -64,10 +64,11 @@ QDeclarativeFocusPanel::~QDeclarativeFocusPanel()
 
 bool QDeclarativeFocusPanel::sceneEvent(QEvent *event)
 {
-    if (event->type() == QEvent::WindowActivate ||
-        event->type() == QEvent::WindowDeactivate)
-        emit activeChanged();
-    return QDeclarativeItem::sceneEvent(event);
+   if (event->type() == QEvent::WindowActivate ||
+         event->type() == QEvent::WindowDeactivate) {
+      emit activeChanged();
+   }
+   return QDeclarativeItem::sceneEvent(event);
 }
 
 QT_END_NAMESPACE

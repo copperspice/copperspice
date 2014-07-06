@@ -23,25 +23,24 @@
 *
 ***********************************************************************/
 
-#include "qscreenvnc_qws.h"
+#include <qscreenvnc_qws.h>
 
 #ifndef QT_NO_QWS_VNC
 
-#include "qscreenvnc_p.h"
-#include "qwindowsystem_qws.h"
-#include "qwsdisplay_qws.h"
-#include "qscreendriverfactory_qws.h"
+#include <qscreenvnc_p.h>
+#include <qwindowsystem_qws.h>
+#include <qwsdisplay_qws.h>
+#include <qscreendriverfactory_qws.h>
 #include <QtCore/qtimer.h>
 #include <QtCore/qregexp.h>
 #include <QtGui/qwidget.h>
 #include <QtGui/qpolygon.h>
 #include <QtGui/qpainter.h>
 #include <qdebug.h>
-#include <private/qwindowsurface_qws_p.h>
-#include <private/qwssignalhandler_p.h>
-#include <private/qwidget_p.h>
-#include <private/qdrawhelper_p.h>
-
+#include <qwindowsurface_qws_p.h>
+#include <qwssignalhandler_p.h>
+#include <qwidget_p.h>
+#include <qdrawhelper_p.h>
 #include <stdlib.h>
 
 QT_BEGIN_NAMESPACE

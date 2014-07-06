@@ -27,7 +27,7 @@
 #define QMLOSTPLUGIN_H
 
 #include <QtGui/QStylePlugin>
-#include <QtDeclarative/private/qdeclarativedebugserverconnection_p.h>
+#include <qdeclarativedebugserverconnection_p.h>
 
 QT_BEGIN_NAMESPACE
 

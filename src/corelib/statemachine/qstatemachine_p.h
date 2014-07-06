@@ -90,7 +90,6 @@ class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
    QAbstractState *findErrorState(QAbstractState *context);
    void setError(QStateMachine::Error error, QAbstractState *currentContext);
 
-   // private slots
    void _q_start();
    void _q_process();
 

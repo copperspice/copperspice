@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,35 +18,46 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVENULLABLEVALUE_P_H
-#define QDECLARATIVENULLABLEVALUE_P_H
+#ifndef QDECLARATIVENULLABLEVALUE_P_P_H
+#define QDECLARATIVENULLABLEVALUE_P_P_H
 
 QT_BEGIN_NAMESPACE
 
 template<typename T>
-struct QDeclarativeNullableValue 
-{
-    QDeclarativeNullableValue()
-    : isNull(true), value(T()) {}
-    QDeclarativeNullableValue(const QDeclarativeNullableValue<T> &o)
-    : isNull(o.isNull), value(o.value) {}
-    QDeclarativeNullableValue(const T &t)
-    : isNull(false), value(t) {}
-    QDeclarativeNullableValue<T> &operator=(const T &t)
-    { isNull = false; value = t; return *this; }
-    QDeclarativeNullableValue<T> &operator=(const QDeclarativeNullableValue<T> &o)
-    { isNull = o.isNull; value = o.value; return *this; }
-    operator T() const { return value; }
+struct QDeclarativeNullableValue {
+   QDeclarativeNullableValue()
+      : isNull(true), value(T()) {}
+   QDeclarativeNullableValue(const QDeclarativeNullableValue<T> &o)
+      : isNull(o.isNull), value(o.value) {}
+   QDeclarativeNullableValue(const T &t)
+      : isNull(false), value(t) {}
+   QDeclarativeNullableValue<T> &operator=(const T &t) {
+      isNull = false;
+      value = t;
+      return *this;
+   }
+   QDeclarativeNullableValue<T> &operator=(const QDeclarativeNullableValue<T> &o) {
+      isNull = o.isNull;
+      value = o.value;
+      return *this;
+   }
+   operator T() const {
+      return value;
+   }
 
-    void invalidate() { isNull = true; }
-    bool isValid() const { return !isNull; }
-    bool isNull;
-    T value;
+   void invalidate() {
+      isNull = true;
+   }
+   bool isValid() const {
+      return !isNull;
+   }
+   bool isNull;
+   T value;
 };
 
 QT_END_NAMESPACE

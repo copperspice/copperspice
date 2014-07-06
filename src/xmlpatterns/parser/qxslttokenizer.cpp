@@ -694,7 +694,7 @@ void XSLTTokenizer::handleStandardAttributes(const bool isXSLTElement)
             continue;
          default: {
             if (!isXSLTElement) /* validateElement() will take care of it, and we
-                           * don't want to flag non-standard XSL-T attributes. */
+                        * don't want to flag non-standard XSL-T attributes. */
             {
                error(QtXmlPatterns::tr("Unknown XSL-T attribute %1.")
                      .arg(formatKeyword(att.name())),

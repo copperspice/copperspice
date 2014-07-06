@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,75 +42,75 @@ class QDeclarativeComponentAttached;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeComponent : public QObject
 {
-    CS_OBJECT(QDeclarativeComponent)
-    Q_DECLARE_PRIVATE(QDeclarativeComponent)
+   CS_OBJECT(QDeclarativeComponent)
+   Q_DECLARE_PRIVATE(QDeclarativeComponent)
 
-    CS_PROPERTY_READ(progress, progress)
-    CS_PROPERTY_NOTIFY(progress, progressChanged)
-    CS_PROPERTY_READ(status, status)
-    CS_PROPERTY_NOTIFY(status, statusChanged)
-    CS_PROPERTY_READ(url, url)
-    CS_PROPERTY_CONSTANT(url)
+   CS_PROPERTY_READ(progress, progress)
+   CS_PROPERTY_NOTIFY(progress, progressChanged)
+   CS_PROPERTY_READ(status, status)
+   CS_PROPERTY_NOTIFY(status, statusChanged)
+   CS_PROPERTY_READ(url, url)
+   CS_PROPERTY_CONSTANT(url)
 
-public:
-    QDeclarativeComponent(QObject *parent = 0);
-    QDeclarativeComponent(QDeclarativeEngine *, QObject *parent=0);
-    QDeclarativeComponent(QDeclarativeEngine *, const QString &fileName, QObject *parent = 0);
-    QDeclarativeComponent(QDeclarativeEngine *, const QUrl &url, QObject *parent = 0);
-    virtual ~QDeclarativeComponent();
+ public:
+   QDeclarativeComponent(QObject *parent = 0);
+   QDeclarativeComponent(QDeclarativeEngine *, QObject *parent = 0);
+   QDeclarativeComponent(QDeclarativeEngine *, const QString &fileName, QObject *parent = 0);
+   QDeclarativeComponent(QDeclarativeEngine *, const QUrl &url, QObject *parent = 0);
+   virtual ~QDeclarativeComponent();
 
-    CS_ENUM(Status)
-    enum Status { Null, Ready, Loading, Error };
-    Status status() const;
+   CS_ENUM(Status)
+   enum Status { Null, Ready, Loading, Error };
+   Status status() const;
 
-    bool isNull() const;
-    bool isReady() const;
-    bool isError() const;
-    bool isLoading() const;
+   bool isNull() const;
+   bool isReady() const;
+   bool isError() const;
+   bool isLoading() const;
 
-    QList<QDeclarativeError> errors() const;
-   
-    DECL_CS_INVOKABLE_METHOD_1(Public, QString errorString() const)
-    DECL_CS_INVOKABLE_METHOD_2(errorString)
+   QList<QDeclarativeError> errors() const;
 
-    qreal progress() const;
+   DECL_CS_INVOKABLE_METHOD_1(Public, QString errorString() const)
+   DECL_CS_INVOKABLE_METHOD_2(errorString)
 
-    QUrl url() const;
+   qreal progress() const;
 
-    virtual QObject *create(QDeclarativeContext *context = 0);
-    virtual QObject *beginCreate(QDeclarativeContext *);
-    virtual void completeCreate();
+   QUrl url() const;
 
-    void loadUrl(const QUrl &url);
-    void setData(const QByteArray &, const QUrl &baseUrl);
+   virtual QObject *create(QDeclarativeContext *context = 0);
+   virtual QObject *beginCreate(QDeclarativeContext *);
+   virtual void completeCreate();
 
-    QDeclarativeContext *creationContext() const;
+   void loadUrl(const QUrl &url);
+   void setData(const QByteArray &, const QUrl &baseUrl);
 
-    static QDeclarativeComponentAttached *qmlAttachedProperties(QObject *);
+   QDeclarativeContext *creationContext() const;
 
-    CS_SIGNAL_1(Public, void statusChanged(QDeclarativeComponent::Status un_named_arg1))
-    CS_SIGNAL_2(statusChanged,un_named_arg1) 
+   static QDeclarativeComponentAttached *qmlAttachedProperties(QObject *);
 
-    CS_SIGNAL_1(Public, void progressChanged(qreal un_named_arg1))
-    CS_SIGNAL_2(progressChanged,un_named_arg1) 
+   CS_SIGNAL_1(Public, void statusChanged(QDeclarativeComponent::Status un_named_arg1))
+   CS_SIGNAL_2(statusChanged, un_named_arg1)
 
-protected:
-    QDeclarativeComponent(QDeclarativeComponentPrivate &dd, QObject* parent);
+   CS_SIGNAL_1(Public, void progressChanged(qreal un_named_arg1))
+   CS_SIGNAL_2(progressChanged, un_named_arg1)
 
-    CS_INVOKABLE_METHOD_1(Protected, QScriptValue createObject(QObject* parent))
-    CS_INVOKABLE_METHOD_OVERLOAD(createObject)
-       
-    CS_INVOKABLE_METHOD_1(Protected, createObject(QObject* parent, const QScriptValue& valuemap))
-    CS_INVOKABLE_METHOD_OVERLOAD(createObject)
-    CS_REVISION_OVERLOAD(createObject, 1, (QObject *, const QScriptValue&))
+ protected:
+   QDeclarativeComponent(QDeclarativeComponentPrivate &dd, QObject *parent);
 
-private:
-    QDeclarativeComponent(QDeclarativeEngine *, QDeclarativeCompiledData *, int, int, QObject *parent);
+   CS_INVOKABLE_METHOD_1(Protected, QScriptValue createObject(QObject *parent))
+   CS_INVOKABLE_METHOD_OVERLOAD(createObject)
 
-    Q_DISABLE_COPY(QDeclarativeComponent)
-    friend class QDeclarativeVME;
-    friend class QDeclarativeCompositeTypeData;
-    friend class QDeclarativeTypeData;
+   CS_INVOKABLE_METHOD_1(Protected, createObject(QObject *parent, const QScriptValue &valuemap))
+   CS_INVOKABLE_METHOD_OVERLOAD(createObject)
+   CS_REVISION_OVERLOAD(createObject, 1, (QObject *, const QScriptValue &))
+
+ private:
+   QDeclarativeComponent(QDeclarativeEngine *, QDeclarativeCompiledData *, int, int, QObject *parent);
+
+   Q_DISABLE_COPY(QDeclarativeComponent)
+   friend class QDeclarativeVME;
+   friend class QDeclarativeCompositeTypeData;
+   friend class QDeclarativeTypeData;
 };
 
 QT_END_NAMESPACE

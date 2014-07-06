@@ -23,10 +23,9 @@
 *
 ***********************************************************************/
 
-
-#include "qminimalwindowsurface.h"
+#include <qminimalwindowsurface.h>
 #include <QtCore/qdebug.h>
-#include <QtGui/private/qapplication_p.h>
+#include <qapplication_p.h>
 
 QT_BEGIN_NAMESPACE
 

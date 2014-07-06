@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -65,7 +65,7 @@ QT_BEGIN_NAMESPACE
     \sa PathView, PathAttribute, PathPercent, PathLine, PathQuad, PathCubic
 */
 QDeclarativePath::QDeclarativePath(QObject *parent)
- : QObject(*(new QDeclarativePathPrivate), parent)
+   : QObject(*(new QDeclarativePathPrivate), parent)
 {
 }
 
@@ -80,34 +80,36 @@ QDeclarativePath::~QDeclarativePath()
 */
 qreal QDeclarativePath::startX() const
 {
-    Q_D(const QDeclarativePath);
-    return d->startX;
+   Q_D(const QDeclarativePath);
+   return d->startX;
 }
 
 void QDeclarativePath::setStartX(qreal x)
 {
-    Q_D(QDeclarativePath);
-    if (qFuzzyCompare(x, d->startX))
-        return;
-    d->startX = x;
-    emit startXChanged();
-    processPath();
+   Q_D(QDeclarativePath);
+   if (qFuzzyCompare(x, d->startX)) {
+      return;
+   }
+   d->startX = x;
+   emit startXChanged();
+   processPath();
 }
 
 qreal QDeclarativePath::startY() const
 {
-    Q_D(const QDeclarativePath);
-    return d->startY;
+   Q_D(const QDeclarativePath);
+   return d->startY;
 }
 
 void QDeclarativePath::setStartY(qreal y)
 {
-    Q_D(QDeclarativePath);
-    if (qFuzzyCompare(y, d->startY))
-        return;
-    d->startY = y;
-    emit startYChanged();
-    processPath();
+   Q_D(QDeclarativePath);
+   if (qFuzzyCompare(y, d->startY)) {
+      return;
+   }
+   d->startY = y;
+   emit startYChanged();
+   processPath();
 }
 
 /*!
@@ -116,8 +118,8 @@ void QDeclarativePath::setStartY(qreal y)
 */
 bool QDeclarativePath::isClosed() const
 {
-    Q_D(const QDeclarativePath);
-    return d->closed;
+   Q_D(const QDeclarativePath);
+   return d->closed;
 }
 
 /*!
@@ -140,337 +142,346 @@ bool QDeclarativePath::isClosed() const
 
 QDeclarativeListProperty<QDeclarativePathElement> QDeclarativePath::pathElements()
 {
-    Q_D(QDeclarativePath);
-    return QDeclarativeListProperty<QDeclarativePathElement>(this, d->_pathElements);
+   Q_D(QDeclarativePath);
+   return QDeclarativeListProperty<QDeclarativePathElement>(this, d->_pathElements);
 }
 
 void QDeclarativePath::interpolate(int idx, const QString &name, qreal value)
 {
-    Q_D(QDeclarativePath);
-    if (!idx)
-        return;
+   Q_D(QDeclarativePath);
+   if (!idx) {
+      return;
+   }
 
-    qreal lastValue = 0;
-    qreal lastPercent = 0;
-    int search = idx - 1;
-    while(search >= 0) {
-        const AttributePoint &point = d->_attributePoints.at(search);
-        if (point.values.contains(name)) {
-            lastValue = point.values.value(name);
-            lastPercent = point.origpercent;
-            break;
-        }
-        --search;
-    }
+   qreal lastValue = 0;
+   qreal lastPercent = 0;
+   int search = idx - 1;
+   while (search >= 0) {
+      const AttributePoint &point = d->_attributePoints.at(search);
+      if (point.values.contains(name)) {
+         lastValue = point.values.value(name);
+         lastPercent = point.origpercent;
+         break;
+      }
+      --search;
+   }
 
-    ++search;
+   ++search;
 
-    const AttributePoint &curPoint = d->_attributePoints.at(idx);
+   const AttributePoint &curPoint = d->_attributePoints.at(idx);
 
-    for (int ii = search; ii < idx; ++ii) {
-        AttributePoint &point = d->_attributePoints[ii];
+   for (int ii = search; ii < idx; ++ii) {
+      AttributePoint &point = d->_attributePoints[ii];
 
-        qreal val = lastValue + (value - lastValue) * (point.origpercent - lastPercent) / (curPoint.origpercent - lastPercent);
-        point.values.insert(name, val);
-    }
+      qreal val = lastValue + (value - lastValue) * (point.origpercent - lastPercent) / (curPoint.origpercent - lastPercent);
+      point.values.insert(name, val);
+   }
 }
 
 void QDeclarativePath::endpoint(const QString &name)
 {
-    Q_D(QDeclarativePath);
-    const AttributePoint &first = d->_attributePoints.first();
-    qreal val = first.values.value(name);
-    for (int ii = d->_attributePoints.count() - 1; ii >= 0; ii--) {
-        const AttributePoint &point = d->_attributePoints.at(ii);
-        if (point.values.contains(name)) {
-            for (int jj = ii + 1; jj < d->_attributePoints.count(); ++jj) {
-                AttributePoint &setPoint = d->_attributePoints[jj];
-                setPoint.values.insert(name, val);
-            }
-            return;
-        }
-    }
+   Q_D(QDeclarativePath);
+   const AttributePoint &first = d->_attributePoints.first();
+   qreal val = first.values.value(name);
+   for (int ii = d->_attributePoints.count() - 1; ii >= 0; ii--) {
+      const AttributePoint &point = d->_attributePoints.at(ii);
+      if (point.values.contains(name)) {
+         for (int jj = ii + 1; jj < d->_attributePoints.count(); ++jj) {
+            AttributePoint &setPoint = d->_attributePoints[jj];
+            setPoint.values.insert(name, val);
+         }
+         return;
+      }
+   }
 }
 
 void QDeclarativePath::processPath()
 {
-    Q_D(QDeclarativePath);
+   Q_D(QDeclarativePath);
 
-    if (!d->componentComplete)
-        return;
+   if (!d->componentComplete) {
+      return;
+   }
 
-    d->_pointCache.clear();
-    d->_attributePoints.clear();
-    d->_path = QPainterPath();
+   d->_pointCache.clear();
+   d->_attributePoints.clear();
+   d->_path = QPainterPath();
 
-    AttributePoint first;
-    for (int ii = 0; ii < d->_attributes.count(); ++ii)
-        first.values[d->_attributes.at(ii)] = 0;
-    d->_attributePoints << first;
+   AttributePoint first;
+   for (int ii = 0; ii < d->_attributes.count(); ++ii) {
+      first.values[d->_attributes.at(ii)] = 0;
+   }
+   d->_attributePoints << first;
 
-    d->_path.moveTo(d->startX, d->startY);
+   d->_path.moveTo(d->startX, d->startY);
 
-    QDeclarativeCurve *lastCurve = 0;
-    foreach (QDeclarativePathElement *pathElement, d->_pathElements) {
-        if (QDeclarativeCurve *curve = qobject_cast<QDeclarativeCurve *>(pathElement)) {
-            curve->addToPath(d->_path);
-            AttributePoint p;
-            p.origpercent = d->_path.length();
-            d->_attributePoints << p;
-            lastCurve = curve;
-        } else if (QDeclarativePathAttribute *attribute = qobject_cast<QDeclarativePathAttribute *>(pathElement)) {
-            AttributePoint &point = d->_attributePoints.last();
-            point.values[attribute->name()] = attribute->value();
-            interpolate(d->_attributePoints.count() - 1, attribute->name(), attribute->value());
-        } else if (QDeclarativePathPercent *percent = qobject_cast<QDeclarativePathPercent *>(pathElement)) {
-            AttributePoint &point = d->_attributePoints.last();
-            point.values[QLatin1String("_qfx_percent")] = percent->value();
-            interpolate(d->_attributePoints.count() - 1, QLatin1String("_qfx_percent"), percent->value());
-        }
-    }
+   QDeclarativeCurve *lastCurve = 0;
+   foreach (QDeclarativePathElement * pathElement, d->_pathElements) {
+      if (QDeclarativeCurve *curve = qobject_cast<QDeclarativeCurve *>(pathElement)) {
+         curve->addToPath(d->_path);
+         AttributePoint p;
+         p.origpercent = d->_path.length();
+         d->_attributePoints << p;
+         lastCurve = curve;
+      } else if (QDeclarativePathAttribute *attribute = qobject_cast<QDeclarativePathAttribute *>(pathElement)) {
+         AttributePoint &point = d->_attributePoints.last();
+         point.values[attribute->name()] = attribute->value();
+         interpolate(d->_attributePoints.count() - 1, attribute->name(), attribute->value());
+      } else if (QDeclarativePathPercent *percent = qobject_cast<QDeclarativePathPercent *>(pathElement)) {
+         AttributePoint &point = d->_attributePoints.last();
+         point.values[QLatin1String("_qfx_percent")] = percent->value();
+         interpolate(d->_attributePoints.count() - 1, QLatin1String("_qfx_percent"), percent->value());
+      }
+   }
 
-    // Fixup end points
-    const AttributePoint &last = d->_attributePoints.last();
-    for (int ii = 0; ii < d->_attributes.count(); ++ii) {
-        if (!last.values.contains(d->_attributes.at(ii)))
-            endpoint(d->_attributes.at(ii));
-    }
+   // Fixup end points
+   const AttributePoint &last = d->_attributePoints.last();
+   for (int ii = 0; ii < d->_attributes.count(); ++ii) {
+      if (!last.values.contains(d->_attributes.at(ii))) {
+         endpoint(d->_attributes.at(ii));
+      }
+   }
 
-    // Adjust percent
-    qreal length = d->_path.length();
-    qreal prevpercent = 0;
-    qreal prevorigpercent = 0;
-    for (int ii = 0; ii < d->_attributePoints.count(); ++ii) {
-        const AttributePoint &point = d->_attributePoints.at(ii);
-        if (point.values.contains(QLatin1String("_qfx_percent"))) { //special string for QDeclarativePathPercent
-            if ( ii > 0) {
-                qreal scale = (d->_attributePoints[ii].origpercent/length - prevorigpercent) /
-                            (point.values.value(QLatin1String("_qfx_percent"))-prevpercent);
-                d->_attributePoints[ii].scale = scale;
-            }
-            d->_attributePoints[ii].origpercent /= length;
-            d->_attributePoints[ii].percent = point.values.value(QLatin1String("_qfx_percent"));
-            prevorigpercent = d->_attributePoints[ii].origpercent;
-            prevpercent = d->_attributePoints[ii].percent;
-        } else {
-            d->_attributePoints[ii].origpercent /= length;
-            d->_attributePoints[ii].percent = d->_attributePoints[ii].origpercent;
-        }
-    }
+   // Adjust percent
+   qreal length = d->_path.length();
+   qreal prevpercent = 0;
+   qreal prevorigpercent = 0;
+   for (int ii = 0; ii < d->_attributePoints.count(); ++ii) {
+      const AttributePoint &point = d->_attributePoints.at(ii);
+      if (point.values.contains(QLatin1String("_qfx_percent"))) { //special string for QDeclarativePathPercent
+         if ( ii > 0) {
+            qreal scale = (d->_attributePoints[ii].origpercent / length - prevorigpercent) /
+                          (point.values.value(QLatin1String("_qfx_percent")) - prevpercent);
+            d->_attributePoints[ii].scale = scale;
+         }
+         d->_attributePoints[ii].origpercent /= length;
+         d->_attributePoints[ii].percent = point.values.value(QLatin1String("_qfx_percent"));
+         prevorigpercent = d->_attributePoints[ii].origpercent;
+         prevpercent = d->_attributePoints[ii].percent;
+      } else {
+         d->_attributePoints[ii].origpercent /= length;
+         d->_attributePoints[ii].percent = d->_attributePoints[ii].origpercent;
+      }
+   }
 
-    d->closed = lastCurve && d->startX == lastCurve->x() && d->startY == lastCurve->y();
+   d->closed = lastCurve && d->startX == lastCurve->x() && d->startY == lastCurve->y();
 
-    emit changed();
+   emit changed();
 }
 
 void QDeclarativePath::classBegin()
 {
-    Q_D(QDeclarativePath);
-    d->componentComplete = false;
+   Q_D(QDeclarativePath);
+   d->componentComplete = false;
 }
 
 void QDeclarativePath::componentComplete()
 {
-    Q_D(QDeclarativePath);
-    QSet<QString> attrs;
-    d->componentComplete = true;
+   Q_D(QDeclarativePath);
+   QSet<QString> attrs;
+   d->componentComplete = true;
 
-    // First gather up all the attributes
-    foreach (QDeclarativePathElement *pathElement, d->_pathElements) {
-        if (QDeclarativePathAttribute *attribute =
-            qobject_cast<QDeclarativePathAttribute *>(pathElement))
-            attrs.insert(attribute->name());
-    }
-    d->_attributes = attrs.toList();
+   // First gather up all the attributes
+   foreach (QDeclarativePathElement * pathElement, d->_pathElements) {
+      if (QDeclarativePathAttribute *attribute =
+               qobject_cast<QDeclarativePathAttribute *>(pathElement)) {
+         attrs.insert(attribute->name());
+      }
+   }
+   d->_attributes = attrs.toList();
 
-    processPath();
+   processPath();
 
-    foreach (QDeclarativePathElement *pathElement, d->_pathElements)
-        connect(pathElement, SIGNAL(changed()), this, SLOT(processPath()));
+   foreach (QDeclarativePathElement * pathElement, d->_pathElements)
+   connect(pathElement, SIGNAL(changed()), this, SLOT(processPath()));
 }
 
 QPainterPath QDeclarativePath::path() const
 {
-    Q_D(const QDeclarativePath);
-    return d->_path;
+   Q_D(const QDeclarativePath);
+   return d->_path;
 }
 
 QStringList QDeclarativePath::attributes() const
 {
-    Q_D(const QDeclarativePath);
-    if (!d->componentComplete) {
-        QSet<QString> attrs;
+   Q_D(const QDeclarativePath);
+   if (!d->componentComplete) {
+      QSet<QString> attrs;
 
-        // First gather up all the attributes
-        foreach (QDeclarativePathElement *pathElement, d->_pathElements) {
-            if (QDeclarativePathAttribute *attribute =
-                qobject_cast<QDeclarativePathAttribute *>(pathElement))
-                attrs.insert(attribute->name());
-        }
-        return attrs.toList();
-    }
-    return d->_attributes;
+      // First gather up all the attributes
+      foreach (QDeclarativePathElement * pathElement, d->_pathElements) {
+         if (QDeclarativePathAttribute *attribute =
+                  qobject_cast<QDeclarativePathAttribute *>(pathElement)) {
+            attrs.insert(attribute->name());
+         }
+      }
+      return attrs.toList();
+   }
+   return d->_attributes;
 }
 
 static inline QBezier nextBezier(const QPainterPath &path, int *from, qreal *bezLength)
 {
-    const int lastElement = path.elementCount() - 1;
-    for (int i=*from; i <= lastElement; ++i) {
-        const QPainterPath::Element &e = path.elementAt(i);
+   const int lastElement = path.elementCount() - 1;
+   for (int i = *from; i <= lastElement; ++i) {
+      const QPainterPath::Element &e = path.elementAt(i);
 
-        switch (e.type) {
-        case QPainterPath::MoveToElement:
+      switch (e.type) {
+         case QPainterPath::MoveToElement:
             break;
-        case QPainterPath::LineToElement:
-        {
-            QLineF line(path.elementAt(i-1), e);
+         case QPainterPath::LineToElement: {
+            QLineF line(path.elementAt(i - 1), e);
             *bezLength = line.length();
-            QPointF a = path.elementAt(i-1);
+            QPointF a = path.elementAt(i - 1);
             QPointF delta = e - a;
-            *from = i+1;
+            *from = i + 1;
             return QBezier::fromPoints(a, a + delta / 3, a + 2 * delta / 3, e);
-        }
-        case QPainterPath::CurveToElement:
-        {
-            QBezier b = QBezier::fromPoints(path.elementAt(i-1),
+         }
+         case QPainterPath::CurveToElement: {
+            QBezier b = QBezier::fromPoints(path.elementAt(i - 1),
                                             e,
-                                            path.elementAt(i+1),
-                                            path.elementAt(i+2));
+                                            path.elementAt(i + 1),
+                                            path.elementAt(i + 2));
             *bezLength = b.length();
-            *from = i+3;
+            *from = i + 3;
             return b;
-        }
-        default:
+         }
+         default:
             break;
-        }
-    }
-    *from = lastElement;
-    *bezLength = 0;
-    return QBezier();
+      }
+   }
+   *from = lastElement;
+   *bezLength = 0;
+   return QBezier();
 }
 
 void QDeclarativePath::createPointCache() const
 {
-    Q_D(const QDeclarativePath);
-    qreal pathLength = d->_path.length();
-    if (pathLength <= 0 || qIsNaN(pathLength))
-        return;
-    // more points means less jitter between items as they move along the
-    // path, but takes longer to generate
-    const int points = qCeil(pathLength*5);
-    const int lastElement = d->_path.elementCount() - 1;
-    d->_pointCache.resize(points+1);
+   Q_D(const QDeclarativePath);
+   qreal pathLength = d->_path.length();
+   if (pathLength <= 0 || qIsNaN(pathLength)) {
+      return;
+   }
+   // more points means less jitter between items as they move along the
+   // path, but takes longer to generate
+   const int points = qCeil(pathLength * 5);
+   const int lastElement = d->_path.elementCount() - 1;
+   d->_pointCache.resize(points + 1);
 
-    int currElement = 0;
-    qreal bezLength = 0;
-    QBezier currBez = nextBezier(d->_path, &currElement, &bezLength);
-    qreal currLength = bezLength;
-    qreal epc = currLength / pathLength;
+   int currElement = 0;
+   qreal bezLength = 0;
+   QBezier currBez = nextBezier(d->_path, &currElement, &bezLength);
+   qreal currLength = bezLength;
+   qreal epc = currLength / pathLength;
 
-    for (int i = 0; i < d->_pointCache.size(); i++) {
-        //find which set we are in
-        qreal prevPercent = 0;
-        qreal prevOrigPercent = 0;
-        for (int ii = 0; ii < d->_attributePoints.count(); ++ii) {
-            qreal percent = qreal(i)/points;
-            const AttributePoint &point = d->_attributePoints.at(ii);
-            if (percent < point.percent || ii == d->_attributePoints.count() - 1) { //### || is special case for very last item
-                qreal elementPercent = (percent - prevPercent);
+   for (int i = 0; i < d->_pointCache.size(); i++) {
+      //find which set we are in
+      qreal prevPercent = 0;
+      qreal prevOrigPercent = 0;
+      for (int ii = 0; ii < d->_attributePoints.count(); ++ii) {
+         qreal percent = qreal(i) / points;
+         const AttributePoint &point = d->_attributePoints.at(ii);
+         if (percent < point.percent || ii == d->_attributePoints.count() - 1) { //### || is special case for very last item
+            qreal elementPercent = (percent - prevPercent);
 
-                qreal spc = prevOrigPercent + elementPercent * point.scale;
+            qreal spc = prevOrigPercent + elementPercent * point.scale;
 
-                while (spc > epc) {
-                    if (currElement > lastElement)
-                        break;
-                    currBez = nextBezier(d->_path, &currElement, &bezLength);
-                    if (bezLength == 0.0) {
-                        currLength = pathLength;
-                        epc = 1.0;
-                        break;
-                    }
-                    currLength += bezLength;
-                    epc = currLength / pathLength;
-                }
-                qreal realT = (pathLength * spc - (currLength - bezLength)) / bezLength;
-                d->_pointCache[i] = currBez.pointAt(qBound(qreal(0), realT, qreal(1)));
-                break;
+            while (spc > epc) {
+               if (currElement > lastElement) {
+                  break;
+               }
+               currBez = nextBezier(d->_path, &currElement, &bezLength);
+               if (bezLength == 0.0) {
+                  currLength = pathLength;
+                  epc = 1.0;
+                  break;
+               }
+               currLength += bezLength;
+               epc = currLength / pathLength;
             }
-            prevOrigPercent = point.origpercent;
-            prevPercent = point.percent;
-        }
-    }
+            qreal realT = (pathLength * spc - (currLength - bezLength)) / bezLength;
+            d->_pointCache[i] = currBez.pointAt(qBound(qreal(0), realT, qreal(1)));
+            break;
+         }
+         prevOrigPercent = point.origpercent;
+         prevPercent = point.percent;
+      }
+   }
 }
 
 QPointF QDeclarativePath::pointAt(qreal p) const
 {
-    Q_D(const QDeclarativePath);
-    if (d->_pointCache.isEmpty()) {
-        createPointCache();
-        if (d->_pointCache.isEmpty())
-            return QPointF();
-    }
-    int idx = qRound(p*d->_pointCache.size());
-    if (idx >= d->_pointCache.size())
-        idx = d->_pointCache.size() - 1;
-    else if (idx < 0)
-        idx = 0;
-    return d->_pointCache.at(idx);
+   Q_D(const QDeclarativePath);
+   if (d->_pointCache.isEmpty()) {
+      createPointCache();
+      if (d->_pointCache.isEmpty()) {
+         return QPointF();
+      }
+   }
+   int idx = qRound(p * d->_pointCache.size());
+   if (idx >= d->_pointCache.size()) {
+      idx = d->_pointCache.size() - 1;
+   } else if (idx < 0) {
+      idx = 0;
+   }
+   return d->_pointCache.at(idx);
 }
 
 qreal QDeclarativePath::attributeAt(const QString &name, qreal percent) const
 {
-    Q_D(const QDeclarativePath);
-    if (percent < 0 || percent > 1)
-        return 0;
+   Q_D(const QDeclarativePath);
+   if (percent < 0 || percent > 1) {
+      return 0;
+   }
 
-    for (int ii = 0; ii < d->_attributePoints.count(); ++ii) {
-        const AttributePoint &point = d->_attributePoints.at(ii);
+   for (int ii = 0; ii < d->_attributePoints.count(); ++ii) {
+      const AttributePoint &point = d->_attributePoints.at(ii);
 
-        if (point.percent == percent) {
-            return point.values.value(name);
-        } else if (point.percent > percent) {
-            qreal lastValue =
-                ii?(d->_attributePoints.at(ii - 1).values.value(name)):0;
-            qreal lastPercent =
-                ii?(d->_attributePoints.at(ii - 1).percent):0;
-            qreal curValue = point.values.value(name);
-            qreal curPercent = point.percent;
+      if (point.percent == percent) {
+         return point.values.value(name);
+      } else if (point.percent > percent) {
+         qreal lastValue =
+            ii ? (d->_attributePoints.at(ii - 1).values.value(name)) : 0;
+         qreal lastPercent =
+            ii ? (d->_attributePoints.at(ii - 1).percent) : 0;
+         qreal curValue = point.values.value(name);
+         qreal curPercent = point.percent;
 
-            return lastValue + (curValue - lastValue) * (percent - lastPercent) / (curPercent - lastPercent);
-        }
-    }
+         return lastValue + (curValue - lastValue) * (percent - lastPercent) / (curPercent - lastPercent);
+      }
+   }
 
-    return 0;
+   return 0;
 }
 
 /****************************************************************************/
 
 qreal QDeclarativeCurve::x() const
 {
-    return _x;
+   return _x;
 }
 
 void QDeclarativeCurve::setX(qreal x)
 {
-    if (_x != x) {
-        _x = x;
-        emit xChanged();
-        emit changed();
-    }
+   if (_x != x) {
+      _x = x;
+      emit xChanged();
+      emit changed();
+   }
 }
 
 qreal QDeclarativeCurve::y() const
 {
-    return _y;
+   return _y;
 }
 
 void QDeclarativeCurve::setY(qreal y)
 {
-    if (_y != y) {
-        _y = y;
-        emit yChanged();
-        emit changed();
-    }
+   if (_y != y) {
+      _y = y;
+      emit yChanged();
+      emit changed();
+   }
 }
 
 /****************************************************************************/
@@ -525,15 +536,16 @@ void QDeclarativeCurve::setY(qreal y)
 
 QString QDeclarativePathAttribute::name() const
 {
-    return _name;
+   return _name;
 }
 
 void QDeclarativePathAttribute::setName(const QString &name)
 {
-    if (_name == name)
-        return;
-     _name = name;
-    emit nameChanged();
+   if (_name == name) {
+      return;
+   }
+   _name = name;
+   emit nameChanged();
 }
 
 /*!
@@ -577,16 +589,16 @@ void QDeclarativePathAttribute::setName(const QString &name)
 */
 qreal QDeclarativePathAttribute::value() const
 {
-    return _value;
+   return _value;
 }
 
 void QDeclarativePathAttribute::setValue(qreal value)
 {
-    if (_value != value) {
-        _value = value;
-        emit valueChanged();
-        emit changed();
-    }
+   if (_value != value) {
+      _value = value;
+      emit valueChanged();
+      emit changed();
+   }
 }
 
 /****************************************************************************/
@@ -619,7 +631,7 @@ void QDeclarativePathAttribute::setValue(qreal value)
 
 void QDeclarativePathLine::addToPath(QPainterPath &path)
 {
-    path.lineTo(x(), y());
+   path.lineTo(x(), y());
 }
 
 /****************************************************************************/
@@ -665,16 +677,16 @@ void QDeclarativePathLine::addToPath(QPainterPath &path)
 */
 qreal QDeclarativePathQuad::controlX() const
 {
-    return _controlX;
+   return _controlX;
 }
 
 void QDeclarativePathQuad::setControlX(qreal x)
 {
-    if (_controlX != x) {
-        _controlX = x;
-        emit controlXChanged();
-        emit changed();
-    }
+   if (_controlX != x) {
+      _controlX = x;
+      emit controlXChanged();
+      emit changed();
+   }
 }
 
 
@@ -683,21 +695,21 @@ void QDeclarativePathQuad::setControlX(qreal x)
 */
 qreal QDeclarativePathQuad::controlY() const
 {
-    return _controlY;
+   return _controlY;
 }
 
 void QDeclarativePathQuad::setControlY(qreal y)
 {
-    if (_controlY != y) {
-        _controlY = y;
-        emit controlYChanged();
-        emit changed();
-    }
+   if (_controlY != y) {
+      _controlY = y;
+      emit controlYChanged();
+      emit changed();
+   }
 }
 
 void QDeclarativePathQuad::addToPath(QPainterPath &path)
 {
-    path.quadTo(controlX(), controlY(), x(), y());
+   path.quadTo(controlX(), controlY(), x(), y());
 }
 
 /****************************************************************************/
@@ -743,30 +755,30 @@ void QDeclarativePathQuad::addToPath(QPainterPath &path)
 */
 qreal QDeclarativePathCubic::control1X() const
 {
-    return _control1X;
+   return _control1X;
 }
 
 void QDeclarativePathCubic::setControl1X(qreal x)
 {
-    if (_control1X != x) {
-        _control1X = x;
-        emit control1XChanged();
-        emit changed();
-    }
+   if (_control1X != x) {
+      _control1X = x;
+      emit control1XChanged();
+      emit changed();
+   }
 }
 
 qreal QDeclarativePathCubic::control1Y() const
 {
-    return _control1Y;
+   return _control1Y;
 }
 
 void QDeclarativePathCubic::setControl1Y(qreal y)
 {
-    if (_control1Y != y) {
-        _control1Y = y;
-        emit control1YChanged();
-        emit changed();
-    }
+   if (_control1Y != y) {
+      _control1Y = y;
+      emit control1YChanged();
+      emit changed();
+   }
 }
 
 /*!
@@ -777,35 +789,35 @@ void QDeclarativePathCubic::setControl1Y(qreal y)
 */
 qreal QDeclarativePathCubic::control2X() const
 {
-    return _control2X;
+   return _control2X;
 }
 
 void QDeclarativePathCubic::setControl2X(qreal x)
 {
-    if (_control2X != x) {
-        _control2X = x;
-        emit control2XChanged();
-        emit changed();
-    }
+   if (_control2X != x) {
+      _control2X = x;
+      emit control2XChanged();
+      emit changed();
+   }
 }
 
 qreal QDeclarativePathCubic::control2Y() const
 {
-    return _control2Y;
+   return _control2Y;
 }
 
 void QDeclarativePathCubic::setControl2Y(qreal y)
 {
-    if (_control2Y != y) {
-        _control2Y = y;
-        emit control2YChanged();
-        emit changed();
-    }
+   if (_control2Y != y) {
+      _control2Y = y;
+      emit control2YChanged();
+      emit changed();
+   }
 }
 
 void QDeclarativePathCubic::addToPath(QPainterPath &path)
 {
-    path.cubicTo(control1X(), control1Y(), control2X(), control2Y(), x(), y());
+   path.cubicTo(control1X(), control1Y(), control2X(), control2Y(), x(), y());
 }
 
 /****************************************************************************/
@@ -892,15 +904,15 @@ void QDeclarativePathCubic::addToPath(QPainterPath &path)
 
 qreal QDeclarativePathPercent::value() const
 {
-    return _value;
+   return _value;
 }
 
 void QDeclarativePathPercent::setValue(qreal value)
 {
-    if (_value != value) {
-        _value = value;
-        emit valueChanged();
-        emit changed();
-    }
+   if (_value != value) {
+      _value = value;
+      emit valueChanged();
+      emit changed();
+   }
 }
 QT_END_NAMESPACE

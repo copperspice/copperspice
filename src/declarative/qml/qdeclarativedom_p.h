@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,23 +26,10 @@
 #ifndef QDECLARATIVEDOM_P_H
 #define QDECLARATIVEDOM_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "qdeclarativeerror.h"
-
+#include <qdeclarativeerror.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qshareddata.h>
-
-#include <private/qdeclarativeglobal_p.h>
+#include <qdeclarativeglobal_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -60,279 +47,279 @@ class QDeclarativeDomDocumentPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomDocument
 {
-public:
-    QDeclarativeDomDocument();
-    QDeclarativeDomDocument(const QDeclarativeDomDocument &);
-    ~QDeclarativeDomDocument();
-    QDeclarativeDomDocument &operator=(const QDeclarativeDomDocument &);
+ public:
+   QDeclarativeDomDocument();
+   QDeclarativeDomDocument(const QDeclarativeDomDocument &);
+   ~QDeclarativeDomDocument();
+   QDeclarativeDomDocument &operator=(const QDeclarativeDomDocument &);
 
-    QList<QDeclarativeDomImport> imports() const;
+   QList<QDeclarativeDomImport> imports() const;
 
-    QList<QDeclarativeError> errors() const;
-    bool load(QDeclarativeEngine *, const QByteArray &, const QUrl & = QUrl());
+   QList<QDeclarativeError> errors() const;
+   bool load(QDeclarativeEngine *, const QByteArray &, const QUrl & = QUrl());
 
-    QDeclarativeDomObject rootObject() const;
+   QDeclarativeDomObject rootObject() const;
 
-private:
-    QSharedDataPointer<QDeclarativeDomDocumentPrivate> d;
+ private:
+   QSharedDataPointer<QDeclarativeDomDocumentPrivate> d;
 };
 
 class QDeclarativeDomPropertyPrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomProperty
 {
-public:
-    QDeclarativeDomProperty();
-    QDeclarativeDomProperty(const QDeclarativeDomProperty &);
-    ~QDeclarativeDomProperty();
-    QDeclarativeDomProperty &operator=(const QDeclarativeDomProperty &);
+ public:
+   QDeclarativeDomProperty();
+   QDeclarativeDomProperty(const QDeclarativeDomProperty &);
+   ~QDeclarativeDomProperty();
+   QDeclarativeDomProperty &operator=(const QDeclarativeDomProperty &);
 
-    bool isValid() const;
+   bool isValid() const;
 
-    QByteArray propertyName() const;
-    QList<QByteArray> propertyNameParts() const;
+   QByteArray propertyName() const;
+   QList<QByteArray> propertyNameParts() const;
 
-    bool isDefaultProperty() const;
+   bool isDefaultProperty() const;
 
-    QDeclarativeDomValue value() const;
+   QDeclarativeDomValue value() const;
 
-    int position() const;
-    int length() const;
+   int position() const;
+   int length() const;
 
-private:
-    friend class QDeclarativeDomObject;
-    friend class QDeclarativeDomDynamicProperty;
-    QSharedDataPointer<QDeclarativeDomPropertyPrivate> d;
+ private:
+   friend class QDeclarativeDomObject;
+   friend class QDeclarativeDomDynamicProperty;
+   QSharedDataPointer<QDeclarativeDomPropertyPrivate> d;
 };
 
 class QDeclarativeDomDynamicPropertyPrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomDynamicProperty
 {
-public:
-    QDeclarativeDomDynamicProperty();
-    QDeclarativeDomDynamicProperty(const QDeclarativeDomDynamicProperty &);
-    ~QDeclarativeDomDynamicProperty();
-    QDeclarativeDomDynamicProperty &operator=(const QDeclarativeDomDynamicProperty &);
+ public:
+   QDeclarativeDomDynamicProperty();
+   QDeclarativeDomDynamicProperty(const QDeclarativeDomDynamicProperty &);
+   ~QDeclarativeDomDynamicProperty();
+   QDeclarativeDomDynamicProperty &operator=(const QDeclarativeDomDynamicProperty &);
 
-    bool isValid() const;
+   bool isValid() const;
 
-    QByteArray propertyName() const;
-    int propertyType() const;
-    QByteArray propertyTypeName() const;
+   QByteArray propertyName() const;
+   int propertyType() const;
+   QByteArray propertyTypeName() const;
 
-    bool isDefaultProperty() const;
-    QDeclarativeDomProperty defaultValue() const;
+   bool isDefaultProperty() const;
+   QDeclarativeDomProperty defaultValue() const;
 
-    bool isAlias() const;
+   bool isAlias() const;
 
-    int position() const;
-    int length() const;
+   int position() const;
+   int length() const;
 
-private:
-    friend class QDeclarativeDomObject;
-    QSharedDataPointer<QDeclarativeDomDynamicPropertyPrivate> d;
+ private:
+   friend class QDeclarativeDomObject;
+   QSharedDataPointer<QDeclarativeDomDynamicPropertyPrivate> d;
 };
 
 class QDeclarativeDomObjectPrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomObject
 {
-public:
-    QDeclarativeDomObject();
-    QDeclarativeDomObject(const QDeclarativeDomObject &);
-    ~QDeclarativeDomObject();
-    QDeclarativeDomObject &operator=(const QDeclarativeDomObject &);
+ public:
+   QDeclarativeDomObject();
+   QDeclarativeDomObject(const QDeclarativeDomObject &);
+   ~QDeclarativeDomObject();
+   QDeclarativeDomObject &operator=(const QDeclarativeDomObject &);
 
-    bool isValid() const;
+   bool isValid() const;
 
-    QByteArray objectType() const;
-    QByteArray objectClassName() const;
+   QByteArray objectType() const;
+   QByteArray objectClassName() const;
 
-    int objectTypeMajorVersion() const;
-    int objectTypeMinorVersion() const;
+   int objectTypeMajorVersion() const;
+   int objectTypeMinorVersion() const;
 
-    QString objectId() const;
+   QString objectId() const;
 
-    QList<QDeclarativeDomProperty> properties() const;
-    QDeclarativeDomProperty property(const QByteArray &) const;
+   QList<QDeclarativeDomProperty> properties() const;
+   QDeclarativeDomProperty property(const QByteArray &) const;
 
-    QList<QDeclarativeDomDynamicProperty> dynamicProperties() const;
-    QDeclarativeDomDynamicProperty dynamicProperty(const QByteArray &) const;
+   QList<QDeclarativeDomDynamicProperty> dynamicProperties() const;
+   QDeclarativeDomDynamicProperty dynamicProperty(const QByteArray &) const;
 
-    bool isCustomType() const;
-    QByteArray customTypeData() const;
+   bool isCustomType() const;
+   QByteArray customTypeData() const;
 
-    bool isComponent() const;
-    QDeclarativeDomComponent toComponent() const;
+   bool isComponent() const;
+   QDeclarativeDomComponent toComponent() const;
 
-    int position() const;
-    int length() const;
+   int position() const;
+   int length() const;
 
-    QUrl url() const;
-private:
-    friend class QDeclarativeDomDocument;
-    friend class QDeclarativeDomComponent;
-    friend class QDeclarativeDomValue;
-    friend class QDeclarativeDomValueValueSource;
-    friend class QDeclarativeDomValueValueInterceptor;
-    QSharedDataPointer<QDeclarativeDomObjectPrivate> d;
+   QUrl url() const;
+ private:
+   friend class QDeclarativeDomDocument;
+   friend class QDeclarativeDomComponent;
+   friend class QDeclarativeDomValue;
+   friend class QDeclarativeDomValueValueSource;
+   friend class QDeclarativeDomValueValueInterceptor;
+   QSharedDataPointer<QDeclarativeDomObjectPrivate> d;
 };
 
 class QDeclarativeDomValuePrivate;
 class QDeclarativeDomBasicValuePrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomValueLiteral
 {
-public:
-    QDeclarativeDomValueLiteral();
-    QDeclarativeDomValueLiteral(const QDeclarativeDomValueLiteral &);
-    ~QDeclarativeDomValueLiteral();
-    QDeclarativeDomValueLiteral &operator=(const QDeclarativeDomValueLiteral &);
+ public:
+   QDeclarativeDomValueLiteral();
+   QDeclarativeDomValueLiteral(const QDeclarativeDomValueLiteral &);
+   ~QDeclarativeDomValueLiteral();
+   QDeclarativeDomValueLiteral &operator=(const QDeclarativeDomValueLiteral &);
 
-    QString literal() const;
+   QString literal() const;
 
-private:
-    friend class QDeclarativeDomValue;
-    QSharedDataPointer<QDeclarativeDomBasicValuePrivate> d;
+ private:
+   friend class QDeclarativeDomValue;
+   QSharedDataPointer<QDeclarativeDomBasicValuePrivate> d;
 };
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomValueBinding
 {
-public:
-    QDeclarativeDomValueBinding();
-    QDeclarativeDomValueBinding(const QDeclarativeDomValueBinding &);
-    ~QDeclarativeDomValueBinding();
-    QDeclarativeDomValueBinding &operator=(const QDeclarativeDomValueBinding &);
+ public:
+   QDeclarativeDomValueBinding();
+   QDeclarativeDomValueBinding(const QDeclarativeDomValueBinding &);
+   ~QDeclarativeDomValueBinding();
+   QDeclarativeDomValueBinding &operator=(const QDeclarativeDomValueBinding &);
 
-    QString binding() const;
+   QString binding() const;
 
-private:
-    friend class QDeclarativeDomValue;
-    QSharedDataPointer<QDeclarativeDomBasicValuePrivate> d;
+ private:
+   friend class QDeclarativeDomValue;
+   QSharedDataPointer<QDeclarativeDomBasicValuePrivate> d;
 };
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomValueValueSource
 {
-public:
-    QDeclarativeDomValueValueSource();
-    QDeclarativeDomValueValueSource(const QDeclarativeDomValueValueSource &);
-    ~QDeclarativeDomValueValueSource();
-    QDeclarativeDomValueValueSource &operator=(const QDeclarativeDomValueValueSource &);
+ public:
+   QDeclarativeDomValueValueSource();
+   QDeclarativeDomValueValueSource(const QDeclarativeDomValueValueSource &);
+   ~QDeclarativeDomValueValueSource();
+   QDeclarativeDomValueValueSource &operator=(const QDeclarativeDomValueValueSource &);
 
-    QDeclarativeDomObject object() const;
+   QDeclarativeDomObject object() const;
 
-private:
-    friend class QDeclarativeDomValue;
-    QSharedDataPointer<QDeclarativeDomBasicValuePrivate> d;
+ private:
+   friend class QDeclarativeDomValue;
+   QSharedDataPointer<QDeclarativeDomBasicValuePrivate> d;
 };
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomValueValueInterceptor
 {
-public:
-    QDeclarativeDomValueValueInterceptor();
-    QDeclarativeDomValueValueInterceptor(const QDeclarativeDomValueValueInterceptor &);
-    ~QDeclarativeDomValueValueInterceptor();
-    QDeclarativeDomValueValueInterceptor &operator=(const QDeclarativeDomValueValueInterceptor &);
+ public:
+   QDeclarativeDomValueValueInterceptor();
+   QDeclarativeDomValueValueInterceptor(const QDeclarativeDomValueValueInterceptor &);
+   ~QDeclarativeDomValueValueInterceptor();
+   QDeclarativeDomValueValueInterceptor &operator=(const QDeclarativeDomValueValueInterceptor &);
 
-    QDeclarativeDomObject object() const;
+   QDeclarativeDomObject object() const;
 
-private:
-    friend class QDeclarativeDomValue;
-    QSharedDataPointer<QDeclarativeDomBasicValuePrivate> d;
+ private:
+   friend class QDeclarativeDomValue;
+   QSharedDataPointer<QDeclarativeDomBasicValuePrivate> d;
 };
 
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomComponent : public QDeclarativeDomObject
 {
-public:
-    QDeclarativeDomComponent();
-    QDeclarativeDomComponent(const QDeclarativeDomComponent &);
-    ~QDeclarativeDomComponent();
-    QDeclarativeDomComponent &operator=(const QDeclarativeDomComponent &);
+ public:
+   QDeclarativeDomComponent();
+   QDeclarativeDomComponent(const QDeclarativeDomComponent &);
+   ~QDeclarativeDomComponent();
+   QDeclarativeDomComponent &operator=(const QDeclarativeDomComponent &);
 
-    QDeclarativeDomObject componentRoot() const;
+   QDeclarativeDomObject componentRoot() const;
 };
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomValue
 {
-public:
-    enum Type { 
-        Invalid,
-        Literal, 
-        PropertyBinding, 
-        ValueSource,
-        ValueInterceptor,
-        Object,
-        List 
-    };
+ public:
+   enum Type {
+      Invalid,
+      Literal,
+      PropertyBinding,
+      ValueSource,
+      ValueInterceptor,
+      Object,
+      List
+   };
 
-    QDeclarativeDomValue();
-    QDeclarativeDomValue(const QDeclarativeDomValue &);
-    ~QDeclarativeDomValue();
-    QDeclarativeDomValue &operator=(const QDeclarativeDomValue &);
+   QDeclarativeDomValue();
+   QDeclarativeDomValue(const QDeclarativeDomValue &);
+   ~QDeclarativeDomValue();
+   QDeclarativeDomValue &operator=(const QDeclarativeDomValue &);
 
-    Type type() const;
+   Type type() const;
 
-    bool isInvalid() const;
-    bool isLiteral() const;
-    bool isBinding() const;
-    bool isValueSource() const;
-    bool isValueInterceptor() const;
-    bool isObject() const;
-    bool isList() const;
+   bool isInvalid() const;
+   bool isLiteral() const;
+   bool isBinding() const;
+   bool isValueSource() const;
+   bool isValueInterceptor() const;
+   bool isObject() const;
+   bool isList() const;
 
-    QDeclarativeDomValueLiteral toLiteral() const;
-    QDeclarativeDomValueBinding toBinding() const;
-    QDeclarativeDomValueValueSource toValueSource() const;
-    QDeclarativeDomValueValueInterceptor toValueInterceptor() const;
-    QDeclarativeDomObject toObject() const;
-    QDeclarativeDomList toList() const;
+   QDeclarativeDomValueLiteral toLiteral() const;
+   QDeclarativeDomValueBinding toBinding() const;
+   QDeclarativeDomValueValueSource toValueSource() const;
+   QDeclarativeDomValueValueInterceptor toValueInterceptor() const;
+   QDeclarativeDomObject toObject() const;
+   QDeclarativeDomList toList() const;
 
-    int position() const;
-    int length() const;
+   int position() const;
+   int length() const;
 
-private:
-    friend class QDeclarativeDomProperty;
-    friend class QDeclarativeDomList;
-    QSharedDataPointer<QDeclarativeDomValuePrivate> d;
+ private:
+   friend class QDeclarativeDomProperty;
+   friend class QDeclarativeDomList;
+   QSharedDataPointer<QDeclarativeDomValuePrivate> d;
 };
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomList
 {
-public:
-    QDeclarativeDomList();
-    QDeclarativeDomList(const QDeclarativeDomList &);
-    ~QDeclarativeDomList();
-    QDeclarativeDomList &operator=(const QDeclarativeDomList &);
+ public:
+   QDeclarativeDomList();
+   QDeclarativeDomList(const QDeclarativeDomList &);
+   ~QDeclarativeDomList();
+   QDeclarativeDomList &operator=(const QDeclarativeDomList &);
 
-    QList<QDeclarativeDomValue> values() const;
+   QList<QDeclarativeDomValue> values() const;
 
-    int position() const;
-    int length() const;
+   int position() const;
+   int length() const;
 
-    QList<int> commaPositions() const;
+   QList<int> commaPositions() const;
 
-private:
-    friend class QDeclarativeDomValue;
-    QSharedDataPointer<QDeclarativeDomValuePrivate> d;
+ private:
+   friend class QDeclarativeDomValue;
+   QSharedDataPointer<QDeclarativeDomValuePrivate> d;
 };
 
 class QDeclarativeDomImportPrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDomImport
 {
-public:
-    enum Type { Library, File };
+ public:
+   enum Type { Library, File };
 
-    QDeclarativeDomImport();
-    QDeclarativeDomImport(const QDeclarativeDomImport &);
-    ~QDeclarativeDomImport();
-    QDeclarativeDomImport &operator=(const QDeclarativeDomImport &);
+   QDeclarativeDomImport();
+   QDeclarativeDomImport(const QDeclarativeDomImport &);
+   ~QDeclarativeDomImport();
+   QDeclarativeDomImport &operator=(const QDeclarativeDomImport &);
 
-    Type type() const;
-    QString uri() const;
-    QString version() const;
-    QString qualifier() const;
+   Type type() const;
+   QString uri() const;
+   QString version() const;
+   QString qualifier() const;
 
-private:
-    friend class QDeclarativeDomDocument;
-    QSharedDataPointer<QDeclarativeDomImportPrivate> d;
+ private:
+   friend class QDeclarativeDomDocument;
+   QSharedDataPointer<QDeclarativeDomImportPrivate> d;
 };
 
 QT_END_NAMESPACE

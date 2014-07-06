@@ -26,12 +26,13 @@
 #ifndef QTCPSERVERCONNECTION_H
 #define QTCPSERVERCONNECTION_H
 
-#include <QtDeclarative/private/qdeclarativedebugserverconnection_p.h>
+#include <qdeclarativedebugserverconnection_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QDeclarativeDebugServer;
 class QTcpServerConnectionPrivate;
+
 class QTcpServerConnection : public QObject, public QDeclarativeDebugServerConnection
 {
     Q_OBJECT

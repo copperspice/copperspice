@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,13 +18,13 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVETRANSITIONMANAGER_P_H
-#define QDECLARATIVETRANSITIONMANAGER_P_H
+#ifndef QDECLARATIVETRANSITIONMANAGER_P_P_H
+#define QDECLARATIVETRANSITIONMANAGER_P_P_H
 
 #include "qdeclarativestateoperations_p.h"
 
@@ -32,25 +32,25 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeStatePrivate;
 class QDeclarativeTransitionManagerPrivate;
-class QDeclarativeTransitionManager 
+class QDeclarativeTransitionManager
 {
-public:
-    QDeclarativeTransitionManager();
-    ~QDeclarativeTransitionManager();
+ public:
+   QDeclarativeTransitionManager();
+   ~QDeclarativeTransitionManager();
 
-    void transition(const QList<QDeclarativeAction> &, QDeclarativeTransition *transition);
+   void transition(const QList<QDeclarativeAction> &, QDeclarativeTransition *transition);
 
-    void cancel();
+   void cancel();
 
-private:
-    Q_DISABLE_COPY(QDeclarativeTransitionManager)
-    QDeclarativeTransitionManagerPrivate *d;
+ private:
+   Q_DISABLE_COPY(QDeclarativeTransitionManager)
+   QDeclarativeTransitionManagerPrivate *d;
 
-    void complete();
-    void setState(QDeclarativeState *);
+   void complete();
+   void setState(QDeclarativeState *);
 
-    friend class QDeclarativeState;
-    friend class QDeclarativeTransitionPrivate;
+   friend class QDeclarativeState;
+   friend class QDeclarativeTransitionPrivate;
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -52,27 +52,27 @@ class QStringList;
 class QScriptDebuggerConsoleCommandManagerPrivate;
 class QScriptDebuggerConsoleCommandManager
 {
-public:
-    QScriptDebuggerConsoleCommandManager();
-    ~QScriptDebuggerConsoleCommandManager();
+ public:
+   QScriptDebuggerConsoleCommandManager();
+   ~QScriptDebuggerConsoleCommandManager();
 
-    void addCommand(QScriptDebuggerConsoleCommand *command);
-    void addCommandGroup(const QString &name,
-                         const QScriptDebuggerConsoleCommandGroupData &data);
+   void addCommand(QScriptDebuggerConsoleCommand *command);
+   void addCommandGroup(const QString &name,
+                        const QScriptDebuggerConsoleCommandGroupData &data);
 
-    QScriptDebuggerConsoleCommand *findCommand(const QString &name) const;
-    QMap<QString, QList<QScriptDebuggerConsoleCommand*> > commands() const;
-    QList<QScriptDebuggerConsoleCommand*> commandsInGroup(const QString &name) const;
+   QScriptDebuggerConsoleCommand *findCommand(const QString &name) const;
+   QMap<QString, QList<QScriptDebuggerConsoleCommand *> > commands() const;
+   QList<QScriptDebuggerConsoleCommand *> commandsInGroup(const QString &name) const;
 
-    QScriptDebuggerConsoleCommandGroupData commandGroupData(const QString &name) const;
-    QScriptDebuggerConsoleCommandGroupMap commandGroups() const;
+   QScriptDebuggerConsoleCommandGroupData commandGroupData(const QString &name) const;
+   QScriptDebuggerConsoleCommandGroupMap commandGroups() const;
 
-    QStringList completions(const QString &prefix) const;
+   QStringList completions(const QString &prefix) const;
 
-private:
-    QScopedPointer<QScriptDebuggerConsoleCommandManagerPrivate> d_ptr;
+ private:
+   QScopedPointer<QScriptDebuggerConsoleCommandManagerPrivate> d_ptr;
 
-    Q_DECLARE_PRIVATE(QScriptDebuggerConsoleCommandManager)
+   Q_DECLARE_PRIVATE(QScriptDebuggerConsoleCommandManager)
 };
 
 QT_END_NAMESPACE

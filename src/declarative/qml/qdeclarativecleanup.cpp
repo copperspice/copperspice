@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 /*!
 \internal
 \class QDeclarativeCleanup
-\brief The QDeclarativeCleanup provides a callback when a QDeclarativeEngine is deleted. 
+\brief The QDeclarativeCleanup provides a callback when a QDeclarativeEngine is deleted.
 
 Any object that needs cleanup to occur before the QDeclarativeEngine's QScriptEngine is
 destroyed should inherit from QDeclarativeCleanup.  The clear() virtual method will be
@@ -45,17 +45,22 @@ called by QDeclarativeEngine just before it deletes the QScriptEngine.
 Create a QDeclarativeCleanup for \a engine
 */
 QDeclarativeCleanup::QDeclarativeCleanup(QDeclarativeEngine *engine)
-: prev(0), next(0)
+   : prev(0), next(0)
 {
-    if (!engine)
-        return;
+   if (!engine) {
+      return;
+   }
 
-    QDeclarativeEnginePrivate *p = QDeclarativeEnginePrivate::get(engine);
+   QDeclarativeEnginePrivate *p = QDeclarativeEnginePrivate::get(engine);
 
-    if (p->cleanup) next = p->cleanup;
-    p->cleanup = this;
-    prev = &p->cleanup;
-    if (next) next->prev = &next;
+   if (p->cleanup) {
+      next = p->cleanup;
+   }
+   p->cleanup = this;
+   prev = &p->cleanup;
+   if (next) {
+      next->prev = &next;
+   }
 }
 
 /*!
@@ -63,9 +68,13 @@ QDeclarativeCleanup::QDeclarativeCleanup(QDeclarativeEngine *engine)
 */
 QDeclarativeCleanup::~QDeclarativeCleanup()
 {
-    if (prev) *prev = next;
-    if (next) next->prev = prev;
-    prev = 0; 
-    next = 0;
+   if (prev) {
+      *prev = next;
+   }
+   if (next) {
+      next->prev = prev;
+   }
+   prev = 0;
+   next = 0;
 }
 QT_END_NAMESPACE

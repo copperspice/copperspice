@@ -26,9 +26,8 @@
 #ifndef QWINDOWSURFACE_WAYLAND_H
 #define QWINDOWSURFACE_WAYLAND_H
 
-#include "qwaylandbuffer.h"
-#include <QtGui/private/qwindowsurface_p.h>
-
+#include <qwaylandbuffer.h>
+#include <qwindowsurface_p.h>
 #include <QtGui/QPlatformWindow>
 
 QT_BEGIN_NAMESPACE

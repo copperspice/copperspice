@@ -159,6 +159,7 @@ class QFutureInterface : public QFutureInterfaceBase
    inline const T &resultReference(int index) const;
    inline const T *resultPointer(int index) const;
    inline QList<T> results();
+
  private:
    QtConcurrent::ResultStore<T> &resultStore() {
       return static_cast<QtConcurrent::ResultStore<T> &>(resultStoreBase());

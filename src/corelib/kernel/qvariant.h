@@ -314,7 +314,7 @@ class Q_CORE_EXPORT QVariant
    template<typename T>
    static inline QVariant fromValue(const T &value) {
       return qVariantFromValue(value);
-   }       
+   }
 
    template<typename T>
    bool canConvert() const {
@@ -447,7 +447,8 @@ inline QVariant qVariantFromValue(const QVariant &t)
 
 // CopperSpice - new
 template<typename T>
-inline QVariant convertToQVariant(const T &value) {
+inline QVariant convertToQVariant(const T &value)
+{
    return qVariantFromValue(value);
 }
 

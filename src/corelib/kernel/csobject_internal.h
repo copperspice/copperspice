@@ -357,8 +357,8 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    }
 
    //
-   Bento<void (SignalClass::*)(SignalArgs...)> *signalMethod_Bento = 
-         new Bento<void (SignalClass::*)(SignalArgs...)>(signalMethod);
+   Bento<void (SignalClass::*)(SignalArgs...)> *signalMethod_Bento =
+      new Bento<void (SignalClass::*)(SignalArgs...)>(signalMethod);
 
    Bento<void (SlotClass::*)(SlotArgs...)> *slotMethod_Bento = new Bento<void (SlotClass::*)(SlotArgs...)>(slotMethod);
 
@@ -677,7 +677,7 @@ bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)
 
    if (signalName.isEmpty())  {
       const_cast<Sender *>(sender)->disconnectNotify(0);
-      
+
    } else {
       const_cast<Sender *>(sender)->disconnectNotify(signalName.constData());
 
@@ -785,11 +785,11 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
 
       // find registerd methods which match the name
       for (int index = 0; index < metaObject->methodCount(); ++index) {
-        
+
          int numOfChars = sig.indexOf('(') + 1;
 
          QMetaMethod testMethod   = metaObject->method(index);
-         QByteArray testSignature = testMethod.methodSignature();   
+         QByteArray testSignature = testMethod.methodSignature();
 
          if (strncmp(testSignature.constData(), sig.constData(), numOfChars) == 0)  {
             msgList.append(testSignature);
@@ -838,7 +838,7 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
 
       // find registerd methods which match the name
       for (int index = 0; index < metaObject->methodCount(); ++index) {
-         
+
          int numOfChars = sig.indexOf('(') + 1;
 
          QMetaMethod testMethod   = metaObject->method(index);

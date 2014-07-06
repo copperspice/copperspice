@@ -23,26 +23,29 @@
 *
 ***********************************************************************/
 
-#include "qxlibintegration.h"
-#include "qxlibwindowsurface.h"
-#include <QtGui/private/qpixmap_raster_p.h>
+#include <qxlibintegration.h>
+#include <qxlibwindowsurface.h>
+#include <qpixmap_raster_p.h>
 #include <QtCore/qdebug.h>
 
-#include "qxlibwindow.h"
-#include "qgenericunixfontdatabase.h"
-#include "qxlibscreen.h"
-#include "qxlibclipboard.h"
-#include "qxlibdisplay.h"
-#include "qxlibnativeinterface.h"
+#include <qxlibwindow.h>
+#include <qgenericunixfontdatabase.h>
+#include <qxlibscreen.h>
+#include <qxlibclipboard.h>
+#include <qxlibdisplay.h>
+#include <qxlibnativeinterface.h>
 
-#if !defined(QT_NO_OPENGL)
-#if !defined(QT_OPENGL_ES_2)
+#if ! defined(QT_NO_OPENGL)
+
+#if ! defined(QT_OPENGL_ES_2)
 #include <GL/glx.h>
 #else
 #include <EGL/egl.h>
-#endif //!defined(QT_OPENGL_ES_2)
-#include <private/qwindowsurface_gl_p.h>
-#include <private/qpixmapdata_gl_p.h>
+#endif
+
+#include <qwindowsurface_gl_p.h>
+#include <qpixmapdata_gl_p.h>
+
 #endif //QT_NO_OPENGL
 
 QT_BEGIN_NAMESPACE

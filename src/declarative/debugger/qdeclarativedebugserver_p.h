@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,19 +18,17 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVEDEBUGSERVER_H
-#define QDECLARATIVEDEBUGSERVER_H
+#ifndef QDECLARATIVEDEBUGSERVER_P_H
+#define QDECLARATIVEDEBUGSERVER_P_H
 
-#include <private/qdeclarativeglobal_p.h>
-#include <private/qdeclarativedebugserverconnection_p.h>
+#include <qdeclarativeglobal_p.h>
+#include <qdeclarativedebugserverconnection_p.h>
 #include <QScopedPointer>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
@@ -39,47 +37,45 @@ class QDeclarativeDebugServerPrivate;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeDebugServer : public QObject
 {
-    CS_OBJECT(QDeclarativeDebugServer)
+   CS_OBJECT(QDeclarativeDebugServer)
 
-    Q_DECLARE_PRIVATE(QDeclarativeDebugServer)
-    Q_DISABLE_COPY(QDeclarativeDebugServer)
+   Q_DECLARE_PRIVATE(QDeclarativeDebugServer)
+   Q_DISABLE_COPY(QDeclarativeDebugServer)
 
-public:
-    virtual ~QDeclarativeDebugServer();
-  
-    static QDeclarativeDebugServer *instance();
+ public:
+   virtual ~QDeclarativeDebugServer();
 
-    void setConnection(QDeclarativeDebugServerConnection *connection);
+   static QDeclarativeDebugServer *instance();
 
-    bool hasDebuggingClient() const;
+   void setConnection(QDeclarativeDebugServerConnection *connection);
 
-    QList<QDeclarativeDebugService*> services() const;
-    QStringList serviceNames() const;
+   bool hasDebuggingClient() const;
 
-    bool addService(QDeclarativeDebugService *service);
-    bool removeService(QDeclarativeDebugService *service);
+   QList<QDeclarativeDebugService *> services() const;
+   QStringList serviceNames() const;
 
-    void sendMessage(QDeclarativeDebugService *service, const QByteArray &message);
-    void receiveMessage(const QByteArray &message);
+   bool addService(QDeclarativeDebugService *service);
+   bool removeService(QDeclarativeDebugService *service);
 
-    bool waitForMessage(QDeclarativeDebugService *service);
+   void sendMessage(QDeclarativeDebugService *service, const QByteArray &message);
+   void receiveMessage(const QByteArray &message);
 
-private:
-    friend class QDeclarativeDebugService;
-    friend class QDeclarativeDebugServicePrivate;
+   bool waitForMessage(QDeclarativeDebugService *service);
 
-    QDeclarativeDebugServer();    
+ private:
+   friend class QDeclarativeDebugService;
+   friend class QDeclarativeDebugServicePrivate;
 
-    CS_SLOT_1(Private, void _q_deliverMessage(QString un_named_arg1,QByteArray un_named_arg2))
-    CS_SLOT_2(_q_deliverMessage)
+   QDeclarativeDebugServer();
 
-protected:
-	 QScopedPointer<QDeclarativeDebugServerPrivate> d_ptr;
+   CS_SLOT_1(Private, void _q_deliverMessage(QString un_named_arg1, QByteArray un_named_arg2))
+   CS_SLOT_2(_q_deliverMessage)
+
+ protected:
+   QScopedPointer<QDeclarativeDebugServerPrivate> d_ptr;
 
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEDEBUGSERVICE_H

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -51,197 +51,197 @@ class QScriptDebuggerValue;
 class QScriptDebuggerCommandPrivate;
 class QScriptDebuggerCommand
 {
-public:
-    friend QDataStream &operator<<(QDataStream &, const QScriptDebuggerCommand &);
-    friend QDataStream &operator>>(QDataStream &, QScriptDebuggerCommand &);
+ public:
+   friend QDataStream &operator<<(QDataStream &, const QScriptDebuggerCommand &);
+   friend QDataStream &operator>>(QDataStream &, QScriptDebuggerCommand &);
 
-    enum Type {
-        None,
+   enum Type {
+      None,
 
-        Interrupt,
-        Continue,
-        StepInto,
-        StepOver,
-        StepOut,
-        RunToLocation,
-        RunToLocationByID,
-        ForceReturn,
-        Resume,
+      Interrupt,
+      Continue,
+      StepInto,
+      StepOver,
+      StepOut,
+      RunToLocation,
+      RunToLocationByID,
+      ForceReturn,
+      Resume,
 
-        SetBreakpoint,
-        DeleteBreakpoint,
-        DeleteAllBreakpoints,
-        GetBreakpoints,
-        GetBreakpointData,
-        SetBreakpointData,
+      SetBreakpoint,
+      DeleteBreakpoint,
+      DeleteAllBreakpoints,
+      GetBreakpoints,
+      GetBreakpointData,
+      SetBreakpointData,
 
-        GetScripts,
-        GetScriptData,
-        ScriptsCheckpoint,
-        GetScriptsDelta,
-        ResolveScript,
+      GetScripts,
+      GetScriptData,
+      ScriptsCheckpoint,
+      GetScriptsDelta,
+      ResolveScript,
 
-        GetBacktrace,
-        GetContextCount,
-        GetContextInfo,
-        GetContextState,
-        GetContextID,
-        GetThisObject,
-        GetActivationObject,
-        GetScopeChain,
-        ContextsCheckpoint,
-        GetPropertyExpressionValue,
-        GetCompletions,
+      GetBacktrace,
+      GetContextCount,
+      GetContextInfo,
+      GetContextState,
+      GetContextID,
+      GetThisObject,
+      GetActivationObject,
+      GetScopeChain,
+      ContextsCheckpoint,
+      GetPropertyExpressionValue,
+      GetCompletions,
 
-        NewScriptObjectSnapshot,
-        ScriptObjectSnapshotCapture,
-        DeleteScriptObjectSnapshot,
+      NewScriptObjectSnapshot,
+      ScriptObjectSnapshotCapture,
+      DeleteScriptObjectSnapshot,
 
-        NewScriptValueIterator,
-        GetPropertiesByIterator,
-        DeleteScriptValueIterator,
+      NewScriptValueIterator,
+      GetPropertiesByIterator,
+      DeleteScriptValueIterator,
 
-        Evaluate,
+      Evaluate,
 
-        SetScriptValueProperty,
-        ScriptValueToString,
+      SetScriptValueProperty,
+      ScriptValueToString,
 
-        ClearExceptions,
+      ClearExceptions,
 
-        UserCommand = 1000,
-        MaxUserCommand = 32767
-    };
+      UserCommand = 1000,
+      MaxUserCommand = 32767
+   };
 
-    enum Attribute {
-        ScriptID,
-        FileName,
-        LineNumber,
-        Program,
-        BreakpointID,
-        BreakpointData,
-        ContextIndex,
-        ScriptValue,
-        StepCount,
-        IteratorID,
-        Name,
-        SubordinateScriptValue,
-        SnapshotID,
-        UserAttribute = 1000,
-        MaxUserAttribute = 32767
-    };
+   enum Attribute {
+      ScriptID,
+      FileName,
+      LineNumber,
+      Program,
+      BreakpointID,
+      BreakpointData,
+      ContextIndex,
+      ScriptValue,
+      StepCount,
+      IteratorID,
+      Name,
+      SubordinateScriptValue,
+      SnapshotID,
+      UserAttribute = 1000,
+      MaxUserAttribute = 32767
+   };
 
-    QScriptDebuggerCommand();
-    QScriptDebuggerCommand(Type type);
-    QScriptDebuggerCommand(const QScriptDebuggerCommand &other);
-    ~QScriptDebuggerCommand();
+   QScriptDebuggerCommand();
+   QScriptDebuggerCommand(Type type);
+   QScriptDebuggerCommand(const QScriptDebuggerCommand &other);
+   ~QScriptDebuggerCommand();
 
-    Type type() const;
+   Type type() const;
 
-    QVariant attribute(Attribute attribute, const QVariant &defaultValue = QVariant()) const;
-    void setAttribute(Attribute attribute, const QVariant &value);
-    QHash<Attribute, QVariant> attributes() const;
+   QVariant attribute(Attribute attribute, const QVariant &defaultValue = QVariant()) const;
+   void setAttribute(Attribute attribute, const QVariant &value);
+   QHash<Attribute, QVariant> attributes() const;
 
-    QString fileName() const;
-    void setFileName(const QString &fileName);
+   QString fileName() const;
+   void setFileName(const QString &fileName);
 
-    int lineNumber() const;
-    void setLineNumber(int lineNumber);
+   int lineNumber() const;
+   void setLineNumber(int lineNumber);
 
-    qint64 scriptId() const;
-    void setScriptId(qint64 id);
+   qint64 scriptId() const;
+   void setScriptId(qint64 id);
 
-    QString program() const;
-    void setProgram(const QString &program);
+   QString program() const;
+   void setProgram(const QString &program);
 
-    int breakpointId() const;
-    void setBreakpointId(int id);
+   int breakpointId() const;
+   void setBreakpointId(int id);
 
-    QScriptBreakpointData breakpointData() const;
-    void setBreakpointData(const QScriptBreakpointData &data);
+   QScriptBreakpointData breakpointData() const;
+   void setBreakpointData(const QScriptBreakpointData &data);
 
-    QScriptDebuggerValue scriptValue() const;
-    void setScriptValue(const QScriptDebuggerValue &value);
+   QScriptDebuggerValue scriptValue() const;
+   void setScriptValue(const QScriptDebuggerValue &value);
 
-    int contextIndex() const;
-    void setContextIndex(int index);
+   int contextIndex() const;
+   void setContextIndex(int index);
 
-    int iteratorId() const;
-    void setIteratorId(int id);
+   int iteratorId() const;
+   void setIteratorId(int id);
 
-    QString name() const;
-    void setName(const QString &name);
+   QString name() const;
+   void setName(const QString &name);
 
-    QScriptDebuggerValue subordinateScriptValue() const;
-    void setSubordinateScriptValue(const QScriptDebuggerValue &value);
+   QScriptDebuggerValue subordinateScriptValue() const;
+   void setSubordinateScriptValue(const QScriptDebuggerValue &value);
 
-    int snapshotId() const;
-    void setSnapshotId(int id);
+   int snapshotId() const;
+   void setSnapshotId(int id);
 
-    QScriptDebuggerCommand &operator=(const QScriptDebuggerCommand &other);
+   QScriptDebuggerCommand &operator=(const QScriptDebuggerCommand &other);
 
-    bool operator==(const QScriptDebuggerCommand &other) const;
-    bool operator!=(const QScriptDebuggerCommand &other) const;
+   bool operator==(const QScriptDebuggerCommand &other) const;
+   bool operator!=(const QScriptDebuggerCommand &other) const;
 
-    static QScriptDebuggerCommand interruptCommand();
-    static QScriptDebuggerCommand continueCommand();
-    static QScriptDebuggerCommand stepIntoCommand(int count = 1);
-    static QScriptDebuggerCommand stepOverCommand(int count = 1);
-    static QScriptDebuggerCommand stepOutCommand();
-    static QScriptDebuggerCommand runToLocationCommand(const QString &fileName, int lineNumber);
-    static QScriptDebuggerCommand runToLocationCommand(qint64 scriptId, int lineNumber);
-    static QScriptDebuggerCommand forceReturnCommand(int contextIndex, const QScriptDebuggerValue &value);
-    static QScriptDebuggerCommand resumeCommand();
+   static QScriptDebuggerCommand interruptCommand();
+   static QScriptDebuggerCommand continueCommand();
+   static QScriptDebuggerCommand stepIntoCommand(int count = 1);
+   static QScriptDebuggerCommand stepOverCommand(int count = 1);
+   static QScriptDebuggerCommand stepOutCommand();
+   static QScriptDebuggerCommand runToLocationCommand(const QString &fileName, int lineNumber);
+   static QScriptDebuggerCommand runToLocationCommand(qint64 scriptId, int lineNumber);
+   static QScriptDebuggerCommand forceReturnCommand(int contextIndex, const QScriptDebuggerValue &value);
+   static QScriptDebuggerCommand resumeCommand();
 
-    static QScriptDebuggerCommand setBreakpointCommand(const QString &fileName, int lineNumber);
-    static QScriptDebuggerCommand setBreakpointCommand(const QScriptBreakpointData &data);
-    static QScriptDebuggerCommand deleteBreakpointCommand(int id);
-    static QScriptDebuggerCommand deleteAllBreakpointsCommand();
-    static QScriptDebuggerCommand getBreakpointsCommand();
-    static QScriptDebuggerCommand getBreakpointDataCommand(int id);
-    static QScriptDebuggerCommand setBreakpointDataCommand(int id, const QScriptBreakpointData &data);
+   static QScriptDebuggerCommand setBreakpointCommand(const QString &fileName, int lineNumber);
+   static QScriptDebuggerCommand setBreakpointCommand(const QScriptBreakpointData &data);
+   static QScriptDebuggerCommand deleteBreakpointCommand(int id);
+   static QScriptDebuggerCommand deleteAllBreakpointsCommand();
+   static QScriptDebuggerCommand getBreakpointsCommand();
+   static QScriptDebuggerCommand getBreakpointDataCommand(int id);
+   static QScriptDebuggerCommand setBreakpointDataCommand(int id, const QScriptBreakpointData &data);
 
-    static QScriptDebuggerCommand getScriptsCommand();
-    static QScriptDebuggerCommand getScriptDataCommand(qint64 id);
-    static QScriptDebuggerCommand scriptsCheckpointCommand();
-    static QScriptDebuggerCommand getScriptsDeltaCommand();
-    static QScriptDebuggerCommand resolveScriptCommand(const QString &fileName);
+   static QScriptDebuggerCommand getScriptsCommand();
+   static QScriptDebuggerCommand getScriptDataCommand(qint64 id);
+   static QScriptDebuggerCommand scriptsCheckpointCommand();
+   static QScriptDebuggerCommand getScriptsDeltaCommand();
+   static QScriptDebuggerCommand resolveScriptCommand(const QString &fileName);
 
-    static QScriptDebuggerCommand getBacktraceCommand();
-    static QScriptDebuggerCommand getContextCountCommand();
-    static QScriptDebuggerCommand getContextStateCommand(int contextIndex);
-    static QScriptDebuggerCommand getContextInfoCommand(int contextIndex);
-    static QScriptDebuggerCommand getContextIdCommand(int contextIndex);
-    static QScriptDebuggerCommand getThisObjectCommand(int contextIndex);
-    static QScriptDebuggerCommand getActivationObjectCommand(int contextIndex);
-    static QScriptDebuggerCommand getScopeChainCommand(int contextIndex);
-    static QScriptDebuggerCommand contextsCheckpoint();
-    static QScriptDebuggerCommand getPropertyExpressionValue(int contextIndex, int lineNumber,
-                                                             const QStringList &path);
-    static QScriptDebuggerCommand getCompletions(int contextIndex, const QStringList &path);
+   static QScriptDebuggerCommand getBacktraceCommand();
+   static QScriptDebuggerCommand getContextCountCommand();
+   static QScriptDebuggerCommand getContextStateCommand(int contextIndex);
+   static QScriptDebuggerCommand getContextInfoCommand(int contextIndex);
+   static QScriptDebuggerCommand getContextIdCommand(int contextIndex);
+   static QScriptDebuggerCommand getThisObjectCommand(int contextIndex);
+   static QScriptDebuggerCommand getActivationObjectCommand(int contextIndex);
+   static QScriptDebuggerCommand getScopeChainCommand(int contextIndex);
+   static QScriptDebuggerCommand contextsCheckpoint();
+   static QScriptDebuggerCommand getPropertyExpressionValue(int contextIndex, int lineNumber,
+         const QStringList &path);
+   static QScriptDebuggerCommand getCompletions(int contextIndex, const QStringList &path);
 
-    static QScriptDebuggerCommand newScriptObjectSnapshotCommand();
-    static QScriptDebuggerCommand scriptObjectSnapshotCaptureCommand(int id, const QScriptDebuggerValue &object);
-    static QScriptDebuggerCommand deleteScriptObjectSnapshotCommand(int id);
+   static QScriptDebuggerCommand newScriptObjectSnapshotCommand();
+   static QScriptDebuggerCommand scriptObjectSnapshotCaptureCommand(int id, const QScriptDebuggerValue &object);
+   static QScriptDebuggerCommand deleteScriptObjectSnapshotCommand(int id);
 
-    static QScriptDebuggerCommand newScriptValueIteratorCommand(const QScriptDebuggerValue &object);
-    static QScriptDebuggerCommand getPropertiesByIteratorCommand(int id, int count);
-    static QScriptDebuggerCommand deleteScriptValueIteratorCommand(int id);
+   static QScriptDebuggerCommand newScriptValueIteratorCommand(const QScriptDebuggerValue &object);
+   static QScriptDebuggerCommand getPropertiesByIteratorCommand(int id, int count);
+   static QScriptDebuggerCommand deleteScriptValueIteratorCommand(int id);
 
-    static QScriptDebuggerCommand evaluateCommand(int contextIndex, const QString &program,
-                                                  const QString &fileName = QString(),
-                                                  int lineNumber = 1);
+   static QScriptDebuggerCommand evaluateCommand(int contextIndex, const QString &program,
+         const QString &fileName = QString(),
+         int lineNumber = 1);
 
-    static QScriptDebuggerCommand setScriptValuePropertyCommand(const QScriptDebuggerValue &object,
-                                                                const QString &name,
-                                                                const QScriptDebuggerValue &value);
-    static QScriptDebuggerCommand scriptValueToStringCommand(const QScriptDebuggerValue &value);
+   static QScriptDebuggerCommand setScriptValuePropertyCommand(const QScriptDebuggerValue &object,
+         const QString &name,
+         const QScriptDebuggerValue &value);
+   static QScriptDebuggerCommand scriptValueToStringCommand(const QScriptDebuggerValue &value);
 
-    static QScriptDebuggerCommand clearExceptionsCommand();
+   static QScriptDebuggerCommand clearExceptionsCommand();
 
-private:
-    QScopedPointer<QScriptDebuggerCommandPrivate> d_ptr;
+ private:
+   QScopedPointer<QScriptDebuggerCommandPrivate> d_ptr;
 
-    Q_DECLARE_PRIVATE(QScriptDebuggerCommand)
+   Q_DECLARE_PRIVATE(QScriptDebuggerCommand)
 };
 
 QDataStream &operator<<(QDataStream &, const QScriptDebuggerCommand &);

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -28,15 +28,15 @@
 
 QT_BEGIN_NAMESPACE
 
-class QDeclarativeApplicationPrivate 
+class QDeclarativeApplicationPrivate
 {
-    Q_DECLARE_PUBLIC(QDeclarativeApplication)
+   Q_DECLARE_PUBLIC(QDeclarativeApplication)
 
-public:
-    QDeclarativeApplicationPrivate() : active(QApplication::activeWindow() != 0),
-    layoutDirection(QApplication::layoutDirection()) {}
-    bool active;
-    Qt::LayoutDirection layoutDirection;
+ public:
+   QDeclarativeApplicationPrivate() : active(QApplication::activeWindow() != 0),
+      layoutDirection(QApplication::layoutDirection()) {}
+   bool active;
+   Qt::LayoutDirection layoutDirection;
 };
 
 /*
@@ -44,10 +44,12 @@ public:
     in qdeclarativengine.cpp
 */
 
-QDeclarativeApplication::QDeclarativeApplication(QObject *parent) : QObject(*new QDeclarativeApplicationPrivate(), parent)
+QDeclarativeApplication::QDeclarativeApplication(QObject *parent) : QObject(*new QDeclarativeApplicationPrivate(),
+         parent)
 {
-    if (qApp)
-        qApp->installEventFilter(this);
+   if (qApp) {
+      qApp->installEventFilter(this);
+   }
 }
 
 QDeclarativeApplication::~QDeclarativeApplication()
@@ -56,41 +58,42 @@ QDeclarativeApplication::~QDeclarativeApplication()
 
 bool QDeclarativeApplication::active() const
 {
-    Q_D(const QDeclarativeApplication);
-    return d->active;
+   Q_D(const QDeclarativeApplication);
+   return d->active;
 }
 
 Qt::LayoutDirection QDeclarativeApplication::layoutDirection() const
 {
-    Q_D(const QDeclarativeApplication);
-    return d->layoutDirection;
+   Q_D(const QDeclarativeApplication);
+   return d->layoutDirection;
 }
 
 bool QDeclarativeApplication::eventFilter(QObject *obj, QEvent *event)
 {
-    Q_UNUSED(obj)
-    Q_D(QDeclarativeApplication);
-    if (event->type() == QEvent::ApplicationActivate
-     || event->type() == QEvent::ApplicationDeactivate) {
-        bool active = d->active;
-        if (event->type() == QEvent::ApplicationActivate)
-            active  = true;
-        else if (event->type() == QEvent::ApplicationDeactivate)
-            active  = false;
+   Q_UNUSED(obj)
+   Q_D(QDeclarativeApplication);
+   if (event->type() == QEvent::ApplicationActivate
+         || event->type() == QEvent::ApplicationDeactivate) {
+      bool active = d->active;
+      if (event->type() == QEvent::ApplicationActivate) {
+         active  = true;
+      } else if (event->type() == QEvent::ApplicationDeactivate) {
+         active  = false;
+      }
 
-        if (d->active != active) {
-            d->active = active;
-            emit activeChanged();
-        }
-    }
-    if (event->type() == QEvent::LayoutDirectionChange) {
-        Qt::LayoutDirection direction = QApplication::layoutDirection();
-        if (d->layoutDirection != direction) {
-            d->layoutDirection = direction;
-            emit layoutDirectionChanged();
-        }
-    }
-    return false;
+      if (d->active != active) {
+         d->active = active;
+         emit activeChanged();
+      }
+   }
+   if (event->type() == QEvent::LayoutDirectionChange) {
+      Qt::LayoutDirection direction = QApplication::layoutDirection();
+      if (d->layoutDirection != direction) {
+         d->layoutDirection = direction;
+         emit layoutDirectionChanged();
+      }
+   }
+   return false;
 }
 
 QT_END_NAMESPACE

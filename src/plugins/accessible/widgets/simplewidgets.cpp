@@ -23,8 +23,7 @@
 *
 ***********************************************************************/
 
-#include "simplewidgets.h"
-
+#include <simplewidgets.h>
 #include <qabstractbutton.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
@@ -37,7 +36,7 @@
 #include <qlcdnumber.h>
 #include <qtextdocument.h>
 #include <qlineedit.h>
-#include <private/qlineedit_p.h>
+#include <qlineedit_p.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
 

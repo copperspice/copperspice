@@ -40,6 +40,7 @@ template <typename Iterator, typename MapFunctor>
 class MapKernel : public IterateKernel<Iterator, void>
 {
    MapFunctor map;
+
  public:
    typedef void ReturnType;
    MapKernel(Iterator begin, Iterator end, MapFunctor _map)
@@ -63,19 +64,16 @@ class MapKernel : public IterateKernel<Iterator, void>
    }
 };
 
-template <typename ReducedResultType,
-          typename Iterator,
-          typename MapFunctor,
-          typename ReduceFunctor,
-          typename Reducer = ReduceKernel<ReduceFunctor,
-                ReducedResultType,
-                typename MapFunctor::result_type> >
+template <typename ReducedResultType, typename Iterator, typename MapFunctor, typename ReduceFunctor,
+          typename Reducer = ReduceKernel<ReduceFunctor, ReducedResultType, typename MapFunctor::result_type> >
+
 class MappedReducedKernel : public IterateKernel<Iterator, ReducedResultType>
 {
    ReducedResultType reducedResult;
    MapFunctor map;
    ReduceFunctor reduce;
    Reducer reducer;
+
  public:
    typedef ReducedResultType ReturnType;
    MappedReducedKernel(Iterator begin, Iterator end, MapFunctor _map, ReduceFunctor _reduce, ReduceOptions reduceOptions)
@@ -83,9 +81,7 @@ class MappedReducedKernel : public IterateKernel<Iterator, ReducedResultType>
         reducer(reduceOptions) {
    }
 
-   MappedReducedKernel(ReducedResultType initialValue,
-                       MapFunctor _map,
-                       ReduceFunctor _reduce)
+   MappedReducedKernel(ReducedResultType initialValue, MapFunctor _map, ReduceFunctor _reduce)
       : reducedResult(initialValue), map(_map), reduce(_reduce) {
    }
 
@@ -139,6 +135,7 @@ class MappedEachKernel : public IterateKernel<Iterator, typename MapFunctor::res
 {
    MapFunctor map;
    typedef typename MapFunctor::result_type T;
+
  public:
    typedef T ReturnType;
    typedef T ResultType;

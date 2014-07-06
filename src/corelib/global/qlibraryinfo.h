@@ -45,24 +45,26 @@ class Q_CORE_EXPORT QLibraryInfo
    static QDate buildDate();
 #endif
 
-   enum LibraryLocation {    
+   enum LibraryLocation {
       PluginsPath,
-      ImportsPath,     
-      Qml2ImportsPath, 
+      ImportsPath,
+      Qml2ImportsPath,
       TranslationsPath,
-      SettingsPath,          
+      SettingsPath,
    };
-   static QString location(LibraryLocation); 
+   static QString location(LibraryLocation);
 
  private:
    QLibraryInfo();
-  
-   static QSettings *configuration();  
-   static QSettings *findConfiguration();    
-   static QSettings *qt_library_settings(); 
+
+   static QSettings *configuration();
+   static QSettings *findConfiguration();
+   static QSettings *qt_library_settings();
 };
 
 #endif /* QT_NO_SETTINGS */
+
+Q_CORE_EXPORT void cs_print_build_info();
 
 QT_END_NAMESPACE
 

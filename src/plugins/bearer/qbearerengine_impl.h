@@ -26,7 +26,7 @@
 #ifndef QBEARERENGINE_IMPL_H
 #define QBEARERENGINE_IMPL_H
 
-#include <QtNetwork/private/qbearerengine_p.h>
+#include <qbearerengine_p.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

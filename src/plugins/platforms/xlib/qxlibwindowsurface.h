@@ -26,8 +26,7 @@
 #ifndef QWINDOWSURFACE_TESTLITE_H
 #define QWINDOWSURFACE_TESTLITE_H
 
-#include <QtGui/private/qwindowsurface_p.h>
-
+#include <qwindowsurface_p.h>
 
 QT_BEGIN_NAMESPACE
 

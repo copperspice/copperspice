@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,24 +26,12 @@
 #ifndef QDECLARATIVECOMPONENT_P_H
 #define QDECLARATIVECOMPONENT_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "qdeclarativecomponent.h"
-
-#include "private/qdeclarativeengine_p.h"
-#include "private/qdeclarativetypeloader_p.h"
-#include "private/qbitfield_p.h"
-#include "qdeclarativeerror.h"
-#include "qdeclarative.h"
+#include <qdeclarativecomponent.h>
+#include <qdeclarativeengine_p.h>
+#include <qdeclarativetypeloader_p.h>
+#include <qbitfield_p.h>
+#include <qdeclarativeerror.h>
+#include <qdeclarative.h>
 
 #include <QtCore/QString>
 #include <QtCore/QStringList>
@@ -58,87 +46,95 @@ class QDeclarativeCompiledData;
 class QDeclarativeComponentAttached;
 class QDeclarativeComponentPrivate : public QDeclarativeTypeData::TypeDataCallback
 {
-    Q_DECLARE_PUBLIC(QDeclarativeComponent)
-        
-public:
-    QDeclarativeComponentPrivate() : typeData(0), progress(0.), start(-1), count(-1), cc(0), engine(0), creationContext(0) {}
+   Q_DECLARE_PUBLIC(QDeclarativeComponent)
 
-    QObject *beginCreate(QDeclarativeContextData *, const QBitField &);
-    void completeCreate();
+ public:
+   QDeclarativeComponentPrivate() : typeData(0), progress(0.), start(-1), count(-1), cc(0), engine(0),
+      creationContext(0) {}
 
-    QDeclarativeTypeData *typeData;
-    virtual void typeDataReady(QDeclarativeTypeData *);
-    virtual void typeDataProgress(QDeclarativeTypeData *, qreal);
-    
-    void fromTypeData(QDeclarativeTypeData *data);
+   QObject *beginCreate(QDeclarativeContextData *, const QBitField &);
+   void completeCreate();
 
-    QUrl url;
-    qreal progress;
+   QDeclarativeTypeData *typeData;
+   virtual void typeDataReady(QDeclarativeTypeData *);
+   virtual void typeDataProgress(QDeclarativeTypeData *, qreal);
 
-    int start;
-    int count;
-    QDeclarativeCompiledData *cc;
+   void fromTypeData(QDeclarativeTypeData *data);
 
-    struct ConstructionState {
-        ConstructionState() : componentAttached(0), completePending(false) {}
-        QList<QDeclarativeEnginePrivate::SimpleList<QDeclarativeAbstractBinding> > bindValues;
-        QList<QDeclarativeEnginePrivate::SimpleList<QDeclarativeParserStatus> > parserStatus;
-        QList<QPair<QDeclarativeGuard<QObject>, int> > finalizedParserStatus;
-        QDeclarativeComponentAttached *componentAttached;
-        QList<QDeclarativeError> errors;
-        bool completePending;
-    };
-    ConstructionState state;
+   QUrl url;
+   qreal progress;
 
-    static QObject *begin(QDeclarativeContextData *parentContext, QDeclarativeContextData *componentCreationContext,
-                          QDeclarativeCompiledData *component, int start, int count, 
-                          ConstructionState *state, QList<QDeclarativeError> *errors, 
-                          const QBitField &bindings = QBitField());
-    static void beginDeferred(QDeclarativeEnginePrivate *enginePriv, QObject *object, 
-                              ConstructionState *state);
-    static void complete(QDeclarativeEnginePrivate *enginePriv, ConstructionState *state);
+   int start;
+   int count;
+   QDeclarativeCompiledData *cc;
 
-    QScriptValue createObject(QObject *publicParent, const QScriptValue valuemap);
+   struct ConstructionState {
+      ConstructionState() : componentAttached(0), completePending(false) {}
+      QList<QDeclarativeEnginePrivate::SimpleList<QDeclarativeAbstractBinding> > bindValues;
+      QList<QDeclarativeEnginePrivate::SimpleList<QDeclarativeParserStatus> > parserStatus;
+      QList<QPair<QDeclarativeGuard<QObject>, int> > finalizedParserStatus;
+      QDeclarativeComponentAttached *componentAttached;
+      QList<QDeclarativeError> errors;
+      bool completePending;
+   };
+   ConstructionState state;
 
-    QDeclarativeEngine *engine;
-    QDeclarativeGuardedContextData creationContext;
+   static QObject *begin(QDeclarativeContextData *parentContext, QDeclarativeContextData *componentCreationContext,
+                         QDeclarativeCompiledData *component, int start, int count,
+                         ConstructionState *state, QList<QDeclarativeError> *errors,
+                         const QBitField &bindings = QBitField());
+   static void beginDeferred(QDeclarativeEnginePrivate *enginePriv, QObject *object,
+                             ConstructionState *state);
+   static void complete(QDeclarativeEnginePrivate *enginePriv, ConstructionState *state);
 
-    void clear();
+   QScriptValue createObject(QObject *publicParent, const QScriptValue valuemap);
 
-    static QDeclarativeComponentPrivate *get(QDeclarativeComponent *c) {
-        return static_cast<QDeclarativeComponentPrivate *>(QObjectPrivate::get(c));
-    }
+   QDeclarativeEngine *engine;
+   QDeclarativeGuardedContextData creationContext;
+
+   void clear();
+
+   static QDeclarativeComponentPrivate *get(QDeclarativeComponent *c) {
+      return static_cast<QDeclarativeComponentPrivate *>(QObjectPrivate::get(c));
+   }
 };
 
 class QDeclarativeComponentAttached : public QObject
 {
-    CS_OBJECT(QDeclarativeComponentAttached)
+   CS_OBJECT(QDeclarativeComponentAttached)
 
-public:
-    QDeclarativeComponentAttached(QObject *parent = 0);
-    ~QDeclarativeComponentAttached();
+ public:
+   QDeclarativeComponentAttached(QObject *parent = 0);
+   ~QDeclarativeComponentAttached();
 
-    void add(QDeclarativeComponentAttached **a) {
-        prev = a; next = *a; *a = this;
-        if (next) next->prev = &next;
-    }
-    void rem() {
-        if (next) next->prev = prev;
-        *prev = next;
-        next = 0; prev = 0;
-    }
-    QDeclarativeComponentAttached **prev;
-    QDeclarativeComponentAttached *next;
+   void add(QDeclarativeComponentAttached **a) {
+      prev = a;
+      next = *a;
+      *a = this;
+      if (next) {
+         next->prev = &next;
+      }
+   }
+   void rem() {
+      if (next) {
+         next->prev = prev;
+      }
+      *prev = next;
+      next = 0;
+      prev = 0;
+   }
+   QDeclarativeComponentAttached **prev;
+   QDeclarativeComponentAttached *next;
 
-public:
-    CS_SIGNAL_1(Public, void completed())
-    CS_SIGNAL_2(completed) 
-    CS_SIGNAL_1(Public, void destruction())
-    CS_SIGNAL_2(destruction) 
+ public:
+   CS_SIGNAL_1(Public, void completed())
+   CS_SIGNAL_2(completed)
+   CS_SIGNAL_1(Public, void destruction())
+   CS_SIGNAL_2(destruction)
 
-private:
-    friend class QDeclarativeContextData;
-    friend class QDeclarativeComponentPrivate;
+ private:
+   friend class QDeclarativeContextData;
+   friend class QDeclarativeComponentPrivate;
 };
 
 QT_END_NAMESPACE

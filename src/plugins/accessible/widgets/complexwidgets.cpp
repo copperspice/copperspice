@@ -23,8 +23,7 @@
 *
 ***********************************************************************/
 
-#include "complexwidgets.h"
-
+#include <complexwidgets.h>
 #include <qapplication.h>
 #include <qabstractbutton.h>
 #include <qevent.h>
@@ -39,7 +38,7 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qtreeview.h>
-#include <private/qtabbar_p.h>
+#include <qtabbar_p.h>
 #include <QAbstractScrollArea>
 #include <QScrollArea>
 #include <QScrollBar>

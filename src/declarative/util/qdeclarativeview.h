@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,8 +33,6 @@
 #include <QtGui/qwidget.h>
 #include <QtDeclarative/qdeclarativedebug.h>
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
 
 class QGraphicsObject;
@@ -45,68 +43,66 @@ class QDeclarativeViewPrivate;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeView : public QGraphicsView
 {
-    CS_OBJECT(QDeclarativeView)
+   CS_OBJECT(QDeclarativeView)
 
-    CS_PROPERTY_READ(resizeMode, resizeMode)
-    CS_PROPERTY_WRITE(resizeMode, setResizeMode)
-    CS_PROPERTY_READ(status, status)
-    CS_PROPERTY_NOTIFY(status, statusChanged)
-    CS_PROPERTY_READ(source, source)
-    CS_PROPERTY_WRITE(source, setSource)
-    CS_PROPERTY_DESIGNABLE(source, true)
+   CS_PROPERTY_READ(resizeMode, resizeMode)
+   CS_PROPERTY_WRITE(resizeMode, setResizeMode)
+   CS_PROPERTY_READ(status, status)
+   CS_PROPERTY_NOTIFY(status, statusChanged)
+   CS_PROPERTY_READ(source, source)
+   CS_PROPERTY_WRITE(source, setSource)
+   CS_PROPERTY_DESIGNABLE(source, true)
 
-    CS_ENUM(ResizeMode)
-    CS_ENUM(Status)
+   CS_ENUM(ResizeMode)
+   CS_ENUM(Status)
 
-public:
-    explicit QDeclarativeView(QWidget *parent = 0);
-    QDeclarativeView(const QUrl &source, QWidget *parent = 0);
-    virtual ~QDeclarativeView();
+ public:
+   explicit QDeclarativeView(QWidget *parent = 0);
+   QDeclarativeView(const QUrl &source, QWidget *parent = 0);
+   virtual ~QDeclarativeView();
 
-    QUrl source() const;
-    void setSource(const QUrl&);
+   QUrl source() const;
+   void setSource(const QUrl &);
 
-    QDeclarativeEngine* engine() const;
-    QDeclarativeContext* rootContext() const;
+   QDeclarativeEngine *engine() const;
+   QDeclarativeContext *rootContext() const;
 
-    QGraphicsObject *rootObject() const;
+   QGraphicsObject *rootObject() const;
 
-    enum ResizeMode { SizeViewToRootObject, SizeRootObjectToView };
-    ResizeMode resizeMode() const;
-    void setResizeMode(ResizeMode);
+   enum ResizeMode { SizeViewToRootObject, SizeRootObjectToView };
+   ResizeMode resizeMode() const;
+   void setResizeMode(ResizeMode);
 
-    enum Status { Null, Ready, Loading, Error };
-    Status status() const;
+   enum Status { Null, Ready, Loading, Error };
+   Status status() const;
 
-    QList<QDeclarativeError> errors() const;
+   QList<QDeclarativeError> errors() const;
 
-    QSize sizeHint() const;
-    QSize initialSize() const;
+   QSize sizeHint() const;
+   QSize initialSize() const;
 
-public:
-    CS_SIGNAL_1(Public, void sceneResized(QSize size))
-    CS_SIGNAL_2(sceneResized,size)  // ???
-    CS_SIGNAL_1(Public, void statusChanged(QDeclarativeView::Status un_named_arg1))
-    CS_SIGNAL_2(statusChanged,un_named_arg1) 
+ public:
+   CS_SIGNAL_1(Public, void sceneResized(QSize size))
+   CS_SIGNAL_2(sceneResized, size) // ???
+   CS_SIGNAL_1(Public, void statusChanged(QDeclarativeView::Status un_named_arg1))
+   CS_SIGNAL_2(statusChanged, un_named_arg1)
 
-private :
-    CS_SLOT_1(Private, void continueExecute())
-    CS_SLOT_2(continueExecute) 
+ private :
+   CS_SLOT_1(Private, void continueExecute())
+   CS_SLOT_2(continueExecute)
 
-protected:
-    virtual void resizeEvent(QResizeEvent *);
-    virtual void paintEvent(QPaintEvent *event);
-    virtual void timerEvent(QTimerEvent*);
-    virtual void setRootObject(QObject *obj);
-    virtual bool eventFilter(QObject *watched, QEvent *e);
+ protected:
+   virtual void resizeEvent(QResizeEvent *);
+   virtual void paintEvent(QPaintEvent *event);
+   virtual void timerEvent(QTimerEvent *);
+   virtual void setRootObject(QObject *obj);
+   virtual bool eventFilter(QObject *watched, QEvent *e);
 
-private:
-    Q_DISABLE_COPY(QDeclarativeView)
-    Q_DECLARE_PRIVATE(QDeclarativeView)
+ private:
+   Q_DISABLE_COPY(QDeclarativeView)
+   Q_DECLARE_PRIVATE(QDeclarativeView)
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEVIEW_H

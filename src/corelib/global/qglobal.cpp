@@ -23,17 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qstring.h"
-#include "qvector.h"
-#include "qlist.h"
-#include "qthreadstorage.h"
-#include "qdir.h"
-#include "qstringlist.h"
-#include "qdatetime.h"
-
+#include <qplatformdefs.h>
+#include <qstring.h>
+#include <qvector.h>
+#include <qlist.h>
+#include <qthreadstorage.h>
+#include <qdir.h>
+#include <qstringlist.h>
+#include <qdatetime.h>
 #include <qthread_p.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -414,10 +412,7 @@ void qt_message_output(QtMsgType msgType, const char *buf)
       fflush(stderr);
    }
 
-   if (msgType == QtFatalMsg
-         || (msgType == QtWarningMsg
-             && (!qgetenv("QT_FATAL_WARNINGS").isNull())) ) {
-
+   if (msgType == QtFatalMsg || (msgType == QtWarningMsg && (!qgetenv("QT_FATAL_WARNINGS").isNull())) ) {
 
 #if (defined(Q_OS_UNIX) || defined(Q_CC_MINGW))
       abort(); // trap; generates core dump

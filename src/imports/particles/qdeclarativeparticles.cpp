@@ -23,18 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qdeclarativeparticles_p.h"
-
+#include <qdeclarativeparticles_p.h>
 #include <qdeclarativeinfo.h>
-#include <private/qdeclarativeitem_p.h>
-
-#include <private/qdeclarativepixmapcache_p.h>
+#include <qdeclarativeitem_p.h>
+#include <qdeclarativepixmapcache_p.h>
 #include <QtCore/QAbstractAnimation>
-
 #include <QPainter>
 #include <QtGui/qdrawutil.h>
 #include <QVarLengthArray>
-
 #include <stdlib.h>
 #include <math.h>
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -70,8 +70,8 @@ QT_BEGIN_NAMESPACE
 */
 
 // XXX bug in WebKit - can call repaintRequested and other cache-changing functions from within render!
-static int inpaint=0;
-static int inpaint_clearcache=0;
+static int inpaint = 0;
+static int inpaint_clearcache = 0;
 
 extern Q_GUI_EXPORT bool qt_applefontsmoothing_enabled;
 
@@ -81,23 +81,23 @@ extern Q_GUI_EXPORT bool qt_applefontsmoothing_enabled;
 
     \sa clearCache()
 */
-void QDeclarativePaintedItem::dirtyCache(const QRect& rect)
+void QDeclarativePaintedItem::dirtyCache(const QRect &rect)
 {
-    Q_D(QDeclarativePaintedItem);
-    QRect srect(qCeil(rect.x()*d->contentsScale),
-            qCeil(rect.y()*d->contentsScale),
-            qCeil(rect.width()*d->contentsScale),
-            qCeil(rect.height()*d->contentsScale));
-    for (int i=0; i < d->imagecache.count(); ) {
-        QDeclarativePaintedItemPrivate::ImageCacheItem *c = d->imagecache[i];
-        QRect isect = (c->area & srect) | c->dirty;
-        if (isect == c->area && !inpaint) {
-            delete d->imagecache.takeAt(i);
-        } else {
-            c->dirty = isect;
-            ++i;
-        }
-    }
+   Q_D(QDeclarativePaintedItem);
+   QRect srect(qCeil(rect.x()*d->contentsScale),
+               qCeil(rect.y()*d->contentsScale),
+               qCeil(rect.width()*d->contentsScale),
+               qCeil(rect.height()*d->contentsScale));
+   for (int i = 0; i < d->imagecache.count(); ) {
+      QDeclarativePaintedItemPrivate::ImageCacheItem *c = d->imagecache[i];
+      QRect isect = (c->area & srect) | c->dirty;
+      if (isect == c->area && !inpaint) {
+         delete d->imagecache.takeAt(i);
+      } else {
+         c->dirty = isect;
+         ++i;
+      }
+   }
 }
 
 /*!
@@ -107,13 +107,13 @@ void QDeclarativePaintedItem::dirtyCache(const QRect& rect)
 */
 void QDeclarativePaintedItem::clearCache()
 {
-    if (inpaint) {
-        inpaint_clearcache=1;
-        return;
-    }
-    Q_D(QDeclarativePaintedItem);
-    qDeleteAll(d->imagecache);
-    d->imagecache.clear();
+   if (inpaint) {
+      inpaint_clearcache = 1;
+      return;
+   }
+   Q_D(QDeclarativePaintedItem);
+   qDeleteAll(d->imagecache);
+   d->imagecache.clear();
 }
 
 /*!
@@ -123,8 +123,8 @@ void QDeclarativePaintedItem::clearCache()
 */
 QSize QDeclarativePaintedItem::contentsSize() const
 {
-    Q_D(const QDeclarativePaintedItem);
-    return d->contentsSize;
+   Q_D(const QDeclarativePaintedItem);
+   return d->contentsSize;
 }
 
 /*!
@@ -134,29 +134,33 @@ QSize QDeclarativePaintedItem::contentsSize() const
 */
 void QDeclarativePaintedItem::setContentsSize(const QSize &size)
 {
-    Q_D(QDeclarativePaintedItem);
-    if (d->contentsSize == size) return;
-    prepareGeometryChange();
-    d->contentsSize = size;
-    clearCache();
-    update();
-    emit contentsSizeChanged();
+   Q_D(QDeclarativePaintedItem);
+   if (d->contentsSize == size) {
+      return;
+   }
+   prepareGeometryChange();
+   d->contentsSize = size;
+   clearCache();
+   update();
+   emit contentsSizeChanged();
 }
 
 qreal QDeclarativePaintedItem::contentsScale() const
 {
-    Q_D(const QDeclarativePaintedItem);
-    return d->contentsScale;
+   Q_D(const QDeclarativePaintedItem);
+   return d->contentsScale;
 }
 
 void QDeclarativePaintedItem::setContentsScale(qreal scale)
 {
-    Q_D(QDeclarativePaintedItem);
-    if (d->contentsScale == scale) return;
-    d->contentsScale = scale;
-    clearCache();
-    update();
-    emit contentsScaleChanged();
+   Q_D(QDeclarativePaintedItem);
+   if (d->contentsScale == scale) {
+      return;
+   }
+   d->contentsScale = scale;
+   clearCache();
+   update();
+   emit contentsScaleChanged();
 }
 
 
@@ -164,7 +168,7 @@ void QDeclarativePaintedItem::setContentsScale(qreal scale)
     Constructs a new QDeclarativePaintedItem with the given \a parent.
 */
 QDeclarativePaintedItem::QDeclarativePaintedItem(QDeclarativeItem *parent)
-  : QDeclarativeItem(*(new QDeclarativePaintedItemPrivate), parent)
+   : QDeclarativeItem(*(new QDeclarativePaintedItemPrivate), parent)
 {
 }
 
@@ -174,7 +178,7 @@ QDeclarativePaintedItem::QDeclarativePaintedItem(QDeclarativeItem *parent)
     initialized private data member \a dd.
 */
 QDeclarativePaintedItem::QDeclarativePaintedItem(QDeclarativePaintedItemPrivate &dd, QDeclarativeItem *parent)
-  : QDeclarativeItem(dd, parent)
+   : QDeclarativeItem(dd, parent)
 {
 }
 
@@ -183,48 +187,53 @@ QDeclarativePaintedItem::QDeclarativePaintedItem(QDeclarativePaintedItemPrivate 
 */
 QDeclarativePaintedItem::~QDeclarativePaintedItem()
 {
-    clearCache();
+   clearCache();
 }
 
 void QDeclarativePaintedItem::geometryChanged(const QRectF &newGeometry,
-                                              const QRectF &oldGeometry)
+      const QRectF &oldGeometry)
 {
-    if (newGeometry.width() != oldGeometry.width() ||
-        newGeometry.height() != oldGeometry.height())
-        clearCache();
+   if (newGeometry.width() != oldGeometry.width() ||
+         newGeometry.height() != oldGeometry.height()) {
+      clearCache();
+   }
 
-    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+   QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 QVariant QDeclarativePaintedItem::itemChange(GraphicsItemChange change,
-                                             const QVariant &value)
+      const QVariant &value)
 {
-    if (change == ItemVisibleHasChanged)
-        clearCache();
+   if (change == ItemVisibleHasChanged) {
+      clearCache();
+   }
 
-    return QDeclarativeItem::itemChange(change, value);
+   return QDeclarativeItem::itemChange(change, value);
 }
 
 void QDeclarativePaintedItem::setCacheFrozen(bool frozen)
 {
-    Q_D(QDeclarativePaintedItem);
-    if (d->cachefrozen == frozen)
-        return;
-    d->cachefrozen = frozen;
-    // XXX clear cache?
+   Q_D(QDeclarativePaintedItem);
+   if (d->cachefrozen == frozen) {
+      return;
+   }
+   d->cachefrozen = frozen;
+   // XXX clear cache?
 }
 
 QRectF QDeclarativePaintedItem::boundingRect() const
 {
-    Q_D(const QDeclarativePaintedItem);
-    qreal w = d->mWidth;
-    QSizeF sz = d->contentsSize * d->contentsScale;
-    if (w < sz.width())
-        w = sz.width();
-    qreal h = d->mHeight;
-    if (h < sz.height())
-        h = sz.height();
-    return QRectF(0.0,0.0,w,h);
+   Q_D(const QDeclarativePaintedItem);
+   qreal w = d->mWidth;
+   QSizeF sz = d->contentsSize * d->contentsScale;
+   if (w < sz.width()) {
+      w = sz.width();
+   }
+   qreal h = d->mHeight;
+   if (h < sz.height()) {
+      h = sz.height();
+   }
+   return QRectF(0.0, 0.0, w, h);
 }
 
 /*!
@@ -232,152 +241,158 @@ QRectF QDeclarativePaintedItem::boundingRect() const
 */
 void QDeclarativePaintedItem::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    Q_D(QDeclarativePaintedItem);
-    const QRect content = boundingRect().toRect();
-    if (content.width() <= 0 || content.height() <= 0)
-        return;
+   Q_D(QDeclarativePaintedItem);
+   const QRect content = boundingRect().toRect();
+   if (content.width() <= 0 || content.height() <= 0) {
+      return;
+   }
 
-    ++inpaint;
+   ++inpaint;
 
-    const QTransform &x = p->deviceTransform();
-    QTransform xinv = x.inverted();
-    QRegion effectiveClip;
-    QRegion sysClip = p->paintEngine()->systemClip();
-    if (xinv.type() <= QTransform::TxScale && sysClip.numRects() < 5) {
-        // simple transform, region gets no more complicated...
-        effectiveClip = xinv.map(sysClip);
-    } else {
-        // do not make complicated regions...
-        effectiveClip = xinv.mapRect(sysClip.boundingRect());
-    }
+   const QTransform &x = p->deviceTransform();
+   QTransform xinv = x.inverted();
+   QRegion effectiveClip;
+   QRegion sysClip = p->paintEngine()->systemClip();
+   if (xinv.type() <= QTransform::TxScale && sysClip.numRects() < 5) {
+      // simple transform, region gets no more complicated...
+      effectiveClip = xinv.map(sysClip);
+   } else {
+      // do not make complicated regions...
+      effectiveClip = xinv.mapRect(sysClip.boundingRect());
+   }
 
-    QRegion topaint = p->clipRegion();
-    if (topaint.isEmpty()) {
-        if (effectiveClip.isEmpty())
-            topaint = QRect(0,0,p->device()->width(),p->device()->height());
-        else
-            topaint = effectiveClip;
-    } else if (!effectiveClip.isEmpty()) {
-        topaint &= effectiveClip;
-    }
+   QRegion topaint = p->clipRegion();
+   if (topaint.isEmpty()) {
+      if (effectiveClip.isEmpty()) {
+         topaint = QRect(0, 0, p->device()->width(), p->device()->height());
+      } else {
+         topaint = effectiveClip;
+      }
+   } else if (!effectiveClip.isEmpty()) {
+      topaint &= effectiveClip;
+   }
 
-    topaint &= content;
-    QRegion uncached(content);
-    p->setRenderHints(QPainter::SmoothPixmapTransform, d->smooth);
+   topaint &= content;
+   QRegion uncached(content);
+   p->setRenderHints(QPainter::SmoothPixmapTransform, d->smooth);
 
-    int cachesize=0;
-    for (int i=0; i<d->imagecache.count(); ++i) {
-        QRect area = d->imagecache[i]->area;
-        if (topaint.contains(area)) {
-            QRectF target(area.x(), area.y(), area.width(), area.height());
-            if (!d->cachefrozen) {
-                if (!d->imagecache[i]->dirty.isNull() && topaint.contains(d->imagecache[i]->dirty)) {
+   int cachesize = 0;
+   for (int i = 0; i < d->imagecache.count(); ++i) {
+      QRect area = d->imagecache[i]->area;
+      if (topaint.contains(area)) {
+         QRectF target(area.x(), area.y(), area.width(), area.height());
+         if (!d->cachefrozen) {
+            if (!d->imagecache[i]->dirty.isNull() && topaint.contains(d->imagecache[i]->dirty)) {
 #ifdef Q_OS_MAC
-                    bool oldSmooth = qt_applefontsmoothing_enabled;
-                    qt_applefontsmoothing_enabled = false;
+               bool oldSmooth = qt_applefontsmoothing_enabled;
+               qt_applefontsmoothing_enabled = false;
 #endif
-                    QPainter qp(&d->imagecache[i]->image);
+               QPainter qp(&d->imagecache[i]->image);
 #ifdef Q_OS_MAC
-                    qt_applefontsmoothing_enabled = oldSmooth;
+               qt_applefontsmoothing_enabled = oldSmooth;
 #endif
-                    qp.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, d->smoothCache);
-                    qp.translate(-area.x(), -area.y());
-                    qp.scale(d->contentsScale,d->contentsScale);
-                    QRect clip = d->imagecache[i]->dirty;
-                    QRect sclip(qFloor(clip.x()/d->contentsScale),
-                            qFloor(clip.y()/d->contentsScale),
-                            qCeil(clip.width()/d->contentsScale+clip.x()/d->contentsScale-qFloor(clip.x()/d->contentsScale)),
-                            qCeil(clip.height()/d->contentsScale+clip.y()/d->contentsScale-qFloor(clip.y()/d->contentsScale)));
-                    qp.setClipRect(sclip);
-                    if (d->fillColor.isValid()){
-                        if(d->fillColor.alpha() < 255){
-                            // ### Might not work outside of raster paintengine
-                            QPainter::CompositionMode prev = qp.compositionMode();
-                            qp.setCompositionMode(QPainter::CompositionMode_Source);
-                            qp.fillRect(sclip,d->fillColor);
-                            qp.setCompositionMode(prev);
-                        }else{
-                            qp.fillRect(sclip,d->fillColor);
-                        }
-                    }
-                    drawContents(&qp, sclip);
-                    d->imagecache[i]->dirty = QRect();
-                }
+               qp.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform,
+                                 d->smoothCache);
+               qp.translate(-area.x(), -area.y());
+               qp.scale(d->contentsScale, d->contentsScale);
+               QRect clip = d->imagecache[i]->dirty;
+               QRect sclip(qFloor(clip.x() / d->contentsScale),
+                           qFloor(clip.y() / d->contentsScale),
+                           qCeil(clip.width() / d->contentsScale + clip.x() / d->contentsScale - qFloor(clip.x() / d->contentsScale)),
+                           qCeil(clip.height() / d->contentsScale + clip.y() / d->contentsScale - qFloor(clip.y() / d->contentsScale)));
+               qp.setClipRect(sclip);
+               if (d->fillColor.isValid()) {
+                  if (d->fillColor.alpha() < 255) {
+                     // ### Might not work outside of raster paintengine
+                     QPainter::CompositionMode prev = qp.compositionMode();
+                     qp.setCompositionMode(QPainter::CompositionMode_Source);
+                     qp.fillRect(sclip, d->fillColor);
+                     qp.setCompositionMode(prev);
+                  } else {
+                     qp.fillRect(sclip, d->fillColor);
+                  }
+               }
+               drawContents(&qp, sclip);
+               d->imagecache[i]->dirty = QRect();
             }
-            p->drawPixmap(target.toRect(), d->imagecache[i]->image);
-            topaint -= area;
-            d->imagecache[i]->age=0;
-        } else {
-            d->imagecache[i]->age++;
-        }
-        cachesize += area.width()*area.height();
-        uncached -= area;
-    }
+         }
+         p->drawPixmap(target.toRect(), d->imagecache[i]->image);
+         topaint -= area;
+         d->imagecache[i]->age = 0;
+      } else {
+         d->imagecache[i]->age++;
+      }
+      cachesize += area.width() * area.height();
+      uncached -= area;
+   }
 
-    if (!topaint.isEmpty()) {
-        if (!d->cachefrozen) {
-            // Find a sensible larger area, otherwise will paint lots of tiny images.
-            QRect biggerrect = topaint.boundingRect().adjusted(-64,-64,128,128);
-            cachesize += biggerrect.width() * biggerrect.height();
-            while (d->imagecache.count() && cachesize > d->max_imagecache_size) {
-                int oldest=-1;
-                int age=-1;
-                for (int i=0; i<d->imagecache.count(); ++i) {
-                    int a = d->imagecache[i]->age;
-                    if (a > age) {
-                        oldest = i;
-                        age = a;
-                    }
-                }
-                cachesize -= d->imagecache[oldest]->area.width()*d->imagecache[oldest]->area.height();
-                uncached += d->imagecache[oldest]->area;
-                delete d->imagecache.takeAt(oldest);
+   if (!topaint.isEmpty()) {
+      if (!d->cachefrozen) {
+         // Find a sensible larger area, otherwise will paint lots of tiny images.
+         QRect biggerrect = topaint.boundingRect().adjusted(-64, -64, 128, 128);
+         cachesize += biggerrect.width() * biggerrect.height();
+         while (d->imagecache.count() && cachesize > d->max_imagecache_size) {
+            int oldest = -1;
+            int age = -1;
+            for (int i = 0; i < d->imagecache.count(); ++i) {
+               int a = d->imagecache[i]->age;
+               if (a > age) {
+                  oldest = i;
+                  age = a;
+               }
             }
-            const QRegion bigger = QRegion(biggerrect) & uncached;
-            const QVector<QRect> rects = bigger.rects();
-            for (int i = 0; i < rects.count(); ++i) {
-                const QRect &r = rects.at(i);
-                QPixmap img(r.size());
-                if (d->fillColor.isValid())
-                    img.fill(d->fillColor);
-                {
-#ifdef Q_OS_MAC
-                    bool oldSmooth = qt_applefontsmoothing_enabled;
-                    qt_applefontsmoothing_enabled = false;
-#endif
-                    QPainter qp(&img);
-#ifdef Q_OS_MAC
-                    qt_applefontsmoothing_enabled = oldSmooth;
-#endif
-                    qp.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, d->smoothCache);
-
-                    qp.translate(-r.x(),-r.y());
-                    qp.scale(d->contentsScale,d->contentsScale);
-                    QRect sclip(qFloor(r.x()/d->contentsScale),
-                            qFloor(r.y()/d->contentsScale),
-                            qCeil(r.width()/d->contentsScale+r.x()/d->contentsScale-qFloor(r.x()/d->contentsScale)),
-                            qCeil(r.height()/d->contentsScale+r.y()/d->contentsScale-qFloor(r.y()/d->contentsScale)));
-                    drawContents(&qp, sclip);
-                }
-                QDeclarativePaintedItemPrivate::ImageCacheItem *newitem = new QDeclarativePaintedItemPrivate::ImageCacheItem;
-                newitem->area = r;
-                newitem->image = img;
-                d->imagecache.append(newitem);
-                p->drawPixmap(r, newitem->image);
+            cachesize -= d->imagecache[oldest]->area.width() * d->imagecache[oldest]->area.height();
+            uncached += d->imagecache[oldest]->area;
+            delete d->imagecache.takeAt(oldest);
+         }
+         const QRegion bigger = QRegion(biggerrect) & uncached;
+         const QVector<QRect> rects = bigger.rects();
+         for (int i = 0; i < rects.count(); ++i) {
+            const QRect &r = rects.at(i);
+            QPixmap img(r.size());
+            if (d->fillColor.isValid()) {
+               img.fill(d->fillColor);
             }
-        } else {
-            const QVector<QRect> rects = uncached.rects();
-            for (int i = 0; i < rects.count(); ++i)
-                p->fillRect(rects.at(i), Qt::lightGray);
-        }
-    }
+            {
+#ifdef Q_OS_MAC
+               bool oldSmooth = qt_applefontsmoothing_enabled;
+               qt_applefontsmoothing_enabled = false;
+#endif
+               QPainter qp(&img);
+#ifdef Q_OS_MAC
+               qt_applefontsmoothing_enabled = oldSmooth;
+#endif
+               qp.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform,
+                                 d->smoothCache);
 
-    if (inpaint_clearcache) {
-        clearCache();
-        inpaint_clearcache = 0;
-    }
+               qp.translate(-r.x(), -r.y());
+               qp.scale(d->contentsScale, d->contentsScale);
+               QRect sclip(qFloor(r.x() / d->contentsScale),
+                           qFloor(r.y() / d->contentsScale),
+                           qCeil(r.width() / d->contentsScale + r.x() / d->contentsScale - qFloor(r.x() / d->contentsScale)),
+                           qCeil(r.height() / d->contentsScale + r.y() / d->contentsScale - qFloor(r.y() / d->contentsScale)));
+               drawContents(&qp, sclip);
+            }
+            QDeclarativePaintedItemPrivate::ImageCacheItem *newitem = new QDeclarativePaintedItemPrivate::ImageCacheItem;
+            newitem->area = r;
+            newitem->image = img;
+            d->imagecache.append(newitem);
+            p->drawPixmap(r, newitem->image);
+         }
+      } else {
+         const QVector<QRect> rects = uncached.rects();
+         for (int i = 0; i < rects.count(); ++i) {
+            p->fillRect(rects.at(i), Qt::lightGray);
+         }
+      }
+   }
 
-    --inpaint;
+   if (inpaint_clearcache) {
+      clearCache();
+      inpaint_clearcache = 0;
+   }
+
+   --inpaint;
 }
 
 /*!
@@ -396,34 +411,34 @@ void QDeclarativePaintedItem::paint(QPainter *p, const QStyleOptionGraphicsItem 
 */
 int QDeclarativePaintedItem::pixelCacheSize() const
 {
-    Q_D(const QDeclarativePaintedItem);
-    return d->max_imagecache_size;
+   Q_D(const QDeclarativePaintedItem);
+   return d->max_imagecache_size;
 }
 
 void QDeclarativePaintedItem::setPixelCacheSize(int pixels)
 {
-    Q_D(QDeclarativePaintedItem);
-    if (pixels < d->max_imagecache_size) {
-        int cachesize=0;
-        for (int i=0; i<d->imagecache.count(); ++i) {
-            QRect area = d->imagecache[i]->area;
-            cachesize += area.width()*area.height();
-        }
-        while (d->imagecache.count() && cachesize > pixels) {
-            int oldest=-1;
-            int age=-1;
-            for (int i=0; i<d->imagecache.count(); ++i) {
-                int a = d->imagecache[i]->age;
-                if (a > age) {
-                    oldest = i;
-                    age = a;
-                }
+   Q_D(QDeclarativePaintedItem);
+   if (pixels < d->max_imagecache_size) {
+      int cachesize = 0;
+      for (int i = 0; i < d->imagecache.count(); ++i) {
+         QRect area = d->imagecache[i]->area;
+         cachesize += area.width() * area.height();
+      }
+      while (d->imagecache.count() && cachesize > pixels) {
+         int oldest = -1;
+         int age = -1;
+         for (int i = 0; i < d->imagecache.count(); ++i) {
+            int a = d->imagecache[i]->age;
+            if (a > age) {
+               oldest = i;
+               age = a;
             }
-            cachesize -= d->imagecache[oldest]->area.width()*d->imagecache[oldest]->area.height();
-            delete d->imagecache.takeAt(oldest);
-        }
-    }
-    d->max_imagecache_size = pixels;
+         }
+         cachesize -= d->imagecache[oldest]->area.width() * d->imagecache[oldest]->area.height();
+         delete d->imagecache.takeAt(oldest);
+      }
+   }
+   d->max_imagecache_size = pixels;
 }
 
 
@@ -437,20 +452,21 @@ void QDeclarativePaintedItem::setPixelCacheSize(int pixels)
     Performance improvements can be achieved if subclasses call this with either an
     invalid color (QColor()), or an appropriate solid color.
 */
-void QDeclarativePaintedItem::setFillColor(const QColor& c)
+void QDeclarativePaintedItem::setFillColor(const QColor &c)
 {
-    Q_D(QDeclarativePaintedItem);
-    if (d->fillColor == c)
-        return;
-    d->fillColor = c;
-    emit fillColorChanged();
-    update();
+   Q_D(QDeclarativePaintedItem);
+   if (d->fillColor == c) {
+      return;
+   }
+   d->fillColor = c;
+   emit fillColorChanged();
+   update();
 }
 
 QColor QDeclarativePaintedItem::fillColor() const
 {
-    Q_D(const QDeclarativePaintedItem);
-    return d->fillColor;
+   Q_D(const QDeclarativePaintedItem);
+   return d->fillColor;
 }
 
 /*!
@@ -464,17 +480,17 @@ QColor QDeclarativePaintedItem::fillColor() const
 */
 bool QDeclarativePaintedItem::smoothCache() const
 {
-    Q_D(const QDeclarativePaintedItem);
-    return d->smoothCache;
+   Q_D(const QDeclarativePaintedItem);
+   return d->smoothCache;
 }
 
 void QDeclarativePaintedItem::setSmoothCache(bool on)
 {
-    Q_D(QDeclarativePaintedItem);
-    if (d->smoothCache != on) {
-        d->smoothCache = on;
-        clearCache();
-    }
+   Q_D(QDeclarativePaintedItem);
+   if (d->smoothCache != on) {
+      d->smoothCache = on;
+      clearCache();
+   }
 }
 
 

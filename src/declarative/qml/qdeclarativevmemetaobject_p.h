@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,123 +42,122 @@ QT_BEGIN_NAMESPACE
 
 #define QML_ALIAS_FLAG_PTR 0x00000001
 
-struct QDeclarativeVMEMetaData
-{
-    short propertyCount;
-    short aliasCount;
-    short signalCount;
-    short methodCount;
+struct QDeclarativeVMEMetaData {
+   short propertyCount;
+   short aliasCount;
+   short signalCount;
+   short methodCount;
 
-    struct AliasData {
-        int contextIdx;
-        int propertyIdx;
-        int flags;
+   struct AliasData {
+      int contextIdx;
+      int propertyIdx;
+      int flags;
 
-        bool isObjectAlias() const {
-            return propertyIdx == -1;
-        }
-        bool isPropertyAlias() const {
-            return !isObjectAlias() && !(propertyIdx & 0xFF000000);
-        }
-        bool isValueTypeAlias() const {
-            return !isObjectAlias() && (propertyIdx & 0xFF000000);
-        }
-        int propertyIndex() const {
-            return propertyIdx & 0x0000FFFF;
-        }
-        int valueTypeIndex() const {
-            return (propertyIdx & 0x00FF0000) >> 16;
-        }
-        int valueType() const {
-            return ((unsigned int)propertyIdx) >> 24;
-        }
-    };
-    
-    struct PropertyData {
-        int propertyType;
-    };
+      bool isObjectAlias() const {
+         return propertyIdx == -1;
+      }
+      bool isPropertyAlias() const {
+         return !isObjectAlias() && !(propertyIdx & 0xFF000000);
+      }
+      bool isValueTypeAlias() const {
+         return !isObjectAlias() && (propertyIdx & 0xFF000000);
+      }
+      int propertyIndex() const {
+         return propertyIdx & 0x0000FFFF;
+      }
+      int valueTypeIndex() const {
+         return (propertyIdx & 0x00FF0000) >> 16;
+      }
+      int valueType() const {
+         return ((unsigned int)propertyIdx) >> 24;
+      }
+   };
 
-    struct MethodData {
-        int parameterCount;
-        int bodyOffset;
-        int bodyLength;
-        int lineNumber;
-    };
+   struct PropertyData {
+      int propertyType;
+   };
 
-    PropertyData *propertyData() const {
-        return (PropertyData *)(((const char *)this) + sizeof(QDeclarativeVMEMetaData));
-    }
+   struct MethodData {
+      int parameterCount;
+      int bodyOffset;
+      int bodyLength;
+      int lineNumber;
+   };
 
-    AliasData *aliasData() const {
-        return (AliasData *)(propertyData() + propertyCount);
-    }
+   PropertyData *propertyData() const {
+      return (PropertyData *)(((const char *)this) + sizeof(QDeclarativeVMEMetaData));
+   }
 
-    MethodData *methodData() const {
-        return (MethodData *)(aliasData() + aliasCount);
-    }
+   AliasData *aliasData() const {
+      return (AliasData *)(propertyData() + propertyCount);
+   }
+
+   MethodData *methodData() const {
+      return (MethodData *)(aliasData() + aliasCount);
+   }
 };
 
 class QDeclarativeVMEVariant;
 class QDeclarativeRefCount;
 class QDeclarativeVMEMetaObject : public QAbstractDynamicMetaObject
 {
-public:
-    QDeclarativeVMEMetaObject(QObject *obj, const QMetaObject *other, const QDeclarativeVMEMetaData *data,
-                     QDeclarativeCompiledData *compiledData);
-    ~QDeclarativeVMEMetaObject();
+ public:
+   QDeclarativeVMEMetaObject(QObject *obj, const QMetaObject *other, const QDeclarativeVMEMetaData *data,
+                             QDeclarativeCompiledData *compiledData);
+   ~QDeclarativeVMEMetaObject();
 
-    bool aliasTarget(int index, QObject **target, int *coreIndex, int *valueTypeIndex) const;
-    void registerInterceptor(int index, int valueIndex, QDeclarativePropertyValueInterceptor *interceptor);
-    QScriptValue vmeMethod(int index);
-    int vmeMethodLineNumber(int index);
-    void setVmeMethod(int index, const QScriptValue &);
-    QScriptValue vmeProperty(int index);
-    void setVMEProperty(int index, const QScriptValue &);
+   bool aliasTarget(int index, QObject **target, int *coreIndex, int *valueTypeIndex) const;
+   void registerInterceptor(int index, int valueIndex, QDeclarativePropertyValueInterceptor *interceptor);
+   QScriptValue vmeMethod(int index);
+   int vmeMethodLineNumber(int index);
+   void setVmeMethod(int index, const QScriptValue &);
+   QScriptValue vmeProperty(int index);
+   void setVMEProperty(int index, const QScriptValue &);
 
-    void connectAliasSignal(int index);
+   void connectAliasSignal(int index);
 
-protected:
-    virtual int metaCall(QMetaObject::Call _c, int _id, void **_a);
+ protected:
+   virtual int metaCall(QMetaObject::Call _c, int _id, void **_a);
 
-private:
-    QObject *object;
-    QDeclarativeCompiledData *compiledData;
-    QDeclarativeGuardedContextData ctxt;
+ private:
+   QObject *object;
+   QDeclarativeCompiledData *compiledData;
+   QDeclarativeGuardedContextData ctxt;
 
-    const QDeclarativeVMEMetaData *metaData;
-    int propOffset;
-    int methodOffset;
+   const QDeclarativeVMEMetaData *metaData;
+   int propOffset;
+   int methodOffset;
 
-    QDeclarativeVMEVariant *data;
+   QDeclarativeVMEVariant *data;
 
-    void connectAlias(int aliasId);
-    QBitArray aConnected;
-    QBitArray aInterceptors;
-    QHash<int, QPair<int, QDeclarativePropertyValueInterceptor*> > interceptors;
+   void connectAlias(int aliasId);
+   QBitArray aConnected;
+   QBitArray aInterceptors;
+   QHash<int, QPair<int, QDeclarativePropertyValueInterceptor *> > interceptors;
 
-    QScriptValue *methods;
-    QScriptValue method(int);
+   QScriptValue *methods;
+   QScriptValue method(int);
 
-    QScriptValue readVarProperty(int);
-    QVariant readVarPropertyAsVariant(int);
-    void writeVarProperty(int, const QScriptValue &);
-    void writeVarProperty(int, const QVariant &);
+   QScriptValue readVarProperty(int);
+   QVariant readVarPropertyAsVariant(int);
+   void writeVarProperty(int, const QScriptValue &);
+   void writeVarProperty(int, const QVariant &);
 
-    QAbstractDynamicMetaObject *parent;
+   QAbstractDynamicMetaObject *parent;
 
-    void listChanged(int);
-    class List : public QList<QObject*>
-    {
+   void listChanged(int);
+   class List : public QList<QObject *>
+   {
     public:
-        List(int lpi) : notifyIndex(lpi) {}
-        int notifyIndex;
-    };
-    QList<List> listProperties;
+      List(int lpi) : notifyIndex(lpi) {}
+      int notifyIndex;
+   };
+   QList<List> listProperties;
 
-    static void list_append(QDeclarativeListProperty<QObject> *, QObject *);
-    static int list_count(QDeclarativeListProperty<QObject> *);
-    static QObject *list_at(QDeclarativeListProperty<QObject> *, int);
-    static void list_clear(QDeclarativeListProperty<QObject> *);
+   static void list_append(QDeclarativeListProperty<QObject> *, QObject *);
+   static int list_count(QDeclarativeListProperty<QObject> *);
+   static QObject *list_at(QDeclarativeListProperty<QObject> *, int);
+   static void list_clear(QDeclarativeListProperty<QObject> *);
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,13 +33,13 @@ QT_BEGIN_NAMESPACE
 
 class QScriptMessageHandlerInterface
 {
-public:
-    virtual ~QScriptMessageHandlerInterface() {}
+ public:
+   virtual ~QScriptMessageHandlerInterface() {}
 
-    virtual void message(QtMsgType type, const QString &text,
-                         const QString &fileName = QString(),
-                         int lineNumber = -1, int columnNumber = -1,
-                         const QVariant &data = QVariant()) = 0;
+   virtual void message(QtMsgType type, const QString &text,
+                        const QString &fileName = QString(),
+                        int lineNumber = -1, int columnNumber = -1,
+                        const QVariant &data = QVariant()) = 0;
 };
 
 QT_END_NAMESPACE

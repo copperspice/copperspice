@@ -23,22 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qdirectfbpaintengine.h"
+#include <qdirectfbpaintengine.h>
 
 #ifndef QT_NO_QWS_DIRECTFB
 
-#include "qdirectfbwindowsurface.h"
-#include "qdirectfbscreen.h"
-#include "qdirectfbpixmap.h"
+#include <qdirectfbwindowsurface.h>
+#include <qdirectfbscreen.h>
+#include <qdirectfbpixmap.h>
 #include <directfb.h>
 #include <qtransform.h>
 #include <qvarlengtharray.h>
 #include <qcache.h>
 #include <qmath.h>
-#include <private/qpixmapdata_p.h>
-#include <private/qpixmap_raster_p.h>
-#include <private/qimagepixmapcleanuphooks_p.h>
-
+#include <qpixmapdata_p.h>
+#include <qpixmap_raster_p.h>
+#include <qimagepixmapcleanuphooks_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -61,11 +61,9 @@
     \sa QAnimationGroup, QAbstractAnimation, {The Animation Framework}
 */
 
-#include "qsequentialanimationgroup.h"
-#include "qsequentialanimationgroup_p.h"
-
-#include "qpauseanimation.h"
-
+#include <qsequentialanimationgroup.h>
+#include <qsequentialanimationgroup_p.h>
+#include <qpauseanimation.h>
 #include <QtCore/qdebug.h>
 
 #ifndef QT_NO_ANIMATION

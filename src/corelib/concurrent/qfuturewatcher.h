@@ -83,7 +83,6 @@ class Q_CORE_EXPORT QFutureWatcherBase : public QObject
    CORE_CS_SIGNAL_1(Public, void progressTextChanged(const QString &progressText))
    CORE_CS_SIGNAL_2(progressTextChanged, progressText)
 
- public :
    CORE_CS_SLOT_1(Public, void cancel())
    CORE_CS_SLOT_2(cancel)
    CORE_CS_SLOT_1(Public, void setPaused(bool paused))
@@ -103,14 +102,12 @@ class Q_CORE_EXPORT QFutureWatcherBase : public QObject
    void connectOutputInterface();
    void disconnectOutputInterface(bool pendingAssignment = false);
 
+   QScopedPointer<QFutureWatcherBasePrivate> d_ptr;
+
  private:
    // implemented in the template sub-classes
    virtual const QFutureInterfaceBase &futureInterface() const = 0;
    virtual QFutureInterfaceBase &futureInterface() = 0;
-
- protected:
-   QScopedPointer<QFutureWatcherBasePrivate> d_ptr;
-
 };
 
 template <typename T>

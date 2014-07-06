@@ -26,7 +26,7 @@
 #ifndef QTEXTCODEC_P_H
 #define QTEXTCODEC_P_H
 
-#include "qtextcodec.h"
+#include <qtextcodec.h>
 #include <string.h>
 
 QT_BEGIN_NAMESPACE
@@ -41,6 +41,7 @@ struct QTextCodecUnalignedPointer {
       memcpy(&data, src, sizeof(data));
       return reinterpret_cast<QTextCodecStateFreeFunction>(data);
    }
+
    static inline void encode(uint *dst, QTextCodecStateFreeFunction fn) {
       quintptr data = reinterpret_cast<quintptr>(fn);
       memcpy(dst, &data, sizeof(data));
@@ -71,6 +72,7 @@ class QTextCodec
       int invalidChars;
       uint state_data[3];
       void *d;
+
     private:
       Q_DISABLE_COPY(ConverterState)
    };

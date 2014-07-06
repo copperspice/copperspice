@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,24 +26,12 @@
 #ifndef QDECLARATIVEMETATYPE_P_H
 #define QDECLARATIVEMETATYPE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "qdeclarative.h"
-
+#include <qdeclarative.h>
 #include <QtCore/qglobal.h>
 #include <QtCore/qvariant.h>
 #include <QtCore/qbitarray.h>
-#include <private/qdeclarativeglobal_p.h>
-#include <private/qdeclarativedirparser_p.h>
+#include <qdeclarativeglobal_p.h>
+#include <qdeclarativedirparser_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -53,107 +41,108 @@ class QDeclarativeTypePrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeMetaType
 {
-public:
-    static bool canCopy(int type);
-    static bool copy(int type, void *data, const void *copy = 0);
+ public:
+   static bool canCopy(int type);
+   static bool copy(int type, void *data, const void *copy = 0);
 
-    static QList<QByteArray> qmlTypeNames();
-    static QList<QDeclarativeType*> qmlTypes();
+   static QList<QByteArray> qmlTypeNames();
+   static QList<QDeclarativeType *> qmlTypes();
 
-    static QDeclarativeType *qmlType(const QByteArray &, int, int);
-    static QDeclarativeType *qmlType(const QMetaObject *);
-    static QDeclarativeType *qmlType(const QMetaObject *metaObject, const QByteArray &module, int version_major, int version_minor);
-    static QDeclarativeType *qmlType(int);
+   static QDeclarativeType *qmlType(const QByteArray &, int, int);
+   static QDeclarativeType *qmlType(const QMetaObject *);
+   static QDeclarativeType *qmlType(const QMetaObject *metaObject, const QByteArray &module, int version_major,
+                                    int version_minor);
+   static QDeclarativeType *qmlType(int);
 
-    static QDeclarativeDirComponents qmlComponents(const QByteArray& module, int version_major, int version_minor);
+   static QDeclarativeDirComponents qmlComponents(const QByteArray &module, int version_major, int version_minor);
 
-    static QMetaProperty defaultProperty(const QMetaObject *);
-    static QMetaProperty defaultProperty(QObject *);
-    static QMetaMethod defaultMethod(const QMetaObject *);
-    static QMetaMethod defaultMethod(QObject *);
+   static QMetaProperty defaultProperty(const QMetaObject *);
+   static QMetaProperty defaultProperty(QObject *);
+   static QMetaMethod defaultMethod(const QMetaObject *);
+   static QMetaMethod defaultMethod(QObject *);
 
-    static bool isQObject(int);
-    static QObject *toQObject(const QVariant &, bool *ok = 0);
+   static bool isQObject(int);
+   static QObject *toQObject(const QVariant &, bool *ok = 0);
 
-    static int listType(int);
-    static int attachedPropertiesFuncId(const QMetaObject *);
-    static QDeclarativeAttachedPropertiesFunc attachedPropertiesFuncById(int);
+   static int listType(int);
+   static int attachedPropertiesFuncId(const QMetaObject *);
+   static QDeclarativeAttachedPropertiesFunc attachedPropertiesFuncById(int);
 
-    enum TypeCategory { Unknown, Object, List };
-    static TypeCategory typeCategory(int);
-        
-    static bool isInterface(int);
-    static const char *interfaceIId(int);
-    static bool isList(int);
+   enum TypeCategory { Unknown, Object, List };
+   static TypeCategory typeCategory(int);
 
-    typedef QVariant (*StringConverter)(const QString &);
-    static void registerCustomStringConverter(int, StringConverter);
-    static StringConverter customStringConverter(int);
+   static bool isInterface(int);
+   static const char *interfaceIId(int);
+   static bool isList(int);
 
-    static bool isModule(const QByteArray &module, int versionMajor, int versionMinor);
+   typedef QVariant (*StringConverter)(const QString &);
+   static void registerCustomStringConverter(int, StringConverter);
+   static StringConverter customStringConverter(int);
 
-    static QList<QDeclarativePrivate::AutoParentFunction> parentFunctions();
+   static bool isModule(const QByteArray &module, int versionMajor, int versionMinor);
+
+   static QList<QDeclarativePrivate::AutoParentFunction> parentFunctions();
 };
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeType
 {
-public:
-    QByteArray typeName() const;
-    QByteArray qmlTypeName() const;
+ public:
+   QByteArray typeName() const;
+   QByteArray qmlTypeName() const;
 
-    QByteArray module() const;
-    int majorVersion() const;
-    int minorVersion() const;
+   QByteArray module() const;
+   int majorVersion() const;
+   int minorVersion() const;
 
-    bool availableInVersion(int vmajor, int vminor) const;
-    bool availableInVersion(const QByteArray &module, int vmajor, int vminor) const;
+   bool availableInVersion(int vmajor, int vminor) const;
+   bool availableInVersion(const QByteArray &module, int vmajor, int vminor) const;
 
-    QObject *create() const;
-    void create(QObject **, void **, size_t) const;
+   QObject *create() const;
+   void create(QObject **, void **, size_t) const;
 
-    typedef void (*CreateFunc)(void *);
-    CreateFunc createFunction() const;
-    int createSize() const;
+   typedef void (*CreateFunc)(void *);
+   CreateFunc createFunction() const;
+   int createSize() const;
 
-    QDeclarativeCustomParser *customParser() const;
+   QDeclarativeCustomParser *customParser() const;
 
-    bool isCreatable() const;
-    bool isExtendedType() const;
-    QString noCreationReason() const;
+   bool isCreatable() const;
+   bool isExtendedType() const;
+   QString noCreationReason() const;
 
-    bool isInterface() const;
-    int typeId() const;
-    int qListTypeId() const;
+   bool isInterface() const;
+   int typeId() const;
+   int qListTypeId() const;
 
-    const QMetaObject *metaObject() const;
-    const QMetaObject *baseMetaObject() const;
-    int metaObjectRevision() const;
-    bool containsRevisionedAttributes() const;
+   const QMetaObject *metaObject() const;
+   const QMetaObject *baseMetaObject() const;
+   int metaObjectRevision() const;
+   bool containsRevisionedAttributes() const;
 
-    QDeclarativeAttachedPropertiesFunc attachedPropertiesFunction() const;
-    const QMetaObject *attachedPropertiesType() const;
-    int attachedPropertiesId() const;
+   QDeclarativeAttachedPropertiesFunc attachedPropertiesFunction() const;
+   const QMetaObject *attachedPropertiesType() const;
+   int attachedPropertiesId() const;
 
-    int parserStatusCast() const;
-    QVariant fromObject(QObject *) const;
-    const char *interfaceIId() const;
-    int propertyValueSourceCast() const;
-    int propertyValueInterceptorCast() const;
+   int parserStatusCast() const;
+   QVariant fromObject(QObject *) const;
+   const char *interfaceIId() const;
+   int propertyValueSourceCast() const;
+   int propertyValueInterceptorCast() const;
 
-    int index() const;
+   int index() const;
 
-private:
-    QDeclarativeType *superType() const;
-    friend class QDeclarativeTypePrivate;
-    friend struct QDeclarativeMetaTypeData;
-    friend int registerType(const QDeclarativePrivate::RegisterType &);
-    friend int registerInterface(const QDeclarativePrivate::RegisterInterface &);
-    friend int registerComponent(const QDeclarativePrivate::RegisterComponent &);
-    QDeclarativeType(int, const QDeclarativePrivate::RegisterInterface &);
-    QDeclarativeType(int, const QDeclarativePrivate::RegisterType &);
-    ~QDeclarativeType();
+ private:
+   QDeclarativeType *superType() const;
+   friend class QDeclarativeTypePrivate;
+   friend struct QDeclarativeMetaTypeData;
+   friend int registerType(const QDeclarativePrivate::RegisterType &);
+   friend int registerInterface(const QDeclarativePrivate::RegisterInterface &);
+   friend int registerComponent(const QDeclarativePrivate::RegisterComponent &);
+   QDeclarativeType(int, const QDeclarativePrivate::RegisterInterface &);
+   QDeclarativeType(int, const QDeclarativePrivate::RegisterType &);
+   ~QDeclarativeType();
 
-    QDeclarativeTypePrivate *d;
+   QDeclarativeTypePrivate *d;
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,45 +45,45 @@ class QString;
 
 class QScriptCompletionTaskInterfacePrivate;
 class QScriptCompletionTaskInterface
-    : public QObject
+   : public QObject
 {
-    CS_OBJECT(QScriptCompletionTaskInterface)
-public:
-    enum CompletionType {
-        NoCompletion,
-        CommandNameCompletion,
-        CommandArgumentCompletion,
-        ScriptIdentifierCompletion
-    };
+   CS_OBJECT(QScriptCompletionTaskInterface)
+ public:
+   enum CompletionType {
+      NoCompletion,
+      CommandNameCompletion,
+      CommandArgumentCompletion,
+      ScriptIdentifierCompletion
+   };
 
-    ~QScriptCompletionTaskInterface();
+   ~QScriptCompletionTaskInterface();
 
-    virtual void start() = 0;
+   virtual void start() = 0;
 
-    CompletionType completionType() const;
+   CompletionType completionType() const;
 
-    int resultCount() const;
-    QString resultAt(int index) const;
+   int resultCount() const;
+   QString resultAt(int index) const;
 
-    int position() const;
-    int length() const;
+   int position() const;
+   int length() const;
 
-    QString appendix() const;
+   QString appendix() const;
 
-protected:
-    void addResult(const QString &result);
+ protected:
+   void addResult(const QString &result);
 
-public:
-    CS_SIGNAL_1(Public, void finished())
-    CS_SIGNAL_2(finished) 
+ public:
+   CS_SIGNAL_1(Public, void finished())
+   CS_SIGNAL_2(finished)
 
-protected:
-    QScriptCompletionTaskInterface(
-        QScriptCompletionTaskInterfacePrivate &dd, QObject *parent);
+ protected:
+   QScriptCompletionTaskInterface(
+      QScriptCompletionTaskInterfacePrivate &dd, QObject *parent);
 
-private:
-    Q_DECLARE_PRIVATE(QScriptCompletionTaskInterface)
-    Q_DISABLE_COPY(QScriptCompletionTaskInterface)
+ private:
+   Q_DECLARE_PRIVATE(QScriptCompletionTaskInterface)
+   Q_DISABLE_COPY(QScriptCompletionTaskInterface)
 };
 
 QT_END_NAMESPACE

@@ -30,9 +30,9 @@
 
 #ifndef QT_NO_QWS_DIRECTFB
 
-#include <QtGui/private/qpixmapdata_p.h>
-#include <QtGui/private/qpaintengine_raster_p.h>
-#include "qdirectfbpaintdevice.h"
+#include <qpixmapdata_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qdirectfbpaintdevice.h>
 #include <directfb.h>
 
 QT_BEGIN_NAMESPACE

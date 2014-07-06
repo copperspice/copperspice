@@ -333,16 +333,10 @@ class QScriptEnginePrivate
                       JSC::JSValue senderWrapper,
                       Qt::ConnectionType type);
 
-   bool scriptDisconnect(QObject *sender, int index,
-                         JSC::JSValue receiver, JSC::JSValue function);
+   bool scriptDisconnect(QObject *sender, int index, JSC::JSValue receiver, JSC::JSValue function);
+   bool scriptConnect(JSC::JSValue signal, JSC::JSValue receiver, JSC::JSValue function, Qt::ConnectionType type);
+   bool scriptDisconnect(JSC::JSValue signal, JSC::JSValue receiver, JSC::JSValue function);
 
-   bool scriptConnect(JSC::JSValue signal, JSC::JSValue receiver,
-                      JSC::JSValue function, Qt::ConnectionType type);
-
-   bool scriptDisconnect(JSC::JSValue signal, JSC::JSValue receiver,
-                         JSC::JSValue function);
-
-   // private slots
    void _q_objectDestroyed(QObject *);
 
    JSC::JSGlobalData *globalData;

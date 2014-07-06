@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,83 +18,67 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVEBINDINGOPTIMIZATIONS_P_H
-#define QDECLARATIVEBINDINGOPTIMIZATIONS_P_H
+#ifndef QDECLARATIVECompiledBindings_P_H
+#define QDECLARATIVECompiledBindings_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "private/qdeclarativeexpression_p.h"
-#include "private/qdeclarativebinding_p.h"
-
-QT_BEGIN_HEADER
+#include <qdeclarativeexpression_p.h>
+#include <qdeclarativebinding_p.h>
 
 QT_BEGIN_NAMESPACE
 
 struct QDeclarativeBindingCompilerPrivate;
 class QDeclarativeBindingCompiler
 {
-public:
-    QDeclarativeBindingCompiler();
-    ~QDeclarativeBindingCompiler();
+ public:
+   QDeclarativeBindingCompiler();
+   ~QDeclarativeBindingCompiler();
 
-    // Returns true if bindings were compiled
-    bool isValid() const;
+   // Returns true if bindings were compiled
+   bool isValid() const;
 
-    struct Expression
-    {
-        QDeclarativeParser::Object *component;
-        QDeclarativeParser::Object *context;
-        QDeclarativeParser::Property *property;
-        QDeclarativeParser::Variant expression;
-        QHash<QString, QDeclarativeParser::Object *> ids;
-        QDeclarativeImports imports;
-    };
+   struct Expression {
+      QDeclarativeParser::Object *component;
+      QDeclarativeParser::Object *context;
+      QDeclarativeParser::Property *property;
+      QDeclarativeParser::Variant expression;
+      QHash<QString, QDeclarativeParser::Object *> ids;
+      QDeclarativeImports imports;
+   };
 
-    // -1 on failure, otherwise the binding index to use
-    int compile(const Expression &, QDeclarativeEnginePrivate *);
+   // -1 on failure, otherwise the binding index to use
+   int compile(const Expression &, QDeclarativeEnginePrivate *);
 
-    // Returns the compiled program
-    QByteArray program() const;
+   // Returns the compiled program
+   QByteArray program() const;
 
-    static void dump(const QByteArray &);
-private:
-    QDeclarativeBindingCompilerPrivate *d;
+   static void dump(const QByteArray &);
+ private:
+   QDeclarativeBindingCompilerPrivate *d;
 };
 
 class QDeclarativeCompiledBindingsPrivate;
 class QDeclarativeCompiledBindings : public QObject, public QDeclarativeAbstractExpression, public QDeclarativeRefCount
 {
-public:
-    QDeclarativeCompiledBindings(const char *program, QDeclarativeContextData *context, QDeclarativeRefCount *);
-    virtual ~QDeclarativeCompiledBindings();
+ public:
+   QDeclarativeCompiledBindings(const char *program, QDeclarativeContextData *context, QDeclarativeRefCount *);
+   virtual ~QDeclarativeCompiledBindings();
 
-    QDeclarativeAbstractBinding *configBinding(int index, QObject *target, QObject *scope, int property);
+   QDeclarativeAbstractBinding *configBinding(int index, QObject *target, QObject *scope, int property);
 
-protected:
-    int qt_metacall(QMetaObject::Call, int, void **);
+ protected:
+   int qt_metacall(QMetaObject::Call, int, void **);
 
-private:
-    Q_DISABLE_COPY(QDeclarativeCompiledBindings)
-    Q_DECLARE_PRIVATE(QDeclarativeCompiledBindings)
+ private:
+   Q_DISABLE_COPY(QDeclarativeCompiledBindings)
+   Q_DECLARE_PRIVATE(QDeclarativeCompiledBindings)
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEBINDINGOPTIMIZATIONS_P_H
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,15 +18,15 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVEANIMATEDIMAGE_P_H
-#define QDECLARATIVEANIMATEDIMAGE_P_H
+#ifndef QDECLARATIVEANIMATEDIMAGE_P_P_H
+#define QDECLARATIVEANIMATEDIMAGE_P_P_H
 
-#include "qdeclarativeimage_p_p.h"
+#include <qdeclarativeimage_p_p.h>
 
 #ifndef QT_NO_MOVIE
 
@@ -37,20 +37,19 @@ class QNetworkReply;
 
 class QDeclarativeAnimatedImagePrivate : public QDeclarativeImagePrivate
 {
-    Q_DECLARE_PUBLIC(QDeclarativeAnimatedImage)
+   Q_DECLARE_PUBLIC(QDeclarativeAnimatedImage)
 
-public:
-    QDeclarativeAnimatedImagePrivate()
-      : playing(true), paused(false), preset_currentframe(0), _movie(0), reply(0), redirectCount(0)
-    {
-    }
+ public:
+   QDeclarativeAnimatedImagePrivate()
+      : playing(true), paused(false), preset_currentframe(0), _movie(0), reply(0), redirectCount(0) {
+   }
 
-    bool playing;
-    bool paused;
-    int preset_currentframe;
-    QMovie *_movie;
-    QNetworkReply *reply;
-    int redirectCount;
+   bool playing;
+   bool paused;
+   int preset_currentframe;
+   QMovie *_movie;
+   QNetworkReply *reply;
+   int redirectCount;
 };
 
 QT_END_NAMESPACE

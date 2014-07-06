@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -49,21 +49,21 @@ class QScriptDebuggerResponse;
 class QScriptDebuggerCommandExecutorPrivate;
 class QScriptDebuggerCommandExecutor
 {
-public:
-    QScriptDebuggerCommandExecutor();
-    virtual ~QScriptDebuggerCommandExecutor();
+ public:
+   QScriptDebuggerCommandExecutor();
+   virtual ~QScriptDebuggerCommandExecutor();
 
-    virtual QScriptDebuggerResponse execute(
-        QScriptDebuggerBackend *backend,
-        const QScriptDebuggerCommand &command);
+   virtual QScriptDebuggerResponse execute(
+      QScriptDebuggerBackend *backend,
+      const QScriptDebuggerCommand &command);
 
-protected:
-    QScriptDebuggerCommandExecutor(QScriptDebuggerCommandExecutorPrivate &dd);
-    QScopedPointer<QScriptDebuggerCommandExecutorPrivate> d_ptr;
+ protected:
+   QScriptDebuggerCommandExecutor(QScriptDebuggerCommandExecutorPrivate &dd);
+   QScopedPointer<QScriptDebuggerCommandExecutorPrivate> d_ptr;
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerCommandExecutor)
-    Q_DISABLE_COPY(QScriptDebuggerCommandExecutor)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerCommandExecutor)
+   Q_DISABLE_COPY(QScriptDebuggerCommandExecutor)
 };
 
 QT_END_NAMESPACE

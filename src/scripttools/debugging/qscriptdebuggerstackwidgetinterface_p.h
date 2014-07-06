@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,49 +26,37 @@
 #ifndef QSCRIPTDEBUGGERSTACKWIDGETINTERFACE_P_H
 #define QSCRIPTDEBUGGERSTACKWIDGETINTERFACE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtGui/qwidget.h>
 
 QT_BEGIN_NAMESPACE
 
 class QAbstractItemModel;
-
 class QScriptDebuggerStackWidgetInterfacePrivate;
-class QScriptDebuggerStackWidgetInterface:
-    public QWidget
+
+class QScriptDebuggerStackWidgetInterface: public QWidget
 {
-    CS_OBJECT(QScriptDebuggerStackWidgetInterface)
-public:
-    ~QScriptDebuggerStackWidgetInterface();
+   CS_OBJECT(QScriptDebuggerStackWidgetInterface)
 
-    virtual QAbstractItemModel *stackModel() const = 0;
-    virtual void setStackModel(QAbstractItemModel *model) = 0;
+ public:
+   ~QScriptDebuggerStackWidgetInterface();
 
-    virtual int currentFrameIndex() const = 0;
-    virtual void setCurrentFrameIndex(int frameIndex) = 0;
+   virtual QAbstractItemModel *stackModel() const = 0;
+   virtual void setStackModel(QAbstractItemModel *model) = 0;
 
-public:
-    CS_SIGNAL_1(Public, void currentFrameChanged(int newFrameIndex))
-    CS_SIGNAL_2(currentFrameChanged,newFrameIndex) 
+   virtual int currentFrameIndex() const = 0;
+   virtual void setCurrentFrameIndex(int frameIndex) = 0;
 
-protected:
-    QScriptDebuggerStackWidgetInterface(
-        QScriptDebuggerStackWidgetInterfacePrivate &dd,
-        QWidget *parent, Qt::WindowFlags flags);
+   CS_SIGNAL_1(Public, void currentFrameChanged(int newFrameIndex))
+   CS_SIGNAL_2(currentFrameChanged, newFrameIndex)
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerStackWidgetInterface)
-    Q_DISABLE_COPY(QScriptDebuggerStackWidgetInterface)
+ protected:
+   QScriptDebuggerStackWidgetInterface(
+      QScriptDebuggerStackWidgetInterfacePrivate &dd,
+      QWidget *parent, Qt::WindowFlags flags);
+
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerStackWidgetInterface)
+   Q_DISABLE_COPY(QScriptDebuggerStackWidgetInterface)
 };
 
 QT_END_NAMESPACE

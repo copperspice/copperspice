@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -55,65 +55,65 @@ class QScriptContextInfo;
 class QScriptDebuggerResponsePrivate;
 class QScriptDebuggerResponse
 {
-public:
-    friend QDataStream &operator<<(QDataStream &, const QScriptDebuggerResponse &);
-    friend QDataStream &operator>>(QDataStream &, QScriptDebuggerResponse &);
+ public:
+   friend QDataStream &operator<<(QDataStream &, const QScriptDebuggerResponse &);
+   friend QDataStream &operator>>(QDataStream &, QScriptDebuggerResponse &);
 
-    enum Error {
-        NoError,
-        InvalidContextIndex,
-        InvalidArgumentIndex,
-        InvalidScriptID,
-        InvalidBreakpointID,
-        UserError = 1000,
-        MaxUserError = 32767
-    };
+   enum Error {
+      NoError,
+      InvalidContextIndex,
+      InvalidArgumentIndex,
+      InvalidScriptID,
+      InvalidBreakpointID,
+      UserError = 1000,
+      MaxUserError = 32767
+   };
 
-    QScriptDebuggerResponse();
-    QScriptDebuggerResponse(const QScriptDebuggerResponse &other);
-    ~QScriptDebuggerResponse();
+   QScriptDebuggerResponse();
+   QScriptDebuggerResponse(const QScriptDebuggerResponse &other);
+   ~QScriptDebuggerResponse();
 
-    Error error() const;
-    void setError(Error error);
+   Error error() const;
+   void setError(Error error);
 
-    QVariant result() const;
-    void setResult(const QVariant &value);
+   QVariant result() const;
+   void setResult(const QVariant &value);
 
-    void setResult(int value);
-    void setResult(const QString &value);
-    void setResult(const QScriptBreakpointData &data);
-    void setResult(const QScriptBreakpointMap &breakpoints);
-    void setResult(const QScriptScriptMap &scripts);
-    void setResult(const QScriptScriptData &data);
-    void setResult(const QScriptDebuggerValue &value);
-    void setResult(const QScriptDebuggerValueList &value);
-    void setResult(const QScriptDebuggerValuePropertyList &props);
-    void setResult(const QScriptContextInfo &info);
+   void setResult(int value);
+   void setResult(const QString &value);
+   void setResult(const QScriptBreakpointData &data);
+   void setResult(const QScriptBreakpointMap &breakpoints);
+   void setResult(const QScriptScriptMap &scripts);
+   void setResult(const QScriptScriptData &data);
+   void setResult(const QScriptDebuggerValue &value);
+   void setResult(const QScriptDebuggerValueList &value);
+   void setResult(const QScriptDebuggerValuePropertyList &props);
+   void setResult(const QScriptContextInfo &info);
 
-    int resultAsInt() const;
-    qint64 resultAsLongLong() const;
-    QString resultAsString() const;
-    QScriptBreakpointData resultAsBreakpointData() const;
-    QScriptBreakpointMap resultAsBreakpoints() const;
-    QScriptScriptMap resultAsScripts() const;
-    QScriptScriptData resultAsScriptData() const;
-    QScriptDebuggerValue resultAsScriptValue() const;
-    QScriptDebuggerValueList resultAsScriptValueList() const;
-    QScriptDebuggerValuePropertyList resultAsScriptValuePropertyList() const;
-    QScriptContextInfo resultAsContextInfo() const;
+   int resultAsInt() const;
+   qint64 resultAsLongLong() const;
+   QString resultAsString() const;
+   QScriptBreakpointData resultAsBreakpointData() const;
+   QScriptBreakpointMap resultAsBreakpoints() const;
+   QScriptScriptMap resultAsScripts() const;
+   QScriptScriptData resultAsScriptData() const;
+   QScriptDebuggerValue resultAsScriptValue() const;
+   QScriptDebuggerValueList resultAsScriptValueList() const;
+   QScriptDebuggerValuePropertyList resultAsScriptValuePropertyList() const;
+   QScriptContextInfo resultAsContextInfo() const;
 
-    bool async() const;
-    void setAsync(bool async);
+   bool async() const;
+   void setAsync(bool async);
 
-    QScriptDebuggerResponse &operator=(const QScriptDebuggerResponse &other);
+   QScriptDebuggerResponse &operator=(const QScriptDebuggerResponse &other);
 
-    bool operator==(const QScriptDebuggerResponse &other) const;
-    bool operator!=(const QScriptDebuggerResponse &other) const;
+   bool operator==(const QScriptDebuggerResponse &other) const;
+   bool operator!=(const QScriptDebuggerResponse &other) const;
 
-private:
-    QScopedPointer<QScriptDebuggerResponsePrivate> d_ptr;
+ private:
+   QScopedPointer<QScriptDebuggerResponsePrivate> d_ptr;
 
-    Q_DECLARE_PRIVATE(QScriptDebuggerResponse)
+   Q_DECLARE_PRIVATE(QScriptDebuggerResponse)
 };
 
 QDataStream &operator<<(QDataStream &, const QScriptDebuggerResponse &);

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,17 +18,17 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVESTATE_P_H
-#define QDECLARATIVESTATE_P_H
+#ifndef QDECLARATIVESTATE_P_P_H
+#define QDECLARATIVESTATE_P_P_H
 
-#include "qdeclarativestate_p.h"
-#include "qdeclarativeanimation_p_p.h"
-#include "qdeclarativetransitionmanager_p_p.h"
+#include <qdeclarativestate_p.h>
+#include <qdeclarativeanimation_p_p.h>
+#include <qdeclarativetransitionmanager_p_p.h>
 #include <qdeclarativeproperty_p.h>
 #include <qdeclarativeguard_p.h>
 #include <qdeclarativebinding_p.h>
@@ -37,185 +37,173 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeSimpleAction
 {
-public:
-    enum State { StartState, EndState };
-    QDeclarativeSimpleAction(const QDeclarativeAction &a, State state = StartState)
-    {
-        m_property = a.property;
-        m_specifiedObject = a.specifiedObject;
-        m_specifiedProperty = a.specifiedProperty;
-        m_event = a.event;
-        if (state == StartState) {
-            m_value = a.fromValue;
-            if (QDeclarativePropertyPrivate::binding(m_property)) {
-                m_binding = QDeclarativeAbstractBinding::getPointer(QDeclarativePropertyPrivate::binding(m_property));
-            }
-            m_reverseEvent = true;
-        } else {
-            m_value = a.toValue;
-            m_binding = a.toBinding;
-            m_reverseEvent = false;
-        }
-    }
+ public:
+   enum State { StartState, EndState };
+   QDeclarativeSimpleAction(const QDeclarativeAction &a, State state = StartState) {
+      m_property = a.property;
+      m_specifiedObject = a.specifiedObject;
+      m_specifiedProperty = a.specifiedProperty;
+      m_event = a.event;
+      if (state == StartState) {
+         m_value = a.fromValue;
+         if (QDeclarativePropertyPrivate::binding(m_property)) {
+            m_binding = QDeclarativeAbstractBinding::getPointer(QDeclarativePropertyPrivate::binding(m_property));
+         }
+         m_reverseEvent = true;
+      } else {
+         m_value = a.toValue;
+         m_binding = a.toBinding;
+         m_reverseEvent = false;
+      }
+   }
 
-    ~QDeclarativeSimpleAction()
-    {
-    }
+   ~QDeclarativeSimpleAction() {
+   }
 
-    QDeclarativeSimpleAction(const QDeclarativeSimpleAction &other)
-        :  m_property(other.m_property),
-        m_value(other.m_value),
-        m_binding(QDeclarativeAbstractBinding::getPointer(other.binding())),
-        m_specifiedObject(other.m_specifiedObject),
-        m_specifiedProperty(other.m_specifiedProperty),
-        m_event(other.m_event),
-        m_reverseEvent(other.m_reverseEvent)
-    {
-    }
+   QDeclarativeSimpleAction(const QDeclarativeSimpleAction &other)
+      :  m_property(other.m_property),
+         m_value(other.m_value),
+         m_binding(QDeclarativeAbstractBinding::getPointer(other.binding())),
+         m_specifiedObject(other.m_specifiedObject),
+         m_specifiedProperty(other.m_specifiedProperty),
+         m_event(other.m_event),
+         m_reverseEvent(other.m_reverseEvent) {
+   }
 
-    QDeclarativeSimpleAction &operator =(const QDeclarativeSimpleAction &other)
-    {
-        m_property = other.m_property;
-        m_value = other.m_value;
-        m_binding = QDeclarativeAbstractBinding::getPointer(other.binding());
-        m_specifiedObject = other.m_specifiedObject;
-        m_specifiedProperty = other.m_specifiedProperty;
-        m_event = other.m_event;
-        m_reverseEvent = other.m_reverseEvent;
+   QDeclarativeSimpleAction &operator =(const QDeclarativeSimpleAction &other) {
+      m_property = other.m_property;
+      m_value = other.m_value;
+      m_binding = QDeclarativeAbstractBinding::getPointer(other.binding());
+      m_specifiedObject = other.m_specifiedObject;
+      m_specifiedProperty = other.m_specifiedProperty;
+      m_event = other.m_event;
+      m_reverseEvent = other.m_reverseEvent;
 
-        return *this;
-    }
+      return *this;
+   }
 
-    void setProperty(const QDeclarativeProperty &property)
-    {
-        m_property = property;
-    }
+   void setProperty(const QDeclarativeProperty &property) {
+      m_property = property;
+   }
 
-    const QDeclarativeProperty &property() const
-    {
-        return m_property;
-    }
+   const QDeclarativeProperty &property() const {
+      return m_property;
+   }
 
-    void setValue(const QVariant &value)
-    {
-        m_value = value;
-    }
+   void setValue(const QVariant &value) {
+      m_value = value;
+   }
 
-    const QVariant &value() const
-    {
-        return m_value;
-    }
+   const QVariant &value() const {
+      return m_value;
+   }
 
-    void setBinding(QDeclarativeAbstractBinding *binding)
-    {
-        m_binding = QDeclarativeAbstractBinding::getPointer(binding);
-    }
+   void setBinding(QDeclarativeAbstractBinding *binding) {
+      m_binding = QDeclarativeAbstractBinding::getPointer(binding);
+   }
 
-    QDeclarativeAbstractBinding *binding() const
-    {
-        return m_binding.data();
-    }
+   QDeclarativeAbstractBinding *binding() const {
+      return m_binding.data();
+   }
 
-    QObject *specifiedObject() const
-    {
-        return m_specifiedObject;
-    }
+   QObject *specifiedObject() const {
+      return m_specifiedObject;
+   }
 
-    const QString &specifiedProperty() const
-    {
-        return m_specifiedProperty;
-    }
+   const QString &specifiedProperty() const {
+      return m_specifiedProperty;
+   }
 
-    QDeclarativeActionEvent *event() const
-    {
-        return m_event;
-    }
+   QDeclarativeActionEvent *event() const {
+      return m_event;
+   }
 
-    bool reverseEvent() const
-    {
-        return m_reverseEvent;
-    }
+   bool reverseEvent() const {
+      return m_reverseEvent;
+   }
 
-private:
-    QDeclarativeProperty m_property;
-    QVariant m_value;
-    QDeclarativeAbstractBinding::Pointer m_binding;
-    QObject *m_specifiedObject;
-    QString m_specifiedProperty;
-    QDeclarativeActionEvent *m_event;
-    bool m_reverseEvent;
+ private:
+   QDeclarativeProperty m_property;
+   QVariant m_value;
+   QDeclarativeAbstractBinding::Pointer m_binding;
+   QObject *m_specifiedObject;
+   QString m_specifiedProperty;
+   QDeclarativeActionEvent *m_event;
+   bool m_reverseEvent;
 };
 
 class QDeclarativeStateOperationPrivate
 {
-    Q_DECLARE_PUBLIC(QDeclarativeStateOperation)
+   Q_DECLARE_PUBLIC(QDeclarativeStateOperation)
 
-public:
+ public:
 
-    QDeclarativeStateOperationPrivate()
-    : m_state(0) {}
+   QDeclarativeStateOperationPrivate()
+      : m_state(0) {}
 
-    QDeclarativeState *m_state;
+   QDeclarativeState *m_state;
 };
 
 class QDeclarativeStatePrivate
 {
-    Q_DECLARE_PUBLIC(QDeclarativeState)
+   Q_DECLARE_PUBLIC(QDeclarativeState)
 
-public:
-    QDeclarativeStatePrivate()
-    : when(0), named(false), inState(false), group(0) {}
+ public:
+   QDeclarativeStatePrivate()
+      : when(0), named(false), inState(false), group(0) {}
 
-    typedef QList<QDeclarativeSimpleAction> SimpleActionList;
+   typedef QList<QDeclarativeSimpleAction> SimpleActionList;
 
-    QString name;
-    QDeclarativeBinding *when;
-    bool named;
+   QString name;
+   QDeclarativeBinding *when;
+   bool named;
 
-    struct OperationGuard : public QDeclarativeGuard<QDeclarativeStateOperation>
-    {
-        OperationGuard(QObject *obj, QList<OperationGuard> *l) : list(l) { 
-            setObject(static_cast<QDeclarativeStateOperation *>(obj));
-        }
-        QList<OperationGuard> *list;
-        void objectDestroyed(QDeclarativeStateOperation *) {
-            // we assume priv will always be destroyed after objectDestroyed calls
-            list->removeOne(*this);
-        }
-    };
-    QList<OperationGuard> operations;
+   struct OperationGuard : public QDeclarativeGuard<QDeclarativeStateOperation> {
+      OperationGuard(QObject *obj, QList<OperationGuard> *l) : list(l) {
+         setObject(static_cast<QDeclarativeStateOperation *>(obj));
+      }
+      QList<OperationGuard> *list;
+      void objectDestroyed(QDeclarativeStateOperation *) {
+         // we assume priv will always be destroyed after objectDestroyed calls
+         list->removeOne(*this);
+      }
+   };
+   QList<OperationGuard> operations;
 
-    static void operations_append(QDeclarativeListProperty<QDeclarativeStateOperation> *prop, QDeclarativeStateOperation *op) {
-        QList<OperationGuard> *list = static_cast<QList<OperationGuard> *>(prop->data);
-        op->setState(qobject_cast<QDeclarativeState*>(prop->object));
-        list->append(OperationGuard(op, list));
-    }
-    static void operations_clear(QDeclarativeListProperty<QDeclarativeStateOperation> *prop) {
-        QList<OperationGuard> *list = static_cast<QList<OperationGuard> *>(prop->data);
-        QMutableListIterator<OperationGuard> listIterator(*list);
-        while(listIterator.hasNext())
-            listIterator.next()->setState(0);
-        list->clear();
-    }
-    static int operations_count(QDeclarativeListProperty<QDeclarativeStateOperation> *prop) {
-        QList<OperationGuard> *list = static_cast<QList<OperationGuard> *>(prop->data);
-        return list->count();
-    }
-    static QDeclarativeStateOperation *operations_at(QDeclarativeListProperty<QDeclarativeStateOperation> *prop, int index) {
-        QList<OperationGuard> *list = static_cast<QList<OperationGuard> *>(prop->data);
-        return list->at(index);
-    }
+   static void operations_append(QDeclarativeListProperty<QDeclarativeStateOperation> *prop,
+                                 QDeclarativeStateOperation *op) {
+      QList<OperationGuard> *list = static_cast<QList<OperationGuard> *>(prop->data);
+      op->setState(qobject_cast<QDeclarativeState *>(prop->object));
+      list->append(OperationGuard(op, list));
+   }
+   static void operations_clear(QDeclarativeListProperty<QDeclarativeStateOperation> *prop) {
+      QList<OperationGuard> *list = static_cast<QList<OperationGuard> *>(prop->data);
+      QMutableListIterator<OperationGuard> listIterator(*list);
+      while (listIterator.hasNext()) {
+         listIterator.next()->setState(0);
+      }
+      list->clear();
+   }
+   static int operations_count(QDeclarativeListProperty<QDeclarativeStateOperation> *prop) {
+      QList<OperationGuard> *list = static_cast<QList<OperationGuard> *>(prop->data);
+      return list->count();
+   }
+   static QDeclarativeStateOperation *operations_at(QDeclarativeListProperty<QDeclarativeStateOperation> *prop,
+         int index) {
+      QList<OperationGuard> *list = static_cast<QList<OperationGuard> *>(prop->data);
+      return list->at(index);
+   }
 
-    QDeclarativeTransitionManager transitionManager;
+   QDeclarativeTransitionManager transitionManager;
 
-    SimpleActionList revertList;
-    QList<QDeclarativeProperty> reverting;
-    QString extends;
-    mutable bool inState;
-    QDeclarativeStateGroup *group;
+   SimpleActionList revertList;
+   QList<QDeclarativeProperty> reverting;
+   QString extends;
+   mutable bool inState;
+   QDeclarativeStateGroup *group;
 
-    QDeclarativeStateOperation::ActionList generateActionList(QDeclarativeStateGroup *) const;
-    void complete();
+   QDeclarativeStateOperation::ActionList generateActionList(QDeclarativeStateGroup *) const;
+   void complete();
 };
 
 QT_END_NAMESPACE

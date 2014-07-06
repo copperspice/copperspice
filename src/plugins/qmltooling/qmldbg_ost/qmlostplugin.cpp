@@ -23,11 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qmlostplugin.h"
-#include "qostdevice.h"
-
-#include <private/qdeclarativedebugserver_p.h>
-#include <private/qpacketprotocol_p.h>
+#include <qmlostplugin.h>
+#include <qostdevice.h>
+#include <qdeclarativedebugserver_p.h>
+#include <qpacketprotocol_p.h>
 
 QT_BEGIN_NAMESPACE
 

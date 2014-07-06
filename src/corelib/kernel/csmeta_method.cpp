@@ -120,7 +120,7 @@ QByteArray QMetaMethod::name() const
 {
    QByteArray retval = m_signature;
 
-   int pos = m_signature.indexOf("(");   
+   int pos = m_signature.indexOf("(");
    retval  = m_signature.left(pos);
 
    return retval;
@@ -134,10 +134,10 @@ int QMetaMethod::parameterCount() const
 int QMetaMethod::parameterType(int index) const
 {
    QList<QByteArray> types = parameterTypes();
-   QByteArray typeName = types[index];     
+   QByteArray typeName = types[index];
 
    int retval = QMetaType::type(typeName.constData());
-      
+
    return retval;
 }
 

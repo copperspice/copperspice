@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -34,23 +34,23 @@ QT_BEGIN_NAMESPACE
 
 class QScriptObjectSnapshot
 {
-public:
-    struct Delta {
-        QStringList removedProperties;
-        QScriptValuePropertyList changedProperties;
-        QScriptValuePropertyList addedProperties;
-    };
+ public:
+   struct Delta {
+      QStringList removedProperties;
+      QScriptValuePropertyList changedProperties;
+      QScriptValuePropertyList addedProperties;
+   };
 
-    QScriptObjectSnapshot();
-    ~QScriptObjectSnapshot();
+   QScriptObjectSnapshot();
+   ~QScriptObjectSnapshot();
 
-    Delta capture(const QScriptValue &object);
-    QScriptValuePropertyList properties() const;
+   Delta capture(const QScriptValue &object);
+   QScriptValuePropertyList properties() const;
 
-    QScriptValueProperty findProperty(const QString &name) const;
+   QScriptValueProperty findProperty(const QString &name) const;
 
-private:
-    QScriptValuePropertyList m_properties;
+ private:
+   QScriptValuePropertyList m_properties;
 };
 
 QT_END_NAMESPACE

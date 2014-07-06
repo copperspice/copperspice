@@ -23,35 +23,34 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qtextcodec.h"
-#include "qtextcodec_p.h"
+#include <qplatformdefs.h>
+#include <qtextcodec.h>
+#include <qtextcodec_p.h>
 
 #ifndef QT_NO_TEXTCODEC
 
-#include "qlist.h"
-#include "qfile.h"
-#include "qvarlengtharray.h"
-
-#include "qcoreapplication.h"
-#include "qtextcodecplugin.h"
-#include "qfactoryloader_p.h"
-#include "qstringlist.h"
+#include <qlist.h>
+#include <qfile.h>
+#include <qvarlengtharray.h>
+#include <qcoreapplication.h>
+#include <qtextcodecplugin.h>
+#include <qfactoryloader_p.h>
+#include <qstringlist.h>
 
 #ifdef Q_OS_UNIX
-#  include "qiconvcodec_p.h"
+#  include <qiconvcodec_p.h>
 #endif
 
-#include "qutfcodec_p.h"
-#include "qsimplecodec_p.h"
-#include "qlatincodec_p.h"
+#include <qutfcodec_p.h>
+#include <qsimplecodec_p.h>
+#include <qlatincodec_p.h>
 
 #ifndef QT_NO_CODECS
-#  include "qtsciicodec_p.h"
-#  include "qisciicodec_p.h"
+#  include <qtsciicodec_p.h>
+#  include <qisciicodec_p.h>
 
-#  if defined(QT_NO_ICONV) && !defined(QT_CODEC_PLUGINS)
-// no iconv(3) support, must build all codecs into the library
+#  if defined(QT_NO_ICONV) && ! defined(QT_CODEC_PLUGINS)
+//   no iconv(3) support, must build all codecs into the library
 #    include "../../plugins/codecs/cn/qgb18030codec.h"
 #    include "../../plugins/codecs/jp/qeucjpcodec.h"
 #    include "../../plugins/codecs/jp/qjiscodec.h"
@@ -61,14 +60,14 @@
 #  endif
 
 #  if defined(Q_WS_X11)
-#    include "qfontlaocodec_p.h"
+#    include <qfontlaocodec_p.h>
 #    include "../../plugins/codecs/jp/qfontjpcodec.h"
 #  endif
 #endif
 
-#include "qlocale.h"
-#include "qmutex.h"
-#include "qhash.h"
+#include <qlocale.h>
+#include <qmutex.h>
+#include <qhash.h>
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -78,15 +77,13 @@
 #include <langinfo.h>
 #endif
 
-
 // enabling this is not exception safe!
 // #define Q_DEBUG_TEXTCODEC
 
 QT_BEGIN_NAMESPACE
 
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-                          (QTextCodecFactoryInterface_iid, QLatin1String("/codecs")))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QTextCodecFactoryInterface_iid, QLatin1String("/codecs")))
 #endif
 
 //Cache for QTextCodec::codecForName and codecForMib.

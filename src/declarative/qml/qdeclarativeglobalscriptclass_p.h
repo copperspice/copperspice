@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,24 +18,13 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
 #ifndef QDECLARATIVEGLOBALSCRIPTCLASS_P_H
 #define QDECLARATIVEGLOBALSCRIPTCLASS_P_H
-
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
 
 #include <QtScript/qscriptclass.h>
 #include <QtCore/qset.h>
@@ -44,25 +33,29 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeGlobalScriptClass : public QScriptClass
 {
-public:
-    QDeclarativeGlobalScriptClass(QScriptEngine *);
+ public:
+   QDeclarativeGlobalScriptClass(QScriptEngine *);
 
-    virtual QueryFlags queryProperty(const QScriptValue &object,
-                                     const QScriptString &name,
-                                     QueryFlags flags, uint *id);
+   virtual QueryFlags queryProperty(const QScriptValue &object,
+                                    const QScriptString &name,
+                                    QueryFlags flags, uint *id);
 
-    virtual void setProperty(QScriptValue &object, const QScriptString &name,
-                             uint id, const QScriptValue &value);
+   virtual void setProperty(QScriptValue &object, const QScriptString &name,
+                            uint id, const QScriptValue &value);
 
-    void explicitSetProperty(const QStringList &, const QList<QScriptValue> &);
+   void explicitSetProperty(const QStringList &, const QList<QScriptValue> &);
 
-    const QScriptValue &staticGlobalObject() const { return m_staticGlobalObject; }
+   const QScriptValue &staticGlobalObject() const {
+      return m_staticGlobalObject;
+   }
 
-    const QSet<QString> &illegalNames() const { return m_illegalNames; }
+   const QSet<QString> &illegalNames() const {
+      return m_illegalNames;
+   }
 
-private:
-    QSet<QString> m_illegalNames;
-    QScriptValue m_staticGlobalObject;
+ private:
+   QSet<QString> m_illegalNames;
+   QScriptValue m_staticGlobalObject;
 };
 
 QT_END_NAMESPACE

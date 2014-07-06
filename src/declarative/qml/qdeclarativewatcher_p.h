@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,25 +42,25 @@ class QMetaProperty;
 
 class QDeclarativeWatcher : public QObject
 {
-    CS_OBJECT(QDeclarativeWatcher)
-public:
-    QDeclarativeWatcher(QObject * = 0);
+   CS_OBJECT(QDeclarativeWatcher)
+ public:
+   QDeclarativeWatcher(QObject * = 0);
 
-    bool addWatch(int id, quint32 objectId);
-    bool addWatch(int id, quint32 objectId, const QByteArray &property);
-    bool addWatch(int id, quint32 objectId, const QString &expr);
+   bool addWatch(int id, quint32 objectId);
+   bool addWatch(int id, quint32 objectId, const QByteArray &property);
+   bool addWatch(int id, quint32 objectId, const QString &expr);
 
-    void removeWatch(int id);
+   void removeWatch(int id);
 
-public:
-    CS_SIGNAL_1(Public, void propertyChanged(int id,int objectId,const QMetaProperty & property,const QVariant & value))
-    CS_SIGNAL_2(propertyChanged,id,objectId,property,value) 
+ public:
+   CS_SIGNAL_1(Public, void propertyChanged(int id, int objectId, const QMetaProperty &property, const QVariant &value))
+   CS_SIGNAL_2(propertyChanged, id, objectId, property, value)
 
-private:
-    friend class QDeclarativeWatchProxy;
-    void addPropertyWatch(int id, QObject *object, quint32 objectId, const QMetaProperty &property);
+ private:
+   friend class QDeclarativeWatchProxy;
+   void addPropertyWatch(int id, QObject *object, quint32 objectId, const QMetaProperty &property);
 
-    QHash<int, QList<QPointer<QDeclarativeWatchProxy> > > m_proxies;
+   QHash<int, QList<QPointer<QDeclarativeWatchProxy> > > m_proxies;
 };
 
 QT_END_NAMESPACE

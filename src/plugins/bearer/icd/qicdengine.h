@@ -26,10 +26,8 @@
 #ifndef QICDENGINE_H
 #define QICDENGINE_H
 
-#include <QtNetwork/private/qbearerengine_p.h>
-
+#include <qbearerengine_p.h>
 #include <QtCore/qtimer.h>
-
 #include "maemo_icd.h"
 
 QT_BEGIN_NAMESPACE
@@ -44,8 +42,10 @@ inline QNetworkConfiguration::BearerType bearerTypeFromIapType(const QString &ia
     if (iapType == QLatin1String("WLAN_INFRA") ||
         iapType == QLatin1String("WLAN_ADHOC")) {
         return QNetworkConfiguration::BearerWLAN;
+
     } else if (iapType == QLatin1String("GPRS")) {
         return QNetworkConfiguration::BearerHSPA;
+
     } else {
         return QNetworkConfiguration::BearerUnknown;
     }

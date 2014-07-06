@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,46 +18,35 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVEPATH_P_H
-#define QDECLARATIVEPATH_P_H
+#ifndef QDECLARATIVEPATH_P_P_H
+#define QDECLARATIVEPATH_P_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "private/qdeclarativepath_p.h"
+#include <qdeclarativepath_p.h>
 #include <qdeclarative.h>
 
 QT_BEGIN_NAMESPACE
 
-class QDeclarativePathPrivate 
+class QDeclarativePathPrivate
 {
-    Q_DECLARE_PUBLIC(QDeclarativePath)
+   Q_DECLARE_PUBLIC(QDeclarativePath)
 
-public:
-    QDeclarativePathPrivate() : startX(0), startY(0), closed(false), componentComplete(true) { }
+ public:
+   QDeclarativePathPrivate() : startX(0), startY(0), closed(false), componentComplete(true) { }
 
-    QPainterPath _path;
-    QList<QDeclarativePathElement*> _pathElements;
-    mutable QVector<QPointF> _pointCache;
-    QList<QDeclarativePath::AttributePoint> _attributePoints;
-    QStringList _attributes;
-    int startX;
-    int startY;
-    bool closed;
-    bool componentComplete;
+   QPainterPath _path;
+   QList<QDeclarativePathElement *> _pathElements;
+   mutable QVector<QPointF> _pointCache;
+   QList<QDeclarativePath::AttributePoint> _attributePoints;
+   QStringList _attributes;
+   int startX;
+   int startY;
+   bool closed;
+   bool componentComplete;
 };
 
 QT_END_NAMESPACE

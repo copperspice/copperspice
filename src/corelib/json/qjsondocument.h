@@ -63,6 +63,7 @@ struct Q_CORE_EXPORT QJsonParseError {
 class Q_CORE_EXPORT QJsonDocument
 {
  public:
+
 #ifdef Q_LITTLE_ENDIAN
    static const uint BinaryFormatTag = ('q') | ('b' << 8) | ('j' << 16) | ('s' << 24);
 #else

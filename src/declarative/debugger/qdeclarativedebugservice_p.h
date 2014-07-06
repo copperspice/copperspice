@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,11 +26,9 @@
 #ifndef QDECLARATIVEDEBUGSERVICE_P_H
 #define QDECLARATIVEDEBUGSERVICE_P_H
 
-#include <QtCore/qobject.h>
-#include <private/qdeclarativeglobal_p.h>
+#include <qobject.h>
+#include <qdeclarativeglobal_p.h>
 #include <QScopedPointer>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
@@ -38,45 +36,43 @@ class QDeclarativeDebugServicePrivate;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeDebugService : public QObject
 {
-    CS_OBJECT(QDeclarativeDebugService)
+   CS_OBJECT(QDeclarativeDebugService)
 
-    Q_DECLARE_PRIVATE(QDeclarativeDebugService)
-    Q_DISABLE_COPY(QDeclarativeDebugService)
+   Q_DECLARE_PRIVATE(QDeclarativeDebugService)
+   Q_DISABLE_COPY(QDeclarativeDebugService)
 
-public:
-    explicit QDeclarativeDebugService(const QString &, QObject *parent = 0);
-    ~QDeclarativeDebugService();
+ public:
+   explicit QDeclarativeDebugService(const QString &, QObject *parent = 0);
+   ~QDeclarativeDebugService();
 
-    QString name() const;
+   QString name() const;
 
-    enum Status { NotConnected, Unavailable, Enabled };
-    Status status() const;
+   enum Status { NotConnected, Unavailable, Enabled };
+   Status status() const;
 
-    void sendMessage(const QByteArray &);
-    bool waitForMessage();
+   void sendMessage(const QByteArray &);
+   bool waitForMessage();
 
-    static int idForObject(QObject *);
-    static QObject *objectForId(int);
+   static int idForObject(QObject *);
+   static QObject *objectForId(int);
 
-    static QString objectToString(QObject *obj);
+   static QString objectToString(QObject *obj);
 
-    static bool isDebuggingEnabled();
-    static bool hasDebuggingClient();
+   static bool isDebuggingEnabled();
+   static bool hasDebuggingClient();
 
-protected:
-    virtual void statusChanged(Status);
-    virtual void messageReceived(const QByteArray &);
-	
-	 QScopedPointer<QDeclarativeDebugServicePrivate> d_ptr;
+ protected:
+   virtual void statusChanged(Status);
+   virtual void messageReceived(const QByteArray &);
 
-private:
-    friend class QDeclarativeDebugServer;
-    friend class QDeclarativeDebugServerPrivate;
+   QScopedPointer<QDeclarativeDebugServicePrivate> d_ptr;
+
+ private:
+   friend class QDeclarativeDebugServer;
+   friend class QDeclarativeDebugServerPrivate;
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEDEBUGSERVICE_H
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,65 +43,65 @@ QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerConsoleWidgetPrivate;
 class QScriptDebuggerConsoleWidget:
-    public QScriptDebuggerConsoleWidgetInterface
+   public QScriptDebuggerConsoleWidgetInterface
 {
-    CS_OBJECT(QScriptDebuggerConsoleWidget)
-public:
-    QScriptDebuggerConsoleWidget(QWidget *parent = 0);
-    ~QScriptDebuggerConsoleWidget();
+   CS_OBJECT(QScriptDebuggerConsoleWidget)
+ public:
+   QScriptDebuggerConsoleWidget(QWidget *parent = 0);
+   ~QScriptDebuggerConsoleWidget();
 
-    void message(QtMsgType type, const QString &text,
-                 const QString &fileName = QString(),
-                 int lineNumber = -1, int columnNumber = -1,
-                 const QVariant &data = QVariant());
+   void message(QtMsgType type, const QString &text,
+                const QString &fileName = QString(),
+                int lineNumber = -1, int columnNumber = -1,
+                const QVariant &data = QVariant());
 
-    void setLineContinuationMode(bool enabled);
+   void setLineContinuationMode(bool enabled);
 
-    void clear();
+   void clear();
 
-protected:
-    void keyPressEvent(QKeyEvent *event);
-    bool focusNextPrevChild(bool);
+ protected:
+   void keyPressEvent(QKeyEvent *event);
+   bool focusNextPrevChild(bool);
 
-protected:
-    QScriptDebuggerConsoleWidget(
-        QScriptDebuggerConsoleWidgetPrivate &dd,
-        QWidget *parent);
+ protected:
+   QScriptDebuggerConsoleWidget(
+      QScriptDebuggerConsoleWidgetPrivate &dd,
+      QWidget *parent);
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerConsoleWidget)
-    Q_DISABLE_COPY(QScriptDebuggerConsoleWidget)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerConsoleWidget)
+   Q_DISABLE_COPY(QScriptDebuggerConsoleWidget)
 
-    CS_SLOT_1(Private, void _q_onLineEntered(const QString & un_named_arg1))
-    CS_SLOT_2(_q_onLineEntered)
+   CS_SLOT_1(Private, void _q_onLineEntered(const QString &un_named_arg1))
+   CS_SLOT_2(_q_onLineEntered)
 
-/*  PRIVATE_SLOT
-void _q_onLineEntered(const QString & un_named_arg1)
-{
-	Q_D(QScriptDebuggerConsoleWidget);
-	d->_q_onLineEntered();
-}
-*/
-    CS_SLOT_1(Private, void _q_onLineEdited(const QString & un_named_arg1))
-    CS_SLOT_2(_q_onLineEdited)
+   /*  PRIVATE_SLOT
+   void _q_onLineEntered(const QString & un_named_arg1)
+   {
+   	Q_D(QScriptDebuggerConsoleWidget);
+   	d->_q_onLineEntered();
+   }
+   */
+   CS_SLOT_1(Private, void _q_onLineEdited(const QString &un_named_arg1))
+   CS_SLOT_2(_q_onLineEdited)
 
-/*  PRIVATE_SLOT
-void _q_onLineEdited(const QString & un_named_arg1)
-{
-	Q_D(QScriptDebuggerConsoleWidget);
-	d->_q_onLineEdited();
-}
-*/
-    CS_SLOT_1(Private, void _q_onCompletionTaskFinished())
-    CS_SLOT_2(_q_onCompletionTaskFinished)
+   /*  PRIVATE_SLOT
+   void _q_onLineEdited(const QString & un_named_arg1)
+   {
+   	Q_D(QScriptDebuggerConsoleWidget);
+   	d->_q_onLineEdited();
+   }
+   */
+   CS_SLOT_1(Private, void _q_onCompletionTaskFinished())
+   CS_SLOT_2(_q_onCompletionTaskFinished)
 
-/*  PRIVATE_SLOT
-void _q_onCompletionTaskFinished()
-{
-	Q_D(QScriptDebuggerConsoleWidget);
-	d->_q_onCompletionTaskFinished();
-}
-*/
+   /*  PRIVATE_SLOT
+   void _q_onCompletionTaskFinished()
+   {
+   	Q_D(QScriptDebuggerConsoleWidget);
+   	d->_q_onCompletionTaskFinished();
+   }
+   */
 };
 
 QT_END_NAMESPACE

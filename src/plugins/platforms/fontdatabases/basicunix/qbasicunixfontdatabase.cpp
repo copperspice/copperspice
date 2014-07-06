@@ -23,18 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qbasicunixfontdatabase.h"
-
-#include <QtGui/private/qapplication_p.h>
+#include <qbasicunixfontdatabase.h>
+#include <qapplication_p.h>
 #include <QtGui/QPlatformScreen>
-
 #include <QtCore/QFile>
 #include <QtCore/QLibraryInfo>
 #include <QtCore/QDir>
 
 #undef QT_NO_FREETYPE
-#include <QtGui/private/qfontengine_ft_p.h>
-#include <QtGui/private/qfontengine_p.h>
+#include <qfontengine_ft_p.h>
+#include <qfontengine_p.h>
 
 #include <ft2build.h>
 #include FT_TRUETYPE_TABLES_H

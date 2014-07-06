@@ -51,7 +51,7 @@
 #ifndef QTSCIICODEC_P_H
 #define QTSCIICODEC_P_H
 
-#include "QtCore/qtextcodec.h"
+#include <QtCore/qtextcodec.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -26,7 +26,7 @@
 #ifndef SHIVAVGGRAPHICSSYSTEM_H
 #define SHIVAVGGRAPHICSSYSTEM_H
 
-#include <QtGui/private/qgraphicssystem_p.h>
+#include <qgraphicssystem_p.h>
 
 QT_BEGIN_NAMESPACE
 

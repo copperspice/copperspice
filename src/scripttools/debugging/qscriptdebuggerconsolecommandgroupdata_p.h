@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -26,19 +26,8 @@
 #ifndef QSCRIPTDEBUGGERCONSOLECOMMANDGROUPDATA_P_H
 #define QSCRIPTDEBUGGERCONSOLECOMMANDGROUPDATA_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtCore/qobjectdefs.h>
-#include <private/qscopedpointer_p.h>
+#include <qscopedpointer_p.h>
 #include <QtCore/qmap.h>
 
 QT_BEGIN_NAMESPACE
@@ -48,28 +37,28 @@ class QString;
 class QScriptDebuggerConsoleCommandGroupDataPrivate;
 class QScriptDebuggerConsoleCommandGroupData
 {
-public:
-    QScriptDebuggerConsoleCommandGroupData();
-    QScriptDebuggerConsoleCommandGroupData(
-        const QString &shortDescription,
-        const QString &longDescription);
-    QScriptDebuggerConsoleCommandGroupData(
-        const QScriptDebuggerConsoleCommandGroupData &other);
-    ~QScriptDebuggerConsoleCommandGroupData();
+ public:
+   QScriptDebuggerConsoleCommandGroupData();
+   QScriptDebuggerConsoleCommandGroupData(
+      const QString &shortDescription,
+      const QString &longDescription);
+   QScriptDebuggerConsoleCommandGroupData(
+      const QScriptDebuggerConsoleCommandGroupData &other);
+   ~QScriptDebuggerConsoleCommandGroupData();
 
-    QString shortDescription() const;
-    QString longDescription() const;
+   QString shortDescription() const;
+   QString longDescription() const;
 
-    bool isValid() const;
+   bool isValid() const;
 
-    QScriptDebuggerConsoleCommandGroupData &operator=(
-        const QScriptDebuggerConsoleCommandGroupData &other);
+   QScriptDebuggerConsoleCommandGroupData &operator=(
+      const QScriptDebuggerConsoleCommandGroupData &other);
 
-private:
-    QScopedSharedPointer<QScriptDebuggerConsoleCommandGroupDataPrivate> d_ptr;
+ private:
+   QScopedSharedPointer<QScriptDebuggerConsoleCommandGroupDataPrivate> d_ptr;
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerConsoleCommandGroupData)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerConsoleCommandGroupData)
 };
 
 typedef QMap<QString, QScriptDebuggerConsoleCommandGroupData> QScriptDebuggerConsoleCommandGroupMap;

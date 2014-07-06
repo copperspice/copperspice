@@ -626,7 +626,8 @@ JSC::JSValue JSC_HOST_CALL functionDisconnect(JSC::ExecState *exec, JSC::JSObjec
 
    const QMetaObject *meta = qtSignal->metaObject();
    if (! meta) {
-      return JSC::throwError(exec, JSC::TypeError, "Function.prototype.discconnect() Can not disconnect from deleted QObject");
+      return JSC::throwError(exec, JSC::TypeError,
+                             "Function.prototype.discconnect() Can not disconnect from deleted QObject");
    }
 
    QMetaMethod sig = meta->method(qtSignal->initialIndex());

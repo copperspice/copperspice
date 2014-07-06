@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,36 +18,31 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVEFOCUSSCOPE_H
-#define QDECLARATIVEFOCUSSCOPE_H
+#ifndef QDECLARATIVEFOCUSSCOPE_P_H
+#define QDECLARATIVEFOCUSSCOPE_P_H
 
-#include "qdeclarativeitem.h"
-
-QT_BEGIN_HEADER
+#include <qdeclarativeitem.h>
 
 QT_BEGIN_NAMESPACE
-
 
 //### set component root as focusscope
 class QDeclarativeFocusScope : public QDeclarativeItem
 {
-    CS_OBJECT(QDeclarativeFocusScope)
-    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeItem)
+   CS_OBJECT(QDeclarativeFocusScope)
+   Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeItem)
 
-public:
-    QDeclarativeFocusScope(QDeclarativeItem *parent=0);
-    virtual ~QDeclarativeFocusScope();
+ public:
+   QDeclarativeFocusScope(QDeclarativeItem *parent = 0);
+   virtual ~QDeclarativeFocusScope();
 };
 
 QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QDeclarativeFocusScope)
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEFOCUSSCOPE_H

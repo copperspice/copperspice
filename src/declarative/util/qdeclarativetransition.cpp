@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,157 +18,113 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#include "private/qdeclarativestate_p.h"
-#include "private/qdeclarativestategroup_p.h"
-#include "private/qdeclarativestate_p_p.h"
-#include "private/qdeclarativestateoperations_p.h"
-#include "private/qdeclarativeanimation_p.h"
-#include "private/qdeclarativeanimation_p_p.h"
-#include "private/qdeclarativetransitionmanager_p_p.h"
-
+#include <qdeclarativestate_p.h>
+#include <qdeclarativestategroup_p.h>
+#include <qdeclarativestate_p_p.h>
+#include <qdeclarativestateoperations_p.h>
+#include <qdeclarativeanimation_p.h>
+#include <qdeclarativeanimation_p_p.h>
+#include <qdeclarativetransitionmanager_p_p.h>
 #include <QParallelAnimationGroup>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \qmlclass Transition QDeclarativeTransition
-    \ingroup qml-animation-transition
-    \since 4.7
-    \brief The Transition element defines animated transitions that occur on state changes.
-
-    A Transition defines the animations to be applied when a \l State change occurs.
-
-    For example, the following \l Rectangle has two states: the default state, and
-    an added "moved" state. In the "moved state, the rectangle's position changes
-    to (50, 50).  The added Transition specifies that when the rectangle
-    changes between the default and the "moved" state, any changes
-    to the \c x and \c y properties should be animated, using an \c Easing.InOutQuad.
-
-    \snippet doc/src/snippets/declarative/transition.qml 0
-
-    Notice the example does not require \l{PropertyAnimation::}{to} and
-    \l{PropertyAnimation::}{from} values for the NumberAnimation. As a convenience,
-    these properties are automatically set to the values of \c x and \c y before
-    and after the state change; the \c from values are provided by
-    the current values of \c x and \c y, and the \c to values are provided by
-    the PropertyChanges object. If you wish, you can provide \l{PropertyAnimation::}{to} and
-    \l{PropertyAnimation::}{from} values anyway to override the default values.
-
-    By default, a Transition's animations are applied for any state change in the
-    parent item. The  Transition \l {Transition::}{from} and \l {Transition::}{to}
-    values can be set to restrict the animations to only be applied when changing
-    from one particular state to another.
-
-    To define multiple transitions, specify \l Item::transitions as a list:
-
-    \snippet doc/src/snippets/declarative/transitions-list.qml list of transitions
-
-    If multiple Transitions are specified, only a single (best-matching) Transition will be applied for any particular
-    state change. In the example above, when changing to \c state1, the first transition will be used, rather
-    than the more generic second transition.
-
-    If a state change has a Transition that matches the same property as a
-    \l Behavior, the Transition animation overrides the \l Behavior for that
-    state change.
-
-    \sa {QML Animation and Transitions}, {declarative/animation/states}{states example}, {qmlstates}{States}, {QtDeclarative}
-*/
 
 //ParallelAnimationWrapper allows us to do a "callback" when the animation finishes, rather than connecting
 //and disconnecting signals and slots frequently
 class ParallelAnimationWrapper : public QParallelAnimationGroup
 {
-    CS_OBJECT(ParallelAnimationWrapper)
+   CS_OBJECT(ParallelAnimationWrapper)
 
-public:
-    ParallelAnimationWrapper(QObject *parent = 0) : QParallelAnimationGroup(parent) {}
-    QDeclarativeTransitionPrivate *trans;
+ public:
+   ParallelAnimationWrapper(QObject *parent = 0) : QParallelAnimationGroup(parent) {}
+   QDeclarativeTransitionPrivate *trans;
 
-protected:
-    virtual void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+ protected:
+   virtual void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
 
 };
 
 class QDeclarativeTransitionPrivate
 {
-    Q_DECLARE_PUBLIC(QDeclarativeTransition)
+   Q_DECLARE_PUBLIC(QDeclarativeTransition)
 
-public:
-    QDeclarativeTransitionPrivate()
-    : fromState(QLatin1String("*")), toState(QLatin1String("*")),
-      reversed(false), reversible(false), endState(0)
-    {
-        group.trans = this;
-    }
+ public:
+   QDeclarativeTransitionPrivate()
+      : fromState(QLatin1String("*")), toState(QLatin1String("*")),
+        reversed(false), reversible(false), endState(0) {
+      group.trans = this;
+   }
 
-    QString fromState;
-    QString toState;
-    bool reversed;
-    bool reversible;
-    ParallelAnimationWrapper group;
-    QDeclarativeTransitionManager *endState;
+   QString fromState;
+   QString toState;
+   bool reversed;
+   bool reversible;
+   ParallelAnimationWrapper group;
+   QDeclarativeTransitionManager *endState;
 
-    void complete()
-    {
-        endState->complete();
-    }
-    static void append_animation(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list, QDeclarativeAbstractAnimation *a);
-    static int animation_count(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list);
-    static QDeclarativeAbstractAnimation* animation_at(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list, int pos);
-    static void clear_animations(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list);
-    QList<QDeclarativeAbstractAnimation *> animations;
+   void complete() {
+      endState->complete();
+   }
+   static void append_animation(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list,
+                                QDeclarativeAbstractAnimation *a);
+   static int animation_count(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list);
+   static QDeclarativeAbstractAnimation *animation_at(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list,
+         int pos);
+   static void clear_animations(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list);
+   QList<QDeclarativeAbstractAnimation *> animations;
 };
 
-void QDeclarativeTransitionPrivate::append_animation(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list, QDeclarativeAbstractAnimation *a)
+void QDeclarativeTransitionPrivate::append_animation(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list,
+      QDeclarativeAbstractAnimation *a)
 {
-    QDeclarativeTransition *q = static_cast<QDeclarativeTransition *>(list->object);
-    q->d_func()->animations.append(a);
-    q->d_func()->group.addAnimation(a->qtAnimation());
-    a->setDisableUserControl();
+   QDeclarativeTransition *q = static_cast<QDeclarativeTransition *>(list->object);
+   q->d_func()->animations.append(a);
+   q->d_func()->group.addAnimation(a->qtAnimation());
+   a->setDisableUserControl();
 }
 
 int QDeclarativeTransitionPrivate::animation_count(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list)
 {
-    QDeclarativeTransition *q = static_cast<QDeclarativeTransition *>(list->object);
-    return q->d_func()->animations.count();
+   QDeclarativeTransition *q = static_cast<QDeclarativeTransition *>(list->object);
+   return q->d_func()->animations.count();
 }
 
-QDeclarativeAbstractAnimation* QDeclarativeTransitionPrivate::animation_at(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list, int pos)
+QDeclarativeAbstractAnimation *QDeclarativeTransitionPrivate::animation_at(
+   QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list, int pos)
 {
-    QDeclarativeTransition *q = static_cast<QDeclarativeTransition *>(list->object);
-    return q->d_func()->animations.at(pos);
+   QDeclarativeTransition *q = static_cast<QDeclarativeTransition *>(list->object);
+   return q->d_func()->animations.at(pos);
 }
 
 void QDeclarativeTransitionPrivate::clear_animations(QDeclarativeListProperty<QDeclarativeAbstractAnimation> *list)
 {
-    QDeclarativeTransition *q = static_cast<QDeclarativeTransition *>(list->object);
-    while (q->d_func()->animations.count()) {
-        QDeclarativeAbstractAnimation *firstAnim = q->d_func()->animations.at(0);
-        q->d_func()->group.removeAnimation(firstAnim->qtAnimation());
-        q->d_func()->animations.removeAll(firstAnim);
-    }
+   QDeclarativeTransition *q = static_cast<QDeclarativeTransition *>(list->object);
+   while (q->d_func()->animations.count()) {
+      QDeclarativeAbstractAnimation *firstAnim = q->d_func()->animations.at(0);
+      q->d_func()->group.removeAnimation(firstAnim->qtAnimation());
+      q->d_func()->animations.removeAll(firstAnim);
+   }
 }
 
 void ParallelAnimationWrapper::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
-    QParallelAnimationGroup::updateState(newState, oldState);
-    if (newState == Stopped && (duration() == -1
-        || (direction() == QAbstractAnimation::Forward && currentLoopTime() == duration())
-        || (direction() == QAbstractAnimation::Backward && currentLoopTime() == 0)))
-    {
-        trans->complete();
-    }
+   QParallelAnimationGroup::updateState(newState, oldState);
+   if (newState == Stopped && (duration() == -1
+                               || (direction() == QAbstractAnimation::Forward && currentLoopTime() == duration())
+                               || (direction() == QAbstractAnimation::Backward && currentLoopTime() == 0))) {
+      trans->complete();
+   }
 }
 
 
 
 QDeclarativeTransition::QDeclarativeTransition(QObject *parent)
-    : QObject(*(new QDeclarativeTransitionPrivate), parent)
+   : QObject(*(new QDeclarativeTransitionPrivate), parent)
 {
 }
 
@@ -178,37 +134,37 @@ QDeclarativeTransition::~QDeclarativeTransition()
 
 void QDeclarativeTransition::stop()
 {
-    Q_D(QDeclarativeTransition);
-    d->group.stop();
+   Q_D(QDeclarativeTransition);
+   d->group.stop();
 }
 
 void QDeclarativeTransition::setReversed(bool r)
 {
-    Q_D(QDeclarativeTransition);
-    d->reversed = r;
+   Q_D(QDeclarativeTransition);
+   d->reversed = r;
 }
 
 void QDeclarativeTransition::prepare(QDeclarativeStateOperation::ActionList &actions,
-                            QList<QDeclarativeProperty> &after,
-                            QDeclarativeTransitionManager *endState)
+                                     QList<QDeclarativeProperty> &after,
+                                     QDeclarativeTransitionManager *endState)
 {
-    Q_D(QDeclarativeTransition);
+   Q_D(QDeclarativeTransition);
 
-    qmlExecuteDeferred(this);
+   qmlExecuteDeferred(this);
 
-    if (d->reversed) {
-        for (int ii = d->animations.count() - 1; ii >= 0; --ii) {
-            d->animations.at(ii)->transition(actions, after, QDeclarativeAbstractAnimation::Backward);
-        }
-    } else {
-        for (int ii = 0; ii < d->animations.count(); ++ii) {
-            d->animations.at(ii)->transition(actions, after, QDeclarativeAbstractAnimation::Forward);
-        }
-    }
+   if (d->reversed) {
+      for (int ii = d->animations.count() - 1; ii >= 0; --ii) {
+         d->animations.at(ii)->transition(actions, after, QDeclarativeAbstractAnimation::Backward);
+      }
+   } else {
+      for (int ii = 0; ii < d->animations.count(); ++ii) {
+         d->animations.at(ii)->transition(actions, after, QDeclarativeAbstractAnimation::Forward);
+      }
+   }
 
-    d->endState = endState;
-    d->group.setDirection(d->reversed ? QAbstractAnimation::Backward : QAbstractAnimation::Forward);
-    d->group.start();
+   d->endState = endState;
+   d->group.setDirection(d->reversed ? QAbstractAnimation::Backward : QAbstractAnimation::Forward);
+   d->group.start();
 }
 
 /*!
@@ -236,18 +192,19 @@ void QDeclarativeTransition::prepare(QDeclarativeStateOperation::ActionList &act
 */
 QString QDeclarativeTransition::fromState() const
 {
-    Q_D(const QDeclarativeTransition);
-    return d->fromState;
+   Q_D(const QDeclarativeTransition);
+   return d->fromState;
 }
 
 void QDeclarativeTransition::setFromState(const QString &f)
 {
-    Q_D(QDeclarativeTransition);
-    if (f == d->fromState)
-        return;
+   Q_D(QDeclarativeTransition);
+   if (f == d->fromState) {
+      return;
+   }
 
-    d->fromState = f;
-    emit fromChanged();
+   d->fromState = f;
+   emit fromChanged();
 }
 
 /*!
@@ -276,34 +233,36 @@ void QDeclarativeTransition::setFromState(const QString &f)
 */
 bool QDeclarativeTransition::reversible() const
 {
-    Q_D(const QDeclarativeTransition);
-    return d->reversible;
+   Q_D(const QDeclarativeTransition);
+   return d->reversible;
 }
 
 void QDeclarativeTransition::setReversible(bool r)
 {
-    Q_D(QDeclarativeTransition);
-    if (r == d->reversible)
-        return;
+   Q_D(QDeclarativeTransition);
+   if (r == d->reversible) {
+      return;
+   }
 
-    d->reversible = r;
-    emit reversibleChanged();
+   d->reversible = r;
+   emit reversibleChanged();
 }
 
 QString QDeclarativeTransition::toState() const
 {
-    Q_D(const QDeclarativeTransition);
-    return d->toState;
+   Q_D(const QDeclarativeTransition);
+   return d->toState;
 }
 
 void QDeclarativeTransition::setToState(const QString &t)
 {
-    Q_D(QDeclarativeTransition);
-    if (t == d->toState)
-        return;
+   Q_D(QDeclarativeTransition);
+   if (t == d->toState) {
+      return;
+   }
 
-    d->toState = t;
-    emit toChanged();
+   d->toState = t;
+   emit toChanged();
 }
 
 /*!
@@ -321,11 +280,12 @@ void QDeclarativeTransition::setToState(const QString &t)
 */
 QDeclarativeListProperty<QDeclarativeAbstractAnimation> QDeclarativeTransition::animations()
 {
-    Q_D(QDeclarativeTransition);
-    return QDeclarativeListProperty<QDeclarativeAbstractAnimation>(this, &d->animations, QDeclarativeTransitionPrivate::append_animation,
-                                                                   QDeclarativeTransitionPrivate::animation_count,
-                                                                   QDeclarativeTransitionPrivate::animation_at,
-                                                                   QDeclarativeTransitionPrivate::clear_animations);
+   Q_D(QDeclarativeTransition);
+   return QDeclarativeListProperty<QDeclarativeAbstractAnimation>(this, &d->animations,
+          QDeclarativeTransitionPrivate::append_animation,
+          QDeclarativeTransitionPrivate::animation_count,
+          QDeclarativeTransitionPrivate::animation_at,
+          QDeclarativeTransitionPrivate::clear_animations);
 }
 
 QT_END_NAMESPACE

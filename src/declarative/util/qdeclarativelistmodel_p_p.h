@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,44 +43,44 @@ class FlatNodeData;
 
 class FlatListModel
 {
-public:
-    FlatListModel(QDeclarativeListModel *base);
-    ~FlatListModel();
+ public:
+   FlatListModel(QDeclarativeListModel *base);
+   ~FlatListModel();
 
-    QVariant data(int index, int role) const;
+   QVariant data(int index, int role) const;
 
-    QList<int> roles() const;
-    QString toString(int role) const;
+   QList<int> roles() const;
+   QString toString(int role) const;
 
-    int count() const;
-    void clear();
-    void remove(int index);
-    bool insert(int index, const QScriptValue&);
-    QScriptValue get(int index) const;
-    void set(int index, const QScriptValue&, QList<int> *roles);
-    void setProperty(int index, const QString& property, const QVariant& value, QList<int> *roles);
-    void move(int from, int to, int count);
+   int count() const;
+   void clear();
+   void remove(int index);
+   bool insert(int index, const QScriptValue &);
+   QScriptValue get(int index) const;
+   void set(int index, const QScriptValue &, QList<int> *roles);
+   void setProperty(int index, const QString &property, const QVariant &value, QList<int> *roles);
+   void move(int from, int to, int count);
 
-private:    
-    friend class QDeclarativeListModelWorkerAgent;
-    friend class QDeclarativeListModel;
-    friend class FlatListScriptClass;
-    friend class FlatNodeData;
+ private:
+   friend class QDeclarativeListModelWorkerAgent;
+   friend class QDeclarativeListModel;
+   friend class FlatListScriptClass;
+   friend class FlatNodeData;
 
-    bool addValue(const QScriptValue &value, QHash<int, QVariant> *row, QList<int> *roles);
-    void insertedNode(int index);
-    void removedNode(int index);
-    void moveNodes(int from, int to, int n);
+   bool addValue(const QScriptValue &value, QHash<int, QVariant> *row, QList<int> *roles);
+   void insertedNode(int index);
+   void removedNode(int index);
+   void moveNodes(int from, int to, int n);
 
-    QScriptEngine *m_scriptEngine;
-    QHash<int, QString> m_roles;
-    QHash<QString, int> m_strings;
-    QList<QHash<int, QVariant> > m_values;
-    QDeclarativeListModel *m_listModel;
+   QScriptEngine *m_scriptEngine;
+   QHash<int, QString> m_roles;
+   QHash<QString, int> m_strings;
+   QList<QHash<int, QVariant> > m_values;
+   QDeclarativeListModel *m_listModel;
 
-    FlatListScriptClass *m_scriptClass;
-    QList<FlatNodeData *> m_nodeData;
-    QDeclarativeListModelWorkerAgent *m_parentAgent;
+   FlatListScriptClass *m_scriptClass;
+   QList<FlatNodeData *> m_nodeData;
+   QDeclarativeListModelWorkerAgent *m_parentAgent;
 };
 
 
@@ -90,16 +90,16 @@ private:
 */
 class FlatListScriptClass : public QScriptDeclarativeClass
 {
-public:
-    FlatListScriptClass(FlatListModel *model, QScriptEngine *seng);
+ public:
+   FlatListScriptClass(FlatListModel *model, QScriptEngine *seng);
 
-    Value property(Object *, const Identifier &);
-    void setProperty(Object *, const Identifier &name, const QScriptValue &);
-    QScriptClass::QueryFlags queryProperty(Object *, const Identifier &, QScriptClass::QueryFlags flags);
-    bool compare(Object *, Object *);
+   Value property(Object *, const Identifier &);
+   void setProperty(Object *, const Identifier &name, const QScriptValue &);
+   QScriptClass::QueryFlags queryProperty(Object *, const Identifier &, QScriptClass::QueryFlags flags);
+   bool compare(Object *, Object *);
 
-private:
-    FlatListModel *m_model;
+ private:
+   FlatListModel *m_model;
 };
 
 /*
@@ -109,133 +109,132 @@ private:
 struct FlatNodeObjectData;
 class FlatNodeData
 {
-public:
-    FlatNodeData(int i)
-        : index(i) {}
+ public:
+   FlatNodeData(int i)
+      : index(i) {}
 
-    ~FlatNodeData();
+   ~FlatNodeData();
 
-    void addData(FlatNodeObjectData *data);
-    void removeData(FlatNodeObjectData *data);
+   void addData(FlatNodeObjectData *data);
+   void removeData(FlatNodeObjectData *data);
 
-    int index;
+   int index;
 
-private:
-    QSet<FlatNodeObjectData*> objects;
+ private:
+   QSet<FlatNodeObjectData *> objects;
 };
 
-struct FlatNodeObjectData : public QScriptDeclarativeClass::Object
-{
-    FlatNodeObjectData(FlatNodeData *data) : nodeData(data) {
-        nodeData->addData(this);
-    }
+struct FlatNodeObjectData : public QScriptDeclarativeClass::Object {
+   FlatNodeObjectData(FlatNodeData *data) : nodeData(data) {
+      nodeData->addData(this);
+   }
 
-    ~FlatNodeObjectData() {
-        if (nodeData)
-            nodeData->removeData(this);
-    }
+   ~FlatNodeObjectData() {
+      if (nodeData) {
+         nodeData->removeData(this);
+      }
+   }
 
-    FlatNodeData *nodeData;
+   FlatNodeData *nodeData;
 };
 
 
 
 class NestedListModel
 {
-public:
-    NestedListModel(QDeclarativeListModel *base);
-    ~NestedListModel();
+ public:
+   NestedListModel(QDeclarativeListModel *base);
+   ~NestedListModel();
 
-    QHash<int,QVariant> data(int index, const QList<int> &roles, bool *hasNested = 0) const;
-    QVariant data(int index, int role) const;
+   QHash<int, QVariant> data(int index, const QList<int> &roles, bool *hasNested = 0) const;
+   QVariant data(int index, int role) const;
 
-    QList<int> roles() const;
-    QString toString(int role) const;
+   QList<int> roles() const;
+   QString toString(int role) const;
 
-    int count() const;
-    void clear();
-    void remove(int index);
-    bool insert(int index, const QScriptValue&);
-    QScriptValue get(int index) const;
-    void set(int index, const QScriptValue&, QList<int> *roles);
-    void setProperty(int index, const QString& property, const QVariant& value, QList<int> *roles);
-    void move(int from, int to, int count);
+   int count() const;
+   void clear();
+   void remove(int index);
+   bool insert(int index, const QScriptValue &);
+   QScriptValue get(int index) const;
+   void set(int index, const QScriptValue &, QList<int> *roles);
+   void setProperty(int index, const QString &property, const QVariant &value, QList<int> *roles);
+   void move(int from, int to, int count);
 
-    QVariant valueForNode(ModelNode *, bool *hasNested = 0) const;
-    void checkRoles() const;
+   QVariant valueForNode(ModelNode *, bool *hasNested = 0) const;
+   void checkRoles() const;
 
-    ModelNode *_root;
-    bool m_ownsRoot;
-    QDeclarativeListModel *m_listModel;
+   ModelNode *_root;
+   bool m_ownsRoot;
+   QDeclarativeListModel *m_listModel;
 
-private:
-    friend struct ModelNode;
-    mutable QStringList roleStrings;
-    mutable bool _rolesOk;
+ private:
+   friend struct ModelNode;
+   mutable QStringList roleStrings;
+   mutable bool _rolesOk;
 };
 
 
 class ModelNodeMetaObject;
 class ModelObject : public QObject
 {
-    CS_OBJECT(ModelObject)
-public:
-    ModelObject(ModelNode *node, NestedListModel *model, QScriptEngine *seng);
-    void setValue(const QByteArray &name, const QVariant &val);
-    void setNodeUpdatesEnabled(bool enable);
+   CS_OBJECT(ModelObject)
+ public:
+   ModelObject(ModelNode *node, NestedListModel *model, QScriptEngine *seng);
+   void setValue(const QByteArray &name, const QVariant &val);
+   void setNodeUpdatesEnabled(bool enable);
 
-    NestedListModel *m_model;
-    ModelNode *m_node;
+   NestedListModel *m_model;
+   ModelNode *m_node;
 
-private:
-    ModelNodeMetaObject *m_meta;
+ private:
+   ModelNodeMetaObject *m_meta;
 };
 
 class ModelNodeMetaObject : public QDeclarativeOpenMetaObject
 {
-public:
-    ModelNodeMetaObject(QScriptEngine *seng, ModelObject *object);
+ public:
+   ModelNodeMetaObject(QScriptEngine *seng, ModelObject *object);
 
-    bool m_enabled;
+   bool m_enabled;
 
-protected:
-    void propertyWritten(int index);
+ protected:
+   void propertyWritten(int index);
 
-private:
-    QScriptEngine *m_seng;
-    ModelObject *m_obj;
+ private:
+   QScriptEngine *m_seng;
+   ModelObject *m_obj;
 };
 
 
 /*
     A ModelNode is created for each item in a NestedListModel.
 */
-struct ModelNode
-{
-    ModelNode(NestedListModel *model);
-    ~ModelNode();
+struct ModelNode {
+   ModelNode(NestedListModel *model);
+   ~ModelNode();
 
-    QList<QVariant> values;
-    QHash<QString, ModelNode *> properties;
+   QList<QVariant> values;
+   QHash<QString, ModelNode *> properties;
 
-    void clear();
+   void clear();
 
-    QDeclarativeListModel *model(const NestedListModel *model);
-    ModelObject *object(const NestedListModel *model);
+   QDeclarativeListModel *model(const NestedListModel *model);
+   ModelObject *object(const NestedListModel *model);
 
-    bool setObjectValue(const QScriptValue& valuemap, bool writeToCache = true);
-    void setListValue(const QScriptValue& valuelist);
-    bool setProperty(const QString& prop, const QVariant& val);
-    void changedProperty(const QString &name) const;
-    void updateListIndexes();
-    static void dump(ModelNode *node, int ind);
+   bool setObjectValue(const QScriptValue &valuemap, bool writeToCache = true);
+   void setListValue(const QScriptValue &valuelist);
+   bool setProperty(const QString &prop, const QVariant &val);
+   void changedProperty(const QString &name) const;
+   void updateListIndexes();
+   static void dump(ModelNode *node, int ind);
 
-    QDeclarativeListModel *modelCache;
-    ModelObject *objectCache;
-    bool isArray;
+   QDeclarativeListModel *modelCache;
+   ModelObject *objectCache;
+   bool isArray;
 
-    NestedListModel *m_model;
-    int listIndex;  // only used for top-level nodes within a list
+   NestedListModel *m_model;
+   int listIndex;  // only used for top-level nodes within a list
 };
 
 

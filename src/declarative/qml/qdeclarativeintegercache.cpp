@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -31,50 +31,51 @@
 QT_BEGIN_NAMESPACE
 
 QDeclarativeIntegerCache::QDeclarativeIntegerCache(QDeclarativeEngine *e)
-: QDeclarativeCleanup(e), engine(e)
+   : QDeclarativeCleanup(e), engine(e)
 {
 }
 
 QDeclarativeIntegerCache::~QDeclarativeIntegerCache()
 {
-    clear();
+   clear();
 }
 
 void QDeclarativeIntegerCache::clear()
 {
-    qDeleteAll(stringCache);
-    stringCache.clear();
-    identifierCache.clear();
-    engine = 0;
+   qDeleteAll(stringCache);
+   stringCache.clear();
+   identifierCache.clear();
+   engine = 0;
 }
 
 QString QDeclarativeIntegerCache::findId(int value) const
 {
-    for (StringCache::ConstIterator iter = stringCache.begin();
-            iter != stringCache.end(); ++iter) {
-        if (iter.value() && iter.value()->value == value)
-            return iter.key();
-    }
-    return QString();
+   for (StringCache::ConstIterator iter = stringCache.begin();
+         iter != stringCache.end(); ++iter) {
+      if (iter.value() && iter.value()->value == value) {
+         return iter.key();
+      }
+   }
+   return QString();
 }
 
 void QDeclarativeIntegerCache::add(const QString &id, int value)
 {
-    Q_ASSERT(!stringCache.contains(id));
+   Q_ASSERT(!stringCache.contains(id));
 
-    QDeclarativeEnginePrivate *enginePriv = QDeclarativeEnginePrivate::get(engine);
+   QDeclarativeEnginePrivate *enginePriv = QDeclarativeEnginePrivate::get(engine);
 
-    // ### use contextClass
-    Data *d = new Data(enginePriv->objectClass->createPersistentIdentifier(id), value);
+   // ### use contextClass
+   Data *d = new Data(enginePriv->objectClass->createPersistentIdentifier(id), value);
 
-    stringCache.insert(id, d);
-    identifierCache.insert(d->identifier, d);
+   stringCache.insert(id, d);
+   identifierCache.insert(d->identifier, d);
 }
 
 int QDeclarativeIntegerCache::value(const QString &id)
 {
-    Data *d = stringCache.value(id);
-    return d?d->value:-1;
+   Data *d = stringCache.value(id);
+   return d ? d->value : -1;
 }
 
 QT_END_NAMESPACE

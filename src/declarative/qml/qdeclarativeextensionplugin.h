@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -27,10 +27,7 @@
 #define QDECLARATIVEEXTENSIONPLUGIN_H
 
 #include <QtCore/qplugin.h>
-
 #include <QtDeclarative/qdeclarativeextensioninterface.h>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
@@ -38,21 +35,19 @@ class QDeclarativeEngine;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeExtensionPlugin : public QObject, public QDeclarativeExtensionInterface
 {
-    CS_OBJECT(QDeclarativeExtensionPlugin)
-    CS_INTERFACES(QDeclarativeExtensionInterface)
-public:
-    explicit QDeclarativeExtensionPlugin(QObject *parent = 0);
-    ~QDeclarativeExtensionPlugin();
+   CS_OBJECT(QDeclarativeExtensionPlugin)
+   CS_INTERFACES(QDeclarativeExtensionInterface)
+ public:
+   explicit QDeclarativeExtensionPlugin(QObject *parent = 0);
+   ~QDeclarativeExtensionPlugin();
 
-    virtual void registerTypes(const char *uri) = 0;
-    virtual void initializeEngine(QDeclarativeEngine *engine, const char *uri);
+   virtual void registerTypes(const char *uri) = 0;
+   virtual void initializeEngine(QDeclarativeEngine *engine, const char *uri);
 
-private:
-    Q_DISABLE_COPY(QDeclarativeExtensionPlugin)
+ private:
+   Q_DISABLE_COPY(QDeclarativeExtensionPlugin)
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEEXTENSIONPLUGIN_H

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,22 +18,20 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#include "qdeclarativeview.h"
-
+#include <qdeclarativeview.h>
 #include <qdeclarative.h>
 #include <qdeclarativeitem.h>
 #include <qdeclarativeengine.h>
 #include <qdeclarativecontext.h>
 #include <qdeclarativeglobal_p.h>
 #include <qdeclarativeguard_p.h>
-
-#include <private/qdeclarativedebugtrace_p.h>
-#include <private/qdeclarativeinspectorservice_p.h>
+#include <qdeclarativedebugtrace_p.h>
+#include <qdeclarativeinspectorservice_p.h>
 
 #include <qscriptvalueiterator.h>
 #include <qdebug.h>
@@ -49,10 +47,10 @@
 #include <qgraphicswidget.h>
 #include <qbasictimer.h>
 #include <QtCore/qabstractanimation.h>
-#include <private/qgraphicsview_p.h>
-#include <private/qdeclarativeitem_p.h>
-#include <private/qabstractanimation_p.h>
-#include <private/qdeclarativeitemchangelistener_p.h>
+#include <qgraphicsview_p.h>
+#include <qdeclarativeitem_p.h>
+#include <qabstractanimation_p.h>
+#include <qdeclarativeitemchangelistener_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -60,16 +58,16 @@ DEFINE_BOOL_CONFIG_OPTION(frameRateDebug, QML_SHOW_FRAMERATE)
 
 class QDeclarativeScene : public QGraphicsScene
 {
-public:
-    QDeclarativeScene(QObject *parent = 0);
+ public:
+   QDeclarativeScene(QObject *parent = 0);
 
-protected:
-    virtual void keyPressEvent(QKeyEvent *);
-    virtual void keyReleaseEvent(QKeyEvent *);
+ protected:
+   virtual void keyPressEvent(QKeyEvent *);
+   virtual void keyReleaseEvent(QKeyEvent *);
 
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
+   virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *);
+   virtual void mousePressEvent(QGraphicsSceneMouseEvent *);
+   virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
 };
 
 QDeclarativeScene::QDeclarativeScene(QObject *parent) : QGraphicsScene(parent)
@@ -78,99 +76,103 @@ QDeclarativeScene::QDeclarativeScene(QObject *parent) : QGraphicsScene(parent)
 
 void QDeclarativeScene::keyPressEvent(QKeyEvent *e)
 {
-    QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::Key);
+   QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::Key);
 
-    QGraphicsScene::keyPressEvent(e);
+   QGraphicsScene::keyPressEvent(e);
 }
 
 void QDeclarativeScene::keyReleaseEvent(QKeyEvent *e)
 {
-    QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::Key);
+   QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::Key);
 
-    QGraphicsScene::keyReleaseEvent(e);
+   QGraphicsScene::keyReleaseEvent(e);
 }
 
 void QDeclarativeScene::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
-    QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::Mouse);
+   QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::Mouse);
 
-    QGraphicsScene::mouseMoveEvent(e);
+   QGraphicsScene::mouseMoveEvent(e);
 }
 
 void QDeclarativeScene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
-    QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::Mouse);
+   QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::Mouse);
 
-    QGraphicsScene::mousePressEvent(e);
+   QGraphicsScene::mousePressEvent(e);
 }
 
 void QDeclarativeScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
-    QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::Mouse);
+   QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::Mouse);
 
-    QGraphicsScene::mouseReleaseEvent(e);
+   QGraphicsScene::mouseReleaseEvent(e);
 }
 
 class QDeclarativeViewPrivate : public QGraphicsViewPrivate, public QDeclarativeItemChangeListener
 {
-    Q_DECLARE_PUBLIC(QDeclarativeView)
-public:
-    QDeclarativeViewPrivate()
-        : root(0), declarativeItemRoot(0), graphicsWidgetRoot(0), component(0),
-          resizeMode(QDeclarativeView::SizeViewToRootObject), initialSize(0,0) {}
-    ~QDeclarativeViewPrivate() { delete root; delete engine; }
-    void execute();
-    void itemGeometryChanged(QDeclarativeItem *item, const QRectF &newGeometry, const QRectF &oldGeometry);
-    void initResize();
-    void updateSize();
-    inline QSize rootObjectSize() const;
+   Q_DECLARE_PUBLIC(QDeclarativeView)
+ public:
+   QDeclarativeViewPrivate()
+      : root(0), declarativeItemRoot(0), graphicsWidgetRoot(0), component(0),
+        resizeMode(QDeclarativeView::SizeViewToRootObject), initialSize(0, 0) {}
+   ~QDeclarativeViewPrivate() {
+      delete root;
+      delete engine;
+   }
+   void execute();
+   void itemGeometryChanged(QDeclarativeItem *item, const QRectF &newGeometry, const QRectF &oldGeometry);
+   void initResize();
+   void updateSize();
+   inline QSize rootObjectSize() const;
 
-    QDeclarativeGuard<QGraphicsObject> root;
-    QDeclarativeGuard<QDeclarativeItem> declarativeItemRoot;
-    QDeclarativeGuard<QGraphicsWidget> graphicsWidgetRoot;
+   QDeclarativeGuard<QGraphicsObject> root;
+   QDeclarativeGuard<QDeclarativeItem> declarativeItemRoot;
+   QDeclarativeGuard<QGraphicsWidget> graphicsWidgetRoot;
 
-    QUrl source;
+   QUrl source;
 
-    QDeclarativeEngine* engine;
-    QDeclarativeComponent *component;
-    QBasicTimer resizetimer;
+   QDeclarativeEngine *engine;
+   QDeclarativeComponent *component;
+   QBasicTimer resizetimer;
 
-    QDeclarativeView::ResizeMode resizeMode;
-    QSize initialSize;
-    QElapsedTimer frameTimer;
+   QDeclarativeView::ResizeMode resizeMode;
+   QSize initialSize;
+   QElapsedTimer frameTimer;
 
-    void init();
+   void init();
 };
 
 void QDeclarativeViewPrivate::execute()
 {
-    Q_Q(QDeclarativeView);
-    if (root) {
-        delete root;
-        root = 0;
-    }
-    if (component) {
-        delete component;
-        component = 0;
-    }
-    if (!source.isEmpty()) {
-        component = new QDeclarativeComponent(engine, source, q);
-        if (!component->isLoading()) {
-            q->continueExecute();
-        } else {
-            QObject::connect(component, SIGNAL(statusChanged(QDeclarativeComponent::Status)), q, SLOT(continueExecute()));
-        }
-    }
+   Q_Q(QDeclarativeView);
+   if (root) {
+      delete root;
+      root = 0;
+   }
+   if (component) {
+      delete component;
+      component = 0;
+   }
+   if (!source.isEmpty()) {
+      component = new QDeclarativeComponent(engine, source, q);
+      if (!component->isLoading()) {
+         q->continueExecute();
+      } else {
+         QObject::connect(component, SIGNAL(statusChanged(QDeclarativeComponent::Status)), q, SLOT(continueExecute()));
+      }
+   }
 }
 
-void QDeclarativeViewPrivate::itemGeometryChanged(QDeclarativeItem *resizeItem, const QRectF &newGeometry, const QRectF &oldGeometry)
+void QDeclarativeViewPrivate::itemGeometryChanged(QDeclarativeItem *resizeItem, const QRectF &newGeometry,
+      const QRectF &oldGeometry)
 {
-    Q_Q(QDeclarativeView);
-    if (resizeItem == root && resizeMode == QDeclarativeView::SizeViewToRootObject) {
-        // wait for both width and height to be changed
-        resizetimer.start(0,q);
-    }
-    QDeclarativeItemChangeListener::itemGeometryChanged(resizeItem, newGeometry, oldGeometry);
+   Q_Q(QDeclarativeView);
+   if (resizeItem == root && resizeMode == QDeclarativeView::SizeViewToRootObject) {
+      // wait for both width and height to be changed
+      resizetimer.start(0, q);
+   }
+   QDeclarativeItemChangeListener::itemGeometryChanged(resizeItem, newGeometry, oldGeometry);
 }
 
 /*!
@@ -238,11 +240,11 @@ void QDeclarativeViewPrivate::itemGeometryChanged(QDeclarativeItem *resizeItem, 
   Constructs a QDeclarativeView with the given \a parent.
 */
 QDeclarativeView::QDeclarativeView(QWidget *parent)
-    : QGraphicsView(*(new QDeclarativeViewPrivate), parent)
+   : QGraphicsView(*(new QDeclarativeViewPrivate), parent)
 {
-    Q_D(QDeclarativeView);
-    setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-    d->init();
+   Q_D(QDeclarativeView);
+   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+   d->init();
 }
 
 /*!
@@ -251,41 +253,41 @@ QDeclarativeView::QDeclarativeView(QWidget *parent)
   Constructs a QDeclarativeView with the given QML \a source and \a parent.
 */
 QDeclarativeView::QDeclarativeView(const QUrl &source, QWidget *parent)
-    : QGraphicsView(*(new QDeclarativeViewPrivate), parent)
+   : QGraphicsView(*(new QDeclarativeViewPrivate), parent)
 {
-    Q_D(QDeclarativeView);
-    setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-    d->init();
-    setSource(source);
+   Q_D(QDeclarativeView);
+   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+   d->init();
+   setSource(source);
 }
 
 void QDeclarativeViewPrivate::init()
 {
-    Q_Q(QDeclarativeView);
-    engine = new QDeclarativeEngine();
-    q->setScene(new QDeclarativeScene(q));
+   Q_Q(QDeclarativeView);
+   engine = new QDeclarativeEngine();
+   q->setScene(new QDeclarativeScene(q));
 
-    q->setOptimizationFlags(QGraphicsView::DontSavePainterState);
-    q->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    q->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    q->setFrameStyle(0);
+   q->setOptimizationFlags(QGraphicsView::DontSavePainterState);
+   q->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+   q->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+   q->setFrameStyle(0);
 
-    // These seem to give the best performance
-    q->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
-    q->scene()->setItemIndexMethod(QGraphicsScene::NoIndex);
-    q->viewport()->setFocusPolicy(Qt::NoFocus);
-    q->setFocusPolicy(Qt::StrongFocus);
+   // These seem to give the best performance
+   q->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
+   q->scene()->setItemIndexMethod(QGraphicsScene::NoIndex);
+   q->viewport()->setFocusPolicy(Qt::NoFocus);
+   q->setFocusPolicy(Qt::StrongFocus);
 
-    q->scene()->setStickyFocus(true);  //### needed for correct focus handling
+   q->scene()->setStickyFocus(true);  //### needed for correct focus handling
 
 #ifdef QDECLARATIVEVIEW_NOBACKGROUND
-    q->setAttribute(Qt::WA_OpaquePaintEvent);
-    q->setAttribute(Qt::WA_NoSystemBackground);
-    q->viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
-    q->viewport()->setAttribute(Qt::WA_NoSystemBackground);
+   q->setAttribute(Qt::WA_OpaquePaintEvent);
+   q->setAttribute(Qt::WA_NoSystemBackground);
+   q->viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+   q->viewport()->setAttribute(Qt::WA_NoSystemBackground);
 #endif
 
-    QDeclarativeInspectorService::instance()->addView(q);
+   QDeclarativeInspectorService::instance()->addView(q);
 }
 
 /*!
@@ -293,7 +295,7 @@ void QDeclarativeViewPrivate::init()
  */
 QDeclarativeView::~QDeclarativeView()
 {
-    QDeclarativeInspectorService::instance()->removeView(this);
+   QDeclarativeInspectorService::instance()->removeView(this);
 }
 
 /*! \property QDeclarativeView::source
@@ -316,11 +318,11 @@ QDeclarativeView::~QDeclarativeView()
     Calling this methods multiple times with the same url will result
     in the QML being reloaded.
  */
-void QDeclarativeView::setSource(const QUrl& url)
+void QDeclarativeView::setSource(const QUrl &url)
 {
-    Q_D(QDeclarativeView);
-    d->source = url;
-    d->execute();
+   Q_D(QDeclarativeView);
+   d->source = url;
+   d->execute();
 }
 
 /*!
@@ -330,18 +332,18 @@ void QDeclarativeView::setSource(const QUrl& url)
  */
 QUrl QDeclarativeView::source() const
 {
-    Q_D(const QDeclarativeView);
-    return d->source;
+   Q_D(const QDeclarativeView);
+   return d->source;
 }
 
 /*!
   Returns a pointer to the QDeclarativeEngine used for instantiating
   QML Components.
  */
-QDeclarativeEngine* QDeclarativeView::engine() const
+QDeclarativeEngine *QDeclarativeView::engine() const
 {
-    Q_D(const QDeclarativeView);
-    return d->engine;
+   Q_D(const QDeclarativeView);
+   return d->engine;
 }
 
 /*!
@@ -351,10 +353,10 @@ QDeclarativeEngine* QDeclarativeView::engine() const
   arranged hierarchically and this hierarchy is managed by the
   QDeclarativeEngine.
  */
-QDeclarativeContext* QDeclarativeView::rootContext() const
+QDeclarativeContext *QDeclarativeView::rootContext() const
 {
-    Q_D(const QDeclarativeView);
-    return d->engine->rootContext();
+   Q_D(const QDeclarativeView);
+   return d->engine->rootContext();
 }
 
 /*!
@@ -383,11 +385,12 @@ QDeclarativeContext* QDeclarativeView::rootContext() const
 
 QDeclarativeView::Status QDeclarativeView::status() const
 {
-    Q_D(const QDeclarativeView);
-    if (!d->component)
-        return QDeclarativeView::Null;
+   Q_D(const QDeclarativeView);
+   if (!d->component) {
+      return QDeclarativeView::Null;
+   }
 
-    return QDeclarativeView::Status(d->component->status());
+   return QDeclarativeView::Status(d->component->status());
 }
 
 /*!
@@ -396,10 +399,11 @@ QDeclarativeView::Status QDeclarativeView::status() const
 */
 QList<QDeclarativeError> QDeclarativeView::errors() const
 {
-    Q_D(const QDeclarativeView);
-    if (d->component)
-        return d->component->errors();
-    return QList<QDeclarativeError>();
+   Q_D(const QDeclarativeView);
+   if (d->component) {
+      return d->component->errors();
+   }
+   return QList<QDeclarativeError>();
 }
 
 /*!
@@ -419,101 +423,105 @@ QList<QDeclarativeError> QDeclarativeView::errors() const
 
 void QDeclarativeView::setResizeMode(ResizeMode mode)
 {
-    Q_D(QDeclarativeView);
-    if (d->resizeMode == mode)
-        return;
+   Q_D(QDeclarativeView);
+   if (d->resizeMode == mode) {
+      return;
+   }
 
-    if (d->declarativeItemRoot) {
-        if (d->resizeMode == SizeViewToRootObject) {
-            QDeclarativeItemPrivate *p =
-                static_cast<QDeclarativeItemPrivate *>(QGraphicsItemPrivate::get(d->declarativeItemRoot));
-            p->removeItemChangeListener(d, QDeclarativeItemPrivate::Geometry);
-        }
-    } else if (d->graphicsWidgetRoot) {
-         if (d->resizeMode == QDeclarativeView::SizeViewToRootObject) {
-             d->graphicsWidgetRoot->removeEventFilter(this);
-         }
-    }
+   if (d->declarativeItemRoot) {
+      if (d->resizeMode == SizeViewToRootObject) {
+         QDeclarativeItemPrivate *p =
+            static_cast<QDeclarativeItemPrivate *>(QGraphicsItemPrivate::get(d->declarativeItemRoot));
+         p->removeItemChangeListener(d, QDeclarativeItemPrivate::Geometry);
+      }
+   } else if (d->graphicsWidgetRoot) {
+      if (d->resizeMode == QDeclarativeView::SizeViewToRootObject) {
+         d->graphicsWidgetRoot->removeEventFilter(this);
+      }
+   }
 
-    d->resizeMode = mode;
-    if (d->root) {
-        d->initResize();
-    }
+   d->resizeMode = mode;
+   if (d->root) {
+      d->initResize();
+   }
 }
 
 void QDeclarativeViewPrivate::initResize()
 {
-    Q_Q(QDeclarativeView);
-    if (declarativeItemRoot) {
-        if (resizeMode == QDeclarativeView::SizeViewToRootObject) {
-            QDeclarativeItemPrivate *p =
-                static_cast<QDeclarativeItemPrivate *>(QGraphicsItemPrivate::get(declarativeItemRoot));
-            p->addItemChangeListener(this, QDeclarativeItemPrivate::Geometry);
-        }
-    } else if (graphicsWidgetRoot) {
-        if (resizeMode == QDeclarativeView::SizeViewToRootObject) {
-            graphicsWidgetRoot->installEventFilter(q);
-        }
-    }
-    updateSize();
+   Q_Q(QDeclarativeView);
+   if (declarativeItemRoot) {
+      if (resizeMode == QDeclarativeView::SizeViewToRootObject) {
+         QDeclarativeItemPrivate *p =
+            static_cast<QDeclarativeItemPrivate *>(QGraphicsItemPrivate::get(declarativeItemRoot));
+         p->addItemChangeListener(this, QDeclarativeItemPrivate::Geometry);
+      }
+   } else if (graphicsWidgetRoot) {
+      if (resizeMode == QDeclarativeView::SizeViewToRootObject) {
+         graphicsWidgetRoot->installEventFilter(q);
+      }
+   }
+   updateSize();
 }
 
 void QDeclarativeViewPrivate::updateSize()
 {
-    Q_Q(QDeclarativeView);
-    if (!root)
-        return;
-    if (declarativeItemRoot) {
-        if (resizeMode == QDeclarativeView::SizeViewToRootObject) {
-            QSize newSize = QSize(declarativeItemRoot->width(), declarativeItemRoot->height());
-            if (newSize.isValid() && newSize != q->size()) {
-                q->resize(newSize);
-            }
-        } else if (resizeMode == QDeclarativeView::SizeRootObjectToView) {
-            if (!qFuzzyCompare(q->width(), declarativeItemRoot->width()))
-                declarativeItemRoot->setWidth(q->width());
-            if (!qFuzzyCompare(q->height(), declarativeItemRoot->height()))
-                declarativeItemRoot->setHeight(q->height());
-        }
-    } else if (graphicsWidgetRoot) {
-        if (resizeMode == QDeclarativeView::SizeViewToRootObject) {
-            QSize newSize = QSize(graphicsWidgetRoot->size().width(), graphicsWidgetRoot->size().height());
-            if (newSize.isValid() && newSize != q->size()) {
-                q->resize(newSize);
-            }
-        } else if (resizeMode == QDeclarativeView::SizeRootObjectToView) {
-            QSizeF newSize = QSize(q->size().width(), q->size().height());
-            if (newSize.isValid() && newSize != graphicsWidgetRoot->size()) {
-                graphicsWidgetRoot->resize(newSize);
-            }
-        }
-    }
-    q->updateGeometry();
+   Q_Q(QDeclarativeView);
+   if (!root) {
+      return;
+   }
+   if (declarativeItemRoot) {
+      if (resizeMode == QDeclarativeView::SizeViewToRootObject) {
+         QSize newSize = QSize(declarativeItemRoot->width(), declarativeItemRoot->height());
+         if (newSize.isValid() && newSize != q->size()) {
+            q->resize(newSize);
+         }
+      } else if (resizeMode == QDeclarativeView::SizeRootObjectToView) {
+         if (!qFuzzyCompare(q->width(), declarativeItemRoot->width())) {
+            declarativeItemRoot->setWidth(q->width());
+         }
+         if (!qFuzzyCompare(q->height(), declarativeItemRoot->height())) {
+            declarativeItemRoot->setHeight(q->height());
+         }
+      }
+   } else if (graphicsWidgetRoot) {
+      if (resizeMode == QDeclarativeView::SizeViewToRootObject) {
+         QSize newSize = QSize(graphicsWidgetRoot->size().width(), graphicsWidgetRoot->size().height());
+         if (newSize.isValid() && newSize != q->size()) {
+            q->resize(newSize);
+         }
+      } else if (resizeMode == QDeclarativeView::SizeRootObjectToView) {
+         QSizeF newSize = QSize(q->size().width(), q->size().height());
+         if (newSize.isValid() && newSize != graphicsWidgetRoot->size()) {
+            graphicsWidgetRoot->resize(newSize);
+         }
+      }
+   }
+   q->updateGeometry();
 }
 
 QSize QDeclarativeViewPrivate::rootObjectSize() const
 {
-    QSize rootObjectSize(0,0);
-    int widthCandidate = -1;
-    int heightCandidate = -1;
-    if (root) {
-        QSizeF size = root->boundingRect().size();
-        widthCandidate = size.width();
-        heightCandidate = size.height();
-    }
-    if (widthCandidate > 0) {
-        rootObjectSize.setWidth(widthCandidate);
-    }
-    if (heightCandidate > 0) {
-        rootObjectSize.setHeight(heightCandidate);
-    }
-    return rootObjectSize;
+   QSize rootObjectSize(0, 0);
+   int widthCandidate = -1;
+   int heightCandidate = -1;
+   if (root) {
+      QSizeF size = root->boundingRect().size();
+      widthCandidate = size.width();
+      heightCandidate = size.height();
+   }
+   if (widthCandidate > 0) {
+      rootObjectSize.setWidth(widthCandidate);
+   }
+   if (heightCandidate > 0) {
+      rootObjectSize.setHeight(heightCandidate);
+   }
+   return rootObjectSize;
 }
 
 QDeclarativeView::ResizeMode QDeclarativeView::resizeMode() const
 {
-    Q_D(const QDeclarativeView);
-    return d->resizeMode;
+   Q_D(const QDeclarativeView);
+   return d->resizeMode;
 }
 
 /*!
@@ -521,31 +529,31 @@ QDeclarativeView::ResizeMode QDeclarativeView::resizeMode() const
  */
 void QDeclarativeView::continueExecute()
 {
-    Q_D(QDeclarativeView);
-    disconnect(d->component, SIGNAL(statusChanged(QDeclarativeComponent::Status)), this, SLOT(continueExecute()));
+   Q_D(QDeclarativeView);
+   disconnect(d->component, SIGNAL(statusChanged(QDeclarativeComponent::Status)), this, SLOT(continueExecute()));
 
-    if (d->component->isError()) {
-        QList<QDeclarativeError> errorList = d->component->errors();
-        foreach (const QDeclarativeError &error, errorList) {
-            qWarning() << error;
-        }
-        emit statusChanged(status());
-        return;
-    }
+   if (d->component->isError()) {
+      QList<QDeclarativeError> errorList = d->component->errors();
+      foreach (const QDeclarativeError & error, errorList) {
+         qWarning() << error;
+      }
+      emit statusChanged(status());
+      return;
+   }
 
-    QObject *obj = d->component->create();
+   QObject *obj = d->component->create();
 
-    if(d->component->isError()) {
-        QList<QDeclarativeError> errorList = d->component->errors();
-        foreach (const QDeclarativeError &error, errorList) {
-            qWarning() << error;
-        }
-        emit statusChanged(status());
-        return;
-    }
+   if (d->component->isError()) {
+      QList<QDeclarativeError> errorList = d->component->errors();
+      foreach (const QDeclarativeError & error, errorList) {
+         qWarning() << error;
+      }
+      emit statusChanged(status());
+      return;
+   }
 
-    setRootObject(obj);
-    emit statusChanged(status());
+   setRootObject(obj);
+   emit statusChanged(status());
 }
 
 /*!
@@ -553,49 +561,51 @@ void QDeclarativeView::continueExecute()
 */
 void QDeclarativeView::setRootObject(QObject *obj)
 {
-    Q_D(QDeclarativeView);
-    if (d->root == obj || !scene())
-        return;
-    if (QDeclarativeItem *declarativeItem = qobject_cast<QDeclarativeItem *>(obj)) {
-        scene()->addItem(declarativeItem);
-        d->root = declarativeItem;
-        d->declarativeItemRoot = declarativeItem;
-    } else if (QGraphicsObject *graphicsObject = qobject_cast<QGraphicsObject *>(obj)) {
-        scene()->addItem(graphicsObject);
-        d->root = graphicsObject;
-        if (graphicsObject->isWidget()) {
-            d->graphicsWidgetRoot = static_cast<QGraphicsWidget*>(graphicsObject);
-        } else {
-            qWarning() << "QDeclarativeView::resizeMode is not honored for components of type QGraphicsObject";
-        }
-    } else if (obj) {
-        qWarning() << "QDeclarativeView only supports loading of root objects that derive from QGraphicsObject";
-        if (QWidget* widget  = qobject_cast<QWidget *>(obj)) {
-            window()->setAttribute(Qt::WA_OpaquePaintEvent, false);
-            window()->setAttribute(Qt::WA_NoSystemBackground, false);
-            if (layout() && layout()->count()) {
-                // Hide the QGraphicsView in GV mode.
-                QLayoutItem *item = layout()->itemAt(0);
-                if (item->widget())
-                    item->widget()->hide();
+   Q_D(QDeclarativeView);
+   if (d->root == obj || !scene()) {
+      return;
+   }
+   if (QDeclarativeItem *declarativeItem = qobject_cast<QDeclarativeItem *>(obj)) {
+      scene()->addItem(declarativeItem);
+      d->root = declarativeItem;
+      d->declarativeItemRoot = declarativeItem;
+   } else if (QGraphicsObject *graphicsObject = qobject_cast<QGraphicsObject *>(obj)) {
+      scene()->addItem(graphicsObject);
+      d->root = graphicsObject;
+      if (graphicsObject->isWidget()) {
+         d->graphicsWidgetRoot = static_cast<QGraphicsWidget *>(graphicsObject);
+      } else {
+         qWarning() << "QDeclarativeView::resizeMode is not honored for components of type QGraphicsObject";
+      }
+   } else if (obj) {
+      qWarning() << "QDeclarativeView only supports loading of root objects that derive from QGraphicsObject";
+      if (QWidget *widget  = qobject_cast<QWidget *>(obj)) {
+         window()->setAttribute(Qt::WA_OpaquePaintEvent, false);
+         window()->setAttribute(Qt::WA_NoSystemBackground, false);
+         if (layout() && layout()->count()) {
+            // Hide the QGraphicsView in GV mode.
+            QLayoutItem *item = layout()->itemAt(0);
+            if (item->widget()) {
+               item->widget()->hide();
             }
-            widget->setParent(this);
-            if (isVisible()) {
-                widget->setVisible(true);
-            }
-            resize(widget->size());
-        }
-    }
+         }
+         widget->setParent(this);
+         if (isVisible()) {
+            widget->setVisible(true);
+         }
+         resize(widget->size());
+      }
+   }
 
-    if (d->root) {
-        d->initialSize = d->rootObjectSize();
-        if (d->initialSize != size()) {
-            if (!(parentWidget() && parentWidget()->layout())) {
-                resize(d->initialSize);
-            }
-        }
-        d->initResize();
-    }
+   if (d->root) {
+      d->initialSize = d->rootObjectSize();
+      if (d->initialSize != size()) {
+         if (!(parentWidget() && parentWidget()->layout())) {
+            resize(d->initialSize);
+         }
+      }
+      d->initResize();
+   }
 }
 
 /*!
@@ -603,27 +613,27 @@ void QDeclarativeView::setRootObject(QObject *obj)
   If the \l {QTimerEvent} {timer event} \a e is this
   view's resize timer, sceneResized() is emitted.
  */
-void QDeclarativeView::timerEvent(QTimerEvent* e)
+void QDeclarativeView::timerEvent(QTimerEvent *e)
 {
-    Q_D(QDeclarativeView);
-    if (!e || e->timerId() == d->resizetimer.timerId()) {
-        d->updateSize();
-        d->resizetimer.stop();
-    }
+   Q_D(QDeclarativeView);
+   if (!e || e->timerId() == d->resizetimer.timerId()) {
+      d->updateSize();
+      d->resizetimer.stop();
+   }
 }
 
 /*! \internal */
 bool QDeclarativeView::eventFilter(QObject *watched, QEvent *e)
 {
-    Q_D(QDeclarativeView);
-    if (watched == d->root && d->resizeMode == SizeViewToRootObject) {
-        if (d->graphicsWidgetRoot) {
-            if (e->type() == QEvent::GraphicsSceneResize) {
-                d->updateSize();
-            }
-        }
-    }
-    return QGraphicsView::eventFilter(watched, e);
+   Q_D(QDeclarativeView);
+   if (watched == d->root && d->resizeMode == SizeViewToRootObject) {
+      if (d->graphicsWidgetRoot) {
+         if (e->type() == QEvent::GraphicsSceneResize) {
+            d->updateSize();
+         }
+      }
+   }
+   return QGraphicsView::eventFilter(watched, e);
 }
 
 /*!
@@ -632,13 +642,13 @@ bool QDeclarativeView::eventFilter(QObject *watched, QEvent *e)
 */
 QSize QDeclarativeView::sizeHint() const
 {
-    Q_D(const QDeclarativeView);
-    QSize rootObjectSize = d->rootObjectSize();
-    if (rootObjectSize.isEmpty()) {
-        return size();
-    } else {
-        return rootObjectSize;
-    }
+   Q_D(const QDeclarativeView);
+   QSize rootObjectSize = d->rootObjectSize();
+   if (rootObjectSize.isEmpty()) {
+      return size();
+   } else {
+      return rootObjectSize;
+   }
 }
 
 /*!
@@ -646,8 +656,8 @@ QSize QDeclarativeView::sizeHint() const
 */
 QSize QDeclarativeView::initialSize() const
 {
-    Q_D(const QDeclarativeView);
-    return d->initialSize;
+   Q_D(const QDeclarativeView);
+   return d->initialSize;
 }
 
 /*!
@@ -655,8 +665,8 @@ QSize QDeclarativeView::initialSize() const
  */
 QGraphicsObject *QDeclarativeView::rootObject() const
 {
-    Q_D(const QDeclarativeView);
-    return d->root;
+   Q_D(const QDeclarativeView);
+   return d->root;
 }
 
 /*!
@@ -666,19 +676,19 @@ QGraphicsObject *QDeclarativeView::rootObject() const
  */
 void QDeclarativeView::resizeEvent(QResizeEvent *e)
 {
-    Q_D(QDeclarativeView);
-    if (d->resizeMode == SizeRootObjectToView) {
-        d->updateSize();
-    }
-    if (d->declarativeItemRoot) {
-        setSceneRect(QRectF(0, 0, d->declarativeItemRoot->width(), d->declarativeItemRoot->height()));
-    } else if (d->root) {
-        setSceneRect(d->root->boundingRect());
-    } else {
-        setSceneRect(rect());
-    }
-    emit sceneResized(e->size());
-    QGraphicsView::resizeEvent(e);
+   Q_D(QDeclarativeView);
+   if (d->resizeMode == SizeRootObjectToView) {
+      d->updateSize();
+   }
+   if (d->declarativeItemRoot) {
+      setSceneRect(QRectF(0, 0, d->declarativeItemRoot->width(), d->declarativeItemRoot->height()));
+   } else if (d->root) {
+      setSceneRect(d->root->boundingRect());
+   } else {
+      setSceneRect(rect());
+   }
+   emit sceneResized(e->size());
+   QGraphicsView::resizeEvent(e);
 }
 
 /*!
@@ -686,36 +696,38 @@ void QDeclarativeView::resizeEvent(QResizeEvent *e)
 */
 void QDeclarativeView::paintEvent(QPaintEvent *event)
 {
-    Q_D(QDeclarativeView);
+   Q_D(QDeclarativeView);
 
-    QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::FramePaint);
-    QDeclarativeDebugTrace::startRange(QDeclarativeDebugTrace::Painting);
+   QDeclarativeDebugTrace::addEvent(QDeclarativeDebugTrace::FramePaint);
+   QDeclarativeDebugTrace::startRange(QDeclarativeDebugTrace::Painting);
 
-    int time = 0;
-    if (frameRateDebug())
-        time = d->frameTimer.restart();
+   int time = 0;
+   if (frameRateDebug()) {
+      time = d->frameTimer.restart();
+   }
 
-    QGraphicsView::paintEvent(event);
+   QGraphicsView::paintEvent(event);
 
-    QDeclarativeDebugTrace::endRange(QDeclarativeDebugTrace::Painting);
+   QDeclarativeDebugTrace::endRange(QDeclarativeDebugTrace::Painting);
 
-    if (frameRateDebug())
-        qDebug() << "paintEvent:" << d->frameTimer.elapsed() << "time since last frame:" << time;
+   if (frameRateDebug()) {
+      qDebug() << "paintEvent:" << d->frameTimer.elapsed() << "time since last frame:" << time;
+   }
 
 #if QT_SHOW_DECLARATIVEVIEW_FPS
-    static QTime timer;
-    static int frames;
+   static QTime timer;
+   static int frames;
 
-    if (frames == 0) {
-        timer.start();
-    } else if (timer.elapsed() > 5000) {
-        qreal avgtime = timer.elapsed() / (qreal) frames;
-        qDebug("Average time per frame: %f ms (%i fps)", avgtime, int(1000 / avgtime));
-        timer.start();
-        frames = 0;
-    }
-    ++frames;
-    scene()->update();
+   if (frames == 0) {
+      timer.start();
+   } else if (timer.elapsed() > 5000) {
+      qreal avgtime = timer.elapsed() / (qreal) frames;
+      qDebug("Average time per frame: %f ms (%i fps)", avgtime, int(1000 / avgtime));
+      timer.start();
+      frames = 0;
+   }
+   ++frames;
+   scene()->update();
 #endif
 
 }

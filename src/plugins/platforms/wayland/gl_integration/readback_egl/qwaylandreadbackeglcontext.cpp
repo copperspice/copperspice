@@ -23,15 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qwaylandreadbackeglcontext.h"
-
-#include "../../../eglconvenience/qeglconvenience.h"
-
+#include <qwaylandreadbackeglcontext.h>
+#include <qeglconvenience.h>
 #include <QtOpenGL/QGLContext>
-#include <QtOpenGL/private/qglextensions_p.h>
-
-#include "qwaylandshmsurface.h"
-
+#include <qglextensions_p.h>
+#include <qwaylandshmsurface.h>
 #include <QtCore/QDebug>
 
 static inline void qgl_byteSwapImage(QImage &img, GLenum pixel_type)

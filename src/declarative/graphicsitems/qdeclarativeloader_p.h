@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,104 +18,86 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVELOADER_H
-#define QDECLARATIVELOADER_H
+#ifndef QDECLARATIVELOADER_P_H
+#define QDECLARATIVELOADER_P_H
 
-#include "qdeclarativeimplicitsizeitem_p.h"
-
-QT_BEGIN_HEADER
+#include <qdeclarativeimplicitsizeitem_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QDeclarativeLoaderPrivate;
+
 class QDeclarativeLoader : public QDeclarativeImplicitSizeItem
 {
-    CS_OBJECT(QDeclarativeLoader)
-    CS_ENUM(Status)
+   CS_OBJECT(QDeclarativeLoader)
+   CS_ENUM(Status)
 
-    CS_PROPERTY_READ(source, source)
-    CS_PROPERTY_WRITE(source, setSource)
-    CS_PROPERTY_NOTIFY(source, sourceChanged)
-    CS_PROPERTY_READ(*sourceComponent, sourceComponent)
-    CS_PROPERTY_WRITE(*sourceComponent, setSourceComponent)
-    CS_PROPERTY_RESET(*sourceComponent, resetSourceComponent)
-    CS_PROPERTY_NOTIFY(*sourceComponent, sourceChanged)
-    CS_PROPERTY_READ(*item, item)
-    CS_PROPERTY_NOTIFY(*item, itemChanged)
-    CS_PROPERTY_READ(status, status)
-    CS_PROPERTY_NOTIFY(status, statusChanged)
-    CS_PROPERTY_READ(progress, progress)
-    CS_PROPERTY_NOTIFY(progress, progressChanged)
+   CS_PROPERTY_READ(source, source)
+   CS_PROPERTY_WRITE(source, setSource)
+   CS_PROPERTY_NOTIFY(source, sourceChanged)
+   CS_PROPERTY_READ(*sourceComponent, sourceComponent)
+   CS_PROPERTY_WRITE(*sourceComponent, setSourceComponent)
+   CS_PROPERTY_RESET(*sourceComponent, resetSourceComponent)
+   CS_PROPERTY_NOTIFY(*sourceComponent, sourceChanged)
+   CS_PROPERTY_READ(*item, item)
+   CS_PROPERTY_NOTIFY(*item, itemChanged)
+   CS_PROPERTY_READ(status, status)
+   CS_PROPERTY_NOTIFY(status, statusChanged)
+   CS_PROPERTY_READ(progress, progress)
+   CS_PROPERTY_NOTIFY(progress, progressChanged)
 
-public:
-    QDeclarativeLoader(QDeclarativeItem *parent=0);
-    virtual ~QDeclarativeLoader();
+ public:
+   QDeclarativeLoader(QDeclarativeItem *parent = 0);
+   virtual ~QDeclarativeLoader();
 
-    QUrl source() const;
-    void setSource(const QUrl &);
+   QUrl source() const;
+   void setSource(const QUrl &);
 
-    QDeclarativeComponent *sourceComponent() const;
-    void setSourceComponent(QDeclarativeComponent *);
-    void resetSourceComponent();
+   QDeclarativeComponent *sourceComponent() const;
+   void setSourceComponent(QDeclarativeComponent *);
+   void resetSourceComponent();
 
-    enum Status { Null, Ready, Loading, Error };
-    Status status() const;
-    qreal progress() const;
+   enum Status { Null, Ready, Loading, Error };
+   Status status() const;
+   qreal progress() const;
 
-    QGraphicsObject *item() const;
+   QGraphicsObject *item() const;
 
-public:
-    CS_SIGNAL_1(Public, void itemChanged())
-    CS_SIGNAL_2(itemChanged) 
-    CS_SIGNAL_1(Public, void sourceChanged())
-    CS_SIGNAL_2(sourceChanged) 
-    CS_SIGNAL_1(Public, void statusChanged())
-    CS_SIGNAL_2(statusChanged) 
-    CS_SIGNAL_1(Public, void progressChanged())
-    CS_SIGNAL_2(progressChanged) 
-    CS_SIGNAL_1(Public, void loaded())
-    CS_SIGNAL_2(loaded) 
+   CS_SIGNAL_1(Public, void itemChanged())
+   CS_SIGNAL_2(itemChanged)
+   CS_SIGNAL_1(Public, void sourceChanged())
+   CS_SIGNAL_2(sourceChanged)
+   CS_SIGNAL_1(Public, void statusChanged())
+   CS_SIGNAL_2(statusChanged)
+   CS_SIGNAL_1(Public, void progressChanged())
+   CS_SIGNAL_2(progressChanged)
+   CS_SIGNAL_1(Public, void loaded())
+   CS_SIGNAL_2(loaded)
 
-protected:
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-    bool eventFilter(QObject *watched, QEvent *e);
-    void componentComplete();
+ protected:
+   void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+   QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+   bool eventFilter(QObject *watched, QEvent *e);
+   void componentComplete();
 
-private:
-    Q_DISABLE_COPY(QDeclarativeLoader)
-    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeLoader)
-    CS_SLOT_1(Private, void _q_sourceLoaded())
-    CS_SLOT_2(_q_sourceLoaded)
+ private:
+   Q_DISABLE_COPY(QDeclarativeLoader)
+   Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeLoader)
 
-/*  PRIVATE_SLOT
-void _q_sourceLoaded()
-{
-	Q_D(QDeclarativeLoader);
-	d->_q_sourceLoaded();
-}
-*/
-    CS_SLOT_1(Private, void _q_updateSize())
-    CS_SLOT_2(_q_updateSize)
+   CS_SLOT_1(Private, void _q_sourceLoaded())
+   CS_SLOT_2(_q_sourceLoaded)
 
-/*  PRIVATE_SLOT
-void _q_updateSize()
-{
-	Q_D(QDeclarativeLoader);
-	d->_q_updateSize();
-}
-*/
+   CS_SLOT_1(Private, void _q_updateSize())
+   CS_SLOT_2(_q_updateSize)
 };
 
 QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QDeclarativeLoader)
-
-QT_END_HEADER
 
 #endif // QDECLARATIVELOADER_H

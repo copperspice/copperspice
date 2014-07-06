@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,14 +18,13 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#include "private/qdeclarativerectangle_p.h"
-#include "private/qdeclarativerectangle_p_p.h"
-
+#include <qdeclarativerectangle_p.h>
+#include <qdeclarativerectangle_p_p.h>
 #include <QPainter>
 #include <QStringBuilder>
 #include <QtCore/qmath.h>
@@ -53,19 +52,20 @@ QT_BEGIN_NAMESPACE
 
 void QDeclarativePen::setColor(const QColor &c)
 {
-    _color = c;
-    _valid = (_color.alpha() && _width >= 1) ? true : false;
-    emit penChanged();
+   _color = c;
+   _valid = (_color.alpha() && _width >= 1) ? true : false;
+   emit penChanged();
 }
 
 void QDeclarativePen::setWidth(int w)
 {
-    if (_width == w && _valid)
-        return;
+   if (_width == w && _valid) {
+      return;
+   }
 
-    _width = w;
-    _valid = (_color.alpha() && _width >= 1) ? true : false;
-    emit penChanged();
+   _width = w;
+   _valid = (_color.alpha() && _width >= 1) ? true : false;
+   emit penChanged();
 }
 
 
@@ -92,8 +92,9 @@ void QDeclarativePen::setWidth(int w)
 
 void QDeclarativeGradientStop::updateGradient()
 {
-    if (QDeclarativeGradient *grad = qobject_cast<QDeclarativeGradient*>(parent()))
-        grad->doUpdate();
+   if (QDeclarativeGradient *grad = qobject_cast<QDeclarativeGradient *>(parent())) {
+      grad->doUpdate();
+   }
 }
 
 /*!
@@ -158,23 +159,23 @@ void QDeclarativeGradientStop::updateGradient()
 
 const QGradient *QDeclarativeGradient::gradient() const
 {
-    if (!m_gradient && !m_stops.isEmpty()) {
-        m_gradient = new QLinearGradient(0,0,0,1.0);
-        for (int i = 0; i < m_stops.count(); ++i) {
-            const QDeclarativeGradientStop *stop = m_stops.at(i);
-            m_gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
-            m_gradient->setColorAt(stop->position(), stop->color());
-        }
-    }
+   if (!m_gradient && !m_stops.isEmpty()) {
+      m_gradient = new QLinearGradient(0, 0, 0, 1.0);
+      for (int i = 0; i < m_stops.count(); ++i) {
+         const QDeclarativeGradientStop *stop = m_stops.at(i);
+         m_gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+         m_gradient->setColorAt(stop->position(), stop->color());
+      }
+   }
 
-    return m_gradient;
+   return m_gradient;
 }
 
 void QDeclarativeGradient::doUpdate()
 {
-    delete m_gradient;
-    m_gradient = 0;
-    emit updated();
+   delete m_gradient;
+   m_gradient = 0;
+   emit updated();
 }
 
 
@@ -226,17 +227,17 @@ void QDeclarativeGradient::doUpdate()
 int QDeclarativeRectanglePrivate::doUpdateSlotIdx = -1;
 
 QDeclarativeRectangle::QDeclarativeRectangle(QDeclarativeItem *parent)
-  : QDeclarativeItem(*(new QDeclarativeRectanglePrivate), parent)
+   : QDeclarativeItem(*(new QDeclarativeRectanglePrivate), parent)
 {
 }
 
 void QDeclarativeRectangle::doUpdate()
 {
-    Q_D(QDeclarativeRectangle);
-    d->rectImage = QPixmap();
-    const int pw = d->pen && d->pen->isValid() ? d->pen->width() : 0;
-    d->setPaintMargin((pw+1)/2);
-    update();
+   Q_D(QDeclarativeRectangle);
+   d->rectImage = QPixmap();
+   const int pw = d->pen && d->pen->isValid() ? d->pen->width() : 0;
+   d->setPaintMargin((pw + 1) / 2);
+   update();
 }
 
 /*!
@@ -268,8 +269,8 @@ void QDeclarativeRectangle::doUpdate()
 */
 QDeclarativePen *QDeclarativeRectangle::border()
 {
-    Q_D(QDeclarativeRectangle);
-    return d->getPen();
+   Q_D(QDeclarativeRectangle);
+   return d->getPen();
 }
 
 /*!
@@ -293,26 +294,31 @@ QDeclarativePen *QDeclarativeRectangle::border()
 */
 QDeclarativeGradient *QDeclarativeRectangle::gradient() const
 {
-    Q_D(const QDeclarativeRectangle);
-    return d->gradient;
+   Q_D(const QDeclarativeRectangle);
+   return d->gradient;
 }
 
 void QDeclarativeRectangle::setGradient(QDeclarativeGradient *gradient)
 {
-    Q_D(QDeclarativeRectangle);
-    if (d->gradient == gradient)
-        return;
-    static int updatedSignalIdx = -1;
-    if (updatedSignalIdx < 0)
-        updatedSignalIdx = QDeclarativeGradient::staticMetaObject.indexOfSignal("updated()");
-    if (d->doUpdateSlotIdx < 0)
-        d->doUpdateSlotIdx = QDeclarativeRectangle::staticMetaObject.indexOfSlot("doUpdate()");
-    if (d->gradient)
-        QMetaObject::disconnect(d->gradient, updatedSignalIdx, this, d->doUpdateSlotIdx);
-    d->gradient = gradient;
-    if (d->gradient)
-        QMetaObject::connect(d->gradient, updatedSignalIdx, this, d->doUpdateSlotIdx);
-    update();
+   Q_D(QDeclarativeRectangle);
+   if (d->gradient == gradient) {
+      return;
+   }
+   static int updatedSignalIdx = -1;
+   if (updatedSignalIdx < 0) {
+      updatedSignalIdx = QDeclarativeGradient::staticMetaObject.indexOfSignal("updated()");
+   }
+   if (d->doUpdateSlotIdx < 0) {
+      d->doUpdateSlotIdx = QDeclarativeRectangle::staticMetaObject.indexOfSlot("doUpdate()");
+   }
+   if (d->gradient) {
+      QMetaObject::disconnect(d->gradient, updatedSignalIdx, this, d->doUpdateSlotIdx);
+   }
+   d->gradient = gradient;
+   if (d->gradient) {
+      QMetaObject::connect(d->gradient, updatedSignalIdx, this, d->doUpdateSlotIdx);
+   }
+   update();
 }
 
 
@@ -326,20 +332,21 @@ void QDeclarativeRectangle::setGradient(QDeclarativeGradient *gradient)
 */
 qreal QDeclarativeRectangle::radius() const
 {
-    Q_D(const QDeclarativeRectangle);
-    return d->radius;
+   Q_D(const QDeclarativeRectangle);
+   return d->radius;
 }
 
 void QDeclarativeRectangle::setRadius(qreal radius)
 {
-    Q_D(QDeclarativeRectangle);
-    if (d->radius == radius)
-        return;
+   Q_D(QDeclarativeRectangle);
+   if (d->radius == radius) {
+      return;
+   }
 
-    d->radius = radius;
-    d->rectImage = QPixmap();
-    update();
-    emit radiusChanged();
+   d->radius = radius;
+   d->rectImage = QPixmap();
+   update();
+   emit radiusChanged();
 }
 
 /*!
@@ -364,186 +371,208 @@ void QDeclarativeRectangle::setRadius(qreal radius)
 */
 QColor QDeclarativeRectangle::color() const
 {
-    Q_D(const QDeclarativeRectangle);
-    return d->color;
+   Q_D(const QDeclarativeRectangle);
+   return d->color;
 }
 
 void QDeclarativeRectangle::setColor(const QColor &c)
 {
-    Q_D(QDeclarativeRectangle);
-    if (d->color == c)
-        return;
+   Q_D(QDeclarativeRectangle);
+   if (d->color == c) {
+      return;
+   }
 
-    d->color = c;
-    d->rectImage = QPixmap();
-    update();
-    emit colorChanged();
+   d->color = c;
+   d->rectImage = QPixmap();
+   update();
+   emit colorChanged();
 }
 
 void QDeclarativeRectangle::generateRoundedRect()
 {
-    Q_D(QDeclarativeRectangle);
-    if (d->rectImage.isNull()) {
-        const int pw = d->pen && d->pen->isValid() ? d->pen->width() : 0;
-        const int radius = qCeil(d->radius);    //ensure odd numbered width/height so we get 1-pixel center
+   Q_D(QDeclarativeRectangle);
+   if (d->rectImage.isNull()) {
+      const int pw = d->pen && d->pen->isValid() ? d->pen->width() : 0;
+      const int radius = qCeil(d->radius);    //ensure odd numbered width/height so we get 1-pixel center
 
-        QString key = QLatin1String("q_") % QString::number(pw) % d->color.name() % QString::number(d->color.alpha(), 16) % QLatin1Char('_') % QString::number(radius);
-        if (d->pen && d->pen->isValid())
-            key += d->pen->color().name() % QString::number(d->pen->color().alpha(), 16);
+      QString key = QLatin1String("q_") % QString::number(pw) % d->color.name() % QString::number(d->color.alpha(),
+                    16) % QLatin1Char('_') % QString::number(radius);
+      if (d->pen && d->pen->isValid()) {
+         key += d->pen->color().name() % QString::number(d->pen->color().alpha(), 16);
+      }
 
-        if (!QPixmapCache::find(key, &d->rectImage)) {
-            d->rectImage = QPixmap(radius*2 + 3 + pw*2, radius*2 + 3 + pw*2);
-            d->rectImage.fill(Qt::transparent);
-            QPainter p(&(d->rectImage));
-            p.setRenderHint(QPainter::Antialiasing);
-            if (d->pen && d->pen->isValid()) {
-                QPen pn(QColor(d->pen->color()), d->pen->width());
-                p.setPen(pn);
-            } else {
-                p.setPen(Qt::NoPen);
-            }
-            p.setBrush(d->color);
-            if (pw%2)
-                p.drawRoundedRect(QRectF(qreal(pw)/2+1, qreal(pw)/2+1, d->rectImage.width()-(pw+1), d->rectImage.height()-(pw+1)), d->radius, d->radius);
-            else
-                p.drawRoundedRect(QRectF(qreal(pw)/2, qreal(pw)/2, d->rectImage.width()-pw, d->rectImage.height()-pw), d->radius, d->radius);
+      if (!QPixmapCache::find(key, &d->rectImage)) {
+         d->rectImage = QPixmap(radius * 2 + 3 + pw * 2, radius * 2 + 3 + pw * 2);
+         d->rectImage.fill(Qt::transparent);
+         QPainter p(&(d->rectImage));
+         p.setRenderHint(QPainter::Antialiasing);
+         if (d->pen && d->pen->isValid()) {
+            QPen pn(QColor(d->pen->color()), d->pen->width());
+            p.setPen(pn);
+         } else {
+            p.setPen(Qt::NoPen);
+         }
+         p.setBrush(d->color);
+         if (pw % 2) {
+            p.drawRoundedRect(QRectF(qreal(pw) / 2 + 1, qreal(pw) / 2 + 1, d->rectImage.width() - (pw + 1),
+                                     d->rectImage.height() - (pw + 1)), d->radius, d->radius);
+         } else {
+            p.drawRoundedRect(QRectF(qreal(pw) / 2, qreal(pw) / 2, d->rectImage.width() - pw, d->rectImage.height() - pw),
+                              d->radius, d->radius);
+         }
 
-            // end painting before inserting pixmap
-            // to pixmap cache to avoid a deep copy
-            p.end();
-            QPixmapCache::insert(key, d->rectImage);
-        }
-    }
+         // end painting before inserting pixmap
+         // to pixmap cache to avoid a deep copy
+         p.end();
+         QPixmapCache::insert(key, d->rectImage);
+      }
+   }
 }
 
 void QDeclarativeRectangle::generateBorderedRect()
 {
-    Q_D(QDeclarativeRectangle);
-    if (d->rectImage.isNull()) {
-        const int pw = d->pen && d->pen->isValid() ? d->pen->width() : 0;
+   Q_D(QDeclarativeRectangle);
+   if (d->rectImage.isNull()) {
+      const int pw = d->pen && d->pen->isValid() ? d->pen->width() : 0;
 
-        QString key = QLatin1String("q_") % QString::number(pw) % d->color.name() % QString::number(d->color.alpha(), 16);
-        if (d->pen && d->pen->isValid())
-            key += d->pen->color().name() % QString::number(d->pen->color().alpha(), 16);
+      QString key = QLatin1String("q_") % QString::number(pw) % d->color.name() % QString::number(d->color.alpha(), 16);
+      if (d->pen && d->pen->isValid()) {
+         key += d->pen->color().name() % QString::number(d->pen->color().alpha(), 16);
+      }
 
-        if (!QPixmapCache::find(key, &d->rectImage)) {
-            // Adding 5 here makes qDrawBorderPixmap() paint correctly with smooth: true
-            // See QTBUG-7999 and QTBUG-10765 for more details.
-            d->rectImage = QPixmap(pw*2 + 5, pw*2 + 5);
-            d->rectImage.fill(Qt::transparent);
-            QPainter p(&(d->rectImage));
-            p.setRenderHint(QPainter::Antialiasing);
-            if (d->pen && d->pen->isValid()) {
-                QPen pn(QColor(d->pen->color()), d->pen->width());
-                pn.setJoinStyle(Qt::MiterJoin);
-                p.setPen(pn);
-            } else {
-                p.setPen(Qt::NoPen);
-            }
-            p.setBrush(d->color);
-            if (pw%2)
-                p.drawRect(QRectF(qreal(pw)/2+1, qreal(pw)/2+1, d->rectImage.width()-(pw+1), d->rectImage.height()-(pw+1)));
-            else
-                p.drawRect(QRectF(qreal(pw)/2, qreal(pw)/2, d->rectImage.width()-pw, d->rectImage.height()-pw));
+      if (!QPixmapCache::find(key, &d->rectImage)) {
+         // Adding 5 here makes qDrawBorderPixmap() paint correctly with smooth: true
+         // See QTBUG-7999 and QTBUG-10765 for more details.
+         d->rectImage = QPixmap(pw * 2 + 5, pw * 2 + 5);
+         d->rectImage.fill(Qt::transparent);
+         QPainter p(&(d->rectImage));
+         p.setRenderHint(QPainter::Antialiasing);
+         if (d->pen && d->pen->isValid()) {
+            QPen pn(QColor(d->pen->color()), d->pen->width());
+            pn.setJoinStyle(Qt::MiterJoin);
+            p.setPen(pn);
+         } else {
+            p.setPen(Qt::NoPen);
+         }
+         p.setBrush(d->color);
+         if (pw % 2) {
+            p.drawRect(QRectF(qreal(pw) / 2 + 1, qreal(pw) / 2 + 1, d->rectImage.width() - (pw + 1),
+                              d->rectImage.height() - (pw + 1)));
+         } else {
+            p.drawRect(QRectF(qreal(pw) / 2, qreal(pw) / 2, d->rectImage.width() - pw, d->rectImage.height() - pw));
+         }
 
-            // end painting before inserting pixmap
-            // to pixmap cache to avoid a deep copy
-            p.end();
-            QPixmapCache::insert(key, d->rectImage);
-        }
-    }
+         // end painting before inserting pixmap
+         // to pixmap cache to avoid a deep copy
+         p.end();
+         QPixmapCache::insert(key, d->rectImage);
+      }
+   }
 }
 
 void QDeclarativeRectangle::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    Q_D(QDeclarativeRectangle);
-    if (width() <= 0 || height() <= 0)
-        return;
-    if (d->radius > 0 || (d->pen && d->pen->isValid())
-        || (d->gradient && d->gradient->gradient()) ) {
-        drawRect(*p);
-    }
-    else {
-        bool oldAA = p->testRenderHint(QPainter::Antialiasing);
-        if (d->smooth)
-            p->setRenderHints(QPainter::Antialiasing, true);
-        p->fillRect(QRectF(0, 0, width(), height()), d->color);
-        if (d->smooth)
-            p->setRenderHint(QPainter::Antialiasing, oldAA);
-    }
+   Q_D(QDeclarativeRectangle);
+   if (width() <= 0 || height() <= 0) {
+      return;
+   }
+   if (d->radius > 0 || (d->pen && d->pen->isValid())
+         || (d->gradient && d->gradient->gradient()) ) {
+      drawRect(*p);
+   } else {
+      bool oldAA = p->testRenderHint(QPainter::Antialiasing);
+      if (d->smooth) {
+         p->setRenderHints(QPainter::Antialiasing, true);
+      }
+      p->fillRect(QRectF(0, 0, width(), height()), d->color);
+      if (d->smooth) {
+         p->setRenderHint(QPainter::Antialiasing, oldAA);
+      }
+   }
 }
 
 void QDeclarativeRectangle::drawRect(QPainter &p)
 {
-    Q_D(QDeclarativeRectangle);
-    if ((d->gradient && d->gradient->gradient())
-        || d->radius > width()/2 || d->radius > height()/2
-        || width() < 3 || height() < 3) {
-        // XXX This path is still slower than the image path
-        // Image path won't work for gradients or invalid radius though
-        bool oldAA = p.testRenderHint(QPainter::Antialiasing);
-        if (d->smooth)
-            p.setRenderHint(QPainter::Antialiasing);
-        if (d->pen && d->pen->isValid()) {
-            QPen pn(QColor(d->pen->color()), d->pen->width());
-            pn.setJoinStyle(Qt::MiterJoin);
-            p.setPen(pn);
-        } else {
-            p.setPen(Qt::NoPen);
-        }
-        if (d->gradient && d->gradient->gradient())
-            p.setBrush(*d->gradient->gradient());
-        else
-            p.setBrush(d->color);
-        const int pw = d->pen && d->pen->isValid() ? d->pen->width() : 0;
-        QRectF rect;
-        if (pw%2)
-            rect = QRectF(0.5, 0.5, width()-1, height()-1);
-        else
-            rect = QRectF(0, 0, width(), height());
-        qreal radius = d->radius;
-        if (radius > width()/2 || radius > height()/2)
-            radius = qMin(width()/2, height()/2);
-        if (radius > 0.)
-            p.drawRoundedRect(rect, radius, radius);
-        else
-            p.drawRect(rect);
-        if (d->smooth)
-            p.setRenderHint(QPainter::Antialiasing, oldAA);
-    } else {
-        bool oldAA = p.testRenderHint(QPainter::Antialiasing);
-        bool oldSmooth = p.testRenderHint(QPainter::SmoothPixmapTransform);
-        if (d->smooth)
-            p.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, d->smooth);
+   Q_D(QDeclarativeRectangle);
+   if ((d->gradient && d->gradient->gradient())
+         || d->radius > width() / 2 || d->radius > height() / 2
+         || width() < 3 || height() < 3) {
+      // XXX This path is still slower than the image path
+      // Image path won't work for gradients or invalid radius though
+      bool oldAA = p.testRenderHint(QPainter::Antialiasing);
+      if (d->smooth) {
+         p.setRenderHint(QPainter::Antialiasing);
+      }
+      if (d->pen && d->pen->isValid()) {
+         QPen pn(QColor(d->pen->color()), d->pen->width());
+         pn.setJoinStyle(Qt::MiterJoin);
+         p.setPen(pn);
+      } else {
+         p.setPen(Qt::NoPen);
+      }
+      if (d->gradient && d->gradient->gradient()) {
+         p.setBrush(*d->gradient->gradient());
+      } else {
+         p.setBrush(d->color);
+      }
+      const int pw = d->pen && d->pen->isValid() ? d->pen->width() : 0;
+      QRectF rect;
+      if (pw % 2) {
+         rect = QRectF(0.5, 0.5, width() - 1, height() - 1);
+      } else {
+         rect = QRectF(0, 0, width(), height());
+      }
+      qreal radius = d->radius;
+      if (radius > width() / 2 || radius > height() / 2) {
+         radius = qMin(width() / 2, height() / 2);
+      }
+      if (radius > 0.) {
+         p.drawRoundedRect(rect, radius, radius);
+      } else {
+         p.drawRect(rect);
+      }
+      if (d->smooth) {
+         p.setRenderHint(QPainter::Antialiasing, oldAA);
+      }
+   } else {
+      bool oldAA = p.testRenderHint(QPainter::Antialiasing);
+      bool oldSmooth = p.testRenderHint(QPainter::SmoothPixmapTransform);
+      if (d->smooth) {
+         p.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, d->smooth);
+      }
 
-        const int pw = d->pen && d->pen->isValid() ? (d->pen->width()+1)/2*2 : 0;
+      const int pw = d->pen && d->pen->isValid() ? (d->pen->width() + 1) / 2 * 2 : 0;
 
-        if (d->radius > 0)
-            generateRoundedRect();
-        else
-            generateBorderedRect();
+      if (d->radius > 0) {
+         generateRoundedRect();
+      } else {
+         generateBorderedRect();
+      }
 
-        int xOffset = (d->rectImage.width()-1)/2;
-        int yOffset = (d->rectImage.height()-1)/2;
-        Q_ASSERT(d->rectImage.width() == 2*xOffset + 1);
-        Q_ASSERT(d->rectImage.height() == 2*yOffset + 1);
+      int xOffset = (d->rectImage.width() - 1) / 2;
+      int yOffset = (d->rectImage.height() - 1) / 2;
+      Q_ASSERT(d->rectImage.width() == 2 * xOffset + 1);
+      Q_ASSERT(d->rectImage.height() == 2 * yOffset + 1);
 
-        // check whether we've eliminated the center completely
-        if (2*xOffset > width()+pw)
-            xOffset = (width()+pw)/2;
-        if (2*yOffset > height()+pw)
-            yOffset = (height()+pw)/2;
+      // check whether we've eliminated the center completely
+      if (2 * xOffset > width() + pw) {
+         xOffset = (width() + pw) / 2;
+      }
+      if (2 * yOffset > height() + pw) {
+         yOffset = (height() + pw) / 2;
+      }
 
-        QMargins margins(xOffset, yOffset, xOffset, yOffset);
-        QTileRules rules(Qt::StretchTile, Qt::StretchTile);
-        //NOTE: even though our item may have qreal-based width and height, qDrawBorderPixmap only supports QRects
-        qDrawBorderPixmap(&p, QRect(-pw/2, -pw/2, width()+pw, height()+pw), margins, d->rectImage, d->rectImage.rect(), margins, rules);
+      QMargins margins(xOffset, yOffset, xOffset, yOffset);
+      QTileRules rules(Qt::StretchTile, Qt::StretchTile);
+      //NOTE: even though our item may have qreal-based width and height, qDrawBorderPixmap only supports QRects
+      qDrawBorderPixmap(&p, QRect(-pw / 2, -pw / 2, width() + pw, height() + pw), margins, d->rectImage, d->rectImage.rect(),
+                        margins, rules);
 
-        if (d->smooth) {
-            p.setRenderHint(QPainter::Antialiasing, oldAA);
-            p.setRenderHint(QPainter::SmoothPixmapTransform, oldSmooth);
-        }
-    }
+      if (d->smooth) {
+         p.setRenderHint(QPainter::Antialiasing, oldAA);
+         p.setRenderHint(QPainter::SmoothPixmapTransform, oldSmooth);
+      }
+   }
 }
 
 /*!
@@ -564,8 +593,8 @@ void QDeclarativeRectangle::drawRect(QPainter &p)
 
 QRectF QDeclarativeRectangle::boundingRect() const
 {
-    Q_D(const QDeclarativeRectangle);
-    return QRectF(-d->paintmargin, -d->paintmargin, d->width()+d->paintmargin*2, d->height()+d->paintmargin*2);
+   Q_D(const QDeclarativeRectangle);
+   return QRectF(-d->paintmargin, -d->paintmargin, d->width() + d->paintmargin * 2, d->height() + d->paintmargin * 2);
 }
 
 QT_END_NAMESPACE

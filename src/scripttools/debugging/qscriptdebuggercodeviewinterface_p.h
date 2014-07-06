@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,46 +46,46 @@ class QStringList;
 
 class QScriptDebuggerCodeViewInterfacePrivate;
 class QScriptDebuggerCodeViewInterface:
-    public QWidget
+   public QWidget
 {
-    CS_OBJECT(QScriptDebuggerCodeViewInterface)
-public:
-    ~QScriptDebuggerCodeViewInterface();
+   CS_OBJECT(QScriptDebuggerCodeViewInterface)
+ public:
+   ~QScriptDebuggerCodeViewInterface();
 
-    virtual QString text() const = 0;
-    virtual void setText(const QString &text) = 0;
+   virtual QString text() const = 0;
+   virtual void setText(const QString &text) = 0;
 
-    virtual int cursorLineNumber() const = 0;
-    virtual void gotoLine(int lineNumber) = 0;
+   virtual int cursorLineNumber() const = 0;
+   virtual void gotoLine(int lineNumber) = 0;
 
-    virtual int find(const QString &exp, int options = 0) = 0;
+   virtual int find(const QString &exp, int options = 0) = 0;
 
-    virtual void setExecutionLineNumber(int lineNumber, bool error) = 0;
-    virtual void setExecutableLineNumbers(const QSet<int> &lineNumbers) = 0;
+   virtual void setExecutionLineNumber(int lineNumber, bool error) = 0;
+   virtual void setExecutableLineNumbers(const QSet<int> &lineNumbers) = 0;
 
-    virtual int baseLineNumber() const = 0;
-    virtual void setBaseLineNumber(int lineNumber) = 0;
+   virtual int baseLineNumber() const = 0;
+   virtual void setBaseLineNumber(int lineNumber) = 0;
 
-    virtual void setBreakpoint(int lineNumber) = 0;
-    virtual void deleteBreakpoint(int lineNumber) = 0;
-    virtual void setBreakpointEnabled(int lineNumber, bool enable) = 0;
+   virtual void setBreakpoint(int lineNumber) = 0;
+   virtual void deleteBreakpoint(int lineNumber) = 0;
+   virtual void setBreakpointEnabled(int lineNumber, bool enable) = 0;
 
-public:
-    CS_SIGNAL_1(Public, void breakpointToggleRequest(int lineNumber,bool on))
-    CS_SIGNAL_2(breakpointToggleRequest,lineNumber,on) 
-    CS_SIGNAL_1(Public, void breakpointEnableRequest(int lineNumber,bool enable))
-    CS_SIGNAL_2(breakpointEnableRequest,lineNumber,enable) 
-    CS_SIGNAL_1(Public, void toolTipRequest(const QPoint & pos,int lineNumber,const QStringList & path))
-    CS_SIGNAL_2(toolTipRequest,pos,lineNumber,path) 
+ public:
+   CS_SIGNAL_1(Public, void breakpointToggleRequest(int lineNumber, bool on))
+   CS_SIGNAL_2(breakpointToggleRequest, lineNumber, on)
+   CS_SIGNAL_1(Public, void breakpointEnableRequest(int lineNumber, bool enable))
+   CS_SIGNAL_2(breakpointEnableRequest, lineNumber, enable)
+   CS_SIGNAL_1(Public, void toolTipRequest(const QPoint &pos, int lineNumber, const QStringList &path))
+   CS_SIGNAL_2(toolTipRequest, pos, lineNumber, path)
 
-protected:
-    QScriptDebuggerCodeViewInterface(
-        QScriptDebuggerCodeViewInterfacePrivate &dd,
-        QWidget *parent, Qt::WindowFlags flags);
+ protected:
+   QScriptDebuggerCodeViewInterface(
+      QScriptDebuggerCodeViewInterfacePrivate &dd,
+      QWidget *parent, Qt::WindowFlags flags);
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerCodeViewInterface)
-    Q_DISABLE_COPY(QScriptDebuggerCodeViewInterface)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerCodeViewInterface)
+   Q_DISABLE_COPY(QScriptDebuggerCodeViewInterface)
 };
 
 QT_END_NAMESPACE

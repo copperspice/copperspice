@@ -65,8 +65,8 @@ class QDockWidgetPrivate : public QWidgetPrivate
    }
 
    void init();
-   void _q_toggleView(bool); // private slot
-   void _q_toggleTopLevel(); // private slot
+   void _q_toggleView(bool);
+   void _q_toggleTopLevel();
 
    void updateButtons();
    DragState *state;

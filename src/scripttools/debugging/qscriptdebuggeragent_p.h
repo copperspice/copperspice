@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -51,67 +51,67 @@ class QScriptDebuggerBackendPrivate;
 class QScriptDebuggerAgentPrivate;
 class QScriptDebuggerAgent : public QScriptEngineAgent
 {
-public:
-    QScriptDebuggerAgent(QScriptDebuggerBackendPrivate *backend,
-                         QScriptEngine *engine);
-    ~QScriptDebuggerAgent();
+ public:
+   QScriptDebuggerAgent(QScriptDebuggerBackendPrivate *backend,
+                        QScriptEngine *engine);
+   ~QScriptDebuggerAgent();
 
-    void enterStepIntoMode(int count = 1);
-    void enterStepOverMode(int count = 1);
-    void enterStepOutMode();
-    void enterContinueMode();
-    void enterInterruptMode();
-    void enterRunToLocationMode(const QString &fileName, int lineNumber);
-    void enterRunToLocationMode(qint64 scriptId, int lineNumber);
-    void enterReturnByForceMode(int contextIndex, const QScriptValue &value);
+   void enterStepIntoMode(int count = 1);
+   void enterStepOverMode(int count = 1);
+   void enterStepOutMode();
+   void enterContinueMode();
+   void enterInterruptMode();
+   void enterRunToLocationMode(const QString &fileName, int lineNumber);
+   void enterRunToLocationMode(qint64 scriptId, int lineNumber);
+   void enterReturnByForceMode(int contextIndex, const QScriptValue &value);
 
-    int setBreakpoint(const QScriptBreakpointData &data);
-    bool deleteBreakpoint(int id);
-    void deleteAllBreakpoints();
-    QScriptBreakpointData breakpointData(int id) const;
-    bool setBreakpointData(int id, const QScriptBreakpointData &data);
-    QScriptBreakpointMap breakpoints() const;
+   int setBreakpoint(const QScriptBreakpointData &data);
+   bool deleteBreakpoint(int id);
+   void deleteAllBreakpoints();
+   QScriptBreakpointData breakpointData(int id) const;
+   bool setBreakpointData(int id, const QScriptBreakpointData &data);
+   QScriptBreakpointMap breakpoints() const;
 
-    QScriptScriptMap scripts() const;
-    QScriptScriptData scriptData(qint64 id) const;
-    void scriptsCheckpoint();
-    QPair<QList<qint64>, QList<qint64> > scriptsDelta() const;
-    qint64 resolveScript(const QString &fileName) const;
+   QScriptScriptMap scripts() const;
+   QScriptScriptData scriptData(qint64 id) const;
+   void scriptsCheckpoint();
+   QPair<QList<qint64>, QList<qint64> > scriptsDelta() const;
+   qint64 resolveScript(const QString &fileName) const;
 
-    QList<qint64> contextIds() const;
-    QPair<QList<qint64>, QList<qint64> > contextsCheckpoint();
+   QList<qint64> contextIds() const;
+   QPair<QList<qint64>, QList<qint64> > contextsCheckpoint();
 
-    void nullifyBackendPointer();
+   void nullifyBackendPointer();
 
-    // reimplemented
-    void scriptLoad(qint64 id, const QString &program,
-                    const QString &fileName, int baseLineNumber);
-    void scriptUnload(qint64 id);
+   // reimplemented
+   void scriptLoad(qint64 id, const QString &program,
+                   const QString &fileName, int baseLineNumber);
+   void scriptUnload(qint64 id);
 
-    void contextPush();
-    void contextPop();
+   void contextPush();
+   void contextPop();
 
-    void functionEntry(qint64 scriptId);
-    void functionExit(qint64 scriptId,
-                      const QScriptValue &returnValue);
+   void functionEntry(qint64 scriptId);
+   void functionExit(qint64 scriptId,
+                     const QScriptValue &returnValue);
 
-    void positionChange(qint64 scriptId,
-                        int lineNumber, int columnNumber);
+   void positionChange(qint64 scriptId,
+                       int lineNumber, int columnNumber);
 
-    void exceptionThrow(qint64 scriptId,
-                        const QScriptValue &exception,
-                        bool hasHandler);
-    void exceptionCatch(qint64 scriptId,
-                        const QScriptValue &exception);
+   void exceptionThrow(qint64 scriptId,
+                       const QScriptValue &exception,
+                       bool hasHandler);
+   void exceptionCatch(qint64 scriptId,
+                       const QScriptValue &exception);
 
-    bool supportsExtension(Extension extension) const;
-    QVariant extension(Extension extension,
-                       const QVariant &argument = QVariant());
+   bool supportsExtension(Extension extension) const;
+   QVariant extension(Extension extension,
+                      const QVariant &argument = QVariant());
 
-private:
-    QScriptDebuggerAgentPrivate *d_ptr;
-    Q_DECLARE_PRIVATE(QScriptDebuggerAgent)
-    Q_DISABLE_COPY(QScriptDebuggerAgent)
+ private:
+   QScriptDebuggerAgentPrivate *d_ptr;
+   Q_DECLARE_PRIVATE(QScriptDebuggerAgent)
+   Q_DISABLE_COPY(QScriptDebuggerAgent)
 };
 
 QT_END_NAMESPACE

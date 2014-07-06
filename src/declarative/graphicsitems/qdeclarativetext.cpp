@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,27 +43,30 @@ QT_BEGIN_NAMESPACE
 
 extern Q_GUI_EXPORT bool qt_applefontsmoothing_enabled;
 
-class QTextDocumentWithImageResources : public QTextDocument {
-    CS_OBJECT(QTextDocumentWithImageResources)
+class QTextDocumentWithImageResources : public QTextDocument
+{
+   CS_OBJECT(QTextDocumentWithImageResources)
 
-public:
-    QTextDocumentWithImageResources(QDeclarativeText *parent);
-    virtual ~QTextDocumentWithImageResources();
+ public:
+   QTextDocumentWithImageResources(QDeclarativeText *parent);
+   virtual ~QTextDocumentWithImageResources();
 
-    void setText(const QString &);
-    int resourcesLoading() const { return outstanding; }
+   void setText(const QString &);
+   int resourcesLoading() const {
+      return outstanding;
+   }
 
-protected:
-    QVariant loadResource(int type, const QUrl &name);
+ protected:
+   QVariant loadResource(int type, const QUrl &name);
 
-private:
-    CS_SLOT_1(Private,void requestFinished())
-    CS_SLOT_2(requestFinished)
+ private:
+   CS_SLOT_1(Private, void requestFinished())
+   CS_SLOT_2(requestFinished)
 
-    QHash<QUrl, QDeclarativePixmap *> m_resources;
+   QHash<QUrl, QDeclarativePixmap *> m_resources;
 
-    int outstanding;
-    static QSet<QUrl> errors;
+   int outstanding;
+   static QSet<QUrl> errors;
 };
 
 DEFINE_BOOL_CONFIG_OPTION(enableImageCache, QML_ENABLE_TEXT_IMAGE_CACHE);
@@ -71,90 +74,92 @@ DEFINE_BOOL_CONFIG_OPTION(enableImageCache, QML_ENABLE_TEXT_IMAGE_CACHE);
 QString QDeclarativeTextPrivate::elideChar = QString(0x2026);
 
 QDeclarativeTextPrivate::QDeclarativeTextPrivate()
-: color((QRgb)0), style(QDeclarativeText::Normal), hAlign(QDeclarativeText::AlignLeft),
-  vAlign(QDeclarativeText::AlignTop), elideMode(QDeclarativeText::ElideNone),
-  format(QDeclarativeText::AutoText), wrapMode(QDeclarativeText::NoWrap), lineHeight(1),
-  lineHeightMode(QDeclarativeText::ProportionalHeight), lineCount(1), truncated(false), maximumLineCount(INT_MAX),
-  maximumLineCountValid(false), imageCacheDirty(true), updateOnComponentComplete(true), richText(false), singleline(false),
-  cacheAllTextAsImage(true), internalWidthUpdate(false), requireImplicitWidth(false),  hAlignImplicit(true),
-  rightToLeftText(false), layoutTextElided(false), naturalWidth(0), doc(0)
+   : color((QRgb)0), style(QDeclarativeText::Normal), hAlign(QDeclarativeText::AlignLeft),
+     vAlign(QDeclarativeText::AlignTop), elideMode(QDeclarativeText::ElideNone),
+     format(QDeclarativeText::AutoText), wrapMode(QDeclarativeText::NoWrap), lineHeight(1),
+     lineHeightMode(QDeclarativeText::ProportionalHeight), lineCount(1), truncated(false), maximumLineCount(INT_MAX),
+     maximumLineCountValid(false), imageCacheDirty(true), updateOnComponentComplete(true), richText(false),
+     singleline(false),
+     cacheAllTextAsImage(true), internalWidthUpdate(false), requireImplicitWidth(false),  hAlignImplicit(true),
+     rightToLeftText(false), layoutTextElided(false), naturalWidth(0), doc(0)
 {
-    cacheAllTextAsImage = enableImageCache();
-    QGraphicsItemPrivate::acceptedMouseButtons = Qt::LeftButton;
-    QGraphicsItemPrivate::flags = QGraphicsItemPrivate::flags & ~QGraphicsItem::ItemHasNoContents;
+   cacheAllTextAsImage = enableImageCache();
+   QGraphicsItemPrivate::acceptedMouseButtons = Qt::LeftButton;
+   QGraphicsItemPrivate::flags = QGraphicsItemPrivate::flags & ~QGraphicsItem::ItemHasNoContents;
 }
 
-QTextDocumentWithImageResources::QTextDocumentWithImageResources(QDeclarativeText *parent) 
-: QTextDocument(parent), outstanding(0)
+QTextDocumentWithImageResources::QTextDocumentWithImageResources(QDeclarativeText *parent)
+   : QTextDocument(parent), outstanding(0)
 {
 }
 
 QTextDocumentWithImageResources::~QTextDocumentWithImageResources()
 {
-    if (!m_resources.isEmpty()) 
-        qDeleteAll(m_resources);
+   if (!m_resources.isEmpty()) {
+      qDeleteAll(m_resources);
+   }
 }
 
 QVariant QTextDocumentWithImageResources::loadResource(int type, const QUrl &name)
 {
-    QDeclarativeContext *context = qmlContext(parent());
-    QUrl url = context->resolvedUrl(name);
+   QDeclarativeContext *context = qmlContext(parent());
+   QUrl url = context->resolvedUrl(name);
 
-    if (type == QTextDocument::ImageResource) {
-        QHash<QUrl, QDeclarativePixmap *>::Iterator iter = m_resources.find(url);
+   if (type == QTextDocument::ImageResource) {
+      QHash<QUrl, QDeclarativePixmap *>::Iterator iter = m_resources.find(url);
 
-        if (iter == m_resources.end()) {
-            QDeclarativePixmap *p = new QDeclarativePixmap(context->engine(), url);
-            iter = m_resources.insert(name, p);
+      if (iter == m_resources.end()) {
+         QDeclarativePixmap *p = new QDeclarativePixmap(context->engine(), url);
+         iter = m_resources.insert(name, p);
 
-            if (p->isLoading()) {
-                p->connectFinished(this, SLOT(requestFinished()));
-                outstanding++;
-            }
-        }
+         if (p->isLoading()) {
+            p->connectFinished(this, SLOT(requestFinished()));
+            outstanding++;
+         }
+      }
 
-        QDeclarativePixmap *p = *iter;
-        if (p->isReady()) {
-            return p->pixmap();
-        } else if (p->isError()) {
-            if (!errors.contains(url)) {
-                errors.insert(url);
-                qmlInfo(parent()) << p->error();
-            }
-        }
-    }
+      QDeclarativePixmap *p = *iter;
+      if (p->isReady()) {
+         return p->pixmap();
+      } else if (p->isError()) {
+         if (!errors.contains(url)) {
+            errors.insert(url);
+            qmlInfo(parent()) << p->error();
+         }
+      }
+   }
 
-    return QTextDocument::loadResource(type,url); // The *resolved* URL
+   return QTextDocument::loadResource(type, url); // The *resolved* URL
 }
 
 void QTextDocumentWithImageResources::requestFinished()
 {
-    outstanding--;
-    if (outstanding == 0) {
-        QDeclarativeText *textItem = static_cast<QDeclarativeText*>(parent());
-        QString text = textItem->text();
+   outstanding--;
+   if (outstanding == 0) {
+      QDeclarativeText *textItem = static_cast<QDeclarativeText *>(parent());
+      QString text = textItem->text();
 #ifndef QT_NO_TEXTHTMLPARSER
-        setHtml(text);
+      setHtml(text);
 #else
-        setPlainText(text);
+      setPlainText(text);
 #endif
-        QDeclarativeTextPrivate *d = QDeclarativeTextPrivate::get(textItem);
-        d->updateLayout();
-    }
+      QDeclarativeTextPrivate *d = QDeclarativeTextPrivate::get(textItem);
+      d->updateLayout();
+   }
 }
 
 void QTextDocumentWithImageResources::setText(const QString &text)
 {
-    if (!m_resources.isEmpty()) {
-        qDeleteAll(m_resources);
-        m_resources.clear();
-        outstanding = 0;
-    }
+   if (!m_resources.isEmpty()) {
+      qDeleteAll(m_resources);
+      m_resources.clear();
+      outstanding = 0;
+   }
 
 #ifndef QT_NO_TEXTHTMLPARSER
-    setHtml(text);
+   setHtml(text);
 #else
-    setPlainText(text);
+   setPlainText(text);
 #endif
 }
 
@@ -166,148 +171,154 @@ QDeclarativeTextPrivate::~QDeclarativeTextPrivate()
 
 qreal QDeclarativeTextPrivate::implicitWidth() const
 {
-    if (!requireImplicitWidth) {
-        // We don't calculate implicitWidth unless it is required.
-        // We need to force a size update now to ensure implicitWidth is calculated
-        QDeclarativeTextPrivate *me = const_cast<QDeclarativeTextPrivate*>(this);
-        me->requireImplicitWidth = true;
-        me->updateSize();
-    }
-    return mImplicitWidth;
+   if (!requireImplicitWidth) {
+      // We don't calculate implicitWidth unless it is required.
+      // We need to force a size update now to ensure implicitWidth is calculated
+      QDeclarativeTextPrivate *me = const_cast<QDeclarativeTextPrivate *>(this);
+      me->requireImplicitWidth = true;
+      me->updateSize();
+   }
+   return mImplicitWidth;
 }
 
 void QDeclarativeTextPrivate::updateLayout()
 {
-    Q_Q(QDeclarativeText);
-    if (!q->isComponentComplete()) {
-        updateOnComponentComplete = true;
-        return;
-    }
+   Q_Q(QDeclarativeText);
+   if (!q->isComponentComplete()) {
+      updateOnComponentComplete = true;
+      return;
+   }
 
-    layoutTextElided = false;
-    // Setup instance of QTextLayout for all cases other than richtext
-    if (!richText) {
-        layout.clearLayout();
-        layout.setFont(font);
-        if (format != QDeclarativeText::StyledText) {
-            QString tmp = text;
-            tmp.replace(QLatin1Char('\n'), QChar::LineSeparator);
-            singleline = !tmp.contains(QChar::LineSeparator);
-            if (singleline && !maximumLineCountValid && elideMode != QDeclarativeText::ElideNone && q->widthValid()) {
-                QFontMetrics fm(font);
-                tmp = fm.elidedText(tmp,(Qt::TextElideMode)elideMode,q->width());
-                if (tmp != text) {
-                    layoutTextElided = true;
-                    if (!truncated) {
-                        truncated = true;
-                        emit q->truncatedChanged();
-                    }
-                }
+   layoutTextElided = false;
+   // Setup instance of QTextLayout for all cases other than richtext
+   if (!richText) {
+      layout.clearLayout();
+      layout.setFont(font);
+      if (format != QDeclarativeText::StyledText) {
+         QString tmp = text;
+         tmp.replace(QLatin1Char('\n'), QChar::LineSeparator);
+         singleline = !tmp.contains(QChar::LineSeparator);
+         if (singleline && !maximumLineCountValid && elideMode != QDeclarativeText::ElideNone && q->widthValid()) {
+            QFontMetrics fm(font);
+            tmp = fm.elidedText(tmp, (Qt::TextElideMode)elideMode, q->width());
+            if (tmp != text) {
+               layoutTextElided = true;
+               if (!truncated) {
+                  truncated = true;
+                  emit q->truncatedChanged();
+               }
             }
-            layout.setText(tmp);
-        } else {
-            singleline = false;
-            QDeclarativeStyledText::parse(text, layout);
-        }
-    }
+         }
+         layout.setText(tmp);
+      } else {
+         singleline = false;
+         QDeclarativeStyledText::parse(text, layout);
+      }
+   }
 
-    updateSize();
+   updateSize();
 }
 
 void QDeclarativeTextPrivate::updateSize()
 {
-    Q_Q(QDeclarativeText);
+   Q_Q(QDeclarativeText);
 
-    if (!q->isComponentComplete()) {
-        updateOnComponentComplete = true;
-        return;
-    }
+   if (!q->isComponentComplete()) {
+      updateOnComponentComplete = true;
+      return;
+   }
 
-    if (!requireImplicitWidth) {
-        emit q->implicitWidthChanged();
-        // if the implicitWidth is used, then updateSize() has already been called (recursively)
-        if (requireImplicitWidth)
-            return;
-    }
+   if (!requireImplicitWidth) {
+      emit q->implicitWidthChanged();
+      // if the implicitWidth is used, then updateSize() has already been called (recursively)
+      if (requireImplicitWidth) {
+         return;
+      }
+   }
 
-    invalidateImageCache();
+   invalidateImageCache();
 
-    QFontMetrics fm(font);
-    if (text.isEmpty()) {
-        q->setImplicitWidth(0);
-        q->setImplicitHeight(fm.height());
-        paintedSize = QSize(0, fm.height());
-        emit q->paintedSizeChanged();
-        q->update();
-        return;
-    }
+   QFontMetrics fm(font);
+   if (text.isEmpty()) {
+      q->setImplicitWidth(0);
+      q->setImplicitHeight(fm.height());
+      paintedSize = QSize(0, fm.height());
+      emit q->paintedSizeChanged();
+      q->update();
+      return;
+   }
 
-    int dy = q->height();
-    QSize size(0, 0);
+   int dy = q->height();
+   QSize size(0, 0);
 
-    //setup instance of QTextLayout for all cases other than richtext
-    if (!richText) {
-        QRect textRect = setupTextLayout();
-        if (layedOutTextRect.size() != textRect.size())
-            q->prepareGeometryChange();
-        layedOutTextRect = textRect;
-        size = textRect.size();
-        dy -= size.height();
-    } else {
-        singleline = false; // richtext can't elide or be optimized for single-line case
-        ensureDoc();
-        doc->setDefaultFont(font);
+   //setup instance of QTextLayout for all cases other than richtext
+   if (!richText) {
+      QRect textRect = setupTextLayout();
+      if (layedOutTextRect.size() != textRect.size()) {
+         q->prepareGeometryChange();
+      }
+      layedOutTextRect = textRect;
+      size = textRect.size();
+      dy -= size.height();
+   } else {
+      singleline = false; // richtext can't elide or be optimized for single-line case
+      ensureDoc();
+      doc->setDefaultFont(font);
 
-        QDeclarativeText::HAlignment horizontalAlignment = q->effectiveHAlign();
-        if (rightToLeftText) {
-            if (horizontalAlignment == QDeclarativeText::AlignLeft)
-                horizontalAlignment = QDeclarativeText::AlignRight;
-            else if (horizontalAlignment == QDeclarativeText::AlignRight)
-                horizontalAlignment = QDeclarativeText::AlignLeft;
-        }
-        QTextOption option;
-        option.setAlignment((Qt::Alignment)int(horizontalAlignment | vAlign));
-        option.setWrapMode(QTextOption::WrapMode(wrapMode));
-        doc->setDefaultTextOption(option);
-        if (requireImplicitWidth && q->widthValid()) {
-            doc->setTextWidth(-1);
-            naturalWidth = doc->idealWidth();
-        }
-        if (q->widthValid())
-            doc->setTextWidth(q->width());
-        else
-            doc->setTextWidth(doc->idealWidth()); // ### Text does not align if width is not set (QTextDoc bug)
-        dy -= (int)doc->size().height();
-        QSize dsize = doc->size().toSize();
-        if (dsize != layedOutTextRect.size()) {
-            q->prepareGeometryChange();
-            layedOutTextRect = QRect(QPoint(0,0), dsize);
-        }
-        size = QSize(int(doc->idealWidth()),dsize.height());
-    }
-    int yoff = 0;
+      QDeclarativeText::HAlignment horizontalAlignment = q->effectiveHAlign();
+      if (rightToLeftText) {
+         if (horizontalAlignment == QDeclarativeText::AlignLeft) {
+            horizontalAlignment = QDeclarativeText::AlignRight;
+         } else if (horizontalAlignment == QDeclarativeText::AlignRight) {
+            horizontalAlignment = QDeclarativeText::AlignLeft;
+         }
+      }
+      QTextOption option;
+      option.setAlignment((Qt::Alignment)int(horizontalAlignment | vAlign));
+      option.setWrapMode(QTextOption::WrapMode(wrapMode));
+      doc->setDefaultTextOption(option);
+      if (requireImplicitWidth && q->widthValid()) {
+         doc->setTextWidth(-1);
+         naturalWidth = doc->idealWidth();
+      }
+      if (q->widthValid()) {
+         doc->setTextWidth(q->width());
+      } else {
+         doc->setTextWidth(doc->idealWidth());   // ### Text does not align if width is not set (QTextDoc bug)
+      }
+      dy -= (int)doc->size().height();
+      QSize dsize = doc->size().toSize();
+      if (dsize != layedOutTextRect.size()) {
+         q->prepareGeometryChange();
+         layedOutTextRect = QRect(QPoint(0, 0), dsize);
+      }
+      size = QSize(int(doc->idealWidth()), dsize.height());
+   }
+   int yoff = 0;
 
-    if (q->heightValid()) {
-        if (vAlign == QDeclarativeText::AlignBottom)
-            yoff = dy;
-        else if (vAlign == QDeclarativeText::AlignVCenter)
-            yoff = dy/2;
-    }
-    q->setBaselineOffset(fm.ascent() + yoff);
+   if (q->heightValid()) {
+      if (vAlign == QDeclarativeText::AlignBottom) {
+         yoff = dy;
+      } else if (vAlign == QDeclarativeText::AlignVCenter) {
+         yoff = dy / 2;
+      }
+   }
+   q->setBaselineOffset(fm.ascent() + yoff);
 
-    //### need to comfirm cost of always setting these for richText
-    internalWidthUpdate = true;
-    if (!q->widthValid())
-        q->setImplicitWidth(size.width());
-    else if (requireImplicitWidth)
-        q->setImplicitWidth(naturalWidth);
-    internalWidthUpdate = false;
-    q->setImplicitHeight(size.height());
-    if (paintedSize != size) {
-        paintedSize = size;
-        emit q->paintedSizeChanged();
-    }
-    q->update();
+   //### need to comfirm cost of always setting these for richText
+   internalWidthUpdate = true;
+   if (!q->widthValid()) {
+      q->setImplicitWidth(size.width());
+   } else if (requireImplicitWidth) {
+      q->setImplicitWidth(naturalWidth);
+   }
+   internalWidthUpdate = false;
+   q->setImplicitHeight(size.height());
+   if (paintedSize != size) {
+      paintedSize = size;
+      emit q->paintedSizeChanged();
+   }
+   q->update();
 }
 
 /*!
@@ -318,133 +329,145 @@ void QDeclarativeTextPrivate::updateSize()
 */
 QRect QDeclarativeTextPrivate::setupTextLayout()
 {
-    // ### text layout handling should be profiled and optimized as needed
-    // what about QStackTextEngine engine(tmp, d->font.font()); QTextLayout textLayout(&engine);
-    Q_Q(QDeclarativeText);
-    layout.setCacheEnabled(true);
+   // ### text layout handling should be profiled and optimized as needed
+   // what about QStackTextEngine engine(tmp, d->font.font()); QTextLayout textLayout(&engine);
+   Q_Q(QDeclarativeText);
+   layout.setCacheEnabled(true);
 
-    qreal lineWidth = 0;
-    int visibleCount = 0;
+   qreal lineWidth = 0;
+   int visibleCount = 0;
 
-    //set manual width
-    if (q->widthValid())
-        lineWidth = q->width();
+   //set manual width
+   if (q->widthValid()) {
+      lineWidth = q->width();
+   }
 
-    QTextOption textOption = layout.textOption();
-    textOption.setAlignment(Qt::Alignment(q->effectiveHAlign()));
-    textOption.setWrapMode(QTextOption::WrapMode(wrapMode));
-    layout.setTextOption(textOption);
+   QTextOption textOption = layout.textOption();
+   textOption.setAlignment(Qt::Alignment(q->effectiveHAlign()));
+   textOption.setWrapMode(QTextOption::WrapMode(wrapMode));
+   layout.setTextOption(textOption);
 
-    bool elideText = false;
-    bool truncate = false;
+   bool elideText = false;
+   bool truncate = false;
 
-    QFontMetrics fm(layout.font());
-    elidePos = QPointF();
+   QFontMetrics fm(layout.font());
+   elidePos = QPointF();
 
-    if (requireImplicitWidth && q->widthValid()) {
-        // requires an extra layout
-        QString elidedText;
-        if (layoutTextElided) {
-            // We have provided elided text to the layout, but we must calculate unelided width.
-            elidedText = layout.text();
-            layout.setText(text);
-        }
-        layout.beginLayout();
-        forever {
-            QTextLine line = layout.createLine();
-            if (!line.isValid())
-                break;
-        }
-        layout.endLayout();
-        QRectF br;
-        for (int i = 0; i < layout.lineCount(); ++i) {
-            QTextLine line = layout.lineAt(i);
-            br = br.united(line.naturalTextRect());
-        }
-        naturalWidth = br.width();
-        if (layoutTextElided)
-            layout.setText(elidedText);
-    }
+   if (requireImplicitWidth && q->widthValid()) {
+      // requires an extra layout
+      QString elidedText;
+      if (layoutTextElided) {
+         // We have provided elided text to the layout, but we must calculate unelided width.
+         elidedText = layout.text();
+         layout.setText(text);
+      }
+      layout.beginLayout();
+      forever {
+         QTextLine line = layout.createLine();
+         if (!line.isValid())
+         {
+            break;
+         }
+      }
+      layout.endLayout();
+      QRectF br;
+      for (int i = 0; i < layout.lineCount(); ++i) {
+         QTextLine line = layout.lineAt(i);
+         br = br.united(line.naturalTextRect());
+      }
+      naturalWidth = br.width();
+      if (layoutTextElided) {
+         layout.setText(elidedText);
+      }
+   }
 
-    if (maximumLineCountValid) {
-        layout.beginLayout();
-        if (!lineWidth)
-            lineWidth = INT_MAX;
-        int linesLeft = maximumLineCount;
-        int visibleTextLength = 0;
-        while (linesLeft > 0) {
-            QTextLine line = layout.createLine();
-            if (!line.isValid())
-                break;
+   if (maximumLineCountValid) {
+      layout.beginLayout();
+      if (!lineWidth) {
+         lineWidth = INT_MAX;
+      }
+      int linesLeft = maximumLineCount;
+      int visibleTextLength = 0;
+      while (linesLeft > 0) {
+         QTextLine line = layout.createLine();
+         if (!line.isValid()) {
+            break;
+         }
 
-            visibleCount++;
-            if (lineWidth)
-                line.setLineWidth(lineWidth);
-            visibleTextLength += line.textLength();
+         visibleCount++;
+         if (lineWidth) {
+            line.setLineWidth(lineWidth);
+         }
+         visibleTextLength += line.textLength();
 
-            if (--linesLeft == 0) {
-                if (visibleTextLength < text.length()) {
-                    truncate = true;
-                    if (elideMode==QDeclarativeText::ElideRight && q->widthValid()) {
-                        qreal elideWidth = fm.width(elideChar);
-                        // Need to correct for alignment
-                        line.setLineWidth(lineWidth-elideWidth);
-                        if (layout.text().mid(line.textStart(), line.textLength()).isRightToLeft()) {
-                            line.setPosition(QPointF(line.position().x() + elideWidth, line.position().y()));
-                            elidePos.setX(line.naturalTextRect().left() - elideWidth);
-                        } else {
-                            elidePos.setX(line.naturalTextRect().right());
-                        }
-                        elideText = true;
-                    }
-                }
+         if (--linesLeft == 0) {
+            if (visibleTextLength < text.length()) {
+               truncate = true;
+               if (elideMode == QDeclarativeText::ElideRight && q->widthValid()) {
+                  qreal elideWidth = fm.width(elideChar);
+                  // Need to correct for alignment
+                  line.setLineWidth(lineWidth - elideWidth);
+                  if (layout.text().mid(line.textStart(), line.textLength()).isRightToLeft()) {
+                     line.setPosition(QPointF(line.position().x() + elideWidth, line.position().y()));
+                     elidePos.setX(line.naturalTextRect().left() - elideWidth);
+                  } else {
+                     elidePos.setX(line.naturalTextRect().right());
+                  }
+                  elideText = true;
+               }
             }
-        }
-        layout.endLayout();
+         }
+      }
+      layout.endLayout();
 
-        //Update truncated
-        if (truncated != truncate) {
-            truncated = truncate;
-            emit q->truncatedChanged();
-        }
-    } else {
-        layout.beginLayout();
-        forever {
-            QTextLine line = layout.createLine();
-            if (!line.isValid())
-                break;
-            visibleCount++;
-            if (lineWidth)
-                line.setLineWidth(lineWidth);
-        }
-        layout.endLayout();
-    }
+      //Update truncated
+      if (truncated != truncate) {
+         truncated = truncate;
+         emit q->truncatedChanged();
+      }
+   } else {
+      layout.beginLayout();
+      forever {
+         QTextLine line = layout.createLine();
+         if (!line.isValid())
+         {
+            break;
+         }
+         visibleCount++;
+         if (lineWidth)
+         {
+            line.setLineWidth(lineWidth);
+         }
+      }
+      layout.endLayout();
+   }
 
-    qreal height = 0;
-    QRectF br;
-    for (int i = 0; i < layout.lineCount(); ++i) {
-        QTextLine line = layout.lineAt(i);
-        // set line spacing
-        line.setPosition(QPointF(line.position().x(), height));
-        if (elideText && i == layout.lineCount()-1) {
-            elidePos.setY(height + fm.ascent());
-            br = br.united(QRectF(elidePos, QSizeF(fm.width(elideChar), fm.ascent())));
-        }
-        br = br.united(line.naturalTextRect());
-        height += (lineHeightMode == QDeclarativeText::FixedHeight) ? lineHeight : line.height() * lineHeight;
-    }
-    br.setHeight(height);
+   qreal height = 0;
+   QRectF br;
+   for (int i = 0; i < layout.lineCount(); ++i) {
+      QTextLine line = layout.lineAt(i);
+      // set line spacing
+      line.setPosition(QPointF(line.position().x(), height));
+      if (elideText && i == layout.lineCount() - 1) {
+         elidePos.setY(height + fm.ascent());
+         br = br.united(QRectF(elidePos, QSizeF(fm.width(elideChar), fm.ascent())));
+      }
+      br = br.united(line.naturalTextRect());
+      height += (lineHeightMode == QDeclarativeText::FixedHeight) ? lineHeight : line.height() * lineHeight;
+   }
+   br.setHeight(height);
 
-    if (!q->widthValid())
-        naturalWidth = br.width();
+   if (!q->widthValid()) {
+      naturalWidth = br.width();
+   }
 
-    //Update the number of visible lines
-    if (lineCount != visibleCount) {
-        lineCount = visibleCount;
-        emit q->lineCountChanged();
-    }
+   //Update the number of visible lines
+   if (lineCount != visibleCount) {
+      lineCount = visibleCount;
+      emit q->lineCountChanged();
+   }
 
-    return QRect(qRound(br.x()), qRound(br.y()), qCeil(br.width()), qCeil(br.height()));
+   return QRect(qRound(br.x()), qRound(br.y()), qCeil(br.width()), qCeil(br.height()));
 }
 
 /*!
@@ -453,39 +476,41 @@ QRect QDeclarativeTextPrivate::setupTextLayout()
 */
 QPixmap QDeclarativeTextPrivate::textLayoutImage(bool drawStyle)
 {
-    //do layout
-    QSize size = layedOutTextRect.size();
-    //paint text
-    QPixmap img(size);
-    if (!size.isEmpty()) {
-        img.fill(Qt::transparent);
+   //do layout
+   QSize size = layedOutTextRect.size();
+   //paint text
+   QPixmap img(size);
+   if (!size.isEmpty()) {
+      img.fill(Qt::transparent);
 #ifdef Q_OS_MAC
-        bool oldSmooth = qt_applefontsmoothing_enabled;
-        qt_applefontsmoothing_enabled = false;
+      bool oldSmooth = qt_applefontsmoothing_enabled;
+      qt_applefontsmoothing_enabled = false;
 #endif
-        QPainter p(&img);
+      QPainter p(&img);
 #ifdef Q_OS_MAC
-        qt_applefontsmoothing_enabled = oldSmooth;
+      qt_applefontsmoothing_enabled = oldSmooth;
 #endif
-        drawTextLayout(&p, QPointF(-layedOutTextRect.x(),0), drawStyle);
-    }
-    return img;
+      drawTextLayout(&p, QPointF(-layedOutTextRect.x(), 0), drawStyle);
+   }
+   return img;
 }
 
 /*!
-    Paints the QDeclarativeTextPrivate::layout QTextLayout into \a painter at \a pos.  If 
+    Paints the QDeclarativeTextPrivate::layout QTextLayout into \a painter at \a pos.  If
     \a drawStyle is true, the style color overrides all colors in the document.
 */
 void QDeclarativeTextPrivate::drawTextLayout(QPainter *painter, const QPointF &pos, bool drawStyle)
 {
-    if (drawStyle)
-        painter->setPen(styleColor);
-    else
-        painter->setPen(color);
-    painter->setFont(font);
-    layout.draw(painter, pos);
-    if (!elidePos.isNull())
-        painter->drawText(pos + elidePos, elideChar);
+   if (drawStyle) {
+      painter->setPen(styleColor);
+   } else {
+      painter->setPen(color);
+   }
+   painter->setFont(font);
+   layout.draw(painter, pos);
+   if (!elidePos.isNull()) {
+      painter->drawText(pos + elidePos, elideChar);
+   }
 }
 
 /*!
@@ -494,53 +519,56 @@ void QDeclarativeTextPrivate::drawTextLayout(QPainter *painter, const QPointF &p
 */
 QPixmap QDeclarativeTextPrivate::textDocumentImage(bool drawStyle)
 {
-    QSize size = doc->size().toSize();
+   QSize size = doc->size().toSize();
 
-    //paint text
-    QPixmap img(size);
-    img.fill(Qt::transparent);
+   //paint text
+   QPixmap img(size);
+   img.fill(Qt::transparent);
 #ifdef Q_OS_MAC
-    bool oldSmooth = qt_applefontsmoothing_enabled;
-    qt_applefontsmoothing_enabled = false;
+   bool oldSmooth = qt_applefontsmoothing_enabled;
+   qt_applefontsmoothing_enabled = false;
 #endif
-    QPainter p(&img);
+   QPainter p(&img);
 #ifdef Q_OS_MAC
-    qt_applefontsmoothing_enabled = oldSmooth;
+   qt_applefontsmoothing_enabled = oldSmooth;
 #endif
 
-    QAbstractTextDocumentLayout::PaintContext context;
+   QAbstractTextDocumentLayout::PaintContext context;
 
-    QTextOption oldOption(doc->defaultTextOption());
-    if (drawStyle) {
-        context.palette.setColor(QPalette::Text, styleColor);
-        QTextOption colorOption(doc->defaultTextOption());
-        colorOption.setFlags(QTextOption::SuppressColors);
-        doc->setDefaultTextOption(colorOption);
-    } else {
-        context.palette.setColor(QPalette::Text, color);
-    }
-    doc->documentLayout()->draw(&p, context);
-    if (drawStyle)
-        doc->setDefaultTextOption(oldOption);
-    return img;
+   QTextOption oldOption(doc->defaultTextOption());
+   if (drawStyle) {
+      context.palette.setColor(QPalette::Text, styleColor);
+      QTextOption colorOption(doc->defaultTextOption());
+      colorOption.setFlags(QTextOption::SuppressColors);
+      doc->setDefaultTextOption(colorOption);
+   } else {
+      context.palette.setColor(QPalette::Text, color);
+   }
+   doc->documentLayout()->draw(&p, context);
+   if (drawStyle) {
+      doc->setDefaultTextOption(oldOption);
+   }
+   return img;
 }
 
 /*!
     Mark the image cache as dirty.
 */
-void QDeclarativeTextPrivate::invalidateImageCache() 
+void QDeclarativeTextPrivate::invalidateImageCache()
 {
-    Q_Q(QDeclarativeText);
+   Q_Q(QDeclarativeText);
 
-    if(cacheAllTextAsImage || style != QDeclarativeText::Normal){//If actually using the image cache
-        if (imageCacheDirty)
-            return;
+   if (cacheAllTextAsImage || style != QDeclarativeText::Normal) { //If actually using the image cache
+      if (imageCacheDirty) {
+         return;
+      }
 
-        imageCacheDirty = true;
-        imageCache = QPixmap();
-    }
-    if (q->isComponentComplete())
-        q->update();
+      imageCacheDirty = true;
+      imageCache = QPixmap();
+   }
+   if (q->isComponentComplete()) {
+      q->update();
+   }
 }
 
 /*!
@@ -548,58 +576,61 @@ void QDeclarativeTextPrivate::invalidateImageCache()
 */
 void QDeclarativeTextPrivate::checkImageCache()
 {
-    if (!imageCacheDirty)
-        return;
+   if (!imageCacheDirty) {
+      return;
+   }
 
-    if (text.isEmpty()) {
+   if (text.isEmpty()) {
 
-        imageCache = QPixmap();
+      imageCache = QPixmap();
 
-    } else {
+   } else {
 
-        QPixmap textImage;
-        QPixmap styledImage;
+      QPixmap textImage;
+      QPixmap styledImage;
 
-        if (richText) {
-            textImage = textDocumentImage(false);
-            if (style != QDeclarativeText::Normal)
-                styledImage = textDocumentImage(true); //### should use styleColor
-        } else {
-            textImage = textLayoutImage(false);
-            if (style != QDeclarativeText::Normal)
-                styledImage = textLayoutImage(true); //### should use styleColor
-        }
+      if (richText) {
+         textImage = textDocumentImage(false);
+         if (style != QDeclarativeText::Normal) {
+            styledImage = textDocumentImage(true);   //### should use styleColor
+         }
+      } else {
+         textImage = textLayoutImage(false);
+         if (style != QDeclarativeText::Normal) {
+            styledImage = textLayoutImage(true);   //### should use styleColor
+         }
+      }
 
-        switch (style) {
-        case QDeclarativeText::Outline:
+      switch (style) {
+         case QDeclarativeText::Outline:
             imageCache = drawOutline(textImage, styledImage);
             break;
-        case QDeclarativeText::Sunken:
+         case QDeclarativeText::Sunken:
             imageCache = drawOutline(textImage, styledImage, -1);
             break;
-        case QDeclarativeText::Raised:
+         case QDeclarativeText::Raised:
             imageCache = drawOutline(textImage, styledImage, 1);
             break;
-        default:
+         default:
             imageCache = textImage;
             break;
-        }
+      }
 
-    } 
+   }
 
-    imageCacheDirty = false;
+   imageCacheDirty = false;
 }
 
-/*! 
-    Ensures the QDeclarativeTextPrivate::doc variable is set to a valid text document 
+/*!
+    Ensures the QDeclarativeTextPrivate::doc variable is set to a valid text document
 */
 void QDeclarativeTextPrivate::ensureDoc()
 {
-    if (!doc) {
-        Q_Q(QDeclarativeText);
-        doc = new QTextDocumentWithImageResources(q);
-        doc->setDocumentMargin(0);
-    }
+   if (!doc) {
+      Q_Q(QDeclarativeText);
+      doc = new QTextDocumentWithImageResources(q);
+      doc->setDocumentMargin(0);
+   }
 }
 
 /*!
@@ -607,26 +638,26 @@ void QDeclarativeTextPrivate::ensureDoc()
 */
 QPixmap QDeclarativeTextPrivate::drawOutline(const QPixmap &source, const QPixmap &styleSource)
 {
-    QPixmap img = QPixmap(styleSource.width() + 2, styleSource.height() + 2);
-    img.fill(Qt::transparent);
+   QPixmap img = QPixmap(styleSource.width() + 2, styleSource.height() + 2);
+   img.fill(Qt::transparent);
 
-    QPainter ppm(&img);
+   QPainter ppm(&img);
 
-    QPoint pos(0, 0);
-    pos += QPoint(-1, 0);
-    ppm.drawPixmap(pos, styleSource);
-    pos += QPoint(2, 0);
-    ppm.drawPixmap(pos, styleSource);
-    pos += QPoint(-1, -1);
-    ppm.drawPixmap(pos, styleSource);
-    pos += QPoint(0, 2);
-    ppm.drawPixmap(pos, styleSource);
+   QPoint pos(0, 0);
+   pos += QPoint(-1, 0);
+   ppm.drawPixmap(pos, styleSource);
+   pos += QPoint(2, 0);
+   ppm.drawPixmap(pos, styleSource);
+   pos += QPoint(-1, -1);
+   ppm.drawPixmap(pos, styleSource);
+   pos += QPoint(0, 2);
+   ppm.drawPixmap(pos, styleSource);
 
-    pos += QPoint(0, -1);
-    ppm.drawPixmap(pos, source);
-    ppm.end();
+   pos += QPoint(0, -1);
+   ppm.drawPixmap(pos, source);
+   ppm.end();
 
-    return img;
+   return img;
 }
 
 /*!
@@ -634,17 +665,17 @@ QPixmap QDeclarativeTextPrivate::drawOutline(const QPixmap &source, const QPixma
 */
 QPixmap QDeclarativeTextPrivate::drawOutline(const QPixmap &source, const QPixmap &styleSource, int yOffset)
 {
-    QPixmap img = QPixmap(styleSource.width() + 2, styleSource.height() + 2);
-    img.fill(Qt::transparent);
+   QPixmap img = QPixmap(styleSource.width() + 2, styleSource.height() + 2);
+   img.fill(Qt::transparent);
 
-    QPainter ppm(&img);
+   QPainter ppm(&img);
 
-    ppm.drawPixmap(QPoint(0, yOffset), styleSource);
-    ppm.drawPixmap(0, 0, source);
+   ppm.drawPixmap(QPoint(0, yOffset), styleSource);
+   ppm.drawPixmap(0, 0, source);
 
-    ppm.end();
+   ppm.end();
 
-    return img;
+   return img;
 }
 
 /*!
@@ -691,7 +722,7 @@ QPixmap QDeclarativeTextPrivate::drawOutline(const QPixmap &source, const QPixma
     \sa {declarative/text/fonts}{Fonts example}
 */
 QDeclarativeText::QDeclarativeText(QDeclarativeItem *parent)
-  : QDeclarativeImplicitSizeItem(*(new QDeclarativeTextPrivate), parent)
+   : QDeclarativeImplicitSizeItem(*(new QDeclarativeTextPrivate), parent)
 {
 }
 
@@ -701,29 +732,31 @@ QDeclarativeText::~QDeclarativeText()
 
 QFont QDeclarativeText::font() const
 {
-    Q_D(const QDeclarativeText);
-    return d->sourceFont;
+   Q_D(const QDeclarativeText);
+   return d->sourceFont;
 }
 
 void QDeclarativeText::setFont(const QFont &font)
 {
-    Q_D(QDeclarativeText);
-    if (d->sourceFont == font)
-        return;
+   Q_D(QDeclarativeText);
+   if (d->sourceFont == font) {
+      return;
+   }
 
-    d->sourceFont = font;
-    QFont oldFont = d->font;
-    d->font = font;
-    if (d->font.pointSizeF() != -1) {
-        // 0.5pt resolution
-        qreal size = qRound(d->font.pointSizeF()*2.0);
-        d->font.setPointSizeF(size/2.0);
-    }
+   d->sourceFont = font;
+   QFont oldFont = d->font;
+   d->font = font;
+   if (d->font.pointSizeF() != -1) {
+      // 0.5pt resolution
+      qreal size = qRound(d->font.pointSizeF() * 2.0);
+      d->font.setPointSizeF(size / 2.0);
+   }
 
-    if (oldFont != d->font)
-        d->updateLayout();
+   if (oldFont != d->font) {
+      d->updateLayout();
+   }
 
-    emit fontChanged(d->sourceFont);
+   emit fontChanged(d->sourceFont);
 }
 
 /*!
@@ -736,30 +769,31 @@ void QDeclarativeText::setFont(const QFont &font)
 */
 QString QDeclarativeText::text() const
 {
-    Q_D(const QDeclarativeText);
-    return d->text;
+   Q_D(const QDeclarativeText);
+   return d->text;
 }
 
 void QDeclarativeText::setText(const QString &n)
 {
-    Q_D(QDeclarativeText);
-    if (d->text == n)
-        return;
+   Q_D(QDeclarativeText);
+   if (d->text == n) {
+      return;
+   }
 
-    d->richText = d->format == RichText || (d->format == AutoText && Qt::mightBeRichText(n));
-    d->text = n;
-    if (isComponentComplete()) {
-        if (d->richText) {
-            d->ensureDoc();
-            d->doc->setText(n);
-            d->rightToLeftText = d->doc->toPlainText().isRightToLeft();
-        } else {
-            d->rightToLeftText = d->text.isRightToLeft();
-        }
-        d->determineHorizontalAlignment();
-    }
-    d->updateLayout();
-    emit textChanged(d->text);
+   d->richText = d->format == RichText || (d->format == AutoText && Qt::mightBeRichText(n));
+   d->text = n;
+   if (isComponentComplete()) {
+      if (d->richText) {
+         d->ensureDoc();
+         d->doc->setText(n);
+         d->rightToLeftText = d->doc->toPlainText().isRightToLeft();
+      } else {
+         d->rightToLeftText = d->text.isRightToLeft();
+      }
+      d->determineHorizontalAlignment();
+   }
+   d->updateLayout();
+   emit textChanged(d->text);
 }
 
 
@@ -786,19 +820,20 @@ void QDeclarativeText::setText(const QString &n)
 */
 QColor QDeclarativeText::color() const
 {
-    Q_D(const QDeclarativeText);
-    return d->color;
+   Q_D(const QDeclarativeText);
+   return d->color;
 }
 
 void QDeclarativeText::setColor(const QColor &color)
 {
-    Q_D(QDeclarativeText);
-    if (d->color == color)
-        return;
+   Q_D(QDeclarativeText);
+   if (d->color == color) {
+      return;
+   }
 
-    d->color = color;
-    d->invalidateImageCache();
-    emit colorChanged(d->color);
+   d->color = color;
+   d->invalidateImageCache();
+   emit colorChanged(d->color);
 }
 
 /*!
@@ -827,22 +862,24 @@ void QDeclarativeText::setColor(const QColor &color)
 */
 QDeclarativeText::TextStyle QDeclarativeText::style() const
 {
-    Q_D(const QDeclarativeText);
-    return d->style;
+   Q_D(const QDeclarativeText);
+   return d->style;
 }
 
 void QDeclarativeText::setStyle(QDeclarativeText::TextStyle style)
 {
-    Q_D(QDeclarativeText);
-    if (d->style == style)
-        return;
+   Q_D(QDeclarativeText);
+   if (d->style == style) {
+      return;
+   }
 
-    // changing to/from Normal requires the boundingRect() to change
-    if (isComponentComplete() && (d->style == Normal || style == Normal))
-        prepareGeometryChange();
-    d->style = style;
-    d->invalidateImageCache();
-    emit styleChanged(d->style);
+   // changing to/from Normal requires the boundingRect() to change
+   if (isComponentComplete() && (d->style == Normal || style == Normal)) {
+      prepareGeometryChange();
+   }
+   d->style = style;
+   d->invalidateImageCache();
+   emit styleChanged(d->style);
 }
 
 /*!
@@ -862,19 +899,20 @@ void QDeclarativeText::setStyle(QDeclarativeText::TextStyle style)
  */
 QColor QDeclarativeText::styleColor() const
 {
-    Q_D(const QDeclarativeText);
-    return d->styleColor;
+   Q_D(const QDeclarativeText);
+   return d->styleColor;
 }
 
 void QDeclarativeText::setStyleColor(const QColor &color)
 {
-    Q_D(QDeclarativeText);
-    if (d->styleColor == color)
-        return;
+   Q_D(QDeclarativeText);
+   if (d->styleColor == color) {
+      return;
+   }
 
-    d->styleColor = color;
-    d->invalidateImageCache();
-    emit styleColorChanged(d->styleColor);
+   d->styleColor = color;
+   d->invalidateImageCache();
+   emit styleColorChanged(d->styleColor);
 }
 
 
@@ -893,7 +931,7 @@ void QDeclarativeText::setStyleColor(const QColor &color)
 
     Note that for a single line of text, the size of the text is the area of the text. In this common case,
     all alignments are equivalent. If you want the text to be, say, centered in its parent, then you will
-    need to either modify the Item::anchors, or set horizontalAlignment to Text.AlignHCenter and bind the width to 
+    need to either modify the Item::anchors, or set horizontalAlignment to Text.AlignHCenter and bind the width to
     that of the parent.
 
     When using the attached property \l {LayoutMirroring::enabled} to mirror application
@@ -903,98 +941,102 @@ void QDeclarativeText::setStyleColor(const QColor &color)
 */
 QDeclarativeText::HAlignment QDeclarativeText::hAlign() const
 {
-    Q_D(const QDeclarativeText);
-    return d->hAlign;
+   Q_D(const QDeclarativeText);
+   return d->hAlign;
 }
 
 void QDeclarativeText::setHAlign(HAlignment align)
 {
-    Q_D(QDeclarativeText);
-    bool forceAlign = d->hAlignImplicit && d->effectiveLayoutMirror;
-    d->hAlignImplicit = false;
-    if (d->setHAlign(align, forceAlign) && isComponentComplete())
-        d->updateLayout();
+   Q_D(QDeclarativeText);
+   bool forceAlign = d->hAlignImplicit && d->effectiveLayoutMirror;
+   d->hAlignImplicit = false;
+   if (d->setHAlign(align, forceAlign) && isComponentComplete()) {
+      d->updateLayout();
+   }
 }
 
 void QDeclarativeText::resetHAlign()
 {
-    Q_D(QDeclarativeText);
-    d->hAlignImplicit = true;
-    if (d->determineHorizontalAlignment() && isComponentComplete())
-        d->updateLayout();
+   Q_D(QDeclarativeText);
+   d->hAlignImplicit = true;
+   if (d->determineHorizontalAlignment() && isComponentComplete()) {
+      d->updateLayout();
+   }
 }
 
 QDeclarativeText::HAlignment QDeclarativeText::effectiveHAlign() const
 {
-    Q_D(const QDeclarativeText);
-    QDeclarativeText::HAlignment effectiveAlignment = d->hAlign;
-    if (!d->hAlignImplicit && d->effectiveLayoutMirror) {
-        switch (d->hAlign) {
-        case QDeclarativeText::AlignLeft:
+   Q_D(const QDeclarativeText);
+   QDeclarativeText::HAlignment effectiveAlignment = d->hAlign;
+   if (!d->hAlignImplicit && d->effectiveLayoutMirror) {
+      switch (d->hAlign) {
+         case QDeclarativeText::AlignLeft:
             effectiveAlignment = QDeclarativeText::AlignRight;
             break;
-        case QDeclarativeText::AlignRight:
+         case QDeclarativeText::AlignRight:
             effectiveAlignment = QDeclarativeText::AlignLeft;
             break;
-        default:
+         default:
             break;
-        }
-    }
-    return effectiveAlignment;
+      }
+   }
+   return effectiveAlignment;
 }
 
 bool QDeclarativeTextPrivate::setHAlign(QDeclarativeText::HAlignment alignment, bool forceAlign)
 {
-    Q_Q(QDeclarativeText);
-    if (hAlign != alignment || forceAlign) {
-        hAlign = alignment;
-        emit q->horizontalAlignmentChanged(hAlign);
-        return true;
-    }
-    return false;
+   Q_Q(QDeclarativeText);
+   if (hAlign != alignment || forceAlign) {
+      hAlign = alignment;
+      emit q->horizontalAlignmentChanged(hAlign);
+      return true;
+   }
+   return false;
 }
 
 bool QDeclarativeTextPrivate::determineHorizontalAlignment()
 {
-    Q_Q(QDeclarativeText);
-    if (hAlignImplicit && q->isComponentComplete()) {
-        bool alignToRight = text.isEmpty() ? QApplication::keyboardInputDirection() == Qt::RightToLeft : rightToLeftText;
-        return setHAlign(alignToRight ? QDeclarativeText::AlignRight : QDeclarativeText::AlignLeft);
-    }
-    return false;
+   Q_Q(QDeclarativeText);
+   if (hAlignImplicit && q->isComponentComplete()) {
+      bool alignToRight = text.isEmpty() ? QApplication::keyboardInputDirection() == Qt::RightToLeft : rightToLeftText;
+      return setHAlign(alignToRight ? QDeclarativeText::AlignRight : QDeclarativeText::AlignLeft);
+   }
+   return false;
 }
 
 void QDeclarativeTextPrivate::mirrorChange()
 {
-    Q_Q(QDeclarativeText);
-    if (q->isComponentComplete()) {
-        if (!hAlignImplicit && (hAlign == QDeclarativeText::AlignRight || hAlign == QDeclarativeText::AlignLeft)) {
-            updateLayout();
-        }
-    }
+   Q_Q(QDeclarativeText);
+   if (q->isComponentComplete()) {
+      if (!hAlignImplicit && (hAlign == QDeclarativeText::AlignRight || hAlign == QDeclarativeText::AlignLeft)) {
+         updateLayout();
+      }
+   }
 }
 
 QTextDocument *QDeclarativeTextPrivate::textDocument()
 {
-    return doc;
+   return doc;
 }
 
 QDeclarativeText::VAlignment QDeclarativeText::vAlign() const
 {
-    Q_D(const QDeclarativeText);
-    return d->vAlign;
+   Q_D(const QDeclarativeText);
+   return d->vAlign;
 }
 
 void QDeclarativeText::setVAlign(VAlignment align)
 {
-    Q_D(QDeclarativeText);
-    if (d->vAlign == align)
-        return;
+   Q_D(QDeclarativeText);
+   if (d->vAlign == align) {
+      return;
+   }
 
-    if (isComponentComplete())
-        prepareGeometryChange();
-    d->vAlign = align;
-    emit verticalAlignmentChanged(align);
+   if (isComponentComplete()) {
+      prepareGeometryChange();
+   }
+   d->vAlign = align;
+   emit verticalAlignmentChanged(align);
 }
 
 /*!
@@ -1012,20 +1054,21 @@ void QDeclarativeText::setVAlign(VAlignment align)
 */
 QDeclarativeText::WrapMode QDeclarativeText::wrapMode() const
 {
-    Q_D(const QDeclarativeText);
-    return d->wrapMode;
+   Q_D(const QDeclarativeText);
+   return d->wrapMode;
 }
 
 void QDeclarativeText::setWrapMode(WrapMode mode)
 {
-    Q_D(QDeclarativeText);
-    if (mode == d->wrapMode)
-        return;
+   Q_D(QDeclarativeText);
+   if (mode == d->wrapMode) {
+      return;
+   }
 
-    d->wrapMode = mode;
-    d->updateLayout();
-    
-    emit wrapModeChanged();
+   d->wrapMode = mode;
+   d->updateLayout();
+
+   emit wrapModeChanged();
 }
 
 /*!
@@ -1040,8 +1083,8 @@ void QDeclarativeText::setWrapMode(WrapMode mode)
 */
 int QDeclarativeText::lineCount() const
 {
-    Q_D(const QDeclarativeText);
-    return d->lineCount;
+   Q_D(const QDeclarativeText);
+   return d->lineCount;
 }
 
 /*!
@@ -1057,8 +1100,8 @@ int QDeclarativeText::lineCount() const
 */
 bool QDeclarativeText::truncated() const
 {
-    Q_D(const QDeclarativeText);
-    return d->truncated;
+   Q_D(const QDeclarativeText);
+   return d->truncated;
 }
 
 /*!
@@ -1075,31 +1118,31 @@ bool QDeclarativeText::truncated() const
 */
 int QDeclarativeText::maximumLineCount() const
 {
-    Q_D(const QDeclarativeText);
-    return d->maximumLineCount;
+   Q_D(const QDeclarativeText);
+   return d->maximumLineCount;
 }
 
 void QDeclarativeText::setMaximumLineCount(int lines)
 {
-    Q_D(QDeclarativeText);
+   Q_D(QDeclarativeText);
 
-    d->maximumLineCountValid = lines==INT_MAX ? false : true;
-    if (d->maximumLineCount != lines) {
-        d->maximumLineCount = lines;
-        d->updateLayout();
-        emit maximumLineCountChanged();
-    }
+   d->maximumLineCountValid = lines == INT_MAX ? false : true;
+   if (d->maximumLineCount != lines) {
+      d->maximumLineCount = lines;
+      d->updateLayout();
+      emit maximumLineCountChanged();
+   }
 }
 
 void QDeclarativeText::resetMaximumLineCount()
 {
-    Q_D(QDeclarativeText);
-    setMaximumLineCount(INT_MAX);
-    d->elidePos = QPointF();
-    if (d->truncated != false) {
-        d->truncated = false;
-        emit truncatedChanged();
-    }
+   Q_D(QDeclarativeText);
+   setMaximumLineCount(INT_MAX);
+   d->elidePos = QPointF();
+   if (d->truncated != false) {
+      d->truncated = false;
+      emit truncatedChanged();
+   }
 }
 
 /*!
@@ -1108,7 +1151,7 @@ void QDeclarativeText::resetMaximumLineCount()
     The way the text property should be displayed.
 
     Supported text formats are:
-    
+
     \list
     \o Text.AutoText (default)
     \o Text.PlainText
@@ -1159,27 +1202,28 @@ Column {
 */
 QDeclarativeText::TextFormat QDeclarativeText::textFormat() const
 {
-    Q_D(const QDeclarativeText);
-    return d->format;
+   Q_D(const QDeclarativeText);
+   return d->format;
 }
 
 void QDeclarativeText::setTextFormat(TextFormat format)
 {
-    Q_D(QDeclarativeText);
-    if (format == d->format)
-        return;
-    d->format = format;
-    bool wasRich = d->richText;
-    d->richText = format == RichText || (format == AutoText && Qt::mightBeRichText(d->text));
+   Q_D(QDeclarativeText);
+   if (format == d->format) {
+      return;
+   }
+   d->format = format;
+   bool wasRich = d->richText;
+   d->richText = format == RichText || (format == AutoText && Qt::mightBeRichText(d->text));
 
-    if (!wasRich && d->richText && isComponentComplete()) {
-        d->ensureDoc();
-        d->doc->setText(d->text);
-    }
+   if (!wasRich && d->richText && isComponentComplete()) {
+      d->ensureDoc();
+      d->doc->setText(d->text);
+   }
 
-    d->updateLayout();
+   d->updateLayout();
 
-    emit textFormatChanged(d->format);
+   emit textFormatChanged(d->format);
 }
 
 /*!
@@ -1209,66 +1253,68 @@ void QDeclarativeText::setTextFormat(TextFormat format)
 */
 QDeclarativeText::TextElideMode QDeclarativeText::elideMode() const
 {
-    Q_D(const QDeclarativeText);
-    return d->elideMode;
+   Q_D(const QDeclarativeText);
+   return d->elideMode;
 }
 
 void QDeclarativeText::setElideMode(QDeclarativeText::TextElideMode mode)
 {
-    Q_D(QDeclarativeText);
-    if (mode == d->elideMode)
-        return;
+   Q_D(QDeclarativeText);
+   if (mode == d->elideMode) {
+      return;
+   }
 
-    d->elideMode = mode;
-    d->updateLayout();
-    
-    emit elideModeChanged(d->elideMode);
+   d->elideMode = mode;
+   d->updateLayout();
+
+   emit elideModeChanged(d->elideMode);
 }
 
 /*! \internal */
 QRectF QDeclarativeText::boundingRect() const
 {
-    Q_D(const QDeclarativeText);
+   Q_D(const QDeclarativeText);
 
-    QRect rect = d->layedOutTextRect;
-    if (d->style != Normal)
-        rect.adjust(-1, 0, 1, 2);
+   QRect rect = d->layedOutTextRect;
+   if (d->style != Normal) {
+      rect.adjust(-1, 0, 1, 2);
+   }
 
-    // Could include font max left/right bearings to either side of rectangle.
+   // Could include font max left/right bearings to either side of rectangle.
 
-    int h = height();
-    switch (d->vAlign) {
-    case AlignTop:
-        break;
-    case AlignBottom:
-        rect.moveTop(h - rect.height());
-        break;
-    case AlignVCenter:
-        rect.moveTop((h - rect.height()) / 2);
-        break;
-    }
+   int h = height();
+   switch (d->vAlign) {
+      case AlignTop:
+         break;
+      case AlignBottom:
+         rect.moveTop(h - rect.height());
+         break;
+      case AlignVCenter:
+         rect.moveTop((h - rect.height()) / 2);
+         break;
+   }
 
-    return QRectF(rect);
+   return QRectF(rect);
 }
 
 /*! \internal */
 void QDeclarativeText::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    Q_D(QDeclarativeText);
-    if ((!d->internalWidthUpdate && newGeometry.width() != oldGeometry.width())
-            && (d->wrapMode != QDeclarativeText::NoWrap
-                || d->elideMode != QDeclarativeText::ElideNone
-                || d->hAlign != QDeclarativeText::AlignLeft)) {
-        if ((d->singleline || d->maximumLineCountValid) && d->elideMode != QDeclarativeText::ElideNone && widthValid()) {
-            // We need to re-elide
-            d->updateLayout();
-        } else {
-            // We just need to re-layout
-            d->updateSize();
-        }
-    }
+   Q_D(QDeclarativeText);
+   if ((!d->internalWidthUpdate && newGeometry.width() != oldGeometry.width())
+         && (d->wrapMode != QDeclarativeText::NoWrap
+             || d->elideMode != QDeclarativeText::ElideNone
+             || d->hAlign != QDeclarativeText::AlignLeft)) {
+      if ((d->singleline || d->maximumLineCountValid) && d->elideMode != QDeclarativeText::ElideNone && widthValid()) {
+         // We need to re-elide
+         d->updateLayout();
+      } else {
+         // We just need to re-layout
+         d->updateSize();
+      }
+   }
 
-    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+   QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 /*!
@@ -1279,8 +1325,8 @@ void QDeclarativeText::geometryChanged(const QRectF &newGeometry, const QRectF &
 */
 qreal QDeclarativeText::paintedWidth() const
 {
-    Q_D(const QDeclarativeText);
-    return d->paintedSize.width();
+   Q_D(const QDeclarativeText);
+   return d->paintedSize.width();
 }
 
 /*!
@@ -1291,8 +1337,8 @@ qreal QDeclarativeText::paintedWidth() const
 */
 qreal QDeclarativeText::paintedHeight() const
 {
-    Q_D(const QDeclarativeText);
-    return d->paintedSize.height();
+   Q_D(const QDeclarativeText);
+   return d->paintedSize.height();
 }
 
 /*!
@@ -1307,20 +1353,21 @@ qreal QDeclarativeText::paintedHeight() const
 */
 qreal QDeclarativeText::lineHeight() const
 {
-    Q_D(const QDeclarativeText);
-    return d->lineHeight;
+   Q_D(const QDeclarativeText);
+   return d->lineHeight;
 }
 
 void QDeclarativeText::setLineHeight(qreal lineHeight)
 {
-    Q_D(QDeclarativeText);
+   Q_D(QDeclarativeText);
 
-    if ((d->lineHeight == lineHeight) || (lineHeight < 0.0))
-        return;
+   if ((d->lineHeight == lineHeight) || (lineHeight < 0.0)) {
+      return;
+   }
 
-    d->lineHeight = lineHeight;
-    d->updateLayout();
-    emit lineHeightChanged(lineHeight);
+   d->lineHeight = lineHeight;
+   d->updateLayout();
+   emit lineHeightChanged(lineHeight);
 }
 
 /*!
@@ -1337,20 +1384,21 @@ void QDeclarativeText::setLineHeight(qreal lineHeight)
 */
 QDeclarativeText::LineHeightMode QDeclarativeText::lineHeightMode() const
 {
-    Q_D(const QDeclarativeText);
-    return d->lineHeightMode;
+   Q_D(const QDeclarativeText);
+   return d->lineHeightMode;
 }
 
 void QDeclarativeText::setLineHeightMode(LineHeightMode mode)
 {
-    Q_D(QDeclarativeText);
-    if (mode == d->lineHeightMode)
-        return;
+   Q_D(QDeclarativeText);
+   if (mode == d->lineHeightMode) {
+      return;
+   }
 
-    d->lineHeightMode = mode;
-    d->updateLayout();
+   d->lineHeightMode = mode;
+   d->updateLayout();
 
-    emit lineHeightModeChanged(mode);
+   emit lineHeightModeChanged(mode);
 }
 
 /*!
@@ -1358,116 +1406,122 @@ void QDeclarativeText::setLineHeightMode(LineHeightMode mode)
 */
 int QDeclarativeText::resourcesLoading() const
 {
-    Q_D(const QDeclarativeText);
-    return d->doc ? d->doc->resourcesLoading() : 0;
+   Q_D(const QDeclarativeText);
+   return d->doc ? d->doc->resourcesLoading() : 0;
 }
 
 /*! \internal */
 void QDeclarativeText::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    Q_D(QDeclarativeText);
+   Q_D(QDeclarativeText);
 
-    if (d->cacheAllTextAsImage || d->style != Normal) {
-        d->checkImageCache();
-        if (d->imageCache.isNull())
-            return;
+   if (d->cacheAllTextAsImage || d->style != Normal) {
+      d->checkImageCache();
+      if (d->imageCache.isNull()) {
+         return;
+      }
 
-        bool oldAA = p->testRenderHint(QPainter::Antialiasing);
-        bool oldSmooth = p->testRenderHint(QPainter::SmoothPixmapTransform);
-        if (d->smooth)
-            p->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, d->smooth);
+      bool oldAA = p->testRenderHint(QPainter::Antialiasing);
+      bool oldSmooth = p->testRenderHint(QPainter::SmoothPixmapTransform);
+      if (d->smooth) {
+         p->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, d->smooth);
+      }
 
-        QRect br = boundingRect().toRect();
+      QRect br = boundingRect().toRect();
 
-        bool needClip = clip() && (d->imageCache.width() > width() ||
-                                   d->imageCache.height() > height());
+      bool needClip = clip() && (d->imageCache.width() > width() ||
+                                 d->imageCache.height() > height());
 
-        if (needClip)
-            p->drawPixmap(0, 0, width(), height(), d->imageCache, -br.x(), -br.y(), width(), height());
-        else
-            p->drawPixmap(br.x(), br.y(), d->imageCache);
+      if (needClip) {
+         p->drawPixmap(0, 0, width(), height(), d->imageCache, -br.x(), -br.y(), width(), height());
+      } else {
+         p->drawPixmap(br.x(), br.y(), d->imageCache);
+      }
 
-        if (d->smooth) {
-            p->setRenderHint(QPainter::Antialiasing, oldAA);
-            p->setRenderHint(QPainter::SmoothPixmapTransform, oldSmooth);
-        }
-    } else {
-        QRectF bounds = boundingRect();
+      if (d->smooth) {
+         p->setRenderHint(QPainter::Antialiasing, oldAA);
+         p->setRenderHint(QPainter::SmoothPixmapTransform, oldSmooth);
+      }
+   } else {
+      QRectF bounds = boundingRect();
 
-        bool needClip = clip() && (d->layedOutTextRect.width() > width() ||
-                                   d->layedOutTextRect.height() > height());
+      bool needClip = clip() && (d->layedOutTextRect.width() > width() ||
+                                 d->layedOutTextRect.height() > height());
 
-        if (needClip) {
-            p->save();
-            p->setClipRect(0, 0, width(), height(), Qt::IntersectClip);
-        }
-        if (d->richText) {
-            QAbstractTextDocumentLayout::PaintContext context;
-            context.palette.setColor(QPalette::Text, d->color);
-            p->translate(bounds.x(), bounds.y());
-            d->doc->documentLayout()->draw(p, context);
-            p->translate(-bounds.x(), -bounds.y());
-        } else {
-            d->drawTextLayout(p, QPointF(0, bounds.y()), false);
-        }
+      if (needClip) {
+         p->save();
+         p->setClipRect(0, 0, width(), height(), Qt::IntersectClip);
+      }
+      if (d->richText) {
+         QAbstractTextDocumentLayout::PaintContext context;
+         context.palette.setColor(QPalette::Text, d->color);
+         p->translate(bounds.x(), bounds.y());
+         d->doc->documentLayout()->draw(p, context);
+         p->translate(-bounds.x(), -bounds.y());
+      } else {
+         d->drawTextLayout(p, QPointF(0, bounds.y()), false);
+      }
 
-        if (needClip) {
-            p->restore();
-        }
-    }
+      if (needClip) {
+         p->restore();
+      }
+   }
 }
 
 /*! \internal */
 void QDeclarativeText::componentComplete()
 {
-    Q_D(QDeclarativeText);
-    QDeclarativeItem::componentComplete();
-    if (d->updateOnComponentComplete) {
-        d->updateOnComponentComplete = false;
-        if (d->richText) {
-            d->ensureDoc();
-            d->doc->setText(d->text);
-            d->rightToLeftText = d->doc->toPlainText().isRightToLeft();
-        } else {
-            d->rightToLeftText = d->text.isRightToLeft();
-        }
-        d->determineHorizontalAlignment();
-        d->updateLayout();
-    }
+   Q_D(QDeclarativeText);
+   QDeclarativeItem::componentComplete();
+   if (d->updateOnComponentComplete) {
+      d->updateOnComponentComplete = false;
+      if (d->richText) {
+         d->ensureDoc();
+         d->doc->setText(d->text);
+         d->rightToLeftText = d->doc->toPlainText().isRightToLeft();
+      } else {
+         d->rightToLeftText = d->text.isRightToLeft();
+      }
+      d->determineHorizontalAlignment();
+      d->updateLayout();
+   }
 }
 
 /*!  \internal */
 void QDeclarativeText::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_D(QDeclarativeText);
+   Q_D(QDeclarativeText);
 
-    if (!d->richText || !d->doc || d->doc->documentLayout()->anchorAt(event->pos()).isEmpty()) {
-        event->setAccepted(false);
-        d->activeLink.clear();
-    } else {
-        d->activeLink = d->doc->documentLayout()->anchorAt(event->pos());
-    }
+   if (!d->richText || !d->doc || d->doc->documentLayout()->anchorAt(event->pos()).isEmpty()) {
+      event->setAccepted(false);
+      d->activeLink.clear();
+   } else {
+      d->activeLink = d->doc->documentLayout()->anchorAt(event->pos());
+   }
 
-    // ### may malfunction if two of the same links are clicked & dragged onto each other)
+   // ### may malfunction if two of the same links are clicked & dragged onto each other)
 
-    if (!event->isAccepted())
-        QDeclarativeItem::mousePressEvent(event);
+   if (!event->isAccepted()) {
+      QDeclarativeItem::mousePressEvent(event);
+   }
 
 }
 
 /*! \internal */
 void QDeclarativeText::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_D(QDeclarativeText);
+   Q_D(QDeclarativeText);
 
-        // ### confirm the link, and send a signal out
-    if (d->richText && d->doc && d->activeLink == d->doc->documentLayout()->anchorAt(event->pos()))
-        emit linkActivated(d->activeLink);
-    else
-        event->setAccepted(false);
+   // ### confirm the link, and send a signal out
+   if (d->richText && d->doc && d->activeLink == d->doc->documentLayout()->anchorAt(event->pos())) {
+      emit linkActivated(d->activeLink);
+   } else {
+      event->setAccepted(false);
+   }
 
-    if (!event->isAccepted())
-        QDeclarativeItem::mouseReleaseEvent(event);
+   if (!event->isAccepted()) {
+      QDeclarativeItem::mouseReleaseEvent(event);
+   }
 }
 
 QT_END_NAMESPACE

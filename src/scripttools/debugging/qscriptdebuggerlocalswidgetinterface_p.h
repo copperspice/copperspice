@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -47,28 +47,28 @@ class QScriptCompletionProviderInterface;
 
 class QScriptDebuggerLocalsWidgetInterfacePrivate;
 class QScriptDebuggerLocalsWidgetInterface:
-    public QWidget
+   public QWidget
 {
-    CS_OBJECT(QScriptDebuggerLocalsWidgetInterface)
-public:
-    ~QScriptDebuggerLocalsWidgetInterface();
+   CS_OBJECT(QScriptDebuggerLocalsWidgetInterface)
+ public:
+   ~QScriptDebuggerLocalsWidgetInterface();
 
-    QScriptCompletionProviderInterface *completionProvider() const;
-    void setCompletionProvider(QScriptCompletionProviderInterface *completionProvider);
+   QScriptCompletionProviderInterface *completionProvider() const;
+   void setCompletionProvider(QScriptCompletionProviderInterface *completionProvider);
 
-    virtual QScriptDebuggerLocalsModel *localsModel() const = 0;
-    virtual void setLocalsModel(QScriptDebuggerLocalsModel *model) = 0;
+   virtual QScriptDebuggerLocalsModel *localsModel() const = 0;
+   virtual void setLocalsModel(QScriptDebuggerLocalsModel *model) = 0;
 
-    virtual void expand(const QModelIndex &index) = 0;
+   virtual void expand(const QModelIndex &index) = 0;
 
-protected:
-    QScriptDebuggerLocalsWidgetInterface(
-        QScriptDebuggerLocalsWidgetInterfacePrivate &dd,
-        QWidget *parent, Qt::WindowFlags flags);
+ protected:
+   QScriptDebuggerLocalsWidgetInterface(
+      QScriptDebuggerLocalsWidgetInterfacePrivate &dd,
+      QWidget *parent, Qt::WindowFlags flags);
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerLocalsWidgetInterface)
-    Q_DISABLE_COPY(QScriptDebuggerLocalsWidgetInterface)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerLocalsWidgetInterface)
+   Q_DISABLE_COPY(QScriptDebuggerLocalsWidgetInterface)
 };
 
 QT_END_NAMESPACE

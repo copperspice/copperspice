@@ -23,12 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qgraphicssystem_vg_p.h"
-#include <QtOpenVG/private/qpixmapdata_vg_p.h>
-#include <QtOpenVG/private/qwindowsurface_vg_p.h>
-#include <QtOpenVG/private/qvgimagepool_p.h>
-
-#include <QtGui/private/qapplication_p.h>
+#include <qgraphicssystem_vg_p.h>
+#include <qpixmapdata_vg_p.h>
+#include <qwindowsurface_vg_p.h>
+#include <qvgimagepool_p.h>
+#include <qapplication_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,19 +18,17 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
 
-#ifndef QDECLARATIVEDEBUGCLIENT_H
-#define QDECLARATIVEDEBUGCLIENT_H
+#ifndef QDECLARATIVEDEBUGCLIENT_P_H
+#define QDECLARATIVEDEBUGCLIENT_P_H
 
 #include <QtNetwork/qtcpsocket.h>
-#include <private/qdeclarativeglobal_p.h>
+#include <qdeclarativeglobal_p.h>
 #include <QScopedPointer>
-
-QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
@@ -38,53 +36,51 @@ class QDeclarativeDebugConnectionPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDebugConnection : public QTcpSocket
 {
-    CS_OBJECT(QDeclarativeDebugConnection)
-    Q_DISABLE_COPY(QDeclarativeDebugConnection)
+   CS_OBJECT(QDeclarativeDebugConnection)
+   Q_DISABLE_COPY(QDeclarativeDebugConnection)
 
-public:
-    QDeclarativeDebugConnection(QObject * = 0);
-    ~QDeclarativeDebugConnection();
+ public:
+   QDeclarativeDebugConnection(QObject * = 0);
+   ~QDeclarativeDebugConnection();
 
-    bool isConnected() const;
-private:
-    QDeclarativeDebugConnectionPrivate *d;
-    friend class QDeclarativeDebugClient;
-    friend class QDeclarativeDebugClientPrivate;
+   bool isConnected() const;
+ private:
+   QDeclarativeDebugConnectionPrivate *d;
+   friend class QDeclarativeDebugClient;
+   friend class QDeclarativeDebugClientPrivate;
 };
 
 class QDeclarativeDebugClientPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDebugClient : public QObject
 {
-    CS_OBJECT(QDeclarativeDebugClient)
-    Q_DECLARE_PRIVATE(QDeclarativeDebugClient)
-    Q_DISABLE_COPY(QDeclarativeDebugClient)
+   CS_OBJECT(QDeclarativeDebugClient)
+   Q_DECLARE_PRIVATE(QDeclarativeDebugClient)
+   Q_DISABLE_COPY(QDeclarativeDebugClient)
 
-public:
-    enum Status { NotConnected, Unavailable, Enabled };
+ public:
+   enum Status { NotConnected, Unavailable, Enabled };
 
-    QDeclarativeDebugClient(const QString &, QDeclarativeDebugConnection *parent);
-    ~QDeclarativeDebugClient();
+   QDeclarativeDebugClient(const QString &, QDeclarativeDebugConnection *parent);
+   ~QDeclarativeDebugClient();
 
-    QString name() const;
+   QString name() const;
 
-    Status status() const;
+   Status status() const;
 
-    void sendMessage(const QByteArray &);
+   void sendMessage(const QByteArray &);
 
-protected:
-    virtual void statusChanged(Status);
-    virtual void messageReceived(const QByteArray &);
+ protected:
+   virtual void statusChanged(Status);
+   virtual void messageReceived(const QByteArray &);
 
-	 QScopedPointer<QDeclarativeDebugClientPrivate> d_ptr;
+   QScopedPointer<QDeclarativeDebugClientPrivate> d_ptr;
 
-private:
-    friend class QDeclarativeDebugConnection;
-    friend class QDeclarativeDebugConnectionPrivate;
+ private:
+   friend class QDeclarativeDebugConnection;
+   friend class QDeclarativeDebugConnectionPrivate;
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QDECLARATIVEDEBUGCLIENT_H

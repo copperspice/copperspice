@@ -35,6 +35,7 @@ QT_BEGIN_NAMESPACE
 
 template <typename T>
 class QFutureWatcher;
+
 template <>
 class QFutureWatcher<void>;
 

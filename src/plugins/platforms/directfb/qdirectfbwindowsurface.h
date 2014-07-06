@@ -26,11 +26,10 @@
 #ifndef QWINDOWSURFACE_DIRECTFB_H
 #define QWINDOWSURFACE_DIRECTFB_H
 
-#include <QtGui/private/qwindowsurface_p.h>
-#include <private/qpixmap_blitter_p.h>
+#include <qwindowsurface_p.h>
+#include <qpixmap_blitter_p.h>
 #include <directfb.h>
-
-#include "qdirectfbconvenience.h"
+#include <qdirectfbconvenience.h>
 
 QT_BEGIN_NAMESPACE
 

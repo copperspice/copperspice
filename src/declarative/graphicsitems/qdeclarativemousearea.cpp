@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -36,8 +36,8 @@ QT_BEGIN_NAMESPACE
 static const int PressAndHoldDelay = 800;
 
 QDeclarativeDrag::QDeclarativeDrag(QObject *parent)
-: QObject(parent), _target(0), _axis(XandYAxis), _xmin(-FLT_MAX), _xmax(FLT_MAX), _ymin(-FLT_MAX), _ymax(FLT_MAX),
-_active(false), _filterChildren(false)
+   : QObject(parent), _target(0), _axis(XandYAxis), _xmin(-FLT_MAX), _xmax(FLT_MAX), _ymin(-FLT_MAX), _ymax(FLT_MAX),
+     _active(false), _filterChildren(false)
 {
 }
 
@@ -47,119 +47,128 @@ QDeclarativeDrag::~QDeclarativeDrag()
 
 QGraphicsObject *QDeclarativeDrag::target() const
 {
-    return _target;
+   return _target;
 }
 
 void QDeclarativeDrag::setTarget(QGraphicsObject *t)
 {
-    if (_target == t)
-        return;
-    _target = t;
-    emit targetChanged();
+   if (_target == t) {
+      return;
+   }
+   _target = t;
+   emit targetChanged();
 }
 
 void QDeclarativeDrag::resetTarget()
 {
-    if (!_target)
-        return;
-    _target = 0;
-    emit targetChanged();
+   if (!_target) {
+      return;
+   }
+   _target = 0;
+   emit targetChanged();
 }
 
 QDeclarativeDrag::Axis QDeclarativeDrag::axis() const
 {
-    return _axis;
+   return _axis;
 }
 
 void QDeclarativeDrag::setAxis(QDeclarativeDrag::Axis a)
 {
-    if (_axis == a)
-        return;
-    _axis = a;
-    emit axisChanged();
+   if (_axis == a) {
+      return;
+   }
+   _axis = a;
+   emit axisChanged();
 }
 
 qreal QDeclarativeDrag::xmin() const
 {
-    return _xmin;
+   return _xmin;
 }
 
 void QDeclarativeDrag::setXmin(qreal m)
 {
-    if (_xmin == m)
-        return;
-    _xmin = m;
-    emit minimumXChanged();
+   if (_xmin == m) {
+      return;
+   }
+   _xmin = m;
+   emit minimumXChanged();
 }
 
 qreal QDeclarativeDrag::xmax() const
 {
-    return _xmax;
+   return _xmax;
 }
 
 void QDeclarativeDrag::setXmax(qreal m)
 {
-    if (_xmax == m)
-        return;
-    _xmax = m;
-    emit maximumXChanged();
+   if (_xmax == m) {
+      return;
+   }
+   _xmax = m;
+   emit maximumXChanged();
 }
 
 qreal QDeclarativeDrag::ymin() const
 {
-    return _ymin;
+   return _ymin;
 }
 
 void QDeclarativeDrag::setYmin(qreal m)
 {
-    if (_ymin == m)
-        return;
-    _ymin = m;
-    emit minimumYChanged();
+   if (_ymin == m) {
+      return;
+   }
+   _ymin = m;
+   emit minimumYChanged();
 }
 
 qreal QDeclarativeDrag::ymax() const
 {
-    return _ymax;
+   return _ymax;
 }
 
 void QDeclarativeDrag::setYmax(qreal m)
 {
-    if (_ymax == m)
-        return;
-    _ymax = m;
-    emit maximumYChanged();
+   if (_ymax == m) {
+      return;
+   }
+   _ymax = m;
+   emit maximumYChanged();
 }
 
 bool QDeclarativeDrag::active() const
 {
-    return _active;
+   return _active;
 }
 
 void QDeclarativeDrag::setActive(bool drag)
 {
-    if (_active == drag)
-        return;
-    _active = drag;
-    emit activeChanged();
+   if (_active == drag) {
+      return;
+   }
+   _active = drag;
+   emit activeChanged();
 }
 
 bool QDeclarativeDrag::filterChildren() const
 {
-    return _filterChildren;
+   return _filterChildren;
 }
 
 void QDeclarativeDrag::setFilterChildren(bool filter)
 {
-    if (_filterChildren == filter)
-        return;
-    _filterChildren = filter;
-    emit filterChildrenChanged();
+   if (_filterChildren == filter) {
+      return;
+   }
+   _filterChildren = filter;
+   emit filterChildrenChanged();
 }
 
 QDeclarativeMouseAreaPrivate::~QDeclarativeMouseAreaPrivate()
 {
-    delete drag;
+   delete drag;
 }
 
 /*!
@@ -339,10 +348,10 @@ QDeclarativeMouseAreaPrivate::~QDeclarativeMouseAreaPrivate()
 */
 
 QDeclarativeMouseArea::QDeclarativeMouseArea(QDeclarativeItem *parent)
-  : QDeclarativeItem(*(new QDeclarativeMouseAreaPrivate), parent)
+   : QDeclarativeItem(*(new QDeclarativeMouseAreaPrivate), parent)
 {
-    Q_D(QDeclarativeMouseArea);
-    d->init();
+   Q_D(QDeclarativeMouseArea);
+   d->init();
 }
 
 QDeclarativeMouseArea::~QDeclarativeMouseArea()
@@ -370,14 +379,14 @@ QDeclarativeMouseArea::~QDeclarativeMouseArea()
 */
 qreal QDeclarativeMouseArea::mouseX() const
 {
-    Q_D(const QDeclarativeMouseArea);
-    return d->lastPos.x();
+   Q_D(const QDeclarativeMouseArea);
+   return d->lastPos.x();
 }
 
 qreal QDeclarativeMouseArea::mouseY() const
 {
-    Q_D(const QDeclarativeMouseArea);
-    return d->lastPos.y();
+   Q_D(const QDeclarativeMouseArea);
+   return d->lastPos.y();
 }
 
 /*!
@@ -388,17 +397,17 @@ qreal QDeclarativeMouseArea::mouseY() const
 */
 bool QDeclarativeMouseArea::isEnabled() const
 {
-    Q_D(const QDeclarativeMouseArea);
-    return d->absorb;
+   Q_D(const QDeclarativeMouseArea);
+   return d->absorb;
 }
 
 void QDeclarativeMouseArea::setEnabled(bool a)
 {
-    Q_D(QDeclarativeMouseArea);
-    if (a != d->absorb) {
-        d->absorb = a;
-        emit enabledChanged();
-    }
+   Q_D(QDeclarativeMouseArea);
+   if (a != d->absorb) {
+      d->absorb = a;
+      emit enabledChanged();
+   }
 }
 
 /*!
@@ -420,18 +429,18 @@ void QDeclarativeMouseArea::setEnabled(bool a)
 */
 bool QDeclarativeMouseArea::preventStealing() const
 {
-    Q_D(const QDeclarativeMouseArea);
-    return d->preventStealing;
+   Q_D(const QDeclarativeMouseArea);
+   return d->preventStealing;
 }
 
 void QDeclarativeMouseArea::setPreventStealing(bool prevent)
 {
-    Q_D(QDeclarativeMouseArea);
-    if (prevent != d->preventStealing) {
-        d->preventStealing = prevent;
-        setKeepMouseGrab(d->preventStealing && d->absorb);
-        emit preventStealingChanged();
-    }
+   Q_D(QDeclarativeMouseArea);
+   if (prevent != d->preventStealing) {
+      d->preventStealing = prevent;
+      setKeepMouseGrab(d->preventStealing && d->absorb);
+      emit preventStealingChanged();
+   }
 }
 
 /*!
@@ -453,336 +462,353 @@ void QDeclarativeMouseArea::setPreventStealing(bool prevent)
 */
 Qt::MouseButtons QDeclarativeMouseArea::pressedButtons() const
 {
-    Q_D(const QDeclarativeMouseArea);
-    return d->lastButtons;
+   Q_D(const QDeclarativeMouseArea);
+   return d->lastButtons;
 }
 
 void QDeclarativeMouseArea::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_D(QDeclarativeMouseArea);
-    d->moved = false;
-    d->stealMouse = d->preventStealing;
-    if (!d->absorb)
-        QDeclarativeItem::mousePressEvent(event);
-    else {
-        d->longPress = false;
-        d->saveEvent(event);
-        if (d->drag)
-            d->drag->setActive(false);
-        setHovered(true);
-        d->startScene = event->scenePos();
-        // we should only start timer if pressAndHold is connected to.
-        if (d->isPressAndHoldConnected())
-            d->pressAndHoldTimer.start(PressAndHoldDelay, this);
-        setKeepMouseGrab(d->stealMouse);
-        event->setAccepted(setPressed(true));
-    }
+   Q_D(QDeclarativeMouseArea);
+   d->moved = false;
+   d->stealMouse = d->preventStealing;
+   if (!d->absorb) {
+      QDeclarativeItem::mousePressEvent(event);
+   } else {
+      d->longPress = false;
+      d->saveEvent(event);
+      if (d->drag) {
+         d->drag->setActive(false);
+      }
+      setHovered(true);
+      d->startScene = event->scenePos();
+      // we should only start timer if pressAndHold is connected to.
+      if (d->isPressAndHoldConnected()) {
+         d->pressAndHoldTimer.start(PressAndHoldDelay, this);
+      }
+      setKeepMouseGrab(d->stealMouse);
+      event->setAccepted(setPressed(true));
+   }
 }
 
 void QDeclarativeMouseArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_D(QDeclarativeMouseArea);
-    if (!d->absorb) {
-        QDeclarativeItem::mouseMoveEvent(event);
-        return;
-    }
+   Q_D(QDeclarativeMouseArea);
+   if (!d->absorb) {
+      QDeclarativeItem::mouseMoveEvent(event);
+      return;
+   }
 
-    d->saveEvent(event);
+   d->saveEvent(event);
 
-    // ### we should skip this if these signals aren't used
-    // ### can GV handle this for us?
-    bool contains = boundingRect().contains(d->lastPos);
-    if (d->hovered && !contains)
-        setHovered(false);
-    else if (!d->hovered && contains)
-        setHovered(true);
+   // ### we should skip this if these signals aren't used
+   // ### can GV handle this for us?
+   bool contains = boundingRect().contains(d->lastPos);
+   if (d->hovered && !contains) {
+      setHovered(false);
+   } else if (!d->hovered && contains) {
+      setHovered(true);
+   }
 
-    if (d->drag && d->drag->target()) {
-        if (!d->moved) {
-            d->startX = drag()->target()->x();
-            d->startY = drag()->target()->y();
-        }
+   if (d->drag && d->drag->target()) {
+      if (!d->moved) {
+         d->startX = drag()->target()->x();
+         d->startY = drag()->target()->y();
+      }
 
-        QPointF startLocalPos;
-        QPointF curLocalPos;
-        if (drag()->target()->parentItem()) {
-            startLocalPos = drag()->target()->parentItem()->mapFromScene(d->startScene);
-            curLocalPos = drag()->target()->parentItem()->mapFromScene(event->scenePos());
-        } else {
-            startLocalPos = d->startScene;
-            curLocalPos = event->scenePos();
-        }
+      QPointF startLocalPos;
+      QPointF curLocalPos;
+      if (drag()->target()->parentItem()) {
+         startLocalPos = drag()->target()->parentItem()->mapFromScene(d->startScene);
+         curLocalPos = drag()->target()->parentItem()->mapFromScene(event->scenePos());
+      } else {
+         startLocalPos = d->startScene;
+         curLocalPos = event->scenePos();
+      }
 
-        if (keepMouseGrab() && d->stealMouse)
-            d->drag->setActive(true);
+      if (keepMouseGrab() && d->stealMouse) {
+         d->drag->setActive(true);
+      }
 
-        bool dragX = drag()->axis() & QDeclarativeDrag::XAxis;
-        bool dragY = drag()->axis() & QDeclarativeDrag::YAxis;
+      bool dragX = drag()->axis() & QDeclarativeDrag::XAxis;
+      bool dragY = drag()->axis() & QDeclarativeDrag::YAxis;
 
-        const qreal x = dragX
-                ? qBound(d->drag->xmin(), d->startX + curLocalPos.x() - startLocalPos.x(), d->drag->xmax())
-                : d->startX;
-        const qreal y = dragY
-                ? qBound(d->drag->ymin(), d->startY + curLocalPos.y() - startLocalPos.y(), d->drag->ymax())
-                : d->startY;
+      const qreal x = dragX
+                      ? qBound(d->drag->xmin(), d->startX + curLocalPos.x() - startLocalPos.x(), d->drag->xmax())
+                      : d->startX;
+      const qreal y = dragY
+                      ? qBound(d->drag->ymin(), d->startY + curLocalPos.y() - startLocalPos.y(), d->drag->ymax())
+                      : d->startY;
 
-        if (d->drag->active()) {
-            if (dragX && dragY)
-                d->drag->target()->setPos(x, y);
-            else if (dragX)
-                d->drag->target()->setX(x);
-            else if (dragY)
-                d->drag->target()->setY(y);
-        }
+      if (d->drag->active()) {
+         if (dragX && dragY) {
+            d->drag->target()->setPos(x, y);
+         } else if (dragX) {
+            d->drag->target()->setX(x);
+         } else if (dragY) {
+            d->drag->target()->setY(y);
+         }
+      }
 
-        if (!keepMouseGrab()) {
-            const int dragThreshold = QApplication::startDragDistance();
+      if (!keepMouseGrab()) {
+         const int dragThreshold = QApplication::startDragDistance();
 
-            if (qAbs(x - d->startX) > dragThreshold || qAbs(y - d->startY) > dragThreshold) {
-                setKeepMouseGrab(true);
-                d->stealMouse = true;
-            }
-        }
+         if (qAbs(x - d->startX) > dragThreshold || qAbs(y - d->startY) > dragThreshold) {
+            setKeepMouseGrab(true);
+            d->stealMouse = true;
+         }
+      }
 
-        d->moved = true;
-    }
-    QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), d->lastButton, d->lastButtons, d->lastModifiers, false, d->longPress);
-    emit mousePositionChanged(&me);
-    me.setX(d->lastPos.x());
-    me.setY(d->lastPos.y());
-    emit positionChanged(&me);
+      d->moved = true;
+   }
+   QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), d->lastButton, d->lastButtons, d->lastModifiers, false,
+                             d->longPress);
+   emit mousePositionChanged(&me);
+   me.setX(d->lastPos.x());
+   me.setY(d->lastPos.y());
+   emit positionChanged(&me);
 }
 
 
 void QDeclarativeMouseArea::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_D(QDeclarativeMouseArea);
-    d->stealMouse = false;
-    if (!d->absorb) {
-        QDeclarativeItem::mouseReleaseEvent(event);
-    } else {
-        d->saveEvent(event);
-        setPressed(false);
-        if (d->drag)
-            d->drag->setActive(false);
-        // If we don't accept hover, we need to reset containsMouse.
-        if (!acceptHoverEvents())
-            setHovered(false);
-        QGraphicsScene *s = scene();
-        if (s && s->mouseGrabberItem() == this)
-            ungrabMouse();
-        setKeepMouseGrab(false);
-    }
-    d->doubleClick = false;
+   Q_D(QDeclarativeMouseArea);
+   d->stealMouse = false;
+   if (!d->absorb) {
+      QDeclarativeItem::mouseReleaseEvent(event);
+   } else {
+      d->saveEvent(event);
+      setPressed(false);
+      if (d->drag) {
+         d->drag->setActive(false);
+      }
+      // If we don't accept hover, we need to reset containsMouse.
+      if (!acceptHoverEvents()) {
+         setHovered(false);
+      }
+      QGraphicsScene *s = scene();
+      if (s && s->mouseGrabberItem() == this) {
+         ungrabMouse();
+      }
+      setKeepMouseGrab(false);
+   }
+   d->doubleClick = false;
 }
 
 void QDeclarativeMouseArea::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_D(QDeclarativeMouseArea);
-    if (!d->absorb) {
-        QDeclarativeItem::mouseDoubleClickEvent(event);
-    } else {
-        if (d->isDoubleClickConnected())
-            d->doubleClick = true;
-        d->saveEvent(event);
-        QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), d->lastButton, d->lastButtons, d->lastModifiers, true, false);
-        me.setAccepted(d->isDoubleClickConnected());
-        emit this->doubleClicked(&me);
-        QDeclarativeItem::mouseDoubleClickEvent(event);
-    }
+   Q_D(QDeclarativeMouseArea);
+   if (!d->absorb) {
+      QDeclarativeItem::mouseDoubleClickEvent(event);
+   } else {
+      if (d->isDoubleClickConnected()) {
+         d->doubleClick = true;
+      }
+      d->saveEvent(event);
+      QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), d->lastButton, d->lastButtons, d->lastModifiers, true, false);
+      me.setAccepted(d->isDoubleClickConnected());
+      emit this->doubleClicked(&me);
+      QDeclarativeItem::mouseDoubleClickEvent(event);
+   }
 }
 
 void QDeclarativeMouseArea::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    Q_D(QDeclarativeMouseArea);
-    if (!d->absorb)
-        QDeclarativeItem::hoverEnterEvent(event);
-    else {
-        d->lastPos = event->pos();
-        setHovered(true);
-        QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), Qt::NoButton, Qt::NoButton, event->modifiers(), false, false);
-        emit mousePositionChanged(&me);
-    }
+   Q_D(QDeclarativeMouseArea);
+   if (!d->absorb) {
+      QDeclarativeItem::hoverEnterEvent(event);
+   } else {
+      d->lastPos = event->pos();
+      setHovered(true);
+      QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), Qt::NoButton, Qt::NoButton, event->modifiers(), false, false);
+      emit mousePositionChanged(&me);
+   }
 }
 
 void QDeclarativeMouseArea::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
-    Q_D(QDeclarativeMouseArea);
-    if (!d->absorb) {
-        QDeclarativeItem::hoverMoveEvent(event);
-    } else {
-        d->lastPos = event->pos();
-        QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), Qt::NoButton, Qt::NoButton, event->modifiers(), false, false);
-        emit mousePositionChanged(&me);
-        me.setX(d->lastPos.x());
-        me.setY(d->lastPos.y());
-        emit positionChanged(&me);
-    }
+   Q_D(QDeclarativeMouseArea);
+   if (!d->absorb) {
+      QDeclarativeItem::hoverMoveEvent(event);
+   } else {
+      d->lastPos = event->pos();
+      QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), Qt::NoButton, Qt::NoButton, event->modifiers(), false, false);
+      emit mousePositionChanged(&me);
+      me.setX(d->lastPos.x());
+      me.setY(d->lastPos.y());
+      emit positionChanged(&me);
+   }
 }
 
 void QDeclarativeMouseArea::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    Q_D(QDeclarativeMouseArea);
-    if (!d->absorb)
-        QDeclarativeItem::hoverLeaveEvent(event);
-    else
-        setHovered(false);
+   Q_D(QDeclarativeMouseArea);
+   if (!d->absorb) {
+      QDeclarativeItem::hoverLeaveEvent(event);
+   } else {
+      setHovered(false);
+   }
 }
 
 #ifndef QT_NO_CONTEXTMENU
 void QDeclarativeMouseArea::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    bool acceptsContextMenuButton;
+   bool acceptsContextMenuButton;
 
-    acceptsContextMenuButton = acceptedButtons() & Qt::RightButton;
+   acceptsContextMenuButton = acceptedButtons() & Qt::RightButton;
 
-    if (isEnabled() && event->reason() == QGraphicsSceneContextMenuEvent::Mouse
-        && acceptsContextMenuButton) {
-        // Do not let the context menu event propagate to items behind.
-        return;
-    }
+   if (isEnabled() && event->reason() == QGraphicsSceneContextMenuEvent::Mouse
+         && acceptsContextMenuButton) {
+      // Do not let the context menu event propagate to items behind.
+      return;
+   }
 
-    QDeclarativeItem::contextMenuEvent(event);
+   QDeclarativeItem::contextMenuEvent(event);
 }
 #endif // QT_NO_CONTEXTMENU
 
 bool QDeclarativeMouseArea::sceneEvent(QEvent *event)
 {
-    bool rv = QDeclarativeItem::sceneEvent(event);
-    if (event->type() == QEvent::UngrabMouse) {
-        Q_D(QDeclarativeMouseArea);
-        if (d->pressed) {
-            // if our mouse grab has been removed (probably by Flickable), fix our
-            // state
-            d->pressed = false;
-            d->stealMouse = false;
-            setKeepMouseGrab(false);
-            emit canceled();
-            emit pressedChanged();
-            if (d->hovered) {
-                d->hovered = false;
-                emit hoveredChanged();
-            }
-        }
-    }
-    return rv;
+   bool rv = QDeclarativeItem::sceneEvent(event);
+   if (event->type() == QEvent::UngrabMouse) {
+      Q_D(QDeclarativeMouseArea);
+      if (d->pressed) {
+         // if our mouse grab has been removed (probably by Flickable), fix our
+         // state
+         d->pressed = false;
+         d->stealMouse = false;
+         setKeepMouseGrab(false);
+         emit canceled();
+         emit pressedChanged();
+         if (d->hovered) {
+            d->hovered = false;
+            emit hoveredChanged();
+         }
+      }
+   }
+   return rv;
 }
 
 bool QDeclarativeMouseArea::sendMouseEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_D(QDeclarativeMouseArea);
-    QGraphicsSceneMouseEvent mouseEvent(event->type());
-    QRectF myRect = mapToScene(QRectF(0, 0, width(), height())).boundingRect();
+   Q_D(QDeclarativeMouseArea);
+   QGraphicsSceneMouseEvent mouseEvent(event->type());
+   QRectF myRect = mapToScene(QRectF(0, 0, width(), height())).boundingRect();
 
-    QGraphicsScene *s = scene();
-    QDeclarativeItem *grabber = s ? qobject_cast<QDeclarativeItem*>(s->mouseGrabberItem()) : 0;
-    bool stealThisEvent = d->stealMouse;
-    if ((stealThisEvent || myRect.contains(event->scenePos().toPoint())) && (!grabber || !grabber->keepMouseGrab())) {
-        mouseEvent.setAccepted(false);
-        for (int i = 0x1; i <= 0x10; i <<= 1) {
-            if (event->buttons() & i) {
-                Qt::MouseButton button = Qt::MouseButton(i);
-                mouseEvent.setButtonDownPos(button, mapFromScene(event->buttonDownPos(button)));
-            }
-        }
-        mouseEvent.setScenePos(event->scenePos());
-        mouseEvent.setLastScenePos(event->lastScenePos());
-        mouseEvent.setPos(mapFromScene(event->scenePos()));
-        mouseEvent.setLastPos(mapFromScene(event->lastScenePos()));
+   QGraphicsScene *s = scene();
+   QDeclarativeItem *grabber = s ? qobject_cast<QDeclarativeItem *>(s->mouseGrabberItem()) : 0;
+   bool stealThisEvent = d->stealMouse;
+   if ((stealThisEvent || myRect.contains(event->scenePos().toPoint())) && (!grabber || !grabber->keepMouseGrab())) {
+      mouseEvent.setAccepted(false);
+      for (int i = 0x1; i <= 0x10; i <<= 1) {
+         if (event->buttons() & i) {
+            Qt::MouseButton button = Qt::MouseButton(i);
+            mouseEvent.setButtonDownPos(button, mapFromScene(event->buttonDownPos(button)));
+         }
+      }
+      mouseEvent.setScenePos(event->scenePos());
+      mouseEvent.setLastScenePos(event->lastScenePos());
+      mouseEvent.setPos(mapFromScene(event->scenePos()));
+      mouseEvent.setLastPos(mapFromScene(event->lastScenePos()));
 
-        switch(mouseEvent.type()) {
-        case QEvent::GraphicsSceneMouseMove:
+      switch (mouseEvent.type()) {
+         case QEvent::GraphicsSceneMouseMove:
             mouseMoveEvent(&mouseEvent);
             break;
-        case QEvent::GraphicsSceneMousePress:
+         case QEvent::GraphicsSceneMousePress:
             mousePressEvent(&mouseEvent);
             break;
-        case QEvent::GraphicsSceneMouseRelease:
+         case QEvent::GraphicsSceneMouseRelease:
             mouseReleaseEvent(&mouseEvent);
             break;
-        default:
+         default:
             break;
-        }
-        grabber = qobject_cast<QDeclarativeItem*>(s->mouseGrabberItem());
-        if (grabber && stealThisEvent && !grabber->keepMouseGrab() && grabber != this)
-            grabMouse();
+      }
+      grabber = qobject_cast<QDeclarativeItem *>(s->mouseGrabberItem());
+      if (grabber && stealThisEvent && !grabber->keepMouseGrab() && grabber != this) {
+         grabMouse();
+      }
 
-        return stealThisEvent;
-    }
-    if (mouseEvent.type() == QEvent::GraphicsSceneMouseRelease) {
-        if (d->pressed) {
-            d->pressed = false;
-            d->stealMouse = false;
-            if (s && s->mouseGrabberItem() == this)
-                ungrabMouse();
-            emit canceled();
-            emit pressedChanged();
-            if (d->hovered) {
-                d->hovered = false;
-                emit hoveredChanged();
-            }
-        }
-    }
-    return false;
+      return stealThisEvent;
+   }
+   if (mouseEvent.type() == QEvent::GraphicsSceneMouseRelease) {
+      if (d->pressed) {
+         d->pressed = false;
+         d->stealMouse = false;
+         if (s && s->mouseGrabberItem() == this) {
+            ungrabMouse();
+         }
+         emit canceled();
+         emit pressedChanged();
+         if (d->hovered) {
+            d->hovered = false;
+            emit hoveredChanged();
+         }
+      }
+   }
+   return false;
 }
 
 bool QDeclarativeMouseArea::sceneEventFilter(QGraphicsItem *i, QEvent *e)
 {
-    Q_D(QDeclarativeMouseArea);
-    if (!d->absorb || !isVisible() || !d->drag || !d->drag->filterChildren())
-        return QDeclarativeItem::sceneEventFilter(i, e);
-    switch (e->type()) {
-    case QEvent::GraphicsSceneMousePress:
-    case QEvent::GraphicsSceneMouseMove:
-    case QEvent::GraphicsSceneMouseRelease:
-        return sendMouseEvent(static_cast<QGraphicsSceneMouseEvent *>(e));
-    default:
-        break;
-    }
+   Q_D(QDeclarativeMouseArea);
+   if (!d->absorb || !isVisible() || !d->drag || !d->drag->filterChildren()) {
+      return QDeclarativeItem::sceneEventFilter(i, e);
+   }
+   switch (e->type()) {
+      case QEvent::GraphicsSceneMousePress:
+      case QEvent::GraphicsSceneMouseMove:
+      case QEvent::GraphicsSceneMouseRelease:
+         return sendMouseEvent(static_cast<QGraphicsSceneMouseEvent *>(e));
+      default:
+         break;
+   }
 
-    return QDeclarativeItem::sceneEventFilter(i, e);
+   return QDeclarativeItem::sceneEventFilter(i, e);
 }
 
 void QDeclarativeMouseArea::timerEvent(QTimerEvent *event)
 {
-    Q_D(QDeclarativeMouseArea);
-    if (event->timerId() == d->pressAndHoldTimer.timerId()) {
-        d->pressAndHoldTimer.stop();
-        bool dragged = d->drag && d->drag->active();
-        if (d->pressed && dragged == false && d->hovered == true) {
-            d->longPress = true;
-            QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), d->lastButton, d->lastButtons, d->lastModifiers, false, d->longPress);
-            emit pressAndHold(&me);
-        }
-    }
+   Q_D(QDeclarativeMouseArea);
+   if (event->timerId() == d->pressAndHoldTimer.timerId()) {
+      d->pressAndHoldTimer.stop();
+      bool dragged = d->drag && d->drag->active();
+      if (d->pressed && dragged == false && d->hovered == true) {
+         d->longPress = true;
+         QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), d->lastButton, d->lastButtons, d->lastModifiers, false,
+                                   d->longPress);
+         emit pressAndHold(&me);
+      }
+   }
 }
 
 void QDeclarativeMouseArea::geometryChanged(const QRectF &newGeometry,
-                                            const QRectF &oldGeometry)
+      const QRectF &oldGeometry)
 {
-    Q_D(QDeclarativeMouseArea);
-    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+   Q_D(QDeclarativeMouseArea);
+   QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 
-    if (d->lastScenePos.isNull)
-        d->lastScenePos = mapToScene(d->lastPos);
-    else if (newGeometry.x() != oldGeometry.x() || newGeometry.y() != oldGeometry.y())
-        d->lastPos = mapFromScene(d->lastScenePos);
+   if (d->lastScenePos.isNull) {
+      d->lastScenePos = mapToScene(d->lastPos);
+   } else if (newGeometry.x() != oldGeometry.x() || newGeometry.y() != oldGeometry.y()) {
+      d->lastPos = mapFromScene(d->lastScenePos);
+   }
 }
 
 QVariant QDeclarativeMouseArea::itemChange(GraphicsItemChange change,
-                                       const QVariant &value)
+      const QVariant &value)
 {
-    Q_D(QDeclarativeMouseArea);
-    switch (change) {
-    case ItemVisibleHasChanged:
-        if (acceptHoverEvents() && d->hovered != (isVisible() && isUnderMouse()))
+   Q_D(QDeclarativeMouseArea);
+   switch (change) {
+      case ItemVisibleHasChanged:
+         if (acceptHoverEvents() && d->hovered != (isVisible() && isUnderMouse())) {
             setHovered(!d->hovered);
-        break;
-    default:
-        break;
-    }
+         }
+         break;
+      default:
+         break;
+   }
 
-    return QDeclarativeItem::itemChange(change, value);
+   return QDeclarativeItem::itemChange(change, value);
 }
 
 /*!
@@ -798,19 +824,21 @@ QVariant QDeclarativeMouseArea::itemChange(GraphicsItemChange change,
 */
 bool QDeclarativeMouseArea::hoverEnabled() const
 {
-    return acceptHoverEvents();
+   return acceptHoverEvents();
 }
 
 void QDeclarativeMouseArea::setHoverEnabled(bool h)
 {
-    Q_D(QDeclarativeMouseArea);
-    if (h == acceptHoverEvents())
-        return;
+   Q_D(QDeclarativeMouseArea);
+   if (h == acceptHoverEvents()) {
+      return;
+   }
 
-    setAcceptHoverEvents(h);
-    emit hoverEnabledChanged();
-    if (d->hovered != isUnderMouse())
-        setHovered(!d->hovered);
+   setAcceptHoverEvents(h);
+   emit hoverEnabledChanged();
+   if (d->hovered != isUnderMouse()) {
+      setHovered(!d->hovered);
+   }
 }
 
 /*!
@@ -822,8 +850,8 @@ void QDeclarativeMouseArea::setHoverEnabled(bool h)
 */
 bool QDeclarativeMouseArea::hovered() const
 {
-    Q_D(const QDeclarativeMouseArea);
-    return d->hovered;
+   Q_D(const QDeclarativeMouseArea);
+   return d->hovered;
 }
 
 /*!
@@ -832,18 +860,18 @@ bool QDeclarativeMouseArea::hovered() const
 */
 bool QDeclarativeMouseArea::pressed() const
 {
-    Q_D(const QDeclarativeMouseArea);
-    return d->pressed;
+   Q_D(const QDeclarativeMouseArea);
+   return d->pressed;
 }
 
 void QDeclarativeMouseArea::setHovered(bool h)
 {
-    Q_D(QDeclarativeMouseArea);
-    if (d->hovered != h) {
-        d->hovered = h;
-        emit hoveredChanged();
-        d->hovered ? emit entered() : emit exited();
-    }
+   Q_D(QDeclarativeMouseArea);
+   if (d->hovered != h) {
+      d->hovered = h;
+      emit hoveredChanged();
+      d->hovered ? emit entered() : emit exited();
+   }
 }
 
 /*!
@@ -870,53 +898,57 @@ void QDeclarativeMouseArea::setHovered(bool h)
 */
 Qt::MouseButtons QDeclarativeMouseArea::acceptedButtons() const
 {
-    return acceptedMouseButtons();
+   return acceptedMouseButtons();
 }
 
 void QDeclarativeMouseArea::setAcceptedButtons(Qt::MouseButtons buttons)
 {
-    if (buttons != acceptedMouseButtons()) {
-        setAcceptedMouseButtons(buttons);
-        emit acceptedButtonsChanged();
-    }
+   if (buttons != acceptedMouseButtons()) {
+      setAcceptedMouseButtons(buttons);
+      emit acceptedButtonsChanged();
+   }
 }
 
 bool QDeclarativeMouseArea::setPressed(bool p)
 {
-    Q_D(QDeclarativeMouseArea);
-    bool dragged = d->drag && d->drag->active();
-    bool isclick = d->pressed == true && p == false && dragged == false && d->hovered == true;
+   Q_D(QDeclarativeMouseArea);
+   bool dragged = d->drag && d->drag->active();
+   bool isclick = d->pressed == true && p == false && dragged == false && d->hovered == true;
 
-    if (d->pressed != p) {
-        d->pressed = p;
-        QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), d->lastButton, d->lastButtons, d->lastModifiers, isclick, d->longPress);
-        if (d->pressed) {
-            if (!d->doubleClick)
-                emit pressed(&me);
-            me.setX(d->lastPos.x());
-            me.setY(d->lastPos.y());
-            emit mousePositionChanged(&me);
-            emit pressedChanged();
-        } else {
-            emit released(&me);
-            me.setX(d->lastPos.x());
-            me.setY(d->lastPos.y());
-            emit pressedChanged();
-            if (isclick && !d->longPress && !d->doubleClick)
-                emit clicked(&me);
-        }
+   if (d->pressed != p) {
+      d->pressed = p;
+      QDeclarativeMouseEvent me(d->lastPos.x(), d->lastPos.y(), d->lastButton, d->lastButtons, d->lastModifiers, isclick,
+                                d->longPress);
+      if (d->pressed) {
+         if (!d->doubleClick) {
+            emit pressed(&me);
+         }
+         me.setX(d->lastPos.x());
+         me.setY(d->lastPos.y());
+         emit mousePositionChanged(&me);
+         emit pressedChanged();
+      } else {
+         emit released(&me);
+         me.setX(d->lastPos.x());
+         me.setY(d->lastPos.y());
+         emit pressedChanged();
+         if (isclick && !d->longPress && !d->doubleClick) {
+            emit clicked(&me);
+         }
+      }
 
-        return me.isAccepted();
-    }
-    return false;
+      return me.isAccepted();
+   }
+   return false;
 }
 
 QDeclarativeDrag *QDeclarativeMouseArea::drag()
 {
-    Q_D(QDeclarativeMouseArea);
-    if (!d->drag)
-        d->drag = new QDeclarativeDrag;
-    return d->drag;
+   Q_D(QDeclarativeMouseArea);
+   if (!d->drag) {
+      d->drag = new QDeclarativeDrag;
+   }
+   return d->drag;
 }
 
 /*!
@@ -943,10 +975,10 @@ QDeclarativeDrag *QDeclarativeMouseArea::drag()
 
     \snippet doc/src/snippets/declarative/mousearea/mousearea.qml drag
 
-    \note Items cannot be dragged if they are anchored for the requested 
+    \note Items cannot be dragged if they are anchored for the requested
     \c drag.axis. For example, if \c anchors.left or \c anchors.right was set
     for \c rect in the above example, it cannot be dragged along the X-axis.
-    This can be avoided by settng the anchor value to \c undefined in 
+    This can be avoided by settng the anchor value to \c undefined in
     an \l onPressed handler.
 
     If \c drag.filterChildren is set to true, a drag can override descendant MouseAreas.  This

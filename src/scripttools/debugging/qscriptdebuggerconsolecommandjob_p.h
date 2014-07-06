@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,23 +46,23 @@ class QScriptMessageHandlerInterface;
 
 class QScriptDebuggerConsoleCommandJobPrivate;
 class QScriptDebuggerConsoleCommandJob
-    : public QScriptDebuggerCommandSchedulerJob
+   : public QScriptDebuggerCommandSchedulerJob
 {
-public:
-    QScriptDebuggerConsoleCommandJob(QScriptDebuggerConsole *console,
-                                     QScriptMessageHandlerInterface *messageHandler,
-                                     QScriptDebuggerCommandSchedulerInterface *scheduler);
-    ~QScriptDebuggerConsoleCommandJob();
+ public:
+   QScriptDebuggerConsoleCommandJob(QScriptDebuggerConsole *console,
+                                    QScriptMessageHandlerInterface *messageHandler,
+                                    QScriptDebuggerCommandSchedulerInterface *scheduler);
+   ~QScriptDebuggerConsoleCommandJob();
 
-protected:
-    QScriptDebuggerConsoleCommandJob(QScriptDebuggerConsoleCommandJobPrivate &dd,
-                                     QScriptDebuggerConsole *console,
-                                     QScriptMessageHandlerInterface *messageHandler,
-                                     QScriptDebuggerCommandSchedulerInterface *scheduler);
+ protected:
+   QScriptDebuggerConsoleCommandJob(QScriptDebuggerConsoleCommandJobPrivate &dd,
+                                    QScriptDebuggerConsole *console,
+                                    QScriptMessageHandlerInterface *messageHandler,
+                                    QScriptDebuggerCommandSchedulerInterface *scheduler);
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerConsoleCommandJob)
-    Q_DISABLE_COPY(QScriptDebuggerConsoleCommandJob)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerConsoleCommandJob)
+   Q_DISABLE_COPY(QScriptDebuggerConsoleCommandJob)
 };
 
 QT_END_NAMESPACE

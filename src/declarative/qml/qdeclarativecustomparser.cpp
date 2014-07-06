@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -78,146 +78,151 @@ using namespace QDeclarativeParser;
     The \a object will be an instance of the TypeClass specified by QML_REGISTER_CUSTOM_TYPE.
 */
 
-QDeclarativeCustomParserNode 
+QDeclarativeCustomParserNode
 QDeclarativeCustomParserNodePrivate::fromObject(QDeclarativeParser::Object *root)
 {
-    QDeclarativeCustomParserNode rootNode;
-    rootNode.d->name = root->typeName;
-    rootNode.d->location = root->location.start;
+   QDeclarativeCustomParserNode rootNode;
+   rootNode.d->name = root->typeName;
+   rootNode.d->location = root->location.start;
 
-    for(QHash<QByteArray, Property *>::Iterator iter = root->properties.begin();
-        iter != root->properties.end();
-        ++iter) {
+   for (QHash<QByteArray, Property *>::Iterator iter = root->properties.begin();
+         iter != root->properties.end();
+         ++iter) {
 
-        Property *p = *iter;
+      Property *p = *iter;
 
-        rootNode.d->properties << fromProperty(p);
-    }
+      rootNode.d->properties << fromProperty(p);
+   }
 
-    if (root->defaultProperty)
-        rootNode.d->properties << fromProperty(root->defaultProperty);
+   if (root->defaultProperty) {
+      rootNode.d->properties << fromProperty(root->defaultProperty);
+   }
 
-    return rootNode;
+   return rootNode;
 }
 
-QDeclarativeCustomParserProperty 
+QDeclarativeCustomParserProperty
 QDeclarativeCustomParserNodePrivate::fromProperty(QDeclarativeParser::Property *p)
 {
-    QDeclarativeCustomParserProperty prop;
-    prop.d->name = p->name;
-    prop.d->isList = (p->values.count() > 1);
-    prop.d->location = p->location.start;
+   QDeclarativeCustomParserProperty prop;
+   prop.d->name = p->name;
+   prop.d->isList = (p->values.count() > 1);
+   prop.d->location = p->location.start;
 
-    if (p->value) {
-        QDeclarativeCustomParserNode node = fromObject(p->value);
-        QList<QDeclarativeCustomParserProperty> props = node.properties();
-        for (int ii = 0; ii < props.count(); ++ii)
-            prop.d->values << QVariant::fromValue(props.at(ii));
-    } else {
-        for(int ii = 0; ii < p->values.count(); ++ii) {
-            QDeclarativeParser::Value *v = p->values.at(ii);
-            v->type = QDeclarativeParser::Value::Literal;
+   if (p->value) {
+      QDeclarativeCustomParserNode node = fromObject(p->value);
+      QList<QDeclarativeCustomParserProperty> props = node.properties();
+      for (int ii = 0; ii < props.count(); ++ii) {
+         prop.d->values << QVariant::fromValue(props.at(ii));
+      }
+   } else {
+      for (int ii = 0; ii < p->values.count(); ++ii) {
+         QDeclarativeParser::Value *v = p->values.at(ii);
+         v->type = QDeclarativeParser::Value::Literal;
 
-            if(v->object) {
-                QDeclarativeCustomParserNode node = fromObject(v->object);
-                prop.d->values << QVariant::fromValue(node);
-            } else {
-                prop.d->values << QVariant::fromValue(v->value);
-            }
+         if (v->object) {
+            QDeclarativeCustomParserNode node = fromObject(v->object);
+            prop.d->values << QVariant::fromValue(node);
+         } else {
+            prop.d->values << QVariant::fromValue(v->value);
+         }
 
-        }
-    }
+      }
+   }
 
-    return prop;
+   return prop;
 }
 
 QDeclarativeCustomParserNode::QDeclarativeCustomParserNode()
-: d(new QDeclarativeCustomParserNodePrivate)
+   : d(new QDeclarativeCustomParserNodePrivate)
 {
 }
 
 QDeclarativeCustomParserNode::QDeclarativeCustomParserNode(const QDeclarativeCustomParserNode &other)
-: d(new QDeclarativeCustomParserNodePrivate)
+   : d(new QDeclarativeCustomParserNodePrivate)
 {
-    *this = other;
+   *this = other;
 }
 
 QDeclarativeCustomParserNode &QDeclarativeCustomParserNode::operator=(const QDeclarativeCustomParserNode &other)
 {
-    d->name = other.d->name;
-    d->properties = other.d->properties;
-    d->location = other.d->location;
-    return *this;
+   d->name = other.d->name;
+   d->properties = other.d->properties;
+   d->location = other.d->location;
+   return *this;
 }
 
 QDeclarativeCustomParserNode::~QDeclarativeCustomParserNode()
 {
-    delete d; d = 0;
+   delete d;
+   d = 0;
 }
 
 QByteArray QDeclarativeCustomParserNode::name() const
 {
-    return d->name;
+   return d->name;
 }
 
 QList<QDeclarativeCustomParserProperty> QDeclarativeCustomParserNode::properties() const
 {
-    return d->properties;
+   return d->properties;
 }
 
 QDeclarativeParser::Location QDeclarativeCustomParserNode::location() const
 {
-    return d->location;
+   return d->location;
 }
 
 QDeclarativeCustomParserProperty::QDeclarativeCustomParserProperty()
-: d(new QDeclarativeCustomParserPropertyPrivate)
+   : d(new QDeclarativeCustomParserPropertyPrivate)
 {
 }
 
 QDeclarativeCustomParserProperty::QDeclarativeCustomParserProperty(const QDeclarativeCustomParserProperty &other)
-: d(new QDeclarativeCustomParserPropertyPrivate)
+   : d(new QDeclarativeCustomParserPropertyPrivate)
 {
-    *this = other;
+   *this = other;
 }
 
-QDeclarativeCustomParserProperty &QDeclarativeCustomParserProperty::operator=(const QDeclarativeCustomParserProperty &other)
+QDeclarativeCustomParserProperty &QDeclarativeCustomParserProperty::operator=(const QDeclarativeCustomParserProperty
+      &other)
 {
-    d->name = other.d->name;
-    d->isList = other.d->isList;
-    d->values = other.d->values;
-    d->location = other.d->location;
-    return *this;
+   d->name = other.d->name;
+   d->isList = other.d->isList;
+   d->values = other.d->values;
+   d->location = other.d->location;
+   return *this;
 }
 
 QDeclarativeCustomParserProperty::~QDeclarativeCustomParserProperty()
 {
-    delete d; d = 0;
+   delete d;
+   d = 0;
 }
 
 QByteArray QDeclarativeCustomParserProperty::name() const
 {
-    return d->name;
+   return d->name;
 }
 
 bool QDeclarativeCustomParserProperty::isList() const
 {
-    return d->isList;
+   return d->isList;
 }
 
 QDeclarativeParser::Location QDeclarativeCustomParserProperty::location() const
 {
-    return d->location;
+   return d->location;
 }
 
 QList<QVariant> QDeclarativeCustomParserProperty::assignedValues() const
 {
-    return d->values;
+   return d->values;
 }
 
 void QDeclarativeCustomParser::clearErrors()
 {
-    exceptions.clear();
+   exceptions.clear();
 }
 
 /*!
@@ -227,15 +232,15 @@ void QDeclarativeCustomParser::clearErrors()
 
     An error is generated referring to the position of the element in the source file.
 */
-void QDeclarativeCustomParser::error(const QString& description)
+void QDeclarativeCustomParser::error(const QString &description)
 {
-    Q_ASSERT(object);
-    QDeclarativeError error;
-    QString exceptionDescription;
-    error.setLine(object->location.start.line);
-    error.setColumn(object->location.start.column);
-    error.setDescription(description);
-    exceptions << error;
+   Q_ASSERT(object);
+   QDeclarativeError error;
+   QString exceptionDescription;
+   error.setLine(object->location.start.line);
+   error.setColumn(object->location.start.column);
+   error.setDescription(description);
+   exceptions << error;
 }
 
 /*!
@@ -243,14 +248,14 @@ void QDeclarativeCustomParser::error(const QString& description)
 
     An error is generated referring to the position of \a node in the source file.
 */
-void QDeclarativeCustomParser::error(const QDeclarativeCustomParserProperty& prop, const QString& description)
+void QDeclarativeCustomParser::error(const QDeclarativeCustomParserProperty &prop, const QString &description)
 {
-    QDeclarativeError error;
-    QString exceptionDescription;
-    error.setLine(prop.location().line);
-    error.setColumn(prop.location().column);
-    error.setDescription(description);
-    exceptions << error;
+   QDeclarativeError error;
+   QString exceptionDescription;
+   error.setLine(prop.location().line);
+   error.setColumn(prop.location().column);
+   error.setDescription(description);
+   exceptions << error;
 }
 
 /*!
@@ -258,14 +263,14 @@ void QDeclarativeCustomParser::error(const QDeclarativeCustomParserProperty& pro
 
     An error is generated referring to the position of \a node in the source file.
 */
-void QDeclarativeCustomParser::error(const QDeclarativeCustomParserNode& node, const QString& description)
+void QDeclarativeCustomParser::error(const QDeclarativeCustomParserNode &node, const QString &description)
 {
-    QDeclarativeError error;
-    QString exceptionDescription;
-    error.setLine(node.location().line);
-    error.setColumn(node.location().column);
-    error.setDescription(description);
-    exceptions << error;
+   QDeclarativeError error;
+   QString exceptionDescription;
+   error.setLine(node.location().line);
+   error.setColumn(node.location().column);
+   error.setDescription(description);
+   exceptions << error;
 }
 
 /*!
@@ -274,18 +279,18 @@ void QDeclarativeCustomParser::error(const QDeclarativeCustomParserNode& node, c
 
     Otherwise, returns -1.
 */
-int QDeclarativeCustomParser::evaluateEnum(const QByteArray& script) const
+int QDeclarativeCustomParser::evaluateEnum(const QByteArray &script) const
 {
-    return compiler->evaluateEnum(script);
+   return compiler->evaluateEnum(script);
 }
 
 /*!
     Resolves \a name to a type, or 0 if it is not a type. This can be used
     to type-check object nodes.
 */
-const QMetaObject *QDeclarativeCustomParser::resolveType(const QByteArray& name) const
+const QMetaObject *QDeclarativeCustomParser::resolveType(const QByteArray &name) const
 {
-    return compiler->resolveType(name);
+   return compiler->resolveType(name);
 }
 
 /*!
@@ -293,9 +298,10 @@ const QMetaObject *QDeclarativeCustomParser::resolveType(const QByteArray& name)
     used to construct the binding later. \a name
     is used as the name of the rewritten function.
 */
-QDeclarativeBinding::Identifier QDeclarativeCustomParser::rewriteBinding(const QString& expression, const QByteArray& name)
+QDeclarativeBinding::Identifier QDeclarativeCustomParser::rewriteBinding(const QString &expression,
+      const QByteArray &name)
 {
-    return compiler->rewriteBinding(expression, name);
+   return compiler->rewriteBinding(expression, name);
 }
 
 QT_END_NAMESPACE

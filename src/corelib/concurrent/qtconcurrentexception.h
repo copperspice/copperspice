@@ -51,6 +51,7 @@ class Q_CORE_EXPORT UnhandledException : public Exception
 namespace internal {
 
 class Base;
+
 class ExceptionHolder
 {
  public:

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -33,20 +33,20 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeTimerPrivate
 {
-    Q_DECLARE_PUBLIC(QDeclarativeTimer)
+   Q_DECLARE_PUBLIC(QDeclarativeTimer)
 
-public:
-    QDeclarativeTimerPrivate()
-        : interval(1000), running(false), repeating(false), triggeredOnStart(false)
-        , classBegun(false), componentComplete(false), firstTick(true) {}
-    int interval;
-    QPauseAnimation pause;
-    bool running : 1;
-    bool repeating : 1;
-    bool triggeredOnStart : 1;
-    bool classBegun : 1;
-    bool componentComplete : 1;
-    bool firstTick : 1;
+ public:
+   QDeclarativeTimerPrivate()
+      : interval(1000), running(false), repeating(false), triggeredOnStart(false)
+      , classBegun(false), componentComplete(false), firstTick(true) {}
+   int interval;
+   QPauseAnimation pause;
+   bool running : 1;
+   bool repeating : 1;
+   bool triggeredOnStart : 1;
+   bool classBegun : 1;
+   bool componentComplete : 1;
+   bool firstTick : 1;
 };
 
 /*!
@@ -89,13 +89,13 @@ public:
 */
 
 QDeclarativeTimer::QDeclarativeTimer(QObject *parent)
-    : QObject(*(new QDeclarativeTimerPrivate), parent)
+   : QObject(*(new QDeclarativeTimerPrivate), parent)
 {
-    Q_D(QDeclarativeTimer);
-    connect(&d->pause, SIGNAL(currentLoopChanged(int)), this, SLOT(ticked()));
-    connect(&d->pause, SIGNAL(finished()), this, SLOT(finished()));
-    d->pause.setLoopCount(1);
-    d->pause.setDuration(d->interval);
+   Q_D(QDeclarativeTimer);
+   connect(&d->pause, SIGNAL(currentLoopChanged(int)), this, SLOT(ticked()));
+   connect(&d->pause, SIGNAL(finished()), this, SLOT(finished()));
+   d->pause.setLoopCount(1);
+   d->pause.setDuration(d->interval);
 }
 
 /*!
@@ -107,18 +107,18 @@ QDeclarativeTimer::QDeclarativeTimer(QObject *parent)
 */
 void QDeclarativeTimer::setInterval(int interval)
 {
-    Q_D(QDeclarativeTimer);
-    if (interval != d->interval) {
-        d->interval = interval;
-        update();
-        emit intervalChanged();
-    }
+   Q_D(QDeclarativeTimer);
+   if (interval != d->interval) {
+      d->interval = interval;
+      update();
+      emit intervalChanged();
+   }
 }
 
 int QDeclarativeTimer::interval() const
 {
-    Q_D(const QDeclarativeTimer);
-    return d->interval;
+   Q_D(const QDeclarativeTimer);
+   return d->interval;
 }
 
 /*!
@@ -134,19 +134,19 @@ int QDeclarativeTimer::interval() const
 */
 bool QDeclarativeTimer::isRunning() const
 {
-    Q_D(const QDeclarativeTimer);
-    return d->running;
+   Q_D(const QDeclarativeTimer);
+   return d->running;
 }
 
 void QDeclarativeTimer::setRunning(bool running)
 {
-    Q_D(QDeclarativeTimer);
-    if (d->running != running) {
-        d->running = running;
-        d->firstTick = true;
-        emit runningChanged();
-        update();
-    }
+   Q_D(QDeclarativeTimer);
+   if (d->running != running) {
+      d->running = running;
+      d->firstTick = true;
+      emit runningChanged();
+      update();
+   }
 }
 
 /*!
@@ -162,18 +162,18 @@ void QDeclarativeTimer::setRunning(bool running)
 */
 bool QDeclarativeTimer::isRepeating() const
 {
-    Q_D(const QDeclarativeTimer);
-    return d->repeating;
+   Q_D(const QDeclarativeTimer);
+   return d->repeating;
 }
 
 void QDeclarativeTimer::setRepeating(bool repeating)
 {
-    Q_D(QDeclarativeTimer);
-    if (repeating != d->repeating) {
-        d->repeating = repeating;
-        update();
-        emit repeatChanged();
-    }
+   Q_D(QDeclarativeTimer);
+   if (repeating != d->repeating) {
+      d->repeating = repeating;
+      update();
+      emit repeatChanged();
+   }
 }
 
 /*!
@@ -195,18 +195,18 @@ void QDeclarativeTimer::setRepeating(bool repeating)
 */
 bool QDeclarativeTimer::triggeredOnStart() const
 {
-    Q_D(const QDeclarativeTimer);
-    return d->triggeredOnStart;
+   Q_D(const QDeclarativeTimer);
+   return d->triggeredOnStart;
 }
 
 void QDeclarativeTimer::setTriggeredOnStart(bool triggeredOnStart)
 {
-    Q_D(QDeclarativeTimer);
-    if (d->triggeredOnStart != triggeredOnStart) {
-        d->triggeredOnStart = triggeredOnStart;
-        update();
-        emit triggeredOnStartChanged();
-    }
+   Q_D(QDeclarativeTimer);
+   if (d->triggeredOnStart != triggeredOnStart) {
+      d->triggeredOnStart = triggeredOnStart;
+      update();
+      emit triggeredOnStartChanged();
+   }
 }
 
 /*!
@@ -218,7 +218,7 @@ void QDeclarativeTimer::setTriggeredOnStart(bool triggeredOnStart)
 */
 void QDeclarativeTimer::start()
 {
-    setRunning(true);
+   setRunning(true);
 }
 
 /*!
@@ -230,7 +230,7 @@ void QDeclarativeTimer::start()
 */
 void QDeclarativeTimer::stop()
 {
-    setRunning(false);
+   setRunning(false);
 }
 
 /*!
@@ -243,39 +243,40 @@ void QDeclarativeTimer::stop()
 */
 void QDeclarativeTimer::restart()
 {
-    setRunning(false);
-    setRunning(true);
+   setRunning(false);
+   setRunning(true);
 }
 
 void QDeclarativeTimer::update()
 {
-    Q_D(QDeclarativeTimer);
-    if (d->classBegun && !d->componentComplete)
-        return;
-    d->pause.stop();
-    if (d->running) {
-        d->pause.setCurrentTime(0);
-        d->pause.setLoopCount(d->repeating ? -1 : 1);
-        d->pause.setDuration(d->interval);
-        d->pause.start();
-        if (d->triggeredOnStart && d->firstTick) {
-            QCoreApplication::removePostedEvents(this, QEvent::MetaCall);
-            QMetaObject::invokeMethod(this, "ticked", Qt::QueuedConnection);
-        }
-    }
+   Q_D(QDeclarativeTimer);
+   if (d->classBegun && !d->componentComplete) {
+      return;
+   }
+   d->pause.stop();
+   if (d->running) {
+      d->pause.setCurrentTime(0);
+      d->pause.setLoopCount(d->repeating ? -1 : 1);
+      d->pause.setDuration(d->interval);
+      d->pause.start();
+      if (d->triggeredOnStart && d->firstTick) {
+         QCoreApplication::removePostedEvents(this, QEvent::MetaCall);
+         QMetaObject::invokeMethod(this, "ticked", Qt::QueuedConnection);
+      }
+   }
 }
 
 void QDeclarativeTimer::classBegin()
 {
-    Q_D(QDeclarativeTimer);
-    d->classBegun = true;
+   Q_D(QDeclarativeTimer);
+   d->classBegun = true;
 }
 
 void QDeclarativeTimer::componentComplete()
 {
-    Q_D(QDeclarativeTimer);
-    d->componentComplete = true;
-    update();
+   Q_D(QDeclarativeTimer);
+   d->componentComplete = true;
+   update();
 }
 
 /*!
@@ -285,21 +286,23 @@ void QDeclarativeTimer::componentComplete()
 */
 void QDeclarativeTimer::ticked()
 {
-    Q_D(QDeclarativeTimer);
-    if (d->running && (d->pause.currentTime() > 0 || (d->triggeredOnStart && d->firstTick)))
-        emit triggered();
-    d->firstTick = false;
+   Q_D(QDeclarativeTimer);
+   if (d->running && (d->pause.currentTime() > 0 || (d->triggeredOnStart && d->firstTick))) {
+      emit triggered();
+   }
+   d->firstTick = false;
 }
 
 void QDeclarativeTimer::finished()
 {
-    Q_D(QDeclarativeTimer);
-    if (d->repeating || !d->running)
-        return;
-    emit triggered();
-    d->running = false;
-    d->firstTick = false;
-    emit runningChanged();
+   Q_D(QDeclarativeTimer);
+   if (d->repeating || !d->running) {
+      return;
+   }
+   emit triggered();
+   d->running = false;
+   d->firstTick = false;
+   emit runningChanged();
 }
 
 QT_END_NAMESPACE

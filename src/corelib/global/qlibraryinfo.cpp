@@ -29,6 +29,7 @@
 #include <qlibraryinfo.h>
 #include <qscopedpointer.h>
 #include <qcoreapplication.h>
+#include <cs_build_info.h>
 
 #ifdef Q_OS_MAC
 #  include "qcore_mac_p.h"
@@ -44,7 +45,7 @@ QLibraryInfo::QLibraryInfo()
 
 QSettings *QLibraryInfo::configuration()
 {
-   return qt_library_settings();      
+   return qt_library_settings();
 }
 
 QSettings *QLibraryInfo::findConfiguration()
@@ -111,11 +112,11 @@ QString QLibraryInfo::location(LibraryLocation loc)
    QSettings *config = QLibraryInfo::configuration();
 
    if (config) {
-      
+
       QString key;
       QString defaultValue;
 
-      switch (loc) {                      
+      switch (loc) {
 
          case PluginsPath:
             key = QLatin1String("Plugins");
@@ -145,7 +146,7 @@ QString QLibraryInfo::location(LibraryLocation loc)
             break;
       }
 
-      if (! key.isNull()) {         
+      if (! key.isNull()) {
          config->beginGroup(QLatin1String("Paths"));
 
          retval = config->value(key, defaultValue).toString();
@@ -156,8 +157,8 @@ QString QLibraryInfo::location(LibraryLocation loc)
          reg_var.setMinimal(true);
 
          while ((rep = reg_var.indexIn(retval)) != -1) {
-            retval.replace(rep, reg_var.matchedLength(),QString::fromLocal8Bit(qgetenv(retval.mid(rep + 2,
-                  reg_var.matchedLength() - 3).toLatin1().constData()).constData()));
+            retval.replace(rep, reg_var.matchedLength(), QString::fromLocal8Bit(qgetenv(retval.mid(rep + 2,
+                           reg_var.matchedLength() - 3).toLatin1().constData()).constData()));
          }
 
          config->endGroup();
@@ -166,21 +167,21 @@ QString QLibraryInfo::location(LibraryLocation loc)
    }  else {
       // no configuration file, use defaults
 
-      switch (loc) {                      
+      switch (loc) {
 
-         case PluginsPath:           
+         case PluginsPath:
             retval = QLatin1String("plugins");
             break;
 
-         case ImportsPath:        
+         case ImportsPath:
             retval = QLatin1String("imports");
             break;
 
-         case Qml2ImportsPath:           
+         case Qml2ImportsPath:
             retval = QLatin1String("qml");
             break;
 
-         case TranslationsPath:          
+         case TranslationsPath:
             retval = QLatin1String("translations");
             break;
 
@@ -191,12 +192,12 @@ QString QLibraryInfo::location(LibraryLocation loc)
          default:
             break;
       }
-   }   
- 
+   }
+
    return retval;
 }
 
-QSettings *QLibraryInfo::qt_library_settings() 
+QSettings *QLibraryInfo::qt_library_settings()
 {
    static QScopedPointer<QSettings> settings(QLibraryInfo::findConfiguration());
    return settings.data();
@@ -204,23 +205,21 @@ QSettings *QLibraryInfo::qt_library_settings()
 
 #endif // QT_NO_SETTINGS
 
-
-#ifdef CS_BUILD_INFO
-void cs_print_build_info()
+Q_CORE_EXPORT void cs_print_build_info()
 {
-   printf("CopperSpice Build Information \n" 
-          "\n"
-          "Version:        %s\n"
-          "Build Date:     %s\n"	
-          "Install Prefix: %s\n"	
-          "Debug Sstatus:  %s\n"	
-          "Built For:      %s\n",	
-   CS_BUILD_INFO::version, 
-   CS_BUILD_INFO::build_date,
-   CS_BUILD_INFO::install_prefix,
-   CS_BUILD_INFO::debug,
-   CS_BUILD_INFO::built_for);	   
+   QDate build_Date = QLibraryInfo::buildDate();
+
+   printf("CopperSpice Build Information: \n"
+          "   Version:          %s\n"
+          "   Build Date:       %s\n"
+          "   Install Prefix:   %s\n"
+          "   Built For:        %s\n",
+          CS_VERSION_STR,
+          build_Date.toString("MM/dd/yyyy").toLatin1().constData(),
+          csBuildInfo::install_prefix,
+          csBuildInfo::built_for);
+
+   fflush(stdout);
 }
-#endif
 
 QT_END_NAMESPACE

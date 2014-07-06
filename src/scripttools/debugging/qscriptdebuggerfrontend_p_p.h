@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -53,23 +53,23 @@ class QEvent;
 class QScriptDebuggerFrontend;
 class QScriptDebuggerFrontendPrivate
 {
-    Q_DECLARE_PUBLIC(QScriptDebuggerFrontend)
-public:
-    QScriptDebuggerFrontendPrivate();
-    virtual ~QScriptDebuggerFrontendPrivate();
+   Q_DECLARE_PUBLIC(QScriptDebuggerFrontend)
+ public:
+   QScriptDebuggerFrontendPrivate();
+   virtual ~QScriptDebuggerFrontendPrivate();
 
-    void postEvent(QEvent *e);
-    virtual bool event(QEvent *);
-    void processCommands();
+   void postEvent(QEvent *e);
+   virtual bool event(QEvent *);
+   void processCommands();
 
-    QScriptDebuggerEventHandlerInterface *eventHandler;
-    QList<QScriptDebuggerCommand> pendingCommands;
-    QList<int> pendingCommandIds;
-    QHash<int, QScriptDebuggerResponseHandlerInterface*> responseHandlers;
-    int nextCommandId;
-    QObject *eventReceiver;
+   QScriptDebuggerEventHandlerInterface *eventHandler;
+   QList<QScriptDebuggerCommand> pendingCommands;
+   QList<int> pendingCommandIds;
+   QHash<int, QScriptDebuggerResponseHandlerInterface *> responseHandlers;
+   int nextCommandId;
+   QObject *eventReceiver;
 
-    QScriptDebuggerFrontend *q_ptr;
+   QScriptDebuggerFrontend *q_ptr;
 };
 
 QT_END_NAMESPACE

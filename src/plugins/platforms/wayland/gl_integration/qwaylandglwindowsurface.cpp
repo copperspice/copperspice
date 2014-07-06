@@ -23,16 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qwaylandglwindowsurface.h"
-
-#include "qwaylanddisplay.h"
-#include "qwaylandwindow.h"
-#include "qwaylandscreen.h"
-
+#include <qwaylandglwindowsurface.h>
+#include <qwaylanddisplay.h>
+#include <qwaylandwindow.h>
+#include <qwaylandscreen.h>
 #include <QtOpenGL/QGLFramebufferObject>
 #include <QtOpenGL/QGLContext>
-
-#include <QtOpenGL/private/qglengineshadermanager_p.h>
+#include <qglengineshadermanager_p.h>
 
 QT_BEGIN_NAMESPACE
 

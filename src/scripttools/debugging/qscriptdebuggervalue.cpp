@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -42,109 +42,111 @@ QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerValuePrivate
 {
-public:
-    QScriptDebuggerValuePrivate();
-    ~QScriptDebuggerValuePrivate();
+ public:
+   QScriptDebuggerValuePrivate();
+   ~QScriptDebuggerValuePrivate();
 
-    QScriptDebuggerValue::ValueType type;
-    union {
-        bool booleanValue;
-        QString *stringValue;
-        double numberValue;
-        qint64 objectId;
-    };
+   QScriptDebuggerValue::ValueType type;
+   union {
+      bool booleanValue;
+      QString *stringValue;
+      double numberValue;
+      qint64 objectId;
+   };
 
-    QBasicAtomicInt ref;
+   QBasicAtomicInt ref;
 };
 
 QScriptDebuggerValuePrivate::QScriptDebuggerValuePrivate()
-    : type(QScriptDebuggerValue::NoValue)
+   : type(QScriptDebuggerValue::NoValue)
 {
-    ref.store(0);
+   ref.store(0);
 }
 
 QScriptDebuggerValuePrivate::~QScriptDebuggerValuePrivate()
 {
-    if (type == QScriptDebuggerValue::StringValue)
-        delete stringValue;
+   if (type == QScriptDebuggerValue::StringValue) {
+      delete stringValue;
+   }
 }
 
 QScriptDebuggerValue::QScriptDebuggerValue()
-    : d_ptr(0)
+   : d_ptr(0)
 {
 }
 
 QScriptDebuggerValue::QScriptDebuggerValue(const QScriptValue &value)
-    : d_ptr(0)
+   : d_ptr(0)
 {
-    if (value.isValid()) {
-        d_ptr.reset(new QScriptDebuggerValuePrivate);
-        if (value.isUndefined())
-            d_ptr->type = UndefinedValue;
-        else if (value.isNull())
-            d_ptr->type = NullValue;
-        else if (value.isNumber()) {
-            d_ptr->type = NumberValue;
-            d_ptr->numberValue = value.toNumber();
-        } else if (value.isBoolean()) {
-            d_ptr->type = BooleanValue;
-            d_ptr->booleanValue = value.toBoolean();
-        } else if (value.isString()) {
-            d_ptr->type = StringValue;
-            d_ptr->stringValue = new QString(value.toString());
-        } else {
-            Q_ASSERT(value.isObject());
-            d_ptr->type = ObjectValue;
-            d_ptr->objectId = value.objectId();
-        }
-        d_ptr->ref.ref();
-    }
+   if (value.isValid()) {
+      d_ptr.reset(new QScriptDebuggerValuePrivate);
+      if (value.isUndefined()) {
+         d_ptr->type = UndefinedValue;
+      } else if (value.isNull()) {
+         d_ptr->type = NullValue;
+      } else if (value.isNumber()) {
+         d_ptr->type = NumberValue;
+         d_ptr->numberValue = value.toNumber();
+      } else if (value.isBoolean()) {
+         d_ptr->type = BooleanValue;
+         d_ptr->booleanValue = value.toBoolean();
+      } else if (value.isString()) {
+         d_ptr->type = StringValue;
+         d_ptr->stringValue = new QString(value.toString());
+      } else {
+         Q_ASSERT(value.isObject());
+         d_ptr->type = ObjectValue;
+         d_ptr->objectId = value.objectId();
+      }
+      d_ptr->ref.ref();
+   }
 }
 
 QScriptDebuggerValue::QScriptDebuggerValue(double value)
-    : d_ptr(new QScriptDebuggerValuePrivate)
+   : d_ptr(new QScriptDebuggerValuePrivate)
 {
-    d_ptr->type = NumberValue;
-    d_ptr->numberValue = value;
-    d_ptr->ref.ref();
+   d_ptr->type = NumberValue;
+   d_ptr->numberValue = value;
+   d_ptr->ref.ref();
 }
 
 QScriptDebuggerValue::QScriptDebuggerValue(bool value)
-    : d_ptr(new QScriptDebuggerValuePrivate)
+   : d_ptr(new QScriptDebuggerValuePrivate)
 {
-    d_ptr->type = BooleanValue;
-    d_ptr->booleanValue = value;
-    d_ptr->ref.ref();
+   d_ptr->type = BooleanValue;
+   d_ptr->booleanValue = value;
+   d_ptr->ref.ref();
 }
 
 QScriptDebuggerValue::QScriptDebuggerValue(const QString &value)
-    : d_ptr(new QScriptDebuggerValuePrivate)
+   : d_ptr(new QScriptDebuggerValuePrivate)
 {
-    d_ptr->type = StringValue;
-    d_ptr->stringValue = new QString(value);
-    d_ptr->ref.ref();
+   d_ptr->type = StringValue;
+   d_ptr->stringValue = new QString(value);
+   d_ptr->ref.ref();
 }
 
 QScriptDebuggerValue::QScriptDebuggerValue(qint64 objectId)
-    : d_ptr(new QScriptDebuggerValuePrivate)
+   : d_ptr(new QScriptDebuggerValuePrivate)
 {
-    d_ptr->type = ObjectValue;
-    d_ptr->objectId = objectId;
-    d_ptr->ref.ref();
+   d_ptr->type = ObjectValue;
+   d_ptr->objectId = objectId;
+   d_ptr->ref.ref();
 }
 
 QScriptDebuggerValue::QScriptDebuggerValue(ValueType type)
-    : d_ptr(new QScriptDebuggerValuePrivate)
+   : d_ptr(new QScriptDebuggerValuePrivate)
 {
-    d_ptr->type = type;
-    d_ptr->ref.ref();
+   d_ptr->type = type;
+   d_ptr->ref.ref();
 }
 
 QScriptDebuggerValue::QScriptDebuggerValue(const QScriptDebuggerValue &other)
-    : d_ptr(other.d_ptr.data())
+   : d_ptr(other.d_ptr.data())
 {
-    if (d_ptr)
-        d_ptr->ref.ref();
+   if (d_ptr) {
+      d_ptr->ref.ref();
+   }
 }
 
 QScriptDebuggerValue::~QScriptDebuggerValue()
@@ -153,8 +155,8 @@ QScriptDebuggerValue::~QScriptDebuggerValue()
 
 QScriptDebuggerValue &QScriptDebuggerValue::operator=(const QScriptDebuggerValue &other)
 {
-    d_ptr.assign(other.d_ptr.data());
-    return *this;
+   d_ptr.assign(other.d_ptr.data());
+   return *this;
 }
 
 /*!
@@ -162,10 +164,11 @@ QScriptDebuggerValue &QScriptDebuggerValue::operator=(const QScriptDebuggerValue
 */
 QScriptDebuggerValue::ValueType QScriptDebuggerValue::type() const
 {
-    Q_D(const QScriptDebuggerValue);
-    if (!d)
-        return NoValue;
-    return d->type;
+   Q_D(const QScriptDebuggerValue);
+   if (!d) {
+      return NoValue;
+   }
+   return d->type;
 }
 
 /*!
@@ -173,11 +176,12 @@ QScriptDebuggerValue::ValueType QScriptDebuggerValue::type() const
 */
 double QScriptDebuggerValue::numberValue() const
 {
-    Q_D(const QScriptDebuggerValue);
-    if (!d)
-        return 0;
-    Q_ASSERT(d->type == NumberValue);
-    return d->numberValue;
+   Q_D(const QScriptDebuggerValue);
+   if (!d) {
+      return 0;
+   }
+   Q_ASSERT(d->type == NumberValue);
+   return d->numberValue;
 }
 
 /*!
@@ -185,11 +189,12 @@ double QScriptDebuggerValue::numberValue() const
 */
 bool QScriptDebuggerValue::booleanValue() const
 {
-    Q_D(const QScriptDebuggerValue);
-    if (!d)
-        return false;
-    Q_ASSERT(d->type == BooleanValue);
-    return d->booleanValue;
+   Q_D(const QScriptDebuggerValue);
+   if (!d) {
+      return false;
+   }
+   Q_ASSERT(d->type == BooleanValue);
+   return d->booleanValue;
 }
 
 /*!
@@ -197,11 +202,12 @@ bool QScriptDebuggerValue::booleanValue() const
 */
 QString QScriptDebuggerValue::stringValue() const
 {
-    Q_D(const QScriptDebuggerValue);
-    if (!d)
-        return QString();
-    Q_ASSERT(d->type == StringValue);
-    return *d->stringValue;
+   Q_D(const QScriptDebuggerValue);
+   if (!d) {
+      return QString();
+   }
+   Q_ASSERT(d->type == StringValue);
+   return *d->stringValue;
 }
 
 /*!
@@ -209,11 +215,12 @@ QString QScriptDebuggerValue::stringValue() const
 */
 qint64 QScriptDebuggerValue::objectId() const
 {
-    Q_D(const QScriptDebuggerValue);
-    if (!d)
-        return -1;
-    Q_ASSERT(d->type == ObjectValue);
-    return d->objectId;
+   Q_D(const QScriptDebuggerValue);
+   if (!d) {
+      return -1;
+   }
+   Q_ASSERT(d->type == ObjectValue);
+   return d->objectId;
 }
 
 /*!
@@ -222,26 +229,27 @@ qint64 QScriptDebuggerValue::objectId() const
 */
 QScriptValue QScriptDebuggerValue::toScriptValue(QScriptEngine *engine) const
 {
-    Q_D(const QScriptDebuggerValue);
-    if (!d)
-        return QScriptValue();
-    switch (d->type) {
-    case NoValue:
-        return QScriptValue();
-    case UndefinedValue:
-        return engine->undefinedValue();
-    case NullValue:
-        return engine->nullValue();
-    case BooleanValue:
-        return QScriptValue(engine, d->booleanValue);
-    case StringValue:
-        return QScriptValue(engine, *d->stringValue);
-    case NumberValue:
-        return QScriptValue(engine, d->numberValue);
-    case ObjectValue:
-        return engine->objectById(d->objectId);
-    }
-    return QScriptValue();
+   Q_D(const QScriptDebuggerValue);
+   if (!d) {
+      return QScriptValue();
+   }
+   switch (d->type) {
+      case NoValue:
+         return QScriptValue();
+      case UndefinedValue:
+         return engine->undefinedValue();
+      case NullValue:
+         return engine->nullValue();
+      case BooleanValue:
+         return QScriptValue(engine, d->booleanValue);
+      case StringValue:
+         return QScriptValue(engine, *d->stringValue);
+      case NumberValue:
+         return QScriptValue(engine, d->numberValue);
+      case ObjectValue:
+         return engine->objectById(d->objectId);
+   }
+   return QScriptValue();
 }
 
 /*!
@@ -249,29 +257,31 @@ QScriptValue QScriptDebuggerValue::toScriptValue(QScriptEngine *engine) const
 */
 QString QScriptDebuggerValue::toString() const
 {
-    Q_D(const QScriptDebuggerValue);
-    if (!d)
-        return QString();
-    switch (d->type) {
-    case NoValue:
-        return QString();
-    case UndefinedValue:
-        return QString::fromLatin1("undefined");
-    case NullValue:
-        return QString::fromLatin1("null");
-    case BooleanValue:
-        if (d->booleanValue)
+   Q_D(const QScriptDebuggerValue);
+   if (!d) {
+      return QString();
+   }
+   switch (d->type) {
+      case NoValue:
+         return QString();
+      case UndefinedValue:
+         return QString::fromLatin1("undefined");
+      case NullValue:
+         return QString::fromLatin1("null");
+      case BooleanValue:
+         if (d->booleanValue) {
             return QString::fromLatin1("true");
-        else
+         } else {
             return QString::fromLatin1("false");
-    case StringValue:
-        return *d->stringValue;
-    case NumberValue:
-        return QString::number(d->numberValue); // ### qScriptNumberToString()
-    case ObjectValue:
-        return QString::fromLatin1("[object Object]");
-    }
-    return QString();
+         }
+      case StringValue:
+         return *d->stringValue;
+      case NumberValue:
+         return QString::number(d->numberValue); // ### qScriptNumberToString()
+      case ObjectValue:
+         return QString::fromLatin1("[object Object]");
+   }
+   return QString();
 }
 
 /*!
@@ -280,29 +290,32 @@ QString QScriptDebuggerValue::toString() const
 */
 bool QScriptDebuggerValue::operator==(const QScriptDebuggerValue &other) const
 {
-    Q_D(const QScriptDebuggerValue);
-    const QScriptDebuggerValuePrivate *od = other.d_func();
-    if (d == od)
-        return true;
-    if (!d || !od)
-        return false;
-    if (d->type != od->type)
-        return false;
-    switch (d->type) {
-    case NoValue:
-    case UndefinedValue:
-    case NullValue:
-        return true;
-    case BooleanValue:
-        return d->booleanValue == od->booleanValue;
-    case StringValue:
-        return *d->stringValue == *od->stringValue;
-    case NumberValue:
-        return d->numberValue == od->numberValue;
-    case ObjectValue:
-        return d->objectId == od->objectId;
-    }
-    return false;
+   Q_D(const QScriptDebuggerValue);
+   const QScriptDebuggerValuePrivate *od = other.d_func();
+   if (d == od) {
+      return true;
+   }
+   if (!d || !od) {
+      return false;
+   }
+   if (d->type != od->type) {
+      return false;
+   }
+   switch (d->type) {
+      case NoValue:
+      case UndefinedValue:
+      case NullValue:
+         return true;
+      case BooleanValue:
+         return d->booleanValue == od->booleanValue;
+      case StringValue:
+         return *d->stringValue == *od->stringValue;
+      case NumberValue:
+         return d->numberValue == od->numberValue;
+      case ObjectValue:
+         return d->objectId == od->objectId;
+   }
+   return false;
 }
 
 /*!
@@ -311,7 +324,7 @@ bool QScriptDebuggerValue::operator==(const QScriptDebuggerValue &other) const
 */
 bool QScriptDebuggerValue::operator!=(const QScriptDebuggerValue &other) const
 {
-    return !(*this == other);
+   return !(*this == other);
 }
 
 /*!
@@ -322,26 +335,26 @@ bool QScriptDebuggerValue::operator!=(const QScriptDebuggerValue &other) const
 */
 QDataStream &operator<<(QDataStream &out, const QScriptDebuggerValue &value)
 {
-    out << (quint32)value.type();
-    switch (value.type()) {
-    case QScriptDebuggerValue::NoValue:
-    case QScriptDebuggerValue::UndefinedValue:
-    case QScriptDebuggerValue::NullValue:
-        break;
-    case QScriptDebuggerValue::BooleanValue:
-        out << value.booleanValue();
-        break;
-    case QScriptDebuggerValue::StringValue:
-        out << value.stringValue();
-        break;
-    case QScriptDebuggerValue::NumberValue:
-        out << value.numberValue();
-        break;
-    case QScriptDebuggerValue::ObjectValue:
-        out << value.objectId();
-        break;
-    }
-    return out;
+   out << (quint32)value.type();
+   switch (value.type()) {
+      case QScriptDebuggerValue::NoValue:
+      case QScriptDebuggerValue::UndefinedValue:
+      case QScriptDebuggerValue::NullValue:
+         break;
+      case QScriptDebuggerValue::BooleanValue:
+         out << value.booleanValue();
+         break;
+      case QScriptDebuggerValue::StringValue:
+         out << value.stringValue();
+         break;
+      case QScriptDebuggerValue::NumberValue:
+         out << value.numberValue();
+         break;
+      case QScriptDebuggerValue::ObjectValue:
+         out << value.objectId();
+         break;
+   }
+   return out;
 }
 
 /*!
@@ -353,39 +366,43 @@ QDataStream &operator<<(QDataStream &out, const QScriptDebuggerValue &value)
 */
 QDataStream &operator>>(QDataStream &in, QScriptDebuggerValue &value)
 {
-    quint32 type;
-    in >> type;
-    switch (QScriptDebuggerValue::ValueType(type)) {
-    case QScriptDebuggerValue::UndefinedValue:
-    case QScriptDebuggerValue::NullValue:
-        value = QScriptDebuggerValue(QScriptDebuggerValue::ValueType(type));
-        break;
-    case QScriptDebuggerValue::BooleanValue: {
-        bool b;
-        in >> b;
-        value = QScriptDebuggerValue(b);
-    }   break;
-    case QScriptDebuggerValue::StringValue: {
-        QString s;
-        in >> s;
-        value = QScriptDebuggerValue(s);
-    }   break;
-    case QScriptDebuggerValue::NumberValue: {
-        double d;
-        in >> d;
-        value = QScriptDebuggerValue(d);
-    }   break;
-    case QScriptDebuggerValue::ObjectValue: {
-        qint64 id;
-        in >> id;
-        value = QScriptDebuggerValue(id);
-    }   break;
-    case QScriptDebuggerValue::NoValue:
-    default:
-        value = QScriptDebuggerValue();
-        break;
-    }
-    return in;
+   quint32 type;
+   in >> type;
+   switch (QScriptDebuggerValue::ValueType(type)) {
+      case QScriptDebuggerValue::UndefinedValue:
+      case QScriptDebuggerValue::NullValue:
+         value = QScriptDebuggerValue(QScriptDebuggerValue::ValueType(type));
+         break;
+      case QScriptDebuggerValue::BooleanValue: {
+         bool b;
+         in >> b;
+         value = QScriptDebuggerValue(b);
+      }
+      break;
+      case QScriptDebuggerValue::StringValue: {
+         QString s;
+         in >> s;
+         value = QScriptDebuggerValue(s);
+      }
+      break;
+      case QScriptDebuggerValue::NumberValue: {
+         double d;
+         in >> d;
+         value = QScriptDebuggerValue(d);
+      }
+      break;
+      case QScriptDebuggerValue::ObjectValue: {
+         qint64 id;
+         in >> id;
+         value = QScriptDebuggerValue(id);
+      }
+      break;
+      case QScriptDebuggerValue::NoValue:
+      default:
+         value = QScriptDebuggerValue();
+         break;
+   }
+   return in;
 }
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -29,12 +29,12 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeScriptStringPrivate : public QSharedData
 {
-public:
-    QDeclarativeScriptStringPrivate() : context(0), scope(0) {}
+ public:
+   QDeclarativeScriptStringPrivate() : context(0), scope(0) {}
 
-    QDeclarativeContext *context;
-    QObject *scope;
-    QString script;
+   QDeclarativeContext *context;
+   QObject *scope;
+   QString script;
 };
 
 /*!
@@ -70,7 +70,7 @@ expr.value();
 Constructs an empty instance.
 */
 QDeclarativeScriptString::QDeclarativeScriptString()
-:  d(new QDeclarativeScriptStringPrivate)
+   :  d(new QDeclarativeScriptStringPrivate)
 {
 }
 
@@ -78,7 +78,7 @@ QDeclarativeScriptString::QDeclarativeScriptString()
 Copies \a other.
 */
 QDeclarativeScriptString::QDeclarativeScriptString(const QDeclarativeScriptString &other)
-: d(other.d)
+   : d(other.d)
 {
 }
 
@@ -94,8 +94,8 @@ Assigns \a other to this.
 */
 QDeclarativeScriptString &QDeclarativeScriptString::operator=(const QDeclarativeScriptString &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 /*!
@@ -103,7 +103,7 @@ Returns the context for the script.
 */
 QDeclarativeContext *QDeclarativeScriptString::context() const
 {
-    return d->context;
+   return d->context;
 }
 
 /*!
@@ -111,7 +111,7 @@ Sets the \a context for the script.
 */
 void QDeclarativeScriptString::setContext(QDeclarativeContext *context)
 {
-    d->context = context;
+   d->context = context;
 }
 
 /*!
@@ -119,7 +119,7 @@ Returns the scope object for the script.
 */
 QObject *QDeclarativeScriptString::scopeObject() const
 {
-    return d->scope;
+   return d->scope;
 }
 
 /*!
@@ -127,7 +127,7 @@ Sets the scope \a object for the script.
 */
 void QDeclarativeScriptString::setScopeObject(QObject *object)
 {
-    d->scope = object;
+   d->scope = object;
 }
 
 /*!
@@ -135,7 +135,7 @@ Returns the script text.
 */
 QString QDeclarativeScriptString::script() const
 {
-    return d->script;
+   return d->script;
 }
 
 /*!
@@ -143,7 +143,7 @@ Sets the \a script text.
 */
 void QDeclarativeScriptString::setScript(const QString &script)
 {
-    d->script = script;
+   d->script = script;
 }
 
 QT_END_NAMESPACE

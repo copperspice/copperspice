@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -47,39 +47,39 @@ class QScriptDebuggerCommandSchedulerInterface;
 
 class QScriptDebuggerLocalsModelPrivate;
 class QScriptDebuggerLocalsModel
-    : public QAbstractItemModel
+   : public QAbstractItemModel
 {
-    CS_OBJECT(QScriptDebuggerLocalsModel)
-public:
-    QScriptDebuggerLocalsModel(QScriptDebuggerJobSchedulerInterface *jobScheduler,
-                               QScriptDebuggerCommandSchedulerInterface *commandScheduler,
-                               QObject *parent = 0);
-    ~QScriptDebuggerLocalsModel();
+   CS_OBJECT(QScriptDebuggerLocalsModel)
+ public:
+   QScriptDebuggerLocalsModel(QScriptDebuggerJobSchedulerInterface *jobScheduler,
+                              QScriptDebuggerCommandSchedulerInterface *commandScheduler,
+                              QObject *parent = 0);
+   ~QScriptDebuggerLocalsModel();
 
-    void init(int frameIndex);
-    void sync(int frameIndex);
+   void init(int frameIndex);
+   void sync(int frameIndex);
 
-    int frameIndex() const;
+   int frameIndex() const;
 
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &child) const;
-    int columnCount(const QModelIndex &parent) const;
-    int rowCount(const QModelIndex &parent) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    bool hasChildren(const QModelIndex &parent) const;
-    bool canFetchMore(const QModelIndex &parent) const;
-    void fetchMore(const QModelIndex &parent);
+   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+   QModelIndex parent(const QModelIndex &child) const;
+   int columnCount(const QModelIndex &parent) const;
+   int rowCount(const QModelIndex &parent) const;
+   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+   QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const;
+   Qt::ItemFlags flags(const QModelIndex &index) const;
+   bool hasChildren(const QModelIndex &parent) const;
+   bool canFetchMore(const QModelIndex &parent) const;
+   void fetchMore(const QModelIndex &parent);
 
-public:
-    CS_SIGNAL_1(Public, void scopeObjectAvailable(const QModelIndex & index))
-    CS_SIGNAL_2(scopeObjectAvailable,index) 
+ public:
+   CS_SIGNAL_1(Public, void scopeObjectAvailable(const QModelIndex &index))
+   CS_SIGNAL_2(scopeObjectAvailable, index)
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerLocalsModel)
-    Q_DISABLE_COPY(QScriptDebuggerLocalsModel)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerLocalsModel)
+   Q_DISABLE_COPY(QScriptDebuggerLocalsModel)
 };
 
 QT_END_NAMESPACE

@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -43,33 +43,33 @@ QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerScriptsWidgetPrivate;
 class QScriptDebuggerScriptsWidget:
-    public QScriptDebuggerScriptsWidgetInterface
+   public QScriptDebuggerScriptsWidgetInterface
 {
-    CS_OBJECT(QScriptDebuggerScriptsWidget)
-public:
-    QScriptDebuggerScriptsWidget(QWidget *parent = 0);
-    ~QScriptDebuggerScriptsWidget();
+   CS_OBJECT(QScriptDebuggerScriptsWidget)
+ public:
+   QScriptDebuggerScriptsWidget(QWidget *parent = 0);
+   ~QScriptDebuggerScriptsWidget();
 
-    QScriptDebuggerScriptsModel *scriptsModel() const;
-    void setScriptsModel(QScriptDebuggerScriptsModel *model);
+   QScriptDebuggerScriptsModel *scriptsModel() const;
+   void setScriptsModel(QScriptDebuggerScriptsModel *model);
 
-    qint64 currentScriptId() const;
-    void setCurrentScript(qint64 id);
+   qint64 currentScriptId() const;
+   void setCurrentScript(qint64 id);
 
-private:
-    Q_DECLARE_PRIVATE(QScriptDebuggerScriptsWidget)
-    Q_DISABLE_COPY(QScriptDebuggerScriptsWidget)
+ private:
+   Q_DECLARE_PRIVATE(QScriptDebuggerScriptsWidget)
+   Q_DISABLE_COPY(QScriptDebuggerScriptsWidget)
 
-    CS_SLOT_1(Private, void _q_onCurrentChanged(const QModelIndex & un_named_arg1))
-    CS_SLOT_2(_q_onCurrentChanged)
+   CS_SLOT_1(Private, void _q_onCurrentChanged(const QModelIndex &un_named_arg1))
+   CS_SLOT_2(_q_onCurrentChanged)
 
-/*  PRIVATE_SLOT
-void _q_onCurrentChanged(const QModelIndex & un_named_arg1)
-{
-	Q_D(QScriptDebuggerScriptsWidget);
-	d->_q_onCurrentChanged();
-}
-*/
+   /*  PRIVATE_SLOT
+   void _q_onCurrentChanged(const QModelIndex & un_named_arg1)
+   {
+   	Q_D(QScriptDebuggerScriptsWidget);
+   	d->_q_onCurrentChanged();
+   }
+   */
 };
 
 QT_END_NAMESPACE

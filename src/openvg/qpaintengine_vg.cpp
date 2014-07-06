@@ -23,22 +23,24 @@
 *
 ***********************************************************************/
 
-#include "qpaintengine_vg_p.h"
-#include "qpixmapdata_vg_p.h"
-#include "qpixmapfilter_vg_p.h"
-#include "qvgcompositionhelper_p.h"
-#include "qvgimagepool_p.h"
-#include "qvgfontglyphcache_p.h"
+#include <qpaintengine_vg_p.h>
+#include <qpixmapdata_vg_p.h>
+#include <qpixmapfilter_vg_p.h>
+#include <qvgcompositionhelper_p.h>
+#include <qvgimagepool_p.h>
+#include <qvgfontglyphcache_p.h>
+
 #if !defined(QT_NO_EGL)
-#include <QtGui/private/qeglcontext_p.h>
-#include "qwindowsurface_vgegl_p.h"
+#include <qeglcontext_p.h>
+#include <qwindowsurface_vgegl_p.h>
 #endif
+
 #include <QtCore/qvarlengtharray.h>
-#include <QtGui/private/qdrawhelper_p.h>
-#include <QtGui/private/qtextengine_p.h>
-#include <QtGui/private/qfontengine_p.h>
-#include <QtGui/private/qpainterpath_p.h>
-#include <QtGui/private/qstatictext_p.h>
+#include <qdrawhelper_p.h>
+#include <qtextengine_p.h>
+#include <qfontengine_p.h>
+#include <qpainterpath_p.h>
+#include <qstatictext_p.h>
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
 #include <QtCore/qmath.h>

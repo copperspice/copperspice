@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,13 +38,13 @@ QT_BEGIN_NAMESPACE
 
 class QScriptStdMessageHandlerPrivate
 {
-public:
-    QScriptStdMessageHandlerPrivate() {}
-    ~QScriptStdMessageHandlerPrivate() {}
+ public:
+   QScriptStdMessageHandlerPrivate() {}
+   ~QScriptStdMessageHandlerPrivate() {}
 };
 
 QScriptStdMessageHandler::QScriptStdMessageHandler()
-    : d_ptr(new QScriptStdMessageHandlerPrivate)
+   : d_ptr(new QScriptStdMessageHandlerPrivate)
 {
 }
 
@@ -57,27 +57,28 @@ void QScriptStdMessageHandler::message(QtMsgType type, const QString &text,
                                        int lineNumber, int columnNumber,
                                        const QVariant &/*data*/)
 {
-    QString msg;
-    if (!fileName.isEmpty() || (lineNumber != -1)) {
-        if (!fileName.isEmpty())
-            msg.append(fileName);
-        else
-            msg.append(QLatin1String("<noname>"));
-        if (lineNumber != -1) {
+   QString msg;
+   if (!fileName.isEmpty() || (lineNumber != -1)) {
+      if (!fileName.isEmpty()) {
+         msg.append(fileName);
+      } else {
+         msg.append(QLatin1String("<noname>"));
+      }
+      if (lineNumber != -1) {
+         msg.append(QLatin1Char(':'));
+         msg.append(QString::number(lineNumber));
+         if (columnNumber != -1) {
             msg.append(QLatin1Char(':'));
-            msg.append(QString::number(lineNumber));
-            if (columnNumber != -1) {
-                msg.append(QLatin1Char(':'));
-                msg.append(QString::number(columnNumber));
-            }
-        }
-        msg.append(QLatin1String(": "));
-    }
-    msg.append(text);
+            msg.append(QString::number(columnNumber));
+         }
+      }
+      msg.append(QLatin1String(": "));
+   }
+   msg.append(text);
 
-    FILE *fp = (type == QtDebugMsg) ? stdout : stderr;
-    fprintf(fp, "%s\n", msg.toLatin1().constData());
-    fflush(fp);
+   FILE *fp = (type == QtDebugMsg) ? stdout : stderr;
+   fprintf(fp, "%s\n", msg.toLatin1().constData());
+   fflush(fp);
 }
 
 QT_END_NAMESPACE

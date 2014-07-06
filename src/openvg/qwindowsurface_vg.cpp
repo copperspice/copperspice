@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qwindowsurface_vg_p.h"
-#include "qwindowsurface_vgegl_p.h"
-#include "qpaintengine_vg_p.h"
-#include "qpixmapdata_vg_p.h"
-#include "qvg_p.h"
+#include <qwindowsurface_vg_p.h>
+#include <qwindowsurface_vgegl_p.h>
+#include <qpaintengine_vg_p.h>
+#include <qpixmapdata_vg_p.h>
+#include <qvg_p.h>
 
 #if !defined(QT_NO_EGL)
 
-#include <QtGui/private/qeglcontext_p.h>
-#include <QtGui/private/qwidget_p.h>
+#include <qeglcontext_p.h>
+#include <qwidget_p.h>
 
 QT_BEGIN_NAMESPACE
 

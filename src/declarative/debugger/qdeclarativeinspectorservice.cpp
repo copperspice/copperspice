@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,95 +38,101 @@ QT_BEGIN_NAMESPACE
 Q_GLOBAL_STATIC(QDeclarativeInspectorService, serviceInstance)
 
 QDeclarativeInspectorService::QDeclarativeInspectorService()
-    : QDeclarativeDebugService(QLatin1String("QDeclarativeObserverMode"))
-    , m_inspectorPlugin(0)
+   : QDeclarativeDebugService(QLatin1String("QDeclarativeObserverMode"))
+   , m_inspectorPlugin(0)
 {
 }
 
 QDeclarativeInspectorService *QDeclarativeInspectorService::instance()
 {
-    return serviceInstance();
+   return serviceInstance();
 }
 
 void QDeclarativeInspectorService::addView(QDeclarativeView *view)
 {
-    m_views.append(view);
-    updateStatus();
+   m_views.append(view);
+   updateStatus();
 }
 
 void QDeclarativeInspectorService::removeView(QDeclarativeView *view)
 {
-    m_views.removeAll(view);
-    updateStatus();
+   m_views.removeAll(view);
+   updateStatus();
 }
 
 void QDeclarativeInspectorService::sendMessage(const QByteArray &message)
 {
-    if (status() != Enabled)
-        return;
+   if (status() != Enabled) {
+      return;
+   }
 
-    QDeclarativeDebugService::sendMessage(message);
+   QDeclarativeDebugService::sendMessage(message);
 }
 
 void QDeclarativeInspectorService::statusChanged(Status status)
 {
-    Q_UNUSED(status);
-    updateStatus();
+   Q_UNUSED(status);
+   updateStatus();
 }
 
 void QDeclarativeInspectorService::updateStatus()
 {
-    if (m_views.isEmpty()) {
-        if (m_inspectorPlugin)
-            m_inspectorPlugin->deactivate();
-        return;
-    }
+   if (m_views.isEmpty()) {
+      if (m_inspectorPlugin) {
+         m_inspectorPlugin->deactivate();
+      }
+      return;
+   }
 
-    if (status() == Enabled) {
-        if (!m_inspectorPlugin)
-            m_inspectorPlugin = loadInspectorPlugin();
+   if (status() == Enabled) {
+      if (!m_inspectorPlugin) {
+         m_inspectorPlugin = loadInspectorPlugin();
+      }
 
-        if (!m_inspectorPlugin) {
-            qWarning() << "Error while loading inspector plugin";
-            return;
-        }
+      if (!m_inspectorPlugin) {
+         qWarning() << "Error while loading inspector plugin";
+         return;
+      }
 
-        m_inspectorPlugin->activate();
-    } else {
-        if (m_inspectorPlugin)
-            m_inspectorPlugin->deactivate();
-    }
+      m_inspectorPlugin->activate();
+   } else {
+      if (m_inspectorPlugin) {
+         m_inspectorPlugin->deactivate();
+      }
+   }
 }
 
 void QDeclarativeInspectorService::messageReceived(const QByteArray &message)
 {
-    emit gotMessage(message);
+   emit gotMessage(message);
 }
 
 QDeclarativeInspectorInterface *QDeclarativeInspectorService::loadInspectorPlugin()
 {
-    QStringList pluginCandidates;
-    const QStringList paths = QCoreApplication::libraryPaths();
-    foreach (const QString &libPath, paths) {
-        const QDir dir(libPath + QLatin1String("/qmltooling"));
-        if (dir.exists())
-            foreach (const QString &pluginPath, dir.entryList(QDir::Files))
-                pluginCandidates << dir.absoluteFilePath(pluginPath);
-    }
+   QStringList pluginCandidates;
+   const QStringList paths = QCoreApplication::libraryPaths();
+   foreach (const QString & libPath, paths) {
+      const QDir dir(libPath + QLatin1String("/qmltooling"));
+      if (dir.exists())
+         foreach (const QString & pluginPath, dir.entryList(QDir::Files))
+         pluginCandidates << dir.absoluteFilePath(pluginPath);
+   }
 
-    foreach (const QString &pluginPath, pluginCandidates) {
-        QPluginLoader loader(pluginPath);
-        if (!loader.load())
-            continue;
+   foreach (const QString & pluginPath, pluginCandidates) {
+      QPluginLoader loader(pluginPath);
+      if (!loader.load()) {
+         continue;
+      }
 
-        QDeclarativeInspectorInterface *inspector =
-                qobject_cast<QDeclarativeInspectorInterface*>(loader.instance());
+      QDeclarativeInspectorInterface *inspector =
+         qobject_cast<QDeclarativeInspectorInterface *>(loader.instance());
 
-        if (inspector)
-            return inspector;
-        loader.unload();
-    }
-    return 0;
+      if (inspector) {
+         return inspector;
+      }
+      loader.unload();
+   }
+   return 0;
 }
 
 QT_END_NAMESPACE
